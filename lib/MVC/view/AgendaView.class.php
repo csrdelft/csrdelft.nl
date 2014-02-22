@@ -67,12 +67,18 @@ class AgendaItemMaandView extends TemplateView {
 	}
 
 	public function view() {
-		if ($this->actie === 'verwijderen') {
-			echo '<div id="item-' . $this->model->item_id . '" class="remove"></div>';
-		} else {
-			$this->smarty->assign('magBeheren', AgendaController::magBeheren());
-			$this->smarty->assign('item', $this->model);
-			$this->smarty->display('MVC/agenda/maand_item.tpl');
+		switch ($this->actie) {
+
+			case 'toevoegen':
+			case 'bewerken':
+				$this->smarty->assign('magBeheren', AgendaController::magBeheren());
+				$this->smarty->assign('item', $this->model);
+				$this->smarty->display('MVC/agenda/maand_item.tpl');
+				break;
+
+			case 'verwijderen':
+				echo '<div id="item-' . $this->model->item_id . '" class="remove"></div>';
+				break;
 		}
 	}
 
@@ -82,8 +88,10 @@ class AgendaItemFormView extends Formulier {
 
 	private $actie;
 
-	public function __construct(AgendaItem $item, $actie) {
-		parent::__construct($item, 'agenda-item-form', '/agenda/' . $actie . '/' . $item->item_id);
+	public function __construct(AgendaItem $item, $actie, $param) {
+		parent::__construct($item, 'agenda-item-form', '/agenda/' . $actie . '/' . $param);
+		$this->actie = $actie;
+		$this->css_classes[] = 'popup PreventUnchanged';
 
 		$fields[] = new RequiredTextField('titel', $item->titel, 'Titel');
 		$fields['datum'] = new DatumField('datum', $item->begin_moment, 'Datum', date('Y') + 5, date('Y') - 5);
@@ -112,7 +120,6 @@ HTML
 		$fields[] = new SubmitResetCancel();
 
 		$this->addFields($fields);
-		$this->css_classes[] = 'popup PreventUnchanged';
 
 		$this->model->begin_moment = $fields['datum']->getValue() . ' ' . $fields['begin']->getValue();
 		$this->model->eind_moment = $fields['datum']->getValue() . ' ' . $fields['eind']->getValue();
