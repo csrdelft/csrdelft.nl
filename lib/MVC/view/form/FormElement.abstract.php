@@ -402,7 +402,7 @@ class TextField extends InputField {
 		if (!parent::validate()) {
 			return false;
 		}
-		if (!is_utf8($this->value)) {
+		if (!mb_check_encoding($this->value, 'UTF-8')) {
 			$this->error = 'Ongeldige karakters, gebruik reguliere tekst.';
 		} elseif ($this->max_len > 0 AND mb_strlen($this->value) > $this->max_len) {
 			//als max_len > 0 dan checken of de lengte er niet overheen gaat.
@@ -934,20 +934,17 @@ class RequiredAutoresizeTextField extends AutoresizeTextareaField {
  */
 class UbbPreviewField extends TextareaField {
 
-	private $previewOnEnter = false;
-
-	public function __construct($name, $value, $description = null) {
-		parent::__construct($name, $value, $description);
-		$this->css_classes[] = 'wantsPreview';
-	}
-
 	/**
 	 * Bij elk keyup-event een nieuwe preview maken.
-	 * Genereert dus heel veel evens, niet erg wenselijk, moet dus nog
+	 * TODO: Genereert dus heel veel evens, niet erg wenselijk, moet dus nog
 	 * Een time-out in komen...
 	 */
-	public function previewOnEnter($value = true) {
-		$this->previewOnEnter = $value;
+	private $previewOnEnter;
+
+	public function __construct($name, $value, $description = null, $previewOnEnter = false) {
+		parent::__construct($name, $value, $description);
+		$this->css_classes[] = 'wantsPreview';
+		$this->previewOnEnter = $previewOnEnter;
 	}
 
 	/**
@@ -964,17 +961,14 @@ $('.wantsPreview').each(function(){
 		applyUBB(textarea.val(), document.getElementById('preview_'+fieldname));
 		$('#preview_'+fieldname).show();
 	};
-	var vergrootTextarea=function(){
-		var currentRows=parseInt(textarea.attr('rows'));
-		textarea.attr('rows', 10 + currentRows);
+	var vergrootTextarea=function(e){
+		$('#field_'+fieldname).animate({'height': '+=300'}, 800, 'easeInOutCubic');
 	};
-	
-	textarea.wrap('<div class="UBBpreview FormField"  style="width: '+(textarea.width()+6)+'px" />')
+	textarea.wrap('<div class="UBBpreview FormField" />')
 			.before('<div id="preview_'+fieldname+'" class="preview" style="display: none;"></div>')
-			.after($('<a style="float: left; margin-left: 0px;" class="knop">voorbeeld</a>').click(triggerPreview))
+			.after($('<a style="float: right; margin-right: 0px" class="knop" title="Vergroot het invoerveld"><strong>&uarr;&darr;</strong></a>').click(vergrootTextarea))
 			.after($('<a style="float: right;" class="knop" title="Opmaakhulp weergeven" onclick="$(\'#ubbhulpverhaal\').toggle();">UBB</a>'))
-			.after($('<a style="float: right; margin-right: 0px" class="knop" title="Vergroot het invoerveld"><strong>&uarr;&darr;</strong></a>').click(vergrootTextarea));
-
+			.after($('<a style="float: right; margin-left: 0px;" class="knop">Voorbeeld</a>').click(triggerPreview));
 JS;
 		//We voegen een keyup-event toe dat bij elke enter een nieuwe
 		//preview opvraagt.

@@ -201,7 +201,6 @@ htdocs/images/prettyPhoto/light_square/btnPrevious.png -text
 htdocs/images/prettyPhoto/light_square/default_thumbnail.gif -text
 htdocs/images/prettyPhoto/light_square/loader.gif -text
 htdocs/images/prettyPhoto/light_square/sprite.png -text
-htdocs/index.php -text
 htdocs/instellingen.php -text
 htdocs/instellingenbeheer.php -text
 htdocs/layout/agenda.css -text
@@ -779,8 +778,6 @@ htdocs/layout2/js/jquery.backstretch.js -text
 htdocs/layout2/js/jquery.js -text
 htdocs/layout2/normalize.css -text
 htdocs/layout2/style.css -text
-htdocs/leden.php -text
-htdocs/lidworden.php -text
 htdocs/login.php -text
 htdocs/logout.php -text
 htdocs/menubeheer.php -text
@@ -3099,12 +3096,14 @@ images/robots.txt -text
 lib/MVC/Stek[!!-~]ERD.png -text
 lib/MVC/controller/AclController.abstract.php -text
 lib/MVC/controller/AgendaController.class.php -text
+lib/MVC/controller/CmsPaginaController.class.php -text
 lib/MVC/controller/Controller.abstract.php -text
 lib/MVC/controller/InstellingenBeheerController.class.php -text
 lib/MVC/controller/LidInstellingenController.class.php -text
 lib/MVC/controller/MenuBeheerController.class.php -text
 lib/MVC/model/AgendaModel.class.php -text
 lib/MVC/model/Agendeerbaar.interface.php -text
+lib/MVC/model/CmsPaginaModel.class.php -text
 lib/MVC/model/Database.singleton.php -text
 lib/MVC/model/Instellingen.singleton.php -text
 lib/MVC/model/LidInstellingen.singleton.php -text
@@ -3113,6 +3112,7 @@ lib/MVC/model/PaginationModel.abstract.php -text
 lib/MVC/model/Persistence.interface.php -text
 lib/MVC/model/PersistenceModel.abstract.php -text
 lib/MVC/model/entity/AgendaItem.class.php -text
+lib/MVC/model/entity/CmsPagina.class.php -text
 lib/MVC/model/entity/Instelling.class.php -text
 lib/MVC/model/entity/LidInstelling.class.php -text
 lib/MVC/model/entity/Mail.class.php -text
@@ -3131,6 +3131,7 @@ lib/MVC/model/entity/groepen/GroepLid.class.php -text
 lib/MVC/model/entity/groepen/Groepen[!!-~]ERD.png -text
 lib/MVC/model/entity/groepen/Ketzer.class.php -text
 lib/MVC/view/AgendaView.class.php -text
+lib/MVC/view/CmsPaginaView.class.php -text
 lib/MVC/view/CsrSmarty.class.php -text
 lib/MVC/view/CsrUbb.class.php -text
 lib/MVC/view/HtmlPage.abstract.php -text
@@ -3612,8 +3613,6 @@ lib/mimemagic/XmlTypeCheck.php -text
 lib/mimemagic/mime.info -text
 lib/mimemagic/mime.types -text
 lib/mysql.class.php -text
-lib/pagina.class.php -text
-lib/paginacontent.class.php -text
 lib/peiling.class.php -text
 lib/peilingbeheercontent.class.php -text
 lib/peilingcontent.class.php -text
@@ -4069,3 +4068,4 @@ sql/4129_iban.sql -text
 sql/4142_lidinstellingen.sql -text
 sql/4160_agenda.sql -text
 sql/4249_agenda_link.sql -text
+sql/4260_cmspagina.sql -text

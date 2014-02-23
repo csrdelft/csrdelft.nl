@@ -9,8 +9,8 @@
 
 class csrdelft extends HtmlPage {
 
-	private $_body;
-	private $_layout;
+	public $body;
+	public $layout;
 	/**
 	 * De normale layout heeft een array van SimpleHTML als zijkolom
 	 */
@@ -19,10 +19,10 @@ class csrdelft extends HtmlPage {
 
 	function __construct(View $body, $layout = 'normaal') {
 		parent::__construct();
-		$this->_body = $body;
-		$this->_layout = $layout;
+		$this->body = $body;
+		$this->layout = $layout;
 
-		switch ($this->_layout) {
+		switch ($this->layout) {
 
 			case 'csrdelft2':
 				$this->addStylesheet('style.css', '/layout2/');
@@ -34,6 +34,7 @@ class csrdelft extends HtmlPage {
 				$this->addScript('jquery/plugins/jquery.timeago-1.3.0.custom.js', '/layout/');
 				$this->addScript('init.js', '/layout2/');
 				$this->addScript('csrdelft.js', '/layout/');
+				$this->addScript('dragobject.js');
 				return;
 
 			case 'normaal':
@@ -86,9 +87,9 @@ class csrdelft extends HtmlPage {
 	function view($template = '', $menutemplate = '') {
 
 		header('Content-Type: text/html; charset=UTF-8');
-		$this->smarty->assign('body', $this->_body);
+		$this->smarty->assign('body', $this->body);
 
-		switch ($this->_layout) {
+		switch ($this->layout) {
 
 			case 'csrdelft2':
 
@@ -124,7 +125,7 @@ class csrdelft extends HtmlPage {
 
 				if ($this->zijkolom !== false || LidInstellingen::get('layout', 'beeld') === 'breedbeeld') {
 					if (is_array($this->zijkolom)) {
-						$this->zijkolom += SimpleHTML::getStandaardZijkolom();
+						$this->zijkolom = array_merge($this->zijkolom, SimpleHTML::getStandaardZijkolom());
 					} else {
 						$this->zijkolom = SimpleHTML::getStandaardZijkolom();
 					}

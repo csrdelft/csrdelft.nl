@@ -16,7 +16,7 @@
 
 <form action="/login.php" method="post">
 	<fieldset>
-		<input type="hidden" name="url" value="/leden" />
+		<input type="hidden" name="url" value="/" />
 		<input class="text" type="text" name="user" placeholder="Bijnaam of lidnummer" />
 		<input class="text" type="password" name="pass" placeholder="Wachtwoord" />
 		<input class="submit" type="submit" name="login" value="Inloggen" />

@@ -16,7 +16,7 @@ class MijnVoorkeurenView extends TemplateView {
 		$this->_voorkeuren = $voorkeuren;
 
 		$fields[] = new AutoresizeTextareaField('eetwens', $eetwens, 'Allergie/diëet:');
-		$this->_eetwens = new InlineForm('eetwens-form', Instellingen::get('taken', 'url') . '/eetwens', $fields);
+		$this->_eetwens = new InlineForm(null, 'eetwens-form', Instellingen::get('taken', 'url') . '/eetwens', $fields);
 	}
 
 	public function getTitel() {

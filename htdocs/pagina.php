@@ -1,67 +1,29 @@
 <?php
 
-# C.S.R. Delft | pubcie@csrdelft.nl
-# -------------------------------------------------------------------
-# pagina.php
-# -------------------------------------------------------------------
-# Weergeven van pagina's met tekst uit de database
-# -------------------------------------------------------------------
+/**
+ * pagina.php
+ * 
+ * @author P.W.G. Brussee <brussee@live.nl>
+ * 
+ * Entry point voor CmsPagina module.
+ * 
+ */
+try {
+	require_once 'configuratie.include.php';
+	require_once 'MVC/controller/CmsPaginaController.class.php';
 
-require_once 'configuratie.include.php';
-
-require_once 'pagina.class.php';
-require_once 'paginacontent.class.php';
-
-
-# de pagina-inhoud
-$pagina = new Pagina($_GET['naam']);
-$paginacontent = new PaginaContent($pagina);
-
-if (isset($_GET['bewerken']) && $pagina->magBewerken()) {
-	
-	if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-		$pagina->setTitel($_POST['titel']);
-		$pagina->setInhoud($_POST['inhoud']);
-		$pagina->setMenu($_POST['menu']);
-		if ($pagina->magPermissiesBewerken()) {
-			$pagina->setRechtenBekijken($_POST['rechten_bekijken']);
-			$pagina->setRechtenBewerken($_POST['rechten_bewerken']);
-		}
-		$pagina->save();
-		header('Location: ' . CSR_ROOT . 'pagina/' . $pagina->getNaam());
+	$query = filter_input(INPUT_GET, 'uri', FILTER_SANITIZE_URL);
+	if (strlen($query) <= 0) {
+		$query = filter_input(INPUT_GET, 'm', FILTER_SANITIZE_URL);
 	}
-	$paginacontent->setActie('bewerken');
+	$controller = new CmsPaginaController($query);
+	$controller->getContent()->view();
+}
+catch (\Exception $e) { // TODO: logging
+	$protocol = filter_input(INPUT_SERVER, 'SERVER_PROTOCOL', FILTER_SANITIZE_STRING);
+	header($protocol . ' 500 ' . $e->getMessage(), true, 500);
 
-	$zijkolomlijst = new PaginaContent($pagina);
-	$zijkolomlijst->setActie('zijkolom');
-}
-elseif ($pagina->magBekijken()) {
-	$paginacontent->setActie('bekijken');
-}
-else {
-	$pagina = new Pagina('geentoegang');
-	$paginacontent = new PaginaContent($pagina);
-}
-
-// Hier alle namen van pagina's die in de nieuwe layout moeten worden weergegeven
-$nieuwNamen = array("contact", "csrindeowee", "vereniging", "lidworden", "geloof", "vorming", "filmpjes", "gezelligheid", "sport", "vragen", "officieel", "societeit", "ontspanning", "interesse", "interesseverzonden", "accountaanvragen");
-if (in_array($_GET['naam'], $nieuwNamen) && !LoginLid::instance()->hasPermission('P_LEDEN_READ')) {
-	// uitgelogde bezoeker heeft nieuwe layout
-	$depagina = new csrdelft($paginacontent, 'csrdelft2');
-	
-	$nieuwNamen = array("vereniging", "geloof", "vorming", "gezelligheid", "sport", "ontspanning", "societeit", "officieel");
-	if (in_array($_GET['naam'], $nieuwNamen)) {
-		$depagina->view('content', 'Vereniging');
-	} else {
-		$depagina->view();
+	if (defined('DEBUG') && (\LoginLid::instance()->hasPermission('P_ADMIN') || \LoginLid::instance()->isSued())) {
+		echo str_replace('#', '<br />#', $e); // stacktrace
 	}
-
-} else {
-	$depagina = new csrdelft($paginacontent);
-
-	if (isset($zijkolomlijst)) {
-		$depagina->zijkolom = array($zijkolomlijst);
-	}
-	
-	$depagina->view();
 }

@@ -17,7 +17,6 @@ try {
 	$controller->getContent()->view();
 }
 catch (\Exception $e) { // TODO: logging
-
 	$protocol = filter_input(INPUT_SERVER, 'SERVER_PROTOCOL', FILTER_SANITIZE_STRING);
 	header($protocol . ' 500 ' . $e->getMessage(), true, 500);
 

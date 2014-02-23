@@ -7,7 +7,7 @@ require_once 'groepen/groep.class.php';
 if (!($loginlid->hasPermission('P_LOGGED_IN') AND $loginlid->hasPermission('P_OUDLEDEN_READ'))) {
 	# geen rechten
 	require_once 'paginacontent.class.php';
-	$pagina = new csrdelft(new PaginaContent(new Pagina('geentoegang')));
+	$pagina = new csrdelft(new CmsPaginaView(new CmsPagina('geentoegang')));
 	$pagina->view();
 	exit;
 }

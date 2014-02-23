@@ -42,7 +42,7 @@ if (isset($_GET['a'])) {
 
 if (!($loginlid->hasPermission('P_LEDEN_READ') or $loginlid->hasPermission('P_OUDLEDEN_READ'))) {
 	require_once 'paginacontent.class.php';
-	$midden = new PaginaContent(new Pagina('geentoegang'));
+	$midden = new CmsPaginaView(new CmsPagina('geentoegang'));
 	$midden->setActie('bekijken');
 } else {
 	require_once 'lid/profielcontent.class.php';

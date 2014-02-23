@@ -264,7 +264,7 @@ function form_cancel(event) {
 function dom_update(htmlString) {
 	htmlString = $.trim(htmlString);
 	if (htmlString.substring(0, 9) === '<!DOCTYPE') {
-		alert('response error'); //DEBUG
+		alert('response error');
 		document.write(htmlString);
 	}
 	var html = $.parseHTML(htmlString);

@@ -14,8 +14,7 @@ class TestFormulier extends Formulier {
 		$fields[] = new Subkopje('Studie:');
 		$fields[] = new StudieField('studie', $model->default, 'Studie');
 		$fields[] = new RequiredTextareaField('opmerking1', $model->default, 'Opmerking1');
-		$fields['pre'] = new UbbPreviewField('opmerking', $model->default, 'previewOnEnter:');
-		$fields['pre']->previewOnEnter();
+		$fields[] = new UbbPreviewField('opmerking', $model->default, 'previewOnEnter:', true);
 		$fields[] = new UidField('uidtest', '0436', 'Wie ben jij?');
 		$fields[] = new VerticaleField('verticale', '4', 'Welke verticale?');
 		$fields[] = new DatumField('datum', '2011-08-11', 'Welke datum?');

@@ -40,8 +40,8 @@ if($loginlid->hasPermission('P_FORUM_READ')) {
 	}
 } else {
 	require_once 'paginacontent.class.php';
-	$pagina=new Pagina('geentoegang');
-	$midden = new PaginaContent($pagina);
+	$pagina=new CmsPagina('geentoegang');
+	$midden = new CmsPaginaView($pagina);
 }
 
 if(LoginLid::instance()->hasPermission('P_LEDEN_READ')){

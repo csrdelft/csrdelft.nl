@@ -113,7 +113,18 @@ abstract class Controller {
 
 	protected function geentoegang() {
 		header('HTTP/1.0 403 Forbidden');
-		echo 'access denied';
+		if ($this->isPosted()) {
+			echo 'access denied';
+		} else {
+			require_once 'MVC/model/CmsPaginaModel.class.php';
+			require_once 'MVC/view/CmsPaginaView.class.php';
+
+			$model = new CmsPaginaModel();
+			$pagina = $model->getPagina('geentoegang');
+			$body = new CmsPaginaView($pagina);
+			$this->view = new csrdelft($body);
+			$this->view->view();
+		}
 		exit;
 	}
 

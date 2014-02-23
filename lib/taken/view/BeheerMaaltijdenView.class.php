@@ -38,9 +38,9 @@ class BeheerMaaltijdenView extends TemplateView {
 	}
 
 	public function view() {
+		$this->smarty->assign('prullenbak', $this->prullenbak);
 		if (is_array($this->model)) { // list of maaltijden
 			if ($this->prullenbak || $this->archief || $this->repetities !== null) { // normal view
-				$this->smarty->assign('prullenbak', $this->prullenbak);
 				$this->smarty->assign('archief', $this->archief);
 				$this->smarty->display('taken/menu_pagina.tpl');
 				$this->smarty->assign('maaltijden', $this->model);

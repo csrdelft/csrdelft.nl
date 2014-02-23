@@ -21,12 +21,12 @@ class InstellingenBeheerController extends AclController {
 		parent::__construct($query);
 		if (!$this->isPosted()) {
 			$this->acl = array(
-				'module' => 'P_LEDEN_READ'
+				'module' => 'P_LOGGED_IN'
 			);
 		} else {
 			$this->acl = array(
-				'opslaan' => 'P_LEDEN_READ',
-				'reset' => 'P_LEDEN_READ'
+				'opslaan' => 'P_LOGGED_IN',
+				'reset' => 'P_LOGGED_IN'
 			);
 		}
 		$this->action = 'module';
@@ -54,8 +54,8 @@ class InstellingenBeheerController extends AclController {
 	}
 
 	public function module($module = null) {
-		$this->view = new InstellingenBeheerView($this->model, $module);
-		$this->view = new csrdelft($this->getContent());
+		$body = new InstellingenBeheerView($this->model, $module);
+		$this->view = new csrdelft($body);
 		$this->view->addStylesheet('taken.css');
 		$this->view->addScript('taken.js');
 	}

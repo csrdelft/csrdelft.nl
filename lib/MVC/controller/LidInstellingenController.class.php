@@ -21,12 +21,12 @@ class LidInstellingenController extends AclController {
 		parent::__construct($query);
 		if (!$this->isPosted()) {
 			$this->acl = array(
-				'beheer' => 'P_LEDEN_READ',
+				'beheer' => 'P_LOGGED_IN',
 				'reset' => 'P_ADMIN'
 			);
 		} else {
 			$this->acl = array(
-				'opslaan' => 'P_LEDEN_READ'
+				'opslaan' => 'P_LOGGED_IN'
 			);
 		}
 		$this->action = 'beheer';
@@ -37,8 +37,8 @@ class LidInstellingenController extends AclController {
 	}
 
 	public function beheer() {
-		$this->view = new LidInstellingenView($this->model);
-		$this->view = new csrdelft($this->getContent());
+		$body = new LidInstellingenView($this->model);
+		$this->view = new csrdelft($body);
 	}
 
 	public function opslaan() {

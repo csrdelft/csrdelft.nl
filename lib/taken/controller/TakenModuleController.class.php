@@ -49,8 +49,10 @@ class TakenModuleController extends AclController {
 	}
 
 	protected function geentoegang() {
-		require_once 'paginacontent.class.php';
-		$this->view = new csrdelft(new \PaginaContent(new \Pagina('maaltijden')));
+		require_once 'MVC/model/CmsPaginaModel.class.php';
+		require_once 'MVC/view/CmsPaginaView.class.php';
+
+		$this->view = new csrdelft(new CmsPaginaView(new CmsPagina('maaltijden')));
 	}
 
 	public function maaltijdenketzer($query) {

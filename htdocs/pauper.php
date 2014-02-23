@@ -12,7 +12,7 @@ require_once 'pagina.class.php';
 require_once 'paginacontent.class.php';
 
 
-$paginacontent = new PaginaContent(new Pagina('mobiel'));
+$paginacontent = new CmsPaginaView(new CmsPagina('mobiel'));
 $paginacontent->setActie('bekijken');
 
 # Laatste forumberichten

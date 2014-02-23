@@ -739,8 +739,12 @@ input, textarea, select{
 .Formulier input, .Formulier textarea{
 	padding: 2px;
 }
-.Formulier textarea, .Formulier input[type="text"]{
+.Formulier input[type="text"]{
 	width: 250px;
+}
+.Formulier textarea {
+	width: 90%;
+	height: 150px;
 }
 .Formulier .knop{
 	padding: 0px 5px;
@@ -763,6 +767,8 @@ input, textarea, select{
 }
 .Formulier .UBBpreview{
 	float: left;
+	clear: both;
+	width: 100%;
 }
 .Formulier input.UidField{
 	width: 70px;

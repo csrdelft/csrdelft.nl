@@ -39,8 +39,8 @@ class MenuBeheerController extends AclController {
 	}
 
 	public function beheer($menu = '') {
-		$this->view = new MenuBeheerView($this->model, $menu);
-		$this->view = new csrdelft($this->getContent());
+		$body = new MenuBeheerView($this->model, $menu);
+		$this->view = new csrdelft($body);
 		$this->view->addStylesheet('menubeheer.css');
 		$this->view->addScript('menubeheer.js');
 	}
