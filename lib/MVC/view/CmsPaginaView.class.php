@@ -23,7 +23,7 @@ class CmsPaginaView extends TemplateView {
 		if ($this->model->magBewerken()) {
 			echo '<a href="/pagina/' . $this->model->naam . '/bewerken" class="knop" style="float:right;" title="Bewerk pagina">' . Icon::getTag('bewerken') . '</a>';
 		}
-		echo CsrHtmlUbb::parse($this->model->inhoud);
+		echo CsrHtmlUbb::parse(htmlspecialchars_decode($this->model->inhoud));
 	}
 
 }
