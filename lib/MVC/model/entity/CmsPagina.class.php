@@ -29,7 +29,7 @@ class CmsPagina extends PersistentEntity {
 	 * DateTime
 	 * @var string
 	 */
-	public $laatst_aangepast;
+	public $laatst_gewijzigd;
 	/**
 	 * Permissie voor tonen
 	 * @var string

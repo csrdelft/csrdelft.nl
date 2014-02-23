@@ -21,7 +21,7 @@ class CmsPaginaView extends TemplateView {
 	public function view() {
 		echo $this->getMelding();
 		if ($this->model->magBewerken()) {
-			echo '<a href="/paginabewerken/' . $this->model->naam . '" class="knop" style="float:right;" title="Bewerk pagina">' . Icon::getTag('bewerken') . '</a>';
+			echo '<a href="/paginabewerken/' . $this->model->naam . '" class="knop" style="float:right;" title="Bewerk pagina&#013;' . $this->model->laatst_gewijzigd . '">' . Icon::getTag('bewerken') . '</a>';
 		}
 		echo CsrHtmlUbb::parse(htmlspecialchars_decode($this->model->inhoud));
 	}
@@ -41,6 +41,7 @@ class CmsPaginaFormView extends Formulier {
 	function __construct(CmsPagina $pagina) {
 		parent::__construct($pagina, 'cms-pagina-form', '/paginabewerken/' . $pagina->naam);
 
+		$fields[] = new HtmlComment('<label>Laatst aangepast</label>' . reldate($pagina->laatst_gewijzigd));
 		$fields[] = new TextField('titel', $pagina->titel, 'Titel');
 		if (CmsPaginaController::magRechtenWijzigen()) {
 			$fields[] = new TextField('rechten_bekijken', $pagina->rechten_bekijken, 'Rechten bekijken');
@@ -59,7 +60,7 @@ class CmsPaginaFormView extends Formulier {
 	}
 
 	function view() {
-		echo '<h1>' . $this->getTitel() . '</h1>';
+		echo '<h1>' . $this->getTitel() . '</h1><br/>';
 		if (!CmsPaginaController::magRechtenWijzigen()) {
 			echo '<p>Deze pagina is zichtbaar voor: ' . LoginLid::formatPermissionstring($this->model->rechten_bekijken);
 			echo ' en bewerkbaar voor: ' . LoginLid::formatPermissionstring($this->model->rechten_bewerken) . '.</p>';
