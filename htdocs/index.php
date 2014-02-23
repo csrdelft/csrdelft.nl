@@ -17,7 +17,8 @@ try {
 	$class .= 'Controller';
 	require_once 'MVC/controller/' . $class . '.class.php';
 
-	$req = filter_input(INPUT_SERVER, 'REQUEST_URI', FILTER_SANITIZE_URL);
+	$req = $_SERVER['REQUEST_URI'];
+	$req = filter_var($req, FILTER_SANITIZE_URL);
 	$controller = new $class($req);
 	$controller->getContent()->view();
 }
