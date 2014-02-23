@@ -1,5 +1,5 @@
 <div id="menu" onmouseover="ResetTimer()" onmouseout="StartTimer()">
-	<div id="menuleft"><a href="/"><div id="logo"></div></a></div>
+	<div id="menuleft"><a href="/"><div id="beeldmerk"></div></a></div>
 	<div id="menucenter">
 		<div id="menubanners">
 			<div id="banner1" class="menubanner"></div>

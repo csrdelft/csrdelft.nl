@@ -15,7 +15,7 @@ h1, h2, h3, h4, h5, h6{ color: #ebc474 !important; }
 h1 a, h2 a, h3 a, h4 a, h5 a, h6 a{ color: #ebc474 !important; }
 a, #footer a{ color: white; }
 a:hover{ color: #ebc474 !important; }
-#logo{
+#beeldmerk{
 	background-image: url('http://plaetjes.csrdelft.nl/lustrum/logo.png');
 }
 #submenuitems span.separator{
@@ -106,7 +106,7 @@ body{
 	background: url('http://plaetjes.csrdelft.nl/lustrum/nav_active.png') no-repeat;
 }
 
-#logo{
+#beeldmerk{
 	position: relative;
 	top: -9px;
 }
