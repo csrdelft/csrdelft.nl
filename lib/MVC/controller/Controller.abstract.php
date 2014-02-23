@@ -18,30 +18,29 @@ abstract class Controller {
 	 * or representational state transfer (REST)
 	 * @var boolean
 	 */
-	private $kvp = false;
+	private $rest;
 	/**
 	 * Broken down query to (named) parameters
 	 * @var array
 	 */
-	private $queryparts = array();
+	private $queryparts;
 	/**
 	 * Action to be performed
 	 * @var string
 	 */
-	protected $action = '';
+	protected $action;
 	/**
 	 * The view to be shown
 	 * @var View
 	 */
-	protected $view = null;
+	protected $view;
 
 	public function __construct($querystring) {
-		$this->kvp = strpos($querystring, '?');
+		$this->rest = strpos($querystring, '?') === FALSE;
 		if ($this->isRest()) { // REST
 			$this->queryparts = explode('/', $querystring);
 		} else { // KVP
-			$this->kvp = true;
-			$querystring = substr($querystring, $this->kvp);
+			$querystring = substr($querystring, $this->rest);
 			$queryparts = explode('&', $querystring);
 			foreach ($queryparts as $i => $part) {
 				$this->queryparts[$i] = explode('=', $part);
@@ -84,11 +83,11 @@ abstract class Controller {
 	}
 
 	public function isKvp() {
-		return $this->kvp;
+		return !$this->rest;
 	}
 
 	public function isRest() {
-		return !$this->kvp;
+		return $this->rest;
 	}
 
 	public function getContent() {
@@ -120,8 +119,7 @@ abstract class Controller {
 			require_once 'MVC/view/CmsPaginaView.class.php';
 
 			$model = new CmsPaginaModel();
-			$pagina = $model->getPagina('geentoegang');
-			$body = new CmsPaginaView($pagina);
+			$body = new CmsPaginaView($model->getPagina('geentoegang'));
 			$this->view = new csrdelft($body);
 			$this->view->view();
 		}

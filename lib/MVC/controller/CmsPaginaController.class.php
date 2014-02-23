@@ -28,10 +28,20 @@ class CmsPaginaController extends Controller {
 		parent::__construct($query);
 		$this->model = new CmsPaginaModel();
 		$this->action = 'bekijken';
-		if ($this->hasParam(1)) {
-			$this->action = $this->getParam(1);
+		$naam = 'thuis';
+		if ($this->hasParam(2)) {
+			if ($this->getParam(2) === 'bewerken') {
+				if ($this->hasParam(3)) {
+					$this->action = 'bewerken';
+					$naam = $this->getParam(3);
+				} else {
+					$this->geentoegang();
+				}
+			} else {
+				$naam = $this->getParam(2);
+			}
 		}
-		$this->performAction(array($this->getParam(0)));
+		$this->performAction(array($naam));
 	}
 
 	protected function hasPermission() {
@@ -61,9 +71,17 @@ class CmsPaginaController extends Controller {
 			if ($pagina->naam === 'thuis') {
 				$tmpl = 'index';
 			}
-			if (array_key_exists('m', $_GET)) {
-				$menu = filter_input(INPUT_GET, 'm', FILTER_SANITIZE_URL);
-				$tmpl = 'lidworden';
+			elseif ($this->hasParam(2)) {
+				$menu = $this->getParam(2);
+				if ($menu === 'lidworden') {
+					$tmpl = 'multi';
+				}
+				elseif ($menu === 'vereniging') {
+					$tmpl = 'content';
+				}
+				else {
+					$menu = '';
+				}
 			}
 			$view = new csrdelft($body, 'csrdelft2');
 			$view->view($tmpl, $menu);
@@ -80,7 +98,7 @@ class CmsPaginaController extends Controller {
 		if (!$pagina->magBewerken()) {
 			$this->geentoegang();
 		}
-		$form = new CmsPaginaFormView($pagina, $this->action); // fetches POST values itself
+		$form = new CmsPaginaFormView($pagina); // fetches POST values itself
 		if ($this->isPosted() AND $form->validate()) {
 			$rowcount = $this->model->update($pagina);
 			if ($rowcount > 0) {
@@ -88,7 +106,7 @@ class CmsPaginaController extends Controller {
 			} else {
 				setMelding('Geen wijzigingen', 0);
 			}
-			invokeRefresh(CSR_ROOT . 'pagina/' . $pagina->naam);
+			invokeRefresh(CSR_ROOT . $pagina->naam);
 		} else {
 			$this->view = new csrdelft($form);
 			$this->view->zijkolom[] = new CmsPaginaZijkolomView($this->model);

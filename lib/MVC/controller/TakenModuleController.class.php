@@ -3,7 +3,7 @@
 require_once 'MVC/controller/AclController.abstract.php';
 
 /**
- * ModuleController.class.php
+ * TakenModuleController.class.php
  * 
  * @author P.W.G. Brussee <brussee@live.nl>
  * 
@@ -12,47 +12,45 @@ class TakenModuleController extends AclController {
 
 	public function __construct($query) {
 		parent::__construct($query);
-		$module = $this->getParam(0);
-		if ($module === 'maaltijden') {
-			$this->acl = array(
-				'maaltijdenketzer' => 'P_MAAL_IK',
-				'maaltijdenlijst' => 'P_MAAL_IK', // shortcut
-				'maaltijdenbeheer' => 'P_MAAL_MOD',
-				'maaltijdenrepetities' => 'P_MAAL_MOD',
-				'maaltijdenabonnementen' => 'P_MAAL_IK',
-				'maaltijdenabonnementenbeheer' => 'P_MAAL_MOD',
-				'maaltijdenmaalciesaldi' => 'P_MAAL_SALDI'
-			);
-			$this->action = 'ketzer'; // default
-		} elseif ($module === 'corvee') {
-			$this->acl = array(
-				'corveemijn' => 'P_CORVEE_IK',
-				'corveerooster' => 'P_CORVEE_IK', // shortcut
-				'corveebeheer' => 'P_CORVEE_MOD',
-				'corveerepetities' => 'P_CORVEE_MOD',
-				'corveevoorkeuren' => 'P_CORVEE_IK',
-				'corveevoorkeurenbeheer' => 'P_CORVEE_MOD',
-				'corveepuntenbeheer' => 'P_CORVEE_MOD',
-				'corveevrijstellingen' => 'P_CORVEE_MOD',
-				'corveefuncties' => 'P_CORVEE_MOD'
-			);
-			$this->action = 'mijn'; // default
-		} else {
-			$module = '';
-		}
+		$this->acl = array(
+			'maaltijdenketzer' => 'P_MAAL_IK',
+			'maaltijdenlijst' => 'P_MAAL_IK', // shortcut
+			'maaltijdenbeheer' => 'P_MAAL_MOD',
+			'maaltijdenrepetities' => 'P_MAAL_MOD',
+			'maaltijdenabonnementen' => 'P_MAAL_IK',
+			'maaltijdenabonnementenbeheer' => 'P_MAAL_MOD',
+			'maaltijdenmaalciesaldi' => 'P_MAAL_SALDI',
+			'corveemijn' => 'P_CORVEE_IK',
+			'corveerooster' => 'P_CORVEE_IK', // shortcut
+			'corveebeheer' => 'P_CORVEE_MOD',
+			'corveerepetities' => 'P_CORVEE_MOD',
+			'corveevoorkeuren' => 'P_CORVEE_IK',
+			'corveevoorkeurenbeheer' => 'P_CORVEE_MOD',
+			'corveepuntenbeheer' => 'P_CORVEE_MOD',
+			'corveevrijstellingen' => 'P_CORVEE_MOD',
+			'corveefuncties' => 'P_CORVEE_MOD'
+		);
 		if ($this->hasParam(1)) {
 			$this->action = $this->getParam(1);
 		}
-		Instellingen::setTemp('taken', 'url', '/' . $module . $this->action);
-		$this->action = $module . $this->action;
+		if ($this->action === 'maaltijden') {
+			$this->action = 'maaltijdenketzer';
+		} elseif ($this->action === 'corvee') {
+			$this->action = 'corveemijn';
+		}
+		Instellingen::setTemp('taken', 'url', '/' . $this->action);
 		$this->performAction(array($query));
 	}
 
 	protected function geentoegang() {
 		require_once 'MVC/model/CmsPaginaModel.class.php';
 		require_once 'MVC/view/CmsPaginaView.class.php';
-
-		$this->view = new csrdelft(new CmsPaginaView(new CmsPagina('maaltijden')));
+		if (isPosted()) {
+			parent::geentoegang();
+		}
+		$model = new CmsPaginaModel();
+		$body = new CmsPaginaView($model->getPagina('maaltijden'));
+		$this->view = new csrdelft($body);
 	}
 
 	public function maaltijdenketzer($query) {

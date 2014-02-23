@@ -39,7 +39,6 @@ htdocs/actueel/mededelingen/.htaccess -text
 htdocs/actueel/mededelingen/goedkeuren.php -text
 htdocs/actueel/mededelingen/index.php -text
 htdocs/actueel/mededelingen/top3overzicht.php -text
-htdocs/agenda.php -text
 htdocs/android/get_user.php -text
 htdocs/android/get_userlist.php -text
 htdocs/android/login.php -text
@@ -201,8 +200,7 @@ htdocs/images/prettyPhoto/light_square/btnPrevious.png -text
 htdocs/images/prettyPhoto/light_square/default_thumbnail.gif -text
 htdocs/images/prettyPhoto/light_square/loader.gif -text
 htdocs/images/prettyPhoto/light_square/sprite.png -text
-htdocs/instellingen.php -text
-htdocs/instellingenbeheer.php -text
+htdocs/index.php -text
 htdocs/layout/agenda.css -text
 htdocs/layout/bibliotheek.css -text
 htdocs/layout/breedbeeld.css -text
@@ -780,15 +778,12 @@ htdocs/layout2/normalize.css -text
 htdocs/layout2/style.css -text
 htdocs/login.php -text
 htdocs/logout.php -text
-htdocs/menubeheer.php -text
-htdocs/pagina.php -text
 htdocs/pauper.php -text
 htdocs/robots.txt -text
 htdocs/soccie/count.png -text
 htdocs/soccie/index.php -text
 htdocs/soccie/logo.png -text
 htdocs/su.php -text
-htdocs/taken.php -text
 htdocs/test.php -text
 htdocs/testform.php -text
 htdocs/tools/.htaccess -text
@@ -3101,6 +3096,7 @@ lib/MVC/controller/Controller.abstract.php -text
 lib/MVC/controller/InstellingenBeheerController.class.php -text
 lib/MVC/controller/LidInstellingenController.class.php -text
 lib/MVC/controller/MenuBeheerController.class.php -text
+lib/MVC/controller/TakenModuleController.class.php -text
 lib/MVC/model/AgendaModel.class.php -text
 lib/MVC/model/Agendeerbaar.interface.php -text
 lib/MVC/model/CmsPaginaModel.class.php -text
@@ -3810,7 +3806,6 @@ lib/taken/controller/MijnAbonnementenController.class.php -text
 lib/taken/controller/MijnCorveeController.class.php -text
 lib/taken/controller/MijnMaaltijdenController.class.php -text
 lib/taken/controller/MijnVoorkeurenController.class.php -text
-lib/taken/controller/TakenModuleController.class.php -text
 lib/taken/model/AanmeldingenModel.class.php -text
 lib/taken/model/AbonnementenModel.class.php -text
 lib/taken/model/ConversieModel.class.php -text

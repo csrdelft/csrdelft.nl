@@ -21,7 +21,7 @@ class CmsPaginaView extends TemplateView {
 	public function view() {
 		echo $this->getMelding();
 		if ($this->model->magBewerken()) {
-			echo '<a href="/pagina/' . $this->model->naam . '/bewerken" class="knop" style="float:right;" title="Bewerk pagina">' . Icon::getTag('bewerken') . '</a>';
+			echo '<a href="/pagina/bewerken/' . $this->model->naam . '" class="knop" style="float:right;" title="Bewerk pagina">' . Icon::getTag('bewerken') . '</a>';
 		}
 		echo CsrHtmlUbb::parse(htmlspecialchars_decode($this->model->inhoud));
 	}
@@ -38,11 +38,8 @@ class CmsPaginaView extends TemplateView {
  */
 class CmsPaginaFormView extends Formulier {
 
-	private $actie;
-
-	function __construct(CmsPagina $pagina, $actie) {
-		parent::__construct($pagina, 'cms-pagina-form', '/pagina/' . $pagina->naam . '/' . $actie);
-		$this->actie = $actie;
+	function __construct(CmsPagina $pagina) {
+		parent::__construct($pagina, 'cms-pagina-form', '/pagina/bewerken/' . $pagina->naam);
 
 		$fields[] = new TextField('titel', $pagina->titel, 'Titel');
 		if (CmsPaginaController::magRechtenWijzigen()) {
@@ -58,7 +55,7 @@ class CmsPaginaFormView extends Formulier {
 	}
 
 	function getTitel() {
-		return 'Pagina ' . $this->actie . ': ' . $this->model->naam;
+		return 'Pagina bewerken: ' . $this->model->naam;
 	}
 
 	function view() {

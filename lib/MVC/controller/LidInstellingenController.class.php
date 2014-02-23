@@ -30,10 +30,10 @@ class LidInstellingenController extends AclController {
 			);
 		}
 		$this->action = 'beheer';
-		if ($this->hasParam(0)) {
-			$this->action = $this->getParam(0);
+		if ($this->hasParam(2)) {
+			$this->action = $this->getParam(2);
 		}
-		$this->performAction($this->getParams(1));
+		$this->performAction($this->getParams(3));
 	}
 
 	public function beheer() {

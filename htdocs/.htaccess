@@ -1,31 +1,23 @@
-# Dingen voor de htdocs-root
 AddDefaultCharset utf-8
 RewriteEngine On
 
-# Facebook link voor BINAS voor de Owee(Cie)
-RewriteRule ^facebook/?$			http://www.facebook.com/group.php?gid=10294513917&ref=ts [L]
-RewriteRule ^pauper/?$				pauper.php [L]
-RewriteRule ^forum/?$				/communicatie/forum/$1 [L]
-RewriteRule ^nieuws/?$				/actueel/mededelingen/$1 [L]
+RewriteRule ^nieuws/?$			/actueel/mededelingen/$1 [L]
+RewriteRule ^forum/?$			/communicatie/forum/$1 [L]
 
-RewriteRule ^maaltijden/?(.*)$		taken.php?uri=maaltijden/$1 [L]
-RewriteRule ^corvee/?(.*)$			taken.php?uri=corvee/$1 [L]
-RewriteRule ^agenda/?(.*)$			agenda.php?uri=$1 [QSA,L]
+RewriteRule ^facebook/?			http://www.facebook.com/group.php?gid=10294513917&ref=ts [L]
+RewriteRule ^pauper				pauper.php [L]
 
+RewriteRule ^agenda				index.php?c=Agenda [L]
+RewriteRule ^maaltijden			index.php?c=TakenModule [L]
+RewriteRule ^corvee				index.php?c=TakenModule [L]
+RewriteRule ^instellingenbeheer	index.php?c=InstellingenBeheer [L]
+RewriteRule ^instellingen		index.php?c=LidInstellingen [L]
+RewriteRule ^menubeheer			index.php?c=MenuBeheer [L]
+RewriteRule ^pagina				index.php?c=CmsPagina [L]
 
-RewriteRule ^instellingenbeheer/?(.*)$	instellingenbeheer.php?uri=$1 [QSA,L]
-RewriteRule ^instellingen/?(.*)$		instellingen.php?uri=$1 [QSA,L]
+RewriteRule ^su/([0-9a-z]+)/?$	su.php?actie=su&uid=$1 [L]
+RewriteRule ^endsu				su.php?actie=endSu [L]
 
-RewriteRule ^menubeheer/?(.*)$		menubeheer.php?uri=$1 [QSA,L]
-
-RewriteRule ^su/([0-9a-z]+)/?$		su.php?actie=su&uid=$1 [L]
-RewriteRule ^endsu/?$				su.php?actie=endSu [L]
-
-RewriteRule ^contact/sponsoring/?	pagina.php?uri=sponsoring [L]
-RewriteRule ^contact/?				pagina.php?uri=contact [L]
-RewriteRule ^account-aanvragen/?	pagina.php?uri=accountaanvragen [L]
-RewriteRule ^csrindeowee/?			pagina.php?uri=csrindeowee [L]
-RewriteRule ^lidworden/?			pagina.php?m=Lidworden&uri=thuis [L]
-RewriteRule ^vereniging/?(.*)$		pagina.php?m=Vereniging&uri=$1 [QSA,L]
-RewriteRule ^pagina/?(.*)$			pagina.php?uri=$1 [QSA,L]
-RewriteRule ^$						pagina.php?uri=thuis [L]	# Tijdelijke OWee redirect: /actueel/owee [NC,R=302,L]
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^					index.php [L]

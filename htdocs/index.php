@@ -1,19 +1,24 @@
 <?php
 
 /**
- * menubeheer.php
+ * index.php
  * 
  * @author P.W.G. Brussee <brussee@live.nl>
  * 
- * Entry point voor menu-beheer module.
- * 
+ * Entry point voor stek modules.
  */
 try {
 	require_once 'configuratie.include.php';
-	require_once 'MVC/controller/MenuBeheerController.class.php';
 
-	$query = filter_input(INPUT_GET, 'uri', FILTER_SANITIZE_URL);
-	$controller = new MenuBeheerController($query);
+	$class = filter_input(INPUT_GET, 'c', FILTER_SANITIZE_STRING);
+	if (empty($class)) {
+		$class = 'CmsPagina';
+	}
+	$class .= 'Controller';
+	require_once 'MVC/controller/' . $class . '.class.php';
+
+	$req = filter_input(INPUT_SERVER, 'REQUEST_URI', FILTER_SANITIZE_URL);
+	$controller = new $class($req);
 	$controller->getContent()->view();
 }
 catch (\Exception $e) { // TODO: logging
@@ -24,4 +29,3 @@ catch (\Exception $e) { // TODO: logging
 		echo str_replace('#', '<br />#', $e); // stacktrace
 	}
 }
-?>
