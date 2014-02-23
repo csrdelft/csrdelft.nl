@@ -1,0 +1,1 @@
+UPDATE `csrdelft`.`pagina` SET `rechten_bewerken` = 'P_ADMIN+!groep:bestuur' WHERE `pagina`.`naam` = 'thuis';

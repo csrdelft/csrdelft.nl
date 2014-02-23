@@ -4063,4 +4063,5 @@ sql/4129_iban.sql -text
 sql/4142_lidinstellingen.sql -text
 sql/4160_agenda.sql -text
 sql/4249_agenda_link.sql -text
-sql/4260_cmspagina.sql -text
+sql/4260_cmspagina_fixed.sql -text
+sql/4269_cmspagina_security_fix.sql -text
