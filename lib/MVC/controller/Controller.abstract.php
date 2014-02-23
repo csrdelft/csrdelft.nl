@@ -18,7 +18,7 @@ abstract class Controller {
 	 * or representational state transfer (REST)
 	 * @var boolean
 	 */
-	private $rest;
+	private $kvp;
 	/**
 	 * Broken down query to (named) parameters
 	 * @var array
@@ -35,16 +35,17 @@ abstract class Controller {
 	 */
 	protected $view;
 
-	public function __construct($querystring) {
-		$this->rest = strpos($querystring, '?') === FALSE;
-		if ($this->isRest()) { // REST
-			$this->queryparts = explode('/', $querystring);
-		} else { // KVP
-			$querystring = substr($querystring, $this->rest);
-			$queryparts = explode('&', $querystring);
-			foreach ($queryparts as $i => $part) {
-				$this->queryparts[$i] = explode('=', $part);
-			}
+	public function __construct($query) {
+		$kvp = strpos($query, '?');
+		// REST
+		$rest = substr($query, 0, $kvp);
+		$rest = explode('/', $rest);
+		$this->queryparts = $rest;
+		// KVP
+		$kvp = substr($query, $kvp);
+		$kvp = explode('&', $kvp);
+		foreach ($kvp as $key => $value) {
+			$this->queryparts[$key] = explode('=', $value);
 		}
 	}
 
@@ -83,11 +84,11 @@ abstract class Controller {
 	}
 
 	public function isKvp() {
-		return !$this->rest;
+		return !$this->kvp;
 	}
 
 	public function isRest() {
-		return $this->rest;
+		return $this->kvp;
 	}
 
 	public function getContent() {
