@@ -37,26 +37,24 @@ abstract class Controller {
 
 	public function __construct($query) {
 		$kvp = strpos($query, '?');
-		// REST
-		$rest = substr($query, 0, $kvp);
+		if ($kvp) {
+			$rest = substr($query, 0, $kvp);
+		} else {
+			$rest = $query;
+		}
 		$rest = explode('/', $rest);
 		$this->queryparts = $rest;
-		// KVP
-		$kvp = substr($query, $kvp);
-		$kvp = explode('&', $kvp);
-		foreach ($kvp as $key => $value) {
-			$this->queryparts[$key] = explode('=', $value);
+		if ($kvp) {
+			$kvp = substr($query, $kvp);
+			$kvp = explode('&', $kvp);
+			foreach ($kvp as $key => $value) {
+				$this->queryparts[$key] = explode('=', $value);
+			}
 		}
 	}
 
 	protected function hasParam($key) {
-		if (!array_key_exists($key, $this->queryparts) || !isset($this->queryparts[$key])) {
-			return false;
-		}
-		if ($this->isRest()) {
-			return $this->queryparts[$key] !== '';
-		}
-		return true;
+		return array_key_exists($key, $this->queryparts) && !empty($this->queryparts[$key]);
 	}
 
 	protected function getParam($key) {
@@ -81,14 +79,6 @@ abstract class Controller {
 
 	public function isPosted() {
 		return isPosted();
-	}
-
-	public function isKvp() {
-		return !$this->kvp;
-	}
-
-	public function isRest() {
-		return $this->kvp;
 	}
 
 	public function getContent() {
