@@ -198,7 +198,7 @@ abstract class InputField extends FormElement implements Validator {
 					$required = '<span class="required"> *</span>';
 				}
 			}
-			return '<label for="field_' . $this->name . '">' . mb_htmlentities($this->description) . $required . '</label>';
+			return '<label for="field_' . $this->name . '">' . $this->description . $required . '</label>';
 		}
 		return '';
 	}

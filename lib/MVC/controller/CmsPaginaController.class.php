@@ -79,6 +79,9 @@ class CmsPaginaController extends Controller {
 			$this->view = new CsrLayout2Page($body, $tmpl, $menu);
 		} else {
 			$this->view = new CsrLayoutPage($body);
+			if ($this->hasParam(2) AND $this->getParam(1) === 'pagina') {
+				$this->view->zijkolom[] = new CmsPaginaZijkolomView($this->model);
+			}
 		}
 	}
 
