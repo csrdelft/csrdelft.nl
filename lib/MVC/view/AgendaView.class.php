@@ -1,7 +1,5 @@
 <?php
 
-require_once 'MVC/controller/AgendaController.class.php';
-
 /**
  * AgendaView.class.php
  * 

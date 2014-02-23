@@ -9,7 +9,6 @@
  */
 try {
 	require_once 'configuratie.include.php';
-	require_once 'MVC/controller/AclController.abstract.php';
 
 	$class = filter_input(INPUT_GET, 'c', FILTER_SANITIZE_STRING);
 	if (empty($class)) {
