@@ -11,6 +11,8 @@ require_once 'MVC/controller/AclController.abstract.php';
 class TakenModuleController extends AclController {
 
 	public function __construct($query) {
+		$query = str_replace('maaltijden/', 'maaltijden', $query);
+		$query = str_replace('corvee/', 'corvee', $query);
 		parent::__construct($query);
 		$this->acl = array(
 			'maaltijdenketzer' => 'P_MAAL_IK',
@@ -60,8 +62,9 @@ class TakenModuleController extends AclController {
 	}
 
 	public function maaltijdenlijst($query) {
+		$query = str_replace('lijst/', 'ketzer/lijst/', $query);
 		$query = str_replace('lijst/sluit/', 'sluit/', $query);
-		$this->maaltijdenketzer('ketzer/' . $query);
+		$this->maaltijdenketzer($query);
 	}
 
 	public function maaltijdenbeheer($query) {
@@ -95,14 +98,15 @@ class TakenModuleController extends AclController {
 	}
 
 	public function corveemijn($query) {
-		Instellingen::setTemp('taken', 'url', str_replace('mijn', '', Instellingen::get('taken', 'url')));
+		Instellingen::setTemp('taken', 'url', str_replace('mijn', '', Instellingen::get('taken', 'url'))); // strip "mijn" from url
 		require_once 'taken/controller/MijnCorveeController.class.php';
 		$controller = new MijnCorveeController($query);
 		$this->view = $controller->getContent();
 	}
 
 	public function corveerooster($query) {
-		$this->corveemijn('mijn/' . $query);
+		$query = str_replace('//rooster', '/rooster', $query . '/rooster'); // fix trailing slash
+		$this->corveemijn($query);
 	}
 
 	public function corveebeheer($query) {

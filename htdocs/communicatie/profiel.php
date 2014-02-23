@@ -109,10 +109,9 @@ if (!($loginlid->hasPermission('P_LEDEN_READ') or $loginlid->hasPermission('P_OU
 
 			if ($voorkeur->magBewerken()) {
 				if ($voorkeur->isPosted() AND $voorkeur->save()) {
-					invokeRefresh('/communicatie/profiel/' . $uid, 'Voorkeuren opgeslagen', 1);
-				} else {
-					$midden = new ProfielVoorkeurContent($voorkeur, $actie);
+					setMelding('Voorkeuren opgeslagen', 1);
 				}
+				$midden = new ProfielVoorkeurContent($voorkeur, $actie);
 			} else {
 				$midden = new ProfielContent(LidCache::getLid($uid));
 			}
