@@ -47,6 +47,9 @@
 <div class="maaltijdgegevens">
 	<h2><a href="/maaltijdenketzer">Maaltijd</a> van {$maaltijd->getDatum()|date_format:"%A %e %b"} {$maaltijd->getTijd()|date_format:"%H:%M"}</h2>
 	{$maaltijd->getTitel()}
+	{if $maaltijd->getPrijs() !== $standaardprijs}
+		&nbsp; (&euro; {$maaltijd->getPrijs()|string_format:"%.2f"})
+	{/if}
 {if $toonlijst|is_a:'\CorveeTaak'}
 	<div style="float: right; margin: 15px 10px 0px 0px;">
 		{icon get="paintcan" title=$toonlijst->getCorveeFunctie()->getNaam()}
