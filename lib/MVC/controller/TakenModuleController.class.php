@@ -105,7 +105,7 @@ class TakenModuleController extends AclController {
 	}
 
 	public function corveerooster($query) {
-		$query = str_replace('//rooster', '/rooster', $query . '/rooster'); // fix trailing slash
+		$query = str_replace('rooster', 'rooster/rooster', $query);
 		$this->corveemijn($query);
 	}
 

@@ -1,6 +1,5 @@
 <?php
 
-
 require_once 'taken/model/TakenModel.class.php';
 require_once 'taken/model/PuntenModel.class.php';
 require_once 'taken/model/VrijstellingenModel.class.php';
@@ -20,22 +19,20 @@ class MijnCorveeController extends AclController {
 				'mijn' => 'P_CORVEE_IK',
 				'rooster' => 'P_CORVEE_IK'
 			);
-		}
-		else {
-			$this->acl = array(
-			);
+		} else {
+			$this->acl = array();
 		}
 		$this->action = 'mijn';
 		if ($this->hasParam(2)) {
 			$this->action = $this->getParam(2);
 		}
-		$arg = null;
+		$params = array();
 		if ($this->hasParam(3)) {
-			$arg = $this->getParam(3);
+			$params[] = $this->getParam(3);
 		}
-		$this->performAction(array($arg));
+		$this->performAction($params);
 	}
-	
+
 	public function mijn() {
 		$taken = TakenModel::getKomendeTakenVoorLid(\LoginLid::instance()->getUid());
 		$rooster = TakenModel::getRoosterMatrix($taken);
@@ -47,13 +44,12 @@ class MijnCorveeController extends AclController {
 		$this->view->addStylesheet('taken.css');
 		$this->view->addScript('taken.js');
 	}
-	
-	public function rooster($arg=null) {
+
+	public function rooster($param = null) {
 		$toonverleden = false;
-		if ($arg === 'verleden') {
+		if ($param === 'verleden' AND \LoginLid::instance()->hasPermission('P_CORVEE_MOD')) {
 			$taken = TakenModel::getVerledenTaken();
-		}
-		else {
+		} else {
 			$taken = TakenModel::getKomendeTaken();
 			if (\LoginLid::instance()->hasPermission('P_CORVEE_MOD')) {
 				$toonverleden = true;
@@ -65,6 +61,7 @@ class MijnCorveeController extends AclController {
 		$this->view->addStylesheet('taken.css');
 		$this->view->addScript('taken.js');
 	}
+
 }
 
 ?>
