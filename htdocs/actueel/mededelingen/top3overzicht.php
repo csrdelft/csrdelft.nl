@@ -13,7 +13,7 @@ if(!Mededeling::isModerator()){
 
 $top3overzicht = new MededelingTopDrieOverzichtContent();
 
-$page=new csrdelft($top3overzicht);
+$page=new CsrLayoutPage($top3overzicht);
 $page->addStylesheet('mededelingen.css');
 $page->view();
 

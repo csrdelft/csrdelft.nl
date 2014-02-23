@@ -52,7 +52,7 @@ class TakenModuleController extends AclController {
 		}
 		$model = new CmsPaginaModel();
 		$body = new CmsPaginaView($model->getPagina('maaltijden'));
-		$this->view = new csrdelft($body);
+		$this->view = new CsrLayoutPage($body);
 	}
 
 	public function maaltijdenketzer($query) {

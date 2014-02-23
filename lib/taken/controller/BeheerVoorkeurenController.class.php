@@ -37,7 +37,7 @@ class BeheerVoorkeurenController extends AclController {
 	public function beheer() {
 		$matrix_repetities = VoorkeurenModel::getVoorkeurenMatrix();
 		$this->view = new BeheerVoorkeurenView($matrix_repetities[0], $matrix_repetities[1]);
-		$this->view = new csrdelft($this->getContent());
+		$this->view = new CsrLayoutPage($this->getContent());
 		$this->view->addStylesheet('taken.css');
 		$this->view->addScript('taken.js');
 	}

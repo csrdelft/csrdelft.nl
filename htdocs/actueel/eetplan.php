@@ -17,7 +17,7 @@ if($loginlid->hasPermission('P_LEDEN_READ')) {
 }
 
 # pagina weergeven
-$pagina=new csrdelft($midden);
+$pagina=new CsrLayoutPage($midden);
 $pagina->view();
 
 ?>

@@ -25,6 +25,6 @@
 </form>
 <ul>
 	<li><a href="#" class="login-submit">Inloggen</a> &raquo;</li>
-	<li><a href="/account-aanvragen">Account aanvragen</a> &raquo;</li>
+	<li><a href="/accountaanvragen">Account aanvragen</a> &raquo;</li>
 </ul>
 {/if}

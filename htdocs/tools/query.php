@@ -19,6 +19,6 @@ if(isset($_GET['id']) AND (int)$_GET['id']==$_GET['id']){
 	$savedquery=null;
 }
 
-$pagina=new csrdelft(new SavedQueryContent($savedquery));
+$pagina=new CsrLayoutPage(new SavedQueryContent($savedquery));
 $pagina->zijkolom=false;
 $pagina->view();

@@ -6,7 +6,7 @@
  * Stores the screen coordinates of a dragable object in the session variable.
  * @see /htdocs/tools/dragobject.php
  */
-class DragObject {
+class DragObjectModel {
 
 	public static function getCoords($id, &$top, &$left) {
 

@@ -13,7 +13,7 @@ if(LoginLid::instance()->hasPermission('P_LEDEN_MOD')){
 	$inhoud = new CommissieOverzicht();
 	if(isset($_GET['c']))
 		$inhoud = new CommissieOverzicht($_GET['c']);
-	$pagina = new csrdelft($inhoud);
+	$pagina = new CsrLayoutPage($inhoud);
 	$pagina->view();
 }
 ?>

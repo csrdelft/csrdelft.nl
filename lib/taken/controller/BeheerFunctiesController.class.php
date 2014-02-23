@@ -50,7 +50,7 @@ class BeheerFunctiesController extends AclController {
 		$functies = FunctiesModel::getAlleFuncties();
 		KwalificatiesModel::loadKwalificatiesVoorFuncties($functies);
 		$this->view = new BeheerFunctiesView($functies);
-		$this->view = new csrdelft($this->getContent());
+		$this->view = new CsrLayoutPage($this->getContent());
 		$this->view->addStylesheet('js/autocomplete/jquery.autocomplete.css');
 		$this->view->addStylesheet('taken.css');
 		$this->view->addScript('autocomplete/jquery.autocomplete.min.js');

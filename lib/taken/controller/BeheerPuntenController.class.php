@@ -39,7 +39,7 @@ class BeheerPuntenController extends AclController {
 		$functies = FunctiesModel::getAlleFuncties(true); // grouped by fid
 		$matrix = PuntenModel::loadPuntenVoorAlleLeden($functies);
 		$this->view = new BeheerPuntenView($matrix, $functies);
-		$this->view = new csrdelft($this->getContent());
+		$this->view = new CsrLayoutPage($this->getContent());
 		$this->view->addStylesheet('taken.css');
 		$this->view->addScript('taken.js');
 	}

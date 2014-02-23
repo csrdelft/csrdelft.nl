@@ -22,7 +22,7 @@ if ($loginlid->hasPermission('P_LEDEN_READ')) {
 }
 
 
-$pagina=new csrdelft($body);
+$pagina=new CsrLayoutPage($body);
 $pagina->view();
 
 ?>

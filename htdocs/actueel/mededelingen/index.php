@@ -224,7 +224,7 @@ switch($actie){
 	break;
 }
 
-$page=new csrdelft($content);
+$page=new CsrLayoutPage($content);
 $page->addStylesheet('mededelingen.css');
 $page->view();
 

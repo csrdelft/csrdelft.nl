@@ -181,6 +181,6 @@ class stats extends TemplateView{
 }// einde stats klasse
 
 
-$pagina=new csrdelft(new stats());
+$pagina=new CsrLayoutPage(new stats());
 $pagina->zijkolom=false;
 $pagina->view();

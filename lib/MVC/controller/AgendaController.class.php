@@ -66,7 +66,7 @@ class AgendaController extends AclController {
 			$maand = date('n');
 		}
 		$body = new AgendaMaandView($this->model, $jaar, $maand);
-		$this->view = new csrdelft($body);
+		$this->view = new CsrLayoutPage($body);
 		$this->view->addStylesheet('agenda.css');
 		$this->view->zijkolom = false;
 	}

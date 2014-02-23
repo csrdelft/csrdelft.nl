@@ -1,4 +1,5 @@
 <?php
+
 # C.S.R. Delft | pubcie@csrdelft.nl
 # -------------------------------------------------------------------
 # index.php
@@ -11,46 +12,43 @@ require_once 'configuratie.include.php';
 require_once 'fotoalbum.class.php';
 require_once 'fotoalbumcontent.class.php';
 
-$pad=htmlspecialchars(urldecode(substr($_SERVER['REQUEST_URI'], 19)));
+$pad = htmlspecialchars(urldecode(substr($_SERVER['REQUEST_URI'], 19)));
 
-if($pad==''){
-	$mapnaam='Fotoalbum';
-}else{
-	$mapnaam=explode('/',$pad);
+if ($pad == '') {
+	$mapnaam = 'Fotoalbum';
+} else {
+	$mapnaam = explode('/', $pad);
 	array_pop($mapnaam);
-	$mapnaam=array_pop($mapnaam);
+	$mapnaam = array_pop($mapnaam);
 }
 
 $fotoalbum = new Fotoalbum($pad, $mapnaam);
 
-if($fotoalbum->magBekijken()){
+if ($fotoalbum->magBekijken()) {
 	$fotoalbumcontent = new FotoalbumContent($fotoalbum);
 	$fotoalbumcontent->setActie('album');
-	
-	if(LoginLid::instance()->hasPermission('P_LEDEN_READ')){
-		$pagina=new csrdelft($fotoalbumcontent);
-		$pagina->zijkolom=false;
-	}
-	else {
+
+	if (LoginLid::instance()->hasPermission('P_LOGGED_IN')) {
+		$pagina = new CsrLayoutPage($fotoalbumcontent);
+		$pagina->zijkolom = false;
+	} else {
 		//uitgelogd heeft nieuwe layout
-		$pagina=new csrdelft($fotoalbumcontent, 'csrdelft2');
+		$pagina = new CsrLayout2Page($fotoalbumcontent);
 	}
 	$pagina->addStylesheet('fotoalbum.css');
 	$pagina->addStylesheet('jquery.prettyPhoto-3.1.5.css?');
 	$pagina->addScript('jquery/plugins/jquery.prettyPhoto-3.1.5.min.js?');
 	$pagina->view();
-}
-else{
+} else {
 	require_once 'paginacontent.class.php';
-	$pagina=new CmsPagina('geentoegang');
-	$midden=new CmsPaginaView($pagina);
-	
-	if(LoginLid::instance()->hasPermission('P_LEDEN_READ')){
-		$pagina=new csrdelft($midden);
-	}
-	else {
+	$pagina = new CmsPagina('geentoegang');
+	$midden = new CmsPaginaView($pagina);
+
+	if (LoginLid::instance()->hasPermission('P_LOGGED_IN')) {
+		$pagina = new CsrLayoutPage($midden);
+	} else {
 		//uitgelogd heeft nieuwe layout
-		$page=new csrdelft($midden, 'csrdelft2');
+		$page = new CsrLayout2Page($midden);
 	}
 	$page->view();
 }

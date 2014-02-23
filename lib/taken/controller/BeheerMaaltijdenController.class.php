@@ -57,7 +57,7 @@ class BeheerMaaltijdenController extends AclController {
 			$popup = $this->getContent();
 		}
 		$this->view = new BeheerMaaltijdenView(MaaltijdenModel::getAlleMaaltijden(), false, false, MaaltijdRepetitiesModel::getAlleRepetities(), $this->getContent());
-		$this->view = new csrdelft($this->getContent());
+		$this->view = new CsrLayoutPage($this->getContent());
 		$this->view->addStylesheet('js/autocomplete/jquery.autocomplete.css');
 		$this->view->addStylesheet('taken.css');
 		$this->view->addScript('autocomplete/jquery.autocomplete.min.js');
@@ -67,14 +67,14 @@ class BeheerMaaltijdenController extends AclController {
 
 	public function prullenbak() {
 		$this->view = new BeheerMaaltijdenView(MaaltijdenModel::getVerwijderdeMaaltijden(), true);
-		$this->view = new csrdelft($this->getContent());
+		$this->view = new CsrLayoutPage($this->getContent());
 		$this->view->addStylesheet('taken.css');
 		$this->view->addScript('taken.js');
 	}
 
 	public function archief() {
 		$this->view = new BeheerMaaltijdenView(MaaltijdenModel::getArchiefMaaltijdenTussen(), false, true);
-		$this->view = new csrdelft($this->getContent());
+		$this->view = new CsrLayoutPage($this->getContent());
 		$this->view->addStylesheet('taken.css');
 		$this->view->addScript('taken.js');
 	}

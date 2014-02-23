@@ -69,6 +69,6 @@ if (!$loginlid->hasPermission('P_LOGGED_IN') OR !Peiling::magBewerken()) {
 	$beheer = new CmsPaginaView($pagina);
 }
 
-$pagina = new csrdelft($beheer);
+$pagina = new CsrLayoutPage($beheer);
 $pagina->addScript('peilingbeheer.js');
 $pagina->view();

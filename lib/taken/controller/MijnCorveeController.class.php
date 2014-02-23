@@ -43,7 +43,7 @@ class MijnCorveeController extends AclController {
 		$punten = PuntenModel::loadPuntenVoorLid(\LoginLid::instance()->getLid(), $functies);
 		$vrijstelling = VrijstellingenModel::getVrijstelling(\LoginLid::instance()->getUid());
 		$this->view = new MijnCorveeView($rooster, $punten, $functies, $vrijstelling);
-		$this->view = new csrdelft($this->getContent());
+		$this->view = new CsrLayoutPage($this->getContent());
 		$this->view->addStylesheet('taken.css');
 		$this->view->addScript('taken.js');
 	}
@@ -61,7 +61,7 @@ class MijnCorveeController extends AclController {
 		}
 		$rooster = TakenModel::getRoosterMatrix($taken);
 		$this->view = new CorveeRoosterView($rooster, $toonverleden);
-		$this->view = new csrdelft($this->getContent());
+		$this->view = new CsrLayoutPage($this->getContent());
 		$this->view->addStylesheet('taken.css');
 		$this->view->addScript('taken.js');
 	}

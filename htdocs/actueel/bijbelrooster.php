@@ -11,5 +11,5 @@ require_once('configuratie.include.php');
 require_once('bijbelrooster.class.php');
 $inhoud=new bijbelrooster();
 
-$pagina=new csrdelft($inhoud);
+$pagina=new CsrLayoutPage($inhoud);
 $pagina->view();

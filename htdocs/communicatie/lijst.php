@@ -7,7 +7,7 @@ require_once 'groepen/groep.class.php';
 if (!($loginlid->hasPermission('P_LOGGED_IN') AND $loginlid->hasPermission('P_OUDLEDEN_READ'))) {
 	# geen rechten
 	require_once 'paginacontent.class.php';
-	$pagina = new csrdelft(new CmsPaginaView(new CmsPagina('geentoegang')));
+	$pagina = new CsrLayoutPage(new CmsPaginaView(new CmsPagina('geentoegang')));
 	$pagina->view();
 	exit;
 }
@@ -85,7 +85,7 @@ if (isset($_GET['addToGoogle'])) {
 		setMelding($message, 0);
 	}
 }
-$pagina = new csrdelft($ledenlijstcontent);
+$pagina = new CsrLayoutPage($ledenlijstcontent);
 
 $pagina->addStylesheet('js/datatables/css/datatables_basic.css');
 $pagina->addStylesheet('ledenlijst.css');

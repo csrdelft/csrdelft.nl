@@ -58,13 +58,11 @@ define('ROWID_QUEUE_MEDEDELINGEN', 62);
 //stapeltje dingen includeren die toch (bijna) altijd nodig zijn:
 require_once 'common.functions.php';
 require_once 'mysql.class.php';
+require_once 'MVC/view/Validator.interface.php';
+require_once 'MVC/view/TemplateView.abstract.php';
+require_once 'MVC/model/Agendeerbaar.interface.php';
 require_once 'MVC/model/PaginationModel.abstract.php';
 require_once 'MVC/model/LidInstellingen.singleton.php';
-require_once 'MVC/view/HtmlPage.abstract.php';
-require_once 'MVC/view/form/Formulier.class.php';
-require_once 'MVC/view/CsrUbb.class.php';
-require_once 'MVC/controller/AclController.abstract.php';
-require_once 'MVC/model/AgendaModel.class.php';
 require_once 'lid/loginlid.class.php';
 
 switch (constant('MODE')) {
@@ -79,8 +77,11 @@ switch (constant('MODE')) {
 		// dan is de sessie al gestart en zijn sommige includes niet nodig.
 		if (!(isset($conf['authtype']) AND $conf['authtype'] == 'authcsr')) {
 			// sessie starten
+			require_once 'MVC/view/CsrLayoutPage.class.php';
+			require_once 'MVC/view/CsrLayout2Page.class.php';
+			require_once 'MVC/view/form/Formulier.class.php';
+			require_once 'MVC/view/CsrUbb.class.php';
 			require_once 'simplehtml.class.php';
-			require_once 'csrdelft.class.php';
 			require_once 'icon.class.php';
 
 			// volgt de defaults van webserver Syrinx, zodat testen met een workcopy overeenkomt.

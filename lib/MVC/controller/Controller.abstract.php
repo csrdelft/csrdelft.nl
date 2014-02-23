@@ -111,7 +111,7 @@ abstract class Controller {
 
 			$model = new CmsPaginaModel();
 			$body = new CmsPaginaView($model->getPagina('geentoegang'));
-			$this->view = new csrdelft($body);
+			$this->view = new CsrLayoutPage($body);
 			$this->view->view();
 		}
 		exit;

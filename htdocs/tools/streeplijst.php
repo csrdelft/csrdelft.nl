@@ -18,6 +18,6 @@ if(isset($_GET['pdf'])){
 }elseif(isset($_GET['iframe'])){
 	echo $body->getHTML();
 }else{
-	$pagina=new csrdelft($body);
+	$pagina=new CsrLayoutPage($body);
 	$pagina->view();
 }

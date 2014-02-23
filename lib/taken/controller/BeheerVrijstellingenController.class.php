@@ -40,7 +40,7 @@ class BeheerVrijstellingenController extends AclController {
 	public function beheer() {
 		$vrijstellingen = VrijstellingenModel::getAlleVrijstellingen();
 		$this->view = new BeheerVrijstellingenView($vrijstellingen);
-		$this->view = new csrdelft($this->getContent());
+		$this->view = new CsrLayoutPage($this->getContent());
 		$this->view->addStylesheet('js/autocomplete/jquery.autocomplete.css');
 		$this->view->addStylesheet('taken.css');
 		$this->view->addScript('autocomplete/jquery.autocomplete.min.js');

@@ -14,11 +14,6 @@ require_once 'MVC/view/CmsPaginaView.class.php';
 class CmsPaginaController extends Controller {
 
 	/**
-	 * Hier alle namen van pagina's die in de nieuwe layout moeten worden weergegeven [FIXME]
-	 * @var array
-	 */
-	private $nieuw = array('thuis', 'contact', 'csrindeowee', 'vereniging', 'lidworden', 'geloof', 'vorming', 'filmpjes', 'gezelligheid', 'sport', 'vragen', 'officieel', 'societeit', 'ontspanning', 'interesse', 'interesseverzonden', 'accountaanvragen');
-	/**
 	 * Data access model
 	 * @var CmsPaginaModel
 	 */
@@ -29,16 +24,20 @@ class CmsPaginaController extends Controller {
 		$this->model = new CmsPaginaModel();
 		$this->action = 'bekijken';
 		$naam = 'thuis';
-		if ($this->hasParam(2)) {
-			if ($this->getParam(2) === 'bewerken') {
-				if ($this->hasParam(3)) {
+		if ($this->hasParam(1)) {
+			if ($this->getParam(1) === 'paginabewerken') {
+				if ($this->hasParam(2)) {
 					$this->action = 'bewerken';
-					$naam = $this->getParam(3);
+					$naam = $this->getParam(2);
 				} else {
 					$this->geentoegang();
 				}
 			} else {
-				$naam = $this->getParam(2);
+				if ($this->hasParam(2)) {
+					$naam = $this->getParam(2);
+				} else {
+					$naam = $this->getParam(1);
+				}
 			}
 		}
 		$this->performAction(array($naam));
@@ -65,29 +64,22 @@ class CmsPaginaController extends Controller {
 			$this->geentoegang();
 		}
 		$body = new CmsPaginaView($pagina);
-		if (in_array($pagina->naam, $this->nieuw) && !LoginLid::instance()->hasPermission('P_LOGGED_IN')) { // nieuwe layout alleen voor uitgelogde bezoekers
-			$menu = '';
+
+		$nieuw = array('thuis', 'contact', 'csrindeowee', 'vereniging', 'lidworden', 'geloof', 'vorming', 'filmpjes', 'gezelligheid', 'sport', 'vragen', 'officieel', 'societeit', 'ontspanning', 'interesse', 'interesseverzonden', 'accountaanvragen');
+		if (in_array($naam, $nieuw) && !LoginLid::instance()->hasPermission('P_LOGGED_IN')) { // nieuwe layout alleen voor specifieke paginas en uitgelogde bezoekers
 			$tmpl = 'content';
-			if ($pagina->naam === 'thuis') {
+			$menu = '';
+			if ($naam === 'lidworden') {
+				$tmpl = 'lidworden';
+			} elseif ($pagina->naam === 'thuis') {
 				$tmpl = 'index';
+			} elseif ($this->hasParam(1) AND $this->getParam(1) === 'vereniging') {
+				$menu = 'Vereniging';
 			}
-			elseif ($this->hasParam(2)) {
-				$menu = $this->getParam(2);
-				if ($menu === 'lidworden') {
-					$tmpl = 'multi';
-				}
-				elseif ($menu === 'vereniging') {
-					$tmpl = 'content';
-				}
-				else {
-					$menu = '';
-				}
-			}
-			$view = new csrdelft($body, 'csrdelft2');
-			$view->view($tmpl, $menu);
-			exit;
+			$this->view = new CsrLayout2Page($body, $tmpl, $menu);
+		} else {
+			$this->view = new CsrLayoutPage($body);
 		}
-		$this->view = new csrdelft($body);
 	}
 
 	public function bewerken($naam) {
@@ -108,7 +100,7 @@ class CmsPaginaController extends Controller {
 			}
 			invokeRefresh(CSR_ROOT . $pagina->naam);
 		} else {
-			$this->view = new csrdelft($form);
+			$this->view = new CsrLayoutPage($form);
 			$this->view->zijkolom[] = new CmsPaginaZijkolomView($this->model);
 		}
 	}

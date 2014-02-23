@@ -1,6 +1,5 @@
 <?php
 
-require_once 'MVC/view/Validator.interface.php';
 require_once 'MVC/view/form/FormElement.abstract.php';
 
 /**

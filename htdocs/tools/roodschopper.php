@@ -72,7 +72,7 @@ if(isset($_POST['actie'])){
 	exit; //exit voor de XHR-acties.
 }
 
-$pagina=new Csrdelft(new RoodschopperContent($roodschopper));
+$pagina=new CsrLayoutPage(new RoodschopperContent($roodschopper));
 $pagina->addStylesheet('roodschopper.css');
 $pagina->addScript('roodschopper.js');
 $pagina->view();

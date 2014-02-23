@@ -76,6 +76,6 @@ else {
 		}
 	}
 }
-$pagina = new csrdelft($body);
+$pagina = new CsrLayoutPage($body);
 $pagina->view();
 ?>

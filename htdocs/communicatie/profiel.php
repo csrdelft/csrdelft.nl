@@ -156,7 +156,7 @@ if (!($loginlid->hasPermission('P_LEDEN_READ') or $loginlid->hasPermission('P_OU
 	}
 }
 
-$pagina = new csrdelft($midden);
+$pagina = new CsrLayoutPage($midden);
 $pagina->addStylesheet('profiel.css');
 $pagina->addStylesheet('js/autocomplete/jquery.autocomplete.css');
 $pagina->addScript('profiel.js');

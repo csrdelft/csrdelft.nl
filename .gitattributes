@@ -3101,6 +3101,7 @@ lib/MVC/model/AgendaModel.class.php -text
 lib/MVC/model/Agendeerbaar.interface.php -text
 lib/MVC/model/CmsPaginaModel.class.php -text
 lib/MVC/model/Database.singleton.php -text
+lib/MVC/model/DragObjectModel.class.php -text
 lib/MVC/model/Instellingen.singleton.php -text
 lib/MVC/model/LidInstellingen.singleton.php -text
 lib/MVC/model/MenuModel.class.php -text
@@ -3128,6 +3129,8 @@ lib/MVC/model/entity/groepen/Groepen[!!-~]ERD.png -text
 lib/MVC/model/entity/groepen/Ketzer.class.php -text
 lib/MVC/view/AgendaView.class.php -text
 lib/MVC/view/CmsPaginaView.class.php -text
+lib/MVC/view/CsrLayout2Page.class.php -text
+lib/MVC/view/CsrLayoutPage.class.php -text
 lib/MVC/view/CsrSmarty.class.php -text
 lib/MVC/view/CsrUbb.class.php -text
 lib/MVC/view/HtmlPage.abstract.php -text
@@ -3554,7 +3557,6 @@ lib/courant/courant.class.php -text
 lib/courant/courantarchiefcontent.class.php -text
 lib/courant/courantbeheercontent.class.php -text
 lib/courant/courantcontent.class.php -text
-lib/csrdelft.class.php -text
 lib/csrgozerbot.class.php -text
 lib/diesAanmelding.class.php -text
 lib/documenten/categorie.class.php -text
@@ -3562,7 +3564,6 @@ lib/documenten/document.class.php -text
 lib/documenten/documentcontent.class.php -text
 lib/documenten/documentcontroller.class.php -text
 lib/documenten/documentuploader.class.php -text
-lib/dragobject.class.php -text
 lib/eetplan.class.php -text
 lib/eetplancontent.class.php -text
 lib/forum/forum.class.php -text
@@ -3895,7 +3896,6 @@ lib/templates/csrdelft.tpl -text
 lib/templates/csrdelft2/content.tpl -text
 lib/templates/csrdelft2/index.tpl -text
 lib/templates/csrdelft2/lidworden.tpl -text
-lib/templates/csrdelft2/multi.tpl -text
 lib/templates/csrdelft2/partials/_advertenties.tpl -text
 lib/templates/csrdelft2/partials/_footer.tpl -text
 lib/templates/csrdelft2/partials/_header.tpl -text

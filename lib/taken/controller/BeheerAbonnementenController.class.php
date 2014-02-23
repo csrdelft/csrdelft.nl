@@ -43,7 +43,7 @@ class BeheerAbonnementenController extends AclController {
 		$repetities = MaaltijdRepetitiesModel::getAlleRepetities();
 		$matrix = AbonnementenModel::getAbonnementenMatrix($repetities, false, $alleenWaarschuwingen, $ingeschakeld);
 		$this->view = new BeheerAbonnementenView($matrix, $repetities, $alleenWaarschuwingen, $ingeschakeld);
-		$this->view = new csrdelft($this->getContent());
+		$this->view = new CsrLayoutPage($this->getContent());
 		$this->view->addStylesheet('js/autocomplete/jquery.autocomplete.css');
 		$this->view->addStylesheet('taken.css');
 		$this->view->addScript('autocomplete/jquery.autocomplete.min.js');

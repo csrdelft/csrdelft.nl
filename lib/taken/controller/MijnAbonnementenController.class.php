@@ -38,7 +38,7 @@ class MijnAbonnementenController extends AclController {
 	public function mijn() {
 		$abonnementen = AbonnementenModel::getAbonnementenVoorLid(\LoginLid::instance()->getUid(), true, true);
 		$this->view = new MijnAbonnementenView($abonnementen);
-		$this->view = new csrdelft($this->getContent());
+		$this->view = new CsrLayoutPage($this->getContent());
 		$this->view->addStylesheet('taken.css');
 		$this->view->addScript('taken.js');
 	}

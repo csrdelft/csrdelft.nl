@@ -13,7 +13,7 @@ if(isset($_GET['querystring'])){
 	die('epic fail');
 }
 
-$pagina=new csrdelft($biebControl->getContent());
+$pagina=new CsrLayoutPage($biebControl->getContent());
 $pagina->addStylesheet('bibliotheek.css');
 $pagina->addStylesheet('js/datatables/css/datatables_basic.css');
 $pagina->addStylesheet('js/autocomplete/jquery.autocomplete.css');

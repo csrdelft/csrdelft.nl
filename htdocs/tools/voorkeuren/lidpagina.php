@@ -15,7 +15,7 @@ if(LoginLid::instance()->hasPermission('P_LEDEN_MOD')){
 		$inhoud = new LidOverzicht($_GET['lid']);
 	if(isset($_POST['opmerkingen']))
 		$inhoud->save($_POST['opmerkingen']);
-	$pagina = new csrdelft($inhoud);
+	$pagina = new CsrLayoutPage($inhoud);
 	$pagina->view();
 }
 ?>

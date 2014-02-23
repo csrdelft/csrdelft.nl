@@ -15,7 +15,7 @@ if($loginlid->hasPermission('P_LEDEN_READ')){
 	$midden = new CmsPaginaView($pagina);
 }
 
-$pagina=new csrdelft($midden);
+$pagina=new CsrLayoutPage($midden);
 $pagina->view();
 
 ?>

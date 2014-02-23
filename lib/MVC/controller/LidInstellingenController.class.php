@@ -38,7 +38,7 @@ class LidInstellingenController extends AclController {
 
 	public function beheer() {
 		$body = new LidInstellingenView($this->model);
-		$this->view = new csrdelft($body);
+		$this->view = new CsrLayoutPage($body);
 	}
 
 	public function opslaan() {

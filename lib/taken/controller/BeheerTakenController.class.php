@@ -65,7 +65,7 @@ class BeheerTakenController extends AclController {
 			$maaltijd = null;
 		}
 		$this->view = new BeheerTakenView($taken, $maaltijd, false, CorveeRepetitiesModel::getAlleRepetities());
-		$this->view = new csrdelft($this->getContent());
+		$this->view = new CsrLayoutPage($this->getContent());
 		$this->view->addStylesheet('js/autocomplete/jquery.autocomplete.css');
 		$this->view->addStylesheet('taken.css');
 		$this->view->addScript('autocomplete/jquery.autocomplete.min.js');
@@ -79,7 +79,7 @@ class BeheerTakenController extends AclController {
 	
 	public function prullenbak() {
 		$this->view = new BeheerTakenView(TakenModel::getVerwijderdeTaken(), null, true);
-		$this->view = new csrdelft($this->getContent());
+		$this->view = new CsrLayoutPage($this->getContent());
 		$this->view->addStylesheet('taken.css');
 		$this->view->addScript('taken.js');
 	}

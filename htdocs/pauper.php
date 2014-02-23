@@ -22,6 +22,6 @@ $forum=new forum();
 $forumcontent=new forumcontent($forum, 'lastposts');
 
 ## pagina weergeven
-$pagina=new csrdelft($forumcontent);
+$pagina=new CsrLayoutPage($forumcontent);
 $pagina->zijkolom=false;
 $pagina->view();

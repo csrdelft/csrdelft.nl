@@ -50,7 +50,7 @@ if (isset($_GET['bewerken']) AND $groepen->isAdmin()) {
 	}
 }
 
-$pagina = new csrdelft($content);
+$pagina = new CsrLayoutPage($content);
 $pagina->addStylesheet('groepen.css');
 $pagina->addScript('groepen.js');
 $pagina->view();

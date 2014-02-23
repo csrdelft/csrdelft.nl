@@ -1,6 +1,6 @@
 ﻿{include file='csrdelft2/partials/_header.tpl'}
 <section id="blackout">
-	<div id="pageover"{if isset($zijkolom) and $zijkolom===false} class="widepage"{/if}>
+	<div id="pageover">
         {if isset($menutpl)}{include file="csrdelft2/partials/_menu$menutpl.tpl"}{/if}
 		<header class="pg-top">
 			<a class="close" href="#">&times;</a>
@@ -13,5 +13,5 @@
 		<div class="pg-btm"></div>
 	</div>
 </section>
-{include file='csrdelft2/partials/_homeContent.tpl'}
+{include file='csrdelft2/partials/_lidWordenContent.tpl'}
 {include file='csrdelft2/partials/_footer.tpl'}
