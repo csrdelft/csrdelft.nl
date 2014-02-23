@@ -41,11 +41,14 @@ class CmsPaginaFormView extends Formulier {
 	function __construct(CmsPagina $pagina) {
 		parent::__construct($pagina, 'cms-pagina-form', '/paginabewerken/' . $pagina->naam);
 
-		$fields[] = new HtmlComment('<label>Laatst aangepast</label>' . reldate($pagina->laatst_gewijzigd));
+		$fields[] = new HtmlComment('<div><label>Laatst gewijzigd</label>' . reldate($pagina->laatst_gewijzigd) . '</div>');
 		$fields[] = new TextField('titel', $pagina->titel, 'Titel');
 		if (CmsPaginaController::magRechtenWijzigen()) {
 			$fields[] = new TextField('rechten_bekijken', $pagina->rechten_bekijken, 'Rechten bekijken');
 			$fields[] = new TextField('rechten_bewerken', $pagina->rechten_bewerken, 'Rechten bewerken');
+		} else {
+			$fields[] = new HtmlComment('<div><label>Rechten bekijken</label>' . LoginLid::formatPermissionstring($pagina->rechten_bekijken) .
+					'</div><div style="clear:left;"><label>Rechten bewerken</label>' . LoginLid::formatPermissionstring($pagina->rechten_bewerken) . '</div>');
 		}
 		$fields[] = new UbbPreviewField('inhoud', $pagina->inhoud, 'Inhoud');
 		$fields[] = new SubmitResetCancel('/pagina/' . $pagina->naam);
@@ -61,10 +64,6 @@ class CmsPaginaFormView extends Formulier {
 
 	function view() {
 		echo '<h1>' . $this->getTitel() . '</h1><br/>';
-		if (!CmsPaginaController::magRechtenWijzigen()) {
-			echo '<p>Deze pagina is zichtbaar voor: ' . LoginLid::formatPermissionstring($this->model->rechten_bekijken);
-			echo ' en bewerkbaar voor: ' . LoginLid::formatPermissionstring($this->model->rechten_bewerken) . '.</p>';
-		}
 		echo parent::view();
 	}
 
