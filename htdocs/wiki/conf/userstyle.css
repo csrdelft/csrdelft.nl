@@ -231,6 +231,7 @@ div.li a.indexmenu_idx {
 	background-color: #fff !important;
 	margin-left: 200px !important;
 	border-left: 1px solid #b8b8b8 !important;
+	border-bottom: 1px solid #b8b8b8 !important;
 }
 #page-base {
 	height: 176px !important;
@@ -243,7 +244,8 @@ div.li a.indexmenu_idx {
 	padding: 0 !important;
 }
 #head div.vectorTabs li a span {
-	width: 100%;
+	width: 100% !important;
+	text-align: center !important;
 }
 #panel {
 	padding: 10px !important;
@@ -264,11 +266,11 @@ div.li a.indexmenu_idx {
 	background: url('http://plaetjes.csrdelft.nl/layout/menubutton.png') no-repeat;
 }
 #p-views {
-	background: none;
+	background: none !important;
 	color: #fff !important;
 }
 #p-logo {
-	top: -185px;
+	top: -185px !important;
 }
 #p-logo a {
 	margin: 14px 0 0 30px !important;
