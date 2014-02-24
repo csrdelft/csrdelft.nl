@@ -246,6 +246,9 @@ div.li a.indexmenu_idx {
 #head div.vectorTabs li a span {
 	width: 100% !important;
 	text-align: center !important;
+	font-size: 13px !important;
+	font-weight: bold !important;
+	padding-top: 3px !important;
 }
 #panel {
 	padding: 10px !important;
