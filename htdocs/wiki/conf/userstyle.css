@@ -231,7 +231,7 @@ body {
 	height: 176px;
 	background: url('http://plaetjes.csrdelft.nl/layout/body.png') repeat-x;
 }
-#head a, #head a:visited {
+#head a, #head a span, #head a:visited {
 	color: #fff !important;
 }
 #left-navigation li, #right-navigation li {
@@ -241,18 +241,15 @@ body {
 	background: none;
 	color: #fff !important;
 }
-
+#p-logo a {
+	background: url('http://plaetjes.csrdelft.nl/layout/logo.gif') no-repeat !important;
+}
 #p-namespaces li.selected, #p-namespaces li:hover,
 #p-views li.selected, #p-views li:hover {
 	height: 32px !important;
 	background: url('http://plaetjes.csrdelft.nl/layout/menubutton_hover.png') no-repeat;
 }
 
-#panel * {
-	position: static !important;
-	top: 0 !important;
-	left: 0 !important;
-}
 #panel div.body {
 	background: none !important;
 }
@@ -277,11 +274,4 @@ body {
 	border: 1px solid #b8b8b8 !important;
 	border-top: 0 !important;
 	text-align: left !important;
-}
-
-#p-logo a {
-	position: absolute !important;
-	top: 10px !important;
-	left: 30px !important;
-	background: url('http://plaetjes.csrdelft.nl/layout/logo.gif') no-repeat !important;
 }
