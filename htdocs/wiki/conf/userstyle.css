@@ -247,8 +247,10 @@ body {
 	background: url('http://plaetjes.csrdelft.nl/layout/logo.gif') no-repeat !important;
 }
 
-#panel div {
-	background: #fff none no-repeat;
+#panel * {
+	position: static !important;
+	top: 0 !important;
+	left: 0 !important;
 }
 #panel h5 {
 	margin: 0 !important;
