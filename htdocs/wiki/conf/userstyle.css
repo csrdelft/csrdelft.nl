@@ -227,13 +227,16 @@ h1 {
 	border-bottom: none !important;
 }
 div.catlinks {
-	background-color: #FAFAFA;
-	margin: -1em !important;
+	background-color: #fff !important;
+	margin: 0 !important;
+	margin-bottom: 15px !important;
 }
 #siteNotice {
-	position: absolute;
-	top: 50px;
-	left: 250px;
+	position: absolute !important;
+	top: 155px !important;
+	left: 0px !important;
+	text-align: center !important;
+	color: #EBEBEB !important;
 }
 #head li a, #content, #head-base, #footer {
 	background: none !important;
