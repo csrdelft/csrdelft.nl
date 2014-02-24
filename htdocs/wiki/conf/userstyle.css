@@ -223,9 +223,14 @@ div.li a.indexmenu_idx {
 
 /* C.S.R. PAGINA LAYOUT */
 
+#head li a, #content, #head-base #footer {
+	background: none !important;
+	background-image: none !important;
+}
 #content {
+	background-color: #fff;
 	margin-left: 200px !important;
-	border-left: 1px solid #b8b8b8;
+	border-left: 1px solid #b8b8b8 !important;
 }
 #page-base {
 	height: 176px !important;
@@ -236,9 +241,6 @@ div.li a.indexmenu_idx {
 }
 #head div.vectorTabs {
 	padding: 0 !important;
-}
-#head li a, #content, #head-base #footer {
-	background: none !important;
 }
 #panel {
 	padding: 10px !important;
