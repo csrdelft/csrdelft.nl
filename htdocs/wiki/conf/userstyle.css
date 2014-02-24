@@ -256,13 +256,14 @@ div.li a.indexmenu_idx {
 	top: 185px !important;
 }
 #p-search {
-	float: right;
+	float: right !important;
+	margin-right: 225px !important;
 }
 #simpleSearch {
 	margin-top: 0 !important;
 }
 #left-navigation {
-	display: none;
+	display: none !important;
 }
 #left-navigation li, #right-navigation li {
 	height: 32px !important;
