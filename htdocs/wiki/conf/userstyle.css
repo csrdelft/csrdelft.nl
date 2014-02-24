@@ -242,6 +242,9 @@ div.li a.indexmenu_idx {
 #head div.vectorTabs {
 	padding: 0 !important;
 }
+#head div.vectorTabs li a span {
+	width: 100%;
+}
 #panel {
 	padding: 10px !important;
 	top: 185px !important;
@@ -259,9 +262,6 @@ div.li a.indexmenu_idx {
 	height: 32px !important;
 	width: 122px !important;
 	background: url('http://plaetjes.csrdelft.nl/layout/menubutton.png') no-repeat;
-}
-#left-navigation a, #right-navigation a {
-	text-align: center;
 }
 #p-views {
 	background: none;
