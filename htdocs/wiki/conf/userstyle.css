@@ -267,10 +267,12 @@ div.li a.indexmenu_idx {
 #left-navigation li, #right-navigation li {
 	height: 32px !important;
 	width: 122px !important;
+	margin-left: 15px !important;
 	background: url('http://plaetjes.csrdelft.nl/layout/menubutton.png') no-repeat;
 }
 #right-navigation {
 	float: left !important;
+	width: 100% !important;
 	margin-left: 200px !important;
 	margin-top: 120px !important;
 }
