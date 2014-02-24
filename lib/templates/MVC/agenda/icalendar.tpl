@@ -46,9 +46,7 @@ BEGIN:VEVENT
 {else}DTEND;TZID=Europe/Amsterdam:{$item->getEindMoment()|date_format:'%Y%m%dT%H%M%S'}
 {/if}
 SUMMARY:{$item->getTitel()}
-DESCRIPTION:{$item->getBeschrijving()}
-
-{$CSR_ROOT}{$item->getLink()}
+DESCRIPTION:{$item->getBeschrijving()|regex_replace:"/[\r\n]/":"\\n"}\\n\\n{$CSR_ROOT}{$item->getLink()}
 END:VEVENT
 {/if}{/foreach}
 END:VCALENDAR
