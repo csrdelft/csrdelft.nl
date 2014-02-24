@@ -135,7 +135,6 @@ class CsrUbb extends eamBBParser {
 			$citaat = trim(str_replace('_', ' ', $arguments['citaat']));
 		}
 		if (Lid::isValidUid($citaat)) {
-			$text .= '<script>alert();</script>';
 			$lid = LidCache::getLid($citaat);
 			if ($lid instanceof Lid) {
 				$text .= ' van ' . $lid->getNaamLink('user', 'link');
