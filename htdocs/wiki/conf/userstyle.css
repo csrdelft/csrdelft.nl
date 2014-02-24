@@ -241,7 +241,7 @@ div.li a.indexmenu_idx {
 }
 #panel {
 	padding: 10px !important;
-	top: 0px;
+	top: 185px !important;
 }
 #simpleSearch {
 	margin-top: 0 !important;
@@ -259,6 +259,9 @@ div.li a.indexmenu_idx {
 	background: none;
 	color: #fff !important;
 }
+#p-logo {
+	top: -185px;
+}
 #p-logo a {
 	margin: 14px 0 0 30px !important;
 	background: url('http://plaetjes.csrdelft.nl/layout/logo.gif') no-repeat !important;
@@ -267,7 +270,7 @@ div.li a.indexmenu_idx {
 	padding: 3px !important;
 }
 #p-namespaces {
-	margin-left: 30px !important;
+	margin-left: 40px !important;
 }
 #p-namespaces li.selected, #p-namespaces li:hover,
 #p-views li.selected, #p-views li:hover {
