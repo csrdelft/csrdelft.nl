@@ -18,27 +18,29 @@ class CmsPaginaController extends Controller {
 	 * @var CmsPaginaModel
 	 */
 	private $model;
+	private $zijkolom = array();
 
 	public function __construct($query) {
 		parent::__construct($query);
 		$this->model = new CmsPaginaModel();
 		$this->action = 'bekijken';
 		$naam = 'thuis';
-		if ($this->hasParam(1)) {
-			if ($this->getParam(1) === 'paginabewerken') {
-				if ($this->hasParam(2)) {
-					$this->action = 'bewerken';
-					$naam = $this->getParam(2);
-				} else {
-					$this->geentoegang();
-				}
+
+		if ($this->hasParam(3)) {
+			if ($this->getParam(2) === 'bewerken') {
+				$this->action = 'bewerken';
+				$naam = $this->getParam(3);
+				$this->zijkolom[] = new CmsPaginaZijkolomView($this->model);
 			} else {
-				if ($this->hasParam(2)) {
-					$naam = $this->getParam(2);
-				} else {
-					$naam = $this->getParam(1);
-				}
+				$this->geentoegang();
 			}
+		} elseif ($this->hasParam(2)) {
+			$naam = $this->getParam(2);
+			if ($this->getParam(1) === 'pagina') {
+				$this->zijkolom[] = new CmsPaginaZijkolomView($this->model);
+			}
+		} else {
+			$naam = $this->getParam(1);
 		}
 		$this->performAction(array($naam));
 	}
@@ -78,10 +80,7 @@ class CmsPaginaController extends Controller {
 			}
 			$this->view = new CsrLayout2Page($body, $tmpl, $menu);
 		} else {
-			$this->view = new CsrLayoutPage($body);
-			if ($this->hasParam(2) AND $this->getParam(1) === 'pagina') {
-				$this->view->zijkolom[] = new CmsPaginaZijkolomView($this->model);
-			}
+			$this->view = new CsrLayoutPage($body, $this->zijkolom);
 		}
 	}
 
@@ -103,8 +102,7 @@ class CmsPaginaController extends Controller {
 			}
 			invokeRefresh(CSR_ROOT . $pagina->naam);
 		} else {
-			$this->view = new CsrLayoutPage($form);
-			$this->view->zijkolom[] = new CmsPaginaZijkolomView($this->model);
+			$this->view = new CsrLayoutPage($form, $this->zijkolom);
 		}
 	}
 

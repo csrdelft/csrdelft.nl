@@ -30,7 +30,7 @@ class CsrLayoutPage extends HtmlPage {
 	 */
 	public $popup;
 
-	function __construct(View $body, $zijkolom = array(), $popup = null) {
+	function __construct(View $body, array $zijkolom = array(), $popup = null) {
 		parent::__construct();
 		$this->body = $body;
 		$this->zijkolom = $zijkolom;
