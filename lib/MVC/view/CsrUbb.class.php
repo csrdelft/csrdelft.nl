@@ -129,23 +129,26 @@ class CsrUbb extends eamBBParser {
 			unset($delcontent);
 			$content = '...';
 		}
-
 		$text = '<div class="citaatContainer"><strong>Citaat';
+		$citaat = '';
 		if (isset($arguments['citaat'])) {
 			$citaat = trim(str_replace('_', ' ', $arguments['citaat']));
-
-			if (Lid::isValidUid($citaat)) {
-				$lid = LidCache::getLid($citaat);
-				if ($lid instanceof Lid) {
-					$text.=' van ' . $lid->getNaamLink('user', 'link');
-				}
-			} else if (array_key_exists('url', $arguments) AND startsWith($arguments['url'], 'http')) {
-				$text.=' van website <a href="' . $arguments['url'] . '" title="' . $arguments['url'] . '" target="_blank" class="external">' . $citaat . '</a>';
-			} elseif ($citaat !== '') {
-				$text.=' van ' . $citaat;
-			}
 		}
-		$text.=':</strong><div class="citaat">' . trim($content) . '</div></div>';
+		if (Lid::isValidUid($citaat)) {
+			$text .= '<script>alert();</script>';
+			$lid = LidCache::getLid($citaat);
+			if ($lid instanceof Lid) {
+				$text .= ' van ' . $lid->getNaamLink('user', 'link');
+			}
+		} else if (array_key_exists('url', $arguments) AND startsWith($arguments['url'], 'http')) {
+			if ($citaat == '') {
+				$citaat = $arguments['url'];
+			}
+			$text .= ' van website <a href="' . $arguments['url'] . '" title="' . $arguments['url'] . '" target="_blank" class="external">' . $citaat . '</a>';
+		} elseif ($citaat !== '') {
+			$text .= ' van ' . $citaat;
+		}
+		$text .= ':</strong><div class="citaat">' . trim($content) . '</div></div>';
 		return $text;
 	}
 
