@@ -6,9 +6,9 @@ html, body { height: 100%; }
 body { line-height: 20px; }
 body, input, textarea { font-family: Helvetica, "Helvetice Neue", Arial; font-size: 14px; }
 a { text-decoration: none; color: #000; }
-    a.no-line {
-        border-bottom:none!important;
-    }
+a.no-line {
+	border-bottom:none!important;
+}
 img, fieldset { border: none; }
 address { font-style: normal; }
 ul { list-style: none; }
@@ -38,9 +38,9 @@ h1, h2, h3, h4, h5, h6 { font-weight: normal; }
 	font-style: normal;
 	src: url('/layout2/fonts/SentinelBold.eot');
 	src: local('Sentinel'),
-	      url('/layout2/fonts/SentinelBold.eot?#iefix') format('embedded-opentype'),
-	      url('/layout2/fonts/SentinelBold.woff') format('woff'),
-	      url('/layout2/fonts/SentinelBold.otf') format('opentype');
+		url('/layout2/fonts/SentinelBold.eot?#iefix') format('embedded-opentype'),
+		url('/layout2/fonts/SentinelBold.woff') format('woff'),
+		url('/layout2/fonts/SentinelBold.otf') format('opentype');
 }
 
 
@@ -301,30 +301,32 @@ div.rommel img { height: 77px; }
 
 /* ubb-hulp */
 div#ubbhulpverhaal{
-    display: none;
+	display: none;
 	position: fixed;
-    z-index: 999;
-    width: 330px;
-    border: 1px solid #bbb;
-    margin-top: -13px;
-    padding: 5px;
-    background-color: white;
-    text-align: left;
+	z-index: 111;
+	width: 330px;
+	padding: 5px;
+	border: 1px solid #bbb;
+	background-color: white;
+	text-align: left;
+}
+div#ubbhulpverhaal h2, div#ubbhulpverhaal p, div#ubbhulpverhaal ul{
+	margin-bottom: 5px;
 }
 span#ubbsluiten{
-    display: block;
-    width: 18px; height: 18px;
-    float: right;
-    margin: 0; padding: 0;
-    font-weight: bold; font-size: 14px;
-    text-align: center;	vertical-align: middle;
-    color: black;
-    cursor: pointer; cursor: hand;
-    border: 1px solid #fff;
+	display: block;
+	width: 18px; height: 18px;
+	float: right;
+	margin: 0; padding: 0;
+	font-weight: bold; font-size: 14px;
+	text-align: center;	vertical-align: middle;
+	color: black;
+	cursor: pointer; cursor: hand;
+	border: 1px solid #fff;
 }
 span#ubbsluiten:hover{
-    border: 1px solid #000;
-    background-color: #eee;
+	border: 1px solid #000;
+	background-color: #eee;
 }
 
 /* messages with setMelding() */
