@@ -52,6 +52,11 @@ class CsrLayout2Page extends HtmlPage {
 			$this->smarty->assign('menutpl', $this->menutmpl);
 		}
 		$this->smarty->assign('body', $this->body);
+		$top = 180;
+		$left = 10;
+		DragObjectModel::getCoords('ubbhulpverhaal', $top, $left);
+		$this->smarty->assign('ubbtop', $top);
+		$this->smarty->assign('ubbleft', $left);
 		$this->smarty->display('csrdelft2/' . $this->tmpl . '.tpl');
 
 		// als er een error is geweest, die unsetten...

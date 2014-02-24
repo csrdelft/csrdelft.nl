@@ -80,8 +80,8 @@ class CsrLayoutPage extends HtmlPage {
 			$top = 40;
 			$left = 40;
 			DragObjectModel::getCoords('minion', $top, $left);
-			$this->smarty->assign('top', $top);
-			$this->smarty->assign('left', $left);
+			$this->smarty->assign('miniontop', $top);
+			$this->smarty->assign('minionleft', $left);
 			$this->smarty->assign('minion', $this->smarty->fetch('minion.tpl'));
 		}
 
@@ -104,8 +104,13 @@ class CsrLayoutPage extends HtmlPage {
 		$top = 180;
 		$left = 190;
 		DragObjectModel::getCoords('popup', $top, $left);
-		$this->smarty->assign('top', $top);
-		$this->smarty->assign('left', $left);
+		$this->smarty->assign('popuptop', $top);
+		$this->smarty->assign('popupleft', $left);
+		$top = 180;
+		$left = 10;
+		DragObjectModel::getCoords('ubbhulpverhaal', $top, $left);
+		$this->smarty->assign('ubbtop', $top);
+		$this->smarty->assign('ubbleft', $left);
 		$this->smarty->display('csrdelft.tpl');
 
 		// als er een error is geweest, die unsetten...

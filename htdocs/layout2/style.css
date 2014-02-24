@@ -291,7 +291,6 @@ div.rommel img { height: 77px; }
 div#ubbhulpverhaal{
     display: none;
     z-index: 999;
-    position: fixed;
     width: 330px;
     border: 1px solid #bbb;
     margin-top: -13px;
