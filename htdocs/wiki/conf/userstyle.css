@@ -223,12 +223,12 @@ div.li a.indexmenu_idx {
 
 /* C.S.R. PAGINA LAYOUT */
 
-#head li a, #content, #head-base #footer {
+#head li a, #content, #head-base, #footer {
 	background: none !important;
 	background-image: none !important;
 }
 #content {
-	background-color: #fff;
+	background-color: #fff !important;
 	margin-left: 200px !important;
 	border-left: 1px solid #b8b8b8 !important;
 }
