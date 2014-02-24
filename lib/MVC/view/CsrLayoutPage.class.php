@@ -80,7 +80,7 @@ class CsrLayoutPage extends HtmlPage {
 			$top = 40;
 			$left = 40;
 
-			DragObject::getCoords('minion', $top, $left);
+			DragObjectModel::getCoords('minion', $top, $left);
 			$this->smarty->assign('top', $top);
 			$this->smarty->assign('left', $left);
 			$this->smarty->assign('minion', $this->smarty->fetch('minion.tpl'));

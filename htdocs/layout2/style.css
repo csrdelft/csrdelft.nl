@@ -292,8 +292,6 @@ div#ubbhulpverhaal{
     display: none;
     z-index: 999;
     position: fixed;
-    left: 50px;
-    top: 50px;
     width: 330px;
     border: 1px solid #bbb;
     margin-top: -13px;
