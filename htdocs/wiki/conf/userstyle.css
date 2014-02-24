@@ -248,7 +248,7 @@ div.li a.indexmenu_idx {
 	text-align: center !important;
 	font-size: 13px !important;
 	font-weight: bold !important;
-	padding-top: 3px !important;
+	margin-top: 5px !important;
 }
 #panel {
 	padding: 10px !important;
