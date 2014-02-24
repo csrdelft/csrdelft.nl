@@ -13,13 +13,13 @@
 		<div class="inner">
 		<a href="/interesse"><h2>Interesse?</h2></a><br/>
 		<ul>
-			<li><a href="/vereniging/interesse/borrel_bezoeken">Breng een bezoek aan een borrel</a></li>
-			<li><a href="/vereniging/interesse/mee-eten">Eet mee in onze soci&#235;teit</a></li>
-			<li><a href="/vereniging/interesse/meeloopdag">Meeloopdag met een C.S.R. lid</a></li>
-			<li><a href="/vereniging/interesse/tijdens_owee_in_een_csr_huis_overnachten">Overnacht tijdens de OWee in een C.S.R. huis</a></li>
-			<li><a href="/vereniging/interesse/kamers">Informatie over kamers</a></li>
-			<li><a href="/vereniging/interesse/informatiepakket">Vraag een informatiepakket aan</a></li>
-			<li><a href="/vereniging/interesse/interesseformulier">Interesseformulier</a></li>
+			<li><a href="/vereniging/interesse/1#borrel_bezoeken">Breng een bezoek aan een borrel</a></li>
+			<li><a href="/vereniging/interesse/2#mee-eten">Eet mee in onze soci&#235;teit</a></li>
+			<li><a href="/vereniging/interesse/3#meeloopdag">Meeloopdag met een C.S.R. lid</a></li>
+			<li><a href="/vereniging/interesse/4#tijdens_owee_in_een_csr_huis_overnachten">Overnacht tijdens de OWee in een C.S.R. huis</a></li>
+			<li><a href="/vereniging/interesse/5#kamers">Informatie over kamers</a></li>
+			<li><a href="/vereniging/interesse/6#informatiepakket">Vraag een informatiepakket aan</a></li>
+			<li><a href="/vereniging/interesse/7#interesseformulier">Interesseformulier</a></li>
 		</ul>
 		</div>
 	</div>
