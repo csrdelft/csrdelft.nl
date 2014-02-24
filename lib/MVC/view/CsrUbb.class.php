@@ -734,9 +734,7 @@ HTML;
 	}
 
 	public static function getUbbHelp() {
-		$top = 50;
-		$left = 50;
-		DragObjectModel::getCoords('ubbhulpverhaal', $top, $left);
+		DragObjectModel::getCoords('ubbhulpverhaal', $top = 10, $left = 180);
 		return <<<UBBVERHAAL
 <div id="ubbhulpverhaal" class="dragobject" style="top: {$top}px; left: {$left}px;">
 	<span id="ubbsluiten" onclick="$('#ubbhulpverhaal').toggle();" title="Opmaakhulp verbergen">&times;</span>

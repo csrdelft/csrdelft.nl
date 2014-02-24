@@ -48,7 +48,7 @@
 				{/if}
 				<div id="mainright"{if $zijkolom === false} style="width: 958px;"{*FIXME*}{/if}>
 					<div id="popup-background"{if isset($popup)} style="display: block;"{/if}></div>
-					<div id="popup" class="outer-shadow dragobject"{if isset($popup)} style="display: block;"{/if}>
+					<div id="popup" class="outer-shadow dragobject" style="top: {$top}px; left: {$left}px;{if isset($popup)} display: block;{/if}">
 						{if isset($popup)}
 							{$popup->view()}
 						{/if}

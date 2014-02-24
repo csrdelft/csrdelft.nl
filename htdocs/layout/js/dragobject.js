@@ -21,7 +21,7 @@ function startDrag(e) {
 		return;
 	}
 	dragobjectID = $(e.target).attr('id');
-	if (typeof dragobjectID === 'undefined' || dragobjectID === false || !$('#'+dragobjectID).hasClass('dragobject')) {
+	if (typeof dragobjectID === 'undefined' || dragobjectID === false || !$('#' + dragobjectID).hasClass('dragobject')) {
 		dragobjectID = $(e.target).closest('.dragobject').attr('id');
 	}
 	if (typeof dragobjectID !== 'undefined' && dragobjectID !== false) {
@@ -38,15 +38,13 @@ function stopDrag(e) {
 		return;
 	}
 	window.removeEventListener('mousemove', mouseMoveHandler, true);
-	if ($('#'+dragobjectID).hasClass('remember')) {
-		$.post('/tools/dragobject.php', {
-			id: dragobjectID,
-			coords: {
-				left: dragobjLeft(),
-				top: dragobjTop()
-			}
-		});
-	}
+	$.post('/tools/dragobject.php', {
+		id: dragobjectID,
+		coords: {
+			left: dragobjLeft(),
+			top: dragobjTop()
+		}
+	});
 	dragobjectID = false;
 }
 function mouseMoveHandler(e) {
@@ -56,8 +54,8 @@ function mouseMoveHandler(e) {
 	e = e || window.event;
 	var newX = mouseX(e);
 	var newY = mouseY(e);
-	$('#'+dragobjectID).css('left', (dragobjLeft() + newX - oldX) + 'px');
-	$('#'+dragobjectID).css('top', (dragobjTop() + newY - oldY) + 'px');
+	$('#' + dragobjectID).css('left', (dragobjLeft() + newX - oldX) + 'px');
+	$('#' + dragobjectID).css('top', (dragobjTop() + newY - oldY) + 'px');
 	oldX = newX;
 	oldY = newY;
 }
@@ -69,7 +67,7 @@ function docScrollTop() {
 }
 function mouseX(e) {
 	if (e.pageX) {
-	  return e.pageX;
+		return e.pageX;
 	}
 	if (e.clientX) {
 		return e.clientX + docScrollLeft();
@@ -86,8 +84,8 @@ function mouseY(e) {
 	return null;
 }
 function dragobjLeft() {
-	return $('#'+dragobjectID).offset().left - docScrollLeft();
+	return $('#' + dragobjectID).offset().left - docScrollLeft();
 }
 function dragobjTop() {
-	return $('#'+dragobjectID).offset().top - docScrollTop();
+	return $('#' + dragobjectID).offset().top - docScrollTop();
 }
