@@ -751,7 +751,7 @@ if (file_exists(DOKU_TPLINC."lang/".$conf["lang"]."/style.css")){
   <div id="p-logo">
       <?php
       //include default or userdefined logo
-      echo "<a href=\"".wl()."\" ";
+      echo "<a href=\"".CSR_ROOT."\" ";
       if (file_exists(DOKU_TPLINC."user/logo.png")){
           //user defined PNG
           echo "style=\"background-image:url(".DOKU_TPL."user/logo.png);\"";
