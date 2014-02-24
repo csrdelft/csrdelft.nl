@@ -23,12 +23,6 @@ RewriteRule ^profiel/([0-9a-z]+)/?$ profiel.php?uid=$1
 RewriteRule ^profiel/([0-9a-z]+)/([a-zA-Z]+)/?$ profiel.php?uid=$1&a=$2 [QSA]
 RewriteRule ^profiel/([0-9a-z]+)/([a-zA-Z]+)/([a-zA-Z]+)/?$ profiel.php?uid=$1&a=$2&s=$3 [QSA]
 
-# Pagina's met tekst
-RewriteRule ^irc/? ../pagina.php?naam=irc
-RewriteRule ^orientatie/? ../pagina.php?naam=orientatie
-RewriteRule ^boeken/? ../pagina.php?naam=bedrijven
-RewriteRule ^bedrijven/? ../pagina.php?naam=bedrijven
-
 # Oude documentlinks voorlopig doorverwijzen naar de oude ketzer.
 RewriteRule ^documenten/neerladen/([0-9]+)/?$ documenten_old/neerladen/$1
 
@@ -36,8 +30,12 @@ RewriteRule ^documenten/neerladen/([0-9]+)/?$ documenten_old/neerladen/$1
 RewriteRule ^documenten$ documenten.php?querystring=
 RewriteRule ^documenten/(.*)$ documenten.php?querystring=$1 [QSA]
 
+# Pagina's met tekst
+RewriteRule ^irc/? ../index.php
+RewriteRule ^orientatie/? ../index.php
+RewriteRule ^boeken/? ../index.php
+RewriteRule ^bedrijven/? ../index.php
+
 # Bibliotheek
-RewriteRule ^bibliotheek/wenslijst/?$ ../pagina.php?naam=wenslijst
-RewriteRule ^bibliotheek/rubrieken/?$ ../pagina.php?naam=rubrieken
 RewriteRule ^bibliotheek$ bibliotheek.php?querystring=
 RewriteRule ^bibliotheek/(.*)$ bibliotheek.php?querystring=$1 [QSA]

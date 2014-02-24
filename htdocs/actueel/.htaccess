@@ -1,13 +1,10 @@
 RewriteEngine On
 
 # Oude owee redirected
-RewriteRule ^owee/?$		/csrindeowee/ [R=301]
+RewriteRule ^owee/?$		/csrindeowee/
 
 # Als we naar /actueel/ gaan worden we doorgestuurd naar de mededelingen
-RewriteRule ^/?$ /actueel/mededelingen/ [R]
-
-# Agenda pagina
-#RewriteRule ^agenda/?			../pagina.php?naam=agenda
+RewriteRule ^/?$ /actueel/mededelingen/
 
 # Bijbelleesrooster
 RewriteRule ^bijbelrooster/$ bijbelrooster.php
@@ -16,7 +13,3 @@ RewriteRule ^bijbelrooster/$ bijbelrooster.php
 RewriteRule ^eetplan/$ eetplan.php
 RewriteRule ^eetplan/sjaars/([0-9]*) eetplan.php?pheutID=$1
 RewriteRule ^eetplan/huis/([0-9]*) eetplan.php?huisID=$1
-
-# Pagina's met tekst
-RewriteRule ^owee/programma/? ../pagina.php?naam=oweeprogramma
-RewriteRule ^owee/? ../pagina.php?naam=owee

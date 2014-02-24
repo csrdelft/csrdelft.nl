@@ -102,7 +102,7 @@ echo '	<li>query #86: <a href="/tools/query.php?id=86">Novieten, (gast)leden zon
 echo '	<li>query #85: <a href="/tools/query.php?id=85">Alle oudleden/nobodies/etc die nog in socciepcimport staan</a></li>';
 echo '	<li>query #80: <a href="/tools/query.php?id=80">Personen in db met saldo, die ontbreken in socciepcimport</a></li>';
 echo '</ul>';
-echo '<a href="/pagina/saldostatistiekensoccie">Overzichtpagina voor SocCie met opmerkelijke saldi en statistieken</a>...';
+echo '<a href="/saldostatistiekensoccie">Overzichtpagina voor SocCie met opmerkelijke saldi en statistieken</a>...';
 echo '</p>';
 
 echo '<p>Onderstaande gegevens zijn van de laatste import uit de socciepc.</p>';

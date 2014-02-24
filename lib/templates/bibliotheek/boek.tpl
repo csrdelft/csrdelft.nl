@@ -8,11 +8,11 @@
 		<a href="/communicatie/bibliotheek/" title="Naar de catalogus">Catalogus</a>
 	</li>
 	<li>
-		<a href="/communicatie/bibliotheek/wenslijst" title="Wenslijst van bibliothecaris">Wenslijst</a>
+		<a href="/bibliotheek/wenslijst" title="Wenslijst van bibliothecaris">Wenslijst</a>
 	</li>
 	{if $loginlid->hasPermission('P_BIEB_READ')}
 		<li>
-			<a href="/communicatie/bibliotheek/rubrieken" title="Rubriekenoverzicht">Rubrieken</a>
+			<a href="/bibliotheek/rubrieken" title="Rubriekenoverzicht">Rubrieken</a>
 		</li>
 	{/if}
 </ul>
