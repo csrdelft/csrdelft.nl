@@ -225,10 +225,16 @@ div.li a.indexmenu_idx {
 
 h1 {
 	border-bottom: none !important;
-	font-family : Verdana, Geneva, Arial, Helvetica, sans-serif !important;
-	font-size: 1.6em !important;
 }
-
+div.catlinks {
+	background-color: #FAFAFA;
+	margin: -1em !important;
+}
+#siteNotice {
+	position: absolute;
+	top: 50px;
+	left: 250px;
+}
 #head li a, #content, #head-base, #footer {
 	background: none !important;
 	background-image: none !important;
