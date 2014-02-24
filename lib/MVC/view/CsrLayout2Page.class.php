@@ -42,7 +42,7 @@ class CsrLayout2Page extends HtmlPage {
 		$this->addScript('jquery/plugins/jquery.hoverIntent-r7.min.js');
 		$this->addScript('init.js', '/layout2/');
 		$this->addScript('csrdelft.js', '/layout/');
-		$this->addScript('dragobject.js');
+		$this->addScript('dragobject.js', '/layout/');
 	}
 
 	function view() {

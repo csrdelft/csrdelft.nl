@@ -61,9 +61,8 @@ class CmsPaginaController extends Controller {
 			$this->geentoegang();
 		}
 		$body = new CmsPaginaView($pagina);
-
-		$nieuw = array('thuis', 'contact', 'csrindeowee', 'vereniging', 'lidworden', 'geloof', 'vorming', 'filmpjes', 'gezelligheid', 'sport', 'vragen', 'officieel', 'societeit', 'ontspanning', 'interesse', 'interesseverzonden', 'accountaanvragen');
-		if (in_array($naam, $nieuw) && !LoginLid::instance()->hasPermission('P_LOGGED_IN')) { // nieuwe layout alleen voor specifieke paginas en uitgelogde bezoekers
+		$nieuw = array('', 'contact', 'csrindeowee', 'vereniging', 'lidworden', 'geloof', 'vorming', 'filmpjes', 'gezelligheid', 'sport', 'vragen', 'officieel', 'societeit', 'ontspanning', 'interesse', 'interesseverzonden', 'accountaanvragen');
+		if (in_array($naam, $nieuw) AND !LoginLid::instance()->hasPermission('P_LOGGED_IN')) { // nieuwe layout alleen voor specifieke paginas en uitgelogde bezoekers
 			$tmpl = 'content';
 			$menu = '';
 			if ($naam === 'lidworden') {
