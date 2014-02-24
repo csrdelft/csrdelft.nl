@@ -21,13 +21,13 @@ div.dokuwiki .toolbar button {
 /**
  * CSS edits for data plugin
  */
- 
+
 /* ----dataentry data plugin--- */
 
 /* hele wiki */
 div.dataplugin_entry dl {
-  width: 60%; 
-  font-size: 100%;
+	width: 60%; 
+	font-size: 100%;
 }
 
 div.dataplugin_entry dl dd {
@@ -40,44 +40,44 @@ div.dataplugin_entry dl dd {
 }
 
 div.dataaggregation div.filter {
-  margin-top:40px;
-  margin-bottom:10px;
+	margin-top:40px;
+	margin-bottom:10px;
 }
 div.dataaggregation span.filter {
-  font-size: 120%;
-  font-weight: bold;
+	font-size: 120%;
+	font-weight: bold;
 }
 
 /* vormingsbank */
 div.vb {
-  /* code for the container block, such as position, layout and borders, goes here */
+	/* code for the container block, such as position, layout and borders, goes here */
 }
- 
+
 div.vb dl {
-  /* vakje om de dataentry */
-  border: 0px;
-  margin-left:0em;
-  padding-left:0em;
+	/* vakje om de dataentry */
+	border: 0px;
+	margin-left:0em;
+	padding-left:0em;
 }
 
 div.vb dl > dt { 
-  /* this will allow you to style the definition terms */
-  text-align: left;
+	/* this will allow you to style the definition terms */
+	text-align: left;
 }
- 
+
 div.vb dl > dt + dd {
-  /* this will allow you to style to the definition values */
+	/* this will allow you to style to the definition values */
 }
 div.vb dl dd.titel{
-  /* individual entries of dataentry */
-  /* font-size: 200%;*/
+	/* individual entries of dataentry */
+	/* font-size: 200%;*/
 }
 /* --- einde dataentry  ---*/
 
 /* tag cloud data plugin */
 ul.dataplugin_cloud{
-  line-height: 1.8em !important; 
-  margin-left: 1.6em !important;
+	line-height: 1.8em !important; 
+	margin-left: 1.6em !important;
 }
 
 ul.dataplugin_cloud li.cl0 { font-size: 80% }
@@ -90,7 +90,7 @@ ul.dataplugin_cloud li.cl4 { font-size: 150% }
  * Search form plugin 
  * extra zoekvakje dat in pagina geplaatst kan worden
  */
- 
+
 
 div#qsearch2__out {
     position: absolute;
@@ -99,44 +99,44 @@ div#qsearch2__out {
 }
 
 #qsearch2__out {
-  top: 35px;
-  display: none;
-  left: auto;
-  right: 7.93335px;
-  bottom: auto;
-  height: auto;
-  font-family: sans-serif;
-  font-size: 0.8em;
-  background-color: window;
-  border: 1px solid #aaa;
-  padding: 0;
-  position: static;
+	top: 35px;
+	display: none;
+	left: auto;
+	right: 7.93335px;
+	bottom: auto;
+	height: auto;
+	font-family: sans-serif;
+	font-size: 0.8em;
+	background-color: window;
+	border: 1px solid #aaa;
+	padding: 0;
+	position: static;
 }
 
 #qsearch2__out ul {
-  padding: 0;
-  margin: 0;
-  list-style: none;
+	padding: 0;
+	margin: 0;
+	list-style: none;
 }
 #qsearch2__out li {
-  color: windowtext;
-  margin: 0;
-  width: 100%;
-  padding: 1px;
+	color: windowtext;
+	margin: 0;
+	width: 100%;
+	padding: 1px;
 }
 #qsearch2__out li a {
-  width: 97%; /* leave some space for browser rounding errors */
-  display: block;
+	width: 97%; /* leave some space for browser rounding errors */
+	display: block;
 }
 #qsearch2__out li:hover {
-  background-color: #bbb;
+	background-color: #bbb;
 }
 #qsearch2__out li a,
 #qsearch2__out li a:link,
 #qsearch2__out li a:visited,
 #qsearch2__out li a:hover {
-  color: windowtext;
-  text-decoration: none;
+	color: windowtext;
+	text-decoration: none;
 }
 
 /* different layout for wrap-plugin in sidebar of Vector template*/
@@ -205,7 +205,7 @@ div.dokuwiki div.comment_subscribe input { margin: 2px 0 2px 0; }
  * Namespace in index without page link in nojs mode. !important has to be used
  */
 div.li a.indexmenu_idx {
-  color: __text_neu__ !important; /* original: __missing__*/
+	color: __text_neu__ !important; /* original: __missing__*/
 }
 
 /* interwiki link -- internal referers get also internal color */
@@ -218,4 +218,45 @@ div.li a.indexmenu_idx {
     padding: 0 1.25em;
     border: solid __border__;
     border-width: 0 0 0 .25em;
+}
+
+
+/* C.S.R. PAGINA LAYOUT */
+
+body {
+	background: url('http://plaetjes.csrdelft.nl/layout/body.png') repeat-x;
+}
+
+#head {
+	height: 176px;
+}
+#head li {
+	background: url('http://plaetjes.csrdelft.nl/layout/menubutton.png') no-repeat;
+}
+#head li.selected, #head li:hover {
+	background: url('http://plaetjes.csrdelft.nl/layout/menubutton_hover.png') no-repeat;
+}
+#panel {
+	background-color: #fff;
+}
+#panel h5 {
+	margin: 0;
+	padding: 1px 5px;
+	font-size: 11px;
+	height: 13px;
+	color: #162673;
+	font-weight: bold;
+	background: url('http://plaetjes.csrdelft.nl/layout/blocktitle.png') no-repeat;
+	border-bottom: 1px solid #b8b8b8;
+}
+#panel ul {
+	margin: 10px 15px 0 10px;
+}
+#panel li {
+	padding: 0px 5px; 
+	font-size: 10px;
+	background-color: #f5f5f5;
+	border: 1px solid #b8b8b8;
+	border-top: 0;
+	text-align: left;
 }
