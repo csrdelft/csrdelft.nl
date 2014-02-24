@@ -253,7 +253,12 @@ div.li a.indexmenu_idx {
 	margin-top: 120px !important;
 }
 #left-navigation li, #right-navigation li {
+	height: 32px !important;
+	width: 122px !important;
 	background: url('http://plaetjes.csrdelft.nl/layout/menubutton.png') no-repeat;
+}
+#left-navigation span, #right-navigation span {
+	text-align: center;
 }
 #p-views {
 	background: none;
@@ -274,6 +279,5 @@ div.li a.indexmenu_idx {
 }
 #p-namespaces li.selected, #p-namespaces li:hover,
 #p-views li.selected, #p-views li:hover {
-	height: 32px !important;
 	background: url('http://plaetjes.csrdelft.nl/layout/menubutton_hover.png') no-repeat;
 }
