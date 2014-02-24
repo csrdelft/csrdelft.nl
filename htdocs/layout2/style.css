@@ -16,6 +16,18 @@ h1, h2, h3, h4, h5, h6 { font-weight: normal; }
 
 .verborgen { display: none; }
 
+.dragobject {
+	position: fixed;
+}
+.dragobject:active {
+	cursor: move;
+}
+.outer-shadow {
+	-moz-box-shadow: 0 0 20px #000000;
+	-webkit-box-shadow: 0 0 20px #000000;
+	box-shadow: 0 0 20px #000000;
+}
+
 /* Fonts
 ----------------------------------*/
 
@@ -290,6 +302,7 @@ div.rommel img { height: 77px; }
 /* ubb-hulp */
 div#ubbhulpverhaal{
     display: none;
+	position: fixed;
     z-index: 999;
     width: 330px;
     border: 1px solid #bbb;
