@@ -223,6 +223,12 @@ div.li a.indexmenu_idx {
 
 /* C.S.R. PAGINA LAYOUT */
 
+h1 {
+	border-bottom: none !important;
+	font-family : Verdana, Geneva, Arial, Helvetica, sans-serif !important;
+	font-size: 1.6em !important;
+}
+
 #head li a, #content, #head-base, #footer {
 	background: none !important;
 	background-image: none !important;
