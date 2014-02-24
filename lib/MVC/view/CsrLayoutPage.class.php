@@ -77,7 +77,9 @@ class CsrLayoutPage extends HtmlPage {
 		if (LidInstellingen::get('layout', 'minion') == 'ja') {
 			$this->addStylesheet('minion.css');
 			$this->addScript('minion.js');
-			DragObjectModel::getCoords('minion', $top = 40, $left = 40);
+			$top = 40;
+			$left = 40;
+			DragObjectModel::getCoords('minion', $top, $left);
 			$this->smarty->assign('top', $top);
 			$this->smarty->assign('left', $left);
 			$this->smarty->assign('minion', $this->smarty->fetch('minion.tpl'));
@@ -99,7 +101,9 @@ class CsrLayoutPage extends HtmlPage {
 		$this->smarty->assign('body', $this->body);
 		$this->smarty->assign('zijkolom', $this->zijkolom);
 		$this->smarty->assign('popup', $this->popup);
-		DragObjectModel::getCoords('popup', $top = 180, $left = 190);
+		$top = 180;
+		$left = 190;
+		DragObjectModel::getCoords('popup', $top, $left);
 		$this->smarty->assign('top', $top);
 		$this->smarty->assign('left', $left);
 		$this->smarty->display('csrdelft.tpl');
