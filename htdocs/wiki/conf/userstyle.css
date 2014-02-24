@@ -229,14 +229,17 @@ h1 {
 div.catlinks {
 	background-color: #fff !important;
 	margin: 0 !important;
-	margin-bottom: 15px !important;
+}
+div.catlinks span.bchead {
+	display: none !important;
 }
 #siteNotice {
 	position: absolute !important;
 	top: 155px !important;
 	left: 0px !important;
+	width: 100% !important;
 	text-align: center !important;
-	color: #EBEBEB !important;
+	color: #DDD !important;
 }
 #head li a, #content, #head-base, #footer {
 	background: none !important;
