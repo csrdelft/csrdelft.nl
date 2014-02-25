@@ -54,7 +54,7 @@ abstract class Controller {
 	}
 
 	protected function hasParam($key) {
-		return array_key_exists($key, $this->queryparts) && !empty($this->queryparts[$key]);
+		return array_key_exists($key, $this->queryparts) && isset($this->queryparts[$key]);
 	}
 
 	protected function getParam($key) {
