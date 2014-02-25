@@ -32,6 +32,7 @@ if (!defined("DOKU_INC")){
 //      first button will be rendered first, last button will be rendered at
 //      last.
 unset($_vector_btns["rss"]);
+unset($_vector_btns["qrcode"]);
 
 //RSS recent changes button
 $rss["rss"]["img"]      = DOKU_TPL."user/button-rss-algemeen.png";
@@ -58,7 +59,7 @@ if (auth_quickaclcheck('hoofdpagina') >= AUTH_READ) {
 	$rss["rss_prive"]["href"]     = DOKU_BASE."feed.php?validate_token=".$rsstoken;
 	$rss["rss_prive"]["width"]    = 80;
 	$rss["rss_prive"]["height"]   = 15;
-	$rss["rss_prive"]["title"]    = "De laatste wikiwijzigingen, dit is een link met privé-sleutel om al jouw pagina's te zien. Sleutel kun je (opnieuw) aanmaken in profiel met de knop 'Nieuwe aanvragen'";
+	$rss["rss_prive"]["title"]    = "De laatste wikiwijzigingen, dit is een link met privï¿½-sleutel om al jouw pagina's te zien. Sleutel kun je (opnieuw) aanmaken in profiel met de knop 'Nieuwe aanvragen'";
 	$rss["rss_prive"]["nofollow"] = true;
 }
 
