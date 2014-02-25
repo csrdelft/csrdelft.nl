@@ -33,6 +33,8 @@ if (!defined("DOKU_INC")){
 //      last.
 unset($_vector_btns["rss"]);
 unset($_vector_btns["qrcode"]);
+unset($_vector_btns["vecfdw"]);
+
 
 //RSS recent changes button
 $rss["rss"]["img"]      = DOKU_TPL."user/button-rss-algemeen.png";
@@ -65,13 +67,13 @@ if (auth_quickaclcheck('hoofdpagina') >= AUTH_READ) {
 
 $_vector_btns = $rss + $_vector_btns;
 
-//W3C (X)HTML validator button
-$_vector_btns["valid_xhtml"]["img"]      = DOKU_TPL."user/button-xhtml.png";
-$_vector_btns["valid_xhtml"]["href"]     = "http://validator.w3.org/check/referer";
-$_vector_btns["valid_xhtml"]["width"]    = 80;
-$_vector_btns["valid_xhtml"]["height"]   = 15;
-$_vector_btns["valid_xhtml"]["title"]    = "Valid XHTML";
-$_vector_btns["valid_xhtml"]["nofollow"] = true;
+////W3C (X)HTML validator button
+//$_vector_btns["valid_xhtml"]["img"]      = DOKU_TPL."user/button-xhtml.png";
+//$_vector_btns["valid_xhtml"]["href"]     = "http://validator.w3.org/check/referer";
+//$_vector_btns["valid_xhtml"]["width"]    = 80;
+//$_vector_btns["valid_xhtml"]["height"]   = 15;
+//$_vector_btns["valid_xhtml"]["title"]    = "Valid XHTML";
+//$_vector_btns["valid_xhtml"]["nofollow"] = true;
 
 
 
