@@ -13,9 +13,12 @@
 					<a href="{$item->link}" id="top{$item->item_id}" onmouseover="StartShowMenu('{$item->item_id}');" onmouseout="ResetShowMenu();"{if $item->isParentOf($huidig)} class="active"{/if} title="{$item->tekst}">{$item->tekst}</a>
 					{if $item->isParentOf($huidig)}
 						<script type="text/javascript">
-							SetActive({$item->item_id});
-							document.getElementById('banner'+{$item->item_id}).style.display = "inline";
-							fixPNG('imgbanner1');
+							$(document).ready(function() {
+								SetActive({$item->item_id});
+								document.getElementById('banner'+{$item->item_id}).style.display = "inline";
+								fixPNG('imgbanner1');
+								ShowMenu(menu_active);
+							});
 						</script>
 					{/if}
 				</li>

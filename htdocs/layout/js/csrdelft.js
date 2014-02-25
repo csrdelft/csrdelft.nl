@@ -9,7 +9,6 @@ $(document).ready(function() {
 	init_buttons();
 	init_forms();
 	init_visitekaartjes();
-	ShowMenu(menu_active);
 });
 
 function page_reload() {
