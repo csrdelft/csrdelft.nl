@@ -62,9 +62,6 @@ ul.horizontal li{
 ul.horizontal li.active{ font-weight:bold; }
 ul.nobullets li{ list-style-type: none; }
 
-.dragobject {
-	position: fixed;
-}
 .dragobject:active {
 	cursor: move;
 }

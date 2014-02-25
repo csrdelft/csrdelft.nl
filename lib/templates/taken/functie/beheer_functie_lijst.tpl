@@ -17,7 +17,7 @@
 		{/if}
 		{foreach from=$functie->getGekwalificeerden() item=kwali}
 			<div class="kwali"{if $kwali->getLid()->isOudlid()} style="display: none;"{/if}>
-				<a href="{$instellingen->get('taken', 'url')}/dekwalificeer/{$functie->getFunctieId()}" title="Kwalificatie intrekken" class="knop post" post="voor_lid={$kwali->getLidId()}">{icon get="vcard_delete"}</a>
+				<a href="{$instellingen->get('taken', 'url')}/dekwalificeer/{$functie->getFunctieId()}" title="Kwalificatie intrekken" class="knop post" postdata="voor_lid={$kwali->getLidId()}">{icon get="vcard_delete"}</a>
 				&nbsp;{$kwali->getLid()->getNaamLink($instellingen->get('corvee', 'weergave_ledennamen_beheer'), $instellingen->get('corvee', 'weergave_link_ledennamen'))}
 			</div>
 		{/foreach}
