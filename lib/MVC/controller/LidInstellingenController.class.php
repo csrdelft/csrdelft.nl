@@ -3,7 +3,7 @@
 require_once 'MVC/view/LidInstellingenView.class.php';
 
 /**
- * LidLidInstellingenController.class.php
+ * LidInstellingenController.class.php
  * 
  * @author P.W.G. Brussee <brussee@live.nl>
  * 
