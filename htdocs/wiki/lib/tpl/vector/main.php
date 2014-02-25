@@ -685,8 +685,6 @@ if (file_exists(DOKU_TPLINC."lang/".$conf["lang"]."/style.css")){
           if (actionOK("profile")){ //check if action is disabled
               echo  "      <li id=\"pt-preferences\"><a href=\"".wl(cleanID(getId()), array("do" => "profile"))."\" rel=\"nofollow\">".hsc($lang["btn_profile"])."</a></li>\n"; //language comes from DokuWiki core
           }
-          //csrstek
-          	  echo "      <li><a href=\"http://csrdelft.nl\">csrdelft.nl</a></li>";
           //logout
           echo  "      <li id=\"pt-logout\"><a href=\"".wl(cleanID(getId()), array("do" => "logout"))."\" rel=\"nofollow\">".hsc($lang["btn_logout"])."</a></li>\n"; //language comes from DokuWiki core
       }
