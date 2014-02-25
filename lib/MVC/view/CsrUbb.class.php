@@ -142,7 +142,7 @@ class CsrUbb extends eamBBParser {
 			if ($citaat == '') {
 				$citaat = $arguments['url'];
 			}
-			$text .= ' <a href="' . $arguments['url'] . '" title="' . $arguments['url'] . '" target="_blank" class="external">' . $citaat . '</a>';
+			$text .= ' van <a href="' . $arguments['url'] . '" title="' . $arguments['url'] . '" target="_blank" class="external">' . $citaat . '</a>';
 		} elseif ($citaat !== '') {
 			$text .= ' van ' . $citaat;
 		}
