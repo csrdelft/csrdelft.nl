@@ -32,7 +32,7 @@ class VrijstellingFormView extends TemplateView {
 	}
 
 	public function view() {
-		$this->_form->css_classes[] = 'popup';
+		$this->_form->css_classes[] = 'popup PreventUnchanged';
 		$this->smarty->assign('form', $this->_form);
 		if ($this->_uid === null) {
 			$this->smarty->assign('nocheck', true);

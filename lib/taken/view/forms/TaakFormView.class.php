@@ -48,7 +48,7 @@ class TaakFormView extends TemplateView {
 	}
 
 	public function view() {
-		$this->_form->css_classes[] = 'popup';
+		$this->_form->css_classes[] = 'popup PreventUnchanged';
 		$this->smarty->assign('form', $this->_form);
 		if ($this->_tid === 0) {
 			$this->smarty->assign('nocheck', true);
