@@ -1046,6 +1046,7 @@ htdocs/wiki/inc/phpseclib/update.sh -text
 htdocs/wiki/inc/plugin.php -text
 htdocs/wiki/inc/plugincontroller.class.php -text
 htdocs/wiki/inc/pluginutils.php -text
+htdocs/wiki/inc/preload.php -text
 htdocs/wiki/inc/preload.php.dist -text
 htdocs/wiki/inc/remote.php -text
 htdocs/wiki/inc/search.php -text
