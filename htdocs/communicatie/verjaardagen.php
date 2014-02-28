@@ -10,9 +10,9 @@ if($loginlid->hasPermission('P_LEDEN_READ')){
 	$midden = new VerjaardagContent('alleverjaardagen');
 } else {
 	# geen rechten
-	require_once 'paginacontent.class.php';
-	$pagina=new CmsPagina('geentoegang');
-	$midden = new CmsPaginaView($pagina);
+	require_once 'MVC/model/CmsPaginaModel.class.php';
+	$model = new CmsPaginaModel();
+	$midden = new CmsPaginaView($model->getPagina('geentoegang'));
 }
 
 $pagina=new CsrLayoutPage($midden);

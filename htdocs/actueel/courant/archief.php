@@ -16,9 +16,9 @@ if ($loginlid->hasPermission('P_LEDEN_READ')) {
 	$body = new CourantArchiefContent($courant);
 }else{
 	# geen rechten
-	require_once 'paginacontent.class.php';
-	$pagina=new CmsPagina('geentoegang');
-	$body = new CmsPaginaView($pagina);
+	require_once 'MVC/model/CmsPaginaModel.class.php';
+	$model = new CmsPaginaModel();
+	$body = new CmsPaginaView($model->getPagina('geentoegang'));
 }
 
 

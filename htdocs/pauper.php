@@ -9,11 +9,11 @@ require_once 'configuratie.include.php';
 $_SESSION['pauper']=true;
 
 require_once 'pagina.class.php';
-require_once 'paginacontent.class.php';
+require_once 'MVC/model/CmsPaginaModel.class.php';
 
-
-$paginacontent = new CmsPaginaView(new CmsPagina('mobiel'));
-$paginacontent->setActie('bekijken');
+$model = new CmsPaginaModel();
+$view = new CmsPaginaView($model->getPagina('mobiel'));
+$view->view();
 
 # Laatste forumberichten
 require_once 'forum/forum.class.php';

@@ -40,9 +40,9 @@ if ($fotoalbum->magBekijken()) {
 	$pagina->addScript('jquery/plugins/jquery.prettyPhoto-3.1.5.min.js?');
 	$pagina->view();
 } else {
-	require_once 'paginacontent.class.php';
-	$pagina = new CmsPagina('geentoegang');
-	$midden = new CmsPaginaView($pagina);
+	require_once 'MVC/model/CmsPaginaModel.class.php';
+	$model = new CmsPaginaModel();
+	$midden = new CmsPaginaView($model->getPagina('geentoegang'));
 
 	if (LoginLid::instance()->hasPermission('P_LOGGED_IN')) {
 		$pagina = new CsrLayoutPage($midden);

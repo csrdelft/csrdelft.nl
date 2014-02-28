@@ -39,9 +39,9 @@ if ($loginlid->hasPermission('P_FORUM_READ')) {
 		$midden->citeer((int) $_GET['post']);
 	}
 } else {
-	require_once 'paginacontent.class.php';
-	$pagina = new CmsPagina('geentoegang');
-	$midden = new CmsPaginaView($pagina);
+	require_once 'MVC/model/CmsPaginaModel.class.php';
+	$model = new CmsPaginaModel();
+	$midden = new CmsPaginaView($model->getPagina('geentoegang'));
 }
 
 if (LoginLid::instance()->hasPermission('P_LOGGED_IN')) {

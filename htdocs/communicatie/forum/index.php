@@ -32,9 +32,9 @@ if ($loginlid->hasPermission('P_FORUM_READ')) {
 	}
 } else {
 	# geen rechten
-	require_once 'paginacontent.class.php';
-	$pagina = new CmsPagina('geentoegang');
-	$body = new CmsPaginaView($pagina);
+	require_once 'MVC/model/CmsPaginaModel.class.php';
+	$model = new CmsPaginaModel();
+	$body = new CmsPaginaView($model->getPagina('geentoegang'));
 }
 
 if (LoginLid::instance()->hasPermission('P_LOGGED_IN')) {
