@@ -14,12 +14,12 @@ h1, h2, h3, h4 {
 	color: #555555;
 }
 body{
-	background: url('http://trunk.plaetjes.csrdelft.nl/sineregno/2014/body.png') repeat-x;
+	background: url('http://plaetjes.csrdelft.nl/layout/sineregno/2014/body.png') repeat-x;
 }
 
 /**** MENU ********************************************************************/
 #menubanners,#banner1,#banner2,#banner3,#banner4{
-	background-image: url('http://trunk.plaetjes.csrdelft.nl/sineregno/2014/puinhopen.png');
+	background-image: url('http://plaetjes.csrdelft.nl/layout/sineregno/2014/puinhopen.png');
 }
 
 #beeldmerk{
@@ -29,13 +29,13 @@ body{
 /**** MAIN MENU ***************************************************************/
 
 #mainmenu a {
-	background: url('http://trunk.plaetjes.csrdelft.nl/sineregno/2014/menubutton.png') no-repeat;
+	background: url('http://plaetjes.csrdelft.nl/layout/sineregno/2014/menubutton.png') no-repeat;
 }	
 #mainmenu a:link, #mainmenu a:visited {
 	color: #ffffff;
 }
 #mainmenu a:hover, #mainmenu a:active, #mainmenu a.active {
-	background: url('http://trunk.plaetjes.csrdelft.nl/sineregno/2014/menubutton_hover.png') no-repeat;
+	background: url('http://plaetjes.csrdelft.nl/layout/sineregno/2014/menubutton_hover.png') no-repeat;
 }
 
 /**** SUBMENU *****************************************************************/
@@ -45,9 +45,6 @@ body{
 }
 #submenu a:hover, #submenu a:active {
 	color: #fbea14;
-}
-#submenuitems span.separator{
-	background-image: url('http://plaetjes.csrdelft.nl/owee/2013/submenuseperator.png');
 }
 
 /**** MAIN ********************************************************************/
