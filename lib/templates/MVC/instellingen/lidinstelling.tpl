@@ -4,7 +4,7 @@
 {strip}
 <label style="float: left; width: 250px;" for="inst_{$module}_{$id}">
 {if $iedereen}
-	<img src="{$CSR_PICS}famfamfam/user_orange.png" title="Instellen voor alle leden" onclick="if(confirm('Weet u zeker dat u de instelling voor alle leden wilt veranderen?')){ location.href='/instellingen/reset/{$module}/{$id}/' + $('#inst_{$module}_{$id}').val(); };" style="cursor: pointer; border: 1px solid #999;" />&nbsp;
+	<img src="{$CSR_PICS}famfamfam/user_orange.png" title="U gaat nu deze instelling voor iedereen overschrijven. De standaard waarde moet in de code worden aangepast." onclick="if(confirm(this.title + '\n\nWeet u het zeker?')){ location.href='/instellingen/reset/{$module}/{$id}/' + $('#inst_{$module}_{$id}').val(); };" style="cursor: pointer; border: 1px solid #999;" />&nbsp;&nbsp;
 {/if}
 	{$label}
 </label>
