@@ -56,7 +56,7 @@ class LidInstellingen extends PersistenceModel {
 			'bijbel' => array('Bijbelvertaling voor bijbelrooster', 'enum', array('NBV', 'NBG', 'Herziene Statenvertaling', 'Statenvertaling (Jongbloed)', 'Groot Nieuws Bijbel', 'Willibrordvertaling'), 'NBV')
 		),
 		'layout' => array(
-			'layout' => array('Websteklayout', 'enum', array('normaal', 'owee', 'roze', 'lustrum', 'sineregno'), 'normaal'),
+			'layout' => array('Websteklayout', 'enum', array('sineregno'), 'sineregno'), //'normaal', 'owee', 'roze', 'lustrum', 
 			'beeld' => array('Schermmodus', 'enum', array('normaal', 'breedbeeld'), 'normaal'),
 			'visitekaartjes' => array('Visitekaartjes', 'enum', array('ja', 'nee'), 'ja'),
 			'sneeuw' => array('Sneeuw', 'enum', array('ja', 'freeze!', 'nee'), 'nee'),
