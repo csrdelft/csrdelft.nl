@@ -32,25 +32,30 @@ function startDrag(e) {
 	else {
 		dragobjectID = false;
 	}
+	dragged = false;
 }
 function stopDrag(e) {
 	if (!dragobjectID) {
 		return;
 	}
 	window.removeEventListener('mousemove', mouseMoveHandler, true);
-	$.post('/tools/dragobject.php', {
-		id: dragobjectID,
-		coords: {
-			left: dragobjLeft(),
-			top: dragobjTop()
-		}
-	});
+	if (dragged) {
+		$.post('/tools/dragobject.php', {
+			id: dragobjectID,
+			coords: {
+				left: dragobjLeft(),
+				top: dragobjTop()
+			}
+		});
+		dragged = false;
+	}
 	dragobjectID = false;
 }
 function mouseMoveHandler(e) {
 	if (!dragobjectID) {
 		return;
 	}
+	dragged = true;
 	e = e || window.event;
 	var newX = mouseX(e);
 	var newY = mouseY(e);
