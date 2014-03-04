@@ -23,9 +23,10 @@ class LidInstellingenView extends TemplateView {
 			echo '<li><a href="#tabs-' . $module . '">' . ucfirst($module) . '</a></li>';
 		}
 		echo '</ul>';
+		$overwrite = LoginLid::instance()->hasPermission('P_ADMIN');
 		foreach ($this->model->getInstellingen() as $module => $instellingen) {
 			echo '<div id="tabs-' . $module . '">';
-			foreach ($instellingen as $key => $instelling) {
+			foreach ($instellingen as $key => $def) {
 				$this->smarty->assign('module', $module);
 				$this->smarty->assign('id', $key);
 				$this->smarty->assign('type', $this->model->getType($module, $key));
@@ -33,7 +34,7 @@ class LidInstellingenView extends TemplateView {
 				$this->smarty->assign('label', $this->model->getDescription($module, $key));
 				$this->smarty->assign('waarde', $this->model->getValue($module, $key));
 				$this->smarty->assign('default', $this->model->getDefault($module, $key));
-				$this->smarty->assign('iedereen', LoginLid::instance()->hasPermission('P_ADMIN'));
+				$this->smarty->assign('iedereen', $overwrite);
 				$this->smarty->display('MVC/instellingen/lidinstelling.tpl');
 			}
 			echo '</div>';

@@ -17,8 +17,8 @@ class LidInstellingenController extends AclController {
 	private $model;
 
 	public function __construct($query) {
-		$this->model = LidInstellingen::instance();
 		parent::__construct($query);
+		$this->model = LidInstellingen::instance();
 		if (!$this->isPosted()) {
 			$this->acl = array(
 				'beheer' => 'P_LOGGED_IN',

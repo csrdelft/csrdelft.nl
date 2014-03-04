@@ -17,8 +17,8 @@ class InstellingenBeheerController extends AclController {
 	private $model;
 
 	public function __construct($query) {
-		$this->model = Instellingen::instance();
 		parent::__construct($query);
+		$this->model = Instellingen::instance();
 		if (!$this->isPosted()) {
 			$this->acl = array(
 				'module' => 'P_LOGGED_IN'

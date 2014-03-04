@@ -115,8 +115,8 @@ function setTijd(a, b, c, d) {
 </script>
 </div>';
 		$fields[] = new HtmlComment($html);
-		$fields['begin'] = new TijdField('begin', date('H:i', $item->getBeginMoment()), 'Van', 5);
-		$fields['eind'] = new TijdField('eind', date('H:i', $item->getEindMoment()), 'Tot', 5);
+		$fields['begin'] = new TijdField('begin', date('H:i', $item->getBeginMoment()), 'Van');
+		$fields['eind'] = new TijdField('eind', date('H:i', $item->getEindMoment()), 'Tot');
 		$fields[] = new SelectField('rechten_bekijken', $item->rechten_bekijken, 'Zichtbaar', array('P_LEDEN_READ' => 'Intern', 'P_NOBODY' => 'Extern'));
 		$fields[] = new TextField('link', $item->link, 'Link');
 		$fields[] = new AutoresizeTextareaField('beschrijving', $item->beschrijving, 'Beschrijving');
