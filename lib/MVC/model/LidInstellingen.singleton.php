@@ -56,7 +56,7 @@ class LidInstellingen extends PersistenceModel {
 			'bijbel' => array('Bijbelvertaling voor bijbelrooster', 'enum', array('NBV', 'NBG', 'Herziene Statenvertaling', 'Statenvertaling (Jongbloed)', 'Groot Nieuws Bijbel', 'Willibrordvertaling'), 'NBV')
 		),
 		'layout' => array(
-			'layout' => array('Websteklayout', 'enum', array('sineregno'), 'sineregno'), //'normaal', 'owee', 'roze', 'lustrum', 
+			'layout' => array('Websteklayout', 'enum', array('normaal', 'owee', 'lustrum', 'sineregno', 'roze'), 'sineregno'),
 			'beeld' => array('Schermmodus', 'enum', array('normaal', 'breedbeeld'), 'normaal'),
 			'visitekaartjes' => array('Visitekaartjes', 'enum', array('ja', 'nee'), 'ja'),
 			'sneeuw' => array('Sneeuw', 'enum', array('ja', 'freeze!', 'nee'), 'nee'),
@@ -146,7 +146,7 @@ class LidInstellingen extends PersistenceModel {
 
 			case 'int':
 				if ($value >= $this->instellingen[$module][$key][2][0] AND
-					$value <= $this->instellingen[$module][$key][2][1]
+						$value <= $this->instellingen[$module][$key][2][1]
 				) {
 					return true;
 				}
@@ -154,8 +154,8 @@ class LidInstellingen extends PersistenceModel {
 
 			case 'string':
 				if (strlen($value) >= $this->instellingen[$module][$key][2][0] AND
-					strlen($value) <= $this->instellingen[$module][$key][2][1] AND
-					preg_match('/^[\w\-_\. ]*$/', $value)
+						strlen($value) <= $this->instellingen[$module][$key][2][1] AND
+						preg_match('/^[\w\-_\. ]*$/', $value)
 				) {
 					return true;
 				}
