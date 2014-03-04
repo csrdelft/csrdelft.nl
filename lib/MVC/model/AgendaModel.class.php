@@ -152,7 +152,7 @@ class AgendaModel extends PersistenceModel {
 		}
 		$item->begin_moment = getDateTime(strtotime($datum) + 72000);
 		$item->eind_moment = getDateTime(strtotime($datum) + 79200);
-		$item->rechten_bekijken = 'P_NOBODY';
+		$item->rechten_bekijken = 'P_LEDEN_READ';
 		return $item;
 	}
 
