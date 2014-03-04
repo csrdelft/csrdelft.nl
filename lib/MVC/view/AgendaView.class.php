@@ -93,25 +93,30 @@ class AgendaItemFormView extends Formulier {
 
 		$fields[] = new RequiredTextField('titel', $item->titel, 'Titel');
 		$fields['datum'] = new DatumField('datum', $item->begin_moment, 'Datum', date('Y') + 5, date('Y') - 5);
-		$fields[] = new HtmlComment(<<<HTML
-<div id="tijden" class="InputField"><label>Standaard tijden</label>
-	<a onclick="setTijd('00','00','23','59');">» Hele dag</a> &nbsp;
-	<a onclick="setTijd('18','30','22','30');">» Kring</a> &nbsp;
-	<a onclick="setTijd('20','00','22','00');">» Lezing</a> &nbsp;
-	<a onclick="setTijd('20','00','23','59');">» Borrel</a> &nbsp;
+
+		$html = '<div id="tijden" class="InputField"><label>Standaard tijden</label>';
+		$tijden = explode(',', Instellingen::get('agenda', 'standaard_tijden'));
+		$aantal = count($tijden) / 2;
+		for ($i = 0; $i < $aantal; $i++) {
+			$naam = $tijden[$i * 2 + 1];
+			$tijd = explode('-', Instellingen::get('agenda', 'standaard_tijd_' . ($i + 1)));
+			$begin = explode(':', $tijd[0]);
+			$eind = explode(':', $tijd[1]);
+			$html .= '<a onclick="setTijd(\'' . $begin[0] . '\',\'' . $begin[1] . '\',\'' . $eind[0] . '\',\'' . $eind[1] . '\');">» ' . $naam . '</a> &nbsp;';
+		}
+		$html .= '<div style="float:right;"><a title="Wijzig standaard tijden" href="/instellingenbeheer/module/agenda"><img width="16" height="16" class="icon" alt="edit" src="http://plaetjes.csrdelft.nl/famfamfam/pencil.png"></a></div>
 <script type="text/javascript">
 function setTijd(a, b, c, d) {
-	document.getElementById('field_begin_uur').value = a;
-	document.getElementById('field_begin_minuut').value = b;
-	document.getElementById('field_eind_uur').value = c;
-	document.getElementById('field_eind_minuut').value = d;
+	document.getElementById(\'field_begin_uur\').value = a;
+	document.getElementById(\'field_begin_minuut\').value = b;
+	document.getElementById(\'field_eind_uur\').value = c;
+	document.getElementById(\'field_eind_minuut\').value = d;
 }
 </script>
-</div>
-HTML
-		);
-		$fields['begin'] = new TijdField('begin', date('H:i', $item->getBeginMoment()), 'Van');
-		$fields['eind'] = new TijdField('eind', date('H:i', $item->getEindMoment()), 'Tot');
+</div>';
+		$fields[] = new HtmlComment($html);
+		$fields['begin'] = new TijdField('begin', date('H:i', $item->getBeginMoment()), 'Van', 5);
+		$fields['eind'] = new TijdField('eind', date('H:i', $item->getEindMoment()), 'Tot', 5);
 		$fields[] = new SelectField('rechten_bekijken', $item->rechten_bekijken, 'Zichtbaar', array('P_LEDEN_READ' => 'Intern', 'P_NOBODY' => 'Extern'));
 		$fields[] = new TextField('link', $item->link, 'Link');
 		$fields[] = new AutoresizeTextareaField('beschrijving', $item->beschrijving, 'Beschrijving');

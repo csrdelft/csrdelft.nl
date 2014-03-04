@@ -48,6 +48,14 @@ class Instellingen extends PersistenceModel {
 	}
 
 	private $defaults = array(
+		'agenda' => array(
+			'standaard_zichtbaar_rechten' => 'P_LEDEN_READ',
+			'standaard_tijden' => '1,Hele dag,2,Kring,3,Lezing,4,Borrel',
+			'standaard_tijd_1' => '00:00-23:59',
+			'standaard_tijd_2' => '18:30-22:30',
+			'standaard_tijd_3' => '20:00-22:00',
+			'standaard_tijd_4' => '20:00-23:59'
+		),
 		'corvee' => array(
 			'punten_per_jaar' => '11',
 			'herinnering_aantal_mails' => '2',
@@ -168,7 +176,7 @@ class Instellingen extends PersistenceModel {
 	 * @throws Exception
 	 * @return Instelling
 	 */
-	public function getInstelling($module, $key) {
+	private function getInstelling($module, $key) {
 		if (!array_key_exists($module, $this->instellingen) OR !array_key_exists($key, $this->instellingen[$module])) {
 			// get default for missing instelling
 			if (array_key_exists($module, $this->defaults) AND array_key_exists($key, $this->defaults[$module])) {
