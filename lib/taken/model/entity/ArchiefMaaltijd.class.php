@@ -92,6 +92,10 @@ class ArchiefMaaltijd implements Agendeerbaar {
 
 	// Agendeerbaar ############################################################
 
+	public function getUID() {
+		return $this->maaltijd_id . '@archiefmaaltijd.csrdelft.nl';
+	}
+
 	public function getBeginMoment() {
 		return strtotime($this->getDatum() . ' ' . $this->getTijd());
 	}

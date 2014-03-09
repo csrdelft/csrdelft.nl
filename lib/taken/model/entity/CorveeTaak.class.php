@@ -304,6 +304,10 @@ class CorveeTaak implements Agendeerbaar {
 
 	// Agendeerbaar ############################################################
 
+	public function getUID() {
+		return $this->taak_id . '@corveetaak.csrdelft.nl';
+	}
+
 	public function getBeginMoment() {
 		return strtotime($this->getDatum());
 	}

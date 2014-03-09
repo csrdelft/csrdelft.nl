@@ -40,6 +40,9 @@ class AgendaController extends AclController {
 		$this->action = 'maand';
 		if ($this->hasParam(2)) {
 			$this->action = $this->getParam(2);
+			if ($this->action === 'calendar.ics') {
+				$this->action = 'icalendar';
+			}
 		}
 		$this->performAction($this->getParams(3));
 	}

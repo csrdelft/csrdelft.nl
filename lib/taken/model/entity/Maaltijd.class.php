@@ -229,6 +229,10 @@ class Maaltijd implements Agendeerbaar {
 
 	// Agendeerbaar ############################################################
 
+	public function getUID() {
+		return $this->maaltijd_id . '@maaltijd.csrdelft.nl';
+	}
+
 	public function getBeginMoment() {
 		return strtotime($this->getDatum() . ' ' . $this->getTijd());
 	}
@@ -254,5 +258,3 @@ class Maaltijd implements Agendeerbaar {
 	}
 
 }
-
-?>
