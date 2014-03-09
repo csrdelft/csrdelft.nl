@@ -40,17 +40,12 @@ class MenuItem extends PersistentEntity {
 	 * LoginLid::hasPermission
 	 * @var string
 	 */
-	public $permission;
+	public $rechten_bekijken;
 	/**
 	 * Zichtbaar of verborgen
 	 * @var boolean
 	 */
 	public $zichtbaar;
-	/**
-	 * Unieke naam per menu
-	 * @var string
-	 */
-	public $menu_naam;
 	/**
 	 * Database table fields
 	 * @var array
@@ -61,9 +56,8 @@ class MenuItem extends PersistentEntity {
 		'prioriteit' => 'int(11) NOT NULL',
 		'tekst' => 'varchar(50) NOT NULL',
 		'link' => 'varchar(255) NOT NULL',
-		'permission' => 'varchar(255) NOT NULL',
-		'zichtbaar' => 'tinyint(1) NOT NULL',
-		'menu_naam' => 'varchar(255) NOT NULL'
+		'rechten_bekijken' => 'varchar(255) NOT NULL',
+		'zichtbaar' => 'tinyint(1) NOT NULL'
 	);
 	/**
 	 * Database primary key
@@ -98,22 +92,6 @@ class MenuItem extends PersistentEntity {
 			}
 		}
 		return false;
-	}
-
-	/**
-	 * Doorloopt een lijst met menu-items en
-	 * voegt recursief de kinderen toe.
-	 * 
-	 * @param MenuItem[] $items
-	 */
-	public function addChildren(array &$items) {
-		foreach ($items as $i => $child) {
-			if ($this->item_id === $child->parent_id) { // this is the correct parent
-				$this->children[] = $child;
-				unset($items[$i]); // only one parent
-				$child->addChildren($items); // add children of children
-			}
-		}
 	}
 
 }

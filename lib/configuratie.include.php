@@ -81,7 +81,7 @@ switch (constant('MODE')) {
 
 			require_once 'MVC/view/CsrLayoutPage.class.php';
 			require_once 'MVC/view/CsrLayout2Page.class.php';
-			require_once 'MVC/view/form/Formulier.class.php';
+			require_once 'MVC/view/Formulier.class.php';
 			require_once 'MVC/view/CsrUbb.class.php';
 			require_once 'simplehtml.class.php';
 			require_once 'icon.class.php';

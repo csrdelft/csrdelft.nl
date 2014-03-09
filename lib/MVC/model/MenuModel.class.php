@@ -20,87 +20,59 @@ class MenuModel extends PersistenceModel {
 	 * @return array
 	 */
 	public function getAlleMenus() {
-		$sql = 'SELECT DISTINCT menu_naam FROM menus';
+		$sql = 'SELECT tekst FROM menus WHERE parent_id = 0';
 		$query = Database::instance()->prepare($sql);
 		$query->execute();
 		return $query->fetchAll(PDO::FETCH_COLUMN, 0);
 	}
 
 	/**
-	 * Haalt alle menu-items op (die zichtbaar zijn).
-	 * 
-	 * @param string $menu_naam
-	 * @param boolean $zichtbaar
-	 * @return MenuItem[]
-	 */
-	public function getMenuItems($menu_naam, $zichtbaar = null) {
-		$where = 'menu_naam = ?';
-		$params = array($menu_naam);
-		if ($zichtbaar !== null) {
-			$where .= ' AND zichtbaar = ' . ($zichtbaar ? 'true' : 'false');
-		}
-		return $this->find($where, $params, 'parent_id ASC, prioriteit ASC');
-	}
-
-	/**
-	 * Haalt alle menu-items op die zichtbaar zijn voor het ingelogde lid.
-	 * 
-	 * @param string $menu_naam
-	 * @return MenuItem[]
-	 */
-	public function getMenuItemsVoorLid($menu_naam) {
-		return $this->filterMenuItems($this->getMenuItems($menu_naam, true));
-	}
-
-	/**
+	 * Haalt alle menu-items op (die zichtbaar zijn voor de gebruiker).
 	 * Filtert de menu-items met de permissies van het ingelogede lid.
 	 * 
-	 * @param MenuItem[] $menuitems
+	 * @param string $menu_naam
+	 * @param boolean $admin
 	 * @return MenuItem[]
 	 */
-	private function filterMenuItems(array $menuitems) {
-		$result = array();
-		foreach ($menuitems as $i => $item) {
-			if (LoginLid::instance()->hasPermission($item->permission)) {
-				$result[$i] = $item;
+	public function getMenuTree($menu_naam, $admin = false) {
+		// get root
+		$where = 'parent_id = 0 AND tekst = ?';
+		$params = array($menu_naam);
+		$root = $this->find($where, $params, 'parent_id ASC, prioriteit ASC');
+		if (sizeof($root) > 0) {
+			$this->getChildren($root[0], $admin);
+			return $root[0];
+		}
+		return null;
+	}
+
+	public function getChildren(MenuItem $item, $admin = false) {
+		$where = 'parent_id = ?' . ($admin ? '' : ' AND zichtbaar = true');
+		$item->children = $this->find($where, array($item->item_id), 'prioriteit ASC');
+		foreach ($item->children as $i => $child) {
+			if (!$admin AND !LoginLid::instance()->hasPermission($item->rechten_bekijken)) {
+				unset($item->children[$i]);
+			} else {
+				$this->getChildren($child, $admin);
 			}
-			unset($menuitems[$i]);
-		}
-		return $result;
-	}
-
-	public function buildMenuTree($menu_naam, $menuitems) {
-		$root = new MenuItem();
-		$root->item_id = 0;
-		$root->tekst = $menu_naam;
-		$root->menu_naam = $menu_naam;
-		$root->addChildren($menuitems); // recursive
-		return $root;
-	}
-
-	public function wijzigProperty($id, $property, $value) {
-		$rowcount = Database::sqlUpdate('menus', array($property => $value), 'item_id = :id', array(':id' => $id));
-		if ($rowcount !== 1) {
-			throw new Exception('wijzigProperty rowCount=' . $rowcount);
-		}
-		return $this->retrieveByPrimaryKey(array($id));
-	}
-
-	public function saveMenuItem(MenuItem $item) {
-		if (is_int($item->item_id) AND $item->item_id > 0) {
-			$this->update($item);
-		} else {
-			$id = $this->create($item);
-			$item->item_id = intval($id);
 		}
 	}
 
-	public function deleteMenuItem($id) {
+	public function getMenuItem($id) {
 		$item = $this->retrieveByPrimaryKey(array($id));
 		if (!$item) {
 			throw new Exception('Menu-item ' . $id . ' bestaat niet');
 		}
-		$this->delete($item);
+		return $item;
+	}
+
+	public function newMenuItem($parent_id) {
+		$item = new MenuItem();
+		$item->parent_id = intval($parent_id);
+		$item->prioriteit = 0;
+		$item->link = '/';
+		$item->rechten_bekijken = 'P_NOBODY';
+		$item->zichtbaar = true;
 		return $item;
 	}
 

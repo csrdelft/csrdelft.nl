@@ -734,7 +734,6 @@ htdocs/layout/js/jquery/themes/vader/jquery.ui.theme.css -text
 htdocs/layout/js/lightbox.js -text
 htdocs/layout/js/maaltijdabos.js -text
 htdocs/layout/js/menu.js -text
-htdocs/layout/js/menubeheer.js -text
 htdocs/layout/js/minion.js -text
 htdocs/layout/js/peilingbeheer.js -text
 htdocs/layout/js/pngfix.js -text
@@ -3134,6 +3133,8 @@ lib/MVC/view/CsrLayout2Page.class.php -text
 lib/MVC/view/CsrLayoutPage.class.php -text
 lib/MVC/view/CsrSmarty.class.php -text
 lib/MVC/view/CsrUbb.class.php -text
+lib/MVC/view/FormElement.abstract.php -text
+lib/MVC/view/Formulier.class.php -text
 lib/MVC/view/HtmlPage.abstract.php -text
 lib/MVC/view/InstellingenBeheerView.class.php -text
 lib/MVC/view/LidInstellingenView.class.php -text
@@ -3143,8 +3144,6 @@ lib/MVC/view/MenuView.class.php -text
 lib/MVC/view/TemplateView.abstract.php -text
 lib/MVC/view/Validator.interface.php -text
 lib/MVC/view/View.interface.php -text
-lib/MVC/view/form/FormElement.abstract.php -text
-lib/MVC/view/form/Formulier.class.php -text
 lib/Zend/Exception.php -text
 lib/Zend/Gdata.php -text
 lib/Zend/Gdata/App.php -text
@@ -4066,3 +4065,4 @@ sql/4160_agenda.sql -text
 sql/4249_agenda_link.sql -text
 sql/4260_cmspagina_fixed.sql -text
 sql/4269_cmspagina_security_fix.sql -text
+sql/4354_menubeheer_rename.sql -text

@@ -25,9 +25,7 @@ class AgendaController extends AclController {
 		if (!$this->isPosted()) {
 			$this->acl = array(
 				'maand' => 'P_NOBODY',
-				'icalendar' => 'P_NOBODY',
-				'toevoegen' => 'P_AGENDA_POST',
-				'bewerken' => 'P_AGENDA_MOD'
+				'icalendar' => 'P_NOBODY'
 			);
 		} else {
 			$this->acl = array(
@@ -90,7 +88,7 @@ class AgendaController extends AclController {
 		$this->view = new AgendaItemFormView($item, $this->action, $datum); // fetches POST values itself
 		if ($this->isPosted() AND $this->view->validate()) {
 			$id = $this->model->create($item);
-			$item->item_id = $id;
+			$item->item_id = (int) $id;
 			//setMelding('Toegevoegd', 1);
 			$this->view = new AgendaItemMaandView($item, $this->action);
 		}

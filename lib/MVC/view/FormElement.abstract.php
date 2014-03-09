@@ -402,7 +402,7 @@ class TextField extends InputField {
 		if (!parent::validate()) {
 			return false;
 		}
-		if (!mb_check_encoding($this->value, 'UTF-8')) {
+		if (!is_utf8($this->value)) {
 			$this->error = 'Ongeldige karakters, gebruik reguliere tekst.';
 		} elseif ($this->max_len > 0 AND mb_strlen($this->value) > $this->max_len) {
 			//als max_len > 0 dan checken of de lengte er niet overheen gaat.
@@ -698,7 +698,7 @@ class IntField extends TextField {
 	public $min = null;
 	public $max = null;
 
-	public function __construct($name, $value, $description, $max = null, $min = null, $empty = false) {
+	public function __construct($name, $value, $description, $max = null, $min = null) {
 		parent::__construct($name, $value, $description);
 
 		if ($max !== null) {
@@ -707,10 +707,12 @@ class IntField extends TextField {
 		if ($min !== null) {
 			$this->min = (int) $min;
 		}
-		$this->notnull = !$empty;
 	}
 
 	public function getValue() {
+		if (!$this->notnull AND parent::getValue() === '') {
+			return null;
+		}
 		return (int) parent::getValue();
 	}
 

@@ -94,6 +94,16 @@ function invokeRefresh($url = null, $melding = '', $level = -1) {
 	exit;
 }
 
+function is_utf8($string) {
+	return checkEncoding($string, 'UTF-8');
+}
+
+function checkEncoding($string, $string_encoding) {
+	$fs = $string_encoding == 'UTF-8' ? 'UTF-32' : $string_encoding;
+	$ts = $string_encoding == 'UTF-32' ? 'UTF-8' : $string_encoding;
+	return $string === mb_convert_encoding(mb_convert_encoding($string, $fs, $ts), $ts, $fs);
+}
+
 /**
  * User Contributed Notes
  * @source http://nl.php.net/manual/en/function.ip2long.php

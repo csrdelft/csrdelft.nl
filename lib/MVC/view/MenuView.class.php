@@ -35,26 +35,15 @@ class MenuView extends TemplateView {
 	public function __construct($menu_name, $level) {
 		parent::__construct(new MenuModel());
 		$this->level = $level;
-
-		$path = filter_input(INPUT_SERVER, 'REQUEST_URI', FILTER_SANITIZE_URL);
-
-		$items = $this->model->getMenuItemsVoorLid($menu_name);
-
-		foreach ($items as $item) {
-			if (startsWith($path, $item->link)) {
-				$this->active_item = $item;
-			}
-		}
+		$this->tree_root = $this->model->getMenuTree($menu_name);
 		if ($this->active_item === null) {
 			$this->active_item = new MenuItem();
 		}
-
-		$this->tree_root = $this->model->buildMenuTree($menu_name, $items);
 	}
 
 	public function view() {
 		$this->smarty->assign('root', $this->tree_root);
-		$this->smarty->assign('huidig', $this->active_item);
+		$this->smarty->assign('path', filter_input(INPUT_SERVER, 'REQUEST_URI', FILTER_SANITIZE_URL));
 
 		if ($this->level === 0) {
 			// SocCie-saldi & MaalCie-saldi

@@ -8,19 +8,9 @@
 			<div id="banner4" class="menubanner"></div>
 		</div>
 		<ul id="mainmenu">
-			{foreach from=$root->children item=item}
+			{foreach name=main from=$root->children item=item}
 				<li>
-					<a href="{$item->link}" id="top{$item->item_id}" onmouseover="StartShowMenu('{$item->item_id}');" onmouseout="ResetShowMenu();"{if $item->isParentOf($huidig)} class="active"{/if} title="{$item->tekst}">{$item->tekst}</a>
-					{if $item->isParentOf($huidig)}
-						<script type="text/javascript">
-							$(document).ready(function() {
-								SetActive({$item->item_id});
-								document.getElementById('banner'+{$item->item_id}).style.display = "inline";
-								fixPNG('imgbanner1');
-								ShowMenu(menu_active);
-							});
-						</script>
-					{/if}
+					<a href="{$item->link}" id="top{$smarty.foreach.main.iteration}" onmouseover="StartShowMenu('{$smarty.foreach.main.iteration}');" onmouseout="ResetShowMenu();"{if startsWith($path, $item->link)} class="active"{/if} title="{$item->tekst}">{$item->tekst}</a>
 				</li>
 			{/foreach}
 		</ul>
@@ -43,39 +33,39 @@
 					{/foreach}
 				</div>
 				{if $loginlid->hasPermission('P_LEDEN_MOD')}
-				<div id="adminding">
-					Beheer
-					{if $loginlid->hasPermission('P_ADMIN')}
-						{if $queues.forum->count()>0 OR $queues.meded->count()>0}
-							({$queues.forum->count()}/{$queues.meded->count()})
-						{/if}
-					{/if}
-					<div>
+					<div id="adminding">
+						Beheer
 						{if $loginlid->hasPermission('P_ADMIN')}
-						<span class="queues">
-							{foreach from=$queues item=queue key=name}
-								<a href="/tools/query.php?id={$queue->getID()}">
-									{$name|ucfirst}: <span class="count">{$queue->count()}</span><br />
-								</a>
-							{/foreach}
-						</span>
-						<a href="/su/x101">&raquo; SU Jan Lid.</a><br />
+							{if $queues.forum->count()>0 OR $queues.meded->count()>0}
+								({$queues.forum->count()}/{$queues.meded->count()})
+							{/if}
 						{/if}
-						<a href="/beheer">&raquo; Beheeroverzicht</a><br />
-						<a href="/tools/query.php">&raquo; Opgeslagen queries</a><br />
-						<a href="/menubeheer">&raquo; Menubeheer</a> <a href="/instellingenbeheer">&raquo; Instellingen</a><br />
+						<div>
+							{if $loginlid->hasPermission('P_ADMIN')}
+								<span class="queues">
+									{foreach from=$queues item=queue key=name}
+										<a href="/tools/query.php?id={$queue->getID()}">
+											{$name|ucfirst}: <span class="count">{$queue->count()}</span><br />
+										</a>
+									{/foreach}
+								</span>
+								<a href="/su/x101">&raquo; SU Jan Lid.</a><br />
+							{/if}
+							<a href="/beheer">&raquo; Beheeroverzicht</a><br />
+							<a href="/tools/query.php">&raquo; Opgeslagen queries</a><br />
+							<a href="/menubeheer">&raquo; Menubeheer</a> <a href="/instellingenbeheer">&raquo; Instellingen</a><br />
+						</div>
 					</div>
-				</div>
-				{literal}
-				<script>
-					jQuery(document).ready(function($){
-						$('#adminding').click(function(){
-							$(this).children('div').toggle();
-						});
-						$('#adminding div').hide();
-					});
-				</script>
-				{/literal}
+					{literal}
+						<script>
+							jQuery(document).ready(function($) {
+								$('#adminding').click(function() {
+									$(this).children('div').toggle();
+								});
+								$('#adminding div').hide();
+							});
+						</script>
+					{/literal}
 				{/if}
 				<br />
 				<form method="get" action="/communicatie/lijst.php" name="lidzoeker">
@@ -97,7 +87,7 @@
 				<form action="/login.php" method="post">
 					<fieldset>
 						<input type="hidden" name="url" value="{$smarty.server.REQUEST_URI}" />
-						<input type="text" name="user" value="naam" onfocus="if(this.value==='naam')this.value='';" />
+						<input type="text" name="user" value="naam" onfocus="if (this.value === 'naam') this.value = '';" />
 						<input type="password" name="pass" value="wachtwoord" />
 						<input type="checkbox" name="checkip" class="checkbox" value="true" id="login-checkip" />
 						<label for="login-checkip">Koppel IP</label>
@@ -114,18 +104,15 @@
 
 <div id="submenu" onmouseover="ResetTimer();" onmouseout="StartTimer();">
 	<div id="submenuitems">
-{foreach from=$root->children item=item}
-	{foreach name=sub from=$item->children item=subitem}
-		{if $smarty.foreach.sub.first}
-			<div id="sub{$item->item_id}"{if $item->isParentOf($huidig)} class="active"{/if}>
-		{/if}
-			<a href="{$subitem->link}" title="{$subitem->tekst}"{if $subitem === $huidig} class="active"{/if}>{$subitem->tekst}</a>
-		{if !$smarty.foreach.sub.last}
-			<span class="separator">&nbsp;&nbsp;</span>
-		{else}
+		{foreach name=level1 from=$root->children item=item}
+			<div id="sub{$smarty.foreach.level1.iteration}" {if startsWith($path, $item->link)} class="active"{/if}>
+				{foreach name=level2 from=$item->children item=subitem}
+					<a href="{$subitem->link}" title="{$subitem->tekst}"{if startsWith($path, $subitem->link)} class="active"{/if}>{$subitem->tekst}</a>
+					{if !$smarty.foreach.level2.last}
+						<span class="separator">&nbsp;&nbsp;</span>
+					{/if}
+				{/foreach}
 			</div>
-		{/if}
-	{/foreach}
-{/foreach}
+		{/foreach}
 	</div>
 </div>

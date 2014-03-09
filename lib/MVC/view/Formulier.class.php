@@ -1,6 +1,6 @@
 <?php
 
-require_once 'MVC/view/form/FormElement.abstract.php';
+require_once 'MVC/view/FormElement.abstract.php';
 
 /**
  * Formulier.class.php
