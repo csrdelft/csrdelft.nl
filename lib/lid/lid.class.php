@@ -227,10 +227,6 @@ class Lid implements Serializable, Agendeerbaar {
 		return $this->profiel['uid'];
 	}
 
-	public function getUID() {
-		return $this->getUid() . '@' . $this->getStatus() . '.csrdelft.nl';
-	}
-
 	public function getGeslacht() {
 		return $this->profiel['geslacht'];
 	}
