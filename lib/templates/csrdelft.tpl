@@ -36,7 +36,7 @@
 		<link rel="shortcut icon" href="{$CSR_PICS}layout/favicon.ico" />
 	</head>
 	<body>
-		<div id="header"{if isset($minion)} style="background-image: url('http://fc08.deviantart.net/fs71/f/2013/307/b/3/despicable_me_2_gif___evil_minion_yells_by_c0l0ss4l_st1nk3r-d6suojf.gif'); background-repeat: no-repeat;"{/if}>{$mainmenu->view()}</div>
+		<div id="header">{$mainmenu->view()}</div>
 		<div id="container">
 			<div id="main">
 				{if is_array($zijkolom)}
@@ -63,14 +63,6 @@
 		{include file='MVC/layout/ubbhulp.tpl'}
 		{if isset($minion)}
 			{$minion}
-			<script type="text/javascript">
-				$('#header').hoverIntent(function() {
-					 $('#header').animate({ 'height': '692' }, 800, 'easeInOutCubic');
-				});
-				$('#container').hoverIntent(function() {
-					$('#header').animate({ 'height': '176' }, 800, 'easeInOutCubic');
-				});
-				</script>
 		{/if}
 		{if isset($debug)}
 			<h2 id="mysql_debug_header"><a id="mysql_debug_showhide" href="#mysql_debug_header" onclick="$('#mysql_debug').toggle();">Debug Tonen/Verstoppen</a></h2>
