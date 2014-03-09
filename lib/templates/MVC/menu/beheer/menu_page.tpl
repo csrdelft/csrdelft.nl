@@ -15,7 +15,7 @@
 <p>
 	Op deze pagina kunt u het menu beheren.
 </p>
-<ul class="menubeheer-tree" width="100%">
+<ul class="menubeheer-tree">
 	{if $root AND $root->children}
 		{foreach from=$root->children item=child}
 			{include file='MVC/menu/beheer/menu_item.tpl' item=$child}
