@@ -43,7 +43,10 @@ class MenuView extends TemplateView {
 
 	public function view() {
 		$this->smarty->assign('root', $this->tree_root);
-		$this->smarty->assign('path', filter_input(INPUT_SERVER, 'REQUEST_URI', FILTER_SANITIZE_URL));
+
+		$req = $_SERVER['REQUEST_URI'];
+		$req = filter_var($req, FILTER_SANITIZE_URL);
+		$this->smarty->assign('path', $req);
 
 		if ($this->level === 0) {
 			// SocCie-saldi & MaalCie-saldi
