@@ -2,7 +2,7 @@
 	menu_tree.tpl	|	P.W.G. Brussee (brussee@live.nl)
 *}
 {$view->getMelding()}
-<h1>{$view->getTitel()}</h1>
+<h1 style="width: 650px;">{$view->getTitel()}</h1>
 <div style="float: right;">
 	<div style="display: inline-block;"><label for="toon">Toon menu:</label>
 	</div><select name="toon" onchange="location.href = '/menubeheer/beheer/' + this.value;">
