@@ -2,7 +2,6 @@
 	menu_tree.tpl	|	P.W.G. Brussee (brussee@live.nl)
 *}
 {$view->getMelding()}
-<h1 style="width: 650px;">{$view->getTitel()}</h1>
 <div style="float: right;">
 	<div style="display: inline-block;"><label for="toon">Toon menu:</label>
 	</div><select name="toon" onchange="location.href = '/menubeheer/beheer/' + this.value;">
@@ -12,9 +11,8 @@
 		{/foreach}
 	</select>
 </div>
-<p>
-	Op deze pagina kunt u het menu beheren.
-</p>
+<h1 style="width: 650px;">{$view->getTitel()}</h1>
+<br />
 <ul class="menubeheer-tree">
 	{if $root AND $root->children}
 		{foreach from=$root->children item=child}
