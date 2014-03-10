@@ -86,7 +86,7 @@ class AgendaController extends AclController {
 	public function toevoegen($datum = '') {
 		$item = $this->model->newAgendaItem($datum);
 		$this->view = new AgendaItemFormView($item, $this->action, $datum); // fetches POST values itself
-		if ($this->isPosted() AND $this->view->validate()) {
+		if ($this->view->validate()) {
 			$id = $this->model->create($item);
 			$item->item_id = (int) $id;
 			//setMelding('Toegevoegd', 1);
@@ -97,7 +97,7 @@ class AgendaController extends AclController {
 	public function bewerken($aid) {
 		$item = $this->model->getAgendaItem($aid);
 		$this->view = new AgendaItemFormView($item, $this->action, $item->item_id); // fetches POST values itself
-		if ($this->isPosted() AND $this->view->validate()) {
+		if ($this->view->validate()) {
 			$rowcount = $this->model->update($item);
 			if ($rowcount > 0) {
 				//setMelding('Bijgewerkt', 1);

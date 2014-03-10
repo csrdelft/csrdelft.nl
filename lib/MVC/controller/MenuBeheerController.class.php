@@ -47,7 +47,7 @@ class MenuBeheerController extends AclController {
 	public function toevoegen($parent_id) {
 		$item = $this->model->newMenuItem($parent_id);
 		$this->view = new MenuItemFormView($item, $this->action, $parent_id); // fetches POST values itself
-		if ($this->isPosted() AND $this->view->validate()) {
+		if ($this->view->validate()) {
 			$id = $this->model->create($item);
 			$item->item_id = (int) $id;
 			//setMelding('Toegevoegd', 1);
@@ -58,7 +58,7 @@ class MenuBeheerController extends AclController {
 	public function bewerken($aid) {
 		$item = $this->model->getMenuItem($aid);
 		$this->view = new MenuItemFormView($item, $this->action, $item->item_id); // fetches POST values itself
-		if ($this->isPosted() AND $this->view->validate()) {
+		if ($this->view->validate()) {
 			$rowcount = $this->model->update($item);
 			if ($rowcount > 0) {
 				//setMelding('Bijgewerkt', 1);

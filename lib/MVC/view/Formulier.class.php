@@ -83,13 +83,12 @@ class Formulier implements View, Validator {
 	 * Is het formulier *helemaal* gePOST?
 	 */
 	public function isPosted() {
-		$posted = true;
 		foreach ($this->getFields() as $field) {
-			if ($field instanceof InputField) {
-				$posted &= $field->isPosted();
+			if ($field instanceof InputField AND !$field->isPosted()) {
+				return false;
 			}
 		}
-		return $posted;
+		return true;
 	}
 
 	/**
