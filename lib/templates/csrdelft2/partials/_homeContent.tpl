@@ -109,13 +109,13 @@
                         <img src="/images/layout2/box-picture-1.jpg" class="rotate">
                     </figure>
                 </div>
-                <div class="columns large-2 small-2" style="width: auto; height: auto;">
+                {* <div class="columns large-2 small-2" style="width: auto; height: auto;">
                     <div class="box h2 link" style="width: auto; height: auto;">
                         <a href="https://ddb.tudelft.nl/" style="width: auto; height: auto;">
                             <img style="float: left; width: 120px;" src="http://plaetjes.csrdelft.nl/ddb.gif" class="border">
                         </a>
                     </div>
-                </div>
+                </div> *}
                 {* <div class="columns large-2 small-2">
                     <div class="box h2 link">
                         <a href="/lidworden">
