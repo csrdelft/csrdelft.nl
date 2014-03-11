@@ -1,0 +1,1 @@
+UPDATE  `csrdelft`.`menus` SET  `tekst` =  'Ga snel naar' WHERE  `menus`.`item_id` =2;
