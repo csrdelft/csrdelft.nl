@@ -10,76 +10,46 @@
  */
 class MenuBeheerView extends TemplateView {
 
-	/**
-	 * List of all menus
-	 * @var array
-	 */
-	private $menus;
-	/**
-	 * Root of the menu tree
-	 * @var MenuItem
-	 */
-	private $tree_root;
-
-	public function __construct(MenuModel $model, $menu_naam = '') {
-		parent::__construct($model);
-		$this->menus = $model->getAlleMenus();
-		if ($menu_naam !== '') {
-			$this->tree_root = $model->getMenuTree($menu_naam, true);
-		} else {
-			$this->tree_root = false;
-		}
+	public function __construct(array $menus, MenuItem $tree_root) {
+		parent::__construct($tree_root);
+		$this->smarty->assign('menus', $menus);
+		$this->smarty->assign('root', $tree_root);
 	}
 
 	public function getTitel() {
-		if ($this->tree_root) {
-			return 'Beheer ' . $this->tree_root->tekst . '-menu';
+		if ($this->model) {
+			return 'Beheer ' . $this->model->tekst . '-menu';
 		}
 		return 'Menubeheer';
 	}
 
 	public function view() {
-		$this->smarty->assign('menus', $this->menus);
-		$this->smarty->assign('root', $this->tree_root);
-		$this->smarty->display('MVC/menu/beheer/menu_page.tpl');
+		$this->smarty->display('MVC/menu/beheer/menu_tree.tpl');
 	}
 
 }
 
 class MenuItemView extends TemplateView {
 
-	private $actie;
-
-	public function __construct(MenuItem $item, $actie) {
+	public function __construct(MenuItem $item) {
 		parent::__construct($item);
-		$this->actie = $actie;
 	}
 
 	public function view() {
-		switch ($this->actie) {
-
-			case 'toevoegen':
-			case 'bewerken':
-				$this->smarty->assign('item', $this->model);
-				$this->smarty->display('MVC/menu/beheer/menu_item.tpl');
-				break;
-
-			case 'verwijderen':
-				echo '<li id="menu-item-' . $this->model->item_id . '" class="remove"></li>';
-				break;
-		}
+		$this->smarty->assign('item', $this->model);
+		$this->smarty->display('MVC/menu/beheer/menu_item.tpl');
 	}
 
 }
 
 class MenuItemFormView extends Formulier {
 
-	private $actie;
+	private $id;
 
 	public function __construct(MenuItem $item, $actie, $id) {
-		parent::__construct($item, 'menu-item-form', '/menubeheer/' . $actie . '/' . $id);
-		$this->actie = $actie;
-		$this->css_classes[] = 'popup PreventUnchanged';
+		parent::__construct($item, 'menu-item-form', $actie);
+		$this->id = $id;
+		$this->css_classes[] = 'popup PreventUnchanged ReloadPage';
 
 		$fields[] = new RequiredIntField('parent_id', $item->parent_id, 'Parent id');
 		$fields[] = new IntField('prioriteit', $item->prioriteit, 'Prioriteit');
@@ -89,6 +59,10 @@ class MenuItemFormView extends Formulier {
 		$fields[] = new SelectField('zichtbaar', ($item->zichtbaar ? '1' : '0'), 'Tonen', array('1' => 'Zichtbaar', '0' => 'Verborgen'));
 		$fields[] = new SubmitResetCancel();
 		$this->addFields($fields);
+	}
+
+	public function getAction() {
+		return '/menubeheer/' . $this->actie . '/' . $this->id;
 	}
 
 	public function view() {

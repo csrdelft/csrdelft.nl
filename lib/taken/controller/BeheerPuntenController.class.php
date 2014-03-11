@@ -36,7 +36,8 @@ class BeheerPuntenController extends AclController {
 	}
 	
 	public function beheer() {
-		$functies = FunctiesModel::getAlleFuncties(true); // grouped by fid
+		$model = new FunctiesModel();
+		$functies = $model->getAlleFuncties(true); // grouped by fid
 		$matrix = PuntenModel::loadPuntenVoorAlleLeden($functies);
 		$this->view = new BeheerPuntenView($matrix, $functies);
 		$this->view = new CsrLayoutPage($this->getContent());
@@ -51,7 +52,8 @@ class BeheerPuntenController extends AclController {
 		}
 		$punten = (int) filter_input(INPUT_POST, 'totaal_punten', FILTER_SANITIZE_NUMBER_INT);
 		PuntenModel::savePuntenVoorLid($lid, $punten, null);
-		$functies = FunctiesModel::getAlleFuncties(true); // grouped by fid
+		$model = new FunctiesModel();
+		$functies = $model->getAlleFuncties(true); // grouped by fid
 		$lijst = PuntenModel::loadPuntenVoorLid($lid, $functies);
 		$this->view = new BeheerPuntenView($lijst);
 	}
@@ -63,7 +65,8 @@ class BeheerPuntenController extends AclController {
 		}
 		$bonus = (int) filter_input(INPUT_POST, 'totaal_bonus', FILTER_SANITIZE_NUMBER_INT);
 		PuntenModel::savePuntenVoorLid($lid, null, $bonus);
-		$functies = FunctiesModel::getAlleFuncties(true); // grouped by fid
+		$model = new FunctiesModel();
+		$functies = $model->getAlleFuncties(true); // grouped by fid
 		$lijst = PuntenModel::loadPuntenVoorLid($lid, $functies);
 		$this->view = new BeheerPuntenView($lijst);
 	}

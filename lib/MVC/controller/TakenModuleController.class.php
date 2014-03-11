@@ -146,7 +146,7 @@ class TakenModuleController extends AclController {
 	}
 
 	public function corveefuncties($query) {
-		require_once 'taken/controller/BeheerFunctiesController.class.php';
+		require_once 'MVC/controller/taken/BeheerFunctiesController.class.php';
 		$controller = new BeheerFunctiesController($query);
 		$this->view = $controller->getContent();
 	}

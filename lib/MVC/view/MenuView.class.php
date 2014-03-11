@@ -11,58 +11,48 @@ require_once 'MVC/model/MenuModel.class.php';
  * de rechten van de gebruiker menu items wel
  * of niet worden getoond.
  */
-class MenuView extends TemplateView {
+abstract class MenuView extends TemplateView {
 
-	/**
-	 * 0: main
-	 * 1: sub
-	 * 2: page
-	 * 3: block
-	 * @var int
-	 */
-	private $level;
-	/**
-	 * Root MenuItem of menu tree
-	 * @var MenuItem
-	 */
-	private $tree_root;
-	/**
-	 * MenuItem of the current page
-	 * @var MenuItem
-	 */
-	private $active_item;
+	public function __construct(MenuItem $tree_root) {
+		parent::__construct($tree_root);
+		$this->smarty->assign('root', $this->model);
 
-	public function __construct($menu_name, $level) {
-		parent::__construct(new MenuModel());
-		$this->level = $level;
-		$this->tree_root = $this->model->getMenuTree($menu_name);
-		if ($this->active_item === null) {
-			$this->active_item = new MenuItem();
-		}
+		$req = filter_var($_SERVER['REQUEST_URI'], FILTER_SANITIZE_URL);
+		$this->smarty->assign('path', $req);
 	}
 
+}
+
+class MainMenuView extends MenuView {
+
 	public function view() {
-		$this->smarty->assign('root', $this->tree_root);
+		// SocCie-saldi & MaalCie-saldi
+		$this->smarty->assign('saldi', LoginLid::instance()->getLid()->getSaldi());
 
-		$req = $_SERVER['REQUEST_URI'];
-		$req = filter_var($req, FILTER_SANITIZE_URL);
-		$this->smarty->assign('path', $req);
-
-		if ($this->level === 0) {
-			// SocCie-saldi & MaalCie-saldi
-			$this->smarty->assign('saldi', LoginLid::instance()->getLid()->getSaldi());
-
-			if (Loginlid::instance()->hasPermission('P_ADMIN')) {
-				require_once 'savedquery.class.php';
-				$this->smarty->assign('queues', array(
-					'forum' => new SavedQuery(ROWID_QUEUE_FORUM),
-					'meded' => new SavedQuery(ROWID_QUEUE_MEDEDELINGEN)
-				));
-			}
-			$this->smarty->display('MVC/menu/menu.tpl');
-		} elseif ($this->level === 3) {
-			$this->smarty->display('MVC/menu/menu_block.tpl');
+		if (Loginlid::instance()->hasPermission('P_ADMIN')) {
+			require_once 'savedquery.class.php';
+			$this->smarty->assign('queues', array(
+				'forum' => new SavedQuery(ROWID_QUEUE_FORUM),
+				'meded' => new SavedQuery(ROWID_QUEUE_MEDEDELINGEN)
+			));
 		}
+		$this->smarty->display('MVC/menu/main.tpl');
+	}
+
+}
+
+class PageMenuView extends MenuView {
+
+	public function view() {
+		$this->smarty->display('MVC/menu/page.tpl');
+	}
+
+}
+
+class BlockMenuView extends MenuView {
+
+	public function view() {
+		$this->smarty->display('MVC/menu/block.tpl');
 	}
 
 }

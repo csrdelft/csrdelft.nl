@@ -1,6 +1,5 @@
 <?php
 
-
 require_once 'taken/model/entity/CorveeRepetitie.class.php';
 require_once 'taken/model/VoorkeurenModel.class.php';
 
@@ -10,7 +9,7 @@ require_once 'taken/model/VoorkeurenModel.class.php';
  */
 class CorveeRepetitiesModel {
 
-	public static function getVoorkeurbareRepetities($groupById=false) {
+	public static function getVoorkeurbareRepetities($groupById = false) {
 		$repetities = self::loadRepetities('voorkeurbaar = true');
 		if ($groupById) {
 			$result = array();
@@ -21,11 +20,11 @@ class CorveeRepetitiesModel {
 		}
 		return $repetities;
 	}
-	
+
 	public static function getAlleRepetities() {
 		return self::loadRepetities();
 	}
-	
+
 	/**
 	 * Haalt de periodieke taken op die gekoppeld zijn aan een periodieke maaltijd.
 	 * 
@@ -34,48 +33,49 @@ class CorveeRepetitiesModel {
 	 */
 	public static function getRepetitiesVoorMaaltijdRepetitie($mrid) {
 		if (!is_int($mrid) || $mrid <= 0) {
-			throw new Exception('Load taken voor maaltijd faalt: Invalid $mrid ='. $mrid);
+			throw new Exception('Load taken voor maaltijd faalt: Invalid $mrid =' . $mrid);
 		}
 		return self::loadRepetities('mlt_repetitie_id = ?', array($mrid));
 	}
-	
+
 	public static function getRepetitie($crid) {
 		if (!is_int($crid) || $crid <= 0) {
-			throw new Exception('Get corvee-repetitie faalt: Invalid $crid ='. $crid);
+			throw new Exception('Get corvee-repetitie faalt: Invalid $crid =' . $crid);
 		}
 		$repetities = self::loadRepetities('crv_repetitie_id = ?', array($crid), 1);
 		if (!array_key_exists(0, $repetities)) {
-			throw new Exception('Get corvee-repetitie faalt: Not found $crid ='. $crid);
+			throw new Exception('Get corvee-repetitie faalt: Not found $crid =' . $crid);
 		}
 		return $repetities[0];
 	}
-	
-	private static function loadRepetities($where=null, $values=array(), $limit=null) {
+
+	private static function loadRepetities($where = null, $values = array(), $limit = null) {
 		$sql = 'SELECT crv_repetitie_id, mlt_repetitie_id, dag_vd_week, periode_in_dagen, functie_id, standaard_punten, standaard_aantal, voorkeurbaar';
 		$sql.= ' FROM crv_repetities';
 		if ($where !== null) {
-			$sql.= ' WHERE '. $where;
+			$sql.= ' WHERE ' . $where;
 		}
 		if (is_int($limit)) {
-			$sql.= ' LIMIT '. $limit;
+			$sql.= ' LIMIT ' . $limit;
 		}
 		$db = \Database::instance();
 		$query = $db->prepare($sql, $values);
 		$query->execute($values);
-		$result = $query->fetchAll(\PDO::FETCH_CLASS|\PDO::FETCH_PROPS_LATE, '\CorveeRepetitie');
+		$result = $query->fetchAll(\PDO::FETCH_CLASS | \PDO::FETCH_PROPS_LATE, '\CorveeRepetitie');
 		// load corvee functies
 		if ($query->rowCount() === 1) {
-			$result[0]->setCorveeFunctie(FunctiesModel::getFunctie($result[0]->getFunctieId()));
-		}
-		elseif ($query->rowCount() > 1) {
-			$functies = FunctiesModel::getAlleFuncties(true); // grouped by fid
+			$model = new FunctiesModel();
+			$result[0]->setCorveeFunctie($model->getFunctie($result[0]->getFunctieId()));
+		} elseif ($query->rowCount() > 1) {
+			$model = new FunctiesModel();
+			$functies = $model->getAlleFuncties(true); // grouped by fid
 			foreach ($result as $repetitie) {
 				$repetitie->setCorveeFunctie($functies[$repetitie->getFunctieId()]);
 			}
 		}
 		return $result;
 	}
-	
+
 	public static function saveRepetitie($crid, $mrid, $dag, $periode, $fid, $punten, $aantal, $voorkeur) {
 		$db = \Database::instance();
 		try {
@@ -83,8 +83,7 @@ class CorveeRepetitiesModel {
 			$voorkeuren = 0;
 			if ($crid === 0) {
 				$repetitie = self::newRepetitie($mrid, $dag, $periode, $fid, $punten, $aantal, $voorkeur);
-			}
-			else {
+			} else {
 				$repetitie = self::getRepetitie($crid);
 				$repetitie->setMaaltijdRepetitieId($mrid);
 				$repetitie->setDagVanDeWeek($dag);
@@ -97,17 +96,16 @@ class CorveeRepetitiesModel {
 				if (!$voorkeur) { // niet (meer) voorkeurbaar
 					$voorkeuren = VoorkeurenModel::verwijderVoorkeuren($crid);
 				}
-			}
-			$repetitie->setCorveeFunctie(FunctiesModel::getFunctie($repetitie->getFunctieId()));
+			}$model = new FunctiesModel();
+			$repetitie->setCorveeFunctie($model->getFunctie($repetitie->getFunctieId()));
 			$db->commit();
 			return array($repetitie, $voorkeuren);
-		}
-		catch (\Exception $e) {
+		} catch (\Exception $e) {
 			$db->rollback();
 			throw $e; // rethrow to controller
 		}
 	}
-	
+
 	private static function updateRepetitie(CorveeRepetitie $repetitie) {
 		$sql = 'UPDATE crv_repetities';
 		$sql.= ' SET mlt_repetitie_id=?, dag_vd_week=?, periode_in_dagen=?, functie_id=?, standaard_punten=?, standaard_aantal=?, voorkeurbaar=?';
@@ -129,7 +127,7 @@ class CorveeRepetitiesModel {
 			//throw new Exception('Update corvee-repetitie faalt: $query->rowCount() ='. $query->rowCount());
 		}
 	}
-	
+
 	private static function newRepetitie($mrid, $dag, $periode, $fid, $punten, $aantal, $voorkeur) {
 		$sql = 'INSERT INTO crv_repetities';
 		$sql.= ' (crv_repetitie_id, mlt_repetitie_id, dag_vd_week, periode_in_dagen, functie_id, standaard_punten, standaard_aantal, voorkeurbaar)';
@@ -139,14 +137,14 @@ class CorveeRepetitiesModel {
 		$query = $db->prepare($sql, $values);
 		$query->execute($values);
 		if ($query->rowCount() !== 1) {
-			throw new Exception('New corvee-repetitie faalt: $query->rowCount() ='. $query->rowCount());
+			throw new Exception('New corvee-repetitie faalt: $query->rowCount() =' . $query->rowCount());
 		}
 		return new CorveeRepetitie(intval($db->lastInsertId()), $mrid, $dag, $periode, $fid, $punten, $aantal, $voorkeur);
 	}
-	
+
 	public static function verwijderRepetitie($crid) {
 		if (!is_int($crid) || $crid <= 0) {
-			throw new Exception('Verwijder corvee-repetitie faalt: Invalid $crid ='. $crid);
+			throw new Exception('Verwijder corvee-repetitie faalt: Invalid $crid =' . $crid);
 		}
 		if (TakenModel::existRepetitieTaken($crid)) {
 			TakenModel::verwijderRepetitieTaken($crid); // delete corveetaken first (foreign key)
@@ -154,7 +152,7 @@ class CorveeRepetitiesModel {
 		}
 		return self::deleteRepetitie($crid);
 	}
-	
+
 	private static function deleteRepetitie($crid) {
 		$db = \Database::instance();
 		try {
@@ -166,19 +164,18 @@ class CorveeRepetitiesModel {
 			$query = $db->prepare($sql, $values);
 			$query->execute($values);
 			if ($query->rowCount() !== 1) {
-				throw new Exception('Delete corvee-repetitie faalt: $query->rowCount() ='. $query->rowCount());
+				throw new Exception('Delete corvee-repetitie faalt: $query->rowCount() =' . $query->rowCount());
 			}
 			$db->commit();
 			return $aantal;
-		}
-		catch (\Exception $e) {
+		} catch (\Exception $e) {
 			$db->rollback();
 			throw $e; // rethrow to controller
 		}
 	}
-	
+
 	// Maaltijd-Repetitie-Corvee ############################################################
-	
+
 	/**
 	 * Called when a MaaltijdRepetitie is going to be deleted.
 	 * 
@@ -187,7 +184,7 @@ class CorveeRepetitiesModel {
 	 */
 	public static function existMaaltijdRepetitieCorvee($mrid) {
 		if (!is_int($mrid) || $mrid <= 0) {
-			throw new Exception('Exist maaltijd-repetitie-corvee faalt: Invalid $mid ='. $mrid);
+			throw new Exception('Exist maaltijd-repetitie-corvee faalt: Invalid $mid =' . $mrid);
 		}
 		$sql = 'SELECT EXISTS (SELECT * FROM crv_repetities WHERE mlt_repetitie_id = ?)';
 		$values = array($mrid);
@@ -196,9 +193,9 @@ class CorveeRepetitiesModel {
 		$result = $query->fetchColumn();
 		return $result;
 	}
-	
+
 	// Functie-Repetities ############################################################
-	
+
 	/**
 	 * Called when a CorveeFunctie is going to be deleted.
 	 * 
@@ -207,7 +204,7 @@ class CorveeRepetitiesModel {
 	 */
 	public static function existFunctieRepetities($fid) {
 		if (!is_int($fid) || $fid <= 0) {
-			throw new Exception('Exist functie-repetities faalt: Invalid $fid ='. $fid);
+			throw new Exception('Exist functie-repetities faalt: Invalid $fid =' . $fid);
 		}
 		$sql = 'SELECT EXISTS (SELECT * FROM crv_repetities WHERE functie_id = ?)';
 		$values = array($fid);
@@ -216,6 +213,7 @@ class CorveeRepetitiesModel {
 		$result = $query->fetchColumn();
 		return $result;
 	}
+
 }
 
 ?>

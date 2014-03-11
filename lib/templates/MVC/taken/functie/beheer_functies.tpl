@@ -9,7 +9,7 @@ Ook kunt u aangeven of er een kwalificatie benodigd is en een kwalificatie toewi
 <p>
 N.B. Voordat een corveefunctie verwijderd kan worden moeten eerst alle bijbehorende corveetaken en alle bijbehorende corveerepetities definitief zijn verwijderd.
 </p>
-<div style="float: right;"><a href="{$instellingen->get('taken', 'url')}/nieuw" title="Nieuwe functie" class="knop post popup">{icon get="add"} Nieuwe functie</a></div>
+<div style="float: right;"><a href="{$instellingen->get('taken', 'url')}/toevoegen" title="Nieuwe functie" class="knop post popup">{icon get="add"} Nieuwe functie</a></div>
 <table id="taken-tabel" class="taken-tabel">
 	<thead>
 		<tr>
@@ -24,7 +24,7 @@ N.B. Voordat een corveefunctie verwijderd kan worden moeten eerst alle bijbehore
 	</thead>
 	<tbody>
 {foreach from=$functies item=functie}
-	{include file='taken/functie/beheer_functie_lijst.tpl'}
+	{include file='MVC/taken/functie/beheer_functie_lijst.tpl'}
 {/foreach}
 	</tbody>
 </table>

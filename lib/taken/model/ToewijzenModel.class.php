@@ -23,7 +23,7 @@ class ToewijzenModel {
 	public static function getSuggesties(CorveeTaak $taak) {
 		$vrijstellingen = VrijstellingenModel::getAlleVrijstellingen(true); // grouped by uid
 		$functie = $taak->getCorveeFunctie();
-		if ($functie->getIsKwalificatieBenodigd()) { // laad alleen gekwalificeerde leden
+		if ($functie->kwalificatie_benodigd) { // laad alleen gekwalificeerde leden
 			$kwalificaties = KwalificatiesModel::getKwalificatiesVoorFunctie($functie);
 			$lijst = array();
 			$avg = 0;
@@ -43,8 +43,8 @@ class ToewijzenModel {
 						continue; // taak valt binnen vrijstelling-periode: suggestie niet weergeven
 					}
 				}
-				$lijst[$uid] = PuntenModel::loadPuntenVoorLid($lid, array($functie->getFunctieId() => $functie));
-				$lijst[$uid]['aantal'] = $lijst[$uid]['aantal'][$functie->getFunctieId()];
+				$lijst[$uid] = PuntenModel::loadPuntenVoorLid($lid, array($functie->functie_id => $functie));
+				$lijst[$uid]['aantal'] = $lijst[$uid]['aantal'][$functie->functie_id];
 				$avg += $lijst[$uid]['aantal'];
 			}
 			$avg /= sizeof($lijst);

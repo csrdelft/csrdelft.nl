@@ -39,7 +39,7 @@ class MenuBeheerController extends AclController {
 	}
 
 	public function beheer($menu_naam = '') {
-		$body = new MenuBeheerView($this->model, $menu_naam);
+		$body = new MenuBeheerView($this->model->getAlleMenus(), $this->model->getMenuTree($menu_naam, true));
 		$this->view = new CsrLayoutPage($body);
 		$this->view->addStylesheet('menubeheer.css');
 	}
@@ -50,34 +50,30 @@ class MenuBeheerController extends AclController {
 		if ($this->view->validate()) {
 			$id = $this->model->create($item);
 			$item->item_id = (int) $id;
-			//setMelding('Toegevoegd', 1);
-			$this->view = new MenuItemView($item, $this->action);
+			setMelding('Toegevoegd', 1);
 		}
+		// ReloadPage
 	}
 
-	public function bewerken($aid) {
-		$item = $this->model->getMenuItem($aid);
+	public function bewerken($item_id) {
+		$item = $this->model->getMenuItem($item_id);
 		$this->view = new MenuItemFormView($item, $this->action, $item->item_id); // fetches POST values itself
 		if ($this->view->validate()) {
 			$rowcount = $this->model->update($item);
 			if ($rowcount > 0) {
-				//setMelding('Bijgewerkt', 1);
+				setMelding('Bijgewerkt', 1);
 			} else {
-				//setMelding('Geen wijzigingen', 0);
+				setMelding('Geen wijzigingen', 0);
 			}
-			$this->view = new MenuItemView($item, $this->action);
 		}
+		// ReloadPage
 	}
 
-	public function verwijderen($id) {
-		try {
-			$item = $this->model->getMenuItem($id);
-			$this->model->delete($item);
-			setMelding('Verwijderd ' . $item->tekst . ' (' . $item->item_id . ')', 1);
-		} catch (Exception $e) {
-			setMelding($e->getMessage(), -1);
+	public function verwijderen($item_id) {
+		if ($this->model->removeMenuItem($item_id)) {
+			setMelding('Verwijderd', 1);
 		}
-		$this->view = new MenuItemView($item, $this->action);
+		// ReloadPage
 	}
 
 }

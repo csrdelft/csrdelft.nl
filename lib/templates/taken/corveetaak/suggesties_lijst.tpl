@@ -8,7 +8,7 @@
 	<thead>
 		<tr>
 			<th style="width: 65px; padding-right: 0px;">
-{if $taak->getCorveeFunctie()->getIsKwalificatieBenodigd()}
+{if $taak->getCorveeFunctie()->kwalificatie_benodigd}
 	Relatief
 {else}
 	Prognose
@@ -16,7 +16,7 @@
 			</th>
 			<th style="width: 135px;">Naam</th>
 			<th>Laatste taak
-{if $taak->getCorveeFunctie()->getIsKwalificatieBenodigd()}
+{if $taak->getCorveeFunctie()->kwalificatie_benodigd}
 			&nbsp;{icon get="bullet_arrow_up"}
 {/if}
 			</th>
@@ -44,7 +44,7 @@
 					</a>
 				</td>
 				<td style="width: 30px; padding-right: 10px; text-align: right;">
-					{if $taak->getCorveeFunctie()->getIsKwalificatieBenodigd()}
+					{if $taak->getCorveeFunctie()->kwalificatie_benodigd}
 						{if $suggestie.relatief > 0}+{/if}
 						{$suggestie.relatief}
 					{else}
@@ -56,7 +56,7 @@
 				</td>
 			{if $suggestie.laatste}
 				<td>{$suggestie.laatste->getBeginMoment()|date_format:"%d %b %Y"}</td>
-				<td>{$suggestie.laatste->getCorveeFunctie()->getNaam()}</td>
+				<td>{$suggestie.laatste->getCorveeFunctie()->naam}</td>
 			{else}
 				<td colspan="2"></td>
 			{/if}

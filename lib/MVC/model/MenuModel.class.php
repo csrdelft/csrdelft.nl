@@ -39,11 +39,13 @@ class MenuModel extends PersistenceModel {
 		$where = 'parent_id = 0 AND tekst = ?';
 		$params = array($menu_naam);
 		$root = $this->find($where, $params, 'parent_id ASC, prioriteit ASC');
-		if (sizeof($root) > 0) {
-			$this->getChildren($root[0], $admin);
-			return $root[0];
+		if (sizeof($root) <= 0) {
+			$item = $this->newMenuItem(0);
+			$item->tekst = $menu_naam;
+			return $item;
 		}
-		return null;
+		$this->getChildren($root[0], $admin);
+		return $root[0];
 	}
 
 	public function getChildren(MenuItem $item, $admin = false) {

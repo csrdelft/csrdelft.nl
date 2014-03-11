@@ -60,8 +60,10 @@ abstract class SimpleHTML implements View {
 		}
 		// Ga snel naar
 		if (LidInstellingen::get('zijbalk', 'gasnelnaar') == 'ja') {
+			require_once('MVC/model/MenuModel.class.php');
 			require_once('MVC/view/MenuView.class.php');
-			$zijkolom[] = new MenuView('gasnelnaar', 3);
+			$menu = new MenuModel();
+			$zijkolom[] = new BlockMenuView($menu->getMenuTree('Ga snel naar'));
 		}
 		// Agenda
 		if (LoginLid::instance()->hasPermission('P_AGENDA_READ') && LidInstellingen::get('zijbalk', 'agendaweken') > 0) {

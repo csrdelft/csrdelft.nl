@@ -90,6 +90,9 @@ function knop_ajax(knop, type) {
 		source = false;
 		done = popup_open;
 	}
+	if (knop.hasClass('ReloadPage')) {
+		done = page_reload;
+	}
 	ajax_request(type, knop.attr('href'), knop.attr('postdata'), source, done, alert);
 }
 
@@ -212,7 +215,11 @@ function form_submit(event) {
 		if (form.hasClass('InlineForm')) {
 			source = form;
 		}
-		ajax_request('POST', form.attr('action'), form.serialize(), source, dom_update, alert, function() {
+		var done = dom_update;
+		if (form.hasClass('ReloadPage')) {
+			done = page_reload;
+		}
+		ajax_request('POST', form.attr('action'), form.serialize(), source, done, alert, function() {
 			if (form.hasClass('SubmitReset')) {
 				form_reset(event, form);
 			}

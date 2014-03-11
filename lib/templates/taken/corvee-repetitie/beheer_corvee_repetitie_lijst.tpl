@@ -9,7 +9,7 @@
 		<a href="{$instellingen->get('taken', 'url')}/maaltijd/{$repetitie->getMaaltijdRepetitieId()}" title="Corveebeheer maaltijdrepetitie" class="knop">{icon get="calendar_link"}</a>
 {/if}
 	</td>{/strip}
-	<td>{$repetitie->getCorveeFunctie()->getNaam()}</td>
+	<td>{$repetitie->getCorveeFunctie()->naam}</td>
 	<td>{$repetitie->getDagVanDeWeekText()}</td>
 	<td>{$repetitie->getPeriodeInDagenText()}</td>
 	<td>{if $repetitie->getIsVoorkeurbaar()}{icon get="tick" title="Voorkeurbaar"}{/if}</td>

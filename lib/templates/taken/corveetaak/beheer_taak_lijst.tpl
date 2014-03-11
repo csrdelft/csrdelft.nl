@@ -51,7 +51,7 @@
 {/if}
 	</td>
 	<td>{$taak->getDatum()|date_format:"%a %e %b"}</td>
-	<td style="width: 100px;">{$taak->getCorveeFunctie()->getNaam()}</td>
+	<td style="width: 100px;">{$taak->getCorveeFunctie()->naam}</td>
 	<td class="taak-{if $taak->getLidId()}toegewezen{elseif  $taak->getBeginMoment() < strtotime($instellingen->get('corvee', 'waarschuwing_taaktoewijzing_vooraf'))}warning{else}open{/if}" style="font-weight: normal;">
 {if isset($wijzigbaar)}
 		<a href="{$instellingen->get('taken', 'url')}/toewijzen/{$taak->getTaakId()}" title="Deze taak toewijzen aan een lid&#013;Sleep om te ruilen" class="knop post popup dragobject ruilen" id="taak-{$taak->getTaakId()}"{if $taak->getLidId()} lid_id="{$taak->getLidId()}">{icon get="user_green"}{else}>{icon get="user_red"}{/if}</a>

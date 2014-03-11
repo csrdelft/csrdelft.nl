@@ -36,7 +36,8 @@ class MijnCorveeController extends AclController {
 	public function mijn() {
 		$taken = TakenModel::getKomendeTakenVoorLid(\LoginLid::instance()->getUid());
 		$rooster = TakenModel::getRoosterMatrix($taken);
-		$functies = FunctiesModel::getAlleFuncties(true);
+		$model = new FunctiesModel();
+		$functies = $model->getAlleFuncties(true);
 		$punten = PuntenModel::loadPuntenVoorLid(\LoginLid::instance()->getLid(), $functies);
 		$vrijstelling = VrijstellingenModel::getVrijstelling(\LoginLid::instance()->getUid());
 		$this->view = new MijnCorveeView($rooster, $punten, $functies, $vrijstelling);

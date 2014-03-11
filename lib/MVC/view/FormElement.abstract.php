@@ -162,7 +162,7 @@ abstract class InputField extends FormElement implements Validator {
 			$this->error = 'Veld is niet gepost';
 		} elseif ($this->value === '' AND $this->notnull) {
 			if ($this->leden_mod AND LoginLid::instance()->hasPermission('P_LEDEN_MOD')) {
-				
+				// exception for leden mod
 			} else {
 				$this->error = 'Dit is een verplicht veld';
 			}
@@ -193,7 +193,7 @@ abstract class InputField extends FormElement implements Validator {
 			$required = '';
 			if ($this->notnull) {
 				if ($this->leden_mod AND LoginLid::instance()->hasPermission('P_LEDEN_MOD')) {
-					
+					// exception for leden mod
 				} else {
 					$required = '<span class="required"> *</span>';
 				}
@@ -242,7 +242,7 @@ abstract class InputField extends FormElement implements Validator {
 	protected function getCssClasses() {
 		if ($this->notnull) {
 			if ($this->leden_mod AND LoginLid::instance()->hasPermission('P_LEDEN_MOD')) {
-				
+				// exception for leden mod
 			} else {
 				$this->css_classes[] = 'required';
 			}
@@ -1433,21 +1433,32 @@ class TijdField extends InputField {
 
 class VinkField extends InputField {
 
+	/**
+	 * Speciaal geval.
+	 * 
+	 * @return boolean always true
+	 */
+	public function isPosted() {
+		return true;
+	}
+
+	/**
+	 * Niet gepost = uitgevinkt.
+	 * 
+	 * @return boolean
+	 */
 	public function getValue() {
-		if ($this->isPosted()) {
+		if (parent::isPosted()) {
 			return true;
 		} else {
 			return false;
 		}
 	}
 
-	/**
-	 * Speciaal geval, want niet gepost = uitgevinkt
-	 */
 	public function validate() {
 		if (!$this->value AND $this->notnull) {
 			if ($this->leden_mod AND LoginLid::instance()->hasPermission('P_LEDEN_MOD')) {
-				
+				// exception for leden mod
 			} else {
 				$this->error = 'Dit is een verplicht veld';
 			}

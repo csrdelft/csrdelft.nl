@@ -67,7 +67,7 @@
 		{else}
 			<i>vacature</i>
 		{/if}
-		&nbsp;({$taak->getCorveeFunctie()->getNaam()})
+		&nbsp;({$taak->getCorveeFunctie()->naam})
 	{/table_foreach}
 {else}
 			<p>Geen corveetaken voor deze maaltijd in het systeem.</p>

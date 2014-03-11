@@ -156,4 +156,8 @@ class AgendaModel extends PersistenceModel {
 		return $item;
 	}
 
+	public function removeAgendaItem($aid) {
+		return $this->deleteByPrimaryKey(array($aid));
+	}
+
 }

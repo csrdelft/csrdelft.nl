@@ -324,12 +324,12 @@ class CorveeTaak implements Agendeerbaar {
 		if ($this->getLidId()) {
 			return 'Corvee ' . $this->getLid()->getNaamLink('civitas');
 		}
-		return 'Corvee ' . $this->getCorveeFunctie()->getNaam();
+		return 'Corvee ' . $this->getCorveeFunctie()->naam;
 	}
 
 	public function getBeschrijving() {
 		if ($this->getLidId()) {
-			return $this->getCorveeFunctie()->getNaam();
+			return $this->getCorveeFunctie()->naam;
 		}
 		return 'Nog niet ingedeeld';
 	}

@@ -90,7 +90,7 @@ class AgendaController extends AclController {
 			$id = $this->model->create($item);
 			$item->item_id = (int) $id;
 			//setMelding('Toegevoegd', 1);
-			$this->view = new AgendaItemMaandView($item, $this->action);
+			$this->view = new AgendaItemMaandView($item);
 		}
 	}
 
@@ -104,15 +104,15 @@ class AgendaController extends AclController {
 			} else {
 				//setMelding('Geen wijzigingen', 0);
 			}
-			$this->view = new AgendaItemMaandView($item, $this->action);
+			$this->view = new AgendaItemMaandView($item);
 		}
 	}
 
 	public function verwijderen($aid) {
-		$item = $this->model->getAgendaItem($aid);
-		$this->model->delete($item);
-		//setMelding('Verwijderd', 1);
-		$this->view = new AgendaItemMaandView($item, $this->action);
+		if ($this->model->removeAgendaItem($aid)) {
+			//setMelding('Verwijderd', 1);
+			$this->view = new AgendaItemDeleteView($aid);
+		}
 	}
 
 }

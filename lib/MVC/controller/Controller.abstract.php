@@ -14,8 +14,8 @@
 abstract class Controller {
 
 	/**
-	 * Is this controller called with key-value-pair (KVP)
-	 * or representational state transfer (REST)
+	 * Is this controller called with a server request query containing
+	 * key-value-pair (KVP) or only representational state transfer (REST)
 	 * @var boolean
 	 */
 	private $kvp;
@@ -36,27 +36,42 @@ abstract class Controller {
 	protected $view;
 
 	public function __construct($query) {
-		$kvp = strpos($query, '?');
-		if ($kvp) {
-			$rest = substr($query, 0, $kvp);
+		$mark = strpos($query, '?');
+		if ($mark) {
+			$rest = substr($query, 0, $mark);
 		} else {
 			$rest = $query;
 		}
 		$rest = explode('/', $rest);
-		$this->queryparts = $rest;
-		if ($kvp) {
-			$kvp = substr($query, $kvp);
-			$kvp = explode('&', $kvp);
-			foreach ($kvp as $key => $value) {
-				$this->queryparts[$key] = explode('=', $value);
+		$this->queryparts = $rest; // add REST params
+		if ($mark) {
+			$mark = substr($query, $mark);
+			$mark = explode('&', $mark);
+			foreach ($mark as $key => $value) {
+				$this->queryparts[$key] = explode('=', $value); // add KVP params
 			}
+			$this->kvp = true;
 		}
 	}
 
+	/**
+	 * KVP: named parameters
+	 * REST: positional parameters
+	 * 
+	 * @param string $key
+	 * @return boolean
+	 */
 	protected function hasParam($key) {
 		return array_key_exists($key, $this->queryparts) AND isset($this->queryparts[$key]) AND $this->queryparts[$key] !== '';
 	}
 
+	/**
+	 * KVP: named parameters
+	 * REST: positional parameters
+	 * 
+	 * @param string $key
+	 * @return boolean
+	 */
 	protected function getParam($key) {
 		if ($this->hasParam($key)) {
 			return $this->queryparts[$key];
@@ -77,6 +92,11 @@ abstract class Controller {
 		return $params;
 	}
 
+	/**
+	 * If request method is POST.
+	 * 
+	 * @return boolean
+	 */
 	public function isPosted() {
 		return isPosted();
 	}
@@ -85,6 +105,12 @@ abstract class Controller {
 		return $this->view;
 	}
 
+	/**
+	 * If named action is defined.
+	 * 
+	 * @param string $action
+	 * @return boolean
+	 */
 	public function hasAction($action) {
 		return method_exists($this, $action);
 	}

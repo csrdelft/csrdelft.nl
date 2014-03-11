@@ -19,8 +19,8 @@
 		<div style="display: inline-block; width: 80px; font-weight: normal;">{$taak->getDatum()|date_format:"%a %e %b"}</div>
 				{/if}
 		<div style="display: inline-block; width: 70px;">
-			<span title="{$taak->getCorveeFunctie()->getNaam()}">
-				&nbsp;{$taak->getCorveeFunctie()->getAfkorting()}:&nbsp;
+			<span title="{$taak->getCorveeFunctie()->naam}">
+				&nbsp;{$taak->getCorveeFunctie()->afkorting}:&nbsp;
 			</span>
 			{/if}
 			{if $taak->getLidId()}{* ingedeelde taak van functie: teller++ *}

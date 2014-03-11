@@ -158,10 +158,10 @@ class Formulier implements View, Validator {
 	 */
 	public function view() {
 		echo '<form';
-		if ($this->action != null) {
-			echo ' action="' . $this->action . '"';
+		if ($this->getAction() != null) {
+			echo ' action="' . $this->getAction() . '"';
 		}
-		echo ' id="' . $this->formId . '" class="' . implode(' ', $this->css_classes) . '" method="post">' . "\n";
+		echo ' id="' . $this->getFormId() . '" class="' . implode(' ', $this->css_classes) . '" method="post">' . "\n";
 		foreach ($this->getFields() as $field) {
 			$field->view();
 		}
@@ -177,8 +177,8 @@ class Formulier implements View, Validator {
 class InlineForm extends Formulier {
 
 	public function view($tekst = false) {
-		echo '<div id="inline-' . $this->formId . '">';
-		echo '<form id="' . $this->formId . '" action="' . $this->action . '" method="post" class="Formulier InlineForm">';
+		echo '<div id="inline-' . $this->getFormId() . '">';
+		echo '<form id="' . $this->getFormId() . '" action="' . $this->getAction() . '" method="post" class="Formulier InlineForm">';
 		echo $this->fields[0]->view();
 		echo '<div class="FormToggle">' . $this->fields[0]->getValue() . '</div>';
 		echo '<a class="knop submit" title="Opslaan"><img width="16" height="16" class="icon" alt="submit" src="' . CSR_PICS . 'famfamfam/accept.png">' . ($tekst ? ' Opslaan ' : '') . '</a>';

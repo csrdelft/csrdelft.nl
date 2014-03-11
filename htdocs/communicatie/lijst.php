@@ -8,7 +8,8 @@ if (!($loginlid->hasPermission('P_LOGGED_IN') AND $loginlid->hasPermission('P_OU
 	# geen rechten
 	require_once 'MVC/model/CmsPaginaModel.class.php';
 	$model = new CmsPaginaModel();
-	$pagina = new CsrLayoutPage(new CmsPaginaView($model->getPagina('geentoegang')));
+	$body = new CmsPaginaView($model->getPagina('geentoegang'));
+	$pagina = new CsrLayoutPage($body);
 	$pagina->view();
 	exit;
 }

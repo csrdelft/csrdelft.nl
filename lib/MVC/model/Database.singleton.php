@@ -210,7 +210,7 @@ class Database extends PDO {
 	 * @param string $name
 	 * @param array $columns
 	 * @param array $primary_key
-	 * @return string
+	 * @return string SQL query
 	 */
 	public static function sqlCreateTable($name, array $columns, array $primary_key) {
 		$sql = 'CREATE TABLE ' . $name . ' (';

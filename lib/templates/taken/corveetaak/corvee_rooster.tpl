@@ -40,7 +40,7 @@ corvee_rooster.tpl	|	P.W.G. Brussee (brussee@live.nl)
 					<td rowspan="{$smarty.foreach.datum.total}"{if !isset($mijn)} style="background-color: {$datumColor};"{/if}><nobr>{$datum|date_format:"%a %e %b"}</nobr></td>
 					{/if}
 					{if array_key_exists(0, $taken)}
-				<td><nobr>{$taken[0]->getCorveeFunctie()->getNaam()}</nobr></td>
+				<td><nobr>{$taken[0]->getCorveeFunctie()->naam}</nobr></td>
 				{/if}
 				{if !isset($mijn)}
 			<td>

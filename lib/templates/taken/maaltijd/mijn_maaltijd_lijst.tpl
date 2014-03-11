@@ -7,7 +7,7 @@
 		{$maaltijd->getDatum()|date_format:"%a %e %b"} {$maaltijd->getTijd()|date_format:"%H:%M"}
 {if $toonlijst|is_a:'\CorveeTaak'}
 		<div style="float: right;">
-			{icon get="paintcan" title=$toonlijst->getCorveeFunctie()->getNaam()}
+			{icon get="paintcan" title=$toonlijst->getCorveeFunctie()->naam}
 		</div>
 {/if}
 	</td>

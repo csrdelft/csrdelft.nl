@@ -34,14 +34,13 @@ abstract class PersistenceModel implements Persistence {
 	 * @param string $criteria WHERE
 	 * @param array $criteria_params optional named parameters
 	 * @param string $orderby
-	 * @param int $limit
-	 * @param int $start
+	 * @param int $limit max amount of results
+	 * @param int $start resultset from index
 	 * @return PersistentEntity[]
 	 */
 	public function find($criteria = null, array $criteria_params = array(), $orderby = null, $limit = null, $start = 0) {
-		$select = $this->orm_entity->getFields();
-		$result = Database::sqlSelect($select, $this->orm_entity->getTableName(), $criteria, $criteria_params, $orderby, $limit, $start);
-		return $result->fetchAll(\PDO::FETCH_CLASS, get_class($this->orm_entity));
+		$result = Database::sqlSelect($this->orm_entity->getFields(), $this->orm_entity->getTableName(), $criteria, $criteria_params, $orderby, $limit, $start);
+		return $result->fetchAll(PDO::FETCH_CLASS, get_class($this->orm_entity));
 	}
 
 	/**
@@ -108,7 +107,7 @@ abstract class PersistenceModel implements Persistence {
 	 * Save existing entity.
 	 *
 	 * @param PersistentEntity $entity
-	 * @return int rowcount
+	 * @return int rows affected
 	 */
 	public function update(PersistentEntity $entity) {
 		$properties = $entity->getValues();
@@ -126,25 +125,24 @@ abstract class PersistenceModel implements Persistence {
 	 * Remove existing entity.
 	 * 
 	 * @param PersistentEntity $entity
+	 * @return boolean rows affected === 1
 	 */
 	public function delete(PersistentEntity $entity) {
-		$this->deleteByPrimaryKey(array_values($entity->getValues(true)));
+		return $this->deleteByPrimaryKey(array_values($entity->getValues(true)));
 	}
 
 	/**
 	 * Delete entity by primary key.
 	 * 
 	 * @param array $primary_key_values
+	 * @return boolean rows affected === 1
 	 */
 	protected function deleteByPrimaryKey(array $primary_key_values) {
 		$where = array();
 		foreach ($this->orm_entity->getPrimaryKey() as $key) {
 			$where[] = $key . ' = ?';
 		}
-		$rowcount = Database::sqlDelete($this->orm_entity->getTableName(), implode(' AND ', $where), $primary_key_values, 1);
-		if ($rowcount !== 1) {
-			throw new Exception('delete rowCount=' . $rowcount);
-		}
+		return 1 === Database::sqlDelete($this->orm_entity->getTableName(), implode(' AND ', $where), $primary_key_values, 1);
 	}
 
 }

@@ -50,7 +50,7 @@ class ToewijzenFormView extends TemplateView {
 		if ($crid !== null) {
 			$this->smarty->assign('voorkeurbaar', CorveeRepetitiesModel::getRepetitie($crid)->getIsVoorkeurbaar());
 		}
-		if ($this->_taak->getCorveeFunctie()->getIsKwalificatieBenodigd()) {
+		if ($this->_taak->getCorveeFunctie()->kwalificatie_benodigd) {
 			$this->smarty->assign('voorkeur', Instellingen::get('corvee', 'suggesties_voorkeur_kwali_filter'));
 			$this->smarty->assign('recent', Instellingen::get('corvee', 'suggesties_recent_kwali_filter'));
 		} else {

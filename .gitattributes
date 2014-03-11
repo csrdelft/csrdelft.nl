@@ -3097,6 +3097,7 @@ lib/MVC/controller/InstellingenBeheerController.class.php -text
 lib/MVC/controller/LidInstellingenController.class.php -text
 lib/MVC/controller/MenuBeheerController.class.php -text
 lib/MVC/controller/TakenModuleController.class.php -text
+lib/MVC/controller/taken/BeheerFunctiesController.class.php -text
 lib/MVC/model/AgendaModel.class.php -text
 lib/MVC/model/Agendeerbaar.interface.php -text
 lib/MVC/model/CmsPaginaModel.class.php -text
@@ -3127,6 +3128,8 @@ lib/MVC/model/entity/groepen/GroepCategorie.class.php -text
 lib/MVC/model/entity/groepen/GroepLid.class.php -text
 lib/MVC/model/entity/groepen/Groepen[!!-~]ERD.png -text
 lib/MVC/model/entity/groepen/Ketzer.class.php -text
+lib/MVC/model/entity/taken/CorveeFunctie.class.php -text
+lib/MVC/model/taken/FunctiesModel.class.php -text
 lib/MVC/view/AgendaView.class.php -text
 lib/MVC/view/CmsPaginaView.class.php -text
 lib/MVC/view/CsrLayout2Page.class.php -text
@@ -3144,6 +3147,7 @@ lib/MVC/view/MenuView.class.php -text
 lib/MVC/view/TemplateView.abstract.php -text
 lib/MVC/view/Validator.interface.php -text
 lib/MVC/view/View.interface.php -text
+lib/MVC/view/taken/BeheerFunctiesView.class.php -text
 lib/Zend/Exception.php -text
 lib/Zend/Gdata.php -text
 lib/Zend/Gdata/App.php -text
@@ -3794,7 +3798,6 @@ lib/smarty/libs/sysplugins/smarty_resource_uncompiled.php -text
 lib/smarty/libs/sysplugins/smarty_security.php -text
 lib/streeplijstcontent.class.php -text
 lib/taken/controller/BeheerAbonnementenController.class.php -text
-lib/taken/controller/BeheerFunctiesController.class.php -text
 lib/taken/controller/BeheerMaaltijdenController.class.php -text
 lib/taken/controller/BeheerPuntenController.class.php -text
 lib/taken/controller/BeheerTakenController.class.php -text
@@ -3811,7 +3814,6 @@ lib/taken/model/AanmeldingenModel.class.php -text
 lib/taken/model/AbonnementenModel.class.php -text
 lib/taken/model/ConversieModel.class.php -text
 lib/taken/model/CorveeRepetitiesModel.class.php -text
-lib/taken/model/FunctiesModel.class.php -text
 lib/taken/model/HerinneringenModel.class.php -text
 lib/taken/model/KwalificatiesModel.class.php -text
 lib/taken/model/MaaltijdRepetitiesModel.class.php -text
@@ -3822,7 +3824,6 @@ lib/taken/model/ToewijzenModel.class.php -text
 lib/taken/model/VoorkeurenModel.class.php -text
 lib/taken/model/VrijstellingenModel.class.php -text
 lib/taken/model/entity/ArchiefMaaltijd.class.php -text
-lib/taken/model/entity/CorveeFunctie.class.php -text
 lib/taken/model/entity/CorveeKwalificatie.class.php -text
 lib/taken/model/entity/CorveeRepetitie.class.php -text
 lib/taken/model/entity/CorveeTaak.class.php -text
@@ -3834,7 +3835,6 @@ lib/taken/model/entity/MaaltijdAanmelding.class.php -text
 lib/taken/model/entity/MaaltijdAbonnement.class.php -text
 lib/taken/model/entity/MaaltijdRepetitie.class.php -text
 lib/taken/view/BeheerAbonnementenView.class.php -text
-lib/taken/view/BeheerFunctiesView.class.php -text
 lib/taken/view/BeheerMaaltijdenView.class.php -text
 lib/taken/view/BeheerPuntenView.class.php -text
 lib/taken/view/BeheerTakenView.class.php -text
@@ -3853,7 +3853,6 @@ lib/taken/view/MijnVoorkeurenView.class.php -text
 lib/taken/view/forms/AanmeldingFormView.class.php -text
 lib/taken/view/forms/BoekjaarSluitenFormView.class.php -text
 lib/taken/view/forms/CorveeRepetitieFormView.class.php -text
-lib/taken/view/forms/FunctieFormView.class.php -text
 lib/taken/view/forms/KwalificatieFormView.class.php -text
 lib/taken/view/forms/MaaltijdFormView.class.php -text
 lib/taken/view/forms/MaaltijdRepetitieFormView.class.php -text
@@ -3878,9 +3877,13 @@ lib/templates/MVC/mail/lidafmeldingfisci.mail -text
 lib/templates/MVC/mail/nieuwwachtwoord.mail -text
 lib/templates/MVC/mail/toekomstigcorveeverwijderd.mail -text
 lib/templates/MVC/menu/beheer/menu_item.tpl -text
-lib/templates/MVC/menu/beheer/menu_page.tpl -text
-lib/templates/MVC/menu/menu.tpl -text
-lib/templates/MVC/menu/menu_block.tpl -text
+lib/templates/MVC/menu/beheer/menu_root.tpl -text
+lib/templates/MVC/menu/beheer/menu_tree.tpl -text
+lib/templates/MVC/menu/block.tpl -text
+lib/templates/MVC/menu/main.tpl -text
+lib/templates/MVC/menu/page.tpl -text
+lib/templates/MVC/taken/functie/beheer_functie_lijst.tpl -text
+lib/templates/MVC/taken/functie/beheer_functies.tpl -text
 lib/templates/bibliotheek/boek.tpl -text
 lib/templates/bibliotheek/boek.ubb.tpl -text
 lib/templates/bibliotheek/catalogus.tpl -text
@@ -3955,8 +3958,6 @@ lib/templates/taken/corveetaak/beheer_taken.tpl -text
 lib/templates/taken/corveetaak/corvee_rooster.tpl -text
 lib/templates/taken/corveetaak/mijn_rooster.tpl -text
 lib/templates/taken/corveetaak/suggesties_lijst.tpl -text
-lib/templates/taken/functie/beheer_functie_lijst.tpl -text
-lib/templates/taken/functie/beheer_functies.tpl -text
 lib/templates/taken/maalcie_saldi.tpl -text
 lib/templates/taken/maaltijd-repetitie/beheer_maaltijd_repetitie_lijst.tpl -text
 lib/templates/taken/maaltijd-repetitie/beheer_maaltijd_repetities.tpl -text

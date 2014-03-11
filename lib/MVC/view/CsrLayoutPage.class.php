@@ -2,6 +2,7 @@
 
 require_once 'MVC/view/HtmlPage.abstract.php';
 require_once 'MVC/view/MenuView.class.php';
+require_once 'MVC/model/MenuModel.class.php';
 require_once 'MVC/model/DragObjectModel.class.php';
 
 /**
@@ -97,7 +98,8 @@ class CsrLayoutPage extends HtmlPage {
 			}
 		}
 
-		$this->smarty->assign('mainmenu', new MenuView('main', 0));
+		$menu = new MenuModel();
+		$this->smarty->assign('mainmenu', new MainMenuView($menu->getMenuTree('main')));
 		$this->smarty->assign('body', $this->body);
 		$this->smarty->assign('zijkolom', $this->zijkolom);
 		$this->smarty->assign('popup', $this->popup);

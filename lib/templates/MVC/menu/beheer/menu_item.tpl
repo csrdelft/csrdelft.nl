@@ -10,7 +10,7 @@
 	<span style="color: grey;">{$item->item_id}</span>
 	<div style="float: right;">
 		<a href="{$item->link}">{$item->link}</a>
-		<a href="/menubeheer/verwijderen/{$item->item_id}" title="Dit menu-item definitief verwijderen" class="knop post confirm">{icon get="cross"}</a>
+		<a href="/menubeheer/verwijderen/{$item->item_id}" title="Dit menu-item definitief verwijderen" class="knop post confirm ReloadPage">{icon get="cross"}</a>
 	</div>
 	{if $item->children}
 		<ul class="menubeheer-tree">

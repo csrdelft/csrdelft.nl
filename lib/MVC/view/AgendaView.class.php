@@ -57,38 +57,36 @@ class AgendaMaandView extends TemplateView {
 
 class AgendaItemMaandView extends TemplateView {
 
-	private $actie;
-
-	public function __construct(AgendaItem $item, $actie) {
+	public function __construct(AgendaItem $item) {
 		parent::__construct($item);
-		$this->actie = $actie;
 	}
 
 	public function view() {
-		switch ($this->actie) {
+		$this->smarty->assign('magBeheren', AgendaController::magBeheren());
+		$this->smarty->assign('item', $this->model);
+		$this->smarty->display('MVC/agenda/maand_item.tpl');
+	}
 
-			case 'toevoegen':
-			case 'bewerken':
-				$this->smarty->assign('magBeheren', AgendaController::magBeheren());
-				$this->smarty->assign('item', $this->model);
-				$this->smarty->display('MVC/agenda/maand_item.tpl');
-				break;
+}
 
-			case 'verwijderen':
-				echo '<div id="item-' . $this->model->item_id . '" class="remove"></div>';
-				break;
-		}
+/**
+ * Requires id of deleted agenda item.
+ */
+class AgendaItemDeleteView extends TemplateView {
+
+	public function view() {
+		echo '<div id="item-' . $this->model . '" class="remove"></div>';
 	}
 
 }
 
 class AgendaItemFormView extends Formulier {
 
-	private $actie;
+	private $id;
 
-	public function __construct(AgendaItem $item, $actie, $param) {
-		parent::__construct($item, 'agenda-item-form', '/agenda/' . $actie . '/' . $param);
-		$this->actie = $actie;
+	public function __construct(AgendaItem $item, $actie, $id) {
+		parent::__construct($item, 'agenda-item-form', $actie);
+		$this->id = $id;
 		$this->css_classes[] = 'popup PreventUnchanged';
 
 		$fields[] = new RequiredTextField('titel', $item->titel, 'Titel');
@@ -128,8 +126,12 @@ function setTijd(a, b, c, d) {
 		$this->model->eind_moment = $fields['datum']->getValue() . ' ' . $fields['eind']->getValue();
 	}
 
+	public function getAction() {
+		return '/agenda/' . $this->action . '/' . $this->id;
+	}
+
 	public function view() {
-		echo '<div id="popup-content"><h1>Agenda-item ' . $this->actie . '</h1>';
+		echo '<div id="popup-content"><h1>Agenda-item ' . $this->action . '</h1>';
 		echo parent::view();
 		echo '</div>';
 	}

@@ -34,7 +34,7 @@ N.B. Alle corveetaken in het verleden worden bij de reset naar de prullenbak ver
 			<th style="padding: 5px; background-color: {cycle values="#F0F0F0,#FAFAFA"};">{strip}
 				<div style="width: 17px; height: 160px;">
 					<div class="vertical" style="font-weight: normal; position: relative; top: 140px;">
-						<nobr>{$functie->getNaam()}</nobr>
+						<nobr>{$functie->naam}</nobr>
 					</div>
 				</div>
 			</th>{/strip}

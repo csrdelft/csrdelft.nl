@@ -242,21 +242,21 @@
 			<div class="label">Corvee-<br />voorkeuren:</div>
 			<ul class="nobullets data">
 			{foreach from=$corveevoorkeuren item=vrk}
-				<li>{$vrk->getCorveeRepetitie()->getDagVanDeWeekText()|truncate:2:""} {$vrk->getCorveeRepetitie()->getCorveeFunctie()->getNaam()}</span></li>
+				<li>{$vrk->getCorveeRepetitie()->getDagVanDeWeekText()|truncate:2:""} {$vrk->getCorveeRepetitie()->getCorveeFunctie()->naam}</span></li>
 			{/foreach}
 			</ul>
 			<br />
 			<div class="label">Kwalificaties:</div>
 			<ul class="nobullets data">
 			{foreach from=$corveekwalificaties item=kwali}
-				<li>{$kwali->getCorveeFunctie()->getNaam()}<span style="color: gray;"> (sinds {$kwali->getWanneerToegewezen()})</span></li>
+				<li>{$kwali->getCorveeFunctie()->naam}<span style="color: gray;"> (sinds {$kwali->getWanneerToegewezen()})</span></li>
 			{/foreach}
 			</ul>
 			<br />
 			<div class="label">Corveetaken:</div>
 			<ul class="nobullets data">
 			{foreach from=$corveetaken item=taak}
-				<li>{$taak->getCorveeFunctie()->getNaam()} <span style="color: #676767">({$taak->getDatum()|date_format:"%a %e %b"})</span></li>
+				<li>{$taak->getCorveeFunctie()->naam} <span style="color: #676767">({$taak->getDatum()|date_format:"%a %e %b"})</span></li>
 			{/foreach}
 			</ul>
 			<br />

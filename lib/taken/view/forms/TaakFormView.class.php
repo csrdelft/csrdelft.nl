@@ -15,13 +15,14 @@ class TaakFormView extends TemplateView {
 		parent::__construct();
 		$this->_tid = $tid;
 
-		$functieNamen = FunctiesModel::getAlleFuncties(true); // grouped by fid
+		$model = new FunctiesModel();
+		$functieNamen = $model->getAlleFuncties(true); // grouped by fid
 		$functiePunten = 'var punten=[];';
 		foreach ($functieNamen as $functie) {
-			$functieNamen[$functie->getFunctieId()] = $functie->getNaam();
-			$functiePunten .= 'punten[' . $functie->getFunctieId() . ']=' . $functie->getStandaardPunten() . ';';
+			$functieNamen[$functie->functie_id] = $functie->naam;
+			$functiePunten .= 'punten[' . $functie->functie_id . ']=' . $functie->standaard_punten . ';';
 			if ($punten === null) {
-				$punten = $functie->getStandaardPunten();
+				$punten = $functie->standaard_punten;
 			}
 		}
 

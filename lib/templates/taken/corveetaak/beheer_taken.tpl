@@ -46,7 +46,7 @@
 	<select name="crid" value="kies" origvalue="kies" class="FormField SubmitChange">
 		<option selected="selected">kies</option>
 	{foreach from=$repetities item=repetitie}
-		<option value="{$repetitie->getCorveeRepetitieId()}">{$repetitie->getCorveeFunctie()->getNaam()} op {$repetitie->getDagVanDeWeekText()}</option>
+		<option value="{$repetitie->getCorveeRepetitieId()}">{$repetitie->getCorveeFunctie()->naam} op {$repetitie->getDagVanDeWeekText()}</option>
 	{/foreach}
 	</select>
 </form>

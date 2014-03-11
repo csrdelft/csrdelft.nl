@@ -12,6 +12,9 @@ abstract class PersistentEntity {
 	protected static $persistent_fields;
 	protected static $primary_key;
 
+	/**
+	 * Constructor is called late by PDO::FETCH_CLASS (after fields are set).
+	 */
 	public function __construct() {
 		$this->castValues();
 	}
@@ -57,12 +60,16 @@ abstract class PersistentEntity {
 				$this->$field = (int) $this->$field;
 			} else if (startsWith($type, 'tinyint')) {
 				$this->$field = (boolean) $this->$field;
+			} else if ($this->$field === null AND strpos($type, 'NOT NULL')) {
+				$this->$field = '';
 			}
 		}
 	}
 
 	/**
-	 * Create database table
+	 * Create database table.
+	 * 
+	 * @return string SQL query
 	 */
 	public function createTable() {
 		return Database::instance()->sqlCreateTable($this->getTableName(), static::$persistent_fields, $this->getPrimaryKey());
