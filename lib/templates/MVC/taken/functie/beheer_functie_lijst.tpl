@@ -12,6 +12,8 @@
 	<td>
 		{if $functie->kwalificatie_benodigd}
 			<div style="float: left;"><a href="{$instellingen->get('taken', 'url')}/kwalificeer/{$functie->functie_id}" title="Kwalificatie toewijzen" class="knop post popup">{icon get="vcard_add"} Kwalificeer</a></div>
+		{/if}
+		{if $functie->gekwalificeerden}
 			<div class="kwali"><a title="Toon oudleden" class="knop" onclick="$('div.kwali').toggle();">{icon get="eye"} Toon oudleden</a></div>
 			<div class="kwali" style="display: none;"><a title="Toon leden" class="knop" onclick="$('div.kwali').toggle();">{icon get="eye"} Toon leden</a></div>
 		{/if}
