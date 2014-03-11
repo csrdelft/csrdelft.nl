@@ -43,7 +43,9 @@ class FunctiesModel extends PersistenceModel {
 		if (CorveeRepetitiesModel::existFunctieRepetities($fid)) {
 			throw new Exception('Verwijder eerst de bijbehorende corveerepetities!');
 		}
-		KwalificatiesModel::verwijderKwalificaties($fid); // delete kwalificaties first (foreign key)
+		if (KwalificatiesModel::existFunctieKwalificaties($fid)) {
+			throw new Exception('Verwijder eerst de bijbehorende kwalificaties!');
+		}
 		return $this->deleteByPrimaryKey(array($fid));
 	}
 

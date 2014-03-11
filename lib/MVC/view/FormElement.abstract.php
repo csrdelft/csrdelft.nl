@@ -1434,21 +1434,13 @@ class TijdField extends InputField {
 class VinkField extends InputField {
 
 	/**
-	 * Speciaal geval.
-	 * 
-	 * @return boolean always true
-	 */
-	public function isPosted() {
-		return true;
-	}
-
-	/**
+	 * Speciaal geval:
 	 * Niet gepost = uitgevinkt.
 	 * 
 	 * @return boolean
 	 */
 	public function getValue() {
-		if (parent::isPosted()) {
+		if ($this->isPosted()) {
 			return true;
 		} else {
 			return false;

@@ -53,6 +53,24 @@ class KwalificatiesModel {
 		return self::existKwalificatie($uid, $fid);
 	}
 
+	/**
+	 * Called when a CorveeFunctie is going to be deleted.
+	 * 
+	 * @param int $fid
+	 * @return boolean
+	 */
+	public static function existFunctieKwalificaties($fid) {
+		if (!is_int($fid) || $fid <= 0) {
+			throw new Exception('Exist functie-kwalificaties faalt: Invalid $fid =' . $fid);
+		}
+		$sql = 'SELECT EXISTS (SELECT * FROM crv_kwalificaties WHERE functie_id = ?)';
+		$values = array($fid);
+		$query = \Database::instance()->prepare($sql, $values);
+		$query->execute($values);
+		$result = $query->fetchColumn();
+		return $result;
+	}
+
 	private static function existKwalificatie($uid, $fid) {
 		if (!is_int($fid) || $fid <= 0) {
 			throw new Exception('Exist corvee-kwalificatie faalt: Invalid $fid =' . $fid);
@@ -112,13 +130,6 @@ class KwalificatiesModel {
 			throw new Exception('Is niet gekwalificeerd!');
 		}
 		self::deleteKwalificatie($fid, $uid);
-	}
-
-	public static function verwijderKwalificaties($fid) {
-		if (!is_int($fid) || $fid <= 0) {
-			throw new Exception('Verwijder corvee-kwalificatie faalt: Invalid $fid =' . $fid);
-		}
-		return self::deleteKwalificatie($fid);
 	}
 
 	private static function deleteKwalificatie($fid, $uid = null) {

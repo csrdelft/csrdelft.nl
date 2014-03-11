@@ -84,7 +84,7 @@ class Formulier implements View, Validator {
 	 */
 	public function isPosted() {
 		foreach ($this->getFields() as $field) {
-			if ($field instanceof InputField AND !$field->isPosted()) {
+			if ($field instanceof InputField AND !($field instanceof VinkField OR $field->isPosted())) {
 				return false;
 			}
 		}

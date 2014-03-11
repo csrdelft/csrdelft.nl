@@ -83,12 +83,6 @@ class BeheerFunctiesController extends AclController {
 			} else {
 				setMelding('Geen wijzigingen', 0);
 			}
-			if (!$functie->kwalificatie_benodigd) { // niet (meer) voorkeurbaar
-				$rowcount = KwalificatiesModel::verwijderKwalificaties((int) $fid);
-				if ($rowcount > 0) {
-					setMelding($rowcount . ' kwalificaties verwijderd', 1);
-				}
-			}
 			$functie->gekwalificeerden = KwalificatiesModel::getKwalificatiesVoorFunctie($functie);
 			$this->view = new FunctieView($functie);
 		}
