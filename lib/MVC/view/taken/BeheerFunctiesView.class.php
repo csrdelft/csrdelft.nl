@@ -69,10 +69,7 @@ class FunctieFormView extends Formulier {
 		$fields[] = new TextField('afkorting', $functie->afkorting, 'Afkorting', 3);
 		$fields[] = new TextareaField('email_bericht', $functie->email_bericht, 'Email', 9);
 		$fields[] = new IntField('standaard_punten', $functie->standaard_punten, 'Standaard punten', 10, 0);
-		$fields['kwali'] = new VinkField('kwalificatie_benodigd', $functie->kwalificatie_benodigd, 'Kwalificatie benodigd');
-		if ($actie === 'bewerken') {
-			$fields['kwali']->setOnChangeScript("if (!this.checked) alert('Alle kwalificaties zullen definitief worden verwijderd!');");
-		}
+		$fields[] = new VinkField('kwalificatie_benodigd', $functie->kwalificatie_benodigd, 'Kwalificatie benodigd');
 		$fields[] = new SubmitResetCancel();
 		$this->addFields($fields);
 	}
