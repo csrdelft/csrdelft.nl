@@ -63,7 +63,7 @@ class TaakFormView extends TemplateView {
 		}
 		$valid = $this->_form->validate();
 		$fields = $this->_form->getFields();
-		if ($fields['mid']->getValue() !== 0) {
+		if (is_int($fields['mid']->getValue())) {
 			try {
 				$maaltijd = MaaltijdenModel::getMaaltijd($fields['mid']->getValue(), true);
 			} catch (\Exception $e) {
