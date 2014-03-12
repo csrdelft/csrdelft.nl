@@ -39,7 +39,8 @@ class MenuBeheerController extends AclController {
 	}
 
 	public function beheer($menu_naam = '') {
-		$body = new MenuBeheerView($this->model->getAlleMenus(), $this->model->getMenuTree($menu_naam, true));
+		$menu_naam = str_replace('%20', ' ', $menu_naam); // FIXME
+		$body = new MenuBeheerView($this->model->getMenuTree($menu_naam, true), $this->model->getAlleMenus());
 		$this->view = new CsrLayoutPage($body);
 		$this->view->addStylesheet('menubeheer.css');
 	}
@@ -51,6 +52,7 @@ class MenuBeheerController extends AclController {
 			$id = $this->model->create($item);
 			$item->item_id = (int) $id;
 			setMelding('Toegevoegd', 1);
+			$this->view = new MenuItemView($item);
 		}
 		// ReloadPage
 	}
@@ -65,6 +67,7 @@ class MenuBeheerController extends AclController {
 			} else {
 				setMelding('Geen wijzigingen', 0);
 			}
+			$this->view = new MenuItemView($item);
 		}
 		// ReloadPage
 	}
@@ -72,6 +75,7 @@ class MenuBeheerController extends AclController {
 	public function verwijderen($item_id) {
 		if ($this->model->removeMenuItem($item_id)) {
 			setMelding('Verwijderd', 1);
+			$this->view = new MenuItemView($item);
 		}
 		// ReloadPage
 	}

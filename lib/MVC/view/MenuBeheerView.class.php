@@ -10,10 +10,13 @@
  */
 class MenuBeheerView extends TemplateView {
 
-	public function __construct(array $menus, MenuItem $tree_root) {
+	public function __construct(MenuItem $tree_root, array $menus) {
 		parent::__construct($tree_root);
+		if ($tree_root->tekst === '') {
+			$this->model = false;
+		}
+		$this->smarty->assign('root', $this->model);
 		$this->smarty->assign('menus', $menus);
-		$this->smarty->assign('root', $tree_root);
 	}
 
 	public function getTitel() {
@@ -49,7 +52,10 @@ class MenuItemFormView extends Formulier {
 	public function __construct(MenuItem $item, $actie, $id) {
 		parent::__construct($item, 'menu-item-form', $actie);
 		$this->id = $id;
-		$this->css_classes[] = 'popup PreventUnchanged ReloadPage';
+		$this->css_classes[] = 'popup ReloadPage';
+		if ($actie === 'bewerken') {
+			$this->css_classes[] = 'PreventUnchanged';
+		}
 
 		$fields[] = new RequiredIntField('parent_id', $item->parent_id, 'Parent id');
 		$fields[] = new IntField('prioriteit', $item->prioriteit, 'Prioriteit');
@@ -62,11 +68,11 @@ class MenuItemFormView extends Formulier {
 	}
 
 	public function getAction() {
-		return '/menubeheer/' . $this->actie . '/' . $this->id;
+		return '/menubeheer/' . $this->action . '/' . $this->id;
 	}
 
 	public function view() {
-		echo '<div id="popup-content"><h1>Menu-item ' . $this->actie . '</h1>';
+		echo '<div id="popup-content"><h1>Menu-item ' . $this->action . '</h1>';
 		echo parent::view();
 		echo '</div>';
 	}

@@ -78,14 +78,15 @@ class MenuModel extends PersistenceModel {
 		return $item;
 	}
 
-	public function delete(PersistentEntity $item) {
+	public function removeMenuItem($item_id) {
 		$db = Database::instance();
 		try {
 			$db->beginTransaction();
+			$item = $this->getMenuItem($item_id);
 			// give new parent to otherwise future orphans
 			$properties = array('parent_id' => $item->parent_id);
 			$count = Database::sqlUpdate($this->orm_entity->getTableName(), $properties, 'parent_id = :oldid', array(':oldid' => $item->item_id));
-			parent::delete($item);
+			$this->delete($item);
 			$db->commit();
 			setMelding($count . ' menu-items nieuwe parent gegeven.', 2);
 		} catch (\Exception $e) {
