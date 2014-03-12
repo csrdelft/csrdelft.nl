@@ -18,7 +18,7 @@ De prognose geeft aan hoeveel punten u naar verwachting totaal zal hebben aan he
 	<tbody>
 {foreach from=$puntenlijst.aantal key=fid item=aantal}
 		<tr>
-			<td>{$functies[$fid]->getNaam()} ({$aantal})</th>
+			<td>{$functies[$fid]->naam} ({$aantal})</th>
 			<td>{strip}{$puntenlijst.punten[$fid]}
 	{if $puntenlijst.bonus[$fid] > 0}
 		+
