@@ -1,0 +1,10 @@
+====== Move ======
+
+Ta plugin omogoča premikanje in/ali preimenovanje trenutnega dokumenta v okviru naslednjih omejitev:
+
+  * You must have edit permission for the current page/all pages in the current namespace.
+  * The pages that are moved must not be locked for editing.
+  * Za premikanje datoteke potrebujete pravico za ustvarjanje v ciljni mapi.
+  * Ne morete premakniti dokumenta v imenski prostor, kjer dokument z istim imenom že obstaja.
+
+Vsi linki na in z strani bodo posodobljeni, da bodo kazali na novo lokacijo in/ali ime.
