@@ -76,11 +76,11 @@ class CorveeFunctie extends PersistentEntity {
 	 * @var array
 	 */
 	protected static $input_fields = array(
-		'TextField' => array('naam', 'Functienaam', 25),
-		'TextField' => array('afkorting', 'Afkorting van de functie', 3),
-		'TextareaField' => array('email_bericht', 'Tekst in email bericht over deze functie aan de corveeer', 9),
-		'IntField' => array('standaard_punten', 'Aantal corveepunten dat standaard voor deze functie gegeven wordt', 10, 0),
-		'VinkField' => array('kwalificatie_benodigd', 'Is er een kwalificatie benodigd om deze functie uit te mogen voeren')
+		'naam' => array('TextField', 'Functienaam', 25),
+		'afkorting' => array('TextField', 'Afkorting van de functie', 3),
+		'email_bericht' => array('TextareaField', 'Tekst in email bericht over deze functie aan de corveeer', 9),
+		'standaard_punten' => array('IntField', 'Aantal corveepunten dat standaard voor deze functie gegeven wordt', 0, 10),
+		'kwalificatie_benodigd' => array('VinkField', 'Is er een kwalificatie benodigd om deze functie uit te mogen voeren')
 	);
 	/**
 	 * Database primary key

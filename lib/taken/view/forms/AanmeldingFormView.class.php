@@ -19,7 +19,7 @@ class AanmeldingFormView extends TemplateView {
 
 		$fields[] = new LidField('voor_lid', $uid, 'Naam of lidnummer', 'leden');
 		if ($nieuw) {
-			$fields[] = new IntField('aantal_gasten', $gasten, 'Aantal gasten', 200, 0);
+			$fields[] = new IntField('aantal_gasten', $gasten, 'Aantal gasten', 0, 200);
 		}
 		$fields[] = new SubmitResetCancel();
 

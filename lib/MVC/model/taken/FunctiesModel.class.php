@@ -1,6 +1,7 @@
 <?php
 
 require_once 'MVC/model/entity/taken/CorveeFunctie.class.php';
+require_once 'taken/model/KwalificatiesModel.class.php';
 
 /**
  * FunctiesModel.class.php

@@ -32,7 +32,8 @@ class Formulier implements View, Validator {
 	protected $action;
 	/**
 	 * Fields must be added via addFields()
-	 * and retrieved with getFields().
+	 * or insertElementBefore() methods,
+	 * and retrieved with getFields() method.
 	 * 
 	 * @var FormElement[]
 	 */
@@ -45,30 +46,12 @@ class Formulier implements View, Validator {
 		$this->formId = $formId;
 		$this->action = $action;
 		$this->css_classes[] = 'Formulier';
-		if ($this->model) { // create model input fields
-			foreach ($this->model->getFormFields() as $className => $arguments) {
-				$fields[] = $this->createFormElement($className, $arguments);
-			}
-			$fields[] = new SubmitResetCancel();
-		}
 		$this->addFields($fields);
 	}
 
-	/**
-	 * Factory to create FormElements using reflection.
-	 * 
-	 * @param string $className
-	 * @param array $arguments
-	 * @return object class instance
-	 */
-	public function createFormElement($className, $arguments = array()) {
-		$propName = $arguments[0];
-		$mouseOver = $arguments[1];
-		$arguments[1] = $this->model->$propName; // value of the model property
-		array_splice($arguments, 2, 0, ucfirst(str_replace('_', ' ', $propName))); // name of the model property = label of the field (2nd parameter of the constructor)
-		$field = construct_instance($className, $arguments);
-		$field->title = $mouseOver;
-		return $field;
+	public function getModel() {
+		$this->getValues(); // fetch POST values
+		return $this->model;
 	}
 
 	public function getFormId() {
@@ -88,15 +71,28 @@ class Formulier implements View, Validator {
 	}
 
 	/**
+	 * Zoekt een FormElement met exact de gegeven naam.
+	 *
+	 * @param string $fieldName
+	 * @return InputField OR false if not found
+	 */
+	public function findByName($fieldName) {
+		foreach ($this->fields as $field) {
+			if ($field->getName() === $fieldName) {
+				return $field;
+			}
+		}
+		return false;
+	}
+
+	/**
 	 * Fetches POST values itself.
 	 * 
 	 * @param array $fields
 	 */
 	public function addFields(array $fields) {
 		$this->fields = array_merge($this->fields, $fields);
-		if ($this->isPosted() AND isset($this->model)) {
-			$this->getModel(); // Fetch POST values
-		}
+		$this->getValues(); // fetch POST values
 	}
 
 	public function insertElementBefore($fieldName, FormElement $elmnt) {
@@ -110,15 +106,32 @@ class Formulier implements View, Validator {
 	}
 
 	/**
-	 * Fetches POSTed form InputField values.
+	 * Create model input fields.
 	 */
-	public function getModel() {
-		foreach ($this->getValues() as $field => $value) {
-			if (property_exists($this->model, $field)) {
-				$this->model->$field = $value;
-			}
+	public function generateFields() {
+		$fields = array();
+		foreach ($this->model->getFormFields() as $propName => $arguments) {
+			$fields[] = $this->createFormElement($propName, $arguments);
 		}
-		return $this->model;
+		$this->addFields($fields);
+	}
+
+	/**
+	 * Factory to create FormElements using reflection.
+	 * 
+	 * @param string $propName
+	 * @param array $arguments
+	 * @return object class instance
+	 */
+	public function createFormElement($propName, $arguments = array()) {
+		$className = $arguments[0];
+		$mouseOver = $arguments[1];
+		$arguments[0] = $propName; // name of the model property
+		$arguments[1] = $this->model->$propName; // value of the model property
+		array_splice($arguments, 2, 0, ucfirst(str_replace('_', ' ', $propName))); // label of the field
+		$field = construct_instance($className, $arguments);
+		$field->title = $mouseOver;
+		return $field;
 	}
 
 	/**
@@ -131,19 +144,6 @@ class Formulier implements View, Validator {
 			}
 		}
 		return true;
-	}
-
-	/**
-	 * Geeft waardes van de formuliervelden terug.
-	 */
-	public function getValues() {
-		$values = array();
-		foreach ($this->getFields() as $field) {
-			if ($field instanceof InputField) {
-				$values[$field->getName()] = $field->getValue();
-			}
-		}
-		return $values;
 	}
 
 	/**
@@ -164,23 +164,25 @@ class Formulier implements View, Validator {
 		return $valid;
 	}
 
-	public function getError() {
-		return $this->error;
-	}
-
 	/**
-	 * Zoekt een FormElement met exact de gegeven naam.
-	 *
-	 * @param string $fieldName
-	 * @return InputField OR false if not found
+	 * Geeft waardes van de formuliervelden terug.
 	 */
-	public function findByName($fieldName) {
-		foreach ($this->fields as $field) {
-			if ($field->getName() === $fieldName) {
-				return $field;
+	public function getValues() {
+		$values = array();
+		foreach ($this->getFields() as $field) {
+			if ($field instanceof InputField) {
+				$propName = $field->getName();
+				$values[$propName] = $field->getValue();
+				if (isset($this->model) AND property_exists($this->model, $propName)) {
+					$this->model->$propName = $values[$propName];
+				}
 			}
 		}
-		return false;
+		return $values;
+	}
+
+	public function getError() {
+		return $this->error;
 	}
 
 	public function getJavascript() {
@@ -201,8 +203,17 @@ class Formulier implements View, Validator {
 			echo ' action="' . $this->getAction() . '"';
 		}
 		echo ' id="' . $this->getFormId() . '" class="' . implode(' ', $this->css_classes) . '" method="post">' . "\n";
+		$addButtons = true;
 		foreach ($this->getFields() as $field) {
 			$field->view();
+			if ($field instanceof SubmitResetCancel) {
+				$addButtons = false;
+			}
+		}
+		if ($addButtons) {
+			$buttons = new SubmitResetCancel();
+			$this->fields[] = $buttons;
+			echo $buttons->view();
 		}
 		echo $this->getJavascript();
 		echo '</form>';
@@ -234,8 +245,8 @@ class InlineForm extends Formulier {
 		echo '<form id="' . $this->getFormId() . '" action="' . $this->getAction() . '" method="post" class="Formulier InlineForm">';
 		echo $this->fields[0]->view();
 		echo '<div class="FormToggle">' . $this->fields[0]->getValue() . '</div>';
-		echo '<a class="knop submit" title="Opslaan"><img width="16" height="16" class="icon" alt="submit" src="' . CSR_PICS . 'famfamfam/accept.png">' . ($tekst ? ' Opslaan ' : '') . '</a>';
-		echo '<a class="knop reset cancel" title="Annuleren"><img width="16" height="16" class="icon" alt="cancel" src="' . CSR_PICS . 'famfamfam/delete.png">' . ($tekst ? ' Annuleren ' : '') . '</a>';
+		echo '<a class="knop submit" title="Opslaan"><    img width="16" height="16" class="icon" alt="submit" src="' . CSR_PICS . 'famfamfam/accept.png">' . ($tekst ? ' Opslaan ' : '') . '</a>';
+		echo '<a class="knop reset cancel" title="Annuleren"><    img width="16" height="16" class="icon" alt="cancel" src="' . CSR_PICS . 'famfamfam/delete.png">' . ($tekst ? ' Annuleren ' : '') . '</a>';
 		echo $this->getJavascript();
 		echo '</form></div>';
 	}

@@ -698,14 +698,13 @@ class IntField extends TextField {
 	public $min = null;
 	public $max = null;
 
-	public function __construct($name, $value, $description, $max = null, $min = null) {
+	public function __construct($name, $value, $description, $min = null, $max = null) {
 		parent::__construct($name, $value, $description);
-
-		if ($max !== null) {
-			$this->max = (int) $max;
-		}
 		if ($min !== null) {
 			$this->min = (int) $min;
+		}
+		if ($max !== null) {
+			$this->max = (int) $max;
 		}
 	}
 
@@ -749,15 +748,14 @@ class FloatField extends TextField {
 	public $min = null;
 	public $max = null;
 
-	public function __construct($name, $value, $description, $max = null, $min = null, $empty = false) {
+	public function __construct($name, $value, $description, $min = null, $max = null) {
 		parent::__construct($name, $value, $description);
-		if ($max !== null) {
-			$this->max = (float) $max;
-		}
 		if ($min !== null) {
 			$this->min = (float) $min;
 		}
-		$this->notnull = !$empty;
+		if ($max !== null) {
+			$this->max = (float) $max;
+		}
 	}
 
 	public function getValue() {

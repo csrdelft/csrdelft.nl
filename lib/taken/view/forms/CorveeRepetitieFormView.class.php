@@ -35,15 +35,15 @@ class CorveeRepetitieFormView extends TemplateView {
 		$fields['fid'] = new SelectField('functie_id', $fid, 'Functie', $functieNamen);
 		$fields['fid']->setOnChangeScript($functiePunten . "$('#field_standaard_punten').val(punten[this.value]);");
 		$fields[] = new WeekdagField('dag_vd_week', $dag, 'Dag v/d week');
-		$fields['dag'] = new IntField('periode_in_dagen', $periode, 'Periode (in dagen)', 183, 0);
+		$fields['dag'] = new IntField('periode_in_dagen', $periode, 'Periode (in dagen)', 0, 183);
 		$fields['dag']->title = 'Als de periode ongelijk is aan 7 is dit de start-dag bij het aanmaken van periodiek corvee';
 		$fields['vrk'] = new VinkField('voorkeurbaar', $voorkeur, 'Voorkeurbaar');
 		if ($this->_crid !== 0) {
 			$fields['vrk']->setOnChangeScript("if (!this.checked) alert('Alle voorkeuren zullen worden verwijderd!');");
 		}
 		$fields[] = new SelectField('mlt_repetitie_id', $mrid, 'Maaltijdrepetitie', $repetitieNamen);
-		$fields[] = new IntField('standaard_punten', $punten, 'Standaard punten', 10, 0);
-		$fields[] = new IntField('standaard_aantal', $aantal, 'Aantal corveeërs', 10, 1);
+		$fields[] = new IntField('standaard_punten', $punten, 'Standaard punten', 0, 10);
+		$fields[] = new IntField('standaard_aantal', $aantal, 'Aantal corveeërs', 1, 10);
 		if ($this->_crid !== 0) {
 			$fields['ver'] = new VinkField('verplaats_dag', $verplaats, 'Ook verplaatsen');
 			$fields['ver']->title = 'Verplaats naar dag v/d week bij bijwerken';

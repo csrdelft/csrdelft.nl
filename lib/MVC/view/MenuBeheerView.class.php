@@ -45,36 +45,26 @@ class MenuItemView extends TemplateView {
 
 }
 
-class MenuItemFormView extends Formulier {
+class MenuItemFormView extends PopupForm {
 
-	private $id;
-
-	public function __construct(MenuItem $item, $actie, $id) {
+	public function __construct(MenuItem $item, $actie) {
 		parent::__construct($item, 'menu-item-form', $actie);
-		$this->id = $id;
-		$this->css_classes[] = 'popup ReloadPage';
+		$this->css_classes[] = 'ReloadPage';
 		if ($actie === 'bewerken') {
 			$this->css_classes[] = 'PreventUnchanged';
 		}
-
-		$fields[] = new RequiredIntField('parent_id', $item->parent_id, 'Parent id');
-		$fields[] = new IntField('prioriteit', $item->prioriteit, 'Prioriteit');
-		$fields[] = new TextField('tekst', $item->tekst, 'Tekst');
-		$fields[] = new TextField('link', $item->link, 'Url');
-		$fields[] = new TextField('rechten_bekijken', $item->rechten_bekijken, 'Rechten');
-		$fields[] = new SelectField('zichtbaar', ($item->zichtbaar ? '1' : '0'), 'Tonen', array('1' => 'Zichtbaar', '0' => 'Verborgen'));
-		$fields[] = new SubmitResetCancel();
+		$this->generateFields();
+		$fields['zichtbaar'] = new SelectField('zichtbaar', ($item->zichtbaar ? '1' : '0'), 'Tonen', array('1' => 'Zichtbaar', '0' => 'Verborgen'));
+		$fields['zichtbaar']->title = 'Wel of niet tonen';
 		$this->addFields($fields);
 	}
 
 	public function getAction() {
-		return '/menubeheer/' . $this->action . '/' . $this->id;
+		return '/menubeheer/' . $this->action . '/' . $this->model->item_id;
 	}
 
-	public function view() {
-		echo '<div id="popup-content"><h1>Menu-item ' . $this->action . '</h1>';
-		echo parent::view();
-		echo '</div>';
+	public function getTitel() {
+		return 'Menu-item ' . $this->action;
 	}
 
 }

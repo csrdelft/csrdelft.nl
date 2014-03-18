@@ -49,7 +49,7 @@ class CorveeKwalificatie extends PersistentEntity {
 	 * @var array
 	 */
 	protected static $input_fields = array(
-		'LidField' => array('lid_id', 'Naam of lidnummer', 'leden')
+		'lid_id' => array('LidField', 'Naam of lidnummer', 'leden')
 	);
 	/**
 	 * Database primary key

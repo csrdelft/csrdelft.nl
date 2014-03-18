@@ -33,13 +33,13 @@ class MaaltijdRepetitieFormView extends TemplateView {
 		$fields[] = new TijdField('standaard_tijd', $tijd, 'Standaard tijd', 15);
 		$fields['dag'] = new WeekdagField('dag_vd_week', $dag, 'Dag v/d week');
 		$fields['dag']->title = 'Als de periode ongelijk is aan 7 is dit de start-dag bij het aanmaken van periodieke maaltijden';
-		$fields[] = new IntField('periode_in_dagen', $periode, 'Periode (in dagen)', 183, 0);
+		$fields[] = new IntField('periode_in_dagen', $periode, 'Periode (in dagen)', 0, 183);
 		$fields['abo'] = new VinkField('abonneerbaar', $abo, 'Abonneerbaar');
 		if ($this->_mrid !== 0) {
 			$fields['abo']->setOnChangeScript("if (!this.checked) alert('Alle abonnementen zullen worden verwijderd!');");
 		}
-		$fields[] = new FloatField('standaard_prijs', $prijs, 'Standaard prijs (€)', 50.00, 0.00);
-		$fields[] = new IntField('standaard_limiet', $limiet, 'Standaard limiet', 200, 0);
+		$fields[] = new FloatField('standaard_prijs', $prijs, 'Standaard prijs (€)', 0, 50);
+		$fields[] = new IntField('standaard_limiet', $limiet, 'Standaard limiet', 0, 200);
 		$fields['filter'] = new TextField('abonnement_filter', $filter, 'Aanmeldrestrictie', 255, $suggesties);
 		$fields['filter']->title = 'Plaats een ! vooraan om van de restrictie een uitsluiting te maken.';
 		$fields['filter']->required = false;

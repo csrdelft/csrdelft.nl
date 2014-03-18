@@ -1,7 +1,6 @@
 <?php
 
 require_once 'MVC/model/taken/FunctiesModel.class.php';
-require_once 'taken/model/KwalificatiesModel.class.php';
 require_once 'MVC/view/taken/BeheerFunctiesView.class.php';
 
 /**
@@ -84,25 +83,22 @@ class BeheerFunctiesController extends AclController {
 	}
 
 	public function kwalificeer($fid) {
-		$form = new KwalificatieFormView($fid); // fetches POST values itself
-		if ($form->validate()) {
-			$values = $form->getValues();
-			KwalificatiesModel::kwalificatieToewijzen($fid, $values['voor_lid']);
-			$functie = $this->model->getFunctie($fid);
-			$this->view = new BeheerFunctiesView($functie);
-		} else {
-			$this->view = $form;
+		$functie = $this->model->getFunctie($fid);
+		$model = new KwalificatiesModel();
+		$kwalificatie = $model->newKwalificatie($functie);
+		$this->view = new KwalificatieFormView($kwalificatie); // fetches POST values itself
+		if ($this->view->validate()) {
+			$model->kwalificatieToewijzen($kwalificatie->functie_id, $kwalificatie->lid_id);
+			$this->view = new FunctieView($functie);
 		}
 	}
 
 	public function dekwalificeer($fid) {
 		$uid = filter_input(INPUT_POST, 'voor_lid', FILTER_SANITIZE_STRING);
-		if (!\Lid::exists($uid)) {
-			throw new Exception('Lid bestaat niet: $uid =' . $uid);
-		}
-		KwalificatiesModel::kwalificatieTerugtrekken($fid, $uid);
 		$functie = $this->model->getFunctie($fid);
-		$this->view = new BeheerFunctiesView($functie);
+		$model = new KwalificatiesModel();
+		$model->kwalificatieTerugtrekken($functie->functie_id, $uid);
+		$this->view = new FunctieView($functie);
 	}
 
 }

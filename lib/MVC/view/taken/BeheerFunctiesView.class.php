@@ -62,6 +62,7 @@ class FunctieFormView extends PopupForm {
 		if ($actie === 'bewerken') {
 			$this->css_classes[] = 'PreventUnchanged';
 		}
+		$this->generateFields();
 	}
 
 	public function getAction() {
@@ -82,6 +83,7 @@ class KwalificatieFormView extends PopupForm {
 	public function __construct(CorveeKwalificatie $kwalificatie) {
 		parent::__construct($kwalificatie, 'taken-kwalificatie-form', Instellingen::get('taken', 'url') . '/kwalificeer/' . $kwalificatie->functie_id);
 		$this->css_classes[] = 'PreventUnchanged';
+		$this->generateFields();
 	}
 
 	public function getTitel() {

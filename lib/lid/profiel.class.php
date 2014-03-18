@@ -311,7 +311,7 @@ class ProfielBewerken extends Profiel {
 			$form[] = new JaNeeField('machtiging', $profiel['machtiging'], 'Machtiging getekend?');
 		}
 		if (LoginLid::instance()->hasPermission('P_ADMIN')) {
-			$form[] = new IntField('soccieID', $profiel['soccieID'], 'SoccieID (uniek icm. bar)', 10000, 0);
+			$form[] = new IntField('soccieID', $profiel['soccieID'], 'SoccieID (uniek icm. bar)', 0, 10000);
 			$form[] = new SelectField('createTerm', $profiel['createTerm'], 'Aangemaakt bij', array('barvoor' => 'barvoor', 'barmidden' => 'barmidden', 'barachter' => 'barachter', 'soccie' => 'soccie'));
 		}
 
@@ -324,7 +324,7 @@ class ProfielBewerken extends Profiel {
 		$form[] = new Subkopje('Studie:');
 		$form[] = new StudieField('studie', $profiel['studie'], 'Studie');
 		if (in_array($profiel['status'], array('S_OUDLID', 'S_ERELID')) OR $hasLedenMod OR $this->editNoviet) {
-			$form[] = new IntField('studiejaar', $profiel['studiejaar'], 'Beginjaar studie', date('Y'), $beginjaar);
+			$form[] = new IntField('studiejaar', $profiel['studiejaar'], 'Beginjaar studie', $beginjaar, date('Y'));
 		}
 
 		if (!in_array($profiel['status'], array('S_OUDLID', 'S_ERELID'))) {
@@ -333,7 +333,7 @@ class ProfielBewerken extends Profiel {
 
 		if (!$this->editNoviet AND (in_array($profiel['status'], array('S_OUDLID', 'S_ERELID')) OR $hasLedenMod)) {
 			$form[] = new TextField('beroep', $profiel['beroep'], 'Beroep/werk', 4096);
-			$form[] = new IntField('lidjaar', $profiel['lidjaar'], 'Lid sinds', date('Y'), $beginjaar);
+			$form[] = new IntField('lidjaar', $profiel['lidjaar'], 'Lid sinds', $beginjaar, date('Y'));
 		}
 
 		if (in_array($profiel['status'], array('S_OUDLID', 'S_ERELID', 'S_NOBODY', 'S_EXLID'))) {
@@ -355,7 +355,7 @@ class ProfielBewerken extends Profiel {
 			$form[] = new TextField('eetwens', $profiel['eetwens'], 'Dieet/allergie', 200);
 			//wellicht binnenkort voor iedereen beschikbaar?
 			$form[] = new TextField('kerk', $profiel['kerk'], 'Kerk', 50);
-			$form[] = new IntField('lengte', $profiel['lengte'], 'Lengte (cm)', 250);
+			$form[] = new IntField('lengte', $profiel['lengte'], 'Lengte (cm)', 50, 250);
 			$form[] = new TextField('vrienden', $profiel['vrienden'], 'Vrienden binnnen C.S.R./lichting', 300);
 			$form[] = new TextField('middelbareSchool', $profiel['middelbareSchool'], 'Middelbare school', 200);
 		}

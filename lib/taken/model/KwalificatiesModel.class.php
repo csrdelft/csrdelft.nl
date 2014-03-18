@@ -20,6 +20,12 @@ class KwalificatiesModel extends PersistenceModel {
 		$functie->kwalificaties = $this->find('functie_id = ?', array($functie->functie_id));
 	}
 
+	public function newKwalificatie(CorveeFunctie $functie) {
+		$kwalificatie = new CorveeKwalificatie();
+		$kwalificatie->functie_id = $functie->functie_id;
+		return $kwalificatie;
+	}
+
 //TODO:
 	public static function getKwalificatiesVanLid($uid) {
 		$kwalificaties = self::loadKwalificaties('lid_id = ?', array($uid));

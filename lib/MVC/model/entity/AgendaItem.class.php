@@ -61,6 +61,15 @@ class AgendaItem extends PersistentEntity implements Agendeerbaar {
 		'link' => 'varchar(255) DEFAULT NULL'
 	);
 	/**
+	 * Form input fields
+	 * @var array
+	 */
+	protected static $input_fields = array(
+		'rechten_bekijken' => array('SelectField', 'Zichtbaar voor', array('P_LEDEN_READ' => 'Intern', 'P_NOBODY' => 'Extern')),
+		'link' => array('TextField', 'URL als er op de titel geklikt wordt'),
+		'beschrijving' => array('AutoresizeTextareaField', 'Extra info als de cursor boven de titel gehouden wordt')
+	);
+	/**
 	 * Database primary key
 	 * @var array
 	 */
