@@ -31,6 +31,10 @@ abstract class PersistentEntity {
 		return array_keys(static::$persistent_fields);
 	}
 
+	public static function getFormFields() {
+		return static::$input_fields;
+	}
+
 	/**
 	 * Get the fields and their values of this object.
 	 * 

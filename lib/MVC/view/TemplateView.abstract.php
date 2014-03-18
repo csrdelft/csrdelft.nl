@@ -25,6 +25,10 @@ abstract class TemplateView implements View {
 	 */
 	protected $smarty;
 
+	/**
+	 * TODO: required $model
+	 * @param Model $model
+	 */
 	public function __construct($model = null) {
 		$this->model = $model;
 		$this->smarty = new CsrSmarty();
@@ -40,11 +44,25 @@ abstract class TemplateView implements View {
 	}
 
 	/**
-	 * Backwards compatibility with SimpleHTML
 	 * @deprecated
+	 * Backwards compatibility with SimpleHTML.
 	 */
 	public function getMelding() {
 		return SimpleHTML::getMelding();
+	}
+
+	/**
+	 * @deprecated
+	 * Laad een lid object.
+	 * 
+	 * @return Lid if exists, false otherwise
+	 */
+	public function getLid($uid) {
+		$lid = LidCache::getLid($uid); // false if lid does not exist
+		if (!$lid instanceof \Lid) {
+			throw new Exception('Lid bestaat niet: $uid =' . $uid);
+		}
+		return $lid;
 	}
 
 }

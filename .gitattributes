@@ -3208,6 +3208,7 @@ lib/MVC/model/entity/groepen/GroepLid.class.php -text
 lib/MVC/model/entity/groepen/Groepen[!!-~]ERD.png -text
 lib/MVC/model/entity/groepen/Ketzer.class.php -text
 lib/MVC/model/entity/taken/CorveeFunctie.class.php -text
+lib/MVC/model/entity/taken/CorveeKwalificatie.class.php -text
 lib/MVC/model/taken/FunctiesModel.class.php -text
 lib/MVC/view/AgendaView.class.php -text
 lib/MVC/view/CmsPaginaView.class.php -text
@@ -3903,7 +3904,6 @@ lib/taken/model/ToewijzenModel.class.php -text
 lib/taken/model/VoorkeurenModel.class.php -text
 lib/taken/model/VrijstellingenModel.class.php -text
 lib/taken/model/entity/ArchiefMaaltijd.class.php -text
-lib/taken/model/entity/CorveeKwalificatie.class.php -text
 lib/taken/model/entity/CorveeRepetitie.class.php -text
 lib/taken/model/entity/CorveeTaak.class.php -text
 lib/taken/model/entity/CorveeVoorkeur.class.php -text
@@ -3932,7 +3932,6 @@ lib/taken/view/MijnVoorkeurenView.class.php -text
 lib/taken/view/forms/AanmeldingFormView.class.php -text
 lib/taken/view/forms/BoekjaarSluitenFormView.class.php -text
 lib/taken/view/forms/CorveeRepetitieFormView.class.php -text
-lib/taken/view/forms/KwalificatieFormView.class.php -text
 lib/taken/view/forms/MaaltijdFormView.class.php -text
 lib/taken/view/forms/MaaltijdRepetitieFormView.class.php -text
 lib/taken/view/forms/RepetitieCorveeFormView.class.php -text

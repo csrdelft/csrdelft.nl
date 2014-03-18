@@ -58,7 +58,7 @@ class CorveeFunctie extends PersistentEntity {
 	 * Kwalificaties
 	 * @var CorveeKwalificatie[]
 	 */
-	public $gekwalificeerden;
+	public $kwalificaties;
 	/**
 	 * Database table fields
 	 * @var array
@@ -70,6 +70,17 @@ class CorveeFunctie extends PersistentEntity {
 		'email_bericht' => 'text NOT NULL',
 		'standaard_punten' => 'int(11) NOT NULL',
 		'kwalificatie_benodigd' => 'tinyint(1) NOT NULL'
+	);
+	/**
+	 * Form input fields
+	 * @var array
+	 */
+	protected static $input_fields = array(
+		'TextField' => array('naam', 'Functienaam', 25),
+		'TextField' => array('afkorting', 'Afkorting van de functie', 3),
+		'TextareaField' => array('email_bericht', 'Tekst in email bericht over deze functie aan de corveeer', 9),
+		'IntField' => array('standaard_punten', 'Aantal corveepunten dat standaard voor deze functie gegeven wordt', 10, 0),
+		'VinkField' => array('kwalificatie_benodigd', 'Is er een kwalificatie benodigd om deze functie uit te mogen voeren')
 	);
 	/**
 	 * Database primary key

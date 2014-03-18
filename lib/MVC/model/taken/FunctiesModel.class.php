@@ -14,20 +14,25 @@ class FunctiesModel extends PersistenceModel {
 		parent::__construct(new CorveeFunctie());
 	}
 
-	public function getAlleFuncties($groupByFid = false) {
+	public function getAlleFuncties() {
 		$functies = $this->find();
-		if ($groupByFid) {
-			$functiesByFid = array();
-			foreach ($functies as $functie) {
-				$functiesByFid[$functie->functie_id] = $functie;
+		$model = new KwalificatiesModel();
+		$kwalificaties = $model->getAlleKwalificaties();
+		$functiesByFid = array();
+		foreach ($functies as $functie) {
+			if ($functie->kwalificatie_benodigd) {
+				$functie->kwalificaties = $kwalificaties[$functie->functie_id];
 			}
-			return $functiesByFid;
+			$functiesByFid[$functie->functie_id] = $functie;
 		}
-		return $functies;
+		return $functiesByFid;
 	}
 
 	public function getFunctie($fid) {
-		return $this->retrieveByPrimaryKey(array($fid));
+		$functie = $this->retrieveByPrimaryKey(array($fid));
+		$model = new KwalificatiesModel();
+		$model->loadKwalificatiesVoorFunctie($functie);
+		return $functie;
 	}
 
 	public function newFunctie() {

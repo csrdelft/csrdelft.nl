@@ -11,15 +11,8 @@ require_once 'MVC/view/MenuBeheerView.class.php';
  */
 class MenuBeheerController extends AclController {
 
-	/**
-	 * Data access model
-	 * @var MenuModel
-	 */
-	private $model;
-
 	public function __construct($query) {
-		parent::__construct($query);
-		$this->model = new MenuModel();
+		parent::__construct($query, new MenuModel());
 		if (!$this->isPosted()) {
 			$this->acl = array(
 				'beheer' => 'P_ADMIN'

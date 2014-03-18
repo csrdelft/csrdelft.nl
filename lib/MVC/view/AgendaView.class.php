@@ -80,13 +80,10 @@ class AgendaItemDeleteView extends TemplateView {
 
 }
 
-class AgendaItemFormView extends Formulier {
-
-	private $id;
+class AgendaItemFormView extends PopupForm {
 
 	public function __construct(AgendaItem $item, $actie, $id) {
 		parent::__construct($item, 'agenda-item-form', $actie);
-		$this->id = $id;
 		$this->css_classes[] = 'popup PreventUnchanged';
 
 		$fields[] = new RequiredTextField('titel', $item->titel, 'Titel');
@@ -127,13 +124,11 @@ function setTijd(a, b, c, d) {
 	}
 
 	public function getAction() {
-		return '/agenda/' . $this->action . '/' . $this->id;
+		return '/agenda/' . $this->action . '/' . $this->model->item_id;
 	}
 
-	public function view() {
-		echo '<div id="popup-content"><h1>Agenda-item ' . $this->action . '</h1>';
-		echo parent::view();
-		echo '</div>';
+	public function getTitel() {
+		return 'Agenda-item ' . $this->action;
 	}
 
 	public function validate() {

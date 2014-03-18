@@ -3,7 +3,6 @@
 require_once 'MVC/model/taken/FunctiesModel.class.php';
 require_once 'taken/model/KwalificatiesModel.class.php';
 require_once 'MVC/view/taken/BeheerFunctiesView.class.php';
-require_once 'taken/view/forms/KwalificatieFormView.class.php';
 
 /**
  * BeheerFunctiesController.class.php
@@ -13,15 +12,8 @@ require_once 'taken/view/forms/KwalificatieFormView.class.php';
  */
 class BeheerFunctiesController extends AclController {
 
-	/**
-	 * Data access model
-	 * @var FunctiesModel
-	 */
-	private $model;
-
 	public function __construct($query) {
-		parent::__construct($query);
-		$this->model = new FunctiesModel();
+		parent::__construct($query, new FunctiesModel());
 		if (!$this->isPosted()) {
 			$this->acl = array(
 				'beheer' => 'P_CORVEE_MOD'
@@ -50,7 +42,6 @@ class BeheerFunctiesController extends AclController {
 			$popup = $this->getContent();
 		}
 		$functies = $this->model->getAlleFuncties();
-		KwalificatiesModel::loadKwalificatiesVoorFuncties($functies);
 		$this->view = new BeheerFunctiesView($functies);
 		$menu = new MenuModel();
 		$zijkolom = array(new BlockMenuView($menu->getMenuTree('Corveebeheer')));
@@ -68,7 +59,7 @@ class BeheerFunctiesController extends AclController {
 			$id = $this->model->create($functie);
 			$functie->functie_id = (int) $id;
 			setMelding('Toegevoegd', 1);
-			$functie->gekwalificeerden = KwalificatiesModel::getKwalificatiesVoorFunctie($functie);
+			$functie->kwalificaties = KwalificatiesModel::getKwalificatiesVoorFunctie($functie);
 			$this->view = new FunctieView($functie);
 		}
 	}
@@ -83,22 +74,15 @@ class BeheerFunctiesController extends AclController {
 			} else {
 				setMelding('Geen wijzigingen', 0);
 			}
-			$functie->gekwalificeerden = KwalificatiesModel::getKwalificatiesVoorFunctie($functie);
+			$functie->kwalificaties = KwalificatiesModel::getKwalificatiesVoorFunctie($functie);
 			$this->view = new FunctieView($functie);
 		}
 	}
 
 	public function verwijderen($fid) {
-		try {
-			Database::instance()->beginTransaction();
-			$this->model->removeFunctie((int) $fid);
-			setMelding('Verwijderd', 1);
-			$this->view = new FunctieDeleteView($fid);
-			Database::instance()->commit();
-		} catch (Exception $e) {
-			Database::instance()->rollback();
-			throw $e; // rethrow to controller
-		}
+		$this->model->removeFunctie((int) $fid);
+		setMelding('Verwijderd', 1);
+		$this->view = new FunctieDeleteView($fid);
 	}
 
 	public function kwalificeer($fid) {
@@ -107,7 +91,7 @@ class BeheerFunctiesController extends AclController {
 			$values = $form->getValues();
 			KwalificatiesModel::kwalificatieToewijzen($fid, $values['voor_lid']);
 			$functie = $this->model->getFunctie($fid);
-			$functie->gekwalificeerden = KwalificatiesModel::getKwalificatiesVoorFunctie($functie);
+			$functie->kwalificaties = KwalificatiesModel::getKwalificatiesVoorFunctie($functie);
 			$this->view = new BeheerFunctiesView($functie);
 		} else {
 			$this->view = $form;
@@ -121,7 +105,7 @@ class BeheerFunctiesController extends AclController {
 		}
 		KwalificatiesModel::kwalificatieTerugtrekken($fid, $uid);
 		$functie = $this->model->getFunctie($fid);
-		$functie->gekwalificeerden = KwalificatiesModel::getKwalificatiesVoorFunctie($functie);
+		$functie->kwalificaties = KwalificatiesModel::getKwalificatiesVoorFunctie($functie);
 		$this->view = new BeheerFunctiesView($functie);
 	}
 

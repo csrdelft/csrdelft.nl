@@ -31,8 +31,13 @@ class Formulier implements View, Validator {
 	protected $model;
 	protected $formId;
 	protected $action;
-	/** @var FormElement[] */
-	protected $fields = array();
+	/**
+	 * Fields must be added via addFields()
+	 * and retrieved with getFields().
+	 * 
+	 * @var FormElement[]
+	 */
+	private $fields = array();
 	public $css_classes = array();
 	public $error = '';
 
@@ -41,19 +46,34 @@ class Formulier implements View, Validator {
 		$this->formId = $formId;
 		$this->action = $action;
 		$this->css_classes[] = 'Formulier';
+		if ($this->model) { // create model input fields
+			foreach ($this->model->getFormFields() as $className => $arguments) {
+				$fields[] = $this->createFormElement($className, $arguments);
+			}
+			$fields[] = new SubmitResetCancel();
+		}
 		$this->addFields($fields);
 	}
 
 	/**
-	 * Fetches form values
+	 * Factory to create FormElements using reflection.
+	 * 
+	 * @param string $className
+	 * @param array $arguments
+	 * @return object class instance
 	 */
-	public function getModel() {
-		foreach ($this->getValues() as $field => $value) {
-			if (property_exists($this->model, $field)) {
-				$this->model->$field = $value;
-			}
-		}
-		return $this->model;
+	public function createFormElement($className, $arguments = array()) {
+		$propName = $arguments[0];
+		$mouseOver = $arguments[1];
+		$arguments[1] = $this->model->$propName; // value of the model property
+		array_splice($arguments, 2, 0, ucfirst(str_replace('_', ' ', $propName))); // name of the model property = label of the field (2nd parameter of the constructor)
+		$field = construct_instance($className, $arguments);
+		$field->title = $mouseOver;
+		return $field;
+	}
+
+	public function getFormId() {
+		return $this->formId;
 	}
 
 	public function setAction($action) {
@@ -64,14 +84,15 @@ class Formulier implements View, Validator {
 		return $this->action;
 	}
 
-	public function getFormId() {
-		return $this->formId;
-	}
-
 	public function getFields() {
 		return $this->fields;
 	}
 
+	/**
+	 * Fetches POST values itself.
+	 * 
+	 * @param array $fields
+	 */
 	public function addFields(array $fields) {
 		$this->fields = array_merge($this->fields, $fields);
 		if ($this->isPosted() AND isset($this->model)) {
@@ -79,12 +100,34 @@ class Formulier implements View, Validator {
 		}
 	}
 
+	public function insertElementBefore($fieldName, FormElement $elmnt) {
+		$pos = 0;
+		foreach ($this->fields as $field) {
+			if ($field->getName() === $fieldName) {
+				array_splice($this->fields, $pos, 0, $elmnt);
+			}
+			$pos++;
+		}
+	}
+
+	/**
+	 * Fetches POSTed form InputField values.
+	 */
+	public function getModel() {
+		foreach ($this->getValues() as $field => $value) {
+			if (property_exists($this->model, $field)) {
+				$this->model->$field = $value;
+			}
+		}
+		return $this->model;
+	}
+
 	/**
 	 * Is het formulier *helemaal* gePOST?
 	 */
 	public function isPosted() {
 		foreach ($this->getFields() as $field) {
-			if ($field instanceof InputField AND !($field instanceof VinkField OR $field->isPosted())) {
+			if ($field instanceof InputField AND !($field->isPosted() OR $field instanceof VinkField)) {
 				return false;
 			}
 		}
@@ -92,7 +135,7 @@ class Formulier implements View, Validator {
 	}
 
 	/**
-	 * Geeft waardes van de formuliervelden terug
+	 * Geeft waardes van de formuliervelden terug.
 	 */
 	public function getValues() {
 		$values = array();
@@ -105,20 +148,18 @@ class Formulier implements View, Validator {
 	}
 
 	/**
-	 * Alle valideer-functies kunnen het model gebruiken dat meegegeven is
-	 * bij constructie van het InputField om tegen te valideren.
+	 * Alle valideer-functies kunnen het model gebruiken bij het valideren
+	 * dat meegegeven is bij de constructie van het InputField.
 	 */
 	public function validate() {
 		if (!$this->isPosted()) {
 			$this->error = 'Formulier is niet compleet';
 			return false;
 		}
-		//alle veldjes langslopen, en kijken of ze valideren.
 		$valid = true;
 		foreach ($this->getFields() as $field) {
-			//we checken alleen de InputFields, niet de comments enzo.
-			if ($field instanceof InputField AND !$field->validate()) {
-				$valid = false;
+			if ($field instanceof InputField AND !$field->validate()) { // geen coments bijv.
+				$valid = false; // niet gelijk retourneren om voor alle velden eventueel errors te zetten
 			}
 		}
 		return $valid;
@@ -129,15 +170,14 @@ class Formulier implements View, Validator {
 	}
 
 	/**
-	 * Zoekt een InputField met de gegeven naam
+	 * Zoekt een FormElement met exact de gegeven naam.
 	 *
-	 * @param string $fieldname
-	 * @return bool|InputField
+	 * @param string $fieldName
+	 * @return InputField OR false if not found
 	 */
-	public function findByName($fieldname) {
+	public function findByName($fieldName) {
 		foreach ($this->fields as $field) {
-			//we checken alleen de InputFields, niet de comments enzo.
-			if ($field instanceof InputField AND $field->getName() == $fieldname) {
+			if ($field->getName() === $fieldName) {
 				return $field;
 			}
 		}
@@ -167,6 +207,20 @@ class Formulier implements View, Validator {
 		}
 		echo $this->getJavascript();
 		echo '</form>';
+	}
+
+}
+
+/**
+ * Formulier as popup content
+ */
+class PopupForm extends Formulier {
+
+	public function view() {
+		$this->css_classes[] = 'popup';
+		echo '<div id="popup-content"><h1>' . $this->getTitel() . '</h1>';
+		echo parent::view();
+		echo '</div>';
 	}
 
 }

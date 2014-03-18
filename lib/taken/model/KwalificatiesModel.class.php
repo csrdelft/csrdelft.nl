@@ -1,44 +1,26 @@
 <?php
 
-require_once 'taken/model/entity/CorveeKwalificatie.class.php';
+require_once 'MVC/model/entity/taken/CorveeKwalificatie.class.php';
 
 /**
  * KwalificatiesModel.class.php	| 	P.W.G. Brussee (brussee@live.nl)
  * 
  */
-class KwalificatiesModel {
+class KwalificatiesModel extends PersistenceModel {
 
-	public static function getAlleKwalificaties() {
-		return self::loadKwalificaties();
+	public function __construct() {
+		parent::__construct(new CorveeKwalificatie());
 	}
 
-	/**
-	 * Groepeert alle kwalificaties per functie en zet de property gekwalificeerden.
-	 * 
-	 * @param CorveeFunctie[] $functies
-	 * @return CorveeKwalificatie[]
-	 */
-	public static function loadKwalificatiesVoorFuncties(array $functies) {
-		$kwalificaties = self::getAlleKwalificaties();
-		$result = array();
-		foreach ($functies as $functie) {
-			$result[$functie->functie_id] = array();
-		}
-		foreach ($kwalificaties as $kwali) {
-			if (array_key_exists($kwali->getFunctieId(), $result)) {
-				$result[$kwali->getFunctieId()][] = $kwali;
-			}
-		}
-		foreach ($functies as $functie) {
-			$functie->gekwalificeerden = $result[$functie->functie_id];
-		}
-		return $result;
+	public function getAlleKwalificaties() {
+		return array_group_by('functie_id', $this->find());
 	}
 
-	public static function getKwalificatiesVoorFunctie(CorveeFunctie $functie) {
-		return self::loadKwalificaties('functie_id = ?', array($functie->functie_id));
+	public function loadKwalificatiesVoorFunctie(CorveeFunctie $functie) {
+		$functie->kwalificaties = $this->find('functie_id = ?', array($functie->functie_id));
 	}
 
+//TODO:
 	public static function getKwalificatiesVanLid($uid) {
 		$kwalificaties = self::loadKwalificaties('lid_id = ?', array($uid));
 		$model = new FunctiesModel();

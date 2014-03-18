@@ -14,28 +14,39 @@
 abstract class Controller {
 
 	/**
-	 * Is this controller called with a server request query containing
-	 * key-value-pair (KVP) or only representational state transfer (REST)
-	 * @var boolean
+	 * Data access model
+	 * @var Model
 	 */
-	private $kvp;
+	protected $model;
 	/**
-	 * Broken down query to (named) parameters
-	 * @var array
+	 * The view to be shown
+	 * @var View
 	 */
-	private $queryparts;
+	protected $view;
 	/**
 	 * Action to be performed
 	 * @var string
 	 */
 	protected $action;
 	/**
-	 * The view to be shown
-	 * @var View
+	 * Broken down query to (named) parameters
+	 * @var array
 	 */
-	protected $view;
+	private $queryparts;
+	/**
+	 * Is this controller called with a server request query containing
+	 * key-value-pair (KVP) or only representational state transfer (REST)
+	 * @var boolean
+	 */
+	private $kvp;
 
-	public function __construct($query) {
+	/**
+	 * TODO: required $model
+	 * @param string $query
+	 * @param Model $model
+	 */
+	public function __construct($query, $model = null) {
+		$this->model = $model;
 		$mark = strpos($query, '?');
 		if ($mark) {
 			$rest = substr($query, 0, $mark);
@@ -45,8 +56,7 @@ abstract class Controller {
 		$rest = explode('/', $rest);
 		$this->queryparts = $rest; // add REST params
 		if ($mark) {
-			$mark = substr($query, $mark);
-			$mark = explode('&', $mark);
+			$mark = explode('&', substr($query, $mark));
 			foreach ($mark as $key => $value) {
 				$this->queryparts[$key] = explode('=', $value); // add KVP params
 			}
