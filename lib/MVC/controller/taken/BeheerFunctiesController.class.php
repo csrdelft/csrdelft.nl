@@ -59,7 +59,6 @@ class BeheerFunctiesController extends AclController {
 			$id = $this->model->create($functie);
 			$functie->functie_id = (int) $id;
 			setMelding('Toegevoegd', 1);
-			$functie->kwalificaties = KwalificatiesModel::getKwalificatiesVoorFunctie($functie);
 			$this->view = new FunctieView($functie);
 		}
 	}
@@ -74,7 +73,6 @@ class BeheerFunctiesController extends AclController {
 			} else {
 				setMelding('Geen wijzigingen', 0);
 			}
-			$functie->kwalificaties = KwalificatiesModel::getKwalificatiesVoorFunctie($functie);
 			$this->view = new FunctieView($functie);
 		}
 	}
@@ -91,7 +89,6 @@ class BeheerFunctiesController extends AclController {
 			$values = $form->getValues();
 			KwalificatiesModel::kwalificatieToewijzen($fid, $values['voor_lid']);
 			$functie = $this->model->getFunctie($fid);
-			$functie->kwalificaties = KwalificatiesModel::getKwalificatiesVoorFunctie($functie);
 			$this->view = new BeheerFunctiesView($functie);
 		} else {
 			$this->view = $form;
@@ -105,7 +102,6 @@ class BeheerFunctiesController extends AclController {
 		}
 		KwalificatiesModel::kwalificatieTerugtrekken($fid, $uid);
 		$functie = $this->model->getFunctie($fid);
-		$functie->kwalificaties = KwalificatiesModel::getKwalificatiesVoorFunctie($functie);
 		$this->view = new BeheerFunctiesView($functie);
 	}
 

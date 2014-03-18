@@ -24,7 +24,8 @@ class ToewijzenModel {
 		$vrijstellingen = VrijstellingenModel::getAlleVrijstellingen(true); // grouped by uid
 		$functie = $taak->getCorveeFunctie();
 		if ($functie->kwalificatie_benodigd) { // laad alleen gekwalificeerde leden
-			$kwalificaties = KwalificatiesModel::getKwalificatiesVoorFunctie($functie);
+			$model = new KwalificatiesModel();
+			$kwalificaties = $model->loadKwalificatiesVoorFunctie($functie);
 			$lijst = array();
 			$avg = 0;
 			foreach ($kwalificaties as $kwali) {

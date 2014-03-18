@@ -11,14 +11,13 @@ require_once 'MVC/view/FormElement.abstract.php';
  * 
  * Voorbeeld:
  *
- * $form=new Formulier(null, 
+ * $form = new Formulier(
  * 		$model,
  * 		'formulier-ID',
- * 		'/index.php',
+ * 		'/example.php',
  * 		array(
- * 			InputField('naam', '', 'Naam'),
- * 			PassField('password'),
- * 			SubmitButton('save')
+ * 			InputField('naam', $value, 'Naam'),
+ * 			SubmitResetCancel()
  * 		);
  * 
  * Alle dingen die we in de field-array van een Formulier stoppen
@@ -158,7 +157,7 @@ class Formulier implements View, Validator {
 		}
 		$valid = true;
 		foreach ($this->getFields() as $field) {
-			if ($field instanceof InputField AND !$field->validate()) { // geen coments bijv.
+			if ($field instanceof InputField AND !$field->validate()) { // geen comments bijv.
 				$valid = false; // niet gelijk retourneren om voor alle velden eventueel errors te zetten
 			}
 		}

@@ -9,8 +9,9 @@
 abstract class PersistentEntity {
 
 	protected static $table_name;
-	protected static $persistent_fields;
 	protected static $primary_key;
+	protected static $persistent_fields;
+	protected static $input_fields;
 
 	/**
 	 * Constructor is called late by PDO::FETCH_CLASS (after fields are set).
