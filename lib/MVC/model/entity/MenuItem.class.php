@@ -60,17 +60,6 @@ class MenuItem extends PersistentEntity {
 		'zichtbaar' => 'tinyint(1) NOT NULL'
 	);
 	/**
-	 * Form input fields
-	 * @var array
-	 */
-	protected static $input_fields = array(
-		'parent_id' => array('RequiredIntField', 'Item id van element 1 niveau hoger', 0),
-		'prioriteit' => array('IntField', 'Sortering van items'),
-		'tekst' => array('TextField', 'Korte aanduiding', 50),
-		'link' => array('TextField', 'URL als er op het menu item geklikt wordt', 255),
-		'rechten_bekijken' => array('TextField', 'Wie mag dit menu item zien', 255)
-	);
-	/**
 	 * Database primary key
 	 * @var array
 	 */

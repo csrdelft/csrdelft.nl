@@ -11,7 +11,6 @@ abstract class PersistentEntity {
 	protected static $table_name;
 	protected static $primary_key;
 	protected static $persistent_fields;
-	protected static $input_fields;
 
 	/**
 	 * Constructor is called late by PDO::FETCH_CLASS (after fields are set).
@@ -30,10 +29,6 @@ abstract class PersistentEntity {
 
 	public static function getFields() {
 		return array_keys(static::$persistent_fields);
-	}
-
-	public static function getFormFields() {
-		return static::$input_fields;
 	}
 
 	/**

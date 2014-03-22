@@ -1,7 +1,7 @@
 <?php
 
+require_once 'MVC/model/taken/KwalificatiesModel.class.php';
 require_once 'taken/model/VrijstellingenModel.class.php';
-require_once 'taken/model/KwalificatiesModel.class.php';
 require_once 'taken/model/PuntenModel.class.php';
 require_once 'taken/model/VoorkeurenModel.class.php';
 
@@ -24,11 +24,9 @@ class ToewijzenModel {
 		$vrijstellingen = VrijstellingenModel::getAlleVrijstellingen(true); // grouped by uid
 		$functie = $taak->getCorveeFunctie();
 		if ($functie->kwalificatie_benodigd) { // laad alleen gekwalificeerde leden
-			$model = new KwalificatiesModel();
-			$kwalificaties = $model->loadKwalificatiesVoorFunctie($functie);
 			$lijst = array();
 			$avg = 0;
-			foreach ($kwalificaties as $kwali) {
+			foreach ($functie->getKwalificaties() as $kwali) {
 				$uid = $kwali->getLidId();
 				$lid = \LidCache::getLid($uid); // false if lid does not exist
 				if (!$lid instanceof \Lid) {

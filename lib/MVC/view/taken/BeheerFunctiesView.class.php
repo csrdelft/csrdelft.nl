@@ -62,7 +62,22 @@ class FunctieFormView extends PopupForm {
 		if ($actie === 'bewerken') {
 			$this->css_classes[] = 'PreventUnchanged';
 		}
-		$this->generateFields();
+
+		$fields[] = new TextField('naam', $functie->naam, 'Functienaam', 25);
+
+		$fields['afk'] = new TextField('afkorting', $functie->afkorting, 'Afkorting', 3);
+		$fields['afk']->title = 'Afkorting van de functie';
+
+		$fields['eml'] = new TextareaField('email_bericht', $functie->email_bericht, 'E-mailbericht', 9);
+		$fields['eml']->title = 'Tekst in email bericht over deze functie aan de corveeer';
+
+		$fields['ptn'] = new IntField('standaard_punten', $functie->standaard_punten, 'Standaard punten', 0, 10);
+		$fields['ptn']->title = 'Aantal corveepunten dat standaard voor deze functie gegeven wordt';
+
+		$fields['k'] = new VinkField('kwalificatie_benodigd', $functie->kwalificatie_benodigd, 'Kwalificatie benodigd');
+		$fields['k']->title = 'Is er een kwalificatie benodigd om deze functie uit te mogen voeren';
+
+		$this->addFields($fields);
 	}
 
 	public function getAction() {
@@ -83,7 +98,10 @@ class KwalificatieFormView extends PopupForm {
 	public function __construct(CorveeKwalificatie $kwalificatie) {
 		parent::__construct($kwalificatie, 'taken-kwalificatie-form', Instellingen::get('taken', 'url') . '/kwalificeer/' . $kwalificatie->functie_id);
 		$this->css_classes[] = 'PreventUnchanged';
-		$this->generateFields();
+
+		$fields[] = new LidField('lid_id', $kwalificatie->lid_id, 'Naam of lidnummer', 'leden');
+
+		$this->addFields($fields);
 	}
 
 	public function getTitel() {

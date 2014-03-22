@@ -3,7 +3,9 @@
 require_once 'MVC/model/entity/taken/CorveeKwalificatie.class.php';
 
 /**
- * KwalificatiesModel.class.php	| 	P.W.G. Brussee (brussee@live.nl)
+ * KwalificatiesModel.class.php
+ * 
+ * @author P.W.G. Brussee <brussee@live.nl>
  * 
  */
 class KwalificatiesModel extends PersistenceModel {
@@ -12,33 +14,39 @@ class KwalificatiesModel extends PersistenceModel {
 		parent::__construct(new CorveeKwalificatie());
 	}
 
+	/**
+	 * Lazy loading of corveefunctie.
+	 * 
+	 * @return CorveeKwalificatie[]
+	 */
 	public function getAlleKwalificaties() {
 		return array_group_by('functie_id', $this->find());
 	}
 
-	public function loadKwalificatiesVoorFunctie(CorveeFunctie $functie) {
-		$functie->kwalificaties = $this->find('functie_id = ?', array($functie->functie_id));
-	}
-
-	public function newKwalificatie(CorveeFunctie $functie) {
-		$kwalificatie = new CorveeKwalificatie();
-		$kwalificatie->functie_id = $functie->functie_id;
-		return $kwalificatie;
-	}
-
-//TODO:
-	public static function getKwalificatiesVanLid($uid) {
-		$kwalificaties = self::loadKwalificaties('lid_id = ?', array($uid));
+	/**
+	 * Eager loading of corveefuncties.
+	 * 
+	 * @param string $lid_id
+	 * @return CorveeFunctie[]
+	 */
+	public function getKwalificatiesVanLid($lid_id) {
 		$model = new FunctiesModel();
-		$functies = $model->getAlleFuncties(true); // grouped by fid
+		$functies = $model->getAlleFuncties(); // grouped by functie_id
+		$kwalificaties = $this->find('lid_id = ?', array($lid_id));
 		foreach ($kwalificaties as $kwali) {
 			$kwali->setCorveeFunctie($functies[$kwali->getFunctieId()]);
 		}
 		return $kwalificaties;
 	}
 
-	public static function getIsLidGekwalificeerd($uid, $fid) {
-		return self::existKwalificatie($uid, $fid);
+	public function isLidGekwalificeerdVoorFunctie($uid, $fid) {
+		return $this->existsByPrimaryKey(array($uid, $fid));
+	}
+
+	public function newKwalificatie(CorveeFunctie $functie) {
+		$kwalificatie = new CorveeKwalificatie();
+		$kwalificatie->functie_id = $functie->functie_id;
+		return $kwalificatie;
 	}
 
 	/**
@@ -56,35 +64,6 @@ class KwalificatiesModel extends PersistenceModel {
 		$query = \Database::instance()->prepare($sql, $values);
 		$query->execute($values);
 		$result = $query->fetchColumn();
-		return $result;
-	}
-
-	private static function existKwalificatie($uid, $fid) {
-		if (!is_int($fid) || $fid <= 0) {
-			throw new Exception('Exist corvee-kwalificatie faalt: Invalid $fid =' . $fid);
-		}
-		$sql = 'SELECT EXISTS (SELECT * FROM crv_kwalificaties WHERE lid_id = ? AND functie_id = ?)';
-		$values = array($uid, $fid);
-		$query = \Database::instance()->prepare($sql, $values);
-		$query->execute($values);
-		$result = (boolean) $query->fetchColumn();
-		return $result;
-	}
-
-	private static function loadKwalificaties($where = null, $values = array(), $limit = null) {
-		$sql = 'SELECT lid_id, functie_id, wanneer_toegewezen';
-		$sql.= ' FROM crv_kwalificaties';
-		if ($where !== null) {
-			$sql.= ' WHERE ' . $where;
-		}
-		$sql.= ' ORDER BY lid_id ASC';
-		if (is_int($limit) && $limit > 0) {
-			$sql.= ' LIMIT ' . $limit;
-		}
-		$db = \Database::instance();
-		$query = $db->prepare($sql, $values);
-		$query->execute($values);
-		$result = $query->fetchAll(\PDO::FETCH_CLASS | \PDO::FETCH_PROPS_LATE, '\CorveeKwalificatie');
 		return $result;
 	}
 

@@ -1,7 +1,7 @@
 <?php
 
 require_once 'MVC/model/entity/taken/CorveeFunctie.class.php';
-require_once 'taken/model/KwalificatiesModel.class.php';
+require_once 'MVC/model/taken/KwalificatiesModel.class.php';
 
 /**
  * FunctiesModel.class.php
@@ -15,25 +15,35 @@ class FunctiesModel extends PersistenceModel {
 		parent::__construct(new CorveeFunctie());
 	}
 
+	/**
+	 * Eager loading of kwalificaties.
+	 * 
+	 * @return CorveeFunctie[]
+	 */
 	public function getAlleFuncties() {
-		$functies = $this->find();
 		$model = new KwalificatiesModel();
 		$kwalificaties = $model->getAlleKwalificaties();
 		$functiesByFid = array();
+		$functies = $this->find();
 		foreach ($functies as $functie) {
-			if ($functie->kwalificatie_benodigd) {
-				$functie->kwalificaties = $kwalificaties[$functie->functie_id];
+			if (array_key_exists($functie->functie_id, $kwalificaties)) {
+				$functie->setKwalificaties($kwalificaties[$functie->functie_id]);
+			} else {
+				$functie->setKwalificaties(array());
 			}
 			$functiesByFid[$functie->functie_id] = $functie;
 		}
 		return $functiesByFid;
 	}
 
+	/**
+	 * Lazy loading of kwalificaties.
+	 * 
+	 * @param int $fid
+	 * @return CorveeFunctie[]
+	 */
 	public function getFunctie($fid) {
-		$functie = $this->retrieveByPrimaryKey(array($fid));
-		$model = new KwalificatiesModel();
-		$model->loadKwalificatiesVoorFunctie($functie);
-		return $functie;
+		return $this->retrieveByPrimaryKey(array($fid));
 	}
 
 	public function newFunctie() {

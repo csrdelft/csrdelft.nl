@@ -29,12 +29,12 @@ class CorveeKwalificatie extends PersistentEntity {
 	 * Datum + tijd
 	 * @var string
 	 */
-	public $wanneer_toegewezen; #datetime
+	public $wanneer_toegewezen;
 	/**
 	 * Functie instantie
 	 * @var CorveeFunctie
 	 */
-	public $corvee_functie;
+	private $corvee_functie;
 	/**
 	 * Database table fields
 	 * @var array
@@ -43,13 +43,6 @@ class CorveeKwalificatie extends PersistentEntity {
 		'lid_id' => 'varchar(4) NOT NULL',
 		'functie_id' => 'int(11) NOT NULL',
 		'wanneer_toegewezen' => 'datetime NOT NULL'
-	);
-	/**
-	 * Form input fields
-	 * @var array
-	 */
-	protected static $input_fields = array(
-		'lid_id' => array('LidField', 'Naam of lidnummer', 'leden')
 	);
 	/**
 	 * Database primary key
@@ -61,5 +54,24 @@ class CorveeKwalificatie extends PersistentEntity {
 	 * @var string
 	 */
 	protected static $table_name = 'crv_kwalificaties';
+
+	/**
+	 * Lazy loading by foreign key.
+	 * 
+	 * @return CorveeFunctie
+	 */
+	public function getCorveeFunctie() {
+		var_dump(debug_backtrace());
+
+		if (!isset($this->corvee_functie)) {
+			$model = new FunctiesModel();
+			$this->setCorveeFunctie($model->find('functie_id = ?', array($this->functie_id)));
+		}
+		return $this->corvee_functie;
+	}
+
+	public function setCorveeFunctie(CorveeFunctie $functie) {
+		$this->corvee_functie = $functie;
+	}
 
 }

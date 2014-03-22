@@ -45,8 +45,9 @@ class VoorkeurenModel {
 		foreach ($repById as $crid => $repetitie) {
 			if (!$alleenIngeschakeld && !array_key_exists($crid, $result)) { // uitgeschakeld en voorkeurbaar
 				if ($repetitie->getCorveeFunctie()->kwalificatie_benodigd) {
-					require_once 'taken/model/KwalificatiesModel.class.php';
-					if (!KwalificatiesModel::getIsLidGekwalificeerd($uid, $repetitie->getFunctieId())) {
+					require_once 'MVC/model/taken/KwalificatiesModel.class.php';
+					$model = new KwalificatiesModel();
+					if (!$model->isLidGekwalificeerdVoorFunctie($uid, $repetitie->getFunctieId())) {
 						continue;
 					}
 				}

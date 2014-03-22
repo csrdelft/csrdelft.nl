@@ -110,11 +110,19 @@ function setTijd(a, b, c, d) {
 </script>
 </div>';
 		$fields[] = new HtmlComment($html);
+
 		$fields['begin'] = new TijdField('begin', date('H:i', $item->getBeginMoment()), 'Van');
 		$fields['eind'] = new TijdField('eind', date('H:i', $item->getEindMoment()), 'Tot');
 
+		$fields[] = new SelectField('rechten_bekijken', $item->rechten_bekijken, 'Zichtbaar voor', array('P_LEDEN_READ' => 'Intern', 'P_NOBODY' => 'Extern'));
+
+		$fields['l'] = new TextField('link', $item->link, 'Link');
+		$fields['l']->title = 'URL als er op de titel geklikt wordt';
+
+		$fields['b'] = new AutoresizeTextareaField('beschrijving', $item->beschrijving, 'Beschrijving');
+		$fields['b']->title = 'Extra info als de cursor boven de titel gehouden wordt';
+
 		$this->addFields($fields);
-		$this->generateFields();
 
 		$this->model->begin_moment = $fields['datum']->getValue() . ' ' . $fields['begin']->getValue();
 		$this->model->eind_moment = $fields['datum']->getValue() . ' ' . $fields['eind']->getValue();

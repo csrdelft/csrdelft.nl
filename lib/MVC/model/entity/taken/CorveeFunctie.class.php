@@ -58,7 +58,7 @@ class CorveeFunctie extends PersistentEntity {
 	 * Kwalificaties
 	 * @var CorveeKwalificatie[]
 	 */
-	public $kwalificaties;
+	private $kwalificaties;
 	/**
 	 * Database table fields
 	 * @var array
@@ -72,17 +72,6 @@ class CorveeFunctie extends PersistentEntity {
 		'kwalificatie_benodigd' => 'tinyint(1) NOT NULL'
 	);
 	/**
-	 * Form input fields
-	 * @var array
-	 */
-	protected static $input_fields = array(
-		'naam' => array('TextField', 'Functienaam', 25),
-		'afkorting' => array('TextField', 'Afkorting van de functie', 3),
-		'email_bericht' => array('TextareaField', 'Tekst in email bericht over deze functie aan de corveeer', 9),
-		'standaard_punten' => array('IntField', 'Aantal corveepunten dat standaard voor deze functie gegeven wordt', 0, 10),
-		'kwalificatie_benodigd' => array('VinkField', 'Is er een kwalificatie benodigd om deze functie uit te mogen voeren')
-	);
-	/**
 	 * Database primary key
 	 * @var array
 	 */
@@ -92,5 +81,24 @@ class CorveeFunctie extends PersistentEntity {
 	 * @var string
 	 */
 	protected static $table_name = 'crv_functies';
+
+	/**
+	 * Lazy loading by foreign key.
+	 * 
+	 * @return CorveeKwalificatie[]
+	 */
+	public function getKwalificaties() {
+		var_dump(debug_backtrace());
+
+		if (!isset($this->kwalificaties)) {
+			$model = new KwalificatiesModel();
+			$this->setKwalificaties($model->find('functie_id = ?', array($this->functie_id)));
+		}
+		return $this->kwalificaties;
+	}
+
+	public function setKwalificaties(array $kwalificaties) {
+		$this->kwalificaties = $kwalificaties;
+	}
 
 }
