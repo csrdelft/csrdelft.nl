@@ -200,9 +200,6 @@ class AgendaICalendarView extends TemplateView {
 	}
 
 	public function view() {
-		header("Content-Type: text/calendar");
-		header('Content-Disposition: attachment; filename="calendar.ics"');
-
 		$this->smarty->assign('CSR_ROOT', CSR_ROOT);
 		$this->smarty->assign('items', $this->model->getiCalendarItems());
 		$this->smarty->display('MVC/agenda/icalendar.tpl');
