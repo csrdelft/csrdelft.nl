@@ -1,6 +1,5 @@
 <?php
 
-require_once 'MVC/model/entity/LidInstelling.class.php';
 require_once 'MVC/model/InstellingenModel.class.php';
 
 /**
@@ -14,6 +13,7 @@ require_once 'MVC/model/InstellingenModel.class.php';
 class LidInstellingen extends PersistenceModel {
 
 	protected static $instance;
+	protected static $orm = 'LidInstelling';
 
 	public static function get($module, $key = null) {
 		if ($key === null) { // backwards compatibility
@@ -92,7 +92,7 @@ class LidInstellingen extends PersistenceModel {
 	);
 
 	protected function __construct() {
-		parent::__construct(new LidInstelling());
+		parent::__construct();
 		$this->reload();
 	}
 

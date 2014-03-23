@@ -1,6 +1,5 @@
 <?php
 
-require_once 'MVC/model/entity/AgendaItem.class.php';
 require_once 'taken/model/MaaltijdenModel.class.php';
 require_once 'taken/model/TakenModel.class.php';
 
@@ -15,10 +14,7 @@ require_once 'taken/model/TakenModel.class.php';
 class AgendaModel extends PersistenceModel {
 
 	protected static $instance;
-
-	protected function __construct() {
-		parent::__construct(new AgendaItem());
-	}
+	protected static $orm = 'AgendaItem';
 
 	public function getAllAgendeerbaar($van, $tot) {
 		$result = array();

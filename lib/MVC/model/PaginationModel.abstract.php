@@ -23,8 +23,8 @@ abstract class PaginationModel extends PersistenceModel {
 	protected $where_params;
 	protected $orderby;
 
-	protected function __construct(PersistentEntity $orm_entity, $per_page = 25, $where = null, array $where_params = array(), $orderby = null) {
-		parent::__construct($orm_entity);
+	protected function __construct($per_page = 25, $where = null, array $where_params = array(), $orderby = null) {
+		parent::__construct();
 		$this->current_page_number = 0;
 		$this->per_page = $per_page;
 		$this->where = $where;

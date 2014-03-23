@@ -1,7 +1,5 @@
 <?php
 
-require_once 'MVC/model/entity/Instelling.class.php';
-
 /**
  * InstellingenModel.class.php
  * 
@@ -11,6 +9,7 @@ require_once 'MVC/model/entity/Instelling.class.php';
 class Instellingen extends PersistenceModel {
 
 	protected static $instance;
+	protected static $orm = 'Instelling';
 
 	public static function has($module, $key) {
 		return array_key_exists($module, static::instance()->instellingen) AND is_array(static::instance()->instellingen[$module]) AND array_key_exists($key, static::instance()->instellingen[$module]);
@@ -107,7 +106,7 @@ class Instellingen extends PersistenceModel {
 	 * Als default instellingen ontbreken worden deze aangemaakt en opgeslagen.
 	 */
 	protected function __construct() {
-		parent::__construct(new Instelling());
+		parent::__construct();
 		$instellingen = $this->find(); // load all from db
 		foreach ($instellingen as $instelling) {
 			// haal verwijderde instellingen uit de database

@@ -1,7 +1,5 @@
 <?php
 
-require_once 'MVC/model/entity/CmsPagina.class.php';
-
 /**
  * CmsPaginaModel.class.php
  * 
@@ -13,10 +11,7 @@ require_once 'MVC/model/entity/CmsPagina.class.php';
 class CmsPaginaModel extends PersistenceModel {
 
 	protected static $instance;
-
-	protected function __construct() {
-		parent::__construct(new CmsPagina());
-	}
+	protected static $orm = 'CmsPagina';
 
 	public function getAllePaginas() {
 		$paginas = $this->find(null, array(), 'titel ASC');

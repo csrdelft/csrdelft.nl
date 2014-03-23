@@ -1,7 +1,5 @@
 <?php
 
-require_once 'MVC/model/entity/MenuItem.class.php';
-
 /**
  * MenuModel.class.php
  * 
@@ -11,10 +9,7 @@ require_once 'MVC/model/entity/MenuItem.class.php';
 class MenuModel extends PersistenceModel {
 
 	protected static $instance;
-
-	protected function __construct() {
-		parent::__construct(new MenuItem());
-	}
+	protected static $orm = 'MenuItem';
 
 	/**
 	 * Lijst van alle menus.
