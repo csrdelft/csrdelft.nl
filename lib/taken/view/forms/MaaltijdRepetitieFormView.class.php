@@ -60,7 +60,7 @@ JS;
 		$fields['src']->extraText = 'Alles bijwerken';
 		$fields['src']->extraTitle = 'Opslaan & alle maaltijden bijwerken';
 		$fields['src']->extraIcon = 'disk_multiple';
-		$fields['src']->extraUrl = Instellingen::get('taken', 'url') . '/bijwerken/' . $crid;
+		$fields['src']->extraUrl = Instellingen::get('taken', 'url') . '/bijwerken/' . $mrid;
 
 
 		$this->_form = new Formulier(null, 'taken-maaltijd-repetitie-form', Instellingen::get('taken', 'url') . '/opslaan/' . $mrid, $fields);
