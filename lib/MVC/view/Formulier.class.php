@@ -106,24 +106,6 @@ class Formulier implements View, Validator {
 	}
 
 	/**
-	 * Factory to create FormElements using reflection.
-	 * 
-	 * @param string $propName
-	 * @param array $arguments
-	 * @return object class instance
-	 */
-	public function createFormElement($propName, $arguments = array()) {
-		$className = $arguments[0];
-		$mouseOver = $arguments[1];
-		$arguments[0] = $propName; // name of the model property
-		$arguments[1] = $this->model->$propName; // value of the model property
-		array_splice($arguments, 2, 0, ucfirst(str_replace('_', ' ', $propName))); // label of the field
-		$field = construct_instance($className, $arguments);
-		$field->title = $mouseOver;
-		return $field;
-	}
-
-	/**
 	 * Is het formulier *helemaal* gePOST?
 	 */
 	public function isPosted() {

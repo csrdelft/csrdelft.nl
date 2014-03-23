@@ -4,7 +4,7 @@ require_once 'MVC/model/entity/LidInstelling.class.php';
 require_once 'MVC/model/InstellingenModel.class.php';
 
 /**
- * LidInstellingen.singleton.php
+ * LidInstellingenModel.class.php
  * 
  * @author C.S.R. Delft <pubcie@csrdelft.nl>
  *

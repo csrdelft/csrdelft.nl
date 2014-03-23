@@ -6,17 +6,6 @@
 # -------------------------------------------------------------------
 
 /**
- * Class factory.
- * 
- * @param string $className
- * @param array $arguments
- * @return object class instance
- */
-function construct_instance($className, $arguments = array()) {
-	return call_user_func_array(array(new ReflectionClass($className), 'newInstance'), $arguments);
-}
-
-/**
  * Is the current request posted?
  * @return boolean
  */

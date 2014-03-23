@@ -3,7 +3,7 @@
 require_once 'MVC/model/entity/Instelling.class.php';
 
 /**
- * Instellingen.class.php
+ * InstellingenModel.class.php
  * 
  * @author P.W.G. Brussee <brussee@live.nl>
  * 
