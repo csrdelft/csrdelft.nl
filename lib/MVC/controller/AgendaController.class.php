@@ -24,6 +24,7 @@ class AgendaController extends AclController {
 			$this->acl = array(
 				'courant' => 'P_NOBODY',
 				'toevoegen' => 'P_AGENDA_POST',
+				'doorgaan' => 'P_AGENDA_POST',
 				'bewerken' => 'P_AGENDA_MOD',
 				'verwijderen' => 'P_AGENDA_MOD'
 			);
@@ -76,20 +77,30 @@ class AgendaController extends AclController {
 		}
 	}
 
-	public function toevoegen($datum = '') {
+	public function toevoegen($datum = '', $doorgaan = true) {
 		$item = $this->model->newAgendaItem($datum);
-		$this->view = new AgendaItemFormView($item, $this->action, $datum); // fetches POST values itself
-		if ($this->view->validate()) {
+		$this->view = new AgendaItemFormView($item, $this->action); // fetches POST values itself
+		if ($doorgaan AND $this->view->validate()) {
 			$id = $this->model->create($item);
 			$item->item_id = (int) $id;
-			//setMelding('Toegevoegd', 1);
+			setMelding('Toegevoegd: ' . $item->titel . ' (' . $item->begin_moment . ')', 1);
 			$this->view = new AgendaItemMaandView($item);
+			return true; // voor doorgaan
+		}
+	}
+
+	public function doorgaan() {
+		$this->action = 'toevoegen';
+		if ($this->toevoegen()) {
+			$item = $this->view->getModel();
+			$_POST['datum_dag'] = date('d', $item->getEindMoment() + 60); // spring naar volgende dag bij 23:59
+			$this->toevoegen('', false);
 		}
 	}
 
 	public function bewerken($aid) {
 		$item = $this->model->getAgendaItem($aid);
-		$this->view = new AgendaItemFormView($item, $this->action, $item->item_id); // fetches POST values itself
+		$this->view = new AgendaItemFormView($item, $this->action); // fetches POST values itself
 		if ($this->view->validate()) {
 			$rowcount = $this->model->update($item);
 			if ($rowcount > 0) {

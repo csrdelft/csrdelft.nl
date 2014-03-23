@@ -192,6 +192,7 @@ class PopupForm extends Formulier {
 		$this->css_classes[] = 'popup';
 		echo '<div id="popup-content"><h1>' . $this->getTitel() . '</h1>';
 		echo parent::view();
+		echo SimpleHTML::getMelding();
 		echo '</div>';
 	}
 

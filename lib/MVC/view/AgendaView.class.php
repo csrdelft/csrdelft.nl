@@ -84,10 +84,12 @@ class AgendaItemFormView extends PopupForm {
 
 	public function __construct(AgendaItem $item, $actie) {
 		parent::__construct($item, 'agenda-item-form', $actie);
-		$this->css_classes[] = 'PreventUnchanged';
+		if ($actie === 'bewerken') {
+			$this->css_classes[] = 'PreventUnchanged';
+		}
 
 		$fields[] = new RequiredTextField('titel', $item->titel, 'Titel');
-		$fields['datum'] = new DatumField('datum', $item->begin_moment, 'Datum', date('Y') + 5, date('Y') - 5);
+		$fields['datum'] = new DatumField('datum', date('Y-m-d', $item->getBeginMoment()), 'Datum', date('Y') + 5, date('Y') - 5);
 
 		$html = '<div id="tijden" class="InputField"><label>Standaard tijden</label>';
 		$tijden = explode(',', Instellingen::get('agenda', 'standaard_tijden'));
@@ -122,7 +124,14 @@ function setTijd(a, b, c, d) {
 		$fields['b'] = new AutoresizeTextareaField('beschrijving', $item->beschrijving, 'Beschrijving');
 		$fields['b']->title = 'Extra info als de cursor boven de titel gehouden wordt';
 
-		$fields[] = new SubmitResetCancel();
+		$fields['src'] = new SubmitResetCancel();
+		if ($actie === 'toevoegen') {
+			$fields['src']->extraText = 'Opslaan en doorgaan';
+			$fields['src']->extraTitle = 'Opslaan & nog een agenda item toevoegen';
+			$fields['src']->extraIcon = 'add';
+			$fields['src']->extraUrl = '/agenda/doorgaan';
+		}
+
 		$this->addFields($fields);
 
 		$this->model->begin_moment = $fields['datum']->getValue() . ' ' . $fields['begin']->getValue();
