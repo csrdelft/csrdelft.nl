@@ -1,6 +1,5 @@
 <?php
 
-require_once 'MVC/model/entity/taken/CorveeFunctie.class.php';
 require_once 'MVC/model/taken/KwalificatiesModel.class.php';
 
 /**
@@ -12,10 +11,7 @@ require_once 'MVC/model/taken/KwalificatiesModel.class.php';
 class FunctiesModel extends PersistenceModel {
 
 	protected static $instance;
-
-	protected function __construct() {
-		parent::__construct(new CorveeFunctie());
-	}
+	protected static $orm = 'CorveeFunctie';
 
 	/**
 	 * Optional eager loading of kwalificaties.
