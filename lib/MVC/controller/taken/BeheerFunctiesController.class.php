@@ -76,7 +76,8 @@ class BeheerFunctiesController extends AclController {
 	}
 
 	public function verwijderen($fid) {
-		$this->model->removeFunctie((int) $fid);
+		$functie = $this->model->getFunctie((int) $fid);
+		$this->model->removeFunctie($functie);
 		setMelding('Verwijderd', 1);
 		$this->view = new FunctieDeleteView($fid);
 	}

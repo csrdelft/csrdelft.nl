@@ -88,8 +88,6 @@ class CorveeFunctie extends PersistentEntity {
 	 * @return CorveeKwalificatie[]
 	 */
 	public function getKwalificaties() {
-		echo 'getKwalificaties()';
-
 		if (!isset($this->kwalificaties)) {
 			$this->setKwalificaties(KwalificatiesModel::instance()->find('functie_id = ?', array($this->functie_id)));
 		}
@@ -101,11 +99,6 @@ class CorveeFunctie extends PersistentEntity {
 	}
 
 	public function setKwalificaties(array $kwalificaties) {
-		echo 'setKwalificaties(' . count($kwalificaties) . ')';
-
-		foreach ($kwalificaties as $kwali) {
-			$kwali->setCorveeFunctie($this);
-		}
 		$this->kwalificaties = $kwalificaties;
 	}
 

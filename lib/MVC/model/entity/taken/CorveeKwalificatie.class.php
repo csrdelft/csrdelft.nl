@@ -70,6 +70,8 @@ class CorveeKwalificatie extends PersistentEntity {
 	}
 
 	public function setCorveeFunctie(CorveeFunctie $functie) {
+		echo 'setCorveeFunctie()';
+
 		$this->corvee_functie = $functie;
 	}
 

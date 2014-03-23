@@ -58,17 +58,17 @@ class FunctiesModel extends PersistenceModel {
 		return $functie;
 	}
 
-	public function removeFunctie($fid) {
-		if (TakenModel::existFunctieTaken($fid)) {
+	public function removeFunctie(CorveeFunctie $functie) {
+		if (TakenModel::existFunctieTaken($functie->functie_id)) {
 			throw new Exception('Verwijder eerst de bijbehorende corveetaken!');
 		}
-		if (CorveeRepetitiesModel::existFunctieRepetities($fid)) {
+		if (CorveeRepetitiesModel::existFunctieRepetities($functie->functie_id)) {
 			throw new Exception('Verwijder eerst de bijbehorende corveerepetities!');
 		}
-		if (KwalificatiesModel::instance()->existFunctieKwalificaties($fid)) {
+		if ($functie->hasKwalificaties()) {
 			throw new Exception('Verwijder eerst de bijbehorende kwalificaties!');
 		}
-		return $this->deleteByPrimaryKey(array($fid));
+		return $this->delete($functie);
 	}
 
 }

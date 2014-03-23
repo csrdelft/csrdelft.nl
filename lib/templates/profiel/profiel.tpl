@@ -249,7 +249,7 @@
 			<div class="label">Kwalificaties:</div>
 			<ul class="nobullets data">
 			{foreach from=$corveekwalificaties item=kwali}
-				<li>{$kwali->getCorveeFunctie()->naam}<span style="color: gray;"> (sinds {$kwali->getWanneerToegewezen()})</span></li>
+				<li>{$kwali->getCorveeFunctie()->naam}<span style="color: gray;"> (sinds {$kwali->wanneer_toegewezen})</span></li>
 			{/foreach}
 			</ul>
 			<br />

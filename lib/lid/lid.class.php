@@ -507,8 +507,7 @@ class Lid implements Serializable, Agendeerbaar {
 	 */
 	public function getCorveeKwalificaties() {
 		require_once 'MVC/model/taken/KwalificatiesModel.class.php';
-		$model = new KwalificatiesModel();
-		return $model->getKwalificatiesVanLid($this->getUid());
+		return KwalificatiesModel::instance()->getKwalificatiesVanLid($this->getUid());
 	}
 
 	/**

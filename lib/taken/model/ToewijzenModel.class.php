@@ -27,7 +27,7 @@ class ToewijzenModel {
 			$lijst = array();
 			$avg = 0;
 			foreach ($functie->getKwalificaties() as $kwali) {
-				$uid = $kwali->getLidId();
+				$uid = $kwali->lid_id;
 				$lid = \LidCache::getLid($uid); // false if lid does not exist
 				if (!$lid instanceof \Lid) {
 					throw new Exception('Lid bestaat niet: $uid =' . $uid);

@@ -35,7 +35,7 @@ class KwalificatiesModel extends PersistenceModel {
 		$functies = FunctiesModel::instance()->getAlleFuncties(); // grouped by functie_id
 		$kwalificaties = $this->find('lid_id = ?', array($lid_id));
 		foreach ($kwalificaties as $kwali) {
-			$kwali->setCorveeFunctie($functies[$kwali->getFunctieId()]);
+			$kwali->setCorveeFunctie($functies[$kwali->functie_id]);
 		}
 		return $kwalificaties;
 	}
@@ -49,16 +49,6 @@ class KwalificatiesModel extends PersistenceModel {
 		$kwalificatie->functie_id = $functie->functie_id;
 		$kwalificatie->wanneer_toegewezen = date('Y-m-d H:i');
 		return $kwalificatie;
-	}
-
-	/**
-	 * Called when a CorveeFunctie is going to be deleted.
-	 * 
-	 * @param int $fid
-	 * @return boolean
-	 */
-	public function existFunctieKwalificaties($fid) {
-		return $this->exists('functie_id = ?', array($fid));
 	}
 
 	public function kwalificatieToewijzen(CorveeKwalificatie $kwali) {
