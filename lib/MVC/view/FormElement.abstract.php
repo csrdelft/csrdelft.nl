@@ -1493,6 +1493,10 @@ class SubmitResetCancel extends FormElement {
 	public $cancelTitle;
 	public $cancelIcon;
 	public $cancelUrl = '';
+	public $extraText;
+	public $extraTitle;
+	public $extraIcon;
+	public $extraUrl;
 
 	/**
 	 * Volgorde van parameters naar meest aangepast
@@ -1516,9 +1520,16 @@ class SubmitResetCancel extends FormElement {
 
 	public function view() {
 		echo '<div class="FormButtons">';
+		if ($this->extraUrl) {
+			if ($this->extraIcon) {
+				$this->extraIcon = '<img src="' . CSR_PICS . 'famfamfam/' . $this->extraIcon . '.png" class="icon" width="16" height="16" alt="' . $this->extraIcon . '" /> ';
+			}
+			$js = "$(this).attr('postdata', $(this).closest('form').serialize());";
+			echo '<a id="extraButton" class="knop post" title="' . $this->extraTitle . '" href="' . $this->extraUrl . '" onclick="' . $js . '">' . $this->extraIcon . $this->extraText . '</a> ';
+		}
 		echo '<a class="knop submit" title="' . $this->submitTitle . '">' . $this->submitIcon . $this->submitText . '</a> ';
 		echo '<a class="knop reset" title="' . $this->resetTitle . '">' . $this->resetIcon . $this->resetText . '</a> ';
-		echo '<a href="' . $this->cancelUrl . '" class="knop cancel" title="' . $this->cancelTitle . '">' . $this->cancelIcon . $this->cancelText . '</a>';
+		echo '<a class="knop cancel" title="' . $this->cancelTitle . '" href="' . $this->cancelUrl . '">' . $this->cancelIcon . $this->cancelText . '</a>';
 		echo '</div>';
 	}
 

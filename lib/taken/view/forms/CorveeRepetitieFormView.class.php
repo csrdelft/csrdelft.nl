@@ -44,10 +44,23 @@ class CorveeRepetitieFormView extends TemplateView {
 		$fields[] = new IntField('standaard_punten', $punten, 'Standaard punten', 0, 10);
 		$fields[] = new IntField('standaard_aantal', $aantal, 'Aantal corveeërs', 1, 10);
 		if ($this->_crid !== 0) {
-			$fields['ver'] = new VinkField('verplaats_dag', $verplaats, 'Ook verplaatsen');
+			$fields['ver'] = new VinkField('verplaats_dag', $verplaats, 'Verplaatsen');
 			$fields['ver']->title = 'Verplaats naar dag v/d week bij bijwerken';
+			$fields['ver']->onchange = <<<JS
+var txt = $('#extraButton').html();
+if (this.checked) {
+	txt = txt.replace('bijwerken', 'bijwerken en verplaatsen');
+} else {
+	txt = txt.replace(' en verplaatsen', '');
+}
+$('#extraButton').html(txt);
+JS;
 		}
-		$fields[] = new SubmitResetCancel();
+		$fields['src'] = new SubmitResetCancel();
+		$fields['src']->extraText = 'Alles bijwerken';
+		$fields['src']->extraTitle = 'Opslaan & alle taken bijwerken';
+		$fields['src']->extraIcon = 'disk_multiple';
+		$fields['src']->extraUrl = Instellingen::get('taken', 'url') . '/bijwerken/' . $crid;
 
 		$this->_form = new Formulier(null, 'taken-corvee-repetitie-form', Instellingen::get('taken', 'url') . '/opslaan/' . $crid, $fields);
 	}
