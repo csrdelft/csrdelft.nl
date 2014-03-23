@@ -16,9 +16,9 @@ abstract class AclController extends Controller {
 	/**
 	 * Example:
 	 * $acl = array(
-	 * 'mijn' => 'P_LEDEN_READ',
-	 * 'beheer' => 'P_LEDEN_MOD',
-	 * 'verwijder' => 'P_ADMIN'
+	 *		'mijn' => 'P_LEDEN_READ',
+	 *		'beheer' => 'P_LEDEN_MOD',
+	 *		'verwijder' => 'P_ADMIN'
 	 * );
 	 * @see LoginLid->hasPermission()
 	 * @var array

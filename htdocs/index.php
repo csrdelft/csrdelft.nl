@@ -10,14 +10,15 @@
 try {
 	require_once 'configuratie.include.php';
 
+	$req = filter_var($_SERVER['REQUEST_URI'], FILTER_SANITIZE_URL);
 	$class = filter_input(INPUT_GET, 'c', FILTER_SANITIZE_STRING);
+
 	if (empty($class)) {
 		$class = 'CmsPagina';
 	}
 	$class .= 'Controller';
-	require_once 'MVC/controller/' . $class . '.class.php';
 
-	$req = filter_var($_SERVER['REQUEST_URI'], FILTER_SANITIZE_URL);
+	require_once 'MVC/controller/' . $class . '.class.php';
 	$controller = new $class($req);
 	$controller->getContent()->view();
 }
