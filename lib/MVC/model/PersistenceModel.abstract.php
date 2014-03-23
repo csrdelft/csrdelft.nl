@@ -55,8 +55,18 @@ abstract class PersistenceModel implements Persistence {
 	 * @param array $criteria_params
 	 * @return boolean entities with search criteria exist
 	 */
-	public function exists($criteria = null, array $criteria_params = array()) {
+	public function exist($criteria = null, array $criteria_params = array()) {
 		return Database::sqlExists($this->orm_entity->getTableName(), $criteria, $criteria_params);
+	}
+
+	/**
+	 * Check if enitity exists.
+	 * 
+	 * @param PersistentEntity $entity
+	 * @return string last insert id
+	 */
+	public function exists(PersistentEntity $entity) {
+		return $this->existsByPrimaryKey($entity->getValues(true));
 	}
 
 	/**
@@ -70,7 +80,7 @@ abstract class PersistenceModel implements Persistence {
 		foreach ($this->orm_entity->getPrimaryKey() as $key) {
 			$where[] = $key . ' = ?';
 		}
-		return $this->exists(implode(' AND ', $where), $primary_key_values);
+		return $this->exist(implode(' AND ', $where), $primary_key_values);
 	}
 
 	/**
@@ -84,13 +94,14 @@ abstract class PersistenceModel implements Persistence {
 	}
 
 	/**
-	 * Load entity data.
+	 * Load saved enitity data and replace entity.
 	 * 
 	 * @param PersistentEntity $entity
 	 * @return PersistentEntity
 	 */
 	public function retrieve(PersistentEntity $entity) {
-		return $this->retrieveByPrimaryKey($entity->getValues(true));
+		$entity = $this->retrieveByPrimaryKey($entity->getValues(true));
+		return $entity;
 	}
 
 	/**

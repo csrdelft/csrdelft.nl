@@ -196,7 +196,7 @@ class LidInstellingen extends PersistenceModel {
 				$value = $this->getValue($module, $key);
 				$properties = array('lid_id' => LoginLid::instance()->getUid(), 'module' => $module, 'instelling_id' => $key, 'waarde' => $value);
 				$where_params = array(':uid' => LoginLid::instance()->getUid(), ':module' => $module, ':id' => $key);
-				if ($this->exists($where, $where_params)) {
+				if ($this->exist($where, $where_params)) {
 					Database::sqlUpdate($this->orm_entity->getTableName(), $properties, $where, $where_params);
 				} else {
 					Database::sqlInsert($this->orm_entity->getTableName(), $properties);
