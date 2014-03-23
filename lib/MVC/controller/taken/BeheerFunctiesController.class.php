@@ -12,7 +12,7 @@ require_once 'MVC/view/taken/BeheerFunctiesView.class.php';
 class BeheerFunctiesController extends AclController {
 
 	public function __construct($query) {
-		parent::__construct($query, new FunctiesModel());
+		parent::__construct($query, FunctiesModel::instance());
 		if (!$this->isPosted()) {
 			$this->acl = array(
 				'beheer' => 'P_CORVEE_MOD'
@@ -40,10 +40,9 @@ class BeheerFunctiesController extends AclController {
 			$this->bewerken($fid);
 			$popup = $this->getContent();
 		}
-		$functies = $this->model->getAlleFuncties();
+		$functies = $this->model->getAlleFuncties(true); // grouped by functie_id
 		$this->view = new BeheerFunctiesView($functies);
-		$menu = new MenuModel();
-		$zijkolom = array(new BlockMenuView($menu->getMenuTree('Corveebeheer')));
+		$zijkolom = array(new BlockMenuView(MenuModel::instance()->getMenuTree('Corveebeheer')));
 		$this->view = new CsrLayoutPage($this->getContent(), $zijkolom, $popup);
 		$this->view->addStylesheet('js/autocomplete/jquery.autocomplete.css');
 		$this->view->addStylesheet('taken.css');
@@ -84,11 +83,10 @@ class BeheerFunctiesController extends AclController {
 
 	public function kwalificeer($fid) {
 		$functie = $this->model->getFunctie($fid);
-		$model = new KwalificatiesModel();
-		$kwalificatie = $model->newKwalificatie($functie);
+		$kwalificatie = KwalificatiesModel::instance()->newKwalificatie($functie);
 		$this->view = new KwalificatieFormView($kwalificatie); // fetches POST values itself
 		if ($this->view->validate()) {
-			$model->kwalificatieToewijzen($kwalificatie->functie_id, $kwalificatie->lid_id);
+			KwalificatiesModel::instance()->kwalificatieToewijzen($kwalificatie);
 			$this->view = new FunctieView($functie);
 		}
 	}
@@ -96,8 +94,7 @@ class BeheerFunctiesController extends AclController {
 	public function dekwalificeer($fid) {
 		$uid = filter_input(INPUT_POST, 'voor_lid', FILTER_SANITIZE_STRING);
 		$functie = $this->model->getFunctie($fid);
-		$model = new KwalificatiesModel();
-		$model->kwalificatieTerugtrekken($functie->functie_id, $uid);
+		KwalificatiesModel::instance()->kwalificatieTerugtrekken($uid, $functie->functie_id);
 		$this->view = new FunctieView($functie);
 	}
 

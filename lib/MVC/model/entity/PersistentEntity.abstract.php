@@ -8,10 +8,6 @@
  */
 abstract class PersistentEntity {
 
-	protected static $table_name;
-	protected static $primary_key;
-	protected static $persistent_fields;
-
 	/**
 	 * Constructor is called late by PDO::FETCH_CLASS (after fields are set).
 	 */
@@ -46,6 +42,9 @@ abstract class PersistentEntity {
 		}
 		foreach ($fields as $field) {
 			$values[$field] = $this->$field;
+		}
+		if ($primary_key_only) {
+			return array_values($values);
 		}
 		return $values;
 	}

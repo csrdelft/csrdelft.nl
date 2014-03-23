@@ -74,7 +74,7 @@ switch (constant('MODE')) {
 		if (!(isset($conf['authtype']) AND $conf['authtype'] == 'authcsr')) {
 			// sessie starten
 			require_once 'MVC/model/PaginationModel.abstract.php';
-			require_once 'MVC/model/LidInstellingen.singleton.php';
+			require_once 'MVC/model/LidInstellingenModel.class.php';
 
 			require_once 'MVC/view/Validator.interface.php';
 			require_once 'MVC/view/TemplateView.abstract.php';

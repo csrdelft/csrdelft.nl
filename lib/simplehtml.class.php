@@ -45,8 +45,7 @@ abstract class SimpleHTML implements View {
 			//maar één keer tonen, de melding.
 			unset($_SESSION['melding']);
 			return $sMelding;
-		}
-		else {
+		} else {
 			return '';
 		}
 	}
@@ -62,12 +61,11 @@ abstract class SimpleHTML implements View {
 		if (LidInstellingen::get('zijbalk', 'gasnelnaar') == 'ja') {
 			require_once('MVC/model/MenuModel.class.php');
 			require_once('MVC/view/MenuView.class.php');
-			$menu = new MenuModel();
-			$zijkolom[] = new BlockMenuView($menu->getMenuTree('Ga snel naar'));
+			$zijkolom[] = new BlockMenuView(MenuModel::instance()->getMenuTree('Ga snel naar'));
 		}
 		// Agenda
 		if (LoginLid::instance()->hasPermission('P_AGENDA_READ') && LidInstellingen::get('zijbalk', 'agendaweken') > 0) {
-			$zijkolom[] = new AgendaZijbalkView(new AgendaModel(), LidInstellingen::get('zijbalk', 'agendaweken'));
+			$zijkolom[] = new AgendaZijbalkView(AgendaModel::instance(), LidInstellingen::get('zijbalk', 'agendaweken'));
 		}
 		// Laatste mededelingen
 		if (LidInstellingen::get('zijbalk', 'mededelingen') > 0) {

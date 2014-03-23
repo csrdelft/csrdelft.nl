@@ -12,7 +12,9 @@ require_once 'MVC/model/entity/CmsPagina.class.php';
  */
 class CmsPaginaModel extends PersistenceModel {
 
-	public function __construct() {
+	protected static $instance;
+
+	protected function __construct() {
 		parent::__construct(new CmsPagina());
 	}
 

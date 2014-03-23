@@ -48,8 +48,7 @@ class IsHetAlContent extends TemplateView {
 				break;
 			default:
 				require_once 'MVC/model/AgendaModel.class.php';
-				$agenda = new AgendaModel();
-				$vandaag = $agenda->zoekWoordAgenda($this->model);
+				$vandaag = AgendaModel::instance()->zoekWoordAgenda($this->model);
 				if ($vandaag instanceof AgendaItem) {
 					if ($this->model == 'borrel') {
 						$this->ja = time() > $vandaag->getBeginMoment();

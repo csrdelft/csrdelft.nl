@@ -14,7 +14,9 @@ require_once 'taken/model/TakenModel.class.php';
  */
 class AgendaModel extends PersistenceModel {
 
-	public function __construct() {
+	protected static $instance;
+
+	protected function __construct() {
 		parent::__construct(new AgendaItem());
 	}
 

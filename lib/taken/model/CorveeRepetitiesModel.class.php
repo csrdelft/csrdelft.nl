@@ -64,11 +64,9 @@ class CorveeRepetitiesModel {
 		$result = $query->fetchAll(\PDO::FETCH_CLASS | \PDO::FETCH_PROPS_LATE, '\CorveeRepetitie');
 		// load corvee functies
 		if ($query->rowCount() === 1) {
-			$model = new FunctiesModel();
-			$result[0]->setCorveeFunctie($model->getFunctie($result[0]->getFunctieId()));
+			$result[0]->setCorveeFunctie(FunctiesModel::instance()->getFunctie($result[0]->getFunctieId()));
 		} elseif ($query->rowCount() > 1) {
-			$model = new FunctiesModel();
-			$functies = $model->getAlleFuncties(true); // grouped by fid
+			$functies = FunctiesModel::instance()->getAlleFuncties(); // grouped by functie_id
 			foreach ($result as $repetitie) {
 				$repetitie->setCorveeFunctie($functies[$repetitie->getFunctieId()]);
 			}
@@ -96,8 +94,8 @@ class CorveeRepetitiesModel {
 				if (!$voorkeur) { // niet (meer) voorkeurbaar
 					$voorkeuren = VoorkeurenModel::verwijderVoorkeuren($crid);
 				}
-			}$model = new FunctiesModel();
-			$repetitie->setCorveeFunctie($model->getFunctie($repetitie->getFunctieId()));
+			}
+			$repetitie->setCorveeFunctie(FunctiesModel::instance()->getFunctie($repetitie->getFunctieId()));
 			$db->commit();
 			return array($repetitie, $voorkeuren);
 		} catch (\Exception $e) {

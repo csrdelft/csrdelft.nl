@@ -1,7 +1,7 @@
 <?php
 
 require_once 'MVC/model/entity/LidInstelling.class.php';
-require_once 'MVC/model/Instellingen.singleton.php';
+require_once 'MVC/model/InstellingenModel.class.php';
 
 /**
  * LidInstellingen.singleton.php
@@ -13,23 +13,7 @@ require_once 'MVC/model/Instellingen.singleton.php';
  */
 class LidInstellingen extends PersistenceModel {
 
-	/**
-	 * Singleton instance
-	 * @var LidInstellingen
-	 */
-	private static $_instance;
-
-	/**
-	 * Get singleton LidInstellingen model instance.
-	 * 
-	 * @return LidInstellingen
-	 */
-	public static function instance() {
-		if (!isset(self::$_instance)) {
-			self::$_instance = new LidInstellingen();
-		}
-		return self::$_instance;
-	}
+	protected static $instance;
 
 	public static function get($module, $key = null) {
 		if ($key === null) { // backwards compatibility
@@ -37,7 +21,7 @@ class LidInstellingen extends PersistenceModel {
 			$module = $key[0];
 			$key = $key[1];
 		}
-		return self::instance()->getValue($module, $key);
+		return static::instance()->getValue($module, $key);
 	}
 
 	/**

@@ -12,7 +12,7 @@ require_once 'MVC/view/MenuBeheerView.class.php';
 class MenuBeheerController extends AclController {
 
 	public function __construct($query) {
-		parent::__construct($query, new MenuModel());
+		parent::__construct($query, MenuModel::instance());
 		if (!$this->isPosted()) {
 			$this->acl = array(
 				'beheer' => 'P_ADMIN'

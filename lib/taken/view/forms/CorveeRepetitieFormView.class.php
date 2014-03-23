@@ -15,8 +15,7 @@ class CorveeRepetitieFormView extends TemplateView {
 		parent::__construct();
 		$this->_crid = $crid;
 
-		$model = new FunctiesModel();
-		$functieNamen = $model->getAlleFuncties(true); // grouped by fid
+		$functieNamen = FunctiesModel::instance()->getAlleFuncties(); // grouped by functie_id
 		$functiePunten = 'var punten=[];';
 		foreach ($functieNamen as $functie) {
 			$functieNamen[$functie->functie_id] = $functie->naam;

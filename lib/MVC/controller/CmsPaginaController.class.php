@@ -20,7 +20,7 @@ class CmsPaginaController extends Controller {
 	private $zijkolom = array();
 
 	public function __construct($query) {
-		parent::__construct($query, new CmsPaginaModel());
+		parent::__construct($query, CmsPaginaModel::instance());
 		$this->action = 'bekijken';
 		$naam = 'thuis';
 		if ($this->hasParam(3) AND $this->getParam(2) === 'bewerken') {

@@ -10,23 +10,7 @@ require_once 'MVC/model/entity/Instelling.class.php';
  */
 class Instellingen extends PersistenceModel {
 
-	/**
-	 * Singleton instance
-	 * @var Instellingen
-	 */
-	private static $_instance;
-
-	/**
-	 * Get singleton Instellingen model instance.
-	 * 
-	 * @return Instellingen
-	 */
-	public static function instance() {
-		if (!isset(self::$_instance)) {
-			self::$_instance = new Instellingen();
-		}
-		return self::$_instance;
-	}
+	protected static $instance;
 
 	public static function has($module, $key) {
 		return array_key_exists($module, static::instance()->instellingen) AND is_array(static::instance()->instellingen[$module]) AND array_key_exists($key, static::instance()->instellingen[$module]);
@@ -116,7 +100,7 @@ class Instellingen extends PersistenceModel {
 	 * Instellingen array like $defaults
 	 * @var array
 	 */
-	protected $instellingen = array();
+	private $instellingen = array();
 
 	/**
 	 * Laad alle instellingen uit de database.

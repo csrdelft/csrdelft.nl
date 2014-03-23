@@ -1,6 +1,5 @@
 <?php
 
-
 require_once 'taken/model/PuntenModel.class.php';
 require_once 'taken/view/BeheerPuntenView.class.php';
 
@@ -17,8 +16,7 @@ class BeheerPuntenController extends AclController {
 				'beheer' => 'P_CORVEE_MOD',
 				'resetjaar' => 'P_CORVEE_MOD'
 			);
-		}
-		else {
+		} else {
 			$this->acl = array(
 				'wijzigpunten' => 'P_CORVEE_MOD',
 				'wijzigbonus' => 'P_CORVEE_MOD'
@@ -34,54 +32,52 @@ class BeheerPuntenController extends AclController {
 		}
 		$this->performAction(array($uid));
 	}
-	
+
 	public function beheer() {
-		$model = new FunctiesModel();
-		$functies = $model->getAlleFuncties(true); // grouped by fid
+		$functies = FunctiesModel::instance()->getAlleFuncties(); // grouped by functie_id
 		$matrix = PuntenModel::loadPuntenVoorAlleLeden($functies);
 		$this->view = new BeheerPuntenView($matrix, $functies);
 		$this->view = new CsrLayoutPage($this->getContent());
 		$this->view->addStylesheet('taken.css');
 		$this->view->addScript('taken.js');
 	}
-	
+
 	public function wijzigpunten($uid) {
 		$lid = \LidCache::getLid($uid); // false if lid does not exist
 		if (!$lid instanceof \Lid) {
-			throw new Exception('Lid bestaat niet: $uid ='. $uid);
+			throw new Exception('Lid bestaat niet: $uid =' . $uid);
 		}
 		$punten = (int) filter_input(INPUT_POST, 'totaal_punten', FILTER_SANITIZE_NUMBER_INT);
 		PuntenModel::savePuntenVoorLid($lid, $punten, null);
-		$model = new FunctiesModel();
-		$functies = $model->getAlleFuncties(true); // grouped by fid
+		$functies = FunctiesModel::instance()->getAlleFuncties(); // grouped by functie_id
 		$lijst = PuntenModel::loadPuntenVoorLid($lid, $functies);
 		$this->view = new BeheerPuntenView($lijst);
 	}
-	
+
 	public function wijzigbonus($uid) {
 		$lid = \LidCache::getLid($uid); // false if lid does not exist
 		if (!$lid instanceof \Lid) {
-			throw new Exception('Lid bestaat niet: $uid ='. $uid);
+			throw new Exception('Lid bestaat niet: $uid =' . $uid);
 		}
 		$bonus = (int) filter_input(INPUT_POST, 'totaal_bonus', FILTER_SANITIZE_NUMBER_INT);
 		PuntenModel::savePuntenVoorLid($lid, null, $bonus);
-		$model = new FunctiesModel();
-		$functies = $model->getAlleFuncties(true); // grouped by fid
+		$functies = FunctiesModel::instance()->getAlleFuncties(); // grouped by functie_id
 		$lijst = PuntenModel::loadPuntenVoorLid($lid, $functies);
 		$this->view = new BeheerPuntenView($lijst);
 	}
-	
+
 	public function resetjaar() {
 		$aantal_taken_errors = PuntenModel::resetCorveejaar();
 		$this->beheer();
 		$aantal = $aantal_taken_errors[0];
 		$taken = $aantal_taken_errors[1];
-		setMelding($aantal .' vrijstelling'. ($aantal !== 1 ? 'en' : '') .' verwerkt en verwijderd', 1);
-		setMelding($taken .' ta'. ($taken !== 1 ? 'ken' : 'ak') .' naar de prullenbak verplaatst', 0);
+		setMelding($aantal . ' vrijstelling' . ($aantal !== 1 ? 'en' : '') . ' verwerkt en verwijderd', 1);
+		setMelding($taken . ' ta' . ($taken !== 1 ? 'ken' : 'ak') . ' naar de prullenbak verplaatst', 0);
 		foreach ($aantal_taken_errors[2] as $error) {
 			setMelding($error->getMessage(), -1);
 		}
 	}
+
 }
 
 ?>

@@ -14,7 +14,7 @@ require_once 'MVC/view/AgendaView.class.php';
 class AgendaController extends AclController {
 
 	public function __construct($query) {
-		parent::__construct($query, new AgendaModel());
+		parent::__construct($query, AgendaModel::instance());
 		if (!$this->isPosted()) {
 			$this->acl = array(
 				'maand' => 'P_NOBODY',

@@ -201,8 +201,7 @@ class TakenModel {
 					self::updateTaak($taak);
 				}
 			}
-			$model = new FunctiesModel();
-			$taak->setCorveeFunctie($model->getFunctie($taak->getFunctieId()));
+			$taak->setCorveeFunctie(FunctiesModel::instance()->getFunctie($taak->getFunctieId()));
 			$db->commit();
 			return $taak;
 		} catch (\Exception $e) {
@@ -291,11 +290,9 @@ class TakenModel {
 		$result = $query->fetchAll(\PDO::FETCH_CLASS | \PDO::FETCH_PROPS_LATE, '\CorveeTaak');
 		// load corvee functies
 		if ($query->rowCount() === 1) {
-			$model = new FunctiesModel();
-			$result[0]->setCorveeFunctie($model->getFunctie($result[0]->getFunctieId()));
+			$result[0]->setCorveeFunctie(FunctiesModel::instance()->getFunctie($result[0]->getFunctieId()));
 		} elseif ($query->rowCount() > 1) {
-			$model = new FunctiesModel();
-			$functies = $model->getAlleFuncties(true); // grouped by fid
+			$functies = FunctiesModel::instance()->getAlleFuncties(); // grouped by functie_id
 			foreach ($result as $taak) {
 				$taak->setCorveeFunctie($functies[$taak->getFunctieId()]);
 			}
@@ -460,8 +457,7 @@ class TakenModel {
 			$beginDatum = strtotime('+' . $shift . ' days', $beginDatum);
 		}
 		$datum = $beginDatum;
-		$model = new FunctiesModel();
-		$functie = $model->getFunctie($repetitie->getFunctieId());
+		$functie = FunctiesModel::instance()->getFunctie($repetitie->getFunctieId());
 		$taken = array();
 		while ($datum <= $eindDatum) { // break after one
 			for ($i = $repetitie->getStandaardAantal(); $i > 0; $i--) {

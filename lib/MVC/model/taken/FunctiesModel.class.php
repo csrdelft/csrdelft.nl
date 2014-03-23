@@ -11,25 +11,31 @@ require_once 'MVC/model/taken/KwalificatiesModel.class.php';
  */
 class FunctiesModel extends PersistenceModel {
 
-	public function __construct() {
+	protected static $instance;
+
+	protected function __construct() {
 		parent::__construct(new CorveeFunctie());
 	}
 
 	/**
-	 * Eager loading of kwalificaties.
+	 * Optional eager loading of kwalificaties.
 	 * 
+	 * @param boolean $load_kwalifications
 	 * @return CorveeFunctie[]
 	 */
-	public function getAlleFuncties() {
-		$model = new KwalificatiesModel();
-		$kwalificaties = $model->getAlleKwalificaties();
-		$functiesByFid = array();
+	public function getAlleFuncties($load_kwalificaties = false) {
 		$functies = $this->find();
+		if ($load_kwalificaties) {
+			$kwalificaties = KwalificatiesModel::instance()->getAlleKwalificaties();
+		}
+		$functiesByFid = array();
 		foreach ($functies as $functie) {
-			if (array_key_exists($functie->functie_id, $kwalificaties)) {
-				$functie->setKwalificaties($kwalificaties[$functie->functie_id]);
-			} else {
-				$functie->setKwalificaties(array());
+			if ($load_kwalificaties) {
+				if (array_key_exists($functie->functie_id, $kwalificaties)) {
+					$functie->setKwalificaties($kwalificaties[$functie->functie_id]);
+				} else {
+					$functie->setKwalificaties(array());
+				}
 			}
 			$functiesByFid[$functie->functie_id] = $functie;
 		}
@@ -59,7 +65,7 @@ class FunctiesModel extends PersistenceModel {
 		if (CorveeRepetitiesModel::existFunctieRepetities($fid)) {
 			throw new Exception('Verwijder eerst de bijbehorende corveerepetities!');
 		}
-		if (KwalificatiesModel::existFunctieKwalificaties($fid)) {
+		if (KwalificatiesModel::instance()->existFunctieKwalificaties($fid)) {
 			throw new Exception('Verwijder eerst de bijbehorende kwalificaties!');
 		}
 		return $this->deleteByPrimaryKey(array($fid));

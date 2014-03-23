@@ -37,7 +37,7 @@ class Formulier implements View, Validator {
 	 * 
 	 * @var FormElement[]
 	 */
-	private $fields = array();
+	protected $fields = array();
 	public $css_classes = array();
 	public $error = '';
 
@@ -103,17 +103,6 @@ class Formulier implements View, Validator {
 			}
 			$pos++;
 		}
-	}
-
-	/**
-	 * Create model input fields.
-	 */
-	public function generateFields() {
-		$fields = array();
-		foreach ($this->model->getFormFields() as $propName => $arguments) {
-			$fields[] = $this->createFormElement($propName, $arguments);
-		}
-		$this->addFields($fields);
 	}
 
 	/**
@@ -245,8 +234,8 @@ class InlineForm extends Formulier {
 		echo '<form id="' . $this->getFormId() . '" action="' . $this->getAction() . '" method="post" class="Formulier InlineForm">';
 		echo $this->fields[0]->view();
 		echo '<div class="FormToggle">' . $this->fields[0]->getValue() . '</div>';
-		echo '<a class="knop submit" title="Opslaan"><    img width="16" height="16" class="icon" alt="submit" src="' . CSR_PICS . 'famfamfam/accept.png">' . ($tekst ? ' Opslaan ' : '') . '</a>';
-		echo '<a class="knop reset cancel" title="Annuleren"><    img width="16" height="16" class="icon" alt="cancel" src="' . CSR_PICS . 'famfamfam/delete.png">' . ($tekst ? ' Annuleren ' : '') . '</a>';
+		echo '<a class="knop submit" title="Opslaan"><img width="16" height="16" class="icon" alt="submit" src="' . CSR_PICS . 'famfamfam/accept.png">' . ($tekst ? ' Opslaan ' : '') . '</a>';
+		echo '<a class="knop reset cancel" title="Annuleren"><img width="16" height="16" class="icon" alt="cancel" src="' . CSR_PICS . 'famfamfam/delete.png">' . ($tekst ? ' Annuleren ' : '') . '</a>';
 		echo $this->getJavascript();
 		echo '</form></div>';
 	}
