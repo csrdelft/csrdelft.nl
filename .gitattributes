@@ -3201,7 +3201,7 @@ lib/MVC/model/entity/ForumTopic.class.php -text
 lib/MVC/model/entity/Groep.abstract.php -text
 lib/MVC/model/entity/GroepCategorie.class.php -text
 lib/MVC/model/entity/GroepLid.class.php -text
-lib/MVC/model/entity/Groepen[!!-~]ERD.png -text
+lib/MVC/model/entity/Groepen[!!-~]CD.png -text
 lib/MVC/model/entity/Instelling.class.php -text
 lib/MVC/model/entity/Ketzer.class.php -text
 lib/MVC/model/entity/LidInstelling.class.php -text
@@ -3908,11 +3908,11 @@ lib/taken/model/entity/CorveeRepetitie.class.php -text
 lib/taken/model/entity/CorveeTaak.class.php -text
 lib/taken/model/entity/CorveeVoorkeur.class.php -text
 lib/taken/model/entity/CorveeVrijstelling.class.php -text
-lib/taken/model/entity/Entity-Relationship[!!-~]Diagram.png -text
 lib/taken/model/entity/Maaltijd.class.php -text
 lib/taken/model/entity/MaaltijdAanmelding.class.php -text
 lib/taken/model/entity/MaaltijdAbonnement.class.php -text
 lib/taken/model/entity/MaaltijdRepetitie.class.php -text
+lib/taken/model/entity/Taken[!!-~]ERD.png -text
 lib/taken/view/BeheerAbonnementenView.class.php -text
 lib/taken/view/BeheerMaaltijdenView.class.php -text
 lib/taken/view/BeheerPuntenView.class.php -text
