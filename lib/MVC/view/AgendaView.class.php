@@ -122,6 +122,7 @@ function setTijd(a, b, c, d) {
 		$fields['b'] = new AutoresizeTextareaField('beschrijving', $item->beschrijving, 'Beschrijving');
 		$fields['b']->title = 'Extra info als de cursor boven de titel gehouden wordt';
 
+		$fields[] = new SubmitResetCancel();
 		$this->addFields($fields);
 
 		$this->model->begin_moment = $fields['datum']->getValue() . ' ' . $fields['begin']->getValue();

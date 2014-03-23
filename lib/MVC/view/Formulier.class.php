@@ -174,17 +174,8 @@ class Formulier implements View, Validator {
 			echo ' action="' . $this->getAction() . '"';
 		}
 		echo ' id="' . $this->getFormId() . '" class="' . implode(' ', $this->css_classes) . '" method="post">' . "\n";
-		$addButtons = true;
 		foreach ($this->getFields() as $field) {
 			$field->view();
-			if ($field instanceof SubmitResetCancel) {
-				$addButtons = false;
-			}
-		}
-		if ($addButtons) {
-			$buttons = new SubmitResetCancel();
-			$this->fields[] = $buttons;
-			echo $buttons->view();
 		}
 		echo $this->getJavascript();
 		echo '</form>';
