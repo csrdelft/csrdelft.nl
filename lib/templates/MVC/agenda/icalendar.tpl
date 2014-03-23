@@ -28,8 +28,9 @@ UID:{$item->getUID()}
 {if $item->isHeledag()}DTEND;VALUE=DATE:{$item->getEindMoment()|date_format:'%Y%m%d'}
 {else}DTEND;TZID=Europe/Amsterdam:{$item->getEindMoment()|date_format:'%Y%m%dT%H%M%S'}
 {/if}
-SUMMARY:{str_replace("\n",'\\n',str_replace(';','\;',str_replace(',','\,',substr($item->getTitel(),0,60))))}
-DESCRIPTION:{str_replace("\n",'\\n',str_replace(';','\;',str_replace(',','\,',substr($item->getBeschrijving(),0,60))))}
+SUMMARY:{str_replace(';','\;',str_replace(',','\,',substr($item->getTitel(),0,60)))}
+{if $item->getBeschrijving()}DESCRIPTION:{str_replace("\r",'',str_replace("\n",'\\n',str_replace(';','\;',str_replace(',','\,',substr($item->getBeschrijving(),0,60)))))}
+{/if}
 END:VEVENT
 {/if}{/foreach}
 END:VCALENDAR
