@@ -22,14 +22,14 @@ END:VTIMEZONE
 {foreach from=$items item=item}{if $item instanceof Lid}{* geen verjaardagen hier *}{else}
 BEGIN:VEVENT
 UID:{$item->getUID()}
-ORGANIZER;CN=C.S.R.:MAILTO:info@csrdelft.nl
 {if $item->isHeledag()}DTSTART;VALUE=DATE:{$item->getBeginMoment()|date_format:'%Y%m%d'}
 {else}DTSTART;TZID=Europe/Amsterdam:{$item->getBeginMoment()|date_format:'%Y%m%dT%H%M%S'}
 {/if}
 {if $item->isHeledag()}DTEND;VALUE=DATE:{$item->getEindMoment()|date_format:'%Y%m%d'}
 {else}DTEND;TZID=Europe/Amsterdam:{$item->getEindMoment()|date_format:'%Y%m%dT%H%M%S'}
 {/if}
-SUMMARY:{$item->getTitel()}
+SUMMARY:{str_replace("\n",'\\n',str_replace(';','\;',str_replace(',','\,',substr($item->getTitel(),0,60))))}
+DESCRIPTION:{str_replace("\n",'\\n',str_replace(';','\;',str_replace(',','\,',substr($item->getBeschrijving(),0,60))))}
 END:VEVENT
 {/if}{/foreach}
 END:VCALENDAR
