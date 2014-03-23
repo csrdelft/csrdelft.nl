@@ -3182,8 +3182,8 @@ lib/MVC/model/Agendeerbaar.interface.php -text
 lib/MVC/model/CmsPaginaModel.class.php -text
 lib/MVC/model/Database.singleton.php -text
 lib/MVC/model/DragObjectModel.class.php -text
-lib/MVC/model/Instellingen.singleton.php -text
-lib/MVC/model/LidInstellingen.singleton.php -text
+lib/MVC/model/InstellingenModel.class.php -text
+lib/MVC/model/LidInstellingenModel.class.php -text
 lib/MVC/model/MenuModel.class.php -text
 lib/MVC/model/PaginationModel.abstract.php -text
 lib/MVC/model/Persistence.interface.php -text
@@ -3208,7 +3208,9 @@ lib/MVC/model/entity/groepen/GroepLid.class.php -text
 lib/MVC/model/entity/groepen/Groepen[!!-~]ERD.png -text
 lib/MVC/model/entity/groepen/Ketzer.class.php -text
 lib/MVC/model/entity/taken/CorveeFunctie.class.php -text
+lib/MVC/model/entity/taken/CorveeKwalificatie.class.php -text
 lib/MVC/model/taken/FunctiesModel.class.php -text
+lib/MVC/model/taken/KwalificatiesModel.class.php -text
 lib/MVC/view/AgendaView.class.php -text
 lib/MVC/view/CmsPaginaView.class.php -text
 lib/MVC/view/CsrLayout2Page.class.php -text
@@ -3894,7 +3896,6 @@ lib/taken/model/AbonnementenModel.class.php -text
 lib/taken/model/ConversieModel.class.php -text
 lib/taken/model/CorveeRepetitiesModel.class.php -text
 lib/taken/model/HerinneringenModel.class.php -text
-lib/taken/model/KwalificatiesModel.class.php -text
 lib/taken/model/MaaltijdRepetitiesModel.class.php -text
 lib/taken/model/MaaltijdenModel.class.php -text
 lib/taken/model/PuntenModel.class.php -text
@@ -3903,7 +3904,6 @@ lib/taken/model/ToewijzenModel.class.php -text
 lib/taken/model/VoorkeurenModel.class.php -text
 lib/taken/model/VrijstellingenModel.class.php -text
 lib/taken/model/entity/ArchiefMaaltijd.class.php -text
-lib/taken/model/entity/CorveeKwalificatie.class.php -text
 lib/taken/model/entity/CorveeRepetitie.class.php -text
 lib/taken/model/entity/CorveeTaak.class.php -text
 lib/taken/model/entity/CorveeVoorkeur.class.php -text
@@ -3932,7 +3932,6 @@ lib/taken/view/MijnVoorkeurenView.class.php -text
 lib/taken/view/forms/AanmeldingFormView.class.php -text
 lib/taken/view/forms/BoekjaarSluitenFormView.class.php -text
 lib/taken/view/forms/CorveeRepetitieFormView.class.php -text
-lib/taken/view/forms/KwalificatieFormView.class.php -text
 lib/taken/view/forms/MaaltijdFormView.class.php -text
 lib/taken/view/forms/MaaltijdRepetitieFormView.class.php -text
 lib/taken/view/forms/RepetitieCorveeFormView.class.php -text

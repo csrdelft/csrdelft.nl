@@ -9,6 +9,9 @@
 	{$item->tekst}
 	<span style="color: grey;">{$item->item_id}</span>
 	<div style="float: right;">
+		{if $item->rechten_bekijken !== 'P_NOBODY'}
+			&nbsp;{icon get="group_key" title="Rechten bekijken:&#013;"|cat:$item->rechten_bekijken}&nbsp;
+		{/if}
 		<a href="{$item->link}">{$item->link}</a>
 		<a href="/menubeheer/verwijderen/{$item->item_id}" title="Dit menu-item definitief verwijderen" class="knop post confirm ReloadPage">{icon get="cross"}</a>
 	</div>

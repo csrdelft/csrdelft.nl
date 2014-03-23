@@ -6,6 +6,17 @@
 # -------------------------------------------------------------------
 
 /**
+ * Class factory.
+ * 
+ * @param string $className
+ * @param array $arguments
+ * @return object class instance
+ */
+function construct_instance($className, $arguments = array()) {
+	return call_user_func_array(array(new ReflectionClass($className), 'newInstance'), $arguments);
+}
+
+/**
  * Is the current request posted?
  * @return boolean
  */
@@ -31,6 +42,19 @@ function startsWith($haystack, $needle) {
  */
 function endsWith($haystack, $needle) {
 	return $needle === "" || substr($haystack, -strlen($needle)) === $needle;
+}
+
+/**
+ * Group by
+ */
+function array_group_by($by, array $orig) {
+	$result = array();
+	foreach ($orig as $i => $item) {
+		$result[$item->$by][] = $item;
+		unset($orig[$i]);
+	}
+	$orig = &$result;
+	return $orig;
 }
 
 /**

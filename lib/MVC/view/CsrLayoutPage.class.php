@@ -98,8 +98,7 @@ class CsrLayoutPage extends HtmlPage {
 			}
 		}
 
-		$menu = new MenuModel();
-		$this->smarty->assign('mainmenu', new MainMenuView($menu->getMenuTree('main')));
+		$this->smarty->assign('mainmenu', new MainMenuView(MenuModel::instance()->getMenuTree('main')));
 		$this->smarty->assign('body', $this->body);
 		$this->smarty->assign('zijkolom', $this->zijkolom);
 		$this->smarty->assign('popup', $this->popup);

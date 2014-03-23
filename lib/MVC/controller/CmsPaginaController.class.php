@@ -14,15 +14,13 @@ require_once 'MVC/view/CmsPaginaView.class.php';
 class CmsPaginaController extends Controller {
 
 	/**
-	 * Data access model
-	 * @var CmsPaginaModel
+	 * Lijst van pagina's om te bewerken in de zijkolom
+	 * @var CmsPaginaZijkolomView[]
 	 */
-	private $model;
 	private $zijkolom = array();
 
 	public function __construct($query) {
-		parent::__construct($query);
-		$this->model = new CmsPaginaModel();
+		parent::__construct($query, CmsPaginaModel::instance());
 		$this->action = 'bekijken';
 		$naam = 'thuis';
 		if ($this->hasParam(3) AND $this->getParam(2) === 'bewerken') {

@@ -1,9 +1,7 @@
 <?php
 
 require_once 'MVC/model/taken/FunctiesModel.class.php';
-require_once 'taken/model/KwalificatiesModel.class.php';
 require_once 'MVC/view/taken/BeheerFunctiesView.class.php';
-require_once 'taken/view/forms/KwalificatieFormView.class.php';
 
 /**
  * BeheerFunctiesController.class.php
@@ -13,15 +11,8 @@ require_once 'taken/view/forms/KwalificatieFormView.class.php';
  */
 class BeheerFunctiesController extends AclController {
 
-	/**
-	 * Data access model
-	 * @var FunctiesModel
-	 */
-	private $model;
-
 	public function __construct($query) {
-		parent::__construct($query);
-		$this->model = new FunctiesModel();
+		parent::__construct($query, FunctiesModel::instance());
 		if (!$this->isPosted()) {
 			$this->acl = array(
 				'beheer' => 'P_CORVEE_MOD'
@@ -49,11 +40,9 @@ class BeheerFunctiesController extends AclController {
 			$this->bewerken($fid);
 			$popup = $this->getContent();
 		}
-		$functies = $this->model->getAlleFuncties();
-		KwalificatiesModel::loadKwalificatiesVoorFuncties($functies);
+		$functies = $this->model->getAlleFuncties(true); // grouped by functie_id
 		$this->view = new BeheerFunctiesView($functies);
-		$menu = new MenuModel();
-		$zijkolom = array(new BlockMenuView($menu->getMenuTree('Corveebeheer')));
+		$zijkolom = array(new BlockMenuView(MenuModel::instance()->getMenuTree('Corveebeheer')));
 		$this->view = new CsrLayoutPage($this->getContent(), $zijkolom, $popup);
 		$this->view->addStylesheet('js/autocomplete/jquery.autocomplete.css');
 		$this->view->addStylesheet('taken.css');
@@ -68,7 +57,6 @@ class BeheerFunctiesController extends AclController {
 			$id = $this->model->create($functie);
 			$functie->functie_id = (int) $id;
 			setMelding('Toegevoegd', 1);
-			$functie->gekwalificeerden = KwalificatiesModel::getKwalificatiesVoorFunctie($functie);
 			$this->view = new FunctieView($functie);
 		}
 	}
@@ -83,46 +71,32 @@ class BeheerFunctiesController extends AclController {
 			} else {
 				setMelding('Geen wijzigingen', 0);
 			}
-			$functie->gekwalificeerden = KwalificatiesModel::getKwalificatiesVoorFunctie($functie);
 			$this->view = new FunctieView($functie);
 		}
 	}
 
 	public function verwijderen($fid) {
-		try {
-			Database::instance()->beginTransaction();
-			$this->model->removeFunctie((int) $fid);
-			setMelding('Verwijderd', 1);
-			$this->view = new FunctieDeleteView($fid);
-			Database::instance()->commit();
-		} catch (Exception $e) {
-			Database::instance()->rollback();
-			throw $e; // rethrow to controller
-		}
+		$functie = $this->model->getFunctie((int) $fid);
+		$this->model->removeFunctie($functie);
+		setMelding('Verwijderd', 1);
+		$this->view = new FunctieDeleteView($fid);
 	}
 
 	public function kwalificeer($fid) {
-		$form = new KwalificatieFormView($fid); // fetches POST values itself
-		if ($form->validate()) {
-			$values = $form->getValues();
-			KwalificatiesModel::kwalificatieToewijzen($fid, $values['voor_lid']);
-			$functie = $this->model->getFunctie($fid);
-			$functie->gekwalificeerden = KwalificatiesModel::getKwalificatiesVoorFunctie($functie);
-			$this->view = new BeheerFunctiesView($functie);
-		} else {
-			$this->view = $form;
+		$functie = $this->model->getFunctie($fid);
+		$kwalificatie = KwalificatiesModel::instance()->newKwalificatie($functie);
+		$this->view = new KwalificatieFormView($kwalificatie); // fetches POST values itself
+		if ($this->view->validate()) {
+			KwalificatiesModel::instance()->kwalificatieToewijzen($kwalificatie);
+			$this->view = new FunctieView($functie);
 		}
 	}
 
 	public function dekwalificeer($fid) {
 		$uid = filter_input(INPUT_POST, 'voor_lid', FILTER_SANITIZE_STRING);
-		if (!\Lid::exists($uid)) {
-			throw new Exception('Lid bestaat niet: $uid =' . $uid);
-		}
-		KwalificatiesModel::kwalificatieTerugtrekken($fid, $uid);
 		$functie = $this->model->getFunctie($fid);
-		$functie->gekwalificeerden = KwalificatiesModel::getKwalificatiesVoorFunctie($functie);
-		$this->view = new BeheerFunctiesView($functie);
+		KwalificatiesModel::instance()->kwalificatieTerugtrekken($uid, $functie->functie_id);
+		$this->view = new FunctieView($functie);
 	}
 
 }

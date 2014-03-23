@@ -13,14 +13,14 @@
 		{if $functie->kwalificatie_benodigd}
 			<div style="float: left;"><a href="{$instellingen->get('taken', 'url')}/kwalificeer/{$functie->functie_id}" title="Kwalificatie toewijzen" class="knop post popup">{icon get="vcard_add"} Kwalificeer</a></div>
 		{/if}
-		{if $functie->gekwalificeerden}
+		{if $functie->hasKwalificaties()}
 			<div class="kwali"><a title="Toon oudleden" class="knop" onclick="$('div.kwali').toggle();">{icon get="eye"} Toon oudleden</a></div>
 			<div class="kwali" style="display: none;"><a title="Toon leden" class="knop" onclick="$('div.kwali').toggle();">{icon get="eye"} Toon leden</a></div>
 		{/if}
-		{foreach from=$functie->gekwalificeerden item=kwali}
-			<div class="kwali"{if $kwali->getLid()->isOudlid()} style="display: none;"{/if}>
-				<a href="{$instellingen->get('taken', 'url')}/dekwalificeer/{$functie->functie_id}" title="Kwalificatie intrekken" class="knop post" postdata="voor_lid={$kwali->getLidId()}">{icon get="vcard_delete"}</a>
-				&nbsp;{$kwali->getLid()->getNaamLink($instellingen->get('corvee', 'weergave_ledennamen_beheer'), $instellingen->get('corvee', 'weergave_link_ledennamen'))}
+		{foreach from=$functie->getKwalificaties() item=kwali}
+			<div class="kwali"{if $view->getLid($kwali->lid_id)->isOudlid()} style="display: none;"{/if}>
+				<a href="{$instellingen->get('taken', 'url')}/dekwalificeer/{$functie->functie_id}" title="Kwalificatie intrekken" class="knop post" postdata="voor_lid={$kwali->lid_id}">{icon get="vcard_delete"}</a>
+				&nbsp;{$view->getLid($kwali->lid_id)->getNaamLink($instellingen->get('corvee', 'weergave_ledennamen_beheer'), $instellingen->get('corvee', 'weergave_link_ledennamen'))}
 			</div>
 		{/foreach}
 	</td>

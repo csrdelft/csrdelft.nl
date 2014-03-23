@@ -10,7 +10,9 @@ require_once 'MVC/model/entity/MenuItem.class.php';
  */
 class MenuModel extends PersistenceModel {
 
-	public function __construct() {
+	protected static $instance;
+
+	protected function __construct() {
 		parent::__construct(new MenuItem());
 	}
 

@@ -80,14 +80,11 @@ class AgendaItemDeleteView extends TemplateView {
 
 }
 
-class AgendaItemFormView extends Formulier {
+class AgendaItemFormView extends PopupForm {
 
-	private $id;
-
-	public function __construct(AgendaItem $item, $actie, $id) {
+	public function __construct(AgendaItem $item, $actie) {
 		parent::__construct($item, 'agenda-item-form', $actie);
-		$this->id = $id;
-		$this->css_classes[] = 'popup PreventUnchanged';
+		$this->css_classes[] = 'PreventUnchanged';
 
 		$fields[] = new RequiredTextField('titel', $item->titel, 'Titel');
 		$fields['datum'] = new DatumField('datum', $item->begin_moment, 'Datum', date('Y') + 5, date('Y') - 5);
@@ -113,12 +110,17 @@ function setTijd(a, b, c, d) {
 </script>
 </div>';
 		$fields[] = new HtmlComment($html);
+
 		$fields['begin'] = new TijdField('begin', date('H:i', $item->getBeginMoment()), 'Van');
 		$fields['eind'] = new TijdField('eind', date('H:i', $item->getEindMoment()), 'Tot');
-		$fields[] = new SelectField('rechten_bekijken', $item->rechten_bekijken, 'Zichtbaar', array('P_LEDEN_READ' => 'Intern', 'P_NOBODY' => 'Extern'));
-		$fields[] = new TextField('link', $item->link, 'Link');
-		$fields[] = new AutoresizeTextareaField('beschrijving', $item->beschrijving, 'Beschrijving');
-		$fields[] = new SubmitResetCancel();
+
+		$fields[] = new SelectField('rechten_bekijken', $item->rechten_bekijken, 'Zichtbaar voor', array('P_LEDEN_READ' => 'Intern', 'P_NOBODY' => 'Extern'));
+
+		$fields['l'] = new TextField('link', $item->link, 'Link');
+		$fields['l']->title = 'URL als er op de titel geklikt wordt';
+
+		$fields['b'] = new AutoresizeTextareaField('beschrijving', $item->beschrijving, 'Beschrijving');
+		$fields['b']->title = 'Extra info als de cursor boven de titel gehouden wordt';
 
 		$this->addFields($fields);
 
@@ -127,22 +129,21 @@ function setTijd(a, b, c, d) {
 	}
 
 	public function getAction() {
-		return '/agenda/' . $this->action . '/' . $this->id;
+		return '/agenda/' . $this->action . '/' . $this->model->item_id;
 	}
 
-	public function view() {
-		echo '<div id="popup-content"><h1>Agenda-item ' . $this->action . '</h1>';
-		echo parent::view();
-		echo '</div>';
+	public function getTitel() {
+		return 'Agenda-item ' . $this->action;
 	}
 
 	public function validate() {
+		$valid = parent::validate();
 		$fields = $this->getFields();
 		if (strtotime($fields['eind']->getValue()) < strtotime($fields['begin']->getValue())) {
 			$fields['eind']->error = 'Eindmoment moet na beginmoment liggen';
-			return false;
+			$valid = false;
 		}
-		return parent::validate();
+		return $valid;
 	}
 
 }

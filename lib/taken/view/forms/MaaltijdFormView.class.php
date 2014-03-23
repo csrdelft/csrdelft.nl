@@ -34,8 +34,8 @@ class MaaltijdFormView extends TemplateView {
 		$fields[] = new TextField('titel', $titel, 'Titel', 255);
 		$fields[] = new DatumField('datum', $datum, 'Datum', date('Y') + 2, date('Y') - 2);
 		$fields[] = new TijdField('tijd', $tijd, 'Tijd', 15);
-		$fields[] = new FloatField('prijs', $prijs, 'Prijs (€)', 50, 0);
-		$fields[] = new IntField('aanmeld_limiet', $limiet, 'Aanmeldlimiet', 200, 0);
+		$fields[] = new FloatField('prijs', $prijs, 'Prijs (€)', 0, 50);
+		$fields[] = new IntField('aanmeld_limiet', $limiet, 'Aanmeldlimiet', 0, 200);
 		$fields['filter'] = new TextField('aanmeld_filter', $filter, 'Aanmeldrestrictie', 255, $suggesties);
 		$fields['filter']->required = false;
 		$fields['filter']->title = 'Plaats een ! vooraan om van de restrictie een uitsluiting te maken.';

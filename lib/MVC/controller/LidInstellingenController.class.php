@@ -10,15 +10,8 @@ require_once 'MVC/view/LidInstellingenView.class.php';
  */
 class LidInstellingenController extends AclController {
 
-	/**
-	 * Data access model
-	 * @var LidInstellingen
-	 */
-	private $model;
-
 	public function __construct($query) {
-		parent::__construct($query);
-		$this->model = LidInstellingen::instance();
+		parent::__construct($query, LidInstellingen::instance());
 		if (!$this->isPosted()) {
 			$this->acl = array(
 				'beheer' => 'P_LOGGED_IN',

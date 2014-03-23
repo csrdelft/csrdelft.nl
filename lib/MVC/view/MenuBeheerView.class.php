@@ -45,36 +45,40 @@ class MenuItemView extends TemplateView {
 
 }
 
-class MenuItemFormView extends Formulier {
+class MenuItemFormView extends PopupForm {
 
-	private $id;
-
-	public function __construct(MenuItem $item, $actie, $id) {
+	public function __construct(MenuItem $item, $actie) {
 		parent::__construct($item, 'menu-item-form', $actie);
-		$this->id = $id;
-		$this->css_classes[] = 'popup ReloadPage';
+		$this->css_classes[] = 'ReloadPage';
 		if ($actie === 'bewerken') {
 			$this->css_classes[] = 'PreventUnchanged';
 		}
+		$fields['pid'] = new RequiredIntField('parent_id', $item->parent_id, 'Parent ID', 0);
+		$fields['pid']->title = 'Item id van element 1 niveau hoger';
 
-		$fields[] = new RequiredIntField('parent_id', $item->parent_id, 'Parent id');
-		$fields[] = new IntField('prioriteit', $item->prioriteit, 'Prioriteit');
-		$fields[] = new TextField('tekst', $item->tekst, 'Tekst');
-		$fields[] = new TextField('link', $item->link, 'Url');
-		$fields[] = new TextField('rechten_bekijken', $item->rechten_bekijken, 'Rechten');
-		$fields[] = new SelectField('zichtbaar', ($item->zichtbaar ? '1' : '0'), 'Tonen', array('1' => 'Zichtbaar', '0' => 'Verborgen'));
-		$fields[] = new SubmitResetCancel();
+		$fields['prio'] = new IntField('prioriteit', $item->prioriteit, 'Volgorde');
+		$fields['prio']->title = 'Sortering van items';
+
+		$fields[] = new TextField('tekst', $item->tekst, 'Korte aanduiding', 50);
+
+		$fields['url'] = new TextField('link', $item->link, 'Link', 255);
+		$fields['url']->title = 'URL als er op het menu item geklikt wordt';
+
+		$fields['r'] = new TextField('rechten_bekijken', $item->rechten_bekijken, 'Rechten', 255);
+		$fields['r']->title = 'Wie mag dit menu item zien';
+
+		$fields['z'] = new SelectField('zichtbaar', ($item->zichtbaar ? '1' : '0'), 'Tonen', array('1' => 'Zichtbaar', '0' => 'Verborgen'));
+		$fields['z']->title = 'Wel of niet tonen';
+
 		$this->addFields($fields);
 	}
 
 	public function getAction() {
-		return '/menubeheer/' . $this->action . '/' . $this->id;
+		return '/menubeheer/' . $this->action . '/' . $this->model->item_id;
 	}
 
-	public function view() {
-		echo '<div id="popup-content"><h1>Menu-item ' . $this->action . '</h1>';
-		echo parent::view();
-		echo '</div>';
+	public function getTitel() {
+		return 'Menu-item ' . $this->action;
 	}
 
 }

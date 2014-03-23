@@ -1,6 +1,7 @@
 <?php
 
 require_once 'MVC/model/entity/taken/CorveeFunctie.class.php';
+require_once 'MVC/model/taken/KwalificatiesModel.class.php';
 
 /**
  * FunctiesModel.class.php
@@ -10,22 +11,43 @@ require_once 'MVC/model/entity/taken/CorveeFunctie.class.php';
  */
 class FunctiesModel extends PersistenceModel {
 
-	public function __construct() {
+	protected static $instance;
+
+	protected function __construct() {
 		parent::__construct(new CorveeFunctie());
 	}
 
-	public function getAlleFuncties($groupByFid = false) {
+	/**
+	 * Optional eager loading of kwalificaties.
+	 * 
+	 * @param boolean $load_kwalifications
+	 * @return CorveeFunctie[]
+	 */
+	public function getAlleFuncties($load_kwalificaties = false) {
 		$functies = $this->find();
-		if ($groupByFid) {
-			$functiesByFid = array();
-			foreach ($functies as $functie) {
-				$functiesByFid[$functie->functie_id] = $functie;
-			}
-			return $functiesByFid;
+		if ($load_kwalificaties) {
+			$kwalificaties = KwalificatiesModel::instance()->getAlleKwalificaties();
 		}
-		return $functies;
+		$functiesByFid = array();
+		foreach ($functies as $functie) {
+			if ($load_kwalificaties) {
+				if (array_key_exists($functie->functie_id, $kwalificaties)) {
+					$functie->setKwalificaties($kwalificaties[$functie->functie_id]);
+				} else {
+					$functie->setKwalificaties(array());
+				}
+			}
+			$functiesByFid[$functie->functie_id] = $functie;
+		}
+		return $functiesByFid;
 	}
 
+	/**
+	 * Lazy loading of kwalificaties.
+	 * 
+	 * @param int $fid
+	 * @return CorveeFunctie[]
+	 */
 	public function getFunctie($fid) {
 		return $this->retrieveByPrimaryKey(array($fid));
 	}
@@ -36,17 +58,17 @@ class FunctiesModel extends PersistenceModel {
 		return $functie;
 	}
 
-	public function removeFunctie($fid) {
-		if (TakenModel::existFunctieTaken($fid)) {
+	public function removeFunctie(CorveeFunctie $functie) {
+		if (TakenModel::existFunctieTaken($functie->functie_id)) {
 			throw new Exception('Verwijder eerst de bijbehorende corveetaken!');
 		}
-		if (CorveeRepetitiesModel::existFunctieRepetities($fid)) {
+		if (CorveeRepetitiesModel::existFunctieRepetities($functie->functie_id)) {
 			throw new Exception('Verwijder eerst de bijbehorende corveerepetities!');
 		}
-		if (KwalificatiesModel::existFunctieKwalificaties($fid)) {
+		if ($functie->hasKwalificaties()) {
 			throw new Exception('Verwijder eerst de bijbehorende kwalificaties!');
 		}
-		return $this->deleteByPrimaryKey(array($fid));
+		return $this->delete($functie);
 	}
 
 }

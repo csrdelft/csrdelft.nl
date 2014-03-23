@@ -506,8 +506,8 @@ class Lid implements Serializable, Agendeerbaar {
 	 * CorveeKwalificaties opzoeken en teruggeven van dit lid
 	 */
 	public function getCorveeKwalificaties() {
-		require_once 'taken/model/KwalificatiesModel.class.php';
-		return KwalificatiesModel::getKwalificatiesVanLid($this->getUid());
+		require_once 'MVC/model/taken/KwalificatiesModel.class.php';
+		return KwalificatiesModel::instance()->getKwalificatiesVanLid($this->getUid());
 	}
 
 	/**

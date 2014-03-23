@@ -10,15 +10,8 @@ require_once 'MVC/view/InstellingenBeheerView.class.php';
  */
 class InstellingenBeheerController extends AclController {
 
-	/**
-	 * Data access model
-	 * @var Instellingen
-	 */
-	private $model;
-
 	public function __construct($query) {
-		parent::__construct($query);
-		$this->model = Instellingen::instance();
+		parent::__construct($query, Instellingen::instance());
 		if (!$this->isPosted()) {
 			$this->acl = array(
 				'module' => 'P_LOGGED_IN'

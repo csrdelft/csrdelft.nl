@@ -58,7 +58,7 @@ class CorveeFunctie extends PersistentEntity {
 	 * Kwalificaties
 	 * @var CorveeKwalificatie[]
 	 */
-	public $gekwalificeerden;
+	private $kwalificaties;
 	/**
 	 * Database table fields
 	 * @var array
@@ -81,5 +81,25 @@ class CorveeFunctie extends PersistentEntity {
 	 * @var string
 	 */
 	protected static $table_name = 'crv_functies';
+
+	/**
+	 * Lazy loading by foreign key.
+	 * 
+	 * @return CorveeKwalificatie[]
+	 */
+	public function getKwalificaties() {
+		if (!isset($this->kwalificaties)) {
+			$this->setKwalificaties(KwalificatiesModel::instance()->find('functie_id = ?', array($this->functie_id)));
+		}
+		return $this->kwalificaties;
+	}
+
+	public function hasKwalificaties() {
+		return sizeof($this->getKwalificaties()) > 0;
+	}
+
+	public function setKwalificaties(array $kwalificaties) {
+		$this->kwalificaties = $kwalificaties;
+	}
 
 }
