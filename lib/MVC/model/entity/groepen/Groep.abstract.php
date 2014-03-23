@@ -81,10 +81,5 @@ abstract class Groep extends PersistentEntity {
 	 * @var array
 	 */
 	protected static $primary_key = array('groep_id');
-	/**
-	 * Database table name
-	 * @var string
-	 */
-	protected static $table_name = 'groepen';
 
 }

@@ -15,18 +15,6 @@ Ketzer::__constructStatic();
 class Ketzer extends Groep {
 
 	/**
-	 * Extend the persistent fields with those of the base class.
-	 */
-	public static function __constructStatic() {
-		self::$persistent_fields = parent::$persistent_fields + self::$persistent_fields;
-	}
-
-	/**
-	 * Type van groep
-	 * @var string
-	 */
-	public static $class_name = 'Ketzer';
-	/**
 	 * Rechten benodigd voor aanmelden
 	 * @var string
 	 */
@@ -50,5 +38,17 @@ class Ketzer extends Groep {
 		'aanmeld_limiet' => 'int(11) DEFAULT NULL',
 		'aanmeld_opties' => 'text DEFAULT NULL'
 	);
+	/**
+	 * Database table name
+	 * @var string
+	 */
+	protected static $table_name = 'ketzers';
+
+	/**
+	 * Extend the persistent fields.
+	 */
+	public static function __constructStatic() {
+		self::$persistent_fields = parent::$persistent_fields + self::$persistent_fields;
+	}
 
 }

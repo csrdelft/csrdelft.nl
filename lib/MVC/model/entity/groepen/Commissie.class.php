@@ -16,18 +16,6 @@ Commissie::__constructStatic();
 class Commissie extends Groep {
 
 	/**
-	 * Extend the persistent fields with those of the base class.
-	 */
-	public static function __constructStatic() {
-		self::$persistent_fields = parent::$persistent_fields + self::$persistent_fields;
-	}
-
-	/**
-	 * Type van groep
-	 * @var string
-	 */
-	public $class_name = 'Commissie';
-	/**
 	 * Status: ot / ht / ft
 	 * @var string
 	 */
@@ -39,5 +27,17 @@ class Commissie extends Groep {
 	protected static $persistent_fields = array(
 		'status' => 'varchar(2) DEFAULT NULL'
 	);
+	/**
+	 * Database table name
+	 * @var string
+	 */
+	protected static $table_name = 'commissies';
+
+	/**
+	 * Extend the persistent fields.
+	 */
+	public static function __constructStatic() {
+		self::$persistent_fields = parent::$persistent_fields + self::$persistent_fields;
+	}
 
 }
