@@ -33,8 +33,8 @@ class InstellingenBeheerController extends AclController {
 		if (!parent::hasPermission()) {
 			return false;
 		}
-		if ($this->hasParam(1)) {
-			switch ($this->getParam(1)) {
+		if ($this->hasParam(3)) {
+			switch ($this->getParam(3)) {
 				case 'agenda':
 					return LoginLid::instance()->hasPermission('P_AGENDA_MOD');
 				case 'corvee':
