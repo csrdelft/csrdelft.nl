@@ -72,6 +72,8 @@ switch (constant('MODE')) {
 		require_once 'MVC/view/Validator.interface.php';
 		require_once 'MVC/view/TemplateView.abstract.php';
 
+		require_once 'MVC/view/Formulier.class.php';
+
 		// als er een wikiconfiguratie is en hierin is de csr-wikiauthicatie geselecteerd 
 		// dan is de sessie al gestart en zijn sommige includes niet nodig.
 		if (!(isset($conf['authtype']) AND $conf['authtype'] == 'authcsr')) {
@@ -81,7 +83,6 @@ switch (constant('MODE')) {
 
 			require_once 'MVC/view/CsrLayoutPage.class.php';
 			require_once 'MVC/view/CsrLayout2Page.class.php';
-			require_once 'MVC/view/Formulier.class.php';
 			require_once 'MVC/view/CsrUbb.class.php';
 			require_once 'simplehtml.class.php';
 			require_once 'icon.class.php';
