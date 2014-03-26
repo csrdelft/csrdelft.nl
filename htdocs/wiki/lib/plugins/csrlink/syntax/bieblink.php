@@ -38,9 +38,15 @@ class syntax_plugin_csrlink_bieblink extends DokuWiki_Syntax_Plugin {
         $match = trim(substr($match,7,-2));
 
 
-        list($boekid,$title) = explode('|',$match,2);
-
-        return compact('boekid','title');
+        @list($boekid, $title) = explode('|', $match, 2);
+        @list($boekid, $opts) = explode('?', $boekid, 2);
+        $opts = explode('&', $opts);
+        foreach($opts as $option) {
+            @list($key, $value) = explode(':', $option, 2);
+            $options[$key] = $value;
+        }
+        //options are not yet filtered!
+        return compact('boekid', 'title', 'options');
     }
 
     function render($mode, &$R, $data) {
@@ -48,11 +54,18 @@ class syntax_plugin_csrlink_bieblink extends DokuWiki_Syntax_Plugin {
         global $conf;
         /** @var string $title */
         /** @var string $boekid */
+        /** @var array $options */
         extract($data);
 
         if($mode != 'xhtml' || is_null($auth) || !$auth instanceof auth_plugin_authcsr){
             $R->cdata($title?$title:$boekid);
             return true;
+        }
+
+        if(isset($options['auteur']) && $options['auteur'] === 'ja') {
+            $showauteur = true;
+        } else {
+            $showauteur = false;
         }
 
         require_once 'bibliotheek/boek.class.php';
@@ -70,8 +83,12 @@ class syntax_plugin_csrlink_bieblink extends DokuWiki_Syntax_Plugin {
         }
 
         //return html
-        $R->doc .= '<a class="bieblink groeplink_plugin" href="'.$boek->getUrl().'" title="Boek: '.hsc($boek->getTitel()).'">';
-	    $R->doc .= '<span title="'.$boek->getStatus().' boek" class="boekindicator '.$boek->getStatus().'">•</span><span class="titel">'.$title.'</span> <span class="auteur">('.hsc($boek->getAuteur()).')</span>';
+        $R->doc .= '<a class="bieblink groeplink_plugin" href="' . $boek->getUrl() . '" title="Boek: ' . hsc($boek->getTitel()) . ', Auteur: ' . hsc($boek->getAuteur()) . '">';
+        $R->doc .= '   <span title="' . $boek->getStatus() . ' boek" class="boekindicator ' . $boek->getStatus() . '">•</span>';
+        $R->doc .= '   <span class="titel">' . $title . '</span>';
+        if($showauteur) {
+            $R->doc .= ' <span class="auteur">(' . hsc($boek->getAuteur()) . ')</span>';
+        }
         $R->doc .= '</a>';
         return true;
     }
