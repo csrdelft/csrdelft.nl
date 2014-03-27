@@ -210,7 +210,7 @@ jQuery(document).ready(function($) {
 
 	//boekpagina: asynchroon opslaan toevoegen
 	//opslaan-knop toevoegen, met event die met ajax de veldwaarde opslaat
-	$('.blok .veld input,.blok .veld textarea,.blok .veld select').each(function(index, input){
+	$('.blok .InputField input,.blok .InputField textarea,.blok .InputField select').each(function(index, input){
 		$(this).after('<div class="melding"></div>'
 		).after(
 			$('<div class="knop opslaan">Opslaan</div>').mousedown(function(){
