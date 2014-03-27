@@ -193,8 +193,12 @@ jQuery(document).ready(function($) {
 	 */
 	var options = {
 		dataType: 'json',
-		parse: function(result) { return result; },
-		formatItem: function(row, i, n) { return 'Ga naar: <a href="/communicatie/bibliotheek/boek/'+row.id+'" target="_blank">'+row.titel+'</a>'; },
+		parse: function(result) {
+            return result;
+        },
+		formatItem: function(row, i, n) {
+            return 'Ga naar: <a href="/communicatie/bibliotheek/boek/'+row.id+'" target="_blank">'+row.titel+'</a>';
+        },
 		clickFire: true, 
 		max: 20
 	};

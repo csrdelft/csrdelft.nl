@@ -1107,7 +1107,7 @@ class BewerkBoek extends Boek {
 
 }
 
-class TitelField extends AutoresizeTextareaField {
+class TitelField extends RequiredAutoresizeTextField {
 
 	public function validate() {
 		if (!parent::validate()) {
