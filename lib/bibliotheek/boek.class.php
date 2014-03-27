@@ -661,7 +661,6 @@ class BewerkBoek extends Boek {
 	 * @return void
 	 */
 	public function setValue($key, $value, $initboek = false) {
-		var_dump($key, $value, $initboek);
 		switch ($key) {
 			case 'beschrijving':
 				$this->getEditBeschrijving()->setTekst($value);
