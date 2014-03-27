@@ -14,6 +14,10 @@ if(isset($_GET['querystring'])){
 }
 
 $pagina=new CsrLayoutPage($biebControl->getContent());
+if($biebControl->getContent() instanceof BibliotheekCatalogusContent) {
+	$pagina->zijkolom = false;
+}
+
 $pagina->addStylesheet('bibliotheek.css');
 $pagina->addStylesheet('js/datatables/css/datatables_basic.css');
 $pagina->addStylesheet('js/autocomplete/jquery.autocomplete.css');
@@ -25,4 +29,3 @@ $pagina->addScript('csrdelft.js');
 $pagina->addScript('bibliotheek.js');
 
 $pagina->view();
-?>
