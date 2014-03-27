@@ -1091,7 +1091,7 @@ class BewerkBoek extends Boek {
 	 * verwijdert in Boek geladen beschrijving
 	 */
 	public function verwijderBeschrijving() {
-		$this->getEditBeschrijving()->verwijder();
+		return $this->getEditBeschrijving()->verwijder();
 	}
 
 	/**
