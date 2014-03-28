@@ -43,9 +43,8 @@ div#content .dokuwiki h1 {
 }
 
 /* lists */
-div#content .dokuwiki ul {
+div.dokuwiki ul {
 	margin-left: 3.2em;
-	padding-left: 0.5em;
 }
 div#content .dokuwiki #dw__toc ul {
     margin: 0 0 0 5px;
