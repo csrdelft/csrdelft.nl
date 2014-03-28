@@ -1,4 +1,3 @@
-
 #edittable__editor {
     margin-bottom: 1.4em;
 
@@ -6,6 +5,7 @@
 
         td.right {
             text-align: right;
+            float: none; // fix incompatibility with some templates (like ICKE)
         }
 
         td.center {
@@ -18,5 +18,9 @@
         }
 
     }
+}
 
+// add a z-index to DokuWiki's toolbar pickers
+div.picker {
+    z-index: 500;
 }
