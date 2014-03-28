@@ -55,9 +55,9 @@ div.vb {
 
 div.vb dl {
 	/* vakje om de dataentry */
-	border: 0px;
-	margin-left:0em;
-	padding-left:0em;
+	border: 0;
+	margin-left:0;
+	padding-left:0;
 }
 
 div.vb dl > dt { 
@@ -170,7 +170,7 @@ div.dokuwiki .comment_head {
     color: #888;
 }
 div.dokuwiki .comment_head span.author {
-    background: transparent  url(/wiki/lib/plugins/discussion/images/grayuser.gif) 0px 1px no-repeat;
+    background: transparent  url(/wiki/lib/plugins/discussion/images/grayuser.gif) 0 1px no-repeat;
 }
 
 div.dokuwiki div.comment_buttons input.button {
@@ -218,101 +218,4 @@ div.li a.indexmenu_idx {
     padding: 0 1.25em;
     border: solid __border__;
     border-width: 0 0 0 .25em;
-}
-
-
-/* C.S.R. PAGINA LAYOUT */
-
-h1 {
-	border-bottom: none !important;
-}
-div.catlinks {
-	background-color: #fff !important;
-	margin: -1em 0 0 -0.5em !important;
-}
-div.catlinks span.bchead {
-	display: none !important;
-}
-#siteNotice {
-	position: absolute !important;
-	top: 155px !important;
-	left: 0px !important;
-	width: 100% !important;
-	text-align: center !important;
-	color: #DDD !important;
-}
-#head li a, #content, #head-base, #footer {
-	background: none !important;
-	background-image: none !important;
-}
-#content {
-	background-color: #fff !important;
-	margin-left: 200px !important;
-	border-left: 1px solid #b8b8b8 !important;
-	border-bottom: 1px solid #b8b8b8 !important;
-}
-#page-base {
-	height: 176px !important;
-	background: url('http://plaetjes.csrdelft.nl/layout/body.png') repeat-x;
-}
-#head a, #head a span, #head a:visited {
-	color: #fff !important;
-}
-#head div.vectorTabs {
-	padding: 0 !important;
-}
-#head div.vectorTabs li a span {
-	width: 100% !important;
-	text-align: center !important;
-	font-size: 13px !important;
-	font-weight: bold !important;
-	margin-top: 5px !important;
-	font-family: Verdana, Geneva, Arial, Helvetica, sans-serif !important;
-}
-#panel {
-	padding: 10px !important;
-	top: 185px !important;
-}
-#p-search {
-	float: right !important;
-	margin-right: 225px !important;
-}
-#simpleSearch {
-	margin-top: 0 !important;
-}
-#left-navigation {
-	display: none !important;
-}
-#left-navigation li, #right-navigation li {
-	height: 32px !important;
-	width: 122px !important;
-	margin-left: 15px !important;
-	background: url('http://plaetjes.csrdelft.nl/layout/menubutton.png') no-repeat;
-}
-#right-navigation {
-	float: left !important;
-	width: 100% !important;
-	margin-left: 200px !important;
-	margin-top: 120px !important;
-}
-#p-views {
-	background: none !important;
-	color: #fff !important;
-}
-#p-logo {
-	top: -185px !important;
-}
-#p-logo a {
-	margin: 14px 0 0 30px !important;
-	background: url('http://plaetjes.csrdelft.nl/layout/logo.gif') no-repeat !important;
-}
-#p-namespaces, #p-namespaces a span, #p-views a span {
-	padding: 3px !important;
-}
-#p-namespaces {
-	margin-left: 40px !important;
-}
-#p-namespaces li.selected, #p-namespaces li:hover,
-#p-views li.selected, #p-views li:hover {
-	background: url('http://plaetjes.csrdelft.nl/layout/menubutton_hover.png') no-repeat;
 }

@@ -693,6 +693,16 @@ if (file_exists(DOKU_TPLINC."lang/".$conf["lang"]."/style.css")){
   }
   ?>
 
+  <div id="p-sitetools">
+	  <ul>
+		  <?php
+		  tpl_action('recent', 1, 'li');
+		  tpl_action('media', 1, 'li');
+		  tpl_action('index', 1, 'li');
+		  ?>
+	  </ul>
+  </div>
+
   <!-- start div id=left-navigation -->
   <div id="left-navigation">
     <div id="p-namespaces" class="vectorTabs">

@@ -125,21 +125,21 @@ if (empty($conf["useacl"]) || //are there any users?
 	//but it would be the only toolbox link where this is possible... therefore I don't use it to be consistent
     }
 
-	//recent changes
-    if (actionOK("recent")){ //check if action is disabled
-        $_vector_boxes["p-tb"]["xhtml"] .= "        <li id=\"t-recentchanges\"><a href=\"".wl(cleanID(getId()), array("do" => "recent"))."\" rel=\"nofollow\">".hsc($lang["btn_recent"])."</a></li>\n";
-		//language comes from DokuWiki core
-    }
-
-	//upload
-    if (actionOK("media")){ //check if action is disabled
-		$_vector_boxes["p-tb"]["xhtml"] .= "        <li id=\"t-upload\"><a href=\"".wl(cleanID(getId()), array("do" => "media","ns" => getNS(cleanID(getID()))))."\" rel=\"nofollow\">".hsc($lang["vector_toolbxdef_upload"])."</a></li>\n"; //language comes from DokuWiki core
-    }
-
-	//index
-    if (actionOK("index")){ //check if action is disabled
-        $_vector_boxes["p-tb"]["xhtml"] .= "    <li id=\"t-special\"><a href=\"".wl(cleanID(getId()), array("do" => "index"))."\" rel=\"nofollow\">".hsc($lang["vector_toolbxdef_siteindex"])."</a></li>\n";
-    }
+//	//recent changes   -> header sitetools
+//    if (actionOK("recent")){ //check if action is disabled
+//        $_vector_boxes["p-tb"]["xhtml"] .= "        <li id=\"t-recentchanges\"><a href=\"".wl(cleanID(getId()), array("do" => "recent"))."\" rel=\"nofollow\">".hsc($lang["btn_recent"])."</a></li>\n";
+//		//language comes from DokuWiki core
+//    }
+//
+//	//upload     -> header sitetools
+//    if (actionOK("media")){ //check if action is disabled
+//		$_vector_boxes["p-tb"]["xhtml"] .= "        <li id=\"t-upload\"><a href=\"".wl(cleanID(getId()), array("do" => "media","ns" => getNS(cleanID(getID()))))."\" rel=\"nofollow\">".hsc($lang["vector_toolbxdef_upload"])."</a></li>\n"; //language comes from DokuWiki core
+//    }
+//
+//	//index     -> header sitetools
+//    if (actionOK("index")){ //check if action is disabled
+//        $_vector_boxes["p-tb"]["xhtml"] .= "    <li id=\"t-special\"><a href=\"".wl(cleanID(getId()), array("do" => "index"))."\" rel=\"nofollow\">".hsc($lang["vector_toolbxdef_siteindex"])."</a></li>\n";
+//    }
 
 	//permanent link to page
     //$_vector_boxes["p-tb"]["xhtml"] .=  "        <li id=\"t-permanent\"><a href=\"".wl(cleanID(getId()), array("rev" =>(int)$rev))."\" rel=\"nofollow\">".hsc($lang["vector_toolboxdef_permanent"])."</a></li>\n"
