@@ -1858,6 +1858,7 @@ htdocs/wiki/lib/plugins/edittable/_test/renderer_plugin_edittable_inverse.test.t
 htdocs/wiki/lib/plugins/edittable/_test/renderer_plugin_edittable_json.test.php -text
 htdocs/wiki/lib/plugins/edittable/action/editor.php -text
 htdocs/wiki/lib/plugins/edittable/action/newtable.php -text
+htdocs/wiki/lib/plugins/edittable/action/preprocess.php -text
 htdocs/wiki/lib/plugins/edittable/action/sectionjump.php -text
 htdocs/wiki/lib/plugins/edittable/images/a_center.png -text
 htdocs/wiki/lib/plugins/edittable/images/a_left.png -text
@@ -1898,6 +1899,7 @@ htdocs/wiki/lib/plugins/edittable/renderer/inverse.php -text
 htdocs/wiki/lib/plugins/edittable/renderer/json.php -text
 htdocs/wiki/lib/plugins/edittable/script.js -text
 htdocs/wiki/lib/plugins/edittable/script/contextmenu.js -text
+htdocs/wiki/lib/plugins/edittable/script/editbutton.js -text
 htdocs/wiki/lib/plugins/edittable/script/editor.js -text
 htdocs/wiki/lib/plugins/edittable/script/jquery.handsontable.columnmove.js -text
 htdocs/wiki/lib/plugins/edittable/script/jquery.handsontable.full.js -text
