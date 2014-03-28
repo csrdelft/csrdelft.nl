@@ -2522,10 +2522,6 @@ htdocs/wiki/lib/plugins/indexmenu/syntax/indexmenu.php -text
 htdocs/wiki/lib/plugins/indexmenu/syntax/tag.php -text
 htdocs/wiki/lib/plugins/info/plugin.info.txt -text
 htdocs/wiki/lib/plugins/info/syntax.php -text
-htdocs/wiki/lib/plugins/lists/manager.dat -text
-htdocs/wiki/lib/plugins/lists/style.css -text
-htdocs/wiki/lib/plugins/lists/syntax.php -text
-htdocs/wiki/lib/plugins/lists/syntax_plugin_lists.css -text
 htdocs/wiki/lib/plugins/move/README -text
 htdocs/wiki/lib/plugins/move/_test/mediaindex.test.php -text
 htdocs/wiki/lib/plugins/move/_test/mediamove.test.php -text
@@ -2825,10 +2821,6 @@ htdocs/wiki/lib/plugins/wrap/rtl.css -text
 htdocs/wiki/lib/plugins/wrap/style.css -text
 htdocs/wiki/lib/plugins/wrap/syntax/div.php -text
 htdocs/wiki/lib/plugins/wrap/syntax/span.php -text
-htdocs/wiki/lib/plugins/yalist/manager.dat -text
-htdocs/wiki/lib/plugins/yalist/print.css -text
-htdocs/wiki/lib/plugins/yalist/style.css -text
-htdocs/wiki/lib/plugins/yalist/syntax.php -text
 htdocs/wiki/lib/scripts/behaviour.js -text
 htdocs/wiki/lib/scripts/compatibility.js -text
 htdocs/wiki/lib/scripts/cookie.js -text
