@@ -11,8 +11,7 @@ $_SESSION['pauper']=true;
 require_once 'pagina.class.php';
 require_once 'MVC/model/CmsPaginaModel.class.php';
 
-$model = new CmsPaginaModel();
-$view = new CmsPaginaView($model->getPagina('mobiel'));
+$view = new CmsPaginaView(CmsPaginaModel::instance()->getPagina('mobiel'));
 $view->view();
 
 # Laatste forumberichten

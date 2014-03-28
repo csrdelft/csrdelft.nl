@@ -9,7 +9,7 @@ try {
 	$mail = new Mail('brussee@live.nl','brussee@live.nl','test');
 	$mail->send();
 	/*
-	$model = new MededelingenModel();
+	$model = MededelingenModel::instance();
 
 	$m1 = new Mededeling2();
 	echo var_dump($m1);

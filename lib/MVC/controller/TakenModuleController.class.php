@@ -50,8 +50,7 @@ class TakenModuleController extends AclController {
 		if (isPosted()) {
 			parent::geentoegang();
 		}
-		$model = new CmsPaginaModel();
-		$body = new CmsPaginaView($model->getPagina('maaltijden'));
+		$body = new CmsPaginaView(CmsPaginaModel::instance()->getPagina('maaltijden'));
 		$this->view = new CsrLayoutPage($body);
 	}
 

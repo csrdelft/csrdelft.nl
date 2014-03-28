@@ -40,8 +40,7 @@ if ($loginlid->hasPermission('P_FORUM_READ')) {
 	}
 } else {
 	require_once 'MVC/model/CmsPaginaModel.class.php';
-	$model = new CmsPaginaModel();
-	$midden = new CmsPaginaView($model->getPagina('geentoegang'));
+	$midden = new CmsPaginaView(CmsPaginaModel::instance()->getPagina('geentoegang'));
 }
 
 if (LoginLid::instance()->hasPermission('P_LOGGED_IN')) {

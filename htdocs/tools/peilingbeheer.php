@@ -65,8 +65,7 @@ if ($error != '') {
 if (!$loginlid->hasPermission('P_LOGGED_IN') OR !Peiling::magBewerken()) {
 	# geen rechten
 	require_once 'MVC/model/CmsPaginaModel.class.php';
-	$model = new CmsPaginaModel();
-	$beheer = new CmsPaginaView($model->getPagina('geentoegang'));
+	$beheer = new CmsPaginaView(CmsPaginaModel::instance()->getPagina('geentoegang'));
 }
 
 $pagina = new CsrLayoutPage($beheer);

@@ -11,8 +11,7 @@ if($loginlid->hasPermission('P_LEDEN_READ')){
 } else {
 	# geen rechten
 	require_once 'MVC/model/CmsPaginaModel.class.php';
-	$model = new CmsPaginaModel();
-	$midden = new CmsPaginaView($model->getPagina('geentoegang'));
+	$midden = new CmsPaginaView(CmsPaginaModel::instance()->getPagina('geentoegang'));
 }
 
 $pagina=new CsrLayoutPage($midden);
