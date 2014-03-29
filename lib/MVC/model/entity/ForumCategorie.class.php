@@ -36,6 +36,11 @@ class ForumCategorie extends PersistentEntity {
 	 */
 	public $volgorde;
 	/**
+	 * Forumdelen
+	 * @var ForumDeel[]
+	 */
+	private $forum_delen;
+	/**
 	 * Database table fields
 	 * @var array
 	 */
@@ -56,5 +61,25 @@ class ForumCategorie extends PersistentEntity {
 	 * @var string
 	 */
 	protected static $table_name = 'forum_categorien';
+
+	/**
+	 * Lazy loading by foreign key.
+	 * 
+	 * @return ForumDeel[]
+	 */
+	public function getForumDelen() {
+		if (!isset($this->forum_delen)) {
+			$this->setForumDelen(ForumDelenModel::instance()->find('categorie_id = ?', array($this->categorie_id)));
+		}
+		return $this->forum_delen;
+	}
+
+	public function hasForumDelen() {
+		return sizeof($this->getForumDelen()) > 0;
+	}
+
+	public function setForumDelen(array $forum_delen) {
+		$this->forum_delen = $forum_delen;
+	}
 
 }

@@ -29,6 +29,7 @@ class FunctiesModel extends PersistenceModel {
 			if ($load_kwalificaties) {
 				if (array_key_exists($functie->functie_id, $kwalificaties)) {
 					$functie->setKwalificaties($kwalificaties[$functie->functie_id]);
+					unset($kwalificaties[$functie->functie_id]);
 				} else {
 					$functie->setKwalificaties(array());
 				}

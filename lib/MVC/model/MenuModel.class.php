@@ -63,7 +63,7 @@ class MenuModel extends PersistenceModel {
 
 	public function newMenuItem($parent_id) {
 		$item = new MenuItem();
-		$item->parent_id = intval($parent_id);
+		$item->parent_id = (int) $parent_id;
 		$item->prioriteit = 0;
 		$item->link = '/';
 		$item->rechten_bekijken = 'P_NOBODY';

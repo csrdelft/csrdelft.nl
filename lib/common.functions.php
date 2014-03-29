@@ -34,7 +34,7 @@ function endsWith($haystack, $needle) {
 }
 
 /**
- * Group by
+ * Group by (destructive)
  */
 function array_group_by($by, array $orig) {
 	$result = array();
