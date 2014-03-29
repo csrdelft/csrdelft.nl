@@ -41,6 +41,11 @@ class ForumPost extends PersistentEntity {
 	 */
 	public $laatst_bewerkt;
 	/**
+	 * Bewerking logboek
+	 * @var string
+	 */
+	public $bewerkt_tekst;
+	/**
 	 * Zichtbaar, verwijderd of wacht op goedkeuring
 	 * @var string
 	 */
@@ -60,9 +65,11 @@ class ForumPost extends PersistentEntity {
 		'lid_id' => 'varchar(4) NOT NULL',
 		'tekst' => 'text NOT NULL',
 		'datum_tijd' => 'datetime NOT NULL',
-		'laatst_bewerkt' => 'datetime NOT NULL',
-		'status' => 'varchar(25) NOT NULL',
-		'auteur_ip' => 'varchar(255) NOT NULL'
+		'laatst_bewerkt' => 'datetime DEFAULT NULL',
+		'bewerkt_tekst' => 'text DEFAULT NULL',
+		'verwijderd' => 'boolean NOT NULL',
+		'auteur_ip' => 'varchar(255) NOT NULL',
+		'wacht_goedkeuring' => 'boolean NOT NULL'
 	);
 	/**
 	 * Database primary key

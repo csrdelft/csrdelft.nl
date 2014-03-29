@@ -49,27 +49,27 @@ class ForumDeel extends PersistentEntity {
 	 * Aantal topics in dit forum
 	 * @var int
 	 */
-	public $aantal_topics = 0;
+	public $aantal_topics;
 	/**
 	 * Aantal zichtbare posts in dit forum
 	 * @var int
 	 */
-	public $aantal_posts = 0;
+	public $aantal_posts;
 	/**
 	 * Rechten benodigd voor lezen
 	 * @var string
 	 */
-	public $zichtbaar_voor = 'P_FORUM_READ';
+	public $rechten_lezen;
 	/**
 	 * Rechten benodigd voor posten
 	 * @var string
 	 */
-	public $schrijfrechten = 'P_FORUM_POST';
+	public $rechten_posten;
 	/**
 	 * Weergave volgorde
 	 * @var int
 	 */
-	public $prioriteit;
+	public $volgorde;
 	/**
 	 * Database table fields
 	 * @var array
@@ -84,9 +84,9 @@ class ForumDeel extends PersistentEntity {
 		'laatste_lid_id' => 'varchar(4) NOT NULL',
 		'aantal_topics' => 'int(11) NOT NULL',
 		'aantal_posts' => 'int(11) NOT NULL',
-		'zichtbaar_voor' => 'varchar(25) NOT NULL',
-		'schrijfrechten' => 'varchar(25) NOT NULL',
-		'prioriteit' => 'int(11) NOT NULL'
+		'rechten_lezen' => 'varchar(255) NOT NULL',
+		'rechten_posten' => 'varchar(255) NOT NULL',
+		'volgorde' => 'int(11) NOT NULL'
 	);
 	/**
 	 * Database primary key

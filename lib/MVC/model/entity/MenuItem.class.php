@@ -57,7 +57,7 @@ class MenuItem extends PersistentEntity {
 		'tekst' => 'varchar(50) NOT NULL',
 		'link' => 'varchar(255) NOT NULL',
 		'rechten_bekijken' => 'varchar(255) NOT NULL',
-		'zichtbaar' => 'tinyint(1) NOT NULL'
+		'zichtbaar' => 'boolean NOT NULL'
 	);
 	/**
 	 * Database primary key

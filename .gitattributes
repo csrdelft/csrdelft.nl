@@ -3176,6 +3176,7 @@ lib/MVC/model/Agendeerbaar.interface.php -text
 lib/MVC/model/CmsPaginaModel.class.php -text
 lib/MVC/model/Database.singleton.php -text
 lib/MVC/model/DragObjectModel.class.php -text
+lib/MVC/model/ForumModel.class.php -text
 lib/MVC/model/InstellingenModel.class.php -text
 lib/MVC/model/LidInstellingenModel.class.php -text
 lib/MVC/model/MenuModel.class.php -text
@@ -3192,6 +3193,7 @@ lib/MVC/model/entity/ForumCategorie.class.php -text
 lib/MVC/model/entity/ForumDeel.class.php -text
 lib/MVC/model/entity/ForumPost.class.php -text
 lib/MVC/model/entity/ForumTopic.class.php -text
+lib/MVC/model/entity/ForumTopicGelezen.class.php -text
 lib/MVC/model/entity/Groep.abstract.php -text
 lib/MVC/model/entity/GroepCategorie.class.php -text
 lib/MVC/model/entity/GroepLid.class.php -text
@@ -4140,3 +4142,4 @@ sql/4260_cmspagina_fixed.sql -text
 sql/4269_cmspagina_security_fix.sql -text
 sql/4354_menubeheer_rename.sql -text
 sql/4363_gasnelnaar_rename.sql -text
+sql/4416_forum_refactor.sql -text

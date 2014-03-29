@@ -54,7 +54,7 @@ class ForumTopic extends PersistentEntity {
 	 * Aantal zichtbare posts in dit topic
 	 * @var int
 	 */
-	public $aantal_posts = 0;
+	public $aantal_posts;
 	/**
 	 * Zichtbaar, verwijderd of wacht op goedkeuring
 	 * @var string
@@ -69,7 +69,7 @@ class ForumTopic extends PersistentEntity {
 	 * Plakkerig of niet
 	 * @var boolean
 	 */
-	public $sticky;
+	public $plakkerig;
 	/**
 	 * Belangrijk markering of niet
 	 * @var boolean
@@ -89,10 +89,11 @@ class ForumTopic extends PersistentEntity {
 		'laatste_post_id' => 'int(11) NOT NULL',
 		'laatste_lid_id' => 'varchar(4) NOT NULL',
 		'aantal_posts' => 'int(11) NOT NULL',
-		'status' => 'varchar(25) NOT NULL',
-		'gesloten' => 'tinyint(1) NOT NULL',
-		'sticky' => 'tinyint(1) NOT NULL',
-		'belangrijk' => 'tinyint(1) NOT NULL'
+		'gesloten' => 'boolean NOT NULL',
+		'verwijderd' => 'boolean NOT NULL',
+		'wacht_goedkeuring' => 'boolean NOT NULL',
+		'plakkerig' => 'boolean NOT NULL',
+		'belangrijk' => 'boolean NOT NULL'
 	);
 	/**
 	 * Database primary key

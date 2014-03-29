@@ -29,12 +29,12 @@ class ForumCategorie extends PersistentEntity {
 	 * Rechten benodigd voor bekijken
 	 * @var string
 	 */
-	public $zichtbaar_voor = 'P_FORUM_READ';
+	public $rechten_lezen;
 	/**
 	 * Weergave volgorde
 	 * @var int
 	 */
-	public $prioriteit = 0;
+	public $volgorde;
 	/**
 	 * Database table fields
 	 * @var array
@@ -43,8 +43,8 @@ class ForumCategorie extends PersistentEntity {
 		'categorie_id' => 'int(11) NOT NULL AUTO_INCREMENT',
 		'titel' => 'varchar(255) NOT NULL',
 		'omschrijving' => 'text NOT NULL',
-		'zichtbaar_voor' => 'varchar(25) NOT NULL',
-		'prioriteit' => 'int(11) NOT NULL'
+		'rechten_lezen' => 'varchar(255) NOT NULL',
+		'volgorde' => 'int(11) NOT NULL'
 	);
 	/**
 	 * Database primary key

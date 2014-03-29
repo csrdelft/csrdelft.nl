@@ -69,7 +69,7 @@ class CorveeFunctie extends PersistentEntity {
 		'afkorting' => 'varchar(11) NOT NULL',
 		'email_bericht' => 'text NOT NULL',
 		'standaard_punten' => 'int(11) NOT NULL',
-		'kwalificatie_benodigd' => 'tinyint(1) NOT NULL'
+		'kwalificatie_benodigd' => 'boolean NOT NULL'
 	);
 	/**
 	 * Database primary key

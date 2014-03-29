@@ -63,11 +63,11 @@ class GroepCategorie extends PersistentEntity {
 		'categorie_id' => 'int(11) NOT NULL AUTO_INCREMENT',
 		'naam' => 'varchar(255) NOT NULL',
 		'omschrijving' => 'text NOT NULL',
-		'zichtbaar' => 'tinyint(1) NOT NULL',
+		'zichtbaar' => 'boolean NOT NULL',
 		'prioriteit' => 'int(11) NOT NULL',
-		'toon_historie' => 'tinyint(1) NOT NULL',
-		'toon_profiel' => 'tinyint(1) NOT NULL',
-		'sync_ldap' => 'tinyint(1) NOT NULL',
+		'toon_historie' => 'boolean NOT NULL',
+		'toon_profiel' => 'boolean NOT NULL',
+		'sync_ldap' => 'boolean NOT NULL',
 		'schrijfrechten' => 'varchar(25) NOT NULL'
 	);
 	/**
