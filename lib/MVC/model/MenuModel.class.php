@@ -58,11 +58,7 @@ class MenuModel extends PersistenceModel {
 	}
 
 	public function getMenuItem($id) {
-		$item = $this->retrieveByPrimaryKey(array($id));
-		if (!$item) {
-			throw new Exception('Menu-item ' . $id . ' bestaat niet');
-		}
-		return $item;
+		return $this->retrieveByPrimaryKey(array($id));
 	}
 
 	public function newMenuItem($parent_id) {
@@ -75,11 +71,10 @@ class MenuModel extends PersistenceModel {
 		return $item;
 	}
 
-	public function removeMenuItem($item_id) {
+	public function removeMenuItem(MenuItem $item) {
 		$db = Database::instance();
 		try {
 			$db->beginTransaction();
-			$item = $this->getMenuItem($item_id);
 			// give new parent to otherwise future orphans
 			$properties = array('parent_id' => $item->parent_id);
 			$count = Database::sqlUpdate($this->orm_entity->getTableName(), $properties, 'parent_id = :oldid', array(':oldid' => $item->item_id));

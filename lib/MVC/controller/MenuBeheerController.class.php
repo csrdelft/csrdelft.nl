@@ -66,9 +66,10 @@ class MenuBeheerController extends AclController {
 	}
 
 	public function verwijderen($item_id) {
-		if ($this->model->removeMenuItem($item_id)) {
+		$item = $this->getMenuItem($item_id);
+		if ($this->model->removeMenuItem($item)) {
 			setMelding('Verwijderd', 1);
-			$this->view = new MenuItemView($item); //FIXME $item not set
+			$this->view = new MenuItemView($item);
 		}
 		// ReloadPage
 	}
