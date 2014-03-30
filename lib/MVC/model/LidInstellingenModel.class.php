@@ -184,7 +184,13 @@ class LidInstellingen extends PersistenceModel {
 		}
 		$instellingen = $this->find('lid_id = ?', array(LoginLid::instance()->getUid()));
 		foreach ($instellingen as $instelling) {
-			$this->setValue($instelling->module, $instelling->instelling_id, $instelling->waarde);
+			try {
+				$this->setValue($instelling->module, $instelling->instelling_id, $instelling->waarde);
+			} catch (Exception $e) {
+				if (startsWith($e->getMessage(), 'Deze instelling  bestaat niet')) {
+					$this->deleteByPrimaryKey($instelling->getValues(true));
+				}
+			}
 		}
 	}
 
