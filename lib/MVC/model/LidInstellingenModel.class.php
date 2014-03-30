@@ -199,10 +199,11 @@ class LidInstellingen extends PersistenceModel {
 				$value = $this->getValue($module, $key);
 				$properties = array('lid_id' => LoginLid::instance()->getUid(), 'module' => $module, 'instelling_id' => $key, 'waarde' => $value);
 				$where_params = array(':uid' => LoginLid::instance()->getUid(), ':module' => $module, ':id' => $key);
+				$orm = self::orm;
 				if ($this->exist($where, $where_params)) {
-					Database::sqlUpdate($this->orm_entity->getTableName(), $properties, $where, $where_params);
+					Database::sqlUpdate($orm::getTableName(), $properties, $where, $where_params);
 				} else {
-					Database::sqlInsert($this->orm_entity->getTableName(), $properties);
+					Database::sqlInsert($orm::getTableName(), $properties);
 				}
 			}
 		}
@@ -211,7 +212,8 @@ class LidInstellingen extends PersistenceModel {
 	public function setForAll($module, $key, $value) {
 		$this->setValue($module, $key, $value);
 		$properties = array('waarde' => $this->getValue($module, $key));
-		return Database::sqlUpdate($this->orm_entity->getTableName(), $properties, 'module = :module AND instelling_id = :id', array(':module' => $module, ':id' => $key));
+		$orm = self::orm;
+		return Database::sqlUpdate($orm::getTableName(), $properties, 'module = :module AND instelling_id = :id', array(':module' => $module, ':id' => $key));
 	}
 
 }
