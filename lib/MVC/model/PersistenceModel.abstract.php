@@ -11,7 +11,7 @@ require_once 'MVC/model/entity/PersistentEntity.abstract.php';
  *
  * Uses database to provide persistence.
  * Requires a static property $instance in superclass.
- * Requires an ORM class to be defined in superclass.
+ * Requires an ORM class constant to be defined in superclass.
  */
 abstract class PersistenceModel implements Persistence {
 
@@ -29,12 +29,13 @@ abstract class PersistenceModel implements Persistence {
 	private $orm_entity;
 
 	protected function __construct() {
-		require_once 'MVC/model/entity/' . static::$orm . '.class.php';
-		$this->orm_entity = new static::$orm();
+		$class = static::orm;
+		require_once 'MVC/model/entity/' . $class . '.class.php';
+		$this->orm_entity = new $class();
 	}
 
 	/**
-	 * Find existing entities with search criteria.
+	 * Find existing entities with optional search criteria.
 	 * 
 	 * @param string $criteria WHERE
 	 * @param array $criteria_params optional named parameters
@@ -45,11 +46,23 @@ abstract class PersistenceModel implements Persistence {
 	 */
 	public function find($criteria = null, array $criteria_params = array(), $orderby = null, $limit = null, $start = 0) {
 		$result = Database::sqlSelect($this->orm_entity->getFields(), $this->orm_entity->getTableName(), $criteria, $criteria_params, $orderby, $limit, $start);
-		return $result->fetchAll(PDO::FETCH_CLASS, get_class($this->orm_entity));
+		return $result->fetchAll(PDO::FETCH_CLASS, static::orm);
 	}
 
 	/**
-	 * Check if entities with search criteria exist.
+	 * Count existing entities with optional criteria.
+	 * 
+	 * @param string $criteria WHERE
+	 * @param array $criteria_params optional named parameters
+	 * @return int count
+	 */
+	public function count($criteria = null, array $criteria_params = array()) {
+		$result = Database::sqlSelect('COUNT(*)', $this->orm_entity->getTableName(), $criteria, $criteria_params);
+		return (int) $result->fetchColumn();
+	}
+
+	/**
+	 * Check if entities with optional search criteria exist.
 	 * 
 	 * @param string $criteria
 	 * @param array $criteria_params
@@ -116,7 +129,7 @@ abstract class PersistenceModel implements Persistence {
 			$where[] = $key . ' = ?';
 		}
 		$result = Database::sqlSelect($this->orm_entity->getFields(), $this->orm_entity->getTableName(), implode(' AND ', $where), $primary_key_values, 1);
-		return $result->fetchObject(get_class($this->orm_entity));
+		return $result->fetchObject(static::orm);
 	}
 
 	/**

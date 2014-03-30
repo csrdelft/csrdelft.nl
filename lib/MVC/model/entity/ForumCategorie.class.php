@@ -62,6 +62,10 @@ class ForumCategorie extends PersistentEntity {
 	 */
 	protected static $table_name = 'forum_categorien';
 
+	public function magLezen() {
+		return LoginLid::instance()->hasPermission($this->rechten_lezen);
+	}
+
 	/**
 	 * Lazy loading by foreign key.
 	 * 
@@ -69,7 +73,7 @@ class ForumCategorie extends PersistentEntity {
 	 */
 	public function getForumDelen() {
 		if (!isset($this->forum_delen)) {
-			$this->setForumDelen(ForumDelenModel::instance()->find('categorie_id = ?', array($this->categorie_id)));
+			$this->setForumDelen(ForumDelenModel::instance()->getForumDelenVoorCategorie($this->categorie_id));
 		}
 		return $this->forum_delen;
 	}

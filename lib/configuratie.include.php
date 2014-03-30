@@ -71,14 +71,14 @@ switch (constant('MODE')) {
 	case 'WEB':
 		require_once 'MVC/view/Validator.interface.php';
 		require_once 'MVC/view/TemplateView.abstract.php';
-
 		require_once 'MVC/view/Formulier.class.php';
 
 		// als er een wikiconfiguratie is en hierin is de csr-wikiauthicatie geselecteerd 
 		// dan is de sessie al gestart en zijn sommige includes niet nodig.
 		if (!(isset($conf['authtype']) AND $conf['authtype'] == 'authcsr')) {
-			// sessie starten
-			require_once 'MVC/model/PaginationModel.abstract.php';
+
+			require_once 'MVC/model/Paging.interface.php';
+			require_once 'MVC/model/PersistenceModel.abstract.php';
 			require_once 'MVC/model/LidInstellingenModel.class.php';
 
 			require_once 'MVC/view/CsrLayoutPage.class.php';
@@ -90,6 +90,7 @@ switch (constant('MODE')) {
 			require_once 'MVC/controller/AclController.abstract.php';
 			require_once('MVC/controller/AgendaController.class.php');
 
+			// sessie starten
 			// volgt de defaults van webserver Syrinx, zodat testen met een workcopy overeenkomt.
 			session_name("PHPSESSID");
 			session_set_cookie_params(1036800, '/', '', false, false);

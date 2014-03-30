@@ -64,7 +64,7 @@ class CorveeKwalificatie extends PersistentEntity {
 		echo 'getCorveeFunctie()';
 
 		if (!isset($this->corvee_functie)) {
-			$this->setCorveeFunctie(FunctiesModel::instance()->find('functie_id = ?', array($this->functie_id)));
+			$this->setCorveeFunctie(FunctiesModel::instance()->getFunctie($this->functie_id));
 		}
 		return $this->corvee_functie;
 	}

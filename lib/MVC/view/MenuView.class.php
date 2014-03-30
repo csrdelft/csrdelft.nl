@@ -1,7 +1,5 @@
 <?php
 
-require_once 'MVC/model/MenuModel.class.php';
-
 /**
  * MenuView.class.php
  * 

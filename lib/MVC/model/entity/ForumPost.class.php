@@ -5,7 +5,7 @@
  * 
  * @author P.W.G. Brussee <brussee@live.nl>
  * 
- * Een forumpost zit in een forumtopic.
+ * Een forumpost zit in een ForumDraad.
  * 
  */
 class ForumPost extends PersistentEntity {
@@ -19,7 +19,7 @@ class ForumPost extends PersistentEntity {
 	 * Deze post is van dit draadje
 	 * @var int
 	 */
-	public $topic_id;
+	public $draad_id;
 	/**
 	 * Uid van auteur
 	 * @var string
@@ -46,22 +46,27 @@ class ForumPost extends PersistentEntity {
 	 */
 	public $bewerkt_tekst;
 	/**
-	 * Zichtbaar, verwijderd of wacht op goedkeuring
-	 * @var string
+	 * Verwijderd
+	 * @var boolean
 	 */
-	public $status = 'zichtbaar';
+	public $verwijderd;
 	/**
 	 * IP adres van de auteur
 	 * @var string
 	 */
 	public $auteur_ip;
 	/**
+	 * Wacht op goedkeuring
+	 * @var boolean
+	 */
+	public $wacht_goedkeuring;
+	/**
 	 * Database table fields
 	 * @var array
 	 */
 	protected static $persistent_fields = array(
 		'post_id' => 'int(11) NOT NULL AUTO_INCREMENT',
-		'topic_id' => 'int(11) NOT NULL',
+		'draad_id' => 'int(11) NOT NULL',
 		'lid_id' => 'varchar(4) NOT NULL',
 		'tekst' => 'text NOT NULL',
 		'datum_tijd' => 'datetime NOT NULL',

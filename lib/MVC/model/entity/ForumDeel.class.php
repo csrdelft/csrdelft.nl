@@ -5,7 +5,7 @@
  * 
  * @author P.W.G. Brussee <brussee@live.nl>
  * 
- * Een deelforum zit in een forumcategorie bevat forumtopics.
+ * Een deelforum zit in een forumcategorie bevat ForumDraden.
  * 
  */
 class ForumDeel extends PersistentEntity {
@@ -46,10 +46,10 @@ class ForumDeel extends PersistentEntity {
 	 */
 	public $laatste_lid_id;
 	/**
-	 * Aantal topics in dit forum
+	 * Aantal draden in dit forum
 	 * @var int
 	 */
-	public $aantal_topics;
+	public $aantal_draden;
 	/**
 	 * Aantal zichtbare posts in dit forum
 	 * @var int
@@ -71,6 +71,11 @@ class ForumDeel extends PersistentEntity {
 	 */
 	public $volgorde;
 	/**
+	 * Forumdraden
+	 * @var ForumDraad[]
+	 */
+	private $forum_draden;
+	/**
 	 * Database table fields
 	 * @var array
 	 */
@@ -79,10 +84,10 @@ class ForumDeel extends PersistentEntity {
 		'categorie_id' => 'int(11) NOT NULL',
 		'titel' => 'varchar(255) NOT NULL',
 		'omschrijving' => 'text NOT NULL',
-		'laatst_gepost' => 'datetime NOT NULL',
-		'laatste_post_id' => 'int(11) NOT NULL',
-		'laatste_lid_id' => 'varchar(4) NOT NULL',
-		'aantal_topics' => 'int(11) NOT NULL',
+		'laatst_gepost' => 'datetime DEFAULT NULL',
+		'laatste_post_id' => 'int(11) DEFAULT NULL',
+		'laatste_lid_id' => 'varchar(4) DEFAULT NULL',
+		'aantal_draden' => 'int(11) NOT NULL',
 		'aantal_posts' => 'int(11) NOT NULL',
 		'rechten_lezen' => 'varchar(255) NOT NULL',
 		'rechten_posten' => 'varchar(255) NOT NULL',
@@ -98,5 +103,33 @@ class ForumDeel extends PersistentEntity {
 	 * @var string
 	 */
 	protected static $table_name = 'forum_delen';
+
+	public function magLezen() {
+		return LoginLid::instance()->hasPermission($this->rechten_lezen);
+	}
+
+	public function magPosten() {
+		return LoginLid::instance()->hasPermission($this->rechten_posten);
+	}
+
+	/**
+	 * Lazy loading by foreign key.
+	 * 
+	 * @return ForumDraad[]
+	 */
+	public function getForumDraden() {
+		if (!isset($this->forum_draden)) {
+			$this->setForumDraden(ForumDradenModel::instance()->getForumDradenVoorDeel($this->forum_id));
+		}
+		return $this->forum_draden;
+	}
+
+	public function hasForumDraden() {
+		return sizeof($this->getForumDraden()) > 0;
+	}
+
+	public function setForumDraden(array $forum_draden) {
+		$this->forum_draden = $forum_draden;
+	}
 
 }

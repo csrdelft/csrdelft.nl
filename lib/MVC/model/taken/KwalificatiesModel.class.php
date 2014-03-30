@@ -20,6 +20,10 @@ class KwalificatiesModel extends PersistenceModel {
 		return array_group_by('functie_id', $this->find());
 	}
 
+	public function getKwalificatiesVoorFunctie($fid) {
+		return $this->find('functie_id = ?', array($fid));
+	}
+
 	/**
 	 * Eager loading of corveefuncties.
 	 * 

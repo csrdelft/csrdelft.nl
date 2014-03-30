@@ -3,11 +3,11 @@
 try {
 
 	require_once 'configuratie.include.php';
-	require_once 'MVC/model/entity/Mail.class.php';
 
-	
+	/*
 	$mail = new Mail('brussee@live.nl','brussee@live.nl','test');
 	$mail->send();
+	
 	/*
 	$model = MededelingenModel::instance();
 
@@ -26,4 +26,3 @@ try {
 } catch (Exception $e) {
 	echo str_replace('#', '<br />#', $e); // stacktrace
 }
-?>

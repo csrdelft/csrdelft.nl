@@ -3166,6 +3166,7 @@ lib/MVC/controller/AclController.abstract.php -text
 lib/MVC/controller/AgendaController.class.php -text
 lib/MVC/controller/CmsPaginaController.class.php -text
 lib/MVC/controller/Controller.abstract.php -text
+lib/MVC/controller/ForumController.class.php -text
 lib/MVC/controller/InstellingenBeheerController.class.php -text
 lib/MVC/controller/LidInstellingenController.class.php -text
 lib/MVC/controller/MenuBeheerController.class.php -text
@@ -3180,7 +3181,7 @@ lib/MVC/model/ForumModel.class.php -text
 lib/MVC/model/InstellingenModel.class.php -text
 lib/MVC/model/LidInstellingenModel.class.php -text
 lib/MVC/model/MenuModel.class.php -text
-lib/MVC/model/PaginationModel.abstract.php -text
+lib/MVC/model/Paging.interface.php -text
 lib/MVC/model/Persistence.interface.php -text
 lib/MVC/model/PersistenceModel.abstract.php -text
 lib/MVC/model/entity/AgendaItem.class.php -text
@@ -3191,9 +3192,9 @@ lib/MVC/model/entity/CorveeFunctie.class.php -text
 lib/MVC/model/entity/CorveeKwalificatie.class.php -text
 lib/MVC/model/entity/ForumCategorie.class.php -text
 lib/MVC/model/entity/ForumDeel.class.php -text
+lib/MVC/model/entity/ForumDraad.class.php -text
+lib/MVC/model/entity/ForumDraadGelezen.class.php -text
 lib/MVC/model/entity/ForumPost.class.php -text
-lib/MVC/model/entity/ForumTopic.class.php -text
-lib/MVC/model/entity/ForumTopicGelezen.class.php -text
 lib/MVC/model/entity/Groep.abstract.php -text
 lib/MVC/model/entity/GroepCategorie.class.php -text
 lib/MVC/model/entity/GroepLid.class.php -text
@@ -3215,6 +3216,7 @@ lib/MVC/view/CsrSmarty.class.php -text
 lib/MVC/view/CsrUbb.class.php -text
 lib/MVC/view/FormElement.abstract.php -text
 lib/MVC/view/Formulier.class.php -text
+lib/MVC/view/ForumView.class.php -text
 lib/MVC/view/HtmlPage.abstract.php -text
 lib/MVC/view/InstellingenBeheerView.class.php -text
 lib/MVC/view/LidInstellingenView.class.php -text
@@ -3940,6 +3942,7 @@ lib/templates/MVC/agenda/icalendar.tpl -text
 lib/templates/MVC/agenda/maand.tpl -text
 lib/templates/MVC/agenda/maand_item.tpl -text
 lib/templates/MVC/agenda/zijbalk.tpl -text
+lib/templates/MVC/forum/start.tpl -text
 lib/templates/MVC/instellingen/beheer/instelling_row.tpl -text
 lib/templates/MVC/instellingen/beheer/instellingen_page.tpl -text
 lib/templates/MVC/instellingen/lidinstelling.tpl -text

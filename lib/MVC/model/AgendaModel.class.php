@@ -13,8 +13,9 @@ require_once 'taken/model/TakenModel.class.php';
  */
 class AgendaModel extends PersistenceModel {
 
+	const orm = 'AgendaItem';
+
 	protected static $instance;
-	protected static $orm = 'AgendaItem';
 
 	public function getAllAgendeerbaar($van, $tot) {
 		$result = array();

@@ -73,6 +73,7 @@ abstract class SimpleHTML implements View {
 			require_once('mededelingen/mededelingencontent.class.php');
 			$zijkolom[] = new MededelingenZijbalkContent(LidInstellingen::get('zijbalk', 'mededelingen'));
 		}
+		/* TODO
 		// Nieuwste belangrijke forumberichten
 		if (LidInstellingen::get('zijbalk', 'forum_belangrijk') >= 0) {
 			require_once 'forum/forumcontent.class.php';
@@ -88,6 +89,7 @@ abstract class SimpleHTML implements View {
 			require_once 'forum/forumcontent.class.php';
 			$zijkolom[] = new ForumContent('lastposts_zelf');
 		}
+		*/
 		// Nieuwste fotoalbum
 		if (LidInstellingen::get('zijbalk', 'fotoalbum') == 'ja') {
 			require_once 'fotoalbumcontent.class.php';

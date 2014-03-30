@@ -8,8 +8,9 @@
  */
 class Instellingen extends PersistenceModel {
 
+	const orm = 'Instelling';
+
 	protected static $instance;
-	protected static $orm = 'Instelling';
 
 	public static function has($module, $key) {
 		return array_key_exists($module, static::instance()->instellingen) AND is_array(static::instance()->instellingen[$module]) AND array_key_exists($key, static::instance()->instellingen[$module]);

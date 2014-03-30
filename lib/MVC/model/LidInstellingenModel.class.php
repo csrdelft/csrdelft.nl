@@ -12,8 +12,9 @@ require_once 'MVC/model/InstellingenModel.class.php';
  */
 class LidInstellingen extends PersistenceModel {
 
+	const orm = 'LidInstelling';
+
 	protected static $instance;
-	protected static $orm = 'LidInstelling';
 
 	public static function get($module, $key = null) {
 		if ($key === null) { // backwards compatibility
@@ -48,6 +49,8 @@ class LidInstellingen extends PersistenceModel {
 			'minion' => array('Minion', 'enum', array('ja', 'nee'), 'nee')
 		),
 		'forum' => array(
+			'draden_per_pagina' => array('Draadjes per pagina', 'int', array(5, 100), 15),
+			'posts_per_pagina' => array('Berichten per pagina', 'int', array(5, 100), 15),
 			'onderwerpenPerPagina' => array('Onderwerpen per pagina', 'int', array(5, 100), 15),
 			'postsPerPagina' => array('Berichten per pagina', 'int', array(10, 100), 25),
 			'naamWeergave' => array('Naamweergave', 'enum', array('civitas', 'volledig', 'bijnaam', 'aaidrom'), 'civitas'),

@@ -10,8 +10,9 @@
  */
 class CmsPaginaModel extends PersistenceModel {
 
+	const orm = 'CmsPagina';
+
 	protected static $instance;
-	protected static $orm = 'CmsPagina';
 
 	public function getAllePaginas() {
 		$paginas = $this->find(null, array(), 'titel ASC');

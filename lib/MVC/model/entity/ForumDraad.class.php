@@ -1,20 +1,20 @@
 <?php
 
 /**
- * ForumTopic.class.php
+ * ForumDraad.class.php
  * 
  * @author P.W.G. Brussee <brussee@live.nl>
  * 
- * Een forumtopic zit in een deelforum en bevat forumposts.
+ * Een ForumDraad zit in een deelforum en bevat forumposts.
  * 
  */
-class ForumTopic extends PersistentEntity {
+class ForumDraad extends PersistentEntity {
 
 	/**
 	 * Primary key
 	 * @var int
 	 */
-	public $topic_id;
+	public $draad_id;
 	/**
 	 * Forum waaronder dit topic valt
 	 * @var int
@@ -56,31 +56,41 @@ class ForumTopic extends PersistentEntity {
 	 */
 	public $aantal_posts;
 	/**
-	 * Zichtbaar, verwijderd of wacht op goedkeuring
-	 * @var string
-	 */
-	public $status;
-	/**
-	 * Open of gesloten
+	 * Gesloten (posten niet meer mogelijk)
 	 * @var boolean
 	 */
 	public $gesloten;
 	/**
-	 * Plakkerig of niet
+	 * Verwijderd
+	 * @var boolean
+	 */
+	public $verwijderd;
+	/**
+	 * Wacht op goedkeuring
+	 * @var boolean
+	 */
+	public $wacht_goedkeuring;
+	/**
+	 * Plakkerig (altijd bovenaan weergeven)
 	 * @var boolean
 	 */
 	public $plakkerig;
 	/**
-	 * Belangrijk markering of niet
+	 * Belangrijk markering
 	 * @var boolean
 	 */
 	public $belangrijk;
+	/**
+	 * Forumposts
+	 * @var ForumPost[]
+	 */
+	private $forum_posts;
 	/**
 	 * Database table fields
 	 * @var array
 	 */
 	protected static $persistent_fields = array(
-		'topic_id' => 'int(11) NOT NULL AUTO_INCREMENT',
+		'draad_id' => 'int(11) NOT NULL AUTO_INCREMENT',
 		'forum_id' => 'int(11) NOT NULL',
 		'lid_id' => 'varchar(4) NOT NULL',
 		'titel' => 'varchar(255) NOT NULL',
@@ -99,11 +109,31 @@ class ForumTopic extends PersistentEntity {
 	 * Database primary key
 	 * @var array
 	 */
-	protected static $primary_key = array('topic_id');
+	protected static $primary_key = array('draad_id');
 	/**
 	 * Database table name
 	 * @var string
 	 */
-	protected static $table_name = 'forum_topics';
+	protected static $table_name = 'forum_draden';
+
+	/**
+	 * Lazy loading by foreign key.
+	 * 
+	 * @return ForumPost[]
+	 */
+	public function getForumPosts() {
+		if (!isset($this->forum_posts)) {
+			$this->setForumPosts(ForumPostsModel::instance()->getForumPostsVoorDraad($this->draad_id));
+		}
+		return $this->forum_posts;
+	}
+
+	public function hasForumPosts() {
+		return sizeof($this->getForumPosts()) > 0;
+	}
+
+	public function setForumPosts(array $forum_posts) {
+		$this->forum_posts = $forum_posts;
+	}
 
 }
