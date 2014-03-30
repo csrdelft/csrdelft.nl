@@ -14,6 +14,10 @@ and open the template in the editor.
 	overflow-x: hidden;
 }
 
+#menuright {
+	margin-right: 20px;
+}
+
 #submenuitems {
 	width: 966px;
 }
@@ -27,6 +31,7 @@ and open the template in the editor.
 	float: left;
 	display: inline;
 	padding-left: 200px;
+	margin-right: 20px;
 	width: auto !important;
 }
 
