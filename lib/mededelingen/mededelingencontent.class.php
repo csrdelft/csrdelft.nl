@@ -103,19 +103,12 @@ class MededelingenContent extends TemplateView {
 
 class MededelingenZijbalkContent extends TemplateView {
 
-	private $aantal;
-
-	public function __construct($aantal) {
-		parent::__construct();
-		$this->aantal = (int) $aantal;
-	}
-
 	public function view() {
 		// Handige variabelen.
 		$this->smarty->assign('mededelingenRoot', MededelingenContent::mededelingenRoot);
 
 		// De laatste n mededelingen ophalen en meegeven aan $this.
-		$mededelingen = Mededeling::getLaatsteMededelingen($this->aantal);
+		$mededelingen = Mededeling::getLaatsteMededelingen($this->model);
 		$this->smarty->assign('mededelingen', $mededelingen);
 
 		$this->smarty->display('mededelingen/mededelingenzijbalk.tpl');

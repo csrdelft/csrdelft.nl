@@ -40,27 +40,35 @@ abstract class Controller {
 	 */
 	private $kvp;
 
-	/**
-	 * TODO: required $model
-	 * @param string $query
-	 * @param Model $model
-	 */
-	public function __construct($query, $model = null) {
+	public function __construct($query, PersistenceModel $model = null) {
 		$this->model = $model;
+		// strip anchor off
+		$anchor = strpos($query, '#');
+		if ($anchor) {
+			$anchor = explode('#', $query, 2);
+			$query = $anchor[0];
+		}
+		// strip KVP off
 		$mark = strpos($query, '?');
 		if ($mark) {
 			$rest = substr($query, 0, $mark);
 		} else {
 			$rest = $query;
 		}
+		// parse REST
 		$rest = explode('/', $rest);
 		$this->queryparts = $rest; // add REST params
+		// parse KVP
 		if ($mark) {
 			$mark = explode('&', substr($query, $mark));
 			foreach ($mark as $key => $value) {
 				$this->queryparts[$key] = explode('=', $value); // add KVP params
 			}
 			$this->kvp = true;
+		}
+		// parse anchor
+		if ($anchor) {
+			$this->queryparts['#'] = $anchor[1];
 		}
 	}
 

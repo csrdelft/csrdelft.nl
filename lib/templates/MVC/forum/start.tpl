@@ -1,7 +1,7 @@
 <form id="forum_zoeken" action="/communicatie/forum/zoeken.php" method="post"><fieldset><input type="text" name="zoeken" value="zoeken in forum" onfocus="this.value = '';" /></fieldset></form>
 
 <div class="forumNavigatie">
-	<h1 style="width: 200px;">Forum</h1>
+	<h1>Forum</h1>
 </div>
 {$view->getMelding()}
 
@@ -31,10 +31,8 @@
 							{else}
 								{$deel->laatst_gepost}
 							{/if}
-							<br /><a href="/forumpost/{$deel->laatste_post_id}">bericht</a> 
+							<br /><a href="/forumdraad/{$deel->laatste_draad_id}#{$deel->laatste_post_id}">bericht</a> 
 							door {$deel->laatste_lid_id|csrnaam:'user'}
-						{else}
-							nog geen berichten
 						{/if}
 					</td>
 				</tr>

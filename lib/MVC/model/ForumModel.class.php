@@ -27,14 +27,6 @@ class ForumModel extends PersistenceModel {
 				}
 			}
 		}
-		if (count($delen) > 0) {
-			$cat = new ForumCategorie();
-			$cat->titel = 'Zonder categorie';
-			$cat->omschrijving = 'onzichtbaar voor gebruikers';
-			$cat->rechten_lezen = 'P_FORUM_MOD';
-			$cat->setForumDelen($delen[0]);
-			$categorien[] = $cat;
-		}
 		return $categorien;
 	}
 
@@ -62,6 +54,10 @@ class ForumDelenModel extends PersistenceModel {
 
 	public function bestaatForumDeel($id) {
 		return $this->existsByPrimaryKey(array($id));
+	}
+
+	public function getForumDeel($id) {
+		return $this->retrieveByPrimaryKey(array($id));
 	}
 
 }
@@ -97,11 +93,11 @@ class ForumDradenModel extends PersistenceModel implements Paging {
 	}
 
 	public function getAantalPaginas($forum_id) {
-		return ceil($this->count('forum_id = ?', array($forum_id)) / $this->per_pagina);
+		return ceil($this->count('forum_id = ? AND wacht_goedkeuring = FALSE AND verwijderd = FALSE', array($forum_id)) / $this->per_pagina);
 	}
 
 	public function getForumDradenVoorDeel($forum_id) {
-		return $this->find('forum_id = ?', array($forum_id), 'laatst_gepost', $this->per_pagina, $this->pagina * $this->per_pagina);
+		return $this->find('forum_id = ?  AND wacht_goedkeuring = FALSE AND verwijderd = FALSE', array($forum_id), 'laatst_gepost', $this->per_pagina, $this->pagina * $this->per_pagina);
 	}
 
 	public function getForumDraad($id) {
@@ -115,7 +111,7 @@ class ForumDradenModel extends PersistenceModel implements Paging {
 	}
 
 	/**
-	 * forum_id / titel / gesloten / plakkerig / belangrijk
+	 * Wijzig property van forumdraad.
 	 * 
 	 * @param int $id
 	 * @param string $property
@@ -124,8 +120,8 @@ class ForumDradenModel extends PersistenceModel implements Paging {
 	 */
 	public function wijzigForumDraad($id, $property, $value) {
 		$draad = $this->getForumDraad($id);
-		if (!in_array($property, array('forum_id', 'titel', 'gesloten', 'plakkerig', 'belangrijk'))) {
-			throw new Exception('Unsupported');
+		if (!property_exists($draad, $property)) {
+			throw new Exception('Property undefined: ' . $property);
 		}
 		if ($property === 'forum_id' AND !ForumDelenModel::instance()->bestaatForumDeel($value)) {
 			throw new Exception('Forum bestaat niet!');
@@ -160,7 +156,9 @@ class ForumPostsModel extends PersistenceModel implements Paging {
 	}
 
 	public function setHuidigePagina($number) {
-		$this->pagina = $number;
+		if ($number > 0) {
+			$this->pagina = ceil($number);
+		}
 	}
 
 	public function getAantalPerPagina() {
@@ -168,11 +166,16 @@ class ForumPostsModel extends PersistenceModel implements Paging {
 	}
 
 	public function getAantalPaginas($draad_id) {
-		return ceil($this->count('draad_id = ? AND verwijderd = FALSE AND wacht_goedkeuring = FALSE', array($draad_id)) / $this->per_pagina);
+		return ceil($this->count('draad_id = ? AND wacht_goedkeuring = FALSE AND verwijderd = FALSE', array($draad_id)) / $this->per_pagina);
 	}
 
 	public function getForumPostsVoorDraad($draad_id) {
-		return $this->find('draad_id = ?', array($draad_id), null, $this->per_pagina, $this->pagina * $this->per_pagina);
+		return $this->find('draad_id = ? AND wacht_goedkeuring = FALSE AND verwijderd = FALSE', array($draad_id), null, $this->per_pagina, $this->pagina * $this->per_pagina);
+	}
+
+	public function getPaginaVoorPost(ForumPost $post) {
+		$count = $this->count('draad_id = ? AND post_id < ? AND wacht_goedkeuring = FALSE AND verwijderd = FALSE', array($post->draad_id, $post->post_id));
+		return ceil($count / $this->per_pagina);
 	}
 
 	public function getForumPost($id) {

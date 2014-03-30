@@ -26,8 +26,9 @@ abstract class TemplateView implements View {
 	protected $smarty;
 
 	/**
-	 * TODO: required $model
-	 * @param Model $model
+	 * TODO: verplicht $model.
+	 * 
+	 * @param mixed $model
 	 */
 	public function __construct($model = null) {
 		$this->model = $model;

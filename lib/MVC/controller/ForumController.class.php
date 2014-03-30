@@ -13,33 +13,87 @@ require_once 'MVC/view/ForumView.class.php';
 class ForumController extends Controller {
 
 	public function __construct($query) {
-		parent::__construct($query, ForumModel::instance());
-		$this->action = 'start';
-		if ($this->hasParam(2)) {
-			$this->action = $this->getParam(2);
-			if ($this->action === 'calendar.ics') {
-				$this->action = 'icalendar';
-				header("Content-Type: text/calendar");
-				header('Content-Disposition: attachment; filename="calendar.ics"');
-			}
+		str_replace('forum/', 'forum', $query);
+		str_replace('#post', '#', $query);
+		parent::__construct($query);
+		$this->action = $this->getParam(1);
+		if ($this->hasParam('#')) {
+			$this->action = 'post';
 		}
-		$this->performAction($this->getParams(3));
+		$this->performAction($this->getParams(2));
 	}
 
 	protected function hasPermission() {
-		return true; // check permissions for actions on forum-categorie & forum-deel
+		return true; // check permissions & valid params in actions
 	}
 
 	/**
 	 * Overzicht met categorien en forumdelen laten zien.
 	 */
-	public function start() {
-		$body = new ForumView($this->model->getForum());
+	public function forum() {
+		$body = new ForumView(ForumModel::instance()->getForum());
 		$this->view = new CsrLayoutPage($body);
 		$this->view->addStylesheet('forum.css');
 	}
 
+	/**
+	 * Deelforum laten zien met draadjes in tabel.
+	 * 
+	 * @param int $id
+	 */
+	public function forumdeel($id) {
+		$deel = ForumDelenModel::instance()->getForumDeel((int) $id);
+		if (!$deel OR !$deel->magLezen()) {
+			$this->geentoegang();
+		}
+		$body = new ForumDeelView($deel);
+		$this->view = new CsrLayoutPage($body);
+		$this->view->addStylesheet('forum.css');
+	}
+
+	/**
+	 * Forumdraadje laten zien met alle (zichtbare) posts.
+	 * 
+	 * @param int $id
+	 */
+	public function forumdraad($id, $pagina = 1) {
+		$draad = ForumDradenModel::instance()->getForumDraad((int) $id);
+		if (!$draad) {
+			$this->geentoegang();
+		}
+		ForumDradenModel::instance()->setHuidigePagina((int) $pagina);
+		$deel = ForumDelenModel::instance()->getForumDeel($draad->forum_id);
+		if (!$deel->magLezen()) {
+			$this->geentoegang();
+		}
+		$body = new ForumDraadView($draad, $deel);
+		$this->view = new CsrLayoutPage($body);
+		$this->view->addStylesheet('forum.css');
+		$this->view->addScript('forum.js');
+	}
+
+	/**
+	 * Forumdraadje laten zien van de post.
+	 * 
+	 * @param int $draad_id unused
+	 */
+	public function forumpost($draad_id = null) {
+		$post = ForumPostsModel::instance()->getForumPost((int) $this->getParam('#'));
+		if (!$post) {
+			$this->geentoegang();
+		}
+		$pagina = ForumPostsModel::instance()->getPaginaVoorPost($post);
+		$this->draad($post->draad_id, $pagina);
+	}
+
 //TODO
+
+	public function forumdraadwijzig($id, $property, $value) {
+		if (!in_array($property, array('forum_id', 'titel', 'gesloten', 'plakkerig', 'belangrijk'))) {
+			$this->geentoegang();
+		}
+		$this->model->wijzigForumDraad($id, $property, $value);
+	}
 
 	public function toevoegen($datum = '', $doorgaan = true) {
 		$item = $this->model->newForumItem($datum);

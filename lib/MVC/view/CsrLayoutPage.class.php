@@ -16,11 +16,6 @@ require_once 'MVC/model/DragObjectModel.class.php';
 class CsrLayoutPage extends HtmlPage {
 
 	/**
-	 * Inhoud
-	 * @var View
-	 */
-	public $body;
-	/**
 	 * Zijkolom
 	 * @var SimpleHTML[]
 	 */
@@ -32,8 +27,7 @@ class CsrLayoutPage extends HtmlPage {
 	public $popup;
 
 	function __construct(View $body, array $zijkolom = array(), $popup = null) {
-		parent::__construct();
-		$this->body = $body;
+		parent::__construct($body);
 		$this->zijkolom = $zijkolom;
 		$this->popup = $popup;
 
@@ -99,7 +93,7 @@ class CsrLayoutPage extends HtmlPage {
 		}
 
 		$this->smarty->assign('mainmenu', new MainMenuView(MenuModel::instance()->getMenuTree('main')));
-		$this->smarty->assign('body', $this->body);
+		$this->smarty->assign('body', $this->model);
 		$this->smarty->assign('zijkolom', $this->zijkolom);
 		$this->smarty->assign('popup', $this->popup);
 		$top = 180;

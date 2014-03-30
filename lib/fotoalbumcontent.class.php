@@ -14,30 +14,27 @@ define('USED', 'USED');
 
 class FotalbumZijbalkContent extends TemplateView {
 
-	private $album;
-
 	public function __construct() {
-		parent::__construct();
-		$this->album = new Fotoalbum('', '');
-		$this->album = $this->album->getMostrecentSubAlbum();
+		parent::__construct(new Fotoalbum('', ''));
+		$this->model = $this->model->getMostrecentSubAlbum();
 	}
 
 	public function view() {
 		echo '<div id="zijbalk_fotoalbum">';
 		echo '<h1><a href="/actueel/fotoalbum/">Laatste fotoalbum</a></h1>';
 		echo '<div class="item">';
-		echo '<a href="/actueel/fotoalbum/' . $this->album->getPad() . '">';
-		echo $this->album->getNaam();
+		echo '<a href="/actueel/fotoalbum/' . $this->model->getPad() . '">';
+		echo $this->model->getNaam();
 		echo '</a>';
 
 		echo '<div class="fotos">';
-		$fotos = $this->album->getFotos();
+		$fotos = $this->model->getFotos();
 		$limit = sizeof($fotos);
 		if ($limit > 6) {
 			$limit = 6;
 		}
 
-		$url = $this->album->getPad();
+		$url = $this->model->getPad();
 		for ($i = 0; $i < $limit; $i++) {
 			$foto = $fotos[$i];
 			if ($foto instanceof Foto) {
@@ -252,12 +249,10 @@ class FotoalbumUbbContent extends TemplateView {
 
 class FotoalbumContent extends TemplateView {
 
-	private $_fotoalbum;
 	private $actie;
 
-	public function __construct($fotoalbum) {
-		parent::__construct();
-		$this->_fotoalbum = $fotoalbum;
+	public function __construct(Fotoalbum $fotoalbum) {
+		parent::__construct($fotoalbum);
 	}
 
 	function getTitel() {
@@ -272,7 +267,7 @@ class FotoalbumContent extends TemplateView {
 		switch ($this->actie) {
 			case 'album':
 
-				$this->smarty->assign('album', $this->_fotoalbum);
+				$this->smarty->assign('album', $this->model);
 				$this->smarty->display('fotoalbum/album.tpl');
 				break;
 

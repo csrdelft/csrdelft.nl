@@ -57,9 +57,9 @@ abstract class PersistentEntity {
 		foreach (static::$persistent_fields as $field => $type) {
 			if (startsWith($type, 'int')) {
 				$this->$field = (int) $this->$field;
-			} else if (startsWith($type, 'boolean')) {
+			} elseif (startsWith($type, 'boolean')) {
 				$this->$field = (boolean) $this->$field;
-			} else if ($this->$field === null AND strpos($type, 'NOT NULL')) {
+			} elseif ($this->$field === null AND strpos($type, 'NOT NULL')) {
 				$this->$field = '';
 			}
 		}

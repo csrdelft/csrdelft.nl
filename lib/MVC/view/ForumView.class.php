@@ -35,9 +35,10 @@ class ForumDeelView extends TemplateView {
 
 class ForumDraadView extends TemplateView {
 
-	public function __construct(ForumDraad $draad) {
+	public function __construct(ForumDraad $draad, ForumDeel $deel) {
 		parent::__construct($draad);
 		$this->smarty->assign('draad', $this->model);
+		$this->smarty->assign('deel', $deel);
 	}
 
 	public function view() {

@@ -71,7 +71,7 @@ abstract class SimpleHTML implements View {
 		if (LidInstellingen::get('zijbalk', 'mededelingen') > 0) {
 			require_once('mededelingen/mededeling.class.php');
 			require_once('mededelingen/mededelingencontent.class.php');
-			$zijkolom[] = new MededelingenZijbalkContent(LidInstellingen::get('zijbalk', 'mededelingen'));
+			$zijkolom[] = new MededelingenZijbalkContent((int) LidInstellingen::get('zijbalk', 'mededelingen'));
 		}
 		/* TODO
 		// Nieuwste belangrijke forumberichten

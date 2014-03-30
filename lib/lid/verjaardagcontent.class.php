@@ -10,26 +10,13 @@
 require_once 'lid/verjaardag.class.php';
 
 class VerjaardagContent extends TemplateView {
-	### private ###
-	# de objecten die data leveren
-
-	var $_lid;
-	var $_actie;
-
-	### public ###
-
-	function VerjaardagContent($actie) {
-		parent::__construct();
-		$this->_lid = LoginLid::instance();
-		$this->_actie = $actie;
-	}
 
 	function getTitel() {
 		return 'Verjaardagen';
 	}
 
 	function view() {
-		switch ($this->_actie) {
+		switch ($this->model) {
 			case 'alleverjaardagen':
 				echo '<ul class="horizontal nobullets">
 						<li>
@@ -108,7 +95,7 @@ class VerjaardagContent extends TemplateView {
 				}
 
 				echo '<div id="zijbalk_verjaardagen"><h1>';
-				if ($this->_lid->hasPermission('P_LEDEN_READ')) {
+				if (LoginLid::instance()->hasPermission('P_LEDEN_READ')) {
 					echo '<a href="/communicatie/verjaardagen">Verjaardagen</a>';
 				} else {
 					echo 'Verjaardagen';

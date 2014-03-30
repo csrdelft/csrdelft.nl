@@ -36,8 +36,13 @@ class ForumDeel extends PersistentEntity {
 	 */
 	public $laatst_gepost;
 	/**
+	 * Id van de draad waarin het laatst is gepost
+	 * @var int
+	 */
+	public $laatste_draad_id;
+	/**
 	 * Id van de laatst geplaatste post
-	 * @var string
+	 * @var int
 	 */
 	public $laatste_post_id;
 	/**
@@ -66,6 +71,11 @@ class ForumDeel extends PersistentEntity {
 	 */
 	public $rechten_posten;
 	/**
+	 * Rechten benodigd voor modereren
+	 * @var string
+	 */
+	public $rechten_modereren;
+	/**
 	 * Weergave volgorde
 	 * @var int
 	 */
@@ -85,12 +95,14 @@ class ForumDeel extends PersistentEntity {
 		'titel' => 'varchar(255) NOT NULL',
 		'omschrijving' => 'text NOT NULL',
 		'laatst_gepost' => 'datetime DEFAULT NULL',
+		'laatste_draad_id' => 'int(11) DEFAULT NULL',
 		'laatste_post_id' => 'int(11) DEFAULT NULL',
 		'laatste_lid_id' => 'varchar(4) DEFAULT NULL',
 		'aantal_draden' => 'int(11) NOT NULL',
 		'aantal_posts' => 'int(11) NOT NULL',
 		'rechten_lezen' => 'varchar(255) NOT NULL',
 		'rechten_posten' => 'varchar(255) NOT NULL',
+		'rechten_modereren' => 'varchar(255) NOT NULL',
 		'volgorde' => 'int(11) NOT NULL'
 	);
 	/**
@@ -110,6 +122,10 @@ class ForumDeel extends PersistentEntity {
 
 	public function magPosten() {
 		return LoginLid::instance()->hasPermission($this->rechten_posten);
+	}
+
+	public function magModereren() {
+		return LoginLid::instance()->hasPermission($this->rechten_modereren);
 	}
 
 	/**

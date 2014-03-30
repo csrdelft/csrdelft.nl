@@ -11,11 +11,6 @@
 class CsrLayout2Page extends HtmlPage {
 
 	/**
-	 * Inhoud
-	 * @var View
-	 */
-	public $body;
-	/**
 	 * Content template
 	 * @var string
 	 */
@@ -27,8 +22,7 @@ class CsrLayout2Page extends HtmlPage {
 	public $menutmpl;
 
 	function __construct(View $body, $template = 'content', $menu = '') {
-		parent::__construct();
-		$this->body = $body;
+		parent::__construct($body);
 		$this->tmpl = $template;
 		$this->menutmpl = $menu;
 
@@ -51,7 +45,7 @@ class CsrLayout2Page extends HtmlPage {
 		if ($this->menutmpl !== '') {
 			$this->smarty->assign('menutpl', $this->menutmpl);
 		}
-		$this->smarty->assign('body', $this->body);
+		$this->smarty->assign('body', $this->model);
 		$top = 180;
 		$left = 10;
 		DragObjectModel::getCoords('ubbhulpverhaal', $top, $left);

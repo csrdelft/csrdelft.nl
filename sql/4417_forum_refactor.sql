@@ -116,3 +116,34 @@ ALTER TABLE `forum_draden` CHANGE `laatste_lid_id` `laatste_lid_id` VARCHAR( 4 )
 ALTER TABLE `forum_delen` CHANGE `laatst_gepost` `laatst_gepost` DATETIME NULL DEFAULT NULL ;
 ALTER TABLE `forum_delen` CHANGE `laatste_post_id` `laatste_post_id` INT( 11 ) NULL DEFAULT NULL ;
 ALTER TABLE `forum_delen` CHANGE `laatste_lid_id` `laatste_lid_id` VARCHAR( 4 ) NULL DEFAULT NULL ;
+
+ALTER TABLE `forum_delen` ADD `laatste_draad_id` INT NOT NULL AFTER `laatst_gepost` ;
+ALTER TABLE `forum_delen` CHANGE `laatste_draad_id` `laatste_draad_id` INT( 11 ) NULL DEFAULT NULL ;
+UPDATE forum_delen d INNER JOIN forum_posts p ON d.laatste_post_id = p.post_id SET d.laatste_draad_id = p.draad_id;
+
+ALTER TABLE `forum_delen` ADD `rechten_modereren` VARCHAR( 255 ) NOT NULL DEFAULT 'P_FORUM_MOD' AFTER `rechten_posten` ;
+ALTER TABLE `forum_delen` CHANGE `rechten_modereren` `rechten_modereren` VARCHAR( 255 ) NOT NULL ;
+
+-- 
+-- SELECT * FROM forum_draden d LEFT JOIN forum_delen f ON d.forum_id = f.forum_id WHERE f.forum_id IS NULL ;
+-- 
+-- SELECT * FROM forum_posts p LEFT JOIN forum_draden d ON p.draad_id = d.draad_id WHERE d.draad_id IS NULL ;
+-- 
+
+DELETE FROM `forum_delen` WHERE titel = 'SEPARATOR';
+DELETE FROM forum_draden WHERE forum_id NOT IN ( SELECT DISTINCT forum_id FROM forum_delen );
+DELETE FROM forum_posts WHERE draad_id NOT IN ( SELECT DISTINCT draad_id FROM forum_draden );
+DELETE FROM forum_draden_gelezen WHERE draad_id NOT IN ( SELECT DISTINCT draad_id FROM forum_draden );
+
+INSERT INTO `csrdelft`.`forum_categorien` (`categorie_id` ,`titel` ,`omschrijving` ,`rechten_lezen` ,`volgorde`) VALUES ('0', 'Zonder categorie', 'onzichtbaar voor gebruikers', 'P_FORUM_MOD', '0');
+UPDATE `csrdelft`.`forum_categorien` SET `categorie_id` = '0' WHERE `forum_categorien`.`categorie_id` =1;
+ALTER TABLE `forum_categorien` AUTO_INCREMENT =1;
+
+ALTER TABLE `forum_posts`
+  ADD CONSTRAINT `forum_posts_ibfk_1` FOREIGN KEY (`draad_id`) REFERENCES `forum_draden` (`draad_id`);
+ALTER TABLE `forum_draden`
+  ADD CONSTRAINT `forum_draden_ibfk_1` FOREIGN KEY (`forum_id`) REFERENCES `forum_delen` (`forum_id`);
+ALTER TABLE `forum_delen`
+  ADD CONSTRAINT `forum_delen_ibfk_1` FOREIGN KEY (`categorie_id`) REFERENCES `forum_categorien` (`categorie_id`);
+ALTER TABLE `forum_draden_gelezen`
+  ADD CONSTRAINT `forum_draden_gelezen_ibfk_1` FOREIGN KEY (`draad_id`) REFERENCES `forum_draden` (`draad_id`);
