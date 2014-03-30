@@ -36,10 +36,10 @@ class ForumDraad extends PersistentEntity {
 	 */
 	public $datum_tijd;
 	/**
-	 * Datum en tijd van laatst geplaatste post
+	 * Datum en tijd van laatst geplaatste of gewijzigde post
 	 * @var string
 	 */
-	public $laatst_gepost;
+	public $laatst_gewijzigd;
 	/**
 	 * Id van de laatst geplaatste post
 	 * @var string
@@ -86,6 +86,11 @@ class ForumDraad extends PersistentEntity {
 	 */
 	private $forum_posts;
 	/**
+	 * Moment gelezen door gebruiker
+	 * @var string
+	 */
+	private $wanneer_gelezen;
+	/**
 	 * Database table fields
 	 * @var array
 	 */
@@ -95,7 +100,7 @@ class ForumDraad extends PersistentEntity {
 		'lid_id' => 'varchar(4) NOT NULL',
 		'titel' => 'varchar(255) NOT NULL',
 		'datum_tijd' => 'datetime NOT NULL',
-		'laatst_gepost' => 'datetime NOT NULL',
+		'laatst_gewijzigd' => 'datetime NOT NULL',
 		'laatste_post_id' => 'int(11) NOT NULL',
 		'laatste_lid_id' => 'varchar(4) NOT NULL',
 		'aantal_posts' => 'int(11) NOT NULL',
@@ -134,6 +139,29 @@ class ForumDraad extends PersistentEntity {
 
 	public function setForumPosts(array $forum_posts) {
 		$this->forum_posts = $forum_posts;
+	}
+
+	/**
+	 * Lazy loading by foreign key.
+	 * 
+	 * @return string
+	 */
+	public function getWanneerGelezen() {
+		if (!isset($this->wanneer_gelezen)) {
+			$this->setWanneerGelezen(ForumDraadGelezenModel::instance()->getWanneerGelezenDoorLid($this));
+		}
+		return $this->wanneer_gelezen;
+	}
+
+	public function alGelezen() {
+		if (strtotime($this->laatst_gewijzigd) < strtotime($this->getWanneerGelezen())) {
+			return true;
+		}
+		return false;
+	}
+
+	public function setWanneerGelezen($moment) {
+		$this->wanneer_gelezen = $moment;
 	}
 
 }

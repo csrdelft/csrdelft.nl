@@ -12,6 +12,11 @@ class ForumModel extends PersistenceModel {
 
 	protected static $instance;
 
+	/**
+	 * Eager loading of ForumDeel[].
+	 * 
+	 * @return ForumCategorie[]
+	 */
 	public function getForum() {
 		$delen = ForumDelenModel::instance()->getAlleForumDelenPerCategorie();
 		$categorien = $this->find(null, array(), 'volgorde');
@@ -28,6 +33,10 @@ class ForumModel extends PersistenceModel {
 			}
 		}
 		return $categorien;
+	}
+
+	public function getCategorie($id) {
+		return $this->retrieveByPrimaryKey(array($id));
 	}
 
 }
@@ -58,6 +67,36 @@ class ForumDelenModel extends PersistenceModel {
 
 	public function getForumDeel($id) {
 		return $this->retrieveByPrimaryKey(array($id));
+	}
+
+}
+
+class ForumDraadGelezenModel extends PersistenceModel {
+
+	const orm = 'ForumDraadGelezen';
+
+	protected static $instance;
+
+	/**
+	 * Laadt voor elke forumdraad wanneer de gebruiker
+	 * deze voor het laatst gelezen heeft.
+	 * 
+	 * @param ForumDraad[] $draden
+	 * @return ForumDraad[]
+	 */
+	public function loadAlleWanneerGelezen(array $draden) {
+		$draden = array_group_by('draad_id', $draden);
+		$keys = '(' . implode(', ', array_keys($draden)) . ')';
+		$gelezen = $this->find('draad_id IN ?', array($keys));
+		foreach ($gelezen as $draad) {
+			$draden[$draad->draad_id]->setWanneerGelezen($draad->datum_tijd);
+		}
+		return $draden;
+	}
+
+	public function getWanneerGelezenDoorLid(ForumDraad $draad) {
+		$gelezen = $this->retrieveByPrimaryKey(array($draad->draad_id, LoginLid::instance()->getUid()));
+		return $gelezen->datum_tijd;
 	}
 
 }
@@ -96,8 +135,16 @@ class ForumDradenModel extends PersistenceModel implements Paging {
 		return ceil($this->count('forum_id = ? AND wacht_goedkeuring = FALSE AND verwijderd = FALSE', array($forum_id)) / $this->per_pagina);
 	}
 
+	/**
+	 * Eager loading of ForumDraadGelezen[].
+	 * 
+	 * @param int $forum_id
+	 * @return ForumDraad[]
+	 */
 	public function getForumDradenVoorDeel($forum_id) {
-		return $this->find('forum_id = ?  AND wacht_goedkeuring = FALSE AND verwijderd = FALSE', array($forum_id), 'laatst_gepost', $this->per_pagina, $this->pagina * $this->per_pagina);
+		$draden = $this->find('forum_id = ?  AND wacht_goedkeuring = FALSE AND verwijderd = FALSE', array($forum_id), 'laatst_gewijzigd', $this->per_pagina, $this->pagina * $this->per_pagina);
+		ForumDraadGelezenModel::instance()->loadAlleWanneerGelezen($draden);
+		return $draden;
 	}
 
 	public function getForumDraad($id) {

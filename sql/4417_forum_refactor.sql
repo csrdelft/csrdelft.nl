@@ -147,3 +147,6 @@ ALTER TABLE `forum_delen`
   ADD CONSTRAINT `forum_delen_ibfk_1` FOREIGN KEY (`categorie_id`) REFERENCES `forum_categorien` (`categorie_id`);
 ALTER TABLE `forum_draden_gelezen`
   ADD CONSTRAINT `forum_draden_gelezen_ibfk_1` FOREIGN KEY (`draad_id`) REFERENCES `forum_draden` (`draad_id`);
+
+ALTER TABLE `forum_delen` CHANGE `laatst_gepost` `laatst_gewijzigd` DATETIME NULL DEFAULT NULL ;
+ALTER TABLE `forum_draden` CHANGE `laatst_gepost` `laatst_gewijzigd` DATETIME NULL DEFAULT NULL ;

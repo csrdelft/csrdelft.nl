@@ -34,7 +34,7 @@ class ForumDeel extends PersistentEntity {
 	 * Datum en tijd van laatst geplaatste post
 	 * @var string
 	 */
-	public $laatst_gepost;
+	public $laatst_gewijzigd;
 	/**
 	 * Id van de draad waarin het laatst is gepost
 	 * @var int
@@ -94,7 +94,7 @@ class ForumDeel extends PersistentEntity {
 		'categorie_id' => 'int(11) NOT NULL',
 		'titel' => 'varchar(255) NOT NULL',
 		'omschrijving' => 'text NOT NULL',
-		'laatst_gepost' => 'datetime DEFAULT NULL',
+		'laatst_gewijzigd' => 'datetime DEFAULT NULL',
 		'laatste_draad_id' => 'int(11) DEFAULT NULL',
 		'laatste_post_id' => 'int(11) DEFAULT NULL',
 		'laatste_lid_id' => 'varchar(4) DEFAULT NULL',

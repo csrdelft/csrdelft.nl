@@ -46,7 +46,11 @@ class ForumController extends Controller {
 		if (!$deel OR !$deel->magLezen()) {
 			$this->geentoegang();
 		}
-		$body = new ForumDeelView($deel);
+		$categorie = ForumModel::instance()->getCategorie($deel->categorie_id);
+		if (!$categorie->magLezen()) {
+			$this->geentoegang();
+		}
+		$body = new ForumDeelView($deel, $categorie);
 		$this->view = new CsrLayoutPage($body);
 		$this->view->addStylesheet('forum.css');
 	}
@@ -63,10 +67,11 @@ class ForumController extends Controller {
 		}
 		ForumDradenModel::instance()->setHuidigePagina((int) $pagina);
 		$deel = ForumDelenModel::instance()->getForumDeel($draad->forum_id);
-		if (!$deel->magLezen()) {
+		$categorie = ForumModel::instance()->getCategorie($deel->categorie_id);
+		if (!$categorie->magLezen() OR !$deel->magLezen()) {
 			$this->geentoegang();
 		}
-		$body = new ForumDraadView($draad, $deel);
+		$body = new ForumDraadView($draad, $deel, $categorie);
 		$this->view = new CsrLayoutPage($body);
 		$this->view->addStylesheet('forum.css');
 		$this->view->addScript('forum.js');
