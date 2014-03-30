@@ -191,8 +191,8 @@ class Forum{
 	public static function isModerator(){ return LoginLid::instance()->hasPermission('P_FORUM_MOD'); }
 	public static function getLaatstBekeken(){ return LoginLid::instance()->getForumLaatstBekeken(); }
 
-	public static function getTopicsPerPagina(){ return LidInstellingen::get('forum', 'onderwerpenPerPagina'); }
-	public static function getPostsPerPagina(){ return LidInstellingen::get('forum', 'postsPerPagina'); }
+	public static function getTopicsPerPagina(){ return LidInstellingen::get('forum', 'draden_per_pagina'); }
+	public static function getPostsPerPagina(){ return LidInstellingen::get('forum', 'posts_per_pagina'); }
 
 	public static function getForumNaam($uid=false, $aNaam=false, $aLink=true, $bHtmlentities=true ){
 		return LidCache::getLid($uid)->getNaamLink('user', ($aLink ? 'link' : 'plain'));
