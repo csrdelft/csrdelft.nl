@@ -189,6 +189,8 @@ class LidInstellingen extends PersistenceModel {
 			} catch (Exception $e) {
 				if (startsWith($e->getMessage(), 'Deze instelling  bestaat niet')) {
 					$this->deleteByPrimaryKey($instelling->getValues(true));
+				} else {
+					setMelding($e->getMessage());
 				}
 			}
 		}

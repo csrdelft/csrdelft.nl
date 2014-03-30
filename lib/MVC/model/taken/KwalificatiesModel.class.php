@@ -8,8 +8,9 @@
  */
 class KwalificatiesModel extends PersistenceModel {
 
+	const orm = 'CorveeKwalificatie';
+
 	protected static $instance;
-	protected static $orm = 'CorveeKwalificatie';
 
 	/**
 	 * Lazy loading of corveefunctie.

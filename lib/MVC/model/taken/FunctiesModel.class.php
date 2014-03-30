@@ -10,8 +10,9 @@ require_once 'MVC/model/taken/KwalificatiesModel.class.php';
  */
 class FunctiesModel extends PersistenceModel {
 
+	const orm = 'CorveeFunctie';
+
 	protected static $instance;
-	protected static $orm = 'CorveeFunctie';
 
 	/**
 	 * Optional eager loading of kwalificaties.
