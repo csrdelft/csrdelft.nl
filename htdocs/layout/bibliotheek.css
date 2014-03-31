@@ -343,7 +343,7 @@ div.beschrijvingen{ margin-top: 40px;}
 .Formulier .InputField, .Formulier h3, .Formulier .password{
 	clear: both;
 }
-.Formulier .InputField, .Formulier .submit, .boekzoeker{
+.Formulier .InputField, .boekzoeker{
 	margin-left: 10px;
 	padding: 1px 2px;
 	border: 1px solid white;
@@ -389,8 +389,7 @@ div.beschrijvingen{ margin-top: 40px;}
 	margin-left: 109px;
 	width: 506px;
 }
-#Beschrijvingsformulier .InputField, 
-#Beschrijvingsformulier .submit{
+#Beschrijvingsformulier .InputField{
 	margin-left: 0;
 	display: inline-block;
 }
