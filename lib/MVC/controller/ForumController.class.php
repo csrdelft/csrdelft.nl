@@ -13,9 +13,7 @@ require_once 'MVC/view/ForumView.class.php';
 class ForumController extends Controller {
 
 	public function __construct($query) {
-		str_replace('forum/', 'forum', $query);
-		str_replace('#post', '#', $query);
-		parent::__construct($query);
+		parent::__construct(str_replace('forum/', 'forum', $query));
 		$this->action = $this->getParam(1);
 		$this->performAction($this->getParams(2));
 	}
@@ -30,6 +28,7 @@ class ForumController extends Controller {
 			case 'forum':
 			case 'forumdeel':
 			case 'forumdraad':
+			case 'forumpost':
 				return !$this->isPosted();
 
 			case 'forumdraadwijzigen':
@@ -78,20 +77,11 @@ class ForumController extends Controller {
 
 	/**
 	 * Forumdraadje laten zien met alle (zichtbare) posts.
-	 * Indien er een anchor naar een post is opgegeven
-	 * deze opzoeken en juiste pagina tonen.
 	 * 
 	 * @param int $id
 	 * @param int $pagina
 	 */
 	public function forumdraad($id, $pagina = 1) {
-		if ($this->hasParam('#')) {
-			$post = ForumPostsModel::instance()->getForumPost((int) $this->getParam('#'));
-			if ($post) {
-				$id = $post->draad_id;
-				$pagina = ForumPostsModel::instance()->getPaginaVoorPost($post);
-			}
-		}
 		$draad = ForumDradenModel::instance()->getForumDraad((int) $id);
 		if (!$draad) {
 			$this->geentoegang();
@@ -106,6 +96,40 @@ class ForumController extends Controller {
 		$this->view = new CsrLayoutPage($body);
 		$this->view->addStylesheet('forum.css');
 		$this->view->addScript('forum.js');
+	}
+
+	/**
+	 * Opzoeken forumdraad van forumpost.
+	 * 
+	 * @param int $id
+	 */
+	public function forumpost($id) {
+		$post = ForumPostsModel::instance()->getForumPost((int) $id);
+		if (!$post) {
+			throw new Exception('Forumpost bestaat niet!');
+		}
+		$this->forumdraad($post->draad_id, ForumPostsModel::instance()->getPaginaVoorPost($post));
+	}
+
+	public function forumdraadwijzigen($id, $property, $value = null) {
+		$draad = $this->getForumDraad((int) $id);
+		if (!$draad) {
+			throw new Exception('Forumdraad bestaat niet!');
+		} elseif (in_array($property, array('verwijderd', 'gesloten', 'plakkerig', 'belangrijk'))) {
+			$value = !$draad->$property;
+		} elseif ($property === 'forum_id') {
+			$value = (int) $value;
+			if (!ForumDelenModel::instance()->bestaatForumDeel($value)) {
+				throw new Exception('Forum bestaat niet!');
+			}
+		} else if ($property === 'titel') {
+			if (empty($value)) {
+				throw new Exception('Ongeldige titel!');
+			}
+		} else {
+			$this->geentoegang();
+		}
+		ForumDradenModel::instance()->wijzigForumDraad($draad, $property, $value);
 	}
 
 	/**
@@ -146,25 +170,8 @@ class ForumController extends Controller {
 		//TODO
 	}
 
-	public function forumdraadwijzigen($id, $property, $value = null) {
-		$draad = $this->getForumDraad((int) $id);
-		if (!$draad) {
-			throw new Exception('Forumdraad bestaat niet!');
-		} elseif (in_array($property, array('verwijderd', 'gesloten', 'plakkerig', 'belangrijk'))) {
-			$value = !$draad->$property;
-		} elseif ($property === 'forum_id') {
-			$value = (int) $value;
-			if (!ForumDelenModel::instance()->bestaatForumDeel($value)) {
-				throw new Exception('Forum bestaat niet!');
-			}
-		} else if ($property === 'titel') {
-			if (empty($value)) {
-				throw new Exception('Ongeldige titel!');
-			}
-		} else {
-			$this->geentoegang();
-		}
-		ForumDradenModel::instance()->wijzigForumDraad($draad, $property, $value);
+	public function forumpostciteren() {
+		//TODO
 	}
 
 }

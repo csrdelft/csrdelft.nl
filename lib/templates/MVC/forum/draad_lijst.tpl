@@ -24,7 +24,7 @@
 		{else}
 			{$draad->laatst_gewijzigd}
 		{/if}
-		<br /><a href="/forumdraad/{$draad->draad_id}#post{$draad->laatste_post_id}">bericht</a> 
+		<br /><a href="/forumpost/{$draad->laatste_post_id}#post{$draad->laatste_post_id}">bericht</a> 
 		door {$draad->laatste_lid_id|csrnaam:'user'}
 	</td>
 </tr>

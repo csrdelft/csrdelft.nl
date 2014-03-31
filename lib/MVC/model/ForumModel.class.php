@@ -335,4 +335,8 @@ class ForumPostsModel extends PersistenceModel implements Paging {
 		return $post;
 	}
 
+	public function citeerForumPost($id) {
+		//TODO
+	}
+
 }

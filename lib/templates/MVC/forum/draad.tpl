@@ -65,8 +65,7 @@
 					{$smarty.capture.magreageren}
 					<div class="forum_paginering">
 						Pagina: {sliding_pager baseurl="/forumdraad/"|cat:$draad->draad_id|cat:"/"
-									pagecount=ForumPostsModel::instance()->getAantalPaginas($draad->draad_id) curpage=ForumPostsModel::instance()->getHuidigePagina()
-									show_always=true}
+									pagecount=ForumPostsModel::instance()->getAantalPaginas($draad->draad_id) curpage=ForumPostsModel::instance()->getHuidigePagina()}
 					</div>
 				</td>
 			</tr>
@@ -90,8 +89,7 @@
 				<td>
 					<div class="forum_paginering">
 						Pagina: {sliding_pager baseurl="/forumdraad/"|cat:$draad->draad_id|cat:"/"
-									pagecount=ForumPostsModel::instance()->getAantalPaginas($draad->draad_id) curpage=ForumPostsModel::instance()->getHuidigePagina()
-									show_always=true}
+									pagecount=ForumPostsModel::instance()->getAantalPaginas($draad->draad_id) curpage=ForumPostsModel::instance()->getHuidigePagina()}
 					</div>
 				</td>
 			</tr>

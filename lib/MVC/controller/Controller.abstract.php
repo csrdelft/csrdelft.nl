@@ -42,13 +42,7 @@ abstract class Controller {
 
 	public function __construct($query, PersistenceModel $model = null) {
 		$this->model = $model;
-		// strip anchor off
-		$anchor = strpos($query, '#');
-		if ($anchor) {
-			$anchor = explode('#', $query, 2);
-			$query = $anchor[0];
-		}
-		// strip KVP off
+		// split at ?-mark
 		$mark = strpos($query, '?');
 		if ($mark) {
 			$rest = substr($query, 0, $mark);
@@ -65,10 +59,6 @@ abstract class Controller {
 				$this->queryparts[$key] = explode('=', $value); // add KVP params
 			}
 			$this->kvp = true;
-		}
-		// parse anchor
-		if ($anchor) {
-			$this->queryparts['#'] = $anchor[1];
 		}
 	}
 

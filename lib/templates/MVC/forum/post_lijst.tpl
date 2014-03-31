@@ -1,6 +1,6 @@
 <tr>
 	<td class="auteur">
-		<a href="/forumdraad/{$post->draad_id}#post{$post->post_id}" class="postlink" title="Link naar deze post">&rarr;</a>
+		<a href="/forumpost/{$post->post_id}#post{$post->post_id}" class="postlink" title="Link naar deze post">&rarr;</a>
 		{$post->lid_id|csrnaam:'user':'visitekaartje'}
 		{if $loginlid->hasPermission('P_LEDEN_READ')}
 			<span tabindex="0" id="t{$post->lid_id}-{$post->post_id}" class="togglePasfoto"{if $loginlid->getInstelling('forum_toonpasfotos') == 'nee'} title="Toon pasfoto">&raquo;{else}>{/if}</span>

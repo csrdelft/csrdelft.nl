@@ -41,12 +41,12 @@ class ForumDraad extends PersistentEntity {
 	 */
 	public $laatst_gewijzigd;
 	/**
-	 * Id van de laatst geplaatste post
+	 * Id van de laatst geplaatste of gewijzigde post
 	 * @var string
 	 */
 	public $laatste_post_id;
 	/**
-	 * Uid van de auteur van de laatst geplaatste post
+	 * Uid van de auteur van de laatst geplaatste of gewijzigde post
 	 * @var string
 	 */
 	public $laatste_lid_id;

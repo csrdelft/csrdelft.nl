@@ -31,22 +31,17 @@ class ForumDeel extends PersistentEntity {
 	 */
 	public $omschrijving;
 	/**
-	 * Datum en tijd van laatst geplaatste post
+	 * Datum en tijd van laatst geplaatste of gewijzigde post
 	 * @var string
 	 */
 	public $laatst_gewijzigd;
 	/**
-	 * Id van de draad waarin het laatst is gepost
-	 * @var int
-	 */
-	public $laatste_draad_id;
-	/**
-	 * Id van de laatst geplaatste post
+	 * Id van de laatst geplaatste of gewijzigde post
 	 * @var int
 	 */
 	public $laatste_post_id;
 	/**
-	 * Uid van de auteur van de laatst geplaatste post
+	 * Uid van de auteur van de laatst geplaatste of gewijzigde post
 	 * @var string
 	 */
 	public $laatste_lid_id;
@@ -95,7 +90,6 @@ class ForumDeel extends PersistentEntity {
 		'titel' => 'varchar(255) NOT NULL',
 		'omschrijving' => 'text NOT NULL',
 		'laatst_gewijzigd' => 'datetime DEFAULT NULL',
-		'laatste_draad_id' => 'int(11) DEFAULT NULL',
 		'laatste_post_id' => 'int(11) DEFAULT NULL',
 		'laatste_lid_id' => 'varchar(4) DEFAULT NULL',
 		'aantal_draden' => 'int(11) NOT NULL',
