@@ -96,6 +96,7 @@ class Forum{
 					categorie.titel AS categorieTitel,
 				topic.open AS open,
 				topic.plakkerig AS plakkerig,
+				topic.belangrijk AS belangrijk,
 				topic.lastpost AS lastpost,
 				topic.reacties AS reacties,
 				post.uid AS uid,

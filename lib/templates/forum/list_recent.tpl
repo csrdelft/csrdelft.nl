@@ -1,4 +1,4 @@
-<form id="forum_zoeken" action="/communicatie/forum/zoeken.php" method="post"><fieldset><input type="text" name="zoeken" value="zoeken in forum" onfocus="this.value='';" /></fieldset></form>
+<form id="forum_zoeken" action="/communicatie/forum/zoeken.php" method="post"><fieldset><input type="text" name="zoeken" value="zoeken in forum" onfocus="this.value = '';" /></fieldset></form>
 
 {capture name='navlinks'}
 	<div class="forumNavigatie">
@@ -22,9 +22,10 @@
 				<a href="/communicatie/forum/reactie/{$bericht.postID}" {if $bericht.momentGelezen<$bericht.lastpost} class="updatedTopic"{/if}>
 					{if $bericht.plakkerig==1}
 						<img src="{icon get="plakkerig" notag=true}" title="Dit onderwerp is plakkerig, het blijft bovenaan." alt="plakkerig" />&nbsp;&nbsp;
-					{/if}	
-					{if $bericht.open==0}
+					{elseif $bericht.open==0}
 						<img src="{icon get="slotje" notag=true}" title="Dit onderwerp is gesloten, u kunt niet meer reageren" alt="sluiten" />&nbsp;&nbsp;
+					{elseif $bericht.belangrijk==1}
+						<img src="{icon get="belangrijk" notag=true}" title="Dit onderwerp is door het bestuur aangemerkt als belangrijk." alt="belangrijk" />&nbsp;&nbsp;
 					{/if}
 					{$bericht.titel|wordwrap:60:"\n":true|escape:'html'}
 				</a>

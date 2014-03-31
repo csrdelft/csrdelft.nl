@@ -4,11 +4,12 @@
 			[ter goedkeuring...]
 		{/if}
 		<a href="/forumdraad/{$draad->draad_id}"{if !$draad->alGelezen()} class="updatedTopic"{/if}>
-			{if $draad->plakkerig}
-				<img src="{icon get="plakkerig" notag=true}" title="Dit onderwerp is plakkerig, het blijft bovenaan." alt="plakkerig" />&nbsp;&nbsp;
-			{/if}
 			{if $draad->gesloten}
 				<img src="{icon get="slotje" notag=true}" title="Dit onderwerp is gesloten, u kunt niet meer reageren" alt="sluiten" />&nbsp;&nbsp;
+			{elseif $draad->plakkerig}
+				<img src="{icon get="plakkerig" notag=true}" title="Dit onderwerp is plakkerig, het blijft bovenaan." alt="plakkerig" />&nbsp;&nbsp;
+			{elseif $draad->belangrijk}
+				<img src="{icon get="belangrijk" notag=true}" title="Dit onderwerp is door het bestuur aangemerkt als belangrijk." alt="belangrijk" />&nbsp;&nbsp;
 			{/if}
 			{$draad->titel}
 		</a>
