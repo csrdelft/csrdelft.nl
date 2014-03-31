@@ -26,11 +26,11 @@
 				<td class="titel">
 					{if $onderwerp->getZichtbaarheid()=='wacht_goedkeuring'}[ter goedkeuring...]{/if}
 					<a href="/communicatie/forum/onderwerp/{$onderwerp->getID()}"{if $onderwerp->isUpdated()} class="updatedTopic"{/if}>
-						{if $draad->gesloten}
+						{if $onderwerp->gesloten}
 							<img src="{icon get="slotje" notag=true}" title="Dit onderwerp is gesloten, u kunt niet meer reageren" alt="sluiten" />&nbsp;&nbsp;
-						{elseif $draad->plakkerig}
+						{elseif $onderwerp->plakkerig}
 							<img src="{icon get="plakkerig" notag=true}" title="Dit onderwerp is plakkerig, het blijft bovenaan." alt="plakkerig" />&nbsp;&nbsp;
-						{elseif $draad->belangrijk}
+						{elseif $onderwerp->belangrijk}
 							<img src="{icon get="belangrijk" notag=true}" title="Dit onderwerp is door het bestuur aangemerkt als belangrijk." alt="belangrijk" />&nbsp;&nbsp;
 						{/if}
 						{$onderwerp->getTitel()|wordwrap:60:"\n":true|escape:'html'}
