@@ -8,7 +8,7 @@
 					</a>
 					<br /><br />
 					<a href="/forum/draadwijzigen/{$draad->draad_id}/belangrijk" class="knop post" title="Verander belangrijkheid">
-						{icon get="tag_blue"} maak {if $draad->belangrijk}<strong>niet</strong> {/if}belangrijk
+						{icon get="asterisk_orange"} maak {if $draad->belangrijk}<strong>niet</strong> {/if}belangrijk
 					</a>
 					<br /><br />
 					<a href="/forum/draadwijzigen/{$draad->draad_id}/verwijderd" class="knop post confirm" title="Verwijder forumdraad">

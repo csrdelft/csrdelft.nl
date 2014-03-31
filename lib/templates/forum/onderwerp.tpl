@@ -47,9 +47,9 @@
 			{/if}
 			<br /><br />
 			{if $onderwerp->isBelangrijk()}
-				{knop url="belangrijk/`$onderwerp->getID()`" class=knop type=plakkerig text="maak niet belangrijk"}
+				{knop url="belangrijk/`$onderwerp->getID()`" class=knop type=belangrijk text="maak niet belangrijk"}
 			{else}
-				{knop url="belangrijk/`$onderwerp->getID()`" class=knop type=plakkerig text="maak belangrijk"}
+				{knop url="belangrijk/`$onderwerp->getID()`" class=knop type=belangrijk text="maak belangrijk"}
 			{/if}
 			<br /><br />
 			{knop url="verwijder-onderwerp/`$onderwerp->getID()`" confirm="Weet u zeker dat u dit onderwerp wilt verwijderen?" type=verwijderen text=Verwijderen class=knop}
