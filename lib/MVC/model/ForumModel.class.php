@@ -84,18 +84,27 @@ class ForumDraadGelezenModel extends PersistenceModel {
 	 * @param ForumDraad[] $draden
 	 * @return ForumDraad[]
 	 */
-	public function loadAlleWanneerGelezen(array $draden) {
-		$draden = array_group_by('draad_id', $draden);
-		$keys = '(' . implode(', ', array_keys($draden)) . ')';
-		$gelezen = $this->find('draad_id IN ?', array($keys));
-		foreach ($gelezen as $draad) {
-			$draden[$draad->draad_id]->setWanneerGelezen($draad->datum_tijd);
+	public function loadAlleWanneerGelezen(array &$draden) {
+		$draden = array_key_property('draad_id', $draden);
+		$in = implode(', ', array_fill(0, count($draden), '?'));
+		$values = array_merge(array(LoginLid::instance()->getUid()), array_keys($draden));
+		$gelezen = array_key_property('draad_id', $this->find('lid_id = ? AND draad_id IN (' . $in . ')', $values));
+		foreach ($draden as $draad) {
+			if (array_key_exists($draad->draad_id, $gelezen)) {
+				$wanneer = $gelezen[$draad->draad_id]->datum_tijd;
+			} else {
+				$wanneer = '0000-00-00 00:00:00';
+			}
+			$draden[$draad->draad_id]->setWanneerGelezen($wanneer);
 		}
 		return $draden;
 	}
 
 	public function getWanneerGelezenDoorLid(ForumDraad $draad) {
 		$gelezen = $this->retrieveByPrimaryKey(array($draad->draad_id, LoginLid::instance()->getUid()));
+		if (!$gelezen) {
+			return '0000-00-00 00:00:00';
+		}
 		return $gelezen->datum_tijd;
 	}
 
@@ -116,15 +125,27 @@ class ForumDradenModel extends PersistenceModel implements Paging {
 	 * @var int
 	 */
 	private $per_pagina;
+	/**
+	 * Totaal aantal paginas
+	 * @var int[]
+	 */
+	private $aantal_paginas;
 
 	protected function __construct() {
 		parent::__construct();
 		$this->pagina = 1;
 		$this->per_pagina = LidInstellingen::get('forum', 'draden_per_pagina');
+		$this->aantal_paginas = array();
+	}
+
+	public function getHuidigePagina() {
+		return $this->pagina;
 	}
 
 	public function setHuidigePagina($number) {
-		$this->pagina = $number;
+		if ($number > 0) {
+			$this->pagina = $number;
+		}
 	}
 
 	public function getAantalPerPagina() {
@@ -132,7 +153,10 @@ class ForumDradenModel extends PersistenceModel implements Paging {
 	}
 
 	public function getAantalPaginas($forum_id) {
-		return ceil($this->count('forum_id = ? AND wacht_goedkeuring = FALSE AND verwijderd = FALSE', array($forum_id)) / $this->per_pagina);
+		if (!array_key_exists($forum_id, $this->aantal_paginas)) {
+			$this->aantal_paginas[$forum_id] = ceil($this->count('forum_id = ? AND wacht_goedkeuring = FALSE AND verwijderd = FALSE', array($forum_id)) / $this->per_pagina);
+		}
+		return $this->aantal_paginas[$forum_id];
 	}
 
 	/**
@@ -142,7 +166,7 @@ class ForumDradenModel extends PersistenceModel implements Paging {
 	 * @return ForumDraad[]
 	 */
 	public function getForumDradenVoorDeel($forum_id) {
-		$draden = $this->find('forum_id = ?  AND wacht_goedkeuring = FALSE AND verwijderd = FALSE', array($forum_id), 'laatst_gewijzigd', $this->per_pagina, $this->pagina * $this->per_pagina);
+		$draden = $this->find('forum_id = ?  AND wacht_goedkeuring = FALSE AND verwijderd = FALSE', array($forum_id), 'plakkerig DESC, laatst_gewijzigd DESC', $this->per_pagina, ($this->pagina - 1) * $this->per_pagina);
 		ForumDraadGelezenModel::instance()->loadAlleWanneerGelezen($draden);
 		return $draden;
 	}
@@ -151,22 +175,36 @@ class ForumDradenModel extends PersistenceModel implements Paging {
 		return $this->retrieveByPrimaryKey(array($id));
 	}
 
-	public function newForumDraad($forum_id) {
+	public function niewForumDraad($forum_id) {
 		$draad = new ForumDraad();
 		$draad->forum_id = $forum_id;
+		//TODO:
+		$draad->lid_id;
+		$draad->titel;
+		$draad->datum_tijd;
+		$draad->laatst_gewijzigd;
+		$draad->laatste_post_id;
+		$draad->laatste_lid_id;
+		$draad->aantal_posts;
+		$draad->gesloten;
+		$draad->verwijderd;
+		$draad->wacht_goedkeuring;
+		$draad->plakkerig;
+		$draad->belangrijk;
+		$draad->forum_posts;
+		$draad->wanneer_gelezen;
 		return $draad;
 	}
 
 	/**
 	 * Wijzig property van forumdraad.
 	 * 
-	 * @param int $id
+	 * @param ForumDraad $draad
 	 * @param string $property
 	 * @param mixed $value
 	 * @return ForumDraad
 	 */
-	public function wijzigForumDraad($id, $property, $value) {
-		$draad = $this->getForumDraad($id);
+	public function wijzigForumDraad(ForumDraad $draad, $property, $value) {
 		if (!property_exists($draad, $property)) {
 			throw new Exception('Property undefined: ' . $property);
 		}
@@ -195,16 +233,26 @@ class ForumPostsModel extends PersistenceModel implements Paging {
 	 * @var int
 	 */
 	private $per_pagina;
+	/**
+	 * Totaal aantal paginas
+	 * @var int[]
+	 */
+	private $aantal_paginas;
 
 	protected function __construct() {
 		parent::__construct();
 		$this->pagina = 1;
 		$this->per_pagina = LidInstellingen::get('forum', 'posts_per_pagina');
+		$this->aantal_paginas = array();
+	}
+
+	public function getHuidigePagina() {
+		return $this->pagina;
 	}
 
 	public function setHuidigePagina($number) {
 		if ($number > 0) {
-			$this->pagina = ceil($number);
+			$this->pagina = $number;
 		}
 	}
 
@@ -213,11 +261,22 @@ class ForumPostsModel extends PersistenceModel implements Paging {
 	}
 
 	public function getAantalPaginas($draad_id) {
-		return ceil($this->count('draad_id = ? AND wacht_goedkeuring = FALSE AND verwijderd = FALSE', array($draad_id)) / $this->per_pagina);
+		if (!array_key_exists($draad_id, $this->aantal_paginas)) {
+			$this->aantal_paginas[$draad_id] = ceil($this->count('draad_id = ? AND wacht_goedkeuring = FALSE AND verwijderd = FALSE', array($draad_id)) / $this->per_pagina);
+		}
+		return $this->aantal_paginas[$draad_id];
 	}
 
 	public function getForumPostsVoorDraad($draad_id) {
-		return $this->find('draad_id = ? AND wacht_goedkeuring = FALSE AND verwijderd = FALSE', array($draad_id), null, $this->per_pagina, $this->pagina * $this->per_pagina);
+		$posts = $this->find('draad_id = ? AND wacht_goedkeuring = FALSE AND verwijderd = FALSE', array($draad_id), null, $this->per_pagina, ($this->pagina - 1) * $this->per_pagina);
+		if (LidInstellingen::get('forum', 'filter2008') == 'ja') {
+			foreach ($posts as $post) {
+				if (startsWith($post->lid_id, '08')) {
+					$post->gefilterd = 'Bericht van 2008';
+				}
+			}
+		}
+		return $posts;
 	}
 
 	public function getPaginaVoorPost(ForumPost $post) {
@@ -229,14 +288,13 @@ class ForumPostsModel extends PersistenceModel implements Paging {
 		return $this->retrieveByPrimaryKey(array($id));
 	}
 
-	public function newForumPost($draad_id) {
+	public function niewForumPost($draad_id) {
 		$post = new ForumPost();
 		$post->draad_id = $draad_id;
 		return $post;
 	}
 
-	public function removeForumPost($id) {
-		$post = $this->getForumPost($id);
+	public function verwijderForumPost(ForumPost $post) {
 		$post->verwijderd = true;
 		$this->update($post);
 		return $post;

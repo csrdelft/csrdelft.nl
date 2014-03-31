@@ -128,6 +128,10 @@ class ForumDeel extends PersistentEntity {
 		return LoginLid::instance()->hasPermission($this->rechten_modereren);
 	}
 
+	public function isOpenbaar() {
+		return strpos($this->rechten_lezen, 'P_FORUM_READ') !== false;
+	}
+
 	/**
 	 * Lazy loading by foreign key.
 	 * 

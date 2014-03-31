@@ -10,6 +10,8 @@
  */
 interface Paging {
 
+	public function getHuidigePagina();
+
 	public function setHuidigePagina($int);
 
 	public function getAantalPerPagina();

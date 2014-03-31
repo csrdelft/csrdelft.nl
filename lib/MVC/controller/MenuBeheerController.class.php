@@ -42,8 +42,7 @@ class MenuBeheerController extends AclController {
 		$item = $this->model->newMenuItem((int) $parent_id);
 		$this->view = new MenuItemFormView($item, $this->action, (int) $parent_id); // fetches POST values itself
 		if ($this->view->validate()) {
-			$id = $this->model->create($item);
-			$item->item_id = (int) $id;
+			$item->item_id = (int) $this->model->create($item);
 			setMelding('Toegevoegd', 1);
 			$this->view = new MenuItemView($item);
 		}

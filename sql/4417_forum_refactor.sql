@@ -150,3 +150,5 @@ ALTER TABLE `forum_draden_gelezen`
 
 ALTER TABLE `forum_delen` CHANGE `laatst_gepost` `laatst_gewijzigd` DATETIME NULL DEFAULT NULL ;
 ALTER TABLE `forum_draden` CHANGE `laatst_gepost` `laatst_gewijzigd` DATETIME NULL DEFAULT NULL ;
+
+ALTER TABLE `forum_draden` ADD INDEX ( `plakkerig` ) ;

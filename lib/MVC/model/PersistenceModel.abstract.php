@@ -57,7 +57,7 @@ abstract class PersistenceModel implements Persistence {
 	 * @return int count
 	 */
 	public function count($criteria = null, array $criteria_params = array()) {
-		$result = Database::sqlSelect('COUNT(*)', $this->orm_entity->getTableName(), $criteria, $criteria_params);
+		$result = Database::sqlSelect(array('COUNT(*)'), $this->orm_entity->getTableName(), $criteria, $criteria_params);
 		return (int) $result->fetchColumn();
 	}
 

@@ -40,6 +40,7 @@ class Icon{
 		'citeren' => 'comments',
 		'slotje' => 'lock',
 		'plakkerig' => 'note',
+		'belangrijk' => 'tag_red',
 		
 		// corvee
 		'taken_bewerken' => 'text_list_bullets',

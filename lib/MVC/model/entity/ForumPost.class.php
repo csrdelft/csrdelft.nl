@@ -61,6 +61,11 @@ class ForumPost extends PersistentEntity {
 	 */
 	public $wacht_goedkeuring;
 	/**
+	 * Reden van wegfilteren
+	 * @var string
+	 */
+	public $gefilterd;
+	/**
 	 * Database table fields
 	 * @var array
 	 */

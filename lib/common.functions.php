@@ -34,16 +34,35 @@ function endsWith($haystack, $needle) {
 }
 
 /**
- * Group by (destructive)
+ * Group by object property (destructive)
+ * 
+ * @param string $prop
+ * @param array $in
+ * @return array $out
  */
-function array_group_by($by, array $orig) {
-	$result = array();
-	foreach ($orig as $i => $item) {
-		$result[$item->$by][] = $item;
-		unset($orig[$i]);
+function array_group_by($prop, array $in) {
+	$out = array();
+	foreach ($in as $i => $obj) {
+		$out[$obj->$prop][] = $obj; // add to array
+		unset($in[$i]);
 	}
-	$orig = &$result;
-	return $orig;
+	return $out;
+}
+
+/**
+ * Set key to object property (destructive)
+ * 
+ * @param string $prop
+ * @param array $in
+ * @return array $out
+ */
+function array_key_property($prop, array $in) {
+	$out = array();
+	foreach ($in as $i => $obj) {
+		$out[$obj->$prop] = $obj; // overwrite existing
+		unset($in[$i]);
+	}
+	return $out;
 }
 
 /**
@@ -72,10 +91,7 @@ function array_values_in_array($needles, $haystack) {
  *
  * @author			Jan Pieter Waagmeester (jieter@jpwaag.com)
  */
-function array_get_keys($in, $keys) {
-	if (!is_array($in) OR !is_array($keys)) {
-		return false;
-	}
+function array_get_keys(array $in, array $keys) {
 	$out = array();
 	foreach ($keys as $key) {
 		if (isset($in[$key])) {

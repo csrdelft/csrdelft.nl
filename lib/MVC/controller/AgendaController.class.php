@@ -83,8 +83,7 @@ class AgendaController extends AclController {
 		$item = $this->model->newAgendaItem($datum);
 		$this->view = new AgendaItemFormView($item, $this->action); // fetches POST values itself
 		if ($doorgaan AND $this->view->validate()) {
-			$id = $this->model->create($item);
-			$item->item_id = (int) $id;
+			$item->item_id = (int) $this->model->create($item);
 			setMelding('Toegevoegd: ' . $item->titel . ' (' . $item->begin_moment . ')', 1);
 			$this->view = new AgendaItemMaandView($item);
 			return true; // voor doorgaan

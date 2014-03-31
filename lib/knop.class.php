@@ -9,7 +9,7 @@
  */
 class Knop{
 
-	private $knoptypes=array('default', 'toevoegen', 'bewerken', 'verwijderen', 'citeren', 'slotje', 'plakkerig', 'offtopic');
+	private $knoptypes=array('default', 'toevoegen', 'bewerken', 'verwijderen', 'citeren', 'slotje', 'plakkerig', 'belangrijk', 'offtopic');
 	public $url;			//url van de knop.
 	public $type='default';	//type van de knop, default= zonder plaatje, bij de andere opties hoort een plaatje.
 	public $class='knop'; 	//css class

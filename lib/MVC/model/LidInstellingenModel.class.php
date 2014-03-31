@@ -49,8 +49,8 @@ class LidInstellingen extends PersistenceModel {
 			'minion' => array('Minion', 'enum', array('ja', 'nee'), 'nee')
 		),
 		'forum' => array(
-			'draden_per_pagina' => array('Draadjes per pagina', 'int', array(5, 100), 15),
-			'posts_per_pagina' => array('Berichten per pagina', 'int', array(5, 100), 15),
+			'draden_per_pagina' => array('Draadjes per pagina', 'int', array(5, 100), 25),
+			'posts_per_pagina' => array('Berichten per pagina', 'int', array(5, 100), 25),
 			'naamWeergave' => array('Naamweergave', 'enum', array('civitas', 'volledig', 'bijnaam', 'aaidrom'), 'civitas'),
 			'datumWeergave' => array('Datumweergave', 'enum', array('relatief', 'vast'), 'relatief'),
 			'zoekresultaten' => array('Zoekresultaten', 'int', array(10, 100), 40),
