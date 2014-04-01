@@ -22,7 +22,7 @@
 			<input type="text" name="titel" id="titel" value="" class="tekst" style="width: 578px;" tabindex="1" /><br /><br />
 			<label for="forumBericht">Bericht</label><div id="textareaContainer">
 				<div id="berichtPreviewContainer" class="previewContainer"><div id="berichtPreview" class="preview"></div></div>
-				<textarea name="bericht" id="forumBericht" rows="10" cols="80" class="forumBericht" tabindex="2"></textarea>
+				<textarea name="bericht" id="forumBericht" rows="10" cols="80" class="forumBericht" tabindex="2">{$post_form_tekst}</textarea>
 			</div>
 			<div class="butn">
 				<label>&nbsp;</label>

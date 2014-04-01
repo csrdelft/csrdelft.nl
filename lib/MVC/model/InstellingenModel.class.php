@@ -153,12 +153,12 @@ class Instellingen extends PersistenceModel {
 
 	/**
 	 * Zoek een instelling voor bewerken of na verwijderen.
-	 * Als een default instelling ontbreekt wordt deze aangemaakt en opgeslagen.
-	 *
+	 * Als een instelling niet is gezet wordt deze aangemaakt met de default waarde en opgeslagen.
+	 * 
 	 * @param string $module
 	 * @param string $key
-	 * @throws Exception
 	 * @return Instelling
+	 * @throws Exception indien de default waarde ontbreekt (de instelling bestaat niet)
 	 */
 	private function getInstelling($module, $key) {
 		if (!array_key_exists($module, $this->instellingen) OR !array_key_exists($key, $this->instellingen[$module])) {

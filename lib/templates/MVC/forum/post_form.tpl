@@ -3,7 +3,7 @@
 		<a class="forumpostlink" id="reageren">Reageren</a>
 	</td>
 	<td class="forumtekst">
-		{if $deel->magPosten()}
+		{if !$draad->gesloten AND $deel->magPosten()}
 			<form id="forumReageren" action="/forumposten/{$deel->forum_id}/{$draad->draad_id}" method="post">
 				<fieldset>
 					{* berichtje weergeven voor niet-ingeloggede gebruikers dat ze een naam moeten vermelden. *}
@@ -22,7 +22,7 @@
 						{* Openbaar forum: Iedereen mag dit lezen en zoekmachines nemen het op in hun zoekresultaten. *}
 					{/if}
 					<div id="berichtPreviewContainer" class="previewContainer"><div id="berichtPreview" class="preview"></div></div>
-					<textarea name="bericht" id="forumBericht" class="forumBericht {if $deel->isOpenbaar()}extern{/if}" rows="12">{$textarea}</textarea>
+					<textarea name="bericht" id="forumBericht" class="forumBericht {if $deel->isOpenbaar()}extern{/if}" rows="12">{$post_form_tekst}</textarea>
 					<div class="butn">
 						<a style="float: right; margin-right:0" class="handje knop" onclick="$('#ubbhulpverhaal').toggle();" title="Opmaakhulp weergeven">Opmaak</a>
 						<a style="float: right;" class="handje knop" onclick="vergrootTextarea('forumBericht', 10)" title="Vergroot het invoerveld"><strong>&uarr;&darr;</strong></a>

@@ -430,7 +430,7 @@ class AanmeldingenModel {
 	 * @param int $mrid
 	 * @param string $uid
 	 * @return aantal aanmeldingen or false
-	 * @throws \Exception
+	 * @throws Exception indien niet toegestaan vanwege aanmeldrestrictie
 	 */
 	public static function aanmeldenVoorKomendeRepetitieMaaltijden($mrid, $uid) {
 		if (!is_int($mrid) || $mrid <= 0) {

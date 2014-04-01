@@ -132,10 +132,9 @@ class Database extends PDO {
 	 * Requires named parameters.
 	 * 
 	 * @param string $into
-	 * @param string $into
 	 * @param array $properties
-	 * @throws Exception
-	 * @return string last insert id
+	 * @return string last inserted row id or sequence value
+	 * @throws Exception if number of rows affected !== 1
 	 */
 	public static function sqlInsert($into, array $properties) {
 		$params = array();
@@ -162,6 +161,7 @@ class Database extends PDO {
 	 * @param array $where_params
 	 * @param int $limit
 	 * @return int number of rows affected
+	 * @throws Exception if duplicate named parameter
 	 */
 	public static function sqlUpdate($table, array $set_properties, $where, array $where_params = array(), $limit = null) {
 		$sql = 'UPDATE ' . $table . ' SET ';

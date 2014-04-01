@@ -125,17 +125,11 @@ class ForumDradenModel extends PersistenceModel implements Paging {
 	 * @var int
 	 */
 	private $per_pagina;
-	/**
-	 * Totaal aantal paginas
-	 * @var int[]
-	 */
-	private $aantal_paginas;
 
 	protected function __construct() {
 		parent::__construct();
 		$this->pagina = 1;
 		$this->per_pagina = LidInstellingen::get('forum', 'draden_per_pagina');
-		$this->aantal_paginas = array();
 	}
 
 	public function getHuidigePagina() {
@@ -144,7 +138,7 @@ class ForumDradenModel extends PersistenceModel implements Paging {
 
 	public function setHuidigePagina($number) {
 		if ($number > 0) {
-			$this->pagina = $number;
+			$this->pagina = (int) $number;
 		}
 	}
 
@@ -153,10 +147,7 @@ class ForumDradenModel extends PersistenceModel implements Paging {
 	}
 
 	public function getAantalPaginas($forum_id) {
-		if (!array_key_exists($forum_id, $this->aantal_paginas)) {
-			$this->aantal_paginas[$forum_id] = ceil($this->count('forum_id = ? AND wacht_goedkeuring = FALSE AND verwijderd = FALSE', array($forum_id)) / $this->per_pagina);
-		}
-		return $this->aantal_paginas[$forum_id];
+		return ceil($this->count('forum_id = ? AND wacht_goedkeuring = FALSE AND verwijderd = FALSE', array($forum_id)) / $this->per_pagina);
 	}
 
 	/**
@@ -172,38 +163,32 @@ class ForumDradenModel extends PersistenceModel implements Paging {
 	}
 
 	public function getForumDraad($id) {
-		return $this->retrieveByPrimaryKey(array($id));
-	}
-
-	public function niewForumDraad($forum_id) {
-		$draad = new ForumDraad();
-		$draad->forum_id = $forum_id;
-		//TODO:
-		$draad->lid_id;
-		$draad->titel;
-		$draad->datum_tijd;
-		$draad->laatst_gewijzigd;
-		$draad->laatste_post_id;
-		$draad->laatste_lid_id;
-		$draad->aantal_posts;
-		$draad->gesloten;
-		$draad->verwijderd;
-		$draad->wacht_goedkeuring;
-		$draad->plakkerig;
-		$draad->belangrijk;
-		$draad->forum_posts;
-		$draad->wanneer_gelezen;
+		$draad = $this->retrieveByPrimaryKey(array($id));
+		if (!$draad) {
+			throw new Exception('Forumdraad bestaat niet!');
+		}
 		return $draad;
 	}
 
-	/**
-	 * Wijzig property van forumdraad.
-	 * 
-	 * @param ForumDraad $draad
-	 * @param string $property
-	 * @param mixed $value
-	 * @return ForumDraad
-	 */
+	public function maakForumDraad($forum_id, $titel) {
+		$draad = new ForumDraad();
+		$draad->forum_id = (int) $forum_id;
+		$draad->lid_id = LoginLid::instance()->getUid();
+		$draad->titel = $titel;
+		$draad->datum_tijd = datum('Y-m-d H:i:s');
+		$draad->laatst_gewijzigd = null;
+		$draad->laatste_post_id = null;
+		$draad->laatste_lid_id = null;
+		$draad->aantal_posts = 0;
+		$draad->gesloten = false;
+		$draad->verwijderd = false;
+		$draad->wacht_goedkeuring = LoginLid::instance()->hasPermission('P_LOGGED_IN');
+		$draad->plakkerig = false;
+		$draad->belangrijk = false;
+		$draad->draad_id = (int) ForumDradenModel::instance()->create($draad);
+		return $draad;
+	}
+
 	public function wijzigForumDraad(ForumDraad $draad, $property, $value) {
 		if (!property_exists($draad, $property)) {
 			throw new Exception('Property undefined: ' . $property);
@@ -212,8 +197,7 @@ class ForumDradenModel extends PersistenceModel implements Paging {
 			throw new Exception('Forum bestaat niet!');
 		}
 		$draad->$property = $value;
-		$this->update($draad);
-		return $draad;
+		return $this->update($draad);
 	}
 
 }
@@ -229,21 +213,15 @@ class ForumPostsModel extends PersistenceModel implements Paging {
 	 */
 	private $pagina;
 	/**
-	 * Aantal draden per pagina
+	 * Aantal posts per pagina
 	 * @var int
 	 */
 	private $per_pagina;
-	/**
-	 * Totaal aantal paginas
-	 * @var int[]
-	 */
-	private $aantal_paginas;
 
 	protected function __construct() {
 		parent::__construct();
 		$this->pagina = 1;
 		$this->per_pagina = LidInstellingen::get('forum', 'posts_per_pagina');
-		$this->aantal_paginas = array();
 	}
 
 	public function getHuidigePagina() {
@@ -252,7 +230,7 @@ class ForumPostsModel extends PersistenceModel implements Paging {
 
 	public function setHuidigePagina($number) {
 		if ($number > 0) {
-			$this->pagina = $number;
+			$this->pagina = (int) $number;
 		}
 	}
 
@@ -261,14 +239,12 @@ class ForumPostsModel extends PersistenceModel implements Paging {
 	}
 
 	public function getAantalPaginas($draad_id) {
-		if (!array_key_exists($draad_id, $this->aantal_paginas)) {
-			$this->aantal_paginas[$draad_id] = ceil($this->count('draad_id = ? AND wacht_goedkeuring = FALSE AND verwijderd = FALSE', array($draad_id)) / $this->per_pagina);
-		}
-		return $this->aantal_paginas[$draad_id];
+		return ceil($this->count('draad_id = ? AND wacht_goedkeuring = FALSE AND verwijderd = FALSE', array($draad_id)) / $this->per_pagina);
 	}
 
-	public function getForumPostsVoorDraad($draad_id) {
-		$posts = $this->find('draad_id = ? AND wacht_goedkeuring = FALSE AND verwijderd = FALSE', array($draad_id), null, $this->per_pagina, ($this->pagina - 1) * $this->per_pagina);
+	public function getForumPostsVoorDraad(ForumDraad $draad) {
+		$posts = $this->find('draad_id = ? AND wacht_goedkeuring = FALSE AND verwijderd = FALSE', array($draad->draad_id), null, $this->per_pagina, ($this->pagina - 1) * $this->per_pagina);
+		// 2008 filter
 		if (LidInstellingen::get('forum', 'filter2008') == 'ja') {
 			foreach ($posts as $post) {
 				if (startsWith($post->lid_id, '08')) {
@@ -284,59 +260,77 @@ class ForumPostsModel extends PersistenceModel implements Paging {
 		return ceil($count / $this->per_pagina);
 	}
 
-	public function getForumPost($id) {
-		return $this->retrieveByPrimaryKey(array($id));
+	public function getAantalForumPostsVoorLid($uid) {
+		return $this->count('lid_id = ? AND wacht_goedkeuring = FALSE AND verwijderd = FALSE', array($uid));
 	}
 
-	public function niewForumPost($draad_id) {
+	public function getRecenteForumPostsVoorLid($uid, $aantal) {
+		return $this->find('lid_id = ?', array($uid), null, $aantal);
+	}
+
+	public function getForumPost($id) {
+		$post = $this->retrieveByPrimaryKey(array($id));
+		if (!$post) {
+			throw new Exception('Forumpost bestaat niet!');
+		}
+		return $post;
+	}
+
+	public function maakForumPost($draad_id, $tekst, $ip) {
 		$post = new ForumPost();
-		$post->draad_id = $draad_id;
+		$post->draad_id = (int) $draad_id;
+		$post->lid_id = LoginLid::instance()->getUid();
+		$post->tekst = $tekst;
+		$post->datum_tijd = date('Y-m-d H:i:s');
+		$post->laatst_bewerkt = null;
+		$post->bewerkt_tekst = null;
+		$post->verwijderd = false;
+		$post->auteur_ip = $ip;
+		$post->wacht_goedkeuring = false;
+		$post->post_id = (int) ForumPostsModel::instance()->create($post);
 		return $post;
 	}
 
 	public function verwijderForumPost(ForumPost $post) {
+		if ($post->verwijderd) {
+			throw new Exception('Al verwijderd!');
+		}
 		$post->verwijderd = true;
-		$this->update($post);
-		return $post;
+		return $this->update($post);
 	}
 
-	public function bewerkForumPost($id, $nieuwe_tekst, $reden = null) {
-		$post = $this->getForumPost($id);
+	public function bewerkForumPost(ForumPost $post, $nieuwe_tekst, $reden = '') {
 		$post->tekst = $nieuwe_tekst;
 		$post->laatst_bewerkt = getDateTime();
 		$bewerkt = 'bewerkt door [lid=' . LoginLid::instance()->getUid() . '] [reldate]' . $post->laatst_bewerkt . '[/reldate]';
-		if ($reden !== null) {
+		if ($reden !== '') {
 			$bewerkt .= ': ' . $reden;
 		}
 		$bewerkt .= "\n";
 		$post->bewerkt_tekst .= $bewerkt;
-		$this->update($post);
-		return $post;
+		return $this->update($post);
 	}
 
-	public function offtopicForumPost($id) {
-		$post = $this->getForumPost($id);
+	public function offtopicForumPost(ForumPost $post) {
 		$post->tekst = '[offtopic]' . $post->tekst . '[/offtopic]';
 		$post->laatst_bewerkt = getDateTime();
 		$post->bewerkt_tekst = 'offtopic door [lid=' . LoginLid::instance()->getUid() . '] [reldate]' . $post->laatst_bewerkt . '[/reldate]' . "\n";
-		$this->update($post);
-		return $post;
+		return $this->update($post);
 	}
 
-	public function goedkeurenForumPost($id) {
-		$post = $this->getForumPost($id);
+	public function goedkeurenForumPost(ForumPost $post) {
 		if (!$post->wacht_goedkeuring) {
 			throw new Exception('Al goedgekeurd!');
 		}
 		$post->wacht_goedkeuring = false;
 		$post->laatst_bewerkt = getDateTime();
 		$post->bewerkt_tekst .= '[prive=P_FORUM_MOD]Goedgekeurd door [lid=' . LoginLid::instance()->getUid() . '] [reldate]' . $post->laatst_bewerkt . '[/reldate][/prive]' . "\n";
-		$this->update($post);
-		return $post;
+		return $this->update($post);
 	}
 
-	public function citeerForumPost($id) {
-		//TODO
+	public function citeerForumPost(ForumPost $post) {
+		$tekst = CsrUbb::filterPrive($post->tekst);
+		return '[citaat=' . $post->lid_id . ']' . $tekst . '[/citaat]';
 	}
 
 }

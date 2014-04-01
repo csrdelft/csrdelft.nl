@@ -240,20 +240,16 @@ class CsrUbb extends eamBBParser {
 	}
 
 	/**
-	 * Omdat we niet willen dat dingen die in privé staan alsnog gezien
-	 * kunnen worden bij het citeren, slopen we hier alles wat in privé-tags staat weg.
+	 * Omdat we niet willen dat dingen die in privé staan alsnog gezien kunnen worden 
+	 * bij het citeren, slopen we hier alles wat in privé-tags staat weg.
 	 */
 	public static function filterPrive($string) {
-		if (LoginLid::instance()->hasPermission('P_LOGGED_IN')) {
-			return $string;
-		} else {
-			// .* is greedy by default, dat wil zeggen, matched zoveel mogelijk.
-			// door er .*? van te maken matched het zo weinig mogelijk, dat is precies
-			// wat we hier willen, omdat anders [prive]foo[/prive]bar[prive]foo[/prive]
-			// niets zou opleveren.
-			// de /s modifier zorgt ervoor dat een . ook alle newlines matched.
-			return preg_replace('/\[prive=?.*?\].*?\[\/prive\]/s', '', $string);
-		}
+		// .* is greedy by default, dat wil zeggen, matched zoveel mogelijk.
+		// door er .*? van te maken matched het zo weinig mogelijk, dat is precies
+		// wat we hier willen, omdat anders [prive]foo[/prive]bar[prive]foo[/prive]
+		// niets zou opleveren.
+		// de /s modifier zorgt ervoor dat een . ook alle newlines matched.
+		return preg_replace('/\[prive=?.*?\].*?\[\/prive\]/s', '', $string);
 	}
 
 	/**

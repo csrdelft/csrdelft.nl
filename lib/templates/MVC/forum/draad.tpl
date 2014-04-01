@@ -12,7 +12,7 @@
 
 {capture name='navlinks'}
 	<div class="forumNavigatie">
-		<a href="/forum/" class="forumGrootlink">Forum</a> &raquo; {$categorie->titel} &raquo;
+		<a href="/forum/" class="forumGrootlink">Forum</a> &raquo; <strong>{$categorie->titel}</strong> &raquo;
 		<a href="/forumdeel/{$deel->forum_id}" class="forumGrootlink">{$deel->titel}</a><br />
 		{if $deel->magModereren()}
 			<div style="display: inline-block; margin-right: 3px;">
@@ -53,9 +53,10 @@
 	{/strip}
 {/capture}
 
+{assign var=paginas value=ForumPostsModel::instance()->getAantalPaginas($draad->draad_id)}
 <table id="forumtabel">
 	<tbody>
-		{if ForumPostsModel::instance()->getAantalPaginas($draad->draad_id) > 1}
+		{if $paginas > 1}
 			<tr class="tussenschot">
 				<td colspan="2"></td>
 			</tr>
@@ -65,7 +66,7 @@
 					{$smarty.capture.magreageren}
 					<div class="forum_paginering">
 						Pagina: {sliding_pager baseurl="/forumdraad/"|cat:$draad->draad_id|cat:"/"
-									pagecount=ForumPostsModel::instance()->getAantalPaginas($draad->draad_id) curpage=ForumPostsModel::instance()->getHuidigePagina()}
+									pagecount=$paginas curpage=ForumPostsModel::instance()->getHuidigePagina()}
 					</div>
 				</td>
 			</tr>
@@ -81,15 +82,18 @@
 
 		{foreach from=$draad->getForumPosts() item=post name='berichten'}
 			{include file='MVC/forum/post_lijst.tpl'}
+			<tr class="tussenschot">
+				<td colspan="2"></td>
+			</tr>
 		{/foreach}
 
-		{if ForumPostsModel::instance()->getAantalPaginas($draad->draad_id) > 1}
+		{if $paginas > 1}
 			<tr>
 				<td>&nbsp;</td>
 				<td>
 					<div class="forum_paginering">
 						Pagina: {sliding_pager baseurl="/forumdraad/"|cat:$draad->draad_id|cat:"/"
-									pagecount=ForumPostsModel::instance()->getAantalPaginas($draad->draad_id) curpage=ForumPostsModel::instance()->getHuidigePagina()}
+									pagecount=$paginas curpage=ForumPostsModel::instance()->getHuidigePagina()}
 					</div>
 				</td>
 			</tr>

@@ -29,6 +29,7 @@ class ForumDeelView extends TemplateView {
 	}
 
 	public function view() {
+		$this->smarty->assign('post_form_tekst', $_SESSION['forum_laatste_post_tekst']);
 		$this->smarty->display('MVC/forum/deel.tpl');
 	}
 
@@ -44,6 +45,7 @@ class ForumDraadView extends TemplateView {
 	}
 
 	public function view() {
+		$this->smarty->assign('post_form_tekst', $_SESSION['forum_laatste_post_tekst']);
 		$this->smarty->display('MVC/forum/draad.tpl');
 	}
 
@@ -51,13 +53,26 @@ class ForumDraadView extends TemplateView {
 
 class ForumPostView extends TemplateView {
 
-	public function __construct(ForumPost $post) {
+	public function __construct(ForumPost $post, ForumDraad $draad, ForumDeel $deel) {
 		parent::__construct($post);
 		$this->smarty->assign('post', $this->model);
+		$this->smarty->assign('draad', $draad);
+		$this->smarty->assign('deel', $deel);
 	}
 
 	public function view() {
-		$this->smarty->display('MVC/forum/post.tpl');
+		$this->smarty->display('MVC/forum/post_lijst.tpl');
+	}
+
+}
+
+/**
+ * Requires id of deleted forumpost.
+ */
+class ForumPostDeleteView extends TemplateView {
+
+	public function view() {
+		echo '<tr id="forumpost-row-' . $this->model . '" class="remove"><td></td></tr>';
 	}
 
 }

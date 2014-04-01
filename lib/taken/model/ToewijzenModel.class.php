@@ -16,9 +16,8 @@ class ToewijzenModel {
 	 * Als er een kwalificatie benodigd is worden alleen de
 	 * gekwalificeerde leden teruggegeven.
 	 * 
-	 * @param \CorveeTaak $taak
+	 * @param CorveeTaak $taak
 	 * @return type
-	 * @throws \Exception
 	 */
 	public static function getSuggesties(CorveeTaak $taak) {
 		$vrijstellingen = VrijstellingenModel::getAlleVrijstellingen(true); // grouped by uid

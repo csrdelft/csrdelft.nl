@@ -58,7 +58,7 @@ corvee_rooster.tpl	|	P.W.G. Brussee (brussee@live.nl)
 			<td class="taak {$class}">
 				{if $taak->getLidId()}
 					{if $taak->getLidId() === $loginlid->getUid()} 
-						{* <a href="/communicatie/forum/zoeken.php?zoeken=corveedraad" title="Ruilen" class="knop" style="margin-right:10px;">{icon get="arrow_switch"}</a> *}
+						{* icon get="arrow_switch" title="Ruilen" *}
 					{/if}
 					{$taak->getLid()->getNaamLink($instellingen->get('corvee', 'weergave_ledennamen_corveerooster'), $instellingen->get('corvee', 'weergave_link_ledennamen'))}
 				{else}

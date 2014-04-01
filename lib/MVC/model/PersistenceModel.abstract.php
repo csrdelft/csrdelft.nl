@@ -121,7 +121,7 @@ abstract class PersistenceModel implements Persistence {
 	 * Requires positional values.
 	 * 
 	 * @param array $primary_key_values
-	 * @return PersistentEntity
+	 * @return PersistentEntity or false on failure
 	 */
 	protected function retrieveByPrimaryKey(array $primary_key_values) {
 		$where = array();

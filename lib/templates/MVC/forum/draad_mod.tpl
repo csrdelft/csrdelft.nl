@@ -12,29 +12,32 @@
 					</a>
 					<br /><br />
 					<a href="/forum/draadwijzigen/{$draad->draad_id}/verwijderd" class="knop post confirm" title="Verwijder forumdraad">
-						{icon get="cross"} Verwijderen
+						{icon get="cross"} verwijder draadje
 					</a>
 				</td>
 				<td>
-					<label for="newCat">Verplaats naar:</label>
-					<select name="newCat" onchange="location.href = '/forum/draadverplaatsen/{$draad->draad_id}/' + this.value;">
-						{foreach from=ForumModel::instance()->getForum() item=cat}
-							<optgroup label="{$cat->titel}">
-								{foreach from=$cat->getForumDelen() item=newDeel}
-									<option value="{$newDeel->forum_id}"{if $newDeel->forum_id === $deel->forum_id} selected="selected"{/if}>{$newDeel->titel}</option>
-								{/foreach}
-							</optgroup>
-						{/foreach}
-					</select>
+					<form action="/forum/draadwijzigen/{$draad->draad_id}/forum_id" method="post">
+						<label for="forum_id">Verplaats naar: </label>
+						<select name="forum_id">
+							{foreach from=ForumModel::instance()->getForum() item=cat}
+								<optgroup label="{$cat->titel}">
+									{foreach from=$cat->getForumDelen() item=newDeel}
+										<option value="{$newDeel->forum_id}"{if $newDeel->forum_id === $deel->forum_id} selected="selected"{/if}>{$newDeel->titel}</option>
+									{/foreach}
+								</optgroup>
+							{/foreach}
+						</select>
+						<input type="submit" value="opslaan" />
+					</form>
 					<br /><br />
 					<form action="/forum/draadwijzigen/{$draad->draad_id}/titel" method="post">
 						<label for="titel">Titel aanpassen:</label>
-						<input type="text" name="titel" value="{$draad->titel}" style="width: 250px;" />
+						<input type="text" name="titel" value="{$draad->titel}" style="width: 300px;" />
 						<input type="submit" value="opslaan" />
 					</form>
 				</td>
-				<td>
-					<div style="width: 25px; cursor: pointer; padding: 5px;" onclick="$('#btn_mod').toggle();$('#modereren').slideUp();">X</div>
+				<td style="width: 25px;">
+					<div style="cursor: pointer; padding: 5px;" onclick="$('#btn_mod').toggle();$('#modereren').slideUp();">X</div>
 				</td>
 			</tr>
 		</tbody>

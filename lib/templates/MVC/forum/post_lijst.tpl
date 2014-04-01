@@ -1,4 +1,4 @@
-<tr>
+<tr id="forumpost-row-{$post->post_id}">
 	<td class="auteur">
 		<a href="/forumpost/{$post->post_id}#post{$post->post_id}" class="postlink" title="Link naar deze post">&rarr;</a>
 		{$post->lid_id|csrnaam:'user':'visitekaartje'}
@@ -13,10 +13,10 @@
 				{$post->datum_tijd}
 			{/if}
 		</span><br />
-		{if (!$draad->gesloten AND $post->lid_id === $loginlid->getUid()) OR $deel->magModereren()}
+		{if ($deel->magPosten() AND !$draad->gesloten AND $post->lid_id === $loginlid->getUid()) OR $deel->magModereren()}
 			<a href="#post{$post->post_id}" class="knop" onclick="forumBewerken({$post->post_id});" title="Bewerk bericht">{icon get="pencil"}</a>
 		{/if}
-		{if !$draad->gesloten AND ($deel->magPosten() OR $deel->magModereren())}
+		{if !$draad->gesloten AND $deel->magPosten()}
 			<a href="#reageren" class="knop" onclick="forumCiteren({$post->post_id});" title="Citeer bericht">{icon get="comments"}</a>
 		{/if}
 		<br />
@@ -53,7 +53,4 @@
 			{/if}
 		</div>
 	</td>
-</tr>
-<tr class="tussenschot">
-	<td colspan="2"></td>
 </tr>

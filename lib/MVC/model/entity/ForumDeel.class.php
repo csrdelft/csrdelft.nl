@@ -111,15 +111,15 @@ class ForumDeel extends PersistentEntity {
 	protected static $table_name = 'forum_delen';
 
 	public function magLezen() {
-		return LoginLid::instance()->hasPermission($this->rechten_lezen);
+		return LoginLid::instance()->hasPermission('P_FORUM_READ') AND LoginLid::instance()->hasPermission($this->rechten_lezen);
 	}
 
 	public function magPosten() {
-		return LoginLid::instance()->hasPermission($this->rechten_posten);
+		return $this->magLezen() AND LoginLid::instance()->hasPermission($this->rechten_posten);
 	}
 
 	public function magModereren() {
-		return LoginLid::instance()->hasPermission($this->rechten_modereren);
+		return $this->magPosten() AND LoginLid::instance()->hasPermission($this->rechten_modereren);
 	}
 
 	public function isOpenbaar() {

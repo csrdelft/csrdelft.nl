@@ -1,10 +1,10 @@
 {$view->getMelding()}
 
-<form id="forum_zoeken" action="/communicatie/forum/zoeken.php" method="post"><fieldset><input type="text" name="zoeken" value="zoeken in forum" onfocus="this.value = '';" /></fieldset></form>
+<form id="forum_zoeken" action="/forum/zoeken" method="post"><fieldset><input type="text" name="zoeken" value="zoeken in forum" onfocus="this.value = '';" /></fieldset></form>
 
 {capture name='navlinks'}
 	<div class="forumNavigatie">
-		<a href="/forum/" class="forumGrootlink">Forum</a> &raquo; {$categorie->titel}
+		<a href="/forum" class="forumGrootlink">Forum</a> &raquo; <strong>{$categorie->titel}</strong>
 	</div>
 {/capture}
 
