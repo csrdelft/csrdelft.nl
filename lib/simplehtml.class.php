@@ -75,18 +75,26 @@ abstract class SimpleHTML implements View {
 		}
 		// Nieuwste belangrijke forumberichten
 		if (LidInstellingen::get('zijbalk', 'forum_belangrijk') >= 0) {
-			require_once 'forum/forumcontent.class.php';
-			$zijkolom[] = new ForumContent('lastposts_belangrijk');
+			require_once('MVC/model/ForumModel.class.php');
+			require_once('MVC/view/ForumView.class.php');
+			$zijkolom[] = new ForumDraadZijbalkView(
+					ForumDradenModel::instance()->getRecenteForumDraden(
+							LidInstellingen::get('zijbalk', 'forum_belangrijk'), true), true);
 		}
 		// Nieuwste forumberichten
 		if (LidInstellingen::get('zijbalk', 'forum') > 0) {
-			require_once 'forum/forumcontent.class.php';
-			$zijkolom[] = new ForumContent('lastposts');
+			require_once('MVC/model/ForumModel.class.php');
+			require_once('MVC/view/ForumView.class.php');
+			$zijkolom[] = new ForumDraadZijbalkView(
+					ForumDradenModel::instance()->getRecenteForumDraden(
+							LidInstellingen::get('zijbalk', 'forum'), false), false);
 		}
 		// Zelfgeposte forumberichten
 		if (LidInstellingen::get('zijbalk', 'forum_zelf') > 0) {
-			require_once 'forum/forumcontent.class.php';
-			$zijkolom[] = new ForumContent('lastposts_zelf');
+			require_once('MVC/model/ForumModel.class.php');
+			require_once('MVC/view/ForumView.class.php');
+			$posts_draden = ForumPostsModel::instance()->getRecenteForumPostsVanLid(LoginLid::instance()->getUid(), LidInstellingen::get('zijbalk', 'forum_zelf'));
+			$zijkolom[] = new ForumPostZijbalkView($posts_draden[0], $posts_draden[1]);
 		}
 		// Nieuwste fotoalbum
 		if (LidInstellingen::get('zijbalk', 'fotoalbum') == 'ja') {

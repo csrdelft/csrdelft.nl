@@ -5,17 +5,14 @@
  * 
  * @author Jan Pieter Waagmeester <jieter@jpwaag.com>
  *
- * Simpele spamfilter.
+ * Simple spamfilter.
  * 
  */
 class SimpleSpamFilter {
 
 	private $spamregex;
-	private $string;
-	private $score = 0;
 
-	public function __construct($string) {
-		$this->string = $string;
+	public function __construct() {
 		$this->spamregex = "/s-e-x|zoofilia|sexyongpin|grusskarte|geburtstagskarten|animalsex|" .
 				"sex-with|dogsex|adultchat|adultlive|camsexlivesex|viagra|" .
 				"chatsex|onlinesex|adultporn|adultvideo|adultweb.|hardcoresex|hardcoreporn|" .
@@ -26,16 +23,16 @@ class SimpleSpamFilter {
 				"jinxinghj|telematicsone|telematiksone|a-mortgage|diamondabrasives|" .
 				"reuterbrook|sex(-with|-plugin|-zone|cam|chat)|lazy-stars|eblja|liuhecai|" .
 				"buy-viagra|-cialis|-levitra|boy-and-girl-kissing|squirting|\[link=|<a href=/i";
-
-		// score gaat niet met meer dan 1 omhoog omdat preg_match na de eerste match stopt met zoeken.
-		$this->score += preg_match($this->spamregex, $this->string);
-		if ($this->hasOnlyLinks($this->string)) {
-			$this->score++;
-		}
 	}
 
-	public function isSpam() {
-		return $this->score > 0;
+	public function isSpam($string) {
+		$score = 0;
+		// score gaat niet met meer dan 1 omhoog omdat preg_match na de eerste match stopt met zoeken.
+		$score += preg_match($this->spamregex, $string);
+		if ($this->hasOnlyLinks($string)) {
+			$score++;
+		}
+		return $score > 0;
 	}
 
 	static function hasOnlyLinks($str) {

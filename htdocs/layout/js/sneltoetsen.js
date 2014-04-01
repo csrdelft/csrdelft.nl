@@ -21,7 +21,7 @@ jQuery(document).ready(function(){
 				location.href = "http://csrdelft.nl/actueel/groepen/Besturen/";
 			break;
 			case 102: //f voor forum
-				location.href = "http://csrdelft.nl/communicatie/forum/categorie/laatste";
+				location.href = "http://csrdelft.nl/forum/recent";
 			break;
 			case 100: //d voor documenten
 				location.href = "http://csrdelft.nl/communicatie/documenten/";

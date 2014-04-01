@@ -55,7 +55,7 @@ class Lid implements Serializable, Agendeerbaar {
 	}
 
 	public function getRssLink() {
-		$url = 'http://csrdelft.nl/communicatie/forum/rss';
+		$url = 'http://csrdelft.nl/forum/rss';
 		if ($this->getProperty('rssToken') == '') {
 			return $url . '.xml';
 		} else {
@@ -543,7 +543,7 @@ class Lid implements Serializable, Agendeerbaar {
 	 * Recente forumberichten
 	 */
 	public function getRecenteForumberichten() {
-		return Forum::getPostsVoorUid($this->getUid());
+		return ForumPostsModel::instance()->getRecenteForumPostsVanLid($this->getUid(), 15);
 	}
 
 	/**
@@ -553,7 +553,8 @@ class Lid implements Serializable, Agendeerbaar {
 
 	public function getForumPostCount() {
 		if ($this->forumpostcount == -1) {
-			$this->forumpostcount = Forum::getUserPostCount($this->getUid());
+			require_once 'MVC/model/ForumModel.class.php';
+			$this->forumpostcount = ForumPostsModel::instance()->getAantalForumPostsVoorLid($this->getUid());
 		}
 		return $this->forumpostcount;
 	}
