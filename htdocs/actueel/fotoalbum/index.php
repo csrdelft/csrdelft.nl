@@ -41,6 +41,7 @@ if ($fotoalbum->magBekijken()) {
 	$pagina->view();
 } else {
 	require_once 'MVC/model/CmsPaginaModel.class.php';
+	require_once 'MVC/view/CmsPaginaView.class.php';
 	$midden = new CmsPaginaView(CmsPaginaModel::instance()->getPagina('geentoegang'));
 
 	if (LoginLid::instance()->hasPermission('P_LOGGED_IN')) {

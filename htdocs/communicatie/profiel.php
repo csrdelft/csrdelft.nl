@@ -42,6 +42,7 @@ if (isset($_GET['a'])) {
 
 if (!($loginlid->hasPermission('P_LEDEN_READ') or $loginlid->hasPermission('P_OUDLEDEN_READ'))) {
 	require_once 'MVC/model/CmsPaginaModel.class.php';
+	require_once 'MVC/view/CmsPaginaView.class.php';
 	$midden = new CmsPaginaView(CmsPaginaModel::instance()->getPagina('geentoegang'));
 } else {
 	require_once 'lid/profielcontent.class.php';

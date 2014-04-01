@@ -7,6 +7,7 @@ require_once 'groepen/groep.class.php';
 if (!($loginlid->hasPermission('P_LOGGED_IN') AND $loginlid->hasPermission('P_OUDLEDEN_READ'))) {
 	# geen rechten
 	require_once 'MVC/model/CmsPaginaModel.class.php';
+	require_once 'MVC/view/CmsPaginaView.class.php';
 	$body = new CmsPaginaView(CmsPaginaModel::instance()->getPagina('geentoegang'));
 	$pagina = new CsrLayoutPage($body);
 	$pagina->view();

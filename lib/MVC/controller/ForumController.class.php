@@ -60,8 +60,14 @@ class ForumController extends Controller {
 	 */
 	public function forum() {
 		$body = new ForumView(ForumModel::instance()->getForum());
-		$this->view = new CsrLayoutPage($body);
+		if (LoginLid::instance()->hasPermission('P_LOGGED_IN')) {
+			$this->view = new CsrLayoutPage($body);
+		} else {
+			//uitgelogd heeft nieuwe layout
+			$this->view = new CsrLayout2Page($body);
+		}
 		$this->view->addStylesheet('forum.css');
+		$this->view->addScript('forum.js');
 	}
 
 	/**
@@ -78,8 +84,14 @@ class ForumController extends Controller {
 	public function forumrecent() {
 		$deel = ForumDelenModel::instance()->getRecent();
 		$body = new ForumDeelView($deel);
-		$this->view = new CsrLayoutPage($body);
+		if (LoginLid::instance()->hasPermission('P_LOGGED_IN')) {
+			$this->view = new CsrLayoutPage($body);
+		} else {
+			//uitgelogd heeft nieuwe layout
+			$this->view = new CsrLayout2Page($body);
+		}
 		$this->view->addStylesheet('forum.css');
+		$this->view->addScript('forum.js');
 	}
 
 	/**
@@ -99,8 +111,14 @@ class ForumController extends Controller {
 		}
 		ForumDradenModel::instance()->setHuidigePagina((int) $pagina); // lazy loading ForumDraad[]
 		$body = new ForumDeelView($deel, $categorie);
-		$this->view = new CsrLayoutPage($body);
+		if (LoginLid::instance()->hasPermission('P_LOGGED_IN')) {
+			$this->view = new CsrLayoutPage($body);
+		} else {
+			//uitgelogd heeft nieuwe layout
+			$this->view = new CsrLayout2Page($body);
+		}
 		$this->view->addStylesheet('forum.css');
+		$this->view->addScript('forum.js');
 	}
 
 	/**
@@ -119,7 +137,12 @@ class ForumController extends Controller {
 		ForumDradenGelezenModel::instance()->setWanneerGelezenDoorLid($draad);
 		ForumPostsModel::instance()->setHuidigePagina((int) $pagina); // lazy loading ForumPost[]
 		$body = new ForumDraadView($draad, $deel, $categorie);
-		$this->view = new CsrLayoutPage($body);
+		if (LoginLid::instance()->hasPermission('P_LOGGED_IN')) {
+			$this->view = new CsrLayoutPage($body);
+		} else {
+			//uitgelogd heeft nieuwe layout
+			$this->view = new CsrLayout2Page($body);
+		}
 		$this->view->addStylesheet('forum.css');
 		$this->view->addScript('forum.js');
 	}
@@ -209,7 +232,7 @@ class ForumController extends Controller {
 		$post = ForumPostsModel::instance()->getForumPost((int) $id);
 		$draad = ForumDradenModel::instance()->getForumDraad($post->draad_id);
 		$deel = ForumDelenModel::instance()->getForumDeel($draad->forum_id);
-		if (($deel->magPosten() AND !$draad->gesloten AND $post->lid_id === LoginLid::instance()->getUid()) OR $deel->magModereren()) {
+		if (($deel->magPosten() AND !$draad->gesloten AND $post->lid_id === LoginLid::instance()->getUid() AND LoginLid::instance()->hasPermission('P_LOGGED_IN')) OR $deel->magModereren()) {
 			// same if-statement in post_lijst.tpl
 		} else {
 			$this->geentoegang();

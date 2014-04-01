@@ -7,14 +7,14 @@
 			<form id="forumReageren" action="/forumposten/{$deel->forum_id}/{$draad->draad_id}" method="post">
 				<fieldset>
 					{* berichtje weergeven voor niet-ingeloggede gebruikers dat ze een naam moeten vermelden. *}
-					{if $draad->wacht_goedkeuring}
+					{if !$loginlid->hasPermission('P_LOGGED_IN')}
 						<strong>
 							Uw bericht wordt pas geplaatst nadat het bekeken en goedgekeurd is door de
 							<a href="http://csrdelft.nl/actueel/groepen/Commissies/PubCie/">PubCie</a>.
 							Het vermelden van <em>uw naam en email-adres</em> is verplicht.
 						</strong> 
 						<br /><br />
-						<label for="email">Email-adres:</label><input type="text" name="email" /><br />
+						<label for="email">Email-adres:</label><input type="text" name="email" style="width: 250px;" /><br />
 						{* spam trap, must be kept empty! *}
 						<input type="text" name="firstname" value="" class="verborgen" />
 						{* ingelogde gebruikers vertellen dat iedereen hun bericht mag lezen inclusief Google. *}

@@ -14,7 +14,7 @@
 			{/if}
 		</span>
 		<div class="forumpostKnoppen">
-			{if ($deel->magPosten() AND !$draad->gesloten AND $post->lid_id === $loginlid->getUid()) OR $deel->magModereren()}
+			{if (($deel->magPosten() AND !$draad->gesloten AND $post->lid_id === $loginlid->getUid() AND $loginlid->hasPermission('P_LOGGED_IN')) OR $deel->magModereren())}
 				<a href="#{$post->post_id}" class="knop" onclick="forumBewerken({$post->post_id});" title="Bewerk bericht">{icon get="pencil"}</a>
 			{/if}
 			{if !$draad->gesloten AND $deel->magPosten()}

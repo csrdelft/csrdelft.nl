@@ -224,14 +224,14 @@ class ForumDradenModel extends PersistenceModel implements Paging {
 		$draad->forum_id = (int) $forum_id;
 		$draad->lid_id = LoginLid::instance()->getUid();
 		$draad->titel = $titel;
-		$draad->datum_tijd = datum('Y-m-d H:i:s');
+		$draad->datum_tijd = date('Y-m-d H:i:s');
 		$draad->laatst_gewijzigd = null;
 		$draad->laatste_post_id = null;
 		$draad->laatste_lid_id = null;
 		$draad->aantal_posts = 0;
 		$draad->gesloten = false;
 		$draad->verwijderd = false;
-		$draad->wacht_goedkeuring = LoginLid::instance()->hasPermission('P_LOGGED_IN');
+		$draad->wacht_goedkeuring = !LoginLid::instance()->hasPermission('P_LOGGED_IN');
 		$draad->plakkerig = false;
 		$draad->belangrijk = false;
 		$draad->draad_id = (int) ForumDradenModel::instance()->create($draad);
