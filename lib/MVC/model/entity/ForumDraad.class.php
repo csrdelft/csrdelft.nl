@@ -121,6 +121,20 @@ class ForumDraad extends PersistentEntity {
 	 */
 	protected static $table_name = 'forum_draden';
 
+	public function getWanneerGelezen() {
+		if ($this->wanneer_gelezen === null) {
+			return '0000-00-00 00:00:00';
+		}
+		return $this->wanneer_gelezen;
+	}
+
+	public function alGelezen() {
+		if (strtotime($this->laatst_gewijzigd) < strtotime($this->getWanneerGelezen())) {
+			return true;
+		}
+		return false;
+	}
+
 	/**
 	 * Lazy loading by foreign key.
 	 * 
@@ -139,29 +153,6 @@ class ForumDraad extends PersistentEntity {
 
 	public function setForumPosts(array $forum_posts) {
 		$this->forum_posts = $forum_posts;
-	}
-
-	/**
-	 * Lazy loading by foreign key.
-	 * 
-	 * @return string
-	 */
-	public function getWanneerGelezen() {
-		if (!isset($this->wanneer_gelezen)) {
-			$this->setWanneerGelezen(ForumDradenGelezenModel::instance()->getWanneerGelezenDoorLid($this));
-		}
-		return $this->wanneer_gelezen;
-	}
-
-	public function alGelezen() {
-		if (strtotime($this->laatst_gewijzigd) < strtotime($this->getWanneerGelezen())) {
-			return true;
-		}
-		return false;
-	}
-
-	public function setWanneerGelezen($moment) {
-		$this->wanneer_gelezen = $moment;
 	}
 
 }

@@ -89,14 +89,6 @@ class ForumDradenGelezenModel extends PersistenceModel {
 
 	protected static $instance;
 
-	public function getWanneerGelezenDoorLid(ForumDraad $draad) {
-		$gelezen = $this->retrieveByPrimaryKey(array($draad->draad_id, LoginLid::instance()->getUid()));
-		if (!$gelezen) {
-			return '0000-00-00 00:00:00';
-		}
-		return $gelezen->datum_tijd;
-	}
-
 	public function setWanneerGelezenDoorLid(ForumDraad $draad) {
 		$gelezen = $this->retrieveByPrimaryKey(array($draad->draad_id, LoginLid::instance()->getUid()));
 		if (!$gelezen) {
@@ -156,10 +148,14 @@ class ForumDradenModel extends PersistenceModel implements Paging {
 	/**
 	 * Eager loading of ForumDraadGelezen[].
 	 * 
-	 * @param int $forum_id
-	 * @return ForumDraad[]
+	 * @param string $criteria WHERE
+	 * @param array $criteria_params optional named parameters
+	 * @param string $orderby
+	 * @param int $limit max amount of results
+	 * @param int $start resultset from index
+	 * @return PersistentEntity[]
 	 */
-	public function getForumDradenVoorDeel($forum_id) {
+	public function find($criteria = null, array $criteria_params = array(), $orderby = null, $limit = null, $start = 0) {
 		$orm = self::orm;
 		$from = $orm::getTableName() . ' AS d LEFT JOIN forum_draden_gelezen AS g ON d.draad_id = g.draad_id AND g.lid_id = ?';
 		$columns = $orm::getFields();
@@ -167,8 +163,12 @@ class ForumDradenModel extends PersistenceModel implements Paging {
 			$columns[$i] = 'd.' . $column;
 		}
 		$columns[] = 'g.datum_tijd AS wanneer_gelezen';
-		$result = Database::sqlSelect($columns, $from, 'd.forum_id = ? AND d.wacht_goedkeuring = FALSE AND d.verwijderd = FALSE', array(LoginLid::instance()->getUid(), $forum_id), 'd.plakkerig DESC, d.laatst_gewijzigd DESC', $this->per_pagina, ($this->pagina - 1) * $this->per_pagina);
+		$result = Database::sqlSelect($columns, $from, $criteria, array_merge(array(LoginLid::instance()->getUid()), $criteria_params), $orderby, $limit, $start);
 		return $result->fetchAll(PDO::FETCH_CLASS, self::orm);
+	}
+
+	public function getForumDradenVoorDeel($forum_id) {
+		return $this->find('d.forum_id = ? AND d.wacht_goedkeuring = FALSE AND d.verwijderd = FALSE', array($forum_id), 'd.plakkerig DESC, d.laatst_gewijzigd DESC', $this->per_pagina, ($this->pagina - 1) * $this->per_pagina);
 	}
 
 	/**
@@ -184,7 +184,7 @@ class ForumDradenModel extends PersistenceModel implements Paging {
 	 */
 	public function getRecenteForumDraden($aantal, $belangrijk = null, $rss = false) {
 		$draden = $this->find(
-				($belangrijk === null ? '' : 'belangrijk = ? AND ') . 'wacht_goedkeuring = FALSE AND verwijderd = FALSE', ($belangrijk === null ? array() : array($belangrijk)), 'laatst_gewijzigd DESC', $aantal);
+				($belangrijk === null ? '' : 'd.belangrijk = ? AND ') . 'd.wacht_goedkeuring = FALSE AND d.verwijderd = FALSE', ($belangrijk === null ? array() : array($belangrijk)), 'd.laatst_gewijzigd DESC', $aantal);
 		$posts_ids = array_keys(array_key_property('laatste_post_id', $draden, false));
 		$posts = ForumPostsModel::instance()->getForumPostsById($posts_ids);
 		$delen_ids = array_keys(array_key_property('forum_id', $draden, false));
@@ -216,7 +216,7 @@ class ForumDradenModel extends PersistenceModel implements Paging {
 
 	public function getForumDradenById(array $ids) {
 		$in = implode(', ', array_fill(0, count($ids), '?'));
-		return array_key_property('draad_id', $this->find('draad_id IN (' . $in . ')', $ids));
+		return array_key_property('draad_id', $this->find('d.draad_id IN (' . $in . ')', $ids));
 	}
 
 	public function maakForumDraad($forum_id, $titel) {
@@ -327,9 +327,11 @@ class ForumPostsModel extends PersistenceModel implements Paging {
 		$draden = ForumDradenModel::instance()->getForumDradenById($draden_ids);
 		$delen_ids = array_keys(array_key_property('forum_id', $draden, false));
 		$delen = ForumDelenModel::instance()->getForumDelenById($delen_ids);
-		foreach ($draden as $i => $draad) {
-			if (!$delen[$draad->forum_id]->magLezen()) {
-				unset($draden[$i]);
+		foreach ($posts as $i => $post) {
+			$deel = $delen[$draden[$post->draad_id]->forum_id];
+			if (!$deel->magLezen()) {
+				unset($draden[$post->draad_id]);
+				unset($posts[$i]);
 			}
 		}
 		return array($posts, $draden);
