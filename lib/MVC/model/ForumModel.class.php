@@ -69,6 +69,11 @@ class ForumDelenModel extends PersistenceModel {
 		return $this->retrieveByPrimaryKey(array($id));
 	}
 
+	public function getForumDelenById(array $ids) {
+		$in = implode(', ', array_fill(0, count($ids), '?'));
+		return array_key_property('forum_id', $this->find('forum_id IN (' . $in . ')', $ids));
+	}
+
 	public function getRecent() {
 		$deel = new ForumDeel();
 		$deel->titel = 'Recent';
@@ -167,6 +172,7 @@ class ForumDradenModel extends PersistenceModel implements Paging {
 	}
 
 	/**
+	 * Laad recente draadjes en check leesrechten op forumdeel.
 	 * If RSS: use token & eager loading of last ForumPost.
 	 * 
 	 * @param int $aantal
@@ -175,12 +181,10 @@ class ForumDradenModel extends PersistenceModel implements Paging {
 	 */
 	public function getRecenteForumDraden($aantal, $rss = false) {
 		$draden = $this->find('wacht_goedkeuring = FALSE AND verwijderd = FALSE', array(), 'laatst_gewijzigd DESC', $aantal);
-		$delenById = array();
+		$delen_ids = array_keys(array_key_property('forum_id', $draden, false));
+		$delen = ForumDelenModel::instance()->getForumDelenById($delen_ids);
 		foreach ($draden as $i => $draad) {
-			if (!array_key_exists($draad->forum_id, $delenById)) { // cachen
-				$delenById[$draad->forum_id] = ForumDelenModel::instance()->getForumDeel($draad->forum_id);
-			}
-			if (!LoginLid::instance()->hasPermission($delenById[$draad->forum_id]->rechten_lezen, $rss)) {
+			if (!LoginLid::instance()->hasPermission($delen[$draad->forum_id]->rechten_lezen, $rss)) {
 				unset($draden[$i]);
 			} elseif ($rss) {
 				$post = ForumPostsModel::instance()->getForumPost($draad->laatste_post_id);
@@ -188,7 +192,7 @@ class ForumDradenModel extends PersistenceModel implements Paging {
 			}
 		}
 		if ($rss) {
-			return array($draden, $delenById);
+			return array($draden, $delen);
 		}
 		return $draden;
 	}
@@ -203,6 +207,11 @@ class ForumDradenModel extends PersistenceModel implements Paging {
 			throw new Exception('Forumdraad bestaat niet!');
 		}
 		return $draad;
+	}
+
+	public function getForumDradenById(array $ids) {
+		$in = implode(', ', array_fill(0, count($ids), '?'));
+		return array_key_property('draad_id', $this->find('draad_id IN (' . $in . ')', $ids));
 	}
 
 	public function maakForumDraad($forum_id, $titel) {
@@ -310,8 +319,7 @@ class ForumPostsModel extends PersistenceModel implements Paging {
 	public function getRecenteForumPostsVanLid($uid, $aantal) {
 		$posts = $this->find('lid_id = ? AND wacht_goedkeuring = FALSE AND verwijderd = FALSE', array($uid), 'post_id DESC', $aantal);
 		$draden_ids = array_keys(array_key_property('draad_id', $posts, false));
-		$in = implode(', ', array_fill(0, count($draden_ids), '?'));
-		$draden = array_key_property('draad_id', ForumDradenModel::instance()->find('draad_id IN (' . $in . ')', $draden_ids));
+		$draden = ForumDradenModel::instance()->getForumDradenById($draden_ids);
 		foreach ($posts as $post) {
 			if (array_key_exists($post->draad_id, $draden)) {
 				$post->tekst = $draden[$post->draad_id]->titel;
