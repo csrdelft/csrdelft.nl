@@ -148,7 +148,15 @@ class ForumDradenModel extends PersistenceModel implements Paging {
 	 * @return ForumDraad[]
 	 */
 	public function getForumDradenVoorDeel($forum_id) {
-		$draden = $this->find(' LEFT JOIN forum_draden_gelezen AS g ON forum_draden.draad_id = g.draad_id AND g.lid_id = ? WHERE forum_id = ? AND wacht_goedkeuring = FALSE AND verwijderd = FALSE', array(LoginLid::instance()->getUid(), $forum_id), 'plakkerig DESC, laatst_gewijzigd DESC', $this->per_pagina, ($this->pagina - 1) * $this->per_pagina);
+		$orm = self::orm;
+		$from = $orm::getTableName() . ' AS d LEFT JOIN forum_draden_gelezen AS g ON d.draad_id = g.draad_id AND g.lid_id = ? ';
+		$columns = $orm::getFields();
+		foreach ($columns as $i => $column) {
+			$columns[$i] = 'd.' . $column; // prefix
+		}
+		$columns[] = 'g.datum_tijd AS wanneer_gelezen';
+		$result = Database::sqlSelect($columns, $from, 'd.forum_id = ? AND d.wacht_goedkeuring = FALSE AND d.verwijderd = FALSE', array(LoginLid::instance()->getUid(), $forum_id), 'd.plakkerig DESC, d.laatst_gewijzigd DESC', $this->per_pagina, ($this->pagina - 1) * $this->per_pagina);
+		$draden = $result->fetchAll(PDO::FETCH_CLASS, self::orm);
 		return $draden;
 	}
 

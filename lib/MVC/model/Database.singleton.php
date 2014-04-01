@@ -82,7 +82,6 @@ class Database extends PDO {
 
 	/**
 	 * Optional named parameters.
-	 * Optional JOIN in $where.
 	 * 
 	 * @param array $columns
 	 * @param string $from
@@ -94,14 +93,9 @@ class Database extends PDO {
 	 * @return PDOStatement
 	 */
 	public static function sqlSelect(array $columns, $from, $where = null, array $params = array(), $orderby = null, $limit = null, $start = 0) {
-		if (strpos($where, ' JOIN ') !== false) {
-			$glue = ', ' . $from . '.'; // with table prefix
-			$sql = 'SELECT ' . $from . '.' . implode($glue, $columns) . ' FROM ' . $from . $where;
-		} else {
-			$sql = 'SELECT ' . implode(', ', $columns) . ' FROM ' . $from;
-			if ($where !== null) {
-				$sql .= ' WHERE ' . $where;
-			}
+		$sql = 'SELECT ' . implode(', ', $columns) . ' FROM ' . $from;
+		if ($where !== null) {
+			$sql .= ' WHERE ' . $where;
 		}
 		if ($orderby !== null) {
 			$sql .= ' ORDER BY ' . $orderby;
