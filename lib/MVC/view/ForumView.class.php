@@ -14,6 +14,10 @@ class ForumView extends TemplateView {
 		$this->smarty->assign('categorien', $this->model);
 	}
 
+	public function getTitel() {
+		return 'Forum';
+	}
+
 	public function view() {
 		$this->smarty->display('MVC/forum/forum.tpl');
 	}
@@ -42,6 +46,10 @@ class ForumRecentView extends TemplateView {
 		$this->smarty->assign('draden', $this->model);
 	}
 
+	public function getTitel() {
+		return 'Forum recent';
+	}
+
 	public function view() {
 		$this->smarty->display('MVC/forum/recent.tpl');
 	}
@@ -53,6 +61,10 @@ class ForumDeelView extends TemplateView {
 	public function __construct(ForumDeel $deel) {
 		parent::__construct($deel);
 		$this->smarty->assign('deel', $this->model);
+	}
+
+	public function getTitel() {
+		return 'Forum | ' . $this->model->titel;
 	}
 
 	public function view() {
@@ -68,6 +80,10 @@ class ForumDraadView extends TemplateView {
 		parent::__construct($draad);
 		$this->smarty->assign('draad', $this->model);
 		$this->smarty->assign('deel', $deel);
+	}
+
+	public function getTitel() {
+		return 'Forum | ' . $this->model->titel;
 	}
 
 	public function view() {

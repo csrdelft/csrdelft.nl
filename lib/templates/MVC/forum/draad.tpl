@@ -1,6 +1,6 @@
 {$view->getMelding()}
 {strip}
-	<form id="forum_zoeken" action="/forum/zoeken.php" method="post">
+	<form id="forum_zoeken" action="/forum/zoeken" method="post">
 		<input type="text" name="zoeken" value="zoeken in forum" onfocus="this.value = '';" />
 		{if $deel->magModereren()}
 			<div id="btn_mod">
