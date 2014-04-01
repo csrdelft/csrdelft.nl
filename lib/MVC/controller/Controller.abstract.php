@@ -44,7 +44,7 @@ abstract class Controller {
 		$this->model = $model;
 		// split at ?-mark
 		$mark = strpos($query, '?');
-		if ($mark) {
+		if ($mark !== false) {
 			$rest = substr($query, 0, $mark);
 		} else {
 			$rest = $query;

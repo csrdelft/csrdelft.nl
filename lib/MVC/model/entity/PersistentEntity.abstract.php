@@ -59,7 +59,7 @@ abstract class PersistentEntity {
 				$this->$field = (int) $this->$field;
 			} elseif (startsWith($type, 'boolean')) {
 				$this->$field = (boolean) $this->$field;
-			} elseif ($this->$field === null AND strpos($type, 'NOT NULL')) {
+			} elseif ($this->$field === null AND strpos($type, 'NOT NULL') !== false) {
 				$this->$field = '';
 			}
 		}

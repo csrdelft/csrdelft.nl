@@ -77,28 +77,6 @@ class ForumDradenGelezenModel extends PersistenceModel {
 
 	protected static $instance;
 
-	/**
-	 * Laadt voor elke forumdraad wanneer de gebruiker deze voor het laatst gelezen heeft.
-	 * 
-	 * @param ForumDraad[] $draden
-	 * @return ForumDraad[]
-	 */
-	public function loadAlleWanneerGelezen(array &$draden) {
-		$draden = array_key_property('draad_id', $draden);
-		$in = implode(', ', array_fill(0, count($draden), '?'));
-		$values = array_merge(array(LoginLid::instance()->getUid()), array_keys($draden));
-		$gelezen = array_key_property('draad_id', $this->find('lid_id = ? AND draad_id IN (' . $in . ')', $values));
-		foreach ($draden as $draad) {
-			if (array_key_exists($draad->draad_id, $gelezen)) {
-				$wanneer = $gelezen[$draad->draad_id]->datum_tijd;
-			} else {
-				$wanneer = '0000-00-00 00:00:00';
-			}
-			$draad->setWanneerGelezen($wanneer);
-		}
-		return $draden;
-	}
-
 	public function getWanneerGelezenDoorLid(ForumDraad $draad) {
 		$gelezen = $this->retrieveByPrimaryKey(array($draad->draad_id, LoginLid::instance()->getUid()));
 		if (!$gelezen) {
@@ -170,8 +148,7 @@ class ForumDradenModel extends PersistenceModel implements Paging {
 	 * @return ForumDraad[]
 	 */
 	public function getForumDradenVoorDeel($forum_id) {
-		$draden = $this->find('forum_id = ?  AND wacht_goedkeuring = FALSE AND verwijderd = FALSE', array($forum_id), 'plakkerig DESC, laatst_gewijzigd DESC', $this->per_pagina, ($this->pagina - 1) * $this->per_pagina);
-		ForumDradenGelezenModel::instance()->loadAlleWanneerGelezen($draden);
+		$draden = $this->find(' LEFT JOIN forum_draden_gelezen AS g ON forum_draden.draad_id = g.draad_id AND g.lid_id = ? WHERE forum_id = ? AND wacht_goedkeuring = FALSE AND verwijderd = FALSE', array(LoginLid::instance()->getUid(), $forum_id), 'plakkerig DESC, laatst_gewijzigd DESC', $this->per_pagina, ($this->pagina - 1) * $this->per_pagina);
 		return $draden;
 	}
 
