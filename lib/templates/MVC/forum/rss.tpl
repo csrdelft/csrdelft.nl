@@ -31,7 +31,7 @@
 				<title>{$draad->titel}</title>
 				<link>http://csrdelft.nl/forumdraad/{$draad->draad_id}</link>
 				<dc:creator>{$draad->lid_id|csrnaam:'user':false:false|escape:'html'}</dc:creator>
-				<category>forum/{$titels[$draad->forum_id]}</category>
+				<category>forum/{$delen[$draad->forum_id]->titel}</category>
 				<comments>http://csrdelft.nl/forumdraad/{$draad->draad_id}</comments>
 				<guid isPermaLink="true">http://csrdelft.nl/forumdraad/{$draad->draad_id}</guid>
 				<pubDate>{$draad->datum_tijd|rfc2822}</pubDate>

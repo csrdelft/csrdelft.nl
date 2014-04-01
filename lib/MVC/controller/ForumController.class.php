@@ -68,19 +68,8 @@ class ForumController extends Controller {
 	 * RSS feed van recente draadjes tonen.
 	 */
 	public function forumrss() {
-		$draden = ForumDradenModel::instance()->getRssForumDradenVoorLid();
-		$delenById = array();
-		$delenTitels = array();
-		foreach ($draden as $i => $draad) {
-			if (!array_key_exists($draad->forum_id, $delenById)) { // cachen
-				$delenById[$draad->forum_id] = ForumDelenModel::instance()->getForumDeel($draad->forum_id);
-				$delenTitels[$draad->forum_id] = $delenById[$draad->forum_id]->titel;
-			}
-			if (!LoginLid::instance()->hasPermission($delenById[$draad->forum_id]->rechten_lezen, $token_authorizable = true)) {
-				unset($draden[$i]);
-			}
-		}
-		$this->view = new ForumRssView($draden, $delenTitels);
+		$draden_delen = ForumDradenModel::instance()->getRssForumDradenEnDelen();
+		$this->view = new ForumRssView($draden_delen[0], $draden_delen[1]);
 	}
 
 	/**

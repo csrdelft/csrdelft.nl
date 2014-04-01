@@ -22,10 +22,10 @@ class ForumView extends TemplateView {
 
 class ForumRssView extends TemplateView {
 
-	public function __construct(array $draden, array $titels) {
+	public function __construct(array $draden, array $delen) {
 		parent::__construct($draden);
 		$this->smarty->assign('draden', $this->model);
-		$this->smarty->assign('titels', $titels);
+		$this->smarty->assign('delen', $delen);
 		$this->smarty->assign('privatelink', LoginLid::instance()->getLid()->getRssLink());
 	}
 

@@ -72,7 +72,7 @@ class ForumDelenModel extends PersistenceModel {
 	public function getRecent() {
 		$deel = new ForumDeel();
 		$deel->titel = 'Recent';
-		$deel->setForumDraden(ForumDradenModel::instance()->getRecenteForumDraden(30));
+		$deel->setForumDraden(ForumDradenModel::instance()->getRecenteForumDraden(LidInstellingen::get('forum', 'zoekresultaten')));
 		return $deel;
 	}
 
@@ -166,12 +166,35 @@ class ForumDradenModel extends PersistenceModel implements Paging {
 		return $result->fetchAll(PDO::FETCH_CLASS, self::orm);
 	}
 
-	public function getRecenteForumDraden($aantal) {
-		return $this->find('wacht_goedkeuring = FALSE AND verwijderd = FALSE', array(), 'laatst_gewijzigd DESC', $aantal);
+	/**
+	 * If RSS: use token & eager loading of last ForumPost.
+	 * 
+	 * @param int $aantal
+	 * @param boolean $rss
+	 * @return ForumDraad[]
+	 */
+	public function getRecenteForumDraden($aantal, $rss = false) {
+		$draden = $this->find('wacht_goedkeuring = FALSE AND verwijderd = FALSE', array(), 'laatst_gewijzigd DESC', $aantal);
+		$delenById = array();
+		foreach ($draden as $i => $draad) {
+			if (!array_key_exists($draad->forum_id, $delenById)) { // cachen
+				$delenById[$draad->forum_id] = ForumDelenModel::instance()->getForumDeel($draad->forum_id);
+			}
+			if (!LoginLid::instance()->hasPermission($delenById[$draad->forum_id]->rechten_lezen, $rss)) {
+				unset($draden[$i]);
+			} elseif ($rss) {
+				$post = ForumPostsModel::instance()->getForumPost($draad->laatste_post_id);
+				$draad->setForumPosts(array($post));
+			}
+		}
+		if ($rss) {
+			return array($draden, $delenById);
+		}
+		return $draden;
 	}
 
-	public function getRssForumDradenVoorLid() {
-		return $this->getRecenteForumDraden(30); //TODO
+	public function getRssForumDradenEnDelen() {
+		return $this->getRecenteForumDraden(LidInstellingen::get('forum', 'zoekresultaten'), true);
 	}
 
 	public function getForumDraad($id) {
@@ -284,7 +307,7 @@ class ForumPostsModel extends PersistenceModel implements Paging {
 	 * @param int $aantal
 	 * @return ForumPost[]
 	 */
-	public function getRecenteForumPostsVoorLid($uid, $aantal) {
+	public function getRecenteForumPostsVanLid($uid, $aantal) {
 		$posts = $this->find('lid_id = ? AND wacht_goedkeuring = FALSE AND verwijderd = FALSE', array($uid), 'post_id DESC', $aantal);
 		$draden_ids = array_keys(array_key_property('draad_id', $posts, false));
 		$in = implode(', ', array_fill(0, count($draden_ids), '?'));
