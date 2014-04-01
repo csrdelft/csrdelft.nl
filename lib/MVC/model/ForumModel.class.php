@@ -36,62 +36,16 @@ class ForumModel extends PersistenceModel {
 	}
 
 	public function zoeken($query, $categorie_id = null) {
-		$db = MySql::instance();
-
 		if (!preg_match('/^[a-zA-Z0-9 \-\+\'\"\.]*$/', $query)) {
+			setMelding('Ongeldige tekens in zoekopdracht', -1);
 			return false;
 		}
-		$query = $db->escape(trim($query));
-
-		$singleCat = '1';
-		if ($categorie_id !== null AND $categorie_id != 0) {
-			foreach (ForumCategorie::getAll(true) as $cat) {
-				if ($cat['id'] == $categorie_id) {
-					$singleCat = 'topic.categorie=' . (int) $categorie_id;
-				}
-			}
+		$draden = array_key_property('draad_id', ForumDradenModel::instance()->find('MATCH (titel) AGAINST (? IN NATURAL LANGUAGE MODE)', array($query)));
+		foreach ($draden as $draad) {
+			$eerste_posts[] = ForumPostsModel::instance()->find('draad_id = ?', array($draad->draad_id), 'post_id DESC', 1);
 		}
-
-		$dbQuery = "
-			SELECT
-				topic.id AS tid,
-				topic.titel AS titel,
-				topic.uid AS startUID,
-				topic.categorie AS categorie,
-				cat.titel AS categorieTitel,
-				topic.open AS open,
-				topic.plakkerig AS plakkerig,
-				post.uid AS uid,
-				post.id AS postID,
-				post.tekst AS tekst,
-				post.datum AS datum,
-				post.bewerkDatum AS bewerkDatum,
-				count(*) AS aantal,
-				(MATCH(post.tekst) AGAINST('" . $query . "' IN NATURAL LANGUAGE MODE) * 0.34 + MATCH(topic.titel) AGAINST ('" . $query . "' IN NATURAL LANGUAGE MODE) * 0.66) AS relevance
-			FROM
-				forum_post post
-			INNER JOIN
-				forum_topic topic ON( post.tid=topic.id )
-			INNER JOIN
-				forum_cat cat ON( topic.categorie=cat.id )
-			WHERE topic.zichtbaar='zichtbaar'
-			  AND post.zichtbaar='zichtbaar'
-			  AND (" . Forum::getCategorieClause() . ")
-			  AND (" . $singleCat . ")
-			  AND (
-				  MATCH(post.tekst)AGAINST('" . $query . "' IN NATURAL LANGUAGE MODE ) OR
-				  topic.titel LIKE '%" . $query . "%'
-				)
-			GROUP BY
-				topic.id
-			ORDER BY
-				relevance DESC, post.datum DESC
-			LIMIT
-				" . LidInstellingen::get('forum', 'zoekresultaten') . ";";
-		//Als MySQL 5.1.7 op syrinx staat kan er in 'natural language mode' gezocht worden
-		//MATCH(post.tekst)AGAINST('".$query."' IN NATURAL LANGUAGE MODE ) OR
-
-		return $db->query2array($dbQuery);
+		$posts = ForumPostsModel::instance()->find('MATCH (tekst) AGAINST (? IN NATURAL LANGUAGE MODE)', array($query));
+		return array_merge($eerste_posts, $posts);
 	}
 
 }
@@ -289,7 +243,7 @@ class ForumDradenModel extends PersistenceModel implements Paging {
 			if (!$delen[$draad->forum_id]->magLezen($rss)) {
 				unset($draden[$i]);
 			} elseif (array_key_exists($draad->laatste_post_id, $posts)) {
-				$draad->setForumPosts($posts[$draad->laatste_post_id]);
+				$draad->setForumPosts(array($posts[$draad->laatste_post_id]));
 			}
 		}
 		if ($rss) {
@@ -453,7 +407,7 @@ class ForumPostsModel extends PersistenceModel implements Paging {
 			return array();
 		}
 		$in = implode(', ', array_fill(0, $count, '?'));
-		return array_group_by('post_id', $this->find('post_id IN (' . $in . ')', $ids));
+		return array_key_property('post_id', $this->find('post_id IN (' . $in . ')', $ids));
 	}
 
 	public function maakForumPost($draad_id, $tekst, $ip, $wacht_goedkeuring) {

@@ -34,5 +34,5 @@
 	{$smarty.capture.navlinks}
 
 {else}
-	Geen wachtrij.
+	Geen resultaten.
 {/if}

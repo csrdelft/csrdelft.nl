@@ -171,15 +171,19 @@ class ForumPostDeleteView extends TemplateView {
 /**
  * Requires ForumDeel[]
  */
-class ForumGoedkeurenView extends TemplateView {
+class ForumResultatenView extends TemplateView {
+
+	public function __construct(array $delen, $titel) {
+		parent::__construct($titel);
+		$this->smarty->assign('delen', $delen);
+	}
 
 	public function getTitel() {
-		return 'Wacht op goedkeuring';
+		return $this->model;
 	}
 
 	public function view() {
-		$this->smarty->assign('delen', $this->model);
-		$this->smarty->display('MVC/forum/goedkeuren.tpl');
+		$this->smarty->display('MVC/forum/resultaten.tpl');
 	}
 
 }

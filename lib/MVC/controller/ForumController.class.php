@@ -40,6 +40,7 @@ class ForumController extends Controller {
 			case 'forumwacht':
 				return !$this->isPosted();
 
+			case 'forumzoeken':
 			case 'forumposten':
 			case 'forumpostbewerken':
 			case 'forumpostverwijderen':
@@ -76,6 +77,27 @@ class ForumController extends Controller {
 	public function forumrss() {
 		$draden_delen = ForumDradenModel::instance()->getRssForumDradenEnDelen();
 		$this->view = new ForumRssView($draden_delen[0], $draden_delen[1]);
+	}
+
+	/**
+	 * Tonen van alle posts die wachten op goedkeuring.
+	 */
+	public function forumwacht() {
+		$body = new ForumResultatenView(ForumDelenModel::instance()->getWachtOpGoedkeuring(), 'Wacht op goedkeuring');
+		$this->view = new CsrLayoutPage($body);
+		$this->view->addStylesheet('forum.css');
+		$this->view->addScript('forum.js');
+	}
+
+	/**
+	 * Tonen van alle posts die wachten op goedkeuring.
+	 */
+	public function forumzoeken() {
+		$query = filter_input(INPUT_POST, 'zoeken', FILTER_SANITIZE_SPECIAL_CHARS);
+		$body = new ForumResultatenView(ForumModel::instance()->zoeken($query), 'Zoekresultaten voor: ' . $query);
+		$this->view = new CsrLayoutPage($body);
+		$this->view->addStylesheet('forum.css');
+		$this->view->addScript('forum.js');
 	}
 
 	/**
@@ -150,16 +172,6 @@ class ForumController extends Controller {
 	public function forumpost($id) {
 		$post = ForumPostsModel::instance()->getForumPost((int) $id);
 		$this->forumdraad($post->draad_id, ForumPostsModel::instance()->getPaginaVoorPost($post));
-	}
-
-	/**
-	 * Tonen van alle posts die wachten op goedkeuring.
-	 */
-	public function forumwacht() {
-		$body = new ForumGoedkeurenView(ForumDelenModel::instance()->getWachtOpGoedkeuring());
-		$this->view = new CsrLayoutPage($body);
-		$this->view->addStylesheet('forum.css');
-		$this->view->addScript('forum.js');
 	}
 
 	/**
