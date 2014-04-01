@@ -12,7 +12,7 @@
 			{else}
 				{$deel->laatst_gewijzigd}
 			{/if}
-			<br /><a href="/forumpost/{$deel->laatste_post_id}#post{$deel->laatste_post_id}">bericht</a> 
+			<br /><a href="/forumpost/{$deel->laatste_post_id}#{$deel->laatste_post_id}">bericht</a> 
 			door {$deel->laatste_lid_id|csrnaam:'user'}
 		{/if}
 	</td>

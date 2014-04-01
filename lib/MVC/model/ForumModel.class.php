@@ -69,6 +69,13 @@ class ForumDelenModel extends PersistenceModel {
 		return $this->retrieveByPrimaryKey(array($id));
 	}
 
+	public function getRecent() {
+		$deel = new ForumDeel();
+		$deel->titel = 'Recent';
+		$deel->setForumDraden(ForumDradenModel::instance()->getRecenteForumDraden(30));
+		return $deel;
+	}
+
 }
 
 class ForumDradenGelezenModel extends PersistenceModel {
@@ -149,15 +156,22 @@ class ForumDradenModel extends PersistenceModel implements Paging {
 	 */
 	public function getForumDradenVoorDeel($forum_id) {
 		$orm = self::orm;
-		$from = $orm::getTableName() . ' AS d LEFT JOIN forum_draden_gelezen AS g ON d.draad_id = g.draad_id AND g.lid_id = ? ';
+		$from = $orm::getTableName() . ' AS d LEFT JOIN forum_draden_gelezen AS g ON d.draad_id = g.draad_id AND g.lid_id = ?';
 		$columns = $orm::getFields();
 		foreach ($columns as $i => $column) {
 			$columns[$i] = 'd.' . $column; // prefix
 		}
 		$columns[] = 'g.datum_tijd AS wanneer_gelezen';
 		$result = Database::sqlSelect($columns, $from, 'd.forum_id = ? AND d.wacht_goedkeuring = FALSE AND d.verwijderd = FALSE', array(LoginLid::instance()->getUid(), $forum_id), 'd.plakkerig DESC, d.laatst_gewijzigd DESC', $this->per_pagina, ($this->pagina - 1) * $this->per_pagina);
-		$draden = $result->fetchAll(PDO::FETCH_CLASS, self::orm);
-		return $draden;
+		return $result->fetchAll(PDO::FETCH_CLASS, self::orm);
+	}
+
+	public function getRecenteForumDraden($aantal) {
+		return $this->find('wacht_goedkeuring = FALSE AND verwijderd = FALSE', array(), 'laatst_gewijzigd DESC', $aantal);
+	}
+
+	public function getRssForumDradenVoorLid() {
+		return $this->getRecenteForumDraden(30); //TODO
 	}
 
 	public function getForumDraad($id) {

@@ -3,8 +3,9 @@
 <form id="forum_zoeken" action="/forum/zoeken" method="post"><fieldset><input type="text" name="zoeken" value="zoeken in forum" onfocus="this.value = '';" /></fieldset></form>
 
 <div class="forumNavigatie">
-	<h1>Forum</h1>
+	<a href="/forum/recent" class="forumGrootlink">Recent</a>
 </div>
+<h1>Forum</h1>
 
 <table id="forumtabel">
 	{foreach from=$categorien item=cat}

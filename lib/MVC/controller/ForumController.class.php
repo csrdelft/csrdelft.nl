@@ -19,9 +19,6 @@ class ForumController extends Controller {
 			$_SESSION['forum_laatste_post_tekst'] = null;
 		}
 		$this->action = $this->getParam(1);
-		if ($this->action === 'forumrss.xml') {
-			$this->action = 'forumrss';
-		}
 		$this->performAction($this->getParams(2));
 	}
 
@@ -68,17 +65,32 @@ class ForumController extends Controller {
 	}
 
 	/**
-	 * TODO
+	 * RSS feed van recente draadjes tonen.
 	 */
 	public function forumrss() {
-		ForumRssView;
+		$draden = ForumDradenModel::instance()->getRssForumDradenVoorLid();
+		$delenById = array();
+		$delenTitels = array();
+		foreach ($draden as $i => $draad) {
+			if (!array_key_exists($draad->forum_id, $delenById)) { // cachen
+				$delenById[$draad->forum_id] = ForumDelenModel::instance()->getForumDeel($draad->forum_id);
+				$delenTitels[$draad->forum_id] = $delenById[$draad->forum_id]->titel;
+			}
+			if (!LoginLid::instance()->hasPermission($delenById[$draad->forum_id]->rechten_lezen, $token_authorizable = true)) {
+				unset($draden[$i]);
+			}
+		}
+		$this->view = new ForumRssView($draden, $delenTitels);
 	}
 
 	/**
-	 * TODO
+	 * Recente draadjes laten zien in tabel.
 	 */
 	public function forumrecent() {
-		ForumRecentView;
+		$deel = ForumDelenModel::instance()->getRecent();
+		$body = new ForumDeelView($deel);
+		$this->view = new CsrLayoutPage($body);
+		$this->view->addStylesheet('forum.css');
 	}
 
 	/**
@@ -201,7 +213,7 @@ class ForumController extends Controller {
 		ForumDradenModel::instance()->update($draad);
 		$_SESSION['forum_laatste_post_tekst'] = $tekst;
 		// redirect naar (altijd) juiste pagina
-		invokeRefresh('/forumpost/' . $post->post_id . '#post' . $post->post_id); // , ($draad_id === null ? 'Draad' : 'Post') . ' succesvol toegevoegd', 1
+		invokeRefresh('/forumpost/' . $post->post_id . '#' . $post->post_id); // , ($draad_id === null ? 'Draad' : 'Post') . ' succesvol toegevoegd', 1
 	}
 
 	public function forumpostbewerken($id) {
@@ -217,7 +229,7 @@ class ForumController extends Controller {
 		$reden = trim(filter_input(INPUT_POST, 'reden', FILTER_SANITIZE_STRING));
 		ForumPostsModel::instance()->bewerkForumPost($post, $tekst, $reden);
 		// redirect naar (altijd) juiste pagina
-		invokeRefresh('/forumpost/' . $post->post_id . '#post' . $post->post_id); // , 'Post succesvol bewerkt', 1
+		invokeRefresh('/forumpost/' . $post->post_id . '#' . $post->post_id); // , 'Post succesvol bewerkt', 1
 	}
 
 	public function forumpostverwijderen($id) {
