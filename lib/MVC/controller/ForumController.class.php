@@ -14,6 +14,9 @@ class ForumController extends Controller {
 
 	public function __construct($query) {
 		parent::__construct(str_replace('forum/', 'forum', $query));
+		if (!array_key_exists('forum_concept', $_SESSION)) {
+			$_SESSION['forum_concept'] = '';
+		}
 		$this->action = $this->getParam(1);
 		$this->performAction($this->getParams(2));
 	}
@@ -149,9 +152,14 @@ class ForumController extends Controller {
 		$this->forumdraad($post->draad_id, ForumPostsModel::instance()->getPaginaVoorPost($post));
 	}
 
+	/**
+	 * Tonen van alle posts die wachten op goedkeuring.
+	 */
 	public function forumwacht() {
-		$posts_draden = ForumPostsModel::instance()->getForumPostsWachtOpGoedkeuring();
-		$this->view = new ForumPostGoedkeuringView($posts_draden[0], $posts_draden[1]);
+		$body = new ForumGoedkeurenView(ForumDelenModel::instance()->getWachtOpGoedkeuring());
+		$this->view = new CsrLayoutPage($body);
+		$this->view->addStylesheet('forum.css');
+		$this->view->addScript('forum.js');
 	}
 
 	/**
@@ -172,6 +180,9 @@ class ForumController extends Controller {
 			$value = !$draad->$property;
 		} elseif ($property === 'forum_id') {
 			$value = (int) filter_input(INPUT_POST, $property, FILTER_SANITIZE_NUMBER_INT);
+			if (!ForumDelenModel::instance()->bestaatForumDeel($value)) {
+				throw new Exception('Forum bestaat niet!');
+			}
 		} else if ($property === 'titel') {
 			$value = trim(filter_input(INPUT_POST, $property, FILTER_SANITIZE_STRIPPED));
 		} else {
@@ -187,6 +198,9 @@ class ForumController extends Controller {
 				$wijziging = $property . ' = ' . $value;
 			}
 			setMelding('Wijziging geslaagd: ' . $wijziging, 1);
+		}
+		if ($property === 'verwijderd') {
+			ForumDradenModel::instance()->hertellenVoorDeel($deel);
 		}
 		$this->forumdraad($draad->draad_id);
 	}
@@ -209,7 +223,7 @@ class ForumController extends Controller {
 		if ($filter->isSpam($tekst)) {
 			invokeRefresh('/forumdeel/' . $deel->forum_id, 'SPAM', -1); //TODO: logging
 		}
-		// voorkom dubbelposts
+		// voorkomen dubbelposts
 		if (array_key_exists('forum_laatste_post_tekst', $_SESSION) AND $_SESSION['forum_laatste_post_tekst'] === $tekst) {
 			invokeRefresh('/forumdeel/' . $deel->forum_id, 'Bericht is al gepost!', 0);
 		}
@@ -231,13 +245,17 @@ class ForumController extends Controller {
 			}
 		} else { // post in nieuw draadje
 			$draad = ForumDradenModel::instance()->maakForumDraad($deel->forum_id, trim(filter_input(INPUT_POST, 'titel', FILTER_SANITIZE_STRING)));
+			$deel->aantal_draden++;
 		}
 		$post = ForumPostsModel::instance()->maakForumPost($draad->draad_id, $tekst, $_SERVER['REMOTE_ADDR'], $wacht_goedkeuring);
+		$_SESSION['forum_laatste_post_tekst'] = $tekst;
+		$draad->aantal_posts++;
 		$draad->laatst_gewijzigd = $post->datum_tijd;
 		$draad->laatste_post_id = $post->post_id;
 		$draad->laatste_lid_id = $post->lid_id;
 		ForumDradenModel::instance()->update($draad);
-		$_SESSION['forum_laatste_post_tekst'] = $tekst;
+		$deel->aantal_posts++;
+		ForumDelenModel::instance()->update($deel);
 		if ($wacht_goedkeuring) {
 			setMelding('Uw bericht is opgeslagen en zal als het goedgekeurd is geplaatst worden.', 1);
 			//bericht sturen naar pubcie@csrdelft dat er een bericht op goedkeuring wacht
@@ -275,6 +293,7 @@ class ForumController extends Controller {
 		if ($rowcount !== 1) {
 			throw new Exception('Verwijderen mislukt');
 		}
+		ForumPostsModel::instance()->hertellenVoorDraad($draad);
 		$this->view = new ForumPostDeleteView($post->post_id);
 	}
 
@@ -302,6 +321,15 @@ class ForumController extends Controller {
 		$rowcount = ForumPostsModel::instance()->goedkeurenForumPost($post);
 		if ($rowcount !== 1) {
 			throw new Exception('Goedkeuren mislukt');
+		}
+		if ($draad->wacht_goedkeuring AND $draad->aantal_posts === 1) {
+			$draad->wacht_goedkeuring = false;
+			$draad->laatst_gewijzigd = $post->laatst_bewerkt;
+			$draad->aantal_posts++;
+			$rowcount = ForumDradenModel::instance()->update($draad);
+			if ($rowcount !== 1) {
+				throw new Exception('Goedkeuren mislukt');
+			}
 		}
 		$this->view = new ForumPostView($post, $draad, $deel);
 	}

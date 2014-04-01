@@ -126,29 +126,6 @@ class ForumPostZijbalkView extends TemplateView {
 
 }
 
-/**
- * Requires ForumPost[] and ForumDraad[]
- */
-class ForumPostGoedkeuringView extends TemplateView {
-
-	private $draden;
-
-	public function __construct(array $posts, array $draden) {
-		parent::__construct($posts);
-		$this->draden = $draden;
-	}
-
-	public function view() {
-		foreach ($this->model as $post) {
-			$this->smarty->assign('draad', $this->draden[$post->draad_id]);
-			$this->smarty->display('MVC/forum/draad_lijst.tpl');
-			$this->smarty->assign('post', $post);
-			$this->smarty->display('MVC/forum/post_lijst.tpl');
-		}
-	}
-
-}
-
 class ForumPostView extends TemplateView {
 
 	public function __construct(ForumPost $post, ForumDraad $draad, ForumDeel $deel) {
@@ -171,6 +148,22 @@ class ForumPostDeleteView extends TemplateView {
 
 	public function view() {
 		echo '<tr id="forumpost-row-' . $this->model . '" class="remove"><td></td></tr>';
+	}
+
+}
+
+/**
+ * Requires ForumDeel[]
+ */
+class ForumGoedkeurenView extends TemplateView {
+
+	public function getTitel() {
+		return 'Wacht op goedkeuring';
+	}
+
+	public function view() {
+		$this->smarty->assign('delen', $this->model);
+		$this->smarty->display('MVC/forum/goedkeuren.tpl');
 	}
 
 }

@@ -35,10 +35,6 @@ class ForumModel extends PersistenceModel {
 		return $categorien;
 	}
 
-	public function getCategorie($id) {
-		return $this->retrieveByPrimaryKey(array($id));
-	}
-
 }
 
 class ForumDelenModel extends PersistenceModel {
@@ -70,7 +66,11 @@ class ForumDelenModel extends PersistenceModel {
 	}
 
 	public function getForumDelenById(array $ids) {
-		$in = implode(', ', array_fill(0, count($ids), '?'));
+		$count = count($ids);
+		if ($count < 1) {
+			return array();
+		}
+		$in = implode(', ', array_fill(0, $count, '?'));
 		return array_key_property('forum_id', $this->find('forum_id IN (' . $in . ')', $ids));
 	}
 
@@ -79,6 +79,35 @@ class ForumDelenModel extends PersistenceModel {
 		$deel->titel = 'Recent';
 		$deel->setForumDraden(ForumDradenModel::instance()->getRecenteForumDraden(LidInstellingen::get('forum', 'zoekresultaten')));
 		return $deel;
+	}
+
+	/**
+	 * Laadt de posts die wachten op goedkeuring en de draadjes en forumdelen die er bijhoren.
+	 * Check modrechten van gebruiker.
+	 * 
+	 * @return ForumDelen[]
+	 */
+	public function getWachtOpGoedkeuring() {
+		$postsByDraad = array_group_by('draad_id', ForumPostsModel::instance()->find('wacht_goedkeuring = TRUE AND verwijderd = FALSE'));
+		$dradenByDeel = array_group_by('forum_id', ForumDradenModel::instance()->getForumDradenById(array_keys($postsByDraad)));
+		$delenById = array_key_property('forum_id', ForumDelenModel::instance()->getForumDelenById(array_keys($dradenByDeel)));
+		foreach ($delenById as $forum_id => $deel) {
+			if ($deel->magModereren()) {
+				$deel->setForumDraden($dradenByDeel[$deel->forum_id]);
+			} else {
+				unset($delenById[$forum_id]);
+			}
+		}
+		foreach ($dradenByDeel as $forum_id => $draden) {
+			if (array_key_exists($forum_id, $delenById)) {
+				foreach ($draden as $draad) {
+					$draad->setForumPosts($postsByDraad[$draad->draad_id]);
+				}
+			} else {
+				unset($draden[$forum_id]);
+			}
+		}
+		return $delenById;
 	}
 
 }
@@ -143,6 +172,14 @@ class ForumDradenModel extends PersistenceModel implements Paging {
 
 	public function getAantalPaginas($forum_id) {
 		return ceil($this->count('forum_id = ? AND wacht_goedkeuring = FALSE AND verwijderd = FALSE', array($forum_id)) / $this->per_pagina);
+	}
+
+	public function hertellenVoorDeel(ForumDeel $deel) {
+		$orm = self::orm;
+		$result = Database::sqlSelect('SUM(aantal_posts)', $orm::getTableName(), 'forum_id = ?', array($deel->forum_id));
+		$deel->aantal_posts = (int) $result->fetchColumn();
+		$deel->aantal_draden = $this->count('forum_id = ? AND wacht_goedkeuring = FALSE AND verwijderd = FALSE', array($deel->forum_id));
+		ForumDelenModel::instance()->update($deel);
 	}
 
 	/**
@@ -215,7 +252,11 @@ class ForumDradenModel extends PersistenceModel implements Paging {
 	}
 
 	public function getForumDradenById(array $ids) {
-		$in = implode(', ', array_fill(0, count($ids), '?'));
+		$count = count($ids);
+		if ($count < 1) {
+			return array();
+		}
+		$in = implode(', ', array_fill(0, $count, '?'));
 		return array_key_property('draad_id', $this->find('d.draad_id IN (' . $in . ')', $ids));
 	}
 
@@ -241,9 +282,6 @@ class ForumDradenModel extends PersistenceModel implements Paging {
 	public function wijzigForumDraad(ForumDraad $draad, $property, $value) {
 		if (!property_exists($draad, $property)) {
 			throw new Exception('Property undefined: ' . $property);
-		}
-		if ($property === 'forum_id' AND !ForumDelenModel::instance()->bestaatForumDeel($value)) {
-			throw new Exception('Forum bestaat niet!');
 		}
 		$draad->$property = $value;
 		return $this->update($draad);
@@ -289,6 +327,11 @@ class ForumPostsModel extends PersistenceModel implements Paging {
 
 	public function getAantalPaginas($draad_id) {
 		return ceil($this->count('draad_id = ? AND wacht_goedkeuring = FALSE AND verwijderd = FALSE', array($draad_id)) / $this->per_pagina);
+	}
+
+	public function hertellenVoorDraad(ForumDraad $draad) {
+		$draad->aantal_posts = $this->count('draad_id = ? AND wacht_goedkeuring = FALSE AND verwijderd = FALSE', array($draad->draad_id));
+		ForumDradenModel::instance()->update($draad);
 	}
 
 	public function getForumPostsVoorDraad(ForumDraad $draad) {
@@ -337,28 +380,6 @@ class ForumPostsModel extends PersistenceModel implements Paging {
 		return array($posts, $draden);
 	}
 
-	/**
-	 * Laad de forumposts die wachten op goedkeuring.
-	 * Check modrechten van gebruiker.
-	 * 
-	 * @return array(ForumPost[], ForumDraad[])
-	 */
-	public function getForumPostsWachtOpGoedkeuring() {
-		$posts = $this->find('wacht_goedkeuring = TRUE AND verwijderd = FALSE');
-		$draden_ids = array_keys(array_key_property('draad_id', $posts, false));
-		$draden = ForumDradenModel::instance()->getForumDradenById($draden_ids);
-		$delen_ids = array_keys(array_key_property('forum_id', $draden, false));
-		$delen = ForumDelenModel::instance()->getForumDelenById($delen_ids);
-		foreach ($posts as $i => $post) {
-			$deel = $delen[$draden[$post->draad_id]->forum_id];
-			if (!$deel->magModereren()) {
-				unset($draden[$post->draad_id]);
-				unset($posts[$i]);
-			}
-		}
-		return array($posts, $draden);
-	}
-
 	public function getForumPost($id) {
 		$post = $this->retrieveByPrimaryKey(array($id));
 		if (!$post) {
@@ -368,7 +389,11 @@ class ForumPostsModel extends PersistenceModel implements Paging {
 	}
 
 	public function getForumPostsById(array $ids) {
-		$in = implode(', ', array_fill(0, count($ids), '?'));
+		$count = count($ids);
+		if ($count < 1) {
+			return array();
+		}
+		$in = implode(', ', array_fill(0, $count, '?'));
 		return array_group_by('post_id', $this->find('post_id IN (' . $in . ')', $ids));
 	}
 

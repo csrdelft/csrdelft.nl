@@ -30,17 +30,20 @@
 			{include file='MVC/forum/draad_lijst.tpl'}
 		{/foreach}
 	</tbody>
-	<tr>
-		<th colspan="4">
-			{sliding_pager baseurl="/forumdeel/"|cat:$deel->forum_id|cat:"/"
+	<thead>
+		<tr>
+			<th colspan="4">
+				{sliding_pager baseurl="/forumdeel/"|cat:$deel->forum_id|cat:"/"
 				pagecount=ForumDradenModel::instance()->getAantalPaginas($deel->forum_id) curpage=ForumDradenModel::instance()->getHuidigePagina()
 				separator=" &nbsp;"}
-		</th>
-	</tr>
-
-	{if $deel->magPosten()}
-		{include file='MVC/forum/draad_form.tpl'}
-	{/if}
+			</th>
+		</tr>
+	</thead>
+	<tbody>
+		{if $deel->magPosten()}
+			{include file='MVC/forum/draad_form.tpl'}
+		{/if}
+	</tbody>
 </table>
 
 <h1>{$deel->titel}</h1>
