@@ -34,33 +34,37 @@ function endsWith($haystack, $needle) {
 }
 
 /**
- * Group by object property (destructive)
+ * Group by object property
  * 
  * @param string $prop
  * @param array $in
  * @return array $out
  */
-function array_group_by($prop, array $in) {
+function array_group_by($prop, array $in, $destructive = true) {
 	$out = array();
 	foreach ($in as $i => $obj) {
 		$out[$obj->$prop][] = $obj; // add to array
-		unset($in[$i]);
+		if ($destructive) {
+			unset($in[$i]);
+		}
 	}
 	return $out;
 }
 
 /**
- * Set key to object property (destructive)
+ * Set key to object property
  * 
  * @param string $prop
  * @param array $in
  * @return array $out
  */
-function array_key_property($prop, array $in) {
+function array_key_property($prop, array $in, $destructive = true) {
 	$out = array();
 	foreach ($in as $i => $obj) {
 		$out[$obj->$prop] = $obj; // overwrite existing
-		unset($in[$i]);
+		if ($destructive) {
+			unset($in[$i]);
+		}
 	}
 	return $out;
 }

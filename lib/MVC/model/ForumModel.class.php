@@ -71,15 +71,14 @@ class ForumDelenModel extends PersistenceModel {
 
 }
 
-class ForumDraadGelezenModel extends PersistenceModel {
+class ForumDradenGelezenModel extends PersistenceModel {
 
 	const orm = 'ForumDraadGelezen';
 
 	protected static $instance;
 
 	/**
-	 * Laadt voor elke forumdraad wanneer de gebruiker
-	 * deze voor het laatst gelezen heeft.
+	 * Laadt voor elke forumdraad wanneer de gebruiker deze voor het laatst gelezen heeft.
 	 * 
 	 * @param ForumDraad[] $draden
 	 * @return ForumDraad[]
@@ -95,7 +94,7 @@ class ForumDraadGelezenModel extends PersistenceModel {
 			} else {
 				$wanneer = '0000-00-00 00:00:00';
 			}
-			$draden[$draad->draad_id]->setWanneerGelezen($wanneer);
+			$draad->setWanneerGelezen($wanneer);
 		}
 		return $draden;
 	}
@@ -106,6 +105,20 @@ class ForumDraadGelezenModel extends PersistenceModel {
 			return '0000-00-00 00:00:00';
 		}
 		return $gelezen->datum_tijd;
+	}
+
+	public function setWanneerGelezenDoorLid(ForumDraad $draad) {
+		$gelezen = $this->retrieveByPrimaryKey(array($draad->draad_id, LoginLid::instance()->getUid()));
+		if (!$gelezen) {
+			$gelezen = new ForumDraadGelezen();
+			$gelezen->draad_id = $draad->draad_id;
+			$gelezen->lid_id = LoginLid::instance()->getUid();
+			$gelezen->datum_tijd = date('Y-m-d H:i:s');
+			$this->create($gelezen);
+		} else {
+			$gelezen->datum_tijd = date('Y-m-d H:i:s');
+			$this->update($gelezen);
+		}
 	}
 
 }
@@ -158,7 +171,7 @@ class ForumDradenModel extends PersistenceModel implements Paging {
 	 */
 	public function getForumDradenVoorDeel($forum_id) {
 		$draden = $this->find('forum_id = ?  AND wacht_goedkeuring = FALSE AND verwijderd = FALSE', array($forum_id), 'plakkerig DESC, laatst_gewijzigd DESC', $this->per_pagina, ($this->pagina - 1) * $this->per_pagina);
-		ForumDraadGelezenModel::instance()->loadAlleWanneerGelezen($draden);
+		ForumDradenGelezenModel::instance()->loadAlleWanneerGelezen($draden);
 		return $draden;
 	}
 
@@ -264,8 +277,25 @@ class ForumPostsModel extends PersistenceModel implements Paging {
 		return $this->count('lid_id = ? AND wacht_goedkeuring = FALSE AND verwijderd = FALSE', array($uid));
 	}
 
+	/**
+	 * Laad de meest recente forumposts van een gebruiker.
+	 * Zet de titel van het draadje als tekst van de post voor weergave.
+	 * 
+	 * @param string $uid
+	 * @param int $aantal
+	 * @return ForumPost[]
+	 */
 	public function getRecenteForumPostsVoorLid($uid, $aantal) {
-		return $this->find('lid_id = ?', array($uid), null, $aantal);
+		$posts = $this->find('lid_id = ? AND wacht_goedkeuring = FALSE AND verwijderd = FALSE', array($uid), 'post_id DESC', $aantal);
+		$draden_ids = array_keys(array_key_property('draad_id', $posts, false));
+		$in = implode(', ', array_fill(0, count($draden_ids), '?'));
+		$draden = array_key_property('draad_id', ForumDradenModel::instance()->find('draad_id IN (' . $in . ')', $draden_ids));
+		foreach ($posts as $post) {
+			if (array_key_exists($post->draad_id, $draden)) {
+				$post->tekst = $draden[$post->draad_id]->titel;
+			}
+		}
+		return $posts;
 	}
 
 	public function getForumPost($id) {

@@ -12,25 +12,27 @@
 			{else}
 				{$post->datum_tijd}
 			{/if}
-		</span><br />
-		{if ($deel->magPosten() AND !$draad->gesloten AND $post->lid_id === $loginlid->getUid()) OR $deel->magModereren()}
-			<a href="#post{$post->post_id}" class="knop" onclick="forumBewerken({$post->post_id});" title="Bewerk bericht">{icon get="pencil"}</a>
-		{/if}
-		{if !$draad->gesloten AND $deel->magPosten()}
-			<a href="#reageren" class="knop" onclick="forumCiteren({$post->post_id});" title="Citeer bericht">{icon get="comments"}</a>
-		{/if}
-		<br />
-		{if $deel->magModereren()}
-			<a href="/forum/postofftopic/{$post->post_id}" class="knop post confirm" title="Offtopic markeren">{icon get="thumb_down"}</a>
-			<br />
-			<a href="/forum/postverwijderen/{$post->post_id}" class="knop post confirm" title="Verwijder bericht">{icon get="cross"}</a>
-			{if $post->wacht_goedkeuring}
-				<br />
-				<a href="/forum/postgoedkeuren/{$post->post_id}" class="knop post confirm" title="Bericht goedkeuren">{icon get="accept"} Goedkeuren</a>
-				<br />
-				<a href="/tools/stats.php?ip={$post->auteur_ip}" class="knop" title="IP-log">{icon get="script_key"} IP-log</a>
+		</span>
+		<div class="forumpostKnoppen">
+			{if ($deel->magPosten() AND !$draad->gesloten AND $post->lid_id === $loginlid->getUid()) OR $deel->magModereren()}
+				<a href="#post{$post->post_id}" class="knop" onclick="forumBewerken({$post->post_id});" title="Bewerk bericht">{icon get="pencil"}</a>
 			{/if}
-		{/if}
+			{if !$draad->gesloten AND $deel->magPosten()}
+				<a href="#reageren" class="knop" onclick="forumCiteren({$post->post_id});" title="Citeer bericht">{icon get="comments"}</a>
+			{/if}
+			<br />
+			{if $deel->magModereren()}
+				<a href="/forum/postofftopic/{$post->post_id}" class="knop post confirm" title="Offtopic markeren">{icon get="thumb_down"}</a>
+				<br />
+				<a href="/forum/postverwijderen/{$post->post_id}" class="knop post confirm" title="Verwijder bericht">{icon get="cross"}</a>
+				{if $post->wacht_goedkeuring}
+					<br />
+					<a href="/forum/postgoedkeuren/{$post->post_id}" class="knop post confirm" title="Bericht goedkeuren">{icon get="accept"} Goedkeuren</a>
+					<br />
+					<a href="/tools/stats.php?ip={$post->auteur_ip}" class="knop" title="IP-log">{icon get="script_key"} IP-log</a>
+				{/if}
+			{/if}
+		</div>
 	</td>
 	<td class="bericht{cycle values="0,1"}{if $post->gefilterd} filtered{/if}" id="post{$post->post_id}">
 		<div class="bericht">

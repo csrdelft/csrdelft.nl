@@ -135,7 +135,7 @@ DELETE FROM forum_draden WHERE forum_id NOT IN ( SELECT DISTINCT forum_id FROM f
 DELETE FROM forum_posts WHERE draad_id NOT IN ( SELECT DISTINCT draad_id FROM forum_draden );
 DELETE FROM forum_draden_gelezen WHERE draad_id NOT IN ( SELECT DISTINCT draad_id FROM forum_draden );
 
-INSERT INTO `csrdelft`.`forum_categorien` (`categorie_id` ,`titel` ,`omschrijving` ,`rechten_lezen` ,`volgorde`) VALUES ('0', 'Zonder categorie', 'onzichtbaar voor gebruikers', 'P_FORUM_MOD', '0');
+INSERT INTO `csrdelft`.`forum_categorien` (`categorie_id` ,`titel` ,`omschrijving` ,`rechten_lezen` ,`volgorde`) VALUES ('0', 'Zonder categorie', '', 'P_FORUM_READ', '0');
 UPDATE `csrdelft`.`forum_categorien` SET `categorie_id` = '0' WHERE `forum_categorien`.`categorie_id` =1;
 ALTER TABLE `forum_categorien` AUTO_INCREMENT =1;
 

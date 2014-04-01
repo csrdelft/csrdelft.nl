@@ -3,7 +3,7 @@
 		<a class="forumpostlink" id="reageren">Reageren</a>
 	</td>
 	<td class="forumtekst">
-		{if !$draad->gesloten AND $deel->magPosten()}
+		{if !$draad->verwijderd AND !$draad->gesloten AND $deel->magPosten()}
 			<form id="forumReageren" action="/forumposten/{$deel->forum_id}/{$draad->draad_id}" method="post">
 				<fieldset>
 					{* berichtje weergeven voor niet-ingeloggede gebruikers dat ze een naam moeten vermelden. *}
@@ -33,6 +33,6 @@
 				</fieldset>
 			</form>
 		{/if}
-		{$smarty.capture.magreageren}
+		<i>{$smarty.capture.magreageren}</i>
 	</td>
 </tr>

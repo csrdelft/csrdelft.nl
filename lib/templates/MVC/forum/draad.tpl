@@ -42,13 +42,11 @@
 {capture name='magreageren'}
 	{strip}
 		{if !$deel->magPosten()}
-			<div style="font-style: italic; padding: 5px; float: left;">
-				{if $draad->gesloten}
-					U kunt hier niet meer reageren omdat dit onderwerp gesloten is.
-				{else}
-					U mag in dit deel van het forum niet reageren.
-				{/if}
-			</div>
+			U mag in dit deel van het forum niet reageren.
+		{elseif $draad->gesloten}
+			U kunt hier niet meer reageren omdat dit onderwerp gesloten is.
+		{elseif $draad->verwijderd}
+			<span style="color: red;">Dit forumdraad is verwijderd.</span>
 		{/if}
 	{/strip}
 {/capture}
@@ -63,7 +61,7 @@
 			<tr>
 				<td>&nbsp;</td>
 				<td>
-					{$smarty.capture.magreageren}
+					<i>{$smarty.capture.magreageren}</i>
 					<div class="forum_paginering">
 						Pagina: {sliding_pager baseurl="/forumdraad/"|cat:$draad->draad_id|cat:"/"
 									pagecount=$paginas curpage=ForumPostsModel::instance()->getHuidigePagina()}
@@ -73,7 +71,7 @@
 		{elseif $smarty.capture.magreageren !== ''}
 			<tr>
 				<td>&nbsp;</td>
-				<td class="forumtekst">{$smarty.capture.magreageren}</td>
+				<td class="forumtekst"><i>{$smarty.capture.magreageren}</i></td>
 			</tr>
 		{/if}
 		<tr class="tussenschot">

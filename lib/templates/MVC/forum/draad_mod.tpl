@@ -3,16 +3,20 @@
 		<tbody>
 			<tr>
 				<td>
-					<a href="/forum/draadwijzigen/{$draad->draad_id}/plakkerig" class="knop post" title="Verander plakkerigheid">
+					<a href="/forum/draadwijzigen/{$draad->draad_id}/plakkerig" class="knop" title="Verander plakkerigheid">
 						{icon get="note"} maak {if $draad->plakkerig}<strong>niet</strong> {/if}plakkerig
 					</a>
 					<br /><br />
-					<a href="/forum/draadwijzigen/{$draad->draad_id}/belangrijk" class="knop post" title="Verander belangrijkheid">
+					<a href="/forum/draadwijzigen/{$draad->draad_id}/belangrijk" class="knop" title="Verander belangrijkheid">
 						{icon get="asterisk_orange"} maak {if $draad->belangrijk}<strong>niet</strong> {/if}belangrijk
 					</a>
 					<br /><br />
-					<a href="/forum/draadwijzigen/{$draad->draad_id}/verwijderd" class="knop post confirm" title="Verwijder forumdraad">
-						{icon get="cross"} verwijder draadje
+					<a href="/forum/draadwijzigen/{$draad->draad_id}/verwijderd" class="knop" title="{if $draad->verwijderd}Herstel{else}Verwijder{/if} forumdraad">
+						{if $draad->verwijderd}
+							{icon get="arrow_undo"} Ongedaan maken
+						{else}
+							{icon get="cross"} Verwijderen
+						{/if}
 					</a>
 				</td>
 				<td>

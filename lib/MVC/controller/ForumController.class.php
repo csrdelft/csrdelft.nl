@@ -19,6 +19,9 @@ class ForumController extends Controller {
 			$_SESSION['forum_laatste_post_tekst'] = null;
 		}
 		$this->action = $this->getParam(1);
+		if ($this->action === 'forumrss.xml') {
+			$this->action = 'forumrss';
+		}
 		$this->performAction($this->getParams(2));
 	}
 
@@ -29,13 +32,17 @@ class ForumController extends Controller {
 	 */
 	protected function hasPermission() {
 		switch ($this->action) {
+			case 'forumdraadwijzigen':
+				return true;
+
 			case 'forum':
+			case 'forumrss':
+			case 'forumrecent':
 			case 'forumdeel':
 			case 'forumdraad':
 			case 'forumpost':
 				return !$this->isPosted();
 
-			case 'forumdraadwijzigen':
 			case 'forumposten':
 			case 'forumpostbewerken':
 			case 'forumpostverwijderen':
@@ -58,6 +65,20 @@ class ForumController extends Controller {
 		$body = new ForumView(ForumModel::instance()->getForum());
 		$this->view = new CsrLayoutPage($body);
 		$this->view->addStylesheet('forum.css');
+	}
+
+	/**
+	 * TODO
+	 */
+	public function forumrss() {
+		ForumRssView;
+	}
+
+	/**
+	 * TODO
+	 */
+	public function forumrecent() {
+		ForumRecentView;
 	}
 
 	/**
@@ -94,6 +115,7 @@ class ForumController extends Controller {
 		if (!$categorie->magLezen() OR !$deel->magLezen()) {
 			$this->geentoegang();
 		}
+		ForumDradenGelezenModel::instance()->setWanneerGelezenDoorLid($draad);
 		ForumPostsModel::instance()->setHuidigePagina((int) $pagina); // lazy loading ForumPost[]
 		$body = new ForumDraadView($draad, $deel, $categorie);
 		$this->view = new CsrLayoutPage($body);
@@ -137,6 +159,13 @@ class ForumController extends Controller {
 		$rowcount = ForumDradenModel::instance()->wijzigForumDraad($draad, $property, $value);
 		if ($rowcount !== 1) {
 			throw new Exception('Wijzigen mislukt');
+		} else {
+			if (is_bool($value)) {
+				$wijziging = ($value ? 'wel ' : 'niet ') . $property;
+			} else {
+				$wijziging = $property . ' = ' . $value;
+			}
+			setMelding('Wijziging geslaagd: ' . $wijziging, 1);
 		}
 		$this->forumdraad($draad->draad_id);
 	}

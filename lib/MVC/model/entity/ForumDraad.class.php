@@ -148,7 +148,7 @@ class ForumDraad extends PersistentEntity {
 	 */
 	public function getWanneerGelezen() {
 		if (!isset($this->wanneer_gelezen)) {
-			$this->setWanneerGelezen(ForumDraadGelezenModel::instance()->getWanneerGelezenDoorLid($this));
+			$this->setWanneerGelezen(ForumDradenGelezenModel::instance()->getWanneerGelezenDoorLid($this));
 		}
 		return $this->wanneer_gelezen;
 	}

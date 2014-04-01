@@ -15,7 +15,33 @@ class ForumView extends TemplateView {
 	}
 
 	public function view() {
-		$this->smarty->display('MVC/forum/start.tpl');
+		$this->smarty->display('MVC/forum/forum.tpl');
+	}
+
+}
+
+class ForumRssView extends TemplateView {
+
+	public function __construct(array $draden) {
+		parent::__construct($draden);
+		$this->smarty->assign('draden', $this->model);
+	}
+
+	public function view() {
+		$this->smarty->display('MVC/forum/rss.tpl');
+	}
+
+}
+
+class ForumRecentView extends TemplateView {
+
+	public function __construct(array $draden) {
+		parent::__construct($draden);
+		$this->smarty->assign('draden', $this->model);
+	}
+
+	public function view() {
+		$this->smarty->display('MVC/forum/recent.tpl');
 	}
 
 }

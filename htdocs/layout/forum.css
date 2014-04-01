@@ -29,7 +29,12 @@
 }
 #forumtabel tr.kleur0 td{ background-color: #fff; }
 #forumtabel tr.kleur1 td{ background-color: #f4f4f4; }
-
+#forumtabel tr div.forumpostKnoppen{
+	visibility: hidden;
+}
+#forumtabel tr:hover div.forumpostKnoppen{
+	visibility: visible;
+}
 #forumtabel tr td.filtered a.weergeeflink{
 	display: block;
 	background-color: #ddd;
