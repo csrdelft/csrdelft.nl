@@ -37,8 +37,7 @@
 	<td class="bericht{cycle values="0,1"}{if $post->gefilterd} filtered{/if}" id="post{$post->post_id}">
 		<div class="bericht">
 			{if $post->gefilterd}
-				<a href="javascript:;" class="weergeeflink" onclick="jQuery('#filtered{$post->post_id}').slideDown(1000);
-						jQuery(this).hide().remove()">
+				<a href="javascript:;" class="weergeeflink" onclick="jQuery('#filtered{$post->post_id}').slideDown(1000);jQuery(this).hide().remove()">
 					&gt;&gt {$post->gefilterd}, klik om weer te geven. &lt;&lt;
 				</a>
 				<div id="filtered{$post->post_id}" class="verborgen">

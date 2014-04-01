@@ -1,6 +1,6 @@
 {strip}
 	<div class="item">
-		{assign var=timestamp value=strtotime($draad->laatst_gewijzigd)}
+		{assign var=timestamp value=strtotime($post->datum_tijd)}
 		{if date('d-m', $timestamp) === date('d-m')}
 			{$timestamp|date_format:"%H:%M"}
 		{elseif strftime('%U', $timestamp) === strftime('%U')}
@@ -9,8 +9,8 @@
 			{$timestamp|date_format:"%d-%m"}
 		{/if}
 		&nbsp;
-		<a href="/forumpost/{$draad->laatste_post_id}#{$draad->laatste_post_id}" title="[{$draad->titel}] {$draad->laatste_lid_id|csrnaam:'user':false:false|escape:'html'}: {$posts[0]->tekst|truncate:25:"…":true}"
-		   {if !$draad->alGelezen()} class="opvallend"{/if}>{$draad->titel|truncate:25:"…":true}
+		<a href="/forumpost/{$post->post_id}#{$draad->laatste_post_id}" title="{$post->tekst}"{if !$draden[$post->draad_id]->alGelezen()} class="opvallend"{/if}>
+			{$post->tekst|truncate:25:"…":true}
 		</a>
 		<br />
 	</div>

@@ -79,6 +79,55 @@ class ForumDraadView extends TemplateView {
 
 }
 
+/**
+ * Requires ForumDraad[]
+ */
+class ForumDraadZijbalkView extends TemplateView {
+
+	private $belangrijk;
+
+	public function __construct(array $draden, $belangrijk) {
+		parent::__construct($draden);
+		$this->belangrijk = $belangrijk;
+	}
+
+	public function view() {
+		echo '<div id="zijbalk_forum"><h1><a href="/forum/recent">Forum';
+		if ($this->belangrijk) {
+			echo ' belangrijk';
+		}
+		echo '</a></h1>';
+		foreach ($this->model as $draad) {
+			$this->smarty->assign('draad', $draad);
+			$this->smarty->assign('posts', $draad->getForumPosts());
+			$this->smarty->display('MVC/forum/draad_zijbalk.tpl');
+		}
+		echo '</div>';
+	}
+
+}
+
+/**
+ * Requires ForumPost[]
+ */
+class ForumPostZijbalkView extends TemplateView {
+
+	public function __construct(array $posts, array $draden) {
+		parent::__construct($posts);
+		$this->smarty->assign('draden', $draden);
+	}
+
+	public function view() {
+		echo '<div id="zijbalk_forum"><h1><a href="/communicatie/profiel/' . LoginLid::instance()->getUid() . '/#forum">Forum (zelf gepost)</a></h1>';
+		foreach ($this->model as $post) {
+			$this->smarty->assign('post', $post);
+			$this->smarty->display('MVC/forum/post_zijbalk.tpl');
+		}
+		echo '</div>';
+	}
+
+}
+
 class ForumPostView extends TemplateView {
 
 	public function __construct(ForumPost $post, ForumDraad $draad, ForumDeel $deel) {

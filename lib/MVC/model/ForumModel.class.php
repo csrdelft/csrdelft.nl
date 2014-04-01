@@ -164,7 +164,7 @@ class ForumDradenModel extends PersistenceModel implements Paging {
 		$from = $orm::getTableName() . ' AS d LEFT JOIN forum_draden_gelezen AS g ON d.draad_id = g.draad_id AND g.lid_id = ?';
 		$columns = $orm::getFields();
 		foreach ($columns as $i => $column) {
-			$columns[$i] = 'd.' . $column; // prefix
+			$columns[$i] = 'd.' . $column;
 		}
 		$columns[] = 'g.datum_tijd AS wanneer_gelezen';
 		$result = Database::sqlSelect($columns, $from, 'd.forum_id = ? AND d.wacht_goedkeuring = FALSE AND d.verwijderd = FALSE', array(LoginLid::instance()->getUid(), $forum_id), 'd.plakkerig DESC, d.laatst_gewijzigd DESC', $this->per_pagina, ($this->pagina - 1) * $this->per_pagina);
@@ -172,23 +172,28 @@ class ForumDradenModel extends PersistenceModel implements Paging {
 	}
 
 	/**
-	 * Laad recente draadjes en check leesrechten op forumdeel.
-	 * If RSS: use token & eager loading of last ForumPost.
+	 * Laad recente (niet) (belangrijke) draadjes.
+	 * Eager loading van laatste ForumPost
+	 * Check leesrechten van gebruiker.
+	 * RSS: use token & return delen.
 	 * 
 	 * @param int $aantal
+	 * @param boolean $belangrijk
 	 * @param boolean $rss
 	 * @return ForumDraad[]
 	 */
-	public function getRecenteForumDraden($aantal, $rss = false) {
-		$draden = $this->find('wacht_goedkeuring = FALSE AND verwijderd = FALSE', array(), 'laatst_gewijzigd DESC', $aantal);
+	public function getRecenteForumDraden($aantal, $belangrijk = null, $rss = false) {
+		$draden = $this->find(
+				($belangrijk === null ? '' : 'belangrijk = ? AND ') . 'wacht_goedkeuring = FALSE AND verwijderd = FALSE', ($belangrijk === null ? array() : array($belangrijk)), 'laatst_gewijzigd DESC', $aantal);
+		$posts_ids = array_keys(array_key_property('laatste_post_id', $draden, false));
+		$posts = ForumPostsModel::instance()->getForumPostsById($posts_ids);
 		$delen_ids = array_keys(array_key_property('forum_id', $draden, false));
 		$delen = ForumDelenModel::instance()->getForumDelenById($delen_ids);
 		foreach ($draden as $i => $draad) {
-			if (!LoginLid::instance()->hasPermission($delen[$draad->forum_id]->rechten_lezen, $rss)) {
+			if (!$delen[$draad->forum_id]->magLezen($rss)) {
 				unset($draden[$i]);
-			} elseif ($rss) {
-				$post = ForumPostsModel::instance()->getForumPost($draad->laatste_post_id);
-				$draad->setForumPosts(array($post));
+			} elseif (array_key_exists($draad->laatste_post_id, $posts)) {
+				$draad->setForumPosts($posts[$draad->laatste_post_id]);
 			}
 		}
 		if ($rss) {
@@ -198,7 +203,7 @@ class ForumDradenModel extends PersistenceModel implements Paging {
 	}
 
 	public function getRssForumDradenEnDelen() {
-		return $this->getRecenteForumDraden(LidInstellingen::get('forum', 'zoekresultaten'), true);
+		return $this->getRecenteForumDraden(LidInstellingen::get('forum', 'zoekresultaten'), null, true);
 	}
 
 	public function getForumDraad($id) {
@@ -310,22 +315,24 @@ class ForumPostsModel extends PersistenceModel implements Paging {
 
 	/**
 	 * Laad de meest recente forumposts van een gebruiker.
-	 * Zet de titel van het draadje als tekst van de post voor weergave.
+	 * Check leesrechten van gebruiker.
 	 * 
 	 * @param string $uid
 	 * @param int $aantal
-	 * @return ForumPost[]
+	 * @return array(ForumPost[], ForumDraad[])
 	 */
 	public function getRecenteForumPostsVanLid($uid, $aantal) {
 		$posts = $this->find('lid_id = ? AND wacht_goedkeuring = FALSE AND verwijderd = FALSE', array($uid), 'post_id DESC', $aantal);
 		$draden_ids = array_keys(array_key_property('draad_id', $posts, false));
 		$draden = ForumDradenModel::instance()->getForumDradenById($draden_ids);
-		foreach ($posts as $post) {
-			if (array_key_exists($post->draad_id, $draden)) {
-				$post->tekst = $draden[$post->draad_id]->titel;
+		$delen_ids = array_keys(array_key_property('forum_id', $draden, false));
+		$delen = ForumDelenModel::instance()->getForumDelenById($delen_ids);
+		foreach ($draden as $i => $draad) {
+			if (!$delen[$draad->forum_id]->magLezen()) {
+				unset($draden[$i]);
 			}
 		}
-		return $posts;
+		return array($posts, $draden);
 	}
 
 	public function getForumPost($id) {
@@ -334,6 +341,11 @@ class ForumPostsModel extends PersistenceModel implements Paging {
 			throw new Exception('Forumpost bestaat niet!');
 		}
 		return $post;
+	}
+
+	public function getForumPostsById(array $ids) {
+		$in = implode(', ', array_fill(0, count($ids), '?'));
+		return array_group_by('post_id', $this->find('post_id IN (' . $in . ')', $ids));
 	}
 
 	public function maakForumPost($draad_id, $tekst, $ip) {
