@@ -337,6 +337,28 @@ class ForumPostsModel extends PersistenceModel implements Paging {
 		return array($posts, $draden);
 	}
 
+	/**
+	 * Laad de forumposts die wachten op goedkeuring.
+	 * Check modrechten van gebruiker.
+	 * 
+	 * @return array(ForumPost[], ForumDraad[])
+	 */
+	public function getForumPostsWachtOpGoedkeuring() {
+		$posts = $this->find('wacht_goedkeuring = TRUE AND verwijderd = FALSE');
+		$draden_ids = array_keys(array_key_property('draad_id', $posts, false));
+		$draden = ForumDradenModel::instance()->getForumDradenById($draden_ids);
+		$delen_ids = array_keys(array_key_property('forum_id', $draden, false));
+		$delen = ForumDelenModel::instance()->getForumDelenById($delen_ids);
+		foreach ($posts as $i => $post) {
+			$deel = $delen[$draden[$post->draad_id]->forum_id];
+			if (!$deel->magModereren()) {
+				unset($draden[$post->draad_id]);
+				unset($posts[$i]);
+			}
+		}
+		return array($posts, $draden);
+	}
+
 	public function getForumPost($id) {
 		$post = $this->retrieveByPrimaryKey(array($id));
 		if (!$post) {
@@ -350,7 +372,7 @@ class ForumPostsModel extends PersistenceModel implements Paging {
 		return array_group_by('post_id', $this->find('post_id IN (' . $in . ')', $ids));
 	}
 
-	public function maakForumPost($draad_id, $tekst, $ip) {
+	public function maakForumPost($draad_id, $tekst, $ip, $wacht_goedkeuring) {
 		$post = new ForumPost();
 		$post->draad_id = (int) $draad_id;
 		$post->lid_id = LoginLid::instance()->getUid();
@@ -360,7 +382,7 @@ class ForumPostsModel extends PersistenceModel implements Paging {
 		$post->bewerkt_tekst = null;
 		$post->verwijderd = false;
 		$post->auteur_ip = $ip;
-		$post->wacht_goedkeuring = false;
+		$post->wacht_goedkeuring = $wacht_goedkeuring;
 		$post->post_id = (int) ForumPostsModel::instance()->create($post);
 		return $post;
 	}

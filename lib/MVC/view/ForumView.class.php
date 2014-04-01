@@ -50,14 +50,13 @@ class ForumRecentView extends TemplateView {
 
 class ForumDeelView extends TemplateView {
 
-	public function __construct(ForumDeel $deel, ForumCategorie $categorie = null) {
+	public function __construct(ForumDeel $deel) {
 		parent::__construct($deel);
 		$this->smarty->assign('deel', $this->model);
-		$this->smarty->assign('categorie', $categorie);
 	}
 
 	public function view() {
-		$this->smarty->assign('post_form_tekst', $_SESSION['forum_laatste_post_tekst']);
+		$this->smarty->assign('post_form_tekst', $_SESSION['forum_concept']);
 		$this->smarty->display('MVC/forum/deel.tpl');
 	}
 
@@ -65,15 +64,14 @@ class ForumDeelView extends TemplateView {
 
 class ForumDraadView extends TemplateView {
 
-	public function __construct(ForumDraad $draad, ForumDeel $deel, ForumCategorie $categorie) {
+	public function __construct(ForumDraad $draad, ForumDeel $deel) {
 		parent::__construct($draad);
 		$this->smarty->assign('draad', $this->model);
 		$this->smarty->assign('deel', $deel);
-		$this->smarty->assign('categorie', $categorie);
 	}
 
 	public function view() {
-		$this->smarty->assign('post_form_tekst', $_SESSION['forum_laatste_post_tekst']);
+		$this->smarty->assign('post_form_tekst', $_SESSION['forum_concept']);
 		$this->smarty->display('MVC/forum/draad.tpl');
 	}
 
@@ -108,7 +106,7 @@ class ForumDraadZijbalkView extends TemplateView {
 }
 
 /**
- * Requires ForumPost[]
+ * Requires ForumPost[] and ForumDraad[]
  */
 class ForumPostZijbalkView extends TemplateView {
 
@@ -124,6 +122,29 @@ class ForumPostZijbalkView extends TemplateView {
 			$this->smarty->display('MVC/forum/post_zijbalk.tpl');
 		}
 		echo '</div>';
+	}
+
+}
+
+/**
+ * Requires ForumPost[] and ForumDraad[]
+ */
+class ForumPostGoedkeuringView extends TemplateView {
+
+	private $draden;
+
+	public function __construct(array $posts, array $draden) {
+		parent::__construct($posts);
+		$this->draden = $draden;
+	}
+
+	public function view() {
+		foreach ($this->model as $post) {
+			$this->smarty->assign('draad', $this->draden[$post->draad_id]);
+			$this->smarty->display('MVC/forum/draad_lijst.tpl');
+			$this->smarty->assign('post', $post);
+			$this->smarty->display('MVC/forum/post_lijst.tpl');
+		}
 	}
 
 }

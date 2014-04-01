@@ -5,16 +5,14 @@
 		{if $deel->magModereren()}
 			<div id="btn_mod">
 				<a class="knop" title="Moderatie-functies uitklappen" onclick="$('#modereren').slideDown();
-					$('#btn_mod').toggle();">{icon get="bullet_wrench"} Modereren&nbsp;</a>
+						$('#btn_mod').toggle();">{icon get="bullet_wrench"} Modereren&nbsp;</a>
 			</div>
 		{/if}
 	</form>
 
 	{capture name='navlinks'}
 		<div class="forumNavigatie">
-			<a href="/forum/" class="forumGrootlink">Forum</a> &raquo;&nbsp;
-			<strong>{$categorie->titel}</strong> &raquo;&nbsp;
-			<a href="/forumdeel/{$deel->forum_id}" class="forumGrootlink">{$deel->titel}</a>
+			<a href="/forum/" class="forumGrootlink">Forum</a> &raquo; <a href="/forumdeel/{$deel->forum_id}" class="forumGrootlink">{$deel->titel}</a>
 			<br />
 			{if $deel->magModereren()}
 				<div style="display: inline-block; margin-right: 3px;">

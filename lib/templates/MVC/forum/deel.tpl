@@ -4,8 +4,7 @@
 
 {capture name='navlinks'}
 	<div class="forumNavigatie">
-		<a href="/forum" class="forumGrootlink">Forum</a>{if $categorie} &raquo;&nbsp;
-		<strong>{$categorie->titel}</strong>{/if}
+		<a href="/forum" class="forumGrootlink">Forum</a>
 	</div>
 {/capture}
 

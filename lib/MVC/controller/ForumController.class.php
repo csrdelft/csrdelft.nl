@@ -14,10 +14,6 @@ class ForumController extends Controller {
 
 	public function __construct($query) {
 		parent::__construct(str_replace('forum/', 'forum', $query));
-		// voorkom dubbelposts
-		if (!array_key_exists('forum_laatste_post_tekst', $_SESSION)) {
-			$_SESSION['forum_laatste_post_tekst'] = null;
-		}
 		$this->action = $this->getParam(1);
 		$this->performAction($this->getParams(2));
 	}
@@ -38,6 +34,7 @@ class ForumController extends Controller {
 			case 'forumdeel':
 			case 'forumdraad':
 			case 'forumpost':
+			case 'forumwacht':
 				return !$this->isPosted();
 
 			case 'forumposten':
@@ -105,12 +102,8 @@ class ForumController extends Controller {
 		if (!$deel OR !$deel->magLezen()) { // geen exceptie om bestaan van forumdeel niet te verraden
 			$this->geentoegang();
 		}
-		$categorie = ForumModel::instance()->getCategorie($deel->categorie_id);
-		if (!$categorie->magLezen()) {
-			$this->geentoegang();
-		}
 		ForumDradenModel::instance()->setHuidigePagina((int) $pagina); // lazy loading ForumDraad[]
-		$body = new ForumDeelView($deel, $categorie);
+		$body = new ForumDeelView($deel);
 		if (LoginLid::instance()->hasPermission('P_LOGGED_IN')) {
 			$this->view = new CsrLayoutPage($body);
 		} else {
@@ -130,13 +123,12 @@ class ForumController extends Controller {
 	public function forumdraad($id, $pagina = 1) {
 		$draad = ForumDradenModel::instance()->getForumDraad((int) $id);
 		$deel = ForumDelenModel::instance()->getForumDeel($draad->forum_id);
-		$categorie = ForumModel::instance()->getCategorie($deel->categorie_id);
-		if (!$categorie->magLezen() OR !$deel->magLezen()) {
+		if (!$deel->magLezen()) {
 			$this->geentoegang();
 		}
 		ForumDradenGelezenModel::instance()->setWanneerGelezenDoorLid($draad);
 		ForumPostsModel::instance()->setHuidigePagina((int) $pagina); // lazy loading ForumPost[]
-		$body = new ForumDraadView($draad, $deel, $categorie);
+		$body = new ForumDraadView($draad, $deel);
 		if (LoginLid::instance()->hasPermission('P_LOGGED_IN')) {
 			$this->view = new CsrLayoutPage($body);
 		} else {
@@ -155,6 +147,11 @@ class ForumController extends Controller {
 	public function forumpost($id) {
 		$post = ForumPostsModel::instance()->getForumPost((int) $id);
 		$this->forumdraad($post->draad_id, ForumPostsModel::instance()->getPaginaVoorPost($post));
+	}
+
+	public function forumwacht() {
+		$posts_draden = ForumPostsModel::instance()->getForumPostsWachtOpGoedkeuring();
+		$this->view = new ForumPostGoedkeuringView($posts_draden[0], $posts_draden[1]);
 	}
 
 	/**
@@ -206,9 +203,26 @@ class ForumController extends Controller {
 			$this->geentoegang();
 		}
 		$tekst = filter_input(INPUT_POST, 'bericht', FILTER_UNSAFE_RAW);
+		$_SESSION['forum_concept'] = $tekst;
+		require_once 'simplespamfilter.class.php';
+		$filter = new SimpleSpamfilter();
+		if ($filter->isSpam($tekst)) {
+			invokeRefresh('/forumdeel/' . $deel->forum_id, 'SPAM', -1); //TODO: logging
+		}
 		// voorkom dubbelposts
-		if ($_SESSION['forum_laatste_post_tekst'] === $tekst) {
-			invokeRefresh('/forum', 'Bericht is al gepost!', 0);
+		if (array_key_exists('forum_laatste_post_tekst', $_SESSION) AND $_SESSION['forum_laatste_post_tekst'] === $tekst) {
+			invokeRefresh('/forumdeel/' . $deel->forum_id, 'Bericht is al gepost!', 0);
+		}
+		$wacht_goedkeuring = false;
+		if (!LoginLid::instance()->hasPermission('P_LOGGED_IN')) {
+			$wacht_goedkeuring = true;
+			$email = filter_input(INPUT_POST, 'email', FILTER_SANITIZE_EMAIL);
+			if ($filter->isSpam($email)) {
+				invokeRefresh('/forumdeel/' . $deel->forum_id, 'SPAM', -1); //TODO: logging
+			}
+			if (!email_like($email)) {
+				invokeRefresh('/forumdeel/' . $deel->forum_id, 'U moet een geldig email-adres opgeven!', -1);
+			}
 		}
 		if ($draad_id !== null) { // post in bestaand draadje
 			$draad = ForumDradenModel::instance()->getForumDraad((int) $draad_id);
@@ -218,12 +232,18 @@ class ForumController extends Controller {
 		} else { // post in nieuw draadje
 			$draad = ForumDradenModel::instance()->maakForumDraad($deel->forum_id, trim(filter_input(INPUT_POST, 'titel', FILTER_SANITIZE_STRING)));
 		}
-		$post = ForumPostsModel::instance()->maakForumPost($draad->draad_id, $tekst, $_SERVER['REMOTE_ADDR']);
+		$post = ForumPostsModel::instance()->maakForumPost($draad->draad_id, $tekst, $_SERVER['REMOTE_ADDR'], $wacht_goedkeuring);
 		$draad->laatst_gewijzigd = $post->datum_tijd;
 		$draad->laatste_post_id = $post->post_id;
 		$draad->laatste_lid_id = $post->lid_id;
 		ForumDradenModel::instance()->update($draad);
 		$_SESSION['forum_laatste_post_tekst'] = $tekst;
+		if ($wacht_goedkeuring) {
+			setMelding('Uw bericht is opgeslagen en zal als het goedgekeurd is geplaatst worden.', 1);
+			//bericht sturen naar pubcie@csrdelft dat er een bericht op goedkeuring wacht
+			mail('pubcie@csrdelft.nl', 'Nieuw bericht wacht op goedkeuring', "http://csrdelft.nl/forum/wacht/" . $post->post_id . "\r\n" . "\r\nDe inhoud van het bericht is als volgt: \r\n\r\n" . str_replace('\r\n', "\n", $tekst) . "\r\n\r\nEINDE BERICHT", "From: pubcie@csrdelft.nl\nReply-To: " . $email);
+			invokeRefresh('/forumdeel/' . $deel->forum_id);
+		}
 		// redirect naar (altijd) juiste pagina
 		invokeRefresh('/forumpost/' . $post->post_id . '#' . $post->post_id); // , ($draad_id === null ? 'Draad' : 'Post') . ' succesvol toegevoegd', 1
 	}
