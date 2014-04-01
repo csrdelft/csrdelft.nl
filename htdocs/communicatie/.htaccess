@@ -1,7 +1,7 @@
 RewriteEngine On
 
 # Als we naar /communicatie/ gaan worden we doorgestuurd naar het forum
-RewriteRule ^/?$ /communicatie/forum/ [R]
+RewriteRule ^/?$ /forum/ [R]
 
 # Ledenlijst
 RewriteRule ^(leden)?lijst/$ lijst.php

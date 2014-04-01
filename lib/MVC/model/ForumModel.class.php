@@ -35,6 +35,65 @@ class ForumModel extends PersistenceModel {
 		return $categorien;
 	}
 
+	public function zoeken($query, $categorie_id = null) {
+		$db = MySql::instance();
+
+		if (!preg_match('/^[a-zA-Z0-9 \-\+\'\"\.]*$/', $query)) {
+			return false;
+		}
+		$query = $db->escape(trim($query));
+
+		$singleCat = '1';
+		if ($categorie_id !== null AND $categorie_id != 0) {
+			foreach (ForumCategorie::getAll(true) as $cat) {
+				if ($cat['id'] == $categorie_id) {
+					$singleCat = 'topic.categorie=' . (int) $categorie_id;
+				}
+			}
+		}
+
+		$dbQuery = "
+			SELECT
+				topic.id AS tid,
+				topic.titel AS titel,
+				topic.uid AS startUID,
+				topic.categorie AS categorie,
+				cat.titel AS categorieTitel,
+				topic.open AS open,
+				topic.plakkerig AS plakkerig,
+				post.uid AS uid,
+				post.id AS postID,
+				post.tekst AS tekst,
+				post.datum AS datum,
+				post.bewerkDatum AS bewerkDatum,
+				count(*) AS aantal,
+				(MATCH(post.tekst) AGAINST('" . $query . "' IN NATURAL LANGUAGE MODE) * 0.34 + MATCH(topic.titel) AGAINST ('" . $query . "' IN NATURAL LANGUAGE MODE) * 0.66) AS relevance
+			FROM
+				forum_post post
+			INNER JOIN
+				forum_topic topic ON( post.tid=topic.id )
+			INNER JOIN
+				forum_cat cat ON( topic.categorie=cat.id )
+			WHERE topic.zichtbaar='zichtbaar'
+			  AND post.zichtbaar='zichtbaar'
+			  AND (" . Forum::getCategorieClause() . ")
+			  AND (" . $singleCat . ")
+			  AND (
+				  MATCH(post.tekst)AGAINST('" . $query . "' IN NATURAL LANGUAGE MODE ) OR
+				  topic.titel LIKE '%" . $query . "%'
+				)
+			GROUP BY
+				topic.id
+			ORDER BY
+				relevance DESC, post.datum DESC
+			LIMIT
+				" . LidInstellingen::get('forum', 'zoekresultaten') . ";";
+		//Als MySQL 5.1.7 op syrinx staat kan er in 'natural language mode' gezocht worden
+		//MATCH(post.tekst)AGAINST('".$query."' IN NATURAL LANGUAGE MODE ) OR
+
+		return $db->query2array($dbQuery);
+	}
+
 }
 
 class ForumDelenModel extends PersistenceModel {
