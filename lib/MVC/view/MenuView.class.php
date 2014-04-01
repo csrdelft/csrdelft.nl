@@ -28,9 +28,12 @@ class MainMenuView extends MenuView {
 		$this->smarty->assign('saldi', LoginLid::instance()->getLid()->getSaldi());
 
 		if (Loginlid::instance()->hasPermission('P_ADMIN')) {
+
+			require_once 'MVC/model/ForumModel.class.php';
+			$this->smarty->assign('forumcount', ForumPostsModel::instance()->count('wacht_goedkeuring = TRUE AND verwijderd = FALSE'));
+
 			require_once 'savedquery.class.php';
 			$this->smarty->assign('queues', array(
-				'forum' => new SavedQuery(ROWID_QUEUE_FORUM),
 				'meded' => new SavedQuery(ROWID_QUEUE_MEDEDELINGEN)
 			));
 		}

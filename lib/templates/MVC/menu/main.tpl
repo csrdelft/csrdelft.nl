@@ -36,13 +36,14 @@
 					<div id="adminding">
 						Beheer
 						{if $loginlid->hasPermission('P_ADMIN')}
-							{if $queues.forum->count()>0 OR $queues.meded->count()>0}
-								({$queues.forum->count()}/{$queues.meded->count()})
+							{if $forumcount > 0 OR $queues.meded->count()>0}
+								({$forumcount}/{$queues.meded->count()})
 							{/if}
 						{/if}
 						<div>
 							{if $loginlid->hasPermission('P_ADMIN')}
 								<span class="queues">
+									<a href="/forum/wacht">Forum: <span class="count">{$forumcount}</span><br /></a>
 									{foreach from=$queues item=queue key=name}
 										<a href="/tools/query.php?id={$queue->getID()}">
 											{$name|ucfirst}: <span class="count">{$queue->count()}</span><br />
@@ -87,7 +88,8 @@
 				<form action="/login.php" method="post">
 					<fieldset>
 						<input type="hidden" name="url" value="{$smarty.server.REQUEST_URI}" />
-						<input type="text" name="user" value="naam" onfocus="if (this.value === 'naam') this.value = '';" />
+						<input type="text" name="user" value="naam" onfocus="if (this.value === 'naam')
+									this.value = '';" />
 						<input type="password" name="pass" value="wachtwoord" />
 						<input type="checkbox" name="checkip" class="checkbox" value="true" id="login-checkip" />
 						<label for="login-checkip">Koppel IP</label>
