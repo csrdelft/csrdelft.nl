@@ -121,9 +121,9 @@ ALTER TABLE `forum_delen` ADD `laatste_draad_id` INT NOT NULL AFTER `laatst_gepo
 ALTER TABLE `forum_delen` CHANGE `laatste_draad_id` `laatste_draad_id` INT( 11 ) NULL DEFAULT NULL ;
 UPDATE forum_delen d INNER JOIN forum_posts p ON d.laatste_post_id = p.post_id SET d.laatste_draad_id = p.draad_id;
 
-ALTER TABLE `forum_delen` ADD `rechten_modereren` VARCHAR( 255 ) NOT NULL DEFAULT 'P_FORUM_MOD' AFTER `rechten_posten` ;
+ALTER TABLE `forum_delen` ADD `rechten_modereren` VARCHAR( 255 ) NOT NULL DEFAULT 'P_FORUM_MOD' AFTER `rechten_post` ;
 ALTER TABLE `forum_delen` CHANGE `rechten_modereren` `rechten_modereren` VARCHAR( 255 ) NOT NULL ;
-
+ALTER TABLE  `forum_delen` CHANGE  `rechten_post`  `rechten_posten` VARCHAR( 255 ) NOT NULL
 -- 
 -- SELECT * FROM forum_draden d LEFT JOIN forum_delen f ON d.forum_id = f.forum_id WHERE f.forum_id IS NULL ;
 -- 
