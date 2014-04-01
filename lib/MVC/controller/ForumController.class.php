@@ -249,6 +249,7 @@ class ForumController extends Controller {
 		}
 		$post = ForumPostsModel::instance()->maakForumPost($draad->draad_id, $tekst, $_SERVER['REMOTE_ADDR'], $wacht_goedkeuring);
 		$_SESSION['forum_laatste_post_tekst'] = $tekst;
+		$_SESSION['forum_concept'] = '';
 		$draad->aantal_posts++;
 		$draad->laatst_gewijzigd = $post->datum_tijd;
 		$draad->laatste_post_id = $post->post_id;
