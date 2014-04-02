@@ -2,7 +2,7 @@ AddDefaultCharset utf-8
 RewriteEngine On
 
 ## forum backwards compatibility
-RewriteRule ^communicatie/forum/?$		/forum/$
+RewriteRule ^communicatie/forum/(.*)	/forum/$1
 RewriteRule ^forum/rss.xml$				/forum/rss [L]
 RewriteRule ^forum/rss/([0-9a-z]*).xml	/forum/rss?validate_token=$1 [L]
 RewriteRule ^forum/categorie/laatste/?$	/forum/recent [L]
