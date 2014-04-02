@@ -3,15 +3,15 @@
 		<tbody>
 			<tr>
 				<td>
-					<a href="/forum/draadwijzigen/{$draad->draad_id}/plakkerig" class="knop" title="Verander plakkerigheid">
+					<a href="/forum/wijzigen/{$draad->draad_id}/plakkerig" class="knop" title="Verander plakkerigheid">
 						{icon get="note"} maak {if $draad->plakkerig}<strong>niet</strong> {/if}plakkerig
 					</a>
 					<br /><br />
-					<a href="/forum/draadwijzigen/{$draad->draad_id}/belangrijk" class="knop" title="Verander belangrijkheid">
+					<a href="/forum/wijzigen/{$draad->draad_id}/belangrijk" class="knop" title="Verander belangrijkheid">
 						{icon get="asterisk_orange"} maak {if $draad->belangrijk}<strong>niet</strong> {/if}belangrijk
 					</a>
 					<br /><br />
-					<a href="/forum/draadwijzigen/{$draad->draad_id}/verwijderd" class="knop" title="{if $draad->verwijderd}Herstel{else}Verwijder{/if} forumdraad">
+					<a href="/forum/wijzigen/{$draad->draad_id}/verwijderd" class="knop" title="{if $draad->verwijderd}Herstel{else}Verwijder{/if} forumdraad">
 						{if $draad->verwijderd}
 							{icon get="arrow_undo"} Ongedaan maken
 						{else}
@@ -20,7 +20,7 @@
 					</a>
 				</td>
 				<td>
-					<form action="/forum/draadwijzigen/{$draad->draad_id}/forum_id" method="post">
+					<form action="/forum/wijzigen/{$draad->draad_id}/forum_id" method="post">
 						<label for="forum_id">Verplaats naar: </label>
 						<select name="forum_id">
 							{foreach from=ForumModel::instance()->getForum() item=cat}
@@ -34,14 +34,16 @@
 						<input type="submit" value="opslaan" />
 					</form>
 					<br /><br />
-					<form action="/forum/draadwijzigen/{$draad->draad_id}/titel" method="post">
+					<form action="/forum/wijzigen/{$draad->draad_id}/titel" method="post">
 						<label for="titel">Titel aanpassen:</label>
 						<input type="text" name="titel" value="{$draad->titel}" style="width: 300px;" />
 						<input type="submit" value="opslaan" />
 					</form>
 				</td>
 				<td style="width: 25px;">
-					<div style="cursor: pointer; padding: 5px;" onclick="$('#btn_mod').toggle();$('#modereren').slideUp();">X</div>
+					<div style="cursor: pointer; padding: 5px;" onclick="$('#btn_mod').toggle();
+							$('#modereren').slideUp();
+							$('#forumtabel a.forummodknop').fadeOut()">X</div>
 				</td>
 			</tr>
 		</tbody>

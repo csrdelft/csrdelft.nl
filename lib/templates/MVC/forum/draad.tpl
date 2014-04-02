@@ -5,7 +5,8 @@
 		{if $deel->magModereren()}
 			<div id="btn_mod">
 				<a class="knop" title="Moderatie-functies uitklappen" onclick="$('#modereren').slideDown();
-						$('#btn_mod').toggle();">{icon get="bullet_wrench"} Modereren&nbsp;</a>
+						$('#btn_mod').toggle();
+						$('#forumtabel a.forummodknop').fadeIn();">{icon get="bullet_wrench"} Modereren&nbsp;</a>
 			</div>
 		{/if}
 	</form>
@@ -17,12 +18,12 @@
 			{if $deel->magModereren()}
 				<div style="display: inline-block; margin-right: 3px;">
 					{if $draad->gesloten}
-						<a href="/forum/draadwijzigen/{$draad->draad_id}/gesloten" class="knop" title="Openen (reactie mogelijk)"
+						<a href="/forum/wijzigen/{$draad->draad_id}/gesloten" class="knop" title="Openen (reactie mogelijk)"
 						   onmouseover="$(this).children('img').attr('src', 'http://plaetjes.csrdelft.nl/famfamfam/lock_break.png');"
 						   onmouseout="$(this).children('img').attr('src', 'http://plaetjes.csrdelft.nl/famfamfam/lock.png');"
 						   >{icon get="lock"}</a>
 					{else}
-						<a href="/forum/draadwijzigen/{$draad->draad_id}/gesloten" class="knop" title="Sluiten (geen reactie mogelijk)"
+						<a href="/forum/wijzigen/{$draad->draad_id}/gesloten" class="knop" title="Sluiten (geen reactie mogelijk)"
 						   onmouseover="$(this).children('img').attr('src', 'http://plaetjes.csrdelft.nl/famfamfam/lock.png');"
 						   onmouseout="$(this).children('img').attr('src', 'http://plaetjes.csrdelft.nl/famfamfam/lock_open.png');"
 						   >{icon get="lock_open"}</a>

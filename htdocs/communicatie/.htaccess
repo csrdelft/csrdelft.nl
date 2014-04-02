@@ -1,9 +1,11 @@
 RewriteEngine On
 
 # Forum backwards compatibility
-RewriteRule ^forum/?(.*)$	/forum/$1 [QSA,R,L]
+RewriteRule ^forum/categorie/laatste/?	/forum/recent [QSA,R=301,L]
+RewriteRule ^forum/categorie/?(.*)$		/forum/deel/$1 [QSA,R=301,L]
+RewriteRule ^forum/?(.*)$				/forum/$1 [QSA,R=301,L]
 # Als we naar /communicatie/ gaan worden we doorgestuurd naar het forum
-RewriteRule ^/?(.*)$	/forum/$1 [QSA,R,L]
+RewriteRule ^/?$	/forum/ [R,L]
 
 # Ledenlijst
 RewriteRule ^(leden)?lijst/$ lijst.php
