@@ -211,7 +211,7 @@ class ForumDradenModel extends PersistenceModel implements Paging {
 		if ($draad->plakkerig) {
 			return 1;
 		}
-		$count = $this->count('forum_id = ? AND draad_id < ? AND plakkerig = FALSE AND wacht_goedkeuring = FALSE AND verwijderd = FALSE', array($draad->forum_id, $draad->draad_id));
+		$count = $this->count('forum_id = ? AND draad_id > ? AND plakkerig = FALSE AND wacht_goedkeuring = FALSE AND verwijderd = FALSE', array($draad->forum_id, $draad->draad_id));
 		return ceil($count / $this->per_pagina);
 	}
 
