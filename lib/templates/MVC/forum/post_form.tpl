@@ -4,7 +4,7 @@
 	</td>
 	<td class="forumtekst">
 		{if !$draad->verwijderd AND !$draad->gesloten AND $deel->magPosten()}
-			<form id="forumReageren" action="/forumposten/{$deel->forum_id}/{$draad->draad_id}" method="post">
+			<form id="forumReageren" action="/forum/posten/{$deel->forum_id}/{$draad->draad_id}" method="post">
 				<fieldset>
 					{* berichtje weergeven voor niet-ingeloggede gebruikers dat ze een naam moeten vermelden. *}
 					{if !$loginlid->hasPermission('P_LOGGED_IN')}

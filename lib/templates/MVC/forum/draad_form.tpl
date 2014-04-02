@@ -1,6 +1,6 @@
 <tr>
 	<td colspan="4" class="forumtekst">
-		<form id="forumForm" action="/forumposten/{$deel->forum_id}" method="post">
+		<form id="forumForm" action="/forum/posten/{$deel->forum_id}" method="post">
 			{if $loginlid->hasPermission('P_LOGGED_IN')}
 				{if $deel->isOpenbaar()}
 					<strong>Openbaar forum:</strong> Iedereen mag dit lezen en zoekmachines nemen het op in hun zoekresultaten.<br /><br />
