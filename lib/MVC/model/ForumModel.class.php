@@ -207,6 +207,14 @@ class ForumDradenModel extends PersistenceModel implements Paging {
 		return ceil($this->count('forum_id = ? AND wacht_goedkeuring = FALSE AND verwijderd = FALSE', array($forum_id)) / $this->per_pagina);
 	}
 
+	public function getPaginaVoorDraad(ForumDraad $draad) {
+		if ($draad->plakkerig) {
+			return 1;
+		}
+		$count = $this->count('forum_id = ? AND draad_id < ? AND plakkerig = FALSE AND wacht_goedkeuring = FALSE AND verwijderd = FALSE', array($draad->forum_id, $draad->draad_id));
+		return ceil($count / $this->per_pagina);
+	}
+
 	public function hertellenVoorDeel(ForumDeel $deel) {
 		$orm = self::orm;
 		$result = Database::sqlSelect('SUM(aantal_posts)', $orm::getTableName(), 'forum_id = ?', array($deel->forum_id));
@@ -370,6 +378,11 @@ class ForumPostsModel extends PersistenceModel implements Paging {
 		return ceil($this->count('draad_id = ? AND wacht_goedkeuring = FALSE AND verwijderd = FALSE', array($draad_id)) / $this->per_pagina);
 	}
 
+	public function getPaginaVoorPost(ForumPost $post) {
+		$count = $this->count('draad_id = ? AND post_id < ? AND wacht_goedkeuring = FALSE AND verwijderd = FALSE', array($post->draad_id, $post->post_id));
+		return ceil($count / $this->per_pagina);
+	}
+
 	public function hertellenVoorDraad(ForumDraad $draad) {
 		$draad->aantal_posts = $this->count('draad_id = ? AND wacht_goedkeuring = FALSE AND verwijderd = FALSE', array($draad->draad_id));
 		ForumDradenModel::instance()->update($draad);
@@ -394,11 +407,6 @@ class ForumPostsModel extends PersistenceModel implements Paging {
 			}
 		}
 		return $posts;
-	}
-
-	public function getPaginaVoorPost(ForumPost $post) {
-		$count = $this->count('draad_id = ? AND post_id < ? AND wacht_goedkeuring = FALSE AND verwijderd = FALSE', array($post->draad_id, $post->post_id));
-		return ceil($count / $this->per_pagina);
 	}
 
 	public function getAantalForumPostsVoorLid($uid) {

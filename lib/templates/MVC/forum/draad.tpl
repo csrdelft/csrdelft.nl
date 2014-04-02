@@ -13,7 +13,7 @@
 
 	{capture name='navlinks'}
 		<div class="forumNavigatie">
-			<a href="/forum/" class="forumGrootlink">Forum</a> &raquo; <a href="/forum/deel/{$deel->forum_id}" class="forumGrootlink">{$deel->titel}</a>
+			<a href="/forum/" class="forumGrootlink">Forum</a> &raquo; <a href="/forum/deel/{$deel->forum_id}/{ForumDradenModel::instance()->getPaginaVoorDraad($draad)}" class="forumGrootlink">{$deel->titel}</a>
 			<br />
 			{if $deel->magModereren()}
 				<div style="display: inline-block; margin-right: 3px;">
