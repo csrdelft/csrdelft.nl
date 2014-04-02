@@ -32,7 +32,7 @@ private $iKolommenZichtbaar; //aantal kolommen zichtbaar in de tabel.
 
 
 		// kolommen van de tabel. De laatste velden die niet in tabel staan worden gebruik om op te filteren.
-		if(LoginLid::instance()->hasPermission('P_BIEB_READ')){
+		if(LoginLid::mag('P_BIEB_READ')){
 			//boekstatus
 			$this->aKolommen = array( 'titel', 'auteur', 'categorie', 'bsaantal', 'eigenaar', 'lener', 'uitleendatum', 'status', 'code', 'isbn', 'auteur', 'categorie');
 			$this->iKolommenZichtbaar = 7;
@@ -114,7 +114,7 @@ private $iKolommenZichtbaar; //aantal kolommen zichtbaar in de tabel.
 
 		//filter bepalen
 		$allow = array('alle', 'csr', 'leden', 'eigen', 'geleend');
-		if(LoginLid::instance()->hasPermission('P_BIEB_READ') AND in_array($_GET['sEigenaarFilter'], $allow)){
+		if(LoginLid::mag('P_BIEB_READ') AND in_array($_GET['sEigenaarFilter'], $allow)){
 			$filter = $_GET['sEigenaarFilter'];
 		}else{
 			$filter = 'csr';
@@ -144,7 +144,7 @@ private $iKolommenZichtbaar; //aantal kolommen zichtbaar in de tabel.
 		 * SQL queries
 		 * Get data to display
 		 */
-		if(LoginLid::instance()->hasPermission('P_BIEB_READ')){
+		if(LoginLid::mag('P_BIEB_READ')){
 			//ingelogden
 			$sSelect = "
 				, GROUP_CONCAT(e.eigenaar_uid SEPARATOR ', ') AS eigenaar, GROUP_CONCAT(e.uitgeleend_uid SEPARATOR ', ') AS lener, 

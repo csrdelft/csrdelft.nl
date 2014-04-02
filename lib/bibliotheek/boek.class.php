@@ -178,7 +178,7 @@ class Boek {
 	 * 		boek mag alleen door admins verwijdert worden
 	 */
 	static public function magVerwijderen() {
-		return Loginlid::instance()->hasPermission('groep:BAS-FCie,P_BIEB_MOD,P_ADMIN');
+		return LoginLid::mag('groep:BAS-FCie,P_BIEB_MOD,P_ADMIN');
 	}
 
 	/**
@@ -188,7 +188,7 @@ class Boek {
 	 * 		boek mag alleen door admins of door eigenaar v.e. exemplaar bewerkt worden
 	 */
 	public function magBewerken() {
-		if ($this->magVerwijderen() OR Loginlid::instance()->hasPermission('P_BIEB_EDIT')) {
+		if ($this->magVerwijderen() OR LoginLid::mag('P_BIEB_EDIT')) {
 			return true;
 		}
 
@@ -199,7 +199,7 @@ class Boek {
 	 * Iedereen met extra rechten en zij met BIEB_READ mogen
 	 */
 	public function magBekijken() {
-		return Loginlid::instance()->hasPermission('P_BIEB_READ') OR $this->magBewerken();
+		return LoginLid::mag('P_BIEB_READ') OR $this->magBewerken();
 	}
 
 	/**
@@ -226,7 +226,7 @@ class Boek {
 	}
 
 	public function isBASFCie() {
-		return Loginlid::instance()->hasPermission('groep:BAS-FCie');
+		return LoginLid::mag('groep:BAS-FCie');
 	}
 
 	public function isBiebboek($exemplaarid = null) {

@@ -161,7 +161,7 @@ abstract class InputField extends FormElement implements Validator {
 		if (!$this->isPosted()) {
 			$this->error = 'Veld is niet gepost';
 		} elseif ($this->value === '' AND $this->notnull) {
-			if ($this->leden_mod AND LoginLid::instance()->hasPermission('P_LEDEN_MOD')) {
+			if ($this->leden_mod AND LoginLid::mag('P_LEDEN_MOD')) {
 				// exception for leden mod
 			} else {
 				$this->error = 'Dit is een verplicht veld';
@@ -192,7 +192,7 @@ abstract class InputField extends FormElement implements Validator {
 		if (!empty($this->description)) {
 			$required = '';
 			if ($this->notnull) {
-				if ($this->leden_mod AND LoginLid::instance()->hasPermission('P_LEDEN_MOD')) {
+				if ($this->leden_mod AND LoginLid::mag('P_LEDEN_MOD')) {
 					// exception for leden mod
 				} else {
 					$required = '<span class="required"> *</span>';
@@ -241,7 +241,7 @@ abstract class InputField extends FormElement implements Validator {
 	 */
 	protected function getCssClasses() {
 		if ($this->notnull) {
-			if ($this->leden_mod AND LoginLid::instance()->hasPermission('P_LEDEN_MOD')) {
+			if ($this->leden_mod AND LoginLid::mag('P_LEDEN_MOD')) {
 				// exception for leden mod
 			} else {
 				$this->css_classes[] = 'required';
@@ -1447,7 +1447,7 @@ class VinkField extends InputField {
 
 	public function validate() {
 		if (!$this->value AND $this->notnull) {
-			if ($this->leden_mod AND LoginLid::instance()->hasPermission('P_LEDEN_MOD')) {
+			if ($this->leden_mod AND LoginLid::mag('P_LEDEN_MOD')) {
 				// exception for leden mod
 			} else {
 				$this->error = 'Dit is een verplicht veld';

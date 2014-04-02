@@ -104,7 +104,7 @@ class AgendaItem extends PersistentEntity implements Agendeerbaar {
 	}
 
 	public function magBekijken() {
-		return LoginLid::instance()->hasPermission($this->rechten_bekijken);
+		return LoginLid::mag($this->rechten_bekijken);
 	}
 
 }

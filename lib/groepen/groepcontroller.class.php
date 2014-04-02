@@ -190,7 +190,7 @@ class Groepcontroller extends Controller {
 	 */
 
 	public function bewerken() {
-		if (!LoginLid::instance()->hasPermission('P_LOGGED_IN')) {
+		if (!LoginLid::mag('P_LOGGED_IN')) {
 			invokeRefresh($this->getUrl('standaard'), 'Niet voldoende rechten voor deze actie');
 		}
 		$this->view->setAction('edit');

@@ -8,7 +8,7 @@
  */
 require_once 'configuratie.include.php';
 
-if(!LoginLid::instance()->hasPermission('P_LEDEN_READ')){ header('location: '.CSR_ROOT); }
+if(!LoginLid::mag('P_LEDEN_READ')){ header('location: '.CSR_ROOT); }
 if(isset($_GET['xml'])){
 	$sLedenQuery="
 		SELECT 

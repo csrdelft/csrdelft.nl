@@ -10,7 +10,7 @@
 	<li>
 		<a href="/bibliotheek/wenslijst" title="Wenslijst van bibliothecaris">Wenslijst</a>
 	</li>
-	{if LoginLid::instance()->hasPermission('P_BIEB_READ')}
+	{if LoginLid::mag('P_BIEB_READ')}
 		<li>
 			<a href="/bibliotheek/rubrieken" title="Rubriekenoverzicht">Rubrieken</a>
 		</li>

@@ -695,7 +695,7 @@ class Lid implements Serializable, Agendeerbaar {
 						$naam.=' ' . $this->profiel['postfix'];
 					}
 				} elseif (in_array($this->profiel['status'], array('S_KRINGEL', 'S_NOBODY', 'S_EXLID'))) {
-					if (LoginLid::instance()->hasPermission('P_LEDEN_READ')) {
+					if (LoginLid::mag('P_LEDEN_READ')) {
 						$naam = $this->profiel['voornaam'] . ' ';
 					} else {
 						$naam = $this->profiel['voorletters'] . ' ';
@@ -754,7 +754,7 @@ class Lid implements Serializable, Agendeerbaar {
 		}
 		//niet ingelogged nooit een link laten zijn.
 		$nolinks = array('x999', 'x101', 'x027', 'x222', '4444');
-		if (in_array($this->getUid(), $nolinks) || !LoginLid::instance()->hasPermission('P_LEDEN_READ')) {
+		if (in_array($this->getUid(), $nolinks) || !LoginLid::mag('P_LEDEN_READ')) {
 			$mode = 'plain';
 		}
 		if ($mode === 'visitekaartje' || $mode === 'link') {
@@ -1132,8 +1132,8 @@ class Zoeker {
 			# 1. ingelogde persoon dat alleen maar mag of
 			# 2. ingelogde persoon leden en oudleden mag zoeken, maar niet oudleden alleen heeft gekozen
 			if (
-					(LoginLid::instance()->hasPermission('P_LEDEN_READ') and !LoginLid::instance()->hasPermission('P_OUDLEDEN_READ') ) or
-					(LoginLid::instance()->hasPermission('P_LEDEN_READ') and LoginLid::instance()->hasPermission('P_OUDLEDEN_READ') and $zoekstatus != 'oudleden')
+					(LoginLid::mag('P_LEDEN_READ') and !LoginLid::mag('P_OUDLEDEN_READ') ) or
+					(LoginLid::mag('P_LEDEN_READ') and LoginLid::mag('P_OUDLEDEN_READ') and $zoekstatus != 'oudleden')
 			) {
 				$statusfilter .= "status='S_LID' OR status='S_GASTLID' OR status='S_NOVIET' OR status='S_KRINGEL'";
 			}
@@ -1141,8 +1141,8 @@ class Zoeker {
 			# 1. ingelogde persoon dat alleen maar mag of
 			# 2. ingelogde persoon leden en oudleden mag zoeken, maar niet leden alleen heeft gekozen
 			if (
-					(!LoginLid::instance()->hasPermission('P_LEDEN_READ') and LoginLid::instance()->hasPermission('P_OUDLEDEN_READ') ) or
-					(LoginLid::instance()->hasPermission('P_LEDEN_READ') and LoginLid::instance()->hasPermission('P_OUDLEDEN_READ') and $zoekstatus != 'leden')
+					(!LoginLid::mag('P_LEDEN_READ') and LoginLid::mag('P_OUDLEDEN_READ') ) or
+					(LoginLid::mag('P_LEDEN_READ') and LoginLid::mag('P_OUDLEDEN_READ') and $zoekstatus != 'leden')
 			) {
 				if ($statusfilter != '')
 					$statusfilter .= " OR ";
@@ -1150,7 +1150,7 @@ class Zoeker {
 			}
 			# we zoeken in nobodies als
 			# de ingelogde persoon dat mag EN daarom gevraagd heeft
-			if (LoginLid::instance()->hasPermission('P_OUDLEDEN_MOD') and $zoekstatus === 'nobodies') {
+			if (LoginLid::mag('P_OUDLEDEN_MOD') and $zoekstatus === 'nobodies') {
 				# alle voorgaande filters worden ongedaan gemaakt en er wordt alleen op nobodies gezocht
 				$statusfilter = "status='S_NOBODY' OR status='S_EXLID'";
 			}

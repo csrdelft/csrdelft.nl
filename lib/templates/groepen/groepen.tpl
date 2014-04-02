@@ -42,7 +42,7 @@
 			Maak h.t. groepen o.t.
 		</a>
 	{/if}
-	{if LoginLid::instance()->hasPermission('P_ADMIN') AND $action!='edit'}
+	{if LoginLid::mag('P_ADMIN') AND $action!='edit'}
 		<a class="knop" href="/actueel/groepen/{$groepen->getNaam()}/?bewerken=true">
 			<img src="{$CSR_PICS}knopjes/bewerken.png" title="Bewerk beschrijving" />
 		</a>

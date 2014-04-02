@@ -70,7 +70,7 @@ class ForumController extends Controller {
 	 */
 	public function forum() {
 		$body = new ForumView(ForumModel::instance()->getForum());
-		if (LoginLid::instance()->hasPermission('P_LOGGED_IN')) {
+		if (LoginLid::mag('P_LOGGED_IN')) {
 			$this->view = new CsrLayoutPage($body);
 		} else {
 			//uitgelogd heeft nieuwe layout
@@ -120,7 +120,7 @@ class ForumController extends Controller {
 	public function recent() {
 		$deel = ForumDelenModel::instance()->getRecent();
 		$body = new ForumDeelView($deel);
-		if (LoginLid::instance()->hasPermission('P_LOGGED_IN')) {
+		if (LoginLid::mag('P_LOGGED_IN')) {
 			$this->view = new CsrLayoutPage($body);
 		} else {
 			//uitgelogd heeft nieuwe layout
@@ -143,7 +143,7 @@ class ForumController extends Controller {
 		}
 		ForumDradenModel::instance()->setHuidigePagina((int) $pagina); // lazy loading ForumDraad[]
 		$body = new ForumDeelView($deel);
-		if (LoginLid::instance()->hasPermission('P_LOGGED_IN')) {
+		if (LoginLid::mag('P_LOGGED_IN')) {
 			$this->view = new CsrLayoutPage($body);
 		} else {
 			//uitgelogd heeft nieuwe layout
@@ -168,7 +168,7 @@ class ForumController extends Controller {
 		ForumDradenGelezenModel::instance()->setWanneerGelezenDoorLid($draad);
 		ForumPostsModel::instance()->setHuidigePagina((int) $pagina); // lazy loading ForumPost[]
 		$body = new ForumDraadView($draad, $deel);
-		if (LoginLid::instance()->hasPermission('P_LOGGED_IN')) {
+		if (LoginLid::mag('P_LOGGED_IN')) {
 			$this->view = new CsrLayoutPage($body);
 		} else {
 			//uitgelogd heeft nieuwe layout
@@ -254,7 +254,7 @@ class ForumController extends Controller {
 			invokeRefresh('/forum/deel/' . $deel->forum_id, 'Bericht is al gepost!', 0);
 		}
 		$wacht_goedkeuring = false;
-		if (!LoginLid::instance()->hasPermission('P_LOGGED_IN')) {
+		if (!LoginLid::mag('P_LOGGED_IN')) {
 			$wacht_goedkeuring = true;
 			$email = filter_input(INPUT_POST, 'email', FILTER_SANITIZE_EMAIL);
 			if ($filter->isSpam($email)) {
@@ -297,7 +297,7 @@ class ForumController extends Controller {
 		$post = ForumPostsModel::instance()->getForumPost((int) $id);
 		$draad = ForumDradenModel::instance()->getForumDraad($post->draad_id);
 		$deel = ForumDelenModel::instance()->getForumDeel($draad->forum_id);
-		if (($deel->magPosten() AND !$draad->gesloten AND $post->lid_id === LoginLid::instance()->getUid() AND LoginLid::instance()->hasPermission('P_LOGGED_IN')) OR $deel->magModereren()) {
+		if (($deel->magPosten() AND !$draad->gesloten AND $post->lid_id === LoginLid::instance()->getUid() AND LoginLid::mag('P_LOGGED_IN')) OR $deel->magModereren()) {
 			// same if-statement in post_lijst.tpl
 		} else {
 			$this->geentoegang();

@@ -1,11 +1,11 @@
 <div style="float: right; margin: 0 0 10px 10px;">
-	{if LoginLid::instance()->hasPermission('P_LOGGED_IN')}
+	{if LoginLid::mag('P_LOGGED_IN')}
 		<a href="/fotoalbum/fotostoevoegen/" title="Toevoegen">Toevoegen</a>
 	{/if}
-	{if LoginLid::instance()->hasPermission('P_LOGGED_IN') && $album->getFotos()!==false}
+	{if LoginLid::mag('P_LOGGED_IN') && $album->getFotos()!==false}
 		| <a href="/tools/downloadalbum.php?album={$album->getPad()}" title="Download als TAR-bestand">Download album</a>
 	{/if}
-	{if LoginLid::instance()->hasPermission('P_ADMIN')}
+	{if LoginLid::mag('P_ADMIN')}
 		| <a href="/actueel/fotoalbum/verwerk/" title="Verwerken">Verwerken</a>
 	{/if}
 </div>

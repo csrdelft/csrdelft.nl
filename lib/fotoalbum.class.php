@@ -191,7 +191,7 @@ class Fotoalbum{
 	}
 
 	function magBekijken(){
-		if(LoginLid::instance()->hasPermission('P_LEDEN_READ')){
+		if(LoginLid::mag('P_LEDEN_READ')){
 			if(preg_match($this->alleenVrouwen, $this->getPad())){ # Deze foto's alleen voor DéDé
 				if(LoginLid::instance()->getLid()->getGeslacht() == 'v'){
 					return true;

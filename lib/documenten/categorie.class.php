@@ -113,7 +113,7 @@ class DocumentenCategorie{
 	public function getLeesrechten(){ return $this->leesrechten; }
 	
 	public function magBekijken(){
-		return LoginLid::instance()->hasPermission($this->getLeesrechten()); 
+		return LoginLid::mag($this->getLeesrechten()); 
 	}
 
 	public function getLast($count){

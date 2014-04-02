@@ -64,11 +64,11 @@ class CmsPagina extends PersistentEntity {
 	protected static $table_name = 'pagina';
 
 	public function magBekijken() {
-		return LoginLid::instance()->hasPermission($this->rechten_bekijken);
+		return LoginLid::mag($this->rechten_bekijken);
 	}
 
 	public function magBewerken() {
-		return LoginLid::instance()->hasPermission($this->rechten_bewerken);
+		return LoginLid::mag($this->rechten_bewerken);
 	}
 
 }

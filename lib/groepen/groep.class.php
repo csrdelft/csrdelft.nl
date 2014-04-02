@@ -219,7 +219,7 @@ class Groep{
 	}
 	public function getAanmeldbaar(){	return $this->groep['aanmeldbaar']; }
 	public function isAanmeldbaar(){
-		return LoginLid::instance()->hasPermission($this->getAanmeldbaar());
+		return LoginLid::mag($this->getAanmeldbaar());
 	}
 	public function getLimiet(){		return $this->groep['limiet']; }
 	public function getToonFuncties(){	return $this->groep['toonFuncties']; }
@@ -282,7 +282,7 @@ class Groep{
 	 * automatisch bij aanmaken van activiteit in groepstype waar dat toegestaan is.
 	 */
 	public function isEigenaar(){
-		return LoginLid::instance()->hasPermission($this->groep['eigenaar']);
+		return LoginLid::mag($this->groep['eigenaar']);
 	}
 	/*
 	 * LidIsMod houdt in dat élk lid van een groep leden kan toevoegen
@@ -340,7 +340,7 @@ class Groep{
 	}
 
 	public static function isAdmin(){
-		return LoginLid::instance()->hasPermission('P_LEDEN_MOD');
+		return LoginLid::mag('P_LEDEN_MOD');
 	}
 	public function magBewerken(){
 		return
@@ -707,7 +707,7 @@ class Groep{
 	}
 
 	public static function isIngelogged(){
-		return LoginLid::instance()->hasPermission('P_LEDEN_READ');
+		return LoginLid::mag('P_LEDEN_READ');
 	}
 
 	/*

@@ -3,7 +3,7 @@
 require_once 'configuratie.include.php';
 require_once 'lid/profiel.class.php';
 
-if(!(LoginLid::instance()->hasPermission('P_LOGGED_IN') AND LoginLid::instance()->hasPermission('P_OUDLEDEN_READ'))){
+if(!(LoginLid::mag('P_LOGGED_IN') AND LoginLid::mag('P_OUDLEDEN_READ'))){
 	# geen rechten
 	echo 'false';
 	exit;

@@ -95,7 +95,7 @@ class VerjaardagContent extends TemplateView {
 				}
 
 				echo '<div id="zijbalk_verjaardagen"><h1>';
-				if (LoginLid::instance()->hasPermission('P_LEDEN_READ')) {
+				if (LoginLid::mag('P_LEDEN_READ')) {
 					echo '<a href="/communicatie/verjaardagen">Verjaardagen</a>';
 				} else {
 					echo 'Verjaardagen';

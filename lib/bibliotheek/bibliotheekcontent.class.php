@@ -90,7 +90,7 @@ class BibliotheekCatalogusDatatableContent extends TemplateView {
 Auteur: ' . $aBoek['auteur'] . ' 
 Rubriek: ' . $aBoek['categorie'] . '"';
 		//url
-		if (Loginlid::instance()->hasPermission('P_BIEB_READ')) {
+		if (LoginLid::mag('P_BIEB_READ')) {
 			$titel = '<a href="/communicatie/bibliotheek/boek/' . $aBoek['id'] . '" ' . $urltitle . '>'
 					. htmlspecialchars($aBoek['titel'])
 					. '</a>';

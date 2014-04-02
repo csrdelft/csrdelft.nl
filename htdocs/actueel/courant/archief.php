@@ -8,7 +8,7 @@
 
 require_once 'configuratie.include.php';
 
-if (LoginLid::instance()->hasPermission('P_LEDEN_READ')) {
+if (LoginLid::mag('P_LEDEN_READ')) {
 	require_once 'courant/courant.class.php';
 	$courant=new Courant();
 

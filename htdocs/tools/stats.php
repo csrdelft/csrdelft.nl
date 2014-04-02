@@ -5,7 +5,7 @@ error_reporting(E_ALL);
 
 require_once 'configuratie.include.php';
 
-if(!LoginLid::instance()->hasPermission('P_ADMIN')){
+if(!LoginLid::mag('P_ADMIN')){
 	header('location: '.CSR_ROOT);
 	exit;
 }

@@ -64,7 +64,7 @@ abstract class SimpleHTML implements View {
 			$zijkolom[] = new BlockMenuView(MenuModel::instance()->getMenuTree('Ga snel naar'));
 		}
 		// Agenda
-		if (LoginLid::instance()->hasPermission('P_AGENDA_READ') && LidInstellingen::get('zijbalk', 'agendaweken') > 0) {
+		if (LoginLid::mag('P_AGENDA_READ') && LidInstellingen::get('zijbalk', 'agendaweken') > 0) {
 			$zijkolom[] = new AgendaZijbalkView(AgendaModel::instance(), LidInstellingen::get('zijbalk', 'agendaweken'));
 		}
 		// Laatste mededelingen

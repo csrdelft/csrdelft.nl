@@ -63,9 +63,9 @@ class Saldi{
 	public static function magGrafiekZien($uid, $cie=null){
 		//mogen we uberhaupt een grafiek zien?
 		if($cie===null){
-			return LoginLid::instance()->isSelf($uid) OR LoginLid::instance()->hasPermission('P_LEDEN_MOD,groep:soccie,groep:maalcie');
+			return LoginLid::instance()->isSelf($uid) OR LoginLid::mag('P_LEDEN_MOD,groep:soccie,groep:maalcie');
 		}
-		if(LoginLid::instance()->isSelf($uid) OR LoginLid::instance()->hasPermission('P_LEDEN_MOD,groep:'.$cie)){
+		if(LoginLid::instance()->isSelf($uid) OR LoginLid::mag('P_LEDEN_MOD,groep:'.$cie)){
 			return true;
 		}
 		return false;

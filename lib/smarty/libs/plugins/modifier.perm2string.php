@@ -23,5 +23,5 @@
  * @return string
  */
 function smarty_modifier_perm2string($permissies){
-	return LoginLid::formatPermissionstring($permissies);
+	return LoginLid::format($permissies);
 }

@@ -29,7 +29,7 @@ if(isset($_GET['timespan']) AND $_GET['timespan']==(int)$_GET['timespan']){
 	$timespan=$_GET['timespan'];
 }
 
-if(LoginLid::instance()->hasPermission('P_LEDEN_MOD,groep:'.$cie) OR LoginLid::instance()->isSelf($uid)){
+if(LoginLid::mag('P_LEDEN_MOD,groep:'.$cie) OR LoginLid::instance()->isSelf($uid)){
 	$saldi=new Saldi($uid, $cie, $timespan);
 
 	$chart=new chart(500, 200);

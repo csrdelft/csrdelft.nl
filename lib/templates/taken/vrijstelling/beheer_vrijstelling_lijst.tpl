@@ -3,14 +3,14 @@
 *}
 <tr id="vrijstelling-row-{$vrijstelling->getLidId()}">
 	<td>
-		<a href="{Instellingen::instance()->('taken', 'url')}/bewerk/{$vrijstelling->getLidId()}" title="Vrijstelling wijzigen" class="knop post popup">{icon get="pencil"}</a>
+		<a href="{Instellingen::get('taken', 'url')}/bewerk/{$vrijstelling->getLidId()}" title="Vrijstelling wijzigen" class="knop post popup">{icon get="pencil"}</a>
 	</td>
-	<td>{$vrijstelling->getLid()->getNaamLink(Instellingen::instance()->('corvee', 'weergave_ledennamen_beheer'), Instellingen::instance()->('corvee', 'weergave_link_ledennamen'))}</td>
+	<td>{$vrijstelling->getLid()->getNaamLink(Instellingen::get('corvee', 'weergave_ledennamen_beheer'), Instellingen::get('corvee', 'weergave_link_ledennamen'))}</td>
 	<td>{$vrijstelling->getBeginDatum()|date_format:"%e %b %Y"}</td>
 	<td>{$vrijstelling->getEindDatum()|date_format:"%e %b %Y"}</td>
 	<td>{$vrijstelling->getPercentage()}%</td>
 	<td>{$vrijstelling->getPunten()}</td>
 	<td class="col-del">
-		<a href="{Instellingen::instance()->('taken', 'url')}/verwijder/{$vrijstelling->getLidId()}" title="Vrijstelling definitief verwijderen" class="knop post confirm">{icon get="cross"}</a>
+		<a href="{Instellingen::get('taken', 'url')}/verwijder/{$vrijstelling->getLidId()}" title="Vrijstelling definitief verwijderen" class="knop post confirm">{icon get="cross"}</a>
 	</td>
 </tr>

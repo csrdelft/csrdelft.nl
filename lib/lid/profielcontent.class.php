@@ -44,7 +44,7 @@ class ProfielContent extends TemplateView {
 		require_once('groepen/groepcontent.class.php');
 		$profhtml['groepen'] = new GroepenProfielContent($this->lid->getUid());
 
-		if (LoginLid::instance()->getUid() == $this->lid->getUid() || LoginLid::instance()->hasPermission('P_MAAL_MOD')) {
+		if (LoginLid::instance()->getUid() == $this->lid->getUid() || LoginLid::mag('P_MAAL_MOD')) {
 			$profhtml['recenteAanmeldingen'] = AanmeldingenModel::getRecenteAanmeldingenVoorLid($this->lid->getUid());
 			$profhtml['abos'] = AbonnementenModel::getAbonnementenVoorLid($this->lid->getUid());
 		}
@@ -68,10 +68,10 @@ class ProfielContent extends TemplateView {
 		$this->smarty->assign('boeken', Catalogus::getBoekenByUid($this->lid->getUid(), 'eigendom'));
 		$this->smarty->assign('gerecenseerdeboeken', Catalogus::getBoekenByUid($this->lid->getUid(), 'gerecenseerd'));
 
-		$this->smarty->assign('isAdmin', LoginLid::instance()->hasPermission('P_ADMIN'));
+		$this->smarty->assign('isAdmin', LoginLid::mag('P_ADMIN'));
 		//TODO check role vs permission R_BESTUUR
-		$this->smarty->assign('isBestuur', LoginLid::instance()->hasPermission('R_BESTUUR'));
-		$this->smarty->assign('isLidMod', LoginLid::instance()->hasPermission('P_LEDEN_MOD'));
+		$this->smarty->assign('isBestuur', LoginLid::mag('R_BESTUUR'));
+		$this->smarty->assign('isLidMod', LoginLid::mag('P_LEDEN_MOD'));
 
 		//eigen profiel niet cachen, dan krijgen we namelijk rare dingen
 		//dat we andermans saldo's zien enzo

@@ -28,7 +28,7 @@ if ($fotoalbum->magBekijken()) {
 	$fotoalbumcontent = new FotoalbumContent($fotoalbum);
 	$fotoalbumcontent->setActie('album');
 
-	if (LoginLid::instance()->hasPermission('P_LOGGED_IN')) {
+	if (LoginLid::mag('P_LOGGED_IN')) {
 		$pagina = new CsrLayoutPage($fotoalbumcontent);
 		$pagina->zijkolom = false;
 	} else {
@@ -44,7 +44,7 @@ if ($fotoalbum->magBekijken()) {
 	require_once 'MVC/view/CmsPaginaView.class.php';
 	$midden = new CmsPaginaView(CmsPaginaModel::instance()->getPagina('geentoegang'));
 
-	if (LoginLid::instance()->hasPermission('P_LOGGED_IN')) {
+	if (LoginLid::mag('P_LOGGED_IN')) {
 		$pagina = new CsrLayoutPage($midden);
 	} else {
 		//uitgelogd heeft nieuwe layout

@@ -62,7 +62,7 @@ require_once 'lid/loginlid.class.php';
 
 switch (constant('MODE')) {
 	case 'ONDERHOUD':
-		if (!LoginLid::instance()->hasPermission('P_ADMIN')) {
+		if (!LoginLid::mag('P_ADMIN')) {
 			header('location: ' . CSR_ROOT . '/tools/onderhoud.html');
 			exit;
 		}

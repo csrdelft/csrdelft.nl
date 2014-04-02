@@ -1,4 +1,4 @@
-{if LoginLid::instance()->hasPermission('P_LOGGED_IN') }
+{if LoginLid::mag('P_LOGGED_IN') }
 <p>
 	<a href="/instellingen/" class="instellingen no-line" title="Webstekinstellingen">{icon get="instellingen"}</a>
 	{if LoginLid::instance()->isSued()}

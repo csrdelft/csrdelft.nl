@@ -6,7 +6,7 @@ $action = filter_input(INPUT_GET, 'actie', FILTER_SANITIZE_STRING);
 switch ($action) {
 
 	case 'su':
-		if (!LoginLid::instance()->hasPermission('P_ADMIN')) {
+		if (!LoginLid::mag('P_ADMIN')) {
 			setMelding('Geen su-rechten!', -1);
 		} else {
 			$uid = filter_input(INPUT_GET, 'uid', FILTER_SANITIZE_STRING);

@@ -189,7 +189,7 @@ class ForumOnderwerp{
 	public function getRechtenRead(){ return $this->getCategorie()->getRechten_read(); }
 	public function getRechtenPost(){ return $this->getCategorie()->getRechten_post(); }
 	public function magPosten(){
-		return LoginLid::instance()->hasPermission($this->getRechtenPost());
+		return LoginLid::mag($this->getRechtenPost());
 	}
 
 	//topic
@@ -267,7 +267,7 @@ class ForumOnderwerp{
 		if(!($this->getCategorie() instanceof ForumCategorie)){
 			throw new Exception('ForumOnderwerp::magBekijken(): Geen onderwerp ingeladen.');
 		}else{
-			return LoginLid::instance()->hasPermission($this->getCategorie()->getRechten_read());
+			return LoginLid::mag($this->getCategorie()->getRechten_read());
 		}
 	}
 	public function isIngelogged(){ return Forum::isIngelogged(); }

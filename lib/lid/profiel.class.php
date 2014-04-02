@@ -96,15 +96,15 @@ class Profiel {
 	 */
 	public function magBewerken() {
 		//lid-moderator
-		if (LoginLid::instance()->hasPermission('P_LEDEN_MOD')) {
+		if (LoginLid::mag('P_LEDEN_MOD')) {
 			return true;
 		}
 		//oudlid-moderator
-		if (LoginLid::instance()->hasPermission('P_OUDLEDEN_MOD') AND in_array($this->lid->getStatus(), array('S_OUDLID', 'S_ERELID'))) {
+		if (LoginLid::mag('P_OUDLEDEN_MOD') AND in_array($this->lid->getStatus(), array('S_OUDLID', 'S_ERELID'))) {
 			return true;
 		}
 		//novietenbewerker (de novCie dus)
-		if ($this->editNoviet == true AND LoginLid::instance()->hasPermission('groep:novcie')) {
+		if ($this->editNoviet == true AND LoginLid::mag('groep:novcie')) {
 			return true;
 		}
 		//of het gaat om ons eigen profiel.
@@ -246,7 +246,7 @@ class ProfielBewerken extends Profiel {
 
 		$profiel = $this->lid->getProfiel();
 
-		$hasLedenMod = LoginLid::instance()->hasPermission('P_LEDEN_MOD');
+		$hasLedenMod = LoginLid::mag('P_LEDEN_MOD');
 
 		//zaken bewerken als we oudlid zijn of P_LEDEN_MOD hebben
 		if (in_array($profiel['status'], array('S_OUDLID', 'S_ERELID')) OR $hasLedenMod OR $this->editNoviet) {
@@ -310,7 +310,7 @@ class ProfielBewerken extends Profiel {
 		if ($hasLedenMod) {
 			$form[] = new JaNeeField('machtiging', $profiel['machtiging'], 'Machtiging getekend?');
 		}
-		if (LoginLid::instance()->hasPermission('P_ADMIN')) {
+		if (LoginLid::mag('P_ADMIN')) {
 			$form[] = new IntField('soccieID', $profiel['soccieID'], 'SoccieID (uniek icm. bar)', 0, 10000);
 			$form[] = new SelectField('createTerm', $profiel['createTerm'], 'Aangemaakt bij', array('barvoor' => 'barvoor', 'barmidden' => 'barmidden', 'barachter' => 'barachter', 'soccie' => 'soccie'));
 		}
@@ -361,7 +361,7 @@ class ProfielBewerken extends Profiel {
 		}
 		$form[] = new TextField('muziek', $profiel['muziek'], 'Muziekinstrument', 50);
 
-		if (LoginLid::instance()->hasPermission('P_ADMIN,R_BESTUUR,groep:novcie')) {
+		if (LoginLid::mag('P_ADMIN,R_BESTUUR,groep:novcie')) {
 			$form[] = new SelectField('ovkaart', $profiel['ovkaart'], 'OV-kaart', array('' => 'Kies...', 'geen' => '(Nog) geen OV-kaart', 'week' => 'Week', 'weekend' => 'Weekend', 'niet' => 'Niet geactiveerd'));
 			$form[] = new SelectField('zingen', $profiel['zingen'], 'Zingen', array('' => 'Kies...', 'ja' => 'Ja, ik zing in een band/koor', 'nee' => 'Nee, ik houd niet van zingen', 'soms' => 'Alleen onder de douche', 'anders' => 'Anders'));
 			$form[] = new TextareaField('novitiaat', $profiel['novitiaat'], 'Wat verwacht je van het novitiaat?');
@@ -444,7 +444,7 @@ class ProfielStatus extends Profiel {
 		//permissies
 		$perm = array('R_LID' => 'Lid', 'R_OUDLID' => 'Oudlid', 'R_NOBODY' => 'Ex-lid/Nobody', 'R_MAALCIE' => 'MaalCierechten', 'R_BASF' => 'BAS-FCierechten', 'R_ETER' => 'Eter (mag abo\'s) - geen inlog');
 		$permbeheer = array('R_BESTUUR' => 'Bestuur', 'R_VAB' => 'Vice-Abactis', 'R_PUBCIE' => 'PubCierechten');
-		if (LoginLid::instance()->hasPermission('P_ADMIN')) {
+		if (LoginLid::mag('P_ADMIN')) {
 			//admin mag alle permissies toekennen
 			$perm = array_merge($perm, $permbeheer);
 		} elseif (in_array($profiel['permissies'], array('R_BESTUUR', 'R_VAB', 'R_PUBCIE', 'P_MODERATOR'))) {
@@ -515,7 +515,7 @@ class ProfielStatus extends Profiel {
 		$nieuwepermissie = $this->bewerktLid->getProperty('permissies');
 
 		//bij wijzigingen door niet-admins worden aanpassingen aan permissies ongedaan gemaakt
-		if (!LoginLid::instance()->hasPermission('P_ADMIN')) {
+		if (!LoginLid::mag('P_ADMIN')) {
 
 			$adminperms = array('R_PUBCIE', 'P_MODERATOR', 'R_BESTUUR', 'R_VAB');
 
@@ -808,11 +808,11 @@ class ProfielVoorkeur extends Profiel {
 
 	Public function magBewerken() {
 		//lid-moderator
-		if (LoginLid::instance()->hasPermission('P_LEDEN_MOD')) {
+		if (LoginLid::mag('P_LEDEN_MOD')) {
 			return true;
 		}
 		//oudlid-moderator
-		if (LoginLid::instance()->hasPermission('P_OUDLEDEN_MOD') AND in_array($this->lid->getStatus(), array('S_OUDLID', 'S_ERELID'))) {
+		if (LoginLid::mag('P_OUDLEDEN_MOD') AND in_array($this->lid->getStatus(), array('S_OUDLID', 'S_ERELID'))) {
 			return true;
 		}
 		//of het gaat om ons eigen profiel.

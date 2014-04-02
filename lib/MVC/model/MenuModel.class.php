@@ -50,7 +50,7 @@ class MenuModel extends PersistenceModel {
 		$where = 'parent_id = ?' . ($admin ? '' : ' AND zichtbaar = true');
 		$item->children = $this->find($where, array($item->item_id), 'prioriteit ASC');
 		foreach ($item->children as $i => $child) {
-			if (!$admin AND !LoginLid::instance()->hasPermission($child->rechten_bekijken)) {
+			if (!$admin AND !LoginLid::mag($child->rechten_bekijken)) {
 				unset($item->children[$i]);
 			} else {
 				$this->getChildren($child, $admin);

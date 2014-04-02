@@ -334,7 +334,7 @@ class ForumDradenModel extends PersistenceModel implements Paging {
 		$draad->aantal_posts = 0;
 		$draad->gesloten = false;
 		$draad->verwijderd = false;
-		$draad->wacht_goedkeuring = !LoginLid::instance()->hasPermission('P_LOGGED_IN');
+		$draad->wacht_goedkeuring = !LoginLid::mag('P_LOGGED_IN');
 		$draad->plakkerig = false;
 		$draad->belangrijk = false;
 		$draad->draad_id = (int) ForumDradenModel::instance()->create($draad);

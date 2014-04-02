@@ -4,7 +4,7 @@ require_once 'configuratie.include.php';
 require_once 'lid/stamboomcontent.class.php';
 
 
-if(LoginLid::instance()->hasPermission('P_LEDEN_READ')) {
+if(LoginLid::mag('P_LEDEN_READ')) {
 	if(isset($_GET['uid'])){
 		$uid=$_GET['uid'];
 	}else{

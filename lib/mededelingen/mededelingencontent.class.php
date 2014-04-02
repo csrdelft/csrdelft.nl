@@ -30,7 +30,7 @@ class MededelingenContent extends TemplateView {
 					// 5. Indien deze mededeling wacht op goedkeuring en de gebruiker geen moderator is EN deze mededeling niet van hem is. 
 					if (
 							($this->geselecteerdeMededeling->getZichtbaarheid() == 'verwijderd') OR
-							($this->geselecteerdeMededeling->isPrive() AND !LoginLid::instance()->hasPermission('P_LEDEN_READ')) OR
+							($this->geselecteerdeMededeling->isPrive() AND !LoginLid::mag('P_LEDEN_READ')) OR
 							($this->geselecteerdeMededeling->getDoelgroep() == 'leden' AND Mededeling::isOudlid()) OR
 							($this->geselecteerdeMededeling->getZichtbaarheid() == 'onzichtbaar' AND !Mededeling::isModerator()) OR
 							($this->geselecteerdeMededeling->getZichtbaarheid() == 'wacht_goedkeuring' AND

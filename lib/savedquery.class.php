@@ -47,7 +47,7 @@ class SavedQuery {
 						$this->result = $db->result2array($queryResult);
 						$this->resultCount = count($this->result);
 					}
-				} elseif (LoginLid::instance()->hasPermission('P_ADMIN')) {
+				} elseif (LoginLid::mag('P_ADMIN')) {
 					$this->result[] = array('Mysql_error' => mysql_error());
 				}
 			}
@@ -85,7 +85,7 @@ class SavedQuery {
 	//Query's mogen worden weergegeven als de permissiestring toegelaten wordt door 
 	//Lid::hasPermission()' of als gebruiker P_ADMIN heeft.
 	public static function magWeergeven($permissie) {
-		return LoginLid::instance()->hasPermission($permissie) OR LoginLid::instance()->hasPermission('P_ADMIN');
+		return LoginLid::mag($permissie) OR LoginLid::mag('P_ADMIN');
 	}
 
 	public function magBekijken() {

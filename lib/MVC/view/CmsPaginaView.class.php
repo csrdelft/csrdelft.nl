@@ -47,8 +47,8 @@ class CmsPaginaFormView extends Formulier {
 			$fields[] = new TextField('rechten_bekijken', $pagina->rechten_bekijken, 'Rechten bekijken');
 			$fields[] = new TextField('rechten_bewerken', $pagina->rechten_bewerken, 'Rechten bewerken');
 		} else {
-			$fields[] = new HtmlComment('<div><label>Rechten bekijken</label>' . LoginLid::formatPermissionstring($pagina->rechten_bekijken) .
-					'</div><div style="clear:left;"><label>Rechten bewerken</label>' . LoginLid::formatPermissionstring($pagina->rechten_bewerken) . '</div>');
+			$fields[] = new HtmlComment('<div><label>Rechten bekijken</label>' . LoginLid::format($pagina->rechten_bekijken) .
+					'</div><div style="clear:left;"><label>Rechten bewerken</label>' . LoginLid::format($pagina->rechten_bewerken) . '</div>');
 		}
 		$fields[] = new UbbPreviewField('inhoud', $pagina->inhoud, 'Inhoud');
 		$fields[] = new SubmitResetCancel('/pagina/' . $pagina->naam);

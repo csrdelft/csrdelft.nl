@@ -45,7 +45,7 @@ class Groepen{
 			$this->type=$categorie;
 		}else{
 			$message='Groeptype ('.$groeptype.') bestaat niet! Groepen::__construct()';
-			if(LoginLid::instance()->hasPermission('P_ADMIN')){
+			if(LoginLid::mag('P_ADMIN')){
 				$message.="\n".mysql_error();
 			}
 			throw new Exception($message);
@@ -171,11 +171,11 @@ class Groepen{
 		return $this->type['groepenAanmaakbaar'];
 	}
 	public function isGroepAanmaker(){
-		return LoginLid::instance()->hasPermission($this->getGroepAanmaakbaarPermissies());
+		return LoginLid::mag($this->getGroepAanmaakbaarPermissies());
 	}
 
 	public static function isAdmin(){
-		return LoginLid::instance()->hasPermission('P_LEDEN_MOD');
+		return LoginLid::mag('P_LEDEN_MOD');
 	}
 
 	public function getGroep($groepId){

@@ -26,7 +26,7 @@ abstract class AclController extends Controller {
 	protected $acl = array();
 
 	protected function hasPermission() {
-		return array_key_exists($this->action, $this->acl) && isset($this->acl[$this->action]) && LoginLid::instance()->hasPermission($this->acl[$this->action]);
+		return array_key_exists($this->action, $this->acl) && isset($this->acl[$this->action]) && LoginLid::mag($this->acl[$this->action]);
 	}
 
 }

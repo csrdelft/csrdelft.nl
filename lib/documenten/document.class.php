@@ -146,16 +146,16 @@ class Document{
 		return $uid==$this->getEigenaar();
 	}
 	public function magBewerken(){
-		return $this->isEigenaar() OR LoginLid::instance()->hasPermission('P_DOCS_MOD');
+		return $this->isEigenaar() OR LoginLid::mag('P_DOCS_MOD');
 	}
 	public function getLeesrechten(){
 		return $this->leesrechten;
 	}
 	public function magBekijken(){
-		return LoginLid::instance()->hasPermission($this->getLeesrechten());
+		return LoginLid::mag($this->getLeesrechten());
 	}
 	public function magVerwijderen(){
-		return LoginLid::instance()->hasPermission('P_DOCS_MOD');
+		return LoginLid::mag('P_DOCS_MOD');
 	}
 
 	public function getFriendlyMimetype(){

@@ -4,7 +4,7 @@ require_once 'configuratie.include.php';
 require_once 'lid/ledenlijstcontent.class.php';
 require_once 'groepen/groep.class.php';
 
-if (!(LoginLid::instance()->hasPermission('P_LOGGED_IN') AND LoginLid::instance()->hasPermission('P_OUDLEDEN_READ'))) {
+if (!(LoginLid::mag('P_LOGGED_IN') AND LoginLid::mag('P_OUDLEDEN_READ'))) {
 	# geen rechten
 	require_once 'MVC/model/CmsPaginaModel.class.php';
 	require_once 'MVC/view/CmsPaginaView.class.php';
@@ -68,7 +68,7 @@ if (isset($_GET['addToGoogle'])) {
 			'<h1>Google-sync-resultaat:</h1>' . $message . '<br />' .
 			'<a href="/communicatie/lijst.php?q=' . htmlspecialchars($_GET['q']) . '">Terug naar de ledenlijst...</a>', 'Google-sync resultaat');
 
-	if (LoginLid::instance()->hasPermission('P_ADMIN')) {
+	if (LoginLid::mag('P_ADMIN')) {
 		$ledenlijstcontent->append('<hr />Tijd nodig voor deze sync: ' . $elapsed . 'ms');
 	}
 } else {

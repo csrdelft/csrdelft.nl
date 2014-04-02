@@ -108,8 +108,8 @@ class auth_csr extends auth_basic {
         }
 
         # als ingelogd genoeg permissies heeft gegevens ophalen en bewaren
-        if(LoginLid::instance()->hasPermission('P_LOGGED_IN,groep:wikitoegang', $token_authorizable = false)
-            OR (LoginLid::instance()->hasPermission('P_LOGGED_IN,groep:wikitoegang', $token_authorizable = true) AND $_SERVER['PHP_SELF'] == '/wiki/feed.php')
+        if(LoginLid::mag('P_LOGGED_IN,groep:wikitoegang', $token_authorizable = false)
+            OR (LoginLid::mag('P_LOGGED_IN,groep:wikitoegang', $token_authorizable = true) AND $_SERVER['PHP_SELF'] == '/wiki/feed.php')
         ) {
 
             // okay we're logged in - set the globals

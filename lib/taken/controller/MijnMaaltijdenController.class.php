@@ -50,7 +50,7 @@ class MijnMaaltijdenController extends AclController {
 				return $taak; // de taak die toegang geeft tot de maaltijdlijst
 			}
 		}
-		if (opConfide() || \LoginLid::instance()->hasPermission('P_MAAL_MOD')) {
+		if (opConfide() || \LoginLid::mag('P_MAAL_MOD')) {
 			return true;
 		}
 		return false;

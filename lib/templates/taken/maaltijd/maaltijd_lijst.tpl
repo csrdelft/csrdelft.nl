@@ -12,11 +12,11 @@
 <body>
 <a href="/"><img alt="Beeldmerk van de Vereniging" src="{$CSR_PICS}/layout/beeldmerk.jpg" style="float: right; padding: 0px 50px;" /></a>
 <h1>{$view->getTitel()} op {$maaltijd->getDatum()|date_format:"%A %e %B %Y"}</h1>
-<div class="header">{Instellingen::instance()->('maaltijden', 'maaltijdlijst_tekst')|replace:'MAALTIJDPRIJS':$prijs}</div>
+<div class="header">{Instellingen::get('maaltijden', 'maaltijdlijst_tekst')|replace:'MAALTIJDPRIJS':$prijs}</div>
 {if !$maaltijd->getIsGesloten()}
 	<h2 id="maaltijd-gesloten" style="color: red">De inschrijving voor deze maaltijd is nog niet gesloten
 	{if !$maaltijd->getIsVerwijderd() and !$maaltijd->getIsGesloten()}
-	&nbsp;<button href="{Instellingen::instance()->('taken', 'url')}/sluit/{$maaltijd->getMaaltijdId()}" class="knop post confirm" title="Deze maaltijd sluiten">Nu sluiten!</button>
+	&nbsp;<button href="{Instellingen::get('taken', 'url')}/sluit/{$maaltijd->getMaaltijdId()}" class="knop post confirm" title="Deze maaltijd sluiten">Nu sluiten!</button>
 	{/if}
 	</h2>
 {/if}
@@ -25,13 +25,13 @@
 	{table_foreach from=$aanmeldingen inner=rows item=aanmelding table_attr='class="aanmeldingen"' cols=2 name=aanmeldingen}
 		<div class="nummer">{$teller++}</div></td>
 		{if $aanmelding->getLidId()}
-		<td class="naam">{$aanmelding->getLid()->getNaamLink(Instellingen::instance()->('maaltijden', 'weergave_ledennamen_maaltijdlijst'), Instellingen::instance()->('maaltijden', 'weergave_link_ledennamen'))}
+		<td class="naam">{$aanmelding->getLid()->getNaamLink(Instellingen::get('maaltijden', 'weergave_ledennamen_maaltijdlijst'), Instellingen::get('maaltijden', 'weergave_link_ledennamen'))}
 			{if $aanmelding->getLid()->getProperty('eetwens') !== ''}<div class="eetwens">{$aanmelding->getLid()->getProperty('eetwens')}</div>{/if}
 			{if $aanmelding->getGastenOpmerking() !== ''}<div class="opmerking">Gasten opmerking: {$aanmelding->getGastenOpmerking()}</div>{/if}
 		</td>
 		<td class="box">{$aanmelding->getSaldoMelding()}</td>
 		{elseif $aanmelding->getDoorLidId()}
-		<td class="naam">Gast van {$aanmelding->getDoorLid()->getNaamLink(Instellingen::instance()->('maaltijden', 'weergave_ledennamen_maaltijdlijst'), 'plain')}</td>
+		<td class="naam">Gast van {$aanmelding->getDoorLid()->getNaamLink(Instellingen::get('maaltijden', 'weergave_ledennamen_maaltijdlijst'), 'plain')}</td>
 		<td class="box">-</td>
 		{else}
 		<td class="naam"></td>
@@ -63,7 +63,7 @@
 	{table_foreach from=$corveetaken inner=rows item=taak table_attr='class="corveetaken"' cols=2 name=corveetaken}
 			&bullet;&nbsp;
 		{if $taak->getLidId()}
-			{$taak->getLid()->getNaamLink(Instellingen::instance()->('maaltijden', 'weergave_ledennamen_maaltijdlijst'), Instellingen::instance()->('maaltijden', 'weergave_link_ledennamen'))}
+			{$taak->getLid()->getNaamLink(Instellingen::get('maaltijden', 'weergave_ledennamen_maaltijdlijst'), Instellingen::get('maaltijden', 'weergave_link_ledennamen'))}
 		{else}
 			<i>vacature</i>
 		{/if}

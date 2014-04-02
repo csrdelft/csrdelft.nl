@@ -29,7 +29,7 @@ class DocumentController extends Controller {
 
 		//wat zullen we eens gaan doen? Hier bepalen we welke actie we gaan uitvoeren
 		//en of de ingelogde persoon dat mag.
-		if (Loginlid::instance()->hasPermission('P_DOCS_READ')) {
+		if (LoginLid::mag('P_DOCS_READ')) {
 			if ($this->hasParam(0) AND $this->getParam(0) != '') {
 				$this->action = $this->getParam(0);
 			} else {
@@ -39,7 +39,7 @@ class DocumentController extends Controller {
 			//zonder P_DOCS_MOD, en gebruikers met, zodat bij niet bestaande acties
 			//netjes gewoon het documentoverzicht getoond wordt.
 			$allow = array('default', 'download', 'categorie');
-			if (LoginLid::instance()->hasPermission('P_DOCS_MOD')) {
+			if (LoginLid::mag('P_DOCS_MOD')) {
 				$allow = array_merge($allow, array('bewerken', 'toevoegen', 'verwijderen'));
 			}
 			if (!in_array($this->action, $allow)) {

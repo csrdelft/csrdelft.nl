@@ -17,7 +17,7 @@
 
 require_once 'configuratie.include.php';
 
-if(!(LoginLid::instance()->hasPermission('P_ADMIN') || LoginLid::instance()->hasPermission('P_MAAL_MOD'))){
+if(!(LoginLid::mag('P_ADMIN') || LoginLid::mag('P_MAAL_MOD'))){
 	header('location: '.CSR_ROOT);
 	exit;
 }
@@ -31,7 +31,7 @@ try {
 catch (\Exception $e) {
 	header($_SERVER['SERVER_PROTOCOL'] . ' 500 '. $e->getMessage(), true, 500);
 	
-	if (defined('DEBUG') && (\LoginLid::instance()->hasPermission('P_ADMIN') || \LoginLid::instance()->isSued())) {
+	if (defined('DEBUG') && (\LoginLid::mag('P_ADMIN') || \LoginLid::instance()->isSued())) {
 		echo str_replace('#', '<br />#', $e); // stacktrace
 	}
 }

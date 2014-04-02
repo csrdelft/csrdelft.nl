@@ -97,7 +97,7 @@ class Courant {
 			unset($return[3]);
 		}
 		//Sponsors eruitgooien, behalve voor beheerders en/of AcqCiee
-		if (!$this->magBeheren() && !LoginLid::instance()->hasPermission('groep:AcqCie')) {
+		if (!$this->magBeheren() && !LoginLid::mag('groep:AcqCie')) {
 			unset($return[4]);
 		}
 		return $return;
@@ -119,15 +119,15 @@ class Courant {
 	}
 
 	public static function magToevoegen() {
-		return LoginLid::instance()->hasPermission('P_MAIL_POST');
+		return LoginLid::mag('P_MAIL_POST');
 	}
 
 	public static function magBeheren() {
-		return LoginLid::instance()->hasPermission('P_MAIL_COMPOSE');
+		return LoginLid::mag('P_MAIL_COMPOSE');
 	}
 
 	public static function magVerzenden() {
-		return LoginLid::instance()->hasPermission('P_MAIL_SEND');
+		return LoginLid::mag('P_MAIL_SEND');
 	}
 
 	private function _isValideCategorie($categorie) {
@@ -283,7 +283,7 @@ class Courant {
 		if ($this->isCache()) {
 			$userCache = array();
 			//mods en bestuur zien alle berichten
-			if ($this->magBeheren() OR LoginLid::instance()->hasPermission('groep:bestuur')) {
+			if ($this->magBeheren() OR LoginLid::mag('groep:bestuur')) {
 				return $this->berichten;
 			} else {
 				foreach ($this->berichten as $bericht) {

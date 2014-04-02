@@ -10,7 +10,7 @@
 
 require_once 'configuratie.include.php';
 
-if(!LoginLid::instance()->hasPermission('P_LEDEN_READ')){
+if(!LoginLid::mag('P_LEDEN_READ')){
 	echo json_encode(array(array('data'=>array('Niet voldoende rechten'), 'value'=>'Niet voldoende rechten', 'result'=>'')));
 	exit;
 }

@@ -61,7 +61,7 @@ class Forum{
 
 		$cats=array();
 		foreach(ForumCategorie::getAll() as $cat){
-			if(LoginLid::instance()->hasPermission($cat['rechten_read'], $token_authorizable=true)){
+			if(LoginLid::mag($cat['rechten_read'], $token_authorizable=true)){
 				$cats[]='topic.categorie='.$cat['id'];
 			}
 
@@ -187,8 +187,8 @@ class Forum{
 				".$iAantal.";";
 		return MySql::instance()->query2array($query);
 	}
-	public static function isIngelogged(){ return LoginLid::instance()->hasPermission('P_LOGGED_IN'); }
-	public static function isModerator(){ return LoginLid::instance()->hasPermission('P_FORUM_MOD'); }
+	public static function isIngelogged(){ return LoginLid::mag('P_LOGGED_IN'); }
+	public static function isModerator(){ return LoginLid::mag('P_FORUM_MOD'); }
 	public static function getLaatstBekeken(){ return LoginLid::instance()->getForumLaatstBekeken(); }
 
 	public static function getTopicsPerPagina(){ return LidInstellingen::get('forum', 'draden_per_pagina'); }

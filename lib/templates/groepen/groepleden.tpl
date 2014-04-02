@@ -72,7 +72,7 @@
 	</table>
 {/if}
 {* We geven nog even even een aanmeldding weer als de groep aanmeldbaar is. *}
-{if $groep->isAanmeldbaar() AND !$groep->isLid() AND LoginLid::instance()->hasPermission('P_LOGGED_IN')}
+{if $groep->isAanmeldbaar() AND !$groep->isLid() AND LoginLid::mag('P_LOGGED_IN')}
 	<div class="aanmelden">
 		{if $groep->magAanmelden()}
 			{if $groep->getToonFuncties()=='niet' OR $groep->getToonFuncties()=='tonenzonderinvoer'}

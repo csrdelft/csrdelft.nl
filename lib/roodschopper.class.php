@@ -47,7 +47,7 @@ class Roodschopper{
 	public static function getDefaults(){
 		$cie='soccie';
 		$naam='SocCie';
-		if(Loginlid::instance()->hasPermission('groep:MaalCie')){
+		if(LoginLid::mag('groep:MaalCie')){
 			$cie='maalcie';
 			$naam='MaalCie';
 		}

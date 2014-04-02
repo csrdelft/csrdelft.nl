@@ -7,7 +7,7 @@
 
 require_once 'configuratie.include.php';
 
-if(!LoginLid::instance()->hasPermission('P_LEDEN_READ')){
+if(!LoginLid::mag('P_LEDEN_READ')){
 	echo 'Niet voldoende rechten';
 	exit;
 }

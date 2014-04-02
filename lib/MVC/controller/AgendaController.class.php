@@ -41,11 +41,11 @@ class AgendaController extends AclController {
 	}
 
 	public static function magToevoegen() {
-		return LoginLid::instance()->hasPermission('P_AGENDA_POST');
+		return LoginLid::mag('P_AGENDA_POST');
 	}
 
 	public static function magBeheren() {
-		return LoginLid::instance()->hasPermission('P_AGENDA_MOD');
+		return LoginLid::mag('P_AGENDA_MOD');
 	}
 
 	/**

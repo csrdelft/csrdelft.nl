@@ -43,11 +43,11 @@ class CmsPaginaController extends Controller {
 	}
 
 	public static function magRechtenWijzigen() {
-		return LoginLid::instance()->hasPermission('P_ADMIN');
+		return LoginLid::mag('P_ADMIN');
 	}
 
 	public static function magVerwijderen() {
-		return LoginLid::instance()->hasPermission('P_ADMIN');
+		return LoginLid::mag('P_ADMIN');
 	}
 
 	public function bekijken($naam) {
@@ -60,7 +60,7 @@ class CmsPaginaController extends Controller {
 		}
 		$body = new CmsPaginaView($pagina);
 		$nieuw = array('', 'contact', 'csrindeowee', 'vereniging', 'lidworden', 'geloof', 'vorming', 'filmpjes', 'gezelligheid', 'sport', 'vragen', 'officieel', 'societeit', 'ontspanning', 'interesse', 'interesseverzonden', 'accountaanvragen');
-		if (in_array($naam, $nieuw) AND !LoginLid::instance()->hasPermission('P_LOGGED_IN')) { // nieuwe layout alleen voor specifieke paginas en uitgelogde bezoekers
+		if (in_array($naam, $nieuw) AND !LoginLid::mag('P_LOGGED_IN')) { // nieuwe layout alleen voor specifieke paginas en uitgelogde bezoekers
 			$tmpl = 'content';
 			$menu = '';
 			if ($naam === 'lidworden') {

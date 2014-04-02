@@ -331,7 +331,7 @@ class Mededeling {
 	public static function getLijstWachtGoedkeuring() {
 		$mededelingen = array();
 		// Moderators of niet-ingelogden hebben geen berichten die wachten op goedkeuring.
-		if (Mededeling::isModerator() OR !LoginLid::instance()->hasPermission('P_LEDEN_READ'))
+		if (Mededeling::isModerator() OR !LoginLid::mag('P_LEDEN_READ'))
 			return $mededelingen;
 
 		$db = MySql::instance();
@@ -388,7 +388,7 @@ class Mededeling {
 		$db = MySql::instance();
 		$zichtbaarheidClause = "zichtbaarheid='zichtbaar'";
 		$doelgroepClause = "";
-		if (!LoginLid::instance()->hasPermission('P_LEDEN_READ')) {
+		if (!LoginLid::mag('P_LEDEN_READ')) {
 			$doelgroepClause = " AND doelgroep='iedereen'";
 		}
 		$laatstenQuery = "
@@ -437,23 +437,23 @@ class Mededeling {
 	}
 
 	public static function isModerator() {
-		return LoginLid::instance()->hasPermission('P_NEWS_MOD');
+		return LoginLid::mag('P_NEWS_MOD');
 	}
 
 	public static function isOudlid() {
-		return LoginLid::instance()->hasPermission('P_ALLEEN_OUDLID');
+		return LoginLid::mag('P_ALLEEN_OUDLID');
 	}
 
 	// function magPriveLezen()
 	// post: geeft true terug als het huidige lid prive-Mededelingen mag lezen (berichten die voor leden bestemd zijn).
 	public static function magPriveLezen() {
-		return LoginLid::instance()->hasPermission('P_LEDEN_READ');
+		return LoginLid::mag('P_LEDEN_READ');
 	}
 
 	// function magToevoegen()
 	// post: geeft true terug als het huidige lid Mededelingen mag toevoegen.
 	public static function magToevoegen() {
-		return LoginLid::instance()->hasPermission('P_NEWS_POST');
+		return LoginLid::mag('P_NEWS_POST');
 	}
 
 	public static function knipTekst($sTekst, $iMaxTekensPerRegel = 26, $iMaxRegels = 2) {
@@ -575,7 +575,7 @@ class Mededeling {
 		}
 		// Doelgroep clause.
 		$doelgroepClause = "";
-		if (!LoginLid::instance()->hasPermission('P_LEDEN_READ')) {
+		if (!LoginLid::mag('P_LEDEN_READ')) {
 			$doelgroepClause = " AND doelgroep='iedereen'";
 		} elseif (self::isOudlid()) {
 			$doelgroepClause = " AND doelgroep!='leden'";

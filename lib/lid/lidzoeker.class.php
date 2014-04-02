@@ -67,7 +67,7 @@ class LidZoeker{
 	public function __construct(){
 
 		//wat extra velden voor moderators.
-		if(Loginlid::instance()->hasPermission('P_LEDEN_MOD')){
+		if(LoginLid::mag('P_LEDEN_MOD')){
 			$this->allowVelden=array_merge($this->allowVelden, $this->allowVeldenLEDENMOD);
 		}
 
@@ -191,12 +191,12 @@ class LidZoeker{
 			$lichting=substr($zoekterm, 9);
 			if(strlen($lichting)==4){
 				$query="lidjaar=".$lichting." ";
-				if((int)$lichting == 2013 AND !Loginlid::instance()->hasPermission('P_ADMIN')) {
+				if((int)$lichting == 2013 AND !LoginLid::mag('P_ADMIN')) {
 					setMelding('Het is niet toegestaan het aantal nullen te bekijken voor de OweeCie dit heeft bekendgemaakt! Dit zal gebeuren op donderdag 22 augustus rond elf uur.', -1);
 				}
 			}else{
 				$query="RIGHT(lidjaar,2)=".(int)$lichting." ";
-				if((int)$lichting == 13 AND !Loginlid::instance()->hasPermission('P_ADMIN')) {
+				if((int)$lichting == 13 AND !LoginLid::mag('P_ADMIN')) {
 					setMelding('Het is niet toegestaan het aantal nullen te bekijken voor de OweeCie dit heeft bekendgemaakt! Dit zal gebeuren op donderdag 22 augustus rond elf uur.', -1);
 				}
 			}

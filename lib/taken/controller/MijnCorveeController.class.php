@@ -47,11 +47,11 @@ class MijnCorveeController extends AclController {
 
 	public function rooster($param = null) {
 		$toonverleden = false;
-		if ($param === 'verleden' AND \LoginLid::instance()->hasPermission('P_CORVEE_MOD')) {
+		if ($param === 'verleden' AND \LoginLid::mag('P_CORVEE_MOD')) {
 			$taken = TakenModel::getVerledenTaken();
 		} else {
 			$taken = TakenModel::getKomendeTaken();
-			if (\LoginLid::instance()->hasPermission('P_CORVEE_MOD')) {
+			if (\LoginLid::mag('P_CORVEE_MOD')) {
 				$toonverleden = true;
 			}
 		}

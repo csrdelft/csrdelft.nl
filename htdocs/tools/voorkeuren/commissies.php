@@ -9,7 +9,7 @@
 require_once('configuratie.include.php');
 
 require_once('voorkeur/overzicht.class.php');
-if(LoginLid::instance()->hasPermission('P_LEDEN_MOD')){
+if(LoginLid::mag('P_LEDEN_MOD')){
 	$inhoud = new CommissieOverzicht();
 	if(isset($_GET['c']))
 		$inhoud = new CommissieOverzicht($_GET['c']);

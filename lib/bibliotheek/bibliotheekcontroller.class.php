@@ -42,7 +42,7 @@ class BibliotheekController extends Controller {
 		//iedereen(ook uitgelogd) mag catalogus bekijken.
 		$allow = array('default', 'catalogusdata');
 		//met biebrechten mag je meer
-		if (LoginLid::instance()->hasPermission('P_BIEB_READ')) {
+		if (LoginLid::mag('P_BIEB_READ')) {
 			$allow = array_merge($allow, array('default', 'boek', 'nieuwboek', 'bewerkboek',
 				'bewerkbeschrijving', 'verwijderbeschrijving',
 				'addexemplaar', 'verwijderexemplaar',

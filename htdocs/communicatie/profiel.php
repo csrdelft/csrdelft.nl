@@ -40,7 +40,7 @@ if (isset($_GET['a'])) {
 }
 
 
-if (!(LoginLid::instance()->hasPermission('P_LEDEN_READ') or LoginLid::instance()->hasPermission('P_OUDLEDEN_READ'))) {
+if (!(LoginLid::mag('P_LEDEN_READ') or LoginLid::mag('P_OUDLEDEN_READ'))) {
 	require_once 'MVC/model/CmsPaginaModel.class.php';
 	require_once 'MVC/view/CmsPaginaView.class.php';
 	$midden = new CmsPaginaView(CmsPaginaModel::instance()->getPagina('geentoegang'));
@@ -68,8 +68,8 @@ if (!(LoginLid::instance()->hasPermission('P_LEDEN_READ') or LoginLid::instance(
 			//maak van een standaard statusstring van de input
 			$status = 'S_' . strtoupper($status);
 			if (!
-					(LoginLid::instance()->hasPermission('P_ADMIN,P_LEDEN_MOD') OR
-					($status == 'S_NOVIET' AND LoginLid::instance()->hasPermission('groep:novcie')))
+					(LoginLid::mag('P_ADMIN,P_LEDEN_MOD') OR
+					($status == 'S_NOVIET' AND LoginLid::mag('groep:novcie')))
 			) {
 
 				// nieuwe leden mogen worden aangemaakt door P_ADMIN,P_LEDEN_MOD,
@@ -91,7 +91,7 @@ if (!(LoginLid::instance()->hasPermission('P_LEDEN_READ') or LoginLid::instance(
 			}
 			break;
 		case 'wijzigstatus':
-			if (!LoginLid::instance()->hasPermission('P_ADMIN,P_LEDEN_MOD')) {
+			if (!LoginLid::mag('P_ADMIN,P_LEDEN_MOD')) {
 				invokeRefresh('/communicatie/profiel/', 'U mag lidstatus niet aanpassen');
 			}
 			$profiel = new ProfielStatus($uid, $actie);
@@ -117,7 +117,7 @@ if (!(LoginLid::instance()->hasPermission('P_LEDEN_READ') or LoginLid::instance(
 			}
 			break;
 		case 'wachtwoord':
-			if (LoginLid::instance()->hasPermission('P_ADMIN')) {
+			if (LoginLid::mag('P_ADMIN')) {
 				if (Profiel::resetWachtwoord($uid)) {
 					$melding = array('Nieuw wachtwoord met succes verzonden.', 1);
 				} else {

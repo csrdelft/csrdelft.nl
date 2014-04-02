@@ -16,7 +16,7 @@
 		</ul>
 	</div>
 	<div id="menuright">
-		{if LoginLid::instance()->hasPermission('P_LOGGED_IN') }
+		{if LoginLid::mag('P_LOGGED_IN') }
 			<div id="ingelogd">
 				<a href="/instellingen/" class="instellingen" title="Webstekinstellingen">{icon get="instellingen"}</a>
 				{if LoginLid::instance()->isSued()}
@@ -32,16 +32,16 @@
 						</div>
 					{/foreach}
 				</div>
-				{if LoginLid::instance()->hasPermission('P_LEDEN_MOD')}
+				{if LoginLid::mag('P_LEDEN_MOD')}
 					<div id="adminding">
 						Beheer
-						{if LoginLid::instance()->hasPermission('P_ADMIN')}
+						{if LoginLid::mag('P_ADMIN')}
 							{if $forumcount > 0 OR $queues.meded->count()>0}
 								({$forumcount}/{$queues.meded->count()})
 							{/if}
 						{/if}
 						<div>
-							{if LoginLid::instance()->hasPermission('P_ADMIN')}
+							{if LoginLid::mag('P_ADMIN')}
 								<span class="queues">
 									<a href="/forum/wacht">Forum: <span class="count">{$forumcount}</span><br /></a>
 									{foreach from=$queues item=queue key=name}

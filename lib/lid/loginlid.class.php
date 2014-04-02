@@ -246,8 +246,8 @@ class LoginLid {
 		return LidInstellingen::get($module, $key);
 	}
 
-	/*
-	 * hasPermission:
+	/**
+	 * static hasPermission:
 	 *
 	 * @descr				een string met permissie(s).
 	 * @token_authorizable	als false dan werkt hasPermission alsof gebruiker
@@ -268,6 +268,9 @@ class LoginLid {
 	 *  verticale:d					geeft true voor alle leden van verticale d.
 	 *  !lichting:2009				geeft true voor iedereen behalve lichting 2009.
 	 */
+	public static function mag($descr, $token_authorizable = false) {
+		return LoginLid::instance()->hasPermission($descr, $token_authorizable);
+	}
 
 	public function hasPermission($descr, $token_authorizable = false) {
 		# zoek de rechten van de gebruiker op
@@ -548,9 +551,14 @@ class LoginLid {
 		}
 	}
 
-	//maakt een permissiestring met uid's enzo wat leesbaarder
-	public static function formatPermissionstring($string) {
-		$parts = explode(',', $string);
+	/**
+	 * Maakt een permissiestring met uid's enzo wat leesbaarder.
+	 * 
+	 * @param string $permission
+	 * @return string
+	 */
+	public static function format($permission) {
+		$parts = explode(',', $permission);
 		$return = array();
 		require_once 'groepen/groep.class.php';
 		foreach ($parts as $part) {

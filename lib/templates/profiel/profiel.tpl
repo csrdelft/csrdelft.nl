@@ -21,7 +21,7 @@
 						   onclick="return confirm('Weet u zeker dat u het wachtwoord van deze gebruiker wilt resetten?')">
 							{icon get="resetpassword"}</a>
 						{/if}
-						{if $profiel->getStatus()=='S_NOVIET' AND LoginLid::instance()->hasPermission('groep:novcie')}
+						{if $profiel->getStatus()=='S_NOVIET' AND LoginLid::mag('groep:novcie')}
 						<a href="/communicatie/profiel/{$profiel->getUid()}/novietBewerken" class="knop"><img src="{$CSR_PICS}forum/bewerken.png" title="Bewerk dit profiel" />Noviet bewerken</a><br />
 						{/if}
 					<a href="/communicatie/profiel/{$profiel->getUid()}/addToGoogleContacts/" class="knop" title="{*if $profiel->isInGoogleContacts()}Er bestaat al een contact met deze naam in je Google-contacts. Klik om te updaten.{else*}Voeg dit profiel toe aan mijn google adresboek{*/if*}"><img src="http://code.google.com/favicon.ico" /></a>
@@ -188,12 +188,12 @@
 			<div style="clear: left;"></div>
 		</div>
 	</div>
-	{if ($profiel->isLid() OR (LoginLid::instance()->hasPermission('P_LEDEN_MOD') AND ($profhtml.soccieSaldo < 0 OR $profhtml.maalcieSaldo < 0))) AND (isset($saldografiek) OR $profhtml.bankrekening!='')}
+	{if ($profiel->isLid() OR (LoginLid::mag('P_LEDEN_MOD') AND ($profhtml.soccieSaldo < 0 OR $profhtml.maalcieSaldo < 0))) AND (isset($saldografiek) OR $profhtml.bankrekening!='')}
 		<div class="profielregel">
 			<div class="gegevens">
 				{if $profhtml.bankrekening!=''}
 					<div class="label">Bankrekening:</div> {$profhtml.bankrekening}
-					{if LoginLid::instance()->hasPermission('P_MAAL_MOD')}
+					{if LoginLid::mag('P_MAAL_MOD')}
 						<span style="color: gray;">({if $profhtml.machtiging=='nee'}geen {/if}machtiging getekend)</span>
 					{/if}
 					<br />
@@ -209,7 +209,7 @@
 
 	<div class="profielregel" id="maaltijden">
 		<div class="gegevens">
-			{if LoginLid::instance()->getUid()==$profhtml.uid OR LoginLid::instance()->hasPermission('P_MAAL_MOD')}
+			{if LoginLid::instance()->getUid()==$profhtml.uid OR LoginLid::mag('P_MAAL_MOD')}
 				<div class="label">Recent:</div>
 				<ul class="nobullets data">
 					{foreach from=$profhtml.recenteAanmeldingen item=aanmelding}
@@ -348,7 +348,7 @@
 			</div>
 		</div>
 	{/if}
-	{if LoginLid::instance()->hasPermission('P_ADMIN,R_BESTUUR,groep:novcie') AND $profiel->getStatus()=='S_NOVIET' AND $profhtml.kgb!=''}
+	{if LoginLid::mag('P_ADMIN,R_BESTUUR,groep:novcie') AND $profiel->getStatus()=='S_NOVIET' AND $profhtml.kgb!=''}
 		<div class="profielregel" id="novcieopmerking">
 			<div class="handje" onclick="$('#novcie_gegevens').toggle();">NovCie-Opmerking &raquo;</div>
 			<div class="gegevens verborgen" id="novcie_gegevens">{$profhtml.kgb|ubb}</div>

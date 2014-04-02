@@ -27,7 +27,7 @@ class MainMenuView extends MenuView {
 		// SocCie-saldi & MaalCie-saldi
 		$this->smarty->assign('saldi', LoginLid::instance()->getLid()->getSaldi());
 
-		if (Loginlid::instance()->hasPermission('P_ADMIN')) {
+		if (LoginLid::mag('P_ADMIN')) {
 
 			require_once 'MVC/model/ForumModel.class.php';
 			$this->smarty->assign('forumcount', ForumPostsModel::instance()->count('wacht_goedkeuring = TRUE AND verwijderd = FALSE'));

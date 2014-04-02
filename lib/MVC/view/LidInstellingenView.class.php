@@ -23,7 +23,7 @@ class LidInstellingenView extends TemplateView {
 			echo '<li><a href="#tabs-' . $module . '">' . ucfirst($module) . '</a></li>';
 		}
 		echo '</ul>';
-		$overwrite = LoginLid::instance()->hasPermission('P_ADMIN');
+		$overwrite = LoginLid::mag('P_ADMIN');
 		foreach ($this->model->getInstellingen() as $module => $instellingen) {
 			echo '<div id="tabs-' . $module . '">';
 			foreach ($instellingen as $key => $def) {

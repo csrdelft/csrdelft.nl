@@ -4,7 +4,7 @@
 <p>
 Op deze pagina kunt u alle abonnementen beheren en zoeken.
 </p>
-<form method="post" action="{Instellingen::instance()->('taken', 'url')}/novieten" class="Formulier popup SubmitReset" style="float: right;">
+<form method="post" action="{Instellingen::get('taken', 'url')}/novieten" class="Formulier popup SubmitReset" style="float: right;">
 	Abonneer novieten op:
 	<select name="mrid" origvalue="kies" class="FormField SubmitChange">
 		<option selected="selected">kies</option>
@@ -14,7 +14,7 @@ Op deze pagina kunt u alle abonnementen beheren en zoeken.
 	</select>
 </form>
 <div style="width: 30%; display: inline-block;"><label for="toon">Toon abonnementen:</label>
-</div><select name="toon" onchange="location.href='{Instellingen::instance()->('taken', 'url')}/'+this.value;">
+</div><select name="toon" onchange="location.href='{Instellingen::get('taken', 'url')}/'+this.value;">
 	<option value="waarschuwingen" class="arrow"{if $toon === 'waarschuwing'} selected="selected"{/if}>waarschuwingen</option>
 	<option value="ingeschakeld" class="arrow"{if $toon === 'in'} selected="selected"{/if}>ingeschakeld</option>
 	<option value="abonneerbaar" class="arrow"{if $toon === 'abo'} selected="selected"{/if}>abonneerbaar</option>

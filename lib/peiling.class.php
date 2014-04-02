@@ -85,7 +85,7 @@ class Peiling {
 	public function getStemmenAantal(){ return $this->totaal; } //wth is dit voor methodenaam
 
 	public function magStemmen (){
-		if(!LoginLid::instance()->hasPermission('P_LOGGED_IN')){
+		if(!LoginLid::mag('P_LOGGED_IN')){
 			return false;
 		}
 		return $this->hasVoted()=='';
@@ -175,7 +175,7 @@ class Peiling {
 
 	public static function magBewerken(){
 		//Elk basfcie-lid heeft voorlopig peilingbeheerrechten.
-		return LoginLid::instance()->hasPermission('P_ADMIN,groep:bestuur,groep:BASFcie');
+		return LoginLid::mag('P_ADMIN,groep:bestuur,groep:BASFcie');
 	}
 
 	public static function getLijst(){

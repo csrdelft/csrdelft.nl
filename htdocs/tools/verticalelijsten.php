@@ -4,7 +4,7 @@
 require_once 'configuratie.include.php';
 require_once 'verticale.class.php';
 
-if(!LoginLid::instance()->hasPermission('P_ADMIN')){
+if(!LoginLid::mag('P_ADMIN')){
 	header('location: '.CSR_ROOT);
 	exit;
 }

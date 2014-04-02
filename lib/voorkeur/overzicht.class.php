@@ -15,7 +15,7 @@ class CommissieOverzicht extends TemplateView {
 
 	function view() {
 		$res = '';
-		if (LoginLid::instance()->hasPermission('P_LEDEN_MOD')) {
+		if (LoginLid::mag('P_LEDEN_MOD')) {
 			require_once('voorkeur/commissie.class.php');
 			if ($this->id >= 0) {
 				$commissie = Commissie::getCommissie($this->id);
