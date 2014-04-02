@@ -34,7 +34,6 @@ class AgendaController extends AclController {
 			$this->action = $this->getParam(2);
 			if ($this->action === 'calendar.ics') {
 				$this->action = 'icalendar';
-				header("Content-Type: text/calendar");
 				header('Content-Disposition: attachment; filename="calendar.ics"');
 			}
 		}
@@ -69,6 +68,7 @@ class AgendaController extends AclController {
 	}
 
 	public function icalendar() {
+		header("Content-Type: text/calendar");
 		$this->view = new AgendaICalendarView($this->model);
 	}
 

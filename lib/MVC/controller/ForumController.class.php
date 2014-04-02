@@ -19,6 +19,10 @@ class ForumController extends Controller {
 		}
 		try {
 			$this->action = $this->getParam(2);
+			if ($this->action === 'rss.xml') {
+				$this->action = 'rss';
+				header('Content-Disposition: attachment; filename="rss.xml"');
+			}
 			$this->performAction($this->getParams(3));
 		} catch (Exception $e) {
 			setMelding($e->getMessage(), -1);
