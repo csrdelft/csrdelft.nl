@@ -2,13 +2,12 @@ AddDefaultCharset utf-8
 RewriteEngine On
 
 ## forum backwards compatibility
-RewriteRule ^communicatie/forum/?$		/forum/$1
-RewriteRule ^forum/rss.xml				/forum/rss [L]
-RewriteRule ^forum/rss/([0-9a-z]*).xml	/forum/rss?validate_token=$1 [L]
-RewriteRule ^forum/categorie/laatste/?$	/forum/recent [L]
-RewriteRule ^forum/categorie/?$			/forumdeel/$1 [L]
-RewriteRule ^forum/onderwerp/?$			/forumdraad/$1 [L]
-RewriteRule ^forum/reactie/?$			/forumpost/$1 [L]
+RewriteRule ^communicatie/forum/categorie/laatste/?$	/forum/recent [L]
+RewriteRule ^communicatie/forum/categorie/?$			/forumdeel/$1 [L]
+RewriteRule ^communicatie/forum/onderwerp/?$			/forumdraad/$1 [L]
+RewriteRule ^communicatie/forum/reactie/?$				/forumpost/$1 [L]
+RewriteRule ^communicatie/forum/rss.xml					/forum/rss [L]
+RewriteRule ^communicatie/forum/rss/([0-9a-z]*).xml		/forum/rss?validate_token=$1 [L]
 
 RewriteRule ^nieuws/?$			/actueel/mededelingen/$1 [L]
 RewriteRule ^facebook/?			http://www.facebook.com/group.php?gid=10294513917&ref=ts [L]
