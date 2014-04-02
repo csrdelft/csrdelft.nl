@@ -36,55 +36,36 @@ class ForumModel extends PersistenceModel {
 	}
 
 	public function zoeken($query) {
+		// zoek op titel in draden
+		$gevonden_draden = array_key_property('draad_id', ForumDradenModel::instance()->zoeken($query));
 
-		$queryparts = explode(' ', $query);
-		foreach ($queryparts as $i => $part) {
-			$queryparts[$i] = '%' . $part . '%';
-		}
-		$count = count($queryparts);
-		if ($count < 1) {
-			return array();
-		}
+		// zoek op tekst in posts
+		$gevonden_posts = array_group_by('draad_id', ForumPostsModel::instance()->zoeken($query));
 
-		// titel draadje
-		$like = implode(' OR ', array_fill(0, $count, 'd.titel LIKE ?'));
-		$gevonden_draden = array_group_by('forum_id', ForumDradenModel::instance()->find($like, $queryparts));
+		// laad draden bij gevonden posts
+		$draden_ids = array_keys(array_key_property('draad_id', $gevonden_posts, false));
+		$gevonden_draden = $gevonden_draden + ForumDradenModel::instance()->getForumDradenById($draden_ids);
 
-		var_dump($gevonden_draden);
-
-		$eerste_posts = array();
+		// laad posts indien nodig bij gevonden draden
 		foreach ($gevonden_draden as $draad) {
-			$eerste_posts[$draad->draad_id] = ForumPostsModel::instance()->find('draad_id = ?', array($draad->draad_id), 'post_id DESC', 1);
+			if (array_key_exists($draad->draad_id, $gevonden_posts)) { // post is al gevonden
+				$draad->setForumPosts($gevonden_posts[$draad->draad_id]);
+			} else { // get first post
+				$draad->setForumPosts(array(ForumPostsModel::instance()->find('draad_id = ?', array($draad->draad_id), 'post_id DESC', 1)));
+			}
 		}
 
-		// tekst posts
-		$like = implode(' OR ', array_fill(0, $count, 'tekst LIKE ?'));
-		$gevonden_posts = array_group_by('draad_id', ForumPostsModel::instance()->find($like, $queryparts));
-		$draden_erbij = array_group_by('forum_id', ForumDradenModel::instance()->getForumDradenById(array_keys($gevonden_posts)));
-
-		// resultaten samenvoegen
-		$postsByDraad = $eerste_posts + $gevonden_posts;
-		$dradenByDeel = $gevonden_draden + $draden_erbij;
-		$delenById = array_key_property('forum_id', ForumDelenModel::instance()->getForumDelenById(array_keys($dradenByDeel)));
-
-		// filteren met rechten
-		foreach ($delenById as $forum_id => $deel) {
+		// check permissies op delen
+		$dradenByForumId = array_group_by('forum_id', $gevonden_draden);
+		$gevonden_delen = array_key_property('forum_id', ForumDelenModel::instance()->getForumDelenById(array_keys($dradenByForumId)));
+		foreach ($gevonden_delen as $deel) {
 			if ($deel->magLezen()) {
-				$deel->setForumDraden($dradenByDeel[$deel->forum_id]);
+				$deel->setForumDraden($dradenByForumId[$deel->forum_id]);
 			} else {
-				unset($delenById[$forum_id]);
+				unset($gevonden_delen[$deel->forum_id]);
 			}
 		}
-		foreach ($dradenByDeel as $forum_id => $dradenByDeel) {
-			if (array_key_exists($forum_id, $delenById)) {
-				foreach ($dradenByDeel as $draad) {
-					$draad->setForumPosts($postsByDraad[$draad->draad_id]);
-				}
-			} else {
-				unset($dradenByDeel[$forum_id]);
-			}
-		}
-		return $delenById;
+		return $gevonden_delen;
 	}
 
 }
@@ -232,6 +213,14 @@ class ForumDradenModel extends PersistenceModel implements Paging {
 		$deel->aantal_posts = (int) $result->fetchColumn();
 		$deel->aantal_draden = $this->count('forum_id = ? AND wacht_goedkeuring = FALSE AND verwijderd = FALSE', array($deel->forum_id));
 		ForumDelenModel::instance()->update($deel);
+	}
+
+	public function zoeken($query, $max = 30) {
+		$orm = self::orm;
+		$columns = $orm::getFields();
+		$columns[] = 'MATCH(titel) AGAINST (? IN NATURAL LANGUAGE MODE) AS score';
+		$result = Database::sqlSelect($columns, $orm::getTableName(), null, array($query), 'score DESC', $max);
+		return $result->fetchAll(PDO::FETCH_CLASS, $orm);
 	}
 
 	/**
@@ -384,6 +373,14 @@ class ForumPostsModel extends PersistenceModel implements Paging {
 	public function hertellenVoorDraad(ForumDraad $draad) {
 		$draad->aantal_posts = $this->count('draad_id = ? AND wacht_goedkeuring = FALSE AND verwijderd = FALSE', array($draad->draad_id));
 		ForumDradenModel::instance()->update($draad);
+	}
+
+	public function zoeken($query, $max = 30) {
+		$orm = self::orm;
+		$columns = $orm::getFields();
+		$columns[] = 'MATCH(tekst) AGAINST (? IN NATURAL LANGUAGE MODE) AS score';
+		$result = Database::sqlSelect($columns, $orm::getTableName(), null, array($query), 'score DESC', $max);
+		return $result->fetchAll(PDO::FETCH_CLASS, $orm);
 	}
 
 	public function getForumPostsVoorDraad(ForumDraad $draad) {
