@@ -4,7 +4,7 @@
 {strip}
 <td id="voorkeur-cell-{$voorkeur->getLid()->getUid()}-{$crid}"
 	class="voorkeur-{if isset($uid)}in{else}uit{/if}geschakeld">
-	<a href="{$instellingen->get('taken', 'url')}/{if isset($uid)}uit{else}in{/if}schakelen/{$crid}"
+	<a href="{Instellingen::instance()->('taken', 'url')}/{if isset($uid)}uit{else}in{/if}schakelen/{$crid}"
 	   postdata="voor_lid={$voorkeur->getLid()->getUid()}"
 	   class="knop post voorkeur-{if isset($uid)}in{else}uit{/if}geschakeld">
 		

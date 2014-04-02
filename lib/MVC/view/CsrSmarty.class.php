@@ -19,7 +19,6 @@ class CsrSmarty extends Smarty {
 		$this->caching = false;
 
 		// frequently used things
-		$this->assign('instellingen', Instellingen::instance());
 		$this->assign('CSR_PICS', CSR_PICS);
 	}
 

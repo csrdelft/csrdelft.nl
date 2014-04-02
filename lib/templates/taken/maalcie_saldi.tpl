@@ -1,4 +1,4 @@
-<form name="CSVForm" action="{$instellingen->get('taken', 'url')}/upload" method="post" enctype="multipart/form-data">
+<form name="CSVForm" action="{Instellingen::instance()->('taken', 'url')}/upload" method="post" enctype="multipart/form-data">
 	<label for="CSVSaldi">CSV-bestand uploaden</label> 
 	<input type="file" name="CSVSaldi" id="CSVSaldi" size="64" />
 	<input type="submit" name="submit" value="Uploaden" />
@@ -6,4 +6,4 @@
 <br />
 <h2>Boekjaar sluiten</h2>
 <p>De maaltijden van het boekjaar zullen naar het archief worden verplaatst.</p>
-<a href="{$instellingen->get('taken', 'url')}/sluitboekjaar" title="Boekjaar afsluiten" class="knop post popup">{icon get="door_in"} Sluit boekjaar</a>
+<a href="{Instellingen::instance()->('taken', 'url')}/sluitboekjaar" title="Boekjaar afsluiten" class="knop post popup">{icon get="door_in"} Sluit boekjaar</a>

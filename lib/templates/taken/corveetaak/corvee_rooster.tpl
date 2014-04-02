@@ -4,7 +4,7 @@ corvee_rooster.tpl	|	P.W.G. Brussee (brussee@live.nl)
 {strip}
 	{if isset($toonverleden) and $toonverleden}
 		<div style="float: right;">
-			<a href="{$instellingen->get('taken', 'url')}/verleden" title="Taken in het verleden tonen" class="knop">{icon get="time"} Toon verleden</a>
+			<a href="{Instellingen::instance()->('taken', 'url')}/verleden" title="Taken in het verleden tonen" class="knop">{icon get="time"} Toon verleden</a>
 		</div>
 	{/if}
 	<table id="taken-tabel" class="taken-tabel">
@@ -60,7 +60,7 @@ corvee_rooster.tpl	|	P.W.G. Brussee (brussee@live.nl)
 					{if $taak->getLidId() === LoginLid::instance()->getUid()} 
 						{* icon get="arrow_switch" title="Ruilen" *}
 					{/if}
-					{$taak->getLid()->getNaamLink($instellingen->get('corvee', 'weergave_ledennamen_corveerooster'), $instellingen->get('corvee', 'weergave_link_ledennamen'))}
+					{$taak->getLid()->getNaamLink(Instellingen::instance()->('corvee', 'weergave_ledennamen_corveerooster'), Instellingen::instance()->('corvee', 'weergave_link_ledennamen'))}
 				{else}
 					<i>vacature</i>
 				{/if}

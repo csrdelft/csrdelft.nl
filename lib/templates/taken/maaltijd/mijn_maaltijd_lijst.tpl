@@ -44,7 +44,7 @@
 		</div>
 	{else}
 	<td class="maaltijd-aangemeld">
-		<a href="{$instellingen->get('taken', 'url')}/afmelden/{$maaltijd->getMaaltijdId()}" class="knop post maaltijd-aangemeld"><input type="checkbox" checked="checked" /> Ja</a>
+		<a href="{Instellingen::instance()->('taken', 'url')}/afmelden/{$maaltijd->getMaaltijdId()}" class="knop post maaltijd-aangemeld"><input type="checkbox" checked="checked" /> Ja</a>
 		{if $aanmelding->getDoorAbonnement()} (abo){/if}
 	{/if}
 	</td>
@@ -52,7 +52,7 @@
 	{if $maaltijd->getIsGesloten()}
 		{$aanmelding->getAantalGasten()}
 	{else}
-		<form method="post" action="{$instellingen->get('taken', 'url')}/gasten/{$maaltijd->getMaaltijdId()}" class="Formulier InlineForm">
+		<form method="post" action="{Instellingen::instance()->('taken', 'url')}/gasten/{$maaltijd->getMaaltijdId()}" class="Formulier InlineForm">
 			<div class="FormToggle maaltijd-gasten">{$aanmelding->getAantalGasten()}</div>
 			<input type="text" name="aantal_gasten" value="{$aanmelding->getAantalGasten()}" origvalue="{$aanmelding->getAantalGasten()}" class="FormField" maxlength="4" size="4" />
 			<a class="knop submit" title="Wijzigingen opslaan">{icon get="accept"}</a>
@@ -67,7 +67,7 @@
 		{/if}
 	{else}
 	{if $aanmelding->getAantalGasten() > 0}
-		<form method="post" action="{$instellingen->get('taken', 'url')}/opmerking/{$maaltijd->getMaaltijdId()}" class="Formulier InlineForm">
+		<form method="post" action="{Instellingen::instance()->('taken', 'url')}/opmerking/{$maaltijd->getMaaltijdId()}" class="Formulier InlineForm">
 			<div class="FormToggle" title="{$aanmelding->getGastenOpmerking()}">
 		{if $aanmelding->getGastenOpmerking()}
 				<a class="knop">{icon get="comment_edit" title=$aanmelding->getGastenOpmerking()}</a>
@@ -97,7 +97,7 @@
 		{/if}
 	{else}
 	<td class="maaltijd-afgemeld">
-		<a href="{$instellingen->get('taken', 'url')}/aanmelden/{$maaltijd->getMaaltijdId()}" class="knop post maaltijd-afgemeld"><input type="checkbox" /> Nee</a>
+		<a href="{Instellingen::instance()->('taken', 'url')}/aanmelden/{$maaltijd->getMaaltijdId()}" class="knop post maaltijd-afgemeld"><input type="checkbox" /> Nee</a>
 	{/if}
 	</td>
 	<td>-</td>
