@@ -14,15 +14,17 @@
 			{/if}
 		</span>
 		<div class="forumpostKnoppen">
-			{if !$draad->gesloten AND $deel->magPosten()}
+			{if !$draad->gesloten AND $deel->magPosten() AND !$post->wacht_goedkeuring}
 				<a href="#reageren" class="knop" onclick="forumCiteren({$post->post_id});" title="Citeer bericht">{icon get="comments"}</a>
 			{/if}
 			{if (($deel->magPosten() AND !$draad->gesloten AND $post->lid_id === $loginlid->getUid() AND $loginlid->hasPermission('P_LOGGED_IN')) OR $deel->magModereren())}
-				<a href="#{$post->post_id}" class="knop{if $deel->magModereren() AND $post->lid_id !== $loginlid->getUid()} forummodknop{/if}" onclick="forumBewerken({$post->post_id});" title="Bewerk bericht">{icon get="pencil"}</a>
+				<a href="#{$post->post_id}" class="knop
+				   {if $deel->magModereren() AND $post->lid_id !== $loginlid->getUid() AND !$post->wacht_goedkeuring} forummodknop
+				   {/if}" onclick="forumBewerken({$post->post_id});" title="Bewerk bericht">{icon get="pencil"}</a>
 			{/if}
 			{if $deel->magModereren()}
-				<a href="/forum/offtopic/{$post->post_id}" class="knop post confirm forummodknop" title="Offtopic markeren">{icon get="thumb_down"}</a>
-				<a href="/forum/verwijderen/{$post->post_id}" class="knop post confirm forummodknop" title="Verwijder bericht">{icon get="cross"}</a>
+				<a href="/forum/offtopic/{$post->post_id}" class="knop post confirm{if !$post->wacht_goedkeuring} forummodknop{/if}" title="Offtopic markeren">{icon get="thumb_down"}</a>
+				<a href="/forum/verwijderen/{$post->post_id}" class="knop post confirm{if !$post->wacht_goedkeuring} forummodknop{/if}" title="Verwijder bericht">{icon get="cross"}</a>
 				{if $post->wacht_goedkeuring}
 					<a href="/forum/goedkeuren/{$post->post_id}" class="knop post confirm" title="Bericht goedkeuren">goedkeuren</a>
 					<a href="/tools/stats.php?ip={$post->auteur_ip}" class="knop" title="IP-log">IP-log</a>
