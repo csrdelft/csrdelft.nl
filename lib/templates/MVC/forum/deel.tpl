@@ -33,7 +33,7 @@
 	<thead>
 		<tr>
 			<th colspan="4">
-				{sliding_pager baseurl="/forumdeel/"|cat:$deel->forum_id|cat:"/"
+				{sliding_pager baseurl="/forum/deel/"|cat:$deel->forum_id|cat:"/"
 				pagecount=ForumDradenModel::instance()->getAantalPaginas($deel->forum_id) curpage=ForumDradenModel::instance()->getHuidigePagina()
 				separator=" &nbsp;"}
 			</th>

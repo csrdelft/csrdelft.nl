@@ -65,7 +65,7 @@ var bewerkDiv = null;
 var bewerkDivInnerHTML = null;
 function forumBewerken(postId) {
 	http.abort();
-	http.open("POST", "/forum/posttekst/" + postId, true);
+	http.open("POST", "/forum/tekst/" + postId, true);
 	http.onreadystatechange = function() {
 		if (http.readyState == 4) {
 			if (document.getElementById('forumEditForm')) {
@@ -97,7 +97,7 @@ function forumBewerken(postId) {
 }
 function forumCiteren(postId) {
 	http.abort();
-	http.open("POST", "/forum/postciteren/" + postId, true);
+	http.open("POST", "/forum/citeren/" + postId, true);
 	http.onreadystatechange = function() {
 		if (http.readyState == 4) {
 			document.getElementById('forumBericht').value += http.responseText;

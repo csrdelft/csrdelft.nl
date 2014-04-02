@@ -1,6 +1,6 @@
 <tr id="forumpost-row-{$post->post_id}">
 	<td class="auteur">
-		<a href="/forumpost/{$post->post_id}#{$post->post_id}" id="{$post->post_id}" class="postlink" title="Link naar deze post">&rarr;</a>
+		<a href="/forum/reactie/{$post->post_id}#{$post->post_id}" id="{$post->post_id}" class="postlink" title="Link naar deze post">&rarr;</a>
 		{$post->lid_id|csrnaam:'user':'visitekaartje'}
 		{if $loginlid->hasPermission('P_LEDEN_READ')}
 			<span tabindex="0" id="t{$post->lid_id}-{$post->post_id}" class="togglePasfoto"{if $loginlid->getInstelling('forum_toonpasfotos') == 'nee'} title="Toon pasfoto">&raquo;{else}>{/if}</span>
@@ -22,12 +22,12 @@
 			{/if}
 			<br />
 			{if $deel->magModereren()}
-				<a href="/forum/postofftopic/{$post->post_id}" class="knop post confirm" title="Offtopic markeren">{icon get="thumb_down"}</a>
+				<a href="/forum/offtopic/{$post->post_id}" class="knop post confirm" title="Offtopic markeren">{icon get="thumb_down"}</a>
 				<br />
-				<a href="/forum/postverwijderen/{$post->post_id}" class="knop post confirm" title="Verwijder bericht">{icon get="cross"}</a>
+				<a href="/forum/verwijderen/{$post->post_id}" class="knop post confirm" title="Verwijder bericht">{icon get="cross"}</a>
 				{if $post->wacht_goedkeuring}
 					<br />
-					<a href="/forum/postgoedkeuren/{$post->post_id}" class="knop post confirm" title="Bericht goedkeuren">goedkeuren</a>
+					<a href="/forum/goedkeuren/{$post->post_id}" class="knop post confirm" title="Bericht goedkeuren">goedkeuren</a>
 					<br />
 					<a href="/tools/stats.php?ip={$post->auteur_ip}" class="knop" title="IP-log">IP-log</a>
 				{/if}

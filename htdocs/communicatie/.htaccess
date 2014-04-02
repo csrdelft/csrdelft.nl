@@ -1,7 +1,9 @@
 RewriteEngine On
 
+# Forum backwards compatibility
+RewriteRule ^forum/?(.*)$	/forum/$1 [QSA,R,L]
 # Als we naar /communicatie/ gaan worden we doorgestuurd naar het forum
-RewriteRule ^/?$ /forum/ [R]
+RewriteRule ^/?(.*)$	/forum/$1 [QSA,R,L]
 
 # Ledenlijst
 RewriteRule ^(leden)?lijst/$ lijst.php

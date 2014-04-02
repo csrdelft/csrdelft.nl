@@ -73,7 +73,7 @@ function showTab(groepid, tabid){
 			document.getElementById('ledenvangroep'+groepid).innerHTML=http.responseText;
 
 			// naar aanleiding van red-of-slacht-kip-donacie-actie
-			// http://csrdelft.nl/forumdraad/6760
+			// http://csrdelft.nl/forum/onderwerp/6760
 			var $table = $(".query_table"),
 				total = 0.0;
 			$table.find("tr:has(th:contains(opmerking))").last().nextAll().each(function(){

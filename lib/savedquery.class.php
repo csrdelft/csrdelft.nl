@@ -145,7 +145,7 @@ class SavedQueryContent extends TemplateView {
 		if ($name == 'uid_naam') {
 			return LidCache::getLid($contents)->getNaamLink('full', 'link');
 		} elseif ($name == 'onderwerp_link') { //link naar het forum.
-			return '<a href="/forumdraad/' . $contents . '">' . $contents . '</a>';
+			return '<a href="/forum/onderwerp/' . $contents . '">' . $contents . '</a>';
 		} elseif (substr($name, 0, 10) == 'groep_naam' AND $contents != '') {
 			require_once('groepen/groep.class.php');
 			return Groep::ids2links($contents, '<br />');

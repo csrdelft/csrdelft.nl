@@ -29,14 +29,14 @@
 		<webMaster>pubcie@csrdelft.nl (Publiciteitscommissie der C.S.R.)</webMaster>
 		{foreach from=$draden item=draad}<item>
 			<title>{$draad->titel|escape:'html'}</title>
-			<link>http://csrdelft.nl/forumpost/{$draad->laatste_post_id}</link>
+			<link>http://csrdelft.nl/forum/reactie/{$draad->laatste_post_id}</link>
 			{foreach from=$draad->getForumPosts() item=post}<description><![CDATA[ {$post->tekst|ubb} ]]></description>
 			<pubDate>{$post->datum_tijd|rfc2822}</pubDate>
 			{/foreach}
 			<dc:creator>{$draad->laatste_lid_id|csrnaam:'user':false:false|escape:'html'}</dc:creator>
 			<category>forum/{$delen[$draad->forum_id]->titel|escape:'html'}</category>
-			<comments>http://csrdelft.nl/forumdraad/{$draad->draad_id}</comments>
-			<guid isPermaLink="true">http://csrdelft.nl/forumpost/{$draad->laatste_post_id}#{$draad->laatste_post_id}</guid>
+			<comments>http://csrdelft.nl/forum/onderwerp/{$draad->draad_id}</comments>
+			<guid isPermaLink="true">http://csrdelft.nl/forum/reactie/{$draad->laatste_post_id}#{$draad->laatste_post_id}</guid>
 		</item>
 		{/foreach}
 	</channel>

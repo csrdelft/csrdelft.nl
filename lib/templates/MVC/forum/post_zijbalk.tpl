@@ -10,7 +10,7 @@
 			{$timestamp|date_format:"%d-%m"}
 		{/if}
 		&nbsp;
-		<a href="/forumpost/{$post->post_id}#{$post->post_id}" title="{$post->tekst}"{if !$draad->alGelezen()} class="opvallend"{/if}>
+		<a href="/forum/reactie/{$post->post_id}#{$post->post_id}" title="{$post->tekst}"{if !$draad->alGelezen()} class="opvallend"{/if}>
 			{$draad->titel|truncate:25:"…":true}
 		</a>
 		<br />

@@ -291,7 +291,7 @@
 							{assign var=posts_draden value=$profiel->getRecenteForumberichten()}
 							{foreach from=$posts_draden[0] item=post}
 								<tr>
-									<td><a href="/forumpost/{$post->post_id}#{$post->post_id}" title="{$post->tekst}"{if !$posts_draden[1][$post->draad_id]->alGelezen()} class="opvallend"{/if}>{$posts_draden[1][$post->draad_id]->titel|truncate:75|escape:'html'}</a></td>
+									<td><a href="/forum/reactie/{$post->post_id}#{$post->post_id}" title="{$post->tekst}"{if !$posts_draden[1][$post->draad_id]->alGelezen()} class="opvallend"{/if}>{$posts_draden[1][$post->draad_id]->titel|truncate:75|escape:'html'}</a></td>
 									<td>
 										{if $loginlid->getInstelling('forum_datumWeergave') === 'relatief'}
 											{$post->datum_tijd|reldate}

@@ -9,7 +9,7 @@
 			{$timestamp|date_format:"%d-%m"}
 		{/if}
 		&nbsp;
-		<a href="/forumpost/{$draad->laatste_post_id}#{$draad->laatste_post_id}" title="[{$draad->titel}] {$draad->laatste_lid_id|csrnaam:'user':false:false|escape:'html'}: {$posts[0]->tekst|truncate:25:"…":true}"
+		<a href="/forum/reactie/{$draad->laatste_post_id}#{$draad->laatste_post_id}" title="[{$draad->titel}] {$draad->laatste_lid_id|csrnaam:'user':false:false|escape:'html'}: {$posts[0]->tekst|truncate:25:"…":true}"
 		   {if !$draad->alGelezen()} class="opvallend"{/if}>{$draad->titel|truncate:25:"…":true}
 		</a>
 		<br />

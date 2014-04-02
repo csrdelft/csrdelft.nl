@@ -12,7 +12,7 @@
 
 	{capture name='navlinks'}
 		<div class="forumNavigatie">
-			<a href="/forum/" class="forumGrootlink">Forum</a> &raquo; <a href="/forumdeel/{$deel->forum_id}" class="forumGrootlink">{$deel->titel}</a>
+			<a href="/forum/" class="forumGrootlink">Forum</a> &raquo; <a href="/forum/deel/{$deel->forum_id}" class="forumGrootlink">{$deel->titel}</a>
 			<br />
 			{if $deel->magModereren()}
 				<div style="display: inline-block; margin-right: 3px;">
@@ -61,7 +61,7 @@
 				<td>
 					<i>{$smarty.capture.magreageren}</i>
 					<div class="forum_paginering">
-						Pagina: {sliding_pager baseurl="/forumdraad/"|cat:$draad->draad_id|cat:"/"
+						Pagina: {sliding_pager baseurl="/forum/onderwerp/"|cat:$draad->draad_id|cat:"/"
 									pagecount=$paginas curpage=ForumPostsModel::instance()->getHuidigePagina()}
 					</div>
 				</td>
@@ -88,7 +88,7 @@
 				<td>&nbsp;</td>
 				<td>
 					<div class="forum_paginering">
-						Pagina: {sliding_pager baseurl="/forumdraad/"|cat:$draad->draad_id|cat:"/"
+						Pagina: {sliding_pager baseurl="/forum/onderwerp/"|cat:$draad->draad_id|cat:"/"
 									pagecount=$paginas curpage=ForumPostsModel::instance()->getHuidigePagina()}
 					</div>
 				</td>

@@ -13,12 +13,12 @@ require_once 'MVC/view/ForumView.class.php';
 class ForumController extends Controller {
 
 	public function __construct($query) {
-		parent::__construct(str_replace('forum/', 'forum', $query));
+		parent::__construct($query);
 		if (!array_key_exists('forum_concept', $_SESSION)) {
 			$_SESSION['forum_concept'] = '';
 		}
-		$this->action = $this->getParam(1);
-		$this->performAction($this->getParams(2));
+		$this->action = $this->getParam(2);
+		$this->performAction($this->getParams(3));
 	}
 
 	/**
@@ -28,26 +28,25 @@ class ForumController extends Controller {
 	 */
 	protected function hasPermission() {
 		switch ($this->action) {
-			case 'forumdraadwijzigen':
+			case 'wijzigen':
 				return true;
 
-			case 'forum':
-			case 'forumrss':
-			case 'forumrecent':
-			case 'forumdeel':
-			case 'forumdraad':
-			case 'forumpost':
-			case 'forumwacht':
+			case 'rss':
+			case 'recent':
+			case 'deel':
+			case 'onderwerp':
+			case 'reactie':
+			case 'wacht':
 				return !$this->isPosted();
 
-			case 'forumzoeken':
-			case 'forumposten':
-			case 'forumpostbewerken':
-			case 'forumpostverwijderen':
-			case 'forumpostofftopic':
-			case 'forumpostgoedkeuren':
-			case 'forumpostciteren':
-			case 'forumposttekst':
+			case 'zoeken':
+			case 'posten':
+			case 'bewerken':
+			case 'verwijderen':
+			case 'offtopic':
+			case 'goedkeuren':
+			case 'citeren':
+			case 'tekst':
 				return $this->isPosted();
 
 			default:
@@ -74,7 +73,7 @@ class ForumController extends Controller {
 	/**
 	 * RSS feed van recente draadjes tonen.
 	 */
-	public function forumrss() {
+	public function rss() {
 		header('Content-Type: application/rss+xml; charset=UTF-8');
 		$draden_delen = ForumDradenModel::instance()->getRssForumDradenEnDelen();
 		$this->view = new ForumRssView($draden_delen[0], $draden_delen[1]);
@@ -83,7 +82,7 @@ class ForumController extends Controller {
 	/**
 	 * Tonen van alle posts die wachten op goedkeuring.
 	 */
-	public function forumwacht() {
+	public function wacht() {
 		$body = new ForumResultatenView(ForumDelenModel::instance()->getWachtOpGoedkeuring(), 'Wacht op goedkeuring');
 		$this->view = new CsrLayoutPage($body);
 		$this->view->addStylesheet('forum.css');
@@ -93,7 +92,7 @@ class ForumController extends Controller {
 	/**
 	 * Tonen van alle posts die wachten op goedkeuring.
 	 */
-	public function forumzoeken() {
+	public function zoeken() {
 		$query = filter_input(INPUT_POST, 'zoeken', FILTER_SANITIZE_SPECIAL_CHARS);
 		$body = new ForumResultatenView(ForumModel::instance()->zoeken($query), 'Zoekresultaten voor: ' . $query);
 		$this->view = new CsrLayoutPage($body);
@@ -104,7 +103,7 @@ class ForumController extends Controller {
 	/**
 	 * Recente draadjes laten zien in tabel.
 	 */
-	public function forumrecent() {
+	public function recent() {
 		$deel = ForumDelenModel::instance()->getRecent();
 		$body = new ForumDeelView($deel);
 		if (LoginLid::instance()->hasPermission('P_LOGGED_IN')) {
@@ -123,7 +122,7 @@ class ForumController extends Controller {
 	 * @param int $id
 	 * @param int $pagina
 	 */
-	public function forumdeel($id, $pagina = 1) {
+	public function deel($id, $pagina = 1) {
 		$deel = ForumDelenModel::instance()->getForumDeel((int) $id);
 		if (!$deel OR !$deel->magLezen()) { // geen exceptie om bestaan van forumdeel niet te verraden
 			$this->geentoegang();
@@ -146,7 +145,7 @@ class ForumController extends Controller {
 	 * @param int $id
 	 * @param int $pagina
 	 */
-	public function forumdraad($id, $pagina = 1) {
+	public function onderwerp($id, $pagina = 1) {
 		$draad = ForumDradenModel::instance()->getForumDraad((int) $id);
 		$deel = ForumDelenModel::instance()->getForumDeel($draad->forum_id);
 		if (!$deel->magLezen()) {
@@ -170,7 +169,7 @@ class ForumController extends Controller {
 	 * 
 	 * @param int $id
 	 */
-	public function forumpost($id) {
+	public function reactie($id) {
 		$post = ForumPostsModel::instance()->getForumPost((int) $id);
 		$this->forumdraad($post->draad_id, ForumPostsModel::instance()->getPaginaVoorPost($post));
 	}
@@ -183,7 +182,7 @@ class ForumController extends Controller {
 	 * @param mixed $value
 	 * @throws Exception indien forum niet bestaat bij verplaatsen of wijzigen mislukt
 	 */
-	public function forumdraadwijzigen($id, $property, $value = null) {
+	public function wijzigen($id, $property, $value = null) {
 		$draad = ForumDradenModel::instance()->getForumDraad((int) $id);
 		$deel = ForumDelenModel::instance()->getForumDeel($draad->forum_id);
 		if (!$deel->magModereren()) {
@@ -224,7 +223,7 @@ class ForumController extends Controller {
 	 * @param int $forum_id
 	 * @param int $draad_id
 	 */
-	public function forumposten($forum_id, $draad_id = null) {
+	public function posten($forum_id, $draad_id = null) {
 		$deel = ForumDelenModel::instance()->getForumDeel((int) $forum_id);
 		if (!$deel->magPosten()) {
 			$this->geentoegang();
@@ -234,21 +233,21 @@ class ForumController extends Controller {
 		require_once 'simplespamfilter.class.php';
 		$filter = new SimpleSpamfilter();
 		if ($filter->isSpam($tekst)) {
-			invokeRefresh('/forumdeel/' . $deel->forum_id, 'SPAM', -1); //TODO: logging
+			invokeRefresh('/forum/deel/' . $deel->forum_id, 'SPAM', -1); //TODO: logging
 		}
 		// voorkomen dubbelposts
 		if (array_key_exists('forum_laatste_post_tekst', $_SESSION) AND $_SESSION['forum_laatste_post_tekst'] === $tekst) {
-			invokeRefresh('/forumdeel/' . $deel->forum_id, 'Bericht is al gepost!', 0);
+			invokeRefresh('/forum/deel/' . $deel->forum_id, 'Bericht is al gepost!', 0);
 		}
 		$wacht_goedkeuring = false;
 		if (!LoginLid::instance()->hasPermission('P_LOGGED_IN')) {
 			$wacht_goedkeuring = true;
 			$email = filter_input(INPUT_POST, 'email', FILTER_SANITIZE_EMAIL);
 			if ($filter->isSpam($email)) {
-				invokeRefresh('/forumdeel/' . $deel->forum_id, 'SPAM', -1); //TODO: logging
+				invokeRefresh('/forum/deel/' . $deel->forum_id, 'SPAM', -1); //TODO: logging
 			}
 			if (!email_like($email)) {
-				invokeRefresh('/forumdeel/' . $deel->forum_id, 'U moet een geldig email-adres opgeven!', -1);
+				invokeRefresh('/forum/deel/' . $deel->forum_id, 'U moet een geldig email-adres opgeven!', -1);
 			}
 		}
 		if ($draad_id !== null) { // post in bestaand draadje
@@ -274,13 +273,13 @@ class ForumController extends Controller {
 			setMelding('Uw bericht is opgeslagen en zal als het goedgekeurd is geplaatst worden.', 1);
 			//bericht sturen naar pubcie@csrdelft dat er een bericht op goedkeuring wacht
 			mail('pubcie@csrdelft.nl', 'Nieuw bericht wacht op goedkeuring', "http://csrdelft.nl/forum/wacht#" . $post->post_id . "\r\n" . "\r\nDe inhoud van het bericht is als volgt: \r\n\r\n" . str_replace('\r\n', "\n", $tekst) . "\r\n\r\nEINDE BERICHT", "From: pubcie@csrdelft.nl\nReply-To: " . $email);
-			invokeRefresh('/forumdeel/' . $deel->forum_id);
+			invokeRefresh('/forum/deel/' . $deel->forum_id);
 		}
 		// redirect naar (altijd) juiste pagina
-		invokeRefresh('/forumpost/' . $post->post_id . '#' . $post->post_id); // , ($draad_id === null ? 'Draad' : 'Post') . ' succesvol toegevoegd', 1
+		invokeRefresh('/forum/reactie/' . $post->post_id . '#' . $post->post_id); // , ($draad_id === null ? 'Draad' : 'Post') . ' succesvol toegevoegd', 1
 	}
 
-	public function forumpostbewerken($id) {
+	public function bewerken($id) {
 		$post = ForumPostsModel::instance()->getForumPost((int) $id);
 		$draad = ForumDradenModel::instance()->getForumDraad($post->draad_id);
 		$deel = ForumDelenModel::instance()->getForumDeel($draad->forum_id);
@@ -293,10 +292,10 @@ class ForumController extends Controller {
 		$reden = trim(filter_input(INPUT_POST, 'reden', FILTER_SANITIZE_STRING));
 		ForumPostsModel::instance()->bewerkForumPost($post, $tekst, $reden);
 		// redirect naar (altijd) juiste pagina
-		invokeRefresh('/forumpost/' . $post->post_id . '#' . $post->post_id); // , 'Post succesvol bewerkt', 1
+		invokeRefresh('/forum/reactie/' . $post->post_id . '#' . $post->post_id); // , 'Post succesvol bewerkt', 1
 	}
 
-	public function forumpostverwijderen($id) {
+	public function verwijderen($id) {
 		$post = ForumPostsModel::instance()->getForumPost((int) $id);
 		$draad = ForumDradenModel::instance()->getForumDraad($post->draad_id);
 		$deel = ForumDelenModel::instance()->getForumDeel($draad->forum_id);
@@ -311,7 +310,7 @@ class ForumController extends Controller {
 		$this->view = new ForumPostDeleteView($post->post_id);
 	}
 
-	public function forumpostofftopic($id) {
+	public function offtopic($id) {
 		$post = ForumPostsModel::instance()->getForumPost((int) $id);
 		$draad = ForumDradenModel::instance()->getForumDraad($post->draad_id);
 		$deel = ForumDelenModel::instance()->getForumDeel($draad->forum_id);
@@ -325,7 +324,7 @@ class ForumController extends Controller {
 		$this->view = new ForumPostView($post, $draad, $deel);
 	}
 
-	public function forumpostgoedkeuren($id) {
+	public function goedkeuren($id) {
 		$post = ForumPostsModel::instance()->getForumPost((int) $id);
 		$draad = ForumDradenModel::instance()->getForumDraad($post->draad_id);
 		$deel = ForumDelenModel::instance()->getForumDeel($draad->forum_id);
@@ -348,7 +347,7 @@ class ForumController extends Controller {
 		$this->view = new ForumPostView($post, $draad, $deel);
 	}
 
-	public function forumpostciteren($id) {
+	public function citeren($id) {
 		$post = ForumPostsModel::instance()->getForumPost((int) $id);
 		$draad = ForumDradenModel::instance()->getForumDraad($post->draad_id);
 		$deel = ForumDelenModel::instance()->getForumDeel($draad->forum_id);
@@ -359,7 +358,7 @@ class ForumController extends Controller {
 		exit;
 	}
 
-	public function forumposttekst($id) {
+	public function tekst($id) {
 		$post = ForumPostsModel::instance()->getForumPost((int) $id);
 		$draad = ForumDradenModel::instance()->getForumDraad($post->draad_id);
 		$deel = ForumDelenModel::instance()->getForumDeel($draad->forum_id);

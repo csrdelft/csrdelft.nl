@@ -3,7 +3,7 @@
 		{if $draad->wacht_goedkeuring}
 			[ter goedkeuring...]
 		{/if}
-		<a href="/forumdraad/{$draad->draad_id}"{if !$draad->alGelezen()} class="updatedTopic"{/if}>
+		<a href="/forum/onderwerp/{$draad->draad_id}"{if !$draad->alGelezen()} class="updatedTopic"{/if}>
 			{if $draad->gesloten}
 				<img src="{icon get="slotje" notag=true}" title="Dit onderwerp is gesloten, u kunt niet meer reageren" alt="sluiten" />&nbsp;&nbsp;
 			{elseif $draad->belangrijk}
@@ -13,7 +13,7 @@
 			{/if}
 			{$draad->titel}
 		</a>
-		{sliding_pager baseurl="/forumdraad/"|cat:$draad->draad_id|cat:"/"
+		{sliding_pager baseurl="/forum/onderwerp/"|cat:$draad->draad_id|cat:"/"
 			pagecount=ForumPostsModel::instance()->getAantalPaginas($draad->draad_id) curpage=0
 			txt_pre="&nbsp;[ " txt_post=" ]" link_current=true}
 	</td>
@@ -25,7 +25,7 @@
 		{else}
 			{$draad->laatst_gewijzigd}
 		{/if}
-		<br /><a href="/forumpost/{$draad->laatste_post_id}#{$draad->laatste_post_id}">bericht</a> 
+		<br /><a href="/forum/reactie/{$draad->laatste_post_id}#{$draad->laatste_post_id}">bericht</a> 
 		door {$draad->laatste_lid_id|csrnaam:'user'}
 	</td>
 </tr>
