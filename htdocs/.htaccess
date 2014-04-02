@@ -1,8 +1,16 @@
 AddDefaultCharset utf-8
 RewriteEngine On
 
-RewriteRule ^nieuws/?$			/actueel/mededelingen/$1 [L]
+## forum backwards compatibility
+RewriteRule ^communicatie/forum/rss/([0-9a-z]*).xml		/forum/rss?validate_token=$1 [L]
+RewriteRule ^communicatie/forum/rss.xml$				/forum/rss [L]
+RewriteRule ^communicatie/forum/?$	/forum/$1
+RewriteRule ^categorie/laatste/?$	/forum/recent [L]
+RewriteRule ^categorie/?$			/forumdeel/$1 [L]
+RewriteRule ^onderwerp/?$			/forumdraad/$1 [L]
+RewriteRule ^reactie/?$				/forumpost/$1 [L]
 
+RewriteRule ^nieuws/?$			/actueel/mededelingen/$1 [L]
 RewriteRule ^facebook/?			http://www.facebook.com/group.php?gid=10294513917&ref=ts [L]
 RewriteRule ^pauper				pauper.php [L]
 

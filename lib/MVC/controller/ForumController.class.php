@@ -40,7 +40,7 @@ class ForumController extends Controller {
 			case 'forumwacht':
 				return !$this->isPosted();
 
-			//TODO: case 'forumzoeken':
+			case 'forumzoeken':
 			case 'forumposten':
 			case 'forumpostbewerken':
 			case 'forumpostverwijderen':
@@ -75,6 +75,7 @@ class ForumController extends Controller {
 	 * RSS feed van recente draadjes tonen.
 	 */
 	public function forumrss() {
+		header('Content-Type: application/rss+xml; charset=UTF-8');
 		$draden_delen = ForumDradenModel::instance()->getRssForumDradenEnDelen();
 		$this->view = new ForumRssView($draden_delen[0], $draden_delen[1]);
 	}
