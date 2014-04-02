@@ -6,7 +6,7 @@
  */
 require_once 'configuratie.include.php';
 
-if($loginlid->hasPermission('P_ADMIN')){
+if(LoginLid::instance()->hasPermission('P_ADMIN')){
 	echo '<h1>MemCached flushen</h1>';
 	Memcached::instance()->flush();
 	

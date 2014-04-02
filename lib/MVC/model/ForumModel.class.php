@@ -182,11 +182,17 @@ class ForumDradenModel extends PersistenceModel implements Paging {
 	 * @var int
 	 */
 	private $per_pagina;
+	/**
+	 * Aantal plakkerige draden
+	 * @var int
+	 */
+	private $aantal_plakkerig;
 
 	protected function __construct() {
 		parent::__construct();
 		$this->pagina = 1;
 		$this->per_pagina = LidInstellingen::get('forum', 'draden_per_pagina');
+		$this->aantal_plakkerig = null;
 	}
 
 	public function getHuidigePagina() {
@@ -211,8 +217,15 @@ class ForumDradenModel extends PersistenceModel implements Paging {
 		if ($draad->plakkerig) {
 			return 1;
 		}
+		if ($this->aantal_plakkerig === null) {
+			$this->aantal_plakkerig = $this->count('forum_id = ? AND plakkerig = TRUE AND wacht_goedkeuring = FALSE AND verwijderd = FALSE', array($draad->forum_id));
+
+			echo $this->aantal_plakkerig . ' = aantal plakkerig<br />';
+		}
 		$count = $this->count('forum_id = ? AND draad_id > ? AND plakkerig = FALSE AND wacht_goedkeuring = FALSE AND verwijderd = FALSE', array($draad->forum_id, $draad->draad_id));
-		return ceil($count / $this->per_pagina);
+		echo $count . '<br />';
+
+		return $count / $this->per_pagina;
 	}
 
 	public function hertellenVoorDeel(ForumDeel $deel) {

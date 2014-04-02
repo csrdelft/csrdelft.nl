@@ -1,5 +1,6 @@
 <tr class="forumdraad kleur{cycle values="0,1"}">
 	<td class="titel">
+		{*ForumDradenModel::instance()->getPaginaVoorDraad($draad)*}
 		{if $draad->wacht_goedkeuring}
 			[ter goedkeuring...]
 		{/if}
@@ -20,7 +21,7 @@
 	<td class="reacties">{$draad->aantal_posts}</td>
 	<td class="reacties">{$draad->lid_id|csrnaam:'user'}</td>
 	<td class="reactiemoment">
-		{if $loginlid->getInstelling('forum_datumWeergave') === 'relatief'}
+		{if LoginLid::instance()->getInstelling('forum_datumWeergave') === 'relatief'}
 			{$draad->laatst_gewijzigd|reldate}
 		{else}
 			{$draad->laatst_gewijzigd}

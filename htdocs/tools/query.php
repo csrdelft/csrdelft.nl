@@ -9,7 +9,7 @@
 require_once 'configuratie.include.php';
 require_once 'savedquery.class.php';
 
-if(!$loginlid->hasPermission('P_LOGGED_IN')){ header('location: '.CSR_ROOT); }
+if(!LoginLid::instance()->hasPermission('P_LOGGED_IN')){ header('location: '.CSR_ROOT); }
 
 $id=0;
 if(isset($_GET['id']) AND (int)$_GET['id']==$_GET['id']){

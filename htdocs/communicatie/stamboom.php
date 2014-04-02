@@ -4,11 +4,11 @@ require_once 'configuratie.include.php';
 require_once 'lid/stamboomcontent.class.php';
 
 
-if($loginlid->hasPermission('P_LEDEN_READ')) {
+if(LoginLid::instance()->hasPermission('P_LEDEN_READ')) {
 	if(isset($_GET['uid'])){
 		$uid=$_GET['uid'];
 	}else{
-		$uid=$loginlid->getUid();
+		$uid=LoginLid::instance()->getUid();
 	}
 	$midden = new StamboomContent($uid);
 

@@ -4,7 +4,7 @@ require_once 'configuratie.include.php';
 require_once 'lid/ledenlijstcontent.class.php';
 require_once 'groepen/groep.class.php';
 
-if(!($loginlid->hasPermission('P_LOGGED_IN') AND $loginlid->hasPermission('P_OUDLEDEN_READ'))){
+if(!(LoginLid::instance()->hasPermission('P_LOGGED_IN') AND LoginLid::instance()->hasPermission('P_OUDLEDEN_READ'))){
 	# geen rechten
 	echo 'false';
 	exit;

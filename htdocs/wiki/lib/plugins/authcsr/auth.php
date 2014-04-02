@@ -30,7 +30,7 @@ class auth_plugin_authcsr extends DokuWiki_Auth_Plugin {
         $this->cando['external'] = true;
         $this->cando['logoff']   = true;
 
-        global $loginlid;
+        global LoginLid::instance();
         global $conf;
 
         //login with:
@@ -84,13 +84,13 @@ class auth_plugin_authcsr extends DokuWiki_Auth_Plugin {
     function trustExternal($user, $pass, $sticky = false) {
         global $USERINFO;
         global $lang;
-        /** @var $loginlid LoginLid */
-        global $loginlid;
+        /** @var LoginLid::instance() LoginLid */
+        global LoginLid::instance();
         global $conf;
 
         # als er een gebruiker is gegeven willen we graag proberen in te loggen via inlogformulier
         if(!empty($user)) {
-            if($loginlid->login(strval($user), strval($pass), $checkip = false) AND $loginlid->getUid() != 'x999') {
+            if(LoginLid::instance()->login(strval($user), strval($pass), $checkip = false) AND LoginLid::instance()->getUid() != 'x999') {
                 //success
             } else {
                 //invalid credentials - log off
@@ -101,13 +101,13 @@ class auth_plugin_authcsr extends DokuWiki_Auth_Plugin {
         }
 
         # als ingelogd genoeg permissies heeft gegevens ophalen en bewaren
-        if($loginlid->hasPermission('P_LOGGED_IN,groep:wikitoegang', $token_authorizable = false)
-            OR ($loginlid->hasPermission('P_LOGGED_IN,groep:wikitoegang', $token_authorizable = true) AND $_SERVER['PHP_SELF'] == '/wiki/feed.php')
+        if(LoginLid::instance()->hasPermission('P_LOGGED_IN,groep:wikitoegang', $token_authorizable = false)
+            OR (LoginLid::instance()->hasPermission('P_LOGGED_IN,groep:wikitoegang', $token_authorizable = true) AND $_SERVER['PHP_SELF'] == '/wiki/feed.php')
         ) {
 
             // okay we're logged in - set the globals
             require_once 'groepen/groep.class.php';
-            $lid                 = $loginlid->getLid();
+            $lid                 = LoginLid::instance()->getLid();
             $USERINFO['name']    = $lid->getNaam();
             $USERINFO['mail']    = $lid->getEmail();
             $USERINFO['pasfoto'] = $lid->getPasfoto($imgTag = false);
@@ -134,7 +134,7 @@ class auth_plugin_authcsr extends DokuWiki_Auth_Plugin {
             #    return true;
         }
 
-        if($loginlid->getUid() != 'x999') {
+        if(LoginLid::instance()->getUid() != 'x999') {
             msg('Niet genoeg permissies', -1);
         }
         // to be sure
@@ -151,9 +151,9 @@ class auth_plugin_authcsr extends DokuWiki_Auth_Plugin {
      * @see     auth_logoff()
      */
     function logOff() {
-        global $loginlid;
+        global LoginLid::instance();
 
-        $loginlid->logout();
+        LoginLid::instance()->logout();
     }
 
     /**

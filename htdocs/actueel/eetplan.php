@@ -4,7 +4,7 @@
 require_once 'configuratie.include.php';
 
 
-if($loginlid->hasPermission('P_LEDEN_READ')) {
+if(LoginLid::instance()->hasPermission('P_LEDEN_READ')) {
 	require_once 'eetplan.class.php';
 	$eetplan = new Eetplan();
 	require_once 'eetplancontent.class.php';

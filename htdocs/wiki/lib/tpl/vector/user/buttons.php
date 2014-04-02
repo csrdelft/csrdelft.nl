@@ -45,13 +45,13 @@ $rss["rss"]["title"]    = "De laatste wikiwijzigingen (alleen van publieke pagin
 $rss["rss"]["nofollow"] = true;
 
 if (auth_quickaclcheck('hoofdpagina') >= AUTH_READ) {
-	global $loginlid;
-    if($loginlid) {
-        $rsstoken = $loginlid->getLid()->getProperty('rssToken');
+	global LoginLid::instance();
+    if(LoginLid::instance()) {
+        $rsstoken = LoginLid::instance()->getLid()->getProperty('rssToken');
 
         // tip for first-time users
         if($rsstoken == ''){
-            $rsstoken = 'Maak_EERST_een_sleutel_aan_met_knop_[Nieuwe_aanvragen]_op:_http://csrdelft.nl/communicatie/profiel/'.$loginlid->getLid()->getUid().'#forum_gegevens';
+            $rsstoken = 'Maak_EERST_een_sleutel_aan_met_knop_[Nieuwe_aanvragen]_op:_http://csrdelft.nl/communicatie/profiel/'.LoginLid::instance()->getLid()->getUid().'#forum_gegevens';
         }
     }else{
         $rsstoken = 'C.S.R. backend niet beschikbaar';

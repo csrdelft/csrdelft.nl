@@ -12,7 +12,7 @@ if (isset($_GET['url']) and preg_match("/^[-\w?&=.\/]+$/", $_GET['url'])
 
 	$checkip = isset($_GET['checkip']) and $_GET['checkip'] == 'true';
 
-	if ($loginlid->login(strval($_GET['user']), strval($_GET['pass']), $checkip)) {
+	if (LoginLid::instance()->login(strval($_GET['user']), strval($_GET['pass']), $checkip)) {
 		$return["loginSucces"]=true;
 	} else {
 		if($_GET['user']=='aquifer' OR $_GET['user']=='0801'){

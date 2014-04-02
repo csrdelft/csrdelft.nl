@@ -8,7 +8,7 @@
 
 require_once 'configuratie.include.php';
 
-if(!$loginlid->hasPermission('P_LEDEN_READ')){ header('location: '.CSR_ROOT); }
+if(!LoginLid::instance()->hasPermission('P_LEDEN_READ')){ header('location: '.CSR_ROOT); }
 
 
 header('content-type: text/csv');

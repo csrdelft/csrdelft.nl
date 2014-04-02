@@ -1,9 +1,9 @@
 {*
 	menu_beheer.tpl	|	P.W.G. Brussee (brussee@live.nl)
 *}
-{if $loginlid->hasPermission('P_CORVEE_MOD')}
+{if LoginLid::instance()->hasPermission('P_CORVEE_MOD')}
 <div id="beheer-taken-menu">		
-	{if $loginlid->hasPermission('P_MAAL_MOD')}
+	{if LoginLid::instance()->hasPermission('P_MAAL_MOD')}
 	<div class="block">
 		<h1>Beheer</h1>
 		{assign var="link" value="/maaltijdenbeheer"}
@@ -27,7 +27,7 @@
 		<div class="item{if $instellingen->get('taken', 'url') === $link} active{/if}">»
 			<a href="{$link}" title="Beheer abonnementen">Abonnementen</a>
 		</div>
-	{if $loginlid->hasPermission('P_MAAL_SALDI')}
+	{if LoginLid::instance()->hasPermission('P_MAAL_SALDI')}
 		{assign var="link" value="/maaltijdenmaalciesaldi"}
 		<div class="item{if $instellingen->get('taken', 'url') === $link} active{/if}">»
 			<a href="{$link}" title="Beheer MaalCie saldi">MaalCie saldi</a>

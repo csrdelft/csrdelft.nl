@@ -68,11 +68,10 @@ class ProfielContent extends TemplateView {
 		$this->smarty->assign('boeken', Catalogus::getBoekenByUid($this->lid->getUid(), 'eigendom'));
 		$this->smarty->assign('gerecenseerdeboeken', Catalogus::getBoekenByUid($this->lid->getUid(), 'gerecenseerd'));
 
-		$loginlid = LoginLid::instance();
-		$this->smarty->assign('isAdmin', $loginlid->hasPermission('P_ADMIN'));
+		$this->smarty->assign('isAdmin', LoginLid::instance()->hasPermission('P_ADMIN'));
 		//TODO check role vs permission R_BESTUUR
-		$this->smarty->assign('isBestuur', $loginlid->hasPermission('R_BESTUUR'));
-		$this->smarty->assign('isLidMod', $loginlid->hasPermission('P_LEDEN_MOD'));
+		$this->smarty->assign('isBestuur', LoginLid::instance()->hasPermission('R_BESTUUR'));
+		$this->smarty->assign('isLidMod', LoginLid::instance()->hasPermission('P_LEDEN_MOD'));
 
 		//eigen profiel niet cachen, dan krijgen we namelijk rare dingen
 		//dat we andermans saldo's zien enzo

@@ -62,8 +62,7 @@ require_once 'lid/loginlid.class.php';
 
 switch (constant('MODE')) {
 	case 'ONDERHOUD':
-		$loginlid = LoginLid::instance();
-		if (!$loginlid->hasPermission('P_ADMIN')) {
+		if (!LoginLid::instance()->hasPermission('P_ADMIN')) {
 			header('location: ' . CSR_ROOT . '/tools/onderhoud.html');
 			exit;
 		}
@@ -101,13 +100,12 @@ switch (constant('MODE')) {
 		}
 		// database & lid initialiseren...
 		$db = MySQL::instance();
-		$loginlid = LoginLid::instance();
 		break;
 	/*
 	  case 'BOT':
 	  case 'CLI':
 	  $db = MySQL::instance();
-	  //TODO: voor bot & cli blijft het nog even $lid ipv $loginlid, nog geen zin om dat allemaal aan te passen.
+	  //TODO: voor bot & cli blijft het nog even $lid ipv LoginLid::instance(), nog geen zin om dat allemaal aan te passen.
 	  $lid = LoginLid::instance();
 	  break;
 	 */

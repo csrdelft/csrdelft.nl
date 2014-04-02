@@ -58,11 +58,10 @@ class Forum{
 	}
 
 	private static function getCategorieClause(){
-		$loginlid=LoginLid::instance();
 
 		$cats=array();
 		foreach(ForumCategorie::getAll() as $cat){
-			if($loginlid->hasPermission($cat['rechten_read'], $token_authorizable=true)){
+			if(LoginLid::instance()->hasPermission($cat['rechten_read'], $token_authorizable=true)){
 				$cats[]='topic.categorie='.$cat['id'];
 			}
 

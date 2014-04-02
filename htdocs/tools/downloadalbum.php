@@ -2,7 +2,7 @@
 require_once 'configuratie.include.php';
 require_once 'fotoalbum.class.php';
 
-if(!$loginlid->hasPermission('P_LOGGED_IN')){
+if(!LoginLid::instance()->hasPermission('P_LOGGED_IN')){
         header('location: '.CSR_ROOT);
         exit;
 }

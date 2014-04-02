@@ -85,8 +85,7 @@ class SavedQuery {
 	//Query's mogen worden weergegeven als de permissiestring toegelaten wordt door 
 	//Lid::hasPermission()' of als gebruiker P_ADMIN heeft.
 	public static function magWeergeven($permissie) {
-		$loginlid = LoginLid::instance();
-		return $loginlid->hasPermission($permissie) OR $loginlid->hasPermission('P_ADMIN');
+		return LoginLid::instance()->hasPermission($permissie) OR LoginLid::instance()->hasPermission('P_ADMIN');
 	}
 
 	public function magBekijken() {

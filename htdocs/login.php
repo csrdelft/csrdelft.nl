@@ -12,7 +12,7 @@ if (isset($_POST['url']) and preg_match("/^[-\w?&=.\/]+$/", $_POST['url'])
 
 	$checkip = isset($_POST['checkip']) and $_POST['checkip'] == 'true';
 
-	if ($loginlid->login(strval($_POST['user']), strval($_POST['pass']), $checkip)) {
+	if (LoginLid::instance()->login(strval($_POST['user']), strval($_POST['pass']), $checkip)) {
 		header("Location: ". CSR_SERVER . $_POST['url']);
 	} else {
 		if($_POST['user']=='aquifer' OR $_POST['user']=='0801'){

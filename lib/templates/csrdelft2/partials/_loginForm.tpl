@@ -1,12 +1,12 @@
-{if $loginlid->hasPermission('P_LOGGED_IN') }
+{if LoginLid::instance()->hasPermission('P_LOGGED_IN') }
 <p>
 	<a href="/instellingen/" class="instellingen no-line" title="Webstekinstellingen">{icon get="instellingen"}</a>
-	{if $loginlid->isSued()}
-		<a href="/endsu/" style="color: red;">{$loginlid->getSuedFrom()->getNaamLink('civitas', 'link')} als</a><br />�
+	{if LoginLid::instance()->isSued()}
+		<a href="/endsu/" style="color: red;">{LoginLid::instance()->getSuedFrom()->getNaamLink('civitas', 'link')} als</a><br />�
 	{/if}
-	{$loginlid->getUid()|csrnaam}
+	{LoginLid::instance()->getUid()|csrnaam}
 	<a href="/logout.php">log&nbsp;uit</a><br />
-		{foreach from=$loginlid->getLid()->getSaldi() item=saldo}
+		{foreach from=LoginLid::instance()->getLid()->getSaldi() item=saldo}
 				{$saldo.naam}: &euro; {$saldo.saldo|number_format:2:",":"."} <br />
 		{/foreach}
 

@@ -47,7 +47,7 @@ corvee_rooster.tpl	|	P.W.G. Brussee (brussee@live.nl)
 				{table_foreach from=$taken inner=rows item=taak table_attr='class="taken-rooster"' cols=2}
 			</td>
 			{if $taak->getLidId()}
-				{if $taak->getLidId() === $loginlid->getUid()} 
+				{if $taak->getLidId() === LoginLid::instance()->getUid()} 
 					{assign var="class" value="taak-self"}
 				{else}
 					{assign var="class" value=""}
@@ -57,7 +57,7 @@ corvee_rooster.tpl	|	P.W.G. Brussee (brussee@live.nl)
 			{/if}
 			<td class="taak {$class}">
 				{if $taak->getLidId()}
-					{if $taak->getLidId() === $loginlid->getUid()} 
+					{if $taak->getLidId() === LoginLid::instance()->getUid()} 
 						{* icon get="arrow_switch" title="Ruilen" *}
 					{/if}
 					{$taak->getLid()->getNaamLink($instellingen->get('corvee', 'weergave_ledennamen_corveerooster'), $instellingen->get('corvee', 'weergave_link_ledennamen'))}

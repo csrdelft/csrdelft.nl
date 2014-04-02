@@ -1,7 +1,7 @@
 <?php
 
 /*
- * class.loginlid.php	| 	Jan Pieter Waagmeester (jieter@jpwaag.com)
+ * loginlid.class.php	| 	Jan Pieter Waagmeester (jieter@jpwaag.com)
  *
  * Bewaart het huidige ingeloggede lid, inloggen, uitloggen, rechten.
  *

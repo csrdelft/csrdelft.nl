@@ -17,7 +17,7 @@
 
 require_once 'configuratie.include.php';
 
-if(!($loginlid->hasPermission('P_ADMIN') || $loginlid->hasPermission('P_MAAL_MOD'))){
+if(!(LoginLid::instance()->hasPermission('P_ADMIN') || LoginLid::instance()->hasPermission('P_MAAL_MOD'))){
 	header('location: '.CSR_ROOT);
 	exit;
 }

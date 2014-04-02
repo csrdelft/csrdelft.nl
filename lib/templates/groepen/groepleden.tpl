@@ -24,7 +24,7 @@
 		{foreach from=$groep->getLeden() item=groeplid}
 			<tr>
 				<td>{$groeplid.uid|csrnaam:'civitas'}</td>
-				{if $groep->magBewerken() OR ($loginlid->getUid()==$groeplid.uid AND ($groep->getToonFuncties()=='tonen' OR $groep->getToonFuncties()=='verbergen'))}
+				{if $groep->magBewerken() OR (LoginLid::instance()->getUid()==$groeplid.uid AND ($groep->getToonFuncties()=='tonen' OR $groep->getToonFuncties()=='verbergen'))}
 					<td id="bewerk_{$groep->getId()}|{$groeplid.uid}" class="inline_edit">
 						<span class="text">
 							{foreach from=$groeplid.functie item=glfunctie name=glfunctie}
@@ -54,7 +54,7 @@
 						</em></td>
 					{/if}
 				{/if}
-				{if $groep->magBewerken() OR $loginlid->getUid()==$groeplid.uid}
+				{if $groep->magBewerken() OR LoginLid::instance()->getUid()==$groeplid.uid}
 					<td>
 					{if in_array($groep->getTypeId(), array(2, 3)) AND $groep->getStatus()=='ht'}{* maak lid ot voor huizen/onderverenigingen. Dit kunnen leden ook bij zichzelf doen. *}
 						<a href="/actueel/groepen/{$groep->getType()->getNaam()}/{$groep->getId()}/maakLidOt/{$groeplid.uid}" title="Verplaats lid naar o.t.-groep" 
@@ -62,7 +62,7 @@
 							&raquo;
 						</a>
 					{/if}
-					{if $groep->isAdmin() OR $groep->isEigenaar() OR $groeplid.uid!=$loginlid->getUid()} {* We kunnen onzelf niet uit een groep gooien gooien *}
+					{if $groep->isAdmin() OR $groep->isEigenaar() OR $groeplid.uid!=LoginLid::instance()->getUid()} {* We kunnen onzelf niet uit een groep gooien gooien *}
 						<a href="/actueel/groepen/{$groep->getType()->getNaam()}/{$groep->getId()}/verwijderLid/{$groeplid.uid}" title="Verwijder lid uit groep">X</a>
 					{/if}
 					</td>
@@ -72,7 +72,7 @@
 	</table>
 {/if}
 {* We geven nog even even een aanmeldding weer als de groep aanmeldbaar is. *}
-{if $groep->isAanmeldbaar() AND !$groep->isLid() AND $loginlid->hasPermission('P_LOGGED_IN')}
+{if $groep->isAanmeldbaar() AND !$groep->isLid() AND LoginLid::instance()->hasPermission('P_LOGGED_IN')}
 	<div class="aanmelden">
 		{if $groep->magAanmelden()}
 			{if $groep->getToonFuncties()=='niet' OR $groep->getToonFuncties()=='tonenzonderinvoer'}

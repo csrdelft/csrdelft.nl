@@ -20,7 +20,6 @@ class CsrSmarty extends Smarty {
 
 		// frequently used things
 		$this->assign('instellingen', Instellingen::instance());
-		$this->assign('loginlid', LoginLid::instance());
 		$this->assign('CSR_PICS', CSR_PICS);
 	}
 

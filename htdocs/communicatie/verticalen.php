@@ -7,7 +7,7 @@ require_once 'verticalecontent.class.php';
 
 
 
-if($loginlid->hasPermission('P_LEDEN_READ')) {
+if(LoginLid::instance()->hasPermission('P_LEDEN_READ')) {
 	$midden = new VerticalenContent();
 
 	if(isset($_GET['email'])){

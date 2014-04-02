@@ -22,7 +22,7 @@ require_once 'lid/profiel.class.php';
 if (isset($_GET['uid'])) {
 	$uid = $_GET['uid'];
 } else {
-	$uid = $loginlid->getUid();
+	$uid = LoginLid::instance()->getUid();
 }
 
 //welke actie gaan we doen?
@@ -40,7 +40,7 @@ if (isset($_GET['a'])) {
 }
 
 
-if (!($loginlid->hasPermission('P_LEDEN_READ') or $loginlid->hasPermission('P_OUDLEDEN_READ'))) {
+if (!(LoginLid::instance()->hasPermission('P_LEDEN_READ') or LoginLid::instance()->hasPermission('P_OUDLEDEN_READ'))) {
 	require_once 'MVC/model/CmsPaginaModel.class.php';
 	require_once 'MVC/view/CmsPaginaView.class.php';
 	$midden = new CmsPaginaView(CmsPaginaModel::instance()->getPagina('geentoegang'));
@@ -68,8 +68,8 @@ if (!($loginlid->hasPermission('P_LEDEN_READ') or $loginlid->hasPermission('P_OU
 			//maak van een standaard statusstring van de input
 			$status = 'S_' . strtoupper($status);
 			if (!
-					($loginlid->hasPermission('P_ADMIN,P_LEDEN_MOD') OR
-					($status == 'S_NOVIET' AND $loginlid->hasPermission('groep:novcie')))
+					(LoginLid::instance()->hasPermission('P_ADMIN,P_LEDEN_MOD') OR
+					($status == 'S_NOVIET' AND LoginLid::instance()->hasPermission('groep:novcie')))
 			) {
 
 				// nieuwe leden mogen worden aangemaakt door P_ADMIN,P_LEDEN_MOD,
@@ -91,7 +91,7 @@ if (!($loginlid->hasPermission('P_LEDEN_READ') or $loginlid->hasPermission('P_OU
 			}
 			break;
 		case 'wijzigstatus':
-			if (!$loginlid->hasPermission('P_ADMIN,P_LEDEN_MOD')) {
+			if (!LoginLid::instance()->hasPermission('P_ADMIN,P_LEDEN_MOD')) {
 				invokeRefresh('/communicatie/profiel/', 'U mag lidstatus niet aanpassen');
 			}
 			$profiel = new ProfielStatus($uid, $actie);
@@ -117,7 +117,7 @@ if (!($loginlid->hasPermission('P_LEDEN_READ') or $loginlid->hasPermission('P_OU
 			}
 			break;
 		case 'wachtwoord':
-			if ($loginlid->hasPermission('P_ADMIN')) {
+			if (LoginLid::instance()->hasPermission('P_ADMIN')) {
 				if (Profiel::resetWachtwoord($uid)) {
 					$melding = array('Nieuw wachtwoord met succes verzonden.', 1);
 				} else {
@@ -138,8 +138,8 @@ if (!($loginlid->hasPermission('P_LEDEN_READ') or $loginlid->hasPermission('P_OU
 
 		/** @noinspection PhpMissingBreakStatementInspection */
 		case 'rssToken':
-			if ($uid == $loginlid->getUid()) {
-				$loginlid->getToken();
+			if ($uid == LoginLid::instance()->getUid()) {
+				LoginLid::instance()->getToken();
 				header('location: ' . CSR_ROOT . 'communicatie/profiel/' . $uid . '#forum');
 				exit;
 			}
