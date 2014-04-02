@@ -22,8 +22,8 @@ class ForumController extends Controller {
 			$this->performAction($this->getParams(3));
 		} catch (Exception $e) {
 			setMelding($e->getMessage(), -1);
-			$this->action = 'zoeken';
-			$this->performAction($this->getParams(3));
+			$this->action = 'forum';
+			$this->performAction(array());
 		}
 	}
 
@@ -45,7 +45,7 @@ class ForumController extends Controller {
 			case 'wacht':
 				return !$this->isPosted();
 
-			//case 'zoeken':
+			case 'zoeken':
 			case 'posten':
 			case 'bewerken':
 			case 'verwijderen':
