@@ -4,7 +4,7 @@
 		<input type="text" name="zoeken" value="zoeken in forum" onfocus="this.value = '';" />
 		{if $deel->magModereren()}
 			<div id="btn_mod">
-				<a class="knop" title="Moderatie-functies uitklappen" onclick="$('#modereren').slideDown();
+				<a class="knop" title="Moderatie-functies weergeven" onclick="$('#modereren').slideDown();
 						$('#btn_mod').toggle();
 						$('#forumtabel a.forummodknop').fadeIn();">{icon get="bullet_wrench"} Modereren&nbsp;</a>
 			</div>

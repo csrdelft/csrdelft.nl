@@ -38,6 +38,21 @@
 #forumtabel a.forummodknop{
 	display: none;
 }
+span#modsluiten{
+	display: block;
+	width: 18px; height: 18px;
+	float: right;
+	margin: 0; padding: 0;
+	font-weight: bold; font-size: 14px;
+	text-align: center;	vertical-align: middle;
+	color: black;
+	cursor: pointer;
+	border: 1px solid #fff;
+}
+span#modsluiten:hover{
+	border: 1px solid #000;
+	background-color: #eee;
+}
 #forumtabel tr td.filtered a.weergeeflink{
 	display: block;
 	background-color: #ddd;
