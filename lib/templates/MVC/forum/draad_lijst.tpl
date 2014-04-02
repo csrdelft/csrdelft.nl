@@ -1,10 +1,9 @@
 <tr class="forumdraad kleur{cycle values="0,1"}">
 	<td class="titel">
-		{*ForumDradenModel::instance()->getPaginaVoorDraad($draad)*}
 		{if $draad->wacht_goedkeuring}
 			[ter goedkeuring...]
 		{/if}
-		<a href="/forum/onderwerp/{$draad->draad_id}"{if !$draad->alGelezen()} class="updatedTopic"{/if}>
+		<a id="{$draad->draad_id}" href="/forum/onderwerp/{$draad->draad_id}"{if !$draad->alGelezen()} class="updatedTopic"{/if}>
 			{if $draad->gesloten}
 				<img src="{icon get="slotje" notag=true}" title="Dit onderwerp is gesloten, u kunt niet meer reageren" alt="sluiten" />&nbsp;&nbsp;
 			{elseif $draad->belangrijk}

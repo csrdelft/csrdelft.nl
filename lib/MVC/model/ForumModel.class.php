@@ -219,13 +219,9 @@ class ForumDradenModel extends PersistenceModel implements Paging {
 		}
 		if ($this->aantal_plakkerig === null) {
 			$this->aantal_plakkerig = $this->count('forum_id = ? AND plakkerig = TRUE AND wacht_goedkeuring = FALSE AND verwijderd = FALSE', array($draad->forum_id));
-
-			echo $this->aantal_plakkerig . ' = aantal plakkerig<br />';
 		}
-		$count = $this->count('forum_id = ? AND draad_id > ? AND plakkerig = FALSE AND wacht_goedkeuring = FALSE AND verwijderd = FALSE', array($draad->forum_id, $draad->draad_id));
-		echo $count . '<br />';
-
-		return $count / $this->per_pagina;
+		$count = 1 + $this->aantal_plakkerig + $this->count('forum_id = ? AND laatst_gewijzigd > ? AND plakkerig = FALSE AND wacht_goedkeuring = FALSE AND verwijderd = FALSE', array($draad->forum_id, $draad->laatst_gewijzigd));
+		return ceil($count / $this->per_pagina);
 	}
 
 	public function hertellenVoorDeel(ForumDeel $deel) {
