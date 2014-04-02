@@ -171,7 +171,7 @@ class ForumController extends Controller {
 	 */
 	public function reactie($id) {
 		$post = ForumPostsModel::instance()->getForumPost((int) $id);
-		$this->forumdraad($post->draad_id, ForumPostsModel::instance()->getPaginaVoorPost($post));
+		$this->draad($post->draad_id, ForumPostsModel::instance()->getPaginaVoorPost($post));
 	}
 
 	/**
@@ -214,7 +214,7 @@ class ForumController extends Controller {
 		if ($property === 'verwijderd') {
 			ForumDradenModel::instance()->hertellenVoorDeel($deel);
 		}
-		$this->forumdraad($draad->draad_id);
+		$this->draad($draad->draad_id);
 	}
 
 	/**
