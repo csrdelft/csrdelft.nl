@@ -35,17 +35,56 @@ class ForumModel extends PersistenceModel {
 		return $categorien;
 	}
 
-	public function zoeken($query, $categorie_id = null) {
-		if (!preg_match('/^[a-zA-Z0-9 \-\+\'\"\.]*$/', $query)) {
-			setMelding('Ongeldige tekens in zoekopdracht', -1);
-			return false;
+	public function zoeken($query) {
+
+		$queryparts = explode(' ', $query);
+		foreach ($queryparts as $i => $part) {
+			$queryparts[$i] = '%' . $part . '%';
 		}
-		$draden = array_key_property('draad_id', ForumDradenModel::instance()->find('MATCH (titel) AGAINST (? IN NATURAL LANGUAGE MODE)', array($query)));
-		foreach ($draden as $draad) {
-			$eerste_posts[] = ForumPostsModel::instance()->find('draad_id = ?', array($draad->draad_id), 'post_id DESC', 1);
+		$count = count($queryparts);
+		if ($count < 1) {
+			return array();
 		}
-		$posts = ForumPostsModel::instance()->find('MATCH (tekst) AGAINST (? IN NATURAL LANGUAGE MODE)', array($query));
-		return array_merge($eerste_posts, $posts);
+
+		// titel draadje
+		$like = implode(' OR ', array_fill(0, $count, 'd.titel LIKE ?'));
+		$gevonden_draden = array_group_by('forum_id', ForumDradenModel::instance()->find($like, $queryparts));
+
+		var_dump($gevonden_draden);
+
+		$eerste_posts = array();
+		foreach ($gevonden_draden as $draad) {
+			$eerste_posts[$draad->draad_id] = ForumPostsModel::instance()->find('draad_id = ?', array($draad->draad_id), 'post_id DESC', 1);
+		}
+
+		// tekst posts
+		$like = implode(' OR ', array_fill(0, $count, 'tekst LIKE ?'));
+		$gevonden_posts = array_group_by('draad_id', ForumPostsModel::instance()->find($like, $queryparts));
+		$draden_erbij = array_group_by('forum_id', ForumDradenModel::instance()->getForumDradenById(array_keys($gevonden_posts)));
+
+		// resultaten samenvoegen
+		$postsByDraad = $eerste_posts + $gevonden_posts;
+		$dradenByDeel = $gevonden_draden + $draden_erbij;
+		$delenById = array_key_property('forum_id', ForumDelenModel::instance()->getForumDelenById(array_keys($dradenByDeel)));
+
+		// filteren met rechten
+		foreach ($delenById as $forum_id => $deel) {
+			if ($deel->magLezen()) {
+				$deel->setForumDraden($dradenByDeel[$deel->forum_id]);
+			} else {
+				unset($delenById[$forum_id]);
+			}
+		}
+		foreach ($dradenByDeel as $forum_id => $dradenByDeel) {
+			if (array_key_exists($forum_id, $delenById)) {
+				foreach ($dradenByDeel as $draad) {
+					$draad->setForumPosts($postsByDraad[$draad->draad_id]);
+				}
+			} else {
+				unset($dradenByDeel[$forum_id]);
+			}
+		}
+		return $delenById;
 	}
 
 }

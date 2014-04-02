@@ -40,7 +40,7 @@ class ForumController extends Controller {
 			case 'forumwacht':
 				return !$this->isPosted();
 
-			case 'forumzoeken':
+			//TODO: case 'forumzoeken':
 			case 'forumposten':
 			case 'forumpostbewerken':
 			case 'forumpostverwijderen':
