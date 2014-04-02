@@ -17,8 +17,14 @@ class ForumController extends Controller {
 		if (!array_key_exists('forum_concept', $_SESSION)) {
 			$_SESSION['forum_concept'] = '';
 		}
-		$this->action = $this->getParam(2);
-		$this->performAction($this->getParams(3));
+		try {
+			$this->action = $this->getParam(2);
+			$this->performAction($this->getParams(3));
+		} catch (Exception $e) {
+			setMelding($e->getMessage(), -1);
+			$this->action = 'zoeken';
+			$this->performAction($this->getParams(3));
+		}
 	}
 
 	/**
@@ -39,7 +45,7 @@ class ForumController extends Controller {
 			case 'wacht':
 				return !$this->isPosted();
 
-			case 'zoeken':
+			//case 'zoeken':
 			case 'posten':
 			case 'bewerken':
 			case 'verwijderen':
@@ -92,8 +98,12 @@ class ForumController extends Controller {
 	/**
 	 * Tonen van alle posts die wachten op goedkeuring.
 	 */
-	public function zoeken() {
-		$query = filter_input(INPUT_POST, 'zoeken', FILTER_SANITIZE_SPECIAL_CHARS);
+	public function zoeken($query = null) {
+		if ($query === null) {
+			$query = filter_input(INPUT_POST, 'zoeken', FILTER_SANITIZE_SPECIAL_CHARS);
+		} else {
+			$query = filter_var($query, FILTER_SANITIZE_SPECIAL_CHARS);
+		}
 		$body = new ForumResultatenView(ForumModel::instance()->zoeken($query), 'Zoekresultaten voor: ' . $query);
 		$this->view = new CsrLayoutPage($body);
 		$this->view->addStylesheet('forum.css');
