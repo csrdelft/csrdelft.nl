@@ -420,7 +420,7 @@ class ForumPostsModel extends PersistenceModel implements Paging {
 	}
 
 	public function getPaginaVoorPost(ForumPost $post) {
-		$count = $this->count('draad_id = ? AND post_id < ? AND wacht_goedkeuring = FALSE AND verwijderd = FALSE', array($post->draad_id, $post->post_id));
+		$count = 1 + $this->count('draad_id = ? AND post_id < ? AND wacht_goedkeuring = FALSE AND verwijderd = FALSE', array($post->draad_id, $post->post_id));
 		return ceil($count / $this->per_pagina);
 	}
 
