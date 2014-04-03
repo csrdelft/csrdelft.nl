@@ -61,6 +61,7 @@ class ForumDeelView extends TemplateView {
 	public function __construct(ForumDeel $deel) {
 		parent::__construct($deel);
 		$this->smarty->assign('deel', $this->model);
+		$this->smarty->assign('categorien', ForumModel::instance()->getForum());
 	}
 
 	public function getTitel() {
