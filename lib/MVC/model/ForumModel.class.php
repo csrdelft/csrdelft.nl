@@ -469,8 +469,8 @@ class ForumPostsModel extends PersistenceModel implements Paging {
 			$orm = self::orm;
 			$where = 'post_id = (
 	SELECT MAX(post_id)
-	FROM ' . $orm::getTableName() . ' AS t
-	WHERE t.draad_id = draad_id
+	FROM ' . $orm::getTableName() . ' AS subquery
+	WHERE ' . $orm::getTableName() . '.draad_id = subquery.draad_id
 	AND ' . $where . '
 )';
 		}
