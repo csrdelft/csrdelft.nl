@@ -226,7 +226,7 @@ class ForumDradenModel extends PersistenceModel implements Paging {
 		if (!array_key_exists($forum_id, $this->aantal_paginas)) {
 			$this->aantal_paginas[$forum_id] = ceil($this->count('forum_id = ? AND wacht_goedkeuring = FALSE AND verwijderd = FALSE', array($forum_id)) / $this->per_pagina);
 		}
-		return $this->aantal_paginas[$forum_id];
+		return max(1, $this->aantal_paginas[$forum_id]);
 	}
 
 	public function getPaginaVoorDraad(ForumDraad $draad) {
@@ -242,7 +242,7 @@ class ForumDradenModel extends PersistenceModel implements Paging {
 
 	public function hertellenVoorDeel(ForumDeel $deel) {
 		$orm = self::orm;
-		$result = Database::sqlSelect('SUM(aantal_posts)', $orm::getTableName(), 'forum_id = ?', array($deel->forum_id));
+		$result = Database::sqlSelect(array('SUM(aantal_posts)'), $orm::getTableName(), 'forum_id = ?', array($deel->forum_id));
 		$deel->aantal_posts = (int) $result->fetchColumn();
 		$deel->aantal_draden = $this->count('forum_id = ? AND wacht_goedkeuring = FALSE AND verwijderd = FALSE', array($deel->forum_id));
 		ForumDelenModel::instance()->update($deel);
@@ -416,7 +416,7 @@ class ForumPostsModel extends PersistenceModel implements Paging {
 		if (!array_key_exists($draad_id, $this->aantal_paginas)) {
 			$this->aantal_paginas[$draad_id] = ceil($this->count('draad_id = ? AND wacht_goedkeuring = FALSE AND verwijderd = FALSE', array($draad_id)) / $this->per_pagina);
 		}
-		return $this->aantal_paginas[$draad_id];
+		return max(1, $this->aantal_paginas[$draad_id]);
 	}
 
 	public function getPaginaVoorPost(ForumPost $post) {
@@ -460,9 +460,10 @@ class ForumPostsModel extends PersistenceModel implements Paging {
 	 * 
 	 * @param string $uid
 	 * @param int $aantal
+	 * @param int $draad_distinct TODO
 	 * @return array(ForumPost[], ForumDraad[])
 	 */
-	public function getRecenteForumPostsVanLid($uid, $aantal) {
+	public function getRecenteForumPostsVanLid($uid, $aantal, $draad_distinct = false) {
 		$posts = $this->find('lid_id = ? AND wacht_goedkeuring = FALSE AND verwijderd = FALSE', array($uid), 'post_id DESC', $aantal);
 		$draden_ids = array_keys(array_key_property('draad_id', $posts, false));
 		$draden = ForumDradenModel::instance()->getForumDradenById($draden_ids);
