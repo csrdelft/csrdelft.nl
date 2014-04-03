@@ -39,6 +39,12 @@ jQuery(document).ready(function($) {
 			}
 		});
 	});
+
+    //naar juiste forumreactie scrollen door hash toe te voegen
+    if(!window.location.hash && window.location.pathname.substr(0, 15) == '/forum/reactie/' ) {
+        var reactieid = parseInt(window.location.pathname.substr(15), 10);
+        window.location.hash = '#' + reactieid;
+    }
 });
 var orig = null;
 function togglePasfotos(uids, div) {
