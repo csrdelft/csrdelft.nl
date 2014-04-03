@@ -177,7 +177,7 @@ class ForumResultatenView extends TemplateView {
 		$this->smarty->assign('delen', $delen);
 		if ($query !== null) {
 			$this->smarty->assign('query', $query);
-			$this->titel = 'Zoekresultaten voor: "{$query}"';
+			$this->titel = 'Zoekresultaten voor: "' . $query . '"';
 		} else {
 			$this->titel = 'Wacht op goedkeuring';
 		}
