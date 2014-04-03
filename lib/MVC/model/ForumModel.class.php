@@ -334,7 +334,7 @@ class ForumDradenModel extends PersistenceModel implements Paging {
 		return array_key_property('draad_id', $this->find('d.draad_id IN (' . $in . ')', $ids));
 	}
 
-	public function maakForumDraad($forum_id, $titel) {
+	public function maakForumDraad($forum_id, $titel, $wacht_goedkeuring) {
 		$draad = new ForumDraad();
 		$draad->forum_id = (int) $forum_id;
 		$draad->lid_id = LoginLid::instance()->getUid();
@@ -346,7 +346,7 @@ class ForumDradenModel extends PersistenceModel implements Paging {
 		$draad->aantal_posts = 0;
 		$draad->gesloten = false;
 		$draad->verwijderd = false;
-		$draad->wacht_goedkeuring = !LoginLid::mag('P_LOGGED_IN');
+		$draad->wacht_goedkeuring = $wacht_goedkeuring;
 		$draad->plakkerig = false;
 		$draad->belangrijk = false;
 		$draad->draad_id = (int) ForumDradenModel::instance()->create($draad);

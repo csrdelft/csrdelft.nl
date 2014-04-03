@@ -279,8 +279,7 @@ class ForumController extends Controller {
 				$this->geentoegang();
 			}
 		} else { // post in nieuw draadje
-			$draad = ForumDradenModel::instance()->maakForumDraad($deel->forum_id, trim(filter_input(INPUT_POST, 'titel', FILTER_SANITIZE_STRING)));
-			$deel->aantal_draden++;
+			$draad = ForumDradenModel::instance()->maakForumDraad($deel->forum_id, trim(filter_input(INPUT_POST, 'titel', FILTER_SANITIZE_STRING)), $wacht_goedkeuring);
 		}
 		$post = ForumPostsModel::instance()->maakForumPost($draad->draad_id, $tekst, $_SERVER['REMOTE_ADDR'], $wacht_goedkeuring);
 		$_SESSION['forum_laatste_post_tekst'] = $tekst;
