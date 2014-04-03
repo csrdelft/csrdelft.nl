@@ -260,6 +260,7 @@ class ForumDradenModel extends PersistenceModel implements Paging {
 	}
 
 	public function zoeken($query) {
+		$this->per_pagina = (int) LidInstellingen::get('forum', 'zoekresultaten');
 		$orm = self::orm;
 		$columns = $orm::getFields();
 		$columns[] = 'MATCH(titel) AGAINST (? IN NATURAL LANGUAGE MODE) AS score';
@@ -447,6 +448,7 @@ class ForumPostsModel extends PersistenceModel implements Paging {
 	}
 
 	public function zoeken($query) {
+		$this->per_pagina = (int) LidInstellingen::get('forum', 'zoekresultaten');
 		$orm = self::orm;
 		$columns = $orm::getFields();
 		$columns[] = 'MATCH(tekst) AGAINST (? IN NATURAL LANGUAGE MODE) AS score';

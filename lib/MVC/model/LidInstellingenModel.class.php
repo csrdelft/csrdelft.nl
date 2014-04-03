@@ -49,11 +49,11 @@ class LidInstellingen extends PersistenceModel {
 			'minion' => array('Minion', 'enum', array('ja', 'nee'), 'nee')
 		),
 		'forum' => array(
-			'draden_per_pagina' => array('Draadjes per pagina', 'int', array(5, 100), 25),
-			'posts_per_pagina' => array('Berichten per pagina', 'int', array(5, 100), 25),
+			'draden_per_pagina' => array('Draadjes per pagina', 'int', array(5, 100), 20),
+			'posts_per_pagina' => array('Berichten per pagina', 'int', array(5, 100), 20),
 			'naamWeergave' => array('Naamweergave', 'enum', array('civitas', 'volledig', 'bijnaam', 'aaidrom'), 'civitas'),
 			'datumWeergave' => array('Datumweergave', 'enum', array('relatief', 'vast'), 'relatief'),
-			'zoekresultaten' => array('Zoekresultaten', 'int', array(10, 100), 40),
+			'zoekresultaten' => array('Zoekresultaten', 'int', array(5, 100), 20),
 			'toonpasfotos' => array('Pasfoto\'s standaard weergeven', 'enum', array('ja', 'nee'), 'ja'),
 			'filter2008' => array('Berichten van 2008 eerst verbergen', 'enum', array('ja', 'nee'), 'nee')
 		),
