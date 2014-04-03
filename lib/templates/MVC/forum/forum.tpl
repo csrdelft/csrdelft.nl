@@ -14,7 +14,7 @@
 				<th>{$cat->titel} <span class="forumcategorie-omschrijving">{$cat->omschrijving}</span></th>
 				<th>Onderwerpen</th>
 				<th>Berichten</th>
-				<th>Recent</th>
+				<th>Recente wijziging</th>
 			</tr>
 		</thead>
 		<tbody>

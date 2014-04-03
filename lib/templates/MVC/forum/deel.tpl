@@ -17,7 +17,7 @@
 			<th>Titel</th>
 			<th>Reacties</th>
 			<th>Auteur</th>
-			<th>Recent</th>
+			<th>Recente wijziging</th>
 		</tr>
 	</thead>
 	<tbody>

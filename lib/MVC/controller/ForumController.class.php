@@ -193,6 +193,9 @@ class ForumController extends Controller {
 	 */
 	public function reactie($id) {
 		$post = ForumPostsModel::instance()->getForumPost((int) $id);
+		if ($post->verwijderd) {
+			setMelding('Deze reactie is verwijderd', 0);
+		}
 		$this->onderwerp($post->draad_id, ForumPostsModel::instance()->getPaginaVoorPost($post));
 	}
 
@@ -210,7 +213,7 @@ class ForumController extends Controller {
 		if (!$deel->magModereren()) {
 			$this->geentoegang();
 		}
-		if (in_array($property, array('verwijderd', 'gesloten', 'plakkerig', 'belangrijk'))) {
+		if (in_array($property, array('verwijderd', 'gesloten', 'plakkerig', 'belangrijk', 'eerste_post_plakkerig'))) {
 			$value = !$draad->$property;
 		} elseif ($property === 'forum_id') {
 			$value = (int) filter_input(INPUT_POST, $property, FILTER_SANITIZE_NUMBER_INT);
@@ -260,7 +263,7 @@ class ForumController extends Controller {
 		}
 		// voorkomen dubbelposts
 		if (array_key_exists('forum_laatste_post_tekst', $_SESSION) AND $_SESSION['forum_laatste_post_tekst'] === $tekst) {
-			invokeRefresh('/forum/deel/' . $deel->forum_id, 'Bericht is al gepost!', 0);
+			invokeRefresh('/forum/deel/' . $deel->forum_id, 'Uw reactie is al geplaatst', 0);
 		}
 		$wacht_goedkeuring = false;
 		if (!LoginLid::mag('P_LOGGED_IN')) {

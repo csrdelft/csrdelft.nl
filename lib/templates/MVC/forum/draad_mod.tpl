@@ -20,6 +20,10 @@
 					</a>
 				</td>
 				<td>
+					<a href="/forum/wijzigen/{$draad->draad_id}/eerste_post_plakkerig" class="knop" title="Verander plakkerigheid van eerste post">
+						{icon get="note"} maak eerste post {if $draad->eerste_post_plakkerig}<strong>niet</strong> {/if}plakkerig
+					</a>
+					<br /><br />
 					<form action="/forum/wijzigen/{$draad->draad_id}/forum_id" method="post">
 						<label for="forum_id">Verplaats naar: </label>
 						<select name="forum_id">
@@ -33,7 +37,7 @@
 						</select>
 						<input type="submit" value="opslaan" />
 					</form>
-					<br /><br />
+					<br />
 					<form action="/forum/wijzigen/{$draad->draad_id}/titel" method="post">
 						<label for="titel">Titel aanpassen:</label>
 						<input type="text" name="titel" value="{$draad->titel}" style="width: 300px;" />

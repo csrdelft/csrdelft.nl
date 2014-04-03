@@ -109,7 +109,7 @@ class ForumDelenModel extends PersistenceModel {
 
 	public function getRecent() {
 		$deel = new ForumDeel();
-		$deel->titel = 'Recent';
+		$deel->titel = 'Recent gewijzigd';
 		$deel->setForumDraden(ForumDradenModel::instance()->getRecenteForumDraden(LidInstellingen::get('forum', 'zoekresultaten')));
 		return $deel;
 	}
@@ -441,7 +441,7 @@ class ForumPostsModel extends PersistenceModel implements Paging {
 		$posts = $this->find('draad_id = ? AND wacht_goedkeuring = FALSE AND verwijderd = FALSE', array($draad->draad_id), null, $this->per_pagina, ($this->pagina - 1) * $this->per_pagina);
 		if ($draad->eerste_post_plakkerig AND $this->pagina !== 1) {
 			$first_post = $this->find('draad_id = ? AND wacht_goedkeuring = FALSE AND verwijderd = FALSE', array($draad->draad_id), null, 1);
-			array_unshift($posts, $first_post);
+			array_unshift($posts, $first_post[0]);
 		}
 		// 2008 filter
 		if (LidInstellingen::get('forum', 'filter2008') == 'ja') {
