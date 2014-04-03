@@ -333,7 +333,7 @@ class ForumController extends Controller {
 		if ($rowcount !== 1) {
 			throw new Exception('Bewerken mislukt');
 		}
-		ForumDradenModel::instance()->setWanneerGelezenDoorLid($draad);
+		ForumDradenGelezenModel::instance()->setWanneerGelezenDoorLid($draad);
 		$this->view = new ForumPostView($post, $draad, $deel);
 	}
 
