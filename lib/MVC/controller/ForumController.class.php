@@ -134,14 +134,18 @@ class ForumController extends Controller {
 	 * Deelforum laten zien met draadjes in tabel.
 	 * 
 	 * @param int $id
-	 * @param int $pagina
+	 * @param int $pagina or 'laatste'
 	 */
 	public function deel($id, $pagina = 1) {
 		$deel = ForumDelenModel::instance()->getForumDeel((int) $id);
 		if (!$deel OR !$deel->magLezen()) { // geen exceptie om bestaan van forumdeel niet te verraden
 			$this->geentoegang();
 		}
-		ForumDradenModel::instance()->setHuidigePagina((int) $pagina); // lazy loading ForumDraad[]
+		if ($pagina === 'laatste') {
+			ForumDradenModel::instance()->setLaatstePagina($deel->forum_id); // lazy loading ForumDraad[]
+		} else {
+			ForumDradenModel::instance()->setHuidigePagina((int) $pagina, $deel->forum_id); // lazy loading ForumDraad[]
+		}
 		$body = new ForumDeelView($deel);
 		if (LoginLid::mag('P_LOGGED_IN')) {
 			$this->view = new CsrLayoutPage($body);
@@ -157,7 +161,7 @@ class ForumController extends Controller {
 	 * Forumdraadje laten zien met alle (zichtbare) posts.
 	 * 
 	 * @param int $id
-	 * @param int $pagina
+	 * @param int $pagina or 'laatste'
 	 */
 	public function onderwerp($id, $pagina = 1) {
 		$draad = ForumDradenModel::instance()->getForumDraad((int) $id);
@@ -166,7 +170,11 @@ class ForumController extends Controller {
 			$this->geentoegang();
 		}
 		ForumDradenGelezenModel::instance()->setWanneerGelezenDoorLid($draad);
-		ForumPostsModel::instance()->setHuidigePagina((int) $pagina); // lazy loading ForumPost[]
+		if ($pagina === 'laatste') {
+			ForumPostsModel::instance()->setLaatstePagina($draad->draad_id); // lazy loading ForumPost[]
+		} else {
+			ForumPostsModel::instance()->setHuidigePagina((int) $pagina, $draad->draad_id); // lazy loading ForumPost[]
+		}
 		$body = new ForumDraadView($draad, $deel);
 		if (LoginLid::mag('P_LOGGED_IN')) {
 			$this->view = new CsrLayoutPage($body);

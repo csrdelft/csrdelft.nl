@@ -50,10 +50,9 @@
 		{/if}
 	{/capture}
 {/strip}
-{assign var=paginas value=ForumPostsModel::instance()->getAantalPaginas($draad->draad_id)}
 <table id="forumtabel">
 	<tbody>
-		{if $paginas > 1}
+		{if ForumPostsModel::instance()->getAantalPaginas($draad->draad_id) > 1}
 			<tr class="tussenschot">
 				<td colspan="2"></td>
 			</tr>
@@ -63,7 +62,7 @@
 					<i>{$smarty.capture.magreageren}</i>
 					<div class="forum_paginering">
 						Pagina: {sliding_pager baseurl="/forum/onderwerp/"|cat:$draad->draad_id|cat:"/"
-									pagecount=$paginas curpage=ForumPostsModel::instance()->getHuidigePagina()}
+									pagecount=ForumPostsModel::instance()->getAantalPaginas($draad->draad_id) curpage=ForumPostsModel::instance()->getHuidigePagina()}
 					</div>
 				</td>
 			</tr>
@@ -84,13 +83,13 @@
 			</tr>
 		{/foreach}
 
-		{if $paginas > 1}
+		{if ForumPostsModel::instance()->getAantalPaginas($draad->draad_id) > 1}
 			<tr>
 				<td>&nbsp;</td>
 				<td>
 					<div class="forum_paginering">
 						Pagina: {sliding_pager baseurl="/forum/onderwerp/"|cat:$draad->draad_id|cat:"/"
-									pagecount=$paginas curpage=ForumPostsModel::instance()->getHuidigePagina()}
+									pagecount=ForumPostsModel::instance()->getAantalPaginas($draad->draad_id) curpage=ForumPostsModel::instance()->getHuidigePagina()}
 					</div>
 				</td>
 			</tr>

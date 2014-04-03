@@ -183,6 +183,11 @@ class ForumDradenModel extends PersistenceModel implements Paging {
 	 */
 	private $per_pagina;
 	/**
+	 * Totaal aantal paginas per forumdeel
+	 * @var int[]
+	 */
+	private $aantal_paginas;
+	/**
 	 * Aantal plakkerige draden
 	 * @var int
 	 */
@@ -192,25 +197,36 @@ class ForumDradenModel extends PersistenceModel implements Paging {
 		parent::__construct();
 		$this->pagina = 1;
 		$this->per_pagina = LidInstellingen::get('forum', 'draden_per_pagina');
+		$this->aantal_paginas = array();
 		$this->aantal_plakkerig = null;
-	}
-
-	public function getHuidigePagina() {
-		return $this->pagina;
-	}
-
-	public function setHuidigePagina($number) {
-		if ($number > 0) {
-			$this->pagina = (int) $number;
-		}
 	}
 
 	public function getAantalPerPagina() {
 		return $this->per_pagina;
 	}
 
+	public function getHuidigePagina() {
+		return $this->pagina;
+	}
+
+	public function setHuidigePagina($number, $forum_id) {
+		if (!is_int($number) OR $number < 1) {
+			$number = 1;
+		} elseif ($number > $this->getAantalPaginas($forum_id)) {
+			$number = $this->getAantalPaginas($forum_id);
+		}
+		$this->pagina = $number;
+	}
+
+	public function setLaatstePagina($forum_id) {
+		$this->pagina = $this->getAantalPaginas($forum_id);
+	}
+
 	public function getAantalPaginas($forum_id) {
-		return ceil($this->count('forum_id = ? AND wacht_goedkeuring = FALSE AND verwijderd = FALSE', array($forum_id)) / $this->per_pagina);
+		if (!array_key_exists($forum_id, $this->aantal_paginas)) {
+			$this->aantal_paginas[$forum_id] = ceil($this->count('forum_id = ? AND wacht_goedkeuring = FALSE AND verwijderd = FALSE', array($forum_id)) / $this->per_pagina);
+		}
+		return $this->aantal_paginas[$forum_id];
 	}
 
 	public function getPaginaVoorDraad(ForumDraad $draad) {
@@ -362,29 +378,45 @@ class ForumPostsModel extends PersistenceModel implements Paging {
 	 * @var int
 	 */
 	private $per_pagina;
+	/**
+	 * Totaal aantal paginas per forumdraad
+	 * @var int[]
+	 */
+	private $aantal_paginas;
 
 	protected function __construct() {
 		parent::__construct();
 		$this->pagina = 1;
 		$this->per_pagina = LidInstellingen::get('forum', 'posts_per_pagina');
-	}
-
-	public function getHuidigePagina() {
-		return $this->pagina;
-	}
-
-	public function setHuidigePagina($number) {
-		if ($number > 0) {
-			$this->pagina = (int) $number;
-		}
+		$this->aantal_paginas = array();
 	}
 
 	public function getAantalPerPagina() {
 		return $this->per_pagina;
 	}
 
+	public function getHuidigePagina() {
+		return $this->pagina;
+	}
+
+	public function setHuidigePagina($number, $draad_id) {
+		if (!is_int($number) OR $number < 1) {
+			$number = 1;
+		} elseif ($number > $this->getAantalPaginas($draad_id)) {
+			$number = $this->getAantalPaginas($draad_id);
+		}
+		$this->pagina = $number;
+	}
+
+	public function setLaatstePagina($draad_id) {
+		$this->pagina = $this->getAantalPaginas($draad_id);
+	}
+
 	public function getAantalPaginas($draad_id) {
-		return ceil($this->count('draad_id = ? AND wacht_goedkeuring = FALSE AND verwijderd = FALSE', array($draad_id)) / $this->per_pagina);
+		if (!array_key_exists($draad_id, $this->aantal_paginas)) {
+			$this->aantal_paginas[$draad_id] = ceil($this->count('draad_id = ? AND wacht_goedkeuring = FALSE AND verwijderd = FALSE', array($draad_id)) / $this->per_pagina);
+		}
+		return $this->aantal_paginas[$draad_id];
 	}
 
 	public function getPaginaVoorPost(ForumPost $post) {
