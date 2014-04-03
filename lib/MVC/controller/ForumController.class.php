@@ -234,6 +234,7 @@ class ForumController extends Controller {
 			setMelding('Wijziging geslaagd: ' . $wijziging, 1);
 		}
 		if ($property === 'verwijderd') {
+			ForumPostsModel::instance()->verwijderForumPostsVoorDraad($draad);
 			ForumDradenModel::instance()->hertellenVoorDeel($deel);
 		}
 		$this->onderwerp($draad->draad_id);

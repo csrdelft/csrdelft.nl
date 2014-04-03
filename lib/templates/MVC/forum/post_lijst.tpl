@@ -30,6 +30,9 @@
 					<a href="/tools/stats.php?ip={$post->auteur_ip}" class="knop" title="IP-log">IP-log</a>
 				{/if}
 			{/if}
+			{if $post->verwijderd}
+				<span style="color: red;">Deze reactie is verwijderd.</span>
+			{/if}
 		</div>
 	</td>
 	<td class="bericht{cycle values="0,1"}{if $post->gefilterd} filtered{/if}" id="post{$post->post_id}">

@@ -519,6 +519,11 @@ class ForumPostsModel extends PersistenceModel implements Paging {
 		return $this->update($post);
 	}
 
+	public function verwijderForumPostsVoorDraad(ForumDraad $draad) {
+		$orm = self::orm;
+		Database::sqlUpdate($orm::getTableName(), array('verwijderd' => $draad->verwijderd), 'draad_id = :id', array('id' => $draad->draad_id));
+	}
+
 	public function bewerkForumPost(ForumPost $post, $nieuwe_tekst, $reden = '') {
 		$post->tekst = $nieuwe_tekst;
 		$post->laatst_bewerkt = getDateTime();

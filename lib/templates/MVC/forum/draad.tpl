@@ -46,7 +46,7 @@
 		{elseif $draad->gesloten}
 			U kunt hier niet meer reageren omdat dit onderwerp gesloten is.
 		{elseif $draad->verwijderd}
-			<span style="color: red;">Dit forumdraad is verwijderd.</span>
+			<span style="color: red;">Dit onderwerp is verwijderd.</span>
 		{/if}
 	{/capture}
 {/strip}
