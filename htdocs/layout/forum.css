@@ -135,8 +135,8 @@ span.togglePasfoto:hover, a.postlink:hover{
 #forumtabel td.titel a.updatedTopic {
 	font-style: italic;
 }
-/* nieuw draad formulier */
-#forumtabel td.auteur a#nieuwedraad {
+/* nieuw onderwerp formulier */
+#forumtabel td.auteur a#nieuwonderwerp {
     margin-bottom: 30px;
     display: inline-block;
 }

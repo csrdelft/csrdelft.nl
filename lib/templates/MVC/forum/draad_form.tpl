@@ -1,6 +1,6 @@
 <tr>
 	<td class="auteur">
-		<a class="forumpostlink" id="nieuwedraad">Nieuwe draad</a><br />
+		<a class="forumpostlink" id="nieuwonderwerp">Nieuw onderwerp</a><br />
 		{if !LoginLid::mag('P_LOGGED_IN')}
 			<label for="email" class="externeemail">Email-adres</label>
 		{/if}
