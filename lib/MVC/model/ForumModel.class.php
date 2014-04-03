@@ -77,7 +77,7 @@ class ForumDelenModel extends PersistenceModel {
 	public function getRecent() {
 		$deel = new ForumDeel();
 		$deel->titel = 'Recent gewijzigd';
-		$deel->setForumDraden(ForumDradenModel::instance()->getRecenteForumDraden(LidInstellingen::get('forum', 'zoekresultaten')));
+		$deel->setForumDraden(ForumDradenModel::instance()->getRecenteForumDraden());
 		return $deel;
 	}
 
@@ -111,8 +111,9 @@ class ForumDelenModel extends PersistenceModel {
 	}
 
 	public function zoeken($query) {
-		$gevonden_draden = array_key_property('draad_id', ForumDradenModel::instance()->zoeken($query)); // zoek op titel in draden
-		$gevonden_posts = array_group_by('draad_id', ForumPostsModel::instance()->zoeken($query)); // zoek op tekst in posts
+		$max = (int) LidInstellingen::get('forum', 'zoekresultaten');
+		$gevonden_draden = array_key_property('draad_id', ForumDradenModel::instance()->zoeken($query, $max)); // zoek op titel in draden
+		$gevonden_posts = array_group_by('draad_id', ForumPostsModel::instance()->zoeken($query, $max)); // zoek op tekst in posts
 		$gevonden_draden += ForumDradenModel::instance()->getForumDradenById(array_keys($gevonden_posts)); // laad draden bij posts
 		foreach ($gevonden_draden as $draad) { // laad posts bij draden
 			if (array_key_exists($draad->draad_id, $gevonden_posts)) { // post is al gevonden
@@ -220,7 +221,7 @@ class ForumDradenModel extends PersistenceModel implements Paging {
 	public function setHuidigePagina($number, $forum_id) {
 		if (!is_int($number) OR $number < 1) {
 			$number = 1;
-		} elseif ($number > $this->getAantalPaginas($forum_id)) {
+		} elseif ($forum_id !== 0 AND $number > $this->getAantalPaginas($forum_id)) {
 			$number = $this->getAantalPaginas($forum_id);
 		}
 		$this->pagina = $number;
@@ -231,6 +232,9 @@ class ForumDradenModel extends PersistenceModel implements Paging {
 	}
 
 	public function getAantalPaginas($forum_id) {
+		if ($forum_id === 0) { // recent heeft onbeperkte paginas
+			return $this->pagina + 1;
+		}
 		if (!array_key_exists($forum_id, $this->aantal_paginas)) {
 			$this->aantal_paginas[$forum_id] = ceil($this->count('forum_id = ? AND wacht_goedkeuring = FALSE AND verwijderd = FALSE', array($forum_id)) / $this->per_pagina);
 		}
@@ -256,7 +260,7 @@ class ForumDradenModel extends PersistenceModel implements Paging {
 		ForumDelenModel::instance()->update($deel);
 	}
 
-	public function zoeken($query, $max = 30) {
+	public function zoeken($query, $max) {
 		$orm = self::orm;
 		$columns = $orm::getFields();
 		$columns[] = 'MATCH(titel) AGAINST (? IN NATURAL LANGUAGE MODE) AS score';
@@ -301,9 +305,12 @@ class ForumDradenModel extends PersistenceModel implements Paging {
 	 * @param boolean $rss
 	 * @return ForumDraad[]
 	 */
-	public function getRecenteForumDraden($aantal, $belangrijk = null, $rss = false) {
+	public function getRecenteForumDraden($aantal = null, $belangrijk = null, $rss = false) {
+		if (!is_int($aantal)) {
+			$aantal = (int) LidInstellingen::get('forum', 'zoekresultaten');
+		}
 		$draden = $this->find(
-				($belangrijk === null ? '' : 'd.belangrijk = ? AND ') . 'd.wacht_goedkeuring = FALSE AND d.verwijderd = FALSE', ($belangrijk === null ? array() : array($belangrijk)), 'd.laatst_gewijzigd DESC', $aantal);
+				($belangrijk === null ? '' : 'd.belangrijk = ? AND ') . 'd.wacht_goedkeuring = FALSE AND d.verwijderd = FALSE', ($belangrijk === null ? array() : array($belangrijk)), 'd.laatst_gewijzigd DESC', $aantal, ($this->pagina - 1) * $aantal);
 		$posts_ids = array_keys(array_key_property('laatste_post_id', $draden, false));
 		$posts = ForumPostsModel::instance()->getForumPostsById($posts_ids);
 		$delen_ids = array_keys(array_key_property('forum_id', $draden, false));
@@ -322,7 +329,7 @@ class ForumDradenModel extends PersistenceModel implements Paging {
 	}
 
 	public function getRssForumDradenEnDelen() {
-		return $this->getRecenteForumDraden(LidInstellingen::get('forum', 'zoekresultaten'), null, true);
+		return $this->getRecenteForumDraden(null, true);
 	}
 
 	public function getForumDraad($id) {
@@ -437,7 +444,7 @@ class ForumPostsModel extends PersistenceModel implements Paging {
 		ForumDradenModel::instance()->update($draad);
 	}
 
-	public function zoeken($query, $max = 30) {
+	public function zoeken($query, $max) {
 		$orm = self::orm;
 		$columns = $orm::getFields();
 		$columns[] = 'MATCH(tekst) AGAINST (? IN NATURAL LANGUAGE MODE) AS score';

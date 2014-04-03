@@ -40,7 +40,7 @@ function smarty_function_sliding_pager($params, &$smarty) {
 	$pagecount = 0;
 	$curpage = 0;
 	$baseurl = '';
-	$linknum = 4;
+	$linknum = 5;
 	$url_append = '';
 	$txt_pre = '';
 	$txt_first = '<<';

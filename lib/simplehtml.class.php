@@ -79,7 +79,7 @@ abstract class SimpleHTML implements View {
 			require_once('MVC/view/ForumView.class.php');
 			$zijkolom[] = new ForumDraadZijbalkView(
 					ForumDradenModel::instance()->getRecenteForumDraden(
-							LidInstellingen::get('zijbalk', 'forum_belangrijk'), true), true);
+							(int) LidInstellingen::get('zijbalk', 'forum_belangrijk'), true), true);
 		}
 		// Nieuwste forumberichten
 		if (LidInstellingen::get('zijbalk', 'forum') > 0) {
@@ -87,7 +87,7 @@ abstract class SimpleHTML implements View {
 			require_once('MVC/view/ForumView.class.php');
 			$zijkolom[] = new ForumDraadZijbalkView(
 					ForumDradenModel::instance()->getRecenteForumDraden(
-							LidInstellingen::get('zijbalk', 'forum'), false), false);
+							(int) LidInstellingen::get('zijbalk', 'forum'), false), false);
 		}
 		// Zelfgeposte forumberichten
 		if (LidInstellingen::get('zijbalk', 'forum_zelf') > 0) {

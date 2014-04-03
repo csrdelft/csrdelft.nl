@@ -3634,12 +3634,6 @@ lib/documenten/documentcontroller.class.php -text
 lib/documenten/documentuploader.class.php -text
 lib/eetplan.class.php -text
 lib/eetplancontent.class.php -text
-lib/forum/forum.class.php -text
-lib/forum/forumcategorie.class.php -text
-lib/forum/forumcategoriecontent.class.php -text
-lib/forum/forumcontent.class.php -text
-lib/forum/forumonderwerp.class.php -text
-lib/forum/forumonderwerpcontent.class.php -text
 lib/fotoalbum.class.php -text
 lib/fotoalbumcontent.class.php -text
 lib/googlesync.class.php -text

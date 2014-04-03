@@ -119,7 +119,8 @@ class ForumController extends Controller {
 	/**
 	 * Recente draadjes laten zien in tabel.
 	 */
-	public function recent() {
+	public function recent($pagina = 1) {
+		ForumDradenModel::instance()->setHuidigePagina((int) $pagina, 0);
 		$deel = ForumDelenModel::instance()->getRecent();
 		$body = new ForumDeelView($deel);
 		if (LoginLid::mag('P_LOGGED_IN')) {
