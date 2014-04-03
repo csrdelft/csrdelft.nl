@@ -224,7 +224,7 @@ class ForumController extends Controller {
 		}
 		$rowcount = ForumDradenModel::instance()->wijzigForumDraad($draad, $property, $value);
 		if ($rowcount !== 1) {
-			throw new Exception('Wijzigen mislukt');
+			throw new Exception('Wijzigen van ' . $property . ' mislukt');
 		} else {
 			if (is_bool($value)) {
 				$wijziging = ($value ? 'wel ' : 'niet ') . $property;
