@@ -11,11 +11,11 @@
 						{icon get="asterisk_orange"} maak {if $draad->belangrijk}<strong>niet</strong> {/if}belangrijk
 					</a>
 					<br /><br />
-					<a href="/forum/wijzigen/{$draad->draad_id}/verwijderd" class="knop" title="{if $draad->verwijderd}Herstel{else}Verwijder{/if} forumdraad">
+					<a href="/forum/wijzigen/{$draad->draad_id}/verwijderd" class="knop" title="Verander is verwijderd" onclick="return confirm('Weet u zeker dat u dit gehele forumdraad met alle reacties wilt {if $draad->verwijderd}herstellen{else}verwijderen{/if}?');">
 						{if $draad->verwijderd}
-							{icon get="arrow_undo"} Herstellen
+							{icon get="arrow_undo"} draad herstellen
 						{else}
-							{icon get="cross"} Verwijderen
+							{icon get="cross"} draad verwijderen
 						{/if}
 					</a>
 				</td>
