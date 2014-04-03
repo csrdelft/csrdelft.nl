@@ -30,7 +30,7 @@ class MainMenuView extends MenuView {
 		if (LoginLid::mag('P_ADMIN')) {
 
 			require_once 'MVC/model/ForumModel.class.php';
-			$this->smarty->assign('forumcount', ForumPostsModel::instance()->count('wacht_goedkeuring = TRUE AND verwijderd = FALSE'));
+			$this->smarty->assign('forumcount', ForumPostsModel::instance()->getAantalWachtOpGoedkeuring());
 
 			require_once 'savedquery.class.php';
 			$this->smarty->assign('queues', array(

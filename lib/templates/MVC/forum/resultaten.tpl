@@ -26,16 +26,18 @@
 					</th>
 					<th>
 						{if $draad->wacht_goedkeuring}
-							[ter goedkeuring...]
-						{/if}
-						<a id="{$draad->draad_id}" href="/forum/onderwerp/{$draad->draad_id}"{if !$draad->alGelezen()} class="updatedTopic"{/if}>
-							{if $draad->gesloten}
-								<img src="{icon get="slotje" notag=true}" title="Dit onderwerp is gesloten, u kunt niet meer reageren" alt="sluiten" />&nbsp;&nbsp;
-							{elseif $draad->belangrijk}
-								<img src="{icon get="belangrijk" notag=true}" title="Dit onderwerp is door het bestuur aangemerkt als belangrijk." alt="belangrijk" />&nbsp;&nbsp;
-							{/if}
+							<small style="font-weight: normal;">[draad ter goedkeuring...]</small>
 							{$draad->titel}
-						</a>
+						{else}
+							<a id="{$draad->draad_id}" href="/forum/onderwerp/{$draad->draad_id}"{if !$draad->alGelezen()} class="updatedTopic"{/if}>
+								{if $draad->gesloten}
+									<img src="{icon get="slotje" notag=true}" title="Dit onderwerp is gesloten, u kunt niet meer reageren" alt="sluiten" />&nbsp;&nbsp;
+								{elseif $draad->belangrijk}
+									<img src="{icon get="belangrijk" notag=true}" title="Dit onderwerp is door het bestuur aangemerkt als belangrijk." alt="belangrijk" />&nbsp;&nbsp;
+								{/if}
+								{$draad->titel}
+							</a>
+						{/if}
 					</th>
 				</tr>
 			</thead>

@@ -354,13 +354,13 @@ class ForumDradenModel extends PersistenceModel implements Paging {
 		return $draad;
 	}
 
-	public function getForumDradenById(array $ids) {
+	public function getForumDradenById(array $ids, $where = '', array $where_params = array()) {
 		$count = count($ids);
 		if ($count < 1) {
 			return array();
 		}
 		$in = implode(', ', array_fill(0, $count, '?'));
-		return array_key_property('draad_id', $this->find('d.draad_id IN (' . $in . ')', $ids));
+		return array_key_property('draad_id', $this->find('d.draad_id IN (' . $in . ')' . $where, array_merge($ids, $where_params)));
 	}
 
 	public function maakForumDraad($forum_id, $titel, $wacht_goedkeuring) {
@@ -412,12 +412,18 @@ class ForumPostsModel extends PersistenceModel implements Paging {
 	 * @var int[]
 	 */
 	private $aantal_paginas;
+	/**
+	 * Aantal posts die wachten op goedkeuring per forumdeel
+	 * @var int[]
+	 */
+	private $aantal_goedkeuring;
 
 	protected function __construct() {
 		parent::__construct();
 		$this->pagina = 1;
 		$this->per_pagina = LidInstellingen::get('forum', 'posts_per_pagina');
 		$this->aantal_paginas = array();
+		$this->aantal_goedkeuring = array();
 	}
 
 	public function getAantalPerPagina() {
@@ -486,6 +492,24 @@ class ForumPostsModel extends PersistenceModel implements Paging {
 
 	public function getAantalForumPostsVoorLid($uid) {
 		return $this->count('lid_id = ? AND wacht_goedkeuring = FALSE AND verwijderd = FALSE', array($uid));
+	}
+
+	public function getAantalWachtOpGoedkeuring($forum_id = 0) {
+		if ($forum_id === 0) {
+			if (!array_key_exists(0, $this->aantal_goedkeuring)) {
+				$this->aantal_goedkeuring[0] = ForumPostsModel::instance()->count('wacht_goedkeuring = TRUE AND verwijderd = FALSE');
+			}
+			return $this->aantal_goedkeuring[0];
+		} else {
+			if (!array_key_exists($forum_id, $this->aantal_goedkeuring)) {
+				// laad draad ids van posts die wachten op goedkeuring
+				$gevonden_posts = array_group_by('draad_id', ForumPostsModel::instance()->find('wacht_goedkeuring = TRUE AND verwijderd = FALSE'));
+				// laad draden bij posts die alleen in dit deel zitten
+				$gevonden_draden = ForumDradenModel::instance()->getForumDradenById(array_keys($gevonden_posts), ' AND forum_id = ? AND verwijderd = FALSE', array($forum_id));
+				$this->aantal_goedkeuring[$forum_id] = count($gevonden_draden);
+			}
+			return $this->aantal_goedkeuring[$forum_id];
+		}
 	}
 
 	/**

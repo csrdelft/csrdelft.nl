@@ -275,11 +275,12 @@ class ForumController extends Controller {
 		if (!LoginLid::mag('P_LOGGED_IN')) {
 			$wacht_goedkeuring = true;
 			$email = filter_input(INPUT_POST, 'email', FILTER_SANITIZE_EMAIL);
+			if (!email_like($email)) {
+				$url = ($draad_id === null ? '/forum/deel/' . $deel->forum_id : '/forum/onderwerp/' . $draad_id);
+				invokeRefresh($url, 'U moet een geldig email-adres opgeven!', -1);
+			}
 			if ($filter->isSpam($email)) {
 				invokeRefresh('/forum/deel/' . $deel->forum_id, 'SPAM', -1); //TODO: logging
-			}
-			if (!email_like($email)) {
-				invokeRefresh('/forum/deel/' . $deel->forum_id, 'U moet een geldig email-adres opgeven!', -1);
 			}
 		}
 		if ($draad_id !== null) { // post in bestaand draadje
@@ -288,7 +289,11 @@ class ForumController extends Controller {
 				$this->geentoegang();
 			}
 		} else { // post in nieuw draadje
-			$draad = ForumDradenModel::instance()->maakForumDraad($deel->forum_id, trim(filter_input(INPUT_POST, 'titel', FILTER_SANITIZE_STRING)), $wacht_goedkeuring);
+			$titel = trim(filter_input(INPUT_POST, 'titel', FILTER_SANITIZE_STRING));
+			if (empty($titel)) {
+				invokeRefresh('/forum/deel/' . $deel->forum_id, 'U moet een titel opgeven!', -1);
+			}
+			$draad = ForumDradenModel::instance()->maakForumDraad($deel->forum_id, $titel, $wacht_goedkeuring);
 		}
 		$post = ForumPostsModel::instance()->maakForumPost($draad->draad_id, $tekst, $_SERVER['REMOTE_ADDR'], $wacht_goedkeuring);
 		$_SESSION['forum_laatste_post_tekst'] = $tekst;

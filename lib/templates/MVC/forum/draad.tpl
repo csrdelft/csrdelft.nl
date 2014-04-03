@@ -1,15 +1,15 @@
 {$view->getMelding()}
 {strip}
-	<form id="forum_zoeken" action="/forum/zoeken" method="post">
-		<input type="text" name="zoeken" value="zoeken in forum" onfocus="this.value = '';" />
-		{if $deel->magModereren()}
-			<div id="btn_mod">
-				<a class="knop" title="Moderatie-functies weergeven" onclick="$('#modereren').slideDown();
-						$('#btn_mod').toggle();
-						$('#forumtabel a.forummodknop').fadeIn();">{icon get="bullet_wrench"} Modereren&nbsp;</a>
-			</div>
-		{/if}
-	</form>
+
+	{include file='MVC/forum/zoek_form.tpl'}
+
+	{if $deel->magModereren()}
+		<div id="togglemodknop" style="float: right; clear: right;">
+			<a class="knop" title="Moderatie-functies weergeven" onclick="$('#modereren').slideDown();
+					$('#togglemodknop').toggle();
+					$('#forumtabel a.forummodknop').fadeIn();">{icon get="bullet_wrench"} Modereren&nbsp;</a>
+		</div>
+	{/if}
 
 	{capture name='navlinks'}
 		<div class="forumNavigatie">

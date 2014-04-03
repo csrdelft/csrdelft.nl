@@ -1,6 +1,6 @@
 {$view->getMelding()}
 
-<form id="forum_zoeken" action="/forum/zoeken" method="post"><fieldset><input type="text" name="zoeken" value="zoeken in forum" onfocus="this.value = '';" /></fieldset></form>
+{include file='MVC/forum/zoek_form.tpl'}
 
 {capture name='navlinks'}
 	<div class="forumNavigatie">
