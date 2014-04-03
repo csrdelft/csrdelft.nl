@@ -4137,4 +4137,4 @@ sql/4354_menubeheer_rename.sql -text
 sql/4363_gasnelnaar_rename.sql -text
 sql/4417_forum_refactor.sql -text
 sql/4501_eerste_post_plakkerig.sql -text
-sql/DEV_forum_search.sql -text
+sql/4503_forum_search.sql -text
