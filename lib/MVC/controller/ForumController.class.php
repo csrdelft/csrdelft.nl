@@ -39,6 +39,7 @@ class ForumController extends Controller {
 	protected function hasPermission() {
 		switch ($this->action) {
 			case 'wijzigen':
+			case 'zoeken':
 				return true;
 
 			case 'rss':
@@ -49,7 +50,6 @@ class ForumController extends Controller {
 			case 'wacht':
 				return !$this->isPosted();
 
-			case 'zoeken':
 			case 'posten':
 			case 'bewerken':
 			case 'verwijderen':
@@ -106,6 +106,7 @@ class ForumController extends Controller {
 		if ($query === null) {
 			$query = filter_input(INPUT_POST, 'zoeken', FILTER_SANITIZE_SPECIAL_CHARS);
 		} else {
+			$query = urldecode($query);
 			$query = filter_var($query, FILTER_SANITIZE_SPECIAL_CHARS);
 		}
 		$draden_deel = ForumDelenModel::instance()->zoeken($query);
