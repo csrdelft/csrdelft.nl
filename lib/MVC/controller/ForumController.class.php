@@ -298,6 +298,7 @@ class ForumController extends Controller {
 		} else {
 			ForumPostsModel::instance()->goedkeurenForumPost($post, $draad, $deel);
 		}
+		ForumDradenGelezenModel::instance()->setWanneerGelezenDoorLid($draad);
 		// redirect naar (altijd) juiste pagina
 		invokeRefresh('/forum/reactie/' . $post->post_id . '#' . $post->post_id); // , ($draad_id === null ? 'Draad' : 'Post') . ' succesvol toegevoegd', 1
 	}
