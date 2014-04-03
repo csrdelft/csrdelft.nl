@@ -20,6 +20,11 @@ abstract class TemplateView implements View {
 	 */
 	protected $model;
 	/**
+	 * Titel
+	 * @var string
+	 */
+	protected $titel;
+	/**
 	 * Template engine
 	 * @var CsrSmarty
 	 */
@@ -32,6 +37,7 @@ abstract class TemplateView implements View {
 	 */
 	public function __construct($model = null) {
 		$this->model = $model;
+		$this->titel = '';
 		$this->smarty = new CsrSmarty();
 		$this->smarty->assignByRef('view', $this);
 	}
@@ -41,7 +47,7 @@ abstract class TemplateView implements View {
 	}
 
 	public function getTitel() {
-		return '';
+		return $this->titel;
 	}
 
 	/**

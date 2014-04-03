@@ -93,7 +93,8 @@ class ForumController extends Controller {
 	 * Tonen van alle posts die wachten op goedkeuring.
 	 */
 	public function wacht() {
-		$body = new ForumResultatenView(ForumDelenModel::instance()->getWachtOpGoedkeuring(), 'Wacht op goedkeuring');
+		$draden_delen = ForumDelenModel::instance()->getWachtOpGoedkeuring();
+		$body = new ForumResultatenView($draden_delen[0], $draden_delen[1]);
 		$this->view = new CsrLayoutPage($body);
 		$this->view->addStylesheet('forum.css');
 		$this->view->addScript('forum.js');
@@ -111,8 +112,8 @@ class ForumController extends Controller {
 		}
 		ForumPostsModel::instance()->setHuidigePagina((int) $pagina, 0);
 		ForumDradenModel::instance()->setHuidigePagina((int) $pagina, 0);
-		$draden_deel = ForumDelenModel::instance()->zoeken($query);
-		$body = new ForumResultatenView($draden_deel[0], $draden_deel[1], $query);
+		$draden_delen = ForumDelenModel::instance()->zoeken($query);
+		$body = new ForumResultatenView($draden_delen[0], $draden_delen[1], $query);
 		$this->view = new CsrLayoutPage($body);
 		$this->view->addStylesheet('forum.css');
 		$this->view->addScript('forum.js');

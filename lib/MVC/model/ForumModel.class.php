@@ -82,37 +82,47 @@ class ForumDelenModel extends PersistenceModel {
 	}
 
 	/**
-	 * Laadt de posts die wachten op goedkeuring en de draadjes en forumdelen die er bijhoren.
+	 * Laadt de posts die wachten op goedkeuring en de draadjes en forumdelen die erbij horen.
 	 * Check modrechten van gebruiker.
 	 * 
-	 * @return ForumDelen[]
+	 * @return array( ForumDraden[], ForumDelen[] )
 	 */
 	public function getWachtOpGoedkeuring() {
-		$postsByDraad = array_group_by('draad_id', ForumPostsModel::instance()->find('wacht_goedkeuring = TRUE AND verwijderd = FALSE'));
-		$dradenByDeel = array_group_by('forum_id', ForumDradenModel::instance()->getForumDradenById(array_keys($postsByDraad)));
-		$delenById = array_key_property('forum_id', ForumDelenModel::instance()->getForumDelenById(array_keys($dradenByDeel)));
-		foreach ($delenById as $forum_id => $deel) {
-			if ($deel->magModereren()) {
-				$deel->setForumDraden($dradenByDeel[$deel->forum_id]);
+		$gevonden_posts = array_group_by('draad_id', ForumPostsModel::instance()->find('wacht_goedkeuring = TRUE AND verwijderd = FALSE'));
+		$gevonden_draden = array_key_property('draad_id', ForumDradenModel::instance()->find('wacht_goedkeuring = TRUE AND verwijderd = FALSE'));
+		$gevonden_draden += ForumDradenModel::instance()->getForumDradenById(array_keys($gevonden_posts)); // laad draden bij posts
+		foreach ($gevonden_draden as $draad) { // laad posts bij draden
+			if (array_key_exists($draad->draad_id, $gevonden_posts)) { // post is al gevonden
+				$draad->setForumPosts($gevonden_posts[$draad->draad_id]);
 			} else {
-				unset($delenById[$forum_id]);
+				throw Exception('Draad niet goedgekeurd, maar alle posts wel');
 			}
 		}
-		foreach ($dradenByDeel as $forum_id => $draden) {
-			if (array_key_exists($forum_id, $delenById)) {
-				foreach ($draden as $draad) {
-					$draad->setForumPosts($postsByDraad[$draad->draad_id]);
+		// check permissies op delen
+		$delen_ids = array_keys(array_group_by('forum_id', $gevonden_draden, false));
+		$gevonden_delen = array_key_property('forum_id', ForumDelenModel::instance()->getForumDelenById($delen_ids));
+		foreach ($gevonden_delen as $forum_id => $deel) {
+			if (!$deel->magModereren()) {
+				foreach ($gevonden_draden as $draad_id => $draad) {
+					if ($draad->forum_id === $deel->forum_id) {
+						unset($gevonden_draden[$draad_id]);
+					}
 				}
-			} else {
-				unset($draden[$forum_id]);
+				unset($gevonden_delen[$forum_id]);
 			}
 		}
-		return $delenById;
+		return array($gevonden_draden, $gevonden_delen);
 	}
 
+	/**
+	 * Zoek op titel van draadjes en tekst van posts en laad forumdelen die erbij horen.
+	 * Check leesrechten van gebruiker.
+	 * 
+	 * @return array( ForumDraden[], ForumDelen[] )
+	 */
 	public function zoeken($query) {
-		$gevonden_draden = array_key_property('draad_id', ForumDradenModel::instance()->zoeken($query)); // zoek op titel in draden
 		$gevonden_posts = array_group_by('draad_id', ForumPostsModel::instance()->zoeken($query)); // zoek op tekst in posts
+		$gevonden_draden = array_key_property('draad_id', ForumDradenModel::instance()->zoeken($query)); // zoek op titel in draden
 		$gevonden_draden += ForumDradenModel::instance()->getForumDradenById(array_keys($gevonden_posts)); // laad draden bij posts
 		foreach ($gevonden_draden as $draad) { // laad posts bij draden
 			if (array_key_exists($draad->draad_id, $gevonden_posts)) { // post is al gevonden
@@ -130,17 +140,18 @@ class ForumDelenModel extends PersistenceModel {
 		// check permissies op delen
 		$delen_ids = array_keys(array_group_by('forum_id', $gevonden_draden, false));
 		$gevonden_delen = array_key_property('forum_id', ForumDelenModel::instance()->getForumDelenById($delen_ids));
-		foreach ($gevonden_delen as $deel) {
+		foreach ($gevonden_delen as $forum_id => $deel) {
 			if (!$deel->magLezen()) {
 				foreach ($gevonden_draden as $draad_id => $draad) {
 					if ($draad->forum_id === $deel->forum_id) {
 						unset($gevonden_draden[$draad_id]);
 					}
 				}
+				unset($gevonden_delen[$forum_id]);
 			}
 		}
 		usort($gevonden_draden, array($this, 'sorteren'));
-		return array($gevonden_draden, new ForumDeel());
+		return array($gevonden_draden, $gevonden_delen);
 	}
 
 	function sorteren($a, $b) {

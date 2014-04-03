@@ -10,6 +10,7 @@ class TestFormulier extends Formulier {
 
 	public function __construct($model) {
 		parent::__construct($model, 'test-form', '/testform.php');
+		$this->titel = 'Testformulier';
 
 		$fields[] = new Subkopje('Studie:');
 		$fields[] = new StudieField('studie', $model->default, 'Studie');
@@ -23,10 +24,6 @@ class TestFormulier extends Formulier {
 		$fields[] = new LidField('lid2test', 'Gra', 'Wat is je naam?', 'nobodies');
 
 		$this->addFields($fields);
-	}
-
-	public function getTitel() {
-		return 'Testformulier';
 	}
 
 	public function view() {

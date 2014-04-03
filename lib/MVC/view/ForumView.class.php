@@ -171,15 +171,16 @@ class ForumPostDeleteView extends TemplateView {
 
 class ForumResultatenView extends TemplateView {
 
-	public function __construct(array $draden, ForumDeel $dummy, $query) {
+	public function __construct(array $draden, array $delen, $query = null) {
 		parent::__construct($draden);
 		$this->smarty->assign('resultaten', $this->model);
-		$this->smarty->assign('deel', $dummy);
-		$this->smarty->assign('query', $query);
-	}
-
-	public function getTitel() {
-		return 'Zoekresultaten';
+		$this->smarty->assign('delen', $delen);
+		if ($query !== null) {
+			$this->smarty->assign('query', $query);
+			$this->titel = 'Zoekresultaten voor: "{$query}"';
+		} else {
+			$this->titel = 'Wacht op goedkeuring';
+		}
 	}
 
 	public function view() {
