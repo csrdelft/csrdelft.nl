@@ -325,8 +325,7 @@ class ForumController extends Controller {
 		if ($rowcount !== 1) {
 			throw new Exception('Bewerken mislukt');
 		}
-		// redirect naar (altijd) juiste pagina
-		invokeRefresh('/forum/reactie/' . $post->post_id . '#' . $post->post_id); // , 'Post succesvol bewerkt', 1
+		$this->view = new ForumPostView($post, $draad, $deel);
 	}
 
 	public function verwijderen($id) {

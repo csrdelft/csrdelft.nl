@@ -73,16 +73,16 @@ function forumBewerken(postId) {
 			}
 			bewerkDiv = document.getElementById('post' + postId);
 			bewerkDivInnerHTML = bewerkDiv.innerHTML;
-			bewerkForm = '<form id="forumEditForm" action="/forum/postbewerken/' + postId + '" method="post">';
+			bewerkForm = '<form id="forumEditForm" class="InlineForm" action="/forum/bewerken/' + postId + '" method="post">';
 			bewerkForm += '<h3>Bericht bewerken</h3>Als u dingen aanpast zet er dan even bij w&aacute;t u aanpast! Gebruik bijvoorbeeld [s]...[/s]<br />';
 			bewerkForm += '<div id="bewerkPreviewContainer" class="previewContainer"><h3>Voorbeeld van uw bericht:</h3><div id="bewerkPreview" class="preview"></div></div>';
 			bewerkForm += '<textarea name="bericht" id="forumBewerkBericht" class="tekst" rows="8" style="width: 100%;"></textarea>';
 			bewerkForm += 'Reden van bewerking: <input type="text" name="reden" style="width: 250px;"/><br /><br />';
 			bewerkForm += '<a style="float: right;" class="handje knop" onclick="$(\'#ubbhulpverhaal\').toggle();" title="Opmaakhulp weergeven">UBB</a>';
 			bewerkForm += '<a style="float: right;" class="handje knop" onclick="vergrootTextarea(\'forumBewerkBericht\', 10)" title="Vergroot het invoerveld"><strong>&uarr;&darr;</strong></a>';
-			bewerkForm += '<input type="submit" value="opslaan" /> ' +
-					'<input type="button" value="voorbeeld" onclick="previewPost(\'forumBewerkBericht\', \'bewerkPreview\')" /> ' +
-					'<input type="button" value="terug" onclick="restorePost()" />';
+			bewerkForm += '<input type="button" value="opslaan" onclick="submitPost();" /> ' +
+					'<input type="button" value="voorbeeld" onclick="previewPost(\'forumBewerkBericht\', \'bewerkPreview\');" /> ' +
+					'<input type="button" value="terug" onclick="restorePost();" />';
 			bewerkForm += '</form>';
 			bewerkDiv.innerHTML = bewerkForm;
 			document.getElementById('forumBewerkBericht').value = http.responseText;
@@ -123,4 +123,19 @@ function previewPost(source, dest) {
 		applyUBB(post, previewDiv);
 		$('#' + dest + "Container").show();
 	}
+}
+function submitPost() {
+	var form = $('#forumEditForm');
+	var jqXHR = $.ajax({
+		type: 'POST',
+		cache: false,
+		url: form.attr('action'),
+		data: form.serialize()
+	});
+	jqXHR.done(function(data, textStatus, jqXHR) {
+		dom_update(data);
+	});
+	jqXHR.fail(function(jqXHR, textStatus, errorThrown) {
+		alert(textStatus);
+	});
 }

@@ -71,7 +71,7 @@ class ForumDraad extends PersistentEntity {
 	 */
 	public $wacht_goedkeuring;
 	/**
-	 * Plakkerig (altijd bovenaan weergeven)
+	 * Altijd bovenaan weergeven
 	 * @var boolean
 	 */
 	public $plakkerig;
@@ -80,6 +80,11 @@ class ForumDraad extends PersistentEntity {
 	 * @var boolean
 	 */
 	public $belangrijk;
+	/**
+	 * Eerste post altijd bovenaan weergeven
+	 * @var boolean
+	 */
+	public $eerste_post_plakkerig;
 	/**
 	 * Forumposts
 	 * @var ForumPost[]
@@ -108,7 +113,8 @@ class ForumDraad extends PersistentEntity {
 		'verwijderd' => 'boolean NOT NULL',
 		'wacht_goedkeuring' => 'boolean NOT NULL',
 		'plakkerig' => 'boolean NOT NULL',
-		'belangrijk' => 'boolean NOT NULL'
+		'belangrijk' => 'boolean NOT NULL',
+		'eerste_post_plakkerig' => 'boolean NOT NULL'
 	);
 	/**
 	 * Database primary key
