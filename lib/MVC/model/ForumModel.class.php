@@ -312,7 +312,7 @@ class ForumDradenModel extends PersistenceModel implements Paging {
 	 * RSS: use token & return delen.
 	 * 
 	 * @param int $aantal
-	 * @param boolean $belangrijk
+	 * @param boolean $belangrijk null voor maakt niet uit
 	 * @param boolean $rss
 	 * @return ForumDraad[]
 	 */
