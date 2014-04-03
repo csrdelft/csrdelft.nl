@@ -13,7 +13,7 @@
 					<br /><br />
 					<a href="/forum/wijzigen/{$draad->draad_id}/verwijderd" class="knop" title="{if $draad->verwijderd}Herstel{else}Verwijder{/if} forumdraad">
 						{if $draad->verwijderd}
-							{icon get="arrow_undo"} Ongedaan maken
+							{icon get="arrow_undo"} Herstellen
 						{else}
 							{icon get="cross"} Verwijderen
 						{/if}

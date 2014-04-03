@@ -460,11 +460,11 @@ class ForumPostsModel extends PersistenceModel implements Paging {
 	 * 
 	 * @param string $uid
 	 * @param int $aantal
-	 * @param int $draad_distinct TODO
+	 * @param int $draad_uniek
 	 * @return array(ForumPost[], ForumDraad[])
 	 */
-	public function getRecenteForumPostsVanLid($uid, $aantal, $draad_distinct = false) {
-		$posts = $this->find('lid_id = ? AND wacht_goedkeuring = FALSE AND verwijderd = FALSE', array($uid), 'post_id DESC', $aantal);
+	public function getRecenteForumPostsVanLid($uid, $aantal, $draad_uniek = false) {
+		$posts = $this->find('lid_id = ? AND wacht_goedkeuring = FALSE AND verwijderd = FALSE' . ($draad_uniek ? ' GROUP BY draad_id' : ''), array($uid), 'post_id DESC', $aantal);
 		$draden_ids = array_keys(array_key_property('draad_id', $posts, false));
 		$draden = ForumDradenModel::instance()->getForumDradenById($draden_ids);
 		$delen_ids = array_keys(array_key_property('forum_id', $draden, false));

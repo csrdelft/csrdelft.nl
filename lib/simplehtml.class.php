@@ -93,7 +93,7 @@ abstract class SimpleHTML implements View {
 		if (LidInstellingen::get('zijbalk', 'forum_zelf') > 0) {
 			require_once('MVC/model/ForumModel.class.php');
 			require_once('MVC/view/ForumView.class.php');
-			$posts_draden = ForumPostsModel::instance()->getRecenteForumPostsVanLid(LoginLid::instance()->getUid(), LidInstellingen::get('zijbalk', 'forum_zelf'));
+			$posts_draden = ForumPostsModel::instance()->getRecenteForumPostsVanLid(LoginLid::instance()->getUid(), LidInstellingen::get('zijbalk', 'forum_zelf'), true);
 			$zijkolom[] = new ForumPostZijbalkView($posts_draden[0], $posts_draden[1]);
 		}
 		// Nieuwste fotoalbum
