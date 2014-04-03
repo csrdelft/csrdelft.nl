@@ -27,7 +27,7 @@
 <table id="forumtabel">
 	<thead>
 		<tr>
-			<th>Titel</th>
+			<th colspan="2">Titel</th>
 			<th>Reacties</th>
 			<th>Auteur</th>
 			<th>Recente wijziging</th>
@@ -36,7 +36,7 @@
 	<tbody>
 		{if !$deel->hasForumDraden()}
 			<tr>
-				<td colspan="4">Dit forum is nog leeg.</td>
+				<td colspan="5">Dit forum is nog leeg.</td>
 			</tr>
 		{/if}
 		{foreach from=$deel->getForumDraden() item=draad}
@@ -45,7 +45,7 @@
 	</tbody>
 	<thead>
 		<tr>
-			<th colspan="4">
+			<th colspan="5">
 				{if $deel->forum_id === 0}
 					{sliding_pager baseurl="/forum/recent/"
 					pagecount=ForumDradenModel::instance()->getHuidigePagina() curpage=ForumDradenModel::instance()->getHuidigePagina()

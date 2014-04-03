@@ -1,5 +1,5 @@
 <tr class="forumdraad kleur{cycle values="0,1"}">
-	<td class="titel">
+	<td  colspan="2" class="titel">
 		{if $draad->wacht_goedkeuring}
 			<small style="font-weight: normal;">[ter goedkeuring...]</small>
 		{/if}
