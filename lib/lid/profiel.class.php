@@ -8,8 +8,6 @@
 # -------------------------------------------------------------------
 
 
-
-require_once 'forum/forum.class.php';
 require_once 'MVC/model/entity/Mail.class.php';
 
 /**
