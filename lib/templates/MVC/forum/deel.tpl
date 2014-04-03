@@ -60,11 +60,14 @@
 		</tr>
 	</thead>
 	<tbody>
+		<tr>
+			<td colspan="5">
+				<h1 style="display: inline-block;">{$deel->titel}</h1>
+				<div style="float: right;">{$smarty.capture.navlinks}</div>
+			</td>
+		</tr>
 		{if $deel->magPosten()}
 			{include file='MVC/forum/draad_form.tpl'}
 		{/if}
 	</tbody>
 </table>
-
-<h1>{$deel->titel}</h1>
-{$smarty.capture.navlinks}

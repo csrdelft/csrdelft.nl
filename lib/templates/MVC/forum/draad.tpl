@@ -14,27 +14,30 @@
 	{capture name='navlinks'}
 		<div class="forumNavigatie">
 			<a href="/forum/" class="forumGrootlink">Forum</a> &raquo; <a href="/forum/deel/{$deel->forum_id}/{ForumDradenModel::instance()->getPaginaVoorDraad($draad)}#{$draad->draad_id}" class="forumGrootlink">{$deel->titel}</a>
-			<br />
-			{if $deel->magModereren()}
-				<div style="display: inline-block; margin-right: 3px;">
-					{if $draad->gesloten}
-						<a href="/forum/wijzigen/{$draad->draad_id}/gesloten" class="knop" title="Openen (reactie mogelijk)"
-						   onmouseover="$(this).children('img').attr('src', 'http://plaetjes.csrdelft.nl/famfamfam/lock_break.png');"
-						   onmouseout="$(this).children('img').attr('src', 'http://plaetjes.csrdelft.nl/famfamfam/lock.png');"
-						   >{icon get="lock"}</a>
-					{else}
-						<a href="/forum/wijzigen/{$draad->draad_id}/gesloten" class="knop" title="Sluiten (geen reactie mogelijk)"
-						   onmouseover="$(this).children('img').attr('src', 'http://plaetjes.csrdelft.nl/famfamfam/lock.png');"
-						   onmouseout="$(this).children('img').attr('src', 'http://plaetjes.csrdelft.nl/famfamfam/lock_open.png');"
-						   >{icon get="lock_open"}</a>
-					{/if}
-				</div>
-			{/if}
-			<h1 style="display: inline-block;">{$draad->titel}</h1><br />
 		</div>
 	{/capture}
 
+	{capture name='titel'}
+		{if $deel->magModereren()}
+			<div style="display: inline-block; margin-right: 5px;">
+				{if $draad->gesloten}
+					<a href="/forum/wijzigen/{$draad->draad_id}/gesloten" class="knop" title="Openen (reactie mogelijk)"
+					   onmouseover="$(this).children('img').attr('src', 'http://plaetjes.csrdelft.nl/famfamfam/lock_break.png');"
+					   onmouseout="$(this).children('img').attr('src', 'http://plaetjes.csrdelft.nl/famfamfam/lock.png');"
+					   >{icon get="lock"}</a>
+				{else}
+					<a href="/forum/wijzigen/{$draad->draad_id}/gesloten" class="knop" title="Sluiten (geen reactie mogelijk)"
+					   onmouseover="$(this).children('img').attr('src', 'http://plaetjes.csrdelft.nl/famfamfam/lock.png');"
+					   onmouseout="$(this).children('img').attr('src', 'http://plaetjes.csrdelft.nl/famfamfam/lock_open.png');"
+					   >{icon get="lock_open"}</a>
+				{/if}
+			</div>
+		{/if}
+		<h1 style="display: inline-block">{$draad->titel}</h1>
+	{/capture}
+
 	{$smarty.capture.navlinks}
+	{$smarty.capture.titel}
 
 	{if $deel->magModereren()}
 		{include file='MVC/forum/draad_mod.tpl'}
@@ -98,9 +101,13 @@
 			</tr>
 		{/if}
 
-		{* Formulier om een bericht achter te laten *}
+		<tr>
+			<td colspan="5">
+				{$smarty.capture.titel}
+				<div style="float: right;">{$smarty.capture.navlinks}</div>
+			</td>
+		</tr>
+
 		{include file='MVC/forum/post_form.tpl'}
 	</tbody>
 </table>
-
-{$smarty.capture.navlinks}

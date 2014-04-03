@@ -260,6 +260,10 @@ class ForumController extends Controller {
 		if (!$deel->magPosten()) {
 			$this->geentoegang();
 		}
+		$spamtrap = filter_input(INPUT_POST, 'firstname', FILTER_UNSAFE_RAW);
+		if (!empty($spamtrap)) {
+			invokeRefresh('/forum/deel/' . $deel->forum_id, 'SPAM', -1); //TODO: logging
+		}
 		$tekst = filter_input(INPUT_POST, 'bericht', FILTER_UNSAFE_RAW);
 		$_SESSION['forum_concept'] = $tekst;
 		require_once 'simplespamfilter.class.php';
