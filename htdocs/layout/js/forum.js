@@ -133,6 +133,7 @@ function submitPost() {
 		data: form.serialize()
 	});
 	jqXHR.done(function(data, textStatus, jqXHR) {
+		restorePost();
 		dom_update(data);
 	});
 	jqXHR.fail(function(jqXHR, textStatus, errorThrown) {
