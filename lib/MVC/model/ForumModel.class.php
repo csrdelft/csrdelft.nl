@@ -111,9 +111,8 @@ class ForumDelenModel extends PersistenceModel {
 	}
 
 	public function zoeken($query) {
-		$max = (int) LidInstellingen::get('forum', 'zoekresultaten');
-		$gevonden_draden = array_key_property('draad_id', ForumDradenModel::instance()->zoeken($query, $max)); // zoek op titel in draden
-		$gevonden_posts = array_group_by('draad_id', ForumPostsModel::instance()->zoeken($query, $max)); // zoek op tekst in posts
+		$gevonden_draden = array_key_property('draad_id', ForumDradenModel::instance()->zoeken($query)); // zoek op titel in draden
+		$gevonden_posts = array_group_by('draad_id', ForumPostsModel::instance()->zoeken($query)); // zoek op tekst in posts
 		$gevonden_draden += ForumDradenModel::instance()->getForumDradenById(array_keys($gevonden_posts)); // laad draden bij posts
 		foreach ($gevonden_draden as $draad) { // laad posts bij draden
 			if (array_key_exists($draad->draad_id, $gevonden_posts)) { // post is al gevonden
@@ -232,7 +231,7 @@ class ForumDradenModel extends PersistenceModel implements Paging {
 	}
 
 	public function getAantalPaginas($forum_id) {
-		if ($forum_id === 0) { // recent heeft onbeperkte paginas
+		if ($forum_id === 0) { // recent en zoeken hebben onbeperkte paginas
 			return $this->pagina + 1;
 		}
 		if (!array_key_exists($forum_id, $this->aantal_paginas)) {
@@ -260,11 +259,11 @@ class ForumDradenModel extends PersistenceModel implements Paging {
 		ForumDelenModel::instance()->update($deel);
 	}
 
-	public function zoeken($query, $max) {
+	public function zoeken($query) {
 		$orm = self::orm;
 		$columns = $orm::getFields();
 		$columns[] = 'MATCH(titel) AGAINST (? IN NATURAL LANGUAGE MODE) AS score';
-		$result = Database::sqlSelect($columns, $orm::getTableName(), 'wacht_goedkeuring = FALSE AND verwijderd = FALSE HAVING score > 0', array($query), 'score DESC', $max);
+		$result = Database::sqlSelect($columns, $orm::getTableName(), 'wacht_goedkeuring = FALSE AND verwijderd = FALSE HAVING score > 0', array($query), 'score DESC', $this->per_pagina, ($this->pagina - 1) * $this->per_pagina);
 		return $result->fetchAll(PDO::FETCH_CLASS, $orm);
 	}
 
@@ -420,7 +419,7 @@ class ForumPostsModel extends PersistenceModel implements Paging {
 	public function setHuidigePagina($number, $draad_id) {
 		if (!is_int($number) OR $number < 1) {
 			$number = 1;
-		} elseif ($number > $this->getAantalPaginas($draad_id)) {
+		} elseif ($draad_id !== 0 AND $number > $this->getAantalPaginas($draad_id)) {
 			$number = $this->getAantalPaginas($draad_id);
 		}
 		$this->pagina = $number;
@@ -447,11 +446,11 @@ class ForumPostsModel extends PersistenceModel implements Paging {
 		ForumDradenModel::instance()->update($draad);
 	}
 
-	public function zoeken($query, $max) {
+	public function zoeken($query) {
 		$orm = self::orm;
 		$columns = $orm::getFields();
 		$columns[] = 'MATCH(tekst) AGAINST (? IN NATURAL LANGUAGE MODE) AS score';
-		$result = Database::sqlSelect($columns, $orm::getTableName(), 'wacht_goedkeuring = FALSE AND verwijderd = FALSE HAVING score > 0', array($query), 'score DESC', $max);
+		$result = Database::sqlSelect($columns, $orm::getTableName(), 'wacht_goedkeuring = FALSE AND verwijderd = FALSE HAVING score > 0', array($query), 'score DESC', $this->per_pagina, ($this->pagina - 1) * $this->per_pagina);
 		return $result->fetchAll(PDO::FETCH_CLASS, $orm);
 	}
 

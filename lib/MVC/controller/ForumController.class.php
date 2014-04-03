@@ -102,13 +102,15 @@ class ForumController extends Controller {
 	/**
 	 * Tonen van alle posts die wachten op goedkeuring.
 	 */
-	public function zoeken($query = null) {
+	public function zoeken($query = null, $pagina = 1) {
 		if ($query === null) {
 			$query = filter_input(INPUT_POST, 'zoeken', FILTER_SANITIZE_SPECIAL_CHARS);
 		} else {
 			$query = urldecode($query);
 			$query = filter_var($query, FILTER_SANITIZE_SPECIAL_CHARS);
 		}
+		ForumPostsModel::instance()->setHuidigePagina((int) $pagina, 0);
+		ForumDradenModel::instance()->setHuidigePagina((int) $pagina, 0);
 		$draden_deel = ForumDelenModel::instance()->zoeken($query);
 		$body = new ForumResultatenView($draden_deel[0], $draden_deel[1], $query);
 		$this->view = new CsrLayoutPage($body);

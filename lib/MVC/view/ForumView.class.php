@@ -172,13 +172,14 @@ class ForumPostDeleteView extends TemplateView {
 class ForumResultatenView extends TemplateView {
 
 	public function __construct(array $draden, ForumDeel $dummy, $query) {
-		parent::__construct($query);
+		parent::__construct($draden);
+		$this->smarty->assign('resultaten', $this->model);
 		$this->smarty->assign('deel', $dummy);
-		$this->smarty->assign('resultaten', $draden);
+		$this->smarty->assign('query', $query);
 	}
 
 	public function getTitel() {
-		return 'Zoekresultaten voor: "' . $this->model . '"';
+		return 'Zoekresultaten';
 	}
 
 	public function view() {

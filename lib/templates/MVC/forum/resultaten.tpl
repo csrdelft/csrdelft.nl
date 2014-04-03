@@ -10,7 +10,7 @@
 
 {$smarty.capture.navlinks}
 
-<h1>{$view->getTitel()}</h1>
+<h1>{$view->getTitel()} voor: "{$query}"</h1>
 
 {if $resultaten}
 	<table id="forumtabel">
@@ -36,6 +36,16 @@
 				{/foreach}
 			</tbody>
 		{/foreach}
+		<thead>
+			<tr>
+				<th colspan="2">
+					{sliding_pager baseurl="/forum/zoeken/"|cat:$query|cat:"/"
+					pagecount=ForumDradenModel::instance()->getHuidigePagina() curpage=ForumDradenModel::instance()->getHuidigePagina()
+					separator=" &nbsp;"}
+					&nbsp;<a href="/forum/zoeken/{$query}/{ForumDradenModel::instance()->getAantalPaginas(0)}">verder zoeken</a>
+				</th>
+			</tr>
+		</thead>
 	</table>
 
 	<h1>{$view->getTitel()}</h1>
