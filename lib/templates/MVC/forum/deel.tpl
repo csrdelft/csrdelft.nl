@@ -4,7 +4,16 @@
 
 {capture name='navlinks'}
 	<div class="forumNavigatie">
-		<a href="/forum" class="forumGrootlink">Forum</a>
+		<a href="/forum" class="forumGrootlink">Forum</a> &raquo;
+		<select name="forum_id" style="padding: 0px;" onchange="document.location.href = '/forum/deel/' + this.value;">
+			{foreach from=ForumModel::instance()->getForum() item=cat}
+				<optgroup label="{$cat->titel}">
+					{foreach from=$cat->getForumDelen() item=newDeel}
+						<option value="{$newDeel->forum_id}"{if $newDeel->forum_id === $deel->forum_id} selected="selected"{/if}>{$newDeel->titel}</option>
+					{/foreach}
+				</optgroup>
+			{/foreach}
+		</select>
 	</div>
 {/capture}
 
