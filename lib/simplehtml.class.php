@@ -109,7 +109,7 @@ abstract class SimpleHTML implements View {
 		return $zijkolom;
 	}
 
-	public static function getDebug($sql = true, $get = true, $post = true, $files = false, $session = true, $cookie = true) {
+	public static function getDebug($sql = true, $get = true, $post = true, $files = true, $cookie = true, $session = true) {
 		$debug = '';
 		if ($sql) {
 			$debug .= '<hr />SQL<hr />';
@@ -133,16 +133,16 @@ abstract class SimpleHTML implements View {
 				$debug .= '<pre>' . htmlentities(print_r($_FILES, true)) . '</pre>';
 			}
 		}
-		if (isset($_GET['debug_session'])) { // only print session if relevent, because it might be quite big.
-			$debug .= '<hr />SESSION<hr />';
-			if (count($_SESSION) > 0) {
-				$debug .= '<pre>' . htmlentities(print_r($_SESSION, true)) . '</pre>';
-			}
-		}
 		if ($cookie) {
 			$debug .= '<hr />COOKIE<hr />';
 			if (count($_COOKIE) > 0) {
 				$debug .= '<pre>' . htmlentities(print_r($_COOKIE, true)) . '</pre>';
+			}
+		}
+		if ($session) {
+			$debug .= '<hr />SESSION<hr />';
+			if (count($_SESSION) > 0) {
+				$debug .= '<pre>' . htmlentities(print_r($_SESSION, true)) . '</pre>';
 			}
 		}
 		return $debug;
