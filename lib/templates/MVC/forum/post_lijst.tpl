@@ -3,11 +3,11 @@
 		<a href="/forum/reactie/{$post->post_id}#{$post->post_id}" id="{$post->post_id}" class="postlink" title="Link naar deze post">&rarr;</a>
 		{$post->lid_id|csrnaam:'user':'visitekaartje'}
 		{if LoginLid::mag('P_LEDEN_READ')}
-			<span tabindex="0" id="t{$post->lid_id}-{$post->post_id}" class="togglePasfoto"{if LoginLid::instance()->getInstelling('forum_toonpasfotos') == 'nee'} title="Toon pasfoto">&raquo;{else}>{/if}</span>
+			<span tabindex="0" id="t{$post->lid_id}-{$post->post_id}" class="togglePasfoto"{if LoginLid::instelling('forum_toonpasfotos') == 'nee'} title="Toon pasfoto">&raquo;{else}>{/if}</span>
 		{/if}<br />
-		<div id="p{$post->post_id}" class="forumpasfoto{if LoginLid::instance()->getInstelling('forum_toonpasfotos') == 'nee'} verborgen">{elseif LoginLid::mag('P_LEDEN_READ')}">{$post->lid_id|csrnaam:'pasfoto'}{/if}</div>
+		<div id="p{$post->post_id}" class="forumpasfoto{if LoginLid::instelling('forum_toonpasfotos') == 'nee'} verborgen">{elseif LoginLid::mag('P_LEDEN_READ')}">{$post->lid_id|csrnaam:'pasfoto'}{/if}</div>
 		<span class="moment">
-			{if LoginLid::instance()->getInstelling('forum_datumWeergave') === 'relatief'}
+			{if LoginLid::instelling('forum_datumWeergave') === 'relatief'}
 				{$post->datum_tijd|reldate}
 			{else}
 				{$post->datum_tijd}

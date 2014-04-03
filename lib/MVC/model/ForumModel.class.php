@@ -35,39 +35,6 @@ class ForumModel extends PersistenceModel {
 		return $categorien;
 	}
 
-	public function zoeken($query) {
-		// zoek op titel in draden
-		$gevonden_draden = array_key_property('draad_id', ForumDradenModel::instance()->zoeken($query));
-
-		// zoek op tekst in posts
-		$gevonden_posts = array_group_by('draad_id', ForumPostsModel::instance()->zoeken($query));
-
-		// laad draden bij gevonden posts
-		$draden_ids = array_keys(array_key_property('draad_id', $gevonden_posts, false));
-		$gevonden_draden = $gevonden_draden + ForumDradenModel::instance()->getForumDradenById($draden_ids);
-
-		// laad posts indien nodig bij gevonden draden
-		foreach ($gevonden_draden as $draad) {
-			if (array_key_exists($draad->draad_id, $gevonden_posts)) { // post is al gevonden
-				$draad->setForumPosts($gevonden_posts[$draad->draad_id]);
-			} else { // get first post
-				$draad->setForumPosts(array(ForumPostsModel::instance()->find('draad_id = ?', array($draad->draad_id), 'post_id DESC', 1)));
-			}
-		}
-
-		// check permissies op delen
-		$dradenByForumId = array_group_by('forum_id', $gevonden_draden);
-		$gevonden_delen = array_key_property('forum_id', ForumDelenModel::instance()->getForumDelenById(array_keys($dradenByForumId)));
-		foreach ($gevonden_delen as $deel) {
-			if ($deel->magLezen()) {
-				$deel->setForumDraden($dradenByForumId[$deel->forum_id]);
-			} else {
-				unset($gevonden_delen[$deel->forum_id]);
-			}
-		}
-		return $gevonden_delen;
-	}
-
 }
 
 class ForumDelenModel extends PersistenceModel {
@@ -141,6 +108,47 @@ class ForumDelenModel extends PersistenceModel {
 			}
 		}
 		return $delenById;
+	}
+
+	public function zoeken($query) {
+		$gevonden_draden = array_key_property('draad_id', ForumDradenModel::instance()->zoeken($query)); // zoek op titel in draden
+		$gevonden_posts = array_group_by('draad_id', ForumPostsModel::instance()->zoeken($query)); // zoek op tekst in posts
+		$gevonden_draden += ForumDradenModel::instance()->getForumDradenById(array_keys($gevonden_posts)); // laad draden bij posts
+		foreach ($gevonden_draden as $draad) { // laad posts bij draden
+			if (array_key_exists($draad->draad_id, $gevonden_posts)) { // post is al gevonden
+				$draad->setForumPosts($gevonden_posts[$draad->draad_id]);
+				$draad->score = 0;
+				foreach ($draad->getForumPosts() as $post) {
+					$draad->score += $post->score;
+				}
+			} else { // get first post
+				$array_first = ForumPostsModel::instance()->find('draad_id = ?', array($draad->draad_id), 'post_id DESC', 1);
+				$draad->score = 2 * (float) $draad->score;
+				$draad->setForumPosts($array_first);
+			}
+		}
+		// check permissies op delen
+		$delen_ids = array_keys(array_group_by('forum_id', $gevonden_draden, false));
+		$gevonden_delen = array_key_property('forum_id', ForumDelenModel::instance()->getForumDelenById($delen_ids));
+		foreach ($gevonden_delen as $deel) {
+			if (!$deel->magLezen()) {
+				foreach ($gevonden_draden as $draad_id => $draad) {
+					if ($draad->forum_id === $deel->forum_id) {
+						unset($gevonden_draden[$draad_id]);
+					}
+				}
+			}
+		}
+		usort($gevonden_draden, array($this, 'sorteren'));
+		return array($gevonden_draden, new ForumDeel());
+	}
+
+	function sorteren($a, $b) {
+		if ($a->score < $b->score) {
+			return 1;
+		} else {
+			return -1;
+		}
 	}
 
 }
@@ -252,7 +260,7 @@ class ForumDradenModel extends PersistenceModel implements Paging {
 		$orm = self::orm;
 		$columns = $orm::getFields();
 		$columns[] = 'MATCH(titel) AGAINST (? IN NATURAL LANGUAGE MODE) AS score';
-		$result = Database::sqlSelect($columns, $orm::getTableName(), null, array($query), 'score DESC', $max);
+		$result = Database::sqlSelect($columns, $orm::getTableName(), 'wacht_goedkeuring = FALSE AND verwijderd = FALSE HAVING score > 0', array($query), 'score DESC', $max);
 		return $result->fetchAll(PDO::FETCH_CLASS, $orm);
 	}
 
@@ -433,7 +441,7 @@ class ForumPostsModel extends PersistenceModel implements Paging {
 		$orm = self::orm;
 		$columns = $orm::getFields();
 		$columns[] = 'MATCH(tekst) AGAINST (? IN NATURAL LANGUAGE MODE) AS score';
-		$result = Database::sqlSelect($columns, $orm::getTableName(), null, array($query), 'score DESC', $max);
+		$result = Database::sqlSelect($columns, $orm::getTableName(), 'wacht_goedkeuring = FALSE AND verwijderd = FALSE HAVING score > 0', array($query), 'score DESC', $max);
 		return $result->fetchAll(PDO::FETCH_CLASS, $orm);
 	}
 

@@ -9,24 +9,29 @@
 {/capture}
 
 {$smarty.capture.navlinks}
-<h1>{$view->getTitel()}</h1>
 
-{if $delen}
+<h1>{count($resultaten)} {$view->getTitel()}</h1>
+
+{if $resultaten}
 	<table id="forumtabel">
-		{foreach from=$delen item=deel}
-			{foreach from=$deel->getForumDraden() item=draad}
-				<thead>
-					<tr>
-						<th>Draad:</th>
-						<th>{$draad->titel}</th>
-					</tr>
-				</thead>
-				<tbody>
-					{foreach from=$draad->getForumPosts() item=post}
-						{include file='MVC/forum/post_lijst.tpl'}
-					{/foreach}
-				</tbody>
-			{/foreach}
+		{foreach from=$resultaten item=draad}
+			<thead>
+				<tr>
+					<th style="font-weight: normal;">
+						{if LoginLid::instelling('forum_datumWeergave') === 'relatief'}
+							{$draad->datum_tijd|reldate}
+						{else}
+							{$draad->datum_tijd}
+						{/if}
+					</th>
+					<th>{$draad->titel}</th>
+				</tr>
+			</thead>
+			<tbody>
+				{foreach from=$draad->getForumPosts() item=post}
+					{include file='MVC/forum/post_lijst.tpl'}
+				{/foreach}
+			</tbody>
 		{/foreach}
 	</table>
 

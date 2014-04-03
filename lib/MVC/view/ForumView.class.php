@@ -168,18 +168,16 @@ class ForumPostDeleteView extends TemplateView {
 
 }
 
-/**
- * Requires ForumDeel[]
- */
 class ForumResultatenView extends TemplateView {
 
-	public function __construct(array $delen, $titel) {
-		parent::__construct($titel);
-		$this->smarty->assign('delen', $delen);
+	public function __construct(array $draden, ForumDeel $dummy, $query) {
+		parent::__construct($query);
+		$this->smarty->assign('deel', $dummy);
+		$this->smarty->assign('resultaten', $draden);
 	}
 
 	public function getTitel() {
-		return $this->model;
+		return 'zoekresultaten voor: "' . $this->model . '"';
 	}
 
 	public function view() {

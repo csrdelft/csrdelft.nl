@@ -108,7 +108,8 @@ class ForumController extends Controller {
 		} else {
 			$query = filter_var($query, FILTER_SANITIZE_SPECIAL_CHARS);
 		}
-		$body = new ForumResultatenView(ForumModel::instance()->zoeken($query), 'Zoekresultaten voor: ' . $query);
+		$draden_deel = ForumDelenModel::instance()->zoeken($query);
+		$body = new ForumResultatenView($draden_deel[0], $draden_deel[1], $query);
 		$this->view = new CsrLayoutPage($body);
 		$this->view->addStylesheet('forum.css');
 		$this->view->addScript('forum.js');

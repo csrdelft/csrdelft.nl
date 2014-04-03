@@ -242,6 +242,10 @@ class LoginLid {
 		$this->login('x999', 'x999', true);
 	}
 
+	public static function instelling($module, $key = null) {
+		return LidInstellingen::get($module, $key);
+	}
+
 	public function getInstelling($module, $key = null) {
 		return LidInstellingen::get($module, $key);
 	}

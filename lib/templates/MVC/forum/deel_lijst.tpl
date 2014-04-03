@@ -7,7 +7,7 @@
 	<td class="reacties">{$deel->aantal_posts}</td>
 	<td class="reactiemoment">
 		{if $deel->laatst_gewijzigd}
-			{if LoginLid::instance()->getInstelling('forum_datumWeergave') === 'relatief'}
+			{if LoginLid::instelling('forum_datumWeergave') === 'relatief'}
 				{$deel->laatst_gewijzigd|reldate}
 			{else}
 				{$deel->laatst_gewijzigd}
