@@ -285,18 +285,13 @@ class ForumController extends Controller {
 		$post = ForumPostsModel::instance()->maakForumPost($draad->draad_id, $tekst, $_SERVER['REMOTE_ADDR'], $wacht_goedkeuring);
 		$_SESSION['forum_laatste_post_tekst'] = $tekst;
 		$_SESSION['forum_concept'] = '';
-		$draad->aantal_posts++;
-		$draad->laatst_gewijzigd = $post->datum_tijd;
-		$draad->laatste_post_id = $post->post_id;
-		$draad->laatste_lid_id = $post->lid_id;
-		ForumDradenModel::instance()->update($draad);
-		$deel->aantal_posts++;
-		ForumDelenModel::instance()->update($deel);
 		if ($wacht_goedkeuring) {
 			setMelding('Uw bericht is opgeslagen en zal als het goedgekeurd is geplaatst worden.', 1);
 			//bericht sturen naar pubcie@csrdelft dat er een bericht op goedkeuring wacht
 			mail('pubcie@csrdelft.nl', 'Nieuw bericht wacht op goedkeuring', "http://csrdelft.nl/forum/wacht#" . $post->post_id . "\r\n" . "\r\nDe inhoud van het bericht is als volgt: \r\n\r\n" . str_replace('\r\n', "\n", $tekst) . "\r\n\r\nEINDE BERICHT", "From: pubcie@csrdelft.nl\nReply-To: " . $email);
 			invokeRefresh('/forum/deel/' . $deel->forum_id);
+		} else {
+			ForumPostsModel::instance()->goedkeurenForumPost($post, $draad, $deel);
 		}
 		// redirect naar (altijd) juiste pagina
 		invokeRefresh('/forum/reactie/' . $post->post_id . '#' . $post->post_id); // , ($draad_id === null ? 'Draad' : 'Post') . ' succesvol toegevoegd', 1
@@ -354,19 +349,7 @@ class ForumController extends Controller {
 		if (!$deel->magModereren()) {
 			$this->geentoegang();
 		}
-		$rowcount = ForumPostsModel::instance()->goedkeurenForumPost($post);
-		if ($rowcount !== 1) {
-			throw new Exception('Goedkeuren mislukt');
-		}
-		if ($draad->wacht_goedkeuring AND $draad->aantal_posts === 1) {
-			$draad->wacht_goedkeuring = false;
-			$draad->laatst_gewijzigd = $post->laatst_bewerkt;
-			$draad->aantal_posts++;
-			$rowcount = ForumDradenModel::instance()->update($draad);
-			if ($rowcount !== 1) {
-				throw new Exception('Goedkeuren mislukt');
-			}
-		}
+		ForumPostsModel::instance()->goedkeurenForumPost($post, $draad, $deel);
 		$this->view = new ForumPostView($post, $draad, $deel);
 	}
 

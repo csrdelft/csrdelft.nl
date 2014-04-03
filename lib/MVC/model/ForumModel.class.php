@@ -553,14 +553,36 @@ class ForumPostsModel extends PersistenceModel implements Paging {
 		return $this->update($post);
 	}
 
-	public function goedkeurenForumPost(ForumPost $post) {
-		if (!$post->wacht_goedkeuring) {
-			throw new Exception('Al goedgekeurd!');
+	public function goedkeurenForumPost(ForumPost $post, ForumDraad $draad, ForumDeel $deel) {
+		if ($post->wacht_goedkeuring) {
+			$post->wacht_goedkeuring = false;
+			$post->laatst_bewerkt = getDateTime();
+			$post->bewerkt_tekst .= '[prive=P_FORUM_MOD]Goedgekeurd door [lid=' . LoginLid::instance()->getUid() . '] [reldate]' . $post->laatst_bewerkt . '[/reldate][/prive]' . "\n";
+			$rowcount = $this->update($post);
+			if ($rowcount !== 1) {
+				throw new Exception('Goedkeuren mislukt');
+			}
 		}
-		$post->wacht_goedkeuring = false;
-		$post->laatst_bewerkt = getDateTime();
-		$post->bewerkt_tekst .= '[prive=P_FORUM_MOD]Goedgekeurd door [lid=' . LoginLid::instance()->getUid() . '] [reldate]' . $post->laatst_bewerkt . '[/reldate][/prive]' . "\n";
-		return $this->update($post);
+		$draad->aantal_posts++;
+		$draad->laatst_gewijzigd = $post->laatst_bewerkt;
+		$draad->laatste_post_id = $post->post_id;
+		$draad->laatste_lid_id = $post->lid_id;
+		if ($draad->wacht_goedkeuring) {
+			$draad->wacht_goedkeuring = false;
+			$deel->aantal_draden++;
+		}
+		$rowcount = ForumDradenModel::instance()->update($draad);
+		if ($rowcount !== 1) {
+			throw new Exception('Goedkeuren mislukt');
+		}
+		$deel->aantal_posts++;
+		$deel->laatst_gewijzigd = $post->laatst_bewerkt;
+		$deel->laatste_post_id = $post->post_id;
+		$deel->laatste_lid_id = $post->lid_id;
+		$rowcount = ForumDelenModel::instance()->update($deel);
+		if ($rowcount !== 1) {
+			throw new Exception('Goedkeuren mislukt');
+		}
 	}
 
 	public function citeerForumPost(ForumPost $post) {
