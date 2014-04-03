@@ -62,8 +62,8 @@
 	<tbody>
 		<tr>
 			<td colspan="5">
-				<h1 style="display: inline-block;">{$deel->titel}</h1>
 				<div style="float: right;">{$smarty.capture.navlinks}</div>
+				<br /><h1>{$deel->titel}</h1>
 			</td>
 		</tr>
 		{if $deel->magPosten()}

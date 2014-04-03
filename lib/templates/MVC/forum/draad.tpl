@@ -88,9 +88,8 @@
 
 		{if ForumPostsModel::instance()->getAantalPaginas($draad->draad_id) > 1}
 			<tr>
-				<td>&nbsp;</td>
-				<td>
-					<div class="forum_paginering">
+				<td colspan="2">
+					<div class="forum_paginering" style="float: left;">
 						Pagina: {sliding_pager baseurl="/forum/onderwerp/"|cat:$draad->draad_id|cat:"/"
 									pagecount=ForumPostsModel::instance()->getAantalPaginas($draad->draad_id) curpage=ForumPostsModel::instance()->getHuidigePagina()}
 					</div>
@@ -103,8 +102,8 @@
 
 		<tr>
 			<td colspan="5">
-				{$smarty.capture.titel}
 				<div style="float: right;">{$smarty.capture.navlinks}</div>
+				<br />{$smarty.capture.titel}
 			</td>
 		</tr>
 
