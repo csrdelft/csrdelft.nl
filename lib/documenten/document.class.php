@@ -42,7 +42,7 @@ class Document{
 				//Bij $this->ID==0 gaat het om een nieuw document. Hier
 				//zetten we de defaultwaarden voor het nieuwe document.
 				$this->setToegevoegd(getDateTime());
-				$this->setEigenaar(LoginLid::instance()->getLid()->getUid());
+				$this->setEigenaar(LoginLid::instance()->getUid());
 			}else{
 				$db=MySql::instance();
 				$query="

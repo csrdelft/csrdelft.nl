@@ -30,7 +30,6 @@ class auth_plugin_authcsr extends DokuWiki_Auth_Plugin {
         $this->cando['external'] = true;
         $this->cando['logoff']   = true;
 
-        global LoginLid::instance();
         global $conf;
 
         //login with:
@@ -84,8 +83,6 @@ class auth_plugin_authcsr extends DokuWiki_Auth_Plugin {
     function trustExternal($user, $pass, $sticky = false) {
         global $USERINFO;
         global $lang;
-        /** @var LoginLid::instance() LoginLid */
-        global LoginLid::instance();
         global $conf;
 
         # als er een gebruiker is gegeven willen we graag proberen in te loggen via inlogformulier
@@ -151,8 +148,6 @@ class auth_plugin_authcsr extends DokuWiki_Auth_Plugin {
      * @see     auth_logoff()
      */
     function logOff() {
-        global LoginLid::instance();
-
         LoginLid::instance()->logout();
     }
 

@@ -3527,7 +3527,6 @@ Index: user/buttons.php
 -$rss["rss"]["nofollow"] = true;
  
 -if (auth_quickaclcheck('hoofdpagina') >= AUTH_READ) {
--	global LoginLid::instance();
 -    if(LoginLid::instance()) {
 -        $rsstoken = LoginLid::instance()->getLid()->getProperty('rssToken');
 -

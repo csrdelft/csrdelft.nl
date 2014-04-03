@@ -37,7 +37,6 @@ class auth_csr extends auth_basic {
      * Set capabilities.
      */
     function auth_csr() {
-        global LoginLid::instance();
         global $conf;
 
         $this->cando['external'] = true;
@@ -92,7 +91,6 @@ class auth_csr extends auth_basic {
     function trustExternal($user, $pass, $sticky = false) {
         global $USERINFO;
         global $lang;
-        global LoginLid::instance();
         global $conf;
 
         # als er een gebruiker is gegeven willen we graag proberen in te loggen via inlogformulier
@@ -158,8 +156,6 @@ class auth_csr extends auth_basic {
      * @see     auth_logoff()
      */
     function logOff() {
-        global LoginLid::instance();
-
         LoginLid::instance()->logout();
     }
 
