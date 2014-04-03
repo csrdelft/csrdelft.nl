@@ -56,14 +56,17 @@
 					pagecount=ForumDradenModel::instance()->getAantalPaginas($deel->forum_id) curpage=ForumDradenModel::instance()->getHuidigePagina()
 					separator=" &nbsp;" show_prev_next=true}
 				{/if}
+				<div style="float: right;">{$smarty.capture.navlinks}</div>
 			</th>
 		</tr>
 	</thead>
 	<tbody>
 		<tr>
 			<td colspan="5">
-				<div style="float: right;">{$smarty.capture.navlinks}</div>
-				<br /><h1>{$deel->titel}</h1>
+				<div class="forumdeel-omschrijving">
+					<h1>{$deel->titel}</h1>
+					{$deel->omschrijving}
+				</div>
 			</td>
 		</tr>
 		{if $deel->magPosten()}

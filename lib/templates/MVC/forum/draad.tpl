@@ -93,6 +93,7 @@
 						Pagina: {sliding_pager baseurl="/forum/onderwerp/"|cat:$draad->draad_id|cat:"/"
 									pagecount=ForumPostsModel::instance()->getAantalPaginas($draad->draad_id) curpage=ForumPostsModel::instance()->getHuidigePagina()}
 					</div>
+					<div style="float: right; padding: 4px 5px;">{$smarty.capture.navlinks}</div>
 				</td>
 			</tr>
 			<tr class="tussenschot">
@@ -102,8 +103,7 @@
 
 		<tr>
 			<td colspan="5">
-				<div style="float: right;">{$smarty.capture.navlinks}</div>
-				<br />{$smarty.capture.titel}
+				{$smarty.capture.titel}
 			</td>
 		</tr>
 

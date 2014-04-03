@@ -1,7 +1,7 @@
 <tr class="forumdeel kleur{cycle values="0,1"}">
 	<td class="titel">
 		<a href="/forum/deel/{$deel->forum_id}">{$deel->titel}</a>
-		<br /><span class="forumdeel-omschrijving">{$deel->omschrijving}</span>
+		<br />{$deel->omschrijving}
 	</td>
 	<td class="reacties">{$deel->aantal_draden}</td>
 	<td class="reacties">{$deel->aantal_posts}</td>

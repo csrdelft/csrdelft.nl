@@ -151,7 +151,13 @@ span.togglePasfoto:hover, a.postlink:hover{
 #forumtabel td.forumtekst input#titel {
     width: 578px;
 }
-
+div.forumdeel-omschrijving{
+	text-align: left;
+	padding: 10px;
+	margin: 10px 0px;;
+	background-color: #F5F5F5;
+    border: 1px solid #B8B8B8;
+}
 
 div.bewerkt{ font-size: 9px; color: #bbb; }
 div.bewerkt a{ color: #bbb; }
