@@ -178,7 +178,7 @@ class ForumResultatenView extends TemplateView {
 	}
 
 	public function getTitel() {
-		return 'zoekresultaten voor: "' . $this->model . '"';
+		return 'Zoekresultaten voor: "' . $this->model . '"';
 	}
 
 	public function view() {

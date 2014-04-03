@@ -10,7 +10,7 @@
 
 {$smarty.capture.navlinks}
 
-<h1>{count($resultaten)} {$view->getTitel()}</h1>
+<h1>{$view->getTitel()}</h1>
 
 {if $resultaten}
 	<table id="forumtabel">
