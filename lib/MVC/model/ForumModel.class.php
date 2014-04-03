@@ -217,13 +217,13 @@ class ForumDradenModel extends PersistenceModel implements Paging {
 		return $this->pagina;
 	}
 
-	public function setHuidigePagina($number, $forum_id) {
-		if (!is_int($number) OR $number < 1) {
-			$number = 1;
-		} elseif ($forum_id !== 0 AND $number > $this->getAantalPaginas($forum_id)) {
-			$number = $this->getAantalPaginas($forum_id);
+	public function setHuidigePagina($pagina, $forum_id) {
+		if (!is_int($pagina) OR $pagina < 1) {
+			$pagina = 1;
+		} elseif ($forum_id !== 0 AND $pagina > $this->getAantalPaginas($forum_id)) {
+			$pagina = $this->getAantalPaginas($forum_id);
 		}
-		$this->pagina = $number;
+		$this->pagina = $pagina;
 	}
 
 	public function setLaatstePagina($forum_id) {
@@ -416,13 +416,13 @@ class ForumPostsModel extends PersistenceModel implements Paging {
 		return $this->pagina;
 	}
 
-	public function setHuidigePagina($number, $draad_id) {
-		if (!is_int($number) OR $number < 1) {
-			$number = 1;
-		} elseif ($draad_id !== 0 AND $number > $this->getAantalPaginas($draad_id)) {
-			$number = $this->getAantalPaginas($draad_id);
+	public function setHuidigePagina($pagina, $draad_id) {
+		if (!is_int($pagina) OR $pagina < 1) {
+			$pagina = 1;
+		} elseif ($draad_id !== 0 AND $pagina > $this->getAantalPaginas($draad_id)) {
+			$pagina = $this->getAantalPaginas($draad_id);
 		}
-		$this->pagina = $number;
+		$this->pagina = $pagina;
 	}
 
 	public function setLaatstePagina($draad_id) {
