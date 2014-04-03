@@ -308,11 +308,12 @@ class ForumDradenModel extends PersistenceModel implements Paging {
 	public function getRecenteForumDraden($aantal = null, $belangrijk = null, $rss = false) {
 		if (!is_int($aantal)) {
 			$aantal = (int) LidInstellingen::get('forum', 'zoekresultaten');
+			$pagina = $this->pagina;
 		} else {
-			$pagina = $this->pagina - 1;
+			$pagina = 1;
 		}
 		$draden = $this->find(
-				($belangrijk === null ? '' : 'd.belangrijk = ? AND ') . 'd.wacht_goedkeuring = FALSE AND d.verwijderd = FALSE', ($belangrijk === null ? array() : array($belangrijk)), 'd.laatst_gewijzigd DESC', $aantal, $pagina * $aantal);
+				($belangrijk === null ? '' : 'd.belangrijk = ? AND ') . 'd.wacht_goedkeuring = FALSE AND d.verwijderd = FALSE', ($belangrijk === null ? array() : array($belangrijk)), 'd.laatst_gewijzigd DESC', $aantal, ($pagina - 1) * $aantal);
 		$posts_ids = array_keys(array_key_property('laatste_post_id', $draden, false));
 		$posts = ForumPostsModel::instance()->getForumPostsById($posts_ids);
 		$delen_ids = array_keys(array_key_property('forum_id', $draden, false));
