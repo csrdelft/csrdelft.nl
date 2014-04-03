@@ -532,6 +532,7 @@ class ForumPostsModel extends PersistenceModel implements Paging {
 	public function verwijderForumPostsVoorDraad(ForumDraad $draad) {
 		$orm = self::orm;
 		Database::sqlUpdate($orm::getTableName(), array('verwijderd' => $draad->verwijderd), 'draad_id = :id', array('id' => $draad->draad_id));
+		$this->hertellenVoorDraad($draad);
 	}
 
 	public function bewerkForumPost(ForumPost $post, $nieuwe_tekst, $reden = '') {
@@ -554,6 +555,7 @@ class ForumPostsModel extends PersistenceModel implements Paging {
 	}
 
 	public function goedkeurenForumPost(ForumPost $post, ForumDraad $draad, ForumDeel $deel) {
+		$laatst = $post->datum_tijd;
 		if ($post->wacht_goedkeuring) {
 			$post->wacht_goedkeuring = false;
 			$post->laatst_bewerkt = getDateTime();
@@ -562,9 +564,10 @@ class ForumPostsModel extends PersistenceModel implements Paging {
 			if ($rowcount !== 1) {
 				throw new Exception('Goedkeuren mislukt');
 			}
+			$laatst = $post->laatst_bewerkt;
 		}
 		$draad->aantal_posts++;
-		$draad->laatst_gewijzigd = $post->laatst_bewerkt;
+		$draad->laatst_gewijzigd = $laatst;
 		$draad->laatste_post_id = $post->post_id;
 		$draad->laatste_lid_id = $post->lid_id;
 		if ($draad->wacht_goedkeuring) {
@@ -576,7 +579,7 @@ class ForumPostsModel extends PersistenceModel implements Paging {
 			throw new Exception('Goedkeuren mislukt');
 		}
 		$deel->aantal_posts++;
-		$deel->laatst_gewijzigd = $post->laatst_bewerkt;
+		$deel->laatst_gewijzigd = $laatst;
 		$deel->laatste_post_id = $post->post_id;
 		$deel->laatste_lid_id = $post->lid_id;
 		$rowcount = ForumDelenModel::instance()->update($deel);
