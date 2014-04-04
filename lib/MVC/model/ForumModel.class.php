@@ -564,7 +564,7 @@ class ForumPostsModel extends PersistenceModel implements Paging {
 		return array_key_property('post_id', $this->find('post_id IN (' . $in . ')', $ids));
 	}
 
-	public function maakForumPost($draad_id, $tekst, $ip, $wacht_goedkeuring) {
+	public function maakForumPost($draad_id, $tekst, $ip, $wacht_goedkeuring, $email) {
 		$post = new ForumPost();
 		$post->draad_id = (int) $draad_id;
 		$post->lid_id = LoginLid::instance()->getUid();
@@ -575,6 +575,9 @@ class ForumPostsModel extends PersistenceModel implements Paging {
 		$post->verwijderd = false;
 		$post->auteur_ip = $ip;
 		$post->wacht_goedkeuring = $wacht_goedkeuring;
+		if ($wacht_goedkeuring) {
+			$post->bewerkt_tekst = '[prive]email: [email]' . $email . '[/email][/prive]' . "\n";
+		}
 		$post->post_id = (int) ForumPostsModel::instance()->create($post);
 		return $post;
 	}

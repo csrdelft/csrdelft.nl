@@ -275,6 +275,7 @@ class ForumController extends Controller {
 		if (array_key_exists('forum_laatste_post_tekst', $_SESSION) AND $_SESSION['forum_laatste_post_tekst'] === $tekst) {
 			invokeRefresh('/forum/deel/' . $deel->forum_id, 'Uw reactie is al geplaatst', 0);
 		}
+		$email = null;
 		$wacht_goedkeuring = false;
 		if (!LoginLid::mag('P_LOGGED_IN')) {
 			$wacht_goedkeuring = true;
@@ -299,7 +300,7 @@ class ForumController extends Controller {
 			}
 			$draad = ForumDradenModel::instance()->maakForumDraad($deel->forum_id, $titel, $wacht_goedkeuring);
 		}
-		$post = ForumPostsModel::instance()->maakForumPost($draad->draad_id, $tekst, $_SERVER['REMOTE_ADDR'], $wacht_goedkeuring);
+		$post = ForumPostsModel::instance()->maakForumPost($draad->draad_id, $tekst, $_SERVER['REMOTE_ADDR'], $wacht_goedkeuring, $email);
 		$_SESSION['forum_laatste_post_tekst'] = $tekst;
 		$_SESSION['forum_concept'] = '';
 		if ($wacht_goedkeuring) {
