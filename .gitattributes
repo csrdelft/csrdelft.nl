@@ -3939,6 +3939,7 @@ lib/templates/MVC/instellingen/beheer/instelling_row.tpl -text
 lib/templates/MVC/instellingen/beheer/instellingen_page.tpl -text
 lib/templates/MVC/instellingen/lidinstelling.tpl -text
 lib/templates/MVC/instellingen/lidinstellingen_page.tpl -text
+lib/templates/MVC/layout/pauper.tpl -text
 lib/templates/MVC/layout/ubbhulp.tpl -text
 lib/templates/MVC/mail/layout/simple_layout.tpl -text
 lib/templates/MVC/mail/lidafgeleendebiebboeken.mail -text
@@ -3985,6 +3986,7 @@ lib/templates/groepen/groep.ubb.tpl -text
 lib/templates/groepen/groepen.tpl -text
 lib/templates/groepen/groepformulier.tpl -text
 lib/templates/groepen/groepleden.tpl -text
+lib/templates/login.tpl -text
 lib/templates/maalciemail.tpl -text
 lib/templates/mededelingen/lijst.tpl -text
 lib/templates/mededelingen/mededeling.tpl -text

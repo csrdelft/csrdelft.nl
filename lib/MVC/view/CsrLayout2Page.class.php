@@ -51,11 +51,12 @@ class CsrLayout2Page extends HtmlPage {
 		DragObjectModel::getCoords('ubbhulpverhaal', $top, $left);
 		$this->smarty->assign('ubbtop', $top);
 		$this->smarty->assign('ubbleft', $left);
-		$this->smarty->display('csrdelft2/' . $this->tmpl . '.tpl');
 
-		// als er een error is geweest, die unsetten...
-		if (isset($_SESSION['auth_error'])) {
-			unset($_SESSION['auth_error']);
+		if (array_key_exists('pauper', $_SESSION)) {
+			$this->smarty->assign('menutree', MenuModel::instance()->getMenuTree('main'));
+			$this->smarty->display('MVC/layout/pauper.tpl');
+		} else {
+			$this->smarty->display('csrdelft2/' . $this->tmpl . '.tpl');
 		}
 	}
 

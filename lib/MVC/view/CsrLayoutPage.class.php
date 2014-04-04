@@ -96,6 +96,7 @@ class CsrLayoutPage extends HtmlPage {
 		$this->smarty->assign('body', $this->model);
 		$this->smarty->assign('zijkolom', $this->zijkolom);
 		$this->smarty->assign('popup', $this->popup);
+
 		$top = 180;
 		$left = 190;
 		DragObjectModel::getCoords('popup', $top, $left);
@@ -106,11 +107,12 @@ class CsrLayoutPage extends HtmlPage {
 		DragObjectModel::getCoords('ubbhulpverhaal', $top, $left);
 		$this->smarty->assign('ubbtop', $top);
 		$this->smarty->assign('ubbleft', $left);
-		$this->smarty->display('csrdelft.tpl');
 
-		// als er een error is geweest, die unsetten...
-		if (isset($_SESSION['auth_error'])) {
-			unset($_SESSION['auth_error']);
+		if (array_key_exists('pauper', $_SESSION)) {
+			$this->smarty->assign('menutree', MenuModel::instance()->getMenuTree('main'));
+			$this->smarty->display('MVC/layout/pauper.tpl');
+		} else {
+			$this->smarty->display('csrdelft.tpl');
 		}
 	}
 

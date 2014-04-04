@@ -3,8 +3,8 @@ RewriteEngine On
 
 RewriteRule ^nieuws/?(.*)		/actueel/mededelingen/$1/ [R,L]
 RewriteRule ^facebook/?			http://www.facebook.com/group.php?gid=10294513917&ref=ts [L]
-RewriteRule ^pauper				pauper.php [L]
 RewriteRule ^forum/rss/([0-9a-z]*).xml	index.php?c=Forum&validate_token=$1 [L]
+RewriteRule ^pauper				pauper.php [L]
 
 RewriteRule ^forum				index.php?c=Forum [L]
 RewriteRule ^agenda				index.php?c=Agenda [L]
