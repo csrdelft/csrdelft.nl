@@ -125,16 +125,19 @@ class ForumDelenModel extends PersistenceModel {
 		$gevonden_draden = array_key_property('draad_id', ForumDradenModel::instance()->zoeken($query)); // zoek op titel in draden
 		$gevonden_draden += ForumDradenModel::instance()->getForumDradenById(array_keys($gevonden_posts)); // laad draden bij posts
 		foreach ($gevonden_draden as $draad) { // laad posts bij draden
-			if (array_key_exists($draad->draad_id, $gevonden_posts)) { // post is al gevonden
+			if (property_exists($draad, 'score')) { // gevonden op draad titel
+				$draad->score = (float) $draad->score;
+			} else { // gevonden op post tekst
+				$draad->score = (float) 0;
+			}
+			if (array_key_exists($draad->draad_id, $gevonden_posts)) { // posts al gevonden
 				$draad->setForumPosts($gevonden_posts[$draad->draad_id]);
-				$draad->score = 0;
 				foreach ($draad->getForumPosts() as $post) {
-					$draad->score += $post->score;
+					$draad->score += (float) $post->score;
 				}
-			} else { // get first post
-				$array_first = ForumPostsModel::instance()->find('draad_id = ?', array($draad->draad_id), 'post_id ASC', 1);
-				$draad->score = 2 * (float) $draad->score;
-				$draad->setForumPosts($array_first);
+			} else { // laad eerste post
+				$array_first_post = ForumPostsModel::instance()->find('draad_id = ?', array($draad->draad_id), 'post_id ASC', 1);
+				$draad->setForumPosts($array_first_post);
 			}
 		}
 		// check permissies op delen
@@ -476,8 +479,8 @@ class ForumPostsModel extends PersistenceModel implements Paging {
 	public function getForumPostsVoorDraad(ForumDraad $draad) {
 		$posts = $this->find('draad_id = ? AND wacht_goedkeuring = FALSE AND verwijderd = FALSE', array($draad->draad_id), 'post_id ASC', $this->per_pagina, ($this->pagina - 1) * $this->per_pagina);
 		if ($draad->eerste_post_plakkerig AND $this->pagina !== 1) {
-			$first_post = $this->find('draad_id = ? AND wacht_goedkeuring = FALSE AND verwijderd = FALSE', array($draad->draad_id), 'post_id ASC', 1);
-			array_unshift($posts, $first_post[0]);
+			$array_first_post = $this->find('draad_id = ? AND wacht_goedkeuring = FALSE AND verwijderd = FALSE', array($draad->draad_id), 'post_id ASC', 1);
+			array_unshift($posts, $array_first_post[0]);
 		}
 		// 2008 filter
 		if (LidInstellingen::get('forum', 'filter2008') == 'ja') {
