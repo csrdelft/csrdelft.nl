@@ -38,6 +38,9 @@
 	<body style="background: none;">
 		<a href="/pauper/terug">Naar normale webstek</a>
 		<div style="float: right;">
+			{if isset($smarty.session.auth_error)}
+				<span class="waarschuwing">{$smarty.session.auth_error}</span>
+			{/if}
 			{if LoginLid::mag('P_LOGGED_IN')}
 				<a href="/logout.php">Uitloggen</a>
 			{else}
