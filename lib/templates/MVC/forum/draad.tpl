@@ -63,7 +63,7 @@
 				<td>&nbsp;</td>
 				<td>
 					<i>{$smarty.capture.magreageren}</i>
-					<div class="forum_paginering">
+					<div class="forum-paginering" style="float: right;">
 						Pagina: {sliding_pager baseurl="/forum/onderwerp/"|cat:$draad->draad_id|cat:"/"
 									pagecount=ForumPostsModel::instance()->getAantalPaginas($draad->draad_id) curpage=ForumPostsModel::instance()->getHuidigePagina()}
 					</div>
@@ -89,11 +89,10 @@
 		{if ForumPostsModel::instance()->getAantalPaginas($draad->draad_id) > 1}
 			<tr>
 				<td colspan="2">
-					<div class="forum_paginering" style="float: left;">
+					<div class="forum-paginering">
 						Pagina: {sliding_pager baseurl="/forum/onderwerp/"|cat:$draad->draad_id|cat:"/"
 									pagecount=ForumPostsModel::instance()->getAantalPaginas($draad->draad_id) curpage=ForumPostsModel::instance()->getHuidigePagina()}
 					</div>
-					<div style="float: right; padding: 4px 5px;">{$smarty.capture.navlinks}</div>
 				</td>
 			</tr>
 			<tr class="tussenschot">
@@ -102,7 +101,8 @@
 		{/if}
 
 		<tr>
-			<td colspan="5">
+			<td colspan="5" style="padding: 5px 0px;">
+				{$smarty.capture.navlinks}
 				{$smarty.capture.titel}
 			</td>
 		</tr>

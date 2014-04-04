@@ -258,18 +258,17 @@ div.zoekhulp{
 #zoekhulptabel td.operator{	width: 40px; }
 
 /* Paginering */
-div.forum_paginering{
+div.forum-paginering{
 	padding: 5px;
-	float: right;
 }
-div.forum_paginering a{
+div.forum-paginering a{
 	padding: 4px 5px;
 }
-div.forum_paginering a:hover{
+div.forum-paginering a:hover{
 	background-color: #ddd;
 	text-decoration: none;
 }
-div.forum_paginering span.curpage{
+div.forum-paginering span.curpage{
 	padding: 4px 5px;
 	font-weight: bold;
 }
