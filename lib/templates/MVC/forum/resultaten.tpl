@@ -26,16 +26,20 @@
 					</th>
 					<th>
 						{if $draad->wacht_goedkeuring}
-							<small style="font-weight: normal;">[draad ter goedkeuring...]</small>
-							{$draad->titel}
+							<span title="Nieuw onderwerp in {$delen[$draad->forum_id]->titel}">
+								<small style="font-weight: normal;">[{$delen[$draad->forum_id]->titel}]</small>
+								{$draad->titel}
+								{icon get="new"}
+							</span>
 						{else}
 							<a id="{$draad->draad_id}" href="/forum/onderwerp/{$draad->draad_id}"{if !$draad->alGelezen()} class="updatedTopic"{/if}>
-								{if $draad->gesloten}
-									<img src="{icon get="slotje" notag=true}" title="Dit onderwerp is gesloten, u kunt niet meer reageren" alt="sluiten" />&nbsp;&nbsp;
-								{elseif $draad->belangrijk}
-									<img src="{icon get="belangrijk" notag=true}" title="Dit onderwerp is door het bestuur aangemerkt als belangrijk." alt="belangrijk" />&nbsp;&nbsp;
-								{/if}
+								<small style="font-weight: normal;">[{$delen[$draad->forum_id]->titel}]</small>
 								{$draad->titel}
+								{if $draad->gesloten}
+									{icon get="slotje" title="Dit onderwerp is gesloten, u kunt niet meer reageren"}
+								{elseif $draad->belangrijk}
+									{icon get="belangrijk" title="Dit onderwerp is door het bestuur aangemerkt als belangrijk."}
+								{/if}
 							</a>
 						{/if}
 					</th>
