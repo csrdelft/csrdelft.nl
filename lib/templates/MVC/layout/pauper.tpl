@@ -1,7 +1,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xml:lang="nl" xmlns="http://www.w3.org/1999/xhtml">
 	<head>
-		<title>C.S.R. Delft | {$body->getTitel()}</title>
+		<title>C.S.R. Delft Mobiel | {$body->getTitel()}</title>
 		<meta http-equiv="Content-type" content="text/html; charset=UTF-8" />
 		<meta name="author" content="PubCie C.S.R. Delft" />
 		<meta name="robots" content="index, follow" />
@@ -36,11 +36,14 @@
 		<link rel="shortcut icon" href="{$CSR_PICS}layout/favicon.ico" />
 	</head>
 	<body style="background: none;">
-		{if LoginLid::mag('P_LOGGED_IN')}
-			<a href="/logout.php">Uitloggen</a>
-		{else}
-			<a href="/login.php">Inloggen</a>
-		{/if}
+		<a href="/pauper/terug">Naar normale webstek</a>
+		<div style="float: right;">
+			{if LoginLid::mag('P_LOGGED_IN')}
+				<a href="/logout.php">Uitloggen</a>
+			{else}
+				<a href="/login.php">Inloggen</a>
+			{/if}
+		</div>
 		{$body->view()}
 		<br />
 		<div id="paupermenu">

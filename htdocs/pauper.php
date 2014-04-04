@@ -1,6 +1,13 @@
 <?php
 
 require_once 'configuratie.include.php';
+
+if (array_key_exists('exit', $_GET)) {
+	unset($_SESSION['pauper']);
+	header("Location: " . CSR_SERVER);
+	exit;
+}
+
 $_SESSION['pauper'] = true;
 
 require_once 'MVC/model/CmsPaginaModel.class.php';
