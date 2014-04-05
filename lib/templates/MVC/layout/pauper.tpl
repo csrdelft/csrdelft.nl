@@ -49,7 +49,7 @@
 		</div>
 		{$body->view()}
 		<br />
-		<div id="paupermenu">
+		<div id="paupermenu" style="clear: both;">
 			<br />
 			<h1>Menu</h1>
 			<ul>
