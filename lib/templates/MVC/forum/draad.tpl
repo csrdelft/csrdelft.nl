@@ -78,7 +78,7 @@
 
 		{assign var=vanaf value=false}
 		{foreach from=$draad->getForumPosts() item=post name=posts}
-			<tr {if !$vanaf AND !$smarty.foreach.posts.first AND
+			<tr {if !$vanaf AND (!$smarty.foreach.posts.first OR ForumPostsModel::instance()->getHuidigePagina() == 1) AND
 (
 strtotime($post->datum_tijd) > strtotime($draad->getWanneerGelezen())
 OR

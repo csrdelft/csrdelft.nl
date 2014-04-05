@@ -54,7 +54,7 @@ class LidInstellingen extends PersistenceModel {
 			'zoekresultaten' => array('Zoekresultaten per pagina', 'int', array(10, 50), 20),
 			'naamWeergave' => array('Naamweergave', 'enum', array('civitas', 'volledig', 'bijnaam', 'aaidrom'), 'civitas'),
 			'datumWeergave' => array('Datumweergave', 'enum', array('relatief', 'vast'), 'relatief'),
-			'openDraadPagina' => array('Open onderwerp op pagina', 'enum', array('1', 'laatste'), 'laatste'),
+			'openDraadPagina' => array('Open onderwerp op pagina', 'enum', array('1', 'ongelezen', 'laatste'), 'ongelezen'),
 			'toonpasfotos' => array('Pasfoto\'s standaard weergeven', 'enum', array('ja', 'nee'), 'ja'),
 			'filter2008' => array('Berichten van 2008 eerst verbergen', 'enum', array('ja', 'nee'), 'nee')
 		),

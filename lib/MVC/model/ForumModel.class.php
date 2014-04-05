@@ -492,6 +492,11 @@ class ForumPostsModel extends PersistenceModel implements Paging {
 		return ceil($count / $this->per_pagina);
 	}
 
+	public function getPaginaVoorLaatstGelezen(ForumDraadGelezen $gelezen) {
+		$count = 1 + $this->count('draad_id = ? AND datum_tijd < ? AND wacht_goedkeuring = FALSE AND verwijderd = FALSE', array($gelezen->draad_id, $gelezen->datum_tijd));
+		return ceil($count / $this->per_pagina);
+	}
+
 	public function hertellenVoorDraadEnDeel(ForumDraad $draad, ForumDeel $deel) {
 		$draad->aantal_posts = $this->count('draad_id = ? AND wacht_goedkeuring = FALSE AND verwijderd = FALSE', array($draad->draad_id));
 		ForumDradenModel::instance()->update($draad);

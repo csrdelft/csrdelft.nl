@@ -172,7 +172,7 @@ class ForumController extends Controller {
 	 * Forumdraadje laten zien met alle (zichtbare) posts.
 	 * 
 	 * @param int $id
-	 * @param int $pagina or 'laatste'
+	 * @param int $pagina or 'laatste' or 'ongelezen'
 	 */
 	public function onderwerp($id, $pagina = null) {
 		$draad = ForumDradenModel::instance()->getForumDraad((int) $id);
@@ -188,7 +188,9 @@ class ForumController extends Controller {
 		if ($pagina === null) {
 			$pagina = LidInstellingen::get('forum', 'openDraadPagina');
 		}
-		if ($pagina === 'laatste') {
+		if ($pagina === 'ongelezen' AND $gelezen) {
+			ForumPostsModel::instance()->getPaginaVoorLaatstGelezen($gelezen);
+		} elseif ($pagina === 'laatste') {
 			ForumPostsModel::instance()->setLaatstePagina($draad->draad_id); // lazy loading ForumPost[]
 		} else {
 			ForumPostsModel::instance()->setHuidigePagina((int) $pagina, $draad->draad_id); // lazy loading ForumPost[]
