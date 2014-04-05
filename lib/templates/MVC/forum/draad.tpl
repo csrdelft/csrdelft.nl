@@ -84,7 +84,7 @@ strtotime($post->datum_tijd) > strtotime($draad->getWanneerGelezen())
 OR
 strtotime($post->laatst_bewerkt) > strtotime($draad->getWanneerGelezen())
 )
-				}gelezenvanaf{assign var=vanaf value=true}{else}tussenschot{/if}">
+				}gelezenvanaf" title="Gelezen tot hier{assign var=vanaf value=true}{else}tussenschot{/if}">
 				<td colspan="2"></td>
 			</tr>
 			{include file='MVC/forum/post_lijst.tpl'}
