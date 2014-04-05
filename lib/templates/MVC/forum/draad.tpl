@@ -77,14 +77,14 @@
 		{/if}
 
 		{assign var=vanaf value=false}
-		{foreach from=$draad->getForumPosts() item=post}
-			<tr {if !$vanaf AND
+		{foreach from=$draad->getForumPosts() item=post name=posts}
+			<tr {if !$vanaf AND !$smarty.foreach.posts.first AND
 (
 strtotime($post->datum_tijd) > strtotime($draad->getWanneerGelezen())
 OR
 strtotime($post->laatst_bewerkt) > strtotime($draad->getWanneerGelezen())
 )
-				}{assign var=vanaf value=true}title="Ongelezen reacties vanaf hier (mogelijk ook op pagina hiervoor)" class="gelezenvanaf"{else}class="tussenschot{/if}">
+				}{assign var=vanaf value=true}title="Ongelezen reacties vanaf hier" class="gelezenvanaf"{else}class="tussenschot{/if}">
 				<td colspan="2"></td>
 			</tr>
 			{include file='MVC/forum/post_lijst.tpl'}
