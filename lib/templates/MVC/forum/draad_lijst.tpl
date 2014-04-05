@@ -3,7 +3,7 @@
 		{if $draad->wacht_goedkeuring}
 			<small style="font-weight: normal;">[ter goedkeuring...]</small>
 		{/if}
-		<a id="{$draad->draad_id}" href="/forum/onderwerp/{$draad->draad_id}{if LidInstellingen::get('forum', 'openDraadPagina') == 'ongelezen'}#ongelezen{/if}"{if !$draad->alGelezen()} class="updatedTopic"{/if}>
+		<a id="{$draad->draad_id}" href="/forum/onderwerp/{$draad->draad_id}{if LidInstellingen::get('forum', 'openDraadPagina') == 'ongelezen'}#ongelezen{elseif LidInstellingen::get('forum', 'openDraadPagina') == 'laatste'}#reageren{/if}"{if !$draad->alGelezen()} class="updatedTopic"{/if}>
 			{if $draad->gesloten}
 				{icon get="slotje" title="Dit onderwerp is gesloten, u kunt niet meer reageren"}
 			{elseif $draad->belangrijk}

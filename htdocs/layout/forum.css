@@ -111,7 +111,8 @@ span.togglePasfoto:hover, a.postlink:hover{
 	padding: 2px 10px 2px 0.6em;
 }
 .forumpostlink{
-	color: black;
+	color: black !important;
+	text-decoration: none !important;
 }
 .forumtekst {
 	color: #000;
