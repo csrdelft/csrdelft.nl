@@ -105,7 +105,15 @@ class ForumDelenModel extends PersistenceModel {
 			if (array_key_exists($draad->draad_id, $gevonden_posts)) { // post is al gevonden
 				$draad->setForumPosts($gevonden_posts[$draad->draad_id]);
 			} else {
-				throw Exception('Draad niet goedgekeurd, maar alle posts wel');
+				$melding = 'Draad ' . $draad->draad_id . ' niet goedgekeurd, maar alle posts wel. Automatische actie: ';
+				$draad->wacht_goedkeuring = false;
+				if ($draad->aantal_posts === 0) {
+					$draad->verwijderd = true;
+					setMelding($melding . 'verwijderd (bevat geen berichten)', 2);
+				} else {
+					setMelding($melding . 'goedgekeurd (bevat ' . $draad->aantal_posts . ' berichten)', 2);
+				}
+				ForumDradenModel::instance()->update($draad);
 			}
 		}
 		// check permissies op delen
@@ -499,6 +507,10 @@ class ForumPostsModel extends PersistenceModel implements Paging {
 
 	public function hertellenVoorDraadEnDeel(ForumDraad $draad, ForumDeel $deel) {
 		$draad->aantal_posts = $this->count('draad_id = ? AND wacht_goedkeuring = FALSE AND verwijderd = FALSE', array($draad->draad_id));
+		if (!$draad->verwijderd AND $draad->aantal_posts < 1) {
+			$draad->verwijderd = true;
+			setMelding('Draad ' . $draad->draad_id . ' bevat geen berichten. Automatische actie: verwijderd', 2);
+		}
 		ForumDradenModel::instance()->update($draad);
 		ForumDradenModel::instance()->hertellenVoorDeel($deel);
 	}
