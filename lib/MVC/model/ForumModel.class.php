@@ -57,6 +57,16 @@ class ForumDelenModel extends PersistenceModel {
 		return $this->find('categorie_id = ?', array($cid), 'volgorde');
 	}
 
+	public function getForumDelenVoorLid() {
+		$delen = array_key_property('forum_id', $this->find());
+		foreach ($delen as $forum_id => $deel) {
+			if (!$deel->magLezen()) {
+				unset($delen[$forum_id]);
+			}
+		}
+		return $delen;
+	}
+
 	public function bestaatForumDeel($id) {
 		return $this->existsByPrimaryKey(array($id));
 	}
@@ -326,17 +336,30 @@ class ForumDradenModel extends PersistenceModel implements Paging {
 		} else {
 			$pagina = 1;
 		}
-		$draden = $this->find(
-				($belangrijk === null ? '' : 'd.belangrijk = ? AND ') . 'd.wacht_goedkeuring = FALSE AND d.verwijderd = FALSE', ($belangrijk === null ? array() : array($belangrijk)), 'd.laatst_gewijzigd DESC', $aantal, ($pagina - 1) * $aantal);
+		$delen = ForumDelenModel::instance()->getForumDelenVoorLid($rss);
+		$params = array_keys($delen);
+		$count = count($delen);
+		if ($count < 1) {
+			if ($rss) {
+				return array(array(), array());
+			}
+			return array();
+		}
+		$in = implode(', ', array_fill(0, $count, '?'));
+		if ($belangrijk) {
+			$params[] = $belangrijk;
+			$belangrijk = ' AND d.belangrijk = ?';
+		} else {
+			$belangrijk = '';
+		}
+		$draden = $this->find('forum_id IN (' . $in . ') AND d.wacht_goedkeuring = FALSE AND d.verwijderd = FALSE' . $belangrijk, $params, 'd.laatst_gewijzigd DESC', $aantal, ($pagina - 1) * $aantal);
 		$posts_ids = array_keys(array_key_property('laatste_post_id', $draden, false));
-		$posts = ForumPostsModel::instance()->getForumPostsById($posts_ids);
-		$delen_ids = array_keys(array_key_property('forum_id', $draden, false));
-		$delen = ForumDelenModel::instance()->getForumDelenById($delen_ids);
+		$posts = ForumPostsModel::instance()->getForumPostsById($posts_ids, ' AND wacht_goedkeuring = FALSE AND verwijderd = FALSE');
 		foreach ($draden as $i => $draad) {
-			if (!$delen[$draad->forum_id]->magLezen($rss)) {
-				unset($draden[$i]);
-			} elseif (array_key_exists($draad->laatste_post_id, $posts)) {
+			if (array_key_exists($draad->laatste_post_id, $posts)) {
 				$draad->setForumPosts(array($posts[$draad->laatste_post_id]));
+			} else {
+				unset($draden[$i]);
 			}
 		}
 		if ($rss) {
@@ -346,7 +369,7 @@ class ForumDradenModel extends PersistenceModel implements Paging {
 	}
 
 	public function getRssForumDradenEnDelen() {
-		return $this->getRecenteForumDraden(null, true);
+		return $this->getRecenteForumDraden(null, null, true);
 	}
 
 	public function getForumDraad($id) {
@@ -390,7 +413,10 @@ class ForumDradenModel extends PersistenceModel implements Paging {
 			throw new Exception('Property undefined: ' . $property);
 		}
 		$draad->$property = $value;
-		return $this->update($draad);
+		$rowcount = $this->update($draad);
+		if ($rowcount !== 1) {
+			throw new Exception('Wijzigen van ' . $property . ' mislukt');
+		}
 	}
 
 }
@@ -462,9 +488,10 @@ class ForumPostsModel extends PersistenceModel implements Paging {
 		return ceil($count / $this->per_pagina);
 	}
 
-	public function hertellenVoorDraad(ForumDraad $draad) {
+	public function hertellenVoorDraadEnDeel(ForumDraad $draad, ForumDeel $deel) {
 		$draad->aantal_posts = $this->count('draad_id = ? AND wacht_goedkeuring = FALSE AND verwijderd = FALSE', array($draad->draad_id));
 		ForumDradenModel::instance()->update($draad);
+		ForumDradenModel::instance()->hertellenVoorDeel($deel);
 	}
 
 	public function zoeken($query) {
@@ -530,8 +557,8 @@ class ForumPostsModel extends PersistenceModel implements Paging {
 			$orm = self::orm;
 			$where = 'post_id = (
 	SELECT MAX(post_id)
-	FROM ' . $orm::getTableName() . ' AS subquery
-	WHERE ' . $orm::getTableName() . '.draad_id = subquery.draad_id
+	FROM ' . $orm::getTableName() . ' AS zelfde_draad
+	WHERE ' . $orm::getTableName() . '.draad_id = zelfde_draad.draad_id
 	AND ' . $where . '
 )';
 		}
@@ -558,13 +585,13 @@ class ForumPostsModel extends PersistenceModel implements Paging {
 		return $post;
 	}
 
-	public function getForumPostsById(array $ids) {
+	public function getForumPostsById(array $ids, $where = '', array $where_params = array()) {
 		$count = count($ids);
 		if ($count < 1) {
 			return array();
 		}
 		$in = implode(', ', array_fill(0, $count, '?'));
-		return array_key_property('post_id', $this->find('post_id IN (' . $in . ')', $ids));
+		return array_key_property('post_id', $this->find('post_id IN (' . $in . ')' . $where, array_merge($ids, $where_params)));
 	}
 
 	public function maakForumPost($draad_id, $tekst, $ip, $wacht_goedkeuring, $email) {
@@ -585,18 +612,35 @@ class ForumPostsModel extends PersistenceModel implements Paging {
 		return $post;
 	}
 
-	public function verwijderForumPost(ForumPost $post) {
+	public function verwijderForumPost(ForumPost $post, ForumDraad $draad, ForumDeel $deel) {
 		if ($post->verwijderd) {
 			throw new Exception('Al verwijderd!');
 		}
 		$post->verwijderd = true;
-		return $this->update($post);
+		$rowcount = $this->update($post);
+		if ($rowcount !== 1) {
+			throw new Exception('Verwijderen mislukt');
+		}
+		if ($draad->laatste_post_id === $post->post_id) {
+			$draad->laatste_post_id = null;
+			$draad->laatste_lid_id = null;
+			$draad->laatst_gewijzigd = null;
+		}
+		if ($deel->laatste_post_id === $post->post_id) {
+			$deel->laatste_post_id = null;
+			$deel->laatste_lid_id = null;
+			$deel->laatst_gewijzigd = null;
+		}
+		$this->hertellenVoorDraadEnDeel($draad, $deel);
 	}
 
-	public function verwijderForumPostsVoorDraad(ForumDraad $draad) {
+	public function verwijderForumPostsVoorDraad(ForumDraad $draad, ForumDeel $deel) {
 		$orm = self::orm;
 		Database::sqlUpdate($orm::getTableName(), array('verwijderd' => $draad->verwijderd), 'draad_id = :id', array('id' => $draad->draad_id));
-		$this->hertellenVoorDraad($draad);
+		$deel->laatste_post_id = null;
+		$deel->laatste_lid_id = null;
+		$deel->laatst_gewijzigd = null;
+		$this->hertellenVoorDraadEnDeel($draad, $deel);
 	}
 
 	public function bewerkForumPost(ForumPost $post, $nieuwe_tekst, $reden = '') {
@@ -615,7 +659,10 @@ class ForumPostsModel extends PersistenceModel implements Paging {
 		$post->tekst = '[offtopic]' . $post->tekst . '[/offtopic]';
 		$post->laatst_bewerkt = getDateTime();
 		$post->bewerkt_tekst = 'offtopic door [lid=' . LoginLid::instance()->getUid() . '] [reldate]' . $post->laatst_bewerkt . '[/reldate]' . "\n";
-		return $this->update($post);
+		$rowcount = $this->update($post);
+		if ($rowcount !== 1) {
+			throw new Exception('Offtopic mislukt');
+		}
 	}
 
 	public function goedkeurenForumPost(ForumPost $post, ForumDraad $draad, ForumDeel $deel) {

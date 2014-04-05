@@ -79,7 +79,7 @@
 			<td colspan="2"></td>
 		</tr>
 
-		{foreach from=$draad->getForumPosts() item=post name='berichten'}
+		{foreach from=$draad->getForumPosts() item=post}
 			{include file='MVC/forum/post_lijst.tpl'}
 			<tr class="tussenschot">
 				<td colspan="2"></td>

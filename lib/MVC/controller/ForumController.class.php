@@ -231,21 +231,16 @@ class ForumController extends Controller {
 		} else {
 			$this->geentoegang();
 		}
-		$rowcount = ForumDradenModel::instance()->wijzigForumDraad($draad, $property, $value);
-		if ($rowcount !== 1) {
-			throw new Exception('Wijzigen van ' . $property . ' mislukt');
-		} else {
-			if (is_bool($value)) {
-				$wijziging = ($value ? 'wel ' : 'niet ') . $property;
-			} else {
-				$wijziging = $property . ' = ' . $value;
-			}
-			setMelding('Wijziging geslaagd: ' . $wijziging, 1);
-		}
+		ForumDradenModel::instance()->wijzigForumDraad($draad, $property, $value);
 		if ($property === 'verwijderd') {
-			ForumPostsModel::instance()->verwijderForumPostsVoorDraad($draad);
-			ForumDradenModel::instance()->hertellenVoorDeel($deel);
+			ForumPostsModel::instance()->verwijderForumPostsVoorDraad($draad, $deel);
 		}
+		if (is_bool($value)) {
+			$wijziging = ($value ? 'wel ' : 'niet ') . $property;
+		} else {
+			$wijziging = $property . ' = ' . $value;
+		}
+		setMelding('Wijziging geslaagd: ' . $wijziging, 1);
 		$this->onderwerp($draad->draad_id);
 	}
 
@@ -355,12 +350,7 @@ class ForumController extends Controller {
 		if (!$deel->magModereren()) {
 			$this->geentoegang();
 		}
-		$rowcount = ForumPostsModel::instance()->verwijderForumPost($post);
-		if ($rowcount !== 1) {
-			throw new Exception('Verwijderen mislukt');
-		}
-		ForumPostsModel::instance()->hertellenVoorDraad($draad);
-		ForumDradenModel::instance()->hertellenVoorDeel($deel);
+		ForumPostsModel::instance()->verwijderForumPost($post, $draad, $deel);
 		$this->view = new ForumPostDeleteView($post->post_id);
 	}
 
@@ -371,10 +361,7 @@ class ForumController extends Controller {
 		if (!$deel->magModereren()) {
 			$this->geentoegang();
 		}
-		$rowcount = ForumPostsModel::instance()->offtopicForumPost($post);
-		if ($rowcount !== 1) {
-			throw new Exception('Offtopic mislukt');
-		}
+		ForumPostsModel::instance()->offtopicForumPost($post);
 		$this->view = new ForumPostView($post, $draad, $deel);
 	}
 
