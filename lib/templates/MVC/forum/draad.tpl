@@ -78,13 +78,13 @@
 
 		{assign var=vanaf value=false}
 		{foreach from=$draad->getForumPosts() item=post}
-			<tr class="{if !$vanaf AND
+			<tr {if !$vanaf AND
 (
 strtotime($post->datum_tijd) > strtotime($draad->getWanneerGelezen())
 OR
 strtotime($post->laatst_bewerkt) > strtotime($draad->getWanneerGelezen())
 )
-				}gelezenvanaf" title="Gelezen tot hier{assign var=vanaf value=true}{else}tussenschot{/if}">
+				}{assign var=vanaf value=true}title="Ongelezen reacties vanaf hier (mogelijk ook op pagina hiervoor)" class="gelezenvanaf"{else}class="tussenschot{/if}">
 				<td colspan="2"></td>
 			</tr>
 			{include file='MVC/forum/post_lijst.tpl'}
