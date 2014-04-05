@@ -189,7 +189,7 @@ class ForumController extends Controller {
 			$pagina = LidInstellingen::get('forum', 'openDraadPagina');
 		}
 		if ($pagina === 'ongelezen' AND $gelezen) {
-			ForumPostsModel::instance()->getPaginaVoorLaatstGelezen($gelezen);
+			ForumPostsModel::instance()->setPaginaVoorLaatstGelezen($gelezen);
 		} elseif ($pagina === 'laatste') {
 			ForumPostsModel::instance()->setLaatstePagina($draad->draad_id); // lazy loading ForumPost[]
 		} else {
