@@ -78,20 +78,31 @@
 
 		{assign var=vanaf value=false}
 		{foreach from=$draad->getForumPosts() item=post name=posts}
-			<tr {if !$vanaf AND (!$smarty.foreach.posts.first OR ForumPostsModel::instance()->getHuidigePagina() == 1) AND
+			{if !$vanaf AND (!$smarty.foreach.posts.first OR ForumPostsModel::instance()->getHuidigePagina() == 1) AND
 (
 strtotime($post->datum_tijd) > strtotime($draad->getWanneerGelezen())
 OR
 strtotime($post->laatst_bewerkt) > strtotime($draad->getWanneerGelezen())
 )
-				}{assign var=vanaf value=true}title="Ongelezen reacties vanaf hier" class="gelezenvanaf"{else}class="tussenschot{/if}">
-				<td colspan="2"></td>
+			}
+			{assign var=vanaf value=true}
+			<tr class="ongelezenvanaf" title="Ongelezen reacties vanaf hier">
+				<td colspan="2">
+					<a id="ongelezen"></a>
+				</td>
 			</tr>
+			{else}
+				<tr class="tussenschot">
+					<td colspan="2"></td>
+				</tr>
+			{/if}
 			{include file='MVC/forum/post_lijst.tpl'}
 		{/foreach}
 
 		<tr class="tussenschot">
-			<td colspan="2"></td>
+			<td colspan="2">
+				{if !$vanaf}<a id="ongelezen"></a>{/if}
+			</td>
 		</tr>
 
 		{if ForumPostsModel::instance()->getAantalPaginas($draad->draad_id) > 1}
@@ -100,7 +111,7 @@ strtotime($post->laatst_bewerkt) > strtotime($draad->getWanneerGelezen())
 				<td>
 					<div class="forum-paginering">
 						Pagina: {sliding_pager baseurl="/forum/onderwerp/"|cat:$draad->draad_id|cat:"/"
-									pagecount=ForumPostsModel::instance()->getAantalPaginas($draad->draad_id) curpage=ForumPostsModel::instance()->getHuidigePagina()}
+					pagecount=ForumPostsModel::instance()->getAantalPaginas($draad->draad_id) curpage=ForumPostsModel::instance()->getHuidigePagina()}
 					</div>
 				</td>
 			</tr>
