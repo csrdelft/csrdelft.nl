@@ -75,16 +75,24 @@
 				<td class="forumtekst"><i>{$smarty.capture.magreageren}</i></td>
 			</tr>
 		{/if}
+
+		{assign var=vanaf value=false}
+		{foreach from=$draad->getForumPosts() item=post}
+			<tr class="{if !$vanaf AND
+(
+strtotime($post->datum_tijd) > strtotime($draad->getWanneerGelezen())
+OR
+strtotime($post->laatst_bewerkt) > strtotime($draad->getWanneerGelezen())
+)
+				}gelezenvanaf{assign var=vanaf value=true}{else}tussenschot{/if}">
+				<td colspan="2"></td>
+			</tr>
+			{include file='MVC/forum/post_lijst.tpl'}
+		{/foreach}
+
 		<tr class="tussenschot">
 			<td colspan="2"></td>
 		</tr>
-
-		{foreach from=$draad->getForumPosts() item=post}
-			{include file='MVC/forum/post_lijst.tpl'}
-			<tr class="tussenschot">
-				<td colspan="2"></td>
-			</tr>
-		{/foreach}
 
 		{if ForumPostsModel::instance()->getAantalPaginas($draad->draad_id) > 1}
 			<tr>

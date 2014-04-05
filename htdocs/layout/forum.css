@@ -8,6 +8,11 @@
 	margin: 0; padding: 0;
 	background-color: lightgrey;
 }
+#forumtabel tr.gelezenvanaf td{
+	height: 2px;
+	margin: 0; padding: 0;
+	background-color: #E8CF2A;
+}
 #forumtabel td.auteur{
 	vertical-align: top;
 	width: 150px;

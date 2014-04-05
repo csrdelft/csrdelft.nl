@@ -183,8 +183,12 @@ class ForumDradenGelezenModel extends PersistenceModel {
 
 	protected static $instance;
 
+	public function getWanneerGelezenDoorLid(ForumDraad $draad) {
+		return $this->retrieveByPrimaryKey(array($draad->draad_id, LoginLid::instance()->getUid()));
+	}
+
 	public function setWanneerGelezenDoorLid(ForumDraad $draad) {
-		$gelezen = $this->retrieveByPrimaryKey(array($draad->draad_id, LoginLid::instance()->getUid()));
+		$gelezen = $this->getWanneerGelezenDoorLid($draad);
 		if (!$gelezen) {
 			$gelezen = new ForumDraadGelezen();
 			$gelezen->draad_id = $draad->draad_id;

@@ -141,6 +141,10 @@ class ForumDraad extends PersistentEntity {
 		return false;
 	}
 
+	public function setWanneerGelezen(ForumDraadGelezen $gelezen) {
+		$this->wanneer_gelezen = $gelezen->datum_tijd;
+	}
+
 	/**
 	 * Lazy loading by foreign key.
 	 * 

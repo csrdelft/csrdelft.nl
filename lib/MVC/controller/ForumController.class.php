@@ -180,7 +180,11 @@ class ForumController extends Controller {
 		if (!$deel->magLezen()) {
 			$this->geentoegang();
 		}
-		ForumDradenGelezenModel::instance()->setWanneerGelezenDoorLid($draad);
+		$gelezen = ForumDradenGelezenModel::instance()->getWanneerGelezenDoorLid($draad);
+		if ($gelezen) {
+			$draad->setWanneerGelezen($gelezen); // laad gelezen voordat database geupdate wordt
+		}
+		ForumDradenGelezenModel::instance()->setWanneerGelezenDoorLid($draad); // update database
 		if ($pagina === null) {
 			$pagina = LidInstellingen::get('forum', 'openDraadPagina');
 		}
@@ -276,6 +280,7 @@ class ForumController extends Controller {
 		}
 		// voorkomen dubbelposts
 		if (array_key_exists('forum_laatste_post_tekst', $_SESSION) AND $_SESSION['forum_laatste_post_tekst'] === $tekst) {
+			$_SESSION['forum_concept'] = '';
 			invokeRefresh('/forum/deel/' . $deel->forum_id, 'Uw reactie is al geplaatst', 0);
 		}
 		$email = null;
@@ -306,6 +311,7 @@ class ForumController extends Controller {
 		$post = ForumPostsModel::instance()->maakForumPost($draad->draad_id, $tekst, $_SERVER['REMOTE_ADDR'], $wacht_goedkeuring, $email);
 		$_SESSION['forum_laatste_post_tekst'] = $tekst;
 		$_SESSION['forum_concept'] = '';
+		ForumDradenGelezenModel::instance()->setWanneerGelezenDoorLid($draad);
 		if ($wacht_goedkeuring) {
 			setMelding('Uw bericht is opgeslagen en zal als het goedgekeurd is geplaatst worden.', 1);
 			//bericht sturen naar pubcie@csrdelft dat er een bericht op goedkeuring wacht
