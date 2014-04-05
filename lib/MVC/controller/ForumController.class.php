@@ -102,6 +102,9 @@ class ForumController extends Controller {
 
 	/**
 	 * Tonen van alle posts die wachten op goedkeuring.
+	 * 
+	 * @param string $query
+	 * @param int $pagina
 	 */
 	public function zoeken($query = null, $pagina = 1) {
 		if ($query === null) {
@@ -121,6 +124,8 @@ class ForumController extends Controller {
 
 	/**
 	 * Recente draadjes laten zien in tabel.
+	 * 
+	 * @param int $pagina
 	 */
 	public function recent($pagina = 1) {
 		ForumDradenModel::instance()->setHuidigePagina((int) $pagina, 0);
@@ -169,13 +174,16 @@ class ForumController extends Controller {
 	 * @param int $id
 	 * @param int $pagina or 'laatste'
 	 */
-	public function onderwerp($id, $pagina = 1) {
+	public function onderwerp($id, $pagina = null) {
 		$draad = ForumDradenModel::instance()->getForumDraad((int) $id);
 		$deel = ForumDelenModel::instance()->getForumDeel($draad->forum_id);
 		if (!$deel->magLezen()) {
 			$this->geentoegang();
 		}
 		ForumDradenGelezenModel::instance()->setWanneerGelezenDoorLid($draad);
+		if ($pagina === null) {
+			$pagina = LidInstellingen::get('forum', 'openDraadPagina');
+		}
 		if ($pagina === 'laatste') {
 			ForumPostsModel::instance()->setLaatstePagina($draad->draad_id); // lazy loading ForumPost[]
 		} else {

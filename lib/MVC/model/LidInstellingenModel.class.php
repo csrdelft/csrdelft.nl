@@ -51,24 +51,25 @@ class LidInstellingen extends PersistenceModel {
 		'forum' => array(
 			'draden_per_pagina' => array('Draadjes per pagina', 'int', array(5, 100), 20),
 			'posts_per_pagina' => array('Berichten per pagina', 'int', array(5, 100), 20),
+			'zoekresultaten' => array('Zoekresultaten per pagina', 'int', array(10, 50), 20),
 			'naamWeergave' => array('Naamweergave', 'enum', array('civitas', 'volledig', 'bijnaam', 'aaidrom'), 'civitas'),
 			'datumWeergave' => array('Datumweergave', 'enum', array('relatief', 'vast'), 'relatief'),
-			'zoekresultaten' => array('Zoekresultaten', 'int', array(5, 100), 20),
+			'openDraadPagina' => array('Open onderwerp op pagina', 'enum', array('1', 'laatste'), 'laatste'),
 			'toonpasfotos' => array('Pasfoto\'s standaard weergeven', 'enum', array('ja', 'nee'), 'ja'),
 			'filter2008' => array('Berichten van 2008 eerst verbergen', 'enum', array('ja', 'nee'), 'nee')
 		),
 		'zijbalk' => array(
-			'ishetal' => array('Is het al…', 'enum', array('niet weergeven', 'donderdag', 'vrijdag', 'zondag', 'lunch', 'avond', 'borrel', 'lezing', 'jarig', 'dies', 'studeren', 'willekeurig'), 'willekeurig'),
+			'ishetal' => array('Is het al… weergeven', 'enum', array('niet weergeven', 'donderdag', 'vrijdag', 'zondag', 'lunch', 'avond', 'borrel', 'lezing', 'jarig', 'dies', 'studeren', 'willekeurig'), 'willekeurig'),
 			'gasnelnaar' => array('Ga snel naar weergeven', 'enum', array('ja', 'nee'), 'ja'),
-			'agendaweken' => array('Aantal weken weergeven', 'int', array(0, 10), 2),
+			'agendaweken' => array('Aantal weken in agenda weergeven', 'int', array(0, 10), 2),
 			'agenda_max' => array('Maximaal aantal agenda-items', 'int', array(0, 50), 15),
 			'mededelingen' => array('Aantal mededelingen', 'int', array(0, 50), 5),
+			'forum_belangrijk' => array('Aantal belangrijke forumberichten', 'int', array(0, 50), 5),
 			'forum' => array('Aantal forumberichten', 'int', array(0, 50), 10),
 			'forum_zelf' => array('Aantal zelf geposte forumberichten', 'int', array(0, 50), 0),
-			'forum_belangrijk' => array('Aantal belangrijke forumberichten', 'int', array(0, 50), 5),
 			'fotoalbum' => array('Laatste fotoalbum weergeven', 'enum', array('ja', 'nee'), 'ja'),
-			'verjaardagen_pasfotos' => array('Toon pasfoto\'s bij verjaardagen', 'enum', array('ja', 'nee'), 'ja'),
-			'verjaardagen' => array('Aantal verjaardagen in zijbalk', 'int', array(0, 50), 9)
+			'verjaardagen' => array('Aantal verjaardagen in zijbalk', 'int', array(0, 50), 9),
+			'verjaardagen_pasfotos' => array('Toon pasfoto\'s bij verjaardagen', 'enum', array('ja', 'nee'), 'ja')
 		),
 		'voorpagina' => array(
 			'maaltijdblokje' => array('Eerstvolgende maaltijd weergeven', 'enum', array('ja', 'nee'), 'ja'),

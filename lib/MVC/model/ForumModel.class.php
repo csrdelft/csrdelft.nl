@@ -57,10 +57,10 @@ class ForumDelenModel extends PersistenceModel {
 		return $this->find('categorie_id = ?', array($cid), 'volgorde');
 	}
 
-	public function getForumDelenVoorLid() {
+	public function getForumDelenVoorLid($rss) {
 		$delen = array_key_property('forum_id', $this->find());
 		foreach ($delen as $forum_id => $deel) {
-			if (!$deel->magLezen()) {
+			if (!$deel->magLezen($rss)) {
 				unset($delen[$forum_id]);
 			}
 		}
@@ -327,7 +327,7 @@ class ForumDradenModel extends PersistenceModel implements Paging {
 	 * @param int $aantal
 	 * @param boolean $belangrijk null voor maakt niet uit
 	 * @param boolean $rss
-	 * @return ForumDraad[]
+	 * @return ForumDraad[] of voor rss: array( ForumDraad[], ForumDeel[] )
 	 */
 	public function getRecenteForumDraden($aantal = null, $belangrijk = null, $rss = false) {
 		if (!is_int($aantal)) {
@@ -549,7 +549,7 @@ class ForumPostsModel extends PersistenceModel implements Paging {
 	 * @param string $uid
 	 * @param int $aantal
 	 * @param int $draad_uniek
-	 * @return array(ForumPost[], ForumDraad[])
+	 * @return array( ForumPost[], ForumDraad[] )
 	 */
 	public function getRecenteForumPostsVanLid($uid, $aantal, $draad_uniek = false) {
 		$where = 'lid_id = ? AND wacht_goedkeuring = FALSE AND verwijderd = FALSE';
