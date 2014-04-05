@@ -9,8 +9,8 @@
 			{$timestamp|date_format:"%d-%m"}
 		{/if}
 		&nbsp;
-		<a href="/forum/reactie/{$draad->laatste_post_id}#{$draad->laatste_post_id}" title="[{$draad->titel}] {$draad->laatste_lid_id|csrnaam:'user':false:false|escape:'html'}: {$posts[0]->tekst|truncate:25:"…":true}"
-		   {if !$draad->alGelezen()} class="opvallend"{/if}>{$draad->titel|truncate:25:"…":true}
+		<a id="{$draad->draad_id}" href="/forum/onderwerp/{$draad->draad_id}{if LidInstellingen::get('forum', 'openDraadPagina') == 'ongelezen'}#ongelezen{elseif LidInstellingen::get('forum', 'openDraadPagina') == 'laatste'}#reageren{/if}"{if !$draad->alGelezen()} class="opvallend"{/if}>
+			{$draad->titel|truncate:25:"…":true}
 		</a>
 		<br />
 	</div>
