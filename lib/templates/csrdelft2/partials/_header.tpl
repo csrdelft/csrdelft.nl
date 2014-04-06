@@ -33,10 +33,10 @@
 	{/literal}
 
 	<!--[if lt IE 9]><script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
-	<meta property="og:url" content="http://csrdelft.nl{Instellingen::get('menu', 'path')}" />
+	<meta property="og:url" content="http://csrdelft.nl{Instellingen::get('menu', 'request')}" />
 	<meta property="og:title" content="C.S.R. Delft - {$body->getTitel()}" />
 	<meta property="og:locale" content="nl_nl" />
-	<meta property="og:image" content="http://plaetjes.csrdelft.nl/layout/beeldmerk.jpg" />
+	<meta property="og:image" content="http://plaetjes.csrdelft.nl/layout/beeldmerk.png" />
 </head>
 
 <body>
