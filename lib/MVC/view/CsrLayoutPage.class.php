@@ -26,7 +26,7 @@ class CsrLayoutPage extends HtmlPage {
 	 */
 	public $popup;
 
-	function __construct(View $body, array $zijkolom = array(), $popup = null) {
+	public function __construct(View $body, array $zijkolom = array(), $popup = null) {
 		parent::__construct($body);
 		$this->zijkolom = $zijkolom;
 		$this->popup = $popup;
@@ -66,7 +66,7 @@ class CsrLayoutPage extends HtmlPage {
 		}
 	}
 
-	function view() {
+	public function view() {
 		header('Content-Type: text/html; charset=UTF-8');
 
 		if (LidInstellingen::get('layout', 'minion') == 'ja') {

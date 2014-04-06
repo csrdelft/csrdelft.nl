@@ -25,7 +25,7 @@ abstract class HtmlPage extends TemplateView {
 	 *
 	 * Merk op: local-entry kan ook gebruikt worden om een map buiten /layout/ toe te voegen.
 	 */
-	function addStylesheet($sheet, $localpath = '/layout/') {
+	protected function addStylesheet($sheet, $localpath = '/layout/') {
 		if (startsWith($sheet, 'http')) {
 			//extern
 			$add = array(
@@ -47,11 +47,11 @@ abstract class HtmlPage extends TemplateView {
 		}
 	}
 
-	public function hasStylesheet($name) {
+	protected function hasStylesheet($name) {
 		return array_key_exists($name, $this->stylesheets);
 	}
 
-	function getStylesheets() {
+	protected function getStylesheets() {
 		return $this->stylesheets;
 	}
 
@@ -68,7 +68,7 @@ abstract class HtmlPage extends TemplateView {
 	 *
 	 * Merk op: local-entry kan ook gebruikt worden om een map buiten /layout/ toe te voegen.
 	 */
-	function addScript($script, $localpath = '/layout/') {
+	protected function addScript($script, $localpath = '/layout/') {
 		if (startsWith($script, 'http')) {
 			//extern
 			$add = array(
@@ -90,11 +90,11 @@ abstract class HtmlPage extends TemplateView {
 		}
 	}
 
-	public function hasScript($naam) {
+	protected function hasScript($naam) {
 		return array_key_exists($naam, $this->scripts);
 	}
 
-	function getScripts() {
+	protected function getScripts() {
 		return $this->scripts;
 	}
 

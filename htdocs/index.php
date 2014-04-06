@@ -18,6 +18,8 @@ try {
 	}
 	$class .= 'Controller';
 
+	Instellingen::setTemp('menu', 'request', $req);
+
 	require_once 'MVC/controller/' . $class . '.class.php';
 	$controller = new $class($req);
 	$controller->getContent()->view();

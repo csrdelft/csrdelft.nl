@@ -1,7 +1,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xml:lang="nl" xmlns="http://www.w3.org/1999/xhtml">
 	<head>
-		<title>C.S.R. Delft Mobiel | {$body->getTitel()}</title>
+		<title>C.S.R. Delft mobiel | {$body->getTitel()}</title>
 		<meta http-equiv="Content-type" content="text/html; charset=UTF-8" />
 		<meta name="author" content="PubCie C.S.R. Delft" />
 		<meta name="robots" content="index, follow" />
@@ -30,8 +30,10 @@
 			{/literal}
 		</script>
 		<meta name="google-site-verification" content="zLTm1NVzZPHx7jiGHBpe4HeH1goQAlJej2Rdc0_qKzE" />
-		<meta property="og:image" content="http://plaetjes.csrdelft.nl/layout/beeldmerk.jpg" />
+		<meta property="og:url" content="http://csrdelft.nl{Instellingen::get('menu', 'path')}" />
 		<meta property="og:title" content="C.S.R. Delft | {$body->getTitel()}" />
+		<meta property="og:locale" content="nl_nl" />
+		<meta property="og:image" content="http://plaetjes.csrdelft.nl/layout/beeldmerk.jpg" />
 		<link rel="alternate" title="C.S.R. Delft RSS" type="application/rss+xml" href="http://csrdelft.nl/forum/rss.xml" />
 		<link rel="shortcut icon" href="{$CSR_PICS}layout/favicon.ico" />
 	</head>

@@ -30,8 +30,10 @@
 			{/literal}
 		</script>
 		<meta name="google-site-verification" content="zLTm1NVzZPHx7jiGHBpe4HeH1goQAlJej2Rdc0_qKzE" />
-		<meta property="og:image" content="http://plaetjes.csrdelft.nl/layout/beeldmerk.jpg" />
+		<meta property="og:url" content="http://csrdelft.nl{Instellingen::get('menu', 'path')}" />
 		<meta property="og:title" content="C.S.R. Delft | {$body->getTitel()}" />
+		<meta property="og:locale" content="nl_nl" />
+		<meta property="og:image" content="http://plaetjes.csrdelft.nl/layout/beeldmerk.jpg" />
 		<link rel="alternate" title="C.S.R. Delft RSS" type="application/rss+xml" href="http://csrdelft.nl/forum/rss.xml" />
 		<link rel="shortcut icon" href="{$CSR_PICS}layout/favicon.ico" />
 	</head>
