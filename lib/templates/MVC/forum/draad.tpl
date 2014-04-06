@@ -99,19 +99,10 @@ strtotime($post->laatst_bewerkt) > strtotime($draad->getWanneerGelezen())
 			{include file='MVC/forum/post_lijst.tpl'}
 		{/foreach}
 
-		{if !$vanaf AND ForumPostsModel::instance()->getHuidigePagina() == ForumPostsModel::instance()->getAantalPaginas($draad->draad_id)}
-			<tr class="ongelezenvanaf" title="Alles gelezen">
-				<td colspan="2">
-					<a id="ongelezen"></a>
-				</td>
-			</tr>
-		{else}
+		{if ForumPostsModel::instance()->getAantalPaginas($draad->draad_id) > 1}
 			<tr class="tussenschot">
 				<td colspan="2"></td>
 			</tr>
-		{/if}
-
-		{if ForumPostsModel::instance()->getAantalPaginas($draad->draad_id) > 1}
 			<tr>
 				<td>&nbsp;</td>
 				<td>
@@ -121,6 +112,15 @@ strtotime($post->laatst_bewerkt) > strtotime($draad->getWanneerGelezen())
 					</div>
 				</td>
 			</tr>
+		{/if}
+
+		{if !$vanaf AND ForumPostsModel::instance()->getHuidigePagina() == ForumPostsModel::instance()->getAantalPaginas($draad->draad_id)}
+			<tr class="ongelezenvanaf" title="Geen ongelezen berichten">
+				<td colspan="2">
+					<a id="ongelezen"></a>
+				</td>
+			</tr>
+		{else}
 			<tr class="tussenschot">
 				<td colspan="2"></td>
 			</tr>
