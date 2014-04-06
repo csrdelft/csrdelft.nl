@@ -21,6 +21,7 @@
 			<div class="kwali"{if $view->getLid($kwali->lid_id)->isOudlid()} style="display: none;"{/if}>
 				<a href="{Instellingen::get('taken', 'url')}/dekwalificeer/{$functie->functie_id}" title="Kwalificatie intrekken" class="knop post" postdata="voor_lid={$kwali->lid_id}">{icon get="vcard_delete"}</a>
 				&nbsp;{$view->getLid($kwali->lid_id)->getNaamLink(Instellingen::get('corvee', 'weergave_ledennamen_beheer'), Instellingen::get('corvee', 'weergave_link_ledennamen'))}
+				<span style="color: gray;"> (sinds {$kwali->wanneer_toegewezen})</span>
 			</div>
 		{/foreach}
 	</td>
