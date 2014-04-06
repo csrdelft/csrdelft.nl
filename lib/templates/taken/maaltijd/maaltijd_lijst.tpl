@@ -16,7 +16,7 @@
 {if !$maaltijd->getIsGesloten()}
 	<h2 id="maaltijd-gesloten" style="color: red">De inschrijving voor deze maaltijd is nog niet gesloten
 	{if !$maaltijd->getIsVerwijderd() and !$maaltijd->getIsGesloten()}
-	&nbsp;<button href="{Instellingen::get('taken', 'url')}/sluit/{$maaltijd->getMaaltijdId()}" class="knop post confirm" title="Deze maaltijd sluiten">Nu sluiten!</button>
+	&nbsp;<button href="{Instellingen::get('taken', 'url')}/sluit/{$maaltijd->getMaaltijdId()}" class="knop post confirm" title="Inschrijvingen voor deze maaltijd sluiten betekend dat niemand zich meer kan aanmelden voor deze maaltijd. Alleen de kwalikok mag dit doen!">Nu sluiten</button>
 	{/if}
 	</h2>
 {/if}
