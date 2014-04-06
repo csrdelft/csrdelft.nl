@@ -37,6 +37,7 @@
 	<meta property="og:title" content="C.S.R. Delft - {$body->getTitel()}" />
 	<meta property="og:locale" content="nl_nl" />
 	<meta property="og:image" content="http://plaetjes.csrdelft.nl/layout/beeldmerk.png" />
+	<meta property="og:description" content="Instellingen::get('thuispagina', 'beschrijving')}" />
 </head>
 
 <body>
