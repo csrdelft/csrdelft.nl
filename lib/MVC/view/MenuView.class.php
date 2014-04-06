@@ -14,7 +14,7 @@ abstract class MenuView extends TemplateView {
 	public function __construct(MenuItem $tree_root) {
 		parent::__construct($tree_root);
 		$this->smarty->assign('root', $this->model);
-		$this->smarty->assign('path', Instellingen::get('menu', 'request'));
+		$this->smarty->assign('path', Instellingen::get('stek', 'request'));
 	}
 
 }

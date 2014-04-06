@@ -10,7 +10,6 @@
 try {
 	require_once 'configuratie.include.php';
 
-	$req = filter_var($_SERVER['REQUEST_URI'], FILTER_SANITIZE_URL);
 	$class = filter_input(INPUT_GET, 'c', FILTER_SANITIZE_STRING);
 
 	if (empty($class)) {
@@ -18,10 +17,8 @@ try {
 	}
 	$class .= 'Controller';
 
-	Instellingen::setTemp('menu', 'request', $req);
-
 	require_once 'MVC/controller/' . $class . '.class.php';
-	$controller = new $class($req);
+	$controller = new $class(Instellingen::get('stek', 'request'));
 	$controller->getContent()->view();
 }
 catch (Exception $e) { // TODO: logging

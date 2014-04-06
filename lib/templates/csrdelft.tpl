@@ -30,7 +30,7 @@
 			{/literal}
 		</script>
 		<meta name="google-site-verification" content="zLTm1NVzZPHx7jiGHBpe4HeH1goQAlJej2Rdc0_qKzE" />
-		<meta property="og:url" content="http://csrdelft.nl{Instellingen::get('menu', 'request')}" />
+		<meta property="og:url" content="http://csrdelft.nl{Instellingen::get('stek', 'request')}" />
 		<meta property="og:title" content="C.S.R. Delft | {$body->getTitel()}" />
 		<meta property="og:locale" content="nl_nl" />
 		<meta property="og:image" content="http://plaetjes.csrdelft.nl/layout/beeldmerk.png" />

@@ -88,6 +88,9 @@ switch (constant('MODE')) {
 			require_once 'MVC/controller/AclController.abstract.php';
 			require_once('MVC/controller/AgendaController.class.php');
 
+			$req = filter_var($_SERVER['REQUEST_URI'], FILTER_SANITIZE_URL);
+			Instellingen::setTemp('stek', 'request', $req);
+
 			// sessie starten
 			// volgt de defaults van webserver Syrinx, zodat testen met een workcopy overeenkomt.
 			session_name("PHPSESSID");
