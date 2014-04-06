@@ -86,11 +86,11 @@ strtotime($post->laatst_bewerkt) > strtotime($draad->getWanneerGelezen())
 )
 			}
 			{assign var=vanaf value=true}
-			<tr class="ongelezenvanaf" title="Ongelezen reacties vanaf hier">
-				<td colspan="2">
-					<a id="ongelezen"></a>
-				</td>
-			</tr>
+				<tr class="ongelezenvanaf" title="Ongelezen reacties vanaf hier">
+					<td colspan="2">
+						<a id="ongelezen"></a>
+					</td>
+				</tr>
 			{else}
 				<tr class="tussenschot">
 					<td colspan="2"></td>
@@ -99,11 +99,17 @@ strtotime($post->laatst_bewerkt) > strtotime($draad->getWanneerGelezen())
 			{include file='MVC/forum/post_lijst.tpl'}
 		{/foreach}
 
-		<tr class="tussenschot">
-			<td colspan="2">
-				{if !$vanaf}<a id="ongelezen"></a>{/if}
-			</td>
-		</tr>
+		{if !$vanaf AND ForumPostsModel::instance()->getHuidigePagina() == ForumPostsModel::instance()->getAantalPaginas($draad->draad_id)}
+			<tr class="ongelezenvanaf" title="Alles gelezen">
+				<td colspan="2">
+					<a id="ongelezen"></a>
+				</td>
+			</tr>
+		{else}
+			<tr class="tussenschot">
+				<td colspan="2"></td>
+			</tr>
+		{/if}
 
 		{if ForumPostsModel::instance()->getAantalPaginas($draad->draad_id) > 1}
 			<tr>
@@ -111,7 +117,7 @@ strtotime($post->laatst_bewerkt) > strtotime($draad->getWanneerGelezen())
 				<td>
 					<div class="forum-paginering">
 						Pagina: {sliding_pager baseurl="/forum/onderwerp/"|cat:$draad->draad_id|cat:"/"
-					pagecount=ForumPostsModel::instance()->getAantalPaginas($draad->draad_id) curpage=ForumPostsModel::instance()->getHuidigePagina()}
+	pagecount=ForumPostsModel::instance()->getAantalPaginas($draad->draad_id) curpage=ForumPostsModel::instance()->getHuidigePagina()}
 					</div>
 				</td>
 			</tr>
