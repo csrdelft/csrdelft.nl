@@ -10,8 +10,8 @@ require_once 'MVC/view/TemplateView.abstract.php';
  */
 abstract class HtmlPage extends TemplateView {
 
-	protected $stylesheets = array();
-	protected $scripts = array();
+	private $stylesheets = array();
+	private $scripts = array();
 
 	/**
 	 * Zorg dat de template een stijl inlaadt. Er zijn twee verianten:
@@ -25,7 +25,7 @@ abstract class HtmlPage extends TemplateView {
 	 *
 	 * Merk op: local-entry kan ook gebruikt worden om een map buiten /layout/ toe te voegen.
 	 */
-	protected function addStylesheet($sheet, $localpath = '/layout/') {
+	public function addStylesheet($sheet, $localpath = '/layout/') {
 		if (startsWith($sheet, 'http')) {
 			//extern
 			$add = array(
@@ -47,11 +47,11 @@ abstract class HtmlPage extends TemplateView {
 		}
 	}
 
-	protected function hasStylesheet($name) {
+	public function hasStylesheet($name) {
 		return array_key_exists($name, $this->stylesheets);
 	}
 
-	protected function getStylesheets() {
+	public function getStylesheets() {
 		return $this->stylesheets;
 	}
 
@@ -68,7 +68,7 @@ abstract class HtmlPage extends TemplateView {
 	 *
 	 * Merk op: local-entry kan ook gebruikt worden om een map buiten /layout/ toe te voegen.
 	 */
-	protected function addScript($script, $localpath = '/layout/') {
+	public function addScript($script, $localpath = '/layout/') {
 		if (startsWith($script, 'http')) {
 			//extern
 			$add = array(
@@ -90,11 +90,11 @@ abstract class HtmlPage extends TemplateView {
 		}
 	}
 
-	protected function hasScript($naam) {
+	public function hasScript($naam) {
 		return array_key_exists($naam, $this->scripts);
 	}
 
-	protected function getScripts() {
+	public function getScripts() {
 		return $this->scripts;
 	}
 
