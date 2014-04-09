@@ -1,14 +1,14 @@
 {strip}
+	{assign var=timestamp value=strtotime($draad->laatst_gewijzigd)}
 	<div class="item">
 		<div style="display: inline-block;">
-			{assign var=timestamp value=strtotime($draad->laatst_gewijzigd)}
 			<div id="cp{$post->post_id}" class="hoverdivcontent" style="cursor: pointer;" onclick="location.href = '/forum/reactie/{$post->post_id}#{$post->post_id}';">
 				<table id="forumtabel">
 					<tbody>
 						<tr>
 							<td class="auteur">
 								{$post->lid_id|csrnaam:'user':'pain'}:<br />
-								<span class="moment" style="color: #bbb;">
+								<span class="moment">
 									{if LoginLid::instelling('forum_datumWeergave') === 'relatief'}
 										{$post->datum_tijd|reldate}
 									{else}

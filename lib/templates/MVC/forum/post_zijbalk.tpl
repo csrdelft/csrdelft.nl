@@ -1,18 +1,15 @@
 {strip}
+	{assign var=draad value=$draden[$post->draad_id]}
+	{assign var=timestamp value=strtotime($post->datum_tijd)}
 	<div class="item">
 		<div style="display: inline-block;">
-			{assign var=draad value=$draden[$post->draad_id]}
-			{assign var=timestamp value=strtotime($post->datum_tijd)}
 			<div id="cp{$post->post_id}" class="hoverdivcontent" style="cursor: pointer;" onclick="location.href = '/forum/reactie/{$post->post_id}#{$post->post_id}';">
 				<table id="forumtabel">
 					<tbody>
 						<tr>
 							<td class="auteur">
-								<a href="/forum/reactie/{$post->post_id}#{$post->post_id}" title="Link naar deze post">
-									{$post->lid_id|csrnaam:'user':'pain'}:
-								</a>
-								<br />
-								<span class="moment" style="color: #bbb;">
+								{$post->lid_id|csrnaam:'user':'pain'}:<br />
+								<span class="moment">
 									{if LoginLid::instelling('forum_datumWeergave') === 'relatief'}
 										{$post->datum_tijd|reldate}
 									{else}
