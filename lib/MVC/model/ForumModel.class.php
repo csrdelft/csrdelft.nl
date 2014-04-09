@@ -365,16 +365,17 @@ class ForumDradenModel extends PersistenceModel implements Paging {
 			$belangrijk = '';
 		}
 		$draden = $this->find('forum_id IN (' . $in . ') AND d.wacht_goedkeuring = FALSE AND d.verwijderd = FALSE' . $belangrijk, $params, 'd.laatst_gewijzigd DESC', $aantal, ($pagina - 1) * $aantal);
-		if ($rss) {
-			$posts_ids = array_keys(array_key_property('laatste_post_id', $draden, false));
-			$posts = ForumPostsModel::instance()->getForumPostsById($posts_ids, ' AND wacht_goedkeuring = FALSE AND verwijderd = FALSE');
-			foreach ($draden as $i => $draad) {
-				if (array_key_exists($draad->laatste_post_id, $posts)) {
-					$draad->setForumPosts(array($posts[$draad->laatste_post_id]));
-				} else {
-					unset($draden[$i]);
-				}
+		$posts_ids = array_keys(array_key_property('laatste_post_id', $draden, false));
+		$posts = ForumPostsModel::instance()->getForumPostsById($posts_ids, ' AND wacht_goedkeuring = FALSE AND verwijderd = FALSE');
+		foreach ($draden as $i => $draad) {
+			if (array_key_exists($draad->laatste_post_id, $posts)) {
+				$draad->setForumPosts(array($posts[$draad->laatste_post_id]));
+			} else {
+				unset($draden[$i]);
 			}
+		}
+		if ($rss) {
+
 			return array($draden, $delen);
 		}
 		return $draden;

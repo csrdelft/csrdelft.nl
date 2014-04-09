@@ -8,7 +8,7 @@ $(document).ready(function() {
 	init_links();
 	init_buttons();
 	init_forms();
-	init_visitekaartjes();
+	init_hoverdivs();
 });
 
 function page_reload() {
@@ -47,18 +47,6 @@ function init_buttons() {
 			}
 		});
 	});
-}
-
-function init_visitekaartjes() {
-	$('.visite').hoverIntent(function() {
-		var id = $(this).attr('id');
-		id = id.replace('v', 'k');
-		$('#' + id).fadeIn();
-	});
-	$('.visitekaartje').unbind('mouseleave.visitekaartje');
-	$('.visitekaartje').bind('mouseleave.visitekaartje', function() {
-		$(this).fadeOut();
-	});
 	$('button.popup').unbind('click.popup');
 	$('button.popup').bind('click.popup', function() {
 		popup_open();
@@ -67,6 +55,18 @@ function init_visitekaartjes() {
 	$('button.post').bind('click.post', knop_post);
 	$('button.get').unbind('click.get');
 	$('button.get').bind('click.get', knop_get);
+}
+
+function init_hoverdivs() {
+	$('.hoverdiv').hoverIntent(function() {
+		var id = $(this).attr('id');
+		id = id.replace('d', 'c');
+		$('#' + id).fadeIn();
+	});
+	$('.hoverdivcontent').unbind('mouseleave.hoverdiv');
+	$('.hoverdivcontent').bind('mouseleave.hoverdiv', function() {
+		$(this).fadeOut();
+	});
 }
 
 function init_links() {
@@ -122,7 +122,8 @@ function popup_open(htmlString) {
 		$('#popup').html(htmlString);
 		init_forms();
 		init_links();
-		init_visitekaartjes();
+		init_buttons();
+		init_hoverdivs();
 		$('#popup').show();
 		$('#popup-background').css('background-image', 'none');
 		$('#popup input:visible:first').focus();
@@ -302,7 +303,8 @@ function dom_update(htmlString) {
 		}
 		init_forms();
 		init_links();
-		init_visitekaartjes();
+		init_buttons();
+		init_hoverdivs();
 	});
 }
 

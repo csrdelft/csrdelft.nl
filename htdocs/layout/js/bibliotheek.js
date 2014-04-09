@@ -36,7 +36,7 @@ jQuery(document).ready(function($) {
 		"fnStateSaveCallback": function ( oSettings, sValue ) {
 			sValue += ',"sEigenaarFilter": "'+$('span.filter.actief').attr('id')+'"';
 			sValue += ',"sView": '+$('input[name=boekstatus]').is(':checked');
-			init_visitekaartjes();
+			init_hoverdivs();
 			return sValue;
 		},
 		"fnStateLoadCallback": function ( oSettings, oData ) {

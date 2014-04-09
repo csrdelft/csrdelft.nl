@@ -13,7 +13,7 @@
 				{$post->datum_tijd}
 			{/if}
 		</span>
-		{if !isset($query)}
+		{if isset($deel)}
 			<div class="forumpostKnoppen">
 				{if !$draad->gesloten AND $deel->magPosten() AND !$post->wacht_goedkeuring}
 					<a href="#reageren" class="knop" onclick="forumCiteren({$post->post_id});" title="Citeer bericht">{icon get="comments"}</a>

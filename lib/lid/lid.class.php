@@ -765,9 +765,9 @@ class Lid implements Serializable, Agendeerbaar {
 			$k = '';
 			$l = '<a href="' . CSR_ROOT . 'communicatie/profiel/' . $this->getUid() . '" title="' . $sVolledigeNaam . '" class="lidLink ' . $this->profiel['status'] . '">';
 
-			if (($vorm === 'leeg')) {// || $mode === 'visitekaartje') && LidInstellingen::get('layout', 'visitekaartjes') == 'ja') {
+			if (($vorm === 'leeg' || $mode === 'visitekaartje') && LidInstellingen::get('layout', 'visitekaartjes') == 'ja') {
 				$v = str_replace(' ', '', str_replace('.', '', microtime()));
-				$k = '<div id="k' . $v . '" class="visitekaartje';
+				$k = '<div id="c' . $v . '" class="hoverdivcontent visitekaartje';
 				if ($this->isJarig()) {
 					$k.= ' jarig';
 				}
@@ -797,7 +797,7 @@ class Lid implements Serializable, Agendeerbaar {
 				if ($vorm === 'leeg') {
 					$naam = $k . $naam;
 				} else {
-					$naam = $k . '<span id="v' . $v . '" class="init visite">' . $l . $naam . '</a></span>';
+					$naam = $k . '<span id="d' . $v . '" class="hoverdiv">' . $l . $naam . '</a></span>';
 				}
 				return '<div style="display: inline-block;">' . $naam . '</div>';
 			}

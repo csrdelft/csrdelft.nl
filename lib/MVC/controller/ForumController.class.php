@@ -76,7 +76,6 @@ class ForumController extends Controller {
 			//uitgelogd heeft nieuwe layout
 			$this->view = new CsrLayout2Page($body);
 		}
-		$this->view->addStylesheet('forum.css');
 		$this->view->addScript('forum.js');
 	}
 
@@ -96,7 +95,6 @@ class ForumController extends Controller {
 		$draden_delen = ForumDelenModel::instance()->getWachtOpGoedkeuring();
 		$body = new ForumResultatenView($draden_delen[0], $draden_delen[1]);
 		$this->view = new CsrLayoutPage($body);
-		$this->view->addStylesheet('forum.css');
 		$this->view->addScript('forum.js');
 	}
 
@@ -118,7 +116,6 @@ class ForumController extends Controller {
 		$draden_delen = ForumDelenModel::instance()->zoeken($query);
 		$body = new ForumResultatenView($draden_delen[0], $draden_delen[1], $query);
 		$this->view = new CsrLayoutPage($body);
-		$this->view->addStylesheet('forum.css');
 		$this->view->addScript('forum.js');
 	}
 
@@ -137,7 +134,6 @@ class ForumController extends Controller {
 			//uitgelogd heeft nieuwe layout
 			$this->view = new CsrLayout2Page($body);
 		}
-		$this->view->addStylesheet('forum.css');
 		$this->view->addScript('forum.js');
 	}
 
@@ -164,7 +160,6 @@ class ForumController extends Controller {
 			//uitgelogd heeft nieuwe layout
 			$this->view = new CsrLayout2Page($body);
 		}
-		$this->view->addStylesheet('forum.css');
 		$this->view->addScript('forum.js');
 	}
 
@@ -202,7 +197,6 @@ class ForumController extends Controller {
 			//uitgelogd heeft nieuwe layout
 			$this->view = new CsrLayout2Page($body);
 		}
-		$this->view->addStylesheet('forum.css');
 		$this->view->addScript('forum.js');
 	}
 
