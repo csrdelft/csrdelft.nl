@@ -32,7 +32,7 @@
 			{$timestamp|date_format:"%d-%m"}
 		{/if}
 		&nbsp;
-		<a id="{$draad->draad_id}" href="/forum/onderwerp/{$draad->draad_id}{if LidInstellingen::get('forum', 'openDraadPagina') == 'ongelezen'}#ongelezen{elseif LidInstellingen::get('forum', 'openDraadPagina') == 'laatste'}#reageren{/if}" title="{$draad->titel}"{if !$draad->alGelezen()} class="opvallend"{/if}>
+		<a href="/forum/onderwerp/{$draad->draad_id}{if LidInstellingen::get('forum', 'openDraadPagina') == 'ongelezen'}#ongelezen{elseif LidInstellingen::get('forum', 'openDraadPagina') == 'laatste'}#reageren{/if}" title="{$draad->titel}"{if !$draad->alGelezen()} class="opvallend"{/if}>
 			{$draad->titel|truncate:25:"…":true}
 		</a>
 	</div>

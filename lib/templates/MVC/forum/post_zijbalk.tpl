@@ -36,6 +36,5 @@
 		<a href="/forum/reactie/{$post->post_id}#{$post->post_id}" title="{$draad->titel}"{if !$draad->alGelezen()} class="opvallend"{/if}>
 			{$draad->titel|truncate:25:"…":true}
 		</a>
-	</span>
-</div>
+	</div>
 {/strip}
