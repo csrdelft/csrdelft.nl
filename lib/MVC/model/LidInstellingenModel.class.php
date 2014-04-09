@@ -67,9 +67,10 @@ class LidInstellingen extends PersistenceModel {
 			'forum_belangrijk' => array('Aantal belangrijke forumberichten', 'int', array(0, 50), 5),
 			'forum' => array('Aantal forumberichten', 'int', array(0, 50), 10),
 			'forum_zelf' => array('Aantal zelf geposte forumberichten', 'int', array(0, 50), 0),
+			'forum_preview' => array('Laatste forumbericht weergeven', 'enum', array('ja', 'nee'), 'ja'),
 			'fotoalbum' => array('Laatste fotoalbum weergeven', 'enum', array('ja', 'nee'), 'ja'),
 			'verjaardagen' => array('Aantal verjaardagen in zijbalk', 'int', array(0, 50), 9),
-			'verjaardagen_pasfotos' => array('Toon pasfoto\'s bij verjaardagen', 'enum', array('ja', 'nee'), 'ja')
+			'verjaardagen_pasfotos' => array('Pasfoto\'s bij verjaardagen', 'enum', array('ja', 'nee'), 'ja')
 		),
 		'voorpagina' => array(
 			'maaltijdblokje' => array('Eerstvolgende maaltijd weergeven', 'enum', array('ja', 'nee'), 'ja'),
@@ -77,7 +78,7 @@ class LidInstellingen extends PersistenceModel {
 			'bijbelroosterblokje' => array('Bijbelroosterblokje weergeven', 'enum', array('ja', 'nee'), 'ja')
 		),
 		'groepen' => array(
-			'toonPasfotos' => array('Standaard pasfotos tonen', 'enum', array('ja', 'nee'), 'ja')
+			'toonPasfotos' => array('Standaard pasfotos weergeven', 'enum', array('ja', 'nee'), 'ja')
 		),
 		'agenda' => array(
 			'toonVerjaardagen' => array('Verjaardagen in agenda', 'enum', array('ja', 'nee'), 'ja'),
