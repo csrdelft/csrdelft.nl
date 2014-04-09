@@ -39,6 +39,9 @@ class CsrLayoutPage extends HtmlPage {
 		if (LidInstellingen::get('layout', 'beeld') == 'breedbeeld') {
 			$this->addStylesheet('breedbeeld.css');
 		}
+		if (LidInstellingen::get('layout', 'fixed') == 'vast') {
+			$this->addStylesheet('fixed.css');
+		}
 		if (LidInstellingen::get('layout', 'sneeuw') != 'nee') {
 			if (LidInstellingen::get('layout', 'sneeuw') == 'ja') {
 				$this->addStylesheet('snow.anim.css');
