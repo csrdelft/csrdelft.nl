@@ -18,7 +18,7 @@
 								</span>
 							</td>
 							<td class="bericht1">
-								<div class="bericht">{$post->tekst|ubb|html_substr:"125":"…"}</div>
+								<div class="bericht">{$post->tekst|ubb|html_substr:"100":"…"}</div>
 							</td>
 						</tr>
 					</tbody>
