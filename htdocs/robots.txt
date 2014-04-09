@@ -4,6 +4,6 @@
 
 User-agent: *
 Disallow: /tools/
-Disallow: /forum/
+Disallow: /forum/posten/
 Disallow: /actueel/fotoalbum/
 Disallow: /actueel/groepen/

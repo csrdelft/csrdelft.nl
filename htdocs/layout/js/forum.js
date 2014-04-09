@@ -39,6 +39,14 @@ jQuery(document).ready(function($) {
 			}
 		});
 	});
+	$('td.auteur').hover(
+		function() {
+			$(this).find('a.forummodknop').fadeIn();
+		},
+		function() {
+			$(this).find('a.forummodknop').fadeOut();
+		}
+	);
 
     //naar juiste forumreactie scrollen door hash toe te voegen
     if(!window.location.hash && window.location.pathname.substr(0, 15) == '/forum/reactie/' ) {

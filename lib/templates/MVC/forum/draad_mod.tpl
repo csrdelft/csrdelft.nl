@@ -47,7 +47,7 @@
 				<td style="width: 25px;">
 					<span id="modsluiten" onclick="$('#togglemodknop').toggle();
 							$('#modereren').slideUp();
-							$('#forumtabel a.forummodknop').fadeOut()" title="Moderatie-functies verbergen">×</span>
+							$('#forumtabel a.forummodknop').fadeOut();" title="Moderatie-functies verbergen">×</span>
 				</td>
 			</tr>
 		</tbody>

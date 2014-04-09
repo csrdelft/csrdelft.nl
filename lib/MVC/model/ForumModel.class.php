@@ -283,7 +283,7 @@ class ForumDradenModel extends PersistenceModel implements Paging {
 		if ($this->aantal_plakkerig === null) {
 			$this->aantal_plakkerig = $this->count('forum_id = ? AND plakkerig = TRUE AND wacht_goedkeuring = FALSE AND verwijderd = FALSE', array($draad->forum_id));
 		}
-		$count = 1 + $this->aantal_plakkerig + $this->count('forum_id = ? AND laatst_gewijzigd > ? AND plakkerig = FALSE AND wacht_goedkeuring = FALSE AND verwijderd = FALSE', array($draad->forum_id, $draad->laatst_gewijzigd));
+		$count = $this->aantal_plakkerig + $this->count('forum_id = ? AND laatst_gewijzigd >= ? AND plakkerig = FALSE AND wacht_goedkeuring = FALSE AND verwijderd = FALSE', array($draad->forum_id, $draad->laatst_gewijzigd));
 		return ceil($count / $this->per_pagina);
 	}
 
@@ -496,12 +496,12 @@ class ForumPostsModel extends PersistenceModel implements Paging {
 	}
 
 	public function getPaginaVoorPost(ForumPost $post) {
-		$count = 1 + $this->count('draad_id = ? AND post_id < ? AND wacht_goedkeuring = FALSE AND verwijderd = FALSE', array($post->draad_id, $post->post_id));
+		$count = $this->count('draad_id = ? AND post_id <= ? AND wacht_goedkeuring = FALSE AND verwijderd = FALSE', array($post->draad_id, $post->post_id));
 		return ceil($count / $this->per_pagina);
 	}
 
 	public function setPaginaVoorLaatstGelezen(ForumDraadGelezen $gelezen) {
-		$count = 1 + $this->count('draad_id = ? AND datum_tijd < ? AND wacht_goedkeuring = FALSE AND verwijderd = FALSE', array($gelezen->draad_id, $gelezen->datum_tijd));
+		$count = $this->count('draad_id = ? AND datum_tijd <= ? AND wacht_goedkeuring = FALSE AND verwijderd = FALSE', array($gelezen->draad_id, $gelezen->datum_tijd));
 		$this->pagina = ceil($count / $this->per_pagina);
 	}
 

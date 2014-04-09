@@ -765,7 +765,7 @@ class Lid implements Serializable, Agendeerbaar {
 			$k = '';
 			$l = '<a href="' . CSR_ROOT . 'communicatie/profiel/' . $this->getUid() . '" title="' . $sVolledigeNaam . '" class="lidLink ' . $this->profiel['status'] . '">';
 
-			if (($vorm === 'leeg' || $mode === 'visitekaartje') && LidInstellingen::get('layout', 'visitekaartjes') == 'ja') {
+			if (($vorm === 'leeg')) {// || $mode === 'visitekaartje') && LidInstellingen::get('layout', 'visitekaartjes') == 'ja') {
 				$v = str_replace(' ', '', str_replace('.', '', microtime()));
 				$k = '<div id="k' . $v . '" class="visitekaartje';
 				if ($this->isJarig()) {
