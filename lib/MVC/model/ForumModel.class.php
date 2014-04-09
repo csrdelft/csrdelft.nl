@@ -343,7 +343,7 @@ class ForumDradenModel extends PersistenceModel implements Paging {
 	 */
 	public function getRecenteForumDraden($aantal = null, $belangrijk = null, $rss = false) {
 		if (!is_int($aantal)) {
-			$aantal = (int) LidInstellingen::get('forum', 'zoekresultaten');
+			$aantal = (int) LidInstellingen::get('forum', 'draden_per_pagina');
 			$pagina = $this->pagina;
 		} else {
 			$pagina = 1;
