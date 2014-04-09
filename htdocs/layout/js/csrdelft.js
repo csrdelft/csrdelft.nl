@@ -8,7 +8,7 @@ $(document).ready(function() {
 	init_links();
 	init_buttons();
 	init_forms();
-	init_hoverdivs();
+	init_hoverIntents();
 });
 
 function page_reload() {
@@ -57,16 +57,15 @@ function init_buttons() {
 	$('button.get').bind('click.get', knop_get);
 }
 
-function init_hoverdivs() {
-	$('.hoverdiv').hoverIntent(function() {
-		var id = $(this).attr('id');
-		id = id.replace('d', 'c');
-		$('#' + id).fadeIn();
-	});
-	$('.hoverdivcontent').unbind('mouseleave.hoverdiv');
-	$('.hoverdivcontent').bind('mouseleave.hoverdiv', function() {
-		$(this).fadeOut();
-	});
+function init_hoverIntents() {
+	$('.hoverIntent').hoverIntent(
+		function() {
+			$(this).find('.hoverIntentContent').fadeIn();
+		},
+		function() {
+			$(this).find('.hoverIntentContent').fadeOut();
+		}
+	);
 }
 
 function init_links() {
@@ -123,7 +122,7 @@ function popup_open(htmlString) {
 		init_forms();
 		init_links();
 		init_buttons();
-		init_hoverdivs();
+		init_hoverIntents();
 		$('#popup').show();
 		$('#popup-background').css('background-image', 'none');
 		$('#popup input:visible:first').focus();
@@ -304,7 +303,7 @@ function dom_update(htmlString) {
 		init_forms();
 		init_links();
 		init_buttons();
-		init_hoverdivs();
+		init_hoverIntents();
 	});
 }
 

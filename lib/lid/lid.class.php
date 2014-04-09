@@ -767,7 +767,7 @@ class Lid implements Serializable, Agendeerbaar {
 
 			if (($vorm === 'leeg' || $mode === 'visitekaartje') && LidInstellingen::get('layout', 'visitekaartjes') == 'ja') {
 				$v = str_replace(' ', '', str_replace('.', '', microtime()));
-				$k = '<div id="c' . $v . '" class="hoverdivcontent visitekaartje';
+				$k = '<div class="hoverIntentContent visitekaartje';
 				if ($this->isJarig()) {
 					$k.= ' jarig';
 				}
@@ -797,7 +797,7 @@ class Lid implements Serializable, Agendeerbaar {
 				if ($vorm === 'leeg') {
 					$naam = $k . $naam;
 				} else {
-					$naam = $k . '<span id="d' . $v . '" class="hoverdiv">' . $l . $naam . '</a></span>';
+					$naam = $k . '<span class="hoverIntent">' . $l . $naam . '</a></span>';
 				}
 				return '<div style="display: inline-block;">' . $naam . '</div>';
 			}

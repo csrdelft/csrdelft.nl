@@ -39,7 +39,7 @@ jQuery(document).ready(function($) {
 			}
 		});
 	});
-	$('td.auteur').hover(
+	$('td.auteur').hoverIntent(
 		function() {
 			$(this).find('a.forummodknop').fadeIn();
 		},
