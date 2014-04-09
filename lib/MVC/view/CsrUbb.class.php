@@ -49,7 +49,7 @@ class CsrUbb extends eamBBParser {
 		return $this->HTML;
 	}
 
-	function ubb_url($arguments = array()) {
+	function ubb_url(array $arguments = array()) {
 		$content = $this->parseArray(array('[/url]', '[/rul]'), array());
 		if (isset($arguments['url'])) { // [url=
 			$href = $arguments['url'];
@@ -104,7 +104,7 @@ class CsrUbb extends eamBBParser {
 	  }
 	 */
 
-	function ubb_neuzen($arguments = array()) {
+	function ubb_neuzen(array $arguments = array()) {
 		if (is_array($arguments)) {
 			$content = $this->parseArray(array('[/neuzen]'), array());
 		} else {
@@ -117,7 +117,7 @@ class CsrUbb extends eamBBParser {
 		return $content;
 	}
 
-	function ubb_citaat($arguments = array()) {
+	function ubb_citaat(array $arguments = array()) {
 		if ($this->quote_level == 0) {
 			$this->quote_level = 1;
 			$content = $this->parseArray(array('[/citaat]'), array());
@@ -190,7 +190,7 @@ class CsrUbb extends eamBBParser {
 	 * Tekst binnen de privé-tag wordt enkel weergegeven voor leden met
 	 * (standaard) P_LOGGED_IN. Een andere permissie kan worden meegegeven.
 	 */
-	function ubb_prive($arguments = array()) {
+	function ubb_prive(array $arguments = array()) {
 		if (isset($arguments['prive'])) {
 			$permissie = $arguments['prive'];
 		} else {
@@ -217,7 +217,7 @@ class CsrUbb extends eamBBParser {
 	 *
 	 * [instelling=maaltijdblokje module=voorpagina][maaltijd=next][/instelling]
 	 */
-	function ubb_instelling($arguments = array()) {
+	function ubb_instelling(array $arguments = array()) {
 		$content = $this->parseArray(array('[/instelling]'), array());
 		if (!array_key_exists('instelling', $arguments) OR !isset($arguments['instelling'])) {
 			return 'Geen of een niet bestaande instelling opgegeven: ' . mb_htmlentities($arguments['instelling']);
@@ -919,6 +919,42 @@ HTML;
 		require_once 'bijbelrooster.class.php';
 		$bijbel = new Bijbelrooster();
 		return $bijbel->ubbContent($dagen);
+	}
+
+	function ubb_bijbel(array $arguments = array()) {
+		$content = $this->parseArray(array('[/bijbel]'), array());
+		if (isset($arguments['bijbel'])) { // [bijbel=
+			$stukje = $arguments['bijbel'];
+		} else { // [bijbel][/bijbel]
+			$stukje = $content;
+		}
+		$vertaling = null;
+		if (isset($arguments['vertaling'])) {
+			$vert = strtolower(str_replace('_', ' ', $arguments['vertaling']));
+			foreach (self::$bijbelvertalingen as $v => $id) {
+				if (startsWith(strtolower($v), $vert)) {
+					$vertaling = $v;
+				}
+			}
+		}
+		return self::getBiblijaLink($stukje, $vertaling);
+	}
+
+	private static $bijbelvertalingen = array(
+		'NBV' => 'id18=1',
+		'NBG' => 'id16=1',
+		'Herziene Statenvertaling' => 'id47=1',
+		'Statenvertaling (Jongbloed)' => 'id37=1',
+		'Groot Nieuws Bijbel' => 'id17=1',
+		'Willibrordvertaling' => 'id35=1'
+	);
+
+	public static function getBiblijaLink($stukje, $vertaling = null) {
+		if ($vertaling === null) {
+			LidInstellingen::get('algemeen', 'bijbel');
+		}
+		$link = 'http://www.biblija.net/biblija.cgi?m=' . urlencode($stukje) . '&' . self::$bijbelvertalingen[$vertaling] . '&l=nl&set=10';
+		return '<a href=' . $link . '>' . $stukje . '</a>';
 	}
 
 }

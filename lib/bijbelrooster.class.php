@@ -35,17 +35,7 @@ class Bijbelrooster extends TemplateView {
 	}
 
 	function getLink($stukje) {
-		$bijbelvertalingen = array(
-			"NBV" => "id18=1",
-			"NBG" => "id16=1",
-			"Herziene Statenvertaling" => "id47=1",
-			"Statenvertaling (Jongbloed)" => "id37=1",
-			"Groot Nieuws Bijbel" => "id17=1",
-			"Willibrordvertaling" => "id35=1"
-		);
-		$link = 'http://www.biblija.net/biblija.cgi?m=' . urlencode($stukje) . '&' . $bijbelvertalingen[LidInstellingen::get('algemeen', 'bijbel')] . '&l=nl&set=10';
-
-		return '<a href=' . $link . '>' . $stukje . '</a>';
+		return CsrUbb::getBiblijaLink($stukje);
 	}
 
 	/**
