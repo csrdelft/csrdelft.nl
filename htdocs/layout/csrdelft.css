@@ -1135,9 +1135,3 @@ div.forum-paginering span.curpage{
 
 div#ubbhulpverhaal h2 { font-size: 16px; }
 div#ubbhulpverhaal { font-size: 12px; }
-
-div.forcebreak {
-	width: 580px !important;
-	word-wrap: break-word !important;
-	word-break: break-all !important;
-}
