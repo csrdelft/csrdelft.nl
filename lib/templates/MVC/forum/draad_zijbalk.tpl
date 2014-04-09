@@ -17,7 +17,7 @@
 								</span>
 							</td>
 							<td class="bericht1">
-								<div class="bericht">{$post->tekst|ubb|html_substr:"300":"…"}</div>
+								<div class="bericht forcebreak">{$post->tekst|ubb|html_substr:"300":"…"}</div>
 							</td>
 						</tr>
 					</tbody>
