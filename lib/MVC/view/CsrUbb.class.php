@@ -953,7 +953,9 @@ HTML;
 		if ($vertaling === null) {
 			$vertaling = LidInstellingen::get('algemeen', 'bijbel');
 		}
-		$link = 'http://www.biblija.net/biblija.cgi?m=' . urlencode($stukje) . '&' . self::$bijbelvertalingen[$vertaling] . '&l=nl&set=10';
+		// fix http://stackoverflow.com/questions/10152894/php-replacing-special-characters-like-a-a-e-e
+		$fix = iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE', $stukje);
+		$link = 'http://www.biblija.net/biblija.cgi?m=' . urlencode($fix) . '&' . self::$bijbelvertalingen[$vertaling] . '&l=nl&set=10';
 		return '<a href="' . $link . '" target="_blank">' . $stukje . '</a>';
 	}
 
