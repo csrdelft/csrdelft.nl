@@ -502,8 +502,8 @@ class ForumPostsModel extends PersistenceModel implements Paging {
 	}
 
 	public function setPaginaVoorLaatstGelezen(ForumDraadGelezen $gelezen) {
-		$count = $this->count('draad_id = ? AND datum_tijd <= ? AND wacht_goedkeuring = FALSE AND verwijderd = FALSE', array($gelezen->draad_id, $gelezen->datum_tijd));
-		$this->pagina = ceil($count / $this->per_pagina);
+		$count = 1 + $this->count('draad_id = ? AND datum_tijd < ? AND wacht_goedkeuring = FALSE AND verwijderd = FALSE', array($gelezen->draad_id, $gelezen->datum_tijd));
+		$this->setHuidigePagina(ceil($count / $this->per_pagina), $gelezen->draad_id);
 	}
 
 	public function hertellenVoorDraadEnDeel(ForumDraad $draad, ForumDeel $deel) {
