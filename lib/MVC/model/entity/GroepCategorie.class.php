@@ -1,5 +1,7 @@
 <?php
 
+require_once 'MCV/model/entity/Groep.abstract.php';
+
 /**
  * GroepCategorie.class.php
  * 
@@ -16,33 +18,18 @@ class GroepCategorie extends PersistentEntity {
 	 */
 	public $categorie_id;
 	/**
-	 * Naam
+	 * Titel
 	 * @var string
 	 */
-	public $naam;
+	public $titel;
 	/**
-	 * Omschrijving
-	 * @var string
-	 */
-	public $omschrijving;
-	/**
-	 * Zichtbaar in overzicht
+	 * Groepen weergeven in overzicht
 	 * @var boolean
 	 */
-	public $zichtbaar;
-	/**
-	 * Weergave volgorde
-	 * @var int
-	 */
-	public $prioriteit;
-	/**
-	 * Historie weergeven in overzicht
-	 * @var string
-	 */
-	public $toon_historie;
+	public $toon_overzicht;
 	/**
 	 * Groepen weergeven in profiel
-	 * @var string
+	 * @var boolean
 	 */
 	public $toon_profiel;
 	/**
@@ -51,24 +38,21 @@ class GroepCategorie extends PersistentEntity {
 	 */
 	public $sync_ldap;
 	/**
-	 * Rechten benodigd voor aanmaken
+	 * Rechten benodigd voor beheren
 	 * @var string
 	 */
-	public $schrijfrechten = 'P_LEDEN_MOD';
+	public $rechten_beheren;
 	/**
 	 * Database table fields
 	 * @var array
 	 */
 	protected static $persistent_fields = array(
 		'categorie_id' => 'int(11) NOT NULL AUTO_INCREMENT',
-		'naam' => 'varchar(255) NOT NULL',
-		'omschrijving' => 'text NOT NULL',
-		'zichtbaar' => 'boolean NOT NULL',
-		'prioriteit' => 'int(11) NOT NULL',
-		'toon_historie' => 'boolean NOT NULL',
+		'titel' => 'varchar(255) NOT NULL',
+		'toon_overzicht' => 'boolean NOT NULL',
 		'toon_profiel' => 'boolean NOT NULL',
 		'sync_ldap' => 'boolean NOT NULL',
-		'schrijfrechten' => 'varchar(25) NOT NULL'
+		'rechten_beheren' => 'varchar(255) NOT NULL'
 	);
 	/**
 	 * Database primary key
@@ -80,5 +64,9 @@ class GroepCategorie extends PersistentEntity {
 	 * @var string
 	 */
 	protected static $table_name = 'groep_categorien';
+
+	public function magBeheren() {
+		return LoginLid::mag($this->rechten_beheren);
+	}
 
 }

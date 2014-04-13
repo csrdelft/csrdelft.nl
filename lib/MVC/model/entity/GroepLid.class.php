@@ -22,6 +22,7 @@ class GroepLid extends PersistentEntity {
 	public $lid_id;
 	/**
 	 * Omschrijving bij lidmaatschap
+	 * @see BestuurFunctie
 	 * @var string
 	 */
 	public $omschrijving;
@@ -29,7 +30,13 @@ class GroepLid extends PersistentEntity {
 	 * Datum en tijd van toevoegen
 	 * @var string
 	 */
-	public $datum_tijd;
+	public $lid_sinds;
+	/**
+	 * o.t. / h.t. / f.t.
+	 * @see GroepStatus
+	 * @var string
+	 */
+	public $status;
 	/**
 	 * Volgorde van weergave
 	 * @var string
@@ -47,8 +54,9 @@ class GroepLid extends PersistentEntity {
 	protected static $persistent_fields = array(
 		'groep_id' => 'int(11) NOT NULL AUTO_INCREMENT',
 		'lid_id' => 'varchar(4) NOT NULL',
-		'omschrijving' => 'text NOT NULL',
-		'datum_tijd' => 'datetime NOT NULL',
+		'omschrijving' => 'varchar(255) NOT NULL',
+		'lid_sinds' => 'datetime NOT NULL',
+		'status' => 'varchar(4) NOT NULL',
 		'prioriteit' => 'int(11) NOT NULL',
 		'door_lid_id' => 'varchar(4) NOT NULL'
 	);

@@ -1,7 +1,5 @@
 <?php
 
-require_once 'MCV/model/entity/Groep.abstract.php';
-
 Ketzer::__constructStatic();
 
 /**
@@ -15,15 +13,20 @@ Ketzer::__constructStatic();
 class Ketzer extends Groep {
 
 	/**
-	 * Rechten benodigd voor aanmelden
-	 * @var string
-	 */
-	public $aanmeld_filter;
-	/**
-	 * Datum en tijd van toevoegen
+	 * Maximaal aantal groepsleden
 	 * @var string
 	 */
 	public $aanmeld_limiet;
+	/**
+	 * Datum en tijd aanmeldperiode begin
+	 * @var string
+	 */
+	public $aanmelden_vanaf;
+	/**
+	 * Datum en tijd aanmeldperiode einde
+	 * @var string
+	 */
+	public $aanmelden_tot;
 	/**
 	 * Mogelijke opties bij aanmelden
 	 * @var string
@@ -34,8 +37,9 @@ class Ketzer extends Groep {
 	 * @var array
 	 */
 	protected static $persistent_fields = array(
-		'aanmeld_filter' => 'varchar(255) DEFAULT NULL',
 		'aanmeld_limiet' => 'int(11) DEFAULT NULL',
+		'aanmelden_vanaf' => 'datetime NOT NULL',
+		'aanmelden_tot' => 'datetime NOT NULL',
 		'aanmeld_opties' => 'text DEFAULT NULL'
 	);
 	/**
