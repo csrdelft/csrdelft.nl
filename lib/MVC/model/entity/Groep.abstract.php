@@ -17,7 +17,7 @@ abstract class Groep extends PersistentEntity {
 	 * Primary key
 	 * @var int
 	 */
-	public $groep_id;
+	public $id;
 	/**
 	 * Deze groep valt onder deze categorie
 	 * @var int
@@ -94,7 +94,7 @@ abstract class Groep extends PersistentEntity {
 	 * @var array
 	 */
 	protected static $persistent_fields = array(
-		'groep_id' => 'int(11) NOT NULL AUTO_INCREMENT',
+		'id' => 'int(11) NOT NULL AUTO_INCREMENT',
 		'categorie_id' => 'int(11) NOT NULL',
 		'naam' => 'varchar(255) NOT NULL',
 		'familie_id' => 'varchar(255) NOT NULL',

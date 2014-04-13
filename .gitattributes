@@ -3193,6 +3193,9 @@ lib/MVC/model/entity/Groepen[!!-~]CD.png -text
 lib/MVC/model/entity/HuisStatus.enum.php -text
 lib/MVC/model/entity/Instelling.class.php -text
 lib/MVC/model/entity/Ketzer.class.php -text
+lib/MVC/model/entity/KetzerKeuze.class.php -text
+lib/MVC/model/entity/KetzerOptie.class.php -text
+lib/MVC/model/entity/KetzerOptieSoort.enum.php -text
 lib/MVC/model/entity/LidInstelling.class.php -text
 lib/MVC/model/entity/Mail.class.php -text
 lib/MVC/model/entity/Mededeling.class.php -text
