@@ -3152,6 +3152,7 @@ lib/MVC/controller/AgendaController.class.php -text
 lib/MVC/controller/CmsPaginaController.class.php -text
 lib/MVC/controller/Controller.abstract.php -text
 lib/MVC/controller/ForumController.class.php -text
+lib/MVC/controller/GroepenController.class.php -text
 lib/MVC/controller/InstellingenBeheerController.class.php -text
 lib/MVC/controller/LidInstellingenController.class.php -text
 lib/MVC/controller/MenuBeheerController.class.php -text
@@ -3163,6 +3164,7 @@ lib/MVC/model/CmsPaginaModel.class.php -text
 lib/MVC/model/Database.singleton.php -text
 lib/MVC/model/DragObjectModel.class.php -text
 lib/MVC/model/ForumModel.class.php -text
+lib/MVC/model/GroepenModel.class.php -text
 lib/MVC/model/InstellingenModel.class.php -text
 lib/MVC/model/LidInstellingenModel.class.php -text
 lib/MVC/model/MenuModel.class.php -text
@@ -3197,6 +3199,7 @@ lib/MVC/model/entity/Mededeling.class.php -text
 lib/MVC/model/entity/MenuItem.class.php -text
 lib/MVC/model/entity/Ondervereniging.class.php -text
 lib/MVC/model/entity/PersistentEntity.abstract.php -text
+lib/MVC/model/entity/Sjaarcie.class.php -text
 lib/MVC/model/entity/Werkgroep.class.php -text
 lib/MVC/model/entity/Woonoord.class.php -text
 lib/MVC/model/taken/FunctiesModel.class.php -text
@@ -3210,6 +3213,7 @@ lib/MVC/view/CsrUbb.class.php -text
 lib/MVC/view/FormElement.abstract.php -text
 lib/MVC/view/Formulier.class.php -text
 lib/MVC/view/ForumView.class.php -text
+lib/MVC/view/GroepenView.class.php -text
 lib/MVC/view/HtmlPage.abstract.php -text
 lib/MVC/view/InstellingenBeheerView.class.php -text
 lib/MVC/view/LidInstellingenView.class.php -text
@@ -3944,6 +3948,9 @@ lib/templates/MVC/forum/post_zijbalk.tpl -text
 lib/templates/MVC/forum/resultaten.tpl -text
 lib/templates/MVC/forum/rss.tpl -text
 lib/templates/MVC/forum/zoek_form.tpl -text
+lib/templates/MVC/groepen/commissies.tpl -text
+lib/templates/MVC/groepen/groep.tpl -text
+lib/templates/MVC/groepen/page_menu.tpl -text
 lib/templates/MVC/instellingen/beheer/instelling_row.tpl -text
 lib/templates/MVC/instellingen/beheer/instellingen_page.tpl -text
 lib/templates/MVC/instellingen/lidinstelling.tpl -text

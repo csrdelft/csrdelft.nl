@@ -30,7 +30,7 @@ class Groepcontroller extends Controller {
 		//groep-object inladen
 		if ($this->hasParam(0)) {
 			try {
-				$this->groep = new Groep($this->getParam(0));
+				$this->groep = new OldGroep($this->getParam(0));
 			} catch (Exception $e) {
 				invokeRefresh(CSR_ROOT . 'actueel/groepen/', $e->getMessage());
 			}
@@ -200,8 +200,8 @@ class Groepcontroller extends Controller {
 		 * vaak erg handig.
 		 */
 		if ($this->hasParam(2) AND preg_match('/[0-9]*/', $this->getParam(2))) {
-			$oudeGroep = new Groep($this->getParam(2));
-			if ($oudeGroep instanceof Groep) {
+			$oudeGroep = new OldGroep($this->getParam(2));
+			if ($oudeGroep instanceof OldGroep) {
 				$this->groep->setValue('snaam', $oudeGroep->getSnaam());
 				$_SESSION['oudegroep']['snaam'] = $oudeGroep->getSnaam();
 				$this->groep->setValue('naam', $oudeGroep->getNaam());

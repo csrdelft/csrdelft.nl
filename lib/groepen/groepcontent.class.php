@@ -178,7 +178,7 @@ class GroepledenContent extends TemplateView {
 
 	private $actie = 'standaard';
 
-	public function __construct(Groep $groep, $actie = 'standaard') {
+	public function __construct(OldGroep $groep, $actie = 'standaard') {
 		parent::__construct($groep);
 		$this->actie = $actie;
 	}
@@ -218,7 +218,7 @@ class Groepgeschiedeniscontent extends TemplateView {
 				echo '<td colspan="' . $startspacer . '" style="font-size: 8px; background-color: lightgray;">(' . $startspacer . ')</td>';
 			}
 
-			$oudeGr = Groep::getGroepgeschiedenis($groep->getSnaam(), $jaren);
+			$oudeGr = OldGroep::getGroepgeschiedenis($groep->getSnaam(), $jaren);
 			foreach ($oudeGr as $grp) {
 				$duration = $grp['duration'];
 				if ($duration <= 0) {

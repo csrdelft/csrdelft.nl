@@ -6,7 +6,7 @@
  */
 require_once 'groepen.class.php';
 
-class Groep{
+class OldGroep{
 
 	//deze array wordt in deze klasse twee keer gebruikt: in __construct() en load()
 	private $groepseigenschappen=
@@ -578,7 +578,7 @@ class Groep{
 			LIMIT 1;";
 		$voorganger=$db->getRow($qVoorganger);
 		if($voorganger!==false){
-			$return['voorganger']=new Groep($voorganger['id']);
+			$return['voorganger']=new OldGroep($voorganger['id']);
 		}
 		$qOpvolger="
 			SELECT id
@@ -589,7 +589,7 @@ class Groep{
 			LIMIT 1;";
 		$opvolger=$db->getRow($qOpvolger);
 		if($opvolger!==false){
-			$return['opvolger']=new Groep($opvolger['id']);
+			$return['opvolger']=new OldGroep($opvolger['id']);
 		}
 		return $return;
 	}
@@ -624,7 +624,7 @@ class Groep{
 			foreach($groepen as $groepid){
 				$groepid=(int)$groepid;
 				if($groepid!=0){
-					$groep=new Groep($groepid);
+					$groep=new OldGroep($groepid);
 					$groeplinks[]=$groep->getLink();
 				}
 			}

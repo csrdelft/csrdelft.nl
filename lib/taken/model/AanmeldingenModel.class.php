@@ -384,7 +384,7 @@ class AanmeldingenModel {
 
 				try {
 					$parts = explode('>', $filter[1], 2); // Splitst opgegeven term in groepsnaam en functie
-					$groep = new Groep($parts[0]);
+					$groep = new OldGroep($parts[0]);
 					if ($groep->isLid($uid)) {
 						// Wordt er een functie gevraagd?
 						if (isset($parts[1])) {

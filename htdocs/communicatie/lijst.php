@@ -24,7 +24,7 @@ if (isset($_GET['q'])) {
 	//h.t. groep. Als dat zo is refreshen we naar die groep.
 	if ($zoeker->count() == 0) {
 		try {
-			$groep = new Groep($_GET['q']);
+			$groep = new OldGroep($_GET['q']);
 			if ($groep instanceof Groep) {
 				header('location: ' . $groep->getUrl());
 				exit;

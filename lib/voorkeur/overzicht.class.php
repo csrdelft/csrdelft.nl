@@ -18,7 +18,7 @@ class CommissieOverzicht extends TemplateView {
 		if (LoginLid::mag('P_LEDEN_MOD')) {
 			require_once('voorkeur/commissie.class.php');
 			if ($this->id >= 0) {
-				$commissie = Commissie::getCommissie($this->id);
+				$commissie = OldCommissie::getCommissie($this->id);
 				$res .= '<h1> Geinteresseerde voor ' . $commissie->getNaam() . ' </h1> 
 					<a href="/tools/voorkeuren/commissies.php">Terug naar overzicht</a>
 					<table><tr><td><h3>Lid</h3></td><td><h3>Interesse</h3></td></tr>';
@@ -28,7 +28,7 @@ class CommissieOverzicht extends TemplateView {
 				}
 				$res .= '</table>';
 			} else {
-				$commissies = Commissie::getCommissies();
+				$commissies = OldCommissie::getCommissies();
 				$res .= '<h1>Commissie voorkeuren leden</h1>';
 				$res .= '<p>klik op een commissie om de voorkeuren te bekijken';
 				$res .= '<ul>';

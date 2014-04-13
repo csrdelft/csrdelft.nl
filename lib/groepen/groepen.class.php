@@ -108,7 +108,7 @@ class Groepen{
 			if($currentGroepId!=$aGroepraw['groepId']){
 				//groepobject maken en aan de array toevoegen
 
-				$this->groepen[$aGroep[0]['groepId']]=new Groep($aGroep);
+				$this->groepen[$aGroep[0]['groepId']]=new OldGroep($aGroep);
 
 				//tenslotte nieuwe groep als huidige kiezen en groeparray leegmikken
 				$currentGroepId=$aGroepraw['groepId'];
@@ -120,7 +120,7 @@ class Groepen{
 
 		if(isset($aGroep[0])){
 			//tot slot de laatste groep ook toevoegen
-			$this->groepen[$aGroep[0]['groepId']]=new Groep($aGroep);
+			$this->groepen[$aGroep[0]['groepId']]=new OldGroep($aGroep);
 		}
 	}
 	/*
@@ -230,7 +230,7 @@ class Groepen{
 			$rGroepen=$db->query($qGroepen);
 			if ($rGroepen !== false and $db->numRows($rGroepen) > 0){
 				while($row=$db->next($rGroepen)){
-					$groepen[]=new Groep($row['id']);
+					$groepen[]=new OldGroep($row['id']);
 				}
 			}
 		}
@@ -314,7 +314,7 @@ class Groepen{
 			$rGroepen=$db->query($qGroepen);
 			if ($rGroepen !== false and $db->numRows($rGroepen) > 0){
 				while($row=$db->next($rGroepen)){
-					$groepen[]=new Groep($row['id']);
+					$groepen[]=new OldGroep($row['id']);
 				}
 			}
 		}

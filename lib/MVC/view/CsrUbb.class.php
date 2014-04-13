@@ -508,7 +508,7 @@ HTML;
 		require_once 'groepen/groep.class.php';
 		require_once 'groepen/groepcontent.class.php';
 		try {
-			$groep = new Groep($groepid);
+			$groep = new OldGroep($groepid);
 			$groeptag = new GroepUbbContent($groep);
 			return $groeptag->getHTML();
 		} catch (Exception $e) {

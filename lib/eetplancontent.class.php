@@ -36,7 +36,7 @@ class EetplanContent extends TemplateView {
 				<tr><th style="width: 150px">Avond</th><th style="width: 200px">Huis</th></tr>';
 			$row = 0;
 			foreach ($aEetplan as $aEetplanData) {
-				$huis = new Groep($aEetplanData['groepid']);
+				$huis = new OldGroep($aEetplanData['groepid']);
 				echo '
 					<tr class="kleur' . ($row % 2) . '">
 						<td >' . $this->_eetplan->getDatum($aEetplanData['avond']) . '</td>
@@ -60,9 +60,9 @@ class EetplanContent extends TemplateView {
 			echo '<h1>Ongeldig huisID</h1>';
 		} else {
 			try {
-				$huis = new Groep($aEetplan[0]['groepid']);
+				$huis = new OldGroep($aEetplan[0]['groepid']);
 			} catch (Exception $e) {
-				$huis = new Groep(0); //hmm, dirty 
+				$huis = new OldGroep(0); //hmm, dirty 
 			}
 			$sUitvoer = '<table class="eetplantabel">
 				<tr>
@@ -145,9 +145,9 @@ class EetplanContent extends TemplateView {
 
 		foreach ($aHuizenArray as $aHuis) {
 			try {
-				$huis = new Groep($aHuis['groepid']);
+				$huis = new OldGroep($aHuis['groepid']);
 			} catch (Exception $e) {
-				$huis = new Groep(0);
+				$huis = new OldGroep(0);
 			}
 
 			echo '<tr class="kleur' . ($row % 2) . '">';

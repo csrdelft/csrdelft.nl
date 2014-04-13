@@ -9,6 +9,7 @@ RewriteRule ^pauper				pauper.php [L]
 
 RewriteRule ^forum				index.php?c=Forum [L]
 RewriteRule ^agenda				index.php?c=Agenda [L]
+RewriteRule ^groepen			index.php?c=Groepen [L]
 RewriteRule ^maaltijden			index.php?c=TakenModule [L]
 RewriteRule ^corvee				index.php?c=TakenModule [L]
 RewriteRule ^instellingenbeheer	index.php?c=InstellingenBeheer [L]

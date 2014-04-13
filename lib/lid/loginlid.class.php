@@ -374,7 +374,7 @@ class LoginLid {
 			//splitst opgegeven term in groepsnaam en functie
 			$parts = explode(">", substr($permissie, 6), 2);
 			try {
-				$groep = new Groep($parts[0]);
+				$groep = new OldGroep($parts[0]);
 				if ($groep->isLid()) {
 					//wordt er een functie gevraagd?
 					if (isset($parts[1])) {
@@ -570,7 +570,7 @@ class LoginLid {
 				$return[] = (string) LidCache::getLid($part);
 			} elseif (substr($part, 0, 5) == 'groep') {
 				try {
-					$groep = new Groep(substr($part, 6));
+					$groep = new OldGroep(substr($part, 6));
 				} catch (Exception $e) {
 					$return[] = 'Onbekende groep';
 					continue;

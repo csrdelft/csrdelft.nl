@@ -1,6 +1,7 @@
 <?php
 
-require_once 'MCV/model/entity/GroepLid.class.php';
+require_once 'MVC/model/entity/GroepLid.class.php';
+require_once 'MVC/model/entity/GroepStatus.enum.php';
 
 /**
  * Groep.abstract.php
@@ -78,6 +79,11 @@ abstract class Groep extends PersistentEntity {
 	 * @var string
 	 */
 	public $rechten_beheren;
+	/**
+	 * URL van website
+	 * @var string
+	 */
+	public $website;
 	/**
 	 * Groepsleden
 	 * @var GroepLid[]

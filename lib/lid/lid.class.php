@@ -586,7 +586,7 @@ class Lid implements Serializable, Agendeerbaar {
 	 * Zit het huidige lid in de h.t. groep met de korte naam 'bestuur'?
 	 */
 	public function isBestuur() {
-		$bestuur = new Groep('bestuur');
+		$bestuur = new OldGroep('bestuur');
 		return $bestuur->isLid($this->getUid());
 	}
 

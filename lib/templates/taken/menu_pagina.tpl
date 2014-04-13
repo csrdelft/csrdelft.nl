@@ -6,23 +6,23 @@
 	<ul class="horizontal">
 		{assign var="link" value="/maaltijdenketzer"}
 		<li{if Instellingen::get('taken', 'url') === $link} class="active"{/if}>
-			<a href="{$link}" title="Maaltijdenketzer">Maaltijdenketzer</a>
+			<a href="{$link}">Maaltijdenketzer</a>
 		</li>
 		{assign var="link" value="/maaltijdenabonnementen"}
 		<li{if Instellingen::get('taken', 'url') === $link} class="active"{/if}>
-			<a href="{$link}" title="Mijn abonnementen">Mijn abonnementen</a>
+			<a href="{$link}">Mijn abonnementen</a>
 		</li>
 		{assign var="link" value="/corveerooster"}
 		<li{if Instellingen::get('taken', 'url') === $link} class="active"{/if}>
-			<a href="{$link}" title="Corveerooster">Corveerooster</a>
+			<a href="{$link}">Corveerooster</a>
 		</li>
 		{assign var="link" value="/corvee"}
 		<li{if Instellingen::get('taken', 'url') === $link} class="active"{/if}>
-			<a href="{$link}" title="Mijn corveeoverzicht">Mijn corveeoverzicht</a>
+			<a href="{$link}">Mijn corveeoverzicht</a>
 		</li>
 		{assign var="link" value="/corveevoorkeuren"}
 		<li{if Instellingen::get('taken', 'url') === $link} class="active"{/if}>
-			<a href="{$link}" title="Mijn voorkeuren">Mijn voorkeuren</a>
+			<a href="{$link}">Mijn voorkeuren</a>
 		</li>
 	</ul>
 </div>

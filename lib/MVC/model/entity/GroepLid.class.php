@@ -1,5 +1,7 @@
 <?php
 
+require_once 'MVC/model/entity/GroepFunctie.enum.php';
+
 /**
  * GroepLid.class.php
  * 
@@ -22,7 +24,7 @@ class GroepLid extends PersistentEntity {
 	public $lid_id;
 	/**
 	 * Omschrijving bij lidmaatschap
-	 * @see BestuurFunctie
+	 * @see GroepFunctie
 	 * @var string
 	 */
 	public $omschrijving;

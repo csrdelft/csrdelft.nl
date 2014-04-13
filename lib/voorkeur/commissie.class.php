@@ -1,6 +1,6 @@
 <?php
 
-class Commissie {
+class OldCommissie {
 
 	private $cid;
 	private $naam;
@@ -31,7 +31,7 @@ class Commissie {
 		while ($row = mysql_fetch_array($result, MYSQL_ASSOC)) {
 			$res = $row['naam'];
 		}
-		return new Commissie($cid, $res);
+		return new OldCommissie($cid, $res);
 	}
 
 	public static function getCommissies() {

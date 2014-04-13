@@ -170,7 +170,7 @@ class LidZoeker{
 			$uids=array();
 			try{
 				require_once 'groepen/groep.class.php';
-				$groep=new Groep(substr($zoekterm, 6));
+				$groep=new OldGroep(substr($zoekterm, 6));
 				$uids=array_keys($groep->getLeden());
 			}catch(Exception $e){
 				//care.

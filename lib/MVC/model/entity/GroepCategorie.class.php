@@ -1,6 +1,6 @@
 <?php
 
-require_once 'MCV/model/entity/Groep.abstract.php';
+require_once 'MVC/model/entity/Groep.abstract.php';
 
 /**
  * GroepCategorie.class.php
