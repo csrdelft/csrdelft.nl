@@ -1,30 +1,30 @@
 <div id="groepen-menu">
 	<ul class="horizontal">
-		{assign var="link" value="/commissies"}
+		{assign var="link" value="/groepen/commissies"}
 		<li{if Instellingen::get('stek', 'request') === $link} class="active"{/if}>
 			<a href="{$link}">Commissies</a>
 		</li>
-		{assign var="link" value="/besturen"}
+		{assign var="link" value="/groepen/besturen"}
 		<li{if Instellingen::get('stek', 'request') === $link} class="active"{/if}>
 			<a href="{$link}">Besturen</a>
 		</li>
-		{assign var="link" value="/sjaarcies"}
+		{assign var="link" value="/groepen/sjaarcies"}
 		<li{if Instellingen::get('stek', 'request') === $link} class="active"{/if}>
 			<a href="{$link}">SjaarCies</a>
 		</li>
-		{assign var="link" value="/woonoorden"}
+		{assign var="link" value="/groepen/woonoorden"}
 		<li{if Instellingen::get('stek', 'request') === $link} class="active"{/if}>
 			<a href="{$link}">Woonoorden</a>
 		</li>
-		{assign var="link" value="/werkgroepen"}
+		{assign var="link" value="/groepen/werkgroepen"}
 		<li{if Instellingen::get('stek', 'request') === $link} class="active"{/if}>
 			<a href="{$link}">Werkgroepen</a>
 		</li>
-		{assign var="link" value="/onderverenigingen"}
+		{assign var="link" value="/groepen/onderverenigingen"}
 		<li{if Instellingen::get('stek', 'request') === $link} class="active"{/if}>
 			<a href="{$link}">Onderverenigingen</a>
 		</li>
-		{assign var="link" value="/ketzers"}
+		{assign var="link" value="/groepen/ketzers"}
 		<li{if Instellingen::get('stek', 'request') === $link} class="active"{/if}>
 			<a href="{$link}">Overig</a>
 		</li>
