@@ -174,7 +174,7 @@ class OldGroep{
 			}
 			return true;
 		}
-		$this->error.='Fout in query, mysql gaf terug: '.mysql_error().' Groep::save()';
+		$this->error.='Fout in query, mysql gaf terug: '.mysql_error().' OldGroep::save()';
 		return false;
 	}
 
@@ -183,7 +183,7 @@ class OldGroep{
 	 */
 	public function delete(){
 		if($this->getId()==0){
-			$this->error.='Kan geen lege groep wegkekken. Groep::delete()';
+			$this->error.='Kan geen lege groep wegkekken. OldGroep::delete()';
 			return false;
 		}
 		$db=MySql::instance();
@@ -256,7 +256,7 @@ class OldGroep{
 			$this->groep['gtypeId']=$groepen->getId();
 			return true;
 		}else{
-			$this->error.='Geen gtype opgegeven, niet via de juiste weg aangevraagd... (Groep::setGtype())';
+			$this->error.='Geen gtype opgegeven, niet via de juiste weg aangevraagd... (OldGroep::setGtype())';
 			return false;
 		}
 	}
@@ -265,7 +265,7 @@ class OldGroep{
 		$fields=array('snaam', 'naam', 'sbeschrijving', 'beschrijving',
 			'zichtbaar', 'status', 'begin', 'einde', 'aanmeldbaar', 'limiet', 'toonFuncties', 'toonPasfotos', 'lidIsMod', 'eigenaar');
 		if(!in_array($key, $fields)){
-			throw new Exception('Veld ['.$key.'] is niet toegestaan Groep::setValue()');
+			throw new Exception('Veld ['.$key.'] is niet toegestaan OldGroep::setValue()');
 		}
 		$this->groep[$key]=trim($value);
 	}
@@ -378,7 +378,7 @@ class OldGroep{
 	}
 	public function maakOt(){
 		if($this->getStatus()!='ht'){
-			$this->error.='Groep o.t. maken mislukt: groep is niet h.t. (Groep::maakOt())';
+			$this->error.='Groep o.t. maken mislukt: groep is niet h.t. (OldGroep::maakOt())';
 			return false;
 		}else{
 			if($this->getEinde()=='0000-00-00'){
@@ -441,16 +441,16 @@ class OldGroep{
 	 */
 	public function maakLidOt($uid){
 		if(!Lid::isValidUid($uid) OR !$this->isLid($uid)){
-			$this->error.='Gegeven uid zit niet in groep of is geen geldig uid. (Groep::maakLidOt())';
+			$this->error.='Gegeven uid zit niet in groep of is geen geldig uid. (OldGroep::maakLidOt())';
 			return false;
 		}
 		if(!$this->magBewerken()){
-			$this->error.='Gegeven uid mag deze groep niet bewerken. (Groep::maakLidOt())';
+			$this->error.='Gegeven uid mag deze groep niet bewerken. (OldGroep::maakLidOt())';
 			return false;
 		}
 		$ot=$this->getOpvolgerVoorganger();
 		if(!isset($ot['voorganger'])){
-			$this->error.='Groep heeft geen voorganger. (Groep::maakLidOt())';
+			$this->error.='Groep heeft geen voorganger. (OldGroep::maakLidOt())';
 			return false;
 		}
 		$ot=$ot['voorganger'];

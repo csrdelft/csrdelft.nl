@@ -1,6 +1,6 @@
 <?php
 
-require_once 'MVC/model/entity/GroepCategorie.class.php';
+require_once 'MVC/model/entity/groepen/OpvolgbareGroep.abstract.php';
 
 /**
  * GroepenModel.class.php
@@ -8,7 +8,15 @@ require_once 'MVC/model/entity/GroepCategorie.class.php';
  * @author P.W.G. Brussee <brussee@live.nl>
  * 
  */
-class GroepenModel extends PersistenceModel {
+abstract class GroepenModel extends PersistenceModel {
+
+	protected function __construct() {
+		parent::__construct('groepen/');
+	}
+
+}
+
+class GroepCategorienModel extends GroepenModel {
 
 	const orm = 'GroepCategorie';
 
@@ -16,7 +24,7 @@ class GroepenModel extends PersistenceModel {
 
 }
 
-class GroepLedenModel extends PersistenceModel {
+class GroepLedenModel extends GroepenModel {
 
 	const orm = 'GroepLid';
 
@@ -24,7 +32,7 @@ class GroepLedenModel extends PersistenceModel {
 
 }
 
-class CommissiesModel extends PersistenceModel {
+class CommissiesModel extends GroepenModel {
 
 	const orm = 'Commissie';
 
@@ -32,7 +40,7 @@ class CommissiesModel extends PersistenceModel {
 
 }
 
-class BesturenModel extends PersistenceModel {
+class BesturenModel extends GroepenModel {
 
 	const orm = 'Bestuur';
 
@@ -40,7 +48,7 @@ class BesturenModel extends PersistenceModel {
 
 }
 
-class SjaarciesModel extends PersistenceModel {
+class SjaarciesModel extends GroepenModel {
 
 	const orm = 'Sjaarcie';
 
@@ -48,7 +56,7 @@ class SjaarciesModel extends PersistenceModel {
 
 }
 
-class OnderverenigingenModel extends PersistenceModel {
+class OnderverenigingenModel extends GroepenModel {
 
 	const orm = 'Ondervereniging';
 
@@ -56,7 +64,7 @@ class OnderverenigingenModel extends PersistenceModel {
 
 }
 
-class WerkgroepenModel extends PersistenceModel {
+class WerkgroepenModel extends GroepenModel {
 
 	const orm = 'Werkgroep';
 
@@ -64,7 +72,7 @@ class WerkgroepenModel extends PersistenceModel {
 
 }
 
-class WoonoordenModel extends PersistenceModel {
+class WoonoordenModel extends GroepenModel {
 
 	const orm = 'Woonoord';
 
@@ -72,7 +80,7 @@ class WoonoordenModel extends PersistenceModel {
 
 }
 
-class KetzersModel extends PersistenceModel {
+class KetzersModel extends GroepenModel {
 
 	const orm = 'Ketzer';
 
@@ -80,7 +88,7 @@ class KetzersModel extends PersistenceModel {
 
 }
 
-class ActiviteitenModel extends PersistenceModel {
+class ActiviteitenModel extends GroepenModel {
 
 	const orm = 'Activiteit';
 
@@ -88,7 +96,7 @@ class ActiviteitenModel extends PersistenceModel {
 
 }
 
-class ConferentiesModel extends PersistenceModel {
+class ConferentiesModel extends GroepenModel {
 
 	const orm = 'Conferentie';
 

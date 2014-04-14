@@ -292,7 +292,7 @@ class Groepcontroller extends Controller {
 						//todo: loggen dat LDAP niet beschikbaar is in een mooi eventlog wat ook nog gemaakt moet worden...
 					}
 				} else {
-					$melding = 'Opslaan van groep mislukt. (returned from Groep::save() called by Groepcontroller::bewerken())';
+					$melding = 'Opslaan van groep mislukt. (returned from OldGroep::save() called by Groepcontroller::bewerken())';
 				}
 				invokeRefresh($this->getUrl('standaard'), $melding);
 			} else {

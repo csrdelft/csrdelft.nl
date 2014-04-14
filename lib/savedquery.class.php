@@ -147,7 +147,7 @@ class SavedQueryContent extends TemplateView {
 			return '<a href="/forum/onderwerp/' . $contents . '">' . $contents . '</a>';
 		} elseif (substr($name, 0, 10) == 'groep_naam' AND $contents != '') {
 			require_once('groepen/groep.class.php');
-			return Groep::ids2links($contents, '<br />');
+			return OldGroep::ids2links($contents, '<br />');
 		} elseif ($name == 'med_link') { //link naar een mededeling.
 			return '<a href="/actueel/mededelingen/' . $contents . '">' . $contents . '</a>';
 		}
