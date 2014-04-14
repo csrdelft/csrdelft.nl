@@ -5,7 +5,7 @@
  * 
  * @author P.W.G. Brussee <brussee@live.nl>
  * 
- * Een soort ketzeroptie heeft keuzemogelijkheden.
+ * Een gekozen keuzemogelijkheid door een groeplid.
  * 
  */
 class KetzerKeuze extends PersistentEntity {
@@ -14,35 +14,29 @@ class KetzerKeuze extends PersistentEntity {
 	 * Primary key
 	 * @var int
 	 */
-	public $optie_id;
-	/**
-	 * Primary key
-	 * @var int
-	 */
 	public $lid_id;
 	/**
-	 * Gekozen waarde
+	 * Primary key
 	 * @var array
 	 */
-	public $keuze;
+	public $optie_id;
 	/**
 	 * Database table fields
 	 * @var array
 	 */
 	protected static $persistent_fields = array(
-		'optie_id' => 'int(11) DEFAULT NULL',
-		'lid_id' => 'varchar(4) DEFAULT NULL',
-		'keuze' => 'text NOT NULL'
+		'lid_id' => 'varchar(4) NOT NULL',
+		'optie_id' => 'int(11) NOT NULL'
 	);
 	/**
 	 * Database table name
 	 * @var string
 	 */
-	protected static $table_name = 'ketzerkeuzes';
+	protected static $table_name = 'ketzer_keuzes';
 	/**
 	 * Database primary key
 	 * @var array
 	 */
-	protected static $primary_key = array('optie_id', 'lid_id');
+	protected static $primary_key = array('lid_id', 'optie_id');
 
 }

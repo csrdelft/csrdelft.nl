@@ -6,7 +6,7 @@
  * @author P.W.G. Brussee <brussee@live.nl>
  * 
  */
-class Werkgroep extends Groep {
+class Werkgroep extends OpvolgbareGroep {
 
 	/**
 	 * Database table name

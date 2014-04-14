@@ -8,7 +8,7 @@
  * Een commissie is een groep waarvan de groepsleden een specifieke functie (kunnen) hebben.
  * 
  */
-class Commissie extends Groep {
+class Commissie extends OpvolgbareGroep {
 
 	/**
 	 * Database table name

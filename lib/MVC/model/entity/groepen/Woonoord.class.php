@@ -41,6 +41,7 @@ class Woonoord extends Groep {
 	 * Extend the persistent fields.
 	 */
 	public static function __constructStatic() {
+		parent::__constructStatic();
 		self::$persistent_fields = parent::$persistent_fields + self::$persistent_fields;
 	}
 

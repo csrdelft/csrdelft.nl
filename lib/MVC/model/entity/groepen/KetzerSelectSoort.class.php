@@ -1,14 +1,14 @@
 <?php
 
 /**
- * KetzerOptieSoort.enum.php
+ * KetzerSelectSoort.enum.php
  * 
  * @author P.W.G. Brussee <brussee@live.nl>
  * 
- * De keuzesoort van een ketzeroptie: AND / XOR
+ * De keuzesoort van een selector: AND / XOR
  * 
  */
-final class KetzerOptieSoort {
+final class KetzerSelectSoort {
 
 	const Checkbox = 'AND';
 	const Radio = 'XOR';

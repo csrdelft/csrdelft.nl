@@ -1,7 +1,7 @@
 <?php
 
-require_once 'MVC/model/entity/GroepLid.class.php';
-require_once 'MVC/model/entity/GroepStatus.enum.php';
+require_once 'MVC/model/entity/groepen/GroepLid.class.php';
+require_once 'MVC/model/entity/groepen/GroepStatus.enum.php';
 
 /**
  * Groep.abstract.php
@@ -29,16 +29,6 @@ abstract class Groep extends PersistentEntity {
 	 */
 	public $naam;
 	/**
-	 * Familie van generaties
-	 * @var string
-	 */
-	public $familie_id;
-	/**
-	 * Uid van aanmaker
-	 * @var string
-	 */
-	public $eigenaar_lid_id;
-	/**
 	 * Korte omschrijving
 	 * @var string
 	 */
@@ -48,22 +38,6 @@ abstract class Groep extends PersistentEntity {
 	 * @var string
 	 */
 	public $omschrijving;
-	/**
-	 * Datum en tijd begin 
-	 * @var string
-	 */
-	public $begin_moment;
-	/**
-	 * Datum en tijd einde
-	 * @var string
-	 */
-	public $eind_moment;
-	/**
-	 * o.t. / h.t. / f.t.
-	 * @see GroepStatus
-	 * @var string
-	 */
-	public $status;
 	/**
 	 * Rechten benodigd voor bekijken
 	 * @var string
@@ -79,6 +53,11 @@ abstract class Groep extends PersistentEntity {
 	 * @var string
 	 */
 	public $rechten_beheren;
+	/**
+	 * Uid van eigenaar
+	 * @var string
+	 */
+	public $eigenaar_lid_id;
 	/**
 	 * URL van website
 	 * @var string
@@ -97,23 +76,26 @@ abstract class Groep extends PersistentEntity {
 		'id' => 'int(11) NOT NULL AUTO_INCREMENT',
 		'categorie_id' => 'int(11) NOT NULL',
 		'naam' => 'varchar(255) NOT NULL',
-		'familie_id' => 'varchar(255) NOT NULL',
-		'eigenaar_lid_id' => 'varchar(4) NOT NULL',
 		'samenvatting' => 'text NOT NULL',
 		'omschrijving' => 'text NOT NULL',
-		'begin_moment' => 'datetime DEFAULT NULL',
-		'eind_moment' => 'datetime DEFAULT NULL',
-		'status' => 'varchar(4) NOT NULL',
 		'rechten_bekijken' => 'varchar(255) NOT NULL',
 		'rechten_aanmelden' => 'varchar(255) NOT NULL',
 		'rechten_beheren' => 'varchar(255) NOT NULL',
+		'eigenaar_lid_id' => 'varchar(4) NOT NULL',
 		'website' => 'varchar(255) NOT NULL'
 	);
 	/**
 	 * Database primary key
 	 * @var array
 	 */
-	protected static $primary_key = array('groep_id');
+	protected static $primary_key = array('id');
+
+	/**
+	 * Base class
+	 */
+	public static function __constructStatic() {
+		
+	}
 
 	/**
 	 * Lazy loading by foreign key.

@@ -1,6 +1,6 @@
 <?php
 
-require_once 'MVC/model/entity/GroepFunctie.enum.php';
+require_once 'MVC/model/entity/groepen/GroepFunctie.enum.php';
 
 /**
  * GroepLid.class.php
@@ -13,6 +13,12 @@ require_once 'MVC/model/entity/GroepFunctie.enum.php';
 class GroepLid extends PersistentEntity {
 
 	/**
+	 * Type van groep
+	 * @see Groep extends
+	 * @var string
+	 */
+	public $groep_type;
+	/**
 	 * Lid van deze groep
 	 * @var int
 	 */
@@ -23,11 +29,11 @@ class GroepLid extends PersistentEntity {
 	 */
 	public $lid_id;
 	/**
-	 * Omschrijving bij lidmaatschap
+	 * Opmerking bij lidmaatschap
 	 * @see GroepFunctie
 	 * @var string
 	 */
-	public $omschrijving;
+	public $opmerking;
 	/**
 	 * Datum en tijd van toevoegen
 	 * @var string
@@ -54,9 +60,10 @@ class GroepLid extends PersistentEntity {
 	 * @var array
 	 */
 	protected static $persistent_fields = array(
-		'groep_id' => 'int(11) NOT NULL AUTO_INCREMENT',
+		'groep_type' => 'varchar(255) NOT NULL',
+		'groep_id' => 'int(11) NOT NULL',
 		'lid_id' => 'varchar(4) NOT NULL',
-		'omschrijving' => 'varchar(255) NOT NULL',
+		'opmerking' => 'varchar(255) NOT NULL',
 		'lid_sinds' => 'datetime NOT NULL',
 		'status' => 'varchar(4) NOT NULL',
 		'prioriteit' => 'int(11) NOT NULL',
@@ -66,7 +73,7 @@ class GroepLid extends PersistentEntity {
 	 * Database primary key
 	 * @var array
 	 */
-	protected static $primary_key = array('groep_id', 'lid_id');
+	protected static $primary_key = array('groep_type', 'groep_id', 'lid_id');
 	/**
 	 * Database table name
 	 * @var string

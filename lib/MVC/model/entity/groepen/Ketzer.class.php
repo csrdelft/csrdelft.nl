@@ -7,10 +7,10 @@ Ketzer::__constructStatic();
  * 
  * @author P.W.G. Brussee <brussee@live.nl>
  * 
- * Een ketzer is een aanmeldbare groep.
+ * Een ketzer is een aanmeldbare opvolgbare groep.
  * 
  */
-class Ketzer extends Groep {
+class Ketzer extends OpvolgbareGroep {
 
 	/**
 	 * Maximaal aantal groepsleden
@@ -28,19 +28,13 @@ class Ketzer extends Groep {
 	 */
 	public $aanmelden_tot;
 	/**
-	 * Mogelijke opties bij aanmelden
-	 * @var string
-	 */
-	public $aanmeld_opties;
-	/**
 	 * Database table fields
 	 * @var array
 	 */
 	protected static $persistent_fields = array(
 		'aanmeld_limiet' => 'int(11) DEFAULT NULL',
 		'aanmelden_vanaf' => 'datetime NOT NULL',
-		'aanmelden_tot' => 'datetime NOT NULL',
-		'aanmeld_opties' => 'text DEFAULT NULL'
+		'aanmelden_tot' => 'datetime NOT NULL'
 	);
 	/**
 	 * Database table name
@@ -52,6 +46,7 @@ class Ketzer extends Groep {
 	 * Extend the persistent fields.
 	 */
 	public static function __constructStatic() {
+		parent::__constructStatic();
 		self::$persistent_fields = parent::$persistent_fields + self::$persistent_fields;
 	}
 

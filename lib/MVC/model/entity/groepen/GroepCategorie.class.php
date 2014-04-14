@@ -1,7 +1,5 @@
 <?php
 
-require_once 'MVC/model/entity/Groep.abstract.php';
-
 /**
  * GroepCategorie.class.php
  * 
@@ -38,7 +36,12 @@ class GroepCategorie extends PersistentEntity {
 	 */
 	public $sync_ldap;
 	/**
-	 * Rechten benodigd voor beheren
+	 * Rechten benodigd voor aanmaken nieuwe groepen
+	 * @var string
+	 */
+	public $rechten_aanmaken;
+	/**
+	 * Rechten benodigd voor beheren bestaande groepen
 	 * @var string
 	 */
 	public $rechten_beheren;
@@ -52,6 +55,7 @@ class GroepCategorie extends PersistentEntity {
 		'toon_overzicht' => 'boolean NOT NULL',
 		'toon_profiel' => 'boolean NOT NULL',
 		'sync_ldap' => 'boolean NOT NULL',
+		'rechten_aanmaken' => 'varchar(255) NOT NULL',
 		'rechten_beheren' => 'varchar(255) NOT NULL'
 	);
 	/**
