@@ -4157,3 +4157,4 @@ sql/4501_eerste_post_plakkerig.sql -text
 sql/4503_forum_search.sql -text
 sql/4544_forum_index.sql -text
 sql/4613_groepen_refactor.sql -text
+sql/4614_groepen_cat.sql -text

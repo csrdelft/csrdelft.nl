@@ -46,6 +46,16 @@ class GroepCategorie extends PersistentEntity {
 	 */
 	public $rechten_beheren;
 	/**
+	 * Standaard rechten benodigd voor bekijken groep
+	 * @var string
+	 */
+	public $rechten_bekijken;
+	/**
+	 * Standaard rechten benodigd voor aanmelden groep
+	 * @var string
+	 */
+	public $rechten_aanmelden;
+	/**
 	 * Database table fields
 	 * @var array
 	 */
@@ -56,7 +66,9 @@ class GroepCategorie extends PersistentEntity {
 		'toon_profiel' => 'boolean NOT NULL',
 		'sync_ldap' => 'boolean NOT NULL',
 		'rechten_aanmaken' => 'varchar(255) NOT NULL',
-		'rechten_beheren' => 'varchar(255) NOT NULL'
+		'rechten_beheren' => 'varchar(255) NOT NULL',
+		'rechten_bekijken' => 'varchar(255) NOT NULL',
+		'rechten_aanmelden' => 'varchar(255) NOT NULL'
 	);
 	/**
 	 * Database primary key
