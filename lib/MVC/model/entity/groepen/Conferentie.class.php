@@ -1,5 +1,7 @@
 <?php
 
+require_once 'MVC/model/entity/groepen/Activiteit.class.php';
+
 /**
  * Conferentie.class.php
  * 

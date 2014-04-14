@@ -1,5 +1,7 @@
 <?php
 
+require_once 'MVC/model/entity/groepen/Ketzer.class.php';
+
 /**
  * Activiteit.class.php
  * 

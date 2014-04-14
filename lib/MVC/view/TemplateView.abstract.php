@@ -35,9 +35,9 @@ abstract class TemplateView implements View {
 	 * 
 	 * @param mixed $model
 	 */
-	public function __construct($model = null) {
+	public function __construct($model = null, $titel = '') {
 		$this->model = $model;
-		$this->titel = '';
+		$this->titel = $titel;
 		$this->smarty = new CsrSmarty();
 		$this->smarty->assignByRef('view', $this);
 	}

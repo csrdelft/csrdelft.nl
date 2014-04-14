@@ -22,6 +22,10 @@ class GroepenController extends Controller {
 			$this->action = 'commissies';
 			$this->performAction(array());
 		}
+		if (!$this->isPosted()) {
+			$this->view = new CsrLayoutPage($this->getContent());
+			$this->view->addScript('groepen.js');
+		}
 	}
 
 	/**
@@ -60,14 +64,63 @@ class GroepenController extends Controller {
 	 * Overzicht van commissies laten zien.
 	 */
 	public function commissies() {
-		$body = new CommissiesView(CommissiesModel::instance()->find('status = ?', array(GroepStatus::HT)));
-		if (LoginLid::mag('P_LOGGED_IN')) {
-			$this->view = new CsrLayoutPage($body);
-		} else {
-			//uitgelogd heeft nieuwe layout
-			$this->view = new CsrLayout2Page($body);
-		}
-		$this->view->addScript('groepen.js');
+		$this->view = new GroepenView(CommissiesModel::instance()->find('status = ?', array(GroepStatus::HT)), 'Commissies (h.t.)');
+	}
+
+	/**
+	 * Overzicht van besturen laten zien.
+	 */
+	public function besturen() {
+		$this->view = new GroepenView(BesturenModel::instance()->find(), 'Besturen');
+	}
+
+	/**
+	 * Overzicht van sjaarcies laten zien.
+	 */
+	public function sjaarcies() {
+		$this->view = new GroepenView(SjaarciesModel::instance()->find('status = ?', array(GroepStatus::HT)), 'SjaarCies (h.t.)');
+	}
+
+	/**
+	 * Overzicht van woonoorden laten zien.
+	 */
+	public function woonoorden() {
+		$this->view = new GroepenView(WoonoordenModel::instance()->find());
+	}
+
+	/**
+	 * Overzicht van werkgroepen laten zien.
+	 */
+	public function werkgroepen() {
+		$this->view = new GroepenView(WerkgroepenModel::instance()->find('status = ?', array(GroepStatus::HT)), 'Werkgroepen (h.t.)');
+	}
+
+	/**
+	 * Overzicht van onderverenigingen laten zien.
+	 */
+	public function onderverenigingen() {
+		$this->view = new GroepenView(OnderverenigingenModel::instance()->find(), 'Onderverenigingen');
+	}
+
+	/**
+	 * Overzicht van ketzers laten zien.
+	 */
+	public function ketzers() {
+		$this->view = new GroepenView(KetzersModel::instance()->find('status = ?', array(GroepStatus::HT)), 'Ketzers (h.t.)');
+	}
+
+	/**
+	 * Overzicht van activiteiten laten zien.
+	 */
+	public function activiteiten() {
+		$this->view = new GroepenView(ActiviteitenModel::instance()->find('status = ?', array(GroepStatus::HT)), 'Activiteiten (h.t.)');
+	}
+
+	/**
+	 * Overzicht van conferenties laten zien.
+	 */
+	public function conferenties() {
+		$this->view = new GroepenView(ConferentiesModel::instance()->find('status = ?', array(GroepStatus::HT)), 'Conferenties (h.t.)');
 	}
 
 }
