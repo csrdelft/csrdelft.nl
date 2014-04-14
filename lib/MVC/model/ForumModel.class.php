@@ -589,11 +589,19 @@ class ForumPostsModel extends PersistenceModel implements Paging {
 		$draden = ForumDradenModel::instance()->getForumDradenById($draden_ids);
 		$delen_ids = array_keys(array_key_property('forum_id', $draden, false));
 		$delen = ForumDelenModel::instance()->getForumDelenById($delen_ids);
-		foreach ($posts as $i => $post) {
-			$deel = $delen[$draden[$post->draad_id]->forum_id];
+		foreach ($delen as $forum_id => $deel) {
 			if (!$deel->magLezen()) {
-				unset($draden[$post->draad_id]);
-				unset($posts[$i]);
+				foreach ($draden as $draad_id => $draad) {
+					if ($draad->forum_id === $forum_id) {
+						foreach ($posts as $i => $post) {
+							if ($post->draad_id === $draad_id) {
+								unset($posts[$i]);
+							}
+						}
+						unset($draden[$draad_id]);
+					}
+				}
+				unset($delen[$forum_id]);
 			}
 		}
 		return array($posts, $draden);
