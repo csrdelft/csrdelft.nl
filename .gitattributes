@@ -3171,7 +3171,6 @@ lib/MVC/model/MenuModel.class.php -text
 lib/MVC/model/Paging.interface.php -text
 lib/MVC/model/Persistence.interface.php -text
 lib/MVC/model/PersistenceModel.abstract.php -text
-lib/MVC/model/entity/Activiteit.class.php -text
 lib/MVC/model/entity/AgendaItem.class.php -text
 lib/MVC/model/entity/CmsPagina.class.php -text
 lib/MVC/model/entity/CorveeFunctie.class.php -text
@@ -3187,6 +3186,7 @@ lib/MVC/model/entity/Mail.class.php -text
 lib/MVC/model/entity/Mededeling.class.php -text
 lib/MVC/model/entity/MenuItem.class.php -text
 lib/MVC/model/entity/PersistentEntity.abstract.php -text
+lib/MVC/model/entity/groepen/Activiteit.class.php -text
 lib/MVC/model/entity/groepen/Bestuur.class.php -text
 lib/MVC/model/entity/groepen/Commissie.class.php -text
 lib/MVC/model/entity/groepen/Conferentie.class.php -text
