@@ -1,7 +1,5 @@
 <?php
 
-Woonoord::__constructStatic();
-
 /**
  * Woonoord.class.php
  * 

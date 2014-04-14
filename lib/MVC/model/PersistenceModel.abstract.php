@@ -31,6 +31,7 @@ abstract class PersistenceModel implements Persistence {
 	protected function __construct($subdir = '') {
 		$class = static::orm;
 		require_once 'MVC/model/entity/' . $subdir . $class . '.class.php';
+		$class::__constructStatic();
 		$this->orm_entity = new $class();
 	}
 

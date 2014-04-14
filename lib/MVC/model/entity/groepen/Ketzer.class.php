@@ -1,7 +1,5 @@
 <?php
 
-Ketzer::__constructStatic();
-
 /**
  * Ketzer.class.php
  * 

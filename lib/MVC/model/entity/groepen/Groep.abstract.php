@@ -91,13 +91,6 @@ abstract class Groep extends PersistentEntity {
 	protected static $primary_key = array('id');
 
 	/**
-	 * Base class
-	 */
-	public static function __constructStatic() {
-		
-	}
-
-	/**
 	 * Lazy loading by foreign key.
 	 * 
 	 * @return GroepLid[]

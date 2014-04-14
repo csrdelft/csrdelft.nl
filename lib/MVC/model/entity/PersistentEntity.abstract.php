@@ -15,6 +15,13 @@ abstract class PersistentEntity {
 		$this->castValues();
 	}
 
+	/**
+	 * Static constructor is called (by inheritance) first and only from PersistenceModel.
+	 */
+	public static function __constructStatic() {
+		
+	}
+
 	public static function getTableName() {
 		return static::$table_name;
 	}
