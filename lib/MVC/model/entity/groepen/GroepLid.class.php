@@ -35,10 +35,15 @@ class GroepLid extends PersistentEntity {
 	 */
 	public $opmerking;
 	/**
-	 * Datum en tijd van toevoegen
+	 * Datum en tijd van aanmelden
 	 * @var string
 	 */
 	public $lid_sinds;
+	/**
+	 * Datum en tijd van o.t.
+	 * @var string
+	 */
+	public $lid_tot;
 	/**
 	 * o.t. / h.t. / f.t.
 	 * @see GroepStatus
@@ -65,6 +70,7 @@ class GroepLid extends PersistentEntity {
 		'lid_id' => 'varchar(4) NOT NULL',
 		'opmerking' => 'varchar(255) NOT NULL',
 		'lid_sinds' => 'datetime NOT NULL',
+		'lid_tot' => 'datetime DEFAULT NULL',
 		'status' => 'varchar(4) NOT NULL',
 		'prioriteit' => 'int(11) NOT NULL',
 		'door_lid_id' => 'varchar(4) NOT NULL'
