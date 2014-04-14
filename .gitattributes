@@ -3953,7 +3953,6 @@ lib/templates/MVC/forum/post_zijbalk.tpl -text
 lib/templates/MVC/forum/resultaten.tpl -text
 lib/templates/MVC/forum/rss.tpl -text
 lib/templates/MVC/forum/zoek_form.tpl -text
-lib/templates/MVC/groepen/commissies.tpl -text
 lib/templates/MVC/groepen/groep.tpl -text
 lib/templates/MVC/groepen/menu_pagina.tpl -text
 lib/templates/MVC/instellingen/beheer/instelling_row.tpl -text
