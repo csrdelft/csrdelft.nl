@@ -12,8 +12,6 @@ abstract class GroepenModel extends PersistenceModel {
 
 	protected function __construct() {
 		parent::__construct('groepen/');
-
-		//echo $this->orm_entity->createTable();
 	}
 
 }
