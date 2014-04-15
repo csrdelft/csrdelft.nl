@@ -16,17 +16,21 @@ abstract class GroepenModel extends PersistenceModel {
 
 }
 
-class GroepCategorienModel extends GroepenModel {
-
-	const orm = 'GroepCategorie';
-
-	protected static $instance;
-
-}
-
 class GroepLedenModel extends GroepenModel {
 
 	const orm = 'GroepLid';
+
+	protected static $instance;
+
+	public function getLedenVoorGroep(Groep $groep) {
+		return $this->find('groep_type = ? AND groep_id = ?', array(get_class($groep), $groep->id), 'lid_sinds ASC');
+	}
+
+}
+
+class GroepCategorienModel extends GroepenModel {
+
+	const orm = 'GroepCategorie';
 
 	protected static $instance;
 
@@ -80,14 +84,6 @@ class WoonoordenModel extends GroepenModel {
 
 }
 
-class KetzersModel extends GroepenModel {
-
-	const orm = 'Ketzer';
-
-	protected static $instance;
-
-}
-
 class ActiviteitenModel extends GroepenModel {
 
 	const orm = 'Activiteit';
@@ -101,5 +97,37 @@ class ConferentiesModel extends GroepenModel {
 	const orm = 'Conferentie';
 
 	protected static $instance;
+
+}
+
+class KetzersModel extends GroepenModel {
+
+	const orm = 'Ketzer';
+
+	protected static $instance;
+
+}
+
+class KetzerSelectorsModel extends GroepenModel {
+
+	const orm = 'KetzerSelect';
+
+	protected static $instance;
+
+	public function getSelectorsVoorKetzer(Ketzer $ketzer) {
+		return $this->find('ketzer_id = ?', array($ketzer->id));
+	}
+
+}
+
+class KetzerOptiesModel extends GroepenModel {
+
+	const orm = 'KetzerOptie';
+
+	protected static $instance;
+
+	public function getOptiesVoorSelect(KetzerSelect $select) {
+		return $this->find('select_id = ?', array($select->select_id));
+	}
 
 }

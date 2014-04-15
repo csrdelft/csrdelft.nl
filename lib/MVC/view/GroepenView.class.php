@@ -1,5 +1,7 @@
 <?php
 
+require_once 'MVC/model/entity/groepen/GroepTab.enum.php';
+
 /**
  * GroepenView.class.php
  * 

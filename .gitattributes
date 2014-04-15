@@ -3195,6 +3195,7 @@ lib/MVC/model/entity/groepen/GroepCategorie.class.php -text
 lib/MVC/model/entity/groepen/GroepFunctie.enum.php -text
 lib/MVC/model/entity/groepen/GroepLid.class.php -text
 lib/MVC/model/entity/groepen/GroepStatus.enum.php -text
+lib/MVC/model/entity/groepen/GroepTab.enum.php -text
 lib/MVC/model/entity/groepen/Groepen[!!-~]CD.png -text
 lib/MVC/model/entity/groepen/HuisStatus.enum.php -text
 lib/MVC/model/entity/groepen/Ketzer.class.php -text
@@ -3954,6 +3955,7 @@ lib/templates/MVC/forum/resultaten.tpl -text
 lib/templates/MVC/forum/rss.tpl -text
 lib/templates/MVC/forum/zoek_form.tpl -text
 lib/templates/MVC/groepen/groep.tpl -text
+lib/templates/MVC/groepen/groeplid.tpl -text
 lib/templates/MVC/groepen/menu_pagina.tpl -text
 lib/templates/MVC/instellingen/beheer/instelling_row.tpl -text
 lib/templates/MVC/instellingen/beheer/instellingen_page.tpl -text
@@ -4158,3 +4160,4 @@ sql/4503_forum_search.sql -text
 sql/4544_forum_index.sql -text
 sql/4613_groepen_refactor.sql -text
 sql/4614_groepen_cat.sql -text
+sql/4615_groep_leden.sql -text

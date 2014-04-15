@@ -52,4 +52,24 @@ class KetzerSelect extends PersistentEntity {
 	 */
 	protected static $primary_key = array('select_id');
 
+	/**
+	 * Lazy loading by foreign key.
+	 * 
+	 * @return KetzerOptie[]
+	 */
+	public function getKetzerOpties() {
+		if (!isset($this->ketzer_selectors)) {
+			$this->setKetzerOpties(KetzerOptiesModel::instance()->getOptiesVoorSelect($this));
+		}
+		return $this->ketzer_selectors;
+	}
+
+	public function hasKetzerOpties() {
+		return count($this->getKetzerOpties()) > 0;
+	}
+
+	public function setKetzerOpties(array $opties) {
+		$this->ketzer_selectors = $opties;
+	}
+
 }

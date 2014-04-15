@@ -26,6 +26,11 @@ class Ketzer extends OpvolgbareGroep {
 	 */
 	public $aanmelden_tot;
 	/**
+	 * Ketzer-selectors
+	 * @var KetzerSelect[]
+	 */
+	private $ketzer_selectors;
+	/**
 	 * Database table fields
 	 * @var array
 	 */
@@ -46,6 +51,26 @@ class Ketzer extends OpvolgbareGroep {
 	public static function __constructStatic() {
 		parent::__constructStatic();
 		self::$persistent_fields = parent::$persistent_fields + self::$persistent_fields;
+	}
+
+	/**
+	 * Lazy loading by foreign key.
+	 * 
+	 * @return KetzerSelect[]
+	 */
+	public function getKetzerSelectors() {
+		if (!isset($this->ketzer_selectors)) {
+			$this->setKetzerSelectors(KetzerSelectorsModel::instance()->getSelectorsVoorKetzer($this));
+		}
+		return $this->ketzer_selectors;
+	}
+
+	public function hasKetzerSelectors() {
+		return count($this->getKetzerSelectors()) > 0;
+	}
+
+	public function setKetzerSelectors(array $selectors) {
+		$this->ketzer_selectors = $selectors;
 	}
 
 }
