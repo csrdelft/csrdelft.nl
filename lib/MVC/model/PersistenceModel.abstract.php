@@ -144,8 +144,8 @@ abstract class PersistenceModel implements Persistence {
 		$where = array();
 		$params = array();
 		foreach ($this->orm_entity->getPrimaryKey() as $key) {
-			$where[] = $key . ' = :' . $key; // name parameters after column
-			$params[':' . $key] = $properties[$key];
+			$where[] = $key . ' = :W' . $key; // name parameters after column
+			$params[':W' . $key] = $properties[$key];
 			unset($properties[$key]); // do not update primary key
 		}
 		return Database::sqlUpdate($this->orm_entity->getTableName(), $properties, implode(' AND ', $where), $params, 1);

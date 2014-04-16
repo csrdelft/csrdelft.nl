@@ -676,7 +676,7 @@ class ForumPostsModel extends PersistenceModel implements Paging {
 
 	public function verwijderForumPostsVoorDraad(ForumDraad $draad, ForumDeel $deel) {
 		$orm = self::orm;
-		Database::sqlUpdate($orm::getTableName(), array('verwijderd' => $draad->verwijderd), 'draad_id = :id', array('id' => $draad->draad_id));
+		Database::sqlUpdate($orm::getTableName(), array('verwijderd' => $draad->verwijderd), 'draad_id = :id', array(':id' => $draad->draad_id));
 		$deel->laatste_post_id = null;
 		$deel->laatste_lid_id = null;
 		$deel->laatst_gewijzigd = null;

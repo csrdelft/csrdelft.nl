@@ -130,23 +130,37 @@ class Database extends PDO {
 
 	/**
 	 * Requires named parameters.
+	 * Optional ON DUPLICATE KEY UPDATE
 	 * 
 	 * @param string $into
 	 * @param array $properties
+	 * @param boolean $update_duplicate
 	 * @return string last inserted row id or sequence value
 	 * @throws Exception if number of rows affected !== 1
 	 */
-	public static function sqlInsert($into, array $properties) {
-		$params = array();
+	public static function sqlInsert($into, array $properties, $update_duplicate = false) {
+		$insert_params = array();
 		foreach ($properties as $key => $value) {
-			$params[':' . $key] = $value; // name parameters after column
+			$insert_params[':I' . $key] = $value; // name parameters after column
 		}
 		$sql = 'INSERT INTO ' . $into;
 		$sql .= ' (' . implode(', ', array_keys($properties)) . ')';
-		$sql .= ' VALUES (' . implode(', ', array_keys($params)) . ')'; // named params
-		$query = self::instance()->prepare($sql, $params);
-		$query->execute($params);
-		if ($query->rowCount() !== 1) {
+		$sql .= ' VALUES (' . implode(', ', array_keys($insert_params)) . ')'; // named params
+		if ($update_duplicate) {
+			$sql .= ' ON DUPLICATE KEY UPDATE '; // code below duplicate of sqlUpdate
+			$fields = array();
+			foreach ($properties as $key => $value) {
+				$fields[] = $key . ' = :U' . $key; // name parameters after column
+				if (array_key_exists(':U' . $key, $insert_params)) {
+					throw new Exception('Named parameter already defined: ' . $key);
+				}
+				$insert_params[':U' . $key] = $value;
+			}
+			$sql .= implode(', ', $fields);
+		}
+		$query = self::instance()->prepare($sql, $insert_params);
+		$query->execute($insert_params);
+		if (!$update_duplicate AND $query->rowCount() !== 1) {
 			throw new Exception('sqlInsert rowCount=' . $query->rowCount());
 		}
 		return self::instance()->lastInsertId();
@@ -156,22 +170,22 @@ class Database extends PDO {
 	 * Requires named parameters.
 	 * 
 	 * @param string $table
-	 * @param array $set_properties
+	 * @param array $properties
 	 * @param string $where
 	 * @param array $where_params
 	 * @param int $limit
 	 * @return int number of rows affected
 	 * @throws Exception if duplicate named parameter
 	 */
-	public static function sqlUpdate($table, array $set_properties, $where, array $where_params = array(), $limit = null) {
+	public static function sqlUpdate($table, array $properties, $where, array $where_params = array(), $limit = null) {
 		$sql = 'UPDATE ' . $table . ' SET ';
 		$fields = array();
-		foreach ($set_properties as $key => $value) {
-			$fields[] = $key . ' = :' . $key; // name parameters after column
-			if (array_key_exists($key, $where_params)) {
+		foreach ($properties as $key => $value) {
+			$fields[] = $key . ' = :U' . $key; // name parameters after column
+			if (array_key_exists(':U' . $key, $where_params)) {
 				throw new Exception('Named parameter already defined: ' . $key);
 			}
-			$where_params[':' . $key] = $value;
+			$where_params[':U' . $key] = $value;
 		}
 		$sql .= implode(', ', $fields);
 		$sql .= ' WHERE ' . $where;
