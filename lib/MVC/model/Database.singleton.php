@@ -163,54 +163,37 @@ class Database extends PDO {
 	 * Requires positional parameters.
 	 * Default REPLACE (DELETE & INSERT) if primary key already exists.
 	 * 
-	 * $properties => array("colom1" => array(0 => "value1", 1 => "value2", ...),
-	 * 						"colom2" => "valueX", // voor alles hetzelfde
-	 * 						...
-	 * 					);
-	 * 
 	 * @param string $into
-	 * @param int $count
-	 * @param array $properties
+	 * @param array $properties = array( array("propname1", "propname2", ...), array("entry1value1", "entry1value2", ...), array("entry2value1", "entry2value2", ...), ...)
 	 * @param boolean $replace
 	 * @return int number of rows affected
-	 * @throws Exception if number of value-rows !== $count
+	 * @throws Exception if number of values !== number of properties
 	 */
-	public static function sqlInsertMultiple($into, $count, array $properties, $replace = true) {
+	public static function sqlInsertMultiple($into, array $properties, $replace = true) {
 		if ($replace) {
 			$sql = 'REPLACE';
 		} else {
 			$sql = 'INSERT';
 		}
-		$sql .=' INTO ' . $into . ' (' . implode(', ', array_keys($properties)) . ') VALUES ';
 		$insert_values = array();
-		$params_matrix = array();
-		foreach ($properties as $key => $values) {
-			if (is_array($values)) {
-				if (count($values) !== $count) {
-					throw new Exception('Missing value(s) for parameter: ' . $key);
-				}
-				foreach ($values as $i => $value) {
-					$param = ':I' . $i . $key;
-					$insert_values[$param] = $value; // name parameters after column with index
-					$params_matrix[$key][$i] = $param;
-				}
-			} else { // same value for all
-				$param = ':I' . $key;
-				$insert_values[$param] = $values; // name parameters after column
-				$params_matrix[$key] = array_fill(0, $count, $param);
+		$fields = array_shift($properties);
+		$count = count($fields);
+		$sql .=' INTO ' . $into . ' (' . implode(', ', $fields) . ') VALUES ';
+		foreach ($properties as $i => $props) { // for all entries
+			if (count($props) !== $count) {
+				throw new Exception('Missing property value(s) for entry: ' . $i);
 			}
-		}
-		$keys = array_keys($properties);
-		for ($i = 0; $i < $count; $i++) {
 			if ($i > 0) {
 				$sql .= ', ';
 			}
 			$sql .= '(';
-			foreach ($keys as $j => $key) {
+			foreach ($props as $j => $value) {
+				$param = ':I' . $i . $fields[$j]; // name parameters after column with index
+				$insert_values[$param] = $value;
 				if ($j > 0) {
 					$sql .= ', ';
 				}
-				$sql .= $params_matrix[$key][$i];  // named params
+				$sql .= $param;  // named params
 			}
 			$sql .= ')';
 		}
