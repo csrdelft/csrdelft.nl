@@ -539,14 +539,6 @@ class ForumPostsModel extends PersistenceModel implements Paging {
 				}
 			}
 		}
-		// Olifant-filter
-		if (LidInstellingen::get('forum', 'filterOlifant') == 'ja') {
-			foreach ($posts as $post) {
-				if (stristr($post->tekst, 'olifant') !== false OR stristr($post->tekst, 'elephant') !== false) {
-					$post->gefilterd = 'Bericht bevat olifanten';
-				}
-			}
-		}
 		return $posts;
 	}
 
