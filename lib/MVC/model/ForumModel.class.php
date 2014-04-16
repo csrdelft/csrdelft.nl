@@ -531,11 +531,19 @@ class ForumPostsModel extends PersistenceModel implements Paging {
 			$array_first_post = $this->find('draad_id = ? AND wacht_goedkeuring = FALSE AND verwijderd = FALSE', array($draad->draad_id), 'post_id ASC', 1);
 			array_unshift($posts, $array_first_post[0]);
 		}
-		// 2008 filter
+		// 2008-filter
 		if (LidInstellingen::get('forum', 'filter2008') == 'ja') {
 			foreach ($posts as $post) {
 				if (startsWith($post->lid_id, '08')) {
 					$post->gefilterd = 'Bericht van 2008';
+				}
+			}
+		}
+		// Olifant-filter
+		if (LidInstellingen::get('forum', 'filterOlifant') == 'ja') {
+			foreach ($posts as $post) {
+				if ($post->lid_id === '1128') {
+					$post->gefilterd = 'Bericht bevat mogelijk olifanten';
 				}
 			}
 		}

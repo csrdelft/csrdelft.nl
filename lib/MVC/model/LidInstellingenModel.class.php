@@ -57,7 +57,8 @@ class LidInstellingen extends PersistenceModel {
 			'datumWeergave' => array('Datumweergave', 'enum', array('relatief', 'vast'), 'relatief'),
 			'openDraadPagina' => array('Open onderwerp op pagina', 'enum', array('1', 'ongelezen', 'laatste'), 'ongelezen'),
 			'toonpasfotos' => array('Pasfoto\'s standaard weergeven', 'enum', array('ja', 'nee'), 'ja'),
-			'filter2008' => array('Berichten van 2008 eerst verbergen', 'enum', array('ja', 'nee'), 'nee')
+			'filter2008' => array('Berichten van 2008 eerst verbergen', 'enum', array('ja', 'nee'), 'nee'),
+			'filterOlifant' => array('Berichten met olifanten verbergen', 'enum', array('ja', 'nee'), 'nee')
 		),
 		'zijbalk' => array(
 			'ishetal' => array('Is het al… weergeven', 'enum', array('niet weergeven', 'donderdag', 'vrijdag', 'zondag', 'lunch', 'avond', 'borrel', 'lezing', 'jarig', 'dies', 'studeren', 'willekeurig'), 'willekeurig'),
