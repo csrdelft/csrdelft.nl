@@ -885,6 +885,7 @@ span#modsluiten:hover{
 	padding: 6px;
 	left: 10px; right: 10px;
 	text-align: center;
+	cursor: pointer;
 }
 #forumtabel th{
 	font-weight: bold;

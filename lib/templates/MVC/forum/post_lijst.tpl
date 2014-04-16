@@ -1,4 +1,14 @@
-<tr id="forumpost-row-{$post->post_id}">
+{if $post->gefilterd}
+	<tr>
+		<td colspan="2" class="filtered">
+			<a class="weergeeflink" onclick="jQuery('#forumpost-row-{$post->post_id}').show();
+					jQuery(this).remove()">
+				&gt;&gt {$post->gefilterd}, klik om weer te geven. &lt;&lt;
+			</a>
+		</td>
+	</tr>
+{/if}
+<tr id="forumpost-row-{$post->post_id}"{if $post->gefilterd} style="display:none;"{/if}>
 	<td class="auteur">
 		<a href="/forum/reactie/{$post->post_id}#{$post->post_id}" id="{$post->post_id}" class="postlink" title="Link naar deze post">&rarr;</a>
 		{$post->lid_id|csrnaam:'user':'visitekaartje'}
@@ -36,23 +46,13 @@
 			<a href="/tools/stats.php?ip={$post->auteur_ip}" class="knop" title="IP-log">IP-log</a>
 		{/if}
 	</td>
-	<td class="bericht{cycle values="0,1"}{if $post->gefilterd} filtered{/if}" id="post{$post->post_id}">
+	<td class="bericht{cycle values="0,1"}" id="post{$post->post_id}">
 		<div class="bericht">
-			{if $post->gefilterd}
-				<a href="javascript:;" class="weergeeflink" onclick="jQuery('#filtered{$post->post_id}').slideDown(1000);
-						jQuery(this).hide().remove()">
-					&gt;&gt {$post->gefilterd}, klik om weer te geven. &lt;&lt;
-				</a>
-				<div id="filtered{$post->post_id}" class="verborgen">
-				{/if}
-				{$post->tekst|ubb}
-				{if $post->bewerkt_tekst}
-					<div class="bewerkt clear">
-						<hr />
-						{$post->bewerkt_tekst|ubb}
-					</div>
-				{/if}
-				{if $post->gefilterd}
+			{$post->tekst|ubb}
+			{if $post->bewerkt_tekst}
+				<div class="bewerkt clear">
+					<hr />
+					{$post->bewerkt_tekst|ubb}
 				</div>
 			{/if}
 		</div>
