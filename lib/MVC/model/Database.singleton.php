@@ -130,40 +130,93 @@ class Database extends PDO {
 
 	/**
 	 * Requires named parameters.
-	 * Optional ON DUPLICATE KEY UPDATE
+	 * Optional REPLACE (DELETE & INSERT) if primary key already exists.
 	 * 
 	 * @param string $into
 	 * @param array $properties
-	 * @param boolean $update_duplicate
+	 * @param boolean $replace
 	 * @return string last inserted row id or sequence value
 	 * @throws Exception if number of rows affected !== 1
 	 */
-	public static function sqlInsert($into, array $properties, $update_duplicate = false) {
+	public static function sqlInsert($into, array $properties, $replace = false) {
 		$insert_params = array();
 		foreach ($properties as $key => $value) {
 			$insert_params[':I' . $key] = $value; // name parameters after column
 		}
-		$sql = 'INSERT INTO ' . $into;
+		if ($replace) {
+			$sql = 'REPLACE';
+		} else {
+			$sql = 'INSERT';
+		}
+		$sql .=' INTO ' . $into;
 		$sql .= ' (' . implode(', ', array_keys($properties)) . ')';
 		$sql .= ' VALUES (' . implode(', ', array_keys($insert_params)) . ')'; // named params
-		if ($update_duplicate) {
-			$sql .= ' ON DUPLICATE KEY UPDATE '; // code below duplicate of sqlUpdate
-			$fields = array();
-			foreach ($properties as $key => $value) {
-				$fields[] = $key . ' = :U' . $key; // name parameters after column
-				if (array_key_exists(':U' . $key, $insert_params)) {
-					throw new Exception('Named parameter already defined: ' . $key);
-				}
-				$insert_params[':U' . $key] = $value;
-			}
-			$sql .= implode(', ', $fields);
-		}
 		$query = self::instance()->prepare($sql, $insert_params);
 		$query->execute($insert_params);
-		if (!$update_duplicate AND $query->rowCount() !== 1) {
+		if ($query->rowCount() !== 1) {
 			throw new Exception('sqlInsert rowCount=' . $query->rowCount());
 		}
 		return self::instance()->lastInsertId();
+	}
+
+	/**
+	 * Requires positional parameters.
+	 * Default REPLACE (DELETE & INSERT) if primary key already exists.
+	 * 
+	 * $properties => array("colom1" => array(0 => "value1", 1 => "value2", ...),
+	 * 						"colom2" => "valueX", // voor alles hetzelfde
+	 * 						...
+	 * 					);
+	 * 
+	 * @param string $into
+	 * @param int $count
+	 * @param array $properties
+	 * @param boolean $replace
+	 * @return int number of rows affected
+	 * @throws Exception if number of value-rows !== $count
+	 */
+	public static function sqlInsertMultiple($into, $count, array $properties, $replace = true) {
+		if ($replace) {
+			$sql = 'REPLACE';
+		} else {
+			$sql = 'INSERT';
+		}
+		$sql .=' INTO ' . $into . ' (' . implode(', ', array_keys($properties)) . ') VALUES ';
+		$insert_values = array();
+		$params_matrix = array();
+		foreach ($properties as $key => $values) {
+			if (is_array($values)) {
+				if (count($values) !== $count) {
+					throw new Exception('Missing value(s) for parameter: ' . $key);
+				}
+				foreach ($values as $i => $value) {
+					$param = ':I' . $i . $key;
+					$insert_values[$param] = $value; // name parameters after column with index
+					$params_matrix[$key][$i] = $param;
+				}
+			} else { // same value for all
+				$param = ':I' . $key;
+				$insert_values[$param] = $values; // name parameters after column
+				$params_matrix[$key] = array_fill(0, $count, $param);
+			}
+		}
+		$keys = array_keys($properties);
+		for ($i = 0; $i < $count; $i++) {
+			if ($i > 0) {
+				$sql .= ', ';
+			}
+			$sql .= '(';
+			foreach ($keys as $j => $key) {
+				if ($j > 0) {
+					$sql .= ', ';
+				}
+				$sql .= $params_matrix[$key][$i];  // named params
+			}
+			$sql .= ')';
+		}
+		$query = self::instance()->prepare($sql, $insert_values);
+		$query->execute($insert_values);
+		return $query->rowCount();
 	}
 
 	/**

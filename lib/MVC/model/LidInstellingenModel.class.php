@@ -201,23 +201,29 @@ class LidInstellingen extends PersistenceModel {
 	}
 
 	public function save() {
+		$modules = array();
+		$keys = array();
+		$values = array();
 		foreach ($this->instellingen as $module => $instellingen) {
 			foreach ($instellingen as $key => $value) {
 				$value = filter_input(INPUT_POST, $module . '_' . $key, FILTER_SANITIZE_STRING);
 				$this->setValue($module, $key, $value); // sanatize value
-				$value = $this->getValue($module, $key);
-				$properties = array('lid_id' => LoginLid::instance()->getUid(), 'module' => $module, 'instelling_id' => $key, 'waarde' => $value);
-				$orm = self::orm;
-				Database::sqlInsert($orm::getTableName(), $properties, true);
+				$modules[] = $module;
+				$keys[] = $key;
+				$values[] = $this->getValue($module, $key);
 			}
 		}
+		$properties = array('lid_id' => LoginLid::instance()->getUid(), 'module' => $modules, 'instelling_id' => $keys, 'waarde' => $values);
+		$orm = self::orm;
+		Database::sqlInsertMultiple($orm::getTableName(), count($keys), $properties);
 	}
 
 	public function setForAll($module, $key, $value) {
 		$this->setValue($module, $key, $value);
-		$properties = array('module' => $module, 'instelling_id' => $key, 'waarde' => $this->getValue($module, $key));
+		$leden = Database::sqlSelect(array('uid'), 'lid')->fetchAll(PDO::FETCH_COLUMN, 0);
+		$properties = array('lid_id' => $leden, 'module' => $module, 'instelling_id' => $key, 'waarde' => $this->getValue($module, $key));
 		$orm = self::orm;
-		return Database::sqlInsert($orm::getTableName(), $properties, true);
+		Database::sqlInsertMultiple($orm::getTableName(), count($leden), $properties);
 	}
 
 }

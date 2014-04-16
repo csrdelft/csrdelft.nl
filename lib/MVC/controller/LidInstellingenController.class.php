@@ -40,9 +40,8 @@ class LidInstellingenController extends AclController {
 	}
 
 	public function reset($module, $key, $value) {
-		$count = $this->model->setForAll($module, $key, $value);
-		setMelding('Voor ' . $count . ' leden de instelling overschreven', 1);
-		invokeRefresh('/instellingen/beheer', 'Vergeet niet in de code de default value aan te passen voor de overige leden!', 2);
+		$this->model->setForAll($module, $key, $value);
+		invokeRefresh('/instellingen/beheer', 'Voor iedereen de instelling overschreven', 1);
 	}
 
 }
