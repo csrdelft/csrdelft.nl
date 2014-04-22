@@ -590,7 +590,7 @@ class ProfielStatus extends Profiel {
 		$changelog = 'Verwijderde corveetaken:';
 		if ($aantal > 0) {
 			foreach ($taken as $taak) {
-				$changelog .= '[br]' . strftime('%a %e-%m-%Y', $taak->getDatum()) . ' ' . $taak->getCorveeFunctie()->naam . ' (' . $taak->getPunten() . ')';
+				$changelog .= '[br]' . strftime('%a %e-%m-%Y', $taak->getBeginMoment()) . ' ' . $taak->getCorveeFunctie()->naam . ' (' . $taak->getPunten() . ')';
 			}
 			//corveeceasar mailen over vrijvallende corveetaken.
 			$bericht = file_get_contents(LIB_PATH . '/templates/MVC/mail/toekomstigcorveeverwijderd.mail');
