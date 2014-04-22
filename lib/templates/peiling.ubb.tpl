@@ -24,7 +24,7 @@
 			{else}
 				<div class="stemmen">({$optie.stemmen})</div>
 				<div class="percentage">{$optie.percentage|string_format:'%01.1f'}%</div>
-				<div class="grafisch"><div class="balk" style="width: {$optie.percentage*1.8|intval}px;">&nbsp;</div></div>
+				<div class="grafisch"><div class="balk" style="width: {$optie.percentage|string_format:'%d'}%;">&nbsp;</div></div>
 			{/if}
 			{$optie.optie|ubb}
 		</li>
