@@ -56,7 +56,7 @@ class syntax_plugin_csrlink_groeplink extends DokuWiki_Syntax_Plugin {
 
         require_once 'groepen/groepen.class.php';
         try{
-            $groep =    new Groep($groepid);
+            $groep =    new OldGroep($groepid);
             if($groep->getId()===0) {
                 throw new Exception('geen groep');
             }
