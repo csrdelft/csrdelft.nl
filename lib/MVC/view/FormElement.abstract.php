@@ -649,7 +649,7 @@ class EmailField extends TextField {
 				$this->error = 'Het adres bevat ongeldige karakters voor de @:';
 			} elseif (!preg_match('/^[a-z0-9]+([-.][a-z0-9]+)*\\.[a-z]{2,4}$/i', $dom)) {
 				$this->error = 'Het domein is ongeldig:';
-			} elseif (!checkdnsrr($dom, 'A') and !checkdnsrr($dom, 'MX')) {
+			} elseif (!checkdnsrr($dom, 'A') and ! checkdnsrr($dom, 'MX')) {
 				$this->error = 'Het domein bestaat niet (IPv4):';
 			} elseif (!checkdnsrr($dom, 'MX')) {
 				$this->error = 'Het domein is niet geconfigureerd om email te ontvangen:';
@@ -680,7 +680,7 @@ class UrlField extends TextField {
 			return true;
 		}
 		// controleren of het een geldige url is...
-		if (!is_utf8($this->value) OR !preg_match('#([\w]+?://[^ "\n\r\t<]*?)#is', $this->value)) {
+		if (!is_utf8($this->value) OR ! preg_match('#([\w]+?://[^ "\n\r\t<]*?)#is', $this->value)) {
 			$this->error = 'Ongeldige karakters:';
 		} elseif ($this->max_len != null && mb_strlen($this->value) > $this->max_len) {
 			$this->error = 'Gebruik maximaal ' . $this->max_len . ' karakters:';
@@ -726,6 +726,8 @@ class IntField extends TextField {
 			$this->error = 'Alleen getallen toegestaan';
 		} elseif ($this->max !== null AND $this->value > $this->max) {
 			$this->error = 'Maximale waarde is ' . $this->max . ' ';
+		} else if ($this->leden_mod AND LoginLid::mag('P_LEDEN_MOD')) {
+			// exception for leden mod
 		} elseif ($this->min !== null AND $this->value < $this->min) {
 			$this->error = 'Minimale waarde is ' . $this->min . ' ';
 		}
@@ -1289,7 +1291,7 @@ class DatumField extends InputField {
 			$this->error = 'Ongeldige datum';
 		} elseif (substr($this->value, 0, 4) > $this->maxyear) {
 			$this->error = 'Er kunnen geen data later dan ' . $this->maxyear . ' worden weergegeven';
-		} elseif ($this->value != '0000-00-00' AND !checkdate($this->getMaand(), $this->getDag(), $this->getJaar())) {
+		} elseif ($this->value != '0000-00-00' AND ! checkdate($this->getMaand(), $this->getDag(), $this->getJaar())) {
 			$this->error = 'Datum bestaat niet';
 		}
 		return $this->error === '';
