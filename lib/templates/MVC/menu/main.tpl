@@ -94,7 +94,7 @@
 <div id="submenu" onmouseover="ResetTimer();" onmouseout="StartTimer();">
 	<div id="submenuitems">
 		{foreach name=level1 from=$root->children item=item}
-			<div id="sub{$smarty.foreach.level1.iteration}" {if startsWith($path, $item->link)} class="active"{/if}>
+			<div id="sub{$smarty.foreach.level1.iteration}" {if $item->active} class="active"{/if}>
 				{foreach name=level2 from=$item->children item=subitem}
 					<a href="{$subitem->link}" title="{$subitem->tekst}"{if $subitem->active} class="active"{/if}>{$subitem->tekst}</a>
 					{if !$smarty.foreach.level2.last}

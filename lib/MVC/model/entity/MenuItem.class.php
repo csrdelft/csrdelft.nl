@@ -52,7 +52,7 @@ class MenuItem extends PersistentEntity {
 	 */
 	public $children = array();
 	/**
-	 * Huidig actief menu-item
+	 * State of menu GUI
 	 * @var boolean
 	 */
 	public $active;
