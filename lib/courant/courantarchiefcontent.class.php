@@ -62,7 +62,7 @@ class CourantarchiefContent extends TemplateView {
 			</li>
 		</ul>
 		<hr />';
-		if ($this->courant->getID() == 0 OR $this->zijkolom) {
+		if ($this->courant->getID() == 0) {
 			//overzicht
 			echo $this->getArchiefmails();
 		} else {
@@ -75,4 +75,3 @@ class CourantarchiefContent extends TemplateView {
 }
 
 //einde classe
-?>
