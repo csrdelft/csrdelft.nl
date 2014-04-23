@@ -51,17 +51,15 @@ class MenuModel extends PersistenceModel {
 		$parent->children = $this->find($where, array($parent->item_id), 'prioriteit ASC');
 		$child_active = false;
 		foreach ($parent->children as $i => $child) {
-			if (startsWith(Instellingen::get('stek', 'request'), $child->link)) {
-				$child->active = true;
-				$child_active = true;
-			}
 			if (!$admin AND ! LoginLid::mag($child->rechten_bekijken)) {
 				unset($parent->children[$i]);
-			} else {
-				$parent->active = $this->getChildren($child, $admin); // make parent of active child also active
+				continue;
 			}
+			$child->active = startsWith(Instellingen::get('stek', 'request'), $child->link);
+			$child_active |= $child->active;
+			$this->getChildren($child, $admin);
 		}
-		return $child_active;
+		$parent->active |= $child_active; // make parent of active child also active
 	}
 
 	public function getMenuItem($id) {

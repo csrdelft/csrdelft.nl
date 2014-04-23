@@ -12,6 +12,13 @@
 				<li>
 					<a href="{$item->link}" id="top{$smarty.foreach.main.iteration}" onmouseover="StartShowMenu('{$smarty.foreach.main.iteration}');" onmouseout="ResetShowMenu();"{if $item->active} class="active"{/if} title="{$item->tekst}">{$item->tekst}</a>
 				</li>
+				{if $item->active} 
+					<script language="javascript" type="text/javascript">
+						$(document).ready(function() {
+							SetActive({$smarty.foreach.main.iteration});
+						});
+					</script>
+				{/if}
 			{/foreach}
 		</ul>
 	</div>

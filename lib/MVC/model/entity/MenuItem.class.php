@@ -47,15 +47,15 @@ class MenuItem extends PersistentEntity {
 	 */
 	public $zichtbaar;
 	/**
-	 * De sub-items van dit menu-item
-	 * @var array
-	 */
-	public $children = array();
-	/**
 	 * State of menu GUI
 	 * @var boolean
 	 */
 	public $active;
+	/**
+	 * De sub-items van dit menu-item
+	 * @var array
+	 */
+	public $children = array();
 	/**
 	 * Database table fields
 	 * @var array
