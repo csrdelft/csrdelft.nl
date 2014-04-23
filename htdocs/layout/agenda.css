@@ -67,6 +67,7 @@ table#maand td div.meta{
 	padding: 3px 4px;
 	border-bottom: 1px solid #eee;
 	background-color: #f9f9f9;
+	line-height: 1.4em;
 }
 table#maand td.anderemaand { /* De dagen die van andere maanden in de maand-tabel vallen doorzichtig maken */
 	opacity: 0.4;
@@ -100,6 +101,7 @@ table#maand td ul li{
 	margin: 0px;
 	padding: 4px 4px;
 	font-size: 10px;
+	line-height: 1.4em;
 }
 table#maand td ul li:nth-child(even){
 	background-color: #eaeaea;
