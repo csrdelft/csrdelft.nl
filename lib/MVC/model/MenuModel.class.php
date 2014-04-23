@@ -58,10 +58,10 @@ class MenuModel extends PersistenceModel {
 			if (!$admin AND ! LoginLid::mag($child->rechten_bekijken)) {
 				unset($parent->children[$i]);
 			} else {
-				$this->getChildren($child, $admin);
+				$parent->active = $this->getChildren($child, $admin); // make parent of active child also active
 			}
 		}
-		$parent->active = $child_active;
+		return $child_active;
 	}
 
 	public function getMenuItem($id) {
