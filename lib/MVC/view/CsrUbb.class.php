@@ -783,10 +783,13 @@ HTML;
 	}
 
 	/**
-	 * Commentaar = ubboff
+	 * Commentaar niet weergeven
 	 */
 	function ubb_commentaar($arguments = array()) {
-		return $this->ubb_ubboff($arguments);
+		$this->ubb_mode = false;
+		$content = $this->parseArray(array('[/commentaar]'), array());
+		$this->ubb_mode = true;
+		return '';
 	}
 
 	/**

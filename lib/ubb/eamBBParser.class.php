@@ -718,7 +718,7 @@ class eamBBParser {
 
 	function ubb_ubboff() {
 		$this->ubb_mode = false;
-		$content = $this->parseArray(array('[/ubboff]', '[/commentaar]'), array());
+		$content = $this->parseArray(array('[/ubboff]'), array());
 		$this->ubb_mode = true;
 		return $content;
 	}
