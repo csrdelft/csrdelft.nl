@@ -2,10 +2,9 @@
 	<div id="menuleft"><a href="/"><div id="beeldmerk"></div></a></div>
 	<div id="menucenter">
 		<div id="menubanners">
-			<div id="banner1" class="menubanner"></div>
-			<div id="banner2" class="menubanner"></div>
-			<div id="banner3" class="menubanner"></div>
-			<div id="banner4" class="menubanner"></div>
+			{foreach from=$root->children item=item}
+				<div id="banner{$smarty.foreach.main.iteration}" class="menubanner"{if $item->active} style="display: block;"{/if}></div>
+			{/foreach}
 		</div>
 		<ul id="mainmenu">
 			{foreach name=main from=$root->children item=item}
