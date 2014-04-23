@@ -1,6 +1,8 @@
 BEGIN:VCALENDAR
 VERSION:2.0
 PRODID:-//C.S.R. Delft/Webstek C.S.R. Delft//NL
+X-WR-CALNAME:C.S.R. Agenda
+X-ORIGINAL-URL:http://www.csrdelft.nl/agenda/
 BEGIN:VTIMEZONE
 TZID:Europe/Amsterdam
 X-LIC-LOCATION:Europe/Amsterdam
@@ -29,6 +31,8 @@ UID:{$item->getUID()}
 {else}DTEND;TZID=Europe/Amsterdam:{$item->getEindMoment()|date_format:'%Y%m%dT%H%M%S'}
 {/if}
 SUMMARY:{str_replace(';','\;',str_replace(',','\,',$item->getTitel()))|html_substr:"60":"…"}
+{if $item->link}URL:{if startsWith($item->link, '/')}http://csrdelft.nl{/if}{$item->link}
+{/if}
 {if $item->getBeschrijving()}DESCRIPTION:{str_replace("\r",'',str_replace("\n",'\n',str_replace(';','\;',str_replace(',','\,',$item->getBeschrijving()))))|html_substr:"60":"…"}
 {/if}
 END:VEVENT
