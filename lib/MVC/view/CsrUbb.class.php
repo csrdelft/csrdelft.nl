@@ -49,6 +49,13 @@ class CsrUbb extends eamBBParser {
 		return $this->HTML;
 	}
 
+	/**
+	 * Rul = url
+	 */
+	function ubb_rul($arguments = array()) {
+		return $this->ubb_url($arguments);
+	}
+
 	function ubb_url($arguments = array()) {
 		$content = $this->parseArray(array('[/url]', '[/rul]'), array());
 		if (isset($arguments['url'])) { // [url=
@@ -219,10 +226,10 @@ class CsrUbb extends eamBBParser {
 	 */
 	function ubb_instelling($arguments = array()) {
 		$content = $this->parseArray(array('[/instelling]'), array());
-		if (!array_key_exists('instelling', $arguments) OR !isset($arguments['instelling'])) {
+		if (!array_key_exists('instelling', $arguments) OR ! isset($arguments['instelling'])) {
 			return 'Geen of een niet bestaande instelling opgegeven: ' . mb_htmlentities($arguments['instelling']);
 		}
-		if (!array_key_exists('module', $arguments) OR !isset($arguments['module'])) {
+		if (!array_key_exists('module', $arguments) OR ! isset($arguments['module'])) {
 			$arguments['module'] = $arguments['instelling']; // backwards compatibility
 			$arguments['instelling'] = null;
 		}
@@ -349,7 +356,7 @@ class CsrUbb extends eamBBParser {
 		//render embed html
 		switch ($type) {
 			case 'youtube':
-				if (isset($this->youtube[$id]) AND !isset($parameters['force'])) {
+				if (isset($this->youtube[$id]) AND ! isset($parameters['force'])) {
 					return '<a href="#youtube' . $content . '" onclick="youtubeDisplay(\'' . $content . '\')" >&raquo; youtube-filmpje (ergens anders op deze pagina)</a>';
 				} else {
 					//sla het youtube-id op in een array, dan plaatsen we de tweede keer dat
@@ -699,19 +706,32 @@ HTML;
 		return $result;
 	}
 
+	/**
+	 * Vanonderwerp = offtopic
+	 */
+	function ubb_vanonderwerp($arguments = array()) {
+		return $this->ubb_offtopic($arguments);
+	}
+
 	public function ubb_offtopic() {
-		$content = $this->parseArray(array('[/offtopic]'), array());
+		$content = $this->parseArray(array('[/offtopic]', '[/vanonderwerp]'), array());
 		return '<div class="offtopic">' . $content . '</div>';
 	}
 
+	/**
+	 * Verklapper = spoiler
+	 */
+	function ubb_verklapper($arguments = array()) {
+		return $this->ubb_spoiler($arguments);
+	}
+
 	public function ubb_spoiler() {
-		$content = $this->parseArray(array('[/spoiler]'), array());
+		$content = $this->parseArray(array('[/spoiler]', '[/verklapper]'), array());
 		return '<button class="spoiler">Toon verklapper</button><div class="spoiler-content">' . $content . '</div>';
 	}
 
 	function ubb_1337() {
 		$html = $this->parseArray(array('[/1337]'), array());
-
 		$html = str_replace('er ', '0r ', $html);
 		$html = str_replace('you', 'j00', $html);
 		$html = str_replace('elite', '1337', $html);
@@ -762,13 +782,18 @@ HTML;
 		return '[mededelingen] Geen geldig type (' . mb_htmlentities($type) . ').';
 	}
 
-	# Commentaar-tag
+	/**
+	 * Commentaar = ubboff
+	 */
+	function ubb_commentaar($arguments = array()) {
+		return $this->ubb_ubboff($arguments);
+	}
 
-	public function ubb_commentaar() {
-		$this->ubb_mode = false;
-		$content = $this->parseArray(array('[/commentaar]'), array('commentaar'));
-		$this->ubb_mode = true;
-		return '';
+	/**
+	 * Kaart = map
+	 */
+	function ubb_kaart($arguments = array()) {
+		return $this->ubb_map($arguments);
 	}
 
 	private $mapJsLoaded = false;
@@ -781,9 +806,9 @@ HTML;
 	 * [map dynamic=false w=100 h=100]Oude Delft 9[/map]
 	 */
 	public function ubb_map($parameters) {
-		$address = $this->parseArray(array('[/map]'), array());
+		$address = $this->parseArray(array('[/map]', '[/kaart]'), array());
 		if (trim($address) == '') {
-			return '[map] Geen adres opgegeven';
+			return '[kaart] Geen adres opgegeven';
 		}
 		$address = htmlspecialchars($address);
 		$mapid = 'map' . md5($address);
