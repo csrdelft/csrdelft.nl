@@ -59,12 +59,12 @@ function init_buttons() {
 
 function init_hoverIntents() {
 	$('.hoverIntent').hoverIntent(
-		function() {
-			$(this).find('.hoverIntentContent').fadeIn();
-		},
-		function() {
-			$(this).find('.hoverIntentContent').fadeOut();
-		}
+			function() {
+				$(this).find('.hoverIntentContent').fadeIn();
+			},
+			function() {
+				$(this).find('.hoverIntentContent').fadeOut();
+			}
 	);
 }
 
@@ -372,6 +372,13 @@ function ketzer_ajax(url, ketzer) {
 	return true;
 }
 
+function peiling_bevestig_stem(peiling) {
+	var id = $('input[name=optie]:checked', peiling).val();
+	var waarde = $('#label' + id).text();
+	if (confirm('Bevestig uw stem:\n\n' + waarde + '\n\n')) {
+		$(peiling).submit();
+	}
+}
 /**
  * Selecteer de tekst van een DOM-element
  * http://stackoverflow.com/questions/985272/jquery-selecting-text-in-an-element-akin-to-highlighting-with-your-mouse/987376#987376
