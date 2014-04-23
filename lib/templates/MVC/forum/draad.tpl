@@ -55,7 +55,7 @@
 {/strip}
 <table id="forumtabel">
 	<tbody>
-		{if ForumPostsModel::instance()->getAantalPaginas($draad->draad_id) > 1}
+		{if ForumPostsModel::instance()->getAantalPaginas($draad->draad_id) > 1 AND !($draad->eerste_post_plakkerig AND ForumPostsModel::instance()->getHuidigePagina() != 1)}
 			<tr class="tussenschot">
 				<td colspan="2"></td>
 			</tr>
@@ -63,14 +63,10 @@
 				<td>&nbsp;</td>
 				<td>
 					<i>{$smarty.capture.magreageren}</i>
-					{if $draad->eerste_post_plakkerig AND ForumPostsModel::instance()->getHuidigePagina() != 1}
-						{* paginering komt onder de plakkerige eerste post *}
-					{else}
-						<div class="forum-paginering" style="float: right;">
-							Pagina: {sliding_pager baseurl="/forum/onderwerp/"|cat:$draad->draad_id|cat:"/"
-										pagecount=ForumPostsModel::instance()->getAantalPaginas($draad->draad_id) curpage=ForumPostsModel::instance()->getHuidigePagina()}
-						</div>
-					{/if}
+					<div class="forum-paginering" style="float: right;">
+						Pagina: {sliding_pager baseurl="/forum/onderwerp/"|cat:$draad->draad_id|cat:"/"
+									pagecount=ForumPostsModel::instance()->getAantalPaginas($draad->draad_id) curpage=ForumPostsModel::instance()->getHuidigePagina()}
+					</div>
 				</td>
 			</tr>
 		{elseif $smarty.capture.magreageren !== ''}
