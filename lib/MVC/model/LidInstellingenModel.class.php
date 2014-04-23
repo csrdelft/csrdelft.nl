@@ -58,7 +58,7 @@ class LidInstellingen extends PersistenceModel {
 			'zoekresultaten' => array('Zoekresultaten per pagina', 'int', array(10, 50), 20),
 			'naamWeergave' => array('Naamweergave', 'enum', array('civitas', 'volledig', 'bijnaam', 'aaidrom'), 'civitas'),
 			'datumWeergave' => array('Datumweergave', 'enum', array('relatief', 'vast'), 'relatief'),
-			'ongelezenWeergave' => array('Ongelezenweergave', 'enum', array('schuingedrukt', 'dikgedrukt', 'onderstreept', 'normaal'), 'schuingedrukt', array('schuingedrukt' => 'font-style: italic;', 'dikgedrukt' => 'font-weight: bold;', 'onderstreept' => 'text-decoration: underline;', 'normaal' => '')),
+			'ongelezenWeergave' => array('Ongelezenweergave', 'enum', array('schuingedrukt', 'dikgedrukt', 'onderstreept', 'gewoon'), 'schuingedrukt', array('schuingedrukt' => 'font-style: italic;', 'dikgedrukt' => 'font-weight: bold;', 'onderstreept' => 'text-decoration: underline;', 'gewoon' => '')),
 			'open_draad_op_pagina' => array('Open onderwerp op pagina', 'enum', array('1', 'ongelezen', 'laatste'), 'ongelezen'),
 			'toonpasfotos' => array('Pasfoto\'s standaard weergeven', 'enum', array('ja', 'nee'), 'ja'),
 			'filter2008' => array('Berichten van 2008 eerst verbergen', 'enum', array('ja', 'nee'), 'nee')
