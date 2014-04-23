@@ -63,7 +63,7 @@
 				<td>&nbsp;</td>
 				<td>
 					<i>{$smarty.capture.magreageren}</i>
-					{if $draad->eerste_post_plakkerig AND $smarty.foreach.posts.first AND ForumPostsModel::instance()->getHuidigePagina() != 1}
+					{if $draad->eerste_post_plakkerig AND ForumPostsModel::instance()->getHuidigePagina() != 1}
 						{* paginering komt onder de plakkerige eerste post *}
 					{else}
 						<div class="forum-paginering" style="float: right;">
@@ -101,7 +101,7 @@ strtotime($post->laatst_bewerkt) > strtotime($draad->getWanneerGelezen())
 				</tr>
 			{/if}
 			{include file='MVC/forum/post_lijst.tpl'}
-			{if $draad->eerste_post_plakkerig AND $smarty.foreach.posts.first AND ForumPostsModel::instance()->getHuidigePagina() != 1}
+			{if $draad->eerste_post_plakkerig AND ForumPostsModel::instance()->getHuidigePagina() != 1 AND $smarty.foreach.posts.first}
 				<tr class="tussenschot">
 					<td colspan="2"></td>
 				</tr>
