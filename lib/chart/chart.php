@@ -500,7 +500,7 @@ class chart {
 	  $this->draw_grid($xmin, $xmax, $ymin, $ymax);
 	$plot = &$this->plots[$i];
 	$plot->stroke($im, $xmin, $xmax, $ymin, $ymax,
-		      $xoff, $yoff, $width, $height, &$this);
+		      $xoff, $yoff, $width, $height, $this);
       }
     }
 
@@ -668,7 +668,7 @@ class chart {
     if ($this->final_callback) {
       $call = $this->final_callback;
       $call($im, $xmin, $xmax, $ymin, $ymax,
-	    $xoff, $yoff, $width, $height, &$this);
+	    $xoff, $yoff, $width, $height, $this);
       // The callback may have replaced the image.
       $im = $this->image;
     }
