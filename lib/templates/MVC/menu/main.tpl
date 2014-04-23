@@ -2,12 +2,12 @@
 	<div id="menuleft"><a href="/"><div id="beeldmerk"></div></a></div>
 	<div id="menucenter">
 		<div id="menubanners">
-			{foreach from=$root->children item=item}
-				<div id="banner{$smarty.foreach.main.iteration}" class="menubanner"{if $item->active} style="display: block;"{/if}></div>
+			{foreach from=$root->children item=item name=banner}
+				<div id="banner{$smarty.foreach.banner.iteration}" class="menubanner"{if $item->active} style="display: block;"{/if}></div>
 			{/foreach}
 		</div>
 		<ul id="mainmenu">
-			{foreach name=main from=$root->children item=item}
+			{foreach from=$root->children item=item name=main}
 				<li>
 					<a href="{$item->link}" id="top{$smarty.foreach.main.iteration}" onmouseover="StartShowMenu('{$smarty.foreach.main.iteration}');" onmouseout="ResetShowMenu();"{if $item->active} class="active"{/if} title="{$item->tekst}">{$item->tekst}</a>
 				</li>
@@ -96,7 +96,6 @@
 		{/if}
 	</div>
 </div>
-
 <div id="submenu" onmouseover="ResetTimer();" onmouseout="StartTimer();">
 	<div id="submenuitems">
 		{foreach name=level1 from=$root->children item=item}
