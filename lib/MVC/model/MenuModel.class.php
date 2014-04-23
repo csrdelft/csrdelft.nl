@@ -46,16 +46,22 @@ class MenuModel extends PersistenceModel {
 		return $root[0];
 	}
 
-	public function getChildren(MenuItem $item, $admin = false) {
+	public function getChildren(MenuItem $parent, $admin = false) {
 		$where = 'parent_id = ?' . ($admin ? '' : ' AND zichtbaar = true');
-		$item->children = $this->find($where, array($item->item_id), 'prioriteit ASC');
-		foreach ($item->children as $i => $child) {
-			if (!$admin AND !LoginLid::mag($child->rechten_bekijken)) {
-				unset($item->children[$i]);
+		$parent->children = $this->find($where, array($parent->item_id), 'prioriteit ASC');
+		$child_active = false;
+		foreach ($parent->children as $i => $child) {
+			if (startsWith(Instellingen::get('stek', 'request'), $child->link)) {
+				$child->active = true;
+				$child_active = true;
+			}
+			if (!$admin AND ! LoginLid::mag($child->rechten_bekijken)) {
+				unset($parent->children[$i]);
 			} else {
 				$this->getChildren($child, $admin);
 			}
 		}
+		$parent->active = $child_active;
 	}
 
 	public function getMenuItem($id) {

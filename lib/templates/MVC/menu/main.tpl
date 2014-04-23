@@ -10,7 +10,7 @@
 		<ul id="mainmenu">
 			{foreach name=main from=$root->children item=item}
 				<li>
-					<a href="{$item->link}" id="top{$smarty.foreach.main.iteration}" onmouseover="StartShowMenu('{$smarty.foreach.main.iteration}');" onmouseout="ResetShowMenu();"{if startsWith($path, $item->link)} class="active"{/if} title="{$item->tekst}">{$item->tekst}</a>
+					<a href="{$item->link}" id="top{$smarty.foreach.main.iteration}" onmouseover="StartShowMenu('{$smarty.foreach.main.iteration}');" onmouseout="ResetShowMenu();"{if $item->active} class="active"{/if} title="{$item->tekst}">{$item->tekst}</a>
 				</li>
 			{/foreach}
 		</ul>
@@ -44,7 +44,7 @@
 							{if LoginLid::mag('P_ADMIN')}
 								<span class="queues">
 									<a href="/forum/wacht">Forum: <span class="count">{$forumcount}</span><br /></a>
-									{foreach from=$queues item=queue key=name}
+										{foreach from=$queues item=queue key=name}
 										<a href="/tools/query.php?id={$queue->getID()}">
 											{$name|ucfirst}: <span class="count">{$queue->count()}</span><br />
 										</a>
@@ -96,7 +96,7 @@
 		{foreach name=level1 from=$root->children item=item}
 			<div id="sub{$smarty.foreach.level1.iteration}" {if startsWith($path, $item->link)} class="active"{/if}>
 				{foreach name=level2 from=$item->children item=subitem}
-					<a href="{$subitem->link}" title="{$subitem->tekst}"{if startsWith($path, $subitem->link)} class="active"{/if}>{$subitem->tekst}</a>
+					<a href="{$subitem->link}" title="{$subitem->tekst}"{if $subitem->active} class="active"{/if}>{$subitem->tekst}</a>
 					{if !$smarty.foreach.level2.last}
 						<span class="separator">&nbsp;&nbsp;</span>
 					{/if}

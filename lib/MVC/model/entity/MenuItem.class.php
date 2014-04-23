@@ -47,6 +47,16 @@ class MenuItem extends PersistentEntity {
 	 */
 	public $zichtbaar;
 	/**
+	 * De sub-items van dit menu-item
+	 * @var array
+	 */
+	public $children = array();
+	/**
+	 * Huidig actief menu-item
+	 * @var boolean
+	 */
+	public $active;
+	/**
 	 * Database table fields
 	 * @var array
 	 */
@@ -69,11 +79,6 @@ class MenuItem extends PersistentEntity {
 	 * @var string
 	 */
 	protected static $table_name = 'menus';
-	/**
-	 * De sub-items van dit menu-item
-	 * @var array
-	 */
-	public $children = array();
 
 	/**
 	 * Bepaald of het gevraagde menu-item een
