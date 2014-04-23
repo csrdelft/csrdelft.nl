@@ -181,7 +181,7 @@ class ForumController extends Controller {
 		}
 		ForumDradenGelezenModel::instance()->setWanneerGelezenDoorLid($draad); // update database
 		if ($pagina === null) {
-			$pagina = LidInstellingen::get('forum', 'openDraadPagina');
+			$pagina = LidInstellingen::get('forum', 'open_draad_op_pagina');
 		}
 		if ($pagina === 'ongelezen' AND $gelezen) {
 			ForumPostsModel::instance()->setPaginaVoorLaatstGelezen($gelezen);

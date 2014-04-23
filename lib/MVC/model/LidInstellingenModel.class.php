@@ -26,12 +26,15 @@ class LidInstellingen extends PersistenceModel {
 	}
 
 	/**
-	 * 'module' => array( 'key' => array('beschrijving', 'type', type-opties, 'default value') )
+	 * 'module' => array( 'key' => array('beschrijving', 'type', type-opties, 'default value', technical-values) )
 	 * 
 	 * type-opties:
 	 * enum: array
 	 * int: array( min, max )
 	 * string: array( min-lenght, max-lenght )
+	 * 
+	 * technical-values:
+	 * array(type-optie-1 => technical-value-1, ...)
 	 * 
 	 * @var array
 	 */
@@ -55,7 +58,8 @@ class LidInstellingen extends PersistenceModel {
 			'zoekresultaten' => array('Zoekresultaten per pagina', 'int', array(10, 50), 20),
 			'naamWeergave' => array('Naamweergave', 'enum', array('civitas', 'volledig', 'bijnaam', 'aaidrom'), 'civitas'),
 			'datumWeergave' => array('Datumweergave', 'enum', array('relatief', 'vast'), 'relatief'),
-			'openDraadPagina' => array('Open onderwerp op pagina', 'enum', array('1', 'ongelezen', 'laatste'), 'ongelezen'),
+			'ongelezenWeergave' => array('Ongelezenweergave', 'enum', array('schuingedrukt', 'dikgedrukt', 'onderstreept', 'normaal'), 'schuingedrukt', array('schuingedrukt' => 'font-style: italic;', 'dikgedrukt' => 'font-weight: bold;', 'onderstreept' => 'text-decoration: underline;', 'normaal' => '')),
+			'open_draad_op_pagina' => array('Open onderwerp op pagina', 'enum', array('1', 'ongelezen', 'laatste'), 'ongelezen'),
 			'toonpasfotos' => array('Pasfoto\'s standaard weergeven', 'enum', array('ja', 'nee'), 'ja'),
 			'filter2008' => array('Berichten van 2008 eerst verbergen', 'enum', array('ja', 'nee'), 'nee')
 		),
@@ -150,6 +154,14 @@ class LidInstellingen extends PersistenceModel {
 				break;
 		}
 		return false;
+	}
+
+	public function getTechnicalValue($module, $key) {
+		$value = $this->getValue($module, $key);
+		if (array_key_exists(4, $this->instellingen[$module][$key]) AND array_key_exists($value, $this->instellingen[$module][$key][4])) {
+			return $this->instellingen[$module][$key][4][$value];
+		}
+		return $value;
 	}
 
 	public function getValue($module, $key) {

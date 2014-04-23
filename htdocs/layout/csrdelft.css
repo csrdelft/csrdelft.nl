@@ -959,9 +959,6 @@ span.togglePasfoto:hover, a.postlink:hover{
 	vertical-align: top; text-align: left;
 	width: 180px;
 }
-#forumtabel td.titel a.updatedTopic {
-	font-style: italic;
-}
 /* nieuw onderwerp formulier */
 #forumtabel td.auteur a#nieuwonderwerp {
     margin-bottom: 30px;
