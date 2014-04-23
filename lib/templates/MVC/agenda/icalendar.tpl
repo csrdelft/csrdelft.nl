@@ -32,8 +32,8 @@ UID:{$item->getUID()}
 {/if}
 SUMMARY:{str_replace(';','\;',str_replace(',','\,',$item->getTitel()))|html_substr:"60":"…"}
 {if $item->link}URL:{if startsWith($item->link, '/')}http://csrdelft.nl{/if}{$item->link}
-{/if}
-{if $item->getBeschrijving()}DESCRIPTION:{str_replace("\r",'',str_replace("\n",'\n',str_replace(';','\;',str_replace(',','\,',$item->getBeschrijving()))))|html_substr:"60":"…"}
+{/if}{if $item->getBeschrijving()}
+DESCRIPTION:{str_replace("\r",'',str_replace("\n",'\n',str_replace(';','\;',str_replace(',','\,',$item->getBeschrijving()))))|html_substr:"60":"…"}
 {/if}
 END:VEVENT
 {/if}{/foreach}
