@@ -32,7 +32,7 @@
 /**
  * @ignore
  */
-require(dirname(__FILE__) . '/Smarty.class.php');
+require_once(dirname(__FILE__) . '/Smarty.class.php');
 
 /**
  * Smarty Backward Compatability Wrapper Class
@@ -60,12 +60,12 @@ class SmartyBC extends Smarty
     }
 
     /**
-     * wrapper for assignByRef
+     * wrapper for assign_by_ref
      *
      * @param string $tpl_var the template variable name
      * @param mixed  &$value  the referenced value to assign
      */
-    public function assignByRef($tpl_var, &$value)
+    public function assign_by_ref($tpl_var, &$value)
     {
         $this->assignByRef($tpl_var, $value);
     }

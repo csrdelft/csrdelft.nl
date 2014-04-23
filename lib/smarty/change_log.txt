@@ -1,4 +1,64 @@
  ===== trunk =====
+ ===== 3.1.18 =====
+ 06.04.2014 
+ - bugfix template inheritance fail when using custom resource after patch of 8.3.2014 (Issue 187)
+ - bugfix update of composer file (Issue 168 and 184)
+
+ 05.04.2014
+ - bugfix default date format leads to extra spaces when displaying dates with single digit days (Issue 182)
+ 
+ 26.03.2014
+ - bugfix Smart_Resource_Custom should not lowercase the resource name (Issue 183)
+ 
+ 24.03.2014
+ - bugfix using a {foreach} property like @iteration could fail when used in inheritance parent templates (Issue 182)
+ 
+ 20.03.2014
+ - bugfix $smarty->auto_literal and mbsting.func_overload 2, 6 or 7 did fail (forum topic 24899)
+ 
+ 18.03.2014
+ - revert change of 17.03.2014
+ 
+17.03.2014
+ - bugfix $smarty->auto_literal and mbsting.func_overload 2, 6 or 7 did fail (forum topic 24899)
+ 
+ 15.03.2014
+ - bugfix Smarty_CacheResource_Keyvaluestore did use different keys on read/writes and clearCache() calls (Issue 169)
+
+ 13.03.2014
+ - bugfix clearXxx() change of 27.1.2014 did not work when specifing cache_id or compile_id  (forum topic 24868 and 24867)
+ 
+ ===== 3.1.17 =====
+ 08.03.2014
+ - bugfix relative file path {include} within {block} of child templates did throw exception on first call (Issue 177)
+ 
+ 17.02.2014
+ - bugfix Smarty failed when executing PHP on HHVM (Hip Hop 2.4) because uniqid('',true) does return string with ',' (forum topic 20343)
+ 
+ 16.02.2014
+ - bugfix a '//' or '\\' in template_dir path could produce wrong path on relative filepath in {include} (Issue 175)
+ 
+ 05.02.2014
+ - bugfix shared.literal_compiler_param.php did throw an exception when literal did contain a '-' (smarty-developers group)
+ 
+ 27.01.2014
+ - bugfix $smarty->debugging = true; did show the variable of the $smarty object not the variables used in display() call (forum topic 24764)
+ - bugfix clearCompiledTemplate(), clearAll() and clear() should use realpath to avoid possible exception from RecursiveDirectoryIterator (Issue 171)
+ 
+ 26.01.2014
+ - bugfix  undo block nesting checks for {nocache} for reasons like forum topic 23280 (forum topic 24762)
+ 
+ 18.01.2014
+ - bugfix the compiler did fail when using template inheritance and recursive {include} (smarty-developers group)
+ 
+ 11.01.2014
+ - bugfix "* }" (spaces before right delimiter) was interpreted by mistake as comment end tag (Issue 170)
+ - internals  content cache should be clear when updating cache file
+ 
+ 08.01.2014
+ - bugfix Smarty_CacheResource_Custom did not handle template resource type specifications on clearCache() calls (Issue 169)
+ - bugfix SmartyBC.class.php should use require_once to load Smarty.class.php (forum topic 24683)
+ 
  ===== 3.1.16 =====
  15.12.2013
  - bugfix {include} with {block} tag handling (forum topic 24599, 24594, 24682) (Issue 161)
@@ -1772,7 +1832,7 @@ request_use_auto_globals
 10/11/2009
 - fixed bug when template with same name is used with different data objects
 - fixed bug with double quoted name attribute at {insert} tag
-- reenabled assignByRef and append_by_ref methods
+- reenabled assign_by_ref and append_by_ref methods
 
 10/07/2009
 - removed block nesting checks for {capture}
@@ -1792,7 +1852,7 @@ request_use_auto_globals
 09/30/2009
 - fixed handling template_exits method for all resource types
 - bugfix for other cache resources than file
-- the methods assignByRef is now wrapped to assign, append_by_ref to append
+- the methods assign_by_ref is now wrapped to assign, append_by_ref to append
 - allow arrays of variables pass in display, fetch and createTemplate calls
   $data = array('foo'=>'bar','foo2'=>'blar');
   $smarty->display('my.tpl',$data);
@@ -2248,7 +2308,7 @@ NOTICE: existing compiled template and cache files must be deleted
 
 01/08/2009
 - moved clear_assign and clear_all_assign to internal.templatebase.php
-- added assignByRef, append and append_by_ref methods
+- added assign_by_ref, append and append_by_ref methods
 
 01/02/2009
 - added load_filter method
