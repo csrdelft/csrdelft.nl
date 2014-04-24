@@ -799,8 +799,6 @@ HTML;
 		return $this->ubb_map($arguments);
 	}
 
-	private $mapJsLoaded = false;
-
 	/**
 	 * Google-maps ubb-tag.
 	 * 
@@ -831,13 +829,13 @@ HTML;
 
 		$jscall = "writeStaticGmap('$mapid', '$address',$width,$height);";
 		if (isset($parameters['dynamic']) && $parameters['dynamic'] == 'true') {
-			$jscall = "loadGmaps('$mapid','$address');";
+			$jscall = "$(document).ready(function() {loadGmaps('$mapid','$address');});";
 		}
 
 		$html = '';
-		if (!$this->mapJsLoaded) {
+		if (!array_key_exists('mapJsLoaded', $GLOBALS)) {
 			$html.='<script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=ABQIAAAATQu5ACWkfGjbh95oIqCLYxRY812Ew6qILNIUSbDumxwZYKk2hBShiPLD96Ep_T-MwdtX--5T5PYf1A" type="text/javascript"></script><script type="text/javascript" src="/layout/js/gmaps.js"></script>';
-			$this->mapJsLoaded = true;
+			$GLOBALS['mapJsLoaded'] = true;
 		}
 		$html.='<div class="ubb_gmap" id="' . $mapid . '" ' . $style . '></div><script type="text/javascript">' . $jscall . '</script>';
 
