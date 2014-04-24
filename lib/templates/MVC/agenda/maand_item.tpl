@@ -21,7 +21,7 @@
 		{if $item->getLocatie()}
 			{icon get=map title=Kaart}
 			<div class="hoverIntentContent">
-				{"[kaart dynamic=true w=400 h=300]"|cat:$item->getLocatie()|cat:"[/kaart]"|ubb}
+				{"[kaart]"|cat:$item->getLocatie()|cat:"[/kaart]"|ubb}
 			</div>
 		{/if}
 	</div>
