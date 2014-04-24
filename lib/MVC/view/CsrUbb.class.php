@@ -812,8 +812,6 @@ HTML;
 			return '[kaart] Geen adres opgegeven';
 		}
 		$address = htmlspecialchars($address);
-		$mapid = 'map' . md5($address);
-
 		$width = 300;
 		$height = 200;
 		$style = '';
@@ -826,16 +824,17 @@ HTML;
 		if (isset($parameters['w']) || isset($parameters['h'])) {
 			$style = 'style="width:' . $width . 'px;height:' . $height . 'px;"';
 		}
-
-		$jscall = "writeStaticGmap('$mapid', '$address',$width,$height);";
-		if (isset($parameters['dynamic']) && $parameters['dynamic'] == 'true') {
-			$jscall = "$(document).ready(function() {loadGmaps('$mapid','$address');});";
-		}
-
 		$html = '';
 		if (!array_key_exists('mapJsLoaded', $GLOBALS)) {
 			$html.='<script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=ABQIAAAATQu5ACWkfGjbh95oIqCLYxRY812Ew6qILNIUSbDumxwZYKk2hBShiPLD96Ep_T-MwdtX--5T5PYf1A" type="text/javascript"></script><script type="text/javascript" src="/layout/js/gmaps.js"></script>';
-			$GLOBALS['mapJsLoaded'] = true;
+			$GLOBALS['mapJsLoaded'] = 1;
+		} else {
+			$GLOBALS['mapJsLoaded'] ++;
+		}
+		$mapid = 'map' . $GLOBALS['mapJsLoaded'];
+		$jscall = "writeStaticGmap('$mapid', '$address',$width,$height);";
+		if (isset($parameters['dynamic']) && $parameters['dynamic'] == 'true') {
+			$jscall = "$(document).ready(function() {loadGmaps('$mapid','$address');});";
 		}
 		$html.='<div class="ubb_gmap" id="' . $mapid . '" ' . $style . '></div><script type="text/javascript">' . $jscall . '</script>';
 
