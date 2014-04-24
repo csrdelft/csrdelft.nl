@@ -31,6 +31,8 @@ interface Agendeerbaar {
 
 	public function getBeschrijving();
 
+	public function getLocatie();
+
 	public function getLink();
 
 	public function isHeledag();

@@ -334,6 +334,10 @@ class CorveeTaak implements Agendeerbaar {
 		return 'Nog niet ingedeeld';
 	}
 
+	public function getLocatie() {
+		return 'C.S.R. Delft';
+	}
+
 	public function getLink() {
 		return '/corveerooster';
 	}

@@ -43,6 +43,11 @@ class AgendaItem extends PersistentEntity implements Agendeerbaar {
 	 */
 	public $rechten_bekijken;
 	/**
+	 * Locatie
+	 * @var string
+	 */
+	public $locatie;
+	/**
 	 * Link
 	 * @var string
 	 */
@@ -58,6 +63,7 @@ class AgendaItem extends PersistentEntity implements Agendeerbaar {
 		'begin_moment' => 'datetime NOT NULL',
 		'eind_moment' => 'datetime NOT NULL',
 		'rechten_bekijken' => 'varchar(255) NOT NULL',
+		'locatie' => 'varchar(255) DEFAULT NULL',
 		'link' => 'varchar(255) DEFAULT NULL'
 	);
 	/**
@@ -93,6 +99,10 @@ class AgendaItem extends PersistentEntity implements Agendeerbaar {
 
 	public function getBeschrijving() {
 		return $this->beschrijving;
+	}
+
+	public function getLocatie() {
+		return $this->locatie;
 	}
 
 	public function getLink() {

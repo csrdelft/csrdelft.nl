@@ -16,7 +16,7 @@
 						{$item->getBeginMoment()|date_format:"%d-%m"}
 					{/if}
 					&nbsp;
-					{if $item->getLink() != ''}
+					{if $item->getLink()}
 						<a href="{$item->getLink()}" title="{$item->getBeschrijving()}">
 							{$item->getTitel()|truncate:25:"…":true}
 						</a>

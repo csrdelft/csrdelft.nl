@@ -19,9 +19,11 @@
 		<th>Zaterdag</th>
 	</tr>
 	{foreach from=$weken key=weeknr item=dagen}
-		<tr id="{if strftime('%U', $dag.datum) == strftime('%U')-1}dezeweek{/if}">
-			<th>{$weeknr}</th>
-				{foreach from=$dagen key=dagnr item=dag}
+		{foreach from=$dagen key=dagnr item=dag name=dagen}
+			{if $smarty.foreach.dagen.first}
+			<tr {if strftime('%U', $dag.datum) == strftime('%U')}id="dezeweek"{/if}>
+				<th>{$weeknr}</th>
+			{/if}
 				<td id="dag-{$dag.datum|date_format:"%Y-%m-%d"}" class="dag {if strftime('%m', $dag.datum) != strftime('%m', $datum)}anderemaand{/if}{if date('d-m', $dag.datum)==date('d-m')} vandaag{/if}">
 					<div class="meta">
 						{if	$magToevoegen}

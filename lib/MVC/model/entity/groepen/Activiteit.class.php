@@ -11,10 +11,30 @@ require_once 'MVC/model/entity/groepen/Ketzer.class.php';
 class Activiteit extends Ketzer implements Agendeerbaar {
 
 	/**
+	 * Locatie
+	 * @var string
+	 */
+	public $locatie;
+	/**
+	 * Database table fields
+	 * @var array
+	 */
+	protected static $persistent_fields = array(
+		'locatie' => 'varchar(255) DEFAULT NULL'
+	);
+	/**
 	 * Database table name
 	 * @var string
 	 */
 	protected static $table_name = 'activiteiten';
+
+	/**
+	 * Extend the persistent fields.
+	 */
+	public static function __constructStatic() {
+		parent::__constructStatic();
+		self::$persistent_fields = parent::$persistent_fields + self::$persistent_fields;
+	}
 
 	// Agendeerbaar:
 
@@ -49,6 +69,10 @@ class Activiteit extends Ketzer implements Agendeerbaar {
 
 	public function getBeschrijving() {
 		return $this->samenvatting;
+	}
+
+	public function getLocatie() {
+		return $this->locatie;
 	}
 
 	public function getLink() {

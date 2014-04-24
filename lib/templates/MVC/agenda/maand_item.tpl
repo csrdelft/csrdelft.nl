@@ -12,9 +12,17 @@
 			{$item->getBeginMoment()|date_format:"%R"}-{$item->getEindMoment()|date_format:"%R"}
 		</div>
 	{/if}
-	{if $item->getLink() != ''}
-		<a href="{$item->getLink()}" title="{$item->getBeschrijving()}">{$item->getTitel()}</a>
-	{else}
-		<span title="{$item->getBeschrijving()}">{$item->getTitel()}</span>
-	{/if}
+	<div class="hoverIntent">
+		{if $item->getLink()}
+			<a href="{$item->getLink()}" title="{$item->getBeschrijving()}">{$item->getTitel()}</a>
+		{else}
+			<span title="{$item->getBeschrijving()}">{$item->getTitel()}</span>
+		{/if}
+		{if $item->getLocatie()}
+			{icon get=map title=Kaart}
+			<div class="hoverIntentContent">
+				{"[kaart dynamic=true w=400 h=300]"|cat:$item->getLocatie()|cat:"[/kaart]"|ubb}
+			</div>
+		{/if}
+	</div>
 </li>

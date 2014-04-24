@@ -249,6 +249,10 @@ class Maaltijd implements Agendeerbaar {
 		return 'Maaltijd met ' . $this->getAantalAanmeldingen() . ' eters';
 	}
 
+	public function getLocatie() {
+		return 'C.S.R. Delft';
+	}
+
 	public function getLink() {
 		return '/maaltijden';
 	}

@@ -118,8 +118,11 @@ function setTijd(a, b, c, d) {
 
 		$fields[] = new SelectField('rechten_bekijken', $item->rechten_bekijken, 'Zichtbaar voor', array('P_LEDEN_READ' => 'Intern', 'P_NOBODY' => 'Extern'));
 
-		$fields['l'] = new TextField('link', $item->link, 'Link');
-		$fields['l']->title = 'URL als er op de titel geklikt wordt';
+		$fields['l'] = new TextField('locatie', $item->locatie, 'Locatie');
+		$fields['l']->title = 'Een kaart kan worden weergegeven in de agenda';
+
+		$fields['u'] = new TextField('link', $item->link, 'Link');
+		$fields['u']->title = 'URL als er op de titel geklikt wordt';
 
 		$fields['b'] = new AutoresizeTextareaField('beschrijving', $item->beschrijving, 'Beschrijving');
 		$fields['b']->title = 'Extra info als de cursor boven de titel gehouden wordt';

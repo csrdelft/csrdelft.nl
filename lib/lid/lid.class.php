@@ -336,6 +336,10 @@ class Lid implements Serializable, Agendeerbaar {
 		return $this->getTitel() . ' wordt n';
 	}
 
+	public function getLocatie() {
+		return $this->getAdres();
+	}
+
 	public function getLink() {
 		return $this->getNaamLink('civitas', 'link');
 	}
@@ -1073,7 +1077,7 @@ class Zoeker {
 		  } */
 
 		//Zoeken standaard in voornaam, achternaam, bijnaam en uid.
-		if ($zoekveld == 'naam' AND !preg_match('/^\d{2}$/', $zoekterm)) {
+		if ($zoekveld == 'naam' AND ! preg_match('/^\d{2}$/', $zoekterm)) {
 			if (preg_match('/ /', trim($zoekterm))) {
 				$zoekdelen = explode(' ', $zoekterm);
 				$iZoekdelen = count($zoekdelen);
@@ -1093,7 +1097,7 @@ class Zoeker {
 			$zoekfilter = "adres LIKE '%{$zoekterm}%' OR woonplaats LIKE '%{$zoekterm}%' OR
 				postcode LIKE '%{$zoekterm}%' OR REPLACE(postcode, ' ', '') LIKE '%" . str_replace(' ', '', $zoekterm) . "%'";
 		} else {
-			if (preg_match('/^\d{2}$/', $zoekterm) AND ($zoekveld == 'uid' OR $zoekveld == 'naam')) {
+			if (preg_match('/^\d{2}$/', $zoekterm) AND ( $zoekveld == 'uid' OR $zoekveld == 'naam')) {
 				//zoeken op lichtingen...
 				$zoekfilter = "SUBSTRING(uid, 1, 2)='" . $zoekterm . "'";
 			} else {
@@ -1131,8 +1135,7 @@ class Zoeker {
 			# 1. ingelogde persoon dat alleen maar mag of
 			# 2. ingelogde persoon leden en oudleden mag zoeken, maar niet oudleden alleen heeft gekozen
 			if (
-					(LoginLid::mag('P_LEDEN_READ') and !LoginLid::mag('P_OUDLEDEN_READ') ) or
-					(LoginLid::mag('P_LEDEN_READ') and LoginLid::mag('P_OUDLEDEN_READ') and $zoekstatus != 'oudleden')
+					(LoginLid::mag('P_LEDEN_READ') and ! LoginLid::mag('P_OUDLEDEN_READ') ) or ( LoginLid::mag('P_LEDEN_READ') and LoginLid::mag('P_OUDLEDEN_READ') and $zoekstatus != 'oudleden')
 			) {
 				$statusfilter .= "status='S_LID' OR status='S_GASTLID' OR status='S_NOVIET' OR status='S_KRINGEL'";
 			}
@@ -1140,8 +1143,7 @@ class Zoeker {
 			# 1. ingelogde persoon dat alleen maar mag of
 			# 2. ingelogde persoon leden en oudleden mag zoeken, maar niet leden alleen heeft gekozen
 			if (
-					(!LoginLid::mag('P_LEDEN_READ') and LoginLid::mag('P_OUDLEDEN_READ') ) or
-					(LoginLid::mag('P_LEDEN_READ') and LoginLid::mag('P_OUDLEDEN_READ') and $zoekstatus != 'leden')
+					(!LoginLid::mag('P_LEDEN_READ') and LoginLid::mag('P_OUDLEDEN_READ') ) or ( LoginLid::mag('P_LEDEN_READ') and LoginLid::mag('P_OUDLEDEN_READ') and $zoekstatus != 'leden')
 			) {
 				if ($statusfilter != '')
 					$statusfilter .= " OR ";
