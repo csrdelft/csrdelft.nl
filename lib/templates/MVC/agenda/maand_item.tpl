@@ -19,7 +19,7 @@
 			<span title="{$item->getBeschrijving()}">{$item->getTitel()}</span>
 		{/if}
 		{if $item->getLocatie()}
-			{icon get=map title=Kaart}
+			<a href="http://maps.google.nl/maps?q={$item->getLocatie()|htmlspecialchars}">{icon get=map title=Kaart}</a>
 			<div class="hoverIntentContent">
 				{"[kaart]"|cat:$item->getLocatie()|cat:"[/kaart]"|ubb}
 			</div>
