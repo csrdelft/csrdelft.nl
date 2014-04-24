@@ -793,6 +793,15 @@ HTML;
 	}
 
 	/**
+	 * Locatie = map in hoverIntentContent
+	 */
+	function ubb_locatie($arguments = array()) {
+		$address = $this->parseArray(array('[/locatie]'), array());
+		$map = $this->maps(htmlspecialchars($address), $arguments);
+		return '<span class="hoverIntent">' . $address . '<div class="hoverIntentContent">' . $map . '</div> <img src="http://plaetjes.csrdelft.nl/famfamfam/map.png" alt="map" title="Kaart" /></span>';
+	}
+
+	/**
 	 * Kaart = map
 	 */
 	function ubb_kaart($arguments = array()) {
@@ -806,38 +815,38 @@ HTML;
 	 * 
 	 * [map dynamic=false w=100 h=100]Oude Delft 9[/map]
 	 */
-	public function ubb_map($parameters) {
+	public function ubb_map($parameters = array()) {
 		$address = $this->parseArray(array('[/map]', '[/kaart]'), array());
+		return $this->maps(htmlspecialchars($address), $parameters);
+	}
+
+	private function maps($address, array $parameters) {
 		if (trim($address) == '') {
-			return '[kaart] Geen adres opgegeven';
+			return 'Geen adres opgegeven';
 		}
-		$address = htmlspecialchars($address);
-		$width = 300;
-		$height = 200;
-		$style = '';
-		if (isset($parameters['w']) && $parameters['w'] < 800) {
+		if (isset($parameters['w']) AND $parameters['w'] < 800) {
 			$width = (int) $parameters['w'];
+		} else {
+			$width = 400;
 		}
-		if (isset($parameters['h']) && $parameters['h'] < 600) {
+		if (isset($parameters['h']) AND $parameters['h'] < 600) {
 			$height = (int) $parameters['h'];
-		}
-		if (isset($parameters['w']) || isset($parameters['h'])) {
-			$style = 'style="width:' . $width . 'px;height:' . $height . 'px;"';
+		} else {
+			$height = 300;
 		}
 		$html = '';
 		if (!array_key_exists('mapJsLoaded', $GLOBALS)) {
-			$html.='<script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=ABQIAAAATQu5ACWkfGjbh95oIqCLYxRY812Ew6qILNIUSbDumxwZYKk2hBShiPLD96Ep_T-MwdtX--5T5PYf1A" type="text/javascript"></script><script type="text/javascript" src="/layout/js/gmaps.js"></script>';
+			$html .= '<script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=ABQIAAAATQu5ACWkfGjbh95oIqCLYxRY812Ew6qILNIUSbDumxwZYKk2hBShiPLD96Ep_T-MwdtX--5T5PYf1A" type="text/javascript"></script><script type="text/javascript" src="/layout/js/gmaps.js"></script>';
 			$GLOBALS['mapJsLoaded'] = 1;
 		} else {
-			$GLOBALS['mapJsLoaded'] ++;
+			$GLOBALS['mapJsLoaded'] += 1;
 		}
 		$mapid = 'map' . $GLOBALS['mapJsLoaded'];
 		$jscall = "writeStaticGmap('$mapid', '$address',$width,$height);";
-		if (isset($parameters['dynamic']) && $parameters['dynamic'] == 'true') {
+		if (!isset($parameters['static'])) {
 			$jscall = "$(document).ready(function() {loadGmaps('$mapid','$address');});";
 		}
-		$html.='<div class="ubb_gmap" id="' . $mapid . '" ' . $style . '></div><script type="text/javascript">' . $jscall . '</script>';
-
+		$html .= '<div class="ubb_gmap" id="' . $mapid . '" style="width:' . $width . 'px;height:' . $height . 'px;"></div><script type="text/javascript">' . $jscall . '</script>';
 		return $html;
 	}
 
