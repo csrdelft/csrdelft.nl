@@ -43,6 +43,13 @@ abstract class PersistentEntity {
 		return null;
 	}
 
+	public static function getMaxLength($field_name) {
+		if (array_key_exists(1, static::$persistent_fields[$field_name])) {
+			return static::$persistent_fields[$field_name][1];
+		}
+		return null;
+	}
+
 	/**
 	 * Get the fields and their values of this object.
 	 * 

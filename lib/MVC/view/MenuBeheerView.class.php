@@ -59,12 +59,12 @@ class MenuItemFormView extends PopupForm {
 		$fields['prio'] = new IntField('prioriteit', $item->prioriteit, 'Volgorde');
 		$fields['prio']->title = 'Sortering van items';
 
-		$fields[] = new TextField('tekst', $item->tekst, 'Korte aanduiding', 50);
+		$fields[] = new TextField('tekst', $item->tekst, 'Korte aanduiding', MenuItem::getMaxLength('tekst'));
 
-		$fields['url'] = new TextField('link', $item->link, 'Link', 255);
+		$fields['url'] = new TextField('link', $item->link, 'Link');
 		$fields['url']->title = 'URL als er op het menu item geklikt wordt';
 
-		$fields['r'] = new TextField('rechten_bekijken', $item->rechten_bekijken, 'Rechten', 255);
+		$fields['r'] = new TextField('rechten_bekijken', $item->rechten_bekijken, 'Rechten');
 		$fields['r']->title = 'Wie mag dit menu item zien';
 
 		$fields['z'] = new SelectField('zichtbaar', ($item->zichtbaar ? '1' : '0'), 'Tonen', array('1' => 'Zichtbaar', '0' => 'Verborgen'));
