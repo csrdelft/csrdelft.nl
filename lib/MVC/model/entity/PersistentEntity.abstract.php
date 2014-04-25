@@ -21,9 +21,7 @@ abstract class PersistentEntity {
 	 * Static constructor is called (by inheritance) first and only from PersistenceModel.
 	 */
 	public static function __constructStatic() {
-		if (defined('DEBUG')) {
-			self::checkTable();
-		}
+		
 	}
 
 	public static function getTableName() {
@@ -124,16 +122,6 @@ abstract class PersistentEntity {
 	}
 
 	/**
-	 * Create database table.
-	 * 
-	 * @return string SQL query
-	 */
-	public static function createTable() {
-		$string = DatabaseAdmin::instance()->sqlCreateTable(self::getTableName(), static::$persistent_fields, self::getPrimaryKey());
-		debugprint($string);
-	}
-
-	/**
 	 * Check for differences in persistent fields.
 	 * 
 	 * @param boolean modify
@@ -145,14 +133,16 @@ abstract class PersistentEntity {
 		} catch (Exception $e) {
 			if (endsWith($e->getMessage(), self::getTableName() . "' doesn't exist")) {
 				if ($modify) {
-					self::createTable();
+					$string = DatabaseAdmin::instance()->sqlCreateTable(self::getTableName(), static::$persistent_fields, self::getPrimaryKey());
+					debugprint($string);
+					return;
 				} else {
 					debugprint(self::getTableName() . ' TABLE DOES NOT EXIST');
+					exit;
 				}
 			} else {
-				debugprint($e->getMessage());
+				throw $e; // rethrow to controller
 			}
-			exit;
 		}
 		$fields = array();
 		$previous_field = null;
