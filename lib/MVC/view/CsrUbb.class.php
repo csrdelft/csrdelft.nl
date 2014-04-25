@@ -798,7 +798,7 @@ HTML;
 	function ubb_locatie($arguments = array()) {
 		$address = $this->parseArray(array('[/locatie]'), array());
 		$map = $this->maps(htmlspecialchars($address), $arguments);
-		return '<span class="hoverIntent">' . $address . '<div class="hoverIntentContent">' . $map . '</div> <a href="http://maps.google.nl/maps?q=' . htmlspecialchars($address) . '"><img src="http://plaetjes.csrdelft.nl/famfamfam/map.png" alt="map" title="Kaart" /></a></span>';
+		return '<span class="hoverIntent"><a href="http://maps.google.nl/maps?q=' . htmlspecialchars($address) . '">' . $address . ' <img src="http://plaetjes.csrdelft.nl/famfamfam/map.png" alt="map" title="Kaart" /></a><div class="hoverIntentContent">' . $map . '</div></span>';
 	}
 
 	/**
