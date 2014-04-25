@@ -46,8 +46,7 @@ class GroepLid extends PersistentEntity {
 	public $lid_tot;
 	/**
 	 * o.t. / h.t. / f.t.
-	 * @see GroepStatus
-	 * @var string
+	 * @var GroepStatus
 	 */
 	public $status;
 	/**
@@ -71,7 +70,7 @@ class GroepLid extends PersistentEntity {
 		'opmerking' => array('varchar', 255),
 		'lid_sinds' => array('datetime'),
 		'lid_tot' => array('datetime', null, true),
-		'status' => array('varchar', 4),
+		'status' => array('enum', 'GroepStatus'),
 		'prioriteit' => array('int', 11),
 		'door_lid_id' => array('varchar', 4)
 	);

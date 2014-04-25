@@ -1,5 +1,7 @@
 <?php
 
+require_once 'MVC/model/entity/groepen/KetzerSelectSoort.enum.php';
+
 /**
  * KetzerSelect.class.php
  * 
@@ -11,15 +13,15 @@
 class KetzerSelect extends PersistentEntity {
 
 	/**
-	 * Primary key
-	 * @var int
-	 */
-	public $select_id;
-	/**
 	 * Dit is een selector van deze ketzer
 	 * @var int
 	 */
 	public $ketzer_id;
+	/**
+	 * Primary key
+	 * @var int
+	 */
+	public $select_id;
 	/**
 	 * Checkbox (AND) / Radio (XOR)
 	 * @see KetzerSelectSoort
@@ -27,19 +29,13 @@ class KetzerSelect extends PersistentEntity {
 	 */
 	public $keuze_soort;
 	/**
-	 * Mogelijke waarden als keuze
-	 * @var array
-	 */
-	public $keuzemogelijkheden;
-	/**
 	 * Database table fields
 	 * @var array
 	 */
 	protected static $persistent_fields = array(
-		'select_id' => array('int', 11, false, null, 'auto_increment'),
 		'ketzer_id' => array('int', 11),
-		'keuze_soort' => array('varchar', 3),
-		'keuzemogelijkheden' => array('text')
+		'select_id' => array('int', 11),
+		'keuze_soort' => array('enum', 'KetzerSelectSoort')
 	);
 	/**
 	 * Database table name
@@ -50,7 +46,7 @@ class KetzerSelect extends PersistentEntity {
 	 * Database primary key
 	 * @var array
 	 */
-	protected static $primary_key = array('select_id');
+	protected static $primary_key = array('ketzer_id', 'select_id');
 
 	/**
 	 * Lazy loading by foreign key.

@@ -3187,6 +3187,7 @@ lib/MVC/model/entity/Mail.class.php -text
 lib/MVC/model/entity/Mededeling.class.php -text
 lib/MVC/model/entity/MenuItem.class.php -text
 lib/MVC/model/entity/PersistentEntity.abstract.php -text
+lib/MVC/model/entity/PersistentEnum.interface.php -text
 lib/MVC/model/entity/PersistentField.class.php -text
 lib/MVC/model/entity/groepen/Activiteit.class.php -text
 lib/MVC/model/entity/groepen/Bestuur.class.php -text
@@ -3204,7 +3205,7 @@ lib/MVC/model/entity/groepen/Ketzer.class.php -text
 lib/MVC/model/entity/groepen/KetzerKeuze.class.php -text
 lib/MVC/model/entity/groepen/KetzerOptie.class.php -text
 lib/MVC/model/entity/groepen/KetzerSelect.class.php -text
-lib/MVC/model/entity/groepen/KetzerSelectSoort.class.php -text
+lib/MVC/model/entity/groepen/KetzerSelectSoort.enum.php -text
 lib/MVC/model/entity/groepen/Ondervereniging.class.php -text
 lib/MVC/model/entity/groepen/OpvolgbareGroep.abstract.php -text
 lib/MVC/model/entity/groepen/Sjaarcie.class.php -text

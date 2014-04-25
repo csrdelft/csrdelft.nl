@@ -699,7 +699,7 @@ class IntField extends TextField {
 	public $max = null;
 
 	public function __construct($name, $value, $description, $min = null, $max = null) {
-		parent::__construct($name, $value, $description);
+		parent::__construct($name, $value, $description, 11);
 		if ($min !== null) {
 			$this->min = (int) $min;
 		}
@@ -751,7 +751,7 @@ class FloatField extends TextField {
 	public $max = null;
 
 	public function __construct($name, $value, $description, $min = null, $max = null) {
-		parent::__construct($name, $value, $description);
+		parent::__construct($name, $value, $description, 11);
 		if ($min !== null) {
 			$this->min = (float) $min;
 		}

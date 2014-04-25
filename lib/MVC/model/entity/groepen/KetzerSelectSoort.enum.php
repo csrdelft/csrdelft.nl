@@ -8,13 +8,13 @@
  * De keuzesoort van een selector: AND / XOR
  * 
  */
-final class KetzerSelectSoort {
+final class KetzerSelectSoort extends PersistentEnum {
 
 	const Checkbox = 'AND';
 	const Radio = 'XOR';
 
-	private function __construct() {
-		
+	public static function values() {
+		return array(self::Checkbox, self::Radio);
 	}
 
 }

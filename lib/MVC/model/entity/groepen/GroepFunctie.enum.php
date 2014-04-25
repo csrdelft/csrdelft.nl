@@ -8,7 +8,7 @@
  * Standaard functies binnen het bestuur en commissies.
  * 
  */
-final class GroepFunctie {
+abstract class GroepFunctie implements PersistentEnum {
 
 	// Bestuur
 	const Praeses = 'Praeses';
@@ -26,8 +26,12 @@ final class GroepFunctie {
 	// Werkgroep
 	const Leider = 'Leider';
 
-	private function __construct() {
-		
+	public static function values() {
+		return array(self::Praeses, self::Abactis, self::Fiscus, self::VicePraeses, self::ViceAbactis, self::QQ, self::Bibliothecarus, self::Archivarus, self::Statisticus, self::Fotocommissaris, self::Leider);
+	}
+
+	public static function getMaxLenght() {
+		return 15;
 	}
 
 }

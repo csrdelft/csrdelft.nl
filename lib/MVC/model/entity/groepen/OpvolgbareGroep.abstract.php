@@ -29,8 +29,7 @@ abstract class OpvolgbareGroep extends Groep {
 	public $eind_moment;
 	/**
 	 * o.t. / h.t. / f.t.
-	 * @see GroepStatus
-	 * @var string
+	 * @var GroepStatus
 	 */
 	public $status;
 	/**
@@ -41,7 +40,7 @@ abstract class OpvolgbareGroep extends Groep {
 		'familie_id' => array('varchar', 255),
 		'begin_moment' => array('datetime', null, true),
 		'eind_moment' => array('datetime', null, true),
-		'status' => array('varchar', 4)
+		'status' => array('enum', 'GroepStatus')
 	);
 
 	/**

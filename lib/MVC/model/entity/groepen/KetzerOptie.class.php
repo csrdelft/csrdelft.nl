@@ -11,15 +11,15 @@
 class KetzerOptie extends PersistentEntity {
 
 	/**
-	 * Primary key
-	 * @var int
-	 */
-	public $optie_id;
-	/**
 	 * Optie van deze ketzerselector
 	 * @var int
 	 */
 	public $select_id;
+	/**
+	 * Primary key
+	 * @var int
+	 */
+	public $optie_id;
 	/**
 	 * Keuzewaarde
 	 * @var string
@@ -30,8 +30,8 @@ class KetzerOptie extends PersistentEntity {
 	 * @var array
 	 */
 	protected static $persistent_fields = array(
-		'optie_id' => array('int', 11, false, null, 'auto_increment'),
 		'select_id' => array('int', 11),
+		'optie_id' => array('int', 11),
 		'waarde' => array('varchar', 255)
 	);
 	/**
@@ -43,6 +43,6 @@ class KetzerOptie extends PersistentEntity {
 	 * Database primary key
 	 * @var array
 	 */
-	protected static $primary_key = array('optie_id');
+	protected static $primary_key = array('select_id', 'optie_id');
 
 }

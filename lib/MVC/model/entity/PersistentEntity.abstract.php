@@ -1,5 +1,6 @@
 <?php
 
+require_once 'MVC/model/entity/PersistentEnum.interface.php';
 require_once 'MVC/model/entity/PersistentField.class.php';
 
 /**
@@ -82,15 +83,14 @@ abstract class PersistentEntity {
 				$this->$field = (int) $this->$field;
 			} elseif ($definition[0] === 'boolean') {
 				$this->$field = (boolean) $this->$field;
-			} elseif ($this->$field === null AND ! // Is field allowed to be null
-					(array_key_exists(2, $definition) AND $definition[2] === true)
-			) {
-				// Set default value if not null
-				if (array_key_exists(3, $definition) AND $definition[3] !== null) {
-					$this->$field = $definition[3];
-				} else {
+			} elseif ($this->$field === null AND ! (array_key_exists(2, $definition) AND $definition[2] === true)) {
+				// Field is null, but not allowed to be null
+				$this->$field = self::getDefaultValue($field);
+				if ($this->$field === null) {
 					$this->$field = '';
 				}
+			} elseif ($definition[0] === 'enum' AND ! in_array($this->$field, $definition[1]::values())) {
+				debugprint(self::getTableName() . '.' . $field . ' invalid ' . $definition[1] . ' value: ' . $this->$field);
 			}
 		}
 	}
@@ -98,9 +98,13 @@ abstract class PersistentEntity {
 	private static function makePersistentField($name, array $definition) {
 		$field = new PersistentField();
 		$field->field = $name;
-		$field->type = $definition[0];
-		if ($definition[0] === 'varchar' OR $definition[0] === 'int') {
-			$field->type .= '(' . $definition[1] . ')';
+		if ($definition[0] === 'enum') {
+			$field->type = 'varchar(' . $definition[1]::getMaxLenght() . ')';
+		} else {
+			$field->type = $definition[0];
+			if ($definition[0] === 'varchar' OR $definition[0] === 'int') {
+				$field->type .= '(' . $definition[1] . ')';
+			}
 		}
 		if (array_key_exists(2, $definition) AND $definition[2] === true) {
 			$field->null = 'YES';
@@ -125,7 +129,6 @@ abstract class PersistentEntity {
 	 * Check for differences in persistent fields.
 	 * 
 	 * @param boolean modify
-	 * @retun string SQL query
 	 */
 	public static function checkTable($modify = false) {
 		try {

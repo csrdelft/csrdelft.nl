@@ -8,14 +8,18 @@
  * De status van een groep: f.t. / h.t. / o.t.
  * 
  */
-final class GroepStatus {
+abstract class GroepStatus implements PersistentEnum {
 
-	const OT = 'o.t.';
-	const HT = 'h.t.';
-	const FT = 'f.t.';
+	const OT = 'ot';
+	const HT = 'ht';
+	const FT = 'ft';
 
-	private function __construct() {
-		
+	public static function values() {
+		return array(self::OT, self::HT, self::FT);
+	}
+
+	public static function getMaxLenght() {
+		return 2;
 	}
 
 }

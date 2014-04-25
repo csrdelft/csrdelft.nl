@@ -8,15 +8,19 @@
  * De verschillende tabbladen om een groep weer te geven.
  * 
  */
-final class GroepTab {
+abstract class GroepTab implements PersistentEnum {
 
 	const Lijst = 'lidlijst';
 	const Pasfotos = 'pasfotos';
 	const Statistiek = 'stats';
 	const Emails = 'emails';
 
-	private function __construct() {
-		
+	public static function values() {
+		return array(self::Lijst, self::Pasfotos, self::Statistiek, self::Emails);
+	}
+
+	public static function getMaxLenght() {
+		return 8;
 	}
 
 }

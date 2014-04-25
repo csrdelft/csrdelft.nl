@@ -8,13 +8,17 @@
  * De status van een huis / woonoord.
  * 
  */
-final class HuisStatus {
+abstract class HuisStatus implements PersistentEnum {
 
 	const Woonoord = 'woonoord';
 	const Huis = 'huis';
 
-	private function __construct() {
-		
+	public static function values() {
+		return array(self::Woonoord, self::Huis);
+	}
+
+	public static function getMaxLenght() {
+		return 8;
 	}
 
 }
