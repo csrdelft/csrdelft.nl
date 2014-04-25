@@ -66,8 +66,8 @@ class MenuItem extends PersistentEntity {
 		'prioriteit' => array('int', 11, false, 0),
 		'tekst' => array('varchar', 50),
 		'link' => array('varchar', 255),
-		'rechten_bekijken' => array('varchar', 255, 'P_NOBODY'),
-		'zichtbaar' => array('boolean', false, true)
+		'rechten_bekijken' => array('varchar', 255, false, 'P_NOBODY'),
+		'zichtbaar' => array('boolean', null, false, true)
 	);
 	/**
 	 * Database primary key
