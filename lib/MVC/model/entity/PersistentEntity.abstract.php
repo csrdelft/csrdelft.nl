@@ -138,7 +138,20 @@ abstract class PersistentEntity {
 	 * @retun string SQL query
 	 */
 	public static function checkTable($modify = false) {
-		$database_fields = array_key_property('field', DatabaseAdmin::instance()->sqlDescribeTable(self::getTableName()));
+		try {
+			$database_fields = array_key_property('field', DatabaseAdmin::instance()->sqlDescribeTable(self::getTableName()));
+		} catch (Exception $e) {
+			if (endsWith($e->getMessage(), self::getTableName() . "' doesn't exist")) {
+				if ($modify) {
+					self::createTable();
+				} else {
+					debugprint(self::getTableName() . ' TABLE DOES NOT EXIST');
+				}
+			} else {
+				debugprint($e->getMessage());
+			}
+			exit;
+		}
 		$fields = array();
 		$previous_field = null;
 		foreach (static::$persistent_fields as $name => $definition) {
