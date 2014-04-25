@@ -1,6 +1,6 @@
 <?php
 
-require_once 'MVC/model/Database.singleton.php';
+require_once 'MVC/model/DatabaseAdmin.singleton.php';
 require_once 'MVC/model/Persistence.interface.php';
 require_once 'MVC/model/entity/PersistentEntity.abstract.php';
 
@@ -42,7 +42,7 @@ abstract class PersistenceModel implements Persistence {
 	 * @param array $criteria_params optional named parameters
 	 * @param string $orderby
 	 * @param int $limit max amount of results
-	 * @param int $start resultset from index
+	 * @param int $start results from index
 	 * @return PersistentEntity[]
 	 */
 	public function find($criteria = null, array $criteria_params = array(), $orderby = null, $limit = null, $start = 0) {

@@ -30,9 +30,9 @@ class KetzerOptie extends PersistentEntity {
 	 * @var array
 	 */
 	protected static $persistent_fields = array(
-		'optie_id' => 'int(11) NOT NULL AUTO_INCREMENT',
-		'select_id' => 'int(11) NOT NULL',
-		'waarde' => 'varchar(255) NOT NULL'
+		'optie_id' => array('int', 11, false, null, 'auto_increment'),
+		'select_id' => array('int', 11),
+		'waarde' => array('varchar', 255)
 	);
 	/**
 	 * Database table name

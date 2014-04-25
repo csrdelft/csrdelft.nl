@@ -139,7 +139,7 @@ class DocumentController extends Controller {
 		if (isset($_POST['methode'])) {
 			$methode = $_POST['methode'];
 		} else {
-			//pr($this->document); echo $this->document->hasFile() ? 'ja' : 'nee'; exit;
+			//debugprint($this->document); echo $this->document->hasFile() ? 'ja' : 'nee'; exit;
 			if ($this->document->hasFile()) {
 				$methode = 'DUKeepfile';
 			} else {
@@ -202,7 +202,7 @@ class DocumentController extends Controller {
 			if (!(isset($_POST['methode']) AND array_key_exists($_POST['methode'], $this->uploaders))) {
 				$this->addError('Niet ondersteunde uploadmethode. Heeft u er wel een gekozen?');
 			} else {
-				if ($_POST['methode'] == 'DUKeepfile' AND !$this->document->hasFile()) {
+				if ($_POST['methode'] == 'DUKeepfile' AND ! $this->document->hasFile()) {
 					$this->addError('Dit document heeft nog geen bestand, dus dat kan ook niet behouden worden.');
 				}
 				//kijken of we errors hebben in de huidige methode.

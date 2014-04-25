@@ -65,15 +65,15 @@ class GroepLid extends PersistentEntity {
 	 * @var array
 	 */
 	protected static $persistent_fields = array(
-		'groep_type' => 'varchar(255) NOT NULL',
-		'groep_id' => 'int(11) NOT NULL',
-		'lid_id' => 'varchar(4) NOT NULL',
-		'opmerking' => 'varchar(255) NOT NULL',
-		'lid_sinds' => 'datetime NOT NULL',
-		'lid_tot' => 'datetime DEFAULT NULL',
-		'status' => 'varchar(4) NOT NULL',
-		'prioriteit' => 'int(11) NOT NULL',
-		'door_lid_id' => 'varchar(4) NOT NULL'
+		'groep_type' => array('varchar', 255),
+		'groep_id' => array('int', 11),
+		'lid_id' => array('varchar', 4),
+		'opmerking' => array('varchar', 255),
+		'lid_sinds' => array('datetime'),
+		'lid_tot' => array('datetime', null, true),
+		'status' => array('varchar', 4),
+		'prioriteit' => array('int', 11),
+		'door_lid_id' => array('varchar', 4)
 	);
 	/**
 	 * Database primary key

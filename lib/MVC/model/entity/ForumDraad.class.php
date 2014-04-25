@@ -100,21 +100,21 @@ class ForumDraad extends PersistentEntity {
 	 * @var array
 	 */
 	protected static $persistent_fields = array(
-		'draad_id' => 'int(11) NOT NULL AUTO_INCREMENT',
-		'forum_id' => 'int(11) NOT NULL',
-		'lid_id' => 'varchar(4) NOT NULL',
-		'titel' => 'varchar(255) NOT NULL',
-		'datum_tijd' => 'datetime NOT NULL',
-		'laatst_gewijzigd' => 'datetime NOT NULL',
-		'laatste_post_id' => 'int(11) NOT NULL',
-		'laatste_lid_id' => 'varchar(4) NOT NULL',
-		'aantal_posts' => 'int(11) NOT NULL',
-		'gesloten' => 'boolean NOT NULL',
-		'verwijderd' => 'boolean NOT NULL',
-		'wacht_goedkeuring' => 'boolean NOT NULL',
-		'plakkerig' => 'boolean NOT NULL',
-		'belangrijk' => 'boolean NOT NULL',
-		'eerste_post_plakkerig' => 'boolean NOT NULL'
+		'draad_id' => array('int', 11, false, null, 'auto_increment'),
+		'forum_id' => array('int', 11),
+		'lid_id' => array('varchar', 4),
+		'titel' => array('varchar', 255),
+		'datum_tijd' => array('datetime'),
+		'laatst_gewijzigd' => array('datetime', null, true),
+		'laatste_post_id' => array('int', 11, true),
+		'laatste_lid_id' => array('varchar', 4, true),
+		'aantal_posts' => array('int', 11),
+		'gesloten' => array('boolean'),
+		'verwijderd' => array('boolean'),
+		'wacht_goedkeuring' => array('boolean'),
+		'plakkerig' => array('boolean'),
+		'belangrijk' => array('boolean'),
+		'eerste_post_plakkerig' => array('boolean')
 	);
 	/**
 	 * Database primary key

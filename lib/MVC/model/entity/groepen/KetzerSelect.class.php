@@ -36,10 +36,10 @@ class KetzerSelect extends PersistentEntity {
 	 * @var array
 	 */
 	protected static $persistent_fields = array(
-		'select_id' => 'int(11) NOT NULL AUTO_INCREMENT',
-		'ketzer_id' => 'int(11) NOT NULL',
-		'keuze_soort' => 'varchar(3) NOT NULL',
-		'keuzemogelijkheden' => 'text NOT NULL'
+		'select_id' => array('int', 11, false, null, 'auto_increment'),
+		'ketzer_id' => array('int', 11),
+		'keuze_soort' => array('varchar', 3),
+		'keuzemogelijkheden' => array('text')
 	);
 	/**
 	 * Database table name

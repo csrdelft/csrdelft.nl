@@ -3162,6 +3162,7 @@ lib/MVC/model/AgendaModel.class.php -text
 lib/MVC/model/Agendeerbaar.interface.php -text
 lib/MVC/model/CmsPaginaModel.class.php -text
 lib/MVC/model/Database.singleton.php -text
+lib/MVC/model/DatabaseAdmin.singleton.php -text
 lib/MVC/model/DragObjectModel.class.php -text
 lib/MVC/model/ForumModel.class.php -text
 lib/MVC/model/GroepenModel.class.php -text
@@ -3186,6 +3187,7 @@ lib/MVC/model/entity/Mail.class.php -text
 lib/MVC/model/entity/Mededeling.class.php -text
 lib/MVC/model/entity/MenuItem.class.php -text
 lib/MVC/model/entity/PersistentEntity.abstract.php -text
+lib/MVC/model/entity/PersistentField.class.php -text
 lib/MVC/model/entity/groepen/Activiteit.class.php -text
 lib/MVC/model/entity/groepen/Bestuur.class.php -text
 lib/MVC/model/entity/groepen/Commissie.class.php -text

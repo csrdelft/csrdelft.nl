@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Database.class.php
+ * Database.singleton.php
  * 
  * @author P.W.G. Brussee <brussee@live.nl>
  * 
@@ -12,7 +12,7 @@ class Database extends PDO {
 	 * Singleton instance
 	 * @var Database
 	 */
-	private static $_instance;
+	private static $instance;
 
 	/**
 	 * Get singleton Database instance.
@@ -20,27 +20,26 @@ class Database extends PDO {
 	 * @return Database
 	 */
 	public static function instance() {
-		if (!isset(self::$_instance)) {
+		if (!isset(self::$instance)) {
 
 			if (defined('ETC_PATH')) {
 				$cred = parse_ini_file(ETC_PATH . '/mysql.ini');
 			} else {
 				$cred = array(
 					'host' => 'localhost',
-					'user' => 'foo',
-					'pass' => 'bar',
+					'user' => 'username',
+					'pass' => 'password',
 					'db' => 'csrdelft'
 				);
 			}
 			$dsn = 'mysql:host=' . $cred['host'] . ';dbname=' . $cred['db'];
 			$options = array(
-				PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES \'UTF8\'',
+				PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES 'UTF8'",
 				PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION
 			);
-
-			self::$_instance = new Database($dsn, $cred['user'], $cred['pass'], $options);
+			self::$instance = new Database($dsn, $cred['user'], $cred['pass'], $options);
 		}
-		return self::$_instance;
+		return self::$instance;
 	}
 
 	/**
@@ -83,7 +82,7 @@ class Database extends PDO {
 	/**
 	 * Optional named parameters.
 	 * 
-	 * @param array $columns
+	 * @param array $fields
 	 * @param string $from
 	 * @param string $where
 	 * @param array $params
@@ -92,8 +91,8 @@ class Database extends PDO {
 	 * @param int $start
 	 * @return PDOStatement
 	 */
-	public static function sqlSelect(array $columns, $from, $where = null, array $params = array(), $orderby = null, $limit = null, $start = 0) {
-		$sql = 'SELECT ' . implode(', ', $columns) . ' FROM ' . $from;
+	public static function sqlSelect(array $fields, $from, $where = null, array $params = array(), $orderby = null, $limit = null, $start = 0) {
+		$sql = 'SELECT ' . implode(', ', $fields) . ' FROM ' . $from;
 		if ($where !== null) {
 			$sql .= ' WHERE ' . $where;
 		}
@@ -124,8 +123,7 @@ class Database extends PDO {
 		$sql .= ')';
 		$query = self::instance()->prepare($sql, $params);
 		$query->execute($params);
-		$result = $query->fetchColumn();
-		return (boolean) $result;
+		return (boolean) $query->fetchColumn();
 	}
 
 	/**
@@ -141,7 +139,7 @@ class Database extends PDO {
 	public static function sqlInsert($into, array $properties, $replace = false) {
 		$insert_params = array();
 		foreach ($properties as $key => $value) {
-			$insert_params[':I' . $key] = $value; // name parameters after column
+			$insert_params[':I' . $key] = $value; // name parameters after field
 		}
 		if ($replace) {
 			$sql = 'REPLACE';
@@ -188,7 +186,7 @@ class Database extends PDO {
 			}
 			$sql .= '(';
 			foreach ($props as $j => $value) {
-				$param = ':I' . $i . $fields[$j]; // name parameters after column with index
+				$param = ':I' . $i . $fields[$j]; // name parameters after field with index
 				$insert_values[$param] = $value;
 				if ($j > 0) {
 					$sql .= ', ';
@@ -217,7 +215,7 @@ class Database extends PDO {
 		$sql = 'UPDATE ' . $table . ' SET ';
 		$fields = array();
 		foreach ($properties as $key => $value) {
-			$fields[] = $key . ' = :U' . $key; // name parameters after column
+			$fields[] = $key . ' = :U' . $key; // name parameters after field
 			if (array_key_exists(':U' . $key, $where_params)) {
 				throw new Exception('Named parameter already defined: ' . $key);
 			}
@@ -251,25 +249,6 @@ class Database extends PDO {
 		$query = self::instance()->prepare($sql, $where_params);
 		$query->execute($where_params);
 		return $query->rowCount();
-	}
-
-	/**
-	 * Create table and return SQL.
-	 * 
-	 * @param string $name
-	 * @param array $columns
-	 * @param array $primary_key
-	 * @return string SQL query
-	 */
-	public static function sqlCreateTable($name, array $columns, array $primary_key) {
-		$sql = 'CREATE TABLE ' . $name . ' (';
-		foreach ($columns as $key => $value) {
-			$sql .= $key . ' ' . $value . ', ';
-		}
-		$sql .= 'PRIMARY KEY (' . implode(', ', $primary_key) . ')) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1';
-		$query = self::instance()->prepare($sql);
-		$query->execute();
-		return $sql;
 	}
 
 }

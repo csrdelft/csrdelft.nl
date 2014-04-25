@@ -298,9 +298,9 @@ class ForumDradenModel extends PersistenceModel implements Paging {
 	public function zoeken($query) {
 		$this->per_pagina = (int) LidInstellingen::get('forum', 'zoekresultaten');
 		$orm = self::orm;
-		$columns = $orm::getFields();
-		$columns[] = 'MATCH(titel) AGAINST (? IN NATURAL LANGUAGE MODE) AS score';
-		$result = Database::sqlSelect($columns, $orm::getTableName(), 'wacht_goedkeuring = FALSE AND verwijderd = FALSE HAVING score > 0', array($query), 'score DESC', $this->per_pagina, ($this->pagina - 1) * $this->per_pagina);
+		$fields = $orm::getFields();
+		$fields[] = 'MATCH(titel) AGAINST (? IN NATURAL LANGUAGE MODE) AS score';
+		$result = Database::sqlSelect($fields, $orm::getTableName(), 'wacht_goedkeuring = FALSE AND verwijderd = FALSE HAVING score > 0', array($query), 'score DESC', $this->per_pagina, ($this->pagina - 1) * $this->per_pagina);
 		return $result->fetchAll(PDO::FETCH_CLASS, $orm);
 	}
 
@@ -311,18 +311,18 @@ class ForumDradenModel extends PersistenceModel implements Paging {
 	 * @param array $criteria_params optional named parameters
 	 * @param string $orderby
 	 * @param int $limit max amount of results
-	 * @param int $start resultset from index
+	 * @param int $start results from index
 	 * @return PersistentEntity[]
 	 */
 	public function find($criteria = null, array $criteria_params = array(), $orderby = null, $limit = null, $start = 0) {
 		$orm = self::orm;
 		$from = $orm::getTableName() . ' AS d LEFT JOIN forum_draden_gelezen AS g ON d.draad_id = g.draad_id AND g.lid_id = ?';
-		$columns = $orm::getFields();
-		foreach ($columns as $i => $column) {
-			$columns[$i] = 'd.' . $column;
+		$fields = $orm::getFields();
+		foreach ($fields as $i => $field) {
+			$fields[$i] = 'd.' . $field;
 		}
-		$columns[] = 'g.datum_tijd AS wanneer_gelezen';
-		$result = Database::sqlSelect($columns, $from, $criteria, array_merge(array(LoginLid::instance()->getUid()), $criteria_params), $orderby, $limit, $start);
+		$fields[] = 'g.datum_tijd AS wanneer_gelezen';
+		$result = Database::sqlSelect($fields, $from, $criteria, array_merge(array(LoginLid::instance()->getUid()), $criteria_params), $orderby, $limit, $start);
 		return $result->fetchAll(PDO::FETCH_CLASS, self::orm);
 	}
 
@@ -519,9 +519,9 @@ class ForumPostsModel extends PersistenceModel implements Paging {
 	public function zoeken($query) {
 		$this->per_pagina = (int) LidInstellingen::get('forum', 'zoekresultaten');
 		$orm = self::orm;
-		$columns = $orm::getFields();
-		$columns[] = 'MATCH(tekst) AGAINST (? IN NATURAL LANGUAGE MODE) AS score';
-		$result = Database::sqlSelect($columns, $orm::getTableName(), 'wacht_goedkeuring = FALSE AND verwijderd = FALSE HAVING score > 0', array($query), 'score DESC', $this->per_pagina, ($this->pagina - 1) * $this->per_pagina);
+		$fields = $orm::getFields();
+		$fields[] = 'MATCH(tekst) AGAINST (? IN NATURAL LANGUAGE MODE) AS score';
+		$result = Database::sqlSelect($fields, $orm::getTableName(), 'wacht_goedkeuring = FALSE AND verwijderd = FALSE HAVING score > 0', array($query), 'score DESC', $this->per_pagina, ($this->pagina - 1) * $this->per_pagina);
 		return $result->fetchAll(PDO::FETCH_CLASS, $orm);
 	}
 

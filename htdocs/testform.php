@@ -30,7 +30,7 @@ class TestFormulier extends Formulier {
 		echo getMelding();
 		echo '<h1>Testformulier</h1><p>Wat autoaanvullen dingen testen, net als hippe ajax-inline-bewerkzaken...</p>';
 		echo parent::view();
-		pr($this->getModel()); // TEST
+		debugprint($this->getModel());
 	}
 
 }

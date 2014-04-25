@@ -265,7 +265,7 @@ function isGeldigeDatum($datum) {
  * @param string $sString
  * @param string $cssID
  */
-function pr($sString, $cssID = 'pubcie_debug') {
+function debugprint($sString, $cssID = 'pubcie_debug') {
 	$adminIPs = array('145.94.61.229', '145.94.59.158', '192.168.16.101', '127.0.0.1');
 	$isFromAdminIP = isset($_SERVER['REMOTE_ADDR']) AND in_array($_SERVER['REMOTE_ADDR'], $adminIPs);
 	if ($isFromAdminIP OR LoginLid::mag('P_ADMIN')) {

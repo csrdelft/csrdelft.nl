@@ -61,13 +61,13 @@ class MenuItem extends PersistentEntity {
 	 * @var array
 	 */
 	protected static $persistent_fields = array(
-		'item_id' => 'int(11) NOT NULL AUTO_INCREMENT',
-		'parent_id' => 'int(11) NOT NULL',
-		'prioriteit' => 'int(11) NOT NULL',
-		'tekst' => 'varchar(50) NOT NULL',
-		'link' => 'varchar(255) NOT NULL',
-		'rechten_bekijken' => 'varchar(255) NOT NULL',
-		'zichtbaar' => 'boolean NOT NULL'
+		'item_id' => array('int', 11, false, null, 'auto_increment'),
+		'parent_id' => array('int', 11, false),
+		'prioriteit' => array('int', 11, false),
+		'tekst' => array('varchar', 50),
+		'link' => array('varchar', 255),
+		'rechten_bekijken' => array('varchar', 255),
+		'zichtbaar' => array('boolean')
 	);
 	/**
 	 * Database primary key

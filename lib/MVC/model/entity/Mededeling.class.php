@@ -53,14 +53,14 @@ class Mededeling extends PersistentEntity {
 	 * @var array
 	 */
 	protected static $persistent_fields = array(
-		'$mededeling_id' => 'int(11) NOT NULL AUTO_INCREMENT',
-		'type' => 'varchar(255) NOT NULL',
-		'tekst' => 'text NOT NULL',
-		'zichtbaar_voor' => 'varchar(255) NOT NULL',
-		'zichtbaar_vanaf' => 'datetime NOT NULL',
-		'zichtbaar_tot' => 'datetime',
-		'prioriteit' => 'int(11) NOT NULL',
-		'afbeelding_url' => 'text'
+		'$mededeling_id' => array('int', 11, false, null, 'auto_increment'),
+		'type' => array('varchar', 255),
+		'tekst' => array('text'),
+		'zichtbaar_voor' => array('varchar', 255),
+		'zichtbaar_vanaf' => array('datetime'),
+		'zichtbaar_tot' => array('datetime'),
+		'prioriteit' => array('int', 11),
+		'afbeelding_url' => array('text')
 	);
 	/**
 	 * Database primary key

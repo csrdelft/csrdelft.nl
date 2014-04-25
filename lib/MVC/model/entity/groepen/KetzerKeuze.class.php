@@ -25,8 +25,8 @@ class KetzerKeuze extends PersistentEntity {
 	 * @var array
 	 */
 	protected static $persistent_fields = array(
-		'lid_id' => 'varchar(4) NOT NULL',
-		'optie_id' => 'int(11) NOT NULL'
+		'lid_id' => array('varchar', 4),
+		'optie_id' => array('int', 11)
 	);
 	/**
 	 * Database table name

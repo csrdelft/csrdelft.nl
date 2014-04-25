@@ -85,19 +85,19 @@ class ForumDeel extends PersistentEntity {
 	 * @var array
 	 */
 	protected static $persistent_fields = array(
-		'forum_id' => 'int(11) NOT NULL AUTO_INCREMENT',
-		'categorie_id' => 'int(11) NOT NULL',
-		'titel' => 'varchar(255) NOT NULL',
-		'omschrijving' => 'text NOT NULL',
-		'laatst_gewijzigd' => 'datetime DEFAULT NULL',
-		'laatste_post_id' => 'int(11) DEFAULT NULL',
-		'laatste_lid_id' => 'varchar(4) DEFAULT NULL',
-		'aantal_draden' => 'int(11) NOT NULL',
-		'aantal_posts' => 'int(11) NOT NULL',
-		'rechten_lezen' => 'varchar(255) NOT NULL',
-		'rechten_posten' => 'varchar(255) NOT NULL',
-		'rechten_modereren' => 'varchar(255) NOT NULL',
-		'volgorde' => 'int(11) NOT NULL'
+		'forum_id' => array('int', 11, false, null, 'auto_increment'),
+		'categorie_id' => array('int', 11),
+		'titel' => array('varchar', 255),
+		'omschrijving' => array('text'),
+		'laatst_gewijzigd' => array('datetime', null, true),
+		'laatste_post_id' => array('int', 11, true,),
+		'laatste_lid_id' => array('varchar', 4, true),
+		'aantal_draden' => array('int', 11),
+		'aantal_posts' => array('int', 11),
+		'rechten_lezen' => array('varchar', 255),
+		'rechten_posten' => array('varchar', 255),
+		'rechten_modereren' => array('varchar', 255),
+		'volgorde' => array('int', 11)
 	);
 	/**
 	 * Database primary key

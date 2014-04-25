@@ -64,12 +64,12 @@ class CorveeFunctie extends PersistentEntity {
 	 * @var array
 	 */
 	protected static $persistent_fields = array(
-		'functie_id' => 'int(11) NOT NULL AUTO_INCREMENT',
-		'naam' => 'varchar(255) NOT NULL',
-		'afkorting' => 'varchar(11) NOT NULL',
-		'email_bericht' => 'text NOT NULL',
-		'standaard_punten' => 'int(11) NOT NULL',
-		'kwalificatie_benodigd' => 'boolean NOT NULL'
+		'functie_id' => array('int', 11, false, null, 'auto_increment'),
+		'naam' => array('varchar', 255),
+		'afkorting' => array('varchar', 3),
+		'email_bericht' => array('text'),
+		'standaard_punten' => array('int', 11),
+		'kwalificatie_benodigd' => array('boolean')
 	);
 	/**
 	 * Database primary key

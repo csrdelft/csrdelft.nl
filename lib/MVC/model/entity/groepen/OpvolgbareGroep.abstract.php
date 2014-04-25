@@ -38,10 +38,10 @@ abstract class OpvolgbareGroep extends Groep {
 	 * @var array
 	 */
 	protected static $persistent_fields = array(
-		'familie_id' => 'varchar(255) NOT NULL',
-		'begin_moment' => 'datetime DEFAULT NULL',
-		'eind_moment' => 'datetime DEFAULT NULL',
-		'status' => 'varchar(4) NOT NULL'
+		'familie_id' => array('varchar', 255),
+		'begin_moment' => array('datetime', null, true),
+		'eind_moment' => array('datetime', null, true),
+		'status' => array('varchar', 4)
 	);
 
 	/**
