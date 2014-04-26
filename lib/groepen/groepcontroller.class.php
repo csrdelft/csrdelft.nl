@@ -32,13 +32,13 @@ class Groepcontroller extends Controller {
 			try {
 				$this->groep = new OldGroep($this->getParam(0));
 			} catch (Exception $e) {
-				invokeRefresh(CSR_ROOT . 'actueel/groepen/', $e->getMessage());
+				invokeRefresh(CSR_ROOT . '/actueel/groepen/', $e->getMessage());
 			}
 			if ($this->groep->getId() == 0 AND isset($_GET['gtype'])) {
 				try {
 					$groepen = new Groepen($_GET['gtype']);
 				} catch (Exception $e) {
-					invokeRefresh(CSR_ROOT . 'actueel/groepen/', $e->getMessage());
+					invokeRefresh(CSR_ROOT . '/actueel/groepen/', $e->getMessage());
 				}
 				$this->groep->setGtype($groepen);
 				if (!($this->groep->getType() instanceof Groepen)) {
@@ -56,7 +56,7 @@ class Groepcontroller extends Controller {
 
 		//controleer dat we geen lege groep weergeven.
 		if ($this->action == 'standaard' AND $this->groep->getId() == 0) {
-			invokeRefresh(CSR_ROOT . 'actueel/groepen/', 'We geven geen 0-groepen weer! (Groepcontroller::__construct())');
+			invokeRefresh(CSR_ROOT . '/actueel/groepen/', 'We geven geen 0-groepen weer! (Groepcontroller::__construct())');
 		}
 		$this->performAction();
 	}
@@ -76,7 +76,7 @@ class Groepcontroller extends Controller {
 	}
 
 	public function getUrl($action = null) {
-		$url = CSR_ROOT . 'actueel/groepen/' . $this->groep->getType()->getNaam() . '/' . $this->groep->getId() . '/';
+		$url = CSR_ROOT . '/actueel/groepen/' . $this->groep->getType()->getNaam() . '/' . $this->groep->getId() . '/';
 		if ($action != null AND $this->hasAction($action)) {
 			if ($action != 'standaard') {
 				$url.=$action;
@@ -97,7 +97,7 @@ class Groepcontroller extends Controller {
 		if ($this->groep->isAdmin() OR $this->groep->isEigenaar()) {
 			//snaam is alleen relevant bij het maken van een nieuwe groep, bij maken opvolger is snaam ook al bekend.
 			if (!isset($_SESSION['oudegroep']) AND $this->groep->getSnaam() == '') {
-				if ($this->groep->getId() == 0 AND !isset($_POST['snaam'])) {
+				if ($this->groep->getId() == 0 AND ! isset($_POST['snaam'])) {
 					$this->addError("Korte naam is verplicht bij een nieuwe groep.");
 				} else {
 					if ($this->groep->getId() == 0) {
@@ -212,7 +212,7 @@ class Groepcontroller extends Controller {
 				$this->groep->setValue('toonPasfotos', $oudeGroep->getToonPasfotos());
 				$this->groep->setValue('lidIsMod', $oudeGroep->getLidIsMod());
 				$this->groep->setFunctiefilter($oudeGroep->getFunctiefilter());
-				if (LoginLid::instance()->getUid() == $oudeGroep->getEigenaar() OR !Lid::isValidUid($oudeGroep->getEigenaar())) {
+				if (LoginLid::instance()->getUid() == $oudeGroep->getEigenaar() OR ! Lid::isValidUid($oudeGroep->getEigenaar())) {
 					$this->groep->setValue('eigenaar', $oudeGroep->getEigenaar());
 					$_SESSION['oudegroep']['eigenaar'] = $oudeGroep->getEigenaar();
 				}
@@ -223,7 +223,7 @@ class Groepcontroller extends Controller {
 			if ($this->groepValidator()) {
 				//slaan we een nieuwe groep op?
 				if ($this->groep->getId() == 0) {
-					if (isset($_SESSION['oudegroep']) AND !$this->groep->isAdmin()) {
+					if (isset($_SESSION['oudegroep']) AND ! $this->groep->isAdmin()) {
 						$this->groep->setValue('snaam', $_SESSION['oudegroep']['snaam']);
 					} else {
 						$this->groep->setValue('snaam', $_POST['snaam']);
@@ -249,7 +249,7 @@ class Groepcontroller extends Controller {
 					if ($this->groep->getStatus() == 'ht') {
 						if (isset($_POST['aanmeldbaar'])) {
 							//bij sjaarsacties(gtype:11) alleen aanmeldbaar voor laatste lichting
-							if ($this->groep->getType()->getId() == 11 AND ($this->groep->getId() == 0 OR !$this->groep->isAdmin())) {
+							if ($this->groep->getType()->getId() == 11 AND ( $this->groep->getId() == 0 OR ! $this->groep->isAdmin())) {
 								$this->groep->setValue('aanmeldbaar', 'lichting:' . Lichting::getJongsteLichting());
 							} else {
 								$this->groep->setValue('aanmeldbaar', $_POST['aanmeldbaar']);
@@ -336,7 +336,7 @@ class Groepcontroller extends Controller {
 		} else {
 			$melding = 'Niet voldoende rechten voor deze actie';
 		}
-		invokeRefresh(CSR_ROOT . 'actueel/groepen/' . $groeptypenaam . '/', $melding);
+		invokeRefresh(CSR_ROOT . '/actueel/groepen/' . $groeptypenaam . '/', $melding);
 	}
 
 	/*
@@ -533,7 +533,7 @@ class Groepcontroller extends Controller {
 	}
 
 	public function stats() {
-		if ($this->groep->isAdmin() OR $this->groep->isOp() OR $this->groep->isEigenaar() OR ($this->groep->isAanmeldbaar() AND $this->groep->isIngelogged())) {
+		if ($this->groep->isAdmin() OR $this->groep->isOp() OR $this->groep->isEigenaar() OR ( $this->groep->isAanmeldbaar() AND $this->groep->isIngelogged())) {
 			$this->view = new GroepStatsContent($this->groep);
 			$this->view->view();
 		}

@@ -1,18 +1,18 @@
 {$view->getMelding()}
 <ul class="horizontal">
-{foreach from=$groeptypes item=groeptype}
-	<li{if $groeptype.id==$groepen->getId()} class="active"{/if}>
+	{foreach from=$groeptypes item=groeptype}
+		<li{if $groeptype.id==$groepen->getId()} class="active"{/if}>
 			<a href="/actueel/groepen/{$groeptype.naam}/">{$groeptype.naam}</a>
-	</li>
-{/foreach}
+		</li>
+	{/foreach}
 </ul>
 <hr />
 {if !$groepen->getToonHistorie()}
 	<div id="groepLijst">
 		<ul>
-		{foreach from=$groepen->getGroepen() item=groep name=g}
-			<li><a href="#groep{$groep->getId()}">{$groep->getSnaam()}</a></li>
-		{/foreach}	
+			{foreach from=$groepen->getGroepen() item=groep name=g}
+				<li><a href="#groep{$groep->getId()}">{$groep->getSnaam()}</a></li>
+				{/foreach}	
 		</ul>
 	</div>
 {/if}
@@ -38,13 +38,13 @@
 	{/if}	
 	{if $groepen->isAdmin()}
 		<a href="/actueel/groepen/{$groepen->getNaam()}/?maakOt=true" class="knop" 
-			onclick="return confirm('Weet u zeker dat alle h.t. groepen in deze categorie o.t. moeten worden?')">
+		   onclick="return confirm('Weet u zeker dat alle h.t. groepen in deze categorie o.t. moeten worden?')">
 			Maak h.t. groepen o.t.
 		</a>
 	{/if}
 	{if LoginLid::mag('P_ADMIN') AND $action!='edit'}
 		<a class="knop" href="/actueel/groepen/{$groepen->getNaam()}/?bewerken=true">
-			<img src="{$CSR_PICS}knopjes/bewerken.png" title="Bewerk beschrijving" />
+			<img src="{$CSR_PICS}/knopjes/bewerken.png" title="Bewerk beschrijving" />
 		</a>
 	{/if}
 </div>
@@ -59,11 +59,11 @@
 		</div>
 		<h2><a href="/actueel/groepen/{$groepen->getNaam()}/{$groep->getId()}/">{$groep->getNaam()}</a></h2>
 		{if $groep->getType()->getId()==11 }Ouderejaars: {$groep->getEigenaar()|perm2string}<br /><br />{/if} {* alleen bij Sjaarsacties *}
-		{$groep->getSbeschrijving()|ubb}
-	</div>
-{/foreach}
-<hr class="clear" />
-{if $groepen->isAdmin() OR $groepen->isGroepAanmaker()}
-	<a href="/actueel/groepen/{$groepen->getNaam()}/0/bewerken" class="knop">Nieuwe {$groepen->getNaamEnkelvoud()}</a>
-{/if}
+			{$groep->getSbeschrijving()|ubb}
+		</div>
+		{/foreach}
+			<hr class="clear" />
+			{if $groepen->isAdmin() OR $groepen->isGroepAanmaker()}
+				<a href="/actueel/groepen/{$groepen->getNaam()}/0/bewerken" class="knop">Nieuwe {$groepen->getNaamEnkelvoud()}</a>
+			{/if}
 

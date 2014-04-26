@@ -1,11 +1,12 @@
+<hr>
 <div id="groepledenContainer">
 	{if LoginLid::mag('P_LEDEN_READ')}
 		<ul id="tabs">
 			<li id="{GroepTab::Lijst}" class="tab active" onclick="return showTab({$groep->id}, '{GroepTab::Lijst}');" title="Lijst en opmerking tonen">
-				<img src="{$CSR_PICS}knopjes/lijst.png" />
+				<img src="{$CSR_PICS}/knopjes/lijst.png" />
 			</li>
 			<li id="{GroepTab::Pasfotos}" class="tab" onclick="return showTab({$groep->id}, '{GroepTab::Pasfotos}');" title="Pasfoto's tonen">
-				<img src="{$CSR_PICS}knopjes/pasfoto.png" />
+				<img src="{$CSR_PICS}/knopjes/pasfoto.png" />
 			</li>
 			<li id="{GroepTab::Statistiek}" class="tab" onclick="showTab({$groep->id}, '{GroepTab::Statistiek}')" title="Statistiek tonen">
 				%
@@ -39,3 +40,5 @@
 		</table>
 	</div>
 </div>
+<h2><a href="{$link}/{$groep->id}">{$groep->naam}</a></h2>
+{$groep->samenvatting|ubb}

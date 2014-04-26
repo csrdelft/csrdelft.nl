@@ -14,12 +14,12 @@
 		<docs>http://csrdelft.nl/</docs>
 		<description>C.S.R. Delft: Vereniging van Christen-studenten te Delft.</description>
 		<image>
-			<link>http://csrdelft.nl/</link>
-			<title>C.S.R. Delft</title>
-			<url>{$CSR_PICS}layout/beeldmerk.jpg</url>
-			<height>150</height>
-			<width>118</width>
-			<description>Beeldmerk der C.S.R. Delft</description>
+		<link>http://csrdelft.nl/</link>
+		<title>C.S.R. Delft</title>
+		<url>{$CSR_PICS}/layout/beeldmerk.jpg</url>
+		<height>150</height>
+		<width>118</width>
+		<description>Beeldmerk der C.S.R. Delft</description>
 		</image>
 		<language>nl-nl</language>
 		<atom:link href="{$privatelink}" rel="self" type="application/rss+xml" />
@@ -28,16 +28,16 @@
 		<managingEditor>PubCie@csrdelft.nl (Publiciteitscommissie der C.S.R.)</managingEditor>
 		<webMaster>pubcie@csrdelft.nl (Publiciteitscommissie der C.S.R.)</webMaster>
 		{foreach from=$draden item=draad}<item>
-			<title>{$draad->titel|escape:'html'}</title>
-			<link>http://csrdelft.nl/forum/reactie/{$draad->laatste_post_id}</link>
-			{foreach from=$draad->getForumPosts() item=post}<description><![CDATA[ {$post->tekst|ubb} ]]></description>
-			<pubDate>{$post->datum_tijd|rfc2822}</pubDate>
-			{/foreach}
-			<dc:creator>{$draad->laatste_lid_id|csrnaam:'user':false:false|escape:'html'}</dc:creator>
-			<category>forum/{$delen[$draad->forum_id]->titel|escape:'html'}</category>
-			<comments>http://csrdelft.nl/forum/onderwerp/{$draad->draad_id}</comments>
-			<guid isPermaLink="true">http://csrdelft.nl/forum/reactie/{$draad->laatste_post_id}#{$draad->laatste_post_id}</guid>
-		</item>
+				<title>{$draad->titel|escape:'html'}</title>
+				<link>http://csrdelft.nl/forum/reactie/{$draad->laatste_post_id}</link>
+				{foreach from=$draad->getForumPosts() item=post}<description><![CDATA[ {$post->tekst|ubb} ]]></description>
+					<pubDate>{$post->datum_tijd|rfc2822}</pubDate>
+					{/foreach}
+				<dc:creator>{$draad->laatste_lid_id|csrnaam:'user':false:false|escape:'html'}</dc:creator>
+				<category>forum/{$delen[$draad->forum_id]->titel|escape:'html'}</category>
+				<comments>http://csrdelft.nl/forum/onderwerp/{$draad->draad_id}</comments>
+				<guid isPermaLink="true">http://csrdelft.nl/forum/reactie/{$draad->laatste_post_id}#{$draad->laatste_post_id}</guid>
+			</item>
 		{/foreach}
 	</channel>
 </rss>

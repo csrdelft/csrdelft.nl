@@ -124,7 +124,7 @@ class Mededeling {
 			// Als er een nieuwe mededeling is toegevoegd die wacht op goedkeuring moeten
 			// we de PubCie mailen.
 			if ($this->getId() == 0 AND $this->getZichtbaarheid() == 'wacht_goedkeuring') {
-				mail('pubcie@csrdelft.nl', 'Nieuwe mededeling wacht op goedkeuring', CSR_ROOT . "actueel/mededelingen/" . $return . "\r\n" .
+				mail('pubcie@csrdelft.nl', 'Nieuwe mededeling wacht op goedkeuring', CSR_ROOT . '/actueel/mededelingen/' . $return . "\r\n" .
 						"\r\nDe inhoud van de mededeling is als volgt: \r\n\r\n" . str_replace('\r\n', "\n", $this->getTekst()) . "\r\n\r\nEINDE BERICHT", "From: pubcie@csrdelft.nl\nReply-To: " . $this->getUid() . "@csrdelft.nl");
 			}
 		}
@@ -161,7 +161,7 @@ class Mededeling {
 		$this->doelgroep = $array['doelgroep'];
 		// Om zichtbaarheid te veranderen moet je moderator zijn en als deze mededeling op goedkeuring wachtte
 		// of al verwijderd was, verandert hier niets aan.
-		if ($this->getZichtbaarheid() === null OR (Mededeling::isModerator() AND $this->getZichtbaarheid() != 'wacht_goedkeuring' AND $this->getZichtbaarheid() != 'verwijderd')) {
+		if ($this->getZichtbaarheid() === null OR ( Mededeling::isModerator() AND $this->getZichtbaarheid() != 'wacht_goedkeuring' AND $this->getZichtbaarheid() != 'verwijderd')) {
 			$this->zichtbaarheid = $array['zichtbaarheid'];
 		}
 		$this->plaatje = $array['plaatje'];
@@ -302,7 +302,7 @@ class Mededeling {
 
 	public static function getLijstVanPagina($pagina = 1, $aantal, $prullenbak = false) {
 		// Prullenbak checken.
-		if ($prullenbak AND !Mededeling::isModerator()) {
+		if ($prullenbak AND ! Mededeling::isModerator()) {
 			$prullenbak = false;
 		}
 
@@ -331,7 +331,7 @@ class Mededeling {
 	public static function getLijstWachtGoedkeuring() {
 		$mededelingen = array();
 		// Moderators of niet-ingelogden hebben geen berichten die wachten op goedkeuring.
-		if (Mededeling::isModerator() OR !LoginLid::mag('P_LEDEN_READ'))
+		if (Mededeling::isModerator() OR ! LoginLid::mag('P_LEDEN_READ'))
 			return $mededelingen;
 
 		$db = MySql::instance();
@@ -432,8 +432,7 @@ class Mededeling {
 	public function magBewerken() {
 		// het huidige lid mag dit bericht alleen bewerken als hij moderator is of als dit zijn eigen bericht
 		// is (en hij dus het toevoeg-recht heeft).
-		return Mededeling::isModerator() OR
-				(Mededeling::magToevoegen() AND $this->getUid() == LoginLid::instance()->getUid());
+		return Mededeling::isModerator() OR ( Mededeling::magToevoegen() AND $this->getUid() == LoginLid::instance()->getUid());
 	}
 
 	public static function isModerator() {
@@ -493,9 +492,7 @@ class Mededeling {
 						} else { // De tag wordt wél beëindigd.
 							$iWoordLengte = strlen($sTag) - ($iPositieEindTag + 1); // De lengte v/d string ná de tag.
 						}
-						if (($ampPos = strpos($sTag, '&') ) !== false AND
-								($semiPos = strpos($sTag, ';')) !== false AND
-								($diff = $semiPos - $ampPos ) >= 3 AND
+						if (($ampPos = strpos($sTag, '&') ) !== false AND ( $semiPos = strpos($sTag, ';')) !== false AND ( $diff = $semiPos - $ampPos ) >= 3 AND
 								$diff <= 7
 						) {
 							//Dus, als er een enkele entiteit in $sTag zit, corrigeren we de woordlengte. We definiëren

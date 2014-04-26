@@ -1,252 +1,260 @@
 <?php
+
 require_once 'configuratie.include.php';
 require_once 'mededelingen/mededeling.class.php';
 require_once 'mededelingen/mededelingcontent.class.php';
 require_once 'mededelingen/mededelingencontent.class.php';
 
-$mededelingId=0;
-if(isset($_GET['mededelingId'])){
-	$mededelingId=(int)$_GET['mededelingId'];
+$mededelingId = 0;
+if (isset($_GET['mededelingId'])) {
+	$mededelingId = (int) $_GET['mededelingId'];
 }
 
-$actie='default';
-if(isset($_GET['actie'])){
-	$actie=$_GET['actie'];
+$actie = 'default';
+if (isset($_GET['actie'])) {
+	$actie = $_GET['actie'];
 }
 
-if(isset($_GET['pagina'])){
-	$pagina=(int)$_GET['pagina'];
+if (isset($_GET['pagina'])) {
+	$pagina = (int) $_GET['pagina'];
 }
 
-$prullenbak=false;
-if(isset($_REQUEST['prullenbak']) AND $_REQUEST['prullenbak'] == '1' AND Mededeling::isModerator()){
-	$prullenbak=true;
+$prullenbak = false;
+if (isset($_REQUEST['prullenbak']) AND $_REQUEST['prullenbak'] == '1' AND Mededeling::isModerator()) {
+	$prullenbak = true;
 }
 
-define('MEDEDELINGEN_ROOT', CSR_ROOT.'actueel/mededelingen/');
+define('MEDEDELINGEN_ROOT', CSR_ROOT . '/actueel/mededelingen');
 
-switch($actie){
+switch ($actie) {
 	case 'verwijderen':
-		if(!Mededeling::magToevoegen()){
-			header('location: '.CSR_ROOT);
+		if (!Mededeling::magToevoegen()) {
+			header('location: ' . CSR_ROOT);
 			exit;
 		}
-		if($mededelingId>0){
-			$mededeling=new Mededeling($mededelingId);
-			if(Mededeling::isModerator() OR $mededeling->getUid()==LoginLid::instance()->getUid()){
-				$verwijderd=$mededeling->delete();
-				if($verwijderd===false){
+		if ($mededelingId > 0) {
+			$mededeling = new Mededeling($mededelingId);
+			if (Mededeling::isModerator() OR $mededeling->getUid() == LoginLid::instance()->getUid()) {
+				$verwijderd = $mededeling->delete();
+				if ($verwijderd === false) {
 					setMelding('Het verwijderen is mislukt.', -1);
-				}else{
+				} else {
 					setMelding('De mededeling is succesvol verwijderd.', 1);
 				}
-			}else{ // Dit lid mag deze mededeling helemaal niet verwijderen!
-				header('location: '.CSR_ROOT);
+			} else { // Dit lid mag deze mededeling helemaal niet verwijderen!
+				header('location: ' . CSR_ROOT);
 				exit;
 			}
 		}
-		$content=new MededelingenContent(0, $prullenbak);
+		$content = new MededelingenContent(0, $prullenbak);
 		// De eerste pagina laden.
 		$content->setPaginaNummer(1);
-	break; 
+		break;
 
 	case 'bewerken':
-		if(!Mededeling::magToevoegen()){
-			header('location: '.CSR_ROOT);
+		if (!Mededeling::magToevoegen()) {
+			header('location: ' . CSR_ROOT);
 			exit;
 		}
 
-		if(	isset($_POST['titel'],$_POST['tekst'],$_POST['categorie']) ){
+		if (isset($_POST['titel'], $_POST['tekst'], $_POST['categorie'])) {
 			// The user is editing an existing Mededeling or tried adding a new one.
 			// Get properties from $_POST.
-			$mededelingProperties=array();
-			$mededelingProperties['id']=		$mededelingId;
-			$mededelingProperties['titel']=		$_POST['titel'];
-			$mededelingProperties['tekst']=		$_POST['tekst'];
-			$mededelingProperties['datum']=		getDateTime();
-			if(isset($_POST['vervaltijd'])){
-				$mededelingProperties['vervaltijd']=$_POST['vervaltijd'];
+			$mededelingProperties = array();
+			$mededelingProperties['id'] = $mededelingId;
+			$mededelingProperties['titel'] = $_POST['titel'];
+			$mededelingProperties['tekst'] = $_POST['tekst'];
+			$mededelingProperties['datum'] = getDateTime();
+			if (isset($_POST['vervaltijd'])) {
+				$mededelingProperties['vervaltijd'] = $_POST['vervaltijd'];
 			}
-			$mededelingProperties['uid']=		LoginLid::instance()->getUid();
-			if(isset($_POST['prioriteit'])){
-				$mededelingProperties['prioriteit']=		(int)$_POST['prioriteit'];
+			$mededelingProperties['uid'] = LoginLid::instance()->getUid();
+			if (isset($_POST['prioriteit'])) {
+				$mededelingProperties['prioriteit'] = (int) $_POST['prioriteit'];
 			}
-			$mededelingProperties['doelgroep']=	$_POST['doelgroep'];
-			if(!Mededeling::isModerator()){
-				$mededelingProperties['zichtbaarheid']='wacht_goedkeuring';
-			}else{
-				$mededelingProperties['zichtbaarheid']=isset($_POST['verborgen']) ? 'onzichtbaar' : 'zichtbaar';
+			$mededelingProperties['doelgroep'] = $_POST['doelgroep'];
+			if (!Mededeling::isModerator()) {
+				$mededelingProperties['zichtbaarheid'] = 'wacht_goedkeuring';
+			} else {
+				$mededelingProperties['zichtbaarheid'] = isset($_POST['verborgen']) ? 'onzichtbaar' : 'zichtbaar';
 			}
-			$mededelingProperties['categorie']=	(int)$_POST['categorie'];
+			$mededelingProperties['categorie'] = (int) $_POST['categorie'];
 
-			$allOK=true; // This variable is set to false if there is an error.
-
+			$allOK = true; // This variable is set to false if there is an error.
 			// Special treatment for the picture.
-			$mededelingProperties['plaatje']='';
-			if(isset($_FILES['plaatje']) AND $_FILES['plaatje']['error']==UPLOAD_ERR_OK){ // If uploading succeedded.
-				$info=getimagesize($_FILES['plaatje']['tmp_name']);
-				if($info[0]!=0 AND $info[1]!=0)
-				{
-					if(($info[0]/$info[1])==1){ // If the ratio is fine (1:1).
-						$pictureFilename=$_FILES['plaatje']['name'];
-						$pictureFullPath=PICS_PATH.'/nieuws/'.$pictureFilename; // TODO: change nieuws to mededelingen
-						if( move_uploaded_file($_FILES['plaatje']['tmp_name'], $pictureFullPath)!==false ){
-							$mededelingProperties['plaatje']=$pictureFilename;
-							if($info[0]!=200){ // Too big, resize it.
+			$mededelingProperties['plaatje'] = '';
+			if (isset($_FILES['plaatje']) AND $_FILES['plaatje']['error'] == UPLOAD_ERR_OK) { // If uploading succeedded.
+				$info = getimagesize($_FILES['plaatje']['tmp_name']);
+				if ($info[0] != 0 AND $info[1] != 0) {
+					if (($info[0] / $info[1]) == 1) { // If the ratio is fine (1:1).
+						$pictureFilename = $_FILES['plaatje']['name'];
+						$pictureFullPath = PICS_PATH . '/nieuws/' . $pictureFilename; // TODO: change nieuws to mededelingen
+						if (move_uploaded_file($_FILES['plaatje']['tmp_name'], $pictureFullPath) !== false) {
+							$mededelingProperties['plaatje'] = $pictureFilename;
+							if ($info[0] != 200) { // Too big, resize it.
 								resize_plaatje($pictureFullPath);
 							}
 							chmod($pictureFullPath, 0644);
-						}else{
+						} else {
 							setMelding('Plaatje verplaatsen is mislukt.', -1);
-							$allOK=false;
+							$allOK = false;
 						}
-					}else{
+					} else {
 						setMelding('Plaatje is niet in de juiste verhouding.', -1);
-						$allOK=false;
+						$allOK = false;
 					}
-				}else{
+				} else {
 					setMelding('Het is niet gelukt om de resolutie van het plaatje te bepalen.', -1);
-					$allOK=false;
+					$allOK = false;
 				}
 			}
-			
+
 			// Check if all values appear to be OK.
-			$tijdelijkeMededeling=$mededelingId>0 ? new Mededeling($mededelingId) : null;
-			if(strlen($mededelingProperties['titel'])<2){
+			$tijdelijkeMededeling = $mededelingId > 0 ? new Mededeling($mededelingId) : null;
+			if (strlen($mededelingProperties['titel']) < 2) {
 				setMelding('Het veld <b>Titel</b> moet minstens 2 tekens bevatten.', -1);
-				$allOK=false;
+				$allOK = false;
 			}
-			if(strlen($mededelingProperties['tekst'])<5){
+			if (strlen($mededelingProperties['tekst']) < 5) {
 				setMelding('Het veld <b>Tekst</b> moet minstens 5 tekens bevatten.', -1);
-				$allOK=false;
+				$allOK = false;
 			}
-			
+
 			// Check vervaltijd.
-			if(!isset($_POST['vervaltijdAan'], $_POST['vervaltijd'])){
+			if (!isset($_POST['vervaltijdAan'], $_POST['vervaltijd'])) {
 				// Indien de gebruiker geen einddatum wil, reset deze!
-				$mededelingProperties['vervaltijd']=null;
-			}else{
-				$vervaltijd=strtotime($mededelingProperties['vervaltijd']);
-				if($vervaltijd===false OR !isGeldigeDatum($mededelingProperties['vervaltijd'])){
+				$mededelingProperties['vervaltijd'] = null;
+			} else {
+				$vervaltijd = strtotime($mededelingProperties['vervaltijd']);
+				if ($vervaltijd === false OR ! isGeldigeDatum($mededelingProperties['vervaltijd'])) {
 					setMelding('Vervaltijd is ongeldig.', -1);
-					$allOK=false;
-				}else{
-					$datum=strtotime($mededelingProperties['datum']);
-					if($vervaltijd<=$datum){
+					$allOK = false;
+				} else {
+					$datum = strtotime($mededelingProperties['datum']);
+					if ($vervaltijd <= $datum) {
 						setMelding('Vervaltijd moet groter zijn dan de huidige tijd.', -1);
-						$allOK=false;
+						$allOK = false;
 					}
 				}
 			}
-			
+
 			// Check prioriteit.
-			$prioriteitIsOngeldig=true;
-			if(isset($mededelingProperties['prioriteit'])){
-				$prioriteitIsOngeldig=(array_search($mededelingProperties['prioriteit'],array_keys(Mededeling::getPrioriteiten())) === false);
+			$prioriteitIsOngeldig = true;
+			if (isset($mededelingProperties['prioriteit'])) {
+				$prioriteitIsOngeldig = (array_search($mededelingProperties['prioriteit'], array_keys(Mededeling::getPrioriteiten())) === false);
 			}
 			// Indien de gebruiker geen moderator is OF de prioriteit ongeldig is.
-			if(!Mededeling::isModerator() OR $prioriteitIsOngeldig){
-				if($tijdelijkeMededeling!==null){ // We bewerken, dus huidige prioriteit behouden.
-					$mededelingProperties['prioriteit']=$tijdelijkeMededeling->getPrioriteit();
-				}else{ // We voegen toe, dus default prioriteit gebruiken.
-					$mededelingProperties['prioriteit']=Mededeling::defaultPrioriteit;
+			if (!Mededeling::isModerator() OR $prioriteitIsOngeldig) {
+				if ($tijdelijkeMededeling !== null) { // We bewerken, dus huidige prioriteit behouden.
+					$mededelingProperties['prioriteit'] = $tijdelijkeMededeling->getPrioriteit();
+				} else { // We voegen toe, dus default prioriteit gebruiken.
+					$mededelingProperties['prioriteit'] = Mededeling::defaultPrioriteit;
 				}
 			}
-			
+
 			// Check doelgroep.
-			if(array_search($mededelingProperties['doelgroep'], Mededeling::getDoelgroepen())===false){
+			if (array_search($mededelingProperties['doelgroep'], Mededeling::getDoelgroepen()) === false) {
 				setMelding('De doelgroep is ongeldig.', -1);
-				$allOK=false;
+				$allOK = false;
 			}
-			
+
 			// Check categorie.
-			$categorieValid=false;
-			foreach(MededelingCategorie::getCategorieen() as $categorie){
-				$hetIsDeze=($mededelingProperties['categorie']==$categorie->getId());
-				$categorieOnveranderd=($tijdelijkeMededeling!==null AND $tijdelijkeMededeling->getCategorieId()==$mededelingProperties['categorie']);
-				if( $hetIsDeze AND ($categorie->magUitbreiden() OR $categorieOnveranderd) ){
-					$categorieValid=true;
+			$categorieValid = false;
+			foreach (MededelingCategorie::getCategorieen() as $categorie) {
+				$hetIsDeze = ($mededelingProperties['categorie'] == $categorie->getId());
+				$categorieOnveranderd = ($tijdelijkeMededeling !== null AND $tijdelijkeMededeling->getCategorieId() == $mededelingProperties['categorie']);
+				if ($hetIsDeze AND ( $categorie->magUitbreiden() OR $categorieOnveranderd)) {
+					$categorieValid = true;
 				}
 			}
-			if(	!$categorieValid ){
-				$mededelingProperties['categorie']=null;
+			if (!$categorieValid) {
+				$mededelingProperties['categorie'] = null;
 				setMelding('De categorie is ongeldig.', -1);
-				$allOK=false;
+				$allOK = false;
 			}
 			// Check picture.
-			if(empty($mededelingProperties['plaatje']) AND $mededelingId==0){ // If there's no new picture, while there should be.
-				$errorNumber=$_FILES['plaatje']['error'];
-				if($errorNumber==UPLOAD_ERR_NO_FILE){ // If there was no file being uploaded at all. 
+			if (empty($mededelingProperties['plaatje']) AND $mededelingId == 0) { // If there's no new picture, while there should be.
+				$errorNumber = $_FILES['plaatje']['error'];
+				if ($errorNumber == UPLOAD_ERR_NO_FILE) { // If there was no file being uploaded at all. 
 					setMelding('Het toevoegen van een plaatje is verplicht.', -1);
-					$allOK=false;
-				}elseif($errorNumber!=UPLOAD_ERR_OK){
+					$allOK = false;
+				} elseif ($errorNumber != UPLOAD_ERR_OK) {
 					// Uploading the picture failed.
-					$allOK=false;
+					$allOK = false;
 				}
 				// The last possibility, $errorNumber==UPLOAD_ERR_OK is being issued above, where the picture
 				// is being moved.
 			}
-			
-			$mededeling=new Mededeling($mededelingProperties);
-			if($allOK){
+
+			$mededeling = new Mededeling($mededelingProperties);
+			if ($allOK) {
 				// Save the mededeling to the database. (Either via UPDATE or INSERT).
-				$realId=$mededeling->save();
-				if($realId==-1) // If something went wrong, just go to the main page.
-					$realId='';
+				$realId = $mededeling->save();
+				if ($realId == -1) { // If something went wrong, just go to the main page.
+					$realId = '';
+				}
 				//TODO: Melding weergeven dat er iets toegevoegd is (?)
 				$nieuweLocatie = MEDEDELINGEN_ROOT;
-				if($prullenbak){
-					$nieuweLocatie .= 'prullenbak/';
+				if ($prullenbak) {
+					$nieuweLocatie .= '/prullenbak';
 				}
-				$nieuweLocatie .= $realId;
-				header('location: '.$nieuweLocatie); exit;
+				$nieuweLocatie .= '/' . $realId;
+				header('location: ' . $nieuweLocatie);
+				exit;
 			}
-		}else{ // User is going to edit an existing Mededeling or fill in an empty form.
-			$mededeling=new Mededeling($mededelingId);
+		} else { // User is going to edit an existing Mededeling or fill in an empty form.
+			$mededeling = new Mededeling($mededelingId);
 		}
-		
+
 		// Controleren of de gebruiker deze mededeling wel mag bewerken.
-		if($mededelingId>0 AND !$mededeling->magBewerken()){ // Moet dit niet eerder gebeuren?
-			header('location: '.CSR_ROOT);	// Misschien melding weergeven en terug gaan naar
-											// de mededelingenpagina? 
+		if ($mededelingId > 0 AND ! $mededeling->magBewerken()) { // Moet dit niet eerder gebeuren?
+			header('location: ' . CSR_ROOT); // Misschien melding weergeven en terug gaan naar
+			// de mededelingenpagina? 
 			exit;
 		}
-		$content=new MededelingContent($mededeling, $prullenbak);
-	break; 
+		$content = new MededelingContent($mededeling, $prullenbak);
+		break;
 
 	default:
-		$content=new MededelingenContent($mededelingId, $prullenbak);
-		if(isset($pagina)){	// Als de gebruiker een pagina opvraagt.
+		$content = new MededelingenContent($mededelingId, $prullenbak);
+		if (isset($pagina)) { // Als de gebruiker een pagina opvraagt.
 			$content->setPaginaNummer($pagina);
-		}elseif($mededelingId==0){	// Als de gebruiker GEEN pagina opvraagt en ook geen mededeling.
+		} elseif ($mededelingId == 0) { // Als de gebruiker GEEN pagina opvraagt en ook geen mededeling.
 			$content->setPaginaNummer(1);
 		}
-	break;
+		break;
 }
 
-$page=new CsrLayoutPage($content);
+$page = new CsrLayoutPage($content);
 $page->addStylesheet('mededelingen.css');
 $page->view();
 
 function resize_plaatje($file) {
-	list($owdt,$ohgt,$otype)=@getimagesize($file);
-	switch($otype) {
-		case 1:  $oldimg=imagecreatefromgif($file); break;
-		case 2:  $oldimg=imagecreatefromjpeg($file); break;
-		case 3:  $oldimg=imagecreatefrompng($file); break;
+	list($owdt, $ohgt, $otype) = @getimagesize($file);
+	switch ($otype) {
+		case 1: $oldimg = imagecreatefromgif($file);
+			break;
+		case 2: $oldimg = imagecreatefromjpeg($file);
+			break;
+		case 3: $oldimg = imagecreatefrompng($file);
+			break;
 	}
-	if($oldimg) {
-		$newimg=imagecreatetruecolor(200, 200);
-		if(imagecopyresampled($newimg, $oldimg, 0, 0, 0, 0, 200, 200, $owdt, $ohgt)){
-			switch($otype) {
-				case 1: imagegif($newimg,$file); break;
-				case 2: imagejpeg($newimg,$file,90); break;
-				case 3: imagepng($newimg,$file);  break;
+	if ($oldimg) {
+		$newimg = imagecreatetruecolor(200, 200);
+		if (imagecopyresampled($newimg, $oldimg, 0, 0, 0, 0, 200, 200, $owdt, $ohgt)) {
+			switch ($otype) {
+				case 1: imagegif($newimg, $file);
+					break;
+				case 2: imagejpeg($newimg, $file, 90);
+					break;
+				case 3: imagepng($newimg, $file);
+					break;
 			}
 			imagedestroy($newimg);
-		}else{
+		} else {
 			//mislukt
 		}
 	}
 }
+
 ?>

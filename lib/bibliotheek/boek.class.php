@@ -140,7 +140,7 @@ class Boek {
 
 	//url naar dit boek
 	public function getUrl() {
-		return CSR_ROOT . 'communicatie/bibliotheek/boek/' . $this->getId();
+		return CSR_ROOT . '/communicatie/bibliotheek/boek/' . $this->getId();
 	}
 
 	/**

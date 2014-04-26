@@ -2,7 +2,7 @@
 <form action="{$nieuws_root}bewerken/{$mededeling->getId()}" method="post" enctype="multipart/form-data">
 	{$view->getMelding()}
 	{if !$mededeling->isModerator()}
-	Hier kunt u een mededeling toevoegen. Het zal echter niet direct zichtbaar worden, maar &eacute;&eacute;rst door de PubCie worden goedgekeurd.<br /><br />
+		Hier kunt u een mededeling toevoegen. Het zal echter niet direct zichtbaar worden, maar &eacute;&eacute;rst door de PubCie worden goedgekeurd.<br /><br />
 	{/if} 
 	<label>Titel:</label>
 	<input type="text" name="titel" value="{$mededeling->getTitel()|escape:'html'}" class="titel" /><br />
@@ -14,7 +14,7 @@
 		<a id="vergroot" class="handje knop" onclick="vergrootTextarea('tekst', 10)" title="Vergroot het invoerveld"><strong>&uarr;&darr;</strong></a>
 		<a id="opmaakhulp" class="handje knop" onclick="$('#ubbhulpverhaal').toggle();" title="Opmaakhulp weergeven">UBB</a>
 	</div>
-	
+
 	<div id="instellingen">
 		<label for="categorie">Categorie: <a title="De categorie bepaalt welk kleurtje erv&oacute;&oacute;r komt in de overzichtspagina.">{icon get="vraagteken"}</a></label>
 		<select name="categorie">
@@ -40,7 +40,7 @@
 		{/if}
 		<label>Vervalt op:</label>
 		<div id="vervalt">
-			<input type="checkbox" name="vervaltijdAan"{if $mededeling->getVervaltijd()!==null} checked="checked"{/if} onchange="this.form.vervaltijd.disabled=this.form.vervaltijd.disabled==''?'disabled':''" />&nbsp;
+			<input type="checkbox" name="vervaltijdAan"{if $mededeling->getVervaltijd()!==null} checked="checked"{/if} onchange="this.form.vervaltijd.disabled = this.form.vervaltijd.disabled == '' ? 'disabled' : ''" />&nbsp;
 			<input id="vervaltijd" type="text" name="vervaltijd" value="{if $mededeling->getVervaltijd()!==null}{$mededeling->getVervaltijd()|date_format:$datumtijdFormaat}{else}{$standaardVervaltijd}" disabled="disabled{/if}" />
 		</div><br />
 		{if $mededeling->isModerator() AND $mededeling->getZichtbaarheid()!='wacht_goedkeuring'}
@@ -55,7 +55,7 @@
 			<strong>Afbeelding</strong><br />
 		{/if}
 		{if $mededeling->getPlaatje() != ''}
-			<img src="{$CSR_PICS}nieuws/{$mededeling->getPlaatje()|escape:'html'}" width="200px" height="200px" alt="Afbeelding" style="margin: 5px 0px 15px 0px;" /><br />
+			<img src="{$CSR_PICS}/nieuws/{$mededeling->getPlaatje()|escape:'html'}" width="200px" height="200px" alt="Afbeelding" style="margin: 5px 0px 15px 0px;" /><br />
 			<strong>Vervangende afbeelding</strong><br />
 		{/if}
 		<input type="file" name="plaatje" size="40" /><br />

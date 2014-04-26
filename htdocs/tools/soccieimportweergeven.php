@@ -1,81 +1,81 @@
 <?php
+
 require_once 'configuratie.include.php';
 
-if(!LoginLid::mag('P_LEDEN_MOD,groep:SocCie,groep:NBG')){
-	header('location: '.CSR_ROOT);
+if (!LoginLid::mag('P_LEDEN_MOD,groep:SocCie,groep:NBG')) {
+	header('location: ' . CSR_ROOT);
 	exit;
 }
 
 //verzamel bestaande gegevens
-$sLedenQuery="
+$sLedenQuery = "
 	SELECT
 		voornaam, achternaam, tussenvoegsel, uid, soccieID, createTerm, socciesaldo
 	FROM
 		lid";
-$rLeden=$db->query($sLedenQuery);
-while($aData=$db->next($rLeden)){
-	$aLeden[(int)$aData['soccieID'].$aData['createTerm']]=$aData;
+$rLeden = $db->query($sLedenQuery);
+while ($aData = $db->next($rLeden)) {
+	$aLeden[(int) $aData['soccieID'] . $aData['createTerm']] = $aData;
 }
 
 //lees dump van de laatste import in
-$soccieinput=simplexml_load_file ('../../data/soccie.xml');
+$soccieinput = simplexml_load_file('../../data/soccie.xml');
 
 //bepaal sortering
-$sorteeropties=array('voornaam', 'achternaam', 'id', 'saldo', 'createTerm');
-if(isset($_GET['sorteer']) AND in_array($_GET['sorteer'], $sorteeropties)){
-	$sorteerkey=$_GET['sorteer'];
-}else{
-	$sorteerkey=false;
+$sorteeropties = array('voornaam', 'achternaam', 'id', 'saldo', 'createTerm');
+if (isset($_GET['sorteer']) AND in_array($_GET['sorteer'], $sorteeropties)) {
+	$sorteerkey = $_GET['sorteer'];
+} else {
+	$sorteerkey = false;
 }
 
 //splitst bestaande en niet-bestaande accounts
-$accounts=array();
-$teller['totaal']=0;
-$teller['inDb']=0;
-$teller['onbekend']=0;
+$accounts = array();
+$teller['totaal'] = 0;
+$teller['inDb'] = 0;
+$teller['onbekend'] = 0;
 
-$zero=array('negatief'=>0.0,'positief'=>0.0);
-$saldo['bekend']=$zero;
-$saldo['onbekend']=$zero;
+$zero = array('negatief' => 0.0, 'positief' => 0.0);
+$saldo['bekend'] = $zero;
+$saldo['onbekend'] = $zero;
 
-foreach($soccieinput as $soccielid){
+foreach ($soccieinput as $soccielid) {
 	//soccieID i.c.m. createTerm is uniek.
-	$key = (int)$soccielid->id . $soccielid->createTerm;
+	$key = (int) $soccielid->id . $soccielid->createTerm;
 
-	$account=$soccielid;
+	$account = $soccielid;
 
 	//saldo sommeren
-	$polariteit=($account->saldo<0 ? 'negatief':'positief');
+	$polariteit = ($account->saldo < 0 ? 'negatief' : 'positief');
 
-	if(array_key_exists($key, $aLeden)){
-		$filter='inDb';
+	if (array_key_exists($key, $aLeden)) {
+		$filter = 'inDb';
 
 		$account->addChild('uid', $aLeden[$key]['uid']);
-		$account->addChild('naam', $aLeden[$key]['voornaam'].' '.$aLeden[$key]['tussenvoegsel'].($aLeden[$key]['tussenvoegsel'] ? ' ':'') .$aLeden[$key]['achternaam']);
+		$account->addChild('naam', $aLeden[$key]['voornaam'] . ' ' . $aLeden[$key]['tussenvoegsel'] . ($aLeden[$key]['tussenvoegsel'] ? ' ' : '') . $aLeden[$key]['achternaam']);
 		$account->addChild('saldostek', $aLeden[$key]['socciesaldo']);
 
 		//saldo sommmeren
-		$saldo['bekend'][$polariteit]+=(float)$account->saldo;
-	}else{
-		$filter='onbekend';
+		$saldo['bekend'][$polariteit]+=(float) $account->saldo;
+	} else {
+		$filter = 'onbekend';
 
 		//saldo sommmeren
-		$saldo['onbekend'][$polariteit]+=(float)$account->saldo;
-
+		$saldo['onbekend'][$polariteit]+=(float) $account->saldo;
 	}
 
-	if($sorteerkey){
-		$prefix="";
-		if($sorteerkey=='id'){
-			$prefix .= ($account->id<10) ? "0" : "";
-			$prefix .= ($account->id<100) ? "0" : "";
+	if ($sorteerkey) {
+		$prefix = "";
+		if ($sorteerkey == 'id') {
+			$prefix .= ($account->id < 10) ? "0" : "";
+			$prefix .= ($account->id < 100) ? "0" : "";
 		}
-		$accounts[$filter][$prefix.$account->$sorteerkey.$key]=$account;
-	}else{
-		$accounts[$filter][]=$account;
+		$accounts[$filter][$prefix . $account->$sorteerkey . $key] = $account;
+	} else {
+		$accounts[$filter][] = $account;
 	}
-	$teller[$filter]++;
-	$teller['totaal']++;
+	$teller[$filter] ++;
+	$teller['totaal'] ++;
 }
 //sortering
 ksort($accounts['onbekend']);
@@ -106,16 +106,16 @@ echo '<a href="/saldostatistiekensoccie">Overzichtpagina voor SocCie met opmerke
 echo '</p>';
 
 echo '<p>Onderstaande gegevens zijn van de laatste import uit de socciepc.</p>';
-echo 'Totaal aantal accounts: '.$teller['totaal'].'<br/>';
-echo 'Onbekende accounts: '.$teller['onbekend'].' (weergegeven: '.count($accounts['onbekend']).')<br/>';
-echo 'Bekende accounts: '.$teller['inDb'].' (weergegeven: '.count($accounts['inDb']).')<br/>';
+echo 'Totaal aantal accounts: ' . $teller['totaal'] . '<br/>';
+echo 'Onbekende accounts: ' . $teller['onbekend'] . ' (weergegeven: ' . count($accounts['onbekend']) . ')<br/>';
+echo 'Bekende accounts: ' . $teller['inDb'] . ' (weergegeven: ' . count($accounts['inDb']) . ')<br/>';
 echo '<br/>';
 
-$totaalneg=$saldo['bekend']['negatief']+$saldo['onbekend']['negatief'];
-$totaalpos=$saldo['bekend']['positief']+$saldo['onbekend']['positief'];
-echo 'Totaal saldo: € '.($totaalpos+$totaalneg).' (= +'.$totaalpos.'  '.$totaalneg.')<br/>';
-echo 'Saldo van bekende accounts: € '.($saldo['bekend']['positief']+$saldo['bekend']['negatief']).' (= +'.$saldo['bekend']['positief'].'  '.$saldo['bekend']['negatief'].')<br/>';
-echo 'Saldo van onbekende accounts: € '.($saldo['onbekend']['positief']+$saldo['onbekend']['negatief']).' (= +'.$saldo['onbekend']['positief'].'  '.$saldo['onbekend']['negatief'].')<br/>';
+$totaalneg = $saldo['bekend']['negatief'] + $saldo['onbekend']['negatief'];
+$totaalpos = $saldo['bekend']['positief'] + $saldo['onbekend']['positief'];
+echo 'Totaal saldo: € ' . ($totaalpos + $totaalneg) . ' (= +' . $totaalpos . '  ' . $totaalneg . ')<br/>';
+echo 'Saldo van bekende accounts: € ' . ($saldo['bekend']['positief'] + $saldo['bekend']['negatief']) . ' (= +' . $saldo['bekend']['positief'] . '  ' . $saldo['bekend']['negatief'] . ')<br/>';
+echo 'Saldo van onbekende accounts: € ' . ($saldo['onbekend']['positief'] + $saldo['onbekend']['negatief']) . ' (= +' . $saldo['onbekend']['positief'] . '  ' . $saldo['onbekend']['negatief'] . ')<br/>';
 
 
 echo '<h4>Mogelijke oorzaken niet-gekoppelde accounts</h4>';
@@ -126,7 +126,7 @@ echo '<ul>
 	</ul>';
 echo 'De PubCie kan individuele leden bijwerken, NBG zorgt voor uitgebreidere koppelacties.';
 echo '<br /><br />';
-if(LoginLid::mag('P_LEDEN_MOD,groep:NBG')){
+if (LoginLid::mag('P_LEDEN_MOD,groep:NBG')) {
 	echo '<div style="background: lightgrey;">';
 	echo '<i>Privé opmerking voor PubCie/NBG</i>:<br />';
 	echo 'Op de console kun je een koppelscript runnen die alle soccieIDs in database automatisch probeert te updaten.<br />';
@@ -146,8 +146,8 @@ profiel van een lid.</p>';
 echo '</p>';
 
 echo 'Sorteer tabellen op: ';
-foreach($sorteeropties as $optie){
-	echo '<a href="/tools/soccieimportweergeven.php?sorteer='.$optie.'">'.$optie.'</a> ';
+foreach ($sorteeropties as $optie) {
+	echo '<a href="/tools/soccieimportweergeven.php?sorteer=' . $optie . '">' . $optie . '</a> ';
 }
 
 echo '<h3>SocCieaccounts die niet gekoppeld zijn</h3>';
@@ -156,22 +156,20 @@ viewTable($accounts['onbekend']);
 echo '<h3>SocCieaccounts die gekoppeld zijn aan profielen op de webstek</h3>';
 viewTable($accounts['inDb']);
 
-
-function viewTable($aAccounts){
+function viewTable($aAccounts) {
 	echo '<table>';
 	echo '<tr><th>Naam</th><th>ID</th><th>Saldo</th><th>Account gemaakt bij</th><th>naam op webstek</th><th>uid</th><th>Saldo op webstek</th></tr>';
-	foreach($aAccounts as $account){
+	foreach ($aAccounts as $account) {
 		echo '<tr>';
-		echo 	'<td>'.$account->voornaam.' '.$account->achternaam.'</td>';
-		echo 	'<td>'.$account->id.'</td>';
-		echo 	'<td>'.$account->saldo.'</td>';
-		echo 	'<td style="border-right-color: black;">'.$account->createTerm.'</td>';
-		echo 	'<td>'.$account->naam.'</td>';
-		echo 	'<td><a href="'.CSR_ROOT.'communicatie/profiel/'.$account->uid.'">'.$account->uid.'</a></td>';
-		echo 	'<td>'.$account->saldostek.'</td>';
+		echo '<td>' . $account->voornaam . ' ' . $account->achternaam . '</td>';
+		echo '<td>' . $account->id . '</td>';
+		echo '<td>' . $account->saldo . '</td>';
+		echo '<td style="border-right-color: black;">' . $account->createTerm . '</td>';
+		echo '<td>' . $account->naam . '</td>';
+		echo '<td><a href="' . CSR_ROOT . '/communicatie/profiel/' . $account->uid . '">' . $account->uid . '</a></td>';
+		echo '<td>' . $account->saldostek . '</td>';
 		echo '</tr>';
 	}
 	echo '</table>';
 	echo '<br /><br />';
 }
-

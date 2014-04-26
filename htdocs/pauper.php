@@ -4,7 +4,7 @@ require_once 'configuratie.include.php';
 
 if (array_key_exists('exit', $_GET)) {
 	unset($_SESSION['pauper']);
-	header("Location: " . CSR_SERVER);
+	header("Location: " . CSR_ROOT);
 	exit;
 }
 

@@ -22,7 +22,7 @@
 							{icon get="resetpassword"}</a>
 						{/if}
 						{if $profiel->getStatus()=='S_NOVIET' AND LoginLid::mag('groep:novcie')}
-						<a href="/communicatie/profiel/{$profiel->getUid()}/novietBewerken" class="knop"><img src="{$CSR_PICS}forum/bewerken.png" title="Bewerk dit profiel" />Noviet bewerken</a><br />
+						<a href="/communicatie/profiel/{$profiel->getUid()}/novietBewerken" class="knop"><img src="{$CSR_PICS}/forum/bewerken.png" title="Bewerk dit profiel" />Noviet bewerken</a><br />
 						{/if}
 					<a href="/communicatie/profiel/{$profiel->getUid()}/addToGoogleContacts/" class="knop" title="{*if $profiel->isInGoogleContacts()}Er bestaat al een contact met deze naam in je Google-contacts. Klik om te updaten.{else*}Voeg dit profiel toe aan mijn google adresboek{*/if*}"><img src="http://code.google.com/favicon.ico" /></a>
 					<br />
@@ -63,7 +63,7 @@
 					<div class="label">
 						{if $profhtml.adres!=''}
 							<a href="http://maps.google.nl/maps?q={$profhtml.adres|urlencode}+{$profhtml.woonplaats|urlencode}+{$profhtml.land|urlencode} ({if $profhtml.woonoord!=''}{$profiel->getWoonoord()->getNaam()}{else}{$profiel->getNaamLink('civitas', 'plain')}{/if})">
-								<img src="{$CSR_PICS}layout/googlemaps.gif" width="35px" alt="googlemap voor dit adres" />
+								<img src="{$CSR_PICS}/layout/googlemaps.gif" width="35px" alt="googlemap voor dit adres" />
 							</a>
 						{/if}
 					</div>
@@ -81,7 +81,7 @@
 						{if $profhtml.o_adres!=''}
 							<div class="label">
 								<a href="http://maps.google.nl/maps?q={$profhtml.o_adres|urlencode}+{$profhtml.o_woonplaats|urlencode}+{$profhtml.o_land|urlencode} (ouders van {$profiel->getNaamLink('civitas', 'plain')})">
-									<img src="{$CSR_PICS}layout/googlemaps.gif" width="35px" alt="googlemap voor dit adres" />
+									<img src="{$CSR_PICS}/layout/googlemaps.gif" width="35px" alt="googlemap voor dit adres" />
 								</a>
 							</div>
 						{/if}

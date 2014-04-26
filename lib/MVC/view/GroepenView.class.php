@@ -14,6 +14,7 @@ class GroepenView extends TemplateView {
 		$this->smarty->display('MVC/groepen/menu_pagina.tpl');
 		foreach ($this->model as $groep) {
 			$this->smarty->assign('groep', $groep);
+			$this->smarty->assign('link', '/groepen/' . strtolower(get_class($groep)));
 			$this->smarty->display('MVC/groepen/groep.tpl');
 		}
 	}

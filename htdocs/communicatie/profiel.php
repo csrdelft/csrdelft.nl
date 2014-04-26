@@ -55,7 +55,7 @@ if (!(LoginLid::mag('P_LEDEN_READ') or LoginLid::mag('P_OUDLEDEN_READ'))) {
 
 			if ($profiel->magBewerken()) {
 				if ($profiel->validate() AND $profiel->save()) {
-					header('location: ' . CSR_ROOT . 'communicatie/profiel/' . $uid);
+					header('location: ' . CSR_ROOT . '/communicatie/profiel/' . $uid);
 					exit;
 				} else {
 					$midden = new ProfielEditContent($profiel, $actie);
@@ -68,8 +68,7 @@ if (!(LoginLid::mag('P_LEDEN_READ') or LoginLid::mag('P_OUDLEDEN_READ'))) {
 			//maak van een standaard statusstring van de input
 			$status = 'S_' . strtoupper($status);
 			if (!
-					(LoginLid::mag('P_ADMIN,P_LEDEN_MOD') OR
-					($status == 'S_NOVIET' AND LoginLid::mag('groep:novcie')))
+					(LoginLid::mag('P_ADMIN,P_LEDEN_MOD') OR ( $status == 'S_NOVIET' AND LoginLid::mag('groep:novcie')))
 			) {
 
 				// nieuwe leden mogen worden aangemaakt door P_ADMIN,P_LEDEN_MOD,
@@ -97,7 +96,7 @@ if (!(LoginLid::mag('P_LEDEN_READ') or LoginLid::mag('P_OUDLEDEN_READ'))) {
 			$profiel = new ProfielStatus($uid, $actie);
 
 			if ($profiel->validate() AND $profiel->save()) {
-				header('location: ' . CSR_ROOT . 'communicatie/profiel/' . $uid);
+				header('location: ' . CSR_ROOT . '/communicatie/profiel/' . $uid);
 				exit;
 			} else {
 				$midden = new ProfielStatusContent($profiel, $actie);
@@ -128,11 +127,11 @@ if (!(LoginLid::mag('P_LEDEN_READ') or LoginLid::mag('P_OUDLEDEN_READ'))) {
 			break;
 		case 'addToGoogleContacts';
 			require_once('googlesync.class.php');
-			GoogleSync::doRequestToken(CSR_ROOT . 'communicatie/profiel/' . $uid . '/addToGoogleContacts');
+			GoogleSync::doRequestToken(CSR_ROOT . '/communicatie/profiel/' . $uid . '/addToGoogleContacts');
 
 			$gSync = GoogleSync::instance();
 			$message = $gSync->syncLid($uid);
-			invokeRefresh(CSR_ROOT . 'communicatie/profiel/' . $uid, '<h2>Opgeslagen in Google Contacts:</h2>' . $message, 2);
+			invokeRefresh(CSR_ROOT . '/communicatie/profiel/' . $uid, '<h2>Opgeslagen in Google Contacts:</h2>' . $message, 2);
 			exit;
 			break;
 
@@ -140,7 +139,7 @@ if (!(LoginLid::mag('P_LEDEN_READ') or LoginLid::mag('P_OUDLEDEN_READ'))) {
 		case 'rssToken':
 			if ($uid == LoginLid::instance()->getUid()) {
 				LoginLid::instance()->getToken();
-				header('location: ' . CSR_ROOT . 'communicatie/profiel/' . $uid . '#forum');
+				header('location: ' . CSR_ROOT . '/communicatie/profiel/' . $uid . '#forum');
 				exit;
 			}
 		//geen break hier, want als de bovenstaande actie aangevraagd werd voor de

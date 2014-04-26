@@ -67,7 +67,7 @@ class CsrUbb extends eamBBParser {
 		}
 		// only valid patterns
 		if (startsWith($href, '/')) { // locale paden
-			$href = CSR_SERVER . $href;
+			$href = CSR_ROOT . $href;
 		} elseif (!filter_var($href, FILTER_VALIDATE_URL)) { // http vergeten?
 			$href = 'http://' . $href;
 		}
@@ -363,7 +363,7 @@ class CsrUbb extends eamBBParser {
 					//het filmpje in een topic geplaatst wordt een linkje.
 					$this->youtube[$id] = $id;
 					return '<div id="youtube' . $id . '" class="youtubeVideo">
-						<a href="http://www.youtube.com/watch?v=' . $id . '" class="afspelen" onclick="return youtubeDisplay(\'' . $id . '\')"><img width="36" height="36" src="' . CSR_PICS . 'forum/afspelen.gif" alt="afspelen" /></a>
+						<a href="http://www.youtube.com/watch?v=' . $id . '" class="afspelen" onclick="return youtubeDisplay(\'' . $id . '\')"><img width="36" height="36" src="' . CSR_PICS . '/forum/afspelen.gif" alt="afspelen" /></a>
 						<img src="http://img.youtube.com/vi/' . $id . '/default.jpg" style="width: 130px; height: 97px;"
 							alt="klik op de afbeelding om de video te starten"/></div>';
 				}
@@ -408,7 +408,7 @@ class CsrUbb extends eamBBParser {
 				$html = '<a href="#youtube' . $content . '" onclick="youtubeDisplay(\'' . $content . '\')" >&raquo; youtube-filmpje (ergens anders op deze pagina)</a>';
 			} else {
 				$html = '<div id="youtube' . $content . '" class="youtubeVideo">
-					<a href="http://www.youtube.com/watch?v=' . $content . '" class="afspelen" onclick="return youtubeDisplay(\'' . $content . '\')"><img width="36" height="36" src="' . CSR_PICS . 'forum/afspelen.gif" alt="afspelen" /></a>
+					<a href="http://www.youtube.com/watch?v=' . $content . '" class="afspelen" onclick="return youtubeDisplay(\'' . $content . '\')"><img width="36" height="36" src="' . CSR_PICS . '/forum/afspelen.gif" alt="afspelen" /></a>
 					<img src="http://img.youtube.com/vi/' . $content . '/default.jpg" style="width: 130px; height: 97px;"
 						alt="klik op de afbeelding om de video te starten"/></div>';
 				//sla het youtube-id op in een array, dan plaatsen we de tweede keer dat

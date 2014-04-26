@@ -1,4 +1,5 @@
 <?php
+
 # C.S.R. Delft | pubcie@csrdelft.nl
 # -------------------------------------------------------------------
 # class.fotoalbum.php
@@ -6,314 +7,311 @@
 # Dataklassen voor het fotoalbum
 # -------------------------------------------------------------------
 
-
-class Fotoalbum{
+class Fotoalbum {
 
 	private $pad;
 	private $mapnaam;
-
 	//als deze regexp matched is het album alleen voor leden
-	private $alleenLeden='/(intern|novitiaat|ontvoering|feuten|slachten|zuipen|prive|privé)/i';
-
+	private $alleenLeden = '/(intern|novitiaat|ontvoering|feuten|slachten|zuipen|prive|privé)/i';
 	//als deze regexp matched is het album alleen voor DéDé
-	private $alleenVrouwen='/(DéDé-privé|DeDe-prive|vrouwen-only)/i';
-
+	private $alleenVrouwen = '/(DéDé-privé|DeDe-prive|vrouwen-only)/i';
 	//lazy loader-placeholders
-	private $fotos=null;
-	private $subalbums=null;
+	private $fotos = null;
+	private $subalbums = null;
 
-	function Fotoalbum($pad,$mapnaam){
+	function Fotoalbum($pad, $mapnaam) {
 		//beetje vies dit, maar er moet natuurlijk een fatsoenlijk pad uitkomen.
-		if(substr($pad, 0, 1)!='/'){
-			$pad='/'.$pad;
+		if (substr($pad, 0, 1) != '/') {
+			$pad = '/' . $pad;
 		}
-		$this->pad=$pad;
+		$this->pad = $pad;
 
 
-		$this->mapnaam=$mapnaam;
+		$this->mapnaam = $mapnaam;
 	}
 
-	function getPad(){
+	function getPad() {
 		return $this->pad;
 	}
 
-	function getFullpath(){
-		return PICS_PATH.'/fotoalbum/'.$this->pad;
+	function getFullpath() {
+		return PICS_PATH . '/fotoalbum/' . $this->pad;
 	}
 
-	function getMapnaam(){
+	function getMapnaam() {
 		return $this->mapnaam;
 	}
 
-	function getNaam(){
+	function getNaam() {
 		return ucfirst($this->getMapnaam());
 	}
 
 	//bestaat er een map met de naam van het pad.
-	function exists(){
+	function exists() {
 		return file_exists($this->getFullpath()) && is_dir($this->getFullpath());
 	}
 
 	//file modification time van het album.
-	function modified(){
+	function modified() {
 		return filemtime($this->getFullpath());
 	}
 
-	function getMostrecentSubAlbum(){
-		$albums=$this->getSubAlbums();
+	function getMostrecentSubAlbum() {
+		$albums = $this->getSubAlbums();
 
 		//geen subalbums, return self
-		if(!is_array($albums) || count($albums)<1){
+		if (!is_array($albums) || count($albums) < 1) {
 			return $this;
 		}
 
-		$recent=$this;
-		foreach($albums as $album){
-			if($album->modified()>$recent->modified() && $recent->magBekijken()){
-				$recent=$album->getMostrecentSubAlbum();
+		$recent = $this;
+		foreach ($albums as $album) {
+			if ($album->modified() > $recent->modified() && $recent->magBekijken()) {
+				$recent = $album->getMostrecentSubAlbum();
 			}
 		}
 		return $recent;
 	}
 
-	function getBreadcrumb(){
-		if($this->getPad()==''){
+	function getBreadcrumb() {
+		if ($this->getPad() == '') {
 			return '';
 		} else {
-			$breadcrumb='<a href="/actueel/fotoalbum/">Fotoalbum</a>';
-			$url='/actueel/fotoalbum/';
-			$mappen=explode('/',$this->getPad());
+			$breadcrumb = '<a href="/actueel/fotoalbum/">Fotoalbum</a>';
+			$url = '/actueel/fotoalbum/';
+			$mappen = explode('/', $this->getPad());
 
 			array_pop($mappen);
 			array_pop($mappen);
-			foreach($mappen as $map){
-				if($map==''){
+			foreach ($mappen as $map) {
+				if ($map == '') {
 					continue;
 				}
-				$url.=urlencode($map).'/';
-				$breadcrumb.=' » <a href="'.$url.'" title="'.$map.'">'.$map.'</a>';
+				$url.=urlencode($map) . '/';
+				$breadcrumb.=' » <a href="' . $url . '" title="' . $map . '">' . $map . '</a>';
 			}
 			return $breadcrumb;
 		}
 	}
 
-	function getThumbURL(){
+	function getThumbURL() {
 
 		# Foto uit album zelf
-		$fotos=$this->getFotos();
-		if(is_array($fotos) AND count($fotos)>0){
+		$fotos = $this->getFotos();
+		if (is_array($fotos) AND count($fotos) > 0) {
 
 			//gebruik de foto eindigend op folder.jpg als die bestaat.
-			foreach($fotos as $foto){
-				if(substr($foto->getBestandsnaam(),-10)=='folder.jpg'){
+			foreach ($fotos as $foto) {
+				if (substr($foto->getBestandsnaam(), -10) == 'folder.jpg') {
 					return $foto->getThumbURL();
 				}
 			}
 
 			//anders gewoon de eerste.
-			$foto=$fotos[0];
+			$foto = $fotos[0];
 			return $foto->getThumbURL();
 		}
 
 		# Foto uit subalbum
-		$albums=$this->getSubAlbums();
-		if($albums!==false){
-			foreach($albums as $album){
+		$albums = $this->getSubAlbums();
+		if ($albums !== false) {
+			foreach ($albums as $album) {
 				return $album->getThumbURL();
 			}
 		}
 
-		return CSR_PICS.'fotoalbum/_geen_thumb.jpg';
+		return CSR_PICS . '/fotoalbum/_geen_thumb.jpg';
 	}
 
-	function getSubAlbums(){
+	function getSubAlbums() {
 		//lazy-loading...
-		if($this->subalbums===null){
+		if ($this->subalbums === null) {
 			//Mappenlijst ophalen en sorteren
-			$mappen=array();
+			$mappen = array();
 
-			if(is_dir($this->getFullpath())){
-				$handle=opendir($this->getFullpath());
-				while(false!==($file=readdir($handle))){
-					if(is_dir($this->getFullpath().$file) && !preg_match('/^(\.|\_)(.*)$/',$file)){
-						$mappen[]=$file;
+			if (is_dir($this->getFullpath())) {
+				$handle = opendir($this->getFullpath());
+				while (false !== ($file = readdir($handle))) {
+					if (is_dir($this->getFullpath() . $file) && !preg_match('/^(\.|\_)(.*)$/', $file)) {
+						$mappen[] = $file;
 					}
 				}
 				rsort($mappen);
 			}
 			//$mappen=array_reverse($mappen);
-
 			# Albums aanmaken en teruggeven
-			$albums=array();
-			foreach($mappen as $map){
-				$album=new Fotoalbum($this->getPad().$map.'/', $map);
-				if($album->magBekijken()){
-					$albums[]=$album;
+			$albums = array();
+			foreach ($mappen as $map) {
+				$album = new Fotoalbum($this->getPad() . $map . '/', $map);
+				if ($album->magBekijken()) {
+					$albums[] = $album;
 				}
 			}
 
-			if(count($albums)>0){
-				$this->subalbums=$albums;
-			}else{
-				$this->subalbums=false;
+			if (count($albums) > 0) {
+				$this->subalbums = $albums;
+			} else {
+				$this->subalbums = false;
 			}
 		}
 		return $this->subalbums;
 	}
 
-	function getFotos($compleet=true){
+	function getFotos($compleet = true) {
 		//lazy-loading...
-		if($this->fotos===null){
-			$bestanden=array();
-			if(!$this->exists()){
-				$this->fotos=false;
+		if ($this->fotos === null) {
+			$bestanden = array();
+			if (!$this->exists()) {
+				$this->fotos = false;
 			}
-			if(is_dir(PICS_PATH.'/fotoalbum/'.$this->pad) && $handle=opendir(PICS_PATH.'/fotoalbum/'.$this->pad)){
-				while(false!==($bestand=readdir($handle))){
-					$bestanden[]=$bestand;
+			if (is_dir(PICS_PATH . '/fotoalbum/' . $this->pad) && $handle = opendir(PICS_PATH . '/fotoalbum/' . $this->pad)) {
+				while (false !== ($bestand = readdir($handle))) {
+					$bestanden[] = $bestand;
 				}
 			}
 
 			sort($bestanden);
 
-			$fotos=array();
-			foreach($bestanden as $bestand){
-				if(preg_match('/^[^_].*\.(jpg|jpeg)$/i',$bestand)){
-					$foto=new Foto($this->pad, $bestand);
-					if($foto->isCompleet()==$compleet){
-						$fotos[]=$foto;
+			$fotos = array();
+			foreach ($bestanden as $bestand) {
+				if (preg_match('/^[^_].*\.(jpg|jpeg)$/i', $bestand)) {
+					$foto = new Foto($this->pad, $bestand);
+					if ($foto->isCompleet() == $compleet) {
+						$fotos[] = $foto;
 					}
 				}
 			}
-			$this->fotos=$fotos;
+			$this->fotos = $fotos;
 		}
 		return $this->fotos;
 	}
 
-	function magBekijken(){
-		if(LoginLid::mag('P_LEDEN_READ')){
-			if(preg_match($this->alleenVrouwen, $this->getPad())){ # Deze foto's alleen voor DéDé
-				if(LoginLid::instance()->getLid()->getGeslacht() == 'v'){
+	function magBekijken() {
+		if (LoginLid::mag('P_LEDEN_READ')) {
+			if (preg_match($this->alleenVrouwen, $this->getPad())) { # Deze foto's alleen voor DéDé
+				if (LoginLid::instance()->getLid()->getGeslacht() == 'v') {
 					return true;
 				}
 				return false;
 			}
 			return true;
-		}else{
-			if(preg_match($this->alleenLeden, $this->getPad())){
+		} else {
+			if (preg_match($this->alleenLeden, $this->getPad())) {
 				return false; # Deze foto's niet voor gewoon volk
 			}
-			if(preg_match($this->alleenVrouwen, $this->getPad())){
+			if (preg_match($this->alleenVrouwen, $this->getPad())) {
 				return false; # Deze foto's alleen voor DéDé
 			}
 			return true;
 		}
 	}
 
-	function verwerkFotos(){
+	function verwerkFotos() {
 		# Subalbums
-		$albums=$this->getSubAlbums();
-		if($albums!==false){
-			foreach($albums as $album){
+		$albums = $this->getSubAlbums();
+		if ($albums !== false) {
+			foreach ($albums as $album) {
 				$album->verwerkFotos();
 			}
 		}
 
 		# Foto's
-		$fotos=$this->getFotos(false);
-		if($fotos!==false){
+		$fotos = $this->getFotos(false);
+		if ($fotos !== false) {
 			# Controleren of _thums en _resized bestaan, zo niet dan maken
-			if(!file_exists($this->getFullpath().'/_thumbs')){
-				mkdir($this->getFullpath().'/_thumbs');
-				chmod($this->getFullpath().'/_thumbs', 0755);
+			if (!file_exists($this->getFullpath() . '/_thumbs')) {
+				mkdir($this->getFullpath() . '/_thumbs');
+				chmod($this->getFullpath() . '/_thumbs', 0755);
 			}
-			if(!file_exists($this->getFullpath().'/_resized')){
-				mkdir($this->getFullpath().'/_resized');
-				chmod($this->getFullpath().'/_resized', 0755);
-				chmod($this->getFullpath().'/_resized', 0755);
+			if (!file_exists($this->getFullpath() . '/_resized')) {
+				mkdir($this->getFullpath() . '/_resized');
+				chmod($this->getFullpath() . '/_resized', 0755);
+				chmod($this->getFullpath() . '/_resized', 0755);
 			}
 
 			# Thumbnails en resizeds maken
-			foreach($fotos as $foto){
-				if(!$foto->bestaatThumb()){
+			foreach ($fotos as $foto) {
+				if (!$foto->bestaatThumb()) {
 					$foto->maakThumb();
 				}
-				if(!$foto->bestaatResized()){
+				if (!$foto->bestaatResized()) {
 					$foto->maakResized();
 				}
 			}
 		}
 	}
+
 }
 
-class Foto{
+class Foto {
 
 	private $map;
 	private $bestandsnaam;
 
-	function Foto($map,$bestandsnaam){
-		$this->map=$map;
-		$this->bestandsnaam=$bestandsnaam;
+	function Foto($map, $bestandsnaam) {
+		$this->map = $map;
+		$this->bestandsnaam = $bestandsnaam;
 	}
 
-	function getMap(){
+	function getMap() {
 		return $this->map;
 	}
 
-	function getBestandsnaam(){
+	function getBestandsnaam() {
 		return $this->bestandsnaam;
 	}
 
-	function getPad(){
-		return PICS_PATH.'/fotoalbum/'.$this->getMap().$this->getBestandsnaam();
+	function getPad() {
+		return PICS_PATH . '/fotoalbum/' . $this->getMap() . $this->getBestandsnaam();
 	}
 
-	function getThumbPad(){
-		return PICS_PATH.'/fotoalbum/'.$this->getMap().'_thumbs/'.$this->getBestandsnaam();
+	function getThumbPad() {
+		return PICS_PATH . '/fotoalbum/' . $this->getMap() . '_thumbs/' . $this->getBestandsnaam();
 	}
 
-	function getResizedPad(){
-		return PICS_PATH.'/fotoalbum/'.$this->getMap().'_resized/'.$this->getBestandsnaam();
+	function getResizedPad() {
+		return PICS_PATH . '/fotoalbum/' . $this->getMap() . '_resized/' . $this->getBestandsnaam();
 	}
 
-	function getThumbURL(){
-		return CSR_PICS.'fotoalbum'.$this->urlencode($this->getMap()).'_thumbs/'.$this->urlencode($this->getBestandsnaam());
+	function getThumbURL() {
+		return CSR_PICS . '/fotoalbum' . $this->urlencode($this->getMap()) . '_thumbs/' . $this->urlencode($this->getBestandsnaam());
 	}
 
-	function getResizedURL(){
-		return CSR_PICS.'fotoalbum'.$this->urlencode($this->getMap()).'_resized/'.$this->urlencode($this->getBestandsnaam());
+	function getResizedURL() {
+		return CSR_PICS . '/fotoalbum' . $this->urlencode($this->getMap()) . '_resized/' . $this->urlencode($this->getBestandsnaam());
 	}
 
-	function bestaatThumb(){
-		return file_exists(PICS_PATH.'/fotoalbum/'.$this->getMap().'_thumbs/'.$this->getBestandsnaam());
+	function bestaatThumb() {
+		return file_exists(PICS_PATH . '/fotoalbum/' . $this->getMap() . '_thumbs/' . $this->getBestandsnaam());
 	}
 
-	function bestaatResized(){
-		return file_exists(PICS_PATH.'/fotoalbum/'.$this->getMap().'_resized/'.$this->getBestandsnaam());
+	function bestaatResized() {
+		return file_exists(PICS_PATH . '/fotoalbum/' . $this->getMap() . '_resized/' . $this->getBestandsnaam());
 	}
 
-	function maakThumb(){
+	function maakThumb() {
 		set_time_limit(0);
-		$command=IMAGEMAGICK_PATH.' '.escapeshellarg($this->getPad()).' -thumbnail 150x150^^ -gravity center -extent 150x150 -format jpg -quality 80 '.escapeshellarg($this->getThumbPad()).'';
-		echo $command.'<br />';
-		echo shell_exec($command).'<hr />';
+		$command = IMAGEMAGICK_PATH . ' ' . escapeshellarg($this->getPad()) . ' -thumbnail 150x150^^ -gravity center -extent 150x150 -format jpg -quality 80 ' . escapeshellarg($this->getThumbPad()) . '';
+		echo $command . '<br />';
+		echo shell_exec($command) . '<hr />';
 		chmod($this->getThumbPad(), 0644);
 	}
 
-	function maakResized(){
+	function maakResized() {
 		set_time_limit(0);
-		$command=IMAGEMAGICK_PATH.' '.escapeshellarg($this->getPad()).' -resize 1024x1024 -format jpg -quality 85 '.escapeshellarg($this->getResizedPad()).'';
-		echo $command.'<br />';
-		echo shell_exec($command).'<hr />';
+		$command = IMAGEMAGICK_PATH . ' ' . escapeshellarg($this->getPad()) . ' -resize 1024x1024 -format jpg -quality 85 ' . escapeshellarg($this->getResizedPad()) . '';
+		echo $command . '<br />';
+		echo shell_exec($command) . '<hr />';
 		chmod($this->getResizedPad(), 0644);
 	}
 
-	function isCompleet(){
+	function isCompleet() {
 		return ($this->bestaatThumb() && $this->bestaatResized());
 	}
 
-	function urlencode($url){
+	function urlencode($url) {
 		//urlencode() maar dan de slashes niet
 		return str_replace('%2F', '/', rawurlencode($url));
 	}
+
 }

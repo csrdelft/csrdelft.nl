@@ -60,7 +60,7 @@ class CmsPaginaController extends Controller {
 		}
 		$body = new CmsPaginaView($pagina);
 		$nieuw = array('', 'contact', 'csrindeowee', 'vereniging', 'lidworden', 'geloof', 'vorming', 'filmpjes', 'gezelligheid', 'sport', 'vragen', 'officieel', 'societeit', 'ontspanning', 'interesse', 'interesseverzonden', 'accountaanvragen');
-		if (in_array($naam, $nieuw) AND !LoginLid::mag('P_LOGGED_IN')) { // nieuwe layout alleen voor specifieke paginas en uitgelogde bezoekers
+		if (in_array($naam, $nieuw) AND ! LoginLid::mag('P_LOGGED_IN')) { // nieuwe layout alleen voor specifieke paginas en uitgelogde bezoekers
 			$tmpl = 'content';
 			$menu = '';
 			if ($naam === 'lidworden') {
@@ -92,7 +92,7 @@ class CmsPaginaController extends Controller {
 			} else {
 				setMelding('Geen wijzigingen', 0);
 			}
-			invokeRefresh(CSR_ROOT . $pagina->naam);
+			invokeRefresh(CSR_ROOT . '/' . $pagina->naam);
 		} else {
 			$this->view = new CsrLayoutPage($form, $this->zijkolom);
 		}

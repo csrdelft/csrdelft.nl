@@ -1514,9 +1514,9 @@ class SubmitResetCancel extends FormElement {
 		$this->cancelTitle = $cancel_title;
 		$this->cancelUrl = $cancel_url;
 		if ($icons) {
-			$this->submitIcon = '<img src="' . CSR_PICS . 'famfamfam/disk.png" class="icon" width="16" height="16" alt="submit" /> ';
-			$this->resetIcon = '<img src="' . CSR_PICS . 'famfamfam/arrow_rotate_anticlockwise.png" class="icon" width="16" height="16" alt="reset" /> ';
-			$this->cancelIcon = '<img src="' . CSR_PICS . 'famfamfam/delete.png" class="icon" width="16" height="16" alt="cancel" /> ';
+			$this->submitIcon = '<img src="' . CSR_PICS . '/famfamfam/disk.png" class="icon" width="16" height="16" alt="submit" /> ';
+			$this->resetIcon = '<img src="' . CSR_PICS . '/famfamfam/arrow_rotate_anticlockwise.png" class="icon" width="16" height="16" alt="reset" /> ';
+			$this->cancelIcon = '<img src="' . CSR_PICS . '/famfamfam/delete.png" class="icon" width="16" height="16" alt="cancel" /> ';
 		}
 	}
 
@@ -1524,7 +1524,7 @@ class SubmitResetCancel extends FormElement {
 		echo '<div class="FormButtons">';
 		if ($this->extraUrl) {
 			if ($this->extraIcon) {
-				$this->extraIcon = '<img src="' . CSR_PICS . 'famfamfam/' . $this->extraIcon . '.png" class="icon" width="16" height="16" alt="' . $this->extraIcon . '" /> ';
+				$this->extraIcon = '<img src="' . CSR_PICS . '/famfamfam/' . $this->extraIcon . '.png" class="icon" width="16" height="16" alt="' . $this->extraIcon . '" /> ';
 			}
 			$js = "$(this).attr('postdata', $(this).closest('form').serialize());";
 			echo '<a id="extraButton" class="knop post" title="' . $this->extraTitle . '" href="' . $this->extraUrl . '" onclick="' . $js . '">' . $this->extraIcon . $this->extraText . '</a> ';

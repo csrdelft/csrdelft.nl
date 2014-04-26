@@ -36,7 +36,7 @@
 		<meta property="og:image" content="http://plaetjes.csrdelft.nl/layout/beeldmerk.png" />
 		<meta property="og:description" content="{Instellingen::get('thuispagina', 'beschrijving')}" />
 		<link rel="alternate" title="C.S.R. Delft RSS" type="application/rss+xml" href="http://csrdelft.nl/forum/rss.xml" />
-		<link rel="shortcut icon" href="{$CSR_PICS}layout/favicon.ico" />
+		<link rel="shortcut icon" href="{$CSR_PICS}/layout/favicon.ico" />
 	</head>
 	<body>
 		<div id="header">{$mainmenu->view()}</div>

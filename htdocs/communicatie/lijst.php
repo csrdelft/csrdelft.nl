@@ -77,7 +77,7 @@ if (isset($_GET['addToGoogle'])) {
 	if ($zoeker->count() == 1) {
 		$leden = $zoeker->getLeden();
 		$lid = $leden[0];
-		header('location: ' . CSR_ROOT . 'communicatie/profiel/' . $lid->getUid());
+		header('location: ' . CSR_ROOT . '/communicatie/profiel/' . $lid->getUid());
 		exit;
 	}
 

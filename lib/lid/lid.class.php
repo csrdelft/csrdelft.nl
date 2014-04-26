@@ -603,10 +603,10 @@ class Lid implements Serializable, Agendeerbaar {
 	 * bool $square		Geef een pad naar een vierkante (150x150px) versie terug. (voor google contacts sync)
 	 */
 	function getPasfotoPath($vierkant = false) {
-		$pasfoto = 'pasfoto/geen-foto.jpg';
+		$pasfoto = '/pasfoto/geen-foto.jpg';
 		foreach (array('png', 'jpeg', 'jpg', 'gif') as $validExtension) {
 			if (file_exists(PICS_PATH . '/pasfoto/' . $this->getUid() . '.' . $validExtension)) {
-				$pasfoto = 'pasfoto/' . $this->getUid() . '.' . $validExtension;
+				$pasfoto = '/pasfoto/' . $this->getUid() . '.' . $validExtension;
 				break;
 			}
 		}
@@ -614,7 +614,7 @@ class Lid implements Serializable, Agendeerbaar {
 		if ($vierkant) {
 			$vierkant = PICS_PATH . '/pasfoto/' . $this->getUid() . '.vierkant.png';
 			if (!file_exists($vierkant)) {
-				square_crop(PICS_PATH . '/' . $pasfoto, $vierkant, 150);
+				square_crop(PICS_PATH . $pasfoto, $vierkant, 150);
 			}
 			return '/pasfoto/' . $this->getUid() . '.vierkant.png';
 		}
@@ -767,7 +767,7 @@ class Lid implements Serializable, Agendeerbaar {
 				$naam = CsrUbb::parse('[neuzen]' . $naam . '[/neuzen]');
 			}
 			$k = '';
-			$l = '<a href="' . CSR_ROOT . 'communicatie/profiel/' . $this->getUid() . '" title="' . $sVolledigeNaam . '" class="lidLink ' . $this->profiel['status'] . '">';
+			$l = '<a href="' . CSR_ROOT . '/communicatie/profiel/' . $this->getUid() . '" title="' . $sVolledigeNaam . '" class="lidLink ' . $this->profiel['status'] . '">';
 
 			if (($vorm === 'leeg' || $mode === 'visitekaartje') && LidInstellingen::get('layout', 'visitekaartjes') == 'ja') {
 				$k = '<span class="hoverIntent"><div class="hoverIntentContent visitekaartje';
