@@ -419,6 +419,7 @@ class ForumDradenModel extends PersistenceModel implements Paging {
 		$draad->wacht_goedkeuring = $wacht_goedkeuring;
 		$draad->plakkerig = false;
 		$draad->belangrijk = false;
+		$draad->eerste_post_plakkerig = false;
 		$draad->draad_id = (int) ForumDradenModel::instance()->create($draad);
 		return $draad;
 	}
