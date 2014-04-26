@@ -224,7 +224,7 @@ function getDateTime($timestamp = null) {
  */
 function getWeekNumber($timestamp) {
 	if (date('w', $timestamp) == 0) {
-		return date('W', $timestamp + 60 * 60 * 24);
+		return date('W', strtotime('+1 day', $timestamp));
 	} else {
 		return date('W', $timestamp);
 	}

@@ -22,7 +22,7 @@ define('TMP_PATH', BASE_PATH.'tmp');
 define('SESSION_PATH', BASE_PATH.'sessie');
 define('PUBLIC_FTP', '/srv/ftp/incoming/csrdelft');
 
-# urls met trailing slash
+# urls ZONDER trailing slash
 define('CSR_PICS', 'http://plaetjes.csrdelft.nl');
 define('CSR_ROOT', 'http://csrdelft.nl');
 
