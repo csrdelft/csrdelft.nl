@@ -15,13 +15,14 @@ class MenuModel extends PersistenceModel {
 	/**
 	 * Lijst van alle menus.
 	 * 
-	 * @return array
+	 * @return PDOStatement
 	 */
 	public function getAlleMenus() {
 		$sql = 'SELECT tekst FROM menus WHERE parent_id = 0';
 		$query = Database::instance()->prepare($sql);
 		$query->execute();
-		return $query->fetchAll(PDO::FETCH_COLUMN, 0);
+		$query->setFetchMode(PDO::FETCH_COLUMN, 0);
+		return $query;
 	}
 
 	/**
@@ -36,14 +37,14 @@ class MenuModel extends PersistenceModel {
 		// get root
 		$where = 'parent_id = 0 AND tekst = ?';
 		$params = array($menu_naam);
-		$root = $this->find($where, $params, 'parent_id ASC, prioriteit ASC');
-		if (sizeof($root) <= 0) {
+		$root = $this->find($where, $params, 'parent_id ASC, prioriteit ASC')->fetch();
+		if ($root) {
 			$item = $this->newMenuItem(0);
 			$item->tekst = $menu_naam;
 			return $item;
 		}
-		$this->getChildren($root[0], $admin);
-		return $root[0];
+		$this->getChildren($root, $admin);
+		return $root;
 	}
 
 	public function getChildren(MenuItem $parent, $admin = false) {

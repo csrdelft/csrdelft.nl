@@ -50,7 +50,8 @@ abstract class PersistenceModel implements Persistence {
 	 */
 	public function find($criteria = null, array $criteria_params = array(), $orderby = null, $limit = null, $start = 0) {
 		$result = Database::sqlSelect($this->orm_entity->getFields(), $this->orm_entity->getTableName(), $criteria, $criteria_params, $orderby, $limit, $start);
-		return $result->fetchAll(PDO::FETCH_CLASS, static::orm);
+		$result->setFetchMode(PDO::FETCH_CLASS, static::orm, array(true));
+		return $result;
 	}
 
 	/**
@@ -125,7 +126,7 @@ abstract class PersistenceModel implements Persistence {
 	 * Requires positional values.
 	 * 
 	 * @param array $primary_key_values
-	 * @return PersistentEntity or false on failure
+	 * @return PersistentEntity or FALSE on failure
 	 */
 	protected function retrieveByPrimaryKey(array $primary_key_values) {
 		$where = array();

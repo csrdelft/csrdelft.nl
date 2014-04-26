@@ -114,7 +114,7 @@ class Instellingen extends PersistenceModel {
 		$instellingen = $this->find(); // load all from db
 		foreach ($instellingen as $instelling) {
 			// haal verwijderde instellingen uit de database
-			if (!array_key_exists($instelling->module, $this->defaults) OR !array_key_exists($instelling->instelling_id, $this->defaults[$instelling->module])) {
+			if (!array_key_exists($instelling->module, $this->defaults) OR ! array_key_exists($instelling->instelling_id, $this->defaults[$instelling->module])) {
 				$this->deleteByPrimaryKey($instelling->getValues(true));
 			}
 			$this->instellingen[$instelling->module][$instelling->instelling_id] = $instelling->waarde;
@@ -122,7 +122,7 @@ class Instellingen extends PersistenceModel {
 		foreach ($this->defaults as $module => $instellingen) {
 			foreach ($instellingen as $key => $value) {
 				// maak missende instellingen opnieuw aan met default waarde
-				if (!array_key_exists($module, $this->instellingen) OR !array_key_exists($key, $this->instellingen[$module])) {
+				if (!array_key_exists($module, $this->instellingen) OR ! array_key_exists($key, $this->instellingen[$module])) {
 					$this->instellingen[$module][$key] = $value;
 					$this->newInstelling($module, $key, $value); // save to db
 				}
@@ -133,13 +133,14 @@ class Instellingen extends PersistenceModel {
 	/**
 	 * Lijst van alle modules.
 	 * 
-	 * @return array
+	 * @return PDOStatement
 	 */
 	public function getAlleModules() {
 		$sql = 'SELECT DISTINCT module FROM instellingen';
 		$query = Database::instance()->prepare($sql);
 		$query->execute();
-		return $query->fetchAll(PDO::FETCH_COLUMN, 0);
+		$query->setFetchMode(PDO::FETCH_COLUMN, 0);
+		return $query;
 	}
 
 	/**
@@ -164,7 +165,7 @@ class Instellingen extends PersistenceModel {
 	 * @throws Exception indien de default waarde ontbreekt (de instelling bestaat niet)
 	 */
 	private function getInstelling($module, $key) {
-		if (!array_key_exists($module, $this->instellingen) OR !array_key_exists($key, $this->instellingen[$module])) {
+		if (!array_key_exists($module, $this->instellingen) OR ! array_key_exists($key, $this->instellingen[$module])) {
 			// get default for missing instelling
 			if (array_key_exists($module, $this->defaults) AND array_key_exists($key, $this->defaults[$module])) {
 				$this->instellingen[$module][$key] = $this->defaults[$module][$key];

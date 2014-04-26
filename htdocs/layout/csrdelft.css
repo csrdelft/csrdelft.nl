@@ -496,7 +496,7 @@ a.knop, div.knop{
 h2#mysql_debug_header{
 	text-align: center;
 }
-pre#pubcie_debug{
+pre.pubcie_debug{
 	top: 10px;
 	left: 1000px; right: 10px;
 	margin: 10px;

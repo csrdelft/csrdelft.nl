@@ -37,14 +37,14 @@ function endsWith($haystack, $needle) {
  * Group by object property
  * 
  * @param string $prop
- * @param array $in
+ * @param Traversable $in
  * @return array $out
  */
-function array_group_by($prop, array $in, $destructive = true) {
+function array_group_by($prop, Traversable $in) {
 	$out = array();
 	foreach ($in as $i => $obj) {
 		$out[$obj->$prop][] = $obj; // add to array
-		if ($destructive) {
+		if (is_array($in)) {
 			unset($in[$i]);
 		}
 	}
@@ -55,14 +55,14 @@ function array_group_by($prop, array $in, $destructive = true) {
  * Set key to object property
  * 
  * @param string $prop
- * @param array $in
+ * @param Traversable $in
  * @return array $out
  */
-function array_key_property($prop, array $in, $destructive = true) {
+function array_key_property($prop, Traversable $in) {
 	$out = array();
 	foreach ($in as $i => $obj) {
 		$out[$obj->$prop] = $obj; // overwrite existing
-		if ($destructive) {
+		if (is_array($in)) {
 			unset($in[$i]);
 		}
 	}
@@ -269,7 +269,7 @@ function debugprint($sString, $cssID = 'pubcie_debug') {
 	$adminIPs = array('145.94.61.229', '145.94.59.158', '192.168.16.101', '127.0.0.1');
 	$isFromAdminIP = isset($_SERVER['REMOTE_ADDR']) AND in_array($_SERVER['REMOTE_ADDR'], $adminIPs);
 	if ($isFromAdminIP OR LoginLid::mag('P_ADMIN')) {
-		echo '<pre id="' . $cssID . '">' . print_r($sString, true) . '</pre>';
+		echo '<pre class="' . $cssID . '">' . print_r($sString, true) . '</pre>';
 	}
 }
 

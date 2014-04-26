@@ -14,8 +14,10 @@ abstract class PersistentEntity {
 	/**
 	 * Constructor is called late by PDO::FETCH_CLASS (after fields are set).
 	 */
-	public function __construct() {
-		$this->castValues();
+	public function __construct($cast = false) {
+		if ($cast) {
+			$this->castValues();
+		}
 	}
 
 	/**
@@ -79,16 +81,14 @@ abstract class PersistentEntity {
 	 */
 	private function castValues() {
 		foreach (static::$persistent_fields as $field => $definition) {
+			if ($this->$field === null AND ! (array_key_exists(2, $definition) AND $definition[2] === true)) {
+				debugprint(self::getTableName() . '.' . $field . ' is not allowed to be NULL');
+				echo debug_backtrace();
+			}
 			if ($definition[0] === 'int') {
 				$this->$field = (int) $this->$field;
 			} elseif ($definition[0] === 'boolean') {
 				$this->$field = (boolean) $this->$field;
-			} elseif ($this->$field === null AND ! (array_key_exists(2, $definition) AND $definition[2] === true)) {
-				// Field is null, but not allowed to be null
-				$this->$field = self::getDefaultValue($field);
-				if ($this->$field === null) {
-					$this->$field = '';
-				}
 			} elseif ($definition[0] === 'enum' AND ! in_array($this->$field, $definition[1]::values())) {
 				debugprint(self::getTableName() . '.' . $field . ' invalid ' . $definition[1] . ' value: ' . $this->$field);
 			}

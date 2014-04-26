@@ -68,7 +68,7 @@ class DatabaseAdmin extends Database {
 	 * Get table fields.
 	 * 
 	 * @param string $name
-	 * @return PersistentField[]
+	 * @return PDOStatement
 	 */
 	public static function sqlDescribeTable($name) {
 		$sql = 'DESCRIBE ' . $name;
@@ -76,7 +76,8 @@ class DatabaseAdmin extends Database {
 		self::instance()->setAttribute(PDO::ATTR_CASE, PDO::CASE_LOWER); // lowercase field properties
 		$query->execute();
 		self::instance()->setAttribute(PDO::ATTR_CASE, PDO::CASE_NATURAL); // reset
-		return $query->fetchAll(PDO::FETCH_CLASS, 'PersistentField');
+		$query->setFetchMode(PDO::FETCH_CLASS, 'PersistentField');
+		return $query;
 	}
 
 	public static function sqlAddField($table, PersistentField $field, $after_field = null) {

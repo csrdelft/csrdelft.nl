@@ -300,8 +300,9 @@ class ForumDradenModel extends PersistenceModel implements Paging {
 		$orm = self::orm;
 		$fields = $orm::getFields();
 		$fields[] = 'MATCH(titel) AGAINST (? IN NATURAL LANGUAGE MODE) AS score';
-		$result = Database::sqlSelect($fields, $orm::getTableName(), 'wacht_goedkeuring = FALSE AND verwijderd = FALSE HAVING score > 0', array($query), 'score DESC', $this->per_pagina, ($this->pagina - 1) * $this->per_pagina);
-		return $result->fetchAll(PDO::FETCH_CLASS, $orm);
+		$results = Database::sqlSelect($fields, $orm::getTableName(), 'wacht_goedkeuring = FALSE AND verwijderd = FALSE HAVING score > 0', array($query), 'score DESC', $this->per_pagina, ($this->pagina - 1) * $this->per_pagina);
+		$results->setFetchMode(PDO::FETCH_CLASS, static::orm, array(true));
+		return $results;
 	}
 
 	/**
@@ -323,7 +324,8 @@ class ForumDradenModel extends PersistenceModel implements Paging {
 		}
 		$fields[] = 'g.datum_tijd AS wanneer_gelezen';
 		$result = Database::sqlSelect($fields, $from, $criteria, array_merge(array(LoginLid::instance()->getUid()), $criteria_params), $orderby, $limit, $start);
-		return $result->fetchAll(PDO::FETCH_CLASS, self::orm);
+		$result->setFetchMode(PDO::FETCH_CLASS, static::orm, array(true));
+		return $result;
 	}
 
 	public function getForumDradenVoorDeel($forum_id) {
@@ -521,8 +523,9 @@ class ForumPostsModel extends PersistenceModel implements Paging {
 		$orm = self::orm;
 		$fields = $orm::getFields();
 		$fields[] = 'MATCH(tekst) AGAINST (? IN NATURAL LANGUAGE MODE) AS score';
-		$result = Database::sqlSelect($fields, $orm::getTableName(), 'wacht_goedkeuring = FALSE AND verwijderd = FALSE HAVING score > 0', array($query), 'score DESC', $this->per_pagina, ($this->pagina - 1) * $this->per_pagina);
-		return $result->fetchAll(PDO::FETCH_CLASS, $orm);
+		$results = Database::sqlSelect($fields, $orm::getTableName(), 'wacht_goedkeuring = FALSE AND verwijderd = FALSE HAVING score > 0', array($query), 'score DESC', $this->per_pagina, ($this->pagina - 1) * $this->per_pagina);
+		$results->setFetchMode(PDO::FETCH_CLASS, static::orm, array(true));
+		return $results;
 	}
 
 	public function getForumPostsVoorDraad(ForumDraad $draad) {
