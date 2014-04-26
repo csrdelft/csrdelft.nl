@@ -1,9 +1,9 @@
 <?php
 
-/*
- * class.document.php	| 	Jan Pieter Waagmeester (jieter@jpwaag.com)
+/**
+ * document.class.php	| 	Jan Pieter Waagmeester (jieter@jpwaag.com)
  *
- * bestanden worden allemaal in één map opgeslagen, met met hun documentID als prefix.
+ * Bestanden worden allemaal in één map opgeslagen, met met hun documentID als prefix.
  *
  * Als men dus 2008-halfjaarschema.pdf upload komt er een bestand dat bijvoorbeeld
  * 1123_2008-halfjaarschema.pdf heet in de documentenmap te staan.
@@ -11,7 +11,6 @@
  * In de database wordt de originele bestandsnaam opgeslagen, zonder prefix dus.
  *
  */
-
 class Document {
 
 	private $ID = 0;
@@ -243,10 +242,9 @@ class Document {
 		return CSR_ROOT . '/communicatie/documenten/download/' . $this->getID() . '/' . $this->getBestandsnaam();
 	}
 
-	/*
-	 * bestand opslaan vanuit een string in de juiste map.
+	/**
+	 * Bestand opslaan vanuit een string in de juiste map.
 	 */
-
 	public function putFile($file) {
 		$this->throwExceptionWhenUnsaved();
 		$this->throwExceptionWhenDestNotWriteable();
@@ -254,10 +252,9 @@ class Document {
 		return file_put_contents($this->getFullPath(), $file);
 	}
 
-	/*
+	/**
 	 * Bestand kopieren naar de juiste map.
 	 */
-
 	public function copyFile($source) {
 		$this->throwExceptionWhenUnsaved();
 		$this->throwExceptionWhenDestNotWriteable();
@@ -269,10 +266,9 @@ class Document {
 		}
 	}
 
-	/*
-	 * bestand opslaan vanuit upload-tempdir.
+	/**
+	 * Bestand opslaan vanuit upload-tempdir.
 	 */
-
 	public function moveUploaded($source) {
 		$this->throwExceptionWhenUnsaved();
 		$this->throwExceptionWhenDestNotWriteable();
@@ -283,10 +279,9 @@ class Document {
 		return false;
 	}
 
-	/*
-	 * Aangehangen bestand verwijderen van de hd.
+	/**
+	 * Aangehangen bestand verwijderen van file system.
 	 */
-
 	public function deleteFile($throwWhenNotFound = true) {
 		if (!$this->hasFile()) {
 			if ($throwWhenNotFound) {

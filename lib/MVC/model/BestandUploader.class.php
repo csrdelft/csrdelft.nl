@@ -1,49 +1,57 @@
 <?php
 
-/*
- * Verschillende manieren om bestanden te uploaden voor de documentenketzer.
- *
- * DocumentUploader defenieert wat standaardfunctionaliteit, de andere classes
- * zorgen voor de speciale functies. In DocumentUploader::getAll() moet een
- * eventueel nieuw object aan de array toegevoegd worden.
- */
-
 require_once 'mimemagic/MimeMagic.php'; //mediawiki's mime magic class
 
-abstract class DocumentUploader {
+/**
+ * BestandUploader.class.php
+ * 
+ * @author C.S.R. Delft <pubcie@csrdelft.nl>
+ * @author P.W.G. Brussee <brussee@live.nl>
+ * 
+ * Verschillende manieren om bestanden te uploaden.
+ * BestandUploader defenieert wat standaardfunctionaliteit.
+ * De andere classes zorgen voor de speciale functies.
+ * @FIXME In BestandUploader::getAll() moet een eventueel nieuw object aan de array toegevoegd worden.
+ */
+abstract class BestandUploader implements Validator {
 
-	public $beschrijving;
-	public $isActive = false;
-	public $errors;
-	public $filename;
-	public $mimetype = 'application/octet-stream';
-	public $size;
+	protected $active = false;
+	protected $error;
+	protected $filename;
+	protected $mimetype = 'application/octet-stream';
+	protected $size;
 
 	public function __construct() {
 		
 	}
 
-	public function getNaam() {
-		return get_class($this);
+	/**
+	 * Is deze uploadmethode beschikbaar?
+	 * @return boolean
+	 */
+	public abstract function isAvailable();
+
+	/**
+	 * Bestand uiteindelijk opslaan op de juiste plek.
+	 */
+	abstract public function movefile(Document $document);
+
+	/**
+	 * Is de formulierinvoer geldig voor deze methode?
+	 */
+	abstract public function validate();
+
+	public function getError() {
+		return $this->error;
 	}
 
 	protected function addError($error) {
-		$this->errors.=$error . "\n";
+		$this->error .= $error . "\n";
 	}
 
-	public function getErrors() {
-		return $this->errors;
+	public function getNaam() {
+		return get_class($this);
 	}
-
-	public function available() {
-		return true;
-	}
-
-//is deze uploadmethode beschikbaar?
-
-	abstract public function validate();	  //is de formulierinvoer geldig voor deze methode?
-
-	abstract public function movefile(Document $document); //bestand uiteindelijk opslaan op de juiste plek.
 
 	public function getFilename() {
 		return $this->filename;
@@ -57,35 +65,27 @@ abstract class DocumentUploader {
 		return $this->size;
 	}
 
-	public function viewRadiobutton() {
-		echo '<input type="radio" name="methode" id="r' . $this->getNaam() . '" value="' . $this->getNaam() . '" ';
-		if ($this->isActive) {
-			echo 'checked="checked"';
-		}
-		echo ' />';
-		echo '<label for="r' . $this->getNaam() . '">' . $this->beschrijving . '</label>';
+	public function isActive() {
+		return $this->active;
 	}
 
-	abstract public function view();
-
-	/*
+	/**
 	 * Geef een array terug met de aanwezige uploadmethodes.
 	 * Bij een nieuw document willen we geen bestand behouden, want er
 	 * is nog helemaal geen bestand, dus die kunnen we uitsluiten.
 	 */
-
-	public static function getAll($document, $active, $includeKeepfile = true) {
-		$methodes = array('DUKeepfile', 'DUFileupload', 'DUFromurl', 'DUFromftp');
+	public static function getAll($document, $active, $bestand_behouden = true) {
+		$methodes = array('BestandBehouden', 'UploadBrowser', 'UploadURL', 'UploadFTP');
 		$return = array();
 		foreach ($methodes as $methodenaam) {
-			if (!$includeKeepfile AND $methodenaam == 'DUKeepfile') {
+			if (!$bestand_behouden AND $methodenaam == 'BestandBehouden') {
 				continue;
 			}
 			$methode = new $methodenaam($document);
-			if ($methode->available()) {
+			if ($methode->isAvailable()) {
 				$return[$methodenaam] = $methode;
 				if ($active == $methodenaam) {
-					$return[$methodenaam]->isActive = true;
+					$return[$methodenaam]->active = true;
 				}
 			}
 		}
@@ -94,18 +94,20 @@ abstract class DocumentUploader {
 
 }
 
-class DUKeepfile extends DocumentUploader {
+class BestandBehouden extends BestandUploader {
 
 	public $document = null;
 
 	public function __construct(Document $document) {
+		parent::__construct();
 		$this->document = $document;
-
 		$this->filename = $document->getBestandsnaam();
 		$this->mimetype = $document->getMimetype();
 		$this->size = $document->getSize();
+	}
 
-		$this->beschrijving = 'Huidige behouden';
+	public function isAvailable() {
+		return true;
 	}
 
 	public function validate() {
@@ -117,18 +119,17 @@ class DUKeepfile extends DocumentUploader {
 		return true;
 	}
 
-	public function view() {
-		echo $this->document->getBestandsnaam() . ' (' . format_filesize($this->document->getSize()) . ')';
-	}
-
 }
 
-class DUFileupload extends DocumentUploader {
+class UploadBrowser extends BestandUploader {
 
-	private $file; //relevante inhoud van $_FILES;
+	/**
+	 * Relevante inhoud van $_FILES;
+	 */
+	private $file;
 
-	public function __construct() {
-		$this->beschrijving = 'Uploaden in browser';
+	public function isAvailable() {
+		return true;
 	}
 
 	public function validate() {
@@ -148,7 +149,7 @@ class DUFileupload extends DocumentUploader {
 					$this->addError('Upload-error: error-code: ' . $this->file['error']);
 			}
 		}
-		if ($this->getErrors() == '') {
+		if ($this->getError() == '') {
 			$this->filename = $this->file['name'];
 			$this->mimetype = $this->file['type'];
 			$this->size = $this->file['size'];
@@ -162,30 +163,30 @@ class DUFileupload extends DocumentUploader {
 		return $document->moveUploaded($this->file['tmp_name']);
 	}
 
-	public function view() {
-		echo '<label for="fromUrl">Selecteer bestand: </label><input type="file" name="file_upload" />';
-	}
-
 }
 
 /**
- * DUFromurl
+ * UploadURL
  *
  * Kan een bestand downloaden van een url, met file_get_contents of de
  * cURL-extensie. Als beide niet beschikbaar zijn wordt het formulier-
  * element niet weergegeven.
  */
-class DUFromurl extends DocumentUploader {
+class UploadURL extends BestandUploader {
 
-	private $file; //string met het hele bestand.
-	private $url = 'http://';
+	/**
+	 * Het hele bestand
+	 * @var string
+	 */
+	protected $file;
+	protected $url = 'http://';
 
-	public function __construct() {
-		$this->beschrijving = 'Ophalen vanaf url';
+	public function isAvailable() {
+		return $this->file_get_contents_available() OR function_exists('curl_init');
 	}
 
-	public function available() {
-		return $this->file_get_contents_available() OR function_exists('curl_init');
+	public function getUrl() {
+		return $this->url;
 	}
 
 	protected function file_get_contents_available() {
@@ -208,7 +209,7 @@ class DUFromurl extends DocumentUploader {
 	}
 
 	public function validate() {
-		if (!$this->available()) {
+		if (!$this->isAvailable()) {
 			$this->addError('PHP.ini configuratie: cURL of allow_url_fopen moet aan staan...');
 		}
 		if (!isset($_POST['url'])) {
@@ -217,16 +218,13 @@ class DUFromurl extends DocumentUploader {
 		if (!url_like(urldecode($_POST['url']))) {
 			$this->addError('Dit lijkt niet op een url...');
 		}
-
 		$this->url = $_POST['url'];
-
-		if ($this->getErrors() == '') {
+		if ($this->getError() == '') {
 			$this->file = $this->file_get_contents($this->url);
 			if (strlen($this->file) == 0) {
 				$this->addError('Bestand is leeg, check de url.');
 			} else {
 				$naam = substr(trim($this->url), strrpos($this->url, '/') + 1);
-
 				//Bestand tijdelijk omslaan om mime-type te bepalen.
 				$tmpfile = TMP_PATH . 'docuketz0r' . microtime() . '.tmp';
 				if (is_writable(TMP_PATH)) {
@@ -242,45 +240,65 @@ class DUFromurl extends DocumentUploader {
 				}
 			}
 		}
-		return $this->getErrors() == '';
+		return $this->getError() == '';
 	}
 
 	public function moveFile(Document $document) {
 		return $document->putFile($this->file);
 	}
 
-	public function view() {
-		echo '
-			<label for="fromUrl">Geef url op:</label>
-			<div class="indent">
-				<input type="text" name="url" class="fromurl" value="' . $this->url . '" /><br />
-				<span class="small">Bestanden zullen met het mime-type <code>application/octet-stream</code> worden opgeslagen.</span>
-			</div>';
-	}
-
 }
 
-class DUFromftp extends DocumentUploader {
+class UploadFTP extends BestandUploader {
 
-	private $file; //naam van het gekozen bestand.
-	private $path; //pad naar de public-ftp documentenmap.
+	/**
+	 * Naam van het gekozen bestand
+	 * @var string 
+	 */
+	protected $file;
+	/**
+	 * Lijst van bestanden in de publieke ftp map
+	 * @var array
+	 */
+	protected $file_list;
+	/**
+	 * Volledig pad naar bestand
+	 * @var string
+	 */
+	protected $path;
+	/**
+	 * Pad binnen de publieke ftp map
+	 * @var string
+	 */
+	protected $subdir;
 
 	public function __construct() {
-		$this->path = PUBLIC_FTP . '/documenten/';
-		$this->beschrijving = 'Uit publieke FTP-map';
+		parent::__construct();
+		$this->subdir = '/documenten';
+		$this->path = PUBLIC_FTP . $this->subdir . '/';
 	}
 
-	private function getFilelist() {
-		$handler = opendir($this->path);
-		while ($file = readdir($handler)) {
-			//we willen geen directories en geen verborgen bestanden.
-			if (!is_dir($this->path . $file) AND substr($file, 0, 1) != '.') {
-				$results[] = $file;
-			}
-		}
+	public function isAvailable() {
+		return file_exists($this->path);
+	}
 
-		closedir($handler);
-		return $results;
+	public function getFilelist() {
+		if (!$this->file_list) {
+			$this->file_list = array();
+			$handler = opendir($this->path);
+			while ($file = readdir($handler)) {
+				// We willen geen directories en geen verborgen bestanden.
+				if (!is_dir($this->path . $file) AND substr($file, 0, 1) != '.') {
+					$this->file_list[] = $file;
+				}
+			}
+			closedir($handler);
+		}
+		return $this->file_list;
+	}
+
+	public function getSubDir() {
+		return $this->subdir;
 	}
 
 	public function validate() {
@@ -288,20 +306,20 @@ class DUFromftp extends DocumentUploader {
 			$this->addError('Formulier niet compleet.');
 		}
 		if (!file_exists($this->path . $_POST['ftpfile'])) {
-			$this->addError('Bestand is niet aanwezig in public FTP-map');
+			$this->addError('Bestand is niet aanwezig in de publieke FTP-map');
 		}
-		if ($this->getErrors() == '') {
+		if ($this->getError() == '') {
 			$this->file = $_POST['ftpfile'];
 			$this->filename = $_POST['ftpfile'];
 			$this->size = filesize($this->path . $this->file);
 			$this->mimetype = MimeMagic::singleton()->guessMimeType($this->path . $this->file);
 		}
-		return $this->getErrors() == '';
+		return $this->getError() == '';
 	}
 
 	public function moveFile(Document $document) {
 		if ($document->copyFile($this->path . $this->file)) {
-			//moeten we het bestand ook verwijderen uit de public ftp?
+			// Moeten we het bestand ook verwijderen uit de publieke ftp?
 			if (isset($_POST['deleteFiles'])) {
 				return unlink($this->path . $this->file);
 			}
@@ -310,26 +328,4 @@ class DUFromftp extends DocumentUploader {
 		return false;
 	}
 
-	public function view() {
-		echo '<label for="publicftp">Selecteer een bestand:</label>
-			<div id="ftpOpties" class="indent">';
-		if (is_array($this->getFilelist()) AND count($this->getFilelist()) > 0) {
-			echo '<select name="ftpfile" class="ftpfile">';
-			foreach ($this->getFilelist() as $file) {
-				echo '<option value="' . htmlspecialchars($file) . '"';
-				if ($this->file == $file) {
-					echo 'selected="selected"';
-				}
-				echo '>' . htmlspecialchars($file) . '</option>';
-			}
-			echo '</select><br />';
-			echo '<input type="checkbox" name="deleteFiles" /> <label for="deleteFiles">Bestand verwijderen uit FTP-map.</label>';
-		} else {
-			echo 'Geen bestanden gevonden in:<br /> <code class="small">ftp://csrdelft.nl/incoming/csrdelft/documenten/</code>';
-		}
-		echo '</div>';
-	}
-
 }
-
-?>

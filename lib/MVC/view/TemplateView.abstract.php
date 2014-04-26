@@ -54,7 +54,7 @@ abstract class TemplateView implements View {
 	 * @deprecated
 	 * Backwards compatibility with SimpleHTML.
 	 */
-	public function getMelding() {
+	public static function getMelding() {
 		return SimpleHTML::getMelding();
 	}
 
@@ -64,7 +64,7 @@ abstract class TemplateView implements View {
 	 * 
 	 * @return Lid if exists, false otherwise
 	 */
-	public function getLid($uid) {
+	public static function getLid($uid) {
 		$lid = LidCache::getLid($uid); // false if lid does not exist
 		if (!$lid instanceof \Lid) {
 			throw new Exception('Lid bestaat niet: $uid =' . $uid);

@@ -1,9 +1,9 @@
 <?php
 
-require_once 'MVC/controller/Controller.abstract.php';
+require_once 'MVC/model/BestandUploader.class.php';
+require_once 'MVC/view/BestandUploaderView.class.php';
 require_once 'documenten/document.class.php';
 require_once 'documenten/categorie.class.php';
-require_once 'documenten/documentuploader.class.php';
 require_once 'documenten/documentcontent.class.php';
 
 /**
@@ -141,12 +141,12 @@ class DocumentController extends Controller {
 		} else {
 			//debugprint($this->document); echo $this->document->hasFile() ? 'ja' : 'nee'; exit;
 			if ($this->document->hasFile()) {
-				$methode = 'DUKeepfile';
+				$methode = 'BestandBehouden';
 			} else {
-				$methode = 'DUFileupload';
+				$methode = 'UploadBrowser';
 			}
 		}
-		$this->uploaders = DocumentUploader::getAll($this->document, $methode, $this->document->hasFile());
+		$this->uploaders = BestandUploader::getAll($this->document, $methode, $this->document->hasFile());
 
 		if ($this->isPosted()) {
 			$this->document->setNaam($_POST['naam']);
@@ -154,7 +154,7 @@ class DocumentController extends Controller {
 
 			if ($this->validate_document()) {
 				//als we al een bestand hebben voor dit document, moet die natuurlijk eerst hdb.
-				if ($this->document->hasFile() AND $methode != 'DUKeepfile') {
+				if ($this->document->hasFile() AND $methode != 'BestandBehouden') {
 					try {
 						$this->document->deleteFile();
 					} catch (Exception $e) {
@@ -164,7 +164,7 @@ class DocumentController extends Controller {
 				//Actieve methode selecteren.
 				$uploader = $this->uploaders[$_POST['methode']];
 
-				if ($methode !== 'DUKeepfile') {
+				if ($methode !== 'BestandBehouden') {
 					$this->document->setBestandsnaam($uploader->getFilename());
 					$this->document->setSize($uploader->getSize());
 					$this->document->setMimetype($uploader->getMimetype());
@@ -190,7 +190,12 @@ class DocumentController extends Controller {
 				$this->document->setCatID($_GET['catID']);
 			}
 		}
-		$this->view = new DocumentContent($this->document, $this->uploaders);
+		$views = array();
+		foreach ($this->uploaders as $uploader) {
+			$class = $uploader->getNaam() . 'View';
+			$views[] = new $class($uploader);
+		}
+		$this->view = new DocumentContent($this->document, $views);
 		setMelding($this->errors, -1);
 	}
 
@@ -202,12 +207,12 @@ class DocumentController extends Controller {
 			if (!(isset($_POST['methode']) AND array_key_exists($_POST['methode'], $this->uploaders))) {
 				$this->addError('Niet ondersteunde uploadmethode. Heeft u er wel een gekozen?');
 			} else {
-				if ($_POST['methode'] == 'DUKeepfile' AND ! $this->document->hasFile()) {
+				if ($_POST['methode'] == 'BestandBehouden' AND ! $this->document->hasFile()) {
 					$this->addError('Dit document heeft nog geen bestand, dus dat kan ook niet behouden worden.');
 				}
 				//kijken of we errors hebben in de huidige methode.
 				if (!$this->uploaders[$_POST['methode']]->validate()) {
-					$this->addError($this->uploaders[$_POST['methode']]->getErrors());
+					$this->addError($this->uploaders[$_POST['methode']]->getError());
 				}
 			}
 		} else {
