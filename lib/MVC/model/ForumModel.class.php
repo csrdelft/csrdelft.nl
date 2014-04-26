@@ -587,7 +587,7 @@ class ForumPostsModel extends PersistenceModel implements Paging {
 	AND ' . $where . '
 )';
 		}
-		$posts = $this->find($where, array($uid), 'post_id DESC', $aantal);
+		$posts = $this->find($where, array($uid), 'post_id DESC', $aantal)->fetchAll();
 		$draden_ids = array_keys(group_by_distinct('draad_id', $posts, false));
 		$draden = ForumDradenModel::instance()->getForumDradenById($draden_ids);
 		$delen_ids = array_keys(group_by_distinct('forum_id', $draden, false));
