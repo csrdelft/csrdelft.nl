@@ -46,6 +46,22 @@ class DatabaseAdmin extends Database {
 	}
 
 	/**
+	 * Get table fields.
+	 * 
+	 * @param string $name
+	 * @return PDOStatement
+	 */
+	public static function sqlDescribeTable($name) {
+		$sql = 'DESCRIBE ' . $name;
+		$query = self::instance()->prepare($sql);
+		self::instance()->setAttribute(PDO::ATTR_CASE, PDO::CASE_LOWER); // lowercase field properties
+		$query->execute();
+		self::instance()->setAttribute(PDO::ATTR_CASE, PDO::CASE_NATURAL); // reset
+		$query->setFetchMode(PDO::FETCH_CLASS, 'PersistentField');
+		return $query;
+	}
+
+	/**
 	 * Create table and return SQL.
 	 * 
 	 * @param string $name
@@ -64,22 +80,6 @@ class DatabaseAdmin extends Database {
 			$query->execute();
 		}
 		return $sql;
-	}
-
-	/**
-	 * Get table fields.
-	 * 
-	 * @param string $name
-	 * @return PDOStatement
-	 */
-	public static function sqlDescribeTable($name) {
-		$sql = 'DESCRIBE ' . $name;
-		$query = self::instance()->prepare($sql);
-		self::instance()->setAttribute(PDO::ATTR_CASE, PDO::CASE_LOWER); // lowercase field properties
-		$query->execute();
-		self::instance()->setAttribute(PDO::ATTR_CASE, PDO::CASE_NATURAL); // reset
-		$query->setFetchMode(PDO::FETCH_CLASS, 'PersistentField');
-		return $query;
 	}
 
 	public static function sqlAddField($table, PersistentField $field, $after_field = null) {

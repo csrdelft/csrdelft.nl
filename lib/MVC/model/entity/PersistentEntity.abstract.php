@@ -124,7 +124,7 @@ abstract class PersistentEntity {
 	/**
 	 * Check for differences in persistent fields.
 	 * 
-	 * @important Not supported: RENAMING of field and INDEX and FOREIGN KEY check
+	 * @important NOT supported: RENAME field; INDEX check; FOREIGN KEY check;
 	 */
 	public static function checkTable() {
 		try {
