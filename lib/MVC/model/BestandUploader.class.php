@@ -36,11 +36,6 @@ abstract class BestandUploader implements Validator {
 	 */
 	abstract public function movefile(Document $document);
 
-	/**
-	 * Is de formulierinvoer geldig voor deze methode?
-	 */
-	abstract public function validate();
-
 	public function getError() {
 		return $this->error;
 	}
