@@ -81,14 +81,11 @@ abstract class PersistentEntity {
 	 */
 	private function castValues() {
 		foreach (static::$persistent_fields as $field => $definition) {
-			if (defined('DB_CHECK') AND $this->$field === null AND ! (array_key_exists(2, $definition) AND $definition[2] === true)) {
-				throw new Exception(self::getTableName() . '.' . $field . ' is not allowed to be NULL');
-			}
 			if ($definition[0] === 'int') {
 				$this->$field = (int) $this->$field;
 			} elseif ($definition[0] === 'boolean') {
 				$this->$field = (boolean) $this->$field;
-			} elseif ($definition[0] === 'enum' AND ! in_array($this->$field, $definition[1]::values())) {
+			} elseif (defined('DB_CHECK') AND $definition[0] === 'enum' AND ! in_array($this->$field, $definition[1]::values())) {
 				debugprint(self::getTableName() . '.' . $field . ' invalid ' . $definition[1] . ' value: ' . $this->$field);
 			}
 		}
@@ -158,6 +155,7 @@ abstract class PersistentEntity {
 				if ($fields[$name]->null !== $database_fields[$name]->null) {
 					$diff = true;
 				}
+				// Cast database value if default value is defined
 				if ($fields[$name]->default !== null) {
 					if ($definition[0] === 'boolean') {
 						$database_fields[$name]->default = (boolean) $database_fields[$name]->default;
