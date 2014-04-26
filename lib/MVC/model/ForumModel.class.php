@@ -155,7 +155,7 @@ class ForumDelenModel extends PersistenceModel {
 					$draad->score += (float) $post->score;
 				}
 			} else { // laad eerste post
-				$array_first_post = ForumPostsModel::instance()->find('draad_id = ?', array($draad->draad_id), 'post_id ASC', 1);
+				$array_first_post = ForumPostsModel::instance()->find('draad_id = ?', array($draad->draad_id), 'post_id ASC', 1)->fetchAll();
 				$draad->setForumPosts($array_first_post);
 			}
 		}
