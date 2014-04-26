@@ -28,7 +28,7 @@
 					<br />
 				</div>
 			</div>
-			{$view->getMelding()}
+			{SimpleHtml::getMelding()}
 			<h1 title="Lid-status: {$profiel->getStatus()->getDescription()}">
 				<div class="status">{if !$profiel->isLid()}{$profiel->getStatus()->getChar()}{/if}&nbsp;</div>
 				{$profiel->getNaam('full', 'plain')}

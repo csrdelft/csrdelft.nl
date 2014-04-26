@@ -2,7 +2,7 @@
  *	Boek weergeven
  *}
 
-<div class="foutje">{$view->getMelding()}</div>
+<div class="foutje">{SimpleHtml::getMelding()}</div>
 <ul class="horizontal">
 	<li>
 		<a href="/communicatie/bibliotheek/" title="Naar de catalogus">Catalogus</a>

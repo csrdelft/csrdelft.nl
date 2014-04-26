@@ -3,7 +3,7 @@
 *}
 <div id="popup-content">
 <h1>{$view->getTitel()}</h1>
-{$view->getMelding()}
+{SimpleHtml::getMelding()}
 <br />
 {$form->view()}
 {if isset($bijwerken)}

@@ -21,7 +21,7 @@ class MaalCieSaldiView extends TemplateView {
 
 	public function view() {
 		if ($this->_melding) {
-			echo '<tr id="taken-melding"><td>' . $this->getMelding() . '</td></tr>';
+			echo '<tr id="taken-melding"><td>' . SimpleHTML::getMelding() . '</td></tr>';
 		} else {
 			$this->smarty->display('taken/menu_pagina.tpl');
 			$this->smarty->display('taken/maalcie_saldi.tpl');

@@ -31,5 +31,5 @@
 	</ul>
 </div>
 <hr/>
-<table style="width: 100%;"><tr id="tr-melding"><td id="td-melding">{$view->getMelding()}</td></tr></table>
+<table style="width: 100%;"><tr id="tr-melding"><td id="td-melding">{SimpleHtml::getMelding()}</td></tr></table>
 <h1>{$view->getTitel()}</h1>

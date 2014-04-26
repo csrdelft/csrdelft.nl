@@ -26,11 +26,11 @@ class MijnAbonnementenView extends TemplateView {
 			$this->smarty->assign('abonnementen', $this->_abonnementen);
 			$this->smarty->display('taken/abonnement/mijn_abonnementen.tpl');
 		} elseif (is_int($this->_abonnementen)) { // id of disabled abonnement
-			echo '<td id="taken-melding-veld">' . $this->getMelding() . '</td>';
+			echo '<td id="taken-melding-veld">' . SimpleHTML::getMelding() . '</td>';
 			$this->smarty->assign('mrid', $this->_abonnementen);
 			$this->smarty->display('taken/abonnement/mijn_abonnement_veld.tpl');
 		} else { // single abonnement
-			echo '<td id="taken-melding-veld">' . $this->getMelding() . '</td>';
+			echo '<td id="taken-melding-veld">' . SimpleHTML::getMelding() . '</td>';
 			$this->smarty->assign('uid', $this->_abonnementen->getLidId());
 			$this->smarty->assign('mrid', $this->_abonnementen->getMaaltijdRepetitieId());
 			$this->smarty->display('taken/abonnement/mijn_abonnement_veld.tpl');

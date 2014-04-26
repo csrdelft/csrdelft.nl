@@ -1,4 +1,4 @@
-{$view->getMelding()}
+{SimpleHtml::getMelding()}
 
 {if $actie=='novietBewerken'}
 	<h2>Noviet toevoegen</h2>

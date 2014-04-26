@@ -51,7 +51,7 @@ class BeheerTakenView extends TemplateView {
 				$this->smarty->assign('repetities', $this->repetities);
 				$this->smarty->display('taken/corveetaak/beheer_taken.tpl');
 			} else { // list of new corveetaken
-				echo '<tr id="taken-melding"><td>' . $this->getMelding() . '</td></tr>';
+				echo '<tr id="taken-melding"><td>' . SimpleHTML::getMelding() . '</td></tr>';
 				foreach ($this->model as $taken) {
 					$this->smarty->assign('taak', $taken);
 					$this->smarty->assign('show', true);

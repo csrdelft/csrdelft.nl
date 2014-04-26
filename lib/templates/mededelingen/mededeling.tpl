@@ -1,6 +1,6 @@
 <h1>Mededeling {if $mededeling->getId()==0}toevoegen{else}bewerken{/if}</h1>
 <form action="{$nieuws_root}bewerken/{$mededeling->getId()}" method="post" enctype="multipart/form-data">
-	{$view->getMelding()}
+	{SimpleHtml::getMelding()}
 	{if !$mededeling->isModerator()}
 		Hier kunt u een mededeling toevoegen. Het zal echter niet direct zichtbaar worden, maar &eacute;&eacute;rst door de PubCie worden goedgekeurd.<br /><br />
 	{/if} 

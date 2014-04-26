@@ -19,7 +19,7 @@ class CmsPaginaView extends TemplateView {
 	}
 
 	public function view() {
-		echo $this->getMelding();
+		echo SimpleHTML::getMelding();
 		if ($this->model->magBewerken()) {
 			echo '<a href="/pagina/bewerken/' . $this->model->naam . '" class="knop" style="float:right;" title="Bewerk pagina&#013;' . $this->model->laatst_gewijzigd . '">' . Icon::getTag('bewerken') . '</a>';
 		}

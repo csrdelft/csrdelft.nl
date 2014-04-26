@@ -55,7 +55,7 @@ class BeheerMaaltijdenView extends TemplateView {
 		} elseif (is_int($this->model)) { // id of deleted maaltijd
 			echo '<tr id="maaltijd-row-' . $this->model . '" class="remove"></tr>';
 		} else { // single maaltijd
-			echo '<tr id="taken-melding"><td>' . $this->getMelding() . '</td></tr>';
+			echo '<tr id="taken-melding"><td>' . SimpleHTML::getMelding() . '</td></tr>';
 			$this->smarty->assign('maaltijd', $this->model);
 			$this->smarty->display('taken/maaltijd/beheer_maaltijd_lijst.tpl');
 		}

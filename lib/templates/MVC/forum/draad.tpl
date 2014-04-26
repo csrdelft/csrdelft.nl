@@ -1,4 +1,4 @@
-{$view->getMelding()}
+{SimpleHtml::getMelding()}
 {strip}
 
 	{include file='MVC/forum/zoek_form.tpl'}

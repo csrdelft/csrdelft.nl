@@ -4,5 +4,5 @@
 {/foreach}
 </ul>
 <hr/>
-<table style="width: 100%;"><tr id="melding"><td id="melding-veld">{$view->getMelding()}</td></tr></table>
+<table style="width: 100%;"><tr id="melding"><td id="melding-veld">{SimpleHtml::getMelding()}</td></tr></table>
 <h1>{$view->getTitel()}</h1>

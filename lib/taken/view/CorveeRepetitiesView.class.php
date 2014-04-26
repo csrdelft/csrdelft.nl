@@ -31,10 +31,10 @@ class CorveeRepetitiesView extends TemplateView {
 			$this->smarty->assign('repetities', $this->model);
 			$this->smarty->display('taken/corvee-repetitie/beheer_corvee_repetities.tpl');
 		} elseif (is_int($this->model)) { // id of deleted repetitie
-			echo '<tr id="taken-melding"><td>' . $this->getMelding() . '</td></tr>';
+			echo '<tr id="taken-melding"><td>' . SimpleHTML::getMelding() . '</td></tr>';
 			echo '<tr id="repetitie-row-' . $this->model . '" class="remove"></tr>';
 		} else { // single repetitie
-			echo '<tr id="taken-melding"><td>' . $this->getMelding() . '</td></tr>';
+			echo '<tr id="taken-melding"><td>' . SimpleHTML::getMelding() . '</td></tr>';
 			$this->smarty->assign('repetitie', $this->model);
 			$this->smarty->display('taken/corvee-repetitie/beheer_corvee_repetitie_lijst.tpl');
 		}

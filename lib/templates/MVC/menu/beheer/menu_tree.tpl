@@ -1,7 +1,7 @@
 {*
 	menu_tree.tpl	|	P.W.G. Brussee (brussee@live.nl)
 *}
-{$view->getMelding()}
+{SimpleHtml::getMelding()}
 <div style="float: right;">
 	<div style="display: inline-block;"><label for="toon">Toon menu:</label>
 	</div><select name="toon" onchange="location.href = '/menubeheer/beheer/' + this.value;">

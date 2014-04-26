@@ -51,7 +51,7 @@ class BeheerAbonnementenView extends TemplateView {
 				$this->smarty->assign('matrix', $this->_leden_abonnementen);
 				$this->smarty->display('taken/abonnement/beheer_abonnementen.tpl');
 			} else { // lijst van abonnementen voor novieten of opgegeven lid of lege array bij error
-				echo '<tr id="taken-melding"><td id="taken-melding-veld">' . $this->getMelding() . '</td></tr>';
+				echo '<tr id="taken-melding"><td id="taken-melding-veld">' . SimpleHTML::getMelding() . '</td></tr>';
 				foreach ($this->_leden_abonnementen as $uid => $abonnementen) {
 					$this->smarty->assign('uid', $uid);
 					$this->smarty->assign('abonnementen', $abonnementen);
@@ -59,7 +59,7 @@ class BeheerAbonnementenView extends TemplateView {
 				}
 			}
 		} else { // abonnement aan/afmelding
-			echo '<td id="taken-melding-veld">' . $this->getMelding() . '</td>';
+			echo '<td id="taken-melding-veld">' . SimpleHTML::getMelding() . '</td>';
 			$this->smarty->assign('abonnement', $this->_leden_abonnementen);
 			$this->smarty->assign('lidid', $this->_leden_abonnementen->getLidId());
 			$this->smarty->assign('uid', $this->_leden_abonnementen->getLid()->getUid());

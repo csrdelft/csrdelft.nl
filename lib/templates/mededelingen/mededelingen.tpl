@@ -17,7 +17,7 @@
 		<h1>Mededelingen Prullenbak</h1>
 		<span style="display:block; margin-bottom: 10px;">Deze pagina bevat alleen verborgen, verwijderde en vervallen mededelingen.</span>
 	{/if}
-	{$view->getMelding()}
+	{SimpleHtml::getMelding()}
 	{if $geselecteerdeMededeling!==null}		{*	Check of er een mededeling geselecteerd is.	Zo niet, dan
 		is de database leeg en geven we een nette foutmelding.	*}
 		<div id="kolomlinks">

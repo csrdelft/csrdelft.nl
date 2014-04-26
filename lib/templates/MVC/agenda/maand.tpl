@@ -1,4 +1,4 @@
-{$view->getMelding()}
+{SimpleHtml::getMelding()}
 {capture name='navlinks'}
 	<div class="maandnavigatie">
 		<h1>{$datum|date_format:"%B %Y"}</h1>

@@ -6,7 +6,7 @@
 	<a class="knop" href="/communicatie/documenten/">Terug</a>
 </div>
 <h1>Document {if $document->getID()==0}Toevoegen{else}Bewerken{/if}</h1>
-<div class="foutje">{$view->getMelding()}</div>
+<div class="foutje">{SimpleHtml::getMelding()}</div>
 
 <form id="documentForm" method="post" enctype="multipart/form-data" action="/communicatie/documenten/bewerken/{$document->getId()}">
 	<fieldset>

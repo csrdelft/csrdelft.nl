@@ -1,5 +1,5 @@
 {*
-	beheer_functie_lijst.tpl	|	P.W.G. Brussee (brussee@live.nl)
+beheer_functie_lijst.tpl	|	P.W.G. Brussee (brussee@live.nl)
 *}
 <tr id="corveefunctie-row-{$functie->functie_id}">
 	<td>
@@ -18,9 +18,9 @@
 			<div class="kwali" style="display: none;"><a title="Toon leden" class="knop" onclick="$('div.kwali').toggle();">{icon get="eye"} Toon leden</a></div>
 		{/if}
 		{foreach from=$functie->getKwalificaties() item=kwali}
-			<div class="kwali"{if $view->getLid($kwali->lid_id)->isOudlid()} style="display: none;"{/if}>
+			<div class="kwali"{if LidCache::getLid($kwali->lid_id)->isOudlid()} style="display: none;"{/if}>
 				<a href="{Instellingen::get('taken', 'url')}/dekwalificeer/{$functie->functie_id}" title="Kwalificatie intrekken" class="knop post" postdata="voor_lid={$kwali->lid_id}">{icon get="vcard_delete"}</a>
-				&nbsp;{$view->getLid($kwali->lid_id)->getNaamLink(Instellingen::get('corvee', 'weergave_ledennamen_beheer'), Instellingen::get('corvee', 'weergave_link_ledennamen'))}
+				&nbsp;{LidCache::getLid($kwali->lid_id)->getNaamLink(Instellingen::get('corvee', 'weergave_ledennamen_beheer'), Instellingen::get('corvee', 'weergave_link_ledennamen'))}
 				<span style="color: gray;"> (sinds {$kwali->wanneer_toegewezen})</span>
 			</div>
 		{/foreach}

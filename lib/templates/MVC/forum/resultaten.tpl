@@ -1,4 +1,4 @@
-{$view->getMelding()}
+{SimpleHtml::getMelding()}
 
 <form id="forum_zoeken" action="/forum/zoeken" method="post"><fieldset><input type="text" name="zoeken" value="zoeken in forum" onfocus="this.value = '';" /></fieldset></form>
 

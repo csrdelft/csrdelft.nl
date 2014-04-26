@@ -50,26 +50,4 @@ abstract class TemplateView implements View {
 		return $this->titel;
 	}
 
-	/**
-	 * @deprecated
-	 * Backwards compatibility with SimpleHTML.
-	 */
-	public static function getMelding() {
-		return SimpleHTML::getMelding();
-	}
-
-	/**
-	 * @deprecated
-	 * Laad een lid object.
-	 * 
-	 * @return Lid if exists, false otherwise
-	 */
-	public static function getLid($uid) {
-		$lid = LidCache::getLid($uid); // false if lid does not exist
-		if (!$lid instanceof \Lid) {
-			throw new Exception('Lid bestaat niet: $uid =' . $uid);
-		}
-		return $lid;
-	}
-
 }

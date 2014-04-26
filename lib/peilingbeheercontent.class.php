@@ -19,7 +19,7 @@ class PeilingBeheerContent extends TemplateView {
 		$html = '
 		<h1>Peilingbeheertool</h1>
 		<div>
-			' . $this->getMelding() . '
+			' . SimpleHTML::getMelding() . '
 			<b>Nieuwe peiling:</b><br/>
 			<form id="nieuwePeiling" action="/tools/peilingbeheer.php?action=toevoegen" method="post">
 				<label for="titel">Titel:</label><input name="titel" type="text"/><br />
