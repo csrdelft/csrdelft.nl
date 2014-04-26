@@ -5,10 +5,15 @@
 # -------------------------------------------------------------------
 # Instellingen van het include_path enzo...
 # -------------------------------------------------------------------
-#
-# uncomment de volgende regel om de boel in onderhoudsmode te ketzen
 # 
-# define('MODE', 'ONDERHOUD');
+# uncomment de volgende regel om de boel in onderhoudsmode te ketzen
+#define('MODE', 'ONDERHOUD');
+# 
+# uncomment de volgende regel om de database automatisch te laten controleren
+define('DB_CHECK', null);
+# 
+# uncomment de volgende regel om de database automatisch te laten bijwerken
+#define('DB_MODIFY', null);
 # 
 # de wiki genereert de nodige notices. En heeft daarom de error_reporting 
 # anders ingesteld.

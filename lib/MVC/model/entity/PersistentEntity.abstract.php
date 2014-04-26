@@ -98,6 +98,7 @@ abstract class PersistentEntity {
 	private static function makePersistentField($name, array $definition) {
 		$field = new PersistentField();
 		$field->field = $name;
+		$field->default = self::getDefaultValue($name);
 		if ($definition[0] === 'enum') {
 			$field->type = 'varchar(' . $definition[1]::getMaxLenght() . ')';
 		} else {
@@ -111,7 +112,6 @@ abstract class PersistentEntity {
 		} else {
 			$field->null = 'NO';
 		}
-		$field->default = self::getDefaultValue($name);
 		if (array_key_exists(4, $definition)) {
 			$field->extra = $definition[4];
 		} else {
@@ -128,21 +128,16 @@ abstract class PersistentEntity {
 	/**
 	 * Check for differences in persistent fields.
 	 * 
-	 * @param boolean modify
+	 * @important Not supported: RENAMING of field and INDEX and FOREIGN KEY check
 	 */
-	public static function checkTable($modify = false) {
+	public static function checkTable() {
 		try {
 			$database_fields = group_by_distinct('field', DatabaseAdmin::instance()->sqlDescribeTable(self::getTableName()));
 		} catch (Exception $e) {
 			if (endsWith($e->getMessage(), self::getTableName() . "' doesn't exist")) {
-				if ($modify) {
-					$string = DatabaseAdmin::instance()->sqlCreateTable(self::getTableName(), static::$persistent_fields, self::getPrimaryKey());
-					debugprint($string);
-					return;
-				} else {
-					debugprint(self::getTableName() . ' TABLE DOES NOT EXIST');
-					exit;
-				}
+				$string = DatabaseAdmin::instance()->sqlCreateTable(self::getTableName(), static::$persistent_fields, self::getPrimaryKey());
+				debugprint($string);
+				return;
 			} else {
 				throw $e; // rethrow to controller
 			}
@@ -153,28 +148,36 @@ abstract class PersistentEntity {
 			$fields[$name] = self::makePersistentField($name, $definition);
 			// Add missing persistent fields
 			if (!array_key_exists($name, $database_fields)) {
-				if ($modify) {
-					$string = DatabaseAdmin::instance()->sqlAddField(self::getTableName(), $fields[$name], $previous_field);
-					debugprint($string);
-				} else {
-					debugprint(self::getTableName() . '.' . $name . ' MISSING FROM DATABASE');
-				}
+				$string = DatabaseAdmin::instance()->sqlAddField(self::getTableName(), $fields[$name], $previous_field);
+				debugprint($string);
 			} else {
 				// Check exisiting persistent fields for differences
+				$diff = false;
 				if ($fields[$name]->type !== $database_fields[$name]->type AND ! ($fields[$name]->type === 'boolean' AND $database_fields[$name]->type === 'tinyint(1)')) {
-					debugprint(self::getTableName() . '.' . $name . ' TYPE: "' . $fields[$name]->type . '" !== "' . $database_fields[$name]->type . '"');
+					$diff = true;
 				}
 				if ($fields[$name]->null !== $database_fields[$name]->null) {
-					debugprint(self::getTableName() . '.' . $name . ' NULL: "' . $fields[$name]->null . '" !== "' . $database_fields[$name]->null . '"');
+					$diff = true;
 				}
-				if ($fields[$name]->default != $database_fields[$name]->default) {
-					debugprint(self::getTableName() . '.' . $name . ' DEFAULT: "' . $fields[$name]->default . '" != "' . $database_fields[$name]->default . '"');
+				if ($fields[$name]->default !== null) {
+					if ($definition[0] === 'boolean') {
+						$database_fields[$name]->default = (boolean) $database_fields[$name]->default;
+					} elseif ($definition[0] === 'int') {
+						$database_fields[$name]->default = (int) $database_fields[$name]->default;
+					}
+				}
+				if ($fields[$name]->default !== $database_fields[$name]->default) {
+					$diff = true;
 				}
 				if ($fields[$name]->extra !== $database_fields[$name]->extra) {
-					debugprint(self::getTableName() . '.' . $name . ' EXTRA: "' . $fields[$name]->extra . '" !== "' . $database_fields[$name]->extra . '"');
+					$diff = true;
 				}
-				if ($fields[$name]->key !== $database_fields[$name]->key AND $modify) { // ignore normally
-					debugprint(self::getTableName() . '.' . $name . ' KEY: "' . $fields[$name]->key . '" !== "' . $database_fields[$name]->key . '"');
+				if ($fields[$name]->key !== $database_fields[$name]->key AND ! ($fields[$name]->key === '' AND $database_fields[$name]->key === 'MUL')) {
+					$diff = true;
+				}
+				if ($diff) {
+					$string = DatabaseAdmin::instance()->sqlChangeField(self::getTableName(), $fields[$name]);
+					debugprint($string);
 				}
 			}
 			$previous_field = $name;
@@ -182,12 +185,8 @@ abstract class PersistentEntity {
 		// Remove non-persistent fields
 		foreach ($database_fields as $name => $field) {
 			if (!array_key_exists($name, static::$persistent_fields)) {
-				if ($modify) {
-					$string = DatabaseAdmin::instance()->sqlDeleteField(self::getTableName(), $field);
-					debugprint($string);
-				} else {
-					debugprint(self::getTableName() . '.' . $name . ' UNDEFINED PROPERTY');
-				}
+				$string = DatabaseAdmin::instance()->sqlDeleteField(self::getTableName(), $field);
+				debugprint($string);
 			}
 		}
 	}

@@ -59,8 +59,10 @@ class DatabaseAdmin extends Database {
 			$sql .= $key . ' ' . $value . ', ';
 		}
 		$sql .= 'PRIMARY KEY (' . implode(', ', $primary_key) . ')) ENGINE=InnoDB DEFAULT CHARSET=utf8 auto_increment=1';
-		$query = self::instance()->prepare($sql);
-		$query->execute();
+		if (defined('DB_MODIFY')) {
+			$query = self::instance()->prepare($sql);
+			$query->execute();
+		}
 		return $sql;
 	}
 
@@ -83,18 +85,34 @@ class DatabaseAdmin extends Database {
 	public static function sqlAddField($table, PersistentField $field, $after_field = null) {
 		$sql = 'ALTER TABLE ' . $table . ' ADD ' . $field->field . ' ' . $field->type;
 		$sql .= ($field->null === 'YES' ? '' : ' NOT NULL');
-		$sql .= (empty($field->default) ? '' : ' DEFAULT "' . $field->default . '"');
+		$sql .= ($field->default === null ? '' : ' DEFAULT "' . $field->default . '"');
 		$sql .= (empty($field->extra) ? '' : ' ' . $field->extra);
 		$sql .= ($after_field === null ? ' FIRST' : ' AFTER ' . $after_field);
-		$query = self::instance()->prepare($sql);
-		$query->execute();
+		if (defined('DB_MODIFY')) {
+			$query = self::instance()->prepare($sql);
+			$query->execute();
+		}
+		return $sql;
+	}
+
+	public static function sqlChangeField($table, PersistentField $field) {
+		$sql = 'ALTER TABLE ' . $table . ' CHANGE ' . $field->field . ' ' . $field->field . ' ' . $field->type;
+		$sql .= ($field->null === 'YES' ? '' : ' NOT NULL');
+		$sql .= ($field->default === null ? '' : ' DEFAULT "' . $field->default . '"');
+		$sql .= (empty($field->extra) ? '' : ' ' . $field->extra);
+		if (defined('DB_MODIFY')) {
+			$query = self::instance()->prepare($sql);
+			$query->execute();
+		}
 		return $sql;
 	}
 
 	public static function sqlDeleteField($table, $field_name) {
 		$sql = 'ALTER TABLE ' . $table . ' DROP ' . $field_name;
-		$query = self::instance()->prepare($sql);
-		$query->execute();
+		if (defined('DB_MODIFY')) {
+			$query = self::instance()->prepare($sql);
+			$query->execute();
+		}
 		return $sql;
 	}
 
