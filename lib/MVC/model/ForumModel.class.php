@@ -529,10 +529,10 @@ class ForumPostsModel extends PersistenceModel implements Paging {
 	}
 
 	public function getForumPostsVoorDraad(ForumDraad $draad) {
-		$posts = $this->find('draad_id = ? AND wacht_goedkeuring = FALSE AND verwijderd = FALSE', array($draad->draad_id), 'post_id ASC', $this->per_pagina, ($this->pagina - 1) * $this->per_pagina);
+		$posts = $this->find('draad_id = ? AND wacht_goedkeuring = FALSE AND verwijderd = FALSE', array($draad->draad_id), 'post_id ASC', $this->per_pagina, ($this->pagina - 1) * $this->per_pagina)->fetchAll();
 		if ($draad->eerste_post_plakkerig AND $this->pagina !== 1) {
-			$array_first_post = $this->find('draad_id = ? AND wacht_goedkeuring = FALSE AND verwijderd = FALSE', array($draad->draad_id), 'post_id ASC', 1);
-			array_unshift($posts, $array_first_post[0]);
+			$array_first_post = $this->find('draad_id = ? AND wacht_goedkeuring = FALSE AND verwijderd = FALSE', array($draad->draad_id), 'post_id ASC', 1)->fetch();
+			array_unshift($posts, $array_first_post);
 		}
 		// 2008-filter
 		if (LidInstellingen::get('forum', 'filter2008') == 'ja') {
