@@ -24,6 +24,7 @@ class GroepenController extends Controller {
 		}
 		if (!$this->isPosted()) {
 			$this->view = new CsrLayoutPage($this->getContent());
+			$this->view->addStyleSheet('groepen.css');
 			$this->view->addScript('groepen.js');
 		}
 	}
