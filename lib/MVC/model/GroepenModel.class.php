@@ -23,7 +23,7 @@ class GroepLedenModel extends GroepenModel {
 	protected static $instance;
 
 	public function getLedenVoorGroep(Groep $groep) {
-		return $this->find('groep_type = ? AND groep_id = ?', array(get_class($groep), $groep->id), 'lid_sinds ASC');
+		return $this->find('groep_type = ? AND groep_id = ?', array(get_class($groep), $groep->id), 'lid_sinds ASC')->fetchAll();
 	}
 
 }
