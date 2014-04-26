@@ -19,11 +19,11 @@ class ForumModel extends PersistenceModel {
 	 */
 	public function getForum() {
 		$delen = ForumDelenModel::instance()->getAlleForumDelenPerCategorie();
-		$categorien = $this->find(null, array(), 'volgorde');
-		foreach ($categorien as $i => $cat) {
-			if (!$cat->magLezen()) {
-				unset($categorien[$i]);
-			} else {
+		$categorien = $this->find(null, array(), 'volgorde ASC');
+		$result = array();
+		foreach ($categorien as $cat) {
+			if ($cat->magLezen()) {
+				$result[] = $cat;
 				if (array_key_exists($cat->categorie_id, $delen)) {
 					$cat->setForumDelen($delen[$cat->categorie_id]);
 					unset($delen[$cat->categorie_id]);
@@ -32,7 +32,7 @@ class ForumModel extends PersistenceModel {
 				}
 			}
 		}
-		return $categorien;
+		return $result;
 	}
 
 }
@@ -44,7 +44,7 @@ class ForumDelenModel extends PersistenceModel {
 	protected static $instance;
 
 	public function getAlleForumDelenPerCategorie() {
-		$delen = $this->find(null, array(), 'volgorde');
+		$delen = $this->find(null, array(), 'volgorde ASC');
 		$result = array();
 		foreach ($delen as $deel) {
 			if ($deel->magLezen()) {
@@ -55,7 +55,7 @@ class ForumDelenModel extends PersistenceModel {
 	}
 
 	public function getForumDelenVoorCategorie($cid) {
-		return $this->find('categorie_id = ?', array($cid), 'volgorde');
+		return $this->find('categorie_id = ?', array($cid), 'volgorde ASC');
 	}
 
 	public function getForumDelenVoorLid($rss) {
