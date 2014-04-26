@@ -19,7 +19,6 @@ class Knop {
 	public $title = null;  //hover text
 	public $confirm = false; //javascript confirm toevoegen
 
-	?
 	//Kan true zijn of een string, bij true wordt de vraag 'weet u het zeker'
 	//anders de inhoud van de string.
 
