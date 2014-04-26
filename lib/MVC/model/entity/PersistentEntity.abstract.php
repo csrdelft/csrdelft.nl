@@ -81,9 +81,8 @@ abstract class PersistentEntity {
 	 */
 	private function castValues() {
 		foreach (static::$persistent_fields as $field => $definition) {
-			if ($this->$field === null AND ! (array_key_exists(2, $definition) AND $definition[2] === true)) {
-				debugprint(self::getTableName() . '.' . $field . ' is not allowed to be NULL');
-				echo debug_backtrace();
+			if (defined('DB_CHECK') AND $this->$field === null AND ! (array_key_exists(2, $definition) AND $definition[2] === true)) {
+				throw new Exception(self::getTableName() . '.' . $field . ' is not allowed to be NULL');
 			}
 			if ($definition[0] === 'int') {
 				$this->$field = (int) $this->$field;
