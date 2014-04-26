@@ -22,7 +22,7 @@ class MenuModel extends PersistenceModel {
 		$query = Database::instance()->prepare($sql);
 		$query->execute();
 		$query->setFetchMode(PDO::FETCH_COLUMN, 0);
-		return $query;
+		return $query->fetchAll();
 	}
 
 	/**
@@ -38,7 +38,7 @@ class MenuModel extends PersistenceModel {
 		$where = 'parent_id = 0 AND tekst = ?';
 		$params = array($menu_naam);
 		$root = $this->find($where, $params, 'parent_id ASC, prioriteit ASC')->fetch();
-		if ($root) {
+		if (!$root) {
 			$item = $this->newMenuItem(0);
 			$item->tekst = $menu_naam;
 			return $item;
@@ -49,7 +49,7 @@ class MenuModel extends PersistenceModel {
 
 	public function getChildren(MenuItem $parent, $admin = false) {
 		$where = 'parent_id = ?' . ($admin ? '' : ' AND zichtbaar = true');
-		$parent->children = $this->find($where, array($parent->item_id), 'prioriteit ASC');
+		$parent->children = $this->find($where, array($parent->item_id), 'prioriteit ASC')->fetchAll();
 		$child_active = false;
 		foreach ($parent->children as $i => $child) {
 			if (!$admin AND ! LoginLid::mag($child->rechten_bekijken)) {

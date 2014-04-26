@@ -18,7 +18,7 @@ class KwalificatiesModel extends PersistenceModel {
 	 * @return CorveeKwalificatie[]
 	 */
 	public function getAlleKwalificaties() {
-		return array_group_by('functie_id', $this->find());
+		return group_by('functie_id', $this->find());
 	}
 
 	public function getKwalificatiesVoorFunctie($fid) {

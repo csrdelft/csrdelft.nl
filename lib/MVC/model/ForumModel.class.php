@@ -45,12 +45,13 @@ class ForumDelenModel extends PersistenceModel {
 
 	public function getAlleForumDelenPerCategorie() {
 		$delen = $this->find(null, array(), 'volgorde');
-		foreach ($delen as $i => $deel) {
-			if (!$deel->magLezen()) {
-				unset($delen[$i]);
+		$result = array();
+		foreach ($delen as $deel) {
+			if ($deel->magLezen()) {
+				$result[$deel->categorie_id][$deel->forum_id] = $deel;
 			}
 		}
-		return array_group_by('categorie_id', $delen);
+		return $result;
 	}
 
 	public function getForumDelenVoorCategorie($cid) {
@@ -58,7 +59,7 @@ class ForumDelenModel extends PersistenceModel {
 	}
 
 	public function getForumDelenVoorLid($rss) {
-		$delen = array_key_property('forum_id', $this->find());
+		$delen = group_by_distinct('forum_id', $this->find());
 		foreach ($delen as $forum_id => $deel) {
 			if (!$deel->magLezen($rss)) {
 				unset($delen[$forum_id]);
@@ -81,7 +82,7 @@ class ForumDelenModel extends PersistenceModel {
 			return array();
 		}
 		$in = implode(', ', array_fill(0, $count, '?'));
-		return array_key_property('forum_id', $this->find('forum_id IN (' . $in . ')', $ids));
+		return group_by_distinct('forum_id', $this->find('forum_id IN (' . $in . ')', $ids));
 	}
 
 	public function getRecent() {
@@ -98,8 +99,8 @@ class ForumDelenModel extends PersistenceModel {
 	 * @return array( ForumDraden[], ForumDelen[] )
 	 */
 	public function getWachtOpGoedkeuring() {
-		$gevonden_posts = array_group_by('draad_id', ForumPostsModel::instance()->find('wacht_goedkeuring = TRUE AND verwijderd = FALSE'));
-		$gevonden_draden = array_key_property('draad_id', ForumDradenModel::instance()->find('wacht_goedkeuring = TRUE AND verwijderd = FALSE'));
+		$gevonden_posts = group_by('draad_id', ForumPostsModel::instance()->find('wacht_goedkeuring = TRUE AND verwijderd = FALSE'));
+		$gevonden_draden = group_by_distinct('draad_id', ForumDradenModel::instance()->find('wacht_goedkeuring = TRUE AND verwijderd = FALSE'));
 		$gevonden_draden += ForumDradenModel::instance()->getForumDradenById(array_keys($gevonden_posts)); // laad draden bij posts
 		foreach ($gevonden_draden as $draad) { // laad posts bij draden
 			if (array_key_exists($draad->draad_id, $gevonden_posts)) { // post is al gevonden
@@ -117,8 +118,8 @@ class ForumDelenModel extends PersistenceModel {
 			}
 		}
 		// check permissies op delen
-		$delen_ids = array_keys(array_group_by('forum_id', $gevonden_draden, false));
-		$gevonden_delen = array_key_property('forum_id', ForumDelenModel::instance()->getForumDelenById($delen_ids));
+		$delen_ids = array_keys(group_by('forum_id', $gevonden_draden, false));
+		$gevonden_delen = group_by_distinct('forum_id', ForumDelenModel::instance()->getForumDelenById($delen_ids));
 		foreach ($gevonden_delen as $forum_id => $deel) {
 			if (!$deel->magModereren()) {
 				foreach ($gevonden_draden as $draad_id => $draad) {
@@ -139,8 +140,8 @@ class ForumDelenModel extends PersistenceModel {
 	 * @return array( ForumDraden[], ForumDelen[] )
 	 */
 	public function zoeken($query) {
-		$gevonden_posts = array_group_by('draad_id', ForumPostsModel::instance()->zoeken($query)); // zoek op tekst in posts
-		$gevonden_draden = array_key_property('draad_id', ForumDradenModel::instance()->zoeken($query)); // zoek op titel in draden
+		$gevonden_posts = group_by('draad_id', ForumPostsModel::instance()->zoeken($query)); // zoek op tekst in posts
+		$gevonden_draden = group_by_distinct('draad_id', ForumDradenModel::instance()->zoeken($query)); // zoek op titel in draden
 		$gevonden_draden += ForumDradenModel::instance()->getForumDradenById(array_keys($gevonden_posts)); // laad draden bij posts
 		foreach ($gevonden_draden as $draad) { // laad posts bij draden
 			if (property_exists($draad, 'score')) { // gevonden op draad titel
@@ -159,8 +160,8 @@ class ForumDelenModel extends PersistenceModel {
 			}
 		}
 		// check permissies op delen
-		$delen_ids = array_keys(array_group_by('forum_id', $gevonden_draden, false));
-		$gevonden_delen = array_key_property('forum_id', ForumDelenModel::instance()->getForumDelenById($delen_ids));
+		$delen_ids = array_keys(group_by('forum_id', $gevonden_draden, false));
+		$gevonden_delen = group_by_distinct('forum_id', ForumDelenModel::instance()->getForumDelenById($delen_ids));
 		foreach ($gevonden_delen as $forum_id => $deel) {
 			if (!$deel->magLezen()) {
 				foreach ($gevonden_draden as $draad_id => $draad) {
@@ -366,8 +367,8 @@ class ForumDradenModel extends PersistenceModel implements Paging {
 		} else {
 			$belangrijk = '';
 		}
-		$draden = $this->find('forum_id IN (' . $in . ') AND d.wacht_goedkeuring = FALSE AND d.verwijderd = FALSE' . $belangrijk, $params, 'd.laatst_gewijzigd DESC', $aantal, ($pagina - 1) * $aantal);
-		$posts_ids = array_keys(array_key_property('laatste_post_id', $draden, false));
+		$draden = $this->find('forum_id IN (' . $in . ') AND d.wacht_goedkeuring = FALSE AND d.verwijderd = FALSE' . $belangrijk, $params, 'd.laatst_gewijzigd DESC', $aantal, ($pagina - 1) * $aantal)->fetchAll();
+		$posts_ids = array_keys(group_by_distinct('laatste_post_id', $draden, false));
 		$posts = ForumPostsModel::instance()->getForumPostsById($posts_ids, ' AND wacht_goedkeuring = FALSE AND verwijderd = FALSE');
 		foreach ($draden as $i => $draad) {
 			if (array_key_exists($draad->laatste_post_id, $posts)) {
@@ -377,7 +378,6 @@ class ForumDradenModel extends PersistenceModel implements Paging {
 			}
 		}
 		if ($rss) {
-
 			return array($draden, $delen);
 		}
 		return $draden;
@@ -401,7 +401,7 @@ class ForumDradenModel extends PersistenceModel implements Paging {
 			return array();
 		}
 		$in = implode(', ', array_fill(0, $count, '?'));
-		return array_key_property('draad_id', $this->find('d.draad_id IN (' . $in . ')' . $where, array_merge($ids, $where_params)));
+		return group_by_distinct('draad_id', $this->find('d.draad_id IN (' . $in . ')' . $where, array_merge($ids, $where_params)));
 	}
 
 	public function maakForumDraad($forum_id, $titel, $wacht_goedkeuring) {
@@ -558,7 +558,7 @@ class ForumPostsModel extends PersistenceModel implements Paging {
 		} else {
 			if (!array_key_exists($forum_id, $this->aantal_goedkeuring)) {
 				// laad draad ids van posts die wachten op goedkeuring
-				$gevonden_posts = array_group_by('draad_id', ForumPostsModel::instance()->find('wacht_goedkeuring = TRUE AND verwijderd = FALSE'));
+				$gevonden_posts = group_by('draad_id', ForumPostsModel::instance()->find('wacht_goedkeuring = TRUE AND verwijderd = FALSE'));
 				// laad draden bij posts die alleen in dit deel zitten
 				$gevonden_draden = ForumDradenModel::instance()->getForumDradenById(array_keys($gevonden_posts), ' AND forum_id = ? AND verwijderd = FALSE', array($forum_id));
 				$this->aantal_goedkeuring[$forum_id] = count($gevonden_draden);
@@ -588,9 +588,9 @@ class ForumPostsModel extends PersistenceModel implements Paging {
 )';
 		}
 		$posts = $this->find($where, array($uid), 'post_id DESC', $aantal);
-		$draden_ids = array_keys(array_key_property('draad_id', $posts, false));
+		$draden_ids = array_keys(group_by_distinct('draad_id', $posts, false));
 		$draden = ForumDradenModel::instance()->getForumDradenById($draden_ids);
-		$delen_ids = array_keys(array_key_property('forum_id', $draden, false));
+		$delen_ids = array_keys(group_by_distinct('forum_id', $draden, false));
 		$delen = ForumDelenModel::instance()->getForumDelenById($delen_ids);
 		foreach ($delen as $forum_id => $deel) {
 			if (!$deel->magLezen()) {
@@ -624,7 +624,7 @@ class ForumPostsModel extends PersistenceModel implements Paging {
 			return array();
 		}
 		$in = implode(', ', array_fill(0, $count, '?'));
-		return array_key_property('post_id', $this->find('post_id IN (' . $in . ')' . $where, array_merge($ids, $where_params)));
+		return group_by_distinct('post_id', $this->find('post_id IN (' . $in . ')' . $where, array_merge($ids, $where_params)));
 	}
 
 	public function maakForumPost($draad_id, $tekst, $ip, $wacht_goedkeuring, $email) {

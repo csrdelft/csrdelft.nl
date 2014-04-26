@@ -132,7 +132,7 @@ abstract class PersistentEntity {
 	 */
 	public static function checkTable($modify = false) {
 		try {
-			$database_fields = array_key_property('field', DatabaseAdmin::instance()->sqlDescribeTable(self::getTableName()));
+			$database_fields = group_by_distinct('field', DatabaseAdmin::instance()->sqlDescribeTable(self::getTableName()));
 		} catch (Exception $e) {
 			if (endsWith($e->getMessage(), self::getTableName() . "' doesn't exist")) {
 				if ($modify) {

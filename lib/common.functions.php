@@ -37,10 +37,10 @@ function endsWith($haystack, $needle) {
  * Group by object property
  * 
  * @param string $prop
- * @param Traversable $in
+ * @param array $in
  * @return array $out
  */
-function array_group_by($prop, Traversable $in) {
+function group_by($prop, $in) {
 	$out = array();
 	foreach ($in as $i => $obj) {
 		$out[$obj->$prop][] = $obj; // add to array
@@ -52,13 +52,13 @@ function array_group_by($prop, Traversable $in) {
 }
 
 /**
- * Set key to object property
+ * Group by distinct object property
  * 
  * @param string $prop
- * @param Traversable $in
+ * @param array $in
  * @return array $out
  */
-function array_key_property($prop, Traversable $in) {
+function group_by_distinct($prop, $in) {
 	$out = array();
 	foreach ($in as $i => $obj) {
 		$out[$obj->$prop] = $obj; // overwrite existing

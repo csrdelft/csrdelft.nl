@@ -17,7 +17,7 @@ class FunctiesModel extends PersistenceModel {
 	/**
 	 * Optional eager loading of kwalificaties.
 	 * 
-	 * @param boolean $load_kwalifications
+	 * @param boolean $load_kwalificaties
 	 * @return CorveeFunctie[]
 	 */
 	public function getAlleFuncties($load_kwalificaties = false) {
@@ -25,8 +25,8 @@ class FunctiesModel extends PersistenceModel {
 		if ($load_kwalificaties) {
 			$kwalificaties = KwalificatiesModel::instance()->getAlleKwalificaties();
 		}
-		$functiesByFid = array();
-		foreach ($functies as $i => $functie) {
+		$result = array();
+		foreach ($functies as $functie) {
 			if ($load_kwalificaties) {
 				if (array_key_exists($functie->functie_id, $kwalificaties)) {
 					$functie->setKwalificaties($kwalificaties[$functie->functie_id]);
@@ -35,10 +35,9 @@ class FunctiesModel extends PersistenceModel {
 					$functie->setKwalificaties(array());
 				}
 			}
-			$functiesByFid[$functie->functie_id] = $functie;
-			unset($functies[$i]);
+			$result[$functie->functie_id] = $functie;
 		}
-		return $functiesByFid;
+		return $result;
 	}
 
 	/**
