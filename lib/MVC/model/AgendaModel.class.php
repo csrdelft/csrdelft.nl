@@ -100,17 +100,14 @@ class AgendaModel extends PersistenceModel {
 		// Zaterdag van de laatste week van de maand uitrekenen
 		$eindMoment = mktime(0, 0, 0, $maand, 1, $jaar);
 		$eindMoment = strtotime('+1 month', $eindMoment) - 1;
-		if (date('w', $eindMoment) == 6) {
-			$eindMoment++;
-		} else {
+		if (date('w', $eindMoment) != 6) {
 			$eindMoment = strtotime('next Saturday', $eindMoment);
-			$eindMoment = strtotime('+1 day', $eindMoment);
 		}
 
 		// Array met weken en dagen maken
 		$cur = $startMoment;
 		$agenda = array();
-		while ($cur != $eindMoment) {
+		while ($cur <= $eindMoment) {
 			$week = getWeekNumber($cur);
 			$dag = date('d', $cur);
 			$agenda[$week][$dag]['datum'] = $cur;
