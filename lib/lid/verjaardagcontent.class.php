@@ -74,7 +74,7 @@ class VerjaardagContent extends TemplateView {
 								if ($verjaardag['gebdag'] == $dezedag and $maand == $dezemaand)
 									echo '<em>';
 								echo $verjaardag['gebdag'] . " ";
-								echo $lid->getNaamLink('civitas', 'link') . "<br />\n";
+								echo $lid->getNaamLink('civitas', 'visitekaartje') . "<br />\n";
 								if ($verjaardag['gebdag'] == $dezedag and $maand == $dezemaand)
 									echo "</em>";
 							}
