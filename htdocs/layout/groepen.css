@@ -44,8 +44,8 @@ ul.groepledenlijst{ width: 230px; float: right; padding: 10px 20px 20px 20px; ma
 
 
 #voorgangerOpvolger{ margin: 10px 0px; padding: 3px 20px; border-bottom: 1px solid black;}
-	.vorigeGroep{ list-style-image: url(http://plaetjes.csrdelft.nl/groepen/up.png); }
-	.volgendeGroep{ list-style-image: url(http://plaetjes.csrdelft.nl/groepen/down.png); }
+.vorigeGroep{ list-style-image: url(http://plaetjes.csrdelft.nl/groepen/up.png); }
+.volgendeGroep{ list-style-image: url(http://plaetjes.csrdelft.nl/groepen/down.png); }
 #groepAdmin{ float: right; margin: 10px ; }
 .groepFormulier{ width: 100%;}
 .groepFormulier label{ float: left; margin-right: 15px; width: 130px;}
@@ -62,6 +62,23 @@ ul.groepledenlijst{ width: 230px; float: right; padding: 10px 20px 20px 20px; ma
 
 #groepenFormulier{ width: 600px; }
 
+/* Statistiek tab */
+table.groepenStats {
+	margin: 10px;
+	border-spacing: 0;
+	border: 1px solid #000;
+}
+table.groepenStats th{
+	background-color: #0A338D;
+	color: #fff;
+}
+table.groepenStats td, table.groepenStats th{
+	width: 50%;
+	padding: 5px 10px;
+}
+table.groepenStats tr:nth-child(even){
+	background-color: #ccc;
+}
 
 /* bewerken van opmerking/functie */
 .editbox{

@@ -320,7 +320,7 @@ class GroepStatsContent extends TemplateView {
 		if (!is_array($stats)) {
 			return;
 		}
-		echo '<table class="query_table">';
+		echo '<table class="groepenStats">';
 		foreach ($stats as $title => $stat) {
 			if (!is_array($stat)) {
 				continue;
@@ -328,16 +328,10 @@ class GroepStatsContent extends TemplateView {
 			echo '<thead><tr><th colspan="2">' . $title . '</th></tr></thead><tbody>';
 			$rowColor = false;
 			foreach ($stat as $row) {
-				//kleurtjes omwisselen
-				if ($rowColor) {
-					$style = 'background-color: #ccc;';
-				} else {
-					$style = '';
-				}
 				$rowColor = (!$rowColor);
 				echo '<tr>';
 				foreach ($row as $column) {
-					echo '<td style="width: 50%; ' . $style . '">' . $column . '</td>';
+					echo '<td>' . $column . '</td>';
 				}
 				echo '</tr>';
 			}
