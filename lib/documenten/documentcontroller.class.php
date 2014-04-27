@@ -150,7 +150,7 @@ class DocumentController extends Controller {
 		}
 		$uploaders = array(
 			'UploadHttp' => new UploadHttp(),
-			'UploadFtp' => new UploadFtp(),
+			'UploadFtp' => new UploadFtp('/documenten'),
 			'UploadUrl' => new UploadUrl(),
 			'BestandBehouden' => new BestandBehouden($this->document->hasFile(), $this->document->getBestandsnaam(), $this->document->getSize())
 		);

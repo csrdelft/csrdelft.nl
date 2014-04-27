@@ -233,10 +233,9 @@ class UploadFtp extends BestandUploader {
 	 */
 	protected $subdir;
 
-	public function __construct() {
+	public function __construct($subdir = '') {
 		parent::__construct();
-		$this->subdir = '/';
-		$this->path = PUBLIC_FTP . $this->subdir;
+		$this->setSubDir($subdir);
 	}
 
 	public function isAvailable() {
