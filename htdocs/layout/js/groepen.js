@@ -75,6 +75,7 @@ function showTab(groepid, tabid) {
 	http.onreadystatechange = function() {
 		if (http.readyState == 4) {
 			document.getElementById('ledenvangroep' + groepid).innerHTML = http.responseText;
+			init_hoverIntents();
 			observeClick();
 		}
 	};

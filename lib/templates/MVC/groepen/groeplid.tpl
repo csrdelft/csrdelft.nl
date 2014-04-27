@@ -1,5 +1,5 @@
 <tr>
-	<td>{$groeplid->lid_id|csrnaam:'civitas'}</td>
+	<td>{$groeplid->lid_id|csrnaam:'civitas':'visitekaartje'}</td>
 	{if $groep->magBeheren() OR ($groep->magAanmelden() AND LoginLid::instance()->getUid() === $groeplid->lid_id)}
 		<td id="bewerk_{$groep->id}|{$groeplid->lid_id}" class="inline_edit">
 			<span class="text">
