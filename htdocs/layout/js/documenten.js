@@ -3,10 +3,11 @@
  */
 jQuery(document).ready(function($) {
 
-	jQuery('div.UploadOptie input[type=radio]').click(function() {
-		var show = jQuery('div.UploadKeuze', jQuery(this).parent());
-		jQuery('div.UploadKeuze').not(show).fadeOut(250);
-		show.fadeIn(250);
+	jQuery('.BestandUploaderOptie').change(function() {
+		var optie = jQuery('input.BestandUploaderOptie:checked').parent();
+		optie = jQuery('div.UploadKeuze', optie);
+		jQuery('div.UploadKeuze').not(optie).fadeOut(250);
+		optie.fadeIn(250);
 	});
 
 	//tabellen naar zebra converteren.

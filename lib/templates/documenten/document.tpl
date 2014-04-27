@@ -20,7 +20,6 @@
 	<div>
 		<label class="meta">&nbsp;</label>
 		<input type="submit" value="Opslaan" />
-		<input type="reset" value="Reset" />
-		<input type="button" onclick="location.href = '/communicatie/documenten/';" value="Annuleren" />
+		<a href="/communicatie/documenten/" class="knop">Annuleren</a>
 	</div>
 </form>

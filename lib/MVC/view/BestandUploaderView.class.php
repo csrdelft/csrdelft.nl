@@ -26,7 +26,7 @@ class UploadHttpView extends BestandUploaderView {
 	}
 
 	public function view() {
-		echo '<div class="UploadOptie"><input type="radio" name="BestandUploader" id="UploadHttpInput" value="UploadHttp"';
+		echo '<div class="UploadOptie"><input type="radio" class="BestandUploaderOptie" name="BestandUploader" id="UploadHttpInput" value="UploadHttp"';
 		if ($this->selected) {
 			echo ' checked="checked"';
 		}
@@ -47,7 +47,7 @@ class UploadFtpView extends BestandUploaderView {
 	}
 
 	public function view() {
-		echo '<div class="UploadOptie"><input type="radio" name="BestandUploader" id="UploadFtpInput" value="UploadFtp"';
+		echo '<div class="UploadOptie"><input type="radio" class="BestandUploaderOptie" name="BestandUploader" id="UploadFtpInput" value="UploadFtp"';
 		if ($this->selected) {
 			echo ' checked="checked"';
 		}
@@ -82,7 +82,7 @@ class UploadUrlView extends BestandUploaderView {
 	}
 
 	public function view() {
-		echo '<div class="UploadOptie"><input type="radio" name="BestandUploader" id="UploadUrlInput" value="UploadUrl"';
+		echo '<div class="UploadOptie"><input type="radio" class="BestandUploaderOptie" name="BestandUploader" id="UploadUrlInput" value="UploadUrl"';
 		if ($this->selected) {
 			echo ' checked="checked"';
 		}
@@ -103,7 +103,7 @@ class BestandBehoudenView extends BestandUploaderView {
 	}
 
 	public function view() {
-		echo '<div class="UploadOptie"><input type="radio" name="BestandUploader" id="BestandBehoudenInput" value="BestandBehouden"';
+		echo '<div class="UploadOptie"><input type="radio" class="BestandUploaderOptie" name="BestandUploader" id="BestandBehoudenInput" value="BestandBehouden"';
 		if ($this->selected) {
 			echo ' checked="checked"';
 		}
