@@ -397,11 +397,11 @@ function peiling_bevestig_stem(peiling) {
  * Selecteer de tekst van een DOM-element
  * http://stackoverflow.com/questions/985272/jquery-selecting-text-in-an-element-akin-to-highlighting-with-your-mouse/987376#987376
  * 
- * @param element DOM-object
+ * @param id DOM-object
  */
-function selectText(element) {
+function selectText(id) {
 	var doc = document;
-	var text = doc.getElementById(element);
+	var text = doc.getElementById(id);
 	var range;
 	var selection;
 	if (doc.body.createTextRange) { //ms

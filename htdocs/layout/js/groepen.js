@@ -77,6 +77,9 @@ function showTab(groepid, tabid) {
 			document.getElementById('ledenvangroep' + groepid).innerHTML = http.responseText;
 			init_hoverIntents();
 			observeClick();
+			if (tabid == 'emails') {
+				selectText('ledenvangroep' + groepid);
+			}
 		}
 	};
 	http.send(null);
