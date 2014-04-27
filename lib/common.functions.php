@@ -325,7 +325,7 @@ function setMelding($message, $lvl = -1) {
   [naam] => Jan Lid
   )
   [2] => Array (
-  ...
+ ...
   )
   )
   [1] => Array (
@@ -430,19 +430,19 @@ function reldate($datum) {
 	if ($verschil <= 60) {
 		$return = $verschil . ' ';
 		if ($verschil == 1) {
-			$return.='seconde';
+			$return .= 'seconde';
 		} else {
-			$return.='seconden';
+			$return .= 'seconden';
 		}
-		$return.=' geleden';
+		$return .= ' geleden';
 	} elseif ($verschil <= 60 * 60) {
 		$return = floor($verschil / 60);
 		if (floor($verschil / 60) == 1) {
-			$return.=' minuut';
+			$return .= ' minuut';
 		} else {
-			$return.=' minuten';
+			$return .= ' minuten';
 		}
-		$return.=' geleden';
+		$return .= ' geleden';
 	} elseif ($verschil <= (60 * 60 * 4)) {
 		$return = floor($verschil / (60 * 60)) . ' uur geleden';
 	} elseif (date('Y-m-d') == date('Y-m-d', $moment)) {

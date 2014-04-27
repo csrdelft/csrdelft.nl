@@ -95,7 +95,7 @@ class GoogleSync {
 
 	private function loadContactsForGroup($groupId) {
 		$url = GOOGLE_CONTACTS_URL . '?max-results=' . GOOGLE_CONTACTS_MAX_RESULTS;
-		$url.='&group=' . urlencode($groupId);
+		$url .= '&group=' . urlencode($groupId);
 
 		$query = new Zend_Gdata_Query($url);
 		$this->contactFeed = $this->gdata->getFeed($query);

@@ -61,9 +61,9 @@ class Knop {
 	private function getImgTag() {
 		$img = '<img src="' . CSR_PICS . '/knopjes/' . $this->type . '.png"';
 		if ($this->title === null) {
-			$img.=' title="' . ucfirst($this->type) . '"';
+			$img .= ' title="' . ucfirst($this->type) . '"';
 		}
-		$img.='alt="' . ucfirst($this->type) . '" />';
+		$img .= 'alt="' . ucfirst($this->type) . '" />';
 		return $img;
 	}
 
@@ -75,9 +75,9 @@ class Knop {
 			} else {
 				$confirm = $this->confirm;
 			}
-			$html.='onclick="return confirm(\'' . $confirm . '\')" ';
+			$html .= 'onclick="return confirm(\'' . $confirm . '\')" ';
 		}
-		$html.='>';
+		$html .= '>';
 		if ($this->type == 'default') {
 			//knopje zonder plaatje, checken of er wel een tekst is, anders een foutmelding meegeven
 			if ($this->text === null) {
@@ -88,9 +88,9 @@ class Knop {
 			$html.=$this->getImgTag();
 		}
 		if ($this->text !== null) {
-			$html.=' ' . $this->text;
+			$html .= ' ' . $this->text;
 		}
-		$html.='</a>';
+		$html .= '</a>';
 		return $html;
 	}
 

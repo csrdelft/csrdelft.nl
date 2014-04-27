@@ -82,19 +82,19 @@ class EetplanContent extends TemplateView {
 					$iHuidigAvond = $aEetplanData['avond'];
 					$row++;
 				}
-				$sUitvoer.='
+				$sUitvoer .= '
 					<tr class="kleur' . ($row % 2) . '">
 						<td>' . $ertussen;
 
 				$lid = LidCache::getLid($aEetplanData['pheut']);
-				$sUitvoer.='</td>
+				$sUitvoer .= '</td>
 					<td>' . $lid->getNaamLink('civitas', 'link') . '<br /></td>
 					<td>' . mb_htmlentities($aEetplanData['mobiel']) . '</td>
 					<td>' . mb_htmlentities($aEetplanData['email']) . '</td>
 					<td>' . mb_htmlentities($aEetplanData['eetwens']) . '</td>
 					</tr>';
 			}
-			$sUitvoer.='</table>';
+			$sUitvoer .= '</table>';
 			echo '<h2><a class="forumGrootlink"href="/actueel/eetplan/">Eetplan</a> &raquo; voor ' . mb_htmlentities($aEetplanData['huisnaam']) . '</h2>
 				' . mb_htmlentities($aEetplanData['huisadres']) . ' <br />';
 			if ($huis instanceof Groep AND $huis->getId() != 0) {

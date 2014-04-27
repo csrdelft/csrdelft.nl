@@ -54,30 +54,30 @@ class Groepcontent extends TemplateView {
 			$leden = namen2uid($_POST['rawNamen'], $zoekin);
 
 			if (is_array($leden) AND count($leden) != 0) {
-				$return.='<table border="0">';
+				$return .= '<table border="0">';
 
 				foreach ($leden as $aGroepUid) {
 					if (isset($aGroepUid['uid'])) {
 						//naam is gevonden en uniek, dus direct goed.
-						$return.='<tr>';
-						$return.='<td><input type="hidden" name="naam[]" value="' . $aGroepUid['uid'] . '" />' . $aGroepUid['naam'] . '</td>';
+						$return .= '<tr>';
+						$return .= '<td><input type="hidden" name="naam[]" value="' . $aGroepUid['uid'] . '" />' . $aGroepUid['naam'] . '</td>';
 					} else {
 						//naam is niet duidelijk, geef ook een selectievakje met de mogelijke opties
 						if (count($aGroepUid['naamOpties']) > 0) {
-							$return.='<tr><td><select name="naam[]" class="tekst">';
+							$return .= '<tr><td><select name="naam[]" class="tekst">';
 							foreach ($aGroepUid['naamOpties'] as $aNaamOptie) {
-								$return.='<option value="' . $aNaamOptie['uid'] . '">' . $aNaamOptie['naam'] . '</option>';
+								$return .= '<option value="' . $aNaamOptie['uid'] . '">' . $aNaamOptie['naam'] . '</option>';
 							}
-							$return.='</select></td>';
+							$return .= '</select></td>';
 						}//dingen die niets opleveren wordt niets voor weergegeven.
 					}
 					if ($this->model->magBewerken()) {
-						$return.='<td><input type="text" maxlength="25" name="functie[]" /></td></tr>';
+						$return .= '<td><input type="text" maxlength="25" name="functie[]" /></td></tr>';
 					} else {
-						$return.='<td>' . $this->getFunctieSelector() . '</td></tr>';
+						$return .= '<td>' . $this->getFunctieSelector() . '</td></tr>';
 					}
 				}
-				$return.='</table>';
+				$return .= '</table>';
 				return $return;
 			}
 		}
@@ -96,15 +96,15 @@ class Groepcontent extends TemplateView {
 			'Lichttechnicus', 'Geluidstechnicus', 'Adviseur', 'Internetman', 'Posterman',
 			'Corveemanager', 'Provisor', 'HO', 'HJ', 'Onderhuurder');
 		sort($aFuncties);
-		$return.='<select name="functie[]" class="tekst">';
+		$return .= '<select name="functie[]" class="tekst">';
 		foreach ($aFuncties as $sFunctie) {
-			$return.='<option value="' . $sFunctie . '"';
+			$return .= '<option value="' . $sFunctie . '"';
 			if ($sFunctie == $this->model->getFunctie($uid)) {
-				$return.='selected="selected"';
+				$return .= 'selected="selected"';
 			}
-			$return.='>' . $sFunctie . '</option>';
+			$return .= '>' . $sFunctie . '</option>';
 		}
-		$return.='</select>';
+		$return .= '</select>';
 		return $return;
 	}
 
@@ -258,9 +258,9 @@ class GroepenProfielContent extends TemplateView {
 
 		$return = '';
 		foreach ($groepenPerStatus as $status => $groepen) {
-			$return.='<div class="groep' . $status . '">';
-			$return.='<h6>' . str_replace(array('ht', 'ot', 'ft'), array('h.t.', 'o.t.', 'f.t.'), $status) . ' groepen:</h6>';
-			$return.='<ul class="groeplijst nobullets">';
+			$return .= '<div class="groep' . $status . '">';
+			$return .= '<h6>' . str_replace(array('ht', 'ot', 'ft'), array('h.t.', 'o.t.', 'f.t.'), $status) . ' groepen:</h6>';
+			$return .= '<ul class="groeplijst nobullets">';
 			$i = 0;
 			$style = '';
 
@@ -276,16 +276,16 @@ class GroepenProfielContent extends TemplateView {
 				}
 				//op een of andere manier werkt het hier niet als ik een class-property gebruik,
 				//dus daarom maar met inline style.
-				$return.='<li ' . $style . '>' . $groep->getLink() . '</li>';
+				$return .= '<li ' . $style . '>' . $groep->getLink() . '</li>';
 				$i++;
 			}
 
-			$return.='</ul>';
+			$return .= '</ul>';
 			if ($i > $display_limit) {
-				$return.='<a onclick="jQuery(this).parent().children(\'ul\').children().show(); jQuery(this).remove();">&raquo; meer </a>';
+				$return .= '<a onclick="jQuery(this).parent().children(\'ul\').children().show(); jQuery(this).remove();">&raquo; meer </a>';
 			}
 
-			$return.='</div>';
+			$return .= '</div>';
 		}
 		return $return;
 	}

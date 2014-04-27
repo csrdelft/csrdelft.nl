@@ -150,7 +150,7 @@ class Profiel {
 			}
 		}
 		foreach ($this->diff() as $veld => $diff) {
-			$return.='(' . $veld . ') ' . $diff['oud'] . ' => ' . $diff['nieuw'] . '[br]';
+			$return .= '(' . $veld . ') ' . $diff['oud'] . ' => ' . $diff['nieuw'] . '[br]';
 		}
 		return $return . '[/div][hr]';
 	}
@@ -714,12 +714,12 @@ class ProfielStatus extends Profiel {
 	 * 		'save': boolean voor wel/niet opslaan van gePOSTe waarde 
 	 * 		'reset': mixed waarde in te vullen bij reset (null is nooit resetten)
 	 *  Array(
-	  ...
+	 ...
 	  [postfix] => Array(		[save] =>	 1
 	  [reset] => )
 	  [lidafdatum] => Array(	[save] =>
 	  [reset] => 0000-00-00 )
-	  ...
+	 ...
 	  )
 	 */
 	private function getFieldsToSave($nieuwestatus) {

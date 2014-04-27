@@ -199,7 +199,7 @@ class Groepen{
 		}
 		foreach($this->groepen as $groep){
 			if(!$groep->maakOt()){
-				$error.='';
+				$error .= '';
 			}
 		}
 		return $error=='';

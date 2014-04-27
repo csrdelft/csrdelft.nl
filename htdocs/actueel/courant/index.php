@@ -28,7 +28,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 				}
 			} else {
 				setMelding('<h1>Fout</h1>Er ging iets mis met het invoeren van uw bericht. Probeer opnieuw, of stuur uw bericht in een mail naar <a href="mailto:pubcie@csrdelft.nl">pubcie@csrdelft.nl</a>.', -1);
-				$courant_url.='/?ID=0';
+				$courant_url .= '/?ID=0';
 			}
 		} else {
 			//bericht bewerken.
@@ -39,7 +39,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 				}
 			} else {
 				setMelding('<h1>Fout</h1>Er ging iets mis met het invoeren van uw bericht. Probeer opnieuw, of stuur uw bericht in een mail naar <a href="mailto:pubcie@csrdelft.nl">pubcie@csrdelft.nl</a>.', -1);
-				$courant_url.='/bewerken/' . $iBerichtID;
+				$courant_url .= '/bewerken/' . $iBerichtID;
 			}
 		}
 		invokeRefresh($courant_url, $courant->getError());

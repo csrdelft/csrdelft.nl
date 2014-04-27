@@ -184,7 +184,7 @@ class Peiling {
 			FROM peiling
 			ORDER BY id DESC";
 
-		$sSelectQuery.=';';
+		$sSelectQuery .= ';';
 		$db=MySql::instance();
 		$rPeilingen=$db->query($sSelectQuery);
 		return $db->result2array($rPeilingen);

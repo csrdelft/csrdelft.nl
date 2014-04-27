@@ -268,7 +268,7 @@ class Boek {
 	 */
 	public function delete() {
 		if ($this->getId() == 0) {
-			$this->error.='Kan geen lege boek met id=0 wegkekken. Boek::delete()';
+			$this->error .= 'Kan geen lege boek met id=0 wegkekken. Boek::delete()';
 			return false;
 		}
 		$db = MySql::instance();
@@ -278,7 +278,7 @@ class Boek {
 		if ($db->query($qDeleteBeschrijvingen) AND $db->query($qDeleteExemplaren) AND $db->query($qDeleteBoek)) {
 			return true;
 		} else {
-			$this->error.='Fout bij verwijderen. Boek::delete() ' . mysql_error();
+			$this->error .= 'Fout bij verwijderen. Boek::delete() ' . mysql_error();
 			return false;
 		}
 	}
@@ -384,7 +384,7 @@ class Boek {
 		if ($db->query($qSave)) {
 			return true;
 		}
-		$this->error.='Fout in query, mysql gaf terug: ' . mysql_error() . ' Boek::addExemplaar()';
+		$this->error .= 'Fout in query, mysql gaf terug: ' . mysql_error() . ' Boek::addExemplaar()';
 		return false;
 	}
 
@@ -597,7 +597,7 @@ class NieuwBoek extends Boek {
 			}
 			return $this->addExemplaar($eigenaar);
 		}
-		$this->error.='Fout in query, mysql gaf terug: ' . mysql_error() . ' Boek::save()';
+		$this->error .= 'Fout in query, mysql gaf terug: ' . mysql_error() . ' Boek::save()';
 		return false;
 	}
 
@@ -768,7 +768,7 @@ class BewerkBoek extends Boek {
 				$id = (int) $exemplaarid;
 				break;
 			default:
-				$this->error.='Veld [' . $entry . '] is niet toegestaan Boek::saveProperty()';
+				$this->error .= 'Veld [' . $entry . '] is niet toegestaan Boek::saveProperty()';
 				return false;
 		}
 
@@ -780,7 +780,7 @@ class BewerkBoek extends Boek {
 		if ($db->query($qSave)) {
 			return true;
 		}
-		$this->error.='Fout in query, mysql gaf terug: ' . mysql_error() . ' Boek::saveProperty()';
+		$this->error .= 'Fout in query, mysql gaf terug: ' . mysql_error() . ' Boek::saveProperty()';
 		return false;
 	}
 
@@ -848,7 +848,7 @@ class BewerkBoek extends Boek {
 	public function leenExemplaar($exemplaarid, $lener = null) {
 		//alleen status beschikbaar toegestaan, of je moet eigenaar zijn die iemand toevoegd (tbv editable fields)
 		if ($this->getStatusExemplaar($exemplaarid) != 'beschikbaar') {
-			$this->error.='Boek is niet beschikbaar. leenExemplaar()';
+			$this->error .= 'Boek is niet beschikbaar. leenExemplaar()';
 			return false;
 		}
 		if ($lener == null) {
@@ -867,7 +867,7 @@ class BewerkBoek extends Boek {
 		if ($db->query($query)) {
 			return true;
 		}
-		$this->error.='Fout in query, mysql gaf terug: ' . mysql_error() . ' Boek::leenExemplaar()';
+		$this->error .= 'Fout in query, mysql gaf terug: ' . mysql_error() . ' Boek::leenExemplaar()';
 		return false;
 	}
 
@@ -880,7 +880,7 @@ class BewerkBoek extends Boek {
 	 */
 	public function teruggevenExemplaar($exemplaarid) {
 		if ($this->getStatusExemplaar($exemplaarid) != 'uitgeleend') {
-			$this->error.='Boek is niet uitgeleend. ';
+			$this->error .= 'Boek is niet uitgeleend. ';
 			return false;
 		}
 
@@ -893,7 +893,7 @@ class BewerkBoek extends Boek {
 		if ($db->query($query)) {
 			return true;
 		}
-		$this->error.='Fout in query, mysql gaf terug: ' . mysql_error() . ' Boek::teruggegevenExemplaar()';
+		$this->error .= 'Fout in query, mysql gaf terug: ' . mysql_error() . ' Boek::teruggegevenExemplaar()';
 		return false;
 	}
 
@@ -906,7 +906,7 @@ class BewerkBoek extends Boek {
 	 */
 	public function terugontvangenExemplaar($exemplaarid) {
 		if (!in_array($this->getStatusExemplaar($exemplaarid), array('uitgeleend', 'teruggegeven'))) {
-			$this->error.='Boek is niet uitgeleend. ';
+			$this->error .= 'Boek is niet uitgeleend. ';
 			return false;
 		}
 		$db = MySql::instance();
@@ -919,7 +919,7 @@ class BewerkBoek extends Boek {
 		if ($db->query($query)) {
 			return true;
 		}
-		$this->error.='Fout in query, mysql gaf terug: ' . mysql_error() . ' Boek::terugontvangenExemplaar()';
+		$this->error .= 'Fout in query, mysql gaf terug: ' . mysql_error() . ' Boek::terugontvangenExemplaar()';
 		return false;
 	}
 
@@ -932,10 +932,10 @@ class BewerkBoek extends Boek {
 	 */
 	public function vermistExemplaar($exemplaarid) {
 		if ($this->getStatusExemplaar($exemplaarid) == 'vermist') {
-			$this->error.='Boek is al vermist. ';
+			$this->error .= 'Boek is al vermist. ';
 			return false;
 		} elseif ($this->getStatusExemplaar($exemplaarid) != 'beschikbaar') {
-			$this->error.='Boek is nog uitgeleend. ';
+			$this->error .= 'Boek is nog uitgeleend. ';
 			return false;
 		}
 
@@ -949,7 +949,7 @@ class BewerkBoek extends Boek {
 		if ($db->query($query)) {
 			return true;
 		}
-		$this->error.='Fout in query, mysql gaf terug: ' . mysql_error() . ' Boek::vermistExemplaar()';
+		$this->error .= 'Fout in query, mysql gaf terug: ' . mysql_error() . ' Boek::vermistExemplaar()';
 		return false;
 	}
 
@@ -962,7 +962,7 @@ class BewerkBoek extends Boek {
 	 */
 	public function gevondenExemplaar($exemplaarid) {
 		if ($this->getStatusExemplaar($exemplaarid) != 'vermist') {
-			$this->error.='Boek is niet vermist gemeld. ';
+			$this->error .= 'Boek is niet vermist gemeld. ';
 			return false;
 		}
 
@@ -975,7 +975,7 @@ class BewerkBoek extends Boek {
 		if ($db->query($query)) {
 			return true;
 		}
-		$this->error.='Fout in query, mysql gaf terug: ' . mysql_error() . ' Boek::gevondenExemplaar()';
+		$this->error .= 'Fout in query, mysql gaf terug: ' . mysql_error() . ' Boek::gevondenExemplaar()';
 		return false;
 	}
 
@@ -1002,7 +1002,7 @@ class BewerkBoek extends Boek {
 					$schrijver = $lid->getNaamLink('full', 'plain') . ':';
 				}
 				$annuleer = '/communicatie/bibliotheek/boek/' . $this->getId();
-				$posturl.='/' . $this->editbeschrijving;
+				$posturl .= '/' . $this->editbeschrijving;
 			}
 			$boekbeschrijvingform[] = new Subkopje($titeltekst);
 			$textfield = new RequiredUbbPreviewField('beschrijving', $this->getEditBeschrijving()->getTekst(), $schrijver, true);

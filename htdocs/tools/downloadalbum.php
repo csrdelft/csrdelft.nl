@@ -27,7 +27,7 @@ header('Content-Disposition: attachment; filename="'.$mapnaam.'.tar"');
 //tar-command maken
 $cmd = "tar cC ".escapeshellarg(PICS_PATH.'/fotoalbum/'.$fotoalbum->getPad());
 foreach($fotos as $foto){
-	$cmd.=' '.escapeshellarg($foto->getBestandsnaam());
+	$cmd .= ' '.escapeshellarg($foto->getBestandsnaam());
 }
 
 //teh magic

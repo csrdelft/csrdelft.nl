@@ -125,7 +125,7 @@ class Database extends PDO {
 		} else {
 			$sql = 'INSERT';
 		}
-		$sql .=' INTO ' . $into;
+		$sql .= ' INTO ' . $into;
 		$sql .= ' (' . implode(', ', array_keys($properties)) . ')';
 		$sql .= ' VALUES (' . implode(', ', array_keys($insert_params)) . ')'; // named params
 		$query = self::instance()->prepare($sql);
@@ -156,7 +156,7 @@ class Database extends PDO {
 		$insert_values = array();
 		$fields = array_shift($properties);
 		$count = count($fields);
-		$sql .=' INTO ' . $into . ' (' . implode(', ', $fields) . ') VALUES ';
+		$sql .= ' INTO ' . $into . ' (' . implode(', ', $fields) . ') VALUES ';
 		foreach ($properties as $i => $props) { // for all entries
 			if (count($props) !== $count) {
 				throw new Exception('Missing property value(s) for entry: ' . $i);

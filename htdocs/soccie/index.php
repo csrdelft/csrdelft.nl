@@ -49,13 +49,13 @@
 		margin: 0 auto;
 		background: #da352f;
 	}
-      .cntSeparator {
+     .cntSeparator {
         font-size: 54px;
         margin: 10px 7px;
         color: #000;
       }
-      .desc { margin: 7px 3px; }
-      .desc div {
+     .desc { margin: 7px 3px; }
+     .desc div {
         float: left;
         font-family: Arial;
         width: 70px;
@@ -68,7 +68,7 @@
 		float: left;
 		margin: 20px;
 	  }
-	  .clear{
+	 .clear{
 		clear: both;
 	  }
     </style>

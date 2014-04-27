@@ -178,9 +178,12 @@ abstract class InputField extends FormElement implements Validator {
 	 * Elk veld staat in een div, geef de html terug voor de openingstag van die div.
 	 */
 	protected function getDiv() {
-		$cssclass = 'InputField hoverIntent';
+		$cssclass = 'InputField';
+		if ($this->title) {
+			$cssclass .= ' hoverIntent';
+		}
 		if ($this->error != '') {
-			$cssclass.=' metFouten';
+			$cssclass .= ' metFouten';
 		}
 		return '<div class="' . $cssclass . '" id="' . $this->name . '" ' . $this->getInputAttribute('title') . '>';
 	}
@@ -270,7 +273,7 @@ abstract class InputField extends FormElement implements Validator {
 		if (is_array($attr)) {
 			$return = '';
 			foreach ($attr as $a) {
-				$return.=' ' . $this->getInputAttribute($a);
+				$return .= ' ' . $this->getInputAttribute($a);
 			}
 			return $return;
 		}

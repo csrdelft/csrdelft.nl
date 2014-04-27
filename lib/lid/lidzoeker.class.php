@@ -240,7 +240,7 @@ class LidZoeker{
 			$defaults[]="studie LIKE '%".$zoekterm."%' ";
 			$defaults[]="email LIKE '%".$zoekterm."%' ";
 
-			$query.='( '.implode(' OR ', $defaults).' )';
+			$query .= '( '.implode(' OR ', $defaults).' )';
 		}
 
 		return $query.' AND ';
@@ -258,7 +258,7 @@ class LidZoeker{
 			$query.=$this->defaultSearch($this->query);
 		}
 		$query.=$this->getFilterSQL();
-		$query.=' ORDER BY '.implode($this->sort).';';
+		$query .= ' ORDER BY '.implode($this->sort).';';
 
 		$this->sqlquery=$query;
 		$result=$db->query2array($query);

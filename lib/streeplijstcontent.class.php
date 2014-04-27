@@ -90,17 +90,17 @@ class Streeplijstcontent extends TemplateView {
 		$sKop = '<thead><tr><td class="naam">Naam</td>';
 		$i = 1;
 		foreach ($this->aGoederen as $sArtikel) {
-			$sKop.='<td class="cell';
+			$sKop .= '<td class="cell';
 			//switch the row coloring..
 			if (isset($_GET['colorCols'])) {
 				$sKop.=($i % 2);
 			} else {
-				$sKop.='0';
+				$sKop .= '0';
 			}
-			$sKop.='">' . $sArtikel . '</td>';
+			$sKop .= '">' . $sArtikel . '</td>';
 			$i++;
 		}
-		$sKop.='</tr></thead>';
+		$sKop .= '</tr></thead>';
 
 		//eerte header weergeven.
 		$sReturn.=$sKop;
@@ -111,18 +111,18 @@ class Streeplijstcontent extends TemplateView {
 
 			if ($iTeller % 43 == 1) {
 				$sReturn.=$sKop . '</tr></table>';
-				$sReturn.='<span class="breekpunt"></span>';
-				$sReturn.='<table><tr>' . $sKop;
+				$sReturn .= '<span class="breekpunt"></span>';
+				$sReturn .= '<table><tr>' . $sKop;
 			}
-			$sReturn.='<tr><td class="naam">' . $lid->getNaamLink('streeplijst', 'plain') . '</td>';
+			$sReturn .= '<tr><td class="naam">' . $lid->getNaamLink('streeplijst', 'plain') . '</td>';
 			for ($i = 1; $i <= $this->goederenCount(); $i++) {
-				$sReturn.='<td class="cell' . ($i % 2) . '">&nbsp;</td>';
+				$sReturn .= '<td class="cell' . ($i % 2) . '">&nbsp;</td>';
 			}
-			$sReturn.='</tr>' . "\r\n";
+			$sReturn .= '</tr>' . "\r\n";
 			$iTeller++;
 		}
 		$sReturn.=$sKop;
-		$sReturn.='</table>';
+		$sReturn .= '</table>';
 
 		return $sReturn;
 	}
@@ -135,10 +135,10 @@ class Streeplijstcontent extends TemplateView {
 		$sReturn = 'streeplijst.php?goederen=' . urlencode($this->getGoederen()) .
 				'&moot=' . $this->moot . '&lichting=' . $this->lichting . '&';
 		if (isset($_GET['colorCols'])) {
-			$sReturn.='colorCols&';
+			$sReturn .= 'colorCols&';
 		}
 		if (isset($_GET['sortCols'])) {
-			$sReturn.='sortCols&';
+			$sReturn .= 'sortCols&';
 		}
 		return $sReturn;
 	}

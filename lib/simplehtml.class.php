@@ -36,12 +36,12 @@ abstract class SimpleHTML implements View {
 			foreach ($_SESSION['melding'] as $msg) {
 				$hash = md5($msg['msg']);
 				//if(isset($shown[$hash])) continue; // skip double messages
-				$sMelding.='<div class="msg' . $msg['lvl'] . '">';
+				$sMelding .= '<div class="msg' . $msg['lvl'] . '">';
 				$sMelding.=$msg['msg'];
-				$sMelding.='</div>';
+				$sMelding .= '</div>';
 				$shown[$hash] = 1;
 			}
-			$sMelding.='</div>';
+			$sMelding .= '</div>';
 			//maar één keer tonen, de melding.
 			unset($_SESSION['melding']);
 			return $sMelding;

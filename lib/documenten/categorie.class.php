@@ -67,7 +67,7 @@ class DocumentenCategorie{
 			WHERE catID=".$this->getID()."
 			ORDER BY toegevoegd DESC";
 		if($this->loadLimit>0){
-			$query.=' LIMIT '.$this->loadLimit;
+			$query .= ' LIMIT '.$this->loadLimit;
 		}
 		$result=$db->query($query);
 		echo mysql_error();

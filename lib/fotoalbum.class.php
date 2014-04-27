@@ -88,7 +88,7 @@ class Fotoalbum {
 					continue;
 				}
 				$url.=urlencode($map) . '/';
-				$breadcrumb.=' » <a href="' . $url . '" title="' . $map . '">' . $map . '</a>';
+				$breadcrumb .= ' » <a href="' . $url . '" title="' . $map . '">' . $map . '</a>';
 			}
 			return $breadcrumb;
 		}

@@ -59,9 +59,9 @@ class Bijbelrooster extends TemplateView {
 
 
 		if (count($stukjes) == 0) {
-			$return.='Geen rooster aanwezig';
+			$return .= 'Geen rooster aanwezig';
 		} else {
-			$return.='<p class="oneThirth">';
+			$return .= '<p class="oneThirth">';
 			foreach ($stukjes as $key => $stukje) {
 				if ($key % $itemsEachRow == 0 && $key != 0) {
 					$return .= '</p><p class="oneThirth">';
@@ -73,9 +73,9 @@ class Bijbelrooster extends TemplateView {
 				$return.= '<span class="' . $class . '">' . $stukje['dag'] . ':</span> ';
 				$return.=$this->getLink($stukje['stukje']) . '<br />';
 			}
-			$return.='</p>';
+			$return .= '</p>';
 		}
-		$return.='<div class="clear"></div>';
+		$return .= '<div class="clear"></div>';
 
 		return $return;
 	}

@@ -505,14 +505,14 @@ class Mededeling {
 						if ($iWoordLengte + 1 <= $iTekensOver) {
 							// Het woord past, dus toevoegen.
 							if ($k != 0) {
-								$sResultaat.='<';
+								$sResultaat .= '<';
 							}
 							$sResultaat.=$sTag;
 							$iTekensOver-=$iWoordLengte + 1;
 						} elseif ($iWoordLengte <= $iMaxTekensPerRegel AND $iRegelsOver > 0) { // Het woord past op de volgende regel.
 							// Woord toevoegen.
 							if ($k != 0) {
-								$sResultaat.='<';
+								$sResultaat .= '<';
 							}
 							$sResultaat.=$sTag;
 							// Nieuwe regel markeren.
@@ -521,16 +521,16 @@ class Mededeling {
 							$i++;
 						} else { // Het woord past niet op deze regel én niet op een (eventuele) volgende regel.
 							if (substr($sTag, 0, 1) == '/' AND $iPositieEindTag !== false) { // Er wordt een tag beëindigd! Even printen dus.
-								$sResultaat.='<' . substr($sTag, 0, $iPositieEindTag);
+								$sResultaat .= '<' . substr($sTag, 0, $iPositieEindTag);
 							}
-							$sResultaat.='…';
+							$sResultaat .= '…';
 							$bStopDeBoel = true;
 							break;
 						}
 					} // Einde iedere tag in dit woord.
 					if (isset($bStopDeBoel) AND $bStopDeBoel)
 						break;
-					$sResultaat.=' ';
+					$sResultaat .= ' ';
 				} // Einde ieder woord in deze regel.
 			}
 			$sResultaat.=$sRegelAfsluiting;
@@ -544,7 +544,7 @@ class Mededeling {
 			$sEind = substr($sResultaat, strlen($sResultaat) - 1, 1); // Laatste teken ophalen.
 			// Alleen de puntjes erachter zetten als dit nog niet gedaan is doordat er een woord niet meer paste.
 			if ($sEind != '…') {
-				$sResultaat.='…';
+				$sResultaat .= '…';
 			}
 		}
 		return $sResultaat;

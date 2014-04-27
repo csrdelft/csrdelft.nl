@@ -173,7 +173,7 @@ class OldGroep {
 			}
 			return true;
 		}
-		$this->error.='Fout in query, mysql gaf terug: ' . mysql_error() . ' OldGroep::save()';
+		$this->error .= 'Fout in query, mysql gaf terug: ' . mysql_error() . ' OldGroep::save()';
 		return false;
 	}
 
@@ -183,7 +183,7 @@ class OldGroep {
 
 	public function delete() {
 		if ($this->getId() == 0) {
-			$this->error.='Kan geen lege groep wegkekken. OldGroep::delete()';
+			$this->error .= 'Kan geen lege groep wegkekken. OldGroep::delete()';
 			return false;
 		}
 		$db = MySql::instance();
@@ -305,7 +305,7 @@ class OldGroep {
 			$this->groep['gtypeId'] = $groepen->getId();
 			return true;
 		} else {
-			$this->error.='Geen gtype opgegeven, niet via de juiste weg aangevraagd... (OldGroep::setGtype())';
+			$this->error .= 'Geen gtype opgegeven, niet via de juiste weg aangevraagd... (OldGroep::setGtype())';
 			return false;
 		}
 	}
@@ -454,7 +454,7 @@ class OldGroep {
 
 	public function maakOt() {
 		if ($this->getStatus() != 'ht') {
-			$this->error.='Groep o.t. maken mislukt: groep is niet h.t. (OldGroep::maakOt())';
+			$this->error .= 'Groep o.t. maken mislukt: groep is niet h.t. (OldGroep::maakOt())';
 			return false;
 		} else {
 			if ($this->getEinde() == '0000-00-00') {
@@ -524,21 +524,21 @@ class OldGroep {
 
 	public function maakLidOt($uid) {
 		if (!Lid::isValidUid($uid) OR ! $this->isLid($uid)) {
-			$this->error.='Gegeven uid zit niet in groep of is geen geldig uid. (OldGroep::maakLidOt())';
+			$this->error .= 'Gegeven uid zit niet in groep of is geen geldig uid. (OldGroep::maakLidOt())';
 			return false;
 		}
 		if (!$this->magBewerken()) {
-			$this->error.='Gegeven uid mag deze groep niet bewerken. (OldGroep::maakLidOt())';
+			$this->error .= 'Gegeven uid mag deze groep niet bewerken. (OldGroep::maakLidOt())';
 			return false;
 		}
 		$ot = $this->getOpvolgerVoorganger();
 		if (!isset($ot['voorganger'])) {
-			$this->error.='Groep heeft geen voorganger. (OldGroep::maakLidOt())';
+			$this->error .= 'Groep heeft geen voorganger. (OldGroep::maakLidOt())';
 			return false;
 		}
 		$ot = $ot['voorganger'];
 		if ($ot->isLid($uid)) {
-			$this->error.='O.t. groep bevat dit lid al';
+			$this->error .= 'O.t. groep bevat dit lid al';
 			return false;
 		}
 		return $ot->addLid($uid) AND $this->verwijderLid($uid);

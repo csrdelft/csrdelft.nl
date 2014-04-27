@@ -161,23 +161,23 @@ class SavedQueryContent extends TemplateView {
 			$id = 'query-' . time();
 			$return = $sq->getBeschrijving() . ' (' . $sq->count() . ' regels)<br /><table class="query_table" id="' . $id . '">';
 
-			$return.='<thead><tr>';
+			$return .= '<thead><tr>';
 			foreach ($sq->getHeaders() as $kopje) {
-				$return.='<th>' . self::render_header($kopje) . '</th>';
+				$return .= '<th>' . self::render_header($kopje) . '</th>';
 			}
-			$return.='</tr></thead><tbody>';
+			$return .= '</tr></thead><tbody>';
 
 			foreach ($sq->getResult() as $rij) {
-				$return.='<tr>';
+				$return .= '<tr>';
 				foreach ($rij as $key => $veld) {
-					$return.='<td>' . self::render_field($key, $veld) . '</td>';
+					$return .= '<td>' . self::render_field($key, $veld) . '</td>';
 				}
-				$return.='</tr>';
+				$return .= '</tr>';
 			}
-			$return.='</tbody></table><a class="knop" style="clear:right;" onclick="' . <<<JS
+			$return .= '</tbody></table><a class="knop" style="clear:right;" onclick="' . <<<JS
 $('#{$id} tbody').animate({'max-height': '+=300'}, 800, function() {});
 JS;
-			$return.='" title="Vergroot de lijst"><div class="arrows">&uarr;&darr;</div>&nbsp;&nbsp;&nbsp;</a>';
+			$return .= '" title="Vergroot de lijst"><div class="arrows">&uarr;&darr;</div>&nbsp;&nbsp;&nbsp;</a>';
 		} else {
 			//foutmelding in geval van geen resultaat, dus of geen query die bestaat, of niet
 			//voldoende rechten.
@@ -191,31 +191,31 @@ JS;
 		$id = $this->sq instanceof SavedQuery ? $this->sq->getID() : 0;
 
 		$return = '<a class="knop" href="#" onclick="$(\'#sqSelector\').toggle();">Laat queryselector zien.</a>';
-		$return.='<div id="sqSelector" ';
+		$return .= '<div id="sqSelector" ';
 		if ($id != 0) {
-			$return.='class="verborgen"';
+			$return .= 'class="verborgen"';
 		}
-		$return.='>';
+		$return .= '>';
 		$current = '';
 		foreach (SavedQuery::getQueries() as $query) {
 			if ($current != $query['categorie']) {
 				if ($current != '') {
-					$return.='</ul></div>';
+					$return .= '</ul></div>';
 				}
-				$return.='<div class="sqCategorie" style="float: left; width: 450px; margin-right: 20px; margin-bottom: 10px;"><strong>' . $query['categorie'] . '</strong><ul>';
+				$return .= '<div class="sqCategorie" style="float: left; width: 450px; margin-right: 20px; margin-bottom: 10px;"><strong>' . $query['categorie'] . '</strong><ul>';
 				$current = $query['categorie'];
 			}
-			$return.='<li><a href="query.php?id=' . $query['ID'] . '">';
+			$return .= '<li><a href="query.php?id=' . $query['ID'] . '">';
 			if ($id == $query['ID']) {
-				$return.='<em>';
+				$return .= '<em>';
 			}
 			$return.=mb_htmlentities($query['beschrijving']);
 			if ($id == $query['ID']) {
-				$return.='</em>';
+				$return .= '</em>';
 			}
-			$return.='</a></li>';
+			$return .= '</a></li>';
 		}
-		$return.='</ul></div></div><div class="clear"></div>';
+		$return .= '</ul></div></div><div class="clear"></div>';
 		return $return;
 	}
 

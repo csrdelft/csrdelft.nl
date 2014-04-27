@@ -121,7 +121,7 @@ class Mail {
 	public function getSubject() {
 		$onderwerp = $this->onderwerp;
 		if (!isSyrinx()) {
-			$onderwerp.=' [Mail: Debug modus actief]';
+			$onderwerp .= ' [Mail: Debug modus actief]';
 		}
 		if ($this->charset === 'utf8') {
 			//zorg dat het onderwerp netjes utf8 in base64 is. Als je dit niet doet krijgt het

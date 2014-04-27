@@ -630,9 +630,9 @@ class Lid implements Serializable, Agendeerbaar {
 		if ($imgTag === true OR $imgTag === 'small') {
 			$html = '<img class="' . mb_htmlentities($cssClass) . '" src="' . $pasfoto . '" ';
 			if ($imgTag === 'small') {
-				$html.='style="width: 100px;" ';
+				$html .= 'style="width: 100px;" ';
 			}
-			$html.='alt="pasfoto van ' . $this->getNaamLink('full', 'plain') . '" />';
+			$html .= 'alt="pasfoto van ' . $this->getNaamLink('full', 'plain') . '" />';
 			return $html;
 		} else {
 			return $pasfoto;
@@ -675,7 +675,7 @@ class Lid implements Serializable, Agendeerbaar {
 			case 'streeplijst':
 				$naam = $this->profiel['achternaam'] . ', ' . $this->profiel['voornaam'];
 				if ($this->profiel['tussenvoegsel'] != '') {
-					$naam.=' ' . $this->profiel['tussenvoegsel'];
+					$naam .= ' ' . $this->profiel['tussenvoegsel'];
 				}
 				break;
 			case 'full':
@@ -696,7 +696,7 @@ class Lid implements Serializable, Agendeerbaar {
 				if ($this->profiel['status'] == 'S_NOVIET') {
 					$naam = 'Noviet ' . $this->profiel['voornaam'];
 					if ($this->profiel['postfix'] != '') {
-						$naam.=' ' . $this->profiel['postfix'];
+						$naam .= ' ' . $this->profiel['postfix'];
 					}
 				} elseif (in_array($this->profiel['status'], array('S_KRINGEL', 'S_NOBODY', 'S_EXLID'))) {
 					if (LoginLid::mag('P_LEDEN_READ')) {
@@ -720,11 +720,11 @@ class Lid implements Serializable, Agendeerbaar {
 					}
 					$naam.=$this->profiel['achternaam'];
 					if ($this->profiel['postfix'] != '')
-						$naam.=' ' . $this->profiel['postfix'];
+						$naam .= ' ' . $this->profiel['postfix'];
 
 					//Statuschar weergeven bij oudleden, ereleden en kringels.
 					if (in_array($this->profiel['status'], array('S_OUDLID', 'S_ERELID', 'S_KRINGEL'))) {
-						$naam.=' ' . $this->getStatus()->getChar();
+						$naam .= ' ' . $this->getStatus()->getChar();
 					}
 				}
 				break;

@@ -909,7 +909,7 @@ HTML;
 		if (isset($parameters['float']) && in_array($parameters['float'], array('left', 'right'))) {
 			$style = ' float: ' . $parameters['float'] . '';
 		}
-		$style.='"';
+		$style .= '"';
 
 		if (count($slides) == 0) {
 			$content = '[slideshow]: geen geldige afbeeldingen gegeven';
@@ -918,17 +918,17 @@ HTML;
 				<div class="image_reel">';
 
 			foreach ($slides as $slide) {
-				$content.='<img src="' . $slide . '" alt="slide" />' . "\n";
+				$content .= '<img src="' . $slide . '" alt="slide" />' . "\n";
 			}
-			$content.='</div>'; //end image_reel
-			$content.='<div class="paging">';
+			$content .= '</div>'; //end image_reel
+			$content .= '<div class="paging">';
 			for ($i = 1; $i <= count($slides); $i++) {
-				$content.='<a href="#" rel="' . $i . '">&bull;</a>' . "\n";
+				$content .= '<a href="#" rel="' . $i . '">&bull;</a>' . "\n";
 			}
 
-			$content.='</div>' . "\n"; //end paging
+			$content .= '</div>' . "\n"; //end paging
 			if ($this->slideshowJsIncluded === false) {
-				$content.='<script type="text/javascript" src="/layout/js/ubb_slideshow.js"></script>';
+				$content .= '<script type="text/javascript" src="/layout/js/ubb_slideshow.js"></script>';
 				$this->slideshowJsIncluded = true;
 			}
 		}

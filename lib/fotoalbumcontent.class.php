@@ -211,17 +211,17 @@ class FotoalbumUbbContent extends TemplateView {
 		foreach ($grid as $row => $rowcontents) {
 			foreach ($rowcontents as $col => $foto) {
 				if (is_array($foto)) {
-					$ret.='<a href="/actueel/fotoalbum' . $albumurl . '#' . $foto['foto']->getBestandsnaam() . '"';
+					$ret .= '<a href="/actueel/fotoalbum' . $albumurl . '#' . $foto['foto']->getBestandsnaam() . '"';
 					$ret.=in_array($foto['index'], $this->big) ? 'class="big"' : 'class="sml"';
 
-					$ret.='style=" left: ' . ($delta * $col) . 'px; top: ' . ($delta * $row) . 'px;">';
+					$ret .= 'style=" left: ' . ($delta * $col) . 'px; top: ' . ($delta * $row) . 'px;">';
 
-					$ret.='<img src="' . $foto['foto']->getThumbURL() . '" alt="' . $foto['foto']->getBestandsnaam() . '" >';
-					$ret.='</a>' . "\n";
+					$ret .= '<img src="' . $foto['foto']->getThumbURL() . '" alt="' . $foto['foto']->getBestandsnaam() . '" >';
+					$ret .= '</a>' . "\n";
 				}
 			}
 		}
-		$ret.='</div>';
+		$ret .= '</div>';
 		return $ret;
 	}
 

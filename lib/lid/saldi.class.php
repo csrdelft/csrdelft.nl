@@ -91,7 +91,7 @@ class Saldi{
 			foreach($cie->getData() as $data){
 				$p='[';
 				$p.=strtotime(substr($data['moment'],0, 16).':11')*1000;
-				$p.=', ';
+				$p .= ', ';
 				$p.=sprintf('%.2F', $data['saldo']);
 				//$p.=", '".$data['moment']."'";
 				$p.="]";

@@ -232,21 +232,21 @@ class Courant {
 			//titel minimaal 2 tekens
 			if (strlen(trim($_POST['titel'])) < 2) {
 				$bValid = false;
-				$this->sError.='Het veld <strong>titel</strong> moet minstens 2 tekens bevatten.<br />';
+				$this->sError .= 'Het veld <strong>titel</strong> moet minstens 2 tekens bevatten.<br />';
 			}
 			//titel niet langer dan 50 tekens
 			if (strlen(trim($_POST['titel'])) > 50) {
 				$bValid = false;
-				$this->sError.='Het veld <strong>titel</strong> mag maximaal 30 tekens bevatten.<br />';
+				$this->sError .= 'Het veld <strong>titel</strong> mag maximaal 30 tekens bevatten.<br />';
 			}
 			//bericht minstens 15 tekens.
 			if (strlen(trim($_POST['bericht'])) < 15) {
 				$bValid = false;
-				$this->sError.='Het veld <strong>bericht</strong> moet minstens 15 tekens bevatten.<br />';
+				$this->sError .= 'Het veld <strong>bericht</strong> moet minstens 15 tekens bevatten.<br />';
 			}
 		} else {
 			$bValid = false;
-			$this->sError.='Het formulier is niet compleet<br />';
+			$this->sError .= 'Het formulier is niet compleet<br />';
 		}
 		return $bValid;
 	}
