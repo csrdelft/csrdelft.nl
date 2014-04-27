@@ -128,51 +128,59 @@ class DocumentController extends Controller {
 		$this->toevoegen(true);
 	}
 
-	private $uploaders; //array met uploaders.
+	/**
+	 * @var BestandUploader
+	 */
+	private $uploader;
 
 	protected function toevoegen($edit = false) {
 		if (!$edit) {
 			//maak een nieuw, leeg document aan.
 			$this->document = new Document(0);
 		}
-
-		if (isset($_POST['methode'])) {
-			$methode = $_POST['methode'];
+		if (isset($_POST['BestandUploader'])) {
+			$methode = filter_input(INPUT_POST, 'BestandUploader');
 		} else {
 			//debugprint($this->document); echo $this->document->hasFile() ? 'ja' : 'nee'; exit;
 			if ($this->document->hasFile()) {
 				$methode = 'BestandBehouden';
 			} else {
-				$methode = 'UploadBrowser';
+				$methode = 'UploadHttp';
 			}
 		}
-		$this->uploaders = BestandUploader::getAll($this->document, $methode, $this->document->hasFile());
+		$uploaders = array(
+			'UploadHttp' => new UploadHttp(),
+			'UploadFtp' => new UploadFtp(),
+			'UploadUrl' => new UploadUrl(),
+			'BestandBehouden' => new BestandBehouden($this->document->hasFile(), $this->document->getBestandsnaam(), $this->document->getSize())
+		);
+		if (!array_key_exists($methode, $uploaders)) {
+			throw new Exception('Niet ondersteunde uploadmethode. Heeft u er wel een gekozen?');
+		}
+		$this->uploader = $uploaders[$methode];
 
 		if ($this->isPosted()) {
 			$this->document->setNaam($_POST['naam']);
 			$this->document->setCatID($_POST['categorie']);
 
 			if ($this->validate_document()) {
-				//als we al een bestand hebben voor dit document, moet die natuurlijk eerst hdb.
-				if ($this->document->hasFile() AND $methode != 'BestandBehouden') {
-					try {
-						$this->document->deleteFile();
-					} catch (Exception $e) {
-						invokeRefresh($this->baseurl, $e->getMessage());
-					}
-				}
-				//Actieve methode selecteren.
-				$uploader = $this->uploaders[$_POST['methode']];
-
+				// Als we al een bestand hebben voor dit document, moet die natuurlijk eerst hdb.
 				if ($methode !== 'BestandBehouden') {
-					$this->document->setBestandsnaam($uploader->getFilename());
-					$this->document->setSize($uploader->getSize());
-					$this->document->setMimetype($uploader->getMimetype());
+					if ($this->document->hasFile()) {
+						try {
+							$this->document->deleteFile();
+						} catch (Exception $e) {
+							invokeRefresh($this->baseurl, $e->getMessage());
+						}
+					}
+					$this->document->setBestandsnaam($this->uploader->getBestand()->bestandsnaam);
+					$this->document->setSize($this->uploader->getBestand()->size);
+					$this->document->setMimetype($this->uploader->getBestand()->mimetype);
 				}
 
 				if ($this->document->save()) {
 					try {
-						if ($uploader->moveFile($this->document)) {
+						if ($this->uploader->verplaatsBestand($this->document->getPath(), $this->document->getFilename())) {
 							$melding = array('Document met succes opgeslagen.', 1);
 						} else {
 							$melding = 'Fout bij het opslaan van het bestand in het bestandsysteem. Bewerk het document om het bestand alsnog toe te voegen.';
@@ -191,9 +199,12 @@ class DocumentController extends Controller {
 			}
 		}
 		$views = array();
-		foreach ($this->uploaders as $uploader) {
-			$class = $uploader->getNaam() . 'View';
-			$views[] = new $class($uploader);
+		foreach ($uploaders as $class => $uploader) {
+			if ($uploader->isAvailable()) {
+				$selected = $methode === $class;
+				$class .= 'View';
+				$views[] = new $class($uploader, $selected);
+			}
 		}
 		$this->view = new DocumentContent($this->document, $views);
 		setMelding($this->errors, -1);
@@ -204,16 +215,12 @@ class DocumentController extends Controller {
 			if (strlen(trim($_POST['naam'])) < 3) {
 				$this->addError('Naam moet tenminste 3 tekens bevatten');
 			}
-			if (!(isset($_POST['methode']) AND array_key_exists($_POST['methode'], $this->uploaders))) {
-				$this->addError('Niet ondersteunde uploadmethode. Heeft u er wel een gekozen?');
-			} else {
-				if ($_POST['methode'] == 'BestandBehouden' AND ! $this->document->hasFile()) {
-					$this->addError('Dit document heeft nog geen bestand, dus dat kan ook niet behouden worden.');
-				}
-				//kijken of we errors hebben in de huidige methode.
-				if (!$this->uploaders[$_POST['methode']]->validate()) {
-					$this->addError($this->uploaders[$_POST['methode']]->getError());
-				}
+			if ($_POST['BestandUploader'] === 'BestandBehouden' AND ! $this->document->hasFile()) {
+				$this->addError('Dit document heeft nog geen bestand, dus dat kan ook niet behouden worden.');
+			}
+			//kijken of we errors hebben in de huidige methode.
+			if (!$this->uploader->validate()) {
+				$this->addError($this->uploader->getError());
 			}
 		} else {
 			$this->addError('Formulier niet compleet');

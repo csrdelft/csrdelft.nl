@@ -10,84 +10,109 @@
  */
 abstract class BestandUploaderView extends TemplateView {
 
-	public function __construct(BestandUploader $uploader, $titel = 'Bestand uploaden') {
+	protected $selected;
+
+	public function __construct(BestandUploader $uploader, $selected, $titel = 'Bestand uploaden') {
 		parent::__construct($uploader, $titel);
+		$this->selected = $selected;
 	}
 
-	public function viewRadiobutton() {
-		echo '<input type="radio" name="methode" id="r' . $this->model->getNaam() . '" value="' . $this->model->getNaam() . '" ';
-		if ($this->model->isActive()) {
-			echo 'checked="checked"';
+}
+
+class UploadHttpView extends BestandUploaderView {
+
+	public function __construct(UploadHttp $uploader, $selected) {
+		parent::__construct($uploader, $selected, 'Uploaden in browser');
+	}
+
+	public function view() {
+		echo '<div class="UploadOptie"><input type="radio" name="BestandUploader" id="UploadHttpInput" value="UploadHttp"';
+		if ($this->selected) {
+			echo ' checked="checked"';
 		}
-		echo ' /> <label for="r' . $this->model->getNaam() . '">' . $this->getTitel() . '</label>';
+		echo ' /><label for="UploadHttpInput"> ' . $this->getTitel() . '</label>';
+		echo '<div class="UploadKeuze" id="UploadHttp"';
+		if (!$this->selected) {
+			echo ' style="display: none;"';
+		}
+		echo '><input type="file" id="httpInput" name="bestand" /></div></div>';
 	}
 
 }
 
-class BestandBehoudenView extends TemplateView {
+class UploadFtpView extends BestandUploaderView {
 
-	public function __construct(Bestand $bestand) {
-		parent::__construct($bestand, 'Bestaand bestand behouden');
+	public function __construct(UploadFtp $uploader, $selected) {
+		parent::__construct($uploader, $selected, 'Uit publieke FTP-map');
 	}
 
 	public function view() {
-		echo $this->model->getBestandsnaam() . ' (' . format_filesize($this->model->getSize()) . ')';
-	}
-
-}
-
-class UploadBrowserView extends BestandUploaderView {
-
-	public function __construct(UploadBrowser $uploader) {
-		parent::__construct($uploader, 'Uploaden in browser');
-	}
-
-	public function view() {
-		echo '<label for="fileInput">Selecteer bestand: </label><input type="file" id="fileInput" name="file_upload" />';
-	}
-
-}
-
-class UploadURLView extends BestandUploaderView {
-
-	public function __construct(UploadURL $uploader) {
-		parent::__construct($uploader, 'Ophalen vanaf url');
-	}
-
-	public function view() {
-		echo <<<HTML
-<label for="urlInput">Geef url op:</label>
-<div class="indent">
-	<input type="text" id="urlInput" name="url" class="fromurl" value="{$this->model->getUrl()}" /><br />
-	<span class="small">Bestanden zullen met het mime-type <code>application/octet-stream</code> worden opgeslagen.</span>
-</div>
-HTML;
-	}
-
-}
-
-class UploadFTPView extends BestandUploaderView {
-
-	public function __construct(UploadFTP $uploader) {
-		parent::__construct($uploader, 'Uit publieke FTP-map');
-	}
-
-	public function view() {
-		echo '<label for="publicftp">Selecteer een bestand:</label><div id="ftpOpties" class="indent">';
+		echo '<div class="UploadOptie"><input type="radio" name="BestandUploader" id="UploadFtpInput" value="UploadFtp"';
+		if ($this->selected) {
+			echo ' checked="checked"';
+		}
+		echo ' /> <label for="UploadFtpInput">' . $this->getTitel() . '</label>';
+		echo '<div class="UploadKeuze" id="UploadFtp"';
+		if (!$this->selected) {
+			echo ' style="display: none;"';
+		}
+		echo '>';
 		if (count($this->model->getFilelist()) > 0) {
-			echo '<select name="ftpfile" class="ftpfile">';
-			foreach ($this->model->getFilelist() as $file) {
-				echo '<option value="' . htmlspecialchars($file) . '"';
-				if ($this->file == $file) {
-					echo 'selected="selected"';
+			echo '<select id="ftpSelect" name="bestandsnaam">';
+			foreach ($this->model->getFilelist() as $filename) {
+				echo '<option value="' . htmlspecialchars($filename) . '"';
+				if ($this->model->getBestand() AND $this->model->getBestand()->bestandsnaam === $filename) {
+					echo ' selected="selected"';
 				}
-				echo '>' . htmlspecialchars($file) . '</option>';
+				echo '>' . htmlspecialchars($filename) . '</option>';
 			}
-			echo '</select><br /><input type="checkbox" name="deleteFiles" /> <label for="deleteFiles">Bestand verwijderen uit FTP-map.</label>';
+			echo '</select><br /><input type="checkbox" name="verwijderVanFtp" id="verwijderVanFtp" checked="checked" style="width: auto; margin-top: 5px;" /><label for="verwijderVanFtp"> Bestand verwijderen uit FTP-map</label>';
 		} else {
-			echo 'Geen bestanden gevonden in:<br /> <code class="small">ftp://csrdelft.nl/incoming/csrdelft' . $this->model->getSubDir() . '</code>';
+			echo 'Geen bestanden gevonden in:<br />ftp://csrdelft.nl/incoming/csrdelft' . $this->model->getSubDir();
 		}
-		echo '</div>';
+		echo '</div></div>';
+	}
+
+}
+
+class UploadUrlView extends BestandUploaderView {
+
+	public function __construct(UploadUrl $uploader, $selected) {
+		parent::__construct($uploader, $selected, 'Ophalen vanaf url');
+	}
+
+	public function view() {
+		echo '<div class="UploadOptie"><input type="radio" name="BestandUploader" id="UploadUrlInput" value="UploadUrl"';
+		if ($this->selected) {
+			echo ' checked="checked"';
+		}
+		echo ' /><label for="UploadUrlInput"> ' . $this->getTitel() . '</label>';
+		echo '<div class="UploadKeuze" id="UploadUrl"';
+		if (!$this->selected) {
+			echo ' style="display: none;"';
+		}
+		echo '><input type="text" id="urlInput" name="url" value="' . $this->model->getUrl() . '" /></div></div>';
+	}
+
+}
+
+class BestandBehoudenView extends BestandUploaderView {
+
+	public function __construct(BestandBehouden $uploader, $selected) {
+		parent::__construct($uploader, $selected, 'Bestaand bestand behouden');
+	}
+
+	public function view() {
+		echo '<div class="UploadOptie"><input type="radio" name="BestandUploader" id="BestandBehoudenInput" value="BestandBehouden"';
+		if ($this->selected) {
+			echo ' checked="checked"';
+		}
+		echo ' /><label for="BestandBehoudenInput"> ' . $this->getTitel() . '</label>';
+		echo '<div class="UploadKeuze" id="BestandBehouden"';
+		if (!$this->selected) {
+			echo ' style="display: none;"';
+		}
+		echo '>' . $this->model->getBestand()->bestandsnaam . ' (' . format_filesize($this->model->getBestand()->size) . ')</div></div>';
 	}
 
 }

@@ -1,7 +1,5 @@
 <?php
 
-require_once 'mimemagic/MimeMagic.php'; //mediawiki's mime magic class
-
 /**
  * BestandUploader.class.php
  * 
@@ -9,17 +7,19 @@ require_once 'mimemagic/MimeMagic.php'; //mediawiki's mime magic class
  * @author P.W.G. Brussee <brussee@live.nl>
  * 
  * Verschillende manieren om bestanden te uploaden.
- * BestandUploader defenieert wat standaardfunctionaliteit.
- * De andere classes zorgen voor de speciale functies.
- * @FIXME In BestandUploader::getAll() moet een eventueel nieuw object aan de array toegevoegd worden.
  */
 abstract class BestandUploader implements Validator {
 
-	protected $active = false;
+	/**
+	 * Error(s) after validate
+	 * @var string
+	 */
 	protected $error;
-	protected $filename;
-	protected $mimetype = 'application/octet-stream';
-	protected $size;
+	/**
+	 * Bestand
+	 * @var Bestand
+	 */
+	private $bestand;
 
 	public function __construct() {
 		
@@ -27,14 +27,35 @@ abstract class BestandUploader implements Validator {
 
 	/**
 	 * Is deze uploadmethode beschikbaar?
+	 * 
 	 * @return boolean
 	 */
 	public abstract function isAvailable();
 
 	/**
 	 * Bestand uiteindelijk opslaan op de juiste plek.
+	 * 
+	 * @param string $destination fully qualified path with trailing slash
+	 * @param string $filename filename with extension
 	 */
-	abstract public function movefile(Document $document);
+	abstract public function verplaatsBestand($destination, $filename);
+
+	public function getBestand() {
+		return $this->bestand;
+	}
+
+	public function createBestand($naam, $size, $type = null, $tmp = null) {
+		$this->bestand = new Bestand();
+		$this->bestand->bestandsnaam = $naam;
+		$this->bestand->size = $size;
+		if ($type !== null) {
+			$this->bestand->mimetype = $type;
+		} elseif ($tmp !== null) {
+			$finfo = finfo_open(FILEINFO_MIME_TYPE);
+			$this->bestand->mimetype = finfo_file($finfo, $tmp);
+			finfo_close($finfo);
+		}
+	}
 
 	public function getError() {
 		return $this->error;
@@ -44,96 +65,46 @@ abstract class BestandUploader implements Validator {
 		$this->error .= $error . "\n";
 	}
 
-	public function getNaam() {
-		return get_class($this);
-	}
-
-	public function getFilename() {
-		return $this->filename;
-	}
-
-	public function getMimetype() {
-		return $this->mimetype;
-	}
-
-	public function getSize() {
-		return $this->size;
-	}
-
-	public function isActive() {
-		return $this->active;
-	}
-
-	/**
-	 * Geef een array terug met de aanwezige uploadmethodes.
-	 * Bij een nieuw document willen we geen bestand behouden, want er
-	 * is nog helemaal geen bestand, dus die kunnen we uitsluiten.
-	 */
-	public static function getAll($document, $active, $bestand_behouden = true) {
-		$methodes = array('BestandBehouden', 'UploadBrowser', 'UploadURL', 'UploadFTP');
-		$return = array();
-		foreach ($methodes as $methodenaam) {
-			if (!$bestand_behouden AND $methodenaam == 'BestandBehouden') {
-				continue;
-			}
-			$methode = new $methodenaam($document);
-			if ($methode->isAvailable()) {
-				$return[$methodenaam] = $methode;
-				if ($active == $methodenaam) {
-					$return[$methodenaam]->active = true;
-				}
-			}
-		}
-		return $return;
-	}
-
 }
 
 class BestandBehouden extends BestandUploader {
 
-	public $document = null;
-
-	public function __construct(Document $document) {
+	public function __construct($bestaat, $naam, $size) {
 		parent::__construct();
-		$this->document = $document;
-		$this->filename = $document->getBestandsnaam();
-		$this->mimetype = $document->getMimetype();
-		$this->size = $document->getSize();
+		if ($bestaat) {
+			$this->createBestand($naam, $size);
+		}
 	}
 
 	public function isAvailable() {
-		return true;
+		return (boolean) $this->getBestand();
 	}
 
 	public function validate() {
 		return true;
 	}
 
-	public function moveFile(Document $document) {
-		//do nothing here.
-		return true;
+	public function verplaatsBestand($destination, $filename) {
+		return file_exists($destination . $filename);
 	}
 
 }
 
-class UploadBrowser extends BestandUploader {
+class UploadHttp extends BestandUploader {
 
-	/**
-	 * Relevante inhoud van $_FILES;
-	 */
-	private $file;
+	protected $tmp_name;
 
 	public function isAvailable() {
 		return true;
 	}
 
 	public function validate() {
-		if (!isset($_FILES['file_upload'])) {
+		if (!isset($_FILES['bestand'])) {
 			$this->addError('Formulier niet compleet');
 		}
-		$this->file = $_FILES['file_upload'];
-		if ($this->file['error'] != 0) {
-			switch ($this->file['error']) {
+		$upload = $_FILES['bestand'];
+		if ($upload['error'] != 0) {
+			switch ($upload['error']) {
 				case 1:
 					$this->addError('Bestand is te groot: Maximaal ' . ini_get('upload_max_filesize') . 'B ');
 					break;
@@ -141,47 +112,48 @@ class UploadBrowser extends BestandUploader {
 					$this->addError('Selecteer een bestand');
 					break;
 				default:
-					$this->addError('Upload-error: error-code: ' . $this->file['error']);
+					$this->addError('Upload-error: error-code: ' . $upload['error']);
 			}
 		}
 		if ($this->getError() == '') {
-			$this->filename = $this->file['name'];
-			$this->mimetype = $this->file['type'];
-			$this->size = $this->file['size'];
+			$this->tmp_name = $upload['tmp_name'];
+			$this->createBestand($upload['name'], $upload['size'], $upload['type']);
 			return true;
 		} else {
 			return false;
 		}
 	}
 
-	public function moveFile(Document $document) {
-		return $document->moveUploaded($this->file['tmp_name']);
+	public function verplaatsBestand($destination, $filename) {
+		if (!is_writable($destination)) {
+			throw new Exception('Doelmap is niet beschrijfbaar');
+		}
+		if (is_uploaded_file($this->tmp_name)) {
+			return move_uploaded_file($this->tmp_name, $destination . $filename);
+		}
+		return false;
 	}
 
 }
 
 /**
- * UploadURL
+ * UploadUrl
  *
  * Kan een bestand downloaden van een url, met file_get_contents of de
  * cURL-extensie. Als beide niet beschikbaar zijn wordt het formulier-
  * element niet weergegeven.
  */
-class UploadURL extends BestandUploader {
+class UploadUrl extends BestandUploader {
 
-	/**
-	 * Het hele bestand
-	 * @var string
-	 */
-	protected $file;
 	protected $url = 'http://';
-
-	public function isAvailable() {
-		return $this->file_get_contents_available() OR function_exists('curl_init');
-	}
+	protected $file_contents;
 
 	public function getUrl() {
 		return $this->url;
+	}
+
+	public function isAvailable() {
+		return $this->file_get_contents_available() OR function_exists('curl_init');
 	}
 
 	protected function file_get_contents_available() {
@@ -197,7 +169,7 @@ class UploadURL extends BestandUploader {
 
 	protected function file_get_contents($url) {
 		if ($this->file_get_contents_available()) {
-			return @file_get_contents($url);
+			return file_get_contents($url);
 		} else {
 			return $this->curl_file_get_contents($url);
 		}
@@ -205,31 +177,27 @@ class UploadURL extends BestandUploader {
 
 	public function validate() {
 		if (!$this->isAvailable()) {
-			$this->addError('PHP.ini configuratie: cURL of allow_url_fopen moet aan staan...');
+			$this->addError('PHP.ini configuratie: cURL of allow_url_fopen moet aan staan.');
 		}
 		if (!isset($_POST['url'])) {
-			$this->addError('Formulier niet compleet');
+			$this->addError('Formulier niet compleet.');
 		}
 		if (!url_like(urldecode($_POST['url']))) {
-			$this->addError('Dit lijkt niet op een url...');
+			$this->addError('Ongeldige url.');
 		}
 		$this->url = $_POST['url'];
 		if ($this->getError() == '') {
-			$this->file = $this->file_get_contents($this->url);
-			if (strlen($this->file) == 0) {
+			$this->file_contents = $this->file_get_contents($this->url);
+			if (empty($this->file_contents)) {
 				$this->addError('Bestand is leeg, check de url.');
 			} else {
 				$naam = substr(trim($this->url), strrpos($this->url, '/') + 1);
+				$naam = preg_replace("/[^a-zA-Z0-9\s\.\-\_]/", '', $naam);
 				//Bestand tijdelijk omslaan om mime-type te bepalen.
-				$tmpfile = TMP_PATH . 'docuketz0r' . microtime() . '.tmp';
+				$tmp_bestand = TMP_PATH . '/BestandUploader' . LoginLid::instance()->getUid() . microtime() . '.tmp';
 				if (is_writable(TMP_PATH)) {
-					file_put_contents($tmpfile, $this->file);
-					$mimetype = MimeMagic::singleton()->guessMimeType($tmpfile);
-					unlink($tmpfile);
-
-					$this->filename = preg_replace("/[^a-zA-Z0-9\s\.\-\_]/", '', $naam);
-					$this->mimetype = $mimetype;
-					$this->size = strlen($this->file);
+					$size = file_put_contents($tmp_bestand, $this->file_contents);
+					$this->createBestand($naam, $size, null, $tmp_bestand);
 				} else {
 					$this->addError('Ophalen vanaf url mislukt: TMP_PATH is niet beschrijfbaar.');
 				}
@@ -238,19 +206,17 @@ class UploadURL extends BestandUploader {
 		return $this->getError() == '';
 	}
 
-	public function moveFile(Document $document) {
-		return $document->putFile($this->file);
+	public function verplaatsBestand($destination, $filename) {
+		if (!is_writable($destination)) {
+			throw new Exception('Doelmap is niet beschrijfbaar');
+		}
+		return file_put_contents($destination . $filename, $this->file_contents);
 	}
 
 }
 
-class UploadFTP extends BestandUploader {
+class UploadFtp extends BestandUploader {
 
-	/**
-	 * Naam van het gekozen bestand
-	 * @var string 
-	 */
-	protected $file;
 	/**
 	 * Lijst van bestanden in de publieke ftp map
 	 * @var array
@@ -269,8 +235,8 @@ class UploadFTP extends BestandUploader {
 
 	public function __construct() {
 		parent::__construct();
-		$this->subdir = '/documenten';
-		$this->path = PUBLIC_FTP . $this->subdir . '/';
+		$this->subdir = '/';
+		$this->path = PUBLIC_FTP . $this->subdir;
 	}
 
 	public function isAvailable() {
@@ -296,31 +262,41 @@ class UploadFTP extends BestandUploader {
 		return $this->subdir;
 	}
 
+	public function setSubDir($subdir) {
+		if (file_exists(PUBLIC_FTP . $subdir)) {
+			$this->subdir = $subdir . '/';
+			$this->path = PUBLIC_FTP . $this->subdir;
+		}
+	}
+
 	public function validate() {
-		if (!isset($_POST['ftpfile'])) {
+		if (!isset($_POST['bestandsnaam'])) {
 			$this->addError('Formulier niet compleet.');
 		}
-		if (!file_exists($this->path . $_POST['ftpfile'])) {
+		$bestandsnaam = filter_input(INPUT_POST, 'bestandsnaam', FILTER_SANITIZE_STRING);
+		if (!file_exists($this->path . $bestandsnaam)) {
 			$this->addError('Bestand is niet aanwezig in de publieke FTP-map');
 		}
 		if ($this->getError() == '') {
-			$this->file = $_POST['ftpfile'];
-			$this->filename = $_POST['ftpfile'];
-			$this->size = filesize($this->path . $this->file);
-			$this->mimetype = MimeMagic::singleton()->guessMimeType($this->path . $this->file);
+			$this->createBestand($bestandsnaam, filesize($this->path . $bestandsnaam), null, $this->path . $bestandsnaam);
 		}
 		return $this->getError() == '';
 	}
 
-	public function moveFile(Document $document) {
-		if ($document->copyFile($this->path . $this->file)) {
-			// Moeten we het bestand ook verwijderen uit de publieke ftp?
-			if (isset($_POST['deleteFiles'])) {
-				return unlink($this->path . $this->file);
-			}
-			return true;
+	public function verplaatsBestand($destination, $filename) {
+		if (!is_writable($destination)) {
+			throw new Exception('Doelmap is niet beschrijfbaar');
 		}
-		return false;
+		if (file_exists($this->path . $this->getBestand()->bestandsnaam)) {
+			$gelukt = copy($this->path . $this->getBestand()->bestandsnaam, $destination . $filename);
+			// Moeten we het bestand ook verwijderen uit de publieke ftp?
+			if ($gelukt AND isset($_POST['verwijderVanFtp'])) {
+				return unlink($this->path . $this->getBestand()->bestandsnaam);
+			}
+			return $gelukt;
+		} else {
+			throw new Exception('Bronbestand bestaat niet');
+		}
 	}
 
 }

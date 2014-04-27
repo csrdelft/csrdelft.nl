@@ -2,22 +2,14 @@
 	float: right;
 }
 
-#documentForm fieldset{ background-color: #eee; padding: 5px 10px; margin-bottom: 10px;}
-#documentForm fieldset label.metadata{ width: 150px; float: left; }
-
-#documentForm .uploadmethode, #documentForm .uploadmethode:hover{
-	width: 100; min-height: 1.5em; padding: 4px 8px; margin: 4px 0px;
-	clear: both;
-}
-
-#documentForm .uploadmethode:hover{ background-color: #e5e5e5;  }
-#documentForm .uploadmethode .optie{ float: left; width: 150px; }
-#documentForm .uploadmethode .keuze{ display: none; margin-left: 160px; }
-#documentForm .uploadmethode .keuze label{ width: 150px; float: left; }
-#documentForm .uploadmethode .indent{ margin-left: 160px; }
-#documentForm  input[type=text]{ width: 250px; }
-#documentForm  #ftpOpties select{ width: 350px; }
-#documentForm  #ftpOpties label{ float: none; }
+#documentForm label{ width: 150px; }
+#documentForm label.meta{ float: left; margin: 0px 25px; text-align: right; }
+#documentForm input{ width: 450px; }
+#documentForm input[type=text]{ width: 250px; }
+#documentForm input[type=radio]{ width: 15px; }
+#documentForm input[type=checkbox]{ width: 15px; }
+#documentForm div.UploadOptie{ height: 50px; }
+#documentForm div.UploadKeuze{ margin-left: 200px; margin-top: -15px; }
 
 .documenten{
 	width: 100%;

@@ -1,21 +1,17 @@
-/*
+/**
  *	Documentenketzerjavascriptcode.
  */
-function updateForm(){
-	var methodenaam=jQuery("input[name='methode']:checked").val();
-	id="#"+methodenaam;
-	jQuery(".keuze").fadeOut(100);
-	jQuery(id).fadeIn(100);
-}
 jQuery(document).ready(function($) {
-	if($("#documentForm").length > 0){
-		updateForm();
-		//bij het wijzigen van een input doen we weer een update op het formulier.
-		$("input[name='methode']").change(updateForm);
-	}
+
+	jQuery('div.UploadOptie input[type=radio]').click(function() {
+		var show = jQuery('div.UploadKeuze', jQuery(this).parent());
+		jQuery('div.UploadKeuze').not(show).fadeOut(250);
+		show.fadeIn(250);
+	});
+
 	//tabellen naar zebra converteren.
 	$("#documenten tr:odd").addClass('odd');
-	
+
 	//hippe sorteerbare tabel fixen.
 	$("#documentencategorie").dataTable({
 		"oLanguage": {
@@ -31,11 +27,11 @@ jQuery(document).ready(function($) {
 			{'sType': 'html'}, // documentnaam
 			//Bestandstgrootte naar B/KB omzetten.
 			{"fnRender":
-				function(oObj){
-					return readableFileSize(oObj.aData[1]);
-				},
+						function(oObj) {
+							return readableFileSize(oObj.aData[1]);
+						},
 				"bUseRendered": false
-			}, 
+			},
 			null, //mime-type
 			{'sType': 'html'}, //moment toegevoegd
 			null //Eigenaar

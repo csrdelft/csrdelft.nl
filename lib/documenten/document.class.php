@@ -1,5 +1,7 @@
 <?php
 
+require_once 'MVC/model/entity/Bestand.class.php';
+
 /**
  * document.class.php	| 	Jan Pieter Waagmeester (jieter@jpwaag.com)
  *
@@ -11,24 +13,20 @@
  * In de database wordt de originele bestandsnaam opgeslagen, zonder prefix dus.
  *
  */
-class Document {
+class Document extends Bestand {
 
 	private $ID = 0;
 	private $naam;
 	private $catID;   //CategorieID van de categorie van dit bestand
 	private $categorie = null; //DocumentCategorie-object van dit bestand
-	private $bestandsnaam; //originele bestandsnaam zoals geupload
-	private $size = 0;  //bestandsafmeting in bytes
-	private $mimetype = 'application/octet-stream'; //mime-type van het bestand
 	private $toegevoegd; //toevoegdatum
 	private $eigenaar;  //uid van de eigenaar
 	private $leesrechten = 'P_LEDEN_READ'; //rechten nodig om bestand te mogen downloaden
-	public $documentroot;
 
 	public function __construct($init) {
+		$this->size = 0;  //bestandsafmeting in bytes
+		$this->mimetype = 'application/octet-stream'; //mime-type van het bestand
 		$this->load($init);
-
-		$this->documentroot = DATA_PATH . '/documenten';
 	}
 
 	public function load($init = 0) {
@@ -230,12 +228,25 @@ class Document {
 		}
 	}
 
-	/*
+	/**
 	 * Centrale plek om het volledige pad van een document te maken.
 	 */
-
 	public function getFullPath() {
-		return $this->documentroot . '/' . $this->getID() . '_' . $this->bestandsnaam;
+		return $this->getPath() . $this->getFilename();
+	}
+
+	/**
+	 * @return string location on disk
+	 */
+	public function getPath() {
+		return DATA_PATH . '/documenten/';
+	}
+
+	/**
+	 * @return string file name on disk
+	 */
+	public function getFilename() {
+		return $this->getID() . '_' . $this->bestandsnaam;
 	}
 
 	public function getDownloadurl() {
@@ -310,7 +321,7 @@ class Document {
 	}
 
 	private function throwExceptionWhenDestNotWriteable() {
-		if (!is_writable($this->documentroot)) {
+		if (!is_writable(DATA_PATH . '/documenten')) {
 			throw new Exception('Doelmap is niet beschrijfbaar');
 		}
 	}

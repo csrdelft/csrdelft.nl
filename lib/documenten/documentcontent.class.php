@@ -1,16 +1,15 @@
 <?php
 
-/*
- * class.documentcontent.php	| 	Jan Pieter Waagmeester (jieter@jpwaag.com)
- *
- *
- */
 require_once 'document.class.php';
 
-/*
- * Weergeven van één document, bijvoorbeeld toevoegen/bewerken.
+/**
+ * documentcontent.class.php	| 	Jan Pieter Waagmeester (jieter@jpwaag.com)
+ *
  */
 
+/**
+ * Weergeven van één document, bijvoorbeeld toevoegen/bewerken.
+ */
 class DocumentContent extends TemplateView {
 
 	private $document;
@@ -39,11 +38,10 @@ class DocumentContent extends TemplateView {
 
 }
 
-/*
+/**
  * Overzicht van alle categorieën met een bepaald aantal documenten per
  * categorie, zeg maar de standaarpagina voor de documentenketzer.
  */
-
 class DocumentenContent extends TemplateView {
 
 	public function getTitel() {
@@ -57,10 +55,9 @@ class DocumentenContent extends TemplateView {
 
 }
 
-/*
+/**
  * Documenten voor een bepaalde categorie tonen.
  */
-
 class DocumentCategorieContent extends TemplateView {
 
 	private $categorie;
@@ -81,11 +78,10 @@ class DocumentCategorieContent extends TemplateView {
 
 }
 
-/*
+/**
  * Document downloaden, allemaal headers goedzetten.
  * Ongeldig aangevraagde documenten worden in de controller afgehandeld.
  */
-
 class DocumentDownloadContent extends TemplateView {
 
 	private $document;
@@ -102,7 +98,7 @@ class DocumentDownloadContent extends TemplateView {
 		header('content-type: ' . $this->document->getMimeType());
 
 		$mime = $this->document->getMimetype();
-		if (!strstr($mime, 'image') AND !strstr($mime, 'text')) {
+		if (!strstr($mime, 'image') AND ! strstr($mime, 'text')) {
 			header('Content-Disposition: attachment; filename="' . $this->document->getBestandsnaam() . '";');
 			header('Content-Lenght: ' . $this->document->getSize() . ';');
 		}
