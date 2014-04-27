@@ -756,16 +756,15 @@ input, textarea, select{
 	width: 250px;
 }
 .Formulier textarea {
-	width: 90%;
+	width: 250px;
 	height: 150px;
-	margin-left: 10px;
 }
 .Formulier .InputField, .Formulier h3, .Formulier .password{
 	clear: both;
 }
 .Formulier .InputField{
 	border: 1px solid transparent;
-	overflow: auto;
+	width: 500px;
 }
 .Formulier .InputField:hover{
 	border: 1px  solid #ddd;
