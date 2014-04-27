@@ -1011,7 +1011,9 @@ a.forumGrootlink{
 	color: black;
 }
 textarea.forumBericht{
+	height: 197px;
 	width: 574px;
+	max-width: 574px;
 }
 div.butn{
 	width: 580px;
