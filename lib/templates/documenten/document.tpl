@@ -17,9 +17,8 @@
 	{foreach from=$uploaders item=uploader}
 		{$uploader->view()}
 	{/foreach}
-	<div>
-		<label class="meta">&nbsp;</label>
-		<input type="submit" value="Opslaan" />
-		<a href="/communicatie/documenten/" class="knop">Annuleren</a>
-	</div>
+	<p>&nbsp;</p>
+	<label class="meta">&nbsp;</label>
+	<input type="submit" value="Opslaan" />
+	<a href="/communicatie/documenten/" class="knop">Annuleren</a>
 </form>
