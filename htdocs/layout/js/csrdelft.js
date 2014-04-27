@@ -412,11 +412,10 @@ if (navigator.appName == "Microsoft Internet Explorer") {
 }
 
 function vergrootTextarea(id, rows) {
-	var textarea = document.getElementById(id);
-	//if (!textarea || (typeof(textarea.rows) == "undefined")) return;
-	var currentRows = textarea.rows;
-	textarea.rows = currentRows + rows;
+	jQuery('#' + id).animate({'height': '+=' + rows * 30}, 800, function() {
+	});
 }
+
 function setjs() {
 	if (navigator.product == 'Gecko') {
 		document.loginform["interface"].value = 'mozilla';
