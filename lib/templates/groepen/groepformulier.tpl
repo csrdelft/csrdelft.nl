@@ -107,7 +107,7 @@
 		<label for="submit"></label>
 		<input type="button" class="voorbeeld" value="Voorbeeld" onclick="return previewPost('sbeschrijving', 'sbewerkPreview')" />
 		<a class="knop extraknopjespreview" onclick="$('#ubbhulpverhaal').toggle();" title="Opmaakhulp weergeven">Opmaak</a>
-		<a style="margin-right: 3px;" class="knop extraknopjespreview" onclick="vergrootTextarea('sbeschrijving', 5)" title="Vergroot het invoerveld"><div class="arrows">&uarr;&darr;</div></a><br />
+		<a style="margin-right: 3px;" class="knop extraknopjespreview" onclick="vergrootTextarea('sbeschrijving', 5)" title="Vergroot het invoerveld"><div class="arrows">&uarr;&darr;</div>&nbsp;&nbsp;&nbsp;</a><br />
 	{/if}
 
 	{* voor sjaarsactie geen lange beschrijving *}
@@ -122,7 +122,7 @@
 		<label for="submit"></label>
 		<input type="button" class="voorbeeld" value="Voorbeeld" onclick="return previewPost('beschrijving', 'bewerkPreview')" /> 
 		<a class="knop extraknopjespreview" onclick="$('#ubbhulpverhaal').toggle();" title="Opmaakhulp weergeven">Opmaak</a>
-		<a style="margin-right: 3px;" class="knop extraknopjespreview" onclick="vergrootTextarea('beschrijving', 10)" title="Vergroot het invoerveld"><div class="arrows">&uarr;&darr;</div></a><br />
+		<a style="margin-right: 3px;" class="knop extraknopjespreview" onclick="vergrootTextarea('beschrijving', 10)" title="Vergroot het invoerveld"><div class="arrows">&uarr;&darr;</div>&nbsp;&nbsp;&nbsp;</a><br />
 	{/if}
 
 	<hr />

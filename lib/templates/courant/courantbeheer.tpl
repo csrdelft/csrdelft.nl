@@ -62,7 +62,7 @@
 		<div id="bewerkPreviewContainer" class="previewContainer"><div id="bewerkPreview" class="preview"></div></div>
 		<textarea name="bericht" id="courantBericht" cols="80" style="width: 100%;" rows="15" class="tekst">{$form.bericht|escape:'html'}</textarea>
 		<a style="float: right;" class="knop" onclick="$('ubbhulpverhaal').toggle();" title="Opmaakhulp weergeven">Opmaak</a>
-		<a style="float: right; margin-right: 3px;" class="knop" onclick="vergrootTextarea('courantBericht', 10)" title="Vergroot het invoerveld"><div class="arrows">&uarr;&darr;</div></a>
+		<a style="float: right; margin-right: 3px;" class="knop" onclick="vergrootTextarea('courantBericht', 10)" title="Vergroot het invoerveld"><div class="arrows">&uarr;&darr;</div>&nbsp;&nbsp;&nbsp;</a>
 		<input type="submit" name="verzenden" value="Opslaan" class="tekst" /> 
 		<input type="button" value="Voorbeeld" onclick="return previewPost('courantBericht', 'bewerkPreview')" />
 		{if $courant->magBeheren()}
