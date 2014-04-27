@@ -19,7 +19,7 @@ class TestFormulier extends Formulier {
 		$fields[] = new UidField('uidtest', '0436', 'Wie ben jij?');
 		$fields[] = new VerticaleField('verticale', '4', 'Welke verticale?');
 		$fields[] = new DatumField('datum', '2011-08-11', 'Welke datum?');
-		$fields[] = new SubmitResetCancel('/communicatie/profiel/' . $model->uid, true, 'opslaan', 'annuleren', 'reset');
+		$fields[] = new SubmitResetCancel('/communicatie/profiel/' . $model->uid, true, 'Opslaan', 'Annuleren', 'Reset');
 		$fields[] = new LidField('lidtest', 'x101', 'Wat is je naam?', 'alleleden');
 		$fields[] = new LidField('lid2test', 'Gra', 'Wat is je naam?', 'nobodies');
 
