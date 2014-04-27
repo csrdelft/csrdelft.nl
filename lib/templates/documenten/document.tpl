@@ -19,7 +19,8 @@
 	{/foreach}
 	<div>
 		<label class="meta">&nbsp;</label>
-		<input type="button" onclick="jQuery(this).closest('form').submit();" value="Opslaan" />
+		<input type="submit" value="Opslaan" />
+		<input type="reset" value="Reset" />
 		<input type="button" onclick="location.href = '/communicatie/documenten/';" value="Annuleren" />
 	</div>
 </form>

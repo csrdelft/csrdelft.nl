@@ -4,7 +4,7 @@
 
 #documentForm label{ width: 150px; }
 #documentForm label.meta{ float: left; margin: 0px 25px; text-align: right; }
-#documentForm input{ width: 450px; }
+#documentForm input[type=file]{ width: 400px; border: none; }
 #documentForm input[type=text]{ width: 250px; }
 #documentForm input[type=radio]{ width: 15px; }
 #documentForm input[type=checkbox]{ width: 15px; }
