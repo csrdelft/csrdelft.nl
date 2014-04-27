@@ -463,7 +463,7 @@ class ConversieModel {
 
 	private static function queryDb($sql, $values = array()) {
 		$db = \Database::instance();
-		$query = $db->prepare($sql, $values);
+		$query = $db->prepare($sql);
 		$query->execute($values);
 		if ($query->rowCount() > 0) {
 			$result = $query->fetchAll();
@@ -478,7 +478,7 @@ class ConversieModel {
 		$sql.= ' VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
 		$values = array($mid, $mrid, $titel, $limiet, $datum, $tijd, $prijs, false, null, false, $filter);
 		$db = \Database::instance();
-		$query = $db->prepare($sql, $values);
+		$query = $db->prepare($sql);
 		$query->execute($values);
 		if ($query->rowCount() !== 1) {
 			throw new Exception('New maaltijd faalt: $query->rowCount() =' . $query->rowCount());
@@ -503,7 +503,7 @@ class ConversieModel {
 				$archief->getPrijs(),
 				$archief->getAanmeldingen()
 			);
-			$query = $db->prepare($sql, $values);
+			$query = $db->prepare($sql);
 			$query->execute($values);
 			if ($query->rowCount() !== 1) {
 				$db->rollback();

@@ -225,7 +225,7 @@ class TakenModel {
 		$sql.= ' WHERE verwijderd = true';
 		$values = array();
 		$db = \Database::instance();
-		$query = $db->prepare($sql, $values);
+		$query = $db->prepare($sql);
 		$query->execute($values);
 		return $query->rowCount();
 	}
@@ -236,7 +236,7 @@ class TakenModel {
 		$sql.= ' WHERE datum < ?';
 		$values = array(date('Y-m-d'));
 		$db = \Database::instance();
-		$query = $db->prepare($sql, $values);
+		$query = $db->prepare($sql);
 		$query->execute($values);
 		return $query->rowCount();
 	}
@@ -247,7 +247,7 @@ class TakenModel {
 		$sql.= ' WHERE lid_id = ? AND datum >= ?';
 		$values = array(null, $uid, date('Y-m-d'));
 		$db = \Database::instance();
-		$query = $db->prepare($sql, $values);
+		$query = $db->prepare($sql);
 		$query->execute($values);
 		return $query->rowCount();
 	}
@@ -267,7 +267,7 @@ class TakenModel {
 		$sql.= ' WHERE taak_id = ?';
 		$values = array($tid);
 		$db = \Database::instance();
-		$query = $db->prepare($sql, $values);
+		$query = $db->prepare($sql);
 		$query->execute($values);
 		if ($query->rowCount() !== 1) {
 			throw new Exception('Delete taak faalt: $query->rowCount() =' . $query->rowCount());
@@ -285,7 +285,7 @@ class TakenModel {
 			$sql.= ' LIMIT ' . $limit;
 		}
 		$db = \Database::instance();
-		$query = $db->prepare($sql, $values);
+		$query = $db->prepare($sql);
 		$query->execute($values);
 		$result = $query->fetchAll(\PDO::FETCH_CLASS | \PDO::FETCH_PROPS_LATE, '\CorveeTaak');
 		// load corvee functies
@@ -320,7 +320,7 @@ class TakenModel {
 			$taak->getTaakId()
 		);
 		$db = \Database::instance();
-		$query = $db->prepare($sql, $values);
+		$query = $db->prepare($sql);
 		$query->execute($values);
 		if ($query->rowCount() !== 1) {
 			throw new Exception('Update taak faalt: $query->rowCount() =' . $query->rowCount());
@@ -336,7 +336,7 @@ class TakenModel {
 		$sql.= ' VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
 		$values = array(null, $fid, $uid, $crid, $mid, $datum, $punten, $bonus_malus, 0, 0, null, '', false);
 		$db = \Database::instance();
-		$query = $db->prepare($sql, $values);
+		$query = $db->prepare($sql);
 		$query->execute($values);
 		if ($query->rowCount() !== 1) {
 			throw new Exception('New taak faalt: $query->rowCount() =' . $query->rowCount());
@@ -376,7 +376,7 @@ class TakenModel {
 		}
 		$sql = 'SELECT EXISTS (SELECT * FROM crv_taken WHERE maaltijd_id = ?)';
 		$values = array($mid);
-		$query = \Database::instance()->prepare($sql, $values);
+		$query = \Database::instance()->prepare($sql);
 		$query->execute($values);
 		$result = $query->fetchColumn();
 		return $result;
@@ -393,7 +393,7 @@ class TakenModel {
 		}
 		$sql = 'UPDATE crv_taken SET verwijderd = true WHERE maaltijd_id = ?';
 		$values = array($mid);
-		$query = \Database::instance()->prepare($sql, $values);
+		$query = \Database::instance()->prepare($sql);
 		$query->execute($values);
 		return $query->rowCount();
 	}
@@ -425,7 +425,7 @@ class TakenModel {
 		}
 		$sql = 'SELECT EXISTS (SELECT * FROM crv_taken WHERE functie_id = ?)';
 		$values = array($fid);
-		$query = \Database::instance()->prepare($sql, $values);
+		$query = \Database::instance()->prepare($sql);
 		$query->execute($values);
 		$result = $query->fetchColumn();
 		return $result;
@@ -484,7 +484,7 @@ class TakenModel {
 		$sql.= ' WHERE crv_repetitie_id = ?';
 		$values = array($crid);
 		$db = \Database::instance();
-		$query = $db->prepare($sql, $values);
+		$query = $db->prepare($sql);
 		$query->execute($values);
 		return $query->rowCount();
 	}
@@ -501,7 +501,7 @@ class TakenModel {
 		}
 		$sql = 'SELECT EXISTS (SELECT * FROM crv_taken WHERE crv_repetitie_id = ?)';
 		$values = array($crid);
-		$query = \Database::instance()->prepare($sql, $values);
+		$query = \Database::instance()->prepare($sql);
 		$query->execute($values);
 		$result = (boolean) $query->fetchColumn();
 		return $result;
@@ -519,7 +519,7 @@ class TakenModel {
 				$repetitie->getStandaardPunten(),
 				$repetitie->getCorveeRepetitieId()
 			);
-			$query = $db->prepare($sql, $values);
+			$query = $db->prepare($sql);
 			$query->execute($values);
 			$updatecount = $query->rowCount();
 

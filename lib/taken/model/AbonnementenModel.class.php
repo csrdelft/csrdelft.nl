@@ -1,6 +1,5 @@
 <?php
 
-
 require_once 'taken/model/entity/MaaltijdAbonnement.class.php';
 require_once 'taken/model/AanmeldingenModel.class.php';
 require_once 'taken/model/MaaltijdRepetitiesModel.class.php';
@@ -59,7 +58,7 @@ class AbonnementenModel {
 		}
 		$sql = 'SELECT EXISTS (SELECT * FROM mlt_abonnementen WHERE mlt_repetitie_id=? AND lid_id=?)';
 		$values = array($mrid, $uid);
-		$query = \Database::instance()->prepare($sql, $values);
+		$query = \Database::instance()->prepare($sql);
 		$query->execute($values);
 		$result = $query->fetchColumn();
 		return $result;
@@ -149,7 +148,7 @@ class AbonnementenModel {
 		}
 		$sql.= ' ORDER BY achternaam, voornaam ASC';
 		$db = \Database::instance();
-		$query = $db->prepare($sql, $values);
+		$query = $db->prepare($sql);
 		$query->execute($values);
 		$result = $query->fetchAll();
 		return $result;
@@ -187,7 +186,7 @@ class AbonnementenModel {
 			$values[] = $uid;
 		}
 		$db = \Database::instance();
-		$query = $db->prepare($sql, $values);
+		$query = $db->prepare($sql);
 		$query->execute($values);
 		$result = $query->fetchAll(\PDO::FETCH_CLASS|\PDO::FETCH_PROPS_LATE, 'MaaltijdAbonnement');
 		return $result;
@@ -242,13 +241,13 @@ class AbonnementenModel {
 			}
 			$wanneer = date('Y-m-d H:i');
 			$values[] = $wanneer;
-			$query = $db->prepare($sql, $values);
+			$query = $db->prepare($sql);
 			$query->execute($values);
 			$abos = $query->rowCount();
 			// aanmelden voor komende repetitie-maaltijden
 			if ($uid === null) { // voor de novieten
 				$sql = 'SELECT uid FROM lid WHERE status = "S_NOVIET"';
-				$query = $db->prepare($sql, $values);
+				$query = $db->prepare($sql);
 				$query->execute($values);
 				$result = $query->fetchAll(\PDO::FETCH_COLUMN, 0);
 				$aantal = 0;
@@ -329,7 +328,7 @@ class AbonnementenModel {
 			$values[] = $uid;
 		}
 		$db = \Database::instance();
-		$query = $db->prepare($sql, $values);
+		$query = $db->prepare($sql);
 		$query->execute($values);
 		if ($uid !== null) {
 			if ($query->rowCount() !== 1) {

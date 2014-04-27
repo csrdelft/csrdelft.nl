@@ -40,7 +40,7 @@ class VrijstellingenModel {
 			$sql.= ' LIMIT '. $limit;
 		}
 		$db = \Database::instance();
-		$query = $db->prepare($sql, $values);
+		$query = $db->prepare($sql);
 		$query->execute($values);
 		$result = $query->fetchAll(\PDO::FETCH_CLASS|\PDO::FETCH_PROPS_LATE, '\CorveeVrijstelling');
 		return $result;
@@ -75,7 +75,7 @@ class VrijstellingenModel {
 		$sql.= ' VALUES (?, ?, ?, ?)';
 		$values = array($uid, $begin, $eind, $percentage);
 		$db = \Database::instance();
-		$query = $db->prepare($sql, $values);
+		$query = $db->prepare($sql);
 		$query->execute($values);
 		if ($query->rowCount() !== 1) {
 			throw new Exception('New vrijstelling faalt: $query->rowCount() ='. $query->rowCount());
@@ -94,7 +94,7 @@ class VrijstellingenModel {
 			$vrijstelling->getLidId()
 		);
 		$db = \Database::instance();
-		$query = $db->prepare($sql, $values);
+		$query = $db->prepare($sql);
 		$query->execute($values);
 		if ($query->rowCount() !== 1) {
 			throw new Exception('Update vrijstelling faalt: $query->rowCount() ='. $query->rowCount());
@@ -110,7 +110,7 @@ class VrijstellingenModel {
 		$sql.= ' WHERE lid_id = ?';
 		$values = array($uid);
 		$db = \Database::instance();
-		$query = $db->prepare($sql, $values);
+		$query = $db->prepare($sql);
 		$query->execute($values);
 		if ($query->rowCount() !== 1) {
 			throw new Exception('Delete vrijstelling faalt: $query->rowCount() ='. $query->rowCount());

@@ -43,40 +43,17 @@ class Database extends PDO {
 	}
 
 	/**
-	 * Array of prepared SQL statements for debug
+	 * Array of SQL statements for debug
 	 * @var array
 	 */
-	private $queries = array();
+	private static $queries;
 
 	/**
-	 * Get array of prepared SQL statements for debug
+	 * Get array of SQL statements for debug
 	 * @return array
 	 */
-	public function getQueries() {
-		return $this->queries;
-	}
-
-	/**
-	 * Build a safe query.
-	 * 
-	 * @param string $statement SQL
-	 * @param array $values
-	 * @param array $driver_options
-	 * @return PDOStatement
-	 */
-	public function prepare($statement, $values = array(), array $driver_options = array()) {
-		if (defined('DEBUG')) {
-			$query = $statement;
-			foreach ($values as $value) {
-				if (is_bool($value)) {
-					$query = preg_replace('/\?/', ($value ? 'true' : 'false'), $query, 1); //TODO: named parameters
-				} else {
-					$query = preg_replace('/\?/', "'$value'", $query, 1); //TODO: named parameters
-				}
-			}
-			$this->queries[] = $query;
-		}
-		return parent::prepare($statement, $driver_options);
+	public static function getQueries() {
+		return self::$queries;
 	}
 
 	/**
@@ -102,8 +79,9 @@ class Database extends PDO {
 		if (is_int($limit)) {
 			$sql .= ' LIMIT ' . (int) $start . ', ' . $limit;
 		}
-		$query = self::instance()->prepare($sql, $params);
+		$query = self::instance()->prepare($sql);
 		$query->execute($params);
+		self::$queries[] = $query->queryString;
 		return $query;
 	}
 
@@ -121,8 +99,9 @@ class Database extends PDO {
 			$sql .= ' WHERE ' . $where;
 		}
 		$sql .= ')';
-		$query = self::instance()->prepare($sql, $params);
+		$query = self::instance()->prepare($sql);
 		$query->execute($params);
+		self::$queries[] = $query->queryString;
 		return (boolean) $query->fetchColumn();
 	}
 
@@ -149,8 +128,9 @@ class Database extends PDO {
 		$sql .=' INTO ' . $into;
 		$sql .= ' (' . implode(', ', array_keys($properties)) . ')';
 		$sql .= ' VALUES (' . implode(', ', array_keys($insert_params)) . ')'; // named params
-		$query = self::instance()->prepare($sql, $insert_params);
+		$query = self::instance()->prepare($sql);
 		$query->execute($insert_params);
+		self::$queries[] = $query->queryString;
 		if ($query->rowCount() !== 1) {
 			throw new Exception('sqlInsert rowCount=' . $query->rowCount());
 		}
@@ -195,8 +175,9 @@ class Database extends PDO {
 			}
 			$sql .= ')';
 		}
-		$query = self::instance()->prepare($sql, $insert_values);
+		$query = self::instance()->prepare($sql);
 		$query->execute($insert_values);
+		self::$queries[] = $query->queryString;
 		return $query->rowCount();
 	}
 
@@ -226,8 +207,9 @@ class Database extends PDO {
 		if (is_int($limit)) {
 			$sql .= ' LIMIT ' . $limit;
 		}
-		$query = self::instance()->prepare($sql, $where_params);
+		$query = self::instance()->prepare($sql);
 		$query->execute($where_params);
+		self::$queries[] = $query->queryString;
 		return $query->rowCount();
 	}
 
@@ -246,8 +228,9 @@ class Database extends PDO {
 		if (is_int($limit)) {
 			$sql .= ' LIMIT ' . $limit;
 		}
-		$query = self::instance()->prepare($sql, $where_params);
+		$query = self::instance()->prepare($sql);
 		$query->execute($where_params);
+		self::$queries[] = $query->queryString;
 		return $query->rowCount();
 	}
 

@@ -114,7 +114,7 @@ abstract class SimpleHTML implements View {
 		$debug = '';
 		if ($sql) {
 			$debug .= '<hr />SQL<hr />';
-			$debug .= '<pre>' . htmlentities(print_r(array("PDO" => Database::instance()->getQueries(), "MySql" => MySql::instance()->getQueries()), true)) . '</pre>';
+			$debug .= '<pre>' . htmlentities(print_r(array("PDO" => Database::getQueries(), "MySql" => MySql::instance()->getQueries()), true)) . '</pre>';
 		}
 		if ($get) {
 			$debug .= '<hr />GET<hr />';

@@ -208,7 +208,7 @@ class AanmeldingenModel {
 			$values[] = $doorAbo;
 		}
 		$sql.= ')';
-		$query = \Database::instance()->prepare($sql, $values);
+		$query = \Database::instance()->prepare($sql);
 		$query->execute($values);
 		$result = $query->fetchColumn();
 		return (boolean) $result;
@@ -239,7 +239,7 @@ class AanmeldingenModel {
 			$sql.= ' LIMIT ' . $limit;
 		}
 		$db = \Database::instance();
-		$query = $db->prepare($sql, $values);
+		$query = $db->prepare($sql);
 		$query->execute($values);
 		$result = $query->fetchAll(\PDO::FETCH_CLASS | \PDO::FETCH_PROPS_LATE, 'MaaltijdAanmelding');
 		return $result;
@@ -258,7 +258,7 @@ class AanmeldingenModel {
 			$values = array($mid, $uid, $gasten, $opmerking, $doorAbo, $doorUid, $wanneer);
 		}
 		$db = \Database::instance();
-		$query = $db->prepare($sql, $values);
+		$query = $db->prepare($sql);
 		$query->execute($values);
 		if ($mid !== null) {
 			if ($query->rowCount() !== 1) {
@@ -287,7 +287,7 @@ class AanmeldingenModel {
 			$values[] = $uid;
 		}
 		$db = \Database::instance();
-		$query = $db->prepare($sql, $values);
+		$query = $db->prepare($sql);
 		$query->execute($values);
 		if ($uid !== null && $query->rowCount() !== 1) {
 			throw new Exception('Delete aanmelding faalt: $query->rowCount() =' . $query->rowCount());
@@ -308,7 +308,7 @@ class AanmeldingenModel {
 			$aanmelding->getLidId()
 		);
 		$db = \Database::instance();
-		$query = $db->prepare($sql, $values);
+		$query = $db->prepare($sql);
 		$query->execute($values);
 		if ($query->rowCount() !== 1) {
 			throw new Exception('Update aanmelding faalt: $query->rowCount() =' . $query->rowCount());

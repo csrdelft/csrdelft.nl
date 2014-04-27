@@ -59,7 +59,7 @@ class CorveeRepetitiesModel {
 			$sql.= ' LIMIT ' . $limit;
 		}
 		$db = \Database::instance();
-		$query = $db->prepare($sql, $values);
+		$query = $db->prepare($sql);
 		$query->execute($values);
 		$result = $query->fetchAll(\PDO::FETCH_CLASS | \PDO::FETCH_PROPS_LATE, '\CorveeRepetitie');
 		// load corvee functies
@@ -119,7 +119,7 @@ class CorveeRepetitiesModel {
 			$repetitie->getCorveeRepetitieId()
 		);
 		$db = \Database::instance();
-		$query = $db->prepare($sql, $values);
+		$query = $db->prepare($sql);
 		$query->execute($values);
 		if ($query->rowCount() !== 1) {
 			//throw new Exception('Update corvee-repetitie faalt: $query->rowCount() ='. $query->rowCount());
@@ -132,7 +132,7 @@ class CorveeRepetitiesModel {
 		$sql.= ' VALUES (?, ?, ?, ?, ?, ?, ?, ?)';
 		$values = array(null, $mrid, $dag, $periode, $fid, $punten, $aantal, $voorkeur);
 		$db = \Database::instance();
-		$query = $db->prepare($sql, $values);
+		$query = $db->prepare($sql);
 		$query->execute($values);
 		if ($query->rowCount() !== 1) {
 			throw new Exception('New corvee-repetitie faalt: $query->rowCount() =' . $query->rowCount());
@@ -159,7 +159,7 @@ class CorveeRepetitiesModel {
 			$sql = 'DELETE FROM crv_repetities';
 			$sql.= ' WHERE crv_repetitie_id=?';
 			$values = array($crid);
-			$query = $db->prepare($sql, $values);
+			$query = $db->prepare($sql);
 			$query->execute($values);
 			if ($query->rowCount() !== 1) {
 				throw new Exception('Delete corvee-repetitie faalt: $query->rowCount() =' . $query->rowCount());
@@ -186,7 +186,7 @@ class CorveeRepetitiesModel {
 		}
 		$sql = 'SELECT EXISTS (SELECT * FROM crv_repetities WHERE mlt_repetitie_id = ?)';
 		$values = array($mrid);
-		$query = \Database::instance()->prepare($sql, $values);
+		$query = \Database::instance()->prepare($sql);
 		$query->execute($values);
 		$result = $query->fetchColumn();
 		return $result;
@@ -206,7 +206,7 @@ class CorveeRepetitiesModel {
 		}
 		$sql = 'SELECT EXISTS (SELECT * FROM crv_repetities WHERE functie_id = ?)';
 		$values = array($fid);
-		$query = \Database::instance()->prepare($sql, $values);
+		$query = \Database::instance()->prepare($sql);
 		$query->execute($values);
 		$result = $query->fetchColumn();
 		return $result;

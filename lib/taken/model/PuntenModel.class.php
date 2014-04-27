@@ -92,7 +92,7 @@ class PuntenModel {
 			$sql.= ' LIMIT ' . $limit;
 		}
 		$db = \Database::instance();
-		$query = $db->prepare($sql, $values);
+		$query = $db->prepare($sql);
 		$query->execute($values);
 		$result = $query->fetchAll();
 		$totalen = array();

@@ -183,7 +183,7 @@ class MaaltijdenModel {
 			$sql = 'DELETE FROM mlt_maaltijden';
 			$sql.= ' WHERE maaltijd_id = ?';
 			$values = array($mid);
-			$query = $db->prepare($sql, $values);
+			$query = $db->prepare($sql);
 			$query->execute($values);
 			if ($query->rowCount() !== 1) {
 				throw new Exception('Delete maaltijd faalt: $query->rowCount() =' . $query->rowCount());
@@ -235,7 +235,7 @@ class MaaltijdenModel {
 			$sql.= ' LIMIT ' . $limit;
 		}
 		$db = \Database::instance();
-		$query = $db->prepare($sql, $values);
+		$query = $db->prepare($sql);
 		$query->execute($values);
 		$result = $query->fetchAll(\PDO::FETCH_CLASS | \PDO::FETCH_PROPS_LATE, 'Maaltijd');
 		if ($query->rowCount() > 0) {
@@ -261,7 +261,7 @@ class MaaltijdenModel {
 			$maaltijd->getMaaltijdId()
 		);
 		$db = \Database::instance();
-		$query = $db->prepare($sql, $values);
+		$query = $db->prepare($sql);
 		$query->execute($values);
 		if ($query->rowCount() !== 1) {
 			throw new Exception('Update maaltijd faalt: $query->rowCount() =' . $query->rowCount());
@@ -280,7 +280,7 @@ class MaaltijdenModel {
 		$sql.= ' VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
 		$values = array(null, $mrid, $titel, $limiet, $datum, $tijd, $prijs, $gesloten, $wanneer, false, $filter);
 		$db = \Database::instance();
-		$query = $db->prepare($sql, $values);
+		$query = $db->prepare($sql);
 		$query->execute($values);
 		if ($query->rowCount() !== 1) {
 			throw new Exception('New maaltijd faalt: $query->rowCount() =' . $query->rowCount());
@@ -350,7 +350,7 @@ class MaaltijdenModel {
 			$sql.= ' LIMIT ' . $limit;
 		}
 		$db = \Database::instance();
-		$query = $db->prepare($sql, $values);
+		$query = $db->prepare($sql);
 		$query->execute($values);
 		$result = $query->fetchAll(\PDO::FETCH_CLASS | \PDO::FETCH_PROPS_LATE, 'ArchiefMaaltijd');
 		return $result;
@@ -400,7 +400,7 @@ class MaaltijdenModel {
 				$archief->getPrijs(),
 				$archief->getAanmeldingen()
 			);
-			$query = $db->prepare($sql, $values);
+			$query = $db->prepare($sql);
 			$query->execute($values);
 			if ($query->rowCount() !== 1) {
 				$db->rollback();
@@ -430,7 +430,7 @@ class MaaltijdenModel {
 		$sql = 'UPDATE mlt_maaltijden SET verwijderd = true WHERE mlt_repetitie_id = ?';
 		$values = array($mrid);
 		$db = \Database::instance();
-		$query = $db->prepare($sql, $values);
+		$query = $db->prepare($sql);
 		$query->execute($values);
 		return $query->rowCount();
 	}
@@ -447,7 +447,7 @@ class MaaltijdenModel {
 		}
 		$sql = 'SELECT EXISTS (SELECT * FROM mlt_maaltijden WHERE mlt_repetitie_id = ?)';
 		$values = array($mrid);
-		$query = \Database::instance()->prepare($sql, $values);
+		$query = \Database::instance()->prepare($sql);
 		$query->execute($values);
 		$result = (boolean) $query->fetchColumn();
 		return $result;

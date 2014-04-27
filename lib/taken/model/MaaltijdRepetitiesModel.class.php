@@ -64,7 +64,7 @@ class MaaltijdRepetitiesModel {
 			$sql.= ' LIMIT '. $limit;
 		}
 		$db = \Database::instance();
-		$query = $db->prepare($sql, $values);
+		$query = $db->prepare($sql);
 		$query->execute($values);
 		$result = $query->fetchAll(\PDO::FETCH_CLASS|\PDO::FETCH_PROPS_LATE, 'MaaltijdRepetitie');
 		return $result;
@@ -118,7 +118,7 @@ class MaaltijdRepetitiesModel {
 			$repetitie->getMaaltijdRepetitieId()
 		);
 		$db = \Database::instance();
-		$query = $db->prepare($sql, $values);
+		$query = $db->prepare($sql);
 		$query->execute($values);
 		if ($query->rowCount() !== 1) {
 			//throw new Exception('Update maaltijd-repetitie faalt: $query->rowCount() ='. $query->rowCount());
@@ -131,7 +131,7 @@ class MaaltijdRepetitiesModel {
 		$sql.= ' VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)';
 		$values = array(null, $dag, $periode, $titel, $tijd, $prijs, $abo, $limiet, $filter);
 		$db = \Database::instance();
-		$query = $db->prepare($sql, $values);
+		$query = $db->prepare($sql);
 		$query->execute($values);
 		if ($query->rowCount() !== 1) {
 			throw new Exception('New maaltijd-repetitie faalt: $query->rowCount() ='. $query->rowCount());
@@ -161,7 +161,7 @@ class MaaltijdRepetitiesModel {
 			$sql = 'DELETE FROM mlt_repetities';
 			$sql.= ' WHERE mlt_repetitie_id=?';
 			$values = array($mrid);
-			$query = $db->prepare($sql, $values);
+			$query = $db->prepare($sql);
 			$query->execute($values);
 			if ($query->rowCount() !== 1) {
 				throw new Exception('Delete maaltijd-repetitie faalt: $query->rowCount() ='. $query->rowCount());

@@ -66,7 +66,7 @@ class VoorkeurenModel {
 		}
 		$sql = 'SELECT EXISTS (SELECT * FROM crv_voorkeuren WHERE crv_repetitie_id=? AND lid_id=?)';
 		$values = array($crid, $uid);
-		$query = \Database::instance()->prepare($sql, $values);
+		$query = \Database::instance()->prepare($sql);
 		$query->execute($values);
 		$result = $query->fetchColumn();
 		return $result;
@@ -105,7 +105,7 @@ class VoorkeurenModel {
 		$sql.= ' ORDER BY achternaam, voornaam ASC';
 		$db = \Database::instance();
 		$values = array();
-		$query = $db->prepare($sql, $values);
+		$query = $db->prepare($sql);
 		$query->execute($values);
 		$result = $query->fetchAll();
 		return $result;
@@ -134,7 +134,7 @@ class VoorkeurenModel {
 			$values[] = $uid;
 		}
 		$db = \Database::instance();
-		$query = $db->prepare($sql, $values);
+		$query = $db->prepare($sql);
 		$query->execute($values);
 		$result = $query->fetchAll(\PDO::FETCH_CLASS | \PDO::FETCH_PROPS_LATE, '\CorveeVoorkeur');
 		return $result;
@@ -166,7 +166,7 @@ class VoorkeurenModel {
 			$sql.= ' (crv_repetitie_id, lid_id)';
 			$values = array($crid, $uid);
 			$sql.= ' VALUES (?, ?)';
-			$query = $db->prepare($sql, $values);
+			$query = $db->prepare($sql);
 			$query->execute($values);
 			if ($query->rowCount() !== 1) {
 				throw new Exception('New corvee-voorkeur faalt: $query->rowCount() =' . $query->rowCount());
@@ -225,7 +225,7 @@ class VoorkeurenModel {
 			$values[] = $uid;
 		}
 		$db = \Database::instance();
-		$query = $db->prepare($sql, $values);
+		$query = $db->prepare($sql);
 		$query->execute($values);
 		if ($uid !== null && $query->rowCount() !== 1) {
 			throw new Exception('Delete voorkeuren faalt: $query->rowCount() =' . $query->rowCount());
