@@ -47,8 +47,8 @@
 	
 	<div id="submitContainer">
 		<label for="submit">&nbsp;</label>
-		<a class="handje knop" title="Opmaakhulp weergeven" onclick="$('#ubbhulpverhaal').toggle();" style="float: right;">UBB</a>
-		<a class="handje knop" title="Vergroot het invoerveld" onclick="vergrootTextarea('berichtInvoer', 10)" style="float: right;"><strong>↑↓</strong></a>
+		<a class="knop" title="Opmaakhulp weergeven" onclick="$('#ubbhulpverhaal').toggle();" style="float: right;">Opmaak</a>
+		<a class="knop" title="Vergroot het invoerveld" onclick="vergrootTextarea('berichtInvoer', 10)" style="float: right; margin-right: 3px;"><strong>&uarr;&darr;</strong></a>
 
 		<input type="button" name="submit" id="submit" value="Verder gaan" onclick="roodschopper('simulate'); return false;" />
 		<input id="forumVoorbeeld" type="button" onclick="previewPost('berichtInvoer', 'berichtPreview')" style="color: rgb(119, 119, 119);" value="Voorbeeld"/>
@@ -62,4 +62,3 @@
 {* TODO: dit ding met javascript mee laten veranderen met het kiezen van een commissie *}
 <p>Kijk aan, hier doen we het voor!</p>
 <img src="http://csrdelft.nl/tools/saldografiek.php?uid=000&timespan=100&{$roodschopper->getCommissie()}" />
-

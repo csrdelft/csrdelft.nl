@@ -189,7 +189,7 @@
 						{/if}
 					{/foreach}
 					<br /><div style="clear: both;"></div>
-					<label>&nbsp;</label><a onclick="jQuery(this).parent().parent().children('div.exemplaar.uitgebreid').show(); jQuery(this).parent().remove();"class="handje" >» meer informatie</a>
+					<label>&nbsp;</label><a onclick="jQuery(this).parent().parent().children('div.exemplaar.uitgebreid').show(); jQuery(this).parent().remove();">» meer informatie</a>
 				</div>
 			{/if}
 		</div>

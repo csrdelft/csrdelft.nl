@@ -177,7 +177,7 @@ class SavedQueryContent extends TemplateView {
 			$return.='</tbody></table><a class="knop" style="clear:right;" onclick="' . <<<JS
 $('#{$id} tbody').animate({'max-height': '+=300'}, 800, function() {});
 JS;
-			$return.='" title="Vergroot de lijst"><strong>↑↓</strong></a>';
+			$return.='" title="Vergroot de lijst"><strong>&uarr;&darr;</strong></a>';
 		} else {
 			//foutmelding in geval van geen resultaat, dus of geen query die bestaat, of niet
 			//voldoende rechten.

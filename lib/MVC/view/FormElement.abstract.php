@@ -968,9 +968,9 @@ $('.wantsPreview').each(function(){
 	};
 	textarea.wrap('<div class="UBBpreview FormField" />')
 			.before('<div id="preview_'+fieldname+'" class="preview" style="display: none;"></div>')
-			.after($('<a style="float: right; margin-right: 0px" class="knop" title="Vergroot het invoerveld"><strong>&uarr;&darr;</strong></a>').click(vergrootTextarea))
-			.after($('<a style="float: right;" class="knop" title="Opmaakhulp weergeven" onclick="$(\'#ubbhulpverhaal\').toggle();">UBB</a>'))
-			.after($('<a style="float: right; margin-left: 0px;" class="knop">Voorbeeld</a>').click(triggerPreview));
+			.after($('<a style="float: right;" class="knop" title="Vergroot het invoerveld"><strong>&uarr;&darr;</strong></a>').click(vergrootTextarea))
+			.after($('<a style="float: right; margin-right: 3px;" class="knop" title="Opmaakhulp weergeven" onclick="$(\'#ubbhulpverhaal\').toggle();">Opmaak</a>'))
+			.after($('<a class="knop">Voorbeeld</a>').click(triggerPreview));
 JS;
 		//We voegen een keyup-event toe dat bij elke enter een nieuwe
 		//preview opvraagt.

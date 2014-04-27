@@ -282,7 +282,7 @@ class GroepenProfielContent extends TemplateView {
 
 			$return.='</ul>';
 			if ($i > $display_limit) {
-				$return.='<a onclick="jQuery(this).parent().children(\'ul\').children().show(); jQuery(this).remove();" class="handje">&raquo; meer </a>';
+				$return.='<a onclick="jQuery(this).parent().children(\'ul\').children().show(); jQuery(this).remove();">&raquo; meer </a>';
 			}
 
 			$return.='</div>';

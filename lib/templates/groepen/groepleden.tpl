@@ -4,7 +4,7 @@
 		{foreach from=$groep->getLidObjects() item=groeplid name=pasfotos}
 			
 			{if $smarty.foreach.pasfotos.index==20}
-				<a class="toonmeer handje" onclick="$('#meerLeden-{$groep->getId()}').toggle(); this.parentNode.removeChild(this)">
+				<a class="toonmeer" onclick="$('#meerLeden-{$groep->getId()}').toggle(); this.parentNode.removeChild(this)">
 					Nog {$smarty.foreach.pasfotos.total-20} leden tonen...
 				</a>
 				<div class="verborgen" id="meerLeden-{$groep->getId()}">

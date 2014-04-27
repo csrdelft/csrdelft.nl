@@ -106,8 +106,8 @@
 		<br />
 		<label for="submit"></label>
 		<input type="button" class="voorbeeld" value="Voorbeeld" onclick="return previewPost('sbeschrijving', 'sbewerkPreview')" />
-		<a class="handje knop extraknopjespreview" onclick="$('#ubbhulpverhaal').toggle();" title="Opmaakhulp weergeven">UBB</a>
-		<a class="handje knop extraknopjespreview" onclick="vergrootTextarea('sbeschrijving', 5)" title="Vergroot het invoerveld"><strong>&uarr;&darr;</strong></a><br />
+		<a class="knop extraknopjespreview" onclick="$('#ubbhulpverhaal').toggle();" title="Opmaakhulp weergeven">Opmaak</a>
+		<a style="margin-right: 3px;" class="knop extraknopjespreview" onclick="vergrootTextarea('sbeschrijving', 5)" title="Vergroot het invoerveld"><strong>&uarr;&darr;</strong></a><br />
 	{/if}
 
 	{* voor sjaarsactie geen lange beschrijving *}
@@ -121,8 +121,8 @@
 		<textarea id="beschrijving" name="beschrijving" rows="15">{$groep->getBeschrijving()|escape:'html'}</textarea><br />
 		<label for="submit"></label>
 		<input type="button" class="voorbeeld" value="Voorbeeld" onclick="return previewPost('beschrijving', 'bewerkPreview')" /> 
-		<a class="handje knop extraknopjespreview" onclick="$('#ubbhulpverhaal').toggle();" title="Opmaakhulp weergeven">UBB</a>
-		<a class="handje knop extraknopjespreview" onclick="vergrootTextarea('beschrijving', 10)" title="Vergroot het invoerveld"><strong>&uarr;&darr;</strong></a><br />
+		<a class="knop extraknopjespreview" onclick="$('#ubbhulpverhaal').toggle();" title="Opmaakhulp weergeven">Opmaak</a>
+		<a style="margin-right: 3px;" class="knop extraknopjespreview" onclick="vergrootTextarea('beschrijving', 10)" title="Vergroot het invoerveld"><strong>&uarr;&darr;</strong></a><br />
 	{/if}
 
 	<hr />

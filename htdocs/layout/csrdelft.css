@@ -50,7 +50,6 @@ hr{
 }
 .clear{	clear: both; }
 .verborgen{ display: none; }
-.handje{ cursor: pointer; }
 
 .scrollpane{ overflow: auto; }
 .small{ font-size: smaller; }
@@ -982,7 +981,7 @@ span.togglePasfoto:hover, a.postlink:hover{
     margin: 24px 0 13px 0;
 }
 #forumtabel td.forumtekst input#titel {
-    width: 578px;
+    width: 574px;
 }
 div.forumdeel-omschrijving{
 	text-align: left;
@@ -1005,7 +1004,10 @@ a.forumGrootlink{
 	color: black;
 }
 textarea.forumBericht{
-	width: 578px;
+	width: 574px;
+}
+div.butn{
+	width: 580px;
 }
 form.gesloten{
 	display: none;
