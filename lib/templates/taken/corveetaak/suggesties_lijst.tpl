@@ -118,7 +118,7 @@
 	<br />
 	<a class="knop" onclick="
 		$('.scrollpane').animate({ldelim}height: '+=250'{rdelim}, 800, function() {ldelim}{rdelim});
-	" title="Vergroot de lijst met suggesties"><strong>&uarr;&darr;</strong></a>
+	" title="Vergroot de lijst met suggesties"><div class="arrows">&uarr;&darr;</div></a>
 </td></tr>
 <tr><td style="padding-left: 7px;">
 	<input type="checkbox" id="recent" onchange="taken_toggle_suggestie('recent');" 

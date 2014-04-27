@@ -29,7 +29,7 @@
 				<textarea name="bericht" id="forumBericht" class="forumBericht{if $deel->isOpenbaar()} extern{/if}" rows="12">{$post_form_tekst}</textarea>
 				<div class="butn">
 					<a style="float: right;" class="knop" onclick="$('#ubbhulpverhaal').toggle();" title="Opmaakhulp weergeven">Opmaak</a>
-					<a style="float: right; margin-right: 3px;" class="knop" onclick="vergrootTextarea('forumBericht', 10)" title="Vergroot het invoerveld"><strong>&uarr;&darr;</strong></a>
+					<a style="float: right; margin-right: 3px;" class="knop" onclick="vergrootTextarea('forumBericht', 10)" title="Vergroot het invoerveld"><div class="arrows">&uarr;&darr;</div></a>
 
 					<input type="submit" name="submit" value="Opslaan" />
 					<input type="button" value="Voorbeeld" id="forumVoorbeeld" onclick="previewPost('forumBericht', 'berichtPreview')"/>

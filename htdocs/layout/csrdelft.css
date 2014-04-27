@@ -616,6 +616,11 @@ div.msgnotify{
 	background: url(http://plaetjes.csrdelft.nl/famfamfam/bell.png) no-repeat;
 }
 
+div.arrows{
+	font-size: 14px;
+	margin-top: -3px;
+}
+
 /* ubb-hulp */
 div#ubbhulpverhaal{
 	display: none;
