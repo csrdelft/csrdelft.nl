@@ -198,7 +198,11 @@ abstract class InputField extends FormElement implements Validator {
 					$required = '<span class="required"> *</span>';
 				}
 			}
-			return '<label for="field_' . $this->name . '">' . $this->description . $required . '</label>';
+			$help = '';
+			if ($this->title) {
+				$help = '<div class="help"><img width="16" height="16" class="icon hoverIntentContent" alt="?" src="http://plaetjes.csrdelft.nl/famfamfam/help.png"></div>';
+			}
+			return '<label class="hoverIntent" for="field_' . $this->name . '">' . $help . $this->description . $required . '</label>';
 		}
 		return '';
 	}

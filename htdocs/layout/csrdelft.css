@@ -443,9 +443,11 @@ ul.nobullets li{ list-style-type: none; }
 }
 
 /**** hoverIntent ******************************************************************/
-div.hoverIntentContent {
+.hoverIntentContent {
 	display: none;
 	position: absolute;
+}
+div.hoverIntentContent {
 	border: 1px solid #000;
 	background-color: #FFF;
 	-moz-box-shadow: 0 0 11px #000000;
@@ -734,6 +736,7 @@ input, textarea, select{
 	font-size: 1em;
 }
 .Formulier label{
+	padding-left: 5px;
 	float: left;
 	width: 30%;
 	line-height: 2em;
@@ -741,6 +744,10 @@ input, textarea, select{
 }
 .Formulier label .required{
 	color: red;
+}
+.Formulier label .help{
+	position: absolute;
+	margin-left: -25px;
 }
 .Formulier input, .Formulier textarea{
 	padding: 2px;
@@ -751,6 +758,7 @@ input, textarea, select{
 .Formulier textarea {
 	width: 90%;
 	height: 150px;
+	margin-left: 10px;
 }
 .Formulier .InputField, .Formulier h3, .Formulier .password{
 	clear: both;

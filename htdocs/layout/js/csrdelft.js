@@ -58,14 +58,15 @@ function init_buttons() {
 }
 
 function init_hoverIntents() {
-	$('.hoverIntent').hoverIntent(
-			function() {
-				$(this).find('.hoverIntentContent').fadeIn();
-			},
-			function() {
-				$(this).find('.hoverIntentContent').fadeOut();
-			}
-	);
+	$('.hoverIntent').hoverIntent({
+		over: function() {
+			$(this).find('.hoverIntentContent').fadeIn();
+		},
+		out: function() {
+			$(this).find('.hoverIntentContent').fadeOut();
+		},
+		timeout: 250
+	});
 }
 
 function init_links() {
