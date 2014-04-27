@@ -46,15 +46,15 @@
 	<thead>
 		<tr>
 			<th colspan="5">
-				{if $deel->forum_id === 0}
+				{if isset($deel->forum_id)}
+					{sliding_pager baseurl="/forum/deel/"|cat:$deel->forum_id|cat:"/"
+							pagecount=ForumDradenModel::instance()->getAantalPaginas($deel->forum_id) curpage=ForumDradenModel::instance()->getHuidigePagina()
+							separator=" &nbsp;" show_prev_next=true}
+				{else}
 					{sliding_pager baseurl="/forum/recent/"
 							pagecount=ForumDradenModel::instance()->getHuidigePagina() curpage=ForumDradenModel::instance()->getHuidigePagina()
 							separator=" &nbsp;"}
 					&nbsp;<a href="/forum/recent/{ForumDradenModel::instance()->getAantalPaginas(0)}">verder terug</a>
-				{else}
-					{sliding_pager baseurl="/forum/deel/"|cat:$deel->forum_id|cat:"/"
-							pagecount=ForumDradenModel::instance()->getAantalPaginas($deel->forum_id) curpage=ForumDradenModel::instance()->getHuidigePagina()
-							separator=" &nbsp;" show_prev_next=true}
 				{/if}
 			</th>
 		</tr>
