@@ -149,10 +149,10 @@ class DocumentController extends Controller {
 			}
 		}
 		$uploaders = array(
+			'BestandBehouden' => new BestandBehouden($this->document->hasFile(), $this->document->getBestandsnaam(), $this->document->getSize()),
 			'UploadHttp' => new UploadHttp(),
 			'UploadFtp' => new UploadFtp('/documenten'),
-			'UploadUrl' => new UploadUrl(),
-			'BestandBehouden' => new BestandBehouden($this->document->hasFile(), $this->document->getBestandsnaam(), $this->document->getSize())
+			'UploadUrl' => new UploadUrl()
 		);
 		if (!array_key_exists($methode, $uploaders)) {
 			throw new Exception('Niet ondersteunde uploadmethode. Heeft u er wel een gekozen?');
