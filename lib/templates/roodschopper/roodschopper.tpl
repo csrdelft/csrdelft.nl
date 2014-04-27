@@ -51,7 +51,7 @@
 		<a class="handje knop" title="Vergroot het invoerveld" onclick="vergrootTextarea('berichtInvoer', 10)" style="float: right;"><strong>↑↓</strong></a>
 
 		<input type="button" name="submit" id="submit" value="Verder gaan" onclick="roodschopper('simulate'); return false;" />
-		<input id="forumVoorbeeld" type="button" onclick="previewPost('berichtInvoer', 'berichtPreview')" style="color: rgb(119, 119, 119);" value="voorbeeld"/>
+		<input id="forumVoorbeeld" type="button" onclick="previewPost('berichtInvoer', 'berichtPreview')" style="color: rgb(119, 119, 119);" value="Voorbeeld"/>
 	</div>
 	<div id="messageContainer" class="verborgen"></div>
 	

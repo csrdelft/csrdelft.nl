@@ -61,6 +61,6 @@ if(isset($_POST['namenRaw'])){
 	echo '<textarea name="namenRaw" rows="10" cols="40"></textarea>';
 }
 
-echo '<input type="submit" name="submit" value="opslaan" /></form>';
+echo '<input type="submit" name="submit" value="Opslaan" /></form>';
 
 

@@ -63,7 +63,7 @@
 	</div>
 	<div class="clear">
 		{if $prullenbak}<input type="hidden" name="prullenbak" value="1" />{/if}
-		<label >&nbsp;</label><input type="submit" name="submit" value="opslaan" />
+		<label >&nbsp;</label><input type="submit" name="submit" value="Opslaan" />
 		<a href="{$nieuws_root}{$mededeling->getId()}" class="knop">annuleren</a>
 	</div>
 </form>

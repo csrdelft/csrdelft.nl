@@ -40,19 +40,19 @@ jQuery(document).ready(function($) {
 		});
 	});
 	$('td.auteur').hoverIntent(
-		function() {
-			$(this).find('a.forummodknop').fadeIn();
-		},
-		function() {
-			$(this).find('a.forummodknop').fadeOut();
-		}
+			function() {
+				$(this).find('a.forummodknop').fadeIn();
+			},
+			function() {
+				$(this).find('a.forummodknop').fadeOut();
+			}
 	);
 
-    //naar juiste forumreactie scrollen door hash toe te voegen
-    if(!window.location.hash && window.location.pathname.substr(0, 15) == '/forum/reactie/' ) {
-        var reactieid = parseInt(window.location.pathname.substr(15), 10);
-        window.location.hash = '#' + reactieid;
-    }
+	//naar juiste forumreactie scrollen door hash toe te voegen
+	if (!window.location.hash && window.location.pathname.substr(0, 15) == '/forum/reactie/') {
+		var reactieid = parseInt(window.location.pathname.substr(15), 10);
+		window.location.hash = '#' + reactieid;
+	}
 });
 var orig = null;
 function togglePasfotos(uids, div) {
@@ -94,9 +94,9 @@ function forumBewerken(postId) {
 			bewerkForm += 'Reden van bewerking: <input type="text" name="reden" style="width: 250px;"/><br /><br />';
 			bewerkForm += '<a style="float: right;" class="handje knop" onclick="$(\'#ubbhulpverhaal\').toggle();" title="Opmaakhulp weergeven">UBB</a>';
 			bewerkForm += '<a style="float: right;" class="handje knop" onclick="vergrootTextarea(\'forumBewerkBericht\', 10)" title="Vergroot het invoerveld"><strong>&uarr;&darr;</strong></a>';
-			bewerkForm += '<input type="button" value="opslaan" onclick="submitPost();" /> ' +
-					'<input type="button" value="voorbeeld" onclick="previewPost(\'forumBewerkBericht\', \'bewerkPreview\');" /> ' +
-					'<input type="button" value="terug" onclick="restorePost();" />';
+			bewerkForm += '<input type="button" value="Opslaan" onclick="submitPost();" /> ' +
+					'<input type="button" value="Voorbeeld" onclick="previewPost(\'forumBewerkBericht\', \'bewerkPreview\');" /> ' +
+					'<input type="button" value="Annuleren" onclick="restorePost();" />';
 			bewerkForm += '</form>';
 			bewerkDiv.innerHTML = bewerkForm;
 			document.getElementById('forumBewerkBericht').value = http.responseText;

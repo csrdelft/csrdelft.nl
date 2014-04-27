@@ -105,7 +105,7 @@
 		<textarea id="sbeschrijving" name="sbeschrijving" rows="7">{$groep->getSbeschrijving()|escape:'html'}</textarea>
 		<br />
 		<label for="submit"></label>
-		<input type="button" class="voorbeeld" value="voorbeeld" onclick="return previewPost('sbeschrijving', 'sbewerkPreview')" />
+		<input type="button" class="voorbeeld" value="Voorbeeld" onclick="return previewPost('sbeschrijving', 'sbewerkPreview')" />
 		<a class="handje knop extraknopjespreview" onclick="$('#ubbhulpverhaal').toggle();" title="Opmaakhulp weergeven">UBB</a>
 		<a class="handje knop extraknopjespreview" onclick="vergrootTextarea('sbeschrijving', 5)" title="Vergroot het invoerveld"><strong>&uarr;&darr;</strong></a><br />
 	{/if}
@@ -120,7 +120,7 @@
 		<label for="beschrijving"><strong>Lange beschrijving:</strong><br /><br />UBB staat aan.</label>
 		<textarea id="beschrijving" name="beschrijving" rows="15">{$groep->getBeschrijving()|escape:'html'}</textarea><br />
 		<label for="submit"></label>
-		<input type="button" class="voorbeeld" value="voorbeeld" onclick="return previewPost('beschrijving', 'bewerkPreview')" /> 
+		<input type="button" class="voorbeeld" value="Voorbeeld" onclick="return previewPost('beschrijving', 'bewerkPreview')" /> 
 		<a class="handje knop extraknopjespreview" onclick="$('#ubbhulpverhaal').toggle();" title="Opmaakhulp weergeven">UBB</a>
 		<a class="handje knop extraknopjespreview" onclick="vergrootTextarea('beschrijving', 10)" title="Vergroot het invoerveld"><strong>&uarr;&darr;</strong></a><br />
 	{/if}

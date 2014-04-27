@@ -35,13 +35,13 @@
 								</optgroup>
 							{/foreach}
 						</select>
-						<input type="submit" value="opslaan" />
+						<input type="submit" value="Opslaan" />
 					</form>
 					<br />
 					<form action="/forum/wijzigen/{$draad->draad_id}/titel" method="post">
 						<label for="titel">Titel aanpassen:</label>
 						<input type="text" name="titel" value="{$draad->titel}" style="width: 300px;" />
-						<input type="submit" value="opslaan" />
+						<input type="submit" value="Opslaan" />
 					</form>
 				</td>
 				<td style="width: 25px;">
