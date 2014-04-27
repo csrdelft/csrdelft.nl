@@ -159,6 +159,19 @@ function init_forms() {
 		$(this).unbind('keyup.esc');
 		$(this).bind('keyup.esc', form_esc);
 	});
+	// Resize popup to width of textarea
+	$('#popup .TextareaField').unbind('mousedown.resize');
+	$('#popup .TextareaField').bind('mousedown.resize', function() {
+		$(this).bind('mousemove.resize', function() {
+			var width = 7 + parseInt($(this).css('width'));
+			$('#popup').css('min-width', width);
+			$('#popup .InputField').css('min-width', width);
+		});
+	});
+	$('#popup .TextareaField').unbind('mouseup.resize');
+	$('#popup .TextareaField').bind('mouseup.resize', function() {
+		$(this).unbind('mousemove.resize');
+	});
 }
 
 function form_ischanged(form) {
