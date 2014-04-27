@@ -23,7 +23,7 @@
 	<table class="leden">
 		{foreach from=$groep->getLeden() item=groeplid}
 			<tr>
-				<td>{$groeplid.uid|csrnaam:'civitas'}</td>
+				<td>{$groeplid.uid|csrnaam:'civitas':'visitekaartje'}</td>
 				{if $groep->magBewerken() OR (LoginLid::instance()->getUid()==$groeplid.uid AND ($groep->getToonFuncties()=='tonen' OR $groep->getToonFuncties()=='verbergen'))}
 					<td id="bewerk_{$groep->getId()}|{$groeplid.uid}" class="inline_edit">
 						<span class="text">
