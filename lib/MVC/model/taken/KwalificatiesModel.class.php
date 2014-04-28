@@ -22,7 +22,7 @@ class KwalificatiesModel extends PersistenceModel {
 	}
 
 	public function getKwalificatiesVoorFunctie($fid) {
-		return $this->find('functie_id = ?', array($fid));
+		return $this->find('functie_id = ?', array($fid))->fetchAll();
 	}
 
 	/**
