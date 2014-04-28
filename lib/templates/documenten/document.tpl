@@ -14,9 +14,7 @@
 		{/foreach}
 	</select>
 	<p>&nbsp;</p>
-	{foreach from=$uploaders item=uploader}
-		{$uploader->view()}
-	{/foreach}
+	{$uploader->view()}
 	<p>&nbsp;</p>
 	<label class="meta">&nbsp;</label>
 	<input type="submit" value="Opslaan" />

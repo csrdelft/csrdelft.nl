@@ -1,6 +1,7 @@
 <?php
 
 require_once 'MVC/view/FormElement.abstract.php';
+require_once 'MVC/view/FileField.class.php';
 
 /**
  * Formulier.class.php
@@ -110,7 +111,7 @@ class Formulier implements View, Validator {
 	 */
 	public function isPosted() {
 		foreach ($this->getFields() as $field) {
-			if ($field instanceof InputField AND !($field->isPosted() OR $field instanceof VinkField)) {
+			if ($field instanceof InputField AND ! ($field->isPosted() OR $field instanceof VinkField)) {
 				return false;
 			}
 		}
@@ -128,7 +129,7 @@ class Formulier implements View, Validator {
 		}
 		$valid = true;
 		foreach ($this->getFields() as $field) {
-			if ($field instanceof InputField AND !$field->validate()) { // geen comments bijv.
+			if ($field instanceof InputField AND ! $field->validate()) { // geen comments bijv.
 				$valid = false; // niet gelijk retourneren om voor alle velden eventueel errors te zetten
 			}
 		}

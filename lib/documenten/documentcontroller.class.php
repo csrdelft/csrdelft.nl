@@ -1,7 +1,5 @@
 <?php
 
-require_once 'MVC/model/BestandUploader.class.php';
-require_once 'MVC/view/BestandUploaderView.class.php';
 require_once 'documenten/document.class.php';
 require_once 'documenten/categorie.class.php';
 require_once 'documenten/documentcontent.class.php';
@@ -138,26 +136,7 @@ class DocumentController extends Controller {
 			//maak een nieuw, leeg document aan.
 			$this->document = new Document(0);
 		}
-		if (isset($_POST['BestandUploader'])) {
-			$methode = filter_input(INPUT_POST, 'BestandUploader');
-		} else {
-			//debugprint($this->document); echo $this->document->hasFile() ? 'ja' : 'nee'; exit;
-			if ($this->document->hasFile()) {
-				$methode = 'BestandBehouden';
-			} else {
-				$methode = 'UploadHttp';
-			}
-		}
-		$uploaders = array(
-			'BestandBehouden' => new BestandBehouden($this->document->hasFile(), $this->document->getBestandsnaam(), $this->document->getSize()),
-			'UploadHttp' => new UploadHttp(),
-			'UploadFtp' => new UploadFtp('/documenten'),
-			'UploadUrl' => new UploadUrl()
-		);
-		if (!array_key_exists($methode, $uploaders)) {
-			throw new Exception('Niet ondersteunde uploadmethode. Heeft u er wel een gekozen?');
-		}
-		$this->uploader = $uploaders[$methode];
+		$this->uploader = new FileField('/documenten', $this->document->getBestand());
 
 		if ($this->isPosted()) {
 			$this->document->setNaam($_POST['naam']);
@@ -165,7 +144,7 @@ class DocumentController extends Controller {
 
 			if ($this->validate_document()) {
 				// Als we al een bestand hebben voor dit document, moet die natuurlijk eerst hdb.
-				if ($methode !== 'BestandBehouden') {
+				if ($this->uploader->getType() !== 'BestandBehouden') {
 					if ($this->document->hasFile()) {
 						try {
 							$this->document->deleteFile();
@@ -173,14 +152,15 @@ class DocumentController extends Controller {
 							invokeRefresh($this->baseurl, $e->getMessage());
 						}
 					}
-					$this->document->setBestandsnaam($this->uploader->getBestand()->bestandsnaam);
-					$this->document->setSize($this->uploader->getBestand()->size);
-					$this->document->setMimetype($this->uploader->getBestand()->mimetype);
+					$bestand = $this->uploader->getModel();
+					$this->document->setBestandsnaam($bestand->bestandsnaam);
+					$this->document->setSize($bestand->size);
+					$this->document->setMimetype($bestand->mimetype);
 				}
 
 				if ($this->document->save()) {
 					try {
-						if ($this->uploader->verplaatsBestand($this->document->getPath(), $this->document->getFilename())) {
+						if ($this->uploader->opslaan($this->document->getPath(), $this->document->getFilename())) {
 							$melding = array('Document met succes opgeslagen.', 1);
 						} else {
 							$melding = 'Fout bij het opslaan van het bestand in het bestandsysteem. Bewerk het document om het bestand alsnog toe te voegen.';
@@ -198,15 +178,7 @@ class DocumentController extends Controller {
 				$this->document->setCatID($_GET['catID']);
 			}
 		}
-		$views = array();
-		foreach ($uploaders as $class => $uploader) {
-			if ($uploader->isAvailable()) {
-				$selected = $methode === $class;
-				$class .= 'View';
-				$views[] = new $class($uploader, $selected);
-			}
-		}
-		$this->view = new DocumentContent($this->document, $views);
+		$this->view = new DocumentContent($this->document, $this->uploader);
 		setMelding($this->errors, -1);
 	}
 

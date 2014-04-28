@@ -13,12 +13,12 @@ require_once 'document.class.php';
 class DocumentContent extends TemplateView {
 
 	private $document;
-	private $uploaders;
+	private $uploader;
 
-	public function __construct(Document $document, $uploaders) {
+	public function __construct(Document $document, FileField $uploader) {
 		parent::__construct();
 		$this->document = $document;
-		$this->uploaders = $uploaders;
+		$this->uploader = $uploader;
 	}
 
 	public function getTitel() {
@@ -32,7 +32,7 @@ class DocumentContent extends TemplateView {
 	public function view() {
 		$this->smarty->assign('categorieen', DocumentenCategorie::getAll());
 		$this->smarty->assign('document', $this->document);
-		$this->smarty->assign('uploaders', $this->uploaders);
+		$this->smarty->assign('uploader', $this->uploader);
 		$this->smarty->display('documenten/document.tpl');
 	}
 

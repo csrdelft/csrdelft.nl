@@ -3160,7 +3160,6 @@ lib/MVC/controller/TakenModuleController.class.php -text
 lib/MVC/controller/taken/BeheerFunctiesController.class.php -text
 lib/MVC/model/AgendaModel.class.php -text
 lib/MVC/model/Agendeerbaar.interface.php -text
-lib/MVC/model/BestandUploader.class.php -text
 lib/MVC/model/CmsPaginaModel.class.php -text
 lib/MVC/model/Database.singleton.php -text
 lib/MVC/model/DatabaseAdmin.singleton.php -text
@@ -3216,12 +3215,12 @@ lib/MVC/model/entity/groepen/Woonoord.class.php -text
 lib/MVC/model/taken/FunctiesModel.class.php -text
 lib/MVC/model/taken/KwalificatiesModel.class.php -text
 lib/MVC/view/AgendaView.class.php -text
-lib/MVC/view/BestandUploaderView.class.php -text
 lib/MVC/view/CmsPaginaView.class.php -text
 lib/MVC/view/CsrLayout2Page.class.php -text
 lib/MVC/view/CsrLayoutPage.class.php -text
 lib/MVC/view/CsrSmarty.class.php -text
 lib/MVC/view/CsrUbb.class.php -text
+lib/MVC/view/FileField.class.php -text
 lib/MVC/view/FormElement.abstract.php -text
 lib/MVC/view/Formulier.class.php -text
 lib/MVC/view/ForumView.class.php -text

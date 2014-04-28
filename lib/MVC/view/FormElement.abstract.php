@@ -16,6 +16,7 @@
  * de class FormElement.
  * 
  * FormElement
+ *  - FileField						Bestand upload ketzer
  *  - InputField					Elementen die data leveren
  *  - SubmitButton					Submitten en resetten van het formulier
  *  - HtmlComment					Uitleg/commentaar in een formulier stoppen
