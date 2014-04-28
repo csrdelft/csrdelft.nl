@@ -23,20 +23,6 @@ div#melding {
 div.msgnotify {
 	color: #DDAA00;
 }
-a.knop {
-	color: inherit;
-	padding: 0px 4px;
-	margin: 1px;
-}
-a.disabled {
-	opacity: .33;
-	text-decoration: none;
-	cursor: default;
-}
-.knop img {
-	padding: 0px;
-	margin: 0px;
-}
 input {
 	padding: 2px !important;
 	margin: 0px !important;
@@ -119,6 +105,10 @@ div.vertical {
 .taken-tabel td {
 	padding: 2px 7px;
 	vertical-align: text-bottom;
+}
+.taken-tabel .knop {
+	padding: 0px 4px;
+	margin: 1px;
 }
 .taken-tabel .col-del {
 	padding: 2px;
