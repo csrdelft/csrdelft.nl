@@ -143,7 +143,7 @@ class CsrUbb extends eamBBParser {
 		if (Lid::isValidUid($citaat)) {
 			$lid = LidCache::getLid($citaat);
 			if ($lid instanceof Lid) {
-				$text .= ' van ' . $lid->getNaamLink('user', 'link');
+				$text .= ' van ' . $lid->getNaamLink('user', 'visitekaartje');
 			}
 		} elseif (array_key_exists('url', $arguments) AND startsWith($arguments['url'], 'http')) {
 			if ($citaat == '') {
