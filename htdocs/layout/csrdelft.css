@@ -1013,9 +1013,6 @@ a.forumGrootlink{
 	font-size: 1em;
 	font-weight: bold;
 }
-.forumGrootlink:hover{
-	color: black;
-}
 textarea.forumBericht{
 	height: 197px;
 	width: 574px;
