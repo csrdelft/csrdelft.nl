@@ -142,13 +142,13 @@ tr.taak-datum-head th, tr.taak-datum-summary th {
 .maaltijd-open, .maaltijd-aangemeld, .abonnement-ingeschakeld, .voorkeur-ingeschakeld, .taak-self, .functie-toegewezen { /* .taak-toegewezen */
 	background-color: #AAEEAA;
 	font-weight: bold;
-	color: green;
+	color: green !important;
 	text-align: center;
 }
 .maaltijd-gesloten, .maaltijd-afgemeld, .abonnement-uitgeschakeld, .voorkeur-uitgeschakeld, .functie-open { /* .taak-open */
 	background-color: #EEAAAA;
 	font-weight: bold;
-	color: red;
+	color: red !important;
 	text-align: center;
 }
 .taak-self {
