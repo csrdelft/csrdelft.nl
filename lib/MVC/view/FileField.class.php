@@ -147,7 +147,7 @@ class BestandBehouden extends BestandUploader {
 		if (!$this->selected) {
 			echo ' style="display: none;"';
 		}
-		echo '>' . $this->model->bestandsnaam . ' (' . format_filesize($this->model->size) . ')</div></div>';
+		echo '><div style="height: 2em;">' . $this->model->bestandsnaam . ' (' . format_filesize($this->model->size) . ')</div></div></div>';
 	}
 
 }
