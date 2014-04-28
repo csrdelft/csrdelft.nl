@@ -53,11 +53,11 @@ div.maaltijd-afgemeld {
 }
 a.maaltijd-aangemeld, span.maaltijd-aangemeld{
 	font-weight: bold;
-	color: green;
+	color: green !important;
 }
 a.maaltijd-afgemeld, span.maaltijd-afgemeld{
 	font-weight: bold;
-	color: red;
+	color: red !important;
 }
 
 .ubb_gmap {
