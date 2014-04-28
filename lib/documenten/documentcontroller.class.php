@@ -59,7 +59,7 @@ class DocumentController extends Controller {
 
 	public function addError($error) {
 		$this->valid = false;
-		$this->errors.=$error . '<br />';
+		$this->errors .= $error . '<br />';
 	}
 
 	/**
@@ -136,68 +136,56 @@ class DocumentController extends Controller {
 			//maak een nieuw, leeg document aan.
 			$this->document = new Document(0);
 		}
-		$this->uploader = new FileField('/documenten', $this->document->getBestand());
-
-		if ($this->isPosted()) {
-			$this->document->setNaam($_POST['naam']);
-			$this->document->setCatID($_POST['categorie']);
-
-			if ($this->validate_document()) {
-				// Als we al een bestand hebben voor dit document, moet die natuurlijk eerst hdb.
-				if ($this->uploader->getType() !== 'BestandBehouden') {
-					if ($this->document->hasFile()) {
-						try {
-							$this->document->deleteFile();
-						} catch (Exception $e) {
-							invokeRefresh($this->baseurl, $e->getMessage());
-						}
-					}
-					$bestand = $this->uploader->getModel();
-					$this->document->setBestandsnaam($bestand->bestandsnaam);
-					$this->document->setSize($bestand->size);
-					$this->document->setMimetype($bestand->mimetype);
-				}
-
-				if ($this->document->save()) {
+		if (isset($_GET['catID']) AND DocumentenCategorie::exists($_GET['catID'])) {
+			$this->document->setCatID($_GET['catID']);
+		}
+		$namen = array();
+		foreach (DocumentenCategorie::getAll() as $id => $cat) {
+			$namen[$id] = $cat->getNaam();
+		}
+		$fields['naam'] = new RequiredTextField('naam', $this->document->getNaam(), 'Documentnaam');
+		$fields['catID'] = new SelectField('catID', $this->document->getCatID(), 'Categorie', $namen);
+		$fields['uploader'] = new FileField('/documenten', $this->document->getBestand());
+		$fields[] = new SubmitResetCancel('/communicatie/documenten/');
+		$formulier = new Formulier($this->document, 'documentForm', '/communicatie/documenten/bewerken/' . $this->document->getId(), $fields);
+		$formulier->enctype = 'multipart/form-data';
+		if ($this->isPosted() AND $formulier->validate()) {
+			$this->document->setNaam($fields['naam']->getValue());
+			$this->document->setCatID($fields['catID']->getValue());
+			// Als we al een bestand hebben voor dit document, moet die natuurlijk eerst hdb.
+			if ($fields['uploader']->getType() !== 'BestandBehouden') {
+				if ($this->document->hasFile()) {
 					try {
-						if ($this->uploader->opslaan($this->document->getPath(), $this->document->getFilename())) {
-							$melding = array('Document met succes opgeslagen.', 1);
-						} else {
-							$melding = 'Fout bij het opslaan van het bestand in het bestandsysteem. Bewerk het document om het bestand alsnog toe te voegen.';
-						}
+						$this->document->deleteFile();
 					} catch (Exception $e) {
-						$melding = 'Bestand aan document toevoegen mislukt: ' . $e->getMessage();
+						invokeRefresh($this->baseurl, $e->getMessage());
 					}
-				} else {
-					$melding = 'Fout bij toevoegen van document Document::save()';
 				}
-				invokeRefresh($this->baseurl, $melding);
+				$bestand = $this->uploader->getModel();
+				$this->document->setBestandsnaam($bestand->bestandsnaam);
+				$this->document->setSize($bestand->size);
+				$this->document->setMimetype($bestand->mimetype);
 			}
-		} else {
-			if (isset($_GET['catID']) AND DocumentenCategorie::exists($_GET['catID'])) {
-				$this->document->setCatID($_GET['catID']);
+			if ($this->document->save()) {
+				try {
+					if ($fields['uploader']->opslaan($this->document->getPath(), $this->document->getFilename())) {
+						$melding = array('Document met succes opgeslagen.', 1);
+					} else {
+						$melding = 'Fout bij het opslaan van het bestand in het bestandsysteem. Bewerk het document om het bestand alsnog toe te voegen.';
+					}
+				} catch (Exception $e) {
+					$melding = 'Bestand aan document toevoegen mislukt: ' . $e->getMessage();
+				}
+			} else {
+				$melding = 'Fout bij toevoegen van document Document::save()';
 			}
+			invokeRefresh($this->baseurl, $melding);
 		}
-		$this->view = new DocumentContent($this->document, $this->uploader);
+		if ($fields['uploader']->getError() != '') {
+			$this->addError($fields['uploader']->getError());
+		}
+		$this->view = new DocumentContent($formulier);
 		setMelding($this->errors, -1);
-	}
-
-	private function validate_document() {
-		if (isset($_POST['naam'], $_POST['categorie'])) {
-			if (strlen(trim($_POST['naam'])) < 3) {
-				$this->addError('Naam moet tenminste 3 tekens bevatten');
-			}
-			if ($_POST['BestandUploader'] === 'BestandBehouden' AND ! $this->document->hasFile()) {
-				$this->addError('Dit document heeft nog geen bestand, dus dat kan ook niet behouden worden.');
-			}
-			//kijken of we errors hebben in de huidige methode.
-			if (!$this->uploader->validate()) {
-				$this->addError($this->uploader->getError());
-			}
-		} else {
-			$this->addError('Formulier niet compleet');
-		}
-		return $this->valid;
 	}
 
 }

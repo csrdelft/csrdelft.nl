@@ -30,7 +30,8 @@ class Formulier implements View, Validator {
 
 	protected $model;
 	protected $formId;
-	protected $action;
+	public $action = null;
+	public $enctype = null;
 	/**
 	 * Fields must be added via addFields()
 	 * or insertElementBefore() methods,
@@ -57,14 +58,6 @@ class Formulier implements View, Validator {
 
 	public function getFormId() {
 		return $this->formId;
-	}
-
-	public function setAction($action) {
-		$this->action = $action;
-	}
-
-	public function getAction() {
-		return $this->action;
 	}
 
 	public function getFields() {
@@ -129,7 +122,7 @@ class Formulier implements View, Validator {
 		}
 		$valid = true;
 		foreach ($this->getFields() as $field) {
-			if ($field instanceof InputField AND ! $field->validate()) { // geen comments bijv.
+			if ($field instanceof Validator AND ! $field->validate()) { // geen comments bijv.
 				$valid = false; // niet gelijk retourneren om voor alle velden eventueel errors te zetten
 			}
 		}
@@ -145,7 +138,7 @@ class Formulier implements View, Validator {
 			if ($field instanceof InputField) {
 				$propName = $field->getName();
 				$values[$propName] = $field->getValue();
-				if (isset($this->model) AND property_exists($this->model, $propName)) {
+				if ($this->model instanceof PersistentEntity AND property_exists($this->model, $propName)) {
 					$this->model->$propName = $values[$propName];
 				}
 			}
@@ -171,8 +164,11 @@ class Formulier implements View, Validator {
 	 */
 	public function view() {
 		echo '<form';
-		if ($this->getAction() != null) {
-			echo ' action="' . $this->getAction() . '"';
+		if ($this->action !== null) {
+			echo ' action="' . $this->action . '"';
+		}
+		if ($this->enctype !== null) {
+			echo ' enctype="' . $this->enctype . '"';
 		}
 		echo ' id="' . $this->getFormId() . '" class="' . implode(' ', $this->css_classes) . '" method="post">' . "\n";
 		foreach ($this->getFields() as $field) {
@@ -206,7 +202,7 @@ class InlineForm extends Formulier {
 
 	public function view($tekst = false) {
 		echo '<div id="inline-' . $this->getFormId() . '">';
-		echo '<form id="' . $this->getFormId() . '" action="' . $this->getAction() . '" method="post" class="Formulier InlineForm">';
+		echo '<form id="' . $this->getFormId() . '" action="' . $this->action . '" method="post" class="Formulier InlineForm">';
 		echo $this->fields[0]->view();
 		echo '<div class="FormToggle">' . $this->fields[0]->getValue() . '</div>';
 		echo '<a class="knop submit" title="Opslaan"><img width="16" height="16" class="icon" alt="submit" src="' . CSR_PICS . '/famfamfam/accept.png">' . ($tekst ? ' Opslaan ' : '') . '</a>';

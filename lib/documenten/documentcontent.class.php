@@ -10,19 +10,20 @@ require_once 'document.class.php';
 /**
  * Weergeven van één document, bijvoorbeeld toevoegen/bewerken.
  */
-class DocumentContent extends TemplateView {
+class DocumentContent implements view {
 
-	private $document;
-	private $uploader;
+	private $form;
 
-	public function __construct(Document $document, FileField $uploader) {
-		parent::__construct();
-		$this->document = $document;
-		$this->uploader = $uploader;
+	public function __construct(Formulier $documentForm) {
+		$this->form = $documentForm;
+	}
+
+	public function getModel() {
+		return $this->form->getModel();
 	}
 
 	public function getTitel() {
-		if ($this->document->getID() == 0) {
+		if ($this->getModel()->getID() == 0) {
 			return 'Document toevoegen';
 		} else {
 			return 'Document bewerken';
@@ -30,10 +31,9 @@ class DocumentContent extends TemplateView {
 	}
 
 	public function view() {
-		$this->smarty->assign('categorieen', DocumentenCategorie::getAll());
-		$this->smarty->assign('document', $this->document);
-		$this->smarty->assign('uploader', $this->uploader);
-		$this->smarty->display('documenten/document.tpl');
+		echo SimpleHtml::getMelding();
+		echo '<h1>' . $this->getTitel() . '</h1>';
+		$this->form->view();
 	}
 
 }

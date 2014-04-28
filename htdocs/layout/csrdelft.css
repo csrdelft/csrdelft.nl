@@ -755,13 +755,24 @@ input, textarea, select{
 	position: absolute;
 	margin-left: -25px;
 }
+.Formulier input[type="radio"], .Formulier input[type="checkbox"]{
+	height: 2em;
+    vertical-align: middle;
+}
+.Formulier input[type="file"]{
+	border: none;
+}
+.Formulier .UploadKeuze{
+	margin-left: 150px;
+	margin-top: -20px;
+}
 .Formulier input, .Formulier textarea{
 	padding: 2px;
 }
 .Formulier input[type="text"]{
 	width: 250px;
 }
-.Formulier textarea {
+.Formulier textarea{
 	width: 250px;
 	height: 150px;
 }

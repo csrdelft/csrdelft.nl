@@ -3,13 +3,6 @@
  */
 jQuery(document).ready(function($) {
 
-	jQuery('.BestandUploaderOptie').change(function() {
-		var optie = jQuery('input.BestandUploaderOptie:checked').parent();
-		optie = jQuery('div.UploadKeuze', optie);
-		jQuery('div.UploadKeuze').not(optie).fadeOut(250);
-		optie.fadeIn(250);
-	});
-
 	//tabellen naar zebra converteren.
 	$("#documenten tr:odd").addClass('odd');
 

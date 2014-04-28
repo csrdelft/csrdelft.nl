@@ -574,8 +574,7 @@ class LidField extends TextField {
 	 * meteen te vullen.
 	 */
 	public function getJavascript() {
-		$js = parent::getJavascript();
-		$js.=<<<JS
+		return $parent::getJavascript() . <<<JS
 $('.wantsLidPreview').each(function(index, tag){
 	var suggesties=FieldSuggestions[$(this).attr('id').substring(6)].split("/");
 	$(this).after('<div id="lidPreview_'+$(this).attr('id').substring(6)+'" class="lidPreview" />');
@@ -595,7 +594,6 @@ $('.wantsLidPreview').each(function(index, tag){
 	}).keyup();
 });
 JS;
-		return $js;
 	}
 
 }
@@ -983,7 +981,7 @@ JS;
 		//We voegen een keyup-event toe dat bij elke enter een nieuwe
 		//preview opvraagt.
 		if ($this->previewOnEnter) {
-			$js.=<<<JS
+			$js .= <<<JS
 	textarea.keyup(
 		function(event){
 			if(event.keyCode==13){ //enter == 13
@@ -993,7 +991,7 @@ JS;
 JS;
 		}
 		//en de .each() nog afsluiten
-		$js.="});\n";
+		$js .= "});\n";
 		return $js;
 	}
 

@@ -62,6 +62,19 @@ class FileField extends FormElement implements Validator {
 		}
 	}
 
+	public function getJavascript() {
+		return <<<JS
+jQuery('input.UploadOptie').change(function() {
+	var optie = jQuery('input.UploadOptie:checked');
+	optie.css('visibility', 'hidden');
+	jQuery('input.UploadOptie').not(optie).css('visibility', 'visible');
+	var keuze = jQuery('div.UploadKeuze', optie.parent());
+	jQuery('div.UploadKeuze').not(keuze).slideUp(250);
+	keuze.slideDown(250);
+});
+JS;
+	}
+
 }
 
 abstract class BestandUploader extends InputField {
@@ -69,7 +82,7 @@ abstract class BestandUploader extends InputField {
 	public $selected = false;
 
 	public function __construct(Bestand $bestand = null) {
-		parent::__construct('BestandUploader', null, 'Bestand uploaden', $bestand);
+		parent::__construct(get_class($this), null, 'Bestand uploaden', $bestand);
 	}
 
 	public function isPosted() {
@@ -106,7 +119,13 @@ class BestandBehouden extends BestandUploader {
 	}
 
 	public function validate() {
-		return $this->isBeschikbaar();
+		if (!parent::validate()) {
+			return false;
+		}
+		if (!$this->isBeschikbaar()) {
+			$this->error = 'Dit document heeft nog geen bestand, dus dat kan ook niet behouden worden.';
+		}
+		return $this->error === '';
 	}
 
 	public function opslaan($destination, $filename) {
@@ -114,9 +133,10 @@ class BestandBehouden extends BestandUploader {
 	}
 
 	public function getLabel() {
-		$label = '<input type="radio" class="BestandUploaderOptie" name="BestandUploader" id="BestandBehoudenInput" value="BestandBehouden"';
+		$label = '<input type="radio" class="UploadOptie" name="BestandUploader" id="BestandBehoudenInput" value="BestandBehouden"';
 		if ($this->selected) {
 			$label .= ' checked="checked"';
+			$label .= ' style="visibility: hidden;"';
 		}
 		return $label . ' /><label for="BestandBehoudenInput"> Huidig bestand behouden</label>';
 	}
@@ -174,9 +194,10 @@ class UploadHttp extends BestandUploader {
 	}
 
 	public function getLabel() {
-		$label = '<input type="radio" class="BestandUploaderOptie" name="BestandUploader" id="UploadHttpInput" value="UploadHttp"';
+		$label = '<input type="radio" class="UploadOptie" name="BestandUploader" id="UploadHttpInput" value="UploadHttp"';
 		if ($this->selected) {
 			$label .= ' checked="checked"';
+			$label .= ' style="visibility: hidden;"';
 		}
 		return $label . ' /><label for="UploadHttpInput"> Uploaden in browser</label>';
 	}
@@ -249,7 +270,6 @@ class UploadFtp extends BestandUploader {
 		if (!parent::validate()) {
 			return false;
 		}
-		echo $this->path . $this->value;
 		if (!file_exists($this->path . $this->value)) {
 			$this->error = 'Bestand is niet aanwezig in de publieke FTP-map';
 		}
@@ -272,9 +292,10 @@ class UploadFtp extends BestandUploader {
 	}
 
 	public function getLabel() {
-		$label = '<input type="radio" class="BestandUploaderOptie" name="BestandUploader" id="UploadFtpInput" value="UploadFtp"';
+		$label = '<input type="radio" class="UploadOptie" name="BestandUploader" id="UploadFtpInput" value="UploadFtp"';
 		if ($this->selected) {
 			$label .= ' checked="checked"';
+			$label .= ' style="visibility: hidden;"';
 		}
 		return $label . ' /><label for="UploadFtpInput"> Uit publieke FTP-map</label>';
 	}
@@ -295,7 +316,7 @@ class UploadFtp extends BestandUploader {
 				}
 				echo '>' . htmlspecialchars($filename) . '</option>';
 			}
-			echo '</select><br /><input type="checkbox" name="verwijderVanFtp" id="verwijderVanFtp" checked="checked" style="width: auto; margin-top: 5px;" /><label for="verwijderVanFtp"> Bestand verwijderen uit FTP-map</label>';
+			echo '</select><br /><input type="checkbox" name="verwijderVanFtp" id="verwijderVanFtp" checked="checked" /><label for="verwijderVanFtp" style="float: none;"> Bestand verwijderen uit FTP-map</label>';
 		} else {
 			echo 'Geen bestanden gevonden in:<br />ftp://csrdelft.nl/incoming/csrdelft' . $this->subdir;
 		}
@@ -384,9 +405,10 @@ class UploadUrl extends BestandUploader {
 	}
 
 	public function getLabel() {
-		$label = '<input type="radio" class="BestandUploaderOptie" name="BestandUploader" id="UploadUrlInput" value="UploadUrl"';
+		$label = '<input type="radio" class="UploadOptie" name="BestandUploader" id="UploadUrlInput" value="UploadUrl"';
 		if ($this->selected) {
 			$label .= ' checked="checked"';
+			$label .= ' style="visibility: hidden;"';
 		}
 		return $label . ' /><label for="UploadUrlInput"> Downloaden van URL</label>';
 	}
