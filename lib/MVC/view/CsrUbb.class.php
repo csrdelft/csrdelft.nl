@@ -184,7 +184,7 @@ class CsrUbb extends eamBBParser {
 		if (Lid::isValidUid($uid)) {
 			$lid = LidCache::getLid($uid);
 			if ($lid instanceof Lid) {
-				return $lid->getNaamLink('user', 'link');
+				return $lid->getNaamLink('user', 'visitekaartje');
 			} else {
 				return '[lid] Dit lid bestaat niet (' . mb_htmlentities($uid) . ').<br />';
 			}
