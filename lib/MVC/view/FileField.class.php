@@ -316,7 +316,11 @@ class UploadFtp extends BestandUploader {
 				}
 				echo '>' . htmlspecialchars($filename) . '</option>';
 			}
-			echo '</select><br /><input type="checkbox" name="verwijderVanFtp" id="verwijderVanFtp" checked="checked" /><label for="verwijderVanFtp" style="float: none;"> Bestand verwijderen uit FTP-map</label>';
+			echo '</select><br /><input type="checkbox" name="verwijderVanFtp" id="verwijderVanFtp"';
+			if ($this->isPosted() AND array_key_exists('verwijderVanFtp', $_POST)) {
+				echo ' checked="checked"';
+			}
+			echo ' /><label for="verwijderVanFtp" style="float: none;"> Bestand verwijderen uit FTP-map</label>';
 		} else {
 			echo 'Geen bestanden gevonden in:<br />ftp://csrdelft.nl/incoming/csrdelft' . $this->subdir;
 		}
