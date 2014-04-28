@@ -161,7 +161,7 @@ class DocumentController extends Controller {
 						invokeRefresh($this->baseurl, $e->getMessage());
 					}
 				}
-				$bestand = $this->uploader->getModel();
+				$bestand = $fields['uploader']->getModel();
 				$this->document->setBestandsnaam($bestand->bestandsnaam);
 				$this->document->setSize($bestand->size);
 				$this->document->setMimetype($bestand->mimetype);
