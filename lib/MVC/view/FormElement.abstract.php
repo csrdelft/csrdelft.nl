@@ -574,7 +574,7 @@ class LidField extends TextField {
 	 * meteen te vullen.
 	 */
 	public function getJavascript() {
-		return $parent::getJavascript() . <<<JS
+		return parent::getJavascript() . <<<JS
 $('.wantsLidPreview').each(function(index, tag){
 	var suggesties=FieldSuggestions[$(this).attr('id').substring(6)].split("/");
 	$(this).after('<div id="lidPreview_'+$(this).attr('id').substring(6)+'" class="lidPreview" />');

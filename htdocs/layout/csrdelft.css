@@ -758,8 +758,8 @@ input, textarea, select{
 .Formulier input[type="file"]{
 	border: none;
 }
-.Formulier input[type="radio"], .Formulier input[type="checkbox"]{
-	height: 2em;
+.Formulier .UploadOptie{
+	min-height: 2em;
     vertical-align: middle;
 }
 .Formulier .UploadKeuze{
@@ -815,9 +815,6 @@ input, textarea, select{
 .Formulier input.IntField, .Formulier input.FloatField {
 	width: 40px;
 	text-align: right;
-}
-.Formulier input.VinkField {
-	margin-top: 4px !important;
 }
 .Formulier .metFouten{
 	background-color: #FFC3CE;

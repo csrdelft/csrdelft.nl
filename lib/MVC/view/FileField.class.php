@@ -316,8 +316,8 @@ class UploadFtp extends BestandUploader {
 				}
 				echo '>' . htmlspecialchars($filename) . '</option>';
 			}
-			echo '</select><br /><input type="checkbox" name="verwijderVanFtp" id="verwijderVanFtp"';
-			if ($this->isPosted() AND array_key_exists('verwijderVanFtp', $_POST)) {
+			echo '</select><br /><input type="checkbox" name="verwijderVanFtp" id="verwijderVanFtp" style="vertical-align: middle;"';
+			if (!$this->isPosted() OR array_key_exists('verwijderVanFtp', $_POST)) {
 				echo ' checked="checked"';
 			}
 			echo ' /><label for="verwijderVanFtp" style="float: none;"> Bestand verwijderen uit FTP-map</label>';
