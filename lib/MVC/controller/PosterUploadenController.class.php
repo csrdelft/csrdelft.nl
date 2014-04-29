@@ -29,6 +29,7 @@ class PosterUploadenController extends AclController {
 			}
 		}
 		$fields['album'] = new SelectField('album', null, 'Album', array_reverse($dirs));
+		$fields['naam'] = new RequiredTextField('naam', null, 'Posternaam');
 		$fields['uploader'] = new FileField('/posters', null, array('image/jpeg'));
 		$fields[] = new Subkopje('Alleen jpeg afbeeldingen.');
 		$fields['knoppen'] = new SubmitResetCancel('/actueel/fotoalbum/');
@@ -40,7 +41,7 @@ class PosterUploadenController extends AclController {
 			try {
 				$map = PICS_PATH . '/fotoalbum/' . $fields['album']->getValue() . '/Posters/';
 				if (file_exists($map)) {
-					if ($fields['uploader']->opslaan($map, $fields['uploader']->getModel()->bestandsnaam)) {
+					if ($fields['uploader']->opslaan($map, $fields['naam']->getValue() . '.jpg')) {
 						$map = $fields['album']->getValue() . '/Posters';
 						require_once 'fotoalbum.class.php';
 						require_once 'fotoalbumcontent.class.php';
