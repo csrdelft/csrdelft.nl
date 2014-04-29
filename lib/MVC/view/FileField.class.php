@@ -12,14 +12,16 @@ require_once 'MVC/model/entity/Bestand.class.php';
 class FileField extends FormElement implements Validator {
 
 	protected $methode;
+	protected $filter;
 
-	public function __construct($ftpSubDir = '', Bestand $behouden = null) {
+	public function __construct($ftpSubDir = '', Bestand $behouden = null, array $filterType = array()) {
 		parent::__construct(array(
 			'BestandBehouden' => new BestandBehouden($behouden),
 			'UploadHttp' => new UploadHttp(),
 			'UploadFtp' => new UploadFtp($ftpSubDir),
 			'UploadUrl' => new UploadUrl()
 		));
+		$this->filter = $filterType;
 		foreach ($this->model as $methode => $uploader) {
 			if (!$uploader->isBeschikbaar()) {
 				unset($this->model[$methode]);
@@ -51,6 +53,9 @@ class FileField extends FormElement implements Validator {
 	}
 
 	public function validate() {
+		if (sizeof($this->filter) > 0 AND ! in_array($this->getModel()->mimetype, $this->filter)) {
+			$this->model[$this->methode]->error = 'Ongeldig bestandstype: ' . $this->getModel()->mimetype;
+		}
 		return $this->model[$this->methode]->validate();
 	}
 
@@ -178,11 +183,11 @@ class UploadHttp extends BestandUploader {
 		if (!parent::validate()) {
 			return false;
 		}
-		if ($this->value['error'] == 1) {
+		if ($this->value['error'] == UPLOAD_ERR_INI_SIZE) {
 			$this->error = 'Bestand is te groot: Maximaal ' . ini_get('upload_max_filesize') . 'B';
-		} elseif ($this->value['error'] == 4) {
+		} elseif ($this->value['error'] == UPLOAD_ERR_NO_FILE) {
 			$this->error = 'Selecteer een bestand';
-		} elseif ($this->value['error'] != 0) {
+		} elseif ($this->value['error'] != UPLOAD_ERR_OK) {
 			$this->error = 'Upload-error: error-code: ' . $this->value['error'];
 		}
 		return $this->error === '';
