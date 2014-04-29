@@ -1,6 +1,5 @@
 <?php
 
-
 require_once 'MVC/controller/AclController.abstract.php';
 require_once 'taken/model/TakenModel.class.php';
 require_once 'taken/model/CorveeRepetitiesModel.class.php';
@@ -24,8 +23,7 @@ class BeheerTakenController extends AclController {
 				'maaltijd' => 'P_CORVEE_MOD',
 				'herinneren' => 'P_CORVEE_MOD'
 			);
-		}
-		else {
+		} else {
 			$this->acl = array(
 				'nieuw' => 'P_CORVEE_MOD',
 				'bewerk' => 'P_CORVEE_MOD',
@@ -49,18 +47,16 @@ class BeheerTakenController extends AclController {
 		}
 		$this->performAction(array($tid));
 	}
-	
-	public function beheer($tid=null, $mid=null) {
+
+	public function beheer($tid = null, $mid = null) {
 		$popup = null;
 		if (is_int($tid) && $tid > 0) {
 			$this->bewerk($tid);
 			$popup = $this->getContent();
-		}
-		elseif (is_int($mid) && $mid > 0) {
+		} elseif (is_int($mid) && $mid > 0) {
 			$maaltijd = MaaltijdenModel::getMaaltijd($mid, true);
 			$taken = TakenModel::getTakenVoorMaaltijd($mid, true);
-		}
-		else {
+		} else {
 			$taken = TakenModel::getAlleTaken();
 			$maaltijd = null;
 		}
@@ -72,18 +68,18 @@ class BeheerTakenController extends AclController {
 		$this->view->addScript('taken.js');
 		$this->view->popup = $popup;
 	}
-	
+
 	public function maaltijd($mid) {
 		$this->beheer(null, $mid);
 	}
-	
+
 	public function prullenbak() {
 		$this->view = new BeheerTakenView(TakenModel::getVerwijderdeTaken(), null, true);
 		$this->view = new CsrLayoutPage($this->getContent());
 		$this->view->addStylesheet('taken.css');
 		$this->view->addScript('taken.js');
 	}
-	
+
 	public function herinneren() {
 		require_once 'taken/model/HerinneringenModel.class.php';
 		$verstuurd_errors = HerinneringenModel::stuurHerinneringen();
@@ -92,29 +88,28 @@ class BeheerTakenController extends AclController {
 		$aantal = sizeof($verstuurd);
 		$count = sizeof($errors);
 		if ($count > 0) {
-			setMelding($count .' herinnering'. ($count !== 1 ? 'en' : '') .' niet kunnen versturen!', -1);
+			setMelding($count . ' herinnering' . ($count !== 1 ? 'en' : '') . ' niet kunnen versturen!', -1);
 			foreach ($errors as $error) {
 				setMelding($error->getMessage(), 2); // toon wat fout is gegaan
 			}
 		}
 		if ($aantal > 0) {
-			setMelding($aantal .' herinnering'. ($aantal !== 1 ? 'en' : '') .' verstuurd!', 1);
+			setMelding($aantal . ' herinnering' . ($aantal !== 1 ? 'en' : '') . ' verstuurd!', 1);
 			foreach ($verstuurd as $melding) {
 				setMelding($melding, 1); // toon wat goed is gegaan
 			}
-		}
-		else {
+		} else {
 			setMelding('Geen herinneringen verstuurd.', 0);
 		}
 		invokeRefresh(Instellingen::get('taken', 'url'));
 	}
-	
-	public function nieuw($mid=null) {
+
+	public function nieuw($mid = null) {
 		if ($mid !== null) {
 			$maaltijd = MaaltijdenModel::getMaaltijd($mid);
 			$beginDatum = $maaltijd->getDatum();
 		}
-		if (array_key_exists('crid', $_POST)) {
+		if (isset($_POST['crid'])) {
 			$crid = (int) filter_input(INPUT_POST, 'crid', FILTER_SANITIZE_NUMBER_INT);
 			$repetitie = CorveeRepetitiesModel::getRepetitie($crid);
 			if ($mid === null) {
@@ -123,18 +118,17 @@ class BeheerTakenController extends AclController {
 				$shift = $repetitie->getDagVanDeWeek() - date('w', $datum) + 7;
 				$shift %= 7;
 				if ($shift > 0) {
-					$datum = strtotime('+'. $shift .' days', $datum);
+					$datum = strtotime('+' . $shift . ' days', $datum);
 				}
 				$beginDatum = date('Y-m-d', $datum);
-				
+
 				if ($repetitie->getPeriodeInDagen() > 0) {
 					$this->view = new RepetitieCorveeFormView($repetitie, $beginDatum, $beginDatum); // fetches POST values itself
 					return;
 				}
 			}
 			$this->view = new TaakFormView(0, $repetitie->getFunctieId(), null, $crid, $mid, $beginDatum, $repetitie->getStandaardPunten(), 0); // fetches POST values itself
-		}
-		else {
+		} else {
 			$taak = new CorveeTaak();
 			if (isset($beginDatum)) {
 				$taak->setDatum($beginDatum);
@@ -142,17 +136,16 @@ class BeheerTakenController extends AclController {
 			$this->view = new TaakFormView($taak->getTaakId(), $taak->getFunctieId(), $taak->getLidId(), $taak->getCorveeRepetitieId(), $mid, $taak->getDatum(), null, $taak->getBonusMalus()); // fetches POST values itself
 		}
 	}
-	
+
 	public function bewerk($tid) {
 		$taak = TakenModel::getTaak($tid);
 		$this->view = new TaakFormView($taak->getTaakId(), $taak->getFunctieId(), $taak->getLidId(), $taak->getCorveeRepetitieId(), $taak->getMaaltijdId(), $taak->getDatum(), $taak->getPunten(), $taak->getBonusMalus()); // fetches POST values itself
 	}
-	
+
 	public function opslaan($tid) {
 		if ($tid > 0) {
 			$this->bewerk($tid);
-		}
-		else {
+		} else {
 			$this->view = new TaakFormView($tid); // fetches POST values itself
 		}
 		if ($this->view->validate()) {
@@ -162,23 +155,23 @@ class BeheerTakenController extends AclController {
 			$mid = ($values['maaltijd_id'] === 0 ? null : $values['maaltijd_id']);
 			$taak = TakenModel::saveTaak($tid, intval($values['functie_id']), $uid, $crid, $mid, $values['datum'], intval($values['punten']), intval($values['bonus_malus']));
 			$maaltijd = null;
-			if (endsWith($_SERVER['HTTP_REFERER'], Instellingen::get('taken', 'url') .'/maaltijd/'. $values['maaltijd_id'])) { // state of gui
+			if (endsWith($_SERVER['HTTP_REFERER'], Instellingen::get('taken', 'url') . '/maaltijd/' . $values['maaltijd_id'])) { // state of gui
 				$maaltijd = MaaltijdenModel::getMaaltijd($mid);
 			}
 			$this->view = new BeheerTakenView($taak, $maaltijd);
 		}
 	}
-	
+
 	public function verwijder($tid) {
 		TakenModel::verwijderTaak($tid);
 		$this->view = new BeheerTakenView($tid);
 	}
-	
+
 	public function herstel($tid) {
 		$taak = TakenModel::herstelTaak($tid);
 		$this->view = new BeheerTakenView($taak->getTaakId());
 	}
-	
+
 	public function toewijzen($tid) {
 		$taak = TakenModel::getTaak($tid);
 		$InputField = new LidField('lid_id', null, null, 'leden'); // fetches POST values itself
@@ -190,42 +183,41 @@ class BeheerTakenController extends AclController {
 			$taak = TakenModel::getTaak($tid);
 			TakenModel::taakToewijzenAanLid($taak, $uid);
 			$this->view = new BeheerTakenView($taak);
-		}
-		else {
+		} else {
 			require_once 'taken/model/ToewijzenModel.class.php';
 			require_once 'taken/view/forms/ToewijzenFormView.class.php';
-			
+
 			$suggesties = ToewijzenModel::getSuggesties($taak);
 			$this->view = new ToewijzenFormView($taak, $suggesties); // fetches POST values itself
 		}
 	}
-	
+
 	public function puntentoekennen($tid) {
 		$taak = TakenModel::getTaak($tid);
 		TakenModel::puntenToekennen($taak);
 		$this->view = new BeheerTakenView($taak);
 	}
-	
+
 	public function puntenintrekken($tid) {
 		$taak = TakenModel::getTaak($tid);
 		TakenModel::puntenIntrekken($taak);
 		$this->view = new BeheerTakenView($taak);
 	}
-	
+
 	public function email($tid) {
 		$taak = TakenModel::getTaak($tid);
 		require_once 'taken/model/HerinneringenModel.class.php';
 		HerinneringenModel::stuurHerinnering($taak);
 		$this->view = new BeheerTakenView($taak);
 	}
-	
+
 	public function leegmaken() {
 		$aantal = TakenModel::prullenbakLeegmaken();
-		invokeRefresh(Instellingen::get('taken', 'url') .'/prullenbak', $aantal . ($aantal === 1 ? ' taak' : ' taken') .' definitief verwijderd.', ($aantal === 0 ? 0 : 1 ));
+		invokeRefresh(Instellingen::get('taken', 'url') . '/prullenbak', $aantal . ($aantal === 1 ? ' taak' : ' taken') . ' definitief verwijderd.', ($aantal === 0 ? 0 : 1));
 	}
-	
+
 	// Repetitie-Taken ############################################################
-	
+
 	public function aanmaken($crid) {
 		$repetitie = CorveeRepetitiesModel::getRepetitie($crid);
 		$form = new RepetitieCorveeFormView($repetitie); // fetches POST values itself
@@ -237,11 +229,11 @@ class BeheerTakenController extends AclController {
 				throw new Exception('Geen nieuwe taken aangemaakt');
 			}
 			$this->view = new BeheerTakenView($taken);
-		}
-		else {
+		} else {
 			$this->view = $form;
 		}
 	}
+
 }
 
 ?>

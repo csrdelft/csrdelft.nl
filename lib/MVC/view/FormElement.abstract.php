@@ -120,7 +120,7 @@ abstract class InputField extends FormElement implements Validator {
 	}
 
 	public function isPosted() {
-		return array_key_exists($this->name, $_POST);
+		return isset($_POST[$this->name]);
 	}
 
 	/**

@@ -14,7 +14,7 @@ class ForumController extends Controller {
 
 	public function __construct($query) {
 		parent::__construct($query);
-		if (!array_key_exists('forum_concept', $_SESSION)) {
+		if (!isset($_SESSION['forum_concept'])) {
 			$_SESSION['forum_concept'] = '';
 		}
 		try {
@@ -145,7 +145,7 @@ class ForumController extends Controller {
 	 */
 	public function deel($id, $pagina = 1) {
 		$deel = ForumDelenModel::instance()->getForumDeel((int) $id);
-		if (!$deel OR !$deel->magLezen()) { // geen exceptie om bestaan van forumdeel niet te verraden
+		if (!$deel OR ! $deel->magLezen()) { // geen exceptie om bestaan van forumdeel niet te verraden
 			$this->geentoegang();
 		}
 		if ($pagina === 'laatste') {
@@ -275,7 +275,7 @@ class ForumController extends Controller {
 			invokeRefresh('/forum/deel/' . $deel->forum_id, 'SPAM', -1); //TODO: logging
 		}
 		// voorkomen dubbelposts
-		if (array_key_exists('forum_laatste_post_tekst', $_SESSION) AND $_SESSION['forum_laatste_post_tekst'] === $tekst) {
+		if (isset($_SESSION['forum_laatste_post_tekst']) AND $_SESSION['forum_laatste_post_tekst'] === $tekst) {
 			$_SESSION['forum_concept'] = '';
 			invokeRefresh('/forum/deel/' . $deel->forum_id, 'Uw reactie is al geplaatst', 0);
 		}
@@ -324,7 +324,7 @@ class ForumController extends Controller {
 		$post = ForumPostsModel::instance()->getForumPost((int) $id);
 		$draad = ForumDradenModel::instance()->getForumDraad($post->draad_id);
 		$deel = ForumDelenModel::instance()->getForumDeel($draad->forum_id);
-		if (($deel->magPosten() AND !$draad->gesloten AND $post->lid_id === LoginLid::instance()->getUid() AND LoginLid::mag('P_LOGGED_IN')) OR $deel->magModereren()) {
+		if (($deel->magPosten() AND ! $draad->gesloten AND $post->lid_id === LoginLid::instance()->getUid() AND LoginLid::mag('P_LOGGED_IN')) OR $deel->magModereren()) {
 			// same if-statement in post_lijst.tpl
 		} else {
 			$this->geentoegang();

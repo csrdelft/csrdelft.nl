@@ -24,7 +24,7 @@ if (isset($_POST['url']) and preg_match("/^[-\w?&=.\/]+$/", $_POST['url']) and i
 		}
 		header("Location: " . CSR_ROOT . $_POST['url']);
 	}
-} elseif (array_key_exists('pauper', $_SESSION)) {
+} elseif (isset($_SESSION['pauper'])) {
 	$smarty = new CsrSmarty();
 	$smarty->display('login.tpl');
 }

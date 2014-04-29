@@ -9,11 +9,10 @@
 class DragObjectModel {
 
 	public static function getCoords($id, &$top, &$left) {
-
-		if (array_key_exists('dragobject', $_SESSION) && array_key_exists($id, $_SESSION['dragobject'])) {
-
+		if (isset($_SESSION['dragobject']) && isset($_SESSION['dragobject'][$id])) {
 			$top = (int) $_SESSION['dragobject'][$id]['top'];
 			$left = (int) $_SESSION['dragobject'][$id]['left'];
 		}
 	}
+
 }

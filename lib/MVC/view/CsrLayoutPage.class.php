@@ -49,7 +49,7 @@ class CsrLayoutPage extends HtmlPage {
 				$this->addStylesheet('snow.css');
 			}
 		}
-		if (defined('DEBUG') AND (LoginLid::mag('P_ADMIN') OR LoginLid::instance()->isSued())) {
+		if (defined('DEBUG') AND ( LoginLid::mag('P_ADMIN') OR LoginLid::instance()->isSued())) {
 			$this->addStylesheet('jquery-ui.css', '/layout/js/jquery/themes/ui-lightness/');
 			$this->addScript('jquery/jquery-2.1.0.js');
 			$this->addScript('jquery/jquery-ui-1.10.4.custom.js');
@@ -83,7 +83,7 @@ class CsrLayoutPage extends HtmlPage {
 			$this->smarty->assign('minion', $this->smarty->fetch('minion.tpl'));
 		}
 
-		if (defined('DEBUG') AND (LoginLid::mag('P_ADMIN') OR LoginLid::instance()->isSued())) {
+		if (defined('DEBUG') AND ( LoginLid::mag('P_ADMIN') OR LoginLid::instance()->isSued())) {
 			$this->smarty->assign('debug', SimpleHTML::getDebug());
 		}
 
@@ -111,7 +111,7 @@ class CsrLayoutPage extends HtmlPage {
 		$this->smarty->assign('ubbtop', $top);
 		$this->smarty->assign('ubbleft', $left);
 
-		if (array_key_exists('pauper', $_SESSION)) {
+		if (isset($_SESSION['pauper'])) {
 			$this->smarty->assign('menutree', MenuModel::instance()->getMenuTree('main'));
 			$this->smarty->display('MVC/layout/pauper.tpl');
 		} else {

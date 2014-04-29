@@ -24,8 +24,7 @@ class BeheerMaaltijdenController extends AclController {
 				'archief' => 'P_MAAL_MOD',
 				'fiscaal' => 'P_MAAL_MOD'
 			);
-		}
-		else {
+		} else {
 			$this->acl = array(
 				'sluit' => 'P_MAAL_MOD',
 				'open' => 'P_MAAL_MOD',
@@ -99,7 +98,7 @@ class BeheerMaaltijdenController extends AclController {
 	}
 
 	public function nieuw() {
-		if (array_key_exists('mrid', $_POST)) {
+		if (isset($_POST['mrid'])) {
 			$mrid = (int) filter_input(INPUT_POST, 'mrid', FILTER_SANITIZE_NUMBER_INT);
 			$repetitie = MaaltijdRepetitiesModel::getRepetitie($mrid);
 			// start at first occurence
@@ -112,12 +111,10 @@ class BeheerMaaltijdenController extends AclController {
 			$beginDatum = date('Y-m-d', $datum);
 			if ($repetitie->getPeriodeInDagen() > 0) {
 				$this->view = new RepetitieMaaltijdenFormView($repetitie, $beginDatum, $beginDatum); // fetches POST values itself
-			}
-			else {
+			} else {
 				$this->view = new MaaltijdFormView(0, $repetitie->getMaaltijdRepetitieId(), $repetitie->getStandaardTitel(), intval($repetitie->getStandaardLimiet()), $beginDatum, $repetitie->getStandaardTijd(), $repetitie->getStandaardPrijs(), $repetitie->getAbonnementFilter()); // fetches POST values itself
 			}
-		}
-		else {
+		} else {
 			$maaltijd = new Maaltijd();
 			$this->view = new MaaltijdFormView($maaltijd->getMaaltijdId(), $maaltijd->getMaaltijdRepetitieId(), $maaltijd->getTitel(), $maaltijd->getAanmeldLimiet(), $maaltijd->getDatum(), $maaltijd->getTijd(), $maaltijd->getPrijs(), $maaltijd->getAanmeldFilter()); // fetches POST values itself
 		}
@@ -131,8 +128,7 @@ class BeheerMaaltijdenController extends AclController {
 	public function opslaan($mid) {
 		if ($mid > 0) {
 			$this->bewerk($mid);
-		}
-		else {
+		} else {
 			$this->view = new MaaltijdFormView($mid); // fetches POST values itself
 		}
 		if ($this->view->validate()) {
@@ -162,8 +158,7 @@ class BeheerMaaltijdenController extends AclController {
 			$values = $form->getValues();
 			$aanmelding = AanmeldingenModel::aanmeldenVoorMaaltijd($mid, $values['voor_lid'], \LoginLid::instance()->getUid(), $values['aantal_gasten'], true);
 			$this->view = new BeheerMaaltijdenView($aanmelding->getMaaltijd());
-		}
-		else {
+		} else {
 			$this->view = $form;
 		}
 	}
@@ -174,8 +169,7 @@ class BeheerMaaltijdenController extends AclController {
 			$values = $form->getValues();
 			$maaltijd = AanmeldingenModel::afmeldenDoorLid($mid, $values['voor_lid'], true);
 			$this->view = new BeheerMaaltijdenView($maaltijd);
-		}
-		else {
+		} else {
 			$this->view = $form;
 		}
 	}
@@ -197,8 +191,7 @@ class BeheerMaaltijdenController extends AclController {
 				throw new Exception('Geen nieuwe maaltijden aangemaakt');
 			}
 			$this->view = new BeheerMaaltijdenView($maaltijden);
-		}
-		else {
+		} else {
 			$this->view = $form;
 		}
 	}

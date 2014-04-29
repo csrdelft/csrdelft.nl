@@ -27,14 +27,14 @@ class FileField extends FormElement implements Validator {
 				unset($this->model[$methode]);
 			}
 		}
-		if (array_key_exists('BestandUploader', $_POST)) {
+		if (isset($_POST['BestandUploader'])) {
 			$this->methode = filter_input(INPUT_POST, 'BestandUploader');
 		} elseif ($behouden !== null) {
 			$this->methode = 'BestandBehouden';
 		} else {
 			$this->methode = 'UploadHttp';
 		}
-		if (!array_key_exists($this->methode, $this->model)) {
+		if (!isset($this->model[$this->methode])) {
 			throw new Exception('Niet ondersteunde uploadmethode');
 		}
 		$this->model[$this->methode]->selected = true;
@@ -101,7 +101,7 @@ abstract class BestandUploader extends InputField {
 	}
 
 	public function isPosted() {
-		return array_key_exists('BestandUploader', $_POST) AND filter_input(INPUT_POST, 'BestandUploader') === get_class($this);
+		return isset($_POST['BestandUploader']) AND filter_input(INPUT_POST, 'BestandUploader') === get_class($this);
 	}
 
 	/**
@@ -318,7 +318,7 @@ class UploadFtp extends BestandUploader {
 		}
 		$gelukt = copy($this->path . $this->model->bestandsnaam, $destination . $filename);
 		// Moeten we het bestand ook verwijderen uit de publieke ftp?
-		if ($gelukt AND array_key_exists('verwijderVanFtp', $_POST)) {
+		if ($gelukt AND isset($_POST['verwijderVanFtp'])) {
 			return unlink($this->path . $this->model->bestandsnaam);
 		}
 		return $gelukt;
@@ -350,7 +350,7 @@ class UploadFtp extends BestandUploader {
 				echo '>' . htmlspecialchars($filename) . '</option>';
 			}
 			echo '</select><br /><input type="checkbox" name="verwijderVanFtp" id="verwijderVanFtp" style="vertical-align: middle;"';
-			if (!$this->isPosted() OR array_key_exists('verwijderVanFtp', $_POST)) {
+			if (!$this->isPosted() OR isset($_POST['verwijderVanFtp'])) {
 				echo ' checked="checked"';
 			}
 			echo ' /><label for="verwijderVanFtp" style="float: none;"> Bestand verwijderen uit FTP-map</label>';

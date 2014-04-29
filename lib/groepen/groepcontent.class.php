@@ -140,7 +140,7 @@ class Groepcontent extends TemplateView {
 		$this->smarty->assign('groeptypes', Groepen::getGroeptypes());
 		$this->smarty->assign('aanmeldfilters', $this->getAanmeldfilters());
 		$oud = null;
-		if (array_key_exists('oudegroep', $_SESSION)) {
+		if (isset($_SESSION['oudegroep'])) {
 			$oud = $_SESSION['oudegroep'];
 		}
 		$this->smarty->assign('oudegroep', $oud);
