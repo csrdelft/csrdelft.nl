@@ -21,8 +21,11 @@ class Fotoalbum {
 
 	function Fotoalbum($pad, $mapnaam) {
 		//beetje vies dit, maar er moet natuurlijk een fatsoenlijk pad uitkomen.
-		if (substr($pad, 0, 1) != '/') {
+		if (!startsWith($pad, '/')) {
 			$pad = '/' . $pad;
+		}
+		if (!endsWith($pad, '/')) {
+			$pad .= '/';
 		}
 		$this->pad = $pad;
 		$this->mapnaam = $mapnaam;
@@ -162,7 +165,7 @@ class Fotoalbum {
 			if (!$this->exists()) {
 				$this->fotos = false;
 			}
-			if (is_dir(PICS_PATH . '/fotoalbum/' . $this->pad) && $handle = opendir(PICS_PATH . '/fotoalbum/' . $this->pad)) {
+			if (is_dir(PICS_PATH . '/fotoalbum' . $this->pad) && $handle = opendir(PICS_PATH . '/fotoalbum' . $this->pad)) {
 				while (false !== ($bestand = readdir($handle))) {
 					$bestanden[] = $bestand;
 				}
@@ -217,14 +220,14 @@ class Fotoalbum {
 		$fotos = $this->getFotos(false);
 		if ($fotos !== false) {
 			# Controleren of _thums en _resized bestaan, zo niet dan maken
-			if (!file_exists($this->getFullpath() . '/_thumbs')) {
-				mkdir($this->getFullpath() . '/_thumbs');
-				chmod($this->getFullpath() . '/_thumbs', 0755);
+			if (!file_exists($this->getFullpath() . '_thumbs')) {
+				mkdir($this->getFullpath() . '_thumbs');
+				chmod($this->getFullpath() . '_thumbs', 0755);
 			}
-			if (!file_exists($this->getFullpath() . '/_resized')) {
-				mkdir($this->getFullpath() . '/_resized');
-				chmod($this->getFullpath() . '/_resized', 0755);
-				chmod($this->getFullpath() . '/_resized', 0755);
+			if (!file_exists($this->getFullpath() . '_resized')) {
+				mkdir($this->getFullpath() . '_resized');
+				chmod($this->getFullpath() . '_resized', 0755);
+				chmod($this->getFullpath() . '_resized', 0755);
 			}
 
 			# Thumbnails en resizeds maken
@@ -260,15 +263,15 @@ class Foto {
 	}
 
 	function getPad() {
-		return PICS_PATH . '/fotoalbum/' . $this->getMap() . $this->getBestandsnaam();
+		return PICS_PATH . '/fotoalbum' . $this->getMap() . $this->getBestandsnaam();
 	}
 
 	function getThumbPad() {
-		return PICS_PATH . '/fotoalbum/' . $this->getMap() . '_thumbs/' . $this->getBestandsnaam();
+		return PICS_PATH . '/fotoalbum' . $this->getMap() . '_thumbs/' . $this->getBestandsnaam();
 	}
 
 	function getResizedPad() {
-		return PICS_PATH . '/fotoalbum/' . $this->getMap() . '_resized/' . $this->getBestandsnaam();
+		return PICS_PATH . '/fotoalbum' . $this->getMap() . '_resized/' . $this->getBestandsnaam();
 	}
 
 	function getThumbURL() {
@@ -280,11 +283,11 @@ class Foto {
 	}
 
 	function bestaatThumb() {
-		return file_exists(PICS_PATH . '/fotoalbum/' . $this->getMap() . '_thumbs/' . $this->getBestandsnaam());
+		return file_exists(PICS_PATH . '/fotoalbum' . $this->getMap() . '_thumbs/' . $this->getBestandsnaam());
 	}
 
 	function bestaatResized() {
-		return file_exists(PICS_PATH . '/fotoalbum/' . $this->getMap() . '_resized/' . $this->getBestandsnaam());
+		return file_exists(PICS_PATH . '/fotoalbum' . $this->getMap() . '_resized/' . $this->getBestandsnaam());
 	}
 
 	function maakThumb() {
