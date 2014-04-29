@@ -1,12 +1,12 @@
 <div style="float: right; margin: 0 0 10px 10px;">
 	{if LoginLid::mag('P_LOGGED_IN')}
-		<a href="/fotoalbum/fotostoevoegen/" title="Toevoegen">Toevoegen</a>
+		<a class="knop" href="/fotoalbum/fotostoevoegen/">{icon get="toevoegen"} Toevoegen</a>
 	{/if}
 	{if LoginLid::mag('P_LOGGED_IN') && $album->getFotos()!==false}
-		| <a href="/tools/downloadalbum.php?album={$album->getPad()}" title="Download als TAR-bestand">Download album</a>
+		<a class="knop" href="/tools/downloadalbum.php?album={$album->getPad()}" title="Download als TAR-bestand">{icon get="pictures"} Download album</a>
 	{/if}
 	{if LoginLid::mag('P_ADMIN')}
-		| <a href="/actueel/fotoalbum/verwerk/" title="Verwerken">Verwerken</a>
+		<a class="knop" href="/actueel/fotoalbum/verwerk/">{icon get="toevoegen"} Verwerken</a>
 	{/if}
 </div>
 

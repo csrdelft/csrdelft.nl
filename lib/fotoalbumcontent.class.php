@@ -23,7 +23,7 @@ class FotalbumZijbalkContent extends TemplateView {
 		echo '<div id="zijbalk_fotoalbum">';
 		echo '<h1><a href="/actueel/fotoalbum/">Laatste fotoalbum</a></h1>';
 		echo '<div class="item">';
-		echo '<a href="/actueel/fotoalbum/' . $this->model->getPad() . '">';
+		echo '<a href="/actueel/fotoalbum' . $this->model->getPad() . '">';
 		echo $this->model->getNaam();
 		echo '</a>';
 
