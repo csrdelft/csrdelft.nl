@@ -1539,13 +1539,13 @@ class SubmitResetCancel extends FormElement {
 			$js = "$(this).attr('postdata', $(this).closest('form').serialize());";
 			echo '<a id="extraButton" class="knop post" title="' . $this->extraTitle . '" href="' . $this->extraUrl . '" onclick="' . $js . '">' . $this->extraIcon . $this->extraText . '</a> ';
 		}
-		if ($this->submitIcon . $this->submitText != '') {
+		if ($this->submitIcon != '' OR $this->submitText != '') {
 			echo '<a class="knop submit" title="' . $this->submitTitle . '">' . $this->submitIcon . $this->submitText . '</a> ';
 		}
-		if ($this->resetIcon . $this->resetText != '') {
+		if ($this->resetIcon != '' OR $this->resetText != '') {
 			echo '<a class="knop reset" title="' . $this->resetTitle . '">' . $this->resetIcon . $this->resetText . '</a> ';
 		}
-		if ($this->cancelIcon . $this->cancelText != '') {
+		if ($this->cancelIcon != '' OR $this->cancelText != '') {
 			echo '<a class="knop cancel" title="' . $this->cancelTitle . '" href="' . $this->cancelUrl . '">' . $this->cancelIcon . $this->cancelText . '</a>';
 		}
 		echo '</div>';
