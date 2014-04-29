@@ -374,12 +374,17 @@ class UploadUrl extends BestandUploader {
 		if ($this->isPosted()) {
 			$this->url = $_POST['url'];
 			$this->value = $this->file_get_contents($this->url);
+			if (!$this->value) {
+				$this->error = 'Niets gevonden op url';
+				return;
+			}
 			$naam = substr(trim($this->url), strrpos($this->url, '/') + 1);
 			$naam = preg_replace("/[^a-zA-Z0-9\s\.\-\_]/", '', $naam);
 			//Bestand tijdelijk omslaan om mime-type te bepalen.
 			$tmp_bestand = TMP_PATH . '/BestandUploader' . LoginLid::instance()->getUid() . microtime() . '.tmp';
 			if (!is_writable(TMP_PATH)) {
-				throw Exception('TMP_PATH is niet beschrijfbaar');
+				$this->error = 'TMP_PATH is niet beschrijfbaar';
+				return;
 			}
 			$size = file_put_contents($tmp_bestand, $this->value);
 			$finfo = finfo_open(FILEINFO_MIME_TYPE);
@@ -410,7 +415,7 @@ class UploadUrl extends BestandUploader {
 
 	protected function file_get_contents($url) {
 		if ($this->file_get_contents_available()) {
-			return file_get_contents($url);
+			return @file_get_contents($url);
 		} else {
 			return $this->curl_file_get_contents($url);
 		}

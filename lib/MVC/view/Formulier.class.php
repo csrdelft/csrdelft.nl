@@ -164,14 +164,14 @@ class Formulier implements View, Validator {
 	 */
 	public function view() {
 		echo SimpleHtml::getMelding();
-		echo '<form';
+		echo '<h1 class="formTitle">' . $this->getTitel() . '</h1><form';
 		if ($this->action !== null) {
 			echo ' action="' . $this->action . '"';
 		}
 		if ($this->enctype !== null) {
 			echo ' enctype="' . $this->enctype . '"';
 		}
-		echo ' id="' . $this->getFormId() . '" class="' . implode(' ', $this->css_classes) . '" method="post">' . "\n";
+		echo ' id="' . $this->getFormId() . '" class="' . implode(' ', $this->css_classes) . '" method="post">';
 		foreach ($this->getFields() as $field) {
 			$field->view();
 		}
@@ -188,7 +188,7 @@ class PopupForm extends Formulier {
 
 	public function view() {
 		$this->css_classes[] = 'popup';
-		echo '<div id="popup-content"><h1>' . $this->getTitel() . '</h1>';
+		echo '<div id="popup-content">';
 		echo parent::view();
 		echo SimpleHTML::getMelding();
 		echo '</div>';

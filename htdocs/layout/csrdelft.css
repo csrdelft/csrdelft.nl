@@ -20,7 +20,8 @@ body, textarea, input, select, option, tr, td, th, div, p  {
 h1{
 	font-size: 1.6em;
 }
-#popup h1{
+h1.formTitle{
+	font-size: 1.6em;
 	margin-bottom: 20px;
 }
 p{
