@@ -129,6 +129,9 @@ class Document extends Bestand {
 	}
 
 	public function getBestand() {
+		if (!$this->getBestandsnaam()) {
+			return null;
+		}
 		$bestand = new Bestand();
 		$bestand->bestandsnaam = $this->getBestandsnaam();
 		$bestand->size = $this->getSize();
