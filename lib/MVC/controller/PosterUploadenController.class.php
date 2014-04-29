@@ -29,12 +29,12 @@ class PosterUploadenController extends AclController {
 		if ($this->isPosted() AND $formulier->validate()) {
 			try {
 				$jaar = date('Y') + 1;
-				$map = ($jaar - 1) . '-' . $jaar . '/Posters/'; // jaar vooruit
+				$map = ($jaar - 1) . '-' . $jaar . '/Posters'; // jaar vooruit
 				if (!file_exists(PICS_PATH . '/fotoalbum/' . $map)) {
-					$map = ($jaar - 2) . '-' . ($jaar - 1) . '/Posters/'; // jaar terug
+					$map = ($jaar - 2) . '-' . ($jaar - 1) . '/Posters'; // jaar terug
 				}
 				if (file_exists(PICS_PATH . '/fotoalbum/' . $map)) {
-					if ($fields['uploader']->opslaan(PICS_PATH . '/fotoalbum/' . $map, $fields['uploader']->getModel()->bestandsnaam)) {
+					if ($fields['uploader']->opslaan(PICS_PATH . '/fotoalbum/' . $map . '/', $fields['uploader']->getModel()->bestandsnaam)) {
 						$url .= $map;
 						require_once 'fotoalbum.class.php';
 						require_once 'fotoalbumcontent.class.php';

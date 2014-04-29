@@ -25,8 +25,6 @@ class Fotoalbum {
 			$pad = '/' . $pad;
 		}
 		$this->pad = $pad;
-
-
 		$this->mapnaam = $mapnaam;
 	}
 
@@ -35,7 +33,7 @@ class Fotoalbum {
 	}
 
 	function getFullpath() {
-		return PICS_PATH . '/fotoalbum/' . $this->pad;
+		return PICS_PATH . '/fotoalbum' . $this->pad;
 	}
 
 	function getMapnaam() {
