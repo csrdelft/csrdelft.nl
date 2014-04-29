@@ -15,12 +15,7 @@ if (isset($_GET['querystring'])) {
 	die('epic fail');
 }
 
-$content = $docControl->getContent();
-if ($content instanceof PopupForm) {
-	$pagina = new CsrLayoutPage(new DocumentenContent(), array(), $content);
-} else {
-	$pagina = new CsrLayoutPage($content);
-}
+$pagina = new CsrLayoutPage($docControl->getContent());
 $pagina->addStylesheet('js/datatables/css/datatables_basic.css');
 $pagina->addStylesheet('documenten.css');
 

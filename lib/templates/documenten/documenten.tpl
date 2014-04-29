@@ -1,10 +1,10 @@
 {*
- * Toon een overzicht van documenten in de verschillende categorieën
- *}
+* Toon een overzicht van documenten in de verschillende categorieën
+*}
 
 <div id="controls">
 	{if LoginLid::mag('P_DOCS_MOD')}
-		<a class="knop popup" href="/communicatie/documenten/toevoegen/">{icon get="toevoegen"} Toevoegen</a>
+		<a class="knop" href="/communicatie/documenten/toevoegen/">{icon get="toevoegen"} Toevoegen</a>
 	{/if}
 </div>
 <h1>Documenten</h1>
@@ -26,7 +26,7 @@
 						{$categorie->getNaam()|escape:'html'}
 					</a>
 					{if LoginLid::mag('P_DOCS_MOD')}
-						<a class="toevoegen popup" href="/communicatie/documenten/toevoegen/?catID={$categorie->getID()}"
+						<a class="toevoegen" href="/communicatie/documenten/toevoegen/?catID={$categorie->getID()}"
 						   title="Document toevoegen in categorie: {$categorie->getNaam()|escape:'html'}">
 							{icon get="toevoegen"}
 						</a>
@@ -48,7 +48,7 @@
 								<a class="verwijderen" href="/communicatie/documenten/verwijderen/{$document->getID()}" title="Document verwijderen" onclick="return confirm('Weet u zeker dat u dit document wilt verwijderen')">{icon get="verwijderen"}</a>
 							{/if}
 							{if $document->magBewerken()}
-								<a class="bewerken popup" href="/communicatie/documenten/bewerken/{$document->getID()}" title="Document bewerken">{icon get="bewerken"}</a>
+								<a class="bewerken" href="/communicatie/documenten/bewerken/{$document->getID()}" title="Document bewerken">{icon get="bewerken"}</a>
 							{/if}
 					</td>
 					<td class="size">{$document->getSize()|filesize}</td>

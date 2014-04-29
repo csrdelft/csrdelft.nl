@@ -142,7 +142,7 @@ class DocumentController extends Controller {
 		$fields['catID'] = new SelectField('catID', $this->document->getCatID(), 'Categorie', $namen);
 		$fields['uploader'] = new FileField('/documenten', $this->document->getBestand());
 		$fields['knopjes'] = new SubmitResetCancel('/communicatie/documenten/');
-		$formulier = new PopupForm($this->document, 'documentForm', '/communicatie/documenten/bewerken/' . $this->document->getId(), $fields);
+		$formulier = new Formulier($this->document, 'documentForm', '/communicatie/documenten/bewerken/' . $this->document->getId(), $fields);
 		if ($this->document->getID() == 0) {
 			$formulier->titel = 'Document toevoegen';
 			$fields['knopjes']->resetIcon = null;
