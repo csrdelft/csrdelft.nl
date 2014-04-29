@@ -292,20 +292,22 @@ class Foto {
 
 	function maakThumb() {
 		set_time_limit(0);
-		$command = IMAGEMAGICK_PATH . ' ' . escapeshellarg($this->getPad()) . ' -thumbnail 150x150^^ -gravity center -extent 150x150 -format jpg -quality 80 ' . escapeshellarg($this->getThumbPad()) . '';
+		$command = IMAGEMAGICK_PATH . ' ' . escapeshellarg($this->getPad()) . ' -thumbnail 150x150^^ -gravity center -extent 150x150 -format jpg -quality 80 ' . escapeshellarg($this->getThumbPad());
+		$output = shell_exec($command) . '<hr />';
 		if (defined('RESIZE_OUTPUT')) {
 			echo $command . '<br />';
-			echo shell_exec($command) . '<hr />';
+			echo $output;
 		}
 		chmod($this->getThumbPad(), 0644);
 	}
 
 	function maakResized() {
 		set_time_limit(0);
-		$command = IMAGEMAGICK_PATH . ' ' . escapeshellarg($this->getPad()) . ' -resize 1024x1024 -format jpg -quality 85 ' . escapeshellarg($this->getResizedPad()) . '';
+		$command = IMAGEMAGICK_PATH . ' ' . escapeshellarg($this->getPad()) . ' -resize 1024x1024 -format jpg -quality 85 ' . escapeshellarg($this->getResizedPad());
+		$output = shell_exec($command) . '<hr />';
 		if (defined('RESIZE_OUTPUT')) {
 			echo $command . '<br />';
-			echo shell_exec($command) . '<hr />';
+			echo $output;
 		}
 		chmod($this->getResizedPad(), 0644);
 	}

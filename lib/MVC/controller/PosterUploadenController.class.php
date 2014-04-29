@@ -42,7 +42,6 @@ class PosterUploadenController extends AclController {
 						if (!$album->exists()) {
 							invokeRefresh(null, 'Fotoalbum bestaat niet: ' . $album->getFullpath(), -1);
 						}
-						define('RESIZE_OUTPUT', null);
 						$album->verwerkFotos();
 						invokeRefresh($url, 'Poster met succes opgeslagen', 1);
 					} else {
