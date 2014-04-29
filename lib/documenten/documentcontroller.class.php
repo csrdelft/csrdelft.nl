@@ -138,8 +138,8 @@ class DocumentController extends Controller {
 		foreach (DocumentenCategorie::getAll() as $cat) {
 			$namen[$cat->getID()] = $cat->getNaam();
 		}
-		$fields['naam'] = new RequiredTextField('naam', $this->document->getNaam(), 'Documentnaam');
 		$fields['catID'] = new SelectField('catID', $this->document->getCatID(), 'Categorie', $namen);
+		$fields['naam'] = new RequiredTextField('naam', $this->document->getNaam(), 'Documentnaam');
 		$fields['uploader'] = new FileField('/documenten', $this->document->getBestand());
 		$fields['knopjes'] = new SubmitResetCancel('/communicatie/documenten/');
 		$formulier = new Formulier($this->document, 'documentForm', '/communicatie/documenten/bewerken/' . $this->document->getId(), $fields);
