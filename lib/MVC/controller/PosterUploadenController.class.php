@@ -38,9 +38,9 @@ class PosterUploadenController extends AclController {
 						$url .= substr($map, strpos($map, '/fotoalbum/') + 11);
 						require_once 'fotoalbum.class.php';
 						require_once 'fotoalbumcontent.class.php';
-						$album = new Fotoalbum($map, $map);
+						$album = new Fotoalbum($url, $url);
 						if (!$album->exists()) {
-							invokeRefresh($url, 'Poster verwerken mislukt', 1);
+							setMelding('Fotoalbum bestaat niet', -1);
 						}
 						$album->verwerkFotos();
 						invokeRefresh($url, 'Poster met succes opgeslagen', 1);
