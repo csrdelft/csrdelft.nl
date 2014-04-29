@@ -83,6 +83,9 @@ jQuery('input.UploadOptie').change(function() {
 	jQuery('div.UploadKeuze').not(keuze).slideUp(250);
 	keuze.slideDown(250);
 });
+jQuery('.knop.reset').click(function() {
+	jQuery('#BestandBehoudenInput').click();
+});
 JS;
 	}
 
