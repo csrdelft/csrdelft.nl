@@ -36,6 +36,13 @@ class PosterUploadenController extends AclController {
 				if (file_exists($map)) {
 					if ($fields['uploader']->opslaan($map, $fields['uploader']->getModel()->bestandsnaam)) {
 						$url .= substr($map, strpos($map, '/fotoalbum/') + 11);
+						require_once 'fotoalbum.class.php';
+						require_once 'fotoalbumcontent.class.php';
+						$album = new Fotoalbum($map, $map);
+						if (!$album->exists()) {
+							invokeRefresh($url, 'Poster verwerken mislukt', 1);
+						}
+						$album->verwerkFotos();
 						invokeRefresh($url, 'Poster met succes opgeslagen', 1);
 					} else {
 						invokeRefresh($url, 'Poster opslaan mislukt', -1);
