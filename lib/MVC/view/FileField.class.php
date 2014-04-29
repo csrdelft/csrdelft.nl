@@ -286,8 +286,11 @@ class UploadFtp extends BestandUploader {
 		if (!parent::validate()) {
 			return false;
 		}
+		if (count($this->getFileList()) <= 0) {
+			$this->error = 'Geen bestanden aanwezig';
+		}
 		if (!file_exists($this->path . $this->value)) {
-			$this->error = 'Bestand is niet aanwezig in de publieke FTP-map';
+			$this->error = 'Bestand is niet (meer) aanwezig';
 		}
 		return $this->error === '';
 	}
