@@ -25,7 +25,7 @@
 					</a>
 					<br /><br />
 					<form action="/forum/wijzigen/{$draad->draad_id}/forum_id" method="post">
-						<label for="forum_id">Verplaats naar: </label>
+						<label for="forum_id">Verplaats naar &nbsp;</label>
 						<select name="forum_id">
 							{foreach from=ForumModel::instance()->getForum() item=cat}
 								<optgroup label="{$cat->titel}">
@@ -39,7 +39,7 @@
 					</form>
 					<br />
 					<form action="/forum/wijzigen/{$draad->draad_id}/titel" method="post">
-						<label for="titel">Titel aanpassen:</label>
+						<label for="titel">Titel aanpassen &nbsp;</label>
 						<input type="text" name="titel" value="{$draad->titel}" style="width: 300px;" />
 						<input type="submit" value="Opslaan" />
 					</form>
