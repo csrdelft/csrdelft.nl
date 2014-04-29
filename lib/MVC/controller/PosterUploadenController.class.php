@@ -1,26 +1,26 @@
 <?php
 
 /**
- * PosterUploadenController.class.php
+ * PosterController.class.php
  * 
  * @author P.W.G. Brussee <brussee@live.nl>
  * 
  */
-class PosterUploadenController extends AclController {
+class PosterController extends AclController {
 
 	public function __construct($query) {
 		parent::__construct($query, FunctiesModel::instance());
 		$this->acl = array(
-			'toevoegen' => 'P_LEDEN_READ'
+			'uploaden' => 'P_LEDEN_READ'
 		);
-		$this->action = 'toevoegen';
+		$this->action = 'uploaden';
 		if ($this->hasParam(2)) {
 			$this->action = $this->getParam(2);
 		}
 		$this->performAction($this->getParams(3));
 	}
 
-	public function toevoegen() {
+	public function uploaden() {
 		foreach (glob(PICS_PATH . '/fotoalbum/*', GLOB_ONLYDIR) as $path) {
 			$parts = explode('/', $path);
 			$name = end($parts);
@@ -35,7 +35,7 @@ class PosterUploadenController extends AclController {
 		$fields['knoppen'] = new SubmitResetCancel('/actueel/fotoalbum/');
 		$fields['knoppen']->resetIcon = null;
 		$fields['knoppen']->resetText = null;
-		$formulier = new Formulier(null, 'posterForm', '/posteruploaden/toevoegen/', $fields);
+		$formulier = new Formulier(null, 'posterForm', '/poster/uploaden/', $fields);
 		$formulier->titel = 'Poster uploaden';
 		if ($this->isPosted() AND $formulier->validate()) {
 			try {
