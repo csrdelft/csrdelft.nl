@@ -29,7 +29,8 @@ class PosterUploadenController extends AclController {
 			}
 		}
 		$fields['album'] = new SelectField('album', null, 'Album', array_reverse($dirs));
-		$fields['uploader'] = new FileField('/posters', null, array('image/png', 'image/gif', 'image/jpeg'));
+		$fields['uploader'] = new FileField('/posters', null, array('image/jpeg'));
+		$fields[] = new Subkopje('Alleen jpeg afbeeldingen.');
 		$fields['knoppen'] = new SubmitResetCancel('/actueel/fotoalbum/');
 		$fields['knoppen']->resetIcon = null;
 		$fields['knoppen']->resetText = null;
