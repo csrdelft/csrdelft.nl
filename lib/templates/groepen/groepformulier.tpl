@@ -129,7 +129,7 @@
 
 	<label for="submit"></label>
 	<input type="submit" id="submit" value="Opslaan" />
-	<a href="/actueel/groepen/{$groep->getType()->getNaam()}{if $groep->getId()!=0}/{$groep->getId()}{/if}/" class="knop">terug</a>
+	<a href="/actueel/groepen/{$groep->getType()->getNaam()}{if $groep->getId()!=0}/{$groep->getId()}{/if}/" class="knop">Terug</a>
 </div>
 </form>
 <script type="text/javascript">
