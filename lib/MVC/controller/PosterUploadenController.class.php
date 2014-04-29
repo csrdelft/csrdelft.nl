@@ -29,13 +29,13 @@ class PosterUploadenController extends AclController {
 		if ($this->isPosted() AND $formulier->validate()) {
 			try {
 				$jaar = date('Y') + 1;
-				$map = PICS_PATH . '/fotoalbum/' . ($jaar - 1) . '-' . $jaar . '/Posters/'; // jaar vooruit
-				if (!file_exists($map)) {
-					$map = PICS_PATH . '/fotoalbum/' . ($jaar - 2) . '-' . ($jaar - 1) . '/Posters/'; // jaar terug
+				$map = ($jaar - 1) . '-' . $jaar . '/Posters'; // jaar vooruit
+				if (!file_exists(PICS_PATH . '/fotoalbum/' . $map)) {
+					$map = ($jaar - 2) . '-' . ($jaar - 1) . '/Posters'; // jaar terug
 				}
-				if (file_exists($map)) {
-					if ($fields['uploader']->opslaan($map, $fields['uploader']->getModel()->bestandsnaam)) {
-						$url .= substr($map, strpos($map, '/fotoalbum/') + 11);
+				if (file_exists(PICS_PATH . '/fotoalbum/' . $map)) {
+					if ($fields['uploader']->opslaan(PICS_PATH . '/fotoalbum/' . $map . '/', $fields['uploader']->getModel()->bestandsnaam)) {
+						$url .= $map;
 						require_once 'fotoalbum.class.php';
 						require_once 'fotoalbumcontent.class.php';
 						$album = new Fotoalbum($url, $url);
@@ -48,7 +48,7 @@ class PosterUploadenController extends AclController {
 						invokeRefresh($url, 'Poster opslaan mislukt', -1);
 					}
 				} else {
-					invokeRefresh($url, 'Posters map bestaat niet: ' . $map, -1);
+					invokeRefresh($url, 'Posters map bestaat niet: ' . PICS_PATH . '/fotoalbum/' . $map, -1);
 				}
 			} catch (Exception $e) {
 				invokeRefresh($url, 'Poster uploaden mislukt: ' . $e->getMessage(), -1);
