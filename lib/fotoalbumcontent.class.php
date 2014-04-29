@@ -266,13 +266,13 @@ class FotoalbumContent extends TemplateView {
 	function view() {
 		switch ($this->actie) {
 			case 'album':
-
+				echo SimpleHTML::getMelding();
 				$this->smarty->assign('album', $this->model);
 				$this->smarty->display('fotoalbum/album.tpl');
 				break;
 
 			case 'foto':
-
+				echo SimpleHTML::getMelding();
 				break;
 		}
 	}

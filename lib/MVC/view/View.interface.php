@@ -12,6 +12,8 @@ interface View {
 
 	public function view();
 
+	public function getTitel();
+
 	/**
 	 * Hiermee wordt gepoogt af te dwingen dat een view een model heeft om te tonen
 	 */

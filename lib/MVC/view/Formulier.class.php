@@ -30,6 +30,7 @@ class Formulier implements View, Validator {
 
 	protected $model;
 	protected $formId;
+	public $titel = '';
 	public $action = null;
 	public $enctype = null;
 	/**
@@ -49,6 +50,10 @@ class Formulier implements View, Validator {
 		$this->action = $action;
 		$this->css_classes[] = 'Formulier';
 		$this->addFields($fields);
+	}
+
+	public function getTitel() {
+		return $this->titel;
 	}
 
 	public function getModel() {
@@ -85,18 +90,13 @@ class Formulier implements View, Validator {
 	 * @param array $fields
 	 */
 	public function addFields(array $fields) {
+		foreach ($fields as $i => $field) {
+			if ($field instanceof FileField) {
+				$this->enctype = 'multipart/form-data';
+			}
+		}
 		$this->fields = array_merge($this->fields, $fields);
 		$this->getValues(); // fetch POST values
-	}
-
-	public function insertElementBefore($fieldName, FormElement $elmnt) {
-		$pos = 0;
-		foreach ($this->fields as $field) {
-			if ($field->getName() === $fieldName) {
-				array_splice($this->fields, $pos, 0, $elmnt);
-			}
-			$pos++;
-		}
 	}
 
 	/**
@@ -163,6 +163,7 @@ class Formulier implements View, Validator {
 	 * Toont het formulier en javascript van alle fields
 	 */
 	public function view() {
+		echo SimpleHtml::getMelding();
 		echo '<form';
 		if ($this->action !== null) {
 			echo ' action="' . $this->action . '"';
@@ -171,6 +172,9 @@ class Formulier implements View, Validator {
 			echo ' enctype="' . $this->enctype . '"';
 		}
 		echo ' id="' . $this->getFormId() . '" class="' . implode(' ', $this->css_classes) . '" method="post">' . "\n";
+		if ($this->titel !== '') {
+			echo '<h1>' . $this->titel . '</h1>';
+		}
 		foreach ($this->getFields() as $field) {
 			$field->view();
 		}

@@ -5,40 +5,6 @@ require_once 'document.class.php';
 /**
  * documentcontent.class.php	| 	Jan Pieter Waagmeester (jieter@jpwaag.com)
  *
- */
-
-/**
- * Weergeven van één document, bijvoorbeeld toevoegen/bewerken.
- */
-class DocumentContent implements view {
-
-	private $form;
-
-	public function __construct(Formulier $documentForm) {
-		$this->form = $documentForm;
-	}
-
-	public function getModel() {
-		return $this->form->getModel();
-	}
-
-	public function getTitel() {
-		if ($this->getModel()->getID() == 0) {
-			return 'Document toevoegen';
-		} else {
-			return 'Document bewerken';
-		}
-	}
-
-	public function view() {
-		echo SimpleHtml::getMelding();
-		echo '<h1>' . $this->getTitel() . '</h1>';
-		$this->form->view();
-	}
-
-}
-
-/**
  * Overzicht van alle categorieën met een bepaald aantal documenten per
  * categorie, zeg maar de standaarpagina voor de documentenketzer.
  */

@@ -140,15 +140,14 @@ class DocumentController extends Controller {
 			$this->document->setCatID($_GET['catID']);
 		}
 		$namen = array();
-		foreach (DocumentenCategorie::getAll() as $id => $cat) {
-			$namen[$id] = $cat->getNaam();
+		foreach (DocumentenCategorie::getAll() as $cat) {
+			$namen[$cat->getID()] = $cat->getNaam();
 		}
 		$fields['naam'] = new RequiredTextField('naam', $this->document->getNaam(), 'Documentnaam');
 		$fields['catID'] = new SelectField('catID', $this->document->getCatID(), 'Categorie', $namen);
 		$fields['uploader'] = new FileField('/documenten', $this->document->getBestand());
 		$fields[] = new SubmitResetCancel('/communicatie/documenten/');
 		$formulier = new Formulier($this->document, 'documentForm', '/communicatie/documenten/bewerken/' . $this->document->getId(), $fields);
-		$formulier->enctype = 'multipart/form-data';
 		if ($this->isPosted() AND $formulier->validate()) {
 			$this->document->setNaam($fields['naam']->getValue());
 			$this->document->setCatID($fields['catID']->getValue());
@@ -174,17 +173,19 @@ class DocumentController extends Controller {
 						$melding = 'Fout bij het opslaan van het bestand in het bestandsysteem. Bewerk het document om het bestand alsnog toe te voegen.';
 					}
 				} catch (Exception $e) {
-					$melding = 'Bestand aan document toevoegen mislukt: ' . $e->getMessage();
+					$melding = 'Bestand van document opslaan mislukt: ' . $e->getMessage();
 				}
 			} else {
 				$melding = 'Fout bij toevoegen van document Document::save()';
 			}
 			invokeRefresh($this->baseurl, $melding);
 		}
-		if ($fields['uploader']->getError() != '') {
-			$this->addError($fields['uploader']->getError());
+		if ($this->document->getID() == 0) {
+			$formulier->titel = 'Document toevoegen';
+		} else {
+			$formulier->titel = 'Document bewerken';
 		}
-		$this->view = new DocumentContent($formulier);
+		$this->view = $formulier;
 		setMelding($this->errors, -1);
 	}
 

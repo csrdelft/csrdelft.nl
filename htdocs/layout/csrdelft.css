@@ -17,7 +17,7 @@ body, textarea, input, select, option, tr, td, th, div, p  {
 	text-align: justify;
 }
 
-h1{
+h1, .Formulier h1{
 	font-size: 1.6em;
 	margin-bottom: 0.2em;
 }

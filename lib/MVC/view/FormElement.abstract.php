@@ -67,6 +67,10 @@ abstract class FormElement implements View {
 		return get_class($this);
 	}
 
+	public function getTitel() {
+		return '';
+	}
+
 	public function getJavascript() {
 		return '';
 	}

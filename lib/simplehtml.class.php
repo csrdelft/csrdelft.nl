@@ -11,7 +11,7 @@
 abstract class SimpleHTML implements View {
 
 	public function getTitel() {
-		return 'C.S.R. Delft';
+		return '';
 	}
 
 	public function setMelding($sMelding, $level = -1) {

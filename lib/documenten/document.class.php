@@ -129,14 +129,11 @@ class Document extends Bestand {
 	}
 
 	public function getBestand() {
-		if ($this->hasFile()) {
-			$bestand = new Bestand();
-			$bestand->bestandsnaam = $this->getBestandsnaam();
-			$bestand->size = $this->getSize();
-			$bestand->mimetype = $this->getMimetype();
-			return $bestand;
-		}
-		return null;
+		$bestand = new Bestand();
+		$bestand->bestandsnaam = $this->getBestandsnaam();
+		$bestand->size = $this->getSize();
+		$bestand->mimetype = $this->getMimetype();
+		return $bestand;
 	}
 
 	public function getBestandsnaam() {

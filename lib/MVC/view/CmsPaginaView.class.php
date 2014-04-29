@@ -85,6 +85,10 @@ class CmsPaginaZijkolomView implements View {
 		$this->paginas = $model->getAllePaginas();
 	}
 
+	public function getTitel() {
+		return '';
+	}
+
 	public function getModel() {
 		return $this->paginas;
 	}
