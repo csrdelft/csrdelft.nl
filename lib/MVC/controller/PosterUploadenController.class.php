@@ -53,7 +53,7 @@ class PosterUploadenController extends AclController {
 						invokeRefresh(null, 'Poster opslaan mislukt', -1);
 					}
 				} else {
-					invokeRefresh(null, 'Posters map bestaat niet: ' . PICS_PATH . '/fotoalbum/' . $map, -1);
+					invokeRefresh(null, 'Posters map bestaat niet: ' . $map, -1);
 				}
 			} catch (Exception $e) {
 				invokeRefresh(null, 'Poster uploaden mislukt: ' . $e->getMessage(), -1);
