@@ -27,7 +27,7 @@
 		<label for="doelgroep">Doelgroep: <a title="De doelgroep bepaalt welke groep(en) mensen het recht krijg(t)(en) om deze mededeling te zien.">{icon get="vraagteken"}</a></label>
 		<select name="doelgroep">
 			{foreach from=$mededeling->getDoelgroepen() item=doelgroep}
-				<option value="{$doelgroep}"{if $mededeling->getDoelgroep()==$doelgroep} selected="selected"{/if}>{$doelgroep}</option>
+				<option value="{$doelgroep}"{if $mededeling->getDoelgroep()==$doelgroep} selected="selected"{/if}>{$doelgroep}{if $doelgroep === 'iedereen'} (ook externen){/if}</option>
 			{/foreach}
 		</select><br />
 		{if $mededeling->isModerator()}
