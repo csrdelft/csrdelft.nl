@@ -64,6 +64,7 @@ class FileField extends FormElement implements Validator {
 	}
 
 	public function opslaan($destination, $filename, $overwrite = false) {
+		$filename = filter_var($filename, FILTER_SANITIZE_STRING);
 		return $this->model[$this->methode]->opslaan($destination, $filename, $overwrite);
 	}
 
