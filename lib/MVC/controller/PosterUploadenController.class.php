@@ -21,21 +21,24 @@ class PosterUploadenController extends AclController {
 	}
 
 	public function toevoegen() {
-		$url = '/actueel/fotoalbum/';
+		foreach (glob(PICS_PATH . '/fotoalbum/*', GLOB_ONLYDIR) as $path) {
+			$parts = explode('/', $path);
+			$name = end($parts);
+			if (!startsWith($name, '_')) {
+				$dirs[$name] = $name;
+			}
+		}
+		$fields['album'] = new SelectField('album', null, 'Album', array_reverse($dirs));
 		$fields['uploader'] = new FileField('/posters');
-		$fields[] = new SubmitResetCancel($url);
+		$fields[] = new SubmitResetCancel('/actueel/fotoalbum/');
 		$formulier = new Formulier(null, 'posterForm', '/posteruploaden/toevoegen/', $fields);
 		$formulier->titel = 'Poster uploaden';
 		if ($this->isPosted() AND $formulier->validate()) {
 			try {
-				$jaar = date('Y') + 1;
-				$map = ($jaar - 1) . '-' . $jaar . '/Posters'; // jaar vooruit
-				if (!file_exists(PICS_PATH . '/fotoalbum/' . $map)) {
-					$map = ($jaar - 2) . '-' . ($jaar - 1) . '/Posters'; // jaar terug
-				}
-				if (file_exists(PICS_PATH . '/fotoalbum/' . $map)) {
-					if ($fields['uploader']->opslaan(PICS_PATH . '/fotoalbum/' . $map . '/', $fields['uploader']->getModel()->bestandsnaam)) {
-						$url .= $map;
+				$map = PICS_PATH . '/fotoalbum/' . $fields['album']->getValue() . '/Posters/';
+				if (file_exists($map)) {
+					if ($fields['uploader']->opslaan($map, $fields['uploader']->getModel()->bestandsnaam)) {
+						$map = $fields['album']->getValue() . '/Posters';
 						require_once 'fotoalbum.class.php';
 						require_once 'fotoalbumcontent.class.php';
 						$album = new Fotoalbum($map, $map);
@@ -43,7 +46,7 @@ class PosterUploadenController extends AclController {
 							invokeRefresh(null, 'Fotoalbum bestaat niet: ' . $album->getFullpath(), -1);
 						}
 						$album->verwerkFotos();
-						invokeRefresh($url, 'Poster met succes opgeslagen', 1);
+						invokeRefresh('/actueel/fotoalbum/' . $map, 'Poster met succes opgeslagen', 1);
 					} else {
 						invokeRefresh(null, 'Poster opslaan mislukt', -1);
 					}
