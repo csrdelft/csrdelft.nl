@@ -53,10 +53,14 @@ class FileField extends FormElement implements Validator {
 	}
 
 	public function validate() {
+		if (!$this->model[$this->methode]->validate()) {
+			return false;
+		}
 		if (sizeof($this->filter) > 0 AND ! in_array($this->getModel()->mimetype, $this->filter)) {
 			$this->model[$this->methode]->error = 'Bestandstype niet toegestaan: ' . $this->getModel()->mimetype;
+			return false;
 		}
-		return $this->model[$this->methode]->validate();
+		return true;
 	}
 
 	public function opslaan($destination, $filename, $overwrite = false) {
@@ -286,11 +290,11 @@ class UploadFtp extends BestandUploader {
 		if (!parent::validate()) {
 			return false;
 		}
-		if (count($this->getFileList()) <= 0) {
-			$this->error = 'Geen bestanden aanwezig';
-		}
 		if (!file_exists($this->path . $this->value)) {
 			$this->error = 'Bestand is niet (meer) aanwezig';
+		}
+		if (is_dir($this->path . $this->value)) {
+			$this->error = 'Selecteer een bestand';
 		}
 		return $this->error === '';
 	}
