@@ -3156,7 +3156,7 @@ lib/MVC/controller/GroepenController.class.php -text
 lib/MVC/controller/InstellingenBeheerController.class.php -text
 lib/MVC/controller/LidInstellingenController.class.php -text
 lib/MVC/controller/MenuBeheerController.class.php -text
-lib/MVC/controller/PosterUploadenController.class.php -text
+lib/MVC/controller/PosterController.class.php -text
 lib/MVC/controller/TakenModuleController.class.php -text
 lib/MVC/controller/taken/BeheerFunctiesController.class.php -text
 lib/MVC/model/AgendaModel.class.php -text
