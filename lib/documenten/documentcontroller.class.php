@@ -126,11 +126,6 @@ class DocumentController extends Controller {
 		$this->toevoegen(true);
 	}
 
-	/**
-	 * @var BestandUploader
-	 */
-	private $uploader;
-
 	protected function toevoegen($edit = false) {
 		if (!$edit) {
 			//maak een nieuw, leeg document aan.
@@ -146,8 +141,15 @@ class DocumentController extends Controller {
 		$fields['naam'] = new RequiredTextField('naam', $this->document->getNaam(), 'Documentnaam');
 		$fields['catID'] = new SelectField('catID', $this->document->getCatID(), 'Categorie', $namen);
 		$fields['uploader'] = new FileField('/documenten', $this->document->getBestand());
-		$fields[] = new SubmitResetCancel('/communicatie/documenten/');
-		$formulier = new Formulier($this->document, 'documentForm', '/communicatie/documenten/bewerken/' . $this->document->getId(), $fields);
+		$fields['knopjes'] = new SubmitResetCancel('/communicatie/documenten/');
+		$formulier = new PopupForm($this->document, 'documentForm', '/communicatie/documenten/bewerken/' . $this->document->getId(), $fields);
+		if ($this->document->getID() == 0) {
+			$formulier->titel = 'Document toevoegen';
+			$fields['knopjes']->resetIcon = null;
+			$fields['knopjes']->resetText = null;
+		} else {
+			$formulier->titel = 'Document bewerken';
+		}
 		if ($this->isPosted() AND $formulier->validate()) {
 			$this->document->setNaam($fields['naam']->getValue());
 			$this->document->setCatID($fields['catID']->getValue());
@@ -180,13 +182,8 @@ class DocumentController extends Controller {
 			}
 			invokeRefresh($this->baseurl, $melding);
 		}
-		if ($this->document->getID() == 0) {
-			$formulier->titel = 'Document toevoegen';
-		} else {
-			$formulier->titel = 'Document bewerken';
-		}
-		$this->view = $formulier;
 		setMelding($this->errors, -1);
+		$this->view = $formulier;
 	}
 
 }

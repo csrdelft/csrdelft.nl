@@ -172,9 +172,6 @@ class Formulier implements View, Validator {
 			echo ' enctype="' . $this->enctype . '"';
 		}
 		echo ' id="' . $this->getFormId() . '" class="' . implode(' ', $this->css_classes) . '" method="post">' . "\n";
-		if ($this->titel !== '') {
-			echo '<h1>' . $this->titel . '</h1>';
-		}
 		foreach ($this->getFields() as $field) {
 			$field->view();
 		}
