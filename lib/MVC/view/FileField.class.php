@@ -65,6 +65,15 @@ class FileField extends FormElement implements Validator {
 
 	public function opslaan($destination, $filename, $overwrite = false) {
 		$filename = filter_var($filename, FILTER_SANITIZE_STRING);
+		if (!is_writable($destination)) {
+			throw new Exception('Doelmap is niet beschrijfbaar: ' . $destination);
+		}
+		if ($overwrite) {
+			unlink($destination . $filename);
+		}
+		if (file_exists($destination . $filename)) {
+			throw new Exception('Bestandsnaam al in gebruik: ' . $filename);
+		}
 		return $this->model[$this->methode]->opslaan($destination, $filename, $overwrite);
 	}
 
@@ -101,7 +110,7 @@ abstract class BestandUploader extends InputField {
 	}
 
 	public function isPosted() {
-		return isset($_POST['BestandUploader']) AND filter_input(INPUT_POST, 'BestandUploader') === get_class($this);
+		return isset($_POST['BestandUploader']) AND filter_input(INPUT_POST, 'BestandUploader', FILTER_SANITIZE_STRING) === get_class($this);
 	}
 
 	/**
@@ -143,7 +152,7 @@ class BestandBehouden extends BestandUploader {
 		return $this->error === '';
 	}
 
-	public function opslaan($destination, $filename, $overwrite = false) {
+	public function opslaan($destination, $filename) {
 		if (!file_exists($destination . $filename)) {
 			throw new Exception('Bestand bestaat niet');
 		}
@@ -201,16 +210,7 @@ class UploadHttp extends BestandUploader {
 		return $this->error === '';
 	}
 
-	public function opslaan($destination, $filename, $overwrite = false) {
-		if (!is_writable($destination)) {
-			throw new Exception('Doelmap is niet beschrijfbaar');
-		}
-		if ($overwrite) {
-			unlink($destination . $filename);
-		}
-		if (file_exists($destination . $filename)) {
-			throw new Exception('Bestandsnaam al in gebruik');
-		}
+	public function opslaan($destination, $filename) {
 		if (is_uploaded_file($this->value['tmp_name'])) {
 			return move_uploaded_file($this->value['tmp_name'], $destination . $filename);
 		}
@@ -303,16 +303,7 @@ class UploadFtp extends BestandUploader {
 		return $this->error === '';
 	}
 
-	public function opslaan($destination, $filename, $overwrite = false) {
-		if (!is_writable($destination)) {
-			throw new Exception('Doelmap is niet beschrijfbaar');
-		}
-		if ($overwrite) {
-			unlink($destination . $filename);
-		}
-		if (file_exists($destination . $filename)) {
-			throw new Exception('Bestandsnaam al in gebruik');
-		}
+	public function opslaan($destination, $filename) {
 		if (!file_exists($this->path . $this->model->bestandsnaam)) {
 			throw new Exception('Bronbestand bestaat niet');
 		}
@@ -439,16 +430,7 @@ class UploadUrl extends BestandUploader {
 		return $this->error === '';
 	}
 
-	public function opslaan($destination, $filename, $overwrite = false) {
-		if (!is_writable($destination)) {
-			throw new Exception('Doelmap is niet beschrijfbaar');
-		}
-		if ($overwrite) {
-			unlink($destination . $filename);
-		}
-		if (file_exists($destination . $filename)) {
-			throw new Exception('Bestandsnaam al in gebruik');
-		}
+	public function opslaan($destination, $filename) {
 		return file_put_contents($destination . $filename, $this->value);
 	}
 
