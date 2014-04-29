@@ -54,7 +54,7 @@ class FileField extends FormElement implements Validator {
 
 	public function validate() {
 		if (sizeof($this->filter) > 0 AND ! in_array($this->getModel()->mimetype, $this->filter)) {
-			$this->model[$this->methode]->error = 'Ongeldig bestandstype: ' . $this->getModel()->mimetype;
+			$this->model[$this->methode]->error = 'Bestandstype niet toegestaan: ' . $this->getModel()->mimetype;
 		}
 		return $this->model[$this->methode]->validate();
 	}
