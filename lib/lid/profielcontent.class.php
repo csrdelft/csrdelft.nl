@@ -35,7 +35,7 @@ class ProfielContent extends TemplateView {
 		}
 
 		$woonoord = $this->lid->getWoonoord();
-		if ($woonoord instanceof Groep) {
+		if ($woonoord instanceof OldGroep) {
 			$profhtml['woonoord'] = '<strong>' . $woonoord->getLink() . '</strong>';
 		} else {
 			$profhtml['woonoord'] = '';

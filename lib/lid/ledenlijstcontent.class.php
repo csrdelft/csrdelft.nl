@@ -392,7 +392,7 @@ class LLCSV extends LLweergave {
 					break;
 				case 'woonoord':
 					$woonoord = $lid->getWoonoord();
-					if ($woonoord instanceof Groep) {
+					if ($woonoord instanceof OldGroep) {
 						$return.=$woonoord->getNaam();
 					}
 				default:

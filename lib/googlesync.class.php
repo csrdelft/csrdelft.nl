@@ -420,7 +420,7 @@ class GoogleSync {
 			$address->setAttribute('primary', 'true');
 
 			//only rel OR label (XOR) can (and must) be set
-			if ($lid->getWoonoord() instanceof Groep) {
+			if ($lid->getWoonoord() instanceof OldGroep) {
 				$woonoord = $doc->createElement('gd:housename');
 				$woonoord->appendChild(new DOMText($lid->getWoonoord()->getNaam()));
 				$address->appendChild($woonoord);

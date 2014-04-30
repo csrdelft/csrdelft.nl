@@ -41,7 +41,7 @@ class EetplanContent extends TemplateView {
 					<tr class="kleur' . ($row % 2) . '">
 						<td >' . $this->_eetplan->getDatum($aEetplanData['avond']) . '</td>
 						<td><a href="/actueel/eetplan/huis/' . $aEetplanData['huisID'] . '"><strong>' . mb_htmlentities($aEetplanData['huisnaam']) . '</strong></a><br />';
-				if ($huis instanceof Groep AND $huis->getId() != 0) {
+				if ($huis instanceof OldGroep AND $huis->getId() != 0) {
 					echo 'Huispagina van ' . $huis->getLink();
 				}
 				echo '</td></tr>';
@@ -97,7 +97,7 @@ class EetplanContent extends TemplateView {
 			$sUitvoer .= '</table>';
 			echo '<h2><a class="forumGrootlink"href="/actueel/eetplan/">Eetplan</a> &raquo; voor ' . mb_htmlentities($aEetplanData['huisnaam']) . '</h2>
 				' . mb_htmlentities($aEetplanData['huisadres']) . ' <br />';
-			if ($huis instanceof Groep AND $huis->getId() != 0) {
+			if ($huis instanceof OldGroep AND $huis->getId() != 0) {
 				echo 'Huispagina: ' . $huis->getLink() . '<br /><br />';
 			}
 			echo $sUitvoer;
@@ -152,7 +152,7 @@ class EetplanContent extends TemplateView {
 
 			echo '<tr class="kleur' . ($row % 2) . '">';
 			echo '<td><a href="/actueel/eetplan/huis/' . $aHuis['huisID'] . '">' . mb_htmlentities($aHuis['huisNaam']) . '</a></td><td>';
-			if ($huis instanceof Groep AND $huis->getId() != 0) {
+			if ($huis instanceof OldGroep AND $huis->getId() != 0) {
 				echo $huis->getLink();
 			}
 			echo '</td><td>' . $aHuis['telefoon'] . '</td></tr>';

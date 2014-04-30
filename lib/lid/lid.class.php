@@ -150,7 +150,7 @@ class Lid implements Serializable, Agendeerbaar {
 
 
 			$woonoord = $this->getWoonoord();
-			if ($woonoord instanceof Groep) {
+			if ($woonoord instanceof OldGroep) {
 				$entry['ou'] = $woonoord->getNaam();
 			}
 
@@ -568,7 +568,7 @@ class Lid implements Serializable, Agendeerbaar {
 	 */
 	public function getWoonoord() {
 		$groepen = Groepen::getByTypeAndUid(2, $this->getUid());
-		if (is_array($groepen) AND isset($groepen[0]) AND $groepen[0] instanceof Groep) {
+		if (is_array($groepen) AND isset($groepen[0]) AND $groepen[0] instanceof OldGroep) {
 			return $groepen[0];
 		}
 		return false;

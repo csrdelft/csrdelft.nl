@@ -25,7 +25,7 @@ if (isset($_GET['q'])) {
 	if ($zoeker->count() == 0) {
 		try {
 			$groep = new OldGroep($_GET['q']);
-			if ($groep instanceof Groep) {
+			if ($groep instanceof OldGroep) {
 				header('location: ' . $groep->getUrl());
 				exit;
 			}
