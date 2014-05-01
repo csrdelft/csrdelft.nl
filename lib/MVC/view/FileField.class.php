@@ -64,15 +64,17 @@ class FileField extends FormElement implements Validator {
 	}
 
 	public function opslaan($destination, $filename, $overwrite = false) {
-		$filename = filter_var($filename, FILTER_SANITIZE_STRING);
-		if (!is_writable($destination)) {
-			throw new Exception('Doelmap is niet beschrijfbaar: ' . $destination);
-		}
-		if ($overwrite) {
-			unlink($destination . $filename);
-		}
-		if (file_exists($destination . $filename)) {
-			throw new Exception('Bestandsnaam al in gebruik: ' . $filename);
+		if ($this->methode !== 'BestandBehouden') {
+			$filename = filter_var($filename, FILTER_SANITIZE_STRING);
+			if (!is_writable($destination)) {
+				throw new Exception('Doelmap is niet beschrijfbaar: ' . $destination);
+			}
+			if ($overwrite) {
+				unlink($destination . $filename);
+			}
+			if (file_exists($destination . $filename)) {
+				throw new Exception('Bestandsnaam al in gebruik: ' . $filename);
+			}
 		}
 		return $this->model[$this->methode]->opslaan($destination, $filename, $overwrite);
 	}
