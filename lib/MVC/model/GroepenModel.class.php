@@ -127,7 +127,27 @@ class KetzerOptiesModel extends GroepenModel {
 	protected static $instance;
 
 	public function getOptiesVoorSelect(KetzerSelect $select) {
-		return $this->find('select_id = ?', array($select->select_id));
+		return $this->find('ketzer_id = ? AND select_id = ?', array($select->ketzer_id, $select->select_id));
+	}
+
+}
+
+class KetzerKeuzesModel extends GroepenModel {
+
+	const orm = 'KetzerKeuze';
+
+	protected static $instance;
+
+	public function getKeuzesVoorOptie(KetzerOptie $optie) {
+		return $this->find('ketzer_id = ? AND select_id = ? AND optie_id = ?', array($optie->ketzer_id, $optie->select_id, $optie->optie_id));
+	}
+
+	public function getKeuzeVanLid(KetzerSelect $select, $lid_id) {
+		return $this->find('ketzer_id = ? AND select_id = ? AND lid_id = ?', array($select->ketzer_id, $select->select_id, $lid_id));
+	}
+
+	public function getKetzerKeuzesVanLid(Ketzer $ketzer, $lid_id) {
+		return $this->find('ketzer_id = ? AND lid_id = ?', array($ketzer->id, $lid_id));
 	}
 
 }

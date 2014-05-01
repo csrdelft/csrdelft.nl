@@ -1,6 +1,6 @@
 <?php
 
-require_once 'MVC/model/entity/groepen/KetzerSelectSoort.enum.php';
+require_once 'MVC/model/entity/groepen/KetzerSelectorsoort.enum.php';
 
 /**
  * KetzerSelect.class.php
@@ -13,7 +13,7 @@ require_once 'MVC/model/entity/groepen/KetzerSelectSoort.enum.php';
 class KetzerSelect extends PersistentEntity {
 
 	/**
-	 * Dit is een selector van deze ketzer
+	 * Selector van deze ketzer
 	 * @var int
 	 */
 	public $ketzer_id;
@@ -24,7 +24,7 @@ class KetzerSelect extends PersistentEntity {
 	public $select_id;
 	/**
 	 * Checkbox (AND) / Radio (XOR)
-	 * @see KetzerSelectSoort
+	 * @see KetzerSelectorsoort
 	 * @var string
 	 */
 	public $keuze_soort;
@@ -35,7 +35,7 @@ class KetzerSelect extends PersistentEntity {
 	protected static $persistent_fields = array(
 		'ketzer_id' => array('int', 11),
 		'select_id' => array('int', 11),
-		'keuze_soort' => array('enum', 'KetzerSelectSoort')
+		'keuze_soort' => array('enum', 'KetzerSelectorsoort')
 	);
 	/**
 	 * Database table name

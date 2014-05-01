@@ -11,12 +11,12 @@
 class KetzerKeuze extends PersistentEntity {
 
 	/**
-	 * Dit is een selector van deze ketzer
+	 * Keuze in deze ketzer
 	 * @var int
 	 */
 	public $ketzer_id;
 	/**
-	 * Primary key
+	 * Keuze van deze ketzerselector
 	 * @var int
 	 */
 	public $select_id;
