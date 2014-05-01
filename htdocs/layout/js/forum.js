@@ -130,14 +130,6 @@ function restorePost() {
 	document.getElementById('forumOpslaan').disabled = false;
 	document.getElementById('forumVoorbeeld').disabled = false;
 }
-function previewPost(source, dest) {
-	var post = document.getElementById(source).value;
-	if (post.length != '') {
-		var previewDiv = document.getElementById(dest);
-		applyUBB(post, previewDiv);
-		$('#' + dest + "Container").show();
-	}
-}
 function submitPost() {
 	var form = $('#forumEditForm');
 	var jqXHR = $.ajax({

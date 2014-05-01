@@ -543,3 +543,12 @@ function importAgenda(id) {
 	http.send(null);
 	return null;
 }
+
+function previewPost(source, dest) {
+	var post = document.getElementById(source).value;
+	if (post.length != '') {
+		var previewDiv = document.getElementById(dest);
+		applyUBB(post, previewDiv);
+		$('#' + dest + "Container").show();
+	}
+}
