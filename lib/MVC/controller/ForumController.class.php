@@ -331,23 +331,26 @@ class ForumController extends Controller {
 		}
 		$tekst = filter_input(INPUT_POST, 'bericht', FILTER_UNSAFE_RAW);
 		$reden = trim(filter_input(INPUT_POST, 'reden', FILTER_SANITIZE_STRING));
+		$verschil = levenshtein($post->tekst, $tekst);
 		$rowcount = ForumPostsModel::instance()->bewerkForumPost($post, $tekst, $reden);
 		if ($rowcount !== 1) {
 			throw new Exception('Bewerken mislukt');
 		}
-		$draad->laatst_gewijzigd = $post->laatst_bewerkt;
-		$draad->laatste_post_id = $post->post_id;
-		$draad->laatste_lid_id = $post->lid_id;
-		$rowcount = ForumDradenModel::instance()->update($draad);
-		if ($rowcount !== 1) {
-			throw new Exception('Bewerken mislukt');
-		}
-		$deel->laatst_gewijzigd = $post->laatst_bewerkt;
-		$deel->laatste_post_id = $post->post_id;
-		$deel->laatste_lid_id = $post->lid_id;
-		$rowcount = ForumDelenModel::instance()->update($deel);
-		if ($rowcount !== 1) {
-			throw new Exception('Bewerken mislukt');
+		if ($verschil > 3) {
+			$draad->laatst_gewijzigd = $post->laatst_bewerkt;
+			$draad->laatste_post_id = $post->post_id;
+			$draad->laatste_lid_id = $post->lid_id;
+			$rowcount = ForumDradenModel::instance()->update($draad);
+			if ($rowcount !== 1) {
+				throw new Exception('Bewerken mislukt');
+			}
+			$deel->laatst_gewijzigd = $post->laatst_bewerkt;
+			$deel->laatste_post_id = $post->post_id;
+			$deel->laatste_lid_id = $post->lid_id;
+			$rowcount = ForumDelenModel::instance()->update($deel);
+			if ($rowcount !== 1) {
+				throw new Exception('Bewerken mislukt');
+			}
 		}
 		ForumDradenGelezenModel::instance()->setWanneerGelezenDoorLid($draad);
 		$this->view = new ForumPostView($post, $draad, $deel);
