@@ -82,9 +82,9 @@ abstract class FormElement implements View {
  */
 abstract class InputField extends FormElement implements Validator {
 
-	public $name;  //naam van het veld in POST
-	public $value;  //welke initiele waarde heeft het veld?
-	public $origvalue; //welke originele waarde had het veld?
+	protected $name;  //naam van het veld in POST
+	protected $value;  //welke initiele waarde heeft het veld?
+	protected $origvalue; //welke originele waarde had het veld?
 	public $title;  //omschrijving bij mouseover title
 	public $description; //omschrijving in label
 	public $disabled = false;   //veld uitgeschakeld?

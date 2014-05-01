@@ -69,14 +69,14 @@ class Formulier implements View, Validator {
 	}
 
 	/**
-	 * Zoekt een FormElement met exact de gegeven naam.
+	 * Zoekt een InputField met exact de gegeven naam.
 	 *
 	 * @param string $fieldName
 	 * @return InputField OR false if not found
 	 */
 	public function findByName($fieldName) {
 		foreach ($this->fields as $field) {
-			if ($field->getName() === $fieldName) {
+			if ($field instanceof InputField AND $field->getName() === $fieldName) {
 				return $field;
 			}
 		}
@@ -85,9 +85,7 @@ class Formulier implements View, Validator {
 
 	public function addFields(array $fields) {
 		foreach ($fields as $field) {
-			if (!$field instanceof FormElement) {
-				throw new Exception('Field not instanceof FormElement');
-			} elseif ($field instanceof FileField) {
+			if ($field instanceof FileField) {
 				$this->enctype = 'multipart/form-data';
 			}
 			if ($field instanceof InputField) { // same as insertBefore
@@ -117,36 +115,11 @@ class Formulier implements View, Validator {
 		}
 	}
 
-	public function makeField($fieldName, $title = '') {
-		$type = $this->model->getFieldType($fieldName);
-		switch ($type) {
-			case 'string':
-				$field = new TextField($fieldName, $this->model->$fieldName, str_replace('_', ' ', ucfirst($fieldName)), $this->model->getMaxLength());
-				break;
-			case 'int':
-				$field = new IntField($fieldName, $this->model->$fieldName, str_replace('_', ' ', ucfirst($fieldName)), $this->model->getMaxLength());
-				break;
-			case 'float':
-				$field = new TextField($fieldName, $this->model->$fieldName, str_replace('_', ' ', ucfirst($fieldName)), $this->model->getMaxLength());
-				break;
-			case 'datetime':
-				$field = new TextField($fieldName, $this->model->$fieldName, str_replace('_', ' ', ucfirst($fieldName)), $this->model->getMaxLength());
-				break;
-			case 'enum':
-				$field = new TextField($fieldName, $this->model->$fieldName, str_replace('_', ' ', ucfirst($fieldName)), $this->model->getMaxLength());
-				break;
-			default:
-				break;
-		}
-		$field->title = $title;
-		$this->addFields(array($field));
-	}
-
 	/**
 	 * Is het formulier *helemaal* gePOST?
 	 */
 	public function isPosted() {
-		foreach ($this->getFields() as $field) {
+		foreach ($this->fields as $field) {
 			if ($field instanceof InputField AND ! ($field->isPosted() OR $field instanceof VinkField)) {
 				return false;
 			}
@@ -164,7 +137,7 @@ class Formulier implements View, Validator {
 			return false;
 		}
 		$valid = true;
-		foreach ($this->getFields() as $field) {
+		foreach ($this->fields as $field) {
 			if ($field instanceof Validator AND ! $field->validate()) { // geen comments bijv.
 				$valid = false; // niet gelijk retourneren om voor alle velden eventueel errors te zetten
 			}
@@ -177,7 +150,7 @@ class Formulier implements View, Validator {
 	 */
 	public function getValues() {
 		$values = array();
-		foreach ($this->getFields() as $field) {
+		foreach ($this->fields as $field) {
 			if ($field instanceof InputField) {
 				$fieldName = $field->getName();
 				$values[$fieldName] = $field->getValue();
@@ -192,7 +165,7 @@ class Formulier implements View, Validator {
 
 	public function getJavascript() {
 		$javascript = array();
-		foreach ($this->getFields() as $field) {
+		foreach ($this->fields as $field) {
 			$js = $field->getJavascript();
 			$javascript[md5($js)] = $js;
 		}
@@ -212,7 +185,7 @@ class Formulier implements View, Validator {
 			echo ' enctype="' . $this->enctype . '"';
 		}
 		echo ' id="' . $this->getFormId() . '" class="' . implode(' ', $this->css_classes) . '" method="post">';
-		foreach ($this->getFields() as $field) {
+		foreach ($this->fields as $field) {
 			$field->view();
 		}
 		echo $this->getJavascript();
