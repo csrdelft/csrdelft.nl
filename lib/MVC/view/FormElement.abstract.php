@@ -178,7 +178,7 @@ abstract class InputField extends FormElement implements Validator {
 			$this->error = 'Dit veld mag maximaal ' . $this->max_len . ' tekens lang zijn';
 		}
 		//als min_len > 0 dan checken of de lengte er niet onder zit
-		if ($this->min_len > 0 AND strlen($this->value) > $this->min_len) {
+		if ($this->min_len > 0 AND strlen($this->value) < $this->min_len) {
 			$this->error = 'Dit veld moet minimaal ' . $this->min_len . ' tekens lang zijn';
 		}
 		return $this->error === '';
