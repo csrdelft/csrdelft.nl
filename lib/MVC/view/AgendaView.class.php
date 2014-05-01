@@ -83,7 +83,8 @@ class AgendaItemDeleteView extends TemplateView {
 class AgendaItemFormView extends PopupForm {
 
 	public function __construct(AgendaItem $item, $actie) {
-		parent::__construct($item, 'agenda-item-form', $actie);
+		parent::__construct($item, 'agenda-item-form', '/agenda/' . $actie . '/' . $item->item_id);
+		$this->titel = 'Agenda-item ' . $actie;
 		if ($actie === 'bewerken') {
 			$this->css_classes[] = 'PreventUnchanged';
 		}
@@ -139,14 +140,6 @@ function setTijd(a, b, c, d) {
 
 		$this->model->begin_moment = $fields['datum']->getValue() . ' ' . $fields['begin']->getValue();
 		$this->model->eind_moment = $fields['datum']->getValue() . ' ' . $fields['eind']->getValue();
-	}
-
-	public function getAction() {
-		return '/agenda/' . $this->action . '/' . $this->model->item_id;
-	}
-
-	public function getTitel() {
-		return 'Agenda-item ' . $this->action;
 	}
 
 	public function validate() {

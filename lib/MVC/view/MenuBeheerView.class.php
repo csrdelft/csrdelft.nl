@@ -48,11 +48,13 @@ class MenuItemView extends TemplateView {
 class MenuItemFormView extends PopupForm {
 
 	public function __construct(MenuItem $item, $actie) {
-		parent::__construct($item, 'menu-item-form', $actie);
-		$this->css_classes[] = 'ReloadPage';
+		parent::__construct($item, 'menu-item-form', '/menubeheer/' . $actie . '/' . $item->item_id);
+		$this->titel = 'Menu-item ' . $actie;
 		if ($actie === 'bewerken') {
 			$this->css_classes[] = 'PreventUnchanged';
 		}
+		$this->css_classes[] = 'ReloadPage';
+
 		$fields['pid'] = new RequiredIntField('parent_id', $item->parent_id, 'Parent ID', 0);
 		$fields['pid']->title = 'Item id van element 1 niveau hoger';
 
@@ -72,14 +74,6 @@ class MenuItemFormView extends PopupForm {
 
 		$fields[] = new SubmitResetCancel();
 		$this->addFields($fields);
-	}
-
-	public function getAction() {
-		return '/menubeheer/' . $this->action . '/' . $this->model->item_id;
-	}
-
-	public function getTitel() {
-		return 'Menu-item ' . $this->action;
 	}
 
 }

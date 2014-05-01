@@ -52,14 +52,6 @@ class Formulier implements View, Validator {
 		$this->addFields($fields);
 	}
 
-	public function setAction($url) {
-		$this->action = $url;
-	}
-
-	public function getAction() {
-		return $this->action;
-	}
-
 	public function getTitel() {
 		return $this->titel;
 	}
@@ -189,7 +181,7 @@ class Formulier implements View, Validator {
 	 */
 	public function view() {
 		echo SimpleHtml::getMelding();
-		echo '<h1 class="formTitle">' . $this->getTitel() . '</h1><form action="' . $this->getAction() . '"';
+		echo '<h1 class="formTitle">' . $this->getTitel() . '</h1><form action="' . $this->action . '"';
 		if ($this->enctype !== null) {
 			echo ' enctype="' . $this->enctype . '"';
 		}
@@ -225,7 +217,7 @@ class InlineForm extends Formulier {
 
 	public function view($tekst = false) {
 		echo '<div id="inline-' . $this->getFormId() . '">';
-		echo '<form id="' . $this->getFormId() . '" action="' . $this->getAction() . '" method="post" class="Formulier InlineForm">';
+		echo '<form id="' . $this->getFormId() . '" action="' . $this->action . '" method="post" class="Formulier InlineForm">';
 		echo $this->fields[0]->view();
 		echo '<div class="FormToggle">' . $this->fields[0]->getValue() . '</div>';
 		echo '<a class="knop submit" title="Opslaan"><img width="16" height="16" class="icon" alt="submit" src="' . CSR_PICS . '/famfamfam/accept.png">' . ($tekst ? ' Opslaan ' : '') . '</a>';

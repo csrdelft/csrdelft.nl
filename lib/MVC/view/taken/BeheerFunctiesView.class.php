@@ -58,7 +58,8 @@ class FunctieDeleteView extends TemplateView {
 class FunctieFormView extends PopupForm {
 
 	public function __construct(CorveeFunctie $functie, $actie) {
-		parent::__construct($functie, 'taken-functie-form', $actie);
+		parent::__construct($functie, 'taken-functie-form', Instellingen::get('taken', 'url') . '/' . $actie . '/' . $functie->functie_id);
+		$this->titel = 'Corveefunctie ' . $actie;
 		if ($actie === 'bewerken') {
 			$this->css_classes[] = 'PreventUnchanged';
 		}
@@ -79,14 +80,6 @@ class FunctieFormView extends PopupForm {
 
 		$fields[] = new SubmitResetCancel();
 		$this->addFields($fields);
-	}
-
-	public function getAction() {
-		return Instellingen::get('taken', 'url') . '/' . $this->action . '/' . $this->model->functie_id;
-	}
-
-	public function getTitel() {
-		return 'Corveefunctie ' . $this->action;
 	}
 
 }
