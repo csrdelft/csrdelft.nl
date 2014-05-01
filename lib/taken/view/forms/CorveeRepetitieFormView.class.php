@@ -73,7 +73,7 @@ JS;
 	}
 
 	public function view() {
-		$this->_form->css_classes[] = 'popup';
+		$this->_form->addCssClass('popup');
 		$this->smarty->assign('form', $this->_form);
 		if ($this->_crid === 0) {
 			$this->smarty->assign('nocheck', true);

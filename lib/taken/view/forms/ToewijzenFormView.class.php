@@ -41,7 +41,8 @@ class ToewijzenFormView extends TemplateView {
 	}
 
 	public function view() {
-		$this->_form->css_classes[] = 'popup PreventUnchanged';
+		$this->_form->addCssClass('popup');
+		$this->_form->addCssClass('PreventUnchanged');
 
 		$this->smarty->assign('taak', $this->_taak);
 		$this->smarty->assign('suggesties', $this->_suggesties);

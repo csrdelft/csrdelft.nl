@@ -1,7 +1,5 @@
 <?php
 
-
-
 /**
  * BeheerAbonnementenView.class.php	| 	P.W.G. Brussee (brussee@live.nl)
  * 
@@ -39,7 +37,7 @@ class BeheerAbonnementenView extends TemplateView {
 
 		$field = new LidField('voor_lid', null, "Toon abonnementen van persoon:", 'allepersonen');
 		$form = new Formulier(null, 'taken-subform-abos', Instellingen::get('taken', 'url') . '/voorlid', array($field));
-		$form->css_classes[] = 'popup';
+		$form->addCssClass('popup');
 		$this->smarty->assign('form', $form);
 
 		if (is_array($this->_leden_abonnementen)) { // matrix van abonnementen

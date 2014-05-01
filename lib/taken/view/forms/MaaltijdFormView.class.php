@@ -36,7 +36,8 @@ class MaaltijdFormView extends TemplateView {
 		$fields[] = new TijdField('tijd', $tijd, 'Tijd', 15);
 		$fields[] = new FloatField('prijs', $prijs, 'Prijs (€)', 0, 50);
 		$fields[] = new IntField('aanmeld_limiet', $limiet, 'Aanmeldlimiet', 0, 200);
-		$fields['filter'] = new TextField('aanmeld_filter', $filter, 'Aanmeldrestrictie', 255, $suggesties);
+		$fields['filter'] = new TextField('aanmeld_filter', $filter, 'Aanmeldrestrictie', 255);
+		$fields['filter']->setSuggestions($suggesties);
 		$fields['filter']->required = false;
 		$fields['filter']->title = 'Plaats een ! vooraan om van de restrictie een uitsluiting te maken.';
 		$fields[] = new SubmitResetCancel();
@@ -52,7 +53,8 @@ class MaaltijdFormView extends TemplateView {
 	}
 
 	public function view() {
-		$this->_form->css_classes[] = 'popup PreventUnchanged';
+		$this->_form->addCssClass('popup');
+		$this->_form->addCssClass('PreventUnchanged');
 		$this->smarty->assign('form', $this->_form);
 		if ($this->_mid === 0) {
 			$this->smarty->assign('nocheck', true);

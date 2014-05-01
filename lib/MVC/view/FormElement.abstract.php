@@ -99,9 +99,9 @@ abstract class InputField extends FormElement implements Validator {
 	public $max_len = 0; //maximale lengte van de invoer
 	public $min_len = 0; //minimale lengte van de invoer
 	public $rows = 0;  //aantal rijen van textarea
-	public $css_classes = array('FormField'); //array met classnames die later in de class-tag komen
-	public $suggestions = array(); //array met suggesties die de javascript-autocomplete aan gaat bieden
-	public $remotedatasource = '';
+	protected $css_classes = array('FormField'); //array met classnames die later in de class-tag komen
+	protected $suggestions = array(); //array met suggesties die de javascript-autocomplete aan gaat bieden
+	protected $remotedatasource = '';
 
 	public function __construct($name, $value, $description = null, $model = null) {
 		parent::__construct($model);
@@ -125,6 +125,10 @@ abstract class InputField extends FormElement implements Validator {
 		return isset($_POST[$this->name]);
 	}
 
+	public function addCssClass($class) {
+		$this->css_classes[] = $class;
+	}
+
 	/**
 	 * Een remotedatasource overruled suggestions
 	 */
@@ -132,7 +136,7 @@ abstract class InputField extends FormElement implements Validator {
 		$this->remotedatasource = $url;
 	}
 
-	public function setSuggestions($array) {
+	public function setSuggestions(array $array) {
 		$this->suggestions = $array;
 	}
 

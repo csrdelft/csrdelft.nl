@@ -31,7 +31,7 @@ class Formulier implements View, Validator {
 	protected $model;
 	protected $formId;
 	public $titel = '';
-	public $action = null;
+	protected $action = null;
 	public $enctype = null;
 	/**
 	 * Fields must be added via addFields()
@@ -41,7 +41,7 @@ class Formulier implements View, Validator {
 	 * @var FormElement[]
 	 */
 	protected $fields = array();
-	public $css_classes = array();
+	protected $css_classes = array();
 	public $error = '';
 
 	public function __construct($model, $formId, $action = null, $fields = array()) {
@@ -50,6 +50,14 @@ class Formulier implements View, Validator {
 		$this->action = $action;
 		$this->css_classes[] = 'Formulier';
 		$this->addFields($fields);
+	}
+
+	public function setAction($url) {
+		$this->action = $url;
+	}
+
+	public function getAction() {
+		return $this->action;
 	}
 
 	public function getTitel() {
@@ -66,6 +74,10 @@ class Formulier implements View, Validator {
 
 	public function getFields() {
 		return $this->fields;
+	}
+
+	public function addCssClass($class) {
+		$this->css_classes[] = $class;
 	}
 
 	/**
@@ -177,10 +189,7 @@ class Formulier implements View, Validator {
 	 */
 	public function view() {
 		echo SimpleHtml::getMelding();
-		echo '<h1 class="formTitle">' . $this->getTitel() . '</h1><form';
-		if ($this->action !== null) {
-			echo ' action="' . $this->action . '"';
-		}
+		echo '<h1 class="formTitle">' . $this->getTitel() . '</h1><form action="' . $this->getAction() . '"';
 		if ($this->enctype !== null) {
 			echo ' enctype="' . $this->enctype . '"';
 		}
@@ -216,7 +225,7 @@ class InlineForm extends Formulier {
 
 	public function view($tekst = false) {
 		echo '<div id="inline-' . $this->getFormId() . '">';
-		echo '<form id="' . $this->getFormId() . '" action="' . $this->action . '" method="post" class="Formulier InlineForm">';
+		echo '<form id="' . $this->getFormId() . '" action="' . $this->getAction() . '" method="post" class="Formulier InlineForm">';
 		echo $this->fields[0]->view();
 		echo '<div class="FormToggle">' . $this->fields[0]->getValue() . '</div>';
 		echo '<a class="knop submit" title="Opslaan"><img width="16" height="16" class="icon" alt="submit" src="' . CSR_PICS . '/famfamfam/accept.png">' . ($tekst ? ' Opslaan ' : '') . '</a>';

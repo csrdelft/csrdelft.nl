@@ -26,7 +26,7 @@ class BoekjaarSluitenFormView extends TemplateView {
 	}
 
 	public function view() {
-		$this->_form->css_classes[] = 'popup';
+		$this->_form->addCssClass('popup');
 		$this->smarty->assign('form', $this->_form);
 		$this->smarty->assign('nocheck', true);
 		$this->smarty->display('taken/popup_form.tpl');

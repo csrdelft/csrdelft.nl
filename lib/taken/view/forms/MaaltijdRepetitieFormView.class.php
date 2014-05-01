@@ -40,7 +40,8 @@ class MaaltijdRepetitieFormView extends TemplateView {
 		}
 		$fields[] = new FloatField('standaard_prijs', $prijs, 'Standaard prijs (€)', 0, 50);
 		$fields[] = new IntField('standaard_limiet', $limiet, 'Standaard limiet', 0, 200);
-		$fields['filter'] = new TextField('abonnement_filter', $filter, 'Aanmeldrestrictie', 255, $suggesties);
+		$fields['filter'] = new TextField('abonnement_filter', $filter, 'Aanmeldrestrictie', 255);
+		$fields['filter']->setSuggestions($suggesties);
 		$fields['filter']->title = 'Plaats een ! vooraan om van de restrictie een uitsluiting te maken.';
 		$fields['filter']->required = false;
 		if ($this->_mrid !== 0) {
@@ -74,7 +75,7 @@ JS;
 	}
 
 	public function view() {
-		$this->_form->css_classes[] = 'popup';
+		$this->_form->addCssClass('popup');
 		$this->smarty->assign('form', $this->_form);
 		if ($this->_mrid === 0) {
 			$this->smarty->assign('nocheck', true);
