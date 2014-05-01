@@ -27,7 +27,7 @@ class Ketzer extends OpvolgbareGroep {
 	public $aanmelden_tot;
 	/**
 	 * Ketzer-selectors
-	 * @var KetzerSelect[]
+	 * @var KetzerSelector[]
 	 */
 	private $ketzer_selectors;
 	/**
@@ -56,7 +56,7 @@ class Ketzer extends OpvolgbareGroep {
 	/**
 	 * Lazy loading by foreign key.
 	 * 
-	 * @return KetzerSelect[]
+	 * @return KetzerSelector[]
 	 */
 	public function getKetzerSelectors() {
 		if (!isset($this->ketzer_selectors)) {

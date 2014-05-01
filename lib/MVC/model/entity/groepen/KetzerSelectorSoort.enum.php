@@ -1,14 +1,14 @@
 <?php
 
 /**
- * KetzerSelectorsoort.enum.php
+ * KetzerSelectorSoort.enum.php
  * 
  * @author P.W.G. Brussee <brussee@live.nl>
  * 
  * De keuzesoort van een selector: AND / XOR
  * 
  */
-final class KetzerSelectorsoort extends PersistentEnum {
+final class KetzerSelectorSoort extends PersistentEnum {
 
 	const Checkbox = 'AND';
 	const Radio = 'XOR';

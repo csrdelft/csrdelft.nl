@@ -3206,8 +3206,8 @@ lib/MVC/model/entity/groepen/HuisStatus.enum.php -text
 lib/MVC/model/entity/groepen/Ketzer.class.php -text
 lib/MVC/model/entity/groepen/KetzerKeuze.class.php -text
 lib/MVC/model/entity/groepen/KetzerOptie.class.php -text
-lib/MVC/model/entity/groepen/KetzerSelect.class.php -text
-lib/MVC/model/entity/groepen/KetzerSelectSoort.enum.php -text
+lib/MVC/model/entity/groepen/KetzerSelector.php -text
+lib/MVC/model/entity/groepen/KetzerSelectorSoort.enum.php -text
 lib/MVC/model/entity/groepen/Ondervereniging.class.php -text
 lib/MVC/model/entity/groepen/OpvolgbareGroep.abstract.php -text
 lib/MVC/model/entity/groepen/Sjaarcie.class.php -text

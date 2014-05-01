@@ -16,7 +16,7 @@ class KetzerKeuze extends PersistentEntity {
 	 */
 	public $ketzer_id;
 	/**
-	 * Keuze van deze ketzerselector
+	 * Keuze van deze KetzerSelector
 	 * @var int
 	 */
 	public $select_id;
