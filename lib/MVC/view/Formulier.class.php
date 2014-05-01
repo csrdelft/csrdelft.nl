@@ -57,7 +57,6 @@ class Formulier implements View, Validator {
 	}
 
 	public function getModel() {
-		$this->getValues(); // fetch POST values
 		return $this->model;
 	}
 
@@ -84,19 +83,38 @@ class Formulier implements View, Validator {
 		return false;
 	}
 
-	/**
-	 * Fetches POST values itself.
-	 * 
-	 * @param array $fields
-	 */
 	public function addFields(array $fields) {
-		foreach ($fields as $i => $field) {
-			if ($field instanceof FileField) {
+		foreach ($fields as $field) {
+			if (!$field instanceof FormElement) {
+				throw new Exception('Field not instanceof FormElement');
+			} elseif ($field instanceof FileField) {
 				$this->enctype = 'multipart/form-data';
+			}
+			if ($field instanceof InputField) { // same as insertBefore
+				$fieldName = $field->getName();
+				if ($this->model instanceof PersistentEntity AND property_exists($this->model, $fieldName)) {
+					$this->model->$fieldName = $field->getValue();
+				}
 			}
 		}
 		$this->fields = array_merge($this->fields, $fields);
-		$this->getValues(); // fetch POST values
+	}
+
+	public function insertBefore(FormElement $field, $fieldName) {
+		$pos = 0;
+		foreach ($this->fields as $before) {
+			if ($before->getName() === $fieldName) {
+				if ($field instanceof InputField) { // same as addFields
+					$fieldName = $field->getName();
+					if ($this->model instanceof PersistentEntity AND property_exists($this->model, $fieldName)) {
+						$this->model->$fieldName = $field->getValue();
+					}
+				}
+				array_splice($this->fields, $pos, 0, $field);
+				return;
+			}
+			$pos++;
+		}
 	}
 
 	/**
@@ -136,11 +154,8 @@ class Formulier implements View, Validator {
 		$values = array();
 		foreach ($this->getFields() as $field) {
 			if ($field instanceof InputField) {
-				$propName = $field->getName();
-				$values[$propName] = $field->getValue();
-				if ($this->model instanceof PersistentEntity AND property_exists($this->model, $propName)) {
-					$this->model->$propName = $values[$propName];
-				}
+				$fieldName = $field->getName();
+				$values[$fieldName] = $field->getValue();
 			}
 		}
 		return $values;
