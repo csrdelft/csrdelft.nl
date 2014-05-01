@@ -43,6 +43,6 @@ class KetzerOptie extends PersistentEntity {
 	 * Database primary key
 	 * @var array
 	 */
-	protected static $primary_key = array('select_id', 'optie_id');
+	protected static $primary_keys = array('select_id', 'optie_id');
 
 }

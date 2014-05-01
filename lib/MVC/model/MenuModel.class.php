@@ -64,7 +64,7 @@ class MenuModel extends PersistenceModel {
 	}
 
 	public function getMenuItem($id) {
-		return $this->retrieveByPrimaryKey(array($id));
+		return $this->retrieveByPrimaryKeys(array($id));
 	}
 
 	public function newMenuItem($parent_id) {

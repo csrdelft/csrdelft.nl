@@ -26,7 +26,7 @@ class CmsPaginaModel extends PersistenceModel {
 	}
 
 	public function getPagina($naam) {
-		return $this->retrieveByPrimaryKey(array($naam));
+		return $this->retrieveByPrimaryKeys(array($naam));
 	}
 
 	public function newPagina($naam) {
@@ -41,7 +41,7 @@ class CmsPaginaModel extends PersistenceModel {
 	}
 
 	public function removePagina($naam) {
-		return $this->deleteByPrimaryKey(array($naam));
+		return $this->deleteByPrimaryKeys(array($naam));
 	}
 
 }

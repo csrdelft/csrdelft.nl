@@ -103,7 +103,7 @@ class ForumDeel extends PersistentEntity {
 	 * Database primary key
 	 * @var array
 	 */
-	protected static $primary_key = array('forum_id');
+	protected static $primary_keys = array('forum_id');
 	/**
 	 * Database table name
 	 * @var string

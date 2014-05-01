@@ -88,7 +88,7 @@ abstract class Groep extends PersistentEntity {
 	 * Database primary key
 	 * @var array
 	 */
-	protected static $primary_key = array('id');
+	protected static $primary_keys = array('id');
 
 	/**
 	 * Lazy loading by foreign key.

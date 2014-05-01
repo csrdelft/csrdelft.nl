@@ -41,7 +41,7 @@ class KwalificatiesModel extends PersistenceModel {
 	}
 
 	public function isLidGekwalificeerdVoorFunctie($uid, $fid) {
-		return $this->existsByPrimaryKey(array($uid, $fid));
+		return $this->existsByPrimaryKeys(array($uid, $fid));
 	}
 
 	public function newKwalificatie(CorveeFunctie $functie) {
@@ -52,14 +52,14 @@ class KwalificatiesModel extends PersistenceModel {
 	}
 
 	public function kwalificatieToewijzen(CorveeKwalificatie $kwali) {
-		if ($this->existsByPrimaryKey($kwali->getValues(true))) {
+		if ($this->existsByPrimaryKeys($kwali->getValues(true))) {
 			throw new Exception('Is al gekwalificeerd!');
 		}
 		$this->create($kwali);
 	}
 
 	public function kwalificatieTerugtrekken($uid, $fid) {
-		if (!$this->deleteByPrimaryKey(array($uid, $fid))) {
+		if (!$this->deleteByPrimaryKeys(array($uid, $fid))) {
 			throw new Exception('Is niet gekwalificeerd!');
 		}
 	}

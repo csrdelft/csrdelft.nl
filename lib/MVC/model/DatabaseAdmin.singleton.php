@@ -66,15 +66,15 @@ class DatabaseAdmin extends Database {
 	 * 
 	 * @param string $name
 	 * @param array $fields
-	 * @param array $primary_key
+	 * @param array $primary_keys
 	 * @return string SQL query
 	 */
-	public static function sqlCreateTable($name, array $fields, array $primary_key) {
+	public static function sqlCreateTable($name, array $fields, array $primary_keys) {
 		$sql = 'CREATE TABLE ' . $name . ' (';
 		foreach ($fields as $key => $value) {
 			$sql .= $key . ' ' . $value . ', ';
 		}
-		$sql .= 'PRIMARY KEY (' . implode(', ', $primary_key) . ')) ENGINE=InnoDB DEFAULT CHARSET=utf8 auto_increment=1';
+		$sql .= 'PRIMARY KEY (' . implode(', ', $primary_keys) . ')) ENGINE=InnoDB DEFAULT CHARSET=utf8 auto_increment=1';
 		if (defined('DB_MODIFY')) {
 			$query = self::instance()->prepare($sql);
 			$query->execute();

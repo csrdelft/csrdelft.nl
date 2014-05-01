@@ -31,42 +31,31 @@ abstract class PersistentEntity {
 		return static::$table_name;
 	}
 
-	public static function getPrimaryKey() {
-		return static::$primary_key;
+	public static function getPrimaryKeys() {
+		return static::$primary_keys;
 	}
 
 	public static function getFields() {
 		return array_keys(static::$persistent_fields);
 	}
 
-	public static function getFieldName($field_number) {
-		$i = 0;
-		foreach (static::$persistent_fields as $name => $definition) {
-			if ($i === $field_number) {
-				return $name;
-			}
-			$i++;
-		}
-		return null;
-	}
-
 	/**
 	 * Get the fields and their values of this object.
 	 * 
-	 * @param boolean $primary_key_only
+	 * @param boolean $primary_keys_only
 	 * @return array
 	 */
-	public function getValues($primary_key_only = false) {
+	public function getValues($primary_keys_only = false) {
 		$values = array();
-		if ($primary_key_only) {
-			$fields = $this->getPrimaryKey();
+		if ($primary_keys_only) {
+			$fields = $this->getPrimaryKeys();
 		} else {
 			$fields = $this->getFields();
 		}
 		foreach ($fields as $field) {
 			$values[$field] = $this->$field;
 		}
-		if ($primary_key_only) {
+		if ($primary_keys_only) {
 			return array_values($values);
 		}
 		return $values;
@@ -89,6 +78,17 @@ abstract class PersistentEntity {
 	}
 
 	/* PersistentField */
+
+	public static function getFieldName($field_number) {
+		$i = 0;
+		foreach (static::$persistent_fields as $name => $definition) {
+			if ($i === $field_number) {
+				return $name;
+			}
+			$i++;
+		}
+		return null;
+	}
 
 	public static function getFieldType($field_name) {
 		return self::getDefinition($field_name, 0);
@@ -144,7 +144,7 @@ abstract class PersistentEntity {
 			$field->null = 'NO';
 		}
 		$field->extra = '' . self::getExtraProp($field_name);
-		if (in_array($field_name, self::getPrimaryKey())) {
+		if (in_array($field_name, self::getPrimaryKeys())) {
 			$field->key = 'PRI';
 		} else {
 			$field->key = '';
@@ -162,7 +162,7 @@ abstract class PersistentEntity {
 			$database_fields = group_by_distinct('field', DatabaseAdmin::instance()->sqlDescribeTable(self::getTableName()));
 		} catch (Exception $e) {
 			if (endsWith($e->getMessage(), self::getTableName() . "' doesn't exist")) {
-				$string = DatabaseAdmin::instance()->sqlCreateTable(self::getTableName(), static::$persistent_fields, self::getPrimaryKey());
+				$string = DatabaseAdmin::instance()->sqlCreateTable(self::getTableName(), static::$persistent_fields, self::getPrimaryKeys());
 				debugprint($string);
 				return;
 			} else {

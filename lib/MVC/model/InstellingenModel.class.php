@@ -115,7 +115,7 @@ class Instellingen extends PersistenceModel {
 		foreach ($instellingen as $instelling) {
 			// haal verwijderde instellingen uit de database
 			if (!array_key_exists($instelling->module, $this->defaults) OR ! array_key_exists($instelling->instelling_id, $this->defaults[$instelling->module])) {
-				$this->deleteByPrimaryKey($instelling->getValues(true));
+				$this->deleteByPrimaryKeys($instelling->getValues(true));
 			}
 			$this->instellingen[$instelling->module][$instelling->instelling_id] = $instelling->waarde;
 		}
@@ -174,7 +174,7 @@ class Instellingen extends PersistenceModel {
 				throw new Exception('Instelling default not found: ' . $key . ' module: ' . $module);
 			}
 		}
-		return $this->retrieveByPrimaryKey(array($module, $key));
+		return $this->retrieveByPrimaryKeys(array($module, $key));
 	}
 
 	private function newInstelling($module, $key, $value) {
@@ -196,7 +196,7 @@ class Instellingen extends PersistenceModel {
 	}
 
 	public function resetInstelling($module, $key) {
-		$this->deleteByPrimaryKey(array($module, $key));
+		$this->deleteByPrimaryKeys(array($module, $key));
 		unset($this->instellingen[$module][$key]);
 		return $this->getInstelling($module, $key); // creates new with default value
 	}
