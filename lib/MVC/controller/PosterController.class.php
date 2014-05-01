@@ -41,7 +41,8 @@ class PosterController extends AclController {
 			try {
 				$map = PICS_PATH . '/fotoalbum/' . $fields['album']->getValue() . '/Posters/';
 				if (file_exists($map)) {
-					if ($fields['uploader']->opslaan($map, $fields['naam']->getValue() . '.jpg')) {
+					$filenaam = $fields['naam']->getValue() . '.jpg';
+					if ($fields['uploader']->opslaan($map, $filenaam)) {
 						$map = $fields['album']->getValue() . '/Posters';
 						require_once 'fotoalbum.class.php';
 						require_once 'fotoalbumcontent.class.php';
@@ -50,7 +51,7 @@ class PosterController extends AclController {
 							invokeRefresh(null, 'Fotoalbum bestaat niet: ' . $album->getFullpath(), -1);
 						}
 						$album->verwerkFotos();
-						invokeRefresh('/actueel/fotoalbum/' . $map, 'Poster met succes opgeslagen', 1);
+						invokeRefresh('/actueel/fotoalbum/' . $map . '/#' . $filenaam, 'Poster met succes opgeslagen', 1);
 					} else {
 						invokeRefresh(null, 'Poster opslaan mislukt', -1);
 					}
