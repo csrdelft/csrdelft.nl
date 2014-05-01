@@ -54,9 +54,9 @@ class Mededeling extends PersistentEntity {
 	 */
 	protected static $persistent_fields = array(
 		'$mededeling_id' => array('int', 11, false, null, 'auto_increment'),
-		'type' => array('varchar', 255),
+		'type' => array('string', 255),
 		'tekst' => array('text'),
-		'zichtbaar_voor' => array('varchar', 255),
+		'zichtbaar_voor' => array('string', 255),
 		'zichtbaar_vanaf' => array('datetime'),
 		'zichtbaar_tot' => array('datetime'),
 		'prioriteit' => array('int', 11),

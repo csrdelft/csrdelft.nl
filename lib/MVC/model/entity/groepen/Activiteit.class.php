@@ -20,7 +20,7 @@ class Activiteit extends Ketzer implements Agendeerbaar {
 	 * @var array
 	 */
 	protected static $persistent_fields = array(
-		'locatie' => array('varchar', 255, true)
+		'locatie' => array('string', 255, true)
 	);
 	/**
 	 * Database table name

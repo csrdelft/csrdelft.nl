@@ -32,7 +32,7 @@ class KetzerOptie extends PersistentEntity {
 	protected static $persistent_fields = array(
 		'select_id' => array('int', 11),
 		'optie_id' => array('int', 11),
-		'waarde' => array('varchar', 255)
+		'waarde' => array('string', 255)
 	);
 	/**
 	 * Database table name

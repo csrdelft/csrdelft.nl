@@ -45,10 +45,10 @@ class LidInstelling extends PersistentEntity {
 	 * @var array
 	 */
 	protected static $persistent_fields = array(
-		'lid_id' => array('varchar', 4),
-		'module' => array('varchar', 255),
-		'instelling_id' => array('varchar', 255),
-		'waarde' => array('varchar', 255)
+		'lid_id' => array('string', 4),
+		'module' => array('string', 255),
+		'instelling_id' => array('string', 255),
+		'waarde' => array('string', 255)
 	);
 	/**
 	 * Database primary key

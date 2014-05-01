@@ -38,7 +38,7 @@ class KetzerKeuze extends PersistentEntity {
 		'ketzer_id' => array('int', 11),
 		'select_id' => array('int', 11),
 		'optie_id' => array('int', 11),
-		'lid_id' => array('varchar', 4)
+		'lid_id' => array('string', 4)
 	);
 	/**
 	 * Database table name

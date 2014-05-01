@@ -61,14 +61,14 @@ class GroepCategorie extends PersistentEntity {
 	 */
 	protected static $persistent_fields = array(
 		'categorie_id' => array('int', 11, false, null, 'auto_increment'),
-		'titel' => array('varchar', 255),
+		'titel' => array('string', 255),
 		'toon_overzicht' => array('boolean'),
 		'toon_profiel' => array('boolean'),
 		'sync_ldap' => array('boolean'),
-		'rechten_aanmaken' => array('varchar', 255),
-		'rechten_beheren' => array('varchar', 255),
-		'rechten_bekijken' => array('varchar', 255),
-		'rechten_aanmelden' => array('varchar', 255)
+		'rechten_aanmaken' => array('string', 255),
+		'rechten_beheren' => array('string', 255),
+		'rechten_bekijken' => array('string', 255),
+		'rechten_aanmelden' => array('string', 255)
 	);
 	/**
 	 * Database primary key

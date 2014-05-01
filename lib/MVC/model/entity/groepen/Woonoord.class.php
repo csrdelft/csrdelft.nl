@@ -27,7 +27,7 @@ class Woonoord extends Groep {
 	 */
 	protected static $persistent_fields = array(
 		'status_historie' => array('text', null, true),
-		'huis_status' => array('varchar', 255, true)
+		'huis_status' => array('string', 255, true)
 	);
 	/**
 	 * Database table name

@@ -46,9 +46,9 @@ class ForumCategorie extends PersistentEntity {
 	 */
 	protected static $persistent_fields = array(
 		'categorie_id' => array('int', 11, false, null, 'auto_increment'),
-		'titel' => array('varchar', 255),
+		'titel' => array('string', 255),
 		'omschrijving' => array('text'),
-		'rechten_lezen' => array('varchar', 255),
+		'rechten_lezen' => array('string', 255),
 		'volgorde' => array('int', 11)
 	);
 	/**

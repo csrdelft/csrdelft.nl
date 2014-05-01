@@ -65,8 +65,8 @@ class CorveeFunctie extends PersistentEntity {
 	 */
 	protected static $persistent_fields = array(
 		'functie_id' => array('int', 11, false, null, 'auto_increment'),
-		'naam' => array('varchar', 255),
-		'afkorting' => array('varchar', 3),
+		'naam' => array('string', 255),
+		'afkorting' => array('string', 3),
 		'email_bericht' => array('text'),
 		'standaard_punten' => array('int', 11),
 		'kwalificatie_benodigd' => array('boolean')

@@ -75,14 +75,14 @@ abstract class Groep extends PersistentEntity {
 	protected static $persistent_fields = array(
 		'id' => array('int', 11, false, null, 'auto_increment'),
 		'categorie_id' => array('int', 11),
-		'naam' => array('varchar', 255),
+		'naam' => array('string', 255),
 		'samenvatting' => array('text'),
 		'omschrijving' => array('text'),
-		'rechten_bekijken' => array('varchar', 255),
-		'rechten_aanmelden' => array('varchar', 255),
-		'rechten_beheren' => array('varchar', 255),
-		'eigenaar_lid_id' => array('varchar', 4),
-		'website' => array('varchar', 255)
+		'rechten_bekijken' => array('string', 255),
+		'rechten_aanmelden' => array('string', 255),
+		'rechten_beheren' => array('string', 255),
+		'eigenaar_lid_id' => array('string', 4),
+		'website' => array('string', 255)
 	);
 	/**
 	 * Database primary key

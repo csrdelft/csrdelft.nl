@@ -87,16 +87,16 @@ class ForumDeel extends PersistentEntity {
 	protected static $persistent_fields = array(
 		'forum_id' => array('int', 11, false, null, 'auto_increment'),
 		'categorie_id' => array('int', 11),
-		'titel' => array('varchar', 255),
+		'titel' => array('string', 255),
 		'omschrijving' => array('text'),
 		'laatst_gewijzigd' => array('datetime', null, true),
 		'laatste_post_id' => array('int', 11, true,),
-		'laatste_lid_id' => array('varchar', 4, true),
+		'laatste_lid_id' => array('string', 4, true),
 		'aantal_draden' => array('int', 11),
 		'aantal_posts' => array('int', 11),
-		'rechten_lezen' => array('varchar', 255),
-		'rechten_posten' => array('varchar', 255),
-		'rechten_modereren' => array('varchar', 255),
+		'rechten_lezen' => array('string', 255),
+		'rechten_posten' => array('string', 255),
+		'rechten_modereren' => array('string', 255),
 		'volgorde' => array('int', 11)
 	);
 	/**

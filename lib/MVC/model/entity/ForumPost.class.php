@@ -72,13 +72,13 @@ class ForumPost extends PersistentEntity {
 	protected static $persistent_fields = array(
 		'post_id' => array('int', 11, false, null, 'auto_increment'),
 		'draad_id' => array('int', 11),
-		'lid_id' => array('varchar', 4),
+		'lid_id' => array('string', 4),
 		'tekst' => array('text'),
 		'datum_tijd' => array('datetime'),
 		'laatst_bewerkt' => array('datetime', null, true),
 		'bewerkt_tekst' => array('text', null, true),
 		'verwijderd' => array('boolean'),
-		'auteur_ip' => array('varchar', 255),
+		'auteur_ip' => array('string', 255),
 		'wacht_goedkeuring' => array('boolean')
 	);
 	/**

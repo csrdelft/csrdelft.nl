@@ -31,7 +31,7 @@ class ForumDraadGelezen extends PersistentEntity {
 	 */
 	protected static $persistent_fields = array(
 		'draad_id' => array('int', 11),
-		'lid_id' => array('varchar', 4),
+		'lid_id' => array('string', 4),
 		'datum_tijd' => array('datetime')
 	);
 	/**

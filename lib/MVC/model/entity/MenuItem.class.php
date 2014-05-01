@@ -64,9 +64,9 @@ class MenuItem extends PersistentEntity {
 		'item_id' => array('int', 11, false, null, 'auto_increment'),
 		'parent_id' => array('int', 11, false, 0),
 		'prioriteit' => array('int', 11, false, 0),
-		'tekst' => array('varchar', 50),
-		'link' => array('varchar', 255),
-		'rechten_bekijken' => array('varchar', 255, false, 'P_NOBODY'),
+		'tekst' => array('string', 50),
+		'link' => array('string', 255),
+		'rechten_bekijken' => array('string', 255, false, 'P_NOBODY'),
 		'zichtbaar' => array('boolean', null, false, true)
 	);
 	/**
