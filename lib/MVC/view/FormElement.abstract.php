@@ -78,7 +78,8 @@ abstract class FormElement implements View {
 }
 
 /**
- * InputField is de moeder van alle FormElements die data leveren.
+ * InputField is de base class van alle FormElements die data leveren,
+ * behalve FileField zelf die wel meerdere InputFields bevat.
  */
 abstract class InputField extends FormElement implements Validator {
 
