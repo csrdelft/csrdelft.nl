@@ -117,6 +117,31 @@ class Formulier implements View, Validator {
 		}
 	}
 
+	public function makeField($fieldName, $title = '') {
+		$type = $this->model->getFieldType($fieldName);
+		switch ($type) {
+			case 'string':
+				$field = new TextField($fieldName, $this->model->$fieldName, str_replace('_', ' ', ucfirst($fieldName)), $this->model->getMaxLength());
+				break;
+			case 'int':
+				$field = new IntField($fieldName, $this->model->$fieldName, str_replace('_', ' ', ucfirst($fieldName)), $this->model->getMaxLength());
+				break;
+			case 'float':
+				$field = new TextField($fieldName, $this->model->$fieldName, str_replace('_', ' ', ucfirst($fieldName)), $this->model->getMaxLength());
+				break;
+			case 'datetime':
+				$field = new TextField($fieldName, $this->model->$fieldName, str_replace('_', ' ', ucfirst($fieldName)), $this->model->getMaxLength());
+				break;
+			case 'enum':
+				$field = new TextField($fieldName, $this->model->$fieldName, str_replace('_', ' ', ucfirst($fieldName)), $this->model->getMaxLength());
+				break;
+			default:
+				break;
+		}
+		$field->title = $title;
+		$this->addFields(array($field));
+	}
+
 	/**
 	 * Is het formulier *helemaal* gePOST?
 	 */

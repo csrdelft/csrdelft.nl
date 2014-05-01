@@ -29,7 +29,7 @@ class PosterController extends AclController {
 			}
 		}
 		$fields['album'] = new SelectField('album', null, 'Album', array_reverse($dirs));
-		$fields['naam'] = new RequiredTextField('naam', null, 'Posternaam');
+		$fields['naam'] = new RequiredTextField('naam', null, 'Posternaam', 50, 5);
 		$fields['uploader'] = new FileField('/posters', null, array('image/jpeg'));
 		$fields[] = new Subkopje('Alleen jpeg afbeeldingen.');
 		$fields['knoppen'] = new SubmitResetCancel('/actueel/fotoalbum/');

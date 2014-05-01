@@ -668,7 +668,6 @@ class BewerkBoek extends Boek {
 			default:
 				parent::setValue($key, $value, $initboek);
 		}
-
 	}
 
 	/**
@@ -1005,7 +1004,7 @@ class BewerkBoek extends Boek {
 				$posturl .= '/' . $this->editbeschrijving;
 			}
 			$boekbeschrijvingform[] = new Subkopje($titeltekst);
-			$textfield = new RequiredUbbPreviewField('beschrijving', $this->getEditBeschrijving()->getTekst(), $schrijver, true);
+			$textfield = new RequiredUbbPreviewField('beschrijving', $this->getEditBeschrijving()->getTekst(), $schrijver, true, 255);
 			$boekbeschrijvingform[] = $textfield;
 			$boekbeschrijvingform[] = new SubmitResetCancel($annuleer);
 
@@ -1108,6 +1107,10 @@ class BewerkBoek extends Boek {
 }
 
 class TitelField extends RequiredAutoresizeTextField {
+
+	public function __construct($name, $value, $description = null, $max_len = 255, $placeholder = null) {
+		parent::__construct($name, $value, $description, $max_len, $placeholder);
+	}
 
 	public function validate() {
 		if (!parent::validate()) {

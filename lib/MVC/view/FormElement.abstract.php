@@ -95,10 +95,11 @@ abstract class InputField extends FormElement implements Validator {
 	public $error = ''; //foutmelding van dit veld
 	public $onchange = null;   //javascript onChange
 	public $onclick = null;   //javascript onClick
-	public $max_len = 0; //maximale lengte van de invoer.
+	public $max_len = 0; //maximale lengte van de invoer
+	public $min_len = 0; //minimale lengte van de invoer
 	public $rows = 0;  //aantal rijen van textarea
-	public $css_classes = array('FormField'); //array met classnames die later in de class-tag komen.
-	public $suggestions = array(); //array met suggesties die de javascript-autocomplete aan gaat bieden.
+	public $css_classes = array('FormField'); //array met classnames die later in de class-tag komen
+	public $suggestions = array(); //array met suggesties die de javascript-autocomplete aan gaat bieden
 	public $remotedatasource = '';
 
 	public function __construct($name, $value, $description = null, $model = null) {
@@ -172,9 +173,13 @@ abstract class InputField extends FormElement implements Validator {
 				$this->error = 'Dit is een verplicht veld';
 			}
 		}
-		//als max_len > 0 dan checken of de lengte er niet overheen gaat.
+		//als max_len > 0 dan checken of de lengte er niet boven zit
 		if ($this->max_len > 0 AND strlen($this->value) > $this->max_len) {
 			$this->error = 'Dit veld mag maximaal ' . $this->max_len . ' tekens lang zijn';
+		}
+		//als min_len > 0 dan checken of de lengte er niet onder zit
+		if ($this->min_len > 0 AND strlen($this->value) > $this->min_len) {
+			$this->error = 'Dit veld moet minimaal ' . $this->min_len . ' tekens lang zijn';
 		}
 		return $this->error === '';
 	}
@@ -403,9 +408,10 @@ class HiddenField extends InputField {
  */
 class TextField extends InputField {
 
-	public function __construct($name, $value, $description, $max_len = 255, $model = null) {
+	public function __construct($name, $value, $description, $max_len = 255, $min_len = 0, $model = null) {
 		parent::__construct($name, $value, $description, $model);
 		$this->max_len = (int) $max_len;
+		$this->min_len = (int) $min_len;
 		$this->value = htmlspecialchars_decode($this->value);
 		$this->origvalue = htmlspecialchars_decode($value);
 	}
@@ -416,9 +422,6 @@ class TextField extends InputField {
 		}
 		if (!is_utf8($this->value)) {
 			$this->error = 'Ongeldige karakters, gebruik reguliere tekst.';
-		} elseif ($this->max_len > 0 AND mb_strlen($this->value) > $this->max_len) {
-			//als max_len > 0 dan checken of de lengte er niet overheen gaat.
-			$this->error = 'Maximaal ' . $this->max_len . ' karakters toegestaan.';
 		}
 		return $this->error === '';
 	}
@@ -691,9 +694,7 @@ class UrlField extends TextField {
 		}
 		// controleren of het een geldige url is...
 		if (!is_utf8($this->value) OR ! preg_match('#([\w]+?://[^ "\n\r\t<]*?)#is', $this->value)) {
-			$this->error = 'Ongeldige karakters:';
-		} elseif ($this->max_len != null && mb_strlen($this->value) > $this->max_len) {
-			$this->error = 'Gebruik maximaal ' . $this->max_len . ' karakters:';
+			$this->error = 'Ongeldige karakters';
 		}
 		return $this->error === '';
 	}
@@ -862,7 +863,7 @@ class TelefoonField extends TextField {
  */
 class TextareaField extends TextField {
 
-	public function __construct($name, $value, $description = null, $rows = 5, $max_len = 0) {
+	public function __construct($name, $value, $description = null, $rows = 5, $max_len = null) {
 		parent::__construct($name, $value, $description, $max_len);
 		$this->rows = (int) $rows;
 	}
@@ -893,7 +894,7 @@ class RequiredTextareaField extends TextareaField {
  */
 class AutoresizeTextareaField extends TextareaField {
 
-	public function __construct($name, $value, $description = null, $max_len = 255, $placeholder = null) {
+	public function __construct($name, $value, $description = null, $max_len = null, $placeholder = null) {
 		parent::__construct($name, $value, $description, 1, $max_len);
 		$this->css_classes[] = 'wantsAutoresize';
 		$this->placeholder = $placeholder;
@@ -953,8 +954,8 @@ class UbbPreviewField extends TextareaField {
 	 */
 	private $previewOnEnter;
 
-	public function __construct($name, $value, $description = null, $previewOnEnter = false) {
-		parent::__construct($name, $value, $description);
+	public function __construct($name, $value, $description = null, $previewOnEnter = false, $max_len = null) {
+		parent::__construct($name, $value, $description, 5, $max_len);
 		$this->css_classes[] = 'wantsPreview';
 		$this->previewOnEnter = $previewOnEnter;
 	}
