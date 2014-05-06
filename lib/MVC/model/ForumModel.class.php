@@ -361,7 +361,7 @@ class ForumDradenModel extends PersistenceModel implements Paging {
 			return array();
 		}
 		$in = implode(', ', array_fill(0, $count, '?'));
-		if ($belangrijk) {
+		if ($belangrijk !== null) {
 			$params[] = $belangrijk;
 			$belangrijk = ' AND d.belangrijk = ?';
 		} else {
