@@ -475,7 +475,7 @@ class RequiredLandField extends LandField {
 class UidField extends TextField {
 
 	public function __construct($name, $value, $description) {
-		parent::__construct($name, $value, $description, 4);
+		parent::__construct($name, $value, $description, 4, 4);
 	}
 
 	public function validate() {
@@ -818,7 +818,7 @@ class NickField extends TextField {
 	public $max_len = 20;
 
 	public function __construct($name, $value, $description, Lid $lid) {
-		parent::__construct($name, $value, $description, 255, $lid);
+		parent::__construct($name, $value, $description, 255, 0, $lid);
 	}
 
 	public function validate() {
@@ -871,8 +871,8 @@ class TelefoonField extends TextField {
  */
 class TextareaField extends TextField {
 
-	public function __construct($name, $value, $description = null, $rows = 5, $max_len = null) {
-		parent::__construct($name, $value, $description, $max_len);
+	public function __construct($name, $value, $description = null, $rows = 5, $max_len = null, $min_len = null) {
+		parent::__construct($name, $value, $description, $max_len, $min_len);
 		$this->rows = (int) $rows;
 	}
 
