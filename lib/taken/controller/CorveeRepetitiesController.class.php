@@ -4,7 +4,7 @@
 require_once 'taken/model/CorveeRepetitiesModel.class.php';
 require_once 'taken/model/MaaltijdRepetitiesModel.class.php';
 require_once 'taken/view/CorveeRepetitiesView.class.php';
-require_once 'taken/view/forms/CorveeRepetitieFormView.class.php';
+require_once 'taken/view/forms/CorveeRepetitieForm.class.php';
 
 /**
  * CorveeRepetitiesController.class.php	| 	P.W.G. Brussee (brussee@live.nl)
@@ -68,12 +68,12 @@ class CorveeRepetitiesController extends AclController {
 	
 	public function nieuw($mrid=null) {
 		$repetitie = new CorveeRepetitie(0, $mrid);
-		$this->view = new CorveeRepetitieFormView($repetitie->getCorveeRepetitieId(), $repetitie->getMaaltijdRepetitieId(), $repetitie->getDagVanDeWeek(), $repetitie->getPeriodeInDagen(), $repetitie->getFunctieId(), null, $repetitie->getStandaardAantal(), $repetitie->getIsVoorkeurbaar()); // fetches POST values itself
+		$this->view = new CorveeRepetitieForm($repetitie->getCorveeRepetitieId(), $repetitie->getMaaltijdRepetitieId(), $repetitie->getDagVanDeWeek(), $repetitie->getPeriodeInDagen(), $repetitie->getFunctieId(), null, $repetitie->getStandaardAantal(), $repetitie->getIsVoorkeurbaar()); // fetches POST values itself
 	}
 	
 	public function bewerk($crid) {
 		$repetitie = CorveeRepetitiesModel::getRepetitie($crid);
-		$this->view = new CorveeRepetitieFormView($repetitie->getCorveeRepetitieId(), $repetitie->getMaaltijdRepetitieId(), $repetitie->getDagVanDeWeek(), $repetitie->getPeriodeInDagen(), $repetitie->getFunctieId(), $repetitie->getStandaardPunten(), $repetitie->getStandaardAantal(), $repetitie->getIsVoorkeurbaar()); // fetches POST values itself
+		$this->view = new CorveeRepetitieForm($repetitie->getCorveeRepetitieId(), $repetitie->getMaaltijdRepetitieId(), $repetitie->getDagVanDeWeek(), $repetitie->getPeriodeInDagen(), $repetitie->getFunctieId(), $repetitie->getStandaardPunten(), $repetitie->getStandaardAantal(), $repetitie->getIsVoorkeurbaar()); // fetches POST values itself
 	}
 	
 	public function opslaan($crid) {
@@ -81,7 +81,7 @@ class CorveeRepetitiesController extends AclController {
 			$this->bewerk($crid);
 		}
 		else {
-			$this->view = new CorveeRepetitieFormView($crid); // fetches POST values itself
+			$this->view = new CorveeRepetitieForm($crid); // fetches POST values itself
 		}
 		if ($this->view->validate()) {
 			$values = $this->view->getValues(); 

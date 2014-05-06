@@ -1,12 +1,12 @@
 <?php
 
 /**
- * RepetitieCorveeFormView.class.php	| 	P.W.G. Brussee (brussee@live.nl)
+ * RepetitieCorveeForm.class.php	| 	P.W.G. Brussee (brussee@live.nl)
  *
  * Formulier voor nieuw periodiek corvee.
  * 
  */
-class RepetitieCorveeFormView extends TemplateView {
+class RepetitieCorveeForm extends TemplateView {
 
 	private $_form;
 

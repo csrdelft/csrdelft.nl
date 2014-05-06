@@ -52,7 +52,7 @@ class BeheerFunctiesController extends AclController {
 
 	public function toevoegen() {
 		$functie = $this->model->newFunctie();
-		$this->view = new FunctieFormView($functie, $this->action); // fetches POST values itself
+		$this->view = new FunctieForm($functie, $this->action); // fetches POST values itself
 		if ($this->view->validate()) {
 			$id = $this->model->create($functie);
 			$functie->functie_id = (int) $id;
@@ -63,7 +63,7 @@ class BeheerFunctiesController extends AclController {
 
 	public function bewerken($fid) {
 		$functie = $this->model->getFunctie((int) $fid);
-		$this->view = new FunctieFormView($functie, $this->action); // fetches POST values itself
+		$this->view = new FunctieForm($functie, $this->action); // fetches POST values itself
 		if ($this->view->validate()) {
 			$rowcount = $this->model->update($functie);
 			if ($rowcount > 0) {
@@ -85,7 +85,7 @@ class BeheerFunctiesController extends AclController {
 	public function kwalificeer($fid) {
 		$functie = $this->model->getFunctie($fid);
 		$kwalificatie = KwalificatiesModel::instance()->newKwalificatie($functie);
-		$this->view = new KwalificatieFormView($kwalificatie); // fetches POST values itself
+		$this->view = new KwalificatieForm($kwalificatie); // fetches POST values itself
 		if ($this->view->validate()) {
 			KwalificatiesModel::instance()->kwalificatieToewijzen($kwalificatie);
 			$this->view = new FunctieView($functie);

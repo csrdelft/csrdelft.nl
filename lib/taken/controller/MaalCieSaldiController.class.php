@@ -3,7 +3,7 @@
 
 require_once 'lid/saldi.class.php';
 require_once 'taken/view/MaalCieSaldiView.class.php';
-require_once 'taken/view/forms/BoekjaarSluitenFormView.class.php';
+require_once 'taken/view/forms/BoekjaarSluitenForm.class.php';
 
 /**
  * MaalCieSaldiController.class.php	| 	P.W.G. Brussee (brussee@live.nl)
@@ -45,7 +45,7 @@ class MaalCieSaldiController extends AclController {
 	}
 	
 	public function sluitboekjaar() {
-		$form = new BoekjaarSluitenFormView(date('Y-m-d', strtotime('-1 year')), date('Y-m-d')); // fetches POST values itself
+		$form = new BoekjaarSluitenForm(date('Y-m-d', strtotime('-1 year')), date('Y-m-d')); // fetches POST values itself
 		if ($form->validate()) {
 			$values = $form->getValues();
 			$errors_aantal = MaaltijdenModel::archiveerOudeMaaltijden(strtotime($values['begindatum']), strtotime($values['einddatum']));

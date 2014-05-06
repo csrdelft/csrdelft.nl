@@ -1,12 +1,12 @@
 <?php
 
 /**
- * VrijstellingFormView.class.php	| 	P.W.G. Brussee (brussee@live.nl)
+ * VrijstellingForm.class.php	| 	P.W.G. Brussee (brussee@live.nl)
  *
  * Formulier voor een nieuwe of te bewerken vrijstelling.
  * 
  */
-class VrijstellingFormView extends TemplateView {
+class VrijstellingForm extends TemplateView {
 
 	private $_form;
 	private $_uid;

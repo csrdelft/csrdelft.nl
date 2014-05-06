@@ -4,8 +4,8 @@ require_once 'MVC/controller/AclController.abstract.php';
 require_once 'taken/model/TakenModel.class.php';
 require_once 'taken/model/CorveeRepetitiesModel.class.php';
 require_once 'taken/view/BeheerTakenView.class.php';
-require_once 'taken/view/forms/TaakFormView.class.php';
-require_once 'taken/view/forms/RepetitieCorveeFormView.class.php';
+require_once 'taken/view/forms/TaakForm.class.php';
+require_once 'taken/view/forms/RepetitieCorveeForm.class.php';
 
 /**
  * BeheerTakenController.class.php	| 	P.W.G. Brussee (brussee@live.nl)
@@ -123,30 +123,30 @@ class BeheerTakenController extends AclController {
 				$beginDatum = date('Y-m-d', $datum);
 
 				if ($repetitie->getPeriodeInDagen() > 0) {
-					$this->view = new RepetitieCorveeFormView($repetitie, $beginDatum, $beginDatum); // fetches POST values itself
+					$this->view = new RepetitieCorveeForm($repetitie, $beginDatum, $beginDatum); // fetches POST values itself
 					return;
 				}
 			}
-			$this->view = new TaakFormView(0, $repetitie->getFunctieId(), null, $crid, $mid, $beginDatum, $repetitie->getStandaardPunten(), 0); // fetches POST values itself
+			$this->view = new TaakForm(0, $repetitie->getFunctieId(), null, $crid, $mid, $beginDatum, $repetitie->getStandaardPunten(), 0); // fetches POST values itself
 		} else {
 			$taak = new CorveeTaak();
 			if (isset($beginDatum)) {
 				$taak->setDatum($beginDatum);
 			}
-			$this->view = new TaakFormView($taak->getTaakId(), $taak->getFunctieId(), $taak->getLidId(), $taak->getCorveeRepetitieId(), $mid, $taak->getDatum(), null, $taak->getBonusMalus()); // fetches POST values itself
+			$this->view = new TaakForm($taak->getTaakId(), $taak->getFunctieId(), $taak->getLidId(), $taak->getCorveeRepetitieId(), $mid, $taak->getDatum(), null, $taak->getBonusMalus()); // fetches POST values itself
 		}
 	}
 
 	public function bewerk($tid) {
 		$taak = TakenModel::getTaak($tid);
-		$this->view = new TaakFormView($taak->getTaakId(), $taak->getFunctieId(), $taak->getLidId(), $taak->getCorveeRepetitieId(), $taak->getMaaltijdId(), $taak->getDatum(), $taak->getPunten(), $taak->getBonusMalus()); // fetches POST values itself
+		$this->view = new TaakForm($taak->getTaakId(), $taak->getFunctieId(), $taak->getLidId(), $taak->getCorveeRepetitieId(), $taak->getMaaltijdId(), $taak->getDatum(), $taak->getPunten(), $taak->getBonusMalus()); // fetches POST values itself
 	}
 
 	public function opslaan($tid) {
 		if ($tid > 0) {
 			$this->bewerk($tid);
 		} else {
-			$this->view = new TaakFormView($tid); // fetches POST values itself
+			$this->view = new TaakForm($tid); // fetches POST values itself
 		}
 		if ($this->view->validate()) {
 			$values = $this->view->getValues();
@@ -185,10 +185,10 @@ class BeheerTakenController extends AclController {
 			$this->view = new BeheerTakenView($taak);
 		} else {
 			require_once 'taken/model/ToewijzenModel.class.php';
-			require_once 'taken/view/forms/ToewijzenFormView.class.php';
+			require_once 'taken/view/forms/ToewijzenForm.class.php';
 
 			$suggesties = ToewijzenModel::getSuggesties($taak);
-			$this->view = new ToewijzenFormView($taak, $suggesties); // fetches POST values itself
+			$this->view = new ToewijzenForm($taak, $suggesties); // fetches POST values itself
 		}
 	}
 
@@ -220,7 +220,7 @@ class BeheerTakenController extends AclController {
 
 	public function aanmaken($crid) {
 		$repetitie = CorveeRepetitiesModel::getRepetitie($crid);
-		$form = new RepetitieCorveeFormView($repetitie); // fetches POST values itself
+		$form = new RepetitieCorveeForm($repetitie); // fetches POST values itself
 		if ($form->validate()) {
 			$values = $form->getValues();
 			$mid = ($values['maaltijd_id'] === '' ? null : intval($values['maaltijd_id']));

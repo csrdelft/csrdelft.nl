@@ -1,12 +1,12 @@
 <?php
 
 /**
- * ToewijzenFormView.class.php	| 	P.W.G. Brussee (brussee@live.nl)
+ * ToewijzenForm.class.php	| 	P.W.G. Brussee (brussee@live.nl)
  *
  * Formulier om een corveetaak toe te wijzen aan een lid.
  * 
  */
-class ToewijzenFormView extends TemplateView {
+class ToewijzenForm extends TemplateView {
 
 	private $_form;
 	private $_taak;

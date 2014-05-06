@@ -1,12 +1,12 @@
 <?php
 
 /**
- * AanmeldingFormView.class.php	| 	P.W.G. Brussee (brussee@live.nl)
+ * AanmeldingForm.class.php	| 	P.W.G. Brussee (brussee@live.nl)
  *
  * Formulier voor een nieuwe of te verwijderen maaltijd-aanmelding.
  * 
  */
-class AanmeldingFormView extends TemplateView {
+class AanmeldingForm extends TemplateView {
 
 	private $_form;
 	private $_mid;

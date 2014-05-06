@@ -3,7 +3,7 @@
 
 require_once 'taken/model/VrijstellingenModel.class.php';
 require_once 'taken/view/BeheerVrijstellingenView.class.php';
-require_once 'taken/view/forms/VrijstellingFormView.class.php';
+require_once 'taken/view/forms/VrijstellingForm.class.php';
 
 /**
  * BeheerVrijstellingenController.class.php	| 	P.W.G. Brussee (brussee@live.nl)
@@ -49,7 +49,7 @@ class BeheerVrijstellingenController extends AclController {
 	
 	public function nieuw() {
 		$vrijstelling = new CorveeVrijstelling();
-		$this->view = new VrijstellingFormView($vrijstelling->getLidId(), $vrijstelling->getBeginDatum(), $vrijstelling->getEindDatum(), $vrijstelling->getPercentage()); // fetches POST values itself
+		$this->view = new VrijstellingForm($vrijstelling->getLidId(), $vrijstelling->getBeginDatum(), $vrijstelling->getEindDatum(), $vrijstelling->getPercentage()); // fetches POST values itself
 	}
 	
 	public function bewerk($uid) {
@@ -57,7 +57,7 @@ class BeheerVrijstellingenController extends AclController {
 			throw new Exception('Lid bestaat niet: $uid ='. $uid);
 		}
 		$vrijstelling = VrijstellingenModel::getVrijstelling($uid);
-		$this->view = new VrijstellingFormView($vrijstelling->getLidId(), $vrijstelling->getBeginDatum(), $vrijstelling->getEindDatum(), $vrijstelling->getPercentage()); // fetches POST values itself
+		$this->view = new VrijstellingForm($vrijstelling->getLidId(), $vrijstelling->getBeginDatum(), $vrijstelling->getEindDatum(), $vrijstelling->getPercentage()); // fetches POST values itself
 	}
 	
 	public function opslaan($uid=null) {
@@ -65,7 +65,7 @@ class BeheerVrijstellingenController extends AclController {
 			$this->bewerk($uid);
 		}
 		else {
-			$this->view = new VrijstellingFormView(); // fetches POST values itself
+			$this->view = new VrijstellingForm(); // fetches POST values itself
 		}
 		if ($this->view->validate()) {
 			$values = $this->view->getValues();

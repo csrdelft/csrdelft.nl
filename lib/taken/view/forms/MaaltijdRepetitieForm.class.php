@@ -3,12 +3,12 @@
 require_once 'verticale.class.php';
 
 /**
- * MaaltijdRepetitieFormView.class.php	| 	P.W.G. Brussee (brussee@live.nl)
+ * MaaltijdRepetitieForm.class.php	| 	P.W.G. Brussee (brussee@live.nl)
  *
  * Formulier voor een nieuwe of te bewerken maaltijd-repetitie.
  * 
  */
-class MaaltijdRepetitieFormView extends TemplateView {
+class MaaltijdRepetitieForm extends TemplateView {
 
 	private $_form;
 	private $_mrid;

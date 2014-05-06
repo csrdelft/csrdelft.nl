@@ -55,7 +55,7 @@ class FunctieDeleteView extends TemplateView {
 /**
  * Formulier voor een nieuwe of te bewerken corveefunctie.
  */
-class FunctieFormView extends PopupForm {
+class FunctieForm extends PopupForm {
 
 	public function __construct(CorveeFunctie $functie, $actie) {
 		parent::__construct($functie, 'taken-functie-form', Instellingen::get('taken', 'url') . '/' . $actie . '/' . $functie->functie_id);
@@ -87,7 +87,7 @@ class FunctieFormView extends PopupForm {
 /**
  * Formulier voor het toewijzen van een corvee-kwalificatie.
  */
-class KwalificatieFormView extends PopupForm {
+class KwalificatieForm extends PopupForm {
 
 	public function __construct(CorveeKwalificatie $kwalificatie) {
 		parent::__construct($kwalificatie, 'taken-kwalificatie-form', Instellingen::get('taken', 'url') . '/kwalificeer/' . $kwalificatie->functie_id);

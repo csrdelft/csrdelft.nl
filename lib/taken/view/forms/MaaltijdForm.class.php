@@ -4,12 +4,12 @@ require_once 'verticale.class.php';
 require_once 'lichting.class.php';
 
 /**
- * MaaltijdFormView.class.php	| 	P.W.G. Brussee (brussee@live.nl)
+ * MaaltijdForm.class.php	| 	P.W.G. Brussee (brussee@live.nl)
  *
  * Formulier voor een nieuwe of te bewerken maaltijd.
  * 
  */
-class MaaltijdFormView extends TemplateView {
+class MaaltijdForm extends TemplateView {
 
 	private $_form;
 	private $_mid;

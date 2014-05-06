@@ -1,12 +1,12 @@
 <?php
 
 /**
- * TaakFormView.class.php	| 	P.W.G. Brussee (brussee@live.nl)
+ * TaakForm.class.php	| 	P.W.G. Brussee (brussee@live.nl)
  *
  * Formulier voor een nieuwe of te bewerken corveetaak.
  * 
  */
-class TaakFormView extends TemplateView {
+class TaakForm extends TemplateView {
 
 	private $_form;
 	private $_tid;

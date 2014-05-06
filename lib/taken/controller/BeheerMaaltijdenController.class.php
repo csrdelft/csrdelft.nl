@@ -4,9 +4,9 @@ require_once 'taken/model/MaaltijdenModel.class.php';
 require_once 'taken/model/AanmeldingenModel.class.php';
 require_once 'taken/model/MaaltijdRepetitiesModel.class.php';
 require_once 'taken/view/BeheerMaaltijdenView.class.php';
-require_once 'taken/view/forms/MaaltijdFormView.class.php';
-require_once 'taken/view/forms/RepetitieMaaltijdenFormView.class.php';
-require_once 'taken/view/forms/AanmeldingFormView.class.php';
+require_once 'taken/view/forms/MaaltijdForm.class.php';
+require_once 'taken/view/forms/RepetitieMaaltijdenForm.class.php';
+require_once 'taken/view/forms/AanmeldingForm.class.php';
 
 /**
  * BeheerMaaltijdenController.class.php	| 	P.W.G. Brussee (brussee@live.nl)
@@ -110,26 +110,26 @@ class BeheerMaaltijdenController extends AclController {
 			}
 			$beginDatum = date('Y-m-d', $datum);
 			if ($repetitie->getPeriodeInDagen() > 0) {
-				$this->view = new RepetitieMaaltijdenFormView($repetitie, $beginDatum, $beginDatum); // fetches POST values itself
+				$this->view = new RepetitieMaaltijdenForm($repetitie, $beginDatum, $beginDatum); // fetches POST values itself
 			} else {
-				$this->view = new MaaltijdFormView(0, $repetitie->getMaaltijdRepetitieId(), $repetitie->getStandaardTitel(), intval($repetitie->getStandaardLimiet()), $beginDatum, $repetitie->getStandaardTijd(), $repetitie->getStandaardPrijs(), $repetitie->getAbonnementFilter()); // fetches POST values itself
+				$this->view = new MaaltijdForm(0, $repetitie->getMaaltijdRepetitieId(), $repetitie->getStandaardTitel(), intval($repetitie->getStandaardLimiet()), $beginDatum, $repetitie->getStandaardTijd(), $repetitie->getStandaardPrijs(), $repetitie->getAbonnementFilter()); // fetches POST values itself
 			}
 		} else {
 			$maaltijd = new Maaltijd();
-			$this->view = new MaaltijdFormView($maaltijd->getMaaltijdId(), $maaltijd->getMaaltijdRepetitieId(), $maaltijd->getTitel(), $maaltijd->getAanmeldLimiet(), $maaltijd->getDatum(), $maaltijd->getTijd(), $maaltijd->getPrijs(), $maaltijd->getAanmeldFilter()); // fetches POST values itself
+			$this->view = new MaaltijdForm($maaltijd->getMaaltijdId(), $maaltijd->getMaaltijdRepetitieId(), $maaltijd->getTitel(), $maaltijd->getAanmeldLimiet(), $maaltijd->getDatum(), $maaltijd->getTijd(), $maaltijd->getPrijs(), $maaltijd->getAanmeldFilter()); // fetches POST values itself
 		}
 	}
 
 	public function bewerk($mid) {
 		$maaltijd = MaaltijdenModel::getMaaltijd($mid);
-		$this->view = new MaaltijdFormView($maaltijd->getMaaltijdId(), $maaltijd->getMaaltijdRepetitieId(), $maaltijd->getTitel(), $maaltijd->getAanmeldLimiet(), $maaltijd->getDatum(), $maaltijd->getTijd(), $maaltijd->getPrijs(), $maaltijd->getAanmeldFilter()); // fetches POST values itself
+		$this->view = new MaaltijdForm($maaltijd->getMaaltijdId(), $maaltijd->getMaaltijdRepetitieId(), $maaltijd->getTitel(), $maaltijd->getAanmeldLimiet(), $maaltijd->getDatum(), $maaltijd->getTijd(), $maaltijd->getPrijs(), $maaltijd->getAanmeldFilter()); // fetches POST values itself
 	}
 
 	public function opslaan($mid) {
 		if ($mid > 0) {
 			$this->bewerk($mid);
 		} else {
-			$this->view = new MaaltijdFormView($mid); // fetches POST values itself
+			$this->view = new MaaltijdForm($mid); // fetches POST values itself
 		}
 		if ($this->view->validate()) {
 			$values = $this->view->getValues();
@@ -153,7 +153,7 @@ class BeheerMaaltijdenController extends AclController {
 	}
 
 	public function anderaanmelden($mid) {
-		$form = new AanmeldingFormView($mid, true); // fetches POST values itself
+		$form = new AanmeldingForm($mid, true); // fetches POST values itself
 		if ($form->validate()) {
 			$values = $form->getValues();
 			$aanmelding = AanmeldingenModel::aanmeldenVoorMaaltijd($mid, $values['voor_lid'], \LoginLid::instance()->getUid(), $values['aantal_gasten'], true);
@@ -164,7 +164,7 @@ class BeheerMaaltijdenController extends AclController {
 	}
 
 	public function anderafmelden($mid) {
-		$form = new AanmeldingFormView($mid, false); // fetches POST values itself
+		$form = new AanmeldingForm($mid, false); // fetches POST values itself
 		if ($form->validate()) {
 			$values = $form->getValues();
 			$maaltijd = AanmeldingenModel::afmeldenDoorLid($mid, $values['voor_lid'], true);
@@ -183,7 +183,7 @@ class BeheerMaaltijdenController extends AclController {
 
 	public function aanmaken($mrid) {
 		$repetitie = MaaltijdRepetitiesModel::getRepetitie($mrid);
-		$form = new RepetitieMaaltijdenFormView($repetitie); // fetches POST values itself
+		$form = new RepetitieMaaltijdenForm($repetitie); // fetches POST values itself
 		if ($form->validate()) {
 			$values = $form->getValues();
 			$maaltijden = MaaltijdenModel::maakRepetitieMaaltijden($repetitie, strtotime($values['begindatum']), strtotime($values['einddatum']));

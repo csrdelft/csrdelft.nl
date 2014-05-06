@@ -45,7 +45,7 @@ class MenuItemView extends TemplateView {
 
 }
 
-class MenuItemFormView extends PopupForm {
+class MenuItemForm extends PopupForm {
 
 	public function __construct(MenuItem $item, $actie) {
 		parent::__construct($item, 'menu-item-form', '/menubeheer/' . $actie . '/' . $item->item_id);

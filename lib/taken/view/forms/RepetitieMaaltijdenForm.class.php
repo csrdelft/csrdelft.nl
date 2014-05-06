@@ -1,12 +1,12 @@
 <?php
 
 /**
- * RepetitieMaaltijdenFormView.class.php	| 	P.W.G. Brussee (brussee@live.nl)
+ * RepetitieMaaltijdenForm.class.php	| 	P.W.G. Brussee (brussee@live.nl)
  *
  * Formulier voor nieuwe periodieke maaltijden.
  * 
  */
-class RepetitieMaaltijdenFormView extends TemplateView {
+class RepetitieMaaltijdenForm extends TemplateView {
 
 	private $_form;
 

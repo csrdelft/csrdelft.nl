@@ -3,7 +3,7 @@
 
 require_once 'taken/model/MaaltijdRepetitiesModel.class.php';
 require_once 'taken/view/MaaltijdRepetitiesView.class.php';
-require_once 'taken/view/forms/MaaltijdRepetitieFormView.class.php';
+require_once 'taken/view/forms/MaaltijdRepetitieForm.class.php';
 
 /**
  * MaaltijdRepetitiesController.class.php	| 	P.W.G. Brussee (brussee@live.nl)
@@ -55,12 +55,12 @@ class MaaltijdRepetitiesController extends AclController {
 	
 	public function nieuw() {
 		$repetitie = new MaaltijdRepetitie();
-		$this->view = new MaaltijdRepetitieFormView($repetitie->getMaaltijdRepetitieId(), $repetitie->getDagVanDeWeek(), $repetitie->getPeriodeInDagen(), $repetitie->getStandaardTitel(), $repetitie->getStandaardTijd(), $repetitie->getStandaardPrijs(), $repetitie->getIsAbonneerbaar(), $repetitie->getStandaardLimiet(), $repetitie->getAbonnementFilter()); // fetches POST values itself
+		$this->view = new MaaltijdRepetitieForm($repetitie->getMaaltijdRepetitieId(), $repetitie->getDagVanDeWeek(), $repetitie->getPeriodeInDagen(), $repetitie->getStandaardTitel(), $repetitie->getStandaardTijd(), $repetitie->getStandaardPrijs(), $repetitie->getIsAbonneerbaar(), $repetitie->getStandaardLimiet(), $repetitie->getAbonnementFilter()); // fetches POST values itself
 	}
 	
 	public function bewerk($mrid) {
 		$repetitie = MaaltijdRepetitiesModel::getRepetitie($mrid);
-		$this->view = new MaaltijdRepetitieFormView($repetitie->getMaaltijdRepetitieId(), $repetitie->getDagVanDeWeek(), $repetitie->getPeriodeInDagen(), $repetitie->getStandaardTitel(), $repetitie->getStandaardTijd(), $repetitie->getStandaardPrijs(), $repetitie->getIsAbonneerbaar(), $repetitie->getStandaardLimiet(), $repetitie->getAbonnementFilter()); // fetches POST values itself
+		$this->view = new MaaltijdRepetitieForm($repetitie->getMaaltijdRepetitieId(), $repetitie->getDagVanDeWeek(), $repetitie->getPeriodeInDagen(), $repetitie->getStandaardTitel(), $repetitie->getStandaardTijd(), $repetitie->getStandaardPrijs(), $repetitie->getIsAbonneerbaar(), $repetitie->getStandaardLimiet(), $repetitie->getAbonnementFilter()); // fetches POST values itself
 	}
 	
 	public function opslaan($mrid) {
@@ -68,7 +68,7 @@ class MaaltijdRepetitiesController extends AclController {
 			$this->bewerk($mrid);
 		}
 		else {
-			$this->view = new MaaltijdRepetitieFormView($mrid); // fetches POST values itself
+			$this->view = new MaaltijdRepetitieForm($mrid); // fetches POST values itself
 		}
 		if ($this->view->validate()) {
 			$values = $this->view->getValues(); 

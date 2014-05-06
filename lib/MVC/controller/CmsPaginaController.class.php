@@ -84,7 +84,7 @@ class CmsPaginaController extends Controller {
 		if (!$pagina->magBewerken()) {
 			$this->geentoegang();
 		}
-		$form = new CmsPaginaFormView($pagina); // fetches POST values itself
+		$form = new CmsPaginaForm($pagina); // fetches POST values itself
 		if ($form->validate()) {
 			$rowcount = $this->model->update($pagina);
 			if ($rowcount > 0) {

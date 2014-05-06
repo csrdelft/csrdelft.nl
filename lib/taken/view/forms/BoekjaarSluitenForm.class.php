@@ -1,12 +1,12 @@
 <?php
 
 /**
- * BoekjaarSluitenFormView.class.php	| 	P.W.G. Brussee (brussee@live.nl)
+ * BoekjaarSluitenForm.class.php	| 	P.W.G. Brussee (brussee@live.nl)
  *
  * Formulier voor het sluiten van het MaalCie-boekjaar.
  * 
  */
-class BoekjaarSluitenFormView extends TemplateView {
+class BoekjaarSluitenForm extends TemplateView {
 
 	private $_form;
 

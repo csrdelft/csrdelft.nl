@@ -80,7 +80,7 @@ class AgendaItemDeleteView extends TemplateView {
 
 }
 
-class AgendaItemFormView extends PopupForm {
+class AgendaItemForm extends PopupForm {
 
 	public function __construct(AgendaItem $item, $actie) {
 		parent::__construct($item, 'agenda-item-form', '/agenda/' . $actie . '/' . $item->item_id);

@@ -29,14 +29,14 @@ class CmsPaginaView extends TemplateView {
 }
 
 /**
- * CmsPaginaFormView.class.php
+ * CmsPaginaForm.class.php
  * 
  * @author C.S.R. Delft <pubcie@csrdelft.nl>
  * @author P.W.G. Brussee <brussee@live.nl>
  * 
  * Bewerken van een CmsPagina.
  */
-class CmsPaginaFormView extends Formulier {
+class CmsPaginaForm extends Formulier {
 
 	function __construct(CmsPagina $pagina) {
 		parent::__construct($pagina, 'cms-pagina-form', '/pagina/bewerken/' . $pagina->naam);
