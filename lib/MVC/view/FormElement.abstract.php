@@ -255,7 +255,10 @@ abstract class InputField extends FormElement implements Validator {
 	 * Geef een div met de foutmelding voor dit veld terug.
 	 */
 	public function getErrorDiv() {
-		return '<div class="waarschuwing">' . $this->getError() . '</div>';
+		if ($this->getError() != '') {
+			return '<div class="waarschuwing">' . $this->getError() . '</div>';
+		}
+		return '';
 	}
 
 	/**
@@ -1501,58 +1504,60 @@ class RequiredVinkField extends VinkField {
  */
 class SubmitResetCancel extends FormElement {
 
-	public $submitText = 'Opslaan';
-	public $submitTitle;
+	public $submitTitle = 'Invoer opslaan';
+	public $submitText;
 	public $submitIcon;
-	public $resetText = 'Reset';
-	public $resetTitle;
+	public $resetTitle = 'Reset naar opgeslagen gegevens';
+	public $resetText;
 	public $resetIcon;
-	public $cancelText = 'Annuleren';
-	public $cancelTitle;
+	public $cancelTitle = 'Niet opslaan en terugkeren';
+	public $cancelText;
 	public $cancelIcon;
-	public $cancelUrl = '';
-	public $extraText;
+	public $cancelUrl;
+	public $cancelReset;
 	public $extraTitle;
+	public $extraText;
 	public $extraIcon;
 	public $extraUrl;
 
-	/**
-	 * Volgorde van parameters naar meest aangepast
-	 * @param string $cancelurl
-	 * @param string $submittext
-	 * @param string $canceltext
-	 * @param string $resettext
-	 */
-	public function __construct($cancel_url = '', $icons = true, $submit_title = 'Invoer opslaan', $cancel_title = 'Niet opslaan en terugkeren', $reset_title = 'Reset naar opgeslagen gegevens') {
+	public function __construct($cancel_url = '', $icons = true, $text = true, $reset = true) {
 		parent::__construct(null);
-		$this->submitTitle = $submit_title;
-		$this->resetTitle = $reset_title;
-		$this->cancelTitle = $cancel_title;
 		$this->cancelUrl = $cancel_url;
 		if ($icons) {
 			$this->submitIcon = '<img src="' . CSR_PICS . '/famfamfam/disk.png" class="icon" width="16" height="16" alt="submit" /> ';
 			$this->resetIcon = '<img src="' . CSR_PICS . '/famfamfam/arrow_rotate_anticlockwise.png" class="icon" width="16" height="16" alt="reset" /> ';
 			$this->cancelIcon = '<img src="' . CSR_PICS . '/famfamfam/delete.png" class="icon" width="16" height="16" alt="cancel" /> ';
 		}
+		if ($text) {
+			$this->submitText = 'Opslaan';
+			$this->resetText = 'Reset';
+			$this->cancelText = 'Annuleren';
+		}
+		if (!$reset) {
+			unset($this->resetIcon);
+			unset($this->resetText);
+		}
 	}
 
 	public function view() {
 		echo '<div class="FormButtons">';
 		if ($this->extraUrl) {
-			if ($this->extraIcon) {
+			if (isset($this->extraIcon)) {
 				$this->extraIcon = '<img src="' . CSR_PICS . '/famfamfam/' . $this->extraIcon . '.png" class="icon" width="16" height="16" alt="' . $this->extraIcon . '" /> ';
 			}
-			$js = "$(this).attr('postdata', $(this).closest('form').serialize());";
-			echo '<a id="extraButton" class="knop post" title="' . $this->extraTitle . '" href="' . $this->extraUrl . '" onclick="' . $js . '">' . $this->extraIcon . $this->extraText . '</a> ';
+			if (isset($this->extraIcon) OR isset($this->extraText)) {
+				$js = "$(this).attr('postdata', $(this).closest('form').serialize());";
+				echo '<a id="extraButton" class="knop post" title="' . $this->extraTitle . '" href="' . $this->extraUrl . '" onclick="' . $js . '">' . $this->extraIcon . $this->extraText . '</a> ';
+			}
 		}
-		if ($this->submitIcon != '' OR $this->submitText != '') {
+		if (isset($this->submitIcon) OR isset($this->submitText)) {
 			echo '<a class="knop submit" title="' . $this->submitTitle . '">' . $this->submitIcon . $this->submitText . '</a> ';
 		}
-		if ($this->resetIcon != '' OR $this->resetText != '') {
+		if (isset($this->resetIcon) OR isset($this->resetText)) {
 			echo '<a class="knop reset" title="' . $this->resetTitle . '">' . $this->resetIcon . $this->resetText . '</a> ';
 		}
-		if ($this->cancelIcon != '' OR $this->cancelText != '') {
-			echo '<a class="knop cancel" title="' . $this->cancelTitle . '" href="' . $this->cancelUrl . '">' . $this->cancelIcon . $this->cancelText . '</a>';
+		if (isset($this->cancelIcon) OR isset($this->cancelText)) {
+			echo '<a class="knop' . ($this->cancelReset ? ' reset' : '') . ' cancel" title="' . $this->cancelTitle . '"' . ($this->cancelUrl !== '' ? ' href="' . $this->cancelUrl . '"' : '') . '>' . $this->cancelIcon . $this->cancelText . '</a>';
 		}
 		echo '</div>';
 	}

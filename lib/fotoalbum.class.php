@@ -81,15 +81,33 @@ class Fotoalbum {
 			$breadcrumb = '<a href="/actueel/fotoalbum/">Fotoalbum</a>';
 			$url = '/actueel/fotoalbum/';
 			$mappen = explode('/', $this->getPad());
-
 			array_pop($mappen);
-			array_pop($mappen);
+			$m = array_pop($mappen);
 			foreach ($mappen as $map) {
 				if ($map == '') {
 					continue;
 				}
-				$url.=urlencode($map) . '/';
+				$url .= urlencode($map) . '/';
 				$breadcrumb .= ' » <a href="' . $url . '" title="' . $map . '">' . $map . '</a>';
+			}
+			if (sizeof($mappen) === 1) {
+				foreach (glob(PICS_PATH . '/fotoalbum/*', GLOB_ONLYDIR) as $path) {
+					$parts = explode('/', $path);
+					$name = end($parts);
+					if (!startsWith($name, '_')) {
+						$dirs[$name] = $name;
+					}
+				}
+				$dirs = array_reverse($dirs);
+				$breadcrumb .= ' » <select onchange="location.href=\'/actueel/fotoalbum/\'+this.value;">';
+				foreach ($dirs as $value => $description) {
+					$breadcrumb .= '<option value="' . $value . '"';
+					if ($value == $m) {
+						$breadcrumb .= ' selected="selected"';
+					}
+					$breadcrumb .= '>' . htmlspecialchars($description) . '</option>';
+				}
+				$breadcrumb .= '</select>';
 			}
 			return $breadcrumb;
 		}

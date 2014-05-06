@@ -181,7 +181,9 @@ class Formulier implements View, Validator {
 	 */
 	public function view() {
 		echo SimpleHtml::getMelding();
-		echo '<h1 class="formTitle">' . $this->getTitel() . '</h1><form action="' . $this->action . '"';
+		if ($this->title !== '') {
+			echo '<h1 class="formTitle">' . $this->getTitel() . '</h1><form action="' . $this->action . '"';
+		}
 		if ($this->enctype !== null) {
 			echo ' enctype="' . $this->enctype . '"';
 		}
@@ -200,8 +202,13 @@ class Formulier implements View, Validator {
  */
 class PopupForm extends Formulier {
 
-	public function view() {
+	public function __construct($model, $formId, $action = null, $fields = array()) {
+		parent::__construct($model, $formId, $action, $fields);
 		$this->css_classes[] = 'popup';
+	}
+
+	public function view() {
+
 		echo '<div id="popup-content">';
 		echo parent::view();
 		echo SimpleHTML::getMelding();
@@ -211,17 +218,29 @@ class PopupForm extends Formulier {
 }
 
 /**
- * InlineForm with single InputField
+ * InlineForm with single InputField and optional SubmitResetCancel
  */
 class InlineForm extends Formulier {
 
-	public function view($tekst = false) {
+	public function __construct($model, $formId, $action = null, $fields = array()) {
+		parent::__construct($model, $formId, $action, $fields);
+		$this->css_classes[] = 'InlineForm';
+	}
+
+	public function view() {
 		echo '<div id="inline-' . $this->getFormId() . '">';
 		echo '<form id="' . $this->getFormId() . '" action="' . $this->action . '" method="post" class="Formulier InlineForm">';
 		echo $this->fields[0]->view();
 		echo '<div class="FormToggle">' . $this->fields[0]->getValue() . '</div>';
-		echo '<a class="knop submit" title="Opslaan"><img width="16" height="16" class="icon" alt="submit" src="' . CSR_PICS . '/famfamfam/accept.png">' . ($tekst ? ' Opslaan ' : '') . '</a>';
-		echo '<a class="knop reset cancel" title="Annuleren"><img width="16" height="16" class="icon" alt="cancel" src="' . CSR_PICS . '/famfamfam/delete.png">' . ($tekst ? ' Annuleren ' : '') . '</a>';
+		if (isset($this->fields[1])) {
+			if ($this->fields[1] instanceof SubmitResetCancel) {
+				$this->fields[1]->submitIcon = '<img src="' . CSR_PICS . '/famfamfam/accept.png" class="icon" width="16" height="16" alt="submit" /> ';
+				$this->fields[1]->resetIcon = null;
+				$this->fields[1]->resetText = null;
+				$this->fields[1]->cancelReset = true;
+			}
+			$this->fields[1]->view();
+		}
 		echo $this->getJavascript();
 		echo '</form></div>';
 	}

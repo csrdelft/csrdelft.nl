@@ -16,6 +16,7 @@ class MijnVoorkeurenView extends TemplateView {
 		$this->_voorkeuren = $voorkeuren;
 
 		$fields[] = new AutoresizeTextareaField('eetwens', $eetwens, 'Allergie/diëet:');
+		$fields[] = new SubmitResetCancel();
 		$this->_eetwens = new InlineForm(null, 'eetwens-form', Instellingen::get('taken', 'url') . '/eetwens', $fields);
 	}
 
@@ -25,7 +26,7 @@ class MijnVoorkeurenView extends TemplateView {
 
 	public function view() {
 		if ($this->_voorkeuren === null) { // eetwens
-			echo $this->_eetwens->view(true);
+			echo $this->_eetwens->view();
 		}
 		elseif (is_array($this->_voorkeuren)) { // list of voorkeuren
 			$this->smarty->display('taken/menu_pagina.tpl');
