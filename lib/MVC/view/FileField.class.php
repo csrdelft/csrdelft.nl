@@ -76,7 +76,11 @@ class FileField extends FormElement implements Validator {
 				throw new Exception('Bestandsnaam al in gebruik: ' . $filename);
 			}
 		}
-		return $this->model[$this->methode]->opslaan($destination, $filename, $overwrite);
+		$success = $this->model[$this->methode]->opslaan($destination, $filename, $overwrite);
+		if ($success) {
+			chmod($destination . $filename, 0644);
+		}
+		return $success;
 	}
 
 	public function view() {
