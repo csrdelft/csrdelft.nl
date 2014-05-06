@@ -54,10 +54,9 @@ class MaaltijdForm extends TemplateView {
 
 	public function view() {
 		$this->_form->addCssClass('popup');
-		$this->_form->addCssClass('PreventUnchanged');
 		$this->smarty->assign('form', $this->_form);
-		if ($this->_mid === 0) {
-			$this->smarty->assign('nocheck', true);
+		if ($this->_mid > 0) {
+			$this->_form->addCssClass('PreventUnchanged');
 		}
 		$this->smarty->display('taken/popup_form.tpl');
 	}

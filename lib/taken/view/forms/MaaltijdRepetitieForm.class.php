@@ -77,9 +77,8 @@ JS;
 	public function view() {
 		$this->_form->addCssClass('popup');
 		$this->smarty->assign('form', $this->_form);
-		if ($this->_mrid === 0) {
-			$this->smarty->assign('nocheck', true);
-		} elseif ($this->_mrid > 0) {
+		if ($this->_mrid > 0) {
+			$this->_form->addCssClass('PreventUnchanged');
 			$this->smarty->assign('bijwerken', Instellingen::get('taken', 'url') . '/bijwerken/' . $this->_mrid);
 		}
 		$this->smarty->display('taken/popup_form.tpl');
