@@ -85,10 +85,14 @@ class ForumDelenModel extends PersistenceModel {
 		return group_by_distinct('forum_id', $this->find('forum_id IN (' . $in . ')', $ids));
 	}
 
-	public function getRecent() {
+	public function getRecent($belangrijk = null) {
 		$deel = new ForumDeel();
-		$deel->titel = 'Recent gewijzigd';
-		$deel->setForumDraden(ForumDradenModel::instance()->getRecenteForumDraden());
+		if ($belangrijk === true) {
+			$deel->titel = 'Belangrijk recent gewijzigd';
+		} else {
+			$deel->titel = 'Recent gewijzigd';
+		}
+		$deel->setForumDraden(ForumDradenModel::instance()->getRecenteForumDraden(null, $belangrijk));
 		return $deel;
 	}
 

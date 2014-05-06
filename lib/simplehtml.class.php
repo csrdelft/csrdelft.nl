@@ -85,10 +85,10 @@ abstract class SimpleHTML implements View {
 		if (LidInstellingen::get('zijbalk', 'forum') > 0) {
 			require_once('MVC/model/ForumModel.class.php');
 			require_once('MVC/view/ForumView.class.php');
-			$beide = (LidInstellingen::get('zijbalk', 'forum_belangrijk') > 0 ? false : null);
+			$belangrijk = (LidInstellingen::get('zijbalk', 'forum_belangrijk') > 0 ? false : null);
 			$zijkolom[] = new ForumDraadZijbalkView(
 					ForumDradenModel::instance()->getRecenteForumDraden(
-							(int) LidInstellingen::get('zijbalk', 'forum'), $beide), false);
+							(int) LidInstellingen::get('zijbalk', 'forum'), $belangrijk), $belangrijk);
 		}
 		// Zelfgeposte forumberichten
 		if (LidInstellingen::get('zijbalk', 'forum_zelf') > 0) {

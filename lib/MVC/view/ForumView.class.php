@@ -39,27 +39,11 @@ class ForumRssView extends TemplateView {
 
 }
 
-class ForumRecentView extends TemplateView {
-
-	public function __construct(array $draden) {
-		parent::__construct($draden);
-		$this->smarty->assign('draden', $this->model);
-	}
-
-	public function getTitel() {
-		return 'Forum recent';
-	}
-
-	public function view() {
-		$this->smarty->display('MVC/forum/recent.tpl');
-	}
-
-}
-
 class ForumDeelView extends TemplateView {
 
-	public function __construct(ForumDeel $deel) {
+	public function __construct(ForumDeel $deel, $belangrijk = null) {
 		parent::__construct($deel);
+		$this->smarty->assign('belangrijk', ($belangrijk === true ? '/belangrijk' : ''));
 		$this->smarty->assign('deel', $this->model);
 		$this->smarty->assign('categorien', ForumModel::instance()->getForum());
 	}
@@ -107,8 +91,12 @@ class ForumDraadZijbalkView extends TemplateView {
 	}
 
 	public function view() {
-		echo '<div id="zijbalk_forum"><h1><a href="/forum/recent">Forum';
-		if ($this->belangrijk) {
+		echo '<div id="zijbalk_forum"><h1><a href="/forum/recent';
+		if ($this->belangrijk === true) {
+			echo '/1/belangrijk';
+		}
+		echo '">Forum';
+		if ($this->belangrijk === true) {
 			echo ' belangrijk';
 		}
 		echo '</a></h1>';
