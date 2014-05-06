@@ -99,7 +99,7 @@ class Fotoalbum {
 					}
 				}
 				$dirs = array_reverse($dirs);
-				$breadcrumb .= ' » <select onchange="location.href=\'/actueel/fotoalbum/\'+this.value;">';
+				$breadcrumb .= ' » <select onchange="location.href=\'/actueel/fotoalbum/\'+this.value+\'/\';">';
 				foreach ($dirs as $value => $description) {
 					$breadcrumb .= '<option value="' . $value . '"';
 					if ($value == $m) {
