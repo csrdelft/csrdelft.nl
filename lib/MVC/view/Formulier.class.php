@@ -181,8 +181,8 @@ class Formulier implements View, Validator {
 	 */
 	public function view() {
 		echo SimpleHtml::getMelding();
-		if ($this->title !== '') {
-			echo '<h1 class="formTitle">' . $this->getTitel() . '</h1><form action="' . $this->action . '"';
+		if ($this->titel !== '') {
+			echo '<h1 class="formTitle">' . $this->titel . '</h1><form action="' . $this->action . '"';
 		}
 		if ($this->enctype !== null) {
 			echo ' enctype="' . $this->enctype . '"';
