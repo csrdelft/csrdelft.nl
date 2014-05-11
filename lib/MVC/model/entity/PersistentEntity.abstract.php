@@ -140,7 +140,8 @@ abstract class PersistentEntity {
 			$field->type = 'varchar(4)';
 		} elseif ($field->type === T::Enumeration) {
 			$max = 0;
-			foreach ($field->type->getTypeOptions() as $option) {
+			$class = $field->extra;
+			foreach ($class::getTypeOptions() as $option) {
 				$max = max($max, strlen($option));
 			}
 			$field->type = 'varchar(' . $max . ')';
