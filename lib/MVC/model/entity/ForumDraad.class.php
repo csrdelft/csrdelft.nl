@@ -100,21 +100,21 @@ class ForumDraad extends PersistentEntity {
 	 * @var array
 	 */
 	protected static $persistent_fields = array(
-		'draad_id' => array('int', 11, false, null, 'auto_increment'),
-		'forum_id' => array('int', 11),
-		'lid_id' => array('string', 4),
-		'titel' => array('string', 255),
-		'datum_tijd' => array('datetime'),
-		'laatst_gewijzigd' => array('datetime', null, true),
-		'laatste_post_id' => array('int', 11, true),
-		'laatste_lid_id' => array('string', 4, true),
-		'aantal_posts' => array('int', 11),
-		'gesloten' => array('boolean'),
-		'verwijderd' => array('boolean'),
-		'wacht_goedkeuring' => array('boolean'),
-		'plakkerig' => array('boolean'),
-		'belangrijk' => array('boolean'),
-		'eerste_post_plakkerig' => array('boolean')
+		'draad_id' => array(T::Integer, false, null, 'auto_increment'),
+		'forum_id' => array(T::Integer),
+		'lid_id' => array(T::UID),
+		'titel' => array(T::String),
+		'datum_tijd' => array(T::DateTime),
+		'laatst_gewijzigd' => array(T::DateTime, true),
+		'laatste_post_id' => array(T::Integer, true),
+		'laatste_lid_id' => array(T::UID, true),
+		'aantal_posts' => array(T::Integer),
+		'gesloten' => array(T::Boolean),
+		'verwijderd' => array(T::Boolean),
+		'wacht_goedkeuring' => array(T::Boolean),
+		'plakkerig' => array(T::Boolean),
+		'belangrijk' => array(T::Boolean),
+		'eerste_post_plakkerig' => array(T::Boolean)
 	);
 	/**
 	 * Database primary key

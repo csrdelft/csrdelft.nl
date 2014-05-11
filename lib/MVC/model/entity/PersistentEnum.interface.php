@@ -5,12 +5,10 @@
  * 
  * @author P.W.G. Brussee <brussee@live.nl>
  * 
- * De keuzesoort van een selector: AND / XOR
+ * Een enumeration heeft type-opties.
  * 
  */
 interface PersistentEnum {
 
-	public static function values();
-
-	public static function getMaxLenght();
+	public static function getTypeOptions();
 }

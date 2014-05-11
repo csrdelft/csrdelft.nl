@@ -35,10 +35,10 @@ class KetzerOptie extends PersistentEntity {
 	 * @var array
 	 */
 	protected static $persistent_fields = array(
-		'ketzer_id' => array('int', 11),
-		'select_id' => array('int', 11),
-		'optie_id' => array('int', 11),
-		'waarde' => array('string', 255)
+		'ketzer_id' => array(T::Integer),
+		'select_id' => array(T::Integer),
+		'optie_id' => array(T::Integer),
+		'waarde' => array(T::String)
 	);
 	/**
 	 * Database table name

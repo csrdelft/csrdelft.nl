@@ -5,6 +5,10 @@
  * 
  * @author P.W.G. Brussee <brussee@live.nl>
  * 
+ * MySQL definitions.
+ * 
+ * @see PersistentEntity::makePersistentField()
+ * 
  */
 class PersistentField {
 

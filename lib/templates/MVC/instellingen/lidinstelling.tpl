@@ -11,14 +11,14 @@
 		{/if}
 		{$label}
 	</label>
-	{if $type === 'enum'}
+	{if $type === T::Enumeration}
 		<select type="select" id="inst_{$module}_{$id}" name="{$module}_{$id}">
 			{foreach from=$opties item=optie}
 				<option value="{$optie}"{if $optie === $waarde} selected="selected"{/if}>{ucfirst($optie)}</option>
 			{/foreach}
 		</select>
 	{else}
-		<input type="text" id="inst_{$module}_{$id}" name="{$module}_{$id}" value="{$waarde}"{if $type === 'string'} maxlength="{$opties[1]}"{/if} />
+		<input type="text" id="inst_{$module}_{$id}" name="{$module}_{$id}" value="{$waarde}"{if $type === T::String} maxlength="{$opties[1]}"{/if} />
 	{/if}
 	&nbsp;({ucfirst($default)})
 	<br /><br />

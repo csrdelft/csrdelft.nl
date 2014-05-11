@@ -13,12 +13,8 @@ abstract class HuisStatus implements PersistentEnum {
 	const Woonoord = 'woonoord';
 	const Huis = 'huis';
 
-	public static function values() {
+	public static function getTypeOptions() {
 		return array(self::Woonoord, self::Huis);
-	}
-
-	public static function getMaxLenght() {
-		return 8;
 	}
 
 }

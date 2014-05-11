@@ -30,9 +30,9 @@ class ForumDraadGelezen extends PersistentEntity {
 	 * @var array
 	 */
 	protected static $persistent_fields = array(
-		'draad_id' => array('int', 11),
-		'lid_id' => array('string', 4),
-		'datum_tijd' => array('datetime')
+		'draad_id' => array(T::Integer),
+		'lid_id' => array(T::UID),
+		'datum_tijd' => array(T::DateTime)
 	);
 	/**
 	 * Database primary key

@@ -61,7 +61,7 @@ class MenuItemForm extends PopupForm {
 		$fields['prio'] = new IntField('prioriteit', $item->prioriteit, 'Volgorde');
 		$fields['prio']->title = 'Sortering van items';
 
-		$fields[] = new TextField('tekst', $item->tekst, 'Korte aanduiding', MenuItem::getMaxLength('tekst'));
+		$fields[] = new TextField('tekst', $item->tekst, 'Korte aanduiding', 50);
 
 		$fields['url'] = new TextField('link', $item->link, 'Link');
 		$fields['url']->title = 'URL als er op het menu item geklikt wordt';

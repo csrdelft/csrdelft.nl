@@ -40,62 +40,62 @@ class LidInstellingen extends PersistenceModel {
 	 */
 	private $instellingen = array(
 		'algemeen' => array(
-			'sneltoetsen' => array('Sneltoetsen op de webstek', 'enum', array('ja', 'nee'), 'nee'),
-			'bijbel' => array('Bijbelvertaling voor bijbelrooster', 'enum', array('NBV', 'NBG', 'Herziene Statenvertaling', 'Statenvertaling (Jongbloed)', 'Groot Nieuws Bijbel', 'Willibrordvertaling'), 'NBV')
+			'sneltoetsen' => array('Sneltoetsen op de webstek', T::Enumeration, array('ja', 'nee'), 'nee'),
+			'bijbel' => array('Bijbelvertaling voor bijbelrooster', T::Enumeration, array('NBV', 'NBG', 'Herziene Statenvertaling', 'Statenvertaling (Jongbloed)', 'Groot Nieuws Bijbel', 'Willibrordvertaling'), 'NBV')
 		),
 		'layout' => array(
-			'layout' => array('Websteklayout', 'enum', array('normaal', 'owee', 'lustrum', 'sineregno', 'roze'), 'normaal'),
-			'beeld' => array('Schermmodus', 'enum', array('normaal', 'breedbeeld'), 'normaal'),
-			'fixed' => array('Lijstmodus', 'enum', array('normaal', 'vast'), 'normaal'),
-			'visitekaartjes' => array('Visitekaartjes', 'enum', array('ja', 'nee'), 'ja'),
-			'sneeuw' => array('Sneeuw', 'enum', array('ja', 'freeze!', 'nee'), 'nee'),
-			'neuzen' => array('Neuzen', 'enum', array('overal', '2013', 'nee'), '2013'),
-			'minion' => array('Minion', 'enum', array('ja', 'nee'), 'nee')
+			'layout' => array('Websteklayout', T::Enumeration, array('normaal', 'owee', 'lustrum', 'sineregno', 'roze'), 'normaal'),
+			'beeld' => array('Schermmodus', T::Enumeration, array('normaal', 'breedbeeld'), 'normaal'),
+			'fixed' => array('Lijstmodus', T::Enumeration, array('normaal', 'vast'), 'normaal'),
+			'visitekaartjes' => array('Visitekaartjes', T::Enumeration, array('ja', 'nee'), 'ja'),
+			'sneeuw' => array('Sneeuw', T::Enumeration, array('ja', 'freeze!', 'nee'), 'nee'),
+			'neuzen' => array('Neuzen', T::Enumeration, array('overal', '2013', 'nee'), '2013'),
+			'minion' => array('Minion', T::Enumeration, array('ja', 'nee'), 'nee')
 		),
 		'forum' => array(
-			'draden_per_pagina' => array('Draadjes per pagina', 'int', array(5, 100), 20),
-			'posts_per_pagina' => array('Berichten per pagina', 'int', array(5, 100), 20),
-			'zoekresultaten' => array('Zoekresultaten per pagina', 'int', array(10, 50), 20),
-			'naamWeergave' => array('Naamweergave', 'enum', array('civitas', 'volledig', 'bijnaam', 'aaidrom'), 'civitas'),
-			'datumWeergave' => array('Datumweergave', 'enum', array('relatief', 'vast'), 'relatief'),
-			'ongelezenWeergave' => array('Ongelezenweergave', 'enum', array('schuingedrukt', 'dikgedrukt', 'onderstreept', 'gewoon'), 'schuingedrukt', array('schuingedrukt' => 'font-style: italic;', 'dikgedrukt' => 'font-weight: bold;', 'onderstreept' => 'text-decoration: underline;', 'gewoon' => '')),
-			'open_draad_op_pagina' => array('Open onderwerp op pagina', 'enum', array('1', 'ongelezen', 'laatste'), 'ongelezen'),
-			'toonpasfotos' => array('Pasfoto\'s standaard weergeven', 'enum', array('ja', 'nee'), 'ja'),
-			'filter2008' => array('Berichten van 2008 eerst verbergen', 'enum', array('ja', 'nee'), 'nee')
+			'draden_per_pagina' => array('Draadjes per pagina', T::Integer, array(5, 100), 20),
+			'posts_per_pagina' => array('Berichten per pagina', T::Integer, array(5, 100), 20),
+			'zoekresultaten' => array('Zoekresultaten per pagina', T::Integer, array(10, 50), 20),
+			'naamWeergave' => array('Naamweergave', T::Enumeration, array('civitas', 'volledig', 'bijnaam', 'aaidrom'), 'civitas'),
+			'datumWeergave' => array('Datumweergave', T::Enumeration, array('relatief', 'vast'), 'relatief'),
+			'ongelezenWeergave' => array('Ongelezenweergave', T::Enumeration, array('schuingedrukt', 'dikgedrukt', 'onderstreept', 'gewoon'), 'schuingedrukt', array('schuingedrukt' => 'font-style: italic;', 'dikgedrukt' => 'font-weight: bold;', 'onderstreept' => 'text-decoration: underline;', 'gewoon' => '')),
+			'open_draad_op_pagina' => array('Open onderwerp op pagina', T::Enumeration, array('1', 'ongelezen', 'laatste'), 'ongelezen'),
+			'toonpasfotos' => array('Pasfoto\'s standaard weergeven', T::Enumeration, array('ja', 'nee'), 'ja'),
+			'filter2008' => array('Berichten van 2008 eerst verbergen', T::Enumeration, array('ja', 'nee'), 'nee')
 		),
 		'zijbalk' => array(
-			'ishetal' => array('Is het al… weergeven', 'enum', array('niet weergeven', 'donderdag', 'vrijdag', 'zondag', 'lunch', 'avond', 'borrel', 'lezing', 'jarig', 'dies', 'studeren', 'willekeurig'), 'willekeurig'),
-			'gasnelnaar' => array('Ga snel naar weergeven', 'enum', array('ja', 'nee'), 'ja'),
-			'agendaweken' => array('Aantal weken in agenda weergeven', 'int', array(0, 10), 2),
-			'agenda_max' => array('Maximaal aantal agenda-items', 'int', array(0, 50), 15),
-			'mededelingen' => array('Aantal mededelingen', 'int', array(0, 50), 5),
-			'forum_belangrijk' => array('Aantal belangrijke forumberichten', 'int', array(0, 50), 5),
-			'forum' => array('Aantal forumberichten', 'int', array(0, 50), 10),
-			'forum_zelf' => array('Aantal zelf geposte forumberichten', 'int', array(0, 50), 0),
-			//'forum_preview' => array('Laatste forumbericht weergeven', 'enum', array('ja', 'nee'), 'ja'),
-			'fotoalbum' => array('Laatste fotoalbum weergeven', 'enum', array('ja', 'nee'), 'ja'),
-			'verjaardagen' => array('Aantal verjaardagen in zijbalk', 'int', array(0, 50), 9),
-			'verjaardagen_pasfotos' => array('Pasfoto\'s bij verjaardagen', 'enum', array('ja', 'nee'), 'ja')
+			'ishetal' => array('Is het al… weergeven', T::Enumeration, array('niet weergeven', 'donderdag', 'vrijdag', 'zondag', 'lunch', 'avond', 'borrel', 'lezing', 'jarig', 'dies', 'studeren', 'willekeurig'), 'willekeurig'),
+			'gasnelnaar' => array('Ga snel naar weergeven', T::Enumeration, array('ja', 'nee'), 'ja'),
+			'agendaweken' => array('Aantal weken in agenda weergeven', T::Integer, array(0, 10), 2),
+			'agenda_max' => array('Maximaal aantal agenda-items', T::Integer, array(0, 50), 15),
+			'mededelingen' => array('Aantal mededelingen', T::Integer, array(0, 50), 5),
+			'forum_belangrijk' => array('Aantal belangrijke forumberichten', T::Integer, array(0, 50), 5),
+			'forum' => array('Aantal forumberichten', T::Integer, array(0, 50), 10),
+			'forum_zelf' => array('Aantal zelf geposte forumberichten', T::Integer, array(0, 50), 0),
+			//'forum_preview' => array('Laatste forumbericht weergeven', T::Enumeration, array('ja', 'nee'), 'ja'),
+			'fotoalbum' => array('Laatste fotoalbum weergeven', T::Enumeration, array('ja', 'nee'), 'ja'),
+			'verjaardagen' => array('Aantal verjaardagen in zijbalk', T::Integer, array(0, 50), 9),
+			'verjaardagen_pasfotos' => array('Pasfoto\'s bij verjaardagen', T::Enumeration, array('ja', 'nee'), 'ja')
 		),
 		'voorpagina' => array(
-			'maaltijdblokje' => array('Eerstvolgende maaltijd weergeven', 'enum', array('ja', 'nee'), 'ja'),
-			'twitterblokje' => array('Twitter-blokje weergeven', 'enum', array('ja', 'nee'), 'nee'),
-			'bijbelroosterblokje' => array('Bijbelroosterblokje weergeven', 'enum', array('ja', 'nee'), 'ja')
+			'maaltijdblokje' => array('Eerstvolgende maaltijd weergeven', T::Enumeration, array('ja', 'nee'), 'ja'),
+			'twitterblokje' => array('Twitter-blokje weergeven', T::Enumeration, array('ja', 'nee'), 'nee'),
+			'bijbelroosterblokje' => array('Bijbelroosterblokje weergeven', T::Enumeration, array('ja', 'nee'), 'ja')
 		),
 		'groepen' => array(
-			'toonPasfotos' => array('Standaard pasfotos weergeven', 'enum', array('ja', 'nee'), 'ja')
+			'toonPasfotos' => array('Standaard pasfotos weergeven', T::Enumeration, array('ja', 'nee'), 'ja')
 		),
 		'agenda' => array(
-			'toonVerjaardagen' => array('Verjaardagen in agenda', 'enum', array('ja', 'nee'), 'ja'),
-			'toonMaaltijden' => array('Maaltijden in agenda', 'enum', array('ja', 'nee'), 'ja'),
-			'toonCorvee' => array('Corvee in agenda', 'enum', array('iedereen', 'eigen', 'nee'), 'eigen')
+			'toonVerjaardagen' => array('Verjaardagen in agenda', T::Enumeration, array('ja', 'nee'), 'ja'),
+			'toonMaaltijden' => array('Maaltijden in agenda', T::Enumeration, array('ja', 'nee'), 'ja'),
+			'toonCorvee' => array('Corvee in agenda', T::Enumeration, array('iedereen', 'eigen', 'nee'), 'eigen')
 		),
 		'mededelingen' => array(
-			'aantalPerPagina' => array('Aantal mededeling per pagina', 'int', array(5, 50), 10)
+			'aantalPerPagina' => array('Aantal mededeling per pagina', T::Integer, array(5, 50), 10)
 		),
 		'googleContacts' => array(
-			'groepnaam' => array('Naam van groep voor contacten in Google contacts', 'string', array(1, 100), 'C.S.R.-leden'),
-			'extended' => array('Uitgebreide export (nickname, voorletters, adres/tel ouders, website, chataccounts, eetwens) ', 'enum', array('ja', 'nee'), 'ja')
+			'groepnaam' => array('Naam van groep voor contacten in Google contacts', T::String, array(1, 100), 'C.S.R.-leden'),
+			'extended' => array('Uitgebreide export (nickname, voorletters, adres/tel ouders, website, chataccounts, eetwens) ', T::Enumeration, array('ja', 'nee'), 'ja')
 		)
 	);
 
@@ -130,13 +130,13 @@ class LidInstellingen extends PersistenceModel {
 
 	public function isValidValue($module, $key, $value) {
 		switch ($this->getType($module, $key)) {
-			case 'enum':
+			case T::Enumeration:
 				if (in_array($value, $this->getTypeOptions($module, $key))) {
 					return true;
 				}
 				break;
 
-			case 'int':
+			case T::Integer:
 				if ($value >= $this->instellingen[$module][$key][2][0] AND
 						$value <= $this->instellingen[$module][$key][2][1]
 				) {
@@ -144,7 +144,7 @@ class LidInstellingen extends PersistenceModel {
 				}
 				break;
 
-			case 'string':
+			case T::String:
 				if (strlen($value) >= $this->instellingen[$module][$key][2][0] AND
 						strlen($value) <= $this->instellingen[$module][$key][2][1] AND
 						preg_match('/^[\w\-_\. ]*$/', $value)
@@ -176,7 +176,7 @@ class LidInstellingen extends PersistenceModel {
 		if (!$this->has($module, $key)) {
 			throw new Exception('Deze instelling  bestaat niet: ' . $module . '->' . $key);
 		}
-		if ($this->getType($module, $key) === 'int') {
+		if ($this->getType($module, $key) === T::Integer) {
 			$value = (int) $value;
 		}
 		if ($this->isValidValue($module, $key, $value)) {

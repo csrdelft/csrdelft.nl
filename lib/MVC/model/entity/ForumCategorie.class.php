@@ -45,11 +45,11 @@ class ForumCategorie extends PersistentEntity {
 	 * @var array
 	 */
 	protected static $persistent_fields = array(
-		'categorie_id' => array('int', 11, false, null, 'auto_increment'),
-		'titel' => array('string', 255),
-		'omschrijving' => array('text'),
-		'rechten_lezen' => array('string', 255),
-		'volgorde' => array('int', 11)
+		'categorie_id' => array(T::Integer, false, null, 'auto_increment'),
+		'titel' => array(T::String),
+		'omschrijving' => array(T::Text),
+		'rechten_lezen' => array(T::String),
+		'volgorde' => array(T::Integer)
 	);
 	/**
 	 * Database primary key

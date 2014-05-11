@@ -1,6 +1,7 @@
 <?php
 
 require_once 'MVC/model/entity/PersistentEnum.interface.php';
+require_once 'MVC/model/entity/PersistentType.enum.php';
 require_once 'MVC/model/entity/PersistentField.class.php';
 
 /**
@@ -67,12 +68,16 @@ abstract class PersistentEntity {
 	 */
 	private function castValues() {
 		foreach (static::$persistent_fields as $field => $definition) {
-			if ($definition[0] === 'int') {
-				$this->$field = (int) $this->$field;
-			} elseif ($definition[0] === 'boolean') {
+			if ($definition[0] === T::Boolean) {
 				$this->$field = (boolean) $this->$field;
-			} elseif (defined('DB_CHECK') AND $definition[0] === 'enum' AND ! in_array($this->$field, $definition[1]::values())) {
-				debugprint(self::getTableName() . '.' . $field . ' invalid ' . $definition[1] . ' value: ' . $this->$field);
+			} elseif ($definition[0] === T::Integer) {
+				$this->$field = (int) $this->$field;
+			} elseif ($definition[0] === T::Float) {
+				$this->$field = (float) $this->$field;
+			} elseif (defined('DB_CHECK') AND
+					$definition[0] === T::Enumeration AND ! in_array($this->$field, $definition[3]::getTypeOptions())
+			) {
+				debugprint(self::getTableName() . '.' . $field . ' invalid ' . $definition[3] . ' value: ' . $this->$field);
 			}
 		}
 	}
@@ -94,20 +99,16 @@ abstract class PersistentEntity {
 		return self::getDefinition($field_name, 0);
 	}
 
-	public static function getMaxLength($field_name) {
-		return self::getDefinition($field_name, 1);
-	}
-
 	public static function isAllowedNull($field_name) {
-		return (boolean) self::getDefinition($field_name, 2);
+		return (boolean) self::getDefinition($field_name, 1);
 	}
 
 	public static function getDefaultValue($field_name) {
-		return self::getDefinition($field_name, 3);
+		return self::getDefinition($field_name, 2);
 	}
 
 	public static function getExtraProp($field_name) {
-		return self::getDefinition($field_name, 4);
+		return self::getDefinition($field_name, 3);
 	}
 
 	private static function getDefinition($field_name, $definition_number) {
@@ -126,24 +127,30 @@ abstract class PersistentEntity {
 	private static function makePersistentField($field_name) {
 		$field = new PersistentField();
 		$field->field = $field_name;
-		$field->default = self::getDefaultValue($field_name);
 		$field->type = self::getFieldType($field_name);
-		$maxlength = self::getMaxLength($field_name);
-		if ($field->type === 'int') {
-			$field->type .= '(' . $maxlength . ')';
-		} elseif ($field->type === 'boolean') {
+		$field->default = self::getDefaultValue($field_name);
+		$field->extra = (string) self::getExtraProp($field_name);
+		if ($field->type === T::Boolean) {
 			$field->type = 'tinyint(1)';
-		} elseif ($field->type === 'string') {
-			$field->type = 'varchar(' . $maxlength . ')';
-		} elseif ($field->type === 'enum') {
-			$field->type = 'varchar(' . $maxlength::getMaxLenght() . ')';
+		} elseif ($field->type === T::Integer) {
+			$field->type = 'int(11)';
+		} elseif ($field->type === T::String) {
+			$field->type = 'varchar(255)';
+		} elseif ($field->type === T::UID) {
+			$field->type = 'varchar(4)';
+		} elseif ($field->type === T::Enumeration) {
+			$max = 0;
+			foreach ($field->type->getTypeOptions() as $option) {
+				$max = max($max, strlen($option));
+			}
+			$field->type = 'varchar(' . $max . ')';
+			$field->extra = null;
 		}
 		if (self::isAllowedNull($field_name)) {
 			$field->null = 'YES';
 		} else {
 			$field->null = 'NO';
 		}
-		$field->extra = '' . self::getExtraProp($field_name);
 		if (in_array($field_name, self::getPrimaryKeys())) {
 			$field->key = 'PRI';
 		} else {
@@ -188,10 +195,12 @@ abstract class PersistentEntity {
 				}
 				// Cast database value if default value is defined
 				if ($fields[$name]->default !== null) {
-					if (self::getFieldType($name) === 'boolean') {
+					if (self::getFieldType($name) === T::Boolean) {
 						$database_fields[$name]->default = (boolean) $database_fields[$name]->default;
-					} elseif (self::getFieldType($name) === 'int') {
+					} elseif (self::getFieldType($name) === T::Integer) {
 						$database_fields[$name]->default = (int) $database_fields[$name]->default;
+					} elseif (self::getFieldType($name) === T::Float) {
+						$database_fields[$name]->default = (float) $database_fields[$name]->default;
 					}
 				}
 				if ($fields[$name]->default !== $database_fields[$name]->default) {

@@ -57,14 +57,14 @@ class AgendaItem extends PersistentEntity implements Agendeerbaar {
 	 * @var array
 	 */
 	protected static $persistent_fields = array(
-		'item_id' => array('int', 11, false, null, 'auto_increment'),
-		'titel' => array('string', 255),
-		'beschrijving' => array('text'),
-		'begin_moment' => array('datetime'),
-		'eind_moment' => array('datetime'),
-		'rechten_bekijken' => array('string', 255),
-		'locatie' => array('string', 255, true),
-		'link' => array('string', 255, true)
+		'item_id' => array(T::Integer, false, null, 'auto_increment'),
+		'titel' => array(T::String),
+		'beschrijving' => array(T::Text),
+		'begin_moment' => array(T::DateTime),
+		'eind_moment' => array(T::DateTime),
+		'rechten_bekijken' => array(T::String),
+		'locatie' => array(T::String, true),
+		'link' => array(T::String, true)
 	);
 	/**
 	 * Database primary key

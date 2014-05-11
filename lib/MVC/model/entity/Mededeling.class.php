@@ -53,14 +53,14 @@ class Mededeling extends PersistentEntity {
 	 * @var array
 	 */
 	protected static $persistent_fields = array(
-		'$mededeling_id' => array('int', 11, false, null, 'auto_increment'),
-		'type' => array('string', 255),
-		'tekst' => array('text'),
-		'zichtbaar_voor' => array('string', 255),
-		'zichtbaar_vanaf' => array('datetime'),
-		'zichtbaar_tot' => array('datetime'),
-		'prioriteit' => array('int', 11),
-		'afbeelding_url' => array('text')
+		'$mededeling_id' => array(T::Integer, false, null, 'auto_increment'),
+		'type' => array(T::String),
+		'tekst' => array(T::Text),
+		'zichtbaar_voor' => array(T::String),
+		'zichtbaar_vanaf' => array(T::DateTime),
+		'zichtbaar_tot' => array(T::DateTime),
+		'prioriteit' => array(T::Integer),
+		'afbeelding_url' => array(T::Text)
 	);
 	/**
 	 * Database primary key

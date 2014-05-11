@@ -45,12 +45,12 @@ class CmsPagina extends PersistentEntity {
 	 * @var array
 	 */
 	protected static $persistent_fields = array(
-		'naam' => array('string', 255),
-		'titel' => array('string', 255),
-		'inhoud' => array('longtext'),
-		'laatst_gewijzigd' => array('datetime'),
-		'rechten_bekijken' => array('string', 255),
-		'rechten_bewerken' => array('string', 255)
+		'naam' => array(T::String),
+		'titel' => array(T::String),
+		'inhoud' => array(T::LongText),
+		'laatst_gewijzigd' => array(T::DateTime),
+		'rechten_bekijken' => array(T::String),
+		'rechten_bewerken' => array(T::String)
 	);
 	/**
 	 * Database primary key

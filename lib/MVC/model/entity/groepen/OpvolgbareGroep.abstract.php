@@ -37,10 +37,10 @@ abstract class OpvolgbareGroep extends Groep {
 	 * @var array
 	 */
 	protected static $persistent_fields = array(
-		'familie_id' => array('string', 255),
-		'begin_moment' => array('datetime', null, true),
-		'eind_moment' => array('datetime', null, true),
-		'status' => array('enum', 'GroepStatus')
+		'familie_id' => array(T::String),
+		'begin_moment' => array(T::DateTime, true),
+		'eind_moment' => array(T::DateTime, true),
+		'status' => array(T::Enumeration, false, GroepStatus::HT, 'GroepStatus')
 	);
 
 	/**

@@ -23,7 +23,7 @@ class KetzerSelector extends PersistentEntity {
 	 */
 	public $select_id;
 	/**
-	 * Checkbox (AND) / Radio (XOR)
+	 * Vinkje (AND) / KeuzeRondje (XOR)
 	 * @see KetzerSelectorSoort
 	 * @var string
 	 */
@@ -33,9 +33,9 @@ class KetzerSelector extends PersistentEntity {
 	 * @var array
 	 */
 	protected static $persistent_fields = array(
-		'ketzer_id' => array('int', 11),
-		'select_id' => array('int', 11),
-		'keuze_soort' => array('enum', 'KetzerSelectorSoort')
+		'ketzer_id' => array(T::Integer),
+		'select_id' => array(T::Integer),
+		'keuze_soort' => array(T::Enumeration, false, KetzerSelectorSoort::Single, 'KetzerSelectorSoort')
 	);
 	/**
 	 * Database table name

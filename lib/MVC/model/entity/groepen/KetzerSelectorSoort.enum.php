@@ -5,16 +5,16 @@
  * 
  * @author P.W.G. Brussee <brussee@live.nl>
  * 
- * De keuzesoort van een selector: AND / XOR
+ * De keuzesoort van een selector: AND (Multiple) / XOR (Single)
  * 
  */
 final class KetzerSelectorSoort extends PersistentEnum {
 
-	const Checkbox = 'AND';
-	const Radio = 'XOR';
+	const Single = 'XOR';
+	const Multiple = 'AND';
 
 	public static function values() {
-		return array(self::Checkbox, self::Radio);
+		return array(self::Single, self::Multiple);
 	}
 
 }

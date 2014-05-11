@@ -26,12 +26,8 @@ abstract class GroepFunctie implements PersistentEnum {
 	// Werkgroep
 	const Leider = 'Leider';
 
-	public static function values() {
+	public static function getTypeOptions() {
 		return array(self::Praeses, self::Abactis, self::Fiscus, self::VicePraeses, self::ViceAbactis, self::QQ, self::Bibliothecarus, self::Archivarus, self::Statisticus, self::Fotocommissaris, self::Leider);
-	}
-
-	public static function getMaxLenght() {
-		return 15;
 	}
 
 }

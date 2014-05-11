@@ -35,9 +35,11 @@ class Ketzer extends OpvolgbareGroep {
 	 * @var array
 	 */
 	protected static $persistent_fields = array(
-		'aanmeld_limiet' => array('int', 11, true),
-		'aanmelden_vanaf' => array('datetime'),
-		'aanmelden_tot' => array('datetime')
+		'aanmeld_limiet' => array(T::Integer, true),
+		'aanmelden_vanaf' => array(T::DateTime),
+		'aanmelden_tot' => array(T::DateTime),
+		'kosten_bedrag' => array(T::Float, true),
+		'machtiging_rekening' => array(T::String, true)
 	);
 	/**
 	 * Database table name

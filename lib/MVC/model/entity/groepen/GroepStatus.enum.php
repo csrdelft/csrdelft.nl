@@ -14,12 +14,8 @@ abstract class GroepStatus implements PersistentEnum {
 	const HT = 'ht';
 	const FT = 'ft';
 
-	public static function values() {
+	public static function getTypeOptions() {
 		return array(self::OT, self::HT, self::FT);
-	}
-
-	public static function getMaxLenght() {
-		return 2;
 	}
 
 }

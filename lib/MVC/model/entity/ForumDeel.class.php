@@ -85,19 +85,19 @@ class ForumDeel extends PersistentEntity {
 	 * @var array
 	 */
 	protected static $persistent_fields = array(
-		'forum_id' => array('int', 11, false, null, 'auto_increment'),
-		'categorie_id' => array('int', 11),
-		'titel' => array('string', 255),
-		'omschrijving' => array('text'),
-		'laatst_gewijzigd' => array('datetime', null, true),
-		'laatste_post_id' => array('int', 11, true,),
-		'laatste_lid_id' => array('string', 4, true),
-		'aantal_draden' => array('int', 11),
-		'aantal_posts' => array('int', 11),
-		'rechten_lezen' => array('string', 255),
-		'rechten_posten' => array('string', 255),
-		'rechten_modereren' => array('string', 255),
-		'volgorde' => array('int', 11)
+		'forum_id' => array(T::Integer, false, null, 'auto_increment'),
+		'categorie_id' => array(T::Integer),
+		'titel' => array(T::String),
+		'omschrijving' => array(T::Text),
+		'laatst_gewijzigd' => array(T::DateTime, true),
+		'laatste_post_id' => array(T::Integer, true),
+		'laatste_lid_id' => array(T::UID, true),
+		'aantal_draden' => array(T::Integer),
+		'aantal_posts' => array(T::Integer),
+		'rechten_lezen' => array(T::String),
+		'rechten_posten' => array(T::String),
+		'rechten_modereren' => array(T::String),
+		'volgorde' => array(T::Integer)
 	);
 	/**
 	 * Database primary key

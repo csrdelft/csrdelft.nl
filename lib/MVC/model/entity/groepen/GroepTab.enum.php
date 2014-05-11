@@ -15,12 +15,8 @@ abstract class GroepTab implements PersistentEnum {
 	const Statistiek = 'stats';
 	const Emails = 'emails';
 
-	public static function values() {
+	public static function getTypeOptions() {
 		return array(self::Lijst, self::Pasfotos, self::Statistiek, self::Emails);
-	}
-
-	public static function getMaxLenght() {
-		return 8;
 	}
 
 }

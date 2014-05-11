@@ -40,9 +40,9 @@ class CorveeKwalificatie extends PersistentEntity {
 	 * @var array
 	 */
 	protected static $persistent_fields = array(
-		'lid_id' => array('string', 4),
-		'functie_id' => array('int', 11),
-		'wanneer_toegewezen' => array('datetime')
+		'lid_id' => array(T::UID),
+		'functie_id' => array(T::Integer),
+		'wanneer_toegewezen' => array(T::DateTime)
 	);
 	/**
 	 * Database primary key
