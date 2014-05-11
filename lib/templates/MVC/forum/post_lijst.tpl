@@ -42,8 +42,11 @@
 				{/if}
 			</div>
 		{else if $post->wacht_goedkeuring}
+			<br /><br />
 			<a href="/forum/goedkeuren/{$post->post_id}" class="knop post confirm" title="Bericht goedkeuren">goedkeuren</a>
+			<br /><br />
 			<a href="/tools/stats.php?ip={$post->auteur_ip}" class="knop" title="IP-log">IP-log</a>
+			<a href="/forum/verwijderen/{$post->post_id}" class="knop post confirm" title="Verwijder bericht of draad">{icon get="cross"}</a>
 		{/if}
 	</td>
 	<td class="bericht{cycle values="0,1"}" id="post{$post->post_id}">
