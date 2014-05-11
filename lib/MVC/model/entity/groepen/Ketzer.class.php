@@ -26,6 +26,16 @@ class Ketzer extends OpvolgbareGroep {
 	 */
 	public $aanmelden_tot;
 	/**
+	 * Bedrag dat mag worden afgeschreven
+	 * @var float
+	 */
+	public $kosten_bedrag;
+	/**
+	 * Tegenrekening van machtiging 
+	 * @var string
+	 */
+	public $machtiging_rekening;
+	/**
 	 * Ketzer-selectors
 	 * @var KetzerSelector[]
 	 */

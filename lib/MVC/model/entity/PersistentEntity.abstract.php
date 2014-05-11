@@ -145,7 +145,7 @@ abstract class PersistentEntity {
 				$max = max($max, strlen($option));
 			}
 			$field->type = 'varchar(' . $max . ')';
-			$field->extra = null;
+			$field->extra = '';
 		}
 		if (self::isAllowedNull($field_name)) {
 			$field->null = 'YES';
