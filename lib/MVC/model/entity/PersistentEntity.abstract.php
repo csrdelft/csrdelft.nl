@@ -23,7 +23,9 @@ abstract class PersistentEntity {
 	 * Static constructor is called (by inheritance) first and only from PersistenceModel.
 	 */
 	public static function __constructStatic() {
-		
+		if (defined('DB_CHECK')) {
+			static::checkTable();
+		}
 	}
 
 	public static function getTableName() {
@@ -36,6 +38,13 @@ abstract class PersistentEntity {
 
 	public static function getPrimaryKeys() {
 		return static::$primary_keys;
+	}
+
+	public static function getDefaultValue($field_name) {
+		if (isset(static::$persistent_fields[$field_name][2])) {
+			return static::$persistent_fields[$field_name][2];
+		}
+		return null;
 	}
 
 	/**
