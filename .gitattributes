@@ -3690,11 +3690,6 @@ lib/mededelingen/mededelingcontent.class.php -text
 lib/mededelingen/mededelingencontent.class.php -text
 lib/mededelingen/mededelingtopdrieoverzichtcontent.class.php -text
 lib/memcached.class.php -text
-lib/mimemagic/DjVuImage.php -text
-lib/mimemagic/MimeMagic.php -text
-lib/mimemagic/XmlTypeCheck.php -text
-lib/mimemagic/mime.info -text
-lib/mimemagic/mime.types -text
 lib/mysql.class.php -text
 lib/peiling.class.php -text
 lib/peilingbeheercontent.class.php -text
