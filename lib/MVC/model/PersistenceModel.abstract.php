@@ -26,7 +26,10 @@ abstract class PersistenceModel implements Persistence {
 	protected function __construct($subdir = '') {
 		$orm = static::orm;
 		require_once 'MVC/model/entity/' . $subdir . $orm . '.class.php';
-		$orm::__constructStatic();
+		$orm::__constructStatic(); // combine persistent fields
+		if (defined('DB_CHECK')) {
+			$orm::checkTable();
+		}
 	}
 
 	/**

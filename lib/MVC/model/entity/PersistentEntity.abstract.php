@@ -23,9 +23,7 @@ abstract class PersistentEntity {
 	 * Static constructor is called (by inheritance) first and only from PersistenceModel.
 	 */
 	public static function __constructStatic() {
-		if (defined('DB_CHECK')) {
-			static::checkTable();
-		}
+		
 	}
 
 	public static function getTableName() {

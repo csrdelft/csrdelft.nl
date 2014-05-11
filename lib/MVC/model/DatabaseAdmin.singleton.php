@@ -101,8 +101,8 @@ class DatabaseAdmin extends Database {
 		return $sql;
 	}
 
-	public static function sqlDeleteField($table, $field_name) {
-		$sql = 'ALTER TABLE ' . $table . ' DROP ' . $field_name;
+	public static function sqlDeleteField($table, PersistentField $field) {
+		$sql = 'ALTER TABLE ' . $table . ' DROP ' . $field->field;
 		if (defined('DB_MODIFY')) {
 			$query = self::instance()->prepare($sql);
 			$query->execute();
