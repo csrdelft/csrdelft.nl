@@ -12,6 +12,7 @@ class GroepenView extends TemplateView {
 
 	public function __construct($groepen) {
 		parent::__construct();
+		$this->model = array();
 		foreach ($groepen as $groep) {
 			$this->model[] = new GroepView($groep);
 		}
