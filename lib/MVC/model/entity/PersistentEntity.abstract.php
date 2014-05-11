@@ -166,21 +166,23 @@ abstract class PersistentEntity {
 	 * @unsupported RENAME field; INDEX check; FOREIGN KEY check;
 	 */
 	public static function checkTable() {
+		$fields = array();
+		foreach (static::$persistent_fields as $name => $definition) {
+			$fields[$name] = self::makePersistentField($name);
+		}
 		try {
 			$database_fields = group_by_distinct('field', DatabaseAdmin::instance()->sqlDescribeTable(self::getTableName()));
 		} catch (Exception $e) {
 			if (endsWith($e->getMessage(), self::getTableName() . "' doesn't exist")) {
-				$string = DatabaseAdmin::instance()->sqlCreateTable(self::getTableName(), static::$persistent_fields, self::getPrimaryKeys());
+				$string = DatabaseAdmin::instance()->sqlCreateTable(self::getTableName(), $fields, self::getPrimaryKeys());
 				debugprint($string);
 				return;
 			} else {
 				throw $e; // rethrow to controller
 			}
 		}
-		$fields = array();
 		$previous_field = null;
-		foreach (static::$persistent_fields as $name => $definition) {
-			$fields[$name] = self::makePersistentField($name);
+		foreach ($fields as $name => $definition) {
 			// Add missing persistent fields
 			if (!array_key_exists($name, $database_fields)) {
 				$string = DatabaseAdmin::instance()->sqlAddField(self::getTableName(), $fields[$name], $previous_field);

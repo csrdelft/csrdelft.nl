@@ -71,8 +71,8 @@ class DatabaseAdmin extends Database {
 	 */
 	public static function sqlCreateTable($name, array $fields, array $primary_keys) {
 		$sql = 'CREATE TABLE ' . $name . ' (';
-		foreach ($fields as $key => $value) {
-			$sql .= $key . ' ' . $value . ', ';
+		foreach ($fields as $name => $field) {
+			$sql .= $field->toSQL() . ', ';
 		}
 		$sql .= 'PRIMARY KEY (' . implode(', ', $primary_keys) . ')) ENGINE=InnoDB DEFAULT CHARSET=utf8 auto_increment=1';
 		if (defined('DB_MODIFY')) {
@@ -83,10 +83,7 @@ class DatabaseAdmin extends Database {
 	}
 
 	public static function sqlAddField($table, PersistentField $field, $after_field = null) {
-		$sql = 'ALTER TABLE ' . $table . ' ADD ' . $field->field . ' ' . $field->type;
-		$sql .= ($field->null === 'YES' ? '' : ' NOT NULL');
-		$sql .= ($field->default === null ? '' : ' DEFAULT "' . $field->default . '"');
-		$sql .= (empty($field->extra) ? '' : ' ' . $field->extra);
+		$sql = 'ALTER TABLE ' . $table . ' ADD ' . $field->toSQL();
 		$sql .= ($after_field === null ? ' FIRST' : ' AFTER ' . $after_field);
 		if (defined('DB_MODIFY')) {
 			$query = self::instance()->prepare($sql);
@@ -96,10 +93,7 @@ class DatabaseAdmin extends Database {
 	}
 
 	public static function sqlChangeField($table, PersistentField $field) {
-		$sql = 'ALTER TABLE ' . $table . ' CHANGE ' . $field->field . ' ' . $field->field . ' ' . $field->type;
-		$sql .= ($field->null === 'YES' ? '' : ' NOT NULL');
-		$sql .= ($field->default === null ? '' : ' DEFAULT "' . $field->default . '"');
-		$sql .= (empty($field->extra) ? '' : ' ' . $field->extra);
+		$sql = 'ALTER TABLE ' . $table . ' CHANGE ' . $field->field . ' ' . $field->toSQL();
 		if (defined('DB_MODIFY')) {
 			$query = self::instance()->prepare($sql);
 			$query->execute();

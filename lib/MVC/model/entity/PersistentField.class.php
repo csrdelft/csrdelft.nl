@@ -43,4 +43,11 @@ class PersistentField {
 	 */
 	public $extra;
 
+	public function toSQL() {
+		return $this->field . ' ' . $this->type .
+				($this->null === 'YES' ? '' : ' NOT NULL') .
+				($this->default === null ? '' : ' DEFAULT "' . $this->default . '"') .
+				(empty($this->extra) ? '' : ' ' . $this->extra);
+	}
+
 }
