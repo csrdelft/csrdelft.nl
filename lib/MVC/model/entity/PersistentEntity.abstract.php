@@ -15,10 +15,8 @@ abstract class PersistentEntity {
 	/**
 	 * Constructor is called late by PDO::FETCH_CLASS (after fields are set).
 	 */
-	public function __construct($cast = false) {
-		if ($cast) {
-			$this->castValues();
-		}
+	public function __construct() {
+		$this->castValues();
 	}
 
 	/**
@@ -82,54 +80,19 @@ abstract class PersistentEntity {
 		}
 	}
 
-	/* PersistentField */
-
-	public static function getFieldName($field_number) {
-		$i = 0;
-		foreach (static::$persistent_fields as $name => $definition) {
-			if ($i === $field_number) {
-				return $name;
-			}
-			$i++;
-		}
-		return null;
-	}
-
-	public static function getFieldType($field_name) {
-		return self::getDefinition($field_name, 0);
-	}
-
-	public static function isAllowedNull($field_name) {
-		return (boolean) self::getDefinition($field_name, 1);
-	}
-
-	public static function getDefaultValue($field_name) {
-		return self::getDefinition($field_name, 2);
-	}
-
-	public static function getExtraProp($field_name) {
-		return self::getDefinition($field_name, 3);
-	}
-
-	private static function getDefinition($field_name, $definition_number) {
-		if (array_key_exists($definition_number, static::$persistent_fields[$field_name])) {
-			return static::$persistent_fields[$field_name][$definition_number];
-		}
-		return null;
-	}
-
 	/**
 	 * To compare table description of MySQL.
 	 * 
-	 * @param string $field_name
+	 * @param string $name
+	 * @param array $definition
 	 * @return PersistentField
 	 */
-	private static function makePersistentField($field_name) {
+	private static function makePersistentField($name, array $definition) {
 		$field = new PersistentField();
-		$field->field = $field_name;
-		$field->type = self::getFieldType($field_name);
-		$field->default = self::getDefaultValue($field_name);
-		$field->extra = (string) self::getExtraProp($field_name);
+		$field->field = $name;
+		$field->type = $definition[0];
+		$field->default = (isset($definition[2]) ? $definition[2] : null);
+		$field->extra = (isset($definition[3]) ? (string) $definition[3] : '');
 		if ($field->type === T::Boolean) {
 			$field->type = 'tinyint(1)';
 		} elseif ($field->type === T::Integer) {
@@ -147,12 +110,12 @@ abstract class PersistentEntity {
 			$field->type = 'varchar(' . $max . ')';
 			$field->extra = '';
 		}
-		if (self::isAllowedNull($field_name)) {
+		if (isset($definition[1]) AND $definition[1]) {
 			$field->null = 'YES';
 		} else {
 			$field->null = 'NO';
 		}
-		if (in_array($field_name, self::getPrimaryKeys())) {
+		if (in_array($name, self::getPrimaryKeys())) {
 			$field->key = 'PRI';
 		} else {
 			$field->key = '';
@@ -168,7 +131,7 @@ abstract class PersistentEntity {
 	public static function checkTable() {
 		$fields = array();
 		foreach (static::$persistent_fields as $name => $definition) {
-			$fields[$name] = self::makePersistentField($name);
+			$fields[$name] = self::makePersistentField($name, $definition);
 		}
 		try {
 			$database_fields = group_by_distinct('field', DatabaseAdmin::instance()->sqlDescribeTable(self::getTableName()));
@@ -182,7 +145,7 @@ abstract class PersistentEntity {
 			}
 		}
 		$previous_field = null;
-		foreach ($fields as $name => $definition) {
+		foreach (static::$persistent_fields as $name => $definition) {
 			// Add missing persistent fields
 			if (!array_key_exists($name, $database_fields)) {
 				$string = DatabaseAdmin::instance()->sqlAddField(self::getTableName(), $fields[$name], $previous_field);
@@ -198,11 +161,11 @@ abstract class PersistentEntity {
 				}
 				// Cast database value if default value is defined
 				if ($fields[$name]->default !== null) {
-					if (self::getFieldType($name) === T::Boolean) {
+					if ($definition[0] === T::Boolean) {
 						$database_fields[$name]->default = (boolean) $database_fields[$name]->default;
-					} elseif (self::getFieldType($name) === T::Integer) {
+					} elseif ($definition[0] === T::Integer) {
 						$database_fields[$name]->default = (int) $database_fields[$name]->default;
-					} elseif (self::getFieldType($name) === T::Float) {
+					} elseif ($definition[0] === T::Float) {
 						$database_fields[$name]->default = (float) $database_fields[$name]->default;
 					}
 				}
