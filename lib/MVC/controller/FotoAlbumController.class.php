@@ -64,7 +64,7 @@ class FotoAlbumController extends Controller {
 			//case 'hernoemen':
 			//case 'verplaatsen':
 			case 'verwijderen':
-				return $this->isPosted() AND LoginLid::mag('P_ADMIN');
+				return $this->isPosted() AND LoginLid::mag('P_DOCS_MOD');
 
 			case 'verwerken':
 			case 'downloaden':

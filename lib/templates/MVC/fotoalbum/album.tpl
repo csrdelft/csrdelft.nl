@@ -5,7 +5,7 @@
 	{if LoginLid::mag('P_LOGGED_IN') && $album->getFotos()!==false}
 		<a class="knop" href="/fotoalbum/downloaden{$album->getSubDir()}" title="Download als TAR-bestand">{icon get="folder_picture"} Download album</a>
 	{/if}
-	{if LoginLid::mag('P_ADMIN')}
+	{if LoginLid::mag('P_DOCS_MOD')}
 		<a class="knop" href="/fotoalbum/verwerken{$album->getSubDir()}">{icon get="photos"} Verwerken</a>
 	{/if}
 </div>

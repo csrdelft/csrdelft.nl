@@ -440,7 +440,7 @@ class LoginLid {
 			'P_FORUM_MOD' => 000000000700, # Forum-moderator mag berichten van anderen wijzigen of verwijderen
 			'P_DOCS_READ' => 000000004000, # Documenten-rubriek lezen
 			'P_DOCS_POST' => 000000005000, # Documenten verwijderen of erbij plaatsen
-			'P_DOCS_MOD' => 000000007000, # euh?
+			'P_DOCS_MOD' => 000000007000, # Documenten aanpassen en fotos uit fotoalbum verwijderen
 			'P_PROFIEL_EDIT' => 000000010000, # Eigen gegevens aanpassen
 			'P_LEDEN_READ' => 000000040000, # Gegevens over andere leden raadplegen
 			'P_LEDEN_EDIT' => 000000020000, # Profiel van andere leden wijzigen
