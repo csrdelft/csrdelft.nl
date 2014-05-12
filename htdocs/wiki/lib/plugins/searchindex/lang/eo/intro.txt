@@ -1,0 +1,11 @@
+====== Serĉindeks-Administranto ====== 
+
+Tiu-ĉi paĝo ebligas al vi aktualigi aŭ rekrei la serĉindekson uzata de la plenteksta serĉado. 
+Tio ĝenerale ne necesas dum la indekso kreas kaj aktualigas sin mem dum vi foliumas vian vikion. Se vi ĵus aktualigis, aldonis aŭ forigis 
+multajn dosierojn, tamen povus esti bona ideo purigi la indekson. 
+
+Rekrei la indekson **povas daŭri tre longan tempon**. Plej bone lasu la paĝon malferma 
+ĝis la indeksado finiĝis. 
+
+//NOTO: Tiu administranto bezonas aktualan foliumilon, ĉar ĝi uzas modernan JavaSkripton 
+por plenumi multajn taskojn en la malantaŭo (uzante [[wp>AJAX]]).// 

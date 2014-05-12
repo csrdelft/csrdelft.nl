@@ -1,0 +1,8 @@
+====== Zoekindex Manager ======
+
+Deze pagina maakt het mogelijk de zoekindex bij te werken of te vernieuwen.
+Over het algemeen is dit niet nodig omdat de index vanzelf wordt opgebouwd en bijgewerkt zodra gebruikers de wiki bezoeken, echter als er zojuist een upgrade is uitgevoerd of een groot aantal bestand toegevoegd of verwijderd is kan het een goed idee zijn om de index op te schonen.
+
+Het opnieuw opbouwen van de index **kan lang duren**. Deze pagina dient geopend te blijven totdat het indexeringsproces is afgerond.
+
+//LET OP: Deze manager gebruikt een modern Javascript mechanisme om verschillende taken op de achtergrond uit te voeren (mbv. [[wp>AJAX]]) en heeft een recente browser nodig.//

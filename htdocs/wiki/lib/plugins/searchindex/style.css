@@ -1,0 +1,52 @@
+
+#plugin__searchindex {
+    width: 80%;
+    margin: 0 auto;
+}
+
+#plugin__searchindex .buttons {
+    vertical-align: middle;
+    padding: 7px 8px;
+    margin: 2.5em auto;
+}
+#plugin__searchindex .buttons .button {
+    float: left;
+    clear: left;
+    margin: 0 1.2em;
+    width: 10em;
+}
+#plugin__searchindex .buttons p {
+    float: left;
+}
+#plugin__searchindex .msg {
+    color: __text__;
+    border: 0px solid __border__;
+    border-radius: 3px;
+    -moz-border-radius: 3px;
+    -webkit-border-radius: 3px;
+    overflow: hidden;
+}
+#plugin__searchindex .msg p {
+    margin-left: 24px;
+    margin-bottom: 4px !important;
+}
+#plugin__searchindex .msg p.name,
+#plugin__searchindex .msg p.status {
+    margin-left: 2.2em;
+    font-size: 75%;
+}
+#plugin__searchindex .msg p.name {
+    font-weight: bold;
+}
+#plugin__searchindex .msg p.status {
+    color: __text_neu__;
+    font-style: italic;
+}
+
+#plugin__searchindex .updating {
+    background-image: url('../../images/throbber.gif');
+    background-repeat: no-repeat;
+    background-position: 5px 4px;
+    border-width: 1px;
+    padding: 3px;
+}

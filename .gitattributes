@@ -2625,6 +2625,33 @@ htdocs/wiki/lib/plugins/searchform/plugin.info.txt -text
 htdocs/wiki/lib/plugins/searchform/script.js -text
 htdocs/wiki/lib/plugins/searchform/style.css -text
 htdocs/wiki/lib/plugins/searchform/syntax.php -text
+htdocs/wiki/lib/plugins/searchindex/README -text
+htdocs/wiki/lib/plugins/searchindex/admin.php -text
+htdocs/wiki/lib/plugins/searchindex/ajax.php -text
+htdocs/wiki/lib/plugins/searchindex/lang/de/intro.txt -text
+htdocs/wiki/lib/plugins/searchindex/lang/de/lang.php -text
+htdocs/wiki/lib/plugins/searchindex/lang/en/intro.txt -text
+htdocs/wiki/lib/plugins/searchindex/lang/en/lang.php -text
+htdocs/wiki/lib/plugins/searchindex/lang/eo/intro.txt -text
+htdocs/wiki/lib/plugins/searchindex/lang/eo/lang.php -text
+htdocs/wiki/lib/plugins/searchindex/lang/fr/intro.txt -text
+htdocs/wiki/lib/plugins/searchindex/lang/fr/lang.php -text
+htdocs/wiki/lib/plugins/searchindex/lang/ja/intro.txt -text svneol=unset#application/octet-stream
+htdocs/wiki/lib/plugins/searchindex/lang/ja/lang.php -text
+htdocs/wiki/lib/plugins/searchindex/lang/ko/intro.txt -text svneol=unset#application/octet-stream
+htdocs/wiki/lib/plugins/searchindex/lang/ko/lang.php -text
+htdocs/wiki/lib/plugins/searchindex/lang/nl/intro.txt -text
+htdocs/wiki/lib/plugins/searchindex/lang/nl/lang.php -text
+htdocs/wiki/lib/plugins/searchindex/lang/ru/intro.txt -text svneol=unset#application/octet-stream
+htdocs/wiki/lib/plugins/searchindex/lang/ru/lang.php -text
+htdocs/wiki/lib/plugins/searchindex/lang/zh-tw/intro.txt -text svneol=unset#application/octet-stream
+htdocs/wiki/lib/plugins/searchindex/lang/zh-tw/lang.php -text
+htdocs/wiki/lib/plugins/searchindex/lang/zh/intro.txt -text svneol=unset#application/octet-stream
+htdocs/wiki/lib/plugins/searchindex/lang/zh/lang.php -text
+htdocs/wiki/lib/plugins/searchindex/manager.dat -text
+htdocs/wiki/lib/plugins/searchindex/plugin.info.txt -text
+htdocs/wiki/lib/plugins/searchindex/script.js -text
+htdocs/wiki/lib/plugins/searchindex/style.css -text
 htdocs/wiki/lib/plugins/showlogin/action.php -text
 htdocs/wiki/lib/plugins/sortablejs/manager.dat -text
 htdocs/wiki/lib/plugins/sortablejs/plugin.info.txt -text
