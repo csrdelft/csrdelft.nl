@@ -40,7 +40,7 @@ class PosterController extends AclController {
 		if ($this->isPosted() AND $formulier->validate()) {
 			try {
 				$path = PICS_PATH . '/fotoalbum/' . $fields['album']->getValue();
-				if (file_exists($path)) {
+				if (file_exists($path . '/Posters/')) {
 					$filenaam = $fields['naam']->getValue() . '.jpg';
 					if ($fields['uploader']->opslaan($path . '/Posters/', $filenaam)) {
 						$map = new Map();
