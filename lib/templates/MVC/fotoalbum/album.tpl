@@ -1,6 +1,6 @@
 <div style="float: right; margin: 0 0 10px 10px;">
 	{if LoginLid::mag('P_LOGGED_IN')}
-		<a class="knop" href="/fotoalbum/fotostoevoegen/">{icon get="toevoegen"} Toevoegen</a>
+		<a class="knop" href="/fotostoevoegen/">{icon get="toevoegen"} Toevoegen</a>
 	{/if}
 	{if LoginLid::mag('P_LOGGED_IN') && $album->getFotos()!==false}
 		<a class="knop" href="/tools/downloadalbum.php?album={$album->locatie}" title="Download als TAR-bestand">{icon get="folder_picture"} Download album</a>
