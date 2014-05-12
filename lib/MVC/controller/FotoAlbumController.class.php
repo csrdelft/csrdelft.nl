@@ -63,7 +63,7 @@ class FotoAlbumController extends Controller {
 				return $this->isPosted() AND LoginLid::mag('P_ADMIN');
 
 			case 'verwerken':
-				return LoginLid::mag('P_ADMIN');
+				return LoginLid::mag('P_LEDEN_READ');
 
 			default:
 				$this->action = 'bekijken';
@@ -106,6 +106,10 @@ class FotoAlbumController extends Controller {
 	}
 
 	public function verwerken(Map $map, $naam) {
+		define('RESIZE_OUTPUT', null);
+		echo '<h1>Fotoalbum verwerken: ' . $naam . '</h1>';
+		echo 'Dit kan even duren<br />';
+		flush();
 		$album = new FotoAlbum($map, $naam);
 		$album->verwerkFotos();
 		invokeRefresh($album->getSubDir(), 'Album verwerk succesvol verwerkt', 1);
