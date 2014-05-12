@@ -10,7 +10,7 @@ require_once 'MVC/model/entity/PersistentEntity.abstract.php';
  * @author P.W.G. Brussee <brussee@live.nl>
  *
  * Uses database to provide persistence.
- * Requires a static property $orm in superclass.
+ * Requires an ORM class constant to be defined in superclass. 
  * Requires a static property $instance in superclass.
  * 
  */
@@ -26,7 +26,7 @@ abstract class PersistenceModel implements Persistence {
 	protected function __construct($subdir = '') {
 		$orm = static::orm;
 		require_once 'MVC/model/entity/' . $subdir . $orm . '.class.php';
-		$orm::__constructStatic(); // combine persistent fields
+		$orm::__constructStatic(); // extend persistent fields
 		if (defined('DB_CHECK')) {
 			$orm::checkTable();
 		}

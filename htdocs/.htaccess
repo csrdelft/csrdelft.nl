@@ -8,6 +8,7 @@ RewriteRule ^pauper/terug		pauper.php?exit=true [L]
 RewriteRule ^pauper				pauper.php [L]
 
 RewriteRule ^forum				index.php?c=Forum [L]
+RewriteRule ^fotoalbum			index.php?c=FotoAlbum [L]
 RewriteRule ^agenda				index.php?c=Agenda [L]
 RewriteRule ^groepen			index.php?c=Groepen [L]
 RewriteRule ^maaltijden			index.php?c=TakenModule [L]

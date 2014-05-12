@@ -127,6 +127,16 @@ function invokeRefresh($url = null, $melding = '', $level = -1) {
 	exit;
 }
 
+/**
+ * rawurlencode() met uitzondering van slashes.
+ * 
+ * @param string $url
+ * @return string
+ */
+function direncode($url) {
+	return str_replace('%2F', '/', rawurlencode($url));
+}
+
 function is_utf8($string) {
 	return checkEncoding($string, 'UTF-8');
 }

@@ -72,8 +72,7 @@ class ForumController extends Controller {
 		$body = new ForumView(ForumModel::instance()->getForum());
 		if (LoginLid::mag('P_LOGGED_IN')) {
 			$this->view = new CsrLayoutPage($body);
-		} else {
-			//uitgelogd heeft nieuwe layout
+		} else { // uitgelogd heeft nieuwe layout
 			$this->view = new CsrLayout2Page($body);
 		}
 		$this->view->addScript('forum.js');
@@ -132,8 +131,7 @@ class ForumController extends Controller {
 		$body = new ForumDeelView($deel, $belangrijk);
 		if (LoginLid::mag('P_LOGGED_IN')) {
 			$this->view = new CsrLayoutPage($body);
-		} else {
-			//uitgelogd heeft nieuwe layout
+		} else { // uitgelogd heeft nieuwe layout
 			$this->view = new CsrLayout2Page($body);
 		}
 		$this->view->addScript('forum.js');
@@ -158,8 +156,7 @@ class ForumController extends Controller {
 		$body = new ForumDeelView($deel);
 		if (LoginLid::mag('P_LOGGED_IN')) {
 			$this->view = new CsrLayoutPage($body);
-		} else {
-			//uitgelogd heeft nieuwe layout
+		} else { // uitgelogd heeft nieuwe layout
 			$this->view = new CsrLayout2Page($body);
 		}
 		$this->view->addScript('forum.js');
@@ -195,8 +192,7 @@ class ForumController extends Controller {
 		$body = new ForumDraadView($draad, $deel);
 		if (LoginLid::mag('P_LOGGED_IN')) {
 			$this->view = new CsrLayoutPage($body);
-		} else {
-			//uitgelogd heeft nieuwe layout
+		} else { // uitgelogd heeft nieuwe layout
 			$this->view = new CsrLayout2Page($body);
 		}
 		$this->view->addScript('forum.js');

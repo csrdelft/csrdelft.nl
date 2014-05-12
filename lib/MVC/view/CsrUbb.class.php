@@ -582,15 +582,15 @@ HTML;
 			$albuminvoer = array_filter(explode('/', $albuminvoer));
 			$albumnaam = urldecode(end($albuminvoer));
 
-			$album = new Fotoalbum($pad, $albumnaam);
+			$album = new FotoAlbum($pad, $albumnaam);
 
 			//album bestaat niet, we geven een foutmelding
 			if (!$album->exists()) {
-				return '<div class="ubb_block">Fotoalbum niet gevonden: ' . mb_htmlentities($pad) . '</div>';
+				return '<div class="ubb_block">FotoAlbum niet gevonden: ' . mb_htmlentities($pad) . '</div>';
 			}
 		}
 
-		$fotoalbumtag = new FotoalbumUbbContent($album);
+		$fotoalbumtag = new FotoAlbumUbbContent($album);
 
 		if ($this->quote_level > 0 || isset($parameters['compact'])) {
 			$fotoalbumtag->makeCompact();

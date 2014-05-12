@@ -1,5 +1,7 @@
 <?php
 
+require_once 'MVC/model/entity/Map.class.php';
+
 /**
  * Bestand.class.php
  * 
@@ -23,5 +25,10 @@ class Bestand {
 	 * @var string 
 	 */
 	public $mimetype;
+	/**
+	 * Locatie van bestand
+	 * @var Map
+	 */
+	public $map;
 
 }

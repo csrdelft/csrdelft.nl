@@ -99,8 +99,8 @@ abstract class SimpleHTML implements View {
 		}
 		// Nieuwste fotoalbum
 		if (LidInstellingen::get('zijbalk', 'fotoalbum') == 'ja') {
-			require_once 'fotoalbumcontent.class.php';
-			$zijkolom[] = new FotalbumZijbalkContent();
+			require_once 'MVC/controller/FotoAlbumController.class.php';
+			$zijkolom[] = new FotoAlbumZijbalkView(FotoAlbumModel::getMostRecentFotoAlbum());
 		}
 		// Komende verjaardagen
 		if (LidInstellingen::get('zijbalk', 'verjaardagen') > 0) {

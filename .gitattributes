@@ -29,9 +29,6 @@ htdocs/actueel/courant/courant.php -text
 htdocs/actueel/courant/index.php -text
 htdocs/actueel/courant/verzenden.php -text
 htdocs/actueel/eetplan.php -text
-htdocs/actueel/fotoalbum/.htaccess -text
-htdocs/actueel/fotoalbum/index.php -text
-htdocs/actueel/fotoalbum/verwerk.php -text
 htdocs/actueel/groepen/.htaccess -text
 htdocs/actueel/groepen/groep.php -text
 htdocs/actueel/groepen/groepen.php -text
@@ -3152,6 +3149,7 @@ lib/MVC/controller/AgendaController.class.php -text
 lib/MVC/controller/CmsPaginaController.class.php -text
 lib/MVC/controller/Controller.abstract.php -text
 lib/MVC/controller/ForumController.class.php -text
+lib/MVC/controller/FotoAlbumController.class.php -text
 lib/MVC/controller/GroepenController.class.php -text
 lib/MVC/controller/InstellingenBeheerController.class.php -text
 lib/MVC/controller/LidInstellingenController.class.php -text
@@ -3166,6 +3164,7 @@ lib/MVC/model/Database.singleton.php -text
 lib/MVC/model/DatabaseAdmin.singleton.php -text
 lib/MVC/model/DragObjectModel.class.php -text
 lib/MVC/model/ForumModel.class.php -text
+lib/MVC/model/FotoAlbumModel.class.php -text
 lib/MVC/model/GroepenModel.class.php -text
 lib/MVC/model/InstellingenModel.class.php -text
 lib/MVC/model/LidInstellingenModel.class.php -text
@@ -3183,9 +3182,12 @@ lib/MVC/model/entity/ForumDeel.class.php -text
 lib/MVC/model/entity/ForumDraad.class.php -text
 lib/MVC/model/entity/ForumDraadGelezen.class.php -text
 lib/MVC/model/entity/ForumPost.class.php -text
+lib/MVC/model/entity/Foto.class.php -text
+lib/MVC/model/entity/FotoAlbum.class.php -text
 lib/MVC/model/entity/Instelling.class.php -text
 lib/MVC/model/entity/LidInstelling.class.php -text
 lib/MVC/model/entity/Mail.class.php -text
+lib/MVC/model/entity/Map.class.php -text
 lib/MVC/model/entity/Mededeling.class.php -text
 lib/MVC/model/entity/MenuItem.class.php -text
 lib/MVC/model/entity/PersistentEntity.abstract.php -text
@@ -3226,6 +3228,7 @@ lib/MVC/view/FileField.class.php -text
 lib/MVC/view/FormElement.abstract.php -text
 lib/MVC/view/Formulier.class.php -text
 lib/MVC/view/ForumView.class.php -text
+lib/MVC/view/FotoAlbumView.class.php -text
 lib/MVC/view/GroepenView.class.php -text
 lib/MVC/view/HtmlPage.abstract.php -text
 lib/MVC/view/InstellingenBeheerView.class.php -text
@@ -3658,8 +3661,6 @@ lib/documenten/documentcontent.class.php -text
 lib/documenten/documentcontroller.class.php -text
 lib/eetplan.class.php -text
 lib/eetplancontent.class.php -text
-lib/fotoalbum.class.php -text
-lib/fotoalbumcontent.class.php -text
 lib/googlesync.class.php -text
 lib/gozerbot/class.AES.php -text
 lib/gozerbot/class.GozerbotUDP.php -text
@@ -3955,6 +3956,7 @@ lib/templates/MVC/forum/post_zijbalk.tpl -text
 lib/templates/MVC/forum/resultaten.tpl -text
 lib/templates/MVC/forum/rss.tpl -text
 lib/templates/MVC/forum/zoek_form.tpl -text
+lib/templates/MVC/fotoalbum/album.tpl -text
 lib/templates/MVC/groepen/groep.tpl -text
 lib/templates/MVC/groepen/groeplid.tpl -text
 lib/templates/MVC/groepen/menu_pagina.tpl -text
@@ -4002,7 +4004,6 @@ lib/templates/csrdelft2/partials/_menuVereniging.tpl -text
 lib/templates/documenten/document.ubb.tpl -text
 lib/templates/documenten/documenten.tpl -text
 lib/templates/documenten/documentencategorie.tpl -text
-lib/templates/fotoalbum/album.tpl -text
 lib/templates/groepen/groep.tpl -text
 lib/templates/groepen/groep.ubb.tpl -text
 lib/templates/groepen/groepen.tpl -text
