@@ -149,11 +149,11 @@ class FotoAlbumController extends Controller {
 		$bestandsnaam = filter_input(INPUT_POST, 'foto', FILTER_SANITIZE_URL);
 		$foto = new Foto($album, $bestandsnaam);
 		if (FotoAlbumModel::verwijderFoto($foto)) {
-			echo '<div id="' . md5($bestandsnaam) . '" class="remove"></div>';
 			setMelding('Foto ' . $bestandsnaam . ' succesvol verwijdert', 1);
 		} else {
 			setMelding('Foto verwijderen mislukt', -1);
 		}
+		echo '<div id="' . md5($bestandsnaam) . '" class="remove"></div>';
 		exit;
 	}
 

@@ -51,7 +51,7 @@ class PosterController extends AclController {
 							invokeRefresh(null, 'Fotoalbum bestaat niet: ' . $album->locatie, -1);
 						}
 						$album->verwerkFotos();
-						invokeRefresh('/fotoalbum/' . $fields['album']->getValue() . '/Posters#' . $filenaam, 'Poster met succes opgeslagen', 1);
+						invokeRefresh($album->getUrl() . '#' . direncode($filenaam), 'Poster met succes opgeslagen', 1);
 					} else {
 						invokeRefresh(null, 'Poster opslaan mislukt', -1);
 					}
