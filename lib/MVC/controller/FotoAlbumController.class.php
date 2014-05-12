@@ -30,7 +30,8 @@ class FotoAlbumController extends AclController {
 			$this->acl = array(
 				'bekijken' => 'P_NOBODY',
 				'downloaden' => 'P_LOGGED_IN',
-				'verwerken' => 'P_LEDEN_READ'
+				'verwerken' => 'P_LEDEN_READ',
+				'albumcover' => 'P_DOCS_MOD'
 			);
 		} else {
 			$this->acl = array(
@@ -152,6 +153,17 @@ class FotoAlbumController extends AclController {
 			setMelding('Fotoalbum hernoemen mislukt', -1);
 		}
 		exit;
+	}
+
+	public function albumcover(Map $map, $naam) {
+		$album = FotoAlbumModel::getFotoAlbum($map, '');
+		$foto = new Foto($album, $naam);
+		if (FotoAlbumModel::setAlbumCover($album, $foto)) {
+			invokeRefresh($album->getSubDir(), 'Fotoalbum-cover succesvol ingesteld', 1);
+		} else {
+			exit;
+			invokeRefresh($album->getSubDir(), 'Fotoalbum-cover instellen mislukt', -1);
+		}
 	}
 
 }

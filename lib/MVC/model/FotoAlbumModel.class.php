@@ -52,4 +52,27 @@ class FotoAlbumModel {
 		return rename($album->locatie, str_replace($album->mapnaam, $nieuwenaam, $album->locatie));
 	}
 
+	public static function setAlbumCover(FotoAlbum $album, Foto $cover) {
+		$ret = true;
+		// find old cover
+		foreach ($album->getFotos() as $foto) {
+			if (strpos($foto->bestandsnaam, 'folder')) {
+				$old = $foto->getPad();
+				$ret &= rename($old, str_replace('folder', '', $old));
+				$old = $foto->getResizedPad();
+				$ret &= rename($old, str_replace('folder', '', $old));
+				$old = $foto->getThumbPad();
+				$ret &= rename($old, str_replace('folder', '', $old));
+			}
+		}
+		// set new cover
+		$old = $cover->getPad();
+		$ret &= rename($old, substr_replace($old, 'folder', strrpos($old, '.'), 0));
+		$old = $cover->getResizedPad();
+		$ret &= rename($old, substr_replace($old, 'folder', strrpos($old, '.'), 0));
+		$old = $cover->getThumbPad();
+		$ret &= rename($old, substr_replace($old, 'folder', strrpos($old, '.'), 0));
+		return $ret;
+	}
+
 }

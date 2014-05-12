@@ -17,6 +17,7 @@
 	border: 1px solid #777777;
 	overflow: hidden;
 	position: relative;
+	cursor: pointer;
 }
 
 .album:hover{

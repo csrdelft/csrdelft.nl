@@ -16,7 +16,7 @@
 		<a href="{$subalbum->getUrl()}">
 			<img src="{$subalbum->getThumbURL()}" />
 			<div id="{$subalbum->mapnaam|md5}" class="albumname">
-				{if LoginLid::mag('P_ADMIN')}
+				{if LoginLid::mag('P_DOCS_MOD')}
 					<a href="/fotoalbum/hernoemen{$subalbum->getSubDir()}" class="knop post prompt hoverIntentContent" title="Fotoalbum hernoemen" postdata="naam={$subalbum->mapnaam}" style="position: absolute; top: -90px; left: 118px;">{icon get=pencil}</a>
 				{/if}
 				{$subalbum->mapnaam}
@@ -26,8 +26,11 @@
 {/foreach}
 {foreach from=$album->getFotos() item=foto}
 	<div id="{$foto->bestandsnaam|md5}" class="thumb hoverIntent">
-		{if LoginLid::mag('P_ADMIN')}
-			<a href="/fotoalbum/verwijderen{$album->getSubDir()}" class="knop post confirm hoverIntentContent" title="Definitief verwijderen van deze foto" postdata="foto={$foto->bestandsnaam}" style="position: absolute;">{icon get=cross}</a>
+		{if LoginLid::mag('P_DOCS_MOD')}
+			<div style="position: absolute;">
+				<a href="/fotoalbum/verwijderen{$album->getSubDir()}" class="knop post confirm hoverIntentContent" title="Definitief verwijderen van deze foto" postdata="foto={$foto->bestandsnaam}">{icon get=cross}</a>
+				<a href="/fotoalbum/albumcover{$album->getSubDir()}{$foto->bestandsnaam}" class="knop confirm hoverIntentContent" title="Instellen als albumcover" style="position: relative; left: 118px;">{icon get=folder_picture}</a>
+			</div>
 		{/if}
 		<a href="{$foto->getResizedURL()}" rel="prettyPhoto[album]">
 			<img src="{$foto->getThumbURL()}" />

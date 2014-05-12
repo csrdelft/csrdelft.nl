@@ -89,7 +89,7 @@ class FotoAlbum extends Map {
 
 	public function getThumbURL() {
 		foreach ($this->getFotos() as $foto) {
-			if (substr($foto->bestandsnaam, -10) == 'folder.jpg') {
+			if (strpos($foto->bestandsnaam, 'folder')) {
 				return $foto->getThumbURL();
 			}
 		}
