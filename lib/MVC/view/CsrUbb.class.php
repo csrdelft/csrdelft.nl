@@ -582,11 +582,13 @@ HTML;
 			$albuminvoer = array_filter(explode('/', $albuminvoer));
 			$albumnaam = urldecode(end($albuminvoer));
 
+			$map = new Map();
+			$map->locatie = CSR_PICS . '/fotoalbum/' . $pad;
 			$album = new FotoAlbum($pad, $albumnaam);
 
 			//album bestaat niet, we geven een foutmelding
 			if (!$album->exists()) {
-				return '<div class="ubb_block">FotoAlbum niet gevonden: ' . mb_htmlentities($pad) . '</div>';
+				return '<div class="ubb_block">Fotoalbum niet gevonden: ' . mb_htmlentities($pad) . '</div>';
 			}
 		}
 
