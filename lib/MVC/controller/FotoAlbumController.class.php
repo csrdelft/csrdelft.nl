@@ -127,8 +127,8 @@ class FotoAlbumController extends Controller {
 
 	public function downloaden(Map $map, $naam) {
 		header('Content-type: application/x-tar');
-		header('Content-Disposition: attachment; filename="' . $mapnaam . '.tar"');
-		$album = new FotoAlbum($pad, $mapnaam);
+		header('Content-Disposition: attachment; filename="' . $naam . '.tar"');
+		$album = new FotoAlbum($map, $naam);
 		$fotos = $album->getFotos();
 		set_time_limit(0);
 		$cmd = "tar cC " . escapeshellarg($album->locatie);
