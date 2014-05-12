@@ -53,6 +53,7 @@ class ForumController extends Controller {
 			case 'posten':
 			case 'bewerken':
 			case 'verwijderen':
+			case 'verplaatsen':
 			case 'offtopic':
 			case 'goedkeuren':
 			case 'citeren':
@@ -352,6 +353,18 @@ class ForumController extends Controller {
 		}
 		ForumDradenGelezenModel::instance()->setWanneerGelezenDoorLid($draad);
 		$this->view = new ForumPostView($post, $draad, $deel);
+	}
+
+	public function verplaatsen($id) {
+		$post = ForumPostsModel::instance()->getForumPost((int) $id);
+		$draad = ForumDradenModel::instance()->getForumDraad($post->draad_id);
+		$deel = ForumDelenModel::instance()->getForumDeel($draad->forum_id);
+		if (!$deel->magModereren()) {
+			$this->geentoegang();
+		}
+		$nieuw = filter_input(INPUT_POST, 'draad_id', FILTER_SANITIZE_NUMBER_INT);
+		ForumPostsModel::instance()->verplaatsForumPost($post, $nieuw);
+		$this->view = new ForumPostDeleteView($post->post_id);
 	}
 
 	public function verwijderen($id) {

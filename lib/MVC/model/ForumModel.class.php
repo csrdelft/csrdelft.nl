@@ -693,6 +693,16 @@ class ForumPostsModel extends PersistenceModel implements Paging {
 		return $this->update($post);
 	}
 
+	public function verplaatsForumPost(ForumPost $post, $nieuw_draad_id) {
+		$post->draad_id = $nieuw_draad_id;
+		$post->laatst_bewerkt = getDateTime();
+		$post->bewerkt_tekst = 'verplaatst door [lid=' . LoginLid::instance()->getUid() . '] [reldate]' . $post->laatst_bewerkt . '[/reldate]' . "\n";
+		$rowcount = $this->update($post);
+		if ($rowcount !== 1) {
+			throw new Exception('Verplaatsen mislukt');
+		}
+	}
+
 	public function offtopicForumPost(ForumPost $post) {
 		$post->tekst = '[offtopic]' . $post->tekst . '[/offtopic]';
 		$post->laatst_bewerkt = getDateTime();

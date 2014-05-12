@@ -889,6 +889,9 @@ input, textarea, select{
 }
 #forumtabel tr.kleur0 td{ background-color: #fff; }
 #forumtabel tr.kleur1 td{ background-color: #f4f4f4; }
+#forumtabel tr div.forumpostKnoppen{
+	min-height: 60px;
+}
 #forumtabel tr div.forumpostKnoppen a{
 	border: none;
 	background: none;

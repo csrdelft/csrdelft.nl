@@ -36,6 +36,7 @@
 				{if $deel->magModereren()}
 					<a href="/forum/offtopic/{$post->post_id}" class="knop post confirm{if !$post->wacht_goedkeuring} forummodknop{/if}" title="Offtopic markeren">{icon get="thumb_down"}</a>
 					<a href="/forum/verwijderen/{$post->post_id}" class="knop post confirm{if !$post->wacht_goedkeuring} forummodknop{/if}" title="Verwijder bericht">{icon get="cross"}</a>
+					<a href="/forum/verplaatsen/{$post->post_id}" class="knop post prompt{if !$post->wacht_goedkeuring} forummodknop{/if}" title="Verplaats bericht" postdata="draad_id={$post->draad_id}">{icon get=arrow_right}</a>
 				{/if}
 				{if $post->verwijderd}
 					<span style="color: red;">Deze reactie is verwijderd.</span>
