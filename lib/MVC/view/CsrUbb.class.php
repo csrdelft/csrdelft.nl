@@ -579,21 +579,14 @@ HTML;
 				$map->locatie .= urldecode(implode('/', $path)) . '/';
 			}
 		}
-		if (!self::magBekijken($map->locatie)) {
-			$this->geentoegang();
-		}
 		$album = new FotoAlbum($map, $naam);
-		//album bestaat niet, we geven een foutmelding
-		if (!$album->exists()) {
-			return '<div class="ubb_block">Fotoalbum niet gevonden: ' . mb_htmlentities($pad) . '</div>';
+		if (!FotoAlbumController::magBekijken($map->locatie) OR ! $album->exists()) {
+			return '<div class="ubb_block">Fotoalbum niet gevonden: ' . mb_htmlentities($path) . '</div>';
 		}
-
 		$fotoalbumtag = new FotoAlbumUbbView($album);
-
 		if ($this->quote_level > 0 || isset($parameters['compact'])) {
 			$fotoalbumtag->makeCompact();
 		}
-
 		if (isset($parameters['rows'])) {
 			$fotoalbumtag->setRows((int) $parameters['rows']);
 		}
