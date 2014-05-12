@@ -283,12 +283,13 @@ class Doku_Renderer extends DokuWiki_Plugin {
         if($hash) return $hash;
 
         if($conf['useslash']) {
-            $name = strtr($name, ';/', ';:');
-        } else {
-            $name = strtr($name, ';', ':');
-        }
+			$name = strtr($name, '/', ':');  
+		}
 
-        return noNSorNS($name);
+		$name = noNSorNS($name);
+
+		//replace _, - or . by spaces in titles
+		return strtr($name, $conf['sepchar'], ' ');
     }
 
     /**
