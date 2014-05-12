@@ -29,7 +29,10 @@ class FotoAlbumController extends Controller {
 		if ($this->hasParam(2)) {
 			$this->action = $this->getParam(2);
 		}
-		if ($this->action === 'verwerken' OR $this->action === 'verwijderen') {
+		if ($this->action === 'verwerken' OR
+				$this->action === 'verwijderen' OR
+				$this->action === 'downloaden'
+		) {
 			$path = array_filter($this->getParams(4));
 		} else {
 			$path = array_filter($this->getParams(2));
@@ -63,6 +66,7 @@ class FotoAlbumController extends Controller {
 				return $this->isPosted() AND LoginLid::mag('P_ADMIN');
 
 			case 'verwerken':
+			case 'downloaden':
 				return LoginLid::mag('P_LEDEN_READ');
 
 			default:
@@ -121,9 +125,27 @@ class FotoAlbumController extends Controller {
 		}
 	}
 
+	public function downloaden(Map $map, $naam) {
+		header('Content-type: application/x-tar');
+		header('Content-Disposition: attachment; filename="' . $mapnaam . '.tar"');
+		$album = new FotoAlbum($pad, $mapnaam);
+		$fotos = $album->getFotos();
+		set_time_limit(0);
+		$cmd = "tar cC " . escapeshellarg($album->locatie);
+		foreach ($fotos as $foto) {
+			$cmd .= ' ' . escapeshellarg($foto->bestandsnaam);
+		}
+		$fh = popen($cmd, 'r');
+		while (!feof($fh)) {
+			print fread($fh, 8192);
+		}
+		pclose($fh);
+		exit;
+	}
+
 	public function verwijderen(Map $map, $naam) {
 		$album = new FotoAlbum($map, $naam);
-		$bestandsnaam = filter_input(INPUT_POST, 'foto');
+		$bestandsnaam = filter_input(INPUT_POST, 'foto', FILTER_SANITIZE_URL);
 		$foto = new Foto($album, $bestandsnaam);
 		if (FotoAlbumModel::verwijderFoto($foto)) {
 			echo '<div id="' . md5($bestandsnaam) . '" class="remove"></div>';

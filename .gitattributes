@@ -788,7 +788,6 @@ htdocs/tools/alphabanner/tegel_in.jpg -text
 htdocs/tools/alphabanner/tegel_leeg.jpg -text
 htdocs/tools/alphabanner/tegel_start.jpg -text
 htdocs/tools/corvee_mailer.php -text
-htdocs/tools/downloadalbum.php -text
 htdocs/tools/dragobject.php -text
 htdocs/tools/eetplan.php -text
 htdocs/tools/flushcache.php -text
