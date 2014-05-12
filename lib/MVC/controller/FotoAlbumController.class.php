@@ -114,7 +114,11 @@ class FotoAlbumController extends Controller {
 		}
 		$album = new FotoAlbum($map, $naam);
 		$album->verwerkFotos();
-		invokeRefresh($album->getSubDir(), 'Album verwerk succesvol verwerkt', 1);
+		if (defined('RESIZE_OUTPUT')) {
+			exit;
+		} else {
+			invokeRefresh($album->getSubDir(), 'Album verwerk succesvol verwerkt', 1);
+		}
 	}
 
 }

@@ -67,7 +67,7 @@ class FotoAlbum extends Map {
 		return substr($breadcrumbs, 3);
 	}
 
-	public function getFotos() {
+	public function getFotos($incompleet = false) {
 		if (isset($this->fotos)) {
 			return $this->fotos;
 		}
@@ -77,7 +77,7 @@ class FotoAlbum extends Map {
 				$parts = explode('/', $path);
 				$bestandsnaam = end($parts);
 				$foto = new Foto($this, $bestandsnaam);
-				if ($foto->isCompleet()) {
+				if ($incompleet OR $foto->isCompleet()) {
 					$this->fotos[] = $foto;
 				}
 			}
@@ -139,8 +139,7 @@ class FotoAlbum extends Map {
 			mkdir($this->locatie . '_resized');
 			chmod($this->locatie . '_resized', 0755);
 		}
-		foreach ($this->getFotos() as $foto) {
-			debugprint($foto);
+		foreach ($this->getFotos(true) as $foto) {
 			if (!$foto->bestaatThumb()) {
 				$foto->maakThumb();
 			}
