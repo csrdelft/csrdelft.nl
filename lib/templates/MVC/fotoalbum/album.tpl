@@ -18,7 +18,7 @@
 	</a>
 {/foreach}
 {foreach from=$album->getFotos() item=foto}
-	<a class="thumb" href="{$foto->getResizedURL()}" rel="prettyPhoto[album]" title="{$foto->bestandsnaam}">
+	<a class="thumb" href="{$foto->getResizedURL()}" rel="prettyPhoto[album]">
 		<img src="{$foto->getThumbURL()}" alt="{$album->mapnaam} - {$foto->bestandsnaam}" />
 	</a>
 {/foreach}

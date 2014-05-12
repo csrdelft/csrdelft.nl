@@ -28,11 +28,11 @@ class Foto extends Bestand {
 	}
 
 	public function getThumbURL() {
-		return CSR_PICS . str_replace(PICS_PATH, '', $this->map->locatie) . '_thumbs/' . $this->bestandsnaam;
+		return CSR_PICS . direncode(str_replace(PICS_PATH, '', $this->map->locatie) . '_thumbs/' . $this->bestandsnaam);
 	}
 
 	public function getResizedURL() {
-		return CSR_PICS . str_replace(PICS_PATH, '', $this->map->locatie) . '_resized/' . $this->bestandsnaam;
+		return CSR_PICS . direncode(str_replace(PICS_PATH, '', $this->map->locatie) . '_resized/' . $this->bestandsnaam);
 	}
 
 	public function bestaatThumb() {

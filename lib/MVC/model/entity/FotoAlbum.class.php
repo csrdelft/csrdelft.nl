@@ -58,7 +58,7 @@ class FotoAlbum extends Map {
 			} else {
 				$subdir = '';
 			}
-			$breadcrumbs = ' » <a href="' . CSR_ROOT . '/' . $subdir . $mapnaam . '" title="' . $mapnaam . '">' . ucfirst($mapnaam) . '</a>' . $breadcrumbs;
+			$breadcrumbs = ' » <a href="' . CSR_ROOT . '/' . $subdir . $mapnaam . '">' . ucfirst($mapnaam) . '</a>' . $breadcrumbs;
 		}
 		return substr($breadcrumbs, 3);
 	}
