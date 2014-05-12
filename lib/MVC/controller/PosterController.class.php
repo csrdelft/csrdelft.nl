@@ -39,11 +39,10 @@ class PosterController extends AclController {
 		$formulier->titel = 'Poster uploaden';
 		if ($this->isPosted() AND $formulier->validate()) {
 			try {
-				$path = PICS_PATH . '/fotoalbum/' . $fields['album']->getValue() . '/Posters/';
+				$path = PICS_PATH . '/fotoalbum/' . $fields['album']->getValue();
 				if (file_exists($path)) {
 					$filenaam = $fields['naam']->getValue() . '.jpg';
-					if ($fields['uploader']->opslaan($path, $filenaam)) {
-						$path = $fields['album']->getValue();
+					if ($fields['uploader']->opslaan($path . '/Posters/', $filenaam)) {
 						$map = new Map();
 						$map->locatie = $path . '/';
 						require_once 'MVC/controller/FotoAlbumController.class.php';
@@ -52,12 +51,12 @@ class PosterController extends AclController {
 							invokeRefresh(null, 'FotoAlbum bestaat niet: ' . $album->locatie, -1);
 						}
 						$album->verwerkFotos();
-						invokeRefresh('/fotoalbum/' . $path . '/Posters#' . $filenaam, 'Poster met succes opgeslagen', 1);
+						invokeRefresh('/fotoalbum/' . $fields['album']->getValue() . '/Posters#' . $filenaam, 'Poster met succes opgeslagen', 1);
 					} else {
 						invokeRefresh(null, 'Poster opslaan mislukt', -1);
 					}
 				} else {
-					invokeRefresh(null, 'Posters map bestaat niet: ' . $path . '/Posters', -1);
+					invokeRefresh(null, 'Posters map bestaat niet in album: ' . $fields['album']->getValue(), -1);
 				}
 			} catch (Exception $e) {
 				invokeRefresh(null, 'Poster uploaden mislukt: ' . $e->getMessage(), -1);
