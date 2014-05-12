@@ -46,7 +46,7 @@ class FotoAlbumZijbalkView extends TemplateView {
 		for ($i = 0; $i < $limit; $i++) {
 			$foto = $fotos[$i];
 			if ($foto instanceof Foto) {
-				echo '<a href="/actueel/fotoalbum' . $url . '#' . $foto->bestandsnaam . '">';
+				echo '<a href="' . $url . '#' . direncode($foto->bestandsnaam) . '">';
 				echo '<img src="' . $foto->getThumbURL() . '">';
 				echo '</a>' . "\n";
 			}
