@@ -579,7 +579,7 @@ HTML;
 				$map->locatie .= urldecode(implode('/', $path)) . '/';
 			}
 		}
-		$album = new FotoAlbum($map, $naam);
+		$album = FotoAlbumModel::getFotoAlbum($map, $naam);
 		if (!FotoAlbumController::magBekijken($map->locatie) OR ! $album->exists()) {
 			return '<div class="ubb_block">Fotoalbum niet gevonden: ' . mb_htmlentities($path) . '</div>';
 		}

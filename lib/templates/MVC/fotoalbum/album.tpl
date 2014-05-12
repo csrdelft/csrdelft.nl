@@ -9,7 +9,7 @@
 		<a class="knop" href="/fotoalbum/verwerken{$album->getSubDir()}">{icon get="photos"} Verwerken</a>
 	{/if}
 </div>
-{$album->getBreadcrumbs()}
+{$view->getBreadcrumbs($album)}
 <h1>{$album->mapnaam|ucfirst}</h1>
 {foreach from=$album->getSubAlbums() item=subalbum}
 	<a class="album" href="{$subalbum->getUrl()}">

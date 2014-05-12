@@ -9,7 +9,7 @@ require_once 'MVC/model/entity/PersistentEntity.abstract.php';
  * 
  * @author P.W.G. Brussee <brussee@live.nl>
  *
- * Uses database to provide persistence.
+ * Uses the database to provide persistence.
  * Requires an ORM class constant to be defined in superclass. 
  * Requires a static property $instance in superclass.
  * 

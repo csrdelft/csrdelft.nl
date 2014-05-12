@@ -24,6 +24,48 @@ class FotoAlbumView extends TemplateView {
 		$this->smarty->display('MVC/fotoalbum/album.tpl');
 	}
 
+	public function getBreadcrumbs(FotoAlbum $album) {
+		$breadcrumbs = '';
+		$mappen = array_filter(explode('/', $album->getSubDir()));
+		while (!empty($mappen)) {
+			$naam = array_pop($mappen);
+			$locatie = '/' . implode('/', $mappen) . '/';
+			if ($locatie === '//') {
+				$breadcrumbs = '<a href="/fotoalbum/">Fotoalbum</a> » ' . $breadcrumbs;
+			} elseif ($breadcrumbs === '') {
+				$breadcrumbs = $this->getDropDown($locatie, $naam);
+			} else {
+				$breadcrumbs = '<a href="' . $locatie . '">' . ucfirst($naam) . '</a> » ' . $breadcrumbs;
+			}
+		}
+		return $breadcrumbs;
+	}
+
+	private function getDropDown($locatie, $albumnaam) {
+		$dirs = array();
+		foreach (glob(PICS_PATH . $locatie . '*', GLOB_ONLYDIR) as $path) {
+			$path = str_replace(PICS_PATH, '', $path);
+			$parts = explode('/', $path);
+			$name = end($parts);
+			if (!startsWith($name, '_')) {
+				$dirs[$path] = $name;
+			}
+		}
+		if (empty($dirs)) {
+			return '';
+		}
+		$dropdown = '<select onchange="location.href=this.value;">';
+		foreach (array_reverse($dirs) as $value => $description) {
+			$dropdown .= '<option value="' . $value . '"';
+			if ($value === $locatie . $albumnaam) {
+				$dropdown .= ' selected="selected" onclick="location.href=this.value;"';
+			}
+			$dropdown .= '>' . htmlspecialchars($description) . '</option>';
+		}
+		$dropdown .= '</select>';
+		return $dropdown;
+	}
+
 }
 
 class FotoAlbumZijbalkView extends TemplateView {

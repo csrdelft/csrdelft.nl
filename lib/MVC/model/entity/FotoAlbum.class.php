@@ -52,22 +52,6 @@ class FotoAlbum extends Map {
 		return CSR_ROOT . direncode($this->getSubDir());
 	}
 
-	public function getBreadcrumbs() {
-		$locatie = $this->getSubDir();
-		$breadcrumbs = '';
-		$mappen = array_filter(explode('/', $locatie));
-		while (!empty($mappen)) {
-			$mapnaam = array_pop($mappen);
-			if (!empty($mappen)) {
-				$subdir = implode('/', $mappen) . '/';
-			} else {
-				$subdir = '';
-			}
-			$breadcrumbs = ' » <a href="' . CSR_ROOT . '/' . $subdir . $mapnaam . '">' . ucfirst($mapnaam) . '</a>' . $breadcrumbs;
-		}
-		return substr($breadcrumbs, 3);
-	}
-
 	public function getFotos($incompleet = false) {
 		if (isset($this->fotos)) {
 			return $this->fotos;
@@ -93,9 +77,9 @@ class FotoAlbum extends Map {
 		$this->subalbums = array();
 		foreach (glob($this->locatie . '*', GLOB_ONLYDIR) as $path) {
 			$parts = explode('/', $path);
-			$mapnaam = end($parts);
-			if (!startsWith($mapnaam, '_')) {
-				$subalbum = new FotoAlbum($this, $mapnaam);
+			$naam = end($parts);
+			if (!startsWith($naam, '_')) {
+				$subalbum = FotoAlbumModel::getFotoAlbum($this, $naam);
 				$this->subalbums[] = $subalbum;
 			}
 		}
@@ -129,28 +113,6 @@ class FotoAlbum extends Map {
 			}
 		}
 		return $recent;
-	}
-
-	public function verwerkFotos() {
-		if (!file_exists($this->locatie . '_thumbs')) {
-			mkdir($this->locatie . '_thumbs');
-			chmod($this->locatie . '_thumbs', 0755);
-		}
-		if (!file_exists($this->locatie . '_resized')) {
-			mkdir($this->locatie . '_resized');
-			chmod($this->locatie . '_resized', 0755);
-		}
-		foreach ($this->getFotos(true) as $foto) {
-			if (!$foto->bestaatThumb()) {
-				$foto->maakThumb();
-			}
-			if (!$foto->bestaatResized()) {
-				$foto->maakResized();
-			}
-		}
-		foreach ($this->getSubAlbums() as $subalbum) {
-			$subalbum->verwerkFotos();
-		}
 	}
 
 }

@@ -46,11 +46,11 @@ class PosterController extends AclController {
 						$map = new Map();
 						$map->locatie = $path . '/';
 						require_once 'MVC/controller/FotoAlbumController.class.php';
-						$album = new FotoAlbum($map, 'Posters');
+						$album = FotoAlbumModel::getFotoAlbum($map, 'Posters');
 						if (!$album->exists()) {
 							invokeRefresh(null, 'Fotoalbum bestaat niet: ' . $album->locatie, -1);
 						}
-						$album->verwerkFotos();
+						FotoAlbumModel::verwerkFotos($album);
 						invokeRefresh($album->getUrl() . '#' . direncode($filenaam), 'Poster met succes opgeslagen', 1);
 					} else {
 						invokeRefresh(null, 'Poster opslaan mislukt', -1);

@@ -97,7 +97,7 @@ class FotoAlbumController extends Controller {
 	}
 
 	public function bekijken(Map $map, $naam) {
-		$album = new FotoAlbum($map, $naam);
+		$album = FotoAlbumModel::getFotoAlbum($map, $naam);
 		$body = new FotoAlbumView($album);
 		if (LoginLid::mag('P_LOGGED_IN')) {
 			$this->view = new CsrLayoutPage($body);
@@ -117,8 +117,8 @@ class FotoAlbumController extends Controller {
 			echo 'Dit kan even duren<br />';
 			flush();
 		}
-		$album = new FotoAlbum($map, $naam);
-		$album->verwerkFotos();
+		$album = FotoAlbumModel::getFotoAlbum($map, $naam);
+		FotoAlbumModel::verwerkFotos($album);
 		if (defined('RESIZE_OUTPUT')) {
 			exit;
 		} else {
@@ -129,7 +129,7 @@ class FotoAlbumController extends Controller {
 	public function downloaden(Map $map, $naam) {
 		header('Content-type: application/x-tar');
 		header('Content-Disposition: attachment; filename="' . $naam . '.tar"');
-		$album = new FotoAlbum($map, $naam);
+		$album = FotoAlbumModel::getFotoAlbum($map, $naam);
 		$fotos = $album->getFotos();
 		set_time_limit(0);
 		$cmd = "tar cC " . escapeshellarg($album->locatie);
@@ -145,7 +145,7 @@ class FotoAlbumController extends Controller {
 	}
 
 	public function verwijderen(Map $map, $naam) {
-		$album = new FotoAlbum($map, $naam);
+		$album = FotoAlbumModel::getFotoAlbum($map, $naam);
 		$bestandsnaam = filter_input(INPUT_POST, 'foto', FILTER_SANITIZE_URL);
 		$foto = new Foto($album, $bestandsnaam);
 		if (FotoAlbumModel::verwijderFoto($foto)) {
