@@ -567,7 +567,7 @@ HTML;
 	protected function ubb_fotoalbum($parameters) {
 		$albuminvoer = $this->parseArray(array('[/fotoalbum]'), array());
 
-		require_once 'fotoalbumcontent.class.php';
+		require_once 'MVC/controller/FotoAlbumController.class.php';
 
 		//we kunnen urls uit de browser direct in de tag kopieren
 		$pad = urldecode($albuminvoer);
