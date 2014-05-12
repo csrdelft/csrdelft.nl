@@ -16,11 +16,3 @@
 //$config_cascade = array(
 //);
 
-
-//settings specific for use of the authcsr authentication plugin
-define ('DOKU_SESSION_NAME', "PHPSESSID");
-define ('DOKU_SESSION_LIFETIME', 1036800);
-define ('DOKU_SESSION_PATH', '/');
-
-$sessiepath = fullpath(dirname(__FILE__) . '/../../../') . '/sessie';
-session_save_path($sessiepath);
