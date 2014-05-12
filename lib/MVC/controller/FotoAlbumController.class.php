@@ -108,7 +108,7 @@ class FotoAlbumController extends Controller {
 	public function verwerken(Map $map, $naam) {
 		$album = new FotoAlbum($map, $naam);
 		$album->verwerkFotos();
-		invokeRefresh('/fotoalbum/' . $album->getSubDir(), 'Album verwerk succesvol verwerkt', 1);
+		invokeRefresh($album->getSubDir(), 'Album verwerk succesvol verwerkt', 1);
 	}
 
 }
