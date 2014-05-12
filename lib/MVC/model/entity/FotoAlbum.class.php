@@ -94,6 +94,7 @@ class FotoAlbum extends Map {
 				$this->subalbums[] = $subalbum;
 			}
 		}
+		$this->subalbums = array_reverse($this->subalbums);
 		return $this->subalbums;
 	}
 
