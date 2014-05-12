@@ -140,13 +140,13 @@ class FotoAlbumUbbView extends TemplateView {
 					continue;
 				}
 				// remove images that will cause overlap with a big image one row up.
-				if ($grid[$row][$col + 1] == USED) {
+				if ($grid[$row][$col + 1] == 'USED') {
 					continue;
 				}
 				// if valid image, put on grid.
 				if (isset($fotos[$bigindex]) && $fotos[$bigindex] instanceof Foto) {
 					// if place already USED, do not put photo in.
-					if ($grid[$row][$col] == USED) {
+					if ($grid[$row][$col] == 'USED') {
 						continue;
 					}
 					$grid[$row][$col] = array(
@@ -154,7 +154,7 @@ class FotoAlbumUbbView extends TemplateView {
 						'foto' => $fotos[$bigindex]
 					);
 					// mark the three places overlapped by this image as used.
-					$grid[$row + 1][$col] = $grid[$row][$col + 1] = $grid[$row + 1][$col + 1] = USED;
+					$grid[$row + 1][$col] = $grid[$row][$col + 1] = $grid[$row + 1][$col + 1] = 'USED';
 				}
 			}
 		}
@@ -184,7 +184,7 @@ class FotoAlbumUbbView extends TemplateView {
 			);
 		}
 		// check length of last row and remove it if not full and no big images overlap it.
-		if (!in_array(USED, end($grid)) && count(array_filter(end($grid))) < $this->per_row) {
+		if (!in_array('USED', end($grid)) && count(array_filter(end($grid))) < $this->per_row) {
 			unset($grid[$this->rows - 1]);
 		}
 		if (count(array_filter(end($grid))) == 0) {
@@ -217,11 +217,11 @@ class FotoAlbumUbbView extends TemplateView {
 		$url = $this->model->getUrl();
 		if ($this->compact) {
 			// compacte versie van de tag is alleen een thumbnail.
-			$content = '<a href="' . $url . '"><img src="' . $this->album->getThumbURL() . '" class="compact" /></a><div class="clear"></div>';
+			$content = '<a href="' . $url . '"><img src="' . $this->model->getThumbURL() . '" class="compact" /></a><div class="clear"></div>';
 		} else {
 			$content = $this->getGridHtml();
 		}
-		return '<div class="ubb_block ubb_fotoalbum"><h2>' . $this->album->getBreadcrumbs() . '&raquo; <a href="' . $url . '" title="' . $this->album->mapnaam . '">' . $this->album->mapnaam . '</a></h2>' . $content . '</div>';
+		return '<div class="ubb_block ubb_fotoalbum"><h2>' . $this->model->getBreadcrumbs() . '&raquo; <a href="' . $url . '" title="' . $this->model->mapnaam . '">' . $this->model->mapnaam . '</a></h2>' . $content . '</div>';
 	}
 
 }
