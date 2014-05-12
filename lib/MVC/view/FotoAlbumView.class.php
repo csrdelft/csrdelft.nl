@@ -214,14 +214,14 @@ class FotoAlbumUbbView extends TemplateView {
 	}
 
 	public function getHTML() {
-		$albumurl = $this->model->getUrl();
+		$url = $this->model->getUrl();
 		if ($this->compact) {
 			// compacte versie van de tag is alleen een thumbnail.
-			$content = '<a href="/fotoalbum' . $albumurl . '"><img src="' . $this->album->getThumbURL() . '" class="compact" /></a><div class="clear"></div>';
+			$content = '<a href="' . $url . '"><img src="' . $this->album->getThumbURL() . '" class="compact" /></a><div class="clear"></div>';
 		} else {
 			$content = $this->getGridHtml();
 		}
-		return '<div class="ubb_block ubb_fotoalbum"><h2>' . $this->album->getBreadcrumb() . '&raquo; <a href="/actueel/fotoalbum' . $albumurl . '">' . mb_htmlentities($this->album->getNaam()) . '</a></h2>' . $content . '</div>';
+		return '<div class="ubb_block ubb_fotoalbum"><h2>' . $this->album->getBreadcrumbs() . '&raquo; <a href="' . $url . '" title="' . $this->album->mapnaam . '">' . $this->album->mapnaam . '</a></h2>' . $content . '</div>';
 	}
 
 }
