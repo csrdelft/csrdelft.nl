@@ -47,7 +47,7 @@ class FotoAlbumZijbalkView extends TemplateView {
 			$foto = $fotos[$i];
 			if ($foto instanceof Foto) {
 				echo '<a href="/actueel/fotoalbum' . $url . '#' . $foto->bestandsnaam . '">';
-				echo '<img src="' . $foto->getThumbURL() . '" alt="' . $foto->bestandsnaam . '" >';
+				echo '<img src="' . $foto->getThumbURL() . '">';
 				echo '</a>' . "\n";
 			}
 		}
@@ -195,16 +195,16 @@ class FotoAlbumUbbView extends TemplateView {
 
 	public function getGridHtml() {
 		$grid = $this->getGrid();
-		$albumurl = $this->model->getUrl();
+		$url = $this->model->getUrl();
 		$delta = $this->picsize + (2 * $this->rowmargin);
 		$ret = '<div class="images" style="height: ' . (count($grid) * $delta) . 'px">';
 		foreach ($grid as $row => $rowcontents) {
 			foreach ($rowcontents as $col => $foto) {
 				if (is_array($foto)) {
-					$ret .= '<a href="/actueel/fotoalbum' . $albumurl . '#' . $foto['foto']->bestandsnaam . '"';
+					$ret .= '<a href="' . $url . '#' . direncode($foto['foto']->bestandsnaam) . '"';
 					$ret.=in_array($foto['index'], $this->big) ? 'class="big"' : 'class="sml"';
 					$ret .= 'style=" left: ' . ($delta * $col) . 'px; top: ' . ($delta * $row) . 'px;">';
-					$ret .= '<img src="' . $foto['foto']->getThumbURL() . '" alt="' . $foto['foto']->bestandsnaam . '" >';
+					$ret .= '<img src="' . $foto['foto']->getThumbURL() . '">';
 					$ret .= '</a>' . "\n";
 				}
 			}
