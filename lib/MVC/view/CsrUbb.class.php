@@ -584,7 +584,7 @@ HTML;
 
 			$map = new Map();
 			$map->locatie = CSR_PICS . '/fotoalbum/' . $pad;
-			$album = new FotoAlbum($pad, $albumnaam);
+			$album = new FotoAlbum($map, $albumnaam);
 
 			//album bestaat niet, we geven een foutmelding
 			if (!$album->exists()) {
