@@ -38,6 +38,9 @@ class FotoAlbumView extends TemplateView {
 				$breadcrumbs = '<a href="' . $locatie . $mapnaam . '">' . ucfirst($mapnaam) . '</a> » ' . $breadcrumbs;
 			}
 		}
+		if (endsWith($breadcrumbs, ' » ')) {
+			return substr($breadcrumbs, 0, strrpos($breadcrumbs, ' » '));
+		}
 		return $breadcrumbs;
 	}
 
