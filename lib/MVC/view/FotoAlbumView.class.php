@@ -46,8 +46,8 @@ class FotoAlbumZijbalkView extends TemplateView {
 		for ($i = 0; $i < $limit; $i++) {
 			$foto = $fotos[$i];
 			if ($foto instanceof Foto) {
-				echo '<a href="/actueel/fotoalbum' . $url . '#' . $foto->getBestandsnaam() . '">';
-				echo '<img src="' . $foto->getThumbURL() . '" alt="' . $foto->getBestandsnaam() . '" >';
+				echo '<a href="/actueel/fotoalbum' . $url . '#' . $foto->bestandsnaam . '">';
+				echo '<img src="' . $foto->getThumbURL() . '" alt="' . $foto->bestandsnaam . '" >';
 				echo '</a>' . "\n";
 			}
 		}
@@ -201,10 +201,10 @@ class FotoAlbumUbbView extends TemplateView {
 		foreach ($grid as $row => $rowcontents) {
 			foreach ($rowcontents as $col => $foto) {
 				if (is_array($foto)) {
-					$ret .= '<a href="/actueel/fotoalbum' . $albumurl . '#' . $foto['foto']->getBestandsnaam() . '"';
+					$ret .= '<a href="/actueel/fotoalbum' . $albumurl . '#' . $foto['foto']->bestandsnaam . '"';
 					$ret.=in_array($foto['index'], $this->big) ? 'class="big"' : 'class="sml"';
 					$ret .= 'style=" left: ' . ($delta * $col) . 'px; top: ' . ($delta * $row) . 'px;">';
-					$ret .= '<img src="' . $foto['foto']->getThumbURL() . '" alt="' . $foto['foto']->getBestandsnaam() . '" >';
+					$ret .= '<img src="' . $foto['foto']->getThumbURL() . '" alt="' . $foto['foto']->bestandsnaam . '" >';
 					$ret .= '</a>' . "\n";
 				}
 			}

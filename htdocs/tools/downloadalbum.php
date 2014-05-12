@@ -28,7 +28,7 @@ header('Content-Disposition: attachment; filename="' . $mapnaam . '.tar"');
 //tar-command maken
 $cmd = "tar cC " . escapeshellarg($fotoalbum->locatie);
 foreach ($fotos as $foto) {
-	$cmd .= ' ' . escapeshellarg($foto->getBestandsnaam());
+	$cmd .= ' ' . escapeshellarg($foto->bestandsnaam);
 }
 
 //teh magic
