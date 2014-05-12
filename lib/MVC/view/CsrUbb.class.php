@@ -565,34 +565,30 @@ HTML;
 	 *
 	 */
 	protected function ubb_fotoalbum($parameters) {
-		$albuminvoer = $this->parseArray(array('[/fotoalbum]'), array());
-
 		require_once 'MVC/controller/FotoAlbumController.class.php';
-
-		//we kunnen urls uit de browser direct in de tag kopieren
-		$pad = urldecode($albuminvoer);
-
-		$album = null;
-		if ($pad != '') {
-			//eventueel '/fotoalbum' aan het begin wegverwijderen.
-			if (substr($pad, 0, 10) == '/fotoalbum') {
-				$pad = substr($pad, 10);
-			}
-			//de albumnaam bedenken. Op een of andere wijze doet het album dat niet zelf :(
-			$albuminvoer = array_filter(explode('/', $albuminvoer));
-			$albumnaam = urldecode(end($albuminvoer));
-
-			$map = new Map();
-			$map->locatie = CSR_PICS . '/fotoalbum/' . $pad;
-			$album = new FotoAlbum($map, $albumnaam);
-
-			//album bestaat niet, we geven een foutmelding
-			if (!$album->exists()) {
-				return '<div class="ubb_block">Fotoalbum niet gevonden: ' . mb_htmlentities($pad) . '</div>';
+		$url = $this->parseArray(array('[/fotoalbum]'), array());
+		$path = array_filter(explode('/', $url));
+		$map = new Map();
+		$map->locatie = PICS_PATH . '/';
+		if (empty($path)) {
+			$naam = 'fotoalbum';
+		} else {
+			$map->locatie .= 'fotoalbum/';
+			$naam = urldecode(array_pop($path));
+			if (!empty($path)) {
+				$map->locatie .= urldecode(implode('/', $path)) . '/';
 			}
 		}
+		if (!self::magBekijken($map->locatie)) {
+			$this->geentoegang();
+		}
+		$album = new FotoAlbum($map, $naam);
+		//album bestaat niet, we geven een foutmelding
+		if (!$album->exists()) {
+			return '<div class="ubb_block">Fotoalbum niet gevonden: ' . mb_htmlentities($pad) . '</div>';
+		}
 
-		$fotoalbumtag = new FotoAlbumUbbContent($album);
+		$fotoalbumtag = new FotoAlbumUbbView($album);
 
 		if ($this->quote_level > 0 || isset($parameters['compact'])) {
 			$fotoalbumtag->makeCompact();
