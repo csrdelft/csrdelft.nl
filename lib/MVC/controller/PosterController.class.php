@@ -45,7 +45,7 @@ class PosterController extends AclController {
 					if ($fields['uploader']->opslaan($path, $filenaam)) {
 						$path = $fields['album']->getValue();
 						$map = new Map();
-						$map->locatie = $path;
+						$map->locatie = $path . '/';
 						require_once 'MVC/controller/FotoAlbumController.class.php';
 						$album = new FotoAlbum($map, 'Posters');
 						if (!$album->exists()) {
