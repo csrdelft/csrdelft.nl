@@ -80,7 +80,9 @@ class FotoAlbum extends Map {
 			$naam = end($parts);
 			if (!startsWith($naam, '_')) {
 				$subalbum = FotoAlbumModel::getFotoAlbum($this, $naam);
-				$this->subalbums[] = $subalbum;
+				if (FotoAlbumController::magBekijken($subalbum->locatie)) {
+					$this->subalbums[] = $subalbum;
+				}
 			}
 		}
 		$this->subalbums = array_reverse($this->subalbums);
@@ -108,7 +110,7 @@ class FotoAlbum extends Map {
 	public function getMostRecentSubAlbum() {
 		$recent = $this;
 		foreach ($this->getSubAlbums() as $subalbum) {
-			if ($subalbum->modified() > $recent->modified() AND FotoAlbumController::magBekijken($subalbum->locatie)) {
+			if ($subalbum->modified() > $recent->modified()) {
 				$recent = $subalbum->getMostRecentSubAlbum();
 			}
 		}

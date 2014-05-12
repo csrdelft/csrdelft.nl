@@ -14,6 +14,9 @@ class Foto extends Bestand {
 	public function __construct(FotoAlbum $album, $bestandsnaam) {
 		$this->map = $album;
 		$this->bestandsnaam = $bestandsnaam;
+		if (!FotoAlbumController::magBekijken($album->locatie)) {
+			throw new Exception();
+		}
 	}
 
 	public function getPad() {
