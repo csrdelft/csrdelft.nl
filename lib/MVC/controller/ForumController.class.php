@@ -265,7 +265,7 @@ class ForumController extends Controller {
 		if (!empty($spamtrap)) {
 			invokeRefresh('/forum/deel/' . $deel->forum_id, 'SPAM', -1); //TODO: logging
 		}
-		$tekst = filter_input(INPUT_POST, 'bericht', FILTER_UNSAFE_RAW);
+		$tekst = trim(filter_input(INPUT_POST, 'bericht', FILTER_UNSAFE_RAW));
 		$_SESSION['forum_concept'] = $tekst;
 		require_once 'simplespamfilter.class.php';
 		$filter = new SimpleSpamfilter();
@@ -327,7 +327,7 @@ class ForumController extends Controller {
 		} else {
 			$this->geentoegang();
 		}
-		$tekst = filter_input(INPUT_POST, 'bericht', FILTER_UNSAFE_RAW);
+		$tekst = trim(filter_input(INPUT_POST, 'bericht', FILTER_UNSAFE_RAW));
 		$reden = trim(filter_input(INPUT_POST, 'reden', FILTER_SANITIZE_STRING));
 		$verschil = levenshtein($post->tekst, $tekst);
 		$rowcount = ForumPostsModel::instance()->bewerkForumPost($post, $tekst, $reden);
