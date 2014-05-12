@@ -91,7 +91,7 @@ function knop_ajax(knop, type) {
 		if (!val) {
 			return false;
 		}
-		knop.attr('postdata', data[0] + '=' + val);
+		knop.attr('postdata', encodeURIComponent(data[0]) + '=' + encodeURIComponent(val));
 	}
 	var source = knop;
 	var done = dom_update;

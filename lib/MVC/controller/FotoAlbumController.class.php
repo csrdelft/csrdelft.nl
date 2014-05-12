@@ -134,7 +134,7 @@ class FotoAlbumController extends AclController {
 
 	public function verwijderen(Map $map, $naam) {
 		$album = FotoAlbumModel::getFotoAlbum($map, $naam);
-		$bestandsnaam = filter_input(INPUT_POST, 'foto', FILTER_SANITIZE_URL);
+		$bestandsnaam = filter_input(INPUT_POST, 'foto', FILTER_SANITIZE_STRING);
 		$foto = new Foto($album, $bestandsnaam);
 		if (FotoAlbumModel::verwijderFoto($foto)) {
 			echo '<div id="' . md5($bestandsnaam) . '" class="remove"></div>';
@@ -146,7 +146,7 @@ class FotoAlbumController extends AclController {
 
 	public function hernoemen(Map $map, $naam) {
 		$album = FotoAlbumModel::getFotoAlbum($map, $naam);
-		$nieuw = filter_input(INPUT_POST, 'naam', FILTER_SANITIZE_URL);
+		$nieuw = filter_input(INPUT_POST, 'naam', FILTER_SANITIZE_STRING);
 		if (FotoAlbumModel::hernoemAlbum($album, $nieuw)) {
 			echo '<div id="' . md5($naam) . '" class="albumname">' . $nieuw . '</div>';
 		} else {
