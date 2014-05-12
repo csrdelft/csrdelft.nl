@@ -48,4 +48,8 @@ class FotoAlbumModel {
 		return $ret;
 	}
 
+	public static function hernoemAlbum(FotoAlbum $album, $nieuwenaam) {
+		return rename($album->locatie, str_replace($album->mapnaam, $nieuwenaam, $album->locatie));
+	}
+
 }

@@ -1,5 +1,5 @@
 <div style="float: right; margin: 0 0 10px 10px;">
-	{if LoginLid::mag('P_LOGGED_IN')}
+	{if LoginLid::mag('P_LEDEN_READ')}
 		<a class="knop" href="/fotostoevoegen/">{icon get="toevoegen"} Toevoegen</a>
 	{/if}
 	{if LoginLid::mag('P_LOGGED_IN') && $album->getFotos()!==false}
@@ -12,15 +12,22 @@
 {$view->getBreadcrumbs($album)}
 <h1>{$album->mapnaam|ucfirst}</h1>
 {foreach from=$album->getSubAlbums() item=subalbum}
-	<a class="album" href="{$subalbum->getUrl()}">
-		<img src="{$subalbum->getThumbURL()}" />
-		<span class="albumname">{$subalbum->mapnaam}</span>
-	</a>
+	<div class="album hoverIntent">
+		<a href="{$subalbum->getUrl()}">
+			<img src="{$subalbum->getThumbURL()}" />
+			<div id="{$subalbum->mapnaam|md5}" class="albumname">
+				{if LoginLid::mag('P_ADMIN')}
+					<a href="/fotoalbum/hernoemen{$subalbum->getSubDir()}" class="knop post prompt hoverIntentContent" title="Fotoalbum hernoemen" postdata="naam={$subalbum->mapnaam}" style="position: absolute; top: -90px; left: 118px;">{icon get=pencil}</a>
+				{/if}
+				{$subalbum->mapnaam}
+			</div>
+		</a>
+	</div>
 {/foreach}
 {foreach from=$album->getFotos() item=foto}
 	<div id="{$foto->bestandsnaam|md5}" class="thumb hoverIntent">
 		{if LoginLid::mag('P_ADMIN')}
-			<a href="/fotoalbum/verwijderen{$album->getSubDir()}" class="knop post confirm remove hoverIntentContent" postdata="foto={$foto->bestandsnaam}" title="Definitief verwijderen van deze foto">{icon get=cross}</a>
+			<a href="/fotoalbum/verwijderen{$album->getSubDir()}" class="knop post confirm hoverIntentContent" title="Definitief verwijderen van deze foto" postdata="foto={$foto->bestandsnaam}" style="position: absolute;">{icon get=cross}</a>
 		{/if}
 		<a href="{$foto->getResizedURL()}" rel="prettyPhoto[album]">
 			<img src="{$foto->getThumbURL()}" />

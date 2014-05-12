@@ -11,7 +11,7 @@ require_once 'MVC/view/FotoAlbumView.class.php';
  * 
  * Controller van het fotoalbum.
  */
-class FotoAlbumController extends Controller {
+class FotoAlbumController extends AclController {
 
 	/**
 	 * Als deze regexp matched is het album alleen voor leden
@@ -26,17 +26,26 @@ class FotoAlbumController extends Controller {
 
 	public function __construct($query) {
 		parent::__construct($query);
-		$this->action = 'bekijken';
+		if (!$this->isPosted()) {
+			$this->acl = array(
+				'bekijken' => 'P_NOBODY',
+				'downloaden' => 'P_LOGGED_IN',
+				'verwerken' => 'P_LEDEN_READ'
+			);
+		} else {
+			$this->acl = array(
+				'verwijderen' => 'P_DOCS_MOD',
+				'hernoemen' => 'P_DOCS_MOD'
+			);
+		}
 		if ($this->hasParam(2)) {
 			$this->action = $this->getParam(2);
 		}
-		if ($this->action === 'verwerken' OR
-				$this->action === 'verwijderen' OR
-				$this->action === 'downloaden'
-		) {
-			$path = array_filter($this->getParams(4));
-		} else {
+		if (!array_key_exists($this->action, $this->acl)) {
+			$this->action = 'bekijken';
 			$path = array_filter($this->getParams(2));
+		} else {
+			$path = array_filter($this->getParams(4));
 		}
 		$map = new Map();
 		$map->locatie = PICS_PATH . '/';
@@ -52,28 +61,6 @@ class FotoAlbumController extends Controller {
 			$this->geentoegang();
 		}
 		$this->performAction(array($map, $naam));
-	}
-
-	/**
-	 * Check permissions & valid params in actions.
-	 * 
-	 * @return boolean
-	 */
-	protected function hasPermission() {
-		switch ($this->action) {
-			//case 'hernoemen':
-			//case 'verplaatsen':
-			case 'verwijderen':
-				return $this->isPosted() AND LoginLid::mag('P_DOCS_MOD');
-
-			case 'verwerken':
-			case 'downloaden':
-				return LoginLid::mag('P_LEDEN_READ');
-
-			default:
-				$this->action = 'bekijken';
-				return true;
-		}
 	}
 
 	public static function magBekijken($path) {
@@ -152,6 +139,17 @@ class FotoAlbumController extends Controller {
 			echo '<div id="' . md5($bestandsnaam) . '" class="remove"></div>';
 		} else {
 			setMelding('Foto verwijderen mislukt', -1);
+		}
+		exit;
+	}
+
+	public function hernoemen(Map $map, $naam) {
+		$album = FotoAlbumModel::getFotoAlbum($map, $naam);
+		$nieuw = filter_input(INPUT_POST, 'naam', FILTER_SANITIZE_URL);
+		if (FotoAlbumModel::hernoemAlbum($album, $nieuw)) {
+			echo '<div id="' . md5($naam) . '" class="albumname">' . $nieuw . '</div>';
+		} else {
+			setMelding('Fotoalbum hernoemen mislukt', -1);
 		}
 		exit;
 	}

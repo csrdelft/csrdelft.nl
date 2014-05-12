@@ -84,6 +84,15 @@ function knop_ajax(knop, type) {
 	if (knop.hasClass('confirm') && !confirm(knop.attr('title') + '.\n\nWeet u het zeker?')) {
 		return false;
 	}
+	if (knop.hasClass('prompt')) {
+		var data = knop.attr('postdata');
+		data = data.split('=');
+		var val = prompt(data[0], data[1]);
+		if (!val) {
+			return false;
+		}
+		knop.attr('postdata', data[0] + '=' + val);
+	}
 	var source = knop;
 	var done = dom_update;
 	if (knop.hasClass('popup')) {

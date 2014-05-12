@@ -15,7 +15,7 @@ class FotoAlbumView extends TemplateView {
 	}
 
 	function getTitel() {
-		return 'Fotoalbum | ' . $this->model->mapnaam;
+		return $this->model->mapnaam;
 	}
 
 	function view() {
@@ -28,14 +28,14 @@ class FotoAlbumView extends TemplateView {
 		$breadcrumbs = '';
 		$mappen = array_filter(explode('/', $album->getSubDir()));
 		while (!empty($mappen)) {
-			$naam = array_pop($mappen);
+			$mapnaam = array_pop($mappen);
 			$locatie = '/' . implode('/', $mappen) . '/';
 			if ($locatie === '//') {
 				$breadcrumbs = '<a href="/fotoalbum/">Fotoalbum</a> » ' . $breadcrumbs;
 			} elseif ($breadcrumbs === '') {
-				$breadcrumbs = $this->getDropDown($locatie, $naam);
+				$breadcrumbs = $this->getDropDown($locatie, $mapnaam);
 			} else {
-				$breadcrumbs = '<a href="' . $locatie . '">' . ucfirst($naam) . '</a> » ' . $breadcrumbs;
+				$breadcrumbs = '<a href="' . $locatie . $mapnaam . '">' . ucfirst($mapnaam) . '</a> » ' . $breadcrumbs;
 			}
 		}
 		return $breadcrumbs;
@@ -46,9 +46,9 @@ class FotoAlbumView extends TemplateView {
 		foreach (glob(PICS_PATH . $locatie . '*', GLOB_ONLYDIR) as $path) {
 			$path = str_replace(PICS_PATH, '', $path);
 			$parts = explode('/', $path);
-			$name = end($parts);
-			if (!startsWith($name, '_')) {
-				$dirs[$path] = $name;
+			$mapnaam = end($parts);
+			if (!startsWith($mapnaam, '_')) {
+				$dirs[$path] = $mapnaam;
 			}
 		}
 		if (empty($dirs)) {

@@ -1,9 +1,5 @@
 
-a.remove{
-	position: absolute;
-}
-
-div.thumb{
+.thumb{
 	width: 150px;
 	height: 150px;
 	border: 1px solid #777777;
@@ -11,43 +7,35 @@ div.thumb{
 	float: left;
 }
 
-a.album{
-	width: 154px;
-	height: 154px;
-	padding: 2px;
+.album{
+	width: 150px;
+	height: 150px;
 	margin: 15px;
 	float: left;
 	text-align: center;
 	font-weight: bold;
-	border: 1px solid #ffffff;
+	border: 1px solid #777777;
 	overflow: hidden;
 	position: relative;
 }
 
-a.album:hover{
+.album:hover{
 	text-decoration: none;
 	border-color: #aaaaaa;
 }
 
-a.album img{
-	height: 150px;
-	width: 150px;
-	border: 1px solid #777777;
-}
-
-a.album .albumname{
-	display: block;
+.album .albumname{
 	position: absolute;
+	top: 90px;
+	width: 150px;
 	padding: 5px 2px 5px 2px;
-	width: 148px;
-	margin-left: 1px;
-	top: 100px;
+	text-align: center;
 	color: black;
 	background-color: white;
 	opacity: 0.8;
 }
 
-a.album .albumname:hover{
+.album:hover .albumname{
 	opacity: 0.9;
 }
 
