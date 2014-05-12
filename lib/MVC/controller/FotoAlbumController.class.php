@@ -63,7 +63,7 @@ class FotoAlbumController extends Controller {
 				return $this->isPosted() AND LoginLid::mag('P_ADMIN');
 
 			case 'verwerken':
-				return LoginLid::mag('P_LEDEN_READ');
+				return LoginLid::mag('P_ADMIN');
 
 			default:
 				$this->action = 'bekijken';
