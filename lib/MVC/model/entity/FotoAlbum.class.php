@@ -113,7 +113,7 @@ class FotoAlbum extends Map {
 			return $album->getThumbURL();
 		}
 		// If all else fails:
-		return CSR_PICS . '/fotoalbum/_geen_thumb.jpg';
+		return CSR_PICS . '/_geen_thumb.jpg';
 	}
 
 	public function getMostRecentSubAlbum() {
