@@ -49,6 +49,9 @@ class FotoAlbumModel {
 	}
 
 	public static function hernoemAlbum(FotoAlbum $album, $nieuwenaam) {
+		if (!preg_match('/^(?:[a-z0-9_-]|\.(?!\.))+$/iD', $nieuwenaam)) {
+			throw new Exception('Ongeldige naam');
+		}
 		return rename($album->locatie, str_replace($album->mapnaam, $nieuwenaam, $album->locatie));
 	}
 

@@ -147,9 +147,6 @@ class FotoAlbumController extends AclController {
 	public function hernoemen(Map $map, $naam) {
 		$album = FotoAlbumModel::getFotoAlbum($map, $naam);
 		$nieuw = filter_input(INPUT_POST, 'naam', FILTER_SANITIZE_STRING);
-		if (!preg_match('/^(?:[a-z0-9_-]|\.(?!\.))+$/iD', $nieuw)) {
-			throw new Exception('Ongeldige albumnaam');
-		}
 		if (FotoAlbumModel::hernoemAlbum($album, $nieuw)) {
 			echo '<div id="' . md5($naam) . '" class="albumname">' . $nieuw . '</div>';
 		} else {
