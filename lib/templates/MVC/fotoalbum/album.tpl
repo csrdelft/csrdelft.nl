@@ -20,7 +20,7 @@
 {foreach from=$album->getFotos() item=foto}
 	<div id="{$foto->bestandsnaam|md5}" class="thumb hoverIntent">
 		{if LoginLid::mag('P_ADMIN')}
-			<a href="/fotoalbum/verwijderen{$album->getSubDir()}" class="knop post remove hoverIntentContent" postdata="foto={$foto->bestandsnaam}" title="Verwijder deze foto">{icon get=cross}</a>
+			<a href="/fotoalbum/verwijderen{$album->getSubDir()}" class="knop post confirm remove hoverIntentContent" postdata="foto={$foto->bestandsnaam}" title="Definitief verwijderen van deze foto">{icon get=cross}</a>
 		{/if}
 		<a href="{$foto->getResizedURL()}" rel="prettyPhoto[album]">
 			<img src="{$foto->getThumbURL()}" />
