@@ -3,6 +3,7 @@
 /**
  * FotoAlbumView.class.php
  * 
+ * @author C.S.R. Delft <pubcie@csrdelft.nl>
  * @author P.W.G. Brussee <brussee@live.nl>
  * 
  * De views van het fotoalbum.

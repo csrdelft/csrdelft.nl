@@ -6,6 +6,7 @@ require_once 'MVC/view/FotoAlbumView.class.php';
 /**
  * FotoAlbumController.class.php
  * 
+ * @author C.S.R. Delft <pubcie@csrdelft.nl>
  * @author P.W.G. Brussee <brussee@live.nl>
  * 
  * Controller van het fotoalbum.

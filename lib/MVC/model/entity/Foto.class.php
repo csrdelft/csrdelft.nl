@@ -6,6 +6,7 @@ require_once 'MVC/model/entity/FotoAlbum.class.php';
  * Foto.class.php
  * 
  * @author C.S.R. Delft <pubcie@csrdelft.nl>
+ * @author P.W.G. Brussee <brussee@live.nl>
  * 
  */
 class Foto extends Bestand {
