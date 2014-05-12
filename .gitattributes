@@ -1955,6 +1955,71 @@ htdocs/wiki/lib/plugins/edittable/script/jquery.handsontable.rowmove.js -text
 htdocs/wiki/lib/plugins/edittable/script/json2.js -text
 htdocs/wiki/lib/plugins/edittable/script/newtable.js -text
 htdocs/wiki/lib/plugins/edittable/style.less -text
+htdocs/wiki/lib/plugins/extension/action.php -text
+htdocs/wiki/lib/plugins/extension/admin.php -text
+htdocs/wiki/lib/plugins/extension/all.less -text
+htdocs/wiki/lib/plugins/extension/helper/extension.php -text
+htdocs/wiki/lib/plugins/extension/helper/gui.php -text
+htdocs/wiki/lib/plugins/extension/helper/list.php -text
+htdocs/wiki/lib/plugins/extension/helper/repository.php -text
+htdocs/wiki/lib/plugins/extension/images/disabled.png -text
+htdocs/wiki/lib/plugins/extension/images/donate.png -text
+htdocs/wiki/lib/plugins/extension/images/down.png -text
+htdocs/wiki/lib/plugins/extension/images/enabled.png -text
+htdocs/wiki/lib/plugins/extension/images/icons.xcf -text
+htdocs/wiki/lib/plugins/extension/images/license.txt -text
+htdocs/wiki/lib/plugins/extension/images/overlay.png -text
+htdocs/wiki/lib/plugins/extension/images/plugin.png -text
+htdocs/wiki/lib/plugins/extension/images/tag.png -text
+htdocs/wiki/lib/plugins/extension/images/template.png -text
+htdocs/wiki/lib/plugins/extension/images/up.png -text
+htdocs/wiki/lib/plugins/extension/images/warning.png -text
+htdocs/wiki/lib/plugins/extension/lang/de/intro_install.txt -text
+htdocs/wiki/lib/plugins/extension/lang/de/intro_plugins.txt -text
+htdocs/wiki/lib/plugins/extension/lang/de/intro_search.txt -text
+htdocs/wiki/lib/plugins/extension/lang/de/intro_templates.txt -text
+htdocs/wiki/lib/plugins/extension/lang/de/lang.php -text
+htdocs/wiki/lib/plugins/extension/lang/en/intro_install.txt -text
+htdocs/wiki/lib/plugins/extension/lang/en/intro_plugins.txt -text
+htdocs/wiki/lib/plugins/extension/lang/en/intro_search.txt -text
+htdocs/wiki/lib/plugins/extension/lang/en/intro_templates.txt -text
+htdocs/wiki/lib/plugins/extension/lang/en/lang.php -text
+htdocs/wiki/lib/plugins/extension/lang/eo/intro_install.txt -text
+htdocs/wiki/lib/plugins/extension/lang/eo/intro_plugins.txt -text
+htdocs/wiki/lib/plugins/extension/lang/eo/intro_search.txt -text
+htdocs/wiki/lib/plugins/extension/lang/eo/intro_templates.txt -text
+htdocs/wiki/lib/plugins/extension/lang/eo/lang.php -text
+htdocs/wiki/lib/plugins/extension/lang/es/lang.php -text
+htdocs/wiki/lib/plugins/extension/lang/fr/intro_install.txt -text
+htdocs/wiki/lib/plugins/extension/lang/fr/intro_plugins.txt -text
+htdocs/wiki/lib/plugins/extension/lang/fr/intro_search.txt -text
+htdocs/wiki/lib/plugins/extension/lang/fr/intro_templates.txt -text
+htdocs/wiki/lib/plugins/extension/lang/fr/lang.php -text
+htdocs/wiki/lib/plugins/extension/lang/ja/intro_install.txt -text svneol=unset#application/octet-stream
+htdocs/wiki/lib/plugins/extension/lang/ja/intro_plugins.txt -text svneol=unset#application/octet-stream
+htdocs/wiki/lib/plugins/extension/lang/ja/intro_search.txt -text svneol=unset#application/octet-stream
+htdocs/wiki/lib/plugins/extension/lang/ja/intro_templates.txt -text
+htdocs/wiki/lib/plugins/extension/lang/ja/lang.php -text
+htdocs/wiki/lib/plugins/extension/lang/ko/intro_install.txt -text svneol=unset#application/octet-stream
+htdocs/wiki/lib/plugins/extension/lang/ko/intro_plugins.txt -text svneol=unset#application/octet-stream
+htdocs/wiki/lib/plugins/extension/lang/ko/intro_search.txt -text
+htdocs/wiki/lib/plugins/extension/lang/ko/intro_templates.txt -text
+htdocs/wiki/lib/plugins/extension/lang/ko/lang.php -text
+htdocs/wiki/lib/plugins/extension/lang/nl/intro_install.txt -text
+htdocs/wiki/lib/plugins/extension/lang/nl/intro_plugins.txt -text
+htdocs/wiki/lib/plugins/extension/lang/nl/intro_search.txt -text
+htdocs/wiki/lib/plugins/extension/lang/nl/intro_templates.txt -text
+htdocs/wiki/lib/plugins/extension/lang/nl/lang.php -text
+htdocs/wiki/lib/plugins/extension/lang/ru/lang.php -text
+htdocs/wiki/lib/plugins/extension/lang/sk/lang.php -text
+htdocs/wiki/lib/plugins/extension/lang/zh/intro_install.txt -text svneol=unset#application/octet-stream
+htdocs/wiki/lib/plugins/extension/lang/zh/intro_plugins.txt -text svneol=unset#application/octet-stream
+htdocs/wiki/lib/plugins/extension/lang/zh/intro_search.txt -text
+htdocs/wiki/lib/plugins/extension/lang/zh/intro_templates.txt -text
+htdocs/wiki/lib/plugins/extension/lang/zh/lang.php -text
+htdocs/wiki/lib/plugins/extension/plugin.info.txt -text
+htdocs/wiki/lib/plugins/extension/script.js -text
+htdocs/wiki/lib/plugins/extension/style.less -text
 htdocs/wiki/lib/plugins/fontcolor/action.php -text
 htdocs/wiki/lib/plugins/fontcolor/images/toolbar/aqua.png -text
 htdocs/wiki/lib/plugins/fontcolor/images/toolbar/black.png -text
