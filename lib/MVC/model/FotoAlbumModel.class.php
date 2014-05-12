@@ -38,4 +38,12 @@ class FotoAlbumModel {
 		return $dropdown;
 	}
 
+	public static function verwijderFoto(Foto $foto) {
+		$ret = true;
+		$ret &= unlink($foto->map->locatie . $foto->bestandsnaam);
+		$ret &= unlink($foto->getResizedPad());
+		$ret &= unlink($foto->getThumbPad());
+		return $ret;
+	}
+
 }

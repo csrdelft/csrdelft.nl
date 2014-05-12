@@ -28,11 +28,11 @@ class FotoAlbumController extends Controller {
 		$this->action = 'bekijken';
 		if ($this->hasParam(2)) {
 			$this->action = $this->getParam(2);
-			if ($this->action === 'verwerken') {
-				$path = array_filter($this->getParams(4));
-			} else {
-				$path = array_filter($this->getParams(2));
-			}
+		}
+		if ($this->action === 'verwerken' OR $this->action === 'verwijderen') {
+			$path = array_filter($this->getParams(4));
+		} else {
+			$path = array_filter($this->getParams(2));
 		}
 		$map = new Map();
 		$map->locatie = PICS_PATH . '/';
@@ -57,9 +57,9 @@ class FotoAlbumController extends Controller {
 	 */
 	protected function hasPermission() {
 		switch ($this->action) {
+			//case 'hernoemen':
+			//case 'verplaatsen':
 			case 'verwijderen':
-			case 'hernoemen':
-			case 'verplaatsen':
 				return $this->isPosted() AND LoginLid::mag('P_ADMIN');
 
 			case 'verwerken':
@@ -119,6 +119,19 @@ class FotoAlbumController extends Controller {
 		} else {
 			invokeRefresh($album->getSubDir(), 'Fotoalbum ' . $naam . ' succesvol verwerkt', 1);
 		}
+	}
+
+	public function verwijderen(Map $map, $naam) {
+		$album = new FotoAlbum($map, $naam);
+		$bestandsnaam = filter_input(INPUT_POST, 'foto');
+		$foto = new Foto($album, $bestandsnaam);
+		if (FotoAlbumModel::verwijderFoto($foto)) {
+			echo '<div id="' . md5($bestandsnaam) . '" class="remove"></div>';
+			setMelding('Foto ' . $bestandsnaam . ' succesvol verwijdert', 1);
+		} else {
+			setMelding('Foto verwijderen mislukt', -1);
+		}
+		exit;
 	}
 
 }

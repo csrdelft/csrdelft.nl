@@ -1,15 +1,14 @@
-/* Album */
-a.thumb{
+
+a.remove{
+	position: absolute;
+}
+
+div.thumb{
 	width: 150px;
 	height: 150px;
 	border: 1px solid #777777;
-	margin: 19px;
+	margin: 10px;
 	float: left;
-}
-
-a.thumb img{
-	position:absolute;
-	clip: rect(0px,150px,150px,0px);
 }
 
 a.album{
@@ -29,11 +28,13 @@ a.album:hover{
 	text-decoration: none;
 	border-color: #aaaaaa;
 }
+
 a.album img{
 	height: 150px;
 	width: 150px;
 	border: 1px solid #777777;
 }
+
 a.album .albumname{
 	display: block;
 	position: absolute;
@@ -45,9 +46,11 @@ a.album .albumname{
 	background-color: white;
 	opacity: 0.8;
 }
+
 a.album .albumname:hover{
 	opacity: 0.9;
 }
+
 #fullsizeLink{
 	float: right;
 }

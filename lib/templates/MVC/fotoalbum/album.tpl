@@ -18,9 +18,14 @@
 	</a>
 {/foreach}
 {foreach from=$album->getFotos() item=foto}
-	<a class="thumb" href="{$foto->getResizedURL()}" rel="prettyPhoto[album]">
-		<img src="{$foto->getThumbURL()}" />
-	</a>
+	<div id="{$foto->bestandsnaam|md5}" class="thumb hoverIntent">
+		{if LoginLid::mag('P_ADMIN')}
+			<a href="/fotoalbum/verwijderen{$album->getSubDir()}" class="knop post remove hoverIntentContent" postdata="foto={$foto->bestandsnaam}" title="Verwijder deze foto">{icon get=cross}</a>
+		{/if}
+		<a href="{$foto->getResizedURL()}" rel="prettyPhoto[album]">
+			<img src="{$foto->getThumbURL()}" />
+		</a>
+	</div>
 {/foreach}
 {literal}
 <script type="text/javascript">
