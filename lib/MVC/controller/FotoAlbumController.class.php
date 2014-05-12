@@ -106,10 +106,12 @@ class FotoAlbumController extends Controller {
 	}
 
 	public function verwerken(Map $map, $naam) {
-		define('RESIZE_OUTPUT', null);
-		echo '<h1>Fotoalbum verwerken: ' . $naam . '</h1>';
-		echo 'Dit kan even duren<br />';
-		flush();
+		//define('RESIZE_OUTPUT', null);
+		if (defined('RESIZE_OUTPUT')) {
+			echo '<h1>Fotoalbum verwerken: ' . $naam . '</h1>';
+			echo 'Dit kan even duren<br />';
+			flush();
+		}
 		$album = new FotoAlbum($map, $naam);
 		$album->verwerkFotos();
 		invokeRefresh($album->getSubDir(), 'Album verwerk succesvol verwerkt', 1);

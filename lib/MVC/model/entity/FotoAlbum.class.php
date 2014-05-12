@@ -140,6 +140,7 @@ class FotoAlbum extends Map {
 			chmod($this->locatie . '_resized', 0755);
 		}
 		foreach ($this->getFotos() as $foto) {
+			debugprint($foto);
 			if (!$foto->bestaatThumb()) {
 				$foto->maakThumb();
 			}
