@@ -26,10 +26,28 @@ class FotoAlbumController extends Controller {
 	public function __construct($query) {
 		parent::__construct($query);
 		$this->action = 'bekijken';
-		if ($this->hasParam(1)) {
-			$this->action = $this->getParam(1);
+		if ($this->hasParam(2)) {
+			$this->action = $this->getParam(2);
+			if ($this->action === 'verwerken') {
+				$path = array_filter($this->getParams(4));
+			} else {
+				$path = array_filter($this->getParams(2));
+			}
 		}
-		$this->performAction(array($this->getParams(2)));
+		$map = new Map();
+		$map->locatie = PICS_PATH . '/';
+		$naam = 'fotoalbum';
+		if (!empty($path)) {
+			$map->locatie .= 'fotoalbum/';
+			$naam = urldecode(array_pop($path));
+			if (!empty($path)) {
+				$map->locatie .= urldecode(implode('/', $path)) . '/';
+			}
+		}
+		if (!self::magBekijken($map->locatie)) {
+			$this->geentoegang();
+		}
+		$this->performAction(array($map, $naam));
 	}
 
 	/**
@@ -73,24 +91,9 @@ class FotoAlbumController extends Controller {
 		}
 	}
 
-	public function bekijken(array $path) {
-		$path = array_filter($path);
-		$map = new Map();
-		$map->locatie = PICS_PATH . '/';
-		if (empty($path)) {
-			$naam = 'fotoalbum';
-		} else {
-			$map->locatie .= 'fotoalbum/';
-			$naam = urldecode(array_pop($path));
-			if (!empty($path)) {
-				$map->locatie .= urldecode(implode('/', $path)) . '/';
-			}
-		}
-		if (!self::magBekijken($map->locatie)) {
-			$this->geentoegang();
-		}
-		$fotoalbum = new FotoAlbum($map, $naam);
-		$body = new FotoAlbumView($fotoalbum);
+	public function bekijken(Map $map, $naam) {
+		$album = new FotoAlbum($map, $naam);
+		$body = new FotoAlbumView($album);
 		if (LoginLid::mag('P_LOGGED_IN')) {
 			$this->view = new CsrLayoutPage($body);
 			$this->view->zijkolom = false;
@@ -102,31 +105,10 @@ class FotoAlbumController extends Controller {
 		$this->view->addScript('jquery/plugins/jquery.prettyPhoto-3.1.5.min.js?');
 	}
 
-	public function verwerken() {
-		define('RESIZE_OUTPUT', null);
-
-		$base = '';
-
-		// try to narrow search
-		preg_match('/fotoalbum\/(.*)$/', $_SERVER['HTTP_REFERER'], $matches);
-		$file = PICS_PATH . '/fotoalbum/' . urldecode($matches[1]);
-
-		if (file_exists($file)) {
-			$base = $matches[1];
-		}
-
-		$base = urldecode($base);
-
-		echo '<h1>Verwerken wijzigingen in <code>fotoalbum/' . mb_htmlentities($base) . '</code></h1>';
-		echo 'Dit kan even duren<br />';
-
-		flush();
-
-		$album = new FotoAlbum($base, $base);
-		if (!$album->exists()) {
-			$album = new FotoAlbum('', '');
-		}
+	public function verwerken(Map $map, $naam) {
+		$album = new FotoAlbum($map, $naam);
 		$album->verwerkFotos();
+		invokeRefresh('/fotoalbum/' . $album->getSubDir(), 'Album verwerk succesvol verwerkt', 1);
 	}
 
 }

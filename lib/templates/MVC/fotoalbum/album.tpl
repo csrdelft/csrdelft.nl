@@ -3,10 +3,10 @@
 		<a class="knop" href="/fotostoevoegen/">{icon get="toevoegen"} Toevoegen</a>
 	{/if}
 	{if LoginLid::mag('P_LOGGED_IN') && $album->getFotos()!==false}
-		<a class="knop" href="/tools/downloadalbum.php?album={$album->locatie}" title="Download als TAR-bestand">{icon get="folder_picture"} Download album</a>
+		<a class="knop" href="/tools/downloadalbum.php?album={$album->getSubDir()}" title="Download als TAR-bestand">{icon get="folder_picture"} Download album</a>
 	{/if}
 	{if LoginLid::mag('P_ADMIN')}
-		<a class="knop" href="/fotoalbum/verwerk/">{icon get="photos"} Verwerken</a>
+		<a class="knop" href="/fotoalbum/verwerken{$album->getSubDir()}">{icon get="photos"} Verwerken</a>
 	{/if}
 </div>
 {$album->getBreadcrumbs()}

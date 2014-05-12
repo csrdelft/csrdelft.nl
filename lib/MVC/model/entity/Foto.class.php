@@ -28,19 +28,21 @@ class Foto extends Bestand {
 	}
 
 	public function getThumbURL() {
-		return CSR_PICS . direncode(str_replace(PICS_PATH, '', $this->map->locatie) . '_thumbs/' . $this->bestandsnaam);
+		return CSR_PICS . direncode($this->map->getSubDir() . '_thumbs/' . $this->bestandsnaam);
 	}
 
 	public function getResizedURL() {
-		return CSR_PICS . direncode(str_replace(PICS_PATH, '', $this->map->locatie) . '_resized/' . $this->bestandsnaam);
+		return CSR_PICS . direncode($this->map->getSubDir() . '_resized/' . $this->bestandsnaam);
 	}
 
 	public function bestaatThumb() {
-		return file_exists($this->getThumbPad()) AND is_file($this->getThumbPad());
+		$pad = $this->getThumbPad();
+		return file_exists($pad) AND is_file($pad);
 	}
 
 	public function bestaatResized() {
-		return file_exists($this->getResizedPad()) AND is_file($this->getResizedPad());
+		$pad = $this->getResizedPad();
+		return file_exists($pad) AND is_file($pad);
 	}
 
 	public function maakThumb() {

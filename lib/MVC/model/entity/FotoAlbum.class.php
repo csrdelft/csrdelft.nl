@@ -43,12 +43,16 @@ class FotoAlbum extends Map {
 		return filemtime($this->locatie);
 	}
 
+	public function getSubDir() {
+		return str_replace(PICS_PATH, '', $this->locatie);
+	}
+
 	public function getUrl() {
-		return CSR_ROOT . direncode(str_replace(PICS_PATH, '', $this->locatie));
+		return CSR_ROOT . direncode($this->getSubDir());
 	}
 
 	public function getBreadcrumbs() {
-		$locatie = str_replace(PICS_PATH, '', $this->locatie);
+		$locatie = $this->getSubDir();
 		$breadcrumbs = '';
 		$mappen = array_filter(explode('/', $locatie));
 		while (!empty($mappen)) {
