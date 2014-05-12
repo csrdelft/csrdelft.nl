@@ -264,7 +264,7 @@ class FotoAlbumUbbView extends TemplateView {
 		} else {
 			$content = $this->getGridHtml();
 		}
-		return '<div class="ubb_block ubb_fotoalbum"><h2>' . $this->model->getBreadcrumbs() . '&raquo; <a href="' . $url . '">' . $this->model->mapnaam . '</a></h2>' . $content . '</div>';
+		return '<div class="ubb_block ubb_fotoalbum"><h2>' . $this->getBreadcrumbs($this->model) . '&raquo; <a href="' . $url . '">' . $this->model->mapnaam . '</a></h2>' . $content . '</div>';
 	}
 
 }
