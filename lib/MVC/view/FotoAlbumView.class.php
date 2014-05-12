@@ -24,7 +24,7 @@ class FotoAlbumView extends TemplateView {
 		$this->smarty->display('MVC/fotoalbum/album.tpl');
 	}
 
-	public static function getBreadcrumbs(FotoAlbum $album) {
+	public static function getBreadcrumbs(FotoAlbum $album, $dropdown = false) {
 		$breadcrumbs = '';
 		$mappen = array_filter(explode('/', $album->getSubDir()));
 		while (!empty($mappen)) {
@@ -32,7 +32,7 @@ class FotoAlbumView extends TemplateView {
 			$locatie = '/' . implode('/', $mappen) . '/';
 			if ($locatie === '//') {
 				$breadcrumbs = '<a href="/fotoalbum/">Fotoalbum</a> » ' . $breadcrumbs;
-			} elseif ($breadcrumbs === '') {
+			} elseif ($dropdown AND $breadcrumbs === '') {
 				$breadcrumbs = FotoAlbumView::getDropDown($locatie, $mapnaam);
 			} else {
 				$breadcrumbs = '<a href="' . $locatie . $mapnaam . '">' . ucfirst($mapnaam) . '</a> » ' . $breadcrumbs;
@@ -264,7 +264,7 @@ class FotoAlbumUbbView extends TemplateView {
 		} else {
 			$content = $this->getGridHtml();
 		}
-		return '<div class="ubb_block ubb_fotoalbum"><h2>' . FotoAlbumView::getBreadcrumbs($this->model) . '&raquo; <a href="' . $url . '">' . $this->model->mapnaam . '</a></h2>' . $content . '</div>';
+		return '<div class="ubb_block ubb_fotoalbum"><h2>' . FotoAlbumView::getBreadcrumbs($this->model) . '</a></h2>' . $content . '</div>';
 	}
 
 }

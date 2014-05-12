@@ -9,7 +9,7 @@
 		<a class="knop" href="/fotoalbum/verwerken{$album->getSubDir()}">{icon get="photos"} Verwerken</a>
 	{/if}
 </div>
-{$view->getBreadcrumbs($album)}
+{$view->getBreadcrumbs($album, true)}
 <h1>{$album->mapnaam|ucfirst}</h1>
 {foreach from=$album->getSubAlbums() item=subalbum}
 	<div class="album hoverIntent">
