@@ -996,32 +996,32 @@ h3, h4, h5 {
 	font-size: 1.6em;
 	padding-bottom: 0;
 }
-div#content a.external,
-div#content a[href ^="gopher://"] {
+div#content a.external/*,
+div#content a[href ^="gopher://"] */{
 	background: url(static/3rd/vector/external-link-ltr-icon.png) center right no-repeat;
 	padding: 0 13px 0 0;
-}
-div#content a[href ^="https://"],
+}/*
+div#content a[href ^="https://"],*/
 .link-https {
 	background: url(static/3rd/vector/lock-icon.png) center right no-repeat;
 	padding: 0 13px 0 0;
 }
-div#content a[href ^="mailto:"],
+/*div#content a[href ^="mailto:"],*/
 .link-mailto {
 	background: url(static/3rd/vector/mail-icon.png) center right no-repeat;
 	padding: 0 13px 0 0;
-}
+}/*
 div#content a[href ^="news://"] {
 	background: url(static/3rd/vector/news-icon.png) center right no-repeat;
 	padding: 0 13px 0 0;
 }
-div#content a[href ^="ftp://"],
+/*div#content a[href ^="ftp://"],*/
 .link-ftp {
 	background: url(static/3rd/vector/file-icon.png) center right no-repeat;
 	padding: 0 13px 0 0;
 }
-div#content a[href ^="irc://"],
-div#content a.extiw[href ^="irc://"],
+/*div#content a[href ^="irc://"],
+div#content a.extiw[href ^="irc://"],*/
 .link-irc {
 	background: url(static/3rd/vector/talk-icon.png) center right no-repeat;
 	padding: 0 13px 0 0;
