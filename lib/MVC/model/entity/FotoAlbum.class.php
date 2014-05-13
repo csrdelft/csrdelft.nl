@@ -80,7 +80,7 @@ class FotoAlbum extends Map {
 			$naam = end($parts);
 			if (!startsWith($naam, '_')) {
 				$subalbum = FotoAlbumModel::getFotoAlbum($this, $naam);
-				if (FotoAlbumController::magBekijken($subalbum->locatie)) {
+				if ($subalbum) {
 					$this->subalbums[] = $subalbum;
 				}
 			}

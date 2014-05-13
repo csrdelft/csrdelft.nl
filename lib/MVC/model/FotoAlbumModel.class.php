@@ -11,7 +11,11 @@ require_once 'MVC/model/entity/Foto.class.php';
 class FotoAlbumModel {
 
 	public static function getFotoAlbum(Map $parent, $naam) {
-		return new FotoAlbum($parent, $naam);
+		$album = new FotoAlbum($parent, $naam);
+		if (!$album->exists() OR ! FotoAlbumController::magBekijken($album->locatie)) {
+			return null;
+		}
+		return $album;
 	}
 
 	public static function verwerkFotos(FotoAlbum $album) {
@@ -49,7 +53,7 @@ class FotoAlbumModel {
 	}
 
 	public static function hernoemAlbum(FotoAlbum $album, $nieuwenaam) {
-		if (!preg_match('/^(?:[a-z0-9 _-]|\.(?!\.))+$/iD', $nieuwenaam)) {
+		if (!preg_match('/^(?:[a-z0-9 _-é]|\.(?!\.))+$/iD', $nieuwenaam)) {
 			throw new Exception('Ongeldige naam');
 		}
 		return rename($album->locatie, str_replace($album->mapnaam, $nieuwenaam, $album->locatie));

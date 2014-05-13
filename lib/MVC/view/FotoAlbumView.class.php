@@ -113,11 +113,8 @@ class FotoAlbumUbbView extends TemplateView {
 	private $picsize = 75;  //size of an image
 	private $rowmargin = 2; //margin between the images
 
-	public function __construct(FotoAlbum $album = null) {
+	public function __construct(FotoAlbum $album) {
 		parent::__construct($album);
-		if ($album === null OR ! $album->exists()) {
-			$this->model = FotoAlbumModel::getMostRecentFotoAlbum();
-		}
 	}
 
 	public function view() {
