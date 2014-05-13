@@ -69,7 +69,7 @@ class syntax_plugin_include_include extends DokuWiki_Syntax_Plugin {
      * @param Doku_Handler $handler The hanlder object
      * @return array The instructions of the plugin
      */
-    function handle($match, $state, $pos, &$handler) {
+    function handle($match, $state, $pos, Doku_Handler &$handler) {
 
         $match = substr($match, 2, -2); // strip markup
         list($match, $flags) = explode('&', $match, 2);
@@ -78,7 +78,8 @@ class syntax_plugin_include_include extends DokuWiki_Syntax_Plugin {
         list($mode, $page, $sect) = preg_split('/>|#/u', $match, 3); 
         $check = false;
         if (isset($sect)) $sect = sectionID($sect, $check);
-        return array($mode, $page, $sect, explode('&', $flags));
+        $level = NULL;
+        return array($mode, $page, $sect, explode('&', $flags), $level, $pos);
     }
 
     /**
@@ -86,7 +87,7 @@ class syntax_plugin_include_include extends DokuWiki_Syntax_Plugin {
      *
      * @author Michael Hamann <michael@content-space.de>
      */
-    function render($format, &$renderer, $data) {
+    function render($format, Doku_Renderer &$renderer, $data) {
         global $ID;
 
         // static stack that records all ancestors of the child pages
@@ -98,10 +99,10 @@ class syntax_plugin_include_include extends DokuWiki_Syntax_Plugin {
         $parent_id = $page_stack[count($page_stack)-1];
         $root_id = $page_stack[0];
 
-        list($mode, $page, $sect, $flags, $level) = $data;
+        list($mode, $page, $sect, $flags, $level, $pos) = $data;
 
         if (!$this->helper)
-            $this->helper =& plugin_load('helper', 'include');
+            $this->helper = plugin_load('helper', 'include');
         $flags = $this->helper->get_flags($flags);
 
         $pages = $this->helper->_get_included_pages($mode, $page, $sect, $parent_id, $flags);
@@ -122,6 +123,11 @@ class syntax_plugin_include_include extends DokuWiki_Syntax_Plugin {
             $renderer->meta['plugin_include']['include_content'] = isset($_REQUEST['include_content']);
         }
 
+        $secids = array();
+        if ($format == 'xhtml') {
+            $secids = p_get_metadata($ID, 'plugin_include secids');
+        }
+
         foreach ($pages as $page) {
             extract($page);
             $id = $page['id'];
@@ -134,9 +140,18 @@ class syntax_plugin_include_include extends DokuWiki_Syntax_Plugin {
             if ($format == 'metadata') {
                 $renderer->meta['relation']['references'][$id] = $exists;
                 $renderer->meta['relation']['haspart'][$id]    = $exists;
+                if (!$sect && !$flags['firstsec'] && !$flags['linkonly'] && !isset($renderer->meta['plugin_include']['secids'][$id])) {
+                    $renderer->meta['plugin_include']['secids'][$id] = array('hid' => 'plugin_include__'.str_replace(':', '__', $id), 'pos' => $pos);
+                }
             }
 
-            $instructions = $this->helper->_get_instructions($id, $sect, $mode, $level, $flags, $root_id);
+            if (isset($secids[$id]) && $pos === $secids[$id]['pos']) {
+                $flags['include_secid'] = $secids[$id]['hid'];
+            } else {
+                unset($flags['include_secid']);
+            }
+
+            $instructions = $this->helper->_get_instructions($id, $sect, $mode, $level, $flags, $root_id, $secids);
 
             $renderer->nest($instructions);
 

@@ -19,7 +19,6 @@ require_once(DOKU_PLUGIN.'action.php');
  */
 class action_plugin_include extends DokuWiki_Action_Plugin {
  
-    var $supportedModes = array('xhtml', 'metadata');
     /* @var helper_plugin_include $helper */
     var $helper = null;
 
@@ -30,7 +29,7 @@ class action_plugin_include extends DokuWiki_Action_Plugin {
     /**
      * plugin should use this method to register its handlers with the dokuwiki's event controller
      */
-    function register(&$controller) {
+    function register(Doku_Event_Handler $controller) {
         /* @var Doku_event_handler $controller */
         $controller->register_hook('INDEXER_PAGE_ADD', 'BEFORE', $this, 'handle_indexer');
         $controller->register_hook('INDEXER_VERSION_GET', 'BEFORE', $this, 'handle_indexer_version');
@@ -42,7 +41,7 @@ class action_plugin_include extends DokuWiki_Action_Plugin {
       $controller->register_hook('PARSER_HANDLER_DONE', 'BEFORE', $this, 'handle_parser');
       $controller->register_hook('PARSER_METADATA_RENDER', 'AFTER', $this, 'handle_metadata');
       $controller->register_hook('HTML_SECEDIT_BUTTON', 'BEFORE', $this, 'handle_secedit_button');
-      $controller->register_hook('EDITX_HANDLERS_REGISTER', 'BEFORE', $this, 'handle_editx_register');
+        $controller->register_hook('PLUGIN_MOVE_HANDLERS_REGISTER', 'BEFORE', $this, 'handle_move_register');
     }
 
     /**
@@ -156,7 +155,7 @@ class action_plugin_include extends DokuWiki_Action_Plugin {
             case 'plugin':
                 switch($ins[$i][1][0]) {
                 case 'include_include':
-                    $ins[$i][1][1][] = $level;
+                    $ins[$i][1][1][4] = $level;
                     break;
                     /* FIXME: this doesn't work anymore that way with the new structure
                     // some plugins already close open sections
@@ -210,7 +209,7 @@ class action_plugin_include extends DokuWiki_Action_Plugin {
         $cache =& $event->data;
 
         if(!isset($cache->page)) return;
-        if(!isset($cache->mode) || !in_array($cache->mode, $this->supportedModes)) return;
+        if(!isset($cache->mode) || $cache->mode == 'i') return;
 
         $depends = p_get_metadata($cache->page, 'plugin_include');
         
@@ -294,8 +293,10 @@ class action_plugin_include extends DokuWiki_Action_Plugin {
 
             // Special handling for the edittable plugin
             if ($data['target'] == 'table' && !plugin_isdisabled('edittable')) {
-                /* @var action_plugin_edittable $edittable */
-                $edittable =& plugin_load('action', 'edittable');
+                /* @var action_plugin_edittable_editor $edittable */
+                $edittable =& plugin_load('action', 'edittable_editor');
+                if (is_null($edittable))
+                    $edittable =& plugin_load('action', 'edittable');
                 $data['name'] = $edittable->getLang('secedit_name');
             }
 
@@ -327,11 +328,11 @@ class action_plugin_include extends DokuWiki_Action_Plugin {
         $event->stopPropagation();
     }
 
-    public function handle_editx_register(Doku_Event $event, $params) {
+    public function handle_move_register(Doku_Event $event, $params) {
         $event->data['handlers']['include_include'] = array($this, 'rewrite_include');
     }
 
-    public function rewrite_include($match, $pos, $state, $plugin, action_plugin_editx_handler $handler) {
+    public function rewrite_include($match, $pos, $state, $plugin, helper_plugin_move_handler $handler) {
         $syntax = substr($match, 2, -2); // strip markup
         $replacers = explode('|', $syntax);
         $syntax = array_shift($replacers);

@@ -4,6 +4,7 @@
  * @author     Esther Brunner <wikidesign@gmail.com>
  * @author     Christopher Smith <chris@jalakai.co.uk>
  * @author     Gina Häußge, Michael Klier <dokuwiki@chimeric.de>
+ * @author     Michael Hamann <michael@content-space.de>
  */
 
 // must be run within Dokuwiki
@@ -13,12 +14,14 @@ if (!defined('DOKU_LF')) define('DOKU_LF', "\n");
 if (!defined('DOKU_TAB')) define('DOKU_TAB', "\t");
 if (!defined('DOKU_PLUGIN')) define('DOKU_PLUGIN', DOKU_INC.'lib/plugins/');
 
-require_once(DOKU_INC.'inc/search.php');
-
+/**
+ * Helper functions for the include plugin and other plugins that want to include pages.
+ */
 class helper_plugin_include extends DokuWiki_Plugin { // DokuWiki_Helper_Plugin
 
     var $defaults  = array();
     var $sec_close = true;
+    /** @var helper_plugin_tag $taghelper */
     var $taghelper = null;
     var $includes  = array(); // deprecated - compatibility code for the blog plugin
 
@@ -228,7 +231,7 @@ class helper_plugin_include extends DokuWiki_Plugin { // DokuWiki_Helper_Plugin
      * @author Michael Klier <chi@chimeric.de>
      * @author Michael Hamann <michael@content-space.de>
      */
-    function _get_instructions($page, $sect, $mode, $lvl, $flags, $root_id = null) {
+    function _get_instructions($page, $sect, $mode, $lvl, $flags, $root_id = null, $included_pages = array()) {
         $key = ($sect) ? $page . '#' . $sect : $page;
         $this->includes[$key] = true; // legacy code for keeping compatibility with other plugins
 
@@ -260,13 +263,13 @@ class helper_plugin_include extends DokuWiki_Plugin { // DokuWiki_Helper_Plugin
                 global $ID;
                 $backupID = $ID;
                 $ID = $page; // Change the global $ID as otherwise plugins like the discussion plugin will save data for the wrong page
-                $ins = p_cached_instructions(wikiFN($page));
+                $ins = p_cached_instructions(wikiFN($page), false, $page);
                 $ID = $backupID;
             } else {
                 $ins = array();
             }
 
-            $this->_convert_instructions($ins, $lvl, $page, $sect, $flags, $root_id);
+            $this->_convert_instructions($ins, $lvl, $page, $sect, $flags, $root_id, $included_pages);
         }
         return $ins;
     }
@@ -284,7 +287,7 @@ class helper_plugin_include extends DokuWiki_Plugin { // DokuWiki_Helper_Plugin
      *
      * @author Michael Klier <chi@chimeric.de>
      */
-    function _convert_instructions(&$ins, $lvl, $page, $sect, $flags, $root_id) {
+    function _convert_instructions(&$ins, $lvl, $page, $sect, $flags, $root_id, $included_pages = array()) {
         global $conf;
 
         // filter instructions if needed
@@ -307,6 +310,15 @@ class helper_plugin_include extends DokuWiki_Plugin { // DokuWiki_Helper_Plugin
         $endpos     = null; // end position of the raw wiki text
 
         for($i=0; $i<$num; $i++) {
+            // adjust links with image titles
+            if (strpos($ins[$i][0], 'link') !== false && isset($ins[$i][1][1]) && is_array($ins[$i][1][1]) && $ins[$i][1][1]['type'] == 'internalmedia') {
+                // resolve relative ids, but without cleaning in order to preserve the name
+                $media_id = resolve_id($ns, $ins[$i][1][1]['src']);
+                // make sure that after resolving the link again it will be the same link
+                if ($media_id{0} != ':') $media_id = ':'.$media_id;
+                $ins[$i][1][1]['src'] = $media_id;
+            }
+
             switch($ins[$i][0]) {
                 case 'document_start':
                 case 'document_end':
@@ -357,6 +369,40 @@ class helper_plugin_include extends DokuWiki_Plugin { // DokuWiki_Helper_Plugin
                     if ($link_id{0} != ':') $link_id = ':'.$link_id;
                     // restore parameters
                     $ins[$i][1][0] = ($link_params != '') ? $link_id.'?'.$link_params : $link_id;
+                    if ($ins[$i][0] == 'internallink' && !empty($included_pages)) {
+                        // change links to included pages into local links
+                        $link_id = $ins[$i][1][0];
+                        $link_parts = explode('?', $link_id, 2);
+                        // only adapt links without parameters
+                        if (count($link_parts) === 1) {
+                            $link_parts = explode('#', $link_id, 2);
+                            $hash = '';
+                            if (count($link_parts) === 2) {
+                                list($link_id, $hash) = $link_parts;
+                            }
+                            $exists = false;
+                            resolve_pageid($ns, $link_id, $exists);
+                            if (array_key_exists($link_id, $included_pages)) {
+                                if ($hash) {
+                                    // hopefully the hash is also unique in the including page (otherwise this might be the wrong link target)
+                                    $ins[$i][0] = 'locallink';
+                                    $ins[$i][1][0] = $hash;
+                                } else {
+                                    // the include section ids are different from normal section ids (so they won't conflict) but this
+                                    // also means that the normal locallink function can't be used
+                                    $ins[$i][0] = 'plugin';
+                                    $ins[$i][1] = array('include_locallink', array($included_pages[$link_id]['hid'], $ins[$i][1][1], $ins[$i][1][0]));
+                                }
+                            }
+                        }
+                    }
+                    break;
+                case 'locallink':
+                    /* Convert local links to internal links if the page hasn't been fully included */
+                    if ($included_pages == null || !array_key_exists($page, $included_pages)) {
+                        $ins[$i][0] = 'internallink';
+                        $ins[$i][1][0] = ':'.$page.'#'.$ins[$i][1][0];
+                    }
                     break;
                 case 'plugin':
                     // FIXME skip other plugins?
@@ -406,8 +452,9 @@ class helper_plugin_include extends DokuWiki_Plugin { // DokuWiki_Helper_Plugin
         $section_close_at = false;
         foreach($conv_idx as $idx) {
             if($ins[$idx][0] == 'header') {
-                if ($section_close_at === false) {
-                    // store the index of the first heading (the begin of the first section)
+                if ($section_close_at === false && isset($ins[$idx+1]) && $ins[$idx+1][0] == 'section_open') {
+                    // store the index of the first heading that is followed by a new section
+                    // the wrap plugin creates sections without section_open so the section shouldn't be closed before them
                     $section_close_at = $idx;
                 }
 
@@ -433,7 +480,7 @@ class helper_plugin_include extends DokuWiki_Plugin { // DokuWiki_Helper_Plugin
 
                 // set footer level
                 if(!$footer_lvl && ($idx == $first_header) && !$no_header) {
-                    if($flags['indent']) {
+                    if($flags['indent'] && isset($lvl_new)) {
                         $footer_lvl = $lvl_new;
                     } else {
                         $footer_lvl = $lvl_max;
@@ -448,7 +495,7 @@ class helper_plugin_include extends DokuWiki_Plugin { // DokuWiki_Helper_Plugin
 
                 // check if noheader is used and set the footer level to the first section
                 if($no_header && !$footer_lvl) {
-                    if($flags['indent']) {
+                    if($flags['indent'] && isset($lvl_new)) {
                         $footer_lvl = $lvl_new;
                     } else {
                         $footer_lvl = $lvl_max;
@@ -489,7 +536,8 @@ class helper_plugin_include extends DokuWiki_Plugin { // DokuWiki_Helper_Plugin
         }
 
         // add instructions entry wrapper
-        array_unshift($ins, array('plugin', array('include_wrap', array('open', $page, $flags['redirect']))));
+        $include_secid = (isset($flags['include_secid']) ? $flags['include_secid'] : NULL);
+        array_unshift($ins, array('plugin', array('include_wrap', array('open', $page, $flags['redirect'], $include_secid))));
         if (isset($flags['beforeeach']))
             array_unshift($ins, array('entity', array($flags['beforeeach'])));
         array_push($ins, array('plugin', array('include_wrap', array('close'))));
@@ -749,6 +797,11 @@ class helper_plugin_include extends DokuWiki_Plugin { // DokuWiki_Helper_Plugin
 
         $user     = $_SERVER['REMOTE_USER'];
         $group    = $INFO['userinfo']['grps'][0];
+
+        // set group for unregistered users
+        if (!isset($group)) {
+            $group = 'ALL';
+        }
 
         $time_stamp = time();
         if(preg_match('/@DATE(\w+)@/',$id,$matches)) {
