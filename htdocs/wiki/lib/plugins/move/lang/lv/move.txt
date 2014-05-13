@@ -1,0 +1,11 @@
+====== Lapas pārvietošana ======
+
+Šis modulis ļauj pārvietot un/vai pārdēvēt tekošo lapu.
+Ar nosacījumiem:
+
+  * You must have edit permission for the current page/all pages in the current namespace.
+  * The pages that are moved must not be locked for editing.
+  * Lai pārvietotu, tev vajag attiecīgās tiesības mērķa direktorijā.
+  * Nevar pārvietot lapu uz nodaļu, kurā jau ir šāda nosaukuma lapa.
+
+Visas saites uz šo lapu un no tās tiks automātiski nomainītas atbilstoši jaunajam lapas nosaukumam un/vai vietai.

@@ -1,0 +1,128 @@
+/**
+ * Tree Manager
+ */
+#plugin_move__tree {
+
+    display: none; // will be enabled via JavaScript
+
+    .tree_pages,
+    .tree_media {
+        width: 49%;
+        float: left;
+    }
+
+    .controls {
+        clear: left;
+        display: block;
+    }
+
+    ul.tree_list ul {
+        .moved > div {
+            background-color: @ini_background_neu;
+        }
+
+        li {
+            cursor: move;
+
+            img {
+                float: right;
+                cursor: pointer;
+                display: none;
+            }
+        }
+
+        li div:hover {
+            background-color: @ini_background_alt;
+
+            img {
+                display: block;
+            }
+        }
+
+        li.closed {
+            ul {
+                display: none;
+            }
+        }
+    }
+}
+#plugin_move__treelink {
+    display: none; // will be enabled via JavaScript
+}
+
+/**
+ * The progress page
+ */
+#plugin_move__progress {
+
+    .hide {
+        display: none;
+    }
+
+
+    #plugin_move__preview {
+        span {
+            cursor: pointer;
+            color: @ini_link;
+        }
+
+        ul {
+            li.page {
+                list-style-image: url(images/page.png);
+            }
+            li.media {
+                list-style-image: url(images/disk.png);
+            }
+            li.affected {
+                list-style-image: url(images/page_link.png);
+            }
+        }
+    }
+}
+
+/**
+ * The admin form
+ */
+.dokuwiki .plugin_move_form {
+    label.block {
+        text-align: left;
+    }
+
+    label.indent {
+        padding-left: 15px;
+
+        select,
+        input {
+            float: right;
+        }
+    }
+}
+
+
+/**
+ * Pagetool icon
+ */
+#dokuwiki__pagetools ul li.plugin_move_page a {
+    background-position: right 0;
+}
+#dokuwiki__pagetools ul li.plugin_move_page a:before {
+    content: url(images/sprite.png);
+    margin-top: 0;
+}
+#dokuwiki__pagetools:hover ul li.plugin_move_page a,
+#dokuwiki__pagetools ul li.plugin_move_page a:focus,
+#dokuwiki__pagetools ul li.plugin_move_page a:active {
+    background-image: url(images/sprite.png);
+}
+#dokuwiki__pagetools ul li.plugin_move_page a:hover,
+#dokuwiki__pagetools ul li.plugin_move_page a:active,
+#dokuwiki__pagetools ul li.plugin_move_page a:focus {
+    background-position: right -45px;
+}
+
+/**
+ * page rename link
+ */
+.plugin_move_page {
+    display: none; // will be shown by JavaScript
+}
