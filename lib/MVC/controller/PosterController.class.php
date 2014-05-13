@@ -47,7 +47,7 @@ class PosterController extends AclController {
 						$map->locatie = $path . '/';
 						require_once 'MVC/controller/FotoAlbumController.class.php';
 						$album = FotoAlbumModel::getFotoAlbum($map, 'Posters');
-						if (!$album) {
+						if ($album === null) {
 							invokeRefresh(null, 'Fotoalbum bestaat niet', -1);
 						}
 						FotoAlbumModel::verwerkFotos($album);

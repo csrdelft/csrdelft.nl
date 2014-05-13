@@ -24,7 +24,6 @@ class FotoAlbum extends Map {
 		$this->locatie = $parent->locatie . $mapnaam . '/';
 		$this->mapnaam = $mapnaam;
 		if (!$this->exists()) {
-			setMelding('Album bestaat niet', -1);
 			$this->fotos = array();
 			$this->subalbums = array();
 		}

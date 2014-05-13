@@ -86,8 +86,8 @@ class FotoAlbumController extends AclController {
 
 	public function bekijken(Map $map, $naam) {
 		$album = FotoAlbumModel::getFotoAlbum($map, $naam);
-		if (!$album) {
-			setMelding('Fotoalbum bestaat niet', -1);
+		if ($album === null) {
+			invokeRefresh(CSR_ROOT . '/fotoalbum', 'Album bestaat niet', -1);
 		}
 		$body = new FotoAlbumView($album);
 		if (LoginLid::mag('P_LOGGED_IN')) {
@@ -109,8 +109,8 @@ class FotoAlbumController extends AclController {
 			flush();
 		}
 		$album = FotoAlbumModel::getFotoAlbum($map, $naam);
-		if (!$album) {
-			invokeRefresh(CSR_ROOT, 'Fotoalbum ' . $naam . ' verwerken mislukt', -1);
+		if ($album === null) {
+			invokeRefresh(CSR_ROOT . '/fotoalbum', 'Fotoalbum ' . $naam . ' verwerken mislukt', -1);
 		}
 		FotoAlbumModel::verwerkFotos($album);
 		if (defined('RESIZE_OUTPUT')) {
@@ -124,8 +124,8 @@ class FotoAlbumController extends AclController {
 		header('Content-type: application/x-tar');
 		header('Content-Disposition: attachment; filename="' . $naam . '.tar"');
 		$album = FotoAlbumModel::getFotoAlbum($map, $naam);
-		if (!$album) {
-			exit;
+		if ($album === null) {
+			invokeRefresh(CSR_ROOT . '/fotoalbum', 'Fotoalbum bestaat niet', -1);
 		}
 		$fotos = $album->getFotos();
 		set_time_limit(0);

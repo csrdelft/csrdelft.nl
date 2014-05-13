@@ -580,7 +580,7 @@ HTML;
 			}
 		}
 		$album = FotoAlbumModel::getFotoAlbum($map, $naam);
-		if (!$album) {
+		if ($album === null) {
 			return '<div class="ubb_block">Fotoalbum niet gevonden: ' . mb_htmlentities($path) . '</div>';
 		}
 		$fotoalbumtag = new FotoAlbumUbbView($album);
