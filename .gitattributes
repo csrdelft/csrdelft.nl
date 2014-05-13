@@ -2727,6 +2727,8 @@ htdocs/wiki/lib/plugins/pagelist/lang/it/lang.php -text
 htdocs/wiki/lib/plugins/pagelist/lang/it/settings.php -text
 htdocs/wiki/lib/plugins/pagelist/lang/ja/lang.php -text
 htdocs/wiki/lib/plugins/pagelist/lang/ja/settings.php -text
+htdocs/wiki/lib/plugins/pagelist/lang/nl/lang.php -text
+htdocs/wiki/lib/plugins/pagelist/lang/nl/settings.php -text
 htdocs/wiki/lib/plugins/pagelist/lang/pt-br/lang.php -text
 htdocs/wiki/lib/plugins/pagelist/lang/pt-br/settings.php -text
 htdocs/wiki/lib/plugins/pagelist/lang/ru/lang.php -text
