@@ -306,7 +306,7 @@ class ForumDradenModel extends PersistenceModel implements Paging {
 		$fields = $orm::getFields();
 		$fields[] = 'MATCH(titel) AGAINST (? IN NATURAL LANGUAGE MODE) AS score';
 		$results = Database::sqlSelect($fields, $orm::getTableName(), 'wacht_goedkeuring = FALSE AND verwijderd = FALSE HAVING score > 0', array($query), 'score DESC', $this->per_pagina, ($this->pagina - 1) * $this->per_pagina);
-		$results->setFetchMode(PDO::FETCH_CLASS, static::orm);
+		$results->setFetchMode(PDO::FETCH_CLASS, $orm, array($cast = true));
 		return $results;
 	}
 
@@ -329,7 +329,7 @@ class ForumDradenModel extends PersistenceModel implements Paging {
 		}
 		$fields[] = 'g.datum_tijd AS wanneer_gelezen';
 		$result = Database::sqlSelect($fields, $from, $criteria, array_merge(array(LoginLid::instance()->getUid()), $criteria_params), $orderby, $limit, $start);
-		$result->setFetchMode(PDO::FETCH_CLASS, static::orm);
+		$result->setFetchMode(PDO::FETCH_CLASS, $orm, array($cast = true));
 		return $result;
 	}
 
@@ -529,7 +529,7 @@ class ForumPostsModel extends PersistenceModel implements Paging {
 		$fields = $orm::getFields();
 		$fields[] = 'MATCH(tekst) AGAINST (? IN NATURAL LANGUAGE MODE) AS score';
 		$results = Database::sqlSelect($fields, $orm::getTableName(), 'wacht_goedkeuring = FALSE AND verwijderd = FALSE HAVING score > 0', array($query), 'score DESC', $this->per_pagina, ($this->pagina - 1) * $this->per_pagina);
-		$results->setFetchMode(PDO::FETCH_CLASS, static::orm);
+		$results->setFetchMode(PDO::FETCH_CLASS, $orm, array($cast = true));
 		return $results;
 	}
 

@@ -13,10 +13,15 @@ require_once 'MVC/model/entity/PersistentField.class.php';
 abstract class PersistentEntity {
 
 	/**
-	 * Constructor is called late by PDO::FETCH_CLASS (after fields are set).
+	 * Constructor is called late (after fields are set)
+	 * by PDO::FETCH_CLASS with $cast = true.
+	 * 
+	 * @param boolean $cast Regular construction should not cast unset properties!
 	 */
-	public function __construct() {
-		$this->castValues();
+	public function __construct($cast = false) {
+		if ($cast) {
+			$this->castValues();
+		}
 	}
 
 	/**
