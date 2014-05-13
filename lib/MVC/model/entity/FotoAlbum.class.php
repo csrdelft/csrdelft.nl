@@ -56,7 +56,9 @@ class FotoAlbum extends Map {
 			return $this->fotos;
 		}
 		$this->fotos = array();
-		debugprint(glob($this->locatie . '*'));
+		if (!is_array(glob($this->locatie . '*'))) {
+			debugprint('GEEN ARRAY');
+		}
 		foreach (glob($this->locatie . '*') as $path) {
 			if (is_file($path)) {
 				$parts = explode('/', $path);
@@ -75,7 +77,9 @@ class FotoAlbum extends Map {
 			return $this->subalbums;
 		}
 		$this->subalbums = array();
-		debugprint(glob($this->locatie . '*', GLOB_ONLYDIR));
+		if (!is_array(glob($this->locatie . '*', GLOB_ONLYDIR))) {
+			debugprint('GEEN DIR');
+		}
 		foreach (glob($this->locatie . '*', GLOB_ONLYDIR) as $path) {
 			$parts = explode('/', $path);
 			$naam = end($parts);
