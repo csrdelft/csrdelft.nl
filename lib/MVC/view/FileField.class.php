@@ -64,7 +64,7 @@ class FileField extends FormElement implements Validator {
 	}
 
 	public function opslaan($destination, $filename, $overwrite = false) {
-		if (!preg_match('/^(?:[a-z0-9 _-]|\.(?!\.))+$/iD', $filename)) {
+		if (!preg_match('/^(?:[a-z0-9 _-é]|\.(?!\.))+$/iD', $filename)) {
 			throw new Exception('Ongeldige bestandsnaam');
 		}
 		if ($this->methode !== 'BestandBehouden') {
@@ -382,9 +382,9 @@ class UploadUrl extends BestandUploader {
 				$this->error = 'Niets gevonden op url';
 				return;
 			}
-			$naam = substr(trim($this->url), strrpos($this->url, '/') + 1);
-			$naam = preg_replace("/[^a-zA-Z0-9\s\.\-\_]/", '', $naam);
-			//Bestand tijdelijk omslaan om mime-type te bepalen.
+			$name = substr(trim($this->url), strrpos($this->url, '/') + 1);
+			$clean_name = preg_replace('/[^a-zA-Z0-9\s\.\-\_]/', '', $name);
+			// Bestand tijdelijk omslaan om mime-type te bepalen
 			$tmp_bestand = TMP_PATH . '/BestandUploader' . LoginLid::instance()->getUid() . microtime() . '.tmp';
 			if (!is_writable(TMP_PATH)) {
 				$this->error = 'TMP_PATH is niet beschrijfbaar';
@@ -395,7 +395,7 @@ class UploadUrl extends BestandUploader {
 			$mime = finfo_file($finfo, $tmp_bestand);
 			finfo_close($finfo);
 			$this->model = new Bestand();
-			$this->model->bestandsnaam = $naam;
+			$this->model->bestandsnaam = $clean_name;
 			$this->model->size = $size;
 			$this->model->mimetype = $mime;
 			unlink($tmp_bestand);
