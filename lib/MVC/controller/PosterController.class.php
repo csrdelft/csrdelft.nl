@@ -21,11 +21,17 @@ class PosterController extends AclController {
 	}
 
 	public function uploaden() {
-		foreach (glob(PICS_PATH . '/fotoalbum/*', GLOB_ONLYDIR) as $path) {
-			$parts = explode('/', $path);
-			$name = end($parts);
-			if (!startsWith($name, '_')) {
-				$dirs[$name] = $name;
+		$dirs = array();
+		$glob = glob(PICS_PATH . '/fotoalbum/*', GLOB_ONLYDIR);
+		if (!is_array($glob)) {
+			setMelding(null, 'Fotoalbum is leeg', -1);
+		} else {
+			foreach ($glob as $path) {
+				$parts = explode('/', $path);
+				$name = end($parts);
+				if (!startsWith($name, '_')) {
+					$dirs[$name] = $name;
+				}
 			}
 		}
 		$fields['album'] = new SelectField('album', null, 'Album', array_reverse($dirs));

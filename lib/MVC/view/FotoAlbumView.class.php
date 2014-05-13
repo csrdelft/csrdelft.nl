@@ -46,12 +46,15 @@ class FotoAlbumView extends TemplateView {
 
 	public static function getDropDown($locatie, $albumnaam) {
 		$dirs = array();
-		foreach (glob(PICS_PATH . $locatie . '*', GLOB_ONLYDIR) as $path) {
-			$path = str_replace(PICS_PATH, '', $path);
-			$parts = explode('/', $path);
-			$mapnaam = end($parts);
-			if (!startsWith($mapnaam, '_')) {
-				$dirs[$path] = $mapnaam;
+		$glob = glob(PICS_PATH . $locatie . '*', GLOB_ONLYDIR);
+		if (is_array($glob)) {
+			foreach ($glob as $path) {
+				$path = str_replace(PICS_PATH, '', $path);
+				$parts = explode('/', $path);
+				$mapnaam = end($parts);
+				if (!startsWith($mapnaam, '_')) {
+					$dirs[$path] = $mapnaam;
+				}
 			}
 		}
 		if (empty($dirs)) {
