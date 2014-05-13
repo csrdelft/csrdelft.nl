@@ -2809,7 +2809,6 @@ htdocs/wiki/lib/plugins/searchindex/manager.dat -text
 htdocs/wiki/lib/plugins/searchindex/plugin.info.txt -text
 htdocs/wiki/lib/plugins/searchindex/script.js -text
 htdocs/wiki/lib/plugins/searchindex/style.css -text
-htdocs/wiki/lib/plugins/showlogin/action.php -text
 htdocs/wiki/lib/plugins/sortablejs/manager.dat -text
 htdocs/wiki/lib/plugins/sortablejs/plugin.info.txt -text
 htdocs/wiki/lib/plugins/sortablejs/script.js -text
