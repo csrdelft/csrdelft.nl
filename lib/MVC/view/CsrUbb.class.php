@@ -566,7 +566,7 @@ HTML;
 	 */
 	protected function ubb_fotoalbum($parameters) {
 		require_once 'MVC/controller/FotoAlbumController.class.php';
-		$url = $this->parseArray(array('[/fotoalbum]'), array());
+		$url = filter_var($this->parseArray(array('[/fotoalbum]'), array()), FILTER_SANITIZE_URL);
 		$path = array_filter(explode('/', $url));
 		$map = new Map();
 		$map->locatie = PICS_PATH . '/';
@@ -581,7 +581,7 @@ HTML;
 		}
 		$album = FotoAlbumModel::getFotoAlbum($map, $naam);
 		if ($album === null) {
-			return '<div class="ubb_block">Fotoalbum niet gevonden: ' . mb_htmlentities($path) . '</div>';
+			return '<div class="ubb_block">Fotoalbum niet gevonden: ' . $url . '</div>';
 		}
 		$fotoalbumtag = new FotoAlbumUbbView($album);
 		if ($this->quote_level > 0 || isset($parameters['compact'])) {
