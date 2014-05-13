@@ -655,7 +655,9 @@ class ProfielStatus extends Profiel {
 	private function notifyBibliothecaris($oudestatus, $nieuwestatus) {
 		require_once 'bibliotheek/catalogus.class.php';
 		$boeken = Catalogus::getBoekenByUid($this->bewerktLid->getUid(), 'geleend');
-
+		if (!is_array($boeken)) {
+			$boeken = array();
+		}
 		//lijst van boeken genereren
 		$bknleden = $bkncsr = array(
 			'kopje' => '',
@@ -714,12 +716,12 @@ class ProfielStatus extends Profiel {
 	 * 		'save': boolean voor wel/niet opslaan van gePOSTe waarde 
 	 * 		'reset': mixed waarde in te vullen bij reset (null is nooit resetten)
 	 *  Array(
-	 ...
+	  ...
 	  [postfix] => Array(		[save] =>	 1
 	  [reset] => )
 	  [lidafdatum] => Array(	[save] =>
 	  [reset] => 0000-00-00 )
-	 ...
+	  ...
 	  )
 	 */
 	private function getFieldsToSave($nieuwestatus) {
