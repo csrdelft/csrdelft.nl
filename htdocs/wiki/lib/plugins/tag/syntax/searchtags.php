@@ -75,9 +75,7 @@ class syntax_plugin_tag_searchtags extends DokuWiki_Syntax_Plugin {
 
             /* @var helper_plugin_pagelist $pagelist */
             // let Pagelist Plugin do the work for us
-            if (plugin_isdisabled('pagelist')
-                || (!$pagelist = plugin_load('helper', 'pagelist'))) {
-                msg($this->getLang('missing_pagelistplugin'), -1);
+            if ((!$pagelist = $this->loadHelper('pagelist'))) {
                 return false;
             }
 
@@ -96,7 +94,7 @@ class syntax_plugin_tag_searchtags extends DokuWiki_Syntax_Plugin {
 
             if ($tags != NULL) {
                 /* @var helper_plugin_tag $my */
-                if ($my =& plugin_load('helper', 'tag')) $pages = $my->getTopic($this->getNS(), '', $tags);
+                if ($my = $this->loadHelper('tag')) $pages = $my->getTopic($this->getNS(), '', $tags);
 
                 // Display a message when no pages were found
                 if (!isset($pages) || !$pages) {
@@ -156,14 +154,14 @@ class syntax_plugin_tag_searchtags extends DokuWiki_Syntax_Plugin {
 
         // load the tag list - only tags that actually have pages assigned that the current user can access are listed
         /* @var helper_plugin_tag $my */
-        if ($my =& plugin_load('helper', 'tag')) $tags = $my->tagOccurrences(array(), NULL, true);
+        if ($my = $this->loadHelper('tag')) $tags = $my->tagOccurrences(array(), NULL, true);
         // sort tags by name ($tags is in the form $tag => $count)
         ksort($tags);
 
         // display error message when no tags were found
         if (!isset($tags) || $tags == NULL) {
             $form->addElement(form_makeOpenTag('p'));
-            $form->addElement($this->getLang('notags'));
+            $form->addElement($this->getLang('no_tags'));
             $form->addElement(form_makeCloseTag('p'));
         } else {
             // the tags table
@@ -234,16 +232,22 @@ class syntax_plugin_tag_searchtags extends DokuWiki_Syntax_Plugin {
         if (isset($_POST['plugin__tag_search_tags']) && is_array($_POST['plugin__tag_search_tags'])) {
             $tags = $_POST['plugin__tag_search_tags'];
             // wWhen and is set, prepend "+" to each tag
-            if (isset($_POST['plugin__tag_search_and'])) {
-                $first = true; // is this the first positive tag in the list?
-                foreach ($tags as $i => $tag) {
-                    if (substr((string)$tag, 0, 1) !== '-') {
-                        if ($first) $first = false; // leave the first tag unchanged as there needs to be one tag in the OR query
-                        else $tags[$i] = '+'.(string)$tag;
+            $plus = (isset($_POST['plugin__tag_search_and']) ? '+' : '');
+            $positive_tags = '';
+            $negative_tags = '';
+            foreach ($tags as $tag) {
+                $tag = (string)$tag;
+                if ($tag{0} == '-') {
+                    $negative_tags .= $tag.' ';
+                } else {
+                    if ($positive_tags === '') {
+                        $positive_tags = $tag.' ';
+                    } else {
+                        $positive_tags .= $plus.$tag.' ';
                     }
                 }
             }
-            return implode(' ', $tags);
+            return $positive_tags.$negative_tags;
         } else {
             return NULL; // return NULL when no tags were selected so no results will be displayed
         }

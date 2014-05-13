@@ -1,0 +1,5 @@
+互联网不再是过去的互联网了。一切好的都变坏了，维基也一样。[[meatball>WikiSpam|维基垃圾信息]] ，就像博客和电子邮件中的垃圾信息一样，在不断上升。如果您在内部网使用 [[doku>DokuWiki]] 的话，这没有问题。但是如果你打算在互联网使用，你可能想要列黑名单屏蔽一些已知的垃圾信息单词。
+
+要在 DokuWiki 上使用黑名单需要在 ''conf/local.php'' 文件中启用 ''$conf['usewordblock'] = 1;''（默认它被设置为 1）编辑 ''conf/wordblock.local.conf'' 文件。你可以看看 ''conf/wordblock.conf'' 文件，查看现有的屏蔽单词。该文件包含[[wp>Regular Expressions|正则表达式]]（Perl 兼容），任何匹配的保存动作都是不会被允许的。
+
+更多信息请查看 [[doku>blacklist|黑名单]]。

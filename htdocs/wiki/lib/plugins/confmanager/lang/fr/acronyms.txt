@@ -1,0 +1,5 @@
+[[doku>fr:dokuwiki|DokuWiki]] peut annoter les abréviations et acronymes automatiquement. Si votre navigateur comprend la balise ''<acronym>'', vous pouvez survoler une abréviation à la souris et voir surgir  une courte explication dans une info bulle  Par exemple, si le curseur passe au dessus de "CMS", qui est dans la liste par défaut, l'info bulle affichera "Content Management System".
+
+Note: Seuls les mots complets sont annotés. Un acronymes faisant partie d'un mot n'est pas reconnu comme tel. Ainsi, CMS est reconnu, mas pas myCMS.
+
+Pour de plus amples informations voir [[doku>fr::abbreviations|abréviations]].

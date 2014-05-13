@@ -1,0 +1,15 @@
+ユーザが[[doku>ja:media_manager|メディアマネージャー]]を利用してアップロードできるファイルのファイルタイプは、''conf/mime.conf'' ファイルによって設定されます。
+この設定ファイルでは、ファイルの拡張子 <-> MIME タイプの対応付けも設定します。
+
+セキュリティの理由から、どんなファイルタイプでもアップロードできるように [[doku>ja:dokuwiki|DokuWiki]] を設定できません。
+
+:!: **オープンな Wiki で HTML ファイルをアップロードできるように設定してはいけません。**
+JavaScript によるクロスサイトスクリプティングの脆弱性を許してしまうからです。
+HTML ファイルのアップロードは、信頼できるユーザ向けの Wiki でのみ有効にしてください。
+MIME 設定ファイルに HTML ファイルタイプを追加して HTML のアップロードを許可する場合は、[[doku>ja:config:iexssprotect|設定項目: iexssprotect]] を無効にする必要があります。
+
+追加用アイコンは、http://www.splitbrain.org/projects/file_icons にもあります。
+
+http://filext.com/ で　MIME タイプとファイルの拡張子を探すことができます。
+
+詳細な情報は [[doku>ja:mine|MIME の設定]] にあります。

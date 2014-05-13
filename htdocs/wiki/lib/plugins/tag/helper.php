@@ -120,11 +120,16 @@ class helper_plugin_tag extends DokuWiki_Plugin {
 
     /**
      * Returns the link for one given tag
+     *
+     * @param string $tag the tag the link shall point to
+     * @param string $title the title of the link (optional)
+     * @param bool   $dynamic if the link class shall be changed if no pages with the specified tag exist
+     * @return string The HTML code of the link
      */
-    function tagLink($tag) {
+    function tagLink($tag, $title = '', $dynamic = false) {
         global $conf;
         $svtag = $tag;
-        $title = str_replace('_', ' ', noNS($tag));
+        $tag_title = str_replace('_', ' ', noNS($tag));
         resolve_pageid($this->namespace, $tag, $exists); // resolve shortcuts
         if ($exists) {
             $class = 'wikilink1';
@@ -132,12 +137,22 @@ class helper_plugin_tag extends DokuWiki_Plugin {
             if ($conf['useheading']) {
                 // important: set sendond param to false to prevent recursion!
                 $heading = p_get_first_heading($tag, false);
-                if ($heading) $title = $heading;
+                if ($heading) $tag_title = $heading;
             }
         } else {
-            $class = 'wikilink1';
+            if ($dynamic) {
+                $pages = $this->getTopic('', 1, $svtag);
+                if (empty($pages)) {
+                    $class = 'wikilink2';
+                } else {
+                    $class = 'wikilink1';
+                }
+            } else {
+                $class = 'wikilink1';
+            }
             $url   = wl($tag, array('do'=>'showtag', 'tag'=>$svtag));
         }
+        if (!$title) $title = $tag_title;
         $link = '<a href="'.$url.'" class="'.$class.'" title="'.hsc($tag).
             '" rel="tag">'.hsc($title).'</a>';
         return $link;
@@ -145,6 +160,11 @@ class helper_plugin_tag extends DokuWiki_Plugin {
 
     /**
      * Returns a list of pages with a certain tag; very similar to ft_backlinks()
+     *
+     * @param string $ns A namespace to which all pages need to belong, "." for only the root namespace
+     * @param int    $num The maximum number of pages that shall be returned
+     * @param string $tag The tag that shall be searched
+     * @return array The list of pages
      *
      * @author  Esther Brunner <wikidesign@gmail.com>
      */
@@ -162,7 +182,6 @@ class helper_plugin_tag extends DokuWiki_Plugin {
             if($this->_notVisible($page, $ns)) continue;
             $tags  = $this->_getSubjectMetadata($page);
             // don't trust index
-            if (empty($tags)) continue;
             if (!$this->_checkPageTags($tags, $tag)) continue;
 
             // get metadata
@@ -180,9 +199,16 @@ class helper_plugin_tag extends DokuWiki_Plugin {
 
             // determine the sort key
             if ($this->sort == 'id') $key = $page;
-            elseif ($this->sort == 'pagename') $key = noNS($page);
-            elseif ($this->sort == 'title') $key = utf8_strtolower($title);
-            else $key = $date;
+            elseif ($this->sort == 'ns') {
+                $pos = strrpos($page, ':');
+                if ($pos === false) $key = "\0".$page;
+                else $key = substr_replace($page, "\0\0", $pos, 1);
+                $key = str_replace(':', "\0", $key);
+            } elseif ($this->sort == 'pagename') $key = noNS($page);
+            elseif ($this->sort == 'title') {
+                $key = utf8_strtolower($title);
+                if (empty($key)) $key = str_replace('_', ' ', noNS($page));
+            } else $key = $date;
             // make sure that the key is unique
             $key = $this->_uniqueKey($key, $result);
 
@@ -197,6 +223,8 @@ class helper_plugin_tag extends DokuWiki_Plugin {
                     'perm'   => $perm,
                     'exists' => true,
                     'draft'  => $draft, );
+
+            if ($num && count($result) >= $num) break;
         }
 
         // finally sort by sort key
@@ -208,32 +236,20 @@ class helper_plugin_tag extends DokuWiki_Plugin {
 
     /**
      * Refine found pages with tags (+tag: AND, -tag: (AND) NOT)
+     *
+     * @param array $pages The pages that shall be filtered, each page needs to be an array with a key "id"
+     * @param string $refine The list of tags in the form "tag +tag2 -tag3". The tags will be cleaned.
+     * @return array The filtered list of pages
      */
     function tagRefine($pages, $refine) {
         if (!is_array($pages)) return $pages; // wrong data type
         $tags = $this->_parseTagList($refine, true);
-        $clean_tags = array();
-        foreach ($tags as $i => $tag) {
-            if (($tag{0} == '+') || ($tag{0} == '-'))
-                $clean_tags[$i] = substr($tag, 1);
-            else
-                $clean_tags[$i] = $tag;
+        $all_pages = $this->_tagIndexLookup($tags);
+
+        foreach ($pages as $key => $page) {
+            if (!in_array($page['id'], $all_pages)) unset($pages[$key]);
         }
 
-        $indexer = idx_get_indexer();
-        $index_pages = $indexer->lookupKey('subject', $clean_tags, array($this, '_tagCompare'));
-
-        foreach ($tags as $tag) {
-            if (!(($tag{0} == '+') || ($tag{0} == '-'))) continue;
-            $cleaned_tag = substr($tag, 1);
-            $tagpages = $index_pages[$cleaned_tag];
-            $and = ($tag{0} == '+');
-            foreach ($pages as $key => $page) {
-                $cond = in_array($page['id'], $tagpages);
-                if ($and) $cond = (!$cond);
-                if ($cond) unset($pages[$key]);
-            }
-        }
         return $pages;
    }
    
@@ -330,6 +346,8 @@ class helper_plugin_tag extends DokuWiki_Plugin {
 
         $indexer = idx_get_indexer();
         $pages = $indexer->lookupKey('subject', $clean_tags, array($this, '_tagCompare'));
+        // use all pages as basis if the first tag isn't an "or"-tag or if there are no tags given
+        if (empty($tags) || $clean_tags[0] != $tags[0]) $result = $indexer->getPages();
 
         foreach ($tags as $i => $tag) {
             $t = $clean_tags[$i];
@@ -361,7 +379,7 @@ class helper_plugin_tag extends DokuWiki_Plugin {
             }
         }
 
-        $tags = explode(' ', $tags);
+        $tags = preg_split('/ /', $tags, -1, PREG_SPLIT_NO_EMPTY);
 
         if ($clean) {
             return $this->_cleanTagList($tags);
@@ -394,7 +412,7 @@ class helper_plugin_tag extends DokuWiki_Plugin {
      * Makes user or date dependent topic lists possible
      */
     function _applyMacro($id) {
-        /** @var auth_basic $auth */
+        /** @var DokuWiki_Auth_Plugin $auth */
         global $INFO, $auth;
 
         $user     = $_SERVER['REMOTE_USER'];
@@ -473,7 +491,7 @@ class helper_plugin_tag extends DokuWiki_Plugin {
      * Helper function for the indexer in order to avoid interpreting wildcards
      */
     function _tagCompare($tag1, $tag2) {
-        return $tag1 == $tag2;
+        return $tag1 === $tag2;
     }
 
     /**
@@ -486,8 +504,8 @@ class helper_plugin_tag extends DokuWiki_Plugin {
     function _checkPageTags($pagetags, $tags) {
         $result = false;
         foreach($tags as $tag) {
-            if ($tag{0} == "+" and !in_array(substr($tag, 1), $pagetags)) return false;
-            if ($tag{0} == "-" and in_array(substr($tag, 1), $pagetags)) return false;
+            if ($tag{0} == "+" and !in_array(substr($tag, 1), $pagetags)) $result = false;
+            if ($tag{0} == "-" and in_array(substr($tag, 1), $pagetags)) $result = false;
             if (in_array($tag, $pagetags)) $result = true;
         }
         return $result;

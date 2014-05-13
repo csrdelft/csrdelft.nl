@@ -1,0 +1,14 @@
+[[doku>fr:dokuwiki|DokuWiki]] peut remplacer certains caractères ou mots par d'autres définis dans un fichier de configuration. Par défaut, ce mécanisme est utilisé pour convertir diverses combinaisons de caractères en leur équivallent typographique
+
+Par exemple, 
+<code>
+<< en «
+>> en »
+=> en ⇒
+</code>
+
+Voir également [[doku>fr:syntax#typographie|typographie]].
+
+Bien que ce mécanisme soit utilisé par défaut pour de simples substitutions de caractères, on peut également utiliser le système d'entités pour insérer des constructions plus complexes dans les pages. Et même de l'HTML. Cependant, vous devez réaliser que générer du HTML de cette manière sera voué à l'échec avec des moteurs de rendus autres que HTML (par ex PDF ou ODT).
+
+pour de plus amples informations, voir [[doku>fr:entities|Entités]].

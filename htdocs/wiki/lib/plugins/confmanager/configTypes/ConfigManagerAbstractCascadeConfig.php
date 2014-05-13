@@ -39,11 +39,7 @@ abstract class ConfigManagerAbstractCascadeConfig implements ConfigManagerConfig
     }
 
     protected function prepareEntity($str) {
-        $str = trim($str);
-        $str = str_replace("\n", '', $str);
-        $str = str_replace("\r", '', $str);
-        $str = str_replace('#', '\\#', $str);
-        return $str;
+        return $this->helper->prepareEntity($str);
     }
 
     public function getName() {

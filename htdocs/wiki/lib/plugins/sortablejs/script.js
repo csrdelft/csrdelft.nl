@@ -27,6 +27,9 @@
   10.5.2011
  * version 2.5 Fixed problems with secionediting, footnotes and edittable
 
+  18.7.2013
+ * version 2.6 Added support for jQuery and dokuwiki Weatherwax ->
+
   Instructions:
   Used from dokuwiki 
   Click on the headers to sort
@@ -43,7 +46,7 @@ sorttable = {
   reinit: function() {
     arguments.callee.done = true;
     // kill the timer
-    if (_timer) {clearInterval(_timer);}
+    //if (_timer) {clearInterval(_timer);}
     
     if (!document.createElement || !document.getElementsByTagName) {return;}
     
@@ -69,7 +72,7 @@ sorttable = {
     // flag this function so we don't do the same thing twice
     arguments.callee.done = true;
     // kill the timer
-    if (_timer) {clearInterval(_timer);}
+    //if (_timer) {clearInterval(_timer);}
     
     if (!document.createElement || !document.getElementsByTagName) {return;}
     
@@ -283,7 +286,8 @@ sorttable = {
         headrow[i].sorttable_columnindex = i;
         headrow[i].sorttable_tbody = table.tBodies[0];
 //        dean_addEvent(headrow[i],"click", function(e) {
-        addEvent(headrow[i],"click", function(e) {
+//        addEvent(headrow[i],"click", function(e) {
+        jQuery(headrow[i]).click(function(){ 
 
           theadrow = this.parentNode;
 
@@ -609,7 +613,11 @@ var forEach = function(object, block, context) {
 
 if ('undefined' != typeof(window.addEvent)) {
     window.addEvent(window, 'load', sorttable.init);
-} // if
+} else {
+    jQuery(function() {
+      sorttable.init();
+    });
+}
 
 //sorttable.init;
 

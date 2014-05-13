@@ -30,12 +30,12 @@
                     
                     <?php if($isDefault) : ?>
 	                    <img class="upload_image_button"
-							src="<?php echo 'lib/plugins/confmanager/icons/picture_edit_disabled.png' ?>"
+							src="<?php echo DOKU_PLUGIN_ICONS.'picture_edit_disabled.png' ?>"
 							alt="<?php echo hsc($helper->getLang('edit_icon_action_disabled')) ?>"
 							title="<?php echo hsc($helper->getLang('edit_icon_action_tooltip_disabled')) ?>" />
                     <?php else : ?>
 	                    <img class="upload_image_button clickable"
-							src="<?php echo 'lib/plugins/confmanager/icons/picture_edit.png' ?>"
+							src="<?php echo DOKU_PLUGIN_ICONS.'picture_edit.png' ?>"
 							alt="<?php echo hsc($helper->getLang('edit_icon_action')) ?>"
 							title="<?php echo hsc($helper->getLang('edit_icon_action_tooltip')) ?>" />
                     <?php endif ?>
@@ -43,11 +43,11 @@
                         	 
 					<?php if($image !== '' && !$isDefault) : ?>
 						<img class="delete_image_button clickable"
-                       		src="<?php echo 'lib/plugins/confmanager/icons/picture_delete.png' ?>"
+                       		src="<?php echo DOKU_PLUGIN_ICONS.'picture_delete.png' ?>"
                        		alt="<?php echo hsc($helper->getLang('delete_icon_action')) ?>"
                        		title="<?php echo hsc($helper->getLang('delete_icon_action_tooltip')) ?>" />
                     <?php else : ?>
-                       	<img src="<?php echo 'lib/plugins/confmanager/icons/picture_delete_disabled.png' ?>"
+                       	<img src="<?php echo DOKU_PLUGIN_ICONS.'picture_delete_disabled.png' ?>"
                        		 alt="<?php echo hsc($helper->getLang('delete_icon_action_disabled')) ?>"
                        		title="<?php echo hsc($helper->getLang('delete_icon_action_tooltip_disabled')) ?>" />
                     <?php endif ?>
@@ -104,10 +104,10 @@
 	                    </div>
 	                </td>
 	                <td class="default_value">
-	                       <img src="lib/plugins/confmanager/icons/delete_disabled.png"
+	                       <img src="<?php echo DOKU_PLUGIN_ICONS?>delete_disabled.png"
 	                        	alt="<?php echo hsc($helper->getLang('delete_action')) ?>"
 	                        	title="<?php echo hsc($helper->getLang('delete_action_tooltip_disabled')) ?>" />
-	                       <img src="<?php echo 'lib/plugins/confmanager/icons/picture_edit_disabled.png' ?>"
+	                       <img src="<?php echo DOKU_PLUGIN_ICONS.'picture_edit_disabled.png' ?>"
 	                        	alt="<?php echo hsc($helper->getLang('edit_icon_action')) ?>"
 	                        	title="<?php echo hsc($helper->getLang('edit_icon_action_tooltip_disabled')) ?>" />
 	                </td>

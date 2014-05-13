@@ -3,7 +3,7 @@
  * Plugin imagereference
  *
  * Syntax: <tabref linkname> - creates a table link to a table
- *         <tabcaption linkname <orientation> | Image caption> Image/Table</tabcaption>
+ *         <tabcaption linkname <orientation> | Table caption> Table</tabcaption>
  *
  * @license    GPL 2 (http://www.gnu.org/licenses/gpl.html)
  * @author     Gerrit Uitslag <klapinklapin@gmail.com>
@@ -11,11 +11,6 @@
 
 if(!defined('DOKU_INC')) die();
 
-if(!defined('DOKU_LF')) define('DOKU_LF', "\n");
-if(!defined('DOKU_TAB')) define('DOKU_TAB', "\t");
-if(!defined('DOKU_PLUGIN')) define('DOKU_PLUGIN', DOKU_INC.'lib/plugins/');
-
-require_once DOKU_PLUGIN.'syntax.php';
 /**
  * All DokuWiki plugins to extend the parser/rendering mechanism
  * need to inherit from this class
@@ -25,19 +20,19 @@ class syntax_plugin_imagereference_tabcaption extends syntax_plugin_imagereferen
     /**
      * @return string Syntax type
      */
-    function getType() {
+    public function getType() {
         return 'formatting';
     }
     /**
      * @return string Paragraph type
      */
-    function getPType() {
+    public function getPType() {
         return 'block';
     }
     /**
      * @return int Sort order
      */
-    function getSort() {
+    public function getSort() {
         return 196;
     }
 
@@ -48,8 +43,12 @@ class syntax_plugin_imagereference_tabcaption extends syntax_plugin_imagereferen
      * @param string $mode Parser mode
      * @return bool true if $mode is accepted
      */
-    function accepts($mode) {
-        if($mode == 'table') return true;
+    public function accepts($mode) {
+        $allowedsinglemodes = array(
+            'table', //allowed content
+            'plugin_diagram_main'    //plugins
+        );
+        if(in_array($mode, $allowedsinglemodes)) return true;
 
         return parent::accepts($mode);
     }
@@ -59,13 +58,19 @@ class syntax_plugin_imagereference_tabcaption extends syntax_plugin_imagereferen
      *
      * @param string $mode Parser mode
      */
-    function connectTo($mode) {
+    public function connectTo($mode) {
         $this->Lexer->addEntryPattern('<tabcaption.*?>(?=.*?</tabcaption>)', $mode, 'plugin_imagereference_tabcaption');
-
     }
 
-    function postConnect() {
+    public function postConnect() {
         $this->Lexer->addExitPattern('</tabcaption>', 'plugin_imagereference_tabcaption');
     }
+
+    /**
+     * @var string $captionStart opening tag of caption, image/table dependent
+     * @var string $captionEnd closing tag of caption, image/table dependent
+     */
+    protected $captionStart = '<div id="%s" class="tabcaptionbox%s"><div class="tabcaption%s">';
+    protected $captionEnd   = '</div></div>';
 }
 

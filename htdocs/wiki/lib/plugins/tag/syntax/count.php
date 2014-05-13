@@ -7,7 +7,7 @@
  * Usage: {{tag>category tags space separated}}
  *
  * @license  GPL 2 (http://www.gnu.org/licenses/gpl.html)
- * @author   Matthias Schulte <mailinglist@lupo49.de>
+ * @author   Matthias Schulte <dokuwiki@lupo49.de>
  */
  
 // must be run within Dokuwiki
@@ -66,7 +66,7 @@ class syntax_plugin_tag_count extends DokuWiki_Syntax_Plugin {
         if (!$tags) $tags = '+';
 
         /** @var helper_plugin_tag $my */
-        if(!($my = plugin_load('helper', 'tag'))) return false;
+        if(!($my = $this->loadHelper('tag'))) return false;
 
         return array($my->_parseTagList($tags), $allowedNamespaces);
     }
@@ -90,7 +90,7 @@ class syntax_plugin_tag_count extends DokuWiki_Syntax_Plugin {
 
         if($mode == "xhtml") {
             /** @var helper_plugin_tag $my */
-            if(!($my = plugin_load('helper', 'tag'))) return false;
+            if(!($my = $this->loadHelper('tag'))) return false;
 
             // get tags and their occurrences
             if($tags[0] == '+') {

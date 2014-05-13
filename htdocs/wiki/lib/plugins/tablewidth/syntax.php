@@ -22,7 +22,7 @@ class syntax_plugin_tablewidth extends DokuWiki_Syntax_Plugin {
     }
 
     function getType() {
-        return 'substition';
+        return 'container';
     }
 
     function getPType() {
@@ -34,7 +34,7 @@ class syntax_plugin_tablewidth extends DokuWiki_Syntax_Plugin {
     }
 
     function connectTo($mode) {
-        $this->Lexer->addSpecialPattern('\n\|<[^\n]+?>\|(?=\s*?\n[|^])', $mode, $this->mode);
+        $this->Lexer->addSpecialPattern('[\t ]*\n\|<[^\n]+?>\|(?=\s*?\n[|^])', $mode, $this->mode);
     }
 
     function handle($match, $state, $pos, &$handler) {

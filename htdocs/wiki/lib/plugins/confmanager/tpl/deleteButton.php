@@ -1,6 +1,6 @@
 <a class="deleteButton clickable">
 	<img
-		src="lib/plugins/confmanager/icons/delete.png"
+		src="<?php echo DOKU_PLUGIN_ICONS.'delete.png'?>"
 		alt="<?php echo hsc($helper->getLang('delete_action')) ?>"
 		title="<?php echo hsc($helper->getLang('delete_action_tooltip')) ?>"
 	/>

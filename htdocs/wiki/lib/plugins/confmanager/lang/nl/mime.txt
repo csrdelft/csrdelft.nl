@@ -1,0 +1,11 @@
+Welke bestandtypes je kunt uploaden via de [[doku>nl:mediamanager]] is geconfigureerd met het ''conf/mime.conf'' bestand. Het configureert welke mimetype geassocieerd moet worden met een bestandsextensie.
+
+Om veiligheidsredenen is het niet mogelijk om [[doku>DokuWiki]] zo te configureren dat het elke bestandstype toestaan, je moet elke bestandstype opgeven.
+
+:!: **Schakel nooit HTML upload in voor ongeschermde wiki's**, omdat dit Cross Site Scripting kwetsbaarheden (aanroepen van scripts van externe websites) mogelijk maakt via Javascript. Aanvullend is het nodig bij het toevoegen van het HTML mimetype in het configuratiebestand, dat je de [[doku>config:iexssprotect]] uitschakelt.
+
+Extra iconen in vergelijkbare stijl zijn beschikbaar op http://www.splitbrain.org/projects/file_icons
+
+Je kunt elk soort bestandextensie met bijhorende mimetype vinden op http://filext.com/
+
+Meer informatie kun je vinden op [[doku>nl:mime]].

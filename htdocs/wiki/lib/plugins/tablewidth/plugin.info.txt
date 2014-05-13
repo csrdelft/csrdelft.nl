@@ -1,7 +1,7 @@
 base   tablewidth
 author Mykola Ostrovskyy
 email  spambox03@mail.ru
-date   2010-11-18
+date   2013-12-03
 name   Table Width Plugin
 desc   Allows to specify width of table columns.
 url    http://www.dokuwiki.org/plugin:tablewidth

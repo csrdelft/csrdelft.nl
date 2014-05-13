@@ -6,4 +6,4 @@
 $lang['imgshort'] = 'Abb.';
 $lang['tabshort'] = 'Tab.';
 $lang['imgfull']  = 'Abbildung';
-$lang['tabfull']  = 'table';
+$lang['tabfull']  = 'Tabelle';

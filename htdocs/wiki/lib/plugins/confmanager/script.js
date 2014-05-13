@@ -5,6 +5,10 @@ jQuery(document).ready(function() {
 	var COOKIE_DESCRIPTION_NAME = 'DW_Admin_ConfManager_showDescription';
 	var COOKIE_DEFAULTS_NAME = 'DW_Admin_ConfManager_showDefaults';
 	
+	var ICON_BASE_URL=DOKU_BASE+'lib/plugins/confmanager/icons/';
+	var collapse_icon = ICON_BASE_URL+'collapse.png';
+	var expand_icon = ICON_BASE_URL+'expand.png';
+
 	var readCookie = function(cookieKey) {
 		var ARRcookies=document.cookie.split(";");
 		for (var i=0;i<ARRcookies.length;i++) {
@@ -38,20 +42,20 @@ jQuery(document).ready(function() {
 	var setDescriptionVisible = function(show) {
 		if(show) {
 			jQuery('#description').show();
-			jQuery('#description_toggle_button').attr('src', 'lib/plugins/confmanager/icons/collapse.png');
+			jQuery('#description_toggle_button').attr('src', collapse_icon);
 		} else {
 			jQuery('#description').hide();
-			jQuery('#description_toggle_button').attr('src', 'lib/plugins/confmanager/icons/expand.png');
+			jQuery('#description_toggle_button').attr('src', expand_icon);
 		}
 	};
 	
 	var setDefaultsVisible = function(show) {
 		if(show) {
 			jQuery('.defaults').show();
-			jQuery('#defaults_toggle_button').attr('src', 'lib/plugins/confmanager/icons/collapse.png');
+			jQuery('#defaults_toggle_button').attr('src', collapse_icon);
 		} else {
 			jQuery('.defaults').hide();
-			jQuery('#defaults_toggle_button').attr('src', 'lib/plugins/confmanager/icons/expand.png');
+			jQuery('#defaults_toggle_button').attr('src', expand_icon);
 		}
 	};
 	

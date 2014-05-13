@@ -1,0 +1,28 @@
+Het originele idee van InterWiki was om één grote verspreide [[wp>Wiki]] over het hele internet te hebben. Vandaag is het meer een makkelijke manier om van de ene naar de andere wiki te verwijzen met simpele link syntax.
+
+In [[doku>DokuWiki]] wordt dit gedaan door een afkorting als voorvoegsel voor Wiki [[doku>nl:pagenames|paginanamen]] te plaatsen gescheiden met een ">" teken.
+
+Voorbeelden:
+<code>
+[[wp>Wiki]] linkt naar Wikipedia,
+[[Meatball>TourBusStop]] linkt naar deMeatBall wiki TourBusStop,
+[[google>Wiki]] linkt naar een Google zoekactie,
+[[doku>interwiki]] linkt naar deze pagina
+</code>
+
+[[wp>Wiki]] linkt naar Wikipedia, [[Meatball>TourBusStop]] naar deMeatBall wiki TourBusStop,
+[[google>Wiki]]  naar een Google zoekactie,
+[[doku>interwiki]] deze tekst maar dan in de DokuWiki wiki.
+
+Er is een speciale interwiki afkorting genaamd **''this''**. Het verwijst altijd naar de webserver locatie waar jouw DokuWiki is geïnstalleerd. Je kunt het gebruiken om relatieve URLs te maken. Bijvoorbeeld het volgende verwijst altijd naar de lokale [[doku>nl:syndication|XML feed]]: [[this>feed.php]]
+
+<code>
+[[this>feed.php]]
+</code>
+
+**Meer informatie over InterWiki:**
+
+  * [[wp>InterWiki]] op Wikipedia
+  * [[MeatBall>InterWiki]] op MeatBall
+  * [[Wiki>InterWiki]] op c2.com Wiki
+  * [[doku>interwiki]]

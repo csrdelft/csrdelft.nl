@@ -71,5 +71,13 @@ class helper_plugin_confmanager extends DokuWiki_Plugin {
         include DOKU_PLUGIN . 'confmanager/tpl/formControls.php';
         $called = true;
     }
+
+    public function prepareEntity($str) {
+        $str = trim($str);
+        $str = str_replace("\n", '', $str);
+        $str = str_replace("\r", '', $str);
+        $str = str_replace('#', '\\#', $str);
+        return $str;
+    }
 }
 

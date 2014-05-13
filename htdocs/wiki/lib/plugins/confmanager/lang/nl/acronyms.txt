@@ -1,0 +1,5 @@
+[[doku>DokuWiki]] kan afkortingen en acroniemen (terminologie) automatisch markeren. Als je browser de <acronym> tag ondersteunt, kun je met je muis over de afkorting bewegen om een korte uitleg te zien, weergegeven als tooltip. Bijvoorbeeld, als de muis boven "XML" wordt geplaatst (welke opgenomen in de standaard lijst met acroniemen), verschijnt er een tooltip die weergeeft "Extensible Markup Language".
+
+Merk op: alleen complete woorden worden gemarkeerd. Dat wil zeggen, een acroniem die wordt gebruikt binnen een woord zal geen acroniem tooltip krijgen. Voorbeeld: XML is een acroniem, myXML is niet.
+
+Meer informatie kan worden gevonden op [[doku>nl:abbreviations]].

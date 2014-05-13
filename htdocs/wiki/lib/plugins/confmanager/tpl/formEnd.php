@@ -8,7 +8,7 @@
     <div class="popup">
 		<h3 class="popupheader">File Upload</h3>
 		<div class="popupcontent" id="popup_select_file">
-			<form id="fileuploadform" enctype="multipart/form-data" method="POST" action="<?php echo 'lib/exe/ajax.php' ?>">
+			<form id="fileuploadform" enctype="multipart/form-data" method="POST" action="<?php echo DOKU_BASE.'lib/exe/ajax.php' ?>">
 				<div class="popupprompt"><?php echo $helper->getLang('file_upload_prompt') ?></div>
 				<input type="file" name="icon" id="file_upload_input" />
 				<br/>

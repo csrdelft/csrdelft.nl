@@ -1,0 +1,29 @@
+L'idée originale d'InterWiki était d'avoir un grand Wiki réparti sur tout internet. Aujourd'hui c'est plutôt une façon  de lier facilement un wiki à un autre avec une syntaxe simple et facile à mettre en œuvre.
+
+On fait cela dans [[doku>fr:dokuwiki|DokuWiki]] en préfixant les [[doku>fr:pagenames|noms de page]] avec un raccourci suivi du caractère ''>''.
+
+Par exemple
+<code>
+[[wp>Wiki]] crée un lien vers Wikipedia (anglais),
+[[wpfr>Wiki]] un lien vers Wikipedia francophone,
+[[Meatball>TourBusStop]] un lien vers la page TourBusStop de MeatBall,
+[[google>Wiki]] lien vers une recherche google,
+[[doku>fr:interwiki]] lien vers page fr:interwiki de DokuWiki.
+</code>
+
+[[wp>Wiki]] crée un lien vers Wikipedia (anglais),
+[[wpfr>Wiki]] un lien vers Wikipedia francophone,
+[[Meatball>TourBusStop]] un lien vers la page TourBusStop de MeatBall,
+[[google>Wiki]] lien vers une recherche google,
+[[doku>fr:interwiki]] lien vers page fr:interwiki de DokuWiki.
+
+Il existe un lien interwiki spécial nommé ''**this**'' qui lie toujours vers le DokuWiki où il se trouve. Vous pouvez l'utiliser pour construire des URL relatifs. Par exemple; le lien suivant pointera toujours vers le [[doku>fr:syndication|flux XML]] local : [[this>feed.php]].
+
+<code> [[this>feed.php]] </code> 
+
+Pour de plus amples renseignements sur les liens InterWiki
+
+  * [[wpfr>InterWiki]] sur Wikipedia
+  * [[MeatBall>InterWiki]] sur MeatBall
+  * [[Wiki>InterWiki]] sur le Wiki  c2.com
+  * [[doku>fr:interwiki]]  sur DokuWiki

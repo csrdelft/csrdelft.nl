@@ -8,7 +8,7 @@ class ConfigManagerTwoLineLeftImageConfigCascade extends ConfigManagerTwoLineCas
     public function __construct($name, $imageFolder, $extension) {
         parent::__construct($name);
          $this->setImageFolder($imageFolder);
-        $this->extension = $extension;
+        $this->extension = explode(',',$extension);
     }
 
     public function display() {
@@ -22,9 +22,11 @@ class ConfigManagerTwoLineLeftImageConfigCascade extends ConfigManagerTwoLineCas
     }
 
     private function getImage($key) {
-        $path = $this->imageFolder . "$key." . $this->extension;
+        foreach($this->extension as $ext){
+        $path = $this->imageFolder . "$key." . $ext;
         if (is_file($path)) {
             return DOKU_BASE . $path;
+        }
         }
         return '';
     }
@@ -70,13 +72,13 @@ class ConfigManagerTwoLineLeftImageConfigCascade extends ConfigManagerTwoLineCas
             return false;
         }
         $extension = substr($icon['name'], $extension+1);
-        if ($extension !== $this->extension) {
+        if (!in_array($extension, $this->extension)) {
             header('Content-Type: text/plain');
             echo $this->helper->getLang('upload_errWrongFileExtension');
             return false;
         }
 
-        if (!@move_uploaded_file($icon['tmp_name'], DOKU_INC . $this->imageFolder . "$key." . $this->extension)) {
+        if (!@move_uploaded_file($icon['tmp_name'], DOKU_INC . $this->imageFolder . "$key." . $extension)) {
             header('Content-Type: text/plain');
             echo $this->helper->getLang('upload_errCannotMoveUploadedFileToFolder');
             return false;
@@ -101,8 +103,7 @@ class ConfigManagerTwoLineLeftImageConfigCascade extends ConfigManagerTwoLineCas
             echo $this->helper->getLang('upload_errCannotOverwriteDefaultKey');
             return false;
         }
-
-        if (!@unlink(DOKU_INC . $this->imageFolder . "$key." . $this->extension)) {
+        if (!@unlink(DOKU_INC . $this->imageFolder . "$key." . $extension)) {
             echo $this->helper->getLang('iconDelete_error');
             return false;
         }

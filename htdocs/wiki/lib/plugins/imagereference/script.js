@@ -1,3 +1,32 @@
+/**
+ *  Extends toolbar
+ *  Image captions:
+ *     - copy url from image to magnify button
+ *     - try copy image title to caption
+ *     - try copy alignment of image to caption
+ *     - resize box to width of image
+ */
+
+if (window.toolbar !== undefined) {
+    toolbar[toolbar.length] = {
+        "type": "format",
+        "title": "Adds an ImageCaption tag",
+        "icon": "../../plugins/imagereference/button.png",
+        "key": "",
+        "open": "<imgcaption image1|>",
+        "close": "</imgcaption>"
+    };
+    toolbar[toolbar.length] = {
+        "type": "format",
+        "title": "Adds an ImageReference tag",
+        "icon": "../../plugins/imagereference/refbutton.png",
+        "key": "",
+        "open": "<imgref ",
+        "sample": "image1",
+        "close": ">"
+    };
+}
+
 function checkImages() {
 
     jQuery('span.imgcaption').each(function () {
@@ -41,25 +70,6 @@ function checkImages() {
 }
 
 
-if (window.toolbar !== undefined) {
-    toolbar[toolbar.length] = {
-        "type": "format",
-        "title": "Adds an ImageCaption tag",
-        "icon": "../../plugins/imagereference/button.png",
-        "key": "",
-        "open": "<imgcaption image1|>",
-        "close": "</imgcaption>"
-    };
-    toolbar[toolbar.length] = {
-        "type": "format",
-        "title": "Adds an ImageReference tag",
-        "icon": "../../plugins/imagereference/refbutton.png",
-        "key": "",
-        "open": "<imgref ",
-        "sample": "image1",
-        "close": ">"
-    };
-}
 
 jQuery(function () {
     checkImages();
@@ -68,10 +78,19 @@ jQuery(function () {
 // Chrome returns 0 for jQuery().width() on not scaled images, when not loaded yet before js runs
 // TODO: do this in css??
 jQuery(window).load(function () {
-    jQuery('span.imgcaption.img').each(function () {
+    jQuery('span.imgcaption').each(function () {
         //set imgcaption width equal to image
         var $imgcaption = jQuery(this);
         var width = $imgcaption.find('img').width();
         $imgcaption.width((width + 8) + "px");
     });
+
+    jQuery('div.tabcaption').each(function() {
+        var $imgcaption = jQuery(this);
+
+        //add wrapper to center imgcaption
+        if ($imgcaption.hasClass('center')) {
+            $imgcaption.wrap('<span class="imgcaption_centerwrapper"></span>');
+        }
+    })
 });

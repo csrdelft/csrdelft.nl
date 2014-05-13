@@ -303,6 +303,12 @@ class ImageMap_Handler {
       $data =& $this->calls[$n][1];
       $type = $this->calls[$n][0];
       switch ($type) {
+	  case 'plugin':
+	  
+        if ( $plugin =& plugin_load('syntax', $data[0]) && method_exists($plugin, 'convertToImageMapArea')) {
+        	$plugin->convertToImageMapArea($this, $data[1], $pos);
+        	break;
+        }
       case 'internallink':
       case 'locallink':
       case 'externallink':

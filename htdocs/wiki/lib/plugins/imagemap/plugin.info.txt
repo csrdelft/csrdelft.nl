@@ -1,8 +1,8 @@
 base    imagemap
-author  Tom N Harris
-email   tnharris@whoopdedo.org
-date    2012-05-31
+author  Tom N Harris / Gerry Weißbach
+email   tools@inetsoftware.de
+date    2014-03-27
 name    Image Map Plugin
 desc    Create client-side image maps.
-url     http://whoopdedo.org/doku/wiki/imagemap
+url     https://github.com/i-net-software/dokuwiki-plugin-imagemap
 

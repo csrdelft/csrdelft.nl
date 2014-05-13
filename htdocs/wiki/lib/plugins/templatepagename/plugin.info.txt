@@ -1,7 +1,7 @@
 base   templatepagename
-author Martin
-email  martin@sound4.biz
-date   2012-07-16
+author Gerrit Uitslag (previous: Martin)
+email  klapinklapin@gmail.com
+date   2014-04-29
 name   templatepagename plugin
 desc   Set a default template page name
-url    http://dokuwiki.org
+url    https://dokuwiki.org/plugin:templatepagename

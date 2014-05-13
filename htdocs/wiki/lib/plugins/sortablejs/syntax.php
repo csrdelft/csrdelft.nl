@@ -13,6 +13,7 @@
  * version 2.3a Fixed default sort with aligned text (Andre Rauschenbach)
  * version 2.4 Added options to set manual override options for column sort. (nosort, numeric, alpha, ddmm, mmdd)
  * version 2.5 Fixed problems with secionediting, footnotes and edittable
+ * version 2.6 Added support for jQuery and dokuwiki Weatherwax ->
  */
 // must be run within Dokuwiki
 if (!defined('DOKU_INC')) die();

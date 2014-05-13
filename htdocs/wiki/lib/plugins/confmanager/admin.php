@@ -1,5 +1,7 @@
 <?php
 
+if(!defined('DOKU_PLUGIN_ICONS')) define('DOKU_PLUGIN_ICONS',DOKU_BASE.'lib/plugins/confmanager/icons/');
+
 require_once DOKU_PLUGIN . 'confmanager/adminActions/ConfigManagerAdminAction.php';
 require_once DOKU_PLUGIN . 'confmanager/adminActions/ConfigManagerAdminOverview.php';
 require_once DOKU_PLUGIN . 'confmanager/adminActions/ConfigManagerAdminShowConfig.php';

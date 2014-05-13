@@ -13,6 +13,9 @@ require_once(DOKU_PLUGIN.'syntax.php');
 
 class syntax_plugin_wrap_div extends DokuWiki_Syntax_Plugin {
 
+    protected $entry_pattern = '<div.*?>(?=.*?</div>)';
+    protected $exit_pattern  = '</div>';
+
     function getType(){ return 'formatting';}
     function getAllowedTypes() { return array('container', 'formatting', 'substition', 'protected', 'disabled', 'paragraphs'); }
     function getPType(){ return 'stack';}
@@ -27,21 +30,18 @@ class syntax_plugin_wrap_div extends DokuWiki_Syntax_Plugin {
      * Connect pattern to lexer
      */
     function connectTo($mode) {
-        $this->Lexer->addEntryPattern('<WRAP.*?>(?=.*?</WRAP>)',$mode,'plugin_wrap_div');
-        $this->Lexer->addEntryPattern('<block.*?>(?=.*?</block>)',$mode,'plugin_wrap_div');
-        $this->Lexer->addEntryPattern('<div.*?>(?=.*?</div>)',$mode,'plugin_wrap_div');
+        $this->Lexer->addEntryPattern($this->entry_pattern,$mode,'plugin_wrap_'.$this->getPluginComponent());
     }
 
     function postConnect() {
-        $this->Lexer->addExitPattern('</WRAP>', 'plugin_wrap_div');
-        $this->Lexer->addExitPattern('</block>', 'plugin_wrap_div');
-        $this->Lexer->addExitPattern('</div>', 'plugin_wrap_div');
+        $this->Lexer->addExitPattern($this->exit_pattern, 'plugin_wrap_'.$this->getPluginComponent());
     }
 
     /**
      * Handle the match
      */
-    function handle($match, $state, $pos, &$handler){
+    function handle($match, $state, $pos, Doku_Handler &$handler){
+        global $conf;
         switch ($state) {
             case DOKU_LEXER_ENTER:
                 $data = strtolower(trim(substr($match,strpos($match,' '),-1)));
@@ -62,6 +62,10 @@ class syntax_plugin_wrap_div extends DokuWiki_Syntax_Plugin {
                     $title = trim($title);
 
                     $handler->_addCall('header',array($title,$level,$pos), $pos);
+                    // close the section edit the header could open
+                    if ($title && $level <= $conf['maxseclevel']) {
+                        $handler->addPluginCall('wrap_closesection', array(), DOKU_LEXER_SPECIAL, $pos, '');
+                    }
                 }
                 return false;
 
@@ -74,14 +78,23 @@ class syntax_plugin_wrap_div extends DokuWiki_Syntax_Plugin {
     /**
      * Create output
      */
-    function render($mode, &$renderer, $indata) {
+    function render($mode, Doku_Renderer &$renderer, $indata) {
 
         if (empty($indata)) return false;
         list($state, $data) = $indata;
 
         if($mode == 'xhtml'){
+            /** @var Doku_Renderer_xhtml $renderer */
             switch ($state) {
                 case DOKU_LEXER_ENTER:
+                    // add a section edit right at the beginning of the wrap output
+                    $renderer->startSectionEdit(0, 'plugin_wrap_start');
+                    $renderer->finishSectionEdit();
+                    // add a section edit for the end of the wrap output. This prevents the renderer
+                    // from closing the last section edit so the next section button after the wrap syntax will
+                    // include the whole wrap syntax
+                    $renderer->startSectionEdit(0, 'plugin_wrap_end');
+
                     $wrap =& plugin_load('helper', 'wrap');
                     $attr = $wrap->buildAttributes($data, 'plugin_wrap');
 
@@ -90,6 +103,7 @@ class syntax_plugin_wrap_div extends DokuWiki_Syntax_Plugin {
 
                 case DOKU_LEXER_EXIT:
                     $renderer->doc .= "</div>";
+                    $renderer->finishSectionEdit();
                     break;
             }
             return true;

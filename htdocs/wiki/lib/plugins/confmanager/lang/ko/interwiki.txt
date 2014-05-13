@@ -1,0 +1,26 @@
+InterWiki의 원래 아이디어는 인터넷 공간 상에서 분산된 [[wp>Wiki]]를 만드는 것이었습니다. 오늘날에는 한 위키에서 다른 위키로 연결할 수 있는 간단한 방법입니다.
+
+[[doku>DokuWiki]] 에서는 Wiki의 접두어와 ">" 문자, 그리고 [[doku>pagenames]]의 조합으로 표현됩니다.
+
+예를 들어,
+<code>
+[[wp>Wiki]] links to Wikipedia,
+[[Meatball>TourBusStop]] links to the MeatBall wiki TourBusStop,
+[[google>Wiki]] links to a Google search,
+[[doku>interwiki]] links to this page
+</code>
+
+[[wp>Wiki]] 는 Wikipedia로 연결됩니다.
+[[Meatball>TourBusStop]] 는 MeatBall 위키의 TourBusStop 페이지로 연결됩니다.
+[[google>Wiki]] 는 구글 검색으로 연결됩니다.
+[[doku>interwiki]] 는 이 페이지로 연결합니다.
+
+InterWiki의 특별한 단축 링크는 **''this''** 입니다. DokuWiki가 설치된 웹서버 디렉토리로 항상 연결해줍니다. 즉, 상대 경로(URL)을 생성하는 데 사용할 수 있습니다. 예를 들어 [[this>feed.php]] 링크는 항상[[doku>syndication|XML feed]] 을 가르킵니다.
+
+<code> [[this>feed.php]] </code>
+
+**InterWiki 에 대한 더 자세한 내용**
+  * [[wp>InterWiki]] at Wikipedia
+  * [[MeatBall>InterWiki]] at MeatBall
+  * [[Wiki>InterWiki]] at c2.com Wiki
+  * [[doku>interwiki]]

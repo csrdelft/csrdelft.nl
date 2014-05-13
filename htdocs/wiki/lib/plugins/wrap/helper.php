@@ -23,7 +23,12 @@ class helper_plugin_wrap extends DokuWiki_Plugin {
 
         $attr = array();
         $tokens = preg_split('/\s+/', $data, 9);
-        $noPrefix = array_map('trim', explode(",", $this->getConf('noPrefix')));
+        $noPrefix = array_map('trim', explode(',', $this->getConf('noPrefix')));
+        $restrictedClasses = $this->getConf('restrictedClasses');
+        if ($restrictedClasses) {
+            $restrictedClasses = array_map('trim', explode(',', $this->getConf('restrictedClasses')));
+        }
+        $restrictionType = $this->getConf('restrictionType');
 
         foreach ($tokens as $token) {
 
@@ -39,9 +44,25 @@ class helper_plugin_wrap extends DokuWiki_Plugin {
                 continue;
             }
 
+            //get id
+            if (preg_match('/#([A-Za-z0-9_-]+)/', $token)) {
+                $attr['id'] = trim($token,'#');
+                continue;
+            }
+
             //get classes
             //restrict token (class names) characters to prevent any malicious data
             if (preg_match('/[^A-Za-z0-9_-]/',$token)) continue;
+            if ($restrictedClasses) {
+                $classIsInList = in_array(trim($token), $restrictedClasses);
+                // either allow only certain classes
+                if ($restrictionType) {
+                    if (!$classIsInList) continue;
+                // or disallow certain classes
+                } else {
+                    if ($classIsInList) continue;
+                }
+            }
             $prefix = in_array($token, $noPrefix) ? '' : 'wrap_';
             $attr['class'] = (isset($attr['class']) ? $attr['class'].' ' : '').$prefix.$token;
         }
@@ -70,8 +91,16 @@ class helper_plugin_wrap extends DokuWiki_Plugin {
             if($attr['class']) $out .= ' class="'.hsc($attr['class']).' '.$addClass.'"';
             // if used in other plugins, they might want to add their own class(es)
             elseif($addClass)  $out .= ' class="'.$addClass.'"';
+            if($attr['id'])    $out .= ' id="'.hsc($attr['id']).'"';
             // width on spans normally doesn't make much sense, but in the case of floating elements it could be used
-            if($attr['width']) $out .= ' style="width:'.hsc($attr['width']).';"';
+            if($attr['width']) {
+                if (strpos($attr['width'],'%') !== false) {
+                    $out .= ' style="width: '.hsc($attr['width']).';"';
+                } else {
+                    // anything but % should be 100% when the screen gets smaller
+                    $out .= ' style="width: '.hsc($attr['width']).'; max-width: 100%;"';
+                }
+            }
             // only write lang if it's a language in lang2dir.conf
             if($attr['dir'])   $out .= ' lang="'.$attr['lang'].'" xml:lang="'.$attr['lang'].'" dir="'.$attr['dir'].'"';
         }

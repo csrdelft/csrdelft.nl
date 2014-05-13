@@ -12,11 +12,6 @@
 
 if(!defined('DOKU_INC')) die();
 
-if(!defined('DOKU_LF')) define('DOKU_LF', "\n");
-if(!defined('DOKU_TAB')) define('DOKU_TAB', "\t");
-if(!defined('DOKU_PLUGIN')) define('DOKU_PLUGIN', DOKU_INC.'lib/plugins/');
-
-require_once DOKU_PLUGIN.'syntax.php';
 /**
  * All DokuWiki plugins to extend the parser/rendering mechanism
  * need to inherit from this class
@@ -24,26 +19,26 @@ require_once DOKU_PLUGIN.'syntax.php';
 class syntax_plugin_imagereference_imgcaption extends DokuWiki_Syntax_Plugin {
 
     /* @var array $_captionparam */
-    var $_captionparam = array();
+    protected $_captionparam = array();
 
     /**
      * @return string Syntax type
      */
-    function getType() {
+    public function getType() {
         return 'formatting';
     }
 
     /**
      * @return string Paragraph type
      */
-    function getPType() {
+    public function getPType() {
         return 'normal';
     }
 
     /**
      * @return int Sort order
      */
-    function getSort() {
+    public function getSort() {
         return 196;
     }
 
@@ -54,11 +49,12 @@ class syntax_plugin_imagereference_imgcaption extends DokuWiki_Syntax_Plugin {
      * @param string $mode Parser mode
      * @return bool true if $mode is accepted
      */
-    function accepts($mode) {
+    public function accepts($mode) {
         $allowedsinglemodes = array(
             'media', //allowed content
             'internallink', 'externallink', 'linebreak', //clickable img allowed
-            'emaillink', 'windowssharelink', 'filelink'
+            'emaillink', 'windowssharelink', 'filelink',
+            'plugin_graphviz', 'plugin_ditaa'    //plugins
         );
         if(in_array($mode, $allowedsinglemodes)) return true;
 
@@ -70,12 +66,12 @@ class syntax_plugin_imagereference_imgcaption extends DokuWiki_Syntax_Plugin {
      *
      * @param string $mode Parser mode
      */
-    function connectTo($mode) {
+    public function connectTo($mode) {
         $this->Lexer->addEntryPattern('<imgcaption.*?>(?=.*?</imgcaption>)', $mode, 'plugin_imagereference_imgcaption');
 
     }
 
-    function postConnect() {
+    public function postConnect() {
         $this->Lexer->addExitPattern('</imgcaption>', 'plugin_imagereference_imgcaption');
     }
 
@@ -88,8 +84,8 @@ class syntax_plugin_imagereference_imgcaption extends DokuWiki_Syntax_Plugin {
      * @param Doku_Handler    $handler The handler
      * @return array Data for the renderer
      */
-    function handle($match, $state, $pos, &$handler) {
-
+    public function handle($match, $state, $pos, Doku_Handler &$handler) {
+        global $ACT;
         switch($state) {
             case DOKU_LEXER_ENTER :
                 $rawparam = trim(substr($match, 1, -1));
@@ -97,6 +93,11 @@ class syntax_plugin_imagereference_imgcaption extends DokuWiki_Syntax_Plugin {
 
                 //store parameters for closing tag
                 $this->_captionparam = $param;
+
+                //local counter for preview
+                if($ACT == 'preview') {
+                    self::captionReferencesStorage($param['type'], $param);
+                }
 
                 return array('caption_open', $param);
 
@@ -125,8 +126,8 @@ class syntax_plugin_imagereference_imgcaption extends DokuWiki_Syntax_Plugin {
      * @param array          $indata    The data from the handler function
      * @return bool If rendering was successful.
      */
-    function render($mode, &$renderer, $indata) {
-        global $ID;
+    public function render($mode, Doku_Renderer &$renderer, $indata) {
+        global $ID, $ACT;
         list($case, $data) = $indata;
 
         switch($mode) {
@@ -144,8 +145,16 @@ class syntax_plugin_imagereference_imgcaption extends DokuWiki_Syntax_Plugin {
 
                     case 'caption_close' :
                         //determine referencenumber
-                        $caprefs           = p_get_metadata($ID, 'captionreferences '.$data['type']);
+                        if($ACT == 'preview') {
+                            $caprefs = self::getCaptionreferences($ID, $data['type']);
+                        } else {
+                            $caprefs = p_get_metadata($ID, 'captionreferences '.$data['type']);
+                        }
                         $data['refnumber'] = array_search($data['caprefname'], $caprefs);
+
+                        if(!$data['refnumber']) {
+                            $data['refnumber'] = "##";
+                        }
 
                         $renderer->doc .= $this->_capend($data);
                         return true;
@@ -189,7 +198,7 @@ class syntax_plugin_imagereference_imgcaption extends DokuWiki_Syntax_Plugin {
                         } elseif(strpos($data['classes'], 'right') !== false) {
                             $orientation = "\\right";
                         }
-                        $renderer->doc .= "\\begin{".$floattype."}[H!]{".$orientation;
+                        $renderer->doc .= "\\begin{".$floattype."}[!h]{".$orientation."}";
                         return true;
 
                     case 'data' :
@@ -206,12 +215,52 @@ class syntax_plugin_imagereference_imgcaption extends DokuWiki_Syntax_Plugin {
     }
 
     /**
+     * When a array of caption data is given, this is stored. Otherwise the array is returned
+     *
+     * @param string $type          'img' or 'tab'
+     * @param array  $captiondata   array with data of the caption
+     * @param string $id            page id
+     * @return void|array
+     */
+    static private function captionReferencesStorage($type, $captiondata = null, $id = null) {
+        global $ID;
+        static $captionreferences = array();
+
+        if($captiondata !== null) {
+            //store reference names
+            if(!isset($captionreferences[$ID][$type])) {
+                $captionreferences[$ID][$type][] = '';
+            }
+            $captionreferences[$ID][$type][] = $captiondata['caprefname'];
+            return null;
+
+        } else {
+            //return reference names
+            if($id === null) {
+                $id = $ID;
+            }
+            return $captionreferences[$id][$type];
+        }
+    }
+
+    /**
+     * Returns the captionreferences of page
+     *
+     * @param string $id   page id
+     * @param string $type caption type 'img' or 'tab'
+     * @return array of stored reference names
+     */
+    static public function getCaptionreferences($id, $type) {
+        return self::captionReferencesStorage($type, null, $id);
+    }
+
+    /**
      * Parse parameters part of <imgcaption imgref class1 class2|Caption of image>
      *
      * @param string $str space separated parameters e.g."imgref class1 class2|Caption of image"
      * @return array(string imgrefname, string classes, string caption)
      */
-    function _parseParam($str) {
+    protected function _parseParam($str) {
         if($str == null || count($str) < 1) {
             return array();
         }
@@ -245,20 +294,25 @@ class syntax_plugin_imagereference_imgcaption extends DokuWiki_Syntax_Plugin {
     }
 
     /**
+     * @var string $captionStart opening tag of caption, image/table dependent
+     * @var string $captionEnd closing tag of caption, image/table dependent
+     */
+    protected $captionStart = '<span id="%s" class="imgcaption%s">';
+    protected $captionEnd   = '</span>';
+
+    /**
      * Create html of opening of caption wrapper
      *
      * @param array $data(caprefname, classes, ..)
      * @return string html start of caption wrapper
      */
-    function _capstart($data) {
-
-        $layout = '<span class="imgcaption'.($data['type'] =='img' ? ' img':'');
-        if($data['classes'] != "") {
-            $layout .= $data['classes'];
-        }
-        $layout .= '">';
-
-        return $layout;
+    protected function _capstart($data) {
+      return sprintf(
+          $this->captionStart,
+          $data['type'].'_'.cleanID($data['caprefname']),
+          (strpos($data['classes'], 'center') == false ? '':' center'),
+          $data['classes']  //needed for tabcaption
+      ).DOKU_LF;
     }
 
     /**
@@ -267,12 +321,14 @@ class syntax_plugin_imagereference_imgcaption extends DokuWiki_Syntax_Plugin {
      * @param array $data(caprefname, refnumber, caption, ..) Caption data
      * @return string html caption wrapper
      */
-    function _capend($data) {
-        return '<span class="undercaption">'
-                    .$this->getLang($data['type'].'short').' '.$data['refnumber'].($data['caption'] ? ': ' : '')
-                    .'<a name="'.$data['type'].'_'.cleanID($data['caprefname']).'">'.hsc($data['caption']).'</a>
-                    <a href=" "><span></span></a>
-                </span></span>';
+    protected function _capend($data) {
+        return DOKU_LF
+                .'<span class="undercaption">'.DOKU_LF
+                    .DOKU_TAB.$this->getLang($data['type'].'short').' '.$data['refnumber'].($data['caption'] ? ': ' : '')
+                    .' '.hsc($data['caption'])
+                    .' <a href=" "><span></span></a>'.DOKU_LF
+                .'</span>'.DOKU_LF
+            . $this->captionEnd;
     }
 }
 

@@ -61,7 +61,7 @@
 	                    </div>
 					</td>
 					<td>
-						<img src="<?php echo 'lib/plugins/confmanager/icons/delete_disabled.png' ?>"
+						<img src="<?php echo DOKU_PLUGIN_ICONS.'delete_disabled.png' ?>"
 	                        alt="<?php echo hsc($helper->getLang('delete_action')) ?>"
 	                        title="<?php echo hsc($helper->getLang('delete_action_tooltip_disabled')) ?>" />
 	                </td>

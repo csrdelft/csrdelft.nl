@@ -12,11 +12,6 @@
 
     if(!defined('DOKU_INC')) die();
 
-    if(!defined('DOKU_LF')) define('DOKU_LF', "\n");
-    if(!defined('DOKU_TAB')) define('DOKU_TAB', "\t");
-    if(!defined('DOKU_PLUGIN')) define('DOKU_PLUGIN', DOKU_INC.'lib/plugins/');
-
-    require_once DOKU_PLUGIN.'syntax.php';
     /**
      * All DokuWiki plugins to extend the parser/rendering mechanism
      * need to inherit from this class
@@ -61,7 +56,7 @@ class syntax_plugin_imagereference_imgref extends DokuWiki_Syntax_Plugin {
      * @param Doku_Handler    $handler The handler
      * @return array Data for the renderer
      */
-    function handle($match, $state, $pos, &$handler) {
+    function handle($match, $state, $pos, Doku_Handler &$handler) {
         $reftype = substr($match, 1, 3);
         $ref = substr($match, 7, -1);
 
@@ -91,8 +86,8 @@ class syntax_plugin_imagereference_imgref extends DokuWiki_Syntax_Plugin {
      * @param array          $data      The data from the handler function
      * @return bool If rendering was successful.
      */
-    function render($mode, &$renderer, $data) {
-        global $ID;
+    function render($mode, Doku_Renderer &$renderer, $data) {
+        global $ID, $ACT;
         if($data === false) return false;
 
         switch($mode) {
@@ -105,18 +100,22 @@ class syntax_plugin_imagereference_imgref extends DokuWiki_Syntax_Plugin {
                 resolve_pageid(getNS($ID), $data['page'], $exists);
 
                 //determine referencenumber
-                $caprefs   = p_get_metadata($data['page'], 'captionreferences '.$data['type']);
+                if($ACT == 'preview' && $data['page'] == $ID) {
+                    $caprefs = syntax_plugin_imagereference_imgcaption::getCaptionreferences($ID, $data['type']);
+                } else {
+                    $caprefs = p_get_metadata($data['page'], 'captionreferences '.$data['type']);
+                }
                 $refNumber = array_search($data['caprefname'], $caprefs);
 
                 if(!$refNumber) {
                     $refNumber = "##";
                 }
 
-                $renderer->doc .= '<a href="'.wl($data['page']).'#'.$data['type'].'_'.cleanID($data['caprefname']).'">'.$this->getLang($data['type'].'full').' '.$refNumber.'</a>';
+                $renderer->doc .= '<a href="'.wl($data['page']).'#'.$data['type'].'_'.cleanID($data['caprefname']).'">'.$this->getLang($data['type'].'full').'&nbsp;'.$refNumber.'</a>';
                 return true;
 
             case 'latex' :
-                $renderer->doc .= "\\ref{".$data['caprefname']."}";
+                $renderer->doc .= $this->getLang($data['type'].'full')." \\ref{".$data['caprefname']."}";
                 return true;
         }
         return false;

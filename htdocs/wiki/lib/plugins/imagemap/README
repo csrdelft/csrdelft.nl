@@ -39,9 +39,16 @@ most browsers. If using an image map is not desirable, however, the browser
 can hide the image and display the alternate markup. The plugin is already 
 configured for the ''braille'', ''aural'', and ''tty'' CSS media types.
 
+===== API =====
+
+You can have a plugin implement the public method: ''convertToImageMapArea($imagemap, $data, $pos)''
+to have your plugin handle and create its own area snippet. An example can be found at the
+{{https://github.com/i-net-software/dokuwiki-plugin-popupviewer/blob/master/syntax/viewer.php|popupviewer plugin}}.
+
+
 ===== Installation =====
 
-  * {{http://whoopdedo.org/doku-plugins/imagemap.zip|Image Map Plugin}}
+  * {{https://github.com/i-net-software/dokuwiki-plugin-imagemap/archive/master.zip|Image Map Plugin}}
 
 Download using the plugin manager, or manually and unzip in your ''plugins'' 
 folder. After installing, you must refresh the style cache. Go to the

@@ -1,0 +1,3 @@
+DokuWiki autorise les liens vers des URL externes, mais seulement pour les protocoles connus. [[doku>fr:urlschemes|Plus d'informations sur les schemas d'URL]].
+
+Les protocoles suivants sont actuellement activés :

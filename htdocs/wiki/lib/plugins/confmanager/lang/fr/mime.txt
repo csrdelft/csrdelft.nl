@@ -1,0 +1,11 @@
+Les types de fichiers que l'on peut téléverser via le [[doku>fr:media_manager|gestionnaire de media]]sont configurés dans le fichier ''conf/mime.conf''. Ce même fichier configure également les correspondances extension <-> type-mime.
+
+Par mesure de sécurité, on ne peut pas configurer [[doku>fr:dokuwiki|DokuWiki]] pour ccepter n'importe quel tye de fichiers.
+
+:!: Ne **jamais** activer le téléversement de fichier HTML sur un wiki non protégé, attendu que cela permet des attaques de type //Cross Site Scripting// via JavaScript. N'activez ceci que pour un wiki où tous les utilisateurs sont de confiance. De plus, il faut également désactiver l'option [[doku>fr:config:iexssprotect]].
+
+Si vous avez besoin d'icône pour un type mime, vous pourrez en trouver dans le style de DokuWiki sur [[http://www.splitbrain.org/projects/file_icons]].
+
+La liste de toutes les extensions avec leur type mime est disponible sur [[http://filext.com/].
+
+Voir [[doku>fr:mime]] pour de plus amples informations.
