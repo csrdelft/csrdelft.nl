@@ -64,6 +64,9 @@ class FotoAlbumModel {
 		// find old cover
 		foreach ($album->getFotos() as $foto) {
 			if (strpos($foto->bestandsnaam, 'folder')) {
+				if ($foto->getPad() === $cover->getPad()) {
+					return $ret;
+				}
 				$old = $foto->getPad();
 				$ret &= rename($old, str_replace('folder', '', $old));
 				$old = $foto->getResizedPad();
