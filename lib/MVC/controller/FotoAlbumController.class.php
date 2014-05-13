@@ -87,7 +87,7 @@ class FotoAlbumController extends AclController {
 	public function bekijken(Map $map, $naam) {
 		$album = FotoAlbumModel::getFotoAlbum($map, $naam);
 		if ($album === null) {
-			invokeRefresh(CSR_ROOT . '/fotoalbum', 'Album bestaat niet', -1);
+			invokeRefresh(CSR_ROOT . '/fotoalbum', 'Fotoalbum bestaat niet', -1);
 		}
 		$body = new FotoAlbumView($album);
 		if (LoginLid::mag('P_LOGGED_IN')) {
