@@ -1524,9 +1524,6 @@ function userlink($username = null, $textonly = false) {
                         case 'username_link':
                             $data['name'] = $textonly ? $info['name'] : hsc($info['name']);
                             break;
-						case 'username_profiellink':
-							$data['name'] = '<a href="'.$conf['profiellink'].$username.'">'.hsc($info['name']).'</a>';
-							break;
                         case 'email':
                         case 'email_link':
                             $data['name'] = obfuscate($info['mail']);
