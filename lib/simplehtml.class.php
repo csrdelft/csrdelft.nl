@@ -101,7 +101,7 @@ abstract class SimpleHTML implements View {
 		if (LidInstellingen::get('zijbalk', 'fotoalbum') == 'ja') {
 			require_once 'MVC/controller/FotoAlbumController.class.php';
 			$album = FotoAlbumModel::getMostRecentFotoAlbum();
-			if ($album) {
+			if ($album !== null) {
 				$zijkolom[] = new FotoAlbumZijbalkView($album);
 			}
 		}

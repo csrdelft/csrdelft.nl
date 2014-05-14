@@ -18,6 +18,7 @@ class FotoAlbumController extends AclController {
 	 * @var string
 	 */
 	private static $alleenLeden = '/(intern|novitiaat|ontvoering|feuten|slachten|zuipen|prive|privé)/i';
+
 	/**
 	 * Als deze regexp matched is het album alleen voor DéDé
 	 * @var string
@@ -144,7 +145,7 @@ class FotoAlbumController extends AclController {
 	public function verwijderen(Map $map, $naam) {
 		$album = FotoAlbumModel::getFotoAlbum($map, $naam);
 		$bestandsnaam = filter_input(INPUT_POST, 'foto', FILTER_SANITIZE_STRING);
-		if ($album AND FotoAlbumModel::verwijderFoto(new Foto($album, $bestandsnaam))) {
+		if ($album !== null AND FotoAlbumModel::verwijderFoto(new Foto($album, $bestandsnaam))) {
 			echo '<div id="' . md5($bestandsnaam) . '" class="remove"></div>';
 		} else {
 			setMelding('Foto verwijderen mislukt', -1);
@@ -155,7 +156,7 @@ class FotoAlbumController extends AclController {
 	public function hernoemen(Map $map, $naam) {
 		$album = FotoAlbumModel::getFotoAlbum($map, $naam);
 		$nieuw = filter_input(INPUT_POST, 'naam', FILTER_SANITIZE_STRING);
-		if ($album AND FotoAlbumModel::hernoemAlbum($album, $nieuw)) {
+		if ($album !== null AND FotoAlbumModel::hernoemAlbum($album, $nieuw)) {
 			echo '<div id="' . md5($naam) . '" class="albumname">' . $nieuw . '</div>';
 		} else {
 			setMelding('Fotoalbum hernoemen mislukt', -1);
@@ -165,7 +166,7 @@ class FotoAlbumController extends AclController {
 
 	public function albumcover(Map $map, $naam) {
 		$album = FotoAlbumModel::getFotoAlbum($map, '');
-		if ($album AND FotoAlbumModel::setAlbumCover($album, new Foto($album, $naam))) {
+		if ($album !== null AND FotoAlbumModel::setAlbumCover($album, new Foto($album, $naam))) {
 			invokeRefresh($album->getSubDir(), 'Fotoalbum-cover succesvol ingesteld', 1);
 		} else {
 			invokeRefresh(CSR_ROOT . '/fotoalbum', 'Fotoalbum-cover instellen mislukt', -1);

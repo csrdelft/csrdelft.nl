@@ -41,6 +41,9 @@ class FotoAlbumModel {
 		$map = new Map();
 		$map->locatie = PICS_PATH . '/';
 		$album = FotoAlbumModel::getFotoAlbum($map, 'fotoalbum');
+		if ($album === null) {
+			return null;
+		}
 		return $album->getMostRecentSubAlbum();
 	}
 
