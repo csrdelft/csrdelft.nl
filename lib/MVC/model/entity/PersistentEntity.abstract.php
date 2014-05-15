@@ -28,7 +28,7 @@ abstract class PersistentEntity {
 	 * Static constructor is called (by inheritance) first and only from PersistenceModel.
 	 */
 	public static function __constructStatic() {
-		
+		// suggested location for conversion code
 	}
 
 	public static function getTableName() {
@@ -131,7 +131,7 @@ abstract class PersistentEntity {
 	/**
 	 * Check for differences in persistent fields.
 	 * 
-	 * @unsupported RENAME field; INDEX check; FOREIGN KEY check;
+	 * @unsupported INDEX check; FOREIGN KEY check;
 	 */
 	public static function checkTable() {
 		$orm = get_called_class();
