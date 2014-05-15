@@ -84,7 +84,7 @@ class DatabaseAdmin extends Database {
 		header('Content-Type: application/x-gzip');
 		header('Content-Disposition: attachment; filename="' . $filename . '"');
 		$cred = parse_ini_file(ETC_PATH . '/mysql.ini');
-		$cmd = 'mysqldump --user=' . $cred['user'] . ' --password=' . $cred['pass'] . ' --host=' . $cred['host'] . ' ' . $cred['db'] . ' | gzip --best';
+		$cmd = 'mysqldump --user=' . $cred['user'] . ' --password=' . $cred['pass'] . ' --host=' . $cred['host'] . ' ' . $cred['db'] . ' ' . $name . ' | gzip --best';
 		passthru($cmd);
 	}
 
