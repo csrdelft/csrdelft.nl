@@ -10,32 +10,17 @@ $tables = array();
 foreach (DatabaseAdmin::instance()->sqlShowTables()->fetchAll() as $table) {
 	$tables[$table[0]] = $table[0];
 }
-$fields['actie'] = new KeuzeRondjeField('actie', null, 'Actie', array('S' => 'Backup structure', 'B' => 'Backup data', 'R' => 'Restore data'));
+$fields['actie'] = new KeuzeRondjeField('actie', null, 'Actie', array('S' => 'Structure', 'D' => 'Data'));
 $fields['tabel'] = new SelectField('tabel', null, 'Tabel', $tables);
 $fields['file'] = new FileField();
 $fields['btn'] = new SubmitResetCancel(CSR_ROOT, true, true, false);
 $form = new Formulier(null, 'form', null, $fields);
-$form->titel = 'Backup/Restore database table';
+$form->titel = 'Dump database table';
 try {
 	switch ($fields['actie']->getValue()) {
-		case 'R' :
-			if ($form->validate()) {
-				$path = TMP_PATH . '/';
-				$filename = $fields['tabel']->getValue() . '_' . time();
-				$fields['file']->opslaan($path, $filename);
-				$path .= $filename;
-				$rows = DatabaseAdmin::instance()->sqlRestoreTable($fields['tabel']->getValue(), $path);
-				unlink($path);
-				invokeRefresh(null, $rows . ' rows restored', 1);
-			}
-			exit;
-		case 'B':
+		case 'D':
 			if ($fields['tabel']->validate()) {
-				$path = DatabaseAdmin::instance()->sqlBackupTable($fields['tabel']->getValue());
-				header('Content-Type: text/plain');
-				header('Content-disposition: attachment;filename=' . basename($path) . '.txt');
-				readfile($path); // table data
-				unlink($path);
+				DatabaseAdmin::instance()->sqlBackupTable($fields['tabel']->getValue());
 			}
 			exit;
 		case 'S':

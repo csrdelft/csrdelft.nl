@@ -74,32 +74,18 @@ class DatabaseAdmin extends Database {
 	}
 
 	/**
-	 * Restore table data from file.
-	 * 
-	 * @param string $name
-	 * @param string $path to data file
-	 * @return int number of affected rows
-	 */
-	public static function sqlRestoreTable($name, $path) {
-		$path = TMP_PATH . '/' . $name . '_' . time();
-		$sql = 'LOAD DATA INFILE "' . $path . '" INTO TABLE ' . $name;
-		$query = self::instance()->prepare($sql);
-		$query->execute();
-		return $query->rowCount();
-	}
-
-	/**
 	 * Backup table data to file.
 	 * 
 	 * @param string $name
 	 * @return string path to data file
 	 */
 	public static function sqlBackupTable($name) {
-		$path = TMP_PATH . '/' . $name . '_' . time();
-		$sql = 'SELECT * INTO OUTFILE "' . $path . '" FROM ' . $name;
-		$query = self::instance()->prepare($sql);
-		$query->execute();
-		return $path;
+		$filename = 'backup-' . $name . '-' . date('d-m-Y') . '.sql.gz';
+		header('Content-Type: application/x-gzip');
+		header('Content-Disposition: attachment; filename="' . $filename . '"');
+		$cred = parse_ini_file(ETC_PATH . '/mysql.ini');
+		$cmd = 'mysqldump --user=' . $cred['user'] . ' --password=' . $cred['pass'] . ' --host=' . $cred['host'] . ' ' . $cred['db'] . ' | gzip --best';
+		passthru($cmd);
 	}
 
 	/**
