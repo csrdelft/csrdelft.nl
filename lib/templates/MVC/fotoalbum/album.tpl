@@ -17,7 +17,7 @@
 			<img src="{$subalbum->getThumbURL()}" />
 			<div id="{$subalbum->mapnaam|md5}" class="albumname">
 				{if LoginLid::mag('P_DOCS_MOD')}
-					<a href="/fotoalbum/hernoemen{$subalbum->getSubDir()}" class="knop post prompt hoverIntentContent" title="Fotoalbum hernoemen" postdata="naam={$subalbum->mapnaam}" style="position: absolute; top: -90px; left: 118px;">{icon get=pencil}</a>
+					<a href="/fotoalbum/hernoemen{$subalbum->getSubDir()}" class="knop post prompt hoverIntentContent" title="Fotoalbum hernoemen" postdata="Nieuwe naam={$subalbum->mapnaam}" style="position: absolute; top: -90px; left: 118px;">{icon get=pencil}</a>
 				{/if}
 				{$subalbum->mapnaam}
 			</div>

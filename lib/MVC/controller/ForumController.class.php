@@ -54,6 +54,7 @@ class ForumController extends Controller {
 			case 'bewerken':
 			case 'verwijderen':
 			case 'verplaatsen':
+			case 'afsplitsen':
 			case 'offtopic':
 			case 'goedkeuren':
 			case 'citeren':
@@ -362,8 +363,21 @@ class ForumController extends Controller {
 		if (!$deel->magModereren()) {
 			$this->geentoegang();
 		}
-		$nieuw = filter_input(INPUT_POST, 'draad_id', FILTER_SANITIZE_NUMBER_INT);
+		$nieuw = filter_input(INPUT_POST, 'Draad_id', FILTER_SANITIZE_NUMBER_INT);
 		ForumPostsModel::instance()->verplaatsForumPost($post, $nieuw);
+		$this->view = new ForumPostDeleteView($post->post_id);
+	}
+
+	public function afsplitsen($id) {
+		$post = ForumPostsModel::instance()->getForumPost((int) $id);
+		$draad = ForumDradenModel::instance()->getForumDraad($post->draad_id);
+		$deel = ForumDelenModel::instance()->getForumDeel($draad->forum_id);
+		if (!$deel->magModereren()) {
+			$this->geentoegang();
+		}
+		$nieuw = filter_input(INPUT_POST, 'Naam_van_nieuwe_draad', FILTER_SANITIZE_STRING);
+		$draad = ForumPostsModel::instance()->afsplitsenForumPost($post, $nieuw, $deel->forum_id);
+		ForumPostsModel::instance()->goedkeurenForumPost($post, $draad, $deel);
 		$this->view = new ForumPostDeleteView($post->post_id);
 	}
 

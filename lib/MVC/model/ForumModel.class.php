@@ -703,6 +703,18 @@ class ForumPostsModel extends PersistenceModel implements Paging {
 		}
 	}
 
+	public function afsplitsenForumPost(ForumPost $post, $nieuw_draad_naam, $forum_id) {
+		$draad = ForumDradenModel::instance()->maakForumDraad($forum_id, $nieuw_draad_naam, false);
+		$post->draad_id = $draad->draad_id;
+		$post->laatst_bewerkt = getDateTime();
+		$post->bewerkt_tekst = 'verplaatst door [lid=' . LoginLid::instance()->getUid() . '] [reldate]' . $post->laatst_bewerkt . '[/reldate]' . "\n";
+		$rowcount = $this->update($post);
+		if ($rowcount !== 1) {
+			throw new Exception('Afsplitsen mislukt');
+		}
+		return $draad;
+	}
+
 	public function offtopicForumPost(ForumPost $post) {
 		$post->tekst = '[offtopic]' . $post->tekst . '[/offtopic]';
 		$post->laatst_bewerkt = getDateTime();
