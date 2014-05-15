@@ -6,7 +6,6 @@ if (!LoginLid::mag('P_ADMIN')) {
 	header('location: ' . CSR_ROOT);
 	exit;
 }
-
 $tables = array();
 foreach (DatabaseAdmin::instance()->sqlShowTables()->fetchAll() as $table) {
 	$tables[$table[0]] = $table[0];
@@ -34,7 +33,6 @@ try {
 			exit;
 		case 'B':
 			if ($fields['tabel']->validate()) {
-// Backup table
 				$path = DatabaseAdmin::instance()->sqlBackupTable($fields['tabel']->getValue());
 				header('Content-Type: text/plain');
 				header('Content-disposition: attachment;filename=' . basename($path) . '.txt');
