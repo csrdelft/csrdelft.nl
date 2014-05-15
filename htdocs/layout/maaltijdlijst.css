@@ -21,6 +21,9 @@ table {
 	border-collapse: collapse;
 	width: 100%;
 }
+table.aanmeldingen {
+	margin-left: 25px;
+}
 td {
 	vertical-align: top;
 }
@@ -30,7 +33,7 @@ table.aanmeldingen td {
 	width: 260px;
 }
 table.aanmeldingen td.clear {
-	width: 20px;
+	width: 10px;
 	border: none;
 }
 table.aanmeldingen td.box {
