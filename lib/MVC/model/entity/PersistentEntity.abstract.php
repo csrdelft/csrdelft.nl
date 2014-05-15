@@ -86,7 +86,7 @@ abstract class PersistentEntity {
 				$this->$field = (int) $this->$field;
 			} elseif ($definition[0] === T::Float) {
 				$this->$field = (float) $this->$field;
-			} elseif (defined('DB_CHECK') AND
+			} elseif (defined('DB_CHECK_ENABLE') AND
 					$definition[0] === T::Enumeration AND ! in_array($this->$field, $definition[2]::getTypeOptions())
 			) {
 				debugprint(static::getTableName() . '.' . $field . ' invalid ' . $definition[2] . ' value: ' . $this->$field);

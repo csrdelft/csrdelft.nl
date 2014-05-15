@@ -10,10 +10,13 @@
 #define('MODE', 'ONDERHOUD');
 # 
 # uncomment de volgende regel om de database automatisch te laten controleren
-define('DB_CHECK', null);
+define('DB_CHECK_ENABLE', null);
 # 
 # uncomment de volgende regel om de database automatisch te laten bijwerken
-#define('DB_MODIFY', null);
+#define('DB_MODIFY_ENABLE', null);
+#
+# uncomment de volgende regel om de database automatisch te laten droppen
+#define('DB_DROP_ENABLE', null);
 # 
 # de wiki genereert de nodige notices. En heeft daarom de error_reporting 
 # anders ingesteld.
