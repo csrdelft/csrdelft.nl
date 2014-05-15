@@ -85,7 +85,7 @@ class ForumDeel extends PersistentEntity {
 	 * @var array
 	 */
 	protected static $persistent_fields = array(
-		'forum_id' => array(T::Integer, false, null, 'auto_increment'),
+		'forum_id' => array(T::Integer, false, 'auto_increment'),
 		'categorie_id' => array(T::Integer),
 		'titel' => array(T::String),
 		'omschrijving' => array(T::Text),

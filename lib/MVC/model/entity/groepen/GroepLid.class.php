@@ -70,7 +70,7 @@ class GroepLid extends PersistentEntity {
 		'opmerking' => array(T::String),
 		'lid_sinds' => array(T::DateTime),
 		'lid_tot' => array(T::DateTime, true),
-		'status' => array(T::Enumeration, false, GroepStatus::HT, 'GroepStatus'),
+		'status' => array(T::Enumeration, false, 'GroepStatus'),
 		'prioriteit' => array(T::Integer),
 		'door_lid_id' => array(T::UID)
 	);

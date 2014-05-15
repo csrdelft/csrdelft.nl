@@ -40,7 +40,7 @@ abstract class OpvolgbareGroep extends Groep {
 		'familie_id' => array(T::String),
 		'begin_moment' => array(T::DateTime, true),
 		'eind_moment' => array(T::DateTime, true),
-		'status' => array(T::Enumeration, false, GroepStatus::HT, 'GroepStatus')
+		'status' => array(T::Enumeration, false, 'GroepStatus')
 	);
 
 	/**

@@ -42,7 +42,7 @@ class Mededeling extends PersistentEntity {
 	 * Volgorde van weergave
 	 * @var int
 	 */
-	public $prioriteit = 0;
+	public $prioriteit;
 	/**
 	 * Url naar afbeelding van 200x200
 	 * @var string
@@ -53,7 +53,7 @@ class Mededeling extends PersistentEntity {
 	 * @var array
 	 */
 	protected static $persistent_fields = array(
-		'$mededeling_id' => array(T::Integer, false, null, 'auto_increment'),
+		'$mededeling_id' => array(T::Integer, false, 'auto_increment'),
 		'type' => array(T::String),
 		'tekst' => array(T::Text),
 		'zichtbaar_voor' => array(T::String),

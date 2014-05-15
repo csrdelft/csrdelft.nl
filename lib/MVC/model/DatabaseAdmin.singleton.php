@@ -62,6 +62,60 @@ class DatabaseAdmin extends Database {
 	}
 
 	/**
+	 * Restore table data from file.
+	 * 
+	 * @param string $name
+	 * @param string $path to data file
+	 * @return int number of affected rows
+	 */
+	public static function sqlRestoreTable($name, $path) {
+		$path = TMP_PATH . '/' . $name . '_' . time();
+		$sql = 'LOAD DATA INFILE "' . $path . '" INTO TABLE ' . $name;
+		$query = self::instance()->prepare($sql);
+		$query->execute();
+		return $query->rowCount();
+	}
+
+	/**
+	 * Backup table data to file.
+	 * 
+	 * @param string $name
+	 * @return string path to data file
+	 */
+	public static function sqlBackupTable($name) {
+		$path = TMP_PATH . '/' . $name . '_' . time();
+		$sql = 'SELECT * INTO OUTFILE "' . $path . '" FROM ' . $name;
+		$query = self::instance()->prepare($sql);
+		$query->execute();
+		return $path;
+	}
+
+	/**
+	 * Get all tables.
+	 * 
+	 * @return string SQL query
+	 */
+	public static function sqlShowTables() {
+		$sql = 'SHOW TABLES';
+		$query = self::instance()->prepare($sql);
+		$query->execute();
+		return $query;
+	}
+
+	/**
+	 * Get create table query.
+	 * 
+	 * @param string $name
+	 * @return string SQL query
+	 */
+	public static function sqlShowCreateTable($name) {
+		$sql = 'SHOW CREATE TABLE ' . $name;
+		$query = self::instance()->prepare($sql);
+		$query->execute();
+		return $query->fetchColumn(1);
+	}
+
+	/**
 	 * Create table and return SQL.
 	 * 
 	 * @param string $name
@@ -92,8 +146,8 @@ class DatabaseAdmin extends Database {
 		return $sql;
 	}
 
-	public static function sqlChangeField($table, PersistentField $field) {
-		$sql = 'ALTER TABLE ' . $table . ' CHANGE ' . $field->field . ' ' . $field->toSQL();
+	public static function sqlChangeField($table, PersistentField $field, $old_name = null) {
+		$sql = 'ALTER TABLE ' . $table . ' CHANGE ' . ($old_name === null ? $field->field : $old_name) . ' ' . $field->toSQL();
 		if (defined('DB_MODIFY')) {
 			$query = self::instance()->prepare($sql);
 			$query->execute();

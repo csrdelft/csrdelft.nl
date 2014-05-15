@@ -56,7 +56,7 @@ class FileField extends FormElement implements Validator {
 		if (!$this->model[$this->methode]->validate()) {
 			return false;
 		}
-		if (sizeof($this->filter) > 0 AND ! in_array($this->getModel()->mimetype, $this->filter)) {
+		if (!empty($this->filter) AND ! in_array($this->getModel()->mimetype, $this->filter)) {
 			$this->model[$this->methode]->error = 'Bestandstype niet toegestaan: ' . $this->getModel()->mimetype;
 			return false;
 		}
@@ -385,7 +385,7 @@ class UploadUrl extends BestandUploader {
 			$name = substr(trim($this->url), strrpos($this->url, '/') + 1);
 			$clean_name = preg_replace('/[^a-zA-Z0-9\s\.\-\_]/', '', $name);
 			// Bestand tijdelijk omslaan om mime-type te bepalen
-			$tmp_bestand = TMP_PATH . '/BestandUploader' . LoginLid::instance()->getUid() . microtime() . '.tmp';
+			$tmp_bestand = TMP_PATH . '/' . LoginLid::instance()->getUid() . '_' . time();
 			if (!is_writable(TMP_PATH)) {
 				$this->error = 'TMP_PATH is niet beschrijfbaar';
 				return;

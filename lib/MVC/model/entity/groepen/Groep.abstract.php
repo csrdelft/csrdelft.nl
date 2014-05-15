@@ -73,7 +73,7 @@ abstract class Groep extends PersistentEntity {
 	 * @var array
 	 */
 	protected static $persistent_fields = array(
-		'id' => array(T::Integer, false, null, 'auto_increment'),
+		'id' => array(T::Integer, false, 'auto_increment'),
 		'categorie_id' => array(T::Integer),
 		'naam' => array(T::String),
 		'samenvatting' => array(T::Text),

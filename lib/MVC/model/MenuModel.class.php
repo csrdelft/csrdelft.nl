@@ -70,10 +70,10 @@ class MenuModel extends PersistenceModel {
 	public function newMenuItem($parent_id) {
 		$item = new MenuItem();
 		$item->parent_id = $parent_id;
-		$item->prioriteit = $item->getDefaultValue('prioriteit');
+		$item->prioriteit = 0;
 		$item->link = '/';
-		$item->rechten_bekijken = $item->getDefaultValue('rechten_bekijken');
-		$item->zichtbaar = $item->getDefaultValue('zichtbaar');
+		$item->rechten_bekijken = 'P_NOBODY';
+		$item->zichtbaar = false;
 		return $item;
 	}
 

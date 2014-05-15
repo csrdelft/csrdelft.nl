@@ -334,14 +334,14 @@ class TakenModel {
 		$sql = 'INSERT INTO crv_taken';
 		$sql.= ' (taak_id, functie_id, lid_id, crv_repetitie_id, maaltijd_id, datum, punten, bonus_malus, punten_toegekend, bonus_toegekend, wanneer_toegekend, wanneer_gemaild, verwijderd)';
 		$sql.= ' VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
-		$values = array(null, $fid, $uid, $crid, $mid, $datum, $punten, $bonus_malus, 0, 0, null, '', false);
+		$values = array(null, $fid, $uid, $crid, $mid, $datum, $punten, $bonus_malus, 0, '', false);
 		$db = \Database::instance();
 		$query = $db->prepare($sql);
 		$query->execute($values);
 		if ($query->rowCount() !== 1) {
 			throw new Exception('New taak faalt: $query->rowCount() =' . $query->rowCount());
 		}
-		$taak = new CorveeTaak(intval($db->lastInsertId()), $fid, $uid, $crid, $mid, $datum, $punten, $bonus_malus, 0, 0, null, '', false);
+		$taak = new CorveeTaak(intval($db->lastInsertId()), $fid, $uid, $crid, $mid, $datum, $punten, $bonus_malus, 0, '', false);
 		return $taak;
 	}
 

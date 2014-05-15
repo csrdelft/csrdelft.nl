@@ -1237,7 +1237,7 @@ class KeuzeRondjeField extends SelectField {
 		echo $this->getLabel();
 		echo $this->getErrorDiv();
 
-		echo '<div style="float: left;">';
+		echo '<div class="KeuzeRondjeFieldOptions">';
 		foreach ($this->options as $value => $description) {
 			echo '<input type="radio" id="field_' . $this->getName() . '_option_' . $value . '" value="' . $value . '"' . $this->getInputAttribute(array('name', 'origvalue', 'class', 'disabled', 'onchange', 'onclick'));
 			if ($value == $this->value) {
@@ -1541,14 +1541,9 @@ class SubmitResetCancel extends FormElement {
 
 	public function view() {
 		echo '<div class="FormButtons">';
-		if ($this->extraUrl) {
-			if (isset($this->extraIcon)) {
-				$this->extraIcon = '<img src="' . CSR_PICS . '/famfamfam/' . $this->extraIcon . '.png" class="icon" width="16" height="16" alt="' . $this->extraIcon . '" /> ';
-			}
-			if (isset($this->extraIcon) OR isset($this->extraText)) {
-				$js = "$(this).attr('postdata', $(this).closest('form').serialize());";
-				echo '<a id="extraButton" class="knop post" title="' . $this->extraTitle . '" href="' . $this->extraUrl . '" onclick="' . $js . '">' . $this->extraIcon . $this->extraText . '</a> ';
-			}
+		if (isset($this->extraIcon) OR isset($this->extraText)) {
+			$js = "$(this).attr('postdata', $(this).closest('form').serialize());";
+			echo '<a id="extraButton" class="knop post" title="' . $this->extraTitle . '" href="' . $this->extraUrl . '" onclick="' . $js . '">' . $this->extraIcon . $this->extraText . '</a> ';
 		}
 		if (isset($this->submitIcon) OR isset($this->submitText)) {
 			echo '<a class="knop submit" title="' . $this->submitTitle . '">' . $this->submitIcon . $this->submitText . '</a> ';

@@ -43,13 +43,6 @@ abstract class PersistentEntity {
 		return static::$primary_keys;
 	}
 
-	public static function getDefaultValue($field_name) {
-		if (isset(static::$persistent_fields[$field_name][2])) {
-			return static::$persistent_fields[$field_name][2];
-		}
-		return null;
-	}
-
 	/**
 	 * Get the fields and their values of this object.
 	 * 
@@ -85,9 +78,9 @@ abstract class PersistentEntity {
 			} elseif ($definition[0] === T::Float) {
 				$this->$field = (float) $this->$field;
 			} elseif (defined('DB_CHECK') AND
-					$definition[0] === T::Enumeration AND ! in_array($this->$field, $definition[3]::getTypeOptions())
+					$definition[0] === T::Enumeration AND ! in_array($this->$field, $definition[2]::getTypeOptions())
 			) {
-				debugprint(self::getTableName() . '.' . $field . ' invalid ' . $definition[3] . ' value: ' . $this->$field);
+				debugprint(static::getTableName() . '.' . $field . ' invalid ' . $definition[2] . ' value: ' . $this->$field);
 			}
 		}
 	}
@@ -103,8 +96,13 @@ abstract class PersistentEntity {
 		$field = new PersistentField();
 		$field->field = $name;
 		$field->type = $definition[0];
-		$field->default = (isset($definition[2]) ? $definition[2] : null);
-		$field->extra = (isset($definition[3]) ? (string) $definition[3] : '');
+		$field->default = null;
+		if (isset($definition[1]) AND $definition[1]) {
+			$field->null = 'YES';
+		} else {
+			$field->null = 'NO';
+		}
+		$field->extra = (isset($definition[2]) ? $definition[2] : '');
 		if ($field->type === T::Boolean) {
 			$field->type = 'tinyint(1)';
 		} elseif ($field->type === T::Integer) {
@@ -122,12 +120,7 @@ abstract class PersistentEntity {
 			$field->type = 'varchar(' . $max . ')';
 			$field->extra = '';
 		}
-		if (isset($definition[1]) AND $definition[1]) {
-			$field->null = 'YES';
-		} else {
-			$field->null = 'NO';
-		}
-		if (in_array($name, self::getPrimaryKeys())) {
+		if (in_array($name, static::getPrimaryKeys())) {
 			$field->key = 'PRI';
 		} else {
 			$field->key = '';
@@ -141,26 +134,34 @@ abstract class PersistentEntity {
 	 * @unsupported RENAME field; INDEX check; FOREIGN KEY check;
 	 */
 	public static function checkTable() {
+		$orm = get_called_class();
 		$fields = array();
 		foreach (static::$persistent_fields as $name => $definition) {
 			$fields[$name] = self::makePersistentField($name, $definition);
 		}
 		try {
-			$database_fields = group_by_distinct('field', DatabaseAdmin::instance()->sqlDescribeTable(self::getTableName()));
+			$database_fields = group_by_distinct('field', DatabaseAdmin::instance()->sqlDescribeTable(static::getTableName()));
 		} catch (Exception $e) {
-			if (endsWith($e->getMessage(), self::getTableName() . "' doesn't exist")) {
-				$string = DatabaseAdmin::instance()->sqlCreateTable(self::getTableName(), $fields, self::getPrimaryKeys());
+			if (endsWith($e->getMessage(), static::getTableName() . "' doesn't exist")) {
+				$string = DatabaseAdmin::instance()->sqlCreateTable(static::getTableName(), $fields, static::getPrimaryKeys());
 				debugprint($string);
 				return;
 			} else {
 				throw $e; // rethrow to controller
 			}
 		}
+		// Rename fields
+		if (property_exists($orm, 'rename_fields')) {
+			foreach (static::$rename_fields as $oldname => $newname) {
+				$string = DatabaseAdmin::instance()->sqlChangeField(static::getTableName(), $fields[$newname], $oldname);
+				debugprint($string);
+			}
+		}
 		$previous_field = null;
 		foreach (static::$persistent_fields as $name => $definition) {
 			// Add missing persistent fields
 			if (!array_key_exists($name, $database_fields)) {
-				$string = DatabaseAdmin::instance()->sqlAddField(self::getTableName(), $fields[$name], $previous_field);
+				$string = DatabaseAdmin::instance()->sqlAddField(static::getTableName(), $fields[$name], $previous_field);
 				debugprint($string);
 			} else {
 				// Check exisiting persistent fields for differences
@@ -191,7 +192,7 @@ abstract class PersistentEntity {
 					$diff = true;
 				}
 				if ($diff) {
-					$string = DatabaseAdmin::instance()->sqlChangeField(self::getTableName(), $fields[$name]);
+					$string = DatabaseAdmin::instance()->sqlChangeField(static::getTableName(), $fields[$name]);
 					debugprint($string);
 				}
 			}
@@ -200,7 +201,7 @@ abstract class PersistentEntity {
 		// Remove non-persistent fields
 		foreach ($database_fields as $name => $field) {
 			if (!array_key_exists($name, static::$persistent_fields)) {
-				$string = DatabaseAdmin::instance()->sqlDeleteField(self::getTableName(), $field);
+				$string = DatabaseAdmin::instance()->sqlDeleteField(static::getTableName(), $field);
 				debugprint($string);
 			}
 		}

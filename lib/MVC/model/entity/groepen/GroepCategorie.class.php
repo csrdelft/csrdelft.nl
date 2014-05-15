@@ -60,7 +60,7 @@ class GroepCategorie extends PersistentEntity {
 	 * @var array
 	 */
 	protected static $persistent_fields = array(
-		'categorie_id' => array(T::Integer, false, null, 'auto_increment'),
+		'categorie_id' => array(T::Integer, false, 'auto_increment'),
 		'titel' => array(T::String),
 		'toon_overzicht' => array(T::Boolean),
 		'toon_profiel' => array(T::Boolean),

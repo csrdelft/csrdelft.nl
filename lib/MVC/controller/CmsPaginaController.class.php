@@ -99,7 +99,7 @@ class CmsPaginaController extends Controller {
 	}
 
 	public function verwijderen($naam) {
-		if (self::magVerwijderen() AND $this->model->removePagina($naam)) {
+		if (CmsPaginaController::magVerwijderen() AND $this->model->removePagina($naam)) {
 			invokeRefresh(CSR_ROOT, 'Verwijderd', 1);
 		} else {
 			$this->geentoegang();

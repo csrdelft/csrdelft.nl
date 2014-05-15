@@ -55,19 +55,19 @@ class MenuItem extends PersistentEntity {
 	 * De sub-items van dit menu-item
 	 * @var array
 	 */
-	public $children = array();
+	public $children;
 	/**
 	 * Database table fields
 	 * @var array
 	 */
 	protected static $persistent_fields = array(
-		'item_id' => array(T::Integer, false, null, 'auto_increment'),
-		'parent_id' => array(T::Integer, false, 0),
-		'prioriteit' => array(T::Integer, false, 0),
+		'item_id' => array(T::Integer, false, 'auto_increment'),
+		'parent_id' => array(T::Integer, false),
+		'prioriteit' => array(T::Integer, false),
 		'tekst' => array(T::String),
 		'link' => array(T::String),
-		'rechten_bekijken' => array(T::String, false, 'P_NOBODY'),
-		'zichtbaar' => array(T::Boolean, false, true)
+		'rechten_bekijken' => array(T::String, false),
+		'zichtbaar' => array(T::Boolean, false)
 	);
 	/**
 	 * Database primary key
