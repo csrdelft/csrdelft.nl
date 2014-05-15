@@ -80,7 +80,7 @@ class DatabaseAdmin extends Database {
 	 * @return string path to data file
 	 */
 	public static function sqlBackupTable($name) {
-		$filename = 'backup-' . $name . '-' . date('d-m-Y') . '.sql.gz';
+		$filename = 'backup-' . $name . '_' . date('d-m-Y_H-i-s') . '.sql.gz';
 		header('Content-Type: application/x-gzip');
 		header('Content-Disposition: attachment; filename="' . $filename . '"');
 		$cred = parse_ini_file(ETC_PATH . '/mysql.ini');
