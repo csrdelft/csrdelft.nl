@@ -31,8 +31,8 @@
 						</span>
 					{/if}
 					{if $aanmelding->getGastenOpmerking() !== ''}
-						<span class="opmerking">Gasten opmerking:
-							{$aanmelding->getGastenOpmerking()}
+						<span class="opmerking">
+							Gasten opmerking: {$aanmelding->getGastenOpmerking()}
 						</span>
 					{/if}
 					</td>
