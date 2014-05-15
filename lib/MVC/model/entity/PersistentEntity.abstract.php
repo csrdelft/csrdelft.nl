@@ -28,7 +28,7 @@ abstract class PersistentEntity {
 	 * Static constructor is called (by inheritance) first and only from PersistenceModel.
 	 */
 	public static function __constructStatic() {
-		// suggested location for conversion code
+		
 	}
 
 	public static function getTableName() {
