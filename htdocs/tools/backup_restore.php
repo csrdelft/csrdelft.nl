@@ -51,7 +51,9 @@ try {
 			$view->view();
 	}
 } catch (Exception $e) { // TODO: logging
-	unlink($path);
+	if (isset($path)) {
+		unlink($path);
+	}
 	$protocol = filter_input(INPUT_SERVER, 'SERVER_PROTOCOL', FILTER_SANITIZE_STRING);
 	header($protocol . ' 500 ' . $e->getMessage(), true, 500);
 
