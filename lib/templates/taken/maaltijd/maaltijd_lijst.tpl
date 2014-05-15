@@ -10,7 +10,7 @@
 		{/foreach}
 	</head>
 	<body>
-		<a href="/"><img alt="Beeldmerk van de Vereniging" src="{$CSR_PICS}/layout/beeldmerk.jpg" style="float: right; padding: 0px 50px;" /></a>
+		<a href="/"><img alt="Beeldmerk van de Vereniging" src="{$CSR_PICS}/layout/beeldmerk.jpg" style="float: right;" /></a>
 		<h1>{$view->getTitel()} op {$maaltijd->getDatum()|date_format:"%A %e %B %Y"}</h1>
 		<div class="header">{Instellingen::get('maaltijden', 'maaltijdlijst_tekst')|replace:'MAALTIJDPRIJS':$prijs}</div>
 		{if !$maaltijd->getIsGesloten()}
@@ -53,7 +53,7 @@
 		{/if}
 		<table>
 			<tr>
-				<td style="width: 50px;">&nbsp;</td>
+				<td style="width: 30px;">&nbsp;</td>
 				<td style="width: 200px;">
 					<h3>Maaltijdgegevens</h3>
 					<table>
