@@ -19,9 +19,24 @@ try {
 
 	require_once 'MVC/controller/' . $class . '.class.php';
 	$controller = new $class(Instellingen::get('stek', 'request'));
+
+	if (defined('DB_MODIFY_ENABLE') AND LoginLid::mag('P_ADMIN')) {
+		$queries = DatabaseAdmin::getQueries();
+		if (empty($queries)) {
+			debugprint('DB_MODIFY_ENABLED');
+		} else {
+			header('Content-Type: text/plain');
+			header('Content-disposition: attachment;filename=DB_modify_' . time() . '.sql');
+			foreach ($queries as $query) {
+				echo $query . ";\n";
+				setMelding($query, 1);
+			}
+			exit;
+		}
+	}
+
 	$controller->getContent()->view();
-}
-catch (Exception $e) { // TODO: logging
+} catch (Exception $e) { // TODO: logging
 	$protocol = filter_input(INPUT_SERVER, 'SERVER_PROTOCOL', FILTER_SANITIZE_STRING);
 	header($protocol . ' 500 ' . $e->getMessage(), true, 500);
 

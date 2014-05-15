@@ -21,10 +21,8 @@ class Database extends PDO {
 	 */
 	public static function instance() {
 		if (!isset(self::$instance)) {
-
-			if (defined('ETC_PATH')) {
-				$cred = parse_ini_file(ETC_PATH . '/mysql.ini');
-			} else {
+			$cred = parse_ini_file(ETC_PATH . '/mysql.ini');
+			if ($cred === false) {
 				$cred = array(
 					'host' => 'localhost',
 					'user' => 'username',
@@ -46,7 +44,7 @@ class Database extends PDO {
 	 * Array of SQL statements for debug
 	 * @var array
 	 */
-	private static $queries;
+	private static $queries = array();
 
 	/**
 	 * Get array of SQL statements for debug
@@ -54,6 +52,31 @@ class Database extends PDO {
 	 */
 	public static function getQueries() {
 		return self::$queries;
+	}
+
+	/**
+	 * @source http://stackoverflow.com/a/1376838
+	 * 
+	 * Replaces any parameter placeholders in a query with the value of that
+	 * parameter. Useful for debugging. Assumes anonymous parameters from 
+	 * $params are are in the same order as specified in $query
+	 *
+	 * @param string $query The sql query with parameter placeholders
+	 * @param array $params The array of substitution parameters
+	 * @return string The interpolated query
+	 */
+	public static function interpolateQuery($query, $params) {
+		$keys = array();
+		// build a regular expression for each parameter
+		foreach ($params as $key => $value) {
+			if (is_string($key)) {
+				$keys[] = '/:' . $key . '/';
+			} else {
+				$keys[] = '/[?]/';
+			}
+		}
+		$query = preg_replace($keys, $params, $query, 1, $count);
+		return $query;
 	}
 
 	/**
@@ -81,7 +104,7 @@ class Database extends PDO {
 		}
 		$query = self::instance()->prepare($sql);
 		$query->execute($params);
-		self::$queries[] = $query->queryString;
+		self::$queries[] = self::interpolateQuery($query->queryString, $params);
 		return $query;
 	}
 
@@ -101,7 +124,7 @@ class Database extends PDO {
 		$sql .= ')';
 		$query = self::instance()->prepare($sql);
 		$query->execute($params);
-		self::$queries[] = $query->queryString;
+		self::$queries[] = self::interpolateQuery($query->queryString, $params);
 		return (boolean) $query->fetchColumn();
 	}
 
@@ -130,7 +153,7 @@ class Database extends PDO {
 		$sql .= ' VALUES (' . implode(', ', array_keys($insert_params)) . ')'; // named params
 		$query = self::instance()->prepare($sql);
 		$query->execute($insert_params);
-		self::$queries[] = $query->queryString;
+		self::$queries[] = self::interpolateQuery($query->queryString, $insert_params);
 		if ($query->rowCount() !== 1) {
 			throw new Exception('sqlInsert rowCount=' . $query->rowCount());
 		}
@@ -177,7 +200,7 @@ class Database extends PDO {
 		}
 		$query = self::instance()->prepare($sql);
 		$query->execute($insert_values);
-		self::$queries[] = $query->queryString;
+		self::$queries[] = self::interpolateQuery($query->queryString, $insert_values);
 		return $query->rowCount();
 	}
 
@@ -209,7 +232,7 @@ class Database extends PDO {
 		}
 		$query = self::instance()->prepare($sql);
 		$query->execute($where_params);
-		self::$queries[] = $query->queryString;
+		self::$queries[] = self::interpolateQuery($query->queryString, $where_params);
 		return $query->rowCount();
 	}
 
@@ -230,7 +253,7 @@ class Database extends PDO {
 		}
 		$query = self::instance()->prepare($sql);
 		$query->execute($where_params);
-		self::$queries[] = $query->queryString;
+		self::$queries[] = self::interpolateQuery($query->queryString, $where_params);
 		return $query->rowCount();
 	}
 
