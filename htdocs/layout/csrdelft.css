@@ -763,7 +763,6 @@ input, textarea, select{
 }
 .Formulier .UploadOptie{
 	min-height: 2em;
-    vertical-align: middle;
 }
 .Formulier .UploadKeuze{
 	margin-left: 150px;
@@ -774,6 +773,9 @@ input, textarea, select{
 }
 .Formulier input[type="text"]{
 	width: 250px;
+}
+.Formulier input[type="radio"]{
+	vertical-align: middle;
 }
 .Formulier textarea{
 	width: 250px;
@@ -812,14 +814,12 @@ input, textarea, select{
 .Formulier input.LidField, .Formulier input.RequiredLidField {
 	width: 160px;
 }
-.Formulier .KeuzeRondjeField {
-	width: auto;
-}
 .Formulier label.KeuzeRondjeField {
 	float: none;
 }
 .Formulier .KeuzeRondjeFieldOptions {
-	float: left;
+	margin-left: 30%;
+	padding: 5px;
 }
 .Formulier input.IntField, .Formulier input.FloatField {
 	width: 40px;
