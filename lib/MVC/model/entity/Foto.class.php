@@ -54,7 +54,11 @@ class Foto extends Bestand {
 			echo $command . '<br />';
 			echo $output;
 		}
-		chmod($this->getThumbPad(), 0644);
+		if ($this->bestaatThumb()) {
+			chmod($this->getThumbPad(), 0644);
+		} else {
+			setMelding('Thumb maken mislukt voor: ' . $this->getThumbPad(), -1);
+		}
 	}
 
 	public function maakResized() {
@@ -65,7 +69,11 @@ class Foto extends Bestand {
 			echo $command . '<br />';
 			echo $output;
 		}
-		chmod($this->getResizedPad(), 0644);
+		if ($this->bestaatResized()) {
+			chmod($this->getResizedPad(), 0644);
+		} else {
+			setMelding('Resized maken mislukt voor: ' . $this->getResizedPad(), -1);
+		}
 	}
 
 	public function isCompleet() {
