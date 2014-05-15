@@ -23,10 +23,6 @@ class DatabaseAdmin extends Database {
 	 * @return DatabaseAdmin
 	 */
 	public static function instance() {
-		if (defined('DB_MODIFY_ENABLE') AND ! LoginLid::mag('P_ADMIN')) {
-			//header('location: ' . CSR_ROOT . '/onderhoud.html');
-			//exit;
-		}
 		if (!isset(self::$instance)) {
 			$cred = parse_ini_file(ETC_PATH . '/mysql.ini');
 			if ($cred === false) {
@@ -149,6 +145,8 @@ class DatabaseAdmin extends Database {
 			$query = self::instance()->prepare($sql);
 			$query->execute();
 			self::$queries[] = $query->queryString;
+		} else {
+			debugprint($sql);
 		}
 		return $sql;
 	}
@@ -160,6 +158,8 @@ class DatabaseAdmin extends Database {
 			$query = self::instance()->prepare($sql);
 			$query->execute();
 			self::$queries[] = $query->queryString;
+		} else {
+			debugprint($sql);
 		}
 		return $sql;
 	}
@@ -170,6 +170,8 @@ class DatabaseAdmin extends Database {
 			$query = self::instance()->prepare($sql);
 			$query->execute();
 			self::$queries[] = $query->queryString;
+		} else {
+			debugprint($sql);
 		}
 		return $sql;
 	}
@@ -180,6 +182,8 @@ class DatabaseAdmin extends Database {
 			$query = self::instance()->prepare($sql);
 			$query->execute();
 			self::$queries[] = $query->queryString;
+		} else {
+			debugprint($sql);
 		}
 		return $sql;
 	}

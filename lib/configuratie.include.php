@@ -13,7 +13,7 @@
 define('DB_CHECK_ENABLE', null);
 # 
 # uncomment de volgende regel om de database automatisch te laten bijwerken
-define('DB_MODIFY_ENABLE', null);
+#define('DB_MODIFY_ENABLE', null);
 #
 # uncomment de volgende regel om de database automatisch te laten droppen
 #define('DB_DROP_ENABLE', null);
@@ -69,11 +69,6 @@ require_once 'MVC/model/Agendeerbaar.interface.php';
 require_once 'lid/loginlid.class.php';
 
 switch (constant('MODE')) {
-	case 'ONDERHOUD':
-		if (!LoginLid::mag('P_ADMIN')) {
-			header('location: ' . CSR_ROOT . '/onderhoud.html');
-			exit;
-		}
 	case 'WEB':
 		require_once 'MVC/view/Validator.interface.php';
 		require_once 'MVC/view/TemplateView.abstract.php';
@@ -111,6 +106,17 @@ switch (constant('MODE')) {
 		}
 		// database & lid initialiseren...
 		$db = MySQL::instance();
+		if (defined('DB_MODIFY_ENABLE') OR defined('DB_DROP_ENABLE')) {
+			// fall through to ONDERHOUD and check permissions
+		} else {
+			break;
+		}
+
+	case 'ONDERHOUD':
+		if (!LoginLid::mag('P_ADMIN')) {
+			header('location: ' . CSR_ROOT . '/onderhoud.html');
+			exit;
+		}
 		break;
 	/*
 	  case 'BOT':

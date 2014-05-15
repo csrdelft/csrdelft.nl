@@ -152,8 +152,7 @@ abstract class PersistentEntity {
 			$database_fields = group_by_distinct('field', DatabaseAdmin::instance()->sqlDescribeTable(static::getTableName()));
 		} catch (Exception $e) {
 			if (endsWith($e->getMessage(), static::getTableName() . "' doesn't exist")) {
-				$string = DatabaseAdmin::instance()->sqlCreateTable(static::getTableName(), $fields, static::getPrimaryKeys());
-				debugprint($string);
+				DatabaseAdmin::instance()->sqlCreateTable(static::getTableName(), $fields, static::getPrimaryKeys());
 				return;
 			} else {
 				throw $e; // rethrow to controller
@@ -162,16 +161,14 @@ abstract class PersistentEntity {
 		// Rename fields
 		if (property_exists($orm, 'rename_fields')) {
 			foreach (static::$rename_fields as $oldname => $newname) {
-				$string = DatabaseAdmin::instance()->sqlChangeField(static::getTableName(), $fields[$newname], $oldname);
-				debugprint($string);
+				DatabaseAdmin::instance()->sqlChangeField(static::getTableName(), $fields[$newname], $oldname);
 			}
 		}
 		$previous_field = null;
 		foreach (static::$persistent_fields as $name => $definition) {
 			// Add missing persistent fields
 			if (!array_key_exists($name, $database_fields)) {
-				$string = DatabaseAdmin::instance()->sqlAddField(static::getTableName(), $fields[$name], $previous_field);
-				debugprint($string);
+				DatabaseAdmin::instance()->sqlAddField(static::getTableName(), $fields[$name], $previous_field);
 			} else {
 				// Check exisiting persistent fields for differences
 				$diff = false;
@@ -201,8 +198,7 @@ abstract class PersistentEntity {
 					$diff = true;
 				}
 				if ($diff) {
-					$string = DatabaseAdmin::instance()->sqlChangeField(static::getTableName(), $fields[$name]);
-					debugprint($string);
+					DatabaseAdmin::instance()->sqlChangeField(static::getTableName(), $fields[$name]);
 				}
 			}
 			$previous_field = $name;
@@ -210,8 +206,7 @@ abstract class PersistentEntity {
 		// Remove non-persistent fields
 		foreach ($database_fields as $name => $field) {
 			if (!array_key_exists($name, static::$persistent_fields)) {
-				$string = DatabaseAdmin::instance()->sqlDeleteField(static::getTableName(), $field);
-				debugprint($string);
+				DatabaseAdmin::instance()->sqlDeleteField(static::getTableName(), $field);
 			}
 		}
 	}
