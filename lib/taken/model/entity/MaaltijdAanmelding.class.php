@@ -29,7 +29,7 @@ class MaaltijdAanmelding {
 	private $lid_id; # foreign key lid.uid
 	
 	private $aantal_gasten; # int 11
-	private $gasten_opmerking; # string 255
+	private $gasten_eetwens; # string 255
 	
 	private $door_abonnement; # foreign key mlt_repetitie.id
 	private $door_lid_id; # foreign key lid.uid
@@ -42,7 +42,7 @@ class MaaltijdAanmelding {
 		$this->maaltijd_id = (int) $mid;
 		$this->lid_id = $uid;
 		$this->setAantalGasten($gasten);
-		$this->setGastenOpmerking($opmerking);
+		$this->setGastenEetwens($opmerking);
 		$this->setDoorAbonnement($door_abo);
 		$this->setDoorLidId($door_lid);
 		$this->setLaatstGewijzigd($wanneer);
@@ -58,8 +58,8 @@ class MaaltijdAanmelding {
 	public function getAantalGasten() {
 		return (int) $this->aantal_gasten;
 	}
-	public function getGastenOpmerking() {
-		return $this->gasten_opmerking;
+	public function getGastenEetwens() {
+		return $this->gasten_eetwens;
 	}
 	public function getDoorAbonnement() {
 		if ($this->door_abonnement === null) {
@@ -166,8 +166,8 @@ class MaaltijdAanmelding {
 		}
 		$this->aantal_gasten = $int;
 	}
-	public function setGastenOpmerking($text) {
-		$this->gasten_opmerking = $text;
+	public function setGastenEetwens($text) {
+		$this->gasten_eetwens = $text;
 	}
 	public function setDoorAbonnement($mrid) {
 		if ($mrid !== null && !is_int($mrid)) {

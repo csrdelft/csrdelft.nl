@@ -442,7 +442,7 @@ class ConversieModel {
 		foreach ($rows as $row) {
 			if ($row['status'] === 'AAN') {
 				try {
-					AanmeldingenModel::aanmeldenVoorMaaltijd(intval($row['maalid']), $row['uid'], $row['door'], intval($row['gasten']), true, $row['gasten_opmerking']);
+					AanmeldingenModel::aanmeldenVoorMaaltijd(intval($row['maalid']), $row['uid'], $row['door'], intval($row['gasten']), true, $row['gasten_eetwens']);
 				} catch (\Exception $e) {
 					
 				}

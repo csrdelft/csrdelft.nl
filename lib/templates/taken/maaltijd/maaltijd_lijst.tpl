@@ -30,9 +30,10 @@
 							{$aanmelding->getLid()->getProperty('eetwens')}
 						</span>
 					{/if}
-					{if $aanmelding->getGastenOpmerking() !== ''}
-						<span class="opmerking">
-							Gasten opmerking: {$aanmelding->getGastenOpmerking()}
+					{if $aanmelding->getGastenEetwens() !== ''}
+						<span class="opmerking">Gasten: </span>
+						<span class="eetwens">
+							{$aanmelding->getGastenEetwens()}
 						</span>
 					{/if}
 					</td>

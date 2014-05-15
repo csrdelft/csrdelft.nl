@@ -1,0 +1,1 @@
+ALTER TABLE `mlt_aanmeldingen` CHANGE `gasten_opmerking` `gasten_eetwens` VARCHAR( 255 ) NOT NULL DEFAULT '';

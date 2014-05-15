@@ -8,7 +8,7 @@ require_once 'taken/model/entity/MaaltijdAanmelding.class.php';
  */
 class AanmeldingenModel {
 
-	public static function aanmeldenVoorMaaltijd($mid, $uid, $doorUid, $aantalGasten = 0, $beheer = false, $gastenOpmerking = '') {
+	public static function aanmeldenVoorMaaltijd($mid, $uid, $doorUid, $aantalGasten = 0, $beheer = false, $gastenEetwens = '') {
 		$maaltijd = MaaltijdenModel::getMaaltijd($mid);
 		if (!$maaltijd->getIsGesloten() && $maaltijd->getBeginMoment() < strtotime(date('Y-m-d H:i'))) {
 			MaaltijdenModel::sluitMaaltijd($maaltijd);
@@ -39,7 +39,7 @@ class AanmeldingenModel {
 			self::updateAanmelding($aanmelding);
 			$maaltijd->setAantalAanmeldingen($maaltijd->getAantalAanmeldingen() + $verschil);
 		} else {
-			$aanmelding = self::newAanmelding($mid, $uid, $aantalGasten, $gastenOpmerking, null, $doorUid);
+			$aanmelding = self::newAanmelding($mid, $uid, $aantalGasten, $gastenEetwens, null, $doorUid);
 			$maaltijd->setAantalAanmeldingen($maaltijd->getAantalAanmeldingen() + 1 + $aantalGasten);
 		}
 		$aanmelding->setMaaltijd($maaltijd);
@@ -133,9 +133,9 @@ class AanmeldingenModel {
 		}
 	}
 
-	public static function saveGastenOpmerking($mid, $uid, $opmerking) {
+	public static function saveGastenEetwens($mid, $uid, $opmerking) {
 		if (!is_int($mid) || $mid <= 0) {
-			throw new Exception('Save gasten-opmerking faalt: Invalid $mid =' . $mid);
+			throw new Exception('Save gasten eetwens faalt: Invalid $mid =' . $mid);
 		}
 		if (!self::getIsAangemeld($mid, $uid)) {
 			throw new Exception('Niet aangemeld');
@@ -152,7 +152,7 @@ class AanmeldingenModel {
 				throw new Exception('Geen gasten aangemeld');
 			}
 			$aanmelding->setMaaltijd($maaltijd);
-			$aanmelding->setGastenOpmerking($opmerking);
+			$aanmelding->setGastenEetwens($opmerking);
 			self::updateAanmelding($aanmelding);
 			$db->commit();
 			return $aanmelding;
@@ -223,7 +223,7 @@ class AanmeldingenModel {
 	}
 
 	private static function loadAanmeldingen(array $mids, $uid = null, $limit = null) {
-		$sql = 'SELECT maaltijd_id, lid_id, aantal_gasten, gasten_opmerking, door_abonnement, door_lid_id, laatst_gewijzigd';
+		$sql = 'SELECT maaltijd_id, lid_id, aantal_gasten, gasten_eetwens, door_abonnement, door_lid_id, laatst_gewijzigd';
 		$sql.= ' FROM mlt_aanmeldingen';
 		$sql.= ' WHERE (maaltijd_id=?';
 		for ($i = sizeof($mids); $i > 1; $i--) {
@@ -247,7 +247,7 @@ class AanmeldingenModel {
 
 	private static function newAanmelding($mid, $uid, $gasten, $opmerking, $doorAbo, $doorUid) {
 		$sql = 'INSERT IGNORE INTO mlt_aanmeldingen';
-		$sql.= ' (maaltijd_id, lid_id, aantal_gasten, gasten_opmerking, door_abonnement, door_lid_id, laatst_gewijzigd)';
+		$sql.= ' (maaltijd_id, lid_id, aantal_gasten, gasten_eetwens, door_abonnement, door_lid_id, laatst_gewijzigd)';
 		$wanneer = date('Y-m-d H:i');
 		if ($mid === null) { // niet voor specifieke maaltijd? dan voor alle komende repetitie-maaltijden
 			$sql.= ' SELECT maaltijd_id, ?, ?, ?, ?, ?, ? FROM mlt_maaltijden';
@@ -296,11 +296,11 @@ class AanmeldingenModel {
 
 	private static function updateAanmelding(MaaltijdAanmelding $aanmelding) {
 		$sql = 'UPDATE mlt_aanmeldingen';
-		$sql.= ' SET aantal_gasten=?, gasten_opmerking=?, door_abonnement=?, door_lid_id=?, laatst_gewijzigd=?';
+		$sql.= ' SET aantal_gasten=?, gasten_eetwens=?, door_abonnement=?, door_lid_id=?, laatst_gewijzigd=?';
 		$sql.= ' WHERE maaltijd_id=? AND lid_id=?';
 		$values = array(
 			$aanmelding->getAantalGasten(),
-			$aanmelding->getGastenOpmerking(),
+			$aanmelding->getGastenEetwens(),
 			$aanmelding->getDoorAbonnement(),
 			$aanmelding->getDoorLidId(),
 			$aanmelding->getLaatstGewijzigd(),

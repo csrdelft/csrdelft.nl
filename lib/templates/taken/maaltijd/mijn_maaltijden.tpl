@@ -29,7 +29,7 @@ Vanaf dat moment zal deze ketzer u niet meer willen aan- of afmelden en bent u a
 			<th>Eters (Limiet)</th>
 			<th style="width: 140px;">Aangemeld</th>
 			<th>Gasten</th>
-			<th title="Gasten opmerking" style="width: 25px;">{icon get="comment"}</th>
+			<th title="Gasten allergie/diëet" style="width: 25px;">{icon get="comment"}</th>
 		</tr>
 	</thead>
 	<tbody>

@@ -115,8 +115,8 @@ class MijnMaaltijdenController extends AclController {
 	}
 
 	public function opmerking($mid) {
-		$opmerking = filter_input(INPUT_POST, 'gasten_opmerking', FILTER_SANITIZE_STRING);
-		$aanmelding = AanmeldingenModel::saveGastenOpmerking($mid, \LoginLid::instance()->getUid(), $opmerking);
+		$opmerking = filter_input(INPUT_POST, 'gasten_eetwens', FILTER_SANITIZE_STRING);
+		$aanmelding = AanmeldingenModel::saveGastenEetwens($mid, \LoginLid::instance()->getUid(), $opmerking);
 		$this->view = new MijnMaaltijdenView($aanmelding->getMaaltijd(), $aanmelding);
 	}
 

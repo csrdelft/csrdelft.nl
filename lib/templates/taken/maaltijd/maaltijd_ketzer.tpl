@@ -33,8 +33,8 @@
 		+{$aanmelding->getAantalGasten()}
 	{/if}
 
-	{if $aanmelding and $aanmelding->getGastenOpmerking()}
-		{icon get="comment" title=$aanmelding->getGastenOpmerking()}
+	{if $aanmelding and $aanmelding->getGastenEetwens()}
+		{icon get="comment" title=$aanmelding->getGastenEetwens()}
 	{/if}
 
 	{if $maaltijd->getIsGesloten()}&nbsp;

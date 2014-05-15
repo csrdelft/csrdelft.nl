@@ -62,20 +62,20 @@
 	</td>
 	<td>
 	{if $maaltijd->getIsGesloten()}
-		{if $aanmelding->getGastenOpmerking()}
-			{icon get="comment" title=$aanmelding->getGastenOpmerking()}
+		{if $aanmelding->getGastenEetwens()}
+			{icon get="comment" title=$aanmelding->getGastenEetwens()}
 		{/if}
 	{else}
 	{if $aanmelding->getAantalGasten() > 0}
 		<form method="post" action="{Instellingen::get('taken', 'url')}/opmerking/{$maaltijd->getMaaltijdId()}" class="Formulier InlineForm">
-			<div class="FormToggle" title="{$aanmelding->getGastenOpmerking()}">
-		{if $aanmelding->getGastenOpmerking()}
-				<a class="knop">{icon get="comment_edit" title=$aanmelding->getGastenOpmerking()}</a>
+			<div class="FormToggle" title="{$aanmelding->getGastenEetwens()}">
+		{if $aanmelding->getGastenEetwens()}
+				<a class="knop">{icon get="comment_edit" title=$aanmelding->getGastenEetwens()}</a>
 		{else}
-				<a class="knop">{icon get="comment_add" title="Gasten opmerking maken"}</a>
+				<a class="knop">{icon get="comment_add" title="Gasten allergie/diëet"}</a>
 		{/if}
 			</div>
-			<input type="text" name="gasten_opmerking" value="{$aanmelding->getGastenOpmerking()}" origvalue="{$aanmelding->getGastenOpmerking()}" class="FormField" maxlength="255" size="20" />
+			<input type="text" name="gasten_eetwens" value="{$aanmelding->getGastenEetwens()}" origvalue="{$aanmelding->getGastenEetwens()}" class="FormField" maxlength="255" size="20" />
 			<a class="knop submit" title="Wijzigingen opslaan">{icon get="accept"}</a>
 			<a class="knop reset cancel" title="Annuleren">{icon get="delete"}</a>
 		</form>
