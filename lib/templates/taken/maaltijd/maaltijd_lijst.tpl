@@ -21,59 +21,66 @@
 			</h1>
 		{/if}
 		{if $maaltijd->getAantalAanmeldingen() > 0}
-			{assign var=teller value=1}
 			{table_foreach from=$aanmeldingen inner=rows item=aanmelding table_attr='class="aanmeldingen"' cols=2 name=aanmeldingen}
-			<div class="nummer">{$teller++}</div></td>
-			{if $aanmelding->getLidId()}
-		<td class="naam">{$aanmelding->getLid()->getNaamLink(Instellingen::get('maaltijden', 'weergave_ledennamen_maaltijdlijst'), Instellingen::get('maaltijden', 'weergave_link_ledennamen'))}
-			{if $aanmelding->getLid()->getProperty('eetwens') !== ''}<div class="eetwens">{$aanmelding->getLid()->getProperty('eetwens')}</div>{/if}
-			{if $aanmelding->getGastenOpmerking() !== ''}<div class="opmerking">Gasten opmerking: {$aanmelding->getGastenOpmerking()}</div>{/if}
-		</td>
-		<td class="box">{$aanmelding->getSaldoMelding()}</td>
-	{elseif $aanmelding->getDoorLidId()}
-		<td class="naam">Gast van {$aanmelding->getDoorLid()->getNaamLink(Instellingen::get('maaltijden', 'weergave_ledennamen_maaltijdlijst'), 'plain')}</td>
-		<td class="box">-</td>
-	{else}
-		<td class="naam"></td>
-		<td class="box">-</td>
-	{/if}
-	<td class="geld">&euro;</td>
-	<td class="box" style="color: #AAAAAA">m</td>
-	<td class="clear">
-		{/table_foreach}
-	{else}
-		<p>Nog geen aanmeldingen voor deze maaltijd.</p>
-	{/if}
-	<table>
-		<tr>
-			<td style="width: 50px;">&nbsp;</td>
-			<td style="width: 200px;">
-				<h3>Maaltijdgegevens</h3>
-				<table>
-					<tr><td>Inschrijvingen:</td><td>{$maaltijd->getAantalAanmeldingen()}</td></tr>
-					<tr><td>Marge:</td><td>{$maaltijd->getMarge()}</td></tr>
-					<tr><td>Eters:</td><td>{$eterstotaal}</td></tr>
-					<tr><td>Budget koks:</td><td>&euro; {$maaltijd->getBudget()|string_format:"%.2f"}</td></tr>
-				</table>
-			</td>
-			<td style="width: 150px;">&nbsp;</td>
-			<td style="width: 500px;">
-				<h3>Corvee</h3>
-				{if $corveetaken}
-					{table_foreach from=$corveetaken inner=rows item=taak table_attr='class="corveetaken"' cols=2 name=corveetaken}
-					&bullet;&nbsp;
-					{if $taak->getLidId()}
-						{$taak->getLid()->getNaamLink(Instellingen::get('maaltijden', 'weergave_ledennamen_maaltijdlijst'), Instellingen::get('maaltijden', 'weergave_link_ledennamen'))}
-					{else}
-						<i>vacature</i>
+				{if $aanmelding->getLidId()}
+					{$aanmelding->getLid()->getNaamLink(Instellingen::get('maaltijden', 'weergave_ledennamen_maaltijdlijst'), Instellingen::get('maaltijden', 'weergave_link_ledennamen'))}
+					<br />
+					{if $aanmelding->getLid()->getProperty('eetwens') !== ''}
+						<span class="eetwens">
+							{$aanmelding->getLid()->getProperty('eetwens')}
+						</span>
 					{/if}
-					&nbsp;({$taak->getCorveeFunctie()->naam})
-					{/table_foreach}
+					{if $aanmelding->getGastenOpmerking() !== ''}
+						<span class="opmerking">Gasten opmerking:
+							{$aanmelding->getGastenOpmerking()}
+						</span>
+					{/if}
+					</td>
+					<td class="saldo">{$aanmelding->getSaldoMelding()}</td>
+				{elseif $aanmelding->getDoorLidId()}
+					Gast van {$aanmelding->getDoorLid()->getNaamLink(Instellingen::get('maaltijden', 'weergave_ledennamen_maaltijdlijst'), 'plain')}</td>
+					<td class="saldo">-</td>
 				{else}
-					<p>Geen corveetaken voor deze maaltijd in het systeem.</p>
+					</td>
+					<td class="saldo"></td>
 				{/if}
-			</td>
-		</tr>
-	</table>
-</body>
+				<td class="geld">&euro;</td>
+				<td class="box">m</td>
+				<td class="clear">
+			{/table_foreach}
+		{else}
+			<p>Nog geen aanmeldingen voor deze maaltijd.</p>
+		{/if}
+		<table>
+			<tr>
+				<td style="width: 50px;">&nbsp;</td>
+				<td style="width: 200px;">
+					<h3>Maaltijdgegevens</h3>
+					<table>
+						<tr><td>Inschrijvingen:</td><td>{$maaltijd->getAantalAanmeldingen()}</td></tr>
+						<tr><td>Marge:</td><td>{$maaltijd->getMarge()}</td></tr>
+						<tr><td>Eters:</td><td>{$eterstotaal}</td></tr>
+						<tr><td>Budget koks:</td><td>&euro; {$maaltijd->getBudget()|string_format:"%.2f"}</td></tr>
+					</table>
+				</td>
+				<td style="width: 150px;">&nbsp;</td>
+				<td style="width: 500px;">
+					<h3>Corvee</h3>
+					{if $corveetaken}
+						{table_foreach from=$corveetaken inner=rows item=taak table_attr='class="corveetaken"' cols=2 name=corveetaken}
+						&bullet;&nbsp;
+						{if $taak->getLidId()}
+							{$taak->getLid()->getNaamLink(Instellingen::get('maaltijden', 'weergave_ledennamen_maaltijdlijst'), Instellingen::get('maaltijden', 'weergave_link_ledennamen'))}
+						{else}
+							<i>vacature</i>
+						{/if}
+						&nbsp;({$taak->getCorveeFunctie()->naam})
+						{/table_foreach}
+					{else}
+						<p>Geen corveetaken voor deze maaltijd in het systeem.</p>
+					{/if}
+				</td>
+			</tr>
+		</table>
+	</body>
 </html>{/strip}

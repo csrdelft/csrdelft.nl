@@ -27,33 +27,29 @@ td {
 table.aanmeldingen td {
 	border: 1px solid black;
 	padding: 3px 5px;
+	width: 260px;
 }
 table.aanmeldingen td.clear {
-	border: none;
 	width: 20px;
+	border: none;
 }
 table.aanmeldingen td.box {
-	width: 30px;
-	padding: 3px;
+	width: 20px;
 	text-align: center;
 }
-table.aanmeldingen td.naam {
-	width: 260px;
-	padding-left: 10px;
+table.aanmeldingen td.saldo {
+	width: 40px;
+	text-align: center;
 }
 table.aanmeldingen td.geld {
 	width: 60px;
 	padding-left: 10px;
 }
-div.eetwens {
+span.eetwens {
 	font-weight: bold;
 }
-div.opmerking {
+span.opmerking {
 	font-style: italic;
-}
-div.nummer {
-	width: 30px;
-	text-align: right;
 }
 div.header {
 	width: 590px;
