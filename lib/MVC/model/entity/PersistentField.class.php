@@ -38,7 +38,7 @@ class PersistentField {
 	 */
 	public $default;
 	/**
-	 * Additional properties like 0, null, 'auto_increment'
+	 * Additional properties like 'auto_increment'
 	 * @var string
 	 */
 	public $extra;

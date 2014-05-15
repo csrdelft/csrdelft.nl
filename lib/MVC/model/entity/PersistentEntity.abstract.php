@@ -9,6 +9,8 @@ require_once 'MVC/model/entity/PersistentField.class.php';
  * 
  * @author P.W.G. Brussee <brussee@live.nl>
  * 
+ * Requires static properties in superclass: $table_name, $persistent_fields, $primary_keys
+ * Optional: $rename_fields = array("oldname" => "newname")
  */
 abstract class PersistentEntity {
 
@@ -28,7 +30,14 @@ abstract class PersistentEntity {
 	 * Static constructor is called (by inheritance) first and only from PersistenceModel.
 	 */
 	public static function __constructStatic() {
-		
+		/*
+		 * Override this to extend the persistent fields:
+		 * 
+		  parent::__constructStatic();
+		  self::$persistent_fields = parent::$persistent_fields + self::$persistent_fields;
+		 * 
+		 * Optionally run conversion code before checkTables()
+		 */
 	}
 
 	public static function getTableName() {
