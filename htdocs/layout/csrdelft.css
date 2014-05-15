@@ -818,11 +818,8 @@ input, textarea, select{
 .Formulier label.KeuzeRondjeField {
 	float: none;
 }
-.Formulier input.KeuzeRondjeField {
-	margin-left: 30%;
-}
-.Formulier input.KeuzeRondjeField:first-child {
-	margin-left: -5px;
+.Formulier .KeuzeRondjeFieldOptions {
+	float: left;
 }
 .Formulier input.IntField, .Formulier input.FloatField {
 	width: 40px;
