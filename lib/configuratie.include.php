@@ -107,17 +107,16 @@ switch (constant('MODE')) {
 		// database & lid initialiseren...
 		$db = MySQL::instance();
 		if (defined('DB_MODIFY_ENABLE') OR defined('DB_DROP_ENABLE')) {
-			// fall through to ONDERHOUD and check permissions
-		} else {
-			break;
-		}
-
-	case 'ONDERHOUD':
-		if (!LoginLid::mag('P_ADMIN')) {
-			header('location: ' . CSR_ROOT . '/onderhoud.html');
-			exit;
+			if (!LoginLid::mag('P_ADMIN')) {
+				header('location: ' . CSR_ROOT . '/onderhoud.html');
+				exit;
+			}
 		}
 		break;
+
+	case 'ONDERHOUD':
+		header('location: ' . CSR_ROOT . '/onderhoud.html');
+		exit;
 	/*
 	  case 'BOT':
 	  case 'CLI':
