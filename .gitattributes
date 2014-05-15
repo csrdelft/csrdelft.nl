@@ -759,6 +759,7 @@ htdocs/layout2/normalize.css -text
 htdocs/layout2/style.css -text
 htdocs/login.php -text
 htdocs/logout.php -text
+htdocs/onderhoud.html -text
 htdocs/pauper.php -text
 htdocs/robots.txt -text
 htdocs/soccie/count.png -text

@@ -23,11 +23,13 @@ class DatabaseAdmin extends Database {
 	 * @return DatabaseAdmin
 	 */
 	public static function instance() {
+		if (defined('DB_MODIFY_ENABLE') AND ! LoginLid::mag('P_ADMIN')) {
+			//header('location: ' . CSR_ROOT . '/onderhoud.html');
+			//exit;
+		}
 		if (!isset(self::$instance)) {
-
-			if (defined('ETC_PATH')) {
-				$cred = parse_ini_file(ETC_PATH . '/mysql.ini');
-			} else {
+			$cred = parse_ini_file(ETC_PATH . '/mysql.ini');
+			if ($cred === false) {
 				$cred = array(
 					'host' => 'localhost',
 					'user' => 'admin',
@@ -43,6 +45,20 @@ class DatabaseAdmin extends Database {
 			self::$instance = new DatabaseAdmin($dsn, $cred['user'], $cred['pass'], $options);
 		}
 		return self::$instance;
+	}
+
+	/**
+	 * Array of SQL statements for file.sql
+	 * @var array
+	 */
+	private static $queries = array();
+
+	/**
+	 * Get array of SQL statements for file.sql
+	 * @return array
+	 */
+	public static function getQueries() {
+		return self::$queries;
 	}
 
 	/**
@@ -132,6 +148,7 @@ class DatabaseAdmin extends Database {
 		if (defined('DB_MODIFY_ENABLE')) {
 			$query = self::instance()->prepare($sql);
 			$query->execute();
+			self::$queries[] = $query->queryString;
 		}
 		return $sql;
 	}
@@ -142,6 +159,7 @@ class DatabaseAdmin extends Database {
 		if (defined('DB_MODIFY_ENABLE')) {
 			$query = self::instance()->prepare($sql);
 			$query->execute();
+			self::$queries[] = $query->queryString;
 		}
 		return $sql;
 	}
@@ -151,15 +169,17 @@ class DatabaseAdmin extends Database {
 		if (defined('DB_MODIFY_ENABLE')) {
 			$query = self::instance()->prepare($sql);
 			$query->execute();
+			self::$queries[] = $query->queryString;
 		}
 		return $sql;
 	}
 
 	public static function sqlDeleteField($table, PersistentField $field) {
 		$sql = 'ALTER TABLE ' . $table . ' DROP ' . $field->field;
-		if (defined('DB_DROP_ENABLE')) {
+		if (defined('DB_MODIFY_ENABLE') AND defined('DB_DROP_ENABLE')) {
 			$query = self::instance()->prepare($sql);
 			$query->execute();
+			self::$queries[] = $query->queryString;
 		}
 		return $sql;
 	}

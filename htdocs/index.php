@@ -19,6 +19,16 @@ try {
 
 	require_once 'MVC/controller/' . $class . '.class.php';
 	$controller = new $class(Instellingen::get('stek', 'request'));
+
+	if (defined('DB_MODIFY_ENABLE') AND LoginLid::mag('P_ADMIN')) {
+		header('Content-Type: text/plain');
+		header('Content-disposition: attachment;filename=DB_modify_' . time() . '.sql');
+		foreach (DatabaseAdmin::getQueries() as $query) {
+			echo $query . "\n";
+		}
+		exit;
+	}
+
 	$controller->getContent()->view();
 }
 catch (Exception $e) { // TODO: logging

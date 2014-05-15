@@ -13,7 +13,7 @@
 define('DB_CHECK_ENABLE', null);
 # 
 # uncomment de volgende regel om de database automatisch te laten bijwerken
-#define('DB_MODIFY_ENABLE', null);
+define('DB_MODIFY_ENABLE', null);
 #
 # uncomment de volgende regel om de database automatisch te laten droppen
 #define('DB_DROP_ENABLE', null);
@@ -71,7 +71,7 @@ require_once 'lid/loginlid.class.php';
 switch (constant('MODE')) {
 	case 'ONDERHOUD':
 		if (!LoginLid::mag('P_ADMIN')) {
-			header('location: ' . CSR_ROOT . '/tools/onderhoud.html');
+			header('location: ' . CSR_ROOT . '/onderhoud.html');
 			exit;
 		}
 	case 'WEB':

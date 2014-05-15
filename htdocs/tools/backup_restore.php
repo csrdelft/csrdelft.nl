@@ -12,10 +12,8 @@ foreach (DatabaseAdmin::instance()->sqlShowTables()->fetchAll() as $table) {
 }
 $fields['actie'] = new KeuzeRondjeField('actie', null, 'Actie', array('S' => 'Backup structure', 'B' => 'Backup data', 'R' => 'Restore data'));
 $fields['tabel'] = new SelectField('tabel', null, 'Tabel', $tables);
-$fields['tabel']->onchange = 'document.getElementById("sql").value=this.value;';
 $fields['file'] = new FileField();
 $fields['btn'] = new SubmitResetCancel(CSR_ROOT, true, true, false);
-$fields['html'] = new HtmlComment('<div id="sql"></div>');
 $form = new Formulier(null, 'form', null, $fields);
 $form->titel = 'Backup/Restore database table';
 try {
