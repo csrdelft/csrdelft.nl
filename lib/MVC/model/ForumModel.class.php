@@ -114,11 +114,13 @@ class ForumDelenModel extends PersistenceModel {
 				$draad->wacht_goedkeuring = false;
 				if ($draad->aantal_posts === 0) {
 					$draad->verwijderd = true;
-					setMelding($melding . 'verwijderd (bevat geen berichten)', 2);
-					DebugLogModel::instance()->log(get_called_class(), 'getWachtOpGoedkeuring', array(), 'draad ' . $draad->id . ' verwijderd');
+					$melding .= 'verwijderd (bevat geen berichten)';
+					setMelding($melding, 2);
+					DebugLogModel::instance()->log(get_called_class(), 'getWachtOpGoedkeuring', array(), $melding);
 				} else {
-					setMelding($melding . 'goedgekeurd (bevat ' . $draad->aantal_posts . ' berichten)', 2);
-					DebugLogModel::instance()->log(get_called_class(), 'getWachtOpGoedkeuring', array(), 'draad ' . $draad->id . ' goedgekeurd');
+					$melding .= 'goedgekeurd (bevat ' . $draad->aantal_posts . ' berichten)';
+					setMelding($melding, 2);
+					DebugLogModel::instance()->log(get_called_class(), 'getWachtOpGoedkeuring', array(), $melding);
 				}
 				ForumDradenModel::instance()->update($draad);
 			}
