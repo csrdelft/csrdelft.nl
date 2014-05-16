@@ -74,10 +74,9 @@ class DatabaseAdmin extends Database {
 	}
 
 	/**
-	 * Backup table data to file.
+	 * Backup table structure and data.
 	 * 
 	 * @param string $name
-	 * @return string path to data file
 	 */
 	public static function sqlBackupTable($name) {
 		$filename = 'backup-' . $name . '_' . date('d-m-Y_H-i-s') . '.sql.gz';

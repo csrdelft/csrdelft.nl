@@ -13,10 +13,10 @@
 define('DB_CHECK_ENABLE', null);
 # 
 # uncomment de volgende regel om de database automatisch te laten bijwerken
-#define('DB_MODIFY_ENABLE', null);
+#define('DB_MODIFY_ENABLE', 'heb je een backup gemaakt?');
 #
 # uncomment de volgende regel om de database automatisch te laten droppen
-#define('DB_DROP_ENABLE', null);
+#define('DB_DROP_ENABLE', 'heb je een backup gemaakt?');
 # 
 # de wiki genereert de nodige notices. En heeft daarom de error_reporting 
 # anders ingesteld.
