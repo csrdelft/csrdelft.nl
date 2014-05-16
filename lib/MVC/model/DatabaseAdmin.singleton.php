@@ -125,7 +125,9 @@ class DatabaseAdmin extends Database {
 		foreach ($fields as $name => $field) {
 			$sql .= $field->toSQL() . ', ';
 		}
-		if (!empty($primary_keys)) {
+		if (empty($primary_keys)) {
+			$sql = substr($sql, 0, -2); // remove last ,
+		} else {
 			$sql .= 'PRIMARY KEY (' . implode(', ', $primary_keys) . ')';
 		}
 		$sql .= ') ENGINE=InnoDB DEFAULT CHARSET=utf8 auto_increment=1';
