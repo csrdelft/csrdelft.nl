@@ -20,9 +20,10 @@ class DebugLogModel extends PersistenceModel {
 		}
 	}
 
-	public function log($module = '', $action = '', array $args = array()) {
+	public function log($module, $action, array $args = array(), $dump = null) {
 		$entry = new LogEntry();
 		$entry->module_action = $module . '->' . $action . '(' . implode(', ', $args) . ')';
+		$entry->dump = $dump;
 		$e = new Exception();
 		$entry->call_trace = $e->getTraceAsString();
 		$entry->moment = getDateTime();

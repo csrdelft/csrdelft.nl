@@ -14,6 +14,11 @@ class LogEntry extends PersistentEntity {
 	 */
 	public $module_action;
 	/**
+	 * Dump data
+	 * @var LongText
+	 */
+	public $dump;
+	/**
 	 * Call trace
 	 * @var string
 	 */
@@ -59,6 +64,7 @@ class LogEntry extends PersistentEntity {
 	 */
 	protected static $persistent_fields = array(
 		'module_action' => array(T::String),
+		'dump' => array(T::LongText),
 		'call_trace' => array(T::Text),
 		'moment' => array(T::DateTime),
 		'lid_id' => array(T::UID),
