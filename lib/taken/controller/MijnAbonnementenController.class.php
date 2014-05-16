@@ -1,6 +1,5 @@
 <?php
 
-
 require_once 'taken/model/AbonnementenModel.class.php';
 require_once 'taken/model/MaaltijdRepetitiesModel.class.php';
 require_once 'taken/view/MijnAbonnementenView.class.php';
@@ -17,8 +16,7 @@ class MijnAbonnementenController extends AclController {
 			$this->acl = array(
 				'mijn' => 'P_MAAL_IK'
 			);
-		}
-		else {
+		} else {
 			$this->acl = array(
 				'inschakelen' => 'P_MAAL_IK',
 				'uitschakelen' => 'P_MAAL_IK'
@@ -34,7 +32,7 @@ class MijnAbonnementenController extends AclController {
 		}
 		$this->performAction(array($mrid));
 	}
-	
+
 	public function mijn() {
 		$abonnementen = AbonnementenModel::getAbonnementenVoorLid(\LoginLid::instance()->getUid(), true, true);
 		$this->view = new MijnAbonnementenView($abonnementen);
@@ -42,22 +40,25 @@ class MijnAbonnementenController extends AclController {
 		$this->view->addStylesheet('taken.css');
 		$this->view->addScript('taken.js');
 	}
-	
+
 	public function inschakelen($mrid) {
 		$abo_aantal = AbonnementenModel::inschakelenAbonnement($mrid, \LoginLid::instance()->getUid());
 		$this->view = new MijnAbonnementenView($abo_aantal[0]);
 		if ($abo_aantal[1] > 0) {
-			setMelding('Automatisch aangemeld voor '. $abo_aantal[1] .' maaltijd'. ($abo_aantal[1] === 1 ? '' : 'en'), 2);
+			setMelding('Automatisch aangemeld voor ' . $abo_aantal[1] . ' maaltijd' . ($abo_aantal[1] === 1 ? '' : 'en'), 2);
+			DebugLogModel::instance()->log(get_called_class(), 'inschakelen', array('aangemeld voor ' . $abo_aantal[1] . ' maaltijden'));
 		}
 	}
-	
+
 	public function uitschakelen($mrid) {
 		$abo_aantal = AbonnementenModel::uitschakelenAbonnement($mrid, \LoginLid::instance()->getUid());
 		$this->view = new MijnAbonnementenView($mrid);
 		if ($abo_aantal[1] > 0) {
-			setMelding('Automatisch afgemeld voor '. $abo_aantal[1] .' maaltijd'. ($abo_aantal[1] === 1 ? '' : 'en'), 2);
+			setMelding('Automatisch afgemeld voor ' . $abo_aantal[1] . ' maaltijd' . ($abo_aantal[1] === 1 ? '' : 'en'), 2);
+			DebugLogModel::instance()->log(get_called_class(), 'inschakelen', array('afgemeld voor ' . $abo_aantal[1] . ' maaltijden'));
 		}
 	}
+
 }
 
 ?>

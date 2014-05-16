@@ -1,6 +1,5 @@
 <?php
 
-
 require_once 'taken/model/AbonnementenModel.class.php';
 require_once 'taken/model/MaaltijdRepetitiesModel.class.php';
 require_once 'taken/view/BeheerAbonnementenView.class.php';
@@ -19,8 +18,7 @@ class BeheerAbonnementenController extends AclController {
 				'ingeschakeld' => 'P_MAAL_MOD',
 				'abonneerbaar' => 'P_MAAL_MOD'
 			);
-		}
-		else {
+		} else {
 			$this->acl = array(
 				'inschakelen' => 'P_MAAL_MOD',
 				'uitschakelen' => 'P_MAAL_MOD',
@@ -38,8 +36,8 @@ class BeheerAbonnementenController extends AclController {
 		}
 		$this->performAction(array($mrid));
 	}
-	
-	private function beheer($alleenWaarschuwingen, $ingeschakeld=null) {
+
+	private function beheer($alleenWaarschuwingen, $ingeschakeld = null) {
 		$repetities = MaaltijdRepetitiesModel::getAlleRepetities();
 		$matrix = AbonnementenModel::getAbonnementenMatrix($repetities, false, $alleenWaarschuwingen, $ingeschakeld);
 		$this->view = new BeheerAbonnementenView($matrix, $repetities, $alleenWaarschuwingen, $ingeschakeld);
@@ -49,19 +47,19 @@ class BeheerAbonnementenController extends AclController {
 		$this->view->addScript('autocomplete/jquery.autocomplete.min.js');
 		$this->view->addScript('taken.js');
 	}
-	
+
 	public function waarschuwingen() {
 		$this->beheer(true, null);
 	}
-	
+
 	public function ingeschakeld() {
 		$this->beheer(false, true);
 	}
-	
+
 	public function abonneerbaar() {
 		$this->beheer(false, false);
 	}
-	
+
 	public function voorlid() {
 		$InputField = new LidField('voor_lid', null, null, 'allepersonen'); // fetches POST values itself
 		if ($InputField->validate()) {
@@ -69,13 +67,12 @@ class BeheerAbonnementenController extends AclController {
 			$matrix = array();
 			$matrix[$uid] = AbonnementenModel::getAbonnementenVoorLid($uid, false, true);
 			$this->view = new BeheerAbonnementenView($matrix);
-		}
-		else {
+		} else {
 			$this->view = new BeheerAbonnementenView(array(), null);
 			setMelding($InputField->error, -1);
 		}
 	}
-	
+
 	public function novieten() {
 		$mrid = (int) filter_input(INPUT_POST, 'mrid', FILTER_SANITIZE_NUMBER_INT);
 		$aantal = AbonnementenModel::inschakelenAbonnementVoorNovieten($mrid);
@@ -83,33 +80,36 @@ class BeheerAbonnementenController extends AclController {
 		$novieten = sizeof($matrix);
 		$this->view = new BeheerAbonnementenView($matrix);
 		setMelding(
-			$aantal .' abonnement'. ($aantal !== 1 ? 'en' : '') .' aangemaakt voor '.
-			$novieten .' noviet'. ($novieten !== 1 ? 'en' : '') .'.', 1);
+				$aantal . ' abonnement' . ($aantal !== 1 ? 'en' : '') . ' aangemaakt voor ' .
+				$novieten . ' noviet' . ($novieten !== 1 ? 'en' : '') . '.', 1);
 	}
-	
+
 	public function inschakelen($mrid) {
 		$uid = filter_input(INPUT_POST, 'voor_lid', FILTER_SANITIZE_STRING);
 		if (!\Lid::exists($uid)) {
-			throw new Exception('Lid bestaat niet: $uid ='. $uid);
+			throw new Exception('Lid bestaat niet: $uid =' . $uid);
 		}
 		$abo_aantal = AbonnementenModel::inschakelenAbonnement($mrid, $uid);
 		$this->view = new BeheerAbonnementenView($abo_aantal[0]);
 		if ($abo_aantal[1] > 0) {
-			setMelding('Automatisch aangemeld voor '. $abo_aantal[1] .' maaltijd'. ($abo_aantal[1] === 1 ? '' : 'en'), 2);
+			setMelding('Automatisch aangemeld voor ' . $abo_aantal[1] . ' maaltijd' . ($abo_aantal[1] === 1 ? '' : 'en'), 2);
+			DebugLogModel::instance()->log(get_called_class(), 'inschakelen', array('aangemeld voor ' . $abo_aantal[1] . ' maaltijden'));
 		}
 	}
-	
+
 	public function uitschakelen($mrid) {
 		$uid = filter_input(INPUT_POST, 'voor_lid', FILTER_SANITIZE_STRING);
 		if (!\Lid::exists($uid)) {
-			throw new Exception('Lid bestaat niet: $uid ='. $uid);
+			throw new Exception('Lid bestaat niet: $uid =' . $uid);
 		}
 		$abo_aantal = AbonnementenModel::uitschakelenAbonnement($mrid, $uid);
 		$this->view = new BeheerAbonnementenView($abo_aantal[0]);
 		if ($abo_aantal[1] > 0) {
-			setMelding('Automatisch afgemeld voor '. $abo_aantal[1] .' maaltijd'. ($abo_aantal[1] === 1 ? '' : 'en'), 2);
+			setMelding('Automatisch afgemeld voor ' . $abo_aantal[1] . ' maaltijd' . ($abo_aantal[1] === 1 ? '' : 'en'), 2);
+			DebugLogModel::instance()->log(get_called_class(), 'inschakelen', array('afgemeld voor ' . $abo_aantal[1] . ' maaltijden'));
 		}
 	}
+
 }
 
 ?>

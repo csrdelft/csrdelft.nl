@@ -12,7 +12,7 @@ class DebugLogModel extends PersistenceModel {
 
 	protected static $instance;
 
-	public function log($module = '', $action = '', array $args = null) {
+	public function log($module = '', $action = '', array $args = array()) {
 		$entries = $this->find('moment < ?', array(strtotime('-1 month')));
 		foreach ($entries as $entry) {
 			$this->delete($entry);
