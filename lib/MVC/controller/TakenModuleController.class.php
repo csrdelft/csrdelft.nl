@@ -1,7 +1,5 @@
 <?php
 
-require_once 'MVC/controller/AclController.abstract.php';
-
 /**
  * TakenModuleController.class.php
  * 

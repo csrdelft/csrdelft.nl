@@ -1,8 +1,8 @@
 <?php
 
-require_once 'MVC/controller/AclController.abstract.php';
 require_once 'taken/model/MaaltijdenModel.class.php';
 require_once 'taken/model/AanmeldingenModel.class.php';
+require_once 'taken/model/TakenModel.class.php';
 require_once 'taken/view/MijnMaaltijdenView.class.php';
 
 /**

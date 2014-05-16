@@ -1,6 +1,5 @@
 <?php
 
-require_once 'MVC/controller/AclController.abstract.php';
 require_once 'taken/model/TakenModel.class.php';
 require_once 'taken/model/CorveeRepetitiesModel.class.php';
 require_once 'taken/view/BeheerTakenView.class.php';
