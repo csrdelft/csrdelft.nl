@@ -92,8 +92,9 @@ class BeheerAbonnementenController extends AclController {
 		$abo_aantal = AbonnementenModel::inschakelenAbonnement($mrid, $uid);
 		$this->view = new BeheerAbonnementenView($abo_aantal[0]);
 		if ($abo_aantal[1] > 0) {
-			setMelding('Automatisch aangemeld voor ' . $abo_aantal[1] . ' maaltijd' . ($abo_aantal[1] === 1 ? '' : 'en'), 2);
-			DebugLogModel::instance()->log(get_called_class(), 'inschakelen', array('aangemeld voor ' . $abo_aantal[1] . ' maaltijden'));
+			$melding = 'Automatisch aangemeld voor ' . $abo_aantal[1] . ' maaltijd' . ($abo_aantal[1] === 1 ? '' : 'en');
+			setMelding($melding, 2);
+			DebugLogModel::instance()->log(get_called_class(), $melding);
 		}
 	}
 
@@ -105,8 +106,9 @@ class BeheerAbonnementenController extends AclController {
 		$abo_aantal = AbonnementenModel::uitschakelenAbonnement($mrid, $uid);
 		$this->view = new BeheerAbonnementenView($abo_aantal[0]);
 		if ($abo_aantal[1] > 0) {
-			setMelding('Automatisch afgemeld voor ' . $abo_aantal[1] . ' maaltijd' . ($abo_aantal[1] === 1 ? '' : 'en'), 2);
-			DebugLogModel::instance()->log(get_called_class(), 'inschakelen', array('afgemeld voor ' . $abo_aantal[1] . ' maaltijden'));
+			$melding = 'Automatisch afgemeld voor ' . $abo_aantal[1] . ' maaltijd' . ($abo_aantal[1] === 1 ? '' : 'en');
+			setMelding($melding, 2);
+			DebugLogModel::instance()->log(get_called_class(), $melding);
 		}
 	}
 
