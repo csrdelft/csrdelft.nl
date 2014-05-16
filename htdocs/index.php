@@ -17,8 +17,10 @@ try {
 	}
 	$class .= 'Controller';
 
+	$request = Instellingen::get('stek', 'request');
+
 	require_once 'MVC/controller/' . $class . '.class.php';
-	$controller = new $class(Instellingen::get('stek', 'request'));
+	$controller = new $class($request);
 
 	if (defined('DB_MODIFY_ENABLE') AND LoginLid::mag('P_ADMIN')) {
 		$queries = DatabaseAdmin::getQueries();
@@ -36,9 +38,12 @@ try {
 	}
 
 	$controller->getContent()->view();
-} catch (Exception $e) { // TODO: logging
+}
+catch (Exception $e) {
 	$protocol = filter_input(INPUT_SERVER, 'SERVER_PROTOCOL', FILTER_SANITIZE_STRING);
 	header($protocol . ' 500 ' . $e->getMessage(), true, 500);
+
+	DebugLogModel::instance()->log($class, '__construct', array($request), $e->getTraceAsString());
 
 	if (defined('DEBUG') && (LoginLid::mag('P_ADMIN') || LoginLid::instance()->isSued())) {
 		echo str_replace('#', '<br />#', $e); // stacktrace
