@@ -74,6 +74,7 @@ class Database extends PDO {
 			} else {
 				$keys[] = '/[?]/';
 			}
+			$params[$key] = '"' . $value . '"'; // quotes
 		}
 		$query = preg_replace($keys, $params, $query, 1, $count);
 		return $query;
