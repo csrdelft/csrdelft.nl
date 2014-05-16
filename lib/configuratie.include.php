@@ -36,7 +36,7 @@ if (!defined('MODE')) {
 }
 
 //alle paden goedzetten.
-require_once('include.defines.php');
+require_once 'include.defines.php';
 
 if (constant('MODE') == 'WEB') {
 	# We willen geen sessie-id in de url hebben

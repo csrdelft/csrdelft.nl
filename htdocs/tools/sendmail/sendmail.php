@@ -13,10 +13,10 @@ exit();
 function main() {
 
 	# instellingen & rommeltjes
-	require_once('configuratie.include.php');
-	require_once('common.functions.php');
+	require_once 'configuratie.include.php';
+	require_once 'common.functions.php';
 
-	require_once("maildata.php");
+	require_once 'maildata.php';
 
 	# Ophalen welk form het is
 	$form_id = (isset($_POST['form_id'])) ? $_POST['form_id'] : 'f3u7z0r';

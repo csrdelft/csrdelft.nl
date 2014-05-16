@@ -768,10 +768,9 @@ class ProfielVoorkeur extends Profiel {
 	 */
 	public function assignFields() {
 		LidCache::updateLid($this->lid->getUid());
-		$profiel = $this->lid->getProfiel();
 		//permissies
 		$opties = array(1 => 'nee', 2 => 'misschien', 3 => 'ja');
-		require_once('voorkeur/lidvoorkeur.class.php');
+		require_once 'voorkeur/lidvoorkeur.class.php';
 		$lidvoorkeur = new Lidvoorkeur($this->lid->getUid());
 		$commissies = $lidvoorkeur->getCommissies();
 		$voorkeuren = $lidvoorkeur->getVoorkeur();

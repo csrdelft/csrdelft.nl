@@ -16,7 +16,7 @@ class CommissieOverzicht extends TemplateView {
 	function view() {
 		$res = '';
 		if (LoginLid::mag('P_LEDEN_MOD')) {
-			require_once('voorkeur/commissie.class.php');
+			require_once 'voorkeur/commissie.class.php';
 			if ($this->id >= 0) {
 				$commissie = OldCommissie::getCommissie($this->id);
 				$res .= '<h1> Geinteresseerde voor ' . $commissie->getNaam() . ' </h1> 
@@ -79,7 +79,7 @@ class LidOverzicht extends TemplateView {
 
 	function viewProfile() {
 		$res = '<h1> Voorkeuren!</h1>';
-		require_once('voorkeur/lidvoorkeur.class.php');
+		require_once 'voorkeur/lidvoorkeur.class.php';
 		$res .= '<p>Naam: ' . Lid::getNaamLinkFromUid($this->lid, 'full', 'link') . '</p>';
 		$voorkeur = new LidVoorkeur($this->lid);
 		$voorkeuren = $voorkeur->getVoorkeur();
@@ -102,7 +102,7 @@ class LidOverzicht extends TemplateView {
 	}
 
 	function save($actie) {
-		require_once('voorkeur/lidvoorkeur.class.php');
+		require_once 'voorkeur/lidvoorkeur.class.php';
 		$voorkeur = new LidVoorkeur($this->lid);
 		$voorkeur->setPraesesOpmerking($actie);
 	}

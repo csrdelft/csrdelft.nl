@@ -126,7 +126,7 @@ if (!(LoginLid::mag('P_LEDEN_READ') or LoginLid::mag('P_OUDLEDEN_READ'))) {
 			invokeRefresh('/communicatie/profiel/' . $uid, $melding);
 			break;
 		case 'addToGoogleContacts';
-			require_once('googlesync.class.php');
+			require_once 'googlesync.class.php';
 			GoogleSync::doRequestToken(CSR_ROOT . '/communicatie/profiel/' . $uid . '/addToGoogleContacts');
 
 			$gSync = GoogleSync::instance();

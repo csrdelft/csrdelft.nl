@@ -2,14 +2,14 @@
 
 require_once 'configuratie.include.php';
 
-require_once('courant/courant.class.php');
+require_once 'courant/courant.class.php';
 $courant = new Courant();
 if (!$courant->magToevoegen()) {
 	header('location: ' . CSR_ROOT);
 	exit;
 }
 
-require_once('courant/courantbeheercontent.class.php');
+require_once 'courant/courantbeheercontent.class.php';
 $body = new CourantBeheerContent($courant);
 
 //url waarheen standaard gerefreshed wordt

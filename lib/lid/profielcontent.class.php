@@ -41,7 +41,7 @@ class ProfielContent extends TemplateView {
 			$profhtml['woonoord'] = '';
 		}
 
-		require_once('groepen/groepcontent.class.php');
+		require_once 'groepen/groepcontent.class.php';
 		$profhtml['groepen'] = new GroepenProfielContent($this->lid->getUid());
 
 		if (LoginLid::instance()->getUid() == $this->lid->getUid() || LoginLid::mag('P_MAAL_MOD')) {

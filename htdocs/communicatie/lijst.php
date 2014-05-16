@@ -55,7 +55,7 @@ if (isset($_GET['q'])) {
 
 
 if (isset($_GET['addToGoogle'])) {
-	require_once('googlesync.class.php');
+	require_once 'googlesync.class.php';
 	GoogleSync::doRequestToken(CSR_ROOT . Instellingen::get('stek', 'request'));
 
 	$gSync = GoogleSync::instance();
