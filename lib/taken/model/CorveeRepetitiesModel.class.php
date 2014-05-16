@@ -1,6 +1,7 @@
 <?php
 
 require_once 'taken/model/entity/CorveeRepetitie.class.php';
+require_once 'MVC/model/taken/FunctiesModel.class.php';
 require_once 'taken/model/VoorkeurenModel.class.php';
 
 /**
