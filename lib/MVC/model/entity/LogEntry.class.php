@@ -65,7 +65,7 @@ class LogEntry extends PersistentEntity {
 		'su_id' => array(T::UID, true),
 		'ip' => array(T::String),
 		'request' => array(T::String),
-		'referer' => array(T::String),
+		'referer' => array(T::String, true),
 		'user_agent' => array(T::String)
 	);
 	/**
