@@ -516,6 +516,9 @@ class LoginLid {
 		}
 	}
 
+	/**
+	 * @deprecated Remove after MVC refactor is complete
+	 */
 	private function logBezoek() {
 		$db = MySql::instance();
 		$uid = $this->getUid();

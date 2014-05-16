@@ -125,7 +125,10 @@ class DatabaseAdmin extends Database {
 		foreach ($fields as $name => $field) {
 			$sql .= $field->toSQL() . ', ';
 		}
-		$sql .= 'PRIMARY KEY (' . implode(', ', $primary_keys) . ')) ENGINE=InnoDB DEFAULT CHARSET=utf8 auto_increment=1';
+		if (!empty($primary_keys)) {
+			$sql .= 'PRIMARY KEY (' . implode(', ', $primary_keys) . ')';
+		}
+		$sql .= ') ENGINE=InnoDB DEFAULT CHARSET=utf8 auto_increment=1';
 		if (defined('DB_MODIFY_ENABLE')) {
 			$query = self::instance()->prepare($sql);
 			$query->execute();
