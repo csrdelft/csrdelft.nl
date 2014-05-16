@@ -46,7 +46,7 @@ catch (Exception $e) {
 	DebugLogModel::instance()->log($class, '__construct', array($request), $e);
 
 	if (defined('DEBUG') && (LoginLid::mag('P_ADMIN') || LoginLid::instance()->isSued())) {
-		echo $e; // stacktrace
+		echo str_replace('#', '<br />#', $e); // stacktrace 
 	}
 }
 
