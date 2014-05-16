@@ -260,6 +260,7 @@ class AanmeldingenModel {
 		$db = \Database::instance();
 		$query = $db->prepare($sql);
 		$query->execute($values);
+		DebugLogModel::instance()->log(get_called_class(), Database::interpolateQuery($query, $values));
 		if ($mid !== null) {
 			if ($query->rowCount() !== 1) {
 				throw new Exception('New aanmelding faalt: $query->rowCount() =' . $query->rowCount());
