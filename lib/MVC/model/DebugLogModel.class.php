@@ -14,7 +14,7 @@ class DebugLogModel extends PersistenceModel {
 
 	protected function __construct() {
 		parent::__construct();
-		$entries = $this->find('moment < ?', array(strtotime('-2 month')));
+		$entries = $this->find('moment < ?', array(strtotime('-2 months')));
 		foreach ($entries as $entry) {
 			$this->delete($entry);
 		}
