@@ -134,7 +134,7 @@ abstract class Controller {
 		if (!$this->hasAction($this->action)) {
 			throw new Exception('Action undefined: ' . $this->action);
 		}
-		DebugLogModel::instance()->log(get_called_class(), $this->action, $args);
+		//DebugLogModel::instance()->log(get_called_class(), $this->action, $args);
 		call_user_func_array(array($this, $this->action), $args);
 	}
 

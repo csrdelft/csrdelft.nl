@@ -58,7 +58,7 @@ class LogEntry extends PersistentEntity {
 	 * @var array
 	 */
 	protected static $persistent_fields = array(
-		'module_action' => array(T::Text),
+		'module_action' => array(T::String),
 		'call_trace' => array(T::Text),
 		'moment' => array(T::DateTime),
 		'lid_id' => array(T::UID),
@@ -72,7 +72,7 @@ class LogEntry extends PersistentEntity {
 	 * Database primary key
 	 * @var array
 	 */
-	protected static $primary_keys = array();
+	protected static $primary_keys = array('module_action', 'moment');
 	/**
 	 * Database table name
 	 * @var string

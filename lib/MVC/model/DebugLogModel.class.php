@@ -12,11 +12,15 @@ class DebugLogModel extends PersistenceModel {
 
 	protected static $instance;
 
-	public function log($module = '', $action = '', array $args = array()) {
+	protected function __construct() {
+		parent::__construct();
 		$entries = $this->find('moment < ?', array(strtotime('-1 month')));
 		foreach ($entries as $entry) {
 			$this->delete($entry);
 		}
+	}
+
+	public function log($module = '', $action = '', array $args = array()) {
 		$entry = new LogEntry();
 		$entry->module_action = $module . '->' . $action . '(' . implode(', ', $args) . ')';
 		$e = new Exception();
