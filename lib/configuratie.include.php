@@ -50,29 +50,29 @@ if (constant('MODE') == 'WEB') {
 setlocale(LC_ALL, 'nl_NL.utf8');
 setlocale(LC_ALL, 'nld_nld');
 
-//standaard templaat voor de C.S.R.-courant
-define('COURANT_TEMPLATE', 'courant.tpl');
-
 # wordt gebruikt om pagina's alleen op Confide te laten zien
 define('CONFIDE_IP', '80.112.180.123');
 
 //Feut ip voor de rss feed in #csrdelft
 define('FEUT_IP', '82.94.188.77');
 
-//id's van de regeltjes in de databasetabel savedquery voor de queues van mededelingen
+/**
+ * @deprecated standaard templaat voor de C.S.R.-courant
+ */
+define('COURANT_TEMPLATE', 'courant.tpl');
+
+/**
+ * @deprecated numberid's van de regeltjes in de databasetabel savedquery voor de queues van mededelingen
+ */
 define('ROWID_QUEUE_MEDEDELINGEN', 62);
 
 //stapeltje dingen includeren die toch (bijna) altijd nodig zijn:
 require_once 'common.functions.php';
 require_once 'mysql.class.php';
-require_once 'MVC/model/Agendeerbaar.interface.php';
 require_once 'lid/loginlid.class.php';
 
 switch (constant('MODE')) {
 	case 'WEB':
-		require_once 'MVC/view/Validator.interface.php';
-		require_once 'MVC/view/TemplateView.abstract.php';
-		require_once 'MVC/view/Formulier.class.php';
 
 		// als er een wikiconfiguratie is en hierin is de csr-wikiauthicatie geselecteerd 
 		// dan is de sessie al gestart en zijn sommige includes niet nodig.
@@ -82,14 +82,15 @@ switch (constant('MODE')) {
 			require_once 'MVC/model/PersistenceModel.abstract.php';
 			require_once 'MVC/model/LidInstellingenModel.class.php';
 
+			require_once 'MVC/view/TemplateView.abstract.php';
+			require_once 'MVC/view/Formulier.class.php';
+			require_once 'MVC/view/CsrUbb.class.php';
 			require_once 'MVC/view/CsrLayoutPage.class.php';
 			require_once 'MVC/view/CsrLayout2Page.class.php';
-			require_once 'MVC/view/CsrUbb.class.php';
 			require_once 'simplehtml.class.php';
 			require_once 'icon.class.php';
 
 			require_once 'MVC/controller/AclController.abstract.php';
-			require_once('MVC/controller/AgendaController.class.php');
 
 			$req = filter_var($_SERVER['REQUEST_URI'], FILTER_SANITIZE_URL);
 			Instellingen::setTemp('stek', 'request', $req);

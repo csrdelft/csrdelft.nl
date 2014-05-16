@@ -389,7 +389,7 @@ function ketzer_ajax(url, ketzer) {
 		});
 	});
 	jqXHR.fail(function(jqXHR, textStatus, errorThrown) {
-		$(ketzer + ' .aanmelddata').html('<span style="color: red; font-weight: bold;">Error:</span><br />' + errorThrown);
+		$(ketzer + ' .aanmelddata').html('<span style="color: red; font-weight: bold;">Error: </span>' + errorThrown);
 		alert(errorThrown);
 	});
 	return true;
@@ -465,8 +465,9 @@ function nickvalid() {
 	return false;
 }
 function setcharset() {
-	if (document.charset && document.loginform["Character set"])
-		document.loginform['Character set'].value = document.charset
+	if (document.charset && document.loginform['Character set']) {
+		document.loginform['Character set'].value = document.charset;
+	}
 }
 /*
  * Apply UBB to a string, and put it in innerHTML of given div.
@@ -476,11 +477,11 @@ function setcharset() {
  */
 function applyUBB(string, div) {
 	http.abort();
-	var params = "string=" + encodeURIComponent(string);
-	http.open("POST", "/tools/ubb.php", true);
-	http.setRequestHeader("Content-length", params.length);
-	http.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-	http.setRequestHeader("Connection", "close");
+	var params = 'string=' + encodeURIComponent(string);
+	http.open('POST', '/tools/ubb.php', true);
+	http.setRequestHeader('Content-length', params.length);
+	http.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+	http.setRequestHeader('Connection', 'close');
 
 	http.onreadystatechange = function() {
 		if (http.readyState == 4) {

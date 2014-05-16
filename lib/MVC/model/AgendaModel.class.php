@@ -1,5 +1,6 @@
 <?php
 
+require_once('MVC/controller/AgendaController.class.php');
 require_once 'taken/model/MaaltijdenModel.class.php';
 require_once 'taken/model/TakenModel.class.php';
 

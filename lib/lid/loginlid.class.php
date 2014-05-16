@@ -1,14 +1,16 @@
 <?php
 
-/*
- * loginlid.class.php	| 	Jan Pieter Waagmeester (jieter@jpwaag.com)
- *
- * Bewaart het huidige ingeloggede lid, inloggen, uitloggen, rechten.
- *
- */
+require_once 'MVC/model/Agendeerbaar.interface.php';
 require_once 'lid.class.php';
 require_once 'lichting.class.php';
 
+/**
+ * loginlid.class.php
+ * 
+ * @author Jan Pieter Waagmeester <jieter@jpwaag.com>
+ *
+ * Bewaart het huidige ingeloggede lid, inloggen, uitloggen, rechten.
+ */
 class LoginLid {
 
 	private static $instance;
@@ -282,7 +284,7 @@ class LoginLid {
 
 		//alleen als $token_athorizable true is testen we met de permissies van het
 		//geauthenticeerde lid, anders met P_NOBODY
-		if ($this->authenticatedByToken AND !$token_authorizable) {
+		if ($this->authenticatedByToken AND ! $token_authorizable) {
 			$liddescr = 'P_NOBODY';
 		}
 

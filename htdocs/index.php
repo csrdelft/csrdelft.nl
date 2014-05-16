@@ -40,13 +40,13 @@ try {
 	$controller->getContent()->view();
 }
 catch (Exception $e) {
-	$protocol = filter_input(INPUT_SERVER, 'SERVER_PROTOCOL', FILTER_SANITIZE_STRING);
-	header($protocol . ' 500 ' . $e->getMessage(), true, 500);
-
-	DebugLogModel::instance()->log($class, '__construct', array($request), $e->getTraceAsString());
+	$protocol = (isset($_SERVER['SERVER_PROTOCOL']) ? $_SERVER['SERVER_PROTOCOL'] : 'HTTP/1.0');
+	$code = ($e->getCode() >= 100 ? $e->getCode() : 500);
+	header($protocol . ' ' . $code . ' ' . $e->getMessage());
+	DebugLogModel::instance()->log($class, '__construct', array($request), $e);
 
 	if (defined('DEBUG') && (LoginLid::mag('P_ADMIN') || LoginLid::instance()->isSued())) {
-		echo str_replace('#', '<br />#', $e); // stacktrace
+		echo $e; // stacktrace
 	}
 }
 

@@ -68,7 +68,7 @@ class AgendaController extends AclController {
 	}
 
 	public function icalendar() {
-		header("Content-Type: text/calendar");
+		header('Content-Type: text/calendar');
 		$this->view = new AgendaICalendarView($this->model);
 	}
 

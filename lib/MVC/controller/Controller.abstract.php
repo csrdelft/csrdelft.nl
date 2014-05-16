@@ -139,7 +139,8 @@ abstract class Controller {
 	}
 
 	protected function geentoegang() {
-		header('HTTP/1.0 403 Forbidden');
+		http_response_code(403);
+		DebugLogModel::instance()->log(get_called_class(), $this->action, array(), 'geentoegang');
 		if ($this->isPosted()) {
 			echo 'access denied';
 		} else {

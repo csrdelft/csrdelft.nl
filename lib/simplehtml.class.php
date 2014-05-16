@@ -1,13 +1,13 @@
 <?php
 
-# C.S.R. Delft | pubcie@csrdelft.nl
-# -------------------------------------------------------------------
-# simplehtml.class.php
-# -------------------------------------------------------------------
-# Van deze klasse worden alle klassen afgeleid die ervoor
-# bedoeld zijn om uiteindelijk HTML te tonen met view()
-# -------------------------------------------------------------------
-
+/**
+ * simplehtml.class.php
+ * 
+ * @author C.S.R. Delft <pubcie@csrdelft.nl>
+ * 
+ * Van deze klasse worden alle klassen afgeleid die ervoor bedoeld zijn om uiteindelijk HTML te tonen met view().
+ *
+ */
 abstract class SimpleHTML implements View {
 
 	public function getTitel() {
@@ -65,6 +65,7 @@ abstract class SimpleHTML implements View {
 		}
 		// Agenda
 		if (LoginLid::mag('P_AGENDA_READ') && LidInstellingen::get('zijbalk', 'agendaweken') > 0) {
+			require_once('MVC/model/AgendaModel.class.php');
 			$zijkolom[] = new AgendaZijbalkView(AgendaModel::instance(), LidInstellingen::get('zijbalk', 'agendaweken'));
 		}
 		// Laatste mededelingen

@@ -33,7 +33,7 @@
 # Hans van Kranenburg ;]
 #
 
-header("content-type: text/plain");
+header('content-type: text/plain');
 define('MODE', 'BOT');
 
 require_once 'configuratie.include.php';
