@@ -27,7 +27,7 @@ try {
 		if (empty($queries)) {
 			debugprint('DB_MODIFY_ENABLED');
 		} else {
-			header('Content-Type: text/plain');
+			header('Content-Type: text/x-sql');
 			header('Content-disposition: attachment;filename=DB_modify_' . time() . '.sql');
 			foreach ($queries as $query) {
 				echo $query . ";\n";

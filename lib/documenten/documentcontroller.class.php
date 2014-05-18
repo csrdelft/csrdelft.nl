@@ -142,7 +142,7 @@ class DocumentController extends Controller {
 		$fields['naam'] = new RequiredTextField('naam', $this->document->getNaam(), 'Documentnaam');
 		$fields['uploader'] = new FileField('/documenten', $this->document->getBestand());
 		$fields['knopjes'] = new SubmitResetCancel('/communicatie/documenten/');
-		$formulier = new PopupForm(null, 'documentForm', '/communicatie/documenten/bewerken/' . $this->document->getId(), $fields);
+		$formulier = new Formulier(null, 'documentForm', '/communicatie/documenten/bewerken/' . $this->document->getId(), $fields);
 		if ($this->document->getID() == 0) {
 			$formulier->titel = 'Document toevoegen';
 			$fields['knopjes']->resetIcon = null;
@@ -156,11 +156,7 @@ class DocumentController extends Controller {
 			// Als we al een bestand hebben voor dit document, moet die natuurlijk eerst hdb.
 			if ($fields['uploader']->getType() !== 'BestandBehouden') {
 				if ($this->document->hasFile()) {
-					try {
-						$this->document->deleteFile();
-					} catch (Exception $e) {
-						invokeRefresh($this->baseurl, $e->getMessage());
-					}
+					$this->document->deleteFile();
 				}
 				$bestand = $fields['uploader']->getModel();
 				$this->document->setBestandsnaam($bestand->bestandsnaam);
@@ -170,21 +166,18 @@ class DocumentController extends Controller {
 			if ($this->document->save()) {
 				try {
 					if ($fields['uploader']->opslaan($this->document->getPath(), $this->document->getFilename())) {
-						$melding = array('Document met succes opgeslagen.', 1);
+						setMelding('Document met succes opgeslagen.', 1);
 					} else {
-						$melding = 'Fout bij het opslaan van het bestand in het bestandsysteem. Bewerk het document om het bestand alsnog toe te voegen.';
+						throw new Exception('Fout bij het opslaan van het bestand in het bestandsysteem. Bewerk het document om het bestand alsnog toe te voegen.');
 					}
 				} catch (Exception $e) {
-					$melding = 'Bestand van document opslaan mislukt: ' . $e->getMessage();
+					throw new Exception('Bestand van document opslaan mislukt: ' . $e->getMessage());
 				}
 			} else {
-				$melding = 'Fout bij toevoegen van document Document::save()';
+				throw new Exception('Fout bij toevoegen van document Document::save()');
 			}
-			invokeRefresh($this->baseurl, $melding);
 		}
-		setMelding($this->errors, -1);
-		$formulier->view();
-		exit;
+		$this->view = $formulier;
 	}
 
 }

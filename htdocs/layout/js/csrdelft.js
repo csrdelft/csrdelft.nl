@@ -242,7 +242,8 @@ function form_submit(event) {
 		if (form.hasClass('ReloadPage')) {
 			done = page_reload;
 		}
-		ajax_request('POST', form.attr('action'), form.serialize(), source, done, alert, function() {
+		var formData = new FormData(form.get(0));
+		ajax_request('POST', form.attr('action'), formData, source, done, alert, function() {
 			if (form.hasClass('SubmitReset')) {
 				form_reset(event, form);
 			}
@@ -345,7 +346,8 @@ function ajax_request(type, url, data, source, onsuccess, onerror, onfinish) {
 	var jqXHR = $.ajax({
 		type: type,
 		cache: false,
-		//processData: false,
+		processData: false,
+		contentType: false,
 		url: url,
 		data: data
 	});
@@ -370,7 +372,8 @@ function ajax_request(type, url, data, source, onsuccess, onerror, onfinish) {
 		if (onfinish) {
 			onfinish();
 		}
-	});
+	}
+	);
 }
 
 function ketzer_ajax(url, ketzer) {

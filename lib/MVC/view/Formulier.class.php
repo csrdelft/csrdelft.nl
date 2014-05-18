@@ -181,15 +181,7 @@ class Formulier implements View, Validator {
 	}
 
 	public function getFormTag() {
-		$tag = '<form action="' . $this->action . '"';
-		foreach ($this->fields as $field) {
-			if ($field instanceof FileField) {
-				$tag .= ' enctype="multipart/form-data"';
-				break;
-			}
-		}
-		$tag .= ' id="' . $this->getFormId() . '" class="' . implode(' ', $this->css_classes) . '" method="post">';
-		return $tag;
+		return '<form action="' . $this->action . '" id="' . $this->getFormId() . '" class="' . implode(' ', $this->css_classes) . '" method="post">';
 	}
 
 	/**

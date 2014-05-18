@@ -1499,6 +1499,7 @@ class SubmitResetCancel implements FormElement {
 	public $submitTitle = 'Invoer opslaan';
 	public $submitText;
 	public $submitIcon;
+	public $submitReload;
 	public $resetTitle = 'Reset naar opgeslagen gegevens';
 	public $resetText;
 	public $resetIcon;
@@ -1555,7 +1556,11 @@ class SubmitResetCancel implements FormElement {
 			if (isset($this->submitIcon)) {
 				$this->submitIcon = '<img src="' . CSR_PICS . '/famfamfam/' . $this->submitIcon . '.png" class="icon" width="16" height="16" alt="submit" /> ';
 			}
-			echo '<a class="knop submit" title="' . $this->submitTitle . '">' . $this->submitIcon . $this->submitText . '</a> ';
+			echo '<a class="knop submit';
+			if (isset($this->submitReload)) {
+				echo ' ReloadPage';
+			}
+			echo '" title="' . $this->submitTitle . '">' . $this->submitIcon . $this->submitText . '</a> ';
 		}
 		if (isset($this->resetIcon) OR isset($this->resetText)) {
 			if (isset($this->resetIcon)) {

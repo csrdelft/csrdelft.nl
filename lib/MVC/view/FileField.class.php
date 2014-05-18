@@ -11,20 +11,21 @@ require_once 'MVC/model/entity/Bestand.class.php';
  */
 class FileField implements FormElement, Validator {
 
+	protected $opties;
 	protected $methode;
 	protected $filter;
 
 	public function __construct($ftpSubDir = '', Bestand $behouden = null, array $filterType = array()) {
-		parent::__construct(array(
+		$this->opties = array(
 			'BestandBehouden' => new BestandBehouden($behouden),
 			'UploadHttp' => new UploadHttp(),
 			'UploadFtp' => new UploadFtp($ftpSubDir),
 			'UploadUrl' => new UploadUrl()
-		));
+		);
 		$this->filter = $filterType;
-		foreach ($this->model as $methode => $uploader) {
+		foreach ($this->opties as $methode => $uploader) {
 			if (!$uploader->isBeschikbaar()) {
-				unset($this->model[$methode]);
+				unset($this->opties[$methode]);
 			}
 		}
 		if (isset($_POST['BestandUploader'])) {
@@ -34,10 +35,10 @@ class FileField implements FormElement, Validator {
 		} else {
 			$this->methode = 'UploadHttp';
 		}
-		if (!isset($this->model[$this->methode])) {
+		if (!isset($this->opties[$this->methode])) {
 			throw new Exception('Niet ondersteunde uploadmethode');
 		}
-		$this->model[$this->methode]->selected = true;
+		$this->opties[$this->methode]->selected = true;
 	}
 
 	public function getTitel() {
@@ -49,19 +50,19 @@ class FileField implements FormElement, Validator {
 	}
 
 	public function getModel() {
-		return $this->model[$this->methode]->getModel();
+		return $this->opties[$this->methode]->getModel();
 	}
 
 	public function getError() {
-		return $this->model[$this->methode]->getError();
+		return $this->opties[$this->methode]->getError();
 	}
 
 	public function validate() {
-		if (!$this->model[$this->methode]->validate()) {
+		if (!$this->opties[$this->methode]->validate()) {
 			return false;
 		}
 		if (!empty($this->filter) AND ! in_array($this->getModel()->mimetype, $this->filter)) {
-			$this->model[$this->methode]->error = 'Bestandstype niet toegestaan: ' . $this->getModel()->mimetype;
+			$this->opties[$this->methode]->error = 'Bestandstype niet toegestaan: ' . $this->getModel()->mimetype;
 			return false;
 		}
 		return true;
@@ -83,7 +84,7 @@ class FileField implements FormElement, Validator {
 				throw new Exception('Bestandsnaam al in gebruik: ' . $filename);
 			}
 		}
-		$success = $this->model[$this->methode]->opslaan($destination, $filename, $overwrite);
+		$success = $this->opties[$this->methode]->opslaan($destination, $filename, $overwrite);
 		if ($success) {
 			chmod($destination . $filename, 0644);
 		}
@@ -91,7 +92,7 @@ class FileField implements FormElement, Validator {
 	}
 
 	public function view() {
-		foreach ($this->model as $methode => $uploader) {
+		foreach ($this->opties as $methode => $uploader) {
 			$uploader->view();
 		}
 	}
@@ -203,6 +204,7 @@ class UploadHttp extends BestandUploader {
 			$this->model->size = $this->value['size'];
 			$this->model->mimetype = $this->value['type'];
 		}
+		$this->css_classes[] = $this->getType();
 	}
 
 	public function isBeschikbaar() {
@@ -245,7 +247,7 @@ class UploadHttp extends BestandUploader {
 		if (!$this->selected) {
 			echo ' style="display: none;"';
 		}
-		echo '><input type="file" id="httpInput" name="bestand" /></div></div>';
+		echo '><input type="file" class="' . implode(' ', $this->css_classes) . '" id="bestand" name="bestand" /></div></div>';
 	}
 
 }
@@ -345,7 +347,7 @@ class UploadFtp extends BestandUploader {
 		}
 		echo '>';
 		if (count($this->getFileList()) > 0) {
-			echo '<select id="ftpSelect" name="bestandsnaam">';
+			echo '<select id="bestandsnaam" name="bestandsnaam" class="' . implode(' ', $this->css_classes) . '">';
 			foreach ($this->getFileList() as $filename) {
 				echo '<option value="' . htmlspecialchars($filename) . '"';
 				if ($this->model AND $this->model->bestandsnaam === $filename) {
@@ -462,7 +464,7 @@ class UploadUrl extends BestandUploader {
 		if (!$this->selected) {
 			echo ' style="display: none;"';
 		}
-		echo '><input type="text" id="urlInput" name="url" value="' . $this->url . '" /></div></div>';
+		echo '><input type="text" class="' . implode(' ', $this->css_classes) . '" id="url" name="url" value="' . $this->url . '" /></div></div>';
 	}
 
 }

@@ -4,7 +4,7 @@
 
 <div id="controls">
 	{if LoginLid::mag('P_DOCS_MOD')}
-		<a class="knop post popup" href="/communicatie/documenten/toevoegen/">{icon get="toevoegen"} Toevoegen</a>
+		<a class="knop" href="/communicatie/documenten/toevoegen/">{icon get="toevoegen"} Toevoegen</a>
 	{/if}
 </div>
 <h1>Documenten</h1>
