@@ -1,5 +1,7 @@
 <?php
 
+require_once 'MVC/model/entity/Bestand.class.php';
+
 /**
  * document.class.php	| 	Jan Pieter Waagmeester (jieter@jpwaag.com)
  *
