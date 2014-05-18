@@ -1524,9 +1524,9 @@ class SubmitResetCancel extends FormElement {
 		parent::__construct(null);
 		$this->cancelUrl = $cancel_url;
 		if ($icons) {
-			$this->submitIcon = '<img src="' . CSR_PICS . '/famfamfam/disk.png" class="icon" width="16" height="16" alt="submit" /> ';
-			$this->resetIcon = '<img src="' . CSR_PICS . '/famfamfam/arrow_rotate_anticlockwise.png" class="icon" width="16" height="16" alt="reset" /> ';
-			$this->cancelIcon = '<img src="' . CSR_PICS . '/famfamfam/delete.png" class="icon" width="16" height="16" alt="cancel" /> ';
+			$this->submitIcon = 'disk';
+			$this->resetIcon = 'arrow_rotate_anticlockwise';
+			$this->cancelIcon = 'delete';
 		}
 		if ($text) {
 			$this->submitText = 'Opslaan';
@@ -1542,16 +1542,28 @@ class SubmitResetCancel extends FormElement {
 	public function view() {
 		echo '<div class="FormButtons">';
 		if (isset($this->extraIcon) OR isset($this->extraText)) {
+			if (isset($this->extraIcon)) {
+				$this->extraIcon = '<img src="' . CSR_PICS . '/famfamfam/' . $this->extraIcon . '.png" class="icon" width="16" height="16" alt="extra" /> ';
+			}
 			$js = "$(this).attr('postdata', $(this).closest('form').serialize());";
 			echo '<a id="extraButton" class="knop post" title="' . $this->extraTitle . '" href="' . $this->extraUrl . '" onclick="' . $js . '">' . $this->extraIcon . $this->extraText . '</a> ';
 		}
 		if (isset($this->submitIcon) OR isset($this->submitText)) {
+			if (isset($this->submitIcon)) {
+				$this->submitIcon = '<img src="' . CSR_PICS . '/famfamfam/' . $this->submitIcon . '.png" class="icon" width="16" height="16" alt="submit" /> ';
+			}
 			echo '<a class="knop submit" title="' . $this->submitTitle . '">' . $this->submitIcon . $this->submitText . '</a> ';
 		}
 		if (isset($this->resetIcon) OR isset($this->resetText)) {
+			if (isset($this->resetIcon)) {
+				$this->resetIcon = '<img src="' . CSR_PICS . '/famfamfam/' . $this->resetIcon . '.png" class="icon" width="16" height="16" alt="reset" /> ';
+			}
 			echo '<a class="knop reset" title="' . $this->resetTitle . '">' . $this->resetIcon . $this->resetText . '</a> ';
 		}
 		if (isset($this->cancelIcon) OR isset($this->cancelText)) {
+			if (isset($this->cancelIcon)) {
+				$this->cancelIcon = '<img src="' . CSR_PICS . '/famfamfam/' . $this->cancelIcon . '.png" class="icon" width="16" height="16" alt="cancel" /> ';
+			}
 			echo '<a class="knop' . ($this->cancelReset ? ' reset' : '') . ' cancel" title="' . $this->cancelTitle . '"' . ($this->cancelUrl !== '' ? ' href="' . $this->cancelUrl . '"' : '') . '>' . $this->cancelIcon . $this->cancelText . '</a>';
 		}
 		echo '</div>';
