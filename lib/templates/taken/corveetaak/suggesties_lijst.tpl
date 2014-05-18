@@ -69,21 +69,20 @@ mijn_rooster.tpl	|	P.W.G. Brussee (brussee@live.nl)
 	</div>
 	<table id="suggesties-controls">
 		<tr>
-			<td>
+			<td {if isset($voorkeurbaar) AND !$voorkeurbaar}
+					title="Deze corveerepetitie is niet voorkeurbaar." 
+				{elseif !isset($voorkeurbaar)}
+					title="Dit is geen periodieke taak dus zijn er geen voorkeuren." 
+				{/if}
+			>
 				<input type="checkbox" id="voorkeur" 
-					   {if !isset($voorkeurbaar) or !$voorkeurbaar}
-						   disabled
+					   {if !isset($voorkeurbaar) OR !$voorkeurbaar}
+						   disabled 
 					   {else}
 						   {if $voorkeur}
 							   checked="checked" 
 						   {/if}
 						   onchange="taken_toggle_suggestie('geenvoorkeur');" 
-					   {/if}{if isset($voorkeurbaar)}
-						   {if !$voorkeurbaar}
-							   title="Deze corveerepetitie is niet voorkeurbaar." 
-						   {/if}
-					   {else}
-						   title="Dit is geen periodieke taak dus zijn er geen voorkeuren." 
 					   {/if}
 					   />
 				<label for="voorkeur">Met voorkeur</label>
