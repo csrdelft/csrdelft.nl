@@ -9,14 +9,20 @@ require_once 'lichting.class.php';
  * Formulier voor een nieuwe of te bewerken maaltijd.
  * 
  */
-class MaaltijdForm extends TemplateView {
-
-	private $_form;
-	private $_mid;
+class MaaltijdForm extends PopupForm {
 
 	public function __construct($mid, $mrid = null, $titel = null, $limiet = null, $datum = null, $tijd = null, $prijs = null, $filter = null) {
-		parent::__construct();
-		$this->_mid = $mid;
+		parent::__construct(null, 'taken-maaltijd-form', Instellingen::get('taken', 'url') . '/opslaan/' . $mid);
+
+		if (!is_int($mid) || $mid < 0) {
+			throw new Exception('invalid mid');
+		}
+		if ($mid === 0) {
+			$this->titel = 'Maaltijd aanmaken';
+		} else {
+			$this->titel = 'Maaltijd wijzigen';
+			$this->css_classes[] = 'PreventUnchanged';
+		}
 
 		$suggesties = array();
 		$suggesties[] = 'geslacht:m';
@@ -42,49 +48,25 @@ class MaaltijdForm extends TemplateView {
 		$fields['filter']->title = 'Plaats een ! vooraan om van de restrictie een uitsluiting te maken.';
 		$fields[] = new SubmitResetCancel();
 
-		$this->_form = new Formulier(null, 'taken-maaltijd-form', Instellingen::get('taken', 'url') . '/opslaan/' . $mid, $fields);
-	}
-
-	public function getTitel() {
-		if ($this->_mid === 0) {
-			return 'Maaltijd aanmaken';
-		}
-		return 'Maaltijd wijzigen';
-	}
-
-	public function view() {
-		$this->_form->addCssClass('popup');
-		$this->smarty->assign('form', $this->_form);
-		if ($this->_mid > 0) {
-			$this->_form->addCssClass('PreventUnchanged');
-		}
-		$this->smarty->display('taken/popup_form.tpl');
+		$this->addFields($fields);
 	}
 
 	public function validate() {
-		if (!is_int($this->_mid) || $this->_mid < 0) {
-			return false;
-		}
-		$fields = $this->_form->getFields();
+		$valid = parent::validate();
+		$fields = $this->getFields();
 		$filter = $fields['filter']->getValue();
 		if (!empty($filter)) {
 			if (preg_match('/\s/', $filter)) {
 				$fields['filter']->error = 'Mag geen spaties bevatten';
-				return false;
+				$valid = false;
 			}
 			$filter = explode(':', $filter);
 			if (sizeof($filter) !== 2 || empty($filter[0]) || empty($filter[1])) {
 				$fields['filter']->error = 'Ongeldige restrictie';
-				return false;
+				$valid = false;
 			}
 		}
-		return $this->_form->validate();
-	}
-
-	public function getValues() {
-		return $this->_form->getValues(); // escapes HTML
+		return $valid;
 	}
 
 }
-
-?>

@@ -6,14 +6,17 @@
  * Formulier voor een nieuwe of te bewerken vrijstelling.
  * 
  */
-class VrijstellingForm extends TemplateView {
-
-	private $_form;
-	private $_uid;
+class VrijstellingForm extends PopupForm {
 
 	public function __construct($uid = null, $begin = null, $eind = null, $percentage = null) {
-		parent::__construct();
-		$this->_uid = $uid;
+		parent::__construct(null, 'taken-vrijstelling-form', Instellingen::get('taken', 'url') . '/opslaan' . ($uid === null ? '' : '/' . $uid));
+
+		if ($uid === null) {
+			$this->titel = 'Vrijstelling aanmaken';
+		} else {
+			$this->titel = 'Vrijstelling wijzigen';
+			$this->css_classes[] = 'PreventUnchanged';
+		}
 
 		$fields[] = new RequiredLidField('lid_id', $uid, 'Naam of lidnummer');
 		$fields[] = new DatumField('begin_datum', $begin, 'Vanaf', date('Y') + 1, date('Y'));
@@ -21,33 +24,7 @@ class VrijstellingForm extends TemplateView {
 		$fields[] = new IntField('percentage', $percentage, 'Percentage (%)', Instellingen::get('corvee', 'vrijstelling_percentage_min'), Instellingen::get('corvee', 'vrijstelling_percentage_max'));
 		$fields[] = new SubmitResetCancel();
 
-		$this->_form = new Formulier(null, 'taken-vrijstelling-form', Instellingen::get('taken', 'url') . '/opslaan' . ($uid === null ? '' : '/' . $uid), $fields);
-	}
-
-	public function getTitel() {
-		if ($this->_uid === null) {
-			return 'Vrijstelling aanmaken';
-		}
-		return 'Vrijstelling wijzigen';
-	}
-
-	public function view() {
-		$this->_form->addCssClass('popup');
-		$this->smarty->assign('form', $this->_form);
-		if ($this->_uid !== null) {
-			$this->_form->addCssClass('PreventUnchanged');
-		}
-		$this->smarty->display('taken/popup_form.tpl');
-	}
-
-	public function validate() {
-		return $this->_form->validate();
-	}
-
-	public function getValues() {
-		return $this->_form->getValues(); // escapes HTML
+		$this->addFields($fields);
 	}
 
 }
-
-?>

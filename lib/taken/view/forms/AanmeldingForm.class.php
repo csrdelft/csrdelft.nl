@@ -6,16 +6,20 @@
  * Formulier voor een nieuwe of te verwijderen maaltijd-aanmelding.
  * 
  */
-class AanmeldingForm extends TemplateView {
-
-	private $_form;
-	private $_mid;
-	private $_nieuw;
+class AanmeldingForm extends PopupForm {
 
 	public function __construct($mid, $nieuw, $uid = null, $gasten = 0) {
-		parent::__construct();
-		$this->_mid = $mid;
-		$this->_nieuw = $nieuw;
+		parent::__construct(null, 'taken-aanmelding-form', Instellingen::get('taken', 'url') . '/ander' . ($nieuw ? 'aanmelden' : 'afmelden') . '/' . $mid);
+
+		if (!is_int($mid) || $mid <= 0) {
+			throw new Exception('invalid mid');
+		}
+		if ($nieuw) {
+			$this->title = 'Aanmelding toevoegen/aanpassen';
+		} else {
+			$this->title = 'Aanmelding verwijderen (inclusief gasten)';
+		}
+		$this->css_classes[] = 'PreventUnchanged';
 
 		$fields[] = new LidField('voor_lid', $uid, 'Naam of lidnummer', 'leden');
 		if ($nieuw) {
@@ -23,34 +27,7 @@ class AanmeldingForm extends TemplateView {
 		}
 		$fields[] = new SubmitResetCancel();
 
-		$this->_form = new Formulier(null, 'taken-aanmelding-form', Instellingen::get('taken', 'url') . '/ander' . ($nieuw ? 'aanmelden' : 'afmelden') . '/' . $mid, $fields);
-	}
-
-	public function getTitel() {
-		if ($this->_nieuw) {
-			return 'Aanmelding toevoegen/aanpassen';
-		}
-		return 'Aanmelding verwijderen (inclusief gasten)';
-	}
-
-	public function view() {
-		$this->_form->addCssClass('popup');
-		$this->_form->addCssClass('PreventUnchanged');
-		$this->smarty->assign('form', $this->_form);
-		$this->smarty->display('taken/popup_form.tpl');
-	}
-
-	public function validate() {
-		if (!is_int($this->_mid) || $this->_mid <= 0) {
-			return false;
-		}
-		return $this->_form->validate();
-	}
-
-	public function getValues() {
-		return $this->_form->getValues(); // escapes HTML
+		$this->addFields($fields);
 	}
 
 }
-
-?>

@@ -6,79 +6,79 @@
  * Formulier om een corveetaak toe te wijzen aan een lid.
  * 
  */
-class ToewijzenForm extends TemplateView {
-
-	private $_form;
-	private $_taak;
-	private $_suggesties;
-	private $_jong;
+class ToewijzenForm extends PopupForm {
 
 	public function __construct(CorveeTaak $taak, array $suggesties) {
-		parent::__construct();
-		$this->_taak = $taak;
-		$this->_suggesties = $suggesties;
-		$this->_jong = (int) \Lichting::getJongsteLichting();
+		parent::__construct(null, 'taken-taak-toewijzen-form', Instellingen::get('taken', 'url') . '/toewijzen/' . $taak->getTaakId());
+
+		if (!is_int($taak->getTaakId()) || $taak->getTaakId() <= 0) {
+			throw new Exception('invalid tid');
+		}
+		$this->titel = 'Taak toewijzen aan lid';
+		$this->css_classes[] = 'PreventUnchanged';
 
 		$fields[] = new LidField('lid_id', $taak->getLidId(), 'Naam of lidnummer', 'leden');
-
-		$this->_form = new Formulier(null, 'taken-taak-toewijzen-form', Instellingen::get('taken', 'url') . '/toewijzen/' . $this->_taak->getTaakId(), $fields);
-	}
-
-	public function getTitel() {
-		return 'Taak toewijzen aan lid';
-	}
-
-	public function getLidLink($uid) {
-		$lid = \LidCache::getLid($uid);
-		if ($lid instanceof \Lid) {
-			return $lid->getNaamLink(Instellingen::get('corvee', 'weergave_ledennamen_beheer'), Instellingen::get('corvee', 'weergave_link_ledennamen'));
-		}
-		return $uid;
-	}
-
-	public function getIsJongsteLichting($uid) {
-		return ($this->_jong === \LidCache::getLid($uid)->getLichting());
-	}
-
-	public function view() {
-		$this->_form->addCssClass('popup');
-		$this->_form->addCssClass('PreventUnchanged');
-
-		$this->smarty->assign('taak', $this->_taak);
-		$this->smarty->assign('suggesties', $this->_suggesties);
-
-		$crid = $this->_taak->getCorveeRepetitieId();
-		if ($crid !== null) {
-			$this->smarty->assign('voorkeurbaar', CorveeRepetitiesModel::getRepetitie($crid)->getIsVoorkeurbaar());
-		}
-		if ($this->_taak->getCorveeFunctie()->kwalificatie_benodigd) {
-			$this->smarty->assign('voorkeur', Instellingen::get('corvee', 'suggesties_voorkeur_kwali_filter'));
-			$this->smarty->assign('recent', Instellingen::get('corvee', 'suggesties_recent_kwali_filter'));
-		} else {
-			$this->smarty->assign('voorkeur', Instellingen::get('corvee', 'suggesties_voorkeur_filter'));
-			$this->smarty->assign('recent', Instellingen::get('corvee', 'suggesties_recent_filter'));
-		}
-
-		$lijst = $this->smarty->fetch('taken/corveetaak/suggesties_lijst.tpl');
-		$fields[] = new HtmlComment($lijst);
+		$fields[] = new SuggestieLIjst($suggesties, $taak);
 		$fields[] = new SubmitResetCancel();
-		$this->_form->addFields($fields);
 
-		$this->smarty->assign('form', $this->_form);
-		$this->smarty->display('taken/popup_form.tpl');
-	}
-
-	public function validate() {
-		if (!is_int($this->_taak->getTaakId()) || $this->_taak->getTaakId() <= 0) {
-			return false;
-		}
-		return $this->_form->validate();
-	}
-
-	public function getValues() {
-		return $this->_form->getValues(); // escapes HTML
+		$this->addFields($fields);
 	}
 
 }
 
-?>
+class SuggestieLijst extends TemplateView implements FormElement {
+
+	private $jongste_lichting;
+	private $voorkeurbaar;
+	private $voorkeur;
+	private $recent;
+
+	public function __construct(array $suggesties, CorveeTaak $taak) {
+		parent::__construct($suggesties);
+
+		$this->jongste_lichting = Lichting::getJongsteLichting();
+		$this->smarty->assign('suggesties', $this->model);
+
+		$crid = $taak->getCorveeRepetitieId();
+		if ($crid !== null) {
+			$this->voorkeurbaar = CorveeRepetitiesModel::getRepetitie($crid)->getIsVoorkeurbaar();
+			$this->smarty->assign('voorkeurbaar', $this->voorkeurbaar);
+		}
+		$this->smarty->assign('kwalificatie_benodigd', $taak->getCorveeFunctie()->kwalificatie_benodigd);
+
+		if ($taak->getCorveeFunctie()->kwalificatie_benodigd) {
+			$this->voorkeur = Instellingen::get('corvee', 'suggesties_voorkeur_kwali_filter');
+			$this->recent = Instellingen::get('corvee', 'suggesties_recent_kwali_filter');
+		} else {
+			$this->voorkeur = Instellingen::get('corvee', 'suggesties_voorkeur_filter');
+			$this->recent = Instellingen::get('corvee', 'suggesties_recent_filter');
+		}
+		$this->smarty->assign('voorkeur', $this->voorkeur);
+		$this->smarty->assign('recent', $this->recent);
+	}
+
+	public function view() {
+		$this->smarty->display('taken/corveetaak/suggesties_lijst.tpl');
+	}
+
+	public function getType() {
+		return get_class($this);
+	}
+
+	public function getJavascript() {
+		$js = '$(document).ready(function() { $("#suggesties-tabel").show(1, taken_color_suggesties); ';
+		if (isset($this->voorkeurbaar) and $this->voorkeur) {
+			$js .= 'taken_toggle_suggestie("geenvoorkeur"); ';
+		}
+		if ($this->recent) {
+			$js .= 'taken_toggle_suggestie("recent"); ';
+		}
+		$js .= '});';
+		return $js;
+	}
+
+	public function getIsJongsteLichting($uid) {
+		return ($this->jongste_lichting === LidCache::getLid($uid)->getLichting());
+	}
+
+}

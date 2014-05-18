@@ -29,14 +29,6 @@ class BeheerMaaltijdenView extends TemplateView {
 		}
 	}
 
-	public function getLidLink($uid) {
-		$lid = \LidCache::getLid($uid);
-		if ($lid instanceof \Lid) {
-			return $lid->getNaamLink(Instellingen::get('maaltijden', 'weergave_ledennamen_beheer'), Instellingen::get('maaltijden', 'weergave_link_ledennamen'));
-		}
-		return $uid;
-	}
-
 	public function view() {
 		$this->smarty->assign('prullenbak', $this->prullenbak);
 		if (is_array($this->model)) { // list of maaltijden

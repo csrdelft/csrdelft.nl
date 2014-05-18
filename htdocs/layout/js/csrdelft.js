@@ -158,8 +158,8 @@ function init_forms() {
 	$('.reset').bind('click.reset', form_reset);
 	$('.cancel').unbind('click.cancel');
 	$('.cancel').bind('click.cancel', form_cancel);
-	$('.FormToggle').unbind('click.toggle');
-	$('.FormToggle').bind('click.toggle', form_toggle);
+	$('.InlineFormToggle').unbind('click.toggle');
+	$('.InlineFormToggle').bind('click.toggle', form_toggle);
 	$('.SubmitChange').unbind('change.change');
 	$('.SubmitChange').bind('change.change', form_submit);
 	$('.Formulier').each(function() {
@@ -207,7 +207,7 @@ function form_ischanged(form) {
 }
 
 function form_inline_toggle(form) {
-	$(form).find('.FormToggle').toggle();
+	$(form).find('.InlineFormToggle').toggle();
 	$(form).find('.FormField').toggle().focus();
 	$(form).find('.knop').toggle();
 }
@@ -345,6 +345,7 @@ function ajax_request(type, url, data, source, onsuccess, onerror, onfinish) {
 	var jqXHR = $.ajax({
 		type: type,
 		cache: false,
+		//processData: false,
 		url: url,
 		data: data
 	});

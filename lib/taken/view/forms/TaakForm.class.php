@@ -6,14 +6,20 @@
  * Formulier voor een nieuwe of te bewerken corveetaak.
  * 
  */
-class TaakForm extends TemplateView {
-
-	private $_form;
-	private $_tid;
+class TaakForm extends PopupForm {
 
 	public function __construct($tid, $fid = null, $uid = null, $crid = null, $mid = null, $datum = null, $punten = null, $bonus_malus = null) {
-		parent::__construct();
-		$this->_tid = $tid;
+		parent::__construct(null, 'taken-corveetaak-form', Instellingen::get('taken', 'url') . '/opslaan/' . $tid);
+
+		if (!is_int($tid) || $tid < 0) {
+			throw new Exception('invalid tid');
+		}
+		if ($tid === 0) {
+			$this->titel = 'Corveetaak aanmaken';
+		} else {
+			$this->titel = 'Corveetaak wijzigen';
+			$this->css_classes[] = 'PreventUnchanged';
+		}
 
 		$functieNamen = FunctiesModel::instance()->getAlleFuncties(); // grouped by functie_id
 		$functiePunten = 'var punten=[];';
@@ -37,46 +43,21 @@ class TaakForm extends TemplateView {
 		$fields['mid']->title = 'Het ID van de maaltijd waar deze taak bij hoort.';
 		$fields[] = new SubmitResetCancel();
 
-		$this->_form = new Formulier(null, 'taken-corveetaak-form', Instellingen::get('taken', 'url') . '/opslaan/' . $tid, $fields);
-	}
-
-	public function getTitel() {
-		if ($this->_tid === 0) {
-			return 'Corveetaak aanmaken';
-		}
-		return 'Corveetaak wijzigen';
-	}
-
-	public function view() {
-		$this->_form->addCssClass('popup');
-		$this->smarty->assign('form', $this->_form);
-		if ($this->_tid > 0) {
-			$this->_form->addCssClass('PreventUnchanged');
-		}
-		$this->smarty->display('taken/popup_form.tpl');
+		$this->addFields($fields);
 	}
 
 	public function validate() {
-		if (!is_int($this->_tid) || $this->_tid < 0) {
-			return false;
-		}
-		$valid = $this->_form->validate();
-		$fields = $this->_form->getFields();
+		$valid = parent::validate();
+		$fields = $this->getFields();
 		if (is_int($fields['mid']->getValue())) {
 			try {
-				$maaltijd = MaaltijdenModel::getMaaltijd($fields['mid']->getValue(), true);
-			} catch (\Exception $e) {
+				MaaltijdenModel::getMaaltijd($fields['mid']->getValue(), true);
+			} catch (Exception $e) {
 				$fields['mid']->error = 'Maaltijd bestaat niet.';
-				return false;
+				$valid = false;
 			}
 		}
 		return $valid;
 	}
 
-	public function getValues() {
-		return $this->_form->getValues(); // escapes HTML
-	}
-
 }
-
-?>

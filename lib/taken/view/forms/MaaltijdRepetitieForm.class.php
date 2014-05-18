@@ -8,14 +8,20 @@ require_once 'verticale.class.php';
  * Formulier voor een nieuwe of te bewerken maaltijd-repetitie.
  * 
  */
-class MaaltijdRepetitieForm extends TemplateView {
-
-	private $_form;
-	private $_mrid;
+class MaaltijdRepetitieForm extends PopupForm {
 
 	public function __construct($mrid, $dag = null, $periode = null, $titel = null, $tijd = null, $prijs = null, $abo = null, $limiet = null, $filter = null, $verplaats = null) {
-		parent::__construct();
-		$this->_mrid = $mrid;
+		parent::__construct(null, 'taken-maaltijd-repetitie-form', Instellingen::get('taken', 'url') . '/opslaan/' . $mrid);
+
+		if (!is_int($mrid) || $mrid < 0) {
+			throw new Exception('invalid mrid');
+		}
+		if ($mrid === 0) {
+			$this->titel = 'Maaltijdrepetitie aanmaken';
+		} else {
+			$this->titel = 'Maaltijdrepetitie wijzigen';
+			$this->css_classes[] = 'PreventUnchanged';
+		}
 
 		$suggesties = array();
 		$suggesties[] = 'geslacht:m';
@@ -35,7 +41,7 @@ class MaaltijdRepetitieForm extends TemplateView {
 		$fields['dag']->title = 'Als de periode ongelijk is aan 7 is dit de start-dag bij het aanmaken van periodieke maaltijden';
 		$fields[] = new IntField('periode_in_dagen', $periode, 'Periode (in dagen)', 0, 183);
 		$fields['abo'] = new VinkField('abonneerbaar', $abo, 'Abonneerbaar');
-		if ($this->_mrid !== 0) {
+		if ($mrid !== 0) {
 			$fields['abo']->setOnChangeScript("if (!this.checked) alert('Alle abonnementen zullen worden verwijderd!');");
 		}
 		$fields[] = new FloatField('standaard_prijs', $prijs, 'Standaard prijs (€)', 0, 50);
@@ -44,7 +50,7 @@ class MaaltijdRepetitieForm extends TemplateView {
 		$fields['filter']->setSuggestions($suggesties);
 		$fields['filter']->title = 'Plaats een ! vooraan om van de restrictie een uitsluiting te maken.';
 		$fields['filter']->required = false;
-		if ($this->_mrid !== 0) {
+		if ($mrid !== 0) {
 			$fields['ver'] = new VinkField('verplaats_dag', $verplaats, 'Verplaatsen');
 			$fields['ver']->title = 'Verplaats naar dag v/d week bij bijwerken';
 			$fields['ver']->onchange = <<<JS
@@ -63,51 +69,25 @@ JS;
 		$fields['src']->extraIcon = 'disk_multiple';
 		$fields['src']->extraUrl = Instellingen::get('taken', 'url') . '/bijwerken/' . $mrid;
 
-
-		$this->_form = new Formulier(null, 'taken-maaltijd-repetitie-form', Instellingen::get('taken', 'url') . '/opslaan/' . $mrid, $fields);
-	}
-
-	public function getTitel() {
-		if ($this->_mrid === 0) {
-			return 'Maaltijdrepetitie aanmaken';
-		}
-		return 'Maaltijdrepetitie wijzigen';
-	}
-
-	public function view() {
-		$this->_form->addCssClass('popup');
-		$this->smarty->assign('form', $this->_form);
-		if ($this->_mrid > 0) {
-			$this->_form->addCssClass('PreventUnchanged');
-			$this->smarty->assign('bijwerken', Instellingen::get('taken', 'url') . '/bijwerken/' . $this->_mrid);
-		}
-		$this->smarty->display('taken/popup_form.tpl');
+		$this->addFields($fields);
 	}
 
 	public function validate() {
-		if (!is_int($this->_mrid) || $this->_mrid < 0) {
-			return false;
-		}
-		$fields = $this->_form->getFields();
+		$valid = parent::validate();
+		$fields = $this->getFields();
 		$filter = $fields['filter']->getValue();
 		if (!empty($filter)) {
 			if (preg_match('/\s/', $filter)) {
 				$fields['filter']->error = 'Mag geen spaties bevatten';
-				return false;
+				$valid = false;
 			}
 			$filter = explode(':', $filter);
 			if (sizeof($filter) !== 2 || empty($filter[0]) || empty($filter[1])) {
 				$fields['filter']->error = 'Ongeldige restrictie';
-				return false;
+				$valid = false;
 			}
 		}
-		return $this->_form->validate();
-	}
-
-	public function getValues() {
-		return $this->_form->getValues(); // escapes HTML
+		return $valid;
 	}
 
 }
-
-?>

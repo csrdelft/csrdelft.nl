@@ -6,12 +6,11 @@
  * Formulier voor nieuw periodiek corvee.
  * 
  */
-class RepetitieCorveeForm extends TemplateView {
-
-	private $_form;
+class RepetitieCorveeForm extends PopupForm {
 
 	public function __construct(CorveeRepetitie $repetitie, $beginDatum = null, $eindDatum = null, $mid = null) {
-		parent::__construct();
+		parent::__construct(null, 'taken-repetitie-aanmaken-form', Instellingen::get('taken', 'url') . '/aanmaken/' . $repetitie->getCorveeRepetitieId());
+		$this->titel = 'Periodiek corvee aanmaken';
 
 		$fields[] = new HtmlComment('<p>Aanmaken op de eerste ' . $repetitie->getDagVanDeWeekText() . 'en vervolgens ' . $repetitie->getPeriodeInDagenText() . ' in de periode:</p>');
 		$fields['begin'] = new DatumField('begindatum', $beginDatum, 'Vanaf', date('Y') + 1, date('Y'));
@@ -19,32 +18,17 @@ class RepetitieCorveeForm extends TemplateView {
 		$fields[] = new HiddenField('maaltijd_id', $mid);
 		$fields[] = new SubmitResetCancel();
 
-		$this->_form = new Formulier(null, 'taken-repetitie-aanmaken-form', Instellingen::get('taken', 'url') . '/aanmaken/' . $repetitie->getCorveeRepetitieId(), $fields);
-	}
-
-	public function getTitel() {
-		return 'Periodiek corvee aanmaken';
-	}
-
-	public function view() {
-		$this->_form->addCssClass('popup');
-		$this->smarty->assign('form', $this->_form);
-		$this->smarty->display('taken/popup_form.tpl');
+		$this->addFields($fields);
 	}
 
 	public function validate() {
-		$fields = $this->_form->getFields();
+		$valid = parent::validate();
+		$fields = $this->getFields();
 		if (strtotime($fields['eind']->getValue()) < strtotime($fields['begin']->getValue())) {
 			$fields['eind']->error = 'Moet na begindatum liggen';
-			return false;
+			$valid = false;
 		}
-		return $this->_form->validate();
-	}
-
-	public function getValues() {
-		return $this->_form->getValues(); // escapes HTML
+		return $valid;
 	}
 
 }
-
-?>

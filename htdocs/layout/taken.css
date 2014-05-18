@@ -171,6 +171,6 @@ td.maaltijd-aangemeld, td.maaltijd-afgemeld {
 	display: none;
 }
 
-#eetwens-form .FormToggle {
+#eetwens-form .InlineFormToggle {
 	width: 300px;
 }

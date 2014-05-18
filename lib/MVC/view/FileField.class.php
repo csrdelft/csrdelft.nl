@@ -9,7 +9,7 @@ require_once 'MVC/model/entity/Bestand.class.php';
  * 
  * Verschillende manieren om een bestand te uploaden.
  */
-class FileField extends FormElement implements Validator {
+class FileField implements FormElement, Validator {
 
 	protected $methode;
 	protected $filter;
@@ -38,6 +38,10 @@ class FileField extends FormElement implements Validator {
 			throw new Exception('Niet ondersteunde uploadmethode');
 		}
 		$this->model[$this->methode]->selected = true;
+	}
+
+	public function getTitel() {
+		return 'Bestand uploaden';
 	}
 
 	public function getType() {

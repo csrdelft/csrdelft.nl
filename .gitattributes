@@ -4295,7 +4295,6 @@ lib/templates/taken/maaltijd/mijn_maaltijd_lijst.tpl -text
 lib/templates/taken/maaltijd/mijn_maaltijden.tpl -text
 lib/templates/taken/menu_beheer.tpl -text
 lib/templates/taken/menu_pagina.tpl -text
-lib/templates/taken/popup_form.tpl -text
 lib/templates/taken/voorkeur/beheer_voorkeur_lijst.tpl -text
 lib/templates/taken/voorkeur/beheer_voorkeur_veld.tpl -text
 lib/templates/taken/voorkeur/beheer_voorkeuren.tpl -text

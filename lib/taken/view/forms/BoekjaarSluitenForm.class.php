@@ -6,44 +6,28 @@
  * Formulier voor het sluiten van het MaalCie-boekjaar.
  * 
  */
-class BoekjaarSluitenForm extends TemplateView {
-
-	private $_form;
+class BoekjaarSluitenForm extends PopupForm {
 
 	public function __construct($beginDatum = null, $eindDatum = null) {
-		parent::__construct();
+		parent::__construct(null, 'taken-boekjaar-sluiten-form', Instellingen::get('taken', 'url') . '/sluitboekjaar');
+		$this->titel = 'Boekjaar sluiten';
 
 		$fields[] = new HtmlComment('<p style="color:red;">Dit is een onomkeerbare stap!</p>');
 		$fields['begin'] = new DatumField('begindatum', $beginDatum, 'Vanaf', date('Y') + 1, date('Y') - 2);
 		$fields['eind'] = new DatumField('einddatum', $eindDatum, 'Tot en met', date('Y') + 1, date('Y') - 2);
 		$fields[] = new SubmitResetCancel();
 
-		$this->_form = new Formulier(null, 'taken-boekjaar-sluiten-form', Instellingen::get('taken', 'url') . '/sluitboekjaar', $fields);
-	}
-
-	public function getTitel() {
-		return 'Boekjaar sluiten';
-	}
-
-	public function view() {
-		$this->_form->addCssClass('popup');
-		$this->smarty->assign('form', $this->_form);
-		$this->smarty->display('taken/popup_form.tpl');
+		$this->addFields($fields);
 	}
 
 	public function validate() {
-		$fields = $this->_form->getFields();
+		$valid = parent::validate();
+		$fields = $this->getFields();
 		if (strtotime($fields['eind']->getValue()) < strtotime($fields['begin']->getValue())) {
 			$fields['eind']->error = 'Moet na begindatum liggen';
-			return false;
+			$valid = false;
 		}
-		return $this->_form->validate();
-	}
-
-	public function getValues() {
-		return $this->_form->getValues(); // escapes HTML
+		return $valid;
 	}
 
 }
-
-?>

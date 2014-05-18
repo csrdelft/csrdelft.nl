@@ -74,13 +74,13 @@ function group_by_distinct($prop, $in) {
  */
 function array_values_in_array($needles, $haystack) {
 	if (is_array($needles)) {
-		$valid = true;
+		$found = true;
 		foreach ($needles as $needle) {
 			if (!in_array($needle, $haystack)) {
-				$valid = false;
+				$found = false;
 			}
 		}
-		return $valid;
+		return $found;
 	} else {
 		return in_array($needles, $haystack);
 	}

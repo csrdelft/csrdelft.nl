@@ -526,6 +526,7 @@ class TakenModel {
 			$taken = self::loadTaken('verwijderd = false AND crv_repetitie_id = ?', array($repetitie->getCorveeRepetitieId()));
 			$takenPerDatum = array(); // taken per datum indien geen maaltijd
 			$takenPerMaaltijd = array(); // taken per maaltijd
+			require_once 'taken/model/MaaltijdenModel.class.php';
 			$maaltijden = MaaltijdenModel::getKomendeRepetitieMaaltijden($repetitie->getMaaltijdRepetitieId(), true);
 			$maaltijdenById = array();
 			foreach ($maaltijden as $maaltijd) {

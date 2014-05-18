@@ -850,7 +850,7 @@ input, textarea, select{
 .InlineForm .InputField{
 	display: inline;
 }
-.InlineForm .FormToggle{
+.InlineForm .InlineFormToggle{
 	float: left;
 	border-bottom: 1px dotted grey;
 	width: 100%;

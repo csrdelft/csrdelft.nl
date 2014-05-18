@@ -42,7 +42,7 @@ class Formulier implements View, Validator {
 	 * 
 	 * @var FormElement[]
 	 */
-	protected $fields = array();
+	private $fields = array();
 	protected $css_classes = array();
 	public $error = '';
 
@@ -70,10 +70,6 @@ class Formulier implements View, Validator {
 		return $this->fields;
 	}
 
-	public function addCssClass($class) {
-		$this->css_classes[] = $class;
-	}
-
 	/**
 	 * Zoekt een InputField met exact de gegeven naam.
 	 *
@@ -91,9 +87,6 @@ class Formulier implements View, Validator {
 
 	public function addFields(array $fields) {
 		foreach ($fields as $field) {
-			if ($field instanceof FileField) {
-				$this->enctype = 'multipart/form-data';
-			}
 			if ($field instanceof InputField) { // same as insertBefore
 				$fieldName = $field->getName();
 				if ($this->model instanceof PersistentEntity AND property_exists($this->model, $fieldName)) {
@@ -104,10 +97,11 @@ class Formulier implements View, Validator {
 		$this->fields = array_merge($this->fields, $fields);
 	}
 
-	public function insertBefore(FormElement $field, $fieldName) {
+	public function insertAfter(FormElement $field, $fieldName) {
 		$pos = 0;
-		foreach ($this->fields as $before) {
-			if ($before->getName() === $fieldName) {
+		foreach ($this->fields as $after) {
+			$pos++;
+			if ($after->getName() === $fieldName) {
 				if ($field instanceof InputField) { // same as addFields
 					$fieldName = $field->getName();
 					if ($this->model instanceof PersistentEntity AND property_exists($this->model, $fieldName)) {
@@ -115,10 +109,10 @@ class Formulier implements View, Validator {
 					}
 				}
 				array_splice($this->fields, $pos, 0, $field);
-				return;
+				return true;
 			}
-			$pos++;
 		}
+		return false;
 	}
 
 	/**
@@ -178,19 +172,33 @@ class Formulier implements View, Validator {
 		return '<script type="text/javascript">$(document).ready(function(){' . "\n" . implode("\n", $javascript) . "\n" . '});</script>';
 	}
 
+	public function getTitleTag() {
+		if ($this->titel === '') {
+			return '';
+		} else {
+			return '<h1 class="formTitle">' . $this->titel . '</h1>';
+		}
+	}
+
+	public function getFormTag() {
+		$tag = '<form action="' . $this->action . '"';
+		foreach ($this->fields as $field) {
+			if ($field instanceof FileField) {
+				$tag .= ' enctype="multipart/form-data"';
+				break;
+			}
+		}
+		$tag .= ' id="' . $this->getFormId() . '" class="' . implode(' ', $this->css_classes) . '" method="post">';
+		return $tag;
+	}
+
 	/**
 	 * Toont het formulier en javascript van alle fields
 	 */
 	public function view() {
 		echo SimpleHtml::getMelding();
-		if ($this->titel !== '') {
-			echo '<h1 class="formTitle">' . $this->titel . '</h1>';
-		}
-		echo '<form action="' . $this->action . '"';
-		if ($this->enctype !== null) {
-			echo ' enctype="' . $this->enctype . '"';
-		}
-		echo ' id="' . $this->getFormId() . '" class="' . implode(' ', $this->css_classes) . '" method="post">';
+		echo $this->getTitleTag();
+		echo $this->getFormTag();
 		foreach ($this->fields as $field) {
 			$field->view();
 		}
@@ -205,16 +213,10 @@ class Formulier implements View, Validator {
  */
 class PopupForm extends Formulier {
 
-	public function __construct($model, $formId, $action = null, $fields = array()) {
-		parent::__construct($model, $formId, $action, $fields);
-		$this->css_classes[] = 'popup';
-	}
-
 	public function view() {
-
+		$this->css_classes[] = 'popup';
 		echo '<div id="popup-content">';
 		echo parent::view();
-		echo SimpleHTML::getMelding();
 		echo '</div>';
 	}
 
@@ -225,23 +227,16 @@ class PopupForm extends Formulier {
  */
 class InlineForm extends Formulier {
 
-	public function __construct($model, $formId, $action = null, $fields = array()) {
-		parent::__construct($model, $formId, $action, $fields);
-		$this->css_classes[] = 'InlineForm';
-	}
-
 	public function view() {
-		echo '<div id="inline-' . $this->getFormId() . '">';
-		echo '<form id="' . $this->getFormId() . '" action="' . $this->action . '" method="post" class="Formulier InlineForm">';
+		$this->css_classes[] = 'InlineForm';
+		echo $this->getFormTag();
 		echo $this->fields[0]->view();
-		echo '<div class="FormToggle">' . $this->fields[0]->getValue() . '</div>';
-		if (isset($this->fields[1])) {
-			if ($this->fields[1] instanceof SubmitResetCancel) {
-				$this->fields[1]->submitIcon = '<img src="' . CSR_PICS . '/famfamfam/accept.png" class="icon" width="16" height="16" alt="submit" /> ';
-				$this->fields[1]->resetIcon = null;
-				$this->fields[1]->resetText = null;
-				$this->fields[1]->cancelReset = true;
-			}
+		echo '<div class="InlineFormToggle">' . $this->fields[0]->getValue() . '</div>';
+		if (isset($this->fields[1]) AND $this->fields[1] instanceof SubmitResetCancel) {
+			$this->fields[1]->submitIcon = '<img src="' . CSR_PICS . '/famfamfam/accept.png" class="icon" width="16" height="16" alt="submit" /> ';
+			$this->fields[1]->resetIcon = null;
+			$this->fields[1]->resetText = null;
+			$this->fields[1]->cancelReset = true;
 			$this->fields[1]->view();
 		}
 		echo $this->getJavascript();

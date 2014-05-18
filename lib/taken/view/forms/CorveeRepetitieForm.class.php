@@ -6,14 +6,20 @@
  * Formulier voor een nieuwe of te bewerken corvee-repetitie.
  * 
  */
-class CorveeRepetitieForm extends TemplateView {
-
-	private $_form;
-	private $_crid;
+class CorveeRepetitieForm extends PopupForm {
 
 	public function __construct($crid, $mrid = null, $dag = null, $periode = null, $fid = null, $punten = null, $aantal = null, $voorkeur = null, $verplaats = null) {
-		parent::__construct();
-		$this->_crid = $crid;
+		parent::__construct(null, 'taken-corvee-repetitie-form', Instellingen::get('taken', 'url') . '/opslaan/' . $crid);
+
+		if (!is_int($crid) || $crid < 0) {
+			throw new Exception('invalid crid');
+		}
+		if ($crid === 0) {
+			$this->titel = 'Corveerepetitie aanmaken';
+		} else {
+			$this->titel = 'Corveerepetitie wijzigen';
+			$this->css_classes[] = 'PreventUnchanged';
+		}
 
 		$functieNamen = FunctiesModel::instance()->getAlleFuncties(); // grouped by functie_id
 		$functiePunten = 'var punten=[];';
@@ -37,13 +43,13 @@ class CorveeRepetitieForm extends TemplateView {
 		$fields['dag'] = new IntField('periode_in_dagen', $periode, 'Periode (in dagen)', 0, 183);
 		$fields['dag']->title = 'Als de periode ongelijk is aan 7 is dit de start-dag bij het aanmaken van periodiek corvee';
 		$fields['vrk'] = new VinkField('voorkeurbaar', $voorkeur, 'Voorkeurbaar');
-		if ($this->_crid !== 0) {
+		if ($crid !== 0) {
 			$fields['vrk']->setOnChangeScript("if (!this.checked) alert('Alle voorkeuren zullen worden verwijderd!');");
 		}
 		$fields[] = new SelectField('mlt_repetitie_id', $mrid, 'Maaltijdrepetitie', $repetitieNamen);
 		$fields[] = new IntField('standaard_punten', $punten, 'Standaard punten', 0, 10);
 		$fields[] = new IntField('standaard_aantal', $aantal, 'Aantal corveeërs', 1, 10);
-		if ($this->_crid !== 0) {
+		if ($crid !== 0) {
 			$fields['ver'] = new VinkField('verplaats_dag', $verplaats, 'Verplaatsen');
 			$fields['ver']->title = 'Verplaats naar dag v/d week bij bijwerken';
 			$fields['ver']->onchange = <<<JS
@@ -62,37 +68,7 @@ JS;
 		$fields['src']->extraIcon = 'disk_multiple';
 		$fields['src']->extraUrl = Instellingen::get('taken', 'url') . '/bijwerken/' . $crid;
 
-		$this->_form = new Formulier(null, 'taken-corvee-repetitie-form', Instellingen::get('taken', 'url') . '/opslaan/' . $crid, $fields);
-	}
-
-	public function getTitel() {
-		if ($this->_crid === 0) {
-			return 'Corveerepetitie aanmaken';
-		}
-		return 'Corveerepetitie wijzigen';
-	}
-
-	public function view() {
-		$this->_form->addCssClass('popup');
-		$this->smarty->assign('form', $this->_form);
-		if ($this->_crid > 0) {
-			$this->_form->addCssClass('PreventUnchanged');
-			$this->smarty->assign('bijwerken', Instellingen::get('taken', 'url') . '/bijwerken/' . $this->_crid);
-		}
-		$this->smarty->display('taken/popup_form.tpl');
-	}
-
-	public function validate() {
-		if (!is_int($this->_crid) || $this->_crid < 0) {
-			return false;
-		}
-		return $this->_form->validate();
-	}
-
-	public function getValues() {
-		return $this->_form->getValues(); // escapes HTML
+		$this->addFields($fields);
 	}
 
 }
-
-?>

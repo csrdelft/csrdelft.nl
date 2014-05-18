@@ -51,38 +51,22 @@
  * 		- Subkopje					invoer wordt als <h3> weergegeven
  * 
  */
-abstract class FormElement implements View {
+interface FormElement extends View {
 
-	protected $model;
+	public function getModel();
 
-	public function __construct($model) {
-		$this->model = $model;
-	}
+	public function getType();
 
-	public function getModel() {
-		return $this->model;
-	}
-
-	public function getType() {
-		return get_class($this);
-	}
-
-	public function getTitel() {
-		return '';
-	}
-
-	public function getJavascript() {
-		return '';
-	}
-
+	public function getJavascript();
 }
 
 /**
  * InputField is de base class van alle FormElements die data leveren,
  * behalve FileField zelf die wel meerdere InputFields bevat.
  */
-abstract class InputField extends FormElement implements Validator {
+abstract class InputField implements FormElement, Validator {
 
+	protected $model;
 	protected $name;  //naam van het veld in POST
 	protected $value;  //welke initiele waarde heeft het veld?
 	protected $origvalue; //welke originele waarde had het veld?
@@ -104,7 +88,7 @@ abstract class InputField extends FormElement implements Validator {
 	protected $remotedatasource = '';
 
 	public function __construct($name, $value, $description = null, $model = null) {
-		parent::__construct($model);
+		$this->model = $model;
 		$this->name = $name;
 		if ($this->isPosted()) {
 			$this->value = $this->getValue();
@@ -117,16 +101,24 @@ abstract class InputField extends FormElement implements Validator {
 		$this->css_classes[] = $this->getType();
 	}
 
+	public function getType() {
+		return get_class($this);
+	}
+
+	public function getModel() {
+		return $this->model;
+	}
+
+	public function getTitel() {
+		return $this->getName();
+	}
+
 	public function getName() {
 		return $this->name;
 	}
 
 	public function isPosted() {
 		return isset($_POST[$this->name]);
-	}
-
-	public function addCssClass($class) {
-		$this->css_classes[] = $class;
 	}
 
 	/**
@@ -1502,7 +1494,7 @@ class RequiredVinkField extends VinkField {
 /**
  * Submit, reset en cancel buttons
  */
-class SubmitResetCancel extends FormElement {
+class SubmitResetCancel implements FormElement {
 
 	public $submitTitle = 'Invoer opslaan';
 	public $submitText;
@@ -1521,7 +1513,6 @@ class SubmitResetCancel extends FormElement {
 	public $extraUrl;
 
 	public function __construct($cancel_url = '', $icons = true, $text = true, $reset = true) {
-		parent::__construct(null);
 		$this->cancelUrl = $cancel_url;
 		if ($icons) {
 			$this->submitIcon = 'disk';
@@ -1537,6 +1528,18 @@ class SubmitResetCancel extends FormElement {
 			unset($this->resetIcon);
 			unset($this->resetText);
 		}
+	}
+
+	public function getModel() {
+		return null;
+	}
+
+	public function getTitel() {
+		return $this->getType();
+	}
+
+	public function getType() {
+		return get_class($this);
 	}
 
 	public function view() {
@@ -1569,22 +1572,41 @@ class SubmitResetCancel extends FormElement {
 		echo '</div>';
 	}
 
+	public function getJavascript() {
+		return '';
+	}
+
 }
 
 /**
  * Commentaardingen voor formulieren
  */
-class HtmlComment extends FormElement {
+class HtmlComment implements FormElement {
 
-	public $comment;
+	protected $comment;
 
 	public function __construct($comment) {
-		parent::__construct(null);
 		$this->comment = $comment;
+	}
+
+	public function getModel() {
+		return $this->comment;
 	}
 
 	public function view() {
 		echo $this->comment;
+	}
+
+	public function getJavascript() {
+		return '';
+	}
+
+	public function getTitel() {
+		return $this->getType();
+	}
+
+	public function getType() {
+		return get_class($this);
 	}
 
 }
