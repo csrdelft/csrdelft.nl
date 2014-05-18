@@ -66,14 +66,13 @@ class SuggestieLijst extends TemplateView implements FormElement {
 	}
 
 	public function getJavascript() {
-		$js = '$(document).ready(function() { $("#suggesties-tabel").show(1, taken_color_suggesties); ';
+		$js = '$("#suggesties-tabel").show(1, taken_color_suggesties); ';
 		if (isset($this->voorkeurbaar) and $this->voorkeur) {
 			$js .= 'taken_toggle_suggestie("geenvoorkeur"); ';
 		}
 		if ($this->recent) {
 			$js .= 'taken_toggle_suggestie("recent"); ';
 		}
-		$js .= '});';
 		return $js;
 	}
 

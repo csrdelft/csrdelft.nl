@@ -67,9 +67,9 @@ mijn_rooster.tpl	|	P.W.G. Brussee (brussee@live.nl)
 			</table>
 		</div>
 	</div>
-	<table style="width: 100%; background-color: #EEEEEE; border: 1px solid #DDDDDD;">
+	<table id="suggesties-controls">
 		<tr>
-			<td style="width: 45%; padding: 7px !important;" 
+			<td
 				{if isset($voorkeurbaar)}
 					{if !$voorkeurbaar}
 						title="Deze corveerepetitie is niet voorkeurbaar."
@@ -88,44 +88,43 @@ mijn_rooster.tpl	|	P.W.G. Brussee (brussee@live.nl)
 						   onchange="taken_toggle_suggestie('geenvoorkeur');" 
 					   {/if}
 					   />
-				<label for="voorkeur" style="padding-left: 7px !important; float: none; position: relative; top: -4px;">Met voorkeur</label>
+				<label for="voorkeur">Met voorkeur</label>
 			</td>
-			<td rowspan="2" style="padding: 7px;">
+			<td rowspan="2">
 				<p>Toon novieten/sjaars</p>
 
 				<input type="radio" id="jongste_ja" name="jongste" value="ja" onchange="
 						taken_toggle_suggestie('oudere', 'alleen' !== $('#jongste_alleen:checked').val());
 						taken_toggle_suggestie('jongste', 'nee' !== $('#jongste_nee:checked').val());
 					   " checked="checked" />
-				<label for="jongste_ja" style="padding-left: 7px !important; float: none; padding-right: 15px !important; position: relative; top: -4px;">Ja</label>
+				<label for="jongste_ja">Ja</label>
 
 				<input type="radio" id="jongste_nee" name="jongste" value="nee" onchange="
 						taken_toggle_suggestie('oudere', 'alleen' !== $('#jongste_alleen:checked').val());
 						taken_toggle_suggestie('jongste', 'nee' !== $('#jongste_nee:checked').val());
 					   " />
-				<label for="jongste_nee" style="padding-left: 7px !important; float: none; padding-right: 15px !important; position: relative; top: -4px;">Nee</label>
+				<label for="jongste_nee">Nee</label>
 
 				<input type="radio" id="jongste_alleen" name="jongste" value="alleen" onchange="
 						taken_toggle_suggestie('oudere', 'alleen' !== $('#jongste_alleen:checked').val());
 						taken_toggle_suggestie('jongste', 'nee' !== $('#jongste_nee:checked').val());
 					   " />
-				<label for="jongste_alleen" style="padding-left: 7px !important; float: none; padding-right: 15px !important; position: relative; top: -4px;">Alleen</label>
+				<label for="jongste_alleen">Alleen</label>
 			</td>
-			<td rowspan="3" style="width: 25px;">
+			<td rowspan="3" style="width: 30px;">
 				<br />
-				<a class="knop" onclick="
-						$('.scrollpane').animate({ldelim}height: '+=250'{rdelim}, 800, function() {ldelim}{rdelim});
-				   " title="Vergroot de lijst met suggesties"><div class="arrows">&uarr;&darr;</div>&nbsp;&nbsp;&nbsp;</a>
+				<a class="knop" onclick="$('.scrollpane' + id).animate({ 'height': '+=250' }, 800, function() {
+						});" title="Vergroot de lijst met suggesties"><div class="arrows">&uarr;&darr;</div>&nbsp;&nbsp;&nbsp;</a>
 			</td>
 		</tr>
 		<tr>
-			<td style="padding-left: 7px;">
+			<td>
 				<input type="checkbox" id="recent" onchange="taken_toggle_suggestie('recent');" 
 					   {if $recent}
 						   checked="checked" 
 					   {/if}
 					   />
-				<label for="recent" style="padding-left: 7px !important; float: none; position: relative; top: -4px;">Niet recent gecorveed</label>
+				<label for="recent">Niet recent gecorveed</label>
 			</td>
 		</tr>
 	</table>

@@ -124,6 +124,18 @@ tr.taak-datum-head th, tr.taak-datum-summary th {
 #suggesties-tabel tr:hover, tr.taak-datum-summary:hover th {
 	background-color: #DDEEFF !important;
 }
+#suggesties-controls {
+	width: 100%;
+	background-color: #EEEEEE;
+	border: 1px solid #DDDDDD;
+}
+#suggesties-controls td {
+	padding: 7px;
+}
+#suggesties-controls label {
+	float: none;
+	padding: 7px;
+}
 .taken-rooster tr {
 	background-color: transparent !important;
 }

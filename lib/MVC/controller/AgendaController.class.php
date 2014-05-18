@@ -24,7 +24,6 @@ class AgendaController extends AclController {
 			$this->acl = array(
 				'courant' => 'P_NOBODY',
 				'toevoegen' => 'P_AGENDA_POST',
-				'doorgaan' => 'P_AGENDA_POST',
 				'bewerken' => 'P_AGENDA_MOD',
 				'verwijderen' => 'P_AGENDA_MOD'
 			);
@@ -79,23 +78,20 @@ class AgendaController extends AclController {
 		}
 	}
 
-	public function toevoegen($datum = '', $doorgaan = true) {
+	public function toevoegen($datum = '') {
 		$item = $this->model->newAgendaItem($datum);
 		$this->view = new AgendaItemForm($item, $this->action); // fetches POST values itself
-		if ($doorgaan AND $this->view->validate()) {
+		if ($this->view->validate()) {
 			$item->item_id = (int) $this->model->create($item);
-			setMelding('Toegevoegd: ' . $item->titel . ' (' . $item->begin_moment . ')', 1);
-			$this->view = new AgendaItemMaandView($item);
-			return true; // voor doorgaan
-		}
-	}
-
-	public function doorgaan() {
-		$this->action = 'toevoegen';
-		if ($this->toevoegen()) {
-			$item = $this->view->getModel();
-			$_POST['datum_dag'] = date('d', $item->getEindMoment() + 60); // spring naar volgende dag bij 23:59
-			$this->toevoegen('', false);
+			if ($datum === 'doorgaan') {
+				setMelding('Toegevoegd: ' . $item->titel . ' (' . $item->begin_moment . ')', 1);
+				$item->item_id = null;
+				$_POST = array(); // clear post values of previous input
+				$item->begin_moment = getDateTime($item->getEindMoment() + 60); // spring naar volgende dag bij 23:59
+				$this->view = new AgendaItemForm($item, $this->action); // fetches POST values itself
+			} else {
+				$this->view = new AgendaItemMaandView($item);
+			}
 		}
 	}
 

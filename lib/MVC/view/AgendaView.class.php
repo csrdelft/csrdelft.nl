@@ -133,7 +133,9 @@ function setTijd(a, b, c, d) {
 			$fields['src']->extraText = 'Opslaan en doorgaan';
 			$fields['src']->extraTitle = 'Opslaan & nog een agenda item toevoegen';
 			$fields['src']->extraIcon = 'add';
-			$fields['src']->extraUrl = '/agenda/doorgaan';
+			$fields['src']->extraUrl = '/agenda/toevoegen/doorgaan';
+			$fields['src']->extraActie = 'submit';
+			$fields['src']->js = "$('#extraButton').bind('click.action', form_replace_action);";
 		}
 
 		$this->addFields($fields);

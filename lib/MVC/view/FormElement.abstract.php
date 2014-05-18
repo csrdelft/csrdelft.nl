@@ -1499,7 +1499,6 @@ class SubmitResetCancel implements FormElement {
 	public $submitTitle = 'Invoer opslaan';
 	public $submitText;
 	public $submitIcon;
-	public $submitReload;
 	public $resetTitle = 'Reset naar opgeslagen gegevens';
 	public $resetText;
 	public $resetIcon;
@@ -1512,9 +1511,12 @@ class SubmitResetCancel implements FormElement {
 	public $extraText;
 	public $extraIcon;
 	public $extraUrl;
+	public $extraActie;
+	public $js;
 
 	public function __construct($cancel_url = '', $icons = true, $text = true, $reset = true) {
 		$this->cancelUrl = $cancel_url;
+		$this->js = '';
 		if ($icons) {
 			$this->submitIcon = 'disk';
 			$this->resetIcon = 'arrow_rotate_anticlockwise';
@@ -1549,18 +1551,17 @@ class SubmitResetCancel implements FormElement {
 			if (isset($this->extraIcon)) {
 				$this->extraIcon = '<img src="' . CSR_PICS . '/famfamfam/' . $this->extraIcon . '.png" class="icon" width="16" height="16" alt="extra" /> ';
 			}
-			$js = "$(this).attr('postdata', $(this).closest('form').serialize());";
-			echo '<a id="extraButton" class="knop post" title="' . $this->extraTitle . '" href="' . $this->extraUrl . '" onclick="' . $js . '">' . $this->extraIcon . $this->extraText . '</a> ';
+			echo '<a id="extraButton" class="knop';
+			if (isset($this->extraActie)) {
+				echo ' ' . $this->extraActie;
+			}
+			echo '" title="' . $this->extraTitle . '" href="' . $this->extraUrl . '">' . $this->extraIcon . $this->extraText . '</a> ';
 		}
 		if (isset($this->submitIcon) OR isset($this->submitText)) {
 			if (isset($this->submitIcon)) {
 				$this->submitIcon = '<img src="' . CSR_PICS . '/famfamfam/' . $this->submitIcon . '.png" class="icon" width="16" height="16" alt="submit" /> ';
 			}
-			echo '<a class="knop submit';
-			if (isset($this->submitReload)) {
-				echo ' ReloadPage';
-			}
-			echo '" title="' . $this->submitTitle . '">' . $this->submitIcon . $this->submitText . '</a> ';
+			echo '<a class="knop submit" title="' . $this->submitTitle . '">' . $this->submitIcon . $this->submitText . '</a> ';
 		}
 		if (isset($this->resetIcon) OR isset($this->resetText)) {
 			if (isset($this->resetIcon)) {
@@ -1578,7 +1579,7 @@ class SubmitResetCancel implements FormElement {
 	}
 
 	public function getJavascript() {
-		return '';
+		return $this->js;
 	}
 
 }

@@ -62,10 +62,6 @@ class Formulier implements View, Validator {
 		return $this->model;
 	}
 
-	public function getFormId() {
-		return $this->formId;
-	}
-
 	public function getFields() {
 		return $this->fields;
 	}
@@ -169,7 +165,7 @@ class Formulier implements View, Validator {
 			$js = $field->getJavascript();
 			$javascript[md5($js)] = $js;
 		}
-		return '<script type="text/javascript">$(document).ready(function(){' . "\n" . implode("\n", $javascript) . "\n" . '});</script>';
+		return '<script type="text/javascript">function form_ready_' . str_replace('-', '_', $this->formId) . '(){' . "\n" . implode("\n", $javascript) . "\n" . '}</script>';
 	}
 
 	public function getTitleTag() {
@@ -181,7 +177,7 @@ class Formulier implements View, Validator {
 	}
 
 	public function getFormTag() {
-		return '<form enctype="multipart/form-data" action="' . $this->action . '" id="' . $this->getFormId() . '" class="' . implode(' ', $this->css_classes) . '" method="post">';
+		return '<form enctype="multipart/form-data" action="' . $this->action . '" id="' . $this->formId . '" class="' . implode(' ', $this->css_classes) . '" method="post">';
 	}
 
 	/**

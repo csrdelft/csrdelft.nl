@@ -129,9 +129,9 @@ function knop_get(event) {
 function popup_open(htmlString) {
 	if (htmlString) {
 		$('#popup').html(htmlString);
-		init_forms();
 		init_links();
 		init_buttons();
+		init_forms();
 		init_hoverIntents();
 		$('#popup').show();
 		$('#popup-background').css('background-image', 'none');
@@ -152,8 +152,20 @@ function popup_close() {
 }
 
 function init_forms() {
-	$('.submit').unbind('click.sumbit');
-	$('.submit').bind('click.sumbit', form_submit);
+	$('.Formulier').each(function() {
+		var formId = $(this).attr('id');
+		if (formId) {
+			var init = 'form_ready_' + formId;
+			init = init.split('-').join('_');
+			window[init]();
+		}
+		$(this).unbind('submit.enter');
+		$(this).bind('submit.enter', form_submit);
+		$(this).unbind('keyup.esc');
+		$(this).bind('keyup.esc', form_esc);
+	});
+	$('.submit').unbind('click.submit');
+	$('.submit').bind('click.submit', form_submit);
 	$('.reset').unbind('click.reset');
 	$('.reset').bind('click.reset', form_reset);
 	$('.cancel').unbind('click.cancel');
@@ -162,12 +174,6 @@ function init_forms() {
 	$('.InlineFormToggle').bind('click.toggle', form_toggle);
 	$('.SubmitChange').unbind('change.change');
 	$('.SubmitChange').bind('change.change', form_submit);
-	$('.Formulier').each(function() {
-		$(this).unbind('submit.enter');
-		$(this).bind('submit.enter', form_submit);
-		$(this).unbind('keyup.esc');
-		$(this).bind('keyup.esc', form_esc);
-	});
 	// Resize popup to width of textarea
 	$('#popup .TextareaField').unbind('mousedown.resize');
 	$('#popup .TextareaField').bind('mousedown.resize', function() {
@@ -204,6 +210,12 @@ function form_ischanged(form) {
 		}
 	});
 	return changed;
+}
+
+function form_replace_action(event) {
+	var form = $(event.target).closest('form');
+	var url = $(event.target).closest('a.knop').attr('href');
+	form.attr('action', url);
 }
 
 function form_inline_toggle(form) {
@@ -324,9 +336,9 @@ function dom_update(htmlString) {
 				$(this).prependTo('#taken-tabel tbody:visible:first').effect('highlight');
 			}
 		}
-		init_forms();
 		init_links();
 		init_buttons();
+		init_forms();
 		init_hoverIntents();
 	});
 }
