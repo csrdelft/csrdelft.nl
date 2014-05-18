@@ -69,15 +69,7 @@ mijn_rooster.tpl	|	P.W.G. Brussee (brussee@live.nl)
 	</div>
 	<table id="suggesties-controls">
 		<tr>
-			<td
-				{if isset($voorkeurbaar)}
-					{if !$voorkeurbaar}
-						title="Deze corveerepetitie is niet voorkeurbaar."
-					{/if}
-				{else}
-					title="Dit is geen periodieke taak dus zijn er geen voorkeuren."
-				{/if}
-				>
+			<td>
 				<input type="checkbox" id="voorkeur" 
 					   {if !isset($voorkeurbaar) or !$voorkeurbaar}
 						   disabled
@@ -86,11 +78,24 @@ mijn_rooster.tpl	|	P.W.G. Brussee (brussee@live.nl)
 							   checked="checked" 
 						   {/if}
 						   onchange="taken_toggle_suggestie('geenvoorkeur');" 
+					   {/if}{if isset($voorkeurbaar)}
+						   {if !$voorkeurbaar}
+							   title="Deze corveerepetitie is niet voorkeurbaar." 
+						   {/if}
+					   {else}
+						   title="Dit is geen periodieke taak dus zijn er geen voorkeuren." 
 					   {/if}
 					   />
 				<label for="voorkeur">Met voorkeur</label>
+				<br />
+				<input type="checkbox" id="recent" onchange="taken_toggle_suggestie('recent');" 
+					   {if $recent}
+						   checked="checked" 
+					   {/if}
+					   />
+				<label for="recent">Niet recent gecorveed</label>
 			</td>
-			<td rowspan="2">
+			<td>
 				<p>Toon novieten/sjaars</p>
 
 				<input type="radio" id="jongste_ja" name="jongste" value="ja" onchange="
@@ -111,20 +116,12 @@ mijn_rooster.tpl	|	P.W.G. Brussee (brussee@live.nl)
 					   " />
 				<label for="jongste_alleen">Alleen</label>
 			</td>
-			<td rowspan="3" style="width: 30px;">
+			<td style="width: 25px;">
 				<br />
-				<a class="knop" onclick="$('.scrollpane' + id).animate({ 'height': '+=250' }, 800, function() {
+				<a class="knop" onclick="$('.scrollpane' + id).animate({
+							'height': '+=250'
+						}, 800, function() {
 						});" title="Vergroot de lijst met suggesties"><div class="arrows">&uarr;&darr;</div>&nbsp;&nbsp;&nbsp;</a>
-			</td>
-		</tr>
-		<tr>
-			<td>
-				<input type="checkbox" id="recent" onchange="taken_toggle_suggestie('recent');" 
-					   {if $recent}
-						   checked="checked" 
-					   {/if}
-					   />
-				<label for="recent">Niet recent gecorveed</label>
 			</td>
 		</tr>
 	</table>
