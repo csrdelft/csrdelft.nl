@@ -156,7 +156,11 @@ class DocumentController extends Controller {
 			// Als we al een bestand hebben voor dit document, moet die natuurlijk eerst hdb.
 			if ($fields['uploader']->getType() !== 'BestandBehouden') {
 				if ($this->document->hasFile()) {
-					$this->document->deleteFile();
+					try {
+						$this->document->deleteFile();
+					} catch (Exception $e) {
+						invokeRefresh($this->baseurl, $e->getMessage());
+					}
 				}
 				$bestand = $fields['uploader']->getModel();
 				$this->document->setBestandsnaam($bestand->bestandsnaam);
@@ -166,17 +170,19 @@ class DocumentController extends Controller {
 			if ($this->document->save()) {
 				try {
 					if ($fields['uploader']->opslaan($this->document->getPath(), $this->document->getFilename())) {
-						setMelding('Document met succes opgeslagen.', 1);
+						$melding = array('Document met succes opgeslagen.', 1);
 					} else {
-						throw new Exception('Fout bij het opslaan van het bestand in het bestandsysteem. Bewerk het document om het bestand alsnog toe te voegen.');
+						$melding = 'Fout bij het opslaan van het bestand in het bestandsysteem. Bewerk het document om het bestand alsnog toe te voegen.';
 					}
 				} catch (Exception $e) {
-					throw new Exception('Bestand van document opslaan mislukt: ' . $e->getMessage());
+					$melding = 'Bestand van document opslaan mislukt: ' . $e->getMessage();
 				}
 			} else {
-				throw new Exception('Fout bij toevoegen van document Document::save()');
+				$melding = 'Fout bij toevoegen van document Document::save()';
 			}
+			invokeRefresh($this->baseurl, $melding);
 		}
+		setMelding($this->errors, -1);
 		$this->view = $formulier;
 	}
 

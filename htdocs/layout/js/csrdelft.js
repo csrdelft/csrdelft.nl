@@ -372,8 +372,7 @@ function ajax_request(type, url, data, source, onsuccess, onerror, onfinish) {
 		if (onfinish) {
 			onfinish();
 		}
-	}
-	);
+	});
 }
 
 function ketzer_ajax(url, ketzer) {
