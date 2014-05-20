@@ -1,6 +1,7 @@
 <?php
 
 require_once 'MVC/model/entity/Mail.class.php';
+require_once 'taken/model/AanmeldingenModel.class.php';
 
 /**
  * HerinneringenModel.class.php

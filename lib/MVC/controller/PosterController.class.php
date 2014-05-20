@@ -1,5 +1,7 @@
 <?php
 
+require_once 'MVC/controller/FotoAlbumController.class.php';
+
 /**
  * PosterController.class.php
  * 
@@ -9,7 +11,7 @@
 class PosterController extends AclController {
 
 	public function __construct($query) {
-		parent::__construct($query, FunctiesModel::instance());
+		parent::__construct($query);
 		$this->acl = array(
 			'uploaden' => 'P_LEDEN_READ'
 		);
@@ -51,7 +53,6 @@ class PosterController extends AclController {
 					if ($fields['uploader']->opslaan($path . '/Posters/', $filenaam)) {
 						$map = new Map();
 						$map->locatie = $path . '/';
-						require_once 'MVC/controller/FotoAlbumController.class.php';
 						$album = FotoAlbumModel::getFotoAlbum($map, 'Posters');
 						if ($album === null) {
 							invokeRefresh(null, 'Fotoalbum bestaat niet', -1);
