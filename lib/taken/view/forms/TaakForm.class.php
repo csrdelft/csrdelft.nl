@@ -1,5 +1,7 @@
 <?php
 
+require_once 'taken/model/MaaltijdenModel.class.php';
+
 /**
  * TaakForm.class.php	| 	P.W.G. Brussee (brussee@live.nl)
  *
