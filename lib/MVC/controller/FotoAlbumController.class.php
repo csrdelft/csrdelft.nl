@@ -18,7 +18,6 @@ class FotoAlbumController extends AclController {
 	 * @var string
 	 */
 	private static $alleenLeden = '/(intern|novitiaat|ontvoering|feuten|slachten|zuipen|prive|privé)/i';
-
 	/**
 	 * Als deze regexp matched is het album alleen voor DéDé
 	 * @var string
@@ -142,17 +141,6 @@ class FotoAlbumController extends AclController {
 		exit;
 	}
 
-	public function verwijderen(Map $map, $naam) {
-		$album = FotoAlbumModel::getFotoAlbum($map, $naam);
-		$bestandsnaam = filter_input(INPUT_POST, 'foto', FILTER_SANITIZE_STRING);
-		if ($album !== null AND FotoAlbumModel::verwijderFoto(new Foto($album, $bestandsnaam))) {
-			echo '<div id="' . md5($bestandsnaam) . '" class="remove"></div>';
-		} else {
-			setMelding('Foto verwijderen mislukt', -1);
-		}
-		exit;
-	}
-
 	public function hernoemen(Map $map, $naam) {
 		$album = FotoAlbumModel::getFotoAlbum($map, $naam);
 		$nieuw = filter_input(INPUT_POST, 'Nieuwe_naam', FILTER_SANITIZE_STRING);
@@ -160,6 +148,16 @@ class FotoAlbumController extends AclController {
 			echo '<div id="' . md5($naam) . '" class="albumname">' . $nieuw . '</div>';
 		} else {
 			setMelding('Fotoalbum hernoemen mislukt', -1);
+		}
+		exit;
+	}
+
+	public function verwijderen(Map $map, $naam) {
+		$album = FotoAlbumModel::getFotoAlbum($map, '');
+		if ($album !== null AND FotoAlbumModel::verwijderFoto(new Foto($album, $naam))) {
+			echo '<div id="' . md5($naam) . '" class="remove"></div>';
+		} else {
+			setMelding('Foto verwijderen mislukt', -1);
 		}
 		exit;
 	}
