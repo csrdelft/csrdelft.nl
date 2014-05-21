@@ -102,14 +102,7 @@ class BeheerMaaltijdenController extends AclController {
 		if (isset($_POST['mrid'])) {
 			$mrid = (int) filter_input(INPUT_POST, 'mrid', FILTER_SANITIZE_NUMBER_INT);
 			$repetitie = MaaltijdRepetitiesModel::getRepetitie($mrid);
-			// start at first occurence
-			$datum = time();
-			$shift = $repetitie->getDagVanDeWeek() - date('w', $datum) + 7;
-			$shift %= 7;
-			if ($shift > 0) {
-				$datum = strtotime('+' . $shift . ' days', $datum);
-			}
-			$beginDatum = date('Y-m-d', $datum);
+			$beginDatum = MaaltijdRepetitiesModel::getFirstOccurrence($repetitie);
 			if ($repetitie->getPeriodeInDagen() > 0) {
 				$this->view = new RepetitieMaaltijdenForm($repetitie, $beginDatum, $beginDatum); // fetches POST values itself
 			} else {

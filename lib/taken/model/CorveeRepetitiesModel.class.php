@@ -10,6 +10,16 @@ require_once 'taken/model/VoorkeurenModel.class.php';
  */
 class CorveeRepetitiesModel {
 
+	public static function getFirstOccurrence(CorveeRepetitie $repetitie) {
+		$datum = time();
+		$shift = $repetitie->getDagVanDeWeek() - date('w', $datum) + 7;
+		$shift %= 7;
+		if ($shift > 0) {
+			$datum = strtotime('+' . $shift . ' days', $datum);
+		}
+		return date('Y-m-d', $datum);
+	}
+
 	public static function getVoorkeurbareRepetities($groupById = false) {
 		$repetities = self::loadRepetities('voorkeurbaar = true');
 		if ($groupById) {

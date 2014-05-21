@@ -262,3 +262,5 @@ class Maaltijd implements Agendeerbaar {
 	}
 
 }
+
+?>

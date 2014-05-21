@@ -114,15 +114,7 @@ class BeheerTakenController extends AclController {
 			$crid = (int) filter_input(INPUT_POST, 'crid', FILTER_SANITIZE_NUMBER_INT);
 			$repetitie = CorveeRepetitiesModel::getRepetitie($crid);
 			if ($mid === null) {
-				// start at first occurence
-				$datum = time();
-				$shift = $repetitie->getDagVanDeWeek() - date('w', $datum) + 7;
-				$shift %= 7;
-				if ($shift > 0) {
-					$datum = strtotime('+' . $shift . ' days', $datum);
-				}
-				$beginDatum = date('Y-m-d', $datum);
-
+				$beginDatum = CorveeRepetitiesModel::getFirstOccurrence($repetitie);
 				if ($repetitie->getPeriodeInDagen() > 0) {
 					$this->view = new RepetitieCorveeForm($repetitie, $beginDatum, $beginDatum); // fetches POST values itself
 					return;
