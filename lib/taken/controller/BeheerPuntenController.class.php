@@ -1,6 +1,7 @@
 <?php
 
 require_once 'taken/model/PuntenModel.class.php';
+require_once 'MVC/model/taken/FunctiesModel.class.php';
 require_once 'taken/view/BeheerPuntenView.class.php';
 
 /**
