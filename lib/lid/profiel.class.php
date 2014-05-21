@@ -385,9 +385,11 @@ class ProfielBewerken extends Profiel {
 		$form[] = new SubmitResetCancel('/communicatie/profiel/' . $this->getUid());
 
 		if ($this->editNoviet) {
-			$this->form = new Formulier(null, 'profielForm', '/communicatie/profiel/' . $this->getUid() . '/novietBewerken', $form);
+			$this->form = new Formulier(null, 'profielForm', '/communicatie/profiel/' . $this->getUid() . '/novietBewerken');
+			$this->form->addFields($form);
 		} else {
-			$this->form = new Formulier(null, 'profielForm', '/communicatie/profiel/' . $this->getUid() . '/bewerken', $form);
+			$this->form = new Formulier(null, 'profielForm', '/communicatie/profiel/' . $this->getUid() . '/bewerken');
+			$this->form->addFields($form);
 		}
 	}
 
@@ -467,7 +469,8 @@ class ProfielStatus extends Profiel {
 		$form[] = new DatumField('sterfdatum', $profiel['sterfdatum'], 'Overleden op:');
 		$form[] = new SubmitResetCancel();
 
-		$this->form = new Formulier(null, 'statusForm', '/communicatie/profiel/' . $this->getUid() . '/wijzigstatus/', $form);
+		$this->form = new Formulier(null, 'statusForm', '/communicatie/profiel/' . $this->getUid() . '/wijzigstatus/');
+		$this->form->addFields($form);
 	}
 
 	/**
@@ -782,7 +785,8 @@ class ProfielVoorkeur extends Profiel {
 		$form[] = new TextareaField('lidOpmerking', $lidvoorkeur->getLidOpmerking(), 'Vul hier je eventuele voorkeur voor functie in, of andere opmerkingen');
 		$form[] = new SubmitResetCancel('/communicatie/profiel/' . $this->getUid());
 
-		$this->form = new Formulier(null, 'profielForm', '/communicatie/profiel/' . $this->getUid() . '/voorkeuren', $form);
+		$this->form = new Formulier(null, 'profielForm', '/communicatie/profiel/' . $this->getUid() . '/voorkeuren');
+		$this->form->addFields($form);
 	}
 
 	/**

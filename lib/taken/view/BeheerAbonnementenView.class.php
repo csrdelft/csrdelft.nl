@@ -14,7 +14,8 @@ class BeheerAbonnementenView extends TemplateView {
 		parent::__construct($matrix, 'Beheer abonnementen');
 
 		$field = new LidField('voor_lid', null, "Toon abonnementen van persoon:", 'allepersonen');
-		$form = new Formulier(null, 'taken-subform-abos', Instellingen::get('taken', 'url') . '/voorlid', array($field));
+		$form = new Formulier(null, 'taken-subform-abos', Instellingen::get('taken', 'url') . '/voorlid');
+		$form->addFields(array($field));
 		$this->smarty->assign('form', $form);
 
 		$status = 'abo';

@@ -157,7 +157,9 @@ function init_forms() {
 		if (formId) {
 			var init = 'form_ready_' + formId;
 			init = init.split('-').join('_');
-			window[init]();
+			if (typeof window[init] === 'function') {
+				window[init]();
+			}
 		}
 		$(this).unbind('submit.enter');
 		$(this).bind('submit.enter', form_submit);

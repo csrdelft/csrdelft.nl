@@ -1,9 +1,7 @@
 <?php
 
-/*
- * Peiling beheerpagina
- * 
- */
+/* Peiling beheerpagina */
+
 require_once 'configuratie.include.php';
 require_once 'peilingcontent.class.php';
 require_once 'peiling.class.php';

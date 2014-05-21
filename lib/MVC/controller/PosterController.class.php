@@ -43,7 +43,8 @@ class PosterController extends AclController {
 		$fields['knoppen'] = new SubmitResetCancel('/actueel/fotoalbum/');
 		$fields['knoppen']->resetIcon = null;
 		$fields['knoppen']->resetText = null;
-		$formulier = new Formulier(null, 'posterForm', '/poster/uploaden/', $fields);
+		$formulier = new Formulier(null, 'posterForm', '/poster/uploaden/');
+		$formulier->addFields($fields);
 		$formulier->titel = 'Poster uploaden';
 		if ($this->isPosted() AND $formulier->validate()) {
 			try {

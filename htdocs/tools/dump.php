@@ -14,7 +14,8 @@ foreach (DatabaseAdmin::instance()->sqlShowTables()->fetchAll() as $table) {
 
 $fields['tabel'] = new SelectField('tabel', null, 'Tabel', $tables);
 $fields['btn'] = new SubmitResetCancel(CSR_ROOT, true, true, false);
-$form = new Formulier(null, 'form', null, $fields);
+$form = new Formulier(null, 'form', null);
+$form->addFields($fields);
 $form->titel = 'Dump database table';
 
 if ($form->validate()) {

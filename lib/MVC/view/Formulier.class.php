@@ -46,12 +46,11 @@ class Formulier implements View, Validator {
 	protected $css_classes = array();
 	public $error = '';
 
-	public function __construct($model, $formId, $action = null, array $fields = array()) {
+	public function __construct($model, $formId, $action) {
 		$this->model = $model;
 		$this->formId = $formId;
 		$this->action = $action;
 		$this->css_classes[] = 'Formulier';
-		$this->addFields($fields);
 	}
 
 	public function getTitel() {

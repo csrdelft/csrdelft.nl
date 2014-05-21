@@ -120,7 +120,8 @@ $ingelogd = false;
 					$fields['submit'] = new SubmitResetCancel('/dies', false);
 					$fields['submit']->submitTitle = 'Aanmelding opslaan';
 
-					$form = new Formulier(null, 'galaaanmelding', '/dies/galaaanmelding.php', $fields);
+					$form = new Formulier(null, 'galaaanmelding', '/dies/galaaanmelding.php');
+					$form->addFields($fields);
 					$form->view();
 				} else {
 ?>

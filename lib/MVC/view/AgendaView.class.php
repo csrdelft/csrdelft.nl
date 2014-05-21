@@ -94,7 +94,12 @@ class AgendaItemForm extends PopupForm {
 		$aantal = count($tijden) / 2;
 		for ($i = 0; $i < $aantal; $i++) {
 			$naam = $tijden[$i * 2 + 1];
-			$tijd = explode('-', Instellingen::get('agenda', 'standaard_tijd_' . ($i + 1)));
+			$standaard_tijd = 'standaard_tijd_' . ($i + 1);
+			if (!Instellingen::has('agenda', $standaard_tijd)) {
+				setMelding($standaard_tijd . ' "' . $naam . '" is niet gedefinieerd', -1);
+				continue;
+			}
+			$tijd = explode('-', Instellingen::get('agenda', $standaard_tijd));
 			$begin = explode(':', $tijd[0]);
 			$eind = explode(':', $tijd[1]);
 			$html .= '<a onclick="setTijd(\'' . $begin[0] . '\',\'' . $begin[1] . '\',\'' . $eind[0] . '\',\'' . $eind[1] . '\');">» ' . $naam . '</a> &nbsp;';
