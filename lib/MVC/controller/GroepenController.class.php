@@ -15,7 +15,9 @@ class GroepenController extends Controller {
 	public function __construct($query) {
 		parent::__construct($query);
 		try {
-			$this->action = $this->getParam(2);
+			if ($this->hasParam(2)) {
+				$this->action = $this->getParam(2);
+			}
 			$this->performAction($this->getParams(3));
 		} catch (Exception $e) {
 			setMelding($e->getMessage(), -1);

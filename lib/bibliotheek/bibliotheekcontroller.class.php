@@ -28,7 +28,7 @@ class BibliotheekController extends Controller {
 		//wat zullen we eens gaan doen? Hier bepalen we welke actie we gaan uitvoeren
 		//en of de ingelogde persoon dat mag.
 
-		if ($this->hasParam(0) AND $this->getParam(0) != '') {
+		if ($this->hasParam(0)) {
 			$this->action = $this->getParam(0);
 		} else {
 			$this->action = 'catalogustonen';

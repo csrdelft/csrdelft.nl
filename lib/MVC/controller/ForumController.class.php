@@ -18,7 +18,9 @@ class ForumController extends Controller {
 			$_SESSION['forum_concept'] = '';
 		}
 		try {
-			$this->action = $this->getParam(2);
+			if ($this->hasParam(2)) {
+				$this->action = $this->getParam(2);
+			}
 			if ($this->action === 'rss.xml') {
 				$this->action = 'rss';
 				header('Content-Disposition: attachment; filename="rss.xml"');
