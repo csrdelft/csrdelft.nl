@@ -46,7 +46,7 @@ class Formulier implements View, Validator {
 	protected $css_classes = array();
 	public $error = '';
 
-	public function __construct($model, $formId, $action = null, $fields = array()) {
+	public function __construct($model, $formId, $action = null, array $fields = array()) {
 		$this->model = $model;
 		$this->formId = $formId;
 		$this->action = $action;
@@ -60,6 +60,13 @@ class Formulier implements View, Validator {
 
 	public function getModel() {
 		return $this->model;
+	}
+
+	public function loadProperty(InputField $field) {
+		$fieldName = $field->getName();
+		if ($this->model instanceof PersistentEntity AND property_exists($this->model, $fieldName)) {
+			$this->model->$fieldName = $field->getValue();
+		}
 	}
 
 	public function getFields() {
@@ -83,11 +90,8 @@ class Formulier implements View, Validator {
 
 	public function addFields(array $fields) {
 		foreach ($fields as $field) {
-			if ($field instanceof InputField) { // same as insertBefore
-				$fieldName = $field->getName();
-				if ($this->model instanceof PersistentEntity AND property_exists($this->model, $fieldName)) {
-					$this->model->$fieldName = $field->getValue();
-				}
+			if ($field instanceof InputField) {
+				$this->loadProperty($field);
 			}
 		}
 		$this->fields = array_merge($this->fields, $fields);
@@ -98,11 +102,8 @@ class Formulier implements View, Validator {
 		foreach ($this->fields as $after) {
 			$pos++;
 			if ($after->getName() === $fieldName) {
-				if ($field instanceof InputField) { // same as addFields
-					$fieldName = $field->getName();
-					if ($this->model instanceof PersistentEntity AND property_exists($this->model, $fieldName)) {
-						$this->model->$fieldName = $field->getValue();
-					}
+				if ($field instanceof InputField) {
+					$this->loadProperty($field);
 				}
 				array_splice($this->fields, $pos, 0, $field);
 				return true;
@@ -211,24 +212,37 @@ class PopupForm extends Formulier {
 }
 
 /**
- * InlineForm with single InputField and optional SubmitResetCancel
+ * InlineForm with single InputField and SubmitResetCancel
  */
 class InlineForm extends Formulier {
 
+	public function __construct($model, $formId, $action, InputField $field, $tekst = false) {
+		parent::__construct($model, $formId, $action);
+
+		$fields = array();
+		$fields['input'] = $field;
+		$fields['src'] = new SubmitResetCancel(null, true, $tekst, false);
+		$fields['src']->submitIcon = 'accept';
+		$fields['src']->cancelReset = true;
+
+		$this->addFields($fields);
+	}
+
 	public function view() {
 		$this->css_classes[] = 'InlineForm';
+		$fields = $this->getFields();
+		echo '<div id="InlineForm-' . $this->formId . '">';
 		echo $this->getFormTag();
-		echo $this->fields[0]->view();
-		echo '<div class="InlineFormToggle">' . $this->fields[0]->getValue() . '</div>';
-		if (isset($this->fields[1]) AND $this->fields[1] instanceof SubmitResetCancel) {
-			$this->fields[1]->submitIcon = '<img src="' . CSR_PICS . '/famfamfam/accept.png" class="icon" width="16" height="16" alt="submit" /> ';
-			$this->fields[1]->resetIcon = null;
-			$this->fields[1]->resetText = null;
-			$this->fields[1]->cancelReset = true;
-			$this->fields[1]->view();
-		}
+		echo $fields['input']->view();
+		echo '<div class="InlineFormToggle">' . $fields['input']->getValue() . '</div>';
+		$fields['src']->view();
 		echo $this->getJavascript();
 		echo '</form></div>';
+	}
+
+	public function getValue() {
+		$fields = $this->getFields();
+		return $fields['input']->getValue();
 	}
 
 }

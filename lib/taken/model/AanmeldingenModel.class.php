@@ -1,6 +1,7 @@
 <?php
 
 require_once 'taken/model/entity/MaaltijdAanmelding.class.php';
+require_once 'taken/model/MaaltijdenModel.class.php';
 
 /**
  * AanmeldingenModel.class.php	| 	P.W.G. Brussee (brussee@live.nl)

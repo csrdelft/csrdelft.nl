@@ -1,56 +1,67 @@
 <?php
 
 /**
- * BeheerMaaltijdenView.class.php	| 	P.W.G. Brussee (brussee@live.nl)
+ * BeheerMaaltijdenView.class.php
+ * 
+ * @author P.W.G. Brussee <brussee@live.nl>
  * 
  * Tonen van alle maaltijden om te beheren.
  * 
  */
 class BeheerMaaltijdenView extends TemplateView {
 
-	private $prullenbak;
-	private $archief;
-	private $repetities;
-
-	public function __construct($maaltijden, $prullenbak = false, $archief = false, $repetities = null) {
+	public function __construct(array $maaltijden, $prullenbak = false, $archief = false, $repetities = null) {
 		parent::__construct($maaltijden);
-		$this->prullenbak = $prullenbak;
-		$this->archief = $archief;
-		$this->repetities = $repetities;
-	}
 
-	public function getTitel() {
-		if ($this->prullenbak) {
-			return 'Beheer maaltijden in prullenbak';
-		} elseif ($this->archief) {
-			return 'Maaltijdenarchief';
+		if ($prullenbak) {
+			$this->titel = 'Beheer maaltijden in prullenbak';
+		} elseif ($archief) {
+			$this->titel = 'Maaltijdenarchief';
 		} else {
-			return 'Beheer maaltijden';
+			$this->titel = 'Beheer maaltijden';
 		}
+
+		$this->smarty->assign('maaltijden', $this->model);
+		$this->smarty->assign('prullenbak', $prullenbak);
+		$this->smarty->assign('archief', $archief);
+		$this->smarty->assign('repetities', $repetities);
 	}
 
 	public function view() {
-		$this->smarty->assign('prullenbak', $this->prullenbak);
-		if (is_array($this->model)) { // list of maaltijden
-			if ($this->prullenbak || $this->archief || $this->repetities !== null) { // normal view
-				$this->smarty->assign('archief', $this->archief);
-				$this->smarty->display('taken/menu_pagina.tpl');
-				$this->smarty->assign('maaltijden', $this->model);
-				$this->smarty->assign('repetities', $this->repetities);
-				$this->smarty->display('taken/maaltijd/beheer_maaltijden.tpl');
-			} else { // list of new maaltijden
-				foreach ($this->model as $maaltijd) {
-					$this->smarty->assign('maaltijd', $maaltijd);
-					$this->smarty->display('taken/maaltijd/beheer_maaltijd_lijst.tpl');
-				}
-			}
-		} elseif (is_int($this->model)) { // id of deleted maaltijd
-			echo '<tr id="maaltijd-row-' . $this->model . '" class="remove"></tr>';
-		} else { // single maaltijd
-			echo '<tr id="taken-melding"><td>' . SimpleHTML::getMelding() . '</td></tr>';
-			$this->smarty->assign('maaltijd', $this->model);
+		$this->smarty->display('taken/menu_pagina.tpl');
+		$this->smarty->display('taken/maaltijd/beheer_maaltijden.tpl');
+	}
+
+}
+
+class BeheerMaaltijdenLijstView extends TemplateView {
+
+	public function __construct(array $maaltijden) {
+		parent::__construct($maaltijden);
+		$this->smarty->assign('prullenbak', false);
+	}
+
+	public function view() {
+		echo '<tr id="taken-melding"><td>' . SimpleHTML::getMelding() . '</td></tr>';
+		foreach ($this->model as $maaltijd) {
+			$this->smarty->assign('maaltijd', $maaltijd);
 			$this->smarty->display('taken/maaltijd/beheer_maaltijd_lijst.tpl');
 		}
+	}
+
+}
+
+class BeheerMaaltijdView extends TemplateView {
+
+	public function __construct(Maaltijd $maaltijd, $prullenbak = false) {
+		parent::__construct($maaltijd);
+		$this->smarty->assign('maaltijd', $this->model);
+		$this->smarty->assign('prullenbak', $prullenbak);
+	}
+
+	public function view() {
+		echo '<tr id="taken-melding"><td>' . SimpleHTML::getMelding() . '</td></tr>';
+		$this->smarty->display('taken/maaltijd/beheer_maaltijd_lijst.tpl');
 	}
 
 }

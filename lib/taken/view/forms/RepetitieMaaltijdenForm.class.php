@@ -1,7 +1,9 @@
 <?php
 
 /**
- * RepetitieMaaltijdenForm.class.php	| 	P.W.G. Brussee (brussee@live.nl)
+ * RepetitieMaaltijdenForm.class.php
+ * 
+ * @author P.W.G. Brussee <brussee@live.nl>
  *
  * Formulier voor nieuwe periodieke maaltijden.
  * 

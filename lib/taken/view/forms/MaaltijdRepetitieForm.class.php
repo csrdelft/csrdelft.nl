@@ -3,7 +3,9 @@
 require_once 'verticale.class.php';
 
 /**
- * MaaltijdRepetitieForm.class.php	| 	P.W.G. Brussee (brussee@live.nl)
+ * MaaltijdRepetitieForm.class.php
+ * 
+ * @author P.W.G. Brussee <brussee@live.nl>
  *
  * Formulier voor een nieuwe of te bewerken maaltijd-repetitie.
  * 

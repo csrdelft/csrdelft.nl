@@ -4,7 +4,9 @@ require_once 'verticale.class.php';
 require_once 'lichting.class.php';
 
 /**
- * MaaltijdForm.class.php	| 	P.W.G. Brussee (brussee@live.nl)
+ * MaaltijdForm.class.php
+ * 
+ * @author P.W.G. Brussee <brussee@live.nl>
  *
  * Formulier voor een nieuwe of te bewerken maaltijd.
  * 

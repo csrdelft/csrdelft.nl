@@ -56,13 +56,13 @@ if (isset($_GET['action'])) {
 
 
 require_once 'peilingbeheercontent.class.php';
-$beheer = new PeilingBeheerContent();
+$beheer = new PeilingBeheerContent(Peiling::getLijst());
 
 if ($error != '') {
 	setMelding($error);
 }
 
-if (!LoginLid::mag('P_LOGGED_IN') OR !Peiling::magBewerken()) {
+if (!LoginLid::mag('P_LOGGED_IN') OR ! Peiling::magBewerken()) {
 	# geen rechten
 	require_once 'MVC/model/CmsPaginaModel.class.php';
 	require_once 'MVC/view/CmsPaginaView.class.php';

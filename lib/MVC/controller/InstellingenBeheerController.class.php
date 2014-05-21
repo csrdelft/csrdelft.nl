@@ -58,12 +58,12 @@ class InstellingenBeheerController extends AclController {
 	public function opslaan($module, $key) {
 		$value = filter_input(INPUT_POST, 'waarde', FILTER_UNSAFE_RAW);
 		$instelling = $this->model->wijzigInstelling($module, $key, $value);
-		$this->view = new InstellingenBeheerView($this->model, $instelling->module, $instelling);
+		$this->view = new InstellingBeheerView($instelling);
 	}
 
 	public function reset($module, $key) {
 		$instelling = $this->model->resetInstelling($module, $key);
-		$this->view = new InstellingenBeheerView($this->model, $instelling->module, $instelling);
+		$this->view = new InstellingBeheerView($instelling);
 	}
 
 }

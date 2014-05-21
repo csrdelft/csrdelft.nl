@@ -10,55 +10,34 @@
  */
 class InstellingenBeheerView extends TemplateView {
 
-	/**
-	 * List of all modules
-	 * @var array
-	 */
-	private $modules;
-	/**
-	 * List of instellingen of a module
-	 * @var array
-	 */
-	private $instellingen;
-	/**
-	 * Instelling to update in view
-	 * @var Instelling
-	 */
-	private $instelling;
-	/**
-	 * Currently viewed module
-	 * @var string
-	 */
-	private $module;
-
-	public function __construct(Instellingen $model, $module, Instelling $instelling = null) {
-		parent::__construct($model);
-		$this->module = $module;
-		$this->instelling = $instelling;
-		if ($instelling === null) {
-			$this->modules = $model->getAlleModules();
-			if ($module !== null) {
-				$this->instellingen = $model->getModuleInstellingen($module);
-			}
+	public function __construct(Instellingen $instellingen, $module) {
+		parent::__construct();
+		if ($module !== null) {
+			$this->titel = 'Beheer instellingen module: ' . $module;
+			$this->smarty->assign('instellingen', $instellingen->getModuleInstellingen($module));
+		} else {
+			$this->titel = 'Beheer instellingen stek';
+			$this->smarty->assign('instellingen', array());
 		}
-	}
-
-	public function getTitel() {
-		if ($this->module !== null) {
-			return 'Beheer instellingen module: ' . $this->module;
-		}
-		return 'Beheer instellingen stek';
+		$this->smarty->assign('modules', $instellingen->getAlleModules());
 	}
 
 	public function view() {
-		if ($this->instelling === null) {
-			$this->smarty->assign('modules', $this->modules);
-			$this->smarty->assign('instellingen', $this->instellingen);
-			$this->smarty->display('MVC/instellingen/beheer/instellingen_page.tpl');
-		} else {
-			$this->smarty->assign('instelling', $this->instelling);
-			$this->smarty->display('MVC/instellingen/beheer/instelling_row.tpl');
-		}
+		$this->smarty->display('MVC/instellingen/beheer/instellingen_page.tpl');
+	}
+
+}
+
+class InstellingBeheerView extends TemplateView {
+
+	public function __construct(Instelling $instelling) {
+		parent::__construct();
+		$this->smarty->assign('instelling', $instelling);
+	}
+
+	public function view() {
+
+		$this->smarty->display('MVC/instellingen/beheer/instelling_row.tpl');
 	}
 
 }

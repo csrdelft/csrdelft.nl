@@ -157,18 +157,20 @@ class BeheerTakenController extends AclController {
 			if (endsWith($_SERVER['HTTP_REFERER'], Instellingen::get('taken', 'url') . '/maaltijd/' . $values['maaltijd_id'])) { // state of gui
 				$maaltijd = MaaltijdenModel::getMaaltijd($mid);
 			}
-			$this->view = new BeheerTakenView($taak, $maaltijd);
+			$this->view = new BeheerTaakView($taak, $maaltijd);
 		}
 	}
 
 	public function verwijder($tid) {
 		TakenModel::verwijderTaak($tid);
-		$this->view = new BeheerTakenView($tid);
+		echo '<tr id="corveetaak-row-' . $tid . '" class="remove"></tr>';
+		exit;
 	}
 
 	public function herstel($tid) {
-		$taak = TakenModel::herstelTaak($tid);
-		$this->view = new BeheerTakenView($taak->getTaakId());
+		TakenModel::herstelTaak($tid);
+		echo '<tr id="corveetaak-row-' . $tid . '" class="remove"></tr>';
+		exit;
 	}
 
 	public function toewijzen($tid) {
@@ -181,7 +183,7 @@ class BeheerTakenController extends AclController {
 			}
 			$taak = TakenModel::getTaak($tid);
 			TakenModel::taakToewijzenAanLid($taak, $uid);
-			$this->view = new BeheerTakenView($taak);
+			$this->view = new BeheerTaakView($taak);
 		} else {
 			require_once 'taken/model/ToewijzenModel.class.php';
 			require_once 'taken/view/forms/ToewijzenForm.class.php';
@@ -194,20 +196,20 @@ class BeheerTakenController extends AclController {
 	public function puntentoekennen($tid) {
 		$taak = TakenModel::getTaak($tid);
 		TakenModel::puntenToekennen($taak);
-		$this->view = new BeheerTakenView($taak);
+		$this->view = new BeheerTaakView($taak);
 	}
 
 	public function puntenintrekken($tid) {
 		$taak = TakenModel::getTaak($tid);
 		TakenModel::puntenIntrekken($taak);
-		$this->view = new BeheerTakenView($taak);
+		$this->view = new BeheerTaakView($taak);
 	}
 
 	public function email($tid) {
 		$taak = TakenModel::getTaak($tid);
 		require_once 'taken/model/HerinneringenModel.class.php';
 		HerinneringenModel::stuurHerinnering($taak);
-		$this->view = new BeheerTakenView($taak);
+		$this->view = new BeheerTaakView($taak);
 	}
 
 	public function leegmaken() {
@@ -227,7 +229,7 @@ class BeheerTakenController extends AclController {
 			if (empty($taken)) {
 				throw new Exception('Geen nieuwe taken aangemaakt');
 			}
-			$this->view = new BeheerTakenView($taken);
+			$this->view = new BeheerTakenLijstView($taken);
 		} else {
 			$this->view = $form;
 		}

@@ -43,7 +43,7 @@ class MijnAbonnementenController extends AclController {
 
 	public function inschakelen($mrid) {
 		$abo_aantal = AbonnementenModel::inschakelenAbonnement($mrid, \LoginLid::instance()->getUid());
-		$this->view = new MijnAbonnementenView($abo_aantal[0]);
+		$this->view = new MijnAbonnementView($abo_aantal[0]);
 		if ($abo_aantal[1] > 0) {
 			$melding = 'Automatisch aangemeld voor ' . $abo_aantal[1] . ' maaltijd' . ($abo_aantal[1] === 1 ? '' : 'en');
 			setMelding($melding, 2);
@@ -53,7 +53,7 @@ class MijnAbonnementenController extends AclController {
 
 	public function uitschakelen($mrid) {
 		$abo_aantal = AbonnementenModel::uitschakelenAbonnement($mrid, \LoginLid::instance()->getUid());
-		$this->view = new MijnAbonnementenView($mrid);
+		$this->view = new MijnAbonnementView($abo_aantal[0]);
 		if ($abo_aantal[1] > 0) {
 			$melding = 'Automatisch afgemeld voor ' . $abo_aantal[1] . ' maaltijd' . ($abo_aantal[1] === 1 ? '' : 'en');
 			setMelding($melding, 2);
@@ -62,5 +62,3 @@ class MijnAbonnementenController extends AclController {
 	}
 
 }
-
-?>

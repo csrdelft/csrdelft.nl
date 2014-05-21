@@ -1,7 +1,9 @@
 <?php
 
 /**
- * AanmeldingForm.class.php	| 	P.W.G. Brussee (brussee@live.nl)
+ * AanmeldingForm.class.php
+ * 
+ * @author P.W.G. Brussee <brussee@live.nl>
  *
  * Formulier voor een nieuwe of te verwijderen maaltijd-aanmelding.
  * 

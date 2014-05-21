@@ -9,11 +9,7 @@
 class LidInstellingenView extends TemplateView {
 
 	public function __construct(LidInstellingen $model) {
-		parent::__construct($model);
-	}
-
-	public function getTitel() {
-		return 'Stekinstellingen';
+		parent::__construct($model, 'Stekinstellingen');
 	}
 
 	public function view() {

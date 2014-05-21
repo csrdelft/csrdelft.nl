@@ -1,7 +1,9 @@
 <?php
 
 /**
- * BoekjaarSluitenForm.class.php	| 	P.W.G. Brussee (brussee@live.nl)
+ * BoekjaarSluitenForm.class.php
+ * 
+ * @author P.W.G. Brussee <brussee@live.nl>
  *
  * Formulier voor het sluiten van het MaalCie-boekjaar.
  * 

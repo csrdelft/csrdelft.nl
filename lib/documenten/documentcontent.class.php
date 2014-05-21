@@ -10,12 +10,12 @@ require_once 'document.class.php';
  */
 class DocumentenContent extends TemplateView {
 
-	public function getTitel() {
-		return 'Documentenketzer';
+	public function __construct() {
+		parent::__construct(DocumentenCategorie::getAll(), 'Documentenketzer');
+		$this->smarty->assign('categorieen', $this->model);
 	}
 
 	public function view() {
-		$this->smarty->assign('categorieen', DocumentenCategorie::getAll());
 		$this->smarty->display('documenten/documenten.tpl');
 	}
 
@@ -26,19 +26,12 @@ class DocumentenContent extends TemplateView {
  */
 class DocumentCategorieContent extends TemplateView {
 
-	private $categorie;
-
 	public function __construct(DocumentenCategorie $categorie) {
-		parent::__construct();
-		$this->categorie = $categorie;
-	}
-
-	public function getTitel() {
-		return 'Documenten in categorie: ' . $this->categorie->getNaam();
+		parent::__construct($categorie, 'Documenten in categorie: ' . $categorie->getNaam());
+		$this->smarty->assign('categorie', $this->model);
 	}
 
 	public function view() {
-		$this->smarty->assign('categorie', $this->categorie);
 		$this->smarty->display('documenten/documentencategorie.tpl');
 	}
 
@@ -50,40 +43,33 @@ class DocumentCategorieContent extends TemplateView {
  */
 class DocumentDownloadContent extends TemplateView {
 
-	private $document;
-
 	public function __construct(Document $document) {
-		parent::__construct();
-		$this->document = $document;
+		parent::__construct($document);
 	}
 
 	public function view() {
+		$mime = $this->model->getMimetype();
 		header('Pragma: public');
 		header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
 		header('Cache-Control: private', false);
-		header('content-type: ' . $this->document->getMimeType());
-
-		$mime = $this->document->getMimetype();
+		header('content-type: ' . $mime);
 		if (!strstr($mime, 'image') AND ! strstr($mime, 'text')) {
-			header('Content-Disposition: attachment; filename="' . $this->document->getBestandsnaam() . '";');
-			header('Content-Lenght: ' . $this->document->getSize() . ';');
+			header('Content-Disposition: attachment; filename="' . $this->model->getBestandsnaam() . '";');
+			header('Content-Lenght: ' . $this->model->getSize() . ';');
 		}
-		readfile($this->document->getFullPath());
+		readfile($this->model->getFullPath());
 	}
 
 }
 
 class DocumentUbbContent extends TemplateView {
 
-	private $document;
-
 	public function __construct(Document $document) {
-		parent::__construct();
-		$this->document = $document;
+		parent::__construct($document);
+		$this->smarty->assign('document', $this->model);
 	}
 
 	public function getHTML() {
-		$this->smarty->assign('document', $this->document);
 		return $this->smarty->fetch('documenten/document.ubb.tpl');
 	}
 

@@ -15,22 +15,15 @@ require_once 'lid/lidzoeker.class.php';
 
 class LedenlijstContent extends TemplateView {
 
-	private $zoeker;
-
 	public function __construct(LidZoeker $zoeker) {
-		parent::__construct();
-		$this->zoeker = $zoeker;
-	}
-
-	public function getTitel() {
-		return 'Ledenlijst der Civitas';
+		parent::__construct($zoeker, 'Ledenlijst der Civitas');
 	}
 
 	public function viewSelect($name, $options) {
 		echo '<select name="' . $name . '" id="f' . $name . '">';
 		foreach ($options as $key => $value) {
 			echo '<option value="' . htmlspecialchars($key) . '"';
-			if ($key == $this->zoeker->getRawQuery($name)) {
+			if ($key == $this->model->getRawQuery($name)) {
 				echo ' selected="selected"';
 			}
 			echo '>' . mb_htmlentities($value) . '</option>';
@@ -41,11 +34,11 @@ class LedenlijstContent extends TemplateView {
 	public function viewVeldselectie() {
 		echo '<label for="veldselectie">Veldselectie: </label>';
 		echo '<div id="veldselectie">';
-		$velden = $this->zoeker->getSelectableVelden();
+		$velden = $this->model->getSelectableVelden();
 		foreach ($velden as $key => $veld) {
 			echo '<div class="selectVeld">';
 			echo '<input type="checkbox" name="velden[]" id="veld' . $key . '" value="' . $key . '" ';
-			if (in_array($key, $this->zoeker->getSelectedVelden())) {
+			if (in_array($key, $this->model->getSelectedVelden())) {
 				echo 'checked="checked" ';
 			}
 			echo ' />';
@@ -63,18 +56,18 @@ class LedenlijstContent extends TemplateView {
 </ul>';
 		echo '<hr />';
 
-		if ($this->zoeker->count() > 0) {
+		if ($this->model->count() > 0) {
 			if (strstr(Instellingen::get('stek', 'request'), '?') !== false) {
 				$url = Instellingen::get('stek', 'request') . '&amp;addToGoogle=true';
 			} else {
 				$url = Instellingen::get('stek', 'request') . '?addToGoogle=true';
 			}
-			echo '<a href="' . $url . '" class="knop" style="float: right" title="Huidige selectie exporteren naar Google Contacts" onclick="return confirm(\'Weet u zeker dat u deze ' . $this->zoeker->count() . ' leden wilt importeren in uw Google-contacts?\')"><img src="http://code.google.com/favicon.ico" alt="google"/></a>';
+			echo '<a href="' . $url . '" class="knop" style="float: right" title="Huidige selectie exporteren naar Google Contacts" onclick="return confirm(\'Weet u zeker dat u deze ' . $this->model->count() . ' leden wilt importeren in uw Google-contacts?\')"><img src="http://code.google.com/favicon.ico" alt="google"/></a>';
 		}
 		echo SimpleHTML::getMelding();
 		echo '<h1>' . (LoginLid::instance()->getLid()->isOudlid() ? 'Oud-leden en l' : 'L') . 'edenlijst </h1>';
 		echo '<form method="get" id="zoekform">';
-		echo '<label for="q"></label><input type="text" name="q" value="' . htmlspecialchars($this->zoeker->getQuery()) . '" /> ';
+		echo '<label for="q"></label><input type="text" name="q" value="' . htmlspecialchars($this->model->getQuery()) . '" /> ';
 		echo '<input type="submit" class="submit" value="zoeken" /> <a class="knop" id="toggleAdvanced" href="#geavanceerd">Geavanceerd</a>';
 
 		echo '<div id="advanced" class="verborgen">';
@@ -94,7 +87,7 @@ class LedenlijstContent extends TemplateView {
 
 		//sorteren op:
 		echo '<label for="sort">Sorteer op:</label>';
-		$this->viewSelect('sort', $this->zoeker->getSortableVelden());
+		$this->viewSelect('sort', $this->model->getSortableVelden());
 		echo '<br />';
 
 		//selecteer velden
@@ -107,11 +100,11 @@ class LedenlijstContent extends TemplateView {
 
 		echo '<hr class="clear" />';
 
-		if ($this->zoeker->count() > 0) {
-			$viewclass = $this->zoeker->getWeergave();
-			$view = new $viewclass($this->zoeker);
+		if ($this->model->count() > 0) {
+			$viewclass = $this->model->getWeergave();
+			$view = new $viewclass($this->model);
 			$view->view();
-		} elseif ($this->zoeker->searched()) {
+		} elseif ($this->model->searched()) {
 			echo 'Geen resultaten';
 		} else {
 			//nog niet gezocht.

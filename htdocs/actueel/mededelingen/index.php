@@ -24,8 +24,6 @@ if (isset($_REQUEST['prullenbak']) AND $_REQUEST['prullenbak'] == '1' AND Medede
 	$prullenbak = true;
 }
 
-define('MEDEDELINGEN_ROOT', CSR_ROOT . '/actueel/mededelingen');
-
 switch ($actie) {
 	case 'verwijderen':
 		if (!Mededeling::magToevoegen()) {

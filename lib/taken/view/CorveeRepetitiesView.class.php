@@ -1,43 +1,45 @@
 <?php
 
 /**
- * CorveeRepetitiesView.class.php	| 	P.W.G. Brussee (brussee@live.nl)
+ * CorveeRepetitiesView.class.php
+ * 
+ * @author P.W.G. Brussee <brussee@live.nl>
  * 
  * Tonen van alle corvee-repetities om te beheren.
  * 
  */
 class CorveeRepetitiesView extends TemplateView {
 
-	private $maaltijdrepetitie;
-
 	public function __construct($repetities, $maaltijdrepetitie = null) {
 		parent::__construct($repetities);
-		$this->maaltijdrepetitie = $maaltijdrepetitie;
-	}
 
-	public function getTitel() {
-		if ($this->maaltijdrepetitie !== null) {
-			return 'Corveebeheer maaltijdrepetitie: ' . $this->maaltijdrepetitie->getStandaardTitel();
+		if ($maaltijdrepetitie !== null) {
+			$this->smarty->assign('maaltijdrepetitie', $maaltijdrepetitie);
+
+			$this->titel = 'Corveebeheer maaltijdrepetitie: ' . $maaltijdrepetitie->getStandaardTitel();
+		} else {
+			$this->titel = 'Beheer corveerepetities';
 		}
-		return 'Beheer corveerepetities';
+		$this->smarty->assign('repetities', $this->model);
 	}
 
 	public function view() {
-		if ($this->maaltijdrepetitie !== null) {
-			$this->smarty->assign('maaltijdrepetitie', $this->maaltijdrepetitie);
-		}
-		if (is_array($this->model)) { // list of repetities
-			$this->smarty->display('taken/menu_pagina.tpl');
-			$this->smarty->assign('repetities', $this->model);
-			$this->smarty->display('taken/corvee-repetitie/beheer_corvee_repetities.tpl');
-		} elseif (is_int($this->model)) { // id of deleted repetitie
-			echo '<tr id="taken-melding"><td>' . SimpleHTML::getMelding() . '</td></tr>';
-			echo '<tr id="repetitie-row-' . $this->model . '" class="remove"></tr>';
-		} else { // single repetitie
-			echo '<tr id="taken-melding"><td>' . SimpleHTML::getMelding() . '</td></tr>';
-			$this->smarty->assign('repetitie', $this->model);
-			$this->smarty->display('taken/corvee-repetitie/beheer_corvee_repetitie_lijst.tpl');
-		}
+		$this->smarty->display('taken/menu_pagina.tpl');
+		$this->smarty->display('taken/corvee-repetitie/beheer_corvee_repetities.tpl');
+	}
+
+}
+
+class CorveeRepetitieView extends TemplateView {
+
+	public function __construct(CorveeRepetitie $repetitie) {
+		parent::__construct($repetitie);
+		$this->smarty->assign('repetitie', $this->model);
+	}
+
+	public function view() {
+		echo '<tr id="taken-melding"><td>' . SimpleHTML::getMelding() . '</td></tr>';
+		$this->smarty->display('taken/corvee-repetitie/beheer_corvee_repetitie_lijst.tpl');
 	}
 
 }

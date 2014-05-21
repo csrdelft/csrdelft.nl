@@ -19,8 +19,8 @@ class CorveeVoorkeur {
 	private $corvee_repetitie;
 	private $van_lid;
 	
-	public function __construct($mrid=0, $uid='') {
-		$this->crv_repetitie_id = (int) $mrid;
+	public function __construct($crid=0, $uid='') {
+		$this->crv_repetitie_id = (int) $crid;
 		$this->lid_id = $uid;
 	}
 	

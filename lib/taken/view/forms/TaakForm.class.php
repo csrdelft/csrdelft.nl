@@ -3,7 +3,9 @@
 require_once 'taken/model/MaaltijdenModel.class.php';
 
 /**
- * TaakForm.class.php	| 	P.W.G. Brussee (brussee@live.nl)
+ * TaakForm.class.php
+ * 
+ * @author P.W.G. Brussee <brussee@live.nl>
  *
  * Formulier voor een nieuwe of te bewerken corveetaak.
  * 

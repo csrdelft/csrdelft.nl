@@ -4,14 +4,14 @@ require_once 'peiling.class.php';
 
 class PeilingBeheerContent extends TemplateView {
 
-	public function __construct() {
-		parent::__construct();
+	public function __construct(array $pijlingen) {
+		parent::__construct($pijlingen, 'Peilingbeheer');
 	}
 
 	public function getHTML() {
 		$lijst = '<h3>Peilingen:</h3>';
 
-		foreach (Peiling::getLijst() as $peiling) {
+		foreach ($this->model as $peiling) {
 			$pcontent = new PeilingContent(new Peiling($peiling['id']));
 			$lijst.=$pcontent->getHTML($beheer = true);
 		}
@@ -40,14 +40,8 @@ class PeilingBeheerContent extends TemplateView {
 		return $html;
 	}
 
-	public function getTitel() {
-		return 'Peilingbeheer';
-	}
-
 	public function view() {
 		echo $this->getHTML();
 	}
 
 }
-
-?>

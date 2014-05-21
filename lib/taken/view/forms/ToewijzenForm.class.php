@@ -1,7 +1,9 @@
 <?php
 
 /**
- * ToewijzenForm.class.php	| 	P.W.G. Brussee (brussee@live.nl)
+ * ToewijzenForm.class.php
+ * 
+ * @author P.W.G. Brussee <brussee@live.nl>
  *
  * Formulier om een corveetaak toe te wijzen aan een lid.
  * 

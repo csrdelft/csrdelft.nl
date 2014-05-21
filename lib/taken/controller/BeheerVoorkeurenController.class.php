@@ -1,6 +1,5 @@
 <?php
 
-
 require_once 'taken/model/VoorkeurenModel.class.php';
 require_once 'taken/view/BeheerVoorkeurenView.class.php';
 
@@ -16,8 +15,7 @@ class BeheerVoorkeurenController extends AclController {
 			$this->acl = array(
 				'beheer' => 'P_CORVEE_MOD'
 			);
-		}
-		else {
+		} else {
 			$this->acl = array(
 				'inschakelen' => 'P_CORVEE_MOD',
 				'uitschakelen' => 'P_CORVEE_MOD'
@@ -33,7 +31,7 @@ class BeheerVoorkeurenController extends AclController {
 		}
 		$this->performAction(array($crid));
 	}
-	
+
 	public function beheer() {
 		$matrix_repetities = VoorkeurenModel::getVoorkeurenMatrix();
 		$this->view = new BeheerVoorkeurenView($matrix_repetities[0], $matrix_repetities[1]);
@@ -41,27 +39,26 @@ class BeheerVoorkeurenController extends AclController {
 		$this->view->addStylesheet('taken.css');
 		$this->view->addScript('taken.js');
 	}
-	
+
 	public function inschakelen($crid) {
 		$uid = filter_input(INPUT_POST, 'voor_lid', FILTER_SANITIZE_STRING);
 		if (!\Lid::exists($uid)) {
-			throw new Exception('Lid bestaat niet: $uid ='. $uid);
+			throw new Exception('Lid bestaat niet: $uid =' . $uid);
 		}
-		$abonnement = VoorkeurenModel::inschakelenVoorkeur($crid, $uid);
-		$abonnement->setVanLid($abonnement->getLidId());
-		$this->view = new BeheerVoorkeurenView($abonnement);
+		$voorkeur = VoorkeurenModel::inschakelenVoorkeur($crid, $uid);
+		$voorkeur->setVanLid($voorkeur->getLidId());
+		$this->view = new BeheerVoorkeurView($voorkeur);
 	}
-	
+
 	public function uitschakelen($crid) {
 		$uid = filter_input(INPUT_POST, 'voor_lid', FILTER_SANITIZE_STRING);
 		if (!\Lid::exists($uid)) {
-			throw new Exception('Lid bestaat niet: $uid ='. $uid);
+			throw new Exception('Lid bestaat niet: $uid =' . $uid);
 		}
 		VoorkeurenModel::uitschakelenVoorkeur($crid, $uid);
-		$abonnement = new CorveeVoorkeur($crid, null);
-		$abonnement->setVanLid($uid);
-		$this->view = new BeheerVoorkeurenView($abonnement);
+		$voorkeur = new CorveeVoorkeur($crid, null);
+		$voorkeur->setVanLid($uid);
+		$this->view = new BeheerVoorkeurView($voorkeur);
 	}
-}
 
-?>
+}

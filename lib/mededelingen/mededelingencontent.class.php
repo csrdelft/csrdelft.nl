@@ -11,7 +11,7 @@ class MededelingenContent extends TemplateView {
 	const mededelingenRoot = '/actueel/mededelingen/';
 
 	public function __construct($mededelingId, $prullenbak = false) {
-		parent::__construct();
+		parent::__construct(null, 'Mededelingen overzicht');
 		$this->prullenbak = $prullenbak;
 
 		$this->geselecteerdeMededeling = null;
@@ -61,10 +61,6 @@ class MededelingenContent extends TemplateView {
 			$this->paginaNummerOpgevraagd = true;
 			$this->paginaNummer = $pagina;
 		}
-	}
-
-	public function getTitel() {
-		return 'Mededelingen overzicht';
 	}
 
 	public function view() {

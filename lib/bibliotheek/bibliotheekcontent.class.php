@@ -1,24 +1,20 @@
 <?php
 
-/*
- * bibliotheekcontent.class.php	|	Gerrit Uitslag (klapinklapin@gmail.com)
- *
+/**
+ * bibliotheekcontent.class.php
+ * 
+ * @author Gerrit Uitslag <klapinklapin@gmail.com>
  *
  */
 require_once 'catalogus.class.php';
 
-/*
+/**
  * Catalogus
  */
-
 class BibliotheekCatalogusContent extends TemplateView {
 
 	public function __construct() {
-		parent::__construct();
-	}
-
-	public function getTitel() {
-		return 'Bibliotheek | Catalogus';
+		parent::__construct(null, 'Bibliotheek | Catalogus');
 	}
 
 	public function view() {
@@ -29,11 +25,8 @@ class BibliotheekCatalogusContent extends TemplateView {
 
 class BibliotheekCatalogusDatatableContent extends TemplateView {
 
-	private $catalogus;
-
 	public function __construct(Catalogus $catalogus) {
-		parent::__construct();
-		$this->catalogus = $catalogus;
+		parent::__construct($catalogus);
 	}
 
 	public function view() {
@@ -41,19 +34,19 @@ class BibliotheekCatalogusDatatableContent extends TemplateView {
 		 * Output
 		 */
 		$output = array(
-			"sEcho" => intval($_GET['sEcho']),
-			"iTotalRecords" => $this->catalogus->getTotaal(),
-			"iTotalDisplayRecords" => $this->catalogus->getGefilterdTotaal(),
+			"sEcho" => intval(filter_input(INPUT_GET, 'sEcho', FILTER_SANITIZE_NUMBER_INT)),
+			"iTotalRecords" => $this->model->getTotaal(),
+			"iTotalDisplayRecords" => $this->model->getGefilterdTotaal(),
 			"aaData" => array()
 		);
 
 		//kolommen van de dataTable
-		$aKolommen = $this->catalogus->getKolommen();
+		$aKolommen = $this->model->getKolommen();
 		//Vult de array aaData met htmlcontent. Entries van aaData corresponderen met tabelcellen.
-		foreach ($this->catalogus->getBoeken() as $aBoek) {
+		foreach ($this->model->getBoeken() as $aBoek) {
 			$boek = array();
 			//loopt over de zichtbare kolommen
-			for ($i = 0; $i < $this->catalogus->getKolommenZichtbaar(); $i++) {
+			for ($i = 0; $i < $this->model->getKolommenZichtbaar(); $i++) {
 				//van sommige kolommen wordt de inhoud verfraaid
 				switch ($aKolommen[$i]) {
 					case 'titel':
@@ -155,48 +148,34 @@ Rubriek: ' . $aBoek['categorie'] . '"';
 
 }
 
-/*
+/**
  * Boek weergeven
  */
-
 class BibliotheekBoekContent extends TemplateView {
 
-	private $boek;
-
 	public function __construct(Boek $boek) {
-		parent::__construct();
-		$this->boek = $boek;
-	}
-
-	public function getTitel() {
-		return 'Bibliotheek | Boek: ' . $this->boek->getTitel();
+		parent::__construct($boek, 'Bibliotheek | Boek: ' . $boek->getTitel());
+		$this->smarty->assign('boek', $this->model);
 	}
 
 	public function view() {
-		$this->smarty->assign('boek', $this->boek);
 		$this->smarty->display('bibliotheek/boek.tpl');
 	}
 
 }
 
-/*
+/**
  * Contentclasse voor de boek-ubb-tag
  */
-
 class BoekUbbContent extends TemplateView {
 
-	private $boek;
-
 	public function __construct(Boek $boek) {
-		parent::__construct();
-		$this->boek = $boek;
+		parent::__construct($boek);
+		$this->smarty->assign('boek', $this->model);
 	}
 
 	public function view() {
-		$this->smarty->assign('boek', $this->boek);
 		return $this->smarty->fetch('bibliotheek/boek.ubb.tpl');
 	}
 
 }
-
-?>

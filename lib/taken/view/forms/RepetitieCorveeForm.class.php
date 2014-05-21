@@ -1,7 +1,9 @@
 <?php
 
 /**
- * RepetitieCorveeForm.class.php	| 	P.W.G. Brussee (brussee@live.nl)
+ * RepetitieCorveeForm.class.php
+ * 
+ * @author P.W.G. Brussee <brussee@live.nl>
  *
  * Formulier voor nieuw periodiek corvee.
  * 

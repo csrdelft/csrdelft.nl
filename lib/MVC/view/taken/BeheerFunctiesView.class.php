@@ -11,12 +11,8 @@
 class BeheerFunctiesView extends TemplateView {
 
 	public function __construct(array $functies) {
-		parent::__construct($functies);
+		parent::__construct($functies, 'Beheer corveefuncties en kwalificaties');
 		$this->smarty->assign('functies', $this->model);
-	}
-
-	public function getTitel() {
-		return 'Beheer corveefuncties en kwalificaties';
 	}
 
 	public function view() {
@@ -91,16 +87,13 @@ class KwalificatieForm extends PopupForm {
 
 	public function __construct(CorveeKwalificatie $kwalificatie) {
 		parent::__construct($kwalificatie, 'taken-kwalificatie-form', Instellingen::get('taken', 'url') . '/kwalificeer/' . $kwalificatie->functie_id);
+		$this->titel = 'Kwalificatie toewijzen';
 		$this->css_classes[] = 'PreventUnchanged';
 
 		$fields[] = new LidField('lid_id', $kwalificatie->lid_id, 'Naam of lidnummer', 'leden');
 		$fields[] = new SubmitResetCancel();
 
 		$this->addFields($fields);
-	}
-
-	public function getTitel() {
-		return 'Kwalificatie toewijzen';
 	}
 
 }

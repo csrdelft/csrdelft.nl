@@ -1,70 +1,79 @@
 <?php
 
 /**
- * BeheerTakenView.class.php	| 	P.W.G. Brussee (brussee@live.nl)
+ * BeheerTakenView.class.php
+ * 
+ * @author P.W.G. Brussee <brussee@live.nl>
  * 
  * Tonen van alle taken om te beheren.
  * 
  */
 class BeheerTakenView extends TemplateView {
 
-	private $maaltijd;
-	private $prullenbak;
-	private $repetities;
+	public function __construct(array $taken, $maaltijd = null, $prullenbak = false, $repetities = null) {
+		parent::__construct();
 
-	public function __construct($taken, $maaltijd = null, $prullenbak = false, $repetities = null) {
-		parent::__construct($taken);
-		$this->maaltijd = $maaltijd;
-		$this->prullenbak = $prullenbak;
-		$this->repetities = $repetities;
-	}
+		if ($maaltijd !== null) {
+			$this->smarty->assign('maaltijd', $maaltijd);
+			$this->smarty->assign('show', true);
 
-	public function getTitel() {
-		if ($this->maaltijd !== null) {
-			return 'Maaltijdcorveebeheer: ' . $this->maaltijd->getTitel();
-		} elseif ($this->prullenbak) {
-			return 'Beheer corveetaken in prullenbak';
+			$this->titel = 'Maaltijdcorveebeheer: ' . $maaltijd->getTitel();
+		} elseif ($prullenbak) {
+			$this->titel = 'Beheer corveetaken in prullenbak';
+		} else {
+			$this->titel = 'Corveebeheer';
 		}
-		return 'Corveebeheer';
+
+		$takenByDate = array();
+		foreach ($taken as $taak) {
+			$datum = $taak->getDatum();
+			if (!array_key_exists($datum, $takenByDate)) {
+				$takenByDate[$datum] = array();
+			}
+			$takenByDate[$datum][$taak->getFunctieId()][] = $taak;
+		}
+		$this->smarty->assign('taken', $takenByDate);
+		$this->smarty->assign('prullenbak', $prullenbak);
+		$this->smarty->assign('repetities', $repetities);
 	}
 
 	public function view() {
-		if ($this->maaltijd !== null) {
-			$this->smarty->assign('maaltijd', $this->maaltijd);
-		}
-		if (is_array($this->model)) { // list of corveetaken
-			if ($this->prullenbak || $this->repetities !== null) { // normal view
-				$this->smarty->assign('prullenbak', $this->prullenbak);
-				$this->smarty->display('taken/menu_pagina.tpl');
-				$takenByDate = array();
-				foreach ($this->model as $taak) {
-					$datum = $taak->getDatum();
-					if (!array_key_exists($datum, $takenByDate)) {
-						$takenByDate[$datum] = array();
-					}
-					$takenByDate[$datum][$taak->getFunctieId()][] = $taak;
-				}
-				if ($this->maaltijd !== null) {
-					$this->smarty->assign('show', true);
-				}
-				$this->smarty->assign('taken', $takenByDate);
-				$this->smarty->assign('repetities', $this->repetities);
-				$this->smarty->display('taken/corveetaak/beheer_taken.tpl');
-			} else { // list of new corveetaken
-				echo '<tr id="taken-melding"><td>' . SimpleHTML::getMelding() . '</td></tr>';
-				foreach ($this->model as $taken) {
-					$this->smarty->assign('taak', $taken);
-					$this->smarty->assign('show', true);
-					$this->smarty->display('taken/corveetaak/beheer_taak_lijst.tpl');
-				}
-			}
-		} elseif (is_int($this->model)) { // id of deleted corveetaak
-			echo '<tr id="corveetaak-row-' . $this->model . '" class="remove"></tr>';
-		} else { // single corveetaak
-			$this->smarty->assign('taak', $this->model);
-			$this->smarty->assign('show', true);
+		$this->smarty->display('taken/menu_pagina.tpl');
+		$this->smarty->display('taken/corveetaak/beheer_taken.tpl');
+	}
+
+}
+
+class BeheerTakenLijstView extends TemplateView {
+
+	public function __construct(array $taken) {
+		parent::__construct($taken);
+		$this->smarty->assign('show', true);
+		$this->smarty->assign('prullenbak', false);
+	}
+
+	public function view() {
+		echo '<tr id="taken-melding"><td>' . SimpleHTML::getMelding() . '</td></tr>';
+		foreach ($this->model as $taak) {
+			$this->smarty->assign('taak', $taak);
 			$this->smarty->display('taken/corveetaak/beheer_taak_lijst.tpl');
 		}
+	}
+
+}
+
+class BeheerTaakView extends TemplateView {
+
+	public function __construct(CorveeTaak $taak, Maaltijd $maaltijd = null) {
+		parent::__construct($taak);
+		$this->smarty->assign('taak', $this->model);
+		$this->smarty->assign('maaltijd', $maaltijd);
+		$this->smarty->assign('show', true);
+		$this->smarty->assign('prullenbak', false);
+	}
+
+	public function view() {
+		$this->smarty->display('taken/corveetaak/beheer_taak_lijst.tpl');
 	}
 
 }

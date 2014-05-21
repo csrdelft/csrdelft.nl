@@ -1,7 +1,9 @@
 <?php
 
 /**
- * MaaltijdLijstView.class.php	| 	P.W.G. Brussee (brussee@live.nl)
+ * MaaltijdLijstView.class.php
+ * 
+ * @author P.W.G. Brussee <brussee@live.nl>
  * 
  * Tonen van de lijst van aanmeldingen, betaalmogelijkheden en maaltijdgegevens.
  * 
@@ -13,14 +15,10 @@ class MaaltijdLijstView extends HtmlPage {
 	private $_fiscaal;
 
 	public function __construct(Maaltijd $maaltijd, $aanmeldingen, $corvee, $fiscaal = false) {
-		parent::__construct($maaltijd);
+		parent::__construct($maaltijd, $maaltijd->getTitel());
 		$this->_aanmeldingen = $aanmeldingen;
 		$this->_corvee = $corvee;
 		$this->_fiscaal = $fiscaal;
-	}
-
-	public function getTitel() {
-		return $this->model->getTitel();
 	}
 
 	public function view() {

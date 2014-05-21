@@ -66,9 +66,9 @@ class BeheerAbonnementenController extends AclController {
 			$uid = $InputField->getValue();
 			$matrix = array();
 			$matrix[$uid] = AbonnementenModel::getAbonnementenVoorLid($uid, false, true);
-			$this->view = new BeheerAbonnementenView($matrix);
+			$this->view = new BeheerAbonnementenLijstView($matrix);
 		} else {
-			$this->view = new BeheerAbonnementenView(array(), null);
+			$this->view = new BeheerAbonnementenLijstView(array());
 			setMelding($InputField->error, -1);
 		}
 	}
@@ -78,7 +78,7 @@ class BeheerAbonnementenController extends AclController {
 		$aantal = AbonnementenModel::inschakelenAbonnementVoorNovieten($mrid);
 		$matrix = AbonnementenModel::getAbonnementenVanNovieten();
 		$novieten = sizeof($matrix);
-		$this->view = new BeheerAbonnementenView($matrix);
+		$this->view = new BeheerAbonnementenLijstView($matrix);
 		setMelding(
 				$aantal . ' abonnement' . ($aantal !== 1 ? 'en' : '') . ' aangemaakt voor ' .
 				$novieten . ' noviet' . ($novieten !== 1 ? 'en' : '') . '.', 1);
@@ -90,7 +90,7 @@ class BeheerAbonnementenController extends AclController {
 			throw new Exception('Lid bestaat niet: $uid =' . $uid);
 		}
 		$abo_aantal = AbonnementenModel::inschakelenAbonnement($mrid, $uid);
-		$this->view = new BeheerAbonnementenView($abo_aantal[0]);
+		$this->view = new BeheerAbonnementView($abo_aantal[0]);
 		if ($abo_aantal[1] > 0) {
 			$melding = 'Automatisch aangemeld voor ' . $abo_aantal[1] . ' maaltijd' . ($abo_aantal[1] === 1 ? '' : 'en');
 			setMelding($melding, 2);
@@ -104,7 +104,7 @@ class BeheerAbonnementenController extends AclController {
 			throw new Exception('Lid bestaat niet: $uid =' . $uid);
 		}
 		$abo_aantal = AbonnementenModel::uitschakelenAbonnement($mrid, $uid);
-		$this->view = new BeheerAbonnementenView($abo_aantal[0]);
+		$this->view = new BeheerAbonnementView($abo_aantal[0]);
 		if ($abo_aantal[1] > 0) {
 			$melding = 'Automatisch afgemeld voor ' . $abo_aantal[1] . ' maaltijd' . ($abo_aantal[1] === 1 ? '' : 'en');
 			setMelding($melding, 2);

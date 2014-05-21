@@ -4165,6 +4165,7 @@ lib/taken/view/MijnVoorkeurenView.class.php -text
 lib/taken/view/forms/AanmeldingForm.class.php -text
 lib/taken/view/forms/BoekjaarSluitenForm.class.php -text
 lib/taken/view/forms/CorveeRepetitieForm.class.php -text
+lib/taken/view/forms/EetwensForm.class.php -text
 lib/taken/view/forms/MaaltijdForm.class.php -text
 lib/taken/view/forms/MaaltijdRepetitieForm.class.php -text
 lib/taken/view/forms/RepetitieCorveeForm.class.php -text

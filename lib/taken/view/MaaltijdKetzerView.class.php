@@ -12,22 +12,16 @@ require_once 'taken/controller/MijnMaaltijdenController.class.php';
  */
 class MaaltijdKetzerView extends TemplateView {
 
-	private $aanmelding;
-
 	public function __construct(Maaltijd $maaltijd, $aanmelding = null) {
-		parent::__construct($maaltijd);
-		$this->aanmelding = $aanmelding;
-	}
+		parent::__construct($maaltijd, 'Maaltijdketzer');
 
-	public function getTitel() {
-		return 'Maaltijdketzer';
+		$this->smarty->assign('standaardprijs', floatval(Instellingen::get('maaltijden', 'standaard_prijs')));
+		$this->smarty->assign('maaltijd', $this->model);
+		$this->smarty->assign('aanmelding', $aanmelding);
+		$this->smarty->assign('toonlijst', MijnMaaltijdenController::magMaaltijdlijstTonen($this->model));
 	}
 
 	public function getKetzer() {
-		$this->smarty->assign('standaardprijs', floatval(Instellingen::get('maaltijden', 'standaard_prijs')));
-		$this->smarty->assign('maaltijd', $this->model);
-		$this->smarty->assign('aanmelding', $this->aanmelding);
-		$this->smarty->assign('toonlijst', MijnMaaltijdenController::magMaaltijdlijstTonen($this->model));
 		return $this->smarty->fetch('taken/maaltijd/maaltijd_ketzer.tpl');
 	}
 

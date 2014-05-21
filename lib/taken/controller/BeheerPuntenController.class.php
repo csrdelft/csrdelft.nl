@@ -51,7 +51,7 @@ class BeheerPuntenController extends AclController {
 		PuntenModel::savePuntenVoorLid($lid, $punten, null);
 		$functies = FunctiesModel::instance()->getAlleFuncties(); // grouped by functie_id
 		$lijst = PuntenModel::loadPuntenVoorLid($lid, $functies);
-		$this->view = new BeheerPuntenView($lijst);
+		$this->view = new BeheerPuntenLidView($lijst);
 	}
 
 	public function wijzigbonus($uid) {
@@ -63,7 +63,7 @@ class BeheerPuntenController extends AclController {
 		PuntenModel::savePuntenVoorLid($lid, null, $bonus);
 		$functies = FunctiesModel::instance()->getAlleFuncties(); // grouped by functie_id
 		$lijst = PuntenModel::loadPuntenVoorLid($lid, $functies);
-		$this->view = new BeheerPuntenView($lijst);
+		$this->view = new BeheerPuntenLidView($lijst);
 	}
 
 	public function resetjaar() {

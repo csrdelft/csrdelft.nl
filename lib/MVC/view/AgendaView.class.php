@@ -17,10 +17,7 @@ class AgendaMaandView extends TemplateView {
 		parent::__construct($agenda);
 		$this->jaar = $jaar;
 		$this->maand = $maand;
-	}
-
-	public function getTitel() {
-		return 'Agenda - Maandoverzicht voor ' . strftime('%B %Y', strtotime($this->jaar . '-' . $this->maand . '-01'));
+		$this->titel = 'Agenda - Maandoverzicht voor ' . strftime('%B %Y', strtotime($this->jaar . '-' . $this->maand . '-01'));
 	}
 
 	public function view() {

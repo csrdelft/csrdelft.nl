@@ -11,11 +11,8 @@ class ForumView extends TemplateView {
 
 	public function __construct(array $categorien) {
 		parent::__construct($categorien);
+		$this->titel = 'Forum';
 		$this->smarty->assign('categorien', $this->model);
-	}
-
-	public function getTitel() {
-		return 'Forum';
 	}
 
 	public function view() {
@@ -43,13 +40,10 @@ class ForumDeelView extends TemplateView {
 
 	public function __construct(ForumDeel $deel, $belangrijk = null) {
 		parent::__construct($deel);
+		$this->titel = 'Forum | ' . $deel->titel;
 		$this->smarty->assign('belangrijk', ($belangrijk === true ? '/belangrijk' : ''));
 		$this->smarty->assign('deel', $this->model);
 		$this->smarty->assign('categorien', ForumModel::instance()->getForum());
-	}
-
-	public function getTitel() {
-		return 'Forum | ' . $this->model->titel;
 	}
 
 	public function view() {
@@ -63,12 +57,9 @@ class ForumDraadView extends TemplateView {
 
 	public function __construct(ForumDraad $draad, ForumDeel $deel) {
 		parent::__construct($draad);
+		$this->titel = 'Forum | ' . $draad->titel;
 		$this->smarty->assign('draad', $this->model);
 		$this->smarty->assign('deel', $deel);
-	}
-
-	public function getTitel() {
-		return 'Forum | ' . $this->model->titel;
 	}
 
 	public function view() {

@@ -148,7 +148,7 @@ tr.taak-datum-head th, tr.taak-datum-summary th {
 
 /* cell style */
 
-.maaltijd-open, .maaltijd-aangemeld, .abonnement-ingeschakeld, .voorkeur-ingeschakeld, .taak-self, .functie-toegewezen { /* .taak-toegewezen */
+.maaltijd-open, .maaltijd-aangemeld, .abonnement-ingeschakeld, .voorkeur-ingeschakeld, .functie-toegewezen, .taak-self { /* .taak-toegewezen */
 	background-color: #AAEEAA;
 	font-weight: bold;
 	color: green !important;

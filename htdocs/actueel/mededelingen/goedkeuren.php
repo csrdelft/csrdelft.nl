@@ -3,8 +3,6 @@
 require_once 'configuratie.include.php';
 require_once 'mededelingen/mededeling.class.php';
 
-define('MEDEDELINGEN_ROOT', '/actueel/mededelingen');
-
 if (!Mededeling::isModerator()) {
 	header('location: ' . CSR_ROOT . '/actueel/mededelingen');
 	setMelding('U heeft daar niets te zoeken.', -1);
@@ -26,4 +24,3 @@ if (isset($_GET['mededelingId']) AND is_numeric($_GET['mededelingId']) AND $_GET
 	header('location: ' . CSR_ROOT . MEDEDELINGEN_ROOT);
 	setMelding('Geen mededelingId gezet.', -1);
 }
-?>

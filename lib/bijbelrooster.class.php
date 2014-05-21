@@ -3,11 +3,7 @@
 class Bijbelrooster extends TemplateView {
 
 	public function __construct() {
-		parent::__construct();
-	}
-
-	public function getTitel() {
-		return 'Bijbelrooster';
+		parent::__construct(null, 'Bijbelrooster');
 	}
 
 	function ubbContent($aantal) {

@@ -1,39 +1,37 @@
 <?php
 
 /**
- * BeheerPuntenView.class.php	| 	P.W.G. Brussee (brussee@live.nl)
+ * BeheerPuntenView.class.php
+ * 
+ * @author P.W.G. Brussee <brussee@live.nl>
  * 
  * Tonen van alle corveepunten van alle leden.
  * 
  */
 class BeheerPuntenView extends TemplateView {
 
-	private $_leden_punten;
-	private $_functies;
-
-	public function __construct($leden_punten, $functies = null) {
-		parent::__construct();
-		$this->_leden_punten = $leden_punten;
-		$this->_functies = $functies;
-	}
-
-	public function getTitel() {
-		return 'Beheer corveepunten';
+	public function __construct(array $matrix, array $functies) {
+		parent::__construct($matrix, 'Beheer corveepunten');
+		$this->smarty->assign('matrix', $this->model);
+		$this->smarty->assign('functies', $functies);
 	}
 
 	public function view() {
-		if ($this->_functies === null) { // voor een lid
-			$this->smarty->assign('puntenlijst', $this->_leden_punten);
-			$this->smarty->display('taken/corveepunt/beheer_punten_lijst.tpl');
-		} else { // matrix of functies and punten
-			$this->smarty->display('taken/menu_pagina.tpl');
-
-			$this->smarty->assign('matrix', $this->_leden_punten);
-			$this->smarty->assign('functies', $this->_functies);
-			$this->smarty->display('taken/corveepunt/beheer_punten.tpl');
-		}
+		$this->smarty->display('taken/menu_pagina.tpl');
+		$this->smarty->display('taken/corveepunt/beheer_punten.tpl');
 	}
 
 }
 
-?>
+class BeheerPuntenLidView extends TemplateView {
+
+	public function __construct(array $puntenlijst) {
+		parent::__construct($puntenlijst);
+		$this->smarty->assign('puntenlijst', $this->model);
+	}
+
+	public function view() {
+		$this->smarty->display('taken/corveepunt/beheer_punten_lijst.tpl');
+	}
+
+}

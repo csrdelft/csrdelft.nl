@@ -12,21 +12,13 @@
  */
 class ProfielContent extends TemplateView {
 
-	/** @var Lid  */
-	private $lid;
-
-	function __construct($lid) {
-		parent::__construct();
-		$this->lid = $lid;
-	}
-
-	function getTitel() {
-		return 'Het profiel van ' . $this->lid->getNaam();
+	function __construct(Lid $lid) {
+		parent::__construct($lid, 'Het profiel van ' . $lid->getNaam());
 	}
 
 	function view() {
 		$profhtml = array();
-		foreach ($this->lid->getProfiel() as $key => $value) {
+		foreach ($this->model->getProfiel() as $key => $value) {
 			if (!is_array($value) AND $key != 'changelog') {
 				$profhtml[$key] = mb_htmlentities($value);
 			} elseif ($key == 'changelog') {
@@ -34,7 +26,7 @@ class ProfielContent extends TemplateView {
 			}
 		}
 
-		$woonoord = $this->lid->getWoonoord();
+		$woonoord = $this->model->getWoonoord();
 		if ($woonoord instanceof OldGroep) {
 			$profhtml['woonoord'] = '<strong>' . $woonoord->getLink() . '</strong>';
 		} else {
@@ -42,31 +34,31 @@ class ProfielContent extends TemplateView {
 		}
 
 		require_once 'groepen/groepcontent.class.php';
-		$profhtml['groepen'] = new GroepenProfielContent($this->lid->getUid());
+		$profhtml['groepen'] = new GroepenProfielContent($this->model->getUid());
 
-		if (LoginLid::instance()->getUid() == $this->lid->getUid() || LoginLid::mag('P_MAAL_MOD')) {
-			$profhtml['recenteAanmeldingen'] = AanmeldingenModel::getRecenteAanmeldingenVoorLid($this->lid->getUid());
-			$profhtml['abos'] = AbonnementenModel::getAbonnementenVoorLid($this->lid->getUid());
+		if (LoginLid::instance()->getUid() == $this->model->getUid() || LoginLid::mag('P_MAAL_MOD')) {
+			$profhtml['recenteAanmeldingen'] = AanmeldingenModel::getRecenteAanmeldingenVoorLid($this->model->getUid());
+			$profhtml['abos'] = AbonnementenModel::getAbonnementenVoorLid($this->model->getUid());
 		}
 
 		//de html template in elkaar draaien en weergeven
 		$this->smarty->assign('profhtml', $profhtml);
 
 		require_once 'lid/saldi.class.php';
-		if (Saldi::magGrafiekZien($this->lid->getUid())) {
-			$this->smarty->assign('saldografiek', Saldi::getDatapoints($this->lid->getUid(), 60));
+		if (Saldi::magGrafiekZien($this->model->getUid())) {
+			$this->smarty->assign('saldografiek', Saldi::getDatapoints($this->model->getUid(), 60));
 		}
 
-		$this->smarty->assign('corveepunten', $this->lid->getProperty('corvee_punten'));
-		$this->smarty->assign('corveebonus', $this->lid->getProperty('corvee_punten_bonus'));
-		$this->smarty->assign('corveetaken', $this->lid->getCorveeTaken());
-		$this->smarty->assign('corveevoorkeuren', $this->lid->getCorveeVoorkeuren());
-		$this->smarty->assign('corveevrijstelling', $this->lid->getCorveeVrijstelling());
-		$this->smarty->assign('corveekwalificaties', $this->lid->getCorveeKwalificaties());
+		$this->smarty->assign('corveepunten', $this->model->getProperty('corvee_punten'));
+		$this->smarty->assign('corveebonus', $this->model->getProperty('corvee_punten_bonus'));
+		$this->smarty->assign('corveetaken', $this->model->getCorveeTaken());
+		$this->smarty->assign('corveevoorkeuren', $this->model->getCorveeVoorkeuren());
+		$this->smarty->assign('corveevrijstelling', $this->model->getCorveeVrijstelling());
+		$this->smarty->assign('corveekwalificaties', $this->model->getCorveeKwalificaties());
 
 		require_once 'bibliotheek/catalogus.class.php';
-		$this->smarty->assign('boeken', Catalogus::getBoekenByUid($this->lid->getUid(), 'eigendom'));
-		$this->smarty->assign('gerecenseerdeboeken', Catalogus::getBoekenByUid($this->lid->getUid(), 'gerecenseerd'));
+		$this->smarty->assign('boeken', Catalogus::getBoekenByUid($this->model->getUid(), 'eigendom'));
+		$this->smarty->assign('gerecenseerdeboeken', Catalogus::getBoekenByUid($this->model->getUid(), 'gerecenseerd'));
 
 		$this->smarty->assign('isAdmin', LoginLid::mag('P_ADMIN'));
 		//TODO check role vs permission R_BESTUUR
@@ -75,14 +67,14 @@ class ProfielContent extends TemplateView {
 
 		//eigen profiel niet cachen, dan krijgen we namelijk rare dingen
 		//dat we andermans saldo's zien enzo
-		if (LoginLid::instance()->isSelf($this->lid->getUid())) {
+		if (LoginLid::instance()->isSelf($this->model->getUid())) {
 			$this->caching = false;
 		}
 
-		$this->smarty->assign('profiel', new Profiel($this->lid));
+		$this->smarty->assign('profiel', new Profiel($this->model));
 
 		$template = 'profiel/profiel.tpl';
-		$this->smarty->display($template, $this->lid->getUid());
+		$this->smarty->display($template, $this->model->getUid());
 	}
 
 }
@@ -92,23 +84,13 @@ class ProfielContent extends TemplateView {
  */
 class ProfielEditContent extends TemplateView {
 
-	/** @var Profiel */
-	private $profiel;
-	private $actie;
-
 	public function __construct($profiel, $actie) {
-		parent::__construct();
-		$this->profiel = $profiel;
-		$this->actie = $actie;
-	}
-
-	public function getTitel() {
-		return 'profiel van ' . $this->profiel->getLid()->getNaam() . ' bewerken.';
+		parent::__construct($profiel, 'profiel van ' . $profiel->getLid()->getNaam() . ' bewerken.');
+		$this->smarty->assign('profiel', $this->model);
+		$this->smarty->assign('actie', $actie);
 	}
 
 	public function view() {
-		$this->smarty->assign('profiel', $this->profiel);
-		$this->smarty->assign('actie', $this->actie);
 		$this->smarty->display('profiel/bewerken.tpl');
 	}
 
@@ -119,27 +101,17 @@ class ProfielEditContent extends TemplateView {
  */
 class ProfielStatusContent extends TemplateView {
 
-	/** @var Profiel */
-	private $profiel;
-	private $actie;
-
 	public function __construct($profiel, $actie) {
-		parent::__construct();
-		$this->profiel = $profiel;
-		$this->actie = $actie;
-	}
-
-	public function getTitel() {
-		return 'lidstatus van ' . $this->profiel->getLid()->getNaam() . ' aanpassen.';
+		parent::__construct($profiel, 'lidstatus van ' . $profiel->getLid()->getNaam() . ' aanpassen.');
+		$this->smarty->assign('profiel', $this->model);
+		$this->smarty->assign('actie', $actie);
 	}
 
 	public function view() {
-		$gelijknamigenovieten = Zoeker::zoekLeden($this->profiel->getLid()->getProperty('voornaam'), 'voornaam', 'alle', 'achternaam', array('S_NOVIET'), array('uid'));
-		$gelijknamigeleden = Zoeker::zoekLeden($this->profiel->getLid()->getProperty('achternaam'), 'achternaam', 'alle', 'lidjaar', array('S_LID', 'S_GASTLID'), array('uid'));
-		$this->smarty->assign('profiel', $this->profiel);
+		$gelijknamigenovieten = Zoeker::zoekLeden($this->model->getLid()->getProperty('voornaam'), 'voornaam', 'alle', 'achternaam', array('S_NOVIET'), array('uid'));
+		$gelijknamigeleden = Zoeker::zoekLeden($this->model->getLid()->getProperty('achternaam'), 'achternaam', 'alle', 'lidjaar', array('S_LID', 'S_GASTLID'), array('uid'));
 		$this->smarty->assign('gelijknamigenovieten', $gelijknamigenovieten);
 		$this->smarty->assign('gelijknamigeleden', $gelijknamigeleden);
-		$this->smarty->assign('actie', $this->actie);
 		$this->smarty->display('profiel/wijzigstatus.tpl');
 	}
 
@@ -150,23 +122,13 @@ class ProfielStatusContent extends TemplateView {
  */
 class ProfielVoorkeurContent extends TemplateView {
 
-	/** @var Profiel */
-	private $profiel;
-	private $actie;
-
 	public function __construct($profiel, $actie) {
-		parent::__construct();
-		$this->profiel = $profiel;
-		$this->actie = $actie;
-	}
-
-	public function getTitel() {
-		return 'voorkeur van ' . $this->profiel->getLid()->getNaam() . ' aanpassen.';
+		parent::__construct($profiel, 'voorkeur van ' . $profiel->getLid()->getNaam() . ' aanpassen.');
+		$this->smarty->assign('profiel', $this->model);
+		$this->smarty->assign('actie', $actie);
 	}
 
 	public function view() {
-		$this->smarty->assign('profiel', $this->profiel);
-		$this->smarty->assign('actie', $this->actie);
 		$this->smarty->display('profiel/wijzigvoorkeur.tpl');
 	}
 

@@ -1,6 +1,5 @@
 <?php
 
-
 require_once 'taken/model/VrijstellingenModel.class.php';
 require_once 'taken/view/BeheerVrijstellingenView.class.php';
 require_once 'taken/view/forms/VrijstellingForm.class.php';
@@ -17,8 +16,7 @@ class BeheerVrijstellingenController extends AclController {
 			$this->acl = array(
 				'beheer' => 'P_CORVEE_MOD'
 			);
-		}
-		else {
+		} else {
 			$this->acl = array(
 				'nieuw' => 'P_CORVEE_MOD',
 				'bewerk' => 'P_CORVEE_MOD',
@@ -36,7 +34,7 @@ class BeheerVrijstellingenController extends AclController {
 		}
 		$this->performAction(array($uid));
 	}
-	
+
 	public function beheer() {
 		$vrijstellingen = VrijstellingenModel::getAlleVrijstellingen();
 		$this->view = new BeheerVrijstellingenView($vrijstellingen);
@@ -46,42 +44,41 @@ class BeheerVrijstellingenController extends AclController {
 		$this->view->addScript('autocomplete/jquery.autocomplete.min.js');
 		$this->view->addScript('taken.js');
 	}
-	
+
 	public function nieuw() {
 		$vrijstelling = new CorveeVrijstelling();
 		$this->view = new VrijstellingForm($vrijstelling->getLidId(), $vrijstelling->getBeginDatum(), $vrijstelling->getEindDatum(), $vrijstelling->getPercentage()); // fetches POST values itself
 	}
-	
+
 	public function bewerk($uid) {
-		if (!\Lid::exists($uid)) {
-			throw new Exception('Lid bestaat niet: $uid ='. $uid);
+		if (!Lid::exists($uid)) {
+			throw new Exception('Lid bestaat niet: $uid =' . $uid);
 		}
 		$vrijstelling = VrijstellingenModel::getVrijstelling($uid);
 		$this->view = new VrijstellingForm($vrijstelling->getLidId(), $vrijstelling->getBeginDatum(), $vrijstelling->getEindDatum(), $vrijstelling->getPercentage()); // fetches POST values itself
 	}
-	
-	public function opslaan($uid=null) {
+
+	public function opslaan($uid = null) {
 		if ($uid !== null) {
 			$this->bewerk($uid);
-		}
-		else {
+		} else {
 			$this->view = new VrijstellingForm(); // fetches POST values itself
 		}
 		if ($this->view->validate()) {
 			$values = $this->view->getValues();
 			$uid = ($values['lid_id'] === '' ? null : $values['lid_id']);
 			$vrijstelling = VrijstellingenModel::saveVrijstelling($uid, $values['begin_datum'], $values['eind_datum'], $values['percentage']);
-			$this->view = new BeheerVrijstellingenView($vrijstelling);
+			$this->view = new BeheerVrijstellingView($vrijstelling);
 		}
 	}
-	
+
 	public function verwijder($uid) {
-		if (!\Lid::exists($uid)) {
-			throw new Exception('Lid bestaat niet: $uid ='. $uid);
+		if (!Lid::exists($uid)) {
+			throw new Exception('Lid bestaat niet: $uid =' . $uid);
 		}
 		VrijstellingenModel::verwijderVrijstelling($uid);
-		$this->view = new BeheerVrijstellingenView($uid);
+		echo '<tr id="vrijstelling-row-' . $uid . '" class="remove"></tr>';
+		exit;
 	}
-}
 
-?>
+}
