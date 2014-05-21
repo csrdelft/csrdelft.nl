@@ -83,9 +83,7 @@ abstract class Controller {
 	 * @return boolean
 	 */
 	protected function getParam($key) {
-		if ($this->hasParam($key)) {
-			return $this->queryparts[$key];
-		}
+		return $this->queryparts[$key];
 	}
 
 	/**

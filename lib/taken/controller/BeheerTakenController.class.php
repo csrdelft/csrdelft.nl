@@ -7,7 +7,9 @@ require_once 'taken/view/forms/TaakForm.class.php';
 require_once 'taken/view/forms/RepetitieCorveeForm.class.php';
 
 /**
- * BeheerTakenController.class.php	| 	P.W.G. Brussee (brussee@live.nl)
+ * BeheerTakenController.class.php
+ * 
+ * @author P.W.G. Brussee <brussee@live.nl>
  * 
  */
 class BeheerTakenController extends AclController {
@@ -42,7 +44,7 @@ class BeheerTakenController extends AclController {
 		}
 		$tid = null;
 		if ($this->hasParam(3)) {
-			$tid = intval($this->getParam(3));
+			$tid = (int) $this->getParam(3);
 		}
 		$this->performAction(array($tid));
 	}
@@ -236,5 +238,3 @@ class BeheerTakenController extends AclController {
 	}
 
 }
-
-?>

@@ -893,8 +893,9 @@ class Lid implements Serializable, Agendeerbaar {
 	 * Bestaat er een lid met uid $uid in de database?
 	 */
 	public static function exists($uid) {
-		if (!Lid::isValidUid($uid))
+		if (!Lid::isValidUid($uid)) {
 			return false;
+		}
 		return LidCache::getLid($uid) instanceof Lid;
 	}
 

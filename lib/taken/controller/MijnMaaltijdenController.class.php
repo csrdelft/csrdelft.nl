@@ -6,7 +6,9 @@ require_once 'taken/model/TakenModel.class.php';
 require_once 'taken/view/MijnMaaltijdenView.class.php';
 
 /**
- * MijnMaaltijdenController.class.php	| 	P.W.G. Brussee (brussee@live.nl)
+ * MijnMaaltijdenController.class.php
+ * 
+ * @author P.W.G. Brussee <brussee@live.nl>
  * 
  */
 class MijnMaaltijdenController extends AclController {
@@ -35,30 +37,30 @@ class MijnMaaltijdenController extends AclController {
 		}
 		$mid = null;
 		if ($this->hasParam(3)) {
-			$mid = intval($this->getParam(3));
+			$mid = (int) $this->getParam(3);
 		}
 		$this->performAction(array($mid));
 	}
 
 	public static function magMaaltijdlijstTonen(Maaltijd $maaltijd) {
-		//$taken = \TakenModel::getTakenVoorMaaltijd($maaltijd->getMaaltijdId());
+		//$taken = TakenModel::getTakenVoorMaaltijd($maaltijd->getMaaltijdId());
 		// als er meerdere maaltijden op 1 dag zijn en maar 1 kookploeg (een taak kan maar aan 1 maaltijd gekoppeld zijn)
-		$taken = \TakenModel::getTakenVoorAgenda($maaltijd->getBeginMoment(), $maaltijd->getBeginMoment());
-		$uid = \LoginLid::instance()->getUid();
+		$taken = TakenModel::getTakenVoorAgenda($maaltijd->getBeginMoment(), $maaltijd->getBeginMoment());
+		$uid = LoginLid::instance()->getUid();
 		foreach ($taken as $taak) {
 			if ($taak->getLidId() === $uid && $taak->getMaaltijdId() !== null) { // het moet wel maaltijdcorvee zijn (vanwege op datum hierboven)
 				return $taak; // de taak die toegang geeft tot de maaltijdlijst
 			}
 		}
-		if (opConfide() || \LoginLid::mag('P_MAAL_MOD')) {
+		if (opConfide() || LoginLid::mag('P_MAAL_MOD')) {
 			return true;
 		}
 		return false;
 	}
 
 	public function ketzer() {
-		$maaltijden = MaaltijdenModel::getKomendeMaaltijdenVoorLid(\LoginLid::instance()->getUid());
-		$aanmeldingen = AanmeldingenModel::getAanmeldingenVoorLid($maaltijden, \LoginLid::instance()->getUid());
+		$maaltijden = MaaltijdenModel::getKomendeMaaltijdenVoorLid(LoginLid::instance()->getUid());
+		$aanmeldingen = AanmeldingenModel::getAanmeldingenVoorLid($maaltijden, LoginLid::instance()->getUid());
 		$this->view = new MijnMaaltijdenView($maaltijden, $aanmeldingen);
 		$this->view = new CsrLayoutPage($this->getContent());
 		$this->view->addStylesheet('taken.css');
@@ -72,7 +74,7 @@ class MijnMaaltijdenController extends AclController {
 			return;
 		}
 		$aanmeldingen = AanmeldingenModel::getAanmeldingenVoorMaaltijd($maaltijd);
-		$taken = \TakenModel::getTakenVoorMaaltijd($mid);
+		$taken = TakenModel::getTakenVoorMaaltijd($mid);
 		require_once 'taken/view/MaaltijdLijstView.class.php';
 		$this->view = new MaaltijdLijstView($maaltijd, $aanmeldingen, $taken);
 	}
@@ -89,7 +91,7 @@ class MijnMaaltijdenController extends AclController {
 	}
 
 	public function aanmelden($mid) {
-		$aanmelding = AanmeldingenModel::aanmeldenVoorMaaltijd($mid, \LoginLid::instance()->getUid(), \LoginLid::instance()->getUid());
+		$aanmelding = AanmeldingenModel::aanmeldenVoorMaaltijd($mid, LoginLid::instance()->getUid(), LoginLid::instance()->getUid());
 		if ($this->isPosted()) {
 			$this->view = new MijnMaaltijdView($aanmelding->getMaaltijd(), $aanmelding);
 		} else {
@@ -99,7 +101,7 @@ class MijnMaaltijdenController extends AclController {
 	}
 
 	public function afmelden($mid) {
-		$maaltijd = AanmeldingenModel::afmeldenDoorLid($mid, \LoginLid::instance()->getUid());
+		$maaltijd = AanmeldingenModel::afmeldenDoorLid($mid, LoginLid::instance()->getUid());
 		if ($this->isPosted()) {
 			$this->view = new MijnMaaltijdView($maaltijd);
 		} else {
@@ -110,16 +112,14 @@ class MijnMaaltijdenController extends AclController {
 
 	public function gasten($mid) {
 		$gasten = (int) filter_input(INPUT_POST, 'aantal_gasten', FILTER_SANITIZE_NUMBER_INT);
-		$aanmelding = AanmeldingenModel::saveGasten($mid, \LoginLid::instance()->getUid(), $gasten);
+		$aanmelding = AanmeldingenModel::saveGasten($mid, LoginLid::instance()->getUid(), $gasten);
 		$this->view = new MijnMaaltijdView($aanmelding->getMaaltijd(), $aanmelding);
 	}
 
 	public function opmerking($mid) {
 		$opmerking = filter_input(INPUT_POST, 'gasten_eetwens', FILTER_SANITIZE_STRING);
-		$aanmelding = AanmeldingenModel::saveGastenEetwens($mid, \LoginLid::instance()->getUid(), $opmerking);
+		$aanmelding = AanmeldingenModel::saveGastenEetwens($mid, LoginLid::instance()->getUid(), $opmerking);
 		$this->view = new MijnMaaltijdView($aanmelding->getMaaltijd(), $aanmelding);
 	}
 
 }
-
-?>

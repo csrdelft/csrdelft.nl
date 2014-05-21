@@ -4,7 +4,9 @@ require_once 'taken/model/VoorkeurenModel.class.php';
 require_once 'taken/view/BeheerVoorkeurenView.class.php';
 
 /**
- * BeheerVoorkeurenController.class.php	| 	P.W.G. Brussee (brussee@live.nl)
+ * BeheerVoorkeurenController.class.php
+ * 
+ * @author P.W.G. Brussee <brussee@live.nl>
  * 
  */
 class BeheerVoorkeurenController extends AclController {
@@ -25,11 +27,7 @@ class BeheerVoorkeurenController extends AclController {
 		if ($this->hasParam(2)) {
 			$this->action = $this->getParam(2);
 		}
-		$crid = null;
-		if ($this->hasParam(3)) {
-			$crid = intval($this->getParam(3));
-		}
-		$this->performAction(array($crid));
+		$this->performAction($this->getParams(3));
 	}
 
 	public function beheer() {
@@ -40,23 +38,21 @@ class BeheerVoorkeurenController extends AclController {
 		$this->view->addScript('taken.js');
 	}
 
-	public function inschakelen($crid) {
-		$uid = filter_input(INPUT_POST, 'voor_lid', FILTER_SANITIZE_STRING);
-		if (!\Lid::exists($uid)) {
+	public function inschakelen($crid, $uid) {
+		if (!Lid::exists($uid)) {
 			throw new Exception('Lid bestaat niet: $uid =' . $uid);
 		}
-		$voorkeur = VoorkeurenModel::inschakelenVoorkeur($crid, $uid);
+		$voorkeur = VoorkeurenModel::inschakelenVoorkeur((int) $crid, $uid);
 		$voorkeur->setVanLid($voorkeur->getLidId());
 		$this->view = new BeheerVoorkeurView($voorkeur);
 	}
 
-	public function uitschakelen($crid) {
-		$uid = filter_input(INPUT_POST, 'voor_lid', FILTER_SANITIZE_STRING);
-		if (!\Lid::exists($uid)) {
+	public function uitschakelen($crid, $uid) {
+		if (!Lid::exists($uid)) {
 			throw new Exception('Lid bestaat niet: $uid =' . $uid);
 		}
-		VoorkeurenModel::uitschakelenVoorkeur($crid, $uid);
-		$voorkeur = new CorveeVoorkeur($crid, null);
+		VoorkeurenModel::uitschakelenVoorkeur((int) $crid, $uid);
+		$voorkeur = new CorveeVoorkeur((int) $crid, null);
 		$voorkeur->setVanLid($uid);
 		$this->view = new BeheerVoorkeurView($voorkeur);
 	}

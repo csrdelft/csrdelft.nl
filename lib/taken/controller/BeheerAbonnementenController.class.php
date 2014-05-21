@@ -5,7 +5,9 @@ require_once 'taken/model/MaaltijdRepetitiesModel.class.php';
 require_once 'taken/view/BeheerAbonnementenView.class.php';
 
 /**
- * BeheerMaaltijdenController.class.php	| 	P.W.G. Brussee (brussee@live.nl)
+ * BeheerMaaltijdenController.class.php
+ * 
+ * @author P.W.G. Brussee <brussee@live.nl>
  * 
  */
 class BeheerAbonnementenController extends AclController {
@@ -30,11 +32,7 @@ class BeheerAbonnementenController extends AclController {
 		if ($this->hasParam(2)) {
 			$this->action = $this->getParam(2);
 		}
-		$mrid = null;
-		if ($this->hasParam(3)) {
-			$mrid = intval($this->getParam(3));
-		}
-		$this->performAction(array($mrid));
+		$this->performAction($this->getParams(3));
 	}
 
 	private function beheer($alleenWaarschuwingen, $ingeschakeld = null) {
@@ -84,12 +82,11 @@ class BeheerAbonnementenController extends AclController {
 				$novieten . ' noviet' . ($novieten !== 1 ? 'en' : '') . '.', 1);
 	}
 
-	public function inschakelen($mrid) {
-		$uid = filter_input(INPUT_POST, 'voor_lid', FILTER_SANITIZE_STRING);
-		if (!\Lid::exists($uid)) {
+	public function inschakelen($mrid, $uid) {
+		if (!Lid::exists($uid)) {
 			throw new Exception('Lid bestaat niet: $uid =' . $uid);
 		}
-		$abo_aantal = AbonnementenModel::inschakelenAbonnement($mrid, $uid);
+		$abo_aantal = AbonnementenModel::inschakelenAbonnement((int) $mrid, $uid);
 		$this->view = new BeheerAbonnementView($abo_aantal[0]);
 		if ($abo_aantal[1] > 0) {
 			$melding = 'Automatisch aangemeld voor ' . $abo_aantal[1] . ' maaltijd' . ($abo_aantal[1] === 1 ? '' : 'en');
@@ -98,12 +95,11 @@ class BeheerAbonnementenController extends AclController {
 		}
 	}
 
-	public function uitschakelen($mrid) {
-		$uid = filter_input(INPUT_POST, 'voor_lid', FILTER_SANITIZE_STRING);
-		if (!\Lid::exists($uid)) {
+	public function uitschakelen($mrid, $uid) {
+		if (!Lid::exists($uid)) {
 			throw new Exception('Lid bestaat niet: $uid =' . $uid);
 		}
-		$abo_aantal = AbonnementenModel::uitschakelenAbonnement($mrid, $uid);
+		$abo_aantal = AbonnementenModel::uitschakelenAbonnement((int) $mrid, $uid);
 		$this->view = new BeheerAbonnementView($abo_aantal[0]);
 		if ($abo_aantal[1] > 0) {
 			$melding = 'Automatisch afgemeld voor ' . $abo_aantal[1] . ' maaltijd' . ($abo_aantal[1] === 1 ? '' : 'en');
@@ -113,5 +109,3 @@ class BeheerAbonnementenController extends AclController {
 	}
 
 }
-
-?>

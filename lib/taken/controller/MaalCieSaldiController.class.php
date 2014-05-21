@@ -5,7 +5,9 @@ require_once 'taken/view/MaalCieSaldiView.class.php';
 require_once 'taken/view/forms/BoekjaarSluitenForm.class.php';
 
 /**
- * MaalCieSaldiController.class.php	| 	P.W.G. Brussee (brussee@live.nl)
+ * MaalCieSaldiController.class.php
+ * 
+ * @author P.W.G. Brussee <brussee@live.nl>
  * 
  */
 class MaalCieSaldiController extends AclController {

@@ -5,7 +5,9 @@ require_once 'taken/view/MijnVoorkeurenView.class.php';
 require_once 'taken/view/forms/EetwensForm.class.php';
 
 /**
- * MijnVoorkeurenController.class.php	| 	P.W.G. Brussee (brussee@live.nl)
+ * MijnVoorkeurenController.class.php
+ * 
+ * @author P.W.G. Brussee <brussee@live.nl>
  * 
  */
 class MijnVoorkeurenController extends AclController {
@@ -35,7 +37,7 @@ class MijnVoorkeurenController extends AclController {
 	}
 
 	public function mijn() {
-		$voorkeuren = VoorkeurenModel::getVoorkeurenVoorLid(\LoginLid::instance()->getUid());
+		$voorkeuren = VoorkeurenModel::getVoorkeurenVoorLid(LoginLid::instance()->getUid());
 		$this->view = new MijnVoorkeurenView($voorkeuren);
 		$this->view = new CsrLayoutPage($this->getContent());
 		$this->view->addStylesheet('taken.css');
@@ -43,13 +45,13 @@ class MijnVoorkeurenController extends AclController {
 	}
 
 	public function inschakelen($crid) {
-		$voorkeur = VoorkeurenModel::inschakelenVoorkeur($crid, \LoginLid::instance()->getUid());
+		$voorkeur = VoorkeurenModel::inschakelenVoorkeur($crid, LoginLid::instance()->getUid());
 		$this->view = new MijnVoorkeurView($voorkeur);
 	}
 
 	public function uitschakelen($crid) {
-		VoorkeurenModel::uitschakelenVoorkeur($crid, \LoginLid::instance()->getUid());
-		$this->view = new MijnVoorkeurView(new CorveeVoorkeur($crid, null));
+		$voorkeur = VoorkeurenModel::uitschakelenVoorkeur($crid, LoginLid::instance()->getUid());
+		$this->view = new MijnVoorkeurView($voorkeur);
 	}
 
 	public function eetwens() {

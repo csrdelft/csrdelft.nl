@@ -83,7 +83,7 @@ class BeheerFunctiesController extends AclController {
 	}
 
 	public function kwalificeer($fid) {
-		$functie = $this->model->getFunctie($fid);
+		$functie = $this->model->getFunctie((int) $fid);
 		$kwalificatie = KwalificatiesModel::instance()->newKwalificatie($functie);
 		$this->view = new KwalificatieForm($kwalificatie); // fetches POST values itself
 		if ($this->view->validate()) {
@@ -92,9 +92,8 @@ class BeheerFunctiesController extends AclController {
 		}
 	}
 
-	public function dekwalificeer($fid) {
-		$uid = filter_input(INPUT_POST, 'voor_lid', FILTER_SANITIZE_STRING);
-		$functie = $this->model->getFunctie($fid);
+	public function dekwalificeer($fid, $uid) {
+		$functie = $this->model->getFunctie((int) $fid);
 		KwalificatiesModel::instance()->kwalificatieTerugtrekken($uid, $functie->functie_id);
 		$this->view = new FunctieView($functie);
 	}

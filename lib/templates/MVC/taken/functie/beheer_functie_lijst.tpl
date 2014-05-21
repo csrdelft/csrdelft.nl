@@ -19,7 +19,7 @@ beheer_functie_lijst.tpl	|	P.W.G. Brussee (brussee@live.nl)
 		{/if}
 		{foreach from=$functie->getKwalificaties() item=kwali}
 			<div class="kwali"{if LidCache::getLid($kwali->lid_id)->isOudlid()} style="display: none;"{/if}>
-				<a href="{Instellingen::get('taken', 'url')}/dekwalificeer/{$functie->functie_id}" title="Kwalificatie intrekken" class="knop post" postdata="voor_lid={$kwali->lid_id}">{icon get="vcard_delete"}</a>
+				<a href="{Instellingen::get('taken', 'url')}/dekwalificeer/{$functie->functie_id}/{$kwali->lid_id}" title="Kwalificatie intrekken" class="knop post">{icon get="vcard_delete"}</a>
 				&nbsp;{LidCache::getLid($kwali->lid_id)->getNaamLink(Instellingen::get('corvee', 'weergave_ledennamen_beheer'), Instellingen::get('corvee', 'weergave_link_ledennamen'))}
 				<span style="color: gray;"> (sinds {$kwali->wanneer_toegewezen})</span>
 			</div>

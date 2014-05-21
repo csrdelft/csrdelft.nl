@@ -1,8 +1,8 @@
 {*
-corvee_rooster.tpl	|	P.W.G. Brussee (brussee@live.nl)
+	corvee_rooster.tpl	|	P.W.G. Brussee (brussee@live.nl)
 *}
 {strip}
-	{if isset($toonverleden) and $toonverleden}
+	{if $toonverleden}
 		<div style="float: right;">
 			<a href="{Instellingen::get('taken', 'url')}/verleden" title="Taken in het verleden tonen" class="knop">{icon get="time"} Toon verleden</a>
 		</div>

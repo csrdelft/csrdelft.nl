@@ -9,7 +9,9 @@ require_once 'taken/view/forms/RepetitieMaaltijdenForm.class.php';
 require_once 'taken/view/forms/AanmeldingForm.class.php';
 
 /**
- * BeheerMaaltijdenController.class.php	| 	P.W.G. Brussee (brussee@live.nl)
+ * BeheerMaaltijdenController.class.php
+ * 
+ * @author P.W.G. Brussee <brussee@live.nl>
  * 
  */
 class BeheerMaaltijdenController extends AclController {
@@ -44,7 +46,7 @@ class BeheerMaaltijdenController extends AclController {
 		}
 		$mid = null;
 		if ($this->hasParam(3)) {
-			$mid = intval($this->getParam(3));
+			$mid = (int) $this->getParam(3);
 		}
 		$this->performAction(array($mid));
 	}
@@ -157,7 +159,7 @@ class BeheerMaaltijdenController extends AclController {
 		$form = new AanmeldingForm($mid, true); // fetches POST values itself
 		if ($form->validate()) {
 			$values = $form->getValues();
-			$aanmelding = AanmeldingenModel::aanmeldenVoorMaaltijd($mid, $values['voor_lid'], \LoginLid::instance()->getUid(), $values['aantal_gasten'], true);
+			$aanmelding = AanmeldingenModel::aanmeldenVoorMaaltijd($mid, $values['voor_lid'], LoginLid::instance()->getUid(), $values['aantal_gasten'], true);
 			$this->view = new BeheerMaaltijdView($aanmelding->getMaaltijd());
 		} else {
 			$this->view = $form;

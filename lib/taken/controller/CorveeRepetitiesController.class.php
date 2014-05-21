@@ -6,7 +6,9 @@ require_once 'taken/view/CorveeRepetitiesView.class.php';
 require_once 'taken/view/forms/CorveeRepetitieForm.class.php';
 
 /**
- * CorveeRepetitiesController.class.php	| 	P.W.G. Brussee (brussee@live.nl)
+ * CorveeRepetitiesController.class.php
+ * 
+ * @author P.W.G. Brussee <brussee@live.nl>
  * 
  */
 class CorveeRepetitiesController extends AclController {
@@ -33,7 +35,7 @@ class CorveeRepetitiesController extends AclController {
 		}
 		$crid = null;
 		if ($this->hasParam(3)) {
-			$crid = intval($this->getParam(3));
+			$crid = (int) $this->getParam(3);
 		}
 		$this->performAction(array($crid));
 	}

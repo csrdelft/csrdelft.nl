@@ -5,7 +5,9 @@ require_once 'taken/view/MaaltijdRepetitiesView.class.php';
 require_once 'taken/view/forms/MaaltijdRepetitieForm.class.php';
 
 /**
- * MaaltijdRepetitiesController.class.php	| 	P.W.G. Brussee (brussee@live.nl)
+ * MaaltijdRepetitiesController.class.php
+ * 
+ * @author P.W.G. Brussee <brussee@live.nl>
  * 
  */
 class MaaltijdRepetitiesController extends AclController {
@@ -31,7 +33,7 @@ class MaaltijdRepetitiesController extends AclController {
 		}
 		$mrid = null;
 		if ($this->hasParam(3)) {
-			$mrid = intval($this->getParam(3));
+			$mrid = (int) $this->getParam(3);
 		}
 		$this->performAction(array($mrid));
 	}
@@ -100,5 +102,3 @@ class MaaltijdRepetitiesController extends AclController {
 	}
 
 }
-
-?>

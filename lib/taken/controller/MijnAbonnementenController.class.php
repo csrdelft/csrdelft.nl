@@ -5,7 +5,9 @@ require_once 'taken/model/MaaltijdRepetitiesModel.class.php';
 require_once 'taken/view/MijnAbonnementenView.class.php';
 
 /**
- * MijnAbonnementenController.class.php	| 	P.W.G. Brussee (brussee@live.nl)
+ * MijnAbonnementenController.class.php
+ * 
+ * @author P.W.G. Brussee <brussee@live.nl>
  * 
  */
 class MijnAbonnementenController extends AclController {
@@ -28,13 +30,13 @@ class MijnAbonnementenController extends AclController {
 		}
 		$mrid = null;
 		if ($this->hasParam(3)) {
-			$mrid = intval($this->getParam(3));
+			$mrid = (int) $this->getParam(3);
 		}
 		$this->performAction(array($mrid));
 	}
 
 	public function mijn() {
-		$abonnementen = AbonnementenModel::getAbonnementenVoorLid(\LoginLid::instance()->getUid(), true, true);
+		$abonnementen = AbonnementenModel::getAbonnementenVoorLid(LoginLid::instance()->getUid(), true, true);
 		$this->view = new MijnAbonnementenView($abonnementen);
 		$this->view = new CsrLayoutPage($this->getContent());
 		$this->view->addStylesheet('taken.css');
@@ -42,7 +44,7 @@ class MijnAbonnementenController extends AclController {
 	}
 
 	public function inschakelen($mrid) {
-		$abo_aantal = AbonnementenModel::inschakelenAbonnement($mrid, \LoginLid::instance()->getUid());
+		$abo_aantal = AbonnementenModel::inschakelenAbonnement($mrid, LoginLid::instance()->getUid());
 		$this->view = new MijnAbonnementView($abo_aantal[0]);
 		if ($abo_aantal[1] > 0) {
 			$melding = 'Automatisch aangemeld voor ' . $abo_aantal[1] . ' maaltijd' . ($abo_aantal[1] === 1 ? '' : 'en');
@@ -52,7 +54,7 @@ class MijnAbonnementenController extends AclController {
 	}
 
 	public function uitschakelen($mrid) {
-		$abo_aantal = AbonnementenModel::uitschakelenAbonnement($mrid, \LoginLid::instance()->getUid());
+		$abo_aantal = AbonnementenModel::uitschakelenAbonnement($mrid, LoginLid::instance()->getUid());
 		$this->view = new MijnAbonnementView($abo_aantal[0]);
 		if ($abo_aantal[1] > 0) {
 			$melding = 'Automatisch afgemeld voor ' . $abo_aantal[1] . ' maaltijd' . ($abo_aantal[1] === 1 ? '' : 'en');

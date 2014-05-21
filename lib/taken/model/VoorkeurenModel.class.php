@@ -184,6 +184,7 @@ class VoorkeurenModel {
 			throw new Exception('Voorkeur al uitgeschakeld');
 		}
 		self::deleteVoorkeuren($crid, $uid);
+		return new CorveeVoorkeur($crid, null);
 	}
 
 	/**

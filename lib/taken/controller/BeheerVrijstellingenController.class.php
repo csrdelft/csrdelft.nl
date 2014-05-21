@@ -5,7 +5,9 @@ require_once 'taken/view/BeheerVrijstellingenView.class.php';
 require_once 'taken/view/forms/VrijstellingForm.class.php';
 
 /**
- * BeheerVrijstellingenController.class.php	| 	P.W.G. Brussee (brussee@live.nl)
+ * BeheerVrijstellingenController.class.php
+ * 
+ * @author P.W.G. Brussee <brussee@live.nl>
  * 
  */
 class BeheerVrijstellingenController extends AclController {
