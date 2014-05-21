@@ -1,6 +1,7 @@
 <?php
 
 require_once 'taken/model/VrijstellingenModel.class.php';
+require_once 'taken/model/TakenModel.class.php';
 
 /**
  * PuntenModel.class.php	| 	P.W.G. Brussee (brussee@live.nl)
@@ -201,10 +202,12 @@ class PuntenModel {
 		$g = 2 * (1 - $verhouding);
 
 		if ($r < 0)
-			$r = 0; if ($r > 1)
+			$r = 0;
+		if ($r > 1)
 			$r = 1;
 		if ($g < 0)
-			$g = 0; if ($g > 1)
+			$g = 0;
+		if ($g > 1)
 			$g = 1;
 
 		return dechex(8 + round($r * 6)) . dechex(8 + round($g * 6)) . dechex(8);
