@@ -41,6 +41,7 @@ class MijnMaaltijdView extends TemplateView {
 		$this->smarty->assign('maaltijd', $this->model);
 		$this->smarty->assign('aanmelding', $aanmelding);
 		$this->smarty->assign('toonlijst', MijnMaaltijdenController::magMaaltijdlijstTonen($maaltijd));
+		$this->smarty->assign('standaardprijs', sprintf('%.2f', floatval(Instellingen::get('maaltijden', 'standaard_prijs'))));
 	}
 
 	public function view() {
