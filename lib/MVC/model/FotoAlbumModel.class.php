@@ -66,7 +66,7 @@ class FotoAlbumModel {
 		$ret = true;
 		// find old cover
 		foreach ($album->getFotos() as $foto) {
-			if (strpos($foto->bestandsnaam, 'folder')) {
+			if (strpos($foto->bestandsnaam, 'folder') !== false) {
 				if ($foto->getPad() === $cover->getPad()) {
 					return $ret;
 				}
