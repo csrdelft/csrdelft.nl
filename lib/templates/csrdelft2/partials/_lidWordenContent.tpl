@@ -58,7 +58,7 @@
 		<h2 class="overlay">7 filmpjes over C.S.R.</h2>
 	</a></div>
 
-	<div class="blue box pad-left link"><a href="/actueel/fotoalbum/">
+	<div class="blue box pad-left link"><a href="/fotoalbum/">
 		<img src="/images/layout2/box-icon-fotos.png">
 		<h2 class="overlay">Foto's</h2>
 	</a></div>

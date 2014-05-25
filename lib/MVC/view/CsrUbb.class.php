@@ -566,7 +566,8 @@ HTML;
 	 */
 	protected function ubb_fotoalbum($parameters) {
 		require_once 'MVC/controller/FotoAlbumController.class.php';
-		$url = filter_var($this->parseArray(array('[/fotoalbum]'), array()), FILTER_SANITIZE_URL);
+		$parse = $this->parseArray(array('[/fotoalbum]'), array());
+		$url = filter_var($parse, FILTER_SANITIZE_STRING);
 		$path = array_filter(explode('/', $url));
 		$map = new Map();
 		$map->locatie = PICS_PATH . '/';
