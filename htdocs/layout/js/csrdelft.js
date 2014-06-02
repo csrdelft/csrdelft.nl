@@ -357,11 +357,14 @@ function ajax_request(type, url, data, source, onsuccess, onerror, onfinish) {
 	else {
 		popup_open();
 	}
+	var processData = true;
+	if (data instanceof FormData) {
+		processData = false;
+	}
 	var jqXHR = $.ajax({
 		type: type,
 		cache: false,
-		processData: false,
-		contentType: false,
+		processData: processData,
 		url: url,
 		data: data
 	});
