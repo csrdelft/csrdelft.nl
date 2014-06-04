@@ -357,15 +357,19 @@ function ajax_request(type, url, data, source, onsuccess, onerror, onfinish) {
 	else {
 		popup_open();
 	}
+	var contentType = 'application/x-www-form-urlencoded; charset=UTF-8';
 	var processData = true;
 	if (data instanceof FormData) {
+		contentType = false;
 		processData = false;
 	}
 	var jqXHR = $.ajax({
 		type: type,
-		cache: false,
+		dataType: false,
+		contentType: contentType,
 		processData: processData,
 		url: url,
+		cache: false,
 		data: data
 	});
 	jqXHR.done(function(data, textStatus, jqXHR) {
