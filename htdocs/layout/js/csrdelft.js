@@ -1,8 +1,21 @@
-/*
+/**
  * csrdelft.nl javascript libje...
  */
 
 var FieldSuggestions = [];
+
+function preload(arrayOfImages) {
+    $(arrayOfImages).each(function(){
+        $('<img/>')[0].src = this;
+        // Alternatively you could use:
+        // (new Image()).src = this;
+    });
+}
+
+preload([
+	'http://plaetjes.csrdelft.nl/layout/loading-arrows.gif',
+    'http://plaetjes.csrdelft.nl/layout/loading_bar_black.gif'
+]);
 
 $(document).ready(function() {
 	init_links();
