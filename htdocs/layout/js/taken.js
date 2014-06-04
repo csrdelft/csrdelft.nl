@@ -138,10 +138,10 @@ function taken_ruilen(e) {
 	if (typeof attr === 'undefined' || attr === false) {
 		attr = '';
 	}
-	taken_ajax(elmnt, $(elmnt).attr('href'), taken_handle_response, 'lid_id=' + attr);
+	ajax_request('POST', $(elmnt).attr('href'), 'lid_id=' + attr, elmnt, dom_update, alert);
 	attr = $(elmnt).attr('lid_id');
 	if (typeof attr === 'undefined' || attr === false) {
 		attr = '';
 	}
-	taken_ajax(source, $(source).attr('href'), taken_handle_response, 'lid_id=' + attr);
+	ajax_request('POST', $(source).attr('href'), 'lid_id=' + attr, source, dom_update, alert);
 }
