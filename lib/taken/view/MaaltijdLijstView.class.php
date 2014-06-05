@@ -39,7 +39,7 @@ class MaaltijdLijstView extends HtmlPage {
 			
 		}
 		else {
-			$this->smarty->assign('aanmeldingen', $aanmedlingen);
+			$this->smarty->assign('aanmeldingen', $aanmeldingen);
 		}
 		$this->smarty->assign('maaltijd', $maaltijd);
 		$this->smarty->assign('prijs', sprintf('%.2f', $maaltijd->getPrijs()));
