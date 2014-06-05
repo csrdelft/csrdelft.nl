@@ -33,12 +33,14 @@ class MaaltijdLijstView extends HtmlPage {
 			$tabel1 = array_slice($aanmeldingen, 0, intval($aantal / 2), true);
 			$tabel2 = array_diff_key($aanmeldingen, $tabel1);
 
+			$this->smarty->assign('aanmeldingen', array($tabel1, $tabel2));
 			$this->smarty->assign('eterstotaal', $maaltijd->getAantalAanmeldingen() + $maaltijd->getMarge());
 			$this->smarty->assign('corveetaken', $corvee);
+			
 		}
-
-		$this->smarty->assign('aanmeldingen', array($tabel1, $tabel2));
-
+		else {
+			$this->smarty->assign('aanmeldingen', $aanmedlingen);
+		}
 		$this->smarty->assign('maaltijd', $maaltijd);
 		$this->smarty->assign('prijs', sprintf('%.2f', $maaltijd->getPrijs()));
 	}
