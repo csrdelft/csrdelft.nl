@@ -7,34 +7,34 @@
 body {
 	font-family: verdana;
 	font-size: 11px;
-	width: 1000px;
+	width: 920px;
+	margin: 0px;
 }
 a {
 	text-decoration: none;
 	color: inherit;
 }
-h3 {
-	position: relative;
-	left: -10px;
+h1 {
+	margin-top: 0px;
+}
+ul {
+	padding-left: 20px;
 }
 table {
 	border-collapse: collapse;
 	width: 100%;
 }
-table.aanmeldingen {
-	margin-left: 25px;
-}
 td {
 	vertical-align: top;
 }
+table.aanmeldingen {
+	width: 450px;
+	display: inline-table;
+}
 table.aanmeldingen td {
 	border: 1px solid black;
-	padding: 3px 10px;
-	width: 260px;
-}
-table.aanmeldingen td.clear {
-	width: 10px;
-	border: none;
+	padding: 3px 0px 0px 10px;
+	width: 240px;
 }
 table.aanmeldingen td.box {
 	width: 20px;
@@ -57,6 +57,12 @@ span.opmerking {
 }
 div.header {
 	width: 590px;
+}
+td.maaltijdgegevens {
+	width: 25%;
+}
+td.corvee {
+	width: 60%;
 }
 
 /**** VISITEKAARTJE ******************************************************************/

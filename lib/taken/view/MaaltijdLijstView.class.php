@@ -10,18 +10,12 @@
  */
 class MaaltijdLijstView extends HtmlPage {
 
-	private $_aanmeldingen;
-	private $_corvee;
-	private $_fiscaal;
+	private $fiscaal;
 
 	public function __construct(Maaltijd $maaltijd, $aanmeldingen, $corvee, $fiscaal = false) {
 		parent::__construct($maaltijd, $maaltijd->getTitel());
-		$this->_aanmeldingen = $aanmeldingen;
-		$this->_corvee = $corvee;
-		$this->_fiscaal = $fiscaal;
-	}
+		$this->fiscaal = $fiscaal;
 
-	public function view() {
 		$this->addStylesheet('jquery-ui.min.css', '/layout/js/jquery/themes/ui-lightness/');
 		$this->addScript('jquery/jquery-2.1.0.min.js');
 		$this->addScript('jquery/jquery-ui-1.10.4.custom.min.js');
@@ -29,26 +23,30 @@ class MaaltijdLijstView extends HtmlPage {
 		$this->addScript('csrdelft.js');
 		$this->addScript('taken.js');
 
-		$this->smarty->assign('maaltijd', $this->model);
-		$this->smarty->assign('prijs', sprintf('%.2f', $this->model->getPrijs()));
-
-		if (!$this->_fiscaal) {
-			for ($i = $this->model->getMarge(); $i > 0; $i--) { // ruimte voor marge eters
-				$this->_aanmeldingen[] = new MaaltijdAanmelding();
-			}
-			if (sizeof($this->_aanmeldingen) % 2 === 1) { // altijd even aantal voor lijst
-				$this->_aanmeldingen[] = new MaaltijdAanmelding();
-			}
-			$this->smarty->assign('eterstotaal', $this->model->getAantalAanmeldingen() + $this->model->getMarge());
-			$this->smarty->assign('corveetaken', $this->_corvee);
-		}
-		$this->smarty->assign('aanmeldingen', $this->_aanmeldingen);
-
-		if ($this->_fiscaal) {
-			$this->smarty->display('taken/maaltijd/maaltijd_lijst_fiscaal.tpl');
-		} else {
+		if (!$fiscaal) {
 			$this->addStylesheet('maaltijdlijst.css');
 
+			for ($i = $maaltijd->getMarge(); $i > 0; $i--) { // ruimte voor marge eters
+				$aanmeldingen[] = new MaaltijdAanmelding();
+			}
+			$aantal = count($aanmeldingen);
+			$tabel1 = array_slice($aanmeldingen, 0, intval($aantal / 2), true);
+			$tabel2 = array_diff_key($aanmeldingen, $tabel1);
+
+			$this->smarty->assign('eterstotaal', $maaltijd->getAantalAanmeldingen() + $maaltijd->getMarge());
+			$this->smarty->assign('corveetaken', $corvee);
+		}
+
+		$this->smarty->assign('aanmeldingen', array($tabel1, $tabel2));
+
+		$this->smarty->assign('maaltijd', $maaltijd);
+		$this->smarty->assign('prijs', sprintf('%.2f', $maaltijd->getPrijs()));
+	}
+
+	public function view() {
+		if ($this->fiscaal) {
+			$this->smarty->display('taken/maaltijd/maaltijd_lijst_fiscaal.tpl');
+		} else {
 			$this->smarty->display('taken/maaltijd/maaltijd_lijst.tpl');
 		}
 	}
