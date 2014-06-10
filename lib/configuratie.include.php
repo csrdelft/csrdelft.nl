@@ -60,14 +60,6 @@ define('FEUT_IP', '82.94.188.77');
  * @deprecated standaard templaat voor de C.S.R.-courant
  */
 define('COURANT_TEMPLATE', 'courant.tpl');
-/**
- * @deprecated numberid's van de regeltjes in de databasetabel savedquery voor de queues van mededelingen
- */
-define('ROWID_QUEUE_MEDEDELINGEN', 62);
-/**
- * @deprecated base url van mededelingen module
- */
-define('MEDEDELINGEN_ROOT', '/actueel/mededelingen');
 
 //stapeltje dingen includeren die toch (bijna) altijd nodig zijn:
 require_once 'common.functions.php';

@@ -5,7 +5,7 @@ require_once 'mededelingen/mededeling.class.php';
 require_once 'mededelingen/mededelingtopdrieoverzichtcontent.class.php';
 
 if (!Mededeling::isModerator()) {
-	header('location: ' . CSR_ROOT . MEDEDELINGEN_ROOT);
+	header('location: ' . CSR_ROOT . MededelingenContent::mededelingenRoot);
 	$_SESSION['mededelingen_foutmelding'] = 'U heeft daar niets te zoeken.';
 	exit;
 }

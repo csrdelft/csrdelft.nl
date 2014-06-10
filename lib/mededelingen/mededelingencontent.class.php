@@ -21,7 +21,7 @@ class MededelingenContent extends TemplateView {
 		if ($mededelingId != 0) {
 			try {
 				$this->geselecteerdeMededeling = new Mededeling($mededelingId);
-				if (!$this->prullenbak OR !Mededeling::isModerator()) {
+				if (!$this->prullenbak OR ! Mededeling::isModerator()) {
 					// In de volgende gevallen heeft de gebruiker geen rechten om deze mededeling te bekijken:
 					// 1. Indien deze mededeling reeds verwijderd is.
 					// 2. Indien deze mededeling niet bestemd is voor iedereen en de gebruiker geen leden-lees rechten heeft.
@@ -29,13 +29,7 @@ class MededelingenContent extends TemplateView {
 					// 4. Indien deze mededeling verborgen is en de gebruiker geen moderator is.
 					// 5. Indien deze mededeling wacht op goedkeuring en de gebruiker geen moderator is EN deze mededeling niet van hem is. 
 					if (
-							($this->geselecteerdeMededeling->getZichtbaarheid() == 'verwijderd') OR
-							($this->geselecteerdeMededeling->isPrive() AND !LoginLid::mag('P_LEDEN_READ')) OR
-							($this->geselecteerdeMededeling->getDoelgroep() == 'leden' AND Mededeling::isOudlid()) OR
-							($this->geselecteerdeMededeling->getZichtbaarheid() == 'onzichtbaar' AND !Mededeling::isModerator()) OR
-							($this->geselecteerdeMededeling->getZichtbaarheid() == 'wacht_goedkeuring' AND
-							( (LoginLid::instance()->getUid() != $this->geselecteerdeMededeling->getUid()) AND
-							!Mededeling::isModerator() )
+							($this->geselecteerdeMededeling->getZichtbaarheid() == 'verwijderd') OR ( $this->geselecteerdeMededeling->isPrive() AND ! LoginLid::mag('P_LEDEN_READ')) OR ( $this->geselecteerdeMededeling->getDoelgroep() == 'leden' AND Mededeling::isOudlid()) OR ( $this->geselecteerdeMededeling->getZichtbaarheid() == 'onzichtbaar' AND ! Mededeling::isModerator()) OR ( $this->geselecteerdeMededeling->getZichtbaarheid() == 'wacht_goedkeuring' AND ( (LoginLid::instance()->getUid() != $this->geselecteerdeMededeling->getUid()) AND ! Mededeling::isModerator() )
 							)
 					) {
 						// De gebruiker heeft geen rechten om deze mededeling te bekijken, dus we resetten het weer.
@@ -88,8 +82,6 @@ class MededelingenContent extends TemplateView {
 
 	public function getTopBlock($doelgroep) {
 		$topMost = Mededeling::getTopmost(self::aantalTopMostBlock, $doelgroep);
-
-		$this->smarty->assign('mededelingenRoot', self::mededelingenRoot);
 		$this->smarty->assign('topmost', $topMost);
 
 		return $this->smarty->fetch('mededelingen/mededelingentopblock.tpl');
@@ -100,9 +92,6 @@ class MededelingenContent extends TemplateView {
 class MededelingenZijbalkContent extends TemplateView {
 
 	public function view() {
-		// Handige variabelen.
-		$this->smarty->assign('mededelingenRoot', MededelingenContent::mededelingenRoot);
-
 		// De laatste n mededelingen ophalen en meegeven aan $this.
 		$mededelingen = Mededeling::getLaatsteMededelingen($this->model);
 		$this->smarty->assign('mededelingen', $mededelingen);

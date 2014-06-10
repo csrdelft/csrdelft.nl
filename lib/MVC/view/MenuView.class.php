@@ -31,7 +31,7 @@ class MainMenuView extends MenuView {
 
 			require_once 'savedquery.class.php';
 			$this->smarty->assign('queues', array(
-				'meded' => new SavedQuery(ROWID_QUEUE_MEDEDELINGEN)
+				'meded' => new SavedQuery(62) //ROW ID QUEUE MEDEDELINGEN
 			));
 		}
 		$this->smarty->display('MVC/menu/main.tpl');

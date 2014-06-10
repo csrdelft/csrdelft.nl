@@ -192,7 +192,7 @@ switch ($actie) {
 					$realId = '';
 				}
 				//TODO: Melding weergeven dat er iets toegevoegd is (?)
-				$nieuweLocatie = MEDEDELINGEN_ROOT;
+				$nieuweLocatie = MededelingenContent::mededelingenRoot;
 				if ($prullenbak) {
 					$nieuweLocatie .= '/prullenbak';
 				}

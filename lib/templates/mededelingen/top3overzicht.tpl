@@ -1,12 +1,12 @@
 <ul class="horizontal nobullets">
 	<li>
-		<a href="{$mededelingen_root}" title="Mededelingenketzer">Mededelingenketzer</a>
+		<a href="{MededelingenContent::mededelingenRoot}" title="Mededelingenketzer">Mededelingenketzer</a>
 	</li>
 	<li class="active">
-		<a href="{$mededelingen_root}top3overzicht/" title="Top 3 Overzicht">Top 3 Overzicht</a>
+		<a href="{MededelingenContent::mededelingenRoot}top3overzicht/" title="Top 3 Overzicht">Top 3 Overzicht</a>
 	</li>
 	<li>
-		<a href="{$mededelingen_root}prullenbak/" title="Prullenbak">Prullenbak</a>
+		<a href="{MededelingenContent::mededelingenRoot}prullenbak/" title="Prullenbak">Prullenbak</a>
 	</li>
 </ul>
 <hr />
