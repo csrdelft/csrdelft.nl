@@ -1,5 +1,5 @@
 <h1>Mededeling {if $mededeling->getId()==0}toevoegen{else}bewerken{/if}</h1>
-<form action="{MededelingenContent::mededelingenRoot}/bewerken/{$mededeling->getId()}" method="post" enctype="multipart/form-data">
+<form action="{MededelingenContent::mededelingenRoot}bewerken/{$mededeling->getId()}" method="post" enctype="multipart/form-data">
 	{SimpleHtml::getMelding()}
 	{if !$mededeling->isModerator()}
 		Hier kunt u een mededeling toevoegen. Het zal echter niet direct zichtbaar worden, maar &eacute;&eacute;rst door de PubCie worden goedgekeurd.<br /><br />
@@ -64,6 +64,6 @@
 	<div class="clear">
 		{if $prullenbak}<input type="hidden" name="prullenbak" value="1" />{/if}
 		<label >&nbsp;</label><input type="submit" name="submit" value="Opslaan" />
-		<a href="{MededelingenContent::mededelingenRoot}/{$mededeling->getId()}" class="knop">Annuleren</a>
+		<a href="{MededelingenContent::mededelingenRoot}{$mededeling->getId()}" class="knop">Annuleren</a>
 	</div>
 </form>
