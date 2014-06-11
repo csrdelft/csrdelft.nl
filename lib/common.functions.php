@@ -165,6 +165,10 @@ function makepasswd($pass) {
 	return "{SSHA}" . base64_encode(mhash(MHASH_SHA1, $pass . $salt) . $salt);
 }
 
+function valid_filename($name) {
+	return preg_match('/^(?:[a-z0-9 \-_é]|\.(?!\.))+$/iD', $name);
+}
+
 function email_like($email) {
 	if ($email == '') {
 		return false;

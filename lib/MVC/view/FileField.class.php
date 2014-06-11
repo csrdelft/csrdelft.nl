@@ -69,7 +69,7 @@ class FileField implements FormElement, Validator {
 	}
 
 	public function opslaan($destination, $filename, $overwrite = false) {
-		if (!preg_match('/^(?:[a-z0-9 _-é]|\.(?!\.))+$/iD', $filename)) {
+		if (!valid_filename($filename)) {
 			throw new Exception('Ongeldige bestandsnaam');
 		}
 		if ($this->methode !== 'BestandBehouden') {
