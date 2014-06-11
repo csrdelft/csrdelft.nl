@@ -2,6 +2,7 @@
 
 require_once 'configuratie.include.php';
 require_once 'mededelingen/mededeling.class.php';
+require_once 'mededelingen/mededelingencontent.class.php';
 require_once 'mededelingen/mededelingtopdrieoverzichtcontent.class.php';
 
 if (!Mededeling::isModerator()) {
