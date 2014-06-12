@@ -87,11 +87,10 @@ class Groepcontroller extends Controller {
 		return $url;
 	}
 
-	/*
+	/**
 	 * Valideer de formulierinvoer voor een groep.
 	 * Beetje gecompliceerd door de verschillende permissielagen, maargoed.
 	 */
-
 	public function groepValidator() {
 		//Velden beschikbaar voor groepadmins en voor leden die hun groep mogen aanpassen/maken
 		if ($this->groep->isAdmin() OR $this->groep->isEigenaar()) {
@@ -183,12 +182,11 @@ class Groepcontroller extends Controller {
 		return $this->valid;
 	}
 
-	/*
+	/**
 	 * Bewerken en opslaan van groepen. Groepen mogen door groepadmins (groeplid.op=='1')
 	 * voor een deel bewerkt worden, de P_ADMINS kunnen alles aanpassen. Hier wordt de
 	 * toegangscontrole voor verschillende velden geregeld.
 	 */
-
 	public function bewerken() {
 		if (!LoginLid::mag('P_LOGGED_IN')) {
 			invokeRefresh($this->getUrl('standaard'), 'Niet voldoende rechten voor deze actie');
@@ -316,10 +314,9 @@ class Groepcontroller extends Controller {
 		}
 	}
 
-	/*
+	/**
 	 * Een groep permanent verwijderen.
 	 */
-
 	public function verwijderen() {
 		$groeptypenaam = $this->groep->getType()->getNaam();
 		if ($this->groep->isAdmin()) {
@@ -339,10 +336,9 @@ class Groepcontroller extends Controller {
 		invokeRefresh(CSR_ROOT . '/actueel/groepen/' . $groeptypenaam . '/', $melding);
 	}
 
-	/*
+	/**
 	 * Ingelogde leden kunnen zich aanmelden.
 	 */
-
 	public function aanmelden() {
 		if ($this->groep->magAanmelden()) {
 			$functie = '';
@@ -373,10 +369,9 @@ class Groepcontroller extends Controller {
 		invokeRefresh($url, $melding);
 	}
 
-	/*
+	/**
 	 * Leden toevoegen aan een groep.
 	 */
-
 	public function addLid() {
 		if (!$this->groep->magBewerken()) {
 			invokeRefresh($this->getUrl('standaard'), 'Niet voldoende rechten voor deze actie');
@@ -410,10 +405,9 @@ class Groepcontroller extends Controller {
 		}
 	}
 
-	/*
+	/**
 	 * Leden verwijderen uit een groep
 	 */
-
 	public function verwijderLid() {
 		if ($this->hasParam(2) AND Lid::isValidUid($this->getParam(2)) AND $this->groep->magBewerken()) {
 			if ($this->groep->verwijderLid($this->getParam(2))) {
@@ -430,10 +424,9 @@ class Groepcontroller extends Controller {
 		}
 	}
 
-	/*
+	/**
 	 * Opmerking/functie van een lid aanpassen, return functie of een foutmelding
 	 */
-
 	public function bewerkfunctieLid() {
 		if (!$this->groep->magBewerken() AND LoginLid::instance()->getUid() != $this->getParam(2)) {
 			echo '<span class="melding">Onvoldoende rechten voor deze actie</span>';
@@ -462,10 +455,9 @@ class Groepcontroller extends Controller {
 		exit;
 	}
 
-	/*
+	/**
 	 * Een lid naar de eerstvolgende o.t. groep verplaatsen.
 	 */
-
 	public function maakLidOt() {
 		if ($this->hasParam(2) AND Lid::isValidUid($this->getParam(2)) AND $this->groep->magBewerken()) {
 			if ($this->groep->maakLidOt($this->getParam(2))) {
@@ -482,10 +474,9 @@ class Groepcontroller extends Controller {
 		}
 	}
 
-	/*
+	/**
 	 * De groep o.t. maken.
 	 */
-
 	public function maakGroepOt() {
 		if ($this->groep->isAdmin() OR $this->groep->isEigenaar()) {
 			if ($this->groep->getStatus() == 'ht') {

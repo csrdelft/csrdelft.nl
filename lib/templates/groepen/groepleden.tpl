@@ -25,7 +25,7 @@
 			<tr>
 				<td>{$groeplid.uid|csrnaam:'civitas':'visitekaartje'}</td>
 				{if $groep->magBewerken() OR (LoginLid::instance()->getUid()==$groeplid.uid AND ($groep->getToonFuncties()=='tonen' OR $groep->getToonFuncties()=='verbergen'))}
-					<td id="bewerk_{$groep->getId()}|{$groeplid.uid}" class="inline_edit">
+					<td id="bewerk_{$groep->getId()}_{$groeplid.uid}" class="inline_edit">
 						<span class="text">
 							{foreach from=$groeplid.functie item=glfunctie name=glfunctie}
 								{if $smarty.foreach.glfunctie.iteration > 1} - {/if}{$glfunctie|escape:'html'}

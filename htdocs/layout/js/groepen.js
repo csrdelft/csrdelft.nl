@@ -93,7 +93,7 @@ function observeClick() {
 		jQuery(this).children('input,select').show();
 	}).change(function() {
 		//id = 'bewerk_<gid>|<uid>'
-		var ids = jQuery(this).attr('id').substring(7).split('|');
+		var ids = jQuery(this).attr('id').substring(7).split('_');
 		var gid = ids[0];
 		var uid = ids[1];
 		var values = [];

@@ -1,7 +1,7 @@
 <tr>
 	<td>{$groeplid->lid_id|csrnaam:'civitas':'visitekaartje'}</td>
 	{if $groep->magBeheren() OR ($groep->magAanmelden() AND LoginLid::instance()->getUid() === $groeplid->lid_id)}
-		<td id="bewerk_{$groep->id}|{$groeplid->lid_id}" class="inline_edit">
+		<td id="bewerk_{$groep->id}_{$groeplid->lid_id}" class="inline_edit">
 			<span class="text">
 				{foreach from=$groeplid->opmerking item=glfunctie name=glfunctie}
 					{if $smarty.foreach.glfunctie.iteration > 1} - {/if}{$glfunctie|escape:'html'}
