@@ -26,7 +26,7 @@ try {
 	if (defined('DB_MODIFY_ENABLE') AND LoginLid::mag('P_ADMIN')) {
 		$queries = DatabaseAdmin::getQueries();
 		if (empty($queries)) {
-			//debugprint('DB_MODIFY_ENABLED');
+			debugprint('DB_MODIFY_ENABLED');
 		} else {
 			header('Content-Type: text/x-sql');
 			header('Content-disposition: attachment;filename=DB_modify_' . time() . '.sql');
@@ -39,8 +39,7 @@ try {
 	}
 
 	$controller->getContent()->view();
-}
-catch (Exception $e) {
+} catch (Exception $e) {
 	$protocol = (isset($_SERVER['SERVER_PROTOCOL']) ? $_SERVER['SERVER_PROTOCOL'] : 'HTTP/1.0');
 	$code = ($e->getCode() >= 100 ? $e->getCode() : 500);
 	header($protocol . ' ' . $code . ' ' . $e->getMessage());
