@@ -25,6 +25,9 @@ class MijnVoorkeurenController extends AclController {
 				'eetwens' => 'P_CORVEE_IK'
 			);
 		}
+	}
+
+	public function performAction(array $args = array()) {
 		$this->action = 'mijn';
 		if ($this->hasParam(2)) {
 			$this->action = $this->getParam(2);
@@ -33,7 +36,7 @@ class MijnVoorkeurenController extends AclController {
 		if ($this->hasParam(3)) {
 			$crid = intval($this->getParam(3));
 		}
-		$this->performAction(array($crid));
+		parent::performAction(array($crid));
 	}
 
 	public function mijn() {

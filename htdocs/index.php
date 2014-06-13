@@ -21,11 +21,12 @@ try {
 
 	require_once 'MVC/controller/' . $class . '.class.php';
 	$controller = new $class($request);
+	$controller->performAction();
 
 	if (defined('DB_MODIFY_ENABLE') AND LoginLid::mag('P_ADMIN')) {
 		$queries = DatabaseAdmin::getQueries();
 		if (empty($queries)) {
-			debugprint('DB_MODIFY_ENABLED');
+			//debugprint('DB_MODIFY_ENABLED');
 		} else {
 			header('Content-Type: text/x-sql');
 			header('Content-disposition: attachment;filename=DB_modify_' . time() . '.sql');

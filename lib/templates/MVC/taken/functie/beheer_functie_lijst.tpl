@@ -1,5 +1,5 @@
 {*
-beheer_functie_lijst.tpl	|	P.W.G. Brussee (brussee@live.nl)
+	beheer_functie_lijst.tpl	|	P.W.G. Brussee (brussee@live.nl)
 *}
 <tr id="corveefunctie-row-{$functie->functie_id}">
 	<td>

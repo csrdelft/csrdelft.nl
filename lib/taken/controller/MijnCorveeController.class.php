@@ -24,11 +24,14 @@ class MijnCorveeController extends AclController {
 		} else {
 			$this->acl = array();
 		}
+	}
+
+	public function performAction(array $args = array()) {
 		$this->action = 'mijn';
 		if ($this->hasParam(2)) {
 			$this->action = $this->getParam(2);
 		}
-		$this->performAction($this->getParams(3));
+		parent::performAction($this->getParams(3));
 	}
 
 	public function mijn() {

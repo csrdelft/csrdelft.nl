@@ -29,6 +29,9 @@ class CorveeRepetitiesController extends AclController {
 				'bijwerken' => 'P_MAAL_MOD'
 			);
 		}
+	}
+
+	public function performAction(array $args = array()) {
 		$this->action = 'beheer';
 		if ($this->hasParam(2)) {
 			$this->action = $this->getParam(2);
@@ -37,7 +40,7 @@ class CorveeRepetitiesController extends AclController {
 		if ($this->hasParam(3)) {
 			$crid = (int) $this->getParam(3);
 		}
-		$this->performAction(array($crid));
+		parent::performAction(array($crid));
 	}
 
 	public function beheer($crid = null, $mrid = null) {

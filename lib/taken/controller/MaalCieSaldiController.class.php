@@ -24,11 +24,14 @@ class MaalCieSaldiController extends AclController {
 				'sluitboekjaar' => 'P_MAAL_SALDI'
 			);
 		}
+	}
+
+	public function performAction(array $args = array()) {
 		$this->action = 'beheer';
 		if ($this->hasParam(2)) {
 			$this->action = $this->getParam(2);
 		}
-		$this->performAction();
+		parent::performAction();
 	}
 
 	public function beheer() {

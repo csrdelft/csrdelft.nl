@@ -17,7 +17,7 @@ if(!isset($_GET['query'])){
 	exit;
 }
 $controller=new Groepcontroller($_GET['query']);
-
+$controller->performAction();
 
 $pagina=new CsrLayoutPage($controller->getContent());
 

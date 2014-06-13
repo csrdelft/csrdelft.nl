@@ -15,11 +15,14 @@ class PosterController extends AclController {
 		$this->acl = array(
 			'uploaden' => 'P_LEDEN_READ'
 		);
+	}
+
+	public function performAction(array $args = array()) {
 		$this->action = 'uploaden';
 		if ($this->hasParam(2)) {
 			$this->action = $this->getParam(2);
 		}
-		$this->performAction($this->getParams(3));
+		parent::performAction($this->getParams(3));
 	}
 
 	public function uploaden() {

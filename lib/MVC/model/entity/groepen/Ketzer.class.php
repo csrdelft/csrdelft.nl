@@ -5,10 +5,10 @@
  * 
  * @author P.W.G. Brussee <brussee@live.nl>
  * 
- * Een ketzer is een aanmeldbare opvolgbare groep.
+ * Een ketzer is een aanmeldbare groep.
  * 
  */
-class Ketzer extends OpvolgbareGroep {
+class Ketzer extends Groep {
 
 	/**
 	 * Maximaal aantal groepsleden

@@ -25,6 +25,9 @@ class BeheerPuntenController extends AclController {
 				'wijzigbonus' => 'P_CORVEE_MOD'
 			);
 		}
+	}
+
+	public function performAction(array $args = array()) {
 		$this->action = 'beheer';
 		if ($this->hasParam(2)) {
 			$this->action = $this->getParam(2);
@@ -33,7 +36,7 @@ class BeheerPuntenController extends AclController {
 		if ($this->hasParam(3)) {
 			$uid = $this->getParam(3);
 		}
-		$this->performAction(array($uid));
+		parent::performAction(array($uid));
 	}
 
 	public function beheer() {

@@ -58,7 +58,6 @@ class Groepcontroller extends Controller {
 		if ($this->action == 'standaard' AND $this->groep->getId() == 0) {
 			invokeRefresh(CSR_ROOT . '/actueel/groepen/', 'We geven geen 0-groepen weer! (Groepcontroller::__construct())');
 		}
-		$this->performAction();
 	}
 
 	public function standaard() {

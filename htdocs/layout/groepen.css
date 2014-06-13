@@ -1,7 +1,7 @@
 /* Groepen nieuwe stijl */
 
 /* Groepenlijst */
-#groepLijst{ float: right; margin: 30px 0px 10px 20px; }
+#groepLijst{ float: right; width: 200px; background-color: #EEE; }
 #groepLijst, #groepLijst li, #groepLijst ul{ text-align: right;}
 #groepLijst li{ list-style-type: none; }
 .groep{ border-top: 1px solid black; margin-top: 20px; }

@@ -18,6 +18,7 @@ class FotoAlbumController extends AclController {
 	 * @var string
 	 */
 	private static $alleenLeden = '/(intern|novitiaat|ontvoering|feuten|slachten|zuipen|prive|privé)/i';
+
 	/**
 	 * Als deze regexp matched is het album alleen voor DéDé
 	 * @var string
@@ -39,6 +40,9 @@ class FotoAlbumController extends AclController {
 				'hernoemen' => 'P_DOCS_MOD'
 			);
 		}
+	}
+
+	public function performAction(array $args = array()) {
 		if ($this->hasParam(2)) {
 			$this->action = $this->getParam(2);
 		}
@@ -61,7 +65,7 @@ class FotoAlbumController extends AclController {
 		if (!self::magBekijken($map->locatie)) {
 			$this->geentoegang();
 		}
-		$this->performAction(array($map, $naam));
+		parent::performAction(array($map, $naam));
 	}
 
 	public static function magBekijken($path) {

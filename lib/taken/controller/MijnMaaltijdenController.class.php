@@ -31,6 +31,9 @@ class MijnMaaltijdenController extends AclController {
 				'opmerking' => 'P_MAAL_IK'
 			);
 		}
+	}
+
+	public function performAction(array $args = array()) {
 		$this->action = 'ketzer';
 		if ($this->hasParam(2)) {
 			$this->action = $this->getParam(2);
@@ -39,7 +42,7 @@ class MijnMaaltijdenController extends AclController {
 		if ($this->hasParam(3)) {
 			$mid = (int) $this->getParam(3);
 		}
-		$this->performAction(array($mid));
+		parent::performAction(array($mid));
 	}
 
 	public static function magMaaltijdlijstTonen(Maaltijd $maaltijd) {

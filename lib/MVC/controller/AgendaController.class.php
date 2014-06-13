@@ -28,6 +28,9 @@ class AgendaController extends AclController {
 				'verwijderen' => 'P_AGENDA_MOD'
 			);
 		}
+	}
+
+	public function performAction(array $args = array()) {
 		$this->action = 'maand';
 		if ($this->hasParam(2)) {
 			$this->action = $this->getParam(2);
@@ -36,7 +39,7 @@ class AgendaController extends AclController {
 				header('Content-Disposition: attachment; filename="calendar.ics"');
 			}
 		}
-		$this->performAction($this->getParams(3));
+		parent::performAction($this->getParams(3));
 	}
 
 	public static function magToevoegen() {

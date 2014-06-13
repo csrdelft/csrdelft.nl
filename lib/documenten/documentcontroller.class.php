@@ -46,8 +46,6 @@ class DocumentController extends Controller {
 		} else {
 			$this->action = 'geentoegang';
 		}
-
-		$this->performAction();
 	}
 
 	/**

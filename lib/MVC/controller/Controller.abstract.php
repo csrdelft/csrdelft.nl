@@ -48,19 +48,15 @@ abstract class Controller {
 		$mark = strpos($query, '?');
 		if ($mark !== false) {
 			$rest = substr($query, 0, $mark);
+			$this->kvp = true;
 		} else {
 			$rest = $query;
 		}
-		// parse REST
-		$rest = explode('/', $rest);
-		$this->queryparts = $rest; // add REST params
-		// parse KVP
-		if ($mark) {
-			$mark = explode('&', substr($query, $mark));
-			foreach ($mark as $key => $value) {
-				$this->queryparts[$key] = explode('=', $value); // add KVP params
-			}
-			$this->kvp = true;
+		// parse REST query
+		$this->queryparts = explode('/', $rest);
+		// parse KVP query
+		foreach ($_GET as $key => $value) {
+			$this->queryparts[$key] = filter_input(INPUT_GET, $key, FILTER_SANITIZE_ENCODED);
 		}
 	}
 
@@ -72,7 +68,7 @@ abstract class Controller {
 	 * @return boolean
 	 */
 	protected function hasParam($key) {
-		return array_key_exists($key, $this->queryparts) AND isset($this->queryparts[$key]) AND $this->queryparts[$key] !== '';
+		return array_key_exists($key, $this->queryparts) AND isset($this->queryparts[$key]) AND $this->queryparts[$key] !== ''; // don't use empty() because 0 is allowed
 	}
 
 	/**
@@ -87,15 +83,17 @@ abstract class Controller {
 	}
 
 	/**
-	 * Return query paramter values.
+	 * Return query paramter values from $num onwards.
 	 * 
-	 * @param int $skip do not return number of paramters
+	 * @param int $num skip params before this
 	 * @return array
 	 */
-	protected function getParams($skip = 0) {
+	protected function getParams($num = 0) {
 		$params = array_values($this->queryparts);
-		for ($i = 0; $i < $skip; $i++) {
-			unset($params[$i]);
+		for ($i = 0; $i < $num; $i++) {
+			if (isset($params[$i])) {
+				unset($params[$i]);
+			}
 		}
 		return $params;
 	}
@@ -125,7 +123,7 @@ abstract class Controller {
 
 	abstract protected function hasPermission();
 
-	protected function performAction(array $args = array()) {
+	public function performAction(array $args = array()) {
 		if (!$this->hasPermission()) {
 			$this->action = 'geentoegang';
 		}
@@ -133,7 +131,7 @@ abstract class Controller {
 			throw new Exception('Action undefined: ' . $this->action);
 		}
 		//DebugLogModel::instance()->log(get_called_class(), $this->action, $args);
-		call_user_func_array(array($this, $this->action), $args);
+		return call_user_func_array(array($this, $this->action), $args);
 	}
 
 	protected function geentoegang() {

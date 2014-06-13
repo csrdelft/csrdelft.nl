@@ -24,11 +24,14 @@ class MenuBeheerController extends AclController {
 				'verwijderen' => 'P_ADMIN'
 			);
 		}
+	}
+
+	public function performAction(array $args = array()) {
 		$this->action = 'beheer';
 		if ($this->hasParam(2)) {
 			$this->action = $this->getParam(2);
 		}
-		$this->performAction($this->getParams(3));
+		parent::performAction($this->getParams(3));
 	}
 
 	public function beheer($menu_naam = '') {

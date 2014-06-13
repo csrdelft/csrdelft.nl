@@ -1,17 +1,25 @@
 <?php
 
 /**
- * TakenModuleController.class.php
+ * TakenRouterController.class.php
  * 
  * @author P.W.G. Brussee <brussee@live.nl>
  * 
+ * Router voor de taken module.
  */
-class TakenModuleController extends AclController {
+class TakenRouterController extends AclController {
+
+	/**
+	 * Pass through query
+	 * @var string
+	 */
+	private $query;
 
 	public function __construct($query) {
-		$query = str_replace('maaltijden/', 'maaltijden', $query);
-		$query = str_replace('corvee/', 'corvee', $query);
-		parent::__construct($query);
+		$this->query = $query;
+		$this->query = str_replace('maaltijden/', 'maaltijden', $this->query);
+		$this->query = str_replace('corvee/', 'corvee', $this->query);
+		parent::__construct($this->query);
 		$this->acl = array(
 			'maaltijdenketzer' => 'P_MAAL_IK',
 			'maaltijdenlijst' => 'P_MAAL_IK', // shortcut
@@ -30,6 +38,9 @@ class TakenModuleController extends AclController {
 			'corveevrijstellingen' => 'P_CORVEE_MOD',
 			'corveefuncties' => 'P_CORVEE_MOD'
 		);
+	}
+
+	public function performAction(array $args = array()) {
 		if ($this->hasParam(1)) {
 			$this->action = $this->getParam(1);
 		}
@@ -38,8 +49,10 @@ class TakenModuleController extends AclController {
 		} elseif ($this->action === 'corvee') {
 			$this->action = 'corveemijn';
 		}
+		$controller = parent::performAction();
 		Instellingen::setTemp('taken', 'url', '/' . $this->action);
-		$this->performAction(array($query));
+		$controller->performAction();
+		$this->view = $controller->getContent();
 	}
 
 	protected function geentoegang() {
@@ -52,102 +65,86 @@ class TakenModuleController extends AclController {
 		$this->view = new CsrLayoutPage($body);
 	}
 
-	public function maaltijdenketzer($query) {
+	public function maaltijdenketzer() {
 		require_once 'taken/controller/MijnMaaltijdenController.class.php';
-		$controller = new MijnMaaltijdenController($query);
-		$this->view = $controller->getContent();
+		return new MijnMaaltijdenController($this->query);
 	}
 
-	public function maaltijdenlijst($query) {
-		$query = str_replace('lijst/', 'ketzer/lijst/', $query);
-		$query = str_replace('lijst/sluit/', 'sluit/', $query);
-		$this->maaltijdenketzer($query);
+	public function maaltijdenlijst() {
+		$this->query = str_replace('lijst/', 'ketzer/lijst/', $this->query);
+		$this->query = str_replace('lijst/sluit/', 'sluit/', $this->query);
+		$this->maaltijdenketzer();
 	}
 
-	public function maaltijdenbeheer($query) {
+	public function maaltijdenbeheer() {
 		require_once 'taken/controller/BeheerMaaltijdenController.class.php';
-		$controller = new BeheerMaaltijdenController($query);
-		$this->view = $controller->getContent();
+		return new BeheerMaaltijdenController($this->query);
 	}
 
-	public function maaltijdenrepetities($query) {
+	public function maaltijdenrepetities() {
 		require_once 'taken/controller/MaaltijdRepetitiesController.class.php';
-		$controller = new MaaltijdRepetitiesController($query);
-		$this->view = $controller->getContent();
+		return new MaaltijdRepetitiesController($this->query);
 	}
 
-	public function maaltijdenabonnementen($query) {
+	public function maaltijdenabonnementen() {
 		require_once 'taken/controller/MijnAbonnementenController.class.php';
-		$controller = new MijnAbonnementenController($query);
-		$this->view = $controller->getContent();
+		return new MijnAbonnementenController($this->query);
 	}
 
-	public function maaltijdenabonnementenbeheer($query) {
+	public function maaltijdenabonnementenbeheer() {
 		require_once 'taken/controller/BeheerAbonnementenController.class.php';
-		$controller = new BeheerAbonnementenController($query);
-		$this->view = $controller->getContent();
+		return new BeheerAbonnementenController($this->query);
 	}
 
-	public function maaltijdenmaalciesaldi($query) {
+	public function maaltijdenmaalciesaldi() {
 		require_once 'taken/controller/MaalCieSaldiController.class.php';
-		$controller = new MaalCieSaldiController($query);
-		$this->view = $controller->getContent();
+		return new MaalCieSaldiController($this->query);
 	}
 
-	public function corveemijn($query) {
+	public function corveemijn() {
 		Instellingen::setTemp('taken', 'url', str_replace('mijn', '', Instellingen::get('taken', 'url'))); // strip "mijn" from url
 		require_once 'taken/controller/MijnCorveeController.class.php';
-		$controller = new MijnCorveeController($query);
-		$this->view = $controller->getContent();
+		return new MijnCorveeController($this->query);
 	}
 
-	public function corveerooster($query) {
-		$query = str_replace('rooster', 'rooster/rooster', $query);
-		$this->corveemijn($query);
+	public function corveerooster() {
+		$this->query = str_replace('rooster', 'rooster/rooster', $this->query);
+		return $this->corveemijn();
 	}
 
-	public function corveebeheer($query) {
+	public function corveebeheer() {
 		require_once 'taken/controller/BeheerTakenController.class.php';
-		$controller = new BeheerTakenController($query);
-		$this->view = $controller->getContent();
+		return new BeheerTakenController($this->query);
 	}
 
-	public function corveerepetities($query) {
+	public function corveerepetities() {
 		require_once 'taken/controller/CorveeRepetitiesController.class.php';
-		$controller = new CorveeRepetitiesController($query);
-		$this->view = $controller->getContent();
+		return new CorveeRepetitiesController($this->query);
 	}
 
-	public function corveevoorkeuren($query) {
+	public function corveevoorkeuren() {
 		require_once 'taken/controller/MijnVoorkeurenController.class.php';
-		$controller = new MijnVoorkeurenController($query);
-		$this->view = $controller->getContent();
+		return new MijnVoorkeurenController($this->query);
 	}
 
-	public function corveevoorkeurenbeheer($query) {
+	public function corveevoorkeurenbeheer() {
 		require_once 'taken/controller/BeheerVoorkeurenController.class.php';
-		$controller = new BeheerVoorkeurenController($query);
-		$this->view = $controller->getContent();
+		return new BeheerVoorkeurenController($this->query);
 	}
 
-	public function corveepuntenbeheer($query) {
+	public function corveepuntenbeheer() {
 		require_once 'taken/controller/BeheerPuntenController.class.php';
-		$controller = new BeheerPuntenController($query);
-		$this->view = $controller->getContent();
+		return new BeheerPuntenController($this->query);
 	}
 
-	public function corveevrijstellingen($query) {
+	public function corveevrijstellingen() {
 		require_once 'taken/controller/BeheerVrijstellingenController.class.php';
-		$controller = new BeheerVrijstellingenController($query);
-		$this->view = $controller->getContent();
+		return new BeheerVrijstellingenController($this->query);
 	}
 
-	public function corveefuncties($query) {
+	public function corveefuncties() {
 		require_once 'MVC/controller/taken/BeheerFunctiesController.class.php';
-		$controller = new BeheerFunctiesController($query);
-		$this->view = $controller->getContent();
+		return new BeheerFunctiesController($this->query);
 	}
 
 }
-
-?>

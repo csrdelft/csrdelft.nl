@@ -1,6 +1,6 @@
 <?php
 
-require_once 'MVC/model/entity/groepen/OpvolgbareGroep.abstract.php';
+require_once 'MVC/model/entity/groepen/Groep.abstract.php';
 
 /**
  * GroepenModel.class.php

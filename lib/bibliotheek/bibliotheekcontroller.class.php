@@ -55,8 +55,6 @@ class BibliotheekController extends Controller {
 		if (!in_array($this->action, $allow)) {
 			$this->action = 'catalogustonen';
 		}
-
-		$this->performAction();
 	}
 
 	/**

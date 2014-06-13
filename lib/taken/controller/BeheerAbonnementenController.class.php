@@ -28,11 +28,14 @@ class BeheerAbonnementenController extends AclController {
 				'novieten' => 'P_MAAL_MOD'
 			);
 		}
+	}
+
+	public function performAction(array $args = array()) {
 		$this->action = 'waarschuwingen';
 		if ($this->hasParam(2)) {
 			$this->action = $this->getParam(2);
 		}
-		$this->performAction($this->getParams(3));
+		parent::performAction($this->getParams(3));
 	}
 
 	private function beheer($alleenWaarschuwingen, $ingeschakeld = null) {

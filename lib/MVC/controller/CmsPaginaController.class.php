@@ -21,6 +21,9 @@ class CmsPaginaController extends Controller {
 
 	public function __construct($query) {
 		parent::__construct($query, CmsPaginaModel::instance());
+	}
+
+	public function performAction(array $args = array()) {
 		$this->action = 'bekijken';
 		$naam = 'thuis';
 		if ($this->hasParam(3) AND $this->getParam(2) === 'bewerken') {
@@ -35,7 +38,7 @@ class CmsPaginaController extends Controller {
 		} else {
 			$naam = $this->getParam(1);
 		}
-		$this->performAction(array($naam));
+		parent::performAction(array($naam));
 	}
 
 	protected function hasPermission() {

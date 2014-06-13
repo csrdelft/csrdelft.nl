@@ -11,6 +11,7 @@ require_once 'documenten/documentcontroller.class.php';
 
 if (isset($_GET['querystring'])) {
 	$docControl = new DocumentController($_GET['querystring']);
+	$docControl->performAction();
 } else {
 	die('epic fail');
 }

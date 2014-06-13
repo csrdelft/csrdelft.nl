@@ -38,6 +38,9 @@ class BeheerTakenController extends AclController {
 				'aanmaken' => 'P_CORVEE_MOD'
 			);
 		}
+	}
+
+	public function performAction(array $args = array()) {
 		$this->action = 'beheer';
 		if ($this->hasParam(2)) {
 			$this->action = $this->getParam(2);
@@ -46,7 +49,7 @@ class BeheerTakenController extends AclController {
 		if ($this->hasParam(3)) {
 			$tid = (int) $this->getParam(3);
 		}
-		$this->performAction(array($tid));
+		parent::performAction(array($tid));
 	}
 
 	public function beheer($tid = null, $mid = null) {

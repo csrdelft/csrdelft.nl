@@ -9,7 +9,7 @@ require_once 'MVC/model/entity/groepen/GroepStatus.enum.php';
  * @author P.W.G. Brussee <brussee@live.nl>
  * 
  * Een groep met leden en status.
- * 
+ * Optioneel in familie voor opvolging.
  */
 abstract class Groep extends PersistentEntity {
 
@@ -23,6 +23,11 @@ abstract class Groep extends PersistentEntity {
 	 * @var int
 	 */
 	public $categorie_id;
+	/**
+	 * Familie (opvolging)
+	 * @var string
+	 */
+	public $familie_id;
 	/**
 	 * Naam
 	 * @var string
@@ -38,6 +43,21 @@ abstract class Groep extends PersistentEntity {
 	 * @var string
 	 */
 	public $omschrijving;
+	/**
+	 * Datum en tijd begin 
+	 * @var string
+	 */
+	public $begin_moment;
+	/**
+	 * Datum en tijd einde
+	 * @var string
+	 */
+	public $eind_moment;
+	/**
+	 * o.t. / h.t. / f.t.
+	 * @var GroepStatus
+	 */
+	public $status;
 	/**
 	 * Rechten benodigd voor bekijken
 	 * @var string
@@ -75,9 +95,13 @@ abstract class Groep extends PersistentEntity {
 	protected static $persistent_fields = array(
 		'id' => array(T::Integer, false, 'auto_increment'),
 		'categorie_id' => array(T::Integer),
+		'familie_id' => array(T::String),
 		'naam' => array(T::String),
 		'samenvatting' => array(T::Text),
 		'omschrijving' => array(T::Text),
+		'begin_moment' => array(T::DateTime, true),
+		'eind_moment' => array(T::DateTime, true),
+		'status' => array(T::Enumeration, false, 'GroepStatus'),
 		'rechten_bekijken' => array(T::String),
 		'rechten_aanmelden' => array(T::String),
 		'rechten_beheren' => array(T::String),

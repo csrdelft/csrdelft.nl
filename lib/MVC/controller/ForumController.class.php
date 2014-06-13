@@ -12,24 +12,31 @@ require_once 'MVC/view/ForumView.class.php';
  */
 class ForumController extends Controller {
 
-	public function __construct($query) {
-		parent::__construct($query);
+	public function performAction(array $args = array()) {
+		if ($this->hasParam(2)) {
+			$this->action = $this->getParam(2);
+		}
+		if ($this->action === 'rss.xml') {
+			$this->action = 'rss';
+			header('Content-Disposition: attachment; filename="rss.xml"');
+		}
 		if (!isset($_SESSION['forum_concept'])) {
 			$_SESSION['forum_concept'] = '';
 		}
 		try {
-			if ($this->hasParam(2)) {
-				$this->action = $this->getParam(2);
-			}
-			if ($this->action === 'rss.xml') {
-				$this->action = 'rss';
-				header('Content-Disposition: attachment; filename="rss.xml"');
-			}
-			$this->performAction($this->getParams(3));
+			parent::performAction($this->getParams(3));
 		} catch (Exception $e) {
 			setMelding($e->getMessage(), -1);
 			$this->action = 'forum';
-			$this->performAction(array());
+			parent::performAction(array());
+		}
+		if (!$this->isPosted()) {
+			if (LoginLid::mag('P_LOGGED_IN')) {
+				$this->view = new CsrLayoutPage($this->getContent());
+			} else { // uitgelogd heeft nieuwe layout
+				$this->view = new CsrLayout2Page($this->getContent());
+			}
+			$this->view->addScript('forum.js');
 		}
 	}
 

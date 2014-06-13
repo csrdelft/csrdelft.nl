@@ -24,6 +24,9 @@ class MijnAbonnementenController extends AclController {
 				'uitschakelen' => 'P_MAAL_IK'
 			);
 		}
+	}
+
+	public function performAction(array $args = array()) {
 		$this->action = 'mijn';
 		if ($this->hasParam(2)) {
 			$this->action = $this->getParam(2);
@@ -32,7 +35,7 @@ class MijnAbonnementenController extends AclController {
 		if ($this->hasParam(3)) {
 			$mrid = (int) $this->getParam(3);
 		}
-		$this->performAction(array($mrid));
+		parent::performAction(array($mrid));
 	}
 
 	public function mijn() {

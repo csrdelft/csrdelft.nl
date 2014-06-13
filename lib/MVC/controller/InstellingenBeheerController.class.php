@@ -22,11 +22,14 @@ class InstellingenBeheerController extends AclController {
 				'reset' => 'P_LOGGED_IN'
 			);
 		}
+	}
+
+	public function performAction(array $args = array()) {
 		$this->action = 'module';
 		if ($this->hasParam(2)) {
 			$this->action = $this->getParam(2);
 		}
-		$this->performAction($this->getParams(3));
+		parent::performAction($this->getParams(3));
 	}
 
 	protected function hasPermission() {
