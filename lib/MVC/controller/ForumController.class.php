@@ -80,13 +80,7 @@ class ForumController extends Controller {
 	 * Overzicht met categorien en forumdelen laten zien.
 	 */
 	public function forum() {
-		$body = new ForumView(ForumModel::instance()->getForum());
-		if (LoginLid::mag('P_LOGGED_IN')) {
-			$this->view = new CsrLayoutPage($body);
-		} else { // uitgelogd heeft nieuwe layout
-			$this->view = new CsrLayout2Page($body);
-		}
-		$this->view->addScript('forum.js');
+		$this->view = new ForumView(ForumModel::instance()->getForum());
 	}
 
 	/**
@@ -103,9 +97,7 @@ class ForumController extends Controller {
 	 */
 	public function wacht() {
 		$draden_delen = ForumDelenModel::instance()->getWachtOpGoedkeuring();
-		$body = new ForumResultatenView($draden_delen[0], $draden_delen[1]);
-		$this->view = new CsrLayoutPage($body);
-		$this->view->addScript('forum.js');
+		$this->view = new ForumResultatenView($draden_delen[0], $draden_delen[1]);
 	}
 
 	/**
@@ -124,9 +116,7 @@ class ForumController extends Controller {
 		ForumPostsModel::instance()->setHuidigePagina((int) $pagina, 0);
 		ForumDradenModel::instance()->setHuidigePagina((int) $pagina, 0);
 		$draden_delen = ForumDelenModel::instance()->zoeken($query);
-		$body = new ForumResultatenView($draden_delen[0], $draden_delen[1], $query);
-		$this->view = new CsrLayoutPage($body);
-		$this->view->addScript('forum.js');
+		$this->view = new ForumResultatenView($draden_delen[0], $draden_delen[1], $query);
 	}
 
 	/**
@@ -139,13 +129,7 @@ class ForumController extends Controller {
 		ForumDradenModel::instance()->setHuidigePagina((int) $pagina, 0);
 		$belangrijk = ($belangrijk === 'belangrijk' ? true : null);
 		$deel = ForumDelenModel::instance()->getRecent($belangrijk);
-		$body = new ForumDeelView($deel, $belangrijk);
-		if (LoginLid::mag('P_LOGGED_IN')) {
-			$this->view = new CsrLayoutPage($body);
-		} else { // uitgelogd heeft nieuwe layout
-			$this->view = new CsrLayout2Page($body);
-		}
-		$this->view->addScript('forum.js');
+		$this->view = new ForumDeelView($deel, $belangrijk);
 	}
 
 	/**
@@ -164,13 +148,7 @@ class ForumController extends Controller {
 		} else {
 			ForumDradenModel::instance()->setHuidigePagina((int) $pagina, $deel->forum_id); // lazy loading ForumDraad[]
 		}
-		$body = new ForumDeelView($deel);
-		if (LoginLid::mag('P_LOGGED_IN')) {
-			$this->view = new CsrLayoutPage($body);
-		} else { // uitgelogd heeft nieuwe layout
-			$this->view = new CsrLayout2Page($body);
-		}
-		$this->view->addScript('forum.js');
+		$this->view = new ForumDeelView($deel);
 	}
 
 	/**
@@ -200,13 +178,7 @@ class ForumController extends Controller {
 		} else {
 			ForumPostsModel::instance()->setHuidigePagina((int) $pagina, $draad->draad_id); // lazy loading ForumPost[]
 		}
-		$body = new ForumDraadView($draad, $deel);
-		if (LoginLid::mag('P_LOGGED_IN')) {
-			$this->view = new CsrLayoutPage($body);
-		} else { // uitgelogd heeft nieuwe layout
-			$this->view = new CsrLayout2Page($body);
-		}
-		$this->view->addScript('forum.js');
+		$this->view = new ForumDraadView($draad, $deel);
 	}
 
 	/**
