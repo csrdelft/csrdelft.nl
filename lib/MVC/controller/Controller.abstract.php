@@ -31,7 +31,7 @@ abstract class Controller {
 	 */
 	protected $action;
 	/**
-	 * Broken down query to (named) parameters
+	 * Broken down query to positional (REST) or named (KVP) parameters
 	 * @var array
 	 */
 	private $queryparts;
@@ -47,17 +47,28 @@ abstract class Controller {
 		// split at ?-mark
 		$mark = strpos($query, '?');
 		if ($mark !== false) {
-			$rest = substr($query, 0, $mark);
 			$this->kvp = true;
+			// parse REST query
+			$this->queryparts = explode('/', substr($query, 0, $mark));
+			// parse KVP query
+			$parts = explode('&', substr($query, $mark));
+			foreach ($parts as $key => $value) {
+				$this->queryparts[$key] = explode('=', $value);
+			}
 		} else {
-			$rest = $query;
+			$this->kvp = false;
+			// parse REST query
+			$this->queryparts = explode('/', $query);
 		}
-		// parse REST query
-		$this->queryparts = explode('/', $rest);
-		// parse KVP query
-		foreach ($_GET as $key => $value) {
-			$this->queryparts[$key] = filter_input(INPUT_GET, $key, FILTER_SANITIZE_ENCODED);
-		}
+	}
+
+	/**
+	 * Is this controller called with a server request query containing
+	 * key-value-pair (KVP) or only representational state transfer (REST)
+	 * @return boolean
+	 */
+	public function hasKvp() {
+		return $this->kvp;
 	}
 
 	/**
@@ -130,7 +141,7 @@ abstract class Controller {
 		if (!$this->hasAction($this->action)) {
 			throw new Exception('Action undefined: ' . $this->action);
 		}
-		//DebugLogModel::instance()->log(get_called_class(), $this->action, $args);
+//DebugLogModel::instance()->log(get_called_class(), $this->action, $args);
 		return call_user_func_array(array($this, $this->action), $args);
 	}
 

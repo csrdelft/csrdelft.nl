@@ -174,11 +174,11 @@ class ForumController extends Controller {
 		if ($pagina === 'ongelezen' AND $gelezen) {
 			ForumPostsModel::instance()->setPaginaVoorLaatstGelezen($gelezen);
 		} elseif ($pagina === 'laatste') {
-			ForumPostsModel::instance()->setLaatstePagina($draad->draad_id); // lazy loading ForumPost[]
+			ForumPostsModel::instance()->setLaatstePagina($draad->draad_id);
 		} else {
-			ForumPostsModel::instance()->setHuidigePagina((int) $pagina, $draad->draad_id); // lazy loading ForumPost[]
+			ForumPostsModel::instance()->setHuidigePagina((int) $pagina, $draad->draad_id);
 		}
-		$this->view = new ForumDraadView($draad, $deel);
+		$this->view = new ForumDraadView($draad, $deel); // lazy loading ForumPost[]
 	}
 
 	/**
