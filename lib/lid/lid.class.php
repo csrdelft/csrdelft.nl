@@ -664,7 +664,7 @@ class Lid implements Serializable, Agendeerbaar {
 	public function getNaamLink($vorm, $mode) {
 
 		//TEMP: Voor senatorenopdracht 2014.
-		if (LoginLid::mag('P_LOGGED_IN')) {
+		if (LoginLid::mag('P_LOGGED_IN') AND $vorm !== 'pasfoto' AND $vorm !== 'leeg') {
 			$vorm = 'duckstad';
 		}
 
