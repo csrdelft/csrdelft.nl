@@ -77,7 +77,7 @@ class TakenRouterController extends AclController {
 	public function maaltijdenlijst() {
 		$this->query = str_replace('lijst/', 'ketzer/lijst/', $this->query);
 		$this->query = str_replace('lijst/sluit/', 'sluit/', $this->query);
-		$this->maaltijdenketzer();
+		return $this->maaltijdenketzer();
 	}
 
 	public function maaltijdenbeheer() {
