@@ -664,9 +664,8 @@ class Lid implements Serializable, Agendeerbaar {
 	public function getNaamLink($vorm, $mode) {
 
 		//TEMP: Voor senatorenopdracht 2014.
-		if (LoginLid::mag('P_LOGGED_IN') AND $this->profiel['duckname'] != ''
-				AND $vorm !== 'pasfoto' AND $vorm !== 'leeg') {
-			$vorm = 'duckstad';
+		if (LoginLid::mag('P_LOGGED_IN') AND $vorm !== 'pasfoto' AND $vorm !== 'leeg') {
+			$vorm = 'Duckstad';
 		}
 
 		if ($this->profiel['voornaam'] != '') {
@@ -681,10 +680,15 @@ class Lid implements Serializable, Agendeerbaar {
 
 		//als $vorm==='user', de instelling uit het profiel gebruiken voor vorm
 		if ($vorm === 'user') {
-			$vorm = LidInstellingen::get('algemeen', 'naamWeergave');
+			$vorm = LidInstellingen::get('algemeen ', 'naamWeergave');
+		}
+		if ($vorm === 'bijnaam' AND $this->profiel['nickname'] == '') {
+			$vorm = 'civitas';
+		}
+		if ($vorm === 'Duckstad' AND $this->profiel['duckname'] == '') {
+			$vorm = 'volledig';
 		}
 		switch ($vorm) {
-			case 'nick':
 			case 'bijnaam':
 				if ($this->profiel['nickname'] != '') {
 					$naam = $this->profiel['nickname'];
@@ -692,7 +696,7 @@ class Lid implements Serializable, Agendeerbaar {
 					$naam = $sVolledigeNaam;
 				}
 				break;
-			case 'duckstad': //Voor senatorenopdracht 2014.
+			case 'Duckstad': //Voor senatorenopdracht 2014.
 				if ($this->profiel['duckname'] != '') {
 					$naam = $this->profiel['duckname'];
 				} else {
@@ -701,10 +705,11 @@ class Lid implements Serializable, Agendeerbaar {
 				break;
 			//achternaam, voornaam [tussenvoegsel] voor de streeplijst
 			case 'streeplijst':
-				$naam = $this->profiel['achternaam'] . ', ' . $this->profiel['voornaam'];
+				$naam = $this->profiel['achternaam'] . ', ';
 				if ($this->profiel['tussenvoegsel'] != '') {
-					$naam .= ' ' . $this->profiel['tussenvoegsel'];
+					$naam .= $this->profiel['tussenvoegsel'] . ', ';
 				}
+				$naam .= $this->profiel['voornaam'];
 				break;
 			case 'full':
 			case 'volledig':
@@ -747,9 +752,9 @@ class Lid implements Serializable, Agendeerbaar {
 						$naam .= ucfirst($this->profiel['tussenvoegsel']) . ' ';
 					}
 					$naam .= $this->profiel['achternaam'];
-					if ($this->profiel['postfix'] != '')
+					if ($this->profiel['postfix'] != '') {
 						$naam .= ' ' . $this->profiel['postfix'];
-
+					}
 					//Statuschar weergeven bij oudleden, ereleden en kringels.
 					if (in_array($this->profiel['status'], array('S_OUDLID', 'S_ERELID', 'S_KRINGEL'))) {
 						$naam .= ' ' . $this->getStatus()->getChar();
