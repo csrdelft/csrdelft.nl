@@ -49,8 +49,12 @@ class TakenRouterController extends AclController {
 		} elseif ($this->action === 'corvee') {
 			$this->action = 'corveemijn';
 		}
+		if ($this->action === 'corveemijn') {
+			Instellingen::setTemp('taken', 'url', '/corvee'); // strip "mijn" from url
+		} else {
+			Instellingen::setTemp('taken', 'url', '/' . $this->action);
+		}
 		$controller = parent::performAction();
-		Instellingen::setTemp('taken', 'url', '/' . $this->action);
 		$controller->performAction();
 		$this->view = $controller->getContent();
 	}
@@ -102,7 +106,6 @@ class TakenRouterController extends AclController {
 	}
 
 	public function corveemijn() {
-		Instellingen::setTemp('taken', 'url', str_replace('mijn', '', Instellingen::get('taken', 'url'))); // strip "mijn" from url
 		require_once 'taken/controller/MijnCorveeController.class.php';
 		return new MijnCorveeController($this->query);
 	}

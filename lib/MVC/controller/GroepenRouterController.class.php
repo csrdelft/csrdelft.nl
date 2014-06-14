@@ -28,7 +28,7 @@ class GroepenRouterController extends Controller {
 		if ($this->hasParam(2)) {
 			$this->action = $this->getParam(2);
 		}
-		$controller = parent::performAction();
+		$controller = parent::performAction(); // modifies action (default)
 		Instellingen::setTemp('groepen', 'url', '/groepen/' . $this->action);
 		$controller->performAction();
 		$this->view = $controller->getContent();
