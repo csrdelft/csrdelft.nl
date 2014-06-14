@@ -46,8 +46,9 @@ abstract class GroepenController extends Controller {
 
 	public function overzicht() {
 		$groepen = $this->model->find('status = ?', array(GroepStatus::HT));
-		$type = str_replace('Model', '', get_class($this->model));
-		$this->view = new GroepenView($groepen, $type, $type . ' (h.t.)');
+		$class = str_replace('Model', '', get_class($this->model));
+		$view = $class . 'View';
+		$this->view = new $view($groepen, $class, $class . ' (h.t.)');
 	}
 
 	public function tonen($id) {

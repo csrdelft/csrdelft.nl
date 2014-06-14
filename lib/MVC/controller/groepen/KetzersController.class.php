@@ -1,5 +1,7 @@
 <?php
 
+require_once 'MVC/view/groepen/KetzersView.class.php';
+
 /**
  * KetzersController.abstract.php
  * 

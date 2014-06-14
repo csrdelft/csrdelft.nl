@@ -18,16 +18,16 @@
  * @link http://csrdelft.nl/feuten
  *          (svn repository)
  * @author   Jan Pieter Waagmeester < jpwaag at jpwaag dot com>
- * @version 1.0
+ * @version 1.1
  * @param string
  * @param string
  * @param bool
  * @return string
  */
-function smarty_modifier_csrnaam($uid, $vorm='civitas', $mode='link'){
-	if($naam = Lid::getNaamLinkFromUid($uid,$vorm, $mode)){
+function smarty_modifier_csrnaam($uid, $vorm='civitas', $mode='link') {
+	if($naam = Lid::naamLink($uid, $vorm, $mode)) {
 		return $naam;
-	}else{
+	} else {
 		return 'Lid['.$uid.'] &notin; db.';
 	}
 }

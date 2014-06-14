@@ -38,7 +38,7 @@ class VoorkeurenModel {
 			$crid = $voorkeur->getCorveeRepetitieId();
 			if (array_key_exists($crid, $repById)) { // ingeschakeld en voorkeurbaar
 				$voorkeur->setCorveeRepetitie($repById[$crid]);
-				$voorkeur->setVanLid($uid);
+				$voorkeur->setVanLidId($uid);
 				$result[$crid] = $voorkeur;
 			}
 		}
@@ -52,7 +52,7 @@ class VoorkeurenModel {
 				}
 				$voorkeur = new CorveeVoorkeur($crid, null);
 				$voorkeur->setCorveeRepetitie($repetitie);
-				$voorkeur->setVanLid($uid);
+				$voorkeur->setVanLidId($uid);
 				$result[$crid] = $voorkeur;
 			}
 		}
@@ -90,7 +90,7 @@ class VoorkeurenModel {
 				$voorkeur = new CorveeVoorkeur($crid, null);
 			}
 			$voorkeur->setCorveeRepetitie($repById[$crid]);
-			$voorkeur->setVanLid($uid);
+			$voorkeur->setVanLidId($uid);
 			$matrix[$uid][$crid] = $voorkeur;
 			ksort($matrix[$uid]);
 		}

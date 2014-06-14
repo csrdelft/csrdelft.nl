@@ -14,8 +14,7 @@ class HerinneringenModel {
 	public static function stuurHerinnering(CorveeTaak $taak) {
 		$datum = date('d-m-Y', strtotime($taak->getDatum()));
 		$uid = $taak->getLidId();
-		$lid = \LidCache::getLid($uid); // false if lid does not exist
-		if (!$lid instanceof \Lid) {
+		if (!Lid::exists($uid)) {
 			throw new Exception($datum . ' ' . $taak->getCorveeFunctie()->naam . ' niet toegewezen!' . (!empty($uid) ? ' ($uid =' . $uid . ')' : ''));
 		}
 		//$to = $lid->getEmail();
@@ -23,7 +22,7 @@ class HerinneringenModel {
 		$from = 'corvee@csrdelft.nl';
 		$onderwerp = 'C.S.R. Delft corvee ' . $datum;
 		$bericht = $taak->getCorveeFunctie()->email_bericht;
-		$lidnaam = $lid->getNaamLink('civitas');
+		$lidnaam = Lid::naamLink($uid, 'civitas', 'plain');
 		$eten = '';
 		if ($taak->getMaaltijdId() !== null) {
 			$aangemeld = AanmeldingenModel::getIsAangemeld($taak->getMaaltijdId(), $uid);

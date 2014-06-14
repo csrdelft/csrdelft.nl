@@ -60,7 +60,7 @@
 					{if $taak->getLidId() === LoginLid::instance()->getUid()} 
 						{* icon get="arrow_switch" title="Ruilen" *}
 					{/if}
-					{$taak->getLid()->getNaamLink(Instellingen::get('corvee', 'weergave_ledennamen_corveerooster'), Instellingen::get('corvee', 'weergave_link_ledennamen'))}
+					{Lid::naamLink($taak->getLidId(), Instellingen::get('corvee', 'weergave_ledennamen_corveerooster'), Instellingen::get('corvee', 'weergave_link_ledennamen'))}
 				{else}
 					<i>vacature</i>
 				{/if}

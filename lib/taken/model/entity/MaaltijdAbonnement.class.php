@@ -27,65 +27,67 @@
  * 
  */
 class MaaltijdAbonnement {
-
 	# shared primary key
+
 	private $mlt_repetitie_id; # foreign key mlt_repetitie.id
 	private $lid_id; # foreign key lid.uid
-	
 	private $wanneer_ingeschakeld; # datetime
-	
 	private $maaltijd_repetitie;
 	private $van_lid;
 	private $waarschuwing;
-	
-	public function __construct($mrid=0, $uid='', $wanneer='') {
+
+	public function __construct($mrid = 0, $uid = '', $wanneer = '') {
 		$this->mlt_repetitie_id = (int) $mrid;
 		$this->lid_id = $uid;
 		$this->setWanneerIngeschakeld($wanneer);
 	}
-	
+
 	public function getMaaltijdRepetitieId() {
 		return (int) $this->mlt_repetitie_id;
 	}
+
 	public function getLidId() {
 		return $this->lid_id;
 	}
+
+	public function getVanLidId() {
+		return $this->van_lid;
+	}
+
 	public function getWanneerIngeschakeld() {
 		return $this->wanneer_ingeschakeld;
 	}
+
 	public function getMaaltijdRepetitie() {
 		return $this->maaltijd_repetitie;
 	}
-	public function getLid() {
-		$uid = $this->van_lid;
-		$lid = \LidCache::getLid($uid); // false if lid does not exist
-		if (!$lid instanceof \Lid) {
-			throw new Exception('Lid bestaat niet: $uid ='. $uid);
-		}
-		return $lid;
-	}
+
 	public function getWaarschuwing() {
 		return $this->waarschuwing;
 	}
-	
+
 	public function setWanneerIngeschakeld($datumtijd) {
 		if (!is_string($datumtijd)) {
 			throw new Exception('Geen string: wanneer ingeschakeld');
 		}
 		$this->wanneer_ingeschakeld = $datumtijd;
 	}
+
 	public function setMaaltijdRepetitie(MaaltijdRepetitie $repetitie) {
 		$this->maaltijd_repetitie = $repetitie;
 	}
-	public function setVanLid($uid) {
+
+	public function setVanLidId($uid) {
 		$this->van_lid = $uid;
 	}
+
 	public function setWaarschuwing($string) {
 		if (!is_string($string)) {
 			throw new Exception('Geen string: set waarschuwing');
 		}
 		$this->waarschuwing = $string;
 	}
+
 }
 
 ?>

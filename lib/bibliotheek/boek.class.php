@@ -819,9 +819,9 @@ class BewerkBoek extends Boek {
 				break;
 			case 'lener':
 				$uid = $this->exemplaren[$exemplaarid]['uitgeleend_uid'];
-				$lid = LidCache::getLid($uid);
-				if ($lid instanceof Lid) {
-					$return = $lid->getNaamLink('full', 'plain');
+				$naam = Lid::naamLink($uid, 'full', 'plain');
+				if ($naam !== false) {
+					$return = $naam;
 				} else {
 					$return = 'Geen geldig lid getProperty()';
 				}
@@ -998,10 +998,10 @@ class BewerkBoek extends Boek {
 				$titeltekst = 'Geef uw beschrijving of recensie van het boek:';
 			} else {
 				$titeltekst = 'Bewerk uw beschrijving of recensie van het boek:';
-
-				$lid = LidCache::getLid($this->getEditBeschrijving()->getSchrijver());
-				if ($lid instanceof Lid) {
-					$schrijver = $lid->getNaamLink('full', 'plain') . ':';
+				$uid = $this->getEditBeschrijving()->getSchrijver();
+				$naam = Lid::naamLink($uid, 'full', 'plain');
+				if ($naam !== false) {
+					$schrijver = $naam . ':';
 				}
 				$annuleer = '/communicatie/bibliotheek/boek/' . $this->getId();
 				$posturl .= '/' . $this->editbeschrijving;

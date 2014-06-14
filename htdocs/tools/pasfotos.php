@@ -15,12 +15,7 @@ if (isset($_GET['string'])) {
 
 		echo '<div class="pasfotomatrix">';
 		foreach ($uids as $uid) {
-			if (Lid::isValidUid($uid)) {
-				$lid = LidCache::getLid($uid);
-				if ($lid instanceof Lid) {
-					echo $lid->getNaamLink('pasfoto', ($link ? 'link' : 'plain'));
-				}
-			}
+			Lid::naamLink($uid, 'pasfoto', ($link ? 'link' : 'plain'));
 		}
 		echo '</div>';
 	} else {

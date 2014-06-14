@@ -33,7 +33,7 @@ class AbonnementenModel {
 			$mrid = $abo->getMaaltijdRepetitieId();
 			if (array_key_exists($mrid, $repById)) { // weergeven
 				$abo->setMaaltijdRepetitie($repById[$mrid]);
-				$abo->setVanLid($uid);
+				$abo->setVanLidId($uid);
 				$lijst[$mrid] = $abo;
 			}
 		}
@@ -43,7 +43,7 @@ class AbonnementenModel {
 				if (!array_key_exists($mrid, $lijst)) { // uitgeschakelde abonnementen weergeven
 					$abo = new MaaltijdAbonnement($repetitie->getMaaltijdRepetitieId(), null);
 					$abo->setMaaltijdRepetitie($repetitie);
-					$abo->setVanLid($uid);
+					$abo->setVanLidId($uid);
 					$lijst[$mrid] = $abo;
 				}
 			}
@@ -85,7 +85,7 @@ class AbonnementenModel {
 			else { // uitgeschakelde abonnementen
 				$abonnement = new MaaltijdAbonnement($mrid, null);
 			}
-			$abonnement->setVanLid($uid);
+			$abonnement->setVanLidId($uid);
 			$abonnement->setMaaltijdRepetitie($repById[$mrid]);
 			if ($alleenWaarschuwingen) {
 				if ($abo['abo_err']) {
@@ -110,7 +110,7 @@ class AbonnementenModel {
 			foreach ($matrix as $uid => $abos) {
 				if (!array_key_exists($mrid, $abos)) {
 					$abonnement = new MaaltijdAbonnement(($ingeschakeld ? $mrid : null), null);
-					$abonnement->setVanLid($uid);
+					$abonnement->setVanLidId($uid);
 					$abonnement->setMaaltijdRepetitie($repById[$mrid]);
 					$matrix[$uid][$mrid] = $abonnement;
 				}
@@ -204,7 +204,7 @@ class AbonnementenModel {
 			throw new Exception('Niet toegestaan vanwege aanmeldrestrictie: '. $repetitie->getAbonnementFilter());
 		}
 		$abo_aantal = self::newAbonnement($mrid, $uid);
-		$abo_aantal[0]->setVanLid($uid);
+		$abo_aantal[0]->setVanLidId($uid);
 		return $abo_aantal;
 	}
 	
@@ -282,7 +282,7 @@ class AbonnementenModel {
 		}
 		$aantal = self::deleteAbonnementen($mrid, $uid);
 		$abo = new MaaltijdAbonnement($mrid, null);
-		$abo->setVanLid($uid);
+		$abo->setVanLidId($uid);
 		return array($abo, $aantal);
 	}
 	

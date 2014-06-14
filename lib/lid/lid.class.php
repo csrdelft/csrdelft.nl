@@ -646,7 +646,7 @@ class Lid implements Serializable, Agendeerbaar {
 	 * @mode:	link, plain
 	 */
 
-	public function getNaamLink($vorm = 'full', $mode = 'plain') {
+	public function getNaamLink($vorm, $mode) {
 		if ($this->profiel['voornaam'] != '') {
 			$sVolledigeNaam = $this->profiel['voornaam'] . ' ';
 		} else {
@@ -864,19 +864,12 @@ class Lid implements Serializable, Agendeerbaar {
 	}
 
 	/**
-	 * Geeft Naamlink voor uid
-	 *
-	 * 2012-04-18, Jieter: Zou deze niet static moeten zijn?
+	 * Geeft naam link voor uid
 	 */
-	public static function getNaamLinkFromUid($uid = null, $vorm = 'full', $mode = 'plain') {
-		if ($uid === null) {
-			$uid = LoginLid::instance()->getUid();
-		}
-		if (Lid::isValidUid($uid)) {
-			$lid = LidCache::getLid($uid);
-			if ($lid instanceof Lid) {
-				return $lid->getNaamLink($vorm, $mode);
-			}
+	public static function naamLink($uid, $vorm, $mode) {
+		$lid = LidCache::getLid($uid); // false if lid does not exist
+		if ($lid instanceof Lid) {
+			return $lid->getNaamLink($vorm, $mode);
 		}
 		return false;
 	}

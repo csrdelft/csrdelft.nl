@@ -29,9 +29,8 @@ class EetplanContent extends TemplateView {
 		if ($aEetplan === false) {
 			echo '<h1>Ongeldig uid</h1>';
 		} else {
-			$lid = LidCache::getLid($uid);
-			echo '<h2><a class="forumGrootlink" href="/actueel/eetplan/">Eetplan</a> &raquo; voor ' . $lid->getNaamLink('full', 'plain') . '</h2>
-				Profiel van ' . $lid->getNaamLink('civitas', 'link') . '<br /><br />';
+			echo '<h2><a class="forumGrootlink" href="/actueel/eetplan/">Eetplan</a> &raquo; voor ' . Lid::naamLink($uid, 'full', 'plain') . '</h2>
+				Profiel van ' . Lid::naamLink($uid, 'civitas', 'link') . '<br /><br />';
 			echo '<table class="eetplantabel">
 				<tr><th style="width: 150px">Avond</th><th style="width: 200px">Huis</th></tr>';
 			$row = 0;
@@ -85,10 +84,8 @@ class EetplanContent extends TemplateView {
 				$sUitvoer .= '
 					<tr class="kleur' . ($row % 2) . '">
 						<td>' . $ertussen;
-
-				$lid = LidCache::getLid($aEetplanData['pheut']);
 				$sUitvoer .= '</td>
-					<td>' . $lid->getNaamLink('civitas', 'link') . '<br /></td>
+					<td>' . Lid::naamLink($aEetplanData['pheut'], 'civitas', 'link') . '<br /></td>
 					<td>' . mb_htmlentities($aEetplanData['mobiel']) . '</td>
 					<td>' . mb_htmlentities($aEetplanData['email']) . '</td>
 					<td>' . mb_htmlentities($aEetplanData['eetwens']) . '</td>

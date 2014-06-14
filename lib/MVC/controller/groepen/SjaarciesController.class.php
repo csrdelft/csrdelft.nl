@@ -1,5 +1,7 @@
 <?php
 
+require_once 'MVC/view/groepen/SjaarciesView.class.php';
+
 /**
  * SjaarciesController.abstract.php
  * 

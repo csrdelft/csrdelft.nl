@@ -194,19 +194,6 @@ class CorveeTaak implements Agendeerbaar {
 		return false;
 	}
 
-	/**
-	 * Laad het Lid object behorende bij deze corveetaak.
-	 * @return Lid if exists, false otherwise
-	 */
-	public function getLid() {
-		$uid = $this->getLidId();
-		$lid = \LidCache::getLid($uid); // false if lid does not exist
-		if (!$lid instanceof \Lid) {
-			throw new Exception('Lid bestaat niet: $uid =' . $uid);
-		}
-		return $lid;
-	}
-
 	public function getCorveeFunctie() {
 		return $this->corvee_functie;
 	}
@@ -322,7 +309,7 @@ class CorveeTaak implements Agendeerbaar {
 
 	public function getTitel() {
 		if ($this->getLidId()) {
-			return 'Corvee ' . $this->getLid()->getNaamLink('civitas');
+			return 'Corvee ' . Lid::naamLink($this->getLidId(), 'civitas', 'plain');
 		}
 		return 'Corvee ' . $this->getCorveeFunctie()->naam;
 	}

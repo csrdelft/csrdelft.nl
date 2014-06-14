@@ -142,7 +142,7 @@ class SavedQueryContent extends TemplateView {
 
 	public static function render_field($name, $contents) {
 		if ($name == 'uid_naam') {
-			return LidCache::getLid($contents)->getNaamLink('full', 'link');
+			return Lid::naamLink($contents, 'full', 'link');
 		} elseif ($name == 'onderwerp_link') { //link naar het forum.
 			return '<a href="/forum/onderwerp/' . $contents . '">' . $contents . '</a>';
 		} elseif (substr($name, 0, 10) == 'groep_naam' AND $contents != '') {

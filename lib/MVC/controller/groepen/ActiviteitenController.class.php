@@ -1,5 +1,7 @@
 <?php
 
+require_once 'MVC/view/groepen/ActiviteitenView.class.php';
+
 /**
  * ActiviteitenController.abstract.php
  * 

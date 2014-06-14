@@ -11,7 +11,7 @@ switch ($action) {
 		} else {
 			$uid = filter_input(INPUT_GET, 'uid', FILTER_SANITIZE_STRING);
 			LoginLid::instance()->su($uid);
-			setMelding('U bekijkt de webstek nu als ' . Lid::getNaamLinkFromUid($_GET['uid']) . '!', 1);
+			setMelding('U bekijkt de webstek nu als ' . Lid::naamLink($_GET['uid']) . '!', 1);
 		}
 		break;
 

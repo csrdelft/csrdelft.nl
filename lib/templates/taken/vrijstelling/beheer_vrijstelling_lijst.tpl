@@ -5,7 +5,7 @@
 	<td>
 		<a href="{Instellingen::get('taken', 'url')}/bewerk/{$vrijstelling->getLidId()}" title="Vrijstelling wijzigen" class="knop post popup">{icon get="pencil"}</a>
 	</td>
-	<td>{$vrijstelling->getLid()->getNaamLink(Instellingen::get('corvee', 'weergave_ledennamen_beheer'), Instellingen::get('corvee', 'weergave_link_ledennamen'))}</td>
+	<td>{Lid::naamLink($vrijstelling->getLidId(), Instellingen::get('corvee', 'weergave_ledennamen_beheer'), Instellingen::get('corvee', 'weergave_link_ledennamen'))}</td>
 	<td>{$vrijstelling->getBeginDatum()|date_format:"%e %b %Y"}</td>
 	<td>{$vrijstelling->getEindDatum()|date_format:"%e %b %Y"}</td>
 	<td>{$vrijstelling->getPercentage()}%</td>

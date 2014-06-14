@@ -1,5 +1,7 @@
 <?php
 
+require_once 'MVC/view/groepen/CommissiesView.class.php';
+
 /**
  * CommissiesController.abstract.php
  * 

@@ -85,14 +85,15 @@ $cmnds = array();
 function getuserhosts($uid, $params) {
 	global $lid;
 	if ($params['getuid'] == '') {
-		$profiel = $lid->getLid()->getProfiel();
-		$naam = $lid->getLid()->getNaamLink('civitas', 'plain');
+		$lid = $lid->getLid(); //?? magic
+		$profiel = $lid->getProfiel();
+		$naam = $lid->getNaamLink('civitas', 'plain');
 	} else {
 		$profiel = anderprofiel($params['getuid']);
 		if ($profiel === false)
 			return array("Profiel niet gevonden in de ledenlijst");
 		# N.B. getCivitasName() 'werkt niet' voor een class.profiel object
-		$naam = LidCache::getLid($params['getuid'])->getNaamLink('civitas', 'plain');
+		$naam = Lid::naamLink($params['getuid'], 'civitas', 'plain');
 	}
 	$userhosts = array();
 	if ($profiel['msn'] != "")
@@ -332,7 +333,7 @@ function zoeklid($uid, $params) {
 	}
 	$result = array(); # array bouwen van naam en uid
 	foreach ($leden as $l)
-		$result[] = $l['uid'] . " " . LidCache::getLid($l['uid'])->getNaamLink('civitas', 'plain');
+		$result[] = $l['uid'] . " " . Lid::naamLink($l['uid'], 'civitas', 'plain');
 	return $result;
 }
 
@@ -357,7 +358,7 @@ function zoekoud($uid, $params) {
 	}
 	$result = array(); # array bouwen van naam en uid
 	foreach ($leden as $l) {
-		$result[] = $l['uid'] . " " . LidCache::getLid($l['uid'])->getNaamLink('civitas', 'plain');
+		$result[] = $l['uid'] . " " . Lid::naamLink($l['uid'], 'civitas', 'plain');
 	}
 	return $result;
 }

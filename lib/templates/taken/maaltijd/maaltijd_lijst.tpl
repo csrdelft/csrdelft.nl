@@ -26,11 +26,12 @@
 				{foreach from=$tabel item="aanmelding"}
 				<tr>
 					{if $aanmelding->getLidId()}
-						<td>{$aanmelding->getLid()->getNaamLink(Instellingen::get('maaltijden', 'weergave_ledennamen_maaltijdlijst'), Instellingen::get('maaltijden', 'weergave_link_ledennamen'))}
+						<td>{Lid::naamLink($aanmelding->getLidId(), Instellingen::get('maaltijden', 'weergave_ledennamen_maaltijdlijst'), Instellingen::get('maaltijden', 'weergave_link_ledennamen'))}
 						<br />
-						{if $aanmelding->getLid()->getProperty('eetwens') !== ''}
+						{assign var=eetwens value=LidCache::getLid($aanmelding->getLidId())->getProperty('eetwens')}
+						{if $eetwens !== ''}
 							<span class="eetwens">
-								{$aanmelding->getLid()->getProperty('eetwens')}
+								{$eetwens}
 							</span>
 						{/if}
 						{if $aanmelding->getGastenEetwens() !== ''}
@@ -42,7 +43,7 @@
 						</td>
 						<td class="saldo">{$aanmelding->getSaldoMelding()}</td>
 					{elseif $aanmelding->getDoorLidId()}
-						<td>Gast van {$aanmelding->getDoorLid()->getNaamLink(Instellingen::get('maaltijden', 'weergave_ledennamen_maaltijdlijst'), 'plain')}</td>
+						<td>Gast van {Lid::naamLink($aanmelding->getDoorLidId(), Instellingen::get('maaltijden', 'weergave_ledennamen_maaltijdlijst'), 'plain')}</td>
 						<td class="saldo">-</td>
 					{else}
 						<td></td>
@@ -78,7 +79,7 @@
 						{table_foreach from=$corveetaken inner=rows item=taak table_attr='class="corveetaken"' cols=2 name=corveetaken}
 						&bullet;&nbsp;
 						{if $taak->getLidId()}
-							{$taak->getLid()->getNaamLink(Instellingen::get('maaltijden', 'weergave_ledennamen_maaltijdlijst'), Instellingen::get('maaltijden', 'weergave_link_ledennamen'))}
+							{Lid::naamLink($taak->getLidId(), Instellingen::get('maaltijden', 'weergave_ledennamen_maaltijdlijst'), Instellingen::get('maaltijden', 'weergave_link_ledennamen'))}
 						{else}
 							<i>vacature</i>
 						{/if}

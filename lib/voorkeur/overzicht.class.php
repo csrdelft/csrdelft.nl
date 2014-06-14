@@ -80,7 +80,7 @@ class LidOverzicht extends TemplateView {
 	function viewProfile() {
 		$res = '<h1> Voorkeuren!</h1>';
 		require_once 'voorkeur/lidvoorkeur.class.php';
-		$res .= '<p>Naam: ' . Lid::getNaamLinkFromUid($this->lid, 'full', 'link') . '</p>';
+		$res .= '<p>Naam: ' . Lid::naamLink($this->lid, 'full', 'link') . '</p>';
 		$voorkeur = new LidVoorkeur($this->lid);
 		$voorkeuren = $voorkeur->getVoorkeur();
 		$commissies = $voorkeur->getCommissies();

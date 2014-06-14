@@ -62,7 +62,7 @@ class BeheerAbonnementView extends TemplateView {
 		parent::__construct($abo);
 		$this->smarty->assign('abonnement', $this->model);
 		$this->smarty->assign('lidid', $this->model->getLidId());
-		$this->smarty->assign('uid', $this->model->getLid()->getUid());
+		$this->smarty->assign('uid', $this->model->getVanLidId());
 	}
 
 	public function view() {

@@ -172,7 +172,7 @@ class AanmeldingenModel {
 		$lijst = array();
 		foreach ($aanmeldingen as $aanmelding) {
 			$aanmelding->setMaaltijd($maaltijd);
-			$naam = $aanmelding->getLid()->getNaamLink('streeplijst');
+			$naam = Lid::naamLink($aanmelding->getLidId(), 'streeplijst', 'plain');
 			$lijst[$naam] = $aanmelding;
 			for ($i = $aanmelding->getAantalGasten(); $i > 0; $i--) {
 				$gast = new MaaltijdAanmelding();

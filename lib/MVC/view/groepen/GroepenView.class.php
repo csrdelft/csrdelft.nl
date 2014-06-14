@@ -10,7 +10,7 @@ require_once 'MVC/view/CmsPaginaView.class.php';
  * @author P.W.G. Brussee <brussee@live.nl>
  * 
  */
-class GroepenView extends TemplateView {
+abstract class GroepenView extends TemplateView {
 
 	/**
 	 * Toon CMS pagina
@@ -35,14 +35,15 @@ class GroepenView extends TemplateView {
 			$pagina->view();
 		}
 		foreach ($this->model as $groep) {
-			$view = new GroepView($groep);
-			$view->view();
+			$class = get_class($groep) . 'View';
+			$class = new $class($groep);
+			$class->view();
 		}
 	}
 
 }
 
-class GroepView extends TemplateView {
+abstract class GroepView extends TemplateView {
 
 	public function __construct(Groep $groep) {
 		parent::__construct($groep);

@@ -3483,8 +3483,17 @@ lib/MVC/view/MenuView.class.php -text
 lib/MVC/view/TemplateView.abstract.php -text
 lib/MVC/view/Validator.interface.php -text
 lib/MVC/view/View.interface.php -text
+lib/MVC/view/groepen/ActiviteitenView.class.php -text
+lib/MVC/view/groepen/BesturenView.class.php -text
+lib/MVC/view/groepen/CommissiesView.class.php -text
+lib/MVC/view/groepen/ConferentiesView.class.php -text
 lib/MVC/view/groepen/GroepCategorienView.class.php -text
 lib/MVC/view/groepen/GroepenView.class.php -text
+lib/MVC/view/groepen/KetzersView.class.php -text
+lib/MVC/view/groepen/OnderverenigingenView.class.php -text
+lib/MVC/view/groepen/SjaarciesView.class.php -text
+lib/MVC/view/groepen/WerkgroepenView.class.php -text
+lib/MVC/view/groepen/WoonoordenView.class.php -text
 lib/MVC/view/taken/BeheerFunctiesView.class.php -text
 lib/Zend/Exception.php -text
 lib/Zend/Gdata.php -text

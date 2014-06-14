@@ -1,5 +1,7 @@
 <?php
 
+require_once 'MVC/view/groepen/ConferentiesView.class.php';
+
 /**
  * ConferentiesController.abstract.php
  * 

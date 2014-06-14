@@ -523,9 +523,9 @@ class LidField extends TextField {
 	private $zoekin;
 
 	public function __construct($name, $value, $description = null, $zoekin = 'leden') {
-		$lid = LidCache::getLid($value);
-		if ($lid instanceof Lid) {
-			$value = $lid->getNaamLink('full', 'plain');
+		$naam = Lid::naamLink($value, 'full', 'plain');
+		if ($naam !== false) {
+			$value = $naam;
 		}
 		parent::__construct($name, $value, $description);
 		if (!in_array($zoekin, array('leden', 'oudleden', 'alleleden', 'allepersonen', 'nobodies'))) {

@@ -53,9 +53,9 @@ class CsrUbb extends eamBBParser {
 	 * Dit laad de twitter account van het hidden cash spel.
 	 */
 	function ubb_hidden($parameters) {
-				$html = '<a class="twitter-timeline" href="https://twitter.com/HiddenCashCSR" data-widget-id="477465734352621568">Tweets by @HiddenCashCSR</a>
+		$html = '<a class="twitter-timeline" href="https://twitter.com/HiddenCashCSR" data-widget-id="477465734352621568">Tweets by @HiddenCashCSR</a>
 							<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?\'http\':\'https\';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+"://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>';
-		return $html;		
+		return $html;
 	}
 
 	/**
@@ -149,11 +149,9 @@ class CsrUbb extends eamBBParser {
 		if (isset($arguments['citaat'])) {
 			$citaat = trim(str_replace('_', ' ', $arguments['citaat']));
 		}
-		if (Lid::isValidUid($citaat)) {
-			$lid = LidCache::getLid($citaat);
-			if ($lid instanceof Lid) {
-				$text .= ' van ' . $lid->getNaamLink('user', 'visitekaartje');
-			}
+		$naam = Lid::naamLink($citaat, 'user', 'visitekaartje');
+		if ($naam !== false) {
+			$text .= ' van ' . $naam;
 		} elseif (array_key_exists('url', $arguments) AND startsWith($arguments['url'], 'http')) {
 			if ($citaat == '') {
 				$citaat = $arguments['url'];
@@ -189,16 +187,11 @@ class CsrUbb extends eamBBParser {
 			$uid = $this->parseArray(array('[/lid]'), array());
 		}
 		$uid = trim($uid);
-
-		if (Lid::isValidUid($uid)) {
-			$lid = LidCache::getLid($uid);
-			if ($lid instanceof Lid) {
-				return $lid->getNaamLink('user', 'visitekaartje');
-			} else {
-				return '[lid] Dit lid bestaat niet (' . mb_htmlentities($uid) . ').<br />';
-			}
+		$naam = Lid::naamLink($uid, 'user', 'visitekaartje');
+		if ($naam !== false) {
+			return $naam;
 		} else {
-			return '[lid] Geen correct uid opgegeven (' . mb_htmlentities($uid) . ').<br />';
+			return '[lid] ' . mb_htmlentities($uid) . '] &notin; db.';
 		}
 	}
 

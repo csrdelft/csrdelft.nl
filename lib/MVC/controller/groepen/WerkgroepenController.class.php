@@ -1,5 +1,7 @@
 <?php
 
+require_once 'MVC/view/groepen/WerkgroepenView.class.php';
+
 /**
  * WerkgroepenController.abstract.php
  * 

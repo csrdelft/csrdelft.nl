@@ -601,7 +601,7 @@ class ProfielStatus extends Profiel {
 			$bericht = file_get_contents(LIB_PATH . '/templates/MVC/mail/toekomstigcorveeverwijderd.mail');
 			$values = array(
 				'AANTAL' => $aantal,
-				'NAAM' => $this->bewerktLid->getNaamLink('full', 'plain'),
+				'NAAM' => Lid::naamLink($uid, 'full', 'plain'),
 				'UID' => $uid,
 				'OUD' => $oudestatus,
 				'NIEUW' => $nieuwestatus,
@@ -631,9 +631,10 @@ class ProfielStatus extends Profiel {
 		}
 
 		$bericht = file_get_contents(LIB_PATH . '/templates/MVC/mail/lidafmeldingfisci.mail');
+		$uid = $this->bewerktLid->getUid();
 		$values = array(
-			'NAAM' => $this->bewerktLid->getNaamLink('full', 'plain'),
-			'UID' => $this->bewerktLid->getUid(),
+			'NAAM' => Lid::naamLink($uid, 'full', 'plain'),
+			'UID' => $uid,
 			'OUD' => $oudestatus,
 			'NIEUW' => $nieuwestatus,
 			'SALDI' => $saldi,
@@ -676,7 +677,7 @@ class ProfielStatus extends Profiel {
 				$bknleden['aantal'] ++;
 				$bknleden['lijst'] .= "{$boek['titel']} door {$boek['auteur']}\n";
 				$bknleden['lijst'] .= " - http://csrdelft.nl/communicatie/bibliotheek/boek/{$boek['id']}\n";
-				$naam = LidCache::getLid($boek['eigenaar_uid'])->getNaamLink('full', 'plain');
+				$naam = Lid::naamLink($boek['eigenaar_uid'], 'full', 'plain');
 				$bknleden['lijst'] .= " - boek is geleend van: $naam\n";
 			}
 		}
@@ -695,9 +696,10 @@ class ProfielStatus extends Profiel {
 
 		$to = 'bibliothecaris@csrdelft.nl,' . $this->bewerktLid->getEmail();
 		$bericht = file_get_contents(LIB_PATH . '/templates/MVC/mail/lidafgeleendebiebboeken.mail');
+		$uid = $this->bewerktLid->getUid();
 		$values = array(
-			'NAAM' => $this->bewerktLid->getNaamLink('full', 'plain'),
-			'UID' => $this->bewerktLid->getUid(),
+			'NAAM' => Lid::naamLink($uid, 'full', 'plain'),
+			'UID' => $uid,
 			'OUD' => substr($oudestatus, 2),
 			'NIEUW' => ($nieuwestatus == 'S_NOBODY' ? 'GEEN LID' : substr($nieuwestatus, 2)),
 			'CSRLIJST' => $bkncsr['kopje'] . "\n" . $bkncsr['lijst'],

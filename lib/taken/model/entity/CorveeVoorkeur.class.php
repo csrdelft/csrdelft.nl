@@ -11,44 +11,42 @@
  * 
  */
 class CorveeVoorkeur {
-
 	# shared primary key
+
 	private $crv_repetitie_id; # foreign key crv_repetitie.id
 	private $lid_id; # foreign key lid.uid
-	
 	private $corvee_repetitie;
 	private $van_lid;
-	
-	public function __construct($crid=0, $uid='') {
+
+	public function __construct($crid = 0, $uid = '') {
 		$this->crv_repetitie_id = (int) $crid;
 		$this->lid_id = $uid;
 	}
-	
+
 	public function getCorveeRepetitieId() {
 		return (int) $this->crv_repetitie_id;
 	}
+
 	public function getLidId() {
 		return $this->lid_id;
 	}
-	
+
+	public function getVanLidId() {
+		return $this->van_lid;
+	}
+
 	public function getCorveeRepetitie() {
 		return $this->corvee_repetitie;
 	}
-	public function getLid() {
-		$uid = $this->van_lid;
-		$lid = \LidCache::getLid($uid); // false if lid does not exist
-		if (!$lid instanceof \Lid) {
-			throw new Exception('Lid bestaat niet: $uid ='. $uid);
-		}
-		return $lid;
-	}
-	
+
 	public function setCorveeRepetitie(CorveeRepetitie $repetitie) {
 		$this->corvee_repetitie = $repetitie;
 	}
-	public function setVanLid($uid) {
+
+	public function setVanLidId($uid) {
 		$this->van_lid = $uid;
 	}
+
 }
 
 ?>

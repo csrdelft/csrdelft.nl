@@ -23,22 +23,18 @@
  * 
  */
 class MaaltijdAanmelding {
-
 	# shared primary key
+
 	private $maaltijd_id; # foreign key maaltijd.id
 	private $lid_id; # foreign key lid.uid
-	
 	private $aantal_gasten; # int 11
 	private $gasten_eetwens; # string 255
-	
 	private $door_abonnement; # foreign key mlt_repetitie.id
 	private $door_lid_id; # foreign key lid.uid
-	
 	private $laatst_gewijzigd; # datetime
-	
 	private $maaltijd;
-	
-	public function __construct($mid=0, $uid='', $gasten=0, $opmerking='', $door_abo=null, $door_lid=null, $wanneer='') {
+
+	public function __construct($mid = 0, $uid = '', $gasten = 0, $opmerking = '', $door_abo = null, $door_lid = null, $wanneer = '') {
 		$this->maaltijd_id = (int) $mid;
 		$this->lid_id = $uid;
 		$this->setAantalGasten($gasten);
@@ -47,67 +43,51 @@ class MaaltijdAanmelding {
 		$this->setDoorLidId($door_lid);
 		$this->setLaatstGewijzigd($wanneer);
 	}
-	
+
 	public function getMaaltijdId() {
 		return (int) $this->maaltijd_id;
 	}
+
 	public function getLidId() {
 		return $this->lid_id;
 	}
-	
+
 	public function getAantalGasten() {
 		return (int) $this->aantal_gasten;
 	}
+
 	public function getGastenEetwens() {
 		return $this->gasten_eetwens;
 	}
+
 	public function getDoorAbonnement() {
 		if ($this->door_abonnement === null) {
 			return null;
 		}
 		return (int) $this->door_abonnement;
 	}
+
 	public function getDoorLidId() {
 		return $this->door_lid_id;
 	}
+
 	public function getLaatstGewijzigd() {
 		return $this->laatst_gewijzigd;
 	}
+
 	public function getMaaltijd() {
 		return $this->maaltijd;
 	}
-	/**
-	 * Laad het Lid object behorende bij deze aanmelding.
-	 * @return Lid if exists, false otherwise
-	 */
-	public function getLid() {
-		$uid = $this->getLidId();
-		$lid = \LidCache::getLid($uid); // false if lid does not exist
-		if (!$lid instanceof \Lid) {
-			throw new Exception('Lid bestaat niet: $uid ='. $uid);
-		}
-		return $lid;
-	}
-	/**
-	 * Laad het Lid object die deze aanmelding heeft gemaakt.
-	 * @return Lid if exists, false otherwise
-	 */
-	public function getDoorLid() {
-		$uid = $this->getDoorLidId();
-		$lid = \LidCache::getLid($uid); // false if lid does not exist
-		if (!$lid instanceof \Lid) {
-			throw new Exception('Lid bestaat niet: $uid ='. $uid);
-		}
-		return $lid;
-	}
+
 	/**
 	 * Haal het MaalCie saldo op van het lid van deze aanmelding.
 	 * 
 	 * @return float if lid exists, false otherwise
 	 */
 	public function getSaldo() {
-		return $this->getLid()->getProperty('maalcieSaldo');
+		return LidCache::getLid($this->getLidId())->getProperty('maalcieSaldo');
 	}
+
 	/**
 	 * Bereken of het saldo toereikend is voor de prijs van de maaltijd.
 	 * 
@@ -126,23 +106,20 @@ class MaaltijdAanmelding {
 	public function getSaldoStatus() {
 		$saldo = $this->getSaldo();
 		$prijs = $this->getMaaltijd()->getPrijs();
-		
+
 		if ($saldo > $prijs) { // saldo meer dan genoeg
 			return 3;
-		}
-		elseif ($saldo > $prijs - 0.004) { // saldo precies genoeg
+		} elseif ($saldo > $prijs - 0.004) { // saldo precies genoeg
 			return 2;
-		}
-		elseif ($saldo > 0.004) { // saldo positief maar te weinig
+		} elseif ($saldo > 0.004) { // saldo positief maar te weinig
 			return 1;
-		}
-		elseif ($saldo > -0.004) { // saldo nul
+		} elseif ($saldo > -0.004) { // saldo nul
 			return 0;
-		}
-		else {
+		} else {
 			return -1; // saldo negatief
 		}
 	}
+
 	/**
 	 * Melding voor saldo status.
 	 * 
@@ -154,39 +131,45 @@ class MaaltijdAanmelding {
 		switch ($status) {
 			case 3: return 'ok';
 			case 2: return $prijs;
-			case 1: return '&lt; '. $prijs;
+			case 1: return '&lt; ' . $prijs;
 			case 0: return '0';
 			case -1: return '&lt; 0';
 		}
 	}
-	
+
 	public function setAantalGasten($int) {
 		if (!is_int($int) || $int < 0) {
 			throw new Exception('Geen integer: aantal gasten');
 		}
 		$this->aantal_gasten = $int;
 	}
+
 	public function setGastenEetwens($text) {
 		$this->gasten_eetwens = $text;
 	}
+
 	public function setDoorAbonnement($mrid) {
 		if ($mrid !== null && !is_int($mrid)) {
 			throw new Exception('Ongeldig id: door abonnement');
 		}
 		$this->door_abonnement = $mrid;
 	}
+
 	public function setDoorLidId($uid) {
 		$this->door_lid_id = $uid;
 	}
+
 	public function setLaatstGewijzigd($datumtijd) {
 		if (!is_string($datumtijd)) {
 			throw new Exception('Geen string: laatst gewijzigd');
 		}
 		$this->laatst_gewijzigd = $datumtijd;
 	}
+
 	public function setMaaltijd(Maaltijd $maaltijd) {
 		$this->maaltijd = $maaltijd;
 	}
+
 }
 
 ?>

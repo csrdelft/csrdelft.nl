@@ -1,5 +1,7 @@
 <?php
 
+require_once 'MVC/view/groepen/BesturenView.class.php';
+
 /**
  * BesturenController.abstract.php
  * 

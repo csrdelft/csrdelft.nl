@@ -1,5 +1,7 @@
 <?php
 
+require_once 'MVC/view/groepen/WoonoordenView.class.php';
+
 /**
  * WoonoordenController.abstract.php
  * 

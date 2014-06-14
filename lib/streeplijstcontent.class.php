@@ -107,14 +107,12 @@ class Streeplijstcontent extends TemplateView {
 
 		$iTeller = 2;
 		foreach ($this->aLeden as $aLid) {
-			$lid = LidCache::getLid($aLid['uid']);
-
 			if ($iTeller % 43 == 1) {
 				$sReturn.=$sKop . '</tr></table>';
 				$sReturn .= '<span class="breekpunt"></span>';
 				$sReturn .= '<table><tr>' . $sKop;
 			}
-			$sReturn .= '<tr><td class="naam">' . $lid->getNaamLink('streeplijst', 'plain') . '</td>';
+			$sReturn .= '<tr><td class="naam">' . Lid::naamLink($aLid['uid'], 'streeplijst', 'plain') . '</td>';
 			for ($i = 1; $i <= $this->goederenCount(); $i++) {
 				$sReturn .= '<td class="cell' . ($i % 2) . '">&nbsp;</td>';
 			}

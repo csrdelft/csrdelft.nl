@@ -24,7 +24,7 @@ class StamboomContent extends TemplateView {
 		return 'Stamboom voor het geslacht van ' . $this->root->getNaam();
 	}
 
-	private function viewNode($lid, $viewPatroon = false) {
+	private function viewNode(Lid $lid, $viewPatroon = false) {
 		echo '<div class="node">';
 		echo '<div class="lid">';
 		echo $lid->getNaamLink('pasfoto', 'link');

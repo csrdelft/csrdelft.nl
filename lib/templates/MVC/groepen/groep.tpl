@@ -46,7 +46,7 @@
 		</div>
 	</div>
 	<h2>
-		<a href="{$link}/{$groep->id}">
+		<a href="{Instellingen::get('groepen', 'url')}/{$groep->id}">
 			{$groep->naam}
 		</a>
 	</h2>
