@@ -501,6 +501,14 @@ function nickvalid() {
 	//document.loginform.Nickname.value = nick.replace(/[^A-Za-z0-9\[\]\{\}^\\\|\_\-`]/g, '');
 	return false;
 }
+function duckvalid() {
+	var duck = document.loginform.Duckname.value;
+	if (duck.match(/^[A-Za-z0-9\[\]\{\}^\\\|\_\-`]{1,32}$/))
+		return true;
+	alert('Kies een geldige duckname!');
+	//document.loginform.Duckname.value = duck.replace(/[^A-Za-z0-9\[\]\{\}^\\\|\_\-`]/g, '');
+	return false;
+}
 function setcharset() {
 	if (document.charset && document.loginform['Character set']) {
 		document.loginform['Character set'].value = document.charset;

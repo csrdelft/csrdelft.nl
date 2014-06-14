@@ -95,7 +95,7 @@ class LidInstellingen extends PersistenceModel {
 		),
 		'googleContacts' => array(
 			'groepnaam' => array('Naam van groep voor contacten in Google contacts', T::String, array(1, 100), 'C.S.R.-leden'),
-			'extended' => array('Uitgebreide export (nickname, voorletters, adres/tel ouders, website, chataccounts, eetwens) ', T::Enumeration, array('ja', 'nee'), 'ja')
+			'extended' => array('Uitgebreide export (nickname, duckname, voorletters, adres/tel ouders, website, chataccounts, eetwens) ', T::Enumeration, array('ja', 'nee'), 'ja')
 		)
 	);
 

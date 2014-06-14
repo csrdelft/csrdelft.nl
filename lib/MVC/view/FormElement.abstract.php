@@ -32,6 +32,7 @@
  * 			- UbbPreviewField			Textarea met ubb voorbeeld 
  * 			- AutoresizeTextareaField	Textarea die automagisch uitbreidt bij typen
  *  	* NickField					Nicknames
+ *  	* DuckField					Ducknames
  *  	* UidField					Uid's  met preview
  * 		* LidField					Leden selecteren
  * 		* IntField					Integers 
@@ -828,6 +829,42 @@ class NickField extends TextField {
 		//omdat this->nickExists in mysql case-insensitive zoek
 		if (Lid::nickExists($this->value) AND strtolower($this->model->getNickname()) != strtolower($this->value)) {
 			$this->error = 'Deze bijnaam is al in gebruik.';
+		}
+		return $this->error === '';
+	}
+
+}
+
+/**
+ * DuckField
+ *
+ * is pas valid als dit lid de enige is met deze duckname.
+ * 
+ * COPY-PASTE from NickField
+ */
+class DuckField extends TextField {
+
+	public $max_len = 20;
+
+	public function __construct($name, $value, $description, Lid $lid) {
+		parent::__construct($name, $value, $description, 255, 0, $lid);
+	}
+
+	public function validate() {
+		if (!$this->model instanceof Lid) {
+			throw new Exception($this->getType() . ' moet een Lid-object meekrijgen');
+		}
+		if (!parent::validate()) {
+			return false;
+		}
+		//parent checks notnull
+		if ($this->value === '') {
+			return true;
+		}
+		//check met strtolower is toegevoegd omdat je anders je eigen nick niet van case kan veranderen
+		//omdat this->nickExists in mysql case-insensitive zoek
+		if (Lid::duckExists($this->value) AND strtolower($this->model->getDuckname()) != strtolower($this->value)) {
+			$this->error = 'Deze Duck-naam is al in gebruik.';
 		}
 		return $this->error === '';
 	}

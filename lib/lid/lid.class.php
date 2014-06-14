@@ -54,6 +54,17 @@ class Lid implements Serializable, Agendeerbaar {
 		}
 	}
 
+	public static function loadByDuckname($duck) {
+		$db = MySql::instance();
+		$query = "SELECT uid FROM lid WHERE duckname='" . $db->escape($duck) . "' LIMIT 1";
+		$lid = $db->getRow($query);
+		if (is_array($lid)) {
+			return new Lid($lid['uid']);
+		} else {
+			return false;
+		}
+	}
+
 	public function getRssLink() {
 		$url = 'http://csrdelft.nl/forum/rss';
 		if ($this->getProperty('rssToken') == '') {
@@ -139,6 +150,7 @@ class Lid implements Serializable, Agendeerbaar {
 			$entry['homepostaladdress'] = implode('$', array($this->profiel['adres'], $this->profiel['postcode'], $this->profiel['woonplaats']));
 			$entry['o'] = 'C.S.R. Delft';
 			$entry['mozillanickname'] = $this->getNickname();
+			$entry['mozilladuckname'] = $this->getDuckname();
 			$entry['mozillausehtmlmail'] = 'FALSE';
 			$entry['mozillahomestreet'] = $this->profiel['adres'];
 			$entry['mozillahomelocalityname'] = $this->profiel['woonplaats'];
@@ -241,6 +253,10 @@ class Lid implements Serializable, Agendeerbaar {
 
 	public function getNickname() {
 		return $this->profiel['nickname'];
+	}
+
+	public function getDuckname() {
+		return $this->profiel['duckname'];
 	}
 
 	public function getEmail() {
@@ -642,7 +658,7 @@ class Lid implements Serializable, Agendeerbaar {
 	/*
 	 * Maak een link met de naam van het huidige lid naar zijn profiel.
 	 *
-	 * @vorm:	user, nick, bijnaam, streeplijst, full/volledig, civitas, aaidrom
+	 * @vorm:	user, nick, bijnaam, streeplijst, full/volledig, civitas, aaidrom, duckstad
 	 * @mode:	link, plain
 	 */
 
@@ -653,9 +669,9 @@ class Lid implements Serializable, Agendeerbaar {
 			$sVolledigeNaam = $this->profiel['voorletters'] . ' ';
 		}
 		if ($this->profiel['tussenvoegsel'] != '') {
-			$sVolledigeNaam.=$this->profiel['tussenvoegsel'] . ' ';
+			$sVolledigeNaam .= $this->profiel['tussenvoegsel'] . ' ';
 		}
-		$sVolledigeNaam.=$this->profiel['achternaam'];
+		$sVolledigeNaam .= $this->profiel['achternaam'];
 
 
 		//als $vorm==='user', de instelling uit het profiel gebruiken voor vorm
@@ -728,8 +744,7 @@ class Lid implements Serializable, Agendeerbaar {
 					}
 				}
 				break;
-			//Voor een 1 aprilgrap ooit.
-			case 'aaidrom':
+			case 'aaidrom': //Voor een 1 aprilgrap ooit.
 				$voornaam = strtolower($this->profiel['voornaam']);
 				$achternaam = strtolower($this->profiel['achternaam']);
 
@@ -742,6 +757,13 @@ class Lid implements Serializable, Agendeerbaar {
 				$nwachter = ucwords($voor[1] . $achter[2]);
 
 				$naam = sprintf("%s %s%s", $nwvoor, ($this->profiel['tussenvoegsel'] != '') ? $this->profiel['tussenvoegsel'] . ' ' : '', $nwachter);
+				break;
+			case 'duckstad': //Voor senatorenopdracht 2014.
+				if ($this->profiel['duckname'] != '') {
+					$naam = $this->profiel['duckname'];
+				} else {
+					$naam = $sVolledigeNaam;
+				}
 				break;
 			case 'pasfoto':
 				if ($mode == 'link') {
@@ -756,7 +778,7 @@ class Lid implements Serializable, Agendeerbaar {
 			default:
 				$naam = 'Formaat in $vorm is onbekend.';
 		}
-		//niet ingelogged nooit een link laten zijn.
+		//Niet ingelogged nooit een link laten zijn.
 		$nolinks = array('x999', 'x101', 'x027', 'x222', '4444');
 		if (in_array($this->getUid(), $nolinks) || !LoginLid::mag('P_LEDEN_READ')) {
 			$mode = 'plain';
@@ -897,6 +919,13 @@ class Lid implements Serializable, Agendeerbaar {
 	 */
 	public static function nickExists($nick) {
 		return Lid::loadByNickname($nick) instanceof Lid;
+	}
+
+	/**
+	 * Bestaat er al een lid met de duckname $duck in de database?
+	 */
+	public static function duckExists($duck) {
+		return Lid::loadByDuckname($duck) instanceof Lid;
 	}
 
 	/**
@@ -1078,14 +1107,16 @@ class Zoeker {
 				if ($iZoekdelen == 2) {
 					$zoekfilter = "( voornaam LIKE '%" . $zoekdelen[0] . "%' AND achternaam LIKE '%" . $zoekdelen[1] . "%' ) OR";
 					$zoekfilter.="( voornaam LIKE '%{$zoekterm}%' OR achternaam LIKE '%{$zoekterm}%' OR
-                                        nickname LIKE '%{$zoekterm}%' OR uid LIKE '%{$zoekterm}%' )";
+                                    nickname LIKE '%{$zoekterm}%' OR duckname LIKE '%{$zoekterm}%' OR
+									uid LIKE '%{$zoekterm}%' )";
 				} else {
 					$zoekfilter = "( voornaam LIKE '%" . $zoekdelen[0] . "%' AND achternaam LIKE '%" . $zoekdelen[$iZoekdelen - 1] . "%' )";
 				}
 			} else {
 				$zoekfilter = "
 					voornaam LIKE '%{$zoekterm}%' OR achternaam LIKE '%{$zoekterm}%' OR
-					nickname LIKE '%{$zoekterm}%' OR uid LIKE '%{$zoekterm}%'";
+					nickname LIKE '%{$zoekterm}%' OR duckname LIKE '%{$zoekterm}%' OR
+					uid LIKE '%{$zoekterm}%'";
 			}
 		} elseif ($zoekveld == 'adres') {
 			$zoekfilter = "adres LIKE '%{$zoekterm}%' OR woonplaats LIKE '%{$zoekterm}%' OR
@@ -1160,7 +1191,7 @@ class Zoeker {
 		if ($statusfilter != '') {
 			# standaardvelden
 			if (empty($velden)) {
-				$velden = array('uid', 'nickname', 'voornaam', 'tussenvoegsel', 'achternaam', 'postfix', 'adres', 'postcode', 'woonplaats', 'land', 'telefoon',
+				$velden = array('uid', 'nickname', 'duckname', 'voornaam', 'tussenvoegsel', 'achternaam', 'postfix', 'adres', 'postcode', 'woonplaats', 'land', 'telefoon',
 					'mobiel', 'email', 'geslacht', 'voornamen', 'icq', 'msn', 'skype', 'jid', 'website', 'beroep', 'studie', 'studiejaar', 'lidjaar',
 					'gebdatum', 'moot', 'kring', 'kringleider', 'motebal', 'verticale',
 					'o_adres', 'o_postcode', 'o_woonplaats', 'o_land', 'o_telefoon',

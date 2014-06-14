@@ -402,12 +402,15 @@ class GoogleSync {
 				$nick = $doc->createElement('gContact:nickname', $lid->getNickname());
 				$entry->appendChild($nick);
 			}
-
+			//duckname
+			if ($lid->getDuckname() != '') {
+				$duck = $doc->createElement('gContact:duckname', $lid->getDuckname());
+				$entry->appendChild($duck);
+			}
 			//initialen
 			if ($lid->getProperty('voorletters') != '') {
 				$entry->appendChild($doc->createElement('gContact:initials', $lid->getProperty('voorletters')));
 			}
-
 			//geslacht?
 			$gender = $doc->createElement('gContact:gender');
 			$gender->setAttribute('value', $lid->getGeslacht() == 'm' ? 'male' : 'female');

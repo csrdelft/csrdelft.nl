@@ -198,6 +198,13 @@ class LoginLid {
 				return false;
 			}
 		}
+		//als er geen lid-object terugkomt, proberen we het met de duckname:
+		if (!($lid instanceof Lid)) {
+			$lid = Lid::loadByDuckname($user);
+			if (!($lid instanceof Lid)) {
+				return false;
+			}
+		}
 
 		# we hebben nu een gebruiker gevonden en gaan eerst het wachtwoord controleren
 		if (!$lid->checkpw($pass)) {
@@ -218,7 +225,7 @@ class LoginLid {
 	}
 
 	# login without a password, only for BOT use
-	# only uids are supported, no nicknames
+	# only uids are supported, no nicknames and no ducknames
 
 	private function _login_bot($user) {
 		$lid = false;

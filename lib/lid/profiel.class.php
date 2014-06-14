@@ -379,6 +379,7 @@ class ProfielBewerken extends Profiel {
 			//we voeren nog geen wachtwoord of bijnaam in bij novieten, die krijgen ze pas na het novitiaat
 			$form[] = new Subkopje('Inloggen:');
 			$form[] = new NickField('nickname', $profiel['nickname'], 'Bijnaam (inloggen)', $this->lid);
+			$form[] = new DuckField('duckname', $profiel['duckname'], 'Duckstad-naam (inloggen)', $this->lid);
 
 			$form[] = new PassField('password', $this->lid);
 		}

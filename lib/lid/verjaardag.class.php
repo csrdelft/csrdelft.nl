@@ -11,7 +11,7 @@ class Verjaardag{
 		$maand = (int)$maand; $dag = (int)$dag; $verjaardagen = array();
 		$query="
 			SELECT
-				uid, voornaam, tussenvoegsel, achternaam, nickname, postfix, geslacht, email,
+				uid, voornaam, tussenvoegsel, achternaam, nickname, duckname, postfix, geslacht, email,
 				EXTRACT( DAY FROM gebdatum) as gebdag, status
 			FROM
 				lid
@@ -36,7 +36,7 @@ class Verjaardag{
 		$db=MySql::instance();
 		$query="
 			SELECT
-				uid, nickname, voornaam, tussenvoegsel, achternaam, status, geslacht, postfix, gebdatum,
+				uid, nickname, duckname, voornaam, tussenvoegsel, achternaam, status, geslacht, postfix, gebdatum,
 				ADDDATE(
 					gebdatum,
 					INTERVAL TIMESTAMPDIFF(

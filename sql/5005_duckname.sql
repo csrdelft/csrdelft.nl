@@ -1,0 +1,1 @@
+ALTER TABLE `lid` ADD `duckname` VARCHAR( 100 ) NOT NULL DEFAULT '' AFTER `nickname` ;

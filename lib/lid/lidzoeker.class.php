@@ -11,7 +11,7 @@ class LidZoeker{
 
 	//velden die door gewone leden geselecteerd mogen worden.
 	private $allowVelden=array(
-		'pasfoto', 'uid', 'naam', 'voorletters', 'voornaam', 'tussenvoegsel', 'achternaam', 'nickname', 'geslacht',
+		'pasfoto', 'uid', 'naam', 'voorletters', 'voornaam', 'tussenvoegsel', 'achternaam', 'nickname', 'duckname', 'geslacht',
 		'email', 'adres', 'telefoon', 'mobiel', 'msn', 'jid', 'skype', 'linkedin', 'website', 'studie', 'status',
 		'gebdatum', 'beroep', 'verticale', 'moot', 'lidjaar', 'kring', 'patroon', 'woonoord', 'bankrekening', 'corvee_kwalikok');
 	
@@ -228,6 +228,7 @@ class LidZoeker{
 			$defaults[]="CONCAT_WS(' ', tussenvoegsel, achternaam) LIKE '%".$zoekterm."%' ";
 			$defaults[]="CONCAT_WS(', ', achternaam, tussenvoegsel) LIKE '%".$zoekterm."%' ";
 			$defaults[]="nickname LIKE '%".$zoekterm."%' ";
+			$defaults[]="duckname LIKE '%".$zoekterm."%' ";
 
 			$defaults[]="CONCAT_WS(' ', adres, postcode, woonplaats) LIKE '%".$zoekterm."%' ";
 			$defaults[]="adres LIKE '%".$zoekterm."%' ";
