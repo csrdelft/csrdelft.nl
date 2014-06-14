@@ -29,16 +29,14 @@ class MaaltijdLijstView extends HtmlPage {
 			for ($i = $maaltijd->getMarge(); $i > 0; $i--) { // ruimte voor marge eters
 				$aanmeldingen[] = new MaaltijdAanmelding();
 			}
-			$aantal = count($aanmeldingen);
-			$tabel1 = array_slice($aanmeldingen, 0, intval($aantal / 2), true);
+			$totaal = $maaltijd->getAantalAanmeldingen() + $maaltijd->getMarge();
+			$tabel1 = array_slice($aanmeldingen, 0, intval($totaal / 2), true);
 			$tabel2 = array_diff_key($aanmeldingen, $tabel1);
 
 			$this->smarty->assign('aanmeldingen', array($tabel1, $tabel2));
-			$this->smarty->assign('eterstotaal', $maaltijd->getAantalAanmeldingen() + $maaltijd->getMarge());
+			$this->smarty->assign('eterstotaal', $totaal);
 			$this->smarty->assign('corveetaken', $corvee);
-			
-		}
-		else {
+		} else {
 			$this->smarty->assign('aanmeldingen', $aanmeldingen);
 		}
 		$this->smarty->assign('maaltijd', $maaltijd);

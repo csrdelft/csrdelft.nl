@@ -46,7 +46,7 @@
 						<td>Gast van {Lid::naamLink($aanmelding->getDoorLidId(), Instellingen::get('maaltijden', 'weergave_ledennamen_maaltijdlijst'), 'plain')}</td>
 						<td class="saldo">-</td>
 					{else}
-						<td></td>
+						<td style="line-height: 2.2em;">&nbsp;</td>
 						<td class="saldo"></td>
 					{/if}
 					<td class="geld">&euro;</td>
