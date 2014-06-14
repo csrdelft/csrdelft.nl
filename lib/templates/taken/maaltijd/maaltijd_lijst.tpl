@@ -68,7 +68,7 @@
 		{else}
 			<p>Nog geen aanmeldingen voor deze maaltijd.</p>
 		{/if}
-		<table>
+		<table class="container">
 			<tr>
 				<td class="maaltijdgegevens">
 					<h3>Maaltijdgegevens</h3>
