@@ -246,6 +246,15 @@ class ProfielBewerken extends Profiel {
 
 		$hasLedenMod = LoginLid::mag('P_LEDEN_MOD');
 
+		if (!$this->editNoviet) {
+			//we voeren nog geen wachtwoord of bijnaam in bij novieten, die krijgen ze pas na het novitiaat
+			$form[] = new Subkopje('Inloggen:');
+			$form[] = new NickField('nickname', $profiel['nickname'], 'Bijnaam', $this->lid);
+			$form[] = new DuckField('duckname', $profiel['duckname'], 'Duckstad-naam', $this->lid);
+
+			$form[] = new PassField('password', $this->lid);
+		}
+
 		//zaken bewerken als we oudlid zijn of P_LEDEN_MOD hebben
 		if (in_array($profiel['status'], array('S_OUDLID', 'S_ERELID')) OR $hasLedenMod OR $this->editNoviet) {
 			$form[] = new Subkopje('Identiteit:');
@@ -373,15 +382,6 @@ class ProfielBewerken extends Profiel {
 			$form[] = new TextareaField('medisch', $profiel['medisch'], 'medisch (NB alleen als relevant voor hele NovCie)');
 			$form[] = new TextareaField('novitiaatBijz', $profiel['novitiaatBijz'], 'Bijzonderheden novitiaat (op dag x ...)');
 			$form[] = new TextareaField('kgb', $profiel['kgb'], 'Overige NovCie-opmerking');
-		}
-
-		if (!$this->editNoviet) {
-			//we voeren nog geen wachtwoord of bijnaam in bij novieten, die krijgen ze pas na het novitiaat
-			$form[] = new Subkopje('Inloggen:');
-			$form[] = new NickField('nickname', $profiel['nickname'], 'Bijnaam (ook inloggen)', $this->lid);
-			$form[] = new DuckField('duckname', $profiel['duckname'], 'Duckstad-naam (ook inloggen)', $this->lid);
-
-			$form[] = new PassField('password', $this->lid);
 		}
 		$form[] = new SubmitResetCancel('/communicatie/profiel/' . $this->getUid());
 
