@@ -250,8 +250,9 @@ class ProfielBewerken extends Profiel {
 			//we voeren nog geen wachtwoord of bijnaam in bij novieten, die krijgen ze pas na het novitiaat
 			$form[] = new Subkopje('Inloggen:');
 			$form[] = new NickField('nickname', $profiel['nickname'], 'Bijnaam', $this->lid);
-			$form[] = new DuckField('duckname', $profiel['duckname'], 'Duckstad-naam', $this->lid);
-
+			if ($hasLedenMod) {
+				$form[] = new DuckField('duckname', $profiel['duckname'], 'Duckstad-naam', $this->lid);
+			}
 			$form[] = new PassField('password', $this->lid);
 		}
 
@@ -330,10 +331,8 @@ class ProfielBewerken extends Profiel {
 
 		$form[] = new Subkopje('Studie:');
 		$form[] = new StudieField('studie', $profiel['studie'], 'Studie');
-		if (in_array($profiel['status'], array('S_OUDLID', 'S_ERELID')) OR $hasLedenMod OR $this->editNoviet) {
-			$form['studiejaar'] = new IntField('studiejaar', $profiel['studiejaar'], 'Beginjaar studie', $beginjaar, date('Y'));
-			$form['studiejaar']->leden_mod = true;
-		}
+		$form['studiejaar'] = new IntField('studiejaar', $profiel['studiejaar'], 'Beginjaar studie', $beginjaar, date('Y'));
+		$form['studiejaar']->leden_mod = $hasLedenMod;
 
 		if (!in_array($profiel['status'], array('S_OUDLID', 'S_ERELID'))) {
 			$form[] = new TextField('studienr', $profiel['studienr'], 'Studienummer (TU)', 20);
