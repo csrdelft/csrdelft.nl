@@ -41,7 +41,8 @@ class LidInstellingen extends PersistenceModel {
 	private $instellingen = array(
 		'algemeen' => array(
 			'sneltoetsen' => array('Sneltoetsen op de webstek', T::Enumeration, array('ja', 'nee'), 'nee'),
-			'bijbel' => array('Bijbelvertaling voor bijbelrooster', T::Enumeration, array('NBV', 'NBG', 'Herziene Statenvertaling', 'Statenvertaling (Jongbloed)', 'Groot Nieuws Bijbel', 'Willibrordvertaling'), 'NBV')
+			'bijbel' => array('Bijbelvertaling voor bijbelrooster', T::Enumeration, array('NBV', 'NBG', 'Herziene Statenvertaling', 'Statenvertaling (Jongbloed)', 'Groot Nieuws Bijbel', 'Willibrordvertaling'), 'NBV'),
+			'naamWeergave' => array('Naamweergave', T::Enumeration, array('civitas', 'volledig', 'bijnaam', 'Duckstad', 'aaidrom'), 'Duckstad')
 		),
 		'layout' => array(
 			'layout' => array('Websteklayout', T::Enumeration, array('normaal', 'owee', 'lustrum', 'sineregno', 'roze'), 'normaal'),
@@ -56,7 +57,6 @@ class LidInstellingen extends PersistenceModel {
 			'draden_per_pagina' => array('Draadjes per pagina', T::Integer, array(5, 100), 20),
 			'posts_per_pagina' => array('Berichten per pagina', T::Integer, array(5, 100), 20),
 			'zoekresultaten' => array('Zoekresultaten per pagina', T::Integer, array(10, 50), 20),
-			'naamWeergave' => array('Naamweergave', T::Enumeration, array('civitas', 'volledig', 'bijnaam', 'aaidrom'), 'civitas'),
 			'datumWeergave' => array('Datumweergave', T::Enumeration, array('relatief', 'vast'), 'relatief'),
 			'ongelezenWeergave' => array('Ongelezenweergave', T::Enumeration, array('schuingedrukt', 'dikgedrukt', 'onderstreept', 'gewoon'), 'schuingedrukt', array('schuingedrukt' => 'font-style: italic;', 'dikgedrukt' => 'font-weight: bold;', 'onderstreept' => 'text-decoration: underline;', 'gewoon' => '')),
 			'open_draad_op_pagina' => array('Open onderwerp op pagina', T::Enumeration, array('1', 'ongelezen', 'laatste'), 'ongelezen'),

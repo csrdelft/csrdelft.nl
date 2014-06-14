@@ -662,6 +662,12 @@ class Lid implements Serializable, Agendeerbaar {
 	 */
 
 	public function getNaamLink($vorm, $mode) {
+
+		//TEMP: Voor senatorenopdracht 2014.
+		if (LoginLid::mag('P_LOGGED_IN')) {
+			$vorm = 'duckstad';
+		}
+
 		if ($this->profiel['voornaam'] != '') {
 			$sVolledigeNaam = $this->profiel['voornaam'] . ' ';
 		} else {
@@ -672,16 +678,22 @@ class Lid implements Serializable, Agendeerbaar {
 		}
 		$sVolledigeNaam .= $this->profiel['achternaam'];
 
-
 		//als $vorm==='user', de instelling uit het profiel gebruiken voor vorm
-		if ($vorm == 'user') {
-			$vorm = LidInstellingen::get('forum', 'naamWeergave');
+		if ($vorm === 'user') {
+			$vorm = LidInstellingen::get('algemeen', 'naamWeergave');
 		}
 		switch ($vorm) {
 			case 'nick':
 			case 'bijnaam':
 				if ($this->profiel['nickname'] != '') {
 					$naam = $this->profiel['nickname'];
+				} else {
+					$naam = $sVolledigeNaam;
+				}
+				break;
+			case 'duckstad': //Voor senatorenopdracht 2014.
+				if ($this->profiel['duckname'] != '') {
+					$naam = $this->profiel['duckname'];
 				} else {
 					$naam = $sVolledigeNaam;
 				}
@@ -722,7 +734,7 @@ class Lid implements Serializable, Agendeerbaar {
 					if ($this->profiel['tussenvoegsel'] != '') {
 						$naam.=$this->profiel['tussenvoegsel'] . ' ';
 					}
-					$naam.=$this->profiel['achternaam'];
+					$naam .= $this->profiel['achternaam'];
 				} else {
 					//voor novieten is het Dhr./ Mevr.
 					if (LoginLid::instance()->getLid()->getStatus() == 'S_NOVIET') {
@@ -731,9 +743,9 @@ class Lid implements Serializable, Agendeerbaar {
 						$naam = ($this->getGeslacht() == 'v') ? 'Ama. ' : 'Am. ';
 					}
 					if ($this->profiel['tussenvoegsel'] != '') {
-						$naam.=ucfirst($this->profiel['tussenvoegsel']) . ' ';
+						$naam .= ucfirst($this->profiel['tussenvoegsel']) . ' ';
 					}
-					$naam.=$this->profiel['achternaam'];
+					$naam .= $this->profiel['achternaam'];
 					if ($this->profiel['postfix'] != '')
 						$naam .= ' ' . $this->profiel['postfix'];
 
@@ -756,13 +768,6 @@ class Lid implements Serializable, Agendeerbaar {
 				$nwachter = ucwords($voor[1] . $achter[2]);
 
 				$naam = sprintf("%s %s%s", $nwvoor, ($this->profiel['tussenvoegsel'] != '') ? $this->profiel['tussenvoegsel'] . ' ' : '', $nwachter);
-				break;
-			case 'duckstad': //Voor senatorenopdracht 2014.
-				if ($this->profiel['duckname'] != '') {
-					$naam = $this->profiel['duckname'];
-				} else {
-					$naam = $sVolledigeNaam;
-				}
 				break;
 			case 'pasfoto':
 				if ($mode == 'link') {
