@@ -864,7 +864,7 @@ class DuckField extends TextField {
 		//check met strtolower is toegevoegd omdat je anders je eigen nick niet van case kan veranderen
 		//omdat this->nickExists in mysql case-insensitive zoek
 		if (Lid::duckExists($this->value) AND strtolower($this->model->getDuckname()) != strtolower($this->value)) {
-			$this->error = 'Deze Duck-naam is al in gebruik.';
+			$this->error = 'Deze Duckstad-naam is al in gebruik.';
 		}
 		return $this->error === '';
 	}

@@ -150,7 +150,6 @@ class Lid implements Serializable, Agendeerbaar {
 			$entry['homepostaladdress'] = implode('$', array($this->profiel['adres'], $this->profiel['postcode'], $this->profiel['woonplaats']));
 			$entry['o'] = 'C.S.R. Delft';
 			$entry['mozillanickname'] = $this->getNickname();
-			$entry['mozilladuckname'] = $this->getDuckname();
 			$entry['mozillausehtmlmail'] = 'FALSE';
 			$entry['mozillahomestreet'] = $this->profiel['adres'];
 			$entry['mozillahomelocalityname'] = $this->profiel['woonplaats'];
