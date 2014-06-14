@@ -323,15 +323,9 @@ class ProfielBewerken extends Profiel {
 			$form[] = new SelectField('createTerm', $profiel['createTerm'], 'Aangemaakt bij', array('barvoor' => 'barvoor', 'barmidden' => 'barmidden', 'barachter' => 'barachter', 'soccie' => 'soccie'));
 		}
 
-		if (in_array($profiel['status'], array('S_OUDLID', 'S_ERELID', 'S_NOBODY', 'S_EXLID', 'S_OVERLEDEN', 'S_CIE')) OR $this->lid->getUid() == '6601') { //vd Wekken mag wel eerder begonnen zijn.
-			$beginjaar = 1950;
-		} else {
-			$beginjaar = date('Y') - 20;
-		}
-
 		$form[] = new Subkopje('Studie:');
 		$form[] = new StudieField('studie', $profiel['studie'], 'Studie');
-		$form['studiejaar'] = new IntField('studiejaar', $profiel['studiejaar'], 'Beginjaar studie', $beginjaar, date('Y'));
+		$form['studiejaar'] = new IntField('studiejaar', $profiel['studiejaar'], 'Beginjaar studie', 1950, date('Y'));
 		$form['studiejaar']->leden_mod = $hasLedenMod;
 
 		if (!in_array($profiel['status'], array('S_OUDLID', 'S_ERELID'))) {
@@ -340,7 +334,7 @@ class ProfielBewerken extends Profiel {
 
 		if (!$this->editNoviet AND ( in_array($profiel['status'], array('S_OUDLID', 'S_ERELID')) OR $hasLedenMod)) {
 			$form[] = new TextField('beroep', $profiel['beroep'], 'Beroep/werk', 4096);
-			$form[] = new IntField('lidjaar', $profiel['lidjaar'], 'Lid sinds', $beginjaar, date('Y'));
+			$form[] = new IntField('lidjaar', $profiel['lidjaar'], 'Lid sinds', 1950, date('Y'));
 		}
 
 		if (in_array($profiel['status'], array('S_OUDLID', 'S_ERELID', 'S_NOBODY', 'S_EXLID'))) {
