@@ -124,3 +124,5 @@ switch (constant('MODE')) {
 	default:
 		die("configuratie.include.php:: unsupported MODE");
 }
+
+date_default_timezone_set('Europe/Amsterdam');
