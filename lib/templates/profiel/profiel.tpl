@@ -2,7 +2,7 @@
 	<div id="profielregel">
 		<div class="naam">
 			<div class="floatR">
-				{$profiel->getUid()|pasfoto}<br />
+				<div style="width: 200px;">{$profiel->getUid()|pasfoto}</div>
 				<div class="knopjes">
 					{if $profiel->magBewerken()}
 						<a href="/communicatie/profiel/{$profiel->getUid()}/bewerken" class="knop" title="Bewerk dit profiel">{icon get="bewerken"}</a>
