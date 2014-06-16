@@ -252,6 +252,8 @@ class ProfielBewerken extends Profiel {
 			$form[] = new NickField('nickname', $profiel['nickname'], 'Bijnaam', $this->lid);
 			if ($hasLedenMod) {
 				$form[] = new DuckField('duckname', $profiel['duckname'], 'Duckstad-naam', $this->lid);
+			}
+			if ($hasLedenMod OR LoginLid::instance()->getUid() === '1207') {
 				$form[] = new Subkopje('Duck-pasfoto:');
 				$duckfoto = new Bestand();
 				$path = PICS_PATH . $this->lid->getPasfotoPath();
