@@ -138,7 +138,7 @@ class DocumentController extends Controller {
 		}
 		$fields['catID'] = new SelectField('catID', $this->document->getCatID(), 'Categorie', $namen);
 		$fields['naam'] = new RequiredTextField('naam', $this->document->getNaam(), 'Documentnaam');
-		$fields['uploader'] = new FileField('/documenten', $this->document->getBestand());
+		$fields['uploader'] = new RequiredFileField('document', $this->document->getBestand(), '/documenten');
 		$fields['knopjes'] = new SubmitResetCancel('/communicatie/documenten/');
 		$formulier = new Formulier(null, 'documentForm', '/communicatie/documenten/bewerken/' . $this->document->getId());
 		$formulier->addFields($fields);

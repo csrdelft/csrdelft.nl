@@ -9,13 +9,14 @@ require_once 'MVC/model/entity/Bestand.class.php';
  * 
  * Verschillende manieren om een bestand te uploaden.
  */
-class FileField implements FormElement, Validator {
+class FileField extends InputField {
 
 	protected $opties;
 	protected $methode;
 	protected $filter;
 
-	public function __construct($ftpSubDir = '', Bestand $behouden = null, array $filterType = array()) {
+	public function __construct($name, Bestand $behouden = null, $ftpSubDir = '', array $filterType = array()) {
+		parent::__construct($name, $behouden, 'Bestand uploaden');
 		$this->opties = array(
 			'BestandBehouden' => new BestandBehouden($behouden),
 			'UploadHttp' => new UploadHttp(),
@@ -26,12 +27,14 @@ class FileField implements FormElement, Validator {
 		foreach ($this->opties as $methode => $uploader) {
 			if (!$uploader->isBeschikbaar()) {
 				unset($this->opties[$methode]);
+			} else {
+				$this->opties[$methode]->notnull = $this->notnull;
 			}
 		}
-		if (isset($_POST['BestandUploader'])) {
-			$this->methode = filter_input(INPUT_POST, 'BestandUploader');
-		} elseif ($behouden !== null) {
+		if (!$this->notnull OR $behouden !== null) {
 			$this->methode = 'BestandBehouden';
+		} elseif (isset($_POST['BestandUploader'])) {
+			$this->methode = filter_input(INPUT_POST, 'BestandUploader');
 		} else {
 			$this->methode = 'UploadHttp';
 		}
@@ -152,10 +155,16 @@ abstract class BestandUploader extends InputField {
 
 }
 
+class RequiredFileField extends FileField {
+
+	public $notnull = true;
+
+}
+
 class BestandBehouden extends BestandUploader {
 
 	public function isBeschikbaar() {
-		return (boolean) $this->model;
+		return !$this->notnull OR (boolean) $this->model;
 	}
 
 	public function validate() {
@@ -181,7 +190,8 @@ class BestandBehouden extends BestandUploader {
 			$label .= ' checked="checked"';
 			$label .= ' style="visibility: hidden;"';
 		}
-		return $label . ' /><label for="BestandBehoudenInput"> Huidig bestand behouden</label>';
+		$label .= ' /><label for="BestandBehoudenInput">Huidig bestand behouden</label>';
+		return $label;
 	}
 
 	public function view() {
@@ -190,7 +200,13 @@ class BestandBehouden extends BestandUploader {
 		if (!$this->selected) {
 			echo ' style="display: none;"';
 		}
-		echo '><div style="height: 2em;">' . $this->model->bestandsnaam . ' (' . format_filesize($this->model->size) . ')</div></div></div>';
+		echo '><div style="height: 2em;">';
+		if ($this->model !== null) {
+			echo $this->model->bestandsnaam . ' (' . format_filesize($this->model->size) . ')';
+		} else {
+			echo '<div style="font-style: italic; margin: 2px 0px 0px 22px;">Geen bestand.</div>';
+		}
+		echo '</div></div></div>';
 	}
 
 }
