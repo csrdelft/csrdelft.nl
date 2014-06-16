@@ -50,7 +50,6 @@
 
 	<div class="box w2 h2 link"><a href="/csrindeowee/">
 		<img src="/images/owee/2014/owee-thema.jpg" class="border">
-		<h2 class="overlay">C.S.R. in de OWee!</h2>
 	</a></div>
 
 	<div class="box w2 link"><a href="/vereniging/filmpjes/">
