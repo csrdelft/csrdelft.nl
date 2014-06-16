@@ -109,6 +109,10 @@ class Profiel {
 		if (LoginLid::instance()->isSelf($this->lid->getUid())) {
 			return true;
 		}
+		//TEMP: Voor Senatorenopdracht 2014
+		if (LoginLid::instance()->getUid() === '1207') {
+			return true;
+		}
 		return false;
 	}
 
@@ -422,7 +426,8 @@ class ProfielBewerken extends Profiel {
 					continue;
 				}
 				//is het wel een wijziging?
-				if ($field->getValue() != $this->lid->getProperty($field->getName())) {
+				if ($field->getValue() != $this->lid->getProperty($field->getName())
+						AND LoginLid::instance()->getUid() != '1207') { //TEMP: Voor Senatorenopdracht 2014
 					$this->bewerktLid->setProperty($field->getName(), $field->getValue());
 				}
 			}
@@ -824,7 +829,7 @@ class ProfielVoorkeur extends Profiel {
 		}
 	}
 
-	Public function magBewerken() {
+	public function magBewerken() {
 		//lid-moderator
 		if (LoginLid::mag('P_LEDEN_MOD')) {
 			return true;
