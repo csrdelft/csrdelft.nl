@@ -255,12 +255,16 @@ class ProfielBewerken extends Profiel {
 			}
 			if ($hasLedenMod OR LoginLid::instance()->getUid() === '1207') {
 				$form[] = new Subkopje('Duck-pasfoto:');
-				$duckfoto = new Bestand();
 				$path = PICS_PATH . $this->lid->getPasfotoPath();
-				$duckfoto->map = pathinfo($path, PATHINFO_DIRNAME);
-				$duckfoto->bestandsnaam = pathinfo($path, PATHINFO_BASENAME);
-				$duckfoto->size = filesize($path);
-				$form[] = new FileField($ftpSubDir = '', $duckfoto, array('image/png', 'image/jpeg', 'image/gif'));
+				if (strpos($path, '/duck') !== false) {
+					$duckfoto = new Bestand();
+					$duckfoto->map = pathinfo($path, PATHINFO_DIRNAME);
+					$duckfoto->bestandsnaam = pathinfo($path, PATHINFO_BASENAME);
+					$duckfoto->size = filesize($path);
+				} else {
+					$duckfoto = null;
+				}
+				$form[] = new FileField('duck', $duckfoto, array('image/png', 'image/jpeg', 'image/gif'));
 			}
 			$form[] = new PassField('password', $this->lid);
 		}
