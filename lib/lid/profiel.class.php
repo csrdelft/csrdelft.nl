@@ -416,7 +416,7 @@ class ProfielBewerken extends Profiel {
 				if ($field instanceof FileField) {
 					$path = $field->getModel()->bestandsnaam;
 					$ext = pathinfo($path, PATHINFO_EXTENSION);
-					$field->opslaan(PICS_PATH . '/pasfoto/duck/' . $this->getUid() . $ext);
+					$field->opslaan(PICS_PATH . '/pasfoto/duck/', $this->getUid() . $ext, true);
 					continue;
 				}
 				//is het wel een wijziging?
