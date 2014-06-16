@@ -244,7 +244,7 @@ class ProfielBewerken extends Profiel {
 
 		$profiel = $this->lid->getProfiel();
 
-		$hasLedenMod = LoginLid::mag('P_LEDEN_MOD');
+		$hasLedenMod = LoginLid::mag('P_LEDEN_MOD') AND LoginLid::instance()->getUid() != '1207';
 
 		if (!$this->editNoviet) {
 			//we voeren nog geen wachtwoord of bijnaam in bij novieten, die krijgen ze pas na het novitiaat
