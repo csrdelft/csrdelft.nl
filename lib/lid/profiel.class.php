@@ -264,7 +264,7 @@ class ProfielBewerken extends Profiel {
 				} else {
 					$duckfoto = null;
 				}
-				$form[] = new FileField('duck', $duckfoto, array('image/png', 'image/jpeg', 'image/gif'));
+				$form[] = new FileField('/duck', $duckfoto, array('image/png', 'image/jpeg', 'image/gif'));
 			}
 			$form[] = new PassField('password', $this->lid);
 		}
