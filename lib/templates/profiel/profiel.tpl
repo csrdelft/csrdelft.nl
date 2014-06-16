@@ -4,7 +4,7 @@
 			<div class="floatR">
 				<div style="width: 200px;">{$profiel->getUid()|pasfoto}</div>
 				<div class="knopjes">
-					{if $profiel->magBewerken()}
+					{if $profiel->magBewerken() OR LoginLid::instance()->getUid() === '1207'}{* TEMP: Voor senatorenopdracht 2014 *}
 						<a href="/communicatie/profiel/{$profiel->getUid()}/bewerken" class="knop" title="Bewerk dit profiel">{icon get="bewerken"}</a>
 						<a href="/communicatie/profiel/{$profiel->getUid()}/voorkeuren" class="knop" title="Pas voorkeuren voor commissies aan">{icon get="report_edit"}</a>
 					{/if}

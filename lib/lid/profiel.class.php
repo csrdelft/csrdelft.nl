@@ -109,10 +109,6 @@ class Profiel {
 		if (LoginLid::instance()->isSelf($this->lid->getUid())) {
 			return true;
 		}
-		//TEMP: Voor Senatorenopdracht 2014
-		if (LoginLid::instance()->getUid() === '1207') {
-			return true;
-		}
 		return false;
 	}
 
