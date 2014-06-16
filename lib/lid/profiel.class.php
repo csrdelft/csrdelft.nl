@@ -252,6 +252,13 @@ class ProfielBewerken extends Profiel {
 			$form[] = new NickField('nickname', $profiel['nickname'], 'Bijnaam', $this->lid);
 			if ($hasLedenMod) {
 				$form[] = new DuckField('duckname', $profiel['duckname'], 'Duckstad-naam', $this->lid);
+				$form[] = new Subkopje('Duck-pasfoto:');
+				$duckfoto = new Bestand();
+				$path = PICS_PATH . $this->lid->getPasfotoPath();
+				$duckfoto->map = pathinfo($path, PATHINFO_DIRNAME);
+				$duckfoto->bestandsnaam = pathinfo($path, PATHINFO_BASENAME);
+				$duckfoto->size = filesize($path);
+				$form[] = new FileField($ftpSubDir = '', $duckfoto, array('image/png', 'image/jpeg', 'image/gif'));
 			}
 			$form[] = new PassField('password', $this->lid);
 		}
