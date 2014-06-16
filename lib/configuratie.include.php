@@ -49,6 +49,7 @@ if (constant('MODE') == 'WEB') {
 
 setlocale(LC_ALL, 'nl_NL.utf8');
 setlocale(LC_ALL, 'nld_nld');
+date_default_timezone_set('Europe/Amsterdam');
 
 # wordt gebruikt om pagina's alleen op Confide te laten zien
 define('CONFIDE_IP', '80.112.180.123');
@@ -124,5 +125,3 @@ switch (constant('MODE')) {
 	default:
 		die("configuratie.include.php:: unsupported MODE");
 }
-
-date_default_timezone_set('Europe/Amsterdam');

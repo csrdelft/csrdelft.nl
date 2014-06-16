@@ -662,12 +662,6 @@ class Lid implements Serializable, Agendeerbaar {
 	 */
 
 	public function getNaamLink($vorm, $mode) {
-
-		//TEMP: Voor senatorenopdracht 2014.
-		if (LoginLid::mag('P_LOGGED_IN') AND $vorm !== 'pasfoto' AND $vorm !== 'leeg') {
-			$vorm = 'Duckstad';
-		}
-
 		if ($this->profiel['voornaam'] != '') {
 			$sVolledigeNaam = $this->profiel['voornaam'] . ' ';
 		} else {
@@ -678,10 +672,21 @@ class Lid implements Serializable, Agendeerbaar {
 		}
 		$sVolledigeNaam .= $this->profiel['achternaam'];
 
+		
+		//TEMP: Voor senatorenopdracht 2014.
+		if (LoginLid::mag('P_LOGGED_IN') AND $vorm !== 'pasfoto' AND $vorm !== 'leeg') {
+			$vorm = 'Duckstad';
+		}
+		/*
 		//als $vorm==='user', de instelling uit het profiel gebruiken voor vorm
 		if ($vorm === 'user') {
 			$vorm = LidInstellingen::get('algemeen ', 'naamWeergave');
 		}
+		*/
+		if (!LoginLid::mag('P_LOGGED_IN')) {
+			$vorm = 'civitas';
+		}
+		//EINDE TEMP
 		if ($vorm === 'bijnaam' AND $this->profiel['nickname'] == '') {
 			$vorm = 'civitas';
 		}
