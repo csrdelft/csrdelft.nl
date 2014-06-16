@@ -412,6 +412,13 @@ class ProfielBewerken extends Profiel {
 				if ($field instanceof PassField AND $field->getValue() == '') {
 					continue;
 				}
+				//pasfoto opslaan
+				if ($field instanceof FileField) {
+					$path = $field->getModel()->bestandsnaam;
+					$ext = pathinfo($path, PATHINFO_EXTENSION);
+					$field->opslaan('/pasfoto/duck/' . $this->getUid() . $ext);
+					continue;
+				}
 				//is het wel een wijziging?
 				if ($field->getValue() != $this->lid->getProperty($field->getName())) {
 					$this->bewerktLid->setProperty($field->getName(), $field->getValue());
