@@ -9,14 +9,14 @@ require_once 'MVC/model/entity/Bestand.class.php';
  * 
  * Verschillende manieren om een bestand te uploaden.
  */
-class FileField extends InputField {
+class FileField implements FormElement, Validator {
 
 	protected $opties;
 	protected $methode;
 	protected $filter;
+	public $notnull = false; // required
 
 	public function __construct($name, Bestand $behouden = null, $ftpSubDir = '', array $filterType = array()) {
-		parent::__construct($name, $behouden, 'Bestand uploaden');
 		$this->opties = array(
 			'BestandBehouden' => new BestandBehouden($behouden),
 			'UploadHttp' => new UploadHttp(),
@@ -31,7 +31,7 @@ class FileField extends InputField {
 				$this->opties[$methode]->notnull = $this->notnull;
 			}
 		}
-		if (!$this->notnull OR $behouden !== null) {
+		if ($behouden !== null) {
 			$this->methode = 'BestandBehouden';
 		} elseif (isset($_POST['BestandUploader'])) {
 			$this->methode = filter_input(INPUT_POST, 'BestandUploader');
@@ -64,8 +64,7 @@ class FileField extends InputField {
 		if (!$this->opties[$this->methode]->validate()) {
 			return false;
 		}
-		if (!empty($this->filter) AND ! in_array($this->getModel()->mimetype, $this->filter)
-				AND $this->methode !== 'BestandBehouden') {
+		if (!empty($this->filter) AND ! empty($this->getModel()->mimetype) AND ! in_array($this->getModel()->mimetype, $this->filter)) {
 			$this->opties[$this->methode]->error = 'Bestandstype niet toegestaan: ' . $this->getModel()->mimetype;
 			return false;
 		}
@@ -164,7 +163,7 @@ class RequiredFileField extends FileField {
 class BestandBehouden extends BestandUploader {
 
 	public function isBeschikbaar() {
-		return !$this->notnull OR (boolean) $this->model;
+		return (boolean) $this->model;
 	}
 
 	public function validate() {
@@ -233,12 +232,14 @@ class UploadHttp extends BestandUploader {
 		if (!parent::validate()) {
 			return false;
 		}
-		if ($this->value['error'] == UPLOAD_ERR_INI_SIZE) {
+		if ($this->value['error'] == UPLOAD_ERR_NO_FILE) {
+			if ($this->notnull) {
+				$this->error = 'Selecteer een bestand';
+			}
+		} else if ($this->value['error'] == UPLOAD_ERR_INI_SIZE) {
 			$this->error = 'Bestand is te groot: Maximaal ' . ini_get('upload_max_filesize') . 'B';
-		} elseif ($this->value['error'] == UPLOAD_ERR_NO_FILE) {
-			$this->error = 'Selecteer een bestand';
 		} elseif ($this->value['error'] != UPLOAD_ERR_OK) {
-			$this->error = 'Upload-error: error-code: ' . $this->value['error'];
+			$this->error = 'Upload-error: code ' . $this->value['error'];
 		}
 		return $this->error === '';
 	}
@@ -305,7 +306,7 @@ class UploadFtp extends BestandUploader {
 	}
 
 	public function isBeschikbaar() {
-		return file_exists($this->path);
+		return file_exists($this->path) AND is_dir($this->path);
 	}
 
 	public function getFileList() {

@@ -19,9 +19,9 @@
  *  - InputField					Elementen die data leveren
  *  - SubmitButton					Submitten en resetten van het formulier
  *  - HtmlComment					Uitleg/commentaar in een formulier stoppen
+ *  - FileField						Bestand upload ketzer
  * 
  * Uitbreidingen van InputField:
- *  - FileField						Bestand upload ketzer
  * 	- TextField						Simpele input
  * 		* LandField					Landjes 
  * 		* StudieField				Studie
