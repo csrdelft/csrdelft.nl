@@ -38,13 +38,15 @@ function endsWith($haystack, $needle) {
  * 
  * @param string $prop
  * @param array $in
+ * @param boolean $del delete from $in array
  * @return array $out
  */
-function group_by($prop, $in) {
+function group_by($prop, $in, $del = true) {
+	$del&=is_array($in);
 	$out = array();
 	foreach ($in as $i => $obj) {
 		$out[$obj->$prop][] = $obj; // add to array
-		if (is_array($in)) {
+		if ($del) {
 			unset($in[$i]);
 		}
 	}
@@ -56,13 +58,15 @@ function group_by($prop, $in) {
  * 
  * @param string $prop
  * @param array $in
+ * @param boolean $del delete from $in array
  * @return array $out
  */
-function group_by_distinct($prop, $in) {
+function group_by_distinct($prop, $in, $del = true) {
+	$del &= is_array($in);
 	$out = array();
 	foreach ($in as $i => $obj) {
 		$out[$obj->$prop] = $obj; // overwrite existing
-		if (is_array($in)) {
+		if ($del) {
 			unset($in[$i]);
 		}
 	}

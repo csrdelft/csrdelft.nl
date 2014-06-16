@@ -126,7 +126,7 @@ class ForumDelenModel extends PersistenceModel {
 			}
 		}
 		// check permissies op delen
-		$delen_ids = array_keys(group_by('forum_id', $gevonden_draden, false));
+		$delen_ids = array_keys(group_by_distict('forum_id', $gevonden_draden, false));
 		$gevonden_delen = group_by_distinct('forum_id', ForumDelenModel::instance()->getForumDelenById($delen_ids));
 		foreach ($gevonden_delen as $forum_id => $deel) {
 			if (!$deel->magModereren()) {
@@ -168,7 +168,7 @@ class ForumDelenModel extends PersistenceModel {
 			}
 		}
 		// check permissies op delen
-		$delen_ids = array_keys(group_by('forum_id', $gevonden_draden, false));
+		$delen_ids = array_keys(group_by_distinct('forum_id', $gevonden_draden, false));
 		$gevonden_delen = group_by_distinct('forum_id', ForumDelenModel::instance()->getForumDelenById($delen_ids));
 		foreach ($gevonden_delen as $forum_id => $deel) {
 			if (!$deel->magLezen()) {
