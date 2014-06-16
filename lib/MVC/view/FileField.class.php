@@ -167,9 +167,6 @@ class BestandBehouden extends BestandUploader {
 	}
 
 	public function validate() {
-		if (!parent::validate()) {
-			return false;
-		}
 		if (!$this->isBeschikbaar()) {
 			$this->error = 'Er is geen bestand om te behouden.';
 		}
