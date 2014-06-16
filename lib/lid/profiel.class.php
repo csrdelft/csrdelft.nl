@@ -407,16 +407,16 @@ class ProfielBewerken extends Profiel {
 		$this->changelog[] = 'Bewerking van [lid=' . LoginLid::instance()->getUid() . '] op [reldate]' . getDatetime() . '[/reldate]';
 
 		foreach ($this->form->getFields() as $field) {
+			//duck-pasfoto opslaan
+			if ($field instanceof FileField) {
+				$path = $field->getModel()->bestandsnaam;
+				$ext = pathinfo($path, PATHINFO_EXTENSION);
+				$field->opslaan(PICS_PATH . '/pasfoto/duck/', $this->getUid() . $ext, true);
+				continue;
+			}
 			if ($field instanceof InputField) {
 				//als een wachtwoordveld leeg is doen we er niets mee
 				if ($field instanceof PassField AND $field->getValue() == '') {
-					continue;
-				}
-				//pasfoto opslaan
-				if ($field instanceof FileField) {
-					$path = $field->getModel()->bestandsnaam;
-					$ext = pathinfo($path, PATHINFO_EXTENSION);
-					$field->opslaan(PICS_PATH . '/pasfoto/duck/', $this->getUid() . $ext, true);
 					continue;
 				}
 				//is het wel een wijziging?
