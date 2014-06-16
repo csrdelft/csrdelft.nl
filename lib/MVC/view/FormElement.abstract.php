@@ -193,7 +193,7 @@ abstract class InputField implements FormElement, Validator {
 		if ($this->error != '') {
 			$cssclass .= ' metFouten';
 		}
-		return '<div class="' . $cssclass . '" id="' . $this->name . '" ' . $this->getInputAttribute('title') . '>';
+		return '<div class="' . $cssclass . '" ' . $this->getInputAttribute('title') . '>';
 	}
 
 	/**

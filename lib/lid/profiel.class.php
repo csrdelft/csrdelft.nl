@@ -258,7 +258,7 @@ class ProfielBewerken extends Profiel {
 				$path = PICS_PATH . $this->lid->getPasfotoPath();
 				if (strpos($path, '/duck') !== false) {
 					$duckfoto = new Bestand();
-					$duckfoto->map = pathinfo($path, PATHINFO_DIRNAME);
+					$duckfoto->map = pathinfo($path, PATHINFO_DIRNAME) . '/';
 					$duckfoto->bestandsnaam = pathinfo($path, PATHINFO_BASENAME);
 					$duckfoto->size = filesize($path);
 				} else {

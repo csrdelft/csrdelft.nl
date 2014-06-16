@@ -14,16 +14,20 @@ class FileField implements FormElement, Validator {
 	protected $opties;
 	protected $methode;
 	protected $filter;
+	protected $behouden;
+	protected $name;  // naam van het veld in POST
 	public $notnull = false; // required
 
 	public function __construct($name, Bestand $behouden = null, $ftpSubDir = '', array $filterType = array()) {
+		$this->name = $name;
 		$this->opties = array(
-			'BestandBehouden' => new BestandBehouden($behouden),
-			'UploadHttp' => new UploadHttp(),
-			'UploadFtp' => new UploadFtp($ftpSubDir),
-			'UploadUrl' => new UploadUrl()
+			'BestandBehouden' => new BestandBehouden($name, $behouden),
+			'UploadHttp' => new UploadHttp($name),
+			'UploadFtp' => new UploadFtp($name, $ftpSubDir),
+			'UploadUrl' => new UploadUrl($name)
 		);
 		$this->filter = $filterType;
+		$this->behouden = $behouden;
 		foreach ($this->opties as $methode => $uploader) {
 			if (!$uploader->isBeschikbaar()) {
 				unset($this->opties[$methode]);
@@ -31,10 +35,10 @@ class FileField implements FormElement, Validator {
 				$this->opties[$methode]->notnull = $this->notnull;
 			}
 		}
-		if ($behouden !== null) {
+		if (isset($_POST[$name . 'BestandUploader'])) {
+			$this->methode = filter_input(INPUT_POST, $name . 'BestandUploader', FILTER_SANITIZE_STRING);
+		} elseif ($behouden !== null) {
 			$this->methode = 'BestandBehouden';
-		} elseif (isset($_POST['BestandUploader'])) {
-			$this->methode = filter_input(INPUT_POST, 'BestandUploader');
 		} else {
 			$this->methode = 'UploadHttp';
 		}
@@ -76,6 +80,9 @@ class FileField implements FormElement, Validator {
 			throw new Exception('Ongeldige bestandsnaam');
 		}
 		if ($this->methode !== 'BestandBehouden') {
+			if ($this->behouden !== null) {
+				unlink($this->behouden->map . $this->behouden->bestandsnaam);
+			}
 			$filename = filter_var($filename, FILTER_SANITIZE_STRING);
 			if (!is_writable($destination)) {
 				throw new Exception('Doelmap is niet beschrijfbaar: ' . $destination);
@@ -112,7 +119,7 @@ jQuery('input.UploadOptie').change(function() {
 	keuze.slideDown(250);
 });
 jQuery('.knop.reset').click(function() {
-	jQuery('#BestandBehoudenInput').click();
+	jQuery('#{$this->name}BestandBehoudenOptie').click();
 });
 JS;
 	}
@@ -121,14 +128,16 @@ JS;
 
 abstract class BestandUploader extends InputField {
 
+	protected $uploaderName;
 	public $selected = false;
 
-	public function __construct(Bestand $bestand = null) {
-		parent::__construct(get_class($this), null, 'Bestand uploaden', $bestand);
+	public function __construct($name) {
+		parent::__construct($name . get_class($this), null, 'Bestand uploaden');
+		$this->uploaderName = $name . 'BestandUploader';
 	}
 
 	public function isPosted() {
-		return isset($_POST['BestandUploader']) AND filter_input(INPUT_POST, 'BestandUploader', FILTER_SANITIZE_STRING) === get_class($this);
+		return filter_input(INPUT_POST, $this->uploaderName, FILTER_SANITIZE_STRING) === $this->getType();
 	}
 
 	/**
@@ -162,11 +171,19 @@ class RequiredFileField extends FileField {
 
 class BestandBehouden extends BestandUploader {
 
+	public function __construct($name, Bestand $bestand = null) {
+		parent::__construct($name);
+		$this->model = $bestand;
+	}
+
 	public function isBeschikbaar() {
 		return (boolean) $this->model;
 	}
 
 	public function validate() {
+		if (!parent::validate()) {
+			return false;
+		}
 		if (!$this->isBeschikbaar()) {
 			$this->error = 'Er is geen bestand om te behouden.';
 		}
@@ -181,27 +198,23 @@ class BestandBehouden extends BestandUploader {
 	}
 
 	public function getLabel() {
-		$label = '<input type="radio" class="UploadOptie" name="BestandUploader" id="BestandBehoudenInput" value="BestandBehouden"';
+		$label = '<input type="radio" class="UploadOptie" name="' . $this->uploaderName . '" id="' . $this->name . 'Optie" value="BestandBehouden"';
 		if ($this->selected) {
 			$label .= ' checked="checked"';
 			$label .= ' style="visibility: hidden;"';
 		}
-		$label .= ' /><label for="BestandBehoudenInput">Huidig bestand behouden</label>';
+		$label .= ' /><label for="' . $this->name . 'Optie">Huidig bestand behouden</label>';
 		return $label;
 	}
 
 	public function view() {
 		parent::view();
-		echo '<div class="UploadKeuze" id="BestandBehouden"';
+		echo '<div class="UploadKeuze" id="' . $this->name . 'Keuze"';
 		if (!$this->selected) {
 			echo ' style="display: none;"';
 		}
-		echo '><div style="height: 2em;">';
-		if ($this->model !== null) {
-			echo $this->model->bestandsnaam . ' (' . format_filesize($this->model->size) . ')';
-		} else {
-			echo '<div style="font-style: italic; margin: 2px 0px 0px 22px;">Geen bestand.</div>';
-		}
+		echo '><div id="' . $this->name . '" style="height: 2em;">';
+		echo $this->model->bestandsnaam . ' (' . format_filesize($this->model->size) . ')';
 		echo '</div></div></div>';
 	}
 
@@ -209,16 +222,15 @@ class BestandBehouden extends BestandUploader {
 
 class UploadHttp extends BestandUploader {
 
-	public function __construct() {
-		parent::__construct();
+	public function __construct($name) {
+		parent::__construct($name);
 		if ($this->isPosted()) {
-			$this->value = $_FILES['bestand'];
+			$this->value = $_FILES[$this->name];
 			$this->model = new Bestand();
 			$this->model->bestandsnaam = $this->value['name'];
 			$this->model->size = $this->value['size'];
 			$this->model->mimetype = $this->value['type'];
 		}
-		$this->css_classes[] = $this->getType();
 	}
 
 	public function isBeschikbaar() {
@@ -249,21 +261,21 @@ class UploadHttp extends BestandUploader {
 	}
 
 	public function getLabel() {
-		$label = '<input type="radio" class="UploadOptie" name="BestandUploader" id="UploadHttpInput" value="UploadHttp"';
+		$label = '<input type="radio" class="UploadOptie" name="' . $this->uploaderName . '" id="' . $this->name . 'Optie" value="UploadHttp"';
 		if ($this->selected) {
 			$label .= ' checked="checked"';
 			$label .= ' style="visibility: hidden;"';
 		}
-		return $label . ' /><label for="UploadHttpInput"> Uploaden in browser</label>';
+		return $label . ' /><label for="' . $this->name . 'Optie"> Uploaden in browser</label>';
 	}
 
 	public function view() {
 		parent::view();
-		echo '<div class="UploadKeuze" id="UploadHttp"';
+		echo '<div class="UploadKeuze" id="' . $this->name . 'Keuze"';
 		if (!$this->selected) {
 			echo ' style="display: none;"';
 		}
-		echo '><input type="file" class="' . implode(' ', $this->css_classes) . '" id="bestand" name="bestand" /></div></div>';
+		echo '><input type="file" class="' . implode(' ', $this->css_classes) . '" id="' . $this->name . '" name="' . $this->name . '" /></div></div>';
 	}
 
 }
@@ -286,12 +298,12 @@ class UploadFtp extends BestandUploader {
 	 */
 	protected $subdir;
 
-	public function __construct($subdir) {
-		parent::__construct();
+	public function __construct($name, $subdir) {
+		parent::__construct($name);
 		$this->subdir = $subdir . '/';
 		$this->path = PUBLIC_FTP . $this->subdir;
 		if ($this->isPosted()) {
-			$this->value = filter_input(INPUT_POST, 'bestandsnaam', FILTER_SANITIZE_STRING);
+			$this->value = filter_input(INPUT_POST, $this->name, FILTER_SANITIZE_STRING);
 			$finfo = finfo_open(FILEINFO_MIME_TYPE);
 			$mime = finfo_file($finfo, $this->path . $this->value);
 			finfo_close($finfo);
@@ -340,30 +352,30 @@ class UploadFtp extends BestandUploader {
 		}
 		$gelukt = copy($this->path . $this->model->bestandsnaam, $destination . $filename);
 		// Moeten we het bestand ook verwijderen uit de publieke ftp?
-		if ($gelukt AND isset($_POST['verwijderVanFtp'])) {
+		if ($gelukt AND isset($_POST[$this->name . 'VerwijderVanFtp'])) {
 			return unlink($this->path . $this->model->bestandsnaam);
 		}
 		return $gelukt;
 	}
 
 	public function getLabel() {
-		$label = '<input type="radio" class="UploadOptie" name="BestandUploader" id="UploadFtpInput" value="UploadFtp"';
+		$label = '<input type="radio" class="UploadOptie" name="' . $this->uploaderName . '" id="' . $this->name . 'Optie" value="UploadFtp"';
 		if ($this->selected) {
 			$label .= ' checked="checked"';
 			$label .= ' style="visibility: hidden;"';
 		}
-		return $label . ' /><label for="UploadFtpInput"> Uit publieke FTP-map</label>';
+		return $label . ' /><label for="' . $this->name . 'Optie"> Uit publieke FTP-map</label>';
 	}
 
 	public function view() {
 		parent::view();
-		echo '<div class="UploadKeuze" id="UploadFtp"';
+		echo '<div class="UploadKeuze" id="' . $this->name . 'Keuze"';
 		if (!$this->selected) {
 			echo ' style="display: none;"';
 		}
 		echo '>';
 		if (count($this->getFileList()) > 0) {
-			echo '<select id="bestandsnaam" name="bestandsnaam" class="' . implode(' ', $this->css_classes) . '">';
+			echo '<select id="' . $this->name . '" name="' . $this->name . '" class="' . implode(' ', $this->css_classes) . '">';
 			foreach ($this->getFileList() as $filename) {
 				echo '<option value="' . htmlspecialchars($filename) . '"';
 				if ($this->model AND $this->model->bestandsnaam === $filename) {
@@ -371,8 +383,8 @@ class UploadFtp extends BestandUploader {
 				}
 				echo '>' . htmlspecialchars($filename) . '</option>';
 			}
-			echo '</select><br /><input type="checkbox" name="verwijderVanFtp" id="verwijderVanFtp" style="vertical-align: middle;"';
-			if (!$this->isPosted() OR isset($_POST['verwijderVanFtp'])) {
+			echo '</select><br /><input type="checkbox" name="' . $this->name . 'VerwijderVanFtp" id="' . $this->name . 'VerwijderVanFtp" style="vertical-align: middle;"';
+			if (!$this->isPosted() OR isset($_POST[$this->name . 'VerwijderVanFtp'])) {
 				echo ' checked="checked"';
 			}
 			echo ' /><label for="verwijderVanFtp" style="float: none;"> Bestand verwijderen uit FTP-map</label>';
@@ -393,19 +405,20 @@ class UploadFtp extends BestandUploader {
  */
 class UploadUrl extends BestandUploader {
 
-	protected $url = 'http://';
+	protected $url;
 
-	public function __construct() {
-		parent::__construct();
+	public function __construct($name, $url = 'http://') {
+		parent::__construct($name);
+		$this->url = $url;
 		if ($this->isPosted()) {
-			$this->url = $_POST['url'];
+			$this->url = $_POST[$this->name];
 			$this->value = $this->file_get_contents($this->url);
 			if (!$this->value) {
 				$this->error = 'Niets gevonden op url';
 				return;
 			}
-			$name = substr(trim($this->url), strrpos($this->url, '/') + 1);
-			$clean_name = preg_replace('/[^a-zA-Z0-9\s\.\-\_]/', '', $name);
+			$url_name = substr(trim($this->url), strrpos($this->url, '/') + 1);
+			$clean_name = preg_replace('/[^a-zA-Z0-9\s\.\-\_]/', '', $url_name);
 			// Bestand tijdelijk omslaan om mime-type te bepalen
 			$tmp_bestand = TMP_PATH . '/' . LoginLid::instance()->getUid() . '_' . time();
 			if (!is_writable(TMP_PATH)) {
@@ -466,21 +479,21 @@ class UploadUrl extends BestandUploader {
 	}
 
 	public function getLabel() {
-		$label = '<input type="radio" class="UploadOptie" name="BestandUploader" id="UploadUrlInput" value="UploadUrl"';
+		$label = '<input type="radio" class="UploadOptie" name="' . $this->uploaderName . '" id="' . $this->name . 'Optie" value="UploadUrl"';
 		if ($this->selected) {
 			$label .= ' checked="checked"';
 			$label .= ' style="visibility: hidden;"';
 		}
-		return $label . ' /><label for="UploadUrlInput"> Downloaden van URL</label>';
+		return $label . ' /><label for="' . $this->name . 'Optie"> Downloaden van URL</label>';
 	}
 
 	public function view() {
 		parent::view();
-		echo '<div class="UploadKeuze" id="UploadUrl"';
+		echo '<div class="UploadKeuze" id="' . $this->name . 'Keuze"';
 		if (!$this->selected) {
 			echo ' style="display: none;"';
 		}
-		echo '><input type="text" class="' . implode(' ', $this->css_classes) . '" id="url" name="url" value="' . $this->url . '" /></div></div>';
+		echo '><input type="text" class="' . implode(' ', $this->css_classes) . '" id="' . $this->name . '" name="' . $this->name . '" value="' . $this->url . '" /></div></div>';
 	}
 
 }
