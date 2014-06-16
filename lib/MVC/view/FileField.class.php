@@ -169,7 +169,7 @@ class BestandBehouden extends BestandUploader {
 
 	public function opslaan($destination, $filename) {
 		if (!file_exists($destination . $filename)) {
-			throw new Exception('Bestand bestaat niet');
+			setMelding('Bestand bestaat niet (meer)', -1);
 		}
 		return true;
 	}
