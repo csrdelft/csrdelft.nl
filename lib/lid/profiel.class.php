@@ -410,7 +410,7 @@ class ProfielBewerken extends Profiel {
 			//duck-pasfoto opslaan
 			if ($field instanceof FileField) {
 				$path = $field->getModel()->bestandsnaam;
-				$ext = pathinfo($path, PATHINFO_EXTENSION);
+				$ext = '.' . pathinfo($path, PATHINFO_EXTENSION);
 				$field->opslaan(PICS_PATH . '/pasfoto/duck/', $this->getUid() . $ext, true);
 				continue;
 			}
