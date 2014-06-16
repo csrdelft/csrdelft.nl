@@ -78,11 +78,12 @@ class FileField implements FormElement, Validator {
 			if (!is_writable($destination)) {
 				throw new Exception('Doelmap is niet beschrijfbaar: ' . $destination);
 			}
-			if ($overwrite) {
-				unlink($destination . $filename);
-			}
 			if (file_exists($destination . $filename)) {
-				throw new Exception('Bestandsnaam al in gebruik: ' . $filename);
+				if ($overwrite) {
+					unlink($destination . $filename);
+				} else {
+					throw new Exception('Bestandsnaam al in gebruik: ' . $filename);
+				}
 			}
 		}
 		$success = $this->opties[$this->methode]->opslaan($destination, $filename, $overwrite);
