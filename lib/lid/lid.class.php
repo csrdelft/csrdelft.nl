@@ -645,10 +645,9 @@ class Lid implements Serializable, Agendeerbaar {
 	 * bool $square		Geef een pad naar een vierkante (150x150px) versie terug. (voor google contacts sync)
 	 */
 	function getPasfotoPath($vierkant = false) {
-
-		//TEMP: Voor senatorenopdracht 2014.
-		return $this->getDuckfotoPath($vierkant);
-		//EINDE TEMP
+		if (LidInstellingen::get('algemeen', 'naamWeergave') === 'Duckstad') {
+			return $this->getDuckfotoPath($vierkant);
+		}
 
 		$pasfoto = '/pasfoto/geen-foto.jpg';
 		foreach (array('png', 'jpeg', 'jpg', 'gif') as $validExtension) {
@@ -689,10 +688,9 @@ class Lid implements Serializable, Agendeerbaar {
 	 * Geef een url naar een pasfoto terug, of een <img>-tag met die url.
 	 */
 	function getPasfoto($imgTag = true, $cssClass = 'pasfoto', $vierkant = false) {
-
-		//TEMP: Voor senatorenopdracht 2014.
-		return $this->getDuckfoto($imgTag, $cssClass, $vierkant);
-		//EINDE TEMP
+		if (LidInstellingen::get('algemeen', 'naamWeergave') === 'Duckstad') {
+			return $this->getDuckfoto($imgTag, $cssClass, $vierkant);
+		}
 
 		$pasfoto = CSR_PICS . $this->getPasfotoPath($vierkant);
 		if ($imgTag === true OR $imgTag === 'small') {
@@ -726,14 +724,11 @@ class Lid implements Serializable, Agendeerbaar {
 		$sVolledigeNaam .= $this->profiel['achternaam'];
 
 		//als $vorm==='user', de instelling uit het profiel gebruiken voor vorm
-		$pref = LidInstellingen::get('algemeen', 'naamWeergave');
 		if ($vorm === 'user') {
-			$vorm = $pref;
-		} elseif ($vorm === 'pasfoto' AND $pref === 'Duckstad') {
-			$vorm = 'duckfoto';
+			$vorm = LidInstellingen::get('algemeen', 'naamWeergave');
 		}
 		//TEMP: Voor senatorenopdracht 2014.
-		elseif ($vorm !== 'leeg' AND LoginLid::mag('P_LOGGED_IN')) {
+		if ($vorm !== 'leeg' AND $vorm !== 'pasfoto' AND LoginLid::mag('P_LOGGED_IN')) {
 			$vorm = 'Duckstad';
 		}
 
@@ -835,13 +830,6 @@ class Lid implements Serializable, Agendeerbaar {
 
 				$naam = sprintf("%s %s%s", $nwvoor, ($this->profiel['tussenvoegsel'] != '') ? $this->profiel['tussenvoegsel'] . ' ' : '', $nwachter);
 				break;
-			case 'duckfoto':
-				if ($mode == 'link') {
-					$naam = $this->getDuckfoto(true, 'lidfoto');
-				} else {
-					$naam = '$vorm [duckfoto] alleen toegestaan in linkmodus';
-				}
-				break;
 			case 'pasfoto':
 				if ($mode == 'link') {
 					$naam = $this->getPasfoto(true, 'lidfoto');
@@ -862,7 +850,7 @@ class Lid implements Serializable, Agendeerbaar {
 		}
 		if ($mode === 'visitekaartje' || $mode === 'link') {
 
-			if ($vorm !== 'pasfoto' AND $vorm !== 'duckfoto' AND $this->getLichting() === 2013) {
+			if ($vorm !== 'pasfoto' AND $this->getLichting() === 2013) {
 				$naam = CsrUbb::parse('[neuzen]' . $naam . '[/neuzen]');
 			}
 			$k = '';
