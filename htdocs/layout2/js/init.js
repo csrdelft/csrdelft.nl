@@ -47,7 +47,7 @@ $(function() {
 		$("body").css({overflowY: "hidden"});
 
 	$('body').bind('click.outside', function(e) {
-		if (!$(e.target).parents('#pageover').length > 0) {
+		if (!$(e.target).parents('#pageover').length > 0 && !$(e.target).hasClass('pp_overlay')) {
 			escape(e);
 		}
 	});
