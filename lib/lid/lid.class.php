@@ -645,6 +645,11 @@ class Lid implements Serializable, Agendeerbaar {
 	 * bool $square		Geef een pad naar een vierkante (150x150px) versie terug. (voor google contacts sync)
 	 */
 	function getPasfotoPath($vierkant = false) {
+
+		//TEMP: Voor senatorenopdracht 2014.
+		return $this->getDuckfotoPath($vierkant);
+		//EINDE TEMP
+
 		$pasfoto = '/pasfoto/geen-foto.jpg';
 		foreach (array('png', 'jpeg', 'jpg', 'gif') as $validExtension) {
 			if (file_exists(PICS_PATH . '/pasfoto/' . $this->getUid() . '.' . $validExtension)) {
@@ -668,7 +673,6 @@ class Lid implements Serializable, Agendeerbaar {
 	 */
 	function getDuckfoto($imgTag = true, $cssClass = 'pasfoto', $vierkant = false) {
 		$pasfoto = CSR_PICS . $this->getDuckfotoPath($vierkant);
-
 		if ($imgTag === true OR $imgTag === 'small') {
 			$html = '<img class="' . mb_htmlentities($cssClass) . '" src="' . $pasfoto . '" ';
 			if ($imgTag === 'small') {
@@ -685,8 +689,12 @@ class Lid implements Serializable, Agendeerbaar {
 	 * Geef een url naar een pasfoto terug, of een <img>-tag met die url.
 	 */
 	function getPasfoto($imgTag = true, $cssClass = 'pasfoto', $vierkant = false) {
-		$pasfoto = CSR_PICS . $this->getPasfotoPath($vierkant);
 
+		//TEMP: Voor senatorenopdracht 2014.
+		return $this->getDuckfoto($imgTag, $cssClass, $vierkant);
+		//EINDE TEMP
+
+		$pasfoto = CSR_PICS . $this->getPasfotoPath($vierkant);
 		if ($imgTag === true OR $imgTag === 'small') {
 			$html = '<img class="' . mb_htmlentities($cssClass) . '" src="' . $pasfoto . '" ';
 			if ($imgTag === 'small') {
