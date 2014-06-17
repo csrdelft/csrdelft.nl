@@ -610,6 +610,33 @@ class Lid implements Serializable, Agendeerbaar {
 	}
 
 	/**
+	 * getDuckfoto()
+	 *
+	 * Kijkt of er een duckfoto voor het gegeven uid is, en geef die terug.
+	 * Geef anders een standaard-plaatje weer.
+	 *
+	 * bool $square		Geef een pad naar een vierkante (150x150px) versie terug. (voor google contacts sync)
+	 */
+	function getDuckfotoPath($vierkant = false) {
+		$pasfoto = '/pasfoto/duck/eend.jpg';
+		foreach (array('png', 'jpeg', 'jpg', 'gif') as $validExtension) {
+			if (file_exists(PICS_PATH . '/pasfoto/duck/' . $this->getUid() . '.' . $validExtension)) {
+				$pasfoto = '/pasfoto/duck/' . $this->getUid() . '.' . $validExtension;
+				break;
+			}
+		}
+		//als het vierkant moet, kijken of de vierkante bestaat, en anders maken.
+		if ($vierkant) {
+			$vierkant = PICS_PATH . '/pasfoto/duck/' . $this->getUid() . '.vierkant.png';
+			if (!file_exists($vierkant)) {
+				square_crop(PICS_PATH . $pasfoto, $vierkant, 150);
+			}
+			return '/pasfoto/duck/' . $this->getUid() . '.vierkant.png';
+		}
+		return $pasfoto;
+	}
+
+	/**
 	 * getPasfoto()
 	 *
 	 * Kijkt of er een pasfoto voor het gegeven uid is, en geef die terug.
@@ -625,15 +652,6 @@ class Lid implements Serializable, Agendeerbaar {
 				break;
 			}
 		}
-		//TEMP: Voor senatorenopdracht 2014:
-		$pasfoto = '/pasfoto/duck/eend.jpg';
-		foreach (array('png', 'jpeg', 'jpg', 'gif') as $validExtension) {
-			if (file_exists(PICS_PATH . '/pasfoto/duck/' . $this->getUid() . '.' . $validExtension)) {
-				$pasfoto = '/pasfoto/duck/' . $this->getUid() . '.' . $validExtension;
-				break;
-			}
-		}
-		//Einde TEMP
 		//als het vierkant moet, kijken of de vierkante bestaat, en anders maken.
 		if ($vierkant) {
 			$vierkant = PICS_PATH . '/pasfoto/' . $this->getUid() . '.vierkant.png';
@@ -643,6 +661,24 @@ class Lid implements Serializable, Agendeerbaar {
 			return '/pasfoto/' . $this->getUid() . '.vierkant.png';
 		}
 		return $pasfoto;
+	}
+
+	/**
+	 * Geef een url naar een duckfoto terug, of een <img>-tag met die url.
+	 */
+	function getDuckfoto($imgTag = true, $cssClass = 'pasfoto', $vierkant = false) {
+		$pasfoto = CSR_PICS . $this->getDuckfotoPath($vierkant);
+
+		if ($imgTag === true OR $imgTag === 'small') {
+			$html = '<img class="' . mb_htmlentities($cssClass) . '" src="' . $pasfoto . '" ';
+			if ($imgTag === 'small') {
+				$html .= 'style="width: 100px;" ';
+			}
+			$html .= 'alt="pasfoto van ' . $this->getNaamLink('Duckstad', 'plain') . '" />';
+			return $html;
+		} else {
+			return $pasfoto;
+		}
 	}
 
 	/**
@@ -681,21 +717,23 @@ class Lid implements Serializable, Agendeerbaar {
 		}
 		$sVolledigeNaam .= $this->profiel['achternaam'];
 
-
+		//als $vorm==='user', de instelling uit het profiel gebruiken voor vorm
+		$pref = LidInstellingen::get('algemeen ', 'naamWeergave');
+		if ($vorm === 'user') {
+			$vorm = $pref;
+		} elseif ($vorm === 'pasfoto' AND $pref === 'Duckstad') {
+			$vorm = 'duckfoto';
+		}
 		//TEMP: Voor senatorenopdracht 2014.
-		if (LoginLid::mag('P_LOGGED_IN') AND $vorm !== 'pasfoto' AND $vorm !== 'leeg') {
+		elseif ($vorm !== 'leeg' AND LoginLid::mag('P_LOGGED_IN')) {
 			$vorm = 'Duckstad';
 		}
-		/*
-		  //als $vorm==='user', de instelling uit het profiel gebruiken voor vorm
-		  if ($vorm === 'user') {
-		  $vorm = LidInstellingen::get('algemeen ', 'naamWeergave');
-		  }
-		 */
+
 		if (!LoginLid::mag('P_LOGGED_IN')) {
-			$vorm = 'civitas';
+			$vorm = 'civitas'; // niet vergeten te herstellen in lid-instellingen voor niet-ingelogd!
 		}
 		//EINDE TEMP
+
 		if ($vorm === 'bijnaam' AND $this->profiel['nickname'] == '') {
 			$vorm = 'civitas';
 		}
@@ -710,7 +748,7 @@ class Lid implements Serializable, Agendeerbaar {
 					$naam = $sVolledigeNaam;
 				}
 				break;
-			case 'Duckstad': //Voor senatorenopdracht 2014.
+			case 'Duckstad':
 				if ($this->profiel['duckname'] != '') {
 					$naam = $this->profiel['duckname'];
 				} else {
@@ -788,6 +826,13 @@ class Lid implements Serializable, Agendeerbaar {
 				$nwachter = ucwords($voor[1] . $achter[2]);
 
 				$naam = sprintf("%s %s%s", $nwvoor, ($this->profiel['tussenvoegsel'] != '') ? $this->profiel['tussenvoegsel'] . ' ' : '', $nwachter);
+				break;
+			case 'duckfoto':
+				if ($mode == 'link') {
+					$naam = $this->getDuckfoto(true, 'lidfoto');
+				} else {
+					$naam = '$vorm [duckfoto] alleen toegestaan in linkmodus';
+				}
 				break;
 			case 'pasfoto':
 				if ($mode == 'link') {

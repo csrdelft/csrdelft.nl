@@ -426,8 +426,7 @@ class ProfielBewerken extends Profiel {
 					continue;
 				}
 				//is het wel een wijziging?
-				if ($field->getValue() != $this->lid->getProperty($field->getName())
-						AND LoginLid::instance()->getUid() != '1207') { //TEMP: Voor Senatorenopdracht 2014
+				if ($field->getValue() != $this->lid->getProperty($field->getName())) {
 					$this->bewerktLid->setProperty($field->getName(), $field->getValue());
 				}
 			}

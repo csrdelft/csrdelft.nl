@@ -53,8 +53,7 @@ if (!(LoginLid::mag('P_LEDEN_READ') or LoginLid::mag('P_OUDLEDEN_READ'))) {
 		case 'bewerken':
 			$profiel = new ProfielBewerken($uid, $actie);
 
-			if ($profiel->magBewerken() OR
-					LoginLid::instance()->getUid() === '1207') { //TEMP: Voor Senatorenopdracht 2014
+			if ($profiel->magBewerken()) {
 				if ($profiel->validate() AND $profiel->save()) {
 					header('location: ' . CSR_ROOT . '/communicatie/profiel/' . $uid);
 					exit;
