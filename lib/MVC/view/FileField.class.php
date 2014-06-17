@@ -69,7 +69,11 @@ class FileField implements FormElement, Validator {
 			return false;
 		}
 		if (!empty($this->filter) AND ! in_array($this->getModel()->mimetype, $this->filter)) {
-			if (empty($this->getModel()->mimetype) AND ! $this->notnull) {
+			if (empty($this->getModel()->mimetype)) {
+				if ($this->notnull) {
+					$this->opties[$this->methode]->error = 'Afbeelding is verplicht';
+					return false;
+				}
 				return true;
 			}
 			$this->opties[$this->methode]->error = 'Bestandstype niet toegestaan: ' . $this->getModel()->mimetype;
@@ -154,16 +158,22 @@ class ImageField extends FileField {
 		if (!parent::validate()) {
 			return false;
 		}
-		$width = $this->getModel()->breedte;
-		$height = $this->getModel()->hoogte;
-		if ($this->minWidth !== null AND $width < $this->minWidth) {
-			$this->opties[$this->methode]->error = 'Afbeelding is niet breed genoeg.';
-		} elseif ($this->minHeight !== null AND $height < $this->minHeight) {
-			$this->opties[$this->methode]->error = 'Afbeelding is niet hoog genoeg.';
-		} elseif ($this->maxWidth !== null AND $width > $this->maxWidth) {
-			$this->opties[$this->methode]->error = 'Afbeelding is te breed.';
-		} elseif ($this->maxHeight !== null AND $height > $this->maxHeight) {
-			$this->opties[$this->methode]->error = 'Afbeelding is te hoog.';
+		if ($this->getModel() instanceof Afbeelding) {
+			$width = $this->getModel()->breedte;
+			$height = $this->getModel()->hoogte;
+			if ($this->minWidth !== null AND $width < $this->minWidth) {
+				$this->opties[$this->methode]->error = 'Afbeelding is niet breed genoeg.';
+			} elseif ($this->minHeight !== null AND $height < $this->minHeight) {
+				$this->opties[$this->methode]->error = 'Afbeelding is niet hoog genoeg.';
+			} elseif ($this->maxWidth !== null AND $width > $this->maxWidth) {
+				$this->opties[$this->methode]->error = 'Afbeelding is te breed.';
+			} elseif ($this->maxHeight !== null AND $height > $this->maxHeight) {
+				$this->opties[$this->methode]->error = 'Afbeelding is te hoog.';
+			}
+		} else {
+			if ($this->notnull) {
+				$this->opties[$this->methode]->error = 'Afbeelding is verplicht';
+			}
 		}
 		return $this->opties[$this->methode]->error === '';
 	}
