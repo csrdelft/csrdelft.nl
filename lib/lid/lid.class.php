@@ -718,7 +718,7 @@ class Lid implements Serializable, Agendeerbaar {
 		$sVolledigeNaam .= $this->profiel['achternaam'];
 
 		//als $vorm==='user', de instelling uit het profiel gebruiken voor vorm
-		$pref = LidInstellingen::get('algemeen ', 'naamWeergave');
+		$pref = LidInstellingen::get('algemeen', 'naamWeergave');
 		if ($vorm === 'user') {
 			$vorm = $pref;
 		} elseif ($vorm === 'pasfoto' AND $pref === 'Duckstad') {
@@ -854,7 +854,7 @@ class Lid implements Serializable, Agendeerbaar {
 		}
 		if ($mode === 'visitekaartje' || $mode === 'link') {
 
-			if ($vorm !== 'pasfoto' && $this->getLichting() === 2013) {
+			if ($vorm !== 'pasfoto' AND $vorm !== 'duckfoto' AND $this->getLichting() === 2013) {
 				$naam = CsrUbb::parse('[neuzen]' . $naam . '[/neuzen]');
 			}
 			$k = '';
