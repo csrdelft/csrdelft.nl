@@ -1,7 +1,9 @@
 <?php
 
-/*
- * pasfotos.php	| 	Jan Pieter Waagmeester (jieter@jpwaag.com)
+/**
+ * pasfotos.php
+ * 
+ * @author Jan Pieter Waagmeester <jieter@jpwaag.com>
  *
  * Zet een stel uid's om in pasfoto's
  */
@@ -35,13 +37,14 @@ if (isset($_GET['string'])) {
 	//we geven de pasfoto voor het gegeven uid direct aan de browser, als we lid-leesrechten hebben
 	if (Lid::isValidUid($uid) AND LoginLid::mag('P_LEDEN_READ')) {
 		$lid = LidCache::getLid($uid);
-		$types = array('png', 'gif', 'jpg');
+		$types = array('jpg', 'png', 'gif');
+		
 		$pasfoto = $lid->getPasfotoPath();
 
 		if (in_array(substr($pasfoto, -3), $types)) {
 			header('Content-type: image/' . substr($pasfoto, -3));
 		} else { //assumption is the mother of all...
-			header('Content-type: image/jpg');
+			header('Content-type: image/jpeg');
 		}
 		echo file_get_contents(PICS_PATH . $pasfoto);
 	} else {
@@ -49,5 +52,3 @@ if (isset($_GET['string'])) {
 		echo file_get_contents(PICS_PATH . '/pasfoto/geen-foto.jpg');
 	}
 }
-?>
-

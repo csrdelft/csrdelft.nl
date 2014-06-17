@@ -68,7 +68,10 @@ class FileField implements FormElement, Validator {
 		if (!$this->opties[$this->methode]->validate()) {
 			return false;
 		}
-		if (!empty($this->filter) AND ! empty($this->getModel()->mimetype) AND ! in_array($this->getModel()->mimetype, $this->filter)) {
+		if (!empty($this->filter) AND ! in_array($this->getModel()->mimetype, $this->filter)) {
+			if (empty($this->getModel()->mimetype) AND ! $this->notnull) {
+				return true;
+			}
 			$this->opties[$this->methode]->error = 'Bestandstype niet toegestaan: ' . $this->getModel()->mimetype;
 			return false;
 		}

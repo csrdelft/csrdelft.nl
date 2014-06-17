@@ -15,13 +15,13 @@ define('GOOGLE_GROUP_CONTACTS_URL', 'http://www.google.com/m8/feeds/contacts/def
 define('GOOGLE_GROUPS_URL', 'http://www.google.com/m8/feeds/groups/default/full');
 
 define('GOOGLE_CONTACTS_MAX_RESULTS', 1000);
-/*
+
+/**
  * Documentatie voor google GData protocol:
  * algemeen, interactie: http://code.google.com/apis/contacts/docs/3.0/developers_guide_protocol.html
  * gd-namespace: http://code.google.com/apis/gdata/docs/2.0/elements.html
  * gContact-namespace: http://code.google.com/apis/contacts/docs/3.0/reference.html
  */
-
 class GoogleSync {
 
 	private $gdata = null;
@@ -69,19 +69,17 @@ class GoogleSync {
 		$this->extendedExport = LidInstellingen::get('googleContacts', 'extended') == 'ja';
 	}
 
-	/*
+	/**
 	 * Load all contactgroups.
 	 */
-
 	private function loadGroupFeed() {
 		$query = new Zend_Gdata_Query(GOOGLE_GROUPS_URL);
 		$this->groupFeed = $this->gdata->getFeed($query);
 	}
 
-	/*
+	/**
 	 * Load all google contacts.
 	 */
-
 	private function loadContactFeed() {
 		$url = GOOGLE_CONTACTS_URL . '?max-results=' . GOOGLE_CONTACTS_MAX_RESULTS;
 
@@ -89,10 +87,9 @@ class GoogleSync {
 		$this->contactFeed = $this->gdata->getFeed($query);
 	}
 
-	/*
+	/**
 	 * Load contacts from certain contact group.
 	 */
-
 	private function loadContactsForGroup($groupId) {
 		$url = GOOGLE_CONTACTS_URL . '?max-results=' . GOOGLE_CONTACTS_MAX_RESULTS;
 		$url .= '&group=' . urlencode($groupId);
@@ -101,10 +98,10 @@ class GoogleSync {
 		$this->contactFeed = $this->gdata->getFeed($query);
 	}
 
-	/* Trek naam googleId en wat andere relevante meuk uit de feed-objecten
+	/**
+	 * Trek naam googleId en wat andere relevante meuk uit de feed-objecten
 	 * en stop dat in een array.
 	 */
-
 	public function getGoogleContacts() {
 		if ($this->contactData == null) {
 			$this->contactData = array();
@@ -136,24 +133,23 @@ class GoogleSync {
 		return $this->contactData;
 	}
 
-	/* plaats een foto voor een google contact.
+	/**
+	 * Plaats een foto voor een google contact.
 	 *
 	 * @param $photolink link uit een google-entry waar de foto naartoe moet.
 	 * @param $filename bestandsnaam van de foto die moet worden opgestuurd.
 	 */
-
 	private function putPhoto($photolink, $filename) {
 		$this->gdata->put(file_get_contents($filename), $photolink, null, 'image/*');
 	}
 
-	/* Check of een Lid al voorkomt in de lijst met contacten zoals ingeladen
-	 * van google.
+	/**
+	 * Check of een Lid al voorkomt in de lijst met contacten zoals ingeladen van google.
 	 *
 	 * @param $lid Lid waarvan de aanwezigheid gechecked moet worden.
 	 *
 	 * @return string met het google-id in het geval van voorkomen, anders null.
 	 */
-
 	public function existsInGoogleContacts(Lid $lid) {
 		$name = strtolower($lid->getNaam());
 		foreach ($this->getGoogleContacts() as $contact) {
@@ -169,10 +165,9 @@ class GoogleSync {
 		return null;
 	}
 
-	/*
+	/**
 	 * return the etag for any matching contact in this->contactFeed.
 	 */
-
 	public function getEtag($googleid) {
 		foreach ($this->getGoogleContacts() as $contact) {
 			if (strtolower($contact['id']) == $googleid) {
@@ -191,11 +186,9 @@ class GoogleSync {
 		return null;
 	}
 
-	/*
+	/**
 	 * Get array with group[name] => id
-	 * 
 	 */
-
 	function getGroups() {
 		$return = array();
 		foreach ($this->groupFeed as $group) {
@@ -231,12 +224,11 @@ class GoogleSync {
 		return $return;
 	}
 
-	/*
+	/**
 	 * id van de systemgroup aan de hand van de system-group-id ophalen
 	 * 
 	 * http://code.google.com/apis/contacts/docs/2.0/reference.html#GroupElements
 	 */
-
 	private function getSystemGroupId($name) {
 		//kijken of we al een grop hebben met de naam
 		foreach ($this->getGroups() as $group) {
@@ -247,12 +239,11 @@ class GoogleSync {
 		return null;
 	}
 
-	/*
+	/**
 	 * Get the groupid for the group $this->groupname, or create and return groupname.
 	 *
 	 * @return string met het google group-id.
 	 */
-
 	private function getGroupId($groupname = null) {
 		if ($groupname == null) {
 			$groupname = $this->groupname;
@@ -284,13 +275,13 @@ class GoogleSync {
 		return (string) $response->id;
 	}
 
-	/* Een hele serie leden syncen naar google contacts.
+	/**
+	 * Een hele serie leden syncen naar google contacts.
 	 *
 	 * @param $leden array van uid's of Lid-objecten die moeten worden gesynced
 	 *
 	 * @return string met foutmeldingen en de namen van de gesyncte leden.
 	 */
-
 	public function syncLidBatch($leden) {
 		//kan veel tijd kosten, dus time_limit naar 0 zodat het oneindig door kan gaan.
 		set_time_limit(0);
@@ -319,13 +310,13 @@ class GoogleSync {
 		return $message;
 	}
 
-	/* Een enkel lid syncen naar Google contacts.
+	/**
+	 * Een enkel lid syncen naar Google contacts.
 	 *
 	 * @param $lid uid of Lid-object
 	 *
 	 * @return string met foutmelding of naam van lid bij succes.
 	 */
-
 	public function syncLid($lid) {
 		if (!$lid instanceof Lid) {
 			$lid = LidCache::getLid($lid);
@@ -374,11 +365,10 @@ class GoogleSync {
 		}
 	}
 
-	/*
-	 *  Create a XML document for this Lid.
-	 * @param $lid 			Lid object to create XML feed for.
+	/**
+	 * Create a XML document for this Lid.
+	 * @param $lid Lid object to create XML feed for.
 	 */
-
 	private function createXML(Lid $lid) {
 
 		$doc = new DOMDocument();
@@ -572,10 +562,9 @@ class GoogleSync {
 		return isset($_SESSION['google_token']);
 	}
 
-	/*
+	/**
 	 * Vraag een Authsub-token aan bij google, plaats bij ontvangen in _SESSION['google_token'].
 	 */
-
 	public static function doRequestToken($self) {
 		if (isset($_GET['token'])) {
 			$_SESSION['google_token'] = Zend_Gdata_AuthSub::getAuthSubSessionToken($_GET['token']);

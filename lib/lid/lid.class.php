@@ -677,17 +677,17 @@ class Lid implements Serializable, Agendeerbaar {
 		}
 		$sVolledigeNaam .= $this->profiel['achternaam'];
 
-		
+
 		//TEMP: Voor senatorenopdracht 2014.
 		if (LoginLid::mag('P_LOGGED_IN') AND $vorm !== 'pasfoto' AND $vorm !== 'leeg') {
 			$vorm = 'Duckstad';
 		}
 		/*
-		//als $vorm==='user', de instelling uit het profiel gebruiken voor vorm
-		if ($vorm === 'user') {
-			$vorm = LidInstellingen::get('algemeen ', 'naamWeergave');
-		}
-		*/
+		  //als $vorm==='user', de instelling uit het profiel gebruiken voor vorm
+		  if ($vorm === 'user') {
+		  $vorm = LidInstellingen::get('algemeen ', 'naamWeergave');
+		  }
+		 */
 		if (!LoginLid::mag('P_LOGGED_IN')) {
 			$vorm = 'civitas';
 		}
@@ -812,7 +812,15 @@ class Lid implements Serializable, Agendeerbaar {
 			$l = '<a href="' . CSR_ROOT . '/communicatie/profiel/' . $this->getUid() . '" title="' . $sVolledigeNaam . '" class="lidLink ' . $this->profiel['status'] . '">';
 
 			if (($vorm === 'leeg' || $mode === 'visitekaartje') && LidInstellingen::get('layout', 'visitekaartjes') == 'ja') {
-				$k = '<span class="hoverIntent"><div style="margin-top: -10px; margin-left: -10px;" class="hoverIntentContent visitekaartje';
+				$k = '<span';
+				if ($vorm !== 'leeg') {
+					$k .=' class="hoverIntent"';
+				}
+				$k .= '><div style="margin-top: -10px; margin-left: -10px;" class="';
+				if ($vorm !== 'leeg') {
+					$k .= 'hoverIntentContent ';
+				}
+				$k .= 'visitekaartje';
 				if ($this->isJarig()) {
 					$k.= ' jarig';
 				}
@@ -1245,5 +1253,3 @@ class Zoeker {
 	}
 
 }
-
-?>
