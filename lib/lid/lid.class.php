@@ -645,10 +645,10 @@ class Lid implements Serializable, Agendeerbaar {
 	 * bool $square		Geef een pad naar een vierkante (150x150px) versie terug. (voor google contacts sync)
 	 */
 	function getPasfotoPath($vierkant = false) {
+		require_once 'MVC/model/LidInstellingenModel.class.php';
 		if ($this->isLid() AND LidInstellingen::get('algemeen', 'naamWeergave') === 'Duckstad') {
 			return $this->getDuckfotoPath($vierkant);
 		}
-
 		$pasfoto = '/pasfoto/geen-foto.jpg';
 		foreach (array('png', 'jpeg', 'jpg', 'gif') as $validExtension) {
 			if (file_exists(PICS_PATH . '/pasfoto/' . $this->getUid() . '.' . $validExtension)) {
@@ -688,10 +688,10 @@ class Lid implements Serializable, Agendeerbaar {
 	 * Geef een url naar een pasfoto terug, of een <img>-tag met die url.
 	 */
 	function getPasfoto($imgTag = true, $cssClass = 'pasfoto', $vierkant = false) {
+		require_once 'MVC/model/LidInstellingenModel.class.php';
 		if ($this->isLid() AND LidInstellingen::get('algemeen', 'naamWeergave') === 'Duckstad') {
 			return $this->getDuckfoto($imgTag, $cssClass, $vierkant);
 		}
-
 		$pasfoto = CSR_PICS . $this->getPasfotoPath($vierkant);
 		if ($imgTag === true OR $imgTag === 'small') {
 			$html = '<img class="' . mb_htmlentities($cssClass) . '" src="' . $pasfoto . '" ';
