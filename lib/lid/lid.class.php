@@ -620,11 +620,16 @@ class Lid implements Serializable, Agendeerbaar {
 	function getPasfotoPath($vierkant = false) {
 		$pasfoto = '/pasfoto/geen-foto.jpg';
 		foreach (array('png', 'jpeg', 'jpg', 'gif') as $validExtension) {
-			//Voor senatorenopdracht 2014:
+			//TEMP: Voor senatorenopdracht 2014:
 			if (file_exists(PICS_PATH . '/pasfoto/duck/' . $this->getUid() . '.' . $validExtension)) {
 				$pasfoto = '/pasfoto/duck/' . $this->getUid() . '.' . $validExtension;
 				break;
 			}
+			if (file_exists(PICS_PATH . '/pasfoto/duck/eend.' . $validExtension)) {
+				$pasfoto = '/pasfoto/duck/eend.' . $validExtension;
+				break;
+			}
+			//Einde TEMP
 			if (file_exists(PICS_PATH . '/pasfoto/' . $this->getUid() . '.' . $validExtension)) {
 				$pasfoto = '/pasfoto/' . $this->getUid() . '.' . $validExtension;
 				break;
