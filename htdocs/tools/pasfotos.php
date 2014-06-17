@@ -38,8 +38,10 @@ if (isset($_GET['string'])) {
 	if (Lid::isValidUid($uid) AND LoginLid::mag('P_LEDEN_READ')) {
 		$lid = LidCache::getLid($uid);
 		$types = array('jpg', 'png', 'gif');
-		
-		$pasfoto = $lid->getPasfotoPath();
+
+		//TEMP: Voor senatorenopdracht 2014.
+		$pasfoto = $lid->getDuckfotoPath();
+		//EINDE TEMP
 
 		if (in_array(substr($pasfoto, -3), $types)) {
 			header('Content-type: image/' . substr($pasfoto, -3));
