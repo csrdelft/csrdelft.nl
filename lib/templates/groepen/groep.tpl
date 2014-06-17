@@ -11,26 +11,26 @@
 	<div id="groepledenContainer">
 		<ul id="tabs">
 			{if $groep->isIngelogged()}
-				<li id="lidlijst" class="active" onclick="return showTab({$groep->getId()}, 'lidlijst');">
+				<li id="lidlijst" class="active" onclick="return groepTabShow({$groep->getId()}, 'lidlijst');">
 					<img src="{$CSR_PICS}/knopjes/lijst.png" title="Lidlijst tonen" />
 				</li>
-				<li id="pasfotos" onclick="return showTab({$groep->getId()}, 'pasfotos');">
+				<li id="pasfotos" onclick="return groepTabShow({$groep->getId()}, 'pasfotos');">
 					<img src="{$CSR_PICS}/knopjes/pasfoto.png" title="schakel naar pasfoto's" />
 				</li>
 			{/if}
 			{* if $groep->magBewerken() AND $action!='edit' AND !($action=='addLid' AND $lidAdder!=false)}
-			<li id="addLid" onclick="return showTab('{$groep->getId()}', 'addLid');" title="Leden toevoegen aan groep">
+			<li id="addLid" onclick="return groepTabShow('{$groep->getId()}', 'addLid');" title="Leden toevoegen aan groep">
 			<strong>+</strong>
 			</li>
 			{/if *}
 			{if $groep->magStatsBekijken()}
 				<li id="stats">
-					<a onclick="showTab({$groep->getId()}, 'stats')">%</a>
+					<a onclick="groepTabShow({$groep->getId()}, 'stats')">%</a>
 				</li>
 			{/if}
 			{if $groep->isIngelogged()}
 				<li id="emails">
-					<a class="tab" onclick="showTab({$groep->getId()}, 'emails')">@</a>
+					<a class="tab" onclick="groepTabShow({$groep->getId()}, 'emails')">@</a>
 				</li>
 			{/if}
 		</ul>
@@ -45,11 +45,11 @@
 		<script type="text/javascript">
 			{literal}
 				if (window.location.hash != '') {
-					showTab('{/literal}{$groep->getId()}{literal}', window.location.hash.substring(1));
+					groepTabShow('{/literal}{$groep->getId()}{literal}', window.location.hash.substring(1));
 				} else {
 			{/literal}
 			{if $groep->toonPasfotos()}
-					showTab('{$groep->getId()}', 'pasfotos');
+					groepTabShow('{$groep->getId()}', 'pasfotos');
 			{/if}
 			{literal}
 				}

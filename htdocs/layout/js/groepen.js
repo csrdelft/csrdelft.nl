@@ -1,12 +1,8 @@
-/*
+/**
  * Spul voor csrdelft.nl-groepenketzer.
  */
 
-jQuery(document).ready(function() {
-	observeClick();
-});
-
-function updateGroepform() {
+function groepFormUpdate() {
 	var gAanmeldDiv = document.getElementById('groepAanmeldbaarContainer');
 	if (document.getElementById('groepStatus').value == 'ht') {
 		$(gAanmeldDiv).show();
@@ -52,12 +48,12 @@ function updateGroepform() {
 	}
 }
 /*
- * showTab()
+ * groepTabShow()
  * tabid is meteen de actie die aangeroepen wordt, een tabje erbij is
  * dus een kwestie van een nieuwe function action_<naam>(){} maken in de
  * controller
  */
-function showTab(groepid, tabid) {
+function groepTabShow(groepid, tabid) {
 	//alle tabjes inactief maken
 	var tabs = document.getElementById('tabs').childNodes;
 	for (var tabI in tabs) {
@@ -71,12 +67,12 @@ function showTab(groepid, tabid) {
 
 	//request doen voor de tab-inhoud
 	http.abort();
-	http.open("GET", "/actueel/groepen/XHR/" + groepid + "/" + tabid, true);
+	http.open('GET', '/actueel/groepen/XHR/' + groepid + '/' + tabid, true);
 	http.onreadystatechange = function() {
 		if (http.readyState == 4) {
 			document.getElementById('ledenvangroep' + groepid).innerHTML = http.responseText;
 			init_hoverIntents();
-			observeClick();
+			init_groepen();
 			if (tabid == 'emails') {
 				selectText('ledenvangroep' + groepid);
 			}
@@ -86,8 +82,8 @@ function showTab(groepid, tabid) {
 
 }
 
-function observeClick() {
-	jQuery(".inline_edit").click(function() {
+function init_groepen() {
+	jQuery('.inline_edit').click(function() {
 		//show edit field.
 		jQuery(this).children('span').hide();
 		jQuery(this).children('input,select').show();
@@ -102,25 +98,25 @@ function observeClick() {
 		});
 		var data = {'functie[]': values}
 		//update span
-		jQuery(this).children('span').html(values.join(" - "));
+		jQuery(this).children('span').html(values.join(' - '));
 
 		jQuery.ajax({
-			type: "POST",
+			type: 'POST',
 			url: '/actueel/groepen/XHR/' + gid + '/bewerkfunctieLid/' + uid,
 			data: data,
 			cache: false,
 			success: function(response) {
-				jQuery(".editbox").hide();
-				jQuery(".text").show();
+				jQuery('.editbox').hide();
+				jQuery('.text').show();
 			}
 		});
 	});
 
 	// close editor if clicking outside editfield
 	jQuery(document).mouseup(function(object) {
-		if (!jQuery(object.target).hasClass("editbox")) { //in editbox mag je klikken
-			jQuery(".editbox").hide();
-			jQuery(".text").show();
+		if (!jQuery(object.target).hasClass('editbox')) { //in editbox mag je klikken
+			jQuery('.editbox').hide();
+			jQuery('.text').show();
 		}
 	});
 

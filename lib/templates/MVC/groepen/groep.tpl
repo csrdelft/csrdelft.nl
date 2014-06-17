@@ -3,16 +3,16 @@
 	<div class="groepledenContainer">
 		{if LoginLid::mag('P_LEDEN_READ')}
 			<ul id="tabs">
-				<li id="{GroepTab::Lijst}" class="tab active" onclick="return showTab({$groep->id}, '{GroepTab::Lijst}');" title="Lijst en opmerking tonen">
+				<li id="{GroepTab::Lijst}" class="tab active" onclick="return groepTabShow({$groep->id}, '{GroepTab::Lijst}');" title="Lijst en opmerking tonen">
 					<img src="{$CSR_PICS}/knopjes/lijst.png" />
 				</li>
-				<li id="{GroepTab::Pasfotos}" class="tab" onclick="return showTab({$groep->id}, '{GroepTab::Pasfotos}');" title="Pasfoto's tonen">
+				<li id="{GroepTab::Pasfotos}" class="tab" onclick="return groepTabShow({$groep->id}, '{GroepTab::Pasfotos}');" title="Pasfoto's tonen">
 					<img src="{$CSR_PICS}/knopjes/pasfoto.png" />
 				</li>
-				<li id="{GroepTab::Statistiek}" class="tab" onclick="showTab({$groep->id}, '{GroepTab::Statistiek}');" title="Statistiek tonen">
+				<li id="{GroepTab::Statistiek}" class="tab" onclick="groepTabShow({$groep->id}, '{GroepTab::Statistiek}');" title="Statistiek tonen">
 					%
 				</li>
-				<li id="{GroepTab::Emails}" class="tab" onclick="showTab({$groep->id}, '{GroepTab::Emails}');" title="E-mail's tonen">
+				<li id="{GroepTab::Emails}" class="tab" onclick="groepTabShow({$groep->id}, '{GroepTab::Emails}');" title="E-mail's tonen">
 					@
 				</li>
 			</ul>
@@ -25,11 +25,11 @@
 		<script type="text/javascript">
 			$(document).ready(new function() {
 				if (window.location.hash === '{GroepTab::Lijst}' || window.location.hash === '{GroepTab::Pasfotos}' || window.location.hash === '{GroepTab::Statistiek}' || window.location.hash === '{GroepTab::Emails}') {
-					showTab('{$groep->id}', window.location.hash.substring(1));
+					groepTabShow('{$groep->id}', window.location.hash.substring(1));
 				}
 				else {
 			{if LidInstellingen::get('groepen', 'toonPasfotos') == 'ja'}
-					showTab('{$groep->id}', '{GroepTab::Pasfotos}');
+					groepTabShow('{$groep->id}', '{GroepTab::Pasfotos}');
 			{/if}
 				}
 			});

@@ -22,6 +22,7 @@ $(document).ready(function() {
 	init_buttons();
 	init_forms();
 	init_hoverIntents();
+	init_groepen();
 });
 
 function page_reload() {

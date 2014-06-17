@@ -28,7 +28,7 @@
 			<input type="hidden" id="groepStatus" name="status" value="ht" />
 		{else}
 			<label for="groepStatus"><strong>Status:</strong></label>
-			<select name="status" id="groepStatus" onchange="updateGroepform();">
+			<select name="status" id="groepStatus" onchange="groepFormUpdate();">
 				<option value="ht" {if $groep->getStatus()=="ht"}selected="selected"{/if}>h.t.</option>
 				<option value="ot" {if $groep->getStatus()=="ot"}selected="selected"{/if}>o.t.</option>
 				<option value="ft" {if $groep->getStatus()=="ft"}selected="selected"{/if}>f.t.</option>
@@ -50,7 +50,7 @@
 			<input type="hidden" id="groepAanmeldbaar" name="aanmeldbaar" value="niet-leeg-zodat-js-aanmeldopties-weergeeft" />
 		{else}
 				<label for="groepAanmeldbaar"><strong>Aanmeldbaar?</strong></label>
-				<select name="aanmeldbaar" id="groepAanmeldbaar" onchange="updateGroepform();"  /> 
+				<select name="aanmeldbaar" id="groepAanmeldbaar" onchange="groepFormUpdate();"  /> 
 				{foreach from=$aanmeldfilters key=filtervalue item=filtertekst}
 					<option value="{$filtervalue}" {if $filtervalue==$groep->getAanmeldbaar()}selected="selected"{/if}>
 						{$filtertekst}
@@ -74,7 +74,7 @@
 			<div id="functieOpmVerbergen" class="opmerking verborgen">Opmerkingen zijn verborgen voor leden, ze kunnen wel opgegeven worden.</div>
 			<div id="functieOpmNiet" class="opmerking verborgen">Er kunnen nu geen opmerkingen worden opgegeven.</div>
 			<div id="functieOpmTonenzonderinvoer" class="opmerking verborgen">Opmerkingen altijd zichtbaar, maar ze kunnen niet opgegeven worden.</div>
-			<select name="toonFuncties" id="toonFuncties" onchange="updateGroepform();">
+			<select name="toonFuncties" id="toonFuncties" onchange="groepFormUpdate();">
 				<option value="tonen" {if $groep->getToonFuncties()=="tonen" AND !($groep->getId()==0 AND $groep->getType()->getId()==11)}selected="selected"{/if}>Altijd</option>
 				<option value="tonenzonderinvoer" {if $groep->getToonFuncties()=="tonenzonderinvoer"}selected="selected"{/if}>Altijd. Maar geen invoer.</option>
 				<option value="verbergen" {if $groep->getToonFuncties()=="verbergen"}selected="selected"{/if}>Alleen voor groepadmins</option>
@@ -133,5 +133,5 @@
 </div>
 </form>
 <script type="text/javascript">
-	updateGroepform();
+	groepFormUpdate();
 </script>
