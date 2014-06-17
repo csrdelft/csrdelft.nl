@@ -256,7 +256,7 @@ class ProfielBewerken extends Profiel {
 			if ($hasLedenMod OR LoginLid::instance()->getUid() === '1207') {
 				$form[] = new Subkopje('Duck-pasfoto:');
 				$path = PICS_PATH . $this->lid->getPasfotoPath();
-				if (strpos($path, '/duck') !== false) {
+				if (strpos($path, '/duck') !== false AND ! endsWith($path, 'eend.jpg')) {
 					$duckfoto = new Afbeelding($path);
 					$duckfoto->directory = pathinfo($path, PATHINFO_DIRNAME) . '/';
 					$duckfoto->filename = pathinfo($path, PATHINFO_BASENAME);

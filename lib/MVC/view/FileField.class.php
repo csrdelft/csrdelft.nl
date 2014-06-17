@@ -3,7 +3,7 @@
 require_once 'MVC/model/entity/Afbeelding.class.php';
 
 /**
- * UploadElement.class.php
+ * FileField.class.php
  * 
  * @author P.W.G. Brussee <brussee@live.nl>
  * 
