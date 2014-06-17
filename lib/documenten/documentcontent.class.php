@@ -54,7 +54,7 @@ class DocumentDownloadContent extends TemplateView {
 		header('Cache-Control: private', false);
 		header('content-type: ' . $mime);
 		if (!strstr($mime, 'image') AND ! strstr($mime, 'text')) {
-			header('Content-Disposition: attachment; filename="' . $this->model->getBestandsnaam() . '";');
+			header('Content-Disposition: attachment; filename="' . $this->model->getFileName() . '";');
 			header('Content-Lenght: ' . $this->model->getFileSize() . ';');
 		}
 		readfile($this->model->getFullPath());

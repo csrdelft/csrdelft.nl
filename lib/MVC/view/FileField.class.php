@@ -84,7 +84,7 @@ class FileField implements FormElement, Validator {
 		}
 		if ($this->methode !== 'BestandBehouden') {
 			if ($this->behouden !== null) {
-				unlink($this->behouden->map . $this->behouden->bestandsnaam);
+				unlink($this->behouden->directory . $this->behouden->filename);
 			}
 			$filename = filter_var($filename, FILTER_SANITIZE_STRING);
 			if (!is_writable($destination)) {
@@ -258,7 +258,7 @@ class BestandBehouden extends BestandUploader {
 			echo ' style="display: none;"';
 		}
 		echo '><div id="' . $this->name . '" style="height: 2em;">';
-		echo $this->model->bestandsnaam . ' (' . format_filesize($this->model->filesize) . ')';
+		echo $this->model->filename . ' (' . format_filesize($this->model->filesize) . ')';
 		echo '</div></div></div>';
 	}
 
@@ -275,7 +275,7 @@ class UploadHttp extends BestandUploader {
 			} else {
 				$this->model = new Bestand();
 			}
-			$this->model->bestandsnaam = $this->value['name'];
+			$this->model->filename = $this->value['name'];
 			$this->model->filesize = $this->value['size'];
 			$this->model->mimetype = $this->value['type'];
 		}
@@ -360,7 +360,7 @@ class UploadFtp extends BestandUploader {
 			} else {
 				$this->model = new Bestand();
 			}
-			$this->model->bestandsnaam = $this->value;
+			$this->model->filename = $this->value;
 			$this->model->filesize = filesize($this->path . $this->value);
 			$this->model->mimetype = $mime;
 		}
@@ -399,13 +399,13 @@ class UploadFtp extends BestandUploader {
 	}
 
 	public function opslaan($destination, $filename) {
-		if (!file_exists($this->path . $this->model->bestandsnaam)) {
+		if (!file_exists($this->path . $this->model->filename)) {
 			throw new Exception('Bronbestand bestaat niet');
 		}
-		$gelukt = copy($this->path . $this->model->bestandsnaam, $destination . $filename);
+		$gelukt = copy($this->path . $this->model->filename, $destination . $filename);
 		// Moeten we het bestand ook verwijderen uit de publieke ftp?
 		if ($gelukt AND isset($_POST[$this->name . 'VerwijderVanFtp'])) {
-			return unlink($this->path . $this->model->bestandsnaam);
+			return unlink($this->path . $this->model->filename);
 		}
 		return $gelukt;
 	}
@@ -430,7 +430,7 @@ class UploadFtp extends BestandUploader {
 			echo '<select id="' . $this->name . '" name="' . $this->name . '" class="' . implode(' ', $this->css_classes) . '">';
 			foreach ($this->getFileList() as $filename) {
 				echo '<option value="' . htmlspecialchars($filename) . '"';
-				if ($this->model AND $this->model->bestandsnaam === $filename) {
+				if ($this->model AND $this->model->filename === $filename) {
 					echo ' selected="selected"';
 				}
 				echo '>' . htmlspecialchars($filename) . '</option>';
@@ -486,7 +486,7 @@ class UploadUrl extends BestandUploader {
 			} else {
 				$this->model = new Bestand();
 			}
-			$this->model->bestandsnaam = $clean_name;
+			$this->model->filename = $clean_name;
 			$this->model->filesize = $filesize;
 			$this->model->mimetype = $mime;
 			unlink($tmp_bestand);

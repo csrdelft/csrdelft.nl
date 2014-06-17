@@ -135,7 +135,7 @@ class FotoAlbumController extends AclController {
 		set_time_limit(0);
 		$cmd = "tar cC " . escapeshellarg($album->locatie);
 		foreach ($fotos as $foto) {
-			$cmd .= ' ' . escapeshellarg($foto->bestandsnaam);
+			$cmd .= ' ' . escapeshellarg($foto->filename);
 		}
 		$fh = popen($cmd, 'r');
 		while (!feof($fh)) {

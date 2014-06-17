@@ -4421,3 +4421,4 @@ sql/4615_groep_leden.sql -text
 sql/4658_agendeerbaar_locatie.sql -text
 sql/4920_gasten_eetwens.sql -text
 sql/5005_duckname.sql -text
+sql/5049_file_size_rename.sql -text

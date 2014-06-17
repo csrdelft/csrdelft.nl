@@ -25,11 +25,11 @@
 	</div>
 {/foreach}
 {foreach from=$album->getFotos() item=foto}
-	<div id="{$foto->bestandsnaam|md5}" class="thumb hoverIntent">
+	<div id="{$foto->filename|md5}" class="thumb hoverIntent">
 		{if LoginLid::mag('P_DOCS_MOD')}
 			<div style="position: absolute;">
-				<a href="/fotoalbum/verwijderen{$album->getSubDir()}{$foto->bestandsnaam}" class="knop post confirm hoverIntentContent" title="Definitief verwijderen van deze foto">{icon get=cross}</a>
-				<a href="/fotoalbum/albumcover{$album->getSubDir()}{$foto->bestandsnaam}" class="knop confirm hoverIntentContent" title="Instellen als albumcover" style="position: relative; left: 118px;">{icon get=folder_picture}</a>
+				<a href="/fotoalbum/verwijderen{$album->getSubDir()}{$foto->filename}" class="knop post confirm hoverIntentContent" title="Definitief verwijderen van deze foto">{icon get=cross}</a>
+				<a href="/fotoalbum/albumcover{$album->getSubDir()}{$foto->filename}" class="knop confirm hoverIntentContent" title="Instellen als albumcover" style="position: relative; left: 118px;">{icon get=folder_picture}</a>
 			</div>
 		{/if}
 		<a href="{$foto->getResizedURL()}" rel="prettyPhoto[album]">

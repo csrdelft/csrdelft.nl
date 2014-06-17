@@ -258,8 +258,8 @@ class ProfielBewerken extends Profiel {
 				$path = PICS_PATH . $this->lid->getPasfotoPath();
 				if (strpos($path, '/duck') !== false) {
 					$duckfoto = new Afbeelding($path);
-					$duckfoto->map = pathinfo($path, PATHINFO_DIRNAME) . '/';
-					$duckfoto->bestandsnaam = pathinfo($path, PATHINFO_BASENAME);
+					$duckfoto->directory = pathinfo($path, PATHINFO_DIRNAME) . '/';
+					$duckfoto->filename = pathinfo($path, PATHINFO_BASENAME);
 					$duckfoto->filesize = filesize($path);
 				} else {
 					$duckfoto = null;
@@ -415,7 +415,7 @@ class ProfielBewerken extends Profiel {
 		foreach ($this->form->getFields() as $field) {
 			//duck-pasfoto opslaan
 			if ($field instanceof FileField) {
-				$path = $field->getModel()->bestandsnaam;
+				$path = $field->getModel()->filename;
 				$ext = '.' . pathinfo($path, PATHINFO_EXTENSION);
 				$field->opslaan(PICS_PATH . '/pasfoto/duck/', $this->getUid() . $ext, true);
 				continue;

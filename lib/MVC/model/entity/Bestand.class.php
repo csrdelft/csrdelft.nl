@@ -11,10 +11,10 @@ require_once 'MVC/model/entity/Map.class.php';
 class Bestand {
 
 	/**
-	 * Naam
+	 * Bestandsnaam
 	 * @var string
 	 */
-	public $bestandsnaam;
+	public $filename;
 	/**
 	 * Bestandsgrootte in bytes
 	 * @var int
@@ -29,6 +29,6 @@ class Bestand {
 	 * Locatie van bestand
 	 * @var Map
 	 */
-	public $map;
+	public $directory;
 
 }

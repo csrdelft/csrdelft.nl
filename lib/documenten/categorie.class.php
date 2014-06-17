@@ -62,7 +62,7 @@ class DocumentenCategorie{
 	public function loadDocumenten(){
 		$db=MySql::instance();
 		$query="
-			SELECT ID, naam, catID, bestandsnaam, size, mimetype, toegevoegd, eigenaar, leesrechten
+			SELECT ID, naam, catID, filename, filesize, mimetype, toegevoegd, eigenaar, leesrechten
 			FROM document
 			WHERE catID=".$this->getID()."
 			ORDER BY toegevoegd DESC";
@@ -179,9 +179,9 @@ class DocumentenCategorie{
 		$db=MySql::instance();
 		$zoekterm = $db->escape($zoekterm);
 		$query="
-			SELECT ID, naam, catID, bestandsnaam, size, mimetype, toegevoegd, eigenaar, leesrechten
+			SELECT ID, naam, catID, filename, filesize, mimetype, toegevoegd, eigenaar, leesrechten
 			FROM document
-			WHERE (naam LIKE '%".$zoekterm."%' OR bestandsnaam LIKE '%".$zoekterm."%' OR ID = ".(int)$zoekterm.") ".$wherecat."
+			WHERE (naam LIKE '%".$zoekterm."%' OR filename LIKE '%".$zoekterm."%' OR ID = ".(int)$zoekterm.") ".$wherecat."
 			ORDER BY toegevoegd DESC
 			LIMIT ".(int)$limit;
 		$result=$db->query($query);

@@ -49,7 +49,7 @@ class FotoAlbumModel {
 
 	public static function verwijderFoto(Foto $foto) {
 		$ret = true;
-		$ret &= unlink($foto->map->locatie . $foto->bestandsnaam);
+		$ret &= unlink($foto->directory->locatie . $foto->filename);
 		$ret &= unlink($foto->getResizedPad());
 		$ret &= unlink($foto->getThumbPad());
 		return $ret;
@@ -66,7 +66,7 @@ class FotoAlbumModel {
 		$ret = true;
 		// find old cover
 		foreach ($album->getFotos() as $foto) {
-			if (strpos($foto->bestandsnaam, 'folder') !== false) {
+			if (strpos($foto->filename, 'folder') !== false) {
 				if ($foto->getPad() === $cover->getPad()) {
 					return $ret;
 				}

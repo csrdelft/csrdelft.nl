@@ -41,7 +41,7 @@ switch ($datatype) {
 			/** @var $document Document  */
 			foreach ($documenten as $document) {
 				$naam = $document->getNaam();
-				$bestandsnaam = $document->getBestandsnaam();
+				$bestandsnaam = $document->getFileName();
 				$id = $document->getID();
 
 				$result[] = array('naam'=>$naam, 'bestandsnaam'=>$bestandsnaam, 'id'=>$id);

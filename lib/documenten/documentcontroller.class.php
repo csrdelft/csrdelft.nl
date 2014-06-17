@@ -162,13 +162,13 @@ class DocumentController extends Controller {
 					}
 				}
 				$bestand = $fields['uploader']->getModel();
-				$this->document->setBestandsnaam($bestand->bestandsnaam);
+				$this->document->setFileName($bestand->filename);
 				$this->document->setFileSize($bestand->filesize);
 				$this->document->setMimetype($bestand->mimetype);
 			}
 			if ($this->document->save()) {
 				try {
-					if ($fields['uploader']->opslaan($this->document->getPath(), $this->document->getFilename())) {
+					if ($fields['uploader']->opslaan($this->document->getPath(), $this->document->getFullFileName())) {
 						$melding = array('Document met succes opgeslagen.', 1);
 					} else {
 						$melding = 'Fout bij het opslaan van het bestand in het bestandsysteem. Bewerk het document om het bestand alsnog toe te voegen.';

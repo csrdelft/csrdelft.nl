@@ -13,28 +13,28 @@ class Foto extends Afbeelding {
 
 	public function __construct(FotoAlbum $album, $bestandsnaam) {
 		parent::__construct($album->locatie . $bestandsnaam);
-		$this->map = $album;
-		$this->bestandsnaam = $bestandsnaam;
+		$this->directory = $album;
+		$this->filename = $bestandsnaam;
 	}
 
 	public function getPad() {
-		return $this->map->locatie . $this->bestandsnaam;
+		return $this->directory->locatie . $this->filename;
 	}
 
 	public function getThumbPad() {
-		return $this->map->locatie . '_thumbs/' . $this->bestandsnaam;
+		return $this->directory->locatie . '_thumbs/' . $this->filename;
 	}
 
 	public function getResizedPad() {
-		return $this->map->locatie . '_resized/' . $this->bestandsnaam;
+		return $this->directory->locatie . '_resized/' . $this->filename;
 	}
 
 	public function getThumbURL() {
-		return CSR_PICS . direncode($this->map->getSubDir() . '_thumbs/' . $this->bestandsnaam);
+		return CSR_PICS . direncode($this->directory->getSubDir() . '_thumbs/' . $this->filename);
 	}
 
 	public function getResizedURL() {
-		return CSR_PICS . direncode($this->map->getSubDir() . '_resized/' . $this->bestandsnaam);
+		return CSR_PICS . direncode($this->directory->getSubDir() . '_resized/' . $this->filename);
 	}
 
 	public function bestaatThumb() {

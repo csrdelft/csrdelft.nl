@@ -10,7 +10,7 @@ require_once 'MVC/model/entity/Bestand.class.php';
  * Als men dus 2008-halfjaarschema.pdf upload komt er een bestand dat bijvoorbeeld
  * 1123_2008-halfjaarschema.pdf heet in de documentenmap te staan.
  *
- * In de database wordt de originele bestandsnaam opgeslagen, zonder prefix dus.
+ * In de database wordt de originele filename opgeslagen, zonder prefix dus.
  *
  */
 class Document extends Bestand {
@@ -42,7 +42,7 @@ class Document extends Bestand {
 			} else {
 				$db = MySql::instance();
 				$query = "
-					SELECT ID, naam, catID, bestandsnaam, size, mimetype, toegevoegd, eigenaar, leesrechten
+					SELECT ID, naam, catID, filename, filesize, mimetype, toegevoegd, eigenaar, leesrechten
 					FROM document
 					WHERE ID=" . $this->getID() . ";";
 				$doc = $db->getRow($query);
@@ -56,7 +56,7 @@ class Document extends Bestand {
 	}
 
 	public function array2properties($array) {
-		$properties = array('ID', 'naam', 'catID', 'bestandsnaam', 'size', 'mimetype', 'toegevoegd', 'eigenaar', 'leesrechten');
+		$properties = array('ID', 'naam', 'catID', 'filename', 'filesize', 'mimetype', 'toegevoegd', 'eigenaar', 'leesrechten');
 		foreach ($properties as $prop) {
 			if (!isset($array[$prop])) {
 				throw new Exception('Documentproperties-array is niet compleet: ' . $prop . ' mist.');
@@ -70,11 +70,11 @@ class Document extends Bestand {
 		if ($this->getID() == 0) {
 			$query = "
 				INSERT INTO document (
-					naam, catID, bestandsnaam, size, mimetype, toegevoegd, eigenaar, leesrechten
+					naam, catID, filename, filesize, mimetype, toegevoegd, eigenaar, leesrechten
 				)VALUES(
 					'" . $db->escape($this->getNaam()) . "',
 					" . $this->getCatID() . ",
-					'" . $db->escape($this->getBestandsnaam()) . "',
+					'" . $db->escape($this->getFileName()) . "',
 					" . $this->getFileSize() . ",
 					'" . $db->escape($this->getMimetype()) . "',
 					'" . $this->getToegevoegd() . "',
@@ -86,8 +86,8 @@ class Document extends Bestand {
 				UPDATE document SET
 					naam='" . $db->escape($this->getNaam()) . "',
 					catID=" . $this->getCatID() . ",
-					bestandsnaam='" . $db->escape($this->getBestandsnaam()) . "',
-					size=" . $this->getFileSize() . ",
+					filename='" . $db->escape($this->getFileName()) . "',
+					filesize=" . $this->getFileSize() . ",
 					mimetype='" . $db->escape($this->getMimetype()) . "',
 					toegevoegd='" . $this->getToegevoegd() . "',
 					eigenaar='" . $this->getEigenaar() . "',
@@ -129,22 +129,19 @@ class Document extends Bestand {
 	}
 
 	public function getBestand() {
-		if (!$this->getBestandsnaam()) {
-			return null;
-		}
 		$bestand = new Bestand();
-		$bestand->bestandsnaam = $this->getBestandsnaam();
+		$bestand->filename = $this->getFullFileName();
 		$bestand->filesize = $this->getFileSize();
 		$bestand->mimetype = $this->getMimetype();
 		return $bestand;
 	}
 
-	public function getBestandsnaam() {
-		return $this->bestandsnaam;
+	public function getFileName() {
+		return $this->filename;
 	}
 
 	public function hasFile() {
-		return $this->getBestandsnaam() != '' AND file_exists($this->getFullPath());
+		return $this->getFileName() != '' AND file_exists($this->getFullPath());
 	}
 
 	public function getFileSize() {
@@ -171,8 +168,8 @@ class Document extends Bestand {
 		$this->catID = (int) $catID;
 	}
 
-	public function setBestandsnaam($naam) {
-		$this->bestandsnaam = $naam;
+	public function setFileName($naam) {
+		$this->filename = $naam;
 	}
 
 	public function setFileSize($filesize) {
@@ -243,7 +240,7 @@ class Document extends Bestand {
 	 * Centrale plek om het volledige pad van een document te maken.
 	 */
 	public function getFullPath() {
-		return $this->getPath() . $this->getFilename();
+		return $this->getPath() . $this->getFullFileName();
 	}
 
 	/**
@@ -256,12 +253,12 @@ class Document extends Bestand {
 	/**
 	 * @return string file name on disk
 	 */
-	public function getFilename() {
-		return $this->getID() . '_' . $this->bestandsnaam;
+	public function getFullFileName() {
+		return $this->getID() . '_' . $this->filename;
 	}
 
 	public function getDownloadurl() {
-		return CSR_ROOT . '/communicatie/documenten/download/' . $this->getID() . '/' . $this->getBestandsnaam();
+		return CSR_ROOT . '/communicatie/documenten/download/' . $this->getID() . '/' . $this->getFullFileName();
 	}
 
 	/**
@@ -313,7 +310,7 @@ class Document extends Bestand {
 			}
 		}
 		if (@unlink($this->getFullPath())) {
-			$this->setBestandsnaam('');
+			$this->setFileName('');
 			return $this->save();
 		} else {
 			if (is_writable($this->getFullPath())) {
