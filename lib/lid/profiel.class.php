@@ -260,11 +260,11 @@ class ProfielBewerken extends Profiel {
 					$duckfoto = new Bestand();
 					$duckfoto->map = pathinfo($path, PATHINFO_DIRNAME) . '/';
 					$duckfoto->bestandsnaam = pathinfo($path, PATHINFO_BASENAME);
-					$duckfoto->size = filesize($path);
+					$duckfoto->filesize = filesize($path);
 				} else {
 					$duckfoto = null;
 				}
-				$form[] = new FileField('duckfoto', $duckfoto, '/duck', array('image/png', 'image/jpeg', 'image/gif'));
+				$form[] = new ImageField('duckfoto', $duckfoto, '/duck', null, null, null, 250);
 			}
 			$form[] = new PassField('password', $this->lid);
 		}

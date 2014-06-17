@@ -24,7 +24,7 @@ class Document extends Bestand {
 	private $leesrechten = 'P_LEDEN_READ'; //rechten nodig om bestand te mogen downloaden
 
 	public function __construct($init) {
-		$this->size = 0;  //bestandsafmeting in bytes
+		$this->filesize = 0;  //bestandsafmeting in bytes
 		$this->mimetype = 'application/octet-stream'; //mime-type van het bestand
 		$this->load($init);
 	}
@@ -75,7 +75,7 @@ class Document extends Bestand {
 					'" . $db->escape($this->getNaam()) . "',
 					" . $this->getCatID() . ",
 					'" . $db->escape($this->getBestandsnaam()) . "',
-					" . $this->getSize() . ",
+					" . $this->getFileSize() . ",
 					'" . $db->escape($this->getMimetype()) . "',
 					'" . $this->getToegevoegd() . "',
 					'" . $this->getEigenaar() . "',
@@ -87,7 +87,7 @@ class Document extends Bestand {
 					naam='" . $db->escape($this->getNaam()) . "',
 					catID=" . $this->getCatID() . ",
 					bestandsnaam='" . $db->escape($this->getBestandsnaam()) . "',
-					size=" . $this->getSize() . ",
+					size=" . $this->getFileSize() . ",
 					mimetype='" . $db->escape($this->getMimetype()) . "',
 					toegevoegd='" . $this->getToegevoegd() . "',
 					eigenaar='" . $this->getEigenaar() . "',
@@ -134,7 +134,7 @@ class Document extends Bestand {
 		}
 		$bestand = new Bestand();
 		$bestand->bestandsnaam = $this->getBestandsnaam();
-		$bestand->size = $this->getSize();
+		$bestand->filesize = $this->getFileSize();
 		$bestand->mimetype = $this->getMimetype();
 		return $bestand;
 	}
@@ -147,8 +147,8 @@ class Document extends Bestand {
 		return $this->getBestandsnaam() != '' AND file_exists($this->getFullPath());
 	}
 
-	public function getSize() {
-		return $this->size;
+	public function getFileSize() {
+		return $this->filesize;
 	}
 
 	public function getMimetype() {
@@ -175,8 +175,8 @@ class Document extends Bestand {
 		$this->bestandsnaam = $naam;
 	}
 
-	public function setSize($size) {
-		$this->size = (int) $size;
+	public function setFileSize($filesize) {
+		$this->filesize = (int) $filesize;
 	}
 
 	public function setMimetype($mime) {
@@ -338,5 +338,3 @@ class Document extends Bestand {
 	}
 
 }
-
-?>

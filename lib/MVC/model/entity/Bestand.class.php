@@ -19,7 +19,7 @@ class Bestand {
 	 * Bestandsgrootte in bytes
 	 * @var int
 	 */
-	public $size;
+	public $filesize;
 	/**
 	 * Mime-type van het bestand
 	 * @var string 

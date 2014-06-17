@@ -9,9 +9,10 @@ require_once 'MVC/model/entity/FotoAlbum.class.php';
  * @author P.W.G. Brussee <brussee@live.nl>
  * 
  */
-class Foto extends Bestand {
+class Foto extends Afbeelding {
 
 	public function __construct(FotoAlbum $album, $bestandsnaam) {
+		parent::__construct($album->locatie . $bestandsnaam);
 		$this->map = $album;
 		$this->bestandsnaam = $bestandsnaam;
 	}

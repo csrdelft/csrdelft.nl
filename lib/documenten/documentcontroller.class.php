@@ -163,7 +163,7 @@ class DocumentController extends Controller {
 				}
 				$bestand = $fields['uploader']->getModel();
 				$this->document->setBestandsnaam($bestand->bestandsnaam);
-				$this->document->setSize($bestand->size);
+				$this->document->setFileSize($bestand->filesize);
 				$this->document->setMimetype($bestand->mimetype);
 			}
 			if ($this->document->save()) {

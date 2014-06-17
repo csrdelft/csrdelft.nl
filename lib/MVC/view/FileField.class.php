@@ -1,6 +1,6 @@
 <?php
 
-require_once 'MVC/model/entity/Bestand.class.php';
+require_once 'MVC/model/entity/Afbeelding.class.php';
 
 /**
  * UploadElement.class.php
@@ -18,7 +18,7 @@ class FileField implements FormElement, Validator {
 	protected $name;  // naam van het veld in POST
 	public $notnull = false; // required
 
-	public function __construct($name, Bestand $behouden = null, $ftpSubDir = '', array $filterType = array()) {
+	public function __construct($name, Bestand $behouden = null, $ftpSubDir = '', array $filterMime = array()) {
 		$this->name = $name;
 		$this->opties = array(
 			'BestandBehouden' => new BestandBehouden($name, $behouden),
@@ -26,7 +26,7 @@ class FileField implements FormElement, Validator {
 			'UploadFtp' => new UploadFtp($name, $ftpSubDir),
 			'UploadUrl' => new UploadUrl($name)
 		);
-		$this->filter = $filterType;
+		$this->filter = $filterMime;
 		$this->behouden = $behouden;
 		foreach ($this->opties as $methode => $uploader) {
 			if (!$uploader->isBeschikbaar()) {
@@ -129,6 +129,53 @@ JS;
 
 }
 
+class RequiredFileField extends FileField {
+
+	public $notnull = true;
+
+}
+
+class ImageField extends FileField {
+
+	protected $minWidth;
+	protected $minHeight;
+	protected $maxWidth;
+	protected $maxHeight;
+
+	public function __construct($name, Afbeelding $behouden = null, $ftpSubDir = '', array $filterMime = null, $minWidth = null, $minHeight = null, $maxWidth = null, $maxHeight = null) {
+		parent::__construct($name, $behouden, $ftpSubDir, ($filterMime === null ? Afbeelding::$mimeTypes : $filterMime));
+		$this->minWidth = $minWidth;
+		$this->minHeight = $minHeight;
+		$this->maxWidth = $maxWidth;
+		$this->maxHeight = $maxHeight;
+	}
+
+	public function validate() {
+		if (!parent::validate()) {
+			return false;
+		}
+		$width = $this->getModel()->breedte;
+		$height = $this->getModel()->hoogte;
+		if ($this->minWidth !== null AND $width < $this->minWidth) {
+			$this->opties[$this->methode]->error = 'Afbeelding is niet breed genoeg.';
+		} elseif ($this->minHeight !== null AND $height < $this->minHeight) {
+			$this->opties[$this->methode]->error = 'Afbeelding is niet hoog genoeg.';
+		} elseif ($this->maxWidth !== null AND $width > $this->maxWidth) {
+			$this->opties[$this->methode]->error = 'Afbeelding is te breed.';
+		} elseif ($this->maxHeight !== null AND $height > $this->maxHeight) {
+			$this->opties[$this->methode]->error = 'Afbeelding is te hoog.';
+		}
+		return $this->opties[$this->methode]->error === '';
+	}
+
+}
+
+class RequiredImageField extends ImageField {
+
+	public $notnull = true;
+
+}
+
 abstract class BestandUploader extends InputField {
 
 	protected $uploaderName;
@@ -163,12 +210,6 @@ abstract class BestandUploader extends InputField {
 		echo $this->getLabel();
 		echo $this->getErrorDiv();
 	}
-
-}
-
-class RequiredFileField extends FileField {
-
-	public $notnull = true;
 
 }
 
@@ -217,7 +258,7 @@ class BestandBehouden extends BestandUploader {
 			echo ' style="display: none;"';
 		}
 		echo '><div id="' . $this->name . '" style="height: 2em;">';
-		echo $this->model->bestandsnaam . ' (' . format_filesize($this->model->size) . ')';
+		echo $this->model->bestandsnaam . ' (' . format_filesize($this->model->filesize) . ')';
 		echo '</div></div></div>';
 	}
 
@@ -229,9 +270,13 @@ class UploadHttp extends BestandUploader {
 		parent::__construct($name);
 		if ($this->isPosted()) {
 			$this->value = $_FILES[$this->name];
-			$this->model = new Bestand();
+			if (in_array($this->value['type'], Afbeelding::$mimeTypes)) {
+				$this->model = new Afbeelding($this->value['tmp_name']);
+			} else {
+				$this->model = new Bestand();
+			}
 			$this->model->bestandsnaam = $this->value['name'];
-			$this->model->size = $this->value['size'];
+			$this->model->filesize = $this->value['size'];
 			$this->model->mimetype = $this->value['type'];
 		}
 	}
@@ -310,9 +355,13 @@ class UploadFtp extends BestandUploader {
 			$finfo = finfo_open(FILEINFO_MIME_TYPE);
 			$mime = finfo_file($finfo, $this->path . $this->value);
 			finfo_close($finfo);
-			$this->model = new Bestand();
+			if (in_array($mime, Afbeelding::$mimeTypes)) {
+				$this->model = new Afbeelding($this->path . $this->value);
+			} else {
+				$this->model = new Bestand();
+			}
 			$this->model->bestandsnaam = $this->value;
-			$this->model->size = filesize($this->path . $this->value);
+			$this->model->filesize = filesize($this->path . $this->value);
 			$this->model->mimetype = $mime;
 		}
 	}
@@ -428,13 +477,17 @@ class UploadUrl extends BestandUploader {
 				$this->error = 'TMP_PATH is niet beschrijfbaar';
 				return;
 			}
-			$size = file_put_contents($tmp_bestand, $this->value);
+			$filesize = file_put_contents($tmp_bestand, $this->value);
 			$finfo = finfo_open(FILEINFO_MIME_TYPE);
 			$mime = finfo_file($finfo, $tmp_bestand);
 			finfo_close($finfo);
-			$this->model = new Bestand();
+			if (in_array($mime, Afbeelding::$mimeTypes)) {
+				$this->model = new Afbeelding($tmp_bestand);
+			} else {
+				$this->model = new Bestand();
+			}
 			$this->model->bestandsnaam = $clean_name;
-			$this->model->size = $size;
+			$this->model->filesize = $filesize;
 			$this->model->mimetype = $mime;
 			unlink($tmp_bestand);
 		}

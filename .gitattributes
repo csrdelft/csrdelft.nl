@@ -3417,6 +3417,7 @@ lib/MVC/model/MenuModel.class.php -text
 lib/MVC/model/Paging.interface.php -text
 lib/MVC/model/Persistence.interface.php -text
 lib/MVC/model/PersistenceModel.abstract.php -text
+lib/MVC/model/entity/Afbeelding.class.php -text
 lib/MVC/model/entity/AgendaItem.class.php -text
 lib/MVC/model/entity/Bestand.class.php -text
 lib/MVC/model/entity/CmsPagina.class.php -text

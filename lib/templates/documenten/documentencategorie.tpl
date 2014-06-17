@@ -35,7 +35,7 @@
 					<a class="bewerken" href="/communicatie/documenten/bewerken/{$document->getID()}" title="Document bewerken">{icon get="bewerken"}</a>
 				{/if}
 			</td>
-			<td class="size">{$document->getSize()}</td>
+			<td class="size">{$document->getFileSize()}</td>
 			<td class="mimetype" title="{$document->getMimetype()}">{$document->getMimetype()|mimeicon}</td>
 			<td class="datum"><div class="verborgen">{$document->getToegevoegd()}</div>{$document->getToegevoegd()|reldate}</td>
 			<td class="eigenaar">{$document->getEigenaar()|csrnaam:'civitas':'visitekaartje'}</td>
