@@ -257,7 +257,7 @@ class ProfielBewerken extends Profiel {
 				$form[] = new Subkopje('Duck-pasfoto:');
 				$path = PICS_PATH . $this->lid->getPasfotoPath();
 				if (strpos($path, '/duck') !== false) {
-					$duckfoto = new Bestand();
+					$duckfoto = new Afbeelding($path);
 					$duckfoto->map = pathinfo($path, PATHINFO_DIRNAME) . '/';
 					$duckfoto->bestandsnaam = pathinfo($path, PATHINFO_BASENAME);
 					$duckfoto->filesize = filesize($path);
