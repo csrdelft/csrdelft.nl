@@ -42,7 +42,7 @@ class LidInstellingen extends PersistenceModel {
 		'algemeen' => array(
 			'sneltoetsen' => array('Sneltoetsen op de webstek', T::Enumeration, array('ja', 'nee'), 'nee'),
 			'bijbel' => array('Bijbelvertaling voor bijbelrooster', T::Enumeration, array('NBV', 'NBG', 'Herziene Statenvertaling', 'Statenvertaling (Jongbloed)', 'Groot Nieuws Bijbel', 'Willibrordvertaling'), 'NBV'),
-			'naamWeergave' => array('Naamweergave', T::Enumeration, array('Duckstad'), 'Duckstad') //'civitas', 'volledig', 'bijnaam', 'aaidrom'
+			'naamWeergave' => array('Naamweergave', T::Enumeration, array('civitas', 'volledig', 'bijnaam', 'aaidrom', 'Duckstad'), 'Duckstad')
 		),
 		'layout' => array(
 			'layout' => array('Websteklayout', T::Enumeration, array('normaal', 'owee', 'lustrum', 'sineregno', 'roze'), 'normaal'),
