@@ -864,7 +864,12 @@ class Lid implements Serializable, Agendeerbaar {
 				} else {
 					$k.= ' init';
 				}
-				$k.= '">' . $this->getPasfoto('small', 'lidfoto');
+				$k.= '">';
+				if (LidInstellingen::get('algemeen', 'naamWeergave') === 'Duckstad') {
+					$k.= $this->getDuckfoto('small', 'lidfoto');
+				} else {
+					$k.= $this->getPasfoto('small', 'lidfoto');
+				}
 				$k.= '<div class="uid uitgebreid">(';
 				if (LoginLid::instance()->maySuTo($this)) {
 					$k.= '<a href="/su/' . $this->getUid() . '" title="Su naar dit lid">' . $this->getUid() . '</a>';
@@ -922,7 +927,11 @@ class Lid implements Serializable, Agendeerbaar {
 
 	public function __toString() {
 		if ($this->tsMode == 'pasfoto') {
-			$this->getPasfoto(true);
+			if (LidInstellingen::get('algemeen', 'naamWeergave') === 'Duckstad') {
+				$this->getDuckfoto(true);
+			} else {
+				$this->getPasfoto(true);
+			}
 		} else {
 			return $this->getNaamLink($this->tsVorm, $this->tsMode);
 		}
