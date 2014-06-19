@@ -14,7 +14,7 @@ Dit kunt u hieronder aangeven, de koks zullen er dan rekening mee houden.
 <p>
 N.B. Dit is niet de plek om aan te geven dat u iets niet lekker vindt!
 </p>
-{$eetwens->view(true)}
+<label>Allergie/diëet:</label>{$eetwens->view(true)}
 <br />
 <table id="taken-tabel" class="taken-tabel">
 	<thead>
