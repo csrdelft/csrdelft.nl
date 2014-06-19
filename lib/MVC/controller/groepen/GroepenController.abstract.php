@@ -25,16 +25,9 @@ abstract class GroepenController extends Controller {
 	 * @return boolean
 	 */
 	protected function hasPermission() {
-		if (!LoginLid::mag('P_LEDEN_READ')) {
-			$this->geentoegang();
-		}
 		switch ($this->action) {
 			case 'overzicht':
 			case 'tonen':
-			case GroepTab::Lijst:
-			case GroepTab::Pasfotos:
-			case GroepTab::Statistiek:
-			case GroepTab::Emails:
 				return !$this->isPosted();
 
 			case 'aanmaken':
@@ -59,22 +52,6 @@ abstract class GroepenController extends Controller {
 	}
 
 	public function tonen($id) {
-		//TODO
-	}
-
-	public function lijst($id) {
-		//TODO
-	}
-
-	public function pasfotos($id) {
-		//TODO
-	}
-
-	public function stats($id) {
-		//TODO
-	}
-
-	public function emails($id) {
 		//TODO
 	}
 

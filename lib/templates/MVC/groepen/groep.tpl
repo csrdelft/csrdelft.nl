@@ -1,48 +1,54 @@
-<div id="groep{$groep->id}" class="groep">
-	<div style="float: left;">
-		<h2>
-			<a href="{Instellingen::get('groepen', 'url')}/{$groep->id}">
-				{$groep->naam}
-			</a>
-		</h2>
-		{$groep->samenvatting|ubb}
-		{if isset($generaties)}
-			<div class="generaties">
-				<ul class="nobullets">
-					<li class="volgendeGroep"><a href="{Instellingen::get('groepen', 'url')}/{$generaties.volgende->id}">{$generaties.volgende}</a></li>
-					<li class="huidigeGroep">{$generaties.huidig}</li>
-					<li class="vorigeGroep"><a href="{Instellingen::get('groepen', 'url')}/{$generaties.vorige->id}"{$generaties.vorige}</a></li>
-				</ul>
-			</div>
-		{/if}
-	</div>
-	<div style="float: right;">
-		<ul class="tabs nobullets">
-			<li>
-				<a class="knop get active" href="{Instellingen::get('groepen', 'url')}/{$groep->id}/{GroepTab::Lijst}" title="Lijst en opmerking tonen">
-					<img src="{$CSR_PICS}/knopjes/lijst.png" width="20" height="20" />
-				</a>
-			</li>
-			<li>
-				<a class="knop get" href="{Instellingen::get('groepen', 'url')}/{$groep->id}/{GroepTab::Pasfotos}" title="Pasfoto's tonen">
-					<img src="{$CSR_PICS}/knopjes/pasfoto.png" width="18" height="18" />
-				</a>
-			</li>
-			<li>
-				<a class="knop get" href="{Instellingen::get('groepen', 'url')}/{$groep->id}/{GroepTab::Statistiek}" title="Statistiek tonen">
+<hr>
+<div id="groep{$groep->id}">
+	<div class="groepledenContainer">
+		{if LoginLid::mag('P_LEDEN_READ')}
+			<ul id="tabs">
+				<li id="{GroepTab::Lijst}" class="tab active" onclick="return groepTabShow({$groep->id}, '{GroepTab::Lijst}');" title="Lijst en opmerking tonen">
+					<img src="{$CSR_PICS}/knopjes/lijst.png" />
+				</li>
+				<li id="{GroepTab::Pasfotos}" class="tab" onclick="return groepTabShow({$groep->id}, '{GroepTab::Pasfotos}');" title="Pasfoto's tonen">
+					<img src="{$CSR_PICS}/knopjes/pasfoto.png" />
+				</li>
+				<li id="{GroepTab::Statistiek}" class="tab" onclick="groepTabShow({$groep->id}, '{GroepTab::Statistiek}');" title="Statistiek tonen">
 					%
-				</a>
-			</li>
-			<li><a class="knop get" href="{Instellingen::get('groepen', 'url')}/{$groep->id}/{GroepTab::Emails}" title="E-mail's tonen">
+				</li>
+				<li id="{GroepTab::Emails}" class="tab" onclick="groepTabShow({$groep->id}, '{GroepTab::Emails}');" title="E-mail's tonen">
 					@
-				</a>
-			</li>
-		</ul>
-		<div id="groepleden{$groep->id}" class="groepleden">
-			{foreach from=$lidforms key=uid item=form}
-				<div class="lid">{$uid|csrnaam:'civitas':'visitekaartje'}</div>
-				<div class="opmerking">{$form->view()}</div>
-			{/foreach}
+				</li>
+			</ul>
+		{/if}
+		{*
+		we laden het juiste tabje adh van de hashtag, als er niets
+		ingesteld is kiezen we tussen pasfoto's en ledenlijst aan de hand
+		van de instelling van de gebruiker.
+		*}
+		<script type="text/javascript">
+			$(document).ready(new function() {
+				if (window.location.hash === '{GroepTab::Lijst}' || window.location.hash === '{GroepTab::Pasfotos}' || window.location.hash === '{GroepTab::Statistiek}' || window.location.hash === '{GroepTab::Emails}') {
+					groepTabShow('{$groep->id}', window.location.hash.substring(1));
+				}
+				else {
+			{if LidInstellingen::get('groepen', 'toonPasfotos') == 'ja'}
+					groepTabShow('{$groep->id}', '{GroepTab::Pasfotos}');
+			{/if}
+				}
+			});
+		</script>
+		<div id="ledenvangroep{$groep->id}" class="groepleden">
+			<table class="leden">
+				{foreach from=$lidforms key=uid item=form}
+					<tr>
+						<td>{$uid|csrnaam:'civitas':'visitekaartje'}</td>
+						<td>{$form->view()}</td>
+					</tr>
+				{/foreach}
+			</table>
 		</div>
 	</div>
+	<h2>
+		<a href="{Instellingen::get('groepen', 'url')}/{$groep->id}">
+			{$groep->naam}
+		</a>
+	</h2>
+	{$groep->samenvatting|ubb}
 </div>

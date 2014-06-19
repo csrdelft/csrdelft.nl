@@ -11,7 +11,7 @@
 class EetwensForm extends InlineForm {
 
 	public function __construct() {
-		parent::__construct(null, 'eetwens-form', Instellingen::get('taken', 'url') . '/eetwens', new AutoresizeTextareaField('eetwens', VoorkeurenModel::getEetwens(LoginLid::instance()->getLid())), true);
+		parent::__construct(null, 'eetwens-form', Instellingen::get('taken', 'url') . '/eetwens', new AutoresizeTextareaField('eetwens', VoorkeurenModel::getEetwens(LoginLid::instance()->getLid()), 'Allergie/diëet:'), true);
 	}
 
 }

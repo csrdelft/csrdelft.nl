@@ -34,6 +34,7 @@ class GroepenRouterController extends Controller {
 		$this->view = $controller->getContent();
 		if (!$this->isPosted()) {
 			$this->view = new CsrLayoutPage($this->getContent());
+			$this->view->addStyleSheet('groepen.css');
 		}
 	}
 

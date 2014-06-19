@@ -5,16 +5,16 @@
 var FieldSuggestions = [];
 
 function preload(arrayOfImages) {
-	$(arrayOfImages).each(function() {
-		$('<img/>')[0].src = this;
-		// Alternatively you could use:
-		// (new Image()).src = this;
-	});
+    $(arrayOfImages).each(function(){
+        $('<img/>')[0].src = this;
+        // Alternatively you could use:
+        // (new Image()).src = this;
+    });
 }
 
 preload([
 	'http://plaetjes.csrdelft.nl/layout/loading-arrows.gif',
-	'http://plaetjes.csrdelft.nl/layout/loading_bar_black.gif'
+    'http://plaetjes.csrdelft.nl/layout/loading_bar_black.gif'
 ]);
 
 $(document).ready(function() {
@@ -234,19 +234,10 @@ function form_replace_action(event) {
 	form.attr('action', url);
 }
 
-function toggle_inline_none(elmnt) {
-	$(elmnt).css('display', $(elmnt).css('display') === 'none' ? 'inline' : 'none');
-}
-
 function form_inline_toggle(form) {
-	$(form).find('.InputField').each(function() {
-		toggle_inline_none($(this));
-	});
-	$(form).find('.FormButtons').each(function() {
-		toggle_inline_none($(this));
-	});
 	$(form).find('.InlineFormToggle').toggle();
-	$(form).find('.FormField').focus();
+	$(form).find('.FormField').toggle().focus();
+	$(form).find('.knop').toggle();
 }
 
 function form_toggle(event) {
