@@ -32,9 +32,6 @@ class GroepenRouterController extends Controller {
 		Instellingen::setTemp('groepen', 'url', '/groepen/' . $this->action);
 		$controller->performAction();
 		$this->view = $controller->getContent();
-		if (!$this->isPosted()) {
-			$this->view = new CsrLayoutPage($this->getContent());
-		}
 	}
 
 	/**

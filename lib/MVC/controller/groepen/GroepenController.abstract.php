@@ -13,10 +13,24 @@ abstract class GroepenController extends Controller {
 
 	public function __construct($query, GroepenModel $model) {
 		parent::__construct($query, $model);
+		if ($this->hasParam(4)) {
+			$this->action = $this->getParam(3);
+		} elseif ($this->hasParam(3) AND (int) $this->getParam(3) > 0) {
+			$this->action = 'tonen';
+		} else {
+			$this->action = 'overzicht';
+		}
 	}
 
 	public function performAction(array $args = array()) {
-		parent::performAction($this->getParams(3));
+		if ($this->hasParam(4)) {
+			parent::performAction($this->getParams(4));
+		} else { // zonder user-actie
+			parent::performAction($this->getParams(3));
+		}
+		if (!$this->isPosted()) {
+			$this->view = new CsrLayoutPage($this->getContent());
+		}
 	}
 
 	/**
