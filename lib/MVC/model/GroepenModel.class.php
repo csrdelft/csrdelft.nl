@@ -14,6 +14,17 @@ abstract class GroepenModel extends PersistenceModel {
 		parent::__construct('groepen/');
 	}
 
+	public function getById($id) {
+		if (!is_int($id) OR $id <= 0) {
+			throw new Exception('Invalid groep id');
+		}
+		$groep = $this->retrieveByPrimaryKeys(array($id));
+		if (!$groep instanceof Groep) {
+			throw new Exception('Groep bestaat niet');
+		}
+		return $groep;
+	}
+
 }
 
 class GroepLedenModel extends GroepenModel {

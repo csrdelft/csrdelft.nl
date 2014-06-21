@@ -19,21 +19,21 @@
 	<div style="float: right;">
 		<ul class="tabs nobullets">
 			<li>
-				<a class="knop get active" href="{Instellingen::get('groepen', 'url')}/{GroepTab::Lijst}/{$groep->id}" title="Lijst en opmerking tonen">
+				<a class="knop get active" href="{Instellingen::get('groepen', 'url')}/{$groep->id}/{GroepTab::Lijst}" title="Lijst en opmerking tonen">
 					<img src="{$CSR_PICS}/knopjes/lijst.png" width="20" height="20" />
 				</a>
 			</li>
 			<li>
-				<a class="knop get" href="{Instellingen::get('groepen', 'url')}/{GroepTab::Pasfotos}/{$groep->id}" title="Pasfoto's tonen">
+				<a class="knop get" href="{Instellingen::get('groepen', 'url')}/{$groep->id}/{GroepTab::Pasfotos}" title="Pasfoto's tonen">
 					<img src="{$CSR_PICS}/knopjes/pasfoto.png" width="18" height="18" />
 				</a>
 			</li>
 			<li>
-				<a class="knop get" href="{Instellingen::get('groepen', 'url')}/{GroepTab::Statistiek}/{$groep->id}" title="Statistiek tonen">
+				<a class="knop get" href="{Instellingen::get('groepen', 'url')}/{$groep->id}/{GroepTab::Statistiek}" title="Statistiek tonen">
 					%
 				</a>
 			</li>
-			<li><a class="knop get" href="{Instellingen::get('groepen', 'url')}/{GroepTab::Emails}/{$groep->id}" title="E-mail's tonen">
+			<li><a class="knop get" href="{Instellingen::get('groepen', 'url')}/{$groep->id}/{GroepTab::Emails}" title="E-mail's tonen">
 					@
 				</a>
 			</li>
