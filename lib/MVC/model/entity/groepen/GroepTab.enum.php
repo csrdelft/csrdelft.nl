@@ -10,7 +10,7 @@
  */
 abstract class GroepTab implements PersistentEnum {
 
-	const Lijst = 'lidlijst';
+	const Lijst = 'lijst';
 	const Pasfotos = 'pasfotos';
 	const Statistiek = 'stats';
 	const Emails = 'emails';

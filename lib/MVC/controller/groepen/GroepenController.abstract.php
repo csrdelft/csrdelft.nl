@@ -13,10 +13,23 @@ abstract class GroepenController extends Controller {
 
 	public function __construct($query, GroepenModel $model) {
 		parent::__construct($query, $model);
+		if ($this->hasParam(4)) {
+			$this->action = $this->getParam(4);
+		} elseif ($this->hasParam(3)) {
+			$this->action = 'tonen';
+		} else {
+			$this->action = 'overzicht';
+		}
 	}
 
 	public function performAction(array $args = array()) {
-		parent::performAction($this->getParams(3));
+		if ($this->hasParam(3)) {
+			$args[] = (int) $this->getParam(3);
+			if ($this->hasParam(5)) {
+				$args[] = $this->getParam(5);
+			}
+		}
+		parent::performAction($args);
 	}
 
 	/**
@@ -25,9 +38,16 @@ abstract class GroepenController extends Controller {
 	 * @return boolean
 	 */
 	protected function hasPermission() {
+		if (!LoginLid::mag('P_LEDEN_READ')) {
+			$this->geentoegang();
+		}
 		switch ($this->action) {
 			case 'overzicht':
 			case 'tonen':
+			case GroepTab::Lijst:
+			case GroepTab::Pasfotos:
+			case GroepTab::Statistiek:
+			case GroepTab::Emails:
 				return !$this->isPosted();
 
 			case 'aanmaken':
@@ -49,10 +69,31 @@ abstract class GroepenController extends Controller {
 		$class = str_replace('Model', '', get_class($this->model));
 		$view = $class . 'View';
 		$this->view = new $view($groepen, $class, $class . ' (h.t.)');
+		$this->view = new CsrLayoutPage($this->getContent());
 	}
 
 	public function tonen($id) {
-		//TODO
+		$this->lijst($id);
+		$this->view = new CsrLayoutPage($this->getContent());
+	}
+
+	public function lijst($id) {
+		$groep = $this->model->getById($id);
+		$class = str_replace('Model', '', get_class($groep));
+		$view = $class . 'View';
+		$this->view = new $view($groep, $this->action);
+	}
+
+	public function pasfotos($id) {
+		$this->lijst($id);
+	}
+
+	public function stats($id) {
+		$this->lijst($id);
+	}
+
+	public function emails($id) {
+		$this->lijst($id);
 	}
 
 	public function aanmaken() {

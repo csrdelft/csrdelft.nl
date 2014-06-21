@@ -63,7 +63,7 @@ class CsrLayoutPage extends HtmlPage {
 		$this->addScript('csrdelft.js');
 		$this->addScript('dragobject.js');
 		$this->addScript('menu.js');
-		$this->addScript('groepen.js');
+		//$this->addScript('groepen.js');
 
 		if (LidInstellingen::get('algemeen', 'sneltoetsen') == 'ja') {
 			$this->addScript('sneltoetsen.js');

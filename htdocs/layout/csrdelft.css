@@ -842,26 +842,55 @@ input, textarea, select{
 }
 
 /* Inline Formulier */
-
-.InlineForm .FormField, .InlineForm .submit, .InlineForm .cancel{
+.InlineForm .InputField, .InlineForm .FormButtons {
 	display: none;
+}
+.InlineForm .FormField {
 	width: auto !important;
 }
-.InlineForm .InputField{
-	display: inline;
+.InlineForm div.InputField:hover {
+	border: 1px solid transparent;
+	background-color: transparent;
 }
-.InlineForm .InlineFormToggle{
-	float: left;
+.InlineForm .InlineFormToggle {
 	border-bottom: 1px dotted grey;
 	width: 100%;
 	height: 15px;
 	cursor: pointer;
 	font-style: italic;
 }
-.InlineForm div.InputField:hover{
-	border: 1px solid transparent;
-	background-color: transparent;
+
+/** GROEPEN **************************************************************/
+ul.tabs {
+	float: right;
 }
+ul.tabs li {
+	float: left;
+	margin-left: 2px;
+	text-align: center;
+}
+ul.tabs a {
+	float: left;
+	width: 20px;
+	height: 20px;
+	color: white;
+	background-color: #cfcfcf;
+}
+div.tabs a.active {
+	background-color: #0a338d;
+}
+div.groepleden {
+	clear: both;
+}
+div.groepleden div.lid {
+	width: 150px;
+	display: inline-block;
+}
+div.groepleden div.opmerking {
+	width: 150px;
+	display: inline-block;
+}
+
 
 /**************************** FORUM *******************************/
 #forumtabel{
