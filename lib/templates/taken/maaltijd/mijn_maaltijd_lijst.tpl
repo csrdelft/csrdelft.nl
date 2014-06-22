@@ -54,9 +54,13 @@
 	{else}
 		<form method="post" action="{Instellingen::get('taken', 'url')}/gasten/{$maaltijd->getMaaltijdId()}" class="Formulier InlineForm">
 			<div class="InlineFormToggle maaltijd-gasten">{$aanmelding->getAantalGasten()}</div>
-			<input type="text" name="aantal_gasten" value="{$aanmelding->getAantalGasten()}" origvalue="{$aanmelding->getAantalGasten()}" class="FormField" maxlength="4" size="4" />
-			<a class="knop submit" title="Wijzigingen opslaan">{icon get="accept"}</a>
-			<a class="knop reset cancel" title="Annuleren">{icon get="delete"}</a>
+			<div class="InputField">
+				<input type="text" name="aantal_gasten" value="{$aanmelding->getAantalGasten()}" origvalue="{$aanmelding->getAantalGasten()}" class="FormField" maxlength="4" size="4" />
+			</div>
+			<div class="FormButtons">
+				<a class="knop submit" title="Wijzigingen opslaan">{icon get="accept"}</a>
+				<a class="knop reset cancel" title="Annuleren">{icon get="delete"}</a>
+			</div>
 		</form>
 	{/if}
 	</td>
@@ -75,9 +79,13 @@
 				<a class="knop">{icon get="comment_add" title="Gasten allergie/diëet"}</a>
 		{/if}
 			</div>
-			<input type="text" name="gasten_eetwens" value="{$aanmelding->getGastenEetwens()}" origvalue="{$aanmelding->getGastenEetwens()}" class="FormField" maxlength="255" size="20" />
-			<a class="knop submit" title="Wijzigingen opslaan">{icon get="accept"}</a>
-			<a class="knop reset cancel" title="Annuleren">{icon get="delete"}</a>
+			<div class="InputField">
+				<input type="text" name="gasten_eetwens" value="{$aanmelding->getGastenEetwens()}" origvalue="{$aanmelding->getGastenEetwens()}" class="FormField" maxlength="255" size="20" />
+			</div>
+			<div class="FormButtons">
+				<a class="knop submit" title="Wijzigingen opslaan">{icon get="accept"}</a>
+				<a class="knop reset cancel" title="Annuleren">{icon get="delete"}</a>
+			</div>
 		</form>
 	{/if}
 	{/if}
