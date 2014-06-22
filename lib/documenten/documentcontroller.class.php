@@ -137,7 +137,7 @@ class DocumentController extends Controller {
 			$namen[$cat->getID()] = $cat->getNaam();
 		}
 		$bestand = $this->document->getBestand();
-		if (!file_exists($bestand)) {
+		if (!file_exists($bestand->directory . $bestand->filename)) {
 			$bestand = null;
 		}
 		$fields['catID'] = new SelectField('catID', $this->document->getCatID(), 'Categorie', $namen);

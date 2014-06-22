@@ -130,6 +130,7 @@ class Document extends Bestand {
 
 	public function getBestand() {
 		$bestand = new Bestand();
+		$bestand->directory = $this->getPath();
 		$bestand->filename = $this->getFullFileName();
 		$bestand->filesize = $this->getFileSize();
 		$bestand->mimetype = $this->getMimetype();
