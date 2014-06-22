@@ -63,7 +63,6 @@ class FotoAlbumController extends AclController {
 		if ($album === false) {
 			$this->geentoegang();
 		} elseif ($album === null) {
-			exit;
 			invokeRefresh(CSR_ROOT . '/fotoalbum', 'Fotoalbum bestaat niet', -1);
 		}
 		$args[] = $album;
