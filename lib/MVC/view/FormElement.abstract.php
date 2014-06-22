@@ -439,6 +439,26 @@ class RequiredTextField extends TextField {
 
 }
 
+class FileNameField extends TextField {
+
+	public function validate() {
+		if (!parent::validate()) {
+			return false;
+		}
+		if (!valid_filename($this->value)) {
+			$this->error = 'Ongeldige bestandsnaam.';
+		}
+		return $this->error === '';
+	}
+
+}
+
+class RequiredFileNameField extends FileNameField {
+
+	public $notnull = true;
+
+}
+
 /**
  * LandField met een aantal autocomplete suggesties voor landen.
  * Doet verder geen controle op niet-bestaande landen...

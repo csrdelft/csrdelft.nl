@@ -79,6 +79,7 @@ class FotoUploadForm extends PopupForm {
 		parent::__construct($album, get_class(), '/fotoalbum/uploaden' . $album->getSubDir());
 		$this->titel = 'Foto toevoegen';
 		$fields[] = new HtmlComment('Alleen jpeg afbeeldingen.<br/><br/>');
+		$fields[] = new FileNameField('subalbum', null, 'Sub-album');
 		$fields[] = new RequiredImageField('foto', null, null, array('image/jpeg'));
 		$fields[] = new SubmitResetCancel('/fotoalbum', true, true, false);
 		$this->addFields($fields);
@@ -91,7 +92,7 @@ class PosterUploadForm extends FotoUploadForm {
 	public function __construct(FotoAlbum $album) {
 		parent::__construct($album);
 		$this->titel = 'Poster toevoegen';
-		$field = new RequiredTextField('posternaam', null, 'Posternaam', 50, 5);
+		$field = new RequiredFileNameField('posternaam', null, 'Posternaam', 50, 5);
 		$this->insertAtPos(1, $field);
 	}
 

@@ -150,6 +150,11 @@ class FotoAlbumController extends AclController {
 				} else {
 					$filenaam = $uploader->getModel()->filename;
 				}
+				$subalbum = $formulier->findByName('subalbum')->getValue();
+				if ($subalbum != '') {
+					$album->path .= $subalbum . '/';
+					mkdir($album->path);
+				}
 				if ($uploader->opslaan($album->path, $filenaam)) {
 					FotoAlbumModel::verwerkFotos($album);
 					setMelding($msg . ' met succes toegevoegd', 1); //TODO: $album->getUrl() . '#' . direncode($filenaam)
