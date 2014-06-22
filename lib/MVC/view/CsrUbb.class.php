@@ -571,7 +571,7 @@ HTML;
 		$url = urldecode($this->parseArray(array('[/fotoalbum]'), array()));
 		$path = PICS_PATH . '/fotoalbum' . $url;
 		$album = FotoAlbumModel::getFotoAlbum($path);
-		if ($album === null) {
+		if (!$album) {
 			return '<div class="ubb_block">Fotoalbum niet gevonden: ' . $url . '</div>';
 		}
 		$fotoalbumtag = new FotoAlbumUbbView($album);
