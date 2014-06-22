@@ -3388,7 +3388,6 @@ lib/MVC/controller/GroepenRouterController.class.php -text
 lib/MVC/controller/InstellingenBeheerController.class.php -text
 lib/MVC/controller/LidInstellingenController.class.php -text
 lib/MVC/controller/MenuBeheerController.class.php -text
-lib/MVC/controller/PosterController.class.php -text
 lib/MVC/controller/TakenRouterController.class.php -text
 lib/MVC/controller/groepen/ActiviteitenController.class.php -text
 lib/MVC/controller/groepen/BesturenController.class.php -text

@@ -10,22 +10,28 @@ require_once 'MVC/model/entity/Foto.class.php';
  */
 class FotoAlbumModel {
 
-	public static function getFotoAlbum(Map $parent, $naam) {
-		$album = new FotoAlbum($parent, $naam);
-		if (!$album->exists() OR ! FotoAlbumController::magBekijken($album->locatie)) {
+	public static function getFotoAlbum($locatie) {
+		if (!endsWith($locatie, '/')) {
+			$locatie .= '/';
+		}
+		if (!FotoAlbumController::magBekijken($locatie)) {
+			return false;
+		}
+		$album = new FotoAlbum($locatie);
+		if (!$album->exists()) {
 			return null;
 		}
 		return $album;
 	}
 
 	public static function verwerkFotos(FotoAlbum $album) {
-		if (!file_exists($album->locatie . '_thumbs')) {
-			mkdir($album->locatie . '_thumbs');
-			chmod($album->locatie . '_thumbs', 0755);
+		if (!file_exists($album->path . '_thumbs')) {
+			mkdir($album->path . '_thumbs');
+			chmod($album->path . '_thumbs', 0755);
 		}
-		if (!file_exists($album->locatie . '_resized')) {
-			mkdir($album->locatie . '_resized');
-			chmod($album->locatie . '_resized', 0755);
+		if (!file_exists($album->path . '_resized')) {
+			mkdir($album->path . '_resized');
+			chmod($album->path . '_resized', 0755);
 		}
 		foreach ($album->getFotos(true) as $foto) {
 			if (!$foto->bestaatThumb()) {
@@ -38,10 +44,8 @@ class FotoAlbumModel {
 	}
 
 	public static function getMostRecentFotoAlbum() {
-		$map = new Map();
-		$map->locatie = PICS_PATH . '/';
-		$album = FotoAlbumModel::getFotoAlbum($map, 'fotoalbum');
-		if ($album === null) {
+		$album = FotoAlbumModel::getFotoAlbum(PICS_PATH . '/fotoalbum/');
+		if (!$album) {
 			return null;
 		}
 		return $album->getMostRecentSubAlbum();
@@ -49,7 +53,7 @@ class FotoAlbumModel {
 
 	public static function verwijderFoto(Foto $foto) {
 		$ret = true;
-		$ret &= unlink($foto->directory->locatie . $foto->filename);
+		$ret &= unlink($foto->directory->path . $foto->filename);
 		$ret &= unlink($foto->getResizedPad());
 		$ret &= unlink($foto->getThumbPad());
 		return $ret;
@@ -59,7 +63,7 @@ class FotoAlbumModel {
 		if (!valid_filename($nieuwenaam)) {
 			throw new Exception('Ongeldige naam');
 		}
-		return rename($album->locatie, str_replace($album->mapnaam, $nieuwenaam, $album->locatie));
+		return rename($album->path, str_replace($album->dirname, $nieuwenaam, $album->path));
 	}
 
 	public static function setAlbumCover(FotoAlbum $album, Foto $cover) {

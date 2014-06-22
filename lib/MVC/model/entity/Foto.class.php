@@ -12,21 +12,21 @@ require_once 'MVC/model/entity/FotoAlbum.class.php';
 class Foto extends Afbeelding {
 
 	public function __construct(FotoAlbum $album, $bestandsnaam) {
-		parent::__construct($album->locatie . $bestandsnaam);
+		parent::__construct($album->path . $bestandsnaam);
 		$this->directory = $album;
 		$this->filename = $bestandsnaam;
 	}
 
 	public function getPad() {
-		return $this->directory->locatie . $this->filename;
+		return $this->directory->path . $this->filename;
 	}
 
 	public function getThumbPad() {
-		return $this->directory->locatie . '_thumbs/' . $this->filename;
+		return $this->directory->path . '_thumbs/' . $this->filename;
 	}
 
 	public function getResizedPad() {
-		return $this->directory->locatie . '_resized/' . $this->filename;
+		return $this->directory->path . '_resized/' . $this->filename;
 	}
 
 	public function getThumbURL() {

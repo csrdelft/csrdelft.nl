@@ -20,9 +20,9 @@ class FotoAlbum extends Map {
 	 */
 	private $subalbums;
 
-	public function FotoAlbum(Map $parent, $mapnaam) {
-		$this->locatie = $parent->locatie . $mapnaam . '/';
-		$this->mapnaam = $mapnaam;
+	public function FotoAlbum($locatie) {
+		$this->path = $locatie;
+		$this->dirname = basename($locatie);
 		if (!$this->exists()) {
 			$this->fotos = array();
 			$this->subalbums = array();
@@ -33,18 +33,18 @@ class FotoAlbum extends Map {
 	 * Bestaat er een map met de naam van het pad.
 	 */
 	public function exists() {
-		return file_exists($this->locatie) && is_dir($this->locatie);
+		return file_exists($this->path) && is_dir($this->path);
 	}
 
 	/**
 	 * File modification time van het album.
 	 */
 	public function modified() {
-		return filemtime($this->locatie);
+		return filemtime($this->path);
 	}
 
 	public function getSubDir() {
-		return str_replace(PICS_PATH, '', $this->locatie);
+		return str_replace(PICS_PATH, '', $this->path);
 	}
 
 	public function getUrl() {
@@ -56,14 +56,13 @@ class FotoAlbum extends Map {
 			return $this->fotos;
 		}
 		$this->fotos = array();
-		$glob = glob($this->locatie . '*');
+		$glob = glob($this->path . '*');
 		if (!is_array($glob)) {
 			return array();
 		}
 		foreach ($glob as $path) {
 			if (is_file($path)) {
-				$parts = explode('/', $path);
-				$bestandsnaam = end($parts);
+				$bestandsnaam = basename($path);
 				$foto = new Foto($this, $bestandsnaam);
 				if ($incompleet OR $foto->isCompleet()) {
 					$this->fotos[] = $foto;
@@ -78,15 +77,14 @@ class FotoAlbum extends Map {
 			return $this->subalbums;
 		}
 		$this->subalbums = array();
-		$glob = glob($this->locatie . '*', GLOB_ONLYDIR);
+		$glob = glob($this->path . '*', GLOB_ONLYDIR);
 		if (!is_array($glob)) {
 			return array();
 		}
 		foreach ($glob as $path) {
-			$parts = explode('/', $path);
-			$naam = end($parts);
-			if (!startsWith($naam, '_')) {
-				$subalbum = FotoAlbumModel::getFotoAlbum($this, $naam);
+			$mapnaam = basename($path);
+			if (!startsWith($mapnaam, '_')) {
+				$subalbum = FotoAlbumModel::getFotoAlbum($path);
 				if ($subalbum) {
 					$this->subalbums[] = $subalbum;
 				}

@@ -15,7 +15,7 @@ class FotoAlbumView extends TemplateView {
 	}
 
 	function getTitel() {
-		return $this->model->mapnaam;
+		return $this->model->dirname;
 	}
 
 	function view() {
@@ -49,10 +49,9 @@ class FotoAlbumView extends TemplateView {
 		$glob = glob(PICS_PATH . $locatie . '*', GLOB_ONLYDIR);
 		if (is_array($glob)) {
 			foreach ($glob as $path) {
-				$path = str_replace(PICS_PATH, '', $path);
-				$parts = explode('/', $path);
-				$mapnaam = end($parts);
+				$mapnaam = basename($path);
 				if (!startsWith($mapnaam, '_')) {
+					$path = str_replace(PICS_PATH, '', $path);
 					$dirs[$path] = $mapnaam;
 				}
 			}
@@ -74,6 +73,30 @@ class FotoAlbumView extends TemplateView {
 
 }
 
+class FotoUploadForm extends PopupForm {
+
+	public function __construct(FotoAlbum $album) {
+		parent::__construct($album, get_class(), '/fotoalbum/uploaden' . $album->getSubDir());
+		$this->titel = 'Foto toevoegen';
+		$fields[] = new HtmlComment('Alleen jpeg afbeeldingen.<br/><br/>');
+		$fields[] = new RequiredImageField('foto', null, null, array('image/jpeg'));
+		$fields[] = new SubmitResetCancel('/fotoalbum', true, true, false);
+		$this->addFields($fields);
+	}
+
+}
+
+class PosterUploadForm extends FotoUploadForm {
+
+	public function __construct(FotoAlbum $album) {
+		parent::__construct($album);
+		$this->titel = 'Poster toevoegen';
+		$field = new RequiredTextField('posternaam', null, 'Posternaam', 50, 5);
+		$this->insertAtPos(1, $field);
+	}
+
+}
+
 class FotoAlbumZijbalkView extends TemplateView {
 
 	public function __construct(FotoAlbum $album) {
@@ -85,7 +108,7 @@ class FotoAlbumZijbalkView extends TemplateView {
 		echo '<div id="zijbalk_fotoalbum">';
 		echo '<h1><a href="/actueel/fotoalbum/">Laatste fotoalbum</a></h1>';
 		echo '<div class="item">';
-		echo '<a href="' . $url . '">' . $this->model->mapnaam . '</a>';
+		echo '<a href="' . $url . '">' . $this->model->dirname . '</a>';
 		echo '<div class="fotos">';
 		$fotos = $this->model->getFotos();
 		$limit = sizeof($fotos);

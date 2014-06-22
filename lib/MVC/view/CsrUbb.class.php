@@ -572,14 +572,14 @@ HTML;
 		$url = filter_var($parse, FILTER_SANITIZE_STRING);
 		$path = array_filter(explode('/', $url));
 		$map = new Map();
-		$map->locatie = PICS_PATH . '/';
+		$map->path = PICS_PATH . '/';
 		if (empty($path)) {
 			$naam = 'fotoalbum';
 		} else {
-			$map->locatie .= 'fotoalbum/';
+			$map->path .= 'fotoalbum/';
 			$naam = urldecode(array_pop($path));
 			if (!empty($path)) {
-				$map->locatie .= urldecode(implode('/', $path)) . '/';
+				$map->path .= urldecode(implode('/', $path)) . '/';
 			}
 		}
 		$album = FotoAlbumModel::getFotoAlbum($map, $naam);

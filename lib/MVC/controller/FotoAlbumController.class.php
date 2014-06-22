@@ -18,7 +18,6 @@ class FotoAlbumController extends AclController {
 	 * @var string
 	 */
 	private static $alleenLeden = '/(intern|novitiaat|ontvoering|feuten|slachten|zuipen|prive|privé)/i';
-
 	/**
 	 * Als deze regexp matched is het album alleen voor DéDé
 	 * @var string
@@ -32,12 +31,14 @@ class FotoAlbumController extends AclController {
 				'bekijken' => 'P_NOBODY',
 				'downloaden' => 'P_LOGGED_IN',
 				'verwerken' => 'P_LEDEN_READ',
-				'albumcover' => 'P_DOCS_MOD'
+				'toevoegen' => 'P_LEDEN_READ'
 			);
 		} else {
 			$this->acl = array(
+				'albumcover' => 'P_DOCS_MOD',
 				'verwijderen' => 'P_DOCS_MOD',
-				'hernoemen' => 'P_DOCS_MOD'
+				'hernoemen' => 'P_DOCS_MOD',
+				'uploaden' => 'P_LEDEN_READ'
 			);
 		}
 	}
@@ -48,27 +49,26 @@ class FotoAlbumController extends AclController {
 		}
 		if (!array_key_exists($this->action, $this->acl)) {
 			$this->action = 'bekijken';
-			$path = array_filter($this->getParams(2));
+			$path = $this->getParams(1);
 		} else {
-			$path = array_filter($this->getParams(4));
+			$path = $this->getParams(3);
 		}
-		$map = new Map();
-		$map->locatie = PICS_PATH . '/';
-		$naam = 'fotoalbum';
-		if (!empty($path)) {
-			$map->locatie .= 'fotoalbum/';
-			$naam = urldecode(array_pop($path));
-			if (!empty($path)) {
-				$map->locatie .= urldecode(implode('/', $path)) . '/';
-			}
-		}
-		if (!self::magBekijken($map->locatie)) {
+		$path = PICS_PATH . '/' . urldecode(implode('/', $path));
+		$album = FotoAlbumModel::getFotoAlbum($path);
+		if ($album === false) {
 			$this->geentoegang();
+		} elseif ($album === null) {
+			exit;
+			invokeRefresh(CSR_ROOT . '/fotoalbum', 'Fotoalbum bestaat niet', -1);
 		}
-		parent::performAction(array($map, $naam));
+		$args[] = $album;
+		parent::performAction($args);
 	}
 
 	public static function magBekijken($path) {
+		if (!startsWith($path, PICS_PATH . '/fotoalbum/')) {
+			return false;
+		}
 		if (LoginLid::mag('P_LEDEN_READ')) {
 			if (preg_match(self::$alleenVrouwen, $path)) { // Deze foto's alleen voor DéDé
 				if (LoginLid::instance()->getLid()->getGeslacht() == 'v') {
@@ -88,11 +88,7 @@ class FotoAlbumController extends AclController {
 		}
 	}
 
-	public function bekijken(Map $map, $naam) {
-		$album = FotoAlbumModel::getFotoAlbum($map, $naam);
-		if ($album === null) {
-			invokeRefresh(CSR_ROOT . '/fotoalbum', 'Fotoalbum bestaat niet', -1);
-		}
+	public function bekijken(FotoAlbum $album) {
 		$body = new FotoAlbumView($album);
 		if (LoginLid::mag('P_LOGGED_IN')) {
 			$this->view = new CsrLayoutPage($body);
@@ -105,35 +101,60 @@ class FotoAlbumController extends AclController {
 		$this->view->addScript('jquery/plugins/jquery.prettyPhoto-3.1.5.min.js');
 	}
 
-	public function verwerken(Map $map, $naam) {
+	public function verwerken(FotoAlbum $album) {
 		//define('RESIZE_OUTPUT', null);
 		if (defined('RESIZE_OUTPUT')) {
-			echo '<h1>Fotoalbum verwerken: ' . $naam . '</h1>';
+			echo '<h1>Fotoalbum verwerken: ' . $album->dirname . '</h1>';
 			echo 'Dit kan even duren<br />';
 			flush();
-		}
-		$album = FotoAlbumModel::getFotoAlbum($map, $naam);
-		if ($album === null) {
-			invokeRefresh(CSR_ROOT . '/fotoalbum', 'Fotoalbum ' . $naam . ' verwerken mislukt', -1);
 		}
 		FotoAlbumModel::verwerkFotos($album);
 		if (defined('RESIZE_OUTPUT')) {
 			exit;
 		} else {
-			invokeRefresh($album->getSubDir(), 'Fotoalbum ' . $naam . ' succesvol verwerkt', 1);
+			invokeRefresh(CSR_ROOT . $album->getSubDir(), 'Fotoalbum ' . $album->dirname . ' succesvol verwerkt', 1);
 		}
 	}
 
-	public function downloaden(Map $map, $naam) {
-		header('Content-type: application/x-tar');
-		header('Content-Disposition: attachment; filename="' . $naam . '.tar"');
-		$album = FotoAlbumModel::getFotoAlbum($map, $naam);
-		if ($album === null) {
-			invokeRefresh(CSR_ROOT . '/fotoalbum', 'Fotoalbum bestaat niet', -1);
+	public function toevoegen(FotoAlbum $album) {
+		$this->uploaden($album);
+	}
+
+	public function uploaden(FotoAlbum $album) {
+		if ($album->dirname === 'Posters') {
+			$formulier = new PosterUploadForm($album);
+			$msg = 'Poster';
+		} else {
+			$formulier = new FotoUploadForm($album);
+			$msg = 'Foto';
 		}
+		if ($this->isPosted() AND $formulier->validate()) {
+			try {
+				$uploader = $formulier->findByName('foto');
+				if ($album->dirname === 'Posters') {
+					$filenaam = $formulier->findByName('posternaam')->getValue() . '.jpg';
+				} else {
+					$filenaam = $uploader->getModel()->filename;
+				}
+				if ($uploader->opslaan($album->path, $filenaam)) {
+					FotoAlbumModel::verwerkFotos($album);
+					setMelding($msg . ' met succes toegevoegd', 1); //TODO: $album->getUrl() . '#' . direncode($filenaam)
+				} else {
+					setMelding($msg . ' toevoegen mislukt', -1);
+				}
+			} catch (Exception $e) {
+				setMelding($msg . ' toevoegen mislukt: ' . $e->getMessage(), -1);
+			}
+		}
+		$this->view = $formulier;
+	}
+
+	public function downloaden(FotoAlbum $album) {
+		header('Content-type: application/x-tar');
+		header('Content-Disposition: attachment; filename="' . $album->dirname . '.tar"');
 		$fotos = $album->getFotos();
 		set_time_limit(0);
-		$cmd = "tar cC " . escapeshellarg($album->locatie);
+		$cmd = "tar cC " . escapeshellarg(PICS_PATH . '/' . $album->path);
 		foreach ($fotos as $foto) {
 			$cmd .= ' ' . escapeshellarg($foto->filename);
 		}
@@ -145,19 +166,18 @@ class FotoAlbumController extends AclController {
 		exit;
 	}
 
-	public function hernoemen(Map $map, $naam) {
-		$album = FotoAlbumModel::getFotoAlbum($map, $naam);
-		$nieuw = filter_input(INPUT_POST, 'Nieuwe_naam', FILTER_SANITIZE_STRING);
-		if ($album !== null AND FotoAlbumModel::hernoemAlbum($album, $nieuw)) {
-			echo '<div id="' . md5($naam) . '" class="albumname">' . $nieuw . '</div>';
+	public function hernoemen(FotoAlbum $album) {
+		$naam = filter_input(INPUT_POST, 'Nieuwe_naam', FILTER_SANITIZE_STRING);
+		if ($album !== null AND FotoAlbumModel::hernoemAlbum($album, $naam)) {
+			echo '<div id="' . md5($album->dirname) . '" class="albumname">' . $naam . '</div>';
 		} else {
 			setMelding('Fotoalbum hernoemen mislukt', -1);
 		}
 		exit;
 	}
 
-	public function verwijderen(Map $map, $naam) {
-		$album = FotoAlbumModel::getFotoAlbum($map, '');
+	public function verwijderen(FotoAlbum $album) {
+		$naam = filter_input(INPUT_POST, 'foto', FILTER_SANITIZE_STRING);
 		if ($album !== null AND FotoAlbumModel::verwijderFoto(new Foto($album, $naam))) {
 			echo '<div id="' . md5($naam) . '" class="remove"></div>';
 		} else {
@@ -166,9 +186,9 @@ class FotoAlbumController extends AclController {
 		exit;
 	}
 
-	public function albumcover(Map $map, $naam) {
-		$album = FotoAlbumModel::getFotoAlbum($map, '');
-		if ($album !== null AND FotoAlbumModel::setAlbumCover($album, new Foto($album, $naam))) {
+	public function albumcover(FotoAlbum $album) {
+		$naam = filter_input(INPUT_POST, 'cover', FILTER_SANITIZE_STRING);
+		if (FotoAlbumModel::setAlbumCover($album, new Foto($album, $naam))) {
 			invokeRefresh($album->getSubDir(), 'Fotoalbum-cover succesvol ingesteld', 1);
 		} else {
 			invokeRefresh(CSR_ROOT . '/fotoalbum', 'Fotoalbum-cover instellen mislukt', -1);

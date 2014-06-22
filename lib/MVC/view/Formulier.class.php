@@ -80,7 +80,7 @@ class Formulier implements View, Validator {
 	 */
 	public function findByName($fieldName) {
 		foreach ($this->fields as $field) {
-			if ($field instanceof InputField AND $field->getName() === $fieldName) {
+			if (($field instanceof InputField OR $field instanceof FileField) AND $field->getName() === $fieldName) {
 				return $field;
 			}
 		}
@@ -96,19 +96,11 @@ class Formulier implements View, Validator {
 		$this->fields = array_merge($this->fields, $fields);
 	}
 
-	public function insertAfter(FormElement $field, $fieldName) {
-		$pos = 0;
-		foreach ($this->fields as $after) {
-			$pos++;
-			if ($after->getName() === $fieldName) {
-				if ($field instanceof InputField) {
-					$this->loadProperty($field);
-				}
-				array_splice($this->fields, $pos, 0, $field);
-				return true;
-			}
+	public function insertAtPos($pos, FormElement $field) {
+		if ($field instanceof InputField) {
+			$this->loadProperty($field);
 		}
-		return false;
+		array_splice($this->fields, $pos, 0, array($field));
 	}
 
 	/**

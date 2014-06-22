@@ -9,14 +9,14 @@
 class Map {
 
 	/**
-	 * Naam
+	 * Mapnaam
 	 * @var string
 	 */
-	public $mapnaam;
+	public $dirname;
 	/**
 	 * Volledig pad (met trailing slash)
 	 * @var string
 	 */
-	public $locatie;
+	public $path;
 
 }

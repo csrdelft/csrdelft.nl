@@ -52,6 +52,10 @@ class FileField implements FormElement, Validator {
 		return 'Bestand uploaden';
 	}
 
+	public function getName() {
+		return $this->name;
+	}
+
 	public function getType() {
 		return $this->methode;
 	}
