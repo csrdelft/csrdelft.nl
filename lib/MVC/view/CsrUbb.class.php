@@ -568,21 +568,9 @@ HTML;
 	 */
 	protected function ubb_fotoalbum($parameters) {
 		require_once 'MVC/controller/FotoAlbumController.class.php';
-		$parse = $this->parseArray(array('[/fotoalbum]'), array());
-		$url = filter_var($parse, FILTER_SANITIZE_STRING);
-		$path = array_filter(explode('/', $url));
-		$map = new Map();
-		$map->path = PICS_PATH . '/';
-		if (empty($path)) {
-			$naam = 'fotoalbum';
-		} else {
-			$map->path .= 'fotoalbum/';
-			$naam = urldecode(array_pop($path));
-			if (!empty($path)) {
-				$map->path .= urldecode(implode('/', $path)) . '/';
-			}
-		}
-		$album = FotoAlbumModel::getFotoAlbum($map, $naam);
+		$url = urldecode($this->parseArray(array('[/fotoalbum]'), array()));
+		$path = PICS_PATH . '/fotoalbum' . $url;
+		$album = FotoAlbumModel::getFotoAlbum($path);
 		if ($album === null) {
 			return '<div class="ubb_block">Fotoalbum niet gevonden: ' . $url . '</div>';
 		}

@@ -10,14 +10,14 @@ require_once 'MVC/model/entity/Foto.class.php';
  */
 class FotoAlbumModel {
 
-	public static function getFotoAlbum($locatie) {
-		if (!endsWith($locatie, '/')) {
-			$locatie .= '/';
+	public static function getFotoAlbum($path) {
+		if (!endsWith($path, '/')) {
+			$path .= '/';
 		}
-		if (!FotoAlbumController::magBekijken($locatie)) {
+		if (!FotoAlbumController::magBekijken($path)) {
 			return false;
 		}
-		$album = new FotoAlbum($locatie);
+		$album = new FotoAlbum($path);
 		if (!$album->exists()) {
 			return null;
 		}
