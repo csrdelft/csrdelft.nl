@@ -96,7 +96,8 @@ class FileField implements FormElement, Validator {
 			}
 			$filename = filter_var($filename, FILTER_SANITIZE_STRING);
 			if (!file_exists($destination)) {
-				mkdir($destination, 0755);
+				mkdir($destination);
+				chmod($destination, 0755);
 			}
 			if (!is_writable($destination)) {
 				throw new Exception('Doelmap is niet beschrijfbaar: ' . $destination);

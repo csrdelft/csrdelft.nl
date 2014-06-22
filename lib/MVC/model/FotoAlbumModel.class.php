@@ -25,11 +25,15 @@ class FotoAlbumModel {
 	}
 
 	public static function verwerkFotos(FotoAlbum $album) {
-		if (!file_exists($album->path . '_thumbs')) {
-			mkdir($album->path . '_thumbs', 0755);
+		$path = $album->path . '_thumbs';
+		if (!file_exists($path)) {
+			mkdir($path);
+			chmod($path, 0755);
 		}
-		if (!file_exists($album->path . '_resized')) {
-			mkdir($album->path . '_resized', 0755);
+		$path = $album->path . '_resized';
+		if (!file_exists($path)) {
+			mkdir($path);
+			chmod($path, 0755);
 		}
 		foreach ($album->getFotos(true) as $foto) {
 			if (!$foto->bestaatThumb()) {
