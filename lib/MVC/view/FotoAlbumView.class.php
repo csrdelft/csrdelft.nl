@@ -79,8 +79,8 @@ class FotoUploadForm extends PopupForm {
 		parent::__construct($album, get_class(), '/fotoalbum/uploaden' . $album->getSubDir());
 		$this->titel = 'Foto toevoegen';
 		$fields[] = new HtmlComment('Alleen jpeg afbeeldingen.<br/><br/>');
-		$fields[] = new FileNameField('subalbum', null, 'Nieuw sub-album');
 		$fields[] = new RequiredImageField('foto', null, null, array('image/jpeg'));
+		$fields[] = new FileNameField('subalbum', null, 'Nieuw sub-album');
 		$fields[] = new SubmitResetCancel('/fotoalbum', true, true, false);
 		$this->addFields($fields);
 	}
