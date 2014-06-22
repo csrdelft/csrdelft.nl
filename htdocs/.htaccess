@@ -16,7 +16,6 @@ RewriteRule ^corvee				index.php?c=TakenRouter [L]
 RewriteRule ^instellingenbeheer	index.php?c=InstellingenBeheer [L]
 RewriteRule ^instellingen		index.php?c=LidInstellingen [L]
 RewriteRule ^menubeheer			index.php?c=MenuBeheer [L]
-RewriteRule ^poster				index.php?c=Poster [L]
 
 RewriteRule ^su/([0-9a-z]+)/?$	su.php?actie=su&uid=$1 [L]
 RewriteRule ^endsu				su.php?actie=endSu [L]

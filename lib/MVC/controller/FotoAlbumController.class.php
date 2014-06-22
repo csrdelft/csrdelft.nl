@@ -14,15 +14,20 @@ require_once 'MVC/view/FotoAlbumView.class.php';
 class FotoAlbumController extends AclController {
 
 	/**
-	 * Als deze regexp matched is het album alleen voor leden
+	 * Als deze regexp matched is het album alleen voor leden toegankelijk
 	 * @var string
 	 */
 	private static $alleenLeden = '/(intern|novitiaat|ontvoering|feuten|slachten|zuipen|prive|privé)/i';
 	/**
-	 * Als deze regexp matched is het album alleen voor DéDé
+	 * Als deze regexp matched is het album alleen voor vrouwen toegankelijk
 	 * @var string
 	 */
 	private static $alleenVrouwen = '/(DéDé-privé|DeDe-prive|vrouwen-only)/i';
+	/**
+	 * Als deze regexp matched is het album alleen voor mannen toegankelijk
+	 * @var string
+	 */
+	private static $alleenMannen = '/(alleen-voor-mannen|mannen-only)/i';
 
 	public function __construct($query) {
 		parent::__construct($query);
@@ -70,8 +75,14 @@ class FotoAlbumController extends AclController {
 			return false;
 		}
 		if (LoginLid::mag('P_LEDEN_READ')) {
-			if (preg_match(self::$alleenVrouwen, $path)) { // Deze foto's alleen voor DéDé
+			if (preg_match(self::$alleenVrouwen, $path)) { // Deze foto's alleen voor vrouwen
 				if (LoginLid::instance()->getLid()->getGeslacht() == 'v') {
+					return true;
+				}
+				return false;
+			}
+			if (preg_match(self::$alleenMannen, $path)) { // Deze foto's alleen voor mannen
+				if (LoginLid::instance()->getLid()->getGeslacht() == 'm') {
 					return true;
 				}
 				return false;
@@ -79,10 +90,13 @@ class FotoAlbumController extends AclController {
 			return true;
 		} else {
 			if (preg_match(self::$alleenLeden, $path)) {
-				return false; // Deze foto's niet voor gewoon volk
+				return false; // Deze foto's alleen voor leden
 			}
 			if (preg_match(self::$alleenVrouwen, $path)) {
-				return false; // Deze foto's alleen voor DéDé
+				return false; // Deze foto's alleen voor vrouwen
+			}
+			if (preg_match(self::$alleenMannen, $path)) {
+				return false; // Deze foto's alleen voor mannen
 			}
 			return true;
 		}
@@ -154,7 +168,7 @@ class FotoAlbumController extends AclController {
 		header('Content-Disposition: attachment; filename="' . $album->dirname . '.tar"');
 		$fotos = $album->getFotos();
 		set_time_limit(0);
-		$cmd = "tar cC " . escapeshellarg(PICS_PATH . '/' . $album->path);
+		$cmd = "tar cC " . escapeshellarg($album->path);
 		foreach ($fotos as $foto) {
 			$cmd .= ' ' . escapeshellarg($foto->filename);
 		}
