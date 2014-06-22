@@ -16,13 +16,17 @@
 		<form id="form-{$instelling->instelling_id}" method="post" action="/instellingenbeheer/opslaan/{$instelling->module}/{$instelling->instelling_id}" class="Formulier InlineForm">
 			<div class="InstellingToggle">{$instelling->waarde}</div>
 			<div class="InstellingToggle" style="display: none;">&nbsp;</div>
-			<textarea name="waarde" origvalue="{htmlspecialchars($instelling->waarde)}" class="FormField" rows="1" style="width: 400px !important;">{$instelling->waarde}</textarea>
+			<div class="InputField">
+				<textarea name="waarde" origvalue="{htmlspecialchars($instelling->waarde)}" class="FormField" rows="1" style="width: 400px !important;">{$instelling->waarde}</textarea>
+			</div>
 			<div class="InstellingToggle" style="display: none;"></div>
-			<a class="knop submit confirm" title="Wijzigingen opslaan">{icon get="accept"} Opslaan</a>
-			<a class="knop reset cancel" title="Annuleren" onclick="
-				$(this).parent().find('.InstellingToggle').toggle();
-				$(this).parent().parent().parent().find('.wijzigknop').toggle();
-			">{icon get="delete"} Annuleren</a>
+			<div class="FormButtons">
+				<a class="knop submit confirm" title="Wijzigingen opslaan">{icon get="accept"} Opslaan</a>
+				<a class="knop reset cancel" title="Annuleren" onclick="
+					$(this).parent().find('.InstellingToggle').toggle();
+					$(this).parent().parent().parent().find('.wijzigknop').toggle();
+				">{icon get="delete"} Annuleren</a>
+			</div>
 		</form>
 	</td>
 	<td class="col-del">
