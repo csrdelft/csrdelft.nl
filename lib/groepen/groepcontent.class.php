@@ -320,7 +320,7 @@ class GroepStatsContent extends TemplateView {
 		if (!is_array($stats)) {
 			return;
 		}
-		echo '<table class="groepenStats">';
+		echo '<table class="groepStats">';
 		foreach ($stats as $title => $stat) {
 			if (!is_array($stat)) {
 				continue;

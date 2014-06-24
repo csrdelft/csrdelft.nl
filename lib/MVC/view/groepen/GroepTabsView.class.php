@@ -18,10 +18,14 @@ class GroepLijstView extends TemplateView {
 	}
 
 	public function view() {
+		echo '<table class="groepLeden"><tbody>';
 		foreach ($this->forms as $form) {
-			echo '<div class="lid">' . Lid::naamLink($form->getModel()->lid_id, 'civitas', 'visitekaartje') . '</div>';
-			echo '<div class="opmerking">' . $form->view() . '</div>';
+			echo '<tr><td>' . Lid::naamLink($form->getModel()->lid_id, 'civitas', 'visitekaartje') . '</td>';
+			echo '<td>';
+			$form->view();
+			echo '</td></tr>';
 		}
+		echo '</tbody></table>';
 	}
 
 }
@@ -47,7 +51,7 @@ class GroepStatistiekView extends TemplateView {
 	}
 
 	public function view() {
-		echo '<table class="groepenStats">';
+		echo '<table class="groepStats">';
 		foreach ($this->model as $title => $stat) {
 			echo '<thead><tr><th colspan="2">' . $title . '</th></tr></thead><tbody>';
 			if (!is_array($stat)) {

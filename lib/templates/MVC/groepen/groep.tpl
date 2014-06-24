@@ -38,7 +38,7 @@
 				</a>
 			</li>
 		</ul>
-		<div id="groepleden{$groep->id}" class="groepleden">
+		<div id="groepTabContent-{$groep->id}" class="groepTabContent">
 			{$tabContent->view()}
 		</div>
 	</div>

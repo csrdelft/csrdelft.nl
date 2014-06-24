@@ -860,7 +860,9 @@ input, textarea, select{
 	font-style: italic;
 }
 
+
 /** GROEPEN **************************************************************/
+
 ul.tabs {
 	float: right;
 }
@@ -879,20 +881,55 @@ ul.tabs a {
 ul.tabs a.active {
 	background-color: #0a338d;
 }
-div.groepleden {
+div.generaties {
+	margin: 10px 0px;
+	padding: 3px 20px;
+}
+div.vorigeGroep {
+	list-style-image: url(http://plaetjes.csrdelft.nl/groepen/up.png);
+}
+div.volgendeGroep {
+	list-style-image: url(http://plaetjes.csrdelft.nl/groepen/down.png);
+}
+div.groepTabContent {
 	clear: both;
+	width: 300px;
 }
-div.groepleden div.lid {
+table.groepLeden td {
 	width: 150px;
-	display: inline-block;
 }
-div.groepleden div.opmerking {
-	width: 150px;
-	display: inline-block;
+div.pasfoto img.lidfoto {
+	float: left;
+	width: 50px;
+	height: 67px;
+	border: 1px solid grey;
+	margin-left: 5px;
+}
+table.groepStats {
+	border-spacing: 0;
+	border: 1px solid #000;
+	float: right;
+}
+table.groepStats tr:nth-child(even) {
+	background-color: #ccc;
+}
+table.groepStats tr:nth-child(odd) {
+	background-color: #eee;
+}
+table.groepStats th {
+	background-color: #0A338D;
+	color: #fff;
+}
+table.groepStats td {
+	width: 90px;
+}
+table.groepStats td, table.groepStats th {
+	padding: 5px 10px;
 }
 
 
 /**************************** FORUM *******************************/
+
 #forumtabel{
 	border: 0; padding: 0;
 	width: 100%;

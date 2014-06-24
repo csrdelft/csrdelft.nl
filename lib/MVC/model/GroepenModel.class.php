@@ -44,11 +44,11 @@ class GroepLedenModel extends GroepenModel {
 			return array();
 		}
 		$in = implode(', ', array_fill(0, $count, '?'));
-		$stats['totaal'] = $count;
-		$stats['verticale'] = Database::instance()->sqlSelect(array('v.naam AS verticale', 'count(*) AS aantal'), 'lid LEFT JOIN verticale AS v ON(lid.verticale = v.id)', 'uid IN (' . $in . ')', $uids, null, 'v.naam')->fetchAll();
-		$stats['geslacht'] = Database::instance()->sqlSelect(array('geslacht', 'count(*) AS aantal'), 'lid', 'uid IN (' . $in . ')', $uids, null, 'geslacht')->fetchAll();
-		$stats['lidjaar'] = Database::instance()->sqlSelect(array('lidjaar', 'count(*) AS aantal'), 'lid', 'uid IN (' . $in . ')', $uids, null, 'lidjaar')->fetchAll();
-		$stats['opmerking'] = Database::instance()->sqlSelect(array('opmerking', 'count(*) AS aantal'), GroepLid::getTableName(), 'groep_type = ? AND groep_id = ?', array(get_class($groep), $groep->id), null, 'opmerking')->fetchAll();
+		$stats['Totaal'] = $count;
+		$stats['Verticale'] = Database::instance()->sqlSelect(array('verticale.naam', 'count(*)'), 'lid LEFT JOIN verticale ON(lid.verticale = verticale.id)', 'uid IN (' . $in . ')', $uids, null, 'verticale.naam')->fetchAll();
+		$stats['Geslacht'] = Database::instance()->sqlSelect(array('geslacht', 'count(*)'), 'lid', 'uid IN (' . $in . ')', $uids, null, 'geslacht')->fetchAll();
+		$stats['Lidjaar'] = Database::instance()->sqlSelect(array('lidjaar', 'count(*)'), 'lid', 'uid IN (' . $in . ')', $uids, null, 'lidjaar')->fetchAll();
+		$stats['Opmerking'] = Database::instance()->sqlSelect(array('opmerking', 'count(*)'), GroepLid::getTableName(), 'groep_type = ? AND groep_id = ?', array(get_class($groep), $groep->id), null, 'opmerking')->fetchAll();
 		return $stats;
 	}
 
