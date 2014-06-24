@@ -187,6 +187,7 @@ htdocs/layout/agenda.css -text
 htdocs/layout/bibliotheek.css -text
 htdocs/layout/breedbeeld.css -text
 htdocs/layout/csrdelft.css -text
+htdocs/layout/css/style.css -text
 htdocs/layout/documenten.css -text
 htdocs/layout/fixed.css -text
 htdocs/layout/fotoalbum.css -text
@@ -3929,6 +3930,7 @@ lib/include.defines.php.sample -text
 lib/ishetalcontent.class.php -text
 lib/knop.class.php -text
 lib/ldap.class.php -text
+lib/less/style.less -text
 lib/lichting.class.php -text
 lib/lid/ledenlijstcontent.class.php -text
 lib/lid/lid.class.php -text
