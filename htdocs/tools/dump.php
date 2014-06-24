@@ -6,8 +6,11 @@ if (!LoginLid::mag('P_ADMIN')) {
 	header('location: ' . CSR_ROOT);
 	exit;
 }
-
-$tables = DatabaseAdmin::instance()->sqlShowTables()->fetchAll();
+$tables = array();
+$results = DatabaseAdmin::instance()->sqlShowTables();
+foreach ($results as $result) {
+	$tables[$result[0]] = $result[0];
+}
 $fields['tabel'] = new SelectField('tabel', null, 'Tabel', $tables);
 $fields['btn'] = new SubmitResetCancel(CSR_ROOT, true, true, false);
 $form = new Formulier(null, 'form', null);
