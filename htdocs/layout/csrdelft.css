@@ -876,7 +876,7 @@ ul.tabs a {
 	color: white;
 	background-color: #cfcfcf;
 }
-div.tabs a.active {
+ul.tabs a.active {
 	background-color: #0a338d;
 }
 div.groepleden {
