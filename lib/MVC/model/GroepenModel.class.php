@@ -37,6 +37,21 @@ class GroepLedenModel extends GroepenModel {
 		return $this->find('groep_type = ? AND groep_id = ?', array(get_class($groep), $groep->id), 'lid_sinds ASC')->fetchAll();
 	}
 
+	public function getStatistieken(Groep $groep) {
+		$uids = array_keys(group_by_distinct('lid_id', $groep->getGroepLeden(), false));
+		$count = count($uids);
+		if ($count < 1) {
+			return array();
+		}
+		$in = implode(', ', array_fill(0, $count, '?'));
+		$stats['totaal'] = $count;
+		$stats['verticale'] = Database::instance()->sqlSelect(array('v.naam AS verticale', 'count(*) AS aantal'), 'lid LEFT JOIN verticale AS v ON(lid.verticale = v.id)', 'uid IN (' . $in . ')', $uids, null, 'v.naam')->fetchAll();
+		$stats['geslacht'] = Database::instance()->sqlSelect(array('geslacht', 'count(*) AS aantal'), 'lid', 'uid IN (' . $in . ')', $uids, null, 'geslacht')->fetchAll();
+		$stats['lidjaar'] = Database::instance()->sqlSelect(array('lidjaar', 'count(*) AS aantal'), 'lid', 'uid IN (' . $in . ')', $uids, null, 'lidjaar')->fetchAll();
+		$stats['opmerking'] = Database::instance()->sqlSelect(array('opmerking', 'count(*) AS aantal'), GroepLid::getTableName(), 'groep_type = ? AND groep_id = ?', array(get_class($groep), $groep->id), null, 'opmerking')->fetchAll();
+		return $stats;
+	}
+
 }
 
 class GroepCategorienModel extends GroepenModel {

@@ -82,9 +82,6 @@ class LidInstellingen extends PersistenceModel {
 			'twitterblokje' => array('Twitter-blokje weergeven', T::Enumeration, array('ja', 'nee'), 'nee'),
 			'bijbelroosterblokje' => array('Bijbelroosterblokje weergeven', T::Enumeration, array('ja', 'nee'), 'ja')
 		),
-		'groepen' => array(
-			'toonPasfotos' => array('Standaard pasfotos weergeven', T::Enumeration, array('ja', 'nee'), 'ja')
-		),
 		'agenda' => array(
 			'toonVerjaardagen' => array('Verjaardagen in agenda', T::Enumeration, array('ja', 'nee'), 'ja'),
 			'toonMaaltijden' => array('Maaltijden in agenda', T::Enumeration, array('ja', 'nee'), 'ja'),

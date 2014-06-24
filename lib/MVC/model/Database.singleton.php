@@ -76,8 +76,7 @@ class Database extends PDO {
 			}
 			$params[$key] = '"' . $value . '"'; // quotes
 		}
-		$query = preg_replace($keys, $params, $query, 1, $count);
-		return $query;
+		return preg_replace($keys, $params, $query, 1);
 	}
 
 	/**
@@ -92,13 +91,16 @@ class Database extends PDO {
 	 * @param int $start
 	 * @return PDOStatement
 	 */
-	public static function sqlSelect(array $fields, $from, $where = null, array $params = array(), $orderby = null, $limit = null, $start = 0) {
+	public static function sqlSelect(array $fields, $from, $where = null, array $params = array(), $orderby = null, $groupby = null, $limit = null, $start = 0) {
 		$sql = 'SELECT ' . implode(', ', $fields) . ' FROM ' . $from;
 		if ($where !== null) {
 			$sql .= ' WHERE ' . $where;
 		}
 		if ($orderby !== null) {
 			$sql .= ' ORDER BY ' . $orderby;
+		}
+		if ($groupby !== null) {
+			$sql .= ' GROUP BY ' . $groupby;
 		}
 		if (is_int($limit)) {
 			$sql .= ' LIMIT ' . (int) $start . ', ' . $limit;

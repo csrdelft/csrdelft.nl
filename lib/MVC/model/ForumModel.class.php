@@ -126,7 +126,7 @@ class ForumDelenModel extends PersistenceModel {
 			}
 		}
 		// check permissies op delen
-		$delen_ids = array_keys(group_by_distict('forum_id', $gevonden_draden, false));
+		$delen_ids = array_keys(group_by_distinct('forum_id', $gevonden_draden, false));
 		$gevonden_delen = group_by_distinct('forum_id', ForumDelenModel::instance()->getForumDelenById($delen_ids));
 		foreach ($gevonden_delen as $forum_id => $deel) {
 			if (!$deel->magModereren()) {
@@ -163,7 +163,7 @@ class ForumDelenModel extends PersistenceModel {
 					$draad->score += (float) $post->score;
 				}
 			} else { // laad eerste post
-				$array_first_post = ForumPostsModel::instance()->find('draad_id = ?', array($draad->draad_id), 'post_id ASC', 1)->fetchAll();
+				$array_first_post = ForumPostsModel::instance()->find('draad_id = ?', array($draad->draad_id), 'post_id ASC', null, 1)->fetchAll();
 				$draad->setForumPosts($array_first_post);
 			}
 		}
@@ -309,7 +309,7 @@ class ForumDradenModel extends PersistenceModel implements Paging {
 		$orm = self::orm;
 		$fields = $orm::getFields();
 		$fields[] = 'MATCH(titel) AGAINST (? IN NATURAL LANGUAGE MODE) AS score';
-		$results = Database::sqlSelect($fields, $orm::getTableName(), 'wacht_goedkeuring = FALSE AND verwijderd = FALSE HAVING score > 0', array($query), 'score DESC', $this->per_pagina, ($this->pagina - 1) * $this->per_pagina);
+		$results = Database::sqlSelect($fields, $orm::getTableName(), 'wacht_goedkeuring = FALSE AND verwijderd = FALSE HAVING score > 0', array($query), 'score DESC', null, $this->per_pagina, ($this->pagina - 1) * $this->per_pagina);
 		$results->setFetchMode(PDO::FETCH_CLASS, $orm, array($cast = true));
 		return $results;
 	}
@@ -324,7 +324,7 @@ class ForumDradenModel extends PersistenceModel implements Paging {
 	 * @param int $start results from index
 	 * @return PersistentEntity[]
 	 */
-	public function find($criteria = null, array $criteria_params = array(), $orderby = null, $limit = null, $start = 0) {
+	public function find($criteria = null, array $criteria_params = array(), $orderby = null, $groupby = null, $limit = null, $start = 0) {
 		$orm = self::orm;
 		$from = $orm::getTableName() . ' AS d LEFT JOIN forum_draden_gelezen AS g ON d.draad_id = g.draad_id AND g.lid_id = ?';
 		$fields = $orm::getFields();
@@ -332,13 +332,13 @@ class ForumDradenModel extends PersistenceModel implements Paging {
 			$fields[$i] = 'd.' . $field;
 		}
 		$fields[] = 'g.datum_tijd AS wanneer_gelezen';
-		$result = Database::sqlSelect($fields, $from, $criteria, array_merge(array(LoginLid::instance()->getUid()), $criteria_params), $orderby, $limit, $start);
+		$result = Database::sqlSelect($fields, $from, $criteria, array_merge(array(LoginLid::instance()->getUid()), $criteria_params), $orderby, $groupby, $limit, $start);
 		$result->setFetchMode(PDO::FETCH_CLASS, $orm, array($cast = true));
 		return $result;
 	}
 
 	public function getForumDradenVoorDeel($forum_id) {
-		return $this->find('d.forum_id = ? AND d.wacht_goedkeuring = FALSE AND d.verwijderd = FALSE', array($forum_id), 'd.plakkerig DESC, d.laatst_gewijzigd DESC', $this->per_pagina, ($this->pagina - 1) * $this->per_pagina)->fetchAll();
+		return $this->find('d.forum_id = ? AND d.wacht_goedkeuring = FALSE AND d.verwijderd = FALSE', array($forum_id), 'd.plakkerig DESC, d.laatst_gewijzigd DESC', null, $this->per_pagina, ($this->pagina - 1) * $this->per_pagina)->fetchAll();
 	}
 
 	/**
@@ -375,7 +375,7 @@ class ForumDradenModel extends PersistenceModel implements Paging {
 		} else {
 			$belangrijk = '';
 		}
-		$draden = $this->find('forum_id IN (' . $in . ') AND d.wacht_goedkeuring = FALSE AND d.verwijderd = FALSE' . $belangrijk, $params, 'd.laatst_gewijzigd DESC', $aantal, ($pagina - 1) * $aantal)->fetchAll();
+		$draden = $this->find('forum_id IN (' . $in . ') AND d.wacht_goedkeuring = FALSE AND d.verwijderd = FALSE' . $belangrijk, $params, 'd.laatst_gewijzigd DESC', null, $aantal, ($pagina - 1) * $aantal)->fetchAll();
 		$posts_ids = array_keys(group_by_distinct('laatste_post_id', $draden, false));
 		$posts = ForumPostsModel::instance()->getForumPostsById($posts_ids, ' AND wacht_goedkeuring = FALSE AND verwijderd = FALSE');
 		foreach ($draden as $i => $draad) {
@@ -532,15 +532,15 @@ class ForumPostsModel extends PersistenceModel implements Paging {
 		$orm = self::orm;
 		$fields = $orm::getFields();
 		$fields[] = 'MATCH(tekst) AGAINST (? IN NATURAL LANGUAGE MODE) AS score';
-		$results = Database::sqlSelect($fields, $orm::getTableName(), 'wacht_goedkeuring = FALSE AND verwijderd = FALSE HAVING score > 0', array($query), 'score DESC', $this->per_pagina, ($this->pagina - 1) * $this->per_pagina);
+		$results = Database::sqlSelect($fields, $orm::getTableName(), 'wacht_goedkeuring = FALSE AND verwijderd = FALSE HAVING score > 0', array($query), 'score DESC', null, $this->per_pagina, ($this->pagina - 1) * $this->per_pagina);
 		$results->setFetchMode(PDO::FETCH_CLASS, $orm, array($cast = true));
 		return $results;
 	}
 
 	public function getForumPostsVoorDraad(ForumDraad $draad) {
-		$posts = $this->find('draad_id = ? AND wacht_goedkeuring = FALSE AND verwijderd = FALSE', array($draad->draad_id), 'post_id ASC', $this->per_pagina, ($this->pagina - 1) * $this->per_pagina)->fetchAll();
+		$posts = $this->find('draad_id = ? AND wacht_goedkeuring = FALSE AND verwijderd = FALSE', array($draad->draad_id), 'post_id ASC', null, $this->per_pagina, ($this->pagina - 1) * $this->per_pagina)->fetchAll();
 		if ($draad->eerste_post_plakkerig AND $this->pagina !== 1) {
-			$array_first_post = $this->find('draad_id = ? AND wacht_goedkeuring = FALSE AND verwijderd = FALSE', array($draad->draad_id), 'post_id ASC', 1)->fetch();
+			$array_first_post = $this->find('draad_id = ? AND wacht_goedkeuring = FALSE AND verwijderd = FALSE', array($draad->draad_id), 'post_id ASC', null, 1)->fetch();
 			array_unshift($posts, $array_first_post);
 		}
 		// 2008-filter
@@ -596,7 +596,7 @@ class ForumPostsModel extends PersistenceModel implements Paging {
 	AND ' . $where . '
 )';
 		}
-		$posts = $this->find($where, array($uid), 'post_id DESC', $aantal)->fetchAll();
+		$posts = $this->find($where, array($uid), 'post_id DESC', null, $aantal)->fetchAll();
 		$draden_ids = array_keys(group_by_distinct('draad_id', $posts, false));
 		$draden = ForumDradenModel::instance()->getForumDradenById($draden_ids);
 		$delen_ids = array_keys(group_by_distinct('forum_id', $draden, false));

@@ -68,6 +68,53 @@ class Formulier implements View, Validator {
 		}
 	}
 
+	public function generateFields() {
+		if (!$this->model instanceof PersistentEntity) {
+			return;
+		}
+		$fields = array();
+		foreach ($this->model->getFields() as $fieldName) {
+			$definition = $this->model->getFieldDefinition($fieldName);
+			if (isset($definition[1]) AND $definition[1] === true) {
+				$class = 'Required';
+			} else {
+				$class = '';
+			}
+			switch ($definition[0]) {
+				case T::String:
+					$class .= 'TextField';
+					break;
+				case T::Boolean:
+					$class .= 'VinkField';
+					break;
+				case T::Integer:
+					$class .= 'IntField';
+					break;
+				case T::Float:
+					$class .= 'FloatField';
+					break;
+				case T::DateTime:
+					$class .= 'DatumField';
+					break;
+				case T::Text:
+					$class .= 'TextareaField';
+					break;
+				case T::LongText:
+					$class .= 'TextareaField';
+					break;
+				case T::Enumeration:
+					$class .= 'SelectField';
+					$fields[] = $class($fieldName, $this->model->$fieldName, $fieldName, $definition[3]);
+					continue;
+				case T::UID:
+					$class .='LidField';
+					break;
+			}
+			$fields[] = new $class($fieldName, $this->model->$fieldName, $fieldName);
+		}
+		$this->addFields($fields);
+	}
+
 	public function getFields() {
 		return $this->fields;
 	}

@@ -149,6 +149,10 @@ abstract class Groep extends PersistentEntity {
 		}
 	}
 
+	public function getStatistieken() {
+		return GroepLedenModel::instance()->getStatistieken($this);
+	}
+
 	public function magBekijken() {
 		return LoginLid::mag($this->rechten_bekijken);
 	}

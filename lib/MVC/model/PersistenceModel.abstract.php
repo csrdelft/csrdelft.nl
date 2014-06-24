@@ -42,9 +42,9 @@ abstract class PersistenceModel implements Persistence {
 	 * @param int $start results from index
 	 * @return PersistentEntity[]
 	 */
-	public function find($criteria = null, array $criteria_params = array(), $orderby = null, $limit = null, $start = 0) {
+	public function find($criteria = null, array $criteria_params = array(), $orderby = null, $groupby = null, $limit = null, $start = 0) {
 		$orm = static::orm;
-		$result = Database::sqlSelect($orm::getFields(), $orm::getTableName(), $criteria, $criteria_params, $orderby, $limit, $start);
+		$result = Database::sqlSelect($orm::getFields(), $orm::getTableName(), $criteria, $criteria_params, $orderby, $groupby, $limit, $start);
 		$result->setFetchMode(PDO::FETCH_CLASS, $orm, array($cast = true));
 		return $result;
 	}
@@ -132,7 +132,7 @@ abstract class PersistenceModel implements Persistence {
 		foreach ($orm::getPrimaryKeys() as $key) {
 			$where[] = $key . ' = ?';
 		}
-		$result = Database::sqlSelect($orm::getFields(), $orm::getTableName(), implode(' AND ', $where), $primary_keys_values, null, 1);
+		$result = Database::sqlSelect($orm::getFields(), $orm::getTableName(), implode(' AND ', $where), $primary_keys_values, null, null, 1);
 		return $result->fetchObject($orm, array($cast = true));
 	}
 

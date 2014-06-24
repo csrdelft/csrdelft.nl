@@ -1,4 +1,4 @@
-<div id="groep{$groep->id}" class="groep">
+<div id="groep-{$groep->id}" class="groep">
 	<div style="float: left;">
 		<h2>
 			<a href="{Instellingen::get('groepen', 'url')}/{$groep->id}">
@@ -19,30 +19,27 @@
 	<div style="float: right;">
 		<ul class="tabs nobullets">
 			<li>
-				<a class="knop get active" href="{Instellingen::get('groepen', 'url')}/{$groep->id}/{GroepTab::Lijst}" title="Lijst en opmerking tonen">
+				<a class="knop get{if $tab === GroepTab::Lijst} active{/if}" href="{Instellingen::get('groepen', 'url')}/{$groep->id}/{GroepTab::Lijst}" title="Lijst en opmerking tonen">
 					<img src="{$CSR_PICS}/knopjes/lijst.png" width="20" height="20" />
 				</a>
 			</li>
 			<li>
-				<a class="knop get" href="{Instellingen::get('groepen', 'url')}/{$groep->id}/{GroepTab::Pasfotos}" title="Pasfoto's tonen">
+				<a class="knop get{if $tab === GroepTab::Pasfotos} active{/if}" href="{Instellingen::get('groepen', 'url')}/{$groep->id}/{GroepTab::Pasfotos}" title="Pasfoto's tonen">
 					<img src="{$CSR_PICS}/knopjes/pasfoto.png" width="18" height="18" />
 				</a>
 			</li>
 			<li>
-				<a class="knop get" href="{Instellingen::get('groepen', 'url')}/{$groep->id}/{GroepTab::Statistiek}" title="Statistiek tonen">
+				<a class="knop get{if $tab === GroepTab::Statistiek} active{/if}" href="{Instellingen::get('groepen', 'url')}/{$groep->id}/{GroepTab::Statistiek}" title="Statistiek tonen">
 					%
 				</a>
 			</li>
-			<li><a class="knop get" href="{Instellingen::get('groepen', 'url')}/{$groep->id}/{GroepTab::Emails}" title="E-mail's tonen">
+			<li><a class="knop get{if $tab === GroepTab::Emails} active{/if}" href="{Instellingen::get('groepen', 'url')}/{$groep->id}/{GroepTab::Emails}" title="E-mail's tonen">
 					@
 				</a>
 			</li>
 		</ul>
 		<div id="groepleden{$groep->id}" class="groepleden">
-			{foreach from=$lidforms key=uid item=form}
-				<div class="lid">{$uid|csrnaam:'civitas':'visitekaartje'}</div>
-				<div class="opmerking">{$form->view()}</div>
-			{/foreach}
+			{$tabContent->view()}
 		</div>
 	</div>
 </div>

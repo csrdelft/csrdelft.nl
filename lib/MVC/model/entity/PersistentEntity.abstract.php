@@ -48,6 +48,10 @@ abstract class PersistentEntity {
 		return array_keys(static::$persistent_fields);
 	}
 
+	public static function getFieldDefinition($field_name) {
+		return static::$persistent_fields[$field_name];
+	}
+
 	public static function getPrimaryKeys() {
 		return static::$primary_keys;
 	}

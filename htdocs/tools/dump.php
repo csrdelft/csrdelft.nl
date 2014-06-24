@@ -7,11 +7,7 @@ if (!LoginLid::mag('P_ADMIN')) {
 	exit;
 }
 
-$tables = array();
-foreach (DatabaseAdmin::instance()->sqlShowTables()->fetchAll() as $table) {
-	$tables[$table[0]] = $table[0];
-}
-
+$tables = DatabaseAdmin::instance()->sqlShowTables()->fetchAll();
 $fields['tabel'] = new SelectField('tabel', null, 'Tabel', $tables);
 $fields['btn'] = new SubmitResetCancel(CSR_ROOT, true, true, false);
 $form = new Formulier(null, 'form', null);

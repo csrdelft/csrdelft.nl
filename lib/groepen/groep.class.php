@@ -267,7 +267,7 @@ class OldGroep {
 	}
 
 	public function toonPasfotos() {
-		return $this->isIngelogged() AND $this->getToonPasfotos() == 1 AND LidInstellingen::get('groepen', 'toonPasfotos') == 'ja';
+		return $this->isIngelogged() AND $this->getToonPasfotos() == 1;
 	}
 
 	public function getLidIsMod() {

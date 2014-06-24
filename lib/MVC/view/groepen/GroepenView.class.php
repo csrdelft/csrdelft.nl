@@ -2,6 +2,7 @@
 
 require_once 'MVC/model/entity/groepen/GroepTab.enum.php';
 require_once 'MVC/model/CmsPaginaModel.class.php';
+require_once 'MVC/view/groepen/GroepTabsView.class.php';
 require_once 'MVC/view/CmsPaginaView.class.php';
 
 /**
@@ -29,14 +30,14 @@ abstract class GroepenView extends TemplateView {
 
 	public function view() {
 		$this->smarty->display('MVC/groepen/menu_pagina.tpl');
-		//$this->smarty->display('MVC/groepen/inhoudsopgave.tpl'); //FIXME: cannot iterate more than once over PDO statement of groepen
+//$this->smarty->display('MVC/groepen/inhoudsopgave.tpl'); //FIXME: cannot iterate more than once over PDO statement of groepen
 		if ($this->pagina) {
 			$pagina = new CmsPaginaView($this->pagina);
 			$pagina->view();
 		}
 		foreach ($this->model as $groep) {
 			$class = get_class($groep) . 'View';
-			$class = new $class($groep);
+			$class = new $class($groep, GroepTab::Lijst);
 			$class->view();
 		}
 	}
@@ -45,18 +46,42 @@ abstract class GroepenView extends TemplateView {
 
 abstract class GroepView extends TemplateView {
 
-	public function __construct(Groep $groep) {
+	protected $tabContent;
+
+	public function __construct(Groep $groep, $groepTab) {
 		parent::__construct($groep);
-		$forms = array();
-		foreach ($groep->getGroepLeden() as $groeplid) {
-			$forms[$groeplid->lid_id] = new GroepLidForm($groeplid);
-		}
 		$this->smarty->assign('groep', $this->model);
-		$this->smarty->assign('lidforms', $forms);
+		$this->smarty->assign('tab', $groepTab);
+		switch ($groepTab) {
+			default:
+			case GroepTab::Lijst:
+				$this->tabContent = new GroepLijstView($groep);
+				break;
+			case GroepTab::Pasfotos:
+				$this->tabContent = new GroepPasfotosView($groep);
+				break;
+			case GroepTab::Statistiek:
+				$this->tabContent = new GroepStatistiekView($groep);
+				break;
+			case GroepTab::Emails:
+				$this->tabContent = new GroepEmailsView($groep);
+				break;
+		}
 	}
 
 	public function view() {
+		$this->smarty->assign('tabContent', $this->tabContent);
 		$this->smarty->display('MVC/groepen/groep.tpl'); //TODO: get_class($this->model)
+	}
+
+}
+
+class GroepForm extends Formulier {
+
+	public function __construct(Groep $groep, $action) {
+		parent::__construct($groep, 'groepform-' . $groep->id, Instellingen::get('groepen', 'url') . '/' . $action . '/' . $groep->id);
+		$this->titel = get_class($groep) . ' ' . $action;
+		$this->generateFields();
 	}
 
 }
@@ -64,7 +89,7 @@ abstract class GroepView extends TemplateView {
 class GroepLidForm extends InlineForm {
 
 	public function __construct(GroepLid $groeplid) {
-		parent::__construct($groeplid, 'lidform' . $groeplid->lid_id, Instellingen::get('groepen', 'url') . '/wijzigen/' . $groeplid->groep_id . '/' . $groeplid->lid_id, $field = new TextField('opmerking', $groeplid->opmerking, null, 255, 0, $groeplid));
+		parent::__construct($groeplid, 'lidform-' . $groeplid->lid_id, Instellingen::get('groepen', 'url') . '/wijzigen/' . $groeplid->groep_id . '/' . $groeplid->lid_id, $field = new TextField('opmerking', $groeplid->opmerking, null, 255, 0, $groeplid));
 		$field->setSuggestions(GroepFunctie::getTypeOptions());
 	}
 
