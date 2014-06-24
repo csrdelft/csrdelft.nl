@@ -894,7 +894,7 @@ div.pasfoto img.lidfoto {
 	width: 50px;
 	height: 67px;
 	border: 1px solid grey;
-	margin-left: 5px;
+	margin: 3px 3px 0px 0px;
 }
 table.groepStats {
 	border-spacing: 0;
