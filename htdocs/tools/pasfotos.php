@@ -14,12 +14,9 @@ if (isset($_GET['string'])) {
 		$string = trim(urldecode($_GET['string']));
 		$uids = explode(',', $string);
 		$link = !isset($_GET['link']);
-
-		echo '<div class="pasfotomatrix">';
 		foreach ($uids as $uid) {
 			Lid::naamLink($uid, 'pasfoto', ($link ? 'link' : 'plain'));
 		}
-		echo '</div>';
 	} else {
 		echo 'niet voldoende rechten';
 	}
@@ -38,7 +35,7 @@ if (isset($_GET['string'])) {
 	if (Lid::isValidUid($uid) AND LoginLid::mag('P_LEDEN_READ')) {
 		$lid = LidCache::getLid($uid);
 		$types = array('jpg', 'png', 'gif');
-		
+
 		$pasfoto = $lid->getPasfotoPath();
 
 		if (in_array(substr($pasfoto, -3), $types)) {
