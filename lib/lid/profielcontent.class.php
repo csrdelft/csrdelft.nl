@@ -37,8 +37,8 @@ class ProfielContent extends TemplateView {
 		$profhtml['groepen'] = new GroepenProfielContent($this->model->getUid());
 
 		if (LoginLid::instance()->getUid() == $this->model->getUid() || LoginLid::mag('P_MAAL_MOD')) {
-			$profhtml['recenteAanmeldingen'] = AanmeldingenModel::getRecenteAanmeldingenVoorLid($this->model->getUid());
-			$profhtml['abos'] = AbonnementenModel::getAbonnementenVoorLid($this->model->getUid());
+			$profhtml['recenteAanmeldingen'] = $this->model->getRecenteAanmeldingen();
+			$profhtml['abos'] = $this->model->getMaaltijdAbonnementen();
 		}
 
 		//de html template in elkaar draaien en weergeven

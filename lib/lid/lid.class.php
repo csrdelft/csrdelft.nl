@@ -522,6 +522,22 @@ class Lid implements Serializable, Agendeerbaar {
 	}
 
 	/**
+	 * MaaltijdAanmeldingen opzoeken en teruggeven van dit lid
+	 */
+	public function getRecenteAanmeldingen() {
+		require_once 'taken/model/AanmeldingenModel.class.php';
+		return AanmeldingenModel::getRecenteAanmeldingenVoorLid($this->getUid());
+	}
+
+	/**
+	 * MaaltijdAbonnementen opzoeken en teruggeven van dit lid
+	 */
+	public function getMaaltijdAbonnementen() {
+		require_once 'taken/model/AbonnementenModel.class.php';
+		return AbonnementenModel::getAbonnementenVoorLid($this->getUid());
+	}
+
+	/**
 	 * CorveeKwalificaties opzoeken en teruggeven van dit lid
 	 */
 	public function getCorveeKwalificaties() {
