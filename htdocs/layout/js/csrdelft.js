@@ -47,7 +47,8 @@ function htmlDecode(input) {
 }
 
 function init_buttons() {
-	$('button.spoiler').click(function() {
+	$('button.spoiler').click(function(e) {
+		e.preventDefault();
 		var button = $(this);
 		var content = button.next('div.spoiler-content');
 		content.toggle(1000, 'easeInOutCubic', function() {
@@ -519,10 +520,13 @@ function applyUBB(string, div) {
 	http.setRequestHeader('Content-length', params.length);
 	http.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
 	http.setRequestHeader('Connection', 'close');
-
 	http.onreadystatechange = function() {
 		if (http.readyState == 4) {
 			div.innerHTML = http.responseText;
+			init_links();
+			init_buttons();
+			init_forms();
+			init_hoverIntents();
 		}
 	}
 	http.send(params);
