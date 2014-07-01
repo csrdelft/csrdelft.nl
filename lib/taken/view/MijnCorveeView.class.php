@@ -17,6 +17,7 @@ class MijnCorveeView extends TemplateView {
 		$this->smarty->assign('puntenlijst', $punten);
 		$this->smarty->assign('functies', $functies);
 		$this->smarty->assign('vrijstelling', $vrijstelling);
+		$this->smarty->assign('toonverleden', false);
 	}
 
 	public function view() {
