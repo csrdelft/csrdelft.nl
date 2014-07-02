@@ -588,6 +588,7 @@ class ProfielStatus extends Profiel {
 	 * @return string changelogregel
 	 */
 	private function disableMaaltijdabos() {
+		require_once 'taken/model/AbonnementenModel.class.php';
 		$aantal = AbonnementenModel::verwijderAbonnementenVoorLid($this->lid->getUid());
 		return 'Afmelden abo\'s: ' . $aantal . ' uitgezet. ';
 	}
