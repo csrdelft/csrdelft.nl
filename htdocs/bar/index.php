@@ -15,12 +15,11 @@ if (LoginLid::mag("P_ADMIN")) {
         <title>Barsysteem C.S.R.</title>
 
         <!-- eigen CSS -->
-        <link href="css/bar.css" rel="stylesheet">
         <link href="css/datepicker3.css" rel="stylesheet">
         <!-- Bootstrap core CSS -->
         <link href="css/bootstrap.min.css" rel="stylesheet">
-
-
+		<link href="css/bar.css" rel="stylesheet">
+        
         <!-- Custom styles for this template -->
 
 
@@ -36,7 +35,7 @@ if (LoginLid::mag("P_ADMIN")) {
         <![endif]-->
     </head>
 
-    <body>
+    <body id="body">
 	
 	<div id="waarschuwing"></div>
 
