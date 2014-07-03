@@ -37,6 +37,8 @@ if (LoginLid::mag("P_ADMIN")) {
     </head>
 
     <body>
+	
+	<div id="waarschuwing"></div>
 
     <!-- Nav tabs -->
     <ul class="nav nav-tabs" role="tablist">
@@ -106,7 +108,6 @@ if (LoginLid::mag("P_ADMIN")) {
 
         </div>
         <div class="tab-pane" id="invoer">
-            <div id="waarschuwing"></div>
 
             <div class="row">
                 <div id="knoppenGroep">
