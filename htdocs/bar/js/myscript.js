@@ -267,9 +267,9 @@ $(function () {
             var shift = false,
                 capslock = false;
 
-            $('#keyboard li').click(function () {
+            $('#keyboard li').not('.spacer').click(function () {
                 var $this = $(this),
-                    character = $this.html(); // If it's a lowercase letter, nothing happens to this variable
+                    character = $this.html().toLowerCase(); // If it's a lowercase letter, nothing happens to this variable
 
                 // Delete
                 if ($this.hasClass('delete')) {

@@ -129,6 +129,14 @@ body {
     -webkit-border-radius: 5px;
 }
 
+#keyboard .spacer{
+	width: 32px;
+	margin-right: 0;
+	background: none;
+	position: relative;
+	left: -10000px;
+}
+
 #keyboard .clear{
 	clear: left;
 }
