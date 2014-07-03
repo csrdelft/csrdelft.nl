@@ -133,7 +133,7 @@ body {
 	clear: left;
 }
 
-#keyboard .delete {
+#keyboard .delete, #keyboard .space {
     width: 126px;
 }
 

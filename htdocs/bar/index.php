@@ -68,8 +68,8 @@ if (LoginLid::mag("P_ADMIN")) {
                     <li class="letter">I</li>
                     <li class="letter">O</li>
                     <li class="letter">P</li>
-                    <li class="delete clear">delete</li>
-                    <li class="letter">A</li>
+                    <li class="delete">delete</li>
+                    <li class="letter clear">A</li>
                     <li class="letter">S</li>
                     <li class="letter">D</li>
                     <li class="letter">F</li>
@@ -77,15 +77,15 @@ if (LoginLid::mag("P_ADMIN")) {
                     <li class="letter">H</li>
                     <li class="letter">J</li>
                     <li class="letter">K</li>
-                    <li class="letter clear">L</li>
-                    <li class="letter">Z</li>
+                    <li class="letter">L</li>
+                    <li class="letter clear">Z</li>
                     <li class="letter">X</li>
                     <li class="letter">C</li>
                     <li class="letter">V</li>
                     <li class="letter">B</li>
                     <li class="letter">N</li>
                     <li class="letter">M</li>
-                    <li class="delete">space</li>
+                    <li class="space">space</li>
                 </ul>
             </div>
             <table id="selectieTabel" class="table">
