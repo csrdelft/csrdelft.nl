@@ -151,7 +151,7 @@ class Barsysteem
     {
         $result = array();
         foreach ($queryResult as $row) {
-            if (!$result[$row["bestellingId"]]) {
+            if (!array_key_exists($row["bestellingId"],$result)) {
                 $result[$row["bestellingId"]] = array();
                 $result[$row["bestellingId"]]["bestelLijst"] = array();
                 $result[$row["bestellingId"]]["bestelTotaal"] = $row["totaal"];
