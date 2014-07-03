@@ -24,7 +24,7 @@ if (LoginLid::mag("P_ADMIN")){
     if (isset($_POST["bestelling"])) {
         $barsysteem = new Barsysteem();
         $data = json_decode($_POST["bestelling"]);
-        if ($data->oudeBestelling) {
+        if (property_exists($data, "oudeBestelling")) {
             echo $barsysteem->updateBestelling($data);
         } else {
             echo $barsysteem->verwerkBestelling(json_decode($_POST["bestelling"]));
