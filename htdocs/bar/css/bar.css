@@ -1,0 +1,185 @@
+* {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+#persoonInput {
+    font-size: 40px;
+    height: 60px;
+}
+
+#keyboardToggle {
+    font-size: 30px;
+    height: 60px;
+}
+
+#aantalInput {
+    width: 208px;
+    font-size: 50px;
+    height: 80px;
+}
+
+button.btn-groot {
+    font-size: 50px;
+    width: 65px;
+    height: 83px;
+}
+
+#knopC {
+    font-size: 30px;
+    background-color: #FFD700;
+}
+
+#knop- {
+    background-color: #ff5354;
+}
+
+.alert {
+    font-size: 30px;
+}
+
+#knoppenGroep {
+    width: 210px;
+    float: right;
+}
+
+#linkerKant {
+    margin-right: 220px;
+    margin-left: 20px;
+}
+
+ul.bestelLijst {
+    height: 200px;
+    font-size: 30px;
+}
+
+button.btn-bestel {
+    font-size: 25px;
+    width: 150px;
+}
+
+#bestelLijstDiv {
+    height: 200px;
+    margin: 20px;
+    overflow: hidden;
+    overflow-y: scroll;
+}
+
+#ondersteRijKnoppen {
+    margin-top: 0px;
+}
+
+button.btn-beneden {
+    margin-top: 0px;
+    width: 105px;
+    height: 50px;
+}
+
+#knopCancel {
+    background-color: #ff5354;
+}
+
+#knopConfirm {
+    background-color: #47ff89;
+}
+
+#saldoOverzicht {
+    margin-top: 20px;
+    margin-bottom: 0px;
+    width: 208px;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font: 71%/1.5 Verdana, Sans-Serif;
+    background: #eee;
+}
+
+#keyboardContainer {
+    margin: 10px auto;
+    width: 950px;
+}
+
+#keyboard {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+#keyboard li {
+    float: left;
+    margin: 0 5px 5px 0;
+    width: 60px;
+    height: 60px;
+    line-height: 60px;
+    font-size: 30px;
+    text-align: center;
+    background: #fff;
+    border: 1px solid #f9f9f9;
+    background-color: #d0cfd1;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+}
+
+#keyboard .delete {
+    width: 126px;
+}
+
+#keyboard li:hover {
+    position: relative;
+    top: 1px;
+    left: 1px;
+    border-color: #e5e5e5;
+    cursor: pointer;
+}
+
+#productBeheerLijstDiv {
+    width: 300px;
+    margin: 20px;
+}
+
+#besteLijstBeheerLaad {
+    margin: 10px auto;
+}
+
+div.row {
+    margin-right: 0px;
+    margin-left: 0px
+}
+
+#laadKnoppen {
+    margin: 10px auto;
+}
+
+.eenDerdeLijst {
+    width: 33%;
+    float: left;
+}
+
+#besteLijstBeheer {
+    width: 100%;
+}
+
+th#persoon {
+    width: 15%;
+}
+
+th#datum {
+    width: 20%;
+}
+
+th#totaal {
+    width: 10%
+}
+
+th#opties {
+    width: 90px;
+}
