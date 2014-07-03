@@ -176,7 +176,7 @@ $(function () {
         })
             .done(function (data) {
                 productenTemp = $.parseJSON(data);
-                console.log(productenTemp);
+                //console.log(productenTemp);
                 var sorteerbaar = [];
                 $.each(productenTemp, function () {
                     sorteerbaar.push([this, this.prioriteit]);
@@ -367,7 +367,7 @@ $(function () {
                 });
                 $("#bewerkInhoud" + item).click(function () {
                     zetWaarschuwing("U bewerkt een bestelling!");
-                    console.log(bestelling);
+                    //console.log(bestelling);
                     bestelLijst = bestelling.bestelLijst;
                     oudeBestelling = bestelling;
                     selectedPerson = personen[bestelling.persoon]
@@ -411,17 +411,5 @@ $(function () {
                     }
             }
         });
-
-		$("#scrollArea").each(function() {
-		
-			$this = $(this);
-		
-			$(window).resize(function() {
-			
-				$this.height($("body").height() - $this.offset().top);
-			
-			}).resize();
-		
-		});
 		
 });

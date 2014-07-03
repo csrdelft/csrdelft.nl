@@ -8,13 +8,6 @@ body{
 	font-size: 14px;
 }
 
-#scrollArea{
-	width: 100%;
-	height: 100px;
-	overflow-y: auto;
-	overflow-x: none;
-}
-
 #body .nav-pills li a{
 	color: #000;
 	background: #d0cfd1;
