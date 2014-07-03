@@ -84,17 +84,19 @@ if (LoginLid::mag("P_ADMIN")) {
                     <li class="space">space</li>
                 </ul>
             </div>
-            <table id="selectieTabel" class="table">
-                <thead>
-                <tr>
-                    <td><b>Bijnaam</b></td>
-                    <td><b>Naam</b></td>
-                </tr>
-                </thead>
-                <tbody>
+			<div id="scrollArea">
+				<table id="selectieTabel" class="table">
+					<thead>
+					<tr>
+						<td><b>Bijnaam</b></td>
+						<td><b>Naam</b></td>
+					</tr>
+					</thead>
+					<tbody>
 
-                </tbody>
-            </table>
+					</tbody>
+				</table>
+			</div>
 
         </div>
         <div class="tab-pane" id="invoer">
