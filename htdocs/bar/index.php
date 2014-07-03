@@ -41,7 +41,7 @@ if (LoginLid::mag("P_ADMIN")) {
 	<div id="waarschuwing"></div>
 
     <!-- Nav tabs -->
-    <ul class="nav nav-tabs" role="tablist">
+    <ul class="nav nav-pills nav-justified" role="tablist">
         <li class="active"><a href="#persoonselectie" role="tab" data-toggle="tab" id="persoonselectieVeld">Persoonselectie</a>
         </li>
         <li><a href="#invoer" role="tab" data-toggle="tab" id="invoerveld">Invoer</a></li>

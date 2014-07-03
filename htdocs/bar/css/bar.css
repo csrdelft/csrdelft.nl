@@ -7,6 +7,19 @@
     user-select: none;
 }
 
+.alert{
+	margin-bottom: 0;
+}
+
+.nav{
+	font-size: 20px;
+}
+
+#selectieTabel td{
+	font-size: 20px;
+	line-height: 30px;
+}
+
 #persoonInput {
     font-size: 40px;
     height: 60px;
