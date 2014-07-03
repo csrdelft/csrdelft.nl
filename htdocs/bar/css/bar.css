@@ -129,6 +129,10 @@ body {
     -webkit-border-radius: 5px;
 }
 
+#keyboard .clear{
+	clear: left;
+}
+
 #keyboard .delete {
     width: 126px;
 }
