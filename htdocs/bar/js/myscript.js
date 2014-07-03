@@ -273,11 +273,11 @@ $(function () {
 
                 // Delete
                 if ($this.hasClass('delete')) {
-                    $("#persoonInput").val($("#persoonInput").val().slice(0, -1));
+                    $("#persoonInput").val($("#persoonInput").val().slice(0, -1)).focus();
                     updateOnKeyPress();
                     return false;
                 } else if($this.hasClass('leeg')) {
-					 $("#persoonInput").val('');
+					 $("#persoonInput").val('').focus();
 					updateOnKeyPress();
 					return false;
 				}
