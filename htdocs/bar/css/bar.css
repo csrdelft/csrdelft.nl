@@ -94,6 +94,10 @@ button.btn-bestel {
     overflow-y: scroll;
 }
 
+#bestelLijstDiv ul{
+	list-style: none;
+}
+
 #ondersteRijKnoppen {
     margin-top: 0px;
 }
