@@ -5,10 +5,21 @@ body{
     -moz-user-select: none;
     -ms-user-select: none;
     user-select: none;
+	font-size: 14px;
+}
+
+.nav-pills li{
+	margin: 3px;
 }
 
 .nav-pills li a{
+	color: #000;
 	background: #d0cfd1;
+}
+
+.nav-pills li.active a{
+	color: #fff;
+	background: #428bca;
 }
 
 .alert{
