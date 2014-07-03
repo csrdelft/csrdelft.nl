@@ -411,5 +411,17 @@ $(function () {
                     }
             }
         });
-    }
-);
+
+		$("#scrollArea").each(function() {
+		
+			$this = $(this);
+		
+			$(window).resize(function() {
+			
+				$this.height($("body").height() - $this.offset().top);
+			
+			}).resize();
+		
+		});
+		
+});
