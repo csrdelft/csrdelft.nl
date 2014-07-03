@@ -276,13 +276,10 @@ $(function () {
                     $("#persoonInput").val($("#persoonInput").val().slice(0, -1));
                     updateOnKeyPress();
                     return false;
-                } else if($this.hasClass('space')) {
-					 $("#persoonInput").val($("#persoonInput").val() + ' ');
-					updateOnKeyPress();
-					return false;
-				}
+                }
 
                 if ($this.hasClass('space')) character = ' ';
+                if ($this.hasClass('leeg')) character = '';
 
                 // Add the character
                 $("#persoonInput").val($("#persoonInput").val() + character)

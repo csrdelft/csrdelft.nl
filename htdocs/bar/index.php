@@ -79,6 +79,7 @@ if (LoginLid::mag("P_ADMIN")) {
                     <li class="letter">J</li>
                     <li class="letter">K</li>
                     <li class="letter">L</li>
+                    <li class="leeg">leeg</li>
                     <li class="spacer clear"></li>
                     <li class="spacer"></li>
                     <li class="letter">Z</li>
