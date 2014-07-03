@@ -8,21 +8,18 @@ body{
 	font-size: 14px;
 }
 
-.nav-pills li{
-	margin: 3px;
-}
-
-.nav-pills li a{
+#body .nav-pills li a{
 	color: #000;
 	background: #d0cfd1;
+	margin: 0 5px;
 }
 
-.nav-pills li.active a{
+#body .nav-pills li.active a{
 	color: #fff;
 	background: #428bca;
 }
 
-.alert{
+#body .alert{
 	margin-bottom: 0;
 }
 

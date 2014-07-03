@@ -26,7 +26,7 @@ if (LoginLid::mag("P_ADMIN")) {
         <![endif]-->
     </head>
 
-    <body>
+    <body id="body">
 	
 	<div id="waarschuwing"></div>
 
@@ -35,8 +35,8 @@ if (LoginLid::mag("P_ADMIN")) {
         <li class="active"><a href="#persoonselectie" role="tab" data-toggle="tab" id="persoonselectieVeld">Persoonselectie</a>
         </li>
         <li><a href="#invoer" role="tab" data-toggle="tab" id="invoerveld">Invoer</a></li>
-        <li><a href="#bestelLijstBeheer" role="tab" data-toggle="tab">Bestellingen van persoon</a></li>
-        <li><a href="#productBeheer" role="tab" data-toggle="tab">beheer producten</a></li>
+        <li><a href="#bestelLijstBeheer" role="tab" data-toggle="tab">Bestellingen</a></li>
+        <li><a href="#productBeheer" role="tab" data-toggle="tab">Productenbeheer</a></li>
     </ul>
 
     <!-- Tab panes -->
