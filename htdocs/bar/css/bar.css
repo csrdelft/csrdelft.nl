@@ -7,7 +7,7 @@ body{
     user-select: none;
 }
 
-#body .nav-pills li a{
+.nav-pills li a{
 	background: #d0cfd1;
 }
 

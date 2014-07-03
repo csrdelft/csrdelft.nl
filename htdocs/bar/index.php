@@ -35,7 +35,7 @@ if (LoginLid::mag("P_ADMIN")) {
         <![endif]-->
     </head>
 
-    <body id="body">
+    <body>
 	
 	<div id="waarschuwing"></div>
 
