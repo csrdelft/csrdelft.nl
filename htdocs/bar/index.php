@@ -17,7 +17,7 @@ if (LoginLid::mag("P_ADMIN")) {
         <!-- Bootstrap core CSS -->
         <link href="css/bar.css" rel="stylesheet">
         <link href="css/bootstrap.min.css" rel="stylesheet">
-		
+
         <!-- Custom styles for this template -->
         <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
         <!--[if lt IE 9]>
@@ -27,8 +27,8 @@ if (LoginLid::mag("P_ADMIN")) {
     </head>
 
     <body id="body">
-	
-	<div id="waarschuwing"></div>
+
+    <div id="waarschuwing"></div>
 
     <!-- Nav tabs -->
     <ul class="nav nav-pills nav-justified" role="tablist">
@@ -84,17 +84,17 @@ if (LoginLid::mag("P_ADMIN")) {
                     <li class="space">space</li>
                 </ul>
             </div>
-			<table id="selectieTabel" class="table">
-				<thead>
-				<tr>
-					<td><b>Bijnaam</b></td>
-					<td><b>Naam</b></td>
-				</tr>
-				</thead>
-				<tbody>
+            <table id="selectieTabel" class="table">
+                <thead>
+                <tr>
+                    <td><b>Bijnaam</b></td>
+                    <td><b>Naam</b></td>
+                </tr>
+                </thead>
+                <tbody>
 
-				</tbody>
-			</table>
+                </tbody>
+            </table>
 
         </div>
         <div class="tab-pane" id="invoer">
@@ -166,11 +166,20 @@ if (LoginLid::mag("P_ADMIN")) {
             </div>
         </div>
         <div class="tab-pane" id="bestelLijstBeheer">
-            <div class="btn-group btn-group-lg" id="laadKnoppen">
-                <button class="btn btn-default btn-lg" id="besteLijstBeheerLaadPersoon">Geen</button>
-                <button class="btn btn-default btn-lg" id="besteLijstBeheerLaadLaatste100">Laad laatste 100
-                    bestellingen
-                </button>
+
+            <div class=" input-group input-group-lg input-daterange" id="datepicker">
+                <span class="input-group-btn">
+                    <button class="btn btn-toggle btn-default" id="eenPersoon">Geselecteerde persoon</button>
+                    <button class="btn btn-toggle btn-default btn-primary" id="allePersonen">Alle personen</button>
+                </span>
+                <span class="input-group-addon">van</span><input type="text" class="input-sm form-control" name="start"
+                                                                 placeholder="begin borrel" id="beginDatum"/>
+                <span class="input-group-addon">tot</span><input type="text" class="input-sm form-control" name="end"
+                                                                 placeholder="nu" id="eindDatum"/>
+                <span class="input-group-btn">
+                    <button class="btn btn-default" id="krijgBestellingen">Ga</button>
+                </span>
+
             </div>
             <div id="besteLijstBeheerContent">
                 <table class="table tablesorter" id="besteLijstBeheer">
@@ -190,11 +199,7 @@ if (LoginLid::mag("P_ADMIN")) {
             </div>
         </div>
         <div class="tab-pane" id="productBeheer">
-            <div class="input-daterange input-group" id="datepicker">
-                <input type="text" class="input-sm form-control" name="start"/>
-                <span class="input-group-addon">tot</span>
-                <input type="text" class="input-sm form-control" name="end"/>
-            </div>
+
             <div id="productBeheerLijstDiv">
                 <ul class="list-group" id="productBeheerLijst">
                 </ul>

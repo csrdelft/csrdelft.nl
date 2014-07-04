@@ -30,10 +30,6 @@ if (LoginLid::mag("P_ADMIN")){
             echo $barsysteem->verwerkBestelling(json_decode($_POST["bestelling"]));
         }
     }
-    if (isset($_POST["persoonBestellingen"])) {
-        $barsysteem = new Barsysteem();
-        echo json_encode($barsysteem->getBestellingPersoon($_POST["persoonBestellingen"]));
-    }
     if (isset($_POST["saldoSocCieId"])) {
         $barsysteem = new Barsysteem();
         echo $barsysteem->getSaldo($_POST["saldoSocCieId"]);
@@ -44,7 +40,7 @@ if (LoginLid::mag("P_ADMIN")){
     }
     if (isset($_POST["laadLaatste"])) {
         $barsysteem = new Barsysteem();
-        echo json_encode($barsysteem->getBestellingLaatste($_POST["laadLaatste"]));
+        echo json_encode($barsysteem->getBestellingLaatste($_POST["aantal"], $_POST["begin"], $_POST["eind"]));
     }
 }
 ?>

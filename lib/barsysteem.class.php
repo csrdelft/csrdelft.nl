@@ -43,7 +43,7 @@ class Barsysteem
             $product["btw"] = $row["btw"];
             $product["beschrijving"] = $row["beschrijving"];
             $product["prioriteit"] = $row["prioriteit"];
-            $product["alcohol"]=$row["alcohol"];
+            $product["alcohol"] = $row["alcohol"];
             $result[$row["id"]] = $product;
         }
         return $result;
@@ -81,10 +81,24 @@ class Barsysteem
         return $this->verwerkBestellingResultaat($q->fetchAll(PDO::FETCH_ASSOC));
     }
 
-    function getBestellingLaatste($aantal)
+    function getBestellingLaatste($persoon, $begin, $eind)
     {
-        $q = $this->db->prepare("SELECT * FROM (SELECT * FROM socCieBestelling ORDER BY tijd DESC LIMIT 0,:aantal) AS B JOIN socCieBestellingInhoud AS I ON B.id=I.bestellingId");
-        $q->bindValue(":aantal", intval($aantal), PDO::PARAM_INT);
+        if ($begin == "") {
+            $begin = date("Y-m-d H:i:s", time() - 15 * 3600);
+        } else {
+            $begin = $this->parseDate($begin) . " 00:00:00";
+        }
+        if ($eind == "") {
+            $eind = date("Y-m-d H:i:s");
+        } else {
+            $eind = $this->parseDate($eind) . " 23:59:59";
+        }
+        $qa = "";
+        if ($persoon != "alles") $qa = "socCieId=:socCieId AND";
+        $q = $this->db->prepare("SELECT * FROM socCieBestelling AS B JOIN socCieBestellingInhoud AS I ON B.id=I.bestellingId WHERE " . $qa . " tijd>=:begin AND tijd<=:eind");
+        if ($persoon != "alles") $q->bindValue(":socCieId", $persoon, PDO::PARAM_INT);
+        $q->bindValue(":begin", $begin);
+        $q->bindValue(":eind", $eind);
         $q->execute();
         return $this->verwerkBestellingResultaat($q->fetchAll(PDO::FETCH_ASSOC));
     }
@@ -151,7 +165,7 @@ class Barsysteem
     {
         $result = array();
         foreach ($queryResult as $row) {
-            if (!array_key_exists($row["bestellingId"],$result)) {
+            if (!array_key_exists($row["bestellingId"], $result)) {
                 $result[$row["bestellingId"]] = array();
                 $result[$row["bestellingId"]]["bestelLijst"] = array();
                 $result[$row["bestellingId"]]["bestelTotaal"] = $row["totaal"];
@@ -163,6 +177,15 @@ class Barsysteem
             $result[$row["bestellingId"]]["bestelLijst"][$row["productId"]] = 1 * $row["aantal"];
         }
         return $result;
+    }
+
+    private function parseDate($date)
+    {
+
+        $elementen = explode(" ", $date);
+        $datum = str_pad($elementen[0], 2, "0", STR_PAD_LEFT);
+        $maanden = ["Januari" => "01", "Februari" => "02", "Maart" => "03", "April" => "04", "Mei" => "05", "Juni" => "06", "Juli" => "07", "Augustus" => "08", "September" => "09", "Oktober" => "10", "November" => "11", "December" => "12"];
+        return ($elementen[2] . "-" . $maanden[$elementen[1]] . "-" . $datum);
     }
 
 }
