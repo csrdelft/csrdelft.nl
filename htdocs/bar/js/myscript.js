@@ -11,7 +11,7 @@ $(function () {
 	
 		function addLeading(number) {
 			
-			if(number.length == 2)
+			if(number.length + "" == 2)
 				return number;
 				
 			return "0" + number;
