@@ -15,11 +15,16 @@ body, html{
 .tab-content{
 	overflow-x: hidden;
 	overflow-y: auto;
+	padding: 0 5px;
 }
 
 #main{
 	width: 100%;
 	height: 100%;
+}
+
+#main td{
+	vertical-align: top;
 }
 
 #main .top td{
