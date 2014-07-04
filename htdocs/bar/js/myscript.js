@@ -140,23 +140,19 @@ $(function () {
     }
 
     function zetSucces(bericht) {
-        $("#waarschuwing").empty();
-        $("#waarschuwing").append("<div class='alert alert-success' role='alert'>" + bericht + "</div>")
+        $("#waarschuwing").html("<div class='alert alert-success' role='alert'>" + bericht + "</div>")
     }
 
     function zetWaarschuwing(bericht) {
-        $("#waarschuwing").empty();
-        $("#waarschuwing").append("<div class='alert alert-warning   ' role='alert'>" + bericht + "</div>")
+        $("#waarschuwing").html("<div class='alert alert-warning   ' role='alert'>" + bericht + "</div>")
     }
 
     function zetFaal(bericht) {
-        $("#waarschuwing").empty();
-        $("#waarschuwing").append("<div class='alert alert-danger   ' role='alert'>" + bericht + "</div>")
+        $("#waarschuwing").html("<div class='alert alert-danger   ' role='alert'>" + bericht + "</div>")
     }
 
     function zetInfo(bericht) {
-        $("#waarschuwing").empty();
-        $("#waarschuwing").append("<div class='alert alert-info   ' role='alert'>" + bericht + "</div>")
+        $("#waarschuwing").html("<div class='alert alert-info   ' role='alert'>" + bericht + "</div>")
     }
 
     var personen = {};
