@@ -31,6 +31,10 @@ body, html{
 	height: 1%;
 }
 
+#main .bottom td{
+	overflow: scroll;
+}
+
 #bestelLijstDiv li:after{
 	content: '\e014';
 	position: relative;
