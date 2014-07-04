@@ -30,7 +30,7 @@ if (LoginLid::mag("P_ADMIN")) {
 
 	<table id="main" cellpadding="0" cellspacing="0">
 
-		<tr class="top">
+		<tr class="top"><td>
 
 			<div id="clock"></div>
 			<div id="waarschuwing"></div>
@@ -44,8 +44,8 @@ if (LoginLid::mag("P_ADMIN")) {
 				<li><a href="#productBeheer" role="tab" data-toggle="tab">Productenbeheer</a></li>
 			</ul>
 
-		</tr>
-		<tr class="bottom">
+		</td></tr>
+		<tr class="bottom"><td>
 
 			<!-- Tab panes -->
 			<div class="tab-content">
@@ -216,7 +216,7 @@ if (LoginLid::mag("P_ADMIN")) {
 
 			</div>
 
-		</tr>
+		</td></tr>
 
 	</table>
 
