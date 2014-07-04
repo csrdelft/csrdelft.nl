@@ -64,9 +64,9 @@
 		<a style="float: right;" class="knop" onclick="$('#ubbhulpverhaal').toggle();" title="Opmaakhulp weergeven">Opmaak</a>
 		<a style="float: right; margin-right: 3px;" class="knop" onclick="vergrootTextarea('courantBericht', 10)" title="Vergroot het invoerveld"><div class="arrows">&uarr;&darr;</div>&nbsp;&nbsp;&nbsp;</a>
 		<input type="submit" name="verzenden" value="Opslaan" class="tekst" /> 
-		<input type="button" value="Voorbeeld" onclick="return previewPost('courantBericht', 'bewerkPreview')" />
+		<input type="button" value="Voorbeeld" onclick="previewPost('courantBericht', 'bewerkPreview');" />
 		{if $courant->magBeheren()}
-			&nbsp;&nbsp;<input type="button" value="Importeer agenda" onclick="return importAgenda('courantBericht')" />
+			&nbsp;&nbsp;<input type="button" value="Importeer agenda" onclick="importAgenda('courantBericht');" />
 		{/if}
 	</div>
 </form>

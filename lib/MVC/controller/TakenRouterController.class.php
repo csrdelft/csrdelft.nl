@@ -55,8 +55,10 @@ class TakenRouterController extends AclController {
 			Instellingen::setTemp('taken', 'url', '/' . $this->action);
 		}
 		$controller = parent::performAction();
-		$controller->performAction();
-		$this->view = $controller->getContent();
+		if ($controller !== null) {
+			$controller->performAction();
+			$this->view = $controller->getContent();
+		}
 	}
 
 	protected function geentoegang() {

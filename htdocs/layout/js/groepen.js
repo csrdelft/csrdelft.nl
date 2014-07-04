@@ -1,6 +1,45 @@
 /**
  * Spul voor csrdelft.nl-groepenketzer.
  */
+function init_groepen() {
+	jQuery('.inline_edit').click(function() {
+		//show edit field.
+		jQuery(this).children('span').hide();
+		jQuery(this).children('input,select').show();
+	}).change(function() {
+		//id = 'bewerk_<gid>|<uid>'
+		var ids = jQuery(this).attr('id').substring(7).split('_');
+		var gid = ids[0];
+		var uid = ids[1];
+		var values = [];
+		jQuery(this).children('input,select').each(function(index) {
+			values.push(jQuery(this).val());
+		});
+		var data = {'functie[]': values}
+		//update span
+		jQuery(this).children('span').html(values.join(' - '));
+
+		jQuery.ajax({
+			type: 'POST',
+			url: '/actueel/groepen/XHR/' + gid + '/bewerkfunctieLid/' + uid,
+			data: data,
+			cache: false,
+			success: function(response) {
+				jQuery('.editbox').hide();
+				jQuery('.text').show();
+			}
+		});
+	});
+
+	// close editor if clicking outside editfield
+	jQuery(document).mouseup(function(object) {
+		if (!jQuery(object.target).hasClass('editbox')) { //in editbox mag je klikken
+			jQuery('.editbox').hide();
+			jQuery('.text').show();
+		}
+	});
+
+}
 
 function groepFormUpdate() {
 	var gAanmeldDiv = document.getElementById('groepAanmeldbaarContainer');
@@ -47,7 +86,16 @@ function groepFormUpdate() {
 		}
 	}
 }
-/*
+
+/**
+ * @param {Number} x nummer van de maand
+ * @return {String} maand, geprefixt met 0 wanneer nodig
+ */
+function LZ(x) {
+	return(x < 0 || x > 9 ? "" : "0") + x
+}
+
+/**
  * groepTabShow()
  * tabid is meteen de actie die aangeroepen wordt, een tabje erbij is
  * dus een kwestie van een nieuwe function action_<naam>(){} maken in de
@@ -79,45 +127,4 @@ function groepTabShow(groepid, tabid) {
 		}
 	};
 	http.send(null);
-
-}
-
-function init_groepen() {
-	jQuery('.inline_edit').click(function() {
-		//show edit field.
-		jQuery(this).children('span').hide();
-		jQuery(this).children('input,select').show();
-	}).change(function() {
-		//id = 'bewerk_<gid>|<uid>'
-		var ids = jQuery(this).attr('id').substring(7).split('_');
-		var gid = ids[0];
-		var uid = ids[1];
-		var values = [];
-		jQuery(this).children('input,select').each(function(index) {
-			values.push(jQuery(this).val());
-		});
-		var data = {'functie[]': values}
-		//update span
-		jQuery(this).children('span').html(values.join(' - '));
-
-		jQuery.ajax({
-			type: 'POST',
-			url: '/actueel/groepen/XHR/' + gid + '/bewerkfunctieLid/' + uid,
-			data: data,
-			cache: false,
-			success: function(response) {
-				jQuery('.editbox').hide();
-				jQuery('.text').show();
-			}
-		});
-	});
-
-	// close editor if clicking outside editfield
-	jQuery(document).mouseup(function(object) {
-		if (!jQuery(object.target).hasClass('editbox')) { //in editbox mag je klikken
-			jQuery('.editbox').hide();
-			jQuery('.text').show();
-		}
-	});
-
 }

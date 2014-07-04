@@ -3,6 +3,7 @@
  */
 
 var FieldSuggestions = [];
+var http = new XMLHttpRequest(); //DEPRECATED
 
 function preload(arrayOfImages) {
 	$(arrayOfImages).each(function() {
@@ -40,28 +41,22 @@ function isCtrlKeyDown(event) {
 	return false;
 }
 
-function htmlDecode(input) {
-	var div = document.createElement('div');
-	div.innerHTML = input;
-	return div.childNodes.length === 0 ? '' : div.childNodes[0].nodeValue;
-}
-
 function init_buttons() {
-	$('button.spoiler').click(function(e) {
-		e.preventDefault();
+	$('button.spoiler').unbind('click.spoiler');
+	$('button.spoiler').bind('click.spoiler', function(event) {
+		event.preventDefault();
 		var button = $(this);
 		var content = button.next('div.spoiler-content');
-		content.toggle(1000, 'easeInOutCubic', function() {
+		content.toggle(800, 'easeInOutCubic', function() {
 			if (content.is(':visible')) {
 				button.html('Verberg verklapper');
-			}
-			else {
+			} else {
 				button.html('Toon verklapper');
 			}
 		});
 	});
 	$('button.popup').unbind('click.popup');
-	$('button.popup').bind('click.popup', function() {
+	$('button.popup').bind('click.popup', function(event) {
 		popup_open();
 	});
 	$('button.post').unbind('click.post');
@@ -84,9 +79,7 @@ function init_hoverIntents() {
 
 function init_links() {
 	$('a.popup').unbind('click.popup');
-	$('a.popup').bind('click.popup', function() {
-		popup_open();
-	});
+	$('a.popup').bind('click.popup', popup_open);
 	$('a.post').unbind('click.post');
 	$('a.post').bind('click.post', knop_post);
 	$('a.get').unbind('click.get');
@@ -192,6 +185,7 @@ function init_forms() {
 	// Resize popup to width of textarea
 	$('#popup .TextareaField').unbind('mousedown.resize');
 	$('#popup .TextareaField').bind('mousedown.resize', function() {
+		$(this).unbind('mousemove.resize');
 		$(this).bind('mousemove.resize', function() {
 			var width = 7 + parseInt($(this).css('width'));
 			$('#popup').css('min-width', width);
@@ -200,6 +194,7 @@ function init_forms() {
 	});
 	$('#popup .TextareaField').unbind('mouseup.resize');
 	$('#popup .TextareaField').bind('mouseup.resize', function() {
+		$(this).trigger('mousemove.resize');
 		$(this).unbind('mousemove.resize');
 	});
 }
@@ -210,18 +205,18 @@ function form_ischanged(form) {
 		if ($(this).is('input:radio')) {
 			if ($(this).is(':checked') && $(this).attr('origvalue') !== $(this).val()) {
 				changed = true;
-				return false;
+				return false; // break each
 			}
 		}
 		else if ($(this).is('input:checkbox')) {
 			if ($(this).is(':checked') !== ($(this).attr('origvalue') === '1')) {
 				changed = true;
-				return false;
+				return false; // break each
 			}
 		}
 		else if ($(this).val() !== $(this).attr('origvalue')) {
 			changed = true;
-			return false;
+			return false; // break each
 		}
 	});
 	return changed;
@@ -357,7 +352,7 @@ function dom_update(htmlString) {
 				$(this).prependTo('#' + parentid).effect('highlight');
 			}
 			else {
-				$(this).prependTo('#taken-tabel tbody:visible:first').effect('highlight');
+				$(this).prependTo('#taken-tabel tbody:visible:first').effect('highlight'); //FIXME: make generic
 			}
 		}
 		init_links();
@@ -472,105 +467,34 @@ function selectText(id) {
 	}
 }
 
-//we maken een standaard AJAX-ding aan.
-var http = false;
-if (navigator.appName == "Microsoft Internet Explorer") {
-	http = new ActiveXObject("Microsoft.XMLHTTP");
-} else {
-	http = new XMLHttpRequest();
-}
-
 function vergrootTextarea(id, rows) {
 	jQuery('#' + id).animate({'height': '+=' + rows * 30}, 800, function() {
 	});
 }
 
-function setjs() {
-	if (navigator.product == 'Gecko') {
-		document.loginform["interface"].value = 'mozilla';
-	} else if (window.opera && document.childNodes) {
-		document.loginform["interface"].value = 'opera7';
-	} else if (navigator.appName == 'Microsoft Internet Explorer' &&
-			navigator.userAgent.indexOf("Mac_PowerPC") > 0) {
-		document.loginform["interface"].value = 'konqueror';
-	} else if (navigator.appName == 'Microsoft Internet Explorer' &&
-			document.getElementById && document.getElementById('ietest').innerHTML) {
-		document.loginform["interface"].value = 'ie';
-	} else if (navigator.appName == 'Konqueror') {
-		document.loginform["interface"].value = 'konqueror';
-	} else if (window.opera) {
-		document.loginform["interface"].value = 'opera';
-	}
-}
-function setcharset() {
-	if (document.charset && document.loginform['Character set']) {
-		document.loginform['Character set'].value = document.charset;
-	}
-}
-/*
- * Apply UBB to a string, and put it in innerHTML of given div.
- *
- * Example:
- * applyUBB('[url=http://csrdelft.nl]csrdelft.nl[/url]', document.getElementById('berichtPreview'));
- */
 function applyUBB(string, div) {
-	http.abort();
-	var params = 'string=' + encodeURIComponent(string);
-	http.open('POST', '/tools/ubb.php', true);
-	http.setRequestHeader('Content-length', params.length);
-	http.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-	http.setRequestHeader('Connection', 'close');
-	http.onreadystatechange = function() {
-		if (http.readyState == 4) {
-			div.innerHTML = http.responseText;
-			init_links();
-			init_buttons();
-			init_forms();
-			init_hoverIntents();
-		}
-	}
-	http.send(params);
+	var jqXHR = $.ajax({
+		type: 'POST',
+		cache: false,
+		url: '/tools/ubb.php',
+		data: 'string=' + encodeURIComponent(string)
+	});
+	jqXHR.done(function(data, textStatus, jqXHR) {
+		$(div).html(data);
+		init_links();
+		init_buttons();
+		init_forms();
+		init_hoverIntents();
+	});
 }
-function youtubeDisplay(ytID) {
-	var html = '<object width="480" height="385">' +
-			'<param name="movie" value="http://www.youtube.com/v/' + ytID + '&autoplay=1&fs=1"></param><param name="allowFullScreen" value="true"></param>' +
-			'<embed src="http://www.youtube.com/v/' + ytID + '&autoplay=1&fs=1" type="application/x-shockwave-flash" wmode="transparent" width="480" height="385" allowfullscreen="true"></embed></object>';
 
-	if (document.all) {
-		//hier moet een <br /> ofzo voor de <object>-tag, want anders maakt IE de div leeg ipv er iets in te zetten. 
-		//2009-02-18 Jieter; dit commentaar was ergens verloren gegaan, maar het blijft een wazige aangelegenheid.
-		document.all['youtube' + ytID].innerHTML = '<br />' + html;
-	} else {
-		document.getElementById('youtube' + ytID).innerHTML = html;
-	}
+function youtubeDisplay(ytID) {
+	$('#youtube' + ytID).html('<object width="640" height="480">' +
+			'<param name="movie" value="http://www.youtube.com/v/' + ytID + '&autoplay=1&fs=1"></param><param name="allowFullScreen" value="true"></param>' +
+			'<embed src="http://www.youtube.com/v/' + ytID + '&autoplay=1&fs=1" type="application/x-shockwave-flash" wmode="transparent" width="640" height="480" allowfullscreen="true"></embed></object>');
 	return false;
 }
-/**
- *
- * @param {Number} x nummer van de maand
- * @return {String} maand, geprefixt met 0 wanneer nodig
- */
-function LZ(x) {
-	return(x < 0 || x > 9 ? "" : "0") + x
-}
-//dummy fixPNG
-function fixPNG() {
-	return false;
-}
-function uidPreview(fieldname) {
-	field = document.getElementById('field_' + fieldname);
-	if (field.value.length == 4) {
-		http.abort();
-		http.open("GET", "/tools/naamlink.php?uid=" + field.value, true);
-		http.onreadystatechange = function() {
-			if (http.readyState == 4) {
-				document.getElementById('preview_' + fieldname).innerHTML = http.responseText;
-			}
-		}
-		http.send(null);
-	}
-	return null;
-}
+
 function readableFileSize(size) {
 	var units = ['B', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
 	var i = 0;
@@ -583,23 +507,22 @@ function readableFileSize(size) {
 }
 
 function importAgenda(id) {
-	textarea = document.getElementById(id);
-	http.abort();
-	http.open("POST", "/agenda/courant/", true);
-	http.onreadystatechange = function() {
-		if (http.readyState == 4) {
-			document.getElementById(id).value += "\n" + http.responseText;
-		}
-	}
-	http.send(null);
-	return null;
+	var jqXHR = $.ajax({
+		type: 'POST',
+		cache: false,
+		url: '/agenda/courant/',
+		data: ''
+	});
+	jqXHR.done(function(data, textStatus, jqXHR) {
+		document.getElementById(id).value += "\n" + data;
+	});
 }
 
 function previewPost(source, dest) {
 	var post = document.getElementById(source).value;
-	if (post.length != '') {
+	if (post.length !== '') {
 		var previewDiv = document.getElementById(dest);
 		applyUBB(post, previewDiv);
-		$('#' + dest + "Container").show();
+		$('#' + dest + 'Container').show();
 	}
 }

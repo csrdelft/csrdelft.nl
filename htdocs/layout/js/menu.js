@@ -1,5 +1,5 @@
 /* Kleine vertraging bij wisselen tussen menu items */
-var menu_t
+var menu_t;
 var menu_timeout = 250;
 var menu_timeout_next = 100;
 
@@ -23,9 +23,6 @@ function ShowMenu(div) {
 		document.getElementById('sub' + div).style.display = "block";
 		document.getElementById('top' + div).className = 'active';
 		document.getElementById('banner' + div).style.display = "block";
-		if (typeof fixPNG != "undefined") {
-			fixPNG('imgbanner' + div);
-		}
 	}
 }
 
@@ -39,7 +36,7 @@ function ResetShowMenu() {
 
 /* Na bepaalde tijd uit menu, terugswitchen naar actieve menu item */
 var menu_active = 0;
-var menu_t2
+var menu_t2;
 var menu_timeout2 = 4000;
 
 function ResetTimer() {
