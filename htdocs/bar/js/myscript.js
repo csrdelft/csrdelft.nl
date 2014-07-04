@@ -64,10 +64,8 @@ $(function () {
                 persoon.saldo = 1 * data;
             });
             selectedPerson = persoon;
-            if (persoon.saldo >= 0)
-                zetSucces("Geselecteerde persoon: " + persoon.bijnaam + " - " + naam + " | Saldo: " + saldoStr(persoon.saldo));
-            if (persoon.saldo < 0)
-                zetFaal("Geselecteerde persoon: " + persoon.bijnaam + " - " + naam + " | Saldo: " + saldoStr(persoon.saldo));
+			
+			zetBericht("Geselecteerde persoon: " + naam + " | Saldo: " + saldoStr(persoon.saldo), persoon.saldo >= 0 ? 'success' : 'danger');
 
             $("#invoerveld").trigger("click");
             $("#besteLijstBeheerLaadPersoon").html("Laad bestellingen van: " + naam);
