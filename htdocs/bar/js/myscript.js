@@ -3,6 +3,28 @@
  */
 $(function () {
 
+	/*************************************************************************************************/
+	/* Clock
+	/*************************************************************************************************/
+
+	$("#clock").each(function() {
+	
+		function update() {
+		
+			var currentDate = new Date();
+			$("#clock").html( currentDate.getHours() + ":" + currentDate.getMinutes() + ":" + currentDate.getSeconds() );
+		
+		}
+		
+		update();
+		setInterval(update, 1000);
+	
+	});
+	
+	/*************************************************************************************************/
+	/* End Clock
+	/*************************************************************************************************/
+
     /**
      * Deze persoon is geselecteerd, dit wordt oa. gebruikt bij de invoer van bestellingen, inleg en laden van de bestellingen van die persoon.
      */
