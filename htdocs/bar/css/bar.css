@@ -8,6 +8,18 @@ body{
 	font-size: 14px;
 }
 
+#bestelLijstDiv li:after{
+	content: '\e014';
+	position: relative;
+	left: 10px;
+	font-size: 20px;
+	font-family: 'Glyphicons Halflings';
+	font-style: normal;
+	font-weight: 400;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+}
+
 #clock{
 	line-height: 74px;
 	position: absolute;
