@@ -22,7 +22,7 @@ $(function () {
 		
 			var currentDate = new Date();
 			$("#clock").html(
-				addLeading(currentDate.getHours())) + ":" +
+				addLeading(currentDate.getHours()) + ":" +
 				addLeading(currentDate.getMinutes()) + ":" +
 				addLeading(currentDate.getSeconds())
 			);
