@@ -501,11 +501,6 @@ class UidField extends TextField {
 		return '<div id="lidPreview_' . $this->getName() . '" class="lidPreview"></div>';
 	}
 
-	/**
-	 * Voeg een preview-div toe achter het veld, defenier een keyup-
-	 * event op het veld waarin de ajax-request gedaan wordt en trigger
-	 * het event meteen om de boel meteen te vullen.
-	 */
 	public function getJavascript() {
 		return parent::getJavascript() . <<<JS
 $('#{$this->getId()}', form).unbind('keyup.autocomplete');
@@ -587,6 +582,28 @@ class LidField extends TextField {
 		}
 		$this->error = 'Geen geldig lid';
 		return $this->error === '';
+	}
+
+	public function getPreviewDiv() {
+		return '<div id="lidPreview_' . $this->getName() . '" class="lidPreview"></div>';
+	}
+
+	public function getJavascript() {
+		return parent::getJavascript() . <<<JS
+$('#{$this->getId()}', form).unbind('keyup.autocomplete');
+$('#{$this->getId()}', form).bind('keyup.autocomplete', function(event) {
+	if ($(this).val().length < 1) {
+		$('#lidPreview_{$this->getName()}').html('');
+		return;
+	}
+	$.ajax({
+		url: "/tools/naamlink.php?naam="+$(this).val()+"&zoekin={$this->zoekin}",
+	}).done(function(response) {
+		$('#lidPreview_{$this->getName()}').html(response);
+		init_hoverIntents();
+	});
+});
+JS;
 	}
 
 }

@@ -243,10 +243,6 @@ div.opslaan{
 .InputField input.RequiredLidField {
 	width: 220px;
 }
-.lidPreview, .uidPreview{
-	display: inline;
-	padding-left: 10px;
-}
 /* urls in suggestiemenu (voor titelfield) */
 li.ac_over a, li.ac_over a:hover { 
 	color: #0071D9;
