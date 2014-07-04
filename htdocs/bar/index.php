@@ -28,6 +28,7 @@ if (LoginLid::mag("P_ADMIN")) {
 
     <body id="body">
 
+	<div id="clock"></div>
     <div id="waarschuwing"></div>
 
     <!-- Nav tabs -->
