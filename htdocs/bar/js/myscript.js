@@ -140,7 +140,7 @@ $(function () {
     }
 	
 	function zetBericht(bericht, type) {
-        $("#waarschuwing").html("<div class='alert alert-" + type + "' role='alert'>" + bericht + "</div>");
+		$("#waarschuwing").removeClass().addClass("alert").addClass("alert-" + type).html(bericht);
 	}
 
     function zetSucces(bericht) {
