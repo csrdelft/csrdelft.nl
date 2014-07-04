@@ -16,6 +16,11 @@ body, html{
 	overflow-x: hidden;
 	overflow-y: auto;
 	padding: 0 5px;
+	position: absolute;
+	left: 0;
+	top: 0;
+	right: 0;
+	bottom: 0;
 }
 
 #main{
@@ -27,6 +32,7 @@ body, html{
 
 #main td{
 	vertical-align: top;
+	position: relative;
 }
 
 #main .top td{
