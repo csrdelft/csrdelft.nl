@@ -8,6 +8,29 @@ body {
     font-size: 14px;
 }
 
+#bestelLijstDiv li:after{
+	content: '\e014';
+	position: relative;
+	left: 10px;
+	font-size: 20px;
+	font-family: 'Glyphicons Halflings';
+	font-style: normal;
+	font-weight: 400;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+}
+
+#clock{
+	line-height: 74px;
+	position: absolute;
+	top: 0;
+	right: 0;
+	font-size: 20px;
+	padding: 0 15px 0 0;
+	font-weight: bold;
+	color: #000;
+}
+
 #body .nav-pills li a {
     color: #000;
     background: #d0cfd1;
