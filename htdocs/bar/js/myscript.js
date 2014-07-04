@@ -138,21 +138,25 @@ $(function () {
         if (saldo > -100 && saldo < 0) return "€-0," + achterKomma;
         return "€" + (saldo - (saldo % 100)) / 100 + "," + achterKomma;
     }
+	
+	function zetBericht(bericht, type) {
+        $("#waarschuwing").html("<div class='alert alert-" + type + "' role='alert'>" + bericht + "</div>");
+	}
 
     function zetSucces(bericht) {
-        $("#waarschuwing").html("<div class='alert alert-success' role='alert'>" + bericht + "</div>")
+		zetBericht(bericht, 'success');
     }
 
     function zetWaarschuwing(bericht) {
-        $("#waarschuwing").html("<div class='alert alert-warning   ' role='alert'>" + bericht + "</div>")
+		zetBericht(bericht, 'warning');
     }
 
     function zetFaal(bericht) {
-        $("#waarschuwing").html("<div class='alert alert-danger   ' role='alert'>" + bericht + "</div>")
+		zetBericht(bericht, 'danger');
     }
 
     function zetInfo(bericht) {
-        $("#waarschuwing").html("<div class='alert alert-info   ' role='alert'>" + bericht + "</div>")
+		zetBericht(bericht, 'info');
     }
 
     var personen = {};
