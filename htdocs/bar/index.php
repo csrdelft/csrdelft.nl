@@ -45,7 +45,7 @@ if (LoginLid::mag("P_ADMIN")) {
         <div class="tab-pane active" id="persoonselectie">
             <div class="input-group input-group-lg">
                 <input id="persoonInput" type="text" class="form-control" placeholder="naam">
-            <span class="input-group-btn input-group-lg">
+                <span class="input-group-btn input-group-lg">
                 <button class="btn btn-default" type="button" id="keyboardToggle">keyboard</button>
             </span>
             </div>
@@ -173,12 +173,12 @@ if (LoginLid::mag("P_ADMIN")) {
                     <button class="btn btn-toggle btn-default" id="eenPersoon">Geselecteerde persoon</button>
                     <button class="btn btn-toggle btn-default btn-primary" id="allePersonen">Alle personen</button>
                 </span>
-                <span class="input-group-addon">van</span><input type="text" class="input-sm form-control" name="start"
-                                                                 placeholder="begin borrel" id="beginDatum"/>
-                <span class="input-group-addon">tot</span><input type="text" class="input-sm form-control" name="end"
-                                                                 placeholder="nu" id="eindDatum"/>
+                <span class="input-group-addon">van</span><input type="text" class=" input-sm form-control " name="start"
+                                                                 placeholder="begin borrel" id="beginDatum"/>  <span class="clearKruisje glyphicon glyphicon glyphicon-remove-circle"></span>
+                <span class="input-group-addon">tot</span><input type="text" class="clearable input-sm form-control " name="end"
+                                                                 placeholder="nu" id="eindDatum"/> <span class="clearKruisje glyphicon glyphicon glyphicon-remove-circle"></span>
                 <span class="input-group-btn">
-                    <button class="btn btn-default" id="krijgBestellingen">Ga</button>
+                    <button class="btn btn-default" id="krijgBestellingen"><span class="glyphicon glyphicon glyphicon-cloud-download"></span></button>
                 </span>
 
             </div>
@@ -217,7 +217,7 @@ if (LoginLid::mag("P_ADMIN")) {
     <script src="js/bootstrap.min.js"></script>
     <script type="text/javascript" src="js/jquery.tablesorter.min.js"></script>
     <script type="text/javascript" src="js/bootstrap-datepicker.js"></script>
-
+    <script src="js/jquery.tablesorter.widgets.min.js"></script>
     <script src="js/myscript.js"></script>
 
     </body>

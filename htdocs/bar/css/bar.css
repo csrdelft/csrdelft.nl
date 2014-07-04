@@ -1,58 +1,35 @@
-body{
+body {
     -webkit-touch-callout: none;
     -webkit-user-select: none;
     -khtml-user-select: none;
     -moz-user-select: none;
     -ms-user-select: none;
     user-select: none;
-	font-size: 14px;
+    font-size: 14px;
 }
 
-#bestelLijstDiv li:after{
-	content: '\e014';
-	position: relative;
-	left: 10px;
-	font-size: 20px;
-	font-family: 'Glyphicons Halflings';
-	font-style: normal;
-	font-weight: 400;
-	-webkit-font-smoothing: antialiased;
-	-moz-osx-font-smoothing: grayscale;
+#body .nav-pills li a {
+    color: #000;
+    background: #d0cfd1;
+    margin: 5px;
 }
 
-#clock{
-	line-height: 74px;
-	position: absolute;
-	top: 0;
-	right: 0;
-	font-size: 20px;
-	padding: 0 15px 0 0;
-	font-weight: bold;
-	color: #000;
+#body .nav-pills li.active a {
+    color: #fff;
+    background: #428bca;
 }
 
-#body .nav-pills li a{
-	color: #000;
-	background: #d0cfd1;
-	margin: 5px;
+#body .alert {
+    margin-bottom: 0;
 }
 
-#body .nav-pills li.active a{
-	color: #fff;
-	background: #428bca;
+.nav {
+    font-size: 20px;
 }
 
-#body .alert{
-	margin-bottom: 0;
-}
-
-.nav{
-	font-size: 20px;
-}
-
-#selectieTabel td{
-	font-size: 20px;
-	line-height: 30px;
+#selectieTabel td {
+    font-size: 20px;
+    line-height: 30px;
 }
 
 #persoonInput {
@@ -117,8 +94,8 @@ button.btn-bestel {
     overflow-y: scroll;
 }
 
-#bestelLijstDiv ul{
-	list-style: none;
+#bestelLijstDiv ul {
+    list-style: none;
 }
 
 #ondersteRijKnoppen {
@@ -181,16 +158,16 @@ body {
     -webkit-border-radius: 5px;
 }
 
-#keyboard .spacer{
-	width: 32px;
-	margin-right: 0;
-	background: none;
-	position: relative;
-	left: -10000px;
+#keyboard .spacer {
+    width: 32px;
+    margin-right: 0;
+    background: none;
+    position: relative;
+    left: -10000px;
 }
 
-#keyboard .clear{
-	clear: left;
+#keyboard .clear {
+    clear: left;
 }
 
 #keyboard .delete, #keyboard .leeg, #keyboard .space {
@@ -246,4 +223,29 @@ th#totaal {
 
 th#opties {
     width: 90px;
+}
+
+.clearable {
+    background: url(http://i.imgur.com/z7ZSYjt.png) no-repeat right -10px center;
+    border: 1px solid #999;
+    padding: 3px 18px 3px 4px; /* USE the same right padding in jQ! */
+    border-radius: 3px;
+}
+
+/* (jQ addClass:) if input has value: */
+.clearable.x {
+    background-position: right 5px center;
+}
+
+/* (jQ addClass:) if mouse is over the 'x' input area*/
+.clearable.onX {
+    cursor: pointer;
+}
+
+.clearKruisje {
+    float: right;
+    margin: -33px 10px -14px 0;
+    position: relative;
+    z-index: 10;
+    font-size: 20px
 }

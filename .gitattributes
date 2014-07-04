@@ -57,6 +57,7 @@ htdocs/bar/js/bootstrap-datepicker.js -text
 htdocs/bar/js/bootstrap.js -text
 htdocs/bar/js/bootstrap.min.js -text
 htdocs/bar/js/jquery.tablesorter.min.js -text
+htdocs/bar/js/jquery.tablesorter.widgets.min.js -text
 htdocs/bar/js/myscript.js -text
 htdocs/bot/.htaccess.sample -text
 htdocs/bot/cmnd.php -text
