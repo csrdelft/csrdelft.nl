@@ -9,10 +9,23 @@ $(function () {
 
 	$("#clock").each(function() {
 	
+		function addLeading(number) {
+			
+			if(number.length == 2)
+				return number;
+				
+			return "0" + number;
+			
+		}
+	
 		function update() {
 		
 			var currentDate = new Date();
-			$("#clock").html( currentDate.getHours() + ":" + currentDate.getMinutes() + ":" + currentDate.getSeconds() );
+			$("#clock").html(
+				addLeading(currentDate.getHours())) + ":" +
+				addLeading(currentDate.getMinutes()) + ":" +
+				addLeading(currentDate.getSeconds())
+			);
 		
 		}
 		
