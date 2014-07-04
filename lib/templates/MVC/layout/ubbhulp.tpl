@@ -1,9 +1,3 @@
-{**
- * ubbhulp.tpl
- * 
- * @author C.S.R. Delft <pubcie@csrdelft.nl>
- * 
- *}
 <div id="ubbhulpverhaal" class="outer-shadow dragobject" style="top: {$ubbtop}px; left: {$ubbleft}px;">
 	<span id="ubbsluiten" onclick="$('#ubbhulpverhaal').fadeOut();" title="Opmaakhulp verbergen">&times;</span>
 	<h2>Tekst opmaken</h2>

@@ -4279,6 +4279,7 @@ lib/templates/csrdelft2/partials/_homeContent.tpl -text
 lib/templates/csrdelft2/partials/_lidWordenContent.tpl -text
 lib/templates/csrdelft2/partials/_loginForm.tpl -text
 lib/templates/csrdelft2/partials/_menuVereniging.tpl -text
+lib/templates/csrdelft_head.tpl -text
 lib/templates/documenten/document.ubb.tpl -text
 lib/templates/documenten/documenten.tpl -text
 lib/templates/documenten/documentencategorie.tpl -text
