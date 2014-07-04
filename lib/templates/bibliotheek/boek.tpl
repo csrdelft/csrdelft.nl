@@ -49,9 +49,7 @@
 
 {else}
 	{* weergave bestaand boek, soms met bewerkbare velden *}
-	<script type="text/javascript">var FieldSuggestions=[]; </script>
 	<div class="boek" id="{$boek->getId()}">
-
 
 		{if $boek->isEigenaar()}
 			

@@ -21,13 +21,13 @@
 					{elseif $deel->isOpenbaar()} 
 						{* Openbaar forum: Iedereen mag dit lezen en zoekmachines nemen het op in hun zoekresultaten. *}
 					{/if}
-					<div id="berichtPreviewContainer" class="previewContainer"><div id="berichtPreview" class="preview"></div></div>
+					<div id="berichtPreview" class="preview"></div>
 					<textarea name="bericht" id="forumBericht" class="forumBericht{if $deel->isOpenbaar()} extern{/if}" rows="12">{$post_form_tekst}</textarea>
 					<div class="butn">
 						<a style="float: right;" class="knop" onclick="$('#ubbhulpverhaal').toggle();" title="Opmaakhulp weergeven">Opmaak</a>
 						<a style="float: right; margin-right: 3px;" class="knop" onclick="vergrootTextarea('forumBericht', 10)" title="Vergroot het invoerveld"><div class="arrows">&uarr;&darr;</div>&nbsp;&nbsp;&nbsp;</a>
-						<input type="submit" name="submit" value="Opslaan" id="forumOpslaan" />
-						<input type="button" value="Voorbeeld" id="forumVoorbeeld" onclick="previewPost('forumBericht', 'berichtPreview')"/>
+						<input type="submit" name="submit" value="Opslaan" />
+						<input type="button" value="Voorbeeld" id="forumVoorbeeld" onclick="ubbPreview('forumBericht', 'berichtPreview')"/>
 					</div>
 				</fieldset>
 			</form>

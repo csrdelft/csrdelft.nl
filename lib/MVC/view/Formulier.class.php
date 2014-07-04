@@ -204,7 +204,7 @@ class Formulier implements View, Validator {
 			$js = $field->getJavascript();
 			$javascript[md5($js)] = $js;
 		}
-		return '<script type="text/javascript">function form_ready_' . str_replace('-', '_', $this->formId) . '(){' . "\n" . implode("\n", $javascript) . "\n" . '}</script>';
+		return $javascript;
 	}
 
 	public function getTitleTag() {
@@ -219,6 +219,10 @@ class Formulier implements View, Validator {
 		return '<form enctype="multipart/form-data" action="' . $this->action . '" id="' . $this->formId . '" class="' . implode(' ', $this->css_classes) . '" method="post">';
 	}
 
+	public function getScriptTag() {
+		return '<script type="text/javascript">function form_ready_' . str_replace('-', '_', $this->formId) . "() {\n" . 'var form = document.getElementById("' . $this->formId . '");' . "\n" . implode("\n", $this->getJavascript()) . "\n" . '}</script>';
+	}
+
 	/**
 	 * Toont het formulier en javascript van alle fields
 	 */
@@ -229,7 +233,7 @@ class Formulier implements View, Validator {
 		foreach ($this->fields as $field) {
 			$field->view();
 		}
-		echo $this->getJavascript();
+		echo $this->getScriptTag();
 		echo '</form>';
 	}
 
@@ -274,7 +278,7 @@ class InlineForm extends Formulier {
 		echo $fields['input']->view();
 		echo '<div class="InlineFormToggle">' . $fields['input']->getValue() . '</div>';
 		$fields['src']->view();
-		echo $this->getJavascript();
+		echo $this->getScriptTag();
 		echo '</form></div>';
 	}
 

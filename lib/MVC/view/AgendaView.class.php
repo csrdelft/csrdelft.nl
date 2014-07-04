@@ -137,7 +137,7 @@ function setTijd(a, b, c, d) {
 			$fields['src']->extraIcon = 'add';
 			$fields['src']->extraUrl = '/agenda/toevoegen/doorgaan';
 			$fields['src']->extraActie = 'submit';
-			$fields['src']->js = "$('#extraButton').bind('click.action', form_replace_action);";
+			$fields['src']->js = "$('#extraButton').unbind('click.action');$('#extraButton').bind('click.action', form_replace_action);";
 		}
 
 		$this->addFields($fields);

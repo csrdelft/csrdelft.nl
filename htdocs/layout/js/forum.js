@@ -11,7 +11,7 @@ jQuery(document).ready(function($) {
 		if (event.keyCode == 13) { //enter == 13
 			if (/\[.*\]/.test(textarea.val())) {
 				//detected ubb tag use, trigger preview and display message.
-				previewPost('forumBericht', 'berichtPreview');
+				ubbPreview('forumBericht', 'berichtPreview');
 
 				if ($('#ubb_melding').length == 0) {
 					textarea.before('<div id="ubb_melding">UBB gevonden:<br /> controleer het voorbeeld.</div>');
@@ -89,13 +89,13 @@ function forumBewerken(postId) {
 			bewerkDivInnerHTML = bewerkDiv.innerHTML;
 			bewerkForm = '<form id="forumEditForm" class="InlineForm" action="/forum/bewerken/' + postId + '" method="post">';
 			bewerkForm += '<h3>Bericht bewerken</h3>Als u dingen aanpast zet er dan even bij w&aacute;t u aanpast! Gebruik bijvoorbeeld [s]...[/s]<br />';
-			bewerkForm += '<div id="bewerkPreviewContainer" class="previewContainer"><h3>Voorbeeld van uw bericht:</h3><div id="bewerkPreview" class="preview"></div></div>';
+			bewerkForm += '<div id="bewerkPreview" class="preview"></div>';
 			bewerkForm += '<textarea name="bericht" id="forumBewerkBericht" class="tekst" rows="8" style="width: 100%;"></textarea>';
 			bewerkForm += 'Reden van bewerking: <input type="text" name="reden" style="width: 250px;"/><br /><br />';
 			bewerkForm += '<a style="float: right;" class="knop" onclick="$(\'#ubbhulpverhaal\').toggle();" title="Opmaakhulp weergeven">Opmaak</a>';
 			bewerkForm += '<a style="float: right; margin-right: 3px;" class="knop" onclick="vergrootTextarea(\'forumBewerkBericht\', 10)" title="Vergroot het invoerveld"><div class="arrows">&uarr;&darr;</div>&nbsp;&nbsp;&nbsp;&nbsp;</a>';
 			bewerkForm += '<input type="button" value="Opslaan" onclick="submitPost();" /> ' +
-					'<input type="button" value="Voorbeeld" onclick="previewPost(\'forumBewerkBericht\', \'bewerkPreview\');" /> ' +
+					'<input type="button" value="Voorbeeld" onclick="ubbPreview(\'forumBewerkBericht\', \'bewerkPreview\');" /> ' +
 					'<input type="button" value="Annuleren" onclick="restorePost();" />';
 			bewerkForm += '</form>';
 			bewerkDiv.innerHTML = bewerkForm;

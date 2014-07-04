@@ -27,7 +27,7 @@ class FotoAlbumController extends AclController {
 	 * Als deze regexp matched is het album alleen voor mannen toegankelijk
 	 * @var string
 	 */
-	private static $alleenMannen = '/(alleen-voor-mannen|mannen-only)/i';
+	private static $alleenMannen = '/(men-only|mannen-only)/i';
 
 	public function __construct($query) {
 		parent::__construct($query);

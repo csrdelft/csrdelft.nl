@@ -34,9 +34,7 @@
 	<input type="text" id="onderwerp" name="onderwerp" value="{$roodschopper->getOnderwerp()}" /><br />
 	
 	<div id="berichtContainer">
-		<div id="berichtPreviewContainer" class="previewContainer">
-			<div id="berichtPreview" class="preview"></div>
-		</div>
+		<div id="berichtPreview" class="preview"></div>
 	</div>
 	<label for="berichtInvoer">Mailbericht:<br /><br />
 	<em class="small">Variabelen:<br />
@@ -51,7 +49,7 @@
 		<a class="knop" title="Vergroot het invoerveld" onclick="vergrootTextarea('berichtInvoer', 10)" style="float: right; margin-right: 3px;"><div class="arrows">&uarr;&darr;</div>&nbsp;&nbsp;&nbsp;</a>
 
 		<input type="button" name="submit" id="submit" value="Verder gaan" onclick="roodschopper('simulate'); return false;" />
-		<input id="forumVoorbeeld" type="button" onclick="previewPost('berichtInvoer', 'berichtPreview')" style="color: rgb(119, 119, 119);" value="Voorbeeld"/>
+		<input id="forumVoorbeeld" type="button" onclick="ubbPreview('berichtInvoer', 'berichtPreview')" style="color: rgb(119, 119, 119);" value="Voorbeeld"/>
 	</div>
 	<div id="messageContainer" class="verborgen"></div>
 	

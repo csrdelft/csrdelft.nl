@@ -98,14 +98,12 @@
 				<br />
 			</div>
 		{/if}
-		<div id="sbewerkPreviewContainer" class="previewContainer">
-			<div id="sbewerkPreview" class="preview"></div>
-		</div>
+		<div id="sbewerkPreview" class="preview"></div>
 		<label for="sbeschrijving"><strong>Korte beschrijving:</strong><br /><br />UBB staat aan.</label>
 		<textarea id="sbeschrijving" name="sbeschrijving" rows="7">{$groep->getSbeschrijving()|escape:'html'}</textarea>
 		<br />
 		<label for="submit"></label>
-		<input type="button" class="voorbeeld" value="Voorbeeld" onclick="return previewPost('sbeschrijving', 'sbewerkPreview')" />
+		<input type="button" class="voorbeeld" value="Voorbeeld" onclick="return ubbPreview('sbeschrijving', 'sbewerkPreview')" />
 		<a class="knop extraknopjespreview" onclick="$('#ubbhulpverhaal').toggle();" title="Opmaakhulp weergeven">Opmaak</a>
 		<a style="margin-right: 3px;" class="knop extraknopjespreview" onclick="vergrootTextarea('sbeschrijving', 5)" title="Vergroot het invoerveld"><div class="arrows">&uarr;&darr;</div>&nbsp;&nbsp;&nbsp;</a><br />
 	{/if}
@@ -114,13 +112,11 @@
 	{if $groep->getType()->getId()==11 AND ($groep->getId()==0 OR !$groep->isAdmin())}
 		<input type="hidden" id="beschrijving" name="beschrijving" value="" />
 	{else}
-		<div id="bewerkPreviewContainer" class="previewContainer">
-			<div id="bewerkPreview" class="preview"></div>
-		</div>
+		<div id="bewerkPreview" class="preview"></div>
 		<label for="beschrijving"><strong>Lange beschrijving:</strong><br /><br />UBB staat aan.</label>
 		<textarea id="beschrijving" name="beschrijving" rows="15">{$groep->getBeschrijving()|escape:'html'}</textarea><br />
 		<label for="submit"></label>
-		<input type="button" class="voorbeeld" value="Voorbeeld" onclick="return previewPost('beschrijving', 'bewerkPreview')" /> 
+		<input type="button" class="voorbeeld" value="Voorbeeld" onclick="return ubbPreview('beschrijving', 'bewerkPreview')" /> 
 		<a class="knop extraknopjespreview" onclick="$('#ubbhulpverhaal').toggle();" title="Opmaakhulp weergeven">Opmaak</a>
 		<a style="margin-right: 3px;" class="knop extraknopjespreview" onclick="vergrootTextarea('beschrijving', 10)" title="Vergroot het invoerveld"><div class="arrows">&uarr;&darr;</div>&nbsp;&nbsp;&nbsp;</a><br />
 	{/if}

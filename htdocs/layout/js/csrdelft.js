@@ -2,7 +2,6 @@
  * csrdelft.nl javascript libje...
  */
 
-var FieldSuggestions = [];
 var http = new XMLHttpRequest(); //DEPRECATED
 
 function preload(arrayOfImages) {
@@ -518,11 +517,11 @@ function importAgenda(id) {
 	});
 }
 
-function previewPost(source, dest) {
-	var post = document.getElementById(source).value;
-	if (post.length !== '') {
+function ubbPreview(source, dest) {
+	var ubb = document.getElementById(source).value;
+	if (ubb.length !== '') {
 		var previewDiv = document.getElementById(dest);
-		applyUBB(post, previewDiv);
-		$('#' + dest + 'Container').show();
+		applyUBB(ubb, previewDiv);
+		previewDiv.style.display = 'block';
 	}
 }

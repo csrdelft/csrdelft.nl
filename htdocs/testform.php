@@ -1,8 +1,6 @@
 <?php
 
 require_once 'configuratie.include.php';
-require_once 'MVC/view/validator.interface.php';
-
 
 /* start view */
 
@@ -12,14 +10,16 @@ class TestFormulier extends Formulier {
 		parent::__construct($model, 'test-form', '/testform.php');
 		$this->titel = 'Testformulier';
 
+		$fields[] = new HtmlComment('<p>Wat autoaanvullen dingen testen, net als hippe ajax-inline-bewerkzaken...</p>');
 		$fields[] = new Subkopje('Studie:');
-		$fields[] = new StudieField('studie', $model->default, 'Studie');
-		$fields[] = new RequiredTextareaField('opmerking1', $model->default, 'Opmerking1');
-		$fields[] = new UbbPreviewField('opmerking', $model->default, 'previewOnEnter:', true);
+		$fields[] = new StudieField('studie', $model->studie, 'Studie');
+		$fields[] = new RequiredTextareaField('opmerking1', null, 'Opmerking1');
+		$fields['enter'] = new UbbPreviewField('opmerking', '', 'previewOnEnter:', true);
+		$fields['enter']->previewOnEnter = true;
 		$fields[] = new UidField('uidtest', '0436', 'Wie ben jij?');
 		$fields[] = new VerticaleField('verticale', '4', 'Welke verticale?');
 		$fields[] = new DatumField('datum', '2011-08-11', 'Welke datum?');
-		$fields[] = new SubmitResetCancel('/communicatie/profiel/' . $model->uid);
+		$fields[] = new SubmitResetCancel('/communicatie/profiel/' . $model->uidtest);
 		$fields[] = new LidField('lidtest', 'x101', 'Wat is je naam?', 'alleleden');
 		$fields[] = new LidField('lid2test', 'Gra', 'Wat is je naam?', 'nobodies');
 
@@ -27,8 +27,7 @@ class TestFormulier extends Formulier {
 	}
 
 	public function view() {
-		echo getMelding();
-		echo '<h1>Testformulier</h1><p>Wat autoaanvullen dingen testen, net als hippe ajax-inline-bewerkzaken...</p>';
+		echo SimpleHTML::getMelding();
 		echo parent::view();
 		debugprint($this->getModel());
 	}

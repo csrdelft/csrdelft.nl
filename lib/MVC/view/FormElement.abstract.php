@@ -118,6 +118,10 @@ abstract class InputField implements FormElement, Validator {
 		return $this->name;
 	}
 
+	public function getId() {
+		return 'field_' . $this->getName();
+	}
+
 	public function isPosted() {
 		return isset($_POST[$this->name]);
 	}
@@ -133,8 +137,8 @@ abstract class InputField implements FormElement, Validator {
 		$this->suggestions = $array;
 	}
 
-	public function setPlaceholder($bericht) {
-		$this->placeholder = $bericht;
+	public function setPlaceholder($string) {
+		$this->placeholder = $string;
 	}
 
 	public function setOnChangeScript($javascript) {
@@ -190,7 +194,7 @@ abstract class InputField implements FormElement, Validator {
 		if ($this->title) {
 			$cssclass .= ' hoverIntent';
 		}
-		if ($this->error != '') {
+		if ($this->error !== '') {
 			$cssclass .= ' metFouten';
 		}
 		return '<div class="' . $cssclass . '" ' . $this->getInputAttribute('title') . '>';
@@ -219,25 +223,6 @@ abstract class InputField implements FormElement, Validator {
 	}
 
 	/**
-	 * Zorg dat de suggesties gegeven gaan worden.
-	 */
-	protected function getFieldSuggestions() {
-		$return = '';
-
-		if (count($this->suggestions) > 0 OR $this->remotedatasource != '') {
-			if ($this->remotedatasource != '') {
-				$suggestions = $this->remotedatasource;
-			} else {
-				$suggestions = $this->suggestions;
-			}
-			$return .= '<script language="javascript"> ' . "\n";
-			$return .= 'FieldSuggestions["' . $this->name . '"]=' . json_encode($suggestions) . "; \n";
-			$return .= '</script>';
-		}
-		return $return;
-	}
-
-	/**
 	 * Geef de foutmelding voor dit veld terug.
 	 */
 	public function getError() {
@@ -254,6 +239,10 @@ abstract class InputField implements FormElement, Validator {
 		return '';
 	}
 
+	public function getPreviewDiv() {
+		return '';
+	}
+
 	/**
 	 * Geef lijst van allerlei CSS-classes voor dit veld terug.
 	 */
@@ -264,11 +253,6 @@ abstract class InputField implements FormElement, Validator {
 			} else {
 				$this->css_classes[] = 'required';
 			}
-		}
-		if ($this->remotedatasource != '') {
-			$this->css_classes[] = 'hasRemoteSuggestions';
-		} elseif (count($this->suggestions) > 0) {
-			$this->css_classes[] = 'hasSuggestions';
 		}
 		return $this->css_classes;
 	}
@@ -289,7 +273,7 @@ abstract class InputField implements FormElement, Validator {
 			return $return;
 		}
 		switch ($attr) {
-			case 'id': return 'id="field_' . $this->getName() . '"';
+			case 'id': return 'id="' . $this->getId() . '"';
 			case 'class': return 'class="' . implode(' ', $this->getCssClasses()) . '"';
 			case 'value': return 'value="' . htmlspecialchars($this->value) . '"';
 			case 'origvalue': return 'origvalue="' . htmlspecialchars($this->origvalue) . '"';
@@ -321,8 +305,8 @@ abstract class InputField implements FormElement, Validator {
 				}
 				break;
 			case 'autocomplete':
-				if (!$this->autocomplete OR count($this->suggestions) > 0 OR $this->remotedatasource != '') {
-					return 'autocomplete="off"';
+				if (!$this->autocomplete OR ! empty($this->suggestions) OR ! empty($this->remotedatasource)) {
+					return 'autocomplete="off"'; // browser autocompete
 				}
 				break;
 			case 'onchange':
@@ -346,10 +330,8 @@ abstract class InputField implements FormElement, Validator {
 		echo $this->getDiv();
 		echo $this->getLabel();
 		echo $this->getErrorDiv();
-
 		echo '<input type="text"' . $this->getInputAttribute(array('id', 'name', 'class', 'value', 'origvalue', 'disabled', 'maxlength', 'placeholder', 'autocomplete', 'onchange', 'onclick')) . ' />';
-
-		echo $this->getFieldSuggestions();
+		echo $this->getPreviewDiv();
 		//afsluiten van de div om de hele tag heen.
 		echo '</div>';
 	}
@@ -368,25 +350,35 @@ abstract class InputField implements FormElement, Validator {
 	 * formatItem geneert html-items voor de suggestielijst, afstemmen op data-array
 	 */
 	public function getJavascript() {
-		return <<<JS
-$('.hasSuggestions').each(function(index, tag){
-	$('#'+tag.id).autocomplete(
-		FieldSuggestions[tag.id.substring(6)],
-		{clickFire: true, max: 20, matchContains: true }
-	);
-});
-$('.hasRemoteSuggestions').each(function(index, tag){
-	$('#'+tag.id).autocomplete(
-		FieldSuggestions[tag.id.substring(6)], {
-			dataType: 'json',
-			parse: function(result) { return result; },
-			formatItem: function(row, i, n) { return row[0]; },
-			clickFire: true, 
-			max: 20
-		}
-	).result(function(){ $(this).keyup(); });
+		if (!empty($this->remotedatasource)) {
+			$autocomplete = json_encode($this->remotedatasource);
+			return <<<JS
+$('#{$this->getId()}', form).autocomplete(
+	{$autocomplete}
+	, {
+		dataType: "json",
+		parse: function(result) { return result; },
+		formatItem: function(row, i, n) { return row[0]; },
+		clickFire: true,
+		max: 20
+	}
+).result(function(){
+	$(this).keyup();
 });
 JS;
+		} elseif (!empty($this->suggestions)) {
+			$autocomplete = json_encode($this->suggestions);
+			return <<<JS
+$('#{$this->getId()}', form).autocomplete(
+	{$autocomplete}
+	, {
+		clickFire: true,
+		max: 20,
+		matchContains: true
+	}
+);
+JS;
+		}
 	}
 
 }
@@ -505,27 +497,29 @@ class UidField extends TextField {
 		return $this->error === '';
 	}
 
+	public function getPreviewDiv() {
+		return '<div id="lidPreview_' . $this->getName() . '" class="lidPreview"></div>';
+	}
+
 	/**
 	 * Voeg een preview-div toe achter het veld, defenier een keyup-
 	 * event op het veld waarin de ajax-request gedaan wordt en trigger
 	 * het event meteen om de boel meteen te vullen.
 	 */
 	public function getJavascript() {
-		return <<<JS
-$('.UidField').each(function(index, tag){
-	$(this).after('<div id="uidPreview_'+$(this).attr('id').substring(6)+'" class="uidPreview" />');
-	$(this).keyup(function(){
-		var field=$(this);
-		if(field.val().length==4){
-			$.ajax({
-				url: "/tools/naamlink.php?uid="+field.val(),
-				success: function(response){
-					$('#uidPreview_'+field.attr('id').substring(6)).html(response);
-					init_hoverIntents();
-				}
-			});
-		}
-	}).keyup();
+		return parent::getJavascript() . <<<JS
+$('#{$this->getId()}', form).unbind('keyup.autocomplete');
+$('#{$this->getId()}', form).bind('keyup.autocomplete', function(event) {
+	if ($(this).val().length < 4) {
+		$('#lidPreview_{$this->getName()}').html('');
+		return;
+	}
+	$.ajax({
+		url: "/tools/naamlink.php?uid="+$(this).val(),
+	}).done(function(response) {
+		$('#lidPreview_{$this->getName()}').html(response);
+		init_hoverIntents();
+	});
 });
 JS;
 	}
@@ -554,7 +548,6 @@ class LidField extends TextField {
 		}
 		$this->zoekin = $zoekin;
 		$this->setRemoteSuggestionsSource('/tools/naamsuggesties/' . $this->zoekin);
-		$this->css_classes[] = 'wantsLidPreview';
 	}
 
 	/**
@@ -594,34 +587,6 @@ class LidField extends TextField {
 		}
 		$this->error = 'Geen geldig lid';
 		return $this->error === '';
-	}
-
-	/**
-	 * Voeg een preview-div toe achter het veld, defenier een
-	 * keyup-event op het veld, en trigger het event meteen om de boel
-	 * meteen te vullen.
-	 */
-	public function getJavascript() {
-		return parent::getJavascript() . <<<JS
-$('.wantsLidPreview').each(function(index, tag){
-	var suggesties=FieldSuggestions[$(this).attr('id').substring(6)].split("/");
-	$(this).after('<div id="lidPreview_'+$(this).attr('id').substring(6)+'" class="lidPreview" />');
-	$(this).keyup(function(){
-		var field=$(this);
-		if(field.val().length>2){
-			$.ajax({
-				url: "/tools/naamlink.php?naam="+field.val()+ "&"+$.param({ zoekin: suggesties[suggesties.length-1] }),
-				success: function(response){
-					$('#lidPreview_'+field.attr('id').substring(6)).html(response);
-					init_hoverIntents();
-				}
-			});
-		}else{
-			$('#lidPreview_'+field.attr('id').substring(6)).html('');
-		}
-	}).keyup();
-});
-JS;
 	}
 
 }
@@ -930,11 +895,9 @@ class TextareaField extends TextField {
 		echo $this->getLabel();
 		echo $this->getErrorDiv();
 
-		echo '<textarea' . $this->getInputAttribute(array('id', 'name', 'origvalue', 'class', 'disabled', 'rows', 'maxlength', 'placeholder', 'autocomplete', 'onchange', 'onclick')) . '>';
-		echo $this->value;
-		echo '</textarea>';
+		echo '<textarea' . $this->getInputAttribute(array('id', 'name', 'origvalue', 'class', 'disabled', 'rows', 'maxlength', 'placeholder', 'autocomplete', 'onchange', 'onclick')) . '>' . $this->value . '</textarea>';
 
-		echo $this->getFieldSuggestions();
+		echo $this->getPreviewDiv();
 		echo '</div>';
 	}
 
@@ -951,37 +914,42 @@ class RequiredTextareaField extends TextareaField {
  */
 class AutoresizeTextareaField extends TextareaField {
 
-	public function __construct($name, $value, $description = null, $max_len = null, $placeholder = null) {
-		parent::__construct($name, $value, $description, 1, $max_len);
+	public function __construct($name, $value, $description = null, $rows = 1, $max_len = null, $min_len = null) {
+		parent::__construct($name, $value, $description, $rows, $max_len, $min_len);
 		$this->css_classes[] = 'wantsAutoresize';
-		$this->placeholder = $placeholder;
 	}
 
+	/**
+	 * Maakt een verborgen div met dezelfde eigenschappen als de textarea en
+	 * gebruikt autoresize eigenschappen van de div om de hoogte te bepalen voor de textarea.
+	 */
 	public function getJavascript() {
-		// maakt een verborgen div met dezelfde eigenschappen als de textarea
-		// en gebruikt autoresize eigenschappen van de div om de hoogte te bepalen voor de textarea
+		//FIXME: incompatible with repeated form_ready_init
 		return <<<JS
-$('.wantsAutoresize').each(function(){
-	var textarea=$(this);
-	var fieldname=textarea.attr('id').substring(6);
-	var hiddenDiv = $(document.createElement('div')),
-	content = null;
+$('.wantsAutoresize', form).each(function(){
+	var textarea = $(this);
+	var fieldname = textarea.attr('id').substring(6);
+	var hiddenDiv = $(document.createElement('div'));
+	var content = null;
 
 	hiddenDiv.addClass('hiddendiv '+fieldname)
-		.css({'font-size': textarea.css('font-size'),
-			'font-weight': textarea.css('font-size'),
-			'width': textarea.css('width'),
-			'word-break': 'break-all',
-			'visibility': 'hidden'});
+		.css({
+			font-size: textarea.css('font-size'),
+			font-weight: textarea.css('font-size'),
+			width: textarea.css('width'),
+			word-break: "break-all",
+			visibility: "hidden"
+		});
 	$('body').append(hiddenDiv);
 
-	textarea.bind('keyup', function() {
+	textarea.unbind('keyup.preview');
+	textarea.bind('keyup.preview', function(event) {
 		content = textarea.val();
 		content = content.replace('<', 'X');
 		content = content.replace(/\\n/g, '<br>');
 		hiddenDiv.html(content+'<br><br>');
 		textarea.css('height', hiddenDiv.height());
-	}).keyup();
+	});
 });
 JS;
 	}
@@ -995,66 +963,40 @@ class RequiredAutoresizeTextField extends AutoresizeTextareaField {
 }
 
 /**
- * Textarea met een ubb-preview erbij. De hele ubb-preview wordt gemaakt
- * door de javascript in de klasse Formulier, op alle textarea's met
- * de class die hier gegeven wordt.
- *
- * met previewOnEnter() is klikken op het voorbeeld-knopje niet meer
- * nodig, er wordt een voorbeeld gemaakt bij het op enter drukken.
+ * Textarea met een ubb-preview erbij.
  */
-class UbbPreviewField extends TextareaField {
+class UbbPreviewField extends AutoresizeTextareaField {
 
-	/**
-	 * Bij elk keyup-event een nieuwe preview maken.
-	 * TODO: Genereert dus heel veel evens, niet erg wenselijk, moet dus nog
-	 * Een time-out in komen...
-	 */
-	private $previewOnEnter;
+	public $previewOnEnter = false;
 
-	public function __construct($name, $value, $description = null, $previewOnEnter = false, $max_len = null) {
-		parent::__construct($name, $value, $description, 5, $max_len);
-		$this->css_classes[] = 'wantsPreview';
-		$this->previewOnEnter = $previewOnEnter;
+	public function __construct($name, $value, $description = null, $rows = 5, $max_len = null, $min_len = null) {
+		parent::__construct($name, $value, $description, $rows, $max_len, $min_len);
 	}
 
-	/**
-	 * Wrap het veld in een divje, maak een preview-div aan voor het veld
-	 * met dezelde breedte, en voeg een knopje toe om het event te triggeren.
-	 */
-	public function getJavascript() {
-		$js = <<<JS
-$('.wantsPreview').each(function(){
-	var textarea=$(this);
-	var fieldname=textarea.attr('id').substring(6);
+	public function getPreviewDiv() {
+		return <<<HTML
+<div style="float: right;">
+	<br />
+	<a style="float: right;" class="knop" onclick="$('#ubbhulpverhaal').toggle();" title="Opmaakhulp weergeven">Opmaak</a>
+	<br /><br />
+	<input type="button" value="Voorbeeld" onclick="ubbPreview('{$this->getId()}', '{$this->getName()}Preview');"/>
+</div>
+<div id="{$this->getName()}Preview" class="preview"></div>
+HTML;
+	}
 
-	var triggerPreview=function(){
-		applyUBB(textarea.val(), document.getElementById('preview_'+fieldname));
-		$('#preview_'+fieldname).show();
-	};
-	var vergrootTextarea=function(e){
-		$('#field_'+fieldname).animate({'height': '+=300'}, 800, 'easeInOutCubic');
-	};
-	textarea.wrap('<div class="UBBpreview FormField" />')
-			.before('<div id="preview_'+fieldname+'" class="preview" style="display: none;"></div>')
-			.after($('<a style="float: right;" class="knop" title="Vergroot het invoerveld"><div class="arrows">&uarr;&darr;</div>&nbsp;&nbsp;&nbsp;</a>').click(vergrootTextarea))
-			.after($('<a style="float: right; margin-right: 3px;" class="knop" title="Opmaakhulp weergeven" onclick="$(\'#ubbhulpverhaal\').toggle();">Opmaak</a>'))
-			.after($('<a class="knop">Voorbeeld</a>').click(triggerPreview));
-JS;
-		//We voegen een keyup-event toe dat bij elke enter een nieuwe
-		//preview opvraagt.
-		if ($this->previewOnEnter) {
-			$js .= <<<JS
-	textarea.keyup(
-		function(event){
-			if(event.keyCode==13){ //enter == 13
-				triggerPreview();
-			}
-		});
-JS;
+	public function getJavascript() {
+		if (!$this->previewOnEnter) {
+			return '';
 		}
-		//en de .each() nog afsluiten
-		$js .= "});\n";
-		return $js;
+		return <<<JS
+$('#{$this->getId()}', form).unbind('keyup.preview');
+$('#{$this->getId()}', form).bind('keyup.preview', function(event) {
+	if(event.keyCode === 13) { //enter
+		ubbPreview('{$this->getId()}', '{$this->getName()}Preview');
+	}
+});
+JS;
 	}
 
 }
