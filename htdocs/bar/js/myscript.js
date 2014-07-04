@@ -185,7 +185,7 @@ $(function () {
         }
 		
 		// Add onclick remove
-		$("bestelLijstDiv li").click(function() {
+		$("#bestelLijstDiv li").click(function() {
 		
 			var key = $(this).attr("class");
 			delete bestelLijst[key];
