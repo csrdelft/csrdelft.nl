@@ -180,9 +180,20 @@ $(function () {
         for (key in bestelLijst) {
             var aantal = bestelLijst[key];
             if (producten[key].prijs < 0) aantal = saldoStr(aantal);
-            $("#bestelLijst" + (teller % 3 + 1)).append("<li>" + aantal + "&#09" + producten[key].beschrijving + "</li>");
+            $("#bestelLijst" + (teller % 3 + 1)).append("<li class=" + key + ">" + aantal + "&#09" + producten[key].beschrijving + "</li>");
             teller++;
         }
+		
+		// Add onclick remove
+		$("bestelLijstDiv li").click(function() {
+		
+			var key = $(this).attr("class");
+			delete bestelLijst[key];
+						
+			zetBestelLijstGoed();
+		
+		});
+		
         if (oudeBestelling) {
 
         }
