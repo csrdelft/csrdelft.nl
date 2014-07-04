@@ -188,7 +188,7 @@ if (LoginLid::mag("P_ADMIN")) {
                     <tr>
                         <th id="persoon">Persoon</th>
                         <th id="datum">Datum en tijd</th>
-                        <th id="totaal">Besteltotaal</th>
+                        <th id="totaal">Totaal</th>
                         <th id="bestelling">Bestelling</th>
                         <th id="opties">Opties</th>
                     </tr>
