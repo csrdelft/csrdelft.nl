@@ -354,8 +354,8 @@ abstract class InputField implements FormElement, Validator {
 			$autocomplete = json_encode($this->remotedatasource);
 			return <<<JS
 $('#{$this->getId()}', form).autocomplete(
-	{$autocomplete}
-	, {
+	{$autocomplete},
+	{
 		dataType: "json",
 		parse: function(result) { return result; },
 		formatItem: function(row, i, n) { return row[0]; },
@@ -369,14 +369,12 @@ JS;
 		} elseif (!empty($this->suggestions)) {
 			$autocomplete = json_encode($this->suggestions);
 			return <<<JS
-$('#{$this->getId()}', form).autocomplete(
-	{$autocomplete}
-	, {
-		clickFire: true,
-		max: 20,
-		matchContains: true
-	}
-);
+$('#{$this->getId()}', form).autocomplete({
+	source: {$autocomplete},
+	clickFire: true,
+	max: 20,
+	matchContains: true
+});
 JS;
 		}
 	}
