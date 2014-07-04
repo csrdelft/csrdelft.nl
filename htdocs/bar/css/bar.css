@@ -21,6 +21,8 @@ body, html{
 #main{
 	width: 100%;
 	height: 100%;
+	border-collapse:collapse;
+	table-layout:fixed;
 }
 
 #main td{
@@ -29,10 +31,6 @@ body, html{
 
 #main .top td{
 	height: 1%;
-}
-
-#main .bottom td{
-	overflow: scroll;
 }
 
 #bestelLijstDiv li:after{
