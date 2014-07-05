@@ -47,9 +47,7 @@ class BeheerFunctiesController extends AclController {
 		$this->view = new BeheerFunctiesView($functies);
 		$zijkolom = array(new BlockMenuView(MenuModel::instance()->getMenuTree('Corveebeheer')));
 		$this->view = new CsrLayoutPage($this->getContent(), $zijkolom, $popup);
-		$this->view->addStylesheet('js/autocomplete/jquery.autocomplete.css');
 		$this->view->addStylesheet('taken.css');
-		$this->view->addScript('autocomplete/jquery.autocomplete.min.js');
 		$this->view->addScript('taken.js');
 	}
 

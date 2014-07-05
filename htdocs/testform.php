@@ -59,9 +59,7 @@ if (isPosted()) { // fetches POST values itself
 $pagina = new CsrLayoutPage($view);
 $pagina->zijkolom = false; //geen zijkolom, overzichterlijker debuggen
 //$pagina->addStylesheet('profiel.css');
-$pagina->addStylesheet('js/autocomplete/jquery.autocomplete.css');
 //$pagina->addScript('profiel.js');
-$pagina->addScript('autocomplete/jquery.autocomplete.min.js');
 $pagina->view();
 
 /* end controller */

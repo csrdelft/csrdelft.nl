@@ -4,7 +4,7 @@
 # Hans van Kranenburg
 # sep 2005
 
-/*
+/**
  * Even wat uitleg over het toevoegen van nieuwe leden:
  * Door naar de url http://csrdelft.nl/communicatie/profiel/2005/nieuw/Lid/ te gaan wordt er een
  * nieuw uid aangemaakt in het opgegeven jaar en status. Vervolgens wordt de browser meteen naar het
@@ -14,9 +14,7 @@
  * weergeven.
  * 
  */
-
 require_once 'configuratie.include.php';
-
 require_once 'lid/profiel.class.php';
 
 if (isset($_GET['uid'])) {
@@ -157,10 +155,7 @@ if (!(LoginLid::mag('P_LEDEN_READ') or LoginLid::mag('P_OUDLEDEN_READ'))) {
 
 $pagina = new CsrLayoutPage($midden);
 $pagina->addStylesheet('profiel.css');
-$pagina->addStylesheet('js/autocomplete/jquery.autocomplete.css');
 $pagina->addScript('profiel.js');
-
-$pagina->addScript('autocomplete/jquery.autocomplete.min.js');
 if ($actie == 'view') {
 	$pagina->addScript('flot/jquery.flot.min.js');
 	$pagina->addScript('flot/jquery.flot.threshold.min.js');

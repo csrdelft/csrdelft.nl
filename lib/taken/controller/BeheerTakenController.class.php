@@ -66,9 +66,7 @@ class BeheerTakenController extends AclController {
 		}
 		$this->view = new BeheerTakenView($taken, $maaltijd, false, CorveeRepetitiesModel::getAlleRepetities());
 		$this->view = new CsrLayoutPage($this->getContent());
-		$this->view->addStylesheet('js/autocomplete/jquery.autocomplete.css');
 		$this->view->addStylesheet('taken.css');
-		$this->view->addScript('autocomplete/jquery.autocomplete.min.js');
 		$this->view->addScript('taken.js');
 		$this->view->popup = $popup;
 	}
