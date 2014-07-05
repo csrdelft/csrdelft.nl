@@ -8,7 +8,7 @@ Tussen haakjes staat het aantal keer dat u bent ingedeeld in deze functie.
 Het totaal is uw huidige aantal toegekende corveepunten.
 De prognose geeft aan hoeveel punten u naar verwachting totaal zal hebben aan het einde van het corveejaar.
 </p>
-<table class="taken-tabel" style="width: 350px;">
+<table class="maalcie-tabel" style="width: 350px;">
 	<thead>
 		<tr>
 			<th>Functie</th>

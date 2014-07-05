@@ -4,7 +4,7 @@ mijn_rooster.tpl	|	P.W.G. Brussee (brussee@live.nl)
 {strip}
 	<br />
 	<div id="suggesties" style="border: 1px solid #A9A9A9; ">
-		<table class="taken-tabel" style="padding: 0px;">
+		<table class="maalcie-tabel" style="padding: 0px;">
 			<thead>
 				<tr>
 					<th style="width: 65px; padding-right: 0px;">
@@ -24,7 +24,7 @@ mijn_rooster.tpl	|	P.W.G. Brussee (brussee@live.nl)
 			</thead>
 		</table>
 		<div class="scrollpane" style="height: 250px;">
-			<table id="suggesties-tabel" class="taken-tabel" style="display: none;">
+			<table id="suggesties-tabel" class="maalcie-tabel" style="display: none;">
 				<tbody>
 					{foreach name="tabel" from=$suggesties key=uid item=suggestie}
 						<tr class="
@@ -34,7 +34,7 @@ mijn_rooster.tpl	|	P.W.G. Brussee (brussee@live.nl)
 							">
 							<td style="width: 15px;">
 								<a class="knop" style="padding: 0px 2px;" onclick="$('#field_lid_id').val('{$uid}');
-										$('#taken-taak-toewijzen-form').submit();">
+										$('#maalcie-taak-toewijzen-form').submit();">
 									{if $suggestie.recent}
 										{icon get="time_delete" title="Recent gecorveed"}
 									{elseif $suggestie.voorkeur}

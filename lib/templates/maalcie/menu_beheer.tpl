@@ -2,7 +2,7 @@
 	menu_beheer.tpl	|	P.W.G. Brussee (brussee@live.nl)
 *}
 {if LoginLid::mag('P_CORVEE_MOD')}
-<div id="beheer-taken-menu">		
+<div id="beheer-maalcie-menu">		
 	{if LoginLid::mag('P_MAAL_MOD')}
 	<div class="block">
 		<h1>Beheer</h1>

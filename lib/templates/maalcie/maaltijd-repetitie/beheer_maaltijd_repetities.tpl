@@ -17,7 +17,7 @@ N.B. Pas na het definitief verwijderen van de bijbehorende maaltijden zal de maa
 Dan pas zullen ook alle abonnementen op deze maaltijdrepetitie automatisch worden uitgeschakeld en verwijderd. 
 </p>
 <div style="float: right;"><a href="{Instellingen::get('taken', 'url')}/nieuw" title="Nieuwe repetitie" class="knop post popup">{icon get="add"} Nieuwe repetitie</a></div>
-<table id="taken-tabel" class="taken-tabel">
+<table id="maalcie-tabel" class="maalcie-tabel">
 	<thead>
 		<tr>
 			<th>Wijzig</th>

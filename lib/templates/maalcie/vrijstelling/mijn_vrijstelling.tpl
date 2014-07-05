@@ -8,7 +8,7 @@
 <p>
 In de onderstaande tabel staat de vrijstelling die u heeft gekregen.
 </p>
-<table class="taken-tabel" style="width: 650px;">
+<table class="maalcie-tabel" style="width: 650px;">
 	<thead>
 		<tr>
 			<th>Van</th>

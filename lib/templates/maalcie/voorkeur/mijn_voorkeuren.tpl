@@ -16,7 +16,7 @@ N.B. Dit is niet de plek om aan te geven dat u iets niet lekker vindt!
 </p>
 <label>Allergie/diëet:</label>{$eetwens->view(true)}
 <br />
-<table id="taken-tabel" class="taken-tabel">
+<table id="maalcie-tabel" class="maalcie-tabel">
 	<thead>
 		<tr>
 			<th>Voorkeur</th>

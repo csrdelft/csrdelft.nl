@@ -31,7 +31,7 @@ class FunctieView extends TemplateView {
 
 	public function view() {
 		$this->smarty->display('MVC/maalcie/functie/beheer_functie_lijst.tpl');
-		echo '<tr id="taken-melding"><td>' . SimpleHTML::getMelding() . '</td></tr>';
+		echo '<tr id="maalcie-melding"><td>' . SimpleHTML::getMelding() . '</td></tr>';
 	}
 
 }
@@ -43,7 +43,7 @@ class FunctieDeleteView extends TemplateView {
 
 	public function view() {
 		echo '<tr id="corveefunctie-row-' . $this->model . '" class="remove"></tr>';
-		echo '<tr id="taken-melding"><td>' . SimpleHTML::getMelding() . '</td></tr>';
+		echo '<tr id="maalcie-melding"><td>' . SimpleHTML::getMelding() . '</td></tr>';
 	}
 
 }
@@ -54,7 +54,7 @@ class FunctieDeleteView extends TemplateView {
 class FunctieForm extends PopupForm {
 
 	public function __construct(CorveeFunctie $functie, $actie) {
-		parent::__construct($functie, 'taken-functie-form', Instellingen::get('taken', 'url') . '/' . $actie . '/' . $functie->functie_id);
+		parent::__construct($functie, 'maalcie-functie-form', Instellingen::get('taken', 'url') . '/' . $actie . '/' . $functie->functie_id);
 		$this->titel = 'Corveefunctie ' . $actie;
 		if ($actie === 'bewerken') {
 			$this->css_classes[] = 'PreventUnchanged';
@@ -86,7 +86,7 @@ class FunctieForm extends PopupForm {
 class KwalificatieForm extends PopupForm {
 
 	public function __construct(CorveeKwalificatie $kwalificatie) {
-		parent::__construct($kwalificatie, 'taken-kwalificatie-form', Instellingen::get('taken', 'url') . '/kwalificeer/' . $kwalificatie->functie_id);
+		parent::__construct($kwalificatie, 'maalcie-kwalificatie-form', Instellingen::get('taken', 'url') . '/kwalificeer/' . $kwalificatie->functie_id);
 		$this->titel = 'Kwalificatie toewijzen';
 		$this->css_classes[] = 'PreventUnchanged';
 

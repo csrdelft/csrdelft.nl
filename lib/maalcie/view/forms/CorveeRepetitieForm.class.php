@@ -11,7 +11,7 @@
 class CorveeRepetitieForm extends PopupForm {
 
 	public function __construct($crid, $mrid = null, $dag = null, $periode = null, $fid = null, $punten = null, $aantal = null, $voorkeur = null, $verplaats = null) {
-		parent::__construct(null, 'taken-corvee-repetitie-form', Instellingen::get('taken', 'url') . '/opslaan/' . $crid);
+		parent::__construct(null, 'maalcie-corvee-repetitie-form', Instellingen::get('taken', 'url') . '/opslaan/' . $crid);
 
 		if (!is_int($crid) || $crid < 0) {
 			throw new Exception('invalid crid');

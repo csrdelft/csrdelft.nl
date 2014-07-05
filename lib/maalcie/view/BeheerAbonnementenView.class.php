@@ -14,7 +14,7 @@ class BeheerAbonnementenView extends TemplateView {
 		parent::__construct($matrix, 'Beheer abonnementen');
 
 		$field = new LidField('voor_lid', null, 'Toon abonnementen van persoon:', 'allepersonen');
-		$form = new Formulier(null, 'taken-subform-abos', Instellingen::get('taken', 'url') . '/voorlid');
+		$form = new Formulier(null, 'maalcie-subform-abos', Instellingen::get('taken', 'url') . '/voorlid');
 		$form->addFields(array($field));
 		$this->smarty->assign('form', $form);
 
@@ -46,7 +46,7 @@ class BeheerAbonnementenLijstView extends TemplateView {
 	}
 
 	public function view() {
-		echo '<tr id="taken-melding"><td id="taken-melding-veld">' . SimpleHTML::getMelding() . '</td></tr>';
+		echo '<tr id="maalcie-melding"><td id="maalcie-melding-veld">' . SimpleHTML::getMelding() . '</td></tr>';
 		foreach ($this->model as $uid => $abonnementen) {
 			$this->smarty->assign('uid', $uid);
 			$this->smarty->assign('abonnementen', $abonnementen);
@@ -66,7 +66,7 @@ class BeheerAbonnementView extends TemplateView {
 	}
 
 	public function view() {
-		echo '<td id="taken-melding-veld">' . SimpleHTML::getMelding() . '</td>';
+		echo '<td id="maalcie-melding-veld">' . SimpleHTML::getMelding() . '</td>';
 		$this->smarty->display('maalcie/abonnement/beheer_abonnement_veld.tpl');
 	}
 

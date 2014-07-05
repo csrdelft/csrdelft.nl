@@ -13,7 +13,7 @@ require_once 'maalcie/model/MaaltijdenModel.class.php';
 class TaakForm extends PopupForm {
 
 	public function __construct($tid, $fid = null, $uid = null, $crid = null, $mid = null, $datum = null, $punten = null, $bonus_malus = null) {
-		parent::__construct(null, 'taken-corveetaak-form', Instellingen::get('taken', 'url') . '/opslaan/' . $tid);
+		parent::__construct(null, 'maalcie-corveetaak-form', Instellingen::get('taken', 'url') . '/opslaan/' . $tid);
 
 		if (!is_int($tid) || $tid < 0) {
 			throw new Exception('invalid tid');

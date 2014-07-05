@@ -56,7 +56,7 @@
 	{*<a href="/corveebeheer/indelen" title="Leden automatisch indelen voor taken" class="knop disabled">{icon get="date"} Automatisch indelen</a>*}
 	<a href="/corveebeheer/herinneren" title="Verstuur herinneringen" class="knop">{icon get="clock"} Herinneringen versturen</a>
 {/if}
-<table id="taken-tabel" class="taken-tabel">
+<table id="maalcie-tabel" class="maalcie-tabel">
 {foreach name="tabel" from=$taken key=datum item=perdatum}
 	{if $smarty.foreach.tabel.first}
 	<thead>

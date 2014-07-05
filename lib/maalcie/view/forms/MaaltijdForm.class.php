@@ -14,7 +14,7 @@ require_once 'lichting.class.php';
 class MaaltijdForm extends PopupForm {
 
 	public function __construct($mid, $mrid = null, $titel = null, $limiet = null, $datum = null, $tijd = null, $prijs = null, $filter = null) {
-		parent::__construct(null, 'taken-maaltijd-form', Instellingen::get('taken', 'url') . '/opslaan/' . $mid);
+		parent::__construct(null, 'maalcie-maaltijd-form', Instellingen::get('taken', 'url') . '/opslaan/' . $mid);
 
 		if (!is_int($mid) || $mid < 0) {
 			throw new Exception('invalid mid');

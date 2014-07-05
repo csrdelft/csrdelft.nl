@@ -351,7 +351,7 @@ function dom_update(htmlString) {
 				$(this).prependTo('#' + parentid).effect('highlight');
 			}
 			else {
-				$(this).prependTo('#taken-tabel tbody:visible:first').effect('highlight'); //FIXME: make generic
+				$(this).prependTo('#maalcie-tabel tbody:visible:first').effect('highlight'); //FIXME: make generic
 			}
 		}
 		init_links();

@@ -53,7 +53,7 @@ class BeheerTakenLijstView extends TemplateView {
 	}
 
 	public function view() {
-		echo '<tr id="taken-melding"><td>' . SimpleHTML::getMelding() . '</td></tr>';
+		echo '<tr id="maalcie-melding"><td>' . SimpleHTML::getMelding() . '</td></tr>';
 		foreach ($this->model as $taak) {
 			$this->smarty->assign('taak', $taak);
 			$this->smarty->display('maalcie/corveetaak/beheer_taak_lijst.tpl');

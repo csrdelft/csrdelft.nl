@@ -11,7 +11,7 @@
 class BoekjaarSluitenForm extends PopupForm {
 
 	public function __construct($beginDatum = null, $eindDatum = null) {
-		parent::__construct(null, 'taken-boekjaar-sluiten-form', Instellingen::get('taken', 'url') . '/sluitboekjaar');
+		parent::__construct(null, 'maalcie-boekjaar-sluiten-form', Instellingen::get('taken', 'url') . '/sluitboekjaar');
 		$this->titel = 'Boekjaar sluiten';
 
 		$fields[] = new HtmlComment('<p style="color:red;">Dit is een onomkeerbare stap!</p>');

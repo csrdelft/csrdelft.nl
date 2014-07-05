@@ -22,7 +22,7 @@ N.B. Als u kiest voor "Alles bijwerken" worden alle corveetaken die behoren tot 
 <div style="float: right;">
 	<a href="{Instellingen::get('taken', 'url')}/nieuw{if isset($maaltijdrepetitie)}/{$maaltijdrepetitie->getMaaltijdRepetitieId()}{/if}" title="Nieuwe repetitie" class="knop post popup">{icon get="add"} Nieuwe repetitie</a>
 </div>
-<table id="taken-tabel" class="taken-tabel">
+<table id="maalcie-tabel" class="maalcie-tabel">
 	<thead>
 		<tr>
 			<th style="width: 80px;">Wijzig</th>

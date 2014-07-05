@@ -11,7 +11,7 @@
 class ToewijzenForm extends PopupForm {
 
 	public function __construct(CorveeTaak $taak, array $suggesties) {
-		parent::__construct(null, 'taken-taak-toewijzen-form', Instellingen::get('taken', 'url') . '/toewijzen/' . $taak->getTaakId());
+		parent::__construct(null, 'maalcie-taak-toewijzen-form', Instellingen::get('taken', 'url') . '/toewijzen/' . $taak->getTaakId());
 
 		if (!is_int($taak->getTaakId()) || $taak->getTaakId() <= 0) {
 			throw new Exception('invalid tid');

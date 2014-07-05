@@ -35,7 +35,7 @@ Onderstaande tabel toont alle maaltijden die niet verwijderd zijn.
 	</select>
 </form>
 {/if}
-<table id="taken-tabel" class="taken-tabel">
+<table id="maalcie-tabel" class="maalcie-tabel">
 {foreach name=tabel from=$maaltijden item=maaltijd}
 	{if $smarty.foreach.tabel.index % 25 === 0}
 		{if !$smarty.foreach.tabel.first}</tbody>{/if}

@@ -13,7 +13,7 @@ require_once 'verticale.class.php';
 class MaaltijdRepetitieForm extends PopupForm {
 
 	public function __construct($mrid, $dag = null, $periode = null, $titel = null, $tijd = null, $prijs = null, $abo = null, $limiet = null, $filter = null, $verplaats = null) {
-		parent::__construct(null, 'taken-maaltijd-repetitie-form', Instellingen::get('taken', 'url') . '/opslaan/' . $mrid);
+		parent::__construct(null, 'maalcie-maaltijd-repetitie-form', Instellingen::get('taken', 'url') . '/opslaan/' . $mrid);
 
 		if (!is_int($mrid) || $mrid < 0) {
 			throw new Exception('invalid mrid');

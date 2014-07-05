@@ -85,7 +85,7 @@ class MaaltijdRepetitiesController extends AclController {
 		if ($aantal > 0) {
 			setMelding($aantal . ' abonnement' . ($aantal !== 1 ? 'en' : '') . ' uitgeschakeld.', 2);
 		}
-		echo '<tr id="taken-melding"><td>' . SimpleHTML::getMelding() . '</td></tr>';
+		echo '<tr id="maalcie-melding"><td>' . SimpleHTML::getMelding() . '</td></tr>';
 		echo '<tr id="repetitie-row-' . $mrid . '" class="remove"></tr>';
 		exit;
 	}

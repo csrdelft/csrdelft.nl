@@ -31,7 +31,7 @@ class MijnAbonnementView extends TemplateView {
 	}
 
 	public function view() {
-		echo '<td id="taken-melding-veld">' . SimpleHTML::getMelding() . '</td>';
+		echo '<td id="maalcie-melding-veld">' . SimpleHTML::getMelding() . '</td>';
 		$this->smarty->display('maalcie/abonnement/mijn_abonnement_veld.tpl');
 	}
 

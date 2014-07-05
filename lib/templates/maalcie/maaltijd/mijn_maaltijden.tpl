@@ -21,7 +21,7 @@ Daarna moet u contact opnemen met de koks!
 N.B. De maaltijd sluit op de dag van de maaltijd rond 15:00 (wanneer de koks de lijst met aanmeldingen uitprinten).
 Vanaf dat moment zal deze ketzer u niet meer willen aan- of afmelden en bent u aangewezen op persoonlijk contact met de koks.
 </p>
-<table id="taken-tabel" class="taken-tabel">
+<table id="maalcie-tabel" class="maalcie-tabel">
 	<thead>
 		<tr>
 			<th>Wanneer</th>

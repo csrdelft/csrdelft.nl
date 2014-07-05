@@ -17,7 +17,7 @@
  * 
  * Een gesloten maaltijd kan weer heropend worden.
  * Een verwijderde maaltijd kan weer uit de prullenbak worden gehaald.
- * Zolang een maaltijd verwijderd is doet en telt deze niet meer mee in het taken-systeem.
+ * Zolang een maaltijd verwijderd is doet en telt deze niet meer mee in het maalcie-systeem.
  * Als de restricties gewijzigt worden nadat er al aangemeldingen zijn (direct na het aanmaken van een maaltijd vanwege abonnementen) worden illegale aanmeldingen automatisch verwijderd.
  * In principe worden maaltijden aangemaakt vanuit maaltijd-repetitie in verband met maaltijd-corvee-taken en corvee-voorkeuren van leden.
  * 

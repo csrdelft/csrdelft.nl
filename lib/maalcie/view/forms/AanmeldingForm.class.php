@@ -11,7 +11,7 @@
 class AanmeldingForm extends PopupForm {
 
 	public function __construct($mid, $nieuw, $uid = null, $gasten = 0) {
-		parent::__construct(null, 'taken-aanmelding-form', Instellingen::get('taken', 'url') . '/ander' . ($nieuw ? 'aanmelden' : 'afmelden') . '/' . $mid);
+		parent::__construct(null, 'maalcie-aanmelding-form', Instellingen::get('taken', 'url') . '/ander' . ($nieuw ? 'aanmelden' : 'afmelden') . '/' . $mid);
 
 		if (!is_int($mid) || $mid <= 0) {
 			throw new Exception('invalid mid');

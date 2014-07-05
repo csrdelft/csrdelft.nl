@@ -23,7 +23,7 @@ N.B. Alle corveetaken in het verleden worden bij de reset naar de prullenbak ver
 <div style="float: right;">
 	<a href="{Instellingen::get('taken', 'url')}/resetjaar" title="Reset corveejaar" class="knop confirm">{icon get="lightning"} Corveejaar resetten</a>
 </div>
-<table id="taken-tabel" class="taken-tabel">
+<table id="maalcie-tabel" class="maalcie-tabel">
 {foreach name=tabel from=$matrix item=puntenlijst}
 	{if $smarty.foreach.tabel.index % 25 === 0}
 		{if !$smarty.foreach.tabel.first}</tbody>{/if}

@@ -38,7 +38,7 @@ class CorveeRepetitieView extends TemplateView {
 	}
 
 	public function view() {
-		echo '<tr id="taken-melding"><td>' . SimpleHTML::getMelding() . '</td></tr>';
+		echo '<tr id="maalcie-melding"><td>' . SimpleHTML::getMelding() . '</td></tr>';
 		$this->smarty->display('maalcie/corvee-repetitie/beheer_corvee_repetitie_lijst.tpl');
 	}
 

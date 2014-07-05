@@ -5,7 +5,7 @@
  * 
  * @author P.W.G. Brussee <brussee@live.nl>
  * 
- * Router voor de taken module.
+ * Router voor de maalcie module.
  */
 class MaalcieRouterController extends AclController {
 

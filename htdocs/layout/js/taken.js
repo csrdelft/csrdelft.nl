@@ -5,8 +5,8 @@
  */
 
 $(document).ready(function() {
-	$('#beheer-taken-menu').prependTo('#mainleft');
-	$('#beheer-taken-menu').show();
+	$('#beheer-maalcie-menu').prependTo('#mainleft');
+	$('#beheer-maalcie-menu').show();
 	$('a.ruilen').each(function() {
 		$(this).removeClass('ruilen');
 		$(this).attr('ondragover', 'taken_mag_ruilen(event);');
@@ -22,7 +22,7 @@ function taken_toggle_datum(datum) {
 
 }
 function taken_toggle_datum_first(datum, index) {
-	if ('taak-datum-head-' + datum === $('#taken-tabel tr:visible').eq(index).attr('id')) {
+	if ('taak-datum-head-' + datum === $('#maalcie-tabel tr:visible').eq(index).attr('id')) {
 		$('#taak-datum-head-first').toggle();
 	}
 }
@@ -80,7 +80,7 @@ var lastSelectedId;
 function taken_select_range(e) {
 	var shift = isShiftKeyDown(e);
 	var withinRange = false;
-	$("#taken-tabel tbody tr td a input[name='" + $(e.target).attr('name') + "']:visible").each(function() {
+	$("#maalcie-tabel tbody tr td a input[name='" + $(e.target).attr('name') + "']:visible").each(function() {
 		var thisId = $(this).attr('id');
 		if (thisId === lastSelectedId) {
 			withinRange = !withinRange;

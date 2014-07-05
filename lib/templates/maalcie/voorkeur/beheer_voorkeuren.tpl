@@ -4,7 +4,7 @@
 <p>
 Op deze pagina kunt u voor alle leden de voorkeuren beheren.
 </p>
-<table id="taken-tabel" class="taken-tabel">
+<table id="maalcie-tabel" class="maalcie-tabel">
 {foreach name=tabel from=$matrix item=voorkeuren}
 	{if $smarty.foreach.tabel.index % 25 === 0}
 		{if !$smarty.foreach.tabel.first}</tbody>{/if}

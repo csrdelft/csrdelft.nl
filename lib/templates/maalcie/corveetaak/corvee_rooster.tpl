@@ -7,7 +7,7 @@
 			<a href="{Instellingen::get('taken', 'url')}/verleden" title="Taken in het verleden tonen" class="knop">{icon get="time"} Toon verleden</a>
 		</div>
 	{/if}
-	<table id="taken-tabel" class="taken-tabel">
+	<table id="maalcie-tabel" class="maalcie-tabel">
 		<thead>
 			<tr>
 				<th>Week</th>
@@ -44,7 +44,7 @@
 				{/if}
 				{if !isset($mijn)}
 			<td>
-				{table_foreach from=$taken inner=rows item=taak table_attr='class="taken-rooster"' cols=2}
+				{table_foreach from=$taken inner=rows item=taak table_attr='class="maalcie-rooster"' cols=2}
 			</td>
 			{if $taak->getLidId()}
 				{if $taak->getLidId() === LoginLid::instance()->getUid()} 

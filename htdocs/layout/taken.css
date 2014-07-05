@@ -58,56 +58,56 @@ div.vertical {
 	-ms-filter: "progid:DXImageTransform.Microsoft.BasicImage(rotation=3)"; /* IE8 */
 }
 
-/* taken menu */
+/* maalcie-menu */
 
-#taken-menu {
+#maalcie-menu {
 	width: 100%;
 }
-#taken-menu td {
+#maalcie-menu td {
 	height: 20px;
 }
-#taken-menu td.active {
+#maalcie-menu td.active {
 	font-weight: bold;
 }
-#beheer-taken-menu {
+#beheer-maalcie-menu {
 	display: none;
 }
-#beheer-taken-menu div.active {
+#beheer-maalcie-menu div.active {
 	font-weight: bold;
 }
 
-/* taken tabel */
+/* maalcie-tabel */
 
-.taken-tabel {
+.maalcie-tabel {
 	padding: 15px 0px;
 	width: 100%;
 	border-spacing: 0px;
 }
-.taken-tabel tr {
+.maalcie-tabel tr {
 	height: 25px;
 	background-color: #EBEBEB;
 }
-.taken-tabel tr:nth-child(even) {
+.maalcie-tabel tr:nth-child(even) {
 	background-color: #FAFAFA;
 }
-.taken-tabel tr:hover {
+.maalcie-tabel tr:hover {
 	background-color: #DDEEFF;
 }
-.taken-tabel th {
+.maalcie-tabel th {
 	background-color: #FAFAFA;
 	font-weight: bold;
 	padding: 10px;
 	border-bottom: 2px solid #FFFFFF;
 }
-.taken-tabel td {
+.maalcie-tabel td {
 	padding: 2px 7px;
 	vertical-align: text-bottom;
 }
-.taken-tabel .knop {
+.maalcie-tabel .knop {
 	padding: 0px 4px;
 	margin: 1px;
 }
-.taken-tabel .col-del {
+.maalcie-tabel .col-del {
 	padding: 2px;
 	text-align: center;
 }
@@ -136,13 +136,13 @@ tr.taak-datum-head th, tr.taak-datum-summary th {
 	float: none;
 	padding: 7px;
 }
-.taken-rooster tr {
+.maalcie-rooster tr {
 	background-color: transparent !important;
 }
-.taken-rooster td {
+.maalcie-rooster td {
 	width: 5px;
 }
-.taken-rooster td.taak {
+.maalcie-rooster td.taak {
 	width: 170px;
 }
 
