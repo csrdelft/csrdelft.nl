@@ -49,7 +49,7 @@ class CsrLayoutPage extends HtmlPage {
 				$this->addStylesheet('snow.css');
 			}
 		}
-		if (defined('DEBUG') AND ( LoginLid::mag('P_ADMIN') OR LoginLid::instance()->isSued())) {
+		if (defined('DEBUG') AND LoginLid::mag('P_ADMIN')) {
 			$this->addStylesheet('jquery-ui.css', '/layout/js/jquery/');
 			$this->addScript('jquery/jquery.js');
 			$this->addScript('jquery/jquery-ui.js');
