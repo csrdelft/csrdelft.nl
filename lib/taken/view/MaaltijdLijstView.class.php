@@ -16,7 +16,7 @@ class MaaltijdLijstView extends HtmlPage {
 		parent::__construct($maaltijd, $maaltijd->getTitel());
 		$this->fiscaal = $fiscaal;
 
-		$this->addStylesheet('jquery-ui.min.css', '/layout/js/jquery/themes/ui-lightness/');
+		$this->addStylesheet('jquery-ui.min.css', '/layout/js/jquery/');
 		$this->addScript('jquery/jquery.min.js');
 		$this->addScript('jquery/jquery-ui.min.js');
 		$this->addScript('jquery/plugins/jquery.hoverIntent-r7.min.js');
