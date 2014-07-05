@@ -3101,6 +3101,7 @@ lib/MVC/view/groepen/SjaarciesView.class.php -text
 lib/MVC/view/groepen/WerkgroepenView.class.php -text
 lib/MVC/view/groepen/WoonoordenView.class.php -text
 lib/MVC/view/maalcie/BeheerFunctiesView.class.php -text
+lib/Soccie[!!-~]ERD.png -text
 lib/Zend/Exception.php -text
 lib/Zend/Gdata.php -text
 lib/Zend/Gdata/App.php -text
