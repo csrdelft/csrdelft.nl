@@ -136,8 +136,8 @@ $cmnds['getsaldo'] = array();
 
 function abolijst($uid, $params) {
 	global $lid, $db;
-	require_once 'taken/model/AbonnementenModel.class.php';
-	$abos = AbonnementenModel::getAbonnementenVoorLid($uid);
+	require_once 'maalcie/model/MaaltijdAbonnementenModel.class.php';
+	$abos = MaaltijdAbonnementenModel::getAbonnementenVoorLid($uid);
 	if (count($abos) > 0)
 		return $abos;
 	return array();
@@ -156,8 +156,8 @@ $cmnds['abolijst'] = array();
 
 function getwelabos($uid, $params) {
 	global $lid, $db;
-	require_once 'taken/model/AbonnementenModel.class.php';
-	$abos = AbonnementenModel::getAbonnementenVoorLid($uid, true, true);
+	require_once 'maalcie/model/MaaltijdAbonnementenModel.class.php';
+	$abos = MaaltijdAbonnementenModel::getAbonnementenVoorLid($uid, true, true);
 	if (count($abos) > 0)
 		return $abos;
 	return array();
@@ -176,8 +176,8 @@ $cmnds['getwelabos'] = array();
 
 function getnotabos($uid, $params) {
 	global $lid, $db;
-	require_once 'taken/model/AbonnementenModel.class.php';
-	$abos = AbonnementenModel::getAbonnementenVoorLid($uid, false, true);
+	require_once 'maalcie/model/MaaltijdAbonnementenModel.class.php';
+	$abos = MaaltijdAbonnementenModel::getAbonnementenVoorLid($uid, false, true);
 	if (count($abos) > 0)
 		return $abos;
 	return array();
@@ -375,7 +375,7 @@ $cmnds['zoekoud'] = array('zoekterm' => true);
 
 function maallijst($uid, $params) {
 	global $lid, $db;
-	require_once 'taken/model/MaaltijdenModel.class.php';
+	require_once 'maalcie/model/MaaltijdenModel.class.php';
 	$mlt = MaaltijdenModel::getKomendeMaaltijdenVoorLid($uid);
 	if (count($mlt) > 0)
 		return $mlt;

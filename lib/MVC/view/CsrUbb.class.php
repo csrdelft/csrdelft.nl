@@ -636,9 +636,9 @@ HTML;
 		$mid = trim($mid);
 		$maaltijd2 = null;
 
-		require_once 'taken/model/MaaltijdenModel.class.php';
-		require_once 'taken/model/AanmeldingenModel.class.php';
-		require_once 'taken/view/MaaltijdKetzerView.class.php';
+		require_once 'maalcie/model/MaaltijdenModel.class.php';
+		require_once 'maalcie/model/MaaltijdAanmeldingenModel.class.php';
+		require_once 'maalcie/view/MaaltijdKetzerView.class.php';
 		try {
 			if ($mid === 'next' || $mid === 'eerstvolgende' || $mid === 'next2' || $mid === 'eerstvolgende2') {
 				$maaltijden = MaaltijdenModel::getKomendeMaaltijdenVoorLid(\LoginLid::instance()->getUid()); // met filter
@@ -666,7 +666,7 @@ HTML;
 		if (!isset($maaltijd)) {
 			return '<div class="ubb_block ubb_maaltijd">Maaltijd niet gevonden: ' . mb_htmlentities($mid) . '</div>';
 		}
-		$aanmeldingen = AanmeldingenModel::getAanmeldingenVoorLid(array($maaltijd->getMaaltijdId() => $maaltijd), \LoginLid::instance()->getUid());
+		$aanmeldingen = MaaltijdAanmeldingenModel::getAanmeldingenVoorLid(array($maaltijd->getMaaltijdId() => $maaltijd), \LoginLid::instance()->getUid());
 		if (empty($aanmeldingen)) {
 			$aanmelding = null;
 		} else {
@@ -676,7 +676,7 @@ HTML;
 		$result = $ketzer->getKetzer();
 
 		if ($maaltijd2 !== null) {
-			$aanmeldingen2 = AanmeldingenModel::getAanmeldingenVoorLid(array($maaltijd2->getMaaltijdId() => $maaltijd2), \LoginLid::instance()->getUid());
+			$aanmeldingen2 = MaaltijdAanmeldingenModel::getAanmeldingenVoorLid(array($maaltijd2->getMaaltijdId() => $maaltijd2), \LoginLid::instance()->getUid());
 			if (empty($aanmeldingen2)) {
 				$aanmelding2 = null;
 			} else {

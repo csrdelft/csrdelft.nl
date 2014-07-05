@@ -38,8 +38,8 @@ if (isset($_POST['namenRaw'])) {
 					echo '">' . sprintf('&euro; %01.2f', $saldo['saldo']) . '</td>';
 				}
 
-				require_once 'taken/model/AbonnementenModel.class.php';
-				$abos = AbonnementenModel::getAbonnementenVoorLid($aLid['uid']);
+				require_once 'maalcie/model/MaaltijdAbonnementenModel.class.php';
+				$abos = MaaltijdAbonnementenModel::getAbonnementenVoorLid($aLid['uid']);
 				echo '<td>' . print_r($abos) . '</td>';
 				echo '<td><input type="checkbox" name="delabos[]" /></td>';
 				echo '<td><select name="status[]"><option value="S_NOBODY">Lid af</option><option value="S_OUDLID">Oudlid</option></select></td>';

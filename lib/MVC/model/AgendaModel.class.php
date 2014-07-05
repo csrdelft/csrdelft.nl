@@ -1,8 +1,8 @@
 <?php
 
 require_once 'MVC/controller/AgendaController.class.php';
-require_once 'taken/model/MaaltijdenModel.class.php';
-require_once 'taken/model/TakenModel.class.php';
+require_once 'maalcie/model/MaaltijdenModel.class.php';
+require_once 'maalcie/model/CorveeTakenModel.class.php';
 
 /**
  * AgendaModel.class.php
@@ -44,9 +44,9 @@ class AgendaModel extends PersistenceModel {
 
 		// CorveeTaken
 		if (LidInstellingen::get('agenda', 'toonCorvee') === 'iedereen') {
-			$result = array_merge($result, TakenModel::getTakenVoorAgenda($van, $tot, true));
+			$result = array_merge($result, CorveeTakenModel::getTakenVoorAgenda($van, $tot, true));
 		} elseif (LidInstellingen::get('agenda', 'toonCorvee') === 'eigen') {
-			$result = array_merge($result, TakenModel::getTakenVoorAgenda($van, $tot, false));
+			$result = array_merge($result, CorveeTakenModel::getTakenVoorAgenda($van, $tot, false));
 		}
 
 		// Verjaardagen

@@ -588,8 +588,8 @@ class ProfielStatus extends Profiel {
 	 * @return string changelogregel
 	 */
 	private function disableMaaltijdabos() {
-		require_once 'taken/model/AbonnementenModel.class.php';
-		$aantal = AbonnementenModel::verwijderAbonnementenVoorLid($this->lid->getUid());
+		require_once 'maalcie/model/MaaltijdAbonnementenModel.class.php';
+		$aantal = MaaltijdAbonnementenModel::verwijderAbonnementenVoorLid($this->lid->getUid());
 		return 'Afmelden abo\'s: ' . $aantal . ' uitgezet. ';
 	}
 
@@ -602,8 +602,8 @@ class ProfielStatus extends Profiel {
 	 */
 	private function removeToekomstigeCorvee($oudestatus, $nieuwestatus) {
 		$uid = $this->bewerktLid->getUid();
-		$taken = TakenModel::getKomendeTakenVoorLid($uid);
-		$aantal = TakenModel::verwijderTakenVoorLid($uid);
+		$taken = CorveeTakenModel::getKomendeTakenVoorLid($uid);
+		$aantal = CorveeTakenModel::verwijderTakenVoorLid($uid);
 		if (sizeof($taken) !== $aantal) {
 			setMelding('Niet alle toekomstige corveetaken zijn verwijderd!', -1);
 		}

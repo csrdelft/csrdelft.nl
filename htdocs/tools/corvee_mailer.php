@@ -23,7 +23,7 @@ if(!(LoginLid::mag('P_ADMIN') || LoginLid::mag('P_MAAL_MOD'))){
 }
 
 try {
-	require_once 'taken/controller/BeheerTakenController.class.php';
+	require_once 'maalcie/controller/BeheerTakenController.class.php';
 	$controller = new BeheerTakenController();
 	$controller->herinneren();
 	$controller->getContent()->view();

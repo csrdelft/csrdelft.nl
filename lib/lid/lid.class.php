@@ -525,23 +525,23 @@ class Lid implements Serializable, Agendeerbaar {
 	 * MaaltijdAanmeldingen opzoeken en teruggeven van dit lid
 	 */
 	public function getRecenteAanmeldingen() {
-		require_once 'taken/model/AanmeldingenModel.class.php';
-		return AanmeldingenModel::getRecenteAanmeldingenVoorLid($this->getUid());
+		require_once 'maalcie/model/MaaltijdAanmeldingenModel.class.php';
+		return MaaltijdAanmeldingenModel::getRecenteAanmeldingenVoorLid($this->getUid());
 	}
 
 	/**
 	 * MaaltijdAbonnementen opzoeken en teruggeven van dit lid
 	 */
 	public function getMaaltijdAbonnementen() {
-		require_once 'taken/model/AbonnementenModel.class.php';
-		return AbonnementenModel::getAbonnementenVoorLid($this->getUid());
+		require_once 'maalcie/model/MaaltijdAbonnementenModel.class.php';
+		return MaaltijdAbonnementenModel::getAbonnementenVoorLid($this->getUid());
 	}
 
 	/**
 	 * CorveeKwalificaties opzoeken en teruggeven van dit lid
 	 */
 	public function getCorveeKwalificaties() {
-		require_once 'MVC/model/taken/KwalificatiesModel.class.php';
+		require_once 'MVC/model/maalcie/KwalificatiesModel.class.php';
 		return KwalificatiesModel::instance()->getKwalificatiesVanLid($this->getUid());
 	}
 
@@ -549,24 +549,24 @@ class Lid implements Serializable, Agendeerbaar {
 	 * CorveeVrijstelling opzoeken en teruggeven van dit lid
 	 */
 	public function getCorveeVrijstelling() {
-		require_once 'taken/model/VrijstellingenModel.class.php';
-		return \VrijstellingenModel::getVrijstelling($this->getUid());
+		require_once 'maalcie/model/CorveeVrijstellingenModel.class.php';
+		return \CorveeVrijstellingenModel::getVrijstelling($this->getUid());
 	}
 
 	/**
 	 * CorveeVoorkeuren opzoeken en teruggeven van dit lid
 	 */
 	public function getCorveeVoorkeuren() {
-		require_once 'taken/model/VoorkeurenModel.class.php';
-		return \VoorkeurenModel::getVoorkeurenVoorLid($this->getUid(), true);
+		require_once 'maalcie/model/CorveeVoorkeurenModel.class.php';
+		return \CorveeVoorkeurenModel::getVoorkeurenVoorLid($this->getUid(), true);
 	}
 
 	/**
 	 * CorveeTaken opzoeken en teruggeven van dit lid
 	 */
 	public function getCorveeTaken() {
-		require_once 'taken/model/TakenModel.class.php';
-		return \TakenModel::getTakenVoorLid($this->getUid());
+		require_once 'maalcie/model/CorveeTakenModel.class.php';
+		return \CorveeTakenModel::getTakenVoorLid($this->getUid());
 	}
 
 	//deze willen we hebben om vanuit templates handig instellingen op te halen.
