@@ -50,7 +50,7 @@ $weekResult=$db->query($weekrapportQuery);
 	<link rel="stylesheet" href="csrdelft.css" type="text/css" />
 	<link rel="stylesheet" href="normaal.css" type="text/css" />
 	<link rel="stylesheet" href="ubb.css" type="text/css" />
-	<script type="text/javascript" src="http://csrdelft.nl/layout/js/jquery/jquery-2.1.0.min.js"></script>
+	<script type="text/javascript" src="http://csrdelft.nl/layout/js/jquery/jquery.min.js"></script>
 	<script type="text/javascript" src="http://csrdelft.nl/layout/js/datatables/jquery.dataTables.min.js"></script>
 	<script type="text/javascript">
 jQuery.fn.dataTableExt.oSort['currency-asc'] = function(a,b) {

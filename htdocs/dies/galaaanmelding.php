@@ -68,7 +68,7 @@ $ingelogd = false;
 			staticImage6.src = "./knoppen/posters1.png";
 			// End -->
 		</script>
-		<script src="/layout/js/jquery/jquery-2.1.0.min.js" type="text/javascript"></script>
+		<script src="/layout/js/jquery/jquery.min.js" type="text/javascript"></script>
 		<link rel="stylesheet" type="text/css" href="styles.css">
 		<script src="/layout/js/csrdelft.js" type="text/javascript"></script>
 		<style>
