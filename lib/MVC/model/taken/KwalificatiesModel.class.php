@@ -12,6 +12,10 @@ class KwalificatiesModel extends PersistenceModel {
 
 	protected static $instance;
 
+	protected function __construct() {
+		parent::__construct('taken/');
+	}
+
 	/**
 	 * Lazy loading of corveefunctie.
 	 * 

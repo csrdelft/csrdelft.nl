@@ -3025,8 +3025,6 @@ lib/MVC/model/entity/Afbeelding.class.php -text
 lib/MVC/model/entity/AgendaItem.class.php -text
 lib/MVC/model/entity/Bestand.class.php -text
 lib/MVC/model/entity/CmsPagina.class.php -text
-lib/MVC/model/entity/CorveeFunctie.class.php -text
-lib/MVC/model/entity/CorveeKwalificatie.class.php -text
 lib/MVC/model/entity/ForumCategorie.class.php -text
 lib/MVC/model/entity/ForumDeel.class.php -text
 lib/MVC/model/entity/ForumDraad.class.php -text
@@ -3066,6 +3064,8 @@ lib/MVC/model/entity/groepen/Ondervereniging.class.php -text
 lib/MVC/model/entity/groepen/Sjaarcie.class.php -text
 lib/MVC/model/entity/groepen/Werkgroep.class.php -text
 lib/MVC/model/entity/groepen/Woonoord.class.php -text
+lib/MVC/model/entity/taken/CorveeFunctie.class.php -text
+lib/MVC/model/entity/taken/CorveeKwalificatie.class.php -text
 lib/MVC/model/taken/FunctiesModel.class.php -text
 lib/MVC/model/taken/KwalificatiesModel.class.php -text
 lib/MVC/view/AgendaView.class.php -text

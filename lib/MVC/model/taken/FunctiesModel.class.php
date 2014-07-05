@@ -14,6 +14,10 @@ class FunctiesModel extends PersistenceModel {
 
 	protected static $instance;
 
+	protected function __construct() {
+		parent::__construct('taken/');
+	}
+
 	/**
 	 * Optional eager loading of kwalificaties.
 	 * 
