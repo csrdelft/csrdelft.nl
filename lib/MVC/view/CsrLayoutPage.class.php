@@ -50,14 +50,17 @@ class CsrLayoutPage extends HtmlPage {
 			}
 		}
 		if (defined('DEBUG') AND ( LoginLid::mag('P_ADMIN') OR LoginLid::instance()->isSued())) {
-			$this->addStylesheet('jquery-ui.css', '/layout/js/jquery/themes/ui-lightness/');
-			$this->addScript('jquery/jquery-2.1.0.js');
-			$this->addScript('jquery/jquery-ui-1.10.4.custom.js');
+			$this->addStylesheet('jquery-ui.css', '/layout/js/jquery/');
+			$this->addScript('jquery/jquery.js');
+			$this->addScript('jquery/jquery-ui.js');
+			$this->addScript('autocomplete/jquery.autocomplete.js');
 		} else { // minimized javascript
-			$this->addStylesheet('jquery-ui.min.css', '/layout/js/jquery/themes/ui-lightness/');
-			$this->addScript('jquery/jquery-2.1.0.min.js');
-			$this->addScript('jquery/jquery-ui-1.10.4.custom.min.js');
+			$this->addStylesheet('jquery-ui.min.css', '/layout/js/jquery/');
+			$this->addScript('jquery/jquery.min.js');
+			$this->addScript('jquery/jquery-ui.min.js');
+			$this->addScript('autocomplete/jquery.autocomplete.pack.js');
 		}
+		$this->addStylesheet('js/autocomplete/jquery.autocomplete.css');
 		$this->addScript('jquery/plugins/jquery.timeago-1.3.0.custom.js');
 		$this->addScript('jquery/plugins/jquery.hoverIntent-r7.min.js');
 		$this->addScript('csrdelft.js');

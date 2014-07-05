@@ -369,12 +369,14 @@ JS;
 		} elseif (!empty($this->suggestions)) {
 			$autocomplete = json_encode($this->suggestions);
 			return <<<JS
-$('#{$this->getId()}', form).autocomplete({
-	source: {$autocomplete},
-	clickFire: true,
-	max: 20,
-	matchContains: true
-});
+$('#{$this->getId()}', form).autocomplete(
+	{$autocomplete},
+	{
+		clickFire: true,
+		max: 20,
+		matchContains: true
+	}
+);
 JS;
 		}
 	}
