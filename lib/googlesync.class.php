@@ -10,9 +10,9 @@ Zend_Loader::loadClass('Zend_Gdata_Feed');
 
 require_once 'groepen/groep.class.php';
 
-define('GOOGLE_CONTACTS_URL', 'http://www.google.com/m8/feeds/contacts/default/full');
-define('GOOGLE_GROUP_CONTACTS_URL', 'http://www.google.com/m8/feeds/contacts/default/base/');
-define('GOOGLE_GROUPS_URL', 'http://www.google.com/m8/feeds/groups/default/full');
+define('GOOGLE_CONTACTS_URL', 'https://www.google.com/m8/feeds/contacts/default/full');
+define('GOOGLE_GROUP_CONTACTS_URL', 'https://www.google.com/m8/feeds/contacts/default/base/');
+define('GOOGLE_GROUPS_URL', 'https://www.google.com/m8/feeds/groups/default/full');
 
 define('GOOGLE_CONTACTS_MAX_RESULTS', 1000);
 
@@ -570,7 +570,7 @@ class GoogleSync {
 			$_SESSION['google_token'] = Zend_Gdata_AuthSub::getAuthSubSessionToken($_GET['token']);
 		}
 		if (!isset($_SESSION['google_token'])) {
-			$scope = 'http://www.google.com/m8/feeds';
+			$scope = 'https://www.google.com/m8/feeds';
 			header('Location: ' . Zend_Gdata_AuthSub::getAuthSubTokenUri($self, $scope, 0, 1));
 			exit;
 		}
