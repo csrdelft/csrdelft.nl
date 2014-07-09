@@ -1,10 +1,11 @@
 <?php
 
 /**
- * Mails versturen vanuit csrdelft.nl.
+ * Mail.class.php
  *
- * Tijd om dit eens een beetje fatsonelijk te centraliseren.
- *
+ * @author C.S.R. Delft <pubcie@csrdelft.nl>
+ * @author P.W.G. Brussee <brussee@live.nl>
+ * 
  * Alle mailadressen in to of bcc zullen als de host niet syrinx is
  * worden aangepast naar pubcie@csrdelft.nl
  */
@@ -17,7 +18,7 @@ class Mail {
 	protected $bcc = array();
 	protected $type = 'html'; // plain or html
 	protected $charset = 'utf8';
-	protected $layout = 'simple';
+	protected $layout = 'letter';
 	protected $ubb = true;
 	protected $placeholders = array();
 
@@ -25,17 +26,6 @@ class Mail {
 		$this->onderwerp = $onderwerp;
 		$this->bericht = $bericht;
 		$this->addTo($to);
-	}
-
-	/**
-	 * Shorthand...
-	 *
-	 * bijvoorbeeld:
-	 * Mail::mail('pubcie@csrdelft.nl', 'Test123', "Hoi Pubcie,\nDit is een test.");
-	 */
-	public static function mail($to, $onderwerp, $bericht) {
-		$mail = new Mail($to, $onderwerp, $bericht);
-		return $mail->send();
 	}
 
 	public function getLayout() {
@@ -160,7 +150,7 @@ class Mail {
 		if ($this->onderwerp == '') {
 			throw new Exception('Geen onderwerp ingevuld');
 		}
-		if ($this->layout != '') {
+		if ($this->layout === 'letter') {
 			require_once 'MVC/view/MailTemplateView.class.php';
 			$view = new MailTemplateView($this);
 			$body = $view->getBody();
