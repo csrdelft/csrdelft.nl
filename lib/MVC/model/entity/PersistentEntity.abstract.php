@@ -52,7 +52,7 @@ abstract class PersistentEntity {
 		return static::$persistent_fields[$field_name];
 	}
 
-	public static function getPrimaryKeys() {
+	public static function getPrimaryKey() {
 		return static::$primary_keys;
 	}
 
@@ -65,7 +65,7 @@ abstract class PersistentEntity {
 	public function getValues($primary_keys_only = false) {
 		$values = array();
 		if ($primary_keys_only) {
-			$fields = $this->getPrimaryKeys();
+			$fields = $this->getPrimaryKey();
 		} else {
 			$fields = $this->getFields();
 		}
@@ -133,7 +133,7 @@ abstract class PersistentEntity {
 			$field->type = 'varchar(' . $max . ')';
 			$field->extra = '';
 		}
-		if (in_array($name, static::getPrimaryKeys())) {
+		if (in_array($name, static::getPrimaryKey())) {
 			$field->key = 'PRI';
 		} else {
 			$field->key = '';
@@ -156,7 +156,7 @@ abstract class PersistentEntity {
 			$database_fields = group_by_distinct('field', DatabaseAdmin::instance()->sqlDescribeTable(static::getTableName()));
 		} catch (Exception $e) {
 			if (endsWith($e->getMessage(), static::getTableName() . "' doesn't exist")) {
-				DatabaseAdmin::instance()->sqlCreateTable(static::getTableName(), $fields, static::getPrimaryKeys());
+				DatabaseAdmin::instance()->sqlCreateTable(static::getTableName(), $fields, static::getPrimaryKey());
 				return;
 			} else {
 				throw $e; // rethrow to controller

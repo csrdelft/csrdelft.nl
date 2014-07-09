@@ -77,7 +77,7 @@ class AgendaModel extends PersistenceModel {
 	}
 
 	public function getAgendaItem($itemId) {
-		return $this->retrieveByPrimaryKeys(array($itemId));
+		return $this->retrieveByPrimaryKey(array($itemId));
 	}
 
 	public function getiCalendarItems() {
@@ -153,7 +153,7 @@ class AgendaModel extends PersistenceModel {
 	}
 
 	public function removeAgendaItem($aid) {
-		return $this->deleteByPrimaryKeys(array($aid));
+		return $this->deleteByPrimaryKey(array($aid));
 	}
 
 }

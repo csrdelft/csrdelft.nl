@@ -51,7 +51,7 @@ class FunctiesModel extends PersistenceModel {
 	 * @return CorveeFunctie[]
 	 */
 	public function getFunctie($fid) {
-		return $this->retrieveByPrimaryKeys(array($fid));
+		return $this->retrieveByPrimaryKey(array($fid));
 	}
 
 	public function newFunctie() {

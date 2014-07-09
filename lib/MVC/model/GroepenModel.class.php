@@ -18,7 +18,7 @@ abstract class GroepenModel extends PersistenceModel {
 		if (!is_int($id) OR $id <= 0) {
 			throw new Exception('Invalid groep id');
 		}
-		$groep = $this->retrieveByPrimaryKeys(array($id));
+		$groep = $this->retrieveByPrimaryKey(array($id));
 		if (!$groep instanceof Groep) {
 			throw new Exception('Groep bestaat niet');
 		}

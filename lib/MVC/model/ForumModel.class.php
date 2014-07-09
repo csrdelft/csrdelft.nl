@@ -69,11 +69,11 @@ class ForumDelenModel extends PersistenceModel {
 	}
 
 	public function bestaatForumDeel($id) {
-		return $this->existsByPrimaryKeys(array($id));
+		return $this->existsByPrimaryKey(array($id));
 	}
 
 	public function getForumDeel($id) {
-		return $this->retrieveByPrimaryKeys(array($id));
+		return $this->retrieveByPrimaryKey(array($id));
 	}
 
 	public function getForumDelenById(array $ids) {
@@ -201,7 +201,7 @@ class ForumDradenGelezenModel extends PersistenceModel {
 	protected static $instance;
 
 	public function getWanneerGelezenDoorLid(ForumDraad $draad) {
-		return $this->retrieveByPrimaryKeys(array($draad->draad_id, LoginLid::instance()->getUid()));
+		return $this->retrieveByPrimaryKey(array($draad->draad_id, LoginLid::instance()->getUid()));
 	}
 
 	public function setWanneerGelezenDoorLid(ForumDraad $draad) {
@@ -396,7 +396,7 @@ class ForumDradenModel extends PersistenceModel implements Paging {
 	}
 
 	public function getForumDraad($id) {
-		$draad = $this->retrieveByPrimaryKeys(array($id));
+		$draad = $this->retrieveByPrimaryKey(array($id));
 		if (!$draad) {
 			throw new Exception('Forumdraad bestaat niet!');
 		}
@@ -620,7 +620,7 @@ class ForumPostsModel extends PersistenceModel implements Paging {
 	}
 
 	public function getForumPost($id) {
-		$post = $this->retrieveByPrimaryKeys(array($id));
+		$post = $this->retrieveByPrimaryKey(array($id));
 		if (!$post) {
 			throw new Exception('Forumpost bestaat niet!');
 		}

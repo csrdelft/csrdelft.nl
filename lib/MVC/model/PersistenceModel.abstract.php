@@ -81,22 +81,22 @@ abstract class PersistenceModel implements Persistence {
 	 * @return string last insert id
 	 */
 	public function exists(PersistentEntity $entity) {
-		return $this->existsByPrimaryKeys($entity->getValues(true));
+		return $this->existsByPrimaryKey($entity->getValues(true));
 	}
 
 	/**
 	 * Requires positional values.
 	 * 
-	 * @param array $primary_keys_values
+	 * @param array $primary_key_values
 	 * @return boolean primary key exists
 	 */
-	protected function existsByPrimaryKeys(array $primary_keys_values) {
+	protected function existsByPrimaryKey(array $primary_key_values) {
 		$orm = static::orm;
 		$where = array();
-		foreach ($orm::getPrimaryKeys() as $key) {
+		foreach ($orm::getPrimaryKey() as $key) {
 			$where[] = $key . ' = ?';
 		}
-		return $this->exist(implode(' AND ', $where), $primary_keys_values);
+		return $this->exist(implode(' AND ', $where), $primary_key_values);
 	}
 
 	/**
@@ -116,23 +116,23 @@ abstract class PersistenceModel implements Persistence {
 	 * @return PersistentEntity
 	 */
 	public function retrieve(PersistentEntity $entity) {
-		$entity = $this->retrieveByPrimaryKeys($entity->getValues(true));
+		$entity = $this->retrieveByPrimaryKey($entity->getValues(true));
 		return $entity;
 	}
 
 	/**
 	 * Requires positional values.
 	 * 
-	 * @param array $primary_keys_values
+	 * @param array $primary_key_values
 	 * @return PersistentEntity or FALSE on failure
 	 */
-	protected function retrieveByPrimaryKeys(array $primary_keys_values) {
+	protected function retrieveByPrimaryKey(array $primary_key_values) {
 		$orm = static::orm;
 		$where = array();
-		foreach ($orm::getPrimaryKeys() as $key) {
+		foreach ($orm::getPrimaryKey() as $key) {
 			$where[] = $key . ' = ?';
 		}
-		$result = Database::sqlSelect($orm::getFields(), $orm::getTableName(), implode(' AND ', $where), $primary_keys_values, null, null, 1);
+		$result = Database::sqlSelect($orm::getFields(), $orm::getTableName(), implode(' AND ', $where), $primary_key_values, null, null, 1);
 		return $result->fetchObject($orm, array($cast = true));
 	}
 
@@ -146,7 +146,7 @@ abstract class PersistenceModel implements Persistence {
 		$properties = $entity->getValues();
 		$where = array();
 		$params = array();
-		foreach ($entity::getPrimaryKeys() as $key) {
+		foreach ($entity::getPrimaryKey() as $key) {
 			$where[] = $key . ' = :W' . $key; // name parameters after column
 			$params[':W' . $key] = $properties[$key];
 			unset($properties[$key]); // do not update primary key
@@ -161,22 +161,22 @@ abstract class PersistenceModel implements Persistence {
 	 * @return boolean rows affected === 1
 	 */
 	public function delete(PersistentEntity $entity) {
-		return $this->deleteByPrimaryKeys($entity->getValues(true));
+		return $this->deleteByPrimaryKey($entity->getValues(true));
 	}
 
 	/**
 	 * Requires positional values.
 	 * 
-	 * @param array $primary_keys_values
+	 * @param array $primary_key_values
 	 * @return boolean rows affected === 1
 	 */
-	protected function deleteByPrimaryKeys(array $primary_keys_values) {
+	protected function deleteByPrimaryKey(array $primary_key_values) {
 		$orm = static::orm;
 		$where = array();
-		foreach ($orm::getPrimaryKeys() as $key) {
+		foreach ($orm::getPrimaryKey() as $key) {
 			$where[] = $key . ' = ?';
 		}
-		return 1 === Database::sqlDelete($orm::getTableName(), implode(' AND ', $where), $primary_keys_values, 1);
+		return 1 === Database::sqlDelete($orm::getTableName(), implode(' AND ', $where), $primary_key_values, 1);
 	}
 
 }
