@@ -15,6 +15,18 @@ try {
 	if (empty($class)) {
 		$class = 'CmsPagina';
 	}
+	// Toegang tot leden website dicht-timmeren
+	switch ($class) {
+		case 'CmsPagina':
+		case 'Forum':
+		case 'FotoAlbum':
+			break; // toegestaan voor iedereen
+		default: // alleen ingelode gebruikers
+			if (!LoginLid::mag('P_LOGGED_IN')) {
+				header('location: ' . CSR_ROOT);
+				exit;
+			}
+	}
 	$class .= 'Controller';
 
 	$request = Instellingen::get('stek', 'request');
