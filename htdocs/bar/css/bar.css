@@ -153,11 +153,11 @@ button.btn-bestel {
 }
 
 #ondersteRijKnoppen {
-    margin-top: 0px;
+    margin-top: 0;
 }
 
 button.btn-beneden {
-    margin-top: 0px;
+    margin-top: 0;
     width: 105px;
     height: 50px;
 }
@@ -172,7 +172,7 @@ button.btn-beneden {
 
 #saldoOverzicht {
     margin-top: 20px;
-    margin-bottom: 0px;
+    margin-bottom: 0;
     width: 208px;
 }
 
@@ -246,8 +246,8 @@ body {
 }
 
 div.row {
-    margin-right: 0px;
-    margin-left: 0px
+    margin-right: 0;
+    margin-left: 0
 }
 
 #laadKnoppen {

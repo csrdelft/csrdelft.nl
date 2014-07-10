@@ -34,16 +34,16 @@ ul.groepledenlijst{ width: 230px; float: right; padding: 10px 20px 20px 20px; ma
 	margin-left: 10px; 
 	padding: 1px 0; }
 .groepleden table.leden{ width: 100%; font-size: 11px;}
-.groepleden table.leden td{ padding: 0px 5px; text-align: left;}
+.groepleden table.leden td{ padding: 0 5px; text-align: left;}
 .groepleden table.leden input.functie{ width: 80px; }
-.groepleden .toonmeer{ display: block; padding: 0px 0px 10px 15px;}
+.groepleden .toonmeer{ display: block; padding: 0 0 10px 15px;}
 .groepleden .aanmelden { clear: left; padding: 5px 5px 4px; line-height: 1.6em;}
 .groepleden .aanmelden input.functie{ width: 160px; }
 .groepleden .aanmelden .pasfoto{ width: 50px; height: 67px; border: 1px solid grey; margin-left: 5px; }
 .groepleden .emails{ margin: 5px 10px;}
 
 
-#voorgangerOpvolger{ margin: 10px 0px; padding: 3px 20px; border-bottom: 1px solid black;}
+#voorgangerOpvolger{ margin: 10px 0; padding: 3px 20px; border-bottom: 1px solid black;}
 .vorigeGroep{ list-style-image: url(http://plaetjes.csrdelft.nl/groepen/up.png); }
 .volgendeGroep{ list-style-image: url(http://plaetjes.csrdelft.nl/groepen/down.png); }
 #groepAdmin{ float: right; margin: 10px ; }
@@ -57,7 +57,7 @@ ul.groepledenlijst{ width: 230px; float: right; padding: 10px 20px 20px 20px; ma
 .groepFormulier div.opmerking{ float: right; width: 440px; margin-bottom: 10px; }
 .groepFormulier div.opmerking#periode{ width: 280px; }
 .groepFormulier .extraknopjespreview { float: right; }
-.groepFormulier input.voorbeeld{ margin-top: 0px; }
+.groepFormulier input.voorbeeld{ margin-top: 0; }
 .groepFormulier div.preview{ width: 748px; }
 
 #groepenFormulier{ width: 600px; }

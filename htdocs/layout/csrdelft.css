@@ -40,10 +40,10 @@ a.external {
 	padding-right: 14px;
 }
 
-div{ margin: 0px; padding: 0px; }
+div{ margin: 0; padding: 0; }
 
 th{ text-align: left; }
-td{ vertical-align: top; padding: 0px; }
+td{ vertical-align: top; padding: 0; }
 ul, ol{ }
 li{margin: 0 0 0 15px;}
 li li{ font-size: 1em;}
@@ -117,7 +117,7 @@ ul.nobullets li{ list-style-type: none; }
 	width: 133px;
 	height: 133px;
 	border: 0;
-	margin: 4px 30px 0px;
+	margin: 4px 30px 0;
 }
 #menucenter{
 	float: left;
@@ -146,7 +146,7 @@ ul.nobullets li{ list-style-type: none; }
 
 /**** MAIN MENU ***************************************************************/
 #mainmenu {
-	line-height: 0px; /*Fix voor Opera*/
+	line-height: 0; /*Fix voor Opera*/
 	list-style-type: none;
 }
 #mainmenu li {
@@ -291,7 +291,7 @@ ul.nobullets li{ list-style-type: none; }
 }
 #login input{
 	padding: 1px;
-	margin: 1px 0px;
+	margin: 1px 0;
 	width: 125px;
 	_width: 85px; /*IE6 Fix*/
 	border: 1px solid #000;
@@ -354,7 +354,7 @@ ul.nobullets li{ list-style-type: none; }
 	color:  #162673;
 }
 #mainleft .block .item {
-	padding: 0px 5px; 
+	padding: 0 5px; 
 	font-size: 10px;
 	background-color: #f5f5f5;
 	border: 1px solid #b8b8b8;
@@ -389,7 +389,7 @@ ul.nobullets li{ list-style-type: none; }
 }
 
 /* Verjaardag in de zijbalk */
-#komende_pasfotos{ padding: 4px 0px;}
+#komende_pasfotos{ padding: 4px 0;}
 #komende_pasfotos .verjaardag{
 	position: relative;
 	float: left;
@@ -406,7 +406,7 @@ ul.nobullets li{ list-style-type: none; }
 	position: absolute;
 	display: block;
 	width: 100%;
-	bottom: 0px;
+	bottom: 0;
 	background-color: white; color: black;
 	font-size: 9px;
 	opacity:0.6;
@@ -471,7 +471,7 @@ div.visitekaartje img {
 	height: auto !important;
 }
 div.visitekaartje p {
-	margin: 8px 0px 0px 10px;
+	margin: 8px 0 0 10px;
 	color: #000 !important;
 }
 div.visitekaartje p a {
@@ -527,7 +527,7 @@ pre.pubcie_debug{
 table.query_table {
 	display: inline-block;
 	margin: 10px;
-	padding: 0px;
+	padding: 0;
 	border-collapse: collapse;
 	border: 1px solid black;
 }
@@ -658,7 +658,7 @@ div.courantArchiefJaar{
 /* Streeplijstgenereertool */
 form#streeplijst fieldset{ padding: 10px;  }
 form#streeplijst fieldset legend{ font-weight: bold; }
-form#streeplijst input, form#streeplijst label{ text-align: left; margin: 3px; padding: 0px; line-height: 1em;}
+form#streeplijst input, form#streeplijst label{ text-align: left; margin: 3px; padding: 0; line-height: 1em;}
 
 
 #eetplanLETOP{
@@ -714,7 +714,6 @@ form#streeplijst input, form#streeplijst label{ text-align: left; margin: 3px; p
 #mededelingen-top3block{
 	float: left;
 	margin: 0;
-	margin-right: 25px;
 	width: 400px;
 }
 #nieuwePeiling label{ clear: left; float: left; width: 150px;}
@@ -731,8 +730,8 @@ input, textarea, select{
 	font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
 }
 .Formulier * {
-	margin: 0px;
-	padding: 0px;
+	margin: 0;
+	padding: 0;
 	font-size: 1em;
 }
 .Formulier label{
@@ -873,7 +872,7 @@ ul.tabs a.active {
 	background-color: #0a338d;
 }
 div.generaties {
-	margin: 10px 0px;
+	margin: 10px 0;
 	padding: 3px 20px;
 }
 div.vorigeGroep {
@@ -894,7 +893,7 @@ div.pasfoto img.lidfoto {
 	width: 50px;
 	height: 67px;
 	border: 1px solid grey;
-	margin: 3px 0px 0px 3px;
+	margin: 3px 0 0 3px;
 }
 table.groepStats {
 	border-spacing: 0;
@@ -1076,7 +1075,7 @@ span.togglePasfoto:hover, a.postlink:hover{
 div.forumdeel-omschrijving{
 	text-align: left;
 	padding: 10px;
-	margin: 10px 0px;;
+	margin: 10px 0;;
 	background-color: #F5F5F5;
     border: 1px solid #B8B8B8;
 }

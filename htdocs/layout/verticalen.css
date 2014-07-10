@@ -6,7 +6,7 @@
 .kring, .geenkring{
 	float: left;
 	width: 144px;
-	padding: 2px 4px 0px 4px;
+	padding: 2px 4px 0 4px;
 }
 .kring:hover, .geenkring:hover{
 	background-color: #f1f1f1;

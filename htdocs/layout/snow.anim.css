@@ -7,25 +7,25 @@
 */
 
 @keyframes snow { 
-    0% { background-position: 0px 0px, 0px 0px, 0px 0px }
+    0% { background-position: 0 0, 0 0, 0 0 }
 
     100% { background-position: 500px 1000px, 400px 400px, 300px 300px }
 }
 
 @-moz-keyframes snow { 
-    0% { background-position: 0px 0px, 0px 0px, 0px 0px }
+    0% { background-position: 0 0, 0 0, 0 0 }
 
     100% { background-position: 500px 1000px, 400px 400px, 300px 300px }
 }
 
 @-webkit-keyframes snow { 
-    0% { background-position: 0px 0px, 0px 0px, 0px 0px }
+    0% { background-position: 0 0, 0 0, 0 0 }
 
     100% { background-position: 500px 1000px, 400px 400px, 300px 300px }
 }
 
 @-ms-keyframes snow { 
-    0% { background-position: 0px 0px, 0px 0px, 0px 0px }
+    0% { background-position: 0 0, 0 0, 0 0 }
 
     100% { background-position: 500px 1000px, 400px 400px, 300px 300px }
 }

@@ -12,12 +12,12 @@
 body{
     font-family: 'Parisienne', cursive;
     font-size: 12px;
-    margin: 0px 0px 20px 0px; padding: 0px ;
+    margin: 0 0 20px 0; padding: 0 ;
 }
 table{
-    border: 0px;
-    margin: 0px; padding: 0px;
-    margin-top: 0px;
+    border: 0;
+    margin: 0; padding: 0;
+    margin-top: 0;
     width: 100%
 }
 td{
@@ -27,43 +27,43 @@ td{
 }
 .zijKolom{
     width: 150px;
-    margin: 0px; padding: 0px;
+    margin: 0; padding: 0;
     vertical-align: top;
 
     background-repeat: repeat-y;
 }
 .hoofdKolom{
-    margin: 0px; 
-    padding: 23px 20px 0px 0px;
+    margin: 0; 
+    padding: 23px 20px 0 0;
     vertical-align: top;
 }
 img{
-    border: 0px;
+    border: 0;
 }
 h4{
     background-color: #E0A937;
     font-size: 15px;
-    margin: 10px 0px 0px 0px; padding: 5px 5px 5px 10px;
+    margin: 10px 0 0 0; padding: 5px 5px 5px 10px;
     font-family: 'Parisienne' cursive;
     color: black;
 }
 div.p{
     background-color: #FAFAFF;
-    margin: 0px 0px 0px 0px;
+    margin: 0 0 0 0;
     padding: 10px 5px 5px 10px;
     color: #000000;
     font-family: 'Parisienne' cursive;
     line-height: 1.4em;
 }
 .inhoud{
-    border: 0px;
+    border: 0;
     width: 100%;
     background-color: #FAFAFF;
-    margin: 0px 0px 15px 0px;
-    padding: 0px;
+    margin: 0 0 15px 0;
+    padding: 0;
 }
 .inhoudKolom{
-    margin: 0px 0px 10px 0px; padding: 5px 5px 5px 10px;
+    margin: 0 0 10px 0; padding: 5px 5px 5px 10px;
     font-size: 11px;
     vertical-align: top;
     width: 33%;
@@ -73,7 +73,7 @@ div.p{
     font-size: 11px;
 }
 ul{
-    margin: 0px 0px 0px 10px; padding: 0px 0px 0px 5px;
+    margin: 0 0 0 10px; padding: 0 0 0 5px;
     
 }
 .onderlijn{
@@ -95,7 +95,7 @@ a:active{
 	color:  #000000;
 }
 li{
-    margin: 0px 0px 0px 00px;
+    margin: 0 0 0 00px;
     color: #000000;
     font-size: 11px;
 }div.citaatContainer{

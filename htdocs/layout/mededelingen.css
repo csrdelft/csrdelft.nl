@@ -1,7 +1,7 @@
 /* nieuws */
 .nieuwsbericht, .nieuwsbericht-vast{
 	float: left;
-	margin: 0px 10px 5px 0px;
+	margin: 0 10px 5px 0;
 	padding: 8px 8px 8px 8px;
 	min-height: 200px; _height: 200px;
 	border-top: 1px solid black;
@@ -17,8 +17,8 @@
 .nieuwsbericht .informatie img{
 	margin-top: 3px;
 }
-.nieuwsplaatje{	margin: 0px 0px 0px 8px; float: right; border: 1px solid black;}
-.nieuwsbody{	margin: 0px 0px 0px 0px; padding: 0px 3px 5px 0px;}	
+.nieuwsplaatje{	margin: 0 0 0 8px; float: right; border: 1px solid black;}
+.nieuwsbody{	margin: 0 0 0 0; padding: 0 3px 5px 0;}	
 .nieuwstitel{	font-size: 1.3em; font-weight: bold; margin-bottom: 5px; text-align: left;}
 .nieuwstitel a{ color:  black;}
 .nieuwsbericht-vast{ height: 100px;	}
@@ -38,7 +38,7 @@
 #mededelingen-titel{
 	height: 20px;
 	width: 70%;
-	margin: 0px 0px 10px 0px;
+	margin: 0 0 10px 0;
 }
 .mededelingen-beheerlink{
 	width: 20%;
@@ -46,7 +46,7 @@
 	text-align: right;
 }
 .mededelingenlijst-block{
-	margin: 0px 10px 10px 0px;
+	margin: 0 10px 10px 0;
 	width: 300px;
 }
 .mededelingenlijst-block-titel{
@@ -71,7 +71,7 @@
 	background-color: #ffef7d;
 }
 .mededelingenlijst-block a{	color: black; }
-.mededelingenlijst-plaatje{ margin: 0px 5px 0px 0px; float: left; }
+.mededelingenlijst-plaatje{ margin: 0 5px 0 0; float: left; }
 
 .wachtgoedkeuring{
 	margin-top: 30px;
@@ -119,11 +119,11 @@
 	text-align: right;
 }
 .mededelingen_paginering a{
-	padding: 0px 5px 0px 5px;
+	padding: 0 5px 0 5px;
 }
 .mededelingen_paginering span.curpage{
 	font-weight: bold;
-	padding: 0px 5px 0px 5px;
+	padding: 0 5px 0 5px;
 }
 
 /* Mededelingen bewerken: */

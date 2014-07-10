@@ -1,8 +1,8 @@
 .floatR{ float: right; }
 .label{ float: left; width: 75px; font-size: 9px; color: #999; }
 .data{ margin-left: 75px; text-align: left;}
-.data li{ margin-left: 0px; }
-#profiel{ margin: 20px 0px 200px 0px; }
+.data li{ margin-left: 0; }
+#profiel{ margin: 20px 0 200px 0; }
 #profiel h1{ margin-bottom: 10px; }
 #profiel img.pasfoto{ border: 1px solid black; margin-left: 20px;}
 #profiel .knopjes{ margin-left: 20px; line-height: 2.5em;}
@@ -14,7 +14,7 @@
 	#profiel .gegevens{ margin-left: 20px; padding-left: 15px; border-left: 1px solid #0a338d; }
 	#profiel .half{ width: 270px; float: left;}
 
-#profiel .naam .status{ float: left; color: #aaa; width: 60px; padding: 0px 20px;}
+#profiel .naam .status{ float: left; color: #aaa; width: 60px; padding: 0 20px;}
 #profiel .naam h1{ padding-left: 10px; }
 #profiel .adres{ margin-left: 75px; text-align: left; }
 #profiel .gegevenszelf{ float: left; width: 250px; }
@@ -56,7 +56,7 @@ a.opvallend{ font-style: italic; }
 
 #wijzigstatus label {
 	width: 153px;
-	margin: 0px;
+	margin: 0;
 	float: left;
 }
 #wijzigstatus .lidgegevens {
@@ -64,7 +64,7 @@ a.opvallend{ font-style: italic; }
 	padding: 2px;
 }
 #wijzigstatus .novieten, #wijzigstatus .leden {
-	margin: 0px 0px 5px 167px;
+	margin: 0 0 5px 167px;
 }
 #statusForm input#field_postfix.FormField{
 	width: 100px;

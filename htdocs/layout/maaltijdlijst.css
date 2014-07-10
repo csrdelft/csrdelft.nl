@@ -8,15 +8,15 @@ body {
 	font-family: verdana;
 	font-size: 11px;
 	width: 920px;
-	margin: 0px;
+	margin: 0;
 }
 a {
 	text-decoration: none;
 	color: inherit;
 }
 h1, h3, p, ul {
-	margin: 0px;
-	padding: 0px;
+	margin: 0;
+	padding: 0;
 }
 h1, h3, p, ul {
 	padding-bottom: 5px;
@@ -44,7 +44,7 @@ table.aanmeldingen {
 }
 table.aanmeldingen td {
 	border: 1px solid black;
-	padding: 3px 0px 0px 10px;
+	padding: 3px 0 0 10px;
 	width: 240px;
 }
 table.aanmeldingen td.box {
@@ -100,7 +100,7 @@ div.visitekaartje img {
 	filter: alpha(opacity=100) !important;
 }
 div.visitekaartje p {
-	margin: 8px 0px 0px 10px;
+	margin: 8px 0 0 10px;
 	color: #000 !important;
 }
 div.visitekaartje p a {

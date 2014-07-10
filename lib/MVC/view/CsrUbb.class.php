@@ -729,7 +729,7 @@ HTML;
 				break;
 			default: $sClear = 'both';
 		}
-		return '<br style="height: 0px; clear: ' . $sClear . ';" />';
+		return '<br style="height: 0; clear: ' . $sClear . ';" />';
 	}
 
 	/**

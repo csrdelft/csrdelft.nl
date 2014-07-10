@@ -141,7 +141,7 @@ strtotime($post->laatst_bewerkt) > strtotime($draad->getWanneerGelezen())
 		{/if}
 
 		<tr>
-			<td colspan="5" style="padding: 5px 0px;">
+			<td colspan="5" style="padding: 5px 0;">
 				{$smarty.capture.navlinks}
 				{$smarty.capture.titel}
 			</td>

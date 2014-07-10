@@ -29,12 +29,12 @@ body {
 	background-color:#f1ddbc;
 } 
 
-h1 {font-family: rieslingregular;font-size:2em;color:#690f36;white-space: normal;margin: 0px;font-weight:normal}
-h2 {font-family: geosanslightregular;font-size:1.2em;white-space: normal;margin-bottom: 0px;margin-top:5px ;font-weight:bold;}
+h1 {font-family: rieslingregular;font-size:2em;color:#690f36;white-space: normal;margin: 0;font-weight:normal}
+h2 {font-family: geosanslightregular;font-size:1.2em;white-space: normal;margin-bottom: 0;margin-top:5px ;font-weight:bold;}
 h3 {font-family: geosanslightregular;font-size:1.2em;white-space: normal;margin-bottom: 5px;margin-top:15px ;font-weight:bold;}
 h4 {font-family: rieslingregular;font-size:2em;color:#690f36;white-space: normal;margin-bottom: 5px; margin-top:20px; font-weight:normal}
 h5 {font-family: geosanslightregular;font-size:0.7em; font-weight:lighter;margin:0}
-p {font-family: geosanslightregular;font-size:1em;white-space: normal;margin-top: 0px;margin-bottom: 10px;font-weight:normal}
+p {font-family: geosanslightregular;font-size:1em;white-space: normal;margin-top: 0;margin-bottom: 10px;font-weight:normal}
 
 input[type="text"], textarea {
 	background-color : #f1ddbc; 
@@ -53,7 +53,7 @@ a.knop {
     background-color: #690f36;
     font-family: geosanslightregular;
 	padding: 1px 5px;
-	margin: 10px 5px 0px 0px !important;
+	margin: 10px 5px 0 0 !important;
 	cursor: pointer;
 	text-decoration: underline;
 }
@@ -136,8 +136,8 @@ a.knop {
 #flamingo {
 	position:absolute;
 	overflow:hidden;
-	right:0px;
-	bottom:0px;
+	right: 0;
+	bottom: 0;
 	z-index:-1;
 
 }

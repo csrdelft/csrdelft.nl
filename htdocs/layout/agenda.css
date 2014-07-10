@@ -28,7 +28,7 @@ div#ical{
 	text-align: center;
 }
 div.maandnavigatie{
-	padding: 15px 0px;
+	padding: 15px 0;
 	text-align: center;
 }
 div.maandnavigatie h1{
@@ -48,7 +48,7 @@ table#maand tr td{
 	height: 100px; border: 1px solid #ddd;
 }
 table#maand tr td.dag{
-	padding: 0px;
+	padding: 0;
 	text-align: left;
 }
 table#maand tr td.dag a.toevoegen{
@@ -95,10 +95,10 @@ table#maand td div a.toevoegen{
 table#maand td ul{
 	clear: both;
 	list-style-type: none;
-	margin: 0px; padding: 0px;
+	margin: 0; padding: 0;
 }
 table#maand td ul li{
-	margin: 0px;
+	margin: 0;
 	padding: 4px 4px;
 	font-size: 10px;
 	line-height: 1.4em;
