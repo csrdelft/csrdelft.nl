@@ -315,6 +315,8 @@ htdocs/layout/js/jquery/jquery-ui.theme.css -text
 htdocs/layout/js/jquery/jquery-ui.theme.min.css -text
 htdocs/layout/js/jquery/jquery.js -text
 htdocs/layout/js/jquery/jquery.min.js -text
+htdocs/layout/js/jquery/plugins/jquery.autosize.js -text
+htdocs/layout/js/jquery/plugins/jquery.autosize.min.js -text
 htdocs/layout/js/jquery/plugins/jquery.hoverIntent-r7.min.js -text
 htdocs/layout/js/jquery/plugins/jquery.prettyPhoto-3.1.5.min.js -text
 htdocs/layout/js/jquery/plugins/jquery.scrollTo-1.4.3.1.min.js -text

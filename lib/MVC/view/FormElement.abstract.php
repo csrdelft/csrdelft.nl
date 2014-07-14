@@ -293,15 +293,14 @@ abstract class InputField implements FormElement, Validator {
 					return 'placeholder="' . $this->placeholder . '"';
 				}
 				break;
-			case 'rows':
-				if ($this->rows > 0) {
-					return 'rows="' . $this->rows . '"';
-					break;
-				}
-				break;
 			case 'maxlength':
 				if ($this->max_len > 0) {
 					return 'maxlength="' . $this->max_len . '"';
+				}
+				break;
+			case 'rows':
+				if ($this->rows > 0) {
+					return 'rows="' . $this->rows . '"';
 				}
 				break;
 			case 'autocomplete':
@@ -912,7 +911,7 @@ class TextareaField extends TextField {
 		echo $this->getLabel();
 		echo $this->getErrorDiv();
 
-		echo '<textarea' . $this->getInputAttribute(array('id', 'name', 'origvalue', 'class', 'disabled', 'rows', 'maxlength', 'placeholder', 'autocomplete', 'onchange', 'onclick')) . '>' . $this->value . '</textarea>';
+		echo '<textarea' . $this->getInputAttribute(array('id', 'name', 'origvalue', 'class', 'disabled', 'placeholder', 'maxlength', 'rows', 'autocomplete', 'onchange', 'onclick')) . '>' . $this->value . '</textarea>';
 
 		echo $this->getPreviewDiv();
 		echo '</div>';
@@ -931,9 +930,9 @@ class RequiredTextareaField extends TextareaField {
  */
 class AutoresizeTextareaField extends TextareaField {
 
-	public function __construct($name, $value, $description = null, $rows = 1, $max_len = null, $min_len = null) {
-		parent::__construct($name, $value, $description, $rows, $max_len, $min_len);
-		$this->css_classes[] = 'wantsAutoresize';
+	public function __construct($name, $value, $description = null, $rows = 2, $max_len = null, $min_len = null) {
+		parent::__construct($name, $value, $description, $max_len, $min_len);
+		$this->css_classes[] = 'textarea-transition';
 	}
 
 	/**
@@ -941,34 +940,7 @@ class AutoresizeTextareaField extends TextareaField {
 	 * gebruikt autoresize eigenschappen van de div om de hoogte te bepalen voor de textarea.
 	 */
 	public function getJavascript() {
-		//FIXME: incompatible with repeated form_ready_init
-		return <<<JS
-$('.wantsAutoresize', form).each(function(){
-	var textarea = $(this);
-	var fieldname = textarea.attr('id').substring(6);
-	var hiddenDiv = $(document.createElement('div'));
-	var content = null;
-
-	hiddenDiv.addClass('hiddendiv '+fieldname)
-		.css({
-			font-size: textarea.css('font-size'),
-			font-weight: textarea.css('font-size'),
-			width: textarea.css('width'),
-			word-break: "break-all",
-			visibility: "hidden"
-		});
-	$('body').append(hiddenDiv);
-
-	textarea.unbind('keyup.preview');
-	textarea.bind('keyup.preview', function(event) {
-		content = textarea.val();
-		content = content.replace('<', 'X');
-		content = content.replace(/\\n/g, '<br>');
-		hiddenDiv.html(content+'<br><br>');
-		textarea.css('height', hiddenDiv.height());
-	});
-});
-JS;
+		return "$('#" . $this->getId() . "').autosize()";
 	}
 
 }

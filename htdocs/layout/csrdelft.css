@@ -769,7 +769,6 @@ input, textarea, select{
 }
 .Formulier textarea{
 	width: 250px;
-	height: 150px;
 }
 .Formulier .InputField, .Formulier h3, .Formulier .password{
 	clear: both;
