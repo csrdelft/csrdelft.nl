@@ -24,7 +24,7 @@
 						{if $profiel->getStatus()=='S_NOVIET' AND LoginLid::mag('groep:novcie')}
 						<a href="/communicatie/profiel/{$profiel->getUid()}/novietBewerken" class="knop"><img src="{$CSR_PICS}/forum/bewerken.png" title="Bewerk dit profiel" />Noviet bewerken</a><br />
 						{/if}
-					<a href="/communicatie/profiel/{$profiel->getUid()}/addToGoogleContacts/" class="knop" title="{*if $profiel->isInGoogleContacts()}Er bestaat al een contact met deze naam in je Google-contacts. Klik om te updaten.{else*}Voeg dit profiel toe aan mijn google adresboek{*/if*}"><img src="http://code.google.com/favicon.ico" /></a>
+					<a href="/communicatie/profiel/{$profiel->getUid()}/addToGoogleContacts/" class="knop" title="{*if $profiel->isInGoogleContacts()}Er bestaat al een contact met deze naam in je Google-contacts. Klik om te updaten.{else*}Voeg dit profiel toe aan mijn google adresboek{*/if*}"><img src="{$CSR_PICS}/knopjes/google.ico" /></a>
 					<br />
 				</div>
 			</div>

@@ -62,7 +62,7 @@ class LedenlijstContent extends TemplateView {
 			} else {
 				$url = Instellingen::get('stek', 'request') . '?addToGoogle=true';
 			}
-			echo '<a href="' . $url . '" class="knop" style="float: right" title="Huidige selectie exporteren naar Google Contacts" onclick="return confirm(\'Weet u zeker dat u deze ' . $this->model->count() . ' leden wilt importeren in uw Google-contacts?\')"><img src="http://code.google.com/favicon.ico" alt="google"/></a>';
+			echo '<a href="' . $url . '" class="knop" style="float: right" title="Huidige selectie exporteren naar Google Contacts" onclick="return confirm(\'Weet u zeker dat u deze ' . $this->model->count() . ' leden wilt importeren in uw Google-contacts?\')"><img src="' . CSR_PICS . '/knopjes/google.ico" alt="google"/></a>';
 		}
 		echo SimpleHTML::getMelding();
 		echo '<h1>' . (LoginLid::instance()->getLid()->isOudlid() ? 'Oud-leden en l' : 'L') . 'edenlijst </h1>';

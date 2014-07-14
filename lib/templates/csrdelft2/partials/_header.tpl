@@ -10,7 +10,7 @@
 		<link rel="stylesheet" href="{$sheet.naam}?{$sheet.datum}" type="text/css" />
 	{/foreach}
 
-	<link rel="shortcut icon" href="http://plaetjes.csrdelft.nl/layout/favicon.ico">
+	<link rel="shortcut icon" href="{$CSR_PICS}/layout/favicon.ico" />
 
 	{foreach from=$view->getScripts() item=script}
 		<script type="text/javascript" src="{$script.naam}?{$script.datum}"></script>
