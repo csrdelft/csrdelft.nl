@@ -87,7 +87,7 @@ class AgendaItemForm extends PopupForm {
 		}
 
 		$fields['titel'] = new RequiredTextField('titel', $item->titel, 'Titel');
-		$fields['titel']->suggestions = array('Kring', 'Lezing', 'Werkgroep', 'Eetplan', 'Borrel', 'Alpha-avond');
+		$fields['titel']->setSuggestions(array('Kring', 'Lezing', 'Werkgroep', 'Eetplan', 'Borrel', 'Alpha-avond'));
 		$fields['datum'] = new DatumField('datum', date('Y-m-d', $item->getBeginMoment()), 'Datum', date('Y') + 5, date('Y') - 5);
 
 		$html = '<div id="tijden" class="InputField"><label>Standaard tijden</label>';
