@@ -100,6 +100,7 @@ function forumBewerken(postId) {
 			bewerkForm += '</form>';
 			bewerkDiv.innerHTML = bewerkForm;
 			document.getElementById('forumBewerkBericht').value = http.responseText;
+			$('#forumBewerkBericht').autosize();
 			//invoerveldjes van het normale toevoegformulier even uitzetten.
 			document.getElementById('forumBericht').disabled = true;
 			document.getElementById('forumOpslaan').disabled = true;
