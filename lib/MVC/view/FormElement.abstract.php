@@ -903,7 +903,7 @@ class TextareaField extends TextField {
 	public function __construct($name, $value, $description = null, $rows = 3, $max_len = null, $min_len = null) {
 		parent::__construct($name, $value, $description, $max_len, $min_len);
 		$this->rows = (int) $rows;
-		$this->css_classes[] = 'textarea-transition';
+		$this->css_classes[] = 'AutoSize textarea-transition';
 	}
 
 	public function view() {
@@ -945,9 +945,8 @@ class UbbPreviewField extends TextareaField {
 	public function getPreviewDiv() {
 		return <<<HTML
 <div style="float: right;">
-	<a style="float: right;" class="knop" onclick="$('#ubbhulpverhaal').toggle();" title="Opmaakhulp weergeven">Opmaak</a>
-	&nbsp;
 	<input type="button" value="Voorbeeld" onclick="ubbPreview('{$this->getId()}', '{$this->getName()}Preview');"/>
+	&nbsp;<a class="knop" onclick="$('#ubbhulpverhaal').toggle();" title="Opmaakhulp weergeven">Opmaak</a>
 </div>
 <br />
 <div id="{$this->getName()}Preview" class="preview"></div>
