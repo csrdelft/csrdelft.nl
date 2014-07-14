@@ -923,7 +923,7 @@ class TextareaField extends TextField {
 	 * gebruikt autoresize eigenschappen van de div om de hoogte te bepalen voor de textarea.
 	 */
 	public function getJavascript() {
-		return "$('#" . $this->getId() . "').autosize()";
+		return "$('#" . $this->getId() . "').autosize();";
 	}
 
 }

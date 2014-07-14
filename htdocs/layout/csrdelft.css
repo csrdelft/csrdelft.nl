@@ -768,7 +768,7 @@ input, textarea, select{
 	vertical-align: middle;
 }
 .Formulier textarea{
-	width: 250px;
+	width: 490px;
 }
 .Formulier .InputField, .Formulier h3, .Formulier .password{
 	clear: both;
