@@ -329,9 +329,8 @@ abstract class InputField implements FormElement, Validator {
 		echo $this->getDiv();
 		echo $this->getLabel();
 		echo $this->getErrorDiv();
-		echo '<input type="text"' . $this->getInputAttribute(array('id', 'name', 'class', 'value', 'origvalue', 'disabled', 'maxlength', 'placeholder', 'autocomplete', 'onchange', 'onclick')) . ' />';
 		echo $this->getPreviewDiv();
-		//afsluiten van de div om de hele tag heen.
+		echo '<input type="text"' . $this->getInputAttribute(array('id', 'name', 'class', 'value', 'origvalue', 'disabled', 'maxlength', 'placeholder', 'autocomplete', 'onchange', 'onclick')) . ' />';
 		echo '</div>';
 	}
 
@@ -911,10 +910,8 @@ class TextareaField extends TextField {
 		echo $this->getDiv();
 		echo $this->getLabel();
 		echo $this->getErrorDiv();
-
-		echo '<textarea' . $this->getInputAttribute(array('id', 'name', 'origvalue', 'class', 'disabled', 'placeholder', 'maxlength', 'rows', 'autocomplete', 'onchange', 'onclick')) . '>' . $this->value . '</textarea>';
-
 		echo $this->getPreviewDiv();
+		echo '<textarea' . $this->getInputAttribute(array('id', 'name', 'origvalue', 'class', 'disabled', 'placeholder', 'maxlength', 'rows', 'autocomplete', 'onchange', 'onclick')) . '>' . $this->value . '</textarea>';
 		echo '</div>';
 	}
 
@@ -948,20 +945,21 @@ class UbbPreviewField extends TextareaField {
 	public function getPreviewDiv() {
 		return <<<HTML
 <div style="float: right;">
-	<br />
 	<a style="float: right;" class="knop" onclick="$('#ubbhulpverhaal').toggle();" title="Opmaakhulp weergeven">Opmaak</a>
-	<br /><br />
+	&nbsp;
 	<input type="button" value="Voorbeeld" onclick="ubbPreview('{$this->getId()}', '{$this->getName()}Preview');"/>
 </div>
+<br />
 <div id="{$this->getName()}Preview" class="preview"></div>
 HTML;
 	}
 
 	public function getJavascript() {
+		$js = parent::getJavascript();
 		if (!$this->previewOnEnter) {
-			return '';
+			return $js;
 		}
-		return <<<JS
+		return $js . <<<JS
 $('#{$this->getId()}', form).unbind('keyup.preview');
 $('#{$this->getId()}', form).bind('keyup.preview', function(event) {
 	if(event.keyCode === 13) { //enter
