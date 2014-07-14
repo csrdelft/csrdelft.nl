@@ -1110,7 +1110,7 @@ class BewerkBoek extends Boek {
 
 }
 
-class TitelField extends RequiredAutoresizeTextField {
+class TitelField extends RequiredTextField {
 
 	public function __construct($name, $value, $description = null, $max_len = 255, $placeholder = null) {
 		parent::__construct($name, $value, $description, $max_len, $placeholder);
