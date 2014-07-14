@@ -31,7 +31,7 @@
 					<a style="float: right;" class="knop" onclick="$('#ubbhulpverhaal').toggle();" title="Opmaakhulp weergeven">Opmaak</a>
 					<a style="float: right; margin-right: 3px;" class="knop" onclick="vergrootTextarea('forumBericht', 10)" title="Vergroot het invoerveld"><div class="arrows">&uarr;&darr;</div>&nbsp;&nbsp;&nbsp;</a>
 
-					<input type="submit" name="submit" value="Opslaan" />
+					<input type="submit" name="submit" value="Opslaan" id="forumOpslaan" />
 					<input type="button" value="Voorbeeld" id="forumVoorbeeld" onclick="ubbPreview('forumBericht', 'berichtPreview')"/>
 				</div>
 			</fieldset>

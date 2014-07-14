@@ -14,7 +14,7 @@ class LidInstellingenView extends TemplateView {
 
 	public function view() {
 		$this->smarty->display('MVC/instellingen/lidinstellingen_page.tpl');
-		echo '<form id="form" action="/instellingen/opslaan" method="post"><div id="tabs" style="width: 700px;"><ul>';
+		echo '<form id="form" action="/instellingen/opslaan" method="post" class="Formulier"><div id="tabs" style="width: 700px;"><ul>';
 		foreach (array_keys($this->model->getInstellingen()) as $module) {
 			echo '<li><a href="#tabs-' . $module . '">' . ucfirst($module) . '</a></li>';
 		}

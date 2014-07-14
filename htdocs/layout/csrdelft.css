@@ -716,6 +716,9 @@ input, textarea, select{
 	padding: 0;
 	font-size: 1em;
 }
+.Formulier input, .Formulier textarea, .Formulier select{
+	padding: 2px;
+}
 .Formulier label{
 	padding-left: 5px;
 	float: left;
@@ -730,26 +733,18 @@ input, textarea, select{
 	position: absolute;
 	margin-left: -25px;
 }
-.Formulier input[type="file"]{
-	border: none;
-}
-.Formulier .UploadOptie{
-	min-height: 2em;
-}
-.Formulier .UploadKeuze{
-	margin-left: 150px;
-	margin-top: -20px;
-}
 .Formulier input[type="text"]{
 	width: 250px;
 }
 .Formulier input[type="radio"]{
 	vertical-align: middle;
 }
+.Formulier input[type="file"]{
+	border: none;
+}
 .Formulier textarea{
 	width: 490px;
 	margin: 4px;
-	padding: 2px;
 }
 .Formulier .AutoSize{
 	resize: none;
@@ -771,6 +766,13 @@ input, textarea, select{
 .Formulier .FormButtons{
 	text-align: right;
 	margin-top: 25px;
+}
+.Formulier .UploadOptie{
+	min-height: 2em;
+}
+.Formulier .UploadKeuze{
+	margin-left: 150px;
+	margin-top: -20px;
 }
 .Formulier .UBBpreview{
 	float: left;
