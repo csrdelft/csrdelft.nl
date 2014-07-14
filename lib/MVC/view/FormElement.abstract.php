@@ -30,7 +30,7 @@
  * 		* TelefoonField				Telefoonnummers
  * 		* TextareaField					Textarea
  * 			- UbbPreviewField			Textarea met ubb voorbeeld 
- * 			- AutoresizeTextareaField	Textarea die automagisch uitbreidt bij typen
+ * 			- TextareaField	Textarea die automagisch uitbreidt bij typen
  *  	* NickField					Nicknames
  *  	* DuckField					Ducknames
  *  	* UidField					Uid's  met preview
@@ -897,13 +897,14 @@ class TelefoonField extends TextField {
 }
 
 /**
- * Een TextField levert een textarea.
+ * Een Textarea die groter wordt als de inhoud niet meer in het veld past.
  */
 class TextareaField extends TextField {
 
-	public function __construct($name, $value, $description = null, $rows = 5, $max_len = null, $min_len = null) {
+	public function __construct($name, $value, $description = null, $rows = 3, $max_len = null, $min_len = null) {
 		parent::__construct($name, $value, $description, $max_len, $min_len);
 		$this->rows = (int) $rows;
+		$this->css_classes[] = 'textarea-transition';
 	}
 
 	public function view() {
@@ -917,24 +918,6 @@ class TextareaField extends TextField {
 		echo '</div>';
 	}
 
-}
-
-class RequiredTextareaField extends TextareaField {
-
-	public $notnull = true;
-
-}
-
-/**
- * Een Textarea die groter wordt als de inhoud niet meer in het veld past.
- */
-class AutoresizeTextareaField extends TextareaField {
-
-	public function __construct($name, $value, $description = null, $rows = 2, $max_len = null, $min_len = null) {
-		parent::__construct($name, $value, $description, $max_len, $min_len);
-		$this->css_classes[] = 'textarea-transition';
-	}
-
 	/**
 	 * Maakt een verborgen div met dezelfde eigenschappen als de textarea en
 	 * gebruikt autoresize eigenschappen van de div om de hoogte te bepalen voor de textarea.
@@ -945,7 +928,7 @@ class AutoresizeTextareaField extends TextareaField {
 
 }
 
-class RequiredAutoresizeTextField extends AutoresizeTextareaField {
+class RequiredTextareaField extends TextareaField {
 
 	public $notnull = true;
 
@@ -954,7 +937,7 @@ class RequiredAutoresizeTextField extends AutoresizeTextareaField {
 /**
  * Textarea met een ubb-preview erbij.
  */
-class UbbPreviewField extends AutoresizeTextareaField {
+class UbbPreviewField extends TextareaField {
 
 	public $previewOnEnter = false;
 

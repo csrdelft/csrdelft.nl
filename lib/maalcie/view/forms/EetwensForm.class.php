@@ -11,7 +11,7 @@
 class EetwensForm extends InlineForm {
 
 	public function __construct() {
-		parent::__construct(null, 'eetwens-form', Instellingen::get('taken', 'url') . '/eetwens', new AutoresizeTextareaField('eetwens', CorveeVoorkeurenModel::getEetwens(LoginLid::instance()->getLid())), true);
+		parent::__construct(null, 'eetwens-form', Instellingen::get('taken', 'url') . '/eetwens', new TextareaField('eetwens', CorveeVoorkeurenModel::getEetwens(LoginLid::instance()->getLid())), true);
 	}
 
 }

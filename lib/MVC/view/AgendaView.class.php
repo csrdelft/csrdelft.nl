@@ -127,7 +127,7 @@ function setTijd(a, b, c, d) {
 		$fields['u'] = new TextField('link', $item->link, 'Link');
 		$fields['u']->title = 'URL als er op de titel geklikt wordt';
 
-		$fields['b'] = new AutoresizeTextareaField('beschrijving', $item->beschrijving, 'Beschrijving');
+		$fields['b'] = new TextareaField('beschrijving', $item->beschrijving, 'Beschrijving');
 		$fields['b']->title = 'Extra info als de cursor boven de titel gehouden wordt';
 
 		$fields['src'] = new SubmitResetCancel();
