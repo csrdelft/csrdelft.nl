@@ -3835,7 +3835,7 @@ lib/templates/MVC/layout/pauper.tpl -text
 lib/templates/MVC/layout/ubbhulp.tpl -text
 lib/templates/MVC/maalcie/functie/beheer_functie_lijst.tpl -text
 lib/templates/MVC/maalcie/functie/beheer_functies.tpl -text
-lib/templates/MVC/mail/layout/simple_layout.tpl -text
+lib/templates/MVC/mail/layout/letter.tpl -text
 lib/templates/MVC/mail/lidafgeleendebiebboeken.mail -text
 lib/templates/MVC/mail/lidafmeldingfisci.mail -text
 lib/templates/MVC/mail/nieuwwachtwoord.mail -text

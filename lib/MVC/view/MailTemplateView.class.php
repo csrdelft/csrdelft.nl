@@ -14,7 +14,7 @@ class MailTemplateView extends TemplateView {
 
 	public function getBody() {
 		$this->smarty->assign('body', $this->model->getBody());
-		return $this->smarty->fetch('MVC/mail/layout/' . $this->model->getLayout() . '_layout.tpl');
+		return $this->smarty->fetch('MVC/mail/layout/' . $this->model->getLayout() . '.tpl');
 	}
 
 	public function view() {
