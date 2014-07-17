@@ -3,40 +3,40 @@
  */
 $(function () {
 
-	/*************************************************************************************************/
-	/* Clock
-	/*************************************************************************************************/
+    /*************************************************************************************************/
+    /* Clock
+     /*************************************************************************************************/
 
-	$("#clock").each(function() {
-	
-		function addLeading(number) {
-			
-			if((number + "").length == 2)
-				return number;
-				
-			return "0" + number;
-			
-		}
-	
-		function update() {
-		
-			var currentDate = new Date();
-			$("#clock").html(
-				addLeading(currentDate.getHours()) + ":" +
-				addLeading(currentDate.getMinutes()) + ":" +
-				addLeading(currentDate.getSeconds())
-			);
-		
-		}
-		
-		update();
-		setInterval(update, 1000);
-	
-	});
-	
-	/*************************************************************************************************/
-	/* End Clock
-	/*************************************************************************************************/
+    $("#clock").each(function () {
+
+        function addLeading(number) {
+
+            if ((number + "").length == 2)
+                return number;
+
+            return "0" + number;
+
+        }
+
+        function update() {
+
+            var currentDate = new Date();
+            $("#clock").html(
+                    addLeading(currentDate.getHours()) + ":" +
+                    addLeading(currentDate.getMinutes()) + ":" +
+                    addLeading(currentDate.getSeconds())
+            );
+
+        }
+
+        update();
+        setInterval(update, 1000);
+
+    });
+
+    /*************************************************************************************************/
+    /* End Clock
+     /*************************************************************************************************/
 
     /**
      * Deze persoon is geselecteerd, dit wordt oa. gebruikt bij de invoer van bestellingen, inleg en laden van de bestellingen van die persoon.
@@ -61,38 +61,40 @@ $(function () {
     $.extend($.tablesorter.themes.bootstrap, {
         // these classes are added to the table. To see other table classes available,
         // look here: http://twitter.github.com/bootstrap/base-css.html#tables
-        table      : 'table table-bordered',
-        caption    : 'caption',
-        header     : 'bootstrap-header', // give the header a gradient background
-        footerRow  : '',
+        table: 'table table-bordered',
+        caption: 'caption',
+        header: 'bootstrap-header', // give the header a gradient background
+        footerRow: '',
         footerCells: '',
-        icons      : '', // add "icon-white" to make them white; this icon class is added to the <i> in the header
-        sortNone   : 'bootstrap-icon-unsorted',
-        sortAsc    : 'icon-chevron-up glyphicon glyphicon-chevron-up',     // includes classes for Bootstrap v2 & v3
-        sortDesc   : 'icon-chevron-down glyphicon glyphicon-chevron-down', // includes classes for Bootstrap v2 & v3
-        active     : '', // applied when column is sorted
-        hover      : '', // use custom css here - bootstrap class may not override it
-        filterRow  : '', // filter row class
-        even       : '', // odd row zebra striping
-        odd        : ''  // even row zebra striping
+        icons: '', // add "icon-white" to make them white; this icon class is added to the <i> in the header
+        sortNone: 'bootstrap-icon-unsorted',
+        sortAsc: 'icon-chevron-up glyphicon glyphicon-chevron-up',     // includes classes for Bootstrap v2 & v3
+        sortDesc: 'icon-chevron-down glyphicon glyphicon-chevron-down', // includes classes for Bootstrap v2 & v3
+        active: '', // applied when column is sorted
+        hover: '', // use custom css here - bootstrap class may not override it
+        filterRow: '', // filter row class
+        even: '', // odd row zebra striping
+        odd: ''  // even row zebra striping
     });
     $("#besteLijstBeheer").tablesorter({
-        theme : "bootstrap",
+        theme: "bootstrap",
         widthFixed: true,
-        sortList: [[1,1]],
-        headerTemplate : '{content} {icon}', // new in v2.7. Needed to add the bootstrap icon!
+        sortList: [
+            [1, 1]
+        ],
+        headerTemplate: '{content} {icon}', // new in v2.7. Needed to add the bootstrap icon!
 
         // widget code contained in the jquery.tablesorter.widgets.js file
         // use the zebra stripe widget if you plan on hiding any rows (filter widget)
-        widgets : [ "uitheme", "zebra" ],
+        widgets: [ "uitheme", "zebra" ],
 
-        widgetOptions : {
+        widgetOptions: {
             // using the default zebra striping class name, so it actually isn't included in the theme variable above
             // this is ONLY needed for bootstrap theming if you are using the filter widget, because rows are hidden
-            zebra : ["even", "odd"],
+            zebra: ["even", "odd"],
 
             // reset filters button
-            filter_reset : ".reset"
+            filter_reset: ".reset"
 
             // set the uitheme widget to use the bootstrap theme class names
             // this is no longer required, if theme is set
@@ -115,8 +117,8 @@ $(function () {
                 persoon.saldo = 1 * data;
             });
             selectedPerson = persoon;
-			
-			zetBericht("Geselecteerde persoon: " + naam + " | Saldo: " + saldoStr(persoon.saldo), persoon.saldo >= 0 ? 'success' : 'danger');
+
+            zetBericht("Geselecteerde persoon: " + naam + " | Saldo: " + saldoStr(persoon.saldo), persoon.saldo >= 0 ? 'success' : 'danger');
 
             $("#invoerveld").trigger("click");
             $("#besteLijstBeheerLaadPersoon").html("Laad bestellingen van: " + naam);
@@ -183,17 +185,17 @@ $(function () {
             $("#bestelLijst" + (teller % 3 + 1)).append("<li class=" + key + ">" + aantal + "&#09" + producten[key].beschrijving + "</li>");
             teller++;
         }
-		
-		// Add onclick remove
-		$("#bestelLijstDiv li").click(function() {
-		
-			var key = $(this).attr("class");
-			delete bestelLijst[key];
-						
-			zetBestelLijstGoed();
-		
-		});
-		
+
+        // Add onclick remove
+        $("#bestelLijstDiv li").click(function () {
+
+            var key = $(this).attr("class");
+            delete bestelLijst[key];
+
+            zetBestelLijstGoed();
+
+        });
+
         if (oudeBestelling) {
 
         }
@@ -220,25 +222,25 @@ $(function () {
         if (saldo > -100 && saldo < 0) return "€-0," + achterKomma;
         return "€" + (saldo - (saldo % 100)) / 100 + "," + achterKomma;
     }
-	
-	function zetBericht(bericht, type) {
-		$("#waarschuwing").removeClass().addClass("alert").addClass("alert-" + type).html(bericht);
-	}
+
+    function zetBericht(bericht, type) {
+        $("#waarschuwing").removeClass().addClass("alert").addClass("alert-" + type).html(bericht);
+    }
 
     function zetSucces(bericht) {
-		zetBericht(bericht, 'success');
+        zetBericht(bericht, 'success');
     }
 
     function zetWaarschuwing(bericht) {
-		zetBericht(bericht, 'warning');
+        zetBericht(bericht, 'warning');
     }
 
     function zetFaal(bericht) {
-		zetBericht(bericht, 'danger');
+        zetBericht(bericht, 'danger');
     }
 
     function zetInfo(bericht) {
-		zetBericht(bericht, 'info');
+        zetBericht(bericht, 'info');
     }
 
     var personen = {};
@@ -261,7 +263,6 @@ $(function () {
     })
         .done(function (data) {
             productenTemp = $.parseJSON(data);
-            //console.log(productenTemp);
             var sorteerbaar = [];
             $.each(productenTemp, function () {
                 sorteerbaar.push([this, this.prioriteit]);
@@ -375,16 +376,6 @@ $(function () {
         });
     });
 
-    if (beheer) {
-        $.each(producten, function (product) {
-            $("#productBeheerLijst").append("<li class='list-group-item' id='productBeheerLijst" + product.productId + "'>" + product.beschrijving + "</li>");
-            $("#productBeheerLlijst" + product.productId).click(setProduct(product));
-        })
-
-        function setProduct(product) {
-            //todo
-        }
-    }
 
     $("#knopCancel").click(cancel);
 
@@ -482,7 +473,7 @@ $(function () {
         $("#eenPersoon").removeClass("btn-primary");
     })
 
-    $(".clearKruisje").click(function(){
+    $(".clearKruisje").click(function () {
         $(this).prev("input").val("");
     })
 
@@ -508,6 +499,16 @@ $(function () {
         }
     });
 
+    $("#laadProducten").click(function () {
+        $.each(producten, function (id) {
+            product = producten[id];
+            $("#productBeheerLijst").append("<li class='list-group-item' id='productBeheerLijst" + product.productId + "'>" + product.beschrijving + "</li>");
+            $("#productBeheerLijst" + product.productId).click(setProduct(product));
 
+            function setProduct(product) {
+
+            }
+        })
+    });
 
 });

@@ -40,6 +40,7 @@ htdocs/android/get_user.php -text
 htdocs/android/get_userlist.php -text
 htdocs/android/login.php -text
 htdocs/bar/ajax.php -text
+htdocs/bar/beheer.php -text
 htdocs/bar/css/bar.css -text
 htdocs/bar/css/bootstrap-theme.css -text
 htdocs/bar/css/bootstrap-theme.css.map -text
@@ -56,9 +57,11 @@ htdocs/bar/index.php -text
 htdocs/bar/js/bootstrap-datepicker.js -text
 htdocs/bar/js/bootstrap.js -text
 htdocs/bar/js/bootstrap.min.js -text
+htdocs/bar/js/bootstrapValidator.min.js -text
 htdocs/bar/js/jquery.tablesorter.min.js -text
 htdocs/bar/js/jquery.tablesorter.widgets.min.js -text
 htdocs/bar/js/myscript.js -text
+htdocs/bar/js/nl_NL.js -text
 htdocs/bot/.htaccess.sample -text
 htdocs/bot/cmnd.php -text
 htdocs/communicatie/.htaccess -text

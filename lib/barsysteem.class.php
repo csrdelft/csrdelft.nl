@@ -34,7 +34,7 @@ class Barsysteem
 
     function getProducten()
     {
-        $terug = $this->db->query("SELECT * FROM socCieProduct WHERE status = '1' ORDER BY prioriteit DESC");
+        $terug = $this->db->query("SELECT id, prijs, btw, beschrijving, prioriteit, alcohol FROM socCieProduct as P JOIN socCiePrijs as R ON P.id=R.productId WHERE status = '1' AND CURRENT_TIMESTAMP<tot AND CURRENT_TIMESTAMP>van ORDER BY prioriteit DESC");
         $result = array();
         foreach ($terug as $row) {
             $product = array();
@@ -52,20 +52,28 @@ class Barsysteem
     function verwerkBestelling($data)
     {
         $this->db->beginTransaction();
-        $q = $this->db->prepare("UPDATE socCieKlanten SET saldo = saldo - :bestelTotaal WHERE socCieId=:socCieId;");
-        $q->bindValue(":bestelTotaal", $data->bestelTotaal, PDO::PARAM_INT);
+
+        $q = $this->db->prepare("INSERT INTO socCieBestelling (socCieId) VALUES (:socCieId);");
         $q->bindValue(":socCieId", $data->persoon->socCieId, PDO::PARAM_INT);
         $q->execute();
-        $q = $this->db->prepare("INSERT INTO socCieBestelling (socCieId, totaal) VALUES ( :socCieId, :bestelTotaal);");
-        $q->bindValue(":socCieId", $data->persoon->socCieId, PDO::PARAM_INT);
-        $q->bindValue(":bestelTotaal", $data->bestelTotaal, PDO::PARAM_INT);
-        $q->execute();
+        $bestelId = $this->db->lastInsertId();
         foreach ($data->bestelLijst as $productId => $aantal) {
-            $q = $this->db->prepare("INSERT INTO socCieBestellingInhoud VALUES ((SELECT MAX(id) FROM socCieBestelling),  :productId, :aantal);");
+            $q = $this->db->prepare("INSERT INTO socCieBestellingInhoud VALUES (:bestelId,  :productId, :aantal);");
             $q->bindValue(":productId", $productId, PDO::PARAM_INT);
             $q->bindValue(":aantal", $aantal, PDO::PARAM_INT);
+            $q->bindValue(":bestelId", $bestelId, PDO::PARAM_INT);
             $q->execute();
         }
+        $totaal = $this->getBestellingTotaal($bestelId);
+        $q = $this->db->prepare("UPDATE socCieKlanten SET saldo = saldo - :totaal WHERE socCieId=:socCieId ;");
+        $q->bindValue(":totaal", $totaal, PDO::PARAM_INT);
+        $q->bindValue(":socCieId", $data->persoon->socCieId, PDO::PARAM_INT);
+        $q->execute();
+        $q = $this->db->prepare("UPDATE socCieBestelling  SET totaal = :totaal WHERE id = :bestelId;");
+        $q->bindValue(":totaal", $totaal, PDO::PARAM_INT);
+        $q->bindValue(":bestelId", $bestelId, PDO::PARAM_INT);
+        $q->execute();
+
         if (!$this->db->commit()) {
             $this->db->rollBack();
             return false;
@@ -108,12 +116,8 @@ class Barsysteem
         $this->db->beginTransaction();
 
         $q = $this->db->prepare("UPDATE socCieKlanten SET saldo = saldo - :bestelTotaal WHERE socCieId=:socCieId;");
-        $q->bindValue(":bestelTotaal", $data->bestelTotaal - $data->oudeBestelling->bestelTotaal, PDO::PARAM_INT);
+        $q->bindValue(":bestelTotaal", $this->getBestellingTotaalTijd($data->oudeBestelling->bestelId, $data->oudeBestelling->tijd), PDO::PARAM_INT);
         $q->bindValue(":socCieId", $data->persoon->socCieId, PDO::PARAM_INT);
-        $q->execute();
-        $q = $this->db->prepare("UPDATE socCieBestelling SET totaal = :bestelTotaal WHERE id = :bestelId");
-        $q->bindValue(":bestelId", $data->oudeBestelling->bestelId, PDO::PARAM_INT);
-        $q->bindValue(":bestelTotaal", $data->bestelTotaal, PDO::PARAM_INT);
         $q->execute();
         $q = $this->db->prepare("DELETE FROM socCieBestellingInhoud  WHERE bestellingId = :bestelId");
         $q->bindValue(":bestelId", $data->oudeBestelling->bestelId, PDO::PARAM_INT);
@@ -125,6 +129,13 @@ class Barsysteem
             $q->bindValue(":aantal", $aantal, PDO::PARAM_INT);
             $q->execute();
         }
+        $q = $this->db->prepare("UPDATE socCieKlanten SET saldo = saldo + :bestelTotaal WHERE socCieId=:socCieId;");
+        $q->bindValue(":bestelTotaal", $this->getBestellingTotaalTijd($data->oudeBestelling->bestelId, $data->oudeBestelling->tijd), PDO::PARAM_INT);
+        $q->bindValue(":socCieId", $data->persoon->socCieId, PDO::PARAM_INT);
+        $q->execute();
+        $q = $this->db->prepare("INSERT INTO socCieBestelling (totaal) VALUES (:totaal);");
+        $q->bindValue(":totaal", $this->getBestellingTotaalTijd($data->oudeBestelling->bestelId, $data->oudeBestelling->tijd), PDO::PARAM_INT);
+        $q->execute();
         if (!$this->db->commit()) {
             $this->db->rollBack();
             return false;
@@ -137,7 +148,7 @@ class Barsysteem
         $q = $this->db->prepare("SELECT saldo FROM socCieKlanten WHERE socCieId = :socCieId");
         $q->bindValue(":socCieId", $socCieId);
         $q->execute();
-        return $q->fetchAll()[0]["saldo"];
+        return $q->fetchColumn();
     }
 
     function verwijderBestelling($data)
@@ -179,9 +190,25 @@ class Barsysteem
         return $result;
     }
 
+    private function getBestellingTotaal($bestelId)
+    {
+        $q = $this->db->prepare("SELECT SUM(prijs * aantal) FROM socCieBestellingInhoud AS I JOIN socCiePrijs AS P ON I . productId = P . productId WHERE bestellingId = :bestelId AND CURRENT_TIMESTAMP < tot AND CURRENT_TIMESTAMP > van");
+        $q->bindValue(":bestelId", $bestelId, PDO::PARAM_INT);
+        $q->execute();
+        return $q->fetchColumn();
+    }
+
+    private function getBestellingTotaalTijd($bestelId, $timestamp)
+    {
+        $q = $this->db->prepare("SELECT SUM(prijs * aantal) FROM socCieBestellingInhoud AS I JOIN socCiePrijs AS P ON I . productId = P . productId WHERE bestellingId = :bestelId AND :timeStamp < tot AND :timeStamp > van");
+        $q->bindValue(":bestelId", $bestelId, PDO::PARAM_INT);
+        $q->bindValue(":timeStamp", $timestamp, PDO::PARAM_STMT);
+        $q->execute();
+        return $q->fetchColumn();
+    }
+
     private function parseDate($date)
     {
-
         $elementen = explode(" ", $date);
         $datum = str_pad($elementen[0], 2, "0", STR_PAD_LEFT);
         $maanden = ["Januari" => "01", "Februari" => "02", "Maart" => "03", "April" => "04", "Mei" => "05", "Juni" => "06", "Juli" => "07", "Augustus" => "08", "September" => "09", "Oktober" => "10", "November" => "11", "December" => "12"];
