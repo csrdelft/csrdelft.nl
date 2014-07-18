@@ -123,6 +123,7 @@ class ForumController extends Controller {
 				}
 			}
 		}
+		$this->forum();
 	}
 
 	/**
