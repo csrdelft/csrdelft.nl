@@ -1,7 +1,7 @@
 <tr class="forumdeel kleur{cycle values="0,1"}">
 	<td class="titel hoverIntent">
+		<a href="/forum/beheren/{$deel->forum_id}" class="knop post popup hoverIntentContent">{icon get="bewerken"}</a>
 		<a href="/forum/deel/{$deel->forum_id}">{$deel->titel}</a>
-		<a href="/forum/beheren/{$deel->forum_id}" class="post popup hoverIntentContent" style="float: left;">{icon get="bewerken"}</a>
 		<br />{$deel->omschrijving}
 	</td>
 	<td class="reacties">{$deel->aantal_draden}</td>
