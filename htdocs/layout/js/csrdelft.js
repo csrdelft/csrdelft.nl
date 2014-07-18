@@ -87,6 +87,7 @@ function init_links() {
 
 function knop_ajax(knop, type) {
 	if (knop.hasClass('confirm') && !confirm(knop.attr('title') + '.\n\nWeet u het zeker?')) {
+		popup_close();
 		return false;
 	}
 	if (knop.hasClass('prompt')) {
