@@ -51,6 +51,10 @@ class ForumController extends Controller {
 			case 'zoeken':
 				return true;
 
+			case 'hertellen':
+				if (!LoginLid::mag('P_ADMIN')) {
+					return false;
+				}
 			case 'rss':
 			case 'recent':
 			case 'deel':
@@ -61,6 +65,9 @@ class ForumController extends Controller {
 
 			case 'aanmaken':
 			case 'beheren':
+				if (!LoginLid::mag('P_ADMIN')) {
+					return false;
+				}
 			case 'posten':
 			case 'bewerken':
 			case 'verwijderen':
@@ -100,6 +107,22 @@ class ForumController extends Controller {
 	public function wacht() {
 		$draden_delen = ForumDelenModel::instance()->getWachtOpGoedkeuring();
 		$this->view = new ForumResultatenView($draden_delen[0], $draden_delen[1]);
+	}
+
+	/**
+	 * Hertellen van het gehele forum.
+	 */
+	public function hertellen() {
+		$categorien = ForumModel::instance()->find();
+		foreach ($categorien as $cat) {
+			$delen = ForumDelenModel::instance()->getForumDelenVoorCategorie($cat->categorie_id);
+			foreach ($delen as $deel) {
+				$draden = ForumDradenModel::instance()->getForumDradenVoorDeel($deel->forum_id);
+				foreach ($draden as $draad) {
+					ForumPostsModel::instance()->hertellenVoorDraadEnDeel($draad, $deel);
+				}
+			}
+		}
 	}
 
 	/**
@@ -241,9 +264,6 @@ class ForumController extends Controller {
 	 * @param int $categorie_id
 	 */
 	public function aanmaken($categorie_id) {
-		if (!LoginLid::mag('P_ADMIN')) {
-			$this->geentoegang();
-		}
 		$deel = ForumDelenModel::instance()->newForumDeel((int) $categorie_id);
 		$this->beheren($deel->forum_id);
 	}
@@ -254,9 +274,6 @@ class ForumController extends Controller {
 	 * @param int $forum_id
 	 */
 	public function beheren($forum_id) {
-		if (!LoginLid::mag('P_ADMIN')) {
-			$this->geentoegang();
-		}
 		$deel = ForumDelenModel::instance()->getForumDeel((int) $forum_id);
 		if (!$deel instanceof ForumDeel) {
 			throw new Exception('Forum bestaat niet!');
