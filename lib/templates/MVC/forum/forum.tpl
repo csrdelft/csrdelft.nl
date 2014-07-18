@@ -11,8 +11,8 @@
 	{foreach from=$categorien item=cat}
 		<thead>
 			<tr>
-				<th>
-					<a href="/forum/toevoegen/{$cat->categorie_id}" class="knop post popup">{icon get="add"}</a>
+				<th class="hoverIntent">
+					<a href="/forum/toevoegen/{$cat->categorie_id}" class="post popup hoverIntentContent">{icon get="add"}</a>
 					{$cat->titel}
 					<span class="forumcategorie-omschrijving">{$cat->omschrijving}</span>
 				</th>

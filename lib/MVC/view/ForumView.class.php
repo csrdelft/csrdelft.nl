@@ -53,12 +53,12 @@ class ForumDeelView extends TemplateView {
 
 }
 
-class ForumDeelForm extends Formulier {
+class ForumDeelForm extends PopupForm {
 
 	public function __construct(ForumDeel $deel) {
 		parent::__construct($deel, 'beheerdeelforum', '/forum/beheren/' . $deel->forum_id);
 		$this->titel = 'Forumdeel beheren';
-		$this->css_classes[] = 'ReloadPage';
+		$this->css_classes[] = 'ReloadPage PreventUnchanged';
 
 		$fields[] = new RequiredTextField('titel', $deel->titel, 'Titel');
 		$fields[] = new TextField('omschrijving', $deel->omschrijving, 'Omschrijving');
