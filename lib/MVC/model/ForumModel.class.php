@@ -90,7 +90,6 @@ class ForumDelenModel extends PersistenceModel {
 		$deel->rechten_posten = 'P_FORUM_POST';
 		$deel->rechten_modereren = 'P_FORUM_MOD';
 		$deel->volgorde = 0;
-		$deel->forum_draden = array();
 		$deel->forum_id = $this->create($deel);
 		return $deel;
 	}
@@ -766,13 +765,13 @@ class ForumPostsModel extends PersistenceModel implements Paging {
 		$draad->laatste_lid_id = $post->lid_id;
 		if ($draad->wacht_goedkeuring) {
 			$draad->wacht_goedkeuring = false;
-			$deel->aantal_draden++;
 		}
 		$rowcount = ForumDradenModel::instance()->update($draad);
 		if ($rowcount !== 1) {
 			throw new Exception('Goedkeuren mislukt');
 		}
 		$deel->aantal_posts++;
+		$deel->aantal_draden++;
 		$deel->laatst_gewijzigd = $laatst;
 		$deel->laatste_post_id = $post->post_id;
 		$deel->laatste_lid_id = $post->lid_id;

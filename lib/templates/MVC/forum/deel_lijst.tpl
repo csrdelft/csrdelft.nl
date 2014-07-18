@@ -1,6 +1,6 @@
 <tr class="forumdeel kleur{cycle values="0,1"}">
 	<td class="titel">
-		<a href="/forum/beheren/{$deel->forum_id}" class="knop post">{icon get="bewerken"}</a>
+		<a href="/forum/beheren/{$deel->forum_id}" class="knop post popup">{icon get="bewerken"}</a>
 		<a href="/forum/deel/{$deel->forum_id}">{$deel->titel}</a>
 		<br />{$deel->omschrijving}
 	</td>

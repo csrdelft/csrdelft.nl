@@ -57,6 +57,7 @@ class ForumDeelForm extends Formulier {
 
 	public function __construct(ForumDeel $deel) {
 		parent::__construct($deel, 'beheerdeelforum', '/forum/beheren/' . $deel->forum_id);
+		$this->css_classes[] = 'ReloadPage';
 
 		$fields[] = new RequiredTextField('titel', $deel->titel, 'Titel');
 		$fields[] = new TextField('omschrijving', $deel->omschrijving, 'Omschrijving');

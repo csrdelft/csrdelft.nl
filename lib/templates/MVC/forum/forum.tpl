@@ -12,7 +12,7 @@
 		<thead>
 			<tr>
 				<th>
-					<a href="/forum/toevoegen/{$cat->categorie_id}" class="knop post">{icon get="add"}</a>
+					<a href="/forum/toevoegen/{$cat->categorie_id}" class="knop post popup">{icon get="add"}</a>
 					{$cat->titel}
 					<span class="forumcategorie-omschrijving">{$cat->omschrijving}</span>
 				</th>
