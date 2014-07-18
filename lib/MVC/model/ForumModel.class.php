@@ -76,6 +76,25 @@ class ForumDelenModel extends PersistenceModel {
 		return $this->retrieveByPrimaryKey(array($id));
 	}
 
+	public function newForumDeel($categorie_id) {
+		$deel = new ForumDeel();
+		$deel->categorie_id = $categorie_id;
+		$deel->titel = '';
+		$deel->omschrijving = '';
+		$deel->laatst_gewijzigd = null;
+		$deel->laatste_post_id = null;
+		$deel->laatste_lid_id = null;
+		$deel->aantal_draden = 0;
+		$deel->aantal_posts = 0;
+		$deel->rechten_lezen = 'P_FORUM_READ';
+		$deel->rechten_posten = 'P_FORUM_POST';
+		$deel->rechten_modereren = 'P_FORUM_MOD';
+		$deel->volgorde = 0;
+		$deel->forum_draden = array();
+		$deel->forum_id = $this->create($deel);
+		return $deel;
+	}
+
 	public function getForumDelenById(array $ids) {
 		$count = count($ids);
 		if ($count < 1) {

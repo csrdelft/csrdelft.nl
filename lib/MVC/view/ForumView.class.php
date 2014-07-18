@@ -53,6 +53,23 @@ class ForumDeelView extends TemplateView {
 
 }
 
+class ForumDeelForm extends Formulier {
+
+	public function __construct(ForumDeel $deel) {
+		parent::__construct($deel, 'beheerdeelforum', '/forum/beheren/' . $deel->forum_id);
+
+		$fields[] = new RequiredTextField('titel', $deel->titel, 'Titel');
+		$fields[] = new TextField('omschrijving', $deel->omschrijving, 'Omschrijving');
+		$fields[] = new TextField('rechten_lezen', $deel->rechten_lezen, 'Leesrechten');
+		$fields[] = new TextField('rechten_posten', $deel->rechten_posten, 'Postrechten');
+		$fields[] = new TextField('rechten_modereren', $deel->rechten_modereren, 'Modrechten');
+		$fields[] = new IntField('volgorde', $deel->volgorde, 'Volgorde');
+
+		$this->addFields($fields);
+	}
+
+}
+
 class ForumDraadView extends TemplateView {
 
 	public function __construct(ForumDraad $draad, ForumDeel $deel) {

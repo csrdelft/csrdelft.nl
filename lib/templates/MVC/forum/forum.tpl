@@ -11,7 +11,11 @@
 	{foreach from=$categorien item=cat}
 		<thead>
 			<tr>
-				<th>{$cat->titel} <span class="forumcategorie-omschrijving">{$cat->omschrijving}</span></th>
+				<th>
+					<a href="/forum/toevoegen/{$cat->categorie_id}">{icon get="add"}</a>
+					{$cat->titel}
+					<span class="forumcategorie-omschrijving">{$cat->omschrijving}</span>
+				</th>
 				<th>Onderwerpen</th>
 				<th>Berichten</th>
 				<th>Recente wijziging</th>

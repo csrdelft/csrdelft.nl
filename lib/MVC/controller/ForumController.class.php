@@ -59,6 +59,8 @@ class ForumController extends Controller {
 			case 'wacht':
 				return !$this->isPosted();
 
+			case 'toevoegen':
+			case 'beheren':
 			case 'posten':
 			case 'bewerken':
 			case 'verwijderen':
@@ -135,11 +137,11 @@ class ForumController extends Controller {
 	/**
 	 * Deelforum laten zien met draadjes in tabel.
 	 * 
-	 * @param int $id
+	 * @param int $forum_id
 	 * @param int $pagina or 'laatste'
 	 */
-	public function deel($id, $pagina = 1) {
-		$deel = ForumDelenModel::instance()->getForumDeel((int) $id);
+	public function deel($forum_id, $pagina = 1) {
+		$deel = ForumDelenModel::instance()->getForumDeel((int) $forum_id);
 		if (!$deel OR ! $deel->magLezen()) { // geen exceptie om bestaan van forumdeel niet te verraden
 			$this->geentoegang();
 		}
@@ -154,11 +156,11 @@ class ForumController extends Controller {
 	/**
 	 * Forumdraadje laten zien met alle (zichtbare) posts.
 	 * 
-	 * @param int $id
+	 * @param int $draad_id
 	 * @param int $pagina or 'laatste' or 'ongelezen'
 	 */
-	public function onderwerp($id, $pagina = null) {
-		$draad = ForumDradenModel::instance()->getForumDraad((int) $id);
+	public function onderwerp($draad_id, $pagina = null) {
+		$draad = ForumDradenModel::instance()->getForumDraad((int) $draad_id);
 		$deel = ForumDelenModel::instance()->getForumDeel($draad->forum_id);
 		if (!$deel->magLezen()) {
 			$this->geentoegang();
@@ -184,10 +186,10 @@ class ForumController extends Controller {
 	/**
 	 * Opzoeken forumdraad van forumpost.
 	 * 
-	 * @param int $id
+	 * @param int $post_id
 	 */
-	public function reactie($id) {
-		$post = ForumPostsModel::instance()->getForumPost((int) $id);
+	public function reactie($post_id) {
+		$post = ForumPostsModel::instance()->getForumPost((int) $post_id);
 		if ($post->verwijderd) {
 			setMelding('Deze reactie is verwijderd', 0);
 		}
@@ -197,13 +199,13 @@ class ForumController extends Controller {
 	/**
 	 * Wijzig een eigenschap van een draadje.
 	 * 
-	 * @param int $id
+	 * @param int $draad_id
 	 * @param string $property
 	 * @param mixed $value
 	 * @throws Exception indien forum niet bestaat bij verplaatsen of wijzigen mislukt
 	 */
-	public function wijzigen($id, $property, $value = null) {
-		$draad = ForumDradenModel::instance()->getForumDraad((int) $id);
+	public function wijzigen($draad_id, $property, $value = null) {
+		$draad = ForumDradenModel::instance()->getForumDraad((int) $draad_id);
 		$deel = ForumDelenModel::instance()->getForumDeel($draad->forum_id);
 		if (!$deel->magModereren()) {
 			$this->geentoegang();
@@ -231,6 +233,36 @@ class ForumController extends Controller {
 		}
 		setMelding('Wijziging geslaagd: ' . $wijziging, 1);
 		$this->onderwerp($draad->draad_id);
+	}
+
+	/**
+	 * Forum deel aanmaken.
+	 * 
+	 * @param int $categorie_id
+	 */
+	public function toevoegen($categorie_id) {
+		$deel = ForumDelenModel::instance()->newForumDeel((int) $categorie_id);
+		$this->beheren($deel->forum_id);
+	}
+
+	/**
+	 * Forum deel wijzigen.
+	 * 
+	 * @param int $forum_id
+	 */
+	public function beheren($forum_id) {
+		$deel = ForumDelenModel::instance()->getForumDeel((int) $forum_id);
+		if (!$deel instanceof ForumDeel) {
+			throw new Exception('Forum bestaat niet!');
+		}
+		$this->view = new ForumDeelForm($deel); // fetches POST values itself
+		if ($this->view->validate()) {
+			$rowcount = ForumDelenModel::instance()->update($deel);
+			if ($rowcount !== 1) {
+				throw new Exception('Forum beheren mislukt!');
+			}
+			$this->forum();
+		}
 	}
 
 	/**
@@ -301,8 +333,8 @@ class ForumController extends Controller {
 		invokeRefresh('/forum/reactie/' . $post->post_id . '#' . $post->post_id); // , ($draad_id === null ? 'Draad' : 'Post') . ' succesvol toegevoegd', 1
 	}
 
-	public function bewerken($id) {
-		$post = ForumPostsModel::instance()->getForumPost((int) $id);
+	public function bewerken($post_id) {
+		$post = ForumPostsModel::instance()->getForumPost((int) $post_id);
 		$draad = ForumDradenModel::instance()->getForumDraad($post->draad_id);
 		$deel = ForumDelenModel::instance()->getForumDeel($draad->forum_id);
 		if (($deel->magPosten() AND ! $draad->gesloten AND $post->lid_id === LoginLid::instance()->getUid() AND LoginLid::mag('P_LOGGED_IN')) OR $deel->magModereren()) {
@@ -337,8 +369,8 @@ class ForumController extends Controller {
 		$this->view = new ForumPostView($post, $draad, $deel);
 	}
 
-	public function verplaatsen($id) {
-		$post = ForumPostsModel::instance()->getForumPost((int) $id);
+	public function verplaatsen($post_id) {
+		$post = ForumPostsModel::instance()->getForumPost((int) $post_id);
 		$draad = ForumDradenModel::instance()->getForumDraad($post->draad_id);
 		$deel = ForumDelenModel::instance()->getForumDeel($draad->forum_id);
 		if (!$deel->magModereren()) {
@@ -349,8 +381,8 @@ class ForumController extends Controller {
 		$this->view = new ForumPostDeleteView($post->post_id);
 	}
 
-	public function afsplitsen($id) {
-		$post = ForumPostsModel::instance()->getForumPost((int) $id);
+	public function afsplitsen($post_id) {
+		$post = ForumPostsModel::instance()->getForumPost((int) $post_id);
 		$draad = ForumDradenModel::instance()->getForumDraad($post->draad_id);
 		$deel = ForumDelenModel::instance()->getForumDeel($draad->forum_id);
 		if (!$deel->magModereren()) {
@@ -362,8 +394,8 @@ class ForumController extends Controller {
 		$this->view = new ForumPostDeleteView($post->post_id);
 	}
 
-	public function verwijderen($id) {
-		$post = ForumPostsModel::instance()->getForumPost((int) $id);
+	public function verwijderen($post_id) {
+		$post = ForumPostsModel::instance()->getForumPost((int) $post_id);
 		$draad = ForumDradenModel::instance()->getForumDraad($post->draad_id);
 		$deel = ForumDelenModel::instance()->getForumDeel($draad->forum_id);
 		if (!$deel->magModereren()) {
@@ -373,8 +405,8 @@ class ForumController extends Controller {
 		$this->view = new ForumPostDeleteView($post->post_id);
 	}
 
-	public function offtopic($id) {
-		$post = ForumPostsModel::instance()->getForumPost((int) $id);
+	public function offtopic($post_id) {
+		$post = ForumPostsModel::instance()->getForumPost((int) $post_id);
 		$draad = ForumDradenModel::instance()->getForumDraad($post->draad_id);
 		$deel = ForumDelenModel::instance()->getForumDeel($draad->forum_id);
 		if (!$deel->magModereren()) {
@@ -384,8 +416,8 @@ class ForumController extends Controller {
 		$this->view = new ForumPostView($post, $draad, $deel);
 	}
 
-	public function goedkeuren($id) {
-		$post = ForumPostsModel::instance()->getForumPost((int) $id);
+	public function goedkeuren($post_id) {
+		$post = ForumPostsModel::instance()->getForumPost((int) $post_id);
 		$draad = ForumDradenModel::instance()->getForumDraad($post->draad_id);
 		$deel = ForumDelenModel::instance()->getForumDeel($draad->forum_id);
 		if (!$deel->magModereren()) {
@@ -395,8 +427,8 @@ class ForumController extends Controller {
 		$this->view = new ForumPostView($post, $draad, $deel);
 	}
 
-	public function citeren($id) {
-		$post = ForumPostsModel::instance()->getForumPost((int) $id);
+	public function citeren($post_id) {
+		$post = ForumPostsModel::instance()->getForumPost((int) $post_id);
 		$draad = ForumDradenModel::instance()->getForumDraad($post->draad_id);
 		$deel = ForumDelenModel::instance()->getForumDeel($draad->forum_id);
 		if (!$deel->magLezen()) {
@@ -406,8 +438,8 @@ class ForumController extends Controller {
 		exit;
 	}
 
-	public function tekst($id) {
-		$post = ForumPostsModel::instance()->getForumPost((int) $id);
+	public function tekst($post_id) {
+		$post = ForumPostsModel::instance()->getForumPost((int) $post_id);
 		$draad = ForumDradenModel::instance()->getForumDraad($post->draad_id);
 		$deel = ForumDelenModel::instance()->getForumDeel($draad->forum_id);
 		if (!$deel->magLezen()) {
