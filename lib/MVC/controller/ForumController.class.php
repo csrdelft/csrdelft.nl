@@ -59,8 +59,11 @@ class ForumController extends Controller {
 			case 'wacht':
 				return !$this->isPosted();
 
-			case 'toevoegen':
+			case 'aanmaken':
 			case 'beheren':
+			case 'opheffen':
+				return $this->isPosted() AND LoginLid::mag('P_ADMIN');
+
 			case 'posten':
 			case 'bewerken':
 			case 'verwijderen':
@@ -240,7 +243,7 @@ class ForumController extends Controller {
 	 * 
 	 * @param int $categorie_id
 	 */
-	public function toevoegen($categorie_id) {
+	public function aanmaken($categorie_id) {
 		$deel = ForumDelenModel::instance()->newForumDeel((int) $categorie_id);
 		$this->beheren($deel->forum_id);
 	}
@@ -261,8 +264,20 @@ class ForumController extends Controller {
 			if ($rowcount !== 1) {
 				throw new Exception('Forum beheren mislukt!');
 			}
-			$this->forum();
 		}
+	}
+
+	/**
+	 * Forum deel verwijderen.
+	 * 
+	 * @param int $forum_id
+	 */
+	public function opheffen($forum_id) {
+		$deel = ForumDelenModel::instance()->getForumDeel((int) $forum_id);
+		if (!$deel instanceof ForumDeel) {
+			throw new Exception('Forum bestaat niet!');
+		}
+		//TODO
 	}
 
 	/**
