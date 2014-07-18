@@ -12,7 +12,9 @@
 		<thead>
 			<tr>
 				<th class="hoverIntent">
+				{if LoginLid::mag('P_ADMIN')}
 					<a href="/forum/aanmaken/{$cat->categorie_id}" class="knop post popup confirm hoverIntentContent" style="margin-left: -35px;" title="Klikken = aanmaken">{icon get="add"}</a>
+				{/if}
 					{$cat->titel}
 					<span class="forumcategorie-omschrijving">{$cat->omschrijving}</span>
 				</th>
