@@ -57,6 +57,7 @@ class ForumDeelForm extends Formulier {
 
 	public function __construct(ForumDeel $deel) {
 		parent::__construct($deel, 'beheerdeelforum', '/forum/beheren/' . $deel->forum_id);
+		$this->titel = 'Forumdeel beheren';
 		$this->css_classes[] = 'ReloadPage';
 
 		$fields[] = new RequiredTextField('titel', $deel->titel, 'Titel');
@@ -65,6 +66,7 @@ class ForumDeelForm extends Formulier {
 		$fields[] = new TextField('rechten_posten', $deel->rechten_posten, 'Postrechten');
 		$fields[] = new TextField('rechten_modereren', $deel->rechten_modereren, 'Modrechten');
 		$fields[] = new IntField('volgorde', $deel->volgorde, 'Volgorde');
+		$fields[] = new SubmitResetCancel();
 
 		$this->addFields($fields);
 	}
