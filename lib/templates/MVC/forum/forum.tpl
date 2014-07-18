@@ -12,7 +12,9 @@
 		<thead>
 			<tr>
 				<th class="hoverIntent">
-					<a href="/forum/toevoegen/{$cat->categorie_id}" class="post popup hoverIntentContent">{icon get="add"}</a>
+					<div class="hoverIntentContent" style="float: right;">
+						<a href="/forum/toevoegen/{$cat->categorie_id}" class="post popup">{icon get="add"}</a>
+					</div>
 					{$cat->titel}
 					<span class="forumcategorie-omschrijving">{$cat->omschrijving}</span>
 				</th>
