@@ -61,6 +61,7 @@ class ForumController extends Controller {
 			case 'onderwerp':
 			case 'reactie':
 			case 'wacht':
+			case 'herstel':
 				return !$this->isPosted();
 
 			case 'aanmaken':
@@ -79,7 +80,6 @@ class ForumController extends Controller {
 			case 'citeren':
 			case 'tekst':
 			case 'optout':
-			case 'herstel':
 				return $this->isPosted();
 
 			default:

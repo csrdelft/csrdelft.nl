@@ -4,7 +4,7 @@
 
 {if !isset($deel->forum_id)}
 	<div class="forumheadbtn">
-		<a href="/forum/herstel" class="knop confirm" title="Verborgen onderwerpen weer laten zien">{icon get="eye"}{$verborgen_aantal}</a>
+		<a href="/forum/herstel" class="knop confirm" title="Verborgen onderwerpen weer laten zien">{icon get="eye"} {$verborgen_aantal}</a>
 	</div>
 {/if}
 
