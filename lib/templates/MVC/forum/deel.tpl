@@ -2,7 +2,7 @@
 
 {include file='MVC/forum/zoek_form.tpl'}
 
-{if LoginLid::mag('P_ADMIN')}
+{if LoginLid::mag('P_ADMIN') AND isset($deel->forum_id)}
 	<div class="forumheadbtn">
 		<a href="/forum/beheren/{$deel->forum_id}" class="knop post popup" title="Beheer-functies weergeven">{icon get="wrench_orange"} Beheren</a>
 	</div>
@@ -35,7 +35,7 @@
 		<tr>
 			<th colspan="2">Titel</th>
 			<th>Reacties</th>
-			<th>Auteur</th>
+			<th style="text-align: center;">Auteur</th>
 			<th>Recente wijziging</th>
 		</tr>
 	</thead>
