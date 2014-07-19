@@ -426,14 +426,10 @@ class ForumDradenModel extends PersistenceModel implements Paging {
 		}
 		$forum_ids = implode(', ', array_fill(0, $count, '?'));
 		$verbergen = ForumDradenVerbergenModel::instance()->find('lid_id = ?', array(LoginLid::instance()->getUid()));
-		debugprint($verbergen);
 		$draden_ids = array_keys(group_by_distinct('draad_id', $verbergen));
-		debugprint($draden_ids);
 		$count = count($draden_ids);
 		if ($count > 0) {
-			debugprint($params);
-			$params = array_merge($draden_ids, $params);
-			debugprint($params);
+			$params = array_merge($params, $draden_ids);
 			$verborgen = ' AND d.draad_id NOT IN (' . implode(', ', array_fill(0, $count, '?')) . ')';
 		} else {
 			$verborgen = '';
