@@ -75,7 +75,7 @@ class ForumDeelForm extends PopupForm {
 		$fields[] = new IntField('volgorde', $deel->volgorde, 'Volgorde');
 		$fields['src'] = new SubmitResetCancel();
 		$fields['src']->extraText = 'Verwijderen';
-		$fields['src']->extraTitle = 'Deelforum verwijderen';
+		$fields['src']->extraTitle = 'Deelforum opheffen';
 		$fields['src']->extraIcon = 'cross';
 		$fields['src']->extraUrl = '/forum/opheffen/' . $deel->forum_id;
 		$fields['src']->extraActie = 'submit';
