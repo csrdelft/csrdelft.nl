@@ -2,6 +2,12 @@
 
 {include file='MVC/forum/zoek_form.tpl'}
 
+{if $verborgen_aantal > 0}
+	<div class="forumheadbtn">
+		<a href="/forum/herstel" class="knop confirm" title="Verborgen onderwerpen weer laten zien">{icon get="eye"} {$verborgen_aantal}</a>
+	</div>
+{/if}
+
 {if LoginLid::mag('P_ADMIN')}
 	<div class="forumheadbtn">
 		<a href="/forum/aanmaken" class="knop post popup confirm" title="Deelforum aanmaken">{icon get="add"}</a>

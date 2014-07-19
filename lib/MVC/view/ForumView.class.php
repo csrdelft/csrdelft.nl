@@ -13,6 +13,7 @@ class ForumView extends TemplateView {
 		parent::__construct($categorien);
 		$this->titel = 'Forum';
 		$this->smarty->assign('categorien', $this->model);
+		$this->smarty->assign('verborgen_aantal', ForumDradenVerbergenModel::instance()->getAantalVerborgenVoorLid());
 	}
 
 	public function view() {
