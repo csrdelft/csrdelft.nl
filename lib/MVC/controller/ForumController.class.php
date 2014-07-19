@@ -255,6 +255,7 @@ class ForumController extends Controller {
 		if (ForumDradenModel::instance()->exist('forum_id = ?', array((int) $forum_id))) {
 			setMelding('Verwijder eerst alle draadjes van dit deelforum uit de database!', -1);
 		} else {
+			setMelding('Deelforum verwijderd', 1);
 			ForumDelenModel::instance()->verwijderForumDeel((int) $forum_id);
 		}
 		// ReloadPage

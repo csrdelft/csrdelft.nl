@@ -69,9 +69,9 @@ class ForumDeelForm extends PopupForm {
 		$fields[] = new SelectField('categorie_id', $deel->categorie_id, 'Categorie', $lijst);
 		$fields[] = new RequiredTextField('titel', $deel->titel, 'Titel');
 		$fields[] = new TextareaField('omschrijving', $deel->omschrijving, 'Omschrijving');
-		$fields[] = new TextField('rechten_lezen', $deel->rechten_lezen, 'Leesrechten');
-		$fields[] = new TextField('rechten_posten', $deel->rechten_posten, 'Postrechten');
-		$fields[] = new TextField('rechten_modereren', $deel->rechten_modereren, 'Modrechten');
+		$fields[] = new TextField('rechten_lezen', $deel->rechten_lezen, 'Lees-rechten');
+		$fields[] = new TextField('rechten_posten', $deel->rechten_posten, 'Post-rechten');
+		$fields[] = new TextField('rechten_modereren', $deel->rechten_modereren, 'Mod-rechten');
 		$fields[] = new IntField('volgorde', $deel->volgorde, 'Volgorde');
 		$fields['src'] = new SubmitResetCancel();
 		$fields['src']->extraText = 'Verwijderen';
