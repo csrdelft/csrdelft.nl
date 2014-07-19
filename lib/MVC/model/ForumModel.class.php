@@ -257,7 +257,7 @@ class ForumDradenVerbergenModel extends PersistenceModel {
 		return $this->existsByPrimaryKey(array($draad->draad_id, LoginLid::instance()->getUid()));
 	}
 
-	public function setVerbergenVoorLid(ForumDraad $draad, $verbergen) {
+	public function setVerbergenVoorLid(ForumDraad $draad, $verbergen = true) {
 		$verborgen = $this->getVerbergenVoorLid($draad);
 		if ($verbergen) {
 			if (!$verborgen) {

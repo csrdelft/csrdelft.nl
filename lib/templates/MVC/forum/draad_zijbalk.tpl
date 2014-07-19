@@ -11,10 +11,10 @@
 		{/if}
 		&nbsp;
 		<a href="/forum/onderwerp/{$draad->draad_id}{if LidInstellingen::get('forum', 'open_draad_op_pagina') == 'ongelezen'}#ongelezen{elseif LidInstellingen::get('forum', 'open_draad_op_pagina') == 'laatste'}#reageren{/if}" title="{$draad->titel}"{if !$draad->alGelezen()} style="{LidInstellingen::instance()->getTechnicalValue('forum', 'ongelezenWeergave')}"{/if}>
-			{$draad->titel|truncate:25:"…":true}
+			{$draad->titel|truncate:24:"…":true}
 		</a>
 		{if !$draad->belangrijk}
-			<a href="/forum/optout/{$draad->draad_id}" class="post forumdraadverbergen">x</a>
+			<a href="/forum/optout/{$draad->draad_id}" class="post forumdraadverbergen" title="Onderwerp verbergen">x</a>
 		{/if}
 	</div>
 {/strip}
