@@ -1,6 +1,6 @@
 {strip}
 	{assign var=timestamp value=strtotime($draad->laatst_gewijzigd)}
-	<div class="item hoverIntent" id="forumdraad-row-{$draad->draad_id}">
+	<div class="item" id="forumdraad-row-{$draad->draad_id}">
 		{*include file='MVC/forum/post_preview.tpl'*}
 		{if date('d-m', $timestamp) === date('d-m')}
 			{$timestamp|date_format:"%H:%M"}
@@ -14,9 +14,7 @@
 			{$draad->titel|truncate:25:"…":true}
 		</a>
 		{if !$draad->belangrijk}
-			<div class="hoverIntentContent" style="float: right;">
-				<a href="/forum/optout/{$draad->draad_id}">{icon get="bullet_delete"}</a>
-			</div>
+			<a href="/forum/optout/{$draad->draad_id}" class="forumdraadverbergen">{icon get="bullet_delete"}</a>
 		{/if}
 	</div>
 {/strip}

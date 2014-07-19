@@ -932,7 +932,13 @@ div.forumheadbtn{
 	float: right;
 	margin-right: 15px;
 }
-
+a.forumdraadverbergen{
+	float: right;
+	display: none;
+}
+a.forumdraadverbergen:hover{
+	display: inline-block;
+}
 #forumtabel{
 	border: 0; padding: 0;
 	width: 100%;
