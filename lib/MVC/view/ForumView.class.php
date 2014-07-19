@@ -44,7 +44,7 @@ class ForumDeelView extends TemplateView {
 		$this->smarty->assign('belangrijk', ($belangrijk === true ? '/belangrijk' : ''));
 		$this->smarty->assign('deel', $this->model);
 		$this->smarty->assign('categorien', ForumModel::instance()->getForum());
-		$this->smarty->assign('verborgen_aantal', ForumDradenVerbergenModel::instance()->count('lid_id = ?', array(LoginLid::instance()->getUid())));
+		$this->smarty->assign('verborgen_aantal', ForumDradenVerbergenModel::instance()->getAantalVerborgenVoorLid());
 	}
 
 	public function view() {

@@ -278,7 +278,9 @@ class ForumController extends Controller {
 	 * Forum draden die verborgen waren door lid weer tonen.
 	 */
 	public function herstel() {
+		$aantal = ForumDradenVerbergenModel::instance()->getAantalVerborgenVoorLid();
 		ForumDradenVerbergenModel::instance()->herstelAlleDradenVoorLid();
+		setMelding($aantal . ' onderwerpen worden weer getoond', 1);
 		$this->forum();
 	}
 

@@ -253,6 +253,10 @@ class ForumDradenVerbergenModel extends PersistenceModel {
 
 	protected static $instance;
 
+	public function getAantalVerborgenVoorLid() {
+		return $this->count('lid_id = ?', array(LoginLid::instance()->getUid()));
+	}
+
 	public function getVerbergenVoorLid(ForumDraad $draad) {
 		return $this->existsByPrimaryKey(array($draad->draad_id, LoginLid::instance()->getUid()));
 	}
