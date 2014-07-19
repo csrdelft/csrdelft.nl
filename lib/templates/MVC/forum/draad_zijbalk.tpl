@@ -14,7 +14,7 @@
 			{$draad->titel|truncate:25:"…":true}
 		</a>
 		{if !$draad->belangrijk}
-			<a href="/forum/optout/{$draad->draad_id}" class="forumdraadverbergen">{icon get="bullet_delete"}</a>
+			<a href="/forum/optout/{$draad->draad_id}" class="post forumdraadverbergen">x</a>
 		{/if}
 	</div>
 {/strip}

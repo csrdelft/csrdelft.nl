@@ -270,6 +270,7 @@ class ForumController extends Controller {
 	public function optout($draad_id) {
 		$draad = ForumDradenModel::instance()->getForumDraad((int) $draad_id);
 		ForumDradenVerbergenModel::instance()->setVerbergenVoorLid($draad);
+		$this->view = new ForumDraadVerbergenView($draad->draad_id);
 	}
 
 	/**
