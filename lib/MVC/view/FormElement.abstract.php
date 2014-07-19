@@ -738,7 +738,7 @@ class IntField extends TextField {
 			$this->error = 'Alleen getallen toegestaan';
 		} elseif ($this->max !== null AND $this->value > $this->max) {
 			$this->error = 'Maximale waarde is ' . $this->max . ' ';
-		} else if ($this->leden_mod AND LoginLid::mag('P_LEDEN_MOD')) {
+		} elseif ($this->leden_mod AND LoginLid::mag('P_LEDEN_MOD')) {
 			// exception for leden mod
 		} elseif ($this->min !== null AND $this->value < $this->min) {
 			$this->error = 'Minimale waarde is ' . $this->min . ' ';

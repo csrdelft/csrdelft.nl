@@ -79,6 +79,7 @@ class ForumController extends Controller {
 			case 'citeren':
 			case 'tekst':
 			case 'optout':
+			case 'herstel':
 				return $this->isPosted();
 
 			default:
@@ -263,7 +264,7 @@ class ForumController extends Controller {
 	}
 
 	/**
-	 * Forum draad verbergen in zijbalk
+	 * Forum draad verbergen in zijbalk.
 	 * 
 	 * @param int $draad_id
 	 */
@@ -271,6 +272,14 @@ class ForumController extends Controller {
 		$draad = ForumDradenModel::instance()->getForumDraad((int) $draad_id);
 		ForumDradenVerbergenModel::instance()->setVerbergenVoorLid($draad);
 		$this->view = new ForumDraadVerbergenView($draad->draad_id);
+	}
+
+	/**
+	 * Forum draden die verborgen waren door lid weer tonen.
+	 */
+	public function herstel() {
+		ForumDradenVerbergenModel::instance()->herstelAlleDradenVoorLid();
+		$this->forum();
 	}
 
 	/**
@@ -294,7 +303,7 @@ class ForumController extends Controller {
 			if (!ForumDelenModel::instance()->bestaatForumDeel($value)) {
 				throw new Exception('Forum bestaat niet!');
 			}
-		} else if ($property === 'titel') {
+		} elseif ($property === 'titel') {
 			$value = trim(filter_input(INPUT_POST, $property, FILTER_SANITIZE_STRIPPED));
 		} else {
 			$this->geentoegang();
@@ -302,6 +311,8 @@ class ForumController extends Controller {
 		ForumDradenModel::instance()->wijzigForumDraad($draad, $property, $value);
 		if ($property === 'verwijderd') {
 			ForumPostsModel::instance()->verwijderForumPostsVoorDraad($draad, $deel);
+		} elseif ($property === 'belangrijk') {
+			ForumDradenVerbergenModel::instance()->herstelDraadVoorIedereen($draad);
 		}
 		if (is_bool($value)) {
 			$wijziging = ($value ? 'wel ' : 'niet ') . $property;

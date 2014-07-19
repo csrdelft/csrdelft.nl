@@ -273,6 +273,18 @@ class ForumDradenVerbergenModel extends PersistenceModel {
 		}
 	}
 
+	public function herstelDraadVoorIedereen(ForumDraad $draad) {
+		foreach ($this->find('draad_id = ?', array($draad->draad_id)) as $verborgen) {
+			$this->delete($verborgen);
+		}
+	}
+
+	public function herstelAlleDradenVoorLid() {
+		foreach ($this->find('lid_id = ?', array(LoginLid::instance()->getUid())) as $verborgen) {
+			$this->delete($verborgen);
+		}
+	}
+
 }
 
 class ForumDradenModel extends PersistenceModel implements Paging {

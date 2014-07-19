@@ -311,7 +311,7 @@ class UploadHttp extends BestandUploader {
 			if ($this->notnull) {
 				$this->error = 'Selecteer een bestand';
 			}
-		} else if ($this->value['error'] == UPLOAD_ERR_INI_SIZE) {
+		} elseif ($this->value['error'] == UPLOAD_ERR_INI_SIZE) {
 			$this->error = 'Bestand is te groot: Maximaal ' . ini_get('upload_max_filesize') . 'B';
 		} elseif ($this->value['error'] != UPLOAD_ERR_OK) {
 			$this->error = 'Upload-error: code ' . $this->value['error'];
