@@ -60,8 +60,15 @@ class ForumDeelForm extends PopupForm {
 		$this->titel = 'Forumdeel beheren';
 		$this->css_classes[] = 'ReloadPage PreventUnchanged';
 
+		$categorien = ForumModel::instance()->find(null, array(), 'volgorde ASC');
+		$lijst = array();
+		foreach ($categorien as $cat) {
+			$lijst[$cat->categorie_id] = $cat->titel;
+		}
+
+		$fields[] = new SelectField('categorie_id', $deel->categorie_id, 'Categorie', $categorien);
 		$fields[] = new RequiredTextField('titel', $deel->titel, 'Titel');
-		$fields[] = new TextField('omschrijving', $deel->omschrijving, 'Omschrijving');
+		$fields[] = new TextareaField('omschrijving', $deel->omschrijving, 'Omschrijving');
 		$fields[] = new TextField('rechten_lezen', $deel->rechten_lezen, 'Leesrechten');
 		$fields[] = new TextField('rechten_posten', $deel->rechten_posten, 'Postrechten');
 		$fields[] = new TextField('rechten_modereren', $deel->rechten_modereren, 'Modrechten');

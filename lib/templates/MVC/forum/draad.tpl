@@ -7,7 +7,7 @@
 		<div id="togglemodknop" style="float: right; clear: right;">
 			<a class="knop" title="Moderatie-functies weergeven" onclick="$('#modereren').slideDown();
 					$('#togglemodknop').toggle();
-					$('#forumtabel a.forummodknop').fadeIn();">{icon get="bullet_wrench"} Modereren&nbsp;</a>
+					$('#forumtabel a.forummodknop').fadeIn();">{icon get="wrench"} Modereren</a>
 		</div>
 	{/if}
 

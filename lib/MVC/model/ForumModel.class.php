@@ -76,9 +76,9 @@ class ForumDelenModel extends PersistenceModel {
 		return $this->retrieveByPrimaryKey(array($id));
 	}
 
-	public function newForumDeel($categorie_id) {
+	public function newForumDeel() {
 		$deel = new ForumDeel();
-		$deel->categorie_id = $categorie_id;
+		$deel->categorie_id = 0;
 		$deel->titel = '';
 		$deel->omschrijving = '';
 		$deel->laatst_gewijzigd = null;

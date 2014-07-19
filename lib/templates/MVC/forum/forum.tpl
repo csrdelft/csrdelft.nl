@@ -7,14 +7,17 @@
 </div>
 <h1>Forum</h1>
 
+{if LoginLid::mag('P_ADMIN')}
+	<div id="togglemodknop" style="float: right; clear: right;">
+		<a href="/forum/aanmaken" class="knop post popup confirm" title="Forum aanmaken">{icon get="add"} Nieuw</a>
+	</div>
+{/if}
+
 <table id="forumtabel">
 	{foreach from=$categorien item=cat}
 		<thead>
 			<tr>
-				<th class="hoverIntent">
-				{if LoginLid::mag('P_ADMIN')}
-					<a href="/forum/aanmaken/{$cat->categorie_id}" class="knop post popup confirm hoverIntentContent" style="margin-left: -35px;" title="Klikken = aanmaken">{icon get="add"}</a>
-				{/if}
+				<th>
 					{$cat->titel}
 					<span class="forumcategorie-omschrijving">{$cat->omschrijving}</span>
 				</th>

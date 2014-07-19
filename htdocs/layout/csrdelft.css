@@ -1158,9 +1158,6 @@ div.citaatContainer div.citaat img.ubb_image{ max-width: 545px; }
 div.citaatContainer div.citaat div.citaatContainer div.citaat img.ubb_image{ max-width: 516px; }
 
 fieldset{
-	border: 0;
-}
-fieldset#modereren{
 	padding: 10px;
 	margin-bottom: 10px;
 	border: 1px solid grey;

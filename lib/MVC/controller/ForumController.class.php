@@ -261,11 +261,9 @@ class ForumController extends Controller {
 
 	/**
 	 * Forum deel aanmaken.
-	 * 
-	 * @param int $categorie_id
 	 */
-	public function aanmaken($categorie_id) {
-		$deel = ForumDelenModel::instance()->newForumDeel((int) $categorie_id);
+	public function aanmaken() {
+		$deel = ForumDelenModel::instance()->newForumDeel();
 		$this->beheren($deel->forum_id);
 	}
 

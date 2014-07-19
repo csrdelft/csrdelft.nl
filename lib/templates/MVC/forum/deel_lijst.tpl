@@ -1,8 +1,5 @@
 <tr class="forumdeel kleur{cycle values="0,1"}">
-	<td class="titel hoverIntent">
-	{if LoginLid::mag('P_ADMIN')}
-		<a href="/forum/beheren/{$deel->forum_id}" class="knop post popup hoverIntentContent" style="margin-left: -35px;">{icon get="bewerken"}</a>
-	{/if}
+	<td class="titel">
 		<a href="/forum/deel/{$deel->forum_id}">{$deel->titel}</a>
 		<br />{$deel->omschrijving}
 	</td>
