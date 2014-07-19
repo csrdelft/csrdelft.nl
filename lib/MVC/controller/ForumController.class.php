@@ -78,6 +78,7 @@ class ForumController extends Controller {
 			case 'goedkeuren':
 			case 'citeren':
 			case 'tekst':
+			case 'optout':
 				return $this->isPosted();
 
 			default:
@@ -259,6 +260,16 @@ class ForumController extends Controller {
 			ForumDelenModel::instance()->verwijderForumDeel((int) $forum_id);
 		}
 		// ReloadPage
+	}
+
+	/**
+	 * Forum draad verbergen in zijbalk
+	 * 
+	 * @param int $draad_id
+	 */
+	public function optout($draad_id) {
+		$draad = ForumDradenModel::instance()->getForumDraad((int) $draad_id);
+		ForumDradenVerbergenModel::instance()->setVerbergenVoorLid($draad);
 	}
 
 	/**

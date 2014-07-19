@@ -1,7 +1,7 @@
 {strip}
 	{assign var=draad value=$draden[$post->draad_id]}
 	{assign var=timestamp value=strtotime($post->datum_tijd)}
-	<div class="item hoverIntent">
+	<div class="item">
 		{*include file='MVC/forum/post_preview.tpl'*}
 		{if date('d-m', $timestamp) === date('d-m')}
 			{$timestamp|date_format:"%H:%M"}

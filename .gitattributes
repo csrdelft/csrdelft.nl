@@ -3034,6 +3034,7 @@ lib/MVC/model/entity/ForumCategorie.class.php -text
 lib/MVC/model/entity/ForumDeel.class.php -text
 lib/MVC/model/entity/ForumDraad.class.php -text
 lib/MVC/model/entity/ForumDraadGelezen.class.php -text
+lib/MVC/model/entity/ForumDraadVerbergen.class.php -text
 lib/MVC/model/entity/ForumPost.class.php -text
 lib/MVC/model/entity/Foto.class.php -text
 lib/MVC/model/entity/FotoAlbum.class.php -text

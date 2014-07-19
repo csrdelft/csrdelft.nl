@@ -422,7 +422,7 @@ class LoginLid {
 			if (Lichting::getJongsteLichting() > $this->lid->getProperty('lidjaar') AND $this->hasPermission('P_LOGGED_IN', $token_authorizable)) {
 				return true;
 			}
-		} elseif (substr($permissie, 0, 11) == 'eerstejaars' OR substr($permissie, 0, 11) == 'eerstejaars') {
+		} elseif (substr($permissie, 0, 11) == 'Eerstejaars' OR substr($permissie, 0, 11) == 'eerstejaars') {
 			if (Lichting::getJongsteLichting() == $this->lid->getProperty('lidjaar') AND $this->hasPermission('P_LOGGED_IN', $token_authorizable)) {
 				return true;
 			}

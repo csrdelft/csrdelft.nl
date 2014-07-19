@@ -99,7 +99,7 @@ class ForumDelenModel extends PersistenceModel {
 	}
 
 	public function verwijderForumDeel($id) {
-		
+
 		$this->deleteByPrimaryKey(array($id));
 	}
 
@@ -152,7 +152,7 @@ class ForumDelenModel extends PersistenceModel {
 				ForumDradenModel::instance()->update($draad);
 			}
 		}
-		// check permissies op delen
+// check permissies op delen
 		$delen_ids = array_keys(group_by_distinct('forum_id', $gevonden_draden, false));
 		$gevonden_delen = group_by_distinct('forum_id', ForumDelenModel::instance()->getForumDelenById($delen_ids));
 		foreach ($gevonden_delen as $forum_id => $deel) {
@@ -194,7 +194,7 @@ class ForumDelenModel extends PersistenceModel {
 				$draad->setForumPosts($array_first_post);
 			}
 		}
-		// check permissies op delen
+// check permissies op delen
 		$delen_ids = array_keys(group_by_distinct('forum_id', $gevonden_draden, false));
 		$gevonden_delen = group_by_distinct('forum_id', ForumDelenModel::instance()->getForumDelenById($delen_ids));
 		foreach ($gevonden_delen as $forum_id => $deel) {
@@ -242,6 +242,34 @@ class ForumDradenGelezenModel extends PersistenceModel {
 		} else {
 			$gelezen->datum_tijd = date('Y-m-d H:i:s');
 			$this->update($gelezen);
+		}
+	}
+
+}
+
+class ForumDradenVerbergenModel extends PersistenceModel {
+
+	const orm = 'ForumDraadVerbergen';
+
+	protected static $instance;
+
+	public function getVerbergenVoorLid(ForumDraad $draad) {
+		return $this->existsByPrimaryKey(array($draad->draad_id, LoginLid::instance()->getUid()));
+	}
+
+	public function setVerbergenVoorLid(ForumDraad $draad, $verbergen) {
+		$verborgen = $this->getVerbergenVoorLid($draad);
+		if ($verbergen) {
+			if (!$verborgen) {
+				$verborgen = new ForumDraadVerbergen();
+				$verborgen->draad_id = $draad->draad_id;
+				$verborgen->lid_id = LoginLid::instance()->getUid();
+				$this->create($verborgen);
+			}
+		} else {
+			if ($verborgen) {
+				$this->deleteByPrimaryKey(array($draad->draad_id, LoginLid::instance()->getUid()));
+			}
 		}
 	}
 
@@ -354,12 +382,14 @@ class ForumDradenModel extends PersistenceModel implements Paging {
 	public function find($criteria = null, array $criteria_params = array(), $orderby = null, $groupby = null, $limit = null, $start = 0) {
 		$orm = self::orm;
 		$from = $orm::getTableName() . ' AS d LEFT JOIN forum_draden_gelezen AS g ON d.draad_id = g.draad_id AND g.lid_id = ?';
+		$from .= ' LEFT JOIN forum_draden_verbergen AS v ON d.draad_id = v.draad_id AND v.lid_id = ?';
 		$fields = $orm::getFields();
 		foreach ($fields as $i => $field) {
 			$fields[$i] = 'd.' . $field;
 		}
 		$fields[] = 'g.datum_tijd AS wanneer_gelezen';
-		$result = Database::sqlSelect($fields, $from, $criteria, array_merge(array(LoginLid::instance()->getUid()), $criteria_params), $orderby, $groupby, $limit, $start);
+		$params = array_merge(array(LoginLid::instance()->getUid(), LoginLid::instance()->getUid()), $criteria_params);
+		$result = Database::sqlSelect($fields, $from, $criteria, $params, $orderby, $groupby, $limit, $start);
 		$result->setFetchMode(PDO::FETCH_CLASS, $orm, array($cast = true));
 		return $result;
 	}
@@ -402,7 +432,7 @@ class ForumDradenModel extends PersistenceModel implements Paging {
 		} else {
 			$belangrijk = '';
 		}
-		$draden = $this->find('forum_id IN (' . $in . ') AND d.wacht_goedkeuring = FALSE AND d.verwijderd = FALSE' . $belangrijk, $params, 'd.laatst_gewijzigd DESC', null, $aantal, ($pagina - 1) * $aantal)->fetchAll();
+		$draden = $this->find('forum_id IN (' . $in . ') AND d.wacht_goedkeuring = FALSE AND d.verwijderd = FALSE AND v.draad_id = NULL' . $belangrijk, $params, 'd.laatst_gewijzigd DESC', null, $aantal, ($pagina - 1) * $aantal)->fetchAll();
 		$posts_ids = array_keys(group_by_distinct('laatste_post_id', $draden, false));
 		$posts = ForumPostsModel::instance()->getForumPostsById($posts_ids, ' AND wacht_goedkeuring = FALSE AND verwijderd = FALSE');
 		foreach ($draden as $i => $draad) {
@@ -425,7 +455,7 @@ class ForumDradenModel extends PersistenceModel implements Paging {
 	public function getForumDraad($id) {
 		$draad = $this->retrieveByPrimaryKey(array($id));
 		if (!$draad) {
-			throw new Exception('Forumdraad bestaat niet!');
+			throw new Exception('Forum-onderwerp bestaat niet!');
 		}
 		return $draad;
 	}
@@ -570,7 +600,7 @@ class ForumPostsModel extends PersistenceModel implements Paging {
 			$array_first_post = $this->find('draad_id = ? AND wacht_goedkeuring = FALSE AND verwijderd = FALSE', array($draad->draad_id), 'post_id ASC', null, 1)->fetch();
 			array_unshift($posts, $array_first_post);
 		}
-		// 2008-filter
+// 2008-filter
 		if (LidInstellingen::get('forum', 'filter2008') == 'ja') {
 			foreach ($posts as $post) {
 				if (startsWith($post->lid_id, '08')) {
@@ -593,9 +623,9 @@ class ForumPostsModel extends PersistenceModel implements Paging {
 			return $this->aantal_goedkeuring[0];
 		} else {
 			if (!array_key_exists($forum_id, $this->aantal_goedkeuring)) {
-				// laad draad ids van posts die wachten op goedkeuring
+// laad draad ids van posts die wachten op goedkeuring
 				$gevonden_posts = group_by('draad_id', ForumPostsModel::instance()->find('wacht_goedkeuring = TRUE AND verwijderd = FALSE'));
-				// laad draden bij posts die alleen in dit deel zitten
+// laad draden bij posts die alleen in dit deel zitten
 				$gevonden_draden = ForumDradenModel::instance()->getForumDradenById(array_keys($gevonden_posts), ' AND forum_id = ? AND verwijderd = FALSE', array($forum_id));
 				$this->aantal_goedkeuring[$forum_id] = count($gevonden_draden);
 			}
@@ -649,7 +679,7 @@ class ForumPostsModel extends PersistenceModel implements Paging {
 	public function getForumPost($id) {
 		$post = $this->retrieveByPrimaryKey(array($id));
 		if (!$post) {
-			throw new Exception('Forumpost bestaat niet!');
+			throw new Exception('Forum-reactie bestaat niet!');
 		}
 		return $post;
 	}
