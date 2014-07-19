@@ -382,13 +382,12 @@ class ForumDradenModel extends PersistenceModel implements Paging {
 	public function find($criteria = null, array $criteria_params = array(), $orderby = null, $groupby = null, $limit = null, $start = 0) {
 		$orm = self::orm;
 		$from = $orm::getTableName() . ' AS d LEFT JOIN forum_draden_gelezen AS g ON d.draad_id = g.draad_id AND g.lid_id = ?';
-		$from .= ' LEFT JOIN forum_draden_verbergen AS v ON d.draad_id = v.draad_id AND v.lid_id = ?';
 		$fields = $orm::getFields();
 		foreach ($fields as $i => $field) {
 			$fields[$i] = 'd.' . $field;
 		}
 		$fields[] = 'g.datum_tijd AS wanneer_gelezen';
-		$params = array_merge(array(LoginLid::instance()->getUid(), LoginLid::instance()->getUid()), $criteria_params);
+		$params = array_merge(array(LoginLid::instance()->getUid()), $criteria_params);
 		$result = Database::sqlSelect($fields, $from, $criteria, $params, $orderby, $groupby, $limit, $start);
 		$result->setFetchMode(PDO::FETCH_CLASS, $orm, array($cast = true));
 		return $result;
@@ -425,14 +424,21 @@ class ForumDradenModel extends PersistenceModel implements Paging {
 			}
 			return array();
 		}
-		$in = implode(', ', array_fill(0, $count, '?'));
+		$forum_ids = implode(', ', array_fill(0, $count, '?'));
+		$draden_ids = group_by_distinct('draad_id', ForumDradenVerbergenModel::instance()->find('lid_id = ?', array(LoginLid::instance()->getUid()));
+		if ($count > 0) {
+			$params = array_merge($draden_ids, $params);
+			$verborgen = ' AND d.draad_id NOT IN (' . implode(', ', array_fill(0, $count, '?')) . ')';
+		} else {
+			$verborgen = '';
+		}
 		if ($belangrijk !== null) {
 			$params[] = $belangrijk;
 			$belangrijk = ' AND d.belangrijk = ?';
 		} else {
 			$belangrijk = '';
 		}
-		$draden = $this->find('forum_id IN (' . $in . ') AND d.wacht_goedkeuring = FALSE AND d.verwijderd = FALSE AND v.draad_id = NULL' . $belangrijk, $params, 'd.laatst_gewijzigd DESC', null, $aantal, ($pagina - 1) * $aantal)->fetchAll();
+		$draden = $this->find('d.forum_id IN (' . $forum_ids . ')' . $verborgen . ' AND d.wacht_goedkeuring = FALSE AND d.verwijderd = FALSE' . $belangrijk, $params, 'd.laatst_gewijzigd DESC', null, $aantal, ($pagina - 1) * $aantal)->fetchAll();
 		$posts_ids = array_keys(group_by_distinct('laatste_post_id', $draden, false));
 		$posts = ForumPostsModel::instance()->getForumPostsById($posts_ids, ' AND wacht_goedkeuring = FALSE AND verwijderd = FALSE');
 		foreach ($draden as $i => $draad) {
