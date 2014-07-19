@@ -73,10 +73,14 @@ class ForumDelenModel extends PersistenceModel {
 	}
 
 	public function getForumDeel($id) {
-		return $this->retrieveByPrimaryKey(array($id));
+		$deel = $this->retrieveByPrimaryKey(array($id));
+		if (!$deel) {
+			throw new Exception('Forum bestaat niet!');
+		}
+		return $deel;
 	}
 
-	public function newForumDeel() {
+	public function maakForumDeel() {
 		$deel = new ForumDeel();
 		$deel->categorie_id = 0;
 		$deel->titel = '';
@@ -92,6 +96,11 @@ class ForumDelenModel extends PersistenceModel {
 		$deel->volgorde = 0;
 		$deel->forum_id = $this->create($deel);
 		return $deel;
+	}
+
+	public function verwijderForumDeel($id) {
+		
+		$this->deleteByPrimaryKey(array($id));
 	}
 
 	public function getForumDelenById(array $ids) {

@@ -65,6 +65,7 @@ class ForumController extends Controller {
 
 			case 'aanmaken':
 			case 'beheren':
+			case 'opheffen':
 				if (!LoginLid::mag('P_ADMIN')) {
 					return false;
 				}
@@ -221,6 +222,45 @@ class ForumController extends Controller {
 	}
 
 	/**
+	 * Forum deel aanmaken.
+	 */
+	public function aanmaken() {
+		$deel = ForumDelenModel::instance()->maakForumDeel();
+		$this->beheren($deel->forum_id);
+	}
+
+	/**
+	 * Forum deel wijzigen.
+	 * 
+	 * @param int $forum_id
+	 */
+	public function beheren($forum_id) {
+		$deel = ForumDelenModel::instance()->getForumDeel((int) $forum_id);
+		$this->view = new ForumDeelForm($deel); // fetches POST values itself
+		if ($this->view->validate()) {
+			$rowcount = ForumDelenModel::instance()->update($deel);
+			if ($rowcount !== 1) {
+				throw new Exception('Forum beheren mislukt!');
+			}
+			// ReloadPage
+		}
+	}
+
+	/**
+	 * Forum deel verwijderen.
+	 * 
+	 * @param int $forum_id
+	 */
+	public function opheffen($forum_id) {
+		if (ForumDradenModel::instance()->exist('forum_id = ?', array((int) $forum_id))) {
+			setMelding('Verwijder eerst alle draadjes van dit deelforum uit de database!', -1);
+		} else {
+			ForumDelenModel::instance()->verwijderForumDeel((int) $forum_id);
+		}
+		// ReloadPage
+	}
+
+	/**
 	 * Wijzig een eigenschap van een draadje.
 	 * 
 	 * @param int $draad_id
@@ -257,34 +297,6 @@ class ForumController extends Controller {
 		}
 		setMelding('Wijziging geslaagd: ' . $wijziging, 1);
 		$this->onderwerp($draad->draad_id);
-	}
-
-	/**
-	 * Forum deel aanmaken.
-	 */
-	public function aanmaken() {
-		$deel = ForumDelenModel::instance()->newForumDeel();
-		$this->beheren($deel->forum_id);
-	}
-
-	/**
-	 * Forum deel wijzigen.
-	 * 
-	 * @param int $forum_id
-	 */
-	public function beheren($forum_id) {
-		$deel = ForumDelenModel::instance()->getForumDeel((int) $forum_id);
-		if (!$deel instanceof ForumDeel) {
-			throw new Exception('Forum bestaat niet!');
-		}
-		$this->view = new ForumDeelForm($deel); // fetches POST values itself
-		if ($this->view->validate()) {
-			$rowcount = ForumDelenModel::instance()->update($deel);
-			if ($rowcount !== 1) {
-				throw new Exception('Forum beheren mislukt!');
-			}
-			// ReloadPage
-		}
 	}
 
 	/**

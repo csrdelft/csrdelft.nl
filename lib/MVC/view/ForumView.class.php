@@ -57,7 +57,7 @@ class ForumDeelForm extends PopupForm {
 
 	public function __construct(ForumDeel $deel) {
 		parent::__construct($deel, 'beheerdeelforum', '/forum/beheren/' . $deel->forum_id);
-		$this->titel = 'Forumdeel beheren';
+		$this->titel = 'Deelforum beheren';
 		$this->css_classes[] = 'ReloadPage PreventUnchanged';
 
 		$categorien = ForumModel::instance()->find(null, array(), 'volgorde ASC');
@@ -73,7 +73,13 @@ class ForumDeelForm extends PopupForm {
 		$fields[] = new TextField('rechten_posten', $deel->rechten_posten, 'Postrechten');
 		$fields[] = new TextField('rechten_modereren', $deel->rechten_modereren, 'Modrechten');
 		$fields[] = new IntField('volgorde', $deel->volgorde, 'Volgorde');
-		$fields[] = new SubmitResetCancel();
+		$fields['src'] = new SubmitResetCancel();
+		$fields['src']->extraText = 'Verwijderen';
+		$fields['src']->extraTitle = 'Deelforum verwijderen';
+		$fields['src']->extraIcon = 'cross';
+		$fields['src']->extraUrl = '/forum/opheffen/' . $deel->forum_id;
+		$fields['src']->extraActie = 'submit';
+		$fields['src']->js = "$('#extraButton').unbind('click.action');$('#extraButton').bind('click.action', form_replace_action);";
 
 		$this->addFields($fields);
 	}
