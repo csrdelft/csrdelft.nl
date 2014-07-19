@@ -115,7 +115,7 @@ class ForumDraadZijbalkView extends TemplateView {
 	}
 
 	public function view() {
-		echo '<div id="zijbalk_forum"><h1><a href="/forum/recent';
+		echo '<div class="zijbalk_forum"><h1><a href="/forum/recent';
 		if ($this->belangrijk === true) {
 			echo '/1/belangrijk';
 		}
@@ -157,7 +157,7 @@ class ForumPostZijbalkView extends TemplateView {
 	}
 
 	public function view() {
-		echo '<div id="zijbalk_forum"><h1><a href="/communicatie/profiel/' . LoginLid::instance()->getUid() . '/#forum">Forum (zelf gepost)</a></h1>';
+		echo '<div class="zijbalk_forum"><h1><a href="/communicatie/profiel/' . LoginLid::instance()->getUid() . '/#forum">Forum (zelf gepost)</a></h1>';
 		foreach ($this->model as $post) {
 			$this->smarty->assign('post', $post);
 			$this->smarty->display('MVC/forum/post_zijbalk.tpl');
