@@ -2,6 +2,12 @@
 
 {include file='MVC/forum/zoek_form.tpl'}
 
+{if LoginLid::mag('P_ADMIN')}
+	<div id="togglemodknop" style="float: right; ">
+		<a href="/forum/beheren/{$deel->forum_id}" class="knop post popup" title="Beheer-functies weergeven">{icon get="wrench_orange"} Beheren</a>
+	</div>
+{/if}
+
 {capture name='navlinks'}
 	<div class="forumNavigatie">
 		<a href="/forum" class="forumGrootlink">Forum</a>
@@ -24,12 +30,6 @@
 {$smarty.capture.navlinks}
 <h1>{$deel->titel}</h1>
 
-{if LoginLid::mag('P_ADMIN')}
-	<div id="togglemodknop" style="float: right; clear: right;">
-		<a href="/forum/beheren/{$deel->forum_id}" class="knop post popup" title="Beheer-functies weergeven">{icon get="wrench_orange"} Beheren</a>
-	</div>
-{/if}
-	
 <table id="forumtabel">
 	<thead>
 		<tr>

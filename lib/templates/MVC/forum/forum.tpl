@@ -2,16 +2,16 @@
 
 {include file='MVC/forum/zoek_form.tpl'}
 
+{if LoginLid::mag('P_ADMIN')}
+	<div id="togglemodknop" style="float: right;">
+		<a href="/forum/aanmaken" class="knop post popup confirm" title="Forum aanmaken">{icon get="add"} Nieuw</a>
+	</div>
+{/if}
+
 <div class="forumNavigatie">
 	<a href="/forum/recent" class="forumGrootlink">Recent</a>
 </div>
 <h1>Forum</h1>
-
-{if LoginLid::mag('P_ADMIN')}
-	<div id="togglemodknop" style="float: right; clear: right;">
-		<a href="/forum/aanmaken" class="knop post popup confirm" title="Forum aanmaken">{icon get="add"} Nieuw</a>
-	</div>
-{/if}
 
 <table id="forumtabel">
 	{foreach from=$categorien item=cat}

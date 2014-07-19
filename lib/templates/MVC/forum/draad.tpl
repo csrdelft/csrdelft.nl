@@ -4,7 +4,7 @@
 	{include file='MVC/forum/zoek_form.tpl'}
 
 	{if $deel->magModereren()}
-		<div id="togglemodknop" style="float: right; clear: right;">
+		<div id="togglemodknop" style="float: right;">
 			<a class="knop" title="Moderatie-functies weergeven" onclick="$('#modereren').slideDown();
 					$('#togglemodknop').toggle();
 					$('#forumtabel a.forummodknop').fadeIn();">{icon get="wrench"} Modereren</a>
@@ -86,67 +86,67 @@ strtotime($post->laatst_bewerkt) > strtotime($draad->getWanneerGelezen())
 )
 			}
 			{assign var=vanaf value=true}
-				<tr class="ongelezenvanaf" title="Ongelezen reacties vanaf hier">
-					<td colspan="2">
-						<a id="ongelezen"></a>
-					</td>
-				</tr>
-			{else}
-				<tr class="tussenschot">
-					<td colspan="2"></td>
-				</tr>
-			{/if}
-			{include file='MVC/forum/post_lijst.tpl'}
-			{if $draad->eerste_post_plakkerig AND ForumPostsModel::instance()->getHuidigePagina() != 1 AND $smarty.foreach.posts.first}
-				<tr class="tussenschot">
-					<td colspan="2"></td>
-				</tr>
-				<tr>
-					<td>&nbsp;</td>
-					<td>
-						<div class="forum-paginering" style="float: right;">
-							Pagina: {sliding_pager baseurl="/forum/onderwerp/"|cat:$draad->draad_id|cat:"/"
-										pagecount=ForumPostsModel::instance()->getAantalPaginas($draad->draad_id) curpage=ForumPostsModel::instance()->getHuidigePagina()}
-						</div>
-					</td>
-				</tr>
-			{/if}
-		{/foreach}
-
-		{if ForumPostsModel::instance()->getAantalPaginas($draad->draad_id) > 1}
-			<tr class="tussenschot">
-				<td colspan="2"></td>
-			</tr>
-			<tr>
-				<td>&nbsp;</td>
-				<td>
-					<div class="forum-paginering">
-						Pagina: {sliding_pager baseurl="/forum/onderwerp/"|cat:$draad->draad_id|cat:"/"
-	pagecount=ForumPostsModel::instance()->getAantalPaginas($draad->draad_id) curpage=ForumPostsModel::instance()->getHuidigePagina()}
-					</div>
-				</td>
-			</tr>
-		{/if}
-
-		{if !$vanaf AND ForumPostsModel::instance()->getHuidigePagina() == ForumPostsModel::instance()->getAantalPaginas($draad->draad_id)}
-			<tr class="ongelezenvanaf" title="Geen ongelezen berichten">
+			<tr class="ongelezenvanaf" title="Ongelezen reacties vanaf hier">
 				<td colspan="2">
 					<a id="ongelezen"></a>
 				</td>
 			</tr>
-		{else}
-			<tr class="tussenschot">
-				<td colspan="2"></td>
-			</tr>
-		{/if}
+			{else}
+				<tr class="tussenschot">
+					<td colspan="2"></td>
+				</tr>
+				{/if}
+					{include file='MVC/forum/post_lijst.tpl'}
+					{if $draad->eerste_post_plakkerig AND ForumPostsModel::instance()->getHuidigePagina() != 1 AND $smarty.foreach.posts.first}
+						<tr class="tussenschot">
+							<td colspan="2"></td>
+						</tr>
+						<tr>
+							<td>&nbsp;</td>
+							<td>
+								<div class="forum-paginering" style="float: right;">
+									Pagina: {sliding_pager baseurl="/forum/onderwerp/"|cat:$draad->draad_id|cat:"/"
+										pagecount=ForumPostsModel::instance()->getAantalPaginas($draad->draad_id) curpage=ForumPostsModel::instance()->getHuidigePagina()}
+								</div>
+							</td>
+						</tr>
+					{/if}
+					{/foreach}
 
-		<tr>
-			<td colspan="5" style="padding: 5px 0;">
-				{$smarty.capture.navlinks}
-				{$smarty.capture.titel}
-			</td>
-		</tr>
+						{if ForumPostsModel::instance()->getAantalPaginas($draad->draad_id) > 1}
+							<tr class="tussenschot">
+								<td colspan="2"></td>
+							</tr>
+							<tr>
+								<td>&nbsp;</td>
+								<td>
+									<div class="forum-paginering">
+										Pagina: {sliding_pager baseurl="/forum/onderwerp/"|cat:$draad->draad_id|cat:"/"
+	pagecount=ForumPostsModel::instance()->getAantalPaginas($draad->draad_id) curpage=ForumPostsModel::instance()->getHuidigePagina()}
+									</div>
+								</td>
+							</tr>
+						{/if}
 
-		{include file='MVC/forum/post_form.tpl'}
-	</tbody>
-</table>
+						{if !$vanaf AND ForumPostsModel::instance()->getHuidigePagina() == ForumPostsModel::instance()->getAantalPaginas($draad->draad_id)}
+							<tr class="ongelezenvanaf" title="Geen ongelezen berichten">
+								<td colspan="2">
+									<a id="ongelezen"></a>
+								</td>
+							</tr>
+						{else}
+							<tr class="tussenschot">
+								<td colspan="2"></td>
+							</tr>
+						{/if}
+
+						<tr>
+							<td colspan="5" style="padding: 5px 0;">
+								{$smarty.capture.navlinks}
+								{$smarty.capture.titel}
+							</td>
+						</tr>
+
+						{include file='MVC/forum/post_form.tpl'}
+					</tbody>
+				</table>

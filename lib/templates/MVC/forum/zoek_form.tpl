@@ -1,4 +1,4 @@
-<form id="forum_zoeken" action="/forum/zoeken" method="post"><fieldset><input type="text" name="zoeken" value="zoeken in forum" onfocus="this.value = '';" /></fieldset></form>
+<form id="forum_zoeken" action="/forum/zoeken" method="post"><input type="text" name="zoeken" placeholder="Zoeken in forum" /></form>
 
 {if isset($deel) AND $deel->magModereren() AND ForumPostsModel::instance()->getAantalWachtOpGoedkeuring($deel->forum_id) > 0}
 	<div style="float: right; margin-right: 50px;">

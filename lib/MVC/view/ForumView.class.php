@@ -66,7 +66,7 @@ class ForumDeelForm extends PopupForm {
 			$lijst[$cat->categorie_id] = $cat->titel;
 		}
 
-		$fields[] = new SelectField('categorie_id', $deel->categorie_id, 'Categorie', $categorien);
+		$fields[] = new SelectField('categorie_id', $deel->categorie_id, 'Categorie', $lijst);
 		$fields[] = new RequiredTextField('titel', $deel->titel, 'Titel');
 		$fields[] = new TextareaField('omschrijving', $deel->omschrijving, 'Omschrijving');
 		$fields[] = new TextField('rechten_lezen', $deel->rechten_lezen, 'Leesrechten');
