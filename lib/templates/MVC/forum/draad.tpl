@@ -4,7 +4,7 @@
 	{include file='MVC/forum/zoek_form.tpl'}
 
 	{if $deel->magModereren()}
-		<div id="togglemodknop" style="float: right;">
+		<div id="togglemodknop" class="forumheadbtn">
 			<a class="knop" title="Moderatie-functies weergeven" onclick="$('#modereren').slideDown();
 					$('#togglemodknop').toggle();
 					$('#forumtabel a.forummodknop').fadeIn();">{icon get="wrench"} Modereren</a>

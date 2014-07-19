@@ -928,6 +928,10 @@ table.groepStats td, table.groepStats th{
 
 
 /**************************** FORUM *******************************/
+div.forumheadbtn{
+	float: right;
+	margin-right: 15px;
+}
 
 #forumtabel{
 	border: 0; padding: 0;

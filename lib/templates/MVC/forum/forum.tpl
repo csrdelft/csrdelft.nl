@@ -3,7 +3,7 @@
 {include file='MVC/forum/zoek_form.tpl'}
 
 {if LoginLid::mag('P_ADMIN')}
-	<div id="togglemodknop" style="float: right;">
+	<div class="forumheadbtn">
 		<a href="/forum/aanmaken" class="knop post popup confirm" title="Forum aanmaken">{icon get="add"} Nieuw</a>
 	</div>
 {/if}
