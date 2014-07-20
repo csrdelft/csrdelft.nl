@@ -338,7 +338,7 @@ class ForumController extends Controller {
 			$this->geentoegang();
 		}
 		if ($property === 'belangrijk') {
-			if (LoginLid::mag('P_FORUM_BELANGRIJK')) {
+			if (LoginLid::mag('P_FORUM_MOD+')) {
 				ForumDradenVerbergenModel::instance()->herstelDraadVoorIedereen($draad);
 			} else {
 				$this->geentoegang();
