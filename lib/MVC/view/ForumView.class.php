@@ -38,10 +38,10 @@ class ForumZoekenForm extends Formulier {
 		$fields[] = new KeuzeRondjeField('datumsoort', 'reactie', null, array('reactie' => 'Laatste reactie', 'gemaakt' => 'Aanmaak-datum'));
 		$fields[] = new SelectField('ouderjonger', 'jonger', null, array('jonger' => 'Niet', 'ouder' => 'Wel'));
 		$fields[] = new HtmlComment(' ouder dan ');
-		$fields[] = new IntField('jaaroud', 1, null, 0);
-		$fields[] = new HtmlComment(' jaar</div>');
-		$fields['l'] = new LidField('auteur', null, 'Auteur');
-		$fields['l']->no_preview = true;
+		$fields[] = new IntField('jaaroud', 1, null, 1);
+		$fields[] = new HtmlComment(' jaar</div>'); /*
+		  $fields['l'] = new LidField('auteur', null, 'Auteur');
+		  $fields['l']->no_preview = true; */
 		$fields[] = new HtmlComment('</div>');
 
 		$this->addFields($fields);
@@ -220,7 +220,7 @@ class ForumResultatenView extends TemplateView {
 		$this->smarty->assign('resultaten', $this->model);
 		$this->smarty->assign('delen', $delen);
 		if ($query !== null) {
-			$this->smarty->assign('query', $query);
+			//FIXME: verder zoeken $this->smarty->assign('query', $query);
 			$this->titel = 'Zoekresultaten voor: "' . $query . '"';
 		} else {
 			$this->titel = 'Wacht op goedkeuring';

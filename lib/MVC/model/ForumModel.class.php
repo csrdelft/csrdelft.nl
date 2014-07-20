@@ -174,10 +174,14 @@ class ForumDelenModel extends PersistenceModel {
 	 * 
 	 * @return array( ForumDraden[], ForumDelen[] )
 	 */
-	public function zoeken($query) {
-		$gevonden_posts = group_by('draad_id', ForumPostsModel::instance()->zoeken($query)); // zoek op tekst in posts
-		$gevonden_draden = group_by_distinct('draad_id', ForumDradenModel::instance()->zoeken($query)); // zoek op titel in draden
-		$gevonden_draden += ForumDradenModel::instance()->getForumDradenById(array_keys($gevonden_posts)); // laad draden bij posts
+	public function zoeken($query, $titel, $datum, $ouder, $jaar, $auteur) {
+		$gevonden_draden = group_by_distinct('draad_id', ForumDradenModel::instance()->zoeken($query, $datum, $ouder, $jaar, $auteur)); // zoek op titel in draden
+		if ($titel === true) {
+			$gevonden_posts = array();
+		} else {
+			$gevonden_posts = group_by('draad_id', ForumPostsModel::instance()->zoeken($query, $datum, $ouder, $jaar, $auteur)); // zoek op tekst in posts
+			$gevonden_draden += ForumDradenModel::instance()->getForumDradenById(array_keys($gevonden_posts)); // laad draden bij posts
+		}
 		foreach ($gevonden_draden as $draad) { // laad posts bij draden
 			if (property_exists($draad, 'score')) { // gevonden op draad titel
 				$draad->score = (float) $draad->score;
@@ -194,7 +198,7 @@ class ForumDelenModel extends PersistenceModel {
 				$draad->setForumPosts($array_first_post);
 			}
 		}
-// check permissies op delen
+		// check permissies op delen
 		$delen_ids = array_keys(group_by_distinct('forum_id', $gevonden_draden, false));
 		$gevonden_delen = group_by_distinct('forum_id', ForumDelenModel::instance()->getForumDelenById($delen_ids));
 		foreach ($gevonden_delen as $forum_id => $deel) {
@@ -375,12 +379,25 @@ class ForumDradenModel extends PersistenceModel implements Paging {
 		ForumDelenModel::instance()->update($deel);
 	}
 
-	public function zoeken($query) {
+	public function zoeken($query, $datum, $ouder, $jaar) {
 		$this->per_pagina = (int) LidInstellingen::get('forum', 'zoekresultaten');
 		$orm = self::orm;
 		$fields = $orm::getFields();
 		$fields[] = 'MATCH(titel) AGAINST (? IN NATURAL LANGUAGE MODE) AS score';
-		$results = Database::sqlSelect($fields, $orm::getTableName(), 'wacht_goedkeuring = FALSE AND verwijderd = FALSE HAVING score > 0', array($query), 'score DESC', null, $this->per_pagina, ($this->pagina - 1) * $this->per_pagina);
+		$where = 'wacht_goedkeuring = FALSE AND verwijderd = FALSE AND ';
+		if ($datum === 'gemaakt') {
+			$where .= 'datum_tijd';
+		} else {
+			$where .= 'laatst_gewijzigd';
+		}
+		if ($ouder === 'ouder') {
+			$where = ' < ';
+		} else {
+			$where = ' > ';
+		}
+		$where .= date('Y-m-d H:i:s', strtotime('-' . $jaar . ' year'));
+		$where .= ' AND HAVING score > 0';
+		$results = Database::sqlSelect($fields, $orm::getTableName(), $where, array($query), 'score DESC', null, $this->per_pagina, ($this->pagina - 1) * $this->per_pagina);
 		$results->setFetchMode(PDO::FETCH_CLASS, $orm, array($cast = true));
 		return $results;
 	}
@@ -608,12 +625,25 @@ class ForumPostsModel extends PersistenceModel implements Paging {
 		ForumDradenModel::instance()->hertellenVoorDeel($deel);
 	}
 
-	public function zoeken($query) {
+	public function zoeken($query, $datum, $ouder, $jaar) {
 		$this->per_pagina = (int) LidInstellingen::get('forum', 'zoekresultaten');
 		$orm = self::orm;
 		$fields = $orm::getFields();
 		$fields[] = 'MATCH(tekst) AGAINST (? IN NATURAL LANGUAGE MODE) AS score';
-		$results = Database::sqlSelect($fields, $orm::getTableName(), 'wacht_goedkeuring = FALSE AND verwijderd = FALSE HAVING score > 0', array($query), 'score DESC', null, $this->per_pagina, ($this->pagina - 1) * $this->per_pagina);
+		$where = 'wacht_goedkeuring = FALSE AND verwijderd = FALSE AND ';
+		if ($datum === 'gemaakt') {
+			$where .= 'datum_tijd';
+		} else {
+			$where .= 'laatst_gewijzigd';
+		}
+		if ($ouder === 'ouder') {
+			$where = ' < ';
+		} else {
+			$where = ' > ';
+		}
+		$where .= date('Y-m-d H:i:s', strtotime('-' . $jaar . ' year'));
+		$where .= ' AND HAVING score > 0';
+		$results = Database::sqlSelect($fields, $orm::getTableName(), $where, array($query), 'score DESC', null, $this->per_pagina, ($this->pagina - 1) * $this->per_pagina);
 		$results->setFetchMode(PDO::FETCH_CLASS, $orm, array($cast = true));
 		return $results;
 	}

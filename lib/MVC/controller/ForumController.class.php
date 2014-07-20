@@ -137,16 +137,21 @@ class ForumController extends Controller {
 	 * @param int $pagina
 	 */
 	public function zoeken($query = null, $pagina = 1) {
+		ForumPostsModel::instance()->setHuidigePagina((int) $pagina, 0);
+		ForumDradenModel::instance()->setHuidigePagina((int) $pagina, 0);
 		if ($query === null) {
 			$zoekform = new ForumZoekenForm();
-			$query = $zoekform->findByName('zoekopdracht')->getValue();
+			$values = $zoekform->getValues();
+			$query = $values['zoekopdracht'];
+			$titel = $values['alleentitel'];
+			$datum = $values['datumsoort'];
+			$ouder = $values['ouderjonger'];
+			$jaar = $values['jaaroud'];
 		} else {
 			$query = urldecode($query);
 			$query = filter_var($query, FILTER_SANITIZE_SPECIAL_CHARS);
 		}
-		ForumPostsModel::instance()->setHuidigePagina((int) $pagina, 0);
-		ForumDradenModel::instance()->setHuidigePagina((int) $pagina, 0);
-		$draden_delen = ForumDelenModel::instance()->zoeken($query);
+		$draden_delen = ForumDelenModel::instance()->zoeken($query, $titel, $datum, $ouder, $jaar);
 		$this->view = new ForumResultatenView($draden_delen[0], $draden_delen[1], $query);
 	}
 
