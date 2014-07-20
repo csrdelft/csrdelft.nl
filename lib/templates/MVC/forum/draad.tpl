@@ -33,10 +33,10 @@
 				{/if}
 			</span>
 		{/if}
-		<span class="hoverIntent">
+		<span class="fade-container">
 			<h1 style="display: inline-block; margin: 0 5px;">{$draad->titel}</h1>
 			{if !$draad->belangrijk}
-				<span class="hoverIntentContent">
+				<span class="fade-content">
 					<a href="/forum/optout/{$draad->draad_id}" class="knop post" title="Onderwerp verbergen in zijbalk">{icon get="application_side_list"}</a>
 				</span>
 			{/if}

@@ -73,6 +73,18 @@ ul.nobullets li{ list-style-type: none; }
 	box-shadow: 0 0 20px #000000;
 }
 
+.fade-content{
+	opacity: 0;
+	-webkit-transition: opacity .3s .1s ease;
+	-moz-transition: opacity .3s .1s ease;
+	-ms-transition: opacity .3s .1s ease;
+	-o-transition: opacity .3s .1s ease;
+	transition: opacity .3s .1s ease;
+}
+.fade-container:hover .fade-content{
+	opacity: 1;
+}
+
 /**** POPUP ********************************************************************/
 #popup{
 	display: none;

@@ -55,16 +55,17 @@ class CsrLayoutPage extends HtmlPage {
 			$this->addScript('jquery/jquery-ui.js');
 			$this->addScript('autocomplete/jquery.autocomplete.js');
 			$this->addScript('jquery/plugins/jquery.autosize.js');
+			$this->addScript('jquery/plugins/jquery.hoverIntent.js');
 		} else { // minimized javascript
 			$this->addStylesheet('jquery-ui.min.css', '/layout/js/jquery/');
 			$this->addScript('jquery/jquery.min.js');
 			$this->addScript('jquery/jquery-ui.min.js');
 			$this->addScript('autocomplete/jquery.autocomplete.pack.js');
 			$this->addScript('jquery/plugins/jquery.autosize.min.js');
+			$this->addScript('jquery/plugins/jquery.hoverIntent.min.js');
 		}
 		$this->addStylesheet('js/autocomplete/jquery.autocomplete.css');
 		$this->addScript('jquery/plugins/jquery.timeago-1.3.0.custom.js');
-		$this->addScript('jquery/plugins/jquery.hoverIntent-r7.min.js');
 		$this->addScript('csrdelft.js');
 		$this->addScript('dragobject.js');
 		$this->addScript('menu.js');
