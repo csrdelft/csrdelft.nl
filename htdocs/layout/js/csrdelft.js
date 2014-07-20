@@ -390,9 +390,6 @@ function ajax_request(type, url, data, source, onsuccess, onerror, onfinish) {
 		data: data
 	});
 	jqXHR.done(function(data, textStatus, jqXHR) {
-		if (source) {
-			$(source).remove();
-		}
 		onsuccess(data);
 	});
 	jqXHR.fail(function(jqXHR, textStatus, errorThrown) {

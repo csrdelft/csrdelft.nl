@@ -147,17 +147,6 @@ class ForumDraadZijbalkView extends TemplateView {
 }
 
 /**
- * Requires id of hidden forumdraad.
- */
-class ForumDraadVerbergenView extends TemplateView {
-
-	public function view() {
-		echo '<div id="forumdraad-row-' . $this->model . '" class="remove"></div>';
-	}
-
-}
-
-/**
  * Requires ForumPost[] and ForumDraad[]
  */
 class ForumPostZijbalkView extends TemplateView {
