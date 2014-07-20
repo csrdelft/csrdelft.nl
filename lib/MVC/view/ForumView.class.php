@@ -12,8 +12,8 @@ class ForumView extends TemplateView {
 	public function __construct(array $categorien) {
 		parent::__construct($categorien);
 		$this->titel = 'Forum';
-		$this->smarty->assign('categorien', $this->model);
 		$this->smarty->assign('zoekform', new ForumZoekenForm());
+		$this->smarty->assign('categorien', $this->model);
 		$this->smarty->assign('verborgen_aantal', ForumDradenVerbergenModel::instance()->getAantalVerborgenVoorLid());
 	}
 
@@ -32,9 +32,8 @@ class ForumZoekenForm extends Formulier {
 		$fields['z'] = new TextField('zoekopdracht');
 		$fields['z']->placeholder = 'Zoeken in forum';
 
-		$fields[] = new HtmlComment('<div class="hoverIntentContent" style="margin-top: 10px; padding: 25px;"><div class="inline" style="vertical-align: top;">');
+		$fields[] = new HtmlComment('<div class="hoverIntentContent" style="margin-top: 10px; padding: 25px;"><div class="inline">');
 		$fields['k'] = new KeuzeRondjeField('datumsoort', 'reactie', null, array('reactie' => 'Laatste reactie', 'gemaakt' => 'Aanmaak-datum'));
-		$fields['k']->onchange = "toggle_vertical_align('#forumZoekenForm div.inline');";
 		$fields[] = new SelectField('ouderjonger', 'jonger', null, array('jonger' => 'Niet', 'ouder' => 'Wel'));
 		$fields[] = new HtmlComment('&nbsp;ouder dan&nbsp;');
 		$fields[] = new IntField('jaaroud', 1, null, 0);
@@ -69,6 +68,7 @@ class ForumDeelView extends TemplateView {
 	public function __construct(ForumDeel $deel, $belangrijk = null) {
 		parent::__construct($deel);
 		$this->titel = 'Forum | ' . $deel->titel;
+		$this->smarty->assign('zoekform', new ForumZoekenForm());
 		$this->smarty->assign('belangrijk', ($belangrijk === true ? '/belangrijk' : ''));
 		$this->smarty->assign('deel', $this->model);
 		$this->smarty->assign('categorien', ForumModel::instance()->getForum());
@@ -120,6 +120,7 @@ class ForumDraadView extends TemplateView {
 	public function __construct(ForumDraad $draad, ForumDeel $deel) {
 		parent::__construct($draad);
 		$this->titel = 'Forum | ' . $draad->titel;
+		$this->smarty->assign('zoekform', new ForumZoekenForm());
 		$this->smarty->assign('draad', $this->model);
 		$this->smarty->assign('deel', $deel);
 	}

@@ -941,7 +941,9 @@ table.groepStats td, table.groepStats th{
 
 
 /**************************** FORUM *******************************/
-
+#forumZoekenForm{
+	float: right;
+}
 #forumZoekenForm div.inline .InputField{
 	display: inline-block;
 	clear: none;
