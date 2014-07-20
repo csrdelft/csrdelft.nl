@@ -953,6 +953,7 @@ table.groepStats td, table.groepStats th{
 	width: 150px;
 }
 #forumZoekenForm .forumZoekenGeavanceerd{
+	right: 100px;
 	margin-top: 10px;
 	padding: 25px;
 }

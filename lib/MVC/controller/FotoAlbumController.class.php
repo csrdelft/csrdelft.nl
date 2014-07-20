@@ -33,7 +33,7 @@ class FotoAlbumController extends AclController {
 		parent::__construct($query);
 		if (!$this->isPosted()) {
 			$this->acl = array(
-				'bekijken' => 'P_NOBODY',
+				'bekijken' => 'P_PUBLIC',
 				'downloaden' => 'P_LOGGED_IN',
 				'verwerken' => 'P_LEDEN_READ',
 				'toevoegen' => 'P_LEDEN_READ'

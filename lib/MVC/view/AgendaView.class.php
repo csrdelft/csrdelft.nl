@@ -120,7 +120,7 @@ function setTijd(a, b, c, d) {
 		$fields['begin'] = new TijdField('begin', date('H:i', $item->getBeginMoment()), 'Van');
 		$fields['eind'] = new TijdField('eind', date('H:i', $item->getEindMoment()), 'Tot');
 
-		$fields[] = new SelectField('rechten_bekijken', $item->rechten_bekijken, 'Zichtbaar voor', array('P_LEDEN_READ' => 'Intern', 'P_NOBODY' => 'Extern'));
+		$fields[] = new SelectField('rechten_bekijken', $item->rechten_bekijken, 'Zichtbaar voor', array('P_LEDEN_READ' => 'Intern', 'P_PUBLIC' => 'Extern'));
 
 		$fields['l'] = new TextField('locatie', $item->locatie, 'Locatie');
 		$fields['l']->title = 'Een kaart kan worden weergegeven in de agenda';

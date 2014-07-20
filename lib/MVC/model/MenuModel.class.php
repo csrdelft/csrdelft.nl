@@ -72,7 +72,7 @@ class MenuModel extends PersistenceModel {
 		$item->parent_id = $parent_id;
 		$item->prioriteit = 0;
 		$item->link = '/';
-		$item->rechten_bekijken = 'P_NOBODY';
+		$item->rechten_bekijken = 'P_PUBLIC';
 		$item->zichtbaar = false;
 		return $item;
 	}

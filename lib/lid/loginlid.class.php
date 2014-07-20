@@ -290,9 +290,9 @@ class LoginLid {
 		$liddescr = $this->lid->getPermissies();
 
 		//alleen als $token_athorizable true is testen we met de permissies van het
-		//geauthenticeerde lid, anders met P_NOBODY
+		//geauthenticeerde lid, anders met P_PUBLIC
 		if ($this->authenticatedByToken AND ! $token_authorizable) {
-			$liddescr = 'P_NOBODY';
+			$liddescr = 'P_PUBLIC';
 		}
 
 		# ga alleen verder als er een geldige permissie wordt teruggegeven
@@ -441,14 +441,14 @@ class LoginLid {
 		# Let op: de rechten zijn cumulatief en octaal
 
 		$this->_permissions = array(
-			'P_NOBODY' => 000000000001,
+			'P_PUBLIC' => 000000000001,
 			'P_LOGGED_IN' => 000000000003, # Leden-menu, eigen profiel raadplegen
 			'P_ADMIN' => 000000000007, # Admin dingen algemeen...
-			'P_FORUM_READ' => 000000000400, # Forum lezen
-			'P_FORUM_POST' => 000000000500, # Berichten plaatsen op het forum en eigen berichten wijzigen
-			'P_FORUM_MOD' => 000000000700, # Forum-moderator mag berichten van anderen wijzigen of verwijderen
-			'P_FORUM_MOD+' => 000000000800, # Forum-super-moderator mag draadjes belangrijk maken
-			'P_FORUM_ADMIN' => 000000000900, # Forum-admin mag forum delen beheren
+			'P_FORUM_READ' => 000000000100, # Forum lezen
+			'P_FORUM_POST' => 000000000300, # Berichten plaatsen op het forum en eigen berichten wijzigen
+			'P_FORUM_MOD' => 000000000500, # Forum-moderator mag berichten van anderen wijzigen of verwijderen
+			'P_FORUM_MOD+' => 000000000600, # Forum-super-moderator mag draadjes belangrijk maken
+			'P_FORUM_ADMIN' => 000000000700, # Forum-admin mag forum delen beheren
 			'P_DOCS_READ' => 000000004000, # Documenten-rubriek lezen
 			'P_DOCS_POST' => 000000005000, # Documenten verwijderen of erbij plaatsen
 			'P_DOCS_MOD' => 000000007000, # Documenten aanpassen en fotos uit fotoalbum verwijderen
@@ -488,7 +488,7 @@ class LoginLid {
 
 		$p = $this->_permissions;
 		$this->_perm_user = array(
-			'R_NOBODY' => $p['P_NOBODY'] | $p['P_FORUM_READ'] | $p['P_AGENDA_READ'],
+			'R_NOBODY' => $p['P_PUBLIC'] | $p['P_FORUM_READ'] | $p['P_AGENDA_READ'],
 			'R_LID' => $p['P_LOGGED_IN'] | $p['P_OUDLEDEN_READ'] | $p['P_FORUM_POST'] | $p['P_DOCS_READ'] | $p['P_LEDEN_READ'] | $p['P_PROFIEL_EDIT'] | $p['P_AGENDA_READ'] | $p['P_MAAL_IK'] | $p['P_CORVEE_IK'] | $p['P_MAIL_POST'] | $p['P_BIEB_READ'] | $p['P_NEWS_POST'],
 			'R_OUDLID' => $p['P_LOGGED_IN'] | $p['P_LEDEN_READ'] | $p['P_OUDLEDEN_READ'] | $p['P_FORUM_POST'] | $p['P_DOCS_READ'] | $p['P_PROFIEL_EDIT'] | $p['P_FORUM_READ'] | $p['P_MAAL_IK'] | $p['P_CORVEE_IK'] | $p['P_MAIL_POST'] | $p['P_BIEB_READ'] | $p['P_AGENDA_READ'] | $p['P_ALLEEN_OUDLID'],
 			'R_MODERATOR' => $p['P_ADMIN'] | $p['P_FORUM_MOD'] | $p['P_DOCS_MOD'] | $p['P_LEDEN_MOD'] | $p['P_OUDLEDEN_MOD'] | $p['P_AGENDA_MOD'] | $p['P_MAAL_IK'] | $p['P_CORVEE_IK'] | $p['P_MAIL_SEND'] | $p['P_NEWS_MOD'] | $p['P_BIEB_MOD']
@@ -630,7 +630,7 @@ class LoginLid {
 				}
 			} elseif (substr($part, 0, 7) == 'P_ADMIN') {
 				$return[] = 'Admin';
-			} elseif (substr($part, 0, 8) == 'P_NOBODY') {
+			} elseif (substr($part, 0, 8) == 'P_PUBLIC') {
 				$return[] = 'Niet-ingelogd';
 			} elseif (substr($part, 0, 11) == 'P_LOGGED_IN') {
 				$return[] = 'Ingelogd';

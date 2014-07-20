@@ -35,7 +35,7 @@ class CmsPaginaModel extends PersistenceModel {
 		$pagina->titel = $naam;
 		$pagina->inhoud = $naam;
 		$pagina->laatst_gewijzigd = date('Y-m-d H:i:s');
-		$pagina->rechten_bekijken = 'P_NOBODY';
+		$pagina->rechten_bekijken = 'P_PUBLIC';
 		$pagina->rechten_bewerken = 'P_ADMIN';
 		return $pagina;
 	}

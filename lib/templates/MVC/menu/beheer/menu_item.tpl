@@ -9,7 +9,7 @@
 	{$item->tekst}
 	<span style="color: grey;">{$item->item_id}</span>
 	<div style="float: right;">
-		{if $item->rechten_bekijken !== 'P_NOBODY'}
+		{if $item->rechten_bekijken !== 'P_PUBLIC'}
 			&nbsp;{icon get="group_key" title="Rechten bekijken:&#013;"|cat:$item->rechten_bekijken}&nbsp;
 		{/if}
 		<a href="{$item->link}">{$item->link}</a>
