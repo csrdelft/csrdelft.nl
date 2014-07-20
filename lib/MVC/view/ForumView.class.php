@@ -13,6 +13,7 @@ class ForumView extends TemplateView {
 		parent::__construct($categorien);
 		$this->titel = 'Forum';
 		$this->smarty->assign('categorien', $this->model);
+		$this->smarty->assign('zoekform', new ForumZoekenForm());
 		$this->smarty->assign('verborgen_aantal', ForumDradenVerbergenModel::instance()->getAantalVerborgenVoorLid());
 	}
 
@@ -25,8 +26,25 @@ class ForumView extends TemplateView {
 class ForumZoekenForm extends Formulier {
 
 	public function __construct() {
-		parent::__construct(null, 'forum_zoeken', '/forum/zoeken');
+		parent::__construct(null, 'forumZoekenForm', '/forum/zoeken');
 		$this->css_classes[] = 'hoverIntent';
+
+		$fields['z'] = new TextField('zoekopdracht');
+		$fields['z']->placeholder = 'Zoeken in forum';
+
+		$fields[] = new HtmlComment('<div class="hoverIntentContent" style="margin-top: 10px; padding: 25px;"><div class="inline" style="vertical-align: top;">');
+		$fields['k'] = new KeuzeRondjeField('datumsoort', 'reactie', null, array('reactie' => 'Laatste reactie', 'gemaakt' => 'Aanmaak-datum'));
+		$fields['k']->onchange = "toggle_vertical_align('#forumZoekenForm div.inline');";
+		$fields[] = new SelectField('ouderjonger', 'jonger', null, array('jonger' => 'Niet', 'ouder' => 'Wel'));
+		$fields[] = new HtmlComment('&nbsp;ouder dan&nbsp;');
+		$fields[] = new IntField('jaaroud', 1, null, 0);
+		$fields[] = new HtmlComment('&nbsp;jaar</div><div class="reverseLabel">');
+		$fields[] = new VinkField('alleentitel', false, null, 'Alleen op titel zoeken');
+		$fields[] = new HtmlComment('</div>');
+		$fields[] = new LidField('auteur', null, 'Auteur');
+		$fields[] = new HtmlComment('</div>');
+
+		$this->addFields($fields);
 	}
 
 }

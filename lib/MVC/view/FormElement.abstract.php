@@ -399,7 +399,7 @@ class HiddenField extends InputField {
  */
 class TextField extends InputField {
 
-	public function __construct($name, $value, $description, $max_len = 255, $min_len = 0, $model = null) {
+	public function __construct($name, $value = null, $description = null, $max_len = 255, $min_len = 0, $model = null) {
 		parent::__construct($name, $value, $description, $model);
 		$this->max_len = (int) $max_len;
 		$this->min_len = (int) $min_len;
@@ -1412,6 +1412,12 @@ class TijdField extends InputField {
 
 class VinkField extends InputField {
 
+	public $label;
+
+	public function __construct($name, $value, $description = null, $label = null, $model = null) {
+		parent::__construct($name, $value, $description, $model);
+		$this->label = $label;
+	}
 	/**
 	 * Speciaal geval:
 	 * Niet gepost = uitgevinkt.
@@ -1447,6 +1453,10 @@ class VinkField extends InputField {
 			echo ' checked="checked" ';
 		}
 		echo '/>';
+
+		if (!empty($this->label)) {
+			echo '<label for="field_' . $this->name . '">' . $this->label . '</label>';
+		}
 
 		echo '</div>';
 	}

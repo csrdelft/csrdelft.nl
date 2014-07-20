@@ -19,7 +19,7 @@ class MaaltijdLijstView extends HtmlPage {
 		$this->addStylesheet('jquery-ui.min.css', '/layout/js/jquery/');
 		$this->addScript('jquery/jquery.min.js');
 		$this->addScript('jquery/jquery-ui.min.js');
-		$this->addScript('jquery/plugins/jquery.hoverIntent-r7.min.js');
+		$this->addScript('jquery/plugins/jquery.hoverIntent.min.js');
 		$this->addScript('csrdelft.js');
 		$this->addScript('taken.js');
 

@@ -8,7 +8,7 @@
 	</div>
 {/if}
 
-{if LoginLid::mag('P_ADMIN')}
+{if LoginLid::mag('P_FORUM_ADMIN')}
 	<div class="forumheadbtn">
 		<a href="/forum/aanmaken" class="knop post popup confirm" title="Deelforum aanmaken">{icon get="add"}</a>
 	</div>

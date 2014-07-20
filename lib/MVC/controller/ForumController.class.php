@@ -52,7 +52,7 @@ class ForumController extends Controller {
 				return true;
 
 			case 'hertellen':
-				if (!LoginLid::mag('P_ADMIN')) {
+				if (!LoginLid::mag('P_FORUM_ADMIN')) {
 					return false;
 				}
 			case 'rss':
@@ -69,7 +69,7 @@ class ForumController extends Controller {
 			case 'aanmaken':
 			case 'beheren':
 			case 'opheffen':
-				if (!LoginLid::mag('P_ADMIN')) {
+				if (!LoginLid::mag('P_FORUM_ADMIN')) {
 					return false;
 				}
 			case 'posten':
@@ -331,11 +331,16 @@ class ForumController extends Controller {
 		} else {
 			$this->geentoegang();
 		}
+		if ($property === 'belangrijk') {
+			if (LoginLid::mag('P_FORUM_BELANGRIJK')) {
+				ForumDradenVerbergenModel::instance()->herstelDraadVoorIedereen($draad);
+			} else {
+				$this->geentoegang();
+			}
+		}
 		ForumDradenModel::instance()->wijzigForumDraad($draad, $property, $value);
 		if ($property === 'verwijderd') {
-			ForumPostsModel::instance()->verwijderForumPostsVoorDraad($draad, $deel);
-		} elseif ($property === 'belangrijk') {
-			ForumDradenVerbergenModel::instance()->herstelDraadVoorIedereen($draad);
+			ForumPostsModel::instance()->verwijderForumPostsVoorDraad($draad, $deel); // hertellen
 		}
 		if (is_bool($value)) {
 			$wijziging = ($value ? 'wel ' : 'niet ') . $property;

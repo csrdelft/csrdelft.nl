@@ -228,6 +228,14 @@ function form_replace_action(event) {
 	form.attr('action', url);
 }
 
+function toggle_vertical_align(elmnt) {
+	if ($(elmnt).css('vertical-align') !== 'top') {
+		$(elmnt).css('vertical-align', 'top');
+	} else {
+		$(elmnt).css('vertical-align', 'bottom');
+	}
+}
+
 function toggle_inline_none(elmnt) {
 	$(elmnt).css('display', $(elmnt).css('display') === 'none' ? 'inline' : 'none');
 }

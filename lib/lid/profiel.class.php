@@ -463,7 +463,7 @@ class ProfielStatus extends Profiel {
 		if (LoginLid::mag('P_ADMIN')) {
 			//admin mag alle permissies toekennen
 			$perm = array_merge($perm, $permbeheer);
-		} elseif (in_array($profiel['permissies'], array('R_BESTUUR', 'R_VAB', 'R_PUBCIE', 'P_MODERATOR'))) {
+		} elseif (in_array($profiel['permissies'], array('R_BESTUUR', 'R_VAB', 'R_PUBCIE', 'R_MODERATOR'))) {
 			//niet admin mag geen beheerpermissies aanpassen
 			$perm = array($permbeheer[$profiel['permissies']], $permbeheer[$profiel['permissies']]);
 		}
@@ -534,7 +534,7 @@ class ProfielStatus extends Profiel {
 		//bij wijzigingen door niet-admins worden aanpassingen aan permissies ongedaan gemaakt
 		if (!LoginLid::mag('P_ADMIN')) {
 
-			$adminperms = array('R_PUBCIE', 'P_MODERATOR', 'R_BESTUUR', 'R_VAB');
+			$adminperms = array('R_PUBCIE', 'R_MODERATOR', 'R_BESTUUR', 'R_VAB');
 
 			if (in_array($oudepermissie, $adminperms)) {
 				if ($oudepermissie != $nieuwepermissie) {
