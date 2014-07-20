@@ -133,7 +133,7 @@ class ForumDraad extends PersistentEntity {
 	protected static $table_name = 'forum_draden';
 
 	public function magVerbergen() {
-		return !$this->belangrijk;
+		return !$this->belangrijk AND LoginLid::mag('P_LOGGED_IN');
 	}
 
 	public function isVerborgen() {

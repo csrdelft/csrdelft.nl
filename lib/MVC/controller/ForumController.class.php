@@ -272,7 +272,7 @@ class ForumController extends Controller {
 	public function optout($draad_id) {
 		$draad = ForumDradenModel::instance()->getForumDraad((int) $draad_id);
 		if (!$draad->magVerbergen()) {
-			throw new Exception('Kan niet verbergen: onderwerp is aangemerkt als belangrijk');
+			throw new Exception('Mag niet verbergen');
 		}
 		if ($draad->isVerborgen()) {
 			throw new Exception('Onderwerp is al verborgen');
