@@ -266,6 +266,7 @@ function form_esc(event) {
 
 function form_submit(event) {
 	var form = $(this).closest('form');
+	console.log(form);
 	if (form.hasClass('PreventUnchanged') && !form_ischanged(form)) {
 		event.preventDefault();
 		alert('Geen wijzigingen');

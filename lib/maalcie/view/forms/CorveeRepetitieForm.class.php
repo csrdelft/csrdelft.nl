@@ -40,13 +40,13 @@ class CorveeRepetitieForm extends PopupForm {
 		}
 
 		$fields['fid'] = new SelectField('functie_id', $fid, 'Functie', $functieNamen);
-		$fields['fid']->setOnChangeScript($functiePunten . "$('#field_standaard_punten').val(punten[this.value]);");
+		$fields['fid']->onchange = $functiePunten . "$('#field_standaard_punten').val(punten[this.value]);";
 		$fields[] = new WeekdagField('dag_vd_week', $dag, 'Dag v/d week');
 		$fields['dag'] = new IntField('periode_in_dagen', $periode, 'Periode (in dagen)', 0, 183);
 		$fields['dag']->title = 'Als de periode ongelijk is aan 7 is dit de start-dag bij het aanmaken van periodiek corvee';
 		$fields['vrk'] = new VinkField('voorkeurbaar', $voorkeur, 'Voorkeurbaar');
 		if ($crid !== 0) {
-			$fields['vrk']->setOnChangeScript("if (!this.checked) alert('Alle voorkeuren zullen worden verwijderd!');");
+			$fields['vrk']->onchange = "if (!this.checked) alert('Alle voorkeuren zullen worden verwijderd!');";
 		}
 		$fields[] = new SelectField('mlt_repetitie_id', $mrid, 'Maaltijdrepetitie', $repetitieNamen);
 		$fields[] = new IntField('standaard_punten', $punten, 'Standaard punten', 0, 10);

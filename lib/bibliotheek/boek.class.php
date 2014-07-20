@@ -418,12 +418,12 @@ class Boek {
 		$fields['titel'] = new TitelField('titel', $this->getTitel(), $naamtitelveld, 200, 'Titel ontbreekt!');
 		$fields['auteur'] = new TextField('auteur', $this->getAuteur(), 'Auteur', 100);
 		$fields['auteur']->setRemoteSuggestionsSource('/communicatie/bibliotheek/autocomplete/auteur');
-		$fields['auteur']->setPlaceholder('Achternaam, Voornaam V.L. van de');
+		$fields['auteur']->placeholder = 'Achternaam, Voornaam V.L. van de';
 		$fields['paginas'] = new IntField('paginas', $this->getPaginas(), "Pagina's", 0, 10000);
 		$fields['taal'] = new TextField('taal', $this->getTaal(), 'Taal', 25);
 		$fields['taal']->setRemoteSuggestionsSource('/communicatie/bibliotheek/autocomplete/taal');
 		$fields['isbn'] = new TextField('isbn', $this->getISBN(), 'ISBN', 15);
-		$fields['isbn']->setPlaceholder('Uniek nummer');
+		$fields['isbn']->placeholder = 'Uniek nummer';
 		$fields['uitgeverij'] = new TextField('uitgeverij', $this->getUitgeverij(), 'Uitgeverij', 100);
 		$fields['uitgeverij']->setRemoteSuggestionsSource('/communicatie/bibliotheek/autocomplete/uitgeverij');
 		$fields['uitgavejaar'] = new IntField('uitgavejaar', $this->getUitgavejaar(), 'Uitgavejaar', 0, 2100);

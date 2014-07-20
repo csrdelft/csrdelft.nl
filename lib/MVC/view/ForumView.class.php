@@ -31,10 +31,11 @@ class ForumZoekenForm extends Formulier {
 
 		$fields['z'] = new TextField('zoekopdracht');
 		$fields['z']->placeholder = 'Zoeken in forum';
+		$fields['z']->onkeyup = "if (event.keyCode == 13) { this.form.submit(); };";
 		$fields[] = new HtmlComment('<div class="forumZoekenGeavanceerd hoverIntentContent" style="display: none;">');
 		$fields[] = new VinkField('alleentitel', false, null, 'Alleen op titel zoeken');
 		$fields[] = new HtmlComment('<div class="inline">');
-		$fields['k'] = new KeuzeRondjeField('datumsoort', 'reactie', null, array('reactie' => 'Laatste reactie', 'gemaakt' => 'Aanmaak-datum'));
+		$fields[] = new KeuzeRondjeField('datumsoort', 'reactie', null, array('reactie' => 'Laatste reactie', 'gemaakt' => 'Aanmaak-datum'));
 		$fields[] = new SelectField('ouderjonger', 'jonger', null, array('jonger' => 'Niet', 'ouder' => 'Wel'));
 		$fields[] = new HtmlComment(' ouder dan ');
 		$fields[] = new IntField('jaaroud', 1, null, 0);

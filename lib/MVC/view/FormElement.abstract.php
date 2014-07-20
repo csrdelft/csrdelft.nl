@@ -68,23 +68,24 @@ interface FormElement extends View {
 abstract class InputField implements FormElement, Validator {
 
 	protected $model;
-	protected $name;  //naam van het veld in POST
-	protected $value;  //welke initiele waarde heeft het veld?
+	protected $name; //naam van het veld in POST
+	protected $value; //welke initiele waarde heeft het veld?
 	protected $origvalue; //welke originele waarde had het veld?
-	public $title;  //omschrijving bij mouseover title
+	public $title; //omschrijving bij mouseover title
 	public $description; //omschrijving in label
-	public $disabled = false;   //veld uitgeschakeld?
+	public $disabled = false; //veld uitgeschakeld?
 	public $not_null = false; //mag het veld leeg zijn?
 	public $no_preview = false; //geen preview tonen
 	public $leden_mod = false; //uitzondering leeg verplicht veld voor LEDEN_MOD
-	public $autocomplete = true;   //browser laten autoaanvullen?
-	public $placeholder = null;  //plaats een grijze placeholdertekst in leeg veld
+	public $autocomplete = true; //browser laten autoaanvullen?
+	public $placeholder = null; //plaats een grijze placeholdertekst in leeg veld
 	public $error = ''; //foutmelding van dit veld
-	public $onchange = null;   //javascript onChange
-	public $onclick = null;   //javascript onClick
+	public $onchange = null; //javascript
+	public $onclick = null; //javascript
+	public $onkeyup = null; //javascript
 	public $max_len = 0; //maximale lengte van de invoer
 	public $min_len = 0; //minimale lengte van de invoer
-	public $rows = 0;  //aantal rijen van textarea
+	public $rows = 0; //aantal rijen van textarea
 	public $css_classes = array('FormField'); //array met classnames die later in de class-tag komen
 	protected $suggestions = array(); //array met suggesties die de javascript-autocomplete aan gaat bieden
 	protected $remotedatasource = '';
@@ -136,18 +137,6 @@ abstract class InputField implements FormElement, Validator {
 
 	public function setSuggestions(array $array) {
 		$this->suggestions = $array;
-	}
-
-	public function setPlaceholder($string) {
-		$this->placeholder = $string;
-	}
-
-	public function setOnChangeScript($javascript) {
-		$this->onchange = $javascript;
-	}
-
-	public function setOnClickScript($javascript) {
-		$this->onclick = $javascript;
 	}
 
 	public function getValue() {
@@ -319,6 +308,11 @@ abstract class InputField implements FormElement, Validator {
 					return 'onclick="' . $this->onclick . '"';
 				}
 				break;
+			case 'onkeyup':
+				if ($this->onkeyup != null) {
+					return 'onkeyup="' . $this->onkeyup . '"';
+				}
+				break;
 		}
 		return '';
 	}
@@ -333,7 +327,7 @@ abstract class InputField implements FormElement, Validator {
 		if (!$this->no_preview) {
 			echo $this->getPreviewDiv();
 		}
-		echo '<input type="text"' . $this->getInputAttribute(array('id', 'name', 'class', 'value', 'origvalue', 'disabled', 'maxlength', 'placeholder', 'autocomplete', 'onchange', 'onclick')) . ' />';
+		echo '<input type="text"' . $this->getInputAttribute(array('id', 'name', 'class', 'value', 'origvalue', 'disabled', 'maxlength', 'placeholder', 'autocomplete', 'onchange', 'onclick', 'onkeyup')) . ' />';
 		echo '</div>';
 	}
 
@@ -914,7 +908,7 @@ class TextareaField extends TextField {
 		echo $this->getLabel();
 		echo $this->getErrorDiv();
 		echo $this->getPreviewDiv();
-		echo '<textarea' . $this->getInputAttribute(array('id', 'name', 'origvalue', 'class', 'disabled', 'placeholder', 'maxlength', 'rows', 'autocomplete', 'onchange', 'onclick')) . '>' . $this->value . '</textarea>';
+		echo '<textarea' . $this->getInputAttribute(array('id', 'name', 'origvalue', 'class', 'disabled', 'placeholder', 'maxlength', 'rows', 'autocomplete', 'onchange', 'onclick', 'onkeyup')) . '>' . $this->value . '</textarea>';
 		echo '</div>';
 	}
 
@@ -1098,7 +1092,7 @@ class SelectField extends InputField {
 		if ($this->size > 1) {
 			echo ' size="' . $this->size . '"';
 		}
-		echo $this->getInputAttribute(array('id', 'name', 'origvalue', 'class', 'disabled', 'onchange', 'onclick')) . '>';
+		echo $this->getInputAttribute(array('id', 'name', 'origvalue', 'class', 'disabled', 'onchange', 'onclick', 'onkeyup')) . '>';
 
 		foreach ($this->options as $value => $description) {
 			echo '<option value="' . $value . '"';
@@ -1202,7 +1196,7 @@ class KeuzeRondjeField extends SelectField {
 
 		echo '<div class="KeuzeRondjeFieldOptions">';
 		foreach ($this->options as $value => $description) {
-			echo '<input type="radio" id="field_' . $this->getName() . '_option_' . $value . '" value="' . $value . '"' . $this->getInputAttribute(array('name', 'origvalue', 'class', 'disabled', 'onchange', 'onclick'));
+			echo '<input type="radio" id="field_' . $this->getName() . '_option_' . $value . '" value="' . $value . '"' . $this->getInputAttribute(array('name', 'origvalue', 'class', 'disabled', 'onchange', 'onclick', 'onkeyup'));
 			if ($value == $this->value) {
 				echo ' checked="checked"';
 			}
@@ -1452,7 +1446,7 @@ class VinkField extends InputField {
 		echo $this->getLabel();
 		echo $this->getErrorDiv();
 
-		echo '<input type="checkbox"' . $this->getInputAttribute(array('id', 'name', 'value', 'origvalue', 'class', 'disabled', 'onchange', 'onclick'));
+		echo '<input type="checkbox"' . $this->getInputAttribute(array('id', 'name', 'value', 'origvalue', 'class', 'disabled', 'onchange', 'onclick', 'onkeyup'));
 		if ($this->value) {
 			echo ' checked="checked" ';
 		}

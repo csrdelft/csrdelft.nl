@@ -951,6 +951,10 @@ table.groepStats td, table.groepStats th{
 }
 #forumZoekenForm #field_zoekopdracht{
 	width: 150px;
+	background-image: url('http://plaetjes.csrdelft.nl/famfamfam/find.png');
+	background-repeat: no-repeat;
+	background-position: center right;
+	padding-right: 16px;
 }
 #forumZoekenForm .forumZoekenGeavanceerd{
 	right: 100px;
