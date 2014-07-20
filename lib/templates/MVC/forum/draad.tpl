@@ -36,7 +36,9 @@
 		<span class="hoverIntent">
 			<h1 style="display: inline-block; margin: 0 5px;">{$draad->titel}</h1>
 			{if !$draad->belangrijk}
-				<a href="/forum/optout/{$draad->draad_id}" class="knop post" title="Onderwerp verbergen in zijbalk">{icon get="application_side_list"}</a>
+				<span class="hoverIntentContent">
+					<a href="/forum/optout/{$draad->draad_id}" class="knop post" title="Onderwerp verbergen in zijbalk">{icon get="application_side_list"}</a>
+				</span>
 			{/if}
 		</span>
 	{/capture}
