@@ -174,12 +174,12 @@ class ForumDelenModel extends PersistenceModel {
 	 * 
 	 * @return array( ForumDraden[], ForumDelen[] )
 	 */
-	public function zoeken($query, $titel, $datum, $ouder, $jaar, $auteur) {
-		$gevonden_draden = group_by_distinct('draad_id', ForumDradenModel::instance()->zoeken($query, $datum, $ouder, $jaar, $auteur)); // zoek op titel in draden
+	public function zoeken($query, $titel, $datum, $ouder, $jaar) {
+		$gevonden_draden = group_by_distinct('draad_id', ForumDradenModel::instance()->zoeken($query, $datum, $ouder, $jaar)); // zoek op titel in draden
 		if ($titel === true) {
 			$gevonden_posts = array();
 		} else {
-			$gevonden_posts = group_by('draad_id', ForumPostsModel::instance()->zoeken($query, $datum, $ouder, $jaar, $auteur)); // zoek op tekst in posts
+			$gevonden_posts = group_by('draad_id', ForumPostsModel::instance()->zoeken($query, $datum, $ouder, $jaar)); // zoek op tekst in posts
 			$gevonden_draden += ForumDradenModel::instance()->getForumDradenById(array_keys($gevonden_posts)); // laad draden bij posts
 		}
 		foreach ($gevonden_draden as $draad) { // laad posts bij draden
