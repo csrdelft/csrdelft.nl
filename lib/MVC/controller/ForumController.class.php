@@ -283,8 +283,8 @@ class ForumController extends Controller {
 	public function herstel() {
 		$aantal = ForumDradenVerbergenModel::instance()->getAantalVerborgenVoorLid();
 		ForumDradenVerbergenModel::instance()->herstelAlleDradenVoorLid();
-		setMelding($aantal . ' onderwerpen worden weer getoond', 1);
-		$this->forum();
+		setMelding($aantal . ' onderwerpen worden weer getoond in de zijbalk', 1);
+		$this->recent();
 	}
 
 	/**

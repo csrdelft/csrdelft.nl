@@ -19,7 +19,7 @@
 
 	{capture name='titel'}
 		{if $deel->magModereren()}
-			<div style="display: inline-block; margin-right: 5px;">
+			<span>
 				{if $draad->gesloten}
 					<a href="/forum/wijzigen/{$draad->draad_id}/gesloten" class="knop" title="Openen (reactie mogelijk)"
 					   onmouseover="$(this).children('img').attr('src', 'http://plaetjes.csrdelft.nl/famfamfam/lock_break.png');"
@@ -31,9 +31,14 @@
 					   onmouseout="$(this).children('img').attr('src', 'http://plaetjes.csrdelft.nl/famfamfam/lock_open.png');"
 					   >{icon get="lock_open"}</a>
 				{/if}
-			</div>
+			</span>
 		{/if}
-		<h1 style="display: inline-block">{$draad->titel}</h1>
+		<span class="hoverIntent">
+			<h1 style="display: inline-block; margin: 0 5px;">{$draad->titel}</h1>
+			{if !$draad->belangrijk}
+				<a href="/forum/optout/{$draad->draad_id}" class="knop post" title="Onderwerp verbergen in zijbalk">{icon get="application_side_list"}</a>
+			{/if}
+		</span>
 	{/capture}
 
 	{$smarty.capture.navlinks}
