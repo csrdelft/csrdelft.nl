@@ -138,7 +138,8 @@ class ForumController extends Controller {
 	 */
 	public function zoeken($query = null, $pagina = 1) {
 		if ($query === null) {
-			$query = filter_input(INPUT_POST, 'zoeken', FILTER_SANITIZE_SPECIAL_CHARS);
+			$zoekform = new ForumZoekenForm();
+			$query = $zoekform->findByName('zoekopdracht')->getValue();
 		} else {
 			$query = urldecode($query);
 			$query = filter_var($query, FILTER_SANITIZE_SPECIAL_CHARS);

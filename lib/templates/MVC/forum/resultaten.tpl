@@ -1,7 +1,5 @@
 {SimpleHtml::getMelding()}
 
-<form id="forum_zoeken" action="/forum/zoeken" method="post"><fieldset><input type="text" name="zoeken" value="zoeken in forum" onfocus="this.value = '';" /></fieldset></form>
-
 {capture name='navlinks'}
 	<div class="forumNavigatie">
 		<a href="/forum" class="forumGrootlink">Forum</a>
