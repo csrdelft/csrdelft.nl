@@ -26,9 +26,9 @@
 					   >{icon get="lock_open"}</a>
 				{/if}
 				&nbsp;&nbsp;&nbsp;
-				<a id="togglemodknop" class="knop" title="Moderatie-functies weergeven" onclick="$('#modereren').slideDown();
-						$('#togglemodknop').toggle();
-						$('#forumtabel a.forummodknop').fadeIn();">{icon get="wrench"} Modereren</a>
+				<a class="knop" title="Moderatie-functies weergeven" onclick="$('#modereren').slideDown();
+					$.scrollTo('#modereren', 600, { easing: 'easeInOutCubic' });
+					$('#forumtabel a.forummodknop').fadeIn();">{icon get="wrench"} Modereren</a>
 			{/if}
 		</div>
 		<div class="forumNavigatie">
