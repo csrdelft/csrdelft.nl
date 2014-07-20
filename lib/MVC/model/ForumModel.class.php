@@ -391,9 +391,9 @@ class ForumDradenModel extends PersistenceModel implements Paging {
 			$where .= 'laatst_gewijzigd';
 		}
 		if ($ouder === 'ouder') {
-			$where = ' < ?';
+			$where .= ' < ?';
 		} else {
-			$where = ' > ?';
+			$where .= ' > ?';
 		}
 		$datum = date('Y-m-d H:i:s', strtotime('-' . $jaar . ' year'));
 		$where .= ' HAVING score > 0';
@@ -637,9 +637,9 @@ class ForumPostsModel extends PersistenceModel implements Paging {
 			$where .= 'laatst_bewerkt';
 		}
 		if ($ouder === 'ouder') {
-			$where = ' < ?';
+			$where .= ' < ?';
 		} else {
-			$where = ' > ?';
+			$where .= ' > ?';
 		}
 		$datum = date('Y-m-d H:i:s', strtotime('-' . $jaar . ' year'));
 		$where .= ' HAVING score > 0';
