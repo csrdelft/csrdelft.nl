@@ -7,9 +7,9 @@
 		<div class="forumheadbtn">
 			{if $draad->magVerbergen()}
 				{if $draad->isVerborgen()}
-					<a href="/forum/optin/{$draad->draad_id}" class="knop post" title="Onderwerp tonen in zijbalk">{icon get="eye"}</a>
+					<a href="/forum/optin/{$draad->draad_id}" class="knop" title="Onderwerp tonen in zijbalk">{icon get="eye"}</a>
 				{else}
-					<a href="/forum/optout/{$draad->draad_id}" class="knop post" title="Onderwerp verbergen in zijbalk">{icon get="application_side_list"}</a>
+					<a href="/forum/optout/{$draad->draad_id}" class="knop" title="Onderwerp verbergen in zijbalk">{icon get="application_side_list"}</a>
 				{/if}
 				&nbsp;&nbsp;&nbsp;
 			{/if}

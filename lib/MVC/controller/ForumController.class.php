@@ -61,6 +61,8 @@ class ForumController extends Controller {
 			case 'onderwerp':
 			case 'reactie':
 			case 'wacht':
+			case 'optout':
+			case 'optin':
 			case 'herstel':
 				return !$this->isPosted();
 
@@ -79,8 +81,6 @@ class ForumController extends Controller {
 			case 'goedkeuren':
 			case 'citeren':
 			case 'tekst':
-			case 'optout':
-			case 'optin':
 				return $this->isPosted();
 
 			default:
@@ -278,7 +278,7 @@ class ForumController extends Controller {
 			throw new Exception('Onderwerp is al verborgen');
 		}
 		ForumDradenVerbergenModel::instance()->setVerbergenVoorLid($draad);
-		$this->view = new ForumDraadVerbergenView($draad->draad_id);
+		$this->onderwerp($draad_id);
 	}
 
 	/**
@@ -292,7 +292,7 @@ class ForumController extends Controller {
 			throw new Exception('Onderwerp is niet verborgen');
 		}
 		ForumDradenVerbergenModel::instance()->setVerbergenVoorLid($draad, false);
-		// ReloadPage
+		$this->onderwerp($draad_id);
 	}
 
 	/**
