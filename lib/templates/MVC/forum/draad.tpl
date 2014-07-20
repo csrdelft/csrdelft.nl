@@ -25,10 +25,12 @@
 					   onmouseout="$(this).children('img').attr('src', 'http://plaetjes.csrdelft.nl/famfamfam/lock_open.png');"
 					   >{icon get="lock_open"}</a>
 				{/if}
-				&nbsp;&nbsp;&nbsp;
-				<a class="knop" title="Moderatie-functies weergeven" onclick="$('#modereren').slideDown();
-					$.scrollTo('#modereren', 600, { easing: 'easeInOutCubic' });
-					$('#forumtabel a.forummodknop').fadeIn();">{icon get="wrench"} Modereren</a>
+				{if LoginLid::mag('P_LOGGED_IN')}
+					&nbsp;&nbsp;&nbsp;
+					<a class="knop" title="Moderatie-functies weergeven" onclick="$('#modereren').slideDown();
+						$.scrollTo('#modereren', 600, { easing: 'easeInOutCubic' });
+						$('#forumtabel a.forummodknop').fadeIn();">{icon get="wrench"} Modereren</a>
+				{/if}
 			{/if}
 		</div>
 		<div class="forumNavigatie">
