@@ -775,7 +775,12 @@ input, textarea, select{
 	background-color: #eee;
 }
 .Formulier .VinkField{
-	margin-top: 4px !important;
+	margin: 4px 0 0 4px;
+}
+.Formulier .VinkFieldLabel{
+	float: none;
+	width: auto;
+	vertical-align: top;
 }
 .Formulier .FormButtons{
 	text-align: right;
@@ -944,16 +949,22 @@ table.groepStats td, table.groepStats th{
 #forumZoekenForm{
 	float: right;
 }
+#forumZoekenForm #field_zoekopdracht{
+	width: 150px;
+}
+#forumZoekenForm .forumZoekenGeavanceerd{
+	margin-top: 10px;
+	padding: 25px;
+}
+#forumZoekenForm .InputField{
+	width: auto;
+}
 #forumZoekenForm div.inline .InputField{
 	display: inline-block;
 	clear: none;
-	width: auto;
 }
 #forumZoekenForm div.inline .KeuzeRondjeFieldOptions{
 	margin: 0;
-}
-#forumZoekenForm div.reverseLabel label{
-	float: none;
 }
 div.forumheadbtn{
 	float: right;

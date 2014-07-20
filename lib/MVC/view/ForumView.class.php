@@ -31,16 +31,16 @@ class ForumZoekenForm extends Formulier {
 
 		$fields['z'] = new TextField('zoekopdracht');
 		$fields['z']->placeholder = 'Zoeken in forum';
-
-		$fields[] = new HtmlComment('<div class="hoverIntentContent" style="margin-top: 10px; padding: 25px;"><div class="inline">');
+		$fields[] = new HtmlComment('<div class="forumZoekenGeavanceerd hoverIntentContent">');
+		$fields[] = new VinkField('alleentitel', false, null, 'Alleen op titel zoeken');
+		$fields[] = new HtmlComment('<div class="inline">');
 		$fields['k'] = new KeuzeRondjeField('datumsoort', 'reactie', null, array('reactie' => 'Laatste reactie', 'gemaakt' => 'Aanmaak-datum'));
 		$fields[] = new SelectField('ouderjonger', 'jonger', null, array('jonger' => 'Niet', 'ouder' => 'Wel'));
-		$fields[] = new HtmlComment('&nbsp;ouder dan&nbsp;');
+		$fields[] = new HtmlComment(' ouder dan ');
 		$fields[] = new IntField('jaaroud', 1, null, 0);
-		$fields[] = new HtmlComment('&nbsp;jaar</div><div class="reverseLabel">');
-		$fields[] = new VinkField('alleentitel', false, null, 'Alleen op titel zoeken');
-		$fields[] = new HtmlComment('</div>');
-		$fields[] = new LidField('auteur', null, 'Auteur');
+		$fields[] = new HtmlComment(' jaar</div>');
+		$fields['l'] = new LidField('auteur', null, 'Auteur');
+		$fields['l']->no_preview = true;
 		$fields[] = new HtmlComment('</div>');
 
 		$this->addFields($fields);

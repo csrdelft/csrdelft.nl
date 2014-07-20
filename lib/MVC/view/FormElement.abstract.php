@@ -74,7 +74,8 @@ abstract class InputField implements FormElement, Validator {
 	public $title;  //omschrijving bij mouseover title
 	public $description; //omschrijving in label
 	public $disabled = false;   //veld uitgeschakeld?
-	public $notnull = false; //mag het veld leeg zijn?
+	public $not_null = false; //mag het veld leeg zijn?
+	public $no_preview = false; //geen preview tonen
 	public $leden_mod = false; //uitzondering leeg verplicht veld voor LEDEN_MOD
 	public $autocomplete = true;   //browser laten autoaanvullen?
 	public $placeholder = null;  //plaats een grijze placeholdertekst in leeg veld
@@ -84,7 +85,7 @@ abstract class InputField implements FormElement, Validator {
 	public $max_len = 0; //maximale lengte van de invoer
 	public $min_len = 0; //minimale lengte van de invoer
 	public $rows = 0;  //aantal rijen van textarea
-	protected $css_classes = array('FormField'); //array met classnames die later in de class-tag komen
+	public $css_classes = array('FormField'); //array met classnames die later in de class-tag komen
 	protected $suggestions = array(); //array met suggesties die de javascript-autocomplete aan gaat bieden
 	protected $remotedatasource = '';
 
@@ -168,7 +169,7 @@ abstract class InputField implements FormElement, Validator {
 		//(tenzij gebruiker LEDEN_MOD heeft en deze optie aan staat voor dit veld)
 		if (!$this->isPosted()) {
 			$this->error = 'Veld is niet gepost';
-		} elseif ($this->value === '' AND $this->notnull) {
+		} elseif ($this->value === '' AND $this->not_null) {
 			if ($this->leden_mod AND LoginLid::mag('P_LEDEN_MOD')) {
 				// exception for leden mod
 			} else {
@@ -206,7 +207,7 @@ abstract class InputField implements FormElement, Validator {
 	protected function getLabel() {
 		if (!empty($this->description)) {
 			$required = '';
-			if ($this->notnull) {
+			if ($this->not_null) {
 				if ($this->leden_mod AND LoginLid::mag('P_LEDEN_MOD')) {
 					// exception for leden mod
 				} else {
@@ -247,7 +248,7 @@ abstract class InputField implements FormElement, Validator {
 	 * Geef lijst van allerlei CSS-classes voor dit veld terug.
 	 */
 	protected function getCssClasses() {
-		if ($this->notnull) {
+		if ($this->not_null) {
 			if ($this->leden_mod AND LoginLid::mag('P_LEDEN_MOD')) {
 				// exception for leden mod
 			} else {
@@ -329,7 +330,9 @@ abstract class InputField implements FormElement, Validator {
 		echo $this->getDiv();
 		echo $this->getLabel();
 		echo $this->getErrorDiv();
-		echo $this->getPreviewDiv();
+		if (!$this->no_preview) {
+			echo $this->getPreviewDiv();
+		}
 		echo '<input type="text"' . $this->getInputAttribute(array('id', 'name', 'class', 'value', 'origvalue', 'disabled', 'maxlength', 'placeholder', 'autocomplete', 'onchange', 'onclick')) . ' />';
 		echo '</div>';
 	}
@@ -721,7 +724,7 @@ class IntField extends TextField {
 	}
 
 	public function getValue() {
-		if (!$this->notnull AND parent::getValue() === '') {
+		if (!$this->not_null AND parent::getValue() === '') {
 			return null;
 		}
 		return (int) parent::getValue();
@@ -1418,6 +1421,7 @@ class VinkField extends InputField {
 		parent::__construct($name, $value, $description, $model);
 		$this->label = $label;
 	}
+
 	/**
 	 * Speciaal geval:
 	 * Niet gepost = uitgevinkt.
@@ -1433,7 +1437,7 @@ class VinkField extends InputField {
 	}
 
 	public function validate() {
-		if (!$this->value AND $this->notnull) {
+		if (!$this->value AND $this->not_null) {
 			if ($this->leden_mod AND LoginLid::mag('P_LEDEN_MOD')) {
 				// exception for leden mod
 			} else {
@@ -1455,7 +1459,7 @@ class VinkField extends InputField {
 		echo '/>';
 
 		if (!empty($this->label)) {
-			echo '<label for="field_' . $this->name . '">' . $this->label . '</label>';
+			echo '<label for="field_' . $this->name . '" class="VinkFieldLabel">' . $this->label . '</label>';
 		}
 
 		echo '</div>';
