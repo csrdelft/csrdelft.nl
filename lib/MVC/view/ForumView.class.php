@@ -22,6 +22,15 @@ class ForumView extends TemplateView {
 
 }
 
+class ForumZoekenForm extends Formulier {
+
+	public function __construct() {
+		parent::__construct(null, 'forum_zoeken', '/forum/zoeken');
+		$this->css_classes[] = 'hoverIntent';
+	}
+
+}
+
 class ForumRssView extends TemplateView {
 
 	public function __construct(array $draden, array $delen) {

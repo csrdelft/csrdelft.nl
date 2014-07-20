@@ -96,6 +96,11 @@ class ForumDraad extends PersistentEntity {
 	 */
 	private $wanneer_gelezen;
 	/**
+	 * Verbergen voor gebruiker
+	 * @var boolean
+	 */
+	private $verbergen;
+	/**
 	 * Database table fields
 	 * @var array
 	 */
@@ -126,6 +131,17 @@ class ForumDraad extends PersistentEntity {
 	 * @var string
 	 */
 	protected static $table_name = 'forum_draden';
+
+	public function magVerbergen() {
+		return !$this->belangrijk;
+	}
+
+	public function isVerborgen() {
+		if (!isset($this->verbergen)) {
+			$this->verbergen = ForumDradenVerbergenModel::instance()->getVerbergenVoorLid($this);
+		}
+		return $this->verbergen;
+	}
 
 	public function getWanneerGelezen() {
 		if ($this->wanneer_gelezen === null) {

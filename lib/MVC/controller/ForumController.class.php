@@ -80,6 +80,7 @@ class ForumController extends Controller {
 			case 'citeren':
 			case 'tekst':
 			case 'optout':
+			case 'optin':
 				return $this->isPosted();
 
 			default:
@@ -270,11 +271,28 @@ class ForumController extends Controller {
 	 */
 	public function optout($draad_id) {
 		$draad = ForumDradenModel::instance()->getForumDraad((int) $draad_id);
-		if ($draad->belangrijk) {
+		if (!$draad->magVerbergen()) {
 			throw new Exception('Kan niet verbergen: onderwerp is aangemerkt als belangrijk');
+		}
+		if ($draad->isVerborgen()) {
+			throw new Exception('Onderwerp is al verborgen');
 		}
 		ForumDradenVerbergenModel::instance()->setVerbergenVoorLid($draad);
 		$this->view = new ForumDraadVerbergenView($draad->draad_id);
+	}
+
+	/**
+	 * Forum draad tonen in zijbalk.
+	 * 
+	 * @param int $draad_id
+	 */
+	public function optin($draad_id) {
+		$draad = ForumDradenModel::instance()->getForumDraad((int) $draad_id);
+		if (!$draad->isVerborgen()) {
+			throw new Exception('Onderwerp is niet verborgen');
+		}
+		ForumDradenVerbergenModel::instance()->setVerbergenVoorLid($draad, false);
+		// ReloadPage
 	}
 
 	/**
