@@ -391,13 +391,13 @@ class ForumDradenModel extends PersistenceModel implements Paging {
 			$where .= 'laatst_gewijzigd';
 		}
 		if ($ouder === 'ouder') {
-			$where = ' < ';
+			$where = ' < ?';
 		} else {
-			$where = ' > ';
+			$where = ' > ?';
 		}
-		$where .= date('Y-m-d H:i:s', strtotime('-' . $jaar . ' year'));
+		$datum = date('Y-m-d H:i:s', strtotime('-' . $jaar . ' year'));
 		$where .= ' AND HAVING score > 0';
-		$results = Database::sqlSelect($fields, $orm::getTableName(), $where, array($query), 'score DESC', null, $this->per_pagina, ($this->pagina - 1) * $this->per_pagina);
+		$results = Database::sqlSelect($fields, $orm::getTableName(), $where, array($query, $datum), 'score DESC', null, $this->per_pagina, ($this->pagina - 1) * $this->per_pagina);
 		$results->setFetchMode(PDO::FETCH_CLASS, $orm, array($cast = true));
 		return $results;
 	}
@@ -634,16 +634,16 @@ class ForumPostsModel extends PersistenceModel implements Paging {
 		if ($datum === 'gemaakt') {
 			$where .= 'datum_tijd';
 		} else {
-			$where .= 'laatst_gewijzigd';
+			$where .= 'laatst_bewerkt';
 		}
 		if ($ouder === 'ouder') {
-			$where = ' < ';
+			$where = ' < ?';
 		} else {
-			$where = ' > ';
+			$where = ' > ?';
 		}
-		$where .= date('Y-m-d H:i:s', strtotime('-' . $jaar . ' year'));
+		$datum = date('Y-m-d H:i:s', strtotime('-' . $jaar . ' year'));
 		$where .= ' AND HAVING score > 0';
-		$results = Database::sqlSelect($fields, $orm::getTableName(), $where, array($query), 'score DESC', null, $this->per_pagina, ($this->pagina - 1) * $this->per_pagina);
+		$results = Database::sqlSelect($fields, $orm::getTableName(), $where, array($query, $datum), 'score DESC', null, $this->per_pagina, ($this->pagina - 1) * $this->per_pagina);
 		$results->setFetchMode(PDO::FETCH_CLASS, $orm, array($cast = true));
 		return $results;
 	}
