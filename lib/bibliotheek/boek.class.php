@@ -415,7 +415,7 @@ class Boek {
 	 * @return FormElement[]
 	 */
 	protected function getCommonFields($naamtitelveld = 'Titel') {
-		$fields['titel'] = new TitelField('titel', $this->getTitel(), $naamtitelveld, 200, 'Titel ontbreekt!');
+		$fields['titel'] = new TitelField('titel', $this->getTitel(), $naamtitelveld);
 		$fields['auteur'] = new TextField('auteur', $this->getAuteur(), 'Auteur', 100);
 		$fields['auteur']->setRemoteSuggestionsSource('/communicatie/bibliotheek/autocomplete/auteur');
 		$fields['auteur']->placeholder = 'Achternaam, Voornaam V.L. van de';
@@ -1111,10 +1111,6 @@ class BewerkBoek extends Boek {
 }
 
 class TitelField extends RequiredTextField {
-
-	public function __construct($name, $value, $description = null, $max_len = 255, $placeholder = null) {
-		parent::__construct($name, $value, $description, $max_len, $placeholder);
-	}
 
 	public function validate() {
 		if (!parent::validate()) {
