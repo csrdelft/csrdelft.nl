@@ -213,25 +213,6 @@ div.opslaan{
 .InputField.metFouten textarea 	{ background-color: #E88; }
 .InputField.metFouten .melding	{ color: red; display: block; margin-left: 77px;}
 
-/* AutoriseTextField */
-.InputField .wantsAutoresize {
-	min-height: 14px;
-	overflow: hidden;
-	resize: none;
-}
-.hiddendiv { /*clone van wantsAutoresize textarea */
-	display: none;
-	white-space: pre-wrap;
-	width: 428px;
-	text-align: justify;
-	min-height: 14px;
-	font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
-	font-size: 11px;
-	overflow: hidden;
-	word-wrap: break-word;
-	padding: 1px 2px;
-	border: 1px solid white;
-}
 /* InputField voor biebcode */
 .InputField input#field_code{
 	width: 100px;
@@ -239,10 +220,6 @@ div.opslaan{
 .boek .InputField a.genereer {		display: none;}
 .InputField input:focus~a.genereer {	display: inline;}
 
-/* LidField */
-.InputField input.RequiredLidField {
-	width: 220px;
-}
 /* urls in suggestiemenu (voor titelfield) */
 li.ac_over a, li.ac_over a:hover { 
 	color: #0071D9;
@@ -255,7 +232,6 @@ li.ac_over a, li.ac_over a:hover {
 
 .exemplaar{
 	margin-bottom: 25px;
-	overflow: auto;
 }
 .exemplaar .fotolabel{
 	color: white;

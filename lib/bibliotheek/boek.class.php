@@ -415,7 +415,7 @@ class Boek {
 	 * @return FormElement[]
 	 */
 	protected function getCommonFields($naamtitelveld = 'Titel') {
-		$fields['titel'] = new TitelField('titel', $this->getTitel(), $naamtitelveld);
+		$fields['titel'] = new TitelField('titel', $this->getTitel(), $naamtitelveld, 200);
 		$fields['auteur'] = new TextField('auteur', $this->getAuteur(), 'Auteur', 100);
 		$fields['auteur']->setRemoteSuggestionsSource('/communicatie/bibliotheek/autocomplete/auteur');
 		$fields['auteur']->placeholder = 'Achternaam, Voornaam V.L. van de';

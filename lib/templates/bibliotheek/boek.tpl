@@ -194,7 +194,7 @@
 	</div>
 	{if $boek->isEigenaar()}
 		{* javascript invoegen van de fields *}
-		{$boek->ajaxformuliervelden->getJavascript()}
+		{$boek->ajaxformuliervelden->getScriptTag()}
 	{/if}
 
 	{* beschrijvingen *}
