@@ -195,10 +195,10 @@ class Profiel {
 
 		$bericht = file_get_contents(LIB_PATH . '/templates/MVC/mail/nieuwwachtwoord.mail');
 		$values = array(
-			'NAAM' => $lid->getNaam(),
-			'UID' => $lid->getUid(),
-			'PW' => $password,
-			'ADMIN' => LoginLid::instance()->getLid()->getNaam()
+			'NAAM'	 => $lid->getNaam(),
+			'UID'	 => $lid->getUid(),
+			'PW'	 => $password,
+			'ADMIN'	 => LoginLid::instance()->getLid()->getNaam()
 		);
 		$mail = new Mail($lid->getEmail(), 'Nieuw wachtwoord voor de C.S.R.-stek', $bericht);
 		$mail->addBcc("pubcie@csrdelft.nl");
@@ -458,12 +458,12 @@ class ProfielStatus extends Profiel {
 		$profiel = $this->lid->getProfiel();
 
 		//permissies
-		$perm = array('R_LID' => 'Lid', 'R_OUDLID' => 'Oudlid', 'R_NOBODY' => 'Ex-lid/Nobody', 'R_MAALCIE' => 'MaalCierechten', 'R_BASF' => 'BAS-FCierechten', 'R_ETER' => 'Eter (mag abo\'s) - geen inlog');
-		$permbeheer = array('R_BESTUUR' => 'Bestuur', 'R_VAB' => 'Vice-Abactis', 'R_PUBCIE' => 'PubCierechten');
+		$perm = array('R_LID' => 'Lid', 'R_OUDLID' => 'Oudlid', 'R_NOBODY' => 'Ex-lid/Nobody', 'R_MAALCIE' => 'MaalCierechten', 'R_BASF' => 'BAS-FCierechten', 'R_ETER' => 'Eter (inlog voor abo\'s)');
+		$permbeheer = array('R_BESTUUR' => 'Bestuur', 'R_PUBCIE' => 'PubCierechten');
 		if (LoginLid::mag('P_ADMIN')) {
 			//admin mag alle permissies toekennen
 			$perm = array_merge($perm, $permbeheer);
-		} elseif (in_array($profiel['permissies'], array('R_BESTUUR', 'R_VAB', 'R_PUBCIE', 'R_MODERATOR'))) {
+		} elseif (in_array($profiel['permissies'], array('R_BESTUUR', 'R_PUBCIE'))) {
 			//niet admin mag geen beheerpermissies aanpassen
 			$perm = array($permbeheer[$profiel['permissies']], $permbeheer[$profiel['permissies']]);
 		}
@@ -534,7 +534,7 @@ class ProfielStatus extends Profiel {
 		//bij wijzigingen door niet-admins worden aanpassingen aan permissies ongedaan gemaakt
 		if (!LoginLid::mag('P_ADMIN')) {
 
-			$adminperms = array('R_PUBCIE', 'R_MODERATOR', 'R_BESTUUR', 'R_VAB');
+			$adminperms = array('R_PUBCIE', 'R_BESTUUR');
 
 			if (in_array($oudepermissie, $adminperms)) {
 				if ($oudepermissie != $nieuwepermissie) {
@@ -616,12 +616,12 @@ class ProfielStatus extends Profiel {
 			$bericht = file_get_contents(LIB_PATH . '/templates/MVC/mail/toekomstigcorveeverwijderd.mail');
 			$values = array(
 				'AANTAL' => $aantal,
-				'NAAM' => Lid::naamLink($uid, 'full', 'plain'),
-				'UID' => $uid,
-				'OUD' => $oudestatus,
-				'NIEUW' => $nieuwestatus,
+				'NAAM'	 => Lid::naamLink($uid, 'full', 'plain'),
+				'UID'	 => $uid,
+				'OUD'	 => $oudestatus,
+				'NIEUW'	 => $nieuwestatus,
 				'CHANGE' => str_replace('[br]', "\n", $changelog),
-				'ADMIN' => LoginLid::instance()->getLid()->getNaam()
+				'ADMIN'	 => LoginLid::instance()->getLid()->getNaam()
 			);
 			$mail = new Mail('corvee@csrdelft.nl', 'Lid-af: toekomstig corvee verwijderd', $bericht);
 			$mail->addBcc("pubcie@csrdelft.nl");
@@ -648,12 +648,12 @@ class ProfielStatus extends Profiel {
 		$bericht = file_get_contents(LIB_PATH . '/templates/MVC/mail/lidafmeldingfisci.mail');
 		$uid = $this->bewerktLid->getUid();
 		$values = array(
-			'NAAM' => Lid::naamLink($uid, 'full', 'plain'),
-			'UID' => $uid,
-			'OUD' => $oudestatus,
-			'NIEUW' => $nieuwestatus,
-			'SALDI' => $saldi,
-			'ADMIN' => LoginLid::instance()->getLid()->getNaam()
+			'NAAM'	 => Lid::naamLink($uid, 'full', 'plain'),
+			'UID'	 => $uid,
+			'OUD'	 => $oudestatus,
+			'NIEUW'	 => $nieuwestatus,
+			'SALDI'	 => $saldi,
+			'ADMIN'	 => LoginLid::instance()->getLid()->getNaam()
 		);
 		$to = 'fiscus@csrdelft.nl,maalcie-fiscus@csrdelft.nl,soccie@csrdelft.nl';
 
@@ -679,8 +679,8 @@ class ProfielStatus extends Profiel {
 		}
 		//lijst van boeken genereren
 		$bknleden = $bkncsr = array(
-			'kopje' => '',
-			'lijst' => '',
+			'kopje'	 => '',
+			'lijst'	 => '',
 			'aantal' => 0
 		);
 		foreach ($boeken as $boek) {
@@ -713,13 +713,13 @@ class ProfielStatus extends Profiel {
 		$bericht = file_get_contents(LIB_PATH . '/templates/MVC/mail/lidafgeleendebiebboeken.mail');
 		$uid = $this->bewerktLid->getUid();
 		$values = array(
-			'NAAM' => Lid::naamLink($uid, 'full', 'plain'),
-			'UID' => $uid,
-			'OUD' => substr($oudestatus, 2),
-			'NIEUW' => ($nieuwestatus == 'S_NOBODY' ? 'GEEN LID' : substr($nieuwestatus, 2)),
-			'CSRLIJST' => $bkncsr['kopje'] . "\n" . $bkncsr['lijst'],
+			'NAAM'		 => Lid::naamLink($uid, 'full', 'plain'),
+			'UID'		 => $uid,
+			'OUD'		 => substr($oudestatus, 2),
+			'NIEUW'		 => ($nieuwestatus == 'S_NOBODY' ? 'GEEN LID' : substr($nieuwestatus, 2)),
+			'CSRLIJST'	 => $bkncsr['kopje'] . "\n" . $bkncsr['lijst'],
 			'LEDENLIJST' => ($bkncsr['aantal'] > 0 ? "Verder ter informatie: " . $bknleden['kopje'] . "\n" . $bknleden['lijst'] : ''),
-			'ADMIN' => LoginLid::instance()->getLid()->getNaam()
+			'ADMIN'		 => LoginLid::instance()->getLid()->getNaam()
 		);
 		$mail = new Mail($to, 'Geleende boeken - Melding lid-af worden', $bericht);
 		$mail->addBcc("pubcie@csrdelft.nl");
