@@ -21,10 +21,10 @@ class FileField implements FormElement, Validator {
 	public function __construct($name, Bestand $behouden = null, $ftpSubDir = '', array $filterMime = array()) {
 		$this->name = $name;
 		$this->opties = array(
-			'BestandBehouden' => new BestandBehouden($name, $behouden),
-			'UploadHttp' => new UploadHttp($name),
-			'UploadFtp' => new UploadFtp($name, $ftpSubDir),
-			'UploadUrl' => new UploadUrl($name)
+			'BestandBehouden'	 => new BestandBehouden($name, $behouden),
+			'UploadHttp'		 => new UploadHttp($name, $filterMime),
+			'UploadFtp'			 => new UploadFtp($name, $ftpSubDir),
+			'UploadUrl'			 => new UploadUrl($name)
 		);
 		$this->filter = $filterMime;
 		$this->behouden = $behouden;
@@ -284,8 +284,11 @@ class BestandBehouden extends BestandUploader {
 
 class UploadHttp extends BestandUploader {
 
-	public function __construct($name) {
+	private $filterMime;
+
+	public function __construct($name, $filterMime) {
 		parent::__construct($name);
+		$this->filterMime = $filterMime;
 		if ($this->isPosted()) {
 			$this->value = $_FILES[$this->name];
 			if (in_array($this->value['type'], Afbeelding::$mimeTypes)) {
@@ -341,7 +344,7 @@ class UploadHttp extends BestandUploader {
 		if (!$this->selected) {
 			echo ' style="display: none;"';
 		}
-		echo '><input type="file" class="' . implode(' ', $this->css_classes) . '" id="' . $this->name . '" name="' . $this->name . '" /></div></div>';
+		echo '><input type="file" class="' . implode(' ', $this->css_classes) . '" id="' . $this->name . '" name="' . $this->name . '" accept="' . implode('|', $this->filterMime) . '" /></div></div>';
 	}
 
 }

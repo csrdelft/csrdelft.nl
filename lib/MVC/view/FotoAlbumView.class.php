@@ -82,6 +82,7 @@ class FotoUploadForm extends PopupForm {
 		$fields[] = new RequiredImageField('foto', null, null, array('image/jpeg'));
 		$fields[] = new FileNameField('subalbum', null, 'Nieuw sub-album');
 		$fields[] = new SubmitResetCancel('/fotoalbum', true, true, false);
+		$fields[] = new HtmlComment('<br /><i>Maak nooit inbreuk op de auteursrechten of het recht op privacy van anderen.</i>');
 		$this->addFields($fields);
 	}
 
@@ -220,8 +221,8 @@ class FotoAlbumUbbView extends TemplateView {
 						continue;
 					}
 					$grid[$row][$col] = array(
-						'index' => $bigindex,
-						'foto' => $fotos[$bigindex]
+						'index'	 => $bigindex,
+						'foto'	 => $fotos[$bigindex]
 					);
 					// mark the three places overlapped by this image as used.
 					$grid[$row + 1][$col] = $grid[$row][$col + 1] = $grid[$row + 1][$col + 1] = 'USED';
@@ -249,8 +250,8 @@ class FotoAlbumUbbView extends TemplateView {
 				}
 			}
 			$grid[$row][$col] = array(
-				'index' => $key,
-				'foto' => $foto
+				'index'	 => $key,
+				'foto'	 => $foto
 			);
 		}
 		// check length of last row and remove it if not full and no big images overlap it.
