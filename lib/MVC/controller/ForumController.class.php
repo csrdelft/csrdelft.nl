@@ -52,7 +52,7 @@ class ForumController extends Controller {
 				return true;
 
 			case 'hertellen':
-				if (!LoginLid::mag('P_FORUM_ADMIN')) {
+				if (!LoginLid::mag('P_ADMIN')) {
 					return false;
 				}
 			case 'rss':
@@ -69,7 +69,7 @@ class ForumController extends Controller {
 			case 'aanmaken':
 			case 'beheren':
 			case 'opheffen':
-				if (!LoginLid::mag('P_FORUM_ADMIN')) {
+				if (!LoginLid::mag('P_ADMIN')) {
 					return false;
 				}
 			case 'posten':
@@ -338,7 +338,7 @@ class ForumController extends Controller {
 			$this->geentoegang();
 		}
 		if ($property === 'belangrijk') {
-			if (LoginLid::mag('P_FORUM_MOD+')) {
+			if (LoginLid::mag('P_ADMIN')) {
 				ForumDradenVerbergenModel::instance()->herstelDraadVoorIedereen($draad);
 			} else {
 				$this->geentoegang();

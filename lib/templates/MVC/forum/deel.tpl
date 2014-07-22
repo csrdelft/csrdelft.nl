@@ -3,7 +3,7 @@
 {include file='MVC/forum/zoek_form.tpl'}
 
 {if isset($deel->forum_id)}
-	{if LoginLid::mag('P_FORUM_ADMIN')}
+	{if LoginLid::mag('P_ADMIN')}
 		<div class="forumheadbtn">
 			<a href="/forum/beheren/{$deel->forum_id}" class="knop post popup" title="Deelforum beheren">{icon get="wrench_orange"} Beheren</a>
 		</div>
