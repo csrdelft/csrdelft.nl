@@ -444,10 +444,10 @@ class LoginLid {
 			'P_PUBLIC'			 => 000000000000, # Iedereen op het Internet
 			'P_LOGGED_IN'		 => 000000000001, # Leden-menu, eigen profiel raadplegen
 			'P_PROFIEL_EDIT'	 => 000000000003, # Eigen gegevens aanpassen
-			'P_LEDEN_MOD'		 => 000000000007, # (Oud)ledengegevens aanpassen			
+			'P_ALLEEN_OUDLID'	 => 000000000007, # Specifiek voor oudleden
 			'P_LEDEN_READ'		 => 000000000010, # Gegevens van leden raadplegen
 			'P_OUDLEDEN_READ'	 => 000000000030, # Gegevens van oudleden raadplegen
-			'P_ALLEEN_OUDLID'	 => 000000000070, # Specifiek voor oudleden
+			'P_LEDEN_MOD'		 => 000000000070, # (Oud)ledengegevens aanpassen			
 			'P_FORUM_READ'		 => 000000000100, # Forum lezen
 			'P_FORUM_POST'		 => 000000000300, # Berichten plaatsen op het forum en eigen berichten wijzigen
 			'P_FORUM_MOD'		 => 000000000700, # Forum-moderator mag berichten van anderen wijzigen of verwijderen
@@ -485,7 +485,7 @@ class LoginLid {
 		$p = $this->_permissions;
 		$this->_perm_user = array(
 			'R_NOBODY'		 => $p['P_PUBLIC'] | $p['P_FORUM_READ'] | $p['P_AGENDA_READ'],
-			'R_LID'			 => $p['P_LOGGED_IN'] | $p['P_LEDEN_READ'] | $p['P_OUDLEDEN_READ'] | $p['P_FORUM_POST'] | $p['P_DOCS_READ'] | $p['P_PROFIEL_EDIT'] | $p['P_BIEB_READ'] | $p['P_AGENDA_READ'] | $p['P_MAAL_IK'] | $p['P_CORVEE_IK'] | $p['P_MAIL_POST'] | $p['P_NEWS_POST'],
+			'R_LID'			 => $p['P_LOGGED_IN'] | $p['P_OUDLEDEN_READ'] | $p['P_FORUM_POST'] | $p['P_DOCS_READ'] | $p['P_PROFIEL_EDIT'] | $p['P_BIEB_READ'] | $p['P_AGENDA_READ'] | $p['P_MAAL_IK'] | $p['P_CORVEE_IK'] | $p['P_MAIL_POST'] | $p['P_NEWS_POST'],
 			'R_MODERATOR'	 => $p['P_FORUM_MOD'] | $p['P_DOCS_MOD'] | $p['P_AGENDA_MOD'] | $p['P_NEWS_MOD'] | $p['P_BIEB_MOD'] | $p['P_MAAL_IK'] | $p['P_CORVEE_IK'] | $p['P_MAIL_COMPOSE']
 		);
 
