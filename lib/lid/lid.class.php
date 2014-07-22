@@ -1264,7 +1264,7 @@ class Zoeker {
 			}
 			# we zoeken in nobodies als
 			# de ingelogde persoon dat mag EN daarom gevraagd heeft
-			if (LoginLid::mag('P_OUDLEDEN_MOD') and $zoekstatus === 'nobodies') {
+			if (LoginLid::mag('P_LEDEN_MOD') and $zoekstatus === 'nobodies') {
 				# alle voorgaande filters worden ongedaan gemaakt en er wordt alleen op nobodies gezocht
 				$statusfilter = "status='S_NOBODY' OR status='S_EXLID'";
 			}

@@ -98,7 +98,7 @@ class Profiel {
 			return true;
 		}
 		//oudlid-moderator
-		if (LoginLid::mag('P_OUDLEDEN_MOD') AND in_array($this->lid->getStatus(), array('S_OUDLID', 'S_ERELID'))) {
+		if (LoginLid::mag('P_LEDEN_MOD') AND in_array($this->lid->getStatus(), array('S_OUDLID', 'S_ERELID'))) {
 			return true;
 		}
 		//novietenbewerker (de novCie dus)
@@ -835,7 +835,7 @@ class ProfielVoorkeur extends Profiel {
 			return true;
 		}
 		//oudlid-moderator
-		if (LoginLid::mag('P_OUDLEDEN_MOD') AND in_array($this->lid->getStatus(), array('S_OUDLID', 'S_ERELID'))) {
+		if (LoginLid::mag('P_LEDEN_MOD') AND in_array($this->lid->getStatus(), array('S_OUDLID', 'S_ERELID'))) {
 			return true;
 		}
 		//of het gaat om ons eigen profiel.

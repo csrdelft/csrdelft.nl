@@ -6,9 +6,9 @@ try {
 
 	/*
 	  $ubb = new CsrUbb();
-	  echo $ubb->ubb_prive(array('prive' => 'P_OUDLEDEN_MOD'));
+	  echo $ubb->ubb_prive(array('prive' => 'P_LEDEN_MOD'));
 
-	  //echo $ubb->getHTML('hoi[prive=P_OUDLEDEN_MOD]hoi[/]');
+	  //echo $ubb->getHTML('hoi[prive=P_LEDEN_MOD]hoi[/]');
 
 	  /*
 	  $mail = new Mail('brussee@live.nl','brussee@live.nl','test');
