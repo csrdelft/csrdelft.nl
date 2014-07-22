@@ -484,7 +484,7 @@ class LoginLid {
 		$p = $this->_permissions;
 		$this->_perm_user = array(
 			'R_NOBODY'	 => $p['P_PUBLIC'] | $p['P_FORUM_READ'] | $p['P_AGENDA_READ'],
-			'R_LID'		 => $p['P_LOGGED_IN'] | $p['P_OUDLEDEN_READ'] | $p['P_FORUM_POST'] | $p['P_DOCS_READ'] | $p['P_PROFIEL_EDIT'] | $p['P_BIEB_READ'] | $p['P_AGENDA_READ'] | $p['P_MAAL_IK'] | $p['P_CORVEE_IK'] | $p['P_MAIL_POST'] | $p['P_NEWS_POST']
+			'R_LID'		 => $p['P_PROFIEL_EDIT'] | $p['P_OUDLEDEN_READ'] | $p['P_FORUM_POST'] | $p['P_AGENDA_READ'] | $p['P_DOCS_READ'] | $p['P_BIEB_READ'] | $p['P_MAAL_IK'] | $p['P_CORVEE_IK'] | $p['P_MAIL_POST'] | $p['P_NEWS_POST']
 		);
 		$this->_perm_user['R_OUDLID'] = $this->_perm_user['R_LID'] | $p['P_ALLEEN_OUDLID'];
 		$this->_perm_user['R_BASF'] = $this->_perm_user['R_LID'] | $p['P_DOCS_MOD'];
