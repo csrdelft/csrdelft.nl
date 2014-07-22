@@ -17,7 +17,7 @@ class FotoAlbumController extends AclController {
 	 * Als deze regexp matched is het album alleen voor leden toegankelijk
 	 * @var string
 	 */
-	private static $alleenLeden = '/(intern|novitiaat|ontvoering|feuten|slachten|zuipen|prive|privé)/i';
+	private static $alleenLeden = '/(intern|novitiaat|ontvoering|feuten|slachten|zuipen|prive|privé|Posters)/i';
 	/**
 	 * Als deze regexp matched is het album alleen voor vrouwen toegankelijk
 	 * @var string
