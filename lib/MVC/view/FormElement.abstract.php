@@ -479,7 +479,7 @@ class RechtenField extends TextField {
 		}
 		//parent checks notnull
 		if ($this->value === '') {
-			return false;
+			return true;
 		}
 		if (preg_match('/\s/', $this->value)) {
 			$this->error = 'Mag geen spaties bevatten';
@@ -493,6 +493,12 @@ class RechtenField extends TextField {
 		}
 		return $this->error === '';
 	}
+
+}
+
+class RequiredRechtenField extends RechtenField {
+
+	public $notnull = true;
 
 }
 

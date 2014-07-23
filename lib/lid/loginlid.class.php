@@ -286,21 +286,8 @@ class LoginLid {
 	}
 
 	public function hasPermission($descr, $token_authorizable = false) {
-		# zoek de rechten van de gebruiker op
-		$liddescr = $this->lid->getPermissies();
 
-		//alleen als $token_athorizable true is testen we met de permissies van het
-		//geauthenticeerde lid, anders met P_PUBLIC
-		if ($this->authenticatedByToken AND ! $token_authorizable) {
-			$liddescr = 'P_PUBLIC';
-		}
-
-		# ga alleen verder als er een geldige permissie wordt teruggegeven
-		if (!array_key_exists($liddescr, $this->_perm_user)) {
-			return false;
-		}
-		# zoek de code op
-		$lidheeft = $this->_perm_user[$liddescr];
+		# Split, combine and reverse permission description:
 
 		if (strpos($descr, ',') !== false) {
 			# Het gevraagde mag een enkele permissie zijn, of meerdere, door komma's
@@ -328,6 +315,26 @@ class LoginLid {
 		# Negatie van een permissie:
 		# gebruiker mag deze permissie niet bezitten
 		if (substr($permissie, 0, 1) == '!' && !$this->hasPermission(substr($permissie, 1), $token_authorizable)) {
+			return true;
+		}
+
+		# zoek de rechten van de gebruiker op
+		$liddescr = $this->lid->getPermissies();
+
+		//alleen als $token_athorizable true is testen we met de permissies van het
+		//geauthenticeerde lid, anders met P_PUBLIC
+		if ($this->authenticatedByToken AND ! $token_authorizable) {
+			$liddescr = 'P_PUBLIC';
+		}
+
+		# ga alleen verder als er een geldige permissie wordt teruggegeven
+		if (!array_key_exists($liddescr, $this->_perm_user)) {
+			return false;
+		}
+		# zoek de code op
+		$lidheeft = $this->_perm_user[$liddescr];
+
+		if ($this->hasPermission('P_ADMIN', $token_authorizable)) {
 			return true;
 		}
 
