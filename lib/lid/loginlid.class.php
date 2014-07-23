@@ -334,10 +334,6 @@ class LoginLid {
 		# zoek de code op
 		$lidheeft = $this->_perm_user[$liddescr];
 
-		if ($this->hasPermission('P_ADMIN', $token_authorizable)) {
-			return true;
-		}
-
 		# Normale permissie:
 		# ga alleen verder als er een geldige permissie wordt gevraagd
 		if (array_key_exists($permissie, $this->_permissions)) {
