@@ -1,11 +1,17 @@
 {SimpleHtml::getMelding()}
 
-{include file='MVC/forum/zoek_form.tpl'}
+{$zoekform->view()}
 
 {if isset($deel->forum_id)}
 	{if LoginLid::mag('P_ADMIN')}
 		<div class="forumheadbtn">
 			<a href="/forum/beheren/{$deel->forum_id}" class="knop post popup" title="Deelforum beheren">{icon get="wrench_orange"} Beheren</a>
+		</div>
+	{/if}
+	{if $deel->magModereren() AND ForumPostsModel::instance()->getAantalWachtOpGoedkeuring($deel->forum_id) > 0}
+		<div class="forumheadbtn">
+			{icon get="bell"}
+			<a href="/forum/wacht">Wacht op goedkeuring</a>: {ForumPostsModel::instance()->getAantalWachtOpGoedkeuring($deel->forum_id)}
 		</div>
 	{/if}
 {else}

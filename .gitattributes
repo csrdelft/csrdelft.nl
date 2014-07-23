@@ -3827,7 +3827,6 @@ lib/templates/MVC/forum/post_preview.tpl -text
 lib/templates/MVC/forum/post_zijbalk.tpl -text
 lib/templates/MVC/forum/resultaten.tpl -text
 lib/templates/MVC/forum/rss.tpl -text
-lib/templates/MVC/forum/zoek_form.tpl -text
 lib/templates/MVC/fotoalbum/album.tpl -text
 lib/templates/MVC/groepen/groep.tpl -text
 lib/templates/MVC/groepen/inhoudsopgave.tpl -text

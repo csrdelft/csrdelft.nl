@@ -8,23 +8,21 @@
 				{* geen verjaardagen hier *}
 			{else}
 				<div class="item">
-					{if date('d-m', $item->getBeginMoment()) === date('d-m')}
-						{$item->getBeginMoment()|date_format:"%H:%M"}
-					{elseif strftime('%U', $item->getBeginMoment()) === strftime('%U')}
-						<div class="zijbalk-dag">{$item->getBeginMoment()|date_format:"%a"}&nbsp;</div>{$item->getBeginMoment()|date_format:"%d"}
-					{else}
-						{$item->getBeginMoment()|date_format:"%d-%m"}
-					{/if}
-					&nbsp;
 					{if $item->getLink()}
 						<a href="{$item->getLink()}" title="{$item->getBeschrijving()}">
-							{$item->getTitel()|truncate:25:"…":true}
-						</a>
-					{else}
-						<a title="{$item->getTitel()}" href="/agenda/maand/{$item->getBeginMoment()|date_format:"%Y-%m"}/#dag-{$item->getBeginMoment()|date_format:"%Y-%m-%d"}">
-							{$item->getTitel()|truncate:25:"…":true}
-						</a>
-					{/if}
+						{else}
+							<a title="{$item->getTitel()}" href="/agenda/maand/{$item->getBeginMoment()|date_format:"%Y-%m"}/#dag-{$item->getBeginMoment()|date_format:"%Y-%m-%d"}">
+						{/if}
+						{if date('d-m', $item->getBeginMoment()) === date('d-m')}
+							{$item->getBeginMoment()|date_format:"%H:%M"}
+						{elseif strftime('%U', $item->getBeginMoment()) === strftime('%U')}
+							<div class="zijbalk-dag">{$item->getBeginMoment()|date_format:"%a"}&nbsp;</div>{$item->getBeginMoment()|date_format:"%d"}
+						{else}
+							{$item->getBeginMoment()|date_format:"%d-%m"}
+						{/if}
+						&nbsp;
+						{$item->getTitel()|truncate:25:"…":true}
+					</a>
 				</div>
 			{/if}
 		{/foreach}

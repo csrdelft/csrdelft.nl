@@ -1,6 +1,6 @@
 {SimpleHtml::getMelding()}
 
-{include file='MVC/forum/zoek_form.tpl'}
+{$zoekform->view()}
 
 {if $verborgen_aantal > 0}
 	<div class="forumheadbtn">
