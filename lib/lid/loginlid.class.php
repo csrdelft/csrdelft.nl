@@ -468,7 +468,7 @@ class LoginLid {
 			'P_MAAL_SALDI'		 => 000070000000, # mag het MaalCie saldo aanpassen van iedereen (MaalCie fiscus)
 			'P_CORVEE_IK'		 => 000100000000, # kan voorkeuren aangeven voor corveetaken
 			'P_CORVEE_MOD'		 => 000300000000, # mag corveetaken beheren (CorveeCaesar)
-			'P_CORVEE_ADMIN'	 => 000700000000, # mag corveefuncties en kwalificaties beheren (CorveeCaesar)
+			'P_CORVEE_SCHED'	 => 000700000000, # mag de automatische corvee-indeler beheren
 			'P_MAIL_POST'		 => 001000000000, # mag berichtjes in de courant rossen
 			'P_MAIL_COMPOSE'	 => 003000000000, # mag alle berichtjes in de courant bewerken, en volgorde wijzigen
 			'P_MAIL_SEND'		 => 007000000000, # mag de courant verzenden
@@ -492,7 +492,7 @@ class LoginLid {
 		$this->_perm_user['R_MAALCIE'] = $this->_perm_user['R_LID'] | $p['P_MAAL_MOD'] | $p['P_CORVEE_MOD'] | $p['P_MAAL_SALDI'];
 		$this->_perm_user['R_MODERATOR'] = $this->_perm_user['R_LID'] | $p['P_FORUM_MOD'] | $p['P_DOCS_MOD'] | $p['P_AGENDA_MOD'] | $p['P_NEWS_MOD'] | $p['P_BIEB_MOD'] | $p['P_MAAL_IK'] | $p['P_CORVEE_IK'] | $p['P_MAIL_COMPOSE'];
 		$this->_perm_user['R_BESTUUR'] = $this->_perm_user['R_MODERATOR'] | $p['P_LEDEN_MOD'] | $p['P_MAAL_MOD'] | $p['P_CORVEE_MOD'] | $p['P_MAIL_COMPOSE'];
-		$this->_perm_user['R_PUBCIE'] = $this->_perm_user['R_MODERATOR'] | $p['P_ADMIN'] | $p['P_CORVEE_ADMIN'] | $p['P_MAAL_SALDI'];
+		$this->_perm_user['R_PUBCIE'] = $this->_perm_user['R_MODERATOR'] | $p['P_ADMIN'] | $p['P_CORVEE_SCHED'] | $p['P_MAAL_SALDI'];
 	}
 
 	public function isValidPerm($key, $user = true) {
