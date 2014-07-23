@@ -263,7 +263,7 @@ class LLLijst extends LLweergave {
 					echo $lid->getNaamLink('full', 'link');
 					break;
 				case 'pasfoto':
-					if (LidInstellingen::get('algemeen', 'naamWeergave') === 'Duckstad') {
+					if (LidInstellingen::get('forum', 'naamWeergave') === 'Duckstad') {
 						echo $lid->getDuckfoto();
 					} else {
 						echo $lid->getPasfoto();
@@ -367,7 +367,7 @@ class LLCSV extends LLweergave {
 					$return.=$lid->getKring(false);
 					break;
 				case 'pasfoto':
-					if (LidInstellingen::get('algemeen', 'naamWeergave') === 'Duckstad') {
+					if (LidInstellingen::get('forum', 'naamWeergave') === 'Duckstad') {
 						$return.=$this->getDuckfoto(false);
 					} else {
 						$return.=$lid->getPasfoto(false);

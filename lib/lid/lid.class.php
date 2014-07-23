@@ -733,7 +733,7 @@ class Lid implements Serializable, Agendeerbaar {
 
 		//als $vorm==='user', de instelling uit het profiel gebruiken voor vorm
 		if ($vorm === 'user') {
-			$vorm = LidInstellingen::get('algemeen', 'naamWeergave');
+			$vorm = LidInstellingen::get('forum', 'naamWeergave');
 		}
 		if ($vorm === 'Duckstad') {
 			if (!LoginLid::mag('P_LOGGED_IN')) {
@@ -834,7 +834,7 @@ class Lid implements Serializable, Agendeerbaar {
 				break;
 			case 'pasfoto':
 				if ($mode == 'link') {
-					if (LidInstellingen::get('algemeen', 'naamWeergave') === 'Duckstad') {
+					if (LidInstellingen::get('forum', 'naamWeergave') === 'Duckstad') {
 						$naam = $this->getDuckfoto(true, 'lidfoto');
 					} else {
 						$naam = $this->getPasfoto(true, 'lidfoto');
@@ -881,7 +881,7 @@ class Lid implements Serializable, Agendeerbaar {
 					$k.= ' init';
 				}
 				$k.= '">';
-				if (LidInstellingen::get('algemeen', 'naamWeergave') === 'Duckstad') {
+				if (LidInstellingen::get('forum', 'naamWeergave') === 'Duckstad') {
 					$k.= $this->getDuckfoto('small', 'lidfoto');
 				} else {
 					$k.= $this->getPasfoto('small', 'lidfoto');
@@ -943,7 +943,7 @@ class Lid implements Serializable, Agendeerbaar {
 
 	public function __toString() {
 		if ($this->tsMode == 'pasfoto') {
-			if (LidInstellingen::get('algemeen', 'naamWeergave') === 'Duckstad') {
+			if (LidInstellingen::get('forum', 'naamWeergave') === 'Duckstad') {
 				$this->getDuckfoto(true);
 			} else {
 				$this->getPasfoto(true);
@@ -960,8 +960,8 @@ class Lid implements Serializable, Agendeerbaar {
 	 */
 	public function serialize() {
 		$lid = array(
-			'uid' => $this->getUid(),
-			'profiel' => $this->getProfiel()
+			'uid'		 => $this->getUid(),
+			'profiel'	 => $this->getProfiel()
 		);
 
 		return serialize($lid);

@@ -33,7 +33,7 @@ function smarty_modifier_pasfoto($uid, $cssclass = 'pasfoto', $link = true) {
 			if ($link) {
 				$return.='<a href="/communicatie/profiel/' . $uid . '" title="' . $lid->getNaamLink('full', 'plain') . '">';
 			}
-			if (LidInstellingen::get('algemeen', 'naamWeergave') === 'Duckstad') {
+			if (LidInstellingen::get('forum', 'naamWeergave') === 'Duckstad') {
 				$return.=$lid->getDuckfoto(true, $cssclass);
 			}
 			else {
