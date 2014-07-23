@@ -87,7 +87,7 @@ class AgendaItemForm extends PopupForm {
 		}
 
 		$fields['titel'] = new RequiredTextField('titel', $item->titel, 'Titel');
-		$fields['titel']->setSuggestions(array('Kring', 'Lezing', 'Werkgroep', 'Eetplan', 'Borrel', 'Alpha-avond'));
+		$fields['titel']->suggestions = array('Kring', 'Lezing', 'Werkgroep', 'Eetplan', 'Borrel', 'Alpha-avond');
 		$fields['datum'] = new DatumField('datum', date('Y-m-d', $item->getBeginMoment()), 'Datum', date('Y') + 5, date('Y') - 5);
 
 		$html = '<div id="tijden" class="InputField" style="line-height: 2em;"><label>Standaard tijden</label>';
@@ -120,7 +120,7 @@ function setTijd(a, b, c, d) {
 		$fields['begin'] = new TijdField('begin', date('H:i', $item->getBeginMoment()), 'Van');
 		$fields['eind'] = new TijdField('eind', date('H:i', $item->getEindMoment()), 'Tot');
 
-		$fields[] = new SelectField('rechten_bekijken', $item->rechten_bekijken, 'Zichtbaar voor', array('P_LEDEN_READ' => 'Intern', 'P_PUBLIC' => 'Extern'));
+		$fields[] = new RechtenField('rechten_bekijken', $item->rechten_bekijken, 'Zichtbaar voor');
 
 		$fields['l'] = new TextField('locatie', $item->locatie, 'Locatie');
 		$fields['l']->title = 'Een kaart kan worden weergegeven in de agenda';

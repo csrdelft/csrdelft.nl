@@ -90,7 +90,7 @@ class GroepLidForm extends InlineForm {
 
 	public function __construct(GroepLid $groeplid) {
 		parent::__construct($groeplid, 'lidform-' . $groeplid->lid_id, Instellingen::get('groepen', 'url') . '/wijzigen/' . $groeplid->groep_id . '/' . $groeplid->lid_id, $field = new TextField('opmerking', $groeplid->opmerking, null, 255, 0, $groeplid));
-		$field->setSuggestions(GroepFunctie::getTypeOptions());
+		$field->suggestions = GroepFunctie::getTypeOptions();
 	}
 
 }

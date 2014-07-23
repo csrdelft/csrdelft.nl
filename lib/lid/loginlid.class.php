@@ -474,7 +474,7 @@ class LoginLid {
 			'P_MAIL_SEND'		 => $this->createPermissionString(7, 9), # mag de courant verzenden
 			'P_ADMIN'			 => $this->createPermissionString(1, 10) # Super-admin
 				# de levels worden omgezet in een karakter met die ASCII waarde.
-			    # elke karakter representeert een onderdeel
+				# elke karakter representeert een onderdeel
 		);
 
 		# Deze waarden worden samengesteld uit bovenstaande permissies en
@@ -504,6 +504,10 @@ class LoginLid {
 	private function createPermissionString($level, $onderdeelnummer) {
 		$nulperm = str_repeat(chr(0), 15);
 		return substr_replace($nulperm, chr($level), $onderdeelnummer, 1);
+	}
+
+	public function getValidPerms() {
+		return array_keys($this->_permissions);
 	}
 
 	public function isValidPerm($key, $user = true) {

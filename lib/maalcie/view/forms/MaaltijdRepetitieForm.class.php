@@ -25,18 +25,6 @@ class MaaltijdRepetitieForm extends PopupForm {
 			$this->css_classes[] = 'PreventUnchanged';
 		}
 
-		$suggesties = array();
-		$suggesties[] = 'geslacht:m';
-		$suggesties[] = 'geslacht:v';
-		$verticalen = \Verticale::getNamen();
-		foreach ($verticalen as $naam) {
-			$suggesties[] = 'verticale:' . $naam;
-		}
-		$jong = \Lichting::getJongsteLichting();
-		for ($jaar = $jong; $jaar > $jong - 9; $jaar--) {
-			$suggesties[] = 'lichting:' . $jaar;
-		}
-
 		$fields[] = new RequiredTextField('standaard_titel', $titel, 'Standaard titel', 255);
 		$fields[] = new TijdField('standaard_tijd', $tijd, 'Standaard tijd', 15);
 		$fields['dag'] = new WeekdagField('dag_vd_week', $dag, 'Dag v/d week');
@@ -48,10 +36,7 @@ class MaaltijdRepetitieForm extends PopupForm {
 		}
 		$fields[] = new FloatField('standaard_prijs', $prijs, 'Standaard prijs (€)', 0, 50);
 		$fields[] = new IntField('standaard_limiet', $limiet, 'Standaard limiet', 0, 200);
-		$fields['filter'] = new TextField('abonnement_filter', $filter, 'Aanmeldrestrictie', 255);
-		$fields['filter']->setSuggestions($suggesties);
-		$fields['filter']->title = 'Plaats een ! vooraan om van de restrictie een uitsluiting te maken.';
-		$fields['filter']->required = false;
+		$fields[] = new RechtenField('abonnement_filter', $filter, 'Aanmeldrestrictie');
 		if ($mrid !== 0) {
 			$fields['ver'] = new VinkField('verplaats_dag', $verplaats, 'Verplaatsen');
 			$fields['ver']->title = 'Verplaats naar dag v/d week bij bijwerken';
@@ -72,24 +57,6 @@ JS;
 		$fields['src']->extraUrl = Instellingen::get('taken', 'url') . '/bijwerken/' . $mrid;
 
 		$this->addFields($fields);
-	}
-
-	public function validate() {
-		$valid = parent::validate();
-		$fields = $this->getFields();
-		$filter = $fields['filter']->getValue();
-		if (!empty($filter)) {
-			if (preg_match('/\s/', $filter)) {
-				$fields['filter']->error = 'Mag geen spaties bevatten';
-				$valid = false;
-			}
-			$filter = explode(':', $filter);
-			if (sizeof($filter) !== 2 || empty($filter[0]) || empty($filter[1])) {
-				$fields['filter']->error = 'Ongeldige restrictie';
-				$valid = false;
-			}
-		}
-		return $valid;
 	}
 
 }

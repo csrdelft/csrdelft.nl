@@ -87,8 +87,8 @@ abstract class InputField implements FormElement, Validator {
 	public $min_len = 0; //minimale lengte van de invoer
 	public $rows = 0; //aantal rijen van textarea
 	public $css_classes = array('FormField'); //array met classnames die later in de class-tag komen
-	protected $suggestions = array(); //array met suggesties die de javascript-autocomplete aan gaat bieden
-	protected $remotedatasource = '';
+	public $suggestions = array(); //array met suggesties die de javascript-autocomplete aan gaat bieden
+	public $remotedatasource = ''; //een remotedatasource overruled suggestions
 
 	public function __construct($name, $value, $description = null, $model = null) {
 		$this->model = $model;
@@ -126,17 +126,6 @@ abstract class InputField implements FormElement, Validator {
 
 	public function isPosted() {
 		return isset($_POST[$this->name]);
-	}
-
-	/**
-	 * Een remotedatasource overruled suggestions
-	 */
-	public function setRemoteSuggestionsSource($url) {
-		$this->remotedatasource = $url;
-	}
-
-	public function setSuggestions(array $array) {
-		$this->suggestions = $array;
 	}
 
 	public function getValue() {
@@ -454,8 +443,7 @@ class LandField extends TextField {
 
 	public function __construct($name, $value, $description) {
 		parent::__construct($name, $value, $description);
-		$landSuggesties = array('Nederland', 'België', 'Duitsland', 'Frankrijk', 'Verenigd Koninkrijk', 'Verenigde Staten');
-		$this->setSuggestions($landSuggesties);
+		$this->suggestions = array('Nederland', 'België', 'Duitsland', 'Frankrijk', 'Verenigd Koninkrijk', 'Verenigde Staten');
 	}
 
 }
@@ -463,6 +451,48 @@ class LandField extends TextField {
 class RequiredLandField extends LandField {
 
 	public $notnull = true;
+
+}
+
+class RechtenField extends TextField {
+
+	public function __construct($name, $value = null, $description = null) {
+		parent::__construct($name, $value, $description);
+		$this->suggestions = LoginLid::instance()->getValidPerms();
+		$this->suggestions[] = 'groep:####';
+		$this->suggestions[] = 'geslacht:m';
+		$this->suggestions[] = 'geslacht:v';
+		$verticalen = Verticale::getNamen();
+		foreach ($verticalen as $naam) {
+			$this->suggestions[] = 'verticale:' . $naam;
+		}
+		$jong = Lichting::getJongsteLichting();
+		for ($jaar = $jong; $jaar > $jong - 9; $jaar--) {
+			$this->suggestions[] = 'lichting:' . $jaar;
+		}
+		$this->title = 'Plaats een ! vooraan om van de restrictie een uitsluiting te maken.';
+	}
+
+	public function validate() {
+		if (!parent::validate()) {
+			return false;
+		}
+		//parent checks notnull
+		if ($this->value === '') {
+			return false;
+		}
+		if (preg_match('/\s/', $this->value)) {
+			$this->error = 'Mag geen spaties bevatten';
+		}
+		$values = explode(',', $this->value);
+		foreach ($values as $value) {
+			$v = explode(':', $value);
+			if (sizeof($v) !== 2 || empty($v[0]) || empty($v[1]) || !LoginLid::instance()->isValidPerm($value)) {
+				$this->error = 'Ongeldige restrictie: "' . value . '"';
+			}
+		}
+		return $this->error === '';
+	}
 
 }
 
@@ -537,7 +567,7 @@ class LidField extends TextField {
 			$zoekin = 'leden';
 		}
 		$this->zoekin = $zoekin;
-		$this->setRemoteSuggestionsSource('/tools/naamsuggesties/' . $this->zoekin);
+		$this->remotedatasource = '/tools/naamsuggesties/' . $this->zoekin;
 	}
 
 	/**
@@ -625,7 +655,7 @@ class StudieField extends TextField {
 
 		$andere = array('INHolland', 'Haagse Hogeschool', 'EURotterdam', 'ULeiden');
 
-		$this->setSuggestions(array_merge($tustudies, $andere));
+		$this->suggestions = array_merge($tustudies, $andere);
 	}
 
 }
