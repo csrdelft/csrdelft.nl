@@ -11,6 +11,7 @@
 		{/if}
 		&nbsp;
 		<a href="/forum/onderwerp/{$draad->draad_id}{if LidInstellingen::get('forum', 'open_draad_op_pagina') == 'ongelezen'}#ongelezen{elseif LidInstellingen::get('forum', 'open_draad_op_pagina') == 'laatste'}#reageren{/if}" title="{$draad->titel}"{if !$draad->alGelezen()} style="{LidInstellingen::instance()->getTechnicalValue('forum', 'ongelezenWeergave')}"{/if}>
+			{if empty($draad->titel)}geen titel{/if}
 			{$draad->titel|truncate:25:"…":true}
 		</a>
 	</div>

@@ -12,6 +12,7 @@
 		{/if}
 		&nbsp;
 		<a href="/forum/reactie/{$post->post_id}#{$post->post_id}" title="{$draad->titel}"{if !$draad->alGelezen()} style="{LidInstellingen::instance()->getTechnicalValue('forum', 'ongelezenWeergave')}"{/if}>
+			{if empty($draad->titel)}geen titel{/if}
 			{$draad->titel|truncate:25:"…":true}
 		</a>
 	</div>
