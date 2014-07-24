@@ -340,13 +340,30 @@ class LoginLid {
 			# zoek de code op
 			$gevraagd = $this->_permissions[$permissie];
 
-			# $p is de gevraagde permissie als octaal getal
-			# de permissies van de gebruiker kunnen we bij $this->_lid opvragen
+			# permissies zijn een string, waarin elk kararakter de
+			# waarde heeft van een permissielevel voor een bepaald onderdeel.
+			#
+			# de mogelijke *verschillende* permissies voor een onderdeel zijn machten van twee:
+			#  1, 2, 4, 8, etc
+			# aan elk van deze waardes kan onderscheiden worden in een permissie, ook als je ze met elkaar combineert
+			# bijv.  3=1+2, 7=1+2+4, 5=1+4, 6=2+4, 12=4+8, etc
+			#
+			# $gevraagd is de gevraagde permissie als string,
+			# de permissies van de gebruiker $lidheeft kunnen we bij $this->lid opvragen
 			# als we die 2 met elkaar AND-en, dan moet het resultaat hetzelfde
 			# zijn aan de gevraagde permissie. In dat geval bestaat de permissie
 			# van het lid dus minimaal uit de gevraagde permissie
 			#
-			# voorbeeld:
+			# Bij het AND-en, wordt elke karakter bitwise vergeleken, dat betekent:
+			#  - elke karakter van de string omzetten in de ASCII-waarde
+			#    (bijv. ?=63, A=65, a=97, etc zie ook http://www.ascii.cl/)
+			#  - deze ASCII-waarde omzetten in een binaire getal
+			#    (bijv. 2=00010, 4=00100, 5=00101, 14=01110, etc)
+			#  - de bits van het binaire getal een-voor-een vergelijken met de bits van het binaire getal uit de
+			#    andere string. Als ze overeenkomen worden ze bewaard.
+			#    (bijv. 3&5=1 => 00011&00101=00001)
+			#
+			# voorbeeld (met de getallen 0 tot 7 als ASCII-waardes ipv de symbolen, voor de leesbaarheid)
 			#  gevraagd:   P_FORUM_MOD: 0000000700
 			#  lid heeft:  R_LID      : 0005544500
 			#  AND resultaat          : 0000000500 -> is niet wat gevraagd is -> weiger
@@ -435,49 +452,50 @@ class LoginLid {
 	}
 
 	private function _loadPermissions() {
-		# Hier staan de permissies die voor enkele onderdelen van
-		# de website nodig zijn. Ze worden zowel op de 'echte'
-		# website als in het beheergedeelte gebruikt.
-		# READ = Rechten om het onderdeel in te zien
-		# POST = Rechten om iets toe te voegen
-		# MOD  = Moderate rechten, dus verwijderen enzo
-		# Let op: de rechten zijn cumulatief en octaal
+		# Hier staan de permissies die voor enkele onderdelen van de website nodig zijn.
+		# Ze worden zowel op de 'echte' website als in het beheergedeelte gebruikt.
+		#   READ = Rechten om het onderdeel in te zien
+		#   POST = Rechten om iets toe te voegen
+		#   MOD  = Moderate rechten, dus verwijderen enzo
+		# Let op: de rechten zijn cumulatief (bijv: 7=4+2+1, 3=2+1)
+		#         als je hiervan afwijkt, kun je (bewust) niveau's uitsluiten (bijv 5=4+1, sluit 2 uit)
+
+		# de levels worden omgezet in een karakter met die ASCII waarde (dit zijn vaak niet-leesbare symbolen, bijv #8=backspace)
+		# elke karakter van een string representeert een onderdeel
 
 		$this->_permissions = array(
-			'P_PUBLIC'			 => $this->createPermissionString(0, 0), # Iedereen op het Internet
-			'P_LOGGED_IN'		 => $this->createPermissionString(15, 0), # Leden-menu, eigen profiel raadplegen
-			'P_PROFIEL_EDIT'	 => $this->createPermissionString(31, 0), # Eigen gegevens aanpassen
-			'P_ALLEEN_OUDLID'	 => $this->createPermissionString(7, 0), # Specifiek voor oudleden
-			'P_LEDEN_READ'		 => $this->createPermissionString(1, 1), # Gegevens van leden raadplegen
-			'P_OUDLEDEN_READ'	 => $this->createPermissionString(3, 1), # Gegevens van oudleden raadplegen
-			'P_LEDEN_MOD'		 => $this->createPermissionString(7, 1), # (Oud)ledengegevens aanpassen
-			'P_FORUM_READ'		 => $this->createPermissionString(1, 2), # Forum lezen
-			'P_FORUM_POST'		 => $this->createPermissionString(3, 2), # Berichten plaatsen op het forum en eigen berichten wijzigen
-			'P_FORUM_MOD'		 => $this->createPermissionString(15, 2), # Forum-moderator mag berichten van anderen wijzigen of verwijderen
-			'P_AGENDA_READ'		 => $this->createPermissionString(1, 3), # Agenda bekijken
-			'P_AGENDA_POST'		 => $this->createPermissionString(3, 3), # Items toevoegen aan de agenda
-			'P_AGENDA_MOD'		 => $this->createPermissionString(7, 3), # Items beheren in de agenda
-			'P_DOCS_READ'		 => $this->createPermissionString(1, 4), # Documenten-rubriek lezen
-			'P_DOCS_POST'		 => $this->createPermissionString(3, 4), # Documenten verwijderen of erbij plaatsen en fotos uploaden
-			'P_DOCS_MOD'		 => $this->createPermissionString(7, 4), # Documenten aanpassen en fotos uit fotoalbum verwijderen
-			'P_BIEB_READ'		 => $this->createPermissionString(1, 5), # Bibliotheek lezen
-			'P_BIEB_EDIT'		 => $this->createPermissionString(3, 5), # Bibliotheek wijzigen
-			'P_BIEB_MOD'		 => $this->createPermissionString(7, 5), # Bibliotheek zowel wijzigen als lezen
-			'P_NEWS_POST'		 => $this->createPermissionString(1, 6), # Nieuws plaatsen en wijzigen van jezelf
-			'P_NEWS_MOD'		 => $this->createPermissionString(3, 6), # Nieuws-moderator mag berichten van anderen wijzigen of verwijderen
-			'P_NEWS_PUBLISH'	 => $this->createPermissionString(7, 6), # Nieuws publiceren en rechten bepalen
-			'P_MAAL_IK'			 => $this->createPermissionString(1, 7), # kan zich aan en afmelden voor maaltijd en eigen abo wijzigen
-			'P_MAAL_MOD'		 => $this->createPermissionString(3, 7), # mag maaltijden beheren (MaalCie P)
-			'P_MAAL_SALDI'		 => $this->createPermissionString(7, 7), # mag het MaalCie saldo aanpassen van iedereen (MaalCie fiscus)
-			'P_CORVEE_IK'		 => $this->createPermissionString(1, 8), # kan voorkeuren aangeven voor corveetaken
-			'P_CORVEE_MOD'		 => $this->createPermissionString(3, 8), # mag corveetaken beheren (CorveeCaesar)
-			'P_CORVEE_SCHED'	 => $this->createPermissionString(7, 8), # mag de automatische corvee-indeler beheren
-			'P_MAIL_POST'		 => $this->createPermissionString(1, 9), # mag berichtjes in de courant rossen
-			'P_MAIL_COMPOSE'	 => $this->createPermissionString(3, 9), # mag alle berichtjes in de courant bewerken, en volgorde wijzigen
-			'P_MAIL_SEND'		 => $this->createPermissionString(7, 9), # mag de courant verzenden
-			'P_ADMIN'			 => $this->createPermissionString(1, 10) # Super-admin
-				# de levels worden omgezet in een karakter met die ASCII waarde.
-				# elke karakter representeert een onderdeel
+			'P_PUBLIC'			 => $this->createPermStr(0, 0), # Iedereen op het Internet
+			'P_LOGGED_IN'		 => $this->createPermStr(1, 0), # Leden-menu, eigen profiel raadplegen
+			'P_PROFIEL_EDIT'	 => $this->createPermStr(3, 0), # Eigen gegevens aanpassen
+			'P_ALLEEN_OUDLID'	 => $this->createPermStr(7, 0), # Specifiek voor oudleden
+			'P_LEDEN_READ'		 => $this->createPermStr(1, 1), # Gegevens van leden raadplegen
+			'P_OUDLEDEN_READ'	 => $this->createPermStr(3, 1), # Gegevens van oudleden raadplegen
+			'P_LEDEN_MOD'		 => $this->createPermStr(7, 1), # (Oud)ledengegevens aanpassen
+			'P_FORUM_READ'		 => $this->createPermStr(1, 2), # Forum lezen
+			'P_FORUM_POST'		 => $this->createPermStr(3, 2), # Berichten plaatsen op het forum en eigen berichten wijzigen
+			'P_FORUM_MOD'		 => $this->createPermStr(7, 2), # Forum-moderator mag berichten van anderen wijzigen of verwijderen
+			'P_AGENDA_READ'		 => $this->createPermStr(1, 3), # Agenda bekijken
+			'P_AGENDA_POST'		 => $this->createPermStr(3, 3), # Items toevoegen aan de agenda
+			'P_AGENDA_MOD'		 => $this->createPermStr(7, 3), # Items beheren in de agenda
+			'P_DOCS_READ'		 => $this->createPermStr(1, 4), # Documenten-rubriek lezen
+			'P_DOCS_POST'		 => $this->createPermStr(3, 4), # Documenten verwijderen of erbij plaatsen en fotos uploaden
+			'P_DOCS_MOD'		 => $this->createPermStr(7, 4), # Documenten aanpassen en fotos uit fotoalbum verwijderen
+			'P_BIEB_READ'		 => $this->createPermStr(1, 5), # Bibliotheek lezen
+			'P_BIEB_EDIT'		 => $this->createPermStr(3, 5), # Bibliotheek wijzigen
+			'P_BIEB_MOD'		 => $this->createPermStr(7, 5), # Bibliotheek zowel wijzigen als lezen
+			'P_NEWS_POST'		 => $this->createPermStr(1, 6), # Nieuws plaatsen en wijzigen van jezelf
+			'P_NEWS_MOD'		 => $this->createPermStr(3, 6), # Nieuws-moderator mag berichten van anderen wijzigen of verwijderen
+			'P_NEWS_PUBLISH'	 => $this->createPermStr(7, 6), # Nieuws publiceren en rechten bepalen
+			'P_MAAL_IK'			 => $this->createPermStr(1, 7), # kan zich aan en afmelden voor maaltijd en eigen abo wijzigen
+			'P_MAAL_MOD'		 => $this->createPermStr(3, 7), # mag maaltijden beheren (MaalCie P)
+			'P_MAAL_SALDI'		 => $this->createPermStr(7, 7), # mag het MaalCie saldo aanpassen van iedereen (MaalCie fiscus)
+			'P_CORVEE_IK'		 => $this->createPermStr(1, 8), # kan voorkeuren aangeven voor corveetaken
+			'P_CORVEE_MOD'		 => $this->createPermStr(3, 8), # mag corveetaken beheren (CorveeCaesar)
+			'P_CORVEE_SCHED'	 => $this->createPermStr(7, 8), # mag de automatische corvee-indeler beheren
+			'P_MAIL_POST'		 => $this->createPermStr(1, 9), # mag berichtjes in de courant rossen
+			'P_MAIL_COMPOSE'	 => $this->createPermStr(3, 9), # mag alle berichtjes in de courant bewerken, en volgorde wijzigen
+			'P_MAIL_SEND'		 => $this->createPermStr(7, 9), # mag de courant verzenden
+			'P_ADMIN'			 => $this->createPermStr(1, 10) # Super-admin
 		);
 
 		# Deze waarden worden samengesteld uit bovenstaande permissies en
@@ -500,11 +518,11 @@ class LoginLid {
 	/**
 	 * Create permission string with character which has ascii value of request level
 	 *
-	 * @param int $level
+	 * @param int $level           permissieniveau
 	 * @param int $onderdeelnummer starts at zero
 	 * @return string permission string
 	 */
-	private function createPermissionString($level, $onderdeelnummer) {
+	private function createPermStr($level, $onderdeelnummer) {
 		$nulperm = str_repeat(chr(0), 15);
 		return substr_replace($nulperm, chr($level), $onderdeelnummer, 1);
 	}
