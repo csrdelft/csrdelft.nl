@@ -345,7 +345,7 @@ class LoginLid {
 			#
 			# de mogelijke *verschillende* permissies voor een onderdeel zijn machten van twee:
 			#  1, 2, 4, 8, etc
-			# aan elk van deze waardes kan onderscheiden worden in een permissie, ook als je ze met elkaar combineert
+			# elk van deze waardes kan onderscheiden worden in een permissie, ook als je ze met elkaar combineert
 			# bijv.  3=1+2, 7=1+2+4, 5=1+4, 6=2+4, 12=4+8, etc
 			#
 			# $gevraagd is de gevraagde permissie als string,
@@ -518,7 +518,7 @@ class LoginLid {
 	/**
 	 * Create permission string with character which has ascii value of request level
 	 *
-	 * @param int $level           permissieniveau
+	 * @param int $level           permissiewaarde
 	 * @param int $onderdeelnummer starts at zero
 	 * @return string permission string
 	 */
