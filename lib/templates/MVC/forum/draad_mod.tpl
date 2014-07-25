@@ -7,10 +7,12 @@
 						{icon get="note"} maak {if $draad->plakkerig}<strong>niet</strong> {/if}plakkerig
 					</a>
 					<br /><br />
-					<a href="/forum/wijzigen/{$draad->draad_id}/belangrijk" class="knop" title="Verander belangrijkheid">
-						{icon get="asterisk_orange"} maak {if $draad->belangrijk}<strong>niet</strong> {/if}belangrijk
-					</a>
-					<br /><br />
+					{if LoginLid::mag('P_FORUM_BELANGRIJK')}
+						<a href="/forum/wijzigen/{$draad->draad_id}/belangrijk" class="knop" title="Verander belangrijkheid">
+							{icon get="asterisk_orange"} maak {if $draad->belangrijk}<strong>niet</strong> {/if}belangrijk
+						</a>
+						<br /><br />
+					{/if}
 					<a href="/forum/wijzigen/{$draad->draad_id}/verwijderd" class="knop" title="Verander is verwijderd" onclick="return confirm('Weet u zeker dat u dit gehele forumdraad met alle reacties wilt {if $draad->verwijderd}herstellen{else}verwijderen{/if}?');">
 						{if $draad->verwijderd}
 							{icon get="arrow_undo"} draad herstellen

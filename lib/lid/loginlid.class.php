@@ -475,6 +475,7 @@ class LoginLid {
 			'P_FORUM_POST'		 => $this->createPermStr(1+2, 	2), # Berichten plaatsen op het forum en eigen berichten wijzigen
 			'P_FORUM_MOD'		 => $this->createPermStr(1+2+4, 2), # Forum-moderator mag berichten van anderen wijzigen of verwijderen
 			'P_FORUM_BELANGRIJK' => $this->createPermStr(8, 	2), # Forum belangrijk (de)markeren  [[let op: niet cumulatief]]
+			'P_FORUM_ADMIN'		 => $this->createPermStr(16,	2),	# Forum-admin mag deel-fora aanmaken en rechten wijzigen  [[let op: niet cumulatief]]
 			'P_AGENDA_READ'		 => $this->createPermStr(1, 	3), # Agenda bekijken
 			'P_AGENDA_POST'		 => $this->createPermStr(1+2, 	3), # Items toevoegen aan de agenda
 			'P_AGENDA_MOD'		 => $this->createPermStr(1+2+4, 3), # Items beheren in de agenda
@@ -513,7 +514,7 @@ class LoginLid {
 		$this->_perm_user['R_MAALCIE'] = $this->_perm_user['R_LID'] | $p['P_MAAL_MOD'] | $p['P_CORVEE_MOD'] | $p['P_MAAL_SALDI'];
 		$this->_perm_user['R_MODERATOR'] = $this->_perm_user['R_LID'] | $p['P_LEDEN_MOD'] | $p['P_FORUM_MOD'] | $p['P_DOCS_MOD'] | $p['P_AGENDA_MOD'] | $p['P_NEWS_MOD'] | $p['P_BIEB_MOD'] | $p['P_MAAL_IK'] | $p['P_CORVEE_IK'] | $p['P_MAIL_COMPOSE'];
 		$this->_perm_user['R_BESTUUR'] = $this->_perm_user['R_MODERATOR'] | $p['P_MAAL_MOD'] | $p['P_CORVEE_MOD'] | $p['P_MAIL_COMPOSE'] | $p['P_FORUM_BELANGRIJK'];
-		$this->_perm_user['R_PUBCIE'] = $this->_perm_user['R_MODERATOR'] | $p['P_ADMIN'] | $p['P_CORVEE_SCHED'] | $p['P_MAAL_SALDI'];
+		$this->_perm_user['R_PUBCIE'] = $this->_perm_user['R_MODERATOR'] | $p['P_ADMIN'] | $p['P_CORVEE_SCHED'] | $p['P_MAAL_SALDI']| $p['P_FORUM_ADMIN'];
 	}
 
 	/**
