@@ -1,25 +1,24 @@
-/* owee 2013, zie ook lib/templates/owee_menu.tpl
- * groen: #3baa35
- * donkergroen: #166F11
- * geel: #fbea14
- * blauw: #1470b8
+/* owee 2014
+ * oranje (submenulinks): #fcb040
+ * rood (linkjes): #ed1c24
+ * donkergrijs (tabbladen): #231f20
  */
 
 
 /**** GENERAL *****************************************************************/
 a, a:HOVER{
-	color: #3baa35;
+	color: #ed1c24;
 }
 h1, h2, h3, h4 {
 	color: #555555;
 }
 body{
-	background: url('http://plaetjes.csrdelft.nl/owee/2013/body.png') repeat-x;
+	background: url('http://plaetjes.csrdelft.nl/owee/2014/body.png') repeat-x;
 }
 
 /**** MENU ********************************************************************/
 #menubanners,#banner1,#banner2,#banner3,#banner4{
-	background-image: url('http://plaetjes.csrdelft.nl/owee/2013/banner.png');
+	background-image: url('http://plaetjes.csrdelft.nl/owee/2014/banner.png');
 }
 
 #beeldmerk{
@@ -29,13 +28,13 @@ body{
 /**** MAIN MENU ***************************************************************/
 
 #mainmenu a {
-	background: url('http://plaetjes.csrdelft.nl/owee/2013/menubutton.png') no-repeat;
+	background: url('http://plaetjes.csrdelft.nl/owee/2014/menubutton_2014.png') no-repeat;
 }	
 #mainmenu a:link, #mainmenu a:visited {
 	color: #ffffff;
 }
 #mainmenu a:hover, #mainmenu a:active, #mainmenu a.active {
-	background: url('http://plaetjes.csrdelft.nl/owee/2013/menubutton_hover.png') no-repeat;
+	background: url('http://plaetjes.csrdelft.nl/owee/2014/menubutton_hover_2014.png') no-repeat;
 }
 
 /**** SUBMENU *****************************************************************/
@@ -44,36 +43,41 @@ body{
 	font-weight: bold;
 }
 #submenu a:hover, #submenu a:active {
-	color: #fbea14;
+	color: #fcb040;
 }
 #submenuitems span.separator{
-	background-image: url('http://plaetjes.csrdelft.nl/owee/2013/submenuseperator.png');
+	background-image: url('http://plaetjes.csrdelft.nl/owee/2014/submenuseperator_2014.png');
 }
 
 /**** MAIN ********************************************************************/
 
 #mainleft .block h1 {
-	color: #3baa35;
+	color: #ed1c24;
 }
 
 #mainleft .block h1 a {
-	color: #3baa35;
+	color: #ed1c24;
 }
 
 /**** INLOGKNOP ***************************************************************/
 #login input.submit {
-	background-color: #3baa35;
+	background-color: #ed1c24;
 	color: #FFF; 
 }
 
 #adminding{
 	border: 1px solid white;
-	background-color: #3baa35;
+	background-color: #ed1c24;
 }
 
 #adminding div{
 	border: 1px solid white; 
-	background-color: #3baa35;
+	background-color: #ed1c24;
+}
+
+.staatrood {
+	background-color: #231f20;
+	font-weight: bold;
 }
 
 #footer {
