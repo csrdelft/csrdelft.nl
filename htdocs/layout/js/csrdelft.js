@@ -45,7 +45,7 @@ function init_buttons() {
 	$('button.ubb_image_placeholder').bind('click.load', function(event) {
 		event.preventDefault();
 		var button = $(this);
-		var content = $('<img/>')[0];
+		var content = $(document.createElement('IMG'));
 		content.addClass('ubb_image');
 		content.attr('alt', button.attr('title'));
 		content.attr('style', button.attr('style'));

@@ -90,7 +90,7 @@ class CsrUbb extends eamBBParser {
 			$content = htmlspecialchars($content);
 		}
 		if (!startsWith($content, CSR_PICS)) {
-			return '<button class="ubb_image_placeholder" src="' . $content . '" title="' . $content . '" style="' . $style . '" />';
+			return '<button class="ubb_image_placeholder" src="' . $content . '" title="' . $content . '" style="' . $style . '">toon afbeelding</button>';
 		}
 		return '<img class="ubb_image' . $class . '" src="' . $content . '" alt="' . $content . '" style="' . $style . '" />';
 	}
