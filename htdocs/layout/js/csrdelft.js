@@ -21,7 +21,19 @@ $(document).ready(function() {
 	init_forms();
 	init_hoverIntents();
 	init_groepen();
+	init_lazy_images();
 });
+
+function init_lazy_images() {
+	$('div.ubb_image_placeholder').each(function() {
+		var content = $(document.createElement('IMG'));
+		content.addClass('ubb_image');
+		content.attr('alt', $(this).attr('title'));
+		content.attr('style', $(this).attr('style'));
+		content.attr('src', $(this).attr('src'));
+		$(this).replaceWith(content);
+	});
+}
 
 function page_reload() {
 	location.reload();
@@ -41,17 +53,6 @@ function isCtrlKeyDown(event) {
 }
 
 function init_buttons() {
-	$('button.ubb_image_placeholder').unbind('click.load');
-	$('button.ubb_image_placeholder').bind('click.load', function(event) {
-		event.preventDefault();
-		var button = $(this);
-		var content = $(document.createElement('IMG'));
-		content.addClass('ubb_image');
-		content.attr('alt', button.attr('title'));
-		content.attr('style', button.attr('style'));
-		content.attr('src', button.attr('src'));
-		button.replaceWith(content);
-	});
 	$('button.spoiler').unbind('click.spoiler');
 	$('button.spoiler').bind('click.spoiler', function(event) {
 		event.preventDefault();

@@ -81,7 +81,7 @@ class CsrUbb extends eamBBParser {
 			$class = ' ' . htmlspecialchars($arguments['class']);
 		}
 		$content = $this->parseArray(array('[/img]', '[/IMG]'), array());
-		// only valid patterns
+		// only valid patterns & prevent CSRF
 		if (!url_like(urldecode($content)) OR startsWith($content, CSR_ROOT)) {
 			return '[img: Ongeldige URL, tip: gebruik tinyurl.com]';
 		}
@@ -90,7 +90,7 @@ class CsrUbb extends eamBBParser {
 			$content = htmlspecialchars($content);
 		}
 		if (!startsWith($content, CSR_PICS)) {
-			return '<button class="ubb_image_placeholder" src="' . $content . '" title="' . $content . '" style="' . $style . '">toon afbeelding</button>';
+			return '<div class="ubb_image_placeholder" src="' . $content . '" title="' . $content . '" style="' . $style . '"></div>';
 		}
 		return '<img class="ubb_image' . $class . '" src="' . $content . '" alt="' . $content . '" style="' . $style . '" />';
 	}

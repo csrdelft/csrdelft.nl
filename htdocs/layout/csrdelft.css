@@ -1199,6 +1199,13 @@ div.citaatContainer div.citaat div.citaatContainer div.citaat div.citaatContaine
 img.ubb_image{
 	max-width: 586px; border: 0;
 }
+div.ubb_image_placeholder{
+	min-width: 16px;
+	min-height: 11px;
+	background-image: url('http://plaetjes.csrdelft.nl/layout/loading-fb.gif');
+	background-repeat: no-repeat;
+	background-position: center center;
+}
 /* zorg dat de plaatjes ook in citaten niet te breed worden */
 div.citaatContainer div.citaat img.ubb_image{ max-width: 545px; }
 div.citaatContainer div.citaat div.citaatContainer div.citaat img.ubb_image{ max-width: 516px; }
