@@ -58,6 +58,43 @@ class CsrUbb extends eamBBParser {
 		return $html;
 	}
 
+	function ubb_img($arguments) {
+		$style = '';
+		if (isset($arguments['float'])) {
+			switch ($arguments['float']) {
+				case 'left':
+					$style.='float: left; margin: 0 10px 10px 0; ';
+					break;
+				case 'right':
+					$style.='float: right; margin: 0 0 10px 10px; ';
+					break;
+			}
+		}
+		if (isset($arguments['w']) AND $arguments['w'] > 10) {
+			$style .= 'width: ' . ((int) $arguments['w']) . 'px; ';
+		}
+		if (isset($arguments['h']) AND $arguments['h'] > 10) {
+			$style .= 'height: ' . ((int) $arguments['h']) . 'px; ';
+		}
+		$class = '';
+		if (isset($arguments['class'])) {
+			$class = ' ' . htmlspecialchars($arguments['class']);
+		}
+		$content = $this->parseArray(array('[/img]', '[/IMG]'), array());
+		// only valid patterns
+		if (!url_like(urldecode($content)) OR startsWith($content, CSR_ROOT)) {
+			return '[img: Ongeldige URL, tip: gebruik tinyurl.com]';
+		}
+		// als de html toegestaan is hebben we genoeg vertrouwen om sommige karakters niet te encoderen
+		if (!$this->allow_html) {
+			$content = htmlspecialchars($content);
+		}
+		if (!startsWith($content, CSR_PICS)) {
+			return '<button class="ubb_image_placeholder" src="' . $content . '" title="' . $content . '" style="' . $style . '" />';
+		}
+		return '<img class="ubb_image' . $class . '" src="' . $content . '" alt="' . $content . '" style="' . $style . '" />';
+	}
+
 	/**
 	 * Rul = url
 	 */
@@ -74,7 +111,7 @@ class CsrUbb extends eamBBParser {
 		} else { // [url][/url]
 			$href = $content;
 		}
-		// only valid patterns
+// only valid patterns
 		if (startsWith($href, '/')) { // locale paden
 			$href = CSR_ROOT . $href;
 		} elseif (!filter_var($href, FILTER_VALIDATE_URL)) { // http vergeten?
@@ -205,8 +242,8 @@ class CsrUbb extends eamBBParser {
 		} else {
 			$permissie = 'P_LOGGED_IN';
 		}
-		//content moet altijd geparsed worden, anders blijft de inhoud van de
-		//tag gewoon staan.
+//content moet altijd geparsed worden, anders blijft de inhoud van de
+//tag gewoon staan.
 		$forbidden = array();
 		if (!LoginLid::mag($permissie)) {
 			$this->ubb_mode = false;
@@ -253,11 +290,11 @@ class CsrUbb extends eamBBParser {
 	 * bij het citeren, slopen we hier alles wat in privé-tags staat weg.
 	 */
 	public static function filterPrive($string) {
-		// .* is greedy by default, dat wil zeggen, matched zoveel mogelijk.
-		// door er .*? van te maken matched het zo weinig mogelijk, dat is precies
-		// wat we hier willen, omdat anders [prive]foo[/prive]bar[prive]foo[/prive]
-		// niets zou opleveren.
-		// de /s modifier zorgt ervoor dat een . ook alle newlines matched.
+// .* is greedy by default, dat wil zeggen, matched zoveel mogelijk.
+// door er .*? van te maken matched het zo weinig mogelijk, dat is precies
+// wat we hier willen, omdat anders [prive]foo[/prive]bar[prive]foo[/prive]
+// niets zou opleveren.
+// de /s modifier zorgt ervoor dat een . ook alle newlines matched.
 		return preg_replace('/\[prive=?.*?\].*?\[\/prive\]/s', '', $string);
 	}
 
@@ -303,7 +340,7 @@ class CsrUbb extends eamBBParser {
 	function ubb_video($parameters) {
 		$content = $this->parseArray(array('[/video]'), array());
 
-		//determine type and id
+//determine type and id
 		$id = '';
 		if (preg_match('/^[0-9a-zA-Z\-_]{11}$/', $content) OR strstr($content, 'youtube')) {
 			$type = 'youtube';
@@ -321,7 +358,7 @@ class CsrUbb extends eamBBParser {
 			}
 		} elseif (strstr($content, '123video')) {
 			$type = '123video';
-			//example url: http://www.123video.nl/playvideos.asp?MovieID=946848
+//example url: http://www.123video.nl/playvideos.asp?MovieID=946848
 			if (preg_match('|^(http://)?(www\.)?123video\.nl/playvideos\.asp\?MovieID=(\d+)(.*)$|', $content, $matches) > 0) {
 				$id = $matches[3];
 			}
@@ -332,7 +369,7 @@ class CsrUbb extends eamBBParser {
 			}
 		} elseif (strstr($content, 'godtube')) {
 			$type = 'godtube';
-			//example: http://www.godtube.com/watch/?v=9CFEMMNU
+//example: http://www.godtube.com/watch/?v=9CFEMMNU
 			if (preg_match('|^(http://)?(www\.)?godtube\.com/watch/\?v=([a-zA-Z0-9]+)$|', $content, $matches) > 0) {
 				$id = $matches[3];
 			}
@@ -340,12 +377,12 @@ class CsrUbb extends eamBBParser {
 			$type = 'unknown';
 		}
 
-		//error message if no valid id found in tag content.
+//error message if no valid id found in tag content.
 		if ($id == '') {
 			return '[video (' . $type . ')] ongeldige url: (' . mb_htmlentities($content) . ')';
 		}
 
-		//video size
+//video size
 		$width = 560;
 		$height = 420;
 		if (isset($parameters['width']) AND (int) $parameters['width'] > 100) {
@@ -355,14 +392,14 @@ class CsrUbb extends eamBBParser {
 			$height = (int) $parameters['height'];
 		}
 
-		//render embed html
+//render embed html
 		switch ($type) {
 			case 'youtube':
 				if (isset($this->youtube[$id]) AND ! isset($parameters['force'])) {
 					return '<a href="#youtube' . $content . '" onclick="youtubeDisplay(\'' . $content . '\')" >&raquo; youtube-filmpje (ergens anders op deze pagina)</a>';
 				} else {
-					//sla het youtube-id op in een array, dan plaatsen we de tweede keer dat
-					//het filmpje in een topic geplaatst wordt een linkje.
+//sla het youtube-id op in een array, dan plaatsen we de tweede keer dat
+//het filmpje in een topic geplaatst wordt een linkje.
 					$this->youtube[$id] = $id;
 					return '<div id="youtube' . $id . '" class="youtubeVideo">
 						<a href="http://www.youtube.com/watch?v=' . $id . '" class="afspelen" onclick="return youtubeDisplay(\'' . $id . '\')"><img width="36" height="36" src="' . CSR_PICS . '/forum/afspelen.gif" alt="afspelen" /></a>
@@ -401,11 +438,11 @@ class CsrUbb extends eamBBParser {
 	 */
 	function ubb_youtube($parameters) {
 		$content = $this->parseArray(array('[/youtube]'), array());
-		//alleen de eerste 11 tekens zijn relevant...
+//alleen de eerste 11 tekens zijn relevant...
 		$content = substr($content, 0, 11);
 		if (preg_match('/[0-9a-zA-Z\-_]{11}/', $content)) {
-			//als we in een quote-tag zijn, geen embed weergeven maar een link naar de embed,
-			//en het filmpje ook maar meteen starten.
+//als we in een quote-tag zijn, geen embed weergeven maar een link naar de embed,
+//en het filmpje ook maar meteen starten.
 			if ($this->quote_level > 0 OR isset($this->youtube[$content])) {
 				$html = '<a href="#youtube' . $content . '" onclick="youtubeDisplay(\'' . $content . '\')" >&raquo; youtube-filmpje (ergens anders op deze pagina)</a>';
 			} else {
@@ -413,8 +450,8 @@ class CsrUbb extends eamBBParser {
 					<a href="http://www.youtube.com/watch?v=' . $content . '" class="afspelen" onclick="return youtubeDisplay(\'' . $content . '\')"><img width="36" height="36" src="' . CSR_PICS . '/forum/afspelen.gif" alt="afspelen" /></a>
 					<img src="http://img.youtube.com/vi/' . $content . '/default.jpg" style="width: 130px; height: 97px;"
 						alt="klik op de afbeelding om de video te starten"/></div>';
-				//sla het youtube-id op in een array, dan plaatsen we de tweede keer dat
-				//het filmpje in een topic geplaatst wordt een linkje.
+//sla het youtube-id op in een array, dan plaatsen we de tweede keer dat
+//het filmpje in een topic geplaatst wordt een linkje.
 				$this->youtube[$content] = $content;
 			}
 		} else {
@@ -452,7 +489,7 @@ src="http://video.google.com/googleplayer.swf?docId=' . $content . '"></embed>';
 
 	function ubb_twitter($parameters) {
 		$content = $this->parseArray(array('[/twitter]'), array());
-		//widget size
+//widget size
 		$lines = 4;
 		$width = 355;
 		$height = 300;
@@ -957,19 +994,19 @@ HTML;
 	}
 
 	private static $bijbelvertalingen = array(
-		'NBV' => 'id18=1',
-		'NBG' => 'id16=1',
-		'Herziene Statenvertaling' => 'id47=1',
-		'Statenvertaling (Jongbloed)' => 'id37=1',
-		'Groot Nieuws Bijbel' => 'id17=1',
-		'Willibrordvertaling' => 'id35=1'
+		'NBV'							 => 'id18=1',
+		'NBG'							 => 'id16=1',
+		'Herziene Statenvertaling'		 => 'id47=1',
+		'Statenvertaling (Jongbloed)'	 => 'id37=1',
+		'Groot Nieuws Bijbel'			 => 'id17=1',
+		'Willibrordvertaling'			 => 'id35=1'
 	);
 
 	public static function getBiblijaLink($stukje, $vertaling = null) {
 		if ($vertaling === null) {
 			$vertaling = LidInstellingen::get('algemeen', 'bijbel');
 		}
-		// fix http://stackoverflow.com/questions/10152894/php-replacing-special-characters-like-a-a-e-e
+// fix http://stackoverflow.com/questions/10152894/php-replacing-special-characters-like-a-a-e-e
 		$fix = iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE', $stukje);
 		$link = 'http://www.biblija.net/biblija.cgi?m=' . urlencode($fix) . '&' . self::$bijbelvertalingen[$vertaling] . '&l=nl&set=10';
 		return '<a href="' . $link . '" target="_blank">' . $stukje . '</a>';

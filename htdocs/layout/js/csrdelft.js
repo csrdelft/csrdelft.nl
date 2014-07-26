@@ -41,12 +41,23 @@ function isCtrlKeyDown(event) {
 }
 
 function init_buttons() {
+	$('button.ubb_image_placeholder').unbind('click.load');
+	$('button.ubb_image_placeholder').bind('click.load', function(event) {
+		event.preventDefault();
+		var button = $(this);
+		var content = $('<img/>')[0];
+		content.addClass('ubb_image');
+		content.attr('alt', button.attr('title'));
+		content.attr('style', button.attr('style'));
+		content.attr('src', button.attr('src'));
+		button.replaceWith(content);
+	});
 	$('button.spoiler').unbind('click.spoiler');
 	$('button.spoiler').bind('click.spoiler', function(event) {
 		event.preventDefault();
 		var button = $(this);
 		var content = button.next('div.spoiler-content');
-		content.toggle(800, 'easeInOutCubic', function() {
+		content.toggle(800, 'easeInOutCubic', function(event) {
 			if (content.is(':visible')) {
 				button.html('Verberg verklapper');
 			} else {

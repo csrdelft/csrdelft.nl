@@ -487,8 +487,8 @@ class RechtenField extends TextField {
 		$values = explode(',', $this->value);
 		foreach ($values as $value) {
 			$v = explode(':', $value);
-			if (sizeof($v) !== 2 || empty($v[0]) || empty($v[1]) || !LoginLid::instance()->isValidPerm($value)) {
-				$this->error = 'Ongeldige restrictie: "' . value . '"';
+			if ((sizeof($v) !== 2 OR empty($v[0]) OR empty($v[1])) AND ! LoginLid::instance()->isValidPerm($value)) {
+				$this->error = 'Ongeldige restrictie: "' . $value . '"';
 			}
 		}
 		return $this->error === '';
