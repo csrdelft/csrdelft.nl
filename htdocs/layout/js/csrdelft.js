@@ -11,6 +11,7 @@ function preload(arrayOfImages) {
 }
 
 preload([
+	'http://plaetjes.csrdelft.nl/layout/loading-fb.gif',
 	'http://plaetjes.csrdelft.nl/layout/loading-arrows.gif',
 	'http://plaetjes.csrdelft.nl/layout/loading_bar_black.gif'
 ]);

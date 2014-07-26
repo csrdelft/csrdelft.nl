@@ -89,6 +89,7 @@ class CsrUbb extends eamBBParser {
 		if (!$this->allow_html) {
 			$content = htmlspecialchars($content);
 		}
+		// lazy loading van externe images bijv. op het forum
 		if (!startsWith($content, CSR_PICS)) {
 			return '<div class="ubb_image_placeholder" src="' . $content . '" title="' . $content . '" style="' . $style . '"></div>';
 		}
