@@ -467,7 +467,7 @@ class LoginLid {
 			'P_PUBLIC'			 => $this->createPermStr(0, 	0), # Iedereen op het Internet
 			'P_LOGGED_IN'		 => $this->createPermStr(1, 	0), # Leden-menu, eigen profiel raadplegen
 			'P_PROFIEL_EDIT'	 => $this->createPermStr(1+2, 	0), # Eigen gegevens aanpassen
-			'P_ALLEEN_OUDLID'	 => $this->createPermStr(1+2+4, 0), # Specifiek voor oudleden
+			'P_ALLEEN_OUDLID'	 => $this->createPermStr(4,     0), # Specifiek voor oudleden [[let op: niet cumulatief]]
 			'P_LEDEN_READ'		 => $this->createPermStr(1, 	1), # Gegevens van leden raadplegen
 			'P_OUDLEDEN_READ'	 => $this->createPermStr(1+2, 	1), # Gegevens van oudleden raadplegen
 			'P_LEDEN_MOD'		 => $this->createPermStr(1+2+4, 1), # (Oud)ledengegevens aanpassen
@@ -505,16 +505,22 @@ class LoginLid {
 		# welke permissie-groep (Role) de gebruiker in zit.
 		$p = $this->_permissions;
 		$this->_perm_user = array(
-			'R_NOBODY'	 => $p['P_PUBLIC'] | $p['P_FORUM_READ'] | $p['P_AGENDA_READ'],
-			'R_LID'		 => $p['P_PROFIEL_EDIT'] | $p['P_OUDLEDEN_READ'] | $p['P_FORUM_POST'] | $p['P_AGENDA_READ'] | $p['P_DOCS_READ'] | $p['P_BIEB_READ'] | $p['P_MAAL_IK'] | $p['P_CORVEE_IK'] | $p['P_MAIL_POST'] | $p['P_NEWS_POST']
+			'R_NOBODY'	 => $p['P_PUBLIC']       | $p['P_FORUM_READ']    | $p['P_AGENDA_READ'],
+			'R_LID'		 => $p['P_PROFIEL_EDIT'] | $p['P_OUDLEDEN_READ'] | $p['P_FORUM_POST'] | $p['P_AGENDA_READ']
+							| $p['P_DOCS_READ']  | $p['P_BIEB_READ']     | $p['P_MAAL_IK']    | $p['P_CORVEE_IK']
+						    | $p['P_MAIL_POST']  | $p['P_NEWS_POST']
 		);
-		$this->_perm_user['R_OUDLID'] = $this->_perm_user['R_LID'] | $p['P_ALLEEN_OUDLID'];
-		$this->_perm_user['R_BASF'] = $this->_perm_user['R_LID'] | $p['P_DOCS_MOD'];
-		$this->_perm_user['R_ETER'] = $this->_perm_user['R_NOBODY'] | $p['P_LOGGED_IN'] | $p['P_PROFIEL_EDIT'] | $p['P_MAAL_IK'];
-		$this->_perm_user['R_MAALCIE'] = $this->_perm_user['R_LID'] | $p['P_MAAL_MOD'] | $p['P_CORVEE_MOD'] | $p['P_MAAL_SALDI'];
-		$this->_perm_user['R_MODERATOR'] = $this->_perm_user['R_LID'] | $p['P_LEDEN_MOD'] | $p['P_FORUM_MOD'] | $p['P_DOCS_MOD'] | $p['P_AGENDA_MOD'] | $p['P_NEWS_MOD'] | $p['P_BIEB_MOD'] | $p['P_MAAL_IK'] | $p['P_CORVEE_IK'] | $p['P_MAIL_COMPOSE'];
-		$this->_perm_user['R_BESTUUR'] = $this->_perm_user['R_MODERATOR'] | $p['P_MAAL_MOD'] | $p['P_CORVEE_MOD'] | $p['P_MAIL_COMPOSE'] | $p['P_FORUM_BELANGRIJK'];
-		$this->_perm_user['R_PUBCIE'] = $this->_perm_user['R_MODERATOR'] | $p['P_ADMIN'] | $p['P_CORVEE_SCHED'] | $p['P_MAAL_SALDI']| $p['P_FORUM_ADMIN'];
+		$this->_perm_user['R_ETER']      = $this->_perm_user['R_NOBODY'] | $p['P_LOGGED_IN'] | $p['P_PROFIEL_EDIT'] | $p['P_MAAL_IK'];
+		$this->_perm_user['R_OUDLID']    = $this->_perm_user['R_LID'] | $p['P_ALLEEN_OUDLID'];
+		$this->_perm_user['R_BASF']      = $this->_perm_user['R_LID'] | $p['P_DOCS_MOD'];
+		$this->_perm_user['R_MAALCIE']   = $this->_perm_user['R_LID'] | $p['P_MAAL_MOD']   | $p['P_CORVEE_MOD'] | $p['P_MAAL_SALDI'];
+		$this->_perm_user['R_MODERATOR'] = $this->_perm_user['R_LID'] | $p['P_LEDEN_MOD']  | $p['P_FORUM_MOD']  | $p['P_DOCS_MOD']
+											     					  | $p['P_AGENDA_MOD'] | $p['P_NEWS_MOD']   | $p['P_BIEB_MOD']
+																	  | $p['P_MAAL_IK']    | $p['P_CORVEE_IK']  | $p['P_MAIL_COMPOSE'];
+		$this->_perm_user['R_BESTUUR']   = $this->_perm_user['R_MODERATOR'] | $p['P_MAAL_MOD'] | $p['P_CORVEE_MOD'] | $p['P_MAIL_COMPOSE']
+																			| $p['P_FORUM_BELANGRIJK'];
+		$this->_perm_user['R_PUBCIE']    = $this->_perm_user['R_MODERATOR'] | $p['P_ADMIN'] | $p['P_CORVEE_SCHED'] | $p['P_MAAL_SALDI']
+																			| $p['P_FORUM_ADMIN'];
 	}
 
 	/**
