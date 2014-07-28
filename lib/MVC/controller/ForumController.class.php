@@ -436,27 +436,7 @@ class ForumController extends Controller {
 		}
 		$tekst = trim(filter_input(INPUT_POST, 'bericht', FILTER_UNSAFE_RAW));
 		$reden = trim(filter_input(INPUT_POST, 'reden', FILTER_SANITIZE_STRING));
-		$verschil = levenshtein($post->tekst, $tekst);
-		$rowcount = ForumPostsModel::instance()->bewerkForumPost($post, $tekst, $reden);
-		if ($rowcount !== 1) {
-			throw new Exception('Bewerken mislukt');
-		}
-		if ($verschil > 3) {
-			$draad->laatst_gewijzigd = $post->laatst_bewerkt;
-			$draad->laatste_post_id = $post->post_id;
-			$draad->laatste_lid_id = $post->lid_id;
-			$rowcount = ForumDradenModel::instance()->update($draad);
-			if ($rowcount !== 1) {
-				throw new Exception('Bewerken mislukt');
-			}
-			$deel->laatst_gewijzigd = $post->laatst_bewerkt;
-			$deel->laatste_post_id = $post->post_id;
-			$deel->laatste_lid_id = $post->lid_id;
-			$rowcount = ForumDelenModel::instance()->update($deel);
-			if ($rowcount !== 1) {
-				throw new Exception('Bewerken mislukt');
-			}
-		}
+		ForumPostsModel::instance()->bewerkForumPost($tekst, $reden, $post, $draad, $deel);
 		ForumDradenGelezenModel::instance()->setWanneerGelezenDoorLid($draad);
 		$this->view = new ForumPostView($post, $draad, $deel);
 	}
@@ -469,7 +449,7 @@ class ForumController extends Controller {
 			$this->geentoegang();
 		}
 		$nieuw = filter_input(INPUT_POST, 'Draad_id', FILTER_SANITIZE_NUMBER_INT);
-		ForumPostsModel::instance()->verplaatsForumPost($post, $nieuw);
+		ForumPostsModel::instance()->verplaatsForumPost($nieuw, $post, $draad, $deel);
 		$this->view = new ForumPostDeleteView($post->post_id);
 	}
 
@@ -481,8 +461,7 @@ class ForumController extends Controller {
 			$this->geentoegang();
 		}
 		$nieuw = filter_input(INPUT_POST, 'Naam_van_nieuwe_draad', FILTER_SANITIZE_STRING);
-		$draad = ForumPostsModel::instance()->afsplitsenForumPost($post, $nieuw, $deel->forum_id);
-		ForumPostsModel::instance()->goedkeurenForumPost($post, $draad, $deel);
+		$draad = ForumPostsModel::instance()->afsplitsenForumPost($nieuw, $post, $draad, $deel);
 		$this->view = new ForumPostDeleteView($post->post_id);
 	}
 
