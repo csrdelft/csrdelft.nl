@@ -449,6 +449,7 @@ class ForumController extends Controller {
 			$this->geentoegang();
 		}
 		$nieuw = filter_input(INPUT_POST, 'Draad_id', FILTER_SANITIZE_NUMBER_INT);
+		$nieuw = ForumDradenModel::instance()->getForumDraad($nieuw);
 		ForumPostsModel::instance()->verplaatsForumPost($nieuw, $post, $draad, $deel);
 		$this->view = new ForumPostDeleteView($post->post_id);
 	}
@@ -461,7 +462,7 @@ class ForumController extends Controller {
 			$this->geentoegang();
 		}
 		$nieuw = filter_input(INPUT_POST, 'Naam_van_nieuwe_draad', FILTER_SANITIZE_STRING);
-		$draad = ForumPostsModel::instance()->afsplitsenForumPost($nieuw, $post, $draad, $deel);
+		ForumPostsModel::instance()->afsplitsenForumPost($nieuw, $post, $draad, $deel);
 		$this->view = new ForumPostDeleteView($post->post_id);
 	}
 

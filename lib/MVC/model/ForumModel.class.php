@@ -828,20 +828,21 @@ class ForumPostsModel extends PersistenceModel implements Paging {
 		}
 	}
 
-	public function verplaatsForumPost($nieuw_draad_id, ForumPost $post, ForumDraad $draad, ForumDeel $deel) {
-		$post->draad_id = $nieuw_draad_id;
+	public function verplaatsForumPost(ForumDraad $nieuw, ForumPost $post, ForumDraad $draad, ForumDeel $deel) {
+		$post->draad_id = $nieuw->draad_id;
 		$post->laatst_bewerkt = getDateTime();
 		$post->bewerkt_tekst .= 'verplaatst door [lid=' . LoginLid::instance()->getUid() . '] [reldate]' . $post->laatst_bewerkt . '[/reldate]' . "\n";
 		$rowcount = $this->update($post);
 		if ($rowcount !== 1) {
 			throw new Exception('Verplaatsen mislukt');
 		}
+		$this->goedkeurenForumPost($post, $nieuw, $deel);
 		$this->hertellenVoorDraadEnDeel($draad, $deel);
 	}
 
 	public function afsplitsenForumPost($nieuw_draad_naam, ForumPost $post, ForumDraad $draad, ForumDeel $deel) {
 		$nieuw = ForumDradenModel::instance()->maakForumDraad($draad->forum_id, $nieuw_draad_naam, false);
-		$this->verplaatsForumPost($nieuw->draad_id, $post, $draad, $deel);
+		$this->verplaatsForumPost($nieuw, $post, $draad, $deel);
 		return $nieuw;
 	}
 
