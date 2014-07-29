@@ -388,8 +388,14 @@ class ForumDradenModel extends PersistenceModel implements Paging {
 		$this->per_pagina = (int) LidInstellingen::get('forum', 'zoekresultaten');
 		$orm = self::orm;
 		$fields = $orm::getFields();
-		$fields[] = 'MATCH(titel) AGAINST (? IN NATURAL LANGUAGE MODE) AS score';
-		$where = 'wacht_goedkeuring = FALSE AND verwijderd = FALSE AND ';
+		$params = array();
+		$where = 'wacht_goedkeuring = FALSE AND verwijderd = FALSE AND )';
+		$terms = explode(' ', $query);
+		foreach ($terms as $i => $term) {
+			$terms[$i] = 'titel LIKE ?';
+			$params[] = '%' . $term . '%';
+		}
+		$where .= implode(' OR ', $terms) . ') AND';
 		if ($datum === 'gemaakt') {
 			$where .= 'datum_tijd';
 		} else {
@@ -400,9 +406,9 @@ class ForumDradenModel extends PersistenceModel implements Paging {
 		} else {
 			$where .= ' > ?';
 		}
-		$datum = date('Y-m-d H:i:s', strtotime('-' . $jaar . ' year'));
+		$params[] = date('Y-m-d H:i:s', strtotime('-' . $jaar . ' year'));
 		$where .= ' HAVING score > 0';
-		$results = Database::sqlSelect($fields, $orm::getTableName(), $where, array($query, $datum), 'score DESC', null, $this->per_pagina, ($this->pagina - 1) * $this->per_pagina);
+		$results = Database::sqlSelect($fields, $orm::getTableName(), $where, $params, 'score DESC', null, $this->per_pagina, ($this->pagina - 1) * $this->per_pagina);
 		$results->setFetchMode(PDO::FETCH_CLASS, $orm, array($cast = true));
 		return $results;
 	}
