@@ -397,10 +397,12 @@ class ForumDradenModel extends PersistenceModel implements Paging {
 		}
 		$where .= implode(' OR ', $terms) . ') AND ';
 		if ($datum === 'gemaakt') {
-			$where .= 'datum_tijd';
+			$order = 'datum_tijd';
 		} else {
-			$where .= 'laatst_gewijzigd';
+			$order = 'laatst_gewijzigd';
 		}
+		$where .= $order;
+		$order .= ' DESC';
 		if ($ouder === 'ouder') {
 			$where .= ' < ?';
 		} else {
@@ -408,7 +410,7 @@ class ForumDradenModel extends PersistenceModel implements Paging {
 		}
 		$params[] = date('Y-m-d H:i:s', strtotime('-' . $jaar . ' year'));
 		$where .= ' HAVING score > 0';
-		$results = Database::sqlSelect($fields, $orm::getTableName(), $where, $params, 'score DESC', null, $this->per_pagina, ($this->pagina - 1) * $this->per_pagina);
+		$results = Database::sqlSelect($fields, $orm::getTableName(), $where, $params, $order, null, $this->per_pagina, ($this->pagina - 1) * $this->per_pagina);
 		$results->setFetchMode(PDO::FETCH_CLASS, $orm, array($cast = true));
 		return $results;
 	}
