@@ -184,7 +184,7 @@ class ForumDelenModel extends PersistenceModel {
 		}
 		foreach ($gevonden_draden as $draad) { // laad posts bij draden
 			if (property_exists($draad, 'score')) { // gevonden op draad titel
-				$draad->score = (float) $draad->score;
+				$draad->score = (float) 10;
 			} else { // gevonden op post tekst
 				$draad->score = (float) 0;
 			}
