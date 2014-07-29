@@ -389,13 +389,13 @@ class ForumDradenModel extends PersistenceModel implements Paging {
 		$orm = self::orm;
 		$fields = $orm::getFields();
 		$params = array();
-		$where = 'wacht_goedkeuring = FALSE AND verwijderd = FALSE AND )';
+		$where = 'wacht_goedkeuring = FALSE AND verwijderd = FALSE AND (';
 		$terms = explode(' ', $query);
 		foreach ($terms as $i => $term) {
 			$terms[$i] = 'titel LIKE ?';
 			$params[] = '%' . $term . '%';
 		}
-		$where .= implode(' OR ', $terms) . ') AND';
+		$where .= implode(' OR ', $terms) . ') AND ';
 		if ($datum === 'gemaakt') {
 			$where .= 'datum_tijd';
 		} else {
