@@ -9,92 +9,79 @@
  * @author     Jerry G. Geiger <JerryGeiger@web.de>
  */
 
-if(!defined('DOKU_INC')) define('DOKU_INC',realpath(dirname(__FILE__).'/../../').'/');
-if(!defined('DOKU_PLUGIN')) define('DOKU_PLUGIN',DOKU_INC.'lib/plugins/');
+if(!defined('DOKU_INC')) define('DOKU_INC', realpath(dirname(__FILE__).'/../../').'/');
+if(!defined('DOKU_PLUGIN')) define('DOKU_PLUGIN', DOKU_INC.'lib/plugins/');
 require_once(DOKU_PLUGIN.'syntax.php');
 
-/*
+/**
  * All DokuWiki plugins to extend the parser/rendering mechanism
  * need to inherit from this class
  */
 class syntax_plugin_csv extends DokuWiki_Syntax_Plugin {
 
-    /*
-     * return some info
-     */
-    function getInfo(){
-        return array(
-            'author' => 'Andreas Gohr',
-            'email'  => 'gohr@cosmocode.de',
-            'date'   => '2009-11-14',
-            'name'   => 'CSV Plugin',
-            'desc'   => 'Displays a CSV file, or inline CSV data, as a table',
-            'url'    => 'http://www.dokuwiki.org/plugin:csv',
-        );
-    }
-
-    /*
+    /**
      * What kind of syntax are we?
      */
-    function getType(){
+    function getType() {
         return 'substition';
     }
 
-    /*
+    /**
      * Where to sort in?
      */
-    function getSort(){
+    function getSort() {
         return 155;
     }
 
-    /*
+    /**
      * Paragraph Type
      */
-    function getPType(){
+    function getPType() {
         return 'block';
     }
 
-    /*
+    /**
      * Connect pattern to lexer
      */
     function connectTo($mode) {
-        $this->Lexer->addSpecialPattern("<csv[^>]*>.*?(?:<\/csv>)",$mode,'plugin_csv');
+        $this->Lexer->addSpecialPattern("<csv[^>]*>.*?(?:<\/csv>)", $mode, 'plugin_csv');
     }
 
-
-    /*
+    /**
      * Handle the matches
      */
-    function handle($match, $state, $pos, &$handler){
-      global $INFO;
-        $match = substr($match,4,-6);
+    function handle($match, $state, $pos, Doku_Handler &$handler) {
+        global $INFO;
+        $match = substr($match, 4, -6);
 
         //default options
         $opt = array(
-            'hdr_rows'    => 1,
-            'hdr_cols'    => 0,
+            'hdr_rows'        => 1,
+            'hdr_cols'        => 0,
             'span_empty_cols' => 0,
-            'file'    => '',
-            'delim'   => ',',
-            'content' => ''
+            'file'            => '',
+            'delim'           => ',',
+            'enclosure'       => '"',
+            'escape'          => '"',
+            'content'         => ''
         );
 
-        list($optstr,$opt['content']) = explode('>',$match,2);
+        list($optstr, $opt['content']) = explode('>', $match, 2);
         unset($match);
 
         // parse options
-        $optsin = explode(' ',$optstr);
-        foreach($optsin as $o){
+        $optsin = explode(' ', $optstr);
+        foreach($optsin as $o) {
             $o = trim($o);
-            if (preg_match("/(\w+)=(.*)/",$o,$matches)) {
+            if(preg_match('/(\w+)=(.*)/', $o, $matches)) {
                 $opt[$matches[1]] = $matches[2];
             } elseif($o) {
-                if(preg_match('/^https?:\/\//i',$o)){
+                if(preg_match('/^https?:\/\//i', $o)) {
                     $opt['file'] = $o;
-                }else{
+                } else {
                     $opt['file'] = cleanID($o);
                     if(!strlen(getNS($opt['file'])))
-                      $opt['file'] = $INFO['namespace'].':'.$opt['file'];
+                        $opt['file'] = $INFO['namespace'].':'.$opt['file'];
                 }
             }
         }
@@ -103,155 +90,253 @@ class syntax_plugin_csv extends DokuWiki_Syntax_Plugin {
         return $opt;
     }
 
-    /*
+    /**
      * Create output
      */
-    function render($mode, &$renderer, $opt) {
+    function render($mode, Doku_Renderer &$renderer, $opt) {
         if($mode == 'metadata') return false;
 
         // load file data
-        if($opt['file']){
-            if(preg_match('/^https?:\/\//i',$opt['file'])){
+        if($opt['file']) {
+            if(preg_match('/^https?:\/\//i', $opt['file'])) {
                 require_once(DOKU_INC.'inc/HTTPClient.php');
-                $http = new DokuHTTPClient();
+                $http           = new DokuHTTPClient();
                 $opt['content'] = $http->get($opt['file']);
-                if(!$opt['content']){
+                if($opt['content'] === false) {
                     $renderer->cdata('Failed to fetch remote CSV data');
                     return true;
                 }
-            }else{
-                $opt['file'] = cleanID($opt['file']);
-                $renderer->info['cache'] = false; //no caching
-                if (auth_quickaclcheck(getNS($opt['file']).':*') < AUTH_READ) {
+            } else {
+                $renderer->info['cache'] = false;
+                if(auth_quickaclcheck(getNS($opt['file']).':*') < AUTH_READ) {
                     $renderer->cdata('Access denied to CSV data');
                     return true;
                 } else {
-                    $file = mediaFN($opt['file']);
+                    $file           = mediaFN($opt['file']);
                     $opt['content'] = io_readFile($file);
-                    // if not valid UTF-8 is given we assume ISO-8859-1
-                    if(!utf8_check($opt['content'])) $opt['content'] = utf8_encode($opt['content']);
                 }
             }
+            // if not valid UTF-8 is given we assume ISO-8859-1
+            if(!utf8_check($opt['content'])) $opt['content'] = utf8_encode($opt['content']);
         }
 
+        // check if there is content
         $content =& $opt['content'];
-
-        // clear any trailing or leading empty lines from the data set
-        $content = preg_replace("/[\r\n]*$/","",$content);
-        $content = preg_replace("/^\s*[\r\n]*/","",$content);
-
-        if(!trim($content)){
+        $content = trim($content);
+        if($content === '') {
             $renderer->cdata('No csv data found');
+            return true;
         }
-        $rows = array();
-        $maxcol=0;
-        $maxrow=0;
-        while($content != "") {
-          $thisrow = $this->csv_explode_row($content,$opt['delim']);
-          if($maxcol < count($thisrow))
-              $maxcol = count($thisrow);
-          array_push($rows, $thisrow);
-            //$cells = $this->csv_explode_row($content,$opt['delim']);
-            // some spreadsheet systems (i.e., excell) appear to
-            // denote column spans with a completely empty cell
-            // (to adjacent commas) and an 'empty' cell will
-            // contain at least one blank space, so if the user
-            // asks, use that for attempting to span columns
-            // together
-          $maxrow++;
-        }
-        // render table we need values e.g. for ODT plugin ... -jerry
-        $renderer->table_open($maxcol, $maxrow);
-        $row = 1;
-        foreach($rows as $cells) {
+
+        // get the first row - it will define the structure
+        $row    = $this->csv_explode_row($content, $opt['delim'], $opt['enclosure'], $opt['escape']);
+        $maxcol = count($row);
+        $line   = 0;
+
+        // create the table and start rendering
+        $renderer->table_open($maxcol);
+        while($row !== false) {
+            // make sure we have enough columns
+            $row = array_pad($row, $maxcol, '');
+
+            // render
             $renderer->tablerow_open();
-            $spans = array();
-            $span  = 0;
-            $current = 0;
-            foreach($cells as $cell) {
-                if ($cell == '' && $opt['span_empty_cols']) {
-                    $spans[$current] = 0;
-                    $spans[$span]++;
+            for($i = 0; $i < $maxcol;) {
+                $span = 1;
+                // lookahead to find spanning cells
+                if($opt['span_empty_cols']) {
+                    for($j = $i + 1; $j < $maxcol; $j++) {
+                        if($row[$j] === '') {
+                            $span++;
+                        } else {
+                            break;
+                        }
+                    }
+                }
+
+                // open cell
+                if($line < $opt['hdr_rows'] || $i < $opt['hdr_cols']) {
+                    $renderer->tableheader_open($span);
                 } else {
-                    $spans[$current] = 1;
-                    $span = $current;
+                    $renderer->tablecell_open($span);
                 }
-                $current++;
-            }
-            //handle empty line feature ;-) jerry
-            if($current < 2) {
-              $spans[0] = $maxcol;
-            }
-            $current = 0;
-            foreach($cells as $cell) {
-                $cell = preg_replace('/\\\\\\\\/',' ',$cell);
-                if ($spans[$current] > 0) {
-                    $align = 'left';
-                    if ($spans[$current] > 1) {
-                        $align = 'center';
-                    }
-                    if ($row <= $opt['hdr_rows'] || 
-                      $current < $opt['hdr_cols'] || // empty line feature
-                      ($current == 0 && $spans[0] == $maxcol)) {
-                        $renderer->tableheader_open($spans[$current], $align);
-                    } else {
-                        $renderer->tablecell_open($spans[$current], $align);
-                    }
-                    $renderer->cdata($cell);
-                    if ($row <= $opt['hdr_rows'] ||
-                      $current < $opt['hdr_cols'] ||
-                      ($current == 0 && $spans[0] == $maxcol)) {
-                        $renderer->tableheader_close();
-                    } else {
-                        $renderer->tablecell_close();
-                    }
+
+                // print cell content, call linebreak() for newlines
+                $lines = explode("\n", $row[$i]);
+                $cnt   = count($lines);
+                for($k = 0; $k < $cnt; $k++) {
+                    $renderer->cdata($lines[$k]);
+                    if($k < $cnt - 1) $renderer->linebreak();
                 }
-                $current++;
+
+                // close cell
+                if($line < $opt['hdr_rows'] || $i < $opt['hdr_cols']) {
+                    $renderer->tableheader_close();
+                } else {
+                    $renderer->tablecell_close();
+                }
+
+                $i += $span;
             }
             $renderer->tablerow_close();
-            $row++;
+
+            // get next row
+            $row = $this->csv_explode_row($content, $opt['delim'], $opt['enclosure'], $opt['escape']);
+            $line++;
         }
         $renderer->table_close();
 
         return true;
     }
 
-    // Explode CSV string, consuming it as we go
-    // RFC 4180 claims that a CSV is allowed to have a cell enclosed in ""
-    // that embeds a newline.  Convert those newlines to \\ (trying to keep
-    // to the DokuWiki syntax) which we will key off of later in render()
-    // as an embedded newline.
-    // Careful, there could be both embedded newlines, commas and quotes
-    // One thing to remember is that a row must end with a newline
-    function csv_explode_row(&$str, $delim = ',', $qual = "\"") {
+    /**
+     * Reads one CSV line from the given string
+     *
+     * Should handle embedded new lines, escapes, quotes and whatever else CSVs tend to have
+     *
+     * Note $delim, $enc, $esc have to be one ASCII character only! The encoding of the content is not
+     * handled here but is read byte by byte - if you need conversions do it on the output
+     *
+     * @author Andreas Gohr <andi@splitbrain.org>
+     * @param string $str   Input string, first CSV line will be removed
+     * @param string $delim Delimiter character
+     * @param string $enc   Enclosing character
+     * @param string $esc   Escape character
+     * @return array|boolean fields found on the line, false when no more lines could be found
+     */
+    function csv_explode_row(&$str, $delim = ',', $enc = '"', $esc = '\\') {
         $len = strlen($str);
-        $inside = false;
-        $word = '';
-        for ($i = 0; $i < $len; ++$i) {
-            $next = $i+1;
-            if ($str[$i]==$delim && !$inside) {
-                $out[] = $word;
-                $word = '';
-            } elseif ($str[$i] == $qual && (!$inside || $next == $len || $str[$next] == $delim || $str[$next] == "\n")) {
-                $inside = !$inside;
-            } elseif ($str[$i] == $qual && $next != $len && $str[$next] == $qual) {
-                $word .= $str[$i];
-                $i++;
-            } elseif ($str[$i] == "\n") {
-                if ($inside) {
-                    $word .= '\\\\';
+
+        $infield = false;
+        $inenc   = false;
+
+        $fields = array();
+        $word   = '';
+
+        for($i = 0; $i < $len; $i++) {
+            // convert to unix line endings
+            if($str[$i] == "\015") {
+                if($str[($i + 1)] != "\012") {
+                    $str[$i] = "\012";
                 } else {
-                    $str = substr($str, $next);
-                    $out[] = $word;
-                    return $out;
+                    $i++;
+                    if($i >= $len) break;
                 }
-            } else {
+            }
+
+            // simple escape that is not an enclosure
+            if($str[$i] == $esc && $esc != $enc) {
+                $i++; // skip this char and take next as is
+                $word .= $str[$i];
+                $infield = true; // we are obviously in a field
+                continue;
+            }
+
+            /*
+             * Now decide special cases depending on current field and enclosure state
+             */
+            if(!$infield) { // not in field
+
+                // we hit a delimiter even though we're not in a field - an empty field
+                if($str[$i] == $delim) {
+                    $fields[] = $word;
+                    $word     = '';
+                    $infield  = false;
+                    $inenc    = false;
+                    continue;
+                }
+
+                // a newline - an empty field as well, but we're done with this line
+                if($str[$i] == "\n") {
+                    $infield = false;
+                    $inenc   = false;
+
+                    //we saw no fields or content yet? empty line! skip it.
+                    if(!count($fields) && $word === '') continue;
+
+                    // otherwise add field
+                    $fields[] = $word;
+                    $word     = '';
+                    break;
+                }
+
+                // we skip leading whitespace when we're not in a field yet
+                if($str[$i] === ' ') {
+                    continue;
+                }
+
+                // cell starts with an enclosure
+                if($str[$i] == $enc) {
+                    // skip this one but open an enclosed field
+                    $infield = true;
+                    $inenc   = true;
+                    continue;
+                }
+
+                // still here? whatever is here, is content and starts a field
+                $word .= $str[$i];
+                $infield = true;
+                $inenc   = false;
+
+            } elseif($inenc) { // in field and enclosure
+
+                // we have an escape char that is an enclosure and the next char is an enclosure, too
+                if($str[$i] == $esc && $esc == $enc && $str[$i + 1] == $esc) {
+                    $i++; // skip this char and take next as is
+                    $word .= $str[$i];
+                    continue;
+                }
+
+                // we have an enclosure char
+                if($str[$i] == $enc) {
+                    // skip this one but close the enclosure
+                    $infield = true;
+                    $inenc   = false;
+                    continue;
+                }
+
+                // still here? just add more content
+                $word .= $str[$i];
+
+            } else { // in field but no enclosure
+
+                // a delimiter - next field please
+                if($str[$i] == $delim) {
+                    $fields[] = $word;
+                    $word     = '';
+                    $infield  = false;
+                    $inenc    = false;
+                    continue;
+                }
+
+                // EOL - we're done with the line
+                if($str[$i] == "\n") {
+                    $infield = false;
+                    $inenc   = false;
+
+                    //we saw no fields or content yet? empty line! skip it.
+                    if(!count($fields) && $word === '') continue;
+
+                    $fields[] = $word;
+                    $word     = '';
+                    break;
+                }
+
+                // still here? just add more content
                 $word .= $str[$i];
             }
         }
-        $str = substr($str, $next);
-        $out[] = $word;
-        return $out;
+
+        // did we hit the end?
+        if($infield && ($word || count($fields))) {
+            $fields[] = $word;
+        }
+
+        // shorten the string by the stuff we read
+        $str = substr($str, $i + 1);
+
+        if(!count($fields)) return false;
+        return $fields;
     }
 }
 

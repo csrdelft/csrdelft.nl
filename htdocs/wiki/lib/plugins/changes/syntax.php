@@ -164,6 +164,16 @@ class syntax_plugin_changes extends DokuWiki_Syntax_Plugin {
         $count = 0;
         $lines = @file($conf['changelog']);
 
+        // Merge media changelog
+        if($this->getConf('listmedia')) {
+            $linesMedia = @file($conf['media_changelog']);
+            // Add a tag to identiy the media lines
+            foreach($linesMedia as $key => $value) {
+                $linesMedia[$key] = $value . "media";
+            }
+            $lines = array_merge($lines, $linesMedia);
+        }
+
         if(is_null($maxage)) $maxage = (int) $this->getConf('maxage');
 
         for($i = count($lines)-1; $i >= 0; $i--){
@@ -176,6 +186,16 @@ class syntax_plugin_changes extends DokuWiki_Syntax_Plugin {
                 if(++$count >= $num) break;
             }
         }
+
+        // Date sort merged page and media changes
+        if($this->getConf('listmedia')) {
+            $dates = array();
+            foreach($changes as $change) {
+                $dates[] = $change['date'];
+            }
+            array_multisort($dates, SORT_ASC, $changes);
+        }
+
         return $changes;
     }
 
@@ -297,7 +317,11 @@ class syntax_plugin_changes extends DokuWiki_Syntax_Plugin {
 
             $R->listitem_open(1);
             $R->listcontent_open();
-            $R->internallink(':'.$change['id'],null,null,false,'navigation');
+            if(trim($change['extra']) == 'media') {
+                $R->internalmedia(':'.$change['id'],null,null,false,'navigation');
+            } else {
+                $R->internallink(':'.$change['id'],null,null,false,'navigation');
+            }
             if($flags['summary']){
                 $R->cdata(' '.$change['sum']);
             }

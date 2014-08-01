@@ -3,7 +3,7 @@
 base   changes
 author Andreas Gohr
 email  gohr@cosmocode.de
-date   2011-07-20
+date   2014-04-12
 name   Changes Plugin
 desc   List the most recent changes of the wiki
 url    http://www.dokuwiki.org/plugin:changes

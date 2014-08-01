@@ -37,7 +37,7 @@ class syntax_plugin_searchform extends DokuWiki_Syntax_Plugin {
      * @param $mode
      */
     public function connectTo($mode) {
-        $this->Lexer->addSpecialPattern('\{searchform\}', $mode, 'plugin_searchform');
+        $this->Lexer->addSpecialPattern('\{searchform\b.*?\}', $mode, 'plugin_searchform');
     }
 
     /**
@@ -50,7 +50,15 @@ class syntax_plugin_searchform extends DokuWiki_Syntax_Plugin {
      * @return  array Return an array with all data you want to use in render
      */
     public function handle($match, $state, $pos, &$handler) {
-        return array($match, $state, $pos);
+        $match = trim(substr($match,11,-1)); //strip {searchform from start and } from end
+        list($key,$value) = explode('=', $match, 2);
+
+        $options['namespace'] = null;
+
+        if(isset($key) && $key == 'ns') {
+            $options['namespace'] = cleanID($value);
+        }
+        return array($options, $state, $pos);
     }
 
     /**
@@ -65,10 +73,16 @@ class syntax_plugin_searchform extends DokuWiki_Syntax_Plugin {
         global $lang, $INFO, $ACT, $QUERY;
 
         if($format == 'xhtml') {
+            list($options,,) = $data;
+
             // don't print the search form if search action has been disabled
             if(!actionOK('search')) return true;
 
-            $ns = $INFO['namespace'];
+            $ns = $options['namespace'];
+            if($ns === null) {
+                $ns = $INFO['namespace'];
+            }
+
             /** based on  tpl_searchform() */
             $renderer->doc .= '<div class="searchform__form">' . "\n";
             $renderer->doc .= '<form action="' . wl() . '" accept-charset="utf-8" class="search" id="searchform__search" method="get" role="search"><div class="no">' . "\n";

@@ -30,6 +30,13 @@
   18.7.2013
  * version 2.6 Added support for jQuery and dokuwiki Weatherwax ->
 
+  28.5.2014 
+  * version 2.7 Fixed problem with first row not getting sorted
+
+  30.5.2014 
+  * version 2.8 Fixed problem with first row not getting sorted in default sort. Added option "sumrow" to prevent sum line sort. 
+
+
   Instructions:
   Used from dokuwiki 
   Click on the headers to sort
@@ -123,7 +130,12 @@ sorttable = {
               }
               colid = colid.replace(patt1,'');
             }
-            sorttable.makeSortable(table,overs);
+            var patt2=/\bsortbottom/gi;
+            var bottoms = 0;
+            if (colid.search(patt2) != -1) {
+				bottoms=1;
+			}
+            sorttable.makeSortable(table,overs,bottoms);
             if (colid.search(/\bsort/) != -1) {
               colid = colid.replace('sortable','');
               colid = colid.replace(' sort','');
@@ -180,7 +192,7 @@ sorttable = {
      row_array = [];
      col = thiscell.sorttable_columnindex;
      rows = thiscell.sorttable_tbody.rows;
-     for (var j=1; j<rows.length; j++) {
+     for (var j=0; j<rows.length; j++) {
        row_array[row_array.length] = [sorttable.getInnerText(rows[j].cells[col]), rows[j]];
      }
      /* If you want a stable sort, uncomment the following line */
@@ -211,7 +223,7 @@ sorttable = {
 
   },
 
-  makeSortable: function(table,overrides) {
+  makeSortable: function(table,overrides, bottoms) {
 //    tableid++;
 /*
     if (table.getElementsByTagName('thead').length === 0) {
@@ -234,25 +246,29 @@ sorttable = {
     // "total" rows, for example). This is B&R, since what you're supposed
     // to do is put them in a tfoot. So, if there are sortbottom rows,
     // for backwards compatibility, move them to tfoot (creating it if needed).
-    /*
+    
     sortbottomrows = [];
-    for (var i=0; i<table.rows.length; i++) {
-      if (table.rows[i].className.search(/\bsortbottom\b/) != -1) {
-        sortbottomrows[sortbottomrows.length] = table.rows[i];
-      }
+	if (bottoms>0) {
+		frombottom=0;
+		for (var i=table.rows.length; i>0; i--) {
+//		  if (table.rows[i].className.search(/\bsortbottom\b/) != -1) {
+          if (bottoms==frombottom) {
+			sortbottomrows[sortbottomrows.length] = table.rows[i];
+		  }
+		  frombottom++;
+		}
+		if (sortbottomrows) {
+		  if (table.tFoot === null) {
+			// table doesn't have a tfoot. Create one.
+			tfo = document.createElement('tfoot');
+			table.appendChild(tfo);
+		  }
+		  for (var ii=0; ii<sortbottomrows.length; ii++) {
+			tfo.appendChild(sortbottomrows[ii]);
+		  }
+		  delete sortbottomrows;
+		}
     }
-    if (sortbottomrows) {
-      if (table.tFoot === null) {
-        // table doesn't have a tfoot. Create one.
-        tfo = document.createElement('tfoot');
-        table.appendChild(tfo);
-      }
-      for (var ii=0; ii<sortbottomrows.length; ii++) {
-        tfo.appendChild(sortbottomrows[ii]);
-      }
-      delete sortbottomrows;
-    }
-    */
     // work through each column and calculate its type
 //    headrow = table.tHead.rows[0].cells;
     headrow = table.rows[0].cells;
@@ -352,7 +368,7 @@ sorttable = {
           row_array = [];
           col = this.sorttable_columnindex;
           rows = this.sorttable_tbody.rows;
-          for (var j=1; j<rows.length; j++) {
+          for (var j=0; j<rows.length; j++) {
             row_array[row_array.length] = [sorttable.getInnerText(rows[j].cells[col]), rows[j]];
           }
           /* If you want a stable sort, uncomment the following line */
@@ -373,12 +389,19 @@ sorttable = {
   
   guessType: function(table, column) {
     // guess the type of a column based on its first non-blank row
+  var NONE=0;
+	var TEXT=0;
+	var NUM=0;
+	var DDMM=0;
+	var MMDD=0;
     sortfn = sorttable.sort_alpha;
     for (var i=0; i<table.tBodies[0].rows.length; i++) {
       text = sorttable.getInnerText(table.tBodies[0].rows[i].cells[column]);
+      set=0;
       if (text !== '') {
-        if (text.match(/^-?[£$¤]?[\d,.]+[%€]?$/)) {
-          return sorttable.sort_numeric;
+        if (text.match(/^-?[Â£$Â¤]?[\d,.]+[%â‚¬]?$/)) {
+          set=1;
+          NUM=1;
         }
         // check for a date: dd/mm/yyyy or dd/mm/yy 
         // can have / or . or - as separator
@@ -390,18 +413,33 @@ sorttable = {
           second = parseInt(possdate[2]);
           if (first > 12) {
             // definitely dd/mm
-            return sorttable.sort_ddmm;
+//            return sorttable.sort_ddmm;
+            set=1;
+            DDMM=1;
           } else if (second > 12) {
-            return sorttable.sort_mmdd;
+            set=1;
+            MMDD=1;
+//            return sorttable.sort_mmdd;
           } else {
             // looks like a date, but we can't tell which, so assume
             // that it's dd/mm (English imperialism!) and keep looking
-            sortfn = sorttable.sort_ddmm;
+            set=1;
+            DDMM=1;
+//            sortfn = sorttable.sort_ddmm;
           }
         }
+        // if nothing known then assume text
+        if (set==0) {
+          TEXT=1;
+        }
+        set=0;
+
       }
     }
-    return sortfn;
+    if (TEXT>0 || NUM+DDMM+MMDD>1) return sorttable.sort_alpha;
+    if (NUM>0) return sorttable.sort_numeric;
+    if (DDMM>0) return sorttable.sort_ddmm;
+    if (MMDD>0) return sorttable.sort_mmdd;
   },
   
   getInnerText: function(node) {
@@ -455,7 +493,7 @@ sorttable = {
     for (var i=0; i<tbody.rows.length; i++) {
       newrows[newrows.length] = tbody.rows[i];
     }
-    for (var i=newrows.length-1; i>=1; i--) {
+    for (var i=newrows.length-1; i>=0; i--) {
        tbody.appendChild(newrows[i]);
     }
     delete newrows;

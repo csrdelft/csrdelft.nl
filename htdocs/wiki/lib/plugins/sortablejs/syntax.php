@@ -9,11 +9,13 @@
  * version 2.1 Changed script to allow multiple sortable tables in one page
  * version 2.2 A table can now be sorted by one column by default.
  * version 2.2a css+js compress broke this script. Now fixed some jslint complains.
- * version 2.3 Added support for odt plugin. (Aurélien Bompard)
+ * version 2.3 Added support for odt plugin. (AurÃ©lien Bompard)
  * version 2.3a Fixed default sort with aligned text (Andre Rauschenbach)
  * version 2.4 Added options to set manual override options for column sort. (nosort, numeric, alpha, ddmm, mmdd)
  * version 2.5 Fixed problems with secionediting, footnotes and edittable
  * version 2.6 Added support for jQuery and dokuwiki Weatherwax ->
+ * version 2.7 Fixed problem with first row not getting sorted
+ * version 2.8 Fixed problem with first row not getting sorted in default sort. Added option "sumrow" to prevent sum line sort. 
  */
 // must be run within Dokuwiki
 if (!defined('DOKU_INC')) die();
@@ -22,18 +24,7 @@ require_once(DOKU_PLUGIN.'syntax.php');
 
 class syntax_plugin_sortablejs extends DokuWiki_Syntax_Plugin {
 
-/*
-  function getInfo(){
-    return array(
-      'author' => 'Otto Vainio',
-      'email'  => 'plugins@valjakko.net',
-      'date'   => '2011-05-10',
-      'name'   => 'Sortable javascript',
-      'desc'   => 'Add <sortable>  and </sortable> around your table.',
-      'url'    => 'http://www.dokuwiki.org/plugin:sortablejs',
-    );
-  }
-*/
+
   function getType() { return 'container';}
   function getPType(){ return 'block';}
   function getSort() { return 371; }
@@ -120,6 +111,10 @@ class syntax_plugin_sortablejs extends DokuWiki_Syntax_Plugin {
     $ret = "";
     foreach($oa as $opt) {
       list($c,$v) = split("=",$opt);
+      if ($c=="sumrow") {
+        $v=$c;
+        $c="";
+      }
       if ($v!=null) {
         $cmpr=$v;
       } else {
@@ -146,6 +141,9 @@ class syntax_plugin_sortablejs extends DokuWiki_Syntax_Plugin {
             break;
         case 'sort':
             $ret = ' sort' . $opt . $ret;
+            break;
+        case 'sumrow':
+            $ret = ' sortbottom' . $c . $ret;
             break;
       }
     }

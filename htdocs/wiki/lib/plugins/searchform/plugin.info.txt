@@ -1,7 +1,7 @@
 base   searchform
-author Gerrit Uitslag, Adolfo González Blázquez
-email  klapinklapin@gmail.com, code@infinicode.org
-date   2014-01-16
+author Gerrit Uitslag, (previous: Adolfo González Blázquez)
+email  klapinklapin@gmail.com
+date   2014-07-30
 name   Search Form Plugin
 desc   Inserts a search form in any page
 url    https://www.dokuwiki.org/plugin:searchform

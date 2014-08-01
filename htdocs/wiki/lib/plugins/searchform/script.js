@@ -7,10 +7,20 @@ jQuery(function () {
             var $ns = $form.find('.searchform__ns');
 
             $input.dw_qsearch({
+
                 output: $output,
+
                 getSearchterm: function () {
-                    var namespace = $ns.val();
-                    return $input.val() + (namespace ? ' @' + namespace : '');
+                    var query = $input.val(),
+                        reg = new RegExp("(?:^| )(?:@|ns:)[\\w:]+");
+
+                    if (reg.test(query)) {
+                        return query;
+                    } else {
+                        var namespace = $ns.val();
+                        return query + (namespace ? ' @' + namespace : '');
+
+                    }
                 }
             });
 
