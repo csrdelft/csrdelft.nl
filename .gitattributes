@@ -2295,6 +2295,13 @@ htdocs/wiki/lib/plugins/indexmenu/syntax/indexmenu.php -text
 htdocs/wiki/lib/plugins/indexmenu/syntax/tag.php -text
 htdocs/wiki/lib/plugins/info/plugin.info.txt -text
 htdocs/wiki/lib/plugins/info/syntax.php -text
+htdocs/wiki/lib/plugins/linksuggest/LICENSE -text
+htdocs/wiki/lib/plugins/linksuggest/README.md -text
+htdocs/wiki/lib/plugins/linksuggest/action.php -text
+htdocs/wiki/lib/plugins/linksuggest/plugin.info.txt -text
+htdocs/wiki/lib/plugins/linksuggest/script.js -text
+htdocs/wiki/lib/plugins/linksuggest/style.css -text
+htdocs/wiki/lib/plugins/linksuggest/vendor/jquery.textcomplete.js -text
 htdocs/wiki/lib/plugins/move/.travis.yml -text
 htdocs/wiki/lib/plugins/move/README -text
 htdocs/wiki/lib/plugins/move/_test/handler.test.php -text
