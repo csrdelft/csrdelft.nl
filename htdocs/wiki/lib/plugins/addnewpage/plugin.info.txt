@@ -1,8 +1,8 @@
 # General Plugin Info
 base   addnewpage
-author iDo, Sam Wilson, Michael Braun
+author iDo, Sam Wilson, Michael Braun, Gerrit Uitslag
 email  
-date   2013-06-20
+date   2014-05-16
 name   Add New Page
 desc   Adds a "new page form" to any wiki page.
 url    http://www.dokuwiki.org/plugin:addnewpage

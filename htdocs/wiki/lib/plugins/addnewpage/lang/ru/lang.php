@@ -1,9 +1,10 @@
 <?php
-/*
- * russian language file
+
+/**
+ * @license    GPL 2 (http://www.gnu.org/licenses/gpl.html)
+ * 
+ * @author Aleksandr Selivanov <alexgearbox@yandex.ru>
  */
-$lang['encoding']      = 'utf-8';
-$lang['direction']     = 'ltr';
-$lang['namespaceRoot'] = 'Корневой уровень';
-$lang['okbutton']      = 'Добавить страницу';
-//Setup VIM: ex: et ts=2 enc=utf-8 :
+$lang['namespaceRoot']         = 'Корневой уровень';
+$lang['okbutton']              = 'Добавить страницу';
+$lang['nooption']              = 'Вы не можете добавлять страницы';

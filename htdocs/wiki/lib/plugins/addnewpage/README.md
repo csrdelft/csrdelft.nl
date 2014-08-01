@@ -17,3 +17,4 @@ If you give @NS@ or @PAGE@ as namespace, the namespace of the current page or th
 - Updated by Sam Wilson <sam@samwilson.id.au>, 2013.
 - Updated by Michael Braun <michael-dev@fami-braun.de>, 2013.
 - Improved by Róbert Toth (FurloSK), 2013.
+- Support for newpagetemplate added by Gerrit Uitslag <klapinklapin@gmail.com>, 2014.
