@@ -154,7 +154,7 @@ if ($barsysteem->isLoggedIn()) {
                             </div>
                         </div>
                         <div id="linkerKant">
-                            <div id=bestelLijstDiv>
+                            <div id="bestelLijstDiv">
                                 <div class="eenDerdeLijst">
                                     <ul class="list-group bestelLijst" id="bestelLijst1"></ul>
                                 </div>
@@ -179,7 +179,7 @@ if ($barsysteem->isLoggedIn()) {
 							<button class="btn btn-toggle btn-default btn-primary" id="allePersonen">Alle personen
                             </button>
 						</span>
-                        <span class="input-group-addon">van</span><input type="text" class=" input-sm form-control "
+                        <span class="input-group-addon">van</span><input type="text" class="input-sm form-control"
                                                                          name="start"
                                                                          placeholder="begin borrel" id="beginDatum"/>
                         <span class="clearKruisje glyphicon glyphicon glyphicon-remove-circle"></span>
