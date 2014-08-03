@@ -216,17 +216,10 @@ class Barsysteem
     }
 	
 	// Log action by type
-	public function log($type, $data) {
+	public function log($type, $value) {
 	
-		$value = array();
-		foreach($data as $key => $item) {
-		
-			$value[] = $key . ' = ' . $item;
-		
-		}
-		$value = implode("\r\n", $value);
-	
-		$q = $this->db->prepare("INSERT INTO socCieLog (type, value) VALUES(:type, :value)");
+		$q = $this->db->prepare("INSERT INTO socCieLog (ip, type, value) VALUES(:ip, :type, :value)");
+		$q->bindValue(':ip', $_SERVER['REMOTE_ADDR'], PDO::PARAM_STR);
 		$q->bindValue(':type', $type, PDO::PARAM_STR);
 		$q->bindValue(':value', $value, PDO::PARAM_STR);
 		$q->execute();
