@@ -508,16 +508,26 @@ $(function () {
         }
     });
 
+    /*************************************************************************************************/
+    /* Producten beheer
+    /*************************************************************************************************/
+
     $("#laadProducten").click(function () {
+	
         $.each(producten, function (id) {
-            product = producten[id];
+		
+            var product = producten[id];
+			$("#productBeheerLijst").empty();
             $("#productBeheerLijst").append("<li class='list-group-item' id='productBeheerLijst" + product.productId + "'>" + product.beschrijving + "</li>");
-            $("#productBeheerLijst" + product.productId).click(setProduct(product));
+            
+			$("#productBeheerLijst" + product.productId).click(setProduct(product));
 
             function setProduct(product) {
 
             }
-        })
+			
+        });
+		
     });
 
 });
