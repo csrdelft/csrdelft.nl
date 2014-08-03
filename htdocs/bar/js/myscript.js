@@ -5,7 +5,7 @@ $(function () {
 
     /*************************************************************************************************/
     /* Clock
-     /*************************************************************************************************/
+    /*************************************************************************************************/
 
     $("#clock").each(function () {
 
@@ -227,16 +227,8 @@ $(function () {
         $("#waarschuwing").removeClass().addClass("alert").addClass("alert-" + type).html(bericht);
     }
 
-    function zetSucces(bericht) {
-        zetBericht(bericht, 'success');
-    }
-
     function zetWaarschuwing(bericht) {
         zetBericht(bericht, 'warning');
-    }
-
-    function zetFaal(bericht) {
-        zetBericht(bericht, 'danger');
     }
 
     function zetInfo(bericht) {
@@ -292,7 +284,7 @@ $(function () {
 
     $("#keyboardToggle").click(function () {
         $("#keyboardContainer").toggle();
-    })
+    });
 
 
     $("#persoonInput").bind("change keyup", updateOnKeyPress);
@@ -338,44 +330,42 @@ $(function () {
                     //succes! de bestelling is goed verwerkt
                     cancel();
                 } else {
-                    alert("er gaat iets verkeert met de bestelling, hij is niet verwerkt!")
+                    alert("Er gaat iets verkeert met de bestelling, hij is niet verwerkt!")
                 }
             });
 
         } else if (!selectedPerson) {
-            zetFaal("geen geldig persoon geselecteerd");
+            zetBericht("Geen geldig persoon geselecteerd", "danger");
         } else if (bestelTotaal == 0) {
-            zetFaal("geen bestelling");
+            zetBericht("Geen bestelling", "danger");
         }
-    })
-
-    $(function () {
-        var shift = false,
-            capslock = false;
-
-        $('#keyboard li').not('.spacer').click(function () {
-            var $this = $(this),
-                character = $this.html().toLowerCase(); // If it's a lowercase letter, nothing happens to this variable
-
-            // Delete
-            if ($this.hasClass('delete')) {
-                $("#persoonInput").val($("#persoonInput").val().slice(0, -1)).focus();
-                updateOnKeyPress();
-                return false;
-            } else if ($this.hasClass('leeg')) {
-                $("#persoonInput").val('').focus();
-                updateOnKeyPress();
-                return false;
-            }
-
-            if ($this.hasClass('space')) character = ' ';
-
-            // Add the character
-            $("#persoonInput").val($("#persoonInput").val() + character).focus();
-            updateOnKeyPress();
-        });
     });
 
+    /*************************************************************************************************/
+    /* Keyboard
+    /*************************************************************************************************/
+
+	$('#keyboard li').not('.spacer').click(function () {
+		var $this = $(this),
+			character = $this.html().toLowerCase(); // If it's a lowercase letter, nothing happens to this variable
+
+		// Delete
+		if ($this.hasClass('delete')) {
+			$("#persoonInput").val($("#persoonInput").val().slice(0, -1)).focus();
+			updateOnKeyPress();
+			return false;
+		} else if ($this.hasClass('leeg')) {
+			$("#persoonInput").val('').focus();
+			updateOnKeyPress();
+			return false;
+		}
+
+		if ($this.hasClass('space')) character = ' ';
+
+		// Add the character
+		$("#persoonInput").val($("#persoonInput").val() + character).focus();
+		updateOnKeyPress();
+	});
 
     $("#knopCancel").click(cancel);
 
