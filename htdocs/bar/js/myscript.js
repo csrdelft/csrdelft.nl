@@ -344,9 +344,9 @@ $(function () {
 				});
 
 			} else if (!selectedPerson) {
-				zetBericht("Geen geldig persoon geselecteerd", "danger");
+				zetBericht("Geen geldig persoon geselecteerd!", "danger");
 			} else if (bestelTotaal() == 0) {
-				zetBericht("Geen bestelling", "danger");
+				zetBericht("Geen bestelling ingevoerd!", "danger");
 			}
 		
 		});

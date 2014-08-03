@@ -214,6 +214,24 @@ class Barsysteem
         $maanden = ["Januari" => "01", "Februari" => "02", "Maart" => "03", "April" => "04", "Mei" => "05", "Juni" => "06", "Juli" => "07", "Augustus" => "08", "September" => "09", "Oktober" => "10", "November" => "11", "December" => "12"];
         return ($elementen[2] . "-" . $maanden[$elementen[1]] . "-" . $datum);
     }
+	
+	// Log action by type
+	public function log($type, $data) {
+	
+		$value = array();
+		foreach($data as $key => $item) {
+		
+			$value[] = $key . ' = ' . $item;
+		
+		}
+		$value = implode("\r\n", $value);
+	
+		$q = $this->db->prepare("INSERT INTO socCieLog (type, value) VALUES(:type, :value)");
+		$q->bindValue(':type', $type, PDO::PARAM_STR);
+		$q->bindValue(':value', $value, PDO::PARAM_STR);
+		$q->execute();
+	
+	}
 
 }
 
