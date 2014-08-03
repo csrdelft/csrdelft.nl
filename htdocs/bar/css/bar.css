@@ -237,9 +237,8 @@ body {
     cursor: pointer;
 }
 
-#productBeheerLijstDiv {
-    width: 300px;
-    margin: 20px;
+#beheer-nav {
+    margin: 5px;
 }
 
 #besteLijstBeheerLaad {

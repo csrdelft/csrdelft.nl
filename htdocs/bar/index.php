@@ -213,15 +213,23 @@ if ($barsysteem->isLoggedIn()) {
                 </div>
                 <div class="tab-pane" id="beheer">
 
-                    <div id="productBeheerLijstDiv" class="btn-group btn-group-large">
+                    <div id="beheer-nav" class="btn-group btn-group-lg">
                         <button class="btn btn-default" id="laadProducten">Laad producten</button>
                         <button class="btn btn-default">Andere optie</button>
                         <button class="btn btn-default">Andere optie</button>
                     </div>
 					
-					<ul class="list-group" id="productBeheerLijst">
+					<div class="row">
+
+						<div class="col-xs-3">
+							
+							<ul class="list-group" id="productBeheerLijst">
+							
+							</ul>
+						
+						</div>
 					
-					</ul>
+					</div>
 
                 </div>
 
