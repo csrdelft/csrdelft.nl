@@ -54,9 +54,9 @@ if (LoginLid::mag("P_ADMIN")) {
             <div class="tab-content">
                 <div class="tab-pane active" id="persoonselectie">
                     <div class="input-group input-group-lg">
-                        <input id="persoonInput" type="text" class="form-control" placeholder="naam">
+                        <input id="persoonInput" type="text" class="form-control" placeholder="Naam">
 						<span class="input-group-btn input-group-lg">
-						<button class="btn btn-default" type="button" id="keyboardToggle">keyboard</button>
+						<button class="btn btn-default" type="button" id="keyboardToggle"><span class="glyphicon glyphicon-font"></span></button>
 					</span>
                     </div>
                     <div id="keyboardContainer">
