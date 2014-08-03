@@ -340,10 +340,11 @@ $(function () {
 						//succes! de bestelling is goed verwerkt
 						cancel();
 					} else {
-						alert("Er gaat iets verkeert met de bestelling, hij is niet verwerkt!")
+						zetBericht("Er gaat iets verkeert met de bestelling, hij is niet verwerkt!", "danger");
 					}
 				}).always(function() {
 				
+					// After AJAX always set submitting on false
 					submitting = false;
 				
 				});
