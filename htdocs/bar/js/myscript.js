@@ -315,7 +315,7 @@ $(function () {
 	
 		$(this).click(function () {
 		
-			if (selectedPerson && bestelLijst.length != 0) {
+			if (selectedPerson && bestelTotaal() == 0) {
 			
 				// Set submitting state on true
 				submitting = true;
@@ -345,7 +345,7 @@ $(function () {
 
 			} else if (!selectedPerson) {
 				zetBericht("Geen geldig persoon geselecteerd", "danger");
-			} else if (bestelLijst.length != 0) {
+			} else if (bestelTotaal() == 0) {
 				zetBericht("Geen bestelling", "danger");
 			}
 		
