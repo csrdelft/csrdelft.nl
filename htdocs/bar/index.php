@@ -1,7 +1,10 @@
 <?php
 require_once 'configuratie.include.php';
+require_once 'barsysteem.class.php';
 
-if ($_COOKIE['barsysteem'] == 'holy_moly_bar_systeem') {
+$barsysteem = new Barsysteem();
+
+if ($barsysteem->isLoggedIn()) {
 
     ?>
     <!DOCTYPE html>

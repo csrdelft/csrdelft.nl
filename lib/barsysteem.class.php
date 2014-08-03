@@ -12,6 +12,12 @@ class Barsysteem
     {
         $this->db = Database::instance();
     }
+	
+	function isLoggedIn() {
+	
+		return isset($_COOKIE['barsysteem']) && $_COOKIE['barsysteem'] == 'holy_moly_bar_systeem';
+	
+	}
 
     function getPersonen()
     {
