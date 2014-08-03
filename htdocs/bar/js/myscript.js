@@ -201,18 +201,13 @@ $(function () {
         }
 
         if (selectedPerson) {
-            $("#huidigSaldo").empty();
-            $("#huidigSaldo").append(saldoStr(selectedPerson.saldo));
-            $("#nieuwSaldo").empty();
-            $("#nieuwSaldo").append(saldoStr(selectedPerson.saldo - totaal));
+            $("#huidigSaldo").html(saldoStr(selectedPerson.saldo));
+            $("#nieuwSaldo").html(saldoStr(selectedPerson.saldo - totaal));
         } else {
-            $("#huidigSaldo").empty();
-            $("#huidigSaldo").append("<span>-</span>");
-            $("#nieuwSaldo").empty();
-            $("#nieuwSaldo").append("<span>-</span>");
+            $("#huidigSaldo").html("<span>-</span>");
+            $("#nieuwSaldo").html("<span>-</span>");
         }
-        $("#totaalBestelling").empty();
-        $("#totaalBestelling").append(saldoStr(totaal));
+        $("#totaalBestelling").html(saldoStr(totaal));
     }
 
     function saldoStr(saldo) {
@@ -224,7 +219,7 @@ $(function () {
     }
 
     function zetBericht(bericht, type) {
-        $("#waarschuwing").removeClass().addClass("alert").addClass("alert-" + type).html(bericht);
+        $("#waarschuwing").removeClass().addClass("alert alert-" + type).html(bericht);
     }
 
     function zetWaarschuwing(bericht) {
@@ -285,7 +280,6 @@ $(function () {
     $("#keyboardToggle").click(function () {
         $("#keyboardContainer").toggle();
     });
-
 
     $("#persoonInput").bind("change keyup", updateOnKeyPress);
 
@@ -351,7 +345,7 @@ $(function () {
 
 			} else if (!selectedPerson) {
 				zetBericht("Geen geldig persoon geselecteerd", "danger");
-			} else if (bestelTotaal == 0) {
+			} else if (bestelTotaal() == 0) {
 				zetBericht("Geen bestelling", "danger");
 			}
 		
