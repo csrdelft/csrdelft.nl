@@ -314,31 +314,48 @@ $(function () {
         }
     })
 
-    $("#knopConfirm").click(function () {
-        if (selectedPerson && bestelLijst.length != 0) {
-            var result = {};
-            result["bestelLijst"] = bestelLijst;
-            result["bestelTotaal"] = bestelTotaal();
-            result["persoon"] = selectedPerson;
-            if (oudeBestelling) result["oudeBestelling"] = oudeBestelling;
-            $.ajax({
-                url: "ajax.php",
-                method: "POST",
-                data: {"bestelling": JSON.stringify(result)}
-            }).done(function (data) {
-                if (data == "1") {
-                    //succes! de bestelling is goed verwerkt
-                    cancel();
-                } else {
-                    alert("Er gaat iets verkeert met de bestelling, hij is niet verwerkt!")
-                }
-            });
+    $("#knopConfirm").each(function() {
+	
+		// Set current submiting state on false
+		var submitting = false;
+	
+		$(this).click(function () {
+		
+			if (selectedPerson && bestelLijst.length != 0) {
+			
+				// Set submitting state on true
+				submitting = true;
+			
+				var result = {};
+				result["bestelLijst"] = bestelLijst;
+				result["bestelTotaal"] = bestelTotaal();
+				result["persoon"] = selectedPerson;
+				if (oudeBestelling) result["oudeBestelling"] = oudeBestelling;
+				$.ajax({
+					url: "ajax.php",
+					method: "POST",
+					data: {"bestelling": JSON.stringify(result)}
+				}).done(function (data) {
+					if (data == "1") {
+						//succes! de bestelling is goed verwerkt
+						cancel();
+					} else {
+						alert("Er gaat iets verkeert met de bestelling, hij is niet verwerkt!")
+					}
+				}).always(function() {
+				
+					submitting = false;
+				
+				});
 
-        } else if (!selectedPerson) {
-            zetBericht("Geen geldig persoon geselecteerd", "danger");
-        } else if (bestelTotaal == 0) {
-            zetBericht("Geen bestelling", "danger");
-        }
+			} else if (!selectedPerson) {
+				zetBericht("Geen geldig persoon geselecteerd", "danger");
+			} else if (bestelTotaal == 0) {
+				zetBericht("Geen bestelling", "danger");
+			}
+		
+		});
+		
     });
 
     /*************************************************************************************************/
