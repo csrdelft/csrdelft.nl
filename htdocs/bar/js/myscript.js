@@ -283,6 +283,10 @@ $(function () {
 
     $("#persoonInput").bind("change keyup", updateOnKeyPress);
 
+    /*************************************************************************************************/
+    /* Order keypad
+    /*************************************************************************************************/
+
     for (i = 0; i < 10; i++) {
         (function (j) {
             $("#knop" + i).click(function () {
@@ -324,7 +328,10 @@ $(function () {
 				result["bestelLijst"] = bestelLijst;
 				result["bestelTotaal"] = bestelTotaal();
 				result["persoon"] = selectedPerson;
+				
+				// If update of old order us that data
 				if (oudeBestelling) result["oudeBestelling"] = oudeBestelling;
+				
 				$.ajax({
 					url: "ajax.php",
 					method: "POST",
