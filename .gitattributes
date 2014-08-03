@@ -40,7 +40,6 @@ htdocs/android/get_user.php -text
 htdocs/android/get_userlist.php -text
 htdocs/android/login.php -text
 htdocs/bar/ajax.php -text
-htdocs/bar/beheer.php -text
 htdocs/bar/css/bar.css -text
 htdocs/bar/css/bootstrap-theme.css -text
 htdocs/bar/css/bootstrap-theme.css.map -text
