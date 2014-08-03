@@ -9,7 +9,7 @@
 require_once 'configuratie.include.php';
 require_once 'barsysteem.class.php';
 
-if (LoginLid::mag("P_ADMIN")){
+if ($_COOKIE['barsysteem'] == 'holy_moly_bar_systeem'){
 
 	// Get persons
     if (isset($_POST["personen"])) {
