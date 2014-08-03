@@ -216,7 +216,15 @@ class Barsysteem
     }
 	
 	// Log action by type
-	public function log($type, $value) {
+	public function log($type, $data) {
+	
+		$value = array();
+		foreach($data as $key => $item) {
+		
+			$value[] = $key . ' = ' . $item;
+		
+		}
+		$value = implode("\r\n", $value);
 	
 		$q = $this->db->prepare("INSERT INTO socCieLog (ip, type, value) VALUES(:ip, :type, :value)");
 		$q->bindValue(':ip', $_SERVER['REMOTE_ADDR'], PDO::PARAM_STR);
