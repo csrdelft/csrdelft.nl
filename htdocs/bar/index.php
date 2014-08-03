@@ -37,7 +37,7 @@ if ($barsysteem->isLoggedIn()) {
                 </li>
                 <li><a href="#invoer" role="tab" data-toggle="tab" id="invoerveld">Invoer</a></li>
                 <li><a href="#bestelLijstBeheer" role="tab" data-toggle="tab">Bestellingen</a></li>
-                <li><a href="#beheer" role="tab" data-toggle="tab">Productenbeheer</a></li>
+                <li><a href="#beheer" role="tab" data-toggle="tab">Beheer</a></li>
             </ul>
 
         </td>
