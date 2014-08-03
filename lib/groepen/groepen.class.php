@@ -46,7 +46,7 @@ class Groepen{
 		}else{
 			$message='Groeptype ('.$groeptype.') bestaat niet! Groepen::__construct()';
 			if(LoginLid::mag('P_ADMIN')){
-				$message.="\n".mysql_error();
+				$message.="\n".mysqli_error();
 			}
 			throw new Exception($message);
 		}

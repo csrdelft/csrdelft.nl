@@ -33,7 +33,7 @@
 				$this->id=$categorie['id'];
 				$this->rubriek=array( $categorie['cat1'], $categorie['cat2']);
 			}else{
-				throw new Exception('__contruct() mislukt. Bestaat de rubriek wel? '.mysql_error());
+				throw new Exception('__contruct() mislukt. Bestaat de rubriek wel? '.mysqli_error());
 			}
 		}
 	}
@@ -69,7 +69,7 @@
 			AND c1.p_id =0
 			ORDER BY c2.id ASC;";
 		$result=$db->query($query);
-		echo mysql_error();
+		echo mysqli_error();
 		if($db->numRows($result)>0){
 			while($categorie=$db->next($result)){
 				if($samenvoegen){
@@ -103,7 +103,7 @@
 			SELECT id
 			FROM biebcategorie;";
 		$result=$db->query($query);
-		echo mysql_error();
+		echo mysqli_error();
 		if($db->numRows($result)>0){
 			while($catid=$db->next($result)){
 				$catids[]=$catid['id'];

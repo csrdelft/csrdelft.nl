@@ -16,7 +16,7 @@ class OldCommissie {
 			AND (voorkeur = 2 OR voorkeur = 3) AND cid = ' . $this->cid . ' ORDER BY voorkeur DESC';
 		$result = $db->select($query);
 		$res = array();
-		while ($row = mysql_fetch_array($result, MYSQL_ASSOC)) {
+		while ($row = mysqli_fetch_array($result, MYSQLI_ASSOC)) {
 			$gedaan = Groepen::isUidLidofGroup($row['uid'], $this->naam, array('ht', 'ot'));
 			$res[$row['uid']] = array('voorkeur' => $row['voorkeur'], 'gedaan' => $gedaan);
 		}
@@ -28,7 +28,7 @@ class OldCommissie {
 		$query = 'SELECT * FROM voorkeurCommissie WHERE id = ' . $cid . '';
 		$result = $db->select($query);
 		$res = '';
-		while ($row = mysql_fetch_array($result, MYSQL_ASSOC)) {
+		while ($row = mysqli_fetch_array($result, MYSQLI_ASSOC)) {
 			$res = $row['naam'];
 		}
 		return new OldCommissie($cid, $res);
@@ -39,7 +39,7 @@ class OldCommissie {
 		$query = 'SELECT * FROM voorkeurCommissie WHERE zichtbaar = 1 ';
 		$result = $db->select($query);
 		$res = array();
-		while ($row = mysql_fetch_array($result, MYSQL_ASSOC)) {
+		while ($row = mysqli_fetch_array($result, MYSQLI_ASSOC)) {
 			$res[$row['id']] = $row['naam'];
 		}
 		return $res;

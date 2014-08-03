@@ -31,7 +31,7 @@ class Lidvoorkeur {
 		$query = 'SELECT * FROM voorkeurCommissie WHERE zichtbaar = 1 ';
 		$result = $db->select($query);
 		$res = array();
-		while ($row = mysql_fetch_array($result, MYSQL_ASSOC)) {
+		while ($row = mysqli_fetch_array($result, MYSQLI_ASSOC)) {
 			$res[$row['id']] = $row['naam'];
 		}
 		return $res;
@@ -42,7 +42,7 @@ class Lidvoorkeur {
 		$query = 'SELECT * FROM voorkeurVoorkeur WHERE actief = 1 AND uid =\'' . $this->uid . '\'';
 		$result = $db->select($query);
 		$res = array();
-		while ($row = mysql_fetch_array($result, MYSQL_ASSOC)) {
+		while ($row = mysqli_fetch_array($result, MYSQLI_ASSOC)) {
 			$res[$row['cid']] = $row['voorkeur'];
 		}
 		return $res;
@@ -53,10 +53,10 @@ class Lidvoorkeur {
 		$query = 'SELECT lidOpmerking FROM voorkeurOpmerking WHERE uid =\'' . $this->uid . '\'';
 		$result = $db->select($query);
 		$res = '';
-		if (mysql_num_rows($result) == 0)
+		if (mysqli_num_rows($result) == 0)
 			$this->insertRow();
 		else
-			while ($row = mysql_fetch_array($result, MYSQL_ASSOC)) {
+			while ($row = mysqli_fetch_array($result, MYSQLI_ASSOC)) {
 				$res = $row['lidOpmerking'];
 			}
 		return $res;
@@ -73,10 +73,10 @@ class Lidvoorkeur {
 		$query = 'SELECT praesesOpmerking FROM voorkeurOpmerking WHERE uid =\'' . $this->uid . '\'';
 		$result = $db->select($query);
 		$res = '';
-		if (mysql_num_rows($result) == 0)
+		if (mysqli_num_rows($result) == 0)
 			$this->insertRow();
 		else
-			while ($row = mysql_fetch_array($result, MYSQL_ASSOC)) {
+			while ($row = mysqli_fetch_array($result, MYSQLI_ASSOC)) {
 				$res = $row['praesesOpmerking'];
 			}
 		return $res;

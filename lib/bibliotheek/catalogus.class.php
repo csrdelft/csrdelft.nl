@@ -177,7 +177,7 @@ private $iKolommenZichtbaar; //aantal kolommen zichtbaar in de tabel.
 			".$sOrder." 
 			".$sLimit."";
 
-		$rResult = $db->query($sQuery) or die($sQuery.' '.mysql_error());
+		$rResult = $db->query($sQuery) or die($sQuery.' '.mysqli_error());
 		while($aRow = $db->next_array($rResult) ){
 			$this->aBoeken[] = $aRow;
 		}
@@ -185,7 +185,7 @@ private $iKolommenZichtbaar; //aantal kolommen zichtbaar in de tabel.
 		/* Data set length after filtering */
 		$sQuery = "
 			SELECT FOUND_ROWS()";
-		$rResultFilterTotal = $db->query( $sQuery ) or die(mysql_error());
+		$rResultFilterTotal = $db->query( $sQuery ) or die(mysqli_error());
 		$aResultFilterTotal = $db->next_array($rResultFilterTotal);
 		$this->iGefilterdTotaal = $aResultFilterTotal[0];
 
@@ -193,7 +193,7 @@ private $iKolommenZichtbaar; //aantal kolommen zichtbaar in de tabel.
 		$sQuery = "
 			SELECT COUNT(id)
 			FROM   biebboek";
-		$rResultTotal = $db->query( $sQuery ) or die(mysql_error());
+		$rResultTotal = $db->query( $sQuery ) or die(mysqli_error());
 		$aResultTotal = $db->next_array($rResultTotal);
 		$this->iTotaal = $aResultTotal[0];
 
@@ -230,7 +230,7 @@ private $iKolommenZichtbaar; //aantal kolommen zichtbaar in de tabel.
 					ORDER BY ".$db->escape($key).";";
 			}
 			$result=$db->query($query);
-			echo mysql_error();
+			echo mysqli_error();
 			if($db->numRows($result)>0){
 				while($prop=$db->next($result)){
 					$properties[]=$prop[$key];
@@ -271,7 +271,7 @@ private $iKolommenZichtbaar; //aantal kolommen zichtbaar in de tabel.
 					LIMIT 0, ".(int)$_GET['limit']." ;";
 			}
 			$result=$db->query($query);
-			echo mysql_error();
+			echo mysqli_error();
 			if ($db->numRows($result) > 0) {
 				while ($prop = $db->next($result)) {
 					if($sKey=='biebboek'){

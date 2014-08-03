@@ -13,7 +13,7 @@ class DiesAanmelding {
 		$query = 'SELECT COUNT(*) FROM diesaanmelding WHERE uid = ' . $this->uid;
 		$result = $db->select($query);
 		$res = '';
-		while ($row = mysql_fetch_array($result, MYSQL_ASSOC)) {
+		while ($row = mysqli_fetch_array($result, MYSQLI_ASSOC)) {
 			$res = $row['COUNT(*)'];
 		}
 		return $res == 1;
@@ -24,7 +24,7 @@ class DiesAanmelding {
 		$query = 'SELECT * FROM diesaanmelding WHERE uid = ' . $this->uid;
 		$result = $db->select($query);
 		$res = array();
-		while ($row = mysql_fetch_array($result, MYSQL_ASSOC)) {
+		while ($row = mysqli_fetch_array($result, MYSQLI_ASSOC)) {
 			$res = $row;
 		}
 		return $res;
@@ -35,7 +35,7 @@ class DiesAanmelding {
 		$query = 'SELECT COUNT(*) FROM diesaanmelding';
 		$result = $db->select($query);
 		$res = '';
-		while ($row = mysql_fetch_array($result, MYSQL_ASSOC)) {
+		while ($row = mysqli_fetch_array($result, MYSQLI_ASSOC)) {
 			$res = $row['COUNT(*)'];
 		}
 		return $res >= 100;

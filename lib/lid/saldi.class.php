@@ -156,7 +156,7 @@ $series[]='{
 		if($bOk){
 			return '[ '.$iAantal.' regels ontvangen.... OK ]';
 		}else{
-			return '[ tenminste 1 van '.$iAantal.' queries is niet gelukt. Laatste foutmelding was '.mysql_error().']';
+			return '[ tenminste 1 van '.$iAantal.' queries is niet gelukt. Laatste foutmelding was '.mysqli_error().']';
 		}
 	}
 	public static function putMaalcieCsv($key='CSVSaldi'){
@@ -209,7 +209,7 @@ $series[]='{
 				$sStatus='Er zijn '.$row.' regels ingevoerd. Als dit er minder zijn dan u verwacht zitten er ongeldige regels in uw bestand.';
 				$lvl=0;
 			}else{
-				$sStatus='Helaas, er ging iets mis. Controleer uw bestand! mysql gaf terug <'.mysql_error().'>';
+				$sStatus='Helaas, er ging iets mis. Controleer uw bestand! mysql gaf terug <'.mysqli_error().'>';
 				$lvl=-1;
 			}
 		}

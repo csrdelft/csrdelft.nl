@@ -36,7 +36,7 @@ class Beschrijving{
 					$beschrijving = $db->next($result);
 					$this->beschrijving=$beschrijving;
 				}else{
-					throw new Exception('Mislukt. Boek::getBeschrijving()'.mysql_error());
+					throw new Exception('Mislukt. Boek::getBeschrijving()'.mysqli_error());
 				}
 			}
 		}
@@ -89,7 +89,7 @@ class Beschrijving{
 			$this->id=$db->insert_id();//id van beschrijving weer tijdelijk opslaan, zodat we beschrijving kunnen linken
 			return true;
 		}
-		$this->error .= 'Fout in query, mysql gaf terug: '.mysql_error().' Boek::saveBeschrijving()';
+		$this->error .= 'Fout in query, mysql gaf terug: '.mysqli_error().' Boek::saveBeschrijving()';
 		return false;
 	}
 	/*
