@@ -315,7 +315,7 @@ $(function () {
 	
 		$(this).click(function () {
 		
-			if (selectedPerson && bestelTotaal() == 0) {
+			if (selectedPerson && bestelTotaal() != 0) {
 			
 				// Set submitting state on true
 				submitting = true;
