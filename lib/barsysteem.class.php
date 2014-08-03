@@ -21,7 +21,9 @@ class Barsysteem
 
     function getPersonen()
     {
-        $terug = $this->db->query("SELECT *, SUM(totaal) AS totaal  FROM socCieKlanten LEFT JOIN socCieBestelling ON socCieKlanten.socCieId = socCieBestelling.socCieId AND DATEDIFF(NOW(), tijd) < 100 GROUP BY socCieKlanten.socCieId ORDER BY totaal DESC;");
+	
+		// SELECT *FROM socCieKlanten LEFT JOIN socCieBestelling ON socCieKlanten.socCieId = socCieBestelling.socCieId AND DATEDIFF(NOW(), tijd) < 100 GROUP BY socCieKlanten.socCieId ORDER BY totaal DESC;
+        $terug = $this->db->query("SELECT * FROM socCieKlanten;");
         $result = array();
         foreach ($terug as $row) {
             $persoon = array();
