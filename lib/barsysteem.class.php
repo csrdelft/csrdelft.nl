@@ -15,7 +15,7 @@ class Barsysteem
 	
 	function isLoggedIn() {
 	
-		return isset($_COOKIE['barsysteem']) && md5('my_salt_is_strong', $_COOKIE['barsysteem']) == '8f700ce34a77ef4ef9db9bbdde9e97d8';
+		return isset($_COOKIE['barsysteem']) && md5('my_salt_is_strong' . $_COOKIE['barsysteem']) == '8f700ce34a77ef4ef9db9bbdde9e97d8';
 	
 	}
 
