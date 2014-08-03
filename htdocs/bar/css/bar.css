@@ -132,7 +132,7 @@ button.btn-groot {
 }
 
 ul.bestelLijst {
-    height: 200px;
+    min-height: 1px;
     font-size: 30px;
 }
 
@@ -146,7 +146,7 @@ button.btn-bestel {
     height: 200px;
     margin: 20px;
     overflow: hidden;
-    overflow-y: scroll;
+    overflow-y: auto;
 }
 
 #bestelLijstDiv ul {
