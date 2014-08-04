@@ -112,11 +112,11 @@ function smarty_function_html_table($params, $template)
     $loop_count = count($loop);
     if (empty($params['rows'])) {
         /* no rows specified */
-        $rows = ceil($loop_count / $cols_count);
+        $rows = (int) ceil($loop_count / $cols_count);
     } elseif (empty($params['cols'])) {
         if (!empty($params['rows'])) {
             /* no cols specified, but rows */
-            $cols_count = ceil($loop_count / $rows);
+            $cols_count = (int) ceil($loop_count / $rows);
         }
     }
 

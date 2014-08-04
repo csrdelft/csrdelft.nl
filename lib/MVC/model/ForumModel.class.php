@@ -363,7 +363,7 @@ class ForumDradenModel extends PersistenceModel implements Paging {
 			return $this->pagina + 1;
 		}
 		if (!array_key_exists($forum_id, $this->aantal_paginas)) {
-			$this->aantal_paginas[$forum_id] = ceil($this->count('forum_id = ? AND wacht_goedkeuring = FALSE AND verwijderd = FALSE', array($forum_id)) / $this->per_pagina);
+			$this->aantal_paginas[$forum_id] = (int) ceil($this->count('forum_id = ? AND wacht_goedkeuring = FALSE AND verwijderd = FALSE', array($forum_id)) / $this->per_pagina);
 		}
 		return max(1, $this->aantal_paginas[$forum_id]);
 	}
@@ -376,7 +376,7 @@ class ForumDradenModel extends PersistenceModel implements Paging {
 			$this->aantal_plakkerig = $this->count('forum_id = ? AND plakkerig = TRUE AND wacht_goedkeuring = FALSE AND verwijderd = FALSE', array($draad->forum_id));
 		}
 		$count = $this->aantal_plakkerig + $this->count('forum_id = ? AND laatst_gewijzigd >= ? AND plakkerig = FALSE AND wacht_goedkeuring = FALSE AND verwijderd = FALSE', array($draad->forum_id, $draad->laatst_gewijzigd));
-		return ceil($count / $this->per_pagina);
+		return (int) ceil($count / $this->per_pagina);
 	}
 
 	public function hertellenVoorDeel(ForumDeel $deel) {
@@ -620,14 +620,14 @@ class ForumPostsModel extends PersistenceModel implements Paging {
 
 	public function getAantalPaginas($draad_id) {
 		if (!array_key_exists($draad_id, $this->aantal_paginas)) {
-			$this->aantal_paginas[$draad_id] = ceil($this->count('draad_id = ? AND wacht_goedkeuring = FALSE AND verwijderd = FALSE', array($draad_id)) / $this->per_pagina);
+			$this->aantal_paginas[$draad_id] = (int) ceil($this->count('draad_id = ? AND wacht_goedkeuring = FALSE AND verwijderd = FALSE', array($draad_id)) / $this->per_pagina);
 		}
 		return max(1, $this->aantal_paginas[$draad_id]);
 	}
 
 	public function getPaginaVoorPost(ForumPost $post) {
 		$count = $this->count('draad_id = ? AND post_id <= ? AND wacht_goedkeuring = FALSE AND verwijderd = FALSE', array($post->draad_id, $post->post_id));
-		return ceil($count / $this->per_pagina);
+		return (int) ceil($count / $this->per_pagina);
 	}
 
 	public function setPaginaVoorLaatstGelezen(ForumDraadGelezen $gelezen) {

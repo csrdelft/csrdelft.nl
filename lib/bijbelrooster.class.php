@@ -16,7 +16,7 @@ class Bijbelrooster extends TemplateView {
 		if ($res === false) {
 			return;
 		}
-		$itemsEachRow = ceil(mysqli_num_rows($res) / 2);
+		$itemsEachRow = (int) ceil(mysqli_num_rows($res) / 2);
 		$i = 0;
 		while ($row = mysqli_fetch_array($res, MYSQLI_ASSOC)) {
 			if ($i++ % $itemsEachRow == 0 && $i != 1)
@@ -45,7 +45,7 @@ class Bijbelrooster extends TemplateView {
 		$stukjes = array();
 		$itemEachRow = 0;
 		if ($res !== false) {
-			$itemsEachRow = ceil(mysqli_num_rows($res) / 3);
+			$itemsEachRow = (int) ceil(mysqli_num_rows($res) / 3);
 			$stukjes = $db->result2array($res);
 		}
 

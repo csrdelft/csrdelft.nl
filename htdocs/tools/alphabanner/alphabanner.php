@@ -13,7 +13,7 @@ $height = 62;
 if (isset($_GET['width'])) {
 	if ($_GET['width'] > 300) {
 		$width = (int) $_GET['width'];
-		$height = ceil($width / 6);
+		$height = (int) ceil($width / 6);
 	}
 }
 

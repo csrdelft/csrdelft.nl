@@ -127,7 +127,6 @@ pagecount=ForumPostsModel::instance()->getAantalPaginas($draad->draad_id) curpag
 				</td>
 			</tr>
 		{/if}
-
 		{if !$vanaf AND ForumPostsModel::instance()->getHuidigePagina() === ForumPostsModel::instance()->getAantalPaginas($draad->draad_id)}
 			<tr class="ongelezenvanaf" title="Geen ongelezen berichten">
 				<td colspan="2">

@@ -58,7 +58,7 @@ class Verjaardag{
 
 		if ($result !== false and $db->numRows($result) > 0) {
 			while($aVerjaardag=$db->next($result)){
-				$aVerjaardag['jarig_over'] = ceil((strtotime($aVerjaardag['verjaardag'])-time())/86400);
+				$aVerjaardag['jarig_over'] = (int) ceil((strtotime($aVerjaardag['verjaardag'])-time())/86400);
 				$aVerjaardag['leeftijd'] = round((strtotime($aVerjaardag['verjaardag'])-strtotime($aVerjaardag['gebdatum']))/31536000);
 				$aVerjaardagen[] = $aVerjaardag;
 			}
