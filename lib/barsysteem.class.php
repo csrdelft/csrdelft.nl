@@ -234,9 +234,9 @@ SELECT P.beschrijving,
 FROM socCieBestelling AS B
 JOIN socCieBestellingInhoud AS I ON
 	B.id = I.bestellingId
-JOIN soccieProduct AS P ON
+JOIN socCieProduct AS P ON
 	I.productId = P.id
-JOIN socciePrijs AS PR ON
+JOIN socCiePrijs AS PR ON
 	P.id = PR.productId
 	AND (B.tijd BETWEEN PR.van AND PR.tot)
 GROUP BY
