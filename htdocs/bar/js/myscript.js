@@ -547,6 +547,7 @@ $(function () {
 				
 				$.each(data, function(week) {
 				
+					console.log(week);
 					html += '<h2>' + week.title + '</h2>';
 				
 				});
