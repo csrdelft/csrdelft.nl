@@ -147,6 +147,7 @@ abstract class PersistentEntity {
 	 * @unsupported INDEX check; FOREIGN KEY check;
 	 */
 	public static function checkTable() {
+		require_once 'MVC/model/DatabaseAdmin.singleton.php';
 		$orm = get_called_class();
 		$fields = array();
 		foreach (static::$persistent_fields as $name => $definition) {

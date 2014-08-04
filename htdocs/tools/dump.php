@@ -6,6 +6,9 @@ if (!LoginLid::mag('P_ADMIN')) {
 	header('location: ' . CSR_ROOT);
 	exit;
 }
+
+require_once 'MVC/model/DatabaseAdmin.singleton.php';
+
 $tables = array();
 $results = DatabaseAdmin::instance()->sqlShowTables();
 foreach ($results as $result) {

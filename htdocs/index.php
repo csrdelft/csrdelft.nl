@@ -36,7 +36,10 @@ try {
 	$controller->performAction();
 
 	if (defined('DB_MODIFY_ENABLE') AND LoginLid::mag('P_ADMIN')) {
+
+		require_once 'MVC/model/DatabaseAdmin.singleton.php';
 		$queries = DatabaseAdmin::getQueries();
+
 		if (empty($queries)) {
 			debugprint('DB_MODIFY_ENABLED');
 		} else {
@@ -51,7 +54,8 @@ try {
 	}
 
 	$controller->getContent()->view();
-} catch (Exception $e) {
+}
+catch (Exception $e) {
 	$protocol = (isset($_SERVER['SERVER_PROTOCOL']) ? $_SERVER['SERVER_PROTOCOL'] : 'HTTP/1.0');
 	$code = ($e->getCode() >= 100 ? $e->getCode() : 500);
 	header($protocol . ' ' . $code . ' ' . $e->getMessage());
