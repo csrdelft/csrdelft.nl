@@ -141,7 +141,7 @@ ul.bestelLijst {
 }
 
 button.btn-bestel {
-    font-size: 25px;
+    font-size: 22px;
     width: 150px;
 	padding: 6px 0;
 }
@@ -315,4 +315,13 @@ th#opties {
 }
 .nav-tabs li.bv-tab-error > a {
     color: #a94442;
+}
+
+#grootboekInvoer table{
+    -webkit-touch-callout: all;
+    -webkit-user-select: all;
+    -khtml-user-select: all;
+    -moz-user-select: all;
+    -ms-user-select: all;
+    user-select: all;
 }

@@ -550,25 +550,29 @@ $(function () {
 				button.parent().find("> button").addClass("btn-default").removeClass("btn-primary");
 				button.removeClass("btn-default").addClass("btn-primary");
 				
-				var html = '';
+				var html = [];
 				
 				$.each(data, function() {
 					
-					html += '<h2>' + this.title + '</h2>';
-					html += '<table class="table"><thead><tr><th>Soort</th><th>Prijs</th></tr></thead><tbody>';
+					addhtml = '';
+					
+					addhtml += '<h2>' + this.title + '</h2>';
+					addhtml += '<table class="table"><thead><tr><th>Soort</th><th>Prijs</th></tr></thead><tbody>';
 					
 					$.each(this.content, function() {
 					
-						html += '<tr><td>' + this.type + '</td><td>' + saldoStr(this.total) + '</td></tr>';
+						addhtml += '<tr><td>' + this.type + '</td><td>' + saldoStr(this.total) + '</td></tr>';
 					
 					});
 					
-					html += '</tbody></table>';
+					addhtml += '</tbody></table>';
+					
+					html.push(addhtml);
 				
 				});
 				
 				$("#productBeheer").addClass("hidden");
-				$("#grootboekInvoer").html(html).removeClass("hidden");
+				$("#grootboekInvoer").html(html.reverse()).removeClass("hidden");
 			
 			}
 		});

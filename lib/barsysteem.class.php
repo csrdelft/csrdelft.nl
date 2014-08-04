@@ -226,9 +226,8 @@ class Barsysteem
 	
 		// GROUP BY week 
 		$q = $this->db->prepare("
-SELECT P.beschrijving,
-	SUM(I.aantal) AS aantal,
-	SUM(I.aantal) * PR.prijs AS totaal,
+SELECT G.type,
+	SUM(I.aantal) * PR.prijs AS total,
 	WEEK(B.tijd, 3) AS week,
 	YEARWEEK(B.tijd) AS yearweek
 FROM socCieBestelling AS B
@@ -239,9 +238,11 @@ JOIN socCieProduct AS P ON
 JOIN socCiePrijs AS PR ON
 	P.id = PR.productId
 	AND (B.tijd BETWEEN PR.van AND PR.tot)
+JOIN socCieGrootboekType AS G ON
+	P.grootboekId = G.id
 GROUP BY
 	yearweek,
-	I.productId
+	G.id
 ORDER BY yearweek DESC
 		");
 		$q->execute();
@@ -255,10 +256,10 @@ ORDER BY yearweek DESC
 			$week = $exists ? $weeks[$r['yearweek']] : array();
 			
 			if($exists) {
-				$week['content'][] = array("type" => $r['beschrijving'], "total" => $r['totaal']);
+				$week['content'][] = array('type' => $r['type'], 'total' => $r['total']);
 			} else {
+				$week['content'] = array(array('type' => $r['type'], 'total' => $r['total']));
 				$week['title'] = 'Week ' . $r['week'];
-				$week['content'] = array(array("type" => $r['beschrijving'], "total" => $r['totaal']));
 			}
 			
 			$weeks[$r['yearweek']] = $week;
