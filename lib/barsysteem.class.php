@@ -1,6 +1,6 @@
 <?php
 
-require_once 'MVC/model/DatabaseAdmin.singleton.php';
+require_once 'MVC/model/Database.singleton.php';
 
 
 class Barsysteem
@@ -13,15 +13,13 @@ class Barsysteem
         $this->db = Database::instance();
     }
 	
-	function isLoggedIn() {
-	
+	function isLoggedIn()
+	{
 		return isset($_COOKIE['barsysteem']) && md5('my_salt_is_strong' . $_COOKIE['barsysteem']) == '8f700ce34a77ef4ef9db9bbdde9e97d8';
-	
 	}
 
     function getPersonen()
     {
-	
 		// SELECT *FROM socCieKlanten LEFT JOIN socCieBestelling ON socCieKlanten.socCieId = socCieBestelling.socCieId AND DATEDIFF(NOW(), tijd) < 100 GROUP BY socCieKlanten.socCieId ORDER BY totaal DESC;
         $terug = $this->db->query("SELECT * FROM socCieKlanten;");
         $result = array();
@@ -224,8 +222,8 @@ class Barsysteem
     }
 	
 	// Log action by type
-	public function log($type, $data) {
-	
+	public function log($type, $data)
+	{
 		$value = array();
 		foreach($data as $key => $item) {
 		
@@ -239,9 +237,6 @@ class Barsysteem
 		$q->bindValue(':type', $type, PDO::PARAM_STR);
 		$q->bindValue(':value', $value, PDO::PARAM_STR);
 		$q->execute();
-	
 	}
 
 }
-
-?>
