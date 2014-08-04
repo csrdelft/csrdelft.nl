@@ -33,9 +33,9 @@ if ($barsysteem->isLoggedIn()) {
 
             <!-- Nav tabs -->
             <ul class="nav nav-pills nav-justified" role="tablist">
-                <li class="active"><a href="#persoonselectie" role="tab" data-toggle="tab" id="persoonselectieVeld">Persoonselectie</a></li>
-                <li><a href="#invoer" role="tab" data-toggle="tab" id="invoerveld">Invoer</a></li>
-                <li><a href="#bestelLijstBeheer" role="tab" data-toggle="tab">Bestellingen</a></li>
+                <li class="active"><a href="#persoonselectie" role="tab" data-toggle="tab" id="persoonselectieVeld"><span class="glyphicon glyphicon-user"></span>Persoonselectie</a></li>
+                <li><a href="#invoer" role="tab" data-toggle="tab" id="invoerveld"><span class="glyphicon glyphicon-pencil"></span>Invoer</a></li>
+                <li><a href="#bestelLijstBeheer" role="tab" data-toggle="tab"><span class="glyphicon glyphicon-list"></span>Bestellingen</a></li>
                 <li><a href="#beheer" role="tab" data-toggle="tab"><span class="glyphicon glyphicon-wrench"></span></a></li>
             </ul>
 
