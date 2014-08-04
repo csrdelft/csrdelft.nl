@@ -231,6 +231,7 @@ class Barsysteem
 			$week = array();
 			
 			$week['title'] = 'Week ' . $i;
+			$week['content'] = 'Content ' . $i;
 			
 			$weeks[] = $week;
 		
