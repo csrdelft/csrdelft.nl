@@ -550,12 +550,20 @@ $(function () {
 				button.parent().find("> button").addClass("btn-default").removeClass("btn-primary");
 				button.removeClass("btn-default").addClass("btn-primary");
 				
-				html = '';
+				var html = '';
 				
 				$.each(data, function() {
 					
 					html += '<h2>' + this.title + '</h2>';
-					html += '<p>' + this.content + '</h2>';
+					html += '<table class="table"><thead><tr><th>Soort</th><th>Prijs</th></tr></thead><tbody>';
+					
+					$.each(this.content, function() {
+					
+						html += '<tr><td>' + this.type + '</td><td>' + saldoStr(this.total) + '</td></tr>';
+					
+					});
+					
+					html += '</tbody></table>';
 				
 				});
 				

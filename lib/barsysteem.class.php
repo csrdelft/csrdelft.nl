@@ -224,16 +224,44 @@ class Barsysteem
 	// Beheer
 	public function getGrootboekInvoer() {
 	
-		$weeks = array();
-	
-		for($i = 0; $i < 52; $i++) {
+		// GROUP BY week 
+		$q = $this->db->prepare("
+SELECT P.beschrijving,
+	SUM(I.aantal) AS aantal,
+	SUM(I.aantal) * PR.prijs AS totaal,
+	WEEK(B.tijd, 3) AS week,
+	YEARWEEK(B.tijd) AS yearweek
+FROM socCieBestelling AS B
+JOIN socCieBestellingInhoud AS I ON
+	B.id = I.bestellingId
+JOIN soccieProduct AS P ON
+	I.productId = P.id
+JOIN socciePrijs AS PR ON
+	P.id = PR.productId
+	AND (B.tijd BETWEEN PR.van AND PR.tot)
+GROUP BY
+	yearweek,
+	I.productId
+ORDER BY yearweek DESC
+		");
+		$q->execute();
 		
-			$week = array();
+		$weeks = array();
+		
+		while($r = $q->fetch(PDO::FETCH_ASSOC)) {
+		
+			$exists = isset($weeks[$r['yearweek']]);
 			
-			$week['title'] = 'Week ' . $i;
-			$week['content'] = 'Content ' . $i;
+			$week = $exists ? $weeks[$r['yearweek']] : array();
 			
-			$weeks[] = $week;
+			if($exists) {
+				$week['content'][] = array("type" => $r['beschrijving'], "total" => $r['totaal']);
+			} else {
+				$week['title'] = 'Week ' . $r['week'];
+				$week['content'] = array(array("type" => $r['beschrijving'], "total" => $r['totaal']));
+			}
+			
+			$weeks[$r['yearweek']] = $week;
 		
 		}
 		
