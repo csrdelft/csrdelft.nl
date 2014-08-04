@@ -533,11 +533,14 @@ $(function () {
 	
 	$("#laadGrootboekInvoer").click(function() {
 	
+		var button = $(this);
+	
 		$.ajax({
 			url: "ajax.php?q=grootboek",
 			method: "GET",
 			success: function(data) {
 		
+				button.removeClass("btn-default").addClass("btn-primary");
 				$("#grootboekInvoer").html(data).removeClass("hidden");
 			
 			}
