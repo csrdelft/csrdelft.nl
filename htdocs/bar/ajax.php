@@ -13,12 +13,22 @@ $barsysteem = new Barsysteem();
 
 if ($barsysteem->isLoggedIn()){
 
+	/* Start beheer */
+
 	// Get grootboekinvoer
 	if(isset($_GET['q']) && $_GET['q'] == 'grootboek') {
 	
 		echo json_encode($barsysteem->getGrootboekInvoer());
 	
 	}
+	
+	if(isset($_POST["add_person"])) {
+	
+		echo $barsysteem->addPerson($_POST['name'], $_POST['saldo']);
+	
+	}
+	
+	/* Einde beheer */
 
 	// Get persons
     if (isset($_POST["personen"])) {

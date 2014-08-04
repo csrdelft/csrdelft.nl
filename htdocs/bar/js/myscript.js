@@ -233,15 +233,19 @@ $(function () {
     var personen = {};
     var producten = {};
 
-    $.ajax({
-        url: "ajax.php",
-        method: "POST",
-        data: {"personen": "waar"}
-    })
-        .done(function (data) {
-            personen = $.parseJSON(data);
-            updateOnKeyPress();
-        });
+	function laadPersonen() {
+	
+		$.ajax({
+			url: "ajax.php",
+			method: "POST",
+			data: {"personen": "waar"}
+		})
+			.done(function (data) {
+				personen = $.parseJSON(data);
+				updateOnKeyPress();
+			});
+		
+	} laadPersonen();
 
     $.ajax({
         url: "ajax.php",
@@ -533,9 +537,46 @@ $(function () {
         });
 		
 		$("#productBeheer").removeClass("hidden");
-		$("#grootboekInvoer").addClass("hidden");
+		$("#grootboekInvoer, #persoonBeheer").addClass("hidden");
 		
     });
+	
+	$("#laadPersonen").click(function() {
+	
+		$(this).parent().find("> button").addClass("btn-default").removeClass("btn-primary");
+		$(this).removeClass("btn-default").addClass("btn-primary");
+		
+		$("#persoonBeheer").removeClass("hidden");
+		$("#grootboekInvoer, #productBeheer").addClass("hidden");
+	
+	});
+	
+	$("#addPerson").submit(function(e) {
+	
+		e.preventDefault();
+		var $this = $(this);
+		
+		$.ajax({
+			url: $(this).attr("action"),
+			method: $(this).attr("method"),
+			data: $(this).serializeArray(),
+			success: function(data) {
+			
+				if(data == "1") {
+					zetBericht("Persoon toegevoegd." , "success");
+					laadPersonen();
+					$this.reset();
+				} else {
+					zetBericht("Er is iets misgegeaan met het toevoegen van een persoon!", "danger");
+				}
+			
+			},
+			error: function() {
+				zetBericht("Er is iets misgegeaan met het toevoegen van een persoon!", "danger");
+			}
+		});
+	
+	});
 	
 	$("#laadGrootboekInvoer").click(function() {
 	
@@ -571,7 +612,7 @@ $(function () {
 				
 				});
 				
-				$("#productBeheer").addClass("hidden");
+				$("#productBeheer, #persoonBeheer").addClass("hidden");
 				$("#grootboekInvoer").html(html.reverse()).removeClass("hidden");
 			
 			}

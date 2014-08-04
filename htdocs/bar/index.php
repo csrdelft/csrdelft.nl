@@ -213,7 +213,8 @@ if ($barsysteem->isLoggedIn()) {
                 <div class="tab-pane" id="beheer">
 
                     <div id="beheer-nav" class="btn-group btn-group-lg">
-                        <button class="btn btn-default" id="laadProducten">Product beheer</button>
+                        <button class="btn btn-default" id="laadProducten">Productbeheer</button>
+                        <button class="btn btn-default" id="laadPersonen">Persoonbeheer</button>
                         <button class="btn btn-default" id="laadGrootboekInvoer">Grootboekinvoer</button>
                     </div>
 	
@@ -233,6 +234,29 @@ if ($barsysteem->isLoggedIn()) {
 							
 							</div>
 						
+						</div>
+						
+						<div id="persoonBeheer" class="hidden">
+						
+							<div class="row">
+							
+								<h2>Persoon toevoegen</h2>
+						
+								<form id="addPerson" class="form-inline" action="ajax.php" method="post">
+								
+									<div id="input-group">
+									
+										<input type="hidden" name="add_person" value="on" />
+										<input placeholder="Naam" name="name" type="text" class="form-control" />
+										<input placeholder="Saldo in centen" name="saldo" type="text" class="form-control" />
+										<button type="submit" class="btn btn-primary"><span class="glyphicon glyphicon-plus"></span></button>
+									
+									</div>
+								
+								</form>
+							
+							</div>
+							
 						</div>
 						
 						<div id="grootboekInvoer" class="hidden">

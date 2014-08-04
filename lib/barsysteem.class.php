@@ -270,6 +270,15 @@ ORDER BY yearweek DESC
 	
 	}
 	
+	public function addPerson($name, $saldo) {
+	
+		$q = $this->db->prepare("INSERT INTO socCieKlanten (naam, saldo) VALUES (:naam, :saldo)");
+		$q->bindValue(':naam', $name, PDO::PARAM_STR);
+		$q->bindValue(':saldo', $saldo, PDO::PARAM_STR);
+		return $q->execute();
+	
+	}
+	
 	// Log action by type
 	public function log($type, $data)
 	{
