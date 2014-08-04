@@ -492,10 +492,9 @@ class ForumDradenModel extends PersistenceModel implements Paging {
 		} else {
 			$verborgen = '';
 		}
-		if ($belangrijk === true) {
-			$belangrijk = ' AND belangrijk = TRUE';
-		} elseif ($belangrijk === false) {
-			$belangrijk = ' AND belangrijk = FALSE';
+		if ($belangrijk !== null) {
+			$params[] = (boolean) $belangrijk;
+			$belangrijk = ' AND belangrijk = ?';
 		} else {
 			$belangrijk = '';
 		}
