@@ -255,6 +255,21 @@ if ($barsysteem->isLoggedIn()) {
 								
 								</form>
 							
+								<h2>Persoon wijziggen</h2>
+						
+								<form id="updatePerson" class="form-inline" action="ajax.php" method="post">
+								
+									<div id="input-group">
+									
+										<input type="hidden" name="update_person" value="on" />
+										<select name="id" class="form-control personList"></select>
+										<input placeholder="Bijnaam" name="name" type="text" class="form-control" />
+										<button type="submit" class="btn btn-primary"><span class="glyphicon glyphicon-pencil"></span></button>
+									
+									</div>
+								
+								</form>
+							
 							</div>
 							
 						</div>

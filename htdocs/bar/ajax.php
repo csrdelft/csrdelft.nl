@@ -17,15 +17,15 @@ if ($barsysteem->isLoggedIn()){
 
 	// Get grootboekinvoer
 	if(isset($_GET['q']) && $_GET['q'] == 'grootboek') {
-	
 		echo json_encode($barsysteem->getGrootboekInvoer());
-	
 	}
 	
 	if(isset($_POST["add_person"])) {
-	
 		echo $barsysteem->addPerson($_POST['name'], $_POST['saldo']);
+	}
 	
+	if(isset($_POST["update_person"])) {
+		echo $barsysteem->updatePerson($_POST['id'], $_POST['name']);
 	}
 	
 	/* Einde beheer */

@@ -270,6 +270,15 @@ ORDER BY yearweek DESC
 	
 	}
 	
+	public function updatePerson($id, $name) {
+	
+		$q = $this->db->prepare("UPDATE socCieKlanten SET naam = :naam WHERE socCieId = :id");
+		$q->bindValue(':id', $id, PDO::PARAM_INT);
+		$q->bindValue(':naam', $name, PDO::PARAM_STR);
+		return $q->execute();
+	
+	}
+	
 	public function addPerson($name, $saldo) {
 	
 		$q = $this->db->prepare("INSERT INTO socCieKlanten (naam, saldo) VALUES (:naam, :saldo)");

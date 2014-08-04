@@ -226,10 +226,6 @@ $(function () {
         zetBericht(bericht, 'warning');
     }
 
-    function zetInfo(bericht) {
-        zetBericht(bericht, 'info');
-    }
-
     var personen = {};
     var producten = {};
 
@@ -243,6 +239,18 @@ $(function () {
 			.done(function (data) {
 				personen = $.parseJSON(data);
 				updateOnKeyPress();
+				
+				var pl = $(".personList");
+				if(pl.size() > 0) {
+					var html = '';
+					$.each(personen, function() {
+					
+						console.log(this);
+						html += '<option value="' + this.socCieId + '">' + this.naam + '</option>';
+					
+					});
+					pl.html(html);
+				}
 			});
 		
 	} laadPersonen();
@@ -397,7 +405,7 @@ $(function () {
         oudeBestelling = null;
         resetLijst();
         resetTeller();
-        zetInfo("Geen persoon geselecteerd");
+        zetBericht("Geen persoon geselecteerd", "info");
         $("#besteLijstBeheerContent tbody").empty();
         $("#besteLijstBeheerLaadPersoon").empty();
         $("#besteLijstBeheerLaadPersoon").append("Laad bestellingen van: -");
@@ -573,6 +581,33 @@ $(function () {
 			},
 			error: function() {
 				zetBericht("Er is iets misgegeaan met het toevoegen van een persoon!", "danger");
+			}
+		});
+	
+	});
+	
+	$("#updatePerson").submit(function(e) {
+	
+		e.preventDefault();
+		var $this = $(this);
+		
+		$.ajax({
+			url: $(this).attr("action"),
+			method: $(this).attr("method"),
+			data: $(this).serializeArray(),
+			success: function(data) {
+			
+				if(data == "1") {
+					zetBericht("Persoon aangepast." , "success");
+					laadPersonen();
+					$this.reset();
+				} else {
+					zetBericht("Er is iets misgegeaan met het aanpassen van een persoon!", "danger");
+				}
+			
+			},
+			error: function() {
+				zetBericht("Er is iets misgegeaan met het aanpassen van een persoon!", "danger");
 			}
 		});
 	
