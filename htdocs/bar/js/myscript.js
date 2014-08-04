@@ -535,11 +535,12 @@ $(function () {
 	
 		$.ajax({
 			url: "ajax.php?q=grootboek",
-			method: "GET"
-		}).done(function (data) {
+			method: "GET",
+			success: function(data) {
 		
-			$("#grootboekInvoer").html(data);
-		
+				$("#grootboekInvoer").html(data);
+			
+			}
 		});
 	
 	});
