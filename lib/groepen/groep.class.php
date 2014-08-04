@@ -173,7 +173,7 @@ class OldGroep {
 			}
 			return true;
 		}
-		$this->error .= 'Fout in query, mysql gaf terug: ' . mysqli_error($db) . ' OldGroep::save()';
+		$this->error .= 'Fout in query, mysql gaf terug: ' . $db->error() . ' OldGroep::save()';
 		return false;
 	}
 

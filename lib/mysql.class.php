@@ -43,6 +43,10 @@ class MySql {
 		$this->query("SET NAMES 'utf8'");
 	}
 
+	public function error() {
+		return mysqli_error($this->_db);
+	}
+
 	# het openen van de databaseconnectie gebeurt tijdens het eerste gebruik
 	# ervan. er wordt een persistent connectie gebruikt
 	# Retourneert het MySql resultaat bij de opgegeven Query
@@ -97,21 +101,21 @@ class MySql {
 
 	public function next($result) {
 		if (!$result) {
-			die('Unable to run query: ' . mysqli_error($this->_db));
+			die('Unable to run query: ' . $this->error());
 		}
 		return mysqli_fetch_assoc($result);
 	}
 
 	public function next_array($result) {
 		if (!$result) {
-			die('Unable to run query: ' . mysqli_error($this->_db));
+			die('Unable to run query: ' . $this->error());
 		}
 		return mysqli_fetch_array($result);
 	}
 
 	public function numRows($result) {
 		if (!$result) {
-			die('Unable to run query: ' . mysqli_error($this->_db));
+			die('Unable to run query: ' . $this->error());
 		}
 		return mysqli_num_rows($result);
 	}
@@ -224,7 +228,7 @@ class MySql {
 	private function debug($string) {
 		if (defined('DEBUG')) {
 			$string = trim(str_replace(array("\r\n", "\n", "\t", '  ', '   '), ' ', $string));
-			$error = mysqli_error($this->_db);
+			$error = $this->error();
 			if (!empty($error)) {
 				$string .= "\nmysqli_error: " . $error;
 			}
