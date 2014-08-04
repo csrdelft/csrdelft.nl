@@ -214,7 +214,7 @@ if ($barsysteem->isLoggedIn()) {
                 </div>
                 <div class="tab-pane" id="spotify">
 				
-					<iframe src="https://google.nl/" />
+					<iframe src="http://tweakers.net/" />
 				
 				
                 </div>
