@@ -166,9 +166,9 @@ class ForumDraad extends PersistentEntity {
 	 * 
 	 * @return ForumPost[]
 	 */
-	public function getForumPosts($wacht = false, $prullenbak = false) {
+	public function getForumPosts() {
 		if (!isset($this->forum_posts)) {
-			$this->setForumPosts(ForumPostsModel::instance()->getForumPostsVoorDraad($this, $wacht, $prullenbak));
+			$this->setForumPosts(ForumPostsModel::instance()->getForumPostsVoorDraad($this));
 		}
 		return $this->forum_posts;
 	}

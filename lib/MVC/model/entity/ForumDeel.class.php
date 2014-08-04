@@ -131,9 +131,9 @@ class ForumDeel extends PersistentEntity {
 	 * 
 	 * @return ForumDraad[]
 	 */
-	public function getForumDraden($wacht = false, $prullenbak = false, $belangrijk = false) {
+	public function getForumDraden() {
 		if (!isset($this->forum_draden)) {
-			$this->setForumDraden(ForumDradenModel::instance()->getForumDradenVoorDeel($this->forum_id, $wacht, $prullenbak, $belangrijk));
+			$this->setForumDraden(ForumDradenModel::instance()->getForumDradenVoorDeel($this));
 		}
 		return $this->forum_draden;
 	}

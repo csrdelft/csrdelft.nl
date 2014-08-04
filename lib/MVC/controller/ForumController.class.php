@@ -189,21 +189,18 @@ class ForumController extends Controller {
 		if (!$deel->magLezen()) {
 			$this->geentoegang();
 		}
-		$wacht = false;
-		$prullenbak = false;
-		$belangrijk = false;
 		if ($pagina === 'laatste') {
-			ForumDradenModel::instance()->setLaatstePagina($deel->forum_id); // lazy loading ForumDraad[]
+			ForumDradenModel::instance()->setLaatstePagina($deel->forum_id);
 		} elseif ($pagina === 'wacht' AND $deel->magModereren()) {
-			$wacht = true;
+			$deel->setForumDraden(ForumDradenModel::instance()->getWachtOpGoedkeuringVoorDeel($deel));
 		} elseif ($pagina === 'prullenbak' AND $deel->magModereren()) {
-			$prullenbak = true;
+			$deel->setForumDraden(ForumDradenModel::instance()->getPrullenbakVoorDeel($deel));
 		} elseif ($pagina === 'belangrijk' AND $deel->magLezen()) {
-			$belangrijk = true;
+			$deel->setForumDraden(ForumDradenModel::instance()->getBelangrijkeForumDradenVoorDeel($deel));
 		} else {
-			ForumDradenModel::instance()->setHuidigePagina((int) $pagina, $deel->forum_id); // lazy loading ForumDraad[]
+			ForumDradenModel::instance()->setHuidigePagina((int) $pagina, $deel->forum_id);
 		}
-		$this->view = new ForumDeelView($deel, $wacht, $prullenbak, $belangrijk);
+		$this->view = new ForumDeelView($deel); // lazy loading ForumDraad[]
 	}
 
 	/**
@@ -218,8 +215,6 @@ class ForumController extends Controller {
 		if (!$deel->magLezen()) {
 			$this->geentoegang();
 		}
-		$wacht = false;
-		$prullenbak = false;
 		$gelezen = $draad->getWanneerGelezen(); // laad gelezen voordat database geupdate wordt
 		if ($pagina === null) {
 			$pagina = LidInstellingen::get('forum', 'open_draad_op_pagina');
@@ -229,16 +224,16 @@ class ForumController extends Controller {
 		} elseif ($pagina === 'laatste') {
 			ForumPostsModel::instance()->setLaatstePagina($draad->draad_id);
 		} elseif ($pagina === 'wacht' AND $deel->magModereren()) {
-			$wacht = true;
+			$draad->setForumPosts(ForumPostsModel::instance()->getWachtOpGoedkeuringVoorDraad($draad));
 		} elseif ($pagina === 'prullenbak' AND $deel->magModereren()) {
-			$prullenbak = true;
+			$draad->setForumPosts(ForumPostsModel::instance()->getPrullenbakVoorDraad($draad));
 		} else {
 			ForumPostsModel::instance()->setHuidigePagina((int) $pagina, $draad->draad_id);
 		}
-		if (!$wacht AND ! $prullenbak) {
+		if ($pagina !== 'wacht' AND $pagina !== 'prullenbak') {
 			ForumDradenGelezenModel::instance()->setWanneerGelezenDoorLid($draad); // update gelezen met laatste post op pagina
 		}
-		$this->view = new ForumDraadView($draad, $deel, $wacht, $prullenbak); // lazy loading ForumPost[]
+		$this->view = new ForumDraadView($draad, $deel); // lazy loading ForumPost[]
 	}
 
 	/**
@@ -330,7 +325,7 @@ class ForumController extends Controller {
 	 */
 	public function herstel() {
 		$aantal = ForumDradenVerbergenModel::instance()->getAantalVerborgenVoorLid();
-		ForumDradenVerbergenModel::instance()->herstelAlleDradenVoorLid();
+		ForumDradenVerbergenModel::instance()->toonAlleDradenVoorLid();
 		setMelding($aantal . ' onderwerpen worden weer getoond in de zijbalk', 1);
 		$this->recent();
 	}
@@ -363,7 +358,7 @@ class ForumController extends Controller {
 		}
 		if ($property === 'belangrijk') {
 			if (LoginLid::mag('P_FORUM_BELANGRIJK')) {
-				ForumDradenVerbergenModel::instance()->herstelDraadVoorIedereen($draad);
+				ForumDradenVerbergenModel::instance()->toonDraadVoorIedereen($draad);
 			} else {
 				$this->geentoegang();
 			}

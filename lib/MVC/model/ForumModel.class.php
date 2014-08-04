@@ -246,7 +246,7 @@ class ForumDradenGelezenModel extends PersistenceModel {
 	public function setWanneerGelezenDoorLid(ForumDraad $draad) {
 		$laatste_op_pagina = $draad->getForumPosts();
 		if (empty($laatste_op_pagina)) {
-			$datum_tijd = date('Y-m-d H:i:s');
+			return;
 		} else {
 			$laatste_op_pagina = end($laatste_op_pagina);
 			$datum_tijd = $laatste_op_pagina->datum_tijd;
@@ -293,13 +293,13 @@ class ForumDradenVerbergenModel extends PersistenceModel {
 		}
 	}
 
-	public function herstelDraadVoorIedereen(ForumDraad $draad) {
+	public function toonDraadVoorIedereen(ForumDraad $draad) {
 		foreach ($this->find('draad_id = ?', array($draad->draad_id)) as $verborgen) {
 			$this->delete($verborgen);
 		}
 	}
 
-	public function herstelAlleDradenVoorLid() {
+	public function toonAlleDradenVoorLid() {
 		foreach ($this->find('lid_id = ?', array(LoginLid::instance()->getUid())) as $verborgen) {
 			$this->delete($verborgen);
 		}
@@ -427,22 +427,32 @@ class ForumDradenModel extends PersistenceModel implements Paging {
 	}
 
 	public function getAantalWachtOpGoedkeuringVoorDeel(ForumDeel $deel) {
-		return $this->count('forum_id = ? AND wacht_goedkeuring = TRUE AND verwijderd = FALSE', array($deel->forum_id));
+		$sum = 0;
+		foreach ($deel->getForumDraden() as $draad) {
+			$sum += ForumPostsModel::instance()->getAantalWachtOpGoedkeuringVoorDraad($draad);
+		}
+		return $sum;
 	}
 
-	public function getForumDradenVoorDeel($forum_id, $wacht = false, $prullenbak = false, $belangrijk = false) {
-		if ($wacht) {
-			return $this->find('forum_id = ? AND wacht_goedkeuring = TRUE AND verwijderd = FALSE', array($forum_id), 'laatst_gewijzigd DESC')->fetchAll();
+	public function getWachtOpGoedkeuringVoorDeel(ForumDeel $deel) {
+		$posts = array();
+		foreach ($deel->getForumDraden() as $draad) {
+			$posts = array_merge($posts, ForumPostsModel::instance()->getWachtOpGoedkeuringVoorDraad($draad));
 		}
-		if ($prullenbak) {
-			return $this->find('forum_id = ? AND verwijderd = TRUE', array($forum_id), 'wacht_goedkeuring DESC, laatst_gewijzigd DESC')->fetchAll();
-		}
-		if ($belangrijk) {
-			$belangrijk = ' AND belangrijk = TRUE';
-		} else {
-			$belangrijk = '';
-		}
-		return $this->find('forum_id = ? AND wacht_goedkeuring = FALSE AND verwijderd = FALSE' . $belangrijk, array($forum_id), 'plakkerig DESC, laatst_gewijzigd DESC', null, $this->per_pagina, ($this->pagina - 1) * $this->per_pagina)->fetchAll();
+		$ids = array_keys(group_by_distinct('draad_id', $posts));
+		return $this->getForumDradenById($ids);
+	}
+
+	public function getPrullenbakVoorDeel(ForumDeel $deel) {
+		return $this->find('forum_id = ? AND verwijderd = TRUE', array($deel->forum_id), 'wacht_goedkeuring DESC, laatst_gewijzigd DESC')->fetchAll();
+	}
+
+	public function getBelangrijkeForumDradenVoorDeel(ForumDeel $deel) {
+		return $this->find('forum_id = ? AND wacht_goedkeuring = FALSE AND verwijderd = FALSE AND belangrijk = TRUE', array($deel->forum_id), 'plakkerig DESC, laatst_gewijzigd DESC')->fetchAll();
+	}
+
+	public function getForumDradenVoorDeel(ForumDeel $deel) {
+		return $this->find('forum_id = ? AND wacht_goedkeuring = FALSE AND verwijderd = FALSE', array($deel->forum_id), 'plakkerig DESC, laatst_gewijzigd DESC', null, $this->per_pagina, ($this->pagina - 1) * $this->per_pagina)->fetchAll();
 	}
 
 	/**
@@ -456,7 +466,7 @@ class ForumDradenModel extends PersistenceModel implements Paging {
 	 * @param boolean $rss
 	 * @return ForumDraad[] of voor rss: array( ForumDraad[], ForumDeel[] )
 	 */
-	public function getRecenteForumDraden($aantal = null, $belangrijk = false, $rss = false) {
+	public function getRecenteForumDraden($aantal, $belangrijk, $rss = false) {
 		if (!is_int($aantal)) {
 			$aantal = (int) LidInstellingen::get('forum', 'draden_per_pagina');
 			$pagina = $this->pagina;
@@ -482,8 +492,10 @@ class ForumDradenModel extends PersistenceModel implements Paging {
 		} else {
 			$verborgen = '';
 		}
-		if ($belangrijk) {
+		if ($belangrijk === true) {
 			$belangrijk = ' AND belangrijk = TRUE';
+		} elseif ($belangrijk === false) {
+			$belangrijk = ' AND belangrijk = FALSE';
 		} else {
 			$belangrijk = '';
 		}
@@ -661,29 +673,6 @@ class ForumPostsModel extends PersistenceModel implements Paging {
 		return $results;
 	}
 
-	public function getForumPostsVoorDraad(ForumDraad $draad, $wacht = false, $prullenbak = false) {
-		if ($wacht) {
-			return $this->find('draad_id = ? AND wacht_goedkeuring = TRUE AND verwijderd = FALSE', array($draad->draad_id), 'post_id ASC')->fetchAll();
-		}
-		if ($prullenbak) {
-			return $this->find('draad_id = ? AND verwijderd = TRUE', array($draad->draad_id), 'post_id ASC')->fetchAll();
-		}
-		$posts = $this->find('draad_id = ? AND wacht_goedkeuring = FALSE AND verwijderd = FALSE', array($draad->draad_id), 'post_id ASC', null, $this->per_pagina, ($this->pagina - 1) * $this->per_pagina)->fetchAll();
-		if ($draad->eerste_post_plakkerig AND $this->pagina !== 1) {
-			$array_first_post = $this->find('draad_id = ? AND wacht_goedkeuring = FALSE AND verwijderd = FALSE', array($draad->draad_id), 'post_id ASC', null, 1)->fetch();
-			array_unshift($posts, $array_first_post);
-		}
-		// 2008-filter
-		if (LidInstellingen::get('forum', 'filter2008') == 'ja') {
-			foreach ($posts as $post) {
-				if (startsWith($post->lid_id, '08')) {
-					$post->gefilterd = 'Bericht van 2008';
-				}
-			}
-		}
-		return $posts;
-	}
-
 	public function getAantalForumPostsVoorLid($uid) {
 		return $this->count('lid_id = ? AND wacht_goedkeuring = FALSE AND verwijderd = FALSE', array($uid));
 	}
@@ -694,6 +683,31 @@ class ForumPostsModel extends PersistenceModel implements Paging {
 
 	public function getAantalWachtOpGoedkeuringVoorDraad(ForumDraad $draad) {
 		return $this->count('draad_id = ? AND wacht_goedkeuring = TRUE AND verwijderd = FALSE', array($draad->draad_id));
+	}
+
+	public function getWachtOpGoedkeuringVoorDraad(ForumDraad $draad) {
+		return $this->find('draad_id = ? AND wacht_goedkeuring = TRUE AND verwijderd = FALSE', array($draad->draad_id), 'post_id ASC')->fetchAll();
+	}
+
+	public function getPrullenbakVoorDraad(ForumDraad $draad) {
+		return $this->find('draad_id = ? AND verwijderd = TRUE', array($draad->draad_id), 'post_id ASC')->fetchAll();
+	}
+
+	public function getForumPostsVoorDraad(ForumDraad $draad) {
+		$posts = $this->find('draad_id = ? AND wacht_goedkeuring = FALSE AND verwijderd = FALSE', array($draad->draad_id), 'post_id ASC', null, $this->per_pagina, ($this->pagina - 1) * $this->per_pagina)->fetchAll();
+		if ($draad->eerste_post_plakkerig AND $this->pagina !== 1) {
+			$array_first_post = $this->find('draad_id = ? AND wacht_goedkeuring = FALSE AND verwijderd = FALSE', array($draad->draad_id), 'post_id ASC', null, 1)->fetch();
+			array_unshift($posts, $array_first_post);
+		}
+// 2008-filter
+		if (LidInstellingen::get('forum', 'filter2008') == 'ja') {
+			foreach ($posts as $post) {
+				if (startsWith($post->lid_id, '08')) {
+					$post->gefilterd = 'Bericht van 2008';
+				}
+			}
+		}
+		return $posts;
 	}
 
 	/**
