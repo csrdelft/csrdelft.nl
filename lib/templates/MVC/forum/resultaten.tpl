@@ -44,8 +44,8 @@
 				</tr>
 			</thead>
 			<tbody>
-				{foreach from=$draad->getForumPosts($prullenbak) item=post}
-					{include file='MVC/forum/post_lijst.tpl'}
+				{foreach from=$draad->getForumPosts() item=post}
+					{include file='MVC/forum/post_lijst.tpl' deel=$delen[$draad->forum_id]}
 					<tr class="tussenschot">
 						<td colspan="2"></td>
 					</tr>

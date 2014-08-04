@@ -217,14 +217,11 @@ class ForumPostDeleteView extends TemplateView {
 
 class ForumResultatenView extends TemplateView {
 
-	public function __construct(array $draden, array $delen, $query = null, $prullenbak = false) {
+	public function __construct(array $draden, array $delen, $query = null) {
 		parent::__construct($draden);
 		$this->smarty->assign('resultaten', $this->model);
 		$this->smarty->assign('delen', $delen);
-		$this->smarty->assign('prullenbak', false);
-		if ($prullenbak) {
-			$this->titel = 'Verwijderde onderwerpen in ' . reset($delen)->titel;
-		} elseif ($query !== null) {
+		if ($query !== null) {
 			//FIXME: verder zoeken $this->smarty->assign('query', $query);
 			$this->titel = 'Zoekresultaten voor: "' . $query . '"';
 		} else {
