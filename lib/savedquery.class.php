@@ -48,7 +48,7 @@ class SavedQuery {
 						$this->resultCount = count($this->result);
 					}
 				} elseif (LoginLid::mag('P_ADMIN')) {
-					$this->result[] = array('mysqli_error' => mysqli_error());
+					$this->result[] = array('mysqli_error' => mysqli_error($db));
 				}
 			}
 		}

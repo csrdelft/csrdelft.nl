@@ -70,7 +70,7 @@ class DocumentenCategorie{
 			$query .= ' LIMIT '.$this->loadLimit;
 		}
 		$result=$db->query($query);
-		echo mysqli_error();
+		echo mysqli_error($db);
 		if($db->numRows($result)>0){
 			while($doc=$db->next($result)){
 				$this->documenten[]=new Document($doc);
@@ -185,7 +185,7 @@ class DocumentenCategorie{
 			ORDER BY toegevoegd DESC
 			LIMIT ".(int)$limit;
 		$result=$db->query($query);
-		echo mysqli_error();
+		echo mysqli_error($db);
 		if($db->numRows($result)>0) {
 			while($doc=$db->next($result)) {
 				$documenten[] = new Document($doc);

@@ -226,7 +226,7 @@ class MySql {
 			$string = trim(str_replace(array("\r\n", "\n", "\t", '  ', '   '), ' ', $string));
 			$error = mysqli_error($this->_db);
 			if (!empty($error)) {
-				$string .= "\nmysqli_error(): " . $error;
+				$string .= "\nmysqli_error: " . $error;
 			}
 			$this->queries[] = $string;
 		}

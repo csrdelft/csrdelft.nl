@@ -69,7 +69,7 @@ class Boek {
 				if (is_array($boek)) {
 					$this->array2properties($boek);
 				} else {
-					throw new Exception('load() mislukt. Bestaat het boek wel? ' . mysqli_error());
+					throw new Exception('load() mislukt. Bestaat het boek wel? ' . mysqli_error($db));
 				}
 			} else {
 				throw new Exception('load() mislukt. Boekid = 0');
@@ -257,7 +257,7 @@ class Boek {
 			$lener = $db->next($result);
 			return $lener['uitgeleend_uid'] == Loginlid::instance()->getUid();
 		} else {
-			$this->error.= mysqli_error();
+			$this->error.= mysqli_error($db);
 			return false;
 		}
 	}
@@ -279,7 +279,7 @@ class Boek {
 		if ($db->query($qDeleteBeschrijvingen) AND $db->query($qDeleteExemplaren) AND $db->query($qDeleteBoek)) {
 			return true;
 		} else {
-			$this->error .= 'Fout bij verwijderen. Boek::delete() ' . mysqli_error();
+			$this->error .= 'Fout bij verwijderen. Boek::delete() ' . mysqli_error($db);
 			return false;
 		}
 	}
@@ -307,7 +307,7 @@ class Boek {
 				$this->exemplaren[$exemplaar['id']] = $exemplaar;
 			}
 		} else {
-			$this->error .= mysqli_error();
+			$this->error .= mysqli_error($db);
 			return false;
 		}
 		return $db->numRows($result);
@@ -355,7 +355,7 @@ class Boek {
 			$exemplaar = $db->next($result);
 			return $exemplaar['status'];
 		} else {
-			$this->error.= mysqli_error();
+			$this->error.= mysqli_error($db);
 			return '';
 		}
 	}
@@ -385,7 +385,7 @@ class Boek {
 		if ($db->query($qSave)) {
 			return true;
 		}
-		$this->error .= 'Fout in query, mysql gaf terug: ' . mysqli_error() . ' Boek::addExemplaar()';
+		$this->error .= 'Fout in query, mysql gaf terug: ' . mysqli_error($db) . ' Boek::addExemplaar()';
 		return false;
 	}
 
@@ -599,7 +599,7 @@ class NieuwBoek extends Boek {
 			}
 			return $this->addExemplaar($eigenaar);
 		}
-		$this->error .= 'Fout in query, mysql gaf terug: ' . mysqli_error() . ' Boek::save()';
+		$this->error .= 'Fout in query, mysql gaf terug: ' . mysqli_error($db) . ' Boek::save()';
 		return false;
 	}
 
@@ -782,7 +782,7 @@ class BewerkBoek extends Boek {
 		if ($db->query($qSave)) {
 			return true;
 		}
-		$this->error .= 'Fout in query, mysql gaf terug: ' . mysqli_error() . ' Boek::saveProperty()';
+		$this->error .= 'Fout in query, mysql gaf terug: ' . mysqli_error($db) . ' Boek::saveProperty()';
 		return false;
 	}
 
@@ -869,7 +869,7 @@ class BewerkBoek extends Boek {
 		if ($db->query($query)) {
 			return true;
 		}
-		$this->error .= 'Fout in query, mysql gaf terug: ' . mysqli_error() . ' Boek::leenExemplaar()';
+		$this->error .= 'Fout in query, mysql gaf terug: ' . mysqli_error($db) . ' Boek::leenExemplaar()';
 		return false;
 	}
 
@@ -895,7 +895,7 @@ class BewerkBoek extends Boek {
 		if ($db->query($query)) {
 			return true;
 		}
-		$this->error .= 'Fout in query, mysql gaf terug: ' . mysqli_error() . ' Boek::teruggegevenExemplaar()';
+		$this->error .= 'Fout in query, mysql gaf terug: ' . mysqli_error($db) . ' Boek::teruggegevenExemplaar()';
 		return false;
 	}
 
@@ -921,7 +921,7 @@ class BewerkBoek extends Boek {
 		if ($db->query($query)) {
 			return true;
 		}
-		$this->error .= 'Fout in query, mysql gaf terug: ' . mysqli_error() . ' Boek::terugontvangenExemplaar()';
+		$this->error .= 'Fout in query, mysql gaf terug: ' . mysqli_error($db) . ' Boek::terugontvangenExemplaar()';
 		return false;
 	}
 
@@ -951,7 +951,7 @@ class BewerkBoek extends Boek {
 		if ($db->query($query)) {
 			return true;
 		}
-		$this->error .= 'Fout in query, mysql gaf terug: ' . mysqli_error() . ' Boek::vermistExemplaar()';
+		$this->error .= 'Fout in query, mysql gaf terug: ' . mysqli_error($db) . ' Boek::vermistExemplaar()';
 		return false;
 	}
 
@@ -977,7 +977,7 @@ class BewerkBoek extends Boek {
 		if ($db->query($query)) {
 			return true;
 		}
-		$this->error .= 'Fout in query, mysql gaf terug: ' . mysqli_error() . ' Boek::gevondenExemplaar()';
+		$this->error .= 'Fout in query, mysql gaf terug: ' . mysqli_error($db) . ' Boek::gevondenExemplaar()';
 		return false;
 	}
 
@@ -1032,7 +1032,7 @@ class BewerkBoek extends Boek {
 				$this->beschrijvingen[$beschrijving['id']] = new Beschrijving($beschrijving);
 			}
 		} else {
-			$this->error .= mysqli_error();
+			$this->error .= mysqli_error($db);
 		}
 		//als er een nieuwe beschrijving toegevoegd kan worden is een leeg object nodig 
 		if ($this->editbeschrijving == 0) {
