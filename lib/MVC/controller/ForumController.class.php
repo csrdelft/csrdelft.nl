@@ -57,6 +57,7 @@ class ForumController extends Controller {
 				}
 			case 'rss':
 			case 'recent':
+			case 'belangrijk':
 			case 'deel':
 			case 'onderwerp':
 			case 'reactie':
@@ -163,32 +164,50 @@ class ForumController extends Controller {
 	 */
 	public function recent($pagina = 1, $belangrijk = null) {
 		ForumDradenModel::instance()->setHuidigePagina((int) $pagina, 0);
-		$belangrijk = ($belangrijk === 'belangrijk' ? true : null);
+		$belangrijk = ($belangrijk === 'belangrijk' OR $pagina === 'belangrijk' ? true : false);
 		$deel = ForumDelenModel::instance()->getRecent($belangrijk);
-		$this->view = new ForumDeelView($deel, $belangrijk);
+		$this->view = new ForumDeelView($deel, false, false, $belangrijk);
+	}
+
+	/**
+	 * Shortcut to /recent/1/belangrijk.
+	 * 
+	 * @param int $pagina
+	 */
+	public function belangrijk($pagina = 1) {
+		$this->recent($pagina, $this->action);
 	}
 
 	/**
 	 * Deelforum laten zien met draadjes in tabel.
 	 * 
 	 * @param int $forum_id
-	 * @param int $pagina or 'laatste'
+	 * @param int $pagina or 'laatste' or 'prullenbak'
 	 */
 	public function deel($forum_id, $pagina = 1) {
 		$deel = ForumDelenModel::instance()->getForumDeel((int) $forum_id);
-		if (!$deel OR ! $deel->magLezen()) { // geen exceptie om bestaan van forumdeel niet te verraden
+		if (!$deel->magLezen()) {
 			$this->geentoegang();
 		}
+		$wacht = false;
+		$prullenbak = false;
+		$belangrijk = false;
 		if ($pagina === 'laatste') {
 			ForumDradenModel::instance()->setLaatstePagina($deel->forum_id); // lazy loading ForumDraad[]
+		} elseif ($pagina === 'wacht' AND $deel->magModereren()) {
+			$wacht = true;
+		} elseif ($pagina === 'prullenbak' AND $deel->magModereren()) {
+			$prullenbak = true;
+		} elseif ($pagina === 'belangrijk' AND $deel->magLezen()) {
+			$belangrijk = true;
 		} else {
 			ForumDradenModel::instance()->setHuidigePagina((int) $pagina, $deel->forum_id); // lazy loading ForumDraad[]
 		}
-		$this->view = new ForumDeelView($deel);
+		$this->view = new ForumDeelView($deel, $wacht, $prullenbak, $belangrijk);
 	}
 
 	/**
-	 * Forumdraadje laten zien met alle (zichtbare) posts.
+	 * Forumdraadje laten zien met alle zichtbare/verwijderde posts.
 	 * 
 	 * @param int $draad_id
 	 * @param int $pagina or 'laatste' or 'ongelezen'
@@ -199,19 +218,27 @@ class ForumController extends Controller {
 		if (!$deel->magLezen()) {
 			$this->geentoegang();
 		}
+		$wacht = false;
+		$prullenbak = false;
 		$gelezen = $draad->getWanneerGelezen(); // laad gelezen voordat database geupdate wordt
 		if ($pagina === null) {
 			$pagina = LidInstellingen::get('forum', 'open_draad_op_pagina');
 		}
-		if ($pagina === 'ongelezen' AND $gelezen !== null) {
+		if ($pagina === 'ongelezen' AND $gelezen) {
 			ForumPostsModel::instance()->setPaginaVoorLaatstGelezen($gelezen);
 		} elseif ($pagina === 'laatste') {
 			ForumPostsModel::instance()->setLaatstePagina($draad->draad_id);
+		} elseif ($pagina === 'wacht' AND $deel->magModereren()) {
+			$wacht = true;
+		} elseif ($pagina === 'prullenbak' AND $deel->magModereren()) {
+			$prullenbak = true;
 		} else {
 			ForumPostsModel::instance()->setHuidigePagina((int) $pagina, $draad->draad_id);
 		}
-		ForumDradenGelezenModel::instance()->setWanneerGelezenDoorLid($draad); // update gelezen met laatste post op pagina
-		$this->view = new ForumDraadView($draad, $deel); // lazy loading ForumPost[]
+		if (!$wacht AND ! $prullenbak) {
+			ForumDradenGelezenModel::instance()->setWanneerGelezenDoorLid($draad); // update gelezen met laatste post op pagina
+		}
+		$this->view = new ForumDraadView($draad, $deel, $wacht, $prullenbak); // lazy loading ForumPost[]
 	}
 
 	/**
@@ -413,7 +440,7 @@ class ForumController extends Controller {
 		if ($wacht_goedkeuring) {
 			setMelding('Uw bericht is opgeslagen en zal als het goedgekeurd is geplaatst worden.', 1);
 			//bericht sturen naar pubcie@csrdelft dat er een bericht op goedkeuring wacht
-			mail('pubcie@csrdelft.nl', 'Nieuw bericht wacht op goedkeuring', "http://csrdelft.nl/forum/wacht#" . $post->post_id . "\r\n" . "\r\nDe inhoud van het bericht is als volgt: \r\n\r\n" . str_replace('\r\n', "\n", $tekst) . "\r\n\r\nEINDE BERICHT", "From: pubcie@csrdelft.nl\nReply-To: " . $email);
+			mail('pubcie@csrdelft.nl', 'Nieuw bericht wacht op goedkeuring', 'http://csrdelft.nl/forum/onderwerp/' . $draad->draad_id . '/wacht#' . $post->post_id . "\r\n" . "\r\nDe inhoud van het bericht is als volgt: \r\n\r\n" . str_replace('\r\n', "\n", $tekst) . "\r\n\r\nEINDE BERICHT", "From: pubcie@csrdelft.nl\nReply-To: " . $email);
 			invokeRefresh('/forum/deel/' . $deel->forum_id);
 		} else {
 			ForumPostsModel::instance()->goedkeurenForumPost($post, $draad, $deel);

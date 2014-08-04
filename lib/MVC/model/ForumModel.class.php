@@ -112,9 +112,9 @@ class ForumDelenModel extends PersistenceModel {
 		return group_by_distinct('forum_id', $this->find('forum_id IN (' . $in . ')', $ids));
 	}
 
-	public function getRecent($belangrijk = null) {
+	public function getRecent($belangrijk = false) {
 		$deel = new ForumDeel();
-		if ($belangrijk === true) {
+		if ($belangrijk) {
 			$deel->titel = 'Belangrijk recent gewijzigd';
 		} else {
 			$deel->titel = 'Recent gewijzigd';
@@ -233,7 +233,7 @@ class ForumDradenGelezenModel extends PersistenceModel {
 
 	public function getWanneerGelezenDoorLid(ForumDraad $draad) {
 		$gelezen = $this->retrieveByPrimaryKey(array($draad->draad_id, LoginLid::instance()->getUid()));
-		if ($gelezen === null) {
+		if (!$gelezen) {
 			$gelezen = new ForumDraadGelezen();
 			$gelezen->draad_id = $draad->draad_id;
 			$gelezen->lid_id = LoginLid::instance()->getUid();
@@ -245,10 +245,14 @@ class ForumDradenGelezenModel extends PersistenceModel {
 
 	public function setWanneerGelezenDoorLid(ForumDraad $draad) {
 		$laatste_op_pagina = $draad->getForumPosts();
-		$laatste_op_pagina = end($laatste_op_pagina);
-		$datum_tijd = $laatste_op_pagina->datum_tijd;
-		if ($laatste_op_pagina->laatst_bewerkt) {
-			$datum_tijd = $laatste_op_pagina->laatst_bewerkt;
+		if (empty($laatste_op_pagina)) {
+			$datum_tijd = date('Y-m-d H:i:s');
+		} else {
+			$laatste_op_pagina = end($laatste_op_pagina);
+			$datum_tijd = $laatste_op_pagina->datum_tijd;
+			if ($laatste_op_pagina->laatst_bewerkt) {
+				$datum_tijd = $laatste_op_pagina->laatst_bewerkt;
+			}
 		}
 		$gelezen = $this->getWanneerGelezenDoorLid($draad);
 		if (strtotime($datum_tijd) > strtotime($draad->getWanneerGelezen()->datum_tijd)) {
@@ -422,32 +426,23 @@ class ForumDradenModel extends PersistenceModel implements Paging {
 		return $results;
 	}
 
-	/**
-	 * Eager loading of ForumDraadGelezen[].
-	 * 
-	 * @param string $criteria WHERE
-	 * @param array $criteria_params optional named parameters
-	 * @param string $orderby
-	 * @param int $limit max amount of results
-	 * @param int $start results from index
-	 * @return PersistentEntity[]
-	 */
-	public function find($criteria = null, array $criteria_params = array(), $orderby = null, $groupby = null, $limit = null, $start = 0) {
-		$orm = self::orm;
-		$from = $orm::getTableName() . ' AS d LEFT JOIN forum_draden_gelezen AS g ON d.draad_id = g.draad_id AND g.lid_id = ?';
-		$fields = $orm::getFields();
-		foreach ($fields as $i => $field) {
-			$fields[$i] = 'd.' . $field;
-		}
-		$fields[] = 'g.datum_tijd AS wanneer_gelezen';
-		$params = array_merge(array(LoginLid::instance()->getUid()), $criteria_params);
-		$result = Database::sqlSelect($fields, $from, $criteria, $params, $orderby, $groupby, $limit, $start);
-		$result->setFetchMode(PDO::FETCH_CLASS, $orm, array($cast = true));
-		return $result;
+	public function getAantalWachtOpGoedkeuringVoorDeel(ForumDeel $deel) {
+		return $this->count('forum_id = ? AND wacht_goedkeuring = TRUE AND verwijderd = FALSE', array($deel->forum_id));
 	}
 
-	public function getForumDradenVoorDeel($forum_id) {
-		return $this->find('d.forum_id = ? AND d.wacht_goedkeuring = FALSE AND d.verwijderd = FALSE', array($forum_id), 'd.plakkerig DESC, d.laatst_gewijzigd DESC', null, $this->per_pagina, ($this->pagina - 1) * $this->per_pagina)->fetchAll();
+	public function getForumDradenVoorDeel($forum_id, $wacht = false, $prullenbak = false, $belangrijk = false) {
+		if ($wacht) {
+			return $this->find('forum_id = ? AND wacht_goedkeuring = TRUE AND verwijderd = FALSE', array($forum_id), 'laatst_gewijzigd DESC')->fetchAll();
+		}
+		if ($prullenbak) {
+			return $this->find('forum_id = ? AND verwijderd = TRUE', array($forum_id), 'wacht_goedkeuring DESC, laatst_gewijzigd DESC')->fetchAll();
+		}
+		if ($belangrijk) {
+			$belangrijk = ' AND belangrijk = TRUE';
+		} else {
+			$belangrijk = '';
+		}
+		return $this->find('forum_id = ? AND wacht_goedkeuring = FALSE AND verwijderd = FALSE' . $belangrijk, array($forum_id), 'plakkerig DESC, laatst_gewijzigd DESC', null, $this->per_pagina, ($this->pagina - 1) * $this->per_pagina)->fetchAll();
 	}
 
 	/**
@@ -457,11 +452,11 @@ class ForumDradenModel extends PersistenceModel implements Paging {
 	 * RSS: use token & return delen.
 	 * 
 	 * @param int $aantal
-	 * @param boolean $belangrijk null voor maakt niet uit
+	 * @param boolean $belangrijk
 	 * @param boolean $rss
 	 * @return ForumDraad[] of voor rss: array( ForumDraad[], ForumDeel[] )
 	 */
-	public function getRecenteForumDraden($aantal = null, $belangrijk = null, $rss = false) {
+	public function getRecenteForumDraden($aantal = null, $belangrijk = false, $rss = false) {
 		if (!is_int($aantal)) {
 			$aantal = (int) LidInstellingen::get('forum', 'draden_per_pagina');
 			$pagina = $this->pagina;
@@ -483,17 +478,16 @@ class ForumDradenModel extends PersistenceModel implements Paging {
 		$count = count($draden_ids);
 		if ($count > 0) {
 			$params = array_merge($params, $draden_ids);
-			$verborgen = ' AND d.draad_id NOT IN (' . implode(', ', array_fill(0, $count, '?')) . ')';
+			$verborgen = ' AND draad_id NOT IN (' . implode(', ', array_fill(0, $count, '?')) . ')';
 		} else {
 			$verborgen = '';
 		}
-		if ($belangrijk !== null) {
-			$params[] = $belangrijk;
-			$belangrijk = ' AND d.belangrijk = ?';
+		if ($belangrijk) {
+			$belangrijk = ' AND belangrijk = TRUE';
 		} else {
 			$belangrijk = '';
 		}
-		$draden = $this->find('d.forum_id IN (' . $forum_ids . ')' . $verborgen . ' AND d.wacht_goedkeuring = FALSE AND d.verwijderd = FALSE' . $belangrijk, $params, 'd.laatst_gewijzigd DESC', null, $aantal, ($pagina - 1) * $aantal)->fetchAll();
+		$draden = $this->find('forum_id IN (' . $forum_ids . ')' . $verborgen . ' AND wacht_goedkeuring = FALSE AND verwijderd = FALSE' . $belangrijk, $params, 'laatst_gewijzigd DESC', null, $aantal, ($pagina - 1) * $aantal)->fetchAll();
 		$posts_ids = array_keys(group_by_distinct('laatste_post_id', $draden, false));
 		$posts = ForumPostsModel::instance()->getForumPostsById($posts_ids, ' AND wacht_goedkeuring = FALSE AND verwijderd = FALSE');
 		foreach ($draden as $i => $draad) {
@@ -527,7 +521,7 @@ class ForumDradenModel extends PersistenceModel implements Paging {
 			return array();
 		}
 		$in = implode(', ', array_fill(0, $count, '?'));
-		return group_by_distinct('draad_id', $this->find('d.draad_id IN (' . $in . ')' . $where, array_merge($ids, $where_params)));
+		return group_by_distinct('draad_id', $this->find('draad_id IN (' . $in . ')' . $where, array_merge($ids, $where_params)));
 	}
 
 	public function maakForumDraad($forum_id, $titel, $wacht_goedkeuring) {
@@ -583,18 +577,12 @@ class ForumPostsModel extends PersistenceModel implements Paging {
 	 * @var int[]
 	 */
 	private $aantal_paginas;
-	/**
-	 * Aantal posts die wachten op goedkeuring per forumdeel
-	 * @var int[]
-	 */
-	private $aantal_goedkeuring;
 
 	protected function __construct() {
 		parent::__construct();
 		$this->pagina = 1;
 		$this->per_pagina = LidInstellingen::get('forum', 'posts_per_pagina');
 		$this->aantal_paginas = array();
-		$this->aantal_goedkeuring = array();
 	}
 
 	public function getAantalPerPagina() {
@@ -673,7 +661,13 @@ class ForumPostsModel extends PersistenceModel implements Paging {
 		return $results;
 	}
 
-	public function getForumPostsVoorDraad(ForumDraad $draad) {
+	public function getForumPostsVoorDraad(ForumDraad $draad, $wacht = false, $prullenbak = false) {
+		if ($wacht) {
+			return $this->find('draad_id = ? AND wacht_goedkeuring = TRUE AND verwijderd = FALSE', array($draad->draad_id), 'post_id ASC')->fetchAll();
+		}
+		if ($prullenbak) {
+			return $this->find('draad_id = ? AND verwijderd = TRUE', array($draad->draad_id), 'post_id ASC')->fetchAll();
+		}
 		$posts = $this->find('draad_id = ? AND wacht_goedkeuring = FALSE AND verwijderd = FALSE', array($draad->draad_id), 'post_id ASC', null, $this->per_pagina, ($this->pagina - 1) * $this->per_pagina)->fetchAll();
 		if ($draad->eerste_post_plakkerig AND $this->pagina !== 1) {
 			$array_first_post = $this->find('draad_id = ? AND wacht_goedkeuring = FALSE AND verwijderd = FALSE', array($draad->draad_id), 'post_id ASC', null, 1)->fetch();
@@ -694,22 +688,12 @@ class ForumPostsModel extends PersistenceModel implements Paging {
 		return $this->count('lid_id = ? AND wacht_goedkeuring = FALSE AND verwijderd = FALSE', array($uid));
 	}
 
-	public function getAantalWachtOpGoedkeuring($forum_id = 0) {
-		if ($forum_id === 0) {
-			if (!array_key_exists(0, $this->aantal_goedkeuring)) {
-				$this->aantal_goedkeuring[0] = ForumPostsModel::instance()->count('wacht_goedkeuring = TRUE AND verwijderd = FALSE');
-			}
-			return $this->aantal_goedkeuring[0];
-		} else {
-			if (!array_key_exists($forum_id, $this->aantal_goedkeuring)) {
-				// laad draad ids van posts die wachten op goedkeuring
-				$gevonden_posts = group_by('draad_id', ForumPostsModel::instance()->find('wacht_goedkeuring = TRUE AND verwijderd = FALSE'));
-				// laad draden bij posts die alleen in dit deel zitten
-				$gevonden_draden = ForumDradenModel::instance()->getForumDradenById(array_keys($gevonden_posts), ' AND forum_id = ? AND verwijderd = FALSE', array($forum_id));
-				$this->aantal_goedkeuring[$forum_id] = count($gevonden_draden);
-			}
-			return $this->aantal_goedkeuring[$forum_id];
-		}
+	public function getAantalWachtOpGoedkeuring() {
+		return $this->count('wacht_goedkeuring = TRUE AND verwijderd = FALSE');
+	}
+
+	public function getAantalWachtOpGoedkeuringVoorDraad(ForumDraad $draad) {
+		return $this->count('draad_id = ? AND wacht_goedkeuring = TRUE AND verwijderd = FALSE', array($draad->draad_id));
 	}
 
 	/**

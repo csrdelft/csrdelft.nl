@@ -151,7 +151,7 @@ class ForumDraad extends PersistentEntity {
 	}
 
 	public function alGelezen() {
-		if (strtotime($this->laatst_gewijzigd) <= strtotime($this->getWanneerGelezen())) {
+		if (strtotime($this->laatst_gewijzigd) <= strtotime($this->getWanneerGelezen()->datum_tijd)) {
 			return true;
 		}
 		return false;
@@ -166,9 +166,9 @@ class ForumDraad extends PersistentEntity {
 	 * 
 	 * @return ForumPost[]
 	 */
-	public function getForumPosts() {
+	public function getForumPosts($wacht = false, $prullenbak = false) {
 		if (!isset($this->forum_posts)) {
-			$this->setForumPosts(ForumPostsModel::instance()->getForumPostsVoorDraad($this));
+			$this->setForumPosts(ForumPostsModel::instance()->getForumPostsVoorDraad($this, $wacht, $prullenbak));
 		}
 		return $this->forum_posts;
 	}

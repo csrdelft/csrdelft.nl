@@ -85,19 +85,19 @@ class ForumDeel extends PersistentEntity {
 	 * @var array
 	 */
 	protected static $persistent_fields = array(
-		'forum_id' => array(T::Integer, false, 'auto_increment'),
-		'categorie_id' => array(T::Integer),
-		'titel' => array(T::String),
-		'omschrijving' => array(T::Text),
-		'laatst_gewijzigd' => array(T::DateTime, true),
-		'laatste_post_id' => array(T::Integer, true),
-		'laatste_lid_id' => array(T::UID, true),
-		'aantal_draden' => array(T::Integer),
-		'aantal_posts' => array(T::Integer),
-		'rechten_lezen' => array(T::String),
-		'rechten_posten' => array(T::String),
-		'rechten_modereren' => array(T::String),
-		'volgorde' => array(T::Integer)
+		'forum_id'			 => array(T::Integer, false, 'auto_increment'),
+		'categorie_id'		 => array(T::Integer),
+		'titel'				 => array(T::String),
+		'omschrijving'		 => array(T::Text),
+		'laatst_gewijzigd'	 => array(T::DateTime, true),
+		'laatste_post_id'	 => array(T::Integer, true),
+		'laatste_lid_id'	 => array(T::UID, true),
+		'aantal_draden'		 => array(T::Integer),
+		'aantal_posts'		 => array(T::Integer),
+		'rechten_lezen'		 => array(T::String),
+		'rechten_posten'	 => array(T::String),
+		'rechten_modereren'	 => array(T::String),
+		'volgorde'			 => array(T::Integer)
 	);
 	/**
 	 * Database primary key
@@ -131,9 +131,9 @@ class ForumDeel extends PersistentEntity {
 	 * 
 	 * @return ForumDraad[]
 	 */
-	public function getForumDraden() {
+	public function getForumDraden($wacht = false, $prullenbak = false, $belangrijk = false) {
 		if (!isset($this->forum_draden)) {
-			$this->setForumDraden(ForumDradenModel::instance()->getForumDradenVoorDeel($this->forum_id));
+			$this->setForumDraden(ForumDradenModel::instance()->getForumDradenVoorDeel($this->forum_id, $wacht, $prullenbak, $belangrijk));
 		}
 		return $this->forum_draden;
 	}

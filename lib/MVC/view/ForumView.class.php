@@ -66,12 +66,14 @@ class ForumRssView extends TemplateView {
 
 class ForumDeelView extends TemplateView {
 
-	public function __construct(ForumDeel $deel, $belangrijk = null) {
+	public function __construct(ForumDeel $deel, $wacht = false, $prullenbak = false, $belangrijk = false) {
 		parent::__construct($deel);
-		$this->titel = 'Forum | ' . $deel->titel;
+		$this->titel = $deel->titel;
 		$this->smarty->assign('zoekform', new ForumZoekenForm());
-		$this->smarty->assign('belangrijk', ($belangrijk === true ? '/belangrijk' : ''));
 		$this->smarty->assign('deel', $this->model);
+		$this->smarty->assign('wacht', $wacht);
+		$this->smarty->assign('prullenbak', $prullenbak);
+		$this->smarty->assign('belangrijk', $belangrijk);
 		$this->smarty->assign('categorien', ForumModel::instance()->getForum());
 		$this->smarty->assign('verborgen_aantal', ForumDradenVerbergenModel::instance()->getAantalVerborgenVoorLid());
 	}
@@ -118,12 +120,14 @@ class ForumDeelForm extends PopupForm {
 
 class ForumDraadView extends TemplateView {
 
-	public function __construct(ForumDraad $draad, ForumDeel $deel) {
+	public function __construct(ForumDraad $draad, ForumDeel $deel, $wacht = false, $prullenbak = false) {
 		parent::__construct($draad);
-		$this->titel = 'Forum | ' . $draad->titel;
+		$this->titel = $draad->titel;
 		$this->smarty->assign('zoekform', new ForumZoekenForm());
 		$this->smarty->assign('draad', $this->model);
 		$this->smarty->assign('deel', $deel);
+		$this->smarty->assign('wacht', $wacht);
+		$this->smarty->assign('prullenbak', $prullenbak);
 	}
 
 	public function view() {
@@ -215,11 +219,14 @@ class ForumPostDeleteView extends TemplateView {
 
 class ForumResultatenView extends TemplateView {
 
-	public function __construct(array $draden, array $delen, $query = null) {
+	public function __construct(array $draden, array $delen, $query = null, $prullenbak = false) {
 		parent::__construct($draden);
 		$this->smarty->assign('resultaten', $this->model);
 		$this->smarty->assign('delen', $delen);
-		if ($query !== null) {
+		$this->smarty->assign('prullenbak', false);
+		if ($prullenbak) {
+			$this->titel = 'Verwijderde onderwerpen in ' . reset($delen)->titel;
+		} elseif ($query !== null) {
 			//FIXME: verder zoeken $this->smarty->assign('query', $query);
 			$this->titel = 'Zoekresultaten voor: "' . $query . '"';
 		} else {

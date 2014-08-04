@@ -1,6 +1,12 @@
 <tr class="forumdeel kleur{cycle values="0,1"}">
 	<td class="titel">
 		<a href="/forum/deel/{$deel->forum_id}">{$deel->titel}</a>
+		{if $deel->magModereren() AND ForumDradenModel::instance()->getAantalWachtOpGoedkeuringVoorDeel($deel) > 0}
+			<div class="forumheadbtn">
+				{icon get="bell"}
+				<a href="/forum/deel/{$deel->forum_id}/wacht">Wacht op goedkeuring</a>: {ForumDradenModel::instance()->getAantalWachtOpGoedkeuringVoorDeel($deel)}
+			</div>
+		{/if}
 		<br />{$deel->omschrijving}
 	</td>
 	<td class="reacties">{$deel->aantal_draden}</td>

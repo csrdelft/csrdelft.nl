@@ -77,7 +77,7 @@
 		{/if}
 
 		{assign var=vanaf value=false}
-		{foreach from=$draad->getForumPosts() item=post name=posts}
+		{foreach from=$draad->getForumPosts($wacht, $prullenbak) item=post name=posts}
 			{if !$vanaf AND
 (
 strtotime($post->datum_tijd) > strtotime($draad->getWanneerGelezen()->datum_tijd)

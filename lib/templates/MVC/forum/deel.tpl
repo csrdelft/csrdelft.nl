@@ -8,10 +8,9 @@
 			<a href="/forum/beheren/{$deel->forum_id}" class="knop post popup" title="Deelforum beheren">{icon get="wrench_orange"} Beheren</a>
 		</div>
 	{/if}
-	{if $deel->magModereren() AND ForumPostsModel::instance()->getAantalWachtOpGoedkeuring($deel->forum_id) > 0}
+	{if $deel->magModereren() AND !$prullenbak}
 		<div class="forumheadbtn">
-			{icon get="bell"}
-			<a href="/forum/wacht">Wacht op goedkeuring</a>: {ForumPostsModel::instance()->getAantalWachtOpGoedkeuring($deel->forum_id)}
+			<a href="/forum/deel/{$deel->forum_id}/prullenbak" class="knop">{icon get="bin_closed"} Prullenbak</a>
 		</div>
 	{/if}
 {else}
@@ -59,7 +58,7 @@
 				<td colspan="5">Dit forum is nog leeg.</td>
 			</tr>
 		{/if}
-		{foreach from=$deel->getForumDraden() item=draad}
+		{foreach from=$deel->getForumDraden($wacht, $prullenbak, $belangrijk) item=draad}
 			{include file='MVC/forum/draad_lijst.tpl'}
 		{/foreach}
 	</tbody>
@@ -71,6 +70,9 @@
 							pagecount=ForumDradenModel::instance()->getAantalPaginas($deel->forum_id) curpage=ForumDradenModel::instance()->getHuidigePagina()
 							separator=" &nbsp;" show_prev_next=true}
 				{else}
+					{if $belangrijk}
+						{assign var="belangrijk" value="/belangrijk"}
+					{/if}
 					{sliding_pager baseurl="/forum/recent/" url_append=$belangrijk
 							pagecount=ForumDradenModel::instance()->getHuidigePagina() curpage=ForumDradenModel::instance()->getHuidigePagina()
 							separator=" &nbsp;"}

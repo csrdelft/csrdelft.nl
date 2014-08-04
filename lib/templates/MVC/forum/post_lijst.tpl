@@ -23,7 +23,13 @@
 				{$post->datum_tijd}
 			{/if}
 		</span>
-		{if isset($deel)}
+		{if $post->wacht_goedkeuring}
+			<br /><br />
+			<a href="/forum/goedkeuren/{$post->post_id}" class="knop post confirm" title="Bericht goedkeuren">goedkeuren</a>
+			<br /><br />
+			<a href="/tools/stats.php?ip={$post->auteur_ip}" class="knop" title="IP-log">IP-log</a>
+			<a href="/forum/verwijderen/{$post->post_id}" class="knop post confirm" title="Verwijder bericht of draad">{icon get="cross"}</a>
+		{else}
 			<div class="forumpostKnoppen">
 				{if !$draad->gesloten AND $deel->magPosten() AND !$post->wacht_goedkeuring}
 					<a href="#reageren" class="knop" onclick="forumCiteren({$post->post_id});" title="Citeer bericht">{icon get="comments"}</a>
@@ -43,12 +49,6 @@
 					<span style="color: red;">Deze reactie is verwijderd.</span>
 				{/if}
 			</div>
-		{else if $post->wacht_goedkeuring}
-			<br /><br />
-			<a href="/forum/goedkeuren/{$post->post_id}" class="knop post confirm" title="Bericht goedkeuren">goedkeuren</a>
-			<br /><br />
-			<a href="/tools/stats.php?ip={$post->auteur_ip}" class="knop" title="IP-log">IP-log</a>
-			<a href="/forum/verwijderen/{$post->post_id}" class="knop post confirm" title="Verwijder bericht of draad">{icon get="cross"}</a>
 		{/if}
 	</td>
 	<td class="bericht{cycle values="0,1"}" id="post{$post->post_id}">
