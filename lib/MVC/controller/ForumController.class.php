@@ -193,6 +193,7 @@ class ForumController extends Controller {
 		if (!$deel->magLezen()) {
 			$this->geentoegang();
 		}
+		$belangrijk = null;
 		if ($pagina === 'laatste') {
 			ForumDradenModel::instance()->setLaatstePagina($deel->forum_id);
 		} elseif ($pagina === 'wacht' AND $deel->magModereren()) {
@@ -201,10 +202,11 @@ class ForumController extends Controller {
 			$deel->setForumDraden(ForumDradenModel::instance()->getPrullenbakVoorDeel($deel));
 		} elseif ($pagina === 'belangrijk' AND $deel->magLezen()) {
 			$deel->setForumDraden(ForumDradenModel::instance()->getBelangrijkeForumDradenVoorDeel($deel));
+			$belangrijk = true;
 		} else {
 			ForumDradenModel::instance()->setHuidigePagina((int) $pagina, $deel->forum_id);
 		}
-		$this->view = new ForumDeelView($deel); // lazy loading ForumDraad[]
+		$this->view = new ForumDeelView($deel, $belangrijk); // lazy loading ForumDraad[]
 	}
 
 	/**

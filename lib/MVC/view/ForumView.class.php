@@ -66,7 +66,7 @@ class ForumRssView extends TemplateView {
 
 class ForumDeelView extends TemplateView {
 
-	public function __construct(ForumDeel $deel, $belangrijk) {
+	public function __construct(ForumDeel $deel, $belangrijk = null) {
 		parent::__construct($deel);
 		$this->titel = $deel->titel;
 		$this->smarty->assign('zoekform', new ForumZoekenForm());
