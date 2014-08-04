@@ -33,8 +33,7 @@ if ($barsysteem->isLoggedIn()) {
 
             <!-- Nav tabs -->
             <ul class="nav nav-pills nav-justified" role="tablist">
-                <li class="active"><a href="#persoonselectie" role="tab" data-toggle="tab" id="persoonselectieVeld">Persoonselectie</a>
-                </li>
+                <li class="active"><a href="#persoonselectie" role="tab" data-toggle="tab" id="persoonselectieVeld">Persoonselectie</a></li>
                 <li><a href="#invoer" role="tab" data-toggle="tab" id="invoerveld">Invoer</a></li>
                 <li><a href="#bestelLijstBeheer" role="tab" data-toggle="tab">Bestellingen</a></li>
                 <li><a href="#spotify" role="tab" data-toggle="tab">Spotify</a></li>
@@ -212,6 +211,11 @@ if ($barsysteem->isLoggedIn()) {
                         </table>
                     </div>
                 </div>
+				<div class="tab-pane" id="spotify">
+				
+					<h1>test</h1>
+				
+				</div>
                 <div class="tab-pane" id="beheer">
 
                     <div id="beheer-nav" class="btn-group btn-group-lg">
