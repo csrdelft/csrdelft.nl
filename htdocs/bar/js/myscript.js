@@ -310,9 +310,6 @@ $(function () {
             resetTeller();
             $("#aantalInput")[0].value = "-";
         }
-		if(isNaN($("#aantalInput")[0].value))
-            resetTeller();
-			
     })
 
     $("#knopConfirm").each(function() {
