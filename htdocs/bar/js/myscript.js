@@ -538,7 +538,7 @@ $(function () {
 			method: "GET",
 			success: function(data) {
 		
-				$("#grootboekInvoer").html(data);
+				$("#grootboekInvoer").html(data).removeClass("hidden");
 			
 			}
 		});
