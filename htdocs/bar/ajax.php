@@ -16,7 +16,7 @@ if ($barsysteem->isLoggedIn()){
 	// Get grootboekinvoer
 	if(isset($_GET['q']) && $_GET['q'] == 'grootboek') {
 	
-		echo '<h1>Grootboek</h1>';
+		echo json_encode($barsysteem->getGrootboekInvoer();
 	
 	}
 

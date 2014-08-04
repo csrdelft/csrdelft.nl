@@ -538,10 +538,20 @@ $(function () {
 		$.ajax({
 			url: "ajax.php?q=grootboek",
 			method: "GET",
+			dataType: "json",
 			success: function(data) {
 		
 				button.removeClass("btn-default").addClass("btn-primary");
-				$("#grootboekInvoer").html(data).removeClass("hidden");
+				
+				html = '';
+				
+				$.each(data, function(week) {
+				
+					html += '<h2>' + week.title + '</h2>';
+				
+				});
+				
+				$("#grootboekInvoer").html(html).removeClass("hidden");
 			
 			}
 		});
