@@ -509,7 +509,7 @@ $(function () {
     });
 
     /*************************************************************************************************/
-    /* Producten beheer
+    /* Beheer
     /*************************************************************************************************/
 
     $("#laadProducten").click(function () {
@@ -530,5 +530,18 @@ $(function () {
         });
 		
     });
+	
+	$("#laadGrootboekInvoer").click(function() {
+	
+		$.ajax({
+			url: "ajax.php?q=grootboek",
+			method: "GET"
+		}).done(function (data) {
+		
+			$("#grootboekInvoer").html(data);
+		
+		});
+	
+	});
 
 });

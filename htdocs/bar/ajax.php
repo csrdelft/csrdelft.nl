@@ -13,6 +13,13 @@ $barsysteem = new Barsysteem();
 
 if ($barsysteem->isLoggedIn()){
 
+	// Get grootboekinvoer
+	if(isset($_GET['q']) && $_GET['q'] == 'grootboek') {
+	
+		echo '<h1>Grootboek</h1>';
+	
+	}
+
 	// Get persons
     if (isset($_POST["personen"])) {
         echo json_encode($barsysteem->getPersonen());
