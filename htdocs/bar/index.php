@@ -36,7 +36,6 @@ if ($barsysteem->isLoggedIn()) {
                 <li class="active"><a href="#persoonselectie" role="tab" data-toggle="tab" id="persoonselectieVeld">Persoonselectie</a></li>
                 <li><a href="#invoer" role="tab" data-toggle="tab" id="invoerveld">Invoer</a></li>
                 <li><a href="#bestelLijstBeheer" role="tab" data-toggle="tab">Bestellingen</a></li>
-                <li><a href="#spotify" role="tab" data-toggle="tab">Spotify</a></li>
                 <li><a href="#beheer" role="tab" data-toggle="tab">Beheer</a></li>
             </ul>
 
@@ -211,11 +210,6 @@ if ($barsysteem->isLoggedIn()) {
                         </table>
                     </div>
                 </div>
-				<div class="tab-pane" id="spotify">
-				
-					<iframe src="https://play.spotify.com/" />
-				
-				</div>
                 <div class="tab-pane" id="beheer">
 
                     <div id="beheer-nav" class="btn-group btn-group-lg">
