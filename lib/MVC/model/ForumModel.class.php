@@ -112,7 +112,7 @@ class ForumDelenModel extends PersistenceModel {
 		return group_by_distinct('forum_id', $this->find('forum_id IN (' . $in . ')', $ids));
 	}
 
-	public function getRecent($belangrijk = false) {
+	public function getRecent($belangrijk = null) {
 		$deel = new ForumDeel();
 		if ($belangrijk) {
 			$deel->titel = 'Belangrijk recent gewijzigd';

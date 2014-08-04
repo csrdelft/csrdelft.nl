@@ -66,11 +66,12 @@ class ForumRssView extends TemplateView {
 
 class ForumDeelView extends TemplateView {
 
-	public function __construct(ForumDeel $deel) {
+	public function __construct(ForumDeel $deel, $belangrijk) {
 		parent::__construct($deel);
 		$this->titel = $deel->titel;
 		$this->smarty->assign('zoekform', new ForumZoekenForm());
 		$this->smarty->assign('deel', $this->model);
+		$this->smarty->assign('belangrijk', ($belangrijk ? '/belangrijk' : ''));
 		$this->smarty->assign('categorien', ForumModel::instance()->getForum());
 		$this->smarty->assign('verborgen_aantal', ForumDradenVerbergenModel::instance()->getAantalVerborgenVoorLid());
 	}

@@ -164,9 +164,9 @@ class ForumController extends Controller {
 	 */
 	public function recent($pagina = 1, $belangrijk = null) {
 		ForumDradenModel::instance()->setHuidigePagina((int) $pagina, 0);
-		$belangrijk = ($belangrijk === 'belangrijk' OR $pagina === 'belangrijk' ? true : false);
+		$belangrijk = ($belangrijk === 'belangrijk' OR $pagina === 'belangrijk' ? true : null);
 		$deel = ForumDelenModel::instance()->getRecent($belangrijk);
-		$this->view = new ForumDeelView($deel, false, false, $belangrijk);
+		$this->view = new ForumDeelView($deel, $belangrijk);
 	}
 
 	/**

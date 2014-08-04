@@ -65,9 +65,6 @@
 							pagecount=ForumDradenModel::instance()->getAantalPaginas($deel->forum_id) curpage=ForumDradenModel::instance()->getHuidigePagina()
 							separator=" &nbsp;" show_prev_next=true}
 				{else}
-					{if $belangrijk}
-						{assign var="belangrijk" value="/belangrijk"}
-					{/if}
 					{sliding_pager baseurl="/forum/recent/" url_append=$belangrijk
 							pagecount=ForumDradenModel::instance()->getHuidigePagina() curpage=ForumDradenModel::instance()->getHuidigePagina()
 							separator=" &nbsp;"}
