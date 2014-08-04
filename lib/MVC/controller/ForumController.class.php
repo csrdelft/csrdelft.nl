@@ -196,9 +196,6 @@ class ForumController extends Controller {
 		$paging = true;
 		if ($pagina === 'laatste') {
 			ForumDradenModel::instance()->setLaatstePagina($deel->forum_id);
-		} elseif ($pagina === 'wacht' AND $deel->magModereren()) {
-			$deel->setForumDraden(ForumDradenModel::instance()->getWachtOpGoedkeuringVoorDeel($deel));
-			$paging = false;
 		} elseif ($pagina === 'prullenbak' AND $deel->magModereren()) {
 			$deel->setForumDraden(ForumDradenModel::instance()->getPrullenbakVoorDeel($deel));
 			$paging = false;
@@ -232,9 +229,6 @@ class ForumController extends Controller {
 			ForumPostsModel::instance()->setPaginaVoorLaatstGelezen($gelezen);
 		} elseif ($pagina === 'laatste') {
 			ForumPostsModel::instance()->setLaatstePagina($draad->draad_id);
-			$paging = false;
-		} elseif ($pagina === 'wacht' AND $deel->magModereren()) {
-			$draad->setForumPosts(ForumPostsModel::instance()->getWachtOpGoedkeuringVoorDraad($draad));
 			$paging = false;
 		} elseif ($pagina === 'prullenbak' AND $deel->magModereren()) {
 			$draad->setForumPosts(ForumPostsModel::instance()->getPrullenbakVoorDraad($draad));

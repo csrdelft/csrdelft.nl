@@ -426,23 +426,6 @@ class ForumDradenModel extends PersistenceModel implements Paging {
 		return $results;
 	}
 
-	public function getAantalWachtOpGoedkeuringVoorDeel(ForumDeel $deel) {
-		$sum = 0;
-		foreach ($deel->getForumDraden() as $draad) {
-			$sum += ForumPostsModel::instance()->getAantalWachtOpGoedkeuringVoorDraad($draad);
-		}
-		return $sum;
-	}
-
-	public function getWachtOpGoedkeuringVoorDeel(ForumDeel $deel) {
-		$posts = array();
-		foreach ($deel->getForumDraden() as $draad) {
-			$posts = array_merge($posts, ForumPostsModel::instance()->getWachtOpGoedkeuringVoorDraad($draad));
-		}
-		$ids = array_keys(group_by_distinct('draad_id', $posts));
-		return $this->getForumDradenById($ids);
-	}
-
 	public function getPrullenbakVoorDeel(ForumDeel $deel) {
 		return $this->find('forum_id = ? AND verwijderd = TRUE', array($deel->forum_id), 'wacht_goedkeuring DESC, laatst_gewijzigd DESC')->fetchAll();
 	}
@@ -678,14 +661,6 @@ class ForumPostsModel extends PersistenceModel implements Paging {
 
 	public function getAantalWachtOpGoedkeuring() {
 		return $this->count('wacht_goedkeuring = TRUE AND verwijderd = FALSE');
-	}
-
-	public function getAantalWachtOpGoedkeuringVoorDraad(ForumDraad $draad) {
-		return $this->count('draad_id = ? AND wacht_goedkeuring = TRUE AND verwijderd = FALSE', array($draad->draad_id));
-	}
-
-	public function getWachtOpGoedkeuringVoorDraad(ForumDraad $draad) {
-		return $this->find('draad_id = ? AND wacht_goedkeuring = TRUE AND verwijderd = FALSE', array($draad->draad_id), 'post_id ASC')->fetchAll();
 	}
 
 	public function getPrullenbakVoorDraad(ForumDraad $draad) {

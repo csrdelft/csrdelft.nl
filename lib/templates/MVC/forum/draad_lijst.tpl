@@ -16,12 +16,6 @@
 		{sliding_pager baseurl="/forum/onderwerp/"|cat:$draad->draad_id|cat:"/"
 			pagecount=ForumPostsModel::instance()->getAantalPaginas($draad->draad_id) curpage=0
 			txt_pre="&nbsp;[ " txt_post=" ]" link_current=true}
-		{if $deel->magModereren() AND ForumPostsModel::instance()->getAantalWachtOpGoedkeuringVoorDraad($draad) > 0}
-			<div class="forumheadbtn">
-				{icon get="bell"}
-				<a href="/forum/onderwerp/{$draad->draad_id}/wacht">Wacht op goedkeuring</a>: {ForumPostsModel::instance()->getAantalWachtOpGoedkeuringVoorDraad($draad)}
-			</div>
-		{/if}
 	</td>
 	<td class="reacties">{$draad->aantal_posts}</td>
 	<td class="reacties">{$draad->lid_id|csrnaam:'user'}</td>
