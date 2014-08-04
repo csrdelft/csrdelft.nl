@@ -65,7 +65,11 @@ body, html{
 #body .nav-pills li a {
     color: #000;
     background: #d0cfd1;
-    margin: 5px;
+    margin: 5px 5px 5px 0;
+}
+
+#body .nav-pills li:first-child a{
+	margin-left: 5px;
 }
 
 #body .nav-pills li.active a {

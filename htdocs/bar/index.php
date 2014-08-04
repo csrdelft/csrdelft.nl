@@ -213,7 +213,7 @@ if ($barsysteem->isLoggedIn()) {
                 </div>
 				<div class="tab-pane" id="spotify">
 				
-					<h1>test</h1>
+					<iframe src="https://play.spotify.com/" />
 				
 				</div>
                 <div class="tab-pane" id="beheer">
