@@ -246,13 +246,15 @@ class ForumDradenGelezenModel extends PersistenceModel {
 	public function setWanneerGelezenDoorLid(ForumDraad $draad) {
 		$laatste_op_pagina = $draad->getForumPosts();
 		$laatste_op_pagina = end($laatste_op_pagina);
-		$datum = $laatste_op_pagina->datum_tijd;
+		$datum_tijd = $laatste_op_pagina->datum_tijd;
 		if ($laatste_op_pagina->laatst_bewerkt) {
-			$datum = $laatste_op_pagina->laatst_bewerkt;
+			$datum_tijd = $laatste_op_pagina->laatst_bewerkt;
 		}
 		$gelezen = $this->getWanneerGelezenDoorLid($draad);
-		$gelezen->datum_tijd = $datum;
-		$this->update($gelezen);
+		if (strtotime($datum_tijd) > strtotime($draad->getWanneerGelezen()->datum_tijd)) {
+			$gelezen->datum_tijd = $datum_tijd;
+			$this->update($gelezen);
+		}
 	}
 
 }
