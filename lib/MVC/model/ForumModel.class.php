@@ -246,7 +246,7 @@ class ForumDradenGelezenModel extends PersistenceModel {
 	public function setWanneerGelezenDoorLid(ForumDraad $draad) {
 		$laatste_op_pagina = $draad->getForumPosts();
 		if (empty($laatste_op_pagina)) {
-			return;
+			throw new Exception('Geen forum posts');
 		} else {
 			$laatste_op_pagina = end($laatste_op_pagina);
 			$datum_tijd = $laatste_op_pagina->datum_tijd;
