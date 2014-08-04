@@ -299,9 +299,47 @@ class ForumDradenVerbergenModel extends PersistenceModel {
 		}
 	}
 
-	public function toonAlleDradenVoorLid() {
+	public function toonAllesVoorLid() {
 		foreach ($this->find('lid_id = ?', array(LoginLid::instance()->getUid())) as $verborgen) {
 			$this->delete($verborgen);
+		}
+	}
+
+}
+
+class ForumDradenVolgenModel extends PersistenceModel {
+
+	const orm = 'ForumDraadVolgen';
+
+	protected static $instance;
+
+	public function getAantalVolgenVoorLid() {
+		return $this->count('lid_id = ?', array(LoginLid::instance()->getUid()));
+	}
+
+	public function getVolgenVoorLid(ForumDraad $draad) {
+		return $this->existsByPrimaryKey(array($draad->draad_id, LoginLid::instance()->getUid()));
+	}
+
+	public function setVolgenVoorLid(ForumDraad $draad, $volgen = true) {
+		$gevolgd = $this->getVolgenVoorLid($draad);
+		if ($volgen) {
+			if (!$gevolgd) {
+				$gevolgd = new ForumDraadVolgen();
+				$gevolgd->draad_id = $draad->draad_id;
+				$gevolgd->lid_id = LoginLid::instance()->getUid();
+				$this->create($gevolgd);
+			}
+		} else {
+			if ($gevolgd) {
+				$this->deleteByPrimaryKey(array($draad->draad_id, LoginLid::instance()->getUid()));
+			}
+		}
+	}
+
+	public function volgNietsVoorLid() {
+		foreach ($this->find('lid_id = ?', array(LoginLid::instance()->getUid())) as $volgen) {
+			$this->delete($volgen);
 		}
 	}
 

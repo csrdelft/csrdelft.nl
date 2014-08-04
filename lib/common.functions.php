@@ -34,6 +34,24 @@ function endsWith($haystack, $needle) {
 }
 
 /**
+ * @source http://stackoverflow.com/a/9826656
+ * @param string $string
+ * @param string $start
+ * @param string $end
+ * @return string
+ */
+function betweenString($string, $start, $end) {
+	$string = ' ' . $string;
+	$pos = strpos($string, $start);
+	if ($pos == 0) {
+		return '';
+	}
+	$pos += strlen($start);
+	$len = strpos($string, $end, $pos) - $pos;
+	return substr($string, $pos, $len);
+}
+
+/**
  * Group by object property
  * 
  * @param string $prop
@@ -376,8 +394,8 @@ function namen2uid($sNamen, $filter = 'leden') {
 			foreach ($aZoekNamen as $aZoekNaam) {
 				$lid = LidCache::getLid($aZoekNaam['uid']);
 				$aNaamOpties[] = array(
-					'uid' => $aZoekNaam['uid'],
-					'naam' => $lid->getNaam());
+					'uid'	 => $aZoekNaam['uid'],
+					'naam'	 => $lid->getNaam());
 			}
 			$return[]['naamOpties'] = $aNaamOpties;
 		}

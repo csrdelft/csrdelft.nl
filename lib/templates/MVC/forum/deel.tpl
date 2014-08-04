@@ -9,11 +9,7 @@
 		</div>
 	{/if}
 {else}
-	{if $verborgen_aantal > 0}
-		<div class="forumheadbtn">
-			<a href="/forum/herstel" class="knop confirm" title="Verborgen onderwerpen weer laten zien">{icon get="eye"} {$verborgen_aantal}</a>
-		</div>
-	{/if}
+	{include file='MVC/forum/verbergen_volgen.tpl'}
 {/if}
 
 {capture name='navlinks'}

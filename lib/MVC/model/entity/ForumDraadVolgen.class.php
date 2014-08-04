@@ -1,14 +1,14 @@
 <?php
 
 /**
- * ForumDraadVerbergen.class.php
+ * ForumDraadVolgen.class.php
  * 
  * @author P.W.G. Brussee <brussee@live.nl>
  * 
- * Een ForumDraad kan worden verborgen door een lid.
+ * Een ForumDraad kan worden gevolgd door een lid.
  * 
  */
-class ForumDraadVerbergen extends PersistentEntity {
+class ForumDraadVolgen extends PersistentEntity {
 
 	/**
 	 * Shared primary key
@@ -37,6 +37,6 @@ class ForumDraadVerbergen extends PersistentEntity {
 	 * Database table name
 	 * @var string
 	 */
-	protected static $table_name = 'forum_draden_verbergen';
+	protected static $table_name = 'forum_draden_volgen';
 
 }

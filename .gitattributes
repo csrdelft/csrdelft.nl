@@ -417,8 +417,6 @@ htdocs/tools/query.php -text
 htdocs/tools/roodschopper.php -text
 htdocs/tools/saldodata.php -text
 htdocs/tools/saldografiek.php -text
-htdocs/tools/sendmail/maildata.php -text
-htdocs/tools/sendmail/sendmail.php -text
 htdocs/tools/soccie.php -text
 htdocs/tools/soccieimportweergeven.php -text
 htdocs/tools/stats.php -text
@@ -3084,6 +3082,7 @@ lib/MVC/model/entity/ForumDeel.class.php -text
 lib/MVC/model/entity/ForumDraad.class.php -text
 lib/MVC/model/entity/ForumDraadGelezen.class.php -text
 lib/MVC/model/entity/ForumDraadVerbergen.class.php -text
+lib/MVC/model/entity/ForumDraadVolgen.class.php -text
 lib/MVC/model/entity/ForumPost.class.php -text
 lib/MVC/model/entity/Foto.class.php -text
 lib/MVC/model/entity/FotoAlbum.class.php -text
@@ -3875,6 +3874,7 @@ lib/templates/MVC/forum/post_preview.tpl -text
 lib/templates/MVC/forum/post_zijbalk.tpl -text
 lib/templates/MVC/forum/resultaten.tpl -text
 lib/templates/MVC/forum/rss.tpl -text
+lib/templates/MVC/forum/verbergen_volgen.tpl -text
 lib/templates/MVC/fotoalbum/album.tpl -text
 lib/templates/MVC/groepen/groep.tpl -text
 lib/templates/MVC/groepen/inhoudsopgave.tpl -text
@@ -4085,3 +4085,4 @@ sql/4658_agendeerbaar_locatie.sql -text
 sql/4920_gasten_eetwens.sql -text
 sql/5005_duckname.sql -text
 sql/5049_file_size_rename.sql -text
+sql/5372_forum_volgen.sql -text

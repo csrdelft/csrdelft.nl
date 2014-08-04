@@ -14,7 +14,6 @@ class ForumView extends TemplateView {
 		$this->titel = 'Forum';
 		$this->smarty->assign('zoekform', new ForumZoekenForm());
 		$this->smarty->assign('categorien', $this->model);
-		$this->smarty->assign('verborgen_aantal', ForumDradenVerbergenModel::instance()->getAantalVerborgenVoorLid());
 	}
 
 	public function view() {
@@ -74,7 +73,6 @@ class ForumDeelView extends TemplateView {
 		$this->smarty->assign('paging', $paging AND ForumDradenModel::instance()->getAantalPaginas($deel->forum_id) > 1);
 		$this->smarty->assign('belangrijk', ($belangrijk ? '/belangrijk' : ''));
 		$this->smarty->assign('categorien', ForumModel::instance()->getForum());
-		$this->smarty->assign('verborgen_aantal', ForumDradenVerbergenModel::instance()->getAantalVerborgenVoorLid());
 	}
 
 	public function view() {

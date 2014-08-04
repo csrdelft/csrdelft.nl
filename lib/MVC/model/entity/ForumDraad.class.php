@@ -101,6 +101,11 @@ class ForumDraad extends PersistentEntity {
 	 */
 	private $verbergen;
 	/**
+	 * Volgen door gebruiker
+	 * @var boolean
+	 */
+	private $volgen;
+	/**
 	 * Database table fields
 	 * @var array
 	 */
@@ -141,6 +146,17 @@ class ForumDraad extends PersistentEntity {
 			$this->verbergen = ForumDradenVerbergenModel::instance()->getVerbergenVoorLid($this);
 		}
 		return $this->verbergen;
+	}
+
+	public function magVolgen() {
+		return LoginLid::mag('P_LOGGED_IN');
+	}
+
+	public function isGevolgd() {
+		if (!isset($this->volgen)) {
+			$this->volgen = ForumDradenVolgenModel::instance()->getVolgenVoorLid($this);
+		}
+		return $this->volgen;
 	}
 
 	public function getWanneerGelezen() {

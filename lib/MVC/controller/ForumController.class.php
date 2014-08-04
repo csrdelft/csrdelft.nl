@@ -62,9 +62,12 @@ class ForumController extends Controller {
 			case 'onderwerp':
 			case 'reactie':
 			case 'wacht':
-			case 'optout':
-			case 'optin':
-			case 'herstel':
+			case 'verbergen':
+			case 'tonen':
+			case 'toonalles':
+			case 'volgenaan':
+			case 'volgenuit':
+			case 'volgniets':
 				return !$this->isPosted();
 
 			case 'aanmaken':
@@ -300,10 +303,10 @@ class ForumController extends Controller {
 	 * 
 	 * @param int $draad_id
 	 */
-	public function optout($draad_id) {
+	public function verbergen($draad_id) {
 		$draad = ForumDradenModel::instance()->getForumDraad((int) $draad_id);
 		if (!$draad->magVerbergen()) {
-			throw new Exception('Mag niet verbergen');
+			throw new Exception('Onderwerp mag niet verborgen worden');
 		}
 		if ($draad->isVerborgen()) {
 			throw new Exception('Onderwerp is al verborgen');
@@ -317,7 +320,7 @@ class ForumController extends Controller {
 	 * 
 	 * @param int $draad_id
 	 */
-	public function optin($draad_id) {
+	public function tonen($draad_id) {
 		$draad = ForumDradenModel::instance()->getForumDraad((int) $draad_id);
 		if (!$draad->isVerborgen()) {
 			throw new Exception('Onderwerp is niet verborgen');
@@ -327,12 +330,53 @@ class ForumController extends Controller {
 	}
 
 	/**
-	 * Forum draden die verborgen waren door lid weer tonen.
+	 * Forum draden die verborgen zijn door lid weer tonen.
 	 */
-	public function herstel() {
+	public function toonalles() {
 		$aantal = ForumDradenVerbergenModel::instance()->getAantalVerborgenVoorLid();
-		ForumDradenVerbergenModel::instance()->toonAlleDradenVoorLid();
-		setMelding($aantal . ' onderwerpen worden weer getoond in de zijbalk', 1);
+		ForumDradenVerbergenModel::instance()->toonAllesVoorLid();
+		setMelding($aantal . ' onderwerp' . ($aantal === 1 ? ' wordt' : 'en worden') . ' weer getoond in de zijbalk', 1);
+		$this->recent();
+	}
+
+	/**
+	 * Forum draad volgen per email.
+	 * 
+	 * @param int $draad_id
+	 */
+	public function volgenaan($draad_id) {
+		$draad = ForumDradenModel::instance()->getForumDraad((int) $draad_id);
+		if (!$draad->magVolgen()) {
+			throw new Exception('Onderwerp mag niet gevolgd worden');
+		}
+		if ($draad->isGevolgd()) {
+			throw new Exception('Onderwerp wordt al gevolgd');
+		}
+		ForumDradenVolgenModel::instance()->setVolgenVoorLid($draad);
+		$this->onderwerp($draad_id);
+	}
+
+	/**
+	 * Forum draad niet meer volgen.
+	 * 
+	 * @param int $draad_id
+	 */
+	public function volgenuit($draad_id) {
+		$draad = ForumDradenModel::instance()->getForumDraad((int) $draad_id);
+		if (!$draad->isGevolgd()) {
+			throw new Exception('Onderwerp wordt niet gevolgd');
+		}
+		ForumDradenVolgenModel::instance()->setVolgenVoorLid($draad, false);
+		$this->onderwerp($draad_id);
+	}
+
+	/**
+	 * Forum draden die gevolgd worden door lid niet meer volgen.
+	 */
+	public function volgniets() {
+		$aantal = ForumDradenVolgenModel::instance()->getAantalVolgenVoorLid();
+		ForumDradenVolgenModel::instance()->volgNietsVoorLid();
+		setMelding($aantal . ' onderwerp' . ($aantal === 1 ? ' wordt' : 'en worden') . ' niet meer gevolgd', 1);
 		$this->recent();
 	}
 
@@ -409,16 +453,16 @@ class ForumController extends Controller {
 			$_SESSION['forum_concept'] = '';
 			invokeRefresh('/forum/deel/' . $deel->forum_id, 'Uw reactie is al geplaatst', 0);
 		}
-		$email = null;
+		$mailadres = null;
 		$wacht_goedkeuring = false;
 		if (!LoginLid::mag('P_LOGGED_IN')) {
 			$wacht_goedkeuring = true;
-			$email = filter_input(INPUT_POST, 'email', FILTER_SANITIZE_EMAIL);
-			if (!email_like($email)) {
+			$mailadres = filter_input(INPUT_POST, 'email', FILTER_SANITIZE_EMAIL);
+			if (!email_like($mailadres)) {
 				$url = ($draad_id === null ? '/forum/deel/' . $deel->forum_id : '/forum/onderwerp/' . $draad_id);
 				invokeRefresh($url, 'U moet een geldig email-adres opgeven!', -1);
 			}
-			if ($filter->isSpam($email)) {
+			if ($filter->isSpam($mailadres)) {
 				invokeRefresh('/forum/deel/' . $deel->forum_id, 'SPAM', -1); //TODO: logging
 			}
 		}
@@ -434,17 +478,20 @@ class ForumController extends Controller {
 			}
 			$draad = ForumDradenModel::instance()->maakForumDraad($deel->forum_id, $titel, $wacht_goedkeuring);
 		}
-		$post = ForumPostsModel::instance()->maakForumPost($draad->draad_id, $tekst, $_SERVER['REMOTE_ADDR'], $wacht_goedkeuring, $email);
+		$post = ForumPostsModel::instance()->maakForumPost($draad->draad_id, $tekst, $_SERVER['REMOTE_ADDR'], $wacht_goedkeuring, $mailadres);
 		$_SESSION['forum_laatste_post_tekst'] = $tekst;
 		$_SESSION['forum_concept'] = '';
 		ForumDradenGelezenModel::instance()->setWanneerGelezenDoorLid($draad);
 		if ($wacht_goedkeuring) {
 			setMelding('Uw bericht is opgeslagen en zal als het goedgekeurd is geplaatst worden.', 1);
 			//bericht sturen naar pubcie@csrdelft dat er een bericht op goedkeuring wacht
-			mail('pubcie@csrdelft.nl', 'Nieuw bericht wacht op goedkeuring', 'http://csrdelft.nl/forum/onderwerp/' . $draad->draad_id . '/wacht#' . $post->post_id . "\r\n" . "\r\nDe inhoud van het bericht is als volgt: \r\n\r\n" . str_replace('\r\n', "\n", $tekst) . "\r\n\r\nEINDE BERICHT", "From: pubcie@csrdelft.nl\nReply-To: " . $email);
+			mail('pubcie@csrdelft.nl', 'Nieuw bericht wacht op goedkeuring', "http://csrdelft.nl/forum/onderwerp/" . $draad->draad_id . "/wacht#" . $post->post_id . "\r\n" . "\r\nDe inhoud van het bericht is als volgt: \r\n\r\n" . str_replace('\r\n', "\n", $tekst) . "\r\n\r\nEINDE BERICHT", "From: pubcie@csrdelft.nl\nReply-To: " . $mailadres);
 			invokeRefresh('/forum/deel/' . $deel->forum_id);
 		} else {
 			ForumPostsModel::instance()->goedkeurenForumPost($post, $draad, $deel);
+			if ($draad->isGevolgd()) {
+				$mail = new Mail(LoginLid::instance()->getUid() . '@csrdelft.nl', 'C.S.R. Forum: nieuwe reactie op ' . $draad->titel, "http://csrdelft.nl/forum/onderwerp/" . $draad->draad_id . "/laatste#" . $post->post_id . "\r\n" . "\r\nDe inhoud van het bericht is als volgt: \r\n\r\n" . str_replace('\r\n', "\n", $tekst) . "\r\n\r\nEINDE BERICHT", "From: pubcie@csrdelft.nl\nReply-To: no-reply@csrdelft.nl");
+			}
 		}
 		// redirect naar (altijd) juiste pagina
 		invokeRefresh('/forum/reactie/' . $post->post_id . '#' . $post->post_id); // , ($draad_id === null ? 'Draad' : 'Post') . ' succesvol toegevoegd', 1
