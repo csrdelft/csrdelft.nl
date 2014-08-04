@@ -77,6 +77,14 @@ body, html{
     background: #428bca;
 }
 
+@media (min-width: 768px) {
+
+	#body .nav-pills li:last-child {
+		width: 0.0000001%;
+	}
+
+} 
+
 #body .alert {
     margin-bottom: 0;
 }
@@ -243,11 +251,6 @@ body {
 
 #besteLijstBeheerLaad {
     margin: 10px auto;
-}
-
-div.row {
-    margin-right: 0;
-    margin-left: 0
 }
 
 #laadKnoppen {

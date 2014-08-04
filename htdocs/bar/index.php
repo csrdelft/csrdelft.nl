@@ -36,7 +36,7 @@ if ($barsysteem->isLoggedIn()) {
                 <li class="active"><a href="#persoonselectie" role="tab" data-toggle="tab" id="persoonselectieVeld">Persoonselectie</a></li>
                 <li><a href="#invoer" role="tab" data-toggle="tab" id="invoerveld">Invoer</a></li>
                 <li><a href="#bestelLijstBeheer" role="tab" data-toggle="tab">Bestellingen</a></li>
-                <li><a href="#beheer" role="tab" data-toggle="tab">Beheer</a></li>
+                <li><a href="#beheer" role="tab" data-toggle="tab"><span class="glyphicon glyphicon-wrench"></span></a></li>
             </ul>
 
         </td>
@@ -104,71 +104,69 @@ if ($barsysteem->isLoggedIn()) {
                 </div>
                 <div class="tab-pane" id="invoer">
 
-                    <div class="row">
-                        <div id="knoppenGroep">
+					<div id="knoppenGroep">
 
-                            <input id="aantalInput" type="text" class="form-control" placeholder="1">
+						<input id="aantalInput" type="text" class="form-control" placeholder="1">
 
-                            <div class="btn-group btn-default">
-                                <button type="button" class="btn btn-groot btn-default" id="knop7">7</button>
-                                <button type="button" class="btn btn-groot btn-default" id="knop8">8</button>
-                                <button type="button" class="btn btn-groot btn-default" id="knop9">9</button>
-                            </div>
-                            <div class="btn-group btn-default">
-                                <button type="button" class="btn btn-groot btn-default" id="knop4">4</button>
-                                <button type="button" class="btn btn-groot btn-default" id="knop5">5</button>
-                                <button type="button" class="btn btn-groot btn-default" id="knop6">6</button>
-                            </div>
-                            <div class="btn-group btn-default">
-                                <button type="button" class="btn btn-groot btn-default" id="knop1">1</button>
-                                <button type="button" class="btn btn-groot btn-default" id="knop2">2</button>
-                                <button type="button" class="btn btn-groot btn-default" id="knop3">3</button>
-                            </div>
-                            <div class="btn-group btn-default">
-                                <button type="button" class="btn btn-groot btn-default" id="knopC">&#60&#60</button>
-                                <button type="button" class="btn btn-groot btn-default" id="knop0">0</button>
-                                <button type="button" class="btn btn-groot btn-default" id="knop-">-</button>
-                            </div>
-                            <div id="saldoOverzicht">
-                                <table class="table">
-                                    <tr>
-                                        <td>Huidig saldo</td>
-                                        <td id="huidigSaldo"></td>
-                                    </tr>
-                                    <tr>
-                                        <td>Totaal bestelling</td>
-                                        <td id="totaalBestelling"></td>
-                                    </tr>
-                                    <tr>
-                                        <td>Nieuw saldo</td>
-                                        <td id="nieuwSaldo"><span>€0,00</span></td>
-                                    </tr>
-                                </table>
-                            </div>
-                            <div class="btn-group btn-default" id="ondersteRijKnoppen">
-                                <button type="button" class="btn btn-beneden btn-default" id="knopCancel"><span
-                                        class="glyphicon glyphicon-remove"></span></button>
-                                <button type="button" class="btn btn-beneden btn-default" id="knopConfirm"><span
-                                        class="glyphicon glyphicon-ok"></span></button>
-                            </div>
-                        </div>
-                        <div id="linkerKant">
-                            <div id="bestelLijstDiv">
-                                <div class="eenDerdeLijst">
-                                    <ul class="list-group bestelLijst" id="bestelLijst1"></ul>
-                                </div>
-                                <div class="eenDerdeLijst">
-                                    <ul class="list-group bestelLijst" id="bestelLijst2"></ul>
-                                </div>
-                                <div class="eenDerdeLijst">
-                                    <ul class="list-group bestelLijst" id="bestelLijst3"></ul>
-                                </div>
-                            </div>
-                            <div id="bestelKnoppenLijst">
-                            </div>
-                        </div>
-
-                    </div>
+						<div class="btn-group btn-default">
+							<button type="button" class="btn btn-groot btn-default" id="knop7">7</button>
+							<button type="button" class="btn btn-groot btn-default" id="knop8">8</button>
+							<button type="button" class="btn btn-groot btn-default" id="knop9">9</button>
+						</div>
+						<div class="btn-group btn-default">
+							<button type="button" class="btn btn-groot btn-default" id="knop4">4</button>
+							<button type="button" class="btn btn-groot btn-default" id="knop5">5</button>
+							<button type="button" class="btn btn-groot btn-default" id="knop6">6</button>
+						</div>
+						<div class="btn-group btn-default">
+							<button type="button" class="btn btn-groot btn-default" id="knop1">1</button>
+							<button type="button" class="btn btn-groot btn-default" id="knop2">2</button>
+							<button type="button" class="btn btn-groot btn-default" id="knop3">3</button>
+						</div>
+						<div class="btn-group btn-default">
+							<button type="button" class="btn btn-groot btn-default" id="knopC">&#60&#60</button>
+							<button type="button" class="btn btn-groot btn-default" id="knop0">0</button>
+							<button type="button" class="btn btn-groot btn-default" id="knop-">-</button>
+						</div>
+						<div id="saldoOverzicht">
+							<table class="table">
+								<tr>
+									<td>Huidig saldo</td>
+									<td id="huidigSaldo"></td>
+								</tr>
+								<tr>
+									<td>Totaal bestelling</td>
+									<td id="totaalBestelling"></td>
+								</tr>
+								<tr>
+									<td>Nieuw saldo</td>
+									<td id="nieuwSaldo"><span>€0,00</span></td>
+								</tr>
+							</table>
+						</div>
+						<div class="btn-group btn-default" id="ondersteRijKnoppen">
+							<button type="button" class="btn btn-beneden btn-default" id="knopCancel"><span
+									class="glyphicon glyphicon-remove"></span></button>
+							<button type="button" class="btn btn-beneden btn-default" id="knopConfirm"><span
+									class="glyphicon glyphicon-ok"></span></button>
+						</div>
+					</div>
+					<div id="linkerKant">
+						<div id="bestelLijstDiv">
+							<div class="eenDerdeLijst">
+								<ul class="list-group bestelLijst" id="bestelLijst1"></ul>
+							</div>
+							<div class="eenDerdeLijst">
+								<ul class="list-group bestelLijst" id="bestelLijst2"></ul>
+							</div>
+							<div class="eenDerdeLijst">
+								<ul class="list-group bestelLijst" id="bestelLijst3"></ul>
+							</div>
+						</div>
+						<div id="bestelKnoppenLijst">
+						</div>
+					</div>
+						
                 </div>
                 <div class="tab-pane" id="bestelLijstBeheer">
 
@@ -222,14 +220,16 @@ if ($barsysteem->isLoggedIn()) {
 
 						<div id="productBeheer" class="hidden">
 						
+							<h2>Wijzig een product</h2>
+							
 							<div class="row">
-
+							
 								<div class="col-xs-3">
 									
 									<ul class="list-group" id="productBeheerLijst">
 									
 									</ul>
-								
+									
 								</div>
 							
 							</div>
@@ -237,41 +237,37 @@ if ($barsysteem->isLoggedIn()) {
 						</div>
 						
 						<div id="persoonBeheer" class="hidden">
+							
+							<h2>Persoon toevoegen</h2>
+					
+							<form id="addPerson" class="form-inline" action="ajax.php" method="post">
+							
+								<div id="input-group">
+								
+									<input type="hidden" name="add_person" value="on" />
+									<input placeholder="Naam" name="name" type="text" class="form-control" />
+									<input placeholder="Saldo in centen" name="saldo" type="text" class="form-control" />
+									<button type="submit" class="btn btn-primary"><span class="glyphicon glyphicon-plus"></span></button>
+								
+								</div>
+							
+							</form>
 						
-							<div class="row">
+							<h2>Persoon wijziggen</h2>
+					
+							<form id="updatePerson" class="form-inline" action="ajax.php" method="post">
 							
-								<h2>Persoon toevoegen</h2>
+								<div id="input-group">
+								
+									<input type="hidden" name="update_person" value="on" />
+									<select name="id" class="form-control personList"></select>
+									<input placeholder="Bijnaam" name="name" type="text" class="form-control" />
+									<button type="submit" class="btn btn-primary"><span class="glyphicon glyphicon-pencil"></span></button>
+								
+								</div>
+							
+							</form>
 						
-								<form id="addPerson" class="form-inline" action="ajax.php" method="post">
-								
-									<div id="input-group">
-									
-										<input type="hidden" name="add_person" value="on" />
-										<input placeholder="Naam" name="name" type="text" class="form-control" />
-										<input placeholder="Saldo in centen" name="saldo" type="text" class="form-control" />
-										<button type="submit" class="btn btn-primary"><span class="glyphicon glyphicon-plus"></span></button>
-									
-									</div>
-								
-								</form>
-							
-								<h2>Persoon wijziggen</h2>
-						
-								<form id="updatePerson" class="form-inline" action="ajax.php" method="post">
-								
-									<div id="input-group">
-									
-										<input type="hidden" name="update_person" value="on" />
-										<select name="id" class="form-control personList"></select>
-										<input placeholder="Bijnaam" name="name" type="text" class="form-control" />
-										<button type="submit" class="btn btn-primary"><span class="glyphicon glyphicon-pencil"></span></button>
-									
-									</div>
-								
-								</form>
-							
-							</div>
-							
 						</div>
 						
 						<div id="grootboekInvoer" class="hidden">
