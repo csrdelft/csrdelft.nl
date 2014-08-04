@@ -362,8 +362,8 @@ class ForumDradenModel extends PersistenceModel implements Paging {
 		$this->pagina = $this->getAantalPaginas($forum_id);
 	}
 
-	public function getAantalPaginas($forum_id) {
-		if ($forum_id === 0) { // recent en zoeken hebben onbeperkte paginas
+	public function getAantalPaginas($forum_id = null) {
+		if (!isset($forum_id)) { // recent en zoeken hebben onbeperkte paginas
 			return $this->pagina + 1;
 		}
 		if (!array_key_exists($forum_id, $this->aantal_paginas)) {

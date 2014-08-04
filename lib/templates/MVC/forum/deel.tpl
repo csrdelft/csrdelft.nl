@@ -69,7 +69,7 @@
 					{sliding_pager baseurl="/forum/recent/" url_append=$belangrijk
 							pagecount=ForumDradenModel::instance()->getHuidigePagina() curpage=ForumDradenModel::instance()->getHuidigePagina()
 							separator=" &nbsp;"}
-					&nbsp;<a href="/forum/recent/{ForumDradenModel::instance()->getAantalPaginas(0)}{$belangrijk}">verder terug</a>
+					&nbsp;<a href="/forum/recent/{ForumDradenModel::instance()->getAantalPaginas(null)}{$belangrijk}">verder terug</a>
 				{/if}
 			</th>
 		</tr>
