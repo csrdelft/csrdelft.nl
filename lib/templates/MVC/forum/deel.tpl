@@ -57,6 +57,7 @@
 			{include file='MVC/forum/draad_lijst.tpl'}
 		{/foreach}
 	</tbody>
+	{if $paging}
 	<thead>
 		<tr>
 			<th colspan="5">
@@ -73,6 +74,7 @@
 			</th>
 		</tr>
 	</thead>
+	{/if}
 	<tbody>
 		<tr>
 			<td colspan="5">

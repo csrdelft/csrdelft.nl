@@ -55,7 +55,7 @@
 {/strip}
 <table id="forumtabel">
 	<tbody>
-		{if ForumPostsModel::instance()->getAantalPaginas($draad->draad_id) > 1 AND !($draad->eerste_post_plakkerig AND ForumPostsModel::instance()->getHuidigePagina() != 1)}
+		{if $paging AND !($draad->eerste_post_plakkerig AND ForumPostsModel::instance()->getHuidigePagina() != 1)}
 			<tr class="tussenschot">
 				<td colspan="2"></td>
 			</tr>
@@ -97,7 +97,7 @@ strtotime($post->laatst_bewerkt) > strtotime($draad->getWanneerGelezen()->datum_
 				</tr>
 			{/if}
 			{include file='MVC/forum/post_lijst.tpl'}
-			{if $draad->eerste_post_plakkerig AND ForumPostsModel::instance()->getHuidigePagina() != 1 AND $smarty.foreach.posts.first}
+			{if $paging AND $draad->eerste_post_plakkerig AND ForumPostsModel::instance()->getHuidigePagina() != 1 AND $smarty.foreach.posts.first}
 				<tr class="tussenschot">
 					<td colspan="2"></td>
 				</tr>
@@ -113,7 +113,7 @@ strtotime($post->laatst_bewerkt) > strtotime($draad->getWanneerGelezen()->datum_
 			{/if}
 		{/foreach}
 
-		{if ForumPostsModel::instance()->getAantalPaginas($draad->draad_id) > 1}
+		{if $paging}
 			<tr class="tussenschot">
 				<td colspan="2"></td>
 			</tr>

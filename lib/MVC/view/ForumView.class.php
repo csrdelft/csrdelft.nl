@@ -66,11 +66,12 @@ class ForumRssView extends TemplateView {
 
 class ForumDeelView extends TemplateView {
 
-	public function __construct(ForumDeel $deel, $belangrijk = null) {
+	public function __construct(ForumDeel $deel, $paging = true, $belangrijk = null) {
 		parent::__construct($deel);
 		$this->titel = $deel->titel;
 		$this->smarty->assign('zoekform', new ForumZoekenForm());
 		$this->smarty->assign('deel', $this->model);
+		$this->smarty->assign('paging', $paging AND ForumDradenModel::instance()->getAantalPaginas($deel->forum_id) > 1);
 		$this->smarty->assign('belangrijk', ($belangrijk ? '/belangrijk' : ''));
 		$this->smarty->assign('categorien', ForumModel::instance()->getForum());
 		$this->smarty->assign('verborgen_aantal', ForumDradenVerbergenModel::instance()->getAantalVerborgenVoorLid());
@@ -118,12 +119,13 @@ class ForumDeelForm extends PopupForm {
 
 class ForumDraadView extends TemplateView {
 
-	public function __construct(ForumDraad $draad, ForumDeel $deel) {
+	public function __construct(ForumDraad $draad, ForumDeel $deel, $paging = true) {
 		parent::__construct($draad);
 		$this->titel = $draad->titel;
 		$this->smarty->assign('zoekform', new ForumZoekenForm());
 		$this->smarty->assign('draad', $this->model);
 		$this->smarty->assign('deel', $deel);
+		$this->smarty->assign('paging', $paging AND ForumPostsModel::instance()->getAantalPaginas($draad->draad_id) > 1);
 	}
 
 	public function view() {
