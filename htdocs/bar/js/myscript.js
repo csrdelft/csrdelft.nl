@@ -532,7 +532,7 @@ $(function () {
 			
         });
 		
-		$("#productBeheerLijst").removeClass("hidden");
+		$("#productBeheer").removeClass("hidden");
 		$("#grootboekInvoer").addClass("hidden");
 		
     });
@@ -559,7 +559,7 @@ $(function () {
 				
 				});
 				
-				$("#productBeheerLijst").addClass("hidden");
+				$("#productBeheer").addClass("hidden");
 				$("#grootboekInvoer").html(html).removeClass("hidden");
 			
 			}
