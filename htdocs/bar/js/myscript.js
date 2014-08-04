@@ -513,6 +513,9 @@ $(function () {
     /*************************************************************************************************/
 
     $("#laadProducten").click(function () {
+	
+		$(this).parent().find("> button").addClass("btn-default").removeClass("btn-primary");
+		$(this).removeClass("btn-default").addClass("btn-primary");
 		
 		$("#productBeheerLijst").empty();
 	
@@ -529,6 +532,9 @@ $(function () {
 			
         });
 		
+		$("#productBeheerLijst").removeClass("hidden");
+		$("#grootboekInvoer").addClass("hidden");
+		
     });
 	
 	$("#laadGrootboekInvoer").click(function() {
@@ -541,6 +547,7 @@ $(function () {
 			dataType: "json",
 			success: function(data) {
 		
+				button.parent().find("> button").addClass("btn-default").removeClass("btn-primary");
 				button.removeClass("btn-default").addClass("btn-primary");
 				
 				html = '';
@@ -552,6 +559,7 @@ $(function () {
 				
 				});
 				
+				$("#productBeheerLijst").addClass("hidden");
 				$("#grootboekInvoer").html(html).removeClass("hidden");
 			
 			}
