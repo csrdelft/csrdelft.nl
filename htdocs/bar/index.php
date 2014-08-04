@@ -199,7 +199,7 @@ if ($barsysteem->isLoggedIn()) {
                                 <th id="datum">Datum en tijd</th>
                                 <th id="totaal">Totaal</th>
                                 <th id="bestelling">Bestelling</th>
-                                <th id="opties">Opties</th>
+                                <th id="opties" class="sorter-false">Opties</th>
                             </tr>
                             </thead>
                             <tbody>
