@@ -221,6 +221,25 @@ class Barsysteem
         return ($elementen[2] . "-" . $maanden[$elementen[1]] . "-" . $datum);
     }
 	
+	// Beheer
+	public function getGrootboekInvoer() {
+	
+		$weeks = array();
+	
+		for($i = 0; $i < 52; $i++) {
+		
+			$week = array();
+			
+			$week['title'] = 'Week ' . $i;
+			
+			$weeks[] = $week;
+		
+		}
+		
+		return $weeks;
+	
+	}
+	
 	// Log action by type
 	public function log($type, $data)
 	{
