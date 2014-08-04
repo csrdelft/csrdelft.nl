@@ -232,21 +232,27 @@ class ForumDradenGelezenModel extends PersistenceModel {
 	protected static $instance;
 
 	public function getWanneerGelezenDoorLid(ForumDraad $draad) {
-		return $this->retrieveByPrimaryKey(array($draad->draad_id, LoginLid::instance()->getUid()));
-	}
-
-	public function setWanneerGelezenDoorLid(ForumDraad $draad) {
-		$gelezen = $this->getWanneerGelezenDoorLid($draad);
-		if (!$gelezen) {
+		$gelezen = $this->retrieveByPrimaryKey(array($draad->draad_id, LoginLid::instance()->getUid()));
+		if ($gelezen === null) {
 			$gelezen = new ForumDraadGelezen();
 			$gelezen->draad_id = $draad->draad_id;
 			$gelezen->lid_id = LoginLid::instance()->getUid();
-			$gelezen->datum_tijd = date('Y-m-d H:i:s');
+			$gelezen->datum_tijd = '0000-00-00 00:00:00';
 			$this->create($gelezen);
-		} else {
-			$gelezen->datum_tijd = date('Y-m-d H:i:s');
-			$this->update($gelezen);
 		}
+		return $gelezen;
+	}
+
+	public function setWanneerGelezenDoorLid(ForumDraad $draad) {
+		$laatste_op_pagina = $draad->getForumPosts();
+		$laatste_op_pagina = end($laatste_op_pagina);
+		$datum = $laatste_op_pagina->datum_tijd;
+		if ($laatste_op_pagina->laatst_bewerkt) {
+			$datum = $laatste_op_pagina->laatst_bewerkt;
+		}
+		$gelezen = $this->getWanneerGelezenDoorLid($draad);
+		$gelezen->datum_tijd = $datum;
+		$this->update($gelezen);
 	}
 
 }

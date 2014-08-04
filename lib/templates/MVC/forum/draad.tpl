@@ -78,11 +78,11 @@
 
 		{assign var=vanaf value=false}
 		{foreach from=$draad->getForumPosts() item=post name=posts}
-			{if !$vanaf AND (!$smarty.foreach.posts.first OR ForumPostsModel::instance()->getHuidigePagina() == 1) AND
+			{if !$vanaf AND
 (
-strtotime($post->datum_tijd) > strtotime($draad->getWanneerGelezen())
+strtotime($post->datum_tijd) > strtotime($draad->getWanneerGelezen()->datum_tijd)
 OR
-strtotime($post->laatst_bewerkt) > strtotime($draad->getWanneerGelezen())
+strtotime($post->laatst_bewerkt) > strtotime($draad->getWanneerGelezen()->datum_tijd)
 )
 			}
 			{assign var=vanaf value=true}
@@ -128,7 +128,7 @@ pagecount=ForumPostsModel::instance()->getAantalPaginas($draad->draad_id) curpag
 			</tr>
 		{/if}
 
-		{if !$vanaf AND ForumPostsModel::instance()->getHuidigePagina() == ForumPostsModel::instance()->getAantalPaginas($draad->draad_id)}
+		{if !$vanaf AND ForumPostsModel::instance()->getHuidigePagina() === ForumPostsModel::instance()->getAantalPaginas($draad->draad_id)}
 			<tr class="ongelezenvanaf" title="Geen ongelezen berichten">
 				<td colspan="2">
 					<a id="ongelezen"></a>

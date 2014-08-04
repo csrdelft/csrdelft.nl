@@ -199,21 +199,18 @@ class ForumController extends Controller {
 		if (!$deel->magLezen()) {
 			$this->geentoegang();
 		}
-		$gelezen = ForumDradenGelezenModel::instance()->getWanneerGelezenDoorLid($draad);
-		if ($gelezen) {
-			$draad->setWanneerGelezen($gelezen); // laad gelezen voordat database geupdate wordt
-		}
-		ForumDradenGelezenModel::instance()->setWanneerGelezenDoorLid($draad); // update database
+		$gelezen = $draad->getWanneerGelezen(); // laad gelezen voordat database geupdate wordt
 		if ($pagina === null) {
 			$pagina = LidInstellingen::get('forum', 'open_draad_op_pagina');
 		}
-		if ($pagina === 'ongelezen' AND $gelezen) {
+		if ($pagina === 'ongelezen' AND $gelezen !== null) {
 			ForumPostsModel::instance()->setPaginaVoorLaatstGelezen($gelezen);
 		} elseif ($pagina === 'laatste') {
 			ForumPostsModel::instance()->setLaatstePagina($draad->draad_id);
 		} else {
 			ForumPostsModel::instance()->setHuidigePagina((int) $pagina, $draad->draad_id);
 		}
+		ForumDradenGelezenModel::instance()->setWanneerGelezenDoorLid($draad); // update gelezen met laatste post op pagina
 		$this->view = new ForumDraadView($draad, $deel); // lazy loading ForumPost[]
 	}
 

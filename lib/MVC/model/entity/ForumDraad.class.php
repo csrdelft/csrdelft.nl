@@ -92,7 +92,7 @@ class ForumDraad extends PersistentEntity {
 	private $forum_posts;
 	/**
 	 * Moment gelezen door gebruiker
-	 * @var string
+	 * @var ForumDraadGelezen
 	 */
 	private $wanneer_gelezen;
 	/**
@@ -105,21 +105,21 @@ class ForumDraad extends PersistentEntity {
 	 * @var array
 	 */
 	protected static $persistent_fields = array(
-		'draad_id' => array(T::Integer, false, 'auto_increment'),
-		'forum_id' => array(T::Integer),
-		'lid_id' => array(T::UID),
-		'titel' => array(T::String),
-		'datum_tijd' => array(T::DateTime),
-		'laatst_gewijzigd' => array(T::DateTime, true),
-		'laatste_post_id' => array(T::Integer, true),
-		'laatste_lid_id' => array(T::UID, true),
-		'aantal_posts' => array(T::Integer),
-		'gesloten' => array(T::Boolean),
-		'verwijderd' => array(T::Boolean),
-		'wacht_goedkeuring' => array(T::Boolean),
-		'plakkerig' => array(T::Boolean),
-		'belangrijk' => array(T::Boolean),
-		'eerste_post_plakkerig' => array(T::Boolean)
+		'draad_id'				 => array(T::Integer, false, 'auto_increment'),
+		'forum_id'				 => array(T::Integer),
+		'lid_id'				 => array(T::UID),
+		'titel'					 => array(T::String),
+		'datum_tijd'			 => array(T::DateTime),
+		'laatst_gewijzigd'		 => array(T::DateTime, true),
+		'laatste_post_id'		 => array(T::Integer, true),
+		'laatste_lid_id'		 => array(T::UID, true),
+		'aantal_posts'			 => array(T::Integer),
+		'gesloten'				 => array(T::Boolean),
+		'verwijderd'			 => array(T::Boolean),
+		'wacht_goedkeuring'		 => array(T::Boolean),
+		'plakkerig'				 => array(T::Boolean),
+		'belangrijk'			 => array(T::Boolean),
+		'eerste_post_plakkerig'	 => array(T::Boolean)
 	);
 	/**
 	 * Database primary key
@@ -144,8 +144,8 @@ class ForumDraad extends PersistentEntity {
 	}
 
 	public function getWanneerGelezen() {
-		if ($this->wanneer_gelezen === null) {
-			return '0000-00-00 00:00:00';
+		if (!isset($this->wanneer_gelezen)) {
+			$this->setWanneerGelezen(ForumDradenGelezenModel::instance()->getWanneerGelezenDoorLid($this));
 		}
 		return $this->wanneer_gelezen;
 	}
@@ -158,7 +158,7 @@ class ForumDraad extends PersistentEntity {
 	}
 
 	public function setWanneerGelezen(ForumDraadGelezen $gelezen) {
-		$this->wanneer_gelezen = $gelezen->datum_tijd;
+		$this->wanneer_gelezen = $gelezen;
 	}
 
 	/**
