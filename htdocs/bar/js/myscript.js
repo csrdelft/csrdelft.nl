@@ -545,10 +545,10 @@ $(function () {
 				
 				html = '';
 				
-				$.each(data, function(week) {
+				$.each(data, function() {
 					
-					console.log(week);
-					html += '<h2>' + week.title + '</h2>';
+					html += '<h2>' + this.title + '</h2>';
+					html += '<p>' + this.content + '</h2>';
 				
 				});
 				
