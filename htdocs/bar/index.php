@@ -212,12 +212,6 @@ if ($barsysteem->isLoggedIn()) {
                         </table>
                     </div>
                 </div>
-                <div class="tab-pane" id="spotify">
-				
-					<iframe src="http://tweakers.net/" />
-				
-				
-                </div>
                 <div class="tab-pane" id="beheer">
 
                     <div id="beheer-nav" class="btn-group btn-group-lg">
