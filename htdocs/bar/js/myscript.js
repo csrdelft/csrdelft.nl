@@ -571,9 +571,9 @@ $(function () {
 			success: function(data) {
 			
 				if(data == "1") {
-					zetBericht("Persoon toegevoegd." , "success");
+					zetBericht("Persoon toegevoegd.", "success");
 					laadPersonen();
-					$this.reset();
+					$this.trigger("reset");
 				} else {
 					zetBericht("Er is iets misgegeaan met het toevoegen van een persoon!", "danger");
 				}
@@ -598,9 +598,9 @@ $(function () {
 			success: function(data) {
 			
 				if(data == "1") {
-					zetBericht("Persoon aangepast." , "success");
+					zetBericht("Persoon aangepast.", "success");
 					laadPersonen();
-					$this.reset();
+					$this.trigger("reset");
 				} else {
 					zetBericht("Er is iets misgegeaan met het aanpassen van een persoon!", "danger");
 				}
