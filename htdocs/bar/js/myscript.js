@@ -647,7 +647,7 @@ $(function () {
 				});
 				
 				$("#productBeheer, #persoonBeheer").addClass("hidden");
-				$("#grootboekInvoer").html(html.reverse()).removeClass("hidden");
+				$("#grootboekInvoer").html(html).removeClass("hidden");
 			
 			}
 		});
