@@ -1105,7 +1105,7 @@ span.togglePasfoto:hover, a.postlink:hover{
 #forumtabel td.titel{
 	margin: 0; padding: 0.2em 0.6em 0.2em 0.6em;
 	vertical-align: middle; text-align: left;
-	min-width: 180px;
+	width: auto;
 }
 #forumtabel td.reactiemoment{
 	margin: 0; padding: 0.2em 0.6em 0.2em 0.6em;

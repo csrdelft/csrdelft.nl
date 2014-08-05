@@ -37,7 +37,7 @@
 <table id="forumtabel">
 	<thead>
 		<tr>
-			<th colspan="2">Titel</th>
+			<th>Titel</th>
 			<th>Reacties</th>
 			<th style="text-align: center;">Auteur</th>
 			<th>Recente wijziging</th>

@@ -380,3 +380,12 @@ div.msgnotify {
     background-image: url(http://plaetjes.csrdelft.nl/famfamfam/bell.png);
     border-color: #eeb;
 }
+
+/* forum */
+td.auteur {
+	min-width: 100px;
+}
+
+td.titel {
+	min-width: 180px;
+}

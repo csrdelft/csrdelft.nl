@@ -13,7 +13,8 @@
 						Het vermelden van <em>uw naam en email-adres</em> is verplicht.
 					</strong> 
 					<br /><br />
-					<label for="email">Email-adres:</label><input type="text" name="email" style="width: 250px;" /><br />
+					<label for="email">Email-adres:</label><input type="text" name="email" style="width: 250px;" />
+					<br /><br/>
 					{* spam trap, must be kept empty! *}
 					<input type="text" name="firstname" value="" class="verborgen" />
 					{* ingelogde gebruikers vertellen dat iedereen hun bericht mag lezen inclusief Google. *}
