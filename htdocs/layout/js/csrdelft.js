@@ -21,8 +21,13 @@ $(document).ready(function() {
 	init_buttons();
 	init_forms();
 	init_hoverIntents();
-	init_groepen();
 	init_lazy_images();
+	try {
+		init_groepen();
+	}
+	catch (err) {
+		//FIXME groepen.js not present
+	}
 });
 
 function init_lazy_images() {
