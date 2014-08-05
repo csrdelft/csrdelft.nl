@@ -85,6 +85,10 @@ body, html{
 
 }
 
+#knoppenGroep{
+	margin: -10px 0 0;
+}
+
 .nav-pills .glyphicon{
 	margin-right: 12px;
 }
