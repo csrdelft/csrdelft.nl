@@ -85,7 +85,7 @@ h1, h2, h3, h4, h5, h6 { font-weight: normal; }
 }
 
 /* Content */
-.box h1 { font-family: SentinelBold; line-height: 24px; font-size: 24px; text-shadow: 1px 1px 1px rgba(0,0,0,0.1); padding: 30px 25px 0; margin:0; }
+.box h1 { font-family: SentinelBold; line-height: 24px; font-size: 24px; text-shadow: 1px 1px 1px rgba(0,0,0,0.1); /* padding: 30px 25px 0; margin:0; */ }
 .box h2 { font-family: SentinelBold; line-height: 31px; font-size: 28px; text-shadow: 1px 1px 1px rgba(0,0,0,0.4); padding: 12px 15px; margin:0; }
 .box h2.overlay { position: absolute; left: 0; top: 0; width: 100%; }
 .box p { line-height: 18px; font-size: 13px; text-align: left; padding: 25px 25px 0; }
