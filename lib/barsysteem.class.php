@@ -248,7 +248,7 @@ class Barsysteem
 		// GROUP BY week 
 		$q = $this->db->prepare("
 SELECT G.type,
-	SUM(I.aantal) * PR.prijs AS total,
+	SUM(I.aantal * PR.prijs) AS total,
 	WEEK(B.tijd, 3) AS week,
 	YEARWEEK(B.tijd) AS yearweek
 FROM socCieBestelling AS B
