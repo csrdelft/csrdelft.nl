@@ -464,7 +464,7 @@ $(function () {
     function zetOudeBestellingen(bestellingen) {
         $("#besteLijstBeheerContent tbody").empty();
         $.each(bestellingen, function (item) {
-            var bestelling = bestellingen[item];
+            var bestelling = this;
             var bestel = [];
             for (key in bestelling.bestelLijst) {
                 bestel.push(bestelling.bestelLijst[key] + " " + producten[key].beschrijving);
