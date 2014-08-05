@@ -34,6 +34,7 @@ class Barsysteem
             if ($row["stekUID"]) {
                 $lid = LidCache::getLid($row["stekUID"]);
                 $persoon["naam"] = $lid->getNaam();
+				$persoon["status"] = $lid->getStatus()->__toString();
             }
             $persoon["socCieId"] = $row["socCieId"];
             $persoon["bijnaam"] = $row["naam"];

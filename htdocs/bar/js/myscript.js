@@ -315,41 +315,67 @@ $(function () {
 
     $("#knopConfirm").each(function() {
 	
+		var $this = $(this);
+	
 		// Set current submiting state on false
 		var submitting = false;
+		var warningGiven = false;
 	
 		$(this).click(function () {
 		
-			if (selectedPerson && bestelTotaal() != 0) {
+			var oudlid = selectedPerson.status != 'S_LID' && selectedPerson.status != 'S_GASTLID';
+			var toRed = selectedPerson.saldo - bestelTotaal() < 0;
 			
-				// Set submitting state on true
-				submitting = true;
+			if(oudlid && toRed) {
 			
-				var result = {};
-				result["bestelLijst"] = bestelLijst;
-				result["bestelTotaal"] = bestelTotaal();
-				result["persoon"] = selectedPerson;
+				zetBericht("Oudleden kunnen niet rood staan, inleg vereist!", "danger");
+			
+			}
+			else if (selectedPerson && bestelTotaal() != 0) {
+			
+				if(!warningGiven && toRed) {
 				
-				// If update of old order us that data
-				if (oudeBestelling) result["oudeBestelling"] = oudeBestelling;
+					$this.addClass("loading");
 				
-				$.ajax({
-					url: "ajax.php",
-					method: "POST",
-					data: {"bestelling": JSON.stringify(result)}
-				}).done(function (data) {
-					if (data == "1") {
-						//succes! de bestelling is goed verwerkt
-						cancel();
-					} else {
-						zetBericht("Er gaat iets verkeert met de bestelling, hij is niet verwerkt!", "danger");
-					}
-				}).always(function() {
+					zetBericht("Laat lid inleggen. Saldo wordt negatief.", "danger");
+					setTimeout(function() {
+						warningGiven = true;
+						$this.removeClass("loading");
+					}, 3000);
 				
-					// After AJAX always set submitting on false
-					submitting = false;
+				} else {
+			
+					// Set submitting state on true
+					submitting = true;
 				
-				});
+					var result = {};
+					result["bestelLijst"] = bestelLijst;
+					result["bestelTotaal"] = bestelTotaal();
+					result["persoon"] = selectedPerson;
+					
+					// If update of old order us that data
+					if (oudeBestelling) result["oudeBestelling"] = oudeBestelling;
+					
+					$.ajax({
+						url: "ajax.php",
+						method: "POST",
+						data: {"bestelling": JSON.stringify(result)}
+					}).done(function (data) {
+						if (data == "1") {
+							//succes! de bestelling is goed verwerkt
+							cancel();
+						} else {
+							zetBericht("Er gaat iets verkeert met de bestelling, hij is niet verwerkt!", "danger");
+						}
+					}).always(function() {
+					
+						// After AJAX always set submitting on false
+						submitting = false;
+						warningGiven = false;
+					
+					});
+
+				}
 
 			} else if (!selectedPerson) {
 				zetBericht("Geen geldig persoon geselecteerd!", "danger");
