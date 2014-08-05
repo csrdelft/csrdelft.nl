@@ -17,6 +17,11 @@ class Barsysteem
 	{
 		return isset($_COOKIE['barsysteem']) && md5('my_salt_is_strong' . $_COOKIE['barsysteem']) == '8f700ce34a77ef4ef9db9bbdde9e97d8';
 	}
+	
+	function isBeheer()
+	{
+		return isset($_COOKIE['barsysteembeheer']) && md5('my_salt_is_strong' . $_COOKIE['barsysteembeheer']) == '49ee17fb49f2075df6bb538eee4e415e';
+	}
 
     function getPersonen()
     {

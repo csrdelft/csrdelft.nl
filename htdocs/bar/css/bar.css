@@ -79,7 +79,7 @@ body, html{
 
 @media (min-width: 768px) {
 
-	#body .nav-pills li:last-child {
+	#body .nav-pills li.beheer {
 		width: 0.0000001%;
 	}
 
@@ -89,7 +89,7 @@ body, html{
 	margin-right: 12px;
 }
 
-.nav-pills li:last-child .glyphicon{
+.nav-pills li.beheer .glyphicon{
 	margin-right: 0;
 }
 

@@ -36,7 +36,7 @@ if ($barsysteem->isLoggedIn()) {
                 <li class="active"><a href="#persoonselectie" role="tab" data-toggle="tab" id="persoonselectieVeld"><span class="glyphicon glyphicon-user"></span>Persoonselectie</a></li>
                 <li><a href="#invoer" role="tab" data-toggle="tab" id="invoerveld"><span class="glyphicon glyphicon-pencil"></span>Invoer</a></li>
                 <li><a href="#bestelLijstBeheer" role="tab" data-toggle="tab"><span class="glyphicon glyphicon-list"></span>Bestellingen</a></li>
-                <li><a href="#beheer" role="tab" data-toggle="tab"><span class="glyphicon glyphicon-wrench"></span></a></li>
+                <?php if ($barsysteem->isBeheer()): ?><li class="beheer"><a href="#beheer" role="tab" data-toggle="tab"><span class="glyphicon glyphicon-wrench"></span></a></li><?php endif; ?>
             </ul>
 
         </td>

@@ -15,21 +15,23 @@ if ($barsysteem->isLoggedIn()){
 
 	/* Start beheer */
 
-	// Get grootboekinvoer
-	if(isset($_GET['q']) && $_GET['q'] == 'grootboek') {
-		echo json_encode($barsysteem->getGrootboekInvoer());
-	}
-	
-	if(isset($_POST["add_person"])) {
-		echo $barsysteem->addPerson($_POST['name'], $_POST['saldo']);
-	}
-	
-	if(isset($_POST["update_person"])) {
-		echo $barsysteem->updatePerson($_POST['id'], $_POST['name']);
-	}
-	
-	if(isset($_POST["remove_person"])) {
-		echo $barsysteem->removePerson($_POST['id']);
+	if($barsysteem->isBeheer()) {
+		// Get grootboekinvoer
+		if(isset($_GET['q']) && $_GET['q'] == 'grootboek') {
+			echo json_encode($barsysteem->getGrootboekInvoer());
+		}
+		
+		if(isset($_POST["add_person"])) {
+			echo $barsysteem->addPerson($_POST['name'], $_POST['saldo']);
+		}
+		
+		if(isset($_POST["update_person"])) {
+			echo $barsysteem->updatePerson($_POST['id'], $_POST['name']);
+		}
+		
+		if(isset($_POST["remove_person"])) {
+			echo $barsysteem->removePerson($_POST['id']);
+		}
 	}
 	
 	/* Einde beheer */
