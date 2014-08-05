@@ -85,6 +85,10 @@ body, html{
 
 }
 
+#selectieTabel tr td:last-child{
+	text-align: right;
+}
+
 .loading .glyphicon:before{
 	content: "\e031";
 }

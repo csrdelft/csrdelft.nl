@@ -201,7 +201,8 @@ $(function () {
         if (achterKomma == 0) achterKomma = "00";
         else if (achterKomma < 10) achterKomma = "0" + achterKomma;
         if (saldo > -100 && saldo < 0) return "€-0," + achterKomma;
-        return "€" + (saldo - (saldo % 100)) / 100 + "," + achterKomma;
+        var string = "&euro;" + (saldo - (saldo % 100)) / 100 + "," + achterKomma;
+		return string.replace("&euro;-", "-&euro;");
     }
 
     function zetBericht(bericht, type) {
