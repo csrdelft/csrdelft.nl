@@ -383,7 +383,12 @@ $(function () {
 		updateOnKeyPress();
 	});
 
-    $("#knopCancel").click(cancel);
+    $("#knopCancel").click(function() {
+	
+		if(confirm("Weet je zeker dat je de bestelling wilt afbreken?"))
+			cancel();
+		
+	});
 
     function cancel() {
         selectedPerson = null;
