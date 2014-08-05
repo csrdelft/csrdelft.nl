@@ -126,30 +126,33 @@ $(function () {
     }
 
     function zetProductInLijst(product) {
-        $("#bestelKnoppenLijst").append("<button type='button' class='btn btn-bestel btn-default' id='bestelKnop" + product.productId + "'>" + product.beschrijving + "<br />" +
-            saldoStr(product.prijs) + "</button>");
-        $("#bestelKnop" + product.productId).click(function () {
-            var aantal = $("#aantalInput")[0].value;
-            if (aantal == "" || aantal == 0) {
-                aantal = 1;
-            }
-            if (aantal == "-") {
-                aantal = -1;
-            }
-            if (product.productId in bestelLijst) {
-                var nieuw = bestelLijst[product.productId] + (1 * aantal);
-                if (nieuw <= 0) {
-                    delete bestelLijst[product.productId];
-                }
-                else {
-                    bestelLijst[product.productId] = nieuw;
-                }
-            } else if (aantal > 0) {
-                bestelLijst[product.productId] = (1 * aantal);
-            }
-            resetTeller();
-            zetBestelLijstGoed();
-        })
+	
+		if(product.beheer == 0 || beheer) {
+			$("#bestelKnoppenLijst").append("<button type='button' class='btn btn-bestel btn-default' id='bestelKnop" + product.productId + "'>" + product.beschrijving + "<br />" +
+				saldoStr(product.prijs) + "</button>");
+			$("#bestelKnop" + product.productId).click(function () {
+				var aantal = $("#aantalInput")[0].value;
+				if (aantal == "" || aantal == 0) {
+					aantal = 1;
+				}
+				if (aantal == "-") {
+					aantal = -1;
+				}
+				if (product.productId in bestelLijst) {
+					var nieuw = bestelLijst[product.productId] + (1 * aantal);
+					if (nieuw <= 0) {
+						delete bestelLijst[product.productId];
+					}
+					else {
+						bestelLijst[product.productId] = nieuw;
+					}
+				} else if (aantal > 0) {
+					bestelLijst[product.productId] = (1 * aantal);
+				}
+				resetTeller();
+				zetBestelLijstGoed();
+			});
+		}
 
     }
 

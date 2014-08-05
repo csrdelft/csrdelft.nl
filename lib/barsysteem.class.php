@@ -51,8 +51,7 @@ class Barsysteem
 
     function getProducten()
     {
-        $q = $this->db->prepare("SELECT id, prijs, beschrijving, prioriteit FROM socCieProduct as P JOIN socCiePrijs as R ON P.id=R.productId WHERE status = '1' AND CURRENT_TIMESTAMP<tot AND CURRENT_TIMESTAMP>van AND beheer <= :beheer ORDER BY prioriteit DESC");
-        $q->bindValue(':beheer', $this->isBeheer() ? 1 : 0);
+        $q = $this->db->prepare("SELECT id, beheer, prijs, beschrijving, prioriteit FROM socCieProduct as P JOIN socCiePrijs as R ON P.id=R.productId WHERE status = '1' AND CURRENT_TIMESTAMP<tot AND CURRENT_TIMESTAMP>van ORDER BY prioriteit DESC");
 		$q->execute();
 	
 		$result = array();
@@ -60,6 +59,7 @@ class Barsysteem
             $product = array();
             $product["productId"] = $row["id"];
             $product["prijs"] = $row["prijs"];
+            $product["beheer"] = $row["beheer"];
             $product["beschrijving"] = $row["beschrijving"];
             $product["prioriteit"] = $row["prioriteit"];
             $result[$row["id"]] = $product;

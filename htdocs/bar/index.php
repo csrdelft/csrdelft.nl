@@ -19,6 +19,11 @@ if ($barsysteem->isLoggedIn()) {
         <!-- Bootstrap core CSS -->
         <link href="css/bar.css" rel="stylesheet">
         <link href="css/bootstrap.min.css" rel="stylesheet">
+		
+		<script type="text/javascript">
+		var beheer = <?= $barsysteem->isBeheer() ? "1" : "0" ?>;
+		</script>
+		
     </head>
 
     <body id="body">
