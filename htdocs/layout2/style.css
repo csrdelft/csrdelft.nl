@@ -85,7 +85,7 @@ h1, h2, h3, h4, h5, h6 { font-weight: normal; }
 }
 
 /* Content */
-.box h1 { font-family: SentinelBold; line-height: 24px; font-size: 24px; text-shadow: 1px 1px 1px rgba(0,0,0,0.1); /* padding: 30px 25px 0; margin:0; */ }
+.box h1 { font-family: SentinelBold; line-height: 24px; font-size: 24px; text-shadow: 1px 1px 1px rgba(0,0,0,0.1); padding: 30px 25px 0; margin:0; }
 .box h2 { font-family: SentinelBold; line-height: 31px; font-size: 28px; text-shadow: 1px 1px 1px rgba(0,0,0,0.4); padding: 12px 15px; margin:0; }
 .box h2.overlay { position: absolute; left: 0; top: 0; width: 100%; }
 .box p { line-height: 18px; font-size: 13px; text-align: left; padding: 25px 25px 0; }
@@ -120,7 +120,7 @@ img.border { width: 224px; border: 6px solid #fff; }
 #pageover .close:hover { color: #333; }
 
 /* Content */
-#pageover h1 { font-family: SentinelBold; line-height: 40px; font-size: 32px; color: #000; margin: -80px 0 0.67em; padding: 25px 30px 0 0; position: relative; z-index: 104; width:700px;}
+#pageover h1 { font-family: SentinelBold; line-height: 40px; font-size: 32px; color: #000; /* margin: -80px 0 0.67em; padding: 25px 30px 0 0; */ position: relative; z-index: 104; width:700px;}
 #pageover h2 { font-size: 14px; font-weight: bold; padding: 24px 0 0; }
 #pageover h3 { font-size: 12px; font-weight: bold; }
 #pageover p, #pageover address, #pageover table { padding: 0 0 14px; }
