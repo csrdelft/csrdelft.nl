@@ -33,7 +33,7 @@ class Lid implements Serializable, Agendeerbaar {
 
 	private function load($uid) {
 		$db = MySql::instance();
-		$query = "SELECT * FROM lid WHERE uid = '" . $db->escape($uid) . "' LIMIT 1;";
+		$query = "SELECT * FROM lid JOIN socCieKlanten AS K ON lid.uid = K.stekUID WHERE uid = '" . $db->escape($uid) . "' LIMIT 1;";
 		$lid = $db->getRow($query);
 		if (is_array($lid)) {
 			$this->profiel = $lid;
@@ -613,7 +613,7 @@ class Lid implements Serializable, Agendeerbaar {
 	 */
 	public function getSaldi() {
 		return array(
-			array('naam' => 'SocCie', 'saldo' => $this->profiel['soccieSaldo']),
+			array('naam' => 'SocCie', 'saldo' => $this->profiel['saldo'] / 100),
 			array('naam' => 'MaalCie', 'saldo' => $this->profiel['maalcieSaldo']));
 	}
 
