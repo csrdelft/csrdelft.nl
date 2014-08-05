@@ -470,6 +470,8 @@ $(function () {
                 bestel.push(bestelling.bestelLijst[key] + " " + producten[key].beschrijving);
             }
             bestel = bestel.join(", ");
+			console.log(bestelling);
+			console.log(personen[bestelling.persoon]);
             $("#besteLijstBeheerContent tbody").append("<tr id='tabelRijBeheerLijst" + item + "'><td>" + personen[bestelling.persoon].naam + "</td><td>"
                 + bestelling.tijd + "</td><td>" + saldoStr(bestelling.bestelTotaal) + "</td><td>" + bestel + "</td>" +
                 "<td><div class='btn-group'><button type='button' class='btn btn-default dropdown-toggle' data-toggle='dropdown'>Opties <span class='caret'></span></button>" +
