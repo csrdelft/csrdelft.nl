@@ -43,9 +43,6 @@ $(function () {
      */
     var selectedPerson;
 
-
-    var beheer = true;
-
     /**
      * Dit is de lijst met bestellingen.
      * @type {{}} deze lijst mapt het productId naar het aantal dat er besteld zijn. Bijv 1=>2, dit betekent bijvoorbeeld dat er twee bier is besteld.
