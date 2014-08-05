@@ -268,6 +268,20 @@ if ($barsysteem->isLoggedIn()) {
 							
 							</form>
 						
+							<h2>Persoon verwijderen</h2>
+					
+							<form id="removePerson" class="form-inline" action="ajax.php" method="post">
+							
+								<div id="input-group">
+								
+									<input type="hidden" name="remove_person" value="on" />
+									<select name="id" class="form-control personList"></select>
+									<button type="submit" class="btn btn-primary"><span class="glyphicon glyphicon-remove"></span></button>
+								
+								</div>
+							
+							</form>
+						
 						</div>
 						
 						<div id="grootboekInvoer" class="hidden">

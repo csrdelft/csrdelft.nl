@@ -28,6 +28,10 @@ if ($barsysteem->isLoggedIn()){
 		echo $barsysteem->updatePerson($_POST['id'], $_POST['name']);
 	}
 	
+	if(isset($_POST["remove_person"])) {
+		echo $barsysteem->removePerson($_POST['id']);
+	}
+	
 	/* Einde beheer */
 
 	// Get persons

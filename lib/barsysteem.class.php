@@ -279,6 +279,14 @@ ORDER BY yearweek DESC
 	
 	}
 	
+	public function removePerson($id) {
+	
+		$q = $this->db->prepare("DELETE FROM socCieKlanten WHERE socCieId = :id");
+		$q->bindValue(':id', $id, PDO::PARAM_INT);
+		return $q->execute();
+	
+	}
+	
 	public function addPerson($name, $saldo) {
 	
 		$q = $this->db->prepare("INSERT INTO socCieKlanten (naam, saldo) VALUES (:naam, :saldo)");

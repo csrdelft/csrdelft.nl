@@ -581,6 +581,37 @@ $(function () {
 	
 	});
 	
+	$("#removePerson").submit(function(e) {
+	
+		e.preventDefault();
+		var $this = $(this);
+		
+		if(confirm("Weet je zeker dat je " + $(".personList :selected", this).html() + " wilt verwijderen?")) {
+		
+			$.ajax({
+				url: $(this).attr("action"),
+				method: $(this).attr("method"),
+				data: $this.serializeArray(),
+				success: function(data) {
+				
+					if(data == "1") {
+						zetBericht("Persoon verwijderd.", "success");
+						laadPersonen();
+						$this.trigger("reset");
+					} else {
+						zetBericht("Er is iets misgegeaan met het verwijderen van een persoon!", "danger");
+					}
+				
+				},
+				error: function() {
+					zetBericht("Er is iets misgegeaan met het verwijderen van een persoon!", "danger");
+				}
+			});
+		
+		}
+	
+	});
+	
 	$("#laadGrootboekInvoer").click(function() {
 	
 		var button = $(this);
