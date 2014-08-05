@@ -264,11 +264,15 @@ $(function () {
         var item = new RegExp($("#persoonInput").val(), "gi");
         var output = new Array();
         $("#selectieTabel > tbody").empty();
-        $.each(personen, function () {
-
-            if (this.bijnaam.match(item) || this.naam.match(item)) {
-                output.push(this);
-                zetInTabel(this);
+		var orderPersonen = [];
+		$.each(personen, function (key, val) {
+			orderPersonen.push( { key: key, value: val } );
+		});
+		orderPersonen.sort(function(a, b) { return b.value.recent - a.value.recent });
+        $.each(orderPersonen, function () {
+            if (this.value.bijnaam.match(item) || this.value.naam.match(item)) {
+                output.push(this.value);
+                zetInTabel(this.value);
             }
 
         });

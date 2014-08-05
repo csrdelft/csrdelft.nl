@@ -25,8 +25,8 @@ class Barsysteem
 
     function getPersonen()
     {
-		// SELECT *FROM socCieKlanten LEFT JOIN socCieBestelling ON socCieKlanten.socCieId = socCieBestelling.socCieId AND DATEDIFF(NOW(), tijd) < 100 GROUP BY socCieKlanten.socCieId ORDER BY totaal DESC;
-        $terug = $this->db->query("SELECT * FROM socCieKlanten;");
+		 
+        $terug = $this->db->query("SELECT socCieKlanten.stekUID, socCieKlanten.socCieId, socCieKlanten.naam, socCieKlanten.saldo, SUM(socCieBestelling.totaal) AS recent FROM socCieKlanten LEFT JOIN socCieBestelling ON (socCieKlanten.socCieId = socCieBestelling.socCieId AND DATEDIFF(NOW(), tijd) < 100) GROUP BY socCieKlanten.socCieId;");
         $result = array();
         foreach ($terug as $row) {
             $persoon = array();
@@ -38,6 +38,7 @@ class Barsysteem
             $persoon["socCieId"] = $row["socCieId"];
             $persoon["bijnaam"] = $row["naam"];
             $persoon["saldo"] = $row["saldo"];
+            $persoon["recent"] = $row["recent"];
             $result[$row["socCieId"]] = $persoon;
         }
         return $result;
