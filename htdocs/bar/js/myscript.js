@@ -183,10 +183,10 @@ $(function () {
         });
 
         if (oudeBestelling) {
-
-        }
-
-        if (selectedPerson) {
+			var before = parseInt(selectedPerson.saldo) + parseInt(oudeBestelling.bestelTotaal);
+            $("#huidigSaldo").html(saldoStr(before));
+            $("#nieuwSaldo").html(saldoStr(before - totaal));
+        } else if (selectedPerson) {
             $("#huidigSaldo").html(saldoStr(selectedPerson.saldo));
             $("#nieuwSaldo").html(saldoStr(selectedPerson.saldo - totaal));
         } else {
@@ -440,14 +440,13 @@ $(function () {
                 "<li><a href='#' id='verwijderBestelling" + item + "'>Verwijder bestelling</a></li>" +
                 "</ul></div></td></tr>");
 
-            $("#besteLijstBeheer").trigger("update")
+            $("#besteLijstBeheer").trigger("update");
 
             $("#anderePersoon" + item).click(function () {
                 //todo
             });
             $("#bewerkInhoud" + item).click(function () {
                 zetWaarschuwing("U bewerkt een bestelling!");
-                //console.log(bestelling);
                 bestelLijst = bestelling.bestelLijst;
                 oudeBestelling = bestelling;
                 selectedPerson = personen[bestelling.persoon]
