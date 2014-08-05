@@ -43,7 +43,7 @@ function init_lazy_images() {
 }
 
 function lazy_image_loaded() {
-	$(this).parent().removeClass('ubb_img_loading');
+	$(this).parent().replaceWith($(this));
 }
 
 function page_reload() {
