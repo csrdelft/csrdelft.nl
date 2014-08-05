@@ -286,7 +286,7 @@ ORDER BY yearweek DESC
 	
 	public function removePerson($id) {
 	
-		$q = $this->db->prepare("DELETE FROM socCieKlanten WHERE socCieId = :id");
+		$q = $this->db->prepare("DELETE FROM socCieKlanten WHERE socCieId = :id AND saldo = 0");
 		$q->bindValue(':id', $id, PDO::PARAM_INT);
 		return $q->execute();
 	
