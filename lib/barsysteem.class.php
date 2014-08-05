@@ -96,7 +96,7 @@ class Barsysteem
 
     function getBestellingPersoon($socCieId)
     {
-        $q = $this->db->prepare("SELECT * FROM socCieBestelling AS B JOIN socCieBestellingInhoud AS I ON B.id=I.bestellingId WHERE socCieId=:socCieId");
+        $q = $this->db->prepare("SELECT * FROM socCieBestelling AS B JOIN socCieBestellingInhoud AS I ON B.id=I.bestellingId WHERE socCieId=:socCieId AND B.deleted = 0");
         $q->bindValue(":socCieId", $socCieId, PDO::PARAM_INT);
         $q->execute();
         return $this->verwerkBestellingResultaat($q->fetchAll(PDO::FETCH_ASSOC));
@@ -116,7 +116,7 @@ class Barsysteem
         }
         $qa = "";
         if ($persoon != "alles") $qa = "socCieId=:socCieId AND";
-        $q = $this->db->prepare("SELECT * FROM socCieBestelling AS B JOIN socCieBestellingInhoud AS I ON B.id=I.bestellingId WHERE " . $qa . " tijd>=:begin AND tijd<=:eind");
+        $q = $this->db->prepare("SELECT * FROM socCieBestelling AS B JOIN socCieBestellingInhoud AS I ON B.id=I.bestellingId WHERE " . $qa . " tijd>=:begin AND tijd<=:eind AND B.deleted = 0");
         if ($persoon != "alles") $q->bindValue(":socCieId", $persoon, PDO::PARAM_INT);
         $q->bindValue(":begin", $begin);
         $q->bindValue(":eind", $eind);
@@ -184,13 +184,14 @@ class Barsysteem
         $q->bindValue(":bestelTotaal", $data->bestelTotaal, PDO::PARAM_INT);
         $q->bindValue(":socCieId", $data->persoon, PDO::PARAM_INT);
         $q->execute();
+		/* Don't remove this for backup
         $q = $this->db->prepare("DELETE FROM socCieBestellingInhoud  WHERE bestellingId = :bestelId");
         $q->bindValue(":bestelId", $data->bestelId, PDO::PARAM_INT);
-        $q->execute();
-        $q = $this->db->prepare("DELETE FROM socCieBestelling WHERE id = :bestelId");
+        $q->execute(); */
+        $q = $this->db->prepare("UPDATE socCieBestelling SET deleted = 1 WHERE id = :bestelId");
         $q->bindValue(":bestelId", $data->bestelId, PDO::PARAM_INT);
         $q->execute();
-        if (!$this->db->commit()) {
+        if (!$this->db->commit() || $q->rowCount() == 0) {
             $this->db->rollBack();
             return false;
         }
@@ -260,6 +261,8 @@ JOIN socCiePrijs AS PR ON
 	AND (B.tijd BETWEEN PR.van AND PR.tot)
 JOIN socCieGrootboekType AS G ON
 	P.grootboekId = G.id
+WHERE
+	B.deleted = 0
 GROUP BY
 	yearweek,
 	G.id
