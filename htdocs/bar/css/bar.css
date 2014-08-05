@@ -326,7 +326,7 @@ th#opties {
     width: 90px;
 }
 
-#besteLijstBeheerContent{
+#besteLijstBeheerContent, #selectieTabel{
 	margin: 5px 0 0;
 }
 

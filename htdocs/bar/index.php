@@ -192,7 +192,7 @@ if ($barsysteem->isLoggedIn()) {
                                                                          placeholder="nu" id="eindDatum"/> <span
                             class="clearKruisje glyphicon glyphicon glyphicon-remove-circle"></span>
 						<span class="input-group-btn">
-							<button class="btn btn-default" id="krijgBestellingen"><span
+							<button class="btn btn-primary" id="krijgBestellingen"><span
                                     class="glyphicon glyphicon glyphicon-cloud-download"></span></button>
 						</span>
 

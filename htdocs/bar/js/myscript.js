@@ -209,10 +209,6 @@ $(function () {
         $("#waarschuwing").removeClass().addClass("alert alert-" + type).html(bericht);
     }
 
-    function zetWaarschuwing(bericht) {
-        zetBericht(bericht, 'warning');
-    }
-
     var personen = {};
     var producten = {};
 
@@ -485,7 +481,7 @@ $(function () {
                 //todo
             });
             $("#bewerkInhoud" + item).click(function () {
-                zetWaarschuwing("U bewerkt een bestelling!");
+                zetBericht("U bewerkt een bestelling!", "warning");
                 bestelLijst = bestelling.bestelLijst;
                 oudeBestelling = bestelling;
                 selectedPerson = personen[bestelling.persoon]
