@@ -124,15 +124,21 @@ class Barsysteem
 
     function updateBestelling($data)
     {
+	
         $this->db->beginTransaction();
 
-        $q = $this->db->prepare("UPDATE socCieKlanten SET saldo = saldo - :bestelTotaal WHERE socCieId=:socCieId;");
+		// Add old order to saldo
+        $q = $this->db->prepare("UPDATE socCieKlanten SET saldo = saldo + :bestelTotaal WHERE socCieId=:socCieId;");
         $q->bindValue(":bestelTotaal", $this->getBestellingTotaalTijd($data->oudeBestelling->bestelId, $data->oudeBestelling->tijd), PDO::PARAM_INT);
         $q->bindValue(":socCieId", $data->persoon->socCieId, PDO::PARAM_INT);
         $q->execute();
-        $q = $this->db->prepare("DELETE FROM socCieBestellingInhoud  WHERE bestellingId = :bestelId");
+		
+		// Remove old contents of the order
+		$q = $this->db->prepare("DELETE FROM socCieBestellingInhoud WHERE bestellingId = :bestelId");
         $q->bindValue(":bestelId", $data->oudeBestelling->bestelId, PDO::PARAM_INT);
-        $q->execute();
+		$q->execute();		
+		
+		// Add contents of the order
         foreach ($data->bestelLijst as $productId => $aantal) {
             $q = $this->db->prepare("INSERT INTO socCieBestellingInhoud VALUES (:bestelId, :productId, :aantal);");
             $q->bindValue(":productId", $productId, PDO::PARAM_INT);
@@ -140,13 +146,20 @@ class Barsysteem
             $q->bindValue(":aantal", $aantal, PDO::PARAM_INT);
             $q->execute();
         }
-        $q = $this->db->prepare("UPDATE socCieKlanten SET saldo = saldo + :bestelTotaal WHERE socCieId=:socCieId;");
+		
+		// Substract new order from saldo
+        $q = $this->db->prepare("UPDATE socCieKlanten SET saldo = saldo - :bestelTotaal WHERE socCieId=:socCieId;");
         $q->bindValue(":bestelTotaal", $this->getBestellingTotaalTijd($data->oudeBestelling->bestelId, $data->oudeBestelling->tijd), PDO::PARAM_INT);
         $q->bindValue(":socCieId", $data->persoon->socCieId, PDO::PARAM_INT);
         $q->execute();
-        $q = $this->db->prepare("INSERT INTO socCieBestelling (totaal) VALUES (:totaal);");
-        $q->bindValue(":totaal", $this->getBestellingTotaalTijd($data->oudeBestelling->bestelId, $data->oudeBestelling->tijd), PDO::PARAM_INT);
+		
+		// Update old order
+        $q = $this->db->prepare("UPDATE socCieBestelling SET totaal = :totaal  WHERE id = :bestelId");
+		$q->bindValue(":totaal", $this->getBestellingTotaalTijd($data->oudeBestelling->bestelId, $data->oudeBestelling->tijd), PDO::PARAM_INT);
+        $q->bindValue(":bestelId", $data->oudeBestelling->bestelId, PDO::PARAM_INT);
         $q->execute();
+		
+		// Roll back if error
         if (!$this->db->commit()) {
             $this->db->rollBack();
             return false;

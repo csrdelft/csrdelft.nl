@@ -464,6 +464,7 @@ $(function () {
                     }).done(function (data) {
                         if (data = "1") {
                             $("#tabelRijBeheerLijst" + item).remove();
+							laadPersonen();
                         }
                     });
                 }
