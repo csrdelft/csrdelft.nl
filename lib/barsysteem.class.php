@@ -26,7 +26,7 @@ class Barsysteem
     function getPersonen()
     {
 		 
-        $terug = $this->db->query("SELECT socCieKlanten.stekUID, socCieKlanten.socCieId, socCieKlanten.naam, socCieKlanten.saldo, COUNT(socCieBestelling.totaal) AS recent FROM socCieKlanten LEFT JOIN socCieBestelling ON (socCieKlanten.socCieId = socCieBestelling.socCieId AND DATEDIFF(NOW(), tijd) < 100) GROUP BY socCieKlanten.socCieId;");
+        $terug = $this->db->query("SELECT socCieKlanten.stekUID, socCieKlanten.socCieId, socCieKlanten.naam, socCieKlanten.saldo, COUNT(socCieBestelling.totaal) AS recent FROM socCieKlanten LEFT JOIN socCieBestelling ON (socCieKlanten.socCieId = socCieBestelling.socCieId AND DATEDIFF(NOW(), tijd) < 100) WHERE socCieKlanten.deleted = 0 GROUP BY socCieKlanten.socCieId;");
         $result = array();
         foreach ($terug as $row) {
             $persoon = array();
@@ -301,7 +301,7 @@ ORDER BY yearweek DESC
 	
 	public function removePerson($id) {
 	
-		$q = $this->db->prepare("DELETE FROM socCieKlanten WHERE socCieId = :id AND saldo = 0");
+		$q = $this->db->prepare("UPDATE socCieKlanten SET deleted = 1 WHERE socCieId = :id");
 		$q->bindValue(':id', $id, PDO::PARAM_INT);
 		return $q->execute();
 	
