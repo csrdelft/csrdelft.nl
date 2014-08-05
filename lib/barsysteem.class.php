@@ -120,7 +120,7 @@ class Barsysteem
             $eind = $this->parseDate($eind) . " 23:59:59";
         }
         $qa = "";
-        if ($persoon != "alles") $qa = "socCieId=:socCieId AND";
+        if ($persoon != "alles") $qa = "I.socCieId=:socCieId AND";
         $q = $this->db->prepare("SELECT * FROM socCieBestelling AS B JOIN socCieBestellingInhoud AS I ON B.id=I.bestellingId JOIN socCieKlanten AS K ON B.socCieId = K.socCieId WHERE " . $qa . " tijd>=:begin AND tijd<=:eind AND B.deleted = 0 AND K.deleted = 0");
         if ($persoon != "alles") $q->bindValue(":socCieId", $persoon, PDO::PARAM_INT);
         $q->bindValue(":begin", $begin);
