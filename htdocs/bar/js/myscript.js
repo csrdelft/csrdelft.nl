@@ -324,7 +324,12 @@ $(function () {
 		$(this).click(function () {
 		
 			var oudlid = selectedPerson.status != 'S_LID' && selectedPerson.status != 'S_GASTLID';
-			var toRed = selectedPerson.saldo - bestelTotaal() < 0;
+			
+			var toRed;
+			if(oudeBestelling)
+				toRed = parseInt(selectedPerson.saldo) + parseInt(oudeBestelling.bestelTotaal) - bestelTotaal() < 0;
+			else
+				toRed = selectedPerson.saldo - bestelTotaal() < 0;
 			
 			if(oudlid && toRed) {
 			
