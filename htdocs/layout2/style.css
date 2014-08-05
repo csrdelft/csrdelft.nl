@@ -299,18 +299,6 @@ div.rommel img { height: 77px; }
 .box.list a { display: block; height: 32px; line-height: 32px; font-size: 14px; color: #46443a; border-bottom: 0; border-top: 1px solid #cac5aa; padding: 0 8px; }
 .box.list a:hover { background: #d9d0c1; }
 
-/* ubb-image lazy loading */
-img.ubb_image{
-	max-width: 586px; border: 0;
-}
-div.ubb_image_placeholder{
-	min-width: 16px;
-	min-height: 11px;
-	background-image: url('http://plaetjes.csrdelft.nl/layout/loading-fb.gif');
-	background-repeat: no-repeat;
-	background-position: center center;
-}
-
 /* ubb-hulp */
 div#ubbhulpverhaal{
 	display: none;
@@ -379,6 +367,18 @@ div.msgnotify {
     background-color: #ffc;
     background-image: url(http://plaetjes.csrdelft.nl/famfamfam/bell.png);
     border-color: #eeb;
+}
+
+/* ubb-image lazy loading */
+img.ubb_img{
+	max-width: 586px; border: 0;
+}
+div.ubb_img_loading{
+	min-width: 16px;
+	min-height: 11px;
+	background-image: url('http://plaetjes.csrdelft.nl/layout/loading-fb.gif');
+	background-repeat: no-repeat;
+	background-position: bottom left;
 }
 
 /* forum */

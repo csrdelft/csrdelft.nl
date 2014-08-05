@@ -91,9 +91,9 @@ class CsrUbb extends eamBBParser {
 		}
 		// lazy loading van externe images bijv. op het forum
 		if (!startsWith($content, CSR_PICS) OR startsWith($content, CSR_PICS . '/fotoalbum/')) {
-			return '<div class="ubb_image_placeholder" src="' . $content . '" title="' . $content . '" style="' . $style . '"></div>';
+			return '<div class="ubb_img_loading" src="' . $content . '" title="' . $content . '" style="' . $style . '"></div>';
 		}
-		return '<img class="ubb_image' . $class . '" src="' . $content . '" alt="' . $content . '" style="' . $style . '" />';
+		return '<img class="ubb_img' . $class . '" src="' . $content . '" alt="' . $content . '" style="' . $style . '" />';
 	}
 
 	/**

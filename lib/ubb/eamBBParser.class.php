@@ -799,7 +799,7 @@ class eamBBParser {
 			if (!$this->allow_html) {
 				$content = htmlspecialchars($content);
 			}
-			$html = '<img class="ubb_image' . $class . '" src="' . $content . '" alt="' . $content . '" style="' . $style . '" />';
+			$html = '<img class="ubb_img' . $class . '" src="' . $content . '" alt="' . $content . '" style="' . $style . '" />';
 		}
 		return $html;
 	}

@@ -60,7 +60,7 @@ $(function() {
 
 	// take first image and put it in the clip
 	/* var imageHolder = $("div.pg-mid img.REPLACE-ANCHOR");
-	 var image = $("div.pg-mid div.content img.ubb_image").first();
+	 var image = $("div.pg-mid div.content img.ubb_img").first();
 	 imageHolder.attr("src", image.attr("src"));
 	 image.hide(); */
 

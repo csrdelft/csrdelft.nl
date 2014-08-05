@@ -31,14 +31,19 @@ $(document).ready(function() {
 });
 
 function init_lazy_images() {
-	$('div.ubb_image_placeholder').each(function() {
+	$('div.ubb_img_loading').each(function() {
 		var content = $(document.createElement('IMG'));
-		content.addClass('ubb_image');
+		content.addClass('ubb_img');
 		content.attr('alt', $(this).attr('title'));
 		content.attr('style', $(this).attr('style'));
 		content.attr('src', $(this).attr('src'));
-		$(this).replaceWith(content);
+		$(this).html(content);
+		content.on('load', lazy_image_loaded);
 	});
+}
+
+function lazy_image_loaded() {
+	$(this).parent().removeClass('ubb_img_loading');
 }
 
 function page_reload() {
