@@ -92,8 +92,9 @@ if ($barsysteem->isLoggedIn()) {
                     <table id="selectieTabel" class="table">
                         <thead>
                         <tr>
-                            <td><b>Bijnaam</b></td>
-                            <td><b>Naam</b></td>
+                            <th>Bijnaam</th>
+                            <th>Naam</th>
+                            <th>Saldo</th>
                         </tr>
                         </thead>
                         <tbody>

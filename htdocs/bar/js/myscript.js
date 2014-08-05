@@ -92,7 +92,7 @@ $(function () {
 
     function zetInTabel(persoon) {
         var naam = persoon.naam;
-        $("#selectieTabel > tbody").append("<tr id='persoon" + persoon.socCieId + "'><td>" + persoon.bijnaam + "</td><td>" + naam + "</td></tr>");
+        $("#selectieTabel > tbody").append("<tr id='persoon" + persoon.socCieId + "'><td>" + persoon.bijnaam + "</td><td>" + naam + "</td><td>" + saldoStr(persoon.saldo) + "</td></tr>");
         $("#persoon" + persoon.socCieId).click(function () {
             cancel();
             $.ajax({
