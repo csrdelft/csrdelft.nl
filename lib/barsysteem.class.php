@@ -7,6 +7,7 @@ class Barsysteem
 {
 
     var $db;
+	private $beheer;
 
     function Barsysteem()
     {
@@ -20,7 +21,10 @@ class Barsysteem
 	
 	function isBeheer()
 	{
-		return isset($_COOKIE['barsysteembeheer']) && md5('my_salt_is_strong' . $_COOKIE['barsysteembeheer']) == '49ee17fb49f2075df6bb538eee4e415e';
+		if(!$this->beheer)
+			$this->beheer = isset($_COOKIE['barsysteembeheer']) && md5('my_salt_is_strong' . $_COOKIE['barsysteembeheer']) == '49ee17fb49f2075df6bb538eee4e415e';
+		
+		return $this->beheer;
 	}
 
     function getPersonen()
@@ -47,16 +51,17 @@ class Barsysteem
 
     function getProducten()
     {
-        $terug = $this->db->query("SELECT id, prijs, btw, beschrijving, prioriteit, alcohol FROM socCieProduct as P JOIN socCiePrijs as R ON P.id=R.productId WHERE status = '1' AND CURRENT_TIMESTAMP<tot AND CURRENT_TIMESTAMP>van ORDER BY prioriteit DESC");
-        $result = array();
-        foreach ($terug as $row) {
+        $q = $this->db->prepare("SELECT id, prijs, beschrijving, prioriteit FROM socCieProduct as P JOIN socCiePrijs as R ON P.id=R.productId WHERE status = '1' AND CURRENT_TIMESTAMP<tot AND CURRENT_TIMESTAMP>van AND beheer <= :beheer ORDER BY prioriteit DESC");
+        $q->bindValue(':beheer', $this->isBeheer() ? 1 : 0);
+		$q->execute();
+	
+		$result = array();
+        foreach ($q->fetchAll(PDO::FETCH_ASSOC) as $row) {
             $product = array();
             $product["productId"] = $row["id"];
             $product["prijs"] = $row["prijs"];
-            $product["btw"] = $row["btw"];
             $product["beschrijving"] = $row["beschrijving"];
             $product["prioriteit"] = $row["prioriteit"];
-            $product["alcohol"] = $row["alcohol"];
             $result[$row["id"]] = $product;
         }
         return $result;

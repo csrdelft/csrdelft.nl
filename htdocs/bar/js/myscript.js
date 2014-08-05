@@ -331,6 +331,9 @@ $(function () {
 				toRed = parseInt(selectedPerson.saldo) + parseInt(oudeBestelling.bestelTotaal) - bestelTotaal() < 0;
 			else
 				toRed = selectedPerson.saldo - bestelTotaal() < 0;
+				
+			if(bestelTotaal() < 0)
+				toRed = false;
 			
 			if(oudlid && toRed) {
 			
