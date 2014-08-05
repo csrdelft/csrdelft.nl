@@ -385,7 +385,7 @@ $(function () {
 
     $("#knopCancel").click(function() {
 	
-		if(confirm("Weet je zeker dat je de bestelling wilt afbreken?"))
+		if(bestelTotaal() == 0 || confirm("Weet je zeker dat je de bestelling wilt afbreken?"))
 			cancel();
 		
 	});
