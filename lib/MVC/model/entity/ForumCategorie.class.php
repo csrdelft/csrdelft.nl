@@ -45,11 +45,11 @@ class ForumCategorie extends PersistentEntity {
 	 * @var array
 	 */
 	protected static $persistent_fields = array(
-		'categorie_id' => array(T::Integer, false, 'auto_increment'),
-		'titel' => array(T::String),
-		'omschrijving' => array(T::Text),
-		'rechten_lezen' => array(T::String),
-		'volgorde' => array(T::Integer)
+		'categorie_id'	 => array(T::Integer, false, 'auto_increment'),
+		'titel'			 => array(T::String),
+		'omschrijving'	 => array(T::Text),
+		'rechten_lezen'	 => array(T::String),
+		'volgorde'		 => array(T::Integer)
 	);
 	/**
 	 * Database primary key
@@ -73,7 +73,7 @@ class ForumCategorie extends PersistentEntity {
 	 */
 	public function getForumDelen() {
 		if (!isset($this->forum_delen)) {
-			$this->setForumDelen(ForumDelenModel::instance()->getForumDelenVoorCategorie($this->categorie_id));
+			$this->setForumDelen(ForumDelenModel::instance()->getForumDelenVoorCategorie($this));
 		}
 		return $this->forum_delen;
 	}

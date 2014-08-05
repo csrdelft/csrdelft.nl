@@ -54,8 +54,8 @@ class ForumDelenModel extends PersistenceModel {
 		return $result;
 	}
 
-	public function getForumDelenVoorCategorie($cid) {
-		return $this->find('categorie_id = ?', array($cid), 'volgorde ASC');
+	public function getForumDelenVoorCategorie(ForumCategorie $cat) {
+		return $this->find('categorie_id = ?', array($cat->categorie_id), 'volgorde ASC');
 	}
 
 	public function getForumDelenVoorLid($rss) {
