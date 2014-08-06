@@ -75,7 +75,7 @@ class LoginLid {
 
 				$lid = LidCache::getLid($lid['uid']);
 				if ($lid instanceof Lid) {
-					$this->lid = $lid;
+					$this->getLid() = $lid;
 					$this->authenticatedByToken = true;
 				}
 			}
@@ -99,7 +99,7 @@ class LoginLid {
 		}
 		$lid = LidCache::getLid($_SESSION['_uid']);
 		if ($lid instanceof Lid) {
-			$this->lid = $lid;
+			$this->getLid() = $lid;
 
 			if (isset($_SESSION['_suedFrom'])) {
 				$this->suedFrom = LidCache::getLid($_SESSION['_suedFrom']);
@@ -111,19 +111,18 @@ class LoginLid {
 	}
 
 	public function getUid() {
-		if ($this->getLid() instanceof Lid) {
-			return $this->lid->getUid();
-		} else {
-			return 'x999';
-		}
+		return $this->getLid()->getUid();
 	}
 
 	public function getLid() {
+		if (!$this->lid instanceof Lid) {
+			$this->logout();
+		}
 		return $this->lid;
 	}
 
 	public function isSelf($uid) {
-		return $this->lid->getUid() == $uid;
+		return $this->getLid()->getUid() == $uid;
 	}
 
 	/**
@@ -147,14 +146,14 @@ class LoginLid {
 		if (in_array($suNaar->getStatus(), array('S_NOBODY', 'S_EXLID'))) {
 			throw new Exception('Kan niet su-en naar nobodies!');
 		}
-		$_SESSION['_suedFrom'] = $this->lid->getUid();
+		$_SESSION['_suedFrom'] = $this->getLid()->getUid();
 		$_SESSION['_uid'] = $uid;
-		$this->lid = $suNaar;
+		$this->getLid() = $suNaar;
 	}
 
 	public function endSu() {
 		$_SESSION['_uid'] = $_SESSION['_suedFrom'];
-		$this->lid = $this->suedFrom;
+		$this->getLid() = $this->suedFrom;
 		unset($_SESSION['_suedFrom']);
 		$this->suedFrom = null;
 	}
@@ -216,7 +215,7 @@ class LoginLid {
 		}
 
 		# als dat klopt laden we het profiel in en richten de sessie in
-		$this->lid = $lid;
+		$this->getLid() = $lid;
 		$_SESSION['_uid'] = $lid->getUid();
 
 		# sessie koppelen aan ip?
@@ -237,7 +236,7 @@ class LoginLid {
 		if (Lid::isValidUid($user)) {
 			$lid = LidCache::getLid($user);
 			if ($lid instanceof Lid) {
-				$this->lid = $lid;
+				$this->getLid() = $lid;
 				return true;
 			}
 		}
@@ -323,7 +322,7 @@ class LoginLid {
 		}
 
 		# zoek de rechten van de gebruiker op
-		$liddescr = $this->lid->getPermissies();
+		$liddescr = $this->getLid()->getPermissies();
 
 		//alleen als $token_athorizable true is testen we met de permissies van het
 		//geauthenticeerde lid, anders met P_PUBLIC
@@ -353,7 +352,7 @@ class LoginLid {
 			# bijv.  3=1+2, 7=1+2+4, 5=1+4, 6=2+4, 12=4+8, etc
 			#
 			# $gevraagd is de gevraagde permissie als string,
-			# de permissies van de gebruiker $lidheeft kunnen we bij $this->lid opvragen
+			# de permissies van de gebruiker $lidheeft kunnen we bij $this->getLid() opvragen
 			# als we die 2 met elkaar AND-en, dan moet het resultaat hetzelfde
 			# zijn aan de gevraagde permissie. In dat geval bestaat de permissie
 			# van het lid dus minimaal uit de gevraagde permissie
@@ -389,12 +388,12 @@ class LoginLid {
 		} elseif (substr($permissie, 0, 9) == 'verticale') {
 			$verticale = strtoupper(substr($permissie, 10));
 			if (is_numeric($verticale)) {
-				if ($verticale == $this->lid->getVerticaleID()) {
+				if ($verticale == $this->getLid()->getVerticaleID()) {
 					return true;
 				}
-			} elseif ($verticale == $this->lid->getVerticaleLetter()) {
+			} elseif ($verticale == $this->getLid()->getVerticaleLetter()) {
 				return true;
-			} elseif ($verticale == strtoupper($this->lid->getVerticale())) {
+			} elseif ($verticale == strtoupper($this->getLid()->getVerticale())) {
 				return true;
 			}
 			//Behoort een lid tot een bepaalde (h.t.) groep?
@@ -425,7 +424,7 @@ class LoginLid {
 			//Is een lid man, vrouw en/of geslacht?
 		} elseif (substr($permissie, 0, 8) == 'geslacht') {
 			$geslacht = strtolower(substr($permissie, 9));
-			if ($geslacht == $this->lid->getGeslacht()) {
+			if ($geslacht == $this->getLid()->getGeslacht()) {
 				return true;
 				//we zijn toch zeker niet geslacht??
 			} elseif ($geslacht == 'nee' AND $this->hasPermission('P_LOGGED_IN', $token_authorizable)) {
@@ -434,20 +433,20 @@ class LoginLid {
 			//Behoort een lid tot een bepaalde lichting?
 		} elseif (substr($permissie, 0, 7) == 'lidjaar') {
 			$lidjaar = substr($permissie, 8);
-			if ($lidjaar == $this->lid->getProperty('lidjaar')) {
+			if ($lidjaar == $this->getLid()->getProperty('lidjaar')) {
 				return true;
 			}
 		} elseif (substr($permissie, 0, 8) == 'lichting') {
 			$lidjaar = substr($permissie, 9);
-			if ($lidjaar == $this->lid->getProperty('lidjaar')) {
+			if ($lidjaar == $this->getLid()->getProperty('lidjaar')) {
 				return true;
 			}
 		} elseif (substr($permissie, 0, 10) == 'Ouderjaars' OR substr($permissie, 0, 10) == 'ouderjaars') {
-			if (Lichting::getJongsteLichting() > $this->lid->getProperty('lidjaar') AND $this->hasPermission('P_LOGGED_IN', $token_authorizable)) {
+			if (Lichting::getJongsteLichting() > $this->getLid()->getProperty('lidjaar') AND $this->hasPermission('P_LOGGED_IN', $token_authorizable)) {
 				return true;
 			}
 		} elseif (substr($permissie, 0, 11) == 'Eerstejaars' OR substr($permissie, 0, 11) == 'eerstejaars') {
-			if (Lichting::getJongsteLichting() == $this->lid->getProperty('lidjaar') AND $this->hasPermission('P_LOGGED_IN', $token_authorizable)) {
+			if (Lichting::getJongsteLichting() == $this->getLid()->getProperty('lidjaar') AND $this->hasPermission('P_LOGGED_IN', $token_authorizable)) {
 				return true;
 			}
 		}
