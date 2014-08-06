@@ -22,7 +22,7 @@ if ($barsysteem->isLoggedIn()){
 		}
 		
 		if(isset($_POST["add_person"])) {
-			echo $barsysteem->addPerson($_POST['name'], $_POST['saldo']);
+			echo $barsysteem->addPerson($_POST['name'], $_POST['saldo'], $_POST['uid']);
 		}
 		
 		if(isset($_POST["update_person"])) {

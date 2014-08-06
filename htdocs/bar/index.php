@@ -253,6 +253,7 @@ if ($barsysteem->isLoggedIn()) {
 									<input type="hidden" name="add_person" value="on" />
 									<input placeholder="Naam" name="name" type="text" class="form-control" />
 									<input placeholder="Saldo in centen" name="saldo" type="text" class="form-control" />
+									<input placeholder="Leeg of lidnummer" name="uid" type="text" class="form-control" />
 									<button type="submit" class="btn btn-primary"><span class="glyphicon glyphicon-plus"></span></button>
 								
 								</div>

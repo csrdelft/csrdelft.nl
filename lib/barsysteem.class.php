@@ -317,11 +317,16 @@ ORDER BY yearweek DESC
 	
 	}
 	
-	public function addPerson($name, $saldo) {
-	
-		$q = $this->db->prepare("INSERT INTO socCieKlanten (naam, saldo) VALUES (:naam, :saldo)");
+	public function addPerson($name, $saldo, $uid) {
+			
+		$q = $this->db->prepare("INSERT INTO socCieKlanten (naam, saldo, stekUID) VALUES (:naam, :saldo, :stekUID)");
 		$q->bindValue(':naam', $name, PDO::PARAM_STR);
 		$q->bindValue(':saldo', $saldo, PDO::PARAM_STR);
+		if(!empty(trim($uid)))
+			$q->bindValue(':stekUID', $uid, PDO::PARAM_STR);
+		else
+			$q->bindValue(':stekUID', null, PDO::PARAM_INT);
+			
 		return $q->execute();
 	
 	}
