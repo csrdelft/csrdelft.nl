@@ -104,8 +104,8 @@ $(function () {
             zetBericht("Geselecteerde persoon: " + naam + " | Saldo: " + saldoStr(persoon.saldo), persoon.saldo >= 0 ? 'success' : 'danger');
 
             $("#invoerveld").trigger("click");
-            $("#besteLijstBeheerLaadPersoon").html("Laad bestellingen van: " + naam);
-            $("#persoonInput").val(null);
+            //$("#besteLijstBeheerLaadPersoon").html("Laad bestellingen van: " + naam);
+            $("#persoonInput").val("");
             updateOnKeyPress();
             resetTeller();
             resetLijst();
@@ -217,10 +217,11 @@ $(function () {
 		$.ajax({
 			url: "ajax.php",
 			method: "POST",
-			data: {"personen": "waar"}
+			data: {"personen": "waar"},
+			dataType: "json"
 		})
 			.done(function (data) {
-				personen = $.parseJSON(data);
+				personen = data;
 				updateOnKeyPress();
 				
 				var pl = $(".personList");
@@ -240,10 +241,11 @@ $(function () {
     $.ajax({
         url: "ajax.php",
         method: "POST",
-        data: {"producten": "waar"}
+        data: {"producten": "waar"},
+		dataType: "json"
     })
         .done(function (data) {
-            productenTemp = $.parseJSON(data);
+            productenTemp = data;
             var sorteerbaar = [];
             $.each(productenTemp, function () {
                 sorteerbaar.push([this, this.prioriteit]);
@@ -259,7 +261,6 @@ $(function () {
 
     function updateOnKeyPress() {
         var item = new RegExp($("#persoonInput").val(), "gi");
-        var output = new Array();
         $("#selectieTabel > tbody").empty();
 		var orderPersonen = [];
 		$.each(personen, function (key, val) {
@@ -268,10 +269,8 @@ $(function () {
 		orderPersonen.sort(function(a, b) { return b.value.recent - a.value.recent });
         $.each(orderPersonen, function () {
             if (this.value.bijnaam.match(item) || this.value.naam.match(item)) {
-                output.push(this.value);
                 zetInTabel(this.value);
             }
-
         });
     }
 
@@ -328,7 +327,7 @@ $(function () {
 			else
 				toRed = selectedPerson.saldo - bestelTotaal() < 0;
 				
-			if(bestelTotaal() < 0)
+			if(bestelTotaal() < 0 || selectedPerson.status == 'S_EXTERN')
 				toRed = false;
 			
 			if(oudlid && toRed) {
@@ -445,9 +444,10 @@ $(function () {
         $.ajax({
             url: "ajax.php",
             method: "POST",
-            data: {"laadLaatste": "waar", "begin": $("#beginDatum").val(), "eind": $("#eindDatum").val(), "aantal": aantal }
+            data: {"laadLaatste": "waar", "begin": $("#beginDatum").val(), "eind": $("#eindDatum").val(), "aantal": aantal },
+			dataType: "json"
         }).done(function (data) {
-            zetOudeBestellingen($.parseJSON(data));
+            zetOudeBestellingen(data);
         });
     });
 
@@ -458,28 +458,25 @@ $(function () {
      * @param bestellingen een lijst in JSON met allen bestellingen.
      */
     function zetOudeBestellingen(bestellingen) {
-        $("#besteLijstBeheerContent tbody").empty();
+		var newHTML = '';
         $.each(bestellingen, function (item) {
             var bestelling = this;
             var bestel = [];
-			console.log(bestelling);
             for (key in bestelling.bestelLijst) {
 				if(producten[key].prijs != -1)
 					bestel.push(bestelling.bestelLijst[key] + " " + producten[key].beschrijving);
 				else
 					bestel.push(saldoStr(bestelling.bestelLijst[key]) + " " + producten[key].beschrijving);
             }
-            bestel = bestel.join(", ");
-            $("#besteLijstBeheerContent tbody").append("<tr id='tabelRijBeheerLijst" + item + "'><td>" + personen[bestelling.persoon].naam + "</td><td>"
+            bestel = '<ul><li>' + bestel.join('</li><li>') + '</li></ul>';
+            newHTML += "<tr id='tabelRijBeheerLijst" + item + "'><td>" + personen[bestelling.persoon].naam + "</td><td>"
                 + bestelling.tijd + "</td><td>" + saldoStr(bestelling.bestelTotaal) + "</td><td>" + bestel + "</td>" +
                 "<td><div class='btn-group'><button type='button' class='btn btn-default dropdown-toggle' data-toggle='dropdown'>Opties <span class='caret'></span></button>" +
                 "<ul class='dropdown-menu dropdown-menu-right' role='menu'>" +
                 "<li><a href='#' id='anderePersoon" + item + "'>Zet bestelling op andere persoon</a></li>" +
                 "<li><a href='#' id='bewerkInhoud" + item + "'>Bewerk inhoud bestelling</a></li>" +
                 "<li><a href='#' id='verwijderBestelling" + item + "'>Verwijder bestelling</a></li>" +
-                "</ul></div></td></tr>");
-
-            $("#besteLijstBeheer").trigger("update");
+                "</ul></div></td></tr>";
 
             $("#anderePersoon" + item).click(function () {
                 //todo
@@ -507,7 +504,9 @@ $(function () {
                     });
                 }
             });
-        })
+        });
+        $("#besteLijstBeheerContent tbody").html(newHTML);
+		$("#besteLijstBeheer").trigger("update");
     }
 
     $("#eenPersoon").click(function () {

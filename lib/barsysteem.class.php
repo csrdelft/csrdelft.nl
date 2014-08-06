@@ -39,7 +39,9 @@ class Barsysteem
                 $lid = LidCache::getLid($row["stekUID"]);
                 $persoon["naam"] = $lid->getNaam();
 				$persoon["status"] = $lid->getStatus()->__toString();
-            }
+            } else {
+				$persoon["status"] = 'S_EXTERN';
+			}
             $persoon["socCieId"] = $row["socCieId"];
             $persoon["bijnaam"] = $row["naam"];
             $persoon["saldo"] = $row["saldo"];
