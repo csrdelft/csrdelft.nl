@@ -488,6 +488,7 @@ class ForumController extends Controller {
 			ForumPostsModel::instance()->goedkeurenForumPost($post, $draad, $deel);
 			if ($draad->isGevolgd()) {
 				$mail = new Mail(LoginLid::instance()->getUid() . '@csrdelft.nl', 'C.S.R. Forum: nieuwe reactie op ' . $draad->titel, "http://csrdelft.nl/forum/onderwerp/" . $draad->draad_id . "/laatste#" . $post->post_id . "\r\n" . "\r\nDe inhoud van het bericht is als volgt: \r\n\r\n" . str_replace('\r\n', "\n", $tekst) . "\r\n\r\nEINDE BERICHT", "From: pubcie@csrdelft.nl\nReply-To: no-reply@csrdelft.nl");
+				$mail->send();
 			}
 		}
 		// redirect naar (altijd) juiste pagina
