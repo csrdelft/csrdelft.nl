@@ -334,6 +334,10 @@ th#opties {
 	margin: 0;
 }
 
+#besteLijstBeheerContent td.name{
+	width: 150px;
+}
+
 #besteLijstBeheerContent td.bestel{
 	width: 100px;
 }
