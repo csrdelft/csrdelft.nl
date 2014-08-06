@@ -334,6 +334,10 @@ th#opties {
 	margin: 0;
 }
 
+#besteLijstBeheerContent{
+	white-space: nowrap;
+}
+
 .clearable {
     background: url(http://i.imgur.com/z7ZSYjt.png) no-repeat right -10px center;
     border: 1px solid #999;
