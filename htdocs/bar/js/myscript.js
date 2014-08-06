@@ -462,11 +462,12 @@ $(function () {
         $.each(bestellingen, function (item) {
             var bestelling = this;
             var bestel = [];
+			console.log(bestelling);
             for (key in bestelling.bestelLijst) {
-				if(bestelling.bestelLijst[key].prijs != -1)
-					bestel.push(bestelling.bestelLijst[key].aantal + " " + producten[key].beschrijving);
+				if(producten[key].prijs != -1)
+					bestel.push(bestelling.bestelLijst[key] + " " + producten[key].beschrijving);
 				else
-					bestel.push(saldoStr(bestelling.bestelLijst[key].aantal) + " " + producten[key].beschrijving);
+					bestel.push(saldoStr(bestelling.bestelLijst[key]) + " " + producten[key].beschrijving);
             }
             bestel = bestel.join(", ");
             $("#besteLijstBeheerContent tbody").append("<tr id='tabelRijBeheerLijst" + item + "'><td>" + personen[bestelling.persoon].naam + "</td><td>"
