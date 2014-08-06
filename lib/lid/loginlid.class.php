@@ -75,7 +75,7 @@ class LoginLid {
 
 				$lid = LidCache::getLid($lid['uid']);
 				if ($lid instanceof Lid) {
-					$this->getLid() = $lid;
+					$this->lid = $lid;
 					$this->authenticatedByToken = true;
 				}
 			}
@@ -99,7 +99,7 @@ class LoginLid {
 		}
 		$lid = LidCache::getLid($_SESSION['_uid']);
 		if ($lid instanceof Lid) {
-			$this->getLid() = $lid;
+			$this->lid = $lid;
 
 			if (isset($_SESSION['_suedFrom'])) {
 				$this->suedFrom = LidCache::getLid($_SESSION['_suedFrom']);
@@ -148,12 +148,12 @@ class LoginLid {
 		}
 		$_SESSION['_suedFrom'] = $this->getLid()->getUid();
 		$_SESSION['_uid'] = $uid;
-		$this->getLid() = $suNaar;
+		$this->lid = $suNaar;
 	}
 
 	public function endSu() {
 		$_SESSION['_uid'] = $_SESSION['_suedFrom'];
-		$this->getLid() = $this->suedFrom;
+		$this->lid = $this->suedFrom;
 		unset($_SESSION['_suedFrom']);
 		$this->suedFrom = null;
 	}
@@ -215,7 +215,7 @@ class LoginLid {
 		}
 
 		# als dat klopt laden we het profiel in en richten de sessie in
-		$this->getLid() = $lid;
+		$this->lid = $lid;
 		$_SESSION['_uid'] = $lid->getUid();
 
 		# sessie koppelen aan ip?
@@ -236,7 +236,7 @@ class LoginLid {
 		if (Lid::isValidUid($user)) {
 			$lid = LidCache::getLid($user);
 			if ($lid instanceof Lid) {
-				$this->getLid() = $lid;
+				$this->lid = $lid;
 				return true;
 			}
 		}
