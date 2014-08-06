@@ -14,6 +14,10 @@ $barsysteem = new Barsysteem();
 if ($barsysteem->isLoggedIn()){
 
 	/* Start beheer */
+		
+	if(isset($_POST["update_person"])) {
+		echo $barsysteem->updatePerson($_POST['id'], $_POST['name']);
+	}
 
 	if($barsysteem->isBeheer()) {
 		// Get grootboekinvoer
@@ -23,10 +27,6 @@ if ($barsysteem->isLoggedIn()){
 		
 		if(isset($_POST["add_person"])) {
 			echo $barsysteem->addPerson($_POST['name'], $_POST['saldo'], $_POST['uid']);
-		}
-		
-		if(isset($_POST["update_person"])) {
-			echo $barsysteem->updatePerson($_POST['id'], $_POST['name']);
 		}
 		
 		if(isset($_POST["remove_person"])) {

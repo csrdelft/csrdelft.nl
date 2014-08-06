@@ -41,7 +41,7 @@ if ($barsysteem->isLoggedIn()) {
                 <li class="active"><a href="#persoonselectie" role="tab" data-toggle="tab" id="persoonselectieVeld"><span class="glyphicon glyphicon-user"></span>Persoonselectie</a></li>
                 <li><a href="#invoer" role="tab" data-toggle="tab" id="invoerveld"><span class="glyphicon glyphicon-pencil"></span>Invoer</a></li>
                 <li><a href="#bestelLijstBeheer" role="tab" data-toggle="tab"><span class="glyphicon glyphicon-list"></span>Bestellingen</a></li>
-                <?php if ($barsysteem->isBeheer()): ?><li class="beheer"><a href="#beheer" role="tab" data-toggle="tab"><span class="glyphicon glyphicon-wrench"></span></a></li><?php endif; ?>
+                <li class="beheer"><a href="#beheer" role="tab" data-toggle="tab"><span class="glyphicon glyphicon-wrench"></span></a></li>
             </ul>
 
         </td>
@@ -217,13 +217,15 @@ if ($barsysteem->isLoggedIn()) {
                 <div class="tab-pane" id="beheer">
 
                     <div id="beheer-nav" class="btn-group btn-group-lg">
-                        <button class="btn btn-default" id="laadProducten">Productbeheer</button>
+                        <?php if ($barsysteem->isBeheer()): ?><button class="btn btn-default" id="laadProducten">Productbeheer</button><?php endif; ?>
                         <button class="btn btn-default" id="laadPersonen">Persoonbeheer</button>
-                        <button class="btn btn-default" id="laadGrootboekInvoer">Grootboekinvoer</button>
+                        <?php if ($barsysteem->isBeheer()): ?><button class="btn btn-default" id="laadGrootboekInvoer">Grootboekinvoer</button><?php endif; ?>
                     </div>
 	
 					<div id="beheerDisplay">
 
+					<?php if ($barsysteem->isBeheer()): ?>
+                        
 						<div id="productBeheer" class="hidden">
 						
 							<h2>Wijzig een product</h2>
@@ -242,7 +244,26 @@ if ($barsysteem->isLoggedIn()) {
 						
 						</div>
 						
+					<?php endif; ?>
+						
 						<div id="persoonBeheer" class="hidden">
+						
+							<h2>Persoon wijziggen</h2>
+					
+							<form id="updatePerson" class="form-inline" action="ajax.php" method="post">
+							
+								<div id="input-group">
+								
+									<input type="hidden" name="update_person" value="on" />
+									<select name="id" class="form-control personList"></select>
+									<input placeholder="Bijnaam" name="name" type="text" class="form-control" />
+									<button type="submit" class="btn btn-primary"><span class="glyphicon glyphicon-pencil"></span></button>
+								
+								</div>
+							
+							</form>
+							
+							<?php if ($barsysteem->isBeheer()): ?>
 							
 							<h2>Persoon toevoegen</h2>
 					
@@ -255,21 +276,6 @@ if ($barsysteem->isLoggedIn()) {
 									<input placeholder="Saldo in centen" name="saldo" type="text" class="form-control" />
 									<input placeholder="Leeg of lidnummer" name="uid" type="text" class="form-control" />
 									<button type="submit" class="btn btn-primary"><span class="glyphicon glyphicon-plus"></span></button>
-								
-								</div>
-							
-							</form>
-						
-							<h2>Persoon wijziggen</h2>
-					
-							<form id="updatePerson" class="form-inline" action="ajax.php" method="post">
-							
-								<div id="input-group">
-								
-									<input type="hidden" name="update_person" value="on" />
-									<select name="id" class="form-control personList"></select>
-									<input placeholder="Bijnaam" name="name" type="text" class="form-control" />
-									<button type="submit" class="btn btn-primary"><span class="glyphicon glyphicon-pencil"></span></button>
 								
 								</div>
 							
@@ -288,6 +294,8 @@ if ($barsysteem->isLoggedIn()) {
 								</div>
 							
 							</form>
+						
+							<?php endif; ?>
 						
 						</div>
 						
