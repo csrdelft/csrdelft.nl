@@ -463,7 +463,10 @@ $(function () {
             var bestelling = this;
             var bestel = [];
             for (key in bestelling.bestelLijst) {
-                bestel.push(bestelling.bestelLijst[key] + " " + producten[key].beschrijving);
+				if(bestelling.bestelLijst[key].prijs != -1)
+					bestel.push(bestelling.bestelLijst[key].aantal + " " + producten[key].beschrijving);
+				else
+					bestel.push(saldoStr(bestelling.bestelLijst[key].aantal) + " " + producten[key].beschrijving);
             }
             bestel = bestel.join(", ");
             $("#besteLijstBeheerContent tbody").append("<tr id='tabelRijBeheerLijst" + item + "'><td>" + personen[bestelling.persoon].naam + "</td><td>"

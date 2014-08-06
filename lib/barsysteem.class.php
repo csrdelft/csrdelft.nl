@@ -101,7 +101,7 @@ class Barsysteem
 
     function getBestellingPersoon($socCieId)
     {
-        $q = $this->db->prepare("SELECT * FROM socCieBestelling AS B JOIN socCieBestellingInhoud AS I ON B.id=I.bestellingId WHERE socCieId=:socCieId AND B.deleted = 0");
+        $q = $this->db->prepare("SELECT * FROM socCieBestelling AS B JOIN socCieBestellingInhoud AS I ON B.id=I.bestellingId JOIN socCiePrijs AS PR ON I.productId = PR.productId AND (tijd BETWEEN van AND tot) WHERE socCieId=:socCieId AND B.deleted = 0");
         $q->bindValue(":socCieId", $socCieId, PDO::PARAM_INT);
         $q->execute();
         return $this->verwerkBestellingResultaat($q->fetchAll(PDO::FETCH_ASSOC));
@@ -121,7 +121,7 @@ class Barsysteem
         }
         $qa = "";
         if ($persoon != "alles") $qa = "B.socCieId=:socCieId AND";
-        $q = $this->db->prepare("SELECT * FROM socCieBestelling AS B JOIN socCieBestellingInhoud AS I ON B.id=I.bestellingId JOIN socCieKlanten AS K ON B.socCieId = K.socCieId WHERE " . $qa . " tijd>=:begin AND tijd<=:eind AND B.deleted = 0 AND K.deleted = 0");
+        $q = $this->db->prepare("SELECT * FROM socCieBestelling AS B JOIN socCieBestellingInhoud AS I ON B.id=I.bestellingId JOIN socCiePrijs AS PR ON I.productId = PR.productId AND (tijd BETWEEN van AND tot) JOIN socCieKlanten AS K ON B.socCieId = K.socCieId WHERE " . $qa . " (tijd BETWEEN :begin AND :eind) AND B.deleted = 0 AND K.deleted = 0");
         if ($persoon != "alles") $q->bindValue(":socCieId", $persoon, PDO::PARAM_INT);
         $q->bindValue(":begin", $begin);
         $q->bindValue(":eind", $eind);
@@ -217,7 +217,7 @@ class Barsysteem
                 $result[$row["bestellingId"]]["bestelId"] = $row["id"];
 
             }
-            $result[$row["bestellingId"]]["bestelLijst"][$row["productId"]] = 1 * $row["aantal"];
+            $result[$row["bestellingId"]]["bestelLijst"][$row["productId"]] = array('aantal' => 1 * $row["aantal"], 'prijs' => $row['prijs']);
         }
         return $result;
     }
