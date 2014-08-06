@@ -111,18 +111,15 @@ class LoginLid {
 	}
 
 	public function getUid() {
-		return $this->getLid()->getUid();
+		return $this->lid->getUid();
 	}
 
 	public function getLid() {
-		if (!$this->lid instanceof Lid) {
-			$this->logout();
-		}
 		return $this->lid;
 	}
 
 	public function isSelf($uid) {
-		return $this->getLid()->getUid() == $uid;
+		return $this->lid->getUid() == $uid;
 	}
 
 	/**
@@ -146,7 +143,7 @@ class LoginLid {
 		if (in_array($suNaar->getStatus(), array('S_NOBODY', 'S_EXLID'))) {
 			throw new Exception('Kan niet su-en naar nobodies!');
 		}
-		$_SESSION['_suedFrom'] = $this->getLid()->getUid();
+		$_SESSION['_suedFrom'] = $this->lid->getUid();
 		$_SESSION['_uid'] = $uid;
 		$this->lid = $suNaar;
 	}
@@ -322,7 +319,7 @@ class LoginLid {
 		}
 
 		# zoek de rechten van de gebruiker op
-		$liddescr = $this->getLid()->getPermissies();
+		$liddescr = $this->lid->getPermissies();
 
 		//alleen als $token_athorizable true is testen we met de permissies van het
 		//geauthenticeerde lid, anders met P_PUBLIC
@@ -352,7 +349,7 @@ class LoginLid {
 			# bijv.  3=1+2, 7=1+2+4, 5=1+4, 6=2+4, 12=4+8, etc
 			#
 			# $gevraagd is de gevraagde permissie als string,
-			# de permissies van de gebruiker $lidheeft kunnen we bij $this->getLid() opvragen
+			# de permissies van de gebruiker $lidheeft kunnen we bij $this->lid opvragen
 			# als we die 2 met elkaar AND-en, dan moet het resultaat hetzelfde
 			# zijn aan de gevraagde permissie. In dat geval bestaat de permissie
 			# van het lid dus minimaal uit de gevraagde permissie
@@ -388,12 +385,12 @@ class LoginLid {
 		} elseif (substr($permissie, 0, 9) == 'verticale') {
 			$verticale = strtoupper(substr($permissie, 10));
 			if (is_numeric($verticale)) {
-				if ($verticale == $this->getLid()->getVerticaleID()) {
+				if ($verticale == $this->lid->getVerticaleID()) {
 					return true;
 				}
-			} elseif ($verticale == $this->getLid()->getVerticaleLetter()) {
+			} elseif ($verticale == $this->lid->getVerticaleLetter()) {
 				return true;
-			} elseif ($verticale == strtoupper($this->getLid()->getVerticale())) {
+			} elseif ($verticale == strtoupper($this->lid->getVerticale())) {
 				return true;
 			}
 			//Behoort een lid tot een bepaalde (h.t.) groep?
@@ -424,7 +421,7 @@ class LoginLid {
 			//Is een lid man, vrouw en/of geslacht?
 		} elseif (substr($permissie, 0, 8) == 'geslacht') {
 			$geslacht = strtolower(substr($permissie, 9));
-			if ($geslacht == $this->getLid()->getGeslacht()) {
+			if ($geslacht == $this->lid->getGeslacht()) {
 				return true;
 				//we zijn toch zeker niet geslacht??
 			} elseif ($geslacht == 'nee' AND $this->hasPermission('P_LOGGED_IN', $token_authorizable)) {
@@ -433,20 +430,20 @@ class LoginLid {
 			//Behoort een lid tot een bepaalde lichting?
 		} elseif (substr($permissie, 0, 7) == 'lidjaar') {
 			$lidjaar = substr($permissie, 8);
-			if ($lidjaar == $this->getLid()->getProperty('lidjaar')) {
+			if ($lidjaar == $this->lid->getProperty('lidjaar')) {
 				return true;
 			}
 		} elseif (substr($permissie, 0, 8) == 'lichting') {
 			$lidjaar = substr($permissie, 9);
-			if ($lidjaar == $this->getLid()->getProperty('lidjaar')) {
+			if ($lidjaar == $this->lid->getProperty('lidjaar')) {
 				return true;
 			}
 		} elseif (substr($permissie, 0, 10) == 'Ouderjaars' OR substr($permissie, 0, 10) == 'ouderjaars') {
-			if (Lichting::getJongsteLichting() > $this->getLid()->getProperty('lidjaar') AND $this->hasPermission('P_LOGGED_IN', $token_authorizable)) {
+			if (Lichting::getJongsteLichting() > $this->lid->getProperty('lidjaar') AND $this->hasPermission('P_LOGGED_IN', $token_authorizable)) {
 				return true;
 			}
 		} elseif (substr($permissie, 0, 11) == 'Eerstejaars' OR substr($permissie, 0, 11) == 'eerstejaars') {
-			if (Lichting::getJongsteLichting() == $this->getLid()->getProperty('lidjaar') AND $this->hasPermission('P_LOGGED_IN', $token_authorizable)) {
+			if (Lichting::getJongsteLichting() == $this->lid->getProperty('lidjaar') AND $this->hasPermission('P_LOGGED_IN', $token_authorizable)) {
 				return true;
 			}
 		}
@@ -462,44 +459,45 @@ class LoginLid {
 		#   MOD  = Moderate rechten, dus verwijderen enzo
 		# Let op: de rechten zijn cumulatief (bijv: 7=4+2+1, 3=2+1)
 		#         als je hiervan afwijkt, kun je (bewust) niveau's uitsluiten (bijv 5=4+1, sluit 2 uit)
+
 		# de levels worden omgezet in een karakter met die ASCII waarde (dit zijn vaak niet-leesbare symbolen, bijv #8=backspace)
 		# elke karakter van een string representeert een onderdeel
 
 		$this->_permissions = array(
-			'P_PUBLIC'			 => $this->createPermStr(0, 0), # Iedereen op het Internet
-			'P_LOGGED_IN'		 => $this->createPermStr(1, 0), # Leden-menu, eigen profiel raadplegen
-			'P_PROFIEL_EDIT'	 => $this->createPermStr(1 + 2, 0), # Eigen gegevens aanpassen
-			'P_ALLEEN_OUDLID'	 => $this->createPermStr(4, 0), # Specifiek voor oudleden [[let op: niet cumulatief]]
-			'P_LEDEN_READ'		 => $this->createPermStr(1, 1), # Gegevens van leden raadplegen
-			'P_OUDLEDEN_READ'	 => $this->createPermStr(1 + 2, 1), # Gegevens van oudleden raadplegen
-			'P_LEDEN_MOD'		 => $this->createPermStr(1 + 2 + 4, 1), # (Oud)ledengegevens aanpassen
-			'P_FORUM_READ'		 => $this->createPermStr(1, 2), # Forum lezen
-			'P_FORUM_POST'		 => $this->createPermStr(1 + 2, 2), # Berichten plaatsen op het forum en eigen berichten wijzigen
-			'P_FORUM_MOD'		 => $this->createPermStr(1 + 2 + 4, 2), # Forum-moderator mag berichten van anderen wijzigen of verwijderen
-			'P_FORUM_BELANGRIJK' => $this->createPermStr(8, 2), # Forum belangrijk (de)markeren  [[let op: niet cumulatief]]
-			'P_FORUM_ADMIN'		 => $this->createPermStr(16, 2), # Forum-admin mag deel-fora aanmaken en rechten wijzigen  [[let op: niet cumulatief]]
-			'P_AGENDA_READ'		 => $this->createPermStr(1, 3), # Agenda bekijken
-			'P_AGENDA_POST'		 => $this->createPermStr(1 + 2, 3), # Items toevoegen aan de agenda
-			'P_AGENDA_MOD'		 => $this->createPermStr(1 + 2 + 4, 3), # Items beheren in de agenda
-			'P_DOCS_READ'		 => $this->createPermStr(1, 4), # Documenten-rubriek lezen
-			'P_DOCS_POST'		 => $this->createPermStr(1 + 2, 4), # Documenten verwijderen of erbij plaatsen en fotos uploaden
-			'P_DOCS_MOD'		 => $this->createPermStr(1 + 2 + 4, 4), # Documenten aanpassen en fotos uit fotoalbum verwijderen
-			'P_BIEB_READ'		 => $this->createPermStr(1, 5), # Bibliotheek lezen
-			'P_BIEB_EDIT'		 => $this->createPermStr(1 + 2, 5), # Bibliotheek wijzigen
-			'P_BIEB_MOD'		 => $this->createPermStr(1 + 2 + 4, 5), # Bibliotheek zowel wijzigen als lezen
-			'P_NEWS_POST'		 => $this->createPermStr(1, 6), # Nieuws plaatsen en wijzigen van jezelf
-			'P_NEWS_MOD'		 => $this->createPermStr(1 + 2, 6), # Nieuws-moderator mag berichten van anderen wijzigen of verwijderen
-			'P_NEWS_PUBLISH'	 => $this->createPermStr(1 + 2 + 4, 6), # Nieuws publiceren en rechten bepalen
-			'P_MAAL_IK'			 => $this->createPermStr(1, 7), # kan zich aan en afmelden voor maaltijd en eigen abo wijzigen
-			'P_MAAL_MOD'		 => $this->createPermStr(1 + 2, 7), # mag maaltijden beheren (MaalCie P)
-			'P_MAAL_SALDI'		 => $this->createPermStr(1 + 2 + 4, 7), # mag het MaalCie saldo aanpassen van iedereen (MaalCie fiscus)
-			'P_CORVEE_IK'		 => $this->createPermStr(1, 8), # kan voorkeuren aangeven voor corveetaken
-			'P_CORVEE_MOD'		 => $this->createPermStr(1 + 2, 8), # mag corveetaken beheren (CorveeCaesar)
-			'P_CORVEE_SCHED'	 => $this->createPermStr(1 + 2 + 4, 8), # mag de automatische corvee-indeler beheren
-			'P_MAIL_POST'		 => $this->createPermStr(1, 9), # mag berichtjes in de courant rossen
-			'P_MAIL_COMPOSE'	 => $this->createPermStr(1 + 2, 9), # mag alle berichtjes in de courant bewerken, en volgorde wijzigen
-			'P_MAIL_SEND'		 => $this->createPermStr(1 + 2 + 4, 9), # mag de courant verzenden
-			'P_ADMIN'			 => $this->createPermStr(1, 10) # Super-admin
+			'P_PUBLIC'			 => $this->createPermStr(0, 	0), # Iedereen op het Internet
+			'P_LOGGED_IN'		 => $this->createPermStr(1, 	0), # Leden-menu, eigen profiel raadplegen
+			'P_PROFIEL_EDIT'	 => $this->createPermStr(1+2, 	0), # Eigen gegevens aanpassen
+			'P_ALLEEN_OUDLID'	 => $this->createPermStr(4,     0), # Specifiek voor oudleden [[let op: niet cumulatief]]
+			'P_LEDEN_READ'		 => $this->createPermStr(1, 	1), # Gegevens van leden raadplegen
+			'P_OUDLEDEN_READ'	 => $this->createPermStr(1+2, 	1), # Gegevens van oudleden raadplegen
+			'P_LEDEN_MOD'		 => $this->createPermStr(1+2+4, 1), # (Oud)ledengegevens aanpassen
+			'P_FORUM_READ'		 => $this->createPermStr(1, 	2), # Forum lezen
+			'P_FORUM_POST'		 => $this->createPermStr(1+2, 	2), # Berichten plaatsen op het forum en eigen berichten wijzigen
+			'P_FORUM_MOD'		 => $this->createPermStr(1+2+4, 2), # Forum-moderator mag berichten van anderen wijzigen of verwijderen
+			'P_FORUM_BELANGRIJK' => $this->createPermStr(8, 	2), # Forum belangrijk (de)markeren  [[let op: niet cumulatief]]
+			'P_FORUM_ADMIN'		 => $this->createPermStr(16,	2),	# Forum-admin mag deel-fora aanmaken en rechten wijzigen  [[let op: niet cumulatief]]
+			'P_AGENDA_READ'		 => $this->createPermStr(1, 	3), # Agenda bekijken
+			'P_AGENDA_POST'		 => $this->createPermStr(1+2, 	3), # Items toevoegen aan de agenda
+			'P_AGENDA_MOD'		 => $this->createPermStr(1+2+4, 3), # Items beheren in de agenda
+			'P_DOCS_READ'		 => $this->createPermStr(1, 	4), # Documenten-rubriek lezen
+			'P_DOCS_POST'		 => $this->createPermStr(1+2, 	4), # Documenten verwijderen of erbij plaatsen en fotos uploaden
+			'P_DOCS_MOD'		 => $this->createPermStr(1+2+4, 4), # Documenten aanpassen en fotos uit fotoalbum verwijderen
+			'P_BIEB_READ'		 => $this->createPermStr(1, 	5), # Bibliotheek lezen
+			'P_BIEB_EDIT'		 => $this->createPermStr(1+2, 	5), # Bibliotheek wijzigen
+			'P_BIEB_MOD'		 => $this->createPermStr(1+2+4, 5), # Bibliotheek zowel wijzigen als lezen
+			'P_NEWS_POST'		 => $this->createPermStr(1, 	6), # Nieuws plaatsen en wijzigen van jezelf
+			'P_NEWS_MOD'		 => $this->createPermStr(1+2, 	6), # Nieuws-moderator mag berichten van anderen wijzigen of verwijderen
+			'P_NEWS_PUBLISH'	 => $this->createPermStr(1+2+4, 6), # Nieuws publiceren en rechten bepalen
+			'P_MAAL_IK'			 => $this->createPermStr(1, 	7), # kan zich aan en afmelden voor maaltijd en eigen abo wijzigen
+			'P_MAAL_MOD'		 => $this->createPermStr(1+2, 	7), # mag maaltijden beheren (MaalCie P)
+			'P_MAAL_SALDI'		 => $this->createPermStr(1+2+4, 7), # mag het MaalCie saldo aanpassen van iedereen (MaalCie fiscus)
+			'P_CORVEE_IK'		 => $this->createPermStr(1, 	8), # kan voorkeuren aangeven voor corveetaken
+			'P_CORVEE_MOD'		 => $this->createPermStr(1+2, 	8), # mag corveetaken beheren (CorveeCaesar)
+			'P_CORVEE_SCHED'	 => $this->createPermStr(1+2+4, 8), # mag de automatische corvee-indeler beheren
+			'P_MAIL_POST'		 => $this->createPermStr(1, 	9), # mag berichtjes in de courant rossen
+			'P_MAIL_COMPOSE'	 => $this->createPermStr(1+2, 	9), # mag alle berichtjes in de courant bewerken, en volgorde wijzigen
+			'P_MAIL_SEND'		 => $this->createPermStr(1+2+4, 9), # mag de courant verzenden
+			'P_ADMIN'			 => $this->createPermStr(1, 	10) # Super-admin
 		);
 
 		# Deze waarden worden samengesteld uit bovenstaande permissies en
@@ -507,16 +505,22 @@ class LoginLid {
 		# welke permissie-groep (Role) de gebruiker in zit.
 		$p = $this->_permissions;
 		$this->_perm_user = array(
-			'R_NOBODY'	 => $p['P_PUBLIC'] | $p['P_FORUM_READ'] | $p['P_AGENDA_READ'],
-			'R_LID'		 => $p['P_PROFIEL_EDIT'] | $p['P_OUDLEDEN_READ'] | $p['P_FORUM_POST'] | $p['P_AGENDA_READ'] | $p['P_DOCS_READ'] | $p['P_BIEB_READ'] | $p['P_MAAL_IK'] | $p['P_CORVEE_IK'] | $p['P_MAIL_POST'] | $p['P_NEWS_POST']
+			'R_NOBODY'	 => $p['P_PUBLIC']       | $p['P_FORUM_READ']    | $p['P_AGENDA_READ'],
+			'R_LID'		 => $p['P_PROFIEL_EDIT'] | $p['P_OUDLEDEN_READ'] | $p['P_FORUM_POST'] | $p['P_AGENDA_READ']
+							| $p['P_DOCS_READ']  | $p['P_BIEB_READ']     | $p['P_MAAL_IK']    | $p['P_CORVEE_IK']
+						    | $p['P_MAIL_POST']  | $p['P_NEWS_POST']
 		);
-		$this->_perm_user['R_ETER'] = $this->_perm_user['R_NOBODY'] | $p['P_LOGGED_IN'] | $p['P_PROFIEL_EDIT'] | $p['P_MAAL_IK'];
-		$this->_perm_user['R_OUDLID'] = $this->_perm_user['R_LID'] | $p['P_ALLEEN_OUDLID'];
-		$this->_perm_user['R_BASF'] = $this->_perm_user['R_LID'] | $p['P_DOCS_MOD'];
-		$this->_perm_user['R_MAALCIE'] = $this->_perm_user['R_LID'] | $p['P_MAAL_MOD'] | $p['P_CORVEE_MOD'] | $p['P_MAAL_SALDI'];
-		$this->_perm_user['R_MODERATOR'] = $this->_perm_user['R_LID'] | $p['P_LEDEN_MOD'] | $p['P_FORUM_MOD'] | $p['P_DOCS_MOD'] | $p['P_AGENDA_MOD'] | $p['P_NEWS_MOD'] | $p['P_BIEB_MOD'] | $p['P_MAAL_IK'] | $p['P_CORVEE_IK'] | $p['P_MAIL_COMPOSE'];
-		$this->_perm_user['R_BESTUUR'] = $this->_perm_user['R_MODERATOR'] | $p['P_MAAL_MOD'] | $p['P_CORVEE_MOD'] | $p['P_MAIL_COMPOSE'] | $p['P_FORUM_BELANGRIJK'];
-		$this->_perm_user['R_PUBCIE'] = $this->_perm_user['R_MODERATOR'] | $p['P_ADMIN'] | $p['P_CORVEE_SCHED'] | $p['P_MAAL_SALDI'] | $p['P_FORUM_ADMIN'];
+		$this->_perm_user['R_ETER']      = $this->_perm_user['R_NOBODY'] | $p['P_LOGGED_IN'] | $p['P_PROFIEL_EDIT'] | $p['P_MAAL_IK'];
+		$this->_perm_user['R_OUDLID']    = $this->_perm_user['R_LID'] | $p['P_ALLEEN_OUDLID'];
+		$this->_perm_user['R_BASF']      = $this->_perm_user['R_LID'] | $p['P_DOCS_MOD'];
+		$this->_perm_user['R_MAALCIE']   = $this->_perm_user['R_LID'] | $p['P_MAAL_MOD']   | $p['P_CORVEE_MOD'] | $p['P_MAAL_SALDI'];
+		$this->_perm_user['R_MODERATOR'] = $this->_perm_user['R_LID'] | $p['P_LEDEN_MOD']  | $p['P_FORUM_MOD']  | $p['P_DOCS_MOD']
+											     					  | $p['P_AGENDA_MOD'] | $p['P_NEWS_MOD']   | $p['P_BIEB_MOD']
+																	  | $p['P_MAAL_IK']    | $p['P_CORVEE_IK']  | $p['P_MAIL_COMPOSE'];
+		$this->_perm_user['R_BESTUUR']   = $this->_perm_user['R_MODERATOR'] | $p['P_MAAL_MOD'] | $p['P_CORVEE_MOD'] | $p['P_MAIL_COMPOSE']
+																			| $p['P_FORUM_BELANGRIJK'];
+		$this->_perm_user['R_PUBCIE']    = $this->_perm_user['R_MODERATOR'] | $p['P_ADMIN'] | $p['P_CORVEE_SCHED'] | $p['P_MAAL_SALDI']
+																			| $p['P_FORUM_ADMIN'];
 	}
 
 	/**
