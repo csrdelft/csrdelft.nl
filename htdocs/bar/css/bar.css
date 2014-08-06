@@ -332,6 +332,9 @@ th#opties {
 
 #besteLijstBeheerContent ul{
 	margin: 0;
+}
+
+#besteLijstBeheerContent td.bestel{
 	width: 250px;
 }
 
