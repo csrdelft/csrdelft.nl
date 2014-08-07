@@ -470,6 +470,7 @@ $(function () {
 					bestel.push(saldoStr(bestelling.bestelLijst[key]) + " " + producten[key].beschrijving);
             }
             bestel = '<ul><li>' + bestel.join('</li><li>') + '</li></ul>';
+            bestelComma = bestel.join(", ");
             
 			$("#besteLijstBeheerContent tbody").append("<tr id='tabelRijBeheerLijst" + item + "'><td>" + personen[bestelling.persoon].naam + "</td><td>"
                 + bestelling.tijd + "</td><td>" + saldoStr(bestelling.bestelTotaal) + "</td><td>" + bestel + "</td>" +
@@ -493,7 +494,7 @@ $(function () {
                 $("#invoerveld").trigger("click");
             });
             $("#verwijderBestelling" + item).click(function () {
-                if (confirm("Weet u zeker dat u de bestelling van " + bestel + " op: " + bestelling.tijd + " wilt verwijderen?")) {
+                if (confirm("Weet u zeker dat u de bestelling van " + bestelComma + " op: " + bestelling.tijd + " wilt verwijderen?")) {
                     $.ajax({
                         url: "ajax.php",
                         method: "POST",
