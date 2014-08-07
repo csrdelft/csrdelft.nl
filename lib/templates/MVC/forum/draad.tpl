@@ -10,27 +10,25 @@
 				   onmouseover="$(this).children('img').attr('src', 'http://plaetjes.csrdelft.nl/famfamfam/email_delete.png');"
 				   onmouseout="$(this).children('img').attr('src', 'http://plaetjes.csrdelft.nl/famfamfam/email_go.png');"
 				   >{icon get="email_go"}</a>
-			{else}
+			{elseif $draad->magVolgen()}
 				<a href="/forum/volgenaan/{$draad->draad_id}" class="knop" title="Onderwerp volgen per email"
 				   onmouseover="$(this).children('img').attr('src', 'http://plaetjes.csrdelft.nl/famfamfam/email_add.png');"
 				   onmouseout="$(this).children('img').attr('src', 'http://plaetjes.csrdelft.nl/famfamfam/email.png');"
 				   >{icon get="email"}</a>
 			{/if}
 			&nbsp;&nbsp;&nbsp;
-			{if $draad->magVerbergen()}
-				{if $draad->isVerborgen()}
-					<a href="/forum/tonen/{$draad->draad_id}" class="knop" title="Onderwerp tonen in zijbalk"
-					   onmouseover="$(this).children('img').attr('src', 'http://plaetjes.csrdelft.nl/famfamfam/layout_add.png');"
-					   onmouseout="$(this).children('img').attr('src', 'http://plaetjes.csrdelft.nl/famfamfam/layout.png');"
-					   >{icon get="layout"}</a>
-				{else}
-					<a href="/forum/verbergen/{$draad->draad_id}" class="knop" title="Onderwerp verbergen in zijbalk"
-					   onmouseover="$(this).children('img').attr('src', 'http://plaetjes.csrdelft.nl/famfamfam/layout_delete.png');"
-					   onmouseout="$(this).children('img').attr('src', 'http://plaetjes.csrdelft.nl/famfamfam/layout_sidebar.png');"
-					   >{icon get="layout_sidebar"}</a>
-				{/if}
-				&nbsp;&nbsp;&nbsp;
+			{if $draad->isVerborgen()}
+				<a href="/forum/tonen/{$draad->draad_id}" class="knop" title="Onderwerp tonen in zijbalk"
+				   onmouseover="$(this).children('img').attr('src', 'http://plaetjes.csrdelft.nl/famfamfam/layout_add.png');"
+				   onmouseout="$(this).children('img').attr('src', 'http://plaetjes.csrdelft.nl/famfamfam/layout.png');"
+				   >{icon get="layout"}</a>
+			{elseif $draad->magVerbergen()}
+				<a href="/forum/verbergen/{$draad->draad_id}" class="knop" title="Onderwerp verbergen in zijbalk"
+				   onmouseover="$(this).children('img').attr('src', 'http://plaetjes.csrdelft.nl/famfamfam/layout_delete.png');"
+				   onmouseout="$(this).children('img').attr('src', 'http://plaetjes.csrdelft.nl/famfamfam/layout_sidebar.png');"
+				   >{icon get="layout_sidebar"}</a>
 			{/if}
+			&nbsp;&nbsp;&nbsp;
 			{if $deel->magModereren()}
 				{if $draad->gesloten}
 					<a href="/forum/wijzigen/{$draad->draad_id}/gesloten" class="knop" title="Openen (reactie mogelijk)"
