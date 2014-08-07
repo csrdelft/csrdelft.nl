@@ -107,10 +107,16 @@ class FotoUbbView extends TemplateView {
 
 	public function getHTML() {
 		$html = '<a href="' . $this->model->getURL() . '" title="Klik voor origineel formaat"';
-		if (LidInstellingen::get('forum', 'afbeeldingHover') === 'hoverIntent') {
+		if (LidInstellingen::get('forum', 'fotoWeergave') === 'hoverIntent') {
 			$html .= ' class="hoverIntent"><div class="hoverIntentContent"><div class="ubb_img_loading" src="' . $this->model->getResizedURL() . '"></div></div';
 		}
-		$html .= '><div class="ubb_img_loading" src="' . $this->model->getThumbURL() . '"></div></a>';
+		$html .= '><div class="ubb_img_loading" src="';
+		if (LidInstellingen::get('forum', 'fotoWeergave') === 'altijd') {
+			$html .= $this->model->getResizedURL();
+		} else {
+			$html .= $this->model->getThumbURL();
+		}
+		$html .= '"></div></a>';
 		return $html;
 	}
 
