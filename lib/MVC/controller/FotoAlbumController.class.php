@@ -33,17 +33,17 @@ class FotoAlbumController extends AclController {
 		parent::__construct($query);
 		if (!$this->isPosted()) {
 			$this->acl = array(
-				'bekijken' => 'P_PUBLIC',
+				'bekijken'	 => 'P_PUBLIC',
 				'downloaden' => 'P_LOGGED_IN',
-				'verwerken' => 'P_LEDEN_READ',
-				'toevoegen' => 'P_LEDEN_READ'
+				'verwerken'	 => 'P_LEDEN_READ',
+				'toevoegen'	 => 'P_LEDEN_READ'
 			);
 		} else {
 			$this->acl = array(
-				'albumcover' => 'P_DOCS_MOD',
-				'verwijderen' => 'P_DOCS_MOD',
-				'hernoemen' => 'P_DOCS_MOD',
-				'uploaden' => 'P_LEDEN_READ'
+				'albumcover'	 => 'P_DOCS_MOD',
+				'verwijderen'	 => 'P_DOCS_MOD',
+				'hernoemen'		 => 'P_DOCS_MOD',
+				'uploaden'		 => 'P_LEDEN_READ'
 			);
 		}
 	}
@@ -109,9 +109,9 @@ class FotoAlbumController extends AclController {
 		} else { // uitgelogd heeft nieuwe layout
 			$this->view = new CsrLayout2Page($body);
 		}
-		$this->view->addStylesheet('fotoalbum.css');
-		$this->view->addStylesheet('jquery.prettyPhoto.css');
+		$this->view->addStylesheet('jquery.prettyPhoto.min.css', '/layout/js/jquery/plugins/');
 		$this->view->addScript('jquery.prettyPhoto.min.js', '/layout/js/jquery/plugins/');
+		$this->view->addStylesheet('fotoalbum.css');
 	}
 
 	public function verwerken(FotoAlbum $album) {
