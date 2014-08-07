@@ -248,7 +248,7 @@ if ($barsysteem->isLoggedIn()) {
 						
 						<div id="persoonBeheer" class="hidden">
 						
-							<h2>Persoon wijziggen</h2>
+							<h2>Persoon wijzigen</h2>
 					
 							<form id="updatePerson" class="form-inline" action="ajax.php" method="post">
 							
