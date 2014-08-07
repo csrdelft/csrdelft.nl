@@ -71,11 +71,9 @@
 		</tr>
 	</thead>
 	{/if}
-</table>
-<table>
 	<tbody>
 		<tr>
-			<td>
+			<td colspan="4">
 				<div class="forumdeel-omschrijving">
 					<div style="float: right;">{$smarty.capture.navlinks}</div>
 					<h1>{$deel->titel}</h1>
@@ -83,8 +81,12 @@
 				</div>
 			</td>
 		</tr>
-		{if $deel->magPosten()}
-			{include file='MVC/forum/draad_form.tpl'}
-		{/if}
+	</tbody>
+</table>
+<table>
+	<tbody>
+	{if $deel->magPosten()}
+		{include file='MVC/forum/draad_form.tpl'}
+	{/if}
 	</tbody>
 </table>
