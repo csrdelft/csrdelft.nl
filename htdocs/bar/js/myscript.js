@@ -458,9 +458,8 @@ $(function () {
      * @param bestellingen een lijst in JSON met allen bestellingen.
      */
     function zetOudeBestellingen(bestellingen) {
-		var newHTML = '';
+		$("#besteLijstBeheerContent tbody").empty();
         $.each(bestellingen, function (item) {
-			$("#besteLijstBeheerContent tbody").empty();
             var bestelling = this;
             var bestel = [];
             for (key in bestelling.bestelLijst) {
