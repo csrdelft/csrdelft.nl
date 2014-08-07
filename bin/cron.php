@@ -1,4 +1,4 @@
-#!/usr/lib/cgi-bin/php
+#!/usr/bin/php-cgi
 <?php
 /**
  * cron.php
