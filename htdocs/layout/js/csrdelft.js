@@ -17,6 +17,10 @@ preload([
 ]);
 
 $(document).ready(function() {
+	init();
+});
+
+function init(){
 	init_links();
 	init_buttons();
 	init_forms();
@@ -28,7 +32,7 @@ $(document).ready(function() {
 	catch (err) {
 		//FIXME groepen.js not present
 	}
-});
+}
 
 function init_lazy_images() {
 	$('div.ubb_img_loading').each(function() {
@@ -158,10 +162,7 @@ function knop_get(event) {
 function popup_open(htmlString) {
 	if (htmlString) {
 		$('#popup').html(htmlString);
-		init_links();
-		init_buttons();
-		init_forms();
-		init_hoverIntents();
+		init();
 		$('#popup').show();
 		$('#popup-background').css('background-image', 'none');
 		$('#popup input:visible:first').focus();
@@ -387,10 +388,7 @@ function dom_update(htmlString) {
 				$(this).prependTo('#maalcie-tabel tbody:visible:first').effect('highlight'); //FIXME: make generic
 			}
 		}
-		init_links();
-		init_buttons();
-		init_forms();
-		init_hoverIntents();
+		init();
 	});
 }
 
@@ -513,10 +511,7 @@ function applyUBB(string, div) {
 	});
 	jqXHR.done(function(data, textStatus, jqXHR) {
 		$(div).html(data);
-		init_links();
-		init_buttons();
-		init_forms();
-		init_hoverIntents();
+		init();
 	});
 }
 
@@ -556,6 +551,5 @@ function ubbPreview(source, dest) {
 		var previewDiv = document.getElementById(dest);
 		applyUBB(ubb, previewDiv);
 		previewDiv.style.display = 'block';
-		init_lazy_images();
 	}
 }
