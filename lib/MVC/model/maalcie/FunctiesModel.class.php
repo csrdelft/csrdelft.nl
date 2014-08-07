@@ -24,24 +24,8 @@ class FunctiesModel extends PersistenceModel {
 	 * @param boolean $load_kwalificaties
 	 * @return CorveeFunctie[]
 	 */
-	public function getAlleFuncties($load_kwalificaties = false) {
-		$functies = $this->find();
-		if ($load_kwalificaties) {
-			$kwalificaties = KwalificatiesModel::instance()->getAlleKwalificaties();
-		}
-		$result = array();
-		foreach ($functies as $functie) {
-			if ($load_kwalificaties) {
-				if (array_key_exists($functie->functie_id, $kwalificaties)) {
-					$functie->setKwalificaties($kwalificaties[$functie->functie_id]);
-					unset($kwalificaties[$functie->functie_id]);
-				} else {
-					$functie->setKwalificaties(array());
-				}
-			}
-			$result[$functie->functie_id] = $functie;
-		}
-		return $result;
+	public function getAlleFuncties() {
+		return group_by_distinct('functie_id', $this->find());
 	}
 
 	/**

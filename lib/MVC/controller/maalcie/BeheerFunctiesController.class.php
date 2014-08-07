@@ -43,7 +43,7 @@ class BeheerFunctiesController extends AclController {
 			$this->bewerken($fid);
 			$popup = $this->getContent();
 		}
-		$functies = $this->model->getAlleFuncties(true); // grouped by functie_id
+		$functies = $this->model->getAlleFuncties(); // grouped by functie_id
 		$this->view = new BeheerFunctiesView($functies);
 		$zijkolom = array(new BlockMenuView(MenuModel::instance()->getMenuTree('Corveebeheer')));
 		$this->view = new CsrLayoutPage($this->getContent(), $zijkolom, $popup);

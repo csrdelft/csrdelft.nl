@@ -144,7 +144,7 @@ class ConversieModel {
 			'puntenlichteklus' => 10,
 			'puntenzwareklus' => 11,
 		);
-		$byFid = \FunctiesModel::getAlleFuncties(true);
+		$byFid = \FunctiesModel::getAlleFuncties();
 		$rows = self::queryDb('SELECT * FROM maaltijdcorveeinstellingen');
 		foreach ($rows as $row) {
 			$id = $row['instelling'];
