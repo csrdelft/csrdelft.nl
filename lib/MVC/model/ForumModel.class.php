@@ -244,19 +244,9 @@ class ForumDradenGelezenModel extends PersistenceModel {
 	}
 
 	public function setWanneerGelezenDoorLid(ForumDraad $draad) {
-		$laatste_op_pagina = $draad->getForumPosts();
-		if (empty($laatste_op_pagina)) {
-			throw new Exception('Geen forum posts');
-		} else {
-			$laatste_op_pagina = end($laatste_op_pagina);
-			$datum_tijd = $laatste_op_pagina->datum_tijd;
-			if ($laatste_op_pagina->laatst_bewerkt) {
-				$datum_tijd = $laatste_op_pagina->laatst_bewerkt;
-			}
-		}
 		$gelezen = $this->getWanneerGelezenDoorLid($draad);
-		if (strtotime($datum_tijd) > strtotime($draad->getWanneerGelezen()->datum_tijd)) {
-			$gelezen->datum_tijd = $datum_tijd;
+		if (strtotime($draad->laatst_gewijzigd) > strtotime($draad->getWanneerGelezen()->datum_tijd)) {
+			$gelezen->datum_tijd = $draad->laatst_gewijzigd;
 			$this->update($gelezen);
 		}
 	}
