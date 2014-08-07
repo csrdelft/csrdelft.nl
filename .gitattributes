@@ -1,5 +1,5 @@
 * text=auto !eol
-bin/corvee_mailer.php -text
+bin/cron.php -text
 bin/ldap-import.php -text
 bin/ldap/settings.py.example -text
 bin/ldap/sync_ldap_groepen.py -text
