@@ -381,11 +381,20 @@ div.ubb_img_loading{
 	background-position: bottom left;
 }
 
-/* forum */
-td.auteur {
-	min-width: 100px;
+/**** hoverIntent ******************************************************************/
+.hoverIntentContent{
+	display: none;
+	position: absolute;
 }
-
-td.titel {
-	min-width: 180px;
+div.hoverIntentContent{
+	border: 1px solid #000;
+	background-color: #FFF;
+	-moz-box-shadow: 0 0 11px #000000;
+	-webkit-box-shadow: 0 0 11px #000000;
+	box-shadow: 0 0 11px #000000;
+	z-index: 111;
+	font-weight: normal !important;
+	font-style: normal !important;
+	float: none !important;
+	overflow: visible;
 }
