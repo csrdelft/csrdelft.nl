@@ -117,7 +117,7 @@ class CsrUbb extends eamBBParser {
 	function ubb_foto($arguments = array()) {
 		require_once 'MVC/controller/FotoAlbumController.class.php';
 		$url = urldecode($this->parseArray(array('[/fotoalbum]'), array()));
-		$parts = explode($url);
+		$parts = array_filter(explode('/', $url));
 		$naam = array_pop($parts);
 		$path = PICS_PATH . '/fotoalbum' . implode('/', $parts);
 		$album = FotoAlbumModel::getFotoAlbum($path);
