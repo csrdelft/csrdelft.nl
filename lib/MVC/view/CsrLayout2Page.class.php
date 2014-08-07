@@ -6,7 +6,7 @@
  * @author C.S.R. Delft <pubcie@csrdelft.nl>
  * @author P.W.G. Brussee <brussee@live.nl>
  * 
- * De stek layout uit 2013
+ * De stek layout van 2013
  */
 class CsrLayout2Page extends HtmlPage {
 
@@ -26,17 +26,17 @@ class CsrLayout2Page extends HtmlPage {
 		$this->tmpl = $template;
 		$this->menutmpl = $menu;
 
-		$this->addStylesheet('style.css', '/layout2/');
-		$this->addStylesheet('foundation.css', '/layout2/');
-		$this->addStylesheet('normalize.css', '/layout2/');
-		$this->addStylesheet('ubb.css', '/layout/');
-		$this->addScript('jquery.js', '/layout2/');
-		$this->addScript('jquery.backstretch.js', '/layout2/');
-		$this->addScript('jquery/plugins/jquery.timeago-1.3.0.custom.js', '/layout/');
-		$this->addScript('jquery/plugins/jquery.hoverIntent.min.js');
-		$this->addScript('init.js', '/layout2/');
-		$this->addScript('csrdelft.js', '/layout/');
-		$this->addScript('dragobject.js', '/layout/');
+		$this->addStylesheet('style.css', '/layout2/css/');
+		$this->addStylesheet('foundation.css', '/layout2/css/');
+		$this->addStylesheet('normalize.css', '/layout2/css/');
+		$this->addStylesheet('ubb.css');
+		$this->addScript('jquery.js', '/layout2/js/');
+		$this->addScript('jquery.backstretch.js', '/layout2/js/');
+		$this->addScript('jquery.timeago.custom.js', '/layout/js/jquery/plugins/');
+		$this->addScript('jquery.hoverIntent.min.js', '/layout/js/jquery/plugins/');
+		$this->addScript('init.js', '/layout2/js/');
+		$this->addScript('csrdelft.js');
+		$this->addScript('dragobject.js');
 	}
 
 	function view() {

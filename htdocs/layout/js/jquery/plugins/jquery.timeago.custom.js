@@ -1,12 +1,9 @@
 /**
- * AANGEPAST-Paul: NLD vertaling & abbr autostart & custom title Date.toLocaleString()
- *
- *
  * Timeago is a jQuery plugin that makes it easy to support automatically
  * updating fuzzy timestamps (e.g. "4 minutes ago" or "about 1 day ago").
  *
  * @name timeago
- * @version 1.3.0
+ * @version 1.4.1
  * @requires jQuery v1.2.3+
  * @author Ryan McGeary
  * @license MIT License - http://www.opensource.org/licenses/mit-license.php
@@ -16,10 +13,6 @@
  *
  * Copyright (c) 2008-2013, Ryan McGeary (ryan -[at]- mcgeary [*dot*] org)
  */
-
-jQuery(document).ready(function() {
-  jQuery('abbr.timeago').timeago();
-});
 
 (function (factory) {
   if (typeof define === 'function' && define.amd) {
@@ -46,32 +39,37 @@ jQuery(document).ready(function() {
   $.extend($.timeago, {
     settings: {
       refreshMillis: 60000,
+      allowPast: true,
       allowFuture: false,
-      localeTitle: true,
+      localeTitle: false,
       cutoff: 0,
       strings: {
-		prefixAgo: "",
-		prefixFromNow: "sinds",
-		suffixAgo: "geleden",
-		suffixFromNow: "",
-		seconds: "minder dan een minuut",
-		minute: "1 minuut",
-		minutes: "%d minuten",
-		hour: "1 uur",
-		hours: "%d uur",
-		day: "een dag",
-		days: "%d dagen",
-		month: "een maand",
-		months: "%d maanden",
-		year: "een jaar",
-		years: "%d jaar",
-		wordSeparator: " ",
-		numbers: [],
-		weekdays: ["zondag", "maandag", "dinsdag", "woensdag", "donderdag", "vrijdag", "zaterdag", "zondag"],
-		fullmonths: ["januari", "februari", "maart", "april", "mei", "juni", "juli", "augustus", "september", "oktober", "november", "december"]
+        prefixAgo: null,
+        prefixFromNow: null,
+        suffixAgo: "ago",
+        suffixFromNow: "from now",
+        inPast: 'any moment now',
+        seconds: "less than a minute",
+        minute: "about a minute",
+        minutes: "%d minutes",
+        hour: "about an hour",
+        hours: "about %d hours",
+        day: "a day",
+        days: "%d days",
+        month: "about a month",
+        months: "%d months",
+        year: "about a year",
+        years: "%d years",
+        wordSeparator: " ",
+        numbers: []
       }
     },
+
     inWords: function(distanceMillis) {
+      if(!this.settings.allowPast && ! this.settings.allowFuture) {
+          throw 'timeago allowPast and allowFuture settings can not both be set to false.';
+      }
+
       var $l = this.settings.strings;
       var prefix = $l.prefixAgo;
       var suffix = $l.suffixAgo;
@@ -80,6 +78,10 @@ jQuery(document).ready(function() {
           prefix = $l.prefixFromNow;
           suffix = $l.suffixFromNow;
         }
+      }
+
+      if(!this.settings.allowPast && distanceMillis >= 0) {
+        return this.settings.strings.inPast;
       }
 
       var seconds = Math.abs(distanceMillis) / 1000;
@@ -110,6 +112,7 @@ jQuery(document).ready(function() {
       if ($l.wordSeparator === undefined) { separator = " "; }
       return $.trim([prefix, words, suffix].join(separator));
     },
+
     parse: function(iso8601) {
       var s = $.trim(iso8601);
       s = s.replace(/\.\d+/,""); // remove milliseconds
@@ -138,16 +141,24 @@ jQuery(document).ready(function() {
       refresh_el();
       var $s = $t.settings;
       if ($s.refreshMillis > 0) {
-        setInterval(refresh_el, $s.refreshMillis);
+        this._timeagoInterval = setInterval(refresh_el, $s.refreshMillis);
       }
     },
     update: function(time){
-      $(this).data('timeago', { datetime: $t.parse(time) });
+      var parsedTime = $t.parse(time);
+      $(this).data('timeago', { datetime: parsedTime });
+      if($t.settings.localeTitle) $(this).attr("title", parsedTime.toLocaleString());
       refresh.apply(this);
     },
     updateFromDOM: function(){
       $(this).data('timeago', { datetime: $t.parse( $t.isTime(this) ? $(this).attr("datetime") : $(this).attr("title") ) });
       refresh.apply(this);
+    },
+    dispose: function () {
+      if (this._timeagoInterval) {
+        window.clearInterval(this._timeagoInterval);
+        this._timeagoInterval = null;
+      }
     }
   };
 
@@ -168,7 +179,7 @@ jQuery(document).ready(function() {
     var $s = $t.settings;
 
     if (!isNaN(data.datetime)) {
-      if ( $s.cutoff == 0 || distance(data.datetime) < $s.cutoff) {
+      if ( $s.cutoff == 0 || Math.abs(distance(data.datetime)) < $s.cutoff) {
         $(this).text(inWords(data.datetime));
       }
     }
@@ -181,17 +192,7 @@ jQuery(document).ready(function() {
       element.data("timeago", { datetime: $t.datetime(element) });
       var text = $.trim(element.text());
       if ($t.settings.localeTitle) {
-        var date = element.data('timeago').datetime;
-        var string = $t.settings.strings.weekdays[date.getDay()] +' '+ date.getDate() +' '+  $t.settings.strings.fullmonths[date.getMonth()] +' '+ date.getFullYear();
-		var hours = date.getHours();
-		if (hours < 10) {
-			hours = '0'+ hours;
-		}
-		var minutes = date.getMinutes();
-		if (minutes < 10) {
-			minutes = '0'+ minutes;
-		}
-        element.attr("title", string +' om '+ hours +':'+ minutes);
+        element.attr("title", element.data('timeago').datetime.toLocaleString());
       } else if (text.length > 0 && !($t.isTime(element) && element.attr("title"))) {
         element.attr("title", text);
       }

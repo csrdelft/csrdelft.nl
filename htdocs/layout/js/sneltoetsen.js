@@ -38,7 +38,7 @@ jQuery(document).ready(function(){
 			case 112: //p voor profiel
 				location.href = "http://csrdelft.nl/communicatie/profiel.php";
 			break;
-			case 47: // / voor focus naar het ledenzoekveldje.
+			case 122: // z voor focus naar het ledenzoekveldje.
 				jQuery('#zoekveld').focus();
 			break;
 		}

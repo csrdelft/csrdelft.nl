@@ -110,8 +110,8 @@ class FotoAlbumController extends AclController {
 			$this->view = new CsrLayout2Page($body);
 		}
 		$this->view->addStylesheet('fotoalbum.css');
-		$this->view->addStylesheet('jquery.prettyPhoto-3.1.5.css');
-		$this->view->addScript('jquery/plugins/jquery.prettyPhoto-3.1.5.min.js');
+		$this->view->addStylesheet('jquery.prettyPhoto.css');
+		$this->view->addScript('jquery.prettyPhoto.min.js', '/layout/js/jquery/plugins/');
 	}
 
 	public function verwerken(FotoAlbum $album) {

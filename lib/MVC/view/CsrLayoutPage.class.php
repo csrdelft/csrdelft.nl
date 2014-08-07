@@ -11,7 +11,7 @@ require_once 'MVC/model/DragObjectModel.class.php';
  * @author C.S.R. Delft <pubcie@csrdelft.nl>
  * @author P.W.G. Brussee <brussee@live.nl>
  * 
- * De stek layout uit 2006
+ * De stek layout van 2006
  */
 class CsrLayoutPage extends HtmlPage {
 
@@ -56,6 +56,7 @@ class CsrLayoutPage extends HtmlPage {
 			$this->addScript('autocomplete/jquery.autocomplete.js');
 			$this->addScript('jquery/plugins/jquery.autosize.js');
 			$this->addScript('jquery/plugins/jquery.hoverIntent.js');
+			$this->addScript('jquery/plugins/jquery.scrollTo.js');
 		} else { // minimized javascript
 			$this->addStylesheet('jquery-ui.min.css', '/layout/js/jquery/');
 			$this->addScript('jquery/jquery.min.js');
@@ -63,10 +64,10 @@ class CsrLayoutPage extends HtmlPage {
 			$this->addScript('autocomplete/jquery.autocomplete.pack.js');
 			$this->addScript('jquery/plugins/jquery.autosize.min.js');
 			$this->addScript('jquery/plugins/jquery.hoverIntent.min.js');
+			$this->addScript('jquery/plugins/jquery.scrollTo.min.js');
 		}
-		$this->addStylesheet('js/autocomplete/jquery.autocomplete.css');
-		$this->addScript('jquery/plugins/jquery.timeago-1.3.0.custom.js');
-		$this->addScript('jquery/plugins/jquery.scrollTo-1.4.3.1.min.js');
+		$this->addStylesheet('jquery.autocomplete.css', '/layout/js/autocomplete/');
+		$this->addScript('jquery/plugins/jquery.timeago.custom.js');
 		$this->addScript('csrdelft.js');
 		$this->addScript('dragobject.js');
 		$this->addScript('menu.js');
