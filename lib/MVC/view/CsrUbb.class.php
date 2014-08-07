@@ -117,12 +117,12 @@ class CsrUbb extends eamBBParser {
 	function ubb_foto($arguments = array()) {
 		require_once 'MVC/controller/FotoAlbumController.class.php';
 		$url = urldecode($this->parseArray(array('[/fotoalbum]'), array()));
-		$parts = array_filter(explode('/', $url));
+		$parts = explode('/', $url);
 		$naam = array_pop($parts);
 		$path = PICS_PATH . '/fotoalbum' . implode('/', $parts);
 		$album = FotoAlbumModel::getFotoAlbum($path);
 		if (!$album) {
-			return '<div class="ubb_block">Fotoalbum niet gevonden: ' . $url . '</div>';
+			return '<div class="ubb_block">Fotoalbum niet gevonden: ' . $path . '</div>';
 		}
 		$foto = new Foto($album, $naam);
 		$fototag = new FotoUbbView($foto);

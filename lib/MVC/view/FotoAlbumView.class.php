@@ -106,7 +106,7 @@ class FotoUbbView extends TemplateView {
 	}
 
 	public function getHTML() {
-		return '<a href="' . $this->model->getURL() . '"><div class="ubb_img_loading" src="' . $this->model->getThumbURL() . '" title="' . $this->model->getURL() . '"></div></a>';
+		return '<a href="' . $this->model->getURL() . '" title="Klik voor origineel formaat" class="hoverIntent"><div class="hoverIntentContent"><div class="ubb_img_loading" src="' . $this->model->getResizedURL() . '"></div></div><div class="ubb_img_loading" src="' . $this->model->getThumbURL() . '"></div></a>';
 	}
 
 	public function view() {
