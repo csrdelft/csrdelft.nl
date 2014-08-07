@@ -71,9 +71,11 @@
 		</tr>
 	</thead>
 	{/if}
+</table>
+<table>
 	<tbody>
 		<tr>
-			<td colspan="4">
+			<td>
 				<div class="forumdeel-omschrijving">
 					<div style="float: right;">{$smarty.capture.navlinks}</div>
 					<h1>{$deel->titel}</h1>
