@@ -97,7 +97,7 @@
 											{/foreach}
 										{else}
 											<input type="text" name="functie" maxlength="60" class="functie" />
-										{/if}&nbsp;<input type="submit" value="aanmelden" onclick="event.preventDefault(); return false;" />
+										{/if}&nbsp;<input type="submit" value="aanmelden" onclick="event.preventDefault(); this.form.submit(); return false;" />
 									</form>
 
 								{/if}
