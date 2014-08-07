@@ -1,4 +1,4 @@
-#!/usr/bin/php
+#!/usr/lib/cgi-bin/php
 <?php
 /**
  * cron.php
@@ -6,6 +6,11 @@
  * @author P.W.G. Brussee <brussee@live.nl>
  * 
  * Entry point voor uitvoeren van CRON-jobs.
+ * 
+ * 'geinstalleerd' met:
+ * chmod +x /usr/www/csrdelft.nl/bin/cron.php
+ * 0 1 * * * /usr/www/csrdelft.nl/bin/cron.php >> cron.log 2>&1
+ * test door ./cron.php te typen
  */
 session_id('cron-cli');
 
