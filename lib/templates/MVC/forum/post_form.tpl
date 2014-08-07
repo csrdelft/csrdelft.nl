@@ -8,7 +8,7 @@
 			Het vermelden van <em>uw naam en email-adres</em> is verplicht.
 		</strong> 
 		<br /><br />
-		<label for="email">Email-adres:</label><input type="text" name="email" style="width: 250px;" />
+		<input type="text" name="email" style="width: 250px;" placeholder="Email-adres" />
 		<br /><br/>
 		{* spam trap, must be kept empty! *}
 		<input type="text" name="firstname" value="" class="verborgen" />
