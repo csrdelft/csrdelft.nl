@@ -1105,12 +1105,10 @@ span.togglePasfoto:hover, a.postlink:hover{
 #forumtabel td.titel{
 	margin: 0; padding: 0.2em 0.6em 0.2em 0.6em;
 	vertical-align: middle; text-align: left;
-	width: auto;
 }
 #forumtabel td.reactiemoment{
 	margin: 0; padding: 0.2em 0.6em 0.2em 0.6em;
 	vertical-align: top; text-align: left;
-	width: 180px;
 }
 /* nieuw onderwerp formulier */
 #forumtabel td.auteur a#nieuwonderwerp{
