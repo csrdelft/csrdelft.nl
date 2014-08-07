@@ -1,4 +1,4 @@
-#!/etc/php5
+#!/usr/bin/usr/bin/php5-cgi
 <?php
 /**
  * cron.php
