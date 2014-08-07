@@ -29,6 +29,10 @@ class Foto extends Afbeelding {
 		return $this->directory->path . '_resized/' . $this->filename;
 	}
 
+	public function getURL() {
+		return CSR_PICS . direncode($this->directory->getSubDir() . $this->filename);
+	}
+
 	public function getThumbURL() {
 		return CSR_PICS . direncode($this->directory->getSubDir() . '_thumbs/' . $this->filename);
 	}

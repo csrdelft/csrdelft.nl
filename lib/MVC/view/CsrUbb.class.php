@@ -50,15 +50,28 @@ class CsrUbb extends eamBBParser {
 	}
 
 	/**
+	 * Omdat we niet willen dat dingen die in privé staan alsnog gezien kunnen worden 
+	 * bij het citeren, slopen we hier alles wat in privé-tags staat weg.
+	 */
+	public static function filterPrive($string) {
+// .* is greedy by default, dat wil zeggen, matched zoveel mogelijk.
+// door er .*? van te maken matched het zo weinig mogelijk, dat is precies
+// wat we hier willen, omdat anders [prive]foo[/prive]bar[prive]foo[/prive]
+// niets zou opleveren.
+// de /s modifier zorgt ervoor dat een . ook alle newlines matched.
+		return preg_replace('/\[prive=?.*?\].*?\[\/prive\]/s', '', $string);
+	}
+
+	/**
 	 * Dit laad de twitter account van het hidden cash spel.
 	 */
-	function ubb_hidden($parameters) {
+	function ubb_hidden($arguments = array()) {
 		$html = '<a class="twitter-timeline" href="https://twitter.com/HiddenCashCSR" data-widget-id="477465734352621568">Tweets by @HiddenCashCSR</a>
 							<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?\'http\':\'https\';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+"://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>';
 		return $html;
 	}
 
-	function ubb_img($arguments) {
+	function ubb_img($arguments = array()) {
 		$style = '';
 		if (isset($arguments['float'])) {
 			switch ($arguments['float']) {
@@ -97,10 +110,73 @@ class CsrUbb extends eamBBParser {
 	}
 
 	/**
+	 * [foto]/pad/naar/foto[/foto]
+	 * 
+	 * Toont de thumbnail met link naar fotoalbum.
+	 */
+	function ubb_foto($arguments = array()) {
+		require_once 'MVC/controller/FotoAlbumController.class.php';
+		$url = urldecode($this->parseArray(array('[/fotoalbum]'), array()));
+		$parts = explode($url);
+		$naam = array_pop($parts);
+		$path = PICS_PATH . '/fotoalbum' . implode('/', $parts);
+		$album = FotoAlbumModel::getFotoAlbum($path);
+		if (!$album) {
+			return '<div class="ubb_block">Fotoalbum niet gevonden: ' . $url . '</div>';
+		}
+		$foto = new Foto($album, $naam);
+		$fototag = new FotoUbbView($foto);
+		return $fototag->getHTML();
+	}
+
+	/**
+	 * [fotoalbum]/pad/naar/album[/fotoalbum]
+	 *
+	 * Parameters:
+	 * 	rows	Aantal regels weergeven
+	 * 			rows=4
+	 *
+	 * 	big		Lijstje met indexen van afbeeldingen die groot moeten
+	 * 			worden.
+	 * 			big=0,5,14 | big=a | big=b |
+	 *
+	 * 	compact	Compacte versie van de tag weergeven
+	 * 			compact=true
+	 *
+	 */
+	protected function ubb_fotoalbum($arguments = array()) {
+		require_once 'MVC/controller/FotoAlbumController.class.php';
+		$url = urldecode($this->parseArray(array('[/fotoalbum]'), array()));
+		$path = PICS_PATH . '/fotoalbum' . $url;
+		$album = FotoAlbumModel::getFotoAlbum($path);
+		if (!$album) {
+			return '<div class="ubb_block">Fotoalbum niet gevonden: ' . $url . '</div>';
+		}
+		$fotoalbumtag = new FotoAlbumUbbView($album);
+		if ($this->quote_level > 0 || isset($arguments['compact'])) {
+			$fotoalbumtag->makeCompact();
+		}
+		if (isset($arguments['rows'])) {
+			$fotoalbumtag->setRows((int) $arguments['rows']);
+		}
+		if (isset($arguments['bigfirst'])) {
+			$fotoalbumtag->setBig(0);
+		}
+		if (isset($arguments['big'])) {
+			if ($arguments['big'] == 'first') {
+				$fotoalbumtag->setBig(0);
+			} else {
+				$fotoalbumtag->setBig($arguments['big']);
+			}
+		}
+		return $fotoalbumtag->getHTML();
+	}
+
+	/**
 	 * Rul = url
 	 */
 	function ubb_rul($arguments = array()) {
-		return $this->ubb_url($arguments);
+		return $this->ubb_url($arguments = array());
 	}
 
 	function ubb_url($arguments = array()) {
@@ -132,17 +208,17 @@ class CsrUbb extends eamBBParser {
 	}
 
 	/* todo
-	  function ubb_mail($parameters) {
-	  return $this->ubb_email($parameters);
+	  function ubb_mail($arguments = array()) {
+	  return $this->ubb_email($arguments = array());
 	  }
 
-	  function ubb_email($parameters){
+	  function ubb_email($arguments = array()){
 	  $content = $this->parseArray(array('[/email]', '[/mail]'), array());
-	  if (isset($parameters['email'])) { // [email=
-	  $email = $parameters['email'];
+	  if (isset($arguments['email'])) { // [email=
+	  $email = $arguments['email'];
 	  }
-	  elseif (isset($parameters['mail'])) { // [mail=
-	  $email = $parameters['mail'];
+	  elseif (isset($arguments['mail'])) { // [mail=
+	  $email = $arguments['mail'];
 	  }
 	  else { // [email][/email]
 	  $email = $content;
@@ -159,7 +235,7 @@ class CsrUbb extends eamBBParser {
 	 */
 
 	function ubb_neuzen($arguments = array()) {
-		if (is_array($arguments)) {
+		if (is_array($arguments = array())) {
 			$content = $this->parseArray(array('[/neuzen]'), array());
 		} else {
 			$content = $arguments;
@@ -205,7 +281,7 @@ class CsrUbb extends eamBBParser {
 	/**
 	 * Geef de relatieve datum terug.
 	 */
-	function ubb_reldate($parameters = array()) {
+	function ubb_reldate($arguments = array()) {
 		$content = $this->parseArray(array('[/reldate]'), array());
 		return '<span title="' . mb_htmlentities($content) . '">' . reldate($content) . '</span>';
 	}
@@ -218,9 +294,9 @@ class CsrUbb extends eamBBParser {
 	 * of
 	 * [lid]0436[/lid]
 	 */
-	function ubb_lid($parameters) {
-		if (isset($parameters['lid'])) {
-			$uid = $parameters['lid'];
+	function ubb_lid($arguments = array()) {
+		if (isset($arguments['lid'])) {
+			$uid = $arguments['lid'];
 		} else {
 			$uid = $this->parseArray(array('[/lid]'), array());
 		}
@@ -287,27 +363,14 @@ class CsrUbb extends eamBBParser {
 	}
 
 	/**
-	 * Omdat we niet willen dat dingen die in privé staan alsnog gezien kunnen worden 
-	 * bij het citeren, slopen we hier alles wat in privé-tags staat weg.
-	 */
-	public static function filterPrive($string) {
-// .* is greedy by default, dat wil zeggen, matched zoveel mogelijk.
-// door er .*? van te maken matched het zo weinig mogelijk, dat is precies
-// wat we hier willen, omdat anders [prive]foo[/prive]bar[prive]foo[/prive]
-// niets zou opleveren.
-// de /s modifier zorgt ervoor dat een . ook alle newlines matched.
-		return preg_replace('/\[prive=?.*?\].*?\[\/prive\]/s', '', $string);
-	}
-
-	/**
 	 * Deze methode kan resultaten van query's die in de database staan printen in een
 	 * tabelletje.
 	 *
 	 * [query=1] of [query]1[/query]
 	 */
-	function ubb_query($parameters) {
-		if (isset($parameters['query'])) {
-			$queryID = $parameters['query'];
+	function ubb_query($arguments = array()) {
+		if (isset($arguments['query'])) {
+			$queryID = $arguments['query'];
 		} else {
 			$queryID = $this->parseArray(array('[/query]'), array());
 		}
@@ -315,7 +378,7 @@ class CsrUbb extends eamBBParser {
 
 		if ($queryID != 0) {
 			require_once 'savedquery.class.php';
-			$sqc = new SavedQueryContent(new SavedQuery((int) $parameters['query']));
+			$sqc = new SavedQueryContent(new SavedQuery((int) $arguments['query']));
 
 			return $sqc->render_queryResult();
 		} else {
@@ -338,7 +401,7 @@ class CsrUbb extends eamBBParser {
 	 * 		width	Breedte van het filmpje
 	 * 		height	Hoogte van het filmpje
 	 */
-	function ubb_video($parameters) {
+	function ubb_video($arguments = array()) {
 		$content = $this->parseArray(array('[/video]'), array());
 
 //determine type and id
@@ -386,17 +449,17 @@ class CsrUbb extends eamBBParser {
 //video size
 		$width = 560;
 		$height = 420;
-		if (isset($parameters['width']) AND (int) $parameters['width'] > 100) {
-			$width = (int) $parameters['width'];
+		if (isset($arguments['width']) AND (int) $arguments['width'] > 100) {
+			$width = (int) $arguments['width'];
 		}
-		if (isset($parameters['height']) AND (int) $parameters['height'] > 100) {
-			$height = (int) $parameters['height'];
+		if (isset($arguments['height']) AND (int) $arguments['height'] > 100) {
+			$height = (int) $arguments['height'];
 		}
 
 //render embed html
 		switch ($type) {
 			case 'youtube':
-				if (isset($this->youtube[$id]) AND ! isset($parameters['force'])) {
+				if (isset($this->youtube[$id]) AND ! isset($arguments['force'])) {
 					return '<a href="#youtube' . $content . '" onclick="youtubeDisplay(\'' . $content . '\')" >&raquo; youtube-filmpje (ergens anders op deze pagina)</a>';
 				} else {
 //sla het youtube-id op in een array, dan plaatsen we de tweede keer dat
@@ -437,7 +500,7 @@ class CsrUbb extends eamBBParser {
 	 * 
 	 * [youtube]youtubeid[/youtube]
 	 */
-	function ubb_youtube($parameters) {
+	function ubb_youtube($arguments = array()) {
 		$content = $this->parseArray(array('[/youtube]'), array());
 //alleen de eerste 11 tekens zijn relevant...
 		$content = substr($content, 0, 11);
@@ -461,7 +524,7 @@ class CsrUbb extends eamBBParser {
 		return $html;
 	}
 
-	function ubb_googlevideo($parameters) {
+	function ubb_googlevideo($arguments = array()) {
 		$content = $this->parseArray(array('[/googlevideo]'), array());
 		if (preg_match('/-?\d*/', $content)) {
 			$html = '<embed style="width:400px; height:326px;" id="VideoPlayback" type="application/x-shockwave-flash"
@@ -472,7 +535,7 @@ src="http://video.google.com/googleplayer.swf?docId=' . $content . '"></embed>';
 		return $html;
 	}
 
-	function ubb_vimeo($parameters) {
+	function ubb_vimeo($arguments = array()) {
 		$content = $this->parseArray(array('[/vimeo]'), array());
 		if (preg_match('/^\d*$/', $content)) {
 			$html = '<object width="549" height="309">
@@ -488,20 +551,20 @@ src="http://video.google.com/googleplayer.swf?docId=' . $content . '"></embed>';
 		return $html;
 	}
 
-	function ubb_twitter($parameters) {
+	function ubb_twitter($arguments = array()) {
 		$content = $this->parseArray(array('[/twitter]'), array());
 //widget size
 		$lines = 4;
 		$width = 355;
 		$height = 300;
-		if (isset($parameters['lines']) AND (int) $parameters['lines'] > 0) {
-			$lines = (int) $parameters['lines'];
+		if (isset($arguments['lines']) AND (int) $arguments['lines'] > 0) {
+			$lines = (int) $arguments['lines'];
 		}
-		if (isset($parameters['width']) AND (int) $parameters['width'] > 100) {
-			$width = (int) $parameters['width'];
+		if (isset($arguments['width']) AND (int) $arguments['width'] > 100) {
+			$width = (int) $arguments['width'];
 		}
-		if (isset($parameters['height']) AND (int) $parameters['height'] > 100) {
-			$height = (int) $parameters['height'];
+		if (isset($arguments['height']) AND (int) $arguments['height'] > 100) {
+			$height = (int) $arguments['height'];
 		}
 
 		$html = <<<HTML
@@ -545,9 +608,9 @@ HTML;
 	 * of
 	 * [groep=123]
 	 */
-	protected function ubb_groep($parameters) {
-		if (isset($parameters['groep'])) {
-			$groepid = $parameters['groep'];
+	protected function ubb_groep($arguments = array()) {
+		if (isset($arguments['groep'])) {
+			$groepid = $arguments['groep'];
 		} else {
 			$groepid = $this->parseArray(array('[/groep]'), array());
 		}
@@ -571,9 +634,9 @@ HTML;
 	 * of
 	 * [boek=123]
 	 */
-	protected function ubb_boek($parameters) {
-		if (isset($parameters['boek'])) {
-			$boekid = $parameters['boek'];
+	protected function ubb_boek($arguments = array()) {
+		if (isset($arguments['boek'])) {
+			$boekid = $arguments['boek'];
 		} else {
 			$boekid = $this->parseArray(array('[/boek]'), array());
 		}
@@ -590,58 +653,15 @@ HTML;
 	}
 
 	/**
-	 * [fotoalbum]/pad/naar/album[/fotoalbum]
-	 *
-	 * Parameters:
-	 * 	rows	Aantal regels weergeven
-	 * 			rows=4
-	 *
-	 * 	big		Lijstje met indexen van afbeeldingen die groot moeten
-	 * 			worden.
-	 * 			big=0,5,14 | big=a | big=b |
-	 *
-	 * 	compact	Compacte versie van de tag weergeven
-	 * 			compact=true
-	 *
-	 */
-	protected function ubb_fotoalbum($parameters) {
-		require_once 'MVC/controller/FotoAlbumController.class.php';
-		$url = urldecode($this->parseArray(array('[/fotoalbum]'), array()));
-		$path = PICS_PATH . '/fotoalbum' . $url;
-		$album = FotoAlbumModel::getFotoAlbum($path);
-		if (!$album) {
-			return '<div class="ubb_block">Fotoalbum niet gevonden: ' . $url . '</div>';
-		}
-		$fotoalbumtag = new FotoAlbumUbbView($album);
-		if ($this->quote_level > 0 || isset($parameters['compact'])) {
-			$fotoalbumtag->makeCompact();
-		}
-		if (isset($parameters['rows'])) {
-			$fotoalbumtag->setRows((int) $parameters['rows']);
-		}
-		if (isset($parameters['bigfirst'])) {
-			$fotoalbumtag->setBig(0);
-		}
-		if (isset($parameters['big'])) {
-			if ($parameters['big'] == 'first') {
-				$fotoalbumtag->setBig(0);
-			} else {
-				$fotoalbumtag->setBig($parameters['big']);
-			}
-		}
-		return $fotoalbumtag->getHTML();
-	}
-
-	/**
 	 * Geeft een blokje met een documentnaam, link, bestandsgrootte en formaat.
 	 * 
 	 * [document]1234[/document]
 	 * of
 	 * [document=1234]
 	 */
-	protected function ubb_document($parameters) {
-		if (isset($parameters['document'])) {
-			$id = $parameters['document'];
+	protected function ubb_document($arguments = array()) {
+		if (isset($arguments['document'])) {
+			$id = $arguments['document'];
 		} else {
 			$id = $this->parseArray(array('[/document]'), array());
 		}
@@ -665,9 +685,9 @@ HTML;
 	 * of
 	 * [maaltijd]123[/maaltijd]
 	 */
-	public function ubb_maaltijd($parameters) {
-		if (isset($parameters['maaltijd'])) {
-			$mid = $parameters['maaltijd'];
+	public function ubb_maaltijd($arguments = array()) {
+		if (isset($arguments['maaltijd'])) {
+			$mid = $arguments['maaltijd'];
 		} else {
 			$mid = $this->parseArray(array('[/maaltijd]'), array());
 		}
@@ -730,7 +750,7 @@ HTML;
 	 * Vanonderwerp = offtopic
 	 */
 	function ubb_vanonderwerp($arguments = array()) {
-		return $this->ubb_offtopic($arguments);
+		return $this->ubb_offtopic($arguments = array());
 	}
 
 	public function ubb_offtopic() {
@@ -742,7 +762,7 @@ HTML;
 	 * Verklapper = spoiler
 	 */
 	function ubb_verklapper($arguments = array()) {
-		return $this->ubb_spoiler($arguments);
+		return $this->ubb_spoiler($arguments = array());
 	}
 
 	public function ubb_spoiler() {
@@ -759,8 +779,8 @@ HTML;
 		return $html;
 	}
 
-	function ubb_clear($parameters) {
-		switch (@$parameters['clear']) {
+	function ubb_clear($arguments = array()) {
+		switch (@$arguments['clear']) {
 			case 'left': $sClear = 'left';
 				break;
 			case 'right': $sClear = 'right';
@@ -777,9 +797,9 @@ HTML;
 	 * of
 	 * [mededeling]top3[/mededeling]
 	 */
-	public function ubb_mededelingen($parameters) {
-		if (isset($parameters['mededelingen'])) {
-			$type = $parameters['mededelingen'];
+	public function ubb_mededelingen($arguments = array()) {
+		if (isset($arguments['mededelingen'])) {
+			$type = $arguments['mededelingen'];
 		} else {
 			$type = $this->parseArray(array('[/mededelingen]'), array());
 		}
@@ -825,7 +845,7 @@ HTML;
 	 * Kaart = map
 	 */
 	function ubb_kaart($arguments = array()) {
-		return $this->ubb_map($arguments);
+		return $this->ubb_map($arguments = array());
 	}
 
 	/**
@@ -835,22 +855,22 @@ HTML;
 	 * 
 	 * [map dynamic=false w=100 h=100]Oude Delft 9[/map]
 	 */
-	public function ubb_map($parameters = array()) {
+	public function ubb_map($arguments = array()) {
 		$address = $this->parseArray(array('[/map]', '[/kaart]'), array());
-		return $this->maps(htmlspecialchars($address), $parameters);
+		return $this->maps(htmlspecialchars($address), $arguments);
 	}
 
-	public static function maps($address, array $parameters) {
+	public static function maps($address, array $arguments) {
 		if (trim($address) == '') {
 			return 'Geen adres opgegeven';
 		}
-		if (isset($parameters['w']) AND $parameters['w'] < 800) {
-			$width = (int) $parameters['w'];
+		if (isset($arguments['w']) AND $arguments['w'] < 800) {
+			$width = (int) $arguments['w'];
 		} else {
 			$width = 400;
 		}
-		if (isset($parameters['h']) AND $parameters['h'] < 600) {
-			$height = (int) $parameters['h'];
+		if (isset($arguments['h']) AND $arguments['h'] < 600) {
+			$height = (int) $arguments['h'];
 		} else {
 			$height = 300;
 		}
@@ -863,7 +883,7 @@ HTML;
 		}
 		$mapid = 'map' . $GLOBALS['mapJsLoaded'];
 		$jscall = "writeStaticGmap('$mapid', '$address',$width,$height);";
-		if (!isset($parameters['static'])) {
+		if (!isset($arguments['static'])) {
 			$jscall = "$(document).ready(function() {loadGmaps('$mapid','$address');});";
 		}
 		$html .= '<div class="ubb_gmap" id="' . $mapid . '" style="width:' . $width . 'px;height:' . $height . 'px;"></div><script type="text/javascript">' . $jscall . '</script>';
@@ -879,9 +899,9 @@ HTML;
 	 * of
 	 * [peiling]2[/peiling]
 	 */
-	public function ubb_peiling($parameters) {
-		if (isset($parameters['peiling'])) {
-			$peilingid = $parameters['peiling'];
+	public function ubb_peiling($arguments = array()) {
+		if (isset($arguments['peiling'])) {
+			$peilingid = $arguments['peiling'];
 		} else {
 			$peilingid = $this->parseArray(array('[/peiling]'), array());
 		}
@@ -904,7 +924,7 @@ HTML;
 	 * example:
 	 * [slideshow]http://example.com/image_1.jpg[/slideshow]
 	 */
-	public function ubb_slideshow($parameters) {
+	public function ubb_slideshow($arguments = array()) {
 		$content = $this->parseArray(array('[/slideshow]'), array());
 
 		$slides_tainted = explode('[br]', $content);
@@ -918,16 +938,16 @@ HTML;
 
 		$width = 355;
 		$height = 238;
-		if (isset($parameters['w']) && $parameters['w'] < 800) {
-			$width = (int) $parameters['w'];
+		if (isset($arguments['w']) && $arguments['w'] < 800) {
+			$width = (int) $arguments['w'];
 		}
-		if (isset($parameters['h']) && $parameters['h'] < 600) {
-			$height = $parameters['h'];
+		if (isset($arguments['h']) && $arguments['h'] < 600) {
+			$height = $arguments['h'];
 		}
 
 		$style = 'style="width:' . $width . 'px;height:' . $height . 'px;';
-		if (isset($parameters['float']) && in_array($parameters['float'], array('left', 'right'))) {
-			$style = ' float: ' . $parameters['float'] . '';
+		if (isset($arguments['float']) && in_array($arguments['float'], array('left', 'right'))) {
+			$style = ' float: ' . $arguments['float'] . '';
 		}
 		$style .= '"';
 
@@ -963,9 +983,9 @@ HTML;
 	 * of
 	 * [bijbelrooster]10[/bijbelrooster]
 	 */
-	public function ubb_bijbelrooster($parameters) {
-		if (isset($parameters['bijbelrooster'])) {
-			$dagen = $parameters['bijbelrooster'];
+	public function ubb_bijbelrooster($arguments = array()) {
+		if (isset($arguments['bijbelrooster'])) {
+			$dagen = $arguments['bijbelrooster'];
 		} else {
 			$dagen = $this->parseArray(array('[/bijbelrooster]'), array());
 		}

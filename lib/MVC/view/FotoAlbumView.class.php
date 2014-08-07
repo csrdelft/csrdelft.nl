@@ -99,6 +99,22 @@ class PosterUploadForm extends FotoUploadForm {
 
 }
 
+class FotoUbbView extends TemplateView {
+
+	public function __construct(Foto $foto) {
+		parent::__construct($foto);
+	}
+
+	public function getHTML() {
+		return '<a href="' . $this->model->getURL() . '"><div class="ubb_img_loading" src="' . $this->model->getThumbURL() . '" title="' . $this->model->getURL() . '"></div></a>';
+	}
+
+	public function view() {
+		echo $this->getHTML();
+	}
+
+}
+
 class FotoAlbumZijbalkView extends TemplateView {
 
 	public function __construct(FotoAlbum $album) {
