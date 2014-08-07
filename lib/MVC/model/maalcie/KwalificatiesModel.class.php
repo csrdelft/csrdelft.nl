@@ -36,12 +36,7 @@ class KwalificatiesModel extends PersistenceModel {
 	 * @return CorveeFunctie[]
 	 */
 	public function getKwalificatiesVanLid($lid_id) {
-		$functies = FunctiesModel::instance()->getAlleFuncties(); // grouped by functie_id
-		$kwalificaties = $this->find('lid_id = ?', array($lid_id));
-		foreach ($kwalificaties as $kwali) {
-			$kwali->setCorveeFunctie($functies[$kwali->functie_id]);
-		}
-		return $kwalificaties;
+		return $this->find('lid_id = ?', array($lid_id));
 	}
 
 	public function isLidGekwalificeerdVoorFunctie($uid, $fid) {
