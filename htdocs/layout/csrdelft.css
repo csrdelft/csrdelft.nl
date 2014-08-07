@@ -1086,6 +1086,7 @@ span.togglePasfoto:hover, a.postlink:hover{
 .forumpostlink{
 	color: black !important;
 	text-decoration: none !important;
+	font-style: italic;
 }
 .forumtekst{
 	color: #000;
@@ -1159,12 +1160,12 @@ form.gesloten{
 	position: relative;
 }
 #meldingen div{
-	width: 130px;
+	width: 140px;
 	position: absolute;
-	left: -141px;
+	left: 580px;
 	color: white;
 	padding: 4px 8px 4px 4px;
-	text-align: right;
+	text-align: left;
 }
 
 #ubb_melding{

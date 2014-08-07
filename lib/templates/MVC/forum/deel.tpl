@@ -54,22 +54,22 @@
 		{/foreach}
 	</tbody>
 	{if $paging}
-	<thead>
-		<tr>
-			<th colspan="4">
-				{if isset($deel->forum_id)}
-					{sliding_pager baseurl="/forum/deel/"|cat:$deel->forum_id|cat:"/"
+		<thead>
+			<tr>
+				<th colspan="4">
+					{if isset($deel->forum_id)}
+						{sliding_pager baseurl="/forum/deel/"|cat:$deel->forum_id|cat:"/"
 							pagecount=ForumDradenModel::instance()->getAantalPaginas($deel->forum_id) curpage=ForumDradenModel::instance()->getHuidigePagina()
 							separator=" &nbsp;" show_prev_next=true}
-				{else}
-					{sliding_pager baseurl="/forum/recent/" url_append=$belangrijk
+					{else}
+						{sliding_pager baseurl="/forum/recent/" url_append=$belangrijk
 							pagecount=ForumDradenModel::instance()->getHuidigePagina() curpage=ForumDradenModel::instance()->getHuidigePagina()
 							separator=" &nbsp;"}
-					&nbsp;<a href="/forum/recent/{ForumDradenModel::instance()->getAantalPaginas(null)}{$belangrijk}">verder terug</a>
-				{/if}
-			</th>
-		</tr>
-	</thead>
+						&nbsp;<a href="/forum/recent/{ForumDradenModel::instance()->getAantalPaginas(null)}{$belangrijk}">verder terug</a>
+					{/if}
+				</th>
+			</tr>
+		</thead>
 	{/if}
 	<tbody>
 		<tr>
@@ -83,10 +83,6 @@
 		</tr>
 	</tbody>
 </table>
-<table>
-	<tbody>
-	{if $deel->magPosten()}
-		{include file='MVC/forum/draad_form.tpl'}
-	{/if}
-	</tbody>
-</table>
+{if $deel->magPosten()}
+	{include file='MVC/forum/draad_form.tpl'}
+{/if}

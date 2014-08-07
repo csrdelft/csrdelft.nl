@@ -163,6 +163,9 @@ pagecount=ForumPostsModel::instance()->getAantalPaginas($draad->draad_id) curpag
 			</td>
 		</tr>
 
-		{include file='MVC/forum/post_form.tpl'}
 	</tbody>
 </table>
+
+{if !$draad->verwijderd AND !$draad->gesloten AND $deel->magPosten()}
+	{include file='MVC/forum/post_form.tpl'}
+{/if}
