@@ -460,6 +460,7 @@ $(function () {
     function zetOudeBestellingen(bestellingen) {
 		var newHTML = '';
         $.each(bestellingen, function (item) {
+			$("#besteLijstBeheerContent tbody").empty();
             var bestelling = this;
             var bestel = [];
             for (key in bestelling.bestelLijst) {
@@ -469,14 +470,15 @@ $(function () {
 					bestel.push(saldoStr(bestelling.bestelLijst[key]) + " " + producten[key].beschrijving);
             }
             bestel = '<ul><li>' + bestel.join('</li><li>') + '</li></ul>';
-            newHTML += "<tr id='tabelRijBeheerLijst" + item + "'><td>" + personen[bestelling.persoon].naam + "</td><td>"
+            
+			$("#besteLijstBeheerContent tbody").append("<tr id='tabelRijBeheerLijst" + item + "'><td>" + personen[bestelling.persoon].naam + "</td><td>"
                 + bestelling.tijd + "</td><td>" + saldoStr(bestelling.bestelTotaal) + "</td><td>" + bestel + "</td>" +
                 "<td><div class='btn-group'><button type='button' class='btn btn-default dropdown-toggle' data-toggle='dropdown'>Opties <span class='caret'></span></button>" +
                 "<ul class='dropdown-menu dropdown-menu-right' role='menu'>" +
                 "<li><a href='#' id='anderePersoon" + item + "'>Zet bestelling op andere persoon</a></li>" +
                 "<li><a href='#' id='bewerkInhoud" + item + "'>Bewerk inhoud bestelling</a></li>" +
                 "<li><a href='#' id='verwijderBestelling" + item + "'>Verwijder bestelling</a></li>" +
-                "</ul></div></td></tr>";
+                "</ul></div></td></tr>");
 
             $("#anderePersoon" + item).click(function () {
                 //todo
@@ -505,7 +507,6 @@ $(function () {
                 }
             });
         });
-        $("#besteLijstBeheerContent tbody").html(newHTML);
 		$("#besteLijstBeheer").trigger("update");
     }
 
