@@ -469,11 +469,11 @@ $(function () {
 				else
 					bestel.push(saldoStr(bestelling.bestelLijst[key]) + " " + producten[key].beschrijving);
             }
-            bestel = '<ul><li>' + bestel.join('</li><li>') + '</li></ul>';
-            bestelComma = bestel.join(", ");
+            var bestelUL = '<ul><li>' + bestel.join('</li><li>') + '</li></ul>';
+            var bestelComma = bestel.join(", ");
             
 			$("#besteLijstBeheerContent tbody").append("<tr id='tabelRijBeheerLijst" + item + "'><td>" + personen[bestelling.persoon].naam + "</td><td>"
-                + bestelling.tijd + "</td><td>" + saldoStr(bestelling.bestelTotaal) + "</td><td>" + bestel + "</td>" +
+                + bestelling.tijd + "</td><td>" + saldoStr(bestelling.bestelTotaal) + "</td><td>" + bestelUL + "</td>" +
                 "<td><div class='btn-group'><button type='button' class='btn btn-default dropdown-toggle' data-toggle='dropdown'>Opties <span class='caret'></span></button>" +
                 "<ul class='dropdown-menu dropdown-menu-right' role='menu'>" +
                 "<li><a href='#' id='anderePersoon" + item + "'>Zet bestelling op andere persoon</a></li>" +
