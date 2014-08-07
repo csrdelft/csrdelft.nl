@@ -1,4 +1,4 @@
-#!/usr/lib/cgi-bin/php
+#!/etc/php5/cgi
 <?php
 /**
  * cron.php
@@ -7,7 +7,7 @@
  * 
  * Entry point voor uitvoeren van CRON-jobs.
  * 
- * 'geinstalleerd' met:
+ * 'geinstalleerd' met: (chmod bij elke svn up!!!)
  * chmod +x /usr/www/csrdelft.nl/bin/cron.php
  * 0 1 * * * /usr/www/csrdelft.nl/bin/cron.php >> cron.log 2>&1
  * test door ./cron.php te typen
