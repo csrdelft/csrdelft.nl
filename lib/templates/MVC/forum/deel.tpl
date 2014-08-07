@@ -46,7 +46,7 @@
 	<tbody>
 		{if !$deel->hasForumDraden()}
 			<tr>
-				<td colspan="5">Dit forum is nog leeg.</td>
+				<td colspan="4">Dit forum is nog leeg.</td>
 			</tr>
 		{/if}
 		{foreach from=$deel->getForumDraden() item=draad}
@@ -56,7 +56,7 @@
 	{if $paging}
 	<thead>
 		<tr>
-			<th colspan="5">
+			<th colspan="4">
 				{if isset($deel->forum_id)}
 					{sliding_pager baseurl="/forum/deel/"|cat:$deel->forum_id|cat:"/"
 							pagecount=ForumDradenModel::instance()->getAantalPaginas($deel->forum_id) curpage=ForumDradenModel::instance()->getHuidigePagina()
@@ -73,7 +73,7 @@
 	{/if}
 	<tbody>
 		<tr>
-			<td colspan="5">
+			<td colspan="4">
 				<div class="forumdeel-omschrijving">
 					<div style="float: right;">{$smarty.capture.navlinks}</div>
 					<h1>{$deel->titel}</h1>
