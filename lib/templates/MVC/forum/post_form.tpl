@@ -16,7 +16,7 @@
 	{elseif $deel->isOpenbaar()} 
 		{* Openbaar forum: Iedereen mag dit lezen en zoekmachines nemen het op in hun zoekresultaten. *}
 	{/if}
-	<div id="berichtPreview" class="preview"></div>
+	<div id="berichtPreview" class="preview forumBericht"></div>
 	<textarea name="forumBericht" id="forumBericht" class="forumBericht{if $deel->isOpenbaar()} extern{/if}" rows="12">{$post_form_tekst}</textarea>
 	<div class="butn">
 		<a style="float: right;" class="knop" onclick="$('#ubbhulpverhaal').toggle();" title="Opmaakhulp weergeven">Opmaak</a>

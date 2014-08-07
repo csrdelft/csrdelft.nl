@@ -16,7 +16,7 @@
 		<input type="text" name="firstname" value="" class="verborgen" />
 	{/if}
 	<input type="text" name="titel" id="titel" value="" class="tekst" placeholder="Onderwerp titel" style="width: 574px;" /><br /><br />
-	<div id="berichtPreview" class="preview"></div>
+	<div id="berichtPreview" class="preview forumBericht"></div>
 	<textarea name="forumBericht" id="forumBericht" class="forumBericht{if $deel->isOpenbaar()} extern{/if}" rows="12">{$post_form_tekst}</textarea>
 	<div class="butn">
 		<a style="float: right;" class="knop" onclick="$('#ubbhulpverhaal').toggle();" title="Opmaakhulp weergeven">Opmaak</a>
