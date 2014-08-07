@@ -9,15 +9,16 @@
 		<li>[s]...[/s] voor <span style="text-decoration: line-through;">doorgestreepte tekst</span></li>
 		<li>[email=e@mail.nl]Stuur email[/email] voor een email-link</li>
 		<li>[url=http://csrdelft.nl]Webstek van C.S.R.[/url] voor een externe link</li>
-		<li>[citaat][/citaat] voor een citaat. [citaat=<em>lidnummer</em>][/citaat] voor een citaat van een lid.</li>
+		<li>[citaat][/citaat] voor een citaat. [citaat=<em>lidnummer</em>][/citaat] voor een citaat van een lid</li>
 		<li>[lid]<em>lidnummer</em>[/lid] voor een link naar het profiel van een lid of oudlid</li>
-		<li>[offtopic]...[/offtopic] voor een stukje tekst van-het-onderwerp.</li>
-		<li>[ubboff]...[/ubboff] voor een stukje met ubb-tags zonder dat ze ge&iuml;nterpreteerd worden</li>
+		<li>[offtopic]...[/offtopic] voor een stukje tekst van-het-onderwerp</li>
+		<li>[ubboff]...[/ubboff] voor een stukje met ubb-tags zonder dat ze geïnterpreteerd worden</li>
 	</ul>
 	<h2>Elementen invoegen</h2>
 	<ul>
 		<li>[img]http://csrdelft.nl/plaetje.jpg[/img] voor een plaetje</li>
-		<li>[video]<em>url</em>[/video], de url van een youtube, vimeo, dailymotion, 123video of godtube voor een filmpje direct in je post</li>
+		<li>[foto]/2014-2015/album/foto.jpg[/foto] voor een foto uit het fotoalbum met link</li>
+		<li>[video]<em>url</em>[/video] url van een youtube, vimeo, dailymotion, 123video of godtube voor een filmpje direct in je post</li>
 		<li>[document]<em>documentid</em>[/document] nummer van document</li>
 		<li>[peiling=<em>peilingid</em>] nummer van peiling</li>
 		<li>[groep]<em>groepid</em>[/groep] nummer van de ketzer / groep / commissie</li>
