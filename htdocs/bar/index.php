@@ -219,7 +219,7 @@ if ($barsysteem->isLoggedIn()) {
                     <div id="beheer-nav" class="btn-group btn-group-lg">
                         <?php if ($barsysteem->isBeheer()): ?><button class="btn btn-default" id="laadProducten">Productbeheer</button><?php endif; ?>
                         <button class="btn btn-default" id="laadPersonen">Persoonbeheer</button>
-                        <?php if ($barsysteem->isBeheer()): ?><button class="btn btn-default" id="laadGrootboekInvoer">Grootboekinvoer</button><?php endif; ?>
+                        <button class="btn btn-default" id="laadGrootboekInvoer">Grootboekinvoer</button>
                     </div>
 	
 					<div id="beheerDisplay">
