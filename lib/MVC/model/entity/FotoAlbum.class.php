@@ -33,7 +33,7 @@ class FotoAlbum extends Map {
 	 * Bestaat er een map met de naam van het pad.
 	 */
 	public function exists() {
-		return file_exists($this->path) && is_dir($this->path);
+		return is_readable($this->path) && file_exists($this->path) && is_dir($this->path);
 	}
 
 	/**
