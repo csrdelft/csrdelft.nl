@@ -556,5 +556,6 @@ function ubbPreview(source, dest) {
 		var previewDiv = document.getElementById(dest);
 		applyUBB(ubb, previewDiv);
 		previewDiv.style.display = 'block';
+		init_lazy_images();
 	}
 }
