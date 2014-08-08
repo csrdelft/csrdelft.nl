@@ -20,18 +20,28 @@ $(document).ready(function() {
 	init();
 });
 
-function init(){
+function init() {
 	init_links();
 	init_buttons();
 	init_forms();
+	try {
+		init_timeago();
+	}
+	catch (err) {
+		//FIXME missing js file
+	}
 	init_hoverIntents();
 	init_lazy_images();
 	try {
 		init_groepen();
 	}
 	catch (err) {
-		//FIXME groepen.js not present
+		//FIXME missing js file
 	}
+}
+
+function init_timeago() {
+	$('abbr.timeago').timeago();
 }
 
 function init_lazy_images() {
