@@ -116,14 +116,14 @@
 		{* <div class="columns large-2 small-2" style="width: auto; height: auto;">
 		<div class="box h2 link" style="width: auto; height: auto;">
 		<a href="https://ddb.tudelft.nl/" style="width: auto; height: auto;">
-		<img style="float: left; width: 120px;" src="{CSR_PICS}/ddb.gif" class="border">
+		<img style="float: left; width: 120px;" src="{$CSR_PICS}/ddb.gif" class="border">
 		</a>
 		</div>
 		</div> *}
 		{* <div class="columns large-2 small-2">
 		<div class="box h2 link">
 		<a href="/lidworden">
-		<img src="{CSR_PICS}/owee/owee-thema.jpg" class="border">
+		<img src="{$CSR_PICS}/owee/owee-thema.jpg" class="border">
 		<h2 class="overlay">OWee pagina!</h2>
 		</a>
 		</div>
