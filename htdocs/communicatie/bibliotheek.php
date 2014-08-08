@@ -21,7 +21,7 @@ if ($biebControl->getContent() instanceof BibliotheekCatalogusContent) {
 }
 
 $pagina->addStylesheet('bibliotheek.css');
-$pagina->addStylesheet('js/datatables/css/datatables_basic.css');
+$pagina->addStylesheet('datatables_basic.css', '/layout/js/datatables/css/');
 $pagina->addScript('datatables/jquery.dataTables.min.js');
 $pagina->addScript('csrdelft.js');
 $pagina->addScript('bibliotheek.js');
