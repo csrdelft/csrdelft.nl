@@ -405,12 +405,14 @@ class ForumController extends Controller {
 			} else {
 				$this->geentoegang();
 			}
-		} elseif ($property === 'verwijderd' OR $property === 'gesloten') {
-			ForumDradenVerbergenModel::instance()->toonDraadVoorIedereen($draad);
+		} elseif ($property === 'gesloten') {
 			ForumDradenVolgenModel::instance()->stopVolgenVoorIedereen($draad);
 		}
 		ForumDradenModel::instance()->wijzigForumDraad($draad, $property, $value);
 		if ($property === 'verwijderd') {
+			ForumDradenVolgenModel::instance()->stopVolgenVoorIedereen($draad);
+			ForumDradenVerbergenModel::instance()->toonDraadVoorIedereen($draad);
+			ForumDradenGelezenModel::instance()->verwijderDraadGelezen($draad);
 			ForumPostsModel::instance()->verwijderForumPostsVoorDraad($draad, $deel); // hertellen
 		}
 		if (is_bool($value)) {

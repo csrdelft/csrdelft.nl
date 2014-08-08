@@ -233,14 +233,19 @@ class ForumDradenGelezenModel extends PersistenceModel {
 
 	protected static $instance;
 
+	private function maakDraadGelezen($draad_id) {
+		$gelezen = new ForumDraadGelezen();
+		$gelezen->draad_id = $draad_id;
+		$gelezen->lid_id = LoginLid::instance()->getUid();
+		$gelezen->datum_tijd = '0000-00-00 00:00:00';
+		$this->create($gelezen);
+		return $gelezen;
+	}
+
 	public function getWanneerGelezenDoorLid(ForumDraad $draad) {
 		$gelezen = $this->retrieveByPrimaryKey(array($draad->draad_id, LoginLid::instance()->getUid()));
 		if (!$gelezen) {
-			$gelezen = new ForumDraadGelezen();
-			$gelezen->draad_id = $draad->draad_id;
-			$gelezen->lid_id = LoginLid::instance()->getUid();
-			$gelezen->datum_tijd = '0000-00-00 00:00:00';
-			$this->create($gelezen);
+			$gelezen = $this->maakDraadGelezen($draad->draad_id);
 		}
 		return $gelezen;
 	}
@@ -250,6 +255,12 @@ class ForumDradenGelezenModel extends PersistenceModel {
 		if (strtotime($draad->laatst_gewijzigd) > strtotime($draad->getWanneerGelezen()->datum_tijd)) {
 			$gelezen->datum_tijd = $draad->laatst_gewijzigd;
 			$this->update($gelezen);
+		}
+	}
+
+	public function verwijderDraadGelezen(ForumDraad $draad) {
+		foreach ($this->find('draad_id = ?', array($draad->draad_id)) as $gelezen) {
+			$this->delete($gelezen);
 		}
 	}
 
