@@ -37,7 +37,7 @@ class MenuModel extends PersistenceModel {
 		// get root
 		$where = 'parent_id = 0 AND tekst = ?';
 		$params = array($menu_naam);
-		$root = $this->find($where, $params, 'parent_id ASC, prioriteit ASC')->fetch();
+		$root = $this->find($where, $params)->fetch(); // should be only 1
 		if (!$root) {
 			$item = $this->newMenuItem(0);
 			$item->tekst = $menu_naam;
