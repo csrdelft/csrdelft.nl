@@ -389,6 +389,14 @@ body .dropdown-menu>li>a{
     user-select: all;
 }
 
+.removed td{
+	opacity: 0.3;
+}
+
+.removed td:last-child{
+	opacity: 1;
+}
+
 /*!
  * Datepicker for Bootstrap
  *
