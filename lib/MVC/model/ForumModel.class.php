@@ -417,10 +417,10 @@ class ForumDradenModel extends PersistenceModel implements Paging {
 		$deel->aantal_posts = (int) $result->fetchColumn();
 		$deel->aantal_draden = $this->count('forum_id = ? AND wacht_goedkeuring = FALSE AND verwijderd = FALSE', array($deel->forum_id));
 		// reset laatst gewijzigd
-		$array_last_draad = $this->find('forum_id = ? AND wacht_goedkeuring = FALSE AND verwijderd = FALSE', array($deel->forum_id), 'laatst_gewijzigd DESC', null, 1)->fetchAll();
-		$deel->laatste_post_id = $array_last_draad[0]->laatste_post_id;
-		$deel->laatste_lid_id = $array_last_draad[0]->laatste_lid_id;
-		$deel->laatst_gewijzigd = $array_last_draad[0]->laatst_gewijzigd;
+		$last_draad = $this->find('forum_id = ? AND wacht_goedkeuring = FALSE AND verwijderd = FALSE', array($deel->forum_id), 'laatst_gewijzigd DESC', null, 1)->fetch();
+		$deel->laatste_post_id = $last_draad->laatste_post_id;
+		$deel->laatste_lid_id = $last_draad->laatste_lid_id;
+		$deel->laatst_gewijzigd = $last_draad->laatst_gewijzigd;
 		ForumDelenModel::instance()->update($deel);
 	}
 
@@ -651,10 +651,10 @@ class ForumPostsModel extends PersistenceModel implements Paging {
 			$draad->verwijderd = true;
 			setMelding('Draad ' . $draad->draad_id . ' bevat geen berichten. Automatische actie: verwijderd', 2);
 		} else { // reset last post
-			$array_last_post = $this->find('draad_id = ? AND wacht_goedkeuring = FALSE AND verwijderd = FALSE', array($draad->draad_id), 'laatst_bewerkt DESC, post_id DESC', null, 1)->fetchAll();
-			$draad->laatste_post_id = $array_last_post[0]->post_id;
-			$draad->laatste_lid_id = $array_last_post[0]->lid_id;
-			$draad->laatst_gewijzigd = $array_last_post[0]->laatst_bewerkt;
+			$last_post = $this->find('draad_id = ? AND wacht_goedkeuring = FALSE AND verwijderd = FALSE', array($draad->draad_id), 'laatst_bewerkt DESC, post_id DESC', null, 1)->fetch();
+			$draad->laatste_post_id = $last_post->post_id;
+			$draad->laatste_lid_id = $last_post->lid_id;
+			$draad->laatst_gewijzigd = $last_post->laatst_bewerkt;
 		}
 		ForumDradenModel::instance()->update($draad);
 		ForumDradenModel::instance()->hertellenVoorDeel($deel);
@@ -698,8 +698,8 @@ class ForumPostsModel extends PersistenceModel implements Paging {
 	public function getForumPostsVoorDraad(ForumDraad $draad) {
 		$posts = $this->find('draad_id = ? AND wacht_goedkeuring = FALSE AND verwijderd = FALSE', array($draad->draad_id), 'post_id ASC', null, $this->per_pagina, ($this->pagina - 1) * $this->per_pagina)->fetchAll();
 		if ($draad->eerste_post_plakkerig AND $this->pagina !== 1) {
-			$array_first_post = $this->find('draad_id = ? AND wacht_goedkeuring = FALSE AND verwijderd = FALSE', array($draad->draad_id), 'post_id ASC', null, 1)->fetch();
-			array_unshift($posts, $array_first_post);
+			$first_post = $this->find('draad_id = ? AND wacht_goedkeuring = FALSE AND verwijderd = FALSE', array($draad->draad_id), 'post_id ASC', null, 1)->fetch();
+			array_unshift($posts, $first_post);
 		}
 // 2008-filter
 		if (LidInstellingen::get('forum', 'filter2008') == 'ja') {
