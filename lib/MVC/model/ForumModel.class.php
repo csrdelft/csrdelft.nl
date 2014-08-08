@@ -656,7 +656,11 @@ class ForumPostsModel extends PersistenceModel implements Paging {
 			$draad->laatste_lid_id = null;
 			$draad->laatst_gewijzigd = null;
 		} else { // reset last post
-			$last_post = $this->find('draad_id = ? AND wacht_goedkeuring = FALSE AND verwijderd = FALSE', array($draad->draad_id), 'laatst_bewerkt DESC, post_id DESC', null, 1)->fetch();
+			$last_bewerkt = $this->find('draad_id = ? AND wacht_goedkeuring = FALSE AND verwijderd = FALSE', array($draad->draad_id), 'laatst_bewerkt DESC', null, 1)->fetch();
+			$last_post = $this->find('draad_id = ? AND wacht_goedkeuring = FALSE AND verwijderd = FALSE', array($draad->draad_id), 'post_id DESC', null, 1)->fetch();
+			if (strtotime($last_bewerkt->laatst_bewerkt) > strtotime($last_post->datum_tijd)) {
+				$last_post = $last_bewerkt;
+			}
 			$draad->laatste_post_id = $last_post->post_id;
 			$draad->laatste_lid_id = $last_post->lid_id;
 			if ($last_post->laatst_bewerkt !== null) {
