@@ -397,6 +397,18 @@ body .dropdown-menu>li>a{
 	opacity: 1;
 }
 
+.dropdown-menu li:first-child{
+	display: none;
+}
+
+.removed .dropdown-menu li{
+	display: none;
+}
+
+.removed .dropdown-menu li:first-child{
+	display: block;
+}
+
 /*!
  * Datepicker for Bootstrap
  *
