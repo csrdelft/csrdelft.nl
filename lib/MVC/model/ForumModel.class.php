@@ -417,7 +417,7 @@ class ForumDradenModel extends PersistenceModel implements Paging {
 		$deel->aantal_posts = (int) $result->fetchColumn();
 		$deel->aantal_draden = $this->count('forum_id = ? AND wacht_goedkeuring = FALSE AND verwijderd = FALSE', array($deel->forum_id));
 		// reset laatst gewijzigd
-		$last_draad = $this->find('forum_id = ? AND wacht_goedkeuring = FALSE AND verwijderd = FALSE', array($deel->forum_id), 'laatst_gewijzigd DESC, draad_id DESC', null, 1)->fetch();
+		$last_draad = $this->find('forum_id = ? AND wacht_goedkeuring = FALSE AND verwijderd = FALSE', array($deel->forum_id), 'laatst_gewijzigd DESC', null, 1)->fetch();
 		$deel->laatste_post_id = $last_draad->laatste_post_id;
 		$deel->laatste_lid_id = $last_draad->laatste_lid_id;
 		$deel->laatst_gewijzigd = $last_draad->laatst_gewijzigd;
@@ -654,7 +654,11 @@ class ForumPostsModel extends PersistenceModel implements Paging {
 			$last_post = $this->find('draad_id = ? AND wacht_goedkeuring = FALSE AND verwijderd = FALSE', array($draad->draad_id), 'laatst_bewerkt DESC, post_id DESC', null, 1)->fetch();
 			$draad->laatste_post_id = $last_post->post_id;
 			$draad->laatste_lid_id = $last_post->lid_id;
-			$draad->laatst_gewijzigd = $last_post->laatst_bewerkt;
+			if ($last_post->laatst_bewerkt !== null) {
+				$draad->laatst_gewijzigd = $last_post->laatst_bewerkt;
+			} else {
+				$draad->laatst_gewijzigd = $last_post->datum_tijd;
+			}
 		}
 		ForumDradenModel::instance()->update($draad);
 		ForumDradenModel::instance()->hertellenVoorDeel($deel);
