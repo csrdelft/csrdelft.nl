@@ -647,9 +647,14 @@ class ForumPostsModel extends PersistenceModel implements Paging {
 
 	public function hertellenVoorDraadEnDeel(ForumDraad $draad, ForumDeel $deel) {
 		$draad->aantal_posts = $this->count('draad_id = ? AND wacht_goedkeuring = FALSE AND verwijderd = FALSE', array($draad->draad_id));
-		if (!$draad->verwijderd AND $draad->aantal_posts < 1) {
-			$draad->verwijderd = true;
-			setMelding('Draad ' . $draad->draad_id . ' bevat geen berichten. Automatische actie: verwijderd', 2);
+		if ($draad->aantal_posts < 1) {
+			if (!$draad->verwijderd) {
+				$draad->verwijderd = true;
+				setMelding('Draad ' . $draad->draad_id . ' bevat geen berichten. Automatische actie: verwijderd', 2);
+			}
+			$draad->laatste_post_id = null;
+			$draad->laatste_lid_id = null;
+			$draad->laatst_gewijzigd = null;
 		} else { // reset last post
 			$last_post = $this->find('draad_id = ? AND wacht_goedkeuring = FALSE AND verwijderd = FALSE', array($draad->draad_id), 'laatst_bewerkt DESC, post_id DESC', null, 1)->fetch();
 			$draad->laatste_post_id = $last_post->post_id;
