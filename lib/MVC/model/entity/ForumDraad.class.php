@@ -106,6 +106,11 @@ class ForumDraad extends PersistentEntity {
 	 */
 	private $volgen;
 	/**
+	 * Volgers
+	 * @var array
+	 */
+	private $volgers;
+	/**
 	 * Database table fields
 	 * @var array
 	 */
@@ -157,6 +162,13 @@ class ForumDraad extends PersistentEntity {
 			$this->volgen = ForumDradenVolgenModel::instance()->getVolgenVoorLid($this);
 		}
 		return $this->volgen;
+	}
+	
+	public function getVolgers() {
+		if (!isset($this->volgers)) {
+			$this->volgers = ForumDradenVolgenModel::instance()->getVolgersVanDraad($this);
+		}
+		return $this->volgers;
 	}
 
 	public function getWanneerGelezen() {

@@ -320,6 +320,10 @@ class ForumDradenVolgenModel extends PersistenceModel {
 		return $this->count('lid_id = ?', array(LoginLid::instance()->getUid()));
 	}
 
+	public function getVolgersVanDraad(ForumDraad $draad) {
+		return $this->find('draad_id = ?', array($draad->draad_id))->fetchAll(PDO::FETCH_COLUMN, 1);
+	}
+
 	public function getVolgenVoorLid(ForumDraad $draad) {
 		return $this->existsByPrimaryKey(array($draad->draad_id, LoginLid::instance()->getUid()));
 	}
