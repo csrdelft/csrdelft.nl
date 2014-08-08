@@ -1,4 +1,4 @@
-#!/usr/bin/usr/bin/php5-cgi
+#!/usr/bin/php5
 <?php
 /**
  * cron.php
@@ -7,14 +7,19 @@
  * 
  * Entry point voor uitvoeren van CRON-jobs.
  * 
- * 'geinstalleerd' met: (chmod bij elke svn up!!!)
- * chmod +x /usr/www/csrdelft.nl/bin/cron.php
- * 0 1 * * * /usr/www/csrdelft.nl/bin/cron.php >> cron.log 2>&1
+ * 'geinstalleerd' met:
+ * svn:executable property
+ * export EDITOR=nano
+ * crontab -e
+ * 0 1 * * * /usr/www/csrdelft.nl/bin/cron.php >> /srv/www/csrdelft.nl/data/log/cron.log 2>&1
  * test door ./cron.php te typen
+ * 
+ * @see http://www.cronjob.nl/
  */
 session_id('cron-cli');
 
-chdir('../lib/');
+chdir('/srv/www/csrdelft.nl/lib/');
+
 require_once 'configuratie.include.php';
 
 // Corvee herinneringen
