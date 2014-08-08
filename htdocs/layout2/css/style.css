@@ -36,11 +36,11 @@ h1, h2, h3, h4, h5, h6 { font-weight: normal; }
 	font-family: "SentinelBold";
 	font-weight: bold;
 	font-style: normal;
-	src: url("http://csrdelft.nl/layout2/fonts/SentinelBold.eot");
+	src: url("../fonts/SentinelBold.eot");
 	src: local("Sentinel"),
-		url("http://csrdelft.nl/layout2/fonts/SentinelBold.eot?#iefix") format("embedded-opentype"),
-		url("http://csrdelft.nl/layout2/fonts/SentinelBold.woff") format("woff"),
-		url("http://csrdelft.nl/layout2/fonts/SentinelBold.otf") format("opentype");
+		url("../fonts/SentinelBold.eot#iefix") format("embedded-opentype"),
+		url("../fonts/SentinelBold.woff") format("woff"),
+		url("../fonts/SentinelBold.otf") format("opentype");
 }
 
 
