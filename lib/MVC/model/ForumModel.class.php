@@ -428,7 +428,7 @@ class ForumDradenModel extends PersistenceModel implements Paging {
 		$this->per_pagina = (int) LidInstellingen::get('forum', 'zoekresultaten');
 		$orm = self::orm;
 		$fields = $orm::getFields();
-		$fields[] = 'MATCH(titel) AGAINST (? IN NATURAL LANGUAGE MODE) AS score';
+		$fields[] = 'MATCH(titel) AGAINST (? IN BOOLEAN MODE) AS score';
 		$where = 'wacht_goedkeuring = FALSE AND verwijderd = FALSE AND ';
 		if ($datum === 'gemaakt') {
 			$order = 'datum_tijd';
