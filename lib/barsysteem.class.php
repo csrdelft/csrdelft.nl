@@ -306,6 +306,7 @@ ORDER BY yearweek DESC
 		
 		$data['sum_saldi'] = $this->sumSaldi();
 		$data['sum_saldi_lid'] = $this->sumSaldi(true);
+		$data['red'] = $this->getRed();
 		
 		return $data;
 	
@@ -316,6 +317,24 @@ ORDER BY yearweek DESC
 		$after = $lidOnly ? "AND stekUID IS NOT NULL" : "";
 		
 		return $this->db->query("SELECT SUM(saldo) AS sum FROM socCieKlanten WHERE deleted = 0 " . $after)->fetch(PDO::FETCH_ASSOC);
+	
+	}
+	
+	private function getRed() {
+		
+		$result = array();
+		
+		$q = $this->db->query("SELECT stekUID, saldo FROM socCieKlanten WHERE deleted = 0 AND saldo < 0 AND stekUID IS NOT NULL ORDER BY saldo");
+		while($r = $q->fetch(PDO::FETCH_ASSOC)) {
+		
+			$result[] = array(
+				'naam' => LidCache::getLid($r['stekUID'])->getNaam(),
+				'saldo' => $r['saldo']
+			);
+		
+		}
+		
+		return $result;
 	
 	}
 	

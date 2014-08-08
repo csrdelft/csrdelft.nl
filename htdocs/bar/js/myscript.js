@@ -708,9 +708,20 @@ $(function () {
 			method: "GET",
 			dataType: "json",
 			success: function(data) {
+		
+				button.parent().find("> button").addClass("btn-default").removeClass("btn-primary");
+				button.removeClass("btn-default").addClass("btn-primary");
 			
 				$("#sumSaldi").html(saldoStr(data.sum_saldi.sum));
 				$("#sumSaldiLid").html(saldoStr(data.sum_saldi_lid.sum));
+				
+				var html = '';
+				$.each(data.red, function() {
+				
+					html += '<tr><th>' + this.naam + '</th><td>' + saldoStr(this.saldo) + '</td></tr>';
+				
+				});
+				$("#red").html(html);
 				
 				$("#productBeheer, #persoonBeheer, #grootboekInvoer").addClass("hidden");
 				$("#tools").removeClass("hidden");
