@@ -21,6 +21,7 @@ $(document).ready(function() {
 });
 
 function init() {
+	//undo_inline_css();
 	init_links();
 	init_buttons();
 	init_forms();
@@ -38,6 +39,10 @@ function init() {
 	catch (err) {
 		//FIXME missing js file
 	}
+}
+
+function undo_inline_css() {
+	$('*').removeAttr('style width border cellSpacing cellPadding'); // etc
 }
 
 function init_timeago() {
