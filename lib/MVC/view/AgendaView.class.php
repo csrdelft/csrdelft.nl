@@ -137,7 +137,7 @@ function setTijd(a, b, c, d) {
 			$fields['btn']->extraTitle = 'Opslaan & nog een agenda item toevoegen';
 			$fields['btn']->extraIcon = 'add';
 			$fields['btn']->extraUrl = '/agenda/toevoegen/doorgaan';
-			$fields['btn']->extraActie = 'submit';
+			$fields['btn']->extraAction = 'submit';
 		}
 
 		$this->addFields($fields);

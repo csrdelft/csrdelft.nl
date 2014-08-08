@@ -473,6 +473,7 @@ div.hoverIntentContent{
 	font-style: normal !important;
 	float: none !important;
 	overflow: visible;
+	padding: 5px;
 }
 div.visitekaartje{
 	width: 330px;
