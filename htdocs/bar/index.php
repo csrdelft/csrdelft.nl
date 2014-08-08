@@ -219,7 +219,8 @@ if ($barsysteem->isLoggedIn()) {
                     <div id="beheer-nav" class="btn-group btn-group-lg">
                         <?php if ($barsysteem->isBeheer()): ?><button class="btn btn-default" id="laadProducten">Productbeheer</button><?php endif; ?>
                         <button class="btn btn-default" id="laadPersonen">Persoonbeheer</button>
-                        <button class="btn btn-default" id="laadGrootboekInvoer">Grootboekinvoer</button>
+                        <?php if ($barsysteem->isBeheer()): ?><button class="btn btn-default" id="laadGrootboekInvoer">Grootboekinvoer</button><?php endif; ?>
+                        <?php if ($barsysteem->isBeheer()): ?><button class="btn btn-default" id="laadTools">Tools</button><?php endif; ?>
                     </div>
 	
 					<div id="beheerDisplay">
@@ -300,6 +301,20 @@ if ($barsysteem->isLoggedIn()) {
 						</div>
 						
 						<div id="grootboekInvoer" class="hidden">
+							
+						</div>
+						
+						<div id="tools" class="hidden">
+						
+							<h2>Som van saldi</h2>
+							<table class="table">
+								<tr>
+									<th>Iedereen in de database</th><td id="sumSaldi"></td>
+								</tr>
+								<tr>
+									<th>Alleen leden en oudleden</th><td id="sumSaldiLid"></td>
+								</tr>
+							</table>
 							
 						</div>
 					

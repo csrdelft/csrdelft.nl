@@ -300,6 +300,25 @@ ORDER BY yearweek DESC
 	
 	}
 	
+	public function getToolData() {
+	
+		$data = array();
+		
+		$data['sum_saldi'] = $this->sumSaldi();
+		$data['sum_saldi_lid'] = $this->sumSaldi(true);
+		
+		return $data;
+	
+	}
+	
+	private function sumSaldi($lidOnly = false) {
+	
+		$after = $lidOnly ? "AND stekUID IS NOT NULL" : "";
+		
+		return $this->db->query("SELECT SUM(saldo) AS sum FROM socCieKlanten WHERE deleted = 0 " . $after)->fetch(PDO::FETCH_ASSOC);
+	
+	}
+	
 	public function updatePerson($id, $name) {
 	
 		$q = $this->db->prepare("UPDATE socCieKlanten SET naam = :naam WHERE socCieId = :id");

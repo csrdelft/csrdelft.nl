@@ -18,16 +18,18 @@ if ($barsysteem->isLoggedIn()){
 	if(isset($_POST["update_person"])) {
 		echo $barsysteem->updatePerson($_POST['id'], $_POST['name']);
 	}
-	// Get grootboekinvoer
-	if(isset($_GET['q']) && $_GET['q'] == 'grootboek') {
-		echo json_encode($barsysteem->getGrootboekInvoer());
-	}
 
 	if($barsysteem->isBeheer()) {		
+		// Get grootboekinvoer
+		if(isset($_GET['q']) && $_GET['q'] == 'grootboek') {
+			echo json_encode($barsysteem->getGrootboekInvoer());
+		}
+		if(isset($_GET['q']) && $_GET['q'] == 'tools') {
+			echo json_encode($barsysteem->getToolData());
+		}
 		if(isset($_POST["add_person"])) {
 			echo $barsysteem->addPerson($_POST['name'], $_POST['saldo'], $_POST['uid']);
 		}
-		
 		if(isset($_POST["remove_person"])) {
 			echo $barsysteem->removePerson($_POST['id']);
 		}

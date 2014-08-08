@@ -558,7 +558,7 @@ $(function () {
         });
 		
 		$("#productBeheer").removeClass("hidden");
-		$("#grootboekInvoer, #persoonBeheer").addClass("hidden");
+		$("#grootboekInvoer, #persoonBeheer, #tools").addClass("hidden");
 		
     });
 	
@@ -568,7 +568,7 @@ $(function () {
 		$(this).removeClass("btn-default").addClass("btn-primary");
 		
 		$("#persoonBeheer").removeClass("hidden");
-		$("#grootboekInvoer, #productBeheer").addClass("hidden");
+		$("#grootboekInvoer, #productBeheer, #tools").addClass("hidden");
 	
 	});
 	
@@ -691,8 +691,29 @@ $(function () {
 				
 				});
 				
-				$("#productBeheer, #persoonBeheer").addClass("hidden");
+				$("#productBeheer, #persoonBeheer, #tools").addClass("hidden");
 				$("#grootboekInvoer").html(html).removeClass("hidden");
+			
+			}
+		});
+	
+	});
+	
+	$("#laadTools").click(function() {
+	
+		var button = $(this);
+	
+		$.ajax({
+			url: "ajax.php?q=tools",
+			method: "GET",
+			dataType: "json",
+			success: function(data) {
+			
+				$("#sumSaldi").html(saldoStr(data.sum_saldi.sum));
+				$("#sumSaldiLid").html(saldoStr(data.sum_saldi_lid.sum));
+				
+				$("#productBeheer, #persoonBeheer, #grootboekInvoer").addClass("hidden");
+				$("#tools").removeClass("hidden");
 			
 			}
 		});
