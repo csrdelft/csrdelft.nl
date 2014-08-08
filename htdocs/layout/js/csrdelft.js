@@ -21,7 +21,6 @@ $(document).ready(function() {
 });
 
 function init() {
-	//undo_inline_css();
 	init_links();
 	init_buttons();
 	init_forms();
@@ -39,6 +38,7 @@ function init() {
 	catch (err) {
 		//FIXME missing js file
 	}
+	//undo_inline_css();
 }
 
 function undo_inline_css() {
@@ -240,21 +240,6 @@ function init_forms() {
 	$('.InlineFormToggle').bind('click.toggle', form_toggle);
 	$('.SubmitChange').unbind('change.change');
 	$('.SubmitChange').bind('change.change', form_submit);
-	// Resize popup to width of textarea
-	$('#popup .TextareaField').unbind('mousedown.resize');
-	$('#popup .TextareaField').bind('mousedown.resize', function() {
-		$(this).unbind('mousemove.resize');
-		$(this).bind('mousemove.resize', function() {
-			var width = 7 + parseInt($(this).css('width'));
-			$('#popup').css('min-width', width);
-			$('#popup .InputField').css('min-width', width);
-		});
-	});
-	$('#popup .TextareaField').unbind('mouseup.resize');
-	$('#popup .TextareaField').bind('mouseup.resize', function() {
-		$(this).trigger('mousemove.resize');
-		$(this).unbind('mousemove.resize');
-	});
 }
 
 function form_ischanged(form) {
