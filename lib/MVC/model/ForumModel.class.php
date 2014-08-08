@@ -436,12 +436,13 @@ class ForumDradenModel extends PersistenceModel implements Paging {
 			$order = 'laatst_gewijzigd';
 		}
 		$where .= $order;
-		$order .= ' DESC';
+		$order .= ' DESC, score DESC';
 		if ($ouder === 'ouder') {
 			$where .= ' < ?';
 		} else {
 			$where .= ' > ?';
 		}
+		$where .= 'HAVING score > 0';
 		$datum = date('Y-m-d H:i:s', strtotime('-' . $jaar . ' year'));
 		$results = Database::sqlSelect($fields, $orm::getTableName(), $where, array($query, $datum), $order, null, $this->per_pagina, ($this->pagina - 1) * $this->per_pagina);
 		$results->setFetchMode(PDO::FETCH_CLASS, $orm, array($cast = true));
