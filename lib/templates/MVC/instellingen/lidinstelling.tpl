@@ -18,7 +18,7 @@
 			{/foreach}
 		</select>
 	{else}
-		<input type="text" id="inst_{$module}_{$id}" name="{$module}_{$id}" value="{$waarde}"{if $type === T::String} maxlength="{$opties[1]}"{/if} />
+		<input type="text" id="inst_{$module}_{$id}" name="{$module}_{$id}" value="{$waarde}"{if $type === T::String} maxlength="{$opties[1]}" style="width: 111px;"{elseif $type === T::Integer} style="width: 33px;"{/if} />
 	{/if}
 	&nbsp;({ucfirst($default)})
 	<br /><br />
