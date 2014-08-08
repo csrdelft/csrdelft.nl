@@ -55,7 +55,7 @@ class CmsPaginaForm extends Formulier {
 
 		$this->addFields($fields);
 
-		$this->model->laatst_gewijzigd = date('Y-m-d H:i:s');
+		$this->model->laatst_gewijzigd = getDateTime();
 	}
 
 	function getTitel() {

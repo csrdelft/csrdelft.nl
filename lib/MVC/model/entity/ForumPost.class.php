@@ -39,7 +39,7 @@ class ForumPost extends PersistentEntity {
 	 * Datum en tijd van laatste bewerking
 	 * @var string
 	 */
-	public $laatst_bewerkt;
+	public $laatst_gewijzigd;
 	/**
 	 * Bewerking logboek
 	 * @var string
@@ -75,11 +75,14 @@ class ForumPost extends PersistentEntity {
 		'lid_id' => array(T::UID),
 		'tekst' => array(T::Text),
 		'datum_tijd' => array(T::DateTime),
-		'laatst_bewerkt' => array(T::DateTime, true),
+		'laatst_gewijzigd' => array(T::DateTime, true),
 		'bewerkt_tekst' => array(T::Text, true),
 		'verwijderd' => array(T::Boolean),
 		'auteur_ip' => array(T::String),
 		'wacht_goedkeuring' => array(T::Boolean)
+	);
+	protected static $rename_fields = array(
+		'laatst_bewerkt' => 'laatst_gewijzigd'
 	);
 	/**
 	 * Database primary key

@@ -4068,3 +4068,4 @@ sql/4920_gasten_eetwens.sql -text
 sql/5005_duckname.sql -text
 sql/5049_file_size_rename.sql -text
 sql/5372_forum_volgen.sql -text
+sql/5518_forum_laatst.sql -text

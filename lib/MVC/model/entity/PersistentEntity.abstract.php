@@ -172,7 +172,9 @@ abstract class PersistentEntity {
 		foreach (static::$persistent_fields as $name => $definition) {
 			// Add missing persistent fields
 			if (!array_key_exists($name, $database_fields)) {
-				DatabaseAdmin::instance()->sqlAddField(static::getTableName(), $fields[$name], $previous_field);
+				if (!(property_exists($orm, 'rename_fields') AND in_array($name, static::$rename_fields))) {
+					DatabaseAdmin::instance()->sqlAddField(static::getTableName(), $fields[$name], $previous_field);
+				}
 			} else {
 				// Check exisiting persistent fields for differences
 				$diff = false;
@@ -209,7 +211,7 @@ abstract class PersistentEntity {
 		}
 		// Remove non-persistent fields
 		foreach ($database_fields as $name => $field) {
-			if (!array_key_exists($name, static::$persistent_fields)) {
+			if (!array_key_exists($name, static::$persistent_fields) AND ! (property_exists($orm, 'rename_fields') AND array_key_exists($name, static::$rename_fields))) {
 				DatabaseAdmin::instance()->sqlDeleteField(static::getTableName(), $field);
 			}
 		}

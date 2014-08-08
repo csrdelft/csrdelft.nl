@@ -245,7 +245,7 @@ class ForumDradenGelezenModel extends PersistenceModel {
 		return $gelezen;
 	}
 
-	public function setWanneerGelezenDoorLid(ForumDraad $draad) {
+	public function setWanneerGelezenDoorLid(ForumDraad $draad, ForumPost $post) {
 		$gelezen = $this->getWanneerGelezenDoorLid($draad);
 		if (strtotime($draad->laatst_gewijzigd) > strtotime($draad->getWanneerGelezen()->datum_tijd)) {
 			$gelezen->datum_tijd = $draad->laatst_gewijzigd;
@@ -555,8 +555,8 @@ class ForumDradenModel extends PersistenceModel implements Paging {
 		$draad->forum_id = (int) $forum_id;
 		$draad->lid_id = LoginLid::instance()->getUid();
 		$draad->titel = $titel;
-		$draad->datum_tijd = date('Y-m-d H:i:s');
-		$draad->laatst_gewijzigd = null;
+		$draad->datum_tijd = getDateTime();
+		$draad->laatst_gewijzigd = $draad->datum_tijd;
 		$draad->laatste_post_id = null;
 		$draad->laatste_lid_id = null;
 		$draad->aantal_posts = 0;
@@ -660,18 +660,10 @@ class ForumPostsModel extends PersistenceModel implements Paging {
 			$draad->laatste_lid_id = null;
 			$draad->laatst_gewijzigd = null;
 		} else { // reset last post
-			$last_bewerkt = $this->find('draad_id = ? AND wacht_goedkeuring = FALSE AND verwijderd = FALSE', array($draad->draad_id), 'laatst_bewerkt DESC', null, 1)->fetch();
-			$last_post = $this->find('draad_id = ? AND wacht_goedkeuring = FALSE AND verwijderd = FALSE', array($draad->draad_id), 'post_id DESC', null, 1)->fetch();
-			if (strtotime($last_bewerkt->laatst_bewerkt) > strtotime($last_post->datum_tijd)) {
-				$last_post = $last_bewerkt;
-			}
+			$last_post = $this->find('draad_id = ? AND wacht_goedkeuring = FALSE AND verwijderd = FALSE', array($draad->draad_id), 'laatst_gewijzigd DESC', null, 1)->fetch();
 			$draad->laatste_post_id = $last_post->post_id;
 			$draad->laatste_lid_id = $last_post->lid_id;
-			if ($last_post->laatst_bewerkt !== null) {
-				$draad->laatst_gewijzigd = $last_post->laatst_bewerkt;
-			} else {
-				$draad->laatst_gewijzigd = $last_post->datum_tijd;
-			}
+			$draad->laatst_gewijzigd = $last_post->laatst_gewijzigd;
 		}
 		ForumDradenModel::instance()->update($draad);
 		ForumDradenModel::instance()->hertellenVoorDeel($deel);
@@ -686,7 +678,7 @@ class ForumPostsModel extends PersistenceModel implements Paging {
 		if ($datum === 'gemaakt') {
 			$where .= 'datum_tijd';
 		} else {
-			$where .= 'laatst_bewerkt';
+			$where .= 'laatst_gewijzigd';
 		}
 		if ($ouder === 'ouder') {
 			$where .= ' < ?';
@@ -794,8 +786,8 @@ class ForumPostsModel extends PersistenceModel implements Paging {
 		$post->draad_id = (int) $draad_id;
 		$post->lid_id = LoginLid::instance()->getUid();
 		$post->tekst = $tekst;
-		$post->datum_tijd = date('Y-m-d H:i:s');
-		$post->laatst_bewerkt = null;
+		$post->datum_tijd = getDateTime();
+		$post->laatst_gewijzigd = $post->datum_tijd;
 		$post->bewerkt_tekst = null;
 		$post->verwijderd = false;
 		$post->auteur_ip = $ip;
@@ -831,8 +823,8 @@ class ForumPostsModel extends PersistenceModel implements Paging {
 	public function bewerkForumPost($nieuwe_tekst, $reden, ForumPost $post, ForumDraad $draad, ForumDeel $deel) {
 		$verschil = levenshtein($post->tekst, $nieuwe_tekst);
 		$post->tekst = $nieuwe_tekst;
-		$post->laatst_bewerkt = getDateTime();
-		$bewerkt = 'bewerkt door [lid=' . LoginLid::instance()->getUid() . '] [reldate]' . $post->laatst_bewerkt . '[/reldate]';
+		$post->laatst_gewijzigd = getDateTime();
+		$bewerkt = 'bewerkt door [lid=' . LoginLid::instance()->getUid() . '] [reldate]' . $post->laatst_gewijzigd . '[/reldate]';
 		if ($reden !== '') {
 			$bewerkt .= ': ' . $reden;
 		}
@@ -843,14 +835,14 @@ class ForumPostsModel extends PersistenceModel implements Paging {
 			throw new Exception('Bewerken mislukt');
 		}
 		if ($verschil > 3) {
-			$draad->laatst_gewijzigd = $post->laatst_bewerkt;
+			$draad->laatst_gewijzigd = $post->laatst_gewijzigd;
 			$draad->laatste_post_id = $post->post_id;
 			$draad->laatste_lid_id = $post->lid_id;
 			$rowcount = ForumDradenModel::instance()->update($draad);
 			if ($rowcount !== 1) {
 				throw new Exception('Bewerken mislukt');
 			}
-			$deel->laatst_gewijzigd = $post->laatst_bewerkt;
+			$deel->laatst_gewijzigd = $post->laatst_gewijzigd;
 			$deel->laatste_post_id = $post->post_id;
 			$deel->laatste_lid_id = $post->lid_id;
 			$rowcount = ForumDelenModel::instance()->update($deel);
@@ -862,8 +854,8 @@ class ForumPostsModel extends PersistenceModel implements Paging {
 
 	public function verplaatsForumPost(ForumDraad $nieuw, ForumPost $post, ForumDraad $draad, ForumDeel $deel) {
 		$post->draad_id = $nieuw->draad_id;
-		$post->laatst_bewerkt = getDateTime();
-		$post->bewerkt_tekst .= 'verplaatst door [lid=' . LoginLid::instance()->getUid() . '] [reldate]' . $post->laatst_bewerkt . '[/reldate]' . "\n";
+		$post->laatst_gewijzigd = getDateTime();
+		$post->bewerkt_tekst .= 'verplaatst door [lid=' . LoginLid::instance()->getUid() . '] [reldate]' . $post->laatst_gewijzigd . '[/reldate]' . "\n";
 		$rowcount = $this->update($post);
 		if ($rowcount !== 1) {
 			throw new Exception('Verplaatsen mislukt');
@@ -880,8 +872,8 @@ class ForumPostsModel extends PersistenceModel implements Paging {
 
 	public function offtopicForumPost(ForumPost $post) {
 		$post->tekst = '[offtopic]' . $post->tekst . '[/offtopic]';
-		$post->laatst_bewerkt = getDateTime();
-		$post->bewerkt_tekst .= 'offtopic door [lid=' . LoginLid::instance()->getUid() . '] [reldate]' . $post->laatst_bewerkt . '[/reldate]' . "\n";
+		$post->laatst_gewijzigd = getDateTime();
+		$post->bewerkt_tekst .= 'offtopic door [lid=' . LoginLid::instance()->getUid() . '] [reldate]' . $post->laatst_gewijzigd . '[/reldate]' . "\n";
 		$rowcount = $this->update($post);
 		if ($rowcount !== 1) {
 			throw new Exception('Offtopic mislukt');
@@ -889,19 +881,17 @@ class ForumPostsModel extends PersistenceModel implements Paging {
 	}
 
 	public function goedkeurenForumPost(ForumPost $post, ForumDraad $draad, ForumDeel $deel) {
-		$laatst = $post->datum_tijd;
 		if ($post->wacht_goedkeuring) {
 			$post->wacht_goedkeuring = false;
-			$post->laatst_bewerkt = getDateTime();
-			$post->bewerkt_tekst .= '[prive=P_FORUM_MOD]Goedgekeurd door [lid=' . LoginLid::instance()->getUid() . '] [reldate]' . $post->laatst_bewerkt . '[/reldate][/prive]' . "\n";
+			$post->laatst_gewijzigd = getDateTime();
+			$post->bewerkt_tekst .= '[prive=P_FORUM_MOD]Goedgekeurd door [lid=' . LoginLid::instance()->getUid() . '] [reldate]' . $post->laatst_gewijzigd . '[/reldate][/prive]' . "\n";
 			$rowcount = $this->update($post);
 			if ($rowcount !== 1) {
 				throw new Exception('Goedkeuren mislukt');
 			}
-			$laatst = $post->laatst_bewerkt;
 		}
 		$draad->aantal_posts++;
-		$draad->laatst_gewijzigd = $laatst;
+		$draad->laatst_gewijzigd = $post->laatst_gewijzigd;
 		$draad->laatste_post_id = $post->post_id;
 		$draad->laatste_lid_id = $post->lid_id;
 		if ($draad->wacht_goedkeuring) {
@@ -913,7 +903,7 @@ class ForumPostsModel extends PersistenceModel implements Paging {
 		}
 		$deel->aantal_posts++;
 		$deel->aantal_draden++;
-		$deel->laatst_gewijzigd = $laatst;
+		$deel->laatst_gewijzigd = $post->laatst_gewijzigd;
 		$deel->laatste_post_id = $post->post_id;
 		$deel->laatste_lid_id = $post->lid_id;
 		$rowcount = ForumDelenModel::instance()->update($deel);
