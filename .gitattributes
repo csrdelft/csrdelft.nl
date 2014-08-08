@@ -302,7 +302,7 @@ htdocs/layout/js/jquery/plugins/jquery.prettyPhoto.min.css -text
 htdocs/layout/js/jquery/plugins/jquery.prettyPhoto.min.js -text
 htdocs/layout/js/jquery/plugins/jquery.scrollTo.js -text
 htdocs/layout/js/jquery/plugins/jquery.scrollTo.min.js -text
-htdocs/layout/js/jquery/plugins/jquery.timeago.custom.js -text
+htdocs/layout/js/jquery/plugins/jquery.timeago.js -text
 htdocs/layout/js/lightbox.js -text
 htdocs/layout/js/maaltijdabos.js -text
 htdocs/layout/js/menu.js -text

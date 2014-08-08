@@ -67,7 +67,7 @@ class CsrLayoutPage extends HtmlPage {
 			$this->addScript('jquery/plugins/jquery.scrollTo.min.js');
 		}
 		$this->addStylesheet('jquery.autocomplete.css', '/layout/js/autocomplete/');
-		$this->addScript('jquery/plugins/jquery.timeago.custom.js');
+		$this->addScript('jquery/plugins/jquery.timeago.js');
 		$this->addScript('csrdelft.js');
 		$this->addScript('dragobject.js');
 		$this->addScript('menu.js');

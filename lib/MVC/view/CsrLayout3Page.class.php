@@ -46,7 +46,7 @@ class CsrLayout3Page extends HtmlPage {
 		$this->addStylesheet('bootstrap-typeahead.css', $css);
 		$this->addStylesheet('csrdelft.css', $css);
 
-		$this->addScript('jquery.timeago.custom.js', $plugin);
+		$this->addScript('jquery.timeago.js', $plugin);
 		$this->addScript('csrdelft.js', $js);
 
 		if (LidInstellingen::get('algemeen', 'sneltoetsen') == 'ja') {

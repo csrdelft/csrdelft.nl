@@ -32,7 +32,7 @@ class CsrLayout2Page extends HtmlPage {
 		$this->addStylesheet('ubb.css');
 		$this->addScript('jquery.js', '/layout2/js/');
 		$this->addScript('jquery.backstretch.js', '/layout2/js/');
-		$this->addScript('jquery.timeago.custom.js', '/layout/js/jquery/plugins/');
+		$this->addScript('jquery.timeago.js', '/layout/js/jquery/plugins/');
 		$this->addScript('jquery.hoverIntent.min.js', '/layout/js/jquery/plugins/');
 		$this->addScript('init.js', '/layout2/js/');
 		$this->addScript('csrdelft.js');
