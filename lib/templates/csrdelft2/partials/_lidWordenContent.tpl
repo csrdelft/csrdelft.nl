@@ -42,6 +42,7 @@
 			<li><a href="/vereniging/gezelligheid">Gezelligheid</a></li>
 			<li><a href="/vereniging/sport">Sport</a></li>
 			<li><a href="/vereniging/ontspanning">Ontspanning</a></li>
+			<!--li><a href="/vereniging/maaltijden">Maaltijden</a></li-->
 			<li><a href="/vereniging/societeit">Soci&#235;teit</a></li>
 			<li><a href="/vereniging/officieel">Officieel</a></li>
 		</ul>
