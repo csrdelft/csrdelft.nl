@@ -18,7 +18,7 @@ class RepetitieCorveeForm extends PopupForm {
 		$fields['begin'] = new DatumField('begindatum', $beginDatum, 'Vanaf', date('Y') + 1, date('Y'));
 		$fields['eind'] = new DatumField('einddatum', $eindDatum, 'Tot en met', date('Y') + 1, date('Y'));
 		$fields[] = new HiddenField('maaltijd_id', $mid);
-		$fields[] = new SubmitResetCancel();
+		$fields[] = new FormButtons();
 
 		$this->addFields($fields);
 	}

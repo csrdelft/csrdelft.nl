@@ -263,9 +263,9 @@ class InlineForm extends Formulier {
 
 		$fields = array();
 		$fields['input'] = $field;
-		$fields['src'] = new SubmitResetCancel(null, true, $tekst, false);
-		$fields['src']->submitIcon = 'accept';
-		$fields['src']->cancelReset = true;
+		$fields['btn'] = new FormButtons(null, true, $tekst, false);
+		$fields['btn']->submitIcon = 'accept';
+		$fields['btn']->cancelReset = true;
 
 		$this->addFields($fields);
 	}
@@ -277,7 +277,7 @@ class InlineForm extends Formulier {
 		echo $this->getFormTag();
 		echo $fields['input']->view();
 		echo '<div class="InlineFormToggle">' . $fields['input']->getValue() . '</div>';
-		$fields['src']->view();
+		$fields['btn']->view();
 		echo $this->getScriptTag();
 		echo '</form></div>';
 	}

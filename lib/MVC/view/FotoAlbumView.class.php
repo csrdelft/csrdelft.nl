@@ -81,7 +81,7 @@ class FotoUploadForm extends PopupForm {
 		$fields[] = new HtmlComment('Alleen jpeg afbeeldingen.<br/><br/>');
 		$fields[] = new RequiredImageField('foto', null, null, array('image/jpeg'));
 		$fields[] = new FileNameField('subalbum', null, 'Nieuw sub-album');
-		$fields[] = new SubmitResetCancel('/fotoalbum', true, true, false);
+		$fields[] = new FormButtons('/fotoalbum', true, true, false);
 		$fields[] = new HtmlComment('<br /><i>Maak nooit inbreuk op de auteursrechten of het recht op privacy van anderen.</i>');
 		$this->addFields($fields);
 	}

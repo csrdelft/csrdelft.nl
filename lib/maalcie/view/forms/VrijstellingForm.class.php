@@ -24,7 +24,7 @@ class VrijstellingForm extends PopupForm {
 		$fields[] = new DatumField('begin_datum', $begin, 'Vanaf', date('Y') + 1, date('Y'));
 		$fields[] = new DatumField('eind_datum', $eind, 'Tot en met', date('Y') + 1, date('Y'));
 		$fields[] = new IntField('percentage', $percentage, 'Percentage (%)', Instellingen::get('corvee', 'vrijstelling_percentage_min'), Instellingen::get('corvee', 'vrijstelling_percentage_max'));
-		$fields[] = new SubmitResetCancel();
+		$fields[] = new FormButtons();
 
 		$this->addFields($fields);
 	}

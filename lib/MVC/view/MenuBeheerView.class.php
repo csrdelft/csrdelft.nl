@@ -68,7 +68,7 @@ class MenuItemForm extends PopupForm {
 		$fields['z'] = new SelectField('zichtbaar', ($item->zichtbaar ? '1' : '0'), 'Tonen', array('1' => 'Zichtbaar', '0' => 'Verborgen'));
 		$fields['z']->title = 'Wel of niet tonen';
 
-		$fields[] = new SubmitResetCancel();
+		$fields[] = new FormButtons();
 		$this->addFields($fields);
 	}
 

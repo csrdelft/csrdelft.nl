@@ -102,13 +102,12 @@ class ForumDeelForm extends PopupForm {
 		$fields[] = new RechtenField('rechten_posten', $deel->rechten_posten, 'Post-rechten');
 		$fields[] = new RechtenField('rechten_modereren', $deel->rechten_modereren, 'Mod-rechten');
 		$fields[] = new IntField('volgorde', $deel->volgorde, 'Volgorde');
-		$fields['src'] = new SubmitResetCancel();
-		$fields['src']->extraText = 'Verwijderen';
-		$fields['src']->extraTitle = 'Deelforum opheffen';
-		$fields['src']->extraIcon = 'cross';
-		$fields['src']->extraUrl = '/forum/opheffen/' . $deel->forum_id;
-		$fields['src']->extraActie = 'submit';
-		$fields['src']->js = "$('#extraButton').unbind('click.action');$('#extraButton').bind('click.action', form_replace_action);";
+		$fields['btn'] = new FormButtons(null, true, true, true, '/forum/opheffen/' . $deel->forum_id);
+		$fields['btn']->deleteTitle = 'Deelforum opheffen';
+		$fields['btn']->extraText = 'Hertellen';
+		$fields['btn']->extraTitle = 'Alle posts en draden hertellen';
+		$fields['btn']->extraIcon = 'calculator';
+		$fields['btn']->extraUrl = '/forum/hertellen/' . $deel->forum_id;
 
 		$this->addFields($fields);
 	}

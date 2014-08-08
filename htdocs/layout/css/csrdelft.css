@@ -856,7 +856,7 @@ input, textarea, select{
 
 /** KNOPPEN **************************************************************/
 
-a.knop, div.knop, input[type=submit], input[type=button]{
+a.knop, input[type=submit], input[type=button]{
 	padding: 2px 7px;
 	text-align: center;
 	cursor: pointer;
@@ -870,10 +870,10 @@ input[type=submit]::-moz-focus-inner, input[type=button]::-moz-focus-inner{
     border: 0
 }
 
-a.knop:hover, div.knop:hover, input[type=submit]:hover, input[type=button]:hover{
+a.knop:hover, input[type=submit]:hover, input[type=button]:hover{
 	border-style: outset;
 }
-a.knop:active, div.knop:active, input[type=submit]:active, input[type=button]:active{
+a.knop:active, input[type=submit]:active, input[type=button]:active{
 	border-style: inset;
 }
 

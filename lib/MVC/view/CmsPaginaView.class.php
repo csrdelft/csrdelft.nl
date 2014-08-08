@@ -51,7 +51,7 @@ class CmsPaginaForm extends Formulier {
 					'</div><div style="clear:left;"><label>Rechten bewerken</label>' . LoginLid::format($pagina->rechten_bewerken) . '</div>');
 		}
 		$fields[] = new UbbPreviewField('inhoud', $pagina->inhoud, 'Inhoud');
-		$fields[] = new SubmitResetCancel('/pagina/' . $pagina->naam);
+		$fields[] = new FormButtons('/pagina/' . $pagina->naam);
 
 		$this->addFields($fields);
 

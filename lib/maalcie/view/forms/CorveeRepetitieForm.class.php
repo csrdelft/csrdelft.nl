@@ -64,11 +64,11 @@ if (this.checked) {
 $('#extraButton').html(txt);
 JS;
 		}
-		$fields['src'] = new SubmitResetCancel();
-		$fields['src']->extraText = 'Alles bijwerken';
-		$fields['src']->extraTitle = 'Opslaan & alle taken bijwerken';
-		$fields['src']->extraIcon = 'disk_multiple';
-		$fields['src']->extraUrl = Instellingen::get('taken', 'url') . '/bijwerken/' . $crid;
+		$fields['btn'] = new FormButtons();
+		$fields['btn']->extraText = 'Alles bijwerken';
+		$fields['btn']->extraTitle = 'Opslaan & alle taken bijwerken';
+		$fields['btn']->extraIcon = 'disk_multiple';
+		$fields['btn']->extraUrl = Instellingen::get('taken', 'url') . '/bijwerken/' . $crid;
 
 		$this->addFields($fields);
 	}

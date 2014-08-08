@@ -21,7 +21,7 @@ class ToewijzenForm extends PopupForm {
 
 		$fields[] = new LidField('lid_id', $taak->getLidId(), 'Naam of lidnummer', 'leden');
 		$fields[] = new SuggestieLIjst($suggesties, $taak);
-		$fields[] = new SubmitResetCancel();
+		$fields[] = new FormButtons();
 
 		$this->addFields($fields);
 	}

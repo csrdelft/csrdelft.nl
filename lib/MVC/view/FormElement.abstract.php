@@ -1504,9 +1504,9 @@ class RequiredVinkField extends VinkField {
 }
 
 /**
- * Submit, reset en cancel buttons
+ * Submit, reset, cancel, delete & extra button (all optional except submit)
  */
-class SubmitResetCancel implements FormElement {
+class FormButtons implements FormElement {
 
 	public $submitTitle = 'Invoer opslaan';
 	public $submitText;
@@ -1519,29 +1519,41 @@ class SubmitResetCancel implements FormElement {
 	public $cancelIcon;
 	public $cancelUrl;
 	public $cancelReset;
+	public $deleteTitle;
+	public $deleteText;
+	public $deleteIcon;
+	public $deleteUrl;
+	public $deleteActie = 'post confirm ReloadPage';
 	public $extraTitle;
 	public $extraText;
 	public $extraIcon;
 	public $extraUrl;
 	public $extraActie;
-	public $js;
+	public $js = '';
 
-	public function __construct($cancel_url = '', $icons = true, $text = true, $reset = true) {
+	public function __construct($cancel_url = null, $icons = true, $text = true, $reset = true, $delete_url = null) {
 		$this->cancelUrl = $cancel_url;
-		$this->js = '';
 		if ($icons) {
 			$this->submitIcon = 'disk';
 			$this->resetIcon = 'arrow_rotate_anticlockwise';
 			$this->cancelIcon = 'delete';
+			$this->deleteIcon = 'cross';
 		}
 		if ($text) {
 			$this->submitText = 'Opslaan';
 			$this->resetText = 'Reset';
 			$this->cancelText = 'Annuleren';
+			$this->deleteText = 'Verwijderen';
 		}
 		if (!$reset) {
 			unset($this->resetIcon);
 			unset($this->resetText);
+		}
+		if ($delete_url === null) {
+			unset($this->deleteIcon);
+			unset($this->deleteText);
+		} else {
+			$this->deleteUrl = $delete_url;
 		}
 	}
 
@@ -1559,38 +1571,60 @@ class SubmitResetCancel implements FormElement {
 
 	public function view() {
 		echo '<div class="FormButtons">';
-		if (isset($this->extraIcon) OR isset($this->extraText)) {
-			if (isset($this->extraIcon)) {
-				$this->extraIcon = '<img src="' . CSR_PICS . '/famfamfam/' . $this->extraIcon . '.png" class="icon" width="16" height="16" alt="extra" /> ';
+		if (isset($this->deleteIcon) OR isset($this->deleteText)) {
+			echo '<div style="float: left;"><a id="deleteButton" class="knop';
+			if (isset($this->deleteActie)) {
+				echo ' ' . $this->deleteActie;
 			}
+			echo '" title="' . $this->deleteTitle . '" href="' . $this->deleteUrl . '">';
+			if (isset($this->deleteIcon)) {
+				echo '<img src="' . CSR_PICS . '/famfamfam/' . $this->deleteIcon . '.png" class="icon" width="16" height="16" alt="delete" /> ';
+			}
+			echo $this->deleteText . '</a></div>';
+		}
+		if (isset($this->extraIcon) OR isset($this->extraText)) {
 			echo '<a id="extraButton" class="knop';
 			if (isset($this->extraActie)) {
 				echo ' ' . $this->extraActie;
 			}
-			echo '" title="' . $this->extraTitle . '" href="' . $this->extraUrl . '">' . $this->extraIcon . $this->extraText . '</a> ';
+			echo '" title="' . $this->extraTitle . '" href="' . $this->extraUrl . '">';
+			if (isset($this->extraIcon)) {
+				echo '<img src="' . CSR_PICS . '/famfamfam/' . $this->extraIcon . '.png" class="icon" width="16" height="16" alt="extra" /> ';
+			}
+			echo $this->extraText . '</a> ';
 		}
 		if (isset($this->submitIcon) OR isset($this->submitText)) {
+			echo '<a class="knop submit" title="' . $this->submitTitle . '">';
 			if (isset($this->submitIcon)) {
-				$this->submitIcon = '<img src="' . CSR_PICS . '/famfamfam/' . $this->submitIcon . '.png" class="icon" width="16" height="16" alt="submit" /> ';
+				echo '<img src="' . CSR_PICS . '/famfamfam/' . $this->submitIcon . '.png" class="icon" width="16" height="16" alt="submit" /> ';
 			}
-			echo '<a class="knop submit" title="' . $this->submitTitle . '">' . $this->submitIcon . $this->submitText . '</a> ';
+			echo $this->submitText . '</a> ';
 		}
 		if (isset($this->resetIcon) OR isset($this->resetText)) {
+			echo '<a class="knop reset" title="' . $this->resetTitle . '">';
 			if (isset($this->resetIcon)) {
-				$this->resetIcon = '<img src="' . CSR_PICS . '/famfamfam/' . $this->resetIcon . '.png" class="icon" width="16" height="16" alt="reset" /> ';
+				echo '<img src="' . CSR_PICS . '/famfamfam/' . $this->resetIcon . '.png" class="icon" width="16" height="16" alt="reset" /> ';
 			}
-			echo '<a class="knop reset" title="' . $this->resetTitle . '">' . $this->resetIcon . $this->resetText . '</a> ';
+			echo $this->resetText . '</a> ';
 		}
 		if (isset($this->cancelIcon) OR isset($this->cancelText)) {
-			if (isset($this->cancelIcon)) {
-				$this->cancelIcon = '<img src="' . CSR_PICS . '/famfamfam/' . $this->cancelIcon . '.png" class="icon" width="16" height="16" alt="cancel" /> ';
+			echo '<a class="knop' . ($this->cancelReset ? ' reset' : '') . ' cancel" title="' . $this->cancelTitle . '"';
+			if (isset($this->cancelUrl)) {
+				echo ' href="' . $this->cancelUrl . '"';
 			}
-			echo '<a class="knop' . ($this->cancelReset ? ' reset' : '') . ' cancel" title="' . $this->cancelTitle . '"' . ($this->cancelUrl !== '' ? ' href="' . $this->cancelUrl . '"' : '') . '>' . $this->cancelIcon . $this->cancelText . '</a>';
+			echo '>';
+			if (isset($this->cancelIcon)) {
+				echo '<img src="' . CSR_PICS . '/famfamfam/' . $this->cancelIcon . '.png" class="icon" width="16" height="16" alt="cancel" /> ';
+			}
+			echo $this->cancelText . '</a>';
 		}
 		echo '</div>';
 	}
 
 	public function getJavascript() {
+		if (strpos($this->extraActie, 'submit') !== false AND isset($this->extraUrl)) {
+			$this->js .= "$('#extraButton').unbind('click.action');$('#extraButton').bind('click.action', form_replace_action);";
+		}
 		return $this->js;
 	}
 

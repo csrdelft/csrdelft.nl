@@ -33,7 +33,7 @@ class MaaltijdForm extends PopupForm {
 		$fields[] = new FloatField('prijs', $prijs, 'Prijs (€)', 0, 50);
 		$fields[] = new IntField('aanmeld_limiet', $limiet, 'Aanmeldlimiet', 0, 200);
 		$fields[] = new RechtenField('aanmeld_filter', $filter, 'Aanmeldrestrictie');
-		$fields[] = new SubmitResetCancel();
+		$fields[] = new FormButtons();
 
 		$this->addFields($fields);
 	}

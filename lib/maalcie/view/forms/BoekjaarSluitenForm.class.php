@@ -17,7 +17,7 @@ class BoekjaarSluitenForm extends PopupForm {
 		$fields[] = new HtmlComment('<p style="color:red;">Dit is een onomkeerbare stap!</p>');
 		$fields['begin'] = new DatumField('begindatum', $beginDatum, 'Vanaf', date('Y') + 1, date('Y') - 2);
 		$fields['eind'] = new DatumField('einddatum', $eindDatum, 'Tot en met', date('Y') + 1, date('Y') - 2);
-		$fields[] = new SubmitResetCancel();
+		$fields[] = new FormButtons();
 
 		$this->addFields($fields);
 	}

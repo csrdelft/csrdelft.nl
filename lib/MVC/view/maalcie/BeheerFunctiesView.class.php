@@ -74,7 +74,7 @@ class FunctieForm extends PopupForm {
 		$fields['k'] = new VinkField('kwalificatie_benodigd', $functie->kwalificatie_benodigd, 'Kwalificatie benodigd');
 		$fields['k']->title = 'Is er een kwalificatie benodigd om deze functie uit te mogen voeren';
 
-		$fields[] = new SubmitResetCancel();
+		$fields[] = new FormButtons();
 		$this->addFields($fields);
 	}
 
@@ -91,7 +91,7 @@ class KwalificatieForm extends PopupForm {
 		$this->css_classes[] = 'PreventUnchanged';
 
 		$fields[] = new LidField('lid_id', $kwalificatie->lid_id, 'Naam of lidnummer', 'leden');
-		$fields[] = new SubmitResetCancel();
+		$fields[] = new FormButtons();
 
 		$this->addFields($fields);
 	}

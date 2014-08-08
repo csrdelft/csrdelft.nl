@@ -389,7 +389,7 @@ class ProfielBewerken extends Profiel {
 			$form[] = new TextareaField('novitiaatBijz', $profiel['novitiaatBijz'], 'Bijzonderheden novitiaat (op dag x ...)');
 			$form[] = new TextareaField('kgb', $profiel['kgb'], 'Overige NovCie-opmerking');
 		}
-		$form[] = new SubmitResetCancel('/communicatie/profiel/' . $this->getUid());
+		$form[] = new FormButtons('/communicatie/profiel/' . $this->getUid());
 
 		if ($this->editNoviet) {
 			$this->form = new Formulier(null, 'profielForm', '/communicatie/profiel/' . $this->getUid() . '/novietBewerken');
@@ -481,7 +481,7 @@ class ProfielStatus extends Profiel {
 		$form[] = new LidField('echtgenoot', $profiel['echtgenoot'], 'Echtgenoot (naam/lidnr):', 'allepersonen');
 		$form[] = new TextField('adresseringechtpaar', $profiel['adresseringechtpaar'], 'Tenaamstelling post echtpaar:', 250);
 		$form[] = new DatumField('sterfdatum', $profiel['sterfdatum'], 'Overleden op:');
-		$form[] = new SubmitResetCancel();
+		$form[] = new FormButtons();
 
 		$this->form = new Formulier(null, 'statusForm', '/communicatie/profiel/' . $this->getUid() . '/wijzigstatus/');
 		$this->form->addFields($form);
@@ -800,7 +800,7 @@ class ProfielVoorkeur extends Profiel {
 		}
 
 		$form[] = new TextareaField('lidOpmerking', $lidvoorkeur->getLidOpmerking(), 'Vul hier je eventuele voorkeur voor functie in, of andere opmerkingen');
-		$form[] = new SubmitResetCancel('/communicatie/profiel/' . $this->getUid());
+		$form[] = new FormButtons('/communicatie/profiel/' . $this->getUid());
 
 		$this->form = new Formulier(null, 'profielForm', '/communicatie/profiel/' . $this->getUid() . '/voorkeuren');
 		$this->form->addFields($form);

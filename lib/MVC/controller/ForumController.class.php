@@ -118,23 +118,6 @@ class ForumController extends Controller {
 	}
 
 	/**
-	 * Hertellen van het gehele forum.
-	 */
-	public function hertellen() {
-		$categorien = ForumModel::instance()->find();
-		foreach ($categorien as $cat) {
-			$delen = ForumDelenModel::instance()->find('categorie_id = ?', array($cat->categorie_id));
-			foreach ($delen as $deel) {
-				$draden = ForumDradenModel::instance()->find('forum_id = ?', array($deel->forum_id));
-				foreach ($draden as $draad) {
-					ForumPostsModel::instance()->hertellenVoorDraadEnDeel($draad, $deel);
-				}
-			}
-		}
-		$this->forum();
-	}
-
-	/**
 	 * Tonen van alle posts die wachten op goedkeuring.
 	 * 
 	 * @param string $query
@@ -286,11 +269,24 @@ class ForumController extends Controller {
 	 * @param int $forum_id
 	 */
 	public function opheffen($forum_id) {
-		if (ForumDradenModel::instance()->exist('forum_id = ?', array((int) $forum_id))) {
+		$deel = ForumDelenModel::instance()->getForumDeel((int) $forum_id);
+		if (ForumDradenModel::instance()->exist('forum_id = ?', array($deel->forum_id))) {
 			setMelding('Verwijder eerst alle draadjes van dit deelforum uit de database!', -1);
 		} else {
 			setMelding('Deelforum verwijderd', 1);
-			ForumDelenModel::instance()->verwijderForumDeel((int) $forum_id);
+			ForumDelenModel::instance()->verwijderForumDeel($deel->forum_id);
+		}
+		// ReloadPage
+	}
+
+	/**
+	 * Hertellen van alle berichten en draden in forum deel.
+	 */
+	public function hertellen($forum_id) {
+		$deel = ForumDelenModel::instance()->getForumDeel((int) $forum_id);
+		$draden = ForumDradenModel::instance()->find('forum_id = ?', array($deel->forum_id));
+		foreach ($draden as $draad) {
+			ForumPostsModel::instance()->hertellenVoorDraadEnDeel($draad, $deel);
 		}
 		// ReloadPage
 	}

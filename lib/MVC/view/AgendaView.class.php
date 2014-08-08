@@ -131,14 +131,13 @@ function setTijd(a, b, c, d) {
 		$fields['b'] = new TextareaField('beschrijving', $item->beschrijving, 'Beschrijving');
 		$fields['b']->title = 'Extra info als de cursor boven de titel gehouden wordt';
 
-		$fields['src'] = new SubmitResetCancel();
+		$fields['btn'] = new FormButtons();
 		if ($actie === 'toevoegen') {
-			$fields['src']->extraText = 'Opslaan en doorgaan';
-			$fields['src']->extraTitle = 'Opslaan & nog een agenda item toevoegen';
-			$fields['src']->extraIcon = 'add';
-			$fields['src']->extraUrl = '/agenda/toevoegen/doorgaan';
-			$fields['src']->extraActie = 'submit';
-			$fields['src']->js = "$('#extraButton').unbind('click.action');$('#extraButton').bind('click.action', form_replace_action);";
+			$fields['btn']->extraText = 'Opslaan en doorgaan';
+			$fields['btn']->extraTitle = 'Opslaan & nog een agenda item toevoegen';
+			$fields['btn']->extraIcon = 'add';
+			$fields['btn']->extraUrl = '/agenda/toevoegen/doorgaan';
+			$fields['btn']->extraActie = 'submit';
 		}
 
 		$this->addFields($fields);

@@ -213,7 +213,7 @@ jQuery(document).ready(function($) {
 	$('.blok .InputField input,.blok .InputField textarea,.blok .InputField select').each(function(index, input){
 		$(this).after('<div class="melding"></div>'
 		).after(
-			$('<div class="knop opslaan">Opslaan</div>').mousedown(function(){
+			$('<a class="knop opslaan">Opslaan</a>').mousedown(function(){
 				var fieldname = input.id.substring(6);
 				var waarde=$("#"+input.id).val();
 				var boekid=jQuery(".boek").attr('id');
