@@ -3,7 +3,7 @@
 		<div class="columns large-2 small-2">
 			<header class="blue box h2">
 				<a href="/" alt="Thuis">
-					<img src="{$CSR_PICS}/images/layout2/box-logo.png" alt="C.S.R. Delft">
+					<img src="{$CSR_PICS}/layout2/box-logo.png" alt="C.S.R. Delft">
 				</a>
 			</header>
 		</div>
@@ -11,13 +11,13 @@
 			<div class="columns large-2 hide-for-small">
 				<a href="/csrindeowee/">
 					<figure class="box">
-						<img src="{$CSR_PICS}/images/owee/2014/box-picture-owee.jpg" class="rotate" alt="C.S.R. in de Owee">
+						<img src="{$CSR_PICS}/owee/2014/box-picture-owee.jpg" class="rotate" alt="C.S.R. in de Owee">
 					</figure>
 				</a>
 			</div>
 			<div class="columns large-2">
 				<figure class="box">
-					<img src="{$CSR_PICS}/images/layout2/box-picture-3.jpg" class="rotate">
+					<img src="{$CSR_PICS}/layout2/box-picture-3.jpg" class="rotate">
 				</figure>
 			</div>
 		</div>
@@ -26,7 +26,7 @@
 				<div class="box flip">
 					<div class="blue front">
 						<h2 class="overlay">Lid worden?</h2>
-						<img src="{$CSR_PICS}/images/layout2/box-icon-lid.png">
+						<img src="{$CSR_PICS}/layout2/box-icon-lid.png">
 					</div>
 					<div class="blue back">
 						<p>Ga je studeren in Delft? Word lid bij een vereniging!</p>
@@ -38,21 +38,21 @@
 			</div>
 			<div class="columns large-2">
 				<figure class="box">
-					<img src="{$CSR_PICS}/images/layout2/box-picture-4.jpg" class="rotate">
+					<img src="{$CSR_PICS}/layout2/box-picture-4.jpg" class="rotate">
 				</figure>
 			</div>
 		</div>
 		<div class="columns large-2 small-2">
 			<div class="columns large-2">
 				<figure class="box">
-					<img src="{$CSR_PICS}/images/layout2/box-picture-2.jpg" class="rotate">
+					<img src="{$CSR_PICS}/layout2/box-picture-2.jpg" class="rotate">
 				</figure>
 			</div>
 			<div class="columns large-2">
 				<div class="box flip">
 					<div class="blue front">
 						<h2 class="overlay">Bedrijven</h2>
-						<img src="{$CSR_PICS}/images/layout2/box-icon-bedrijven.png">
+						<img src="{$CSR_PICS}/layout2/box-icon-bedrijven.png">
 					</div>
 					<div class="blue back">
 						<p>Trek de aandacht van ruim 270 technisch ge&ouml;rienteerde studenten!</p>
@@ -68,7 +68,7 @@
 				<div class="box flip">
 					<div class="blue front">
 						<h2 class="overlay">(Oud)leden</h2>
-						<img src="{$CSR_PICS}/images/layout2/box-icon-oudleden.png">
+						<img src="{$CSR_PICS}/layout2/box-icon-oudleden.png">
 					</div>
 					<div class="blue back login-form">{include file='csrdelft2/partials/_loginForm.tpl'}</div>
 				</div>
@@ -80,7 +80,7 @@
 		</div>
 		<div class="columns large-2 small-2 hide-for-small">
 			<figure class="box pad-top">
-				<img src="{$CSR_PICS}/images/layout2/box-picture-5.jpg" class="rotate">
+				<img src="{$CSR_PICS}/layout2/box-picture-5.jpg" class="rotate">
 			</figure>
 		</div>
 
@@ -110,7 +110,7 @@
 		</div>
 		<div class="columns large-2 small-2">
 			<figure class="box">
-				<img src="{$CSR_PICS}/images/layout2/box-picture-1.jpg" class="rotate">
+				<img src="{$CSR_PICS}/layout2/box-picture-1.jpg" class="rotate">
 			</figure>
 		</div>
 		{* <div class="columns large-2 small-2" style="width: auto; height: auto;">
