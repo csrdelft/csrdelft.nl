@@ -245,7 +245,7 @@ class ForumDradenGelezenModel extends PersistenceModel {
 		return $gelezen;
 	}
 
-	public function setWanneerGelezenDoorLid(ForumDraad $draad, ForumPost $post) {
+	public function setWanneerGelezenDoorLid(ForumDraad $draad) {
 		$gelezen = $this->getWanneerGelezenDoorLid($draad);
 		if (strtotime($draad->laatst_gewijzigd) > strtotime($draad->getWanneerGelezen()->datum_tijd)) {
 			$gelezen->datum_tijd = $draad->laatst_gewijzigd;

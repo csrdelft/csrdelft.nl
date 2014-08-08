@@ -94,7 +94,7 @@
 
 		{assign var=vanaf value=false}
 		{foreach from=$draad->getForumPosts() item=post name=posts}
-			{if !$vanaf AND strtotime($post->laatst_gewijzigd) > strtotime($draad->getWanneerGelezen()->datum_tijd)}
+			{if !$vanaf AND !$draad->alGelezen() AND strtotime($post->laatst_gewijzigd) > strtotime($draad->getWanneerGelezen()->datum_tijd)}
 			{assign var=vanaf value=true}
 			<tr class="ongelezenvanaf" title="Ongelezen reacties vanaf hier">
 				<td colspan="2">

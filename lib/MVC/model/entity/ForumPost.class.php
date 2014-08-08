@@ -70,16 +70,16 @@ class ForumPost extends PersistentEntity {
 	 * @var array
 	 */
 	protected static $persistent_fields = array(
-		'post_id' => array(T::Integer, false, 'auto_increment'),
-		'draad_id' => array(T::Integer),
-		'lid_id' => array(T::UID),
-		'tekst' => array(T::Text),
-		'datum_tijd' => array(T::DateTime),
-		'laatst_gewijzigd' => array(T::DateTime, true),
-		'bewerkt_tekst' => array(T::Text, true),
-		'verwijderd' => array(T::Boolean),
-		'auteur_ip' => array(T::String),
-		'wacht_goedkeuring' => array(T::Boolean)
+		'post_id'			 => array(T::Integer, false, 'auto_increment'),
+		'draad_id'			 => array(T::Integer),
+		'lid_id'			 => array(T::UID),
+		'tekst'				 => array(T::Text),
+		'datum_tijd'		 => array(T::DateTime),
+		'laatst_gewijzigd'	 => array(T::DateTime, true),
+		'bewerkt_tekst'		 => array(T::Text, true),
+		'verwijderd'		 => array(T::Boolean),
+		'auteur_ip'			 => array(T::String),
+		'wacht_goedkeuring'	 => array(T::Boolean)
 	);
 	/**
 	 * Database primary key
