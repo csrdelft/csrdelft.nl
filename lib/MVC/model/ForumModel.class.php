@@ -1,4 +1,4 @@
-LIKE<?php
+<?php
 
 /**
  * ForumModel.class.php
