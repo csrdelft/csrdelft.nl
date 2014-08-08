@@ -211,7 +211,9 @@ class ForumDelenModel extends PersistenceModel {
 				unset($gevonden_delen[$forum_id]);
 			}
 		}
-		usort($gevonden_draden, array($this, 'sorteren'));
+		if ($titel !== true) {
+			usort($gevonden_draden, array($this, 'sorteren'));
+		}
 		return array($gevonden_draden, $gevonden_delen);
 	}
 
