@@ -26,11 +26,13 @@ class Afbeelding extends Bestand {
 	 */
 	public static $mimeTypes = array('image/png', 'image/jpeg', 'image/gif');
 
-	public function __construct($path) {
-		$image = getimagesize($path);
-		$this->breedte = $image[0];
-		$this->hoogte = $image[1];
-		$this->mimetype = $image['mime'];
+	public function __construct($path, $parse = true) {
+		if ($parse) {
+			$image = getimagesize($path); // suppress warnings
+			$this->breedte = $image[0];
+			$this->hoogte = $image[1];
+			$this->mimetype = $image['mime'];
+		}
 	}
 
 }

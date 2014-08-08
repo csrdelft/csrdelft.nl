@@ -58,7 +58,7 @@ class CorveeRepetitie {
 		}
 		$this->setStandaardAantal($aantal);
 		if ($voorkeur === null) {
-			$voorkeur = (bool) Instellingen::get('corvee', 'standaard_voorkeurbaar');
+			$voorkeur = (boolean) Instellingen::get('corvee', 'standaard_voorkeurbaar');
 		}
 		$this->setVoorkeurbaar($voorkeur);
 	}

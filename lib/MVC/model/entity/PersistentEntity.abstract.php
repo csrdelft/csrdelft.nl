@@ -71,6 +71,10 @@ abstract class PersistentEntity {
 		}
 		foreach ($fields as $field) {
 			$values[$field] = $this->$field;
+			//FIXME: werkomheen PDO/MySQL bug boolean/smallint
+			if (is_bool($values[$field])) {
+				$values[$field] = (int) $values[$field];
+			}
 		}
 		if ($primary_keys_only) {
 			return array_values($values);

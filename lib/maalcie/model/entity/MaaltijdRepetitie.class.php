@@ -55,7 +55,7 @@ class MaaltijdRepetitie {
 		}
 		$this->setStandaardPrijs($prijs);
 		if ($abo === null) {
-			$abo = (bool) Instellingen::get('maaltijden', 'standaard_abonneerbaar');
+			$abo = (boolean) Instellingen::get('maaltijden', 'standaard_abonneerbaar');
 		}
 		$this->setAbonneerbaar($abo);
 		if ($limiet === null) {

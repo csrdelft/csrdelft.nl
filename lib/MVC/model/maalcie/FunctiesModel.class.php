@@ -40,7 +40,7 @@ class FunctiesModel extends PersistenceModel {
 
 	public function newFunctie() {
 		$functie = new CorveeFunctie();
-		$functie->kwalificatie_benodigd = (bool) Instellingen::get('corvee', 'standaard_kwalificatie');
+		$functie->kwalificatie_benodigd = (boolean) Instellingen::get('corvee', 'standaard_kwalificatie');
 		return $functie;
 	}
 

@@ -12,7 +12,7 @@ require_once 'MVC/model/entity/FotoAlbum.class.php';
 class Foto extends Afbeelding {
 
 	public function __construct(FotoAlbum $album, $bestandsnaam) {
-		parent::__construct($album->path . $bestandsnaam);
+		parent::__construct($album->path . $bestandsnaam, false); // werkomheen traag fotoalbum: niet onnodig parsen
 		$this->directory = $album;
 		$this->filename = $bestandsnaam;
 	}
