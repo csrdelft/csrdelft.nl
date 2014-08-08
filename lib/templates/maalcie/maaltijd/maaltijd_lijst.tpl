@@ -3,10 +3,10 @@
 	<head>
 		<title>{$view->getTitel()} {$maaltijd->getDatum()|date_format:"%A %e %B"}</title>
 		{foreach from=$view->getStylesheets() item=sheet}
-			<link rel="stylesheet" href="{$sheet.naam}?{$sheet.datum}" type="text/css" />
+			<link rel="stylesheet" href="{$sheet}" type="text/css" />
 		{/foreach}
 		{foreach from=$view->getScripts() item=script}
-			<script type="text/javascript" src="{$script.naam}?{$script.datum}"></script>
+			<script type="text/javascript" src="{$script}"></script>
 		{/foreach}
 	</head>
 	<body>
