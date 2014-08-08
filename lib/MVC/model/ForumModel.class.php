@@ -285,14 +285,14 @@ class ForumDradenVerbergenModel extends PersistenceModel {
 		}
 	}
 
-	public function toonDraadVoorIedereen(ForumDraad $draad) {
-		foreach ($this->find('draad_id = ?', array($draad->draad_id)) as $verborgen) {
+	public function toonAllesVoorLid() {
+		foreach ($this->find('lid_id = ?', array(LoginLid::instance()->getUid())) as $verborgen) {
 			$this->delete($verborgen);
 		}
 	}
 
-	public function toonAllesVoorLid() {
-		foreach ($this->find('lid_id = ?', array(LoginLid::instance()->getUid())) as $verborgen) {
+	public function toonDraadVoorIedereen(ForumDraad $draad) {
+		foreach ($this->find('draad_id = ?', array($draad->draad_id)) as $verborgen) {
 			$this->delete($verborgen);
 		}
 	}
@@ -331,6 +331,12 @@ class ForumDradenVolgenModel extends PersistenceModel {
 
 	public function volgNietsVoorLid() {
 		foreach ($this->find('lid_id = ?', array(LoginLid::instance()->getUid())) as $volgen) {
+			$this->delete($volgen);
+		}
+	}
+
+	public function stopVolgenVoorIedereen(ForumDraad $draad) {
+		foreach ($this->find('draad_id = ?', array($draad->draad_id)) as $volgen) {
 			$this->delete($volgen);
 		}
 	}

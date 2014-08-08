@@ -385,7 +385,10 @@ class ForumController extends Controller {
 			$this->geentoegang();
 		}
 		if (in_array($property, array('verwijderd', 'gesloten', 'plakkerig', 'belangrijk', 'eerste_post_plakkerig'))) {
+			var_dump($draad->$property);
 			$value = !$draad->$property;
+			var_dump($value);
+			exit;
 		} elseif ($property === 'forum_id') {
 			$value = (int) filter_input(INPUT_POST, $property, FILTER_SANITIZE_NUMBER_INT);
 			if (!ForumDelenModel::instance()->bestaatForumDeel($value)) {
@@ -402,6 +405,9 @@ class ForumController extends Controller {
 			} else {
 				$this->geentoegang();
 			}
+		} elseif ($property === 'verwijderd' OR $property === 'gesloten') {
+			ForumDradenVerbergenModel::instance()->toonDraadVoorIedereen($draad);
+			ForumDradenVolgenModel::instance()->stopVolgenVoorIedereen($draad);
 		}
 		ForumDradenModel::instance()->wijzigForumDraad($draad, $property, $value);
 		if ($property === 'verwijderd') {
