@@ -668,19 +668,28 @@ class ForumPostsModel extends PersistenceModel implements Paging {
 
 	public function hertellenVoorDraadEnDeel(ForumDraad $draad, ForumDeel $deel) {
 		$draad->aantal_posts = $this->count('draad_id = ? AND wacht_goedkeuring = FALSE AND verwijderd = FALSE', array($draad->draad_id));
-		if ($draad->aantal_posts < 1) {
+		if ($draad->verwijderd OR $draad->aantal_posts < 1) {
 			if (!$draad->verwijderd) {
 				$draad->verwijderd = true;
-				setMelding('Draad ' . $draad->draad_id . ' bevat geen berichten. Automatische actie: verwijderd', 2);
+				setMelding('Draad ' . $draad->draad_id . ' bevat geen berichten. Automatische actie: draad verwijderd', 2);
+			} elseif ($draad->aantal_posts > 0) {
+				ForumDradenModel::instance()->verwijderForumPostsVoorDraad($draad);
+				setMelding('Draad ' . $draad->draad_id . ' bevat nog berichten. Automatische actie: berichten verwijderd', 2);
 			}
 			$draad->laatste_post_id = null;
 			$draad->laatste_lid_id = null;
 			$draad->laatst_gewijzigd = null;
+			ForumDradenGelezenModel::instance()->verwijderDraadGelezen($draad);
+			ForumDradenVerbergenModel::instance()->toonDraadVoorIedereen($draad);
+			ForumDradenVolgenModel::instance()->stopVolgenVoorIedereen($draad);
 		} else { // reset last post
 			$last_post = $this->find('draad_id = ? AND wacht_goedkeuring = FALSE AND verwijderd = FALSE', array($draad->draad_id), 'laatst_gewijzigd DESC', null, 1)->fetch();
 			$draad->laatste_post_id = $last_post->post_id;
 			$draad->laatste_lid_id = $last_post->lid_id;
 			$draad->laatst_gewijzigd = $last_post->laatst_gewijzigd;
+			if ($draad->gesloten) {
+				ForumDradenVolgenModel::instance()->stopVolgenVoorIedereen($draad);
+			}
 		}
 		ForumDradenModel::instance()->update($draad);
 		ForumDradenModel::instance()->hertellenVoorDeel($deel);
