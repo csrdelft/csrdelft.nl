@@ -417,7 +417,7 @@ class ForumDradenModel extends PersistenceModel implements Paging {
 		$deel->aantal_posts = (int) $result->fetchColumn();
 		$deel->aantal_draden = $this->count('forum_id = ? AND wacht_goedkeuring = FALSE AND verwijderd = FALSE', array($deel->forum_id));
 		// reset laatst gewijzigd
-		$last_draad = $this->find('forum_id = ? AND wacht_goedkeuring = FALSE AND verwijderd = FALSE', array($deel->forum_id), 'laatst_gewijzigd DESC', null, 1)->fetch();
+		$last_draad = $this->find('forum_id = ? AND wacht_goedkeuring = FALSE AND verwijderd = FALSE', array($deel->forum_id), 'laatst_gewijzigd DESC, draad_id DESC', null, 1)->fetch();
 		$deel->laatste_post_id = $last_draad->laatste_post_id;
 		$deel->laatste_lid_id = $last_draad->laatste_lid_id;
 		$deel->laatst_gewijzigd = $last_draad->laatst_gewijzigd;
