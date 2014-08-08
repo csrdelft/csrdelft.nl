@@ -51,10 +51,6 @@ class ForumController extends Controller {
 			case 'zoeken':
 				return true;
 
-			case 'hertellen':
-				if (!LoginLid::mag('P_FORUM_ADMIN')) {
-					return false;
-				}
 			case 'rss':
 			case 'recent':
 			case 'belangrijk':
@@ -73,6 +69,7 @@ class ForumController extends Controller {
 			case 'aanmaken':
 			case 'beheren':
 			case 'opheffen':
+			case 'hertellen':
 				if (!LoginLid::mag('P_FORUM_ADMIN')) {
 					return false;
 				}

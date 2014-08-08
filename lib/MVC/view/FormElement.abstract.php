@@ -1523,12 +1523,12 @@ class FormButtons implements FormElement {
 	public $deleteText;
 	public $deleteIcon;
 	public $deleteUrl;
-	public $deleteActie = 'post confirm ReloadPage';
+	public $deleteAction = 'post confirm ReloadPage';
 	public $extraTitle;
 	public $extraText;
 	public $extraIcon;
 	public $extraUrl;
-	public $extraActie;
+	public $extraAction;
 	public $js = '';
 
 	public function __construct($cancel_url = null, $icons = true, $text = true, $reset = true, $delete_url = null) {
@@ -1573,8 +1573,8 @@ class FormButtons implements FormElement {
 		echo '<div class="FormButtons">';
 		if (isset($this->deleteIcon) OR isset($this->deleteText)) {
 			echo '<div style="float: left;"><a id="deleteButton" class="knop';
-			if (isset($this->deleteActie)) {
-				echo ' ' . $this->deleteActie;
+			if (isset($this->deleteAction)) {
+				echo ' ' . $this->deleteAction;
 			}
 			echo '" title="' . $this->deleteTitle . '" href="' . $this->deleteUrl . '">';
 			if (isset($this->deleteIcon)) {
@@ -1584,8 +1584,8 @@ class FormButtons implements FormElement {
 		}
 		if (isset($this->extraIcon) OR isset($this->extraText)) {
 			echo '<a id="extraButton" class="knop';
-			if (isset($this->extraActie)) {
-				echo ' ' . $this->extraActie;
+			if (isset($this->extraAction)) {
+				echo ' ' . $this->extraAction;
 			}
 			echo '" title="' . $this->extraTitle . '" href="' . $this->extraUrl . '">';
 			if (isset($this->extraIcon)) {
@@ -1622,7 +1622,7 @@ class FormButtons implements FormElement {
 	}
 
 	public function getJavascript() {
-		if (strpos($this->extraActie, 'submit') !== false AND isset($this->extraUrl)) {
+		if (strpos($this->extraAction, 'submit') !== false AND isset($this->extraUrl)) {
 			$this->js .= "$('#extraButton').unbind('click.action');$('#extraButton').bind('click.action', form_replace_action);";
 		}
 		return $this->js;
