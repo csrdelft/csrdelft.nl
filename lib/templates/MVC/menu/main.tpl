@@ -2,15 +2,16 @@
 	<div id="menuleft"><a href="/"><div id="beeldmerk"></div></a></div>
 	<div id="menucenter">
 		<div id="menubanners">
+			{assign var=active value=false}
 			{foreach from=$root->children item=item name=banner}
-				<div id="banner{$smarty.foreach.banner.iteration}" class="menubanner"{if $item->active} style="display: block;"{/if}></div>
+				<div id="banner{$smarty.foreach.banner.iteration}" class="menubanner"{if !$active AND $item->active} style="display: block;"{assign var=active value=true}{/if}></div>
 			{/foreach}
 		</div>
 		<ul id="mainmenu">
 			{assign var=active value=false}
 			{foreach from=$root->children item=item name=main}
 				<li>
-					<a href="{$item->link}" id="top{$smarty.foreach.main.iteration}" onmouseover="StartShowMenu('{$smarty.foreach.main.iteration}');" onmouseout="ResetShowMenu();"{if $item->active} class="active"{/if} title="{$item->tekst}">{$item->tekst}</a>
+					<a href="{$item->link}" id="top{$smarty.foreach.main.iteration}" onmouseover="StartShowMenu('{$smarty.foreach.main.iteration}');" onmouseout="ResetShowMenu();"{if !$active AND $item->active} class="active"{/if} title="{$item->tekst}">{$item->tekst}</a>
 				</li>
 				{if !$active AND $item->active} 
 					{assign var=active value=true}
@@ -100,8 +101,9 @@
 </div>
 <div id="submenu" onmouseover="ResetTimer();" onmouseout="StartTimer();">
 	<div id="submenuitems">
+		{assign var=active value=false}
 		{foreach name=level1 from=$root->children item=item}
-			<div id="sub{$smarty.foreach.level1.iteration}"{if $item->active} class="active"{/if}>
+			<div id="sub{$smarty.foreach.level1.iteration}"{if !$active AND $item->active} class="active"{assign var=active value=true}{/if}>
 				{foreach name=level2 from=$item->children item=subitem}
 					<a href="{$subitem->link}" title="{$subitem->tekst}"{if $subitem->active} class="active"{/if}>{$subitem->tekst}</a>
 					{if !$smarty.foreach.level2.last}
