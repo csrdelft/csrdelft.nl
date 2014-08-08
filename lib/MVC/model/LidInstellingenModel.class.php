@@ -109,6 +109,10 @@ class LidInstellingen extends PersistenceModel {
 		return $this->instellingen;
 	}
 
+	public function getModules() {
+		return array_keys($this->instellingen);
+	}
+
 	public function getDescription($module, $key) {
 		return $this->instellingen[$module][$key][0];
 	}
