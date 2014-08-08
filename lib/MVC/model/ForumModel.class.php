@@ -1,4 +1,4 @@
-<?php
+LIKE<?php
 
 /**
  * ForumModel.class.php
@@ -428,14 +428,8 @@ class ForumDradenModel extends PersistenceModel implements Paging {
 		$this->per_pagina = (int) LidInstellingen::get('forum', 'zoekresultaten');
 		$orm = self::orm;
 		$fields = $orm::getFields();
-		$params = array();
-		$where = 'wacht_goedkeuring = FALSE AND verwijderd = FALSE AND (';
-		$terms = explode(' ', $query);
-		foreach ($terms as $i => $term) {
-			$terms[$i] = 'titel LIKE ?';
-			$params[] = '%' . $term . '%';
-		}
-		$where .= implode(' OR ', $terms) . ') AND ';
+		$fields[] = 'MATCH(titel) AGAINST (? IN NATURAL LANGUAGE MODE) AS score';
+		$where = 'wacht_goedkeuring = FALSE AND verwijderd = FALSE AND ';
 		if ($datum === 'gemaakt') {
 			$order = 'datum_tijd';
 		} else {
@@ -448,8 +442,8 @@ class ForumDradenModel extends PersistenceModel implements Paging {
 		} else {
 			$where .= ' > ?';
 		}
-		$params[] = date('Y-m-d H:i:s', strtotime('-' . $jaar . ' year'));
-		$results = Database::sqlSelect($fields, $orm::getTableName(), $where, $params, $order, null, $this->per_pagina, ($this->pagina - 1) * $this->per_pagina);
+		$datum = date('Y-m-d H:i:s', strtotime('-' . $jaar . ' year'));
+		$results = Database::sqlSelect($fields, $orm::getTableName(), $where, array($query, $datum), $order, null, $this->per_pagina, ($this->pagina - 1) * $this->per_pagina);
 		$results->setFetchMode(PDO::FETCH_CLASS, $orm, array($cast = true));
 		return $results;
 	}
