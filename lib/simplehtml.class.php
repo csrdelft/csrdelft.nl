@@ -57,12 +57,6 @@ abstract class SimpleHTML implements View {
 			require_once 'ishetalcontent.class.php';
 			$zijkolom[] = new IsHetAlContent(LidInstellingen::get('zijbalk', 'ishetal'));
 		}
-		// Ga snel naar
-		if (LidInstellingen::get('zijbalk', 'gasnelnaar') == 'ja') {
-			require_once 'MVC/model/MenuModel.class.php';
-			require_once 'MVC/view/MenuView.class.php';
-			$zijkolom[] = new BlockMenuView(MenuModel::instance()->getMenuTree('Ga snel naar'));
-		}
 		// Agenda
 		if (LoginLid::mag('P_AGENDA_READ') && LidInstellingen::get('zijbalk', 'agendaweken') > 0) {
 			require_once 'MVC/model/AgendaModel.class.php';

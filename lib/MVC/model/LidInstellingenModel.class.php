@@ -62,11 +62,10 @@ class LidInstellingen extends PersistenceModel {
 			'open_draad_op_pagina'	 => array('Open onderwerp op pagina', T::Enumeration, array('1', 'ongelezen', 'laatste'), 'ongelezen'),
 			'toonpasfotos'			 => array('Pasfoto\'s standaard weergeven', T::Enumeration, array('ja', 'nee'), 'ja'),
 			'filter2008'			 => array('Berichten van 2008 eerst verbergen', T::Enumeration, array('ja', 'nee'), 'nee'),
-			'fotoWeergave'		 => array('Toon groter formaat afbeeldingen', T::Enumeration, array('nee', 'hoverIntent', 'altijd'), 'nee')
+			'fotoWeergave'			 => array('Toon groter formaat afbeeldingen', T::Enumeration, array('nee', 'hoverIntent', 'altijd'), 'nee')
 		),
 		'zijbalk'		 => array(
 			'ishetal'				 => array('Is het al… weergeven', T::Enumeration, array('niet weergeven', 'donderdag', 'vrijdag', 'zondag', 'lunch', 'avond', 'borrel', 'lezing', 'jarig', 'dies', 'studeren', 'willekeurig'), 'willekeurig'),
-			'gasnelnaar'			 => array('Ga snel naar weergeven', T::Enumeration, array('ja', 'nee'), 'ja'),
 			'agendaweken'			 => array('Aantal weken in agenda weergeven', T::Integer, array(0, 10), 2),
 			'agenda_max'			 => array('Maximaal aantal agenda-items', T::Integer, array(0, 50), 15),
 			'mededelingen'			 => array('Aantal mededelingen', T::Integer, array(0, 50), 5),
