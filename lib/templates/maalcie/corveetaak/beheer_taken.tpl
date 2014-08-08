@@ -41,7 +41,7 @@
 </div>
 {/if}
 {if isset($repetities) and (!isset($maaltijd) or !$maaltijd->getIsVerwijderd())}
-<form method="post" action="{Instellingen::get('taken', 'url')}/nieuw{if isset($maaltijd)}/{$maaltijd->getMaaltijdId()}{/if}" class="Formulier popup SubmitReset">
+<form action="{Instellingen::get('taken', 'url')}/nieuw{if isset($maaltijd)}/{$maaltijd->getMaaltijdId()}{/if}" method="post" class="Formulier popup SubmitReset">
 	<label for="crid" style="width: auto;">{icon get="calendar_add"} Periodieke taken aanmaken:</label>&nbsp;
 	<select name="crid" value="kies" origvalue="kies" class="FormField SubmitChange">
 		<option selected="selected">kies</option>

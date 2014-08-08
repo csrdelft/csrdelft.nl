@@ -46,7 +46,7 @@
 	</dl>
 {/if}
 
-<form method="post" action="?ID={$form.ID}" >
+<form action="?ID={$form.ID}" method="post">
 	<div id="pubciemail_form">
 		<h3>{if $form.ID==0}Nieuw bericht invoeren{else}Bericht bewerken{/if}</h3><br />
 		<strong>Titel:</strong><br />

@@ -4,7 +4,7 @@
 	en drukt op 'Verder gaan'. Dan krijgt u een overzichtje te zien van de mensen die rood staan, en kunt u het verzenden bevestigen.</p>
 {if !isSyrinx()}<p><br />Niet op csrdelft.nl server: Debugmode staat aan.</p>{/if}
 
-<form action="roodschopper.php" method="post" id="roodschopper">
+<form id="roodschopper" action="roodschopper.php" method="post">
 	<fieldset>
 	<label for="commissie">Commissie:</label>
 	<select name="commissie" id="commissie">

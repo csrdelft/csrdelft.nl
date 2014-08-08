@@ -92,7 +92,7 @@ class LidOverzicht extends TemplateView {
 		$res .= '</table><br />';
 		$res .= '<h2>Lid opmerkingen</h2><p>' . $voorkeur->getLidOpmerking() . '</p>';
 		$res .= '
-		<form name="opties" action = "/tools/voorkeuren/lidpagina.php?lid=' . $this->lid . '" method = "POST">
+		<form name="opties" action="/tools/voorkeuren/lidpagina.php?lid=' . $this->lid . '" method="POST">
 			<textarea name = "opmerkingen" cols=40 rows = 10 >' . $voorkeur->getPraesesOpmerking() . ' </textarea> <br />
 			<input type="submit" value="Opslaan" />
 		</form>

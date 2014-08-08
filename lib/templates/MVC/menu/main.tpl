@@ -75,7 +75,7 @@
 					{/literal}
 				{/if}
 				<br />
-				<form method="get" action="/communicatie/lijst.php" name="lidzoeker">
+				<form name="lidzoeker" method="get" action="/communicatie/lijst.php">
 					<p>
 						{if isset($smarty.get.q)}
 							<input type="text" value="{$smarty.get.q|escape:'htmlall'}" name="q" id="zoekveld" />

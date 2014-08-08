@@ -52,7 +52,7 @@
 	{if $maaltijd->getIsGesloten()}
 		{$aanmelding->getAantalGasten()}
 	{else}
-		<form method="post" action="{Instellingen::get('taken', 'url')}/gasten/{$maaltijd->getMaaltijdId()}" class="Formulier InlineForm">
+		<form action="{Instellingen::get('taken', 'url')}/gasten/{$maaltijd->getMaaltijdId()}" method="post" class="Formulier InlineForm">
 			<div class="InlineFormToggle maaltijd-gasten">{$aanmelding->getAantalGasten()}</div>
 			<div class="InputField">
 				<input type="text" name="aantal_gasten" value="{$aanmelding->getAantalGasten()}" origvalue="{$aanmelding->getAantalGasten()}" class="FormField" maxlength="4" size="4" />
@@ -71,7 +71,7 @@
 		{/if}
 	{else}
 	{if $aanmelding->getAantalGasten() > 0}
-		<form method="post" action="{Instellingen::get('taken', 'url')}/opmerking/{$maaltijd->getMaaltijdId()}" class="Formulier InlineForm">
+		<form action="{Instellingen::get('taken', 'url')}/opmerking/{$maaltijd->getMaaltijdId()}" method="post" class="Formulier InlineForm">
 			<div class="InlineFormToggle" title="{$aanmelding->getGastenEetwens()}">
 		{if $aanmelding->getGastenEetwens()}
 				<a class="knop">{icon get="comment_edit" title=$aanmelding->getGastenEetwens()}</a>

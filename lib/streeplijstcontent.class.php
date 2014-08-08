@@ -143,7 +143,7 @@ class Streeplijstcontent extends TemplateView {
 
 	function view() {
 		echo '<h1>Bestel- &amp; inschrijflijst-generator voor C.S.R. Delft</h1>
-			<form action="streeplijst.php" method="get" id="streeplijst">
+			<form id="streeplijst" action="streeplijst.php" method="get">
 			<fieldset>
 				<legend>Bestellijst</legend>
 				<br />

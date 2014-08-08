@@ -66,7 +66,7 @@ class LedenlijstContent extends TemplateView {
 		}
 		echo SimpleHTML::getMelding();
 		echo '<h1>' . (LoginLid::instance()->getLid()->isOudlid() ? 'Oud-leden en l' : 'L') . 'edenlijst </h1>';
-		echo '<form method="get" id="zoekform">';
+		echo '<form id="zoekform" method="get">';
 		echo '<label for="q"></label><input type="text" name="q" value="' . htmlspecialchars($this->model->getQuery()) . '" /> ';
 		echo '<input type="submit" class="submit" value="zoeken" /> <a class="knop" id="toggleAdvanced" href="#geavanceerd">Geavanceerd</a>';
 

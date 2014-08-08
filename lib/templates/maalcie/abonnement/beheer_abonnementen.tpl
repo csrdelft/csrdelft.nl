@@ -4,7 +4,7 @@
 <p>
 Op deze pagina kunt u alle abonnementen beheren en zoeken.
 </p>
-<form method="post" action="{Instellingen::get('taken', 'url')}/novieten" class="Formulier popup SubmitReset" style="float: right;">
+<form action="{Instellingen::get('taken', 'url')}/novieten" method="post" class="Formulier popup SubmitReset" style="float: right;">
 	Abonneer novieten op:
 	<select name="mrid" origvalue="kies" class="FormField SubmitChange">
 		<option selected="selected">kies</option>
