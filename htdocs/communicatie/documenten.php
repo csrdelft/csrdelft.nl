@@ -16,7 +16,7 @@ if (isset($_GET['querystring'])) {
 }
 
 $pagina = new CsrLayoutPage($docControl->getContent());
-$pagina->addStylesheet('datatables_basic.css', 'datatables_basic.css', '/layout/js/datatables/css/');
+$pagina->addStylesheet('datatables_basic.css', '/layout/js/datatables/css/');
 $pagina->addStylesheet('documenten.css');
 
 $pagina->addScript('datatables/jquery.dataTables.min.js');
