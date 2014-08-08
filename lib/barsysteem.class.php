@@ -191,11 +191,25 @@ class Barsysteem
         $q->bindValue(":bestelTotaal", $data->bestelTotaal, PDO::PARAM_INT);
         $q->bindValue(":socCieId", $data->persoon, PDO::PARAM_INT);
         $q->execute();
-		/* Don't remove this for backup
-        $q = $this->db->prepare("DELETE FROM socCieBestellingInhoud  WHERE bestellingId = :bestelId");
+        $q = $this->db->prepare("UPDATE socCieBestelling SET deleted = 1 WHERE id = :bestelId AND deleted = 0");
         $q->bindValue(":bestelId", $data->bestelId, PDO::PARAM_INT);
-        $q->execute(); */
-        $q = $this->db->prepare("UPDATE socCieBestelling SET deleted = 1 WHERE id = :bestelId");
+        $q->execute();
+        if (!$this->db->commit() || $q->rowCount() == 0) {
+            $this->db->rollBack();
+            return false;
+        }
+        return true;
+
+    }
+
+    function undoVerwijderBestelling($data)
+    {
+        $this->db->beginTransaction();
+        $q = $this->db->prepare("UPDATE socCieKlanten SET saldo = saldo - :bestelTotaal WHERE socCieId=:socCieId;");
+        $q->bindValue(":bestelTotaal", $data->bestelTotaal, PDO::PARAM_INT);
+        $q->bindValue(":socCieId", $data->persoon, PDO::PARAM_INT);
+        $q->execute();
+        $q = $this->db->prepare("UPDATE socCieBestelling SET deleted = 0 WHERE id = :bestelId AND deleted = 1");
         $q->bindValue(":bestelId", $data->bestelId, PDO::PARAM_INT);
         $q->execute();
         if (!$this->db->commit() || $q->rowCount() == 0) {

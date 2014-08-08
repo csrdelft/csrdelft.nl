@@ -483,13 +483,27 @@ $(function () {
                 "<li><a href='#' id='verwijderBestelling" + item + "'>Verwijder bestelling</a></li>" +
                 "</ul></div></td></tr>");
 
-            $("#undoRemove" + item).click(function () {
+            $("#undoRemove" + item).click(function (e) {
+				e.preventDefault();
+                if (confirm("Weet u zeker dat u de bestelling van " + bestelComma + " op: " + bestelling.tijd + " wilt terugzetten?")) {
+                    $.ajax({
+                        url: "ajax.php",
+                        method: "POST",
+                        data: {"undoVerwijderBestelling": JSON.stringify(bestelling)}
+                    }).done(function (data) {
+                        if (data = "1") {
+                            $("#tabelRijBeheerLijst" + item).removeClass("removed");
+							laadPersonen();
+                        }
+                    });
+                }
+            });
+            $("#anderePersoon" + item).click(function (e) {
+				e.preventDefault();
                 //todo
             });
-            $("#anderePersoon" + item).click(function () {
-                //todo
-            });
-            $("#bewerkInhoud" + item).click(function () {
+            $("#bewerkInhoud" + item).click(function (e) {
+				e.preventDefault();
                 zetBericht("U bewerkt een bestelling!", "warning");
                 bestelLijst = bestelling.bestelLijst;
                 oudeBestelling = bestelling;
@@ -498,7 +512,8 @@ $(function () {
                 zetBestelLijstGoed();
                 $("#invoerveld").trigger("click");
             });
-            $("#verwijderBestelling" + item).click(function () {
+            $("#verwijderBestelling" + item).click(function (e) {
+				e.preventDefault();
                 if (confirm("Weet u zeker dat u de bestelling van " + bestelComma + " op: " + bestelling.tijd + " wilt verwijderen?")) {
                     $.ajax({
                         url: "ajax.php",

@@ -70,6 +70,12 @@ if ($barsysteem->isLoggedIn()){
         echo $barsysteem->verwijderBestelling(json_decode($_POST["verwijderBestelling"]));
     }
 	
+	// Undo remove order
+    if (isset($_POST["undoVerwijderBestelling"])) {
+		$barsysteem->log('remove', $_POST);
+        echo $barsysteem->undoVerwijderBestelling(json_decode($_POST["undoVerwijderBestelling"]));
+    }
+	
 	// Load orders
     if (isset($_POST["laadLaatste"])) {
         echo json_encode($barsysteem->getBestellingLaatste($_POST["aantal"], $_POST["begin"], $_POST["eind"]));
