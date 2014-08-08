@@ -385,10 +385,7 @@ class ForumController extends Controller {
 			$this->geentoegang();
 		}
 		if (in_array($property, array('verwijderd', 'gesloten', 'plakkerig', 'belangrijk', 'eerste_post_plakkerig'))) {
-			var_dump($draad->$property);
 			$value = !$draad->$property;
-			var_dump($value);
-			exit;
 		} elseif ($property === 'forum_id') {
 			$value = (int) filter_input(INPUT_POST, $property, FILTER_SANITIZE_NUMBER_INT);
 			if (!ForumDelenModel::instance()->bestaatForumDeel($value)) {

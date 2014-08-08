@@ -95,12 +95,13 @@
 		{assign var=vanaf value=false}
 		{foreach from=$draad->getForumPosts() item=post name=posts}
 			{if !$vanaf AND !$draad->alGelezen() AND strtotime($post->laatst_gewijzigd) > strtotime($draad->getWanneerGelezen()->datum_tijd)}
-			{assign var=vanaf value=true}
-			<tr class="ongelezenvanaf" title="Ongelezen reacties vanaf hier">
-				<td colspan="2">
-					<a id="ongelezen"></a>
-				</td>
-			</tr>
+				{* als posts gewijzigd zijn zonder draad gewijzigd te triggeren voorkomt !$draad->alGelezen() dat de gele lijn wordt getoont *}
+				{assign var=vanaf value=true}
+				<tr class="ongelezenvanaf" title="Ongelezen reacties vanaf hier">
+					<td colspan="2">
+						<a id="ongelezen"></a>
+					</td>
+				</tr>
 			{else}
 				<tr class="tussenschot">
 					<td colspan="2"></td>
