@@ -108,7 +108,7 @@ class ForumDeelForm extends PopupForm {
 		$fields['btn']->extraTitle = 'Alle posts en draden hertellen';
 		$fields['btn']->extraIcon = 'calculator';
 		$fields['btn']->extraUrl = '/forum/hertellen/' . $deel->forum_id;
-		$fields['btn']->extraAction = 'post ReloadPage';
+		$fields['btn']->extraAction = 'post popup ReloadPage';
 
 		$this->addFields($fields);
 	}
