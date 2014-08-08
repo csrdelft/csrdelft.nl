@@ -123,9 +123,9 @@ class ForumController extends Controller {
 	public function hertellen() {
 		$categorien = ForumModel::instance()->find();
 		foreach ($categorien as $cat) {
-			$delen = ForumDelenModel::instance()->getForumDelenVoorCategorie($cat);
+			$delen = ForumDelenModel::instance()->find('categorie_id = ?', array($cat->categorie_id));
 			foreach ($delen as $deel) {
-				$draden = ForumDradenModel::instance()->getForumDradenVoorDeel($deel);
+				$draden = ForumDradenModel::instance()->find('forum_id = ?', array($deel->forum_id));
 				foreach ($draden as $draad) {
 					ForumPostsModel::instance()->hertellenVoorDraadEnDeel($draad, $deel);
 				}
