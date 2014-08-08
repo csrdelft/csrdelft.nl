@@ -62,7 +62,7 @@
 						</div> \
 						<div id="pp_full_res"></div> \
 						<div class="pp_details clearfix"> \
-							<a id="fullsizeLink"><img src="http://plaetjes.csrdelft.nl/famfamfam/disk.png" title="Origineel downloaden" /></a> \
+							<a id="fullsizeLink"><img src="{CSR_PICS}/famfamfam/disk.png" title="Origineel downloaden" /></a> \
 							<p class="pp_description"></p> \
 							<!--<a class="pp_close" href="#">Close</a>--> \
 							<div class="pp_nav"> \

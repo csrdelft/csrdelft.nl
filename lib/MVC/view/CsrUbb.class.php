@@ -241,7 +241,7 @@ class CsrUbb extends eamBBParser {
 			$content = $arguments;
 		}
 		if (LidInstellingen::get('layout', 'neuzen') != 'nee') {
-			$neus = '<img src="http://plaetjes.csrdelft.nl/famfamfam/bullet_red.png" width="16" height="16" alt="o" style="margin: -5px;">';
+			$neus = '<img src="' . CSR_PICS . '/famfamfam/bullet_red.png" width="16" height="16" alt="o" style="margin: -5px;">';
 			$content = str_replace('o', $neus, $content);
 		}
 		return $content;
@@ -838,7 +838,7 @@ HTML;
 	function ubb_locatie($arguments = array()) {
 		$address = $this->parseArray(array('[/locatie]'), array());
 		$map = $this->maps(htmlspecialchars($address), $arguments);
-		return '<span class="hoverIntent"><a href="http://maps.google.nl/maps?q=' . htmlspecialchars($address) . '">' . $address . ' <img src="http://plaetjes.csrdelft.nl/famfamfam/map.png" alt="map" title="Kaart" /></a><div class="hoverIntentContent">' . $map . '</div></span>';
+		return '<span class="hoverIntent"><a href="http://maps.google.nl/maps?q=' . htmlspecialchars($address) . '">' . $address . ' <img src="' . CSR_PICS . '/famfamfam/map.png" alt="map" title="Kaart" /></a><div class="hoverIntentContent">' . $map . '</div></span>';
 	}
 
 	/**

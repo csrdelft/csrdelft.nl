@@ -194,7 +194,7 @@ abstract class InputField implements FormElement, Validator {
 			}
 			$help = '';
 			if ($this->title) {
-				$help = '<div class="help"><img width="16" height="16" class="icon hoverIntentContent" alt="?" src="http://plaetjes.csrdelft.nl/famfamfam/help.png"></div>';
+				$help = '<div class="help"><img width="16" height="16" class="icon hoverIntentContent" alt="?" src="' . CSR_PICS . '/famfamfam/help.png"></div>';
 			}
 			return '<label for="field_' . $this->name . '">' . $help . $this->description . $required . '</label>';
 		}

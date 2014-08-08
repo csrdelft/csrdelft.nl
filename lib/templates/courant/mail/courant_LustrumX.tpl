@@ -107,8 +107,8 @@ li{
 <table>
 <tr>
 <td class="zijKolom" valign="top">
-<img src="http://plaetjes.csrdelft.nl/csrmail/logoLustrum.png" width="150px" alt="Logo van C.S.R." />
-<img src="http://plaetjes.csrdelft.nl/csrmail/balkjeLustrum.png" width="150px" height="100%" />
+<img src="{CSR_PICS}/csrmail/logoLustrum.png" width="150px" alt="Logo van C.S.R." />
+<img src="{CSR_PICS}/csrmail/balkjeLustrum.png" width="150px" height="100%" />
 </td>
 <td class="hoofdKolom">
 <h4><font size="-3" face="verdana">Inhoud</font></h4>

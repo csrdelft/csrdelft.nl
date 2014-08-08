@@ -127,8 +127,6 @@ jQuery.fn.dataTableExt.oSort['currency-desc'] = function(a,b) {
 			});
 		});
 	</script>
-
-	<link rel="shortcut icon" href="http://plaetjes.csrdelft.nl/layout/favicon.ico" />
 </head>
 <body>
 

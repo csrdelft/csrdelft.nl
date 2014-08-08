@@ -90,7 +90,7 @@ a{
 <table>
 <tr>
 <td class="zijKolom" valign="top">
-<img src="http://plaetjes.csrdelft.nl/csrmail/logo_owee2007.jpg" width="150" 
+<img src="{CSR_PICS}/csrmail/logo_owee2007.jpg" width="150" 
 height="187" alt="OWee-courant" />
 </td>
 <td class="hoofdKolom">
