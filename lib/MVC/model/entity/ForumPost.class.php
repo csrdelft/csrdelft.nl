@@ -75,7 +75,7 @@ class ForumPost extends PersistentEntity {
 		'lid_id'			 => array(T::UID),
 		'tekst'				 => array(T::Text),
 		'datum_tijd'		 => array(T::DateTime),
-		'laatst_gewijzigd'	 => array(T::DateTime, true),
+		'laatst_gewijzigd'	 => array(T::DateTime),
 		'bewerkt_tekst'		 => array(T::Text, true),
 		'verwijderd'		 => array(T::Boolean),
 		'auteur_ip'			 => array(T::String),
