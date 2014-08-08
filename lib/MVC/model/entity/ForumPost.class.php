@@ -81,9 +81,6 @@ class ForumPost extends PersistentEntity {
 		'auteur_ip' => array(T::String),
 		'wacht_goedkeuring' => array(T::Boolean)
 	);
-	protected static $rename_fields = array(
-		'laatst_bewerkt' => 'laatst_gewijzigd'
-	);
 	/**
 	 * Database primary key
 	 * @var array
