@@ -178,7 +178,7 @@ class LoginLid {
 	public function login($user, $pass = '', $checkip = true) {
 		switch (constant('MODE')) {
 			case 'CLI':
-				return $this->_login_cli($user);
+				return $this->_login_cli();
 			case 'WEB':
 			default:
 				return $this->_login_web($user, $pass, $checkip);
@@ -186,13 +186,22 @@ class LoginLid {
 	}
 
 	/**
-	 * TODO: implement this
+	 * Grant cli access for cron
 	 * 
 	 * @param type $user
 	 * @return boolean
 	 */
-	private function _login_cli($user) {
-		return false;
+	private function _login_cli() {
+		if (defined('ETC_PATH')) {
+			$cred = parse_ini_file(ETC_PATH . 'cron.ini');
+		} else {
+			$cred = array(
+				'user'	 => 'cron',
+				'pass'	 => 'pw'
+			);
+		}
+		$this->_login_web($cred['user'], $cred['pass'], false);
+		return true;
 	}
 
 	/**

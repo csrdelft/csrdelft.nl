@@ -37,7 +37,8 @@ class MySql {
 				'host'	 => 'localhost',
 				'user'	 => 'foo',
 				'pass'	 => 'bar',
-				'db'	 => 'csrdelft');
+				'db'	 => 'csrdelft'
+			);
 		}
 		$this->_db = mysqli_connect($cred['host'], $cred['user'], $cred['pass'], $cred['db'])
 				or die("Kan geen verbinding maken met de database server {$cred['host']}\n");
