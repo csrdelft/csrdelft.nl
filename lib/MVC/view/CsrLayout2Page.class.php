@@ -23,6 +23,7 @@ class CsrLayout2Page extends HtmlPage {
 
 	function __construct(View $body, $template = 'content', $menu = '') {
 		parent::__construct($body);
+		$this->titel = $body->getTitel();
 		$this->tmpl = $template;
 		$this->menutmpl = $menu;
 

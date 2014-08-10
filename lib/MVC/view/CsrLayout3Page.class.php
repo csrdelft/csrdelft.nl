@@ -17,6 +17,7 @@ class CsrLayout3Page extends HtmlPage {
 
 	public function __construct(View $body) {
 		parent::__construct($body);
+		$this->titel = $body->getTitel();
 
 		$css = '/layout3/css/';
 		$js = '/layout3/js/';
@@ -54,16 +55,12 @@ class CsrLayout3Page extends HtmlPage {
 		}
 	}
 
-	public function getTitel() {
-		return $this->model->getTitel();
-	}
-
 	public function view() {
 		header('Content-Type: text/html; charset=UTF-8');
 
-		$path = '/csrdelft3/';
+		$path = 'csrdelft3/';
 
-		$this->smarty->display($path . 'page_layout.tpl');
+		$this->smarty->display($path . 'pagina_layout.tpl');
 	}
 
 }

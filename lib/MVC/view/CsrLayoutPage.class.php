@@ -28,6 +28,7 @@ class CsrLayoutPage extends HtmlPage {
 
 	public function __construct(View $body, array $zijkolom = array(), $popup = null) {
 		parent::__construct($body);
+		$this->titel = $body->getTitel();
 		$this->zijkolom = $zijkolom;
 		$this->popup = $popup;
 

@@ -5,7 +5,7 @@
 <meta name="author" content="PubCie C.S.R. Delft" />
 <meta name="description" content="{Instellingen::get('thuispagina', 'beschrijving')}">
 <meta name="robots" content="index, follow" />
-<title>C.S.R. Delft - {$body->getTitel()}</title>
+<title>C.S.R. Delft - {$view->getTitel()}</title>
 <link rel="shortcut icon" href="{$CSR_PICS}/layout/favicon.ico" />
 <link rel="alternate" title="C.S.R. Delft RSS" type="application/rss+xml" href="http://csrdelft.nl/forum/rss.xml" />
 {foreach from=$view->getStylesheets() item=sheet}
