@@ -9,9 +9,8 @@
 # alle paden goedzetten.
 require_once 'defines.include.php';
 
-# uncomment de volgende twee regels om de boel in onderhoudsmode te ketzen
-#header('location: ' . CSR_ROOT . '/onderhoud.html');
-#exit;
+# uncomment de volgende regel om de boel in onderhoudsmode te ketzen 
+#define('MODE', 'ONDERHOUD'); 
 # 
 # 
 # uncomment de volgende regel om de database automatisch te laten controleren
@@ -28,8 +27,12 @@ require_once 'defines.include.php';
 define('CONFIDE_IP', '80.112.180.123');
 
 # default is website mode
-if (php_sapi_name() === 'cli') {
-	define('MODE', 'CLI');
+if (!defined('MODE')) {
+	if (php_sapi_name() === 'cli') {
+		define('MODE', 'CLI');
+	} else {
+		define('MODE', 'WEB');
+	}
 }
 
 # alle meldingen tonen
@@ -55,7 +58,6 @@ switch (constant('MODE')) {
 		break;
 
 	case 'WEB':
-	default:
 
 		# geen sessie-id in de url
 		ini_set('session.use_only_cookies', 1);
@@ -102,4 +104,11 @@ switch (constant('MODE')) {
 			}
 		}
 		break;
+
+	case 'ONDERHOUD':
+		header('location: ' . CSR_ROOT . '/onderhoud.html');
+		exit;
+
+	default:
+		die('configuratie.include.php: "' . MODE . '" unsupported MODE');
 }
