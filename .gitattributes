@@ -1,19 +1,4 @@
 * text=auto !eol
-bin/cron.php -text
-bin/ldap-import.php -text
-bin/ldap/settings.py.example -text
-bin/ldap/sync_ldap_groepen.py -text
-bin/maalcie.php -text
-bin/maaltijdabbonovietmailer.php -text
-bin/mk_commissie_ldif.php -text
-bin/mk_commissie_ldif.txt -text
-bin/mkledenldif.php -text
-bin/saldo-kopieer.php -text
-bin/soccie_push/mysql.ini.sample -text
-bin/soccie_push/socciesaldi.php -text
-bin/socciesaldi-koppelen.php -text
-bin/statgraphgen.php -text
-bin/welkom.php -text
 etc/csrmail.ini.sample -text
 etc/gozerbot.ini.sample -text
 etc/ldap.ini.sample -text
