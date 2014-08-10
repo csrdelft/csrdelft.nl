@@ -167,7 +167,7 @@ class Formulier implements View, Validator {
 	 */
 	public function validate() {
 		if (!$this->isPosted()) {
-			throw new Exception('Formulier is niet gepost');
+			return false;
 		}
 		$valid = true;
 		foreach ($this->fields as $field) {
