@@ -18,7 +18,7 @@
  */
 session_id('cron-cli');
 
-chdir('/srv/www/csrdelft.nl/lib/');
+chdir(LIB_PATH);
 
 require_once 'configuratie.include.php';
 
