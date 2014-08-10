@@ -9,8 +9,9 @@
 # alle paden goedzetten.
 require_once 'defines.include.php';
 
-# uncomment de volgende regel om de boel in onderhoudsmode te ketzen 
-#define('MODE', 'ONDERHOUD'); 
+# uncomment de volgende twee regels om de boel in onderhoudsmode te ketzen 
+#header('location: ' . CSR_ROOT . '/onderhoud.html');
+#exit;
 # 
 # 
 # uncomment de volgende regel om de database automatisch te laten controleren
@@ -43,12 +44,24 @@ setlocale(LC_ALL, 'nl_NL.utf8');
 setlocale(LC_ALL, 'nld_nld');
 date_default_timezone_set('Europe/Amsterdam');
 
+# Model
 require_once 'common.functions.php';
 require_once 'mysql.class.php'; # DEPRECATED
-
 require_once 'MVC/model/PersistenceModel.abstract.php';
 require_once 'lid/loginlid.class.php';
 require_once 'MVC/model/LidInstellingenModel.class.php';
+require_once 'MVC/model/Paging.interface.php';
+# View
+require_once 'MVC/view/TemplateView.abstract.php';
+require_once 'MVC/view/Formulier.class.php';
+require_once 'MVC/view/CsrUbb.class.php';
+require_once 'MVC/view/CsrLayoutPage.class.php';
+require_once 'MVC/view/CsrLayout2Page.class.php';
+require_once 'MVC/view/CsrLayout3Page.class.php';
+require_once 'simplehtml.class.php'; # DEPRECATED
+require_once 'icon.class.php';
+# Controller
+require_once 'MVC/controller/AclController.abstract.php';
 
 switch (constant('MODE')) {
 	case 'CLI':
@@ -58,12 +71,11 @@ switch (constant('MODE')) {
 		break;
 
 	case 'WEB':
+		ini_set('upload_tmp_dir', TMP_PATH);
 
 		# geen sessie-id in de url
 		ini_set('session.use_only_cookies', 1);
 		session_save_path(SESSION_PATH);
-
-		ini_set('upload_tmp_dir', TMP_PATH);
 
 		$req = filter_var($_SERVER['REQUEST_URI'], FILTER_SANITIZE_URL);
 		Instellingen::setTemp('stek', 'request', $req);
@@ -74,19 +86,6 @@ switch (constant('MODE')) {
 		if (isset($conf['authtype']) AND $conf['authtype'] === 'authcsr') {
 			error_reporting(E_ALL & ~E_NOTICE & ~E_STRICT);
 		} else {
-			require_once 'MVC/model/Paging.interface.php';
-
-			require_once 'MVC/view/TemplateView.abstract.php';
-			require_once 'MVC/view/Formulier.class.php';
-			require_once 'MVC/view/CsrUbb.class.php';
-			require_once 'MVC/view/CsrLayoutPage.class.php';
-			require_once 'MVC/view/CsrLayout2Page.class.php';
-			require_once 'MVC/view/CsrLayout3Page.class.php';
-			require_once 'simplehtml.class.php'; # DEPRECATED
-			require_once 'icon.class.php';
-
-			require_once 'MVC/controller/AclController.abstract.php';
-
 			# sessie starten
 			# volgt de defaults van webserver Syrinx, voor consistentie bij testen
 			session_name('PHPSESSID');
@@ -106,10 +105,6 @@ switch (constant('MODE')) {
 			}
 		}
 		break;
-
-	case 'ONDERHOUD':
-		header('location: ' . CSR_ROOT . '/onderhoud.html');
-		exit;
 
 	default:
 		die('configuratie.include.php: "' . MODE . '" unsupported MODE');
