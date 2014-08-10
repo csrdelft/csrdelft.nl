@@ -147,7 +147,7 @@ abstract class InputField implements FormElement, Validator {
 		//(tenzij gebruiker LEDEN_MOD heeft en deze optie aan staat voor dit veld)
 		if (!$this->isPosted()) {
 			$this->error = 'Veld is niet gepost';
-		} elseif ($this->value === '' AND $this->not_null) {
+		} elseif ($this->value == '' AND $this->not_null) {
 			if ($this->leden_mod AND LoginLid::mag('P_LEDEN_MOD')) {
 				// exception for leden mod
 			} else {
@@ -478,7 +478,7 @@ class RechtenField extends TextField {
 			return false;
 		}
 		//parent checks notnull
-		if ($this->value === '') {
+		if ($this->value == '') {
 			return true;
 		}
 		if (preg_match('/\s/', $this->value)) {
@@ -519,7 +519,7 @@ class UidField extends TextField {
 			return false;
 		}
 		//parent checks notnull
-		if ($this->value === '') {
+		if ($this->value == '') {
 			return true;
 		}
 		if (!Lid::exists($this->value)) {
@@ -580,8 +580,8 @@ class LidField extends TextField {
 	 * LidField::getValue() levert altijd een uid of '' op.
 	 */
 	public function getValue() {
-		//leeg veld meteen teruggeven
-		if (parent::getValue() === '') {
+		//leeg veld direct teruggeven
+		if (parent::getValue() == '') {
 			return '';
 		}
 		//uid opzoeken
@@ -599,7 +599,7 @@ class LidField extends TextField {
 			return false;
 		}
 		//parent checks notnull
-		if ($this->value === '') {
+		if ($this->value == '') {
 			return true;
 		}
 		$uid = namen2uid(parent::getValue(), $this->zoekin);
@@ -676,7 +676,7 @@ class EmailField extends TextField {
 			return false;
 		}
 		//parent checks notnull
-		if ($this->value === '') {
+		if ($this->value == '') {
 			return true;
 		}
 		//bevat het email-adres een @
@@ -723,7 +723,7 @@ class UrlField extends TextField {
 			return false;
 		}
 		//parent checks notnull
-		if ($this->value === '') {
+		if ($this->value == '') {
 			return true;
 		}
 		// controleren of het een geldige url is...
@@ -754,7 +754,7 @@ class IntField extends TextField {
 	}
 
 	public function getValue() {
-		if (!$this->not_null AND parent::getValue() === '') {
+		if (parent::getValue() == '') {
 			return null;
 		}
 		return (int) parent::getValue();
@@ -765,9 +765,9 @@ class IntField extends TextField {
 			return false;
 		}
 		//parent checks notnull
-		if (parent::getValue() === '') {
+		if ($this->value == '') {
 			return true;
-		} elseif (!preg_match('/\d+/', parent::getValue())) {
+		} elseif (!preg_match('/\d+/', $this->value)) {
 			$this->error = 'Alleen getallen toegestaan';
 		} elseif ($this->max !== null AND $this->value > $this->max) {
 			$this->error = 'Maximale waarde is ' . $this->max . ' ';
@@ -806,6 +806,9 @@ class FloatField extends TextField {
 	}
 
 	public function getValue() {
+		if (parent::getValue() == '') {
+			return null;
+		}
 		return (float) str_replace(',', '.', parent::getValue());
 	}
 
@@ -814,9 +817,9 @@ class FloatField extends TextField {
 			return false;
 		}
 		//parent checks notnull
-		if (parent::getValue() === '') {
+		if ($this->value == '') {
 			return true;
-		} elseif (!preg_match('/\d+(,{1}\d*)?/', str_replace('.', ',', parent::getValue()))) {
+		} elseif (!preg_match('/\d+(,{1}\d*)?/', str_replace(',', '.', $this->value))) {
 			$this->error = 'Alleen komma-getallen toegestaan';
 		} elseif ($this->max !== null AND $this->value > $this->max) {
 			$this->error = 'Maximale waarde is ' . $this->max . ' ';
@@ -855,7 +858,7 @@ class NickField extends TextField {
 			return false;
 		}
 		//parent checks notnull
-		if ($this->value === '') {
+		if ($this->value == '') {
 			return true;
 		}
 		//check met strtolower is toegevoegd omdat je anders je eigen nick niet van case kan veranderen
@@ -891,7 +894,7 @@ class DuckField extends TextField {
 			return false;
 		}
 		//parent checks notnull
-		if ($this->value === '') {
+		if ($this->value == '') {
 			return true;
 		}
 		//check met strtolower is toegevoegd omdat je anders je eigen nick niet van case kan veranderen
@@ -917,7 +920,7 @@ class TelefoonField extends TextField {
 			return false;
 		}
 		//parent checks notnull
-		if ($this->value === '') {
+		if ($this->value == '') {
 			return true;
 		}
 		if (!preg_match('/^([\d\+\-]{10,20})$/', $this->value)) {
@@ -1046,7 +1049,7 @@ class PassField extends InputField {
 			if (!$this->model->checkpw($current)) {
 				$this->error = 'Uw huidige wachtwoord is niet juist';
 			} else {
-				if ($new === '' OR $confirm === '') {
+				if ($new == '' OR $confirm == '') {
 					$this->error = 'Vul uw nieuwe wachtwoord twee keer in';
 				} elseif ($new != $confirm) {
 					$this->error = 'Nieuwe wachtwoorden komen niet overeen';
@@ -1057,7 +1060,7 @@ class PassField extends InputField {
 				}
 			}
 		}
-		if ($new != '' AND $current === '') {
+		if ($new != '' AND $current == '') {
 			$this->error = 'U dient uw huidige wachtwoord ook in te voeren';
 		}
 		return $this->error === '';
