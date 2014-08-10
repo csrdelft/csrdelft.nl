@@ -1,10 +1,7 @@
 #!/usr/bin/php
 <?php 
-error_reporting(E_ALL);
-
 
 require_once('/srv/www/www.csrdelft.nl/lib/configuratie.include.php');
-
 
 $row = 1;
 $fp = fopen ("maalcie.csv","r");
@@ -15,5 +12,3 @@ while ($data = fgetcsv ($fp, 1000, ",")) {
 }
 fclose ($fp);
 echo $row.' regels ingevoerd;';
-
-?>

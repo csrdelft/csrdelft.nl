@@ -1,7 +1,5 @@
 <?php
 //holymoly, wat een kekcode is dit zeg.
-error_reporting(E_ALL);
-
 
 require_once 'configuratie.include.php';
 

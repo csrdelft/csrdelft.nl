@@ -59,8 +59,6 @@ $khd = array(
 # namen opzoeken in de database
 require_once 'configuratie.include.php';
 
-ini_set('error_reporting', E_ALL & ~E_NOTICE);
-
 #if (isset($_GET['bron'])) {
 #	show_source($_SERVER['SCRIPT_FILENAME']);
 #	exit;

@@ -1,5 +1,5 @@
 <?php
-/*
+/**
  * soccie.php.
  *
  * Dit bestand is de ingang voor anthrax om de saldi te uploaden, elke morgen
@@ -7,8 +7,6 @@
  * van Anthrax komt en in de betreffende tabellen in de database gestopt.
  *
  */
-error_reporting(E_ALL);
-
 
 require_once 'configuratie.include.php';
 require_once 'lid/saldi.class.php';
@@ -35,5 +33,3 @@ if(isset($_POST['saldi'])){
 }else{
 	echo '$_POST[saldi] is niet gezet.';
 }
-
-?>

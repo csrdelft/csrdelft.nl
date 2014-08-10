@@ -1,6 +1,5 @@
 #!/usr/bin/php5
 <?php
-error_reporting(E_ALL);
 
 require_once('/srv/www/www.csrdelft.nl/lib/configuratie.include.php');
 
@@ -355,4 +354,3 @@ function uurstatsVoorDag($db, $filename, $dag) {
 	imagepng($im, $filename); //send image to browser 
 	imagedestroy($im); //empty stack
 }
-?>

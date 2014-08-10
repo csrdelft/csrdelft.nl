@@ -71,7 +71,9 @@ switch (constant('MODE')) {
 		# als er een wikiconfiguratie is en hierin is de csr-wikiauthicatie geselecteerd 
 		# dan is de sessie al gestart (en zijn sommige includes niet nodig)
 		global $conf;
-		if (!(isset($conf['authtype']) AND $conf['authtype'] == 'authcsr')) {
+		if (isset($conf['authtype']) AND $conf['authtype'] === 'authcsr') {
+			error_reporting(E_ALL & ~E_NOTICE);
+		} else {
 			require_once 'MVC/model/Paging.interface.php';
 
 			require_once 'MVC/view/TemplateView.abstract.php';
