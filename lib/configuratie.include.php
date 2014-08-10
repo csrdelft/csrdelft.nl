@@ -72,7 +72,7 @@ switch (constant('MODE')) {
 		# dan is de sessie al gestart (en zijn sommige includes niet nodig)
 		global $conf;
 		if (isset($conf['authtype']) AND $conf['authtype'] === 'authcsr') {
-			error_reporting(E_ALL & ~E_NOTICE);
+			error_reporting(E_ALL & ~E_NOTICE & ~E_STRICT);
 		} else {
 			require_once 'MVC/model/Paging.interface.php';
 
