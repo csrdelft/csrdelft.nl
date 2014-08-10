@@ -11,6 +11,7 @@ data/smarty/*
 data/smarty/cache/*
 data/smarty/compiled/*
 etc/bot.htpasswd
+etc/cron.ini
 etc/csrmail.ini
 etc/gozerbot.ini
 etc/ldap.ini
