@@ -232,7 +232,13 @@ function opConfide() {
  * @return boolean
  */
 function isSyrinx() {
-	return $_SERVER['SERVER_NAME'] === 'csrdelft.nl';
+	switch (constant('MODE')) {
+		case 'CLI':
+			return 'csrdelft.nl' === php_uname('n');
+		case 'WEB':
+		default:
+			return 'csrdelft.nl' === $_SERVER['SERVER_NAME'];
+	}
 }
 
 /**
