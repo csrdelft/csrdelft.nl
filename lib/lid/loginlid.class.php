@@ -167,7 +167,6 @@ class LoginLid {
 		return !$this->isSelf($lid->getUid()) AND $lid->getUid() != 'x999' && !$this->isSued() && !in_array($lid->getStatus(), array('S_NOBODY', 'S_EXLID'));
 	}
 
-	# 
 	/**
 	 * dispatch the login proces to a separate function based on MODE
 	 * 
@@ -176,14 +175,13 @@ class LoginLid {
 	 * @param type $checkip
 	 * @return boolean
 	 */
-
 	public function login($user, $pass = '', $checkip = true) {
 		switch (constant('MODE')) {
 			case 'CLI':
 				return $this->_login_cli($user);
-			case 'CGI':
+			case 'WEB':
 			default:
-				return $this->_login_cgi($user, $pass, $checkip);
+				return $this->_login_web($user, $pass, $checkip);
 		}
 	}
 
@@ -207,7 +205,7 @@ class LoginLid {
 	 * @param boolean $checkip
 	 * @return boolean
 	 */
-	private function _login_cgi($user, $pass, $checkip = true) {
+	private function _login_web($user, $pass, $checkip = true) {
 		$lid = false;
 		//eerst met uid proberen, komt daar een zinnige gebruiker uit, die gebruiken.
 		if (Lid::isValidUid($user)) {

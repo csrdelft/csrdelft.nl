@@ -9,8 +9,10 @@
 # alle paden goedzetten.
 require_once 'defines.include.php';
 
-# uncomment de volgende regel om de boel in onderhoudsmode te ketzen
-#define('MODE', 'ONDERHOUD');
+# uncomment de volgende twee regels om de boel in onderhoudsmode te ketzen
+#header('location: ' . CSR_ROOT . '/onderhoud.html');
+#exit;
+# 
 # 
 # uncomment de volgende regel om de database automatisch te laten controleren
 #define('DB_CHECK_ENABLE', 'zie PersistentEntity::checkTable()');
@@ -20,12 +22,15 @@ require_once 'defines.include.php';
 #
 # uncomment de volgende regel om de database automatisch te laten droppen
 #define('DB_DROP_ENABLE', 'heb je een backup gemaakt?');
-# 
-# default to website mode
-define('MODE', 'CGI');
-
+#
+#
 # wordt gebruikt om pagina's alleen op Confide te laten zien
 define('CONFIDE_IP', '80.112.180.123');
+
+# default is website mode
+if (php_sapi_name() === 'cli') {
+	define('MODE', 'CLI');
+}
 
 # alle meldingen tonen
 error_reporting(E_ALL);
@@ -43,11 +48,14 @@ require_once 'lid/loginlid.class.php';
 require_once 'MVC/model/LidInstellingenModel.class.php';
 
 switch (constant('MODE')) {
-	//case 'CLI':
-		
-		//break;
+	case 'CLI':
+		if (!LoginLid::instance()->mag('P_ADMIN')) {
+			die('access denied');
+		}
+		break;
 
-	case 'CGI':
+	case 'WEB':
+	default:
 
 		# geen sessie-id in de url
 		ini_set('session.use_only_cookies', 1);
@@ -94,11 +102,4 @@ switch (constant('MODE')) {
 			}
 		}
 		break;
-
-	case 'ONDERHOUD':
-		header('location: ' . CSR_ROOT . '/onderhoud.html');
-		exit;
-
-	default:
-		die("configuratie.include.php:: unsupported MODE");
 }
