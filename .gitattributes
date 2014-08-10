@@ -3535,6 +3535,7 @@ lib/courant/courantarchiefcontent.class.php -text
 lib/courant/courantbeheercontent.class.php -text
 lib/courant/courantcontent.class.php -text
 lib/csrgozerbot.class.php -text
+lib/defines.include.php.sample -text
 lib/diesAanmelding.class.php -text
 lib/documenten/categorie.class.php -text
 lib/documenten/document.class.php -text
@@ -3550,7 +3551,6 @@ lib/groepen/groepcontent.class.php -text
 lib/groepen/groepcontroller.class.php -text
 lib/groepen/groepen.class.php -text
 lib/icon.class.php -text
-lib/include.defines.php.sample -text
 lib/ishetalcontent.class.php -text
 lib/knop.class.php -text
 lib/ldap.class.php -text
