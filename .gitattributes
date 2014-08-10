@@ -1,4 +1,5 @@
 * text=auto !eol
+etc/cron.ini.sample -text
 etc/csrmail.ini.sample -text
 etc/gozerbot.ini.sample -text
 etc/ldap.ini.sample -text
