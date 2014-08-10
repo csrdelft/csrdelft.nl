@@ -18,7 +18,7 @@
  */
 session_id('cron-cli');
 
-chdir(LIB_PATH);
+chdir(dirname(__FILE__) . '/../lib/');
 
 require_once 'configuratie.include.php';
 

@@ -82,7 +82,7 @@ class DatabaseAdmin extends Database {
 		$filename = 'backup-' . $name . '_' . date('d-m-Y_H-i-s') . '.sql.gz';
 		header('Content-Type: application/x-gzip');
 		header('Content-Disposition: attachment; filename="' . $filename . '"');
-		$cred = parse_ini_file(ETC_PATH . '/mysql.ini');
+		$cred = parse_ini_file(ETC_PATH . 'mysql.ini');
 		$cmd = 'mysqldump --user=' . $cred['user'] . ' --password=' . $cred['pass'] . ' --host=' . $cred['host'] . ' ' . $cred['db'] . ' ' . $name . ' | gzip --best';
 		passthru($cmd);
 	}
