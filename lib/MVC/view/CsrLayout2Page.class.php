@@ -26,15 +26,18 @@ class CsrLayout2Page extends HtmlPage {
 		$this->tmpl = $template;
 		$this->menutmpl = $menu;
 
-		$this->addStylesheet('style.css', '/layout2/css/');
-		$this->addStylesheet('foundation.css', '/layout2/css/');
-		$this->addStylesheet('normalize.css', '/layout2/css/');
+		$layout = '/layout2/css/';
+		$this->addStylesheet('style.css', $layout);
+		$this->addStylesheet('foundation.css', $layout);
+		$this->addStylesheet('normalize.css', $layout);
 		$this->addStylesheet('ubb.css');
-		$this->addScript('jquery.js', '/layout2/js/');
-		$this->addScript('jquery.backstretch.js', '/layout2/js/');
-		$this->addScript('jquery.timeago.js', '/layout/js/jquery/plugins/');
-		$this->addScript('jquery.hoverIntent.min.js', '/layout/js/jquery/plugins/');
-		$this->addScript('init.js', '/layout2/js/');
+
+		$layout = '/layout2/js/';
+		$this->addScript('jquery.js', $layout);
+		$this->addScript('jquery.backstretch.js', $layout);
+		$this->addScript('jquery.timeago.js', $layout . 'jquery/plugins/');
+		$this->addScript('jquery.hoverIntent.min.js', $layout . 'jquery/plugins/');
+		$this->addScript('init.js', $layout);
 		$this->addScript('csrdelft.js');
 		$this->addScript('dragobject.js');
 	}

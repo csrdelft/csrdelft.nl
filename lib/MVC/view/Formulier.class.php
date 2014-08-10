@@ -32,9 +32,8 @@ class Formulier implements View, Validator {
 
 	protected $model;
 	protected $formId;
-	public $titel = '';
 	protected $action = null;
-	public $enctype = null;
+	private $enctype = 'multipart/form-data';
 	/**
 	 * Fields must be added via addFields()
 	 * or insertElementBefore() methods,
@@ -44,7 +43,7 @@ class Formulier implements View, Validator {
 	 */
 	private $fields = array();
 	protected $css_classes = array();
-	public $error = '';
+	public $titel = '';
 
 	public function __construct($model, $formId, $action) {
 		$this->model = $model;
@@ -168,8 +167,7 @@ class Formulier implements View, Validator {
 	 */
 	public function validate() {
 		if (!$this->isPosted()) {
-			$this->error = 'Formulier is niet compleet';
-			return false;
+			throw new Exception('Formulier is niet gepost');
 		}
 		$valid = true;
 		foreach ($this->fields as $field) {
@@ -194,8 +192,18 @@ class Formulier implements View, Validator {
 		return $values;
 	}
 
+	/**
+	 * Geeft errors van de formuliervelden terug.
+	 */
 	public function getError() {
-		return $this->error;
+		$errors = array();
+		foreach ($this->fields as $field) {
+			if ($field instanceof Validator) {
+				$fieldName = $field->getName();
+				$errors[$fieldName] = $field->getError();
+			}
+		}
+		return $errors;
 	}
 
 	public function getJavascript() {
@@ -216,7 +224,7 @@ class Formulier implements View, Validator {
 	}
 
 	public function getFormTag() {
-		return '<form enctype="multipart/form-data" action="' . $this->action . '" id="' . $this->formId . '" class="' . implode(' ', $this->css_classes) . '" method="post">';
+		return '<form enctype="' . $this->enctype . '" action="' . $this->action . '" id="' . $this->formId . '" class="' . implode(' ', $this->css_classes) . '" method="post">';
 	}
 
 	public function getScriptTag() {

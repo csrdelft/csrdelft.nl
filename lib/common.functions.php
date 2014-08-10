@@ -224,15 +224,7 @@ function mb_htmlentities($string) {
  * @return boolean
  */
 function opConfide() {
-	return ( isset($_SERVER['REMOTE_ADDR']) and defined('CONFIDE_IP') and in_array($_SERVER['REMOTE_ADDR'], explode(':', CONFIDE_IP)) );
-}
-
-/**
- * Komt de request van Feut (irc-bot)?
- * @return boolean
- */
-function isFeut() {
-	return isset($_SERVER['REMOTE_ADDR']) and defined('FEUT_IP') and $_SERVER['REMOTE_ADDR'] == FEUT_IP;
+	return defined('CONFIDE_IP') AND isset($_SERVER['REMOTE_ADDR']) and CONFIDE_IP === $_SERVER['REMOTE_ADDR'];
 }
 
 /**

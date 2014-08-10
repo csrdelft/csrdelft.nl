@@ -14,7 +14,7 @@ class CourantContent extends TemplateView {
 	public function __construct(&$courant) {
 		parent::__construct($courant);
 		setlocale(LC_ALL, 'nl_NL@euro');
-		$this->instellingen = parse_ini_file(ETC_PATH . '/csrmail.ini');
+		$this->instellingen = parse_ini_file(ETC_PATH . 'csrmail.ini');
 	}
 
 	function zend($sEmailAan) {

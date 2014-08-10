@@ -24,19 +24,19 @@ class DatabaseAdmin extends Database {
 	 */
 	public static function instance() {
 		if (!isset(self::$instance)) {
-			$cred = parse_ini_file(ETC_PATH . '/mysql.ini');
+			$cred = parse_ini_file(ETC_PATH . 'mysql.ini');
 			if ($cred === false) {
 				$cred = array(
-					'host' => 'localhost',
-					'user' => 'admin',
-					'pass' => 'password',
-					'db' => 'csrdelft'
+					'host'	 => 'localhost',
+					'user'	 => 'admin',
+					'pass'	 => 'password',
+					'db'	 => 'csrdelft'
 				);
 			}
 			$dsn = 'mysql:host=' . $cred['host'] . ';dbname=' . $cred['db'];
 			$options = array(
 				PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES 'UTF8'",
-				PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION
+				PDO::ATTR_ERRMODE			 => PDO::ERRMODE_EXCEPTION
 			);
 			self::$instance = new DatabaseAdmin($dsn, $cred['user'], $cred['pass'], $options);
 		}

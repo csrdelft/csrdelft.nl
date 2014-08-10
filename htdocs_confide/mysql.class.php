@@ -29,7 +29,7 @@ class MySql {
 
 	private function connect() {
 		if (defined('ETC_PATH')) {
-			$cred = parse_ini_file(ETC_PATH . '/mysql.ini');
+			$cred = parse_ini_file(ETC_PATH . 'mysql.ini');
 		} else {
 			$cred = array(
 				'host'	 => 'localhost',

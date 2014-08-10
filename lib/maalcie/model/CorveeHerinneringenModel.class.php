@@ -36,7 +36,9 @@ class CorveeHerinneringenModel {
 		$mail->setFrom($from);
 		$mail->setPlaceholders(array('LIDNAAM' => $lidnaam, 'DATUM' => $datum, 'MEEETEN' => $eten));
 		if ($mail->send()) { // false if failed
-			CorveeTakenModel::updateGemaild($taak);
+			if (!$mail->inDebugMode()) {
+				CorveeTakenModel::updateGemaild($taak);
+			}
 			return $datum . ' ' . $taak->getCorveeFunctie()->naam . ' verstuurd! (' . $lidnaam . ')';
 		} else {
 			throw new Exception($datum . ' ' . $taak->getCorveeFunctie()->naam . ' faalt! (' . $lidnaam . ')');

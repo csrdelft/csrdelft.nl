@@ -46,6 +46,6 @@ if (isset($_GET['string'])) {
 		echo file_get_contents(PICS_PATH . $pasfoto);
 	} else {
 		header('Content-type: image/jpeg');
-		echo file_get_contents(PICS_PATH . '/pasfoto/geen-foto.jpg');
+		echo file_get_contents(PICS_PATH . 'pasfoto/geen-foto.jpg');
 	}
 }

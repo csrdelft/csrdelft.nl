@@ -86,7 +86,7 @@ switch ($actie) {
 				if ($info[0] != 0 AND $info[1] != 0) {
 					if (($info[0] / $info[1]) == 1) { // If the ratio is fine (1:1).
 						$pictureFilename = $_FILES['plaatje']['name'];
-						$pictureFullPath = PICS_PATH . '/nieuws/' . $pictureFilename; // TODO: change nieuws to mededelingen
+						$pictureFullPath = PICS_PATH . 'nieuws/' . $pictureFilename; // TODO: change nieuws to mededelingen
 						if (move_uploaded_file($_FILES['plaatje']['tmp_name'], $pictureFullPath) !== false) {
 							$mededelingProperties['plaatje'] = $pictureFilename;
 							if ($info[0] != 200) { // Too big, resize it.

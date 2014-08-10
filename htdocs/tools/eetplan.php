@@ -57,7 +57,7 @@ $khd = array(
 );
 
 # namen opzoeken in de database
-include_once 'configuratie.include.php';
+require_once 'configuratie.include.php';
 
 ini_set('error_reporting', E_ALL & ~E_NOTICE);
 

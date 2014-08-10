@@ -634,20 +634,20 @@ class Lid implements Serializable, Agendeerbaar {
 	 * bool $square		Geef een pad naar een vierkante (150x150px) versie terug. (voor google contacts sync)
 	 */
 	function getDuckfotoPath($vierkant = false) {
-		$pasfoto = '/pasfoto/duck/eend.jpg';
+		$pasfoto = 'pasfoto/duck/eend.jpg';
 		foreach (array('png', 'jpeg', 'jpg', 'gif') as $validExtension) {
-			if (file_exists(PICS_PATH . '/pasfoto/duck/' . $this->getUid() . '.' . $validExtension)) {
-				$pasfoto = '/pasfoto/duck/' . $this->getUid() . '.' . $validExtension;
+			if (file_exists(PICS_PATH . 'pasfoto/duck/' . $this->getUid() . '.' . $validExtension)) {
+				$pasfoto = 'pasfoto/duck/' . $this->getUid() . '.' . $validExtension;
 				break;
 			}
 		}
 		//als het vierkant moet, kijken of de vierkante bestaat, en anders maken.
 		if ($vierkant) {
-			$vierkant = PICS_PATH . '/pasfoto/duck/' . $this->getUid() . '.vierkant.png';
+			$vierkant = PICS_PATH . 'pasfoto/duck/' . $this->getUid() . '.vierkant.png';
 			if (!file_exists($vierkant)) {
 				square_crop(PICS_PATH . $pasfoto, $vierkant, 150);
 			}
-			return '/pasfoto/duck/' . $this->getUid() . '.vierkant.png';
+			return 'pasfoto/duck/' . $this->getUid() . '.vierkant.png';
 		}
 		return $pasfoto;
 	}
@@ -661,20 +661,20 @@ class Lid implements Serializable, Agendeerbaar {
 	 * bool $square		Geef een pad naar een vierkante (150x150px) versie terug. (voor google contacts sync)
 	 */
 	function getPasfotoPath($vierkant = false) {
-		$pasfoto = '/pasfoto/geen-foto.jpg';
+		$pasfoto = 'pasfoto/geen-foto.jpg';
 		foreach (array('png', 'jpeg', 'jpg', 'gif') as $validExtension) {
-			if (file_exists(PICS_PATH . '/pasfoto/' . $this->getUid() . '.' . $validExtension)) {
-				$pasfoto = '/pasfoto/' . $this->getUid() . '.' . $validExtension;
+			if (file_exists(PICS_PATH . 'pasfoto/' . $this->getUid() . '.' . $validExtension)) {
+				$pasfoto = 'pasfoto/' . $this->getUid() . '.' . $validExtension;
 				break;
 			}
 		}
 		//als het vierkant moet, kijken of de vierkante bestaat, en anders maken.
 		if ($vierkant) {
-			$vierkant = PICS_PATH . '/pasfoto/' . $this->getUid() . '.vierkant.png';
+			$vierkant = PICS_PATH . 'pasfoto/' . $this->getUid() . '.vierkant.png';
 			if (!file_exists($vierkant)) {
 				square_crop(PICS_PATH . $pasfoto, $vierkant, 150);
 			}
-			return '/pasfoto/' . $this->getUid() . '.vierkant.png';
+			return 'pasfoto/' . $this->getUid() . '.vierkant.png';
 		}
 		return $pasfoto;
 	}
@@ -683,7 +683,7 @@ class Lid implements Serializable, Agendeerbaar {
 	 * Geef een url naar een duckfoto terug, of een <img>-tag met die url.
 	 */
 	function getDuckfoto($imgTag = true, $cssClass = 'pasfoto', $vierkant = false) {
-		$pasfoto = CSR_PICS . $this->getDuckfotoPath($vierkant);
+		$pasfoto = CSR_PICS . '/' . $this->getDuckfotoPath($vierkant);
 		if ($imgTag === true OR $imgTag === 'small') {
 			$html = '<img class="' . mb_htmlentities($cssClass) . '" src="' . $pasfoto . '" ';
 			if ($imgTag === 'small') {
@@ -700,7 +700,7 @@ class Lid implements Serializable, Agendeerbaar {
 	 * Geef een url naar een pasfoto terug, of een <img>-tag met die url.
 	 */
 	function getPasfoto($imgTag = true, $cssClass = 'pasfoto', $vierkant = false) {
-		$pasfoto = CSR_PICS . $this->getPasfotoPath($vierkant);
+		$pasfoto = CSR_PICS . '/' . $this->getPasfotoPath($vierkant);
 		if ($imgTag === true OR $imgTag === 'small') {
 			$html = '<img class="' . mb_htmlentities($cssClass) . '" src="' . $pasfoto . '" ';
 			if ($imgTag === 'small') {

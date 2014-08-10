@@ -58,7 +58,7 @@ class FotoAlbumController extends AclController {
 		} else {
 			$path = $this->getParams(3);
 		}
-		$path = PICS_PATH . '/' . urldecode(implode('/', $path));
+		$path = PICS_PATH . urldecode(implode('/', $path));
 		$album = FotoAlbumModel::getFotoAlbum($path);
 		if ($album === false) {
 			$this->geentoegang();
@@ -70,7 +70,7 @@ class FotoAlbumController extends AclController {
 	}
 
 	public static function magBekijken($path) {
-		if (!startsWith($path, PICS_PATH . '/fotoalbum/')) {
+		if (!startsWith($path, PICS_PATH . 'fotoalbum/')) {
 			return false;
 		}
 		if (LoginLid::mag('P_LEDEN_READ')) {

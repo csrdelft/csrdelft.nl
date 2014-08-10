@@ -113,7 +113,7 @@ class Courant {
 		if (isset($firstbericht[0]['template']) AND file_exists($return . $firstbericht[0]['template'])) {
 			$return.=$firstbericht[0]['template'];
 		} else {
-			$return.=COURANT_TEMPLATE;
+			$return.='courant.tpl';
 		}
 		return $return;
 	}
@@ -374,7 +374,7 @@ class Courant {
 			(
 				verzendMoment, verzender, template
 			) VALUES (
-				'" . $datumTijd . "', '" . $uid . "', '" . COURANT_TEMPLATE . "'
+				'" . $datumTijd . "', '" . $uid . "', 'courant.tpl'
 			);";
 		if ($db->query($sCreatecourantQuery)) {
 			return $db->insert_id();

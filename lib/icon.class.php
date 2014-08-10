@@ -1,13 +1,10 @@
 <?php
 
-/*
+/**
  * Icon dingetje voor csrdelft.nl.
- *
  *
  * Icon::get('bewerken'); geeft bijvoorbeeld http://plaetjes.csrdelft.nl/famfamfam/pencil.png
  */
-define('ICON_PATH', PICS_PATH . '/famfamfam/');
-
 class Icon {
 
 	//array met alle icons
@@ -83,7 +80,7 @@ class Icon {
 
 	public static function get($key, $title = null) {
 		if (!self::has($key)) {
-			throw new Exception('Icon (' . $key . ') bestaat niet in images/famfamfam/');
+			throw new Exception('Icon (' . $key . ') bestaat niet in ' . ICON_PATH);
 		}
 		if (in_array($key, self::$index)) {
 			return CSR_PICS . '/famfamfam/' . $key . '.png';
@@ -117,5 +114,3 @@ class Icon {
 	}
 
 }
-
-?>

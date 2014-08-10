@@ -46,7 +46,7 @@ class FotoAlbumModel {
 	}
 
 	public static function getMostRecentFotoAlbum() {
-		$album = FotoAlbumModel::getFotoAlbum(PICS_PATH . '/fotoalbum/');
+		$album = FotoAlbumModel::getFotoAlbum(PICS_PATH . 'fotoalbum/');
 		if (!$album) {
 			return null;
 		}

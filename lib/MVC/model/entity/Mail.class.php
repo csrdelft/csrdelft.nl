@@ -82,11 +82,15 @@ class Mail {
 	 * het pubcie-mailadres.
 	 */
 	protected function production_safe($email) {
-		if (!isSyrinx()) {
+		if ($this->inDebugMode()) {
 			return 'pubcie@csrdelft.nl';
 		} else {
 			return $email;
 		}
+	}
+
+	public function inDebugMode() {
+		return !isSyrinx();
 	}
 
 	public function getHeaders() {
@@ -110,7 +114,7 @@ class Mail {
 
 	public function getSubject() {
 		$onderwerp = $this->onderwerp;
-		if (!isSyrinx()) {
+		if ($this->inDebugMode()) {
 			$onderwerp .= ' [Mail: Debug modus actief]';
 		}
 		if ($this->charset === 'utf8') {
@@ -146,7 +150,7 @@ class Mail {
 		return $body;
 	}
 
-	public function send() {
+	public function send($debug = false) {
 		if ($this->onderwerp == '') {
 			throw new Exception('Geen onderwerp ingevuld');
 		}
@@ -156,6 +160,9 @@ class Mail {
 			$body = $view->getBody();
 		} else {
 			$body = $this->getBody();
+		}
+		if ($this->inDebugMode() AND ! $debug) {
+			return false;
 		}
 		return mail($this->getTo(), $this->getSubject(), $body, $this->getHeaders(), $this->getExtraparameters());
 	}

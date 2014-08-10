@@ -193,7 +193,7 @@ class Profiel {
 		$passwordhash = makepasswd($password);
 		$sNieuwWachtwoord = "UPDATE lid SET password='" . $passwordhash . "' WHERE uid='" . $uid . "' LIMIT 1;";
 
-		$bericht = file_get_contents(LIB_PATH . '/templates/MVC/mail/nieuwwachtwoord.mail');
+		$bericht = file_get_contents(SMARTY_TEMPLATE_DIR . 'MVC/mail/nieuwwachtwoord.mail');
 		$values = array(
 			'NAAM'	 => $lid->getNaam(),
 			'UID'	 => $lid->getUid(),
@@ -264,7 +264,7 @@ class ProfielBewerken extends Profiel {
 				} else {
 					$duckfoto = null;
 				}
-				$form[] = new ImageField('duckfoto', $duckfoto, '/duck', null, null, null, 250);
+				$form[] = new ImageField('duckfoto', $duckfoto, 'duck', null, null, null, 250);
 			}
 			$form[] = new PassField('password', $this->lid);
 		}
@@ -417,7 +417,7 @@ class ProfielBewerken extends Profiel {
 			if ($field instanceof FileField) {
 				$path = $field->getModel()->filename;
 				$ext = '.' . pathinfo($path, PATHINFO_EXTENSION);
-				$field->opslaan(PICS_PATH . '/pasfoto/duck/', $this->getUid() . $ext, true);
+				$field->opslaan(PICS_PATH . 'pasfoto/duck/', $this->getUid() . $ext, true);
 				continue;
 			}
 			if ($field instanceof InputField) {
@@ -613,7 +613,7 @@ class ProfielStatus extends Profiel {
 				$changelog .= '[br]' . strftime('%a %e-%m-%Y', $taak->getBeginMoment()) . ' ' . $taak->getCorveeFunctie()->naam;
 			}
 			//corveeceasar mailen over vrijvallende corveetaken.
-			$bericht = file_get_contents(LIB_PATH . '/templates/MVC/mail/toekomstigcorveeverwijderd.mail');
+			$bericht = file_get_contents(SMARTY_TEMPLATE_DIR . 'MVC/mail/toekomstigcorveeverwijderd.mail');
 			$values = array(
 				'AANTAL' => $aantal,
 				'NAAM'	 => Lid::naamLink($uid, 'full', 'plain'),
@@ -645,7 +645,7 @@ class ProfielStatus extends Profiel {
 			$saldi .= $saldo['naam'] . ': ' . $saldo['saldo'] . "\n";
 		}
 
-		$bericht = file_get_contents(LIB_PATH . '/templates/MVC/mail/lidafmeldingfisci.mail');
+		$bericht = file_get_contents(SMARTY_TEMPLATE_DIR . 'MVC/mail/lidafmeldingfisci.mail');
 		$uid = $this->bewerktLid->getUid();
 		$values = array(
 			'NAAM'	 => Lid::naamLink($uid, 'full', 'plain'),
@@ -710,7 +710,7 @@ class ProfielStatus extends Profiel {
 			return false;
 
 		$to = 'bibliothecaris@csrdelft.nl,' . $this->bewerktLid->getEmail();
-		$bericht = file_get_contents(LIB_PATH . '/templates/MVC/mail/lidafgeleendebiebboeken.mail');
+		$bericht = file_get_contents(SMARTY_TEMPLATE_DIR . 'MVC/mail/lidafgeleendebiebboeken.mail');
 		$uid = $this->bewerktLid->getUid();
 		$values = array(
 			'NAAM'		 => Lid::naamLink($uid, 'full', 'plain'),

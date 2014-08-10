@@ -1,53 +1,58 @@
 <?php
-/*
- * class.memcached.php	| 	Jan Pieter Waagmeester (jieter@jpwaag.com)
+
+/**
+ * memcached.class.php
+ * 
+ * @author Jan Pieter Waagmeester <jieter@jpwaag.com>
  *
  * Simpele wrapper voor memchached
  */
-class Memcached{
+class Memcached {
+
 	private static $instance;
-
 	private $memcache;
-	private $connected=false;
+	private $connected = false;
 
-	public static function instance(){
-		if(!isset(self::$instance)){
-			self::$instance=new Memcached();
+	public static function instance() {
+		if (!isset(self::$instance)) {
+			self::$instance = new Memcached();
 		}
 		return self::$instance;
 	}
-	private function __construct(){
-		if(class_exists('Memcache')){
-			$this->memcache=new Memcache;
-			$this->connected=@$this->memcache->connect('unix://'.DATA_PATH.'/csrdelft-cache.socket', 0);
 
+	private function __construct() {
+		if (class_exists('Memcache')) {
+			$this->memcache = new Memcache;
+			$this->connected = @$this->memcache->connect('unix://' . DATA_PATH . 'csrdelft-cache.socket', 0);
 		}
 	}
 
-	public function set($key, $value){
-		if($this->connected){
+	public function set($key, $value) {
+		if ($this->connected) {
 			$this->memcache->set($key, $value);
 		}
 	}
 
-	public function get($key){
-		if($this->connected){
+	public function get($key) {
+		if ($this->connected) {
 			return $this->memcache->get($key);
 		}
 		return false;
 	}
-	public function delete($key){
-		if($this->connected){
+
+	public function delete($key) {
+		if ($this->connected) {
 			//second parameter is deprecated, but leaving out shows warnings. http://www.php.net/manual/en/memcache.delete.php#98826
 			return $this->memcache->delete($key, 0);
 		}
 	}
-	public function getStats(){
+
+	public function getStats() {
 		return $this->memcache->getStats();
 	}
-	public function flush(){
+
+	public function flush() {
 		return $this->memcache->flush();
 	}
-}
 
-?>
+}

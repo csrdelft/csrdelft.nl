@@ -4,7 +4,7 @@
 	{if !LoginLid::mag('P_LOGGED_IN')}
 		<strong>
 			Uw bericht wordt pas geplaatst nadat het bekeken en goedgekeurd is door de
-			<a href="http://csrdelft.nl/actueel/groepen/Commissies/PubCie/">PubCie</a>.
+			<a href="/actueel/groepen/Commissies/PubCie/">PubCie</a>.
 			Het vermelden van <em>uw naam en email-adres</em> is verplicht.
 		</strong> 
 		<br /><br />

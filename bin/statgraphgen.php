@@ -2,10 +2,7 @@
 <?php
 error_reporting(E_ALL);
 
-
 require_once('/srv/www/www.csrdelft.nl/lib/configuratie.include.php');
-
-define('STATS_DIR', PICS_PATH . '/stats/');
 
 uurstats($db, STATS_DIR . 'uurstats.png');
 dagstats($db, STATS_DIR . 'dagstats.png');
@@ -21,8 +18,6 @@ uurstatsVoorDag($db, STATS_DIR . 'zaterdag.png', 7);
 echo 'Statistieken-grafieken geklust om ' . getDateTime() . "\r\n";
 
 class StatistiekGrafiek {
-
-//	var $_path=PICS_PATH.'/stats/';
 
 	var $_image;
 	var $_db;

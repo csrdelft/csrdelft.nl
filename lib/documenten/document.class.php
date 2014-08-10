@@ -248,7 +248,7 @@ class Document extends Bestand {
 	 * @return string location on disk
 	 */
 	public function getPath() {
-		return DATA_PATH . '/documenten/';
+		return DATA_PATH . 'documenten/';
 	}
 
 	/**
@@ -330,7 +330,7 @@ class Document extends Bestand {
 	}
 
 	private function throwExceptionWhenDestNotWriteable() {
-		if (!is_writable(DATA_PATH . '/documenten')) {
+		if (!is_writable(DATA_PATH . 'documenten')) {
 			throw new Exception('Doelmap is niet beschrijfbaar');
 		}
 	}

@@ -1,12 +1,14 @@
 <?php
 
-# OogOpslag Internet / C.S.R. Delft | pubcie@csrdelft.nl
-# -------------------------------------------------------------------
-# class.mysql.php
-# -------------------------------------------------------------------
-# MySQLi wrapper
-# -------------------------------------------------------------------
-
+/**
+ * mysql.class.php
+ * 
+ * @deprecated
+ * 
+ * OogOpslag Internet / C.S.R. Delft | pubcie@csrdelft.nl
+ * 
+ * MySQLi wrapper
+ */
 class MySql {
 
 	//cached instantie van de klasse
@@ -29,7 +31,7 @@ class MySql {
 
 	private function connect() {
 		if (defined('ETC_PATH')) {
-			$cred = parse_ini_file(ETC_PATH . '/mysql.ini');
+			$cred = parse_ini_file(ETC_PATH . 'mysql.ini');
 		} else {
 			$cred = array(
 				'host'	 => 'localhost',

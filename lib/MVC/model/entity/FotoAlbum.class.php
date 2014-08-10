@@ -48,7 +48,7 @@ class FotoAlbum extends Map {
 	}
 
 	public function getUrl() {
-		return CSR_ROOT . direncode($this->getSubDir());
+		return CSR_ROOT . '/' . direncode($this->getSubDir());
 	}
 
 	public function getFotos($incompleet = false) {

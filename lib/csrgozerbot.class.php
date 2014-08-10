@@ -12,7 +12,7 @@ require_once 'gozerbot/class.GozerbotUDP.php';
 class CsrGozerbot extends GozerbotUDP {
 
 	public function CsrGozerbot() {
-		$aSettings = parse_ini_file(ETC_PATH . '/gozerbot.ini');
+		$aSettings = parse_ini_file(ETC_PATH . 'gozerbot.ini');
 
 		if ($aSettings['cryptkey'] == '') {
 			$aSettings['cryptkey'] = null;

@@ -97,14 +97,8 @@ function is_utf8($string) {
    )*$%xs', $string);
 }
 
-// function is_utf8
-
 function opConfide() {
-	return ( isset($_SERVER['REMOTE_ADDR']) and defined('CONFIDE_IP') and in_array($_SERVER['REMOTE_ADDR'], explode(':', CONFIDE_IP)) );
-}
-
-function isFeut() {
-	return isset($_SERVER['REMOTE_ADDR']) and defined('FEUT_IP') and $_SERVER['REMOTE_ADDR'] == FEUT_IP;
+	return defined('CONFIDE_IP') AND isset($_SERVER['REMOTE_ADDR']) and CONFIDE_IP === $_SERVER['REMOTE_ADDR'];
 }
 
 function getDateTime() {
@@ -180,8 +174,8 @@ function namen2uid($sNamen, $filter = 'leden') {
 			foreach ($aZoekNamen as $aZoekNaam) {
 				$lid = LidCache::getLid($aZoekNaam['uid']);
 				$aNaamOpties[] = array(
-					'uid' => $aZoekNaam['uid'],
-					'naam' => $lid->getNaam());
+					'uid'	 => $aZoekNaam['uid'],
+					'naam'	 => $lid->getNaam());
 			}
 			$return[]['naamOpties'] = $aNaamOpties;
 		}

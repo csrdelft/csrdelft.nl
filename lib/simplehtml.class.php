@@ -3,10 +3,10 @@
 /**
  * simplehtml.class.php
  * 
+ * @deprecated
+ * 
  * @author C.S.R. Delft <pubcie@csrdelft.nl>
  * 
- * Van deze klasse worden alle klassen afgeleid die ervoor bedoeld zijn om uiteindelijk HTML te tonen met view().
- *
  */
 abstract class SimpleHTML implements View {
 
@@ -112,36 +112,36 @@ abstract class SimpleHTML implements View {
 		$debug = '';
 		if ($sql) {
 			$debug .= '<hr />SQL<hr />';
-			$debug .= '<pre>' . htmlentities(print_r(array("PDO" => Database::getQueries(), "MySql" => MySql::instance()->getQueries()), true)) . '</pre>';
+			$debug .= '<pre>' . mb_htmlentities(print_r(array("PDO" => Database::getQueries(), "MySql" => MySql::instance()->getQueries()), true)) . '</pre>';
 		}
 		if ($get) {
 			$debug .= '<hr />GET<hr />';
 			if (count($_GET) > 0) {
-				$debug .= '<pre>' . htmlentities(print_r($_GET, true)) . '</pre>';
+				$debug .= '<pre>' . mb_htmlentities(print_r($_GET, true)) . '</pre>';
 			}
 		}
 		if ($post) {
 			$debug .= '<hr />POST<hr />';
 			if (count($_POST) > 0) {
-				$debug .= '<pre>' . htmlentities(print_r($_POST, true)) . '</pre>';
+				$debug .= '<pre>' . mb_htmlentities(print_r($_POST, true)) . '</pre>';
 			}
 		}
 		if ($files) {
 			$debug .= '<hr />FILES<hr />';
 			if (count($_FILES) > 0) {
-				$debug .= '<pre>' . htmlentities(print_r($_FILES, true)) . '</pre>';
+				$debug .= '<pre>' . mb_htmlentities(print_r($_FILES, true)) . '</pre>';
 			}
 		}
 		if ($cookie) {
 			$debug .= '<hr />COOKIE<hr />';
 			if (count($_COOKIE) > 0) {
-				$debug .= '<pre>' . htmlentities(print_r($_COOKIE, true)) . '</pre>';
+				$debug .= '<pre>' . mb_htmlentities(print_r($_COOKIE, true)) . '</pre>';
 			}
 		}
 		if ($session) {
 			$debug .= '<hr />SESSION<hr />';
 			if (count($_SESSION) > 0) {
-				$debug .= '<pre>' . htmlentities(print_r($_SESSION, true)) . '</pre>';
+				$debug .= '<pre>' . mb_htmlentities(print_r($_SESSION, true)) . '</pre>';
 			}
 		}
 		return $debug;

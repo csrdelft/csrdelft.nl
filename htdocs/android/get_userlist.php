@@ -4,27 +4,24 @@ require_once 'configuratie.include.php';
 require_once 'lid/ledenlijstcontent.class.php';
 require_once 'groepen/groep.class.php';
 
-if(!(LoginLid::mag('P_LOGGED_IN') AND LoginLid::mag('P_OUDLEDEN_READ'))){
+if (!(LoginLid::mag('P_LOGGED_IN') AND LoginLid::mag('P_OUDLEDEN_READ'))) {
 	# geen rechten
 	echo 'false';
 	exit;
 }
 
-$zoeker=new LidZoeker();
+$zoeker = new LidZoeker();
 $zoeker->parseQuery($_GET);
 
 $leden = array();
-$json = "";
+$json = '';
 
-foreach($zoeker->getLeden() as $lid) {
+foreach ($zoeker->getLeden() as $lid) {
 
 	$leden[] = array("id" => $lid->getUid(), "name" => $lid->getNaam());
 	//print_r($lid->getUid(). " " . $lid->getNaam());
-
 }
 
 echo '{
     "user": ' . json_encode($leden) . '
 }';
-
-?>

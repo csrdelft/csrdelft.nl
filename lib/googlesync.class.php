@@ -336,7 +336,7 @@ class GoogleSync {
 				$entryResult = $this->gdata->updateEntry($doc->saveXML(), $this->getLinkSelf($googleid), null, $header);
 
 				$photolink = $entryResult->getLink('http://schemas.google.com/contacts/2008/rel#photo')->getHref();
-				$this->putPhoto($photolink, PICS_PATH . '/' . $lid->getPasfotoPath($square = true));
+				$this->putPhoto($photolink, PICS_PATH . $lid->getPasfotoPath($square = true));
 
 				return 'Update: ' . $lid->getNaam() . ' ';
 			} catch (Exception $e) {
