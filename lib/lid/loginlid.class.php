@@ -222,16 +222,14 @@ class LoginLid {
 		//als er geen lid-object terugkomt, proberen we het met de nickname:
 		if (!($lid instanceof Lid)) {
 			$lid = Lid::loadByNickname($user);
-			if (!($lid instanceof Lid)) {
-				return false;
-			}
 		}
 		//als er geen lid-object terugkomt, proberen we het met de duckname:
 		if (!($lid instanceof Lid)) {
 			$lid = Lid::loadByDuckname($user);
-			if (!($lid instanceof Lid)) {
-				return false;
-			}
+		}
+		//als er geen lid-object terugkomt, haken we af
+		if (!($lid instanceof Lid)) {
+			return false;
 		}
 
 		# we hebben nu een gebruiker gevonden en gaan eerst het wachtwoord controleren
