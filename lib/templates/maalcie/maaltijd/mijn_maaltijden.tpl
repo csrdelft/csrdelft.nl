@@ -35,7 +35,7 @@ Vanaf dat moment zal deze ketzer u niet meer willen aan- of afmelden en bent u a
 	<tbody>
 {foreach from=$maaltijden item=maaltijd}
 	{assign var="mid" value=$maaltijd->getMaaltijdId()}
-	{include file='maalcie/maaltijd/mijn_maaltijd_lijst.tpl' maaltijd=$maaltijd aanmelding=$aanmeldingen.$mid toonlijst=$toonlijst.$mid}
+	{include file='maalcie/maaltijd/mijn_maaltijd_lijst.tpl' aanmelding=$aanmeldingen.$mid}
 {/foreach}
 	</tbody>
 </table>

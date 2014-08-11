@@ -5,9 +5,10 @@
 <tr id="maaltijd-row-{$maaltijd->getMaaltijdId()}"{if !$aanmelding and $maaltijd->getIsGesloten()} class="taak-grijs"{/if}>
 	<td>
 		{$maaltijd->getDatum()|date_format:"%a %e %b"} {$maaltijd->getTijd()|date_format:"%H:%M"}
-{if $toonlijst|is_a:'\CorveeTaak'}
+{assign var=corvee value=$maaltijd->magMaaltijdlijstTonen()}
+{if $corvee|is_a:'\CorveeTaak'}
 		<div style="float: right;">
-			{icon get="paintcan" title=$toonlijst->getCorveeFunctie()->naam}
+			{icon get="paintcan" title=$corvee->getCorveeFunctie()->naam}
 		</div>
 {/if}
 	</td>
@@ -27,7 +28,7 @@
 	</td>
 	<td style="text-align: center;">
 		{$maaltijd->getAantalAanmeldingen()} ({$maaltijd->getAanmeldLimiet()})
-{if $toonlijst}
+{if $corvee}
 		<div style="float: right;">
 			<a href="/maaltijdenlijst/{$maaltijd->getMaaltijdId()}" title="Toon maaltijdlijst" class="knop">{icon get="table"}</a>
 		</div>

@@ -50,17 +50,18 @@
 	{if $maaltijd->getPrijs() !== $standaardprijs}
 		&nbsp; (&euro; {$maaltijd->getPrijs()|string_format:"%.2f"})
 	{/if}
-{if $toonlijst|is_a:'\CorveeTaak'}
+{assign var=corvee value=$maaltijd->magMaaltijdlijstTonen()}
+{if $corvee|is_a:'\CorveeTaak'}
 	<div style="float: right; margin: 15px 10px 0 0;">
-		{icon get="paintcan" title=$toonlijst->getCorveeFunctie()->naam}
+		{icon get="paintcan" title=$corvee->getCorveeFunctie()->naam}
 	</div>
 {/if}
 	<div class="small">
-{if $toonlijst}
+{if $corvee}
 		<a href="/maaltijdenlijst/{$maaltijd->getMaaltijdId()}" title="Toon maaltijdlijst">
 {/if}
 			Inschrijvingen: <em>{$maaltijd->getAantalAanmeldingen()}</em> van <em>{$maaltijd->getAanmeldLimiet()}</em>
-{if $toonlijst}
+{if $corvee}
 		</a>
 {/if}
 	</div>

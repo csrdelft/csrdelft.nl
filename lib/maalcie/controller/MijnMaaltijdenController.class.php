@@ -45,22 +45,6 @@ class MijnMaaltijdenController extends AclController {
 		parent::performAction(array($mid));
 	}
 
-	public static function magMaaltijdlijstTonen(Maaltijd $maaltijd) {
-		//$taken = CorveeTakenModel::getTakenVoorMaaltijd($maaltijd->getMaaltijdId());
-		// als er meerdere maaltijden op 1 dag zijn en maar 1 kookploeg (een taak kan maar aan 1 maaltijd gekoppeld zijn)
-		$taken = CorveeTakenModel::getTakenVoorAgenda($maaltijd->getBeginMoment(), $maaltijd->getBeginMoment());
-		$uid = LoginLid::instance()->getUid();
-		foreach ($taken as $taak) {
-			if ($taak->getLidId() === $uid && $taak->getMaaltijdId() !== null) { // het moet wel maaltijdcorvee zijn (vanwege op datum hierboven)
-				return $taak; // de taak die toegang geeft tot de maaltijdlijst
-			}
-		}
-		if (opConfide() || LoginLid::mag('P_MAAL_MOD')) {
-			return true;
-		}
-		return false;
-	}
-
 	public function ketzer() {
 		$maaltijden = MaaltijdenModel::getKomendeMaaltijdenVoorLid(LoginLid::instance()->getUid());
 		$aanmeldingen = MaaltijdAanmeldingenModel::getAanmeldingenVoorLid($maaltijden, LoginLid::instance()->getUid());
@@ -72,7 +56,7 @@ class MijnMaaltijdenController extends AclController {
 
 	public function lijst($mid) {
 		$maaltijd = MaaltijdenModel::getMaaltijd($mid, true);
-		if (!self::magMaaltijdlijstTonen($maaltijd)) {
+		if (!$maaltijd->magMaaltijdlijstTonen()) {
 			$this->geentoegang();
 			return;
 		}
@@ -84,7 +68,7 @@ class MijnMaaltijdenController extends AclController {
 
 	public function sluit($mid) {
 		$maaltijd = MaaltijdenModel::getMaaltijd($mid);
-		if (!self::magMaaltijdlijstTonen($maaltijd)) {
+		if (!$maaltijd->magMaaltijdlijstTonen()) {
 			$this->geentoegang();
 			return;
 		}

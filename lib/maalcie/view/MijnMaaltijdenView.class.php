@@ -13,15 +13,12 @@ class MijnMaaltijdenView extends TemplateView {
 	public function __construct(array $maaltijden, array $aanmeldingen = null) {
 		parent::__construct($maaltijden, 'Maaltijdenketzer');
 
-		$toonlijst = array();
 		foreach ($this->model as $maaltijd) {
 			$mid = $maaltijd->getMaaltijdId();
-			$toonlijst[$mid] = MijnMaaltijdenController::magMaaltijdlijstTonen($maaltijd);
 			if (!array_key_exists($mid, $aanmeldingen)) {
 				$aanmeldingen[$mid] = false;
 			}
 		}
-		$this->smarty->assign('toonlijst', $toonlijst);
 		$this->smarty->assign('standaardprijs', sprintf('%.2f', floatval(Instellingen::get('maaltijden', 'standaard_prijs'))));
 		$this->smarty->assign('maaltijden', $this->model);
 		$this->smarty->assign('aanmeldingen', $aanmeldingen);
@@ -40,7 +37,6 @@ class MijnMaaltijdView extends TemplateView {
 		parent::__construct($maaltijd);
 		$this->smarty->assign('maaltijd', $this->model);
 		$this->smarty->assign('aanmelding', $aanmelding);
-		$this->smarty->assign('toonlijst', MijnMaaltijdenController::magMaaltijdlijstTonen($maaltijd));
 		$this->smarty->assign('standaardprijs', sprintf('%.2f', floatval(Instellingen::get('maaltijden', 'standaard_prijs'))));
 	}
 

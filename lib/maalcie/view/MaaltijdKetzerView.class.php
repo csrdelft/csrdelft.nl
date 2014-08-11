@@ -18,7 +18,6 @@ class MaaltijdKetzerView extends TemplateView {
 		$this->smarty->assign('standaardprijs', floatval(Instellingen::get('maaltijden', 'standaard_prijs')));
 		$this->smarty->assign('maaltijd', $this->model);
 		$this->smarty->assign('aanmelding', $aanmelding);
-		$this->smarty->assign('toonlijst', MijnMaaltijdenController::magMaaltijdlijstTonen($this->model));
 	}
 
 	public function getKetzer() {

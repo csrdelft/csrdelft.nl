@@ -261,6 +261,21 @@ class Maaltijd implements Agendeerbaar {
 		return false;
 	}
 
-}
+	// Controller ############################################################
 
-?>
+	public function magMaaltijdlijstTonen() {
+		// Er kunnen meerdere maaltijden op 1 dag zijn terwijl er maar 1 kookploeg is (een taak kan maar aan 1 maaltijd gekoppeld zijn)
+		$taken = CorveeTakenModel::getTakenVoorAgenda($this->getBeginMoment(), $this->getBeginMoment());
+		$uid = LoginLid::instance()->getUid();
+		foreach ($taken as $taak) {
+			if ($taak->getLidId() === $uid && $taak->getMaaltijdId() !== null) { // het moet wel maaltijdcorvee zijn (vanwege op datum hierboven)
+				return $taak; // de taak die toegang geeft tot de maaltijdlijst
+			}
+		}
+		if (opConfide() || LoginLid::mag('P_MAAL_MOD')) {
+			return true;
+		}
+		return false;
+	}
+
+}
