@@ -9,7 +9,7 @@ $courant = new Courant();
 if (!$courant->magVerzenden()) {
 	invokeRefresh(CSR_ROOT . '/actueel/courant/', 'U heeft geen rechten om de courant te verzenden.');
 	exit;
-} elseif ($courant->getBerichtenCount() == 0) {
+} elseif ($courant->getBerichtenCount() < 1) {
 	invokeRefresh(CSR_ROOT . '/actueel/courant/', 'Lege courant kan niet worden verzonden');
 	exit;
 }
