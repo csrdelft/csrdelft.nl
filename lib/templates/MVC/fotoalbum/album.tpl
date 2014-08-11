@@ -37,12 +37,12 @@
 		</a>
 	</div>
 {/foreach}
+<script type="text/javascript">
 {literal}
-				<script type="text/javascript">
-		jQuery(document).ready(function($) {
-		$("a[rel^='prettyPhoto']").prettyPhoto({
-		theme: 'dark_rounded',
-				markup: '<div class="pp_pic_holder"> \
+jQuery(document).ready(function($) {
+$("a[rel^='prettyPhoto']").prettyPhoto({
+	theme: 'dark_rounded',
+	markup: '<div class="pp_pic_holder"> \
 		<div class="ppt">&nbsp;</div> \
 		<div class="pp_top"> \
 			<div class="pp_left"></div> \
@@ -62,7 +62,7 @@
 						</div> \
 						<div id="pp_full_res"></div> \
 						<div class="pp_details clearfix"> \
-							<a id="fullsizeLink"><img src="{$CSR_PICS}/famfamfam/disk.png" title="Origineel downloaden" /></a> \
+							<a id="fullsizeLink"><img src="http://plaetjes.csrdelft.nl/famfamfam/disk.png" title="Origineel downloaden" /></a> \
 							<p class="pp_description"></p> \
 							<!--<a class="pp_close" href="#">Close</a>--> \
 							<div class="pp_nav"> \
@@ -97,11 +97,11 @@
 			}
 		});
 
-	//open de foto waar naar gelinkt wordt met de hashtag.
+		//open de foto waar naar gelinkt wordt met de hashtag
 		if (window.location.hash != '') {
 			imgname = window.location.hash.substring(1);
 
-	//verzamel alle plaatjes.
+			//verzamel alle plaatjes.
 			var pics = $('a[rel*=prettyPhoto]');
 			var urls = pics.map(function() {
 				return $(this).attr('href')
@@ -112,7 +112,7 @@
 
 			$.prettyPhoto.open(urls, null, titles);
 
-	//welke moeten we openen?
+			//welke moeten we openen?
 			indexoftheimage = 0;
 			pics.each(function(index, value) {
 				if (pics[index].title == imgname) {
@@ -121,5 +121,5 @@
 			});
 		}
 	});
-	</script>
 {/literal}
+</script>
