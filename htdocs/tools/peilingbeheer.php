@@ -29,7 +29,7 @@ if (isset($_GET['action'])) {
 				try {
 					$peiling = new Peiling((int) $_POST['id']);
 				} catch (Exception $e) {
-					
+					$error = $e->getMessage();
 				}
 
 				if (isset($_POST['optie']) && is_numeric($_POST['optie'])) {

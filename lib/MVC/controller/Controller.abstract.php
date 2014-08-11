@@ -144,18 +144,17 @@ abstract class Controller {
 
 	public function performAction(array $args = array()) {
 		if (!$this->mag($this->action)) {
+			//DebugLogModel::instance()->log(get_called_class(), $this->action, $args, 'geentoegang');
 			$this->action = 'geentoegang';
 		}
 		if (!$this->hasAction($this->action)) {
 			throw new Exception('Action undefined: ' . $this->action);
 		}
-//DebugLogModel::instance()->log(get_called_class(), $this->action, $args);
 		return call_user_func_array(array($this, $this->action), $args);
 	}
 
 	protected function geentoegang() {
 		http_response_code(403);
-		DebugLogModel::instance()->log(get_called_class(), $this->action, array(), 'geentoegang');
 		if ($this->isPosted()) {
 			echo 'access denied';
 		} else {

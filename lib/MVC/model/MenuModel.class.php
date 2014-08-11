@@ -88,7 +88,7 @@ class MenuModel extends PersistenceModel {
 			$this->delete($item);
 			$db->commit();
 			setMelding($count . ' menu-items nieuwe parent gegeven.', 2);
-		} catch (\Exception $e) {
+		} catch (Exception $e) {
 			$db->rollback();
 			throw $e; // rethrow to controller
 		}

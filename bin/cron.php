@@ -27,5 +27,5 @@ try {
 	require_once 'maalcie/model/CorveeHerinneringenModel.class.php';
 	$verstuurd_errors = CorveeHerinneringenModel::stuurHerinneringen();
 } catch (Exception $e) {
-	#TODO: logging
+	DebugLogModel::instance()->log('cron.php', 'CorveeHerinneringenModel::stuurHerinneringen()', array(), $e);
 }

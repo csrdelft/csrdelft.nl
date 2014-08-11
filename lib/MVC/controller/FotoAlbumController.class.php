@@ -159,6 +159,7 @@ class FotoAlbumController extends AclController {
 				}
 			} catch (Exception $e) {
 				setMelding($msg . ' toevoegen mislukt: ' . $e->getMessage(), -1);
+				DebugLogModel::instance()->log(get_called_class(), $this->action, array($album), $e);
 			}
 		}
 		$this->view = $formulier;

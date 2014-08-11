@@ -92,7 +92,6 @@ class BeheerAbonnementenController extends AclController {
 		if ($abo_aantal[1] > 0) {
 			$melding = 'Automatisch aangemeld voor ' . $abo_aantal[1] . ' maaltijd' . ($abo_aantal[1] === 1 ? '' : 'en');
 			setMelding($melding, 2);
-			DebugLogModel::instance()->log(get_called_class(), 'inschakelen', array($mrid), $melding);
 		}
 	}
 
@@ -105,7 +104,6 @@ class BeheerAbonnementenController extends AclController {
 		if ($abo_aantal[1] > 0) {
 			$melding = 'Automatisch afgemeld voor ' . $abo_aantal[1] . ' maaltijd' . ($abo_aantal[1] === 1 ? '' : 'en');
 			setMelding($melding, 2);
-			DebugLogModel::instance()->log(get_called_class(), 'uitschakelen', array($mrid), $melding);
 		}
 	}
 

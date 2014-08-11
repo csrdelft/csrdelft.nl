@@ -10,7 +10,6 @@ require_once 'maalcie/model/MaaltijdenModel.class.php';
 class MaaltijdAanmeldingenModel {
 
 	public static function aanmeldenVoorMaaltijd($mid, $uid, $doorUid, $aantalGasten = 0, $beheer = false, $gastenEetwens = '') {
-		DebugLogModel::instance()->log(get_called_class(), 'aanmeldenVoorMaaltijd', array($mid, $uid, $doorUid, $aantalGasten, $beheer, $gastenEetwens));
 		$maaltijd = MaaltijdenModel::getMaaltijd($mid);
 		if (!$maaltijd->getIsGesloten() && $maaltijd->getBeginMoment() < strtotime(date('Y-m-d H:i'))) {
 			MaaltijdenModel::sluitMaaltijd($maaltijd);
@@ -49,7 +48,6 @@ class MaaltijdAanmeldingenModel {
 	}
 
 	public static function aanmeldenDoorAbonnement($mid, $mrid, $uid) {
-		DebugLogModel::instance()->log(get_called_class(), 'aanmeldenDoorAbonnement', array($mid, $mrid, $uid));
 		return self::newAanmelding($mid, $uid, 0, '', $mrid, null);
 	}
 
@@ -60,7 +58,6 @@ class MaaltijdAanmeldingenModel {
 	 * @param type $uid Lid voor wie het MaaltijdAbonnement wordt uitschakeld
 	 */
 	public static function afmeldenDoorAbonnement($mrid, $uid = null) {
-		DebugLogModel::instance()->log(get_called_class(), 'afmeldenDoorAbonnement', array($mrid, $uid));
 		// afmelden bij maaltijden waarbij dit abonnement de aanmelding heeft gedaan
 		$maaltijden = MaaltijdenModel::getKomendeOpenRepetitieMaaltijden($mrid);
 		if (empty($maaltijden)) {
@@ -84,7 +81,6 @@ class MaaltijdAanmeldingenModel {
 	}
 
 	public static function afmeldenDoorLid($mid, $uid, $beheer = false) {
-		DebugLogModel::instance()->log(get_called_class(), 'afmeldenDoorLid', array($mid, $uid, $beheer));
 		if (!self::getIsAangemeld($mid, $uid)) {
 			throw new Exception('Niet aangemeld');
 		}
@@ -265,7 +261,6 @@ class MaaltijdAanmeldingenModel {
 		$db = \Database::instance();
 		$query = $db->prepare($sql);
 		$query->execute($values);
-		DebugLogModel::instance()->log(get_called_class(), 'newAanmelding', array($mid, $uid, $gasten, $opmerking, $doorAbo, $doorUid), Database::interpolateQuery($query->queryString, $values));
 		if ($mid !== null) {
 			if ($query->rowCount() !== 1) {
 				throw new Exception('New aanmelding faalt: $query->rowCount() =' . $query->rowCount());
@@ -295,7 +290,6 @@ class MaaltijdAanmeldingenModel {
 		$db = \Database::instance();
 		$query = $db->prepare($sql);
 		$query->execute($values);
-		DebugLogModel::instance()->log(get_called_class(), 'deleteAanmeldingen', array($mid, $uid), Database::interpolateQuery($query->queryString, $values));
 		if ($uid !== null && $query->rowCount() !== 1) {
 			throw new Exception('Delete aanmelding faalt: $query->rowCount() =' . $query->rowCount());
 		}

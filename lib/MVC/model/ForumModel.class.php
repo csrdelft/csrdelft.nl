@@ -143,11 +143,9 @@ class ForumDelenModel extends PersistenceModel {
 					$draad->verwijderd = true;
 					$melding .= 'verwijderd (bevat geen berichten)';
 					setMelding($melding, 2);
-					DebugLogModel::instance()->log(get_called_class(), 'getWachtOpGoedkeuring', array(), $melding);
 				} else {
 					$melding .= 'goedgekeurd (bevat ' . $draad->aantal_posts . ' berichten)';
 					setMelding($melding, 2);
-					DebugLogModel::instance()->log(get_called_class(), 'getWachtOpGoedkeuring', array(), $melding);
 				}
 				ForumDradenModel::instance()->update($draad);
 			}

@@ -59,7 +59,8 @@ catch (Exception $e) {
 	$protocol = (isset($_SERVER['SERVER_PROTOCOL']) ? $_SERVER['SERVER_PROTOCOL'] : 'HTTP/1.0');
 	$code = ($e->getCode() >= 100 ? $e->getCode() : 500);
 	header($protocol . ' ' . $code . ' ' . $e->getMessage());
-	DebugLogModel::instance()->log($class, '__construct', array($request), $e);
+
+	DebugLogModel::instance()->log('index.php', 'new ' . $class, array($request), $e);
 
 	if (defined('DEBUG') && (LoginLid::mag('P_ADMIN') || LoginLid::instance()->isSued())) {
 		echo str_replace('#', '<br />#', $e); // stacktrace 
