@@ -22,7 +22,7 @@ class AgendaController extends AclController {
 			);
 		} else {
 			$this->acl = array(
-				'courant'		 => 'P_PUBLIC',
+				'courant'		 => 'P_MAIL_COMPOSE',
 				'toevoegen'		 => 'P_AGENDA_ADD',
 				'bewerken'		 => 'P_AGENDA_MOD',
 				'verwijderen'	 => 'P_AGENDA_MOD'
@@ -67,10 +67,7 @@ class AgendaController extends AclController {
 	}
 
 	public function courant() {
-		require_once 'courant/courant.class.php';
-		if (Courant::magBeheren()) {
-			$this->view = new AgendaCourantView($this->model, 2);
-		}
+		$this->view = new AgendaCourantView($this->model, 2);
 	}
 
 	public function toevoegen($datum = '') {

@@ -51,7 +51,6 @@ class ForumController extends Controller {
 	 */
 	protected function mag($action) {
 		switch ($action) {
-			case 'wijzigen':
 			case 'zoeken':
 				return true;
 
@@ -62,12 +61,6 @@ class ForumController extends Controller {
 			case 'onderwerp':
 			case 'reactie':
 			case 'wacht':
-			case 'verbergen':
-			case 'tonen':
-			case 'toonalles':
-			case 'volgenaan':
-			case 'volgenuit':
-			case 'volgniets':
 				return !$this->isPosted();
 
 			case 'aanmaken':
@@ -77,6 +70,7 @@ class ForumController extends Controller {
 				if (!LoginLid::mag('P_FORUM_ADMIN')) {
 					return false;
 				}
+			case 'wijzigen':
 			case 'posten':
 			case 'bewerken':
 			case 'verwijderen':
@@ -86,6 +80,12 @@ class ForumController extends Controller {
 			case 'goedkeuren':
 			case 'citeren':
 			case 'tekst':
+			case 'verbergen':
+			case 'tonen':
+			case 'toonalles':
+			case 'volgenaan':
+			case 'volgenuit':
+			case 'volgniets':
 				return $this->isPosted();
 
 			default:
@@ -306,7 +306,7 @@ class ForumController extends Controller {
 			throw new Exception('Onderwerp is al verborgen');
 		}
 		ForumDradenVerbergenModel::instance()->setVerbergenVoorLid($draad);
-		$this->onderwerp($draad_id);
+		// ReloadPage
 	}
 
 	/**
@@ -320,7 +320,7 @@ class ForumController extends Controller {
 			throw new Exception('Onderwerp is niet verborgen');
 		}
 		ForumDradenVerbergenModel::instance()->setVerbergenVoorLid($draad, false);
-		$this->onderwerp($draad_id);
+		// ReloadPage
 	}
 
 	/**
@@ -330,7 +330,7 @@ class ForumController extends Controller {
 		$aantal = ForumDradenVerbergenModel::instance()->getAantalVerborgenVoorLid();
 		ForumDradenVerbergenModel::instance()->toonAllesVoorLid();
 		setMelding($aantal . ' onderwerp' . ($aantal === 1 ? ' wordt' : 'en worden') . ' weer getoond in de zijbalk', 1);
-		$this->recent();
+		// ReloadPage
 	}
 
 	/**
@@ -347,7 +347,7 @@ class ForumController extends Controller {
 			throw new Exception('Onderwerp wordt al gevolgd');
 		}
 		ForumDradenVolgenModel::instance()->setVolgenVoorLid($draad);
-		$this->onderwerp($draad_id);
+		// ReloadPage
 	}
 
 	/**
@@ -361,7 +361,7 @@ class ForumController extends Controller {
 			throw new Exception('Onderwerp wordt niet gevolgd');
 		}
 		ForumDradenVolgenModel::instance()->setVolgenVoorLid($draad, false);
-		$this->onderwerp($draad_id);
+		// ReloadPage
 	}
 
 	/**
@@ -371,7 +371,7 @@ class ForumController extends Controller {
 		$aantal = ForumDradenVolgenModel::instance()->getAantalVolgenVoorLid();
 		ForumDradenVolgenModel::instance()->volgNietsVoorLid();
 		setMelding($aantal . ' onderwerp' . ($aantal === 1 ? ' wordt' : 'en worden') . ' niet meer gevolgd', 1);
-		$this->recent();
+		// ReloadPage
 	}
 
 	/**
@@ -422,7 +422,7 @@ class ForumController extends Controller {
 			$wijziging = $property . ' = ' . $value;
 		}
 		setMelding('Wijziging geslaagd: ' . $wijziging, 1);
-		$this->onderwerp($draad->draad_id);
+		// ReloadPage
 	}
 
 	/**

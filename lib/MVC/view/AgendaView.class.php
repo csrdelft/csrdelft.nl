@@ -57,7 +57,6 @@ class AgendaItemMaandView extends TemplateView {
 	}
 
 	public function view() {
-		$this->smarty->assign('magBeheren', AgendaController::magBeheren());
 		$this->smarty->assign('item', $this->model);
 		$this->smarty->display('MVC/agenda/maand_item.tpl');
 	}
