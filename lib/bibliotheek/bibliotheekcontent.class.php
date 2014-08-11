@@ -1,15 +1,12 @@
 <?php
 
+require_once 'catalogus.class.php';
+
 /**
  * bibliotheekcontent.class.php
  * 
  * @author Gerrit Uitslag <klapinklapin@gmail.com>
  *
- */
-require_once 'catalogus.class.php';
-
-/**
- * Catalogus
  */
 class BibliotheekCatalogusContent extends TemplateView {
 
@@ -34,10 +31,10 @@ class BibliotheekCatalogusDatatableContent extends TemplateView {
 		 * Output
 		 */
 		$output = array(
-			"sEcho" => intval(filter_input(INPUT_GET, 'sEcho', FILTER_SANITIZE_NUMBER_INT)),
-			"iTotalRecords" => $this->model->getTotaal(),
-			"iTotalDisplayRecords" => $this->model->getGefilterdTotaal(),
-			"aaData" => array()
+			"sEcho"					 => intval(filter_input(INPUT_GET, 'sEcho', FILTER_SANITIZE_NUMBER_INT)),
+			"iTotalRecords"			 => $this->model->getTotaal(),
+			"iTotalDisplayRecords"	 => $this->model->getGefilterdTotaal(),
+			"aaData"				 => array()
 		);
 
 		//kolommen van de dataTable

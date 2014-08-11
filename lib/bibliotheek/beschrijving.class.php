@@ -1,106 +1,130 @@
 <?php
-/*
+
+/**
  * beschrijving.class.php	| 	Gerrit Uitslag
  *
  * een boekbeschrijving of boekrecensie
  *
  */
+class Beschrijving {
 
-class Beschrijving{
+	private $id = 0;  // id van recensie 
+	private $beschrijving = array();
 
-	private $id=0;		// id van recensie 
-	private $beschrijving=array();
-
-	public function __construct($init, $boekid=null){
+	public function __construct($init, $boekid = null) {
 		$this->load($init, $boekid);
 	}
 
-	private function load($init, $boekid){
-		if(is_array($init)){
-			$this->id=$init['id'];
-			$this->beschrijving=$init;
-		}else{
-			$this->id=(int)$init;
-			if($this->getId()==0){
-				$this->beschrijving=array('id'=>0, 'beschrijving'=>'', 'boek_id'=>(int)$boekid, 'schrijver_uid'=>Loginlid::instance()->getUid());
-			}else{
-				$db=MySql::instance();
-				$query="
+	private function load($init, $boekid) {
+		if (is_array($init)) {
+			$this->id = $init['id'];
+			$this->beschrijving = $init;
+		} else {
+			$this->id = (int) $init;
+			if ($this->getId() == 0) {
+				$this->beschrijving = array('id' => 0, 'beschrijving' => '', 'boek_id' => (int) $boekid, 'schrijver_uid' => Loginlid::instance()->getUid());
+			} else {
+				$db = MySql::instance();
+				$query = "
 					SELECT id, boek_id, schrijver_uid, beschrijving, toegevoegd, bewerkdatum
 					FROM biebbeschrijving
-					WHERE id=".(int)$this->id."
+					WHERE id=" . (int) $this->id . "
 					LIMIT 1;";
-				$result=$db->query($query);
-				
-				if($db->numRows($result)>0){
+				$result = $db->query($query);
+
+				if ($db->numRows($result) > 0) {
 					$beschrijving = $db->next($result);
-					$this->beschrijving=$beschrijving;
-				}else{
-					throw new Exception('Mislukt. Boek::getBeschrijving()'.$db->error());
+					$this->beschrijving = $beschrijving;
+				} else {
+					throw new Exception('Mislukt. Boek::getBeschrijving()' . $db->error());
 				}
 			}
 		}
 	}
 
-	public function getTekst(){			return $this->beschrijving['beschrijving'];}
-	public function getSchrijver(){		return $this->beschrijving['schrijver_uid'];}
-	public function getBeschrijving(){	return $this->beschrijving;}
-	public function getId(){			return $this->id;}
+	public function getTekst() {
+		return $this->beschrijving['beschrijving'];
+	}
 
-	public function setTekst($tekst){	$this->beschrijving['beschrijving']=$tekst;}
-	public function setEditFlag(){		$this->beschrijving['bewerk']=true;}
+	public function getSchrijver() {
+		return $this->beschrijving['schrijver_uid'];
+	}
 
-	/* 
+	public function getBeschrijving() {
+		return $this->beschrijving;
+	}
+
+	public function getId() {
+		return $this->id;
+	}
+
+	public function setTekst($tekst) {
+		$this->beschrijving['beschrijving'] = $tekst;
+	}
+
+	public function setEditFlag() {
+		$this->beschrijving['bewerk'] = true;
+	}
+
+	/*
 	 * @param 	$uid lidnummer of null
 	 * @return	bool
 	 * 		een beschrijving mag door schrijver van beschrijving en door admins bewerkt worden.
 	 */
-	public function isSchrijver($uid=null){
-		if($uid===null){
-			$uid=LoginLid::instance()->getUid();
+
+	public function isSchrijver($uid = null) {
+		if ($uid === null) {
+			$uid = LoginLid::instance()->getUid();
 		}
-		if($uid=='x999'){ return false;}
-		return $this->beschrijving['schrijver_uid'] ==$uid;
+		if ($uid == 'x999') {
+			return false;
+		}
+		return $this->beschrijving['schrijver_uid'] == $uid;
 	}
+
 	/*
 	 * Sla boekrecensie/beschrijving op
 	 */
-	public function save(){
-		$db=MySql::instance();
-		if($this->getId()==0){
-			$qSave="
+
+	public function save() {
+		$db = MySql::instance();
+		if ($this->getId() == 0) {
+			$qSave = "
 				INSERT INTO biebbeschrijving (
 					boek_id, schrijver_uid, beschrijving, toegevoegd
 				) VALUES (
-					".(int)$this->beschrijving['boek_id'].",
-					'".$db->escape(Loginlid::instance()->getUid())."',
-					'".$db->escape($this->getTekst())."',
-					'".getDateTime()."'
+					" . (int) $this->beschrijving['boek_id'] . ",
+					'" . $db->escape(Loginlid::instance()->getUid()) . "',
+					'" . $db->escape($this->getTekst()) . "',
+					'" . getDateTime() . "'
 				);";
-		}else{
-			$qSave="
+		} else {
+			$qSave = "
 				UPDATE biebbeschrijving SET
-					beschrijving= '".$db->escape($this->getTekst())."',
-					bewerkdatum='".getDateTime()."'
-				WHERE id= ".$this->getId()."
+					beschrijving= '" . $db->escape($this->getTekst()) . "',
+					bewerkdatum='" . getDateTime() . "'
+				WHERE id= " . $this->getId() . "
 				LIMIT 1;";
 		}
-		if($db->query($qSave)){
-			$this->id=$db->insert_id();//id van beschrijving weer tijdelijk opslaan, zodat we beschrijving kunnen linken
+		if ($db->query($qSave)) {
+			$this->id = $db->insert_id(); //id van beschrijving weer tijdelijk opslaan, zodat we beschrijving kunnen linken
 			return true;
 		}
-		$this->error .= 'Fout in query, mysql gaf terug: '.$db->error().' Boek::saveBeschrijving()';
+		$this->error .= 'Fout in query, mysql gaf terug: ' . $db->error() . ' Boek::saveBeschrijving()';
 		return false;
 	}
+
 	/*
 	 * verwijder beschrijving
 	 * 
 	 * @return	true geslaagd
 	 * 			false mislukt, iig id=0 is false
 	 */
-	public function verwijder(){
-		$db=MySql::instance();
-	 	$qVerwijderBeschrijving="DELETE FROM biebbeschrijving WHERE id=".(int)$this->getId()." LIMIT 1;";
+
+	public function verwijder() {
+		$db = MySql::instance();
+		$qVerwijderBeschrijving = "DELETE FROM biebbeschrijving WHERE id=" . (int) $this->getId() . " LIMIT 1;";
 		return $db->query($qVerwijderBeschrijving);
 	}
+
 }

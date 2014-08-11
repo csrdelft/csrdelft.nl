@@ -1,19 +1,19 @@
 <?php
-/*
+
+/**
  * Catalogus
  *
  *
  */
+class Catalogus {
 
-class Catalogus{
+	private $aBoeken = array();
+	private $iTotaal;
+	private $iGefilterdTotaal;
+	private $aKolommen = array(); // kolommen van de tabel. De laatste velden die niet in tabel staan worden gebruik om op te filteren.
+	private $iKolommenZichtbaar; //aantal kolommen zichtbaar in de tabel.
 
-private $aBoeken = array();
-private $iTotaal;
-private $iGefilterdTotaal;
-private $aKolommen = array(); // kolommen van de tabel. De laatste velden die niet in tabel staan worden gebruik om op te filteren.
-private $iKolommenZichtbaar; //aantal kolommen zichtbaar in de tabel.
-
-	public function __construct(){
+	public function __construct() {
 		$this->loadCatalogusdata();
 	}
 
@@ -23,7 +23,7 @@ private $iKolommenZichtbaar; //aantal kolommen zichtbaar in de tabel.
 	 * 
 	 * @return json
 	 */
-	protected function loadCatalogusdata(){
+	protected function loadCatalogusdata() {
 		/*
 		 * Script:    DataTables server-side script for PHP and MySQL
 		 * Copyright: 2010 - Allan Jardine
@@ -32,25 +32,25 @@ private $iKolommenZichtbaar; //aantal kolommen zichtbaar in de tabel.
 
 
 		// kolommen van de tabel. De laatste velden die niet in tabel staan worden gebruik om op te filteren.
-		if(LoginLid::mag('P_BIEB_READ')){
+		if (LoginLid::mag('P_BIEB_READ')) {
 			//boekstatus
-			$this->aKolommen = array( 'titel', 'auteur', 'categorie', 'bsaantal', 'eigenaar', 'lener', 'uitleendatum', 'status', 'code', 'isbn', 'auteur', 'categorie');
+			$this->aKolommen = array('titel', 'auteur', 'categorie', 'bsaantal', 'eigenaar', 'lener', 'uitleendatum', 'status', 'code', 'isbn', 'auteur', 'categorie');
 			$this->iKolommenZichtbaar = 7;
-		}else{
+		} else {
 			//catalogus
-			$this->aKolommen = array( 'titel', 'auteur', 'categorie', 'code', 'isbn');
+			$this->aKolommen = array('titel', 'auteur', 'categorie', 'code', 'isbn');
 			$this->iKolommenZichtbaar = 3;
 		}
 
 		/* MySQL */
-		$db=MySql::instance();
+		$db = MySql::instance();
 
-		/* 
+		/*
 		 * Paging
 		 */
 		$sLimit = "";
-		if( isset($_GET['iDisplayStart']) && $_GET['iDisplayLength'] != '-1' ){
-			$sLimit = "LIMIT ".(int) $_GET['iDisplayStart'].", ".(int) $_GET['iDisplayLength'];
+		if (isset($_GET['iDisplayStart']) && $_GET['iDisplayLength'] != '-1') {
+			$sLimit = "LIMIT " . (int) $_GET['iDisplayStart'] . ", " . (int) $_GET['iDisplayLength'];
 		}
 
 
@@ -59,24 +59,24 @@ private $iKolommenZichtbaar; //aantal kolommen zichtbaar in de tabel.
 		 */
 
 		//sorteerkeys voor mysql
-		$aSortColumns = array(	'titel'=>"titel", 	'auteur'=>"auteur", 	'categorie'=>"categorie",
-								'code'=>"code", 	'isbn'=>"isbn", 		'bsaantal'=>"bsaantal", 
-								'status'=>"status", 'leningen'=>"leningen", 'eigenaar'=>"eigenaar", 
-								'lener'=>"lener", 'uitleendatum'=>"uitleendatum");
+		$aSortColumns = array('titel'			 => "titel", 'auteur'		 => "auteur", 'categorie'		 => "categorie",
+			'code'			 => "code", 'isbn'			 => "isbn", 'bsaantal'		 => "bsaantal",
+			'status'		 => "status", 'leningen'		 => "leningen", 'eigenaar'		 => "eigenaar",
+			'lener'			 => "lener", 'uitleendatum'	 => "uitleendatum");
 
 		//is er een kolom gegeven om op te sorteren?
-		if( isset($_GET['iSortCol_0']) ){
+		if (isset($_GET['iSortCol_0'])) {
 			$sOrder = "ORDER BY ";
 			//loop als er op meer kolommen tegelijk gesorteerd moet worden
-			for( $i=0 ; $i<intval( $_GET['iSortingCols'] ) ; $i++ ){
+			for ($i = 0; $i < intval($_GET['iSortingCols']); $i++) {
 				//mag kolom gesorteerd worden?
-				if( $_GET[ 'bSortable_'.intval($_GET['iSortCol_'.$i]) ] == "true" ){
-					$sOrder .= $aSortColumns[$this->aKolommen[ intval( $_GET['iSortCol_'.$i] ) ]]." ".$db->escape( $_GET['sSortDir_'.$i] ) .", ";
+				if ($_GET['bSortable_' . intval($_GET['iSortCol_' . $i])] == "true") {
+					$sOrder .= $aSortColumns[$this->aKolommen[intval($_GET['iSortCol_' . $i])]] . " " . $db->escape($_GET['sSortDir_' . $i]) . ", ";
 				}
 			}
-			$sOrder = substr_replace( $sOrder, "", -2 );
+			$sOrder = substr_replace($sOrder, "", -2);
 
-			if( $sOrder == "ORDER BY " ){
+			if ($sOrder == "ORDER BY ") {
 				$sOrder = "";
 			}
 		}
@@ -89,54 +89,54 @@ private $iKolommenZichtbaar; //aantal kolommen zichtbaar in de tabel.
 		 * on very large tables, and MySQL's regex functionality is very limited
 		 */
 		//sorteer key voor mysql
-		$aFilterColumns = array('titel'=> "titel", 	'auteur'=>"auteur", 'categorie'=>"CONCAT(c1.categorie, ' - ', c2.categorie )",
-								'code'=>"code", 	'isbn'=>"isbn", 	'bsaantal'=>"bsaantal", 'status'=>"e.status", 'leningen'=>"leningen", 
-								'eigenaar'=>"CONCAT(l1.voornaam, ' ', l1.tussenvoegsel,IFNULL(l1.tussenvoegsel, ' '),l1.achternaam)", 
-								'lener'=> "CONCAT(l2.voornaam, ' ',l2.tussenvoegsel, IFNULL(l1.tussenvoegsel, ' '),l2.achternaam)",
-								'uitleendatum'=>"uitleendatum");
+		$aFilterColumns = array('titel'			 => "titel", 'auteur'		 => "auteur", 'categorie'		 => "CONCAT(c1.categorie, ' - ', c2.categorie )",
+			'code'			 => "code", 'isbn'			 => "isbn", 'bsaantal'		 => "bsaantal", 'status'		 => "e.status", 'leningen'		 => "leningen",
+			'eigenaar'		 => "CONCAT(l1.voornaam, ' ', l1.tussenvoegsel,IFNULL(l1.tussenvoegsel, ' '),l1.achternaam)",
+			'lener'			 => "CONCAT(l2.voornaam, ' ',l2.tussenvoegsel, IFNULL(l1.tussenvoegsel, ' '),l2.achternaam)",
+			'uitleendatum'	 => "uitleendatum");
 
 		$sWhere = "";
-		if( $_GET['sSearch'] != "" ){
+		if ($_GET['sSearch'] != "") {
 			$sWhere = "WHERE (";
-			for( $i=0 ; $i<count($this->aKolommen) ; $i++ ){
+			for ($i = 0; $i < count($this->aKolommen); $i++) {
 				//beschrijvingenaantal skippen, die heeft een subquery nodig
-				if($this->aKolommen[$i]!='bsaantal'){
-					$sWhere .= $aFilterColumns[$this->aKolommen[$i]]." LIKE '%".$db->escape( $_GET['sSearch'] )."%' OR ";
+				if ($this->aKolommen[$i] != 'bsaantal') {
+					$sWhere .= $aFilterColumns[$this->aKolommen[$i]] . " LIKE '%" . $db->escape($_GET['sSearch']) . "%' OR ";
 				}
 			}
-			$sWhere = substr_replace( $sWhere, "", -3 );
+			$sWhere = substr_replace($sWhere, "", -3);
 			$sWhere .= ')';
 		}
 
-		/* 
+		/*
 		 * filter op eigenaar
 		 */
 
 		//filter bepalen
 		$allow = array('alle', 'csr', 'leden', 'eigen', 'geleend');
-		if(LoginLid::mag('P_BIEB_READ') AND in_array($_GET['sEigenaarFilter'], $allow)){
+		if (LoginLid::mag('P_BIEB_READ') AND in_array($_GET['sEigenaarFilter'], $allow)) {
 			$filter = $_GET['sEigenaarFilter'];
-		}else{
+		} else {
 			$filter = 'csr';
 		}
 
-		if($sWhere == ""){
+		if ($sWhere == "") {
 			$sBeginWh = "WHERE ";
-		}else{
+		} else {
 			$sBeginWh = " AND ";
 		}
-		switch($filter){
+		switch ($filter) {
 			case 'csr':
-				$sWhere .= $sBeginWh."e.eigenaar_uid='x222'";
+				$sWhere .= $sBeginWh . "e.eigenaar_uid='x222'";
 				break;
 			case 'leden':
-				$sWhere .= $sBeginWh."e.eigenaar_uid NOT LIKE 'x222'";
+				$sWhere .= $sBeginWh . "e.eigenaar_uid NOT LIKE 'x222'";
 				break;
 			case 'eigen':
-				$sWhere .= $sBeginWh."e.eigenaar_uid='".$db->escape(Loginlid::instance()->getUid())."'";
+				$sWhere .= $sBeginWh . "e.eigenaar_uid='" . $db->escape(Loginlid::instance()->getUid()) . "'";
 				break;
 			case 'geleend':
-				$sWhere .= $sBeginWh."(e.status = 'uitgeleend' OR e.status = 'teruggegeven')AND e.uitgeleend_uid='".$db->escape(Loginlid::instance()->getUid())."'";
+				$sWhere .= $sBeginWh . "(e.status = 'uitgeleend' OR e.status = 'teruggegeven')AND e.uitgeleend_uid='" . $db->escape(Loginlid::instance()->getUid()) . "'";
 				break;
 		}
 
@@ -144,7 +144,7 @@ private $iKolommenZichtbaar; //aantal kolommen zichtbaar in de tabel.
 		 * SQL queries
 		 * Get data to display
 		 */
-		if(LoginLid::mag('P_BIEB_READ')){
+		if (LoginLid::mag('P_BIEB_READ')) {
 			//ingelogden
 			$sSelect = "
 				, GROUP_CONCAT(e.eigenaar_uid SEPARATOR ', ') AS eigenaar, GROUP_CONCAT(e.uitgeleend_uid SEPARATOR ', ') AS lener, 
@@ -155,7 +155,7 @@ private $iKolommenZichtbaar; //aantal kolommen zichtbaar in de tabel.
 				LEFT JOIN lid l1 ON(l1.uid=e.eigenaar_uid)
 				LEFT JOIN lid l2 ON(l2.uid=e.uitgeleend_uid)";
 			$sGroupby = "GROUP BY b.id";
-		}else{
+		} else {
 			//uitgelogden
 			$sSelect = "";
 			$sLeftjoin = "";
@@ -166,26 +166,26 @@ private $iKolommenZichtbaar; //aantal kolommen zichtbaar in de tabel.
 			SELECT SQL_CALC_FOUND_ROWS DISTINCT 
 				b.id, b.titel, b.isbn, b.code, b.auteur, 
 				CONCAT(c1.categorie, ' - ', c2.categorie) AS categorie
-				".$sSelect."
+				" . $sSelect . "
 			FROM biebboek b
 			LEFT JOIN biebcategorie c2 ON(b.categorie_id = c2.id)
 			LEFT JOIN biebcategorie c1 ON(c1.id = c2.p_id)
 			LEFT JOIN biebexemplaar e ON(b.id = e.boek_id)
-			".$sLeftjoin." 
-			".$sWhere." 
-			".$sGroupby." 
-			".$sOrder." 
-			".$sLimit."";
+			" . $sLeftjoin . " 
+			" . $sWhere . " 
+			" . $sGroupby . " 
+			" . $sOrder . " 
+			" . $sLimit . "";
 
-		$rResult = $db->query($sQuery) or die($sQuery.' '.$db->error());
-		while($aRow = $db->next_array($rResult) ){
+		$rResult = $db->query($sQuery) or die($sQuery . ' ' . $db->error());
+		while ($aRow = $db->next_array($rResult)) {
 			$this->aBoeken[] = $aRow;
 		}
 
 		/* Data set length after filtering */
 		$sQuery = "
 			SELECT FOUND_ROWS()";
-		$rResultFilterTotal = $db->query( $sQuery ) or die($db->error());
+		$rResultFilterTotal = $db->query($sQuery) or die($db->error());
 		$aResultFilterTotal = $db->next_array($rResultFilterTotal);
 		$this->iGefilterdTotaal = $aResultFilterTotal[0];
 
@@ -193,19 +193,31 @@ private $iKolommenZichtbaar; //aantal kolommen zichtbaar in de tabel.
 		$sQuery = "
 			SELECT COUNT(id)
 			FROM   biebboek";
-		$rResultTotal = $db->query( $sQuery ) or die($db->error());
+		$rResultTotal = $db->query($sQuery) or die($db->error());
 		$aResultTotal = $db->next_array($rResultTotal);
 		$this->iTotaal = $aResultTotal[0];
-
 	}
 
 	//get info van object Catalogus
-	public function getTotaal()				{ return $this->iTotaal; }
-	public function getGefilterdTotaal()	{ return $this->iGefilterdTotaal; }
-	public function getBoeken()				{ return $this->aBoeken; }
-	public function getKolommen()			{ return $this->aKolommen; }
-	public function getKolommenZichtbaar()	{ return $this->iKolommenZichtbaar; }
+	public function getTotaal() {
+		return $this->iTotaal;
+	}
 
+	public function getGefilterdTotaal() {
+		return $this->iGefilterdTotaal;
+	}
+
+	public function getBoeken() {
+		return $this->aBoeken;
+	}
+
+	public function getKolommen() {
+		return $this->aKolommen;
+	}
+
+	public function getKolommenZichtbaar() {
+		return $this->iKolommenZichtbaar;
+	}
 
 	/**
 	 * geeft alle waardes in db voor $key
@@ -213,27 +225,27 @@ private $iKolommenZichtbaar; //aantal kolommen zichtbaar in de tabel.
 	 * @param $key waarvoor waardes gezocht moeten worden
 	 * @return array van alle waardes, alfabetisch gesorteerd
 	 */
-	public static function getAllValuesOfProperty($key){
+	public static function getAllValuesOfProperty($key) {
 		$allowedkeys = array('id', 'titel', 'auteur', 'uitgavejaar', 'uitgeverij', 'paginas', 'taal', 'isbn', 'code', 'naam');
-		if(in_array($key, $allowedkeys)){
-			$db=MySql::instance();
-			if($key=='naam'){
-				$query="
+		if (in_array($key, $allowedkeys)) {
+			$db = MySql::instance();
+			if ($key == 'naam') {
+				$query = "
 					SELECT uid, concat(voornaam, ' ', tussenvoegsel,  IF(tussenvoegsel='','',' '), achternaam) as naam  
 					FROM lid 
 					WHERE status IN ('S_LID', 'S_NOVIET', 'S_GASTLID', 'S_KRINGEL', 'S_OUDLID','S_ERELID') 
 					ORDER BY achternaam;";
-			}else{
-				$query="
-					SELECT DISTINCT ".$db->escape($key)."
+			} else {
+				$query = "
+					SELECT DISTINCT " . $db->escape($key) . "
 					FROM biebboek
-					ORDER BY ".$db->escape($key).";";
+					ORDER BY " . $db->escape($key) . ";";
 			}
-			$result=$db->query($query);
+			$result = $db->query($query);
 			echo $db->error();
-			if($db->numRows($result)>0){
-				while($prop=$db->next($result)){
-					$properties[]=$prop[$key];
+			if ($db->numRows($result) > 0) {
+				while ($prop = $db->next($result)) {
+					$properties[] = $prop[$key];
 				}
 				return array_filter($properties);
 			}
@@ -249,43 +261,43 @@ private $iKolommenZichtbaar; //aantal kolommen zichtbaar in de tabel.
 	 *  )
 	 * met formatItem (optie voor jquery.autocomplete) kan uit data-array inhoud worden gegenereerd voor in de li-elementen van de suggestielijst
 	 */
-	public static function getAutocompleteSuggesties($sKey)	{
+	public static function getAutocompleteSuggesties($sKey) {
 		$properties = array();
 		$allowedkeys = array('id', 'titel', 'uitgavejaar', 'uitgeverij', 'paginas', 'taal', 'isbn', 'code', 'auteur', 'biebboek');
 		if (in_array($sKey, $allowedkeys)) {
 			$db = MySql::instance();
-			if($sKey=='biebboek'){
+			if ($sKey == 'biebboek') {
 				$query = "
 					SELECT titel, auteur, id
 					FROM biebboek
-					WHERE titel LIKE  '%".$db->escape($_GET['q'])."%' OR auteur LIKE  '%".$db->escape($_GET['q'])."%' OR id = ".(int)$_GET['q']."
+					WHERE titel LIKE  '%" . $db->escape($_GET['q']) . "%' OR auteur LIKE  '%" . $db->escape($_GET['q']) . "%' OR id = " . (int) $_GET['q'] . "
 					ORDER BY titel
-					LIMIT 0, ".(int)$_GET['limit']." ;";
-			}else{
+					LIMIT 0, " . (int) $_GET['limit'] . " ;";
+			} else {
 				$query = "
-					SELECT ".$db->escape($sKey).", id
+					SELECT " . $db->escape($sKey) . ", id
 					FROM biebboek
-					WHERE ".$db->escape($sKey)." LIKE  '%".$db->escape($_GET['q'])."%'
-					GROUP BY ".$db->escape($sKey)."
-					ORDER BY ".$db->escape($sKey)."
-					LIMIT 0, ".(int)$_GET['limit']." ;";
+					WHERE " . $db->escape($sKey) . " LIKE  '%" . $db->escape($_GET['q']) . "%'
+					GROUP BY " . $db->escape($sKey) . "
+					ORDER BY " . $db->escape($sKey) . "
+					LIMIT 0, " . (int) $_GET['limit'] . " ;";
 			}
-			$result=$db->query($query);
+			$result = $db->query($query);
 			echo $db->error();
 			if ($db->numRows($result) > 0) {
 				while ($prop = $db->next($result)) {
-					if($sKey=='biebboek'){
+					if ($sKey == 'biebboek') {
 						//input for UI autocomplete
 						$properties[] = array('titel' => $prop['titel'], 'auteur' => $prop['auteur'], 'id' => $prop['id']);
-					}else{
+					} else {
 						if ($sKey == 'titel') {
 							$data = array('titel' => $prop['titel'], 'id' => $prop['id']);
-						}else{
+						} else {
 							$data = array($prop[$sKey]);
 						}
 						$properties[] = array(
-							'data' => $data,
-							'value' => $prop[$sKey],
+							'data'	 => $data,
+							'value'	 => $prop[$sKey],
 							'result' => $prop[$sKey]);
 					}
 				}
@@ -302,18 +314,18 @@ private $iKolommenZichtbaar; //aantal kolommen zichtbaar in de tabel.
 	 * @return bool   true  $value bestaat in db
 	 *                false $value bestaat niet
 	 */
-	public static function existsProperty($key, $value){
-		$allowedkeys = array('id', 'titel', 'uitgavejaar', 'uitgeverij', 'paginas', 'taal', 'isbn', 'code','auteur');
-		if(in_array($key, $allowedkeys)){
-			$db=MySql::instance();
+	public static function existsProperty($key, $value) {
+		$allowedkeys = array('id', 'titel', 'uitgavejaar', 'uitgeverij', 'paginas', 'taal', 'isbn', 'code', 'auteur');
+		if (in_array($key, $allowedkeys)) {
+			$db = MySql::instance();
 			$query = "
-				SELECT  ".$db->escape($key)."
+				SELECT  " . $db->escape($key) . "
 				FROM  `biebboek` 
-				WHERE  `".$db->escape($key)."` LIKE  '".$db->escape($value)."'
+				WHERE  `" . $db->escape($key) . "` LIKE  '" . $db->escape($value) . "'
 				LIMIT 0 , 1;";
-			$result=$db->query($query);
-			return $db->numRows($result)>0;
-		}elseif($key=='rubriek'){
+			$result = $db->query($query);
+			return $db->numRows($result) > 0;
+		} elseif ($key == 'rubriek') {
 			return in_array($value, Rubriek::getAllRubriekIds());
 		}
 		return false;
@@ -327,7 +339,7 @@ private $iKolommenZichtbaar; //aantal kolommen zichtbaar in de tabel.
 	 * @return array met boeken van lid
 	 */
 	public static function getBoekenByUid($uid = null, $filter = 'eigendom') {
-		if($uid === null) {
+		if ($uid === null) {
 			$uid = LoginLid::instance()->getUid();
 		}
 		$db = MySql::instance();
@@ -367,7 +379,7 @@ private $iKolommenZichtbaar; //aantal kolommen zichtbaar in de tabel.
 				$select = ", e.status AS status, e.eigenaar_uid";
 				$join = "biebexemplaar e ON(b.id = e.boek_id)";
 				$where = "(e.status =  'uitgeleend' OR e.status =  'teruggegeven') " .
-					"AND e.uitgeleend_uid =  '" . $db->escape($uid) . "'";
+						"AND e.uitgeleend_uid =  '" . $db->escape($uid) . "'";
 				break;
 			default:
 				return false;
@@ -379,11 +391,11 @@ private $iKolommenZichtbaar; //aantal kolommen zichtbaar in de tabel.
 			FROM biebboek b
 			LEFT JOIN $join
 			WHERE  $where
-			".($filter == 'geleend' ? "" : "GROUP BY b.id")."
+			" . ($filter == 'geleend' ? "" : "GROUP BY b.id") . "
 			ORDER BY titel;";
 		$result = $db->query($query);
 
-		if($db->numRows($result) > 0) {
+		if ($db->numRows($result) > 0) {
 			while ($boek = $db->next($result)) {
 				$boeken[] = $boek;
 			}

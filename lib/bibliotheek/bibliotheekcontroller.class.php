@@ -1,16 +1,15 @@
 <?php
 
-/**
- * bibliotheekcontroller.class.php	|	Gerrit Uitslag (klapinklapin@gmail.com)
- *
- *
- */
 require_once 'MVC/controller/Controller.abstract.php';
 require_once 'bibliotheek/boek.class.php';
 require_once 'bibliotheek/catalogus.class.php';
 
 require_once 'bibliotheek/bibliotheekcontent.class.php';
 
+/**
+ * bibliotheekcontroller.class.php	|	Gerrit Uitslag (klapinklapin@gmail.com)
+ *
+ */
 class BibliotheekController extends Controller {
 
 	/** @var BewerkBoek|NieuwBoek */
