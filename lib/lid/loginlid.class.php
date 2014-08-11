@@ -200,8 +200,7 @@ class LoginLid {
 				'pass'	 => 'pw'
 			);
 		}
-		$this->_login_web($cred['user'], $cred['pass'], false);
-		return true;
+		return $this->_login_web($cred['user'], $cred['pass'], false);
 	}
 
 	/**

@@ -28,12 +28,10 @@ require_once 'defines.include.php';
 define('CONFIDE_IP', '80.112.180.123');
 
 # default is website mode
-if (!defined('MODE')) {
-	if (php_sapi_name() === 'cli') {
-		define('MODE', 'CLI');
-	} else {
-		define('MODE', 'WEB');
-	}
+if (php_sapi_name() === 'cli') {
+	define('MODE', 'CLI');
+} else {
+	define('MODE', 'WEB');
 }
 
 # alle meldingen tonen
