@@ -118,15 +118,15 @@ class Courant {
 		return $return;
 	}
 
-	public static function magToevoegen() {
+	public function magToevoegen() {
 		return LoginLid::mag('P_MAIL_POST');
 	}
 
-	public static function magBeheren() {
+	public function magBeheren() {
 		return LoginLid::mag('P_MAIL_COMPOSE');
 	}
 
-	public static function magVerzenden() {
+	public function magVerzenden() {
 		return LoginLid::mag('P_MAIL_SEND');
 	}
 
