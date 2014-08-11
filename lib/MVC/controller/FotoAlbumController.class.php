@@ -33,17 +33,17 @@ class FotoAlbumController extends AclController {
 		parent::__construct($query);
 		if (!$this->isPosted()) {
 			$this->acl = array(
-				'bekijken'	 => 'P_PUBLIC',
-				'downloaden' => 'P_LOGGED_IN',
-				'verwerken'	 => 'P_LEDEN_READ',
-				'toevoegen'	 => 'P_LEDEN_READ'
+				'bekijken'	 => 'P_ALBUM_READ',
+				'downloaden' => 'P_ALBUM_DOWN',
+				'verwerken'	 => 'P_ALBUM_ADMIN',
+				'toevoegen'	 => 'P_ALBUM_ADD'
 			);
 		} else {
 			$this->acl = array(
-				'albumcover'	 => 'P_DOCS_MOD',
-				'verwijderen'	 => 'P_DOCS_MOD',
-				'hernoemen'		 => 'P_DOCS_MOD',
-				'uploaden'		 => 'P_LEDEN_READ'
+				'albumcover'	 => 'P_ALBUM_MOD',
+				'verwijderen'	 => 'P_ALBUM_ADMIN',
+				'hernoemen'		 => 'P_ALBUM_MOD',
+				'uploaden'		 => 'P_ALBUM_ADD'
 			);
 		}
 	}

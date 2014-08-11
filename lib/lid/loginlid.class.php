@@ -485,6 +485,11 @@ class LoginLid {
 			'P_DOCS_READ'		 => $this->createPermStr(1, 4), # Documenten-rubriek lezen
 			'P_DOCS_POST'		 => $this->createPermStr(1 + 2, 4), # Documenten verwijderen of erbij plaatsen en fotos uploaden
 			'P_DOCS_MOD'		 => $this->createPermStr(1 + 2 + 4, 4), # Documenten aanpassen en fotos uit fotoalbum verwijderen
+			'P_ALBUM_READ'		 => $this->createPermStr(1, 4), # Foto-album bekijken
+			'P_ALBUM_DOWN'		 => $this->createPermStr(1 + 2, 4), # Foto-album downloaden
+			'P_ALBUM_ADD'		 => $this->createPermStr(1 + 2 + 4, 4), # Fotos uploaden en albums toevoegen
+			'P_ALBUM_MOD'		 => $this->createPermStr(1 + 2 + 4 + 8, 4), # Foto-albums aanpassen
+			'P_ALBUM_ADMIN'		 => $this->createPermStr(1 + 2 + 4 + 8 + 16, 4), # Fotos uit fotoalbum verwijderen
 			'P_BIEB_READ'		 => $this->createPermStr(1, 5), # Bibliotheek lezen
 			'P_BIEB_EDIT'		 => $this->createPermStr(1 + 2, 5), # Bibliotheek wijzigen
 			'P_BIEB_MOD'		 => $this->createPermStr(1 + 2 + 4, 5), # Bibliotheek zowel wijzigen als lezen
@@ -508,14 +513,14 @@ class LoginLid {
 		# welke permissie-groep (Role) de gebruiker in zit.
 		$p = $this->_permissions;
 		$this->_perm_user = array(
-			'R_NOBODY'	 => $p['P_PUBLIC'] | $p['P_FORUM_READ'] | $p['P_AGENDA_READ'],
-			'R_LID'		 => $p['P_PROFIEL_EDIT'] | $p['P_OUDLEDEN_READ'] | $p['P_FORUM_POST'] | $p['P_AGENDA_READ'] | $p['P_DOCS_READ'] | $p['P_BIEB_READ'] | $p['P_MAAL_IK'] | $p['P_CORVEE_IK'] | $p['P_MAIL_POST'] | $p['P_NEWS_POST']
+			'R_NOBODY'	 => $p['P_PUBLIC'] | $p['P_FORUM_READ'] | $p['P_AGENDA_READ'] | $p['P_ALBUM_READ'],
+			'R_LID'		 => $p['P_PROFIEL_EDIT'] | $p['P_OUDLEDEN_READ'] | $p['P_FORUM_POST'] | $p['P_AGENDA_READ'] | $p['P_DOCS_READ'] | $p['P_BIEB_READ'] | $p['P_MAAL_IK'] | $p['P_CORVEE_IK'] | $p['P_MAIL_POST'] | $p['P_NEWS_POST'] | $p['P_ALBUM_MOD']
 		);
 		$this->_perm_user['R_ETER'] = $this->_perm_user['R_NOBODY'] | $p['P_LOGGED_IN'] | $p['P_PROFIEL_EDIT'] | $p['P_MAAL_IK'];
 		$this->_perm_user['R_OUDLID'] = $this->_perm_user['R_LID'] | $p['P_ALLEEN_OUDLID'];
-		$this->_perm_user['R_BASF'] = $this->_perm_user['R_LID'] | $p['P_DOCS_MOD'];
+		$this->_perm_user['R_BASF'] = $this->_perm_user['R_LID'] | $p['P_DOCS_MOD'] | $p['P_ALBUM_ADMIN'];
 		$this->_perm_user['R_MAALCIE'] = $this->_perm_user['R_LID'] | $p['P_MAAL_MOD'] | $p['P_CORVEE_MOD'] | $p['P_MAAL_SALDI'];
-		$this->_perm_user['R_MODERATOR'] = $this->_perm_user['R_LID'] | $p['P_LEDEN_MOD'] | $p['P_FORUM_MOD'] | $p['P_DOCS_MOD'] | $p['P_AGENDA_MOD'] | $p['P_NEWS_MOD'] | $p['P_BIEB_MOD'] | $p['P_MAAL_IK'] | $p['P_CORVEE_IK'] | $p['P_MAIL_COMPOSE'];
+		$this->_perm_user['R_MODERATOR'] = $this->_perm_user['R_LID'] | $p['P_LEDEN_MOD'] | $p['P_FORUM_MOD'] | $p['P_DOCS_MOD'] | $p['P_AGENDA_MOD'] | $p['P_NEWS_MOD'] | $p['P_BIEB_MOD'] | $p['P_MAAL_IK'] | $p['P_CORVEE_IK'] | $p['P_MAIL_COMPOSE'] | $p['P_ALBUM_ADMIN'];
 		$this->_perm_user['R_BESTUUR'] = $this->_perm_user['R_MODERATOR'] | $p['P_MAAL_MOD'] | $p['P_CORVEE_MOD'] | $p['P_MAIL_COMPOSE'] | $p['P_FORUM_BELANGRIJK'];
 		$this->_perm_user['R_PUBCIE'] = $this->_perm_user['R_MODERATOR'] | $p['P_ADMIN'] | $p['P_CORVEE_SCHED'] | $p['P_MAAL_SALDI'] | $p['P_FORUM_ADMIN'];
 	}
