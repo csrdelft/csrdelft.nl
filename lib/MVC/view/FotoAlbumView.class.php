@@ -76,7 +76,7 @@ class FotoAlbumView extends TemplateView {
 class FotoUploadForm extends PopupForm {
 
 	public function __construct(FotoAlbum $album) {
-		parent::__construct($album, get_class(), '/fotoalbum/uploaden' . $album->getSubDir());
+		parent::__construct($album, get_class(), '/fotoalbum/uploaden/' . $album->getSubDir());
 		$this->titel = 'Foto toevoegen';
 		$fields[] = new HtmlComment('Alleen jpeg afbeeldingen.<br/><br/>');
 		$fields[] = new RequiredImageField('foto', null, null, array('image/jpeg'));

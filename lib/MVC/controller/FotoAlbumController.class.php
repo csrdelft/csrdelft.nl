@@ -125,7 +125,7 @@ class FotoAlbumController extends AclController {
 		if (defined('RESIZE_OUTPUT')) {
 			exit;
 		} else {
-			invokeRefresh(CSR_ROOT . $album->getSubDir(), 'Fotoalbum ' . $album->dirname . ' succesvol verwerkt', 1);
+			invokeRefresh(CSR_ROOT . '/' . $album->getSubDir(), 'Fotoalbum ' . $album->dirname . ' succesvol verwerkt', 1);
 		}
 	}
 
@@ -206,7 +206,7 @@ class FotoAlbumController extends AclController {
 	public function albumcover(FotoAlbum $album) {
 		$naam = filter_input(INPUT_POST, 'cover', FILTER_SANITIZE_STRING);
 		if (FotoAlbumModel::setAlbumCover($album, new Foto($album, $naam))) {
-			invokeRefresh($album->getSubDir(), 'Fotoalbum-cover succesvol ingesteld', 1);
+			invokeRefresh(CSR_ROOT . '/' . $album->getSubDir(), 'Fotoalbum-cover succesvol ingesteld', 1);
 		} else {
 			invokeRefresh(CSR_ROOT . '/fotoalbum', 'Fotoalbum-cover instellen mislukt', -1);
 		}
