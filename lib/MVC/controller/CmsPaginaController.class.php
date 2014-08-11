@@ -41,16 +41,8 @@ class CmsPaginaController extends Controller {
 		parent::performAction(array($naam));
 	}
 
-	protected function hasPermission() {
+	protected function mag($action) {
 		return true; // check permission on page itself
-	}
-
-	public static function magRechtenWijzigen() {
-		return LoginLid::mag('P_ADMIN');
-	}
-
-	public static function magVerwijderen() {
-		return LoginLid::mag('P_ADMIN');
 	}
 
 	public function bekijken($naam) {
@@ -101,10 +93,14 @@ class CmsPaginaController extends Controller {
 	}
 
 	public function verwijderen($naam) {
-		if (CmsPaginaController::magVerwijderen() AND $this->model->removePagina($naam)) {
-			invokeRefresh(CSR_ROOT, 'Verwijderd', 1);
-		} else {
+		$pagina = $this->model->getPagina($naam);
+		if (!$pagina->magVerwijderen()) {
 			$this->geentoegang();
+		}
+		if ($this->model->delete($pagina)) {
+			invokeRefresh(CSR_ROOT, 'Pagina succesvol verwijderd', 1);
+		} else {
+			invokeRefresh(CSR_ROOT, 'Verwijderen mislukt', -1);
 		}
 	}
 

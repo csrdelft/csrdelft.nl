@@ -15,27 +15,27 @@ require_once 'maalcie/view/forms/RepetitieCorveeForm.class.php';
 class BeheerTakenController extends AclController {
 
 	public function __construct($query) {
-		parent::__construct($query);
+		parent::__construct($query, null);
 		if (!$this->isPosted()) {
 			$this->acl = array(
-				'beheer' => 'P_CORVEE_MOD',
+				'beheer'	 => 'P_CORVEE_MOD',
 				'prullenbak' => 'P_CORVEE_MOD',
 				//'leegmaken' => 'P_MAAL_MOD',
-				'maaltijd' => 'P_CORVEE_MOD',
+				'maaltijd'	 => 'P_CORVEE_MOD',
 				'herinneren' => 'P_CORVEE_MOD'
 			);
 		} else {
 			$this->acl = array(
-				'nieuw' => 'P_CORVEE_MOD',
-				'bewerk' => 'P_CORVEE_MOD',
-				'opslaan' => 'P_CORVEE_MOD',
-				'verwijder' => 'P_CORVEE_MOD',
-				'herstel' => 'P_CORVEE_MOD',
-				'toewijzen' => 'P_CORVEE_MOD',
-				'puntentoekennen' => 'P_CORVEE_MOD',
-				'puntenintrekken' => 'P_CORVEE_MOD',
-				'email' => 'P_CORVEE_MOD',
-				'aanmaken' => 'P_CORVEE_MOD'
+				'nieuw'				 => 'P_CORVEE_MOD',
+				'bewerk'			 => 'P_CORVEE_MOD',
+				'opslaan'			 => 'P_CORVEE_MOD',
+				'verwijder'			 => 'P_CORVEE_MOD',
+				'herstel'			 => 'P_CORVEE_MOD',
+				'toewijzen'			 => 'P_CORVEE_MOD',
+				'puntentoekennen'	 => 'P_CORVEE_MOD',
+				'puntenintrekken'	 => 'P_CORVEE_MOD',
+				'email'				 => 'P_CORVEE_MOD',
+				'aanmaken'			 => 'P_CORVEE_MOD'
 			);
 		}
 	}
@@ -56,7 +56,7 @@ class BeheerTakenController extends AclController {
 		$popup = null;
 		if (is_int($tid) && $tid > 0) {
 			$this->bewerk($tid);
-			$popup = $this->getContent();
+			$popup = $this->getView();
 		} elseif (is_int($mid) && $mid > 0) {
 			$maaltijd = MaaltijdenModel::getMaaltijd($mid, true);
 			$taken = CorveeTakenModel::getTakenVoorMaaltijd($mid, true);
@@ -65,7 +65,7 @@ class BeheerTakenController extends AclController {
 			$maaltijd = null;
 		}
 		$this->view = new BeheerTakenView($taken, $maaltijd, false, CorveeRepetitiesModel::getAlleRepetities());
-		$this->view = new CsrLayoutPage($this->getContent());
+		$this->view = new CsrLayoutPage($this->getView());
 		$this->view->addStylesheet('taken.css');
 		$this->view->addScript('taken.js');
 		$this->view->popup = $popup;
@@ -77,7 +77,7 @@ class BeheerTakenController extends AclController {
 
 	public function prullenbak() {
 		$this->view = new BeheerTakenView(CorveeTakenModel::getVerwijderdeTaken(), null, true);
-		$this->view = new CsrLayoutPage($this->getContent());
+		$this->view = new CsrLayoutPage($this->getView());
 		$this->view->addStylesheet('taken.css');
 		$this->view->addScript('taken.js');
 	}

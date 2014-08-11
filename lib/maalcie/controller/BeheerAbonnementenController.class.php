@@ -13,19 +13,19 @@ require_once 'maalcie/view/BeheerAbonnementenView.class.php';
 class BeheerAbonnementenController extends AclController {
 
 	public function __construct($query) {
-		parent::__construct($query);
+		parent::__construct($query, null);
 		if (!$this->isPosted()) {
 			$this->acl = array(
 				'waarschuwingen' => 'P_MAAL_MOD',
-				'ingeschakeld' => 'P_MAAL_MOD',
-				'abonneerbaar' => 'P_MAAL_MOD'
+				'ingeschakeld'	 => 'P_MAAL_MOD',
+				'abonneerbaar'	 => 'P_MAAL_MOD'
 			);
 		} else {
 			$this->acl = array(
-				'inschakelen' => 'P_MAAL_MOD',
-				'uitschakelen' => 'P_MAAL_MOD',
-				'voorlid' => 'P_MAAL_MOD',
-				'novieten' => 'P_MAAL_MOD'
+				'inschakelen'	 => 'P_MAAL_MOD',
+				'uitschakelen'	 => 'P_MAAL_MOD',
+				'voorlid'		 => 'P_MAAL_MOD',
+				'novieten'		 => 'P_MAAL_MOD'
 			);
 		}
 	}
@@ -42,7 +42,7 @@ class BeheerAbonnementenController extends AclController {
 		$repetities = MaaltijdRepetitiesModel::getAlleRepetities();
 		$matrix = MaaltijdAbonnementenModel::getAbonnementenMatrix($repetities, false, $alleenWaarschuwingen, $ingeschakeld);
 		$this->view = new BeheerAbonnementenView($matrix, $repetities, $alleenWaarschuwingen, $ingeschakeld);
-		$this->view = new CsrLayoutPage($this->getContent());
+		$this->view = new CsrLayoutPage($this->getView());
 		$this->view->addStylesheet('taken.css');
 		$this->view->addScript('taken.js');
 	}

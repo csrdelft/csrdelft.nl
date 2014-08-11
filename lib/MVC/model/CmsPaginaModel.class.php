@@ -40,8 +40,4 @@ class CmsPaginaModel extends PersistenceModel {
 		return $pagina;
 	}
 
-	public function removePagina($naam) {
-		return $this->deleteByPrimaryKey(array($naam));
-	}
-
 }

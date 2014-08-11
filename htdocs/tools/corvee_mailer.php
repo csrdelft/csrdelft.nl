@@ -26,7 +26,7 @@ try {
 	require_once 'maalcie/controller/BeheerTakenController.class.php';
 	$controller = new BeheerTakenController();
 	$controller->herinneren();
-	$controller->getContent()->view();
+	$controller->getView()->view();
 }
 catch (\Exception $e) {
 	header($_SERVER['SERVER_PROTOCOL'] . ' 500 '. $e->getMessage(), true, 500);

@@ -13,17 +13,17 @@ require_once 'maalcie/view/forms/VrijstellingForm.class.php';
 class BeheerVrijstellingenController extends AclController {
 
 	public function __construct($query) {
-		parent::__construct($query);
+		parent::__construct($query, null);
 		if (!$this->isPosted()) {
 			$this->acl = array(
 				'beheer' => 'P_CORVEE_MOD'
 			);
 		} else {
 			$this->acl = array(
-				'nieuw' => 'P_CORVEE_MOD',
-				'bewerk' => 'P_CORVEE_MOD',
-				'opslaan' => 'P_CORVEE_MOD',
-				'verwijder' => 'P_CORVEE_MOD'
+				'nieuw'		 => 'P_CORVEE_MOD',
+				'bewerk'	 => 'P_CORVEE_MOD',
+				'opslaan'	 => 'P_CORVEE_MOD',
+				'verwijder'	 => 'P_CORVEE_MOD'
 			);
 		}
 	}
@@ -43,7 +43,7 @@ class BeheerVrijstellingenController extends AclController {
 	public function beheer() {
 		$vrijstellingen = CorveeVrijstellingenModel::getAlleVrijstellingen();
 		$this->view = new BeheerVrijstellingenView($vrijstellingen);
-		$this->view = new CsrLayoutPage($this->getContent());
+		$this->view = new CsrLayoutPage($this->getView());
 		$this->view->addStylesheet('taken.css');
 		$this->view->addScript('taken.js');
 	}

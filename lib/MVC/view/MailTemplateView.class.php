@@ -1,7 +1,5 @@
 <?php
 
-require_once 'MVC/view/TemplateView.abstract.php';
-
 /**
  * MailTemplateView.class.php
  *

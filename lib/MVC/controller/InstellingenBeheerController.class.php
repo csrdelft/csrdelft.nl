@@ -18,8 +18,8 @@ class InstellingenBeheerController extends AclController {
 			);
 		} else {
 			$this->acl = array(
-				'opslaan' => 'P_LOGGED_IN',
-				'reset' => 'P_LOGGED_IN'
+				'opslaan'	 => 'P_LOGGED_IN',
+				'reset'		 => 'P_LOGGED_IN'
 			);
 		}
 	}
@@ -32,8 +32,8 @@ class InstellingenBeheerController extends AclController {
 		parent::performAction($this->getParams(3));
 	}
 
-	protected function hasPermission() {
-		if (!parent::hasPermission()) {
+	protected function mag($action) {
+		if (!parent::mag($action)) {
 			return false;
 		}
 		if ($this->hasParam(3)) {

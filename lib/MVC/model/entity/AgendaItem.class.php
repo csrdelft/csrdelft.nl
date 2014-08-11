@@ -57,14 +57,14 @@ class AgendaItem extends PersistentEntity implements Agendeerbaar {
 	 * @var array
 	 */
 	protected static $persistent_fields = array(
-		'item_id' => array(T::Integer, false, 'auto_increment'),
-		'titel' => array(T::String),
-		'beschrijving' => array(T::Text),
-		'begin_moment' => array(T::DateTime),
-		'eind_moment' => array(T::DateTime),
-		'rechten_bekijken' => array(T::String),
-		'locatie' => array(T::String, true),
-		'link' => array(T::String, true)
+		'item_id'			 => array(T::Integer, false, 'auto_increment'),
+		'titel'				 => array(T::String),
+		'beschrijving'		 => array(T::Text),
+		'begin_moment'		 => array(T::DateTime),
+		'eind_moment'		 => array(T::DateTime),
+		'rechten_bekijken'	 => array(T::String),
+		'locatie'			 => array(T::String, true),
+		'link'				 => array(T::String, true)
 	);
 	/**
 	 * Database primary key
@@ -114,7 +114,11 @@ class AgendaItem extends PersistentEntity implements Agendeerbaar {
 	}
 
 	public function magBekijken() {
-		return LoginLid::mag($this->rechten_bekijken);
+		return LoginLid::mag($this->rechten_bekijken) OR $this->magBeheren();
+	}
+
+	public function magBeheren() {
+		return LoginLid::mag('P_AGENDA_MOD');
 	}
 
 }

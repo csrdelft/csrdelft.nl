@@ -31,7 +31,7 @@ class GroepenRouterController extends Controller {
 		$controller = parent::performAction(); // modifies action (default)
 		Instellingen::setTemp('groepen', 'url', '/groepen/' . $this->action);
 		$controller->performAction();
-		$this->view = $controller->getContent();
+		$this->view = $controller->getView();
 	}
 
 	/**
@@ -39,8 +39,8 @@ class GroepenRouterController extends Controller {
 	 * 
 	 * @return boolean
 	 */
-	protected function hasPermission() {
-		switch ($this->action) {
+	protected function mag($action) {
+		switch ($action) {
 			case 'commissies':
 			case 'besturen':
 			case 'sjaarcies':

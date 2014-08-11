@@ -13,15 +13,15 @@ require_once 'maalcie/view/forms/BoekjaarSluitenForm.class.php';
 class MaalCieSaldiController extends AclController {
 
 	public function __construct($query) {
-		parent::__construct($query);
+		parent::__construct($query, null);
 		if (!$this->isPosted()) {
 			$this->acl = array(
 				'beheer' => 'P_MAAL_SALDI'
 			);
 		} else {
 			$this->acl = array(
-				'upload' => 'P_MAAL_SALDI',
-				'sluitboekjaar' => 'P_MAAL_SALDI'
+				'upload'		 => 'P_MAAL_SALDI',
+				'sluitboekjaar'	 => 'P_MAAL_SALDI'
 			);
 		}
 	}
@@ -36,7 +36,7 @@ class MaalCieSaldiController extends AclController {
 
 	public function beheer() {
 		$this->view = new MaalCieSaldiView();
-		$this->view = new CsrLayoutPage($this->getContent());
+		$this->view = new CsrLayoutPage($this->getView());
 		$this->view->addStylesheet('taken.css');
 		$this->view->addScript('taken.js');
 	}

@@ -11,7 +11,7 @@
 class BeheerTakenView extends TemplateView {
 
 	public function __construct(array $taken, $maaltijd = null, $prullenbak = false, $repetities = null) {
-		parent::__construct();
+		parent::__construct(array());
 
 		if ($maaltijd !== null) {
 			$this->smarty->assign('maaltijd', $maaltijd);
@@ -24,15 +24,14 @@ class BeheerTakenView extends TemplateView {
 			$this->titel = 'Corveebeheer';
 		}
 
-		$takenByDate = array();
 		foreach ($taken as $taak) {
 			$datum = $taak->getDatum();
-			if (!array_key_exists($datum, $takenByDate)) {
-				$takenByDate[$datum] = array();
+			if (!array_key_exists($datum, $this->model)) {
+				$this->model[$datum] = array();
 			}
-			$takenByDate[$datum][$taak->getFunctieId()][] = $taak;
+			$this->model[$datum][$taak->getFunctieId()][] = $taak;
 		}
-		$this->smarty->assign('taken', $takenByDate);
+		$this->smarty->assign('taken', $this->model);
 		$this->smarty->assign('prullenbak', $prullenbak);
 		$this->smarty->assign('repetities', $repetities);
 	}

@@ -63,7 +63,7 @@ require_once 'MVC/controller/AclController.abstract.php';
 
 switch (constant('MODE')) {
 	case 'CLI':
-		if (!LoginLid::instance()->mag('P_ADMIN')) {
+		if (!LoginLid::mag('P_ADMIN')) {
 			die('access denied');
 		}
 		break;

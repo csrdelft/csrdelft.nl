@@ -19,24 +19,24 @@ class MaalcieRouterController extends AclController {
 		$this->query = $query;
 		$this->query = str_replace('maaltijden/', 'maaltijden', $this->query);
 		$this->query = str_replace('corvee/', 'corvee', $this->query);
-		parent::__construct($this->query);
+		parent::__construct($this->query, null);
 		$this->acl = array(
-			'maaltijdenketzer' => 'P_MAAL_IK',
-			'maaltijdenlijst' => 'P_MAAL_IK', // shortcut
-			'maaltijdenbeheer' => 'P_MAAL_MOD',
-			'maaltijdenrepetities' => 'P_MAAL_MOD',
-			'maaltijdenabonnementen' => 'P_MAAL_IK',
-			'maaltijdenabonnementenbeheer' => 'P_MAAL_MOD',
-			'maaltijdenmaalciesaldi' => 'P_MAAL_SALDI',
-			'corveemijn' => 'P_CORVEE_IK',
-			'corveerooster' => 'P_CORVEE_IK', // shortcut
-			'corveebeheer' => 'P_CORVEE_MOD',
-			'corveerepetities' => 'P_CORVEE_MOD',
-			'corveevoorkeuren' => 'P_CORVEE_IK',
-			'corveevoorkeurenbeheer' => 'P_CORVEE_MOD',
-			'corveepuntenbeheer' => 'P_CORVEE_MOD',
-			'corveevrijstellingen' => 'P_CORVEE_MOD',
-			'corveefuncties' => 'P_CORVEE_MOD'
+			'maaltijdenketzer'				 => 'P_MAAL_IK',
+			'maaltijdenlijst'				 => 'P_MAAL_IK', // shortcut
+			'maaltijdenbeheer'				 => 'P_MAAL_MOD',
+			'maaltijdenrepetities'			 => 'P_MAAL_MOD',
+			'maaltijdenabonnementen'		 => 'P_MAAL_IK',
+			'maaltijdenabonnementenbeheer'	 => 'P_MAAL_MOD',
+			'maaltijdenmaalciesaldi'		 => 'P_MAAL_SALDI',
+			'corveemijn'					 => 'P_CORVEE_IK',
+			'corveerooster'					 => 'P_CORVEE_IK', // shortcut
+			'corveebeheer'					 => 'P_CORVEE_MOD',
+			'corveerepetities'				 => 'P_CORVEE_MOD',
+			'corveevoorkeuren'				 => 'P_CORVEE_IK',
+			'corveevoorkeurenbeheer'		 => 'P_CORVEE_MOD',
+			'corveepuntenbeheer'			 => 'P_CORVEE_MOD',
+			'corveevrijstellingen'			 => 'P_CORVEE_MOD',
+			'corveefuncties'				 => 'P_CORVEE_MOD'
 		);
 	}
 
@@ -57,7 +57,7 @@ class MaalcieRouterController extends AclController {
 		$controller = parent::performAction();
 		if ($controller !== null) {
 			$controller->performAction();
-			$this->view = $controller->getContent();
+			$this->view = $controller->getView();
 		}
 	}
 

@@ -11,14 +11,11 @@ require_once 'courant/courantcontent.class.php';
 
 class CourantarchiefContent extends TemplateView {
 
-	var $courant;
-
 	public function __construct(&$courant) {
-		parent::__construct();
-		$this->courant = $courant;
+		parent::__construct($courant);
 		//opgevraagde mail inladen
 		if (isset($_GET['ID'])) {
-			$this->courant->load((int) $_GET['ID']);
+			$this->model->load((int) $_GET['ID']);
 		}
 	}
 
@@ -27,7 +24,7 @@ class CourantarchiefContent extends TemplateView {
 	}
 
 	private function getArchiefmails() {
-		$aMails = $this->courant->getArchiefmails();
+		$aMails = $this->model->getArchiefmails();
 		$sReturn = '<h1>Archief C.S.R.-courant</h1>';
 		if (is_array($aMails)) {
 			$sLijst = '';
@@ -49,7 +46,7 @@ class CourantarchiefContent extends TemplateView {
 	}
 
 	function getVerzendMoment() {
-		return strftime('%d %B %Y', strtotime($this->courant->getVerzendmoment()));
+		return strftime('%d %B %Y', strtotime($this->model->getVerzendmoment()));
 	}
 
 	function view() {
@@ -62,12 +59,12 @@ class CourantarchiefContent extends TemplateView {
 			</li>
 		</ul>
 		<hr />';
-		if ($this->courant->getID() == 0) {
+		if ($this->model->getID() == 0) {
 			//overzicht
 			echo $this->getArchiefmails();
 		} else {
 			echo '<h1>C.S.R.-courant ' . $this->getVerzendMoment() . '</h1>';
-			echo '<iframe src="/actueel/courant/archief/iframe/' . $this->courant->getID() . '"
+			echo '<iframe src="/actueel/courant/archief/iframe/' . $this->model->getID() . '"
 					style="width: 700px; height: 700px; border: 0;"></iframe>';
 		}
 	}

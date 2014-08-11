@@ -30,7 +30,7 @@ class FotoAlbumController extends AclController {
 	private static $alleenMannen = '/(men-only|mannen-only)/i';
 
 	public function __construct($query) {
-		parent::__construct($query);
+		parent::__construct($query, null);
 		if (!$this->isPosted()) {
 			$this->acl = array(
 				'bekijken'	 => 'P_ALBUM_READ',
@@ -60,9 +60,7 @@ class FotoAlbumController extends AclController {
 		}
 		$path = PICS_PATH . urldecode(implode('/', $path));
 		$album = FotoAlbumModel::getFotoAlbum($path);
-		if ($album === false) {
-			$this->geentoegang();
-		} elseif ($album === null) {
+		if (!$album) {
 			invokeRefresh(CSR_ROOT . '/fotoalbum', 'Fotoalbum bestaat niet', -1);
 		}
 		$args[] = $album;

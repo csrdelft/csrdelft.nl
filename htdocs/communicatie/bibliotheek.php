@@ -15,8 +15,8 @@ if (isset($_GET['querystring'])) {
 	die('epic fail');
 }
 
-$pagina = new CsrLayoutPage($biebControl->getContent());
-if ($biebControl->getContent() instanceof BibliotheekCatalogusContent) {
+$pagina = new CsrLayoutPage($biebControl->getView());
+if ($biebControl->getView() instanceof BibliotheekCatalogusContent) {
 	$pagina->zijkolom = false;
 }
 

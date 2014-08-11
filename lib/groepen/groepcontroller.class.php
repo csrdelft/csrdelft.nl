@@ -25,7 +25,7 @@ class Groepcontroller extends Controller {
 	protected $errors = '';
 
 	public function __construct($querystring) {
-		parent::__construct($querystring);
+		parent::__construct($querystring, null);
 
 		//groep-object inladen
 		if ($this->hasParam(0)) {
@@ -64,7 +64,7 @@ class Groepcontroller extends Controller {
 		$this->view->setAction('view');
 	}
 
-	protected function hasPermission() {
+	protected function mag($action) {
 		// wordt afgehandeld per actie
 		return true;
 	}

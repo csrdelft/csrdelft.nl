@@ -1,31 +1,21 @@
 <?php
 
+require_once 'groepen/groep.class.php';
+
 # C.S.R. Delft
 # -------------------------------------------------------------------
 # class.ledenlijstcontent.php
 # -------------------------------------------------------------------
-require_once 'groepen/groep.class.php';
 
 class EetplanContent extends TemplateView {
-	### private ###
-	# de objecten die data leveren
-
-	var $_eetplan;
-
-	### public ###
 
 	public function __construct(&$eetplan) {
-		parent::__construct();
-		$this->_eetplan = & $eetplan;
-	}
-
-	function getTitel() {
-		return 'Eetplan';
+		parent::__construct($eetplan, 'Eetplan');
 	}
 
 	function viewEetplanVoorPheut($uid) {
 		//huizen voor een feut tonen
-		$aEetplan = $this->_eetplan->getEetplanVoorPheut($uid);
+		$aEetplan = $this->model->getEetplanVoorPheut($uid);
 		if ($aEetplan === false) {
 			echo '<h1>Ongeldig uid</h1>';
 		} else {
@@ -38,7 +28,7 @@ class EetplanContent extends TemplateView {
 				$huis = new OldGroep($aEetplanData['groepid']);
 				echo '
 					<tr class="kleur' . ($row % 2) . '">
-						<td >' . $this->_eetplan->getDatum($aEetplanData['avond']) . '</td>
+						<td >' . $this->model->getDatum($aEetplanData['avond']) . '</td>
 						<td><a href="/actueel/eetplan/huis/' . $aEetplanData['huisID'] . '"><strong>' . mb_htmlentities($aEetplanData['huisnaam']) . '</strong></a><br />';
 				if ($huis instanceof OldGroep AND $huis->getId() != 0) {
 					echo 'Huispagina van ' . $huis->getLink();
@@ -52,7 +42,7 @@ class EetplanContent extends TemplateView {
 
 	function viewEetplanVoorHuis($iHuisID) {
 		//feuten voor een huis tonen
-		$aEetplan = $this->_eetplan->getEetplanVoorHuis($iHuisID);
+		$aEetplan = $this->model->getEetplanVoorHuis($iHuisID);
 
 
 		if ($aEetplan === false) {
@@ -77,7 +67,7 @@ class EetplanContent extends TemplateView {
 				if ($aEetplanData['avond'] == $iHuidigAvond) {
 					$ertussen = '&nbsp;';
 				} else {
-					$ertussen = $this->_eetplan->getDatum($aEetplanData['avond']);
+					$ertussen = $this->model->getDatum($aEetplanData['avond']);
 					$iHuidigAvond = $aEetplanData['avond'];
 					$row++;
 				}
@@ -102,7 +92,7 @@ class EetplanContent extends TemplateView {
 	}
 
 	function viewEetplan($aEetplan) {
-		$aHuizenArray = $this->_eetplan->getHuizen();
+		$aHuizenArray = $this->model->getHuizen();
 		//weergeven
 		echo '
 			<h1>Eetplan</h1>
@@ -113,7 +103,7 @@ class EetplanContent extends TemplateView {
 			<tr><th style="width: 200px;">&Uuml;bersjaarsch/Avond</td>';
 		//kopjes voor tabel
 		for ($iTeller = 5; $iTeller <= 8; $iTeller++) {
-			echo '<th class="huis">' . $this->_eetplan->getDatum($iTeller) . '</th>';
+			echo '<th class="huis">' . $this->model->getDatum($iTeller) . '</th>';
 		}
 		echo '</tr>';
 		$row = 0;
@@ -170,7 +160,7 @@ class EetplanContent extends TemplateView {
 			$this->viewEetplanVoorHuis($iHuisID);
 		} else {
 			//standaard actie, gewoon overzicht tonen.
-			$aEetplan = $this->_eetplan->getEetplan();
+			$aEetplan = $this->model->getEetplan();
 			$this->viewEetplan($aEetplan);
 		}
 	}

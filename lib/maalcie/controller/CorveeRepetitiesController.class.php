@@ -14,19 +14,19 @@ require_once 'maalcie/view/forms/CorveeRepetitieForm.class.php';
 class CorveeRepetitiesController extends AclController {
 
 	public function __construct($query) {
-		parent::__construct($query);
+		parent::__construct($query, null);
 		if (!$this->isPosted()) {
 			$this->acl = array(
-				'beheer' => 'P_CORVEE_MOD',
-				'maaltijd' => 'P_CORVEE_MOD'
+				'beheer'	 => 'P_CORVEE_MOD',
+				'maaltijd'	 => 'P_CORVEE_MOD'
 			);
 		} else {
 			$this->acl = array(
-				'nieuw' => 'P_CORVEE_MOD',
-				'bewerk' => 'P_CORVEE_MOD',
-				'opslaan' => 'P_CORVEE_MOD',
-				'verwijder' => 'P_CORVEE_MOD',
-				'bijwerken' => 'P_MAAL_MOD'
+				'nieuw'		 => 'P_CORVEE_MOD',
+				'bewerk'	 => 'P_CORVEE_MOD',
+				'opslaan'	 => 'P_CORVEE_MOD',
+				'verwijder'	 => 'P_CORVEE_MOD',
+				'bijwerken'	 => 'P_MAAL_MOD'
 			);
 		}
 	}
@@ -48,7 +48,7 @@ class CorveeRepetitiesController extends AclController {
 		$maaltijdrepetitie = null;
 		if (is_int($crid) && $crid > 0) {
 			$this->bewerk($crid);
-			$popup = $this->getContent();
+			$popup = $this->getView();
 			$repetities = CorveeRepetitiesModel::getAlleRepetities();
 		} elseif (is_int($mrid) && $mrid > 0) {
 			$repetities = CorveeRepetitiesModel::getRepetitiesVoorMaaltijdRepetitie($mrid);
@@ -57,7 +57,7 @@ class CorveeRepetitiesController extends AclController {
 			$repetities = CorveeRepetitiesModel::getAlleRepetities();
 		}
 		$this->view = new CorveeRepetitiesView($repetities, $maaltijdrepetitie);
-		$this->view = new CsrLayoutPage($this->getContent());
+		$this->view = new CsrLayoutPage($this->getView());
 		$this->view->addStylesheet('taken.css');
 		$this->view->addScript('taken.js');
 		$this->view->popup = $popup;

@@ -74,11 +74,6 @@ abstract class Groep extends PersistentEntity {
 	 */
 	public $rechten_beheren;
 	/**
-	 * Uid van eigenaar
-	 * @var string
-	 */
-	public $eigenaar_lid_id;
-	/**
 	 * URL van website
 	 * @var string
 	 */
@@ -105,7 +100,6 @@ abstract class Groep extends PersistentEntity {
 		'rechten_bekijken' => array(T::String),
 		'rechten_aanmelden' => array(T::String),
 		'rechten_beheren' => array(T::String),
-		'eigenaar_lid_id' => array(T::UID),
 		'website' => array(T::String)
 	);
 	/**

@@ -45,12 +45,12 @@ class CmsPagina extends PersistentEntity {
 	 * @var array
 	 */
 	protected static $persistent_fields = array(
-		'naam' => array(T::String),
-		'titel' => array(T::String),
-		'inhoud' => array(T::LongText),
-		'laatst_gewijzigd' => array(T::DateTime),
-		'rechten_bekijken' => array(T::String),
-		'rechten_bewerken' => array(T::String)
+		'naam'				 => array(T::String),
+		'titel'				 => array(T::String),
+		'inhoud'			 => array(T::LongText),
+		'laatst_gewijzigd'	 => array(T::DateTime),
+		'rechten_bekijken'	 => array(T::String),
+		'rechten_bewerken'	 => array(T::String)
 	);
 	/**
 	 * Database primary key
@@ -69,6 +69,14 @@ class CmsPagina extends PersistentEntity {
 
 	public function magBewerken() {
 		return LoginLid::mag($this->rechten_bewerken);
+	}
+
+	public function magRechtenWijzigen() {
+		return LoginLid::mag('P_ADMIN');
+	}
+
+	public function magVerwijderen() {
+		return LoginLid::mag('P_ADMIN');
 	}
 
 }

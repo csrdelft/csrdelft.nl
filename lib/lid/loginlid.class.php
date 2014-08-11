@@ -28,7 +28,7 @@ class LoginLid {
 	private $suedFrom = null;
 
 	/* Komt de authenticatie van de huidige gebruiker uit een token in de url
-	 * dan staat dit aan. aan LoginLid::hasPermission() moet expliciet worden
+	 * dan staat dit aan. aan LoginLid::mag() moet expliciet worden
 	 * meegegeven dat we dit goed vinden, zodat deze validatie precies daar werkt
 	 * waar we het willen, en niet op andere plekken.
 	 */
@@ -264,10 +264,8 @@ class LoginLid {
 	}
 
 	/**
-	 * static hasPermission:
-	 *
-	 * @descr				een string met permissie(s).
-	 * @token_authorizable	als false dan werkt hasPermission alsof gebruiker
+	 * @param string $descr permissie(s).
+	 * @param boolean $token_authorizable als false dan werkt mag alsof gebruiker
 	 * 						x999 is, als true dan wordt op de permissies van
 	 * 						de met de token geäuthenticeerde gebruiker getest
 	 *
@@ -289,7 +287,7 @@ class LoginLid {
 		return LoginLid::instance()->hasPermission($descr, $token_authorizable);
 	}
 
-	public function hasPermission($descr, $token_authorizable = false) {
+	private function hasPermission($descr, $token_authorizable = false) {
 
 		# Split, combine and reverse permission description:
 
@@ -301,7 +299,7 @@ class LoginLid {
 			$permissies = explode(',', $descr);
 			$result = false;
 			foreach ($permissies as $permissie) {
-				$result |= $this->hasPermission($permissie, $token_authorizable);
+				$result |= $this->mag($permissie, $token_authorizable);
 			}
 			return $result;
 		}
@@ -311,14 +309,14 @@ class LoginLid {
 			$permissies = explode('+', $descr);
 			$result = true;
 			foreach ($permissies as $permissie) {
-				$result &= $this->hasPermission($permissie, $token_authorizable);
+				$result &= $this->mag($permissie, $token_authorizable);
 			}
 			return $result;
 		}
 		$permissie = trim($descr);
 		# Negatie van een permissie:
 		# gebruiker mag deze permissie niet bezitten
-		if (substr($permissie, 0, 1) == '!' && !$this->hasPermission(substr($permissie, 1), $token_authorizable)) {
+		if (substr($permissie, 0, 1) == '!' && !$this->mag(substr($permissie, 1), $token_authorizable)) {
 			return true;
 		}
 
@@ -428,7 +426,7 @@ class LoginLid {
 			if ($geslacht == $this->lid->getGeslacht()) {
 				return true;
 				//we zijn toch zeker niet geslacht??
-			} elseif ($geslacht == 'nee' AND $this->hasPermission('P_LOGGED_IN', $token_authorizable)) {
+			} elseif ($geslacht == 'nee' AND $this->mag('P_LOGGED_IN', $token_authorizable)) {
 				return true;
 			}
 			//Behoort een lid tot een bepaalde lichting?
@@ -443,11 +441,11 @@ class LoginLid {
 				return true;
 			}
 		} elseif (substr($permissie, 0, 10) == 'Ouderjaars' OR substr($permissie, 0, 10) == 'ouderjaars') {
-			if (Lichting::getJongsteLichting() > $this->lid->getProperty('lidjaar') AND $this->hasPermission('P_LOGGED_IN', $token_authorizable)) {
+			if (Lichting::getJongsteLichting() > $this->lid->getProperty('lidjaar') AND $this->mag('P_LOGGED_IN', $token_authorizable)) {
 				return true;
 			}
 		} elseif (substr($permissie, 0, 11) == 'Eerstejaars' OR substr($permissie, 0, 11) == 'eerstejaars') {
-			if (Lichting::getJongsteLichting() == $this->lid->getProperty('lidjaar') AND $this->hasPermission('P_LOGGED_IN', $token_authorizable)) {
+			if (Lichting::getJongsteLichting() == $this->lid->getProperty('lidjaar') AND $this->mag('P_LOGGED_IN', $token_authorizable)) {
 				return true;
 			}
 		}
@@ -480,7 +478,7 @@ class LoginLid {
 			'P_FORUM_BELANGRIJK' => $this->createPermStr(8, 2), # Forum belangrijk (de)markeren  [[let op: niet cumulatief]]
 			'P_FORUM_ADMIN'		 => $this->createPermStr(16, 2), # Forum-admin mag deel-fora aanmaken en rechten wijzigen  [[let op: niet cumulatief]]
 			'P_AGENDA_READ'		 => $this->createPermStr(1, 3), # Agenda bekijken
-			'P_AGENDA_POST'		 => $this->createPermStr(1 + 2, 3), # Items toevoegen aan de agenda
+			'P_AGENDA_ADD'		 => $this->createPermStr(1 + 2, 3), # Items toevoegen aan de agenda
 			'P_AGENDA_MOD'		 => $this->createPermStr(1 + 2 + 4, 3), # Items beheren in de agenda
 			'P_DOCS_READ'		 => $this->createPermStr(1, 4), # Documenten-rubriek lezen
 			'P_DOCS_POST'		 => $this->createPermStr(1 + 2, 4), # Documenten verwijderen of erbij plaatsen

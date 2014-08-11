@@ -1,5 +1,5 @@
 <li id="item-{$item->item_id}" parentid="items-{$item->getBeginMoment()|date_format:"%Y-%m-%d"}">
-	{if $magBeheren}
+	{if $item->magBeheren()}
 		<a href="/agenda/verwijderen/{$item->item_id}" class="beheren post confirm" title="Dit agenda-item definitief verwijderen">
 			{icon get="verwijderen"}
 		</a>

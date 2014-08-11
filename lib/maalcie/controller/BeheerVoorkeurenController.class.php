@@ -12,15 +12,15 @@ require_once 'maalcie/view/BeheerVoorkeurenView.class.php';
 class BeheerVoorkeurenController extends AclController {
 
 	public function __construct($query) {
-		parent::__construct($query);
+		parent::__construct($query, null);
 		if (!$this->isPosted()) {
 			$this->acl = array(
 				'beheer' => 'P_CORVEE_MOD'
 			);
 		} else {
 			$this->acl = array(
-				'inschakelen' => 'P_CORVEE_MOD',
-				'uitschakelen' => 'P_CORVEE_MOD'
+				'inschakelen'	 => 'P_CORVEE_MOD',
+				'uitschakelen'	 => 'P_CORVEE_MOD'
 			);
 		}
 	}
@@ -36,7 +36,7 @@ class BeheerVoorkeurenController extends AclController {
 	public function beheer() {
 		$matrix_repetities = CorveeVoorkeurenModel::getVoorkeurenMatrix();
 		$this->view = new BeheerVoorkeurenView($matrix_repetities[0], $matrix_repetities[1]);
-		$this->view = new CsrLayoutPage($this->getContent());
+		$this->view = new CsrLayoutPage($this->getView());
 		$this->view->addStylesheet('taken.css');
 		$this->view->addScript('taken.js');
 	}

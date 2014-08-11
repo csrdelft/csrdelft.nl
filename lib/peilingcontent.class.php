@@ -1,27 +1,21 @@
 <?php
 
-/*
- * PeilingContent
+require_once 'peiling.class.php';
+
+/**
+ * PeilingContent.class.php
  * 
  * Roept template aan.
  */
-require_once 'peiling.class.php';
-
 class PeilingContent extends TemplateView {
 
-	private $peiling;
-
 	function PeilingContent(Peiling $peiling) {
-		parent::__construct();
-		$this->peiling = $peiling;
+		parent::__construct($peiling);
 	}
 
 	public function getHTML($beheer = false) {
-
-
-		$this->smarty->assign('peiling', $this->peiling);
+		$this->smarty->assign('peiling', $this->model);
 		$this->smarty->assign('beheer', $beheer);
-
 		return $this->smarty->fetch('peiling.ubb.tpl');
 	}
 
@@ -30,5 +24,3 @@ class PeilingContent extends TemplateView {
 	}
 
 }
-
-?>

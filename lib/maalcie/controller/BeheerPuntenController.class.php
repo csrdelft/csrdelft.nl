@@ -13,16 +13,16 @@ require_once 'maalcie/view/BeheerPuntenView.class.php';
 class BeheerPuntenController extends AclController {
 
 	public function __construct($query) {
-		parent::__construct($query);
+		parent::__construct($query, null);
 		if (!$this->isPosted()) {
 			$this->acl = array(
-				'beheer' => 'P_CORVEE_MOD',
-				'resetjaar' => 'P_CORVEE_MOD'
+				'beheer'	 => 'P_CORVEE_MOD',
+				'resetjaar'	 => 'P_CORVEE_MOD'
 			);
 		} else {
 			$this->acl = array(
-				'wijzigpunten' => 'P_CORVEE_MOD',
-				'wijzigbonus' => 'P_CORVEE_MOD'
+				'wijzigpunten'	 => 'P_CORVEE_MOD',
+				'wijzigbonus'	 => 'P_CORVEE_MOD'
 			);
 		}
 	}
@@ -43,7 +43,7 @@ class BeheerPuntenController extends AclController {
 		$functies = FunctiesModel::instance()->getAlleFuncties(); // grouped by functie_id
 		$matrix = CorveePuntenModel::loadPuntenVoorAlleLeden($functies);
 		$this->view = new BeheerPuntenView($matrix, $functies);
-		$this->view = new CsrLayoutPage($this->getContent());
+		$this->view = new CsrLayoutPage($this->getView());
 		$this->view->addStylesheet('taken.css');
 		$this->view->addScript('taken.js');
 	}

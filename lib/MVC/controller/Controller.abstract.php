@@ -16,8 +16,8 @@ require_once 'MVC/model/DebugLogModel.class.php';
 abstract class Controller {
 
 	/**
-	 * Data access model
-	 * @var Model
+	 * Data model
+	 * @var mixed
 	 */
 	protected $model;
 	/**
@@ -42,7 +42,7 @@ abstract class Controller {
 	 */
 	private $kvp;
 
-	public function __construct($query, PersistenceModel $model = null) {
+	public function __construct($query, $model) {
 		$this->model = $model;
 		// split at ?-mark
 		$mark = strpos($query, '?');
@@ -118,8 +118,16 @@ abstract class Controller {
 		return isPosted();
 	}
 
-	public function getContent() {
+	public function getModel() {
+		return $this->model;
+	}
+
+	public function getView() {
 		return $this->view;
+	}
+
+	public function getAction() {
+		return $this->action;
 	}
 
 	/**
@@ -132,10 +140,10 @@ abstract class Controller {
 		return method_exists($this, $action);
 	}
 
-	abstract protected function hasPermission();
+	abstract protected function mag($action);
 
 	public function performAction(array $args = array()) {
-		if (!$this->hasPermission()) {
+		if (!$this->mag($this->action)) {
 			$this->action = 'geentoegang';
 		}
 		if (!$this->hasAction($this->action)) {

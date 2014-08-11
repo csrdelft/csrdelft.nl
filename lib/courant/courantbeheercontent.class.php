@@ -7,12 +7,10 @@
 
 class CourantBeheercontent extends TemplateView {
 
-	private $courant; //db object voor de courant
 	private $_edit = 0; //bericht wat bewerkt moet worden.
 
 	public function __construct(&$courant) {
-		parent::__construct();
-		$this->courant = $courant;
+		parent::__construct($courant);
 	}
 
 	function edit($iBerichtID) {
@@ -36,7 +34,7 @@ class CourantBeheercontent extends TemplateView {
 		//voor bewerken waarden eventueel overschrijven met waarden uit de database
 		if ($this->_edit != 0) {
 			//nog dingen ophalen.
-			$formulier = $this->courant->getBericht($this->_edit);
+			$formulier = $this->model->getBericht($this->_edit);
 		}
 
 		//als er gepost is de meuk uit post halen.
@@ -57,7 +55,7 @@ class CourantBeheercontent extends TemplateView {
 				$formulier['bericht'] = htmlspecialchars($_SESSION['compose_snapshot']);
 			}
 		}
-		$this->smarty->assign('courant', $this->courant);
+		$this->smarty->assign('courant', $this->model);
 		$this->smarty->assign('form', $formulier);
 		$this->smarty->display('courant/courantbeheer.tpl');
 	}

@@ -11,7 +11,7 @@ if(!LoginLid::mag('P_ADMIN')){
 class stats extends TemplateView{
 	
 	public function __construct() {
-		parent::__construct();
+		parent::__construct(null);
 	}
 
 	function view(){

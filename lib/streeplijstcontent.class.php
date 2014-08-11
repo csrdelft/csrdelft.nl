@@ -17,7 +17,7 @@ class Streeplijstcontent extends TemplateView {
 	private $aLeden;
 
 	function __construct() {
-		parent::__construct();
+		parent::__construct(null);
 		$this->load();
 	}
 

@@ -15,8 +15,8 @@ require_once 'MVC/view/CsrSmarty.class.php';
 abstract class TemplateView implements View {
 
 	/**
-	 * Data access model
-	 * @var mixed
+	 * Data model
+	 * @var PersistentEntity
 	 */
 	protected $model;
 	/**
@@ -30,12 +30,7 @@ abstract class TemplateView implements View {
 	 */
 	protected $smarty;
 
-	/**
-	 * TODO: verplicht $model.
-	 * 
-	 * @param mixed $model
-	 */
-	public function __construct($model = null, $titel = '') {
+	public function __construct($model, $titel = '') {
 		$this->model = $model;
 		$this->titel = $titel;
 		$this->smarty = new CsrSmarty();

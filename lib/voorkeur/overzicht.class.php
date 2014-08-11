@@ -2,11 +2,8 @@
 
 class CommissieOverzicht extends TemplateView {
 
-	private $id;
-
 	public function __construct($id = -1) {
-		parent::__construct();
-		$this->id = $id;
+		parent::__construct($id);
 	}
 
 	public function getTitel() {
@@ -17,8 +14,8 @@ class CommissieOverzicht extends TemplateView {
 		$res = '';
 		if (LoginLid::mag('P_LEDEN_MOD')) {
 			require_once 'voorkeur/commissie.class.php';
-			if ($this->id >= 0) {
-				$commissie = OldCommissie::getCommissie($this->id);
+			if ($this->model >= 0) {
+				$commissie = OldCommissie::getCommissie($this->model);
 				$res .= '<h1> Geinteresseerde voor ' . $commissie->getNaam() . ' </h1> 
 					<a href="/tools/voorkeuren/commissies.php">Terug naar overzicht</a>
 					<table><tr><td><h3>Lid</h3></td><td><h3>Interesse</h3></td></tr>';
@@ -52,11 +49,8 @@ function voorkeur($voorkeur) {
 
 class LidOverzicht extends TemplateView {
 
-	private $lid;
-
 	public function __construct($id = -1) {
-		parent::__construct();
-		$this->lid = $id;
+		parent::__construct($id);
 	}
 
 	public function getTitel() {
@@ -65,7 +59,7 @@ class LidOverzicht extends TemplateView {
 
 	function view() {
 		$res = '';
-		if ($this->lid == -1) {
+		if ($this->model == -1) {
 			$res = $this->viewNotAllowed();
 		} else {
 			$res = $this->viewProfile();
@@ -80,8 +74,8 @@ class LidOverzicht extends TemplateView {
 	function viewProfile() {
 		$res = '<h1> Voorkeuren!</h1>';
 		require_once 'voorkeur/lidvoorkeur.class.php';
-		$res .= '<p>Naam: ' . Lid::naamLink($this->lid, 'full', 'link') . '</p>';
-		$voorkeur = new LidVoorkeur($this->lid);
+		$res .= '<p>Naam: ' . Lid::naamLink($this->model, 'full', 'link') . '</p>';
+		$voorkeur = new LidVoorkeur($this->model);
 		$voorkeuren = $voorkeur->getVoorkeur();
 		$commissies = $voorkeur->getCommissies();
 		$res .= '<table>';
@@ -92,7 +86,7 @@ class LidOverzicht extends TemplateView {
 		$res .= '</table><br />';
 		$res .= '<h2>Lid opmerkingen</h2><p>' . $voorkeur->getLidOpmerking() . '</p>';
 		$res .= '
-		<form name="opties" action="/tools/voorkeuren/lidpagina.php?lid=' . $this->lid . '" method="POST">
+		<form name="opties" action="/tools/voorkeuren/lidpagina.php?lid=' . $this->model . '" method="POST">
 			<textarea name = "opmerkingen" cols=40 rows = 10 >' . $voorkeur->getPraesesOpmerking() . ' </textarea> <br />
 			<input type="submit" value="Opslaan" />
 		</form>
@@ -103,7 +97,7 @@ class LidOverzicht extends TemplateView {
 
 	function save($actie) {
 		require_once 'voorkeur/lidvoorkeur.class.php';
-		$voorkeur = new LidVoorkeur($this->lid);
+		$voorkeur = new LidVoorkeur($this->model);
 		$voorkeur->setPraesesOpmerking($actie);
 	}
 

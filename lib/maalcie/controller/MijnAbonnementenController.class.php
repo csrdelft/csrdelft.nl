@@ -13,15 +13,15 @@ require_once 'maalcie/view/MijnAbonnementenView.class.php';
 class MijnAbonnementenController extends AclController {
 
 	public function __construct($query) {
-		parent::__construct($query);
+		parent::__construct($query, null);
 		if (!$this->isPosted()) {
 			$this->acl = array(
 				'mijn' => 'P_MAAL_IK'
 			);
 		} else {
 			$this->acl = array(
-				'inschakelen' => 'P_MAAL_IK',
-				'uitschakelen' => 'P_MAAL_IK'
+				'inschakelen'	 => 'P_MAAL_IK',
+				'uitschakelen'	 => 'P_MAAL_IK'
 			);
 		}
 	}
@@ -41,7 +41,7 @@ class MijnAbonnementenController extends AclController {
 	public function mijn() {
 		$abonnementen = MaaltijdAbonnementenModel::getAbonnementenVoorLid(LoginLid::instance()->getUid(), true, true);
 		$this->view = new MijnAbonnementenView($abonnementen);
-		$this->view = new CsrLayoutPage($this->getContent());
+		$this->view = new CsrLayoutPage($this->getView());
 		$this->view->addStylesheet('taken.css');
 		$this->view->addScript('taken.js');
 	}

@@ -13,7 +13,7 @@ class StamboomContent extends TemplateView {
 	private $kinderen = 0;
 
 	public function __construct($startuid, $levels = 3) {
-		parent::__construct();
+		parent::__construct(null);
 		if (!Lid::isValidUid($startuid)) {
 			throw new Exception('Opgegeven uid is niet geldig');
 		}

@@ -12,6 +12,10 @@ require_once 'MVC/view/ForumView.class.php';
  */
 class ForumController extends Controller {
 
+	public function __construct($query) {
+		parent::__construct($query, null);
+	}
+
 	public function performAction(array $args = array()) {
 		if ($this->hasParam(2)) {
 			$this->action = $this->getParam(2);
@@ -32,9 +36,9 @@ class ForumController extends Controller {
 		}
 		if (!$this->isPosted() || $this->action == 'wijzigen' || $this->action == 'zoeken') {
 			if (LoginLid::mag('P_LOGGED_IN')) {
-				$this->view = new CsrLayoutPage($this->getContent());
+				$this->view = new CsrLayoutPage($this->getView());
 			} else { // uitgelogd heeft nieuwe layout
-				$this->view = new CsrLayout2Page($this->getContent());
+				$this->view = new CsrLayout2Page($this->getView());
 			}
 			$this->view->addScript('forum.js');
 		}
@@ -45,8 +49,8 @@ class ForumController extends Controller {
 	 * 
 	 * @return boolean
 	 */
-	protected function hasPermission() {
-		switch ($this->action) {
+	protected function mag($action) {
+		switch ($action) {
 			case 'wijzigen':
 			case 'zoeken':
 				return true;

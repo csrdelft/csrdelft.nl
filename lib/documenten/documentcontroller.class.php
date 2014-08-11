@@ -23,7 +23,7 @@ class DocumentController extends Controller {
 	 * actie[/id[/opties]]
 	 */
 	public function __construct($querystring) {
-		parent::__construct($querystring);
+		parent::__construct($querystring, null);
 
 		//wat zullen we eens gaan doen? Hier bepalen we welke actie we gaan uitvoeren
 		//en of de ingelogde persoon dat mag.
@@ -51,7 +51,7 @@ class DocumentController extends Controller {
 	/**
 	 * Wordt op diverse plekken geregeld.
 	 */
-	protected function hasPermission() {
+	protected function mag($action) {
 		return true;
 	}
 

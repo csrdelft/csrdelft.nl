@@ -15,11 +15,11 @@ require_once 'maalcie/view/CorveeRoosterView.class.php';
 class MijnCorveeController extends AclController {
 
 	public function __construct($query) {
-		parent::__construct($query);
+		parent::__construct($query, null);
 		if (!$this->isPosted()) {
 			$this->acl = array(
-				'mijn' => 'P_CORVEE_IK',
-				'rooster' => 'P_CORVEE_IK'
+				'mijn'		 => 'P_CORVEE_IK',
+				'rooster'	 => 'P_CORVEE_IK'
 			);
 		} else {
 			$this->acl = array();
@@ -41,7 +41,7 @@ class MijnCorveeController extends AclController {
 		$punten = CorveePuntenModel::loadPuntenVoorLid(LoginLid::instance()->getLid(), $functies);
 		$vrijstelling = CorveeVrijstellingenModel::getVrijstelling(LoginLid::instance()->getUid());
 		$this->view = new MijnCorveeView($rooster, $punten, $functies, $vrijstelling);
-		$this->view = new CsrLayoutPage($this->getContent());
+		$this->view = new CsrLayoutPage($this->getView());
 		$this->view->addStylesheet('taken.css');
 		$this->view->addScript('taken.js');
 	}
@@ -56,7 +56,7 @@ class MijnCorveeController extends AclController {
 		}
 		$rooster = CorveeTakenModel::getRoosterMatrix($taken);
 		$this->view = new CorveeRoosterView($rooster, $toonverleden);
-		$this->view = new CsrLayoutPage($this->getContent());
+		$this->view = new CsrLayoutPage($this->getView());
 		$this->view->addStylesheet('taken.css');
 		$this->view->addScript('taken.js');
 	}

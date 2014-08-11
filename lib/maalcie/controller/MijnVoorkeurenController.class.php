@@ -13,16 +13,16 @@ require_once 'maalcie/view/forms/EetwensForm.class.php';
 class MijnVoorkeurenController extends AclController {
 
 	public function __construct($query) {
-		parent::__construct($query);
+		parent::__construct($query, null);
 		if (!$this->isPosted()) {
 			$this->acl = array(
 				'mijn' => 'P_CORVEE_IK'
 			);
 		} else {
 			$this->acl = array(
-				'inschakelen' => 'P_CORVEE_IK',
-				'uitschakelen' => 'P_CORVEE_IK',
-				'eetwens' => 'P_CORVEE_IK'
+				'inschakelen'	 => 'P_CORVEE_IK',
+				'uitschakelen'	 => 'P_CORVEE_IK',
+				'eetwens'		 => 'P_CORVEE_IK'
 			);
 		}
 	}
@@ -42,7 +42,7 @@ class MijnVoorkeurenController extends AclController {
 	public function mijn() {
 		$voorkeuren = CorveeVoorkeurenModel::getVoorkeurenVoorLid(LoginLid::instance()->getUid());
 		$this->view = new MijnVoorkeurenView($voorkeuren);
-		$this->view = new CsrLayoutPage($this->getContent());
+		$this->view = new CsrLayoutPage($this->getView());
 		$this->view->addStylesheet('taken.css');
 		$this->view->addScript('taken.js');
 	}

@@ -30,9 +30,8 @@ class AgendaModel extends PersistenceModel {
 
 		// AgendaItems
 		$items = $this->find('eind_moment >= ? AND begin_moment <= ?', array(date('Y-m-d', $van), date('Y-m-d', $tot)), 'begin_moment ASC, titel ASC');
-		$beheer = AgendaController::magBeheren();
 		foreach ($items as $item) {
-			if ($beheer OR $item->magBekijken()) {
+			if ($item->magBekijken()) {
 				$result[] = $item;
 			}
 		}

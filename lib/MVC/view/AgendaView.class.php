@@ -24,8 +24,6 @@ class AgendaMaandView extends TemplateView {
 		$cur = strtotime($this->jaar . '-' . $this->maand . '-01');
 		$this->smarty->assign('datum', $cur);
 		$this->smarty->assign('weken', $this->model->getItemsByMaand($this->jaar, $this->maand));
-		$this->smarty->assign('magToevoegen', AgendaController::magToevoegen());
-		$this->smarty->assign('magBeheren', AgendaController::magBeheren());
 
 		// URL voor vorige maand
 		$urlVorige = '/agenda/maand/';

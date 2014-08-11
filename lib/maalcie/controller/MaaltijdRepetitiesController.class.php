@@ -13,18 +13,18 @@ require_once 'maalcie/view/forms/MaaltijdRepetitieForm.class.php';
 class MaaltijdRepetitiesController extends AclController {
 
 	public function __construct($query) {
-		parent::__construct($query);
+		parent::__construct($query, null);
 		if (!$this->isPosted()) {
 			$this->acl = array(
 				'beheer' => 'P_MAAL_MOD'
 			);
 		} else {
 			$this->acl = array(
-				'nieuw' => 'P_MAAL_MOD',
-				'bewerk' => 'P_MAAL_MOD',
-				'opslaan' => 'P_MAAL_MOD',
-				'verwijder' => 'P_MAAL_MOD',
-				'bijwerken' => 'P_MAAL_MOD'
+				'nieuw'		 => 'P_MAAL_MOD',
+				'bewerk'	 => 'P_MAAL_MOD',
+				'opslaan'	 => 'P_MAAL_MOD',
+				'verwijder'	 => 'P_MAAL_MOD',
+				'bijwerken'	 => 'P_MAAL_MOD'
 			);
 		}
 	}
@@ -45,10 +45,10 @@ class MaaltijdRepetitiesController extends AclController {
 		$popup = null;
 		if (is_int($mrid) && $mrid > 0) {
 			$this->bewerk($mrid);
-			$popup = $this->getContent();
+			$popup = $this->getView();
 		}
 		$this->view = new MaaltijdRepetitiesView(MaaltijdRepetitiesModel::getAlleRepetities());
-		$this->view = new CsrLayoutPage($this->getContent());
+		$this->view = new CsrLayoutPage($this->getView());
 		$this->view->addStylesheet('taken.css');
 		$this->view->addScript('taken.js');
 		$this->view->popup = $popup;

@@ -37,7 +37,7 @@ class MenuItem extends PersistentEntity {
 	 */
 	public $link;
 	/**
-	 * LoginLid::hasPermission
+	 * LoginLid::mag
 	 * @var string
 	 */
 	public $rechten_bekijken;

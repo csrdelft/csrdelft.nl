@@ -41,11 +41,11 @@ class BeheerFunctiesController extends AclController {
 		$popup = null;
 		if ($fid > 0) {
 			$this->bewerken($fid);
-			$popup = $this->getContent();
+			$popup = $this->getView();
 		}
 		$functies = $this->model->getAlleFuncties(); // grouped by functie_id
 		$this->view = new BeheerFunctiesView($functies);
-		$this->view = new CsrLayoutPage($this->getContent(), array(), $popup);
+		$this->view = new CsrLayoutPage($this->getView(), array(), $popup);
 		$this->view->addStylesheet('taken.css');
 		$this->view->addScript('taken.js');
 	}

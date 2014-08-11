@@ -23,7 +23,7 @@ class BibliotheekController extends Controller {
 	 * actie[/id[/opties]]
 	 */
 	public function __construct($querystring) {
-		parent::__construct($querystring);
+		parent::__construct($querystring, null);
 
 		//wat zullen we eens gaan doen? Hier bepalen we welke actie we gaan uitvoeren
 		//en of de ingelogde persoon dat mag.
@@ -42,15 +42,11 @@ class BibliotheekController extends Controller {
 		$allow = array('default', 'catalogusdata');
 		//met biebrechten mag je meer
 		if (LoginLid::mag('P_BIEB_READ')) {
-			$allow = array_merge($allow, array('default', 'boek', 'nieuwboek', 'bewerkboek',
+			$allow = array_merge($allow, array('default', 'boek', 'nieuwboek', 'bewerkboek', 'verwijderboek',
 				'bewerkbeschrijving', 'verwijderbeschrijving',
 				'addexemplaar', 'verwijderexemplaar',
 				'exemplaarlenen', 'exemplaarteruggegeven', 'exemplaarterugontvangen', 'exemplaarvermist', 'exemplaargevonden',
 				'autocomplete'));
-		}
-		// beheerders mogen boeken weggooien
-		if (Boek::magVerwijderen()) {
-			$allow[] = 'verwijderboek';
 		}
 		if (!in_array($this->action, $allow)) {
 			$this->action = 'catalogustonen';
@@ -60,7 +56,7 @@ class BibliotheekController extends Controller {
 	/**
 	 * Wordt op diverse plekken geregeld.
 	 */
-	protected function hasPermission() {
+	protected function mag($action) {
 		return true;
 	}
 

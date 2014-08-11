@@ -11,9 +11,9 @@
 class MijnCorveeView extends TemplateView {
 
 	public function __construct(array $taken, array $punten, array $functies, CorveeVrijstelling $vrijstelling = null) {
-		parent::__construct();
+		parent::__construct($taken);
 		$this->titel = 'Mijn corveeoverzicht';
-		$this->smarty->assign('rooster', $taken);
+		$this->smarty->assign('rooster', $this->model);
 		$this->smarty->assign('puntenlijst', $punten);
 		$this->smarty->assign('functies', $functies);
 		$this->smarty->assign('vrijstelling', $vrijstelling);

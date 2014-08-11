@@ -178,7 +178,7 @@ class Boek {
 	 * @return	bool
 	 * 		boek mag alleen door admins verwijdert worden
 	 */
-	static public function magVerwijderen() {
+	public function magVerwijderen() {
 		return LoginLid::mag('groep:BAS-FCie,P_BIEB_MOD,P_ADMIN');
 	}
 
@@ -189,11 +189,7 @@ class Boek {
 	 * 		boek mag alleen door admins of door eigenaar v.e. exemplaar bewerkt worden
 	 */
 	public function magBewerken() {
-		if ($this->magVerwijderen() OR LoginLid::mag('P_BIEB_EDIT')) {
-			return true;
-		}
-
-		return $this->isEigenaar();
+		return LoginLid::mag('P_BIEB_EDIT') OR $this->isEigenaar() OR $this->magVerwijderen();
 	}
 
 	/**

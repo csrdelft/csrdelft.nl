@@ -15,7 +15,7 @@ if (isset($_GET['querystring'])) {
 	die('epic fail');
 }
 
-$pagina = new CsrLayoutPage($docControl->getContent());
+$pagina = new CsrLayoutPage($docControl->getView());
 $pagina->addStylesheet('datatables_basic.css', '/layout/js/datatables/css/');
 $pagina->addStylesheet('documenten.css');
 

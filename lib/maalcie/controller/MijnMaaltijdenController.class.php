@@ -14,21 +14,21 @@ require_once 'maalcie/view/MijnMaaltijdenView.class.php';
 class MijnMaaltijdenController extends AclController {
 
 	public function __construct($query) {
-		parent::__construct($query);
+		parent::__construct($query, null);
 		if (!$this->isPosted()) {
 			$this->acl = array(
-				'ketzer' => 'P_MAAL_IK',
-				'lijst' => 'P_MAAL_IK',
-				'aanmelden' => 'P_MAAL_IK',
-				'afmelden' => 'P_MAAL_IK'
+				'ketzer'	 => 'P_MAAL_IK',
+				'lijst'		 => 'P_MAAL_IK',
+				'aanmelden'	 => 'P_MAAL_IK',
+				'afmelden'	 => 'P_MAAL_IK'
 			);
 		} else {
 			$this->acl = array(
-				'sluit' => 'P_MAAL_IK',
-				'aanmelden' => 'P_MAAL_IK',
-				'afmelden' => 'P_MAAL_IK',
-				'gasten' => 'P_MAAL_IK',
-				'opmerking' => 'P_MAAL_IK'
+				'sluit'		 => 'P_MAAL_IK',
+				'aanmelden'	 => 'P_MAAL_IK',
+				'afmelden'	 => 'P_MAAL_IK',
+				'gasten'	 => 'P_MAAL_IK',
+				'opmerking'	 => 'P_MAAL_IK'
 			);
 		}
 	}
@@ -65,7 +65,7 @@ class MijnMaaltijdenController extends AclController {
 		$maaltijden = MaaltijdenModel::getKomendeMaaltijdenVoorLid(LoginLid::instance()->getUid());
 		$aanmeldingen = MaaltijdAanmeldingenModel::getAanmeldingenVoorLid($maaltijden, LoginLid::instance()->getUid());
 		$this->view = new MijnMaaltijdenView($maaltijden, $aanmeldingen);
-		$this->view = new CsrLayoutPage($this->getContent());
+		$this->view = new CsrLayoutPage($this->getView());
 		$this->view->addStylesheet('taken.css');
 		$this->view->addScript('taken.js');
 	}

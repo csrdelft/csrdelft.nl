@@ -5,7 +5,7 @@ require_once 'verticale.class.php';
 class VerticalenContent extends TemplateView {
 
 	public function __construct() {
-		parent::__construct();
+		parent::__construct(null);
 	}
 
 	public function getTitel() {

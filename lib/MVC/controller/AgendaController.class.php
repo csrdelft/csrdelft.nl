@@ -17,15 +17,15 @@ class AgendaController extends AclController {
 		parent::__construct($query, AgendaModel::instance());
 		if (!$this->isPosted()) {
 			$this->acl = array(
-				'maand' => 'P_PUBLIC',
-				'icalendar' => 'P_PUBLIC'
+				'maand'		 => 'P_PUBLIC',
+				'icalendar'	 => 'P_PUBLIC'
 			);
 		} else {
 			$this->acl = array(
-				'courant' => 'P_PUBLIC',
-				'toevoegen' => 'P_AGENDA_POST',
-				'bewerken' => 'P_AGENDA_MOD',
-				'verwijderen' => 'P_AGENDA_MOD'
+				'courant'		 => 'P_PUBLIC',
+				'toevoegen'		 => 'P_AGENDA_ADD',
+				'bewerken'		 => 'P_AGENDA_MOD',
+				'verwijderen'	 => 'P_AGENDA_MOD'
 			);
 		}
 	}
@@ -40,14 +40,6 @@ class AgendaController extends AclController {
 			}
 		}
 		parent::performAction($this->getParams(3));
-	}
-
-	public static function magToevoegen() {
-		return LoginLid::mag('P_AGENDA_POST');
-	}
-
-	public static function magBeheren() {
-		return LoginLid::mag('P_AGENDA_MOD');
 	}
 
 	/**

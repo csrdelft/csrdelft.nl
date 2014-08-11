@@ -37,11 +37,11 @@ abstract class GroepenController extends Controller {
 	 * 
 	 * @return boolean
 	 */
-	protected function hasPermission() {
+	protected function mag($action) {
 		if (!LoginLid::mag('P_LEDEN_READ')) {
 			$this->geentoegang();
 		}
-		switch ($this->action) {
+		switch ($action) {
 			case 'overzicht':
 			case 'tonen':
 			case GroepTab::Lijst:
@@ -69,12 +69,12 @@ abstract class GroepenController extends Controller {
 		$class = str_replace('Model', '', get_class($this->model));
 		$view = $class . 'View';
 		$this->view = new $view($groepen, $class, $class . ' (h.t.)');
-		$this->view = new CsrLayoutPage($this->getContent());
+		$this->view = new CsrLayoutPage($this->getView());
 	}
 
 	public function tonen($id) {
 		$this->lijst($id);
-		$this->view = new CsrLayoutPage($this->getContent());
+		$this->view = new CsrLayoutPage($this->getView());
 	}
 
 	public function lijst($id) {

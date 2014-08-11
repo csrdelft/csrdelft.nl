@@ -19,7 +19,7 @@ if(!isset($_GET['query'])){
 $controller=new Groepcontroller($_GET['query']);
 $controller->performAction();
 
-$pagina=new CsrLayoutPage($controller->getContent());
+$pagina=new CsrLayoutPage($controller->getView());
 
 $pagina->addStylesheet('groepen.css');
 $pagina->addScript('groepen.js');

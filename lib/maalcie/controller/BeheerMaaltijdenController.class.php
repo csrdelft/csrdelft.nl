@@ -17,27 +17,27 @@ require_once 'maalcie/view/forms/AanmeldingForm.class.php';
 class BeheerMaaltijdenController extends AclController {
 
 	public function __construct($query) {
-		parent::__construct($query);
+		parent::__construct($query, null);
 		if (!$this->isPosted()) {
 			$this->acl = array(
-				'beheer' => 'P_MAAL_MOD',
+				'beheer'	 => 'P_MAAL_MOD',
 				'prullenbak' => 'P_MAAL_MOD',
 				//'leegmaken' => 'P_MAAL_MOD',
-				'archief' => 'P_MAAL_MOD',
-				'fiscaal' => 'P_MAAL_MOD'
+				'archief'	 => 'P_MAAL_MOD',
+				'fiscaal'	 => 'P_MAAL_MOD'
 			);
 		} else {
 			$this->acl = array(
-				'sluit' => 'P_MAAL_MOD',
-				'open' => 'P_MAAL_MOD',
-				'nieuw' => 'P_MAAL_MOD',
-				'bewerk' => 'P_MAAL_MOD',
-				'opslaan' => 'P_MAAL_MOD',
-				'verwijder' => 'P_MAAL_MOD',
-				'herstel' => 'P_MAAL_MOD',
+				'sluit'			 => 'P_MAAL_MOD',
+				'open'			 => 'P_MAAL_MOD',
+				'nieuw'			 => 'P_MAAL_MOD',
+				'bewerk'		 => 'P_MAAL_MOD',
+				'opslaan'		 => 'P_MAAL_MOD',
+				'verwijder'		 => 'P_MAAL_MOD',
+				'herstel'		 => 'P_MAAL_MOD',
 				'anderaanmelden' => 'P_MAAL_MOD',
-				'anderafmelden' => 'P_MAAL_MOD',
-				'aanmaken' => 'P_MAAL_MOD'
+				'anderafmelden'	 => 'P_MAAL_MOD',
+				'aanmaken'		 => 'P_MAAL_MOD'
 			);
 		}
 	}
@@ -58,7 +58,7 @@ class BeheerMaaltijdenController extends AclController {
 		$popup = null;
 		if (is_int($mid) && $mid > 0) {
 			$this->bewerk($mid);
-			$popup = $this->getContent();
+			$popup = $this->getView();
 		}
 		$body = new BeheerMaaltijdenView(MaaltijdenModel::getAlleMaaltijden(), false, false, MaaltijdRepetitiesModel::getAlleRepetities());
 		$this->view = new CsrLayoutPage($body, array(), $popup);
