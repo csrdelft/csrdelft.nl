@@ -23,7 +23,7 @@ define('ICON_PATH', PICS_PATH . 'famfamfam/');
 define('HTDOCS_PATH', BASE_PATH . 'htdocs/');
 define('TMP_PATH', BASE_PATH . 'data/tmp/');
 define('SESSION_PATH', BASE_PATH . 'sessie/');
-define('PUBLIC_FTP', '/srv/ftp/incoming/csrdelft');
+define('PUBLIC_FTP', '/srv/ftp/incoming/csrdelft/');
 
 # smarty template engine
 define('SMARTY_DIR', LIB_PATH . 'smarty/libs/');
