@@ -349,6 +349,12 @@ class UploadHttp extends BestandUploader {
 
 }
 
+/**
+ * UploadFtp ophalen van bestand nadat gebruiker
+ * handmatig heeft geupload met FTP
+ * 
+ * @author C.S.R. Delft <pubcie@csrdelft.nl>
+ */
 class UploadFtp extends BestandUploader {
 
 	/**
@@ -367,10 +373,19 @@ class UploadFtp extends BestandUploader {
 	 */
 	protected $subdir;
 
+	/**
+	 * Trailing slash required for subdir!
+	 * 
+	 * @param string $name
+	 * @param string $subdir
+	 */
 	public function __construct($name, $subdir) {
 		parent::__construct($name);
 		$this->subdir = $subdir;
 		$this->path = PUBLIC_FTP . $this->subdir;
+		if (startsWith('/', $subdir) OR ! endsWith('/', $subdir) OR ! $this->isBeschikbaar()) {
+			throw new Exception('Invalid FTP subdir');
+		}
 		if ($this->isPosted()) {
 			$this->value = filter_input(INPUT_POST, $this->name, FILTER_SANITIZE_STRING);
 			$finfo = finfo_open(FILEINFO_MIME_TYPE);
@@ -462,7 +477,7 @@ class UploadFtp extends BestandUploader {
 			}
 			echo ' /><label for="verwijderVanFtp" style="float: none;"> Bestand verwijderen uit FTP-map</label>';
 		} else {
-			echo 'Geen bestanden gevonden in:<br />ftp://csrdelft.nl/incoming/csrdelft' . $this->subdir;
+			echo 'Geen bestanden gevonden in:<br />ftp://csrdelft.nl/incoming/csrdelft/' . $this->subdir;
 		}
 		echo '</div></div>';
 	}
