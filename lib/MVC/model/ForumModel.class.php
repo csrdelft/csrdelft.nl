@@ -275,6 +275,9 @@ class ForumDradenGelezenModel extends PersistenceModel {
 	}
 
 	public function verwijderDraadGelezenVoorLid($lid_id) {
+		if (!Lid::isValidUid($lid_id)) {
+			throw new Exception('invalid lid id');
+		}
 		foreach ($this->find('lid_id = ?', array($lid_id)) as $gelezen) {
 			$this->delete($gelezen);
 		}
@@ -313,6 +316,9 @@ class ForumDradenVerbergenModel extends PersistenceModel {
 	}
 
 	public function toonAllesVoorLid($lid_id) {
+		if (!Lid::isValidUid($lid_id)) {
+			throw new Exception('invalid lid id');
+		}
 		foreach ($this->find('lid_id = ?', array($lid_id)) as $verborgen) {
 			$this->delete($verborgen);
 		}
@@ -361,6 +367,9 @@ class ForumDradenVolgenModel extends PersistenceModel {
 	}
 
 	public function volgNietsVoorLid($lid_id) {
+		if (!Lid::isValidUid($lid_id)) {
+			throw new Exception('invalid lid id');
+		}
 		foreach ($this->find('lid_id = ?', array($lid_id)) as $volgen) {
 			$this->delete($volgen);
 		}
