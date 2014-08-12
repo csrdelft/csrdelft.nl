@@ -25,7 +25,15 @@ require_once 'configuratie.include.php';
 // Corvee herinneringen
 try {
 	require_once 'maalcie/model/CorveeHerinneringenModel.class.php';
-	$verstuurd_errors = CorveeHerinneringenModel::stuurHerinneringen();
+	CorveeHerinneringenModel::stuurHerinneringen();
 } catch (Exception $e) {
 	DebugLogModel::instance()->log('cron.php', 'CorveeHerinneringenModel::stuurHerinneringen()', array(), $e);
+}
+
+// Forum opschonen
+try {
+	require_once 'MVC/model/ForumModel.class.php';
+	ForumModel::instance()->opschonen();
+} catch (Exception $e) {
+	DebugLogModel::instance()->log('cron.php', 'ForumModel::instance()->opschonen()', array(), $e);
 }

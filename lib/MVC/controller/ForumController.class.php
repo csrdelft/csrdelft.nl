@@ -328,7 +328,7 @@ class ForumController extends Controller {
 	 */
 	public function toonalles() {
 		$aantal = ForumDradenVerbergenModel::instance()->getAantalVerborgenVoorLid();
-		ForumDradenVerbergenModel::instance()->toonAllesVoorLid();
+		ForumDradenVerbergenModel::instance()->toonAllesVoorLid(LoginSession::instance()->getUid());
 		setMelding($aantal . ' onderwerp' . ($aantal === 1 ? ' wordt' : 'en worden') . ' weer getoond in de zijbalk', 1);
 		// ReloadPage
 	}
@@ -369,7 +369,7 @@ class ForumController extends Controller {
 	 */
 	public function volgniets() {
 		$aantal = ForumDradenVolgenModel::instance()->getAantalVolgenVoorLid();
-		ForumDradenVolgenModel::instance()->volgNietsVoorLid();
+		ForumDradenVolgenModel::instance()->volgNietsVoorLid(LoginSession::instance()->getUid());
 		setMelding($aantal . ' onderwerp' . ($aantal === 1 ? ' wordt' : 'en worden') . ' niet meer gevolgd', 1);
 		// ReloadPage
 	}

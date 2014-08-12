@@ -35,6 +35,18 @@ class ForumModel extends PersistenceModel {
 		return $result;
 	}
 
+	/**
+	 * Voor alle ex-leden dingen verwijderen
+	 */
+	public function opschonen() {
+		$uids = Database::instance()->sqlSelect(array('uid'), 'lid', "status IN ('S_CIE','S_NOBODY','S_EXLID','S_OVERLEDEN')")->fetchColumn(0);
+		foreach ($uids as $lid_id) {
+			ForumDradenGelezenModel::instance()->verwijderDraadGelezenVoorLid($lid_id);
+			ForumDradenVerbergenModel::instance()->toonAllesVoorLid($lid_id);
+			ForumDradenVolgenModel::instance()->volgNietsVoorLid($lid_id);
+		}
+	}
+
 }
 
 class ForumDelenModel extends PersistenceModel {
@@ -262,6 +274,12 @@ class ForumDradenGelezenModel extends PersistenceModel {
 		}
 	}
 
+	public function verwijderDraadGelezenVoorLid($lid_id) {
+		foreach ($this->find('lid_id = ?', array($lid_id)) as $gelezen) {
+			$this->delete($gelezen);
+		}
+	}
+
 }
 
 class ForumDradenVerbergenModel extends PersistenceModel {
@@ -294,8 +312,8 @@ class ForumDradenVerbergenModel extends PersistenceModel {
 		}
 	}
 
-	public function toonAllesVoorLid() {
-		foreach ($this->find('lid_id = ?', array(LoginSession::instance()->getUid())) as $verborgen) {
+	public function toonAllesVoorLid($lid_id) {
+		foreach ($this->find('lid_id = ?', array($lid_id)) as $verborgen) {
 			$this->delete($verborgen);
 		}
 	}
@@ -342,8 +360,8 @@ class ForumDradenVolgenModel extends PersistenceModel {
 		}
 	}
 
-	public function volgNietsVoorLid() {
-		foreach ($this->find('lid_id = ?', array(LoginSession::instance()->getUid())) as $volgen) {
+	public function volgNietsVoorLid($lid_id) {
+		foreach ($this->find('lid_id = ?', array($lid_id)) as $volgen) {
 			$this->delete($volgen);
 		}
 	}
