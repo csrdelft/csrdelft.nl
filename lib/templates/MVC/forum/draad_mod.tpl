@@ -13,7 +13,7 @@
 						</a>
 					{/if}
 					<br /><br />
-					<a href="/forum/wijzigen/{$draad->draad_id}/verwijderd" class="knop post ReloadPage" title="Verander is verwijderd" onclick="return confirm('Weet u zeker dat u dit gehele forumdraad met alle reacties wilt {if $draad->verwijderd}herstellen{else}verwijderen{/if}?');">
+					<a href="/forum/wijzigen/{$draad->draad_id}/verwijderd" class="knop post confirm ReloadPage" title="Verander status verwijderd (incl. alle reacties)">
 						{if $draad->verwijderd}
 							{icon get="arrow_undo"} draad herstellen
 						{else}
