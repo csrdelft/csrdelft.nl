@@ -48,6 +48,7 @@ htdocs/bar/js/nl_NL.js -text
 htdocs/communicatie/.htaccess -text
 htdocs/communicatie/bibliotheek.php -text
 htdocs/communicatie/documenten.php -text
+htdocs/communicatie/documenten_old/convert2new.php -text
 htdocs/communicatie/lijst.php -text
 htdocs/communicatie/profiel.php -text
 htdocs/communicatie/stamboom.php -text
