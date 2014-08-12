@@ -26,7 +26,7 @@ class LoginSession {
 	 * A role can have multiple subjects.
 	 * A role can have many permissions.
 	 * A permission can be assigned to many roles.
-	 * An operation can be assigned many permissions. (Opmerking: AclController ondersteund dit standaard juist niet voor eenvoud)
+	 * An operation can be assigned many permissions.
 	 * A permission can be assigned to many operations.
 	 */
 	private $roles = array();
@@ -39,8 +39,7 @@ class LoginSession {
 	 * Subject bevat het Lid-object van het lid dat op dit moment is ingelogd.
 	 */
 	private $subject;
-
-	/*
+	/**
 	 * Mocht er gesued zijn, dan bevat suedFrom het oorspronkelijk ingelogde Lid,
 	 * dus het lid dat de su heeft geïnitieerd.
 	 */
@@ -556,8 +555,8 @@ class LoginSession {
 			'R_LID'		 => $p['P_PROFIEL_EDIT'] | $p['P_OUDLEDEN_READ'] | $p['P_FORUM_POST'] | $p['P_AGENDA_READ'] | $p['P_DOCS_READ'] | $p['P_BIEB_READ'] | $p['P_MAAL_IK'] | $p['P_CORVEE_IK'] | $p['P_MAIL_POST'] | $p['P_NEWS_POST'] | $p['P_ALBUM_MOD']
 		);
 
-		# hierarchical RBAC (inheritance between roles)
-		# TODO: constrained RBAC, which adds separation of duties
+		# use | $p[] for hierarchical RBAC (inheritance between roles)
+		# use & ~$p[] for constrained RBAC (separation of duties)
 
 		$this->roles['R_ETER'] = $this->roles['R_NOBODY'] | $p['P_LOGGED_IN'] | $p['P_PROFIEL_EDIT'] | $p['P_MAAL_IK'];
 		$this->roles['R_OUDLID'] = $this->roles['R_LID'] | $p['P_ALLEEN_OUDLID'];
