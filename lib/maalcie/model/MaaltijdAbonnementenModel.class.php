@@ -20,11 +20,10 @@ class MaaltijdAbonnementenModel {
 	 * @param boolean $uitgeschakeld ook uitgeschakelde abonnementen
 	 * @return MaaltijdAbonnement[]
 	 */
-	public static function getAbonnementenVoorLid($uid, $abonneerbaar=false, $uitgeschakeld=false) {
+	public static function getAbonnementenVoorLid($uid, $abonneerbaar = false, $uitgeschakeld = false) {
 		if ($abonneerbaar) {
 			$repById = MaaltijdRepetitiesModel::getAbonneerbareRepetitiesVoorLid($uid); // grouped by mrid
-		}
-		else {
+		} else {
 			$repById = MaaltijdRepetitiesModel::getAlleRepetities(true); // grouped by mrid
 		}
 		$lijst = array();
@@ -51,10 +50,10 @@ class MaaltijdAbonnementenModel {
 		ksort($lijst);
 		return $lijst;
 	}
-	
+
 	public static function getHeeftAbonnement($mrid, $uid) {
 		if (!is_int($mrid) || $mrid <= 0) {
-			throw new Exception('Get heeft abonnement faalt: Invalid $mrid ='. $mrid);
+			throw new Exception('Get heeft abonnement faalt: Invalid $mrid =' . $mrid);
 		}
 		$sql = 'SELECT EXISTS (SELECT * FROM mlt_abonnementen WHERE mlt_repetitie_id=? AND lid_id=?)';
 		$values = array($mrid, $uid);
@@ -63,13 +62,13 @@ class MaaltijdAbonnementenModel {
 		$result = $query->fetchColumn();
 		return $result;
 	}
-	
+
 	/**
 	 * Bouwt matrix voor alle repetities en abonnementen van alle leden
 	 * 
 	 * @return MaaltijdAbonnement[uid][mrid]
 	 */
-	public static function getAbonnementenMatrix($repetities, $alleenNovieten=false, $alleenWaarschuwingen=false, $ingeschakeld=null, $voorLid=null) {
+	public static function getAbonnementenMatrix($repetities, $alleenNovieten = false, $alleenWaarschuwingen = false, $ingeschakeld = null, $voorLid = null) {
 		$repById = array();
 		foreach ($repetities as $repetitie) {
 			$repById[$repetitie->getMaaltijdRepetitieId()] = $repetitie;
@@ -81,8 +80,7 @@ class MaaltijdAbonnementenModel {
 			$mrid = $abo['mrid'];
 			if ($abo['abo']) { // ingeschakelde abonnementen
 				$abonnement = new MaaltijdAbonnement($mrid, $uid);
-			}
-			else { // uitgeschakelde abonnementen
+			} else { // uitgeschakelde abonnementen
 				$abonnement = new MaaltijdAbonnement($mrid, null);
 			}
 			$abonnement->setVanLidId($uid);
@@ -90,18 +88,15 @@ class MaaltijdAbonnementenModel {
 			if ($alleenWaarschuwingen) {
 				if ($abo['abo_err']) {
 					$abonnement->setWaarschuwing('Niet abonneerbaar');
-				}
-				elseif ($abo['status_err']) {
+				} elseif ($abo['status_err']) {
 					$abonnement->setWaarschuwing('Geen huidig lid');
-				}
-				elseif ($abo['kring_err']) {
+				} elseif ($abo['kring_err']) {
 					$abonnement->setWaarschuwing('Geen actief kringlid');
-				}
-				elseif (!MaaltijdAanmeldingenModel::checkAanmeldFilter($uid, $abo['abonnement_filter'])) {
-					$abonnement->setWaarschuwing('Niet toegestaan vanwege aanmeldrestrictie: '. $abo['abonnement_filter']);
-				}
-				else {
-					continue;;
+				} elseif (!MaaltijdAanmeldingenModel::checkAanmeldFilter($uid, $abo['abonnement_filter'])) {
+					$abonnement->setWaarschuwing('Niet toegestaan vanwege aanmeldrestrictie: ' . $abo['abonnement_filter']);
+				} else {
+					continue;
+					;
 				}
 			}
 			$matrix[$uid][$mrid] = $abonnement;
@@ -119,8 +114,8 @@ class MaaltijdAbonnementenModel {
 		}
 		return $matrix;
 	}
-	
-	private static function loadLedenAbonnementen($alleenNovieten=false, $alleenWaarschuwingen=false, $ingeschakeld=null, $voorLid=null) {
+
+	private static function loadLedenAbonnementen($alleenNovieten = false, $alleenWaarschuwingen = false, $ingeschakeld = null, $voorLid = null) {
 		$sql = 'SELECT uid, mlt_repetitie_id AS mrid,';
 		if ($alleenWaarschuwingen) {
 			$sql.= ' abonnement_filter,'; // controleer later
@@ -131,19 +126,15 @@ class MaaltijdAbonnementenModel {
 		$values = array();
 		if ($alleenWaarschuwingen) {
 			$sql.= ' HAVING abo AND (abonnement_filter != "" OR abo_err OR kring_err OR status_err)'; // niet-(kring)-leden met abo
-		}
-		elseif ($voorLid !== null) { // alles voor specifiek lid
+		} elseif ($voorLid !== null) { // alles voor specifiek lid
 			$sql.= ' WHERE uid = ?';
 			$values[] = $voorLid;
-		}
-		elseif ($alleenNovieten) { // alles voor novieten
+		} elseif ($alleenNovieten) { // alles voor novieten
 			$sql.= ' WHERE lid.status = "S_NOVIET"';
-		}
-		elseif ($ingeschakeld === true) {
+		} elseif ($ingeschakeld === true) {
 			$sql.= ' HAVING abo = ?';
 			$values[] = $ingeschakeld;
-		}
-		else { // abonneerbaar alleen voor leden
+		} else { // abonneerbaar alleen voor leden
 			$sql.= ' WHERE lid.status IN("S_LID", "S_GASTLID", "S_NOVIET")';
 		}
 		$sql.= ' ORDER BY achternaam, voornaam ASC';
@@ -153,19 +144,19 @@ class MaaltijdAbonnementenModel {
 		$result = $query->fetchAll();
 		return $result;
 	}
-	
+
 	public static function getAbonnementenVoorRepetitie($mrid) {
 		if (!is_int($mrid) || $mrid <= 0) {
-			throw new Exception('Get abonnementen voor repetitie faalt: Invalid $mrid ='. $mrid);
+			throw new Exception('Get abonnementen voor repetitie faalt: Invalid $mrid =' . $mrid);
 		}
 		return self::loadAbonnementen($mrid);
 	}
-	
+
 	public static function getAbonnementenVanNovieten() {
 		$repetities = MaaltijdRepetitiesModel::getAlleRepetities();
 		return self::getAbonnementenMatrix($repetities, true);
 	}
-	
+
 	/**
 	 * Laad abonnementen van een bepaalde repetitie OF voor een bepaald lid.
 	 * 
@@ -173,25 +164,24 @@ class MaaltijdAbonnementenModel {
 	 * @param String $uid
 	 * @return MaaltijdAbonnement[]
 	 */
-	private static function loadAbonnementen($mrid=null, $uid=null) {
+	private static function loadAbonnementen($mrid = null, $uid = null) {
 		$sql = 'SELECT mlt_repetitie_id, lid_id, wanneer_ingeschakeld';
 		$sql.= ' FROM mlt_abonnementen';
 		$values = array();
 		if (is_int($mrid)) {
 			$sql.= ' WHERE mlt_repetitie_id=?';
 			$values[] = $mrid;
-		}
-		elseif ($uid !== null) {
+		} elseif ($uid !== null) {
 			$sql.= ' WHERE lid_id=?';
 			$values[] = $uid;
 		}
 		$db = \Database::instance();
 		$query = $db->prepare($sql);
 		$query->execute($values);
-		$result = $query->fetchAll(\PDO::FETCH_CLASS|\PDO::FETCH_PROPS_LATE, 'MaaltijdAbonnement');
+		$result = $query->fetchAll(\PDO::FETCH_CLASS | \PDO::FETCH_PROPS_LATE, 'MaaltijdAbonnement');
 		return $result;
 	}
-	
+
 	public static function inschakelenAbonnement($mrid, $uid) {
 		$repetitie = MaaltijdRepetitiesModel::getRepetitie($mrid);
 		if (!$repetitie->getIsAbonneerbaar()) {
@@ -201,20 +191,20 @@ class MaaltijdAbonnementenModel {
 			throw new Exception('Abonnement al ingeschakeld');
 		}
 		if (!MaaltijdAanmeldingenModel::checkAanmeldFilter($uid, $repetitie->getAbonnementFilter())) {
-			throw new Exception('Niet toegestaan vanwege aanmeldrestrictie: '. $repetitie->getAbonnementFilter());
+			throw new Exception('Niet toegestaan vanwege aanmeldrestrictie: ' . $repetitie->getAbonnementFilter());
 		}
 		$abo_aantal = self::newAbonnement($mrid, $uid);
 		$abo_aantal[0]->setVanLidId($uid);
 		return $abo_aantal;
 	}
-	
+
 	public static function inschakelenAbonnementVoorNovieten($mrid) {
 		if (!is_int($mrid) || $mrid <= 0) {
-			throw new Exception('Inschakelen abonnement voor novieten faalt: Invalid $mrid ='. $mrid);
+			throw new Exception('Inschakelen abonnement voor novieten faalt: Invalid $mrid =' . $mrid);
 		}
 		return self::newAbonnement($mrid);
 	}
-	
+
 	/**
 	 * Slaat nieuwe abonnement(en) op voor de opgegeven maaltijd-repetitie
 	 * voor een specifiek lid of alle novieten (als $uid=null).
@@ -224,7 +214,7 @@ class MaaltijdAbonnementenModel {
 	 * @param String $uid
 	 * @return MaaltijdAbonnement OR aantal nieuwe abonnementen novieten
 	 */
-	private static function newAbonnement($mrid, $uid=null) {
+	private static function newAbonnement($mrid, $uid = null) {
 		$db = \Database::instance();
 		try {
 			$db->beginTransaction();
@@ -234,48 +224,45 @@ class MaaltijdAbonnementenModel {
 			if ($uid !== null) {
 				$sql.= ' VALUES (?, ?, ?)';
 				$values[] = $uid;
-			}
-			else { // niet voor specifiek lid? dan voor alle novieten
+			} else { // niet voor specifiek lid? dan voor alle novieten
 				$sql.= ' SELECT ?, uid, ? FROM lid';
 				$sql.= ' WHERE status = "S_NOVIET"';
 			}
 			$wanneer = date('Y-m-d H:i');
 			$values[] = $wanneer;
-			$query = $db->prepare($sql);
-			$query->execute($values);
-			$abos = $query->rowCount();
+			$pdo = $db->prepare($sql);
+			$pdo->execute($values);
+			$abos = $pdo->rowCount();
 			// aanmelden voor komende repetitie-maaltijden
 			if ($uid === null) { // voor de novieten
 				$sql = 'SELECT uid FROM lid WHERE status = "S_NOVIET"';
-				$query = $db->prepare($sql);
-				$query->execute($values);
-				$result = $query->fetchAll(\PDO::FETCH_COLUMN, 0);
+				$pdo = $db->prepare($sql);
+				$pdo->execute($values);
+				$pdo->setFetchMode(PDO::FETCH_COLUMN, 0);
 				$aantal = 0;
-				foreach ($result as $uid) {
+				foreach ($pdo as $uid) {
 					try {
 						$aantal += MaaltijdAanmeldingenModel::aanmeldenVoorKomendeRepetitieMaaltijden($mrid, $uid);
-					}
-					catch (\Exception $e) { // niet toegestaan
+					} catch (Exception $e) { // niet toegestaan
+						setMelding($e->getMessage(), -1);
 					}
 				}
 				$db->commit();
 				return $abos;
-			}
-			else {
+			} else {
 				if ($abos !== 1) {
-					throw new Exception('New maaltijd-abonnement faalt: $query->rowCount() ='. $abos);
+					throw new Exception('New maaltijd-abonnement faalt: $query->rowCount() =' . $abos);
 				}
 				$aantal = MaaltijdAanmeldingenModel::aanmeldenVoorKomendeRepetitieMaaltijden($mrid, $uid);
 				$db->commit();
 				return array(new MaaltijdAbonnement($mrid, $uid, $wanneer), $aantal);
 			}
-		}
-		catch (\Exception $e) {
+		} catch (\Exception $e) {
 			$db->rollback();
 			throw $e; // rethrow to controller
 		}
 	}
-	
+
 	public static function uitschakelenAbonnement($mrid, $uid) {
 		if (!self::getHeeftAbonnement($mrid, $uid)) {
 			throw new Exception('Abonnement al uitgeschakeld');
@@ -285,7 +272,7 @@ class MaaltijdAbonnementenModel {
 		$abo->setVanLidId($uid);
 		return array($abo, $aantal);
 	}
-	
+
 	/**
 	 * Called when a MaaltijdRepetitie is being deleted.
 	 * This is only possible after all MaaltijdAanmeldingen are deleted of this MaaltijdAbonnement,
@@ -295,11 +282,11 @@ class MaaltijdAbonnementenModel {
 	 */
 	public static function verwijderAbonnementen($mrid) {
 		if (!is_int($mrid) || $mrid < 0) {
-			throw new Exception('Verwijder abonnementen faalt: Invalid $mrid ='. $mrid);
+			throw new Exception('Verwijder abonnementen faalt: Invalid $mrid =' . $mrid);
 		}
 		return self::deleteAbonnementen($mrid);
 	}
-	
+
 	/**
 	 * Called when a Lid is being made Lid-af.
 	 * All linked MaaltijdAanmeldingen are deleted of this MaaltijdAbonnement.
@@ -317,8 +304,8 @@ class MaaltijdAbonnementenModel {
 		}
 		return $aantal;
 	}
-	
-	private static function deleteAbonnementen($mrid, $uid=null) {
+
+	private static function deleteAbonnementen($mrid, $uid = null) {
 		$aantal = MaaltijdAanmeldingenModel::afmeldenDoorAbonnement($mrid, $uid);
 		$sql = 'DELETE FROM mlt_abonnementen';
 		$sql.= ' WHERE mlt_repetitie_id=?';
@@ -332,12 +319,13 @@ class MaaltijdAbonnementenModel {
 		$query->execute($values);
 		if ($uid !== null) {
 			if ($query->rowCount() !== 1) {
-				throw new Exception('Delete abonnementen faalt: $query->rowCount() ='. $query->rowCount());
+				throw new Exception('Delete abonnementen faalt: $query->rowCount() =' . $query->rowCount());
 			}
 			return $aantal;
 		}
 		return $query->rowCount();
 	}
+
 }
 
 ?>

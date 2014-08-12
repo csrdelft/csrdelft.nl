@@ -39,7 +39,8 @@ class ForumModel extends PersistenceModel {
 	 * Voor alle ex-leden dingen verwijderen
 	 */
 	public function opschonen() {
-		$uids = Database::instance()->sqlSelect(array('uid'), 'lid', "status IN ('S_CIE','S_NOBODY','S_EXLID','S_OVERLEDEN')")->fetchColumn(0);
+		$uids = Database::instance()->sqlSelect(array('uid'), 'lid', "status IN ('S_CIE','S_NOBODY','S_EXLID','S_OVERLEDEN')");
+		$uids->setFetchMode(PDO::FETCH_COLUMN, 0);
 		foreach ($uids as $lid_id) {
 			ForumDradenGelezenModel::instance()->verwijderDraadGelezenVoorLid($lid_id);
 			ForumDradenVerbergenModel::instance()->toonAllesVoorLid($lid_id);

@@ -230,7 +230,8 @@ class LidInstellingen extends PersistenceModel {
 		$properties[] = array('lid_id', 'module', 'instelling_id', 'waarde');
 		$this->setValue($module, $key, $value); // sanatize value
 		$value = $this->getValue($module, $key);
-		$leden = Database::sqlSelect(array('uid'), 'lid')->fetchAll(PDO::FETCH_COLUMN, 0);
+		$leden = Database::sqlSelect(array('uid'), 'lid');
+		$leden->setFetchMode(PDO::FETCH_COLUMN, 0);
 		foreach ($leden as $uid) {
 			$properties[] = array($uid, $module, $key, $value);
 		}

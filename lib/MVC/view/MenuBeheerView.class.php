@@ -10,7 +10,7 @@
  */
 class MenuBeheerView extends TemplateView {
 
-	public function __construct(MenuItem $tree_root, array $menus) {
+	public function __construct(MenuItem $tree_root, $menus) {
 		parent::__construct($tree_root);
 		if ($tree_root->tekst === '') {
 			$this->titel = 'Menubeheer';
