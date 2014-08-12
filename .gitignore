@@ -7,9 +7,12 @@
 /C.S.R.[!!-~]Delft.phpproj
 bin/ldap/settings.py
 data/*
+data/documenten/*
+data/log/*
 data/smarty/*
 data/smarty/cache/*
 data/smarty/compiled/*
+data/tmp/*
 etc/bot.htpasswd
 etc/cron.ini
 etc/csrmail.ini
