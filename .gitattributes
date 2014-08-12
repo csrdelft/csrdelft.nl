@@ -5,7 +5,6 @@ etc/gozerbot.ini.sample -text
 etc/ldap.ini.sample -text
 etc/mysql.ini.sample -text
 etc/soccie.ini.sample -text
-gozerbot/csrdelft.py -text
 htdocs/.htaccess -text
 htdocs/actueel/.htaccess -text
 htdocs/actueel/bijbelrooster.php -text
@@ -3534,7 +3533,6 @@ lib/courant/courant.class.php -text
 lib/courant/courantarchiefcontent.class.php -text
 lib/courant/courantbeheercontent.class.php -text
 lib/courant/courantcontent.class.php -text
-lib/csrgozerbot.class.php -text
 lib/defines.include.php.sample -text
 lib/diesAanmelding.class.php -text
 lib/documenten/categorie.class.php -text
@@ -3544,8 +3542,6 @@ lib/documenten/documentcontroller.class.php -text
 lib/eetplan.class.php -text
 lib/eetplancontent.class.php -text
 lib/googlesync.class.php -text
-lib/gozerbot/class.AES.php -text
-lib/gozerbot/class.GozerbotUDP.php -text
 lib/groepen/groep.class.php -text
 lib/groepen/groepcontent.class.php -text
 lib/groepen/groepcontroller.class.php -text
