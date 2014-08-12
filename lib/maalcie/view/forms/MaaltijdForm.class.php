@@ -1,8 +1,5 @@
 <?php
 
-require_once 'verticale.class.php';
-require_once 'lichting.class.php';
-
 /**
  * MaaltijdForm.class.php
  * 

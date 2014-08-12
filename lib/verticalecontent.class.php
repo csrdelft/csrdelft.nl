@@ -1,7 +1,5 @@
 <?php
 
-require_once 'verticale.class.php';
-
 class VerticalenContent extends TemplateView {
 
 	public function __construct() {

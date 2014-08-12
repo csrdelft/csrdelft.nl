@@ -1204,7 +1204,6 @@ class WeekdagField extends SelectField {
 class VerticaleField extends SelectField {
 
 	public function __construct($name, $value, $description = null) {
-		require_once 'verticale.class.php';
 		$verticalen = Verticale::getNamen();
 		parent::__construct($name, $value, $description, $verticalen);
 	}

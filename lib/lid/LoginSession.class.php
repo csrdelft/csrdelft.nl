@@ -429,12 +429,10 @@ class LoginSession {
 				return true;
 			}
 		} elseif (substr($descr, 0, 10) == 'Ouderjaars' OR substr($descr, 0, 10) == 'ouderjaars') {
-			require_once 'lichting.class.php';
 			if (Lichting::getJongsteLichting() > $this->subject->getProperty('lidjaar') AND $this->hasPermission('P_LOGGED_IN', $token_authorizable)) {
 				return true;
 			}
 		} elseif (substr($descr, 0, 11) == 'Eerstejaars' OR substr($descr, 0, 11) == 'eerstejaars') {
-			require_once 'lichting.class.php';
 			if (Lichting::getJongsteLichting() == $this->subject->getProperty('lidjaar') AND $this->hasPermission('P_LOGGED_IN', $token_authorizable)) {
 				return true;
 			}

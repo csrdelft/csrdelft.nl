@@ -1,6 +1,8 @@
 <?php
 
-/*
+require_once 'groepen/groep.class.php';
+
+/**
  * class.groepcontent.php	| 	Jan Pieter Waagmeester (jieter@jpwaag.com)
  *
  *
@@ -12,10 +14,6 @@
  * GroepenProfielConcent		Weergeven van groepenlijstje in profiel
  * GroepUbbContent				Weergeven van enkele zaken van een groep met een ubb-tag
  */
-
-require_once 'groepen/groep.class.php';
-require_once 'lichting.class.php';
-
 class Groepcontent extends TemplateView {
 
 	private $action = 'view';
@@ -110,10 +108,10 @@ class Groepcontent extends TemplateView {
 
 	public function getAanmeldfilters() {
 		$filters = array(
-			'' => 'Niet aanmeldbaar',
-			'P_LOGGED_IN' => 'Alle leden',
-			'geslacht:m' => 'Alleen mannen',
-			'geslacht:v' => 'Alleen vrouwen');
+			''				 => 'Niet aanmeldbaar',
+			'P_LOGGED_IN'	 => 'Alle leden',
+			'geslacht:m'	 => 'Alleen mannen',
+			'geslacht:v'	 => 'Alleen vrouwen');
 
 		//verticalen.
 		foreach (Verticale::getLetters() as $key => $verticale) {
@@ -358,5 +356,3 @@ class GroepEmailContent extends TemplateView {
 	}
 
 }
-
-?>

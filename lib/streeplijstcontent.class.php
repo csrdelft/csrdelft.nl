@@ -7,8 +7,6 @@
 # Kan streep/bestellijsten maken.
 # -------------------------------------------------------------------
 
-require_once 'verticale.class.php';
-
 class Streeplijstcontent extends TemplateView {
 
 	private $moot = 'alle';

@@ -1,7 +1,5 @@
 <?php
 
-require_once 'verticale.class.php';
-
 /**
  * MaaltijdRepetitieForm.class.php
  * 

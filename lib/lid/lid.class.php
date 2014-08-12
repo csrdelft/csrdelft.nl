@@ -2,8 +2,9 @@
 
 require_once 'ldap.class.php';
 require_once 'memcached.class.php';
-require_once 'verticale.class.php';
 require_once 'status.class.php';
+require_once 'lichting.class.php';
+require_once 'verticale.class.php';
 require_once 'groepen/groep.class.php';
 require_once 'MVC/model/Agendeerbaar.interface.php';
 
