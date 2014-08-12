@@ -307,7 +307,7 @@ class LoginSession {
 	 *  !lichting:2009				geeft true voor iedereen behalve lichting 2009.
 	 */
 	public static function mag($descr, $token_authorizable = false) {
-		# Split
+		# OR
 		if (strpos($descr, ',') !== false) {
 			# Het gevraagde mag een enkele permissie zijn, of meerdere, door komma's
 			# gescheiden, waarvan de gebruiker er dan een hoeft te hebben. Er kunnen
@@ -320,7 +320,7 @@ class LoginSession {
 			}
 			return $result;
 		}
-		# Combine
+		# AND
 		if (strpos($descr, '+') !== false) {
 			# Gecombineerde permissie:
 			# gebruiker moet alle permissies bezitten
@@ -328,6 +328,18 @@ class LoginSession {
 			$result = true;
 			foreach ($permissies as $permissie) {
 				$result &= self::mag($permissie, $token_authorizable);
+			}
+			return $result;
+		}
+		# OR (secondary)
+		if (strpos($descr, '|') !== false) {
+			# Mogelijkheid voor OR binnen een AND
+			# Hierdoor zijn er geen haakjes nodig in de syntax voor niet al te ingewikkelde statements.
+			# Statements waarbij haakjes wel nodig zijn moet je niet willen.
+			$permissies = explode('|', $descr);
+			$result = false;
+			foreach ($permissies as $permissie) {
+				$result |= self::mag($permissie, $token_authorizable);
 			}
 			return $result;
 		}
@@ -583,11 +595,27 @@ class LoginSession {
 		return array_keys($this->permissions);
 	}
 
-	public function isValidPerm($key, $user = true) {
-		if (array_key_exists($key, $this->permissions)) {
+	/**
+	 * Check if permission exists
+	 * 
+	 * @param string $perm
+	 * @return boolean
+	 */
+	public function isValidPerm($perm) {
+		if (array_key_exists($perm, $this->permissions)) {
 			return true;
 		}
-		if ($user && array_key_exists($key, $this->roles)) {
+		return false;
+	}
+
+	/**
+	 * Check if role exists
+	 * 
+	 * @param string $role
+	 * @return boolean
+	 */
+	public function isValidRole($role) {
+		if (array_key_exists($role, $this->roles)) {
 			return true;
 		}
 		return false;

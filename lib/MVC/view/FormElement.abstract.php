@@ -484,11 +484,19 @@ class RechtenField extends TextField {
 		if (preg_match('/\s/', $this->value)) {
 			$this->error = 'Mag geen spaties bevatten';
 		}
-		$values = explode(',', $this->value);
-		foreach ($values as $value) {
-			$v = explode(':', $value);
-			if ((sizeof($v) !== 2 OR empty($v[0]) OR empty($v[1])) AND ! LoginSession::instance()->isValidPerm($value)) {
-				$this->error = 'Ongeldige restrictie: "' . $value . '"';
+		$or = explode(',', $this->value);
+		foreach ($or as $and) {
+			$and = explode('+', $and);
+			foreach ($and as $or2) {
+				$or2 = explode('|', $or2);
+				foreach ($or2 as $value) {
+					if (!LoginSession::instance()->isValidPerm($value)) { // mac?
+						$dac = explode(':', $value);
+						if ((sizeof($dac) !== 2 OR $dac[0] == '' OR $dac[1] == '')) {
+							$this->error = 'Ongeldige restrictie: "' . $value . '"';
+						}
+					}
+				}
 			}
 		}
 		return $this->error === '';
