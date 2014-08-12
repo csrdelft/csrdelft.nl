@@ -112,12 +112,12 @@ class Barsysteem
     function getBestellingLaatste($persoon, $begin, $eind)
     {
         if ($begin == "") {
-            $begin = date("Y-m-d H:i:s", time() - 15 * 3600);
+            $begin = getDateTime(time() - 15 * 3600);
         } else {
             $begin = $this->parseDate($begin) . " 00:00:00";
         }
         if ($eind == "") {
-            $eind = date("Y-m-d H:i:s");
+            $eind = getDateTime();
         } else {
             $eind = $this->parseDate($eind) . " 23:59:59";
         }

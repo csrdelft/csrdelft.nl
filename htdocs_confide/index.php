@@ -21,9 +21,9 @@ while($art=$db->next($artikelenResult)){
 
 //lijst met omzetten voor de afgelopen weken regelen.
 if(isset($_GET['start'])){
-	$start=date('Y-m-d H:i:s', strtotime(((int)$_GET['start']).' months ago'));
+	$start=getDateTime(strtotime(((int)$_GET['start']).' months ago'));
 }else{
-	$start=date('Y-m-d H:i:s', strtotime('3 months ago'));
+	$start=getDateTime(strtotime('3 months ago'));
 }
 
 $db->query("SET SESSION group_concat_max_len=6000");

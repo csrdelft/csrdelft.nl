@@ -46,6 +46,13 @@ class ForumModel extends PersistenceModel {
 			ForumDradenVerbergenModel::instance()->toonAllesVoorLid($lid_id);
 			ForumDradenVolgenModel::instance()->volgNietsVoorLid($lid_id);
 		}
+		$datetime = getDateTime(strtotime('-1 year'));
+		$draden = ForumDradenModel::instance()->find('verwijderd = TRUE OR (gesloten = TRUE AND (laatst_gewijzigd IS NULL OR laatst_gewijzigd < ?))', array($datetime));
+		foreach ($draden as $draad) {
+			ForumDradenVolgenModel::instance()->stopVolgenVoorIedereen($draad);
+			ForumDradenVerbergenModel::instance()->toonDraadVoorIedereen($draad);
+			ForumDradenGelezenModel::instance()->verwijderDraadGelezen($draad);
+		}
 	}
 
 }
@@ -492,7 +499,7 @@ class ForumDradenModel extends PersistenceModel implements Paging {
 			$where .= ' > ?';
 		}
 		$where .= 'HAVING score > 0';
-		$datum = date('Y-m-d H:i:s', strtotime('-' . $jaar . ' year'));
+		$datum = getDateTime(strtotime('-' . $jaar . ' year'));
 		$terms = explode(' ', $query);
 		foreach ($terms as $i => $term) {
 			if (!endsWith($term, '*')) {
@@ -741,7 +748,7 @@ class ForumPostsModel extends PersistenceModel implements Paging {
 		} else {
 			$where .= ' > ?';
 		}
-		$datum = date('Y-m-d H:i:s', strtotime('-' . $jaar . ' year'));
+		$datum = getDateTime(strtotime('-' . $jaar . ' year'));
 		$where .= ' HAVING score > 0';
 		$results = Database::sqlSelect($fields, $orm::getTableName(), $where, array($query, $datum), 'score DESC', null, $this->per_pagina, ($this->pagina - 1) * $this->per_pagina);
 		$results->setFetchMode(PDO::FETCH_CLASS, $orm, array($cast = true));

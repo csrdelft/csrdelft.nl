@@ -335,9 +335,6 @@ htdocs/logout.php -text
 htdocs/onderhoud.html -text
 htdocs/pauper.php -text
 htdocs/robots.txt -text
-htdocs/soccie/count.png -text
-htdocs/soccie/index.php -text
-htdocs/soccie/logo.png -text
 htdocs/su.php -text
 htdocs/test.php -text
 htdocs/testform.php -text

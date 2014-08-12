@@ -101,8 +101,15 @@ function opConfide() {
 	return defined('CONFIDE_IP') AND isset($_SERVER['REMOTE_ADDR']) and CONFIDE_IP === $_SERVER['REMOTE_ADDR'];
 }
 
-function getDateTime() {
-	return date('Y-m-d H:i:s');
+/**
+ * @param int $timestamp optional
+ * @return string current DateTime formatted Y-m-d H:i:s
+ */
+function getDateTime($timestamp = null) {
+	if ($timestamp === null) {
+		$timestamp = time();
+	}
+	return date('Y-m-d H:i:s', $timestamp);
 }
 
 // function isGeldigeDatum
