@@ -2,7 +2,7 @@
  * Toon een overzicht van documenten in een bepaalde categorie
  *}
 <div id="controls">
-	{if LoginLid::mag('P_DOCS_MOD')}
+	{if LoginSession::mag('P_DOCS_MOD')}
 		<a class="knop" href="/communicatie/documenten/toevoegen/?catID={$categorie->getID()}">{icon get="toevoegen"} Toevoegen</a>
 	{/if}
 </div>

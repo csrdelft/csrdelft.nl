@@ -46,8 +46,8 @@ class MijnMaaltijdenController extends AclController {
 	}
 
 	public function ketzer() {
-		$maaltijden = MaaltijdenModel::getKomendeMaaltijdenVoorLid(LoginLid::instance()->getUid());
-		$aanmeldingen = MaaltijdAanmeldingenModel::getAanmeldingenVoorLid($maaltijden, LoginLid::instance()->getUid());
+		$maaltijden = MaaltijdenModel::getKomendeMaaltijdenVoorLid(LoginSession::instance()->getUid());
+		$aanmeldingen = MaaltijdAanmeldingenModel::getAanmeldingenVoorLid($maaltijden, LoginSession::instance()->getUid());
 		$this->view = new MijnMaaltijdenView($maaltijden, $aanmeldingen);
 		$this->view = new CsrLayoutPage($this->getView());
 		$this->view->addStylesheet('taken.css');
@@ -78,7 +78,7 @@ class MijnMaaltijdenController extends AclController {
 	}
 
 	public function aanmelden($mid) {
-		$aanmelding = MaaltijdAanmeldingenModel::aanmeldenVoorMaaltijd($mid, LoginLid::instance()->getUid(), LoginLid::instance()->getUid());
+		$aanmelding = MaaltijdAanmeldingenModel::aanmeldenVoorMaaltijd($mid, LoginSession::instance()->getUid(), LoginSession::instance()->getUid());
 		if ($this->isPosted()) {
 			$this->view = new MijnMaaltijdView($aanmelding->getMaaltijd(), $aanmelding);
 		} else {
@@ -88,7 +88,7 @@ class MijnMaaltijdenController extends AclController {
 	}
 
 	public function afmelden($mid) {
-		$maaltijd = MaaltijdAanmeldingenModel::afmeldenDoorLid($mid, LoginLid::instance()->getUid());
+		$maaltijd = MaaltijdAanmeldingenModel::afmeldenDoorLid($mid, LoginSession::instance()->getUid());
 		if ($this->isPosted()) {
 			$this->view = new MijnMaaltijdView($maaltijd);
 		} else {
@@ -99,13 +99,13 @@ class MijnMaaltijdenController extends AclController {
 
 	public function gasten($mid) {
 		$gasten = (int) filter_input(INPUT_POST, 'aantal_gasten', FILTER_SANITIZE_NUMBER_INT);
-		$aanmelding = MaaltijdAanmeldingenModel::saveGasten($mid, LoginLid::instance()->getUid(), $gasten);
+		$aanmelding = MaaltijdAanmeldingenModel::saveGasten($mid, LoginSession::instance()->getUid(), $gasten);
 		$this->view = new MijnMaaltijdView($aanmelding->getMaaltijd(), $aanmelding);
 	}
 
 	public function opmerking($mid) {
 		$opmerking = filter_input(INPUT_POST, 'gasten_eetwens', FILTER_SANITIZE_STRING);
-		$aanmelding = MaaltijdAanmeldingenModel::saveGastenEetwens($mid, LoginLid::instance()->getUid(), $opmerking);
+		$aanmelding = MaaltijdAanmeldingenModel::saveGastenEetwens($mid, LoginSession::instance()->getUid(), $opmerking);
 		$this->view = new MijnMaaltijdView($aanmelding->getMaaltijd(), $aanmelding);
 	}
 

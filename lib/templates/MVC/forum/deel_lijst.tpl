@@ -2,7 +2,7 @@
 	<td class="titel hoverIntent">
 		<a href="/forum/deel/{$deel->forum_id}">{$deel->titel}</a>
 		<br />{$deel->omschrijving}
-		{if LoginLid::mag('P_FORUM_ADMIN')}
+		{if LoginSession::mag('P_FORUM_ADMIN')}
 			<div class="hoverIntentContent">
 				<a href="/forum/hertellen/{$deel->forum_id}" class="knop post ReloadPage" title="Hertellen">{icon get="calculator"}</a>
 			</div>
@@ -12,7 +12,7 @@
 	<td class="reacties">{$deel->aantal_posts}</td>
 	<td class="reactiemoment">
 		{if $deel->laatst_gewijzigd}
-			{if LoginLid::instelling('forum_datumWeergave') === 'relatief'}
+			{if LoginSession::instelling('forum_datumWeergave') === 'relatief'}
 				{$deel->laatst_gewijzigd|reldate}
 			{else}
 				{$deel->laatst_gewijzigd}

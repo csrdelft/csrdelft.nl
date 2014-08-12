@@ -38,7 +38,7 @@ abstract class GroepenController extends Controller {
 	 * @return boolean
 	 */
 	protected function mag($action) {
-		if (!LoginLid::mag('P_LEDEN_READ')) {
+		if (!LoginSession::mag('P_LEDEN_READ')) {
 			$this->geentoegang();
 		}
 		switch ($action) {

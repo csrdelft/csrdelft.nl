@@ -20,7 +20,7 @@ require_once 'lid/profiel.class.php';
 if (isset($_GET['uid'])) {
 	$uid = $_GET['uid'];
 } else {
-	$uid = LoginLid::instance()->getUid();
+	$uid = LoginSession::instance()->getUid();
 }
 
 //welke actie gaan we doen?
@@ -38,7 +38,7 @@ if (isset($_GET['a'])) {
 }
 
 
-if (!(LoginLid::mag('P_LEDEN_READ') or LoginLid::mag('P_OUDLEDEN_READ'))) {
+if (!(LoginSession::mag('P_LEDEN_READ') or LoginSession::mag('P_OUDLEDEN_READ'))) {
 	require_once 'MVC/model/CmsPaginaModel.class.php';
 	require_once 'MVC/view/CmsPaginaView.class.php';
 	$midden = new CmsPaginaView(CmsPaginaModel::instance()->getPagina('geentoegang'));
@@ -66,7 +66,7 @@ if (!(LoginLid::mag('P_LEDEN_READ') or LoginLid::mag('P_OUDLEDEN_READ'))) {
 			//maak van een standaard statusstring van de input
 			$status = 'S_' . strtoupper($status);
 			if (!
-					(LoginLid::mag('P_ADMIN,P_LEDEN_MOD') OR ( $status == 'S_NOVIET' AND LoginLid::mag('groep:novcie')))
+					(LoginSession::mag('P_ADMIN,P_LEDEN_MOD') OR ( $status == 'S_NOVIET' AND LoginSession::mag('groep:novcie')))
 			) {
 
 				// nieuwe leden mogen worden aangemaakt door P_ADMIN,P_LEDEN_MOD,
@@ -88,7 +88,7 @@ if (!(LoginLid::mag('P_LEDEN_READ') or LoginLid::mag('P_OUDLEDEN_READ'))) {
 			}
 			break;
 		case 'wijzigstatus':
-			if (!LoginLid::mag('P_ADMIN,P_LEDEN_MOD')) {
+			if (!LoginSession::mag('P_ADMIN,P_LEDEN_MOD')) {
 				invokeRefresh('/communicatie/profiel/', 'U mag lidstatus niet aanpassen');
 			}
 			$profiel = new ProfielStatus($uid, $actie);
@@ -114,7 +114,7 @@ if (!(LoginLid::mag('P_LEDEN_READ') or LoginLid::mag('P_OUDLEDEN_READ'))) {
 			}
 			break;
 		case 'wachtwoord':
-			if (LoginLid::mag('P_ADMIN')) {
+			if (LoginSession::mag('P_ADMIN')) {
 				if (Profiel::resetWachtwoord($uid)) {
 					$melding = array('Nieuw wachtwoord met succes verzonden.', 1);
 				} else {
@@ -135,8 +135,8 @@ if (!(LoginLid::mag('P_LEDEN_READ') or LoginLid::mag('P_OUDLEDEN_READ'))) {
 
 		/** @noinspection PhpMissingBreakStatementInspection */
 		case 'rssToken':
-			if ($uid == LoginLid::instance()->getUid()) {
-				LoginLid::instance()->getToken();
+			if ($uid == LoginSession::instance()->getUid()) {
+				LoginSession::instance()->getToken();
 				header('location: ' . CSR_ROOT . '/communicatie/profiel/' . $uid . '#forum');
 				exit;
 			}

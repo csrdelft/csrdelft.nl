@@ -1,60 +1,79 @@
 <?php
 
-require_once 'MVC/model/Agendeerbaar.interface.php';
 require_once 'lid.class.php';
-require_once 'lichting.class.php';
 
 /**
- * loginlid.class.php
+ * LoginSession.class.php
  * 
  * @author Jan Pieter Waagmeester <jieter@jpwaag.com>
+ * @author P.W.G. Brussee <brussee@live.nl>
  *
- * Bewaart het huidige ingeloggede lid, inloggen, uitloggen, rechten.
+ * 
+ * Role-based access control
+ * 
+ * Mapping van huidige ingeloggede lid (subject) met rollen en permissies.
+ * En verder: inloggen, uitloggen, etc.
+ * 
+ * @see http://en.wikipedia.org/wiki/Role-based_access_control
  */
-class LoginLid {
+class LoginSession {
 
 	private static $instance;
+	/**
+	 * Partially ordered Role Hierarchy:
+	 * 
+	 * TODO: A subject can have multiple roles.
+	 * A role can have multiple subjects.
+	 * A role can have many permissions.
+	 * A permission can be assigned to many roles.
+	 * An operation can be assigned many permissions. (Opmerking: AclController ondersteund dit standaard juist niet voor eenvoud)
+	 * A permission can be assigned to many operations.
+	 */
+	private $roles = array();
+	/**
+	 * Permissies die we gebruiken om te vergelijken met de permissies van
+	 * een gebruiker. zie functie _loadPermissions()
+	 */
+	private $permissions = array();
+	/**
+	 * Subject bevat het Lid-object van het lid dat op dit moment is ingelogd.
+	 */
+	private $subject;
 
-	# permissies die we gebruiken om te vergelijken met de permissies van
-	# een gebruiker. zie functie _loadPermissions()
-	protected $_permissions = array();
-	protected $_perm_user = array();
-
-	# $lid bevat het Lid-object van het lid dat op dit moment is ingelogd.
-	private $lid;
-
-	# mocht er gesued zijn, dan bevat suedFrom het oorspronkelijk ingelogde Lid,
-	# dus het lid dat de su heeft geïnitieerd.
+	/*
+	 * Mocht er gesued zijn, dan bevat suedFrom het oorspronkelijk ingelogde Lid,
+	 * dus het lid dat de su heeft geïnitieerd.
+	 */
 	private $suedFrom = null;
-
-	/* Komt de authenticatie van de huidige gebruiker uit een token in de url
-	 * dan staat dit aan. aan LoginLid::mag() moet expliciet worden
+	/**
+	 * Komt de authenticatie van de huidige gebruiker uit een token in de url
+	 * dan staat dit aan. aan LoginSession::mag() moet expliciet worden
 	 * meegegeven dat we dit goed vinden, zodat deze validatie precies daar werkt
 	 * waar we het willen, en niet op andere plekken.
 	 */
 	private $authenticatedByToken = false;
 
 	/**
-	 * De enige instantie van LoginLid
-	 * @return LoginLid
+	 * De enige instantie van LoginSession
+	 * @return LoginSession
 	 */
 	public static function instance() {
-		//als er nog geen instantie gemaakt is, die nu maken
+		# als er nog geen instantie gemaakt is, die nu maken
 		if (!isset(self::$instance)) {
-			self::$instance = new LoginLid();
+			self::$instance = new LoginSession();
 		}
 		return self::$instance;
 	}
 
 	private function __construct() {
-		$this->_loadPermissions();
+		$this->loadPermissions();
 
-		# http://www.nabble.com/problem-with-sessions-in-1.4.8-t2550641.html
+		# http:# www.nabble.com/problem-with-sessions-in-1.4.8-t2550641.html
 		if (session_id() == 'deleted') {
 			session_regenerate_id();
 		}
 
-		// Staat er een gebruiker in de sessie?
+		# Staat er een gebruiker in de sessie?
 		if (!$this->userIsActive()) {
 			# zo nee, dan nobody user er in gooien...
 			# in dit geval is het de eerste keer dat we een pagina opvragen
@@ -72,11 +91,12 @@ class LoginLid {
 					FROM lid
 					WHERE rssToken='" . $db->escape($_GET['validate_token']) . "'
 					LIMIT 1;";
-				$lid = $db->getRow($query);
+				$aLid = $db->getRow($query);
 
-				$lid = LidCache::getLid($lid['uid']);
+				$lid = LidCache::getLid($aLid['uid']);
 				if ($lid instanceof Lid) {
-					$this->lid = $lid;
+					# Subject Assignment:
+					$this->subject = $lid;
 					$this->authenticatedByToken = true;
 				}
 			}
@@ -89,17 +109,18 @@ class LoginLid {
 	 * Is de huidige gebruiker al actief in een sessie?
 	 */
 	private function userIsActive() {
-		// Er is geen _uid gezet in _SESSION dus er is nog niemand ingelogged.
+		# Er is geen _uid gezet in _SESSION dus er is nog niemand ingelogged.
 		if (!isset($_SESSION['_uid'])) {
 			return false;
 		}
-		// Sessie is gekoppeld aan ip, het ip checken:
+		# Sessie is gekoppeld aan ip, het ip checken:
 		if (isset($_SESSION['_ip']) AND $_SESSION['_ip'] !== $_SERVER['REMOTE_ADDR']) {
 			return false;
 		}
 		$lid = LidCache::getLid($_SESSION['_uid']);
 		if ($lid instanceof Lid) {
-			$this->lid = $lid;
+			# Subject Assignment:
+			$this->subject = $lid;
 
 			if (isset($_SESSION['_suedFrom'])) {
 				$this->suedFrom = LidCache::getLid($_SESSION['_suedFrom']);
@@ -111,15 +132,15 @@ class LoginLid {
 	}
 
 	public function getUid() {
-		return $this->lid->getUid();
+		return $this->subject->getUid();
 	}
 
 	public function getLid() {
-		return $this->lid;
+		return $this->subject;
 	}
 
 	public function isSelf($uid) {
-		return $this->lid->getUid() == $uid;
+		return $this->subject->getUid() === $uid;
 	}
 
 	/**
@@ -143,14 +164,16 @@ class LoginLid {
 		if (in_array($suNaar->getStatus(), array('S_NOBODY', 'S_EXLID'))) {
 			throw new Exception('Kan niet su-en naar nobodies!');
 		}
-		$_SESSION['_suedFrom'] = $this->lid->getUid();
+		$_SESSION['_suedFrom'] = $this->subject->getUid();
 		$_SESSION['_uid'] = $uid;
-		$this->lid = $suNaar;
+		# Subject Assignment:
+		$this->subject = $suNaar;
 	}
 
 	public function endSu() {
 		$_SESSION['_uid'] = $_SESSION['_suedFrom'];
-		$this->lid = $this->suedFrom;
+		# Subject Assignment:
+		$this->subject = $this->suedFrom;
 		unset($_SESSION['_suedFrom']);
 		$this->suedFrom = null;
 	}
@@ -178,10 +201,10 @@ class LoginLid {
 	public function login($user, $pass = '', $checkip = true) {
 		switch (constant('MODE')) {
 			case 'CLI':
-				return $this->_login_cli();
+				return $this->loginCli();
 			case 'WEB':
 			default:
-				return $this->_login_web($user, $pass, $checkip);
+				return $this->loginWeb($user, $pass, $checkip);
 		}
 	}
 
@@ -191,7 +214,7 @@ class LoginLid {
 	 * @param type $user
 	 * @return boolean
 	 */
-	private function _login_cli() {
+	private function loginCli() {
 		if (defined('ETC_PATH')) {
 			$cred = parse_ini_file(ETC_PATH . 'cron.ini');
 		} else {
@@ -200,7 +223,7 @@ class LoginLid {
 				'pass'	 => 'pw'
 			);
 		}
-		return $this->_login_web($cred['user'], $cred['pass'], false);
+		return $this->loginWeb($cred['user'], $cred['pass'], false);
 	}
 
 	/**
@@ -213,21 +236,21 @@ class LoginLid {
 	 * @param boolean $checkip
 	 * @return boolean
 	 */
-	private function _login_web($user, $pass, $checkip = true) {
+	private function loginWeb($user, $pass, $checkip = true) {
 		$lid = false;
-		//eerst met uid proberen, komt daar een zinnige gebruiker uit, die gebruiken.
+		# eerst met uid proberen, komt daar een zinnige gebruiker uit, die gebruiken.
 		if (Lid::isValidUid($user)) {
 			$lid = LidCache::getLid($user);
 		}
-		//als er geen lid-object terugkomt, proberen we het met de nickname:
+		# als er geen lid-object terugkomt, proberen we het met de nickname:
 		if (!($lid instanceof Lid)) {
 			$lid = Lid::loadByNickname($user);
 		}
-		//als er geen lid-object terugkomt, proberen we het met de duckname:
+		# als er geen lid-object terugkomt, proberen we het met de duckname:
 		if (!($lid instanceof Lid)) {
 			$lid = Lid::loadByDuckname($user);
 		}
-		//als er geen lid-object terugkomt, haken we af
+		# als er geen lid-object terugkomt, haken we af
 		if (!($lid instanceof Lid)) {
 			return false;
 		}
@@ -238,7 +261,8 @@ class LoginLid {
 		}
 
 		# als dat klopt laden we het profiel in en richten de sessie in
-		$this->lid = $lid;
+		# Subject Assignment:
+		$this->subject = $lid;
 		$_SESSION['_uid'] = $lid->getUid();
 
 		# sessie koppelen aan ip?
@@ -284,13 +308,7 @@ class LoginLid {
 	 *  !lichting:2009				geeft true voor iedereen behalve lichting 2009.
 	 */
 	public static function mag($descr, $token_authorizable = false) {
-		return LoginLid::instance()->hasPermission($descr, $token_authorizable);
-	}
-
-	private function hasPermission($descr, $token_authorizable = false) {
-
-		# Split, combine and reverse permission description:
-
+		# Split
 		if (strpos($descr, ',') !== false) {
 			# Het gevraagde mag een enkele permissie zijn, of meerdere, door komma's
 			# gescheiden, waarvan de gebruiker er dan een hoeft te hebben. Er kunnen
@@ -299,115 +317,71 @@ class LoginLid {
 			$permissies = explode(',', $descr);
 			$result = false;
 			foreach ($permissies as $permissie) {
-				$result |= $this->mag($permissie, $token_authorizable);
+				$result |= self::mag($permissie, $token_authorizable);
 			}
 			return $result;
 		}
+		# Combine
 		if (strpos($descr, '+') !== false) {
 			# Gecombineerde permissie:
 			# gebruiker moet alle permissies bezitten
 			$permissies = explode('+', $descr);
 			$result = true;
 			foreach ($permissies as $permissie) {
-				$result &= $this->mag($permissie, $token_authorizable);
+				$result &= self::mag($permissie, $token_authorizable);
 			}
 			return $result;
 		}
-		$permissie = trim($descr);
-		# Negatie van een permissie:
-		# gebruiker mag deze permissie niet bezitten
-		if (substr($permissie, 0, 1) == '!' && !$this->mag(substr($permissie, 1), $token_authorizable)) {
+		# Negatie van een permissie (gebruiker mag deze permissie niet bezitten)
+		if (substr($descr, 0, 1) === '!' && !self::mag(substr($descr, 1), $token_authorizable)) {
 			return true;
 		}
 
-		# zoek de rechten van de gebruiker op
-		$liddescr = $this->lid->getPermissies();
+		return LoginSession::instance()->hasPermission($descr, $token_authorizable);
+	}
 
-		//alleen als $token_athorizable true is testen we met de permissies van het
-		//geauthenticeerde lid, anders met P_PUBLIC
-		if ($this->authenticatedByToken AND ! $token_authorizable) {
-			$liddescr = 'P_PUBLIC';
+	private function hasPermission($descr, $token_authorizable) {
+
+		# als er een geldige permissie wordt gevraagd
+		if (array_key_exists($descr, $this->permissions)) {
+			return $this->mandatoryAccessControl($descr, $token_authorizable);
+		} else {
+			return $this->discretionaryAccessControl($descr, $token_authorizable);
 		}
+	}
 
-		# ga alleen verder als er een geldige permissie wordt teruggegeven
-		if (!array_key_exists($liddescr, $this->_perm_user)) {
-			return false;
-		}
-		# zoek de code op
-		$lidheeft = $this->_perm_user[$liddescr];
+	private function discretionaryAccessControl($descr, $token_authorizable) {
 
-		# Normale permissie:
-		# ga alleen verder als er een geldige permissie wordt gevraagd
-		if (array_key_exists($permissie, $this->_permissions)) {
-			# zoek de code op
-			$gevraagd = $this->_permissions[$permissie];
-
-			# permissies zijn een string, waarin elk kararakter de
-			# waarde heeft van een permissielevel voor een bepaald onderdeel.
-			#
-			# de mogelijke *verschillende* permissies voor een onderdeel zijn machten van twee:
-			#  1, 2, 4, 8, etc
-			# elk van deze waardes kan onderscheiden worden in een permissie, ook als je ze met elkaar combineert
-			# bijv.  3=1+2, 7=1+2+4, 5=1+4, 6=2+4, 12=4+8, etc
-			#
-			# $gevraagd is de gevraagde permissie als string,
-			# de permissies van de gebruiker $lidheeft kunnen we bij $this->lid opvragen
-			# als we die 2 met elkaar AND-en, dan moet het resultaat hetzelfde
-			# zijn aan de gevraagde permissie. In dat geval bestaat de permissie
-			# van het lid dus minimaal uit de gevraagde permissie
-			#
-			# Bij het AND-en, wordt elke karakter bitwise vergeleken, dat betekent:
-			#  - elke karakter van de string omzetten in de ASCII-waarde
-			#    (bijv. ?=63, A=65, a=97, etc zie ook http://www.ascii.cl/)
-			#  - deze ASCII-waarde omzetten in een binaire getal
-			#    (bijv. 2=00010, 4=00100, 5=00101, 14=01110, etc)
-			#  - de bits van het binaire getal een-voor-een vergelijken met de bits van het binaire getal uit de
-			#    andere string. Als ze overeenkomen worden ze bewaard.
-			#    (bijv. 3&5=1 => 00011&00101=00001)
-			#
-			# voorbeeld (met de getallen 0 tot 7 als ASCII-waardes ipv de symbolen, voor de leesbaarheid)
-			#  gevraagd:   P_FORUM_MOD: 0000000700
-			#  lid heeft:  R_LID      : 0005544500
-			#  AND resultaat          : 0000000500 -> is niet wat gevraagd is -> weiger
-			#
-			#  gevraagd:  P_DOCS_READ : 0000004000
-			#  gebr heeft: R_LID      : 0005544500
-			#  AND resultaat          : 0000004000 -> ja!
-			$resultaat = $gevraagd & $lidheeft;
-
-			if ($resultaat == $gevraagd) {
-				return true;
-			}
-		}
-
-		//als een uid ingevoerd wordt true teruggeven als het om de huidige gebruiker gaat.
-		if ($permissie == $this->getUid()) {
+		# als een uid ingevoerd wordt true teruggeven als het om de huidige gebruiker gaat.
+		if ($descr == $this->getUid()) {
 			return true;
-			//Behoort een lid tot een bepaalde verticale?
-		} elseif (substr($permissie, 0, 9) == 'verticale') {
-			$verticale = strtoupper(substr($permissie, 10));
+		}
+		# Behoort een lid tot een bepaalde verticale?
+		elseif (substr($descr, 0, 9) == 'verticale') {
+			$verticale = strtoupper(substr($descr, 10));
 			if (is_numeric($verticale)) {
-				if ($verticale == $this->lid->getVerticaleID()) {
+				if ($verticale == $this->subject->getVerticaleID()) {
 					return true;
 				}
-			} elseif ($verticale == $this->lid->getVerticaleLetter()) {
+			} elseif ($verticale == $this->subject->getVerticaleLetter()) {
 				return true;
-			} elseif ($verticale == strtoupper($this->lid->getVerticale())) {
+			} elseif ($verticale == strtoupper($this->subject->getVerticale())) {
 				return true;
 			}
-			//Behoort een lid tot een bepaalde (h.t.) groep?
-			//als een string als bijvoorbeeld 'pubcie' wordt meegegeven zoekt de ketzer
-			//de h.t. groep met die korte naam erbij, als het getal is uiteraard de groep
-			//met dat id.
-			//met de toevoeging '>Fiscus' kan ook specifieke functie geëist worden binnen een groep
-		} elseif (substr($permissie, 0, 5) == 'groep') {
+		}
+		# Behoort een lid tot een bepaalde (h.t.) groep?
+		# als een string als bijvoorbeeld 'pubcie' wordt meegegeven zoekt de ketzer
+		# de h.t. groep met die korte naam erbij, als het getal is uiteraard de groep
+		# met dat id.
+		# met de toevoeging '>Fiscus' kan ook specifieke functie geëist worden binnen een groep
+		elseif (substr($descr, 0, 5) == 'groep') {
 			require_once 'groepen/groep.class.php';
-			//splitst opgegeven term in groepsnaam en functie
-			$parts = explode(">", substr($permissie, 6), 2);
+			# splitst opgegeven term in groepsnaam en functie
+			$parts = explode(">", substr($descr, 6), 2);
 			try {
 				$groep = new OldGroep($parts[0]);
 				if ($groep->isLid()) {
-					//wordt er een functie gevraagd?
+					# wordt er een functie gevraagd?
 					if (isset($parts[1])) {
 						$functie = $groep->getFunctie();
 						if (strtolower($functie[0]) == strtolower($parts[1])) {
@@ -418,53 +392,117 @@ class LoginLid {
 					}
 				}
 			} catch (Exception $e) {
-				//de groep bestaat niet, we gaan verder.
+				# de groep bestaat niet, we gaan verder.
 			}
-			//Is een lid man, vrouw en/of geslacht?
-		} elseif (substr($permissie, 0, 8) == 'geslacht') {
-			$geslacht = strtolower(substr($permissie, 9));
-			if ($geslacht == $this->lid->getGeslacht()) {
-				return true;
-				//we zijn toch zeker niet geslacht??
-			} elseif ($geslacht == 'nee' AND $this->mag('P_LOGGED_IN', $token_authorizable)) {
+		}
+		# Is een lid man, vrouw en/of geslacht?
+		elseif (substr($descr, 0, 8) == 'geslacht') {
+			$geslacht = strtolower(substr($descr, 9));
+			if ($geslacht == $this->subject->getGeslacht()) {
 				return true;
 			}
-			//Behoort een lid tot een bepaalde lichting?
-		} elseif (substr($permissie, 0, 7) == 'lidjaar') {
-			$lidjaar = substr($permissie, 8);
-			if ($lidjaar == $this->lid->getProperty('lidjaar')) {
-				return true;
-			}
-		} elseif (substr($permissie, 0, 8) == 'lichting') {
-			$lidjaar = substr($permissie, 9);
-			if ($lidjaar == $this->lid->getProperty('lidjaar')) {
-				return true;
-			}
-		} elseif (substr($permissie, 0, 10) == 'Ouderjaars' OR substr($permissie, 0, 10) == 'ouderjaars') {
-			if (Lichting::getJongsteLichting() > $this->lid->getProperty('lidjaar') AND $this->mag('P_LOGGED_IN', $token_authorizable)) {
-				return true;
-			}
-		} elseif (substr($permissie, 0, 11) == 'Eerstejaars' OR substr($permissie, 0, 11) == 'eerstejaars') {
-			if (Lichting::getJongsteLichting() == $this->lid->getProperty('lidjaar') AND $this->mag('P_LOGGED_IN', $token_authorizable)) {
+			# we zijn toch zeker niet geslacht??
+			elseif ($geslacht == 'nee' AND $this->hasPermission('P_LOGGED_IN', $token_authorizable)) {
 				return true;
 			}
 		}
-		# Zo niet... dan niet
+		# Behoort een lid tot een bepaalde lichting?
+		elseif (substr($descr, 0, 7) == 'lidjaar') {
+			$lidjaar = substr($descr, 8);
+			if ($lidjaar == $this->subject->getProperty('lidjaar')) {
+				return true;
+			}
+		} elseif (substr($descr, 0, 8) == 'lichting') {
+			$lidjaar = substr($descr, 9);
+			if ($lidjaar == $this->subject->getProperty('lidjaar')) {
+				return true;
+			}
+		} elseif (substr($descr, 0, 10) == 'Ouderjaars' OR substr($descr, 0, 10) == 'ouderjaars') {
+			require_once 'lichting.class.php';
+			if (Lichting::getJongsteLichting() > $this->subject->getProperty('lidjaar') AND $this->hasPermission('P_LOGGED_IN', $token_authorizable)) {
+				return true;
+			}
+		} elseif (substr($descr, 0, 11) == 'Eerstejaars' OR substr($descr, 0, 11) == 'eerstejaars') {
+			require_once 'lichting.class.php';
+			if (Lichting::getJongsteLichting() == $this->subject->getProperty('lidjaar') AND $this->hasPermission('P_LOGGED_IN', $token_authorizable)) {
+				return true;
+			}
+		}
+
 		return false;
 	}
 
-	private function _loadPermissions() {
+	private function mandatoryAccessControl($permission, $token_authorizable) {
+
+		# zoek de rechten van de gebruiker op
+		$role = $this->subject->getRole();
+
+		# alleen als $token_athorizable true is testen we met de permissies van het
+		# geauthenticeerde lid, anders met R_NOBODY
+		if ($this->authenticatedByToken AND ! $token_authorizable) {
+			$role = 'R_NOBODY';
+		}
+
+		# ga alleen verder als er een geldige permissie wordt teruggegeven
+		if (!array_key_exists($role, $this->roles)) {
+			return false;
+		}
+
+		# zoek de codes op
+		$gevraagd = $this->permissions[$permission];
+		$lidheeft = $this->roles[$role];
+
+		# permissies zijn een string, waarin elk kararakter de
+		# waarde heeft van een permissielevel voor een bepaald onderdeel.
+		#
+		# de mogelijke *verschillende* permissies voor een onderdeel zijn machten van twee:
+		# 1, 2, 4, 8, etc
+		# elk van deze waardes kan onderscheiden worden in een permissie, ook als je ze met elkaar combineert
+		# bijv.  3=1+2, 7=1+2+4, 5=1+4, 6=2+4, 12=4+8, etc
+		#
+		# $gevraagd is de gevraagde permissie als string,
+		# de permissies van de gebruiker $lidheeft kunnen we bij $this->lid opvragen
+		# als we die 2 met elkaar AND-en, dan moet het resultaat hetzelfde
+		# zijn aan de gevraagde permissie. In dat geval bestaat de permissie
+		# van het lid dus minimaal uit de gevraagde permissie
+		#
+		# Bij het AND-en, wordt elke karakter bitwise vergeleken, dat betekent:
+		# - elke karakter van de string omzetten in de ASCII-waarde
+		#  (bijv. ?=63, A=65, a=97, etc zie ook http:# www.ascii.cl/)
+		# - deze ASCII-waarde omzetten in een binaire getal
+		#  (bijv. 2=00010, 4=00100, 5=00101, 14=01110, etc)
+		# - de bits van het binaire getal een-voor-een vergelijken met de bits van het binaire getal uit de
+		#  andere string. Als ze overeenkomen worden ze bewaard.
+		#  (bijv. 3&5=1 => 00011&00101=00001)
+		#
+		# voorbeeld (met de getallen 0 tot 7 als ASCII-waardes ipv de symbolen, voor de leesbaarheid)
+		# gevraagd:  P_FORUM_MOD : 0000000700
+		# lid heeft: R_LID       : 0005544500
+		# AND resultaat          : 0000000500 -> is niet wat gevraagd is -> weiger
+		#
+		# gevraagd:  P_DOCS_READ : 0000004000
+		# lid heeft: R_LID       : 0005544500
+		# AND resultaat          : 0000004000 -> ja!
+		$resultaat = $gevraagd & $lidheeft;
+
+		if ($resultaat == $gevraagd) {
+			return true;
+		}
+
+		return false;
+	}
+
+	private function loadPermissions() {
 		# Hier staan de permissies die voor enkele onderdelen van de website nodig zijn.
 		# Ze worden zowel op de 'echte' website als in het beheergedeelte gebruikt.
-		#   READ = Rechten om het onderdeel in te zien
-		#   POST = Rechten om iets toe te voegen
-		#   MOD  = Moderate rechten, dus verwijderen enzo
+		#  READ = Rechten om het onderdeel in te zien
+		#  POST = Rechten om iets toe te voegen
+		#  MOD  = Moderate rechten, dus verwijderen enzo
 		# Let op: de rechten zijn cumulatief (bijv: 7=4+2+1, 3=2+1)
-		#         als je hiervan afwijkt, kun je (bewust) niveau's uitsluiten (bijv 5=4+1, sluit 2 uit)
+		#        als je hiervan afwijkt, kun je (bewust) niveau's uitsluiten (bijv 5=4+1, sluit 2 uit)
 		# de levels worden omgezet in een karakter met die ASCII waarde (dit zijn vaak niet-leesbare symbolen, bijv #8=backspace)
 		# elke karakter van een string representeert een onderdeel
-
-		$this->_permissions = array(
+		$this->permissions = array(
 			'P_PUBLIC'			 => $this->createPermStr(0, 0), # Iedereen op het Internet
 			'P_LOGGED_IN'		 => $this->createPermStr(1, 0), # Leden-menu, eigen profiel raadplegen
 			'P_PROFIEL_EDIT'	 => $this->createPermStr(1 + 2, 0), # Eigen gegevens aanpassen
@@ -508,19 +546,26 @@ class LoginLid {
 
 		# Deze waarden worden samengesteld uit bovenstaande permissies en
 		# worden in de gebruikersprofielen gebruikt als aanduiding voor
-		# welke permissie-groep (Role) de gebruiker in zit.
-		$p = $this->_permissions;
-		$this->_perm_user = array(
+		# welke permissie-groep (Role) de gebruiker in zit (max. 1 momenteel).
+
+		$p = $this->permissions;
+
+		# Permission Assignment:
+		$this->roles = array(
 			'R_NOBODY'	 => $p['P_PUBLIC'] | $p['P_FORUM_READ'] | $p['P_AGENDA_READ'] | $p['P_ALBUM_READ'],
 			'R_LID'		 => $p['P_PROFIEL_EDIT'] | $p['P_OUDLEDEN_READ'] | $p['P_FORUM_POST'] | $p['P_AGENDA_READ'] | $p['P_DOCS_READ'] | $p['P_BIEB_READ'] | $p['P_MAAL_IK'] | $p['P_CORVEE_IK'] | $p['P_MAIL_POST'] | $p['P_NEWS_POST'] | $p['P_ALBUM_MOD']
 		);
-		$this->_perm_user['R_ETER'] = $this->_perm_user['R_NOBODY'] | $p['P_LOGGED_IN'] | $p['P_PROFIEL_EDIT'] | $p['P_MAAL_IK'];
-		$this->_perm_user['R_OUDLID'] = $this->_perm_user['R_LID'] | $p['P_ALLEEN_OUDLID'];
-		$this->_perm_user['R_BASF'] = $this->_perm_user['R_LID'] | $p['P_DOCS_MOD'] | $p['P_ALBUM_ADMIN'];
-		$this->_perm_user['R_MAALCIE'] = $this->_perm_user['R_LID'] | $p['P_MAAL_MOD'] | $p['P_CORVEE_MOD'] | $p['P_MAAL_SALDI'];
-		$this->_perm_user['R_MODERATOR'] = $this->_perm_user['R_LID'] | $p['P_LEDEN_MOD'] | $p['P_FORUM_MOD'] | $p['P_DOCS_MOD'] | $p['P_AGENDA_MOD'] | $p['P_NEWS_MOD'] | $p['P_BIEB_MOD'] | $p['P_MAAL_IK'] | $p['P_CORVEE_IK'] | $p['P_MAIL_COMPOSE'] | $p['P_ALBUM_ADMIN'];
-		$this->_perm_user['R_BESTUUR'] = $this->_perm_user['R_MODERATOR'] | $p['P_MAAL_MOD'] | $p['P_CORVEE_MOD'] | $p['P_MAIL_COMPOSE'] | $p['P_FORUM_BELANGRIJK'];
-		$this->_perm_user['R_PUBCIE'] = $this->_perm_user['R_MODERATOR'] | $p['P_ADMIN'] | $p['P_MAIL_SEND'] | $p['P_CORVEE_SCHED'] | $p['P_MAAL_SALDI'] | $p['P_FORUM_ADMIN'];
+
+		# hierarchical RBAC (inheritance between roles)
+		# TODO: constrained RBAC, which adds separation of duties
+
+		$this->roles['R_ETER'] = $this->roles['R_NOBODY'] | $p['P_LOGGED_IN'] | $p['P_PROFIEL_EDIT'] | $p['P_MAAL_IK'];
+		$this->roles['R_OUDLID'] = $this->roles['R_LID'] | $p['P_ALLEEN_OUDLID'];
+		$this->roles['R_BASF'] = $this->roles['R_LID'] | $p['P_DOCS_MOD'] | $p['P_ALBUM_ADMIN'];
+		$this->roles['R_MAALCIE'] = $this->roles['R_LID'] | $p['P_MAAL_MOD'] | $p['P_CORVEE_MOD'] | $p['P_MAAL_SALDI'];
+		$this->roles['R_MODERATOR'] = $this->roles['R_LID'] | $p['P_LEDEN_MOD'] | $p['P_FORUM_MOD'] | $p['P_DOCS_MOD'] | $p['P_AGENDA_MOD'] | $p['P_NEWS_MOD'] | $p['P_BIEB_MOD'] | $p['P_MAAL_IK'] | $p['P_CORVEE_IK'] | $p['P_MAIL_COMPOSE'] | $p['P_ALBUM_ADMIN'];
+		$this->roles['R_BESTUUR'] = $this->roles['R_MODERATOR'] | $p['P_MAAL_MOD'] | $p['P_CORVEE_MOD'] | $p['P_MAIL_COMPOSE'] | $p['P_FORUM_BELANGRIJK'];
+		$this->roles['R_PUBCIE'] = $this->roles['R_MODERATOR'] | $p['P_ADMIN'] | $p['P_MAIL_SEND'] | $p['P_CORVEE_SCHED'] | $p['P_MAAL_SALDI'] | $p['P_FORUM_ADMIN'];
 	}
 
 	/**
@@ -536,14 +581,14 @@ class LoginLid {
 	}
 
 	public function getValidPerms() {
-		return array_keys($this->_permissions);
+		return array_keys($this->permissions);
 	}
 
 	public function isValidPerm($key, $user = true) {
-		if (array_key_exists($key, $this->_permissions)) {
+		if (array_key_exists($key, $this->permissions)) {
 			return true;
 		}
-		if ($user && array_key_exists($key, $this->_perm_user)) {
+		if ($user && array_key_exists($key, $this->roles)) {
 			return true;
 		}
 		return false;

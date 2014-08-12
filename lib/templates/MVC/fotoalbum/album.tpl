@@ -1,11 +1,11 @@
 <div style="float: right; margin: 0 0 10px 10px;">
-	{if LoginLid::mag('P_LEDEN_READ')}
+	{if LoginSession::mag('P_LEDEN_READ')}
 		<a class="knop get popup" href="/fotoalbum/toevoegen/{$album->getSubDir()}">{icon get="picture_add"} Toevoegen</a>
 	{/if}
-	{if LoginLid::mag('P_LOGGED_IN') && $album->getFotos()!==false}
+	{if LoginSession::mag('P_LOGGED_IN') && $album->getFotos()!==false}
 		<a class="knop" href="/fotoalbum/downloaden/{$album->getSubDir()}" title="Download als TAR-bestand">{icon get="picture_save"} Download album</a>
 	{/if}
-	{if LoginLid::mag('P_DOCS_MOD')}
+	{if LoginSession::mag('P_DOCS_MOD')}
 		<a class="knop" href="/fotoalbum/verwerken/{$album->getSubDir()}">{icon get="application_view_gallery"} Verwerken</a>
 	{/if}
 </div>
@@ -16,7 +16,7 @@
 		<a href="{$subalbum->getUrl()}">
 			<img src="{$subalbum->getThumbURL()}" />
 			<div id="{$subalbum->dirname|md5}" class="albumname">
-				{if LoginLid::mag('P_DOCS_MOD')}
+				{if LoginSession::mag('P_DOCS_MOD')}
 					<a href="/fotoalbum/hernoemen/{$subalbum->getSubDir()}" class="knop post prompt hoverIntentContent" title="Fotoalbum hernoemen" postdata="Nieuwe naam={$subalbum->dirname}" style="position: absolute; top: -90px; left: 118px;">{icon get=pencil}</a>
 				{/if}
 				{$subalbum->dirname}
@@ -26,7 +26,7 @@
 {/foreach}
 {foreach from=$album->getFotos() item=foto}
 	<div id="{$foto->filename|md5}" class="thumb hoverIntent">
-		{if LoginLid::mag('P_DOCS_MOD')}
+		{if LoginSession::mag('P_DOCS_MOD')}
 			<div style="position: absolute;">
 				<a href="/fotoalbum/verwijderen/{$album->getSubDir()}" postdata="foto={$foto->filename}" class="knop post confirm hoverIntentContent" title="Definitief verwijderen van deze foto">{icon get=cross}</a>
 				<a href="/fotoalbum/albumcover/{$album->getSubDir()}" postdata="cover={$foto->filename}" class="knop post confirm hoverIntentContent" title="Instellen als albumcover" style="position: relative; left: 118px;">{icon get=folder_picture}</a>

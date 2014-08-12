@@ -23,7 +23,7 @@ class CsrLayout3Page extends HtmlPage {
 		$js = '/layout3/js/';
 		$plugin = '/layout/js/jquery/plugins/';
 
-		if (defined('DEBUG') AND LoginLid::mag('P_ADMIN')) {
+		if (defined('DEBUG') AND LoginSession::mag('P_ADMIN')) {
 			$this->addStylesheet('bootstrap.css', $css);
 			$this->addStylesheet('bootstrap-theme.css', $css);
 

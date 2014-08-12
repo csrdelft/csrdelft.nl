@@ -48,7 +48,7 @@ class MaaltijdenModel {
 			throw new Exception('Invalid timestamp: $tot getMaaltijdenVoorAgenda()');
 		}
 		$maaltijden = self::loadMaaltijden('verwijderd = false AND datum >= ? AND datum <= ?', array(date('Y-m-d', $van), date('Y-m-d', $tot)));
-		$maaltijden = self::filterMaaltijdenVoorLid($maaltijden, \LoginLid::instance()->getUid());
+		$maaltijden = self::filterMaaltijdenVoorLid($maaltijden, \LoginSession::instance()->getUid());
 		return $maaltijden;
 	}
 
@@ -85,7 +85,7 @@ class MaaltijdenModel {
 	 */
 	public static function getMaaltijdVoorKetzer($mid) {
 		$maaltijden = array(self::getMaaltijd($mid));
-		$maaltijden = self::filterMaaltijdenVoorLid($maaltijden, \LoginLid::instance()->getUid());
+		$maaltijden = self::filterMaaltijdenVoorLid($maaltijden, \LoginSession::instance()->getUid());
 		if (!empty($maaltijden)) {
 			return reset($maaltijden);
 		}

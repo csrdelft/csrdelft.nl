@@ -71,15 +71,15 @@ class FotoAlbumController extends AclController {
 		if (!startsWith($path, PICS_PATH . 'fotoalbum/')) {
 			return false;
 		}
-		if (LoginLid::mag('P_LEDEN_READ')) {
+		if (LoginSession::mag('P_LEDEN_READ')) {
 			if (preg_match(self::$alleenVrouwen, $path)) { // Deze foto's alleen voor vrouwen
-				if (LoginLid::instance()->getLid()->getGeslacht() == 'v') {
+				if (LoginSession::instance()->getLid()->getGeslacht() == 'v') {
 					return true;
 				}
 				return false;
 			}
 			if (preg_match(self::$alleenMannen, $path)) { // Deze foto's alleen voor mannen
-				if (LoginLid::instance()->getLid()->getGeslacht() == 'm') {
+				if (LoginSession::instance()->getLid()->getGeslacht() == 'm') {
 					return true;
 				}
 				return false;
@@ -101,7 +101,7 @@ class FotoAlbumController extends AclController {
 
 	public function bekijken(FotoAlbum $album) {
 		$body = new FotoAlbumView($album);
-		if (LoginLid::mag('P_LOGGED_IN')) {
+		if (LoginSession::mag('P_LOGGED_IN')) {
 			$this->view = new CsrLayoutPage($body);
 			$this->view->zijkolom = false;
 		} else { // uitgelogd heeft nieuwe layout

@@ -142,7 +142,7 @@ class CorveeTakenModel {
 		$values = array(date('Y-m-d', $van), date('Y-m-d', $tot));
 		if (!$iedereen) {
 			$where .= ' AND lid_id = ?';
-			$values[] = \LoginLid::instance()->getUid();
+			$values[] = \LoginSession::instance()->getUid();
 		}
 		return self::loadTaken($where, $values);
 	}

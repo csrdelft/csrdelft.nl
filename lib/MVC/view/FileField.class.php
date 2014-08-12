@@ -508,7 +508,7 @@ class UploadUrl extends BestandUploader {
 			$url_name = substr(trim($this->url), strrpos($this->url, '/') + 1);
 			$clean_name = preg_replace('/[^a-zA-Z0-9\s\.\-\_]/', '', $url_name);
 			// Bestand tijdelijk omslaan om mime-type te bepalen
-			$tmp_bestand = TMP_PATH . LoginLid::instance()->getUid() . '_' . time();
+			$tmp_bestand = TMP_PATH . LoginSession::instance()->getUid() . '_' . time();
 			if (!is_writable(TMP_PATH)) {
 				$this->error = 'TMP_PATH is niet beschrijfbaar';
 				return;

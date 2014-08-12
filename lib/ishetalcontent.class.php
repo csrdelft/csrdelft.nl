@@ -25,7 +25,7 @@ class IsHetAlContent extends TemplateView {
 					$this->ja = $dagen;
 				}
 				break;
-			case 'jarig': $this->ja = LoginLid::instance()->getLid()->getJarigOver();
+			case 'jarig': $this->ja = LoginSession::instance()->getLid()->getJarigOver();
 				break;
 			case 'lunch': $this->ja = (date('Hi') > '1245' AND date('Hi') < '1345');
 				break;

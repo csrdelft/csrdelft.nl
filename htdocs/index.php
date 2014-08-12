@@ -22,7 +22,7 @@ try {
 		case 'FotoAlbum':
 			break; // toegestaan voor iedereen
 		default: // alleen ingelode gebruikers
-			if (!LoginLid::mag('P_LOGGED_IN')) {
+			if (!LoginSession::mag('P_LOGGED_IN')) {
 				header('location: ' . CSR_ROOT);
 				exit;
 			}
@@ -35,7 +35,7 @@ try {
 	$controller = new $class($request);
 	$controller->performAction();
 
-	if (defined('DB_MODIFY_ENABLE') AND LoginLid::mag('P_ADMIN')) {
+	if (defined('DB_MODIFY_ENABLE') AND LoginSession::mag('P_ADMIN')) {
 
 		require_once 'MVC/model/DatabaseAdmin.singleton.php';
 		$queries = DatabaseAdmin::getQueries();
@@ -62,7 +62,7 @@ catch (Exception $e) {
 
 	DebugLogModel::instance()->log('index.php', 'new ' . $class, array($request), $e);
 
-	if (defined('DEBUG') && (LoginLid::mag('P_ADMIN') || LoginLid::instance()->isSued())) {
+	if (defined('DEBUG') && (LoginSession::mag('P_ADMIN') || LoginSession::instance()->isSued())) {
 		echo str_replace('#', '<br />#', $e); // stacktrace 
 	}
 }

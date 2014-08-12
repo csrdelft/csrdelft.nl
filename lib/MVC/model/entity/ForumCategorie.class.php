@@ -63,7 +63,7 @@ class ForumCategorie extends PersistentEntity {
 	protected static $table_name = 'forum_categorien';
 
 	public function magLezen() {
-		return LoginLid::mag($this->rechten_lezen);
+		return LoginSession::mag($this->rechten_lezen);
 	}
 
 	/**

@@ -98,7 +98,7 @@ class MededelingCategorie{
 	public function getPlaatje(){ return $this->plaatje; }
 	public function getBeschrijving(){ return $this->beschrijving; }
 
-	public function magUitbreiden(){ return LoginLid::mag($this->permissie); }
+	public function magUitbreiden(){ return LoginSession::mag($this->permissie); }
 
 	public static function getAll(){
 		return MededelingCategorie::getCategorieen();

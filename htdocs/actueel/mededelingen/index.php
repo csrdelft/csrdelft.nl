@@ -32,7 +32,7 @@ switch ($actie) {
 		}
 		if ($mededelingId > 0) {
 			$mededeling = new Mededeling($mededelingId);
-			if (Mededeling::isModerator() OR $mededeling->getUid() == LoginLid::instance()->getUid()) {
+			if (Mededeling::isModerator() OR $mededeling->getUid() == LoginSession::instance()->getUid()) {
 				$verwijderd = $mededeling->delete();
 				if ($verwijderd === false) {
 					setMelding('Het verwijderen is mislukt.', -1);
@@ -66,7 +66,7 @@ switch ($actie) {
 			if (isset($_POST['vervaltijd'])) {
 				$mededelingProperties['vervaltijd'] = $_POST['vervaltijd'];
 			}
-			$mededelingProperties['uid'] = LoginLid::instance()->getUid();
+			$mededelingProperties['uid'] = LoginSession::instance()->getUid();
 			if (isset($_POST['prioriteit'])) {
 				$mededelingProperties['prioriteit'] = (int) $_POST['prioriteit'];
 			}

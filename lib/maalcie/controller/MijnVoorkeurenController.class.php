@@ -40,7 +40,7 @@ class MijnVoorkeurenController extends AclController {
 	}
 
 	public function mijn() {
-		$voorkeuren = CorveeVoorkeurenModel::getVoorkeurenVoorLid(LoginLid::instance()->getUid());
+		$voorkeuren = CorveeVoorkeurenModel::getVoorkeurenVoorLid(LoginSession::instance()->getUid());
 		$this->view = new MijnVoorkeurenView($voorkeuren);
 		$this->view = new CsrLayoutPage($this->getView());
 		$this->view->addStylesheet('taken.css');
@@ -48,19 +48,19 @@ class MijnVoorkeurenController extends AclController {
 	}
 
 	public function inschakelen($crid) {
-		$voorkeur = CorveeVoorkeurenModel::inschakelenVoorkeur($crid, LoginLid::instance()->getUid());
+		$voorkeur = CorveeVoorkeurenModel::inschakelenVoorkeur($crid, LoginSession::instance()->getUid());
 		$this->view = new MijnVoorkeurView($voorkeur);
 	}
 
 	public function uitschakelen($crid) {
-		$voorkeur = CorveeVoorkeurenModel::uitschakelenVoorkeur($crid, LoginLid::instance()->getUid());
+		$voorkeur = CorveeVoorkeurenModel::uitschakelenVoorkeur($crid, LoginSession::instance()->getUid());
 		$this->view = new MijnVoorkeurView($voorkeur);
 	}
 
 	public function eetwens() {
 		$form = new EetwensForm();
 		if ($form->validate()) {
-			CorveeVoorkeurenModel::setEetwens(LoginLid::instance()->getLid(), $form->getValue());
+			CorveeVoorkeurenModel::setEetwens(LoginSession::instance()->getLid(), $form->getValue());
 		}
 		$this->view = $form;
 	}

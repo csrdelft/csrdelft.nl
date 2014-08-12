@@ -143,7 +143,7 @@ class ForumDraad extends PersistentEntity {
 	protected static $table_name = 'forum_draden';
 
 	public function magVerbergen() {
-		return !$this->belangrijk AND LoginLid::mag('P_LOGGED_IN');
+		return !$this->belangrijk AND LoginSession::mag('P_LOGGED_IN');
 	}
 
 	public function isVerborgen() {
@@ -154,7 +154,7 @@ class ForumDraad extends PersistentEntity {
 	}
 
 	public function magVolgen() {
-		return LoginLid::mag('P_LOGGED_IN');
+		return LoginSession::mag('P_LOGGED_IN');
 	}
 
 	public function isGevolgd() {

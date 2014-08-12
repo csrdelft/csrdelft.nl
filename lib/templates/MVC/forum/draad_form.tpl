@@ -1,6 +1,6 @@
 <form id="forumForm" action="/forum/posten/{$deel->forum_id}" method="post">
 	<a class="forumpostlink" id="nieuwonderwerp">Nieuw onderwerp</a><br />
-	{if LoginLid::mag('P_LOGGED_IN')}
+	{if LoginSession::mag('P_LOGGED_IN')}
 		Hier kunt u een onderwerp toevoegen in deze categorie van het forum. Kijkt u vooraf goed of het
 		onderwerp waarover u post hier wel thuishoort.<br /><br />
 	{else}

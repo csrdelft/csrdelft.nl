@@ -59,7 +59,7 @@ class LidZoeker {
 	public function __construct() {
 
 		//wat extra velden voor moderators.
-		if (LoginLid::mag('P_LEDEN_MOD')) {
+		if (LoginSession::mag('P_LEDEN_MOD')) {
 			$this->allowVelden = array_merge($this->allowVelden, $this->allowVeldenLEDENMOD);
 		}
 
@@ -77,7 +77,7 @@ class LidZoeker {
 
 		//als er geen explicite status is opgegeven, en het zoekende lid is oudlid, dan zoeken we automagisch
 		//ook in de oudleden.
-		if (!isset($query['status']) AND in_array(LoginLid::instance()->getLid()->getStatus(), array('S_OUDLID', 'S_ERELID'))) {
+		if (!isset($query['status']) AND in_array(LoginSession::instance()->getLid()->getStatus(), array('S_OUDLID', 'S_ERELID'))) {
 			$this->rawQuery['status'] = 'LEDEN|OUDLEDEN';
 		}
 

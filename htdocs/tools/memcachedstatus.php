@@ -6,7 +6,7 @@
  */
 require_once 'configuratie.include.php';
 
-if(LoginLid::mag('P_ADMIN')){
+if(LoginSession::mag('P_ADMIN')){
 	echo '<h1>MemCached statuspagina</h1>';
 	$stats=Memcached::instance()->getStats();
 	echo '<pre>'.print_r($stats, true).'</pre>';

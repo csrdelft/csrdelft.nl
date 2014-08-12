@@ -35,7 +35,7 @@ class ForumController extends Controller {
 			parent::performAction(array());
 		}
 		if (!$this->isPosted() || $this->action == 'wijzigen' || $this->action == 'zoeken') {
-			if (LoginLid::mag('P_LOGGED_IN')) {
+			if (LoginSession::mag('P_LOGGED_IN')) {
 				$this->view = new CsrLayoutPage($this->getView());
 			} else { // uitgelogd heeft nieuwe layout
 				$this->view = new CsrLayout2Page($this->getView());
@@ -67,7 +67,7 @@ class ForumController extends Controller {
 			case 'beheren':
 			case 'opheffen':
 			case 'hertellen':
-				if (!LoginLid::mag('P_FORUM_ADMIN')) {
+				if (!LoginSession::mag('P_FORUM_ADMIN')) {
 					return false;
 				}
 			case 'wijzigen':
@@ -401,7 +401,7 @@ class ForumController extends Controller {
 			$this->geentoegang();
 		}
 		if ($property === 'belangrijk') {
-			if (LoginLid::mag('P_FORUM_BELANGRIJK')) {
+			if (LoginSession::mag('P_FORUM_BELANGRIJK')) {
 				ForumDradenVerbergenModel::instance()->toonDraadVoorIedereen($draad);
 			} else {
 				$this->geentoegang();
@@ -454,7 +454,7 @@ class ForumController extends Controller {
 		}
 		$mailadres = null;
 		$wacht_goedkeuring = false;
-		if (!LoginLid::mag('P_LOGGED_IN')) {
+		if (!LoginSession::mag('P_LOGGED_IN')) {
 			$wacht_goedkeuring = true;
 			$mailadres = filter_input(INPUT_POST, 'email', FILTER_SANITIZE_EMAIL);
 			if (!email_like($mailadres)) {
@@ -502,7 +502,7 @@ class ForumController extends Controller {
 		$post = ForumPostsModel::instance()->getForumPost((int) $post_id);
 		$draad = ForumDradenModel::instance()->getForumDraad($post->draad_id);
 		$deel = ForumDelenModel::instance()->getForumDeel($draad->forum_id);
-		if (($deel->magPosten() AND ! $draad->gesloten AND $post->lid_id === LoginLid::instance()->getUid() AND LoginLid::mag('P_LOGGED_IN')) OR $deel->magModereren()) {
+		if (($deel->magPosten() AND ! $draad->gesloten AND $post->lid_id === LoginSession::instance()->getUid() AND LoginSession::mag('P_LOGGED_IN')) OR $deel->magModereren()) {
 			// same if-statement in post_lijst.tpl
 		} else {
 			$this->geentoegang();

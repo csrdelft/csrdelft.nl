@@ -4,7 +4,7 @@
 
 require_once 'configuratie.include.php';
 
-LoginLid::instance()->logout();
+LoginSession::instance()->logout();
 
 header('location: '.CSR_ROOT);
 

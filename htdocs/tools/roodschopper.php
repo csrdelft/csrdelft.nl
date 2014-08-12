@@ -11,7 +11,7 @@ require_once 'roodschopper.class.php';
 require_once 'roodschoppercontent.class.php';
 
 //Alleen voor admins, maalcie en Soccie. LET OP: SocCie kan nu ook een maalciemail versturen.
-if (!LoginLid::mag('P_LEDEN_MOD,groep:MaalCie,groep:SocCie')) {
+if (!LoginSession::mag('P_LEDEN_MOD,groep:MaalCie,groep:SocCie')) {
 	header('location: http://csrdelft.nl');
 	exit;
 }

@@ -10,7 +10,7 @@
 			{if isset($smarty.session.auth_error)}
 				<span class="waarschuwing">{$smarty.session.auth_error}</span>
 			{/if}
-			{if LoginLid::mag('P_LOGGED_IN')}
+			{if LoginSession::mag('P_LOGGED_IN')}
 				<a href="/logout.php">Uitloggen</a>
 			{else}
 				<a href="/login.php">Inloggen</a>

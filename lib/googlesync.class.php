@@ -542,7 +542,7 @@ class GoogleSync {
 
 
 		//last updated
-		if (LoginLid::mag('P_ADMIN')) {
+		if (LoginSession::mag('P_ADMIN')) {
 			$update = $doc->createElement('gContact:userDefinedField');
 			$update->setAttribute('key', 'update');
 			$update->setAttribute('value', getDateTime());

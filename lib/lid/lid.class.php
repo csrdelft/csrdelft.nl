@@ -5,6 +5,7 @@ require_once 'memcached.class.php';
 require_once 'verticale.class.php';
 require_once 'status.class.php';
 require_once 'groepen/groep.class.php';
+require_once 'MVC/model/Agendeerbaar.interface.php';
 
 /**
  * lid.class.php
@@ -424,7 +425,7 @@ class Lid implements Serializable, Agendeerbaar {
 		return false;
 	}
 
-	public function getPermissies() {
+	public function getRole() {
 		return $this->profiel['permissies'];
 	}
 
@@ -736,7 +737,7 @@ class Lid implements Serializable, Agendeerbaar {
 			$vorm = LidInstellingen::get('forum', 'naamWeergave');
 		}
 		if ($vorm === 'Duckstad') {
-			if (!LoginLid::mag('P_LOGGED_IN')) {
+			if (!LoginSession::mag('P_LOGGED_IN')) {
 				$vorm = 'civitas';
 			} elseif ($this->profiel['duckname'] == '') {
 				$vorm = 'volledig';
@@ -789,7 +790,7 @@ class Lid implements Serializable, Agendeerbaar {
 						$naam .= ' ' . $this->profiel['postfix'];
 					}
 				} elseif (in_array($this->profiel['status'], array('S_KRINGEL', 'S_NOBODY', 'S_EXLID'))) {
-					if (LoginLid::mag('P_LEDEN_READ')) {
+					if (LoginSession::mag('P_LEDEN_READ')) {
 						$naam = $this->profiel['voornaam'] . ' ';
 					} else {
 						$naam = $this->profiel['voorletters'] . ' ';
@@ -800,7 +801,7 @@ class Lid implements Serializable, Agendeerbaar {
 					$naam .= $this->profiel['achternaam'];
 				} else {
 					//voor novieten is het Dhr./ Mevr.
-					if (LoginLid::instance()->getLid()->getStatus() == 'S_NOVIET') {
+					if (LoginSession::instance()->getLid()->getStatus() == 'S_NOVIET') {
 						$naam = ($this->getGeslacht() == 'v') ? 'Mevr. ' : 'Dhr. ';
 					} else {
 						$naam = ($this->getGeslacht() == 'v') ? 'Ama. ' : 'Am. ';
@@ -851,7 +852,7 @@ class Lid implements Serializable, Agendeerbaar {
 		}
 		//Niet ingelogged nooit een link laten zijn.
 		$nolinks = array('x999', 'x101', 'x027', 'x222', '4444');
-		if (in_array($this->getUid(), $nolinks) || !LoginLid::mag('P_LEDEN_READ')) {
+		if (in_array($this->getUid(), $nolinks) || !LoginSession::mag('P_LEDEN_READ')) {
 			$mode = 'plain';
 		}
 		if ($mode === 'visitekaartje' || $mode === 'link') {
@@ -887,7 +888,7 @@ class Lid implements Serializable, Agendeerbaar {
 					$k.= $this->getPasfoto('small', 'lidfoto');
 				}
 				$k.= '<div class="uid uitgebreid">(';
-				if (LoginLid::instance()->maySuTo($this)) {
+				if (LoginSession::instance()->maySuTo($this)) {
 					$k.= '<a href="/su/' . $this->getUid() . '" title="Su naar dit lid">' . $this->getUid() . '</a>';
 				} else {
 					$k.= $this->getUid();
@@ -1052,7 +1053,7 @@ class Lid implements Serializable, Agendeerbaar {
 		}
 
 		//opslaan in lid tabel
-		$changelog = 'Aangemaakt als ' . $status->getDescription() . ' door [lid=' . LoginLid::instance()->getUid() . '] op [reldate]' . getDatetime() . '[/reldate][br]';
+		$changelog = 'Aangemaakt als ' . $status->getDescription() . ' door [lid=' . LoginSession::instance()->getUid() . '] op [reldate]' . getDatetime() . '[/reldate][br]';
 
 		$query = "
 			INSERT INTO lid (uid, lidjaar, studiejaar, status, permissies, changelog, land, o_land)
@@ -1248,7 +1249,7 @@ class Zoeker {
 			# 1. ingelogde persoon dat alleen maar mag of
 			# 2. ingelogde persoon leden en oudleden mag zoeken, maar niet oudleden alleen heeft gekozen
 			if (
-					(LoginLid::mag('P_LEDEN_READ') and ! LoginLid::mag('P_OUDLEDEN_READ') ) or ( LoginLid::mag('P_LEDEN_READ') and LoginLid::mag('P_OUDLEDEN_READ') and $zoekstatus != 'oudleden')
+					(LoginSession::mag('P_LEDEN_READ') and ! LoginSession::mag('P_OUDLEDEN_READ') ) or ( LoginSession::mag('P_LEDEN_READ') and LoginSession::mag('P_OUDLEDEN_READ') and $zoekstatus != 'oudleden')
 			) {
 				$statusfilter .= "status='S_LID' OR status='S_GASTLID' OR status='S_NOVIET' OR status='S_KRINGEL'";
 			}
@@ -1256,7 +1257,7 @@ class Zoeker {
 			# 1. ingelogde persoon dat alleen maar mag of
 			# 2. ingelogde persoon leden en oudleden mag zoeken, maar niet leden alleen heeft gekozen
 			if (
-					(!LoginLid::mag('P_LEDEN_READ') and LoginLid::mag('P_OUDLEDEN_READ') ) or ( LoginLid::mag('P_LEDEN_READ') and LoginLid::mag('P_OUDLEDEN_READ') and $zoekstatus != 'leden')
+					(!LoginSession::mag('P_LEDEN_READ') and LoginSession::mag('P_OUDLEDEN_READ') ) or ( LoginSession::mag('P_LEDEN_READ') and LoginSession::mag('P_OUDLEDEN_READ') and $zoekstatus != 'leden')
 			) {
 				if ($statusfilter != '')
 					$statusfilter .= " OR ";
@@ -1264,7 +1265,7 @@ class Zoeker {
 			}
 			# we zoeken in nobodies als
 			# de ingelogde persoon dat mag EN daarom gevraagd heeft
-			if (LoginLid::mag('P_LEDEN_MOD') and $zoekstatus === 'nobodies') {
+			if (LoginSession::mag('P_LEDEN_MOD') and $zoekstatus === 'nobodies') {
 				# alle voorgaande filters worden ongedaan gemaakt en er wordt alleen op nobodies gezocht
 				$statusfilter = "status='S_NOBODY' OR status='S_EXLID'";
 			}

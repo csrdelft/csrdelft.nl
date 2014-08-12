@@ -114,11 +114,11 @@ class AgendaItem extends PersistentEntity implements Agendeerbaar {
 	}
 
 	public function magBekijken() {
-		return LoginLid::mag($this->rechten_bekijken) OR $this->magBeheren();
+		return LoginSession::mag($this->rechten_bekijken) OR $this->magBeheren();
 	}
 
 	public function magBeheren() {
-		return LoginLid::mag('P_AGENDA_MOD');
+		return LoginSession::mag('P_AGENDA_MOD');
 	}
 
 }

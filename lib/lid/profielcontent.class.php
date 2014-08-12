@@ -36,7 +36,7 @@ class ProfielContent extends TemplateView {
 		require_once 'groepen/groepcontent.class.php';
 		$profhtml['groepen'] = new GroepenProfielContent($this->model->getUid());
 
-		if (LoginLid::instance()->getUid() == $this->model->getUid() || LoginLid::mag('P_MAAL_MOD')) {
+		if (LoginSession::instance()->getUid() == $this->model->getUid() || LoginSession::mag('P_MAAL_MOD')) {
 			$profhtml['recenteAanmeldingen'] = $this->model->getRecenteAanmeldingen();
 			$profhtml['abos'] = $this->model->getMaaltijdAbonnementen();
 		}
@@ -60,14 +60,14 @@ class ProfielContent extends TemplateView {
 		$this->smarty->assign('boeken', Catalogus::getBoekenByUid($this->model->getUid(), 'eigendom'));
 		$this->smarty->assign('gerecenseerdeboeken', Catalogus::getBoekenByUid($this->model->getUid(), 'gerecenseerd'));
 
-		$this->smarty->assign('isAdmin', LoginLid::mag('P_ADMIN'));
+		$this->smarty->assign('isAdmin', LoginSession::mag('P_ADMIN'));
 		//TODO check role vs permission R_BESTUUR
-		$this->smarty->assign('isBestuur', LoginLid::mag('R_BESTUUR'));
-		$this->smarty->assign('isLidMod', LoginLid::mag('P_LEDEN_MOD'));
+		$this->smarty->assign('isBestuur', LoginSession::mag('R_BESTUUR'));
+		$this->smarty->assign('isLidMod', LoginSession::mag('P_LEDEN_MOD'));
 
 		//eigen profiel niet cachen, dan krijgen we namelijk rare dingen
 		//dat we andermans saldo's zien enzo
-		if (LoginLid::instance()->isSelf($this->model->getUid())) {
+		if (LoginSession::instance()->isSelf($this->model->getUid())) {
 			$this->caching = false;
 		}
 

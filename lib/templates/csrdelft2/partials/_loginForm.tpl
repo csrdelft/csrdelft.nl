@@ -1,4 +1,4 @@
-{if !LoginLid::mag('P_LOGGED_IN') }
+{if !LoginSession::mag('P_LOGGED_IN') }
 	<form action="/login.php" method="post">
 		<fieldset>
 			<input type="hidden" name="url" value="/" />

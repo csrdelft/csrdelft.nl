@@ -88,14 +88,14 @@ class VerjaardagContent extends TemplateView {
 				echo '</table><br>' . "\n";
 				break;
 			case 'komende':
-				if (LoginLid::instance()->getUid() == 'x999') {
+				if (LoginSession::instance()->getUid() == 'x999') {
 					$toonpasfotos = false;
 				} else {
 					$toonpasfotos = LidInstellingen::get('zijbalk', 'verjaardagen_pasfotos') == 'ja';
 				}
 
 				echo '<div id="zijbalk_verjaardagen"><h1>';
-				if (LoginLid::mag('P_LEDEN_READ')) {
+				if (LoginSession::mag('P_LEDEN_READ')) {
 					echo '<a href="/communicatie/verjaardagen">Verjaardagen</a>';
 				} else {
 					echo 'Verjaardagen';

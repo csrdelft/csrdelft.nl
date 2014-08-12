@@ -148,15 +148,15 @@ abstract class Groep extends PersistentEntity {
 	}
 
 	public function magBekijken() {
-		return LoginLid::mag($this->rechten_bekijken);
+		return LoginSession::mag($this->rechten_bekijken);
 	}
 
 	public function magAanmelden() {
-		return LoginLid::mag($this->rechten_aanmelden);
+		return LoginSession::mag($this->rechten_aanmelden);
 	}
 
 	public function magBeheren() {
-		return LoginLid::mag($this->rechten_beheren);
+		return LoginSession::mag($this->rechten_beheren);
 	}
 
 }

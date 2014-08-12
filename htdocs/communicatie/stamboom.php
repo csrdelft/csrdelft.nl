@@ -4,11 +4,11 @@ require_once 'configuratie.include.php';
 require_once 'lid/stamboomcontent.class.php';
 
 
-if(LoginLid::mag('P_LEDEN_READ')) {
+if(LoginSession::mag('P_LEDEN_READ')) {
 	if(isset($_GET['uid'])){
 		$uid=$_GET['uid'];
 	}else{
-		$uid=LoginLid::instance()->getUid();
+		$uid=LoginSession::instance()->getUid();
 	}
 	$midden = new StamboomContent($uid);
 

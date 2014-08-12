@@ -3,12 +3,12 @@
 require_once 'configuratie.include.php';
 
 
-if (!LoginLid::mag('P_ADMIN,groep:soccie,groep:maalcie')) {
+if (!LoginSession::mag('P_ADMIN,groep:soccie,groep:maalcie')) {
 	header('location: http://csrdelft.nl');
 	exit;
 }
 
-if (LoginLid::mag('P_ADMIN') AND isset($_POST['action'])) {
+if (LoginSession::mag('P_ADMIN') AND isset($_POST['action'])) {
 	
 }
 

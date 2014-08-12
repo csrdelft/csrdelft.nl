@@ -16,7 +16,7 @@ if(isset($_GET['uid']) AND (Lid::isValidUid($_GET['uid']) OR $_GET['uid']=='0000
 		$lid=LidCache::getLid($uid);
 	}
 }else{
-	$lid=LoginLid::instance()->getLid();
+	$lid=LoginSession::instance()->getLid();
 }
 
 $cie='soccie';
@@ -29,7 +29,7 @@ if(isset($_GET['timespan']) AND $_GET['timespan']==(int)$_GET['timespan']){
 	$timespan=$_GET['timespan'];
 }
 
-if(LoginLid::mag('P_LEDEN_MOD,groep:'.$cie) OR LoginLid::instance()->isSelf($uid)){
+if(LoginSession::mag('P_LEDEN_MOD,groep:'.$cie) OR LoginSession::instance()->isSelf($uid)){
 	$saldi=new Saldi($uid, $cie, $timespan);
 
 	$chart=new chart(500, 200);

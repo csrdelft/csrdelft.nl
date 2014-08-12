@@ -46,7 +46,7 @@ date_default_timezone_set('Europe/Amsterdam');
 require_once 'common.functions.php';
 require_once 'mysql.class.php'; # DEPRECATED
 require_once 'MVC/model/PersistenceModel.abstract.php';
-require_once 'lid/loginlid.class.php';
+require_once 'lid/LoginSession.class.php';
 require_once 'MVC/model/LidInstellingenModel.class.php';
 require_once 'MVC/model/Paging.interface.php';
 # View
@@ -63,7 +63,7 @@ require_once 'MVC/controller/AclController.abstract.php';
 
 switch (constant('MODE')) {
 	case 'CLI':
-		if (!LoginLid::mag('P_ADMIN')) {
+		if (!LoginSession::mag('P_ADMIN')) {
 			die('access denied');
 		}
 		break;
@@ -91,13 +91,13 @@ switch (constant('MODE')) {
 			session_start();
 		}
 
-		# N.B. het is van belang dat na het starten van de sessie meteen LoginLid
+		# N.B. het is van belang dat na het starten van de sessie meteen LoginSession
 		# wordt geinitialiseerd, omdat die de ingelogde gebruiker controleert en
 		# tevens sess_deleted bugs ondervangt en ip-checks doet
-		LoginLid::instance();
+		LoginSession::instance();
 
 		if (defined('DB_MODIFY_ENABLE') OR defined('DB_DROP_ENABLE')) {
-			if (!LoginLid::mag('P_ADMIN')) {
+			if (!LoginSession::mag('P_ADMIN')) {
 				header('location: ' . CSR_ROOT . '/onderhoud.html');
 				exit;
 			}

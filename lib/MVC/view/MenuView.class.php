@@ -22,9 +22,9 @@ class MainMenuView extends MenuView {
 
 	public function view() {
 		// SocCie-saldi & MaalCie-saldi
-		$this->smarty->assign('saldi', LoginLid::instance()->getLid()->getSaldi());
+		$this->smarty->assign('saldi', LoginSession::instance()->getLid()->getSaldi());
 
-		if (LoginLid::mag('P_ADMIN')) {
+		if (LoginSession::mag('P_ADMIN')) {
 
 			require_once 'MVC/model/ForumModel.class.php';
 			$this->smarty->assign('forumcount', ForumPostsModel::instance()->getAantalWachtOpGoedkeuring());

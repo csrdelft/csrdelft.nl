@@ -198,7 +198,7 @@ class LidInstellingen extends PersistenceModel {
 				$this->setDefaultValue($module, $key);
 			}
 		}
-		$instellingen = $this->find('lid_id = ?', array(LoginLid::instance()->getUid()));
+		$instellingen = $this->find('lid_id = ?', array(LoginSession::instance()->getUid()));
 		foreach ($instellingen as $instelling) {
 			try {
 				$this->setValue($instelling->module, $instelling->instelling_id, $instelling->waarde);
@@ -219,7 +219,7 @@ class LidInstellingen extends PersistenceModel {
 			foreach ($instellingen as $key => $value) {
 				$value = filter_input(INPUT_POST, $module . '_' . $key, FILTER_SANITIZE_STRING);
 				$this->setValue($module, $key, $value); // sanatize value
-				$properties[] = array(LoginLid::instance()->getUid(), $module, $key, $this->getValue($module, $key));
+				$properties[] = array(LoginSession::instance()->getUid(), $module, $key, $this->getValue($module, $key));
 			}
 		}
 		$orm = self::orm;

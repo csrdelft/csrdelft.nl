@@ -4,7 +4,7 @@
 require_once 'configuratie.include.php';
 require_once 'verticale.class.php';
 
-if(!LoginLid::mag('P_ADMIN')){
+if(!LoginSession::mag('P_ADMIN')){
 	header('location: '.CSR_ROOT);
 	exit;
 }

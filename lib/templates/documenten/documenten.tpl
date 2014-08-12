@@ -3,7 +3,7 @@
 *}
 
 <div id="controls">
-	{if LoginLid::mag('P_DOCS_MOD')}
+	{if LoginSession::mag('P_DOCS_MOD')}
 		<a class="knop" href="/communicatie/documenten/toevoegen/">{icon get="toevoegen"} Toevoegen</a>
 	{/if}
 </div>
@@ -25,7 +25,7 @@
 					<a href="/communicatie/documenten/categorie/{$categorie->getID()}/" title="Alle documenten in {$categorie->getNaam()|escape:'html'}">
 						{$categorie->getNaam()|escape:'html'}
 					</a>
-					{if LoginLid::mag('P_DOCS_MOD')}
+					{if LoginSession::mag('P_DOCS_MOD')}
 						<a class="toevoegen" href="/communicatie/documenten/toevoegen/?catID={$categorie->getID()}"
 						   title="Document toevoegen in categorie: {$categorie->getNaam()|escape:'html'}">
 							{icon get="toevoegen"}

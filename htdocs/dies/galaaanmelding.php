@@ -6,10 +6,10 @@ $data = array();
 $ingelogd = true;
 $bericht = '';
 
-if (LoginLid::instance()->instance()->getUid() == 'x999') {
+if (LoginSession::instance()->instance()->getUid() == 'x999') {
 	$ingelogd = false;
 } else {
-	$dies = new DiesAanmelding(LoginLid::instance()->getUid());
+	$dies = new DiesAanmelding(LoginSession::instance()->getUid());
 	if ($dies->galaVol()) {
 		$bericht = '<h3>Gala is vol</h3><p>Helaas, er zijn inmiddels 100 inschrijvingen voor het gala, daarom is de inschrijving nu gesloten.</p>';
 		$ingelogd = false;

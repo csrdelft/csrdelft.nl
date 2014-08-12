@@ -40,7 +40,7 @@ class BibliotheekController extends Controller {
 		//iedereen(ook uitgelogd) mag catalogus bekijken.
 		$allow = array('default', 'catalogusdata');
 		//met biebrechten mag je meer
-		if (LoginLid::mag('P_BIEB_READ')) {
+		if (LoginSession::mag('P_BIEB_READ')) {
 			$allow = array_merge($allow, array('default', 'boek', 'nieuwboek', 'bewerkboek', 'verwijderboek',
 				'bewerkbeschrijving', 'verwijderbeschrijving',
 				'addexemplaar', 'verwijderexemplaar',
@@ -236,7 +236,7 @@ class BibliotheekController extends Controller {
 		if ($this->hasParam(2)) {
 			$eigenaar = $this->getParam(2);
 		} else {
-			$eigenaar = LoginLid::instance()->getUid();
+			$eigenaar = LoginSession::instance()->getUid();
 		}
 		if (Lid::isValidUid($eigenaar)) {
 			if ($this->boek->addExemplaar($eigenaar)) {

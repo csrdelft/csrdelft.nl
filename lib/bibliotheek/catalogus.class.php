@@ -32,7 +32,7 @@ class Catalogus {
 
 
 		// kolommen van de tabel. De laatste velden die niet in tabel staan worden gebruik om op te filteren.
-		if (LoginLid::mag('P_BIEB_READ')) {
+		if (LoginSession::mag('P_BIEB_READ')) {
 			//boekstatus
 			$this->aKolommen = array('titel', 'auteur', 'categorie', 'bsaantal', 'eigenaar', 'lener', 'uitleendatum', 'status', 'code', 'isbn', 'auteur', 'categorie');
 			$this->iKolommenZichtbaar = 7;
@@ -114,7 +114,7 @@ class Catalogus {
 
 		//filter bepalen
 		$allow = array('alle', 'csr', 'leden', 'eigen', 'geleend');
-		if (LoginLid::mag('P_BIEB_READ') AND in_array($_GET['sEigenaarFilter'], $allow)) {
+		if (LoginSession::mag('P_BIEB_READ') AND in_array($_GET['sEigenaarFilter'], $allow)) {
 			$filter = $_GET['sEigenaarFilter'];
 		} else {
 			$filter = 'csr';
@@ -133,10 +133,10 @@ class Catalogus {
 				$sWhere .= $sBeginWh . "e.eigenaar_uid NOT LIKE 'x222'";
 				break;
 			case 'eigen':
-				$sWhere .= $sBeginWh . "e.eigenaar_uid='" . $db->escape(Loginlid::instance()->getUid()) . "'";
+				$sWhere .= $sBeginWh . "e.eigenaar_uid='" . $db->escape(LoginSession::instance()->getUid()) . "'";
 				break;
 			case 'geleend':
-				$sWhere .= $sBeginWh . "(e.status = 'uitgeleend' OR e.status = 'teruggegeven')AND e.uitgeleend_uid='" . $db->escape(Loginlid::instance()->getUid()) . "'";
+				$sWhere .= $sBeginWh . "(e.status = 'uitgeleend' OR e.status = 'teruggegeven')AND e.uitgeleend_uid='" . $db->escape(LoginSession::instance()->getUid()) . "'";
 				break;
 		}
 
@@ -144,7 +144,7 @@ class Catalogus {
 		 * SQL queries
 		 * Get data to display
 		 */
-		if (LoginLid::mag('P_BIEB_READ')) {
+		if (LoginSession::mag('P_BIEB_READ')) {
 			//ingelogden
 			$sSelect = "
 				, GROUP_CONCAT(e.eigenaar_uid SEPARATOR ', ') AS eigenaar, GROUP_CONCAT(e.uitgeleend_uid SEPARATOR ', ') AS lener, 
@@ -340,7 +340,7 @@ class Catalogus {
 	 */
 	public static function getBoekenByUid($uid = null, $filter = 'eigendom') {
 		if ($uid === null) {
-			$uid = LoginLid::instance()->getUid();
+			$uid = LoginSession::instance()->getUid();
 		}
 		$db = MySql::instance();
 

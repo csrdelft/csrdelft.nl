@@ -10,7 +10,7 @@
 require_once 'configuratie.include.php';
 
 if (isset($_GET['string'])) {
-	if (LoginLid::mag('P_LEDEN_READ')) {
+	if (LoginSession::mag('P_LEDEN_READ')) {
 		$string = trim(urldecode($_GET['string']));
 		$uids = explode(',', $string);
 		$link = !isset($_GET['link']);
@@ -24,7 +24,7 @@ if (isset($_GET['string'])) {
 	if (isset($_GET['uid'])) {
 		$uid = $_GET['uid'];
 	} else {
-		$uid = LoginLid::instance()->getUid();
+		$uid = LoginSession::instance()->getUid();
 	}
 	//cache-dingen regelen: 6 dagen vooruit.
 	header('Pragma: public');
@@ -32,7 +32,7 @@ if (isset($_GET['string'])) {
 	header('Expires: ' . gmdate('D, d M Y H:i:s', (time() + 21000)) . ' GMT');
 
 	//we geven de pasfoto voor het gegeven uid direct aan de browser, als we lid-leesrechten hebben
-	if (Lid::isValidUid($uid) AND LoginLid::mag('P_LEDEN_READ')) {
+	if (Lid::isValidUid($uid) AND LoginSession::mag('P_LEDEN_READ')) {
 		$lid = LidCache::getLid($uid);
 		$types = array('jpg', 'png', 'gif');
 

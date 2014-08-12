@@ -3555,10 +3555,10 @@ lib/ishetalcontent.class.php -text
 lib/knop.class.php -text
 lib/ldap.class.php -text
 lib/lichting.class.php -text
+lib/lid/LoginSession.class.php -text
 lib/lid/ledenlijstcontent.class.php -text
 lib/lid/lid.class.php -text
 lib/lid/lidzoeker.class.php -text
-lib/lid/loginlid.class.php -text
 lib/lid/profiel.class.php -text
 lib/lid/profielcontent.class.php -text
 lib/lid/saldi.class.php -text

@@ -8,7 +8,7 @@
 
 require_once 'configuratie.include.php';
 
-if(!LoginLid::mag('P_LEDEN_READ')){ header('location: '.CSR_ROOT); }
+if(!LoginSession::mag('P_LEDEN_READ')){ header('location: '.CSR_ROOT); }
 
 
 header('content-type: text/csv');

@@ -9,7 +9,7 @@
 require_once 'configuratie.include.php';
 require_once 'savedquery.class.php';
 
-if(!LoginLid::mag('P_LOGGED_IN')){ header('location: '.CSR_ROOT); }
+if(!LoginSession::mag('P_LOGGED_IN')){ header('location: '.CSR_ROOT); }
 
 $id=0;
 if(isset($_GET['id']) AND (int)$_GET['id']==$_GET['id']){

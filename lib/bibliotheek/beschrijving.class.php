@@ -22,7 +22,7 @@ class Beschrijving {
 		} else {
 			$this->id = (int) $init;
 			if ($this->getId() == 0) {
-				$this->beschrijving = array('id' => 0, 'beschrijving' => '', 'boek_id' => (int) $boekid, 'schrijver_uid' => Loginlid::instance()->getUid());
+				$this->beschrijving = array('id' => 0, 'beschrijving' => '', 'boek_id' => (int) $boekid, 'schrijver_uid' => LoginSession::instance()->getUid());
 			} else {
 				$db = MySql::instance();
 				$query = "
@@ -74,7 +74,7 @@ class Beschrijving {
 
 	public function isSchrijver($uid = null) {
 		if ($uid === null) {
-			$uid = LoginLid::instance()->getUid();
+			$uid = LoginSession::instance()->getUid();
 		}
 		if ($uid == 'x999') {
 			return false;
@@ -94,7 +94,7 @@ class Beschrijving {
 					boek_id, schrijver_uid, beschrijving, toegevoegd
 				) VALUES (
 					" . (int) $this->beschrijving['boek_id'] . ",
-					'" . $db->escape(Loginlid::instance()->getUid()) . "',
+					'" . $db->escape(LoginSession::instance()->getUid()) . "',
 					'" . $db->escape($this->getTekst()) . "',
 					'" . getDateTime() . "'
 				);";

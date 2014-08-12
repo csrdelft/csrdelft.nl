@@ -97,7 +97,7 @@ class Courant {
 			unset($return[3]);
 		}
 		//Sponsors eruitgooien, behalve voor beheerders en/of AcqCiee
-		if (!$this->magBeheren() && !LoginLid::mag('groep:AcqCie')) {
+		if (!$this->magBeheren() && !LoginSession::mag('groep:AcqCie')) {
 			unset($return[4]);
 		}
 		return $return;
@@ -119,15 +119,15 @@ class Courant {
 	}
 
 	public function magToevoegen() {
-		return LoginLid::mag('P_MAIL_POST');
+		return LoginSession::mag('P_MAIL_POST');
 	}
 
 	public function magBeheren() {
-		return LoginLid::mag('P_MAIL_COMPOSE');
+		return LoginSession::mag('P_MAIL_COMPOSE');
 	}
 
 	public function magVerzenden() {
-		return LoginLid::mag('P_MAIL_SEND');
+		return LoginSession::mag('P_MAIL_SEND');
 	}
 
 	private function _isValideCategorie($categorie) {
@@ -179,7 +179,7 @@ class Courant {
 			(
 				uid, titel, cat, bericht, datumTijd, volgorde
 			)VALUES(
-				'" . LoginLid::instance()->getUid() . "', '" . $this->clearTitel($titel) . "',
+				'" . LoginSession::instance()->getUid() . "', '" . $this->clearTitel($titel) . "',
 				'" . $this->clearCategorie($categorie) . "', '" . $this->clearBericht($bericht) . "', '" . getDateTime() . "', " . $volgorde . "
 			);";
 
@@ -195,7 +195,7 @@ class Courant {
 			if (!isset($this->berichten[$iBerichtID])) {
 				$this->sError = 'Bericht staat niet in cache (Courant::isBewerkbaar())';
 			} else {
-				if (!LoginLid::instance()->isSelf($this->berichten[$iBerichtID]['uid'])) {
+				if (!LoginSession::instance()->isSelf($this->berichten[$iBerichtID]['uid'])) {
 					$this->sError = 'U mag geen berichten van anderen aanpassen. (Courant::isBewerkbaar())';
 				} else {
 					return true;
@@ -283,11 +283,11 @@ class Courant {
 		if ($this->isCache()) {
 			$userCache = array();
 			//mods en bestuur zien alle berichten
-			if ($this->magBeheren() OR LoginLid::mag('groep:bestuur')) {
+			if ($this->magBeheren() OR LoginSession::mag('groep:bestuur')) {
 				return $this->berichten;
 			} else {
 				foreach ($this->berichten as $bericht) {
-					if (LoginLid::instance()->isSelf($bericht['uid'])) {
+					if (LoginSession::instance()->isSelf($bericht['uid'])) {
 						$userCache[] = $bericht;
 					}
 				}
@@ -366,7 +366,7 @@ class Courant {
 	private function createCourant() {
 		$db = MySql::instance();
 
-		$uid = LoginLid::instance()->getUid();
+		$uid = LoginSession::instance()->getUid();
 		$datumTijd = getDateTime();
 		$sCreatecourantQuery = "
 			INSERT INTO

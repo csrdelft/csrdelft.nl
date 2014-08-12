@@ -29,7 +29,7 @@ class MededelingenContent extends TemplateView {
 					// 4. Indien deze mededeling verborgen is en de gebruiker geen moderator is.
 					// 5. Indien deze mededeling wacht op goedkeuring en de gebruiker geen moderator is EN deze mededeling niet van hem is. 
 					if (
-							($this->geselecteerdeMededeling->getZichtbaarheid() == 'verwijderd') OR ( $this->geselecteerdeMededeling->isPrive() AND ! LoginLid::mag('P_LEDEN_READ')) OR ( $this->geselecteerdeMededeling->getDoelgroep() == 'leden' AND Mededeling::isOudlid()) OR ( $this->geselecteerdeMededeling->getZichtbaarheid() == 'onzichtbaar' AND ! Mededeling::isModerator()) OR ( $this->geselecteerdeMededeling->getZichtbaarheid() == 'wacht_goedkeuring' AND ( (LoginLid::instance()->getUid() != $this->geselecteerdeMededeling->getUid()) AND ! Mededeling::isModerator() )
+							($this->geselecteerdeMededeling->getZichtbaarheid() == 'verwijderd') OR ( $this->geselecteerdeMededeling->isPrive() AND ! LoginSession::mag('P_LEDEN_READ')) OR ( $this->geselecteerdeMededeling->getDoelgroep() == 'leden' AND Mededeling::isOudlid()) OR ( $this->geselecteerdeMededeling->getZichtbaarheid() == 'onzichtbaar' AND ! Mededeling::isModerator()) OR ( $this->geselecteerdeMededeling->getZichtbaarheid() == 'wacht_goedkeuring' AND ( (LoginSession::instance()->getUid() != $this->geselecteerdeMededeling->getUid()) AND ! Mededeling::isModerator() )
 							)
 					) {
 						// De gebruiker heeft geen rechten om deze mededeling te bekijken, dus we resetten het weer.

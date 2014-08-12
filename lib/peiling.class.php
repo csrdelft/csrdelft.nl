@@ -30,7 +30,7 @@ class Peiling {
 			SELECT
 				id, titel, tekst, (
 					SELECT uid FROM peiling_stemmen
-					WHERE peilingid=".$this->getId()." AND uid='".LoginLid::instance()->getUid()."'
+					WHERE peilingid=".$this->getId()." AND uid='".LoginSession::instance()->getUid()."'
 					LIMIT 1) as has_voted
 			FROM peiling
 			WHERE peiling.id = ".$this->getId().';';
@@ -85,7 +85,7 @@ class Peiling {
 	public function getStemmenAantal(){ return $this->totaal; } //wth is dit voor methodenaam
 
 	public function magStemmen (){
-		if(!LoginLid::mag('P_LOGGED_IN')){
+		if(!LoginSession::mag('P_LOGGED_IN')){
 			return false;
 		}
 		return $this->hasVoted()=='';
@@ -107,7 +107,7 @@ class Peiling {
 			WHERE id=".$optieId.';';
 		$logStem="
 			INSERT INTO peiling_stemmen (peilingid, uid) VALUES
-			(".$this->getId().",'".LoginLid::instance()->getUid()."');";
+			(".$this->getId().",'".LoginSession::instance()->getUid()."');";
 
 		return $db->query($updateOptie) AND $db->query($logStem);
 	}
@@ -175,7 +175,7 @@ class Peiling {
 
 	public static function magBewerken(){
 		//Elk basfcie-lid heeft voorlopig peilingbeheerrechten.
-		return LoginLid::mag('P_ADMIN,groep:bestuur,groep:BASFcie');
+		return LoginSession::mag('P_ADMIN,groep:bestuur,groep:BASFcie');
 	}
 
 	public static function getLijst(){

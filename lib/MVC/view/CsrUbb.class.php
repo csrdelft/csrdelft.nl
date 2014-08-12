@@ -322,12 +322,12 @@ class CsrUbb extends eamBBParser {
 //content moet altijd geparsed worden, anders blijft de inhoud van de
 //tag gewoon staan.
 		$forbidden = array();
-		if (!LoginLid::mag($permissie)) {
+		if (!LoginSession::mag($permissie)) {
 			$this->ubb_mode = false;
 			$forbidden = array('prive');
 		}
 		$content = $this->parseArray(array('[/prive]'), $forbidden);
-		if (!LoginLid::mag($permissie)) {
+		if (!LoginSession::mag($permissie)) {
 			$content = '';
 			$this->ubb_mode = true;
 		}
@@ -699,7 +699,7 @@ HTML;
 		require_once 'maalcie/view/MaaltijdKetzerView.class.php';
 		try {
 			if ($mid === 'next' || $mid === 'eerstvolgende' || $mid === 'next2' || $mid === 'eerstvolgende2') {
-				$maaltijden = MaaltijdenModel::getKomendeMaaltijdenVoorLid(\LoginLid::instance()->getUid()); // met filter
+				$maaltijden = MaaltijdenModel::getKomendeMaaltijdenVoorLid(\LoginSession::instance()->getUid()); // met filter
 				$aantal = sizeof($maaltijden);
 				if ($aantal < 1) {
 					return 'Geen aankomende maaltijd.';
@@ -724,7 +724,7 @@ HTML;
 		if (!isset($maaltijd)) {
 			return '<div class="ubb_block ubb_maaltijd">Maaltijd niet gevonden: ' . mb_htmlentities($mid) . '</div>';
 		}
-		$aanmeldingen = MaaltijdAanmeldingenModel::getAanmeldingenVoorLid(array($maaltijd->getMaaltijdId() => $maaltijd), \LoginLid::instance()->getUid());
+		$aanmeldingen = MaaltijdAanmeldingenModel::getAanmeldingenVoorLid(array($maaltijd->getMaaltijdId() => $maaltijd), \LoginSession::instance()->getUid());
 		if (empty($aanmeldingen)) {
 			$aanmelding = null;
 		} else {
@@ -734,7 +734,7 @@ HTML;
 		$result = $ketzer->getKetzer();
 
 		if ($maaltijd2 !== null) {
-			$aanmeldingen2 = MaaltijdAanmeldingenModel::getAanmeldingenVoorLid(array($maaltijd2->getMaaltijdId() => $maaltijd2), \LoginLid::instance()->getUid());
+			$aanmeldingen2 = MaaltijdAanmeldingenModel::getAanmeldingenVoorLid(array($maaltijd2->getMaaltijdId() => $maaltijd2), \LoginSession::instance()->getUid());
 			if (empty($aanmeldingen2)) {
 				$aanmelding2 = null;
 			} else {

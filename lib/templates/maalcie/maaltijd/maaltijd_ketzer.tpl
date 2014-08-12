@@ -2,10 +2,10 @@
 	maaltijd_ketzer.tpl	|	P.W.G. Brussee (brussee@live.nl)
 *}
 <div class="ubb_block ubb_maaltijd" id="maaltijdketzer-{$maaltijd->getMaaltijdId()}">{strip}
-{if LoginLid::mag('P_LOGGED_IN')}
+{if LoginSession::mag('P_LOGGED_IN')}
 	<div class="aanmelddata maaltijd-{if $aanmelding}aan{else}af{/if}gemeld">Aangemeld:<br />
 
-	{if !$maaltijd->getIsGesloten() && LoginLid::mag('P_MAAL_IK')}
+	{if !$maaltijd->getIsGesloten() && LoginSession::mag('P_MAAL_IK')}
 
 		{if $aanmelding}
 			<a onclick="ketzer_ajax('/maaltijdenketzer/afmelden/{$maaltijd->getMaaltijdId()}', '#maaltijdketzer-{$maaltijd->getMaaltijdId()}');" class="knop maaltijd-aangemeld"><input type="checkbox" checked="checked" /> Ja</a>

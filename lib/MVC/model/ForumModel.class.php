@@ -234,14 +234,14 @@ class ForumDradenGelezenModel extends PersistenceModel {
 	private function maakDraadGelezen($draad_id) {
 		$gelezen = new ForumDraadGelezen();
 		$gelezen->draad_id = $draad_id;
-		$gelezen->lid_id = LoginLid::instance()->getUid();
+		$gelezen->lid_id = LoginSession::instance()->getUid();
 		$gelezen->datum_tijd = '0000-00-00 00:00:00';
 		$this->create($gelezen);
 		return $gelezen;
 	}
 
 	public function getWanneerGelezenDoorLid(ForumDraad $draad) {
-		$gelezen = $this->retrieveByPrimaryKey(array($draad->draad_id, LoginLid::instance()->getUid()));
+		$gelezen = $this->retrieveByPrimaryKey(array($draad->draad_id, LoginSession::instance()->getUid()));
 		if (!$gelezen) {
 			$gelezen = $this->maakDraadGelezen($draad->draad_id);
 		}
@@ -271,11 +271,11 @@ class ForumDradenVerbergenModel extends PersistenceModel {
 	protected static $instance;
 
 	public function getAantalVerborgenVoorLid() {
-		return $this->count('lid_id = ?', array(LoginLid::instance()->getUid()));
+		return $this->count('lid_id = ?', array(LoginSession::instance()->getUid()));
 	}
 
 	public function getVerbergenVoorLid(ForumDraad $draad) {
-		return $this->existsByPrimaryKey(array($draad->draad_id, LoginLid::instance()->getUid()));
+		return $this->existsByPrimaryKey(array($draad->draad_id, LoginSession::instance()->getUid()));
 	}
 
 	public function setVerbergenVoorLid(ForumDraad $draad, $verbergen = true) {
@@ -284,18 +284,18 @@ class ForumDradenVerbergenModel extends PersistenceModel {
 			if (!$verborgen) {
 				$verborgen = new ForumDraadVerbergen();
 				$verborgen->draad_id = $draad->draad_id;
-				$verborgen->lid_id = LoginLid::instance()->getUid();
+				$verborgen->lid_id = LoginSession::instance()->getUid();
 				$this->create($verborgen);
 			}
 		} else {
 			if ($verborgen) {
-				$this->deleteByPrimaryKey(array($draad->draad_id, LoginLid::instance()->getUid()));
+				$this->deleteByPrimaryKey(array($draad->draad_id, LoginSession::instance()->getUid()));
 			}
 		}
 	}
 
 	public function toonAllesVoorLid() {
-		foreach ($this->find('lid_id = ?', array(LoginLid::instance()->getUid())) as $verborgen) {
+		foreach ($this->find('lid_id = ?', array(LoginSession::instance()->getUid())) as $verborgen) {
 			$this->delete($verborgen);
 		}
 	}
@@ -315,7 +315,7 @@ class ForumDradenVolgenModel extends PersistenceModel {
 	protected static $instance;
 
 	public function getAantalVolgenVoorLid() {
-		return $this->count('lid_id = ?', array(LoginLid::instance()->getUid()));
+		return $this->count('lid_id = ?', array(LoginSession::instance()->getUid()));
 	}
 
 	public function getVolgersVanDraad(ForumDraad $draad) {
@@ -323,7 +323,7 @@ class ForumDradenVolgenModel extends PersistenceModel {
 	}
 
 	public function getVolgenVoorLid(ForumDraad $draad) {
-		return $this->existsByPrimaryKey(array($draad->draad_id, LoginLid::instance()->getUid()));
+		return $this->existsByPrimaryKey(array($draad->draad_id, LoginSession::instance()->getUid()));
 	}
 
 	public function setVolgenVoorLid(ForumDraad $draad, $volgen = true) {
@@ -332,18 +332,18 @@ class ForumDradenVolgenModel extends PersistenceModel {
 			if (!$gevolgd) {
 				$gevolgd = new ForumDraadVolgen();
 				$gevolgd->draad_id = $draad->draad_id;
-				$gevolgd->lid_id = LoginLid::instance()->getUid();
+				$gevolgd->lid_id = LoginSession::instance()->getUid();
 				$this->create($gevolgd);
 			}
 		} else {
 			if ($gevolgd) {
-				$this->deleteByPrimaryKey(array($draad->draad_id, LoginLid::instance()->getUid()));
+				$this->deleteByPrimaryKey(array($draad->draad_id, LoginSession::instance()->getUid()));
 			}
 		}
 	}
 
 	public function volgNietsVoorLid() {
-		foreach ($this->find('lid_id = ?', array(LoginLid::instance()->getUid())) as $volgen) {
+		foreach ($this->find('lid_id = ?', array(LoginSession::instance()->getUid())) as $volgen) {
 			$this->delete($volgen);
 		}
 	}
@@ -517,7 +517,7 @@ class ForumDradenModel extends PersistenceModel implements Paging {
 			return array();
 		}
 		$forum_ids = implode(', ', array_fill(0, $count, '?'));
-		$verbergen = ForumDradenVerbergenModel::instance()->find('lid_id = ?', array(LoginLid::instance()->getUid()));
+		$verbergen = ForumDradenVerbergenModel::instance()->find('lid_id = ?', array(LoginSession::instance()->getUid()));
 		$draden_ids = array_keys(group_by_distinct('draad_id', $verbergen));
 		$count = count($draden_ids);
 		if ($count > 0) {
@@ -572,7 +572,7 @@ class ForumDradenModel extends PersistenceModel implements Paging {
 	public function maakForumDraad($forum_id, $titel, $wacht_goedkeuring) {
 		$draad = new ForumDraad();
 		$draad->forum_id = (int) $forum_id;
-		$draad->lid_id = LoginLid::instance()->getUid();
+		$draad->lid_id = LoginSession::instance()->getUid();
 		$draad->titel = $titel;
 		$draad->datum_tijd = getDateTime();
 		$draad->laatst_gewijzigd = $draad->datum_tijd;
@@ -812,7 +812,7 @@ class ForumPostsModel extends PersistenceModel implements Paging {
 	public function maakForumPost($draad_id, $tekst, $ip, $wacht_goedkeuring, $email) {
 		$post = new ForumPost();
 		$post->draad_id = (int) $draad_id;
-		$post->lid_id = LoginLid::instance()->getUid();
+		$post->lid_id = LoginSession::instance()->getUid();
 		$post->tekst = $tekst;
 		$post->datum_tijd = getDateTime();
 		$post->laatst_gewijzigd = $post->datum_tijd;
@@ -849,7 +849,7 @@ class ForumPostsModel extends PersistenceModel implements Paging {
 		$verschil = levenshtein($post->tekst, $nieuwe_tekst);
 		$post->tekst = $nieuwe_tekst;
 		$post->laatst_gewijzigd = getDateTime();
-		$bewerkt = 'bewerkt door [lid=' . LoginLid::instance()->getUid() . '] [reldate]' . $post->laatst_gewijzigd . '[/reldate]';
+		$bewerkt = 'bewerkt door [lid=' . LoginSession::instance()->getUid() . '] [reldate]' . $post->laatst_gewijzigd . '[/reldate]';
 		if ($reden !== '') {
 			$bewerkt .= ': ' . $reden;
 		}
@@ -880,7 +880,7 @@ class ForumPostsModel extends PersistenceModel implements Paging {
 	public function verplaatsForumPost(ForumDraad $nieuw, ForumPost $post, ForumDraad $draad, ForumDeel $deel) {
 		$post->draad_id = $nieuw->draad_id;
 		$post->laatst_gewijzigd = getDateTime();
-		$post->bewerkt_tekst .= 'verplaatst door [lid=' . LoginLid::instance()->getUid() . '] [reldate]' . $post->laatst_gewijzigd . '[/reldate]' . "\n";
+		$post->bewerkt_tekst .= 'verplaatst door [lid=' . LoginSession::instance()->getUid() . '] [reldate]' . $post->laatst_gewijzigd . '[/reldate]' . "\n";
 		$rowcount = $this->update($post);
 		if ($rowcount !== 1) {
 			throw new Exception('Verplaatsen mislukt');
@@ -898,7 +898,7 @@ class ForumPostsModel extends PersistenceModel implements Paging {
 	public function offtopicForumPost(ForumPost $post) {
 		$post->tekst = '[offtopic]' . $post->tekst . '[/offtopic]';
 		$post->laatst_gewijzigd = getDateTime();
-		$post->bewerkt_tekst .= 'offtopic door [lid=' . LoginLid::instance()->getUid() . '] [reldate]' . $post->laatst_gewijzigd . '[/reldate]' . "\n";
+		$post->bewerkt_tekst .= 'offtopic door [lid=' . LoginSession::instance()->getUid() . '] [reldate]' . $post->laatst_gewijzigd . '[/reldate]' . "\n";
 		$rowcount = $this->update($post);
 		if ($rowcount !== 1) {
 			throw new Exception('Offtopic mislukt');
@@ -909,7 +909,7 @@ class ForumPostsModel extends PersistenceModel implements Paging {
 		if ($post->wacht_goedkeuring) {
 			$post->wacht_goedkeuring = false;
 			$post->laatst_gewijzigd = getDateTime();
-			$post->bewerkt_tekst .= '[prive=P_FORUM_MOD]Goedgekeurd door [lid=' . LoginLid::instance()->getUid() . '] [reldate]' . $post->laatst_gewijzigd . '[/reldate][/prive]' . "\n";
+			$post->bewerkt_tekst .= '[prive=P_FORUM_MOD]Goedgekeurd door [lid=' . LoginSession::instance()->getUid() . '] [reldate]' . $post->laatst_gewijzigd . '[/reldate][/prive]' . "\n";
 			$rowcount = $this->update($post);
 			if ($rowcount !== 1) {
 				throw new Exception('Goedkeuren mislukt');

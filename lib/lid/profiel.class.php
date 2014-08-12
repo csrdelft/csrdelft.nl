@@ -94,19 +94,19 @@ class Profiel {
 	 */
 	public function magBewerken() {
 		//lid-moderator
-		if (LoginLid::mag('P_LEDEN_MOD')) {
+		if (LoginSession::mag('P_LEDEN_MOD')) {
 			return true;
 		}
 		//oudlid-moderator
-		if (LoginLid::mag('P_LEDEN_MOD') AND in_array($this->lid->getStatus(), array('S_OUDLID', 'S_ERELID'))) {
+		if (LoginSession::mag('P_LEDEN_MOD') AND in_array($this->lid->getStatus(), array('S_OUDLID', 'S_ERELID'))) {
 			return true;
 		}
 		//novietenbewerker (de novCie dus)
-		if ($this->editNoviet == true AND LoginLid::mag('groep:novcie')) {
+		if ($this->editNoviet == true AND LoginSession::mag('groep:novcie')) {
 			return true;
 		}
 		//of het gaat om ons eigen profiel.
-		if (LoginLid::instance()->isSelf($this->lid->getUid())) {
+		if (LoginSession::instance()->isSelf($this->lid->getUid())) {
 			return true;
 		}
 		return false;
@@ -198,7 +198,7 @@ class Profiel {
 			'NAAM'	 => $lid->getNaam(),
 			'UID'	 => $lid->getUid(),
 			'PW'	 => $password,
-			'ADMIN'	 => LoginLid::instance()->getLid()->getNaam()
+			'ADMIN'	 => LoginSession::instance()->getLid()->getNaam()
 		);
 		$mail = new Mail($lid->getEmail(), 'Nieuw wachtwoord voor de C.S.R.-stek', $bericht);
 		$mail->addBcc("pubcie@csrdelft.nl");
@@ -244,7 +244,7 @@ class ProfielBewerken extends Profiel {
 
 		$profiel = $this->lid->getProfiel();
 
-		$hasLedenMod = LoginLid::mag('P_LEDEN_MOD') AND LoginLid::instance()->getUid() != '1207';
+		$hasLedenMod = LoginSession::mag('P_LEDEN_MOD') AND LoginSession::instance()->getUid() != '1207';
 
 		if (!$this->editNoviet) {
 			//we voeren nog geen wachtwoord of bijnaam in bij novieten, die krijgen ze pas na het novitiaat
@@ -253,7 +253,7 @@ class ProfielBewerken extends Profiel {
 			if ($hasLedenMod) {
 				$form[] = new DuckField('duckname', $profiel['duckname'], 'Duckstad-naam', $this->lid);
 			}
-			if ($hasLedenMod OR LoginLid::instance()->getUid() === '1207') {
+			if ($hasLedenMod OR LoginSession::instance()->getUid() === '1207') {
 				$form[] = new Subkopje('Duck-pasfoto:');
 				$path = PICS_PATH . $this->lid->getDuckfotoPath();
 				if (strpos($path, '/duck') !== false AND ! endsWith($path, 'eend.jpg')) {
@@ -314,7 +314,7 @@ class ProfielBewerken extends Profiel {
 
 		$form[] = new Subkopje('Contact:');
 		$email = new RequiredEmailField('email', $profiel['email'], 'Emailadres');
-		if (LoginLid::instance()->isSelf($this->lid->getUid())) {
+		if (LoginSession::instance()->isSelf($this->lid->getUid())) {
 			//als we ons *eigen* profiel bewerken is het email-adres verplicht
 			$email->not_null = true;
 		}
@@ -331,7 +331,7 @@ class ProfielBewerken extends Profiel {
 		if ($hasLedenMod) {
 			$form[] = new JaNeeField('machtiging', $profiel['machtiging'], 'Machtiging getekend?');
 		}
-		if (LoginLid::mag('P_ADMIN')) {
+		if (LoginSession::mag('P_ADMIN')) {
 			$form[] = new IntField('soccieID', $profiel['soccieID'], 'SoccieID (uniek icm. bar)', 0, 10000);
 			$form[] = new SelectField('createTerm', $profiel['createTerm'], 'Aangemaakt bij', array('barvoor' => 'barvoor', 'barmidden' => 'barmidden', 'barachter' => 'barachter', 'soccie' => 'soccie'));
 		}
@@ -376,7 +376,7 @@ class ProfielBewerken extends Profiel {
 		}
 		$form[] = new TextField('muziek', $profiel['muziek'], 'Muziekinstrument', 50);
 
-		if (LoginLid::mag('P_ADMIN,R_BESTUUR,groep:novcie')) {
+		if (LoginSession::mag('P_ADMIN,R_BESTUUR,groep:novcie')) {
 			$form[] = new SelectField('ovkaart', $profiel['ovkaart'], 'OV-kaart', array('' => 'Kies...', 'geen' => '(Nog) geen OV-kaart', 'week' => 'Week', 'weekend' => 'Weekend', 'niet' => 'Niet geactiveerd'));
 			$form[] = new SelectField('zingen', $profiel['zingen'], 'Zingen', array('' => 'Kies...', 'ja' => 'Ja, ik zing in een band/koor', 'nee' => 'Nee, ik houd niet van zingen', 'soms' => 'Alleen onder de douche', 'anders' => 'Anders'));
 			$form[] = new TextareaField('novitiaat', $profiel['novitiaat'], 'Wat verwacht je van het novitiaat?');
@@ -410,7 +410,7 @@ class ProfielBewerken extends Profiel {
 	}
 
 	public function save() {
-		$this->changelog[] = 'Bewerking van [lid=' . LoginLid::instance()->getUid() . '] op [reldate]' . getDatetime() . '[/reldate]';
+		$this->changelog[] = 'Bewerking van [lid=' . LoginSession::instance()->getUid() . '] op [reldate]' . getDatetime() . '[/reldate]';
 
 		foreach ($this->form->getFields() as $field) {
 			//duck-pasfoto opslaan
@@ -460,7 +460,7 @@ class ProfielStatus extends Profiel {
 		//permissies
 		$perm = array('R_LID' => 'Lid', 'R_OUDLID' => 'Oudlid', 'R_NOBODY' => 'Ex-lid/Nobody', 'R_MAALCIE' => 'MaalCierechten', 'R_BASF' => 'BAS-FCierechten', 'R_ETER' => 'Eter (inlog voor abo\'s)');
 		$permbeheer = array('R_BESTUUR' => 'Bestuur', 'R_PUBCIE' => 'PubCierechten');
-		if (LoginLid::mag('P_ADMIN')) {
+		if (LoginSession::mag('P_ADMIN')) {
 			//admin mag alle permissies toekennen
 			$perm = array_merge($perm, $permbeheer);
 		} elseif (in_array($profiel['permissies'], array('R_BESTUUR', 'R_PUBCIE'))) {
@@ -503,7 +503,7 @@ class ProfielStatus extends Profiel {
 	 * acties: verwerkt velden, conditioneert die, zet abo's uit, slaat lidgegevens op en mailt fisci.
 	 */
 	public function save() {
-		$this->changelog[] = 'Statusverandering van [lid=' . LoginLid::instance()->getUid() . '] op [reldate]' . getDatetime() . '[/reldate]';
+		$this->changelog[] = 'Statusverandering van [lid=' . LoginSession::instance()->getUid() . '] op [reldate]' . getDatetime() . '[/reldate]';
 
 		//aan de hand van status bepalen welke POSTed velden worden opgeslagen van het formulier
 		$fieldsToSave = $this->getFieldsToSave($this->form->findByName('status')->getValue());
@@ -532,7 +532,7 @@ class ProfielStatus extends Profiel {
 		$nieuwepermissie = $this->bewerktLid->getProperty('permissies');
 
 		//bij wijzigingen door niet-admins worden aanpassingen aan permissies ongedaan gemaakt
-		if (!LoginLid::mag('P_ADMIN')) {
+		if (!LoginSession::mag('P_ADMIN')) {
 
 			$adminperms = array('R_PUBCIE', 'R_BESTUUR');
 
@@ -621,7 +621,7 @@ class ProfielStatus extends Profiel {
 				'OUD'	 => $oudestatus,
 				'NIEUW'	 => $nieuwestatus,
 				'CHANGE' => str_replace('[br]', "\n", $changelog),
-				'ADMIN'	 => LoginLid::instance()->getLid()->getNaam()
+				'ADMIN'	 => LoginSession::instance()->getLid()->getNaam()
 			);
 			$mail = new Mail('corvee@csrdelft.nl', 'Lid-af: toekomstig corvee verwijderd', $bericht);
 			$mail->addBcc("pubcie@csrdelft.nl");
@@ -653,7 +653,7 @@ class ProfielStatus extends Profiel {
 			'OUD'	 => $oudestatus,
 			'NIEUW'	 => $nieuwestatus,
 			'SALDI'	 => $saldi,
-			'ADMIN'	 => LoginLid::instance()->getLid()->getNaam()
+			'ADMIN'	 => LoginSession::instance()->getLid()->getNaam()
 		);
 		$to = 'fiscus@csrdelft.nl,maalcie-fiscus@csrdelft.nl,soccie@csrdelft.nl';
 
@@ -719,7 +719,7 @@ class ProfielStatus extends Profiel {
 			'NIEUW'		 => ($nieuwestatus == 'S_NOBODY' ? 'GEEN LID' : substr($nieuwestatus, 2)),
 			'CSRLIJST'	 => $bkncsr['kopje'] . "\n" . $bkncsr['lijst'],
 			'LEDENLIJST' => ($bkncsr['aantal'] > 0 ? "Verder ter informatie: " . $bknleden['kopje'] . "\n" . $bknleden['lijst'] : ''),
-			'ADMIN'		 => LoginLid::instance()->getLid()->getNaam()
+			'ADMIN'		 => LoginSession::instance()->getLid()->getNaam()
 		);
 		$mail = new Mail($to, 'Geleende boeken - Melding lid-af worden', $bericht);
 		$mail->addBcc("pubcie@csrdelft.nl");
@@ -831,15 +831,15 @@ class ProfielVoorkeur extends Profiel {
 
 	public function magBewerken() {
 		//lid-moderator
-		if (LoginLid::mag('P_LEDEN_MOD')) {
+		if (LoginSession::mag('P_LEDEN_MOD')) {
 			return true;
 		}
 		//oudlid-moderator
-		if (LoginLid::mag('P_LEDEN_MOD') AND in_array($this->lid->getStatus(), array('S_OUDLID', 'S_ERELID'))) {
+		if (LoginSession::mag('P_LEDEN_MOD') AND in_array($this->lid->getStatus(), array('S_OUDLID', 'S_ERELID'))) {
 			return true;
 		}
 		//of het gaat om ons eigen profiel.
-		if (LoginLid::instance()->isSelf($this->lid->getUid())) {
+		if (LoginSession::instance()->isSelf($this->lid->getUid())) {
 			return true;
 		}
 		return false;

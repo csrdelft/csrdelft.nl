@@ -179,7 +179,7 @@ class Boek {
 	 * 		boek mag alleen door admins verwijdert worden
 	 */
 	public function magVerwijderen() {
-		return LoginLid::mag('groep:BAS-FCie,P_BIEB_MOD,P_ADMIN');
+		return LoginSession::mag('groep:BAS-FCie,P_BIEB_MOD,P_ADMIN');
 	}
 
 	/**
@@ -189,14 +189,14 @@ class Boek {
 	 * 		boek mag alleen door admins of door eigenaar v.e. exemplaar bewerkt worden
 	 */
 	public function magBewerken() {
-		return LoginLid::mag('P_BIEB_EDIT') OR $this->isEigenaar() OR $this->magVerwijderen();
+		return LoginSession::mag('P_BIEB_EDIT') OR $this->isEigenaar() OR $this->magVerwijderen();
 	}
 
 	/**
 	 * Iedereen met extra rechten en zij met BIEB_READ mogen
 	 */
 	public function magBekijken() {
-		return LoginLid::mag('P_BIEB_READ') OR $this->magBewerken();
+		return LoginSession::mag('P_BIEB_READ') OR $this->magBewerken();
 	}
 
 	/**
@@ -213,7 +213,7 @@ class Boek {
 	public function isEigenaar($exemplaarid = null) {
 		$eigenaars = $this->getEigenaars($exemplaarid);
 		foreach ($eigenaars as $eigenaar) {
-			if ($eigenaar == Loginlid::instance()->getUid()) {
+			if ($eigenaar == LoginSession::instance()->getUid()) {
 				return true;
 			} elseif ($eigenaar == 'x222' AND $this->isBASFCie()) {
 				return true;
@@ -223,7 +223,7 @@ class Boek {
 	}
 
 	public function isBASFCie() {
-		return LoginLid::mag('groep:BAS-FCie');
+		return LoginSession::mag('groep:BAS-FCie');
 	}
 
 	public function isBiebboek($exemplaarid = null) {
@@ -251,7 +251,7 @@ class Boek {
 		$result = $db->query($qLener);
 		if ($db->numRows($result) > 0) {
 			$lener = $db->next($result);
-			return $lener['uitgeleend_uid'] == Loginlid::instance()->getUid();
+			return $lener['uitgeleend_uid'] == LoginSession::instance()->getUid();
 		} else {
 			$this->error.= $db->error();
 			return false;
@@ -591,7 +591,7 @@ class NieuwBoek extends Boek {
 			if ($this->biebboek == 'ja') {
 				$eigenaar = 'x222'; //C.S.R.Bieb is eigenaar
 			} else {
-				$eigenaar = Loginlid::instance()->getUid();
+				$eigenaar = LoginSession::instance()->getUid();
 			}
 			return $this->addExemplaar($eigenaar);
 		}
@@ -850,7 +850,7 @@ class BewerkBoek extends Boek {
 			return false;
 		}
 		if ($lener == null) {
-			$lener = Loginlid::instance()->getUid();
+			$lener = LoginSession::instance()->getUid();
 		}
 
 		$db = MySql::instance();

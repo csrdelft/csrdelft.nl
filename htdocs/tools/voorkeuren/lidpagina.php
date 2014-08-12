@@ -11,7 +11,7 @@ require_once 'configuratie.include.php';
 
 require_once 'voorkeur/overzicht.class.php';
 
-if (LoginLid::mag('P_LEDEN_MOD')) {
+if (LoginSession::mag('P_LEDEN_MOD')) {
 	$inhoud = new LidOverzicht();
 	if (isset($_GET['lid'])) {
 		$inhoud = new LidOverzicht($_GET['lid']);

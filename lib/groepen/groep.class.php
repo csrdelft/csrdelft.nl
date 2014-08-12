@@ -28,7 +28,7 @@ class OldGroep {
 				 * Als iemand groepen in een rubriek mag maken vanwege adminrechten zijn uid niet invullen.
 				 * Commissiecategorien permissies voor commissie houden, niet voor de idividuen.
 				 */
-				$eigenaar = LoginLid::instance()->getUid();
+				$eigenaar = LoginSession::instance()->getUid();
 				if (isset($_GET['gtype'])) {
 					try {
 						$groepen = new Groepen($_GET['gtype']);
@@ -251,7 +251,7 @@ class OldGroep {
 	}
 
 	public function isAanmeldbaar() {
-		return LoginLid::mag($this->getAanmeldbaar());
+		return LoginSession::mag($this->getAanmeldbaar());
 	}
 
 	public function getLimiet() {
@@ -321,7 +321,7 @@ class OldGroep {
 
 	public function isLid($uid = null) {
 		if ($uid === null) {
-			$uid = LoginLid::instance()->getUid();
+			$uid = LoginSession::instance()->getUid();
 		}
 		return isset($this->leden[$uid]);
 	}
@@ -332,7 +332,7 @@ class OldGroep {
 	 */
 
 	public function isEigenaar() {
-		return LoginLid::mag($this->groep['eigenaar']);
+		return LoginSession::mag($this->groep['eigenaar']);
 	}
 
 	/*
@@ -352,7 +352,7 @@ class OldGroep {
 
 	public function isOp($uid = null) {
 		if ($uid === null) {
-			$uid = LoginLid::instance()->getUid();
+			$uid = LoginSession::instance()->getUid();
 		}
 		if ($this->lidIsMod() AND $this->isLid($uid)) {
 			return true;
@@ -412,14 +412,14 @@ class OldGroep {
 	}
 
 	public static function isAdmin() {
-		return LoginLid::mag('P_LEDEN_MOD');
+		return LoginSession::mag('P_LEDEN_MOD');
 	}
 
 	public function magBewerken() {
 		return
 				$this->isAdmin() OR
 				$this->isEigenaar() OR
-				$this->isOp(LoginLid::instance()->getUid());
+				$this->isOp(LoginSession::instance()->getUid());
 	}
 
 	public function magStatsBekijken() {
@@ -546,7 +546,7 @@ class OldGroep {
 
 	public function meldAan($functie) {
 		if ($this->magAanmelden()) {
-			return $this->addLid(LoginLid::instance()->getUid(), $functie);
+			return $this->addLid(LoginSession::instance()->getUid(), $functie);
 		}
 		return false;
 	}
@@ -774,7 +774,7 @@ class OldGroep {
 
 	public function getFunctie($uid = null) {
 		if ($uid === null) {
-			$uid = LoginLid::instance()->getUid();
+			$uid = LoginSession::instance()->getUid();
 		}
 		$leden = $this->leden;
 		return $leden[$uid]['functie'];
@@ -806,7 +806,7 @@ class OldGroep {
 	}
 
 	public static function isIngelogged() {
-		return LoginLid::mag('P_LEDEN_READ');
+		return LoginSession::mag('P_LEDEN_READ');
 	}
 
 	/*

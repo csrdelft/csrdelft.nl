@@ -302,7 +302,7 @@ function isGeldigeDatum($datum) {
 function debugprint($sString, $cssID = 'pubcie_debug') {
 	$adminIPs = array('145.94.61.229', '145.94.59.158', '192.168.16.101', '127.0.0.1');
 	$isFromAdminIP = isset($_SERVER['REMOTE_ADDR']) AND in_array($_SERVER['REMOTE_ADDR'], $adminIPs);
-	if ($isFromAdminIP OR LoginLid::mag('P_ADMIN')) {
+	if ($isFromAdminIP OR LoginSession::mag('P_ADMIN')) {
 		ob_start();
 		echo '<pre class="' . $cssID . '">' . print_r($sString, true) . '</pre>';
 	}

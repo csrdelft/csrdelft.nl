@@ -6,20 +6,20 @@ $action = filter_input(INPUT_GET, 'actie', FILTER_SANITIZE_STRING);
 switch ($action) {
 
 	case 'su':
-		if (!LoginLid::mag('P_ADMIN')) {
+		if (!LoginSession::mag('P_ADMIN')) {
 			setMelding('Geen su-rechten!', -1);
 		} else {
 			$uid = filter_input(INPUT_GET, 'uid', FILTER_SANITIZE_STRING);
-			LoginLid::instance()->su($uid);
+			LoginSession::instance()->su($uid);
 			setMelding('U bekijkt de webstek nu als ' . Lid::naamLink($_GET['uid'], 'full', 'plain') . '!', 1);
 		}
 		break;
 
 	case 'endSu':
-		if (!LoginLid::instance()->isSued()) {
+		if (!LoginSession::instance()->isSued()) {
 			setMelding('Niet gesued!', -1);
 		} else {
-			LoginLid::instance()->endSu();
+			LoginSession::instance()->endSu();
 			setMelding('Switch-useractie is beëindigd.', 1);
 		}
 		break;

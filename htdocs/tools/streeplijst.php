@@ -7,7 +7,7 @@
 
 require_once 'configuratie.include.php';
 
-if(!LoginLid::mag('P_LEDEN_READ')){ header('location: '.CSR_ROOT); exit; }
+if(!LoginSession::mag('P_LEDEN_READ')){ header('location: '.CSR_ROOT); exit; }
 
 require_once 'streeplijstcontent.class.php';
 $body=new Streeplijstcontent();

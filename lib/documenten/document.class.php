@@ -38,7 +38,7 @@ class Document extends Bestand {
 				//Bij $this->ID==0 gaat het om een nieuw document. Hier
 				//zetten we de defaultwaarden voor het nieuwe document.
 				$this->setToegevoegd(getDateTime());
-				$this->setEigenaar(LoginLid::instance()->getUid());
+				$this->setEigenaar(LoginSession::instance()->getUid());
 			} else {
 				$db = MySql::instance();
 				$query = "
@@ -194,13 +194,13 @@ class Document extends Bestand {
 
 	public function isEigenaar($uid = null) {
 		if ($uid == null) {
-			LoginLid::instance()->getUid();
+			LoginSession::instance()->getUid();
 		}
 		return $uid == $this->getEigenaar();
 	}
 
 	public function magBewerken() {
-		return $this->isEigenaar() OR LoginLid::mag('P_DOCS_MOD');
+		return $this->isEigenaar() OR LoginSession::mag('P_DOCS_MOD');
 	}
 
 	public function getLeesrechten() {
@@ -208,11 +208,11 @@ class Document extends Bestand {
 	}
 
 	public function magBekijken() {
-		return LoginLid::mag($this->getLeesrechten());
+		return LoginSession::mag($this->getLeesrechten());
 	}
 
 	public function magVerwijderen() {
-		return LoginLid::mag('P_DOCS_MOD');
+		return LoginSession::mag('P_DOCS_MOD');
 	}
 
 	public function getFriendlyMimetype() {

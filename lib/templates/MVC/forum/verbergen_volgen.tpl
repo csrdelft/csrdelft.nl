@@ -1,4 +1,4 @@
-{if LoginLid::mag('P_LOGGED_IN')}
+{if LoginSession::mag('P_LOGGED_IN')}
 	<div class="forumheadbtn">
 		<a href="/forum/toonalles" class="knop confirm" title="Verborgen onderwerpen weer laten zien">{icon get="eye"} {ForumDradenVerbergenModel::instance()->getAantalVerborgenVoorLid()}</a>
 	</div>

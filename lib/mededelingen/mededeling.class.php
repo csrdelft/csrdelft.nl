@@ -35,7 +35,7 @@ class Mededeling {
 			} else {
 				//default waarden voor een nieuwe mededeling
 				$this->datum = getDateTime();
-				$this->uid = LoginLid::instance()->getUid();
+				$this->uid = LoginSession::instance()->getUid();
 				$this->prioriteit = self::defaultPrioriteit;
 			}
 		}
@@ -331,14 +331,14 @@ class Mededeling {
 	public static function getLijstWachtGoedkeuring() {
 		$mededelingen = array();
 		// Moderators of niet-ingelogden hebben geen berichten die wachten op goedkeuring.
-		if (Mededeling::isModerator() OR ! LoginLid::mag('P_LEDEN_READ'))
+		if (Mededeling::isModerator() OR ! LoginSession::mag('P_LEDEN_READ'))
 			return $mededelingen;
 
 		$db = MySql::instance();
 		$query = "
 			SELECT id, datum
 			FROM mededeling
-			WHERE uid='" . LoginLid::instance()->getUid() . "' 
+			WHERE uid='" . LoginSession::instance()->getUid() . "' 
 			AND zichtbaarheid='wacht_goedkeuring'
 			ORDER BY datum DESC";
 		$resource = $db->select($query);
@@ -388,7 +388,7 @@ class Mededeling {
 		$db = MySql::instance();
 		$zichtbaarheidClause = "zichtbaarheid='zichtbaar'";
 		$doelgroepClause = "";
-		if (!LoginLid::mag('P_LEDEN_READ')) {
+		if (!LoginSession::mag('P_LEDEN_READ')) {
 			$doelgroepClause = " AND doelgroep='iedereen'";
 		}
 		$laatstenQuery = "
@@ -432,27 +432,27 @@ class Mededeling {
 	public function magBewerken() {
 		// het huidige lid mag dit bericht alleen bewerken als hij moderator is of als dit zijn eigen bericht
 		// is (en hij dus het toevoeg-recht heeft).
-		return Mededeling::isModerator() OR ( Mededeling::magToevoegen() AND $this->getUid() == LoginLid::instance()->getUid());
+		return Mededeling::isModerator() OR ( Mededeling::magToevoegen() AND $this->getUid() == LoginSession::instance()->getUid());
 	}
 
 	public static function isModerator() {
-		return LoginLid::mag('P_NEWS_MOD');
+		return LoginSession::mag('P_NEWS_MOD');
 	}
 
 	public static function isOudlid() {
-		return LoginLid::mag('P_ALLEEN_OUDLID');
+		return LoginSession::mag('P_ALLEEN_OUDLID');
 	}
 
 	// function magPriveLezen()
 	// post: geeft true terug als het huidige lid prive-Mededelingen mag lezen (berichten die voor leden bestemd zijn).
 	public static function magPriveLezen() {
-		return LoginLid::mag('P_LEDEN_READ');
+		return LoginSession::mag('P_LEDEN_READ');
 	}
 
 	// function magToevoegen()
 	// post: geeft true terug als het huidige lid Mededelingen mag toevoegen.
 	public static function magToevoegen() {
-		return LoginLid::mag('P_NEWS_POST');
+		return LoginSession::mag('P_NEWS_POST');
 	}
 
 	public static function knipTekst($sTekst, $iMaxTekensPerRegel = 26, $iMaxRegels = 2) {
@@ -572,7 +572,7 @@ class Mededeling {
 		}
 		// Doelgroep clause.
 		$doelgroepClause = "";
-		if (!LoginLid::mag('P_LEDEN_READ')) {
+		if (!LoginSession::mag('P_LEDEN_READ')) {
 			$doelgroepClause = " AND doelgroep='iedereen'";
 		} elseif (self::isOudlid()) {
 			$doelgroepClause = " AND doelgroep!='leden'";

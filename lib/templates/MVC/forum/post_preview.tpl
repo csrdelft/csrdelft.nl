@@ -6,7 +6,7 @@
 					<td class="auteur">
 						{$post->lid_id|csrnaam:'user':'pain'}:<br />
 						<span class="moment">
-							{if LoginLid::instelling('forum_datumWeergave') === 'relatief'}
+							{if LoginSession::instelling('forum_datumWeergave') === 'relatief'}
 								{$post->datum_tijd|reldate}
 							{else}
 								{$post->datum_tijd}

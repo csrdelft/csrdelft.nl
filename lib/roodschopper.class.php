@@ -47,7 +47,7 @@ class Roodschopper{
 	public static function getDefaults(){
 		$cie='soccie';
 		$naam='SocCie';
-		if(LoginLid::mag('groep:MaalCie')){
+		if(LoginSession::mag('groep:MaalCie')){
 			$cie='maalcie';
 			$naam='MaalCie';
 		}
@@ -58,7 +58,7 @@ Bij voorbaat dank,
 h.t. Fiscus.';
 
 		$return=new Roodschopper($cie, -5.2 , 'U staat rood', $bericht);
-		$return->setBcc(LoginLid::instance()->getLid()->getEmail());
+		$return->setBcc(LoginSession::instance()->getLid()->getEmail());
 		$return->setUitgesloten('x101');
 		return $return;
 	}

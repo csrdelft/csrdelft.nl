@@ -7,7 +7,7 @@
 						{icon get="note"} maak {if $draad->plakkerig}<strong>niet</strong> {/if}plakkerig
 					</a>
 					<br /><br />
-					{if LoginLid::mag('P_FORUM_BELANGRIJK')}
+					{if LoginSession::mag('P_FORUM_BELANGRIJK')}
 						<a href="/forum/wijzigen/{$draad->draad_id}/belangrijk" class="knop post ReloadPage" title="Verander belangrijkheid">
 							{icon get="asterisk_orange"} maak {if $draad->belangrijk}<strong>niet</strong> {/if}belangrijk
 						</a>
