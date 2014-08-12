@@ -3,7 +3,7 @@ jQuery(document).ready(function($) {
 		$(this).wrap('<div id="meldingen"></div>');
 
 		if ($(this).hasClass('extern')) {
-			$('#meldingen').prepend('<div id="extern_melding"><strong>Openbaar forum</strong><br />Voor iedereen leesbaar, doorzoekbaar door zoekmachines.</div>');
+			$('#meldingen').prepend('<div id="extern_melding"><strong>Openbaar forum</strong><br />Voor iedereen leesbaar, doorzoekbaar door zoekmachines.<br />Zet [prive] en [/prive] om uw persoonlijke contactgegevens in het bericht.</div>');
 		}
 	}).keyup(function(event) {
 		var textarea = $(this);
