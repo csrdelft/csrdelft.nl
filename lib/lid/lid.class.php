@@ -435,8 +435,9 @@ class Lid implements Serializable, Agendeerbaar {
 		$ohash = substr($ohash, 0, 20);
 		$nhash = pack("H*", sha1($pass . $osalt));
 		#echo "ohash: {$ohash}, nhash: {$nhash}";
-		if ($ohash == $nhash)
+		if ($ohash === $nhash) {
 			return true;
+		}
 		return false;
 	}
 

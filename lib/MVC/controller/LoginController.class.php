@@ -38,6 +38,11 @@ class LoginController extends AclController {
 		}
 	}
 
+	public function logout() {
+		$this->model->logout();
+		invokeRefresh(CSR_ROOT);
+	}
+
 	public function su($uid) {
 		$this->model->switchUser($uid);
 		setMelding('U bekijkt de webstek nu als ' . Lid::naamLink($uid, 'full', 'plain') . '!', 1);
