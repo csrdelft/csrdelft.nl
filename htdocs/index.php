@@ -21,6 +21,7 @@ try {
 		case 'CmsPagina':
 		case 'Forum':
 		case 'FotoAlbum':
+		case 'Agenda':
 			break; // toegestaan voor iedereen
 		default: // alleen ingelode gebruikers
 			if (!LoginModel::mag('P_LOGGED_IN')) {
