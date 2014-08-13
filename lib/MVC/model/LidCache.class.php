@@ -18,6 +18,7 @@ class LidCache {
 	 * automagisch voor de caching gezorgd.
 	 */
 	public static function getLid($uid) {
+		$uid = (string) $uid; // werkomheen int
 		if (!Lid::isValidUid($uid)) {
 			return false;
 		}

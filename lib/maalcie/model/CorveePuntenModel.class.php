@@ -111,7 +111,6 @@ class CorveePuntenModel {
 		$vrijstellingen = CorveeVrijstellingenModel::getAlleVrijstellingen(true); // grouped by uid
 		$matrix = self::loadPuntenTotaalVoorAlleLeden();
 		foreach ($matrix as $uid => $totalen) {
-			$uid = (string) $uid; // werkomheen int
 			$lid = \LidCache::getLid($uid); // false if lid does not exist
 			if (!$lid instanceof \Lid) {
 				throw new Exception('Lid bestaat niet: $uid =' . $uid);
