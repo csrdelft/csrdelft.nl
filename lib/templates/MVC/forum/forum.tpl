@@ -8,7 +8,7 @@
 	</div>
 {/if}
 
-{include file='MVC/forum/verbergen_volgen.tpl'}
+{include file='MVC/forum/head_buttons.tpl'}
 
 <div class="forumNavigatie">
 	<a href="/forum/recent" class="forumGrootlink">Recent</a>

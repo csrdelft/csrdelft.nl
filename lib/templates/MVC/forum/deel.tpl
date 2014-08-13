@@ -2,15 +2,13 @@
 
 {$zoekform->view()}
 
-{if isset($deel->forum_id)}
-	{if LoginModel::mag('P_ADMIN')}
-		<div class="forumheadbtn">
-			<a href="/forum/beheren/{$deel->forum_id}" class="knop post popup" title="Deelforum beheren">{icon get="wrench_orange"} Beheren</a>
-		</div>
-	{/if}
-{else}
-	{include file='MVC/forum/verbergen_volgen.tpl'}
+{if isset($deel->forum_id) AND LoginModel::mag('P_ADMIN')}
+	<div class="forumheadbtn">
+		<a href="/forum/beheren/{$deel->forum_id}" class="knop post popup" title="Deelforum beheren">{icon get="wrench_orange"} Beheren</a>
+	</div>
 {/if}
+
+{include file='MVC/forum/head_buttons.tpl'}
 
 {capture name='navlinks'}
 	<div class="forumNavigatie">

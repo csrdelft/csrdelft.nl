@@ -146,29 +146,43 @@ class LoginModel extends PersistenceModel implements Validator {
 	}
 
 	/**
-	 * FIXME:
+	 * @deprecated Remove after MVC refactor is complete
 	 */
 	private function logBezoek() {
+		$db = MijnSqli::instance();
+		$uid = $this->subject->getUid();
 		$datumtijd = getDateTime();
+		$locatie = '';
 		if (isset($_SERVER['REMOTE_ADDR'])) {
-			$ip = $_SERVER['REMOTE_ADDR'];
+			$ip = $db->escape($_SERVER['REMOTE_ADDR']);
 		} else {
 			$ip = '0.0.0.0';
+			$locatie = '';
 		}
 		if (isset($_SERVER['REQUEST_URI'])) {
-			$url = $_SERVER['REQUEST_URI'];
+			$url = $db->escape($_SERVER['REQUEST_URI']);
 		} else {
 			$url = '';
 		}
 		if (isset($_SERVER['HTTP_REFERER'])) {
-			$referer = $_SERVER['HTTP_REFERER'];
+			$referer = $db->escape($_SERVER['HTTP_REFERER']);
 		} else {
 			$referer = '';
 		}
+		$agent = '';
 		if (isset($_SERVER['HTTP_USER_AGENT'])) {
-			$agent = $_SERVER['HTTP_USER_AGENT'];
-		} else {
-			$agent = '';
+			$agent = $db->escape($_SERVER['HTTP_USER_AGENT']);
+		}
+		$sLogQuery = "
+			INSERT INTO
+					log
+			(
+					uid, ip, locatie, moment, url, referer, useragent
+			)VALUES(
+					'" . $uid . "', '" . $ip . "', '" . $locatie . "', '" . $datumtijd . "', '" . $url . "', '" . $referer . "', '" . $agent . "'
+			);";
+		if (!preg_match('/stats.php/', $url) AND $ip != '0.0.0.0') {
+			$db->query($sLogQuery);
 		}
 	}
 
