@@ -1,14 +1,25 @@
 <?php
 
-#
-# C.S.R. Delft
-#
 # -------------------------------------------------------------------
 # include.defines.php
 # -------------------------------------------------------------------
 # allerlei paden enzo goed zetten.
 # -------------------------------------------------------------------
 # 
+# uncomment de volgende regel om de database automatisch te laten controleren
+define('DB_CHECK_ENABLE', 'zie PersistentEntity::checkTable()');
+# 
+# uncomment de volgende regel om de database automatisch te laten bijwerken
+#define('DB_MODIFY_ENABLE', 'heb je een backup gemaakt?');
+# 
+# uncomment de volgende regel om de database automatisch te laten droppen
+#define('DB_DROP_ENABLE', 'heb je een backup gemaakt?');
+
+define('DEBUG', 'extra debug output');
+
+# wordt gebruikt om pagina's alleen op Confide te laten zien
+define('CONFIDE_IP', '80.112.180.123');
+
 # urls ZONDER trailing slash
 define('CSR_PICS', 'http://plaetjes.csrdelft.nl');
 define('CSR_ROOT', 'http://csrdelft.nl');

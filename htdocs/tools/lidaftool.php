@@ -2,14 +2,8 @@
 
 require_once 'configuratie.include.php';
 
-
 if (!LoginModel::mag('P_ADMIN,groep:soccie,groep:maalcie')) {
-	header('location: http://csrdelft.nl');
-	exit;
-}
-
-if (LoginModel::mag('P_ADMIN') AND isset($_POST['action'])) {
-	
+	invokeRefresh(CSR_ROOT);
 }
 
 echo '<h1>Overzicht saldi</h1><form action="/tools/lidaftool.php" method="post">';

@@ -26,13 +26,11 @@ if (isset($_GET['q'])) {
 		try {
 			$groep = new OldGroep($_GET['q']);
 			if ($groep instanceof OldGroep) {
-				header('location: ' . $groep->getUrl());
-				exit;
+				invokeRefresh($groep->getUrl());
 			}
 		} catch (Exception $e) {
 			//bestaat ie niet, dan doen we niets.
 		}
-
 
 		//als er ook geen h.t. groep is kijken we of er wel resultaat is bij
 		//het verbreden van het statusfilter
@@ -56,7 +54,7 @@ if (isset($_GET['q'])) {
 
 if (isset($_GET['addToGoogle'])) {
 	require_once 'googlesync.class.php';
-	GoogleSync::doRequestToken(CSR_ROOT . Instellingen::get('stek', 'request'));
+	GoogleSync::doRequestToken(CSR_ROOT . REQUEST_URI);
 
 	$gSync = GoogleSync::instance();
 
@@ -77,8 +75,7 @@ if (isset($_GET['addToGoogle'])) {
 	if ($zoeker->count() == 1) {
 		$leden = $zoeker->getLeden();
 		$lid = $leden[0];
-		header('location: ' . CSR_ROOT . '/communicatie/profiel/' . $lid->getUid());
-		exit;
+		invokeRefresh(CSR_ROOT . '/communicatie/profiel/' . $lid->getUid());
 	}
 
 	$ledenlijstcontent = new LedenlijstContent($zoeker);

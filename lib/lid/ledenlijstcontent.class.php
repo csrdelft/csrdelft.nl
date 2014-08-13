@@ -57,10 +57,10 @@ class LedenlijstContent extends TemplateView {
 		echo '<hr />';
 
 		if ($this->model->count() > 0) {
-			if (strstr(Instellingen::get('stek', 'request'), '?') !== false) {
-				$url = Instellingen::get('stek', 'request') . '&amp;addToGoogle=true';
+			if (strstr(REQUEST_URI, '?') !== false) {
+				$url = REQUEST_URI . '&amp;addToGoogle=true';
 			} else {
-				$url = Instellingen::get('stek', 'request') . '?addToGoogle=true';
+				$url = REQUEST_URI . '?addToGoogle=true';
 			}
 			echo '<a href="' . $url . '" class="knop" style="float: right" title="Huidige selectie exporteren naar Google Contacts" onclick="return confirm(\'Weet u zeker dat u deze ' . $this->model->count() . ' leden wilt importeren in uw Google-contacts?\')"><img src="' . CSR_PICS . '/knopjes/google.ico" alt="google"/></a>';
 		}

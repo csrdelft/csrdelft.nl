@@ -27,8 +27,7 @@ if (isset($_REQUEST['prullenbak']) AND $_REQUEST['prullenbak'] == '1' AND Medede
 switch ($actie) {
 	case 'verwijderen':
 		if (!Mededeling::magToevoegen()) {
-			header('location: ' . CSR_ROOT);
-			exit;
+			invokeRefresh(CSR_ROOT);
 		}
 		if ($mededelingId > 0) {
 			$mededeling = new Mededeling($mededelingId);
@@ -40,8 +39,7 @@ switch ($actie) {
 					setMelding('De mededeling is succesvol verwijderd.', 1);
 				}
 			} else { // Dit lid mag deze mededeling helemaal niet verwijderen!
-				header('location: ' . CSR_ROOT);
-				exit;
+				invokeRefresh(CSR_ROOT);
 			}
 		}
 		$content = new MededelingenContent(0, $prullenbak);
@@ -51,8 +49,7 @@ switch ($actie) {
 
 	case 'bewerken':
 		if (!Mededeling::magToevoegen()) {
-			header('location: ' . CSR_ROOT);
-			exit;
+			invokeRefresh(CSR_ROOT);
 		}
 
 		if (isset($_POST['titel'], $_POST['tekst'], $_POST['categorie'])) {
@@ -197,8 +194,7 @@ switch ($actie) {
 					$nieuweLocatie .= '/prullenbak';
 				}
 				$nieuweLocatie .= '/' . $realId;
-				header('location: ' . $nieuweLocatie);
-				exit;
+				invokeRefresh($nieuweLocatie);
 			}
 		} else { // User is going to edit an existing Mededeling or fill in an empty form.
 			$mededeling = new Mededeling($mededelingId);
@@ -206,9 +202,7 @@ switch ($actie) {
 
 		// Controleren of de gebruiker deze mededeling wel mag bewerken.
 		if ($mededelingId > 0 AND ! $mededeling->magBewerken()) { // Moet dit niet eerder gebeuren?
-			header('location: ' . CSR_ROOT); // Misschien melding weergeven en terug gaan naar
-			// de mededelingenpagina? 
-			exit;
+			invokeRefresh(CSR_ROOT); // Misschien melding weergeven en terug gaan naar de mededelingenpagina? 
 		}
 		$content = new MededelingContent($mededeling, $prullenbak);
 		break;

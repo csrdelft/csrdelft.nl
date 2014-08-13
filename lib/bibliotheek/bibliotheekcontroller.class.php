@@ -160,7 +160,7 @@ class BibliotheekController extends Controller {
 		}
 		//formulier verwerken, als het onvoldoende is terug naar formulier
 		if ($this->boek->validFormulier() AND $this->boek->saveFormulier()) {
-			header('location: ' . CSR_ROOT . '/communicatie/bibliotheek/boek/' . $this->boek->getId());
+			invokeRefresh(CSR_ROOT . '/communicatie/bibliotheek/boek/' . $this->boek->getId());
 		} else {
 			$this->view = new BibliotheekBoekContent($this->boek);
 		}
@@ -197,7 +197,7 @@ class BibliotheekController extends Controller {
 
 		//controleer en sla op of geef de bewerkvelden met eventuele foutmeldingen
 		if ($this->boek->validFormulier() AND $this->boek->saveFormulier()) {
-			header('location: ' . CSR_ROOT . '/communicatie/bibliotheek/boek/' . $this->boek->getId() . '#beschrijving' . $this->boek->getEditBeschrijving()->getId());
+			invokeRefresh(CSR_ROOT . '/communicatie/bibliotheek/boek/' . $this->boek->getId() . '#beschrijving' . $this->boek->getEditBeschrijving()->getId());
 		} else {
 			$this->view = new BibliotheekBoekContent($this->boek);
 		}

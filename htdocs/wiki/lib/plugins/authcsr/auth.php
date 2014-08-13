@@ -11,7 +11,6 @@ if(!defined('DOKU_INC')) die();
 
 class auth_plugin_authcsr extends DokuWiki_Auth_Plugin {
 
-
     /**
      * Constructor.
      */
@@ -29,16 +28,6 @@ class auth_plugin_authcsr extends DokuWiki_Auth_Plugin {
         //$this->cando['getGroups']   => false; // can a list of available groups be retrieved?
         $this->cando['external'] = true;
         $this->cando['logoff']   = true;
-
-        global $conf;
-
-        //login with:
-        // - x999
-        // - or as lid when:
-        //      * cookie available
-        //      * private_token was added to url (checking the permissions by LoginModel::hasPermission, needs setting token_authorizable to true)
-        require_once 'configuratie.include.php';
-        setlocale(LC_NUMERIC, 'en_US.UTF-8');
 
         //intialize your auth system and set success to true, if successful
         $this->success = true;

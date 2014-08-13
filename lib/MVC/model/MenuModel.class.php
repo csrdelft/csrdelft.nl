@@ -56,7 +56,7 @@ class MenuModel extends PersistenceModel {
 				unset($parent->children[$i]);
 				continue;
 			}
-			$child->active = startsWith(Instellingen::get('stek', 'request'), $child->link);
+			$child->active = startsWith(REQUEST_URI, $child->link);
 			$child_active |= $child->active;
 			$this->getChildren($child, $admin);
 		}

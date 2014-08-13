@@ -37,18 +37,8 @@ class auth_csr extends auth_basic {
      * Set capabilities.
      */
     function auth_csr() {
-        global $conf;
-
         $this->cando['external'] = true;
         $this->cando['logoff']   = true;
-
-        //login with:
-        // - x999
-        // - or as lid when:
-        //      * cookie available
-        //      * private_token was added to url (checking the permissions by LoginModel::mag, needs setting token_authorizable to true)
-        require_once 'configuratie.include.php';
-        setlocale(LC_NUMERIC, 'en_US.UTF-8');
     }
 
     /**

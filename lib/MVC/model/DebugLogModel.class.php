@@ -30,8 +30,8 @@ class DebugLogModel extends PersistenceModel {
 		$entry->uid = LoginModel::getUid();
 		$entry->su_uid = LoginModel::instance()->getSuedFrom();
 		$entry->ip = $_SERVER['REMOTE_ADDR'];
-		$entry->request = $_SERVER['REQUEST_URI'];
-		$entry->referer = (isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : null);
+		$entry->request = REQUEST_URI;
+		$entry->referer = HTTP_REFERER;
 		$entry->user_agent = $_SERVER['HTTP_USER_AGENT'];
 		$this->create($entry);
 		return $entry;

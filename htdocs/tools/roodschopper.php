@@ -1,20 +1,20 @@
 <?php
 
+require_once 'configuratie.include.php';
+require_once 'roodschopper.class.php';
+require_once 'roodschoppercontent.class.php';
+
 /**
  * roodschopper.php
  * 
  * @author Jan Pieter Waagmeester <jieter@jpwaag.com>
  *
  */
-require_once 'configuratie.include.php';
-require_once 'roodschopper.class.php';
-require_once 'roodschoppercontent.class.php';
-
 //Alleen voor admins, maalcie en Soccie. LET OP: SocCie kan nu ook een maalciemail versturen.
 if (!LoginModel::mag('P_LEDEN_MOD,groep:MaalCie,groep:SocCie')) {
-	header('location: http://csrdelft.nl');
-	exit;
+	invokeRefresh(CSR_ROOT);
 }
+
 if (isset($_POST['commissie'], $_POST['bcc'], $_POST['saldogrens'], $_POST['uitsluiten'], $_POST['bericht'], $_POST['from'], $_POST['doelgroep'])) {
 	$cie = 'soccie';
 	if ($_POST['commissie'] == 'maalcie') {

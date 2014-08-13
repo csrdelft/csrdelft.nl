@@ -1,23 +1,26 @@
 <?php
+
+require_once 'configuratie.include.php';
+
 # C.S.R. Delft
 #
 # -------------------------------------------------------------------
 # tools/streeplijst.php
 # -------------------------------------------------------------------
 
-require_once 'configuratie.include.php';
-
-if(!LoginModel::mag('P_LEDEN_READ')){ header('location: '.CSR_ROOT); exit; }
+if (!LoginModel::mag('P_LEDEN_READ')) {
+	invokeRefresh(CSR_ROOT);
+}
 
 require_once 'streeplijstcontent.class.php';
-$body=new Streeplijstcontent();
+$body = new Streeplijstcontent();
 
 
-if(isset($_GET['pdf'])){
+if (isset($_GET['pdf'])) {
 	echo $body->getPdf();
-}elseif(isset($_GET['iframe'])){
+} elseif (isset($_GET['iframe'])) {
 	echo $body->getHTML();
-}else{
-	$pagina=new CsrLayoutPage($body);
+} else {
+	$pagina = new CsrLayoutPage($body);
 	$pagina->view();
 }

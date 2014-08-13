@@ -143,7 +143,7 @@ function invokeRefresh($url = null, $melding = '', $level = -1) {
 		setMelding($melding, $level);
 	}
 	if ($url == '') {
-		$url = CSR_ROOT . Instellingen::get('stek', 'request');
+		$url = CSR_ROOT . REQUEST_URI;
 	} else if (!startsWith($url, CSR_ROOT)) {
 		$url = CSR_ROOT;
 	}

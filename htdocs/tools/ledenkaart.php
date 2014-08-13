@@ -1,16 +1,17 @@
 <?php
-/*
+require_once 'configuratie.include.php';
+
+/**
  * ledenkaart.php	| 	Jan Pieter Waagmeester (jieter@jpwaag.com)
  * 
  * 
  * googlemaps-probeerseltje.
  * 
  */
-require_once 'configuratie.include.php';
-
 if (!LoginModel::mag('P_LEDEN_READ')) {
-	header('location: ' . CSR_ROOT);
+	invokeRefresh(CSR_ROOT);
 }
+
 if (isset($_GET['xml'])) {
 	$sLedenQuery = "
 		SELECT 
@@ -104,12 +105,12 @@ if (isset($_GET['xml'])) {
 				map.setCenter(new GLatLng(52.015, 4.356667), 14);
 
 			}
-	//
-	// This function picks up the click and opens the corresponding info window
+			//
+			// This function picks up the click and opens the corresponding info window
 			function myclick(i) {
 				GEvent.trigger(gmarkers[i], "click");
 			}
-	//Create marker and set up event window
+			//Create marker and set up event window
 			function createMarker(point, html, label) {
 				var marker = new GMarker(point);
 				GEvent.addListener(marker, "click", function() {
@@ -126,7 +127,7 @@ if (isset($_GET['xml'])) {
 				return marker;
 			}
 
-	//showAddress
+			//showAddress
 			function showAddress(map, geocoder, address, html, label) {
 				geocoder.getLatLng(
 						address,

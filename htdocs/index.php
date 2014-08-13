@@ -25,13 +25,12 @@ try {
 			break; // toegestaan voor iedereen
 		default: // alleen ingelode gebruikers
 			if (!LoginModel::mag('P_LOGGED_IN')) {
-				header('location: ' . CSR_ROOT);
-				exit;
+				invokeRefresh(CSR_ROOT);
 			}
 	}
 	$class .= 'Controller';
 
-	$request = Instellingen::get('stek', 'request');
+	$request = REQUEST_URI;
 
 	require_once 'MVC/controller/' . $class . '.class.php';
 	$controller = new $class($request);
@@ -54,8 +53,7 @@ try {
 		}
 	}
 	$controller->getView()->view();
-}
-catch (Exception $e) {
+} catch (Exception $e) {
 	$protocol = (isset($_SERVER['SERVER_PROTOCOL']) ? $_SERVER['SERVER_PROTOCOL'] : 'HTTP/1.0');
 	$code = ($e->getCode() >= 100 ? $e->getCode() : 500);
 	header($protocol . ' ' . $code . ' ' . $e->getMessage());

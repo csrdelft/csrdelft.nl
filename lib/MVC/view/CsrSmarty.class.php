@@ -20,6 +20,7 @@ class CsrSmarty extends Smarty {
 
 		// frequently used things
 		$this->assign('CSR_PICS', CSR_PICS);
+		$this->assign('REQUEST_URI', REQUEST_URI);
 	}
 
 }

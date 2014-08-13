@@ -48,7 +48,7 @@ class LoginController extends AclController {
 	public function su($uid) {
 		$this->model->switchUser($uid);
 		setMelding('U bekijkt de webstek nu als ' . Lid::naamLink($uid, 'full', 'plain') . '!', 1);
-		invokeRefresh(Instellingen::get('stek', 'referer'));
+		invokeRefresh(HTTP_REFERER);
 	}
 
 	public function endsu() {
@@ -58,7 +58,7 @@ class LoginController extends AclController {
 			LoginModel::instance()->endSwitchUser();
 			setMelding('Switch-useractie is beëindigd.', 1);
 		}
-		invokeRefresh(Instellingen::get('stek', 'referer'));
+		invokeRefresh(HTTP_REFERER);
 	}
 
 	public function pauper($terug) {

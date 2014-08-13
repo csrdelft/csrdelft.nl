@@ -1,4 +1,8 @@
 <?php
+
+require_once 'configuratie.include.php';
+require_once 'courant/courant.class.php';
+
 # C.S.R. Delft | pubcie@csrdelft.nl
 # -------------------------------------------------------------------
 # courant.php
@@ -7,23 +11,19 @@
 # archief
 # -------------------------------------------------------------------
 
-
-require_once 'configuratie.include.php';
-
-require_once 'courant/courant.class.php';
-$courant=new Courant();
+$courant = new Courant();
 
 # als er genoeg rechten zijn een preview van de courant laten zien.
-if(!$courant->magToevoegen()){ header('location: '.CSR_ROOT); exit; }
+if (!$courant->magToevoegen()) {
+	invokeRefresh(CSR_ROOT);
+}
 
 //kijken of de huidige getoond moet worden, of een nieuwe
-if(isset($_GET['ID']) AND $_GET['ID']!=0){
-	$courant->load((int)$_GET['ID']);
+if (isset($_GET['ID']) AND $_GET['ID'] != 0) {
+	$courant->load((int) $_GET['ID']);
 }
 
 require_once 'courant/courantcontent.class.php';
-$pagina=new CourantContent($courant);
+$pagina = new CourantContent($courant);
 
 $pagina->view();
-
-?>

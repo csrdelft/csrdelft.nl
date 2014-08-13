@@ -1,5 +1,5 @@
-<?php 
+<?php
+
 require_once 'configuratie.include.php';
-$uid=LoginModel::getUid();
-header('Location: /communicatie/profiel/'.$uid.'/voorkeuren');
-?>
+
+invokeRefresh(CSR_ROOT . '/communicatie/profiel/' . LoginModel::getUid() . '/voorkeuren');

@@ -5,8 +5,7 @@ require_once 'configuratie.include.php';
 require_once 'courant/courant.class.php';
 $courant = new Courant();
 if (!$courant->magToevoegen()) {
-	header('location: ' . CSR_ROOT);
-	exit;
+	invokeRefresh(CSR_ROOT);
 }
 
 require_once 'courant/courantbeheercontent.class.php';

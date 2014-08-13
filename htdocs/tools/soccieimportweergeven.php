@@ -3,8 +3,7 @@
 require_once 'configuratie.include.php';
 
 if (!LoginModel::mag('P_LEDEN_MOD,groep:SocCie,groep:NBG')) {
-	header('location: ' . CSR_ROOT);
-	exit;
+	invokeRefresh(CSR_ROOT);
 }
 
 //verzamel bestaande gegevens

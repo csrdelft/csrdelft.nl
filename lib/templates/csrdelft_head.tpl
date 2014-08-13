@@ -35,7 +35,7 @@ s.parentNode.insertBefore(ga, s);
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 <![endif]-->
 <meta name="google-site-verification" content="zLTm1NVzZPHx7jiGHBpe4HeH1goQAlJej2Rdc0_qKzE" />
-<meta property="og:url" content="http://csrdelft.nl{Instellingen::get('stek', 'request')}" />
+<meta property="og:url" content="http://csrdelft.nl{$REQUEST_URI}" />
 <meta property="og:title" content="C.S.R. Delft | {$view->getTitel()}" />
 <meta property="og:locale" content="nl_nl" />
 <meta property="og:image" content="{$CSR_PICS}/layout/beeldmerk.png" />

@@ -35,7 +35,7 @@ if (isset($_GET['action'])) {
 				if (isset($_POST['optie']) && is_numeric($_POST['optie'])) {
 					$peiling->stem((int) $_POST['optie']);
 				}
-				header('location: ' . $_SERVER['HTTP_REFERER'] . '#peiling' . $peiling->getId());
+				invokeRefresh(HTTP_REFERER . '#peiling' . $peiling->getId());
 			}
 			break;
 		case 'verwijder':
@@ -43,7 +43,7 @@ if (isset($_GET['action'])) {
 				try {
 					$peiling = new Peiling((int) $_GET['id']);
 					$peiling->deletePeiling();
-					header('location: ' . $_SERVER['HTTP_REFERER']);
+					invokeRefresh(HTTP_REFERER);
 				} catch (Exception $e) {
 					$error = $e->getMessage();
 				}
