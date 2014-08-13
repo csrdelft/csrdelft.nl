@@ -20,7 +20,7 @@ class LoginForm extends Formulier {
 
 		$fields[] = new VinkField('koppelip', true, 'Koppel IP');
 
-		$url = filter_input(INPUT_SERVER, 'HTTP_REFERER', FILTER_SANITIZE_URL);
+		$url = filter_var($_SERVER['HTTP_REFERER'], FILTER_SANITIZE_URL);
 		$fields[] = new HiddenField('url', $url);
 
 		$this->addFields($fields);
