@@ -58,7 +58,7 @@ abstract class SimpleHTML implements View {
 			$zijkolom[] = new IsHetAlContent(LidInstellingen::get('zijbalk', 'ishetal'));
 		}
 		// Agenda
-		if (LoginSession::mag('P_AGENDA_READ') && LidInstellingen::get('zijbalk', 'agendaweken') > 0) {
+		if (LoginModel::mag('P_AGENDA_READ') && LidInstellingen::get('zijbalk', 'agendaweken') > 0) {
 			require_once 'MVC/model/AgendaModel.class.php';
 			$zijkolom[] = new AgendaZijbalkView(AgendaModel::instance(), LidInstellingen::get('zijbalk', 'agendaweken'));
 		}
@@ -89,7 +89,7 @@ abstract class SimpleHTML implements View {
 		if (LidInstellingen::get('zijbalk', 'forum_zelf') > 0) {
 			require_once 'MVC/model/ForumModel.class.php';
 			require_once 'MVC/view/ForumView.class.php';
-			$posts_draden = ForumPostsModel::instance()->getRecenteForumPostsVanLid(LoginSession::instance()->getUid(), LidInstellingen::get('zijbalk', 'forum_zelf'), true);
+			$posts_draden = ForumPostsModel::instance()->getRecenteForumPostsVanLid(LoginModel::getUid(), LidInstellingen::get('zijbalk', 'forum_zelf'), true);
 			$zijkolom[] = new ForumPostZijbalkView($posts_draden[0], $posts_draden[1]);
 		}
 		// Nieuwste fotoalbum
@@ -112,7 +112,7 @@ abstract class SimpleHTML implements View {
 		$debug = '';
 		if ($sql) {
 			$debug .= '<hr />SQL<hr />';
-			$debug .= '<pre>' . mb_htmlentities(print_r(array("PDO" => Database::getQueries(), "MySql" => MySql::instance()->getQueries()), true)) . '</pre>';
+			$debug .= '<pre>' . mb_htmlentities(print_r(array("PDO" => Database::getQueries(), "MySql" => MijnSqli::instance()->getQueries()), true)) . '</pre>';
 		}
 		if ($get) {
 			$debug .= '<hr />GET<hr />';

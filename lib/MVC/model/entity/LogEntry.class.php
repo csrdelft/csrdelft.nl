@@ -32,12 +32,12 @@ class LogEntry extends PersistentEntity {
 	 * UID
 	 * @var string
 	 */
-	public $lid_id;
+	public $uid;
 	/**
 	 * SU UID
 	 * @var string
 	 */
-	public $su_id;
+	public $su_uid;
 	/**
 	 * IP address
 	 * @var string
@@ -64,15 +64,15 @@ class LogEntry extends PersistentEntity {
 	 */
 	protected static $persistent_fields = array(
 		'class_function' => array(T::String),
-		'dump' => array(T::LongText, true),
-		'call_trace' => array(T::Text),
-		'moment' => array(T::DateTime),
-		'lid_id' => array(T::UID),
-		'su_id' => array(T::UID, true),
-		'ip' => array(T::String),
-		'request' => array(T::String),
-		'referer' => array(T::String, true),
-		'user_agent' => array(T::String)
+		'dump'			 => array(T::LongText, true),
+		'call_trace'	 => array(T::Text),
+		'moment'		 => array(T::DateTime),
+		'uid'			 => array(T::UID, true),
+		'su_uid'		 => array(T::UID, true),
+		'ip'			 => array(T::String),
+		'request'		 => array(T::String),
+		'referer'		 => array(T::String, true),
+		'user_agent'	 => array(T::String)
 	);
 	/**
 	 * Database primary key

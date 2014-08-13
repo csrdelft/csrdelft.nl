@@ -29,7 +29,7 @@ class BeheerVoorkeurView extends TemplateView {
 		parent::__construct($voorkeur);
 		$this->smarty->assign('voorkeur', $this->model);
 		$this->smarty->assign('crid', $voorkeur->getCorveeRepetitieId());
-		$this->smarty->assign('uid', $voorkeur->getLidId());
+		$this->smarty->assign('uid', $voorkeur->getUid());
 	}
 
 	public function view() {

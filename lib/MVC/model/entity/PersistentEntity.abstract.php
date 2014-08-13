@@ -10,7 +10,7 @@ require_once 'MVC/model/entity/PersistentField.class.php';
  * @author P.W.G. Brussee <brussee@live.nl>
  * 
  * Requires static properties in superclass: $table_name, $persistent_fields, $primary_keys
- * Optional: $rename_fields = array("oldname" => "newname")
+ * Optional: static $rename_fields = array('oldname' => 'newname');
  */
 abstract class PersistentEntity {
 
@@ -169,7 +169,9 @@ abstract class PersistentEntity {
 		// Rename fields
 		if (property_exists($orm, 'rename_fields')) {
 			foreach (static::$rename_fields as $oldname => $newname) {
-				DatabaseAdmin::instance()->sqlChangeField(static::getTableName(), $fields[$newname], $oldname);
+				if (property_exists($orm, $newname)) {
+					DatabaseAdmin::instance()->sqlChangeField(static::getTableName(), $fields[$newname], $oldname);
+				}
 			}
 		}
 		$previous_field = null;

@@ -29,7 +29,7 @@ class KetzerKeuze extends PersistentEntity {
 	 * Primary key
 	 * @var int
 	 */
-	public $lid_id;
+	public $uid;
 	/**
 	 * Database table fields
 	 * @var array
@@ -38,7 +38,7 @@ class KetzerKeuze extends PersistentEntity {
 		'ketzer_id' => array(T::Integer),
 		'select_id' => array(T::Integer),
 		'optie_id' => array(T::Integer),
-		'lid_id' => array(T::UID)
+		'uid' => array(T::UID)
 	);
 	/**
 	 * Database table name
@@ -49,6 +49,6 @@ class KetzerKeuze extends PersistentEntity {
 	 * Database primary key
 	 * @var array
 	 */
-	protected static $primary_keys = array('ketzer_id', 'select_id', 'optie_id', 'lid_id');
+	protected static $primary_keys = array('ketzer_id', 'select_id', 'optie_id', 'uid');
 
 }

@@ -131,51 +131,39 @@ class DatabaseAdmin extends Database {
 			$sql .= 'PRIMARY KEY (' . implode(', ', $primary_keys) . ')';
 		}
 		$sql .= ') ENGINE=InnoDB DEFAULT CHARSET=utf8 auto_increment=1';
+		$query = self::instance()->prepare($sql);
 		if (defined('DB_MODIFY_ENABLE')) {
-			$query = self::instance()->prepare($sql);
 			$query->execute();
-			self::$queries[] = $query->queryString;
-		} else {
-			debugprint($sql);
 		}
-		return $sql;
+		self::$queries[] = $query->queryString;
 	}
 
 	public static function sqlAddField($table, PersistentField $field, $after_field = null) {
 		$sql = 'ALTER TABLE ' . $table . ' ADD ' . $field->toSQL();
 		$sql .= ($after_field === null ? ' FIRST' : ' AFTER ' . $after_field);
+		$query = self::instance()->prepare($sql);
 		if (defined('DB_MODIFY_ENABLE')) {
-			$query = self::instance()->prepare($sql);
 			$query->execute();
-			self::$queries[] = $query->queryString;
-		} else {
-			debugprint($sql);
 		}
-		return $sql;
+		self::$queries[] = $query->queryString;
 	}
 
 	public static function sqlChangeField($table, PersistentField $field, $old_name = null) {
 		$sql = 'ALTER TABLE ' . $table . ' CHANGE ' . ($old_name === null ? $field->field : $old_name) . ' ' . $field->toSQL();
+		$query = self::instance()->prepare($sql);
 		if (defined('DB_MODIFY_ENABLE')) {
-			$query = self::instance()->prepare($sql);
 			$query->execute();
-			self::$queries[] = $query->queryString;
-		} else {
-			debugprint($sql);
 		}
-		return $sql;
+		self::$queries[] = $query->queryString;
 	}
 
 	public static function sqlDeleteField($table, PersistentField $field) {
 		$sql = 'ALTER TABLE ' . $table . ' DROP ' . $field->field;
+		$query = self::instance()->prepare($sql);
 		if (defined('DB_MODIFY_ENABLE') AND defined('DB_DROP_ENABLE')) {
-			$query = self::instance()->prepare($sql);
 			$query->execute();
-			self::$queries[] = $query->queryString;
-		} else {
-			debugprint($sql);
 		}
-		return $sql;
+		self::$queries[] = $query->queryString;
 	}
 
 }

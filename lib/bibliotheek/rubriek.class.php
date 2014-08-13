@@ -21,7 +21,7 @@ class Rubriek {
 		if (is_array($init)) {
 			$this->rubriek = $init;
 		} else {
-			$db = MySql::instance();
+			$db = MijnSqli::instance();
 			$query = "
 				SELECT c2.id, c1.categorie AS cat1, c2.categorie AS cat2
 				FROM biebcategorie c1, biebcategorie c2
@@ -77,7 +77,7 @@ class Rubriek {
 	 */
 
 	public static function getAllRubrieken($samenvoegen = false, $short = false) {
-		$db = MySql::instance();
+		$db = MijnSqli::instance();
 		$query = "
 			SELECT c2.id, c1.categorie AS cat1, c2.categorie AS cat2
 			FROM biebcategorie c1, biebcategorie c2
@@ -116,7 +116,7 @@ class Rubriek {
 	 */
 
 	public static function getAllRubriekIds() {
-		$db = MySql::instance();
+		$db = MijnSqli::instance();
 		$query = "
 			SELECT id
 			FROM biebcategorie;";

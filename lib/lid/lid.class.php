@@ -1,7 +1,6 @@
 <?php
 
 require_once 'ldap.class.php';
-require_once 'memcached.class.php';
 require_once 'status.class.php';
 require_once 'lichting.class.php';
 require_once 'verticale.class.php';
@@ -34,7 +33,7 @@ class Lid implements Serializable, Agendeerbaar {
 	}
 
 	private function load($uid) {
-		$db = MySql::instance();
+		$db = MijnSqli::instance();
 		$query = "SELECT * FROM lid LEFT JOIN socCieKlanten ON uid = stekUID WHERE uid = '" . $db->escape($uid) . "' LIMIT 1;";
 		$lid = $db->getRow($query);
 		if (is_array($lid)) {
@@ -46,7 +45,7 @@ class Lid implements Serializable, Agendeerbaar {
 	}
 
 	public static function loadByNickname($nick) {
-		$db = MySql::instance();
+		$db = MijnSqli::instance();
 		$query = "SELECT uid FROM lid WHERE nickname='" . $db->escape($nick) . "' LIMIT 1";
 		$lid = $db->getRow($query);
 		if (is_array($lid)) {
@@ -57,7 +56,7 @@ class Lid implements Serializable, Agendeerbaar {
 	}
 
 	public static function loadByDuckname($duck) {
-		$db = MySql::instance();
+		$db = MijnSqli::instance();
 		$query = "SELECT uid FROM lid WHERE duckname='" . $db->escape($duck) . "' LIMIT 1";
 		$lid = $db->getRow($query);
 		if (is_array($lid)) {
@@ -76,9 +75,20 @@ class Lid implements Serializable, Agendeerbaar {
 		}
 	}
 
+	public function generateRssToken() {
+		$token = substr(md5($this->uid . getDateTime()), 0, 25);
+		$query = "UPDATE lid SET rssToken='" . $token . "' WHERE uid='" . $this->uid . "' LIMIT 1;";
+		if (MijnSqli::instance()->query($query)) {
+			LidCache::flushLid($this->uid);
+			return $token;
+		} else {
+			return false;
+		}
+	}
+
 	// sla huidige objectstatus op in db, en update het huidige lid in de LidCache
 	public function save() {
-		$db = MySql::instance();
+		$db = MijnSqli::instance();
 		$donotsave = array('uid', 'rssToken');
 
 		$queryfields = array();
@@ -238,6 +248,10 @@ class Lid implements Serializable, Agendeerbaar {
 
 	public function getUid() {
 		return $this->profiel['uid'];
+	}
+
+	public function getUUID() {
+		return $this->getUid() . '@csrdelft.nl';
 	}
 
 	public function getGeslacht() {
@@ -498,7 +512,7 @@ class Lid implements Serializable, Agendeerbaar {
 	public function getKinderen($force = false) {
 		if ($this->kinderen === null or $force) {
 			$query = "SELECT uid FROM lid WHERE patroon='" . $this->getUid() . "';";
-			$result = MySql::instance()->query2array($query);
+			$result = MijnSqli::instance()->query2array($query);
 
 			$this->kinderen = array();
 			if (is_array($result)) {
@@ -738,7 +752,7 @@ class Lid implements Serializable, Agendeerbaar {
 			$vorm = LidInstellingen::get('forum', 'naamWeergave');
 		}
 		if ($vorm === 'Duckstad') {
-			if (!LoginSession::mag('P_LOGGED_IN')) {
+			if (!LoginModel::mag('P_LOGGED_IN')) {
 				$vorm = 'civitas';
 			} elseif ($this->profiel['duckname'] == '') {
 				$vorm = 'volledig';
@@ -791,7 +805,7 @@ class Lid implements Serializable, Agendeerbaar {
 						$naam .= ' ' . $this->profiel['postfix'];
 					}
 				} elseif (in_array($this->profiel['status'], array('S_KRINGEL', 'S_NOBODY', 'S_EXLID'))) {
-					if (LoginSession::mag('P_LEDEN_READ')) {
+					if (LoginModel::mag('P_LEDEN_READ')) {
 						$naam = $this->profiel['voornaam'] . ' ';
 					} else {
 						$naam = $this->profiel['voorletters'] . ' ';
@@ -802,7 +816,7 @@ class Lid implements Serializable, Agendeerbaar {
 					$naam .= $this->profiel['achternaam'];
 				} else {
 					//voor novieten is het Dhr./ Mevr.
-					if (LoginSession::instance()->getLid()->getStatus() == 'S_NOVIET') {
+					if (LoginModel::instance()->getLid()->getStatus() == 'S_NOVIET') {
 						$naam = ($this->getGeslacht() == 'v') ? 'Mevr. ' : 'Dhr. ';
 					} else {
 						$naam = ($this->getGeslacht() == 'v') ? 'Ama. ' : 'Am. ';
@@ -853,7 +867,7 @@ class Lid implements Serializable, Agendeerbaar {
 		}
 		//Niet ingelogged nooit een link laten zijn.
 		$nolinks = array('x999', 'x101', 'x027', 'x222', '4444');
-		if (in_array($this->getUid(), $nolinks) || !LoginSession::mag('P_LEDEN_READ')) {
+		if (in_array($this->getUid(), $nolinks) || !LoginModel::mag('P_LEDEN_READ')) {
 			$mode = 'plain';
 		}
 		if ($mode === 'visitekaartje' || $mode === 'link') {
@@ -889,7 +903,7 @@ class Lid implements Serializable, Agendeerbaar {
 					$k.= $this->getPasfoto('small', 'lidfoto');
 				}
 				$k.= '<div class="uid uitgebreid">(';
-				if (LoginSession::instance()->maySuTo($this)) {
+				if (LoginModel::instance()->maySuTo($this)) {
 					$k.= '<a href="/su/' . $this->getUid() . '" title="Su naar dit lid">' . $this->getUid() . '</a>';
 				} else {
 					$k.= $this->getUid();
@@ -991,16 +1005,13 @@ class Lid implements Serializable, Agendeerbaar {
 	 * ook werkelijk bestaat, gebruik daarvoor Lid::exists();
 	 */
 	public static function isValidUid($uid) {
-		return is_string($uid) AND preg_match('/^[a-z0-9]{4}$/', $uid) > 0;
+		return is_string($uid) AND preg_match('/^[a-z0-9]{4}$/', $uid) === 1;
 	}
 
 	/**
 	 * Bestaat er een lid met uid $uid in de database?
 	 */
 	public static function exists($uid) {
-		if (!Lid::isValidUid($uid)) {
-			return false;
-		}
 		return LidCache::getLid($uid) instanceof Lid;
 	}
 
@@ -1023,7 +1034,7 @@ class Lid implements Serializable, Agendeerbaar {
 	 * PAS OP: niet multi-user safe.
 	 */
 	public static function createNew($lichting, $lidstatus) {
-		$db = MySql::instance();
+		$db = MijnSqli::instance();
 
 		//lichtingid zijn eerste 2 cijfers van lidnummer
 		$lichtingid = substr($lichting, 2, 2);
@@ -1054,7 +1065,7 @@ class Lid implements Serializable, Agendeerbaar {
 		}
 
 		//opslaan in lid tabel
-		$changelog = 'Aangemaakt als ' . $status->getDescription() . ' door [lid=' . LoginSession::instance()->getUid() . '] op [reldate]' . getDatetime() . '[/reldate][br]';
+		$changelog = 'Aangemaakt als ' . $status->getDescription() . ' door [lid=' . LoginModel::getUid() . '] op [reldate]' . getDatetime() . '[/reldate][br]';
 
 		$query = "
 			INSERT INTO lid (uid, lidjaar, studiejaar, status, permissies, changelog, land, o_land)
@@ -1097,7 +1108,7 @@ class Lid implements Serializable, Agendeerbaar {
 			ORDER BY verjaardag ASC, lidjaar, gebdatum, achternaam
 			" . $limitclause . ";";
 
-		$leden = MySql::instance()->query2array($query);
+		$leden = MijnSqli::instance()->query2array($query);
 
 		$return = array();
 		if (is_array($leden)) {
@@ -1106,63 +1117,6 @@ class Lid implements Serializable, Agendeerbaar {
 			}
 		}
 		return $return;
-	}
-
-}
-
-/**
- * Lid-objectjes bewaren in Memcached
- */
-class LidCache {
-
-	/**
-	 * Deze methode gebruiken op Lid-objecten te maken. Er wordt dan
-	 * automagisch voor de caching gezorgd.
-	 */
-	public static function getLid($uid) {
-		//kek-2010ers. euhm. we hebben dus een string nodig, niet een int
-		$uid = (string) $uid;
-
-		if (!Lid::isValidUid($uid)) {
-			return false;
-		}
-
-		//kijken of we dit lid al in memcached hebben zitten
-		$lid = Memcached::instance()->get($uid);
-		if ($lid === false) {
-			try {
-				//nieuw lid maken, in memcache stoppen en teruggeven.
-				$lid = new Lid($uid);
-				Memcached::instance()->set($uid, serialize($lid));
-				return $lid;
-			} catch (Exception $e) {
-				return null;
-			}
-		}
-		return unserialize($lid);
-	}
-
-	/**
-	 * Weggooien van een lid uit de cache.
-	 */
-	public static function flushLid($uid) {
-		if (!Lid::isValidUid($uid)) {
-			return false;
-		}
-		return Memcached::instance()->delete($uid);
-	}
-
-	/**
-	 * Weggooien, en meteen weer opnieuw inladen.
-	 */
-	public static function updateLid($uid) {
-		self::flushLid($uid);
-		Memcached::instance()->set($uid, serialize(new Lid($uid)));
-		return true;
-	}
-
-	public static function flushAll() {
-		return Memcached::instance()->flush();
 	}
 
 }
@@ -1177,7 +1131,7 @@ class LidCache {
 class Zoeker {
 
 	static function zoekLeden($zoekterm, $zoekveld, $verticale, $sort, $zoekstatus = '', $velden = array(), $aantalresultaten = null) {
-		$db = MySql::instance();
+		$db = MijnSqli::instance();
 		$leden = array();
 		$zoekfilter = '';
 
@@ -1250,7 +1204,7 @@ class Zoeker {
 			# 1. ingelogde persoon dat alleen maar mag of
 			# 2. ingelogde persoon leden en oudleden mag zoeken, maar niet oudleden alleen heeft gekozen
 			if (
-					(LoginSession::mag('P_LEDEN_READ') and ! LoginSession::mag('P_OUDLEDEN_READ') ) or ( LoginSession::mag('P_LEDEN_READ') and LoginSession::mag('P_OUDLEDEN_READ') and $zoekstatus != 'oudleden')
+					(LoginModel::mag('P_LEDEN_READ') and ! LoginModel::mag('P_OUDLEDEN_READ') ) or ( LoginModel::mag('P_LEDEN_READ') and LoginModel::mag('P_OUDLEDEN_READ') and $zoekstatus != 'oudleden')
 			) {
 				$statusfilter .= "status='S_LID' OR status='S_GASTLID' OR status='S_NOVIET' OR status='S_KRINGEL'";
 			}
@@ -1258,7 +1212,7 @@ class Zoeker {
 			# 1. ingelogde persoon dat alleen maar mag of
 			# 2. ingelogde persoon leden en oudleden mag zoeken, maar niet leden alleen heeft gekozen
 			if (
-					(!LoginSession::mag('P_LEDEN_READ') and LoginSession::mag('P_OUDLEDEN_READ') ) or ( LoginSession::mag('P_LEDEN_READ') and LoginSession::mag('P_OUDLEDEN_READ') and $zoekstatus != 'leden')
+					(!LoginModel::mag('P_LEDEN_READ') and LoginModel::mag('P_OUDLEDEN_READ') ) or ( LoginModel::mag('P_LEDEN_READ') and LoginModel::mag('P_OUDLEDEN_READ') and $zoekstatus != 'leden')
 			) {
 				if ($statusfilter != '')
 					$statusfilter .= " OR ";
@@ -1266,7 +1220,7 @@ class Zoeker {
 			}
 			# we zoeken in nobodies als
 			# de ingelogde persoon dat mag EN daarom gevraagd heeft
-			if (LoginSession::mag('P_LEDEN_MOD') and $zoekstatus === 'nobodies') {
+			if (LoginModel::mag('P_LEDEN_MOD') and $zoekstatus === 'nobodies') {
 				# alle voorgaande filters worden ongedaan gemaakt en er wordt alleen op nobodies gezocht
 				$statusfilter = "status='S_NOBODY' OR status='S_EXLID'";
 			}

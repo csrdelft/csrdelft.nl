@@ -29,7 +29,7 @@ class FileField implements FormElement, Validator {
 		$this->filter = $filterMime;
 		$this->behouden = $behouden;
 		foreach ($this->opties as $methode => $uploader) {
-			if (!$uploader->isBeschikbaar()) {
+			if (!$uploader->isAvailable()) {
 				unset($this->opties[$methode]);
 			} else {
 				$this->opties[$methode]->not_null = $this->notnull;
@@ -213,7 +213,7 @@ abstract class BestandUploader extends InputField {
 	 * 
 	 * @return boolean
 	 */
-	public abstract function isBeschikbaar();
+	public abstract function isAvailable();
 
 	/**
 	 * Bestand uiteindelijk opslaan op de juiste plek.
@@ -238,7 +238,7 @@ class BestandBehouden extends BestandUploader {
 		$this->model = $bestand;
 	}
 
-	public function isBeschikbaar() {
+	public function isAvailable() {
 		return (boolean) $this->model;
 	}
 
@@ -246,7 +246,7 @@ class BestandBehouden extends BestandUploader {
 		if (!parent::validate()) {
 			return false;
 		}
-		if (!$this->isBeschikbaar()) {
+		if (!$this->isAvailable()) {
 			$this->error = 'Er is geen bestand om te behouden.';
 		}
 		return $this->error === '';
@@ -302,7 +302,7 @@ class UploadHttp extends BestandUploader {
 		}
 	}
 
-	public function isBeschikbaar() {
+	public function isAvailable() {
 		return true;
 	}
 
@@ -383,7 +383,7 @@ class UploadFtp extends BestandUploader {
 		parent::__construct($name);
 		$this->subdir = $subdir;
 		$this->path = PUBLIC_FTP . $this->subdir;
-		if (!$this->isBeschikbaar() OR ( $subdir != '' AND ( startsWith($subdir, '/') OR ! endsWith($subdir, '/') ) )) {
+		if (!$this->isAvailable() OR ( $subdir != '' AND ( startsWith($subdir, '/') OR ! endsWith($subdir, '/') ) )) {
 			throw new Exception('Invalid FTP subdir');
 		}
 		if ($this->isPosted()) {
@@ -402,7 +402,7 @@ class UploadFtp extends BestandUploader {
 		}
 	}
 
-	public function isBeschikbaar() {
+	public function isAvailable() {
 		return file_exists($this->path) AND is_dir($this->path);
 	}
 
@@ -508,7 +508,7 @@ class UploadUrl extends BestandUploader {
 			$url_name = substr(trim($this->url), strrpos($this->url, '/') + 1);
 			$clean_name = preg_replace('/[^a-zA-Z0-9\s\.\-\_]/', '', $url_name);
 			// Bestand tijdelijk omslaan om mime-type te bepalen
-			$tmp_bestand = TMP_PATH . LoginSession::instance()->getUid() . '_' . time();
+			$tmp_bestand = TMP_PATH . LoginModel::getUid() . '_' . time();
 			if (!is_writable(TMP_PATH)) {
 				$this->error = 'TMP_PATH is niet beschrijfbaar';
 				return;
@@ -529,7 +529,7 @@ class UploadUrl extends BestandUploader {
 		}
 	}
 
-	public function isBeschikbaar() {
+	public function isAvailable() {
 		return $this->file_get_contents_available() OR function_exists('curl_init');
 	}
 
@@ -556,7 +556,7 @@ class UploadUrl extends BestandUploader {
 		if (!parent::validate()) {
 			return false;
 		}
-		if (!$this->isBeschikbaar()) {
+		if (!$this->isAvailable()) {
 			$this->error = 'PHP.ini configuratie: cURL of allow_url_fopen moet aan staan.';
 		} elseif (!url_like(urldecode($this->url))) {
 			$this->error = 'Ongeldige url.';

@@ -292,17 +292,13 @@ function isGeldigeDatum($datum) {
 }
 
 /**
- * print_r een variabele met <pre>-tags eromheen als:
- *  - het ip van de gebruiker een admin-ip is
- * of
- *  - de gebruiker het recht P_ADMIN heeft.
+ * print_r een variabele met <pre>-tags eromheen.
+ * 
  * @param string $sString
  * @param string $cssID
  */
 function debugprint($sString, $cssID = 'pubcie_debug') {
-	$adminIPs = array('145.94.61.229', '145.94.59.158', '192.168.16.101', '127.0.0.1');
-	$isFromAdminIP = isset($_SERVER['REMOTE_ADDR']) AND in_array($_SERVER['REMOTE_ADDR'], $adminIPs);
-	if ($isFromAdminIP OR LoginSession::mag('P_ADMIN')) {
+	if (LoginModel::mag('P_ADMIN')) {
 		ob_start();
 		echo '<pre class="' . $cssID . '">' . print_r($sString, true) . '</pre>';
 	}

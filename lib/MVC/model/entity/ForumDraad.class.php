@@ -24,7 +24,7 @@ class ForumDraad extends PersistentEntity {
 	 * Uid van auteur
 	 * @var string
 	 */
-	public $lid_id;
+	public $uid;
 	/**
 	 * Titel
 	 * @var string
@@ -49,7 +49,7 @@ class ForumDraad extends PersistentEntity {
 	 * Uid van de auteur van de laatst geplaatste of gewijzigde post
 	 * @var string
 	 */
-	public $laatste_lid_id;
+	public $laatste_wijziging_uid;
 	/**
 	 * Aantal zichtbare posts in dit topic
 	 * @var int
@@ -117,12 +117,12 @@ class ForumDraad extends PersistentEntity {
 	protected static $persistent_fields = array(
 		'draad_id'				 => array(T::Integer, false, 'auto_increment'),
 		'forum_id'				 => array(T::Integer),
-		'lid_id'				 => array(T::UID),
+		'uid'					 => array(T::UID),
 		'titel'					 => array(T::String),
 		'datum_tijd'			 => array(T::DateTime),
 		'laatst_gewijzigd'		 => array(T::DateTime, true),
 		'laatste_post_id'		 => array(T::Integer, true),
-		'laatste_lid_id'		 => array(T::UID, true),
+		'laatste_wijziging_uid'	 => array(T::UID, true),
 		'aantal_posts'			 => array(T::Integer),
 		'gesloten'				 => array(T::Boolean),
 		'verwijderd'			 => array(T::Boolean),
@@ -143,7 +143,7 @@ class ForumDraad extends PersistentEntity {
 	protected static $table_name = 'forum_draden';
 
 	public function magVerbergen() {
-		return !$this->belangrijk AND LoginSession::mag('P_LOGGED_IN');
+		return !$this->belangrijk AND LoginModel::mag('P_LOGGED_IN');
 	}
 
 	public function isVerborgen() {
@@ -154,7 +154,7 @@ class ForumDraad extends PersistentEntity {
 	}
 
 	public function magVolgen() {
-		return LoginSession::mag('P_LOGGED_IN');
+		return LoginModel::mag('P_LOGGED_IN');
 	}
 
 	public function isGevolgd() {
@@ -163,7 +163,7 @@ class ForumDraad extends PersistentEntity {
 		}
 		return $this->volgen;
 	}
-	
+
 	public function getVolgers() {
 		if (!isset($this->volgers)) {
 			$this->volgers = ForumDradenVolgenModel::instance()->getVolgersVanDraad($this);

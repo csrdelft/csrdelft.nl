@@ -203,6 +203,9 @@ class Formulier implements View, Validator {
 				$errors[$fieldName] = $field->getError();
 			}
 		}
+		if (empty($errors)) {
+			return null;
+		}
 		return $errors;
 	}
 

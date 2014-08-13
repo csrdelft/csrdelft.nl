@@ -229,7 +229,7 @@ class Maaltijd implements Agendeerbaar {
 
 	// Agendeerbaar ############################################################
 
-	public function getUID() {
+	public function getUUID() {
 		return $this->maaltijd_id . '@maaltijd.csrdelft.nl';
 	}
 
@@ -266,13 +266,13 @@ class Maaltijd implements Agendeerbaar {
 	public function magMaaltijdlijstTonen() {
 		// Er kunnen meerdere maaltijden op 1 dag zijn terwijl er maar 1 kookploeg is (een taak kan maar aan 1 maaltijd gekoppeld zijn)
 		$taken = CorveeTakenModel::getTakenVoorAgenda($this->getBeginMoment(), $this->getBeginMoment());
-		$uid = LoginSession::instance()->getUid();
+		$uid = LoginModel::getUid();
 		foreach ($taken as $taak) {
-			if ($taak->getLidId() === $uid && $taak->getMaaltijdId() !== null) { // het moet wel maaltijdcorvee zijn (vanwege op datum hierboven)
+			if ($taak->getUid() === $uid && $taak->getMaaltijdId() !== null) { // het moet wel maaltijdcorvee zijn (vanwege op datum hierboven)
 				return $taak; // de taak die toegang geeft tot de maaltijdlijst
 			}
 		}
-		if (opConfide() || LoginSession::mag('P_MAAL_MOD')) {
+		if (opConfide() || LoginModel::mag('P_MAAL_MOD')) {
 			return true;
 		}
 		return false;

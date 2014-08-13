@@ -1,7 +1,7 @@
 <?php
 
 /**
- * mysql.class.php
+ * MijnSqli.class.php
  * 
  * @deprecated
  * 
@@ -9,7 +9,7 @@
  * 
  * MySQLi wrapper
  */
-class MySql {
+class MijnSqli {
 
 	//cached instantie van de klasse
 	static private $mySqli;
@@ -24,7 +24,7 @@ class MySql {
 	public static function instance() {
 		//als er nog geen instantie gemaakt is, die nu maken
 		if (!isset(self::$mySqli)) {
-			self::$mySqli = new MySql();
+			self::$mySqli = new MijnSqli();
 		}
 		return self::$mySqli;
 	}

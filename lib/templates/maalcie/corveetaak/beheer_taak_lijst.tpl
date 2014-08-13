@@ -24,18 +24,18 @@
 {assign var=aantal value=$taak->getAantalKeerGemaild()}
 {if !$taak->getIsVerwijderd() and (!isset($maaltijd) or !$maaltijd->getIsVerwijderd())}
 	{assign var="wijzigbaar" value="true"}
-	{if $taak->getLidId()}
+	{if $taak->getUid()}
 		{$aantal}x
 	{/if}
 	<div style="float: right;">
-	{if $taak->getLidId()}
+	{if $taak->getUid()}
 		<a href="{Instellingen::get('taken', 'url')}/email/{$taak->getTaakId()}" title="Verstuur een (extra) herinnering voor deze taak" class="knop post confirm">
 	{/if}
 {/if}
 {if $taak->getIsTelaatGemaild()}
 			{icon get="email_error" title="Laatste herinnering te laat verstuurd!&#013;"|cat:$taak->getWanneerGemaild()}
 {elseif $aantal < 1}
-	{if $taak->getLidId()}
+	{if $taak->getUid()}
 			{icon get="email" title="Niet gemaild"}
 	{/if}
 {elseif $aantal === 1}
@@ -44,7 +44,7 @@
 			{icon get="email_open" title=$taak->getWanneerGemaild()}
 {/if}
 {if isset($wijzigbaar)}
-	{if $taak->getLidId()}
+	{if $taak->getUid()}
 		</a>
 	{/if}
 	</div>
@@ -52,15 +52,15 @@
 	</td>
 	<td>{$taak->getDatum()|date_format:"%a %e %b"}</td>
 	<td style="width: 100px;">{$taak->getCorveeFunctie()->naam}</td>
-	<td class="taak-{if $taak->getLidId()}toegewezen{elseif  $taak->getBeginMoment() < strtotime(Instellingen::get('corvee', 'waarschuwing_taaktoewijzing_vooraf'))}warning{else}open{/if}" style="font-weight: normal;">
+	<td class="taak-{if $taak->getUid()}toegewezen{elseif  $taak->getBeginMoment() < strtotime(Instellingen::get('corvee', 'waarschuwing_taaktoewijzing_vooraf'))}warning{else}open{/if}" style="font-weight: normal;">
 {if isset($wijzigbaar)}
-		<a href="{Instellingen::get('taken', 'url')}/toewijzen/{$taak->getTaakId()}" title="Deze taak toewijzen aan een lid&#013;Sleep om te ruilen" class="knop post popup dragobject ruilen" id="taak-{$taak->getTaakId()}"{if $taak->getLidId()} lid_id="{$taak->getLidId()}">{icon get="user_green"}{else}>{icon get="user_red"}{/if}</a>
+		<a href="{Instellingen::get('taken', 'url')}/toewijzen/{$taak->getTaakId()}" title="Deze taak toewijzen aan een lid&#013;Sleep om te ruilen" class="knop post popup dragobject ruilen" id="taak-{$taak->getTaakId()}"{if $taak->getUid()} uid="{$taak->getUid()}">{icon get="user_green"}{else}>{icon get="user_red"}{/if}</a>
 {/if}
-{if $taak->getLidId()}
-		&nbsp;{Lid::naamLink($taak->getLidId(), Instellingen::get('corvee', 'weergave_ledennamen_beheer'), Instellingen::get('corvee', 'weergave_link_ledennamen'))}
+{if $taak->getUid()}
+		&nbsp;{Lid::naamLink($taak->getUid(), Instellingen::get('corvee', 'weergave_ledennamen_beheer'), Instellingen::get('corvee', 'weergave_link_ledennamen'))}
 {/if}
 	</td>
-	<td{if $taak->getLidId() and ($taak->getPunten() !== $taak->getPuntenToegekend() or $taak->getBonusMalus() !== $taak->getBonusToegekend()) and $taak->getBeginMoment() < strtotime(Instellingen::get('corvee', 'waarschuwing_puntentoewijzing_achteraf'))} class="taak-warning"{/if}>
+	<td{if $taak->getUid() and ($taak->getPunten() !== $taak->getPuntenToegekend() or $taak->getBonusMalus() !== $taak->getBonusToegekend()) and $taak->getBeginMoment() < strtotime(Instellingen::get('corvee', 'waarschuwing_puntentoewijzing_achteraf'))} class="taak-warning"{/if}>
 		{$taak->getPuntenToegekend()}
 {if $taak->getBonusToegekend() > 0}
 	+
@@ -75,7 +75,7 @@
 {if $taak->getBonusMalus() !== 0}
 	{$taak->getBonusMalus()}
 {/if}
-{if isset($wijzigbaar) and $taak->getLidId()}
+{if isset($wijzigbaar) and $taak->getUid()}
 		<div style="float: right;">
 	{if $taak->getWanneerToegekend()}
 		<a href="{Instellingen::get('taken', 'url')}/puntenintrekken/{$taak->getTaakId()}" title="Punten intrekken" class="knop post">{icon get="medal_silver_delete"}</a>

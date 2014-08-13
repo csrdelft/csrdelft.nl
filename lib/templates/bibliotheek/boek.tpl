@@ -10,7 +10,7 @@
 	<li>
 		<a href="/bibliotheek/wenslijst" title="Wenslijst van bibliothecaris">Wenslijst</a>
 	</li>
-	{if LoginSession::mag('P_BIEB_READ')}
+	{if LoginModel::mag('P_BIEB_READ')}
 		<li>
 			<a href="/bibliotheek/rubrieken" title="Rubriekenoverzicht">Rubrieken</a>
 		</li>
@@ -152,7 +152,7 @@
 									{else}
 										<a class="knop" href="/communicatie/bibliotheek/exemplaarlenen/{$boek->getId()}/{$exemplaar.id}" title="Leen dit boek" onclick="return confirm('U wilt dit boek van {$exemplaar.eigenaar_uid|csrnaam:'civitas':'plain'} lenen?')">{icon get="lorry"} Exemplaar lenen</a>
 									{/if}
-								{elseif $exemplaar.status=='uitgeleend' AND LoginSession::instance()->getUid()==$exemplaar.uitgeleend_uid AND $exemplaar.uitgeleend_uid!=$exemplaar.eigenaar_uid}
+								{elseif $exemplaar.status=='uitgeleend' AND LoginModel::getUid()==$exemplaar.uitgeleend_uid AND $exemplaar.uitgeleend_uid!=$exemplaar.eigenaar_uid}
 									<a class="knop" href="/communicatie/bibliotheek/exemplaarteruggegeven/{$boek->getId()}/{$exemplaar.id}" title="Boek heb ik teruggegeven" onclick="return confirm('U heeft dit exemplaar van {$exemplaar.eigenaar_uid|csrnaam:'civitas':'plain'} teruggegeven?')">{icon get="lorry_go"} Teruggegeven</a>
 								{/if}
 								{if $boek->isEigenaar($exemplaar.id)}

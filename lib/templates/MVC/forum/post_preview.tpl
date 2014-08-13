@@ -4,9 +4,9 @@
 			<tbody>
 				<tr>
 					<td class="auteur">
-						{$post->lid_id|csrnaam:'user':'pain'}:<br />
+						{$post->uid|csrnaam:'user':'pain'}:<br />
 						<span class="moment">
-							{if LoginSession::instelling('forum_datumWeergave') === 'relatief'}
+							{if LidInstellingen::get('forum', 'datumWeergave') === 'relatief'}
 								{$post->datum_tijd|reldate}
 							{else}
 								{$post->datum_tijd}

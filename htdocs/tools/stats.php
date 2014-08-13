@@ -3,7 +3,7 @@
 
 require_once 'configuratie.include.php';
 
-if(!LoginSession::mag('P_ADMIN')){
+if(!LoginModel::mag('P_ADMIN')){
 	header('location: '.CSR_ROOT);
 	exit;
 }
@@ -26,7 +26,7 @@ class stats extends TemplateView{
 	}
 
 	function hoofdLog(){
-		$db=MySql::instance();
+		$db=MijnSqli::instance();
 		$sLogQuery="
 			SELECT
 				log.uid AS uid,  moment,
@@ -83,7 +83,7 @@ class stats extends TemplateView{
 			echo 'geen correct uid opgegeven.';
 
 		}
-		$db=MySql::instance();
+		$db=MijnSqli::instance();
 		$sLogQuery="
 			SELECT
 				log.uid AS uid, moment,
@@ -130,7 +130,7 @@ class stats extends TemplateView{
 		echo '</table>';
 	}
 	function ipLog($ip){
-		$db=MySql::instance();
+		$db=MijnSqli::instance();
 		$sLogQuery="
 			SELECT
 				log.uid AS uid, moment,

@@ -90,7 +90,7 @@ class KwalificatieForm extends PopupForm {
 		$this->titel = 'Kwalificatie toewijzen';
 		$this->css_classes[] = 'PreventUnchanged';
 
-		$fields[] = new LidField('lid_id', $kwalificatie->lid_id, 'Naam of lidnummer', 'leden');
+		$fields[] = new LidField('uid', $kwalificatie->uid, 'Naam of lidnummer', 'leden');
 		$fields[] = new FormButtons();
 
 		$this->addFields($fields);

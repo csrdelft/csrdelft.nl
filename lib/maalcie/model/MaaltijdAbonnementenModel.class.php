@@ -32,7 +32,7 @@ class MaaltijdAbonnementenModel {
 			$mrid = $abo->getMaaltijdRepetitieId();
 			if (array_key_exists($mrid, $repById)) { // weergeven
 				$abo->setMaaltijdRepetitie($repById[$mrid]);
-				$abo->setVanLidId($uid);
+				$abo->setVanUid($uid);
 				$lijst[$mrid] = $abo;
 			}
 		}
@@ -42,7 +42,7 @@ class MaaltijdAbonnementenModel {
 				if (!array_key_exists($mrid, $lijst)) { // uitgeschakelde abonnementen weergeven
 					$abo = new MaaltijdAbonnement($repetitie->getMaaltijdRepetitieId(), null);
 					$abo->setMaaltijdRepetitie($repetitie);
-					$abo->setVanLidId($uid);
+					$abo->setVanUid($uid);
 					$lijst[$mrid] = $abo;
 				}
 			}
@@ -55,7 +55,7 @@ class MaaltijdAbonnementenModel {
 		if (!is_int($mrid) || $mrid <= 0) {
 			throw new Exception('Get heeft abonnement faalt: Invalid $mrid =' . $mrid);
 		}
-		$sql = 'SELECT EXISTS (SELECT * FROM mlt_abonnementen WHERE mlt_repetitie_id=? AND lid_id=?)';
+		$sql = 'SELECT EXISTS (SELECT * FROM mlt_abonnementen WHERE mlt_repetitie_id=? AND uid=?)';
 		$values = array($mrid, $uid);
 		$query = \Database::instance()->prepare($sql);
 		$query->execute($values);
@@ -83,7 +83,7 @@ class MaaltijdAbonnementenModel {
 			} else { // uitgeschakelde abonnementen
 				$abonnement = new MaaltijdAbonnement($mrid, null);
 			}
-			$abonnement->setVanLidId($uid);
+			$abonnement->setVanUid($uid);
 			$abonnement->setMaaltijdRepetitie($repById[$mrid]);
 			if ($alleenWaarschuwingen) {
 				if ($abo['abo_err']) {
@@ -105,7 +105,7 @@ class MaaltijdAbonnementenModel {
 			foreach ($matrix as $uid => $abos) {
 				if (!array_key_exists($mrid, $abos)) {
 					$abonnement = new MaaltijdAbonnement(($ingeschakeld ? $mrid : null), null);
-					$abonnement->setVanLidId($uid);
+					$abonnement->setVanUid($uid);
 					$abonnement->setMaaltijdRepetitie($repById[$mrid]);
 					$matrix[$uid][$mrid] = $abonnement;
 				}
@@ -121,7 +121,7 @@ class MaaltijdAbonnementenModel {
 			$sql.= ' abonnement_filter,'; // controleer later
 			$sql.= ' (abonneerbaar = false) AS abo_err, (lid.kring = 0) AS kring_err, (lid.status NOT IN("S_LID", "S_GASTLID", "S_NOVIET")) AS status_err,';
 		}
-		$sql.= ' (EXISTS ( SELECT * FROM mlt_abonnementen WHERE mlt_repetitie_id = mrid AND lid_id = uid )) AS abo';
+		$sql.= ' (EXISTS ( SELECT * FROM mlt_abonnementen WHERE mlt_repetitie_id = mrid AND uid = uid )) AS abo';
 		$sql.= ' FROM lid, mlt_repetities';
 		$values = array();
 		if ($alleenWaarschuwingen) {
@@ -165,14 +165,14 @@ class MaaltijdAbonnementenModel {
 	 * @return MaaltijdAbonnement[]
 	 */
 	private static function loadAbonnementen($mrid = null, $uid = null) {
-		$sql = 'SELECT mlt_repetitie_id, lid_id, wanneer_ingeschakeld';
+		$sql = 'SELECT mlt_repetitie_id, uid, wanneer_ingeschakeld';
 		$sql.= ' FROM mlt_abonnementen';
 		$values = array();
 		if (is_int($mrid)) {
 			$sql.= ' WHERE mlt_repetitie_id=?';
 			$values[] = $mrid;
 		} elseif ($uid !== null) {
-			$sql.= ' WHERE lid_id=?';
+			$sql.= ' WHERE uid=?';
 			$values[] = $uid;
 		}
 		$db = \Database::instance();
@@ -194,7 +194,7 @@ class MaaltijdAbonnementenModel {
 			throw new Exception('Niet toegestaan vanwege aanmeldrestrictie: ' . $repetitie->getAbonnementFilter());
 		}
 		$abo_aantal = self::newAbonnement($mrid, $uid);
-		$abo_aantal[0]->setVanLidId($uid);
+		$abo_aantal[0]->setVanUid($uid);
 		return $abo_aantal;
 	}
 
@@ -219,7 +219,7 @@ class MaaltijdAbonnementenModel {
 		try {
 			$db->beginTransaction();
 			$sql = 'INSERT IGNORE INTO mlt_abonnementen';
-			$sql.= ' (mlt_repetitie_id, lid_id, wanneer_ingeschakeld)';
+			$sql.= ' (mlt_repetitie_id, uid, wanneer_ingeschakeld)';
 			$values = array($mrid);
 			if ($uid !== null) {
 				$sql.= ' VALUES (?, ?, ?)';
@@ -269,7 +269,7 @@ class MaaltijdAbonnementenModel {
 		}
 		$aantal = self::deleteAbonnementen($mrid, $uid);
 		$abo = new MaaltijdAbonnement($mrid, null);
-		$abo->setVanLidId($uid);
+		$abo->setVanUid($uid);
 		return array($abo, $aantal);
 	}
 
@@ -311,7 +311,7 @@ class MaaltijdAbonnementenModel {
 		$sql.= ' WHERE mlt_repetitie_id=?';
 		$values = array($mrid);
 		if ($uid !== null) {
-			$sql.= ' AND lid_id=?';
+			$sql.= ' AND uid=?';
 			$values[] = $uid;
 		}
 		$db = \Database::instance();

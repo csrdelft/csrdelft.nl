@@ -16,7 +16,7 @@
 			<thead>
 				<tr>
 					<th style="font-weight: normal;">
-						{if LoginSession::instelling('forum_datumWeergave') === 'relatief'}
+						{if LidInstellingen::get('forum', 'datumWeergave') === 'relatief'}
 							{$draad->datum_tijd|reldate}
 						{else}
 							{$draad->datum_tijd}

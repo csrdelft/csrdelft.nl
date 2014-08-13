@@ -27,7 +27,7 @@ class GroepLid extends PersistentEntity {
 	 * Uid van lid
 	 * @var string
 	 */
-	public $lid_id;
+	public $uid;
 	/**
 	 * Opmerking bij lidmaatschap
 	 * @see GroepFunctie
@@ -58,7 +58,7 @@ class GroepLid extends PersistentEntity {
 	 * Uid van aanmelder
 	 * @var string
 	 */
-	public $door_lid_id;
+	public $door_uid;
 	/**
 	 * Database table fields
 	 * @var array
@@ -66,19 +66,19 @@ class GroepLid extends PersistentEntity {
 	protected static $persistent_fields = array(
 		'groep_type' => array(T::String),
 		'groep_id' => array(T::Integer),
-		'lid_id' => array(T::UID),
+		'uid' => array(T::UID),
 		'opmerking' => array(T::String),
 		'lid_sinds' => array(T::DateTime),
 		'lid_tot' => array(T::DateTime, true),
 		'status' => array(T::Enumeration, false, 'GroepStatus'),
 		'prioriteit' => array(T::Integer),
-		'door_lid_id' => array(T::UID)
+		'door_uid' => array(T::UID)
 	);
 	/**
 	 * Database primary key
 	 * @var array
 	 */
-	protected static $primary_keys = array('groep_type', 'groep_id', 'lid_id');
+	protected static $primary_keys = array('groep_type', 'groep_id', 'uid');
 	/**
 	 * Database table name
 	 * @var string

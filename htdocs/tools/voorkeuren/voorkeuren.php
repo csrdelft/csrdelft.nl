@@ -1,5 +1,5 @@
 <?php 
 require_once 'configuratie.include.php';
-$uid=LoginSession::instance()->getUid();
+$uid=LoginModel::getUid();
 header('Location: /communicatie/profiel/'.$uid.'/voorkeuren');
 ?>

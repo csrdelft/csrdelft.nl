@@ -38,9 +38,9 @@ class Document extends Bestand {
 				//Bij $this->ID==0 gaat het om een nieuw document. Hier
 				//zetten we de defaultwaarden voor het nieuwe document.
 				$this->setToegevoegd(getDateTime());
-				$this->setEigenaar(LoginSession::instance()->getUid());
+				$this->setEigenaar(LoginModel::getUid());
 			} else {
-				$db = MySql::instance();
+				$db = MijnSqli::instance();
 				$query = "
 					SELECT ID, naam, catID, filename, filesize, mimetype, toegevoegd, eigenaar, leesrechten
 					FROM document
@@ -66,7 +66,7 @@ class Document extends Bestand {
 	}
 
 	public function save() {
-		$db = MySql::instance();
+		$db = MijnSqli::instance();
 		if ($this->getID() == 0) {
 			$query = "
 				INSERT INTO document (
@@ -107,7 +107,7 @@ class Document extends Bestand {
 		$deletequery = 'DELETE FROM document WHERE ID=' . $this->getID();
 		//zorg dat $this->deleteFile geen exceptions gooit als er geen bestand bestaat
 		//voor het huidige document, zodat verwijderen gewoon lukt.
-		return $this->deleteFile(false) && MySql::instance()->query($deletequery);
+		return $this->deleteFile(false) && MijnSqli::instance()->query($deletequery);
 	}
 
 	public function getID() {
@@ -194,13 +194,13 @@ class Document extends Bestand {
 
 	public function isEigenaar($uid = null) {
 		if ($uid == null) {
-			LoginSession::instance()->getUid();
+			LoginModel::getUid();
 		}
 		return $uid == $this->getEigenaar();
 	}
 
 	public function magBewerken() {
-		return $this->isEigenaar() OR LoginSession::mag('P_DOCS_MOD');
+		return $this->isEigenaar() OR LoginModel::mag('P_DOCS_MOD');
 	}
 
 	public function getLeesrechten() {
@@ -208,11 +208,11 @@ class Document extends Bestand {
 	}
 
 	public function magBekijken() {
-		return LoginSession::mag($this->getLeesrechten());
+		return LoginModel::mag($this->getLeesrechten());
 	}
 
 	public function magVerwijderen() {
-		return LoginSession::mag('P_DOCS_MOD');
+		return LoginModel::mag('P_DOCS_MOD');
 	}
 
 	public function getFriendlyMimetype() {

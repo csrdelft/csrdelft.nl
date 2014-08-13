@@ -72,7 +72,7 @@ function showTooltip(x, y, contents) {
 </script>
 <div id="saldografiek" style="display: none; width: 670px; height: 220px;"></div>
 
-{if !LoginSession::instance()->isSelf($profiel->getUid())}
+{if !LoginModel::getUid() === $profiel->getUid()}
 	<br /><a class="knop" onclick="jQuery('#saldografiek').show(); makePlot(); jQuery(this).remove()">Toon saldografiek</a>
 {else}
 	<script>{literal}

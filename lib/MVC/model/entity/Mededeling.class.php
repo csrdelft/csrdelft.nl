@@ -14,6 +14,11 @@ class Mededeling extends PersistentEntity {
 	 */
 	public $mededeling_id;
 	/**
+	 * Uid van auteur
+	 * @var string
+	 */
+	public $uid;
+	/**
 	 * Bestuur, commissie, lid
 	 * @var string
 	 */
@@ -53,14 +58,15 @@ class Mededeling extends PersistentEntity {
 	 * @var array
 	 */
 	protected static $persistent_fields = array(
-		'$mededeling_id' => array(T::Integer, false, 'auto_increment'),
-		'type' => array(T::String),
-		'tekst' => array(T::Text),
-		'zichtbaar_voor' => array(T::String),
-		'zichtbaar_vanaf' => array(T::DateTime),
-		'zichtbaar_tot' => array(T::DateTime),
-		'prioriteit' => array(T::Integer),
-		'afbeelding_url' => array(T::Text)
+		'mededeling_id'		 => array(T::Integer, false, 'auto_increment'),
+		'uid'				 => array(T::UID),
+		'type'				 => array(T::String),
+		'tekst'				 => array(T::Text),
+		'zichtbaar_voor'	 => array(T::String),
+		'zichtbaar_vanaf'	 => array(T::DateTime),
+		'zichtbaar_tot'		 => array(T::DateTime),
+		'prioriteit'		 => array(T::Integer),
+		'afbeelding_url'	 => array(T::Text)
 	);
 	/**
 	 * Database primary key

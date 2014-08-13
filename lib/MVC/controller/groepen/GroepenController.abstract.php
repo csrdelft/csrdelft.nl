@@ -38,7 +38,7 @@ abstract class GroepenController extends Controller {
 	 * @return boolean
 	 */
 	protected function mag($action) {
-		if (!LoginSession::mag('P_LEDEN_READ')) {
+		if (!LoginModel::mag('P_LEDEN_READ')) {
 			$this->geentoegang();
 		}
 		switch ($action) {
@@ -108,15 +108,15 @@ abstract class GroepenController extends Controller {
 		//TODO
 	}
 
-	public function aanmelden($id, $lid_id) {
+	public function aanmelden($id, $uid) {
 		//TODO
 	}
 
-	public function wijzigen($id, $lid_id) {
+	public function wijzigen($id, $uid) {
 		//TODO
 	}
 
-	public function afmelden($id, $lid_id) {
+	public function afmelden($id, $uid) {
 		//TODO
 	}
 

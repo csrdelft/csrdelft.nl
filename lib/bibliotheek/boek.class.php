@@ -45,7 +45,7 @@ class Boek {
 		} else {
 			$this->id = (int) $init;
 			if ($this->getId() != 0) {
-				$db = MySql::instance();
+				$db = MijnSqli::instance();
 				$query = "
 					SELECT id, titel, auteur, categorie_id, uitgavejaar, uitgeverij, paginas, taal, isbn, code,
 					IF((
@@ -151,7 +151,7 @@ class Boek {
 	 * @return array
 	 */
 	public function getEigenaars($exemplaarid = null) {
-		$db = MySql::instance();
+		$db = MijnSqli::instance();
 		if ($exemplaarid == null) {
 			$where = "WHERE boek_id =" . (int) $this->getId();
 		} else {
@@ -179,7 +179,7 @@ class Boek {
 	 * 		boek mag alleen door admins verwijdert worden
 	 */
 	public function magVerwijderen() {
-		return LoginSession::mag('groep:BAS-FCie,P_BIEB_MOD,P_ADMIN');
+		return LoginModel::mag('groep:BAS-FCie,P_BIEB_MOD,P_ADMIN');
 	}
 
 	/**
@@ -189,14 +189,14 @@ class Boek {
 	 * 		boek mag alleen door admins of door eigenaar v.e. exemplaar bewerkt worden
 	 */
 	public function magBewerken() {
-		return LoginSession::mag('P_BIEB_EDIT') OR $this->isEigenaar() OR $this->magVerwijderen();
+		return LoginModel::mag('P_BIEB_EDIT') OR $this->isEigenaar() OR $this->magVerwijderen();
 	}
 
 	/**
 	 * Iedereen met extra rechten en zij met BIEB_READ mogen
 	 */
 	public function magBekijken() {
-		return LoginSession::mag('P_BIEB_READ') OR $this->magBewerken();
+		return LoginModel::mag('P_BIEB_READ') OR $this->magBewerken();
 	}
 
 	/**
@@ -213,7 +213,7 @@ class Boek {
 	public function isEigenaar($exemplaarid = null) {
 		$eigenaars = $this->getEigenaars($exemplaarid);
 		foreach ($eigenaars as $eigenaar) {
-			if ($eigenaar == LoginSession::instance()->getUid()) {
+			if ($eigenaar == LoginModel::getUid()) {
 				return true;
 			} elseif ($eigenaar == 'x222' AND $this->isBASFCie()) {
 				return true;
@@ -223,7 +223,7 @@ class Boek {
 	}
 
 	public function isBASFCie() {
-		return LoginSession::mag('groep:BAS-FCie');
+		return LoginModel::mag('groep:BAS-FCie');
 	}
 
 	public function isBiebboek($exemplaarid = null) {
@@ -243,7 +243,7 @@ class Boek {
 	 * @return bool
 	 */
 	public function isLener($exemplaarid) {
-		$db = MySql::instance();
+		$db = MijnSqli::instance();
 		$qLener = "
 			SELECT uitgeleend_uid 
 			FROM `biebexemplaar`
@@ -251,7 +251,7 @@ class Boek {
 		$result = $db->query($qLener);
 		if ($db->numRows($result) > 0) {
 			$lener = $db->next($result);
-			return $lener['uitgeleend_uid'] == LoginSession::instance()->getUid();
+			return $lener['uitgeleend_uid'] == LoginModel::getUid();
 		} else {
 			$this->error.= $db->error();
 			return false;
@@ -268,7 +268,7 @@ class Boek {
 			$this->error .= 'Kan geen lege boek met id=0 wegkekken. Boek::delete()';
 			return false;
 		}
-		$db = MySql::instance();
+		$db = MijnSqli::instance();
 		$qDeleteBeschrijvingen = "DELETE FROM biebbeschrijving WHERE boek_id=" . $this->getId() . ";";
 		$qDeleteExemplaren = "DELETE FROM biebexemplaar WHERE boek_id=" . $this->getId() . " LIMIT 1;";
 		$qDeleteBoek = "DELETE FROM biebboek WHERE id=" . $this->getId() . " LIMIT 1;";
@@ -290,7 +290,7 @@ class Boek {
 	 * @return bool|int
 	 */
 	public function loadExemplaren() {
-		$db = MySql::instance();
+		$db = MijnSqli::instance();
 		$query = "
 			SELECT id, eigenaar_uid, opmerking, uitgeleend_uid, toegevoegd, status, uitleendatum
 			FROM biebexemplaar
@@ -341,7 +341,7 @@ class Boek {
 	 * 			of anders lege string
 	 */
 	public function getStatusExemplaar($exemplaarid) {
-		$db = MySql::instance();
+		$db = MijnSqli::instance();
 		$query = "
 			SELECT id, status
 			FROM biebexemplaar
@@ -368,7 +368,7 @@ class Boek {
 		if (!Lid::isValidUid($eigenaar)) {
 			return false;
 		}
-		$db = MySql::instance();
+		$db = MijnSqli::instance();
 		$qSave = "
 			INSERT INTO biebexemplaar (
 				boek_id, eigenaar_uid, toegevoegd, status
@@ -393,7 +393,7 @@ class Boek {
 	 * 			false mislukt
 	 */
 	public function verwijderExemplaar($id) {
-		$db = MySql::instance();
+		$db = MijnSqli::instance();
 		$qDeleteExemplaar = "DELETE FROM biebexemplaar WHERE id=" . (int) $id . " LIMIT 1;";
 		return $db->query($qDeleteExemplaar);
 	}
@@ -570,7 +570,7 @@ class NieuwBoek extends Boek {
 	 */
 	public function save() {
 
-		$db = MySql::instance();
+		$db = MijnSqli::instance();
 		$qSave = "
 			INSERT INTO biebboek (
 				titel, auteur, categorie_id, uitgavejaar, uitgeverij, paginas, taal, isbn, code
@@ -591,7 +591,7 @@ class NieuwBoek extends Boek {
 			if ($this->biebboek == 'ja') {
 				$eigenaar = 'x222'; //C.S.R.Bieb is eigenaar
 			} else {
-				$eigenaar = LoginSession::instance()->getUid();
+				$eigenaar = LoginModel::getUid();
 			}
 			return $this->addExemplaar($eigenaar);
 		}
@@ -726,7 +726,7 @@ class BewerkBoek extends Boek {
 	 * @return bool
 	 */
 	public function saveProperty($entry) {
-		$db = MySql::instance();
+		$db = MijnSqli::instance();
 		$key = $entry; //op een enkele uitzondering na
 		$table = "biebboek";
 		$id = $this->getId();
@@ -850,10 +850,10 @@ class BewerkBoek extends Boek {
 			return false;
 		}
 		if ($lener == null) {
-			$lener = LoginSession::instance()->getUid();
+			$lener = LoginModel::getUid();
 		}
 
-		$db = MySql::instance();
+		$db = MijnSqli::instance();
 		$query = "
 			UPDATE biebexemplaar SET
 				uitgeleend_uid = '" . $db->escape($lener) . "',
@@ -882,7 +882,7 @@ class BewerkBoek extends Boek {
 			return false;
 		}
 
-		$db = MySql::instance();
+		$db = MijnSqli::instance();
 		$query = "
 			UPDATE biebexemplaar SET
 				status = 'teruggegeven'
@@ -907,7 +907,7 @@ class BewerkBoek extends Boek {
 			$this->error .= 'Boek is niet uitgeleend. ';
 			return false;
 		}
-		$db = MySql::instance();
+		$db = MijnSqli::instance();
 		$query = "
 			UPDATE biebexemplaar SET
 				uitgeleend_uid = '',
@@ -937,7 +937,7 @@ class BewerkBoek extends Boek {
 			return false;
 		}
 
-		$db = MySql::instance();
+		$db = MijnSqli::instance();
 		$query = "
 			UPDATE biebexemplaar SET
 				status = 'vermist',
@@ -964,7 +964,7 @@ class BewerkBoek extends Boek {
 			return false;
 		}
 
-		$db = MySql::instance();
+		$db = MijnSqli::instance();
 		$query = "
 			UPDATE biebexemplaar SET
 				status = 'beschikbaar'
@@ -1016,7 +1016,7 @@ class BewerkBoek extends Boek {
 	 * laad beschrijvingen van dit boek, inclusief Beschrijving(0) indien nodig.
 	 */
 	protected function loadBeschrijvingen() {
-		$db = MySql::instance();
+		$db = MijnSqli::instance();
 		$query = "
 			SELECT id, boek_id, schrijver_uid, beschrijving, toegevoegd, bewerkdatum
 			FROM biebbeschrijving

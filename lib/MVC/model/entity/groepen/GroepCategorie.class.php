@@ -82,7 +82,7 @@ class GroepCategorie extends PersistentEntity {
 	protected static $table_name = 'groep_categorien';
 
 	public function magBeheren() {
-		return LoginSession::mag($this->rechten_beheren);
+		return LoginModel::mag($this->rechten_beheren);
 	}
 
 }

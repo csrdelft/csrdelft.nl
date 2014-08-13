@@ -11,13 +11,13 @@
 <tr id="forumpost-row-{$post->post_id}"{if $post->gefilterd} style="display:none;"{/if}>
 	<td class="auteur">
 		<a href="/forum/reactie/{$post->post_id}#{$post->post_id}" id="{$post->post_id}" class="postlink" title="Link naar deze post">&rarr;</a>
-		{$post->lid_id|csrnaam:'user':'visitekaartje'}
-		{if LoginSession::mag('P_LEDEN_READ')}
-			<span tabindex="0" id="t{$post->lid_id}-{$post->post_id}" class="togglePasfoto"{if LoginSession::instelling('forum_toonpasfotos') == 'nee'} title="Toon pasfoto">&raquo;{else}>{/if}</span>
+		{$post->uid|csrnaam:'user':'visitekaartje'}
+		{if LoginModel::mag('P_LEDEN_READ')}
+			<span tabindex="0" id="t{$post->uid}-{$post->post_id}" class="togglePasfoto"{if LidInstellingen::get('forum', 'toonpasfotos') == 'nee'} title="Toon pasfoto">&raquo;{else}>{/if}</span>
 		{/if}<br />
-		<div id="p{$post->post_id}" class="forumpasfoto{if LoginSession::instelling('forum_toonpasfotos') == 'nee'} verborgen">{elseif LoginSession::mag('P_LEDEN_READ')}">{$post->lid_id|csrnaam:'pasfoto'}{/if}</div>
+		<div id="p{$post->post_id}" class="forumpasfoto{if LidInstellingen::get('forum', 'toonpasfotos') == 'nee'} verborgen">{elseif LoginModel::mag('P_LEDEN_READ')}">{$post->uid|csrnaam:'pasfoto'}{/if}</div>
 		<span class="moment">
-			{if LoginSession::instelling('forum_datumWeergave') === 'relatief'}
+			{if LidInstellingen::get('forum', 'datumWeergave') === 'relatief'}
 				{$post->datum_tijd|reldate}
 			{else}
 				{$post->datum_tijd}
@@ -34,9 +34,9 @@
 				{if !$draad->gesloten AND $deel->magPosten() AND !$post->wacht_goedkeuring}
 					<a href="#reageren" class="knop" onclick="forumCiteren({$post->post_id});" title="Citeer bericht">{icon get="comments"}</a>
 				{/if}
-				{if (($deel->magPosten() AND !$draad->gesloten AND $post->lid_id === LoginSession::instance()->getUid() AND LoginSession::mag('P_LOGGED_IN')) OR $deel->magModereren())}
+				{if (($deel->magPosten() AND !$draad->gesloten AND $post->uid === LoginModel::getUid() AND LoginModel::mag('P_LOGGED_IN')) OR $deel->magModereren())}
 					<a href="#{$post->post_id}" class="knop
-					   {if $deel->magModereren() AND $post->lid_id !== LoginSession::instance()->getUid() AND !$post->wacht_goedkeuring} forummodknop
+					   {if $deel->magModereren() AND $post->uid !== LoginModel::getUid() AND !$post->wacht_goedkeuring} forummodknop
 					   {/if}" onclick="forumBewerken({$post->post_id});" title="Bewerk bericht">{icon get="pencil"}</a>
 				{/if}
 				{if $deel->magModereren()}

@@ -134,14 +134,14 @@ function taken_ruilen(e) {
 	if (!confirm('Toegekende corveepunten worden meegeruild!\n\nDoorgaan met ruilen?')) {
 		return;
 	}
-	var attr = $(source).attr('lid_id');
+	var attr = $(source).attr('uid');
 	if (typeof attr === 'undefined' || attr === false) {
 		attr = '';
 	}
-	ajax_request('POST', $(elmnt).attr('href'), 'lid_id=' + attr, elmnt, dom_update, alert);
-	attr = $(elmnt).attr('lid_id');
+	ajax_request('POST', $(elmnt).attr('href'), 'uid=' + attr, elmnt, dom_update, alert);
+	attr = $(elmnt).attr('uid');
 	if (typeof attr === 'undefined' || attr === false) {
 		attr = '';
 	}
-	ajax_request('POST', $(source).attr('href'), 'lid_id=' + attr, source, dom_update, alert);
+	ajax_request('POST', $(source).attr('href'), 'uid=' + attr, source, dom_update, alert);
 }

@@ -10,7 +10,7 @@
  */
 interface Agendeerbaar {
 
-	public function getUID();
+	public function getUUID();
 
 	/**
 	 * Timestamp van beginmoment.

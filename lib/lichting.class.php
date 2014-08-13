@@ -11,7 +11,7 @@ class Lichting {
 	}
 
 	public static function getOudsteLichting() {
-		$db = MySql::instance();
+		$db = MijnSqli::instance();
 		$query = "
 			SELECT MIN(lidjaar) as oud
 			FROM lid

@@ -168,11 +168,11 @@ class MaaltijdAanmeldingenModel {
 		$lijst = array();
 		foreach ($aanmeldingen as $aanmelding) {
 			$aanmelding->setMaaltijd($maaltijd);
-			$naam = Lid::naamLink($aanmelding->getLidId(), 'streeplijst', 'plain');
+			$naam = Lid::naamLink($aanmelding->getUid(), 'streeplijst', 'plain');
 			$lijst[$naam] = $aanmelding;
 			for ($i = $aanmelding->getAantalGasten(); $i > 0; $i--) {
 				$gast = new MaaltijdAanmelding();
-				$gast->setDoorLidId($aanmelding->getLidId());
+				$gast->setDoorUid($aanmelding->getUid());
 				$lijst[$naam . 'gast' . $i] = $gast;
 			}
 		}
@@ -202,7 +202,7 @@ class MaaltijdAanmeldingenModel {
 		if (!is_int($mid) || $mid <= 0) {
 			throw new Exception('Load maaltijd faalt: Invalid $mid =' . $mid);
 		}
-		$sql = 'SELECT EXISTS (SELECT * FROM mlt_aanmeldingen WHERE maaltijd_id=? AND lid_id=?';
+		$sql = 'SELECT EXISTS (SELECT * FROM mlt_aanmeldingen WHERE maaltijd_id=? AND uid=?';
 		$values = array($mid, $uid);
 		if ($doorAbo !== null) {
 			$sql.= ' AND door_abonnement=?';
@@ -224,7 +224,7 @@ class MaaltijdAanmeldingenModel {
 	}
 
 	private static function loadAanmeldingen(array $mids, $uid = null, $limit = null) {
-		$sql = 'SELECT maaltijd_id, lid_id, aantal_gasten, gasten_eetwens, door_abonnement, door_lid_id, laatst_gewijzigd';
+		$sql = 'SELECT maaltijd_id, uid, aantal_gasten, gasten_eetwens, door_abonnement, door_uid, laatst_gewijzigd';
 		$sql.= ' FROM mlt_aanmeldingen';
 		$sql.= ' WHERE (maaltijd_id=?';
 		for ($i = sizeof($mids); $i > 1; $i--) {
@@ -233,7 +233,7 @@ class MaaltijdAanmeldingenModel {
 		$sql.= ')';
 		$values = $mids;
 		if ($uid !== null) {
-			$sql.= ' AND lid_id=?';
+			$sql.= ' AND uid=?';
 			$values[] = $uid;
 		}
 		if (is_int($limit)) {
@@ -248,7 +248,7 @@ class MaaltijdAanmeldingenModel {
 
 	private static function newAanmelding($mid, $uid, $gasten, $opmerking, $doorAbo, $doorUid) {
 		$sql = 'INSERT IGNORE INTO mlt_aanmeldingen';
-		$sql.= ' (maaltijd_id, lid_id, aantal_gasten, gasten_eetwens, door_abonnement, door_lid_id, laatst_gewijzigd)';
+		$sql.= ' (maaltijd_id, uid, aantal_gasten, gasten_eetwens, door_abonnement, door_uid, laatst_gewijzigd)';
 		$wanneer = date('Y-m-d H:i');
 		if ($mid === null) { // niet voor specifieke maaltijd? dan voor alle komende repetitie-maaltijden
 			$sql.= ' SELECT maaltijd_id, ?, ?, ?, ?, ?, ? FROM mlt_maaltijden';
@@ -284,7 +284,7 @@ class MaaltijdAanmeldingenModel {
 		$sql.= ' WHERE maaltijd_id=?';
 		$values = array($mid);
 		if ($uid !== null) {
-			$sql.= ' AND lid_id=?';
+			$sql.= ' AND uid=?';
 			$values[] = $uid;
 		}
 		$db = \Database::instance();
@@ -297,16 +297,16 @@ class MaaltijdAanmeldingenModel {
 
 	private static function updateAanmelding(MaaltijdAanmelding $aanmelding) {
 		$sql = 'UPDATE mlt_aanmeldingen';
-		$sql.= ' SET aantal_gasten=?, gasten_eetwens=?, door_abonnement=?, door_lid_id=?, laatst_gewijzigd=?';
-		$sql.= ' WHERE maaltijd_id=? AND lid_id=?';
+		$sql.= ' SET aantal_gasten=?, gasten_eetwens=?, door_abonnement=?, door_uid=?, laatst_gewijzigd=?';
+		$sql.= ' WHERE maaltijd_id=? AND uid=?';
 		$values = array(
 			$aanmelding->getAantalGasten(),
 			$aanmelding->getGastenEetwens(),
 			$aanmelding->getDoorAbonnement(),
-			$aanmelding->getDoorLidId(),
+			$aanmelding->getDoorUid(),
 			$aanmelding->getLaatstGewijzigd(),
 			$aanmelding->getMaaltijdId(),
-			$aanmelding->getLidId()
+			$aanmelding->getUid()
 		);
 		$db = \Database::instance();
 		$query = $db->prepare($sql);
@@ -334,7 +334,7 @@ class MaaltijdAanmeldingenModel {
 		$aantal = 0;
 		$aanmeldingen = self::loadAanmeldingen($mids);
 		foreach ($aanmeldingen as $aanmelding) { // check filter voor elk aangemeld lid
-			$uid = $aanmelding->getLidId();
+			$uid = $aanmelding->getUid();
 			if (!self::checkAanmeldFilter($uid, $filter)) { // verwijder aanmelding indien niet toegestaan
 				$aantal += self::deleteAanmeldingen($aanmelding->getMaaltijdId(), $uid);
 			}

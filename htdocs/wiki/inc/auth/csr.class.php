@@ -46,7 +46,7 @@ class auth_csr extends auth_basic {
         // - x999
         // - or as lid when:
         //      * cookie available
-        //      * validate_token was added to url (checking the permissions by LoginSession::mag, needs setting token_authorizable to true)
+        //      * private_token was added to url (checking the permissions by LoginModel::mag, needs setting token_authorizable to true)
         require_once 'configuratie.include.php';
         setlocale(LC_NUMERIC, 'en_US.UTF-8');
     }
@@ -95,7 +95,7 @@ class auth_csr extends auth_basic {
 
         # als er een gebruiker is gegeven willen we graag proberen in te loggen via inlogformulier
         if(!empty($user)) {
-            if(LoginSession::instance()->login(strval($user), strval($pass), $checkip = false) AND LoginSession::instance()->getUid() != 'x999') {
+            if(LoginModel::instance()->login(strval($user), strval($pass), $checkip = false) AND LoginModel::getUid() != 'x999') {
                 //success
             } else {
                 //invalid credentials - log off
@@ -106,13 +106,13 @@ class auth_csr extends auth_basic {
         }
 
         # als ingelogd genoeg permissies heeft gegevens ophalen en bewaren
-        if(LoginSession::mag('P_LOGGED_IN,groep:wikitoegang', $token_authorizable = false)
-            OR (LoginSession::mag('P_LOGGED_IN,groep:wikitoegang', $token_authorizable = true) AND $_SERVER['PHP_SELF'] == '/wiki/feed.php')
+        if(LoginModel::mag('P_LOGGED_IN,groep:wikitoegang', $token_authorizable = false)
+            OR (LoginModel::mag('P_LOGGED_IN,groep:wikitoegang', $token_authorizable = true) AND $_SERVER['PHP_SELF'] == '/wiki/feed.php')
         ) {
 
             // okay we're logged in - set the globals
             require_once 'groepen/groep.class.php';
-            $lid                 = LoginSession::instance()->getLid();
+            $lid                 = LoginModel::instance()->getLid();
             $USERINFO['name']    = $lid->getNaam();
             $USERINFO['mail']    = $lid->getEmail();
             $USERINFO['pasfoto'] = $lid->getPasfoto($imgTag = false);
@@ -139,7 +139,7 @@ class auth_csr extends auth_basic {
             #    return true;
         }
 
-        if(LoginSession::instance()->getUid() != 'x999') {
+        if(LoginModel::getUid() != 'x999') {
             msg('Niet genoeg permissies', -1);
         }
         // to be sure
@@ -156,7 +156,7 @@ class auth_csr extends auth_basic {
      * @see     auth_logoff()
      */
     function logOff() {
-        LoginSession::instance()->logout();
+        LoginModel::instance()->logout();
     }
 
     /**

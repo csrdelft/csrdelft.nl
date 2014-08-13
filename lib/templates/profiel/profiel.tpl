@@ -21,7 +21,7 @@
 						   onclick="return confirm('Weet u zeker dat u het wachtwoord van deze gebruiker wilt resetten?')">
 							{icon get="resetpassword"}</a>
 						{/if}
-						{if $profiel->getStatus()=='S_NOVIET' AND LoginSession::mag('groep:novcie')}
+						{if $profiel->getStatus()=='S_NOVIET' AND LoginModel::mag('groep:novcie')}
 						<a href="/communicatie/profiel/{$profiel->getUid()}/novietBewerken" class="knop"><img src="{$CSR_PICS}/forum/bewerken.png" title="Bewerk dit profiel" />Noviet bewerken</a><br />
 						{/if}
 					<a href="/communicatie/profiel/{$profiel->getUid()}/addToGoogleContacts/" class="knop" title="{*if $profiel->isInGoogleContacts()}Er bestaat al een contact met deze naam in je Google-contacts. Klik om te updaten.{else*}Voeg dit profiel toe aan mijn google adresboek{*/if*}"><img src="{$CSR_PICS}/knopjes/google.ico" /></a>
@@ -41,7 +41,7 @@
 		<div class="gegevens">
 			<div class="label">&nbsp;</div> {$profiel->getNaamLink('civitas', 'plain')}<br />
 			<div class="label">Lidnummer:</div>
-			{if LoginSession::instance()->maySuTo($profiel->getLid())}
+			{if LoginModel::instance()->maySuTo($profiel->getLid())}
 				<a href="/su/{$profiel->getUid()}/" title="Su naar dit lid">{$profiel->getUid()}</a>
 			{else}
 				{$profhtml.uid}
@@ -189,12 +189,12 @@
 			<div style="clear: left;"></div>
 		</div>
 	</div>
-	{if ($profiel->isLid() OR (LoginSession::mag('P_LEDEN_MOD') AND ($profhtml.soccieSaldo < 0 OR $profhtml.maalcieSaldo < 0))) AND (isset($saldografiek) OR $profhtml.bankrekening!='')}
+	{if ($profiel->isLid() OR (LoginModel::mag('P_LEDEN_MOD') AND ($profhtml.soccieSaldo < 0 OR $profhtml.maalcieSaldo < 0))) AND (isset($saldografiek) OR $profhtml.bankrekening!='')}
 		<div class="profielregel">
 			<div class="gegevens">
 				{if $profhtml.bankrekening!=''}
 					<div class="label">Bankrekening:</div> {$profhtml.bankrekening}
-					{if LoginSession::mag('P_MAAL_MOD')}
+					{if LoginModel::mag('P_MAAL_MOD')}
 						<span style="color: gray;">({if $profhtml.machtiging=='nee'}geen {/if}machtiging getekend)</span>
 					{/if}
 					<br />
@@ -210,7 +210,7 @@
 
 	<div class="profielregel" id="maaltijden">
 		<div class="gegevens">
-			{if LoginSession::instance()->getUid()==$profhtml.uid OR LoginSession::mag('P_MAAL_MOD')}
+			{if LoginModel::getUid()==$profhtml.uid OR LoginModel::mag('P_MAAL_MOD')}
 				<div class="label">Recent:</div>
 				<ul class="nobullets data">
 					{foreach from=$profhtml.recenteAanmeldingen item=aanmelding}
@@ -235,7 +235,7 @@
 				{else}
 					-
 				{/if}
-				{if LoginSession::instance()->getUid()==$profhtml.uid}
+				{if LoginModel::getUid()==$profhtml.uid}
 					&nbsp;<div style="display: inline-block; position: absolute;"><a href="/corveevoorkeuren" title="Bewerk voorkeuren" class="knop">{icon get="pencil"}</a></div>
 					{/if}
 			</div>{/strip}
@@ -266,10 +266,10 @@
 		</div>
 	</div>
 
-	{if $profiel->getForumPostCount() > 0 OR LoginSession::instance()->getUid()==$profiel->getUid()}
+	{if $profiel->getForumPostCount() > 0 OR LoginModel::getUid()==$profiel->getUid()}
 		<div class="profielregel" id="forum">
 			<div class="gegevens" id="forum_gegevens">
-				{if LoginSession::instance()->getUid()==$profiel->getUid()}
+				{if LoginModel::getUid()==$profiel->getUid()}
 					<div class="label">RSS-feed:</div>
 					<div class="data">
 						{if $profhtml.rssToken!=''}
@@ -294,7 +294,7 @@
 								<tr>
 									<td><a href="/forum/reactie/{$post->post_id}#{$post->post_id}" title="{$post->tekst}"{if !$posts_draden[1][$post->draad_id]->alGelezen()} style="{LidInstellingen::instance()->getTechnicalValue('forum', 'ongelezenWeergave')}"{/if}>{$posts_draden[1][$post->draad_id]->titel|truncate:75|escape:'html'}</a></td>
 									<td>
-										{if LoginSession::instelling('forum_datumWeergave') === 'relatief'}
+										{if LidInstellingen::get('forum', 'datumWeergave') === 'relatief'}
 											{$post->datum_tijd|reldate}
 										{else}
 											{$post->datum_tijd}
@@ -310,7 +310,7 @@
 			</div>
 		</div>
 	{/if}
-	{if $boeken OR LoginSession::instance()->getUid()==$profhtml.uid OR $gerecenseerdeboeken}
+	{if $boeken OR LoginModel::getUid()==$profhtml.uid OR $gerecenseerdeboeken}
 		<div class="profielregel boeken" id="boeken">
 			<div class="gegevens">
 				{if $boeken}
@@ -327,7 +327,7 @@
 							{/foreach}
 					</ul>
 				{/if}
-				{if LoginSession::instance()->getUid()==$profhtml.uid}
+				{if LoginModel::getUid()==$profhtml.uid}
 					<a class="knop" href="/communicatie/bibliotheek/nieuwboek" title="Nieuw boek toevoegen">{icon get="book_add"} Boek toevoegen</a>
 					<br />
 				{/if}
@@ -349,7 +349,7 @@
 			</div>
 		</div>
 	{/if}
-	{if LoginSession::mag('P_ADMIN,R_BESTUUR,groep:novcie') AND $profiel->getStatus()=='S_NOVIET' AND $profhtml.kgb!=''}
+	{if LoginModel::mag('P_ADMIN,R_BESTUUR,groep:novcie') AND $profiel->getStatus()=='S_NOVIET' AND $profhtml.kgb!=''}
 		<div class="profielregel" id="novcieopmerking">
 			<div style="cursor: pointer;" onclick="$('#novcie_gegevens').toggle();">NovCie-Opmerking &raquo;</div>
 			<div class="gegevens verborgen" id="novcie_gegevens">{$profhtml.kgb|ubb}</div>

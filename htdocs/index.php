@@ -22,7 +22,7 @@ try {
 		case 'FotoAlbum':
 			break; // toegestaan voor iedereen
 		default: // alleen ingelode gebruikers
-			if (!LoginSession::mag('P_LOGGED_IN')) {
+			if (!LoginModel::mag('P_LOGGED_IN')) {
 				header('location: ' . CSR_ROOT);
 				exit;
 			}
@@ -35,7 +35,7 @@ try {
 	$controller = new $class($request);
 	$controller->performAction();
 
-	if (defined('DB_MODIFY_ENABLE') AND LoginSession::mag('P_ADMIN')) {
+	if (defined('DB_MODIFY_ENABLE') AND LoginModel::mag('P_ADMIN')) {
 
 		require_once 'MVC/model/DatabaseAdmin.singleton.php';
 		$queries = DatabaseAdmin::getQueries();
@@ -47,12 +47,10 @@ try {
 			header('Content-disposition: attachment;filename=DB_modify_' . time() . '.sql');
 			foreach ($queries as $query) {
 				echo $query . ";\n";
-				setMelding($query, 1);
 			}
 			exit;
 		}
 	}
-
 	$controller->getView()->view();
 }
 catch (Exception $e) {
@@ -60,14 +58,9 @@ catch (Exception $e) {
 	$code = ($e->getCode() >= 100 ? $e->getCode() : 500);
 	header($protocol . ' ' . $code . ' ' . $e->getMessage());
 
-	DebugLogModel::instance()->log('index.php', 'new ' . $class, array($request), $e);
-
-	if (defined('DEBUG') && (LoginSession::mag('P_ADMIN') || LoginSession::instance()->isSued())) {
+	if (defined('DEBUG') && (LoginModel::mag('P_ADMIN') || LoginModel::instance()->isSued())) {
 		echo str_replace('#', '<br />#', $e); // stacktrace 
+	} else {
+		DebugLogModel::instance()->log('index.php', 'new ' . $class, array($request), $e);
 	}
-}
-
-// als er een error is geweest, die unsetten...
-if (isset($_SESSION['auth_error'])) {
-	unset($_SESSION['auth_error']);
 }

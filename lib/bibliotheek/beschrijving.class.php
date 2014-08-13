@@ -22,9 +22,9 @@ class Beschrijving {
 		} else {
 			$this->id = (int) $init;
 			if ($this->getId() == 0) {
-				$this->beschrijving = array('id' => 0, 'beschrijving' => '', 'boek_id' => (int) $boekid, 'schrijver_uid' => LoginSession::instance()->getUid());
+				$this->beschrijving = array('id' => 0, 'beschrijving' => '', 'boek_id' => (int) $boekid, 'schrijver_uid' => LoginModel::getUid());
 			} else {
-				$db = MySql::instance();
+				$db = MijnSqli::instance();
 				$query = "
 					SELECT id, boek_id, schrijver_uid, beschrijving, toegevoegd, bewerkdatum
 					FROM biebbeschrijving
@@ -74,7 +74,7 @@ class Beschrijving {
 
 	public function isSchrijver($uid = null) {
 		if ($uid === null) {
-			$uid = LoginSession::instance()->getUid();
+			$uid = LoginModel::getUid();
 		}
 		if ($uid == 'x999') {
 			return false;
@@ -87,14 +87,14 @@ class Beschrijving {
 	 */
 
 	public function save() {
-		$db = MySql::instance();
+		$db = MijnSqli::instance();
 		if ($this->getId() == 0) {
 			$qSave = "
 				INSERT INTO biebbeschrijving (
 					boek_id, schrijver_uid, beschrijving, toegevoegd
 				) VALUES (
 					" . (int) $this->beschrijving['boek_id'] . ",
-					'" . $db->escape(LoginSession::instance()->getUid()) . "',
+					'" . $db->escape(LoginModel::getUid()) . "',
 					'" . $db->escape($this->getTekst()) . "',
 					'" . getDateTime() . "'
 				);";
@@ -122,7 +122,7 @@ class Beschrijving {
 	 */
 
 	public function verwijder() {
-		$db = MySql::instance();
+		$db = MijnSqli::instance();
 		$qVerwijderBeschrijving = "DELETE FROM biebbeschrijving WHERE id=" . (int) $this->getId() . " LIMIT 1;";
 		return $db->query($qVerwijderBeschrijving);
 	}

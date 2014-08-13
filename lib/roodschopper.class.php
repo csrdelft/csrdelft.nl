@@ -47,7 +47,7 @@ class Roodschopper{
 	public static function getDefaults(){
 		$cie='soccie';
 		$naam='SocCie';
-		if(LoginSession::mag('groep:MaalCie')){
+		if(LoginModel::mag('groep:MaalCie')){
 			$cie='maalcie';
 			$naam='MaalCie';
 		}
@@ -58,7 +58,7 @@ Bij voorbaat dank,
 h.t. Fiscus.';
 
 		$return=new Roodschopper($cie, -5.2 , 'U staat rood', $bericht);
-		$return->setBcc(LoginSession::instance()->getLid()->getEmail());
+		$return->setBcc(LoginModel::instance()->getLid()->getEmail());
 		$return->setUitgesloten('x101');
 		return $return;
 	}
@@ -93,7 +93,7 @@ h.t. Fiscus.';
 	 * Voor een simulatierun uit. Er worden dan geen mails gestuurd.
 	 */
 	public function simulate(){
-		$db=MySql::instance();
+		$db=MijnSqli::instance();
 		if($this->doelgroep=='oudleden'){
 			$where="status='S_OUDLID' OR status='S_ERELID' OR status='S_NOBODY' OR status='S_EXLID'";
 		}else{

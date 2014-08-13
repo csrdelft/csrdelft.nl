@@ -33,7 +33,7 @@ mijn_rooster.tpl	|	P.W.G. Brussee (brussee@live.nl)
 							{if $view->getIsJongsteLichting($uid)} jongste{else} oudere{/if}	
 							">
 							<td style="width: 15px;">
-								<a class="knop" style="padding: 0 2px;" onclick="$('#field_lid_id').val('{$uid}');
+								<a class="knop" style="padding: 0 2px;" onclick="$('#field_uid').val('{$uid}');
 										$('#maalcie-taak-toewijzen-form').submit();">
 									{if $suggestie.recent}
 										{icon get="time_delete" title="Recent gecorveed"}

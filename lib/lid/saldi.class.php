@@ -35,7 +35,7 @@ class Saldi {
 				  AND cie='" . $this->cie . "'
 				  AND moment>(NOW() - INTERVAL " . $timespan . " DAY);";
 		}
-		$this->data = MySql::instance()->query2array($sQuery);
+		$this->data = MijnSqli::instance()->query2array($sQuery);
 		if (!is_array($this->data)) {
 			throw new Exception('Saldi::load() gefaald.' . $sQuery);
 		}
@@ -71,9 +71,9 @@ class Saldi {
 	public static function magGrafiekZien($uid, $cie = null) {
 		//mogen we uberhaupt een grafiek zien?
 		if ($cie === null) {
-			return LoginSession::instance()->isSelf($uid) OR LoginSession::mag('P_LEDEN_MOD,groep:soccie,groep:maalcie');
+			return LoginModel::getUid() === $uid OR LoginModel::mag('P_LEDEN_MOD,groep:soccie,groep:maalcie');
 		}
-		if (LoginSession::instance()->isSelf($uid) OR LoginSession::mag('P_LEDEN_MOD,groep:' . $cie)) {
+		if (LoginModel::getUid() === $uid OR LoginModel::mag('P_LEDEN_MOD,groep:' . $cie)) {
 			return true;
 		}
 		return false;
@@ -119,7 +119,7 @@ class Saldi {
 	}
 
 	public static function putSoccieXML($xml) {
-		$db = MySql::instance();
+		$db = MijnSqli::instance();
 		$datum = getDateTime(); //invoerdatum voor hele sessie gelijk.
 
 
@@ -173,7 +173,7 @@ class Saldi {
 	}
 
 	public static function putMaalcieCsv($key = 'CSVSaldi') {
-		$db = MySql::instance();
+		$db = MijnSqli::instance();
 		$sStatus = '';
 		$lvl = 0;
 		if (is_array($_FILES) AND isset($_FILES[$key])) {
@@ -230,7 +230,7 @@ class Saldi {
 	}
 
 	public static function getSaldi($uid, $alleenRood = false) {
-		$db = MySql::instance();
+		$db = MijnSqli::instance();
 
 		$query = "
 			SELECT moment, cie, saldo

@@ -16,13 +16,13 @@
 class CorveeVrijstelling {
 	# primary key
 
-	private $lid_id; # foreign key lid.uid
+	private $uid; # foreign key lid.uid
 	private $begin_datum; # date
 	private $eind_datum; # date
 	private $percentage; # int 3
 
 	public function __construct($uid = null, $begin = null, $eind = null, $percentage = null) {
-		$this->lid_id = $uid;
+		$this->uid = $uid;
 		if ($begin === null) {
 			$begin = date('Y-m-d');
 		}
@@ -37,8 +37,8 @@ class CorveeVrijstelling {
 		$this->setPercentage($percentage);
 	}
 
-	public function getLidId() {
-		return $this->lid_id;
+	public function getUid() {
+		return $this->uid;
 	}
 
 	public function getBeginDatum() {

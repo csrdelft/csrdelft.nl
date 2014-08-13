@@ -127,13 +127,13 @@ class BeheerTakenController extends AclController {
 			if (isset($beginDatum)) {
 				$taak->setDatum($beginDatum);
 			}
-			$this->view = new TaakForm($taak->getTaakId(), $taak->getFunctieId(), $taak->getLidId(), $taak->getCorveeRepetitieId(), $mid, $taak->getDatum(), null, $taak->getBonusMalus()); // fetches POST values itself
+			$this->view = new TaakForm($taak->getTaakId(), $taak->getFunctieId(), $taak->getUid(), $taak->getCorveeRepetitieId(), $mid, $taak->getDatum(), null, $taak->getBonusMalus()); // fetches POST values itself
 		}
 	}
 
 	public function bewerk($tid) {
 		$taak = CorveeTakenModel::getTaak($tid);
-		$this->view = new TaakForm($taak->getTaakId(), $taak->getFunctieId(), $taak->getLidId(), $taak->getCorveeRepetitieId(), $taak->getMaaltijdId(), $taak->getDatum(), $taak->getPunten(), $taak->getBonusMalus()); // fetches POST values itself
+		$this->view = new TaakForm($taak->getTaakId(), $taak->getFunctieId(), $taak->getUid(), $taak->getCorveeRepetitieId(), $taak->getMaaltijdId(), $taak->getDatum(), $taak->getPunten(), $taak->getBonusMalus()); // fetches POST values itself
 	}
 
 	public function opslaan($tid) {
@@ -144,7 +144,7 @@ class BeheerTakenController extends AclController {
 		}
 		if ($this->view->validate()) {
 			$values = $this->view->getValues();
-			$uid = ($values['lid_id'] === '' ? null : $values['lid_id']);
+			$uid = ($values['uid'] === '' ? null : $values['uid']);
 			$crid = ($values['crv_repetitie_id'] === '' ? null : intval($values['crv_repetitie_id']));
 			$mid = ($values['maaltijd_id'] === 0 ? null : $values['maaltijd_id']);
 			$taak = CorveeTakenModel::saveTaak($tid, intval($values['functie_id']), $uid, $crid, $mid, $values['datum'], intval($values['punten']), intval($values['bonus_malus']));
@@ -170,7 +170,7 @@ class BeheerTakenController extends AclController {
 
 	public function toewijzen($tid) {
 		$taak = CorveeTakenModel::getTaak($tid);
-		$InputField = new LidField('lid_id', null, null, 'leden'); // fetches POST values itself
+		$InputField = new LidField('uid', null, null, 'leden'); // fetches POST values itself
 		if ($InputField->validate()) {
 			$uid = $InputField->getValue();
 			if ($uid === '') {

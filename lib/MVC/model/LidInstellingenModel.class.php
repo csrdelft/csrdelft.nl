@@ -17,11 +17,6 @@ class LidInstellingen extends PersistenceModel {
 	protected static $instance;
 
 	public static function get($module, $key = null) {
-		if ($key === null) { // backwards compatibility
-			$key = explode('_', $module, 2);
-			$module = $key[0];
-			$key = $key[1];
-		}
 		return static::instance()->getValue($module, $key);
 	}
 
@@ -198,7 +193,7 @@ class LidInstellingen extends PersistenceModel {
 				$this->setDefaultValue($module, $key);
 			}
 		}
-		$instellingen = $this->find('lid_id = ?', array(LoginSession::instance()->getUid()));
+		$instellingen = $this->find('uid = ?', array(LoginModel::getUid()));
 		foreach ($instellingen as $instelling) {
 			try {
 				$this->setValue($instelling->module, $instelling->instelling_id, $instelling->waarde);
@@ -214,12 +209,12 @@ class LidInstellingen extends PersistenceModel {
 	}
 
 	public function save() {
-		$properties[] = array('lid_id', 'module', 'instelling_id', 'waarde');
+		$properties[] = array('uid', 'module', 'instelling_id', 'waarde');
 		foreach ($this->instellingen as $module => $instellingen) {
 			foreach ($instellingen as $key => $value) {
 				$value = filter_input(INPUT_POST, $module . '_' . $key, FILTER_SANITIZE_STRING);
 				$this->setValue($module, $key, $value); // sanatize value
-				$properties[] = array(LoginSession::instance()->getUid(), $module, $key, $this->getValue($module, $key));
+				$properties[] = array(LoginModel::getUid(), $module, $key, $this->getValue($module, $key));
 			}
 		}
 		$orm = self::orm;
@@ -227,7 +222,7 @@ class LidInstellingen extends PersistenceModel {
 	}
 
 	public function setForAll($module, $key, $value) {
-		$properties[] = array('lid_id', 'module', 'instelling_id', 'waarde');
+		$properties[] = array('uid', 'module', 'instelling_id', 'waarde');
 		$this->setValue($module, $key, $value); // sanatize value
 		$value = $this->getValue($module, $key);
 		$leden = Database::sqlSelect(array('uid'), 'lid');

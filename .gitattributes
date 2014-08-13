@@ -330,16 +330,10 @@ htdocs/layout3/js/csrdelft.js -text
 htdocs/layout3/js/jquery.js -text
 htdocs/layout3/js/jquery.map -text
 htdocs/layout3/js/jquery.min.js -text
-htdocs/login.php -text
-htdocs/logout.php -text
 htdocs/onderhoud.html -text
-htdocs/pauper.php -text
 htdocs/robots.txt -text
-htdocs/su.php -text
-htdocs/test.php -text
 htdocs/testform.php -text
 htdocs/tools/.htaccess -text
-htdocs/tools/ajax/login.php -text
 htdocs/tools/alphabanner/alphabanner.php -text
 htdocs/tools/alphabanner/gebedsgenezingreclametegeltje.jpg -text
 htdocs/tools/alphabanner/tegel_0.jpg -text
@@ -2985,10 +2979,10 @@ htdocs/wiki/lib/tpl/vector/user/tracker.php.dist -text
 htdocs/wiki/lib/tpl/vector/user/user.js -text
 htdocs/wiki/lib/tpl/vector/user/user.js.dist -text
 htdocs/wiki/lib/tpl/wikichanges.diff -text
+htdocs_confide/MijnSqli.class.php -text
 htdocs_confide/common.functions.php -text
 htdocs_confide/default.css -text
 htdocs_confide/index.php -text
-htdocs_confide/mysql.class.php -text
 htdocs_confide/mysql.ini.sample -text
 htdocs_confide/streeplijstrapportage.php -text
 images/famfamfam/.index -text
@@ -3003,6 +2997,7 @@ lib/MVC/controller/FotoAlbumController.class.php -text
 lib/MVC/controller/GroepenRouterController.class.php -text
 lib/MVC/controller/InstellingenBeheerController.class.php -text
 lib/MVC/controller/LidInstellingenController.class.php -text
+lib/MVC/controller/LoginController.class.php -text
 lib/MVC/controller/MaalcieRouterController.class.php -text
 lib/MVC/controller/MenuBeheerController.class.php -text
 lib/MVC/controller/groepen/ActiviteitenController.class.php -text
@@ -3019,6 +3014,7 @@ lib/MVC/controller/maalcie/BeheerFunctiesController.class.php -text
 lib/MVC/model/AgendaModel.class.php -text
 lib/MVC/model/Agendeerbaar.interface.php -text
 lib/MVC/model/CmsPaginaModel.class.php -text
+lib/MVC/model/CsrMemcache.singleton.php -text
 lib/MVC/model/Database.singleton.php -text
 lib/MVC/model/DatabaseAdmin.singleton.php -text
 lib/MVC/model/DebugLogModel.class.php -text
@@ -3027,7 +3023,9 @@ lib/MVC/model/ForumModel.class.php -text
 lib/MVC/model/FotoAlbumModel.class.php -text
 lib/MVC/model/GroepenModel.class.php -text
 lib/MVC/model/InstellingenModel.class.php -text
+lib/MVC/model/LidCache.class.php -text
 lib/MVC/model/LidInstellingenModel.class.php -text
+lib/MVC/model/LoginModel.class.php -text
 lib/MVC/model/MenuModel.class.php -text
 lib/MVC/model/Paging.interface.php -text
 lib/MVC/model/Persistence.interface.php -text
@@ -3048,6 +3046,7 @@ lib/MVC/model/entity/FotoAlbum.class.php -text
 lib/MVC/model/entity/Instelling.class.php -text
 lib/MVC/model/entity/LidInstelling.class.php -text
 lib/MVC/model/entity/LogEntry.class.php -text
+lib/MVC/model/entity/LoginSession.class.php -text
 lib/MVC/model/entity/Mail.class.php -text
 lib/MVC/model/entity/Map.class.php -text
 lib/MVC/model/entity/Mededeling.class.php -text
@@ -3096,6 +3095,7 @@ lib/MVC/view/FotoAlbumView.class.php -text
 lib/MVC/view/HtmlPage.abstract.php -text
 lib/MVC/view/InstellingenBeheerView.class.php -text
 lib/MVC/view/LidInstellingenView.class.php -text
+lib/MVC/view/LoginView.class.php -text
 lib/MVC/view/MailTemplateView.class.php -text
 lib/MVC/view/MenuBeheerView.class.php -text
 lib/MVC/view/MenuView.class.php -text
@@ -3115,6 +3115,7 @@ lib/MVC/view/groepen/SjaarciesView.class.php -text
 lib/MVC/view/groepen/WerkgroepenView.class.php -text
 lib/MVC/view/groepen/WoonoordenView.class.php -text
 lib/MVC/view/maalcie/BeheerFunctiesView.class.php -text
+lib/MijnSqli.class.php -text
 lib/Soccie[!!-~]ERD.png -text
 lib/Zend/Exception.php -text
 lib/Zend/Gdata.php -text
@@ -3548,7 +3549,6 @@ lib/ishetalcontent.class.php -text
 lib/knop.class.php -text
 lib/ldap.class.php -text
 lib/lichting.class.php -text
-lib/lid/LoginSession.class.php -text
 lib/lid/ledenlijstcontent.class.php -text
 lib/lid/lid.class.php -text
 lib/lid/lidzoeker.class.php -text
@@ -3626,8 +3626,6 @@ lib/mededelingen/mededelingcategorie.class.php -text
 lib/mededelingen/mededelingcontent.class.php -text
 lib/mededelingen/mededelingencontent.class.php -text
 lib/mededelingen/mededelingtopdrieoverzichtcontent.class.php -text
-lib/memcached.class.php -text
-lib/mysql.class.php -text
 lib/peiling.class.php -text
 lib/peilingbeheercontent.class.php -text
 lib/peilingcontent.class.php -text
@@ -3700,7 +3698,6 @@ lib/smarty/libs/plugins/modifier.lower.php -text
 lib/smarty/libs/plugins/modifier.mimeicon.php -text
 lib/smarty/libs/plugins/modifier.nl2br.php -text
 lib/smarty/libs/plugins/modifier.pasfoto.php -text
-lib/smarty/libs/plugins/modifier.perm2string.php -text
 lib/smarty/libs/plugins/modifier.regex_replace.php -text
 lib/smarty/libs/plugins/modifier.reldate.php -text
 lib/smarty/libs/plugins/modifier.replace.php -text
@@ -3887,7 +3884,6 @@ lib/templates/groepen/groep.ubb.tpl -text
 lib/templates/groepen/groepen.tpl -text
 lib/templates/groepen/groepformulier.tpl -text
 lib/templates/groepen/groepleden.tpl -text
-lib/templates/login.tpl -text
 lib/templates/maalcie/abonnement/beheer_abonnement_head.tpl -text
 lib/templates/maalcie/abonnement/beheer_abonnement_lijst.tpl -text
 lib/templates/maalcie/abonnement/beheer_abonnement_veld.tpl -text
@@ -4046,3 +4042,4 @@ sql/5049_file_size_rename.sql -text
 sql/5372_forum_volgen.sql -text
 sql/5518_forum_laatst.sql -text
 sql/5556_cron_user.sql -text
+sql/5600_rename_lid_id.sql -text

@@ -19,20 +19,20 @@ class ForumDraadVerbergen extends PersistentEntity {
 	 * Shared primary key
 	 * @var string
 	 */
-	public $lid_id;
+	public $uid;
 	/**
 	 * Database table fields
 	 * @var array
 	 */
 	protected static $persistent_fields = array(
 		'draad_id'	 => array(T::Integer),
-		'lid_id'	 => array(T::UID)
+		'uid'		 => array(T::UID)
 	);
 	/**
 	 * Database primary key
 	 * @var array
 	 */
-	protected static $primary_keys = array('draad_id', 'lid_id');
+	protected static $primary_keys = array('draad_id', 'uid');
 	/**
 	 * Database table name
 	 * @var string

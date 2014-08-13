@@ -9,7 +9,7 @@ class DiesAanmelding {
 	}
 
 	public function filledInBefore() {
-		$db = MySql::instance();
+		$db = MijnSqli::instance();
 		$query = 'SELECT COUNT(*) FROM diesaanmelding WHERE uid = ' . $this->uid;
 		$result = $db->select($query);
 		$res = '';
@@ -20,7 +20,7 @@ class DiesAanmelding {
 	}
 
 	public function getData() {
-		$db = MySql::instance();
+		$db = MijnSqli::instance();
 		$query = 'SELECT * FROM diesaanmelding WHERE uid = ' . $this->uid;
 		$result = $db->select($query);
 		$res = array();
@@ -31,7 +31,7 @@ class DiesAanmelding {
 	}
 
 	public function galaVol() {
-		$db = MySql::instance();
+		$db = MijnSqli::instance();
 		$query = 'SELECT COUNT(*) FROM diesaanmelding';
 		$result = $db->select($query);
 		$res = '';
@@ -42,7 +42,7 @@ class DiesAanmelding {
 	}
 
 	public function setData($naamDate, $eetZelf, $eetDate, $allerZelf, $allerDate, $date18) {
-		$db = MySql::instance();
+		$db = MijnSqli::instance();
 		$query = 'DELETE FROM diesaanmelding WHERE uid =' . $this->uid;
 		$db->query($query);
 		$query = 'INSERT INTO `diesaanmelding` VALUES ("'

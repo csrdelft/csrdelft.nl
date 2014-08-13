@@ -35,11 +35,11 @@ class MijnCorveeController extends AclController {
 	}
 
 	public function mijn() {
-		$taken = CorveeTakenModel::getKomendeTakenVoorLid(LoginSession::instance()->getUid());
+		$taken = CorveeTakenModel::getKomendeTakenVoorLid(LoginModel::getUid());
 		$rooster = CorveeTakenModel::getRoosterMatrix($taken);
 		$functies = FunctiesModel::instance()->getAlleFuncties(); // grouped by functie_id
-		$punten = CorveePuntenModel::loadPuntenVoorLid(LoginSession::instance()->getLid(), $functies);
-		$vrijstelling = CorveeVrijstellingenModel::getVrijstelling(LoginSession::instance()->getUid());
+		$punten = CorveePuntenModel::loadPuntenVoorLid(LoginModel::instance()->getLid(), $functies);
+		$vrijstelling = CorveeVrijstellingenModel::getVrijstelling(LoginModel::getUid());
 		$this->view = new MijnCorveeView($rooster, $punten, $functies, $vrijstelling);
 		$this->view = new CsrLayoutPage($this->getView());
 		$this->view->addStylesheet('taken.css');
@@ -47,12 +47,12 @@ class MijnCorveeController extends AclController {
 	}
 
 	public function rooster($toonverleden = false) {
-		if ($toonverleden === 'verleden' AND LoginSession::mag('P_CORVEE_MOD')) {
+		if ($toonverleden === 'verleden' AND LoginModel::mag('P_CORVEE_MOD')) {
 			$taken = CorveeTakenModel::getVerledenTaken();
 			$toonverleden = false; // hide button
 		} else {
 			$taken = CorveeTakenModel::getKomendeTaken();
-			$toonverleden = LoginSession::mag('P_CORVEE_MOD');
+			$toonverleden = LoginModel::mag('P_CORVEE_MOD');
 		}
 		$rooster = CorveeTakenModel::getRoosterMatrix($taken);
 		$this->view = new CorveeRoosterView($rooster, $toonverleden);

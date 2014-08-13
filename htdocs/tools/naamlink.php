@@ -8,7 +8,7 @@
 
 require_once 'configuratie.include.php';
 
-if (!LoginSession::mag('P_LEDEN_READ')) {
+if (!LoginModel::mag('P_LEDEN_READ')) {
 	echo 'Niet voldoende rechten';
 	exit;
 }

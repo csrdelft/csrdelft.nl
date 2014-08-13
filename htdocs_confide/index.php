@@ -7,10 +7,10 @@ define('ETC_PATH', '.');
 session_start();
 
 require_once 'common.functions.php';
-require_once 'mysql.class.php';
+require_once 'MijnSqli.class.php';
 require_once 'streeplijstrapportage.php';
 
-$db=MySql::instance();
+$db=MijnSqli::instance();
 
 //lijstje met artikelen regelen.
 $artikelenResult=$db->query("SELECT Naam as naam, Sneltoets as letter, Prijs as prijs FROM Artikelen;");

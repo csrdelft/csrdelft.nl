@@ -46,8 +46,8 @@
 			<td>
 				{table_foreach from=$taken inner=rows item=taak table_attr='class="maalcie-rooster"' cols=2}
 			</td>
-			{if $taak->getLidId()}
-				{if $taak->getLidId() === LoginSession::instance()->getUid()} 
+			{if $taak->getUid()}
+				{if $taak->getUid() === LoginModel::getUid()} 
 					{assign var="class" value="taak-self"}
 				{else}
 					{assign var="class" value=""}
@@ -56,11 +56,11 @@
 				{assign var="class" value="taak-grijs"}
 			{/if}
 			<td class="taak {$class}">
-				{if $taak->getLidId()}
-					{if $taak->getLidId() === LoginSession::instance()->getUid()} 
+				{if $taak->getUid()}
+					{if $taak->getUid() === LoginModel::getUid()} 
 						{* icon get="arrow_switch" title="Ruilen" *}
 					{/if}
-					{Lid::naamLink($taak->getLidId(), Instellingen::get('corvee', 'weergave_ledennamen_corveerooster'), Instellingen::get('corvee', 'weergave_link_ledennamen'))}
+					{Lid::naamLink($taak->getUid(), Instellingen::get('corvee', 'weergave_ledennamen_corveerooster'), Instellingen::get('corvee', 'weergave_link_ledennamen'))}
 				{else}
 					<i>vacature</i>
 				{/if}

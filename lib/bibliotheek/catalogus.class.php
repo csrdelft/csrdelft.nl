@@ -32,7 +32,7 @@ class Catalogus {
 
 
 		// kolommen van de tabel. De laatste velden die niet in tabel staan worden gebruik om op te filteren.
-		if (LoginSession::mag('P_BIEB_READ')) {
+		if (LoginModel::mag('P_BIEB_READ')) {
 			//boekstatus
 			$this->aKolommen = array('titel', 'auteur', 'categorie', 'bsaantal', 'eigenaar', 'lener', 'uitleendatum', 'status', 'code', 'isbn', 'auteur', 'categorie');
 			$this->iKolommenZichtbaar = 7;
@@ -43,7 +43,7 @@ class Catalogus {
 		}
 
 		/* MySQL */
-		$db = MySql::instance();
+		$db = MijnSqli::instance();
 
 		/*
 		 * Paging
@@ -114,7 +114,7 @@ class Catalogus {
 
 		//filter bepalen
 		$allow = array('alle', 'csr', 'leden', 'eigen', 'geleend');
-		if (LoginSession::mag('P_BIEB_READ') AND in_array($_GET['sEigenaarFilter'], $allow)) {
+		if (LoginModel::mag('P_BIEB_READ') AND in_array($_GET['sEigenaarFilter'], $allow)) {
 			$filter = $_GET['sEigenaarFilter'];
 		} else {
 			$filter = 'csr';
@@ -133,10 +133,10 @@ class Catalogus {
 				$sWhere .= $sBeginWh . "e.eigenaar_uid NOT LIKE 'x222'";
 				break;
 			case 'eigen':
-				$sWhere .= $sBeginWh . "e.eigenaar_uid='" . $db->escape(LoginSession::instance()->getUid()) . "'";
+				$sWhere .= $sBeginWh . "e.eigenaar_uid='" . $db->escape(LoginModel::getUid()) . "'";
 				break;
 			case 'geleend':
-				$sWhere .= $sBeginWh . "(e.status = 'uitgeleend' OR e.status = 'teruggegeven')AND e.uitgeleend_uid='" . $db->escape(LoginSession::instance()->getUid()) . "'";
+				$sWhere .= $sBeginWh . "(e.status = 'uitgeleend' OR e.status = 'teruggegeven')AND e.uitgeleend_uid='" . $db->escape(LoginModel::getUid()) . "'";
 				break;
 		}
 
@@ -144,7 +144,7 @@ class Catalogus {
 		 * SQL queries
 		 * Get data to display
 		 */
-		if (LoginSession::mag('P_BIEB_READ')) {
+		if (LoginModel::mag('P_BIEB_READ')) {
 			//ingelogden
 			$sSelect = "
 				, GROUP_CONCAT(e.eigenaar_uid SEPARATOR ', ') AS eigenaar, GROUP_CONCAT(e.uitgeleend_uid SEPARATOR ', ') AS lener, 
@@ -228,7 +228,7 @@ class Catalogus {
 	public static function getAllValuesOfProperty($key) {
 		$allowedkeys = array('id', 'titel', 'auteur', 'uitgavejaar', 'uitgeverij', 'paginas', 'taal', 'isbn', 'code', 'naam');
 		if (in_array($key, $allowedkeys)) {
-			$db = MySql::instance();
+			$db = MijnSqli::instance();
 			if ($key == 'naam') {
 				$query = "
 					SELECT uid, concat(voornaam, ' ', tussenvoegsel,  IF(tussenvoegsel='','',' '), achternaam) as naam  
@@ -265,7 +265,7 @@ class Catalogus {
 		$properties = array();
 		$allowedkeys = array('id', 'titel', 'uitgavejaar', 'uitgeverij', 'paginas', 'taal', 'isbn', 'code', 'auteur', 'biebboek');
 		if (in_array($sKey, $allowedkeys)) {
-			$db = MySql::instance();
+			$db = MijnSqli::instance();
 			if ($sKey == 'biebboek') {
 				$query = "
 					SELECT titel, auteur, id
@@ -317,7 +317,7 @@ class Catalogus {
 	public static function existsProperty($key, $value) {
 		$allowedkeys = array('id', 'titel', 'uitgavejaar', 'uitgeverij', 'paginas', 'taal', 'isbn', 'code', 'auteur');
 		if (in_array($key, $allowedkeys)) {
-			$db = MySql::instance();
+			$db = MijnSqli::instance();
 			$query = "
 				SELECT  " . $db->escape($key) . "
 				FROM  `biebboek` 
@@ -340,9 +340,9 @@ class Catalogus {
 	 */
 	public static function getBoekenByUid($uid = null, $filter = 'eigendom') {
 		if ($uid === null) {
-			$uid = LoginSession::instance()->getUid();
+			$uid = LoginModel::getUid();
 		}
-		$db = MySql::instance();
+		$db = MijnSqli::instance();
 
 		//bepaalt de status voor het boek, is samenvoeging van de statussen van de exemplaren
 		$statusboek = ", IF(

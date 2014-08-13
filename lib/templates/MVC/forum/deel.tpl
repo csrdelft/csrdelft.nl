@@ -3,7 +3,7 @@
 {$zoekform->view()}
 
 {if isset($deel->forum_id)}
-	{if LoginSession::mag('P_ADMIN')}
+	{if LoginModel::mag('P_ADMIN')}
 		<div class="forumheadbtn">
 			<a href="/forum/beheren/{$deel->forum_id}" class="knop post popup" title="Deelforum beheren">{icon get="wrench_orange"} Beheren</a>
 		</div>

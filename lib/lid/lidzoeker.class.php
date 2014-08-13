@@ -59,7 +59,7 @@ class LidZoeker {
 	public function __construct() {
 
 		//wat extra velden voor moderators.
-		if (LoginSession::mag('P_LEDEN_MOD')) {
+		if (LoginModel::mag('P_LEDEN_MOD')) {
 			$this->allowVelden = array_merge($this->allowVelden, $this->allowVeldenLEDENMOD);
 		}
 
@@ -77,7 +77,7 @@ class LidZoeker {
 
 		//als er geen explicite status is opgegeven, en het zoekende lid is oudlid, dan zoeken we automagisch
 		//ook in de oudleden.
-		if (!isset($query['status']) AND in_array(LoginSession::instance()->getLid()->getStatus(), array('S_OUDLID', 'S_ERELID'))) {
+		if (!isset($query['status']) AND in_array(LoginModel::instance()->getLid()->getStatus(), array('S_OUDLID', 'S_ERELID'))) {
 			$this->rawQuery['status'] = 'LEDEN|OUDLEDEN';
 		}
 
@@ -156,7 +156,7 @@ class LidZoeker {
 		$query = '';
 		$defaults = array();
 
-		$zoekterm = MySql::instance()->escape($zoekterm);
+		$zoekterm = MijnSqli::instance()->escape($zoekterm);
 
 		if ($zoekterm == '*' OR trim($zoekterm) == '') {
 			$query = '1 ';
@@ -237,7 +237,7 @@ class LidZoeker {
 	 */
 
 	public function search() {
-		$db = MySql::instance();
+		$db = MijnSqli::instance();
 
 		$query = "SELECT uid FROM lid WHERE ";
 
@@ -305,7 +305,7 @@ class LidZoeker {
 	 */
 
 	public function getFilterSQL() {
-		$db = MySql::instance();
+		$db = MijnSqli::instance();
 		$filters = array();
 		foreach ($this->filters as $key => $value) {
 			if (is_array($value)) {

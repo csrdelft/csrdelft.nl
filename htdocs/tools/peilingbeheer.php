@@ -60,7 +60,7 @@ if ($error != '') {
 	setMelding($error);
 }
 
-if (!LoginSession::mag('P_LOGGED_IN') OR ! Peiling::magBewerken()) {
+if (!LoginModel::mag('P_LOGGED_IN') OR ! Peiling::magBewerken()) {
 	# geen rechten
 	require_once 'MVC/model/CmsPaginaModel.class.php';
 	require_once 'MVC/view/CmsPaginaView.class.php';

@@ -13,7 +13,7 @@ class CorveeHerinneringenModel {
 
 	public static function stuurHerinnering(CorveeTaak $taak) {
 		$datum = date('d-m-Y', strtotime($taak->getDatum()));
-		$uid = $taak->getLidId();
+		$uid = $taak->getUid();
 		if (!Lid::exists($uid)) {
 			throw new Exception($datum . ' ' . $taak->getCorveeFunctie()->naam . ' niet toegewezen!' . (!empty($uid) ? ' ($uid =' . $uid . ')' : ''));
 		}

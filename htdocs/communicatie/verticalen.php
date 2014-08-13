@@ -7,7 +7,7 @@ require_once 'verticalecontent.class.php';
 
 
 
-if(LoginSession::mag('P_LEDEN_READ')) {
+if(LoginModel::mag('P_LEDEN_READ')) {
 	$midden = new VerticalenContent();
 
 	if(isset($_GET['email'])){

@@ -39,13 +39,13 @@ class InstellingenBeheerController extends AclController {
 		if ($this->hasParam(3)) {
 			switch ($this->getParam(3)) {
 				case 'agenda':
-					return LoginSession::mag('P_AGENDA_MOD');
+					return LoginModel::mag('P_AGENDA_MOD');
 				case 'corvee':
-					return LoginSession::mag('P_CORVEE_MOD');
+					return LoginModel::mag('P_CORVEE_MOD');
 				case 'maaltijden':
-					return LoginSession::mag('P_MAAL_MOD');
+					return LoginModel::mag('P_MAAL_MOD');
 				default:
-					return LoginSession::mag('P_ADMIN');
+					return LoginModel::mag('P_ADMIN');
 			}
 		}
 		return true; // hoofdpagina: geen module

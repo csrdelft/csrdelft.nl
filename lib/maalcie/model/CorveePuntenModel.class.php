@@ -30,7 +30,7 @@ class CorveePuntenModel {
 				$punten -= intval(Instellingen::get('corvee', 'punten_per_jaar'));
 				self::savePuntenVoorLid($lid, $punten, 0);
 				if ($vrijstelling !== null && time() > strtotime($vrijstelling->getEindDatum())) {
-					CorveeVrijstellingenModel::verwijderVrijstelling($vrijstelling->getLidId());
+					CorveeVrijstellingenModel::verwijderVrijstelling($vrijstelling->getUid());
 					$aantal++;
 				}
 			} catch (\Exception $e) {

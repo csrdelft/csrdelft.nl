@@ -77,7 +77,7 @@ class AgendaItem extends PersistentEntity implements Agendeerbaar {
 	 */
 	protected static $table_name = 'agenda';
 
-	public function getUID() {
+	public function getUUID() {
 		return $this->item_id . '@' . static::$table_name . '.csrdelft.nl';
 	}
 
@@ -114,11 +114,11 @@ class AgendaItem extends PersistentEntity implements Agendeerbaar {
 	}
 
 	public function magBekijken() {
-		return LoginSession::mag($this->rechten_bekijken) OR $this->magBeheren();
+		return LoginModel::mag($this->rechten_bekijken) OR $this->magBeheren();
 	}
 
 	public function magBeheren() {
-		return LoginSession::mag('P_AGENDA_MOD');
+		return LoginModel::mag('P_AGENDA_MOD');
 	}
 
 }

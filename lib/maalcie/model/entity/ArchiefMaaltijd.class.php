@@ -36,16 +36,16 @@ class ArchiefMaaltijd implements Agendeerbaar {
 		$this->prijs = $prijs;
 		$this->aanmeldingen = '';
 		foreach ($aanmeldingen as $aanmelding) {
-			if ($aanmelding->getLidId() === '') {
+			if ($aanmelding->getUid() === '') {
 				$this->aanmeldingen .= 'gast';
 			} else {
-				$this->aanmeldingen .= $aanmelding->getLidId();
+				$this->aanmeldingen .= $aanmelding->getUid();
 			}
 			if ($aanmelding->getDoorAbonnement()) {
 				$this->aanmeldingen .= '_abo';
 			}
-			if ($aanmelding->getDoorLidId() !== null) {
-				$this->aanmeldingen .= '_' . $aanmelding->getDoorLidId();
+			if ($aanmelding->getDoorUid() !== null) {
+				$this->aanmeldingen .= '_' . $aanmelding->getDoorUid();
 			}
 			$this->aanmeldingen .= ',';
 		}
@@ -92,7 +92,7 @@ class ArchiefMaaltijd implements Agendeerbaar {
 
 	// Agendeerbaar ############################################################
 
-	public function getUID() {
+	public function getUUID() {
 		return $this->maaltijd_id . '@archiefmaaltijd.csrdelft.nl';
 	}
 

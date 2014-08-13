@@ -11,7 +11,7 @@ require_once 'configuratie.include.php';
 
 require_once 'voorkeur/overzicht.class.php';
 
-if (LoginSession::mag('P_LEDEN_MOD')) {
+if (LoginModel::mag('P_LEDEN_MOD')) {
 	$inhoud = new CommissieOverzicht();
 	if (isset($_GET['c'])) {
 		$inhoud = new CommissieOverzicht($_GET['c']);

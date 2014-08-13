@@ -4,10 +4,10 @@
 {foreach name=loop from=$voorkeuren item=voorkeur}
 	{if $voorkeur}
 		{if $smarty.foreach.loop.first}
-<tr id="voorkeur-row-{$voorkeur->getVanLidId()}">
-	<td>{Lid::naamLink($voorkeur->getVanLidId(), Instellingen::get('corvee', 'weergave_ledennamen_beheer'), Instellingen::get('corvee', 'weergave_link_ledennamen'))}</td>
+<tr id="voorkeur-row-{$voorkeur->getVanUid()}">
+	<td>{Lid::naamLink($voorkeur->getVanUid(), Instellingen::get('corvee', 'weergave_ledennamen_beheer'), Instellingen::get('corvee', 'weergave_link_ledennamen'))}</td>
 		{/if}
-		{include file='maalcie/voorkeur/beheer_voorkeur_veld.tpl' voorkeur=$voorkeur crid=$voorkeur->getCorveeRepetitieId() uid=$voorkeur->getLidId()}
+		{include file='maalcie/voorkeur/beheer_voorkeur_veld.tpl' voorkeur=$voorkeur crid=$voorkeur->getCorveeRepetitieId() uid=$voorkeur->getUid()}
 		{if $smarty.foreach.loop.last}
 </tr>
 		{/if}

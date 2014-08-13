@@ -54,7 +54,7 @@ class CmsPaginaController extends Controller {
 			$this->geentoegang();
 		}
 		$body = new CmsPaginaView($pagina);
-		if (!LoginSession::mag('P_LOGGED_IN')) { // nieuwe layout altijd voor uitgelogde bezoekers
+		if (!LoginModel::mag('P_LOGGED_IN')) { // nieuwe layout altijd voor uitgelogde bezoekers
 			$tmpl = 'content';
 			$menu = '';
 			if ($naam === 'lidworden') {

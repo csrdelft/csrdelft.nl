@@ -16,7 +16,7 @@ class CorveeTakenModel {
 	}
 
 	public static function taakToewijzenAanLid(CorveeTaak $taak, $uid) {
-		if ($taak->getLidId() === $uid) {
+		if ($taak->getUid() === $uid) {
 			return false;
 		}
 		$puntenruilen = false;
@@ -24,10 +24,10 @@ class CorveeTakenModel {
 			$puntenruilen = true;
 		}
 		$taak->setWanneerGemaild('');
-		if ($puntenruilen && $taak->getLidId() !== null) {
+		if ($puntenruilen && $taak->getUid() !== null) {
 			self::puntenIntrekken($taak);
 		}
-		$taak->setLidId($uid);
+		$taak->setUid($uid);
 		if ($puntenruilen && $uid !== null) {
 			self::puntenToekennen($taak);
 		} else {
@@ -40,7 +40,7 @@ class CorveeTakenModel {
 		$db = \Database::instance();
 		try {
 			$db->beginTransaction();
-			CorveePuntenModel::puntenToekennen($taak->getLidId(), $taak->getPunten(), $taak->getBonusMalus());
+			CorveePuntenModel::puntenToekennen($taak->getUid(), $taak->getPunten(), $taak->getBonusMalus());
 			$taak->setPuntenToegekend($taak->getPuntenToegekend() + $taak->getPunten());
 			$taak->setBonusToegekend($taak->getBonusToegekend() + $taak->getBonusMalus());
 			$taak->setWanneerToegekend(date('Y-m-d H:i'));
@@ -56,7 +56,7 @@ class CorveeTakenModel {
 		$db = \Database::instance();
 		try {
 			$db->beginTransaction();
-			CorveePuntenModel::puntenIntrekken($taak->getLidId(), $taak->getPunten(), $taak->getBonusMalus());
+			CorveePuntenModel::puntenIntrekken($taak->getUid(), $taak->getPunten(), $taak->getBonusMalus());
 			$taak->setPuntenToegekend($taak->getPuntenToegekend() - $taak->getPunten());
 			$taak->setBonusToegekend($taak->getBonusToegekend() - $taak->getBonusMalus());
 			$taak->setWanneerToegekend(null);
@@ -91,7 +91,7 @@ class CorveeTakenModel {
 		if ($groupByUid) {
 			$takenByUid = array();
 			foreach ($taken as $taak) {
-				$uid = $taak->getLidId();
+				$uid = $taak->getUid();
 				if ($uid !== null) {
 					$takenByUid[$uid][] = $taak;
 				}
@@ -141,8 +141,8 @@ class CorveeTakenModel {
 		$where = 'verwijderd = false AND datum >= ? AND datum <= ?';
 		$values = array(date('Y-m-d', $van), date('Y-m-d', $tot));
 		if (!$iedereen) {
-			$where .= ' AND lid_id = ?';
-			$values[] = \LoginSession::instance()->getUid();
+			$where .= ' AND uid = ?';
+			$values[] = \LoginModel::getUid();
 		}
 		return self::loadTaken($where, $values);
 	}
@@ -154,7 +154,7 @@ class CorveeTakenModel {
 	 * @return CorveeTaak[]
 	 */
 	public static function getTakenVoorLid($uid) {
-		return self::loadTaken('verwijderd = false AND lid_id = ?', array($uid));
+		return self::loadTaken('verwijderd = false AND uid = ?', array($uid));
 	}
 
 	/**
@@ -164,7 +164,7 @@ class CorveeTakenModel {
 	 * @return CorveeTaak[]
 	 */
 	public static function getLaatsteTaakVanLid($uid) {
-		$taken = self::loadTaken('verwijderd = false AND lid_id = ?', array($uid), 1, false);
+		$taken = self::loadTaken('verwijderd = false AND uid = ?', array($uid), 1, false);
 		if (!array_key_exists(0, $taken)) {
 			return null;
 		}
@@ -178,7 +178,7 @@ class CorveeTakenModel {
 	 * @return CorveeTaak[]
 	 */
 	public static function getKomendeTakenVoorLid($uid) {
-		return self::loadTaken('verwijderd = false AND lid_id = ? AND datum >= ?', array($uid, date('Y-m-d')));
+		return self::loadTaken('verwijderd = false AND uid = ? AND datum >= ?', array($uid, date('Y-m-d')));
 	}
 
 	public static function saveTaak($tid, $fid, $uid, $crid, $mid, $datum, $punten, $bonus_malus) {
@@ -243,8 +243,8 @@ class CorveeTakenModel {
 
 	public static function verwijderTakenVoorLid($uid) {
 		$sql = 'UPDATE crv_taken';
-		$sql.= ' SET lid_id = ?';
-		$sql.= ' WHERE lid_id = ? AND datum >= ?';
+		$sql.= ' SET uid = ?';
+		$sql.= ' WHERE uid = ? AND datum >= ?';
 		$values = array(null, $uid, date('Y-m-d'));
 		$db = \Database::instance();
 		$query = $db->prepare($sql);
@@ -275,7 +275,7 @@ class CorveeTakenModel {
 	}
 
 	private static function loadTaken($where = null, $values = array(), $limit = null, $orderAsc = true) {
-		$sql = 'SELECT taak_id, functie_id, lid_id, crv_repetitie_id, maaltijd_id, datum, punten, bonus_malus, punten_toegekend, bonus_toegekend, wanneer_toegekend, wanneer_gemaild, verwijderd';
+		$sql = 'SELECT taak_id, functie_id, uid, crv_repetitie_id, maaltijd_id, datum, punten, bonus_malus, punten_toegekend, bonus_toegekend, wanneer_toegekend, wanneer_gemaild, verwijderd';
 		$sql.= ' FROM crv_taken';
 		if ($where !== null) {
 			$sql.= ' WHERE ' . $where;
@@ -302,11 +302,11 @@ class CorveeTakenModel {
 
 	private static function updateTaak(CorveeTaak $taak) {
 		$sql = 'UPDATE crv_taken';
-		$sql.= ' SET functie_id=?, lid_id=?, crv_repetitie_id=?, maaltijd_id=?, datum=?, punten=?, bonus_malus=?, punten_toegekend=?, bonus_toegekend=?, wanneer_toegekend=?, wanneer_gemaild=?, verwijderd=?';
+		$sql.= ' SET functie_id=?, uid=?, crv_repetitie_id=?, maaltijd_id=?, datum=?, punten=?, bonus_malus=?, punten_toegekend=?, bonus_toegekend=?, wanneer_toegekend=?, wanneer_gemaild=?, verwijderd=?';
 		$sql.= ' WHERE taak_id=?';
 		$values = array(
 			$taak->getFunctieId(),
-			$taak->getLidId(),
+			$taak->getUid(),
 			$taak->getCorveeRepetitieId(),
 			$taak->getMaaltijdId(),
 			$taak->getDatum(),
@@ -332,7 +332,7 @@ class CorveeTakenModel {
 			throw new Exception('New taak faalt: $mid =' . $mid);
 		}
 		$sql = 'INSERT INTO crv_taken';
-		$sql.= ' (taak_id, functie_id, lid_id, crv_repetitie_id, maaltijd_id, datum, punten, bonus_malus, punten_toegekend, bonus_toegekend, wanneer_toegekend, wanneer_gemaild, verwijderd)';
+		$sql.= ' (taak_id, functie_id, uid, crv_repetitie_id, maaltijd_id, datum, punten, bonus_malus, punten_toegekend, bonus_toegekend, wanneer_toegekend, wanneer_gemaild, verwijderd)';
 		$sql.= ' VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
 		$values = array(null, $fid, $uid, $crid, $mid, $datum, $punten, $bonus_malus, 0, 0, null, '', false);
 		$db = \Database::instance();

@@ -38,7 +38,7 @@ class CorveeVoorkeurenModel {
 			$crid = $voorkeur->getCorveeRepetitieId();
 			if (array_key_exists($crid, $repById)) { // ingeschakeld en voorkeurbaar
 				$voorkeur->setCorveeRepetitie($repById[$crid]);
-				$voorkeur->setVanLidId($uid);
+				$voorkeur->setVanUid($uid);
 				$result[$crid] = $voorkeur;
 			}
 		}
@@ -52,7 +52,7 @@ class CorveeVoorkeurenModel {
 				}
 				$voorkeur = new CorveeVoorkeur($crid, null);
 				$voorkeur->setCorveeRepetitie($repetitie);
-				$voorkeur->setVanLidId($uid);
+				$voorkeur->setVanUid($uid);
 				$result[$crid] = $voorkeur;
 			}
 		}
@@ -64,7 +64,7 @@ class CorveeVoorkeurenModel {
 		if (!is_int($crid) || $crid <= 0) {
 			throw new Exception('Get heeft voorkeur faalt: Invalid $crid =' . $crid);
 		}
-		$sql = 'SELECT EXISTS (SELECT * FROM crv_voorkeuren WHERE crv_repetitie_id=? AND lid_id=?)';
+		$sql = 'SELECT EXISTS (SELECT * FROM crv_voorkeuren WHERE crv_repetitie_id=? AND uid=?)';
 		$values = array($crid, $uid);
 		$query = \Database::instance()->prepare($sql);
 		$query->execute($values);
@@ -90,7 +90,7 @@ class CorveeVoorkeurenModel {
 				$voorkeur = new CorveeVoorkeur($crid, null);
 			}
 			$voorkeur->setCorveeRepetitie($repById[$crid]);
-			$voorkeur->setVanLidId($uid);
+			$voorkeur->setVanUid($uid);
 			$matrix[$uid][$crid] = $voorkeur;
 			ksort($matrix[$uid]);
 		}
@@ -99,7 +99,7 @@ class CorveeVoorkeurenModel {
 
 	private static function loadLedenVoorkeuren() {
 		$sql = 'SELECT uid, crv_repetitie_id AS crid,';
-		$sql.= ' (EXISTS ( SELECT * FROM crv_voorkeuren WHERE crv_repetitie_id = crid AND lid_id = uid )) AS voorkeur';
+		$sql.= ' (EXISTS ( SELECT * FROM crv_voorkeuren WHERE crv_repetitie_id = crid AND uid = uid )) AS voorkeur';
 		$sql.= ' FROM lid, crv_repetities';
 		$sql.= ' WHERE voorkeurbaar = true AND lid.status IN("S_LID", "S_GASTLID", "S_NOVIET")'; // alleen leden
 		$sql.= ' ORDER BY achternaam, voornaam ASC';
@@ -122,7 +122,7 @@ class CorveeVoorkeurenModel {
 		if (is_int($crid) && $uid !== null) {
 			throw new Exception('Load voorkeuren faalt: both $crid AND $uid provided');
 		}
-		$sql = 'SELECT crv_repetitie_id, lid_id';
+		$sql = 'SELECT crv_repetitie_id, uid';
 		$sql.= ' FROM crv_voorkeuren';
 		$values = array();
 		if (is_int($crid)) {
@@ -130,7 +130,7 @@ class CorveeVoorkeurenModel {
 			$values[] = $crid;
 		}
 		if ($uid !== null) {
-			$sql.= ' WHERE lid_id=?';
+			$sql.= ' WHERE uid=?';
 			$values[] = $uid;
 		}
 		$db = \Database::instance();
@@ -163,7 +163,7 @@ class CorveeVoorkeurenModel {
 		try {
 			$db->beginTransaction();
 			$sql = 'INSERT IGNORE INTO crv_voorkeuren';
-			$sql.= ' (crv_repetitie_id, lid_id)';
+			$sql.= ' (crv_repetitie_id, uid)';
 			$values = array($crid, $uid);
 			$sql.= ' VALUES (?, ?)';
 			$query = $db->prepare($sql);
@@ -222,7 +222,7 @@ class CorveeVoorkeurenModel {
 		$sql.= ' WHERE crv_repetitie_id=?';
 		$values = array($crid);
 		if ($uid !== null) {
-			$sql.= ' AND lid_id=?';
+			$sql.= ' AND uid=?';
 			$values[] = $uid;
 		}
 		$db = \Database::instance();

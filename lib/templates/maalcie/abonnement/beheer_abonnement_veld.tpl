@@ -3,13 +3,13 @@
 *}
 {strip}
 <td id="abonnement-cell-{$uid}-{$abonnement->getMaaltijdRepetitieId()}"
-	class="abonnement-{if $abonnement->getWaarschuwing()}warning{else}{if $lidid}in{else}uit{/if}geschakeld{/if}"
+	class="abonnement-{if $abonnement->getWaarschuwing()}warning{else}{if $uid2}in{else}uit{/if}geschakeld{/if}"
 	title="{$abonnement->getWaarschuwing()}">
-	<a href="{Instellingen::get('taken', 'url')}/{if $lidid}uit{else}in{/if}schakelen/{$abonnement->getMaaltijdRepetitieId()}/{$uid}" class="knop post abonnement-{if $lidid}in{else}uit{/if}geschakeld">
+	<a href="{Instellingen::get('taken', 'url')}/{if $uid2}uit{else}in{/if}schakelen/{$abonnement->getMaaltijdRepetitieId()}/{$uid}" class="knop post abonnement-{if $uid2}in{else}uit{/if}geschakeld">
 		<input type="checkbox"
 			   id="box-{$uid}-{$abonnement->getMaaltijdRepetitieId()}"
 			   name="abo-{$abonnement->getMaaltijdRepetitieId()}"
-		{if $lidid} checked="checked"{/if} />
+		{if $uid2} checked="checked"{/if} />
 	</a>
 </td>
 {/strip}

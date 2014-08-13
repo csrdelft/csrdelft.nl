@@ -1,13 +1,15 @@
 <?php
 
-# OogOpslag Internet / C.S.R. Delft | pubcie@csrdelft.nl
-# -------------------------------------------------------------------
-# class.mysql.php
-# -------------------------------------------------------------------
-# MySQLi wrapper
-# -------------------------------------------------------------------
-
-class MySql {
+/**
+ * MijnSqli.class.php
+ * 
+ * @deprecated
+ * 
+ * OogOpslag Internet / C.S.R. Delft | pubcie@csrdelft.nl
+ * 
+ * MySQLi wrapper
+ */
+class MijnSqli {
 
 	//cached instantie van de klasse
 	static private $mySqli;
@@ -22,7 +24,7 @@ class MySql {
 	public static function instance() {
 		//als er nog geen instantie gemaakt is, die nu maken
 		if (!isset(self::$mySqli)) {
-			self::$mySqli = new MySql();
+			self::$mySqli = new MijnSqli();
 		}
 		return self::$mySqli;
 	}
@@ -35,7 +37,8 @@ class MySql {
 				'host'	 => 'localhost',
 				'user'	 => 'foo',
 				'pass'	 => 'bar',
-				'db'	 => 'csrdelft');
+				'db'	 => 'csrdelft'
+			);
 		}
 		$this->_db = mysqli_connect($cred['host'], $cred['user'], $cred['pass'], $cred['db'])
 				or die("Kan geen verbinding maken met de database server {$cred['host']}\n");

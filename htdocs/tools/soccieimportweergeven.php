@@ -2,7 +2,7 @@
 
 require_once 'configuratie.include.php';
 
-if (!LoginSession::mag('P_LEDEN_MOD,groep:SocCie,groep:NBG')) {
+if (!LoginModel::mag('P_LEDEN_MOD,groep:SocCie,groep:NBG')) {
 	header('location: ' . CSR_ROOT);
 	exit;
 }
@@ -126,7 +126,7 @@ echo '<ul>
 	</ul>';
 echo 'De PubCie kan individuele leden bijwerken, NBG zorgt voor uitgebreidere koppelacties.';
 echo '<br /><br />';
-if (LoginSession::mag('P_LEDEN_MOD,groep:NBG')) {
+if (LoginModel::mag('P_LEDEN_MOD,groep:NBG')) {
 	echo '<div style="background: lightgrey;">';
 	echo '<i>Privé opmerking voor PubCie/NBG</i>:<br />';
 	echo 'Op de console kun je een koppelscript runnen die alle soccieIDs in database automatisch probeert te updaten.<br />';

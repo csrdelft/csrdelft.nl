@@ -23,7 +23,7 @@
 				&nbsp;{$taak->getCorveeFunctie()->afkorting}:&nbsp;
 			</span>
 			{/if}
-			{if $taak->getLidId()}{* ingedeelde taak van functie: teller++ *}
+			{if $taak->getUid()}{* ingedeelde taak van functie: teller++ *}
 				{counter}
 			{/if}
 			{if $smarty.foreach.taken.last}{* laatste taak van functie: toon ingedeeld-teller en totaal aantal taken van deze functie *}

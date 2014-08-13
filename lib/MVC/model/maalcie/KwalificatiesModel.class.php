@@ -32,11 +32,11 @@ class KwalificatiesModel extends PersistenceModel {
 	/**
 	 * Eager loading of corveefuncties.
 	 * 
-	 * @param string $lid_id
+	 * @param string $uid
 	 * @return CorveeFunctie[]
 	 */
-	public function getKwalificatiesVanLid($lid_id) {
-		return $this->find('lid_id = ?', array($lid_id));
+	public function getKwalificatiesVanLid($uid) {
+		return $this->find('uid = ?', array($uid));
 	}
 
 	public function isLidGekwalificeerdVoorFunctie($uid, $fid) {

@@ -30,12 +30,12 @@ class Peiling {
 			SELECT
 				id, titel, tekst, (
 					SELECT uid FROM peiling_stemmen
-					WHERE peilingid=".$this->getId()." AND uid='".LoginSession::instance()->getUid()."'
+					WHERE peilingid=".$this->getId()." AND uid='".LoginModel::getUid()."'
 					LIMIT 1) as has_voted
 			FROM peiling
 			WHERE peiling.id = ".$this->getId().';';
 
-		$db = MySql::instance();
+		$db = MijnSqli::instance();
 		$rPeiling=$db->query($sPeilingQuery);
 
 		if($db->numRows($rPeiling)==1){
@@ -55,7 +55,7 @@ class Peiling {
 			FROM peilingoptie
 			WHERE peilingid=".$this->getId()."
 			ORDER BY id ASC;";
-		$db=MySql::instance();
+		$db=MijnSqli::instance();
 		$opties=$db->query2array($optiesQuery);
 
 		if(!is_array($opties)){
@@ -85,7 +85,7 @@ class Peiling {
 	public function getStemmenAantal(){ return $this->totaal; } //wth is dit voor methodenaam
 
 	public function magStemmen (){
-		if(!LoginSession::mag('P_LOGGED_IN')){
+		if(!LoginModel::mag('P_LOGGED_IN')){
 			return false;
 		}
 		return $this->hasVoted()=='';
@@ -99,7 +99,7 @@ class Peiling {
 	}
 
 	private function addStem($optieId){
-		$db=MySql::instance();
+		$db=MijnSqli::instance();
 
 		$updateOptie="
 			UPDATE peilingoptie
@@ -107,7 +107,7 @@ class Peiling {
 			WHERE id=".$optieId.';';
 		$logStem="
 			INSERT INTO peiling_stemmen (peilingid, uid) VALUES
-			(".$this->getId().",'".LoginSession::instance()->getUid()."');";
+			(".$this->getId().",'".LoginModel::getUid()."');";
 
 		return $db->query($updateOptie) AND $db->query($logStem);
 	}
@@ -122,7 +122,7 @@ class Peiling {
 
 	private function delete(){
 
-		$db = MySql::instance();
+		$db = MijnSqli::instance();
 
 		$sDelete = "DELETE FROM `peiling` WHERE `id`=".$this->getId().";";
 		$sDeleteOpties = " DELETE FROM  `peilingoptie` WHERE `peilingid`=".$this->getId().";";
@@ -149,7 +149,7 @@ class Peiling {
 		if(is_array($properties['opties'])){
 			$opties = $properties['opties'];
 		}
-		$db = MySql::instance();
+		$db = MijnSqli::instance();
 
 		$sCreate="
 			INSERT INTO `peiling` (`titel`,`tekst`) VALUES
@@ -175,7 +175,7 @@ class Peiling {
 
 	public static function magBewerken(){
 		//Elk basfcie-lid heeft voorlopig peilingbeheerrechten.
-		return LoginSession::mag('P_ADMIN,groep:bestuur,groep:BASFcie');
+		return LoginModel::mag('P_ADMIN,groep:bestuur,groep:BASFcie');
 	}
 
 	public static function getLijst(){
@@ -185,7 +185,7 @@ class Peiling {
 			ORDER BY id DESC";
 
 		$sSelectQuery .= ';';
-		$db=MySql::instance();
+		$db=MijnSqli::instance();
 		$rPeilingen=$db->query($sSelectQuery);
 		return $db->result2array($rPeilingen);
 	}

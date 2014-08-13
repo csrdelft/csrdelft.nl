@@ -28,7 +28,7 @@ class Groepen{
 	 * @return 	void
 	 */
 	public function __construct($groeptype){
-		$db=MySql::instance();
+		$db=MijnSqli::instance();
 
 		if(is_int($groeptype)){
 			$where="groeptype.id=".(int)$groeptype;
@@ -45,7 +45,7 @@ class Groepen{
 			$this->type=$categorie;
 		}else{
 			$message='Groeptype ('.$groeptype.') bestaat niet! Groepen::__construct()';
-			if(LoginSession::mag('P_ADMIN')){
+			if(LoginModel::mag('P_ADMIN')){
 				$message.="\n".$db->error();
 			}
 			throw new Exception($message);
@@ -57,7 +57,7 @@ class Groepen{
 	 * het type.
 	 */
 	private function loadGroepen(){
-		$db=MySql::instance();
+		$db=MijnSqli::instance();
 
 		//Afhankelijk van de instelling voor het groeptype halen we alleen de
 		//h.t.-groepen op, of ook de o.t.-groepen.
@@ -128,7 +128,7 @@ class Groepen{
 	 * LET OP: deze methode doet niets met de ingeladen groepen.
 	 */
 	public function save(){
-		$db=MySql::instance();
+		$db=MijnSqli::instance();
 		$qSave="
 			UPDATE groeptype
 			SET beschrijving='".$db->escape($this->getBeschrijving())."'
@@ -171,11 +171,11 @@ class Groepen{
 		return $this->type['groepenAanmaakbaar'];
 	}
 	public function isGroepAanmaker(){
-		return LoginSession::mag($this->getGroepAanmaakbaarPermissies());
+		return LoginModel::mag($this->getGroepAanmaakbaarPermissies());
 	}
 
 	public static function isAdmin(){
-		return LoginSession::mag('P_LEDEN_MOD');
+		return LoginModel::mag('P_LEDEN_MOD');
 	}
 
 	public function getGroep($groepId){
@@ -212,7 +212,7 @@ class Groepen{
 	 * @return			Array met Groep-objectjes
 	 */
 	public static function getByUid($uid){
-		$db=MySql::instance();
+		$db=MijnSqli::instance();
 
 		$groepen=array();
 		if(Lid::isValidUid($uid)){
@@ -244,7 +244,7 @@ class Groepen{
 	 * @return			Array met de kortenamen van de groepen
 	 */
 	public static function getWikigroupsByUid($uid){
-		$db=MySql::instance();
+		$db=MijnSqli::instance();
 
 		$groepen=array();
 		if(Lid::isValidUid($uid)){
@@ -291,7 +291,7 @@ class Groepen{
 	 * Haal de huidige groepen van een bebaald type voor een bepaald lid.
 	 */
 	public static function getByTypeAndUid($type, $uid, $status='ht'){
-		$db=MySql::instance();
+		$db=MijnSqli::instance();
 
 		$groepen=array();
 		if(Lid::isValidUid($uid)){
@@ -334,7 +334,7 @@ class Groepen{
 	 * @return bool wel/niet lid
 	 */
     public static function isUidLidofGroup($uid,$groep,$status=array('ft','ht','ot')){
-		$db=MySql::instance();
+		$db=MijnSqli::instance();
 		$qLookup="
 			SELECT uid
 			FROM groeplid gl
@@ -352,7 +352,7 @@ class Groepen{
 	 * @return		Array met groeptypes
 	 */
 	public static function getGroeptypes($alleenZichtbaar=true){
-		$db=MySql::instance();
+		$db=MijnSqli::instance();
 		$qGroeptypen="
 			SELECT id, naam
 			FROM groeptype ";
@@ -363,7 +363,7 @@ class Groepen{
 	}
 
 	public static function isValidGtype($gtypetotest){
-		$db=MySql::instance();
+		$db=MijnSqli::instance();
 		$qGroep="SELECT id FROM groeptype WHERE naam='".$db->escape($gtypetotest)."'";
 		return $db->numRows($db->query($qGroep))==1;
 	}
@@ -374,7 +374,7 @@ class Groepen{
 	 * @return		Array met uid van werkgroepleiders
 	 */
 	public static function getWerkgroepLeiders(){
-		$db=MySql::instance();
+		$db=MijnSqli::instance();
 		$Werkgroepleiders = "
 			SELECT uid
 			FROM groeplid
@@ -403,7 +403,7 @@ class Groepen{
 	 * @return array
 	 */
 	public static function zoekGroepen($zoekterm, $type = 0, $limiet = 20){
-		$db=MySql::instance();
+		$db=MijnSqli::instance();
 
 		$groepen = array();
 		$wheretype = "";

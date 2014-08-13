@@ -29,7 +29,7 @@ class CorveeTaak implements Agendeerbaar {
 
 	private $taak_id; # int 11
 	private $functie_id; # foreign key crv_functie.id
-	private $lid_id; # foreign key lid.uid
+	private $uid; # foreign key lid.uid
 	private $crv_repetitie_id; # foreign key crv_repetitie.id
 	private $maaltijd_id; # foreign key maaltijd.id
 	private $datum; # date
@@ -45,7 +45,7 @@ class CorveeTaak implements Agendeerbaar {
 	public function __construct($tid = 0, $fid = 0, $uid = null, $crid = null, $mid = null, $datum = null, $punten = 0, $bonus_malus = 0, $toegekend = 0, $bonus_toegekend = 0, $wanneer = null, $gemaild = '', $verwijderd = false) {
 		$this->taak_id = (int) $tid;
 		$this->setFunctieId($fid);
-		$this->setLidId($uid);
+		$this->setUid($uid);
 		$this->setCorveeRepetitieId($crid);
 		$this->setMaaltijdId($mid);
 		if ($datum === null) {
@@ -69,8 +69,8 @@ class CorveeTaak implements Agendeerbaar {
 		return (int) $this->functie_id;
 	}
 
-	public function getLidId() {
-		return $this->lid_id;
+	public function getUid() {
+		return $this->uid;
 	}
 
 	public function getCorveeRepetitieId() {
@@ -205,11 +205,11 @@ class CorveeTaak implements Agendeerbaar {
 		$this->functie_id = $int;
 	}
 
-	public function setLidId($uid) {
+	public function setUid($uid) {
 		if ($uid !== null && !\Lid::exists($uid)) {
 			throw new Exception('Geen lid: set lid id');
 		}
-		$this->lid_id = $uid;
+		$this->uid = $uid;
 	}
 
 	public function setCorveeRepetitieId($int) {
@@ -291,7 +291,7 @@ class CorveeTaak implements Agendeerbaar {
 
 	// Agendeerbaar ############################################################
 
-	public function getUID() {
+	public function getUUID() {
 		return $this->taak_id . '@corveetaak.csrdelft.nl';
 	}
 
@@ -308,14 +308,14 @@ class CorveeTaak implements Agendeerbaar {
 	}
 
 	public function getTitel() {
-		if ($this->getLidId()) {
-			return 'Corvee ' . Lid::naamLink($this->getLidId(), 'civitas', 'plain');
+		if ($this->getUid()) {
+			return 'Corvee ' . Lid::naamLink($this->getUid(), 'civitas', 'plain');
 		}
 		return 'Corvee ' . $this->getCorveeFunctie()->naam;
 	}
 
 	public function getBeschrijving() {
-		if ($this->getLidId()) {
+		if ($this->getUid()) {
 			return $this->getCorveeFunctie()->naam;
 		}
 		return 'Nog niet ingedeeld';

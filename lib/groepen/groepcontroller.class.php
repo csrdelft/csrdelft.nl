@@ -187,7 +187,7 @@ class Groepcontroller extends Controller {
 	 * toegangscontrole voor verschillende velden geregeld.
 	 */
 	public function bewerken() {
-		if (!LoginSession::mag('P_LOGGED_IN')) {
+		if (!LoginModel::mag('P_LOGGED_IN')) {
 			invokeRefresh($this->getUrl('standaard'), 'Niet voldoende rechten voor deze actie');
 		}
 		$this->view->setAction('edit');
@@ -209,7 +209,7 @@ class Groepcontroller extends Controller {
 				$this->groep->setValue('toonPasfotos', $oudeGroep->getToonPasfotos());
 				$this->groep->setValue('lidIsMod', $oudeGroep->getLidIsMod());
 				$this->groep->setFunctiefilter($oudeGroep->getFunctiefilter());
-				if (LoginSession::instance()->getUid() == $oudeGroep->getEigenaar() OR ! Lid::isValidUid($oudeGroep->getEigenaar())) {
+				if (LoginModel::getUid() == $oudeGroep->getEigenaar() OR ! Lid::isValidUid($oudeGroep->getEigenaar())) {
 					$this->groep->setValue('eigenaar', $oudeGroep->getEigenaar());
 					$_SESSION['oudegroep']['eigenaar'] = $oudeGroep->getEigenaar();
 				}
@@ -427,7 +427,7 @@ class Groepcontroller extends Controller {
 	 * Opmerking/functie van een lid aanpassen, return functie of een foutmelding
 	 */
 	public function bewerkfunctieLid() {
-		if (!$this->groep->magBewerken() AND LoginSession::instance()->getUid() != $this->getParam(2)) {
+		if (!$this->groep->magBewerken() AND LoginModel::getUid() != $this->getParam(2)) {
 			echo '<span class="melding">Onvoldoende rechten voor deze actie</span>';
 			exit;
 		}

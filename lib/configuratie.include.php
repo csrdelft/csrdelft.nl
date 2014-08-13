@@ -15,7 +15,7 @@ require_once 'defines.include.php';
 # 
 # 
 # uncomment de volgende regel om de database automatisch te laten controleren
-#define('DB_CHECK_ENABLE', 'zie PersistentEntity::checkTable()');
+define('DB_CHECK_ENABLE', 'zie PersistentEntity::checkTable()');
 # 
 # uncomment de volgende regel om de database automatisch te laten bijwerken
 #define('DB_MODIFY_ENABLE', 'heb je een backup gemaakt?');
@@ -44,9 +44,9 @@ date_default_timezone_set('Europe/Amsterdam');
 
 # Model
 require_once 'common.functions.php';
-require_once 'mysql.class.php'; # DEPRECATED
+require_once 'MijnSqli.class.php'; # DEPRECATED
 require_once 'MVC/model/PersistenceModel.abstract.php';
-require_once 'lid/LoginSession.class.php';
+require_once 'MVC/model/LoginModel.class.php';
 require_once 'MVC/model/LidInstellingenModel.class.php';
 require_once 'MVC/model/Paging.interface.php';
 # View
@@ -63,7 +63,7 @@ require_once 'MVC/controller/AclController.abstract.php';
 
 switch (constant('MODE')) {
 	case 'CLI':
-		if (!LoginSession::mag('P_ADMIN')) {
+		if (!LoginModel::mag('P_ADMIN')) {
 			die('access denied');
 		}
 		break;
@@ -74,9 +74,6 @@ switch (constant('MODE')) {
 		# geen sessie-id in de url
 		ini_set('session.use_only_cookies', 1);
 		session_save_path(SESSION_PATH);
-
-		$req = filter_var($_SERVER['REQUEST_URI'], FILTER_SANITIZE_URL);
-		Instellingen::setTemp('stek', 'request', $req);
 
 		# als er een wikiconfiguratie is en hierin is de csr-wikiauthicatie geselecteerd 
 		# dan is de sessie al gestart (en zijn sommige includes niet nodig)
@@ -91,13 +88,16 @@ switch (constant('MODE')) {
 			session_start();
 		}
 
-		# N.B. het is van belang dat na het starten van de sessie meteen LoginSession
+		$req = filter_var($_SERVER['REQUEST_URI'], FILTER_SANITIZE_URL);
+		Instellingen::setTemp('stek', 'request', $req);
+
+		# N.B. het is van belang dat na het starten van de sessie meteen LoginModel
 		# wordt geinitialiseerd, omdat die de ingelogde gebruiker controleert en
 		# tevens sess_deleted bugs ondervangt en ip-checks doet
-		LoginSession::instance();
+		LoginModel::instance();
 
 		if (defined('DB_MODIFY_ENABLE') OR defined('DB_DROP_ENABLE')) {
-			if (!LoginSession::mag('P_ADMIN')) {
+			if (!LoginModel::mag('P_ADMIN')) {
 				header('location: ' . CSR_ROOT . '/onderhoud.html');
 				exit;
 			}

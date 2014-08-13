@@ -10,7 +10,7 @@ class Bijbelrooster extends TemplateView {
 		$aantal = (int) max($aantal, 2);
 		$begin = Date('y:m:d', strtotime("-" . min(abs($aantal / 2), 2) . " days"));
 		$return = '<div class="mededeling-grotebalk"><div class="titel"><a href="/actueel/bijbelrooster/">Bijbelleesrooster</a></div><p class="half">';
-		$db = MySql::instance();
+		$db = MijnSqli::instance();
 		$query = 'SELECT * FROM bijbelrooster WHERE dag >= "' . $begin . '" ORDER BY dag ASC LIMIT 0,' . $aantal;
 		$res = $db->select($query);
 		if ($res === false) {
@@ -38,7 +38,7 @@ class Bijbelrooster extends TemplateView {
 	 * Haal het hele rooster op en laat het zien in drie kolommen.
 	 */
 	public function view() {
-		$db = MySql::instance();
+		$db = MijnSqli::instance();
 		$query = "SELECT * FROM bijbelrooster ORDER BY dag ASC";
 		$res = $db->select($query);
 

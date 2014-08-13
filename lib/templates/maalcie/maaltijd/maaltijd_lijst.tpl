@@ -29,10 +29,10 @@
 								<tbody>
 									{foreach from=$tabel item="aanmelding"}
 										<tr>
-											{if $aanmelding->getLidId()}
-												<td>{Lid::naamLink($aanmelding->getLidId(), Instellingen::get('maaltijden', 'weergave_ledennamen_maaltijdlijst'), Instellingen::get('maaltijden', 'weergave_link_ledennamen'))}
+											{if $aanmelding->getUid()}
+												<td>{Lid::naamLink($aanmelding->getUid(), Instellingen::get('maaltijden', 'weergave_ledennamen_maaltijdlijst'), Instellingen::get('maaltijden', 'weergave_link_ledennamen'))}
 													<br />
-													{assign var=eetwens value=LidCache::getLid($aanmelding->getLidId())->getProperty('eetwens')}
+													{assign var=eetwens value=LidCache::getLid($aanmelding->getUid())->getProperty('eetwens')}
 													{if $eetwens !== ''}
 														<span class="eetwens">
 															{$eetwens}
@@ -46,8 +46,8 @@
 													{/if}
 												</td>
 												<td class="saldo">{$aanmelding->getSaldoMelding()}</td>
-											{elseif $aanmelding->getDoorLidId()}
-												<td>Gast van {Lid::naamLink($aanmelding->getDoorLidId(), Instellingen::get('maaltijden', 'weergave_ledennamen_maaltijdlijst'), 'plain')}</td>
+											{elseif $aanmelding->getDoorUid()}
+												<td>Gast van {Lid::naamLink($aanmelding->getDoorUid(), Instellingen::get('maaltijden', 'weergave_ledennamen_maaltijdlijst'), 'plain')}</td>
 												<td class="saldo">-</td>
 											{else}
 												<td style="line-height: 2.2em;">&nbsp;</td>
@@ -85,8 +85,8 @@
 					{if $corveetaken}
 						{table_foreach from=$corveetaken inner=rows item=taak table_attr='class="corveetaken"' cols=2 name=corveetaken}
 						&bullet;&nbsp;
-						{if $taak->getLidId()}
-							{Lid::naamLink($taak->getLidId(), Instellingen::get('maaltijden', 'weergave_ledennamen_maaltijdlijst'), Instellingen::get('maaltijden', 'weergave_link_ledennamen'))}
+						{if $taak->getUid()}
+							{Lid::naamLink($taak->getUid(), Instellingen::get('maaltijden', 'weergave_ledennamen_maaltijdlijst'), Instellingen::get('maaltijden', 'weergave_link_ledennamen'))}
 						{else}
 							<i>vacature</i>
 						{/if}

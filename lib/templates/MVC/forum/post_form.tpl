@@ -1,7 +1,7 @@
 <form id="forumReageren" action="/forum/posten/{$deel->forum_id}/{$draad->draad_id}" method="post">
 	<a class="forumpostlink" id="reageren">Reageren</a>
 	{* berichtje weergeven voor niet-ingeloggede gebruikers dat ze een naam moeten vermelden. *}
-	{if !LoginSession::mag('P_LOGGED_IN')}
+	{if !LoginModel::mag('P_LOGGED_IN')}
 		<strong>
 			Uw bericht wordt pas geplaatst nadat het bekeken en goedgekeurd is door de
 			<a href="/actueel/groepen/Commissies/PubCie/">PubCie</a>.

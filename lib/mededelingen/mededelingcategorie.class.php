@@ -31,7 +31,7 @@ class MededelingCategorie{
 		}
 	}
 	public function load($id=0){
-		$db=MySql::instance();
+		$db=MijnSqli::instance();
 		$loadQuery="
 			SELECT id, naam, prioriteit, permissie, plaatje, beschrijving
 			FROM mededelingcategorie
@@ -45,11 +45,11 @@ class MededelingCategorie{
 	public function loadMededelingen(){
 		$query="SELECT id FROM mededelingen WHERE categorie=".$this->getId().";";
 
-		$this->mededelingen=MySql::instance()->query($query);
+		$this->mededelingen=MijnSqli::instance()->query($query);
 	}
 	public function save(){
 		throw new Exception('Nog niet geïmplementeerd');
-		$db=MySql::instance();
+		$db=MijnSqli::instance();
 		if($this->getId()==0){
 			$saveQuery="
 				INSERT INTO mededelingcategorie (
@@ -98,13 +98,13 @@ class MededelingCategorie{
 	public function getPlaatje(){ return $this->plaatje; }
 	public function getBeschrijving(){ return $this->beschrijving; }
 
-	public function magUitbreiden(){ return LoginSession::mag($this->permissie); }
+	public function magUitbreiden(){ return LoginModel::mag($this->permissie); }
 
 	public static function getAll(){
 		return MededelingCategorie::getCategorieen();
 	}
 	public static function getCategorieen(){
-		$db=MySql::instance();
+		$db=MijnSqli::instance();
 		$sCategorieQuery="
 			SELECT id, naam, prioriteit, permissie, plaatje, beschrijving
 			FROM mededelingcategorie

@@ -28,7 +28,7 @@ class OldGroep {
 				 * Als iemand groepen in een rubriek mag maken vanwege adminrechten zijn uid niet invullen.
 				 * Commissiecategorien permissies voor commissie houden, niet voor de idividuen.
 				 */
-				$eigenaar = LoginSession::instance()->getUid();
+				$eigenaar = LoginModel::getUid();
 				if (isset($_GET['gtype'])) {
 					try {
 						$groepen = new Groepen($_GET['gtype']);
@@ -72,7 +72,7 @@ class OldGroep {
 	 */
 
 	public function load($groepId) {
-		$db = MySql::instance();
+		$db = MijnSqli::instance();
 		if (preg_match('/^\d+$/', $groepId)) {
 			$wherePart = "groep.id=" . (int) $groepId;
 		} else {
@@ -120,7 +120,7 @@ class OldGroep {
 	 */
 
 	public function save() {
-		$db = MySql::instance();
+		$db = MijnSqli::instance();
 		if ($this->getId() == 0) {
 			$qSave = "
 				INSERT INTO groep (
@@ -186,7 +186,7 @@ class OldGroep {
 			$this->error .= 'Kan geen lege groep wegkekken. OldGroep::delete()';
 			return false;
 		}
-		$db = MySql::instance();
+		$db = MijnSqli::instance();
 		$qDeleteLeden = "DELETE FROM groeplid WHERE groepid=" . $this->getId() . ";";
 		$qDeleteGroep = "DELETE FROM groep WHERE id=" . $this->getId() . " LIMIT 1;";
 		$this->leden = $this->groep = null;
@@ -251,7 +251,7 @@ class OldGroep {
 	}
 
 	public function isAanmeldbaar() {
-		return LoginSession::mag($this->getAanmeldbaar());
+		return LoginModel::mag($this->getAanmeldbaar());
 	}
 
 	public function getLimiet() {
@@ -321,7 +321,7 @@ class OldGroep {
 
 	public function isLid($uid = null) {
 		if ($uid === null) {
-			$uid = LoginSession::instance()->getUid();
+			$uid = LoginModel::getUid();
 		}
 		return isset($this->leden[$uid]);
 	}
@@ -332,7 +332,7 @@ class OldGroep {
 	 */
 
 	public function isEigenaar() {
-		return LoginSession::mag($this->groep['eigenaar']);
+		return LoginModel::mag($this->groep['eigenaar']);
 	}
 
 	/*
@@ -352,7 +352,7 @@ class OldGroep {
 
 	public function isOp($uid = null) {
 		if ($uid === null) {
-			$uid = LoginSession::instance()->getUid();
+			$uid = LoginModel::getUid();
 		}
 		if ($this->lidIsMod() AND $this->isLid($uid)) {
 			return true;
@@ -412,14 +412,14 @@ class OldGroep {
 	}
 
 	public static function isAdmin() {
-		return LoginSession::mag('P_LEDEN_MOD');
+		return LoginModel::mag('P_LEDEN_MOD');
 	}
 
 	public function magBewerken() {
 		return
 				$this->isAdmin() OR
 				$this->isEigenaar() OR
-				$this->isOp(LoginSession::instance()->getUid());
+				$this->isOp(LoginModel::getUid());
 	}
 
 	public function magStatsBekijken() {
@@ -435,7 +435,7 @@ class OldGroep {
 	 */
 
 	public function hasHt($snaam = null) {
-		$db = MySql::instance();
+		$db = MijnSqli::instance();
 		if ($snaam == null) {
 			$snaam = $this->getSnaam();
 		}
@@ -502,7 +502,7 @@ class OldGroep {
 				WHERE groepid=" . $this->getId() . "
 				  AND uid='" . $uid . "'
 				LIMIT 1;";
-			return MySql::instance()->query($qVerwijderen);
+			return MijnSqli::instance()->query($qVerwijderen);
 		} else {
 			return false;
 		}
@@ -546,7 +546,7 @@ class OldGroep {
 
 	public function meldAan($functie) {
 		if ($this->magAanmelden()) {
-			return $this->addLid(LoginSession::instance()->getUid(), $functie);
+			return $this->addLid(LoginModel::getUid(), $functie);
 		}
 		return false;
 	}
@@ -629,7 +629,7 @@ class OldGroep {
 		}
 
 		if (!$this->isLid($uid) OR $bewerken) {
-			$db = MySql::instance();
+			$db = MijnSqli::instance();
 			if (!$this->isLid($uid)) {
 				$sCieQuery = "
 					INSERT INTO groeplid
@@ -660,7 +660,7 @@ class OldGroep {
 
 	public function getOpvolgerVoorganger() {
 		$return = false;
-		$db = MySql::instance();
+		$db = MijnSqli::instance();
 		$qVoorganger = "
 			SELECT id
 			FROM groep
@@ -732,7 +732,7 @@ class OldGroep {
 
 	public function getStats($force = false) {
 		if ($force OR $this->stats === null) {
-			$db = MySql::instance();
+			$db = MijnSqli::instance();
 			$statqueries = array(
 				'totaal' => "SELECT 'Totaal' as totaal, count(*) AS aantal FROM groeplid WHERE groepid=" . $this->getId() . ";",
 				'verticale' => "SELECT CONCAT('Verticale ', verticale.naam) AS verticale, count(*) as aantal FROM lid LEFT JOIN verticale ON(lid.verticale=verticale.id) WHERE uid IN(" . $this->getLedenCSV(true) . ") GROUP BY verticale;",
@@ -774,7 +774,7 @@ class OldGroep {
 
 	public function getFunctie($uid = null) {
 		if ($uid === null) {
-			$uid = LoginSession::instance()->getUid();
+			$uid = LoginModel::getUid();
 		}
 		$leden = $this->leden;
 		return $leden[$uid]['functie'];
@@ -786,7 +786,7 @@ class OldGroep {
 	 */
 
 	public static function getGroepgeschiedenis($snaam, $limiet = 10) {
-		$db = MySql::instance();
+		$db = MijnSqli::instance();
 		$limiet = (int) $limiet;
 		$groepen = array();
 		$qGroepen = "
@@ -806,7 +806,7 @@ class OldGroep {
 	}
 
 	public static function isIngelogged() {
-		return LoginSession::mag('P_LEDEN_READ');
+		return LoginModel::mag('P_LEDEN_READ');
 	}
 
 	/*
@@ -822,7 +822,7 @@ class OldGroep {
 		if ($this->getType()->getSyncWithLDAP()) {
 			#groepsleden verzamelen. De ft, ht en 1 generatie ot-groepsleden worden meegenomen.
 			$groepsleden = array();
-			$db = MySql::instance();
+			$db = MijnSqli::instance();
 			//htleden is een groep om voor de wiki met alle h.t. leden van C.S.R..
 			//Bij deze groep wordt niet gekeken naar de groepleden op de webstek.
 			if ($this->getSnaam() == 'htleden') {

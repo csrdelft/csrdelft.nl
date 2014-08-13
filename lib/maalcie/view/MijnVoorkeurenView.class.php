@@ -30,7 +30,7 @@ class MijnVoorkeurView extends TemplateView {
 	public function __construct(CorveeVoorkeur $voorkeur) {
 		parent::__construct($voorkeur);
 		$this->smarty->assign('voorkeur', $this->model);
-		$this->smarty->assign('uid', $voorkeur->getLidId());
+		$this->smarty->assign('uid', $voorkeur->getUid());
 		$this->smarty->assign('crid', $voorkeur->getCorveeRepetitieId());
 	}
 

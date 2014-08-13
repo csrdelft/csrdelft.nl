@@ -8,7 +8,7 @@ require_once('configuratie.include.php');
 
 # open database
 require_once('class.mysql.php');
-$db = new MySql();
+$db = new MijnSqli();
 
 # haal alles van lid op
 $leden = array();

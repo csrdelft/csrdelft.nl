@@ -148,7 +148,7 @@ abstract class InputField implements FormElement, Validator {
 		if (!$this->isPosted()) {
 			$this->error = 'Veld is niet gepost';
 		} elseif ($this->value == '' AND $this->not_null) {
-			if ($this->leden_mod AND LoginSession::mag('P_LEDEN_MOD')) {
+			if ($this->leden_mod AND LoginModel::mag('P_LEDEN_MOD')) {
 				// exception for leden mod
 			} else {
 				$this->error = 'Dit is een verplicht veld';
@@ -186,7 +186,7 @@ abstract class InputField implements FormElement, Validator {
 		if (!empty($this->description)) {
 			$required = '';
 			if ($this->not_null) {
-				if ($this->leden_mod AND LoginSession::mag('P_LEDEN_MOD')) {
+				if ($this->leden_mod AND LoginModel::mag('P_LEDEN_MOD')) {
 					// exception for leden mod
 				} else {
 					$required = '<span class="required"> *</span>';
@@ -227,7 +227,7 @@ abstract class InputField implements FormElement, Validator {
 	 */
 	protected function getCssClasses() {
 		if ($this->not_null) {
-			if ($this->leden_mod AND LoginSession::mag('P_LEDEN_MOD')) {
+			if ($this->leden_mod AND LoginModel::mag('P_LEDEN_MOD')) {
 				// exception for leden mod
 			} else {
 				$this->css_classes[] = 'required';
@@ -458,7 +458,7 @@ class RechtenField extends TextField {
 
 	public function __construct($name, $value = null, $description = null) {
 		parent::__construct($name, $value, $description);
-		$this->suggestions = LoginSession::instance()->getValidPerms();
+		$this->suggestions = LoginModel::instance()->getValidPerms();
 		$this->suggestions[] = 'groep:####';
 		$this->suggestions[] = 'geslacht:m';
 		$this->suggestions[] = 'geslacht:v';
@@ -490,7 +490,7 @@ class RechtenField extends TextField {
 			foreach ($and as $or2) {
 				$or2 = explode('|', $or2);
 				foreach ($or2 as $value) {
-					if (!LoginSession::instance()->isValidPerm($value)) { // mac?
+					if (!LoginModel::instance()->isValidPerm($value)) { // mac?
 						$dac = explode(':', $value);
 						if ((sizeof($dac) !== 2 OR $dac[0] == '' OR $dac[1] == '')) {
 							$this->error = 'Ongeldige restrictie: "' . $value . '"';
@@ -779,7 +779,7 @@ class IntField extends TextField {
 			$this->error = 'Alleen getallen toegestaan';
 		} elseif ($this->max !== null AND $this->value > $this->max) {
 			$this->error = 'Maximale waarde is ' . $this->max . ' ';
-		} elseif ($this->leden_mod AND LoginSession::mag('P_LEDEN_MOD')) {
+		} elseif ($this->leden_mod AND LoginModel::mag('P_LEDEN_MOD')) {
 			// exception for leden mod
 		} elseif ($this->min !== null AND $this->value < $this->min) {
 			$this->error = 'Minimale waarde is ' . $this->min . ' ';
@@ -1478,7 +1478,7 @@ class VinkField extends InputField {
 
 	public function validate() {
 		if (!$this->value AND $this->not_null) {
-			if ($this->leden_mod AND LoginSession::mag('P_LEDEN_MOD')) {
+			if ($this->leden_mod AND LoginModel::mag('P_LEDEN_MOD')) {
 				// exception for leden mod
 			} else {
 				$this->error = 'Dit is een verplicht veld';

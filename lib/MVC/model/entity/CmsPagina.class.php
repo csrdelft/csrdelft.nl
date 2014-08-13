@@ -64,19 +64,19 @@ class CmsPagina extends PersistentEntity {
 	protected static $table_name = 'pagina';
 
 	public function magBekijken() {
-		return LoginSession::mag($this->rechten_bekijken);
+		return LoginModel::mag($this->rechten_bekijken);
 	}
 
 	public function magBewerken() {
-		return LoginSession::mag($this->rechten_bewerken);
+		return LoginModel::mag($this->rechten_bewerken);
 	}
 
 	public function magRechtenWijzigen() {
-		return LoginSession::mag('P_ADMIN');
+		return LoginModel::mag('P_ADMIN');
 	}
 
 	public function magVerwijderen() {
-		return LoginSession::mag('P_ADMIN');
+		return LoginModel::mag('P_ADMIN');
 	}
 
 }

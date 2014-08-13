@@ -17,7 +17,7 @@ class SavedQuery {
 	}
 
 	private function load() {
-		$db = MySql::instance();
+		$db = MijnSqli::instance();
 		//query ophalen
 		$selectQuery = "
 			SELECT
@@ -47,7 +47,7 @@ class SavedQuery {
 						$this->result = $db->result2array($queryResult);
 						$this->resultCount = count($this->result);
 					}
-				} elseif (LoginSession::mag('P_ADMIN')) {
+				} elseif (LoginModel::mag('P_ADMIN')) {
 					$this->result[] = array('mysqli_error' => $db->error());
 				}
 			}
@@ -85,7 +85,7 @@ class SavedQuery {
 	//Query's mogen worden weergegeven als de permissiestring toegelaten wordt door 
 	//Lid::mag()' of als gebruiker P_ADMIN heeft.
 	public static function magWeergeven($permissie) {
-		return LoginSession::mag($permissie) OR LoginSession::mag('P_ADMIN');
+		return LoginModel::mag($permissie) OR LoginModel::mag('P_ADMIN');
 	}
 
 	public function magBekijken() {
@@ -94,7 +94,7 @@ class SavedQuery {
 
 	//geef een array terug met de query's die de huidige gebruiker mag bekijken.
 	static public function getQueries() {
-		$db = MySql::instance();
+		$db = MijnSqli::instance();
 		$selectQuery = "
 			SELECT
 				ID, beschrijving, permissie, categorie

@@ -42,7 +42,7 @@
 			Maak h.t. groepen o.t.
 		</a>
 	{/if}
-	{if LoginSession::mag('P_ADMIN') AND $action!='edit'}
+	{if LoginModel::mag('P_ADMIN') AND $action!='edit'}
 		<a class="knop" href="/actueel/groepen/{$groepen->getNaam()}/?bewerken=true">
 			<img src="{$CSR_PICS}/knopjes/bewerken.png" title="Bewerk beschrijving" />
 		</a>
@@ -58,7 +58,7 @@
 			{include file='groepen/groepleden.tpl'}
 		</div>
 		<h2><a href="/actueel/groepen/{$groepen->getNaam()}/{$groep->getId()}/">{$groep->getNaam()}</a></h2>
-		{if $groep->getType()->getId()==11 }Ouderejaars: {$groep->getEigenaar()|perm2string}<br /><br />{/if} {* alleen bij Sjaarsacties *}
+		{if $groep->getType()->getId()==11 }Ouderejaars: {$groep->getEigenaar()}<br /><br />{/if} {* alleen bij Sjaarsacties *}
 			{$groep->getSbeschrijving()|ubb}
 		</div>
 		{/foreach}

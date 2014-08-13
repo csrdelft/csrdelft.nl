@@ -16,7 +16,7 @@ class Lidvoorkeur {
 	}
 
 	public function setCommissieVoorkeur($cid, $voorkeur) {
-		$db = MySql::instance();
+		$db = MijnSqli::instance();
 		$query = 'DELETE FROM voorkeurVoorkeur WHERE uid =\'' . $this->uid . '\' AND cid = ' . $cid;
 		$db->query($query);
 		$query = 'INSERT INTO `voorkeurVoorkeur` VALUES ("'
@@ -27,7 +27,7 @@ class Lidvoorkeur {
 	}
 
 	public static function getCommissies() {
-		$db = MySql::instance();
+		$db = MijnSqli::instance();
 		$query = 'SELECT * FROM voorkeurCommissie WHERE zichtbaar = 1 ';
 		$result = $db->select($query);
 		$res = array();
@@ -38,7 +38,7 @@ class Lidvoorkeur {
 	}
 
 	public function getVoorkeur() {
-		$db = MySql::instance();
+		$db = MijnSqli::instance();
 		$query = 'SELECT * FROM voorkeurVoorkeur WHERE actief = 1 AND uid =\'' . $this->uid . '\'';
 		$result = $db->select($query);
 		$res = array();
@@ -49,7 +49,7 @@ class Lidvoorkeur {
 	}
 
 	public function getLidOpmerking() {
-		$db = MySql::instance();
+		$db = MijnSqli::instance();
 		$query = 'SELECT lidOpmerking FROM voorkeurOpmerking WHERE uid =\'' . $this->uid . '\'';
 		$result = $db->select($query);
 		$res = '';
@@ -63,13 +63,13 @@ class Lidvoorkeur {
 	}
 
 	public function setLidOpmerking($opmerking) {
-		$db = MySql::instance();
+		$db = MijnSqli::instance();
 		$query = 'UPDATE voorkeurOpmerking Set lidOpmerking = "' . $opmerking . '" WHERE uid = \'' . $this->uid . '\'';
 		$db->query($query);
 	}
 
 	public function getPraesesOpmerking() {
-		$db = MySql::instance();
+		$db = MijnSqli::instance();
 		$query = 'SELECT praesesOpmerking FROM voorkeurOpmerking WHERE uid =\'' . $this->uid . '\'';
 		$result = $db->select($query);
 		$res = '';
@@ -83,13 +83,13 @@ class Lidvoorkeur {
 	}
 
 	public function setPraesesOpmerking($opmerking) {
-		$db = MySql::instance();
+		$db = MijnSqli::instance();
 		$query = 'UPDATE voorkeurOpmerking Set praesesOpmerking = "' . $opmerking . '" WHERE uid = \'' . $this->uid . '\'';
 		$db->query($query);
 	}
 
 	private function insertRow() {
-		$db = MySql::instance();
+		$db = MijnSqli::instance();
 		$query = 'INSERT INTO voorkeurOpmerking VALUES ("' . $this->uid . '","","")';
 		$db->query($query);
 	}

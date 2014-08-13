@@ -35,7 +35,7 @@ class DocumentenCategorie{
 	public function load($catID=0){
 		$this->ID=(int)$catID;
 		if($this->getID()!=0){
-			$db=MySql::instance();
+			$db=MijnSqli::instance();
 			//gegevens over de categorie ophalen.
 			$query="
 				SELECT ID, naam, zichtbaar, leesrechten
@@ -60,7 +60,7 @@ class DocumentenCategorie{
 	 * via getLast() of getDocumenten()
 	 */
 	public function loadDocumenten(){
-		$db=MySql::instance();
+		$db=MijnSqli::instance();
 		$query="
 			SELECT ID, naam, catID, filename, filesize, mimetype, toegevoegd, eigenaar, leesrechten
 			FROM document
@@ -85,7 +85,7 @@ class DocumentenCategorie{
 	 * onderliggende documenten.
 	 */
 	public function save(){
-		$db=MySql::instance();
+		$db=MijnSqli::instance();
 		if($this->getID()==0){
 			$query="
 				INSERT INTO documentcategorie (
@@ -113,7 +113,7 @@ class DocumentenCategorie{
 	public function getLeesrechten(){ return $this->leesrechten; }
 	
 	public function magBekijken(){
-		return LoginSession::mag($this->getLeesrechten()); 
+		return LoginModel::mag($this->getLeesrechten()); 
 	}
 
 	public function getLast($count){
@@ -141,7 +141,7 @@ class DocumentenCategorie{
 		return false;
 	}
 	public static function getAll(){
-		$db=MySql::instance();
+		$db=MijnSqli::instance();
 		$query="
 			SELECT ID, naam, zichtbaar, leesrechten
 			FROM documentcategorie
@@ -176,7 +176,7 @@ class DocumentenCategorie{
 		if($categorie!=0){
 			$wherecat = "AND catID=".(int)$categorie;
 		}
-		$db=MySql::instance();
+		$db=MijnSqli::instance();
 		$zoekterm = $db->escape($zoekterm);
 		$query="
 			SELECT ID, naam, catID, filename, filesize, mimetype, toegevoegd, eigenaar, leesrechten

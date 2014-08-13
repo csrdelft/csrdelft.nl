@@ -24,7 +24,7 @@ class LidInstelling extends PersistentEntity {
 	 * Uid
 	 * @var string
 	 */
-	public $lid_id;
+	public $uid;
 	/**
 	 * Module
 	 * @var string
@@ -45,16 +45,16 @@ class LidInstelling extends PersistentEntity {
 	 * @var array
 	 */
 	protected static $persistent_fields = array(
-		'lid_id' => array(T::UID),
-		'module' => array(T::String),
-		'instelling_id' => array(T::String),
-		'waarde' => array(T::String)
+		'uid'			 => array(T::UID),
+		'module'		 => array(T::String),
+		'instelling_id'	 => array(T::String),
+		'waarde'		 => array(T::String)
 	);
 	/**
 	 * Database primary key
 	 * @var array
 	 */
-	protected static $primary_keys = array('lid_id', 'module', 'instelling_id');
+	protected static $primary_keys = array('uid', 'module', 'instelling_id');
 	/**
 	 * Database table name
 	 * @var string

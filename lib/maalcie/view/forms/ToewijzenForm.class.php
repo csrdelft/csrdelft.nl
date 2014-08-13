@@ -19,7 +19,7 @@ class ToewijzenForm extends PopupForm {
 		$this->titel = 'Taak toewijzen aan lid';
 		$this->css_classes[] = 'PreventUnchanged';
 
-		$fields[] = new LidField('lid_id', $taak->getLidId(), 'Naam of lidnummer', 'leden');
+		$fields[] = new LidField('uid', $taak->getUid(), 'Naam of lidnummer', 'leden');
 		$fields[] = new SuggestieLIjst($suggesties, $taak);
 		$fields[] = new FormButtons();
 

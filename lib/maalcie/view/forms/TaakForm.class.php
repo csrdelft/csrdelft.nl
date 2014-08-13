@@ -37,7 +37,7 @@ class TaakForm extends PopupForm {
 
 		$fields['fid'] = new SelectField('functie_id', $fid, 'Functie', $functieNamen);
 		$fields['fid']->onchange = $functiePunten . "$('#field_punten').val(punten[this.value]);";
-		$fields['lid'] = new LidField('lid_id', $uid, 'Naam of lidnummer');
+		$fields['lid'] = new LidField('uid', $uid, 'Naam of lidnummer');
 		$fields['lid']->title = 'Bij het wijzigen van het toegewezen lid worden ook de corveepunten aan het nieuwe lid gegeven.';
 		$fields[] = new DatumField('datum', $datum, 'Datum', date('Y') + 2, date('Y') - 2);
 		$fields[] = new IntField('punten', $punten, 'Punten', 0, 10);

@@ -14,24 +14,24 @@ class CorveeVoorkeur {
 	# shared primary key
 
 	private $crv_repetitie_id; # foreign key crv_repetitie.id
-	private $lid_id; # foreign key lid.uid
+	private $uid; # foreign key lid.uid
 	private $corvee_repetitie;
 	private $van_lid;
 
 	public function __construct($crid = 0, $uid = '') {
 		$this->crv_repetitie_id = (int) $crid;
-		$this->lid_id = $uid;
+		$this->uid = $uid;
 	}
 
 	public function getCorveeRepetitieId() {
 		return (int) $this->crv_repetitie_id;
 	}
 
-	public function getLidId() {
-		return $this->lid_id;
+	public function getUid() {
+		return $this->uid;
 	}
 
-	public function getVanLidId() {
+	public function getVanUid() {
 		return $this->van_lid;
 	}
 
@@ -43,7 +43,7 @@ class CorveeVoorkeur {
 		$this->corvee_repetitie = $repetitie;
 	}
 
-	public function setVanLidId($uid) {
+	public function setVanUid($uid) {
 		$this->van_lid = $uid;
 	}
 

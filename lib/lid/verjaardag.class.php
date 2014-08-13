@@ -7,7 +7,7 @@
 class Verjaardag{
 
 	static function getVerjaardagen($maand, $dag=0) {
-		$db=MySql::instance();
+		$db=MijnSqli::instance();
 		$maand = (int)$maand; $dag = (int)$dag; $verjaardagen = array();
 		$query="
 			SELECT
@@ -33,7 +33,7 @@ class Verjaardag{
 
 	static function getKomendeVerjaardagen($aantal=10){
 		$aantal=(int)$aantal;
-		$db=MySql::instance();
+		$db=MijnSqli::instance();
 		$query="
 			SELECT
 				uid, nickname, duckname, voornaam, tussenvoegsel, achternaam, status, geslacht, postfix, gebdatum,

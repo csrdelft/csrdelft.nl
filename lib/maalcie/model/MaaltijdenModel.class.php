@@ -48,7 +48,7 @@ class MaaltijdenModel {
 			throw new Exception('Invalid timestamp: $tot getMaaltijdenVoorAgenda()');
 		}
 		$maaltijden = self::loadMaaltijden('verwijderd = false AND datum >= ? AND datum <= ?', array(date('Y-m-d', $van), date('Y-m-d', $tot)));
-		$maaltijden = self::filterMaaltijdenVoorLid($maaltijden, \LoginSession::instance()->getUid());
+		$maaltijden = self::filterMaaltijdenVoorLid($maaltijden, \LoginModel::getUid());
 		return $maaltijden;
 	}
 
@@ -85,7 +85,7 @@ class MaaltijdenModel {
 	 */
 	public static function getMaaltijdVoorKetzer($mid) {
 		$maaltijden = array(self::getMaaltijd($mid));
-		$maaltijden = self::filterMaaltijdenVoorLid($maaltijden, \LoginSession::instance()->getUid());
+		$maaltijden = self::filterMaaltijdenVoorLid($maaltijden, \LoginModel::getUid());
 		if (!empty($maaltijden)) {
 			return reset($maaltijden);
 		}
@@ -223,7 +223,7 @@ class MaaltijdenModel {
 	}
 
 	private static function loadMaaltijden($where = null, $values = array(), $limit = null) {
-		$sql = 'SELECT m.maaltijd_id, mlt_repetitie_id, titel, aanmeld_limiet, datum, tijd, prijs, gesloten, laatst_gesloten, verwijderd, aanmeld_filter, COUNT(a.lid_id) + SUM(IFNULL(aantal_gasten, 0)) AS aantal_aanmeldingen';
+		$sql = 'SELECT m.maaltijd_id, mlt_repetitie_id, titel, aanmeld_limiet, datum, tijd, prijs, gesloten, laatst_gesloten, verwijderd, aanmeld_filter, COUNT(a.uid) + SUM(IFNULL(aantal_gasten, 0)) AS aantal_aanmeldingen';
 		$sql.= ' FROM mlt_maaltijden m';
 		$sql.= ' LEFT JOIN mlt_aanmeldingen a ON m.maaltijd_id = a.maaltijd_id';
 		if ($where !== null) {
@@ -291,8 +291,8 @@ class MaaltijdenModel {
 		if (!$gesloten && $mrid !== null) {
 			$abonnementen = MaaltijdAbonnementenModel::getAbonnementenVoorRepetitie($mrid);
 			foreach ($abonnementen as $abo) {
-				if (MaaltijdAanmeldingenModel::checkAanmeldFilter($abo->getLidId(), $maaltijd->getAanmeldFilter())) {
-					MaaltijdAanmeldingenModel::aanmeldenDoorAbonnement($maaltijd->getMaaltijdId(), $abo->getMaaltijdRepetitieId(), $abo->getLidId());
+				if (MaaltijdAanmeldingenModel::checkAanmeldFilter($abo->getUid(), $maaltijd->getAanmeldFilter())) {
+					MaaltijdAanmeldingenModel::aanmeldenDoorAbonnement($maaltijd->getMaaltijdId(), $abo->getMaaltijdRepetitieId(), $abo->getUid());
 					$aantal++;
 				}
 			}

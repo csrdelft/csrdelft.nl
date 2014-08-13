@@ -19,7 +19,7 @@ class CorveeKwalificatie extends PersistentEntity {
 	 * Lid id
 	 * @var string
 	 */
-	public $lid_id;
+	public $uid;
 	/**
 	 * Functie id
 	 * @var int
@@ -40,7 +40,7 @@ class CorveeKwalificatie extends PersistentEntity {
 	 * @var array
 	 */
 	protected static $persistent_fields = array(
-		'lid_id' => array(T::UID),
+		'uid' => array(T::UID),
 		'functie_id' => array(T::Integer),
 		'wanneer_toegewezen' => array(T::DateTime)
 	);
@@ -48,7 +48,7 @@ class CorveeKwalificatie extends PersistentEntity {
 	 * Database primary key
 	 * @var array
 	 */
-	protected static $primary_keys = array('lid_id', 'functie_id');
+	protected static $primary_keys = array('uid', 'functie_id');
 	/**
 	 * Database table name
 	 * @var string

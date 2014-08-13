@@ -56,7 +56,7 @@ class CsrLayout2Page extends HtmlPage {
 		$this->smarty->assign('ubbtop', $top);
 		$this->smarty->assign('ubbleft', $left);
 
-		if (isset($_SESSION['pauper'])) {
+		if (LoginModel::instance()->isPauper()) {
 			$this->smarty->assign('menutree', MenuModel::instance()->getMenuTree('main'));
 			$this->smarty->display('MVC/layout/pauper.tpl');
 		} else {

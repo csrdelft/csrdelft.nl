@@ -2,7 +2,7 @@
 
 {$zoekform->view()}
 
-{if LoginSession::mag('P_ADMIN')}
+{if LoginModel::mag('P_ADMIN')}
 	<div class="forumheadbtn">
 		<a href="/forum/aanmaken" class="knop post popup confirm" title="Deelforum aanmaken">{icon get="add"} </a>
 	</div>

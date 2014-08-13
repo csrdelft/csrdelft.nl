@@ -35,14 +35,14 @@ class Mededeling {
 			} else {
 				//default waarden voor een nieuwe mededeling
 				$this->datum = getDateTime();
-				$this->uid = LoginSession::instance()->getUid();
+				$this->uid = LoginModel::getUid();
 				$this->prioriteit = self::defaultPrioriteit;
 			}
 		}
 	}
 
 	public function load($id = 0) {
-		$db = MySql::instance();
+		$db = MijnSqli::instance();
 		$loadQuery = "
 			SELECT id, datum, vervaltijd, titel, tekst, categorie, uid, prioriteit, doelgroep, zichtbaarheid, plaatje, categorie
 			FROM mededeling
@@ -55,7 +55,7 @@ class Mededeling {
 	}
 
 	public function save() {
-		$db = MySql::instance();
+		$db = MijnSqli::instance();
 		if ($this->getPrioriteit() != self::defaultPrioriteit) {
 			// Eerst even de prioriteit 'resetten'.
 			$prioriteitQuery = "
@@ -132,7 +132,7 @@ class Mededeling {
 	}
 
 	public function delete() {
-		$db = MySql::instance();
+		$db = MijnSqli::instance();
 		$delete = "UPDATE mededeling SET zichtbaarheid='verwijderd' WHERE id=" . $this->getId() . ";";
 		return $db->query($delete);
 	}
@@ -252,7 +252,7 @@ class Mededeling {
 			return $topmost;
 		}
 
-		$db = MySql::instance();
+		$db = MijnSqli::instance();
 
 		// Doelgroep bepalen en checken.
 		$doelgroepClause = " AND ";
@@ -308,7 +308,7 @@ class Mededeling {
 
 		// Initialisaties.
 		$mededelingen = array();
-		$db = MySql::instance();
+		$db = MijnSqli::instance();
 		list($vervalClause, $operator, $verborgenClause, $doelgroepClause) = Mededeling::getClauses($prullenbak);
 
 		$paginaQuery = "
@@ -331,14 +331,14 @@ class Mededeling {
 	public static function getLijstWachtGoedkeuring() {
 		$mededelingen = array();
 		// Moderators of niet-ingelogden hebben geen berichten die wachten op goedkeuring.
-		if (Mededeling::isModerator() OR ! LoginSession::mag('P_LEDEN_READ'))
+		if (Mededeling::isModerator() OR ! LoginModel::mag('P_LEDEN_READ'))
 			return $mededelingen;
 
-		$db = MySql::instance();
+		$db = MijnSqli::instance();
 		$query = "
 			SELECT id, datum
 			FROM mededeling
-			WHERE uid='" . LoginSession::instance()->getUid() . "' 
+			WHERE uid='" . LoginModel::getUid() . "' 
 			AND zichtbaarheid='wacht_goedkeuring'
 			ORDER BY datum DESC";
 		$resource = $db->select($query);
@@ -353,7 +353,7 @@ class Mededeling {
 	}
 
 	public static function getAantal($prullenbak) {
-		$db = MySql::instance();
+		$db = MijnSqli::instance();
 		list($vervalClause, $operator, $verborgenClause, $doelgroepClause) = Mededeling::getClauses($prullenbak);
 
 		$aantalQuery = "
@@ -367,7 +367,7 @@ class Mededeling {
 	}
 
 	public function getPaginaNummer($prullenbak) {
-		$db = MySql::instance();
+		$db = MijnSqli::instance();
 		list($vervalClause, $operator, $verborgenClause, $doelgroepClause) = Mededeling::getClauses($prullenbak);
 
 		$positieQuery = "
@@ -385,10 +385,10 @@ class Mededeling {
 
 	public static function getLaatsteMededelingen($aantal) {
 		$resultaat = array();
-		$db = MySql::instance();
+		$db = MijnSqli::instance();
 		$zichtbaarheidClause = "zichtbaarheid='zichtbaar'";
 		$doelgroepClause = "";
-		if (!LoginSession::mag('P_LEDEN_READ')) {
+		if (!LoginModel::mag('P_LEDEN_READ')) {
 			$doelgroepClause = " AND doelgroep='iedereen'";
 		}
 		$laatstenQuery = "
@@ -411,7 +411,7 @@ class Mededeling {
 			UPDATE mededeling
 			SET	prioriteit='" . Mededeling::defaultPrioriteit . "'
 			WHERE prioriteit='" . $this->getPrioriteit() . "';";
-		return MySql::instance()->query($updatePrioriteit);
+		return MijnSqli::instance()->query($updatePrioriteit);
 	}
 
 	public static function getPrioriteiten() {
@@ -432,27 +432,27 @@ class Mededeling {
 	public function magBewerken() {
 		// het huidige lid mag dit bericht alleen bewerken als hij moderator is of als dit zijn eigen bericht
 		// is (en hij dus het toevoeg-recht heeft).
-		return Mededeling::isModerator() OR ( Mededeling::magToevoegen() AND $this->getUid() == LoginSession::instance()->getUid());
+		return Mededeling::isModerator() OR ( Mededeling::magToevoegen() AND $this->getUid() == LoginModel::getUid());
 	}
 
 	public static function isModerator() {
-		return LoginSession::mag('P_NEWS_MOD');
+		return LoginModel::mag('P_NEWS_MOD');
 	}
 
 	public static function isOudlid() {
-		return LoginSession::mag('P_ALLEEN_OUDLID');
+		return LoginModel::mag('P_ALLEEN_OUDLID');
 	}
 
 	// function magPriveLezen()
 	// post: geeft true terug als het huidige lid prive-Mededelingen mag lezen (berichten die voor leden bestemd zijn).
 	public static function magPriveLezen() {
-		return LoginSession::mag('P_LEDEN_READ');
+		return LoginModel::mag('P_LEDEN_READ');
 	}
 
 	// function magToevoegen()
 	// post: geeft true terug als het huidige lid Mededelingen mag toevoegen.
 	public static function magToevoegen() {
-		return LoginSession::mag('P_NEWS_POST');
+		return LoginModel::mag('P_NEWS_POST');
 	}
 
 	public static function knipTekst($sTekst, $iMaxTekensPerRegel = 26, $iMaxRegels = 2) {
@@ -572,7 +572,7 @@ class Mededeling {
 		}
 		// Doelgroep clause.
 		$doelgroepClause = "";
-		if (!LoginSession::mag('P_LEDEN_READ')) {
+		if (!LoginModel::mag('P_LEDEN_READ')) {
 			$doelgroepClause = " AND doelgroep='iedereen'";
 		} elseif (self::isOudlid()) {
 			$doelgroepClause = " AND doelgroep!='leden'";

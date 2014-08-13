@@ -8,7 +8,7 @@
  */
 require_once 'configuratie.include.php';
 
-if (!LoginSession::mag('P_LEDEN_READ')) {
+if (!LoginModel::mag('P_LEDEN_READ')) {
 	header('location: ' . CSR_ROOT);
 }
 if (isset($_GET['xml'])) {

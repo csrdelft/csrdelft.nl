@@ -11,7 +11,7 @@ class OldCommissie {
 	}
 
 	public function getGeinteresseerde() {
-		$db = MySql::instance();
+		$db = MijnSqli::instance();
 		$query = 'SELECT uid, voorkeur FROM voorkeurCommissie JOIN voorkeurVoorkeur ON voorkeurCommissie.id = voorkeurVoorkeur.cid WHERE zichtbaar = 1 
 			AND (voorkeur = 2 OR voorkeur = 3) AND cid = ' . $this->cid . ' ORDER BY voorkeur DESC';
 		$result = $db->select($query);
@@ -24,7 +24,7 @@ class OldCommissie {
 	}
 
 	public static function getCommissie($cid) {
-		$db = MySql::instance();
+		$db = MijnSqli::instance();
 		$query = 'SELECT * FROM voorkeurCommissie WHERE id = ' . $cid . '';
 		$result = $db->select($query);
 		$res = '';
@@ -35,7 +35,7 @@ class OldCommissie {
 	}
 
 	public static function getCommissies() {
-		$db = MySql::instance();
+		$db = MijnSqli::instance();
 		$query = 'SELECT * FROM voorkeurCommissie WHERE zichtbaar = 1 ';
 		$result = $db->select($query);
 		$res = array();

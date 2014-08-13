@@ -12,7 +12,7 @@ class CommissieOverzicht extends TemplateView {
 
 	function view() {
 		$res = '';
-		if (LoginSession::mag('P_LEDEN_MOD')) {
+		if (LoginModel::mag('P_LEDEN_MOD')) {
 			require_once 'voorkeur/commissie.class.php';
 			if ($this->model >= 0) {
 				$commissie = OldCommissie::getCommissie($this->model);

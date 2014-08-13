@@ -18,9 +18,9 @@
 			<div class="kwali" style="display: none;"><a title="Toon leden" class="knop" onclick="$('div.kwali').toggle();">{icon get="eye"} Toon leden</a></div>
 		{/if}
 		{foreach from=$functie->getKwalificaties() item=kwali}
-			<div class="kwali"{if LidCache::getLid($kwali->lid_id)->isOudlid()} style="display: none;"{/if}>
-				<a href="{Instellingen::get('taken', 'url')}/dekwalificeer/{$functie->functie_id}/{$kwali->lid_id}" title="Kwalificatie intrekken" class="knop post">{icon get="vcard_delete"}</a>
-				&nbsp;{LidCache::getLid($kwali->lid_id)->getNaamLink(Instellingen::get('corvee', 'weergave_ledennamen_beheer'), Instellingen::get('corvee', 'weergave_link_ledennamen'))}
+			<div class="kwali"{if LidCache::getLid($kwali->uid)->isOudlid()} style="display: none;"{/if}>
+				<a href="{Instellingen::get('taken', 'url')}/dekwalificeer/{$functie->functie_id}/{$kwali->uid}" title="Kwalificatie intrekken" class="knop post">{icon get="vcard_delete"}</a>
+				&nbsp;{LidCache::getLid($kwali->uid)->getNaamLink(Instellingen::get('corvee', 'weergave_ledennamen_beheer'), Instellingen::get('corvee', 'weergave_link_ledennamen'))}
 				<span style="color: gray;"> (sinds {$kwali->wanneer_toegewezen})</span>
 			</div>
 		{/foreach}

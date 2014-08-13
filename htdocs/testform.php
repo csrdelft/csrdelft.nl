@@ -47,13 +47,11 @@ $model->uidtest = '0436';
 
 /* start controller */
 
-$view = new TestFormulier($model);
-if (isPosted()) { // fetches POST values itself
-	if ($view->validate()) {
-		setMelding('Save to DB here', 1);
-	} else {
-		setMelding($view->getError(), -1);
-	}
+$view = new TestFormulier($model); // fetches POST values itself
+if ($view->validate()) {
+	setMelding('Save to DB here', 1);
+} else {
+	setMelding($view->getError(), -1);
 }
 
 $pagina = new CsrLayoutPage($view);

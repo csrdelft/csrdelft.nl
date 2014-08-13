@@ -54,7 +54,7 @@ class ForumRssView extends TemplateView {
 		parent::__construct($draden);
 		$this->smarty->assign('draden', $this->model);
 		$this->smarty->assign('delen', $delen);
-		$this->smarty->assign('privatelink', LoginSession::instance()->getLid()->getRssLink());
+		$this->smarty->assign('privatelink', LoginModel::instance()->getLid()->getRssLink());
 	}
 
 	public function view() {
@@ -177,7 +177,7 @@ class ForumPostZijbalkView extends TemplateView {
 	}
 
 	public function view() {
-		echo '<div class="zijbalk_forum"><h1><a href="/communicatie/profiel/' . LoginSession::instance()->getUid() . '/#forum">Forum (zelf gepost)</a></h1>';
+		echo '<div class="zijbalk_forum"><h1><a href="/communicatie/profiel/' . LoginModel::getUid() . '/#forum">Forum (zelf gepost)</a></h1>';
 		foreach ($this->model as $post) {
 			$this->smarty->assign('post', $post);
 			$this->smarty->display('MVC/forum/post_zijbalk.tpl');

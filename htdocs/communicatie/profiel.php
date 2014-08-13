@@ -20,7 +20,7 @@ require_once 'lid/profiel.class.php';
 if (isset($_GET['uid'])) {
 	$uid = $_GET['uid'];
 } else {
-	$uid = LoginSession::instance()->getUid();
+	$uid = LoginModel::getUid();
 }
 
 //welke actie gaan we doen?
@@ -38,7 +38,7 @@ if (isset($_GET['a'])) {
 }
 
 
-if (!(LoginSession::mag('P_LEDEN_READ') or LoginSession::mag('P_OUDLEDEN_READ'))) {
+if (!(LoginModel::mag('P_LEDEN_READ') or LoginModel::mag('P_OUDLEDEN_READ'))) {
 	require_once 'MVC/model/CmsPaginaModel.class.php';
 	require_once 'MVC/view/CmsPaginaView.class.php';
 	$midden = new CmsPaginaView(CmsPaginaModel::instance()->getPagina('geentoegang'));
@@ -53,8 +53,7 @@ if (!(LoginSession::mag('P_LEDEN_READ') or LoginSession::mag('P_OUDLEDEN_READ'))
 
 			if ($profiel->magBewerken()) {
 				if ($profiel->validate() AND $profiel->save()) {
-					header('location: ' . CSR_ROOT . '/communicatie/profiel/' . $uid);
-					exit;
+					invokeRefresh('/communicatie/profiel/' . $uid);
 				} else {
 					$midden = new ProfielEditContent($profiel, $actie);
 				}
@@ -66,7 +65,7 @@ if (!(LoginSession::mag('P_LEDEN_READ') or LoginSession::mag('P_OUDLEDEN_READ'))
 			//maak van een standaard statusstring van de input
 			$status = 'S_' . strtoupper($status);
 			if (!
-					(LoginSession::mag('P_ADMIN,P_LEDEN_MOD') OR ( $status == 'S_NOVIET' AND LoginSession::mag('groep:novcie')))
+					(LoginModel::mag('P_ADMIN,P_LEDEN_MOD') OR ( $status == 'S_NOVIET' AND LoginModel::mag('groep:novcie')))
 			) {
 
 				// nieuwe leden mogen worden aangemaakt door P_ADMIN,P_LEDEN_MOD,
@@ -88,14 +87,13 @@ if (!(LoginSession::mag('P_LEDEN_READ') or LoginSession::mag('P_OUDLEDEN_READ'))
 			}
 			break;
 		case 'wijzigstatus':
-			if (!LoginSession::mag('P_ADMIN,P_LEDEN_MOD')) {
+			if (!LoginModel::mag('P_ADMIN,P_LEDEN_MOD')) {
 				invokeRefresh('/communicatie/profiel/', 'U mag lidstatus niet aanpassen');
 			}
 			$profiel = new ProfielStatus($uid, $actie);
 
 			if ($profiel->validate() AND $profiel->save()) {
-				header('location: ' . CSR_ROOT . '/communicatie/profiel/' . $uid);
-				exit;
+				invokeRefresh('/communicatie/profiel/' . $uid);
 			} else {
 				$midden = new ProfielStatusContent($profiel, $actie);
 			}
@@ -114,7 +112,7 @@ if (!(LoginSession::mag('P_LEDEN_READ') or LoginSession::mag('P_OUDLEDEN_READ'))
 			}
 			break;
 		case 'wachtwoord':
-			if (LoginSession::mag('P_ADMIN')) {
+			if (LoginModel::mag('P_ADMIN')) {
 				if (Profiel::resetWachtwoord($uid)) {
 					$melding = array('Nieuw wachtwoord met succes verzonden.', 1);
 				} else {
@@ -130,15 +128,13 @@ if (!(LoginSession::mag('P_LEDEN_READ') or LoginSession::mag('P_OUDLEDEN_READ'))
 			$gSync = GoogleSync::instance();
 			$message = $gSync->syncLid($uid);
 			invokeRefresh(CSR_ROOT . '/communicatie/profiel/' . $uid, '<h2>Opgeslagen in Google Contacts:</h2>' . $message, 2);
-			exit;
 			break;
 
 		/** @noinspection PhpMissingBreakStatementInspection */
 		case 'rssToken':
-			if ($uid == LoginSession::instance()->getUid()) {
-				LoginSession::instance()->getToken();
-				header('location: ' . CSR_ROOT . '/communicatie/profiel/' . $uid . '#forum');
-				exit;
+			if ($uid == LoginModel::getUid()) {
+				LoginModel::instance()->getLid()->generateRssToken();
+				invokeRefresh('/communicatie/profiel/' . $uid . '#forum');
 			}
 		//geen break hier, want als de bovenstaande actie aangevraagd werd voor de
 		//niet-huidige gebruiker, doen we gewoon een normale view.

@@ -26,7 +26,7 @@ class MijnAbonnementView extends TemplateView {
 
 	public function __construct(MaaltijdAbonnement $abo) {
 		parent::__construct($abo);
-		$this->smarty->assign('uid', $abo->getLidId());
+		$this->smarty->assign('uid', $abo->getUid());
 		$this->smarty->assign('mrid', $abo->getMaaltijdRepetitieId());
 	}
 

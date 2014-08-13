@@ -19,7 +19,7 @@ class ForumDraadGelezen extends PersistentEntity {
 	 * Shared primary key
 	 * @var string
 	 */
-	public $lid_id;
+	public $uid;
 	/**
 	 * Datum en tijd van laatst gelezen
 	 * @var string
@@ -31,14 +31,14 @@ class ForumDraadGelezen extends PersistentEntity {
 	 */
 	protected static $persistent_fields = array(
 		'draad_id'	 => array(T::Integer),
-		'lid_id'	 => array(T::UID),
+		'uid'		 => array(T::UID),
 		'datum_tijd' => array(T::DateTime)
 	);
 	/**
 	 * Database primary key
 	 * @var array
 	 */
-	protected static $primary_keys = array('draad_id', 'lid_id');
+	protected static $primary_keys = array('draad_id', 'uid');
 	/**
 	 * Database table name
 	 * @var string

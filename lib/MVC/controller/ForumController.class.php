@@ -35,7 +35,7 @@ class ForumController extends Controller {
 			parent::performAction(array());
 		}
 		if (!$this->isPosted() || $this->action == 'wijzigen' || $this->action == 'zoeken') {
-			if (LoginSession::mag('P_LOGGED_IN')) {
+			if (LoginModel::mag('P_LOGGED_IN')) {
 				$this->view = new CsrLayoutPage($this->getView());
 			} else { // uitgelogd heeft nieuwe layout
 				$this->view = new CsrLayout2Page($this->getView());
@@ -67,7 +67,7 @@ class ForumController extends Controller {
 			case 'beheren':
 			case 'opheffen':
 			case 'hertellen':
-				if (!LoginSession::mag('P_FORUM_ADMIN')) {
+				if (!LoginModel::mag('P_FORUM_ADMIN')) {
 					return false;
 				}
 			case 'wijzigen':
@@ -328,7 +328,7 @@ class ForumController extends Controller {
 	 */
 	public function toonalles() {
 		$aantal = ForumDradenVerbergenModel::instance()->getAantalVerborgenVoorLid();
-		ForumDradenVerbergenModel::instance()->toonAllesVoorLid(LoginSession::instance()->getUid());
+		ForumDradenVerbergenModel::instance()->toonAllesVoorLid(LoginModel::getUid());
 		setMelding($aantal . ' onderwerp' . ($aantal === 1 ? ' wordt' : 'en worden') . ' weer getoond in de zijbalk', 1);
 		// ReloadPage
 	}
@@ -369,7 +369,7 @@ class ForumController extends Controller {
 	 */
 	public function volgniets() {
 		$aantal = ForumDradenVolgenModel::instance()->getAantalVolgenVoorLid();
-		ForumDradenVolgenModel::instance()->volgNietsVoorLid(LoginSession::instance()->getUid());
+		ForumDradenVolgenModel::instance()->volgNietsVoorLid(LoginModel::getUid());
 		setMelding($aantal . ' onderwerp' . ($aantal === 1 ? ' wordt' : 'en worden') . ' niet meer gevolgd', 1);
 		// ReloadPage
 	}
@@ -401,7 +401,7 @@ class ForumController extends Controller {
 			$this->geentoegang();
 		}
 		if ($property === 'belangrijk') {
-			if (LoginSession::mag('P_FORUM_BELANGRIJK')) {
+			if (LoginModel::mag('P_FORUM_BELANGRIJK')) {
 				ForumDradenVerbergenModel::instance()->toonDraadVoorIedereen($draad);
 			} else {
 				$this->geentoegang();
@@ -454,7 +454,7 @@ class ForumController extends Controller {
 		}
 		$mailadres = null;
 		$wacht_goedkeuring = false;
-		if (!LoginSession::mag('P_LOGGED_IN')) {
+		if (!LoginModel::mag('P_LOGGED_IN')) {
 			$wacht_goedkeuring = true;
 			$mailadres = filter_input(INPUT_POST, 'email', FILTER_SANITIZE_EMAIL);
 			if (!email_like($mailadres)) {
@@ -488,9 +488,9 @@ class ForumController extends Controller {
 			invokeRefresh('/forum/deel/' . $deel->forum_id);
 		} else {
 			ForumPostsModel::instance()->goedkeurenForumPost($post, $draad, $deel);
-			foreach ($draad->getVolgers() as $lid_id) {
+			foreach ($draad->getVolgers() as $uid) {
 				require_once 'MVC/model/entity/Mail.class.php';
-				$mail = new Mail($lid_id . '@csrdelft.nl', 'C.S.R. Forum: nieuwe reactie op ' . $draad->titel, "http://csrdelft.nl/forum/onderwerp/" . $draad->draad_id . "/laatste#" . $post->post_id . "\r\n" . "\r\nDe inhoud van het bericht is als volgt: \r\n\r\n" . str_replace('\r\n', "\n", $tekst) . "\r\n\r\nEINDE BERICHT", "From: pubcie@csrdelft.nl\nReply-To: no-reply@csrdelft.nl");
+				$mail = new Mail($uid . '@csrdelft.nl', 'C.S.R. Forum: nieuwe reactie op ' . $draad->titel, "http://csrdelft.nl/forum/onderwerp/" . $draad->draad_id . "/laatste#" . $post->post_id . "\r\n" . "\r\nDe inhoud van het bericht is als volgt: \r\n\r\n" . str_replace('\r\n', "\n", $tekst) . "\r\n\r\nEINDE BERICHT", "From: pubcie@csrdelft.nl\nReply-To: no-reply@csrdelft.nl");
 				$mail->send();
 			}
 		}
@@ -502,7 +502,7 @@ class ForumController extends Controller {
 		$post = ForumPostsModel::instance()->getForumPost((int) $post_id);
 		$draad = ForumDradenModel::instance()->getForumDraad($post->draad_id);
 		$deel = ForumDelenModel::instance()->getForumDeel($draad->forum_id);
-		if (($deel->magPosten() AND ! $draad->gesloten AND $post->lid_id === LoginSession::instance()->getUid() AND LoginSession::mag('P_LOGGED_IN')) OR $deel->magModereren()) {
+		if (($deel->magPosten() AND ! $draad->gesloten AND $post->uid === LoginModel::getUid() AND LoginModel::mag('P_LOGGED_IN')) OR $deel->magModereren()) {
 			// same if-statement in post_lijst.tpl
 		} else {
 			$this->geentoegang();

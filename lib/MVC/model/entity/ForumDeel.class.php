@@ -44,7 +44,7 @@ class ForumDeel extends PersistentEntity {
 	 * Uid van de auteur van de laatst geplaatste of gewijzigde post
 	 * @var string
 	 */
-	public $laatste_lid_id;
+	public $laatste_wijziging_uid;
 	/**
 	 * Aantal draden in dit forum
 	 * @var int
@@ -85,19 +85,19 @@ class ForumDeel extends PersistentEntity {
 	 * @var array
 	 */
 	protected static $persistent_fields = array(
-		'forum_id'			 => array(T::Integer, false, 'auto_increment'),
-		'categorie_id'		 => array(T::Integer),
-		'titel'				 => array(T::String),
-		'omschrijving'		 => array(T::Text),
-		'laatst_gewijzigd'	 => array(T::DateTime, true),
-		'laatste_post_id'	 => array(T::Integer, true),
-		'laatste_lid_id'	 => array(T::UID, true),
-		'aantal_draden'		 => array(T::Integer),
-		'aantal_posts'		 => array(T::Integer),
-		'rechten_lezen'		 => array(T::String),
-		'rechten_posten'	 => array(T::String),
-		'rechten_modereren'	 => array(T::String),
-		'volgorde'			 => array(T::Integer)
+		'forum_id'				 => array(T::Integer, false, 'auto_increment'),
+		'categorie_id'			 => array(T::Integer),
+		'titel'					 => array(T::String),
+		'omschrijving'			 => array(T::Text),
+		'laatst_gewijzigd'		 => array(T::DateTime, true),
+		'laatste_post_id'		 => array(T::Integer, true),
+		'laatste_wijziging_uid'	 => array(T::UID, true),
+		'aantal_draden'			 => array(T::Integer),
+		'aantal_posts'			 => array(T::Integer),
+		'rechten_lezen'			 => array(T::String),
+		'rechten_posten'		 => array(T::String),
+		'rechten_modereren'		 => array(T::String),
+		'volgorde'				 => array(T::Integer)
 	);
 	/**
 	 * Database primary key
@@ -111,15 +111,15 @@ class ForumDeel extends PersistentEntity {
 	protected static $table_name = 'forum_delen';
 
 	public function magLezen($rss = false) {
-		return LoginSession::mag('P_FORUM_READ', $rss) AND LoginSession::mag($this->rechten_lezen, $rss);
+		return LoginModel::mag('P_FORUM_READ', $rss) AND LoginModel::mag($this->rechten_lezen, $rss);
 	}
 
 	public function magPosten() {
-		return $this->magLezen() AND LoginSession::mag($this->rechten_posten);
+		return $this->magLezen() AND LoginModel::mag($this->rechten_posten);
 	}
 
 	public function magModereren() {
-		return $this->magPosten() AND LoginSession::mag($this->rechten_modereren);
+		return $this->magPosten() AND LoginModel::mag($this->rechten_modereren);
 	}
 
 	public function isOpenbaar() {

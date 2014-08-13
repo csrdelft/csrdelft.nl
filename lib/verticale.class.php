@@ -19,7 +19,7 @@ class Verticale{
 
 	}
 	public function loadKringen(){
-		$db=MySql::instance();
+		$db=MijnSqli::instance();
 		$query="
 			SELECT kring, GROUP_CONCAT(uid ORDER BY kringleider DESC, achternaam ASC) as kringleden
 			FROM lid
@@ -70,7 +70,7 @@ class Verticale{
 	}
 
 	public static function getNamen(){
-		$db=MySql::instance();
+		$db=MijnSqli::instance();
 		$query="
 			SELECT naam
 			FROM verticale";
@@ -81,7 +81,7 @@ class Verticale{
 		return $namen;
 	}
 	public static function getLetters(){
-		$db=MySql::instance();
+		$db=MijnSqli::instance();
 		$letters=array();
 		$query="
 			SELECT letter
@@ -94,7 +94,7 @@ class Verticale{
 	}
 
 	public static function getAll(){
-		$db=MySql::instance();
+		$db=MijnSqli::instance();
 		$query="
 			SELECT verticale, kring, GROUP_CONCAT(uid ORDER BY kringleider DESC, achternaam ASC) as kringleden
 			FROM lid

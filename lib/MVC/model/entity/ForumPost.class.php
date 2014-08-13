@@ -24,7 +24,7 @@ class ForumPost extends PersistentEntity {
 	 * Uid van auteur
 	 * @var string
 	 */
-	public $lid_id;
+	public $uid;
 	/**
 	 * Tekst
 	 * @var string
@@ -72,7 +72,7 @@ class ForumPost extends PersistentEntity {
 	protected static $persistent_fields = array(
 		'post_id'			 => array(T::Integer, false, 'auto_increment'),
 		'draad_id'			 => array(T::Integer),
-		'lid_id'			 => array(T::UID),
+		'uid'				 => array(T::UID),
 		'tekst'				 => array(T::Text),
 		'datum_tijd'		 => array(T::DateTime),
 		'laatst_gewijzigd'	 => array(T::DateTime),

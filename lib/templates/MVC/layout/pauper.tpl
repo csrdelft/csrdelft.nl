@@ -7,10 +7,10 @@
 	<body style="background: none;">
 		<a href="/pauper/terug">Naar normale webstek</a>
 		<div style="float: right;">
-			{if isset($smarty.session.auth_error)}
-				<span class="waarschuwing">{$smarty.session.auth_error}</span>
+			{if isset(LoginModel::instance()->getError())}
+				<span class="waarschuwing">{LoginModel::instance()->getError()}</span>
 			{/if}
-			{if LoginSession::mag('P_LOGGED_IN')}
+			{if LoginModel::mag('P_LOGGED_IN')}
 				<a href="/logout.php">Uitloggen</a>
 			{else}
 				<a href="/login.php">Inloggen</a>

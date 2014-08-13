@@ -12,7 +12,7 @@ class Eetplan {
 
 	function Eetplan(){
 		# databaseconnectie openen
-		$this->_db=MySql::instance();
+		$this->_db=MijnSqli::instance();
 	}
 
 

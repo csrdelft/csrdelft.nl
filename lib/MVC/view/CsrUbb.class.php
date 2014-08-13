@@ -322,12 +322,12 @@ class CsrUbb extends eamBBParser {
 //content moet altijd geparsed worden, anders blijft de inhoud van de
 //tag gewoon staan.
 		$forbidden = array();
-		if (!LoginSession::mag($permissie)) {
+		if (!LoginModel::mag($permissie)) {
 			$this->ubb_mode = false;
 			$forbidden = array('prive');
 		}
 		$content = $this->parseArray(array('[/prive]'), $forbidden);
-		if (!LoginSession::mag($permissie)) {
+		if (!LoginModel::mag($permissie)) {
 			$content = '';
 			$this->ubb_mode = true;
 		}
@@ -345,9 +345,10 @@ class CsrUbb extends eamBBParser {
 		if (!array_key_exists('instelling', $arguments) OR ! isset($arguments['instelling'])) {
 			return 'Geen of een niet bestaande instelling opgegeven: ' . mb_htmlentities($arguments['instelling']);
 		}
-		if (!array_key_exists('module', $arguments) OR ! isset($arguments['module'])) {
-			$arguments['module'] = $arguments['instelling']; // backwards compatibility
-			$arguments['instelling'] = null;
+		if (!array_key_exists('module', $arguments) OR ! isset($arguments['module'])) { // backwards compatibility
+			$key = explode('_', $arguments['instelling'], 2);
+			$arguments['module'] = $key[0];
+			$arguments['instelling'] = $key[1];
 		}
 		$testwaarde = 'ja';
 		if (isset($arguments['waarde'])) {
@@ -699,7 +700,7 @@ HTML;
 		require_once 'maalcie/view/MaaltijdKetzerView.class.php';
 		try {
 			if ($mid === 'next' || $mid === 'eerstvolgende' || $mid === 'next2' || $mid === 'eerstvolgende2') {
-				$maaltijden = MaaltijdenModel::getKomendeMaaltijdenVoorLid(\LoginSession::instance()->getUid()); // met filter
+				$maaltijden = MaaltijdenModel::getKomendeMaaltijdenVoorLid(\LoginModel::getUid()); // met filter
 				$aantal = sizeof($maaltijden);
 				if ($aantal < 1) {
 					return 'Geen aankomende maaltijd.';
@@ -724,7 +725,7 @@ HTML;
 		if (!isset($maaltijd)) {
 			return '<div class="ubb_block ubb_maaltijd">Maaltijd niet gevonden: ' . mb_htmlentities($mid) . '</div>';
 		}
-		$aanmeldingen = MaaltijdAanmeldingenModel::getAanmeldingenVoorLid(array($maaltijd->getMaaltijdId() => $maaltijd), \LoginSession::instance()->getUid());
+		$aanmeldingen = MaaltijdAanmeldingenModel::getAanmeldingenVoorLid(array($maaltijd->getMaaltijdId() => $maaltijd), \LoginModel::getUid());
 		if (empty($aanmeldingen)) {
 			$aanmelding = null;
 		} else {
@@ -734,7 +735,7 @@ HTML;
 		$result = $ketzer->getKetzer();
 
 		if ($maaltijd2 !== null) {
-			$aanmeldingen2 = MaaltijdAanmeldingenModel::getAanmeldingenVoorLid(array($maaltijd2->getMaaltijdId() => $maaltijd2), \LoginSession::instance()->getUid());
+			$aanmeldingen2 = MaaltijdAanmeldingenModel::getAanmeldingenVoorLid(array($maaltijd2->getMaaltijdId() => $maaltijd2), \LoginModel::getUid());
 			if (empty($aanmeldingen2)) {
 				$aanmelding2 = null;
 			} else {

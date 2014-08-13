@@ -20,7 +20,7 @@ class GroepLijstView extends TemplateView {
 	public function view() {
 		echo '<table class="groepLeden"><tbody>';
 		foreach ($this->forms as $form) {
-			echo '<tr><td>' . Lid::naamLink($form->getModel()->lid_id, 'civitas', 'visitekaartje') . '</td>';
+			echo '<tr><td>' . Lid::naamLink($form->getModel()->uid, 'civitas', 'visitekaartje') . '</td>';
 			echo '<td>';
 			$form->view();
 			echo '</td></tr>';
@@ -38,7 +38,7 @@ class GroepPasfotosView extends TemplateView {
 
 	public function view() {
 		foreach ($this->model->getGroepLeden() as $groeplid) {
-			echo '<div class="pasfoto">' . Lid::naamLink($groeplid->lid_id, 'pasfoto', 'link') . '</div>';
+			echo '<div class="pasfoto">' . Lid::naamLink($groeplid->uid, 'pasfoto', 'link') . '</div>';
 		}
 	}
 
@@ -74,7 +74,7 @@ class GroepEmailsView extends TemplateView {
 	public function __construct(Groep $groep) {
 		parent::__construct($groep);
 		foreach ($this->model->getGroepLeden() as $groeplid) {
-			$lid = LidCache::getLid($groeplid->lid_id);
+			$lid = LidCache::getLid($groeplid->uid);
 			if ($lid instanceof Lid AND $lid->getEmail() != '') {
 				$this->emails[] = $lid->getEmail();
 			}

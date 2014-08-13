@@ -63,7 +63,7 @@ class Courant {
 				ORDER BY
 					cat, volgorde, datumTijd;";
 		}
-		$db = MySql::instance();
+		$db = MijnSqli::instance();
 		$rBerichten = $db->query($sBerichtenQuery);
 		if ($db->numRows($rBerichten) >= 1) {
 			while ($aBericht = $db->next($rBerichten)) {
@@ -97,7 +97,7 @@ class Courant {
 			unset($return[3]);
 		}
 		//Sponsors eruitgooien, behalve voor beheerders en/of AcqCiee
-		if (!$this->magBeheren() && !LoginSession::mag('groep:AcqCie')) {
+		if (!$this->magBeheren() && !LoginModel::mag('groep:AcqCie')) {
 			unset($return[4]);
 		}
 		return $return;
@@ -119,15 +119,15 @@ class Courant {
 	}
 
 	public function magToevoegen() {
-		return LoginSession::mag('P_MAIL_POST');
+		return LoginModel::mag('P_MAIL_POST');
 	}
 
 	public function magBeheren() {
-		return LoginSession::mag('P_MAIL_COMPOSE');
+		return LoginModel::mag('P_MAIL_COMPOSE');
 	}
 
 	public function magVerzenden() {
-		return LoginSession::mag('P_MAIL_SEND');
+		return LoginModel::mag('P_MAIL_SEND');
 	}
 
 	private function _isValideCategorie($categorie) {
@@ -136,12 +136,12 @@ class Courant {
 
 	private function clearTitel($titel) {
 		//titel escapen, eerste letter een hoofdletter maken, en de spaties wegkekken
-		return ucfirst(MySql::instance()->escape(trim($titel)));
+		return ucfirst(MijnSqli::instance()->escape(trim($titel)));
 	}
 
 	private function clearBericht($bericht) {
 		//bericht escapen, eerste letter een hoofdletter maken, en de spaties wegkekken
-		return ucfirst(MySql::instance()->escape(trim($bericht)));
+		return ucfirst(MijnSqli::instance()->escape(trim($bericht)));
 	}
 
 	private function clearCategorie($categorie) {
@@ -179,11 +179,11 @@ class Courant {
 			(
 				uid, titel, cat, bericht, datumTijd, volgorde
 			)VALUES(
-				'" . LoginSession::instance()->getUid() . "', '" . $this->clearTitel($titel) . "',
+				'" . LoginModel::getUid() . "', '" . $this->clearTitel($titel) . "',
 				'" . $this->clearCategorie($categorie) . "', '" . $this->clearBericht($bericht) . "', '" . getDateTime() . "', " . $volgorde . "
 			);";
 
-		return MySql::instance()->query($sBerichtQuery);
+		return MijnSqli::instance()->query($sBerichtQuery);
 	}
 
 	public function isZichtbaar($iBerichtID) {
@@ -195,7 +195,7 @@ class Courant {
 			if (!isset($this->berichten[$iBerichtID])) {
 				$this->sError = 'Bericht staat niet in cache (Courant::isBewerkbaar())';
 			} else {
-				if (!LoginSession::instance()->isSelf($this->berichten[$iBerichtID]['uid'])) {
+				if (!LoginModel::getUid === $this->berichten[$iBerichtID]['uid']) {
 					$this->sError = 'U mag geen berichten van anderen aanpassen. (Courant::isBewerkbaar())';
 				} else {
 					return true;
@@ -223,7 +223,7 @@ class Courant {
 			WHERE
 				ID=" . $iBerichtID . "
 			LIMIT 1;";
-		return MySql::instance()->query($sBerichtQuery);
+		return MijnSqli::instance()->query($sBerichtQuery);
 	}
 
 	public function valideerBerichtInvoer() {
@@ -283,11 +283,11 @@ class Courant {
 		if ($this->isCache()) {
 			$userCache = array();
 			//mods en bestuur zien alle berichten
-			if ($this->magBeheren() OR LoginSession::mag('groep:bestuur')) {
+			if ($this->magBeheren() OR LoginModel::mag('groep:bestuur')) {
 				return $this->berichten;
 			} else {
 				foreach ($this->berichten as $bericht) {
-					if (LoginSession::instance()->isSelf($bericht['uid'])) {
+					if (LoginModel::getUid() === $bericht['uid']) {
 						$userCache[] = $bericht;
 					}
 				}
@@ -318,7 +318,7 @@ class Courant {
 			WHERE
 				ID=" . $iBerichtID . "
 			LIMIT 1;";
-		$db = MySql::instance();
+		$db = MijnSqli::instance();
 		$db->query($sBerichtVerwijderen);
 		return $db->affected_rows() == 1;
 	}
@@ -333,7 +333,7 @@ class Courant {
 			$this->sError = 'Courant bevat helemaal geen berichten (Courant::leegCache())';
 			return false;
 		}
-		$db = MySql::instance();
+		$db = MijnSqli::instance();
 		$iCourantID = $this->createCourant();
 		if (is_integer($iCourantID)) {
 			//kopieren dan maar
@@ -364,9 +364,9 @@ class Courant {
 	}
 
 	private function createCourant() {
-		$db = MySql::instance();
+		$db = MijnSqli::instance();
 
-		$uid = LoginSession::instance()->getUid();
+		$uid = LoginModel::getUid();
 		$datumTijd = getDateTime();
 		$sCreatecourantQuery = "
 			INSERT INTO
@@ -389,7 +389,7 @@ class Courant {
 	################################################################
 
 	public static function getArchiefmails() {
-		$db = MySql::instance();
+		$db = MijnSqli::instance();
 
 		$sArchiefQuery = "
 			SELECT

@@ -18,14 +18,14 @@
 			txt_pre="&nbsp;[ " txt_post=" ]" link_current=true}
 	</td>
 	<td class="reacties">{$draad->aantal_posts}</td>
-	<td class="reacties">{$draad->lid_id|csrnaam:'user'}</td>
+	<td class="reacties">{$draad->uid|csrnaam:'user'}</td>
 	<td class="reactiemoment">
-		{if LoginSession::instelling('forum_datumWeergave') === 'relatief'}
+		{if LidInstellingen::get('forum', 'datumWeergave') === 'relatief'}
 			{$draad->laatst_gewijzigd|reldate}
 		{else}
 			{$draad->laatst_gewijzigd}
 		{/if}
 		<br /><a href="/forum/reactie/{$draad->laatste_post_id}#{$draad->laatste_post_id}">bericht</a>
-		door {$draad->laatste_lid_id|csrnaam:'user'}
+		door {$draad->laatste_wijziging_uid|csrnaam:'user'}
 	</td>
 </tr>

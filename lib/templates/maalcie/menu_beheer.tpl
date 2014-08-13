@@ -1,9 +1,9 @@
 {*
 	menu_beheer.tpl	|	P.W.G. Brussee (brussee@live.nl)
 *}
-{if LoginSession::mag('P_CORVEE_MOD')}
+{if LoginModel::mag('P_CORVEE_MOD')}
 <div id="beheer-maalcie-menu">		
-	{if LoginSession::mag('P_MAAL_MOD')}
+	{if LoginModel::mag('P_MAAL_MOD')}
 	<div class="block">
 		<h1>Beheer</h1>
 		{assign var="link" value="/maaltijdenbeheer"}
@@ -27,7 +27,7 @@
 		<div class="item{if Instellingen::get('taken', 'url') === $link} active{/if}">»
 			<a href="{$link}" title="Beheer abonnementen">Abonnementen</a>
 		</div>
-	{if LoginSession::mag('P_MAAL_SALDI')}
+	{if LoginModel::mag('P_MAAL_SALDI')}
 		{assign var="link" value="/maaltijdenmaalciesaldi"}
 		<div class="item{if Instellingen::get('taken', 'url') === $link} active{/if}">»
 			<a href="{$link}" title="Beheer MaalCie saldi">MaalCie saldi</a>

@@ -26,21 +26,21 @@ class MaaltijdAanmelding {
 	# shared primary key
 
 	private $maaltijd_id; # foreign key maaltijd.id
-	private $lid_id; # foreign key lid.uid
+	private $uid; # foreign key lid.uid
 	private $aantal_gasten; # int 11
 	private $gasten_eetwens; # string 255
 	private $door_abonnement; # foreign key mlt_repetitie.id
-	private $door_lid_id; # foreign key lid.uid
+	private $door_uid; # foreign key lid.uid
 	private $laatst_gewijzigd; # datetime
 	private $maaltijd;
 
 	public function __construct($mid = 0, $uid = '', $gasten = 0, $opmerking = '', $door_abo = null, $door_lid = null, $wanneer = '') {
 		$this->maaltijd_id = (int) $mid;
-		$this->lid_id = $uid;
+		$this->uid = $uid;
 		$this->setAantalGasten($gasten);
 		$this->setGastenEetwens($opmerking);
 		$this->setDoorAbonnement($door_abo);
-		$this->setDoorLidId($door_lid);
+		$this->setDoorUid($door_lid);
 		$this->setLaatstGewijzigd($wanneer);
 	}
 
@@ -48,8 +48,8 @@ class MaaltijdAanmelding {
 		return (int) $this->maaltijd_id;
 	}
 
-	public function getLidId() {
-		return $this->lid_id;
+	public function getUid() {
+		return $this->uid;
 	}
 
 	public function getAantalGasten() {
@@ -67,8 +67,8 @@ class MaaltijdAanmelding {
 		return (int) $this->door_abonnement;
 	}
 
-	public function getDoorLidId() {
-		return $this->door_lid_id;
+	public function getDoorUid() {
+		return $this->door_uid;
 	}
 
 	public function getLaatstGewijzigd() {
@@ -85,7 +85,7 @@ class MaaltijdAanmelding {
 	 * @return float if lid exists, false otherwise
 	 */
 	public function getSaldo() {
-		return LidCache::getLid($this->getLidId())->getProperty('maalcieSaldo');
+		return LidCache::getLid($this->getUid())->getProperty('maalcieSaldo');
 	}
 
 	/**
@@ -155,8 +155,8 @@ class MaaltijdAanmelding {
 		$this->door_abonnement = $mrid;
 	}
 
-	public function setDoorLidId($uid) {
-		$this->door_lid_id = $uid;
+	public function setDoorUid($uid) {
+		$this->door_uid = $uid;
 	}
 
 	public function setLaatstGewijzigd($datumtijd) {

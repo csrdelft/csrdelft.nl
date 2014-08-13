@@ -20,13 +20,13 @@ abstract class AclController extends Controller {
 	 * 		'beheer' => 'P_LEDEN_MOD',
 	 * 		'verwijder' => 'P_ADMIN'
 	 * );
-	 * @see LoginSession::mag()
+	 * @see LoginModel::mag()
 	 * @var array
 	 */
 	protected $acl = array();
 
 	protected function mag($action) {
-		return array_key_exists($action, $this->acl) && isset($this->acl[$action]) && LoginSession::mag($this->acl[$action]);
+		return array_key_exists($action, $this->acl) && isset($this->acl[$action]) && LoginModel::mag($this->acl[$action]);
 	}
 
 }
