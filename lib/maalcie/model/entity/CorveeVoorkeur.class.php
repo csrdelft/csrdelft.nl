@@ -16,7 +16,7 @@ class CorveeVoorkeur {
 	private $crv_repetitie_id; # foreign key crv_repetitie.id
 	private $uid; # foreign key lid.uid
 	private $corvee_repetitie;
-	private $van_lid;
+	private $van_uid;
 
 	public function __construct($crid = 0, $uid = '') {
 		$this->crv_repetitie_id = (int) $crid;
@@ -32,7 +32,7 @@ class CorveeVoorkeur {
 	}
 
 	public function getVanUid() {
-		return $this->van_lid;
+		return $this->van_uid;
 	}
 
 	public function getCorveeRepetitie() {
@@ -44,9 +44,7 @@ class CorveeVoorkeur {
 	}
 
 	public function setVanUid($uid) {
-		$this->van_lid = $uid;
+		$this->van_uid = $uid;
 	}
 
 }
-
-?>

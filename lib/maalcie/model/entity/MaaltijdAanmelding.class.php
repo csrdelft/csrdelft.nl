@@ -34,13 +34,13 @@ class MaaltijdAanmelding {
 	private $laatst_gewijzigd; # datetime
 	private $maaltijd;
 
-	public function __construct($mid = 0, $uid = '', $gasten = 0, $opmerking = '', $door_abo = null, $door_lid = null, $wanneer = '') {
+	public function __construct($mid = 0, $uid = '', $gasten = 0, $opmerking = '', $door_abo = null, $door_uid = null, $wanneer = '') {
 		$this->maaltijd_id = (int) $mid;
 		$this->uid = $uid;
 		$this->setAantalGasten($gasten);
 		$this->setGastenEetwens($opmerking);
 		$this->setDoorAbonnement($door_abo);
-		$this->setDoorUid($door_lid);
+		$this->setDoorUid($door_uid);
 		$this->setLaatstGewijzigd($wanneer);
 	}
 

@@ -33,7 +33,7 @@ class MaaltijdAbonnement {
 	private $uid; # foreign key lid.uid
 	private $wanneer_ingeschakeld; # datetime
 	private $maaltijd_repetitie;
-	private $van_lid;
+	private $van_uid;
 	private $waarschuwing;
 
 	public function __construct($mrid = 0, $uid = '', $wanneer = '') {
@@ -51,7 +51,7 @@ class MaaltijdAbonnement {
 	}
 
 	public function getVanUid() {
-		return $this->van_lid;
+		return $this->van_uid;
 	}
 
 	public function getWanneerIngeschakeld() {
@@ -78,7 +78,7 @@ class MaaltijdAbonnement {
 	}
 
 	public function setVanUid($uid) {
-		$this->van_lid = $uid;
+		$this->van_uid = $uid;
 	}
 
 	public function setWaarschuwing($string) {
