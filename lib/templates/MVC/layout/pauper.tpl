@@ -11,9 +11,9 @@
 				<span class="waarschuwing">{LoginModel::instance()->getError()}</span>
 			{/if}
 			{if LoginModel::mag('P_LOGGED_IN')}
-				<a href="/logout.php">Uitloggen</a>
+				<a href="/logout">Uitloggen</a>
 			{else}
-				<a href="/login.php">Inloggen</a>
+				<a href="/login">Inloggen</a>
 			{/if}
 		</div>
 		{$body->view()}
