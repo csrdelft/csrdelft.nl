@@ -19,9 +19,7 @@ class LoginForm extends Formulier {
 		$fields['pass']->placeholder = 'Wachtwoord';
 
 		$fields[] = new VinkField('koppelip', true, 'Koppel IP');
-
-		$url = filter_var($_SERVER['HTTP_REFERER'], FILTER_SANITIZE_URL);
-		$fields[] = new HiddenField('url', $url);
+		$fields[] = new HiddenField('url', Instellingen::get('stek', 'referer'));
 
 		$this->addFields($fields);
 	}
