@@ -11,15 +11,15 @@
 class InstellingenBeheerView extends TemplateView {
 
 	public function __construct(Instellingen $instellingen, $module) {
-		parent::__construct();
+		parent::__construct($instellingen);
 		if ($module !== null) {
 			$this->titel = 'Beheer instellingen module: ' . $module;
-			$this->smarty->assign('instellingen', $instellingen->getModuleInstellingen($module));
+			$this->smarty->assign('instellingen', $this->model->getModuleInstellingen($module));
 		} else {
 			$this->titel = 'Beheer instellingen stek';
 			$this->smarty->assign('instellingen', array());
 		}
-		$this->smarty->assign('modules', $instellingen->getAlleModules());
+		$this->smarty->assign('modules', $this->model->getAlleModules());
 	}
 
 	public function view() {

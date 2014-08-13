@@ -79,17 +79,16 @@ class Saldi {
 		return false;
 	}
 
-	/*
+	/**
 	 * Geef wat javascriptcode terug met data-series defenities voor Flot
 	 */
-
 	public static function getDatapoints($uid, $timespan) {
 		$s = array();
 		try {
 			$s['maalcie'] = new Saldi($uid, 'maalcie', $timespan);
 			$s['soccie'] = new Saldi($uid, 'soccie', $timespan);
 		} catch (Exception $d) {
-			setMelding('dan niet hoor!', -1);
+			setMelding('saldi grafiek error', -1);
 		}
 		$series = array();
 		foreach ($s as $cie) {

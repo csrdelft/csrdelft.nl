@@ -2,14 +2,14 @@
 	beheer_abonnement_veld.tpl	|	P.W.G. Brussee (brussee@live.nl)
 *}
 {strip}
-<td id="abonnement-cell-{$uid}-{$abonnement->getMaaltijdRepetitieId()}"
-	class="abonnement-{if $abonnement->getWaarschuwing()}warning{else}{if $uid2}in{else}uit{/if}geschakeld{/if}"
+<td id="abonnement-cell-{$vanuid}-{$abonnement->getMaaltijdRepetitieId()}"
+	class="abonnement-{if $abonnement->getWaarschuwing()}warning{else}{if $uid}in{else}uit{/if}geschakeld{/if}"
 	title="{$abonnement->getWaarschuwing()}">
-	<a href="{Instellingen::get('taken', 'url')}/{if $uid2}uit{else}in{/if}schakelen/{$abonnement->getMaaltijdRepetitieId()}/{$uid}" class="knop post abonnement-{if $uid2}in{else}uit{/if}geschakeld">
+	<a href="{Instellingen::get('taken', 'url')}/{if $uid}uit{else}in{/if}schakelen/{$abonnement->getMaaltijdRepetitieId()}/{$vanuid}" class="knop post abonnement-{if $uid}in{else}uit{/if}geschakeld">
 		<input type="checkbox"
-			   id="box-{$uid}-{$abonnement->getMaaltijdRepetitieId()}"
+			   id="box-{$vanuid}-{$abonnement->getMaaltijdRepetitieId()}"
 			   name="abo-{$abonnement->getMaaltijdRepetitieId()}"
-		{if $uid2} checked="checked"{/if} />
+		{if $uid} checked="checked"{/if} />
 	</a>
 </td>
 {/strip}

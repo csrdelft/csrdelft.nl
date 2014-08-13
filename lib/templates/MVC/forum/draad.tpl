@@ -5,18 +5,6 @@
 
 	{capture name='titel'}
 		<div class="forumheadbtn">
-			{if $draad->isGevolgd()}
-				<a href="/forum/volgenuit/{$draad->draad_id}" class="knop post ReloadPage" title="Onderwerp niet meer volgen per email"
-				   onmouseover="$(this).children('img').attr('src', '{$CSR_PICS}/famfamfam/email_delete.png');"
-				   onmouseout="$(this).children('img').attr('src', '{$CSR_PICS}/famfamfam/email_go.png');"
-				   >{icon get="email_go"}</a>
-			{elseif $draad->magVolgen()}
-				<a href="/forum/volgenaan/{$draad->draad_id}" class="knop post ReloadPage" title="Onderwerp volgen per email"
-				   onmouseover="$(this).children('img').attr('src', '{$CSR_PICS}/famfamfam/email_add.png');"
-				   onmouseout="$(this).children('img').attr('src', '{$CSR_PICS}/famfamfam/email.png');"
-				   >{icon get="email"}</a>
-			{/if}
-			&nbsp;&nbsp;&nbsp;
 			{if $draad->isVerborgen()}
 				<a href="/forum/tonen/{$draad->draad_id}" class="knop post ReloadPage" title="Onderwerp tonen in zijbalk"
 				   onmouseover="$(this).children('img').attr('src', '{$CSR_PICS}/famfamfam/layout_add.png');"
@@ -27,6 +15,18 @@
 				   onmouseover="$(this).children('img').attr('src', '{$CSR_PICS}/famfamfam/layout_delete.png');"
 				   onmouseout="$(this).children('img').attr('src', '{$CSR_PICS}/famfamfam/layout_sidebar.png');"
 				   >{icon get="layout_sidebar"}</a>
+			{/if}
+			&nbsp;&nbsp;&nbsp;
+			{if $draad->isGevolgd()}
+				<a href="/forum/volgenuit/{$draad->draad_id}" class="knop post ReloadPage" title="Onderwerp niet meer volgen per email"
+				   onmouseover="$(this).children('img').attr('src', '{$CSR_PICS}/famfamfam/email_delete.png');"
+				   onmouseout="$(this).children('img').attr('src', '{$CSR_PICS}/famfamfam/email_go.png');"
+				   >{icon get="email_go"}</a>
+			{elseif $draad->magVolgen()}
+				<a href="/forum/volgenaan/{$draad->draad_id}" class="knop post ReloadPage" title="Onderwerp volgen per email"
+				   onmouseover="$(this).children('img').attr('src', '{$CSR_PICS}/famfamfam/email_add.png');"
+				   onmouseout="$(this).children('img').attr('src', '{$CSR_PICS}/famfamfam/email.png');"
+				   >{icon get="email"}</a>
 			{/if}
 			&nbsp;&nbsp;&nbsp;
 			{if $deel->magModereren()}

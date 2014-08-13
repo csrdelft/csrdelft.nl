@@ -47,8 +47,8 @@ class BeheerAbonnementenLijstView extends TemplateView {
 
 	public function view() {
 		echo '<tr id="maalcie-melding"><td id="maalcie-melding-veld">' . SimpleHTML::getMelding() . '</td></tr>';
-		foreach ($this->model as $uid => $abonnementen) {
-			$this->smarty->assign('uid', $uid);
+		foreach ($this->model as $vanuid => $abonnementen) {
+			$this->smarty->assign('vanuid', $vanuid);
 			$this->smarty->assign('abonnementen', $abonnementen);
 			$this->smarty->display('maalcie/abonnement/beheer_abonnement_lijst.tpl');
 		}
@@ -61,8 +61,8 @@ class BeheerAbonnementView extends TemplateView {
 	public function __construct(MaaltijdAbonnement $abo) {
 		parent::__construct($abo);
 		$this->smarty->assign('abonnement', $this->model);
-		$this->smarty->assign('uid2', $this->model->getUid());
-		$this->smarty->assign('uid', $this->model->getVanUid());
+		$this->smarty->assign('uid', $this->model->getUid());
+		$this->smarty->assign('vanuid', $this->model->getVanUid());
 	}
 
 	public function view() {

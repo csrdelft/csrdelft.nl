@@ -1,0 +1,1 @@
+ALTER TABLE `mlt_aanmeldingen` CHANGE `door_lid_id` `door_uid` VARCHAR(4);

@@ -21,16 +21,16 @@ Op deze pagina kunt u alle abonnementen beheren en zoeken.
 </select>
 {$form->view()}
 <table id="maalcie-tabel" class="maalcie-tabel">
-{foreach name=tabel from=$matrix key=uid item=abonnementen}
+{foreach name=tabel from=$matrix key=vanuid item=abonnementen}
 	{if $smarty.foreach.tabel.index % 25 === 0}
 		{if !$smarty.foreach.tabel.first}</tbody>{/if}
-		{include file='maalcie/abonnement/beheer_abonnement_head.tpl' repetities=$repetities}
+		{include file='maalcie/abonnement/beheer_abonnement_head.tpl'}
 	<tbody>
 	{/if}
-	{include file='maalcie/abonnement/beheer_abonnement_lijst.tpl' uid=$uid abonnementen=$abonnementen}
+	{include file='maalcie/abonnement/beheer_abonnement_lijst.tpl'}
 {/foreach}
 {if !$matrix}
-	{include file='maalcie/abonnement/beheer_abonnement_head.tpl' repetities=$repetities}
+	{include file='maalcie/abonnement/beheer_abonnement_head.tpl'}
 	<tbody>
 {/if}
 	</tbody>
