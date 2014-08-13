@@ -4044,3 +4044,4 @@ sql/5518_forum_laatst.sql -text
 sql/5556_cron_user.sql -text
 sql/5600_rename_lid_id.sql -text
 sql/5609_door_lid_id.sql -text
+sql/5615_verberg_verjaardagen.sql -text

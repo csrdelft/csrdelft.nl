@@ -1,0 +1,1 @@
+INSERT INTO `csrdelft`.`lidinstellingen` (`uid`, `module`, `instelling_id`, `waarde`) VALUES ('x999', 'agenda', 'toonVerjaardagen', 'nee');
