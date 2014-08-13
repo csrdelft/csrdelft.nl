@@ -15,7 +15,7 @@ class LoginController extends AclController {
 			'login'	 => 'P_PUBLIC',
 			'logout' => 'P_LOGGED_IN',
 			'su'	 => 'P_ADMIN',
-			'endSu'	 => 'P_LOGGED_IN',
+			'endsu'	 => 'P_LOGGED_IN',
 			'pauper' => 'P_PUBLIC'
 		);
 	}
@@ -51,7 +51,7 @@ class LoginController extends AclController {
 		invokeRefresh(Instellingen::get('stek', 'referer'));
 	}
 
-	public function endSu() {
+	public function endsu() {
 		if (!$this->model->isSued()) {
 			setMelding('Niet gesued!', -1);
 		} else {

@@ -183,6 +183,11 @@ class ForumDelenModel extends PersistenceModel {
 				unset($gevonden_delen[$forum_id]);
 			}
 		}
+		if (empty($gevonden_delen) OR empty($gevonden_draden)) {
+			if (ForumPostsModel::instance()->getAantalWachtOpGoedkeuring() > 0) {
+				setMelding('U heeft onvoldoende rechten om de berichten goed te keuren', 0);
+			}
+		}
 		return array($gevonden_draden, $gevonden_delen);
 	}
 
