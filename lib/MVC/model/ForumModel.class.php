@@ -662,6 +662,11 @@ class ForumPostsModel extends PersistenceModel implements Paging {
 	 * @var int[]
 	 */
 	private $aantal_paginas;
+	/**
+	 * Totaal aantal posts die wachten op goedkeuring
+	 * @var int
+	 */
+	private $aantal_wacht;
 
 	protected function __construct() {
 		parent::__construct();
@@ -765,7 +770,10 @@ class ForumPostsModel extends PersistenceModel implements Paging {
 	}
 
 	public function getAantalWachtOpGoedkeuring() {
-		return $this->count('wacht_goedkeuring = TRUE AND verwijderd = FALSE');
+		if (!isset($this->aantal_wacht)) {
+			$this->aantal_wacht = $this->count('wacht_goedkeuring = TRUE AND verwijderd = FALSE');
+		}
+		return $this->aantal_wacht;
 	}
 
 	public function getPrullenbakVoorDraad(ForumDraad $draad) {
