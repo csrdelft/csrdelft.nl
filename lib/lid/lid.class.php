@@ -13,10 +13,10 @@ require_once 'MVC/model/Agendeerbaar.interface.php';
  * @author C.S.R. Delft <pubcie@csrdelft.nl>
  * 
  * Lid is een representatie van een lid in de DB. Lid is serializable en wordt door
- * LidCache in memcached gestopt. In principe roept LidCache als enige *kuch*
+ * LidCache in memcache gestopt. In principe roept LidCache als enige *kuch*
  * de constructor van Lid aan.
  * 
- * LidCache is een wrappertje om memcached die fijn allemaal Lid-objecten beheert.
+ * LidCache is een wrappertje om memcache die fijn allemaal Lid-objecten beheert.
  */
 class Lid implements Serializable, Agendeerbaar {
 

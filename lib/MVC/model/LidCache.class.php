@@ -21,7 +21,7 @@ class LidCache {
 		if (!Lid::isValidUid($uid)) {
 			return false;
 		}
-		// Kijken of we dit lid al in memcached hebben zitten
+		// Kijken of we dit lid al in memcache hebben zitten
 		$lid = CsrMemcache::instance()->get($uid);
 		if ($lid === false) {
 			try {
