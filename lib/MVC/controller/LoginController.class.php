@@ -36,6 +36,7 @@ class LoginController extends AclController {
 				invokeRefresh($values['url']);
 			}
 		}
+		invokeRefresh(CSR_ROOT); // login gefaald
 	}
 
 	public function logout() {
