@@ -91,7 +91,11 @@ switch (constant('MODE')) {
 		$req = filter_var($_SERVER['REQUEST_URI'], FILTER_SANITIZE_URL);
 		Instellingen::setTemp('stek', 'request', $req);
 
-		$ref = filter_var($_SERVER['HTTP_REFERER'], FILTER_SANITIZE_URL);
+		if (isset($_SERVER['HTTP_REFERER'])) {
+			$ref = filter_var($_SERVER['HTTP_REFERER'], FILTER_SANITIZE_URL);
+		} else {
+			$ref = null;
+		}
 		Instellingen::setTemp('stek', 'referer', $ref);
 
 		# N.B. het is van belang dat na het starten van de sessie meteen LoginModel
