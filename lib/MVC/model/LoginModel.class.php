@@ -181,12 +181,14 @@ class LoginModel extends PersistenceModel implements Validator {
 	 * @return boolean
 	 */
 	public function login($user, $pass = '', $checkip = true) {
+		$user = filter_var($user, FILTER_SANITIZE_STRING);
+		$pass = filter_var($pass, FILTER_SANITIZE_STRING);
 		switch (constant('MODE')) {
 			case 'CLI':
 				return $this->loginCli();
 			case 'WEB':
 			default:
-				return $this->loginWeb($user, $pass, $checkip);
+				return $this->loginWeb($user, $pass, (boolean) $checkip);
 		}
 	}
 
