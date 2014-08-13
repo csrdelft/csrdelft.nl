@@ -7,13 +7,11 @@
 	<body style="background: none;">
 		<a href="/pauper/terug">Naar normale webstek</a>
 		<div style="float: right;">
-			{if isset(LoginModel::instance()->getError())}
-				<span class="waarschuwing">{LoginModel::instance()->getError()}</span>
-			{/if}
+			<span class="waarschuwing">{LoginModel::instance()->getError()}</span>
 			{if LoginModel::mag('P_LOGGED_IN')}
 				<a href="/logout">Uitloggen</a>
 			{else}
-				<a href="/login">Inloggen</a>
+				<div class="login-form">{include file='csrdelft2/partials/_loginForm.tpl'}</div>
 			{/if}
 		</div>
 		{$body->view()}

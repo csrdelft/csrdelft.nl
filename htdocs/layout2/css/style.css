@@ -254,7 +254,11 @@ img.border { width: 224px; border: 6px solid #fff; }
 	position: relative;
 	padding: 20px 25px 0;
 }
-.login-form input.text {
+.login-form ul {
+	padding-top: 0;
+}
+.login-form input.TextField,
+.login-form input.WachtwoordField {
 	display: block;
 	width: 169px;
 	height: 14px;
@@ -266,17 +270,23 @@ img.border { width: 224px; border: 6px solid #fff; }
 	padding: 4px 5px;
 	margin: 5px 0 0;
 }
+.login-form label {
+	display: inline;
+	color: #fff;
+	padding: 0 7px;
+}
+.login-form div.InputField {
+	text-align: right;
+}
 .login-form input.submit {
 	position: absolute;
 	left: -9999px;
 }
 .login-form p.error {
-	position: absolute;
-	bottom: -24px;
-	right: 30px;
 	font-size: 12px;
 	color: #f00;
 	padding: 0;
+	margin-left: 20px;
 }
 
 /* Advertenties */

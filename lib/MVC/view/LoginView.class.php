@@ -18,7 +18,7 @@ class LoginForm extends Formulier {
 		$fields['pass'] = new WachtwoordField('pass');
 		$fields['pass']->placeholder = 'Wachtwoord';
 
-		$fields[] = new VinkField('koppelip', true, 'Koppel IP');
+		$fields[] = new VinkField('mobiel', LoginModel::instance()->isPauper(), null, 'Mobiel');
 		$fields[] = new HiddenField('url', Instellingen::get('stek', 'referer'));
 
 		$this->addFields($fields);

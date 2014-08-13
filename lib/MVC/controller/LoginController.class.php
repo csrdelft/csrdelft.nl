@@ -30,9 +30,10 @@ class LoginController extends AclController {
 	public function login() {
 		require_once 'MVC/view/LoginView.class.php';
 		$form = new LoginForm(); // fetches POST values itself
+		$values = $form->getValues();
+		$this->model->setPauper($values['mobiel']);
 		if ($form->validate()) {
-			$values = $form->getValues();
-			if ($this->model->login($values['user'], $values['pass'], $values['koppelip'])) {
+			if ($this->model->login($values['user'], $values['pass'], !$values['mobiel'])) {
 				invokeRefresh($values['url']);
 			}
 		}

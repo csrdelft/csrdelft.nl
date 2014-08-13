@@ -1,5 +1,7 @@
 <?php
 
+require_once 'MVC/view/LoginView.class.php';
+
 /**
  * CsrLayout2Page.class.php
  * 
@@ -50,6 +52,7 @@ class CsrLayout2Page extends HtmlPage {
 			$this->smarty->assign('menutpl', $this->menutmpl);
 		}
 		$this->smarty->assign('body', $this->model);
+		$this->smarty->assign('loginform', new LoginForm());
 		$top = 180;
 		$left = 10;
 		DragObjectModel::getCoords('ubbhulpverhaal', $top, $left);
@@ -60,10 +63,6 @@ class CsrLayout2Page extends HtmlPage {
 			$this->smarty->assign('menutree', MenuModel::instance()->getMenuTree('main'));
 			$this->smarty->display('MVC/layout/pauper.tpl');
 		} else {
-			if ($this->tmpl === 'index') {
-				require_once 'MVC/view/LoginView.class.php';
-				$this->smarty->assign('loginform', new LoginForm());
-			}
 			$this->smarty->display('csrdelft2/' . $this->tmpl . '.tpl');
 		}
 	}
