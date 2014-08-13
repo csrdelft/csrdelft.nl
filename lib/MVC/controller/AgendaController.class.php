@@ -17,8 +17,8 @@ class AgendaController extends AclController {
 		parent::__construct($query, AgendaModel::instance());
 		if (!$this->isPosted()) {
 			$this->acl = array(
-				'maand'		 => 'P_PUBLIC',
-				'icalendar'	 => 'P_PUBLIC'
+				'maand'		 => 'P_AGENDA_READ',
+				'icalendar'	 => 'P_AGENDA_READ'
 			);
 		} else {
 			$this->acl = array(
