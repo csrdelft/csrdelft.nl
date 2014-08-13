@@ -142,8 +142,10 @@ function invokeRefresh($url = null, $melding = '', $level = -1) {
 	if ($melding != '') {
 		setMelding($melding, $level);
 	}
-	if ($url == null) {
+	if ($url == '') {
 		$url = CSR_ROOT . Instellingen::get('stek', 'request');
+	} else if (!startsWith($url, CSR_ROOT)) {
+		$url = CSR_ROOT;
 	}
 	header('location: ' . $url);
 	exit;

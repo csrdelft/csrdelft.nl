@@ -21,25 +21,27 @@ class LoginController extends AclController {
 	}
 
 	public function performAction(array $args = array()) {
-		if ($this->hasParam(2)) {
-			$this->action = $this->getParam(2);
+		if ($this->hasParam(1)) {
+			$this->action = $this->getParam(1);
 		}
-		parent::performAction($this->getParams(3));
+		parent::performAction($this->getParams(2));
 	}
 
 	public function login() {
-		$url = CSR_ROOT;
+		require_once 'MVC/view/LoginView.class.php';
 		$form = new LoginForm(); // fetches POST values itself
 		if ($form->validate()) {
 			$values = $form->getValues();
-			$url = $values['url'];
+			if ($this->model->login($values['user'], $values['pass'], $values['koppelip'])) {
+				invokeRefresh($values['url']);
+			}
 		}
-		invokeRefresh($url);
 	}
 
 	public function su($uid) {
 		$this->model->switchUser($uid);
 		setMelding('U bekijkt de webstek nu als ' . Lid::naamLink($uid, 'full', 'plain') . '!', 1);
+		invokeRefresh(Instellingen::get('stek', 'referer'));
 	}
 
 	public function endSu() {
@@ -49,6 +51,7 @@ class LoginController extends AclController {
 			LoginModel::instance()->endSwitchUser();
 			setMelding('Switch-useractie is beëindigd.', 1);
 		}
+		invokeRefresh(Instellingen::get('stek', 'referer'));
 	}
 
 	public function pauper($terug) {

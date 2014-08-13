@@ -92,7 +92,7 @@ class LoginModel extends PersistenceModel implements Validator {
 				}
 			}
 		}
-		//$this->logBezoek();
+		$this->logBezoek();
 	}
 
 	/**
@@ -150,27 +150,25 @@ class LoginModel extends PersistenceModel implements Validator {
 	 */
 	private function logBezoek() {
 		$datumtijd = getDateTime();
-		$locatie = '';
 		if (isset($_SERVER['REMOTE_ADDR'])) {
-			$ip = $db->escape($_SERVER['REMOTE_ADDR']);
+			$ip = $_SERVER['REMOTE_ADDR'];
 		} else {
 			$ip = '0.0.0.0';
-			$locatie = '';
 		}
 		if (isset($_SERVER['REQUEST_URI'])) {
-			$url = $db->escape($_SERVER['REQUEST_URI']);
+			$url = $_SERVER['REQUEST_URI'];
 		} else {
 			$url = '';
 		}
 		if (isset($_SERVER['HTTP_REFERER'])) {
-			$referer = $db->escape($_SERVER['HTTP_REFERER']);
+			$referer = $_SERVER['HTTP_REFERER'];
 		} else {
 			$referer = '';
 		}
-
-		$agent = '';
 		if (isset($_SERVER['HTTP_USER_AGENT'])) {
-			$agent = $db->escape($_SERVER['HTTP_USER_AGENT']);
+			$agent = $_SERVER['HTTP_USER_AGENT'];
+		} else {
+			$agent = '';
 		}
 	}
 
@@ -235,12 +233,13 @@ class LoginModel extends PersistenceModel implements Validator {
 			$lid = Lid::loadByDuckname($user);
 		}
 		// als er geen lid-object terugkomt, haken we af
-		if (!($lid instanceof Lid)) {
-			return false;
-		}
-
-		// we hebben nu een gebruiker gevonden en gaan eerst het wachtwoord controleren
-		if (!$lid->checkpw($pass)) {
+		// als we hebben nu een gebruiker gevonden en gaan eerst het wachtwoord controleren
+		if (!($lid instanceof Lid) OR ! $lid->checkpw($pass)) {
+			$_SESSION['auth_error'] = 'Het spijt ons heel erg, maar met de gegeven
+				inloggegevens is het niet mogelijk in te loggen. Zou het
+				eventueel mogelijk zijn dat u, geheel per ongeluk, een fout heeft
+				gemaakt met invoeren? In dat geval bieden wij u onze nederige
+				excuses aan en vragen wij u het nog eens te proberen.';
 			return false;
 		}
 

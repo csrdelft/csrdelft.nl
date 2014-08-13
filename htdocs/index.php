@@ -17,6 +17,7 @@ try {
 	}
 	// Toegang tot leden website dicht-timmeren
 	switch ($class) {
+		case 'Login':
 		case 'CmsPagina':
 		case 'Forum':
 		case 'FotoAlbum':

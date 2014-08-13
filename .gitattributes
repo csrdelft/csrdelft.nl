@@ -3088,7 +3088,7 @@ lib/MVC/view/CsrLayoutPage.class.php -text
 lib/MVC/view/CsrSmarty.class.php -text
 lib/MVC/view/CsrUbb.class.php -text
 lib/MVC/view/FileField.class.php -text
-lib/MVC/view/FormElement.abstract.php -text
+lib/MVC/view/FormField.abstract.php -text
 lib/MVC/view/Formulier.class.php -text
 lib/MVC/view/ForumView.class.php -text
 lib/MVC/view/FotoAlbumView.class.php -text

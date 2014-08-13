@@ -13,7 +13,7 @@ require_once 'documenten/documentcontent.class.php';
 class DocumentController extends Controller {
 
 	public $document;
-	public $baseurl = '/communicatie/documenten/';
+	public $baseurl;
 	protected $valid = true;
 	protected $errors = '';
 
@@ -24,7 +24,7 @@ class DocumentController extends Controller {
 	 */
 	public function __construct($querystring) {
 		parent::__construct($querystring, null);
-
+		$this->baseurl = CSR_ROOT . '/communicatie/documenten/';
 		//wat zullen we eens gaan doen? Hier bepalen we welke actie we gaan uitvoeren
 		//en of de ingelogde persoon dat mag.
 		if (LoginModel::mag('P_DOCS_READ')) {

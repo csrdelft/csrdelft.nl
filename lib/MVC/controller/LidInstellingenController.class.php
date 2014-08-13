@@ -39,12 +39,12 @@ class LidInstellingenController extends AclController {
 
 	public function opslaan() {
 		$this->model->save(); // fetches $_POST values itself
-		invokeRefresh('/', 'Instellingen opgeslagen', 1);
+		invokeRefresh(CSR_ROOT . '/', 'Instellingen opgeslagen', 1);
 	}
 
 	public function reset($module, $key, $value) {
 		$this->model->setForAll($module, $key, $value);
-		invokeRefresh('/instellingen/beheer', 'Voor iedereen de instelling overschreven', 1);
+		invokeRefresh(CSR_ROOT . '/instellingen/beheer', 'Voor iedereen de instelling overschreven', 1);
 	}
 
 }

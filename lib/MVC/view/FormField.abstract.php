@@ -1,7 +1,7 @@
 <?php
 
 /**
- * FormElement.abstract.php
+ * FormField.abstract.php
  * 
  * @author Jan Pieter Waagmeester <jieter@jpwaag.com>
  * @author P.W.G. Brussee <brussee@live.nl>
@@ -37,7 +37,7 @@
  * 		* LidField					Leden selecteren
  * 		* IntField					Integers 
  * 		* FloatField				Bedragen
- * 	- PassField						Wachtwoorden (oude, nieuwe, nieuwe ter bevestiging)
+ * 	- WachtwoordWijzigenField		Wachtwoorden (oude, nieuwe, nieuwe ter bevestiging)
  * 	- SelectField
  * 		* GeslachtField				m/v
  * 		* JaNeeField				ja/nee
@@ -75,7 +75,7 @@ abstract class InputField implements FormElement, Validator {
 	public $description; //omschrijving in label
 	public $disabled = false; //veld uitgeschakeld?
 	public $not_null = false; //mag het veld leeg zijn?
-	public $no_preview = false; //geen preview tonen
+	public $preview = true; //preview tonen? (waar van toepassing)
 	public $leden_mod = false; //uitzondering leeg verplicht veld voor LEDEN_MOD
 	public $autocomplete = true; //browser laten autoaanvullen?
 	public $placeholder = null; //plaats een grijze placeholdertekst in leeg veld
@@ -313,7 +313,7 @@ abstract class InputField implements FormElement, Validator {
 		echo $this->getDiv();
 		echo $this->getLabel();
 		echo $this->getErrorDiv();
-		if (!$this->no_preview) {
+		if ($this->preview) {
 			echo $this->getPreviewDiv();
 		}
 		echo '<input type="text"' . $this->getInputAttribute(array('id', 'name', 'class', 'value', 'origvalue', 'disabled', 'maxlength', 'placeholder', 'autocomplete', 'onchange', 'onclick', 'onkeyup')) . ' />';
@@ -411,7 +411,7 @@ class TextField extends InputField {
 
 class RequiredTextField extends TextField {
 
-	public $notnull = true;
+	public $not_null = true;
 
 }
 
@@ -431,7 +431,7 @@ class FileNameField extends TextField {
 
 class RequiredFileNameField extends FileNameField {
 
-	public $notnull = true;
+	public $not_null = true;
 
 }
 
@@ -450,7 +450,7 @@ class LandField extends TextField {
 
 class RequiredLandField extends LandField {
 
-	public $notnull = true;
+	public $not_null = true;
 
 }
 
@@ -477,7 +477,7 @@ class RechtenField extends TextField {
 		if (!parent::validate()) {
 			return false;
 		}
-		//parent checks notnull
+		//parent checks not null
 		if ($this->value == '') {
 			return true;
 		}
@@ -506,7 +506,7 @@ class RechtenField extends TextField {
 
 class RequiredRechtenField extends RechtenField {
 
-	public $notnull = true;
+	public $not_null = true;
 
 }
 
@@ -526,7 +526,7 @@ class UidField extends TextField {
 		if (!parent::validate()) {
 			return false;
 		}
-		//parent checks notnull
+		//parent checks not null
 		if ($this->value == '') {
 			return true;
 		}
@@ -606,7 +606,7 @@ class LidField extends TextField {
 		if (!parent::validate()) {
 			return false;
 		}
-		//parent checks notnull
+		//parent checks not null
 		if ($this->value == '') {
 			return true;
 		}
@@ -649,7 +649,7 @@ JS;
 
 class RequiredLidField extends LidField {
 
-	public $notnull = true;
+	public $not_null = true;
 
 }
 
@@ -683,7 +683,7 @@ class EmailField extends TextField {
 		if (!parent::validate()) {
 			return false;
 		}
-		//parent checks notnull
+		//parent checks not null
 		if ($this->value == '') {
 			return true;
 		}
@@ -717,7 +717,7 @@ class EmailField extends TextField {
 
 class RequiredEmailField extends EmailField {
 
-	public $notnull = true;
+	public $not_null = true;
 
 }
 
@@ -730,7 +730,7 @@ class UrlField extends TextField {
 		if (!parent::validate()) {
 			return false;
 		}
-		//parent checks notnull
+		//parent checks not null
 		if ($this->value == '') {
 			return true;
 		}
@@ -772,7 +772,7 @@ class IntField extends TextField {
 		if (!parent::validate()) {
 			return false;
 		}
-		//parent checks notnull
+		//parent checks not null
 		if ($this->value == '') {
 			return true;
 		} elseif (!preg_match('/\d+/', $this->value)) {
@@ -791,7 +791,7 @@ class IntField extends TextField {
 
 class RequiredIntField extends IntField {
 
-	public $notnull = true;
+	public $not_null = true;
 
 }
 
@@ -824,7 +824,7 @@ class FloatField extends TextField {
 		if (!parent::validate()) {
 			return false;
 		}
-		//parent checks notnull
+		//parent checks not null
 		if ($this->value == '') {
 			return true;
 		} elseif (!preg_match('/\d+(,{1}\d*)?/', str_replace(',', '.', $this->value))) {
@@ -841,7 +841,7 @@ class FloatField extends TextField {
 
 class RequiredFloatField extends FloatField {
 
-	public $notnull = true;
+	public $not_null = true;
 
 }
 
@@ -865,7 +865,7 @@ class NickField extends TextField {
 		if (!parent::validate()) {
 			return false;
 		}
-		//parent checks notnull
+		//parent checks not null
 		if ($this->value == '') {
 			return true;
 		}
@@ -901,7 +901,7 @@ class DuckField extends TextField {
 		if (!parent::validate()) {
 			return false;
 		}
-		//parent checks notnull
+		//parent checks not null
 		if ($this->value == '') {
 			return true;
 		}
@@ -927,7 +927,7 @@ class TelefoonField extends TextField {
 		if (!parent::validate()) {
 			return false;
 		}
-		//parent checks notnull
+		//parent checks not null
 		if ($this->value == '') {
 			return true;
 		}
@@ -971,7 +971,7 @@ class TextareaField extends TextField {
 
 class RequiredTextareaField extends TextareaField {
 
-	public $notnull = true;
+	public $not_null = true;
 
 }
 
@@ -1016,17 +1016,35 @@ JS;
 
 class RequiredUbbPreviewField extends UbbPreviewField {
 
-	public $notnull = true;
+	public $not_null = true;
+
+}
+
+class WachtwoordField extends TextField {
+
+	public function view() {
+		echo $this->getDiv();
+		echo $this->getLabel();
+		echo $this->getErrorDiv();
+		echo '<input type="password"' . $this->getInputAttribute(array('id', 'name', 'class', 'value', 'origvalue', 'disabled', 'maxlength', 'placeholder', 'autocomplete', 'onchange', 'onclick', 'onkeyup')) . ' />';
+		echo '</div>';
+	}
+
+}
+
+class RequiredWachtwoordField extends WachtwoordField {
+
+	public $not_null = true;
 
 }
 
 /**
- * PassField
+ * WachtwoordWijzigenField
  *
  * Aanpassen van wachtwoorden.
  * Vreemde eend in de 'bijt', deze unit produceert 3 velden: oud, nieuw en bevestiging.
  */
-class PassField extends InputField {
+class WachtwoordWijzigenField extends InputField {
 
 	public function __construct($name, Lid $lid) {
 		parent::__construct($name, $name, null, $lid);
@@ -1157,7 +1175,7 @@ class SelectField extends InputField {
 
 class RequiredSelectField extends SelectField {
 
-	public $notnull = true;
+	public $not_null = true;
 
 }
 
@@ -1509,7 +1527,7 @@ class VinkField extends InputField {
 
 class RequiredVinkField extends VinkField {
 
-	public $notnull = true;
+	public $not_null = true;
 
 }
 

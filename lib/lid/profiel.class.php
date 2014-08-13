@@ -266,7 +266,7 @@ class ProfielBewerken extends Profiel {
 				}
 				$form[] = new ImageField('duckfoto', $duckfoto, 'duck', null, null, null, 250);
 			}
-			$form[] = new PassField('password', $this->lid);
+			$form[] = new WachtwoordWijzigenField('password', $this->lid);
 		}
 
 		//zaken bewerken als we oudlid zijn of P_LEDEN_MOD hebben
@@ -422,7 +422,7 @@ class ProfielBewerken extends Profiel {
 			}
 			if ($field instanceof InputField) {
 				//als een wachtwoordveld leeg is doen we er niets mee
-				if ($field instanceof PassField AND $field->getValue() == '') {
+				if ($field instanceof WachtwoordWijzigenField AND $field->getValue() == '') {
 					continue;
 				}
 				//is het wel een wijziging?

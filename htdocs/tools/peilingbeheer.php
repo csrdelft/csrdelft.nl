@@ -20,7 +20,7 @@ if (isset($_GET['action'])) {
 					}
 				}
 				$peiling = Peiling::maakPeiling($properties);
-				invokeRefresh('/tools/peilingbeheer.php', 'De nieuwe peiling heeft id ' . $peiling->getId() . '.', 1);
+				invokeRefresh(CSR_ROOT . '/tools/peilingbeheer.php', 'De nieuwe peiling heeft id ' . $peiling->getId() . '.', 1);
 				exit;
 			}
 			break;

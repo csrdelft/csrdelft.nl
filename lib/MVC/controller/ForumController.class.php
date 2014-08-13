@@ -438,19 +438,19 @@ class ForumController extends Controller {
 		}
 		$spamtrap = filter_input(INPUT_POST, 'firstname', FILTER_UNSAFE_RAW);
 		if (!empty($spamtrap)) {
-			invokeRefresh('/forum/deel/' . $deel->forum_id, 'SPAM', -1); //TODO: logging
+			invokeRefresh(CSR_ROOT . '/forum/deel/' . $deel->forum_id, 'SPAM', -1); //TODO: logging
 		}
 		$tekst = trim(filter_input(INPUT_POST, 'forumBericht', FILTER_UNSAFE_RAW));
 		$_SESSION['forum_concept'] = $tekst;
 		require_once 'simplespamfilter.class.php';
 		$filter = new SimpleSpamfilter();
 		if ($filter->isSpam($tekst)) {
-			invokeRefresh('/forum/deel/' . $deel->forum_id, 'SPAM', -1); //TODO: logging
+			invokeRefresh(CSR_ROOT . '/forum/deel/' . $deel->forum_id, 'SPAM', -1); //TODO: logging
 		}
 		// voorkomen dubbelposts
 		if (isset($_SESSION['forum_laatste_post_tekst']) AND $_SESSION['forum_laatste_post_tekst'] === $tekst) {
 			$_SESSION['forum_concept'] = '';
-			invokeRefresh('/forum/deel/' . $deel->forum_id, 'Uw reactie is al geplaatst', 0);
+			invokeRefresh(CSR_ROOT . '/forum/deel/' . $deel->forum_id, 'Uw reactie is al geplaatst', 0);
 		}
 		$mailadres = null;
 		$wacht_goedkeuring = false;
@@ -458,11 +458,11 @@ class ForumController extends Controller {
 			$wacht_goedkeuring = true;
 			$mailadres = filter_input(INPUT_POST, 'email', FILTER_SANITIZE_EMAIL);
 			if (!email_like($mailadres)) {
-				$url = ($draad_id === null ? '/forum/deel/' . $deel->forum_id : '/forum/onderwerp/' . $draad_id);
+				$url = CSR_ROOT . ($draad_id === null ? '/forum/deel/' . $deel->forum_id : '/forum/onderwerp/' . $draad_id);
 				invokeRefresh($url, 'U moet een geldig email-adres opgeven!', -1);
 			}
 			if ($filter->isSpam($mailadres)) {
-				invokeRefresh('/forum/deel/' . $deel->forum_id, 'SPAM', -1); //TODO: logging
+				invokeRefresh(CSR_ROOT . '/forum/deel/' . $deel->forum_id, 'SPAM', -1); //TODO: logging
 			}
 		}
 		if ($draad_id !== null) { // post in bestaand draadje
@@ -473,7 +473,7 @@ class ForumController extends Controller {
 		} else { // post in nieuw draadje
 			$titel = trim(filter_input(INPUT_POST, 'titel', FILTER_SANITIZE_STRING));
 			if (empty($titel)) {
-				invokeRefresh('/forum/deel/' . $deel->forum_id, 'U moet een titel opgeven!', -1);
+				invokeRefresh(CSR_ROOT . '/forum/deel/' . $deel->forum_id, 'U moet een titel opgeven!', -1);
 			}
 			$draad = ForumDradenModel::instance()->maakForumDraad($deel->forum_id, $titel, $wacht_goedkeuring);
 		}
@@ -485,7 +485,7 @@ class ForumController extends Controller {
 			setMelding('Uw bericht is opgeslagen en zal als het goedgekeurd is geplaatst worden.', 1);
 			//bericht sturen naar pubcie@csrdelft dat er een bericht op goedkeuring wacht
 			mail('pubcie@csrdelft.nl', 'Nieuw bericht wacht op goedkeuring', "http://csrdelft.nl/forum/onderwerp/" . $draad->draad_id . "/wacht#" . $post->post_id . "\r\n" . "\r\nDe inhoud van het bericht is als volgt: \r\n\r\n" . str_replace('\r\n', "\n", $tekst) . "\r\n\r\nEINDE BERICHT", "From: pubcie@csrdelft.nl\nReply-To: " . $mailadres);
-			invokeRefresh('/forum/deel/' . $deel->forum_id);
+			invokeRefresh(CSR_ROOT . '/forum/deel/' . $deel->forum_id);
 		} else {
 			ForumPostsModel::instance()->goedkeurenForumPost($post, $draad, $deel);
 			foreach ($draad->getVolgers() as $uid) {
@@ -495,7 +495,7 @@ class ForumController extends Controller {
 			}
 		}
 		// redirect naar (altijd) juiste pagina
-		invokeRefresh('/forum/reactie/' . $post->post_id . '#' . $post->post_id); // , ($draad_id === null ? 'Draad' : 'Post') . ' succesvol toegevoegd', 1
+		invokeRefresh(CSR_ROOT . '/forum/reactie/' . $post->post_id . '#' . $post->post_id); // , ($draad_id === null ? 'Draad' : 'Post') . ' succesvol toegevoegd', 1
 	}
 
 	public function bewerken($post_id) {

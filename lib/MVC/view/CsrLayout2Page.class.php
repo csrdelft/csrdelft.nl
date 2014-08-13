@@ -60,6 +60,10 @@ class CsrLayout2Page extends HtmlPage {
 			$this->smarty->assign('menutree', MenuModel::instance()->getMenuTree('main'));
 			$this->smarty->display('MVC/layout/pauper.tpl');
 		} else {
+			if ($this->tmpl === 'index') {
+				require_once 'MVC/view/LoginView.class.php';
+				$this->smarty->assign('loginform', new LoginForm());
+			}
 			$this->smarty->display('csrdelft2/' . $this->tmpl . '.tpl');
 		}
 	}

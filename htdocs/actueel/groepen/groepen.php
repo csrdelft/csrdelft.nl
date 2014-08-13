@@ -24,14 +24,14 @@ try {
 
 	$content = new Groepencontent($groepen);
 } catch (Exception $e) {
-	invokeRefresh('/actueel/groepen/', 'Groeptype (' . mb_htmlentities($gtype) . ') bestaat niet');
+	invokeRefresh(CSR_ROOT . '/actueel/groepen/', 'Groeptype (' . mb_htmlentities($gtype) . ') bestaat niet');
 }
 
 if (isset($_GET['maakOt']) AND $groepen->isAdmin()) {
 	if ($groepen->maakGroepenOt()) {
-		invokeRefresh('/actueel/groepen/' . $groepen->getNaam(), 'De h.t. groepen in deze categorie zijn met succes o.t. gemaakt.', 1);
+		invokeRefresh(CSR_ROOT . '/actueel/groepen/' . $groepen->getNaam(), 'De h.t. groepen in deze categorie zijn met succes o.t. gemaakt.', 1);
 	} else {
-		invokeRefresh('/actueel/groepen/' . $groepen->getNaam(), 'De h.t. groepen zijn niet allemaal met succes o.t. gemaakt.');
+		invokeRefresh(CSR_ROOT . '/actueel/groepen/' . $groepen->getNaam(), 'De h.t. groepen zijn niet allemaal met succes o.t. gemaakt.');
 	}
 }
 if (isset($_GET['bewerken']) AND $groepen->isAdmin()) {
@@ -40,7 +40,7 @@ if (isset($_GET['bewerken']) AND $groepen->isAdmin()) {
 		if (isset($_POST['beschrijving'])) {
 			$groepen->setBeschrijving($_POST['beschrijving']);
 			if ($groepen->save()) {
-				invokeRefresh('/actueel/groepen/' . $groepen->getNaam(), 'Beschrijving van groepstype met succes opgeslagen.', 1);
+				invokeRefresh(CSR_ROOT . '/actueel/groepen/' . $groepen->getNaam(), 'Beschrijving van groepstype met succes opgeslagen.', 1);
 			} else {
 				setMelding('Opslaan mislukt.', -1);
 			}

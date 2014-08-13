@@ -88,8 +88,11 @@ switch (constant('MODE')) {
 			session_start();
 		}
 
-		$req = filter_var($_SERVER['REQUEST_URI'], FILTER_SANITIZE_URL);
+		$req = filter_input(INPUT_SERVER, 'REQUEST_URI', FILTER_SANITIZE_URL);
 		Instellingen::setTemp('stek', 'request', $req);
+
+		$ref = filter_input(INPUT_SERVER, 'HTTP_REFERER', FILTER_SANITIZE_URL);
+		Instellingen::setTemp('stek', 'referer', $ref);
 
 		# N.B. het is van belang dat na het starten van de sessie meteen LoginModel
 		# wordt geinitialiseerd, omdat die de ingelogde gebruiker controleert en
