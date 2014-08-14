@@ -122,6 +122,7 @@ class Lid implements Serializable, Agendeerbaar {
 			}
 			return true;
 		} else {
+			DebugLogModel::instance()->log(get_called_class(), 'save', func_get_args(), $this);
 			return false;
 		}
 	}

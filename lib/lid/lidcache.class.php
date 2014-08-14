@@ -31,7 +31,7 @@ class LidCache {
 				CsrMemcache::instance()->set($uid, serialize($lid));
 				return $lid;
 			} catch (Exception $e) {
-				DebugLogModel::instance()->log(get_called_class(), 'getLid($uid)', array($uid), $e);
+				DebugLogModel::instance()->log(get_called_class(), 'getLid($uid)', func_get_args(), $e);
 				return null;
 			}
 		}

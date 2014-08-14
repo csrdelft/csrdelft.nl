@@ -202,7 +202,7 @@ class LidInstellingen extends PersistenceModel {
 					$this->deleteByPrimaryKey($instelling->getValues(true));
 				} else {
 					setMelding($e->getMessage());
-					DebugLogModel::instance()->log(get_called_class(), 'reload', array(), $e);
+					DebugLogModel::instance()->log(get_called_class(), 'reload', func_get_args(), $e);
 				}
 			}
 		}

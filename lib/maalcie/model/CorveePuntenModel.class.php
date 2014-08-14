@@ -99,8 +99,8 @@ class CorveePuntenModel {
 		$totalen = array();
 		foreach ($result as $row) {
 			$totalen[$row['uid']] = array(
-				'puntenTotaal' => (int) $row['corvee_punten'],
-				'bonusTotaal' => (int) $row['corvee_punten_bonus']
+				'puntenTotaal'	 => (int) $row['corvee_punten'],
+				'bonusTotaal'	 => (int) $row['corvee_punten_bonus']
 			);
 		}
 		return $totalen;
