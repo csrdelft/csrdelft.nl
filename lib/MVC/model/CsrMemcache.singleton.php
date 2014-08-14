@@ -6,7 +6,7 @@
  * @author Jan Pieter Waagmeester <jieter@jpwaag.com>
  * @author P.W.G. Brussee <brussee@live.nl>
  *
- * Simpele wrapper voor memchached
+ * Wrapper voor Memchache if available; DummyCache otherwise.
  */
 class CsrMemcache {
 
@@ -43,7 +43,7 @@ class CsrMemcache {
 	}
 
 	private function __construct() {
-		
+		// never called
 	}
 
 }

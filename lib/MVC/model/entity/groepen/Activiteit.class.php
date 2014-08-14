@@ -38,10 +38,6 @@ class Activiteit extends Ketzer implements Agendeerbaar {
 
 	// Agendeerbaar:
 
-	public function getUUID() {
-		return $this->groep_id . '@' . static::$table_name . '.csrdelft.nl';
-	}
-
 	/**
 	 * Timestamp van eindmoment.
 	 */

@@ -56,6 +56,10 @@ abstract class PersistentEntity {
 		return static::$primary_keys;
 	}
 
+	public function getUUID() {
+		return implode('.', $this->getValues(true)) . '@' . get_class($this) . '.csrdelft.nl';
+	}
+
 	/**
 	 * Get the fields and their values of this object.
 	 * 

@@ -4,7 +4,7 @@ require_once 'MVC/model/CsrMemcache.singleton.php';
 require_once 'lid/lid.class.php';
 
 /**
- * LidCache.class.php
+ * lidcache.class.php
  * 
  * @author C.S.R. Delft <pubcie@csrdelft.nl>
  * 

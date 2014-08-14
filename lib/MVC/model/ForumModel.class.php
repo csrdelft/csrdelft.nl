@@ -119,7 +119,6 @@ class ForumDelenModel extends PersistenceModel {
 	}
 
 	public function verwijderForumDeel($id) {
-
 		$this->deleteByPrimaryKey(array($id));
 	}
 

@@ -2997,6 +2997,7 @@ lib/MVC/controller/groepen/WoonoordenController.class.php -text
 lib/MVC/controller/maalcie/BeheerFunctiesController.class.php -text
 lib/MVC/model/AgendaModel.class.php -text
 lib/MVC/model/Agendeerbaar.interface.php -text
+lib/MVC/model/BufferedPersistenceModel.abstract.php -text
 lib/MVC/model/CmsPaginaModel.class.php -text
 lib/MVC/model/CsrMemcache.singleton.php -text
 lib/MVC/model/Database.singleton.php -text
@@ -3007,7 +3008,6 @@ lib/MVC/model/ForumModel.class.php -text
 lib/MVC/model/FotoAlbumModel.class.php -text
 lib/MVC/model/GroepenModel.class.php -text
 lib/MVC/model/InstellingenModel.class.php -text
-lib/MVC/model/LidCache.class.php -text
 lib/MVC/model/LidInstellingenModel.class.php -text
 lib/MVC/model/LoginModel.class.php -text
 lib/MVC/model/MenuModel.class.php -text
@@ -3535,6 +3535,7 @@ lib/ldap.class.php -text
 lib/lichting.class.php -text
 lib/lid/ledenlijstcontent.class.php -text
 lib/lid/lid.class.php -text
+lib/lid/lidcache.class.php -text
 lib/lid/lidzoeker.class.php -text
 lib/lid/profiel.class.php -text
 lib/lid/profielcontent.class.php -text

@@ -117,8 +117,7 @@ abstract class PersistenceModel implements Persistence {
 	 * @return PersistentEntity
 	 */
 	public function retrieve(PersistentEntity $entity) {
-		$entity = $this->retrieveByPrimaryKey($entity->getValues(true));
-		return $entity;
+		return $this->retrieveByPrimaryKey($entity->getValues(true));
 	}
 
 	/**

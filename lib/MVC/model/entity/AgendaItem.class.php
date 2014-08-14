@@ -77,10 +77,6 @@ class AgendaItem extends PersistentEntity implements Agendeerbaar {
 	 */
 	protected static $table_name = 'agenda';
 
-	public function getUUID() {
-		return $this->item_id . '@' . static::$table_name . '.csrdelft.nl';
-	}
-
 	public function getBeginMoment() {
 		return strtotime($this->begin_moment);
 	}
