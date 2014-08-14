@@ -47,7 +47,6 @@ htdocs/wiki/data/meta/*
 htdocs/wiki/data/pages/*
 htdocs/wiki/data/pages/wiki/*
 htdocs/wiki/data/tmp/*
-htdocs/wiki/inc/geshi/*
 htdocs/wiki/inc/lang/af
 htdocs/wiki/inc/lang/ar
 htdocs/wiki/inc/lang/az

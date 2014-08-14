@@ -1,15 +1,10 @@
 <?php
-        //login with:
-        // - x999
-        // - or as lid when:
-        //      * cookie available
-        //      * private_token was added to url (checking the permissions by LoginModel::hasPermission, needs setting token_authorizable to true)
-        require_once 'configuratie.include.php';
-        setlocale(LC_NUMERIC, 'en_US.UTF-8');
-		error_reporting(E_ALL & ~E_NOTICE & ~E_STRICT);
-		if (!LoginModel::mag('P_LOGGED_IN')) {
-			invokeRefresh(CSR_ROOT);
-		}
+/**
+ * Initialize C.S.R. stek essentials
+ */
+require_once 'configuratie.include.php';
+setlocale(LC_NUMERIC, 'en_US.UTF-8');
+error_reporting(E_ALL & ~E_NOTICE & ~E_STRICT);
 
 /**
  * Initialize some defaults needed for DokuWiki
