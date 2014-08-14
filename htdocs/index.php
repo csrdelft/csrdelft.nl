@@ -53,14 +53,14 @@ try {
 		}
 	}
 	$controller->getView()->view();
-} catch (Exception $e) {
+}
+catch (Exception $e) {
 	$protocol = (isset($_SERVER['SERVER_PROTOCOL']) ? $_SERVER['SERVER_PROTOCOL'] : 'HTTP/1.0');
 	$code = ($e->getCode() >= 100 ? $e->getCode() : 500);
 	header($protocol . ' ' . $code . ' ' . $e->getMessage());
 
 	if (defined('DEBUG') && (LoginModel::mag('P_ADMIN') || LoginModel::instance()->isSued())) {
 		echo str_replace('#', '<br />#', $e); // stacktrace 
-	} else {
-		DebugLogModel::instance()->log('index.php', 'new ' . $class, array($request), $e);
 	}
+	DebugLogModel::instance()->log('index.php', 'new ' . $class, array($request), $e);
 }
