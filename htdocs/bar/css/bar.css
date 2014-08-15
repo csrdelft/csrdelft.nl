@@ -37,6 +37,7 @@ body, html{
 
 #main .top td{
 	height: 1%;
+	white-space: nowrap;
 }
 
 #bestelLijstDiv li:after{
