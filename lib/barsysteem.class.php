@@ -53,7 +53,7 @@ class Barsysteem
 
     function getProducten()
     {
-        $q = $this->db->prepare("SELECT id, beheer, prijs, beschrijving, prioriteit FROM socCieProduct as P JOIN socCiePrijs as R ON P.id=R.productId WHERE status = '1' AND CURRENT_TIMESTAMP<tot AND CURRENT_TIMESTAMP>van ORDER BY prioriteit DESC");
+        $q = $this->db->prepare("SELECT id, beheer, prijs, beschrijving, prioriteit FROM socCieProduct as P JOIN socCiePrijs as R ON (P.id=R.productId AND (CURRENT_TIMESTAMP BETWEEN van AND tot)) WHERE status = 1 ORDER BY prioriteit DESC");
 		$q->execute();
 	
 		$result = array();
@@ -381,6 +381,28 @@ ORDER BY yearweek DESC
 			$q->bindValue(':stekUID', null, PDO::PARAM_INT);
 			
 		return $q->execute();
+	
+	}
+	
+	public function updatePrice($productId, $price) {
+	
+        $this->db->beginTransaction();
+		
+		$q = $this->db->prepare("UPDATE socCiePrijs SET tot = CURRENT_TIMESTAMP WHERE productId = :productId ORDER BY tot DESC LIMIT 1");
+		$q->bindValue(':productId', $productId);
+		$q->execute();
+		
+		$q = $this->db->prepare("INSERT INTO socCiePrijs (productId, prijs) VALUES (:productId, :prijs)");
+		$q->bindValue(':productId', $productId);
+		$q->bindValue(':prijs', $price);
+		$q->execute();
+		
+        if (!$this->db->commit()) {
+            $this->db->rollBack();
+            return false;
+        }
+
+		return true;
 	
 	}
 	

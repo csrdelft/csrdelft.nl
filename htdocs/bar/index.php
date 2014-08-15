@@ -235,10 +235,14 @@ if ($barsysteem->isLoggedIn()) {
 							
 								<div class="col-xs-3">
 									
-									<ul class="list-group" id="productBeheerLijst">
+									<div class="list-group" id="productBeheerLijst">
 									
-									</ul>
+									</div>
 									
+								</div>
+								
+								<div class="col-xs-9" id="editProduct">
+								
 								</div>
 							
 							</div>
