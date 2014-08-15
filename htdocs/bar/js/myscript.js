@@ -334,12 +334,17 @@ $(function () {
 			if(bestelTotaal() < 0 || selectedPerson.status == 'S_EXTERN')
 				toRed = false;
 			
+			// Hack
+			var emptyOrder = true;
+			for(key in bestelLijst) {
+				emptyOrder = false
+			}
+			
 			if(oudlid && toRed) {
 			
 				zetBericht("Oudleden kunnen niet rood staan, inleg vereist!", "danger");
 			
-			}
-			else if (selectedPerson && bestelTotaal() != 0) {
+			} else if (selectedPerson && !emptyOrder) {
 			
 				if(!warningGiven && toRed) {
 				
@@ -387,7 +392,7 @@ $(function () {
 
 			} else if (!selectedPerson) {
 				zetBericht("Geen geldig persoon geselecteerd!", "danger");
-			} else if (bestelTotaal() == 0) {
+			} else if (emptyOrder) {
 				zetBericht("Geen bestelling ingevoerd!", "danger");
 			}
 		
