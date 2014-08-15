@@ -45,7 +45,7 @@ class LoginController extends AclController {
 		invokeRefresh(CSR_ROOT);
 	}
 
-	public function su($uid) {
+	public function su($uid = null) {
 		$this->model->switchUser($uid);
 		setMelding('U bekijkt de webstek nu als ' . Lid::naamLink($uid, 'full', 'plain') . '!', 1);
 		invokeRefresh(HTTP_REFERER);
@@ -61,7 +61,7 @@ class LoginController extends AclController {
 		invokeRefresh(HTTP_REFERER);
 	}
 
-	public function pauper($terug) {
+	public function pauper($terug = null) {
 		if ($terug === 'terug') {
 			$this->model->setPauper(false);
 			invokeRefresh(CSR_ROOT);
