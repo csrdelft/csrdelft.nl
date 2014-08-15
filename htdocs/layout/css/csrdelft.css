@@ -351,6 +351,7 @@ ul.nobullets li{ list-style-type: none; }
 	float: left;
 }
 #mainright{
+	position: absolute;
 	float: right;
 	margin-right: 20px;
 	padding: 10px 0;
