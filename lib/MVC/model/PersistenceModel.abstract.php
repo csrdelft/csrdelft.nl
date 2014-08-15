@@ -158,7 +158,7 @@ abstract class PersistenceModel implements Persistence {
 	 * Remove existing entity.
 	 * 
 	 * @param PersistentEntity $entity
-	 * @return boolean rows affected === 1
+	 * @return boolean rows affected
 	 */
 	public function delete(PersistentEntity $entity) {
 		return $this->deleteByPrimaryKey($entity->getValues(true));
@@ -168,7 +168,7 @@ abstract class PersistenceModel implements Persistence {
 	 * Requires positional values.
 	 * 
 	 * @param array $primary_key_values
-	 * @return boolean rows affected === 1
+	 * @return boolean rows affected
 	 */
 	protected function deleteByPrimaryKey(array $primary_key_values) {
 		$orm = static::orm;
@@ -176,7 +176,7 @@ abstract class PersistenceModel implements Persistence {
 		foreach ($orm::getPrimaryKey() as $key) {
 			$where[] = $key . ' = ?';
 		}
-		return 1 === Database::sqlDelete($orm::getTableName(), implode(' AND ', $where), $primary_key_values, 1);
+		return Database::sqlDelete($orm::getTableName(), implode(' AND ', $where), $primary_key_values, 1);
 	}
 
 }

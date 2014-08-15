@@ -102,10 +102,9 @@ class AgendaController extends AclController {
 	}
 
 	public function verwijderen($aid) {
-		if ($this->model->removeAgendaItem($aid)) {
-			//setMelding('Verwijderd', 1);
-			$this->view = new AgendaItemDeleteView($aid);
-		}
+		$this->model->removeAgendaItem($aid);
+		//setMelding('Verwijderd', 1);
+		$this->view = new AgendaItemDeleteView($aid);
 	}
 
 }

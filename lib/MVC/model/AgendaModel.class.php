@@ -152,7 +152,10 @@ class AgendaModel extends PersistenceModel {
 	}
 
 	public function removeAgendaItem($aid) {
-		return $this->deleteByPrimaryKey(array($aid));
+		$rowcount = $this->deleteByPrimaryKey(array($aid));
+		if ($rowcount !== 1) {
+			throw new Exception('Agenda-item verwijderen mislukt');
+		}
 	}
 
 }

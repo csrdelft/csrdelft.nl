@@ -1,7 +1,5 @@
 <?php
 
-require_once 'MVC/model/DebugLogModel.class.php';
-
 /**
  * Controller.abstract.php
  * 

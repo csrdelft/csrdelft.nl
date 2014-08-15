@@ -199,7 +199,10 @@ class LidInstellingen extends PersistenceModel {
 				$this->setValue($instelling->module, $instelling->instelling_id, $instelling->waarde);
 			} catch (Exception $e) {
 				if (startsWith($e->getMessage(), 'Deze instelling  bestaat niet')) {
-					$this->deleteByPrimaryKey($instelling->getValues(true));
+					$rowcount = $this->deleteByPrimaryKey($instelling->getValues(true));
+					if ($rowcount !== 1) {
+						throw new Exception('Niet bestaande instelling verwijderen mislukt');
+					}
 				} else {
 					setMelding($e->getMessage());
 					DebugLogModel::instance()->log(get_called_class(), 'reload', func_get_args(), $e);

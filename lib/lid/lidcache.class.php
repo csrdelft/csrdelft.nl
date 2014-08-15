@@ -44,6 +44,7 @@ class LidCache {
 	 * Weggooien van een lid uit de cache.
 	 */
 	public static function flushLid($uid) {
+		$uid = (string) $uid; // werkomheen int
 		if (!Lid::isValidUid($uid)) {
 			return false;
 		}

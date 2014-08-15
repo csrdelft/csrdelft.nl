@@ -119,7 +119,10 @@ class ForumDelenModel extends PersistenceModel {
 	}
 
 	public function verwijderForumDeel($id) {
-		$this->deleteByPrimaryKey(array($id));
+		$rowcount = $this->deleteByPrimaryKey(array($id));
+		if ($rowcount !== 1) {
+			throw new Exception('Deelforum verwijderen mislukt');
+		}
 	}
 
 	public function getForumDelenById(array $ids) {
@@ -322,7 +325,10 @@ class ForumDradenVerbergenModel extends PersistenceModel {
 			}
 		} else {
 			if ($verborgen) {
-				$this->deleteByPrimaryKey(array($draad->draad_id, LoginModel::getUid()));
+				$rowcount = $this->deleteByPrimaryKey(array($draad->draad_id, LoginModel::getUid()));
+				if ($rowcount !== 1) {
+					throw new Exception('Weer tonen mislukt');
+				}
 			}
 		}
 	}
@@ -373,7 +379,10 @@ class ForumDradenVolgenModel extends PersistenceModel {
 			}
 		} else {
 			if ($gevolgd) {
-				$this->deleteByPrimaryKey(array($draad->draad_id, LoginModel::getUid()));
+				$rowcount = $this->deleteByPrimaryKey(array($draad->draad_id, LoginModel::getUid()));
+				if ($rowcount !== 1) {
+					throw new Exception('Volgen stoppen mislukt');
+				}
 			}
 		}
 	}
