@@ -97,6 +97,11 @@ function init_scroll_fixed() {
 		$('.scroll-fix').each(function() {
 			if (yfix >= $(this).attr('yfix')) {
 				$(this).addClass('scroll-fixed');
+
+				// crappy layout werkomheen
+				if ($('#mainright').height() < $('#mainleft').height()) {
+					$('#mainright').height($('#mainleft').height());
+				}
 			} else {
 				$(this).removeClass('scroll-fixed');
 			}
