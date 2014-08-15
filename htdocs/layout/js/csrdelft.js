@@ -87,7 +87,10 @@ function lazy_image_loaded() {
 
 function init_scroll_fixed() {
 	$('.scroll-fix').each(function() {
-		$(this).attr('yfix', $(this).offset().top);
+		var yfix = $(this).attr('yfix');
+		if (typeof yfix !== typeof undefined && yfix !== false) {
+			$(this).attr('yfix', $(this).offset().top);
+		}
 	});
 	$(window).scroll(function() {
 		var yfix = $(window).scrollTop();
