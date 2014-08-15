@@ -125,7 +125,7 @@ class Lid implements Serializable, Agendeerbaar {
 				LidCache::updateLid($this->getPatroon()->getUid());
 			}
 			return true;
-		} elseif (defined('DEBUG')) {
+		} elseif (DEBUG) {
 			var_dump($return);
 			var_dump($db->error());
 			exit;

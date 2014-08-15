@@ -34,6 +34,9 @@ class DebugLogModel extends PersistenceModel {
 		$entry->referer = HTTP_REFERER;
 		$entry->user_agent = $_SERVER['HTTP_USER_AGENT'];
 		$this->create($entry);
+		if (DEBUG AND Database::inTransaction()) {
+			setMelding('Debuglog may not be committed: database transaction', 2);
+		}
 		return $entry;
 	}
 

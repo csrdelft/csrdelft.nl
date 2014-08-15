@@ -229,7 +229,7 @@ class MijnSqli {
 	}
 
 	private function debug($string) {
-		if (defined('DEBUG')) {
+		if (DEBUG) {
 			$string = trim(str_replace(array("\r\n", "\n", "\t", '  ', '   '), ' ', $string));
 			$error = $this->error();
 			if (!empty($error)) {

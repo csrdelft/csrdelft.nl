@@ -47,7 +47,7 @@ class CsrLayoutPage extends HtmlPage {
 				$this->addStylesheet('snow.css');
 			}
 		}
-		if (defined('DEBUG') AND LoginModel::mag('P_ADMIN')) {
+		if (DEBUG AND LoginModel::mag('P_ADMIN')) {
 			$this->addStylesheet('jquery-ui.css', '/layout/js/jquery/');
 			$this->addScript('jquery/jquery.js');
 			$this->addScript('jquery/jquery-ui.js');
@@ -90,7 +90,7 @@ class CsrLayoutPage extends HtmlPage {
 			$this->smarty->assign('minion', $this->smarty->fetch('minion.tpl'));
 		}
 
-		if (defined('DEBUG') AND ( LoginModel::mag('P_ADMIN') OR LoginModel::instance()->isSued())) {
+		if (DEBUG AND ( LoginModel::mag('P_ADMIN') OR LoginModel::instance()->isSued())) {
 			$this->smarty->assign('debug', SimpleHTML::getDebug());
 		}
 

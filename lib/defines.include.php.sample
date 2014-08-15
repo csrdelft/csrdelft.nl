@@ -7,7 +7,7 @@
 # -------------------------------------------------------------------
 # 
 # uncomment de volgende regel om de database automatisch te laten controleren
-define('DB_CHECK_ENABLE', 'zie PersistentEntity::checkTable()');
+#define('DB_CHECK_ENABLE', 'zie PersistentEntity::checkTable()');
 # 
 # uncomment de volgende regel om de database automatisch te laten bijwerken
 #define('DB_MODIFY_ENABLE', 'heb je een backup gemaakt?');
@@ -15,7 +15,7 @@ define('DB_CHECK_ENABLE', 'zie PersistentEntity::checkTable()');
 # uncomment de volgende regel om de database automatisch te laten droppen
 #define('DB_DROP_ENABLE', 'heb je een backup gemaakt?');
 
-define('DEBUG', 'extra debug output');
+define('DEBUG', false);
 
 # wordt gebruikt om pagina's alleen op Confide te laten zien
 define('CONFIDE_IP', '80.112.180.123');

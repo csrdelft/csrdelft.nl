@@ -57,7 +57,7 @@ catch (Exception $e) {
 	$code = ($e->getCode() >= 100 ? $e->getCode() : 500);
 	header($protocol . ' ' . $code . ' ' . $e->getMessage());
 
-	if (defined('DEBUG') && (LoginModel::mag('P_ADMIN') || LoginModel::instance()->isSued())) {
+	if (DEBUG && (LoginModel::mag('P_ADMIN') || LoginModel::instance()->isSued())) {
 		echo str_replace('#', '<br />#', $e); // stacktrace 
 	}
 	DebugLogModel::instance()->log('index.php', 'new ' . $class, array($request), $e);
