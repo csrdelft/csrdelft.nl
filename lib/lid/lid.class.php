@@ -90,7 +90,7 @@ class Lid implements Serializable, Agendeerbaar {
 	public function save() {
 		$db = MijnSqli::instance();
 		$donotsave = array('uid', 'rssToken');
-		$soccieBeunhaas = array('stekUID', 'socCieId', 'naam', 'saldo');
+		$soccieBeunhaas = array('stekUID', 'socCieId', 'naam', 'saldo', 'deleted');
 		$donotsave = array_merge($donotsave, $soccieBeunhaas);
 
 		$queryfields = array();
