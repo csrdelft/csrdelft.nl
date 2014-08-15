@@ -90,12 +90,11 @@ function init_scroll_fixed() {
 		$(this).attr('yfix', $(this).offset().top);
 	});
 	$(window).scroll(function() {
-		var y = $(window).scrollTop();
+		var yfix = $(window).scrollTop();
 		$('.scroll-fix').each(function() {
-			if (y >= $(this).attr('yfix')) {
+			if (yfix >= $(this).attr('yfix')) {
 				$(this).addClass('scroll-fixed');
-			}
-			else {
+			} else {
 				$(this).removeClass('scroll-fixed');
 			}
 		});
