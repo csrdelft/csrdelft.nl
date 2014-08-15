@@ -114,15 +114,21 @@ class Lid implements Serializable, Agendeerbaar {
 		}
 
 		$query = 'UPDATE lid SET ' . implode(', ', $queryfields) . " WHERE uid='" . $this->getUid() . "';";
+		$return = $db->query($query);
 
-		if ($db->query($query) AND LidCache::updateLid($this->getUid())) {
+		if ($return === true) {
+			LidCache::updateLid($this->getUid());
 			//als er een patroon is die ook even updaten in de cache, zodat de kindertjes kloppen.
 			if ($this->getPatroon() instanceof Lid) {
 				LidCache::updateLid($this->getPatroon()->getUid());
 			}
 			return true;
 		} else {
-			DebugLogModel::instance()->log(get_called_class(), 'save', func_get_args(), $this);
+			DebugLogModel::instance()->log(get_called_class(), 'save', func_get_args(), $return);
+			if (defined(DEBUG) OR LoginModel::mag('P_ADMIN')) {
+				echo $return;
+				exit;
+			}
 			return false;
 		}
 	}
