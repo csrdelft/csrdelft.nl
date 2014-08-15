@@ -35,7 +35,7 @@ class CmsPaginaController extends Controller {
 			if ($this->getParam(1) === 'pagina') {
 				$this->zijkolom[] = new CmsPaginaZijkolomView($this->model);
 			}
-		} else {
+		} elseif ($this->hasParam(1)) {
 			$naam = $this->getParam(1);
 		}
 		parent::performAction(array($naam));
