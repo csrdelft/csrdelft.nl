@@ -33,7 +33,7 @@ class Instellingen extends PersistenceModel {
 
 	private $defaults = array(
 		'stek'		 => array(
-			'defaultPagina'	 => 'thuis',
+			'homepage'	 => 'thuis',
 			'beschrijving'	 => 'De Civitas Studiosorum Reformatorum is een bruisende, actieve, christelijke studentenvereniging in Delft, rijk aan tradities die zijn ontstaan in haar 50-jarig bestaan. Het is een breed gezelschap van zo&lsquo;n 270 leden met een zeer gevarieerde (kerkelijke) achtergrond, maar met een duidelijke eenheid door het christelijk geloof. C.S.R. is de plek waar al tientallen jaren studenten goede vrienden van elkaar worden, op intellectueel en geestelijk gebied groeien en goede studentengrappen uithalen.'
 		),
 		'agenda'	 => array(

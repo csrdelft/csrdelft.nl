@@ -25,7 +25,6 @@ class CmsPaginaController extends Controller {
 
 	public function performAction(array $args = array()) {
 		$this->action = 'bekijken';
-		$naam = Instellingen::get('stek', 'defaultPagina');
 		if ($this->hasParam(3) AND $this->getParam(2) === 'bewerken') {
 			$this->action = 'bewerken';
 			$naam = $this->getParam(3);
@@ -37,6 +36,8 @@ class CmsPaginaController extends Controller {
 			}
 		} elseif ($this->hasParam(1)) {
 			$naam = $this->getParam(1);
+		} else {
+			$naam = Instellingen::get('stek', 'homepage');
 		}
 		parent::performAction(array($naam));
 	}
