@@ -8,7 +8,7 @@
 		<div id="container">
 			<div id="main">
 				{if is_array($zijkolom)}
-					<div id="mainleft">
+					<div id="mainleft"{if LidInstellingen::get('layout', 'fixed') == 'vast'} class="scroll-fix"{/if}>
 						{foreach from=$zijkolom item=block}
 							<div class="block">{$block->view()}</div>
 						{/foreach}

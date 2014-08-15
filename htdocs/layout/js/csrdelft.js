@@ -21,6 +21,7 @@ $(document).ready(function() {
 });
 
 function init() {
+	init_scroll_fixed();
 	init_links();
 	init_buttons();
 	init_forms();
@@ -82,6 +83,23 @@ function init_lazy_images() {
 
 function lazy_image_loaded() {
 	$(this).parent().replaceWith($(this));
+}
+
+function init_scroll_fixed() {
+	$('.scroll-fix').each(function() {
+		$(this).attr('yfix', $(this).offset().top);
+	});
+	$(window).scroll(function() {
+		var y = $(window).scrollTop();
+		$('.scroll-fix').each(function() {
+			if (y >= $(this).attr('yfix')) {
+				$(this).addClass('scroll-fixed');
+			}
+			else {
+				$(this).removeClass('scroll-fixed');
+			}
+		});
+	});
 }
 
 function page_reload() {

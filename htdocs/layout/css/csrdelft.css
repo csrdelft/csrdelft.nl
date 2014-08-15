@@ -28,13 +28,18 @@ p{
 	margin-bottom: 1em;
 }
 
+.scroll-fixed {
+	position: fixed;
+	top: 0;
+}
+
 abbr.timeago{ border: none; }
 abbr.timeago:hover{ border-bottom: 1px dotted grey; }
 
 a{color: #0a338d; text-decoration: none;}
 a:hover{color: #0a338d; text-decoration: underline;}
 a.external{
-	background-image: url('http://plaetjes.csrdelft.nl/layout/external-link-blue.png');
+	background-image: url('http://plaetjes.csrdelft.nl/layout/external-link-red.png');
 	background-repeat: no-repeat;
 	background-position: center right;
 	padding-right: 14px;
@@ -337,8 +342,7 @@ ul.nobullets li{ list-style-type: none; }
 
 #mainleft{
 	float: left;
-	margin-top: 3px;
-	margin-left: 17px; _margin-left: 7px; /*IE6 Fix*/
+	margin: 0;
 	width: 200px;
 }
 #mainright{

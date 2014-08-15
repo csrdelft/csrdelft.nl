@@ -22,15 +22,10 @@ and open the template in the editor.
 	width: 966px;
 }
 
-#mainleft {
-	margin-left: 0;
-	position: absolute;
-}
-
 #mainright {
 	float: left;
-	display: inline;
-	padding-left: 200px;
+	position: absolute;
+	margin-left: 200px;
 	margin-right: 20px;
 	width: auto !important;
 }
