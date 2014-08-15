@@ -32,10 +32,11 @@ class Instellingen extends PersistenceModel {
 	}
 
 	private $defaults = array(
-		'thuispagina'	 => array(
-			'beschrijving' => 'De Civitas Studiosorum Reformatorum is een bruisende, actieve, christelijke studentenvereniging in Delft, rijk aan tradities die zijn ontstaan in haar 50-jarig bestaan. Het is een breed gezelschap van zo&lsquo;n 270 leden met een zeer gevarieerde (kerkelijke) achtergrond, maar met een duidelijke eenheid door het christelijk geloof. C.S.R. is de plek waar al tientallen jaren studenten goede vrienden van elkaar worden, op intellectueel en geestelijk gebied groeien en goede studentengrappen uithalen.'
+		'stek'		 => array(
+			'defaultPagina'	 => 'thuis',
+			'beschrijving'	 => 'De Civitas Studiosorum Reformatorum is een bruisende, actieve, christelijke studentenvereniging in Delft, rijk aan tradities die zijn ontstaan in haar 50-jarig bestaan. Het is een breed gezelschap van zo&lsquo;n 270 leden met een zeer gevarieerde (kerkelijke) achtergrond, maar met een duidelijke eenheid door het christelijk geloof. C.S.R. is de plek waar al tientallen jaren studenten goede vrienden van elkaar worden, op intellectueel en geestelijk gebied groeien en goede studentengrappen uithalen.'
 		),
-		'agenda'		 => array(
+		'agenda'	 => array(
 			'standaard_zichtbaar_rechten'	 => 'P_LEDEN_READ',
 			'standaard_tijden'				 => '1,Hele dag,2,Kring,3,Lezing,4,Borrel',
 			'standaard_tijd_1'				 => '00:00-23:59',
@@ -43,7 +44,7 @@ class Instellingen extends PersistenceModel {
 			'standaard_tijd_3'				 => '20:00-22:00',
 			'standaard_tijd_4'				 => '20:00-23:59'
 		),
-		'corvee'		 => array(
+		'corvee'	 => array(
 			'punten_per_jaar'						 => '11',
 			'herinnering_aantal_mails'				 => '2',
 			'herinnering_1e_mail'					 => '-5 weeks',
@@ -71,7 +72,7 @@ class Instellingen extends PersistenceModel {
 			'mail_wel_meeeten'						 => 'P.S.: U eet WEL mee met de maaltijd.',
 			'mail_niet_meeeten'						 => 'P.S.: U eet NIET mee met de maaltijd.'
 		),
-		'maaltijden'	 => array(
+		'maaltijden' => array(
 			'budget_maalcie'					 => '1.00',
 			'toon_ketzer_vooraf'				 => '+1 month',
 			'recent_lidprofiel'					 => '-2 months',

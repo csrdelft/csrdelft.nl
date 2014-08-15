@@ -87,7 +87,7 @@
 		<div class="columns large-4 hide-for-small">
 			<div class="blue box w2 h2">
 				<h1>Vereniging van christenstudenten</h1>
-				<p>{Instellingen::get('thuispagina', 'beschrijving')}</p>
+				<p>{Instellingen::get('stek', 'beschrijving')}</p>
 
 				<ul>
 					<li><a href="/forum/deel/2">Promoot jouw studentenactiviteit bij C.S.R.</a> &raquo;</li>
@@ -99,7 +99,7 @@
 		<div class="columns small-2 show-for-small">
 			<div class="blue box h4">
 				<h1>Vereniging van christenstudenten</h1>
-				<p>{Instellingen::get('thuispagina', 'beschrijving')}</p>
+				<p>{Instellingen::get('stek', 'beschrijving')}</p>
 
 				<ul>
 					<li><a href="/forum/deel/2">Promoot jouw studentenactiviteit bij C.S.R.</a> &raquo;</li>

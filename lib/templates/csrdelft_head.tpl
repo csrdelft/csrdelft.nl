@@ -3,7 +3,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="author" content="PubCie C.S.R. Delft" />
-<meta name="description" content="{Instellingen::get('thuispagina', 'beschrijving')}">
+<meta name="description" content="{Instellingen::get('stek', 'beschrijving')}">
 <meta name="robots" content="index, follow" />
 <title>C.S.R. Delft - {$view->getTitel()}</title>
 <link rel="shortcut icon" href="{$CSR_PICS}/layout/favicon.ico" />
@@ -39,4 +39,4 @@ s.parentNode.insertBefore(ga, s);
 <meta property="og:title" content="C.S.R. Delft | {$view->getTitel()}" />
 <meta property="og:locale" content="nl_nl" />
 <meta property="og:image" content="{$CSR_PICS}/layout/beeldmerk.png" />
-<meta property="og:description" content="{Instellingen::get('thuispagina', 'beschrijving')}" />
+<meta property="og:description" content="{Instellingen::get('stek', 'beschrijving')}" />
