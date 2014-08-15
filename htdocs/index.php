@@ -30,10 +30,8 @@ try {
 	}
 	$class .= 'Controller';
 
-	$request = REQUEST_URI;
-
 	require_once 'MVC/controller/' . $class . '.class.php';
-	$controller = new $class($request);
+	$controller = new $class(REQUEST_URI);
 	$controller->performAction();
 
 	if (defined('DB_MODIFY_ENABLE') AND LoginModel::mag('P_ADMIN')) {

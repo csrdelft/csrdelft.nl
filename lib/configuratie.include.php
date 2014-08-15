@@ -26,7 +26,11 @@ if (php_sapi_name() === 'cli') {
 }
 
 # Defines
-$req = filter_var($_SERVER['REQUEST_URI'], FILTER_SANITIZE_URL);
+if (isset($_SERVER['HTTP_REFERER'])) {
+	$req = filter_var($_SERVER['REQUEST_URI'], FILTER_SANITIZE_URL);
+} else {
+	$req = null;
+}
 define('REQUEST_URI', $req);
 
 if (isset($_SERVER['HTTP_REFERER'])) {

@@ -90,6 +90,8 @@ class Lid implements Serializable, Agendeerbaar {
 	public function save() {
 		$db = MijnSqli::instance();
 		$donotsave = array('uid', 'rssToken');
+		$soccieBeunhaas = array('stekUID', 'socCieId', 'naam', 'saldo');
+		//$donotsave = array_merge($donotsave, $soccieBeunhaas);
 
 		$queryfields = array();
 		foreach ($this->profiel as $veld => $value) {
@@ -123,14 +125,12 @@ class Lid implements Serializable, Agendeerbaar {
 				LidCache::updateLid($this->getPatroon()->getUid());
 			}
 			return true;
-		} else {
-			DebugLogModel::instance()->log(get_called_class(), 'save', func_get_args(), $return);
-			if (defined(DEBUG) OR LoginModel::mag('P_ADMIN')) {
-				echo $return;
-				exit;
-			}
-			return false;
+		} elseif (defined(DEBUG)) {
+			var_dump($return);
+			var_dump($db->error());
+			exit;
 		}
+		return false;
 	}
 
 	public function logChange($diff) {
