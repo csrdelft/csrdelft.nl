@@ -383,7 +383,7 @@ class UploadFtp extends BestandUploader {
 		parent::__construct($name);
 		$this->subdir = $subdir;
 		$this->path = PUBLIC_FTP . $this->subdir;
-		if (!$this->isAvailable() OR ( $subdir != '' AND ( startsWith($subdir, '/') OR ! endsWith($subdir, '/') ) )) {
+		if ($subdir != '' AND ( startsWith($subdir, '/') OR ! endsWith($subdir, '/') )) {
 			throw new Exception('Invalid FTP subdir');
 		}
 		if ($this->isPosted()) {
