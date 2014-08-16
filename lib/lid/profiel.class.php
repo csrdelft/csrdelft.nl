@@ -380,7 +380,7 @@ class ProfielBewerken extends Profiel {
 			$form[] = new SelectField('ovkaart', $profiel['ovkaart'], 'OV-kaart', array('' => 'Kies...', 'geen' => '(Nog) geen OV-kaart', 'week' => 'Week', 'weekend' => 'Weekend', 'niet' => 'Niet geactiveerd'));
 			$form[] = new SelectField('zingen', $profiel['zingen'], 'Zingen', array('' => 'Kies...', 'ja' => 'Ja, ik zing in een band/koor', 'nee' => 'Nee, ik houd niet van zingen', 'soms' => 'Alleen onder de douche', 'anders' => 'Anders'));
 			$form[] = new TextareaField('novitiaat', $profiel['novitiaat'], 'Wat verwacht je van het novitiaat?');
-			$form[] = new Subkopje('<br>Einde vragenlijst<br><br><br><br><br><span id="novcieKnopFormulier" >In te vullen door NovCie: (klik hier)</span><br>');
+			$form[] = new Subkopje('<br>Einde vragenlijst<br><br><br><br><br><span id="novcieKnopFormulier">In te vullen door NovCie: (klik hier)</span><br>');
 
 			$form[] = new SelectField('novietSoort', $profiel['novietSoort'], 'Soort Noviet', array('noviet', 'nanoviet'));
 			$form[] = new SelectField('matrixPlek', $profiel['matrixPlek'], 'Matrix plek', array('voor', 'midden', 'achter'));
