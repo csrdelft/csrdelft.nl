@@ -213,6 +213,7 @@ class LidZoeker {
 			$defaults[] = "CONCAT_WS(', ', achternaam, tussenvoegsel) LIKE '%" . $zoekterm . "%' ";
 			$defaults[] = "nickname LIKE '%" . $zoekterm . "%' ";
 			$defaults[] = "duckname LIKE '%" . $zoekterm . "%' ";
+			$defaults[] = "eetwens LIKE '%" . $zoekterm . "%' ";
 
 			$defaults[] = "CONCAT_WS(' ', adres, postcode, woonplaats) LIKE '%" . $zoekterm . "%' ";
 			$defaults[] = "adres LIKE '%" . $zoekterm . "%' ";
