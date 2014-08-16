@@ -106,12 +106,7 @@ jQuery(document).ready(function($) {
 	$('#novitiaatBijz').hide();
 	$('#kgb').hide();
 	$('#novcieKnopFormulier').click(function() {
-		$('#novietSoort').toggle('fast');
-		$('#matrixPlek').toggle('fast');
-		$('#startkamp').toggle('fast');
-		$('#medisch').toggle('fast');
-		$('#novitiaatBijz').toggle('fast');
-		$('#kgb').toggle('fast');
+		$('#novcieFormulier').toggle('fast');
 	});
 	$('#novcieKnopFormulier').trigger('click');
 

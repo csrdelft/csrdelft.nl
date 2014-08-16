@@ -380,14 +380,15 @@ class ProfielBewerken extends Profiel {
 			$form[] = new SelectField('ovkaart', $profiel['ovkaart'], 'OV-kaart', array('' => 'Kies...', 'geen' => '(Nog) geen OV-kaart', 'week' => 'Week', 'weekend' => 'Weekend', 'niet' => 'Niet geactiveerd'));
 			$form[] = new SelectField('zingen', $profiel['zingen'], 'Zingen', array('' => 'Kies...', 'ja' => 'Ja, ik zing in een band/koor', 'nee' => 'Nee, ik houd niet van zingen', 'soms' => 'Alleen onder de douche', 'anders' => 'Anders'));
 			$form[] = new TextareaField('novitiaat', $profiel['novitiaat'], 'Wat verwacht je van het novitiaat?');
-			$form[] = new Subkopje('<br>Einde vragenlijst<br><br><br><br><br><span id="novcieKnopFormulier">In te vullen door NovCie: (klik hier)</span><br>');
 
+			$form[] = new Subkopje('<br>Einde vragenlijst<br><br><br><br><br><div id="novcieKnopFormulier">In te vullen door NovCie: (klik hier)</div><br><div id="novcieFormulier">');
 			$form[] = new SelectField('novietSoort', $profiel['novietSoort'], 'Soort Noviet', array('noviet', 'nanoviet'));
 			$form[] = new SelectField('matrixPlek', $profiel['matrixPlek'], 'Matrix plek', array('voor', 'midden', 'achter'));
 			$form[] = new SelectField('startkamp', $profiel['startkamp'], 'Startkamp', array('ja', 'nee'));
 			$form[] = new TextareaField('medisch', $profiel['medisch'], 'medisch (NB alleen als relevant voor hele NovCie)');
 			$form[] = new TextareaField('novitiaatBijz', $profiel['novitiaatBijz'], 'Bijzonderheden novitiaat (op dag x ...)');
 			$form[] = new TextareaField('kgb', $profiel['kgb'], 'Overige NovCie-opmerking');
+			$form[] = new HtmlComment('</div>');
 		}
 		$form[] = new FormButtons('/communicatie/profiel/' . $this->getUid());
 
