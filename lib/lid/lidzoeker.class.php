@@ -14,7 +14,7 @@ class LidZoeker {
 	private $allowVelden = array(
 		'pasfoto', 'uid', 'naam', 'voorletters', 'voornaam', 'tussenvoegsel', 'achternaam', 'nickname', 'duckname', 'geslacht',
 		'email', 'adres', 'telefoon', 'mobiel', 'msn', 'jid', 'skype', 'linkedin', 'website', 'studie', 'status',
-		'gebdatum', 'beroep', 'verticale', 'moot', 'lidjaar', 'kring', 'patroon', 'woonoord', 'bankrekening', 'corvee_kwalikok');
+		'gebdatum', 'beroep', 'verticale', 'moot', 'lidjaar', 'kring', 'patroon', 'woonoord', 'bankrekening', 'eetwens');
 	//velden die ook door mensen met P_LEDEN_MOD bekeken mogen worden
 	//(merge in de constructor)
 	private $allowVeldenLEDENMOD = array(
@@ -38,7 +38,7 @@ class LidZoeker {
 		'machtiging'			 => 'Machtiging getekend?',
 		'adresseringechtpaar'	 => 'Post echtpaar t.n.v.',
 		'linkedin'				 => 'LinkedIn',
-		'corvee_kwalikok'		 => 'Kwalikok');
+	);
 	//toegestane opties voor het statusfilter.
 	private $allowStatus = array('S_LID', 'S_NOVIET', 'S_GASTLID', 'S_NOBODY', 'S_EXLID', 'S_OUDLID', 'S_ERELID', 'S_KRINGEL', 'S_OVERLEDEN');
 	//toegestane opties voor de weergave.
@@ -49,7 +49,6 @@ class LidZoeker {
 	//standaardwaarden voor het zoeken zonder parameters
 	private $rawQuery = array('status' => 'LEDEN', 'sort' => 'achternaam');
 	private $query = '';
-	private $zoekveld = array('default');
 	private $filters = array();
 	private $sort = array('achternaam');
 	private $velden = array('naam', 'email', 'telefoon', 'mobiel');
