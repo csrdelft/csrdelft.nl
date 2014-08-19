@@ -78,6 +78,8 @@ switch (constant('MODE')) {
 				exit;
 			}
 		}
+		ini_set('upload_tmp_dir', TMP_PATH);
+
 		# geen sessie-id in de url
 		ini_set('session.use_only_cookies', 1);
 		session_save_path(SESSION_PATH);
