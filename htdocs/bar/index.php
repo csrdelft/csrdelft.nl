@@ -94,7 +94,7 @@ if ($barsysteem->isLoggedIn()) {
                             <li class="space">space</li>
                         </ul>
                     </div>
-                    <table id="selectieTabel" class="table">
+                    <table id="selectieTabel" class="table table-striped">
                         <thead>
                         <tr>
                             <th>Bijnaam</th>
@@ -198,7 +198,7 @@ if ($barsysteem->isLoggedIn()) {
 
                     </div>
                     <div id="besteLijstBeheerContent">
-                        <table class="table tablesorter" id="besteLijstBeheer">
+                        <table class="table table-striped tablesorter" id="besteLijstBeheer">
                             <thead>
                             <tr>
                                 <th id="persoon">Persoon</th>
@@ -311,7 +311,7 @@ if ($barsysteem->isLoggedIn()) {
 						<div id="tools" class="hidden">
 						
 							<h2>Som van saldi</h2>
-							<table class="table">
+							<table class="table table-striped">
 								<tr>
 									<th>Iedereen in de database</th><td id="sumSaldi"></td>
 								</tr>
@@ -321,7 +321,7 @@ if ($barsysteem->isLoggedIn()) {
 							</table>
 						
 							<h2>Leden die rood staan</h2>
-							<table class="table" id="red">
+							<table class="table table-striped" id="red">
 							</table>
 							
 						</div>

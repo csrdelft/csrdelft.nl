@@ -771,14 +771,17 @@ $(function () {
 					addhtml = '';
 					
 					addhtml += '<h2>' + this.title + '</h2>';
-					addhtml += '<table class="table"><thead><tr><th>Soort</th><th>Prijs</th></tr></thead><tbody>';
+					addhtml += '<table class="table table-striped"><thead><tr><th>Soort</th><th>Prijs</th></tr></thead><tbody>';
 					
+					var total = 0;
 					$.each(this.content, function() {
 					
+						total += parseFloat(this.total);
 						addhtml += '<tr><td>' + this.type + '</td><td>' + saldoStr(this.total) + '</td></tr>';
 					
 					});
 					
+					addhtml += '<tr><td>Week totaal</td><td>' + saldoStr(total) + '</td></tr>';				
 					addhtml += '</tbody></table>';
 					
 					html.push(addhtml);
