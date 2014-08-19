@@ -26,7 +26,7 @@ if (php_sapi_name() === 'cli') {
 }
 
 # Defines
-if (isset($_SERVER['HTTP_REFERER'])) {
+if (isset($_SERVER['REQUEST_URI'])) {
 	$req = filter_var($_SERVER['REQUEST_URI'], FILTER_SANITIZE_URL);
 } else {
 	$req = null;
@@ -78,8 +78,6 @@ switch (constant('MODE')) {
 				exit;
 			}
 		}
-		ini_set('upload_tmp_dir', TMP_PATH);
-
 		# geen sessie-id in de url
 		ini_set('session.use_only_cookies', 1);
 		session_save_path(SESSION_PATH);

@@ -29,11 +29,11 @@ define('BASE_PATH', '/srv/www/csrdelft.nl/');
 define('ETC_PATH', BASE_PATH . 'etc/');
 define('LIB_PATH', BASE_PATH . 'lib/');
 define('DATA_PATH', BASE_PATH . 'data/');
+define('HTDOCS_PATH', BASE_PATH . 'htdocs/');
+define('TMP_PATH', BASE_PATH . 'tmp/');
+define('SESSION_PATH', BASE_PATH . 'sessie/');
 define('PICS_PATH', BASE_PATH . 'images/');
 define('ICON_PATH', PICS_PATH . 'famfamfam/');
-define('HTDOCS_PATH', BASE_PATH . 'htdocs/');
-define('TMP_PATH', BASE_PATH . 'data/tmp/');
-define('SESSION_PATH', BASE_PATH . 'sessie/');
 define('PUBLIC_FTP', '/srv/ftp/incoming/csrdelft/');
 
 # smarty template engine
