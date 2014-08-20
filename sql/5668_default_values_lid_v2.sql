@@ -5,8 +5,8 @@ ALTER TABLE `lid` CHANGE `linkedin` `linkedin` VARCHAR(80) NOT NULL DEFAULT '' C
 ALTER TABLE `lid` CHANGE `beroep` `beroep` TEXT NULL;
 ALTER TABLE `lid` CHANGE `patroon` `patroon` VARCHAR(4) NOT NULL DEFAULT '';
 ALTER TABLE `lid` CHANGE `studienr` `studienr` VARCHAR(20) NULL DEFAULT NULL;
-ALTER TABLE `lid` CHANGE `lidafdatum` `lidafdatum` DATE NULL DEFAULT NULL;
-ALTER TABLE `lid` CHANGE `sterfdatum` `sterfdatum` DATE NULL DEFAULT NULL;
+ALTER TABLE `lid` CHANGE `lidafdatum` `lidafdatum` DATE NOT NULL DEFAULT '0000-00-00';
+ALTER TABLE `lid` CHANGE `sterfdatum` `sterfdatum` DATE NOT NULL DEFAULT '0000-00-00';
 ALTER TABLE `lid` CHANGE `verticale` `verticale` INT(4) NOT NULL DEFAULT '0';
 ALTER TABLE `lid` CHANGE `eetwens` `eetwens` TEXT NULL DEFAULT NULL;
 ALTER TABLE `lid` CHANGE `corvee_punten` `corvee_punten` INT(11) NOT NULL DEFAULT '0';
