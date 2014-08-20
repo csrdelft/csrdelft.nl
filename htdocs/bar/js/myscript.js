@@ -428,7 +428,13 @@ $(function () {
 
     $("#knopCancel").click(function() {
 	
-		if(bestelTotaal() == 0 || confirm("Weet je zeker dat je de bestelling wilt afbreken?"))
+		// Hack
+		var emptyOrder = true;
+		for(key in bestelLijst) {
+			emptyOrder = false
+		}
+	
+		if(emptyOrder || confirm("Weet je zeker dat je de bestelling wilt afbreken?"))
 			cancel();
 		
 	});
