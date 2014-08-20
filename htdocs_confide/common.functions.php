@@ -540,17 +540,6 @@ function square_crop($src_image, $dest_image, $thumb_size = 64, $jpg_quality = 9
 	}
 }
 
-/**
- * @param string $string
- * @return string input without unprintable characters (excluding newlines and tabs)
- */
-function only_printable($string) {
-	return $string;
-	//er gaat nog wat mis, want ik postte net iets met á erin, en die
-	//snoepte dit ding ook weg. Niet de bedoeling natuurlijk, dus ff hdb ermee...
-	//FIXME return preg_replace('/[^\x0A^\x09\x20-\x7E]/', '', $string);
-}
-
 function format_filesize($size) {
 	$units = array(' B', ' KB', ' MB', ' GB', ' TB');
 	for ($i = 0; $size >= 1024 && $i < 4; $i++) {

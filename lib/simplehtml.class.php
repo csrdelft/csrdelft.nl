@@ -36,7 +36,7 @@ abstract class SimpleHTML implements View {
 			if (!isset($_SESSION['melding'])) {
 				$_SESSION['melding'] = array();
 			}
-			//gooit verouderde gegevens weg FIXME tijdelijk tot dat iedereen een nieuwe sessie heeft.
+			// gooit verouderde gegevens weg
 			if (is_string($_SESSION['melding'])) {
 				$_SESSION['melding'] = array();
 			}
@@ -55,14 +55,14 @@ abstract class SimpleHTML implements View {
 			$shown = array();
 			foreach ($_SESSION['melding'] as $msg) {
 				$hash = md5($msg['msg']);
-				//if(isset($shown[$hash])) continue; // skip double messages
+				// if(isset($shown[$hash])) continue; // skip double messages
 				$sMelding .= '<div class="msg' . $msg['lvl'] . '">';
 				$sMelding.=$msg['msg'];
 				$sMelding .= '</div>';
 				$shown[$hash] = 1;
 			}
 			$sMelding .= '</div>';
-			//maar één keer tonen, de melding.
+			// toon melding maar één keer
 			unset($_SESSION['melding']);
 			return $sMelding;
 		} else {

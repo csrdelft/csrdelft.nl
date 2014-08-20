@@ -19,9 +19,9 @@ class MenuBeheerController extends AclController {
 			);
 		} else {
 			$this->acl = array(
-				'toevoegen' => 'P_ADMIN',
-				'bewerken' => 'P_ADMIN',
-				'verwijderen' => 'P_ADMIN'
+				'toevoegen'		 => 'P_ADMIN',
+				'bewerken'		 => 'P_ADMIN',
+				'verwijderen'	 => 'P_ADMIN'
 			);
 		}
 	}
@@ -35,7 +35,7 @@ class MenuBeheerController extends AclController {
 	}
 
 	public function beheer($menu_naam = '') {
-		$menu_naam = str_replace('%20', ' ', $menu_naam); // FIXME
+		$menu_naam = str_replace('%20', ' ', $menu_naam); // eigenlijk rawurldecode()
 		$body = new MenuBeheerView($this->model->getMenuTree($menu_naam, true), $this->model->getAlleMenus());
 		$this->view = new CsrLayoutPage($body);
 		$this->view->addStylesheet('menubeheer.css');
