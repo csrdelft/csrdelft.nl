@@ -402,4 +402,5 @@ images/famfamfam/*.png
 lib/defines.include.php
 sessie/*
 /tmp
+tmp/*
 /wiki

@@ -78,6 +78,7 @@ switch (constant('MODE')) {
 				exit;
 			}
 		}
+		# terugvinden van temp upload files
 		ini_set('upload_tmp_dir', TMP_PATH);
 
 		# geen sessie-id in de url

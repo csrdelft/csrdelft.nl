@@ -31,7 +31,7 @@ define('LIB_PATH', BASE_PATH . 'lib/');
 define('HTDOCS_PATH', BASE_PATH . 'htdocs/');
 define('SESSION_PATH', BASE_PATH . 'sessie/');
 define('DATA_PATH', BASE_PATH . 'data/');
-define('TMP_PATH', DATA_PATH . 'tmp/');
+define('TMP_PATH', BASE_PATH . 'tmp/');
 define('PICS_PATH', BASE_PATH . 'images/');
 define('ICON_PATH', PICS_PATH . 'famfamfam/');
 define('PUBLIC_FTP', '/srv/ftp/incoming/csrdelft/');
@@ -43,4 +43,4 @@ define('SMARTY_COMPILE_DIR', DATA_PATH . 'smarty/compiled/');
 define('SMARTY_CACHE_DIR', DATA_PATH . 'smarty/cache/');
 
 # ImageMagick
-define('IMAGEMAGICK_PATH', '/usr/bin/convert/');
+define('IMAGEMAGICK_PATH', '/usr/bin/');
