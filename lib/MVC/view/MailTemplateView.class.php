@@ -6,7 +6,7 @@
  * @author P.W.G. Brussee <brussee@live.nl>
  * 
  */
-class MailTemplateView extends TemplateView {
+class MailTemplateView extends SmartyTemplateView {
 
 	public function __construct(Mail $model) {
 		parent::__construct($model);

@@ -7,7 +7,7 @@
 # Kan streep/bestellijsten maken.
 # -------------------------------------------------------------------
 
-class Streeplijstcontent extends TemplateView {
+class Streeplijstcontent extends SmartyTemplateView {
 
 	private $moot = 'alle';
 	private $lichting = '';

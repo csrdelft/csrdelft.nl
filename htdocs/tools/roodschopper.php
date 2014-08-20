@@ -12,7 +12,7 @@ require_once 'roodschoppercontent.class.php';
  */
 //Alleen voor admins, maalcie en Soccie. LET OP: SocCie kan nu ook een maalciemail versturen.
 if (!LoginModel::mag('P_LEDEN_MOD,groep:MaalCie,groep:SocCie')) {
-	invokeRefresh(CSR_ROOT);
+	redirect(CSR_ROOT);
 }
 
 if (isset($_POST['commissie'], $_POST['bcc'], $_POST['saldogrens'], $_POST['uitsluiten'], $_POST['bericht'], $_POST['from'], $_POST['doelgroep'])) {
@@ -66,7 +66,7 @@ if (isset($_POST['actie'])) {
 			break;
 		case 'verzenden':
 			$roodschopper->doit();
-			setMelding('Roodschopmails met succes verzonden.', 1);
+			SimpleHTML::setMelding('Roodschopmails met succes verzonden.', 1);
 			break;
 	}
 	exit; //exit voor de XHR-acties.

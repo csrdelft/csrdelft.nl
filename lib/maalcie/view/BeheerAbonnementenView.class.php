@@ -8,7 +8,7 @@
  * Tonen van alle abonnementen en waarschuwingen.
  * 
  */
-class BeheerAbonnementenView extends TemplateView {
+class BeheerAbonnementenView extends SmartyTemplateView {
 
 	public function __construct(array $matrix, array $repetities, $alleenWaarschuwingen = false, $ingeschakeld = null) {
 		parent::__construct($matrix, 'Beheer abonnementen');
@@ -39,7 +39,7 @@ class BeheerAbonnementenView extends TemplateView {
 
 }
 
-class BeheerAbonnementenLijstView extends TemplateView {
+class BeheerAbonnementenLijstView extends SmartyTemplateView {
 
 	public function __construct(array $matrix) {
 		parent::__construct($matrix);
@@ -56,7 +56,7 @@ class BeheerAbonnementenLijstView extends TemplateView {
 
 }
 
-class BeheerAbonnementView extends TemplateView {
+class BeheerAbonnementView extends SmartyTemplateView {
 
 	public function __construct(MaaltijdAbonnement $abo) {
 		parent::__construct($abo);

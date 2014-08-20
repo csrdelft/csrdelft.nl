@@ -51,7 +51,7 @@ class MijnAbonnementenController extends AclController {
 		$this->view = new MijnAbonnementView($abo_aantal[0]);
 		if ($abo_aantal[1] > 0) {
 			$melding = 'Automatisch aangemeld voor ' . $abo_aantal[1] . ' maaltijd' . ($abo_aantal[1] === 1 ? '' : 'en');
-			setMelding($melding, 2);
+			SimpleHTML::setMelding($melding, 2);
 		}
 	}
 
@@ -60,7 +60,7 @@ class MijnAbonnementenController extends AclController {
 		$this->view = new MijnAbonnementView($abo_aantal[0]);
 		if ($abo_aantal[1] > 0) {
 			$melding = 'Automatisch afgemeld voor ' . $abo_aantal[1] . ' maaltijd' . ($abo_aantal[1] === 1 ? '' : 'en');
-			setMelding($melding, 2);
+			SimpleHTML::setMelding($melding, 2);
 		}
 	}
 

@@ -150,11 +150,17 @@ class Mail {
 		return $body;
 	}
 
+	public function __toString() {
+		return $this->getHeaders() . "\nSubject:" . $this->getSubject() . "\n" . $this->bericht;
+	}
+
+	///////// active-record /////////
+
 	public function send($debug = false) {
-		if ($this->onderwerp == '') {
+		if (empty($this->getSubject())) {
 			throw new Exception('Geen onderwerp ingevuld');
 		}
-		if ($this->layout === 'letter') {
+		if ($this->getLayout() === 'letter') {
 			require_once 'MVC/view/MailTemplateView.class.php';
 			$view = new MailTemplateView($this);
 			$body = $view->getBody();
@@ -165,10 +171,6 @@ class Mail {
 			return false;
 		}
 		return mail($this->getTo(), $this->getSubject(), $body, $this->getHeaders(), $this->getExtraparameters());
-	}
-
-	public function __toString() {
-		return $this->getHeaders() . "\nSubject:" . $this->getSubject() . "\n" . $this->bericht;
 	}
 
 }

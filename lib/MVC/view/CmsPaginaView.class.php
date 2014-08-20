@@ -8,7 +8,7 @@
  * 
  * Bekijken van een CmsPagina.
  */
-class CmsPaginaView extends TemplateView {
+class CmsPaginaView extends SmartyTemplateView {
 
 	public function __construct(CmsPagina $pagina) {
 		parent::__construct($pagina);

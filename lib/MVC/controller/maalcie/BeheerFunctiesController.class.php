@@ -56,7 +56,7 @@ class BeheerFunctiesController extends AclController {
 		if ($this->view->validate()) {
 			$id = $this->model->create($functie);
 			$functie->functie_id = (int) $id;
-			setMelding('Toegevoegd', 1);
+			SimpleHTML::setMelding('Toegevoegd', 1);
 			$this->view = new FunctieView($functie);
 		}
 	}
@@ -67,9 +67,9 @@ class BeheerFunctiesController extends AclController {
 		if ($this->view->validate()) {
 			$rowcount = $this->model->update($functie);
 			if ($rowcount > 0) {
-				setMelding('Bijgewerkt', 1);
+				SimpleHTML::setMelding('Bijgewerkt', 1);
 			} else {
-				setMelding('Geen wijzigingen', 0);
+				SimpleHTML::setMelding('Geen wijzigingen', 0);
 			}
 			$this->view = new FunctieView($functie);
 		}
@@ -78,7 +78,7 @@ class BeheerFunctiesController extends AclController {
 	public function verwijderen($fid) {
 		$functie = $this->model->getFunctie((int) $fid);
 		$this->model->removeFunctie($functie);
-		setMelding('Verwijderd', 1);
+		SimpleHTML::setMelding('Verwijderd', 1);
 		$this->view = new FunctieDeleteView($fid);
 	}
 

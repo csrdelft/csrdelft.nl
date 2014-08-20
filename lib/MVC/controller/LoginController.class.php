@@ -34,37 +34,37 @@ class LoginController extends AclController {
 		$this->model->setPauper($values['mobiel']);
 		if ($form->validate()) {
 			if ($this->model->login($values['user'], $values['pass'], !$values['mobiel'])) {
-				invokeRefresh($values['url']);
+				redirect($values['url']);
 			}
 		}
-		invokeRefresh(CSR_ROOT); // login gefaald
+		redirect(CSR_ROOT); // login gefaald
 	}
 
 	public function logout() {
 		$this->model->logout();
-		invokeRefresh(CSR_ROOT);
+		redirect(CSR_ROOT);
 	}
 
 	public function su($uid = null) {
 		$this->model->switchUser($uid);
-		setMelding('U bekijkt de webstek nu als ' . Lid::naamLink($uid, 'full', 'plain') . '!', 1);
-		invokeRefresh(HTTP_REFERER);
+		SimpleHTML::setMelding('U bekijkt de webstek nu als ' . Lid::naamLink($uid, 'full', 'plain') . '!', 1);
+		redirect(HTTP_REFERER);
 	}
 
 	public function endsu() {
 		if (!$this->model->isSued()) {
-			setMelding('Niet gesued!', -1);
+			SimpleHTML::setMelding('Niet gesued!', -1);
 		} else {
 			LoginModel::instance()->endSwitchUser();
-			setMelding('Switch-useractie is beëindigd.', 1);
+			SimpleHTML::setMelding('Switch-useractie is beëindigd.', 1);
 		}
-		invokeRefresh(HTTP_REFERER);
+		redirect(HTTP_REFERER);
 	}
 
 	public function pauper($terug = null) {
 		if ($terug === 'terug') {
 			$this->model->setPauper(false);
-			invokeRefresh(CSR_ROOT);
+			redirect(CSR_ROOT);
 		} else {
 			$this->model->setPauper(true);
 		}

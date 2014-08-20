@@ -254,7 +254,7 @@ class BestandBehouden extends BestandUploader {
 
 	public function opslaan($destination, $filename) {
 		if (!file_exists($destination . $filename)) {
-			setMelding('Bestand bestaat niet (meer): ' . mb_htmlentities($destination . $filename), -1);
+			SimpleHTML::setMelding('Bestand bestaat niet (meer): ' . mb_htmlentities($destination . $filename), -1);
 		}
 		return true;
 	}

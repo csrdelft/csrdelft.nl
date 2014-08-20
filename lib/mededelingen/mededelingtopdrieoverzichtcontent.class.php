@@ -2,7 +2,7 @@
 
 require_once 'mededelingencontent.class.php';
 
-class MededelingTopDrieOverzichtContent extends TemplateView {
+class MededelingTopDrieOverzichtContent extends SmartyTemplateView {
 
 	public function __construct() {
 		parent::__construct(null, 'Top 3 mededelingenoverzicht');

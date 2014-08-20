@@ -8,7 +8,7 @@ require_once 'document.class.php';
  * Overzicht van alle categorieën met een bepaald aantal documenten per
  * categorie, zeg maar de standaarpagina voor de documentenketzer.
  */
-class DocumentenContent extends TemplateView {
+class DocumentenContent extends SmartyTemplateView {
 
 	public function __construct() {
 		parent::__construct(DocumentenCategorie::getAll(), 'Documentenketzer');
@@ -24,7 +24,7 @@ class DocumentenContent extends TemplateView {
 /**
  * Documenten voor een bepaalde categorie tonen.
  */
-class DocumentCategorieContent extends TemplateView {
+class DocumentCategorieContent extends SmartyTemplateView {
 
 	public function __construct(DocumentenCategorie $categorie) {
 		parent::__construct($categorie, 'Documenten in categorie: ' . $categorie->getNaam());
@@ -41,7 +41,7 @@ class DocumentCategorieContent extends TemplateView {
  * Document downloaden, allemaal headers goedzetten.
  * Ongeldig aangevraagde documenten worden in de controller afgehandeld.
  */
-class DocumentDownloadContent extends TemplateView {
+class DocumentDownloadContent extends SmartyTemplateView {
 
 	public function __construct(Document $document) {
 		parent::__construct($document);
@@ -62,7 +62,7 @@ class DocumentDownloadContent extends TemplateView {
 
 }
 
-class DocumentUbbContent extends TemplateView {
+class DocumentUbbContent extends SmartyTemplateView {
 
 	public function __construct(Document $document) {
 		parent::__construct($document);

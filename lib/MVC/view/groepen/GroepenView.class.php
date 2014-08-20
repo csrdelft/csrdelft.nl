@@ -11,7 +11,7 @@ require_once 'MVC/view/CmsPaginaView.class.php';
  * @author P.W.G. Brussee <brussee@live.nl>
  * 
  */
-abstract class GroepenView extends TemplateView {
+abstract class GroepenView extends SmartyTemplateView {
 
 	/**
 	 * Toon CMS pagina
@@ -44,7 +44,7 @@ abstract class GroepenView extends TemplateView {
 
 }
 
-abstract class GroepView extends TemplateView {
+abstract class GroepView extends SmartyTemplateView {
 
 	protected $tabContent;
 

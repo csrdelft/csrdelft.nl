@@ -61,7 +61,8 @@ class FotoAlbumController extends AclController {
 		$path = PICS_PATH . urldecode(implode('/', $path));
 		$album = FotoAlbumModel::getFotoAlbum($path);
 		if (!$album) {
-			invokeRefresh(CSR_ROOT . '/fotoalbum', 'Fotoalbum bestaat niet', -1);
+			SimpleHTML::setMelding('Fotoalbum bestaat niet', -1);
+			redirect(CSR_ROOT . '/fotoalbum');
 		}
 		$args[] = $album;
 		parent::performAction($args);
@@ -123,7 +124,8 @@ class FotoAlbumController extends AclController {
 		if (defined('RESIZE_OUTPUT')) {
 			exit;
 		} else {
-			invokeRefresh(CSR_ROOT . '/' . $album->getSubDir(), 'Fotoalbum ' . $album->dirname . ' succesvol verwerkt', 1);
+			SimpleHTML::setMelding('Fotoalbum ' . $album->dirname . ' succesvol verwerkt', 1);
+			redirect(CSR_ROOT . '/' . $album->getSubDir());
 		}
 	}
 
@@ -153,12 +155,12 @@ class FotoAlbumController extends AclController {
 				}
 				if ($uploader->opslaan($album->path, $filenaam)) {
 					FotoAlbumModel::verwerkFotos($album);
-					setMelding($msg . ' met succes toegevoegd', 1); //TODO: $album->getUrl() . '#' . direncode($filenaam)
+					SimpleHTML::setMelding($msg . ' met succes toegevoegd', 1); //TODO: $album->getUrl() . '#' . direncode($filenaam)
 				} else {
-					setMelding($msg . ' toevoegen mislukt', -1);
+					SimpleHTML::setMelding($msg . ' toevoegen mislukt', -1);
 				}
 			} catch (Exception $e) {
-				setMelding($msg . ' toevoegen mislukt: ' . $e->getMessage(), -1);
+				SimpleHTML::setMelding($msg . ' toevoegen mislukt: ' . $e->getMessage(), -1);
 				DebugLogModel::instance()->log(get_called_class(), $this->action, array($album->path, $album->dirname), $e);
 			}
 		}
@@ -187,7 +189,7 @@ class FotoAlbumController extends AclController {
 		if ($album !== null AND FotoAlbumModel::hernoemAlbum($album, $naam)) {
 			echo '<div id="' . md5($album->dirname) . '" class="albumname">' . $naam . '</div>';
 		} else {
-			setMelding('Fotoalbum hernoemen mislukt', -1);
+			SimpleHTML::setMelding('Fotoalbum hernoemen mislukt', -1);
 		}
 		exit;
 	}
@@ -197,7 +199,7 @@ class FotoAlbumController extends AclController {
 		if ($album !== null AND FotoAlbumModel::verwijderFoto(new Foto($album, $naam))) {
 			echo '<div id="' . md5($naam) . '" class="remove"></div>';
 		} else {
-			setMelding('Foto verwijderen mislukt', -1);
+			SimpleHTML::setMelding('Foto verwijderen mislukt', -1);
 		}
 		exit;
 	}
@@ -205,9 +207,11 @@ class FotoAlbumController extends AclController {
 	public function albumcover(FotoAlbum $album) {
 		$naam = filter_input(INPUT_POST, 'cover', FILTER_SANITIZE_STRING);
 		if (FotoAlbumModel::setAlbumCover($album, new Foto($album, $naam))) {
-			invokeRefresh(CSR_ROOT . '/' . $album->getSubDir(), 'Fotoalbum-cover succesvol ingesteld', 1);
+			SimpleHTML::setMelding('Fotoalbum-cover succesvol ingesteld', 1);
+			redirect(CSR_ROOT . '/' . $album->getSubDir());
 		} else {
-			invokeRefresh(CSR_ROOT . '/fotoalbum', 'Fotoalbum-cover instellen mislukt', -1);
+			SimpleHTML::setMelding('Fotoalbum-cover instellen mislukt', -1);
+			redirect(CSR_ROOT . '/fotoalbum');
 		}
 	}
 

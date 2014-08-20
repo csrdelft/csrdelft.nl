@@ -8,7 +8,7 @@
  * Tonen van alle menus en menu-items om te beheren.
  * 
  */
-class MenuBeheerView extends TemplateView {
+class MenuBeheerView extends SmartyTemplateView {
 
 	public function __construct(MenuItem $tree_root, $menus) {
 		parent::__construct($tree_root);
@@ -28,7 +28,7 @@ class MenuBeheerView extends TemplateView {
 
 }
 
-class MenuItemView extends TemplateView {
+class MenuItemView extends SmartyTemplateView {
 
 	public function __construct(MenuItem $item) {
 		parent::__construct($item);

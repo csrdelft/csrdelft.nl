@@ -6,7 +6,7 @@
  * @author P.W.G. Brussee <brussee@live.nl>
  * 
  */
-class LidInstellingenView extends TemplateView {
+class LidInstellingenView extends SmartyTemplateView {
 
 	public function __construct(LidInstellingen $model) {
 		parent::__construct($model, 'Stekinstellingen');

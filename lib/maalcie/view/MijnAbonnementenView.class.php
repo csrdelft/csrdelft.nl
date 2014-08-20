@@ -8,7 +8,7 @@
  * Tonen van abonnementen die een lid aan of uit kan zetten.
  * 
  */
-class MijnAbonnementenView extends TemplateView {
+class MijnAbonnementenView extends SmartyTemplateView {
 
 	public function __construct($abonnementen) {
 		parent::__construct($abonnementen, 'Mijn abonnementen');
@@ -22,7 +22,7 @@ class MijnAbonnementenView extends TemplateView {
 
 }
 
-class MijnAbonnementView extends TemplateView {
+class MijnAbonnementView extends SmartyTemplateView {
 
 	public function __construct(MaaltijdAbonnement $abo) {
 		parent::__construct($abo);

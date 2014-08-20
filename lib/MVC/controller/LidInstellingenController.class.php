@@ -15,7 +15,7 @@ class LidInstellingenController extends AclController {
 		if (!$this->isPosted()) {
 			$this->acl = array(
 				'beheer' => 'P_LOGGED_IN',
-				'reset' => 'P_ADMIN'
+				'reset'	 => 'P_ADMIN'
 			);
 		} else {
 			$this->acl = array(
@@ -39,12 +39,14 @@ class LidInstellingenController extends AclController {
 
 	public function opslaan() {
 		$this->model->save(); // fetches $_POST values itself
-		invokeRefresh(CSR_ROOT . '/', 'Instellingen opgeslagen', 1);
+		SimpleHTML::setMelding('Instellingen opgeslagen', 1);
+		redirect(CSR_ROOT);
 	}
 
 	public function reset($module, $key, $value) {
 		$this->model->setForAll($module, $key, $value);
-		invokeRefresh(CSR_ROOT . '/instellingen/beheer', 'Voor iedereen de instelling overschreven', 1);
+		SimpleHTML::setMelding('Voor iedereen de instelling overschreven', 1);
+		redirect(CSR_ROOT . '/instellingen/beheer');
 	}
 
 }

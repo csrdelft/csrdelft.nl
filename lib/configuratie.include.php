@@ -51,7 +51,7 @@ require_once 'MVC/model/LidInstellingenModel.class.php';
 require_once 'MVC/model/Paging.interface.php';
 
 # View
-require_once 'MVC/view/TemplateView.abstract.php';
+require_once 'MVC/view/SmartyTemplateView.abstract.php';
 require_once 'MVC/view/Formulier.class.php';
 require_once 'MVC/view/CsrUbb.class.php';
 require_once 'MVC/view/CsrLayoutPage.class.php';
@@ -74,7 +74,7 @@ switch (constant('MODE')) {
 	case 'WEB':
 		if (defined('DB_MODIFY_ENABLE') OR defined('DB_DROP_ENABLE')) {
 			if (!LoginModel::mag('P_ADMIN')) {
-				invokeRefresh(CSR_ROOT . '/onderhoud.html');
+				redirect(CSR_ROOT . '/onderhoud.html');
 				exit;
 			}
 		}
@@ -90,7 +90,9 @@ switch (constant('MODE')) {
 		session_set_cookie_params(1036800, '/', '', false, false);
 		session_start();
 
-		LoginModel::instance();
+		if (!LoginModel::mag('P_PUBLIC')) {
+			die('access denied');
+		}
 		break;
 
 	default:

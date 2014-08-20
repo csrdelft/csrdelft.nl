@@ -25,7 +25,7 @@ try {
 			break; // toegestaan voor iedereen
 		default: // alleen ingelode gebruikers
 			if (!LoginModel::mag('P_LOGGED_IN')) {
-				invokeRefresh(CSR_ROOT);
+				redirect(CSR_ROOT);
 			}
 	}
 	$class .= 'Controller';
