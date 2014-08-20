@@ -12,13 +12,13 @@ class MailTemplateView extends SmartyTemplateView {
 		parent::__construct($model);
 	}
 
-	public function getBody() {
+	public function getHtml() {
 		$this->smarty->assign('body', $this->model->getBody());
 		return $this->smarty->fetch('MVC/mail/layout/' . $this->model->getLayout() . '.tpl');
 	}
 
 	public function view() {
-		echo $this->getBody();
+		echo $this->getHtml();
 	}
 
 }

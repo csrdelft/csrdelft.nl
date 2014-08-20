@@ -11,16 +11,15 @@
  */
 class Mail {
 
-	protected $onderwerp;
-	protected $bericht;
-	protected $from = 'pubcie@csrdelft.nl';
-	protected $to = array();
-	protected $bcc = array();
-	protected $type = 'html'; // plain or html
-	protected $charset = 'utf8';
-	protected $layout = 'letter';
-	protected $ubb = true;
-	protected $placeholders = array();
+	private $onderwerp;
+	private $bericht;
+	private $from = array('pubcie@csrdelft.nl' => 'PubCie C.S.R. Delft');
+	private $replyTo = array();
+	private $to = array();
+	private $bcc = array();
+	private $type = 'html'; // plain or html
+	private $layout = 'letter';
+	private $placeholders = array();
 
 	public function __construct($to, $onderwerp, $bericht) {
 		$this->onderwerp = $onderwerp;
@@ -36,52 +35,98 @@ class Mail {
 		$this->layout = $template;
 	}
 
-	public function getTo() {
-		return implode(',', $this->to);
-	}
-
-	public function addTo($to) {
-		if (strpos($to, ',') !== false) {
-			foreach (explode(',', $to) as $email) {
-				$this->addTo($email);
-			}
-		} else {
-			if (!email_like($to)) {
-				throw new Exception('Emailadres in $to geen valide email-adres');
-			}
-			$this->to[] = $this->production_safe($to);
+	public function getFrom($email_only = false) {
+		$name = reset($this->from);
+		$email = key($this->from);
+		if ($email_only) {
+			return $email;
 		}
+		return $name . ' <' . $email . '>';
 	}
 
-	public function setFrom($from) {
-		if (!email_like($from)) {
+	public function setFrom($email, $name = null) {
+		if (!email_like($email)) {
 			throw new Exception('Emailadres in $from geen valide email-adres');
 		}
-		$this->from = $from;
+		$this->from = array($email => $name);
+	}
+
+	public function getReplyTo($email_only = false) {
+		$name = reset($this->replyTo);
+		$email = key($this->replyTo);
+		if ($email_only) {
+			return $email;
+		}
+		return $name . ' <' . $email . '>';
+	}
+
+	public function setReplyTo($email, $name = null) {
+		if (!email_like($email)) {
+			throw new Exception('Emailadres in $reply_to geen valide email-adres');
+		}
+		$this->replyTo = array($email => $name);
+	}
+
+	public function getTo() {
+		$to = array();
+		foreach ($this->to as $email => $name) {
+			if (empty($name)) {
+				$to[] = $email;
+			} else {
+				$to[] = $name . ' <' . $email . '>';
+			}
+		}
+		return implode(', ', $to);
+	}
+
+	public function addTo(array $to) {
+		foreach ($to as $email => $name) {
+			if (!email_like($email)) {
+				throw new Exception('Invalid e-mailadres in TO "' . $email . '"');
+			}
+			$this->to[$this->production_safe($to)] = $name;
+		}
 	}
 
 	public function getBcc() {
-		return implode(',', $this->bcc);
+		$bcc = array();
+		foreach ($this->bcc as $email => $name) {
+			if (empty($name)) {
+				$bcc[] = $email;
+			} else {
+				$bcc[] = $name . ' <' . $email . '>';
+			}
+		}
+		return implode(', ', $bcc);
 	}
 
-	public function addBcc($bcc) {
-		if (strpos($bcc, ',') !== false) {
-			foreach (explode(',', $bcc) as $email) {
-				$this->addBcc($email);
+	public function addBcc(array $bcc) {
+		foreach ($bcc as $email => $name) {
+			if (!email_like($email)) {
+				throw new Exception('Invalid e-mailadres in BCC "' . $email . '"');
 			}
-		} else {
-			if (!email_like($bcc)) {
-				throw new Exception('Emailadres in $bcc geen valide email-adres');
-			}
-			$this->bcc[] = $this->production_safe($bcc);
+			$this->bcc[$this->production_safe($bcc)] = $name;
 		}
+	}
+
+	public function getSubject() {
+		$onderwerp = $this->onderwerp;
+		if ($this->inDebugMode()) {
+			$onderwerp .= ' [Mail: Debug-modus actief]';
+		}
+		if ($this->charset === 'utf8') {
+			//zorg dat het onderwerp netjes utf8 in base64 is. Als je dit niet doet krijgt het
+			//spampunten van spamassasin (SUBJECT_NEEDS_ENCODING,SUBJ_ILLEGAL_CHARS)
+			$onderwerp = ' =?UTF-8?B?' . base64_encode($onderwerp) . "?=\n";
+		}
+		return $onderwerp;
 	}
 
 	/**
 	 * Mails uit testomgevingen moet en niet naar andere dingen dan naar
 	 * het pubcie-mailadres.
 	 */
-	protected function production_safe($email) {
+	private function production_safe($email) {
 		if ($this->inDebugMode()) {
 			return 'pubcie@csrdelft.nl';
 		} else {
@@ -93,40 +138,33 @@ class Mail {
 		return !isSyrinx();
 	}
 
+	public function setPlaceholders(array $placeholders) {
+		$this->placeholders = $placeholders;
+	}
+
 	public function getHeaders() {
-		$headers = "From: " . $this->from . "\n";
+		$headers = 'From: ' . $this->getFrom();
+		$headers .= "\r\n";
 
-		if ($this->bcc != '') {
-			$headers.="BCC: " . $this->getBcc() . "\n";
+		$headers = 'Reply-To: ' . $this->getReplyTo();
+		$headers .= "\r\n";
+
+		if (!empty($this->bcc)) {
+			$headers .= 'BCC: ' . $this->getBcc();
+			$headers .= "\r\n";
 		}
 
-		if ($this->charset === 'utf8') {
-			$headers .= "Content-Type: text/" . $this->type . "; charset=UTF-8\r\n";
-		}
-		$headers .= 'X-Mailer: nl.csrdelft.lib.Mail' . "\n\r";
+		$headers .= 'Content-Type: text/' . $this->type . '; charset=UTF-8';
+		$headers .= "\r\n";
+
+		$headers .= 'X-Mailer: nl.csrdelft.lib.Mail';
+		$headers .= "\r\n";
 
 		return $headers;
 	}
 
 	public function getExtraparameters() {
-		return "-f " . $this->from;
-	}
-
-	public function getSubject() {
-		$onderwerp = $this->onderwerp;
-		if ($this->inDebugMode()) {
-			$onderwerp .= ' [Mail: Debug modus actief]';
-		}
-		if ($this->charset === 'utf8') {
-			//zorg dat het onderwerp netjes utf8 in base64 is. Als je dit niet doet krijgt het
-			//spampunten van spamassasin (SUBJECT_NEEDS_ENCODING,SUBJ_ILLEGAL_CHARS)
-			$onderwerp = ' =?UTF-8?B?' . base64_encode($onderwerp) . "?=\n";
-		}
-		return $onderwerp;
-	}
-
-	public function setPlaceholders(array $placeholders) {
-		$this->placeholders = $placeholders;
+		return '-f ' . $this->getFrom(true);
 	}
 
 	/**
@@ -144,7 +182,7 @@ class Mail {
 		foreach ($this->placeholders as $key => $value) {
 			$body = str_replace($key, $value, $body);
 		}
-		if ($this->ubb) {
+		if ($this->type === 'html') {
 			$body = CsrUbb::parse($body);
 		}
 		return $body;
@@ -157,15 +195,19 @@ class Mail {
 	///////// active-record /////////
 
 	public function send($debug = false) {
-		if (empty($this->getSubject())) {
-			throw new Exception('Geen onderwerp ingevuld');
-		}
-		if ($this->getLayout() === 'letter') {
-			require_once 'MVC/view/MailTemplateView.class.php';
-			$view = new MailTemplateView($this);
-			$body = $view->getBody();
-		} else {
-			$body = $this->getBody();
+		switch ($this->type) {
+			case 'html':
+				require_once 'MVC/view/MailTemplateView.class.php';
+				$view = new MailTemplateView($this);
+				$body = $view->getBody();
+				break;
+
+			case 'plain':
+				$body = $this->getBody();
+				break;
+
+			default:
+				throw new Exception('unknown mail type: "' . $this->type . '"');
 		}
 		if ($this->inDebugMode() AND ! $debug) {
 			return false;

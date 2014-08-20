@@ -1,6 +1,9 @@
 {strip}
 	<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.1//EN' 'http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd'>
 	<html>
+		<head>
+			<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		</head>
 		<body>
 			<table style="width:98%; border: 1px solid #CCC; font-family:verdana,arial; font-size:12px;">
 				<tbody>
