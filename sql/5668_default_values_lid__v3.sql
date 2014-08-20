@@ -16,7 +16,7 @@ ALTER TABLE `lid` CHANGE `rssToken` `rssToken` VARCHAR(25) NULL DEFAULT NULL COM
 ALTER TABLE `lid` CHANGE `ovkaart` `ovkaart` VARCHAR(50) NOT NULL DEFAULT '';
 ALTER TABLE `lid` CHANGE `zingen` `zingen` VARCHAR(100) NOT NULL DEFAULT '';
 ALTER TABLE `lid` CHANGE `novitiaat` `novitiaat` TEXT NULL DEFAULT NULL;
-ALTER TABLE `lid` CHANGE `lengte` `lengte` INT(11) NULL DEFAULT NULL;
+ALTER TABLE `lid` CHANGE `lengte` `lengte` INT(11) NOT NULL DEFAULT '0';
 ALTER TABLE `lid` CHANGE `vrienden` `vrienden` VARCHAR(300) NOT NULL DEFAULT '';
 ALTER TABLE `lid` CHANGE `middelbareSchool` `middelbareSchool` VARCHAR(200) NOT NULL DEFAULT '';
 ALTER TABLE `lid` CHANGE `novietSoort` `novietSoort` VARCHAR(15) NOT NULL DEFAULT '';
