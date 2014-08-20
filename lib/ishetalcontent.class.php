@@ -1,6 +1,6 @@
 <?php
 
-class IsHetAlContent extends TemplateView {
+class IsHetAlContent extends SmartyTemplateView {
 
 	private $opties = array('dies', 'jarig', 'vrijdag', 'donderdag', 'zondag', 'borrel', 'lezing', 'lunch', 'avond');
 	private $ja = false; //ja of nee.

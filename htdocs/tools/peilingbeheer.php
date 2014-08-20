@@ -20,7 +20,8 @@ if (isset($_GET['action'])) {
 					}
 				}
 				$peiling = Peiling::maakPeiling($properties);
-				invokeRefresh(CSR_ROOT . '/tools/peilingbeheer.php', 'De nieuwe peiling heeft id ' . $peiling->getId() . '.', 1);
+				SimpleHTML::setMelding('De nieuwe peiling heeft id ' . $peiling->getId() . '.', 1);
+				redirect(CSR_ROOT . '/tools/peilingbeheer.php');
 				exit;
 			}
 			break;
@@ -35,7 +36,7 @@ if (isset($_GET['action'])) {
 				if (isset($_POST['optie']) && is_numeric($_POST['optie'])) {
 					$peiling->stem((int) $_POST['optie']);
 				}
-				invokeRefresh(HTTP_REFERER . '#peiling' . $peiling->getId());
+				redirect(HTTP_REFERER . '#peiling' . $peiling->getId());
 			}
 			break;
 		case 'verwijder':
@@ -43,7 +44,7 @@ if (isset($_GET['action'])) {
 				try {
 					$peiling = new Peiling((int) $_GET['id']);
 					$peiling->deletePeiling();
-					invokeRefresh(HTTP_REFERER);
+					redirect(HTTP_REFERER);
 				} catch (Exception $e) {
 					$error = $e->getMessage();
 				}
@@ -57,7 +58,7 @@ require_once 'peilingbeheercontent.class.php';
 $beheer = new PeilingBeheerContent(Peiling::getLijst());
 
 if ($error != '') {
-	setMelding($error);
+	SimpleHTML::setMelding($error, -1);
 }
 
 if (!LoginModel::mag('P_LOGGED_IN') OR ! Peiling::magBewerken()) {

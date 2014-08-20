@@ -8,7 +8,7 @@
  * Tonen van de corveepunten, vrijstellingen en corveetaken van een lid.
  * 
  */
-class MijnCorveeView extends TemplateView {
+class MijnCorveeView extends SmartyTemplateView {
 
 	public function __construct(array $taken, array $punten, array $functies, CorveeVrijstelling $vrijstelling = null) {
 		parent::__construct($taken);

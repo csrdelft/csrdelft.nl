@@ -8,7 +8,7 @@
  * Tonen van alle functies om te beheren.
  * 
  */
-class BeheerFunctiesView extends TemplateView {
+class BeheerFunctiesView extends SmartyTemplateView {
 
 	public function __construct(array $functies) {
 		parent::__construct($functies, 'Beheer corveefuncties en kwalificaties');
@@ -22,7 +22,7 @@ class BeheerFunctiesView extends TemplateView {
 
 }
 
-class FunctieView extends TemplateView {
+class FunctieView extends SmartyTemplateView {
 
 	public function __construct(CorveeFunctie $functie) {
 		parent::__construct($functie);
@@ -39,7 +39,7 @@ class FunctieView extends TemplateView {
 /**
  * Requires id of deleted corveefunctie.
  */
-class FunctieDeleteView extends TemplateView {
+class FunctieDeleteView extends SmartyTemplateView {
 
 	public function view() {
 		echo '<tr id="corveefunctie-row-' . $this->model . '" class="remove"></tr>';

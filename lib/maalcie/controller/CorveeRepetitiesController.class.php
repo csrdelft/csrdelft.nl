@@ -93,7 +93,7 @@ class CorveeRepetitiesController extends AclController {
 			}
 			$this->view = new CorveeRepetitieView($repetitie_aantal[0], $maaltijdrepetitie);
 			if ($repetitie_aantal[1] > 0) {
-				setMelding($repetitie_aantal[1] . ' voorkeur' . ($repetitie_aantal[1] !== 1 ? 'en' : '') . ' uitgeschakeld.', 2);
+				SimpleHTML::setMelding($repetitie_aantal[1] . ' voorkeur' . ($repetitie_aantal[1] !== 1 ? 'en' : '') . ' uitgeschakeld.', 2);
 			}
 		}
 	}
@@ -101,7 +101,7 @@ class CorveeRepetitiesController extends AclController {
 	public function verwijder($crid) {
 		$aantal = CorveeRepetitiesModel::verwijderRepetitie($crid);
 		if ($aantal > 0) {
-			setMelding($aantal . ' voorkeur' . ($aantal !== 1 ? 'en' : '') . ' uitgeschakeld.', 2);
+			SimpleHTML::setMelding($aantal . ' voorkeur' . ($aantal !== 1 ? 'en' : '') . ' uitgeschakeld.', 2);
 		}
 		echo '<tr id="maalcie-melding"><td>' . SimpleHTML::getMelding() . '</td></tr>';
 		echo '<tr id="repetitie-row-' . $crid . '" class="remove"></tr>';
@@ -116,11 +116,11 @@ class CorveeRepetitiesController extends AclController {
 			if ($aantal['update'] < $aantal['day']) {
 				$aantal['update'] = $aantal['day'];
 			}
-			setMelding(
+			SimpleHTML::setMelding(
 					$aantal['update'] . ' corveeta' . ($aantal['update'] !== 1 ? 'ken' : 'ak') . ' bijgewerkt waarvan ' .
 					$aantal['day'] . ' van dag verschoven.', 1);
 			$aantal['datum'] += $aantal['maaltijd'];
-			setMelding(
+			SimpleHTML::setMelding(
 					$aantal['datum'] . ' corveeta' . ($aantal['datum'] !== 1 ? 'ken' : 'ak') . ' aangemaakt waarvan ' .
 					$aantal['maaltijd'] . ' maaltijdcorvee.', 1);
 		}

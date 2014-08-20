@@ -8,7 +8,7 @@
  * 
  * De views van het fotoalbum.
  */
-class FotoAlbumView extends TemplateView {
+class FotoAlbumView extends SmartyTemplateView {
 
 	public function __construct(FotoAlbum $fotoalbum) {
 		parent::__construct($fotoalbum);
@@ -99,7 +99,7 @@ class PosterUploadForm extends FotoUploadForm {
 
 }
 
-class FotoUbbView extends TemplateView {
+class FotoUbbView extends SmartyTemplateView {
 
 	public function __construct(Foto $foto) {
 		parent::__construct($foto);
@@ -126,7 +126,7 @@ class FotoUbbView extends TemplateView {
 
 }
 
-class FotoAlbumZijbalkView extends TemplateView {
+class FotoAlbumZijbalkView extends SmartyTemplateView {
 
 	public function __construct(FotoAlbum $album) {
 		parent::__construct($album);
@@ -159,7 +159,7 @@ class FotoAlbumZijbalkView extends TemplateView {
 
 }
 
-class FotoAlbumUbbView extends TemplateView {
+class FotoAlbumUbbView extends SmartyTemplateView {
 
 	private $compact = false; //compact or expanded tag.
 	private $rows = 2;  //number of rows

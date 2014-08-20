@@ -8,7 +8,7 @@
  * Tonen van alle voorkeuren van alle leden.
  * 
  */
-class BeheerVoorkeurenView extends TemplateView {
+class BeheerVoorkeurenView extends SmartyTemplateView {
 
 	public function __construct(array $matrix, $repetities) {
 		parent::__construct($matrix, 'Beheer voorkeuren');
@@ -23,7 +23,7 @@ class BeheerVoorkeurenView extends TemplateView {
 
 }
 
-class BeheerVoorkeurView extends TemplateView {
+class BeheerVoorkeurView extends SmartyTemplateView {
 
 	public function __construct(CorveeVoorkeur $voorkeur) {
 		parent::__construct($voorkeur);

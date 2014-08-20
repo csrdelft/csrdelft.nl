@@ -9,7 +9,7 @@
 
 require_once 'courant/courantcontent.class.php';
 
-class CourantarchiefContent extends TemplateView {
+class CourantarchiefContent extends SmartyTemplateView {
 
 	public function __construct(&$courant) {
 		parent::__construct($courant);

@@ -10,7 +10,7 @@ require_once 'maalcie/controller/MijnMaaltijdenController.class.php';
  * Tonen van een ketzer voor een specifieke maaltijd waarmee een lid zich kan aan- of afmelden voor die maaltijd.
  * 
  */
-class MaaltijdKetzerView extends TemplateView {
+class MaaltijdKetzerView extends SmartyTemplateView {
 
 	public function __construct(Maaltijd $maaltijd, $aanmelding = null) {
 		parent::__construct($maaltijd, 'Maaltijdketzer');

@@ -6,7 +6,7 @@
  * @author P.W.G. Brussee <brussee@live.nl>
  * 
  */
-class GroepLijstView extends TemplateView {
+class GroepLijstView extends SmartyTemplateView {
 
 	private $forms = array();
 
@@ -30,7 +30,7 @@ class GroepLijstView extends TemplateView {
 
 }
 
-class GroepPasfotosView extends TemplateView {
+class GroepPasfotosView extends SmartyTemplateView {
 
 	public function __construct(Groep $groep) {
 		parent::__construct($groep);
@@ -44,7 +44,7 @@ class GroepPasfotosView extends TemplateView {
 
 }
 
-class GroepStatistiekView extends TemplateView {
+class GroepStatistiekView extends SmartyTemplateView {
 
 	public function __construct(Groep $groep) {
 		parent::__construct($groep->getStatistieken());
@@ -67,7 +67,7 @@ class GroepStatistiekView extends TemplateView {
 
 }
 
-class GroepEmailsView extends TemplateView {
+class GroepEmailsView extends SmartyTemplateView {
 
 	private $emails = array();
 

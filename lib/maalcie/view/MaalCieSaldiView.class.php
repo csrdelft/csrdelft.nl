@@ -8,7 +8,7 @@
  * Tonen van een upload tool voor het bijwerken de MaalCie saldi op de stek.
  * 
  */
-class MaalCieSaldiView extends TemplateView {
+class MaalCieSaldiView extends SmartyTemplateView {
 
 	public function __construct() {
 		parent::__construct(null, 'MaalCie-saldi uploaden met een CSV-bestand');

@@ -6,7 +6,8 @@ require_once 'mededelingen/mededelingencontent.class.php';
 require_once 'mededelingen/mededelingtopdrieoverzichtcontent.class.php';
 
 if (!Mededeling::isModerator()) {
-	invokeRefresh(CSR_ROOT . MededelingenContent::mededelingenRoot, 'U heeft daar niets te zoeken.', -1);
+	SimpleHTML::setMelding('U heeft daar niets te zoeken.', -1);
+	redirect(CSR_ROOT . MededelingenContent::mededelingenRoot);
 }
 
 $top3overzicht = new MededelingTopDrieOverzichtContent();

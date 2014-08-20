@@ -87,7 +87,7 @@ class MenuModel extends PersistenceModel {
 			$count = Database::sqlUpdate($orm::getTableName(), $properties, 'parent_id = :oldid', array(':oldid' => $item->item_id));
 			$this->delete($item);
 			$db->commit();
-			setMelding($count . ' menu-items nieuwe parent gegeven.', 2);
+			SimpleHTML::setMelding($count . ' menu-items nieuwe parent gegeven.', 2);
 		} catch (Exception $e) {
 			$db->rollback();
 			throw $e; // rethrow to controller

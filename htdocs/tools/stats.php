@@ -5,10 +5,10 @@
 require_once 'configuratie.include.php';
 
 if (!LoginModel::mag('P_ADMIN')) {
-	invokeRefresh(CSR_ROOT);
+	redirect(CSR_ROOT);
 }
 
-class stats extends TemplateView {
+class stats extends SmartyTemplateView {
 
 	public function __construct() {
 		parent::__construct(null);

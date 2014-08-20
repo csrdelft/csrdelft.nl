@@ -10,7 +10,7 @@ require_once 'savedquery.class.php';
 # Geeft de in savedquery opgeslagen query's weer
 
 if (!LoginModel::mag('P_LOGGED_IN')) {
-	invokeRefresh(CSR_ROOT);
+	redirect(CSR_ROOT);
 }
 
 $id = 0;

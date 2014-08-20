@@ -113,7 +113,7 @@ class SavedQuery {
 
 }
 
-class SavedQueryContent extends TemplateView {
+class SavedQueryContent extends SmartyTemplateView {
 
 	public function __construct(SavedQuery $sq = null) {
 		parent::__construct($sq);

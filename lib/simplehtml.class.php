@@ -14,12 +14,9 @@ abstract class SimpleHTML implements View {
 		return '';
 	}
 
-	public function setMelding($sMelding, $level = -1) {
-		setMelding($sMelding, $level);
-	}
-
 	/**
-	 * Geeft berichten weer die opgeslagen zijn in de sessie met met setMelding($message, $lvl = -1)
+	 * Stores a message in session.
+	 *
 	 * Levels can be:
 	 *
 	 * -1 error
@@ -27,6 +24,29 @@ abstract class SimpleHTML implements View {
 	 *  1 success
 	 *  2 notify
 	 *
+	 * Gebaseerd op DokuWiki code.
+	 */
+	public static function setMelding($message, $lvl) {
+		$errors[-1] = 'error';
+		$errors[0] = 'info';
+		$errors[1] = 'success';
+		$errors[2] = 'notify';
+		$message = trim($message);
+		if ($message != '' AND ( $lvl === -1 OR $lvl === 0 OR $lvl === 1 OR $lvl === 2 )) {
+			if (!isset($_SESSION['melding'])) {
+				$_SESSION['melding'] = array();
+			}
+			//gooit verouderde gegevens weg FIXME tijdelijk tot dat iedereen een nieuwe sessie heeft.
+			if (is_string($_SESSION['melding'])) {
+				$_SESSION['melding'] = array();
+			}
+			$_SESSION['melding'][] = array('lvl' => $errors[$lvl], 'msg' => $message);
+		}
+	}
+
+	/**
+	 * Geeft berichten weer die opgeslagen zijn in de sessie met met SimpleHTML::setMelding($message, $lvl);
+	 * 
 	 * @return string html van melding(en) of lege string
 	 */
 	public static function getMelding() {

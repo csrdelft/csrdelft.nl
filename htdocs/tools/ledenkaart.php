@@ -9,7 +9,7 @@ require_once 'configuratie.include.php';
  * 
  */
 if (!LoginModel::mag('P_LEDEN_READ')) {
-	invokeRefresh(CSR_ROOT);
+	redirect(CSR_ROOT);
 }
 
 if (isset($_GET['xml'])) {

@@ -1,6 +1,6 @@
 <?php
 
-require_once 'MVC/view/TemplateView.abstract.php';
+require_once 'MVC/view/SmartyTemplateView.abstract.php';
 
 /**
  * HtmlPage.class.php	| 	P.W.G. Brussee (brussee@live.nl)
@@ -8,7 +8,7 @@ require_once 'MVC/view/TemplateView.abstract.php';
  * Een HTML pagina met stylesheets en scripts.
  * 
  */
-abstract class HtmlPage extends TemplateView {
+abstract class HtmlPage extends SmartyTemplateView {
 
 	private $stylesheets = array();
 	private $scripts = array();

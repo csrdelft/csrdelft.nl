@@ -8,7 +8,7 @@ require_once 'catalogus.class.php';
  * @author Gerrit Uitslag <klapinklapin@gmail.com>
  *
  */
-class BibliotheekCatalogusContent extends TemplateView {
+class BibliotheekCatalogusContent extends SmartyTemplateView {
 
 	public function __construct() {
 		parent::__construct(null, 'Bibliotheek | Catalogus');
@@ -20,7 +20,7 @@ class BibliotheekCatalogusContent extends TemplateView {
 
 }
 
-class BibliotheekCatalogusDatatableContent extends TemplateView {
+class BibliotheekCatalogusDatatableContent extends SmartyTemplateView {
 
 	public function __construct(Catalogus $catalogus) {
 		parent::__construct($catalogus);
@@ -148,7 +148,7 @@ Rubriek: ' . $aBoek['categorie'] . '"';
 /**
  * Boek weergeven
  */
-class BibliotheekBoekContent extends TemplateView {
+class BibliotheekBoekContent extends SmartyTemplateView {
 
 	public function __construct(Boek $boek) {
 		parent::__construct($boek, 'Bibliotheek | Boek: ' . $boek->getTitel());
@@ -164,7 +164,7 @@ class BibliotheekBoekContent extends TemplateView {
 /**
  * Contentclasse voor de boek-ubb-tag
  */
-class BoekUbbContent extends TemplateView {
+class BoekUbbContent extends SmartyTemplateView {
 
 	public function __construct(Boek $boek) {
 		parent::__construct($boek);

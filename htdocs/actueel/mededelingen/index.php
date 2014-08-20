@@ -27,19 +27,19 @@ if (isset($_REQUEST['prullenbak']) AND $_REQUEST['prullenbak'] == '1' AND Medede
 switch ($actie) {
 	case 'verwijderen':
 		if (!Mededeling::magToevoegen()) {
-			invokeRefresh(CSR_ROOT);
+			redirect(CSR_ROOT);
 		}
 		if ($mededelingId > 0) {
 			$mededeling = new Mededeling($mededelingId);
 			if (Mededeling::isModerator() OR $mededeling->getUid() == LoginModel::getUid()) {
 				$verwijderd = $mededeling->delete();
 				if ($verwijderd === false) {
-					setMelding('Het verwijderen is mislukt.', -1);
+					SimpleHTML::setMelding('Het verwijderen is mislukt.', -1);
 				} else {
-					setMelding('De mededeling is succesvol verwijderd.', 1);
+					SimpleHTML::setMelding('De mededeling is succesvol verwijderd.', 1);
 				}
 			} else { // Dit lid mag deze mededeling helemaal niet verwijderen!
-				invokeRefresh(CSR_ROOT);
+				redirect(CSR_ROOT);
 			}
 		}
 		$content = new MededelingenContent(0, $prullenbak);
@@ -49,7 +49,7 @@ switch ($actie) {
 
 	case 'bewerken':
 		if (!Mededeling::magToevoegen()) {
-			invokeRefresh(CSR_ROOT);
+			redirect(CSR_ROOT);
 		}
 
 		if (isset($_POST['titel'], $_POST['tekst'], $_POST['categorie'])) {
@@ -91,15 +91,15 @@ switch ($actie) {
 							}
 							chmod($pictureFullPath, 0644);
 						} else {
-							setMelding('Plaatje verplaatsen is mislukt.', -1);
+							SimpleHTML::setMelding('Plaatje verplaatsen is mislukt.', -1);
 							$allOK = false;
 						}
 					} else {
-						setMelding('Plaatje is niet in de juiste verhouding.', -1);
+						SimpleHTML::setMelding('Plaatje is niet in de juiste verhouding.', -1);
 						$allOK = false;
 					}
 				} else {
-					setMelding('Het is niet gelukt om de resolutie van het plaatje te bepalen.', -1);
+					SimpleHTML::setMelding('Het is niet gelukt om de resolutie van het plaatje te bepalen.', -1);
 					$allOK = false;
 				}
 			}
@@ -107,11 +107,11 @@ switch ($actie) {
 			// Check if all values appear to be OK.
 			$tijdelijkeMededeling = $mededelingId > 0 ? new Mededeling($mededelingId) : null;
 			if (strlen($mededelingProperties['titel']) < 2) {
-				setMelding('Het veld <b>Titel</b> moet minstens 2 tekens bevatten.', -1);
+				SimpleHTML::setMelding('Het veld <b>Titel</b> moet minstens 2 tekens bevatten.', -1);
 				$allOK = false;
 			}
 			if (strlen($mededelingProperties['tekst']) < 5) {
-				setMelding('Het veld <b>Tekst</b> moet minstens 5 tekens bevatten.', -1);
+				SimpleHTML::setMelding('Het veld <b>Tekst</b> moet minstens 5 tekens bevatten.', -1);
 				$allOK = false;
 			}
 
@@ -122,12 +122,12 @@ switch ($actie) {
 			} else {
 				$vervaltijd = strtotime($mededelingProperties['vervaltijd']);
 				if ($vervaltijd === false OR ! isGeldigeDatum($mededelingProperties['vervaltijd'])) {
-					setMelding('Vervaltijd is ongeldig.', -1);
+					SimpleHTML::setMelding('Vervaltijd is ongeldig.', -1);
 					$allOK = false;
 				} else {
 					$datum = strtotime($mededelingProperties['datum']);
 					if ($vervaltijd <= $datum) {
-						setMelding('Vervaltijd moet groter zijn dan de huidige tijd.', -1);
+						SimpleHTML::setMelding('Vervaltijd moet groter zijn dan de huidige tijd.', -1);
 						$allOK = false;
 					}
 				}
@@ -149,7 +149,7 @@ switch ($actie) {
 
 			// Check doelgroep.
 			if (array_search($mededelingProperties['doelgroep'], Mededeling::getDoelgroepen()) === false) {
-				setMelding('De doelgroep is ongeldig.', -1);
+				SimpleHTML::setMelding('De doelgroep is ongeldig.', -1);
 				$allOK = false;
 			}
 
@@ -164,14 +164,14 @@ switch ($actie) {
 			}
 			if (!$categorieValid) {
 				$mededelingProperties['categorie'] = null;
-				setMelding('De categorie is ongeldig.', -1);
+				SimpleHTML::setMelding('De categorie is ongeldig.', -1);
 				$allOK = false;
 			}
 			// Check picture.
 			if (empty($mededelingProperties['plaatje']) AND $mededelingId == 0) { // If there's no new picture, while there should be.
 				$errorNumber = $_FILES['plaatje']['error'];
 				if ($errorNumber == UPLOAD_ERR_NO_FILE) { // If there was no file being uploaded at all. 
-					setMelding('Het toevoegen van een plaatje is verplicht.', -1);
+					SimpleHTML::setMelding('Het toevoegen van een plaatje is verplicht.', -1);
 					$allOK = false;
 				} elseif ($errorNumber != UPLOAD_ERR_OK) {
 					// Uploading the picture failed.
@@ -194,7 +194,7 @@ switch ($actie) {
 					$nieuweLocatie .= '/prullenbak';
 				}
 				$nieuweLocatie .= '/' . $realId;
-				invokeRefresh($nieuweLocatie);
+				redirect($nieuweLocatie);
 			}
 		} else { // User is going to edit an existing Mededeling or fill in an empty form.
 			$mededeling = new Mededeling($mededelingId);
@@ -202,7 +202,7 @@ switch ($actie) {
 
 		// Controleren of de gebruiker deze mededeling wel mag bewerken.
 		if ($mededelingId > 0 AND ! $mededeling->magBewerken()) { // Moet dit niet eerder gebeuren?
-			invokeRefresh(CSR_ROOT); // Misschien melding weergeven en terug gaan naar de mededelingenpagina? 
+			redirect(CSR_ROOT); // Misschien melding weergeven en terug gaan naar de mededelingenpagina? 
 		}
 		$content = new MededelingContent($mededeling, $prullenbak);
 		break;

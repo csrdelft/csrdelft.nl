@@ -8,7 +8,7 @@
  * Tonen van alle vrijstellingen om te beheren.
  * 
  */
-class BeheerVrijstellingenView extends TemplateView {
+class BeheerVrijstellingenView extends SmartyTemplateView {
 
 	public function __construct(array $vrijstellingen) {
 		parent::__construct($vrijstellingen, 'Beheer vrijstellingen');
@@ -22,7 +22,7 @@ class BeheerVrijstellingenView extends TemplateView {
 
 }
 
-class BeheerVrijstellingView extends TemplateView {
+class BeheerVrijstellingView extends SmartyTemplateView {
 
 	public function __construct(CorveeVrijstelling $vrijstelling) {
 		parent::__construct($vrijstelling);
