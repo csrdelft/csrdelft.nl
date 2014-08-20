@@ -12,6 +12,7 @@ data/log/*
 data/smarty/*
 data/smarty/cache/*
 data/smarty/compiled/*
+data/tmp/*
 etc/bot.htpasswd
 etc/cron.ini
 etc/csrmail.ini

@@ -10,7 +10,7 @@ require_once 'maalcie/view/forms/EetwensForm.class.php';
  * Tonen van voorkeuren die een lid aan of uit kan zetten.
  * 
  */
-class MijnVoorkeurenView extends SmartyTemplateView {
+class MijnVoorkeurenView extends TemplateView {
 
 	public function __construct(array $voorkeuren) {
 		parent::__construct($voorkeuren, 'Mijn voorkeuren');
@@ -25,7 +25,7 @@ class MijnVoorkeurenView extends SmartyTemplateView {
 
 }
 
-class MijnVoorkeurView extends SmartyTemplateView {
+class MijnVoorkeurView extends TemplateView {
 
 	public function __construct(CorveeVoorkeur $voorkeur) {
 		parent::__construct($voorkeur);

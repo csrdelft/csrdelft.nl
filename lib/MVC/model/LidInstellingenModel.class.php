@@ -204,7 +204,7 @@ class LidInstellingen extends PersistenceModel {
 						throw new Exception('Niet bestaande instelling verwijderen mislukt');
 					}
 				} else {
-					SimpleHTML::setMelding($e->getMessage(), -1);
+					setMelding($e->getMessage());
 					DebugLogModel::instance()->log(get_called_class(), 'reload', func_get_args(), $e);
 				}
 			}

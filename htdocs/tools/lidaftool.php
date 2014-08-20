@@ -3,7 +3,7 @@
 require_once 'configuratie.include.php';
 
 if (!LoginModel::mag('P_ADMIN,groep:soccie,groep:maalcie')) {
-	redirect(CSR_ROOT);
+	invokeRefresh(CSR_ROOT);
 }
 
 echo '<h1>Overzicht saldi</h1><form action="/tools/lidaftool.php" method="post">';

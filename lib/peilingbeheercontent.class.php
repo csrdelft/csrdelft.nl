@@ -2,7 +2,7 @@
 
 require_once 'peiling.class.php';
 
-class PeilingBeheerContent extends SmartyTemplateView {
+class PeilingBeheerContent extends TemplateView {
 
 	public function __construct(array $pijlingen) {
 		parent::__construct($pijlingen, 'Peilingbeheer');

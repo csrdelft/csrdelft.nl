@@ -8,7 +8,7 @@
  * Tonen van het corveerooster.
  * 
  */
-class CorveeRoosterView extends SmartyTemplateView {
+class CorveeRoosterView extends TemplateView {
 
 	public function __construct($rooster, $toonverleden = false) {
 		parent::__construct($rooster, 'Corveerooster');

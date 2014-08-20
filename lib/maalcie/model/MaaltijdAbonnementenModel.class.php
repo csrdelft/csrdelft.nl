@@ -244,7 +244,7 @@ class MaaltijdAbonnementenModel {
 					try {
 						$aantal += MaaltijdAanmeldingenModel::aanmeldenVoorKomendeRepetitieMaaltijden($mrid, $uid);
 					} catch (Exception $e) { // niet toegestaan
-						SimpleHTML::setMelding($e->getMessage(), -1);
+						setMelding($e->getMessage(), -1);
 					}
 				}
 				$db->commit();
@@ -300,7 +300,7 @@ class MaaltijdAbonnementenModel {
 			$aantal += self::deleteAbonnementen($abo->getMaaltijdRepetitieId(), $uid);
 		}
 		if (sizeof($abos) !== $aantal) {
-			SimpleHTML::setMelding('Niet alle abonnementen zijn uitgeschakeld!', -1);
+			setMelding('Niet alle abonnementen zijn uitgeschakeld!', -1);
 		}
 		return $aantal;
 	}

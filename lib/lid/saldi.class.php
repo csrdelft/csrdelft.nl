@@ -87,10 +87,8 @@ class Saldi {
 		try {
 			$s['maalcie'] = new Saldi($uid, 'maalcie', $timespan);
 			$s['soccie'] = new Saldi($uid, 'soccie', $timespan);
-		} catch (Exception $e) {
-			if (!startsWith($e->getMessage(), 'Saldi::load() gefaald.')) {
-				SimpleHTML::setMelding($e->getMessage(), -1);
-			}
+		} catch (Exception $d) {
+			setMelding('saldi grafiek error', -1);
 		}
 		$series = array();
 		foreach ($s as $cie) {
@@ -175,11 +173,14 @@ class Saldi {
 
 	public static function putMaalcieCsv($key = 'CSVSaldi') {
 		$db = MijnSqli::instance();
+		$sStatus = '';
+		$lvl = 0;
 		if (is_array($_FILES) AND isset($_FILES[$key])) {
 			//bestandje uploaden en verwerken...
 			$bCorrect = true;
 			//niet met csv functies omdat dat misging met OS-X regeleinden...
 			$aRegels = preg_split("/[\s]+/", file_get_contents($_FILES['CSVSaldi']['tmp_name']));
+
 			$row = 0;
 			foreach ($aRegels as $regel) {
 				$regel = str_replace(array('"', ' ', "\n", "\r"), '', $regel);
@@ -207,7 +208,7 @@ class Saldi {
 						try {
 							LidCache::updateLid($aRegel[0]);
 						} catch (Exception $e) {
-							SimpleHTML::setMelding('Er bestaat een lid niet: ' . $e->getMessage(), -1);
+							return 'Er bestaat een lid niet: ' . $e->getMessage();
 						}
 					} else {
 						$bCorrect = false;
@@ -215,12 +216,16 @@ class Saldi {
 					$row++;
 				}
 			}
+
 			if ($bCorrect === true) {
-				SimpleHTML::setMelding('Er zijn ' . $row . ' regels ingevoerd. Als dit er minder zijn dan u verwacht zitten er ongeldige regels in uw bestand.', 0);
+				$sStatus = 'Er zijn ' . $row . ' regels ingevoerd. Als dit er minder zijn dan u verwacht zitten er ongeldige regels in uw bestand.';
+				$lvl = 0;
 			} else {
-				SimpleHTML::setMelding('Helaas, er ging iets mis. Controleer uw bestand! mysql gaf terug <' . $db->error() . '>', -1);
+				$sStatus = 'Helaas, er ging iets mis. Controleer uw bestand! mysql gaf terug <' . $db->error() . '>';
+				$lvl = -1;
 			}
 		}
+		return array($sStatus, $lvl);
 	}
 
 	public static function getSaldi($uid, $alleenRood = false) {

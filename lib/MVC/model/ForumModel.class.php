@@ -164,10 +164,10 @@ class ForumDelenModel extends PersistenceModel {
 				if ($draad->aantal_posts === 0) {
 					$draad->verwijderd = true;
 					$melding .= 'verwijderd (bevat geen berichten)';
-					SimpleHTML::setMelding($melding, 2);
+					setMelding($melding, 2);
 				} else {
 					$melding .= 'goedgekeurd (bevat ' . $draad->aantal_posts . ' berichten)';
-					SimpleHTML::setMelding($melding, 2);
+					setMelding($melding, 2);
 				}
 				ForumDradenModel::instance()->update($draad);
 			}
@@ -187,7 +187,7 @@ class ForumDelenModel extends PersistenceModel {
 		}
 		if (empty($gevonden_delen) OR empty($gevonden_draden)) {
 			if (ForumPostsModel::instance()->getAantalWachtOpGoedkeuring() > 0) {
-				SimpleHTML::setMelding('U heeft onvoldoende rechten om de berichten goed te keuren', 0);
+				setMelding('U heeft onvoldoende rechten om de berichten goed te keuren', 0);
 			}
 		}
 		return array($gevonden_draden, $gevonden_delen);
@@ -726,10 +726,10 @@ class ForumPostsModel extends PersistenceModel implements Paging {
 		if ($draad->verwijderd OR $draad->aantal_posts < 1) {
 			if (!$draad->verwijderd) {
 				$draad->verwijderd = true;
-				SimpleHTML::setMelding('Draad ' . $draad->draad_id . ' bevat geen berichten. Automatische actie: draad verwijderd', 2);
+				setMelding('Draad ' . $draad->draad_id . ' bevat geen berichten. Automatische actie: draad verwijderd', 2);
 			} elseif ($draad->aantal_posts > 0) {
 				ForumDradenModel::instance()->verwijderForumPostsVoorDraad($draad);
-				SimpleHTML::setMelding('Draad ' . $draad->draad_id . ' bevat nog berichten. Automatische actie: berichten verwijderd', 2);
+				setMelding('Draad ' . $draad->draad_id . ' bevat nog berichten. Automatische actie: berichten verwijderd', 2);
 			}
 			$draad->laatste_post_id = null;
 			$draad->laatste_wijziging_uid = null;

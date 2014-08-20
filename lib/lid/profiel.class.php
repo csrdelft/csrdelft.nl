@@ -606,7 +606,7 @@ class ProfielStatus extends Profiel {
 		$taken = CorveeTakenModel::getKomendeTakenVoorLid($uid);
 		$aantal = CorveeTakenModel::verwijderTakenVoorLid($uid);
 		if (sizeof($taken) !== $aantal) {
-			SimpleHTML::setMelding('Niet alle toekomstige corveetaken zijn verwijderd!', -1);
+			setMelding('Niet alle toekomstige corveetaken zijn verwijderd!', -1);
 		}
 		$changelog = 'Verwijderde corveetaken:';
 		if ($aantal > 0) {

@@ -13,7 +13,7 @@
  */
 require_once 'lid/lidzoeker.class.php';
 
-class LedenlijstContent extends SmartyTemplateView {
+class LedenlijstContent extends TemplateView {
 
 	public function __construct(LidZoeker $zoeker) {
 		parent::__construct($zoeker, 'Ledenlijst der Civitas');

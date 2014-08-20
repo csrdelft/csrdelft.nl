@@ -8,7 +8,7 @@
  * Tonen van alle maaltijden om te beheren.
  * 
  */
-class BeheerMaaltijdenView extends SmartyTemplateView {
+class BeheerMaaltijdenView extends TemplateView {
 
 	public function __construct(array $maaltijden, $prullenbak = false, $archief = false, $repetities = null) {
 		parent::__construct($maaltijden);
@@ -34,7 +34,7 @@ class BeheerMaaltijdenView extends SmartyTemplateView {
 
 }
 
-class BeheerMaaltijdenLijstView extends SmartyTemplateView {
+class BeheerMaaltijdenLijstView extends TemplateView {
 
 	public function __construct(array $maaltijden) {
 		parent::__construct($maaltijden);
@@ -51,7 +51,7 @@ class BeheerMaaltijdenLijstView extends SmartyTemplateView {
 
 }
 
-class BeheerMaaltijdView extends SmartyTemplateView {
+class BeheerMaaltijdView extends TemplateView {
 
 	public function __construct(Maaltijd $maaltijd, $prullenbak = false) {
 		parent::__construct($maaltijd);

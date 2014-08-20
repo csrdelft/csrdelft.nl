@@ -14,7 +14,7 @@ require_once 'groepen/groep.class.php';
  * GroepenProfielConcent		Weergeven van groepenlijstje in profiel
  * GroepUbbContent				Weergeven van enkele zaken van een groep met een ubb-tag
  */
-class Groepcontent extends SmartyTemplateView {
+class Groepcontent extends TemplateView {
 
 	private $action = 'view';
 
@@ -150,7 +150,7 @@ class Groepcontent extends SmartyTemplateView {
 
 }
 
-class Groepencontent extends SmartyTemplateView {
+class Groepencontent extends TemplateView {
 
 	private $action = 'view';
 
@@ -172,7 +172,7 @@ class Groepencontent extends SmartyTemplateView {
 
 }
 
-class GroepledenContent extends SmartyTemplateView {
+class GroepledenContent extends TemplateView {
 
 	private $actie = 'standaard';
 
@@ -189,7 +189,7 @@ class GroepledenContent extends SmartyTemplateView {
 
 }
 
-class Groepgeschiedeniscontent extends SmartyTemplateView {
+class Groepgeschiedeniscontent extends TemplateView {
 
 	public function getTitel() {
 		return 'Groepen - ' . $this->model->getNaam();
@@ -242,7 +242,7 @@ class Groepgeschiedeniscontent extends SmartyTemplateView {
  * Weergave van groepen in het profiel.
  */
 
-class GroepenProfielContent extends SmartyTemplateView {
+class GroepenProfielContent extends TemplateView {
 
 	private $display_lower_limit = 8;
 	private $display_upper_limit = 12;
@@ -298,7 +298,7 @@ class GroepenProfielContent extends SmartyTemplateView {
  * Contentclasse voor de groep-ubb-tag
  */
 
-class GroepUbbContent extends SmartyTemplateView {
+class GroepUbbContent extends TemplateView {
 
 	public function getHTML() {
 		$this->smarty->assign('groep', $this->model);
@@ -311,7 +311,7 @@ class GroepUbbContent extends SmartyTemplateView {
 
 }
 
-class GroepStatsContent extends SmartyTemplateView {
+class GroepStatsContent extends TemplateView {
 
 	public function view() {
 		$stats = $this->model->getStats();
@@ -339,7 +339,7 @@ class GroepStatsContent extends SmartyTemplateView {
 
 }
 
-class GroepEmailContent extends SmartyTemplateView {
+class GroepEmailContent extends TemplateView {
 
 	public function view() {
 		$emails = array();

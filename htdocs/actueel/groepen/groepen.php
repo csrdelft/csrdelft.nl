@@ -24,17 +24,14 @@ try {
 
 	$content = new Groepencontent($groepen);
 } catch (Exception $e) {
-	SimpleHTML::setMelding('Groeptype (' . mb_htmlentities($gtype) . ') bestaat niet', -1);
-	redirect(CSR_ROOT . '/actueel/groepen/');
+	invokeRefresh(CSR_ROOT . '/actueel/groepen/', 'Groeptype (' . mb_htmlentities($gtype) . ') bestaat niet');
 }
 
 if (isset($_GET['maakOt']) AND $groepen->isAdmin()) {
 	if ($groepen->maakGroepenOt()) {
-		SimpleHTML::setMelding('De h.t. groepen in deze categorie zijn met succes o.t. gemaakt.', 1);
-		redirect(CSR_ROOT . '/actueel/groepen/' . $groepen->getNaam());
+		invokeRefresh(CSR_ROOT . '/actueel/groepen/' . $groepen->getNaam(), 'De h.t. groepen in deze categorie zijn met succes o.t. gemaakt.', 1);
 	} else {
-		SimpleHTML::setMelding('De h.t. groepen zijn niet allemaal met succes o.t. gemaakt.', -1);
-		redirect(CSR_ROOT . '/actueel/groepen/' . $groepen->getNaam());
+		invokeRefresh(CSR_ROOT . '/actueel/groepen/' . $groepen->getNaam(), 'De h.t. groepen zijn niet allemaal met succes o.t. gemaakt.');
 	}
 }
 if (isset($_GET['bewerken']) AND $groepen->isAdmin()) {
@@ -43,13 +40,12 @@ if (isset($_GET['bewerken']) AND $groepen->isAdmin()) {
 		if (isset($_POST['beschrijving'])) {
 			$groepen->setBeschrijving($_POST['beschrijving']);
 			if ($groepen->save()) {
-				SimpleHTML::setMelding('Beschrijving van groepstype met succes opgeslagen.', 1);
-				redirect(CSR_ROOT . '/actueel/groepen/' . $groepen->getNaam());
+				invokeRefresh(CSR_ROOT . '/actueel/groepen/' . $groepen->getNaam(), 'Beschrijving van groepstype met succes opgeslagen.', 1);
 			} else {
-				SimpleHTML::setMelding('Opslaan mislukt.', -1);
+				setMelding('Opslaan mislukt.', -1);
 			}
 		} else {
-			SimpleHTML::setMelding('Opslaan mislukt. Geen inhoud gevonden.', -1);
+			setMelding('Opslaan mislukt. Geen inhoud gevonden.', -1);
 		}
 	}
 }

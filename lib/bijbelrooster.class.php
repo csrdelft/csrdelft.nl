@@ -1,6 +1,6 @@
 <?php
 
-class Bijbelrooster extends SmartyTemplateView {
+class Bijbelrooster extends TemplateView {
 
 	public function __construct() {
 		parent::__construct(null, 'Bijbelrooster');

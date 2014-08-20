@@ -7,7 +7,7 @@
  * je doorklikken naar boven. Verder niet zo'n spannend ding, zou een
  * stuk mooier gelayout kunnen worden...
  */
-class StamboomContent extends SmartyTemplateView {
+class StamboomContent extends TemplateView {
 
 	private $root;
 	private $kinderen = 0;

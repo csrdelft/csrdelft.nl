@@ -8,7 +8,7 @@
  * Tonen van alle instellingen om te beheren.
  * 
  */
-class InstellingenBeheerView extends SmartyTemplateView {
+class InstellingenBeheerView extends TemplateView {
 
 	public function __construct(Instellingen $instellingen, $module) {
 		parent::__construct($instellingen);
@@ -28,7 +28,7 @@ class InstellingenBeheerView extends SmartyTemplateView {
 
 }
 
-class InstellingBeheerView extends SmartyTemplateView {
+class InstellingBeheerView extends TemplateView {
 
 	public function __construct(Instelling $instelling) {
 		parent::__construct();

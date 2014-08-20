@@ -1,6 +1,6 @@
 <?php
 
-class VerticalenContent extends SmartyTemplateView {
+class VerticalenContent extends TemplateView {
 
 	public function __construct() {
 		parent::__construct(null);

@@ -7,7 +7,7 @@
  * 
  * Tonen van het forum.
  */
-class ForumView extends SmartyTemplateView {
+class ForumView extends TemplateView {
 
 	public function __construct(array $categorien) {
 		parent::__construct($categorien);
@@ -48,7 +48,7 @@ class ForumZoekenForm extends Formulier {
 
 }
 
-class ForumRssView extends SmartyTemplateView {
+class ForumRssView extends TemplateView {
 
 	public function __construct(array $draden, array $delen) {
 		parent::__construct($draden);
@@ -63,7 +63,7 @@ class ForumRssView extends SmartyTemplateView {
 
 }
 
-class ForumDeelView extends SmartyTemplateView {
+class ForumDeelView extends TemplateView {
 
 	public function __construct(ForumDeel $deel, $paging = true, $belangrijk = null) {
 		parent::__construct($deel);
@@ -115,7 +115,7 @@ class ForumDeelForm extends PopupForm {
 
 }
 
-class ForumDraadView extends SmartyTemplateView {
+class ForumDraadView extends TemplateView {
 
 	public function __construct(ForumDraad $draad, ForumDeel $deel, $paging = true) {
 		parent::__construct($draad);
@@ -136,7 +136,7 @@ class ForumDraadView extends SmartyTemplateView {
 /**
  * Requires ForumDraad[]
  */
-class ForumDraadZijbalkView extends SmartyTemplateView {
+class ForumDraadZijbalkView extends TemplateView {
 
 	private $belangrijk;
 
@@ -169,7 +169,7 @@ class ForumDraadZijbalkView extends SmartyTemplateView {
 /**
  * Requires ForumPost[] and ForumDraad[]
  */
-class ForumPostZijbalkView extends SmartyTemplateView {
+class ForumPostZijbalkView extends TemplateView {
 
 	public function __construct(array $posts, array $draden) {
 		parent::__construct($posts);
@@ -187,7 +187,7 @@ class ForumPostZijbalkView extends SmartyTemplateView {
 
 }
 
-class ForumPostView extends SmartyTemplateView {
+class ForumPostView extends TemplateView {
 
 	public function __construct(ForumPost $post, ForumDraad $draad, ForumDeel $deel) {
 		parent::__construct($post);
@@ -205,7 +205,7 @@ class ForumPostView extends SmartyTemplateView {
 /**
  * Requires id of deleted forumpost.
  */
-class ForumPostDeleteView extends SmartyTemplateView {
+class ForumPostDeleteView extends TemplateView {
 
 	public function view() {
 		echo '<tr id="forumpost-row-' . $this->model . '" class="remove"><td></td></tr>';
@@ -213,7 +213,7 @@ class ForumPostDeleteView extends SmartyTemplateView {
 
 }
 
-class ForumResultatenView extends SmartyTemplateView {
+class ForumResultatenView extends TemplateView {
 
 	public function __construct(array $draden, array $delen, $query = null) {
 		parent::__construct($draden);
