@@ -1081,7 +1081,7 @@ class Lid implements Serializable, Agendeerbaar {
 		if ($db->query($query)) {
 			return $newuid;
 		} else {
-			throw new Exception('Kon geen nieuw uid aanmaken.');
+			throw new Exception($db->error());
 		}
 	}
 
