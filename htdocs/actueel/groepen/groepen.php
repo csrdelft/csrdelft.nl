@@ -51,6 +51,6 @@ if (isset($_GET['bewerken']) AND $groepen->isAdmin()) {
 }
 
 $pagina = new CsrLayoutPage($content);
-$pagina->addStylesheet('groepen.css');
-$pagina->addScript('groepen.js');
+$pagina->addStylesheet('/layout/css/groepen.css');
+$pagina->addScript('/layout/js/groepen.js');
 $pagina->view();

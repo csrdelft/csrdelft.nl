@@ -43,8 +43,8 @@ class BeheerAbonnementenController extends AclController {
 		$matrix = MaaltijdAbonnementenModel::getAbonnementenMatrix($repetities, false, $alleenWaarschuwingen, $ingeschakeld);
 		$this->view = new BeheerAbonnementenView($matrix, $repetities, $alleenWaarschuwingen, $ingeschakeld);
 		$this->view = new CsrLayoutPage($this->getView());
-		$this->view->addStylesheet('taken.css');
-		$this->view->addScript('taken.js');
+		$this->view->addStylesheet('/layout/css/taken.css');
+		$this->view->addScript('/layout/js/taken.js');
 	}
 
 	public function waarschuwingen() {

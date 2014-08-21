@@ -66,8 +66,8 @@ class BeheerTakenController extends AclController {
 		}
 		$this->view = new BeheerTakenView($taken, $maaltijd, false, CorveeRepetitiesModel::getAlleRepetities());
 		$this->view = new CsrLayoutPage($this->getView());
-		$this->view->addStylesheet('taken.css');
-		$this->view->addScript('taken.js');
+		$this->view->addStylesheet('/layout/css/taken.css');
+		$this->view->addScript('/layout/js/taken.js');
 		$this->view->popup = $popup;
 	}
 
@@ -78,8 +78,8 @@ class BeheerTakenController extends AclController {
 	public function prullenbak() {
 		$this->view = new BeheerTakenView(CorveeTakenModel::getVerwijderdeTaken(), null, true);
 		$this->view = new CsrLayoutPage($this->getView());
-		$this->view->addStylesheet('taken.css');
-		$this->view->addScript('taken.js');
+		$this->view->addStylesheet('/layout/css/taken.css');
+		$this->view->addScript('/layout/js/taken.js');
 	}
 
 	public function herinneren() {

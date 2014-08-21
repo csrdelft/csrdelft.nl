@@ -24,34 +24,34 @@ class CsrLayout3Page extends HtmlPage {
 		$plugin = '/layout/js/jquery/plugins/';
 
 		if (DEBUG AND LoginModel::mag('P_ADMIN')) {
-			$this->addStylesheet('bootstrap.css', $css);
-			$this->addStylesheet('bootstrap-theme.css', $css);
+			$this->addStylesheet($css . 'bootstrap.css');
+			$this->addStylesheet($css . 'bootstrap-theme.css');
 
-			$this->addScript('jquery.js', $js);
-			$this->addScript('bootstrap.js', $js);
-			$this->addScript('bootstrap-typeahead.js', $js);
-			$this->addScript('jquery.autosize.js', $plugin);
-			$this->addScript('jquery.hoverIntent.js', $plugin);
-			$this->addScript('jquery.scrollTo.js', $plugin);
+			$this->addScript($js . 'jquery.js');
+			$this->addScript($js . 'bootstrap.js');
+			$this->addScript($js . 'bootstrap-typeahead.js');
+			$this->addScript($plugin . 'jquery.autosize.js');
+			$this->addScript($plugin . 'jquery.hoverIntent.js');
+			$this->addScript($plugin . 'jquery.scrollTo.js');
 		} else { // minimized javascript
-			$this->addStylesheet('bootstrap.min.css', $css);
-			$this->addStylesheet('bootstrap-theme.min.css', $css);
+			$this->addStylesheet($css . 'bootstrap.min.css');
+			$this->addStylesheet($css . 'bootstrap-theme.min.css');
 
-			$this->addScript('jquery.min.js', $js);
-			$this->addScript('bootstrap.min.js', $js);
-			$this->addScript('bootstrap-typeahead.min.js', $js);
-			$this->addScript('jquery.autosize.min.js', $plugin);
-			$this->addScript('jquery.hoverIntent.min.js', $plugin);
-			$this->addScript('jquery.scrollTo.min.js', $plugin);
+			$this->addScript($js . 'jquery.min.js');
+			$this->addScript($js . 'bootstrap.min.js');
+			$this->addScript($js . 'bootstrap-typeahead.min.js');
+			$this->addScript($plugin . 'jquery.autosize.min.js');
+			$this->addScript($plugin . 'jquery.hoverIntent.min.js');
+			$this->addScript($plugin . 'jquery.scrollTo.min.js');
 		}
-		$this->addStylesheet('bootstrap-typeahead.css', $css);
-		$this->addStylesheet('csrdelft.css', $css);
+		$this->addStylesheet($css . 'bootstrap-typeahead.css');
+		$this->addStylesheet($css . 'csrdelft.css');
 
-		$this->addScript('jquery.timeago.js', $plugin);
-		$this->addScript('csrdelft.js', $js);
+		$this->addScript($plugin . 'jquery.timeago.js');
+		$this->addScript($js . 'csrdelft.js');
 
 		if (LidInstellingen::get('algemeen', 'sneltoetsen') == 'ja') {
-			$this->addScript('sneltoetsen.js');
+			$this->addScript('/layout/js/sneltoetsen.js');
 		}
 	}
 

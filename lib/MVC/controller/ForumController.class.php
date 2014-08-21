@@ -40,7 +40,7 @@ class ForumController extends Controller {
 			} else { // uitgelogd heeft nieuwe layout
 				$this->view = new CsrLayout2Page($this->getView());
 			}
-			$this->view->addScript('forum.js');
+			$this->view->addScript('/layout/js/forum.js');
 		}
 	}
 
@@ -490,7 +490,9 @@ class ForumController extends Controller {
 			ForumPostsModel::instance()->goedkeurenForumPost($post, $draad, $deel);
 			foreach ($draad->getVolgers() as $uid) {
 				require_once 'MVC/model/entity/Mail.class.php';
-				$mail = new Mail($uid . '@csrdelft.nl', 'C.S.R. Forum: nieuwe reactie op ' . $draad->titel, "[url]http://csrdelft.nl/forum/reactie/" . $post->post_id . "#" . $post->post_id . "[/url]\r\n" . "\r\nDe inhoud van het bericht is als volgt: \r\n\r\n" . str_replace('\r\n', "\n", $tekst) . "\r\n\r\nEINDE BERICHT", "From: pubcie@csrdelft.nl\nReply-To: no-reply@csrdelft.nl");
+				$bericht = "[url]http://csrdelft.nl/forum/reactie/" . $post->post_id . "#" . $post->post_id . "[/url]\r\n" . "\r\nDe inhoud van het bericht is als volgt: \r\n\r\n" . str_replace('\r\n', "\n", $tekst) . "\r\n\r\nEINDE BERICHT";
+				$mail = new Mail($uid . '@csrdelft.nl', 'C.S.R. Forum: nieuwe reactie op ' . $draad->titel, $bericht);
+				$mail->setReplyTo('no-reply@csrdelft.nl');
 				$mail->send();
 			}
 		}

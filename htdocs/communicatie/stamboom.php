@@ -21,7 +21,7 @@ if(LoginModel::mag('P_LEDEN_READ')) {
 }
 
 $pagina=new CsrLayoutPage($midden);
-$pagina->addStylesheet('stamboom.css');
+$pagina->addStylesheet('/layout/css/stamboom.css');
 $pagina->view();
 
 ?>

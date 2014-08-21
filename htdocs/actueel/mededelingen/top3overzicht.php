@@ -12,5 +12,5 @@ if (!Mededeling::isModerator()) {
 $top3overzicht = new MededelingTopDrieOverzichtContent();
 
 $page = new CsrLayoutPage($top3overzicht);
-$page->addStylesheet('mededelingen.css');
+$page->addStylesheet('/layout/css/mededelingen.css');
 $page->view();

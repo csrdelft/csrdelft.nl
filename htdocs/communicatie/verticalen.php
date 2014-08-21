@@ -22,8 +22,8 @@ if(LoginModel::mag('P_LEDEN_READ')) {
 }
 
 $pagina=new CsrLayoutPage($midden);
-$pagina->addStylesheet('verticalen.css');
-$pagina->addScript('verticalen.js');
+$pagina->addStylesheet('/layout/css/verticalen.css');
+$pagina->addScript('/layout/js/verticalen.js');
 $pagina->view();
 
 ?>

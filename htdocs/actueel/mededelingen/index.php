@@ -218,7 +218,7 @@ switch ($actie) {
 }
 
 $page = new CsrLayoutPage($content);
-$page->addStylesheet('mededelingen.css');
+$page->addStylesheet('/layout/css/mededelingen.css');
 $page->view();
 
 function resize_plaatje($file) {

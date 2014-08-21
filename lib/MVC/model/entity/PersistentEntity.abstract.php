@@ -12,7 +12,7 @@ require_once 'MVC/model/entity/PersistentField.class.php';
  * Requires static properties in superclass: $table_name, $persistent_fields, $primary_keys
  * Optional: static $rename_fields = array('oldname' => 'newname');
  */
-abstract class PersistentEntity {
+abstract class PersistentEntity implements JsonSerializable {
 
 	/**
 	 * Constructor is called late (after fields are set)
@@ -58,6 +58,19 @@ abstract class PersistentEntity {
 
 	public function getUUID() {
 		return implode('.', $this->getValues(true)) . '@' . get_class($this) . '.csrdelft.nl';
+	}
+
+	public function jsonSerialize() {
+		$array = (array) $this;
+		// strip non-public field prefixes
+		foreach ($array as $key => $value) {
+			$pos = strrpos($key, 0);
+			if ($pos !== false) {
+				$array[substr($key, $pos + 1)] = $value;
+				unset($array[$key]);
+			}
+		}
+		return array(get_class($this) => $array);
 	}
 
 	/**

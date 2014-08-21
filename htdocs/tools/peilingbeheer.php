@@ -68,5 +68,5 @@ if (!LoginModel::mag('P_LOGGED_IN') OR ! Peiling::magBewerken()) {
 }
 
 $pagina = new CsrLayoutPage($beheer);
-$pagina->addScript('peilingbeheer.js');
+$pagina->addScript('/layout/js/peilingbeheer.js');
 $pagina->view();

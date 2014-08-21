@@ -3077,6 +3077,7 @@ lib/MVC/view/ForumView.class.php -text
 lib/MVC/view/FotoAlbumView.class.php -text
 lib/MVC/view/HtmlPage.abstract.php -text
 lib/MVC/view/InstellingenBeheerView.class.php -text
+lib/MVC/view/JsonResponse.class.php -text
 lib/MVC/view/LidInstellingenView.class.php -text
 lib/MVC/view/LoginView.class.php -text
 lib/MVC/view/MailTemplateView.class.php -text

@@ -1,20 +1,22 @@
 <?php
 
-require_once 'MVC/view/TemplateView.abstract.php';
+require_once 'MVC/view/SmartyTemplateView.abstract.php';
 
 /**
- * HtmlPage.class.php	| 	P.W.G. Brussee (brussee@live.nl)
+ * HtmlPage.class.php
+ * 
+ * @author P.W.G. Brussee <brussee@live.nl>
  * 
  * Een HTML pagina met stylesheets en scripts.
  * 
  */
-abstract class HtmlPage extends TemplateView {
+abstract class HtmlPage extends SmartyTemplateView {
 
 	private $stylesheets = array();
 	private $scripts = array();
 
 	/**
-	 * Zorg dat de template een stijl inlaadt. Er zijn twee verianten:
+	 * Zorg dat de template een stylesheet inlaadt. Er zijn twee verianten:
 	 *
 	 * - lokaal:
 	 * een timestamp van de creatie van het bestand wordt toegoevoegd,
@@ -22,20 +24,12 @@ abstract class HtmlPage extends TemplateView {
 	 *
 	 * - extern:
 	 * Buiten de huidige server, gewoon een url dus.
-	 *
-	 * Merk op: local-entry kan ook gebruikt worden om een map buiten /layout/css/ toe te voegen.
 	 */
-	public function addStylesheet($sheet, $path = '/layout/css/') {
-		if (!$this->hasStylesheet($sheet)) {
-			if (!startsWith($sheet, 'http') AND strpos($sheet, '?') === false) {
-				$sheet .= '?' . filemtime(HTDOCS_PATH . $path . $sheet);
-			}
-			$this->stylesheets[] = $path . $sheet;
+	public function addStylesheet($sheet, $remote = false) {
+		if (!$remote) {
+			$sheet .= '?' . filemtime(HTDOCS_PATH . $sheet);
 		}
-	}
-
-	public function hasStylesheet($sheet) {
-		return array_key_exists($sheet, $this->stylesheets);
+		$this->stylesheets[md5($sheet)] = $sheet;
 	}
 
 	public function getStylesheets() {
@@ -50,22 +44,13 @@ abstract class HtmlPage extends TemplateView {
 	 * zodat de browsercache het bestand vernieuwt.
 	 *
 	 * - extern:
-	 * Buiten de huidige server, gewoon een url dus. Google jsapi
-	 * bijvoorbeeld.
-	 *
-	 * Merk op: local-entry kan ook gebruikt worden om een map buiten /layout/js/ toe te voegen.
+	 * Buiten de huidige server, gewoon een url dus.
 	 */
-	public function addScript($script, $path = '/layout/js/') {
-		if (!$this->hasScript($script)) {
-			if (!startsWith($script, 'http') AND strpos($script, '?') === false) {
-				$script .= '?' . filemtime(HTDOCS_PATH . $path . $script);
-			}
-			$this->scripts[] = $path . $script;
+	public function addScript($script, $remote = false) {
+		if (!$remote) {
+			$script .= '?' . filemtime(HTDOCS_PATH . $script);
 		}
-	}
-
-	public function hasScript($script) {
-		return array_key_exists($script, $this->scripts);
+		$this->scripts[md5($script)] = $script;
 	}
 
 	public function getScripts() {

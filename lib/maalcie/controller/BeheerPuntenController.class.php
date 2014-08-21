@@ -44,8 +44,8 @@ class BeheerPuntenController extends AclController {
 		$matrix = CorveePuntenModel::loadPuntenVoorAlleLeden($functies);
 		$this->view = new BeheerPuntenView($matrix, $functies);
 		$this->view = new CsrLayoutPage($this->getView());
-		$this->view->addStylesheet('taken.css');
-		$this->view->addScript('taken.js');
+		$this->view->addStylesheet('/layout/css/taken.css');
+		$this->view->addScript('/layout/js/taken.js');
 	}
 
 	public function wijzigpunten($uid) {

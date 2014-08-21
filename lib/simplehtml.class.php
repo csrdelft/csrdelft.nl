@@ -10,10 +10,6 @@
  */
 abstract class SimpleHTML implements View {
 
-	public function getTitel() {
-		return '';
-	}
-
 	public function setMelding($sMelding, $level = -1) {
 		setMelding($sMelding, $level);
 	}

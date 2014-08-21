@@ -32,47 +32,51 @@ class CsrLayoutPage extends HtmlPage {
 		$this->zijkolom = $zijkolom;
 		$this->popup = $popup;
 
-		$this->addStylesheet('undohtml.css');
-		$this->addStylesheet('ubb.css');
-		$this->addStylesheet('csrdelft.css');
+		$css = '/layout/css/';
+		$js = '/layout/js/';
+		$plugin = $js . 'jquery/plugins/';
+
+		$this->addStylesheet($css . 'undohtml.css');
+		$this->addStylesheet($css . 'ubb.css');
+		$this->addStylesheet($css . 'csrdelft.css');
 		$layout = LidInstellingen::get('layout', 'layout');
-		$this->addStylesheet($layout . '.css');
+		$this->addStylesheet($css . $layout . '.css');
 		if (LidInstellingen::get('layout', 'beeld') == 'breedbeeld') {
-			$this->addStylesheet('breedbeeld.css');
+			$this->addStylesheet($css . 'breedbeeld.css');
 		}
 		if (LidInstellingen::get('layout', 'sneeuw') != 'nee') {
 			if (LidInstellingen::get('layout', 'sneeuw') == 'ja') {
-				$this->addStylesheet('snow.anim.css');
+				$this->addStylesheet($css . 'snow.anim.css');
 			} else {
-				$this->addStylesheet('snow.css');
+				$this->addStylesheet($css . 'snow.css');
 			}
 		}
 		if (DEBUG AND LoginModel::mag('P_ADMIN')) {
-			$this->addStylesheet('jquery-ui.css', '/layout/js/jquery/');
-			$this->addScript('jquery/jquery.js');
-			$this->addScript('jquery/jquery-ui.js');
-			$this->addScript('autocomplete/jquery.autocomplete.js');
-			$this->addScript('jquery/plugins/jquery.autosize.js');
-			$this->addScript('jquery/plugins/jquery.hoverIntent.js');
-			$this->addScript('jquery/plugins/jquery.scrollTo.js');
+			$this->addStylesheet($js . 'jquery/jquery-ui.css');
+			$this->addScript($js . 'jquery/jquery.js');
+			$this->addScript($js . 'jquery/jquery-ui.js');
+			$this->addScript($js . 'autocomplete/jquery.autocomplete.js');
+			$this->addScript($plugin . 'jquery.autosize.js');
+			$this->addScript($plugin . 'jquery.hoverIntent.js');
+			$this->addScript($plugin . 'jquery.scrollTo.js');
 		} else { // minimized javascript
-			$this->addStylesheet('jquery-ui.min.css', '/layout/js/jquery/');
-			$this->addScript('jquery/jquery.min.js');
-			$this->addScript('jquery/jquery-ui.min.js');
-			$this->addScript('autocomplete/jquery.autocomplete.pack.js');
-			$this->addScript('jquery/plugins/jquery.autosize.min.js');
-			$this->addScript('jquery/plugins/jquery.hoverIntent.min.js');
-			$this->addScript('jquery/plugins/jquery.scrollTo.min.js');
+			$this->addStylesheet($js . 'jquery/jquery-ui.min.css');
+			$this->addScript($js . 'jquery/jquery.min.js');
+			$this->addScript($js . 'jquery/jquery-ui.min.js');
+			$this->addScript($js . 'autocomplete/jquery.autocomplete.pack.js');
+			$this->addScript($plugin . 'jquery.autosize.min.js');
+			$this->addScript($plugin . 'jquery.hoverIntent.min.js');
+			$this->addScript($plugin . 'jquery.scrollTo.min.js');
 		}
-		$this->addStylesheet('jquery.autocomplete.css', '/layout/js/autocomplete/');
-		$this->addScript('jquery/plugins/jquery.timeago.js');
-		$this->addScript('csrdelft.js');
-		$this->addScript('dragobject.js');
-		$this->addScript('menu.js');
-		$this->addScript('groepen.js');
+		$this->addStylesheet($js . 'autocomplete/jquery.autocomplete.css');
+		$this->addScript($plugin . 'jquery.timeago.js');
+		$this->addScript($js . 'csrdelft.js');
+		$this->addScript($js . 'dragobject.js');
+		$this->addScript($js . 'menu.js');
+		$this->addScript($js . 'groepen.js');
 
 		if (LidInstellingen::get('algemeen', 'sneltoetsen') == 'ja') {
-			$this->addScript('sneltoetsen.js');
+			$this->addScript($js . 'sneltoetsen.js');
 		}
 	}
 
@@ -80,8 +84,8 @@ class CsrLayoutPage extends HtmlPage {
 		header('Content-Type: text/html; charset=UTF-8');
 
 		if (LidInstellingen::get('layout', 'minion') == 'ja') {
-			$this->addStylesheet('minion.css');
-			$this->addScript('minion.js');
+			$this->addStylesheet($css . 'minion.css');
+			$this->addScript($js . 'minion.js');
 			$top = 40;
 			$left = 40;
 			DragObjectModel::getCoords('minion', $top, $left);
