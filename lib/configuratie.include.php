@@ -9,7 +9,22 @@
 # uncomment de volgende twee regels om de boel in onderhoudsmode te ketzen 
 #header('location: http://csrdelft.nl/onderhoud.html');
 #exit;
-# 
+
+register_shutdown_function('fatal_handler');
+
+function fatal_handler() {
+	$error = error_get_last();
+	if ($error !== null) {
+		$mail['error'] = $error;
+		$mail['trace'] = debug_backtrace(false);
+		$mail['POST'] = $_POST;
+		$mail['GET'] = $_GET;
+		$mail['SERVER'] = $_SERVER;
+		$header = 'From: pubcie@csrdelft.nl' . "\r\n" . 'Content-Type: text/plain; charset=UTF-8' . "\r\n";
+		mail('pubcie@csrdelft.nl', 'Fatal error failsafe', print_r($mail, true), $header);
+	}
+}
+
 # alle meldingen tonen
 error_reporting(E_ALL);
 
