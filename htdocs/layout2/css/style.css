@@ -339,7 +339,7 @@ span#ubbsluiten:hover{
 	background-color: #eee;
 }
 
-/* messages with SimpleHTML::setMelding() */
+/* messages with SimpleHTML::setMelding($msg, $lvl) */
 div.msgerror,
 div.msginfo,
 div.msgsuccess,

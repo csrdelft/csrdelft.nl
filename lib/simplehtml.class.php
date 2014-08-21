@@ -23,13 +23,13 @@ abstract class SimpleHTML implements View {
 	 * @see    SimpleHTML::getMelding()
 	 * gebaseerd op DokuWiki code
 	 */
-	public static function setMelding($message, $lvl) {
+	public static function setMelding($msg, $lvl) {
 		$errors[-1] = 'error';
 		$errors[0] = 'info';
 		$errors[1] = 'success';
 		$errors[2] = 'notify';
-		$message = trim($message);
-		if (!empty($message) AND ( $lvl === -1 OR $lvl === 0 OR $lvl === 1 OR $lvl === 2 )) {
+		$msg = trim($msg);
+		if (!empty($msg) AND ( $lvl === -1 OR $lvl === 0 OR $lvl === 1 OR $lvl === 2 )) {
 			if (!isset($_SESSION['melding'])) {
 				$_SESSION['melding'] = array();
 			}
@@ -37,12 +37,12 @@ abstract class SimpleHTML implements View {
 			if (is_string($_SESSION['melding'])) {
 				$_SESSION['melding'] = array();
 			}
-			$_SESSION['melding'][] = array('lvl' => $errors[$lvl], 'msg' => $message);
+			$_SESSION['melding'][] = array('lvl' => $errors[$lvl], 'msg' => $msg);
 		}
 	}
 
 	/**
-	 * Geeft berichten weer die opgeslagen zijn in de sessie met met SimpleHTML::setMelding($message, $lvl)
+	 * Geeft berichten weer die opgeslagen zijn in de sessie met met SimpleHTML::setMelding($msg, $lvl)
 	 * 
 	 * @return string html van melding(en) of lege string
 	 */

@@ -46,7 +46,7 @@ class MenuBeheerController extends AclController {
 		$this->view = new MenuItemForm($item, $this->action, (int) $parent_id); // fetches POST values itself
 		if ($this->view->validate()) {
 			$item->item_id = (int) $this->model->create($item);
-			SimpleHTML::SimpleHTML::setMelding('Toegevoegd', 1);
+			SimpleHTML::setMelding('Toegevoegd', 1);
 			$this->view = new MenuItemView($item);
 		}
 		// ReloadPage
@@ -58,9 +58,9 @@ class MenuBeheerController extends AclController {
 		if ($this->view->validate()) {
 			$rowcount = $this->model->update($item);
 			if ($rowcount > 0) {
-				SimpleHTML::SimpleHTML::setMelding('Bijgewerkt', 1);
+				SimpleHTML::setMelding('Bijgewerkt', 1);
 			} else {
-				SimpleHTML::SimpleHTML::setMelding('Geen wijzigingen', 0);
+				SimpleHTML::setMelding('Geen wijzigingen', 0);
 			}
 			$this->view = new MenuItemView($item);
 		}
@@ -70,7 +70,7 @@ class MenuBeheerController extends AclController {
 	public function verwijderen($item_id) {
 		$item = $this->model->getMenuItem($item_id);
 		$this->model->removeMenuItem($item);
-		SimpleHTML::SimpleHTML::setMelding('Verwijderd', 1);
+		SimpleHTML::setMelding('Verwijderd', 1);
 		$this->view = new MenuItemView($item);
 		// ReloadPage
 	}
