@@ -3,7 +3,9 @@
 require_once 'MVC/view/SmartyTemplateView.abstract.php';
 
 /**
- * HtmlPage.class.php	| 	P.W.G. Brussee (brussee@live.nl)
+ * HtmlPage.class.php
+ * 
+ * @author P.W.G. Brussee <brussee@live.nl>
  * 
  * Een HTML pagina met stylesheets en scripts.
  * 

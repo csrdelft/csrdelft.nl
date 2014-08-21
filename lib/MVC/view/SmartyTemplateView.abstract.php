@@ -1,6 +1,5 @@
 <?php
 
-require_once 'MVC/view/View.interface.php';
 require_once 'MVC/view/CsrSmarty.class.php';
 
 /**
