@@ -131,18 +131,9 @@ function array_get_keys(array $in, array $keys) {
  * Invokes a client page (re)load the url.
  * 
  * @param string $url
- * @param string $melding
- * @param int $level
  */
-function invokeRefresh($url = null, $melding = '', $level = -1) {
-	// als $melding een array is die uit elkaar halen
-	if (is_array($melding)) {
-		list($melding, $level) = $melding;
-	}
-	if ($melding != '') {
-		setMelding($melding, $level);
-	}
-	if ($url == '') {
+function redirect($url = null) {
+	if (empty($url)) {
 		$url = CSR_ROOT . REQUEST_URI;
 	} else if (!startsWith($url, CSR_ROOT)) {
 		$url = CSR_ROOT;
@@ -303,37 +294,6 @@ function debugprint($sString, $cssID = 'pubcie_debug') {
 	if (LoginModel::mag('P_ADMIN')) {
 		ob_start();
 		echo '<pre class="' . $cssID . '">' . print_r($sString, true) . '</pre>';
-	}
-}
-
-/**
- * Stores a message.
- *
- * Levels can be:
- *
- * -1 error
- *  0 info
- *  1 success
- *  2 notify
- *
- * @see    SimpleHTML::getMelding()
- * gebaseerd op DokuWiki code
- */
-function setMelding($message, $lvl = -1) {
-	$errors[-1] = 'error';
-	$errors[0] = 'info';
-	$errors[1] = 'success';
-	$errors[2] = 'notify';
-
-	$message = trim($message);
-	if ($message != '') {
-		if (!isset($_SESSION['melding']))
-			$_SESSION['melding'] = array();
-		//gooit verouderde gegevens weg FIXME tijdelijk tot dat iedereen een nieuwe sessie heeft.
-		if (is_string($_SESSION['melding']))
-			$_SESSION['melding'] = array();
-
-		$_SESSION['melding'][] = array('lvl' => $errors[$lvl], 'msg' => $message);
 	}
 }
 
@@ -578,17 +538,6 @@ function square_crop($src_image, $dest_image, $thumb_size = 64, $jpg_quality = 9
 	} else {
 		return false;
 	}
-}
-
-/**
- * @param string $string
- * @return string input without unprintable characters (excluding newlines and tabs)
- */
-function only_printable($string) {
-	return $string;
-	//er gaat nog wat mis, want ik postte net iets met á erin, en die
-	//snoepte dit ding ook weg. Niet de bedoeling natuurlijk, dus ff hdb ermee...
-	//FIXME return preg_replace('/[^\x0A^\x09\x20-\x7E]/', '', $string);
 }
 
 function format_filesize($size) {

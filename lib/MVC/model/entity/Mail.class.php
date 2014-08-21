@@ -188,6 +188,8 @@ class Mail {
 		return $body;
 	}
 
+	////////// active-record //////////
+
 	public function send($debug = false) {
 		switch ($this->type) {
 			case 'html':

@@ -89,7 +89,7 @@ class Saldi {
 			$s['soccie'] = new Saldi($uid, 'soccie', $timespan);
 		} catch (Exception $e) {
 			if (!startsWith($e->getMessage(), 'Saldi::load() gefaald.')) {
-				setMelding($e->getMessage(), -1);
+				SimpleHTML::setMelding($e->getMessage(), -1);
 			}
 		}
 		$series = array();
@@ -175,14 +175,11 @@ class Saldi {
 
 	public static function putMaalcieCsv($key = 'CSVSaldi') {
 		$db = MijnSqli::instance();
-		$sStatus = '';
-		$lvl = 0;
 		if (is_array($_FILES) AND isset($_FILES[$key])) {
 			//bestandje uploaden en verwerken...
 			$bCorrect = true;
 			//niet met csv functies omdat dat misging met OS-X regeleinden...
 			$aRegels = preg_split("/[\s]+/", file_get_contents($_FILES['CSVSaldi']['tmp_name']));
-
 			$row = 0;
 			foreach ($aRegels as $regel) {
 				$regel = str_replace(array('"', ' ', "\n", "\r"), '', $regel);
@@ -218,16 +215,12 @@ class Saldi {
 					$row++;
 				}
 			}
-
 			if ($bCorrect === true) {
-				$sStatus = 'Er zijn ' . $row . ' regels ingevoerd. Als dit er minder zijn dan u verwacht zitten er ongeldige regels in uw bestand.';
-				$lvl = 0;
+				SimpleHTML::setMelding('Er zijn ' . $row . ' regels ingevoerd. Als dit er minder zijn dan u verwacht zitten er ongeldige regels in uw bestand.', 0);
 			} else {
-				$sStatus = 'Helaas, er ging iets mis. Controleer uw bestand! mysql gaf terug <' . $db->error() . '>';
-				$lvl = -1;
+				SimpleHTML::setMelding('Helaas, er ging iets mis. Controleer uw bestand! mysql gaf terug <' . $db->error() . '>', -1);
 			}
 		}
-		return array($sStatus, $lvl);
 	}
 
 	public static function getSaldi($uid, $alleenRood = false) {

@@ -76,7 +76,7 @@ class AgendaController extends AclController {
 		if ($this->view->validate()) {
 			$item->item_id = (int) $this->model->create($item);
 			if ($datum === 'doorgaan') {
-				setMelding('Toegevoegd: ' . $item->titel . ' (' . $item->begin_moment . ')', 1);
+				SimpleHTML::setMelding('Toegevoegd: ' . $item->titel . ' (' . $item->begin_moment . ')', 1);
 				$item->item_id = null;
 				$_POST = array(); // clear post values of previous input
 				$item->begin_moment = getDateTime($item->getEindMoment() + 60); // spring naar volgende dag bij 23:59
@@ -93,9 +93,9 @@ class AgendaController extends AclController {
 		if ($this->view->validate()) {
 			$rowcount = $this->model->update($item);
 			if ($rowcount > 0) {
-				//setMelding('Bijgewerkt', 1);
+				//SimpleHTML::setMelding('Bijgewerkt', 1);
 			} else {
-				//setMelding('Geen wijzigingen', 0);
+				//SimpleHTML::setMelding('Geen wijzigingen', 0);
 			}
 			$this->view = new AgendaItemMaandView($item);
 		}
@@ -103,7 +103,7 @@ class AgendaController extends AclController {
 
 	public function verwijderen($aid) {
 		$this->model->removeAgendaItem($aid);
-		//setMelding('Verwijderd', 1);
+		//SimpleHTML::setMelding('Verwijderd', 1);
 		$this->view = new AgendaItemDeleteView($aid);
 	}
 

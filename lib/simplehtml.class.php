@@ -10,12 +10,9 @@
  */
 abstract class SimpleHTML implements View {
 
-	public function setMelding($sMelding, $level = -1) {
-		setMelding($sMelding, $level);
-	}
-
 	/**
-	 * Geeft berichten weer die opgeslagen zijn in de sessie met met setMelding($message, $lvl = -1)
+	 * Stores a message.
+	 *
 	 * Levels can be:
 	 *
 	 * -1 error
@@ -23,6 +20,30 @@ abstract class SimpleHTML implements View {
 	 *  1 success
 	 *  2 notify
 	 *
+	 * @see    SimpleHTML::getMelding()
+	 * gebaseerd op DokuWiki code
+	 */
+	public static function setMelding($message, $lvl) {
+		$errors[-1] = 'error';
+		$errors[0] = 'info';
+		$errors[1] = 'success';
+		$errors[2] = 'notify';
+		$message = trim($message);
+		if (!empty($message) AND ( $lvl === -1 OR $lvl === 0 OR $lvl === 1 OR $lvl === 2 )) {
+			if (!isset($_SESSION['melding'])) {
+				$_SESSION['melding'] = array();
+			}
+			// gooit verouderde gegevens weg
+			if (is_string($_SESSION['melding'])) {
+				$_SESSION['melding'] = array();
+			}
+			$_SESSION['melding'][] = array('lvl' => $errors[$lvl], 'msg' => $message);
+		}
+	}
+
+	/**
+	 * Geeft berichten weer die opgeslagen zijn in de sessie met met SimpleHTML::setMelding($message, $lvl)
+	 * 
 	 * @return string html van melding(en) of lege string
 	 */
 	public static function getMelding() {
@@ -31,14 +52,15 @@ abstract class SimpleHTML implements View {
 			$shown = array();
 			foreach ($_SESSION['melding'] as $msg) {
 				$hash = md5($msg['msg']);
-				//if(isset($shown[$hash])) continue; // skip double messages
+				//if (isset($shown[$hash]))
+				//	continue; // skip double messages
 				$sMelding .= '<div class="msg' . $msg['lvl'] . '">';
-				$sMelding.=$msg['msg'];
+				$sMelding .= $msg['msg'];
 				$sMelding .= '</div>';
 				$shown[$hash] = 1;
 			}
 			$sMelding .= '</div>';
-			//maar één keer tonen, de melding.
+			// maar één keer tonen, de melding.
 			unset($_SESSION['melding']);
 			return $sMelding;
 		} else {

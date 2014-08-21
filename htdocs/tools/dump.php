@@ -3,7 +3,7 @@
 require_once 'configuratie.include.php';
 
 if (!LoginModel::mag('P_ADMIN')) {
-	invokeRefresh(CSR_ROOT);
+	redirect(CSR_ROOT);
 }
 
 require_once 'MVC/model/DatabaseAdmin.singleton.php';

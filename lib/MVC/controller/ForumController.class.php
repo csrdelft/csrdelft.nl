@@ -30,7 +30,7 @@ class ForumController extends Controller {
 		try {
 			parent::performAction($this->getParams(3));
 		} catch (Exception $e) {
-			setMelding($e->getMessage(), -1);
+			SimpleHTML::setMelding($e->getMessage(), -1);
 			$this->action = 'forum';
 			parent::performAction(array());
 		}
@@ -234,7 +234,7 @@ class ForumController extends Controller {
 	public function reactie($post_id) {
 		$post = ForumPostsModel::instance()->getForumPost((int) $post_id);
 		if ($post->verwijderd) {
-			setMelding('Deze reactie is verwijderd', 0);
+			SimpleHTML::setMelding('Deze reactie is verwijderd', 0);
 		}
 		$this->onderwerp($post->draad_id, ForumPostsModel::instance()->getPaginaVoorPost($post));
 	}
@@ -272,10 +272,10 @@ class ForumController extends Controller {
 	public function opheffen($forum_id) {
 		$deel = ForumDelenModel::instance()->getForumDeel((int) $forum_id);
 		if (ForumDradenModel::instance()->exist('forum_id = ?', array($deel->forum_id))) {
-			setMelding('Verwijder eerst alle draadjes van dit deelforum uit de database!', -1);
+			SimpleHTML::setMelding('Verwijder eerst alle draadjes van dit deelforum uit de database!', -1);
 		} else {
 			ForumDelenModel::instance()->verwijderForumDeel($deel->forum_id);
-			setMelding('Deelforum verwijderd', 1);
+			SimpleHTML::setMelding('Deelforum verwijderd', 1);
 		}
 		// ReloadPage
 	}
@@ -329,7 +329,7 @@ class ForumController extends Controller {
 	public function toonalles() {
 		$aantal = ForumDradenVerbergenModel::instance()->getAantalVerborgenVoorLid();
 		ForumDradenVerbergenModel::instance()->toonAllesVoorLid(LoginModel::getUid());
-		setMelding($aantal . ' onderwerp' . ($aantal === 1 ? ' wordt' : 'en worden') . ' weer getoond in de zijbalk', 1);
+		SimpleHTML::setMelding($aantal . ' onderwerp' . ($aantal === 1 ? ' wordt' : 'en worden') . ' weer getoond in de zijbalk', 1);
 		// ReloadPage
 	}
 
@@ -370,7 +370,7 @@ class ForumController extends Controller {
 	public function volgniets() {
 		$aantal = ForumDradenVolgenModel::instance()->getAantalVolgenVoorLid();
 		ForumDradenVolgenModel::instance()->volgNietsVoorLid(LoginModel::getUid());
-		setMelding($aantal . ' onderwerp' . ($aantal === 1 ? ' wordt' : 'en worden') . ' niet meer gevolgd', 1);
+		SimpleHTML::setMelding($aantal . ' onderwerp' . ($aantal === 1 ? ' wordt' : 'en worden') . ' niet meer gevolgd', 1);
 		// ReloadPage
 	}
 
@@ -421,7 +421,7 @@ class ForumController extends Controller {
 		} else {
 			$wijziging = $property . ' = ' . $value;
 		}
-		setMelding('Wijziging geslaagd: ' . $wijziging, 1);
+		SimpleHTML::setMelding('Wijziging geslaagd: ' . $wijziging, 1);
 		// ReloadPage
 	}
 
@@ -437,20 +437,23 @@ class ForumController extends Controller {
 			$this->geentoegang();
 		}
 		$spamtrap = filter_input(INPUT_POST, 'firstname', FILTER_UNSAFE_RAW);
-		if (!empty($spamtrap)) {
-			invokeRefresh(CSR_ROOT . '/forum/deel/' . $deel->forum_id, 'SPAM', -1); //TODO: logging
+		if (!empty($spamtrap)) { //TODO: logging
+			SimpleHTML::setMelding('SPAM', -1);
+			redirect(CSR_ROOT . '/forum/deel/' . $deel->forum_id);
 		}
 		$tekst = trim(filter_input(INPUT_POST, 'forumBericht', FILTER_UNSAFE_RAW));
 		$_SESSION['forum_concept'] = $tekst;
 		require_once 'simplespamfilter.class.php';
 		$filter = new SimpleSpamfilter();
-		if ($filter->isSpam($tekst)) {
-			invokeRefresh(CSR_ROOT . '/forum/deel/' . $deel->forum_id, 'SPAM', -1); //TODO: logging
+		if ($filter->isSpam($tekst)) { //TODO: logging
+			SimpleHTML::setMelding('SPAM', -1);
+			redirect(CSR_ROOT . '/forum/deel/' . $deel->forum_id);
 		}
 		// voorkomen dubbelposts
 		if (isset($_SESSION['forum_laatste_post_tekst']) AND $_SESSION['forum_laatste_post_tekst'] === $tekst) {
 			$_SESSION['forum_concept'] = '';
-			invokeRefresh(CSR_ROOT . '/forum/deel/' . $deel->forum_id, 'Uw reactie is al geplaatst', 0);
+			SimpleHTML::setMelding('Uw reactie is al geplaatst', 0);
+			redirect(CSR_ROOT . '/forum/deel/' . $deel->forum_id);
 		}
 		$mailadres = null;
 		$wacht_goedkeuring = false;
@@ -458,11 +461,13 @@ class ForumController extends Controller {
 			$wacht_goedkeuring = true;
 			$mailadres = filter_input(INPUT_POST, 'email', FILTER_SANITIZE_EMAIL);
 			if (!email_like($mailadres)) {
+				SimpleHTML::setMelding('U moet een geldig email-adres opgeven!', -1);
 				$url = CSR_ROOT . ($draad_id === null ? '/forum/deel/' . $deel->forum_id : '/forum/onderwerp/' . $draad_id);
-				invokeRefresh($url, 'U moet een geldig email-adres opgeven!', -1);
+				redirect($url);
 			}
-			if ($filter->isSpam($mailadres)) {
-				invokeRefresh(CSR_ROOT . '/forum/deel/' . $deel->forum_id, 'SPAM', -1); //TODO: logging
+			if ($filter->isSpam($mailadres)) { //TODO: logging
+				SimpleHTML::setMelding('SPAM', -1);
+				redirect(CSR_ROOT . '/forum/deel/' . $deel->forum_id);
 			}
 		}
 		if ($draad_id !== null) { // post in bestaand draadje
@@ -473,7 +478,8 @@ class ForumController extends Controller {
 		} else { // post in nieuw draadje
 			$titel = trim(filter_input(INPUT_POST, 'titel', FILTER_SANITIZE_STRING));
 			if (empty($titel)) {
-				invokeRefresh(CSR_ROOT . '/forum/deel/' . $deel->forum_id, 'U moet een titel opgeven!', -1);
+				SimpleHTML::setMelding('U moet een titel opgeven!', -1);
+				redirect(CSR_ROOT . '/forum/deel/' . $deel->forum_id);
 			}
 			$draad = ForumDradenModel::instance()->maakForumDraad($deel->forum_id, $titel, $wacht_goedkeuring);
 		}
@@ -482,10 +488,10 @@ class ForumController extends Controller {
 		$_SESSION['forum_concept'] = '';
 		ForumDradenGelezenModel::instance()->setWanneerGelezenDoorLid($draad);
 		if ($wacht_goedkeuring) {
-			setMelding('Uw bericht is opgeslagen en zal als het goedgekeurd is geplaatst worden.', 1);
+			SimpleHTML::setMelding('Uw bericht is opgeslagen en zal als het goedgekeurd is geplaatst worden.', 1);
 			//bericht sturen naar pubcie@csrdelft dat er een bericht op goedkeuring wacht
 			mail('pubcie@csrdelft.nl', 'Nieuw bericht wacht op goedkeuring', "http://csrdelft.nl/forum/onderwerp/" . $draad->draad_id . "/wacht#" . $post->post_id . "\r\n" . "\r\nDe inhoud van het bericht is als volgt: \r\n\r\n" . str_replace('\r\n', "\n", $tekst) . "\r\n\r\nEINDE BERICHT", "From: pubcie@csrdelft.nl\nReply-To: " . $mailadres);
-			invokeRefresh(CSR_ROOT . '/forum/deel/' . $deel->forum_id);
+			redirect(CSR_ROOT . '/forum/deel/' . $deel->forum_id);
 		} else {
 			ForumPostsModel::instance()->goedkeurenForumPost($post, $draad, $deel);
 			foreach ($draad->getVolgers() as $uid) {
@@ -495,9 +501,10 @@ class ForumController extends Controller {
 				$mail->setReplyTo('no-reply@csrdelft.nl');
 				$mail->send();
 			}
+			SimpleHTML::setMelding(($draad_id === null ? 'Draad' : 'Post') . ' succesvol toegevoegd', 1);
 		}
 		// redirect naar (altijd) juiste pagina
-		invokeRefresh(CSR_ROOT . '/forum/reactie/' . $post->post_id . '#' . $post->post_id); // , ($draad_id === null ? 'Draad' : 'Post') . ' succesvol toegevoegd', 1
+		redirect(CSR_ROOT . '/forum/reactie/' . $post->post_id . '#' . $post->post_id);
 	}
 
 	public function bewerken($post_id) {

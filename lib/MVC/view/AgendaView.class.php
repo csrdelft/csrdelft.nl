@@ -94,7 +94,7 @@ class AgendaItemForm extends PopupForm {
 			$naam = $tijden[$i * 2 + 1];
 			$standaard_tijd = 'standaard_tijd_' . ($i + 1);
 			if (!Instellingen::has('agenda', $standaard_tijd)) {
-				setMelding($standaard_tijd . ' "' . $naam . '" is niet gedefinieerd', -1);
+				SimpleHTML::setMelding($standaard_tijd . ' "' . $naam . '" is niet gedefinieerd', -1);
 				continue;
 			}
 			$tijd = explode('-', Instellingen::get('agenda', $standaard_tijd));

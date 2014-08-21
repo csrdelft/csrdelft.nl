@@ -75,7 +75,7 @@ switch (constant('MODE')) {
 	case 'WEB':
 		if (defined('DB_MODIFY_ENABLE') OR defined('DB_DROP_ENABLE')) {
 			if (!LoginModel::mag('P_ADMIN')) {
-				invokeRefresh(CSR_ROOT . '/onderhoud.html');
+				redirect(CSR_ROOT . '/onderhoud.html');
 				exit;
 			}
 		}
