@@ -37,8 +37,8 @@ class MaalCieSaldiController extends AclController {
 	public function beheer() {
 		$this->view = new MaalCieSaldiView();
 		$this->view = new CsrLayoutPage($this->getView());
-		$this->view->addStylesheet('taken.css');
-		$this->view->addScript('taken.js');
+		$this->view->addStylesheet('/layout/css/taken.css');
+		$this->view->addScript('/layout/js/taken.js');
 	}
 
 	public function upload() {

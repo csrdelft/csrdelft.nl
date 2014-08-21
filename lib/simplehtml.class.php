@@ -10,10 +10,6 @@
  */
 abstract class SimpleHTML implements View {
 
-	public function getTitel() {
-		return '';
-	}
-
 	/**
 	 * Stores a message in session.
 	 *

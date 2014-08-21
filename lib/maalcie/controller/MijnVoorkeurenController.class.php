@@ -43,8 +43,8 @@ class MijnVoorkeurenController extends AclController {
 		$voorkeuren = CorveeVoorkeurenModel::getVoorkeurenVoorLid(LoginModel::getUid());
 		$this->view = new MijnVoorkeurenView($voorkeuren);
 		$this->view = new CsrLayoutPage($this->getView());
-		$this->view->addStylesheet('taken.css');
-		$this->view->addScript('taken.js');
+		$this->view->addStylesheet('/layout/css/taken.css');
+		$this->view->addScript('/layout/js/taken.js');
 	}
 
 	public function inschakelen($crid) {

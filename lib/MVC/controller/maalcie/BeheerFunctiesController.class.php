@@ -46,8 +46,8 @@ class BeheerFunctiesController extends AclController {
 		$functies = $this->model->getAlleFuncties(); // grouped by functie_id
 		$this->view = new BeheerFunctiesView($functies);
 		$this->view = new CsrLayoutPage($this->getView(), array(), $popup);
-		$this->view->addStylesheet('taken.css');
-		$this->view->addScript('taken.js');
+		$this->view->addStylesheet('/layout/css/taken.css');
+		$this->view->addScript('/layout/js/taken.js');
 	}
 
 	public function toevoegen() {

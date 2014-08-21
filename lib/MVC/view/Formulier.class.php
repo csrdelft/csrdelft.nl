@@ -43,12 +43,13 @@ class Formulier implements View, Validator {
 	 */
 	private $fields = array();
 	protected $css_classes = array();
-	public $titel = '';
+	public $titel;
 
-	public function __construct($model, $formId, $action) {
+	public function __construct($model, $formId, $action, $titel = '') {
 		$this->model = $model;
 		$this->formId = $formId;
 		$this->action = $action;
+		$this->titel = $titel;
 		$this->css_classes[] = 'Formulier';
 	}
 
@@ -219,7 +220,7 @@ class Formulier implements View, Validator {
 	}
 
 	public function getTitleTag() {
-		if ($this->titel === '') {
+		if ($this->titel == '') {
 			return '';
 		} else {
 			return '<h1 class="formTitle">' . $this->titel . '</h1>';

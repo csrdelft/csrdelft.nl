@@ -40,7 +40,7 @@ class ForumController extends Controller {
 			} else { // uitgelogd heeft nieuwe layout
 				$this->view = new CsrLayout2Page($this->getView());
 			}
-			$this->view->addScript('forum.js');
+			$this->view->addScript('/layout/js/forum.js');
 		}
 	}
 

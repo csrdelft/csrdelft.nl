@@ -58,8 +58,8 @@ class CorveeRepetitiesController extends AclController {
 		}
 		$this->view = new CorveeRepetitiesView($repetities, $maaltijdrepetitie);
 		$this->view = new CsrLayoutPage($this->getView());
-		$this->view->addStylesheet('taken.css');
-		$this->view->addScript('taken.js');
+		$this->view->addStylesheet('/layout/css/taken.css');
+		$this->view->addScript('/layout/js/taken.js');
 		$this->view->popup = $popup;
 	}
 

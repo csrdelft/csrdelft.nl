@@ -56,8 +56,8 @@ if ($view->validate()) {
 
 $pagina = new CsrLayoutPage($view);
 $pagina->zijkolom = false; //geen zijkolom, overzichterlijker debuggen
-//$pagina->addStylesheet('profiel.css');
-//$pagina->addScript('profiel.js');
+//$pagina->addStylesheet('/layout/css/profiel.css');
+//$pagina->addScript('/layout/js/profiel.js');
 $pagina->view();
 
 /* end controller */
