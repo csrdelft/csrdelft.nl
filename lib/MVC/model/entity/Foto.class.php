@@ -62,7 +62,7 @@ class Foto extends Afbeelding {
 		if ($this->bestaatThumb()) {
 			chmod($this->getThumbPad(), 0644);
 		} else {
-			SimpleHTML::setMelding('Thumb maken mislukt voor: ' . $this->getThumbPad(), -1);
+			setMelding('Thumb maken mislukt voor: ' . $this->getThumbPad(), -1);
 		}
 	}
 
@@ -77,7 +77,7 @@ class Foto extends Afbeelding {
 		if ($this->bestaatResized()) {
 			chmod($this->getResizedPad(), 0644);
 		} else {
-			SimpleHTML::setMelding('Resized maken mislukt voor: ' . $this->getResizedPad(), -1);
+			setMelding('Resized maken mislukt voor: ' . $this->getResizedPad(), -1);
 		}
 	}
 

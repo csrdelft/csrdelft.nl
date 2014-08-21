@@ -49,9 +49,9 @@ $model->uidtest = '0436';
 
 $view = new TestFormulier($model); // fetches POST values itself
 if ($view->validate()) {
-	SimpleHTML::setMelding('Save to DB here', 1);
+	setMelding('Save to DB here', 1);
 } else {
-	SimpleHTML::setMelding($view->getError(), -1);
+	setMelding($view->getError(), -1);
 }
 
 $pagina = new CsrLayoutPage($view);

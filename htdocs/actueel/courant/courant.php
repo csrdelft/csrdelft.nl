@@ -15,7 +15,7 @@ $courant = new Courant();
 
 # als er genoeg rechten zijn een preview van de courant laten zien.
 if (!$courant->magToevoegen()) {
-	redirect(CSR_ROOT);
+	invokeRefresh(CSR_ROOT);
 }
 
 //kijken of de huidige getoond moet worden, of een nieuwe

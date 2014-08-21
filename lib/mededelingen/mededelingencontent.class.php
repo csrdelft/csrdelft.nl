@@ -1,6 +1,6 @@
 <?php
 
-class MededelingenContent extends SmartyTemplateView {
+class MededelingenContent extends TemplateView {
 
 	private $geselecteerdeMededeling;
 	private $paginaNummer;
@@ -89,7 +89,7 @@ class MededelingenContent extends SmartyTemplateView {
 
 }
 
-class MededelingenZijbalkContent extends SmartyTemplateView {
+class MededelingenZijbalkContent extends TemplateView {
 
 	public function view() {
 		// De laatste n mededelingen ophalen en meegeven aan $this.

@@ -9,7 +9,7 @@ require_once 'configuratie.include.php';
 # -------------------------------------------------------------------
 
 if (!LoginModel::mag('P_LEDEN_READ')) {
-	redirect(CSR_ROOT);
+	invokeRefresh(CSR_ROOT);
 }
 
 require_once 'streeplijstcontent.class.php';

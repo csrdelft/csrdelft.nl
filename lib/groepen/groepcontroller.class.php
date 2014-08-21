@@ -32,20 +32,17 @@ class Groepcontroller extends Controller {
 			try {
 				$this->groep = new OldGroep($this->getParam(0));
 			} catch (Exception $e) {
-				SimpleHTML::setMelding($e->getMessage(), -1);
-				redirect(CSR_ROOT . '/actueel/groepen/');
+				invokeRefresh(CSR_ROOT . '/actueel/groepen/', $e->getMessage());
 			}
 			if ($this->groep->getId() == 0 AND isset($_GET['gtype'])) {
 				try {
 					$groepen = new Groepen($_GET['gtype']);
 				} catch (Exception $e) {
-					SimpleHTML::setMelding($e->getMessage(), -1);
-					redirect(CSR_ROOT . '/actueel/groepen/');
+					invokeRefresh(CSR_ROOT . '/actueel/groepen/', $e->getMessage());
 				}
 				$this->groep->setGtype($groepen);
 				if (!($this->groep->getType() instanceof Groepen)) {
-					SimpleHTML::setMelding('Groeptype bestaat niet', -1);
-					redirect($this->getUrl());
+					invokeRefresh($this->getUrl(), 'Groeptype bestaat niet;');
 				}
 			}
 		}
@@ -59,8 +56,7 @@ class Groepcontroller extends Controller {
 
 		//controleer dat we geen lege groep weergeven.
 		if ($this->action == 'standaard' AND $this->groep->getId() == 0) {
-			SimpleHTML::setMelding('We geven geen 0-groepen weer! (Groepcontroller::__construct())', -1);
-			redirect(CSR_ROOT . '/actueel/groepen/');
+			invokeRefresh(CSR_ROOT . '/actueel/groepen/', 'We geven geen 0-groepen weer! (Groepcontroller::__construct())');
 		}
 	}
 
@@ -192,8 +188,7 @@ class Groepcontroller extends Controller {
 	 */
 	public function bewerken() {
 		if (!LoginModel::mag('P_LOGGED_IN')) {
-			SimpleHTML::setMelding('Niet voldoende rechten voor deze actie', -1);
-			redirect($this->getUrl('standaard'));
+			invokeRefresh($this->getUrl('standaard'), 'Niet voldoende rechten voor deze actie');
 		}
 		$this->view->setAction('edit');
 
@@ -284,7 +279,7 @@ class Groepcontroller extends Controller {
 				$this->groep->setValue('beschrijving', $_POST['beschrijving']);
 
 				if ($this->groep->save()) {
-					SimpleHTML::setMelding('Opslaan van groep gelukt!', 1);
+					$melding = array('Opslaan van groep gelukt!', 1);
 					if (isset($_SESSION['oudegroep'])) {
 						$_SESSION['oudegroep'] = null;
 					}
@@ -292,12 +287,11 @@ class Groepcontroller extends Controller {
 						$this->groep->save_ldap();
 					} catch (Exception $e) {
 						//todo: loggen dat LDAP niet beschikbaar is in een mooi eventlog wat ook nog gemaakt moet worden...
-						SimpleHTML::setMelding($e->getMessage(), 0);
 					}
 				} else {
-					SimpleHTML::setMelding('Opslaan van groep mislukt. (returned from OldGroep::save() called by Groepcontroller::bewerken())', -1);
+					$melding = 'Opslaan van groep mislukt. (returned from OldGroep::save() called by Groepcontroller::bewerken())';
 				}
-				redirect($this->getUrl('standaard'));
+				invokeRefresh($this->getUrl('standaard'), $melding);
 			} else {
 				//geposte waarden in het object stoppen zodat de template ze zo in het
 				//formulier kan knallen
@@ -314,7 +308,7 @@ class Groepcontroller extends Controller {
 					$this->groep->setFunctiefilter($_POST['functiefilter']);
 				}
 				//de eventuele fouten van de groepValidator aan de melding toevoegen.
-				SimpleHTML::setMelding($this->errors, -1);
+				setMelding($this->errors);
 			}
 		}
 	}
@@ -326,20 +320,19 @@ class Groepcontroller extends Controller {
 		$groeptypenaam = $this->groep->getType()->getNaam();
 		if ($this->groep->isAdmin()) {
 			if ($this->groep->delete()) {
-				SimpleHTML::setMelding('Groep met succes verwijderd.', 1);
+				$melding = array('Groep met succes verwijderd.', 1);
 				try {
 					$this->groep->save_ldap();
 				} catch (Exception $e) {
 					//todo: loggen dat LDAP niet beschikbaar is in een mooi eventlog wat ook nog gemaakt moet worden...
-					SimpleHTML::setMelding($e->getMessage(), 0);
 				}
 			} else {
-				SimpleHTML::setMelding('Groep verwijderen mislukt Groepcontroller::deleteGroep()', -1);
+				$melding = 'Groep verwijderen mislukt Groepcontroller::deleteGroep()';
 			}
 		} else {
-			SimpleHTML::setMelding('Niet voldoende rechten voor deze actie', -1);
+			$melding = 'Niet voldoende rechten voor deze actie';
 		}
-		redirect(CSR_ROOT . '/actueel/groepen/' . $groeptypenaam);
+		invokeRefresh(CSR_ROOT . '/actueel/groepen/' . $groeptypenaam . '/', $melding);
 	}
 
 	/**
@@ -355,24 +348,24 @@ class Groepcontroller extends Controller {
 				}
 			}
 			if ($this->groep->meldAan($functie)) {
+				$melding = '';
 				try {
 					$this->groep->save_ldap();
 				} catch (Exception $e) {
 					//todo: loggen dat LDAP niet beschikbaar is in een mooi eventlog wat ook nog gemaakt moet worden...
-					SimpleHTML::setMelding($e->getMessage(), 0);
 				}
 			} else {
-				SimpleHTML::setMelding('Aanmelden voor groep mislukt.', -1);
+				$melding = 'Aanmelden voor groep mislukt.';
 			}
 		} else {
-			SimpleHTML::setMelding('U kunt zich niet aanmelden voor deze groep, wellicht is hij vol.', 0);
+			$melding = 'U kunt zich niet aanmelden voor deze groep, wellicht is hij vol.';
 		}
 		if ($this->hasParam(2) AND $this->getParam(2) == 'return') {
-			$url = HTTP_REFERER . '#groep' . $this->groep->getId();
+			$url = $_SERVER['HTTP_REFERER'] . '#groep' . $this->groep->getId();
 		} else {
 			$url = $this->getUrl('standaard');
 		}
-		redirect($url);
+		invokeRefresh($url, $melding);
 	}
 
 	/**
@@ -380,8 +373,7 @@ class Groepcontroller extends Controller {
 	 */
 	public function addLid() {
 		if (!$this->groep->magBewerken()) {
-			SimpleHTML::setMelding('Niet voldoende rechten voor deze actie', -1);
-			redirect($this->getUrl('standaard'));
+			invokeRefresh($this->getUrl('standaard'), 'Niet voldoende rechten voor deze actie');
 		}
 		$this->view->setAction('addLid');
 		if (isset($_POST['naam'], $_POST['functie']) AND is_array($_POST['naam']) AND is_array($_POST['functie']) AND count($_POST['naam']) == count($_POST['functie'])) {
@@ -399,17 +391,16 @@ class Groepcontroller extends Controller {
 				}
 			}
 			if ($success === true) {
-				SimpleHTML::setMelding($aantal . ' leden met succes toegevoegd.', 1);
+				$melding = array($aantal . ' leden met succes toegevoegd.', 1);
 			} else {
-				SimpleHTML::setMelding('Niet alle leden met succes toegevoegd. Wellicht waren sommigen al lid van deze groep? (Groepcontroller::addLid())', -1);
+				$melding = 'Niet alle leden met succes toegevoegd. Wellicht waren sommigen al lid van deze groep? (Groepcontroller::addLid())';
 			}
 			try {
 				$this->groep->save_ldap();
 			} catch (Exception $e) {
 				//todo: loggen dat LDAP niet beschikbaar is in een mooi eventlog wat ook nog gemaakt moet worden...
-				SimpleHTML::setMelding($e->getMessage(), 0);
 			}
-			redirect($this->getUrl('standaard') . '#lidlijst');
+			invokeRefresh($this->getUrl('standaard') . '#lidlijst', $melding);
 		}
 	}
 
@@ -419,17 +410,16 @@ class Groepcontroller extends Controller {
 	public function verwijderLid() {
 		if ($this->hasParam(2) AND Lid::isValidUid($this->getParam(2)) AND $this->groep->magBewerken()) {
 			if ($this->groep->verwijderLid($this->getParam(2))) {
-				SimpleHTML::setMelding('Lid is met succes verwijderd uit de groep.', 1);
+				$melding = array('Lid is met succes verwijderd uit de groep.', 1);
 				try {
 					$this->groep->save_ldap();
 				} catch (Exception $e) {
 					//todo: loggen dat LDAP niet beschikbaar is in een mooi eventlog wat ook nog gemaakt moet worden...
-					SimpleHTML::setMelding($e->getMessage(), 0);
 				}
 			} else {
-				SimpleHTML::setMelding('Lid uit groep verwijderen mislukt (GroepController::verwijderLid()).', -1);
+				$melding = 'Lid uit groep verwijderen mislukt (GroepController::verwijderLid()).';
 			}
-			redirect($this->getUrl('standaard') . '#lidlijst');
+			invokeRefresh($this->getUrl('standaard') . '#lidlijst', $melding);
 		}
 	}
 
@@ -452,7 +442,6 @@ class Groepcontroller extends Controller {
 						$this->groep->save_ldap();
 					} catch (Exception $e) {
 						//todo: loggen dat LDAP niet beschikbaar is in een mooi eventlog wat ook nog gemaakt moet worden...
-						SimpleHTML::setMelding($e->getMessage(), 0);
 					}
 					echo $functie;
 				} else {
@@ -471,17 +460,16 @@ class Groepcontroller extends Controller {
 	public function maakLidOt() {
 		if ($this->hasParam(2) AND Lid::isValidUid($this->getParam(2)) AND $this->groep->magBewerken()) {
 			if ($this->groep->maakLidOt($this->getParam(2))) {
-				SimpleHTML::setMelding('Lid naar o.t.-groep verplaatsen gelukt.', 1);
+				$melding = array('Lid naar o.t.-groep verplaatsen gelukt.', 1);
 				try {
 					$this->groep->save_ldap();
 				} catch (Exception $e) {
 					//todo: loggen dat LDAP niet beschikbaar is in een mooi eventlog wat ook nog gemaakt moet worden...
-					SimpleHTML::setMelding($e->getMessage(), 0);
 				}
 			} else {
-				SimpleHTML::setMelding('Lid naar o.t.-groep verplaatsen mislukt. [' . $this->groep->getError() . ']  (GroepController::maakLidOt())', -1);
+				$melding = 'Lid naar o.t.-groep verplaatsen mislukt. [' . $this->groep->getError() . ']  (GroepController::maakLidOt())';
 			}
-			redirect($this->getUrl('standaard') . '#lidlijst');
+			invokeRefresh($this->getUrl('standaard') . '#lidlijst', $melding);
 		}
 	}
 
@@ -492,20 +480,19 @@ class Groepcontroller extends Controller {
 		if ($this->groep->isAdmin() OR $this->groep->isEigenaar()) {
 			if ($this->groep->getStatus() == 'ht') {
 				if ($this->groep->maakOt()) {
-					SimpleHTML::setMelding('Groep o.t. maken gelukt.', 1);
+					$melding = array('Groep o.t. maken gelukt.', 1);
 					try {
 						$this->groep->save_ldap();
 					} catch (Exception $e) {
 						//todo: loggen dat LDAP niet beschikbaar is in een mooi eventlog wat ook nog gemaakt moet worden...
-						SimpleHTML::setMelding($e->getMessage(), 0);
 					}
 				} else {
-					SimpleHTML::setMelding('Groep o.t. maken mislukt [' . $this->groep->getError() . '] (GroepController::maakGroepOt())', -1);
+					$melding = 'Groep o.t. maken mislukt [' . $this->groep->getError() . '] (GroepController::maakGroepOt())';
 				}
 			} else {
-				SimpleHTML::setMelding('Groep kan niet o.t. gemaakt worden omdat groep niet h.t. is.', -1);
+				$melding = 'Groep kan niet o.t. gemaakt worden omdat groep niet h.t. is.';
 			}
-			redirect($this->getUrl('standaard'));
+			invokeRefresh($this->getUrl('standaard'), $melding);
 		}
 	}
 

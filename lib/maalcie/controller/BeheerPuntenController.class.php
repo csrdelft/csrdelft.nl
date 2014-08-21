@@ -77,10 +77,10 @@ class BeheerPuntenController extends AclController {
 		$this->beheer();
 		$aantal = $aantal_taken_errors[0];
 		$taken = $aantal_taken_errors[1];
-		SimpleHTML::setMelding($aantal . ' vrijstelling' . ($aantal !== 1 ? 'en' : '') . ' verwerkt en verwijderd', 1);
-		SimpleHTML::setMelding($taken . ' ta' . ($taken !== 1 ? 'ken' : 'ak') . ' naar de prullenbak verplaatst', 0);
+		setMelding($aantal . ' vrijstelling' . ($aantal !== 1 ? 'en' : '') . ' verwerkt en verwijderd', 1);
+		setMelding($taken . ' ta' . ($taken !== 1 ? 'ken' : 'ak') . ' naar de prullenbak verplaatst', 0);
 		foreach ($aantal_taken_errors[2] as $error) {
-			SimpleHTML::setMelding($error->getMessage(), -1);
+			setMelding($error->getMessage(), -1);
 		}
 	}
 

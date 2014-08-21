@@ -4,7 +4,7 @@ require_once 'MVC/view/View.interface.php';
 require_once 'MVC/view/CsrSmarty.class.php';
 
 /**
- * SmartyTemplateView.abstract.php
+ * TemplateView.abstract.php
  * 
  * @author P.W.G. Brussee <brussee@live.nl>
  * 
@@ -12,7 +12,7 @@ require_once 'MVC/view/CsrSmarty.class.php';
  * display the template.
  * 
  */
-abstract class SmartyTemplateView implements View {
+abstract class TemplateView implements View {
 
 	/**
 	 * Data model

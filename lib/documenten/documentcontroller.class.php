@@ -68,8 +68,7 @@ class DocumentController extends Controller {
 			try {
 				$this->document = new Document($this->getParam(1));
 			} catch (Exception $e) {
-				SimpleHTML::setMelding('Geen geldig id opgegeven of een niet-bestaand document opgevraagd', -1);
-				redirect($this->baseurl);
+				invokeRefresh($this->baseurl, 'Geen geldig id opgegeven of een niet-bestaand document opgevraagd');
 			}
 		}
 	}
@@ -85,26 +84,23 @@ class DocumentController extends Controller {
 		$this->loadDocument();
 		try {
 			if ($this->document->delete()) {
-				SimpleHTML::setMelding('Document is met succes verwijderd.', 1);
-				redirect($this->baseurl);
+				invokeRefresh($this->baseurl, 'Document is met succes verwijderd.', 1);
 			} else {
-				SimpleHTML::setMelding('Document is niet verwijderd. Gaat mis in (Document::delete())', -1);
-				redirect($this->baseurl);
+				invokeRefresh($this->baseurl, 'Document is niet verwijderd. Gaat mis in (Document::delete())');
 			}
 		} catch (Exception $e) {
-			SimpleHTML::setMelding('Document is niet verwijderd: ' . $e->getMessage(), -1);
-			redirect($this->baseurl);
+			invokeRefresh($this->baseurl, 'Document is niet verwijderd: ' . $e->getMessage());
 		}
 	}
 
 	public function download() {
 		$this->loadDocument();
+
 		if ($this->document->hasFile()) {
 			$this->view = new DocumentDownloadContent($this->document);
 			$this->view->view();
 		} else {
-			SimpleHTML::setMelding('Document heeft geen bestand, sorry voor het ongemak.', -1);
-			redirect($this->baseurl);
+			invokeRefresh($this->baseurl, 'Document heeft geen bestand, sorry voor het ongemak.');
 		}
 		exit;
 	}
@@ -114,13 +110,12 @@ class DocumentController extends Controller {
 			try {
 				$categorie = new DocumentenCategorie($this->getParam(1));
 			} catch (Exception $e) {
-				SimpleHTML::setMelding('categorie bestaat niet', -1);
-				redirect(null);
+				invokeRefresh(null, 'categorie bestaat niet');
 			}
 		} else {
-			SimpleHTML::setMelding('categorie bestaat niet', -1);
-			redirect(null);
+			invokeRefresh(null, 'categorie bestaat niet');
 		}
+
 		$this->view = new DocumentCategorieContent($categorie);
 	}
 
@@ -167,8 +162,7 @@ class DocumentController extends Controller {
 					try {
 						$this->document->deleteFile();
 					} catch (Exception $e) {
-						SimpleHTML::setMelding($e->getMessage(), -1);
-						redirect($this->baseurl);
+						invokeRefresh($this->baseurl, $e->getMessage());
 					}
 				}
 				$bestand = $fields['uploader']->getModel();
@@ -179,20 +173,22 @@ class DocumentController extends Controller {
 			if ($this->document->save()) {
 				try {
 					if ($fields['uploader']->opslaan($this->document->getPath(), $this->document->getFullFileName())) {
-						SimpleHTML::setMelding('Document met succes opgeslagen.', 1);
+						$melding = array('Document met succes opgeslagen.', 1);
 					} else {
-						SimpleHTML::setMelding('Fout bij het opslaan van het bestand in het bestandsysteem. Bewerk het document om het bestand alsnog toe te voegen.', -1);
+						$melding = 'Fout bij het opslaan van het bestand in het bestandsysteem. Bewerk het document om het bestand alsnog toe te voegen.';
 					}
 				} catch (Exception $e) {
-					SimpleHTML::setMelding('Bestand van document opslaan mislukt: ' . $e->getMessage(), -1);
+					$melding = 'Bestand van document opslaan mislukt: ' . $e->getMessage();
 				}
 			} else {
-				SimpleHTML::setMelding('Fout bij toevoegen van document Document::save()', -1);
+				$melding = 'Fout bij toevoegen van document Document::save()';
 			}
-			redirect($this->baseurl);
+			invokeRefresh($this->baseurl, $melding);
 		}
-		SimpleHTML::setMelding($this->errors, -1);
+		setMelding($this->errors, -1);
 		$this->view = $formulier;
 	}
 
 }
+
+?>

@@ -8,7 +8,7 @@
  * Tonen van alle corvee-repetities om te beheren.
  * 
  */
-class CorveeRepetitiesView extends SmartyTemplateView {
+class CorveeRepetitiesView extends TemplateView {
 
 	public function __construct($repetities, $maaltijdrepetitie = null) {
 		parent::__construct($repetities);
@@ -30,7 +30,7 @@ class CorveeRepetitiesView extends SmartyTemplateView {
 
 }
 
-class CorveeRepetitieView extends SmartyTemplateView {
+class CorveeRepetitieView extends TemplateView {
 
 	public function __construct(CorveeRepetitie $repetitie) {
 		parent::__construct($repetitie);

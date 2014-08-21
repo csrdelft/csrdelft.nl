@@ -7,7 +7,7 @@ require_once 'peiling.class.php';
  * 
  * Roept template aan.
  */
-class PeilingContent extends SmartyTemplateView {
+class PeilingContent extends TemplateView {
 
 	function PeilingContent(Peiling $peiling) {
 		parent::__construct($peiling);

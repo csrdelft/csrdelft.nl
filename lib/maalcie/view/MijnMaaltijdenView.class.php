@@ -8,7 +8,7 @@
  * Tonen van komende maaltijden en of een lid zich heeft aangemeld.
  * 
  */
-class MijnMaaltijdenView extends SmartyTemplateView {
+class MijnMaaltijdenView extends TemplateView {
 
 	public function __construct(array $maaltijden, array $aanmeldingen = null) {
 		parent::__construct($maaltijden, 'Maaltijdenketzer');
@@ -31,7 +31,7 @@ class MijnMaaltijdenView extends SmartyTemplateView {
 
 }
 
-class MijnMaaltijdView extends SmartyTemplateView {
+class MijnMaaltijdView extends TemplateView {
 
 	public function __construct(Maaltijd $maaltijd, MaaltijdAanmelding $aanmelding = null) {
 		parent::__construct($maaltijd);

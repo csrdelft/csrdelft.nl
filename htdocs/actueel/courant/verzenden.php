@@ -7,12 +7,10 @@ $courant = new Courant();
 
 //niet verzenden bij geen rechten, en niet bij een lege courant.
 if (!$courant->magVerzenden()) {
-	SimpleHTML::setMelding('U heeft geen rechten om de courant te verzenden.', -1);
-	redirect(CSR_ROOT . '/actueel/courant/');
+	invokeRefresh(CSR_ROOT . '/actueel/courant/', 'U heeft geen rechten om de courant te verzenden.');
 	exit;
 } elseif ($courant->getBerichtenCount() < 1) {
-	SimpleHTML::setMelding('Lege courant kan niet worden verzonden', 2);
-	redirect(CSR_ROOT . '/actueel/courant/');
+	invokeRefresh(CSR_ROOT . '/actueel/courant/', 'Lege courant kan niet worden verzonden');
 	exit;
 }
 

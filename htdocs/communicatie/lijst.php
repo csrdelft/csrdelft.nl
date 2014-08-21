@@ -26,7 +26,7 @@ if (isset($_GET['q'])) {
 		try {
 			$groep = new OldGroep($_GET['q']);
 			if ($groep instanceof OldGroep) {
-				redirect($groep->getUrl());
+				invokeRefresh($groep->getUrl());
 			}
 		} catch (Exception $e) {
 			//bestaat ie niet, dan doen we niets.
@@ -75,13 +75,13 @@ if (isset($_GET['addToGoogle'])) {
 	if ($zoeker->count() == 1) {
 		$leden = $zoeker->getLeden();
 		$lid = $leden[0];
-		redirect(CSR_ROOT . '/communicatie/profiel/' . $lid->getUid());
+		invokeRefresh(CSR_ROOT . '/communicatie/profiel/' . $lid->getUid());
 	}
 
 	$ledenlijstcontent = new LedenlijstContent($zoeker);
 
 	if ($message != '') {
-		SimpleHTML::setMelding($message, 0);
+		setMelding($message, 0);
 	}
 }
 $pagina = new CsrLayoutPage($ledenlijstcontent);

@@ -83,11 +83,11 @@ class CmsPaginaController extends Controller {
 		if ($form->validate()) {
 			$rowcount = $this->model->update($pagina);
 			if ($rowcount > 0) {
-				SimpleHTML::setMelding('Bijgewerkt', 1);
+				setMelding('Bijgewerkt', 1);
 			} else {
-				SimpleHTML::setMelding('Geen wijzigingen', 0);
+				setMelding('Geen wijzigingen', 0);
 			}
-			redirect(CSR_ROOT . '/' . $pagina->naam);
+			invokeRefresh(CSR_ROOT . '/' . $pagina->naam);
 		} else {
 			$this->view = new CsrLayoutPage($form, $this->zijkolom);
 		}
@@ -99,11 +99,9 @@ class CmsPaginaController extends Controller {
 			$this->geentoegang();
 		}
 		if ($this->model->delete($pagina)) {
-			SimpleHTML::setMelding('Pagina succesvol verwijderd', 1);
-			redirect(CSR_ROOT);
+			invokeRefresh(CSR_ROOT, 'Pagina succesvol verwijderd', 1);
 		} else {
-			SimpleHTML::setMelding('Verwijderen mislukt', -1);
-			redirect(CSR_ROOT);
+			invokeRefresh(CSR_ROOT, 'Verwijderen mislukt', -1);
 		}
 	}
 

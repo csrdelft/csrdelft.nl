@@ -8,7 +8,7 @@
  * 
  * Klasse voor het weergeven begin agenda-gerelateerde dingen.
  */
-class AgendaMaandView extends SmartyTemplateView {
+class AgendaMaandView extends TemplateView {
 
 	private $jaar;
 	private $maand;
@@ -50,7 +50,7 @@ class AgendaMaandView extends SmartyTemplateView {
 
 }
 
-class AgendaItemMaandView extends SmartyTemplateView {
+class AgendaItemMaandView extends TemplateView {
 
 	public function __construct(AgendaItem $item) {
 		parent::__construct($item);
@@ -66,7 +66,7 @@ class AgendaItemMaandView extends SmartyTemplateView {
 /**
  * Requires id of deleted agenda item.
  */
-class AgendaItemDeleteView extends SmartyTemplateView {
+class AgendaItemDeleteView extends TemplateView {
 
 	public function view() {
 		echo '<div id="item-' . $this->model . '" class="remove"></div>';
@@ -94,7 +94,7 @@ class AgendaItemForm extends PopupForm {
 			$naam = $tijden[$i * 2 + 1];
 			$standaard_tijd = 'standaard_tijd_' . ($i + 1);
 			if (!Instellingen::has('agenda', $standaard_tijd)) {
-				SimpleHTML::setMelding($standaard_tijd . ' "' . $naam . '" is niet gedefinieerd', -1);
+				setMelding($standaard_tijd . ' "' . $naam . '" is niet gedefinieerd', -1);
 				continue;
 			}
 			$tijd = explode('-', Instellingen::get('agenda', $standaard_tijd));
@@ -155,7 +155,7 @@ function setTijd(a, b, c, d) {
 
 }
 
-abstract class AgendaItemsView extends SmartyTemplateView {
+abstract class AgendaItemsView extends TemplateView {
 
 	protected $items;
 
@@ -190,7 +190,7 @@ class AgendaCourantView extends AgendaItemsView {
 
 }
 
-class AgendaICalendarView extends SmartyTemplateView {
+class AgendaICalendarView extends TemplateView {
 
 	public function __construct(AgendaModel $agenda) {
 		parent::__construct($agenda);

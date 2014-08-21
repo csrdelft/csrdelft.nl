@@ -5,7 +5,7 @@
 # courant/class.courantbeheer.php
 # -------------------------------------------------------------------
 
-class CourantBeheercontent extends SmartyTemplateView {
+class CourantBeheercontent extends TemplateView {
 
 	private $_edit = 0; //bericht wat bewerkt moet worden.
 

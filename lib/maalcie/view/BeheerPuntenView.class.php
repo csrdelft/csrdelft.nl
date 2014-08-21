@@ -8,7 +8,7 @@
  * Tonen van alle corveepunten van alle leden.
  * 
  */
-class BeheerPuntenView extends SmartyTemplateView {
+class BeheerPuntenView extends TemplateView {
 
 	public function __construct(array $matrix, array $functies) {
 		parent::__construct($matrix, 'Beheer corveepunten');
@@ -23,7 +23,7 @@ class BeheerPuntenView extends SmartyTemplateView {
 
 }
 
-class BeheerPuntenLidView extends SmartyTemplateView {
+class BeheerPuntenLidView extends TemplateView {
 
 	public function __construct(array $puntenlijst) {
 		parent::__construct($puntenlijst);

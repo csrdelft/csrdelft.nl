@@ -8,7 +8,7 @@
  * Tonen van alle taken om te beheren.
  * 
  */
-class BeheerTakenView extends SmartyTemplateView {
+class BeheerTakenView extends TemplateView {
 
 	public function __construct(array $taken, $maaltijd = null, $prullenbak = false, $repetities = null) {
 		parent::__construct(array());
@@ -43,7 +43,7 @@ class BeheerTakenView extends SmartyTemplateView {
 
 }
 
-class BeheerTakenLijstView extends SmartyTemplateView {
+class BeheerTakenLijstView extends TemplateView {
 
 	public function __construct(array $taken) {
 		parent::__construct($taken);
@@ -61,7 +61,7 @@ class BeheerTakenLijstView extends SmartyTemplateView {
 
 }
 
-class BeheerTaakView extends SmartyTemplateView {
+class BeheerTaakView extends TemplateView {
 
 	public function __construct(CorveeTaak $taak, Maaltijd $maaltijd = null) {
 		parent::__construct($taak);

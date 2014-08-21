@@ -1,6 +1,6 @@
 <?php
 
-class MededelingContent extends SmartyTemplateView {
+class MededelingContent extends TemplateView {
 
 	public function __construct(Mededeling $mededeling, $prullenbak = false) {
 		parent::__construct($mededeling, 'Mededelingen');

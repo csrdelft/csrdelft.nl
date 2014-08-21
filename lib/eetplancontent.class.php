@@ -7,7 +7,7 @@ require_once 'groepen/groep.class.php';
 # class.ledenlijstcontent.php
 # -------------------------------------------------------------------
 
-class EetplanContent extends SmartyTemplateView {
+class EetplanContent extends TemplateView {
 
 	public function __construct(&$eetplan) {
 		parent::__construct($eetplan, 'Eetplan');

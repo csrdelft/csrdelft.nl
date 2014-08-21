@@ -6,7 +6,7 @@
  * @author P.W.G. Brussee <brussee@live.nl>
  * 
  */
-class GroepCategorienView extends SmartyTemplateView {
+class GroepCategorienView extends TemplateView {
 
 	public function __construct($categorien) {
 		parent::__construct(array(), 'Groep-categorien');
@@ -24,7 +24,7 @@ class GroepCategorienView extends SmartyTemplateView {
 
 }
 
-class GroepCategorieView extends SmartyTemplateView {
+class GroepCategorieView extends TemplateView {
 
 	public function __construct(GroepCategorie $categorie) {
 		parent::__construct($categorie);
