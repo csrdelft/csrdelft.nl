@@ -781,12 +781,9 @@ HTML;
 	}
 
 	function ubb_clear($arguments = array()) {
-		switch (@$arguments['clear']) {
-			case 'left': $sClear = 'left';
-				break;
-			case 'right': $sClear = 'right';
-				break;
-			default: $sClear = 'both';
+		$sClear = 'both';
+		if (isset($arguments['clear']) AND ( $arguments['clear'] === 'left' OR $arguments['clear'] === 'right' )) {
+			$sClear = $arguments['clear'];
 		}
 		return '<br style="height: 0; clear: ' . $sClear . ';" />';
 	}

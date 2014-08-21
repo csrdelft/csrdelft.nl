@@ -14,14 +14,21 @@ register_shutdown_function('fatal_handler');
 
 function fatal_handler() {
 	$error = error_get_last();
+	var_dump($error);
 	if ($error !== null) {
-		$mail['error'] = $error;
-		$mail['trace'] = debug_backtrace(false);
-		$mail['POST'] = $_POST;
-		$mail['GET'] = $_GET;
-		$mail['SERVER'] = $_SERVER;
-		$header = 'From: pubcie@csrdelft.nl' . "\r\n" . 'Content-Type: text/plain; charset=UTF-8' . "\r\n";
-		mail('pubcie@csrdelft.nl', 'Fatal error failsafe', print_r($mail, true), $header);
+		$debug['error'] = $error;
+		$debug['trace'] = debug_backtrace(false);
+		$debug['POST'] = $_POST;
+		$debug['GET'] = $_GET;
+		$debug['SERVER'] = $_SERVER;
+		if ($error['type'] === E_CORE_ERROR OR $error['type'] === E_ERROR) {
+			$headers[] = 'From: pubcie@csrdelft.nl';
+			$headers[] = 'Content-Type: text/plain; charset=UTF-8';
+			$headers[] = 'X-Mailer: nl.csrdelft.lib.Mail';
+			mail('pubcie@csrdelft.nl', 'Fatal error failsafe', print_r($debug, true), implode("\r\n", $headers));
+		} else {
+			DebugLogModel::instance()->log(__FILE__, 'fatal_handler', func_get_args(), print_r($debug, true));
+		}
 	}
 }
 

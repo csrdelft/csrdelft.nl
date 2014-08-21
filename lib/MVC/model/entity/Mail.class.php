@@ -143,24 +143,16 @@ class Mail {
 	}
 
 	public function getHeaders() {
-		$headers = 'From: ' . $this->getFrom();
-		$headers .= "\r\n";
-
-		$headers = 'Reply-To: ' . $this->getReplyTo();
-		$headers .= "\r\n";
-
-		if (!empty($this->bcc)) {
-			$headers .= 'BCC: ' . $this->getBcc();
-			$headers .= "\r\n";
+		$headers[] = 'From: ' . $this->getFrom();
+		if (!empty($this->replyTo)) {
+			$headers[] = 'Reply-To: ' . $this->getReplyTo();
 		}
-
-		$headers .= 'Content-Type: text/' . $this->type . '; charset=UTF-8';
-		$headers .= "\r\n";
-
-		$headers .= 'X-Mailer: nl.csrdelft.lib.Mail';
-		$headers .= "\r\n";
-
-		return $headers;
+		if (!empty($this->bcc)) {
+			$headers[] = 'BCC: ' . $this->getBcc();
+		}
+		$headers[] = 'Content-Type: text/' . $this->type . '; charset=UTF-8';
+		$headers[] = 'X-Mailer: nl.csrdelft.lib.Mail';
+		return implode("\r\n", $headers);
 	}
 
 	public function getExtraparameters() {
