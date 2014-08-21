@@ -8,7 +8,7 @@
  * 
  * Klasse voor het weergeven begin agenda-gerelateerde dingen.
  */
-class AgendaMaandView extends TemplateView {
+class AgendaMaandView extends SmartyTemplateView {
 
 	private $jaar;
 	private $maand;
@@ -50,7 +50,7 @@ class AgendaMaandView extends TemplateView {
 
 }
 
-class AgendaItemMaandView extends TemplateView {
+class AgendaItemMaandView extends SmartyTemplateView {
 
 	public function __construct(AgendaItem $item) {
 		parent::__construct($item);
@@ -66,7 +66,7 @@ class AgendaItemMaandView extends TemplateView {
 /**
  * Requires id of deleted agenda item.
  */
-class AgendaItemDeleteView extends TemplateView {
+class AgendaItemDeleteView extends SmartyTemplateView {
 
 	public function view() {
 		echo '<div id="item-' . $this->model . '" class="remove"></div>';
@@ -155,7 +155,7 @@ function setTijd(a, b, c, d) {
 
 }
 
-abstract class AgendaItemsView extends TemplateView {
+abstract class AgendaItemsView extends SmartyTemplateView {
 
 	protected $items;
 
@@ -190,7 +190,7 @@ class AgendaCourantView extends AgendaItemsView {
 
 }
 
-class AgendaICalendarView extends TemplateView {
+class AgendaICalendarView extends SmartyTemplateView {
 
 	public function __construct(AgendaModel $agenda) {
 		parent::__construct($agenda);

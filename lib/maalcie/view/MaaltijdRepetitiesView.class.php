@@ -8,7 +8,7 @@
  * Tonen van alle maaltijd-repetities om te beheren.
  * 
  */
-class MaaltijdRepetitiesView extends TemplateView {
+class MaaltijdRepetitiesView extends SmartyTemplateView {
 
 	public function __construct(array $repetities) {
 		parent::__construct($repetities, 'Beheer maaltijdrepetities');
@@ -22,7 +22,7 @@ class MaaltijdRepetitiesView extends TemplateView {
 
 }
 
-class MaaltijdRepetitieView extends TemplateView {
+class MaaltijdRepetitieView extends SmartyTemplateView {
 
 	public function __construct(MaltijdRepetitie $repetitie) {
 		parent::__construct($repetitie);

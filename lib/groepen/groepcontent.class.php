@@ -14,7 +14,7 @@ require_once 'groepen/groep.class.php';
  * GroepenProfielConcent		Weergeven van groepenlijstje in profiel
  * GroepUbbContent				Weergeven van enkele zaken van een groep met een ubb-tag
  */
-class Groepcontent extends TemplateView {
+class Groepcontent extends SmartyTemplateView {
 
 	private $action = 'view';
 
@@ -150,7 +150,7 @@ class Groepcontent extends TemplateView {
 
 }
 
-class Groepencontent extends TemplateView {
+class Groepencontent extends SmartyTemplateView {
 
 	private $action = 'view';
 
@@ -172,7 +172,7 @@ class Groepencontent extends TemplateView {
 
 }
 
-class GroepledenContent extends TemplateView {
+class GroepledenContent extends SmartyTemplateView {
 
 	private $actie = 'standaard';
 
@@ -189,7 +189,7 @@ class GroepledenContent extends TemplateView {
 
 }
 
-class Groepgeschiedeniscontent extends TemplateView {
+class Groepgeschiedeniscontent extends SmartyTemplateView {
 
 	public function getTitel() {
 		return 'Groepen - ' . $this->model->getNaam();
@@ -242,7 +242,7 @@ class Groepgeschiedeniscontent extends TemplateView {
  * Weergave van groepen in het profiel.
  */
 
-class GroepenProfielContent extends TemplateView {
+class GroepenProfielContent extends SmartyTemplateView {
 
 	private $display_lower_limit = 8;
 	private $display_upper_limit = 12;
@@ -298,7 +298,7 @@ class GroepenProfielContent extends TemplateView {
  * Contentclasse voor de groep-ubb-tag
  */
 
-class GroepUbbContent extends TemplateView {
+class GroepUbbContent extends SmartyTemplateView {
 
 	public function getHTML() {
 		$this->smarty->assign('groep', $this->model);
@@ -311,7 +311,7 @@ class GroepUbbContent extends TemplateView {
 
 }
 
-class GroepStatsContent extends TemplateView {
+class GroepStatsContent extends SmartyTemplateView {
 
 	public function view() {
 		$stats = $this->model->getStats();
@@ -339,7 +339,7 @@ class GroepStatsContent extends TemplateView {
 
 }
 
-class GroepEmailContent extends TemplateView {
+class GroepEmailContent extends SmartyTemplateView {
 
 	public function view() {
 		$emails = array();

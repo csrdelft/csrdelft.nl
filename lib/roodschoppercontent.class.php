@@ -1,6 +1,6 @@
 <?php
 
-class RoodschopperContent extends TemplateView {
+class RoodschopperContent extends SmartyTemplateView {
 
 	public function __construct(Roodschopper $roodschopper) {
 		parent::__construct($roodschopper, 'Roodschopper');

@@ -10,7 +10,7 @@
 /**
  * Profiel bekijken
  */
-class ProfielContent extends TemplateView {
+class ProfielContent extends SmartyTemplateView {
 
 	function __construct(Lid $lid) {
 		parent::__construct($lid, 'Het profiel van ' . $lid->getNaam());
@@ -82,7 +82,7 @@ class ProfielContent extends TemplateView {
 /**
  * Profiel bewerken formulierpagina
  */
-class ProfielEditContent extends TemplateView {
+class ProfielEditContent extends SmartyTemplateView {
 
 	public function __construct($profiel, $actie) {
 		parent::__construct($profiel, 'profiel van ' . $profiel->getLid()->getNaam() . ' bewerken.');
@@ -99,7 +99,7 @@ class ProfielEditContent extends TemplateView {
 /**
  * Lidstatus-wijzigingsformulierpagina
  */
-class ProfielStatusContent extends TemplateView {
+class ProfielStatusContent extends SmartyTemplateView {
 
 	public function __construct($profiel, $actie) {
 		parent::__construct($profiel, 'lidstatus van ' . $profiel->getLid()->getNaam() . ' aanpassen.');
@@ -120,7 +120,7 @@ class ProfielStatusContent extends TemplateView {
 /**
  * Commissievoorkeuren formulierpagina
  */
-class ProfielVoorkeurContent extends TemplateView {
+class ProfielVoorkeurContent extends SmartyTemplateView {
 
 	public function __construct($profiel, $actie) {
 		parent::__construct($profiel, 'voorkeur van ' . $profiel->getLid()->getNaam() . ' aanpassen.');

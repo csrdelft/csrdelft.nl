@@ -1,6 +1,6 @@
 <?php
 
-class CommissieOverzicht extends TemplateView {
+class CommissieOverzicht extends SmartyTemplateView {
 
 	public function __construct($id = -1) {
 		parent::__construct($id);
@@ -47,7 +47,7 @@ function voorkeur($voorkeur) {
 	return $arr[$voorkeur];
 }
 
-class LidOverzicht extends TemplateView {
+class LidOverzicht extends SmartyTemplateView {
 
 	public function __construct($id = -1) {
 		parent::__construct($id);

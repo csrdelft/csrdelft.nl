@@ -7,7 +7,7 @@
 # Verzorgt het in elkaar zetten van de c.s.r.-courant
 # -------------------------------------------------------------------
 
-class CourantContent extends TemplateView {
+class CourantContent extends SmartyTemplateView {
 
 	private $instellingen;
 

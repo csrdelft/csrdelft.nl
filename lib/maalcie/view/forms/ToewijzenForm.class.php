@@ -28,7 +28,7 @@ class ToewijzenForm extends PopupForm {
 
 }
 
-class SuggestieLijst extends TemplateView implements FormElement {
+class SuggestieLijst extends SmartyTemplateView implements FormElement {
 
 	private $jongste_lichting;
 	private $voorkeurbaar;

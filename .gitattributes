@@ -3082,7 +3082,7 @@ lib/MVC/view/LoginView.class.php -text
 lib/MVC/view/MailTemplateView.class.php -text
 lib/MVC/view/MenuBeheerView.class.php -text
 lib/MVC/view/MenuView.class.php -text
-lib/MVC/view/TemplateView.abstract.php -text
+lib/MVC/view/SmartyTemplateView.abstract.php -text
 lib/MVC/view/Validator.interface.php -text
 lib/MVC/view/View.interface.php -text
 lib/MVC/view/groepen/ActiviteitenView.class.php -text

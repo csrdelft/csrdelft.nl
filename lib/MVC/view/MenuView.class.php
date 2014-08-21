@@ -9,7 +9,7 @@
  * de rechten van de gebruiker menu items wel
  * of niet worden getoond.
  */
-abstract class MenuView extends TemplateView {
+abstract class MenuView extends SmartyTemplateView {
 
 	public function __construct(MenuItem $tree_root) {
 		parent::__construct($tree_root);

@@ -9,7 +9,7 @@
 
 require_once 'lid/verjaardag.class.php';
 
-class VerjaardagContent extends TemplateView {
+class VerjaardagContent extends SmartyTemplateView {
 
 	function getTitel() {
 		return 'Verjaardagen';
