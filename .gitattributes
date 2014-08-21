@@ -2996,7 +2996,6 @@ lib/MVC/controller/groepen/WoonoordenController.class.php -text
 lib/MVC/controller/maalcie/BeheerFunctiesController.class.php -text
 lib/MVC/model/AgendaModel.class.php -text
 lib/MVC/model/Agendeerbaar.interface.php -text
-lib/MVC/model/CachedPersistenceModel.abstract.php -text
 lib/MVC/model/CmsPaginaModel.class.php -text
 lib/MVC/model/CsrMemcache.singleton.php -text
 lib/MVC/model/Database.singleton.php -text
