@@ -58,8 +58,8 @@ Met vriendelijke groet,
 René Vennik
 h.t. PubCie-Praeses der Civitas Studiosorum Reformatorum
 EOD;
-			$mail = new Mail($sjaars['email'], 'Inloggegevens C.S.R.-webstek', $tekst);
-			$mail->addBcc('pubcie@csrdelft.nl');
+			$mail = new Mail(array($sjaars['email'] => $sjaars['voornaam']), 'Inloggegevens C.S.R.-webstek', $tekst);
+			$mail->addBcc(array('pubcie@csrdelft.nl' => 'PubCie C.S.R.'));
 			$mail->send();
 			echo $sjaars['email'] . "\n";
 		}

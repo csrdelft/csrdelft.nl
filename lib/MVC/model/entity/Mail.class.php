@@ -21,7 +21,7 @@ class Mail {
 	private $layout = 'letter';
 	private $placeholders = array();
 
-	public function __construct($to, $onderwerp, $bericht) {
+	public function __construct(array $to, $onderwerp, $bericht) {
 		$this->onderwerp = $onderwerp;
 		$this->bericht = $bericht;
 		$this->addTo($to);

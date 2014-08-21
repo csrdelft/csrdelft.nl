@@ -200,8 +200,8 @@ class Profiel {
 			'PW'	 => $password,
 			'ADMIN'	 => LoginModel::instance()->getLid()->getNaam()
 		);
-		$mail = new Mail($lid->getEmail(), 'Nieuw wachtwoord voor de C.S.R.-stek', $bericht);
-		$mail->addBcc("pubcie@csrdelft.nl");
+		$mail = new Mail(array($lid->getEmail() => $lid->getNaamLink('civitas', 'plain')), 'Nieuw wachtwoord voor de C.S.R.-stek', $bericht);
+		$mail->addBcc(array('pubcie@csrdelft.nl' => 'PubCie C.S.R.'));
 		$mail->setPlaceholders($values);
 		return
 				MijnSqli::instance()->query($sNieuwWachtwoord) AND
@@ -624,8 +624,8 @@ class ProfielStatus extends Profiel {
 				'CHANGE' => str_replace('[br]', "\n", $changelog),
 				'ADMIN'	 => LoginModel::instance()->getLid()->getNaam()
 			);
-			$mail = new Mail('corvee@csrdelft.nl', 'Lid-af: toekomstig corvee verwijderd', $bericht);
-			$mail->addBcc("pubcie@csrdelft.nl");
+			$mail = new Mail(array('corvee@csrdelft.nl' => 'CorveeCaesar'), 'Lid-af: toekomstig corvee verwijderd', $bericht);
+			$mail->addBcc(array('pubcie@csrdelft.nl' => 'PubCie C.S.R.'));
 			$mail->setPlaceholders($values);
 			$mail->send();
 		}
@@ -656,10 +656,14 @@ class ProfielStatus extends Profiel {
 			'SALDI'	 => $saldi,
 			'ADMIN'	 => LoginModel::instance()->getLid()->getNaam()
 		);
-		$to = 'fiscus@csrdelft.nl,maalcie-fiscus@csrdelft.nl,soccie@csrdelft.nl';
+		$to = array(
+			'fiscus@csrdelft.nl'		 => 'Fiscus C.S.R.',
+			'maalcie-fiscus@csrdelft.nl' => 'MaalCie fiscus C.S.R.',
+			'soccie@csrdelft.nl'		 => 'SocCie C.S.R.'
+		);
 
 		$mail = new Mail($to, 'Melding lid-af worden', $bericht);
-		$mail->addBcc("pubcie@csrdelft.nl");
+		$mail->addBcc(array('pubcie@csrdelft.nl' => 'PubCie C.S.R.'));
 		$mail->setPlaceholders($values);
 
 		return $mail->send();
@@ -710,7 +714,10 @@ class ProfielStatus extends Profiel {
 		if ($bkncsr['aantal'] == 0)
 			return false;
 
-		$to = 'bibliothecaris@csrdelft.nl,' . $this->bewerktLid->getEmail();
+		$to = array(
+			'bibliothecaris@csrdelft.nl'	 => 'Bibliothecaris C.S.R.',
+			$this->bewerktLid->getEmail()	 => $this->bewerktLid->getNaamLink('civitas', 'plain')
+		);
 		$bericht = file_get_contents(SMARTY_TEMPLATE_DIR . 'MVC/mail/lidafgeleendebiebboeken.mail');
 		$uid = $this->bewerktLid->getUid();
 		$values = array(

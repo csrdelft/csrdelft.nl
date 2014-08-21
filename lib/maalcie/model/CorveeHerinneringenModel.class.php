@@ -18,7 +18,7 @@ class CorveeHerinneringenModel {
 			throw new Exception($datum . ' ' . $taak->getCorveeFunctie()->naam . ' niet toegewezen!' . (!empty($uid) ? ' ($uid =' . $uid . ')' : ''));
 		}
 		//$to = $lid->getEmail();
-		$to = $uid . '@csrdelft.nl';
+		$to = array($uid . '@csrdelft.nl' => Lid::naamLink($uid, 'civitas', 'plain'));
 		$from = 'corvee@csrdelft.nl';
 		$onderwerp = 'C.S.R. Delft corvee ' . $datum;
 		$bericht = $taak->getCorveeFunctie()->email_bericht;

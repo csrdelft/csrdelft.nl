@@ -497,7 +497,7 @@ class ForumController extends Controller {
 			foreach ($draad->getVolgers() as $uid) {
 				require_once 'MVC/model/entity/Mail.class.php';
 				$bericht = "[url]http://csrdelft.nl/forum/reactie/" . $post->post_id . "#" . $post->post_id . "[/url]\r\n" . "\r\nDe inhoud van het bericht is als volgt: \r\n\r\n" . str_replace('\r\n', "\n", $tekst) . "\r\n\r\nEINDE BERICHT";
-				$mail = new Mail($uid . '@csrdelft.nl', 'C.S.R. Forum: nieuwe reactie op ' . $draad->titel, $bericht);
+				$mail = new Mail(array($uid . '@csrdelft.nl' => Lid::naamLink($uid, 'civitas', 'plain')), 'C.S.R. Forum: nieuwe reactie op ' . $draad->titel, $bericht);
 				$mail->setReplyTo('no-reply@csrdelft.nl');
 				$mail->send();
 			}
