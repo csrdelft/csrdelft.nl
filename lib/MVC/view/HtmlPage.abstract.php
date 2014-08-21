@@ -56,7 +56,7 @@ abstract class HtmlPage extends TemplateView {
 	 * Merk op: local-entry kan ook gebruikt worden om een map buiten /layout/js/ toe te voegen.
 	 */
 	public function addScript($script, $path = '/layout/js/') {
-		if (!$this->hasStylesheet($script)) {
+		if (!$this->hasScript($script)) {
 			if (!startsWith($script, 'http') AND strpos($script, '?') === false) {
 				$script .= '?' . filemtime(HTDOCS_PATH . $path . $script);
 			}

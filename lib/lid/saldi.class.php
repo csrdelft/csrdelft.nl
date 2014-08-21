@@ -87,8 +87,10 @@ class Saldi {
 		try {
 			$s['maalcie'] = new Saldi($uid, 'maalcie', $timespan);
 			$s['soccie'] = new Saldi($uid, 'soccie', $timespan);
-		} catch (Exception $d) {
-			setMelding('saldi grafiek error', -1);
+		} catch (Exception $e) {
+			if (!startsWith($e->getMessage(), 'Saldi::load() gefaald.')) {
+				setMelding($e->getMessage(), -1);
+			}
 		}
 		$series = array();
 		foreach ($s as $cie) {
