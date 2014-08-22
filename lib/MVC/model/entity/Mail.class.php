@@ -187,7 +187,7 @@ class Mail {
 			case 'html':
 				require_once 'MVC/view/MailTemplateView.class.php';
 				$view = new MailTemplateView($this);
-				$body = $view->getBody();
+				$body = $view->getHtml();
 				break;
 
 			case 'plain':
