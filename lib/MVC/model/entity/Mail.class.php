@@ -18,6 +18,7 @@ class Mail {
 	private $to = array();
 	private $bcc = array();
 	private $type = 'html'; // plain or html
+	private $charset = 'UTF-8';
 	private $layout = 'letter';
 	private $placeholders = array();
 
@@ -114,7 +115,7 @@ class Mail {
 		if ($this->inDebugMode()) {
 			$onderwerp .= ' [Mail: Debug-modus actief]';
 		}
-		if ($this->charset === 'utf8') {
+		if ($this->charset === 'UTF-8') {
 			//zorg dat het onderwerp netjes utf8 in base64 is. Als je dit niet doet krijgt het
 			//spampunten van spamassasin (SUBJECT_NEEDS_ENCODING,SUBJ_ILLEGAL_CHARS)
 			$onderwerp = ' =?UTF-8?B?' . base64_encode($onderwerp) . "?=\n";
@@ -150,7 +151,7 @@ class Mail {
 		if (!empty($this->bcc)) {
 			$headers[] = 'BCC: ' . $this->getBcc();
 		}
-		$headers[] = 'Content-Type: text/' . $this->type . '; charset=UTF-8';
+		$headers[] = 'Content-Type: text/' . $this->type . '; charset=' . $this->charset;
 		$headers[] = 'X-Mailer: nl.csrdelft.lib.Mail';
 		return implode("\r\n", $headers);
 	}
