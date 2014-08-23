@@ -25,7 +25,7 @@ function fatal_handler() {
 			$headers[] = 'Content-Type: text/plain; charset=UTF-8';
 			$headers[] = 'X-Mailer: nl.csrdelft.lib.Mail';
 			mail('pubcie@csrdelft.nl', 'Fatal error failsafe', print_r($debug, true), implode("\r\n", $headers));
-		} else {
+		} elseif (DEBUG) {
 			DebugLogModel::instance()->log(__FILE__, 'fatal_handler', func_get_args(), print_r($debug, true));
 		}
 	}
