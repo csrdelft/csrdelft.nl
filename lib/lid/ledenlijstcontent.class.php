@@ -13,17 +13,31 @@
  */
 require_once 'lid/lidzoeker.class.php';
 
-class LedenlijstContent extends SmartyTemplateView {
+class LedenlijstContent implements View {
+
+	/**
+	 * Lid-zoeker
+	 * @var LidZoeker
+	 */
+	private $lidzoeker;
 
 	public function __construct(LidZoeker $zoeker) {
-		parent::__construct($zoeker, 'Ledenlijst der Civitas');
+		$this->lidzoeker = $zoeker;
+	}
+
+	public function getModel() {
+		return $this->lidzoeker;
+	}
+
+	public function getTitel() {
+		return 'Ledenlijst der Civitas';
 	}
 
 	public function viewSelect($name, $options) {
 		echo '<select name="' . $name . '" id="f' . $name . '">';
 		foreach ($options as $key => $value) {
 			echo '<option value="' . htmlspecialchars($key) . '"';
-			if ($key == $this->model->getRawQuery($name)) {
+			if ($key == $this->lidzoeker->getRawQuery($name)) {
 				echo ' selected="selected"';
 			}
 			echo '>' . mb_htmlentities($value) . '</option>';
@@ -34,11 +48,11 @@ class LedenlijstContent extends SmartyTemplateView {
 	public function viewVeldselectie() {
 		echo '<label for="veldselectie">Veldselectie: </label>';
 		echo '<div id="veldselectie">';
-		$velden = $this->model->getSelectableVelden();
+		$velden = $this->lidzoeker->getSelectableVelden();
 		foreach ($velden as $key => $veld) {
 			echo '<div class="selectVeld">';
 			echo '<input type="checkbox" name="velden[]" id="veld' . $key . '" value="' . $key . '" ';
-			if (in_array($key, $this->model->getSelectedVelden())) {
+			if (in_array($key, $this->lidzoeker->getSelectedVelden())) {
 				echo 'checked="checked" ';
 			}
 			echo ' />';
@@ -56,38 +70,38 @@ class LedenlijstContent extends SmartyTemplateView {
 </ul>';
 		echo '<hr />';
 
-		if ($this->model->count() > 0) {
+		if ($this->lidzoeker->count() > 0) {
 			if (strstr(REQUEST_URI, '?') !== false) {
 				$url = REQUEST_URI . '&amp;addToGoogle=true';
 			} else {
 				$url = REQUEST_URI . '?addToGoogle=true';
 			}
-			echo '<a href="' . $url . '" class="knop" style="float: right" title="Huidige selectie exporteren naar Google Contacts" onclick="return confirm(\'Weet u zeker dat u deze ' . $this->model->count() . ' leden wilt importeren in uw Google-contacts?\')"><img src="' . CSR_PICS . '/knopjes/google.ico" alt="google"/></a>';
+			echo '<a href="' . $url . '" class="knop" style="float: right" title="Huidige selectie exporteren naar Google Contacts" onclick="return confirm(\'Weet u zeker dat u deze ' . $this->lidzoeker->count() . ' leden wilt importeren in uw Google-contacts?\')"><img src="' . CSR_PICS . '/knopjes/google.ico" alt="google"/></a>';
 		}
 		echo SimpleHTML::getMelding();
 		echo '<h1>' . (LoginModel::instance()->getLid()->isOudlid() ? 'Oud-leden en l' : 'L') . 'edenlijst </h1>';
 		echo '<form id="zoekform" method="get">';
-		echo '<label for="q"></label><input type="text" name="q" value="' . htmlspecialchars($this->model->getQuery()) . '" /> ';
+		echo '<label for="q"></label><input type="text" name="q" value="' . htmlspecialchars($this->lidzoeker->getQuery()) . '" /> ';
 		echo '<input type="submit" class="submit" value="zoeken" /> <a class="knop" id="toggleAdvanced" href="#geavanceerd">Geavanceerd</a>';
 
 		echo '<div id="advanced" class="verborgen">';
 		echo '<label for="status">Status:</label>';
 		$this->viewSelect('status', array(
-			'LEDEN' => 'Leden',
-			'NOVIET' => 'Novieten', 'GASTLID' => 'Gastlid',
-			'OUDLEDEN' => 'Oudleden',
-			'LEDEN|OUDLEDEN' => 'Leden & oudleden', 'ALL' => 'Alles'));
+			'LEDEN'			 => 'Leden',
+			'NOVIET'		 => 'Novieten', 'GASTLID'		 => 'Gastlid',
+			'OUDLEDEN'		 => 'Oudleden',
+			'LEDEN|OUDLEDEN' => 'Leden & oudleden', 'ALL'			 => 'Alles'));
 		echo '<br />';
 		echo '<label for="weergave">Weergave:</label>';
 		$this->viewSelect('weergave', array(
-			'lijst' => 'Lijst (standaard)',
-			'kaartje' => 'Visitekaartjes',
-			'CSV' => 'CSV-bestand'));
+			'lijst'		 => 'Lijst (standaard)',
+			'kaartje'	 => 'Visitekaartjes',
+			'CSV'		 => 'CSV-bestand'));
 		echo '<br />';
 
 		//sorteren op:
 		echo '<label for="sort">Sorteer op:</label>';
-		$this->viewSelect('sort', $this->model->getSortableVelden());
+		$this->viewSelect('sort', $this->lidzoeker->getSortableVelden());
 		echo '<br />';
 
 		//selecteer velden
@@ -100,11 +114,11 @@ class LedenlijstContent extends SmartyTemplateView {
 
 		echo '<hr class="clear" />';
 
-		if ($this->model->count() > 0) {
-			$viewclass = $this->model->getWeergave();
-			$view = new $viewclass($this->model);
-			$view->view();
-		} elseif ($this->model->searched()) {
+		if ($this->lidzoeker->count() > 0) {
+			$class = $this->lidzoeker->getWeergave();
+			$weergave = new $class($this->lidzoeker);
+			$weergave->view();
+		} elseif ($this->lidzoeker->searched()) {
 			echo 'Geen resultaten';
 		} else {
 			//nog niet gezocht.

@@ -1,22 +1,51 @@
 <?php
 
-require_once 'MVC/view/SmartyTemplateView.abstract.php';
-
 /**
- * HtmlPage.class.php
+ * HtmlPage.abstract.php
  * 
  * @author P.W.G. Brussee <brussee@live.nl>
  * 
  * Een HTML pagina met stylesheets en scripts.
  * 
  */
-abstract class HtmlPage extends SmartyTemplateView {
-
-	private $stylesheets = array();
-	private $scripts = array();
+abstract class HtmlPage implements View {
 
 	/**
-	 * Zorg dat de template een stylesheet inlaadt. Er zijn twee verianten:
+	 * <BODY>
+	 * @var View
+	 */
+	protected $body;
+	/**
+	 * <TITLE>
+	 * @var string
+	 */
+	protected $titel;
+	/**
+	 * <CSS>
+	 * @var array 
+	 */
+	private $stylesheets = array();
+	/**
+	 * <SCRIPT>
+	 * @var array
+	 */
+	private $scripts = array();
+
+	public function __construct(View $body, $titel) {
+		$this->body = $body;
+		$this->titel = $titel;
+	}
+
+	function getModel() {
+		return $this->body;
+	}
+
+	function getTitel() {
+		return $this->titel;
+	}
+
+	/**
+	 * Zorg dat de HTML pagina een stylesheet inlaadt. Er zijn twee verianten:
 	 *
 	 * - lokaal:
 	 * een timestamp van de creatie van het bestand wordt toegoevoegd,
@@ -37,7 +66,7 @@ abstract class HtmlPage extends SmartyTemplateView {
 	}
 
 	/**
-	 * Zorg dat de template een script inlaadt. Er zijn twee verianten:
+	 * Zorg dat de HTML pagina een script inlaadt. Er zijn twee verianten:
 	 *
 	 * - lokaal:
 	 * een timestamp van de creatie van het bestand wordt toegoevoegd,

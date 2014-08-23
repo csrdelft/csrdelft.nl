@@ -152,10 +152,10 @@ class BibliotheekBoekContent extends SmartyTemplateView {
 
 	public function __construct(Boek $boek) {
 		parent::__construct($boek, 'Bibliotheek | Boek: ' . $boek->getTitel());
-		$this->smarty->assign('boek', $this->model);
 	}
 
 	public function view() {
+		$this->smarty->assign('boek', $this->model);
 		$this->smarty->display('bibliotheek/boek.tpl');
 	}
 
@@ -168,10 +168,10 @@ class BoekUbbContent extends SmartyTemplateView {
 
 	public function __construct(Boek $boek) {
 		parent::__construct($boek);
-		$this->smarty->assign('boek', $this->model);
 	}
 
 	public function view() {
+		$this->smarty->assign('boek', $this->model);
 		return $this->smarty->fetch('bibliotheek/boek.ubb.tpl');
 	}
 

@@ -47,7 +47,7 @@ function undo_inline_css() {
 }
 
 function init_timeago() {
-	jQuery.timeago.settings.strings = {
+	$.timeago.settings.strings = {
 		prefiprefixAgo: "",
 		prefixFromNow: "sinds",
 		suffixAgo: "geleden",

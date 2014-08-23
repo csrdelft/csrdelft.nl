@@ -10,20 +10,23 @@
  */
 class CorveeRepetitiesView extends SmartyTemplateView {
 
+	private $maaltijdrepetitie;
+
 	public function __construct($repetities, $maaltijdrepetitie = null) {
 		parent::__construct($repetities);
-
-		if ($maaltijdrepetitie !== null) {
-			$this->smarty->assign('maaltijdrepetitie', $maaltijdrepetitie);
-
-			$this->titel = 'Corveebeheer maaltijdrepetitie: ' . $maaltijdrepetitie->getStandaardTitel();
+		$this->maaltijdrepetitie = $maaltijdrepetitie;
+		if ($this->maaltijdrepetitie !== null) {
+			$this->titel = 'Corveebeheer maaltijdrepetitie: ' . $this->maaltijdrepetitie->getStandaardTitel();
 		} else {
 			$this->titel = 'Beheer corveerepetities';
 		}
-		$this->smarty->assign('repetities', $this->model);
 	}
 
 	public function view() {
+		if ($this->maaltijdrepetitie !== null) {
+			$this->smarty->assign('maaltijdrepetitie', $this->maaltijdrepetitie);
+		}
+		$this->smarty->assign('repetities', $this->model);
 		$this->smarty->display('maalcie/menu_pagina.tpl');
 		$this->smarty->display('maalcie/corvee-repetitie/beheer_corvee_repetities.tpl');
 	}
@@ -34,10 +37,10 @@ class CorveeRepetitieView extends SmartyTemplateView {
 
 	public function __construct(CorveeRepetitie $repetitie) {
 		parent::__construct($repetitie);
-		$this->smarty->assign('repetitie', $this->model);
 	}
 
 	public function view() {
+		$this->smarty->assign('repetitie', $this->model);
 		echo '<tr id="maalcie-melding"><td>' . SimpleHTML::getMelding() . '</td></tr>';
 		$this->smarty->display('maalcie/corvee-repetitie/beheer_corvee_repetitie_lijst.tpl');
 	}

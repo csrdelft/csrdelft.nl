@@ -10,13 +10,16 @@
  */
 class BeheerVoorkeurenView extends SmartyTemplateView {
 
+	private $repetities;
+
 	public function __construct(array $matrix, $repetities) {
 		parent::__construct($matrix, 'Beheer voorkeuren');
-		$this->smarty->assign('matrix', $matrix);
-		$this->smarty->assign('repetities', $repetities);
+		$this->repetities = $repetities;
 	}
 
 	public function view() {
+		$this->smarty->assign('matrix', $this->model);
+		$this->smarty->assign('repetities', $this->repetities);
 		$this->smarty->display('maalcie/menu_pagina.tpl');
 		$this->smarty->display('maalcie/voorkeur/beheer_voorkeuren.tpl');
 	}
@@ -27,12 +30,12 @@ class BeheerVoorkeurView extends SmartyTemplateView {
 
 	public function __construct(CorveeVoorkeur $voorkeur) {
 		parent::__construct($voorkeur);
-		$this->smarty->assign('voorkeur', $this->model);
-		$this->smarty->assign('crid', $voorkeur->getCorveeRepetitieId());
-		$this->smarty->assign('uid', $voorkeur->getUid());
 	}
 
 	public function view() {
+		$this->smarty->assign('voorkeur', $this->model);
+		$this->smarty->assign('crid', $this->model->getCorveeRepetitieId());
+		$this->smarty->assign('uid', $this->model->getUid());
 		$this->smarty->display('maalcie/voorkeur/beheer_voorkeur_veld.tpl');
 	}
 

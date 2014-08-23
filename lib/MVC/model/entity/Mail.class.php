@@ -187,8 +187,8 @@ class Mail {
 		switch ($this->type) {
 			case 'html':
 				require_once 'MVC/view/MailTemplateView.class.php';
-				$view = new MailTemplateView($this);
-				$body = $view->getHtml();
+				$template = new MailTemplateView($this);
+				$body = $template->getHtml();
 				break;
 
 			case 'plain':

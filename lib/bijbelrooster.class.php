@@ -1,9 +1,13 @@
 <?php
 
-class Bijbelrooster extends SmartyTemplateView {
+class Bijbelrooster implements View {
 
-	public function __construct() {
-		parent::__construct(null, 'Bijbelrooster');
+	public function getModel() {
+		return null;
+	}
+
+	public function getTitel() {
+		return 'Bijbelrooster';
 	}
 
 	function ubbContent($aantal) {

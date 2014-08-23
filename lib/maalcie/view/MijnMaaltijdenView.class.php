@@ -10,21 +10,24 @@
  */
 class MijnMaaltijdenView extends SmartyTemplateView {
 
+	private $aanmeldingen;
+
 	public function __construct(array $maaltijden, array $aanmeldingen = null) {
 		parent::__construct($maaltijden, 'Maaltijdenketzer');
-
+		$this->aanmeldingen = $aanmeldingen;
 		foreach ($this->model as $maaltijd) {
 			$mid = $maaltijd->getMaaltijdId();
-			if (!array_key_exists($mid, $aanmeldingen)) {
-				$aanmeldingen[$mid] = false;
+			if (!array_key_exists($mid, $this->aanmeldingen)) {
+				$this->aanmeldingen[$mid] = false;
 			}
 		}
-		$this->smarty->assign('standaardprijs', sprintf('%.2f', floatval(Instellingen::get('maaltijden', 'standaard_prijs'))));
-		$this->smarty->assign('maaltijden', $this->model);
-		$this->smarty->assign('aanmeldingen', $aanmeldingen);
 	}
 
 	public function view() {
+		$this->smarty->assign('standaardprijs', sprintf('%.2f', floatval(Instellingen::get('maaltijden', 'standaard_prijs'))));
+		$this->smarty->assign('maaltijden', $this->model);
+		$this->smarty->assign('aanmeldingen', $this->aanmeldingen);
+
 		$this->smarty->display('maalcie/menu_pagina.tpl');
 		$this->smarty->display('maalcie/maaltijd/mijn_maaltijden.tpl');
 	}
@@ -33,14 +36,17 @@ class MijnMaaltijdenView extends SmartyTemplateView {
 
 class MijnMaaltijdView extends SmartyTemplateView {
 
+	private $aanmelding;
+
 	public function __construct(Maaltijd $maaltijd, MaaltijdAanmelding $aanmelding = null) {
 		parent::__construct($maaltijd);
-		$this->smarty->assign('maaltijd', $this->model);
-		$this->smarty->assign('aanmelding', $aanmelding);
-		$this->smarty->assign('standaardprijs', sprintf('%.2f', floatval(Instellingen::get('maaltijden', 'standaard_prijs'))));
+		$this->aanmelding = $aanmelding;
 	}
 
 	public function view() {
+		$this->smarty->assign('maaltijd', $this->model);
+		$this->smarty->assign('aanmelding', $this->aanmelding);
+		$this->smarty->assign('standaardprijs', sprintf('%.2f', floatval(Instellingen::get('maaltijden', 'standaard_prijs'))));
 		$this->smarty->display('maalcie/maaltijd/mijn_maaltijd_lijst.tpl');
 	}
 

@@ -30,7 +30,7 @@ mijn_rooster.tpl	|	P.W.G. Brussee (brussee@live.nl)
 						<tr class="
 							{if !$suggestie.voorkeur} geenvoorkeur{/if}
 							{if $suggestie.recent} recent{/if}
-							{if $view->getIsJongsteLichting($uid)} jongste{else} oudere{/if}	
+							{if $jongsteLichting === LidCache::getLid($uid)->getLichting()} jongste{else} oudere{/if}
 							">
 							<td style="width: 15px;">
 								<a class="knop" style="padding: 0 2px;" onclick="$('#field_uid').val('{$uid}');

@@ -10,7 +10,7 @@
 require_once 'configuratie.include.php';
 
 require_once 'bijbelrooster.class.php';
-$inhoud = new bijbelrooster();
+$inhoud = new Bijbelrooster();
 
 $pagina = new CsrLayoutPage($inhoud);
 $pagina->view();

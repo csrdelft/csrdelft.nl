@@ -1,6 +1,6 @@
 <?php
 
-require_once 'MVC/view/CsrSmarty.class.php';
+require_once 'MVC/view/CsrSmarty.singleton.php';
 
 /**
  * SmartyTemplateView.abstract.php
@@ -32,8 +32,7 @@ abstract class SmartyTemplateView implements View {
 	public function __construct($model, $titel = '') {
 		$this->model = $model;
 		$this->titel = $titel;
-		$this->smarty = new CsrSmarty();
-		$this->smarty->assignByRef('view', $this);
+		$this->smarty = CsrSmarty::instance();
 	}
 
 	public function getModel() {
@@ -44,4 +43,5 @@ abstract class SmartyTemplateView implements View {
 		return $this->titel;
 	}
 
+	abstract function view();
 }

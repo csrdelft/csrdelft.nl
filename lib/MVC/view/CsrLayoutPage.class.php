@@ -16,8 +16,8 @@ require_once 'MVC/model/DragObjectModel.class.php';
 class CsrLayoutPage extends HtmlPage {
 
 	/**
-	 * Zijkolom
-	 * @var SimpleHTML[]
+	 * Zijkolom SimpleHTML
+	 * @var array
 	 */
 	public $zijkolom;
 	/**
@@ -27,8 +27,7 @@ class CsrLayoutPage extends HtmlPage {
 	public $popup;
 
 	public function __construct(View $body, array $zijkolom = array(), $popup = null) {
-		parent::__construct($body);
-		$this->titel = $body->getTitel();
+		parent::__construct($body, $body->getTitel());
 		$this->zijkolom = $zijkolom;
 		$this->popup = $popup;
 
@@ -50,6 +49,10 @@ class CsrLayoutPage extends HtmlPage {
 			} else {
 				$this->addStylesheet($css . 'snow.css');
 			}
+		}
+		if (LidInstellingen::get('layout', 'minion') == 'ja') {
+			$this->addStylesheet($css . 'minion.css');
+			$this->addScript($js . 'minion.js');
 		}
 		if (DEBUG AND LoginModel::mag('P_ADMIN')) {
 			$this->addStylesheet($js . 'jquery/jquery-ui.css');
@@ -83,19 +86,22 @@ class CsrLayoutPage extends HtmlPage {
 	public function view() {
 		header('Content-Type: text/html; charset=UTF-8');
 
+		$smarty = CsrSmarty::instance();
+		$smarty->assign('stylesheets', $this->getStylesheets());
+		$smarty->assign('scripts', $this->getScripts());
+		$smarty->assign('titel', $this->getTitel());
+
 		if (LidInstellingen::get('layout', 'minion') == 'ja') {
-			$this->addStylesheet($css . 'minion.css');
-			$this->addScript($js . 'minion.js');
 			$top = 40;
 			$left = 40;
 			DragObjectModel::getCoords('minion', $top, $left);
-			$this->smarty->assign('miniontop', $top);
-			$this->smarty->assign('minionleft', $left);
-			$this->smarty->assign('minion', $this->smarty->fetch('minion.tpl'));
+			$smarty->assign('miniontop', $top);
+			$smarty->assign('minionleft', $left);
+			$smarty->assign('minion', $smarty->fetch('minion.tpl'));
 		}
 
 		if (DEBUG AND ( LoginModel::mag('P_ADMIN') OR LoginModel::instance()->isSued())) {
-			$this->smarty->assign('debug', SimpleHTML::getDebug());
+			$smarty->assign('debug', SimpleHTML::getDebug());
 		}
 
 		if ($this->zijkolom !== false || LidInstellingen::get('layout', 'beeld') === 'breedbeeld') {
@@ -106,27 +112,27 @@ class CsrLayoutPage extends HtmlPage {
 			}
 		}
 
-		$this->smarty->assign('mainmenu', new MainMenuView(MenuModel::instance()->getMenuTree('main')));
-		$this->smarty->assign('body', $this->model);
-		$this->smarty->assign('zijkolom', $this->zijkolom);
-		$this->smarty->assign('popup', $this->popup);
+		$smarty->assign('mainmenu', new MainMenuView(MenuModel::instance()->getMenuTree('main')));
+		$smarty->assign('body', $this->body);
+		$smarty->assign('zijkolom', $this->zijkolom);
+		$smarty->assign('popup', $this->popup);
 
 		$top = 180;
 		$left = 190;
 		DragObjectModel::getCoords('popup', $top, $left);
-		$this->smarty->assign('popuptop', $top);
-		$this->smarty->assign('popupleft', $left);
+		$smarty->assign('popuptop', $top);
+		$smarty->assign('popupleft', $left);
 		$top = 180;
 		$left = 10;
 		DragObjectModel::getCoords('ubbhulpverhaal', $top, $left);
-		$this->smarty->assign('ubbtop', $top);
-		$this->smarty->assign('ubbleft', $left);
+		$smarty->assign('ubbtop', $top);
+		$smarty->assign('ubbleft', $left);
 
 		if (LoginModel::instance()->isPauper()) {
-			$this->smarty->assign('menutree', MenuModel::instance()->getMenuTree('main'));
-			$this->smarty->display('MVC/layout/pauper.tpl');
+			$smarty->assign('menutree', MenuModel::instance()->getMenuTree('main'));
+			$smarty->display('MVC/layout/pauper.tpl');
 		} else {
-			$this->smarty->display('csrdelft.tpl');
+			$smarty->display('csrdelft.tpl');
 		}
 	}
 

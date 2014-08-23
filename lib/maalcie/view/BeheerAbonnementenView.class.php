@@ -10,29 +10,35 @@
  */
 class BeheerAbonnementenView extends SmartyTemplateView {
 
+	private $repetities;
+	private $status;
+	private $form;
+
 	public function __construct(array $matrix, array $repetities, $alleenWaarschuwingen = false, $ingeschakeld = null) {
 		parent::__construct($matrix, 'Beheer abonnementen');
+		$this->repetities = $repetities;
 
 		$field = new LidField('voor_lid', null, 'Toon abonnementen van persoon:', 'allepersonen');
-		$form = new Formulier(null, 'maalcie-subform-abos', Instellingen::get('taken', 'url') . '/voorlid');
-		$form->addFields(array($field));
-		$this->smarty->assign('form', $form);
+		$this->form = new Formulier(null, 'maalcie-subform-abos', Instellingen::get('taken', 'url') . '/voorlid');
+		$this->form->addFields(array($field));
 
-		$status = 'abo';
+		$this->status = 'abo';
 		if (is_bool($ingeschakeld)) {
-			$status = ($ingeschakeld ? 'in' : 'abo'); // uit
+			$this->status = ($ingeschakeld ? 'in' : 'abo'); // uit
 		}
 		if ($alleenWaarschuwingen) {
-			$status = 'waarschuwing';
+			$this->status = 'waarschuwing';
 		}
-		$this->smarty->assign('toon', $status);
-
-		$this->smarty->assign('aborepetities', MaaltijdRepetitiesModel::getAbonneerbareRepetities());
-		$this->smarty->assign('repetities', $repetities);
-		$this->smarty->assign('matrix', $this->model);
 	}
 
 	public function view() {
+		$this->smarty->assign('form', $this->form);
+		$this->smarty->assign('toon', $this->status);
+
+		$this->smarty->assign('aborepetities', MaaltijdRepetitiesModel::getAbonneerbareRepetities());
+		$this->smarty->assign('repetities', $this->repetities);
+		$this->smarty->assign('matrix', $this->model);
+
 		$this->smarty->display('maalcie/menu_pagina.tpl');
 		$this->smarty->display('maalcie/abonnement/beheer_abonnementen.tpl');
 	}
@@ -60,12 +66,12 @@ class BeheerAbonnementView extends SmartyTemplateView {
 
 	public function __construct(MaaltijdAbonnement $abo) {
 		parent::__construct($abo);
-		$this->smarty->assign('abonnement', $this->model);
-		$this->smarty->assign('uid', $this->model->getUid());
-		$this->smarty->assign('vanuid', $this->model->getVanUid());
 	}
 
 	public function view() {
+		$this->smarty->assign('abonnement', $this->model);
+		$this->smarty->assign('uid', $this->model->getUid());
+		$this->smarty->assign('vanuid', $this->model->getVanUid());
 		echo '<td id="maalcie-melding-veld">' . SimpleHTML::getMelding() . '</td>';
 		$this->smarty->display('maalcie/abonnement/beheer_abonnement_veld.tpl');
 	}

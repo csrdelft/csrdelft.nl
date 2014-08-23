@@ -22,6 +22,6 @@ $form->titel = 'Dump database table';
 if ($form->validate()) {
 	DatabaseAdmin::instance()->sqlBackupTable($fields['tabel']->getValue());
 } else {
-	$view = new CsrLayoutPage($form);
-	$view->view();
+	$pagina = new CsrLayoutPage($form);
+	$pagina->view();
 }

@@ -1,17 +1,17 @@
 <!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.1//EN' 'http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd'>
 <html>{strip}
 	<head>
-		<title>{$view->getTitel()} {$maaltijd->getDatum()|date_format:"%A %e %B"}</title>
-		{foreach from=$view->getStylesheets() item=sheet}
+		<title>{$titel} {$maaltijd->getDatum()|date_format:"%A %e %B"}</title>
+		{foreach from=$stylesheets item=sheet}
 			<link rel="stylesheet" href="{$sheet}" type="text/css" />
 		{/foreach}
-		{foreach from=$view->getScripts() item=script}
+		{foreach from=$scripts item=script}
 			<script type="text/javascript" src="{$script}"></script>
 		{/foreach}
 	</head>
 	<body>
 		<a href="/" style="float: right;"><img alt="Beeldmerk van de Vereniging" src="{$CSR_PICS}/layout/beeldmerk.jpg" /></a>
-		<h1>{$view->getTitel()} op {$maaltijd->getDatum()|date_format:"%A %e %B %Y"}</h1>
+		<h1>{$titel} op {$maaltijd->getDatum()|date_format:"%A %e %B %Y"}</h1>
 		<div class="header">{Instellingen::get('maaltijden', 'maaltijdlijst_tekst')|replace:'MAALTIJDPRIJS':$prijs}</div>
 		{if !$maaltijd->getIsGesloten()}
 			<h1 id="gesloten-melding" style="color: red">De maaltijd is nog niet gesloten

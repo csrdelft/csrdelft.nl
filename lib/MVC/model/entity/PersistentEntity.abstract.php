@@ -70,7 +70,7 @@ abstract class PersistentEntity implements JsonSerializable {
 				unset($array[$key]);
 			}
 		}
-		return array(get_class($this) => $array);
+		return $array;
 	}
 
 	/**

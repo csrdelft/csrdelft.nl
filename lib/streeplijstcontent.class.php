@@ -7,7 +7,7 @@
 # Kan streep/bestellijsten maken.
 # -------------------------------------------------------------------
 
-class Streeplijstcontent extends SmartyTemplateView {
+class Streeplijstcontent implements View {
 
 	private $moot = 'alle';
 	private $lichting = '';
@@ -15,8 +15,15 @@ class Streeplijstcontent extends SmartyTemplateView {
 	private $aLeden;
 
 	function __construct() {
-		parent::__construct(null);
 		$this->load();
+	}
+
+	function getModel() {
+		return null;
+	}
+
+	function getTitel() {
+		return 'Bestel- & inschrijflijst-generator voor C.S.R. Delft';
 	}
 
 	function load() {
@@ -140,7 +147,7 @@ class Streeplijstcontent extends SmartyTemplateView {
 	}
 
 	function view() {
-		echo '<h1>Bestel- &amp; inschrijflijst-generator voor C.S.R. Delft</h1>
+		echo '<h1>' . $this->getTitel() . '</h1>
 			<form id="streeplijst" action="streeplijst.php" method="get">
 			<fieldset>
 				<legend>Bestellijst</legend>

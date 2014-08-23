@@ -5,13 +5,13 @@
 <meta name="author" content="PubCie C.S.R. Delft" />
 <meta name="description" content="{Instellingen::get('stek', 'beschrijving')}">
 <meta name="robots" content="index, follow" />
-<title>C.S.R. Delft - {$view->getTitel()}</title>
+<title>C.S.R. Delft - {$titel}</title>
 <link rel="shortcut icon" href="{$CSR_PICS}/layout/favicon.ico" />
 <link rel="alternate" title="C.S.R. Delft RSS" type="application/rss+xml" href="http://csrdelft.nl/forum/rss.xml" />
-{foreach from=$view->getStylesheets() item=sheet}
+{foreach from=$stylesheets item=sheet}
 <link rel="stylesheet" href="{$sheet}" type="text/css" />
 {/foreach}
-{foreach from=$view->getScripts() item=script}
+{foreach from=$scripts item=script}
 <script type="text/javascript" src="{$script}"></script>
 {/foreach}
 <script type="text/javascript">
@@ -29,7 +29,7 @@ s.parentNode.insertBefore(ga, s);
 </script>
 <meta name="google-site-verification" content="zLTm1NVzZPHx7jiGHBpe4HeH1goQAlJej2Rdc0_qKzE" />
 <meta property="og:url" content="http://csrdelft.nl{$REQUEST_URI}" />
-<meta property="og:title" content="C.S.R. Delft | {$view->getTitel()}" />
+<meta property="og:title" content="C.S.R. Delft | {$titel}" />
 <meta property="og:locale" content="nl_nl" />
 <meta property="og:image" content="{$CSR_PICS}/layout/beeldmerk.png" />
 <meta property="og:description" content="{Instellingen::get('stek', 'beschrijving')}" />

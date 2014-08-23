@@ -11,7 +11,7 @@
 		{/foreach}
 	</select>
 </div>
-<h1 style="width: 650px;">{$view->getTitel()}</h1>
+<h1 style="width: 650px;">{$titel}</h1>
 <br />
 <ul class="menubeheer-tree">
 	{if $root}

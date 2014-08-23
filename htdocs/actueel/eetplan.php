@@ -1,10 +1,9 @@
 <?php
 
-
 require_once 'configuratie.include.php';
 
 
-if(LoginModel::mag('P_LEDEN_READ')) {
+if (LoginModel::mag('P_LEDEN_READ')) {
 	require_once 'eetplan.class.php';
 	$eetplan = new Eetplan();
 	require_once 'eetplancontent.class.php';
@@ -17,7 +16,5 @@ if(LoginModel::mag('P_LEDEN_READ')) {
 }
 
 # pagina weergeven
-$pagina=new CsrLayoutPage($midden);
+$pagina = new CsrLayoutPage($midden);
 $pagina->view();
-
-?>

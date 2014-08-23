@@ -1,27 +1,34 @@
 <?php
 
-class CommissieOverzicht extends SmartyTemplateView {
+class CommissieOverzicht implements View {
+
+	private $id;
 
 	public function __construct($id = -1) {
-		parent::__construct($id);
+		$this->id = $id;
+	}
+
+	public function getModel() {
+		$this->id;
 	}
 
 	public function getTitel() {
-		return 'voorkeuren voor commissies';
+		return 'Voorkeuren voor commissies';
 	}
 
 	function view() {
 		$res = '';
+		$format = array('', 'nee', 'misschien', 'ja');
 		if (LoginModel::mag('P_LEDEN_MOD')) {
 			require_once 'voorkeur/commissie.class.php';
-			if ($this->model >= 0) {
-				$commissie = OldCommissie::getCommissie($this->model);
+			if ($this->id >= 0) {
+				$commissie = OldCommissie::getCommissie($this->id);
 				$res .= '<h1> Geinteresseerde voor ' . $commissie->getNaam() . ' </h1> 
 					<a href="/tools/voorkeuren/commissies.php">Terug naar overzicht</a>
 					<table><tr><td><h3>Lid</h3></td><td><h3>Interesse</h3></td></tr>';
 				$geinteresseerde = $commissie->getGeinteresseerde();
 				foreach ($geinteresseerde as $uid => $voorkeur) {
-					$res .= '<tr ' . ($voorkeur['gedaan'] ? 'style="opacity: .50"' : '') . '><td><a href="/tools/voorkeuren/lidpagina.php?lid=' . $uid . '">' . LidCache::getLid($uid)->getNaam() . '</a></td><td>' . voorkeur($voorkeur['voorkeur']) . '</td></tr>';
+					$res .= '<tr ' . ($voorkeur['gedaan'] ? 'style="opacity: .50"' : '') . '><td><a href="/tools/voorkeuren/lidpagina.php?lid=' . $uid . '">' . LidCache::getLid($uid)->getNaam() . '</a></td><td>' . $format[$voorkeur['voorkeur']] . '</td></tr>';
 				}
 				$res .= '</table>';
 			} else {
@@ -42,24 +49,25 @@ class CommissieOverzicht extends SmartyTemplateView {
 
 }
 
-function voorkeur($voorkeur) {
-	$arr = array('', 'nee', 'misschien', 'ja');
-	return $arr[$voorkeur];
-}
+class LidOverzicht implements View {
 
-class LidOverzicht extends SmartyTemplateView {
+	private $id;
 
 	public function __construct($id = -1) {
-		parent::__construct($id);
+		$this->id = $id;
+	}
+
+	public function getModel() {
+		return $this->id;
 	}
 
 	public function getTitel() {
-		return 'voorkeur van lid';
+		return 'Voorkeur van lid';
 	}
 
 	function view() {
 		$res = '';
-		if ($this->model == -1) {
+		if ($this->id == -1) {
 			$res = $this->viewNotAllowed();
 		} else {
 			$res = $this->viewProfile();
@@ -72,10 +80,10 @@ class LidOverzicht extends SmartyTemplateView {
 	}
 
 	function viewProfile() {
-		$res = '<h1> Voorkeuren!</h1>';
+		$res = '<h1>' . $this->getTitel() . '</h1>';
 		require_once 'voorkeur/lidvoorkeur.class.php';
-		$res .= '<p>Naam: ' . Lid::naamLink($this->model, 'full', 'link') . '</p>';
-		$voorkeur = new LidVoorkeur($this->model);
+		$res .= '<p>Naam: ' . Lid::naamLink($this->id, 'full', 'link') . '</p>';
+		$voorkeur = new LidVoorkeur($this->id);
 		$voorkeuren = $voorkeur->getVoorkeur();
 		$commissies = $voorkeur->getCommissies();
 		$res .= '<table>';
@@ -86,7 +94,7 @@ class LidOverzicht extends SmartyTemplateView {
 		$res .= '</table><br />';
 		$res .= '<h2>Lid opmerkingen</h2><p>' . $voorkeur->getLidOpmerking() . '</p>';
 		$res .= '
-		<form name="opties" action="/tools/voorkeuren/lidpagina.php?lid=' . $this->model . '" method="POST">
+		<form name="opties" action="/tools/voorkeuren/lidpagina.php?lid=' . $this->id . '" method="POST">
 			<textarea name = "opmerkingen" cols=40 rows = 10 >' . $voorkeur->getPraesesOpmerking() . ' </textarea> <br />
 			<input type="submit" value="Opslaan" />
 		</form>
@@ -97,7 +105,7 @@ class LidOverzicht extends SmartyTemplateView {
 
 	function save($actie) {
 		require_once 'voorkeur/lidvoorkeur.class.php';
-		$voorkeur = new LidVoorkeur($this->model);
+		$voorkeur = new LidVoorkeur($this->id);
 		$voorkeur->setPraesesOpmerking($actie);
 	}
 

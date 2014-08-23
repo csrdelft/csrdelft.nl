@@ -10,13 +10,16 @@
  */
 class CorveeRoosterView extends SmartyTemplateView {
 
+	private $toonverleden;
+
 	public function __construct($rooster, $toonverleden = false) {
 		parent::__construct($rooster, 'Corveerooster');
-		$this->smarty->assign('rooster', $this->model);
-		$this->smarty->assign('toonverleden', $toonverleden);
+		$this->toonverleden = $toonverleden;
 	}
 
 	public function view() {
+		$this->smarty->assign('rooster', $this->model);
+		$this->smarty->assign('toonverleden', $this->toonverleden);
 		$this->smarty->display('maalcie/menu_pagina.tpl');
 		$this->smarty->display('maalcie/corveetaak/corvee_rooster.tpl');
 	}

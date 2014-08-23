@@ -24,4 +24,8 @@ class JsonResponse implements View {
 		return $this->model;
 	}
 
+	public function getTitel() {
+		return null;
+	}
+
 }

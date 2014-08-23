@@ -1,4 +1,5 @@
 <?php
+
 # C.S.R. Delft | pubcie@csrdelft.nl
 # -------------------------------------------------------------------
 # archief.php
@@ -10,11 +11,11 @@ require_once 'configuratie.include.php';
 
 if (LoginModel::mag('P_LEDEN_READ')) {
 	require_once 'courant/courant.class.php';
-	$courant=new Courant();
+	$courant = new Courant();
 
 	require_once 'courant/courantarchiefcontent.class.php';
 	$body = new CourantArchiefContent($courant);
-}else{
+} else {
 	# geen rechten
 	require_once 'MVC/model/CmsPaginaModel.class.php';
 	require_once 'MVC/view/CmsPaginaView.class.php';
@@ -22,7 +23,5 @@ if (LoginModel::mag('P_LEDEN_READ')) {
 }
 
 
-$pagina=new CsrLayoutPage($body);
+$pagina = new CsrLayoutPage($body);
 $pagina->view();
-
-?>

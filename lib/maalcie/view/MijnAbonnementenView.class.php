@@ -12,10 +12,10 @@ class MijnAbonnementenView extends SmartyTemplateView {
 
 	public function __construct($abonnementen) {
 		parent::__construct($abonnementen, 'Mijn abonnementen');
-		$this->smarty->assign('abonnementen', $this->model);
 	}
 
 	public function view() {
+		$this->smarty->assign('abonnementen', $this->model);
 		$this->smarty->display('maalcie/menu_pagina.tpl');
 		$this->smarty->display('maalcie/abonnement/mijn_abonnementen.tpl');
 	}
@@ -26,11 +26,11 @@ class MijnAbonnementView extends SmartyTemplateView {
 
 	public function __construct(MaaltijdAbonnement $abo) {
 		parent::__construct($abo);
-		$this->smarty->assign('uid', $abo->getUid());
-		$this->smarty->assign('mrid', $abo->getMaaltijdRepetitieId());
 	}
 
 	public function view() {
+		$this->smarty->assign('uid', $this->model->getUid());
+		$this->smarty->assign('mrid', $this->model->getMaaltijdRepetitieId());
 		echo '<td id="maalcie-melding-veld">' . SimpleHTML::getMelding() . '</td>';
 		$this->smarty->display('maalcie/abonnement/mijn_abonnement_veld.tpl');
 	}

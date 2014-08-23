@@ -113,10 +113,24 @@ class SavedQuery {
 
 }
 
-class SavedQueryContent extends SmartyTemplateView {
+class SavedQueryContent implements View {
+
+	/**
+	 * Saved query
+	 * @var SavedQuery
+	 */
+	private $sq;
 
 	public function __construct(SavedQuery $sq = null) {
-		parent::__construct($sq);
+		$this->sq = $sq;
+	}
+
+	public function getModel() {
+		return $this->sq;
+	}
+
+	public function getTitel() {
+		return 'Opgeslagen query\'s';
 	}
 
 	public static function render_header($name) {
@@ -153,8 +167,8 @@ class SavedQueryContent extends SmartyTemplateView {
 	}
 
 	public function render_queryResult() {
-		if ($this->model->hasResult()) {
-			$sq = $this->model;
+		if ($this->sq->hasResult()) {
+			$sq = $this->sq;
 			$id = 'query-' . time();
 			$return = $sq->getBeschrijving() . ' (' . $sq->count() . ' regels)<br /><table class="query_table" id="' . $id . '">';
 
@@ -178,14 +192,14 @@ JS;
 		} else {
 			//foutmelding in geval van geen resultaat, dus of geen query die bestaat, of niet
 			//voldoende rechten.
-			$return = 'Query (' . $this->model->getID() . ') bestaat niet, geeft een fout, of u heeft niet voldoende rechten.';
+			$return = 'Query (' . $this->sq->getID() . ') bestaat niet, geeft een fout, of u heeft niet voldoende rechten.';
 		}
 		return $return;
 	}
 
 	public function getQueryselector() {
 		//als er een query ingeladen is, die highlighten
-		$id = $this->model instanceof SavedQuery ? $this->model->getID() : 0;
+		$id = $this->sq instanceof SavedQuery ? $this->sq->getID() : 0;
 
 		$return = '<a class="knop" href="#" onclick="$(\'#sqSelector\').toggle();">Laat queryselector zien.</a>';
 		$return .= '<div id="sqSelector" ';
@@ -217,15 +231,13 @@ JS;
 	}
 
 	public function view() {
-		echo '<h1>Opgeslagen query\'s</h1>';
+		echo '<h1>' . $this->getTitel() . '</h1>';
 		echo $this->getQueryselector();
 
 		//render query if selected and allowed
-		if ($this->model != null && $this->model->magBekijken()) {
+		if ($this->sq != null && $this->sq->magBekijken()) {
 			echo $this->render_queryResult();
 		}
 	}
 
 }
-
-?>

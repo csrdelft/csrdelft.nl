@@ -24,8 +24,7 @@ class CsrLayout2Page extends HtmlPage {
 	public $menutmpl;
 
 	function __construct(View $body, $template = 'content', $menu = '') {
-		parent::__construct($body);
-		$this->titel = $body->getTitel();
+		parent::__construct($body, $body->getTitel());
 		$this->tmpl = $template;
 		$this->menutmpl = $menu;
 
@@ -48,22 +47,27 @@ class CsrLayout2Page extends HtmlPage {
 	function view() {
 		header('Content-Type: text/html; charset=UTF-8');
 
+		$smarty = CsrSmarty::instance();
+		$smarty->assign('stylesheets', $this->getStylesheets());
+		$smarty->assign('scripts', $this->getScripts());
+		$smarty->assign('titel', $this->getTitel());
+
 		if ($this->menutmpl !== '') {
-			$this->smarty->assign('menutpl', $this->menutmpl);
+			$smarty->assign('menutpl', $this->menutmpl);
 		}
-		$this->smarty->assign('body', $this->model);
-		$this->smarty->assign('loginform', new LoginForm());
+		$smarty->assign('body', $this->body);
+		$smarty->assign('loginform', new LoginForm());
 		$top = 180;
 		$left = 10;
 		DragObjectModel::getCoords('ubbhulpverhaal', $top, $left);
-		$this->smarty->assign('ubbtop', $top);
-		$this->smarty->assign('ubbleft', $left);
+		$smarty->assign('ubbtop', $top);
+		$smarty->assign('ubbleft', $left);
 
 		if (LoginModel::instance()->isPauper()) {
-			$this->smarty->assign('menutree', MenuModel::instance()->getMenuTree('main'));
-			$this->smarty->display('MVC/layout/pauper.tpl');
+			$smarty->assign('menutree', MenuModel::instance()->getMenuTree('main'));
+			$smarty->display('MVC/layout/pauper.tpl');
 		} else {
-			$this->smarty->display('csrdelft2/' . $this->tmpl . '.tpl');
+			$smarty->display('csrdelft2/' . $this->tmpl . '.tpl');
 		}
 	}
 

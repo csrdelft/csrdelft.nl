@@ -5,4 +5,4 @@
 </ul>
 <hr/>
 <table style="width: 100%;"><tr id="melding"><td id="melding-veld">{SimpleHtml::getMelding()}</td></tr></table>
-<h1>{$view->getTitel()}</h1>
+<h1>{$titel}</h1>

@@ -117,8 +117,8 @@ height="187" alt="OWee-courant" />
 </table>
 <font face="verdana" size="-1">
 	{foreach from=$courant.getBerichten() item=bericht}
-		<h4><a name={$bericht.ID}</a>{$view->ubb->getHTML($bericht.titel)}</h4>
-		<p>{$view->ubb->getHTML($bericht.bericht)}</p>
+		<h4><a name={$bericht.ID}</a>{$bericht.titel|ubb}</h4>
+		<p>{$bericht.bericht|ubb}</p>
 	{/foreach}
 </font>
 </td>

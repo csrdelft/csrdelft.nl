@@ -28,10 +28,10 @@ class GroepCategorieView extends SmartyTemplateView {
 
 	public function __construct(GroepCategorie $categorie) {
 		parent::__construct($categorie);
-		$this->smarty->assign('groep', $categorie);
 	}
 
 	public function view() {
+		$this->smarty->assign('categorie', $this->model);
 		$this->smarty->display('MVC/groepen/categorie.tpl');
 	}
 

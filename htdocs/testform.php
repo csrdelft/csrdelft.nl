@@ -47,14 +47,14 @@ $model->uidtest = '0436';
 
 /* start controller */
 
-$view = new TestFormulier($model); // fetches POST values itself
-if ($view->validate()) {
+$form = new TestFormulier($model); // fetches POST values itself
+if ($form->validate()) {
 	SimpleHTML::setMelding('Save to DB here', 1);
 } else {
-	SimpleHTML::setMelding($view->getError(), -1);
+	SimpleHTML::setMelding($form->getError(), -1);
 }
 
-$pagina = new CsrLayoutPage($view);
+$pagina = new CsrLayoutPage($form);
 $pagina->zijkolom = false; //geen zijkolom, overzichterlijker debuggen
 //$pagina->addStylesheet('/layout/css/profiel.css');
 //$pagina->addScript('/layout/js/profiel.js');

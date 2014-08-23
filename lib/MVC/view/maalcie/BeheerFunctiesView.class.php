@@ -12,10 +12,10 @@ class BeheerFunctiesView extends SmartyTemplateView {
 
 	public function __construct(array $functies) {
 		parent::__construct($functies, 'Beheer corveefuncties en kwalificaties');
-		$this->smarty->assign('functies', $this->model);
 	}
 
 	public function view() {
+		$this->smarty->assign('functies', $this->model);
 		$this->smarty->display('maalcie/menu_pagina.tpl');
 		$this->smarty->display('MVC/maalcie/functie/beheer_functies.tpl');
 	}
@@ -26,10 +26,10 @@ class FunctieView extends SmartyTemplateView {
 
 	public function __construct(CorveeFunctie $functie) {
 		parent::__construct($functie);
-		$this->smarty->assign('functie', $this->model);
 	}
 
 	public function view() {
+		$this->smarty->assign('functie', $this->model);
 		$this->smarty->display('MVC/maalcie/functie/beheer_functie_lijst.tpl');
 		echo '<tr id="maalcie-melding"><td>' . SimpleHTML::getMelding() . '</td></tr>';
 	}

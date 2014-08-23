@@ -13,7 +13,7 @@ class MaaltijdLijstView extends HtmlPage {
 	private $fiscaal;
 
 	public function __construct(Maaltijd $maaltijd, $aanmeldingen, $corvee, $fiscaal = false) {
-		parent::__construct($maaltijd, $maaltijd->getTitel());
+		parent::__construct($this, $maaltijd->getTitel());
 		$this->fiscaal = $fiscaal;
 
 		$jquery = '/layout/js/jquery/';
@@ -24,7 +24,9 @@ class MaaltijdLijstView extends HtmlPage {
 		$this->addScript('/layout/js/csrdelft.js');
 		$this->addScript('/layout/js/taken.js');
 
-		if (!$fiscaal) {
+		$smarty = CsrSmarty::instance();
+
+		if (!$this->fiscaal) {
 			$this->addStylesheet('/layout/css/maaltijdlijst.css');
 
 			for ($i = $maaltijd->getMarge(); $i > 0; $i--) { // ruimte voor marge eters
@@ -34,21 +36,26 @@ class MaaltijdLijstView extends HtmlPage {
 			$tabel1 = array_slice($aanmeldingen, 0, intval($totaal / 2), true);
 			$tabel2 = array_diff_key($aanmeldingen, $tabel1);
 
-			$this->smarty->assign('aanmeldingen', array($tabel1, $tabel2));
-			$this->smarty->assign('eterstotaal', $totaal);
-			$this->smarty->assign('corveetaken', $corvee);
+			$smarty->assign('aanmeldingen', array($tabel1, $tabel2));
+			$smarty->assign('eterstotaal', $totaal);
+			$smarty->assign('corveetaken', $corvee);
 		} else {
-			$this->smarty->assign('aanmeldingen', $aanmeldingen);
+			$smarty->assign('aanmeldingen', $aanmeldingen);
 		}
-		$this->smarty->assign('maaltijd', $maaltijd);
-		$this->smarty->assign('prijs', sprintf('%.2f', $maaltijd->getPrijs()));
+		$smarty->assign('maaltijd', $maaltijd);
+		$smarty->assign('prijs', sprintf('%.2f', $maaltijd->getPrijs()));
 	}
 
 	public function view() {
+		$smarty = CsrSmarty::instance();
+		$smarty->assign('stylesheets', $this->getStylesheets());
+		$smarty->assign('scripts', $this->getScripts());
+		$smarty->assign('titel', $this->getTitel());
+
 		if ($this->fiscaal) {
-			$this->smarty->display('maalcie/maaltijd/maaltijd_lijst_fiscaal.tpl');
+			$smarty->display('maalcie/maaltijd/maaltijd_lijst_fiscaal.tpl');
 		} else {
-			$this->smarty->display('maalcie/maaltijd/maaltijd_lijst.tpl');
+			$smarty->display('maalcie/maaltijd/maaltijd_lijst.tpl');
 		}
 	}
 

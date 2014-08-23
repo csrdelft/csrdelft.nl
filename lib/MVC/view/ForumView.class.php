@@ -10,13 +10,12 @@
 class ForumView extends SmartyTemplateView {
 
 	public function __construct(array $categorien) {
-		parent::__construct($categorien);
-		$this->titel = 'Forum';
-		$this->smarty->assign('zoekform', new ForumZoekenForm());
-		$this->smarty->assign('categorien', $this->model);
+		parent::__construct($categorien, 'Forum');
 	}
 
 	public function view() {
+		$this->smarty->assign('zoekform', new ForumZoekenForm());
+		$this->smarty->assign('categorien', $this->model);
 		$this->smarty->display('MVC/forum/forum.tpl');
 	}
 
@@ -50,14 +49,17 @@ class ForumZoekenForm extends Formulier {
 
 class ForumRssView extends SmartyTemplateView {
 
+	private $delen;
+
 	public function __construct(array $draden, array $delen) {
 		parent::__construct($draden);
-		$this->smarty->assign('draden', $this->model);
-		$this->smarty->assign('delen', $delen);
-		$this->smarty->assign('privatelink', LoginModel::instance()->getLid()->getRssLink());
+		$this->delen = $delen;
 	}
 
 	public function view() {
+		$this->smarty->assign('draden', $this->model);
+		$this->smarty->assign('delen', $this->delen);
+		$this->smarty->assign('privatelink', LoginModel::instance()->getLid()->getRssLink());
 		$this->smarty->display('MVC/forum/rss.tpl');
 	}
 
@@ -65,17 +67,21 @@ class ForumRssView extends SmartyTemplateView {
 
 class ForumDeelView extends SmartyTemplateView {
 
+	private $paging;
+	private $belangrijk;
+
 	public function __construct(ForumDeel $deel, $paging = true, $belangrijk = null) {
-		parent::__construct($deel);
-		$this->titel = $deel->titel;
-		$this->smarty->assign('zoekform', new ForumZoekenForm());
-		$this->smarty->assign('deel', $this->model);
-		$this->smarty->assign('paging', $paging AND ForumDradenModel::instance()->getAantalPaginas($deel->forum_id) > 1);
-		$this->smarty->assign('belangrijk', ($belangrijk ? '/belangrijk' : ''));
-		$this->smarty->assign('categorien', ForumModel::instance()->getForum());
+		parent::__construct($deel, $deel->titel);
+		$this->paging = ($paging AND ForumDradenModel::instance()->getAantalPaginas($deel->forum_id) > 1);
+		$this->belangrijk = ($belangrijk ? '/belangrijk' : '');
 	}
 
 	public function view() {
+		$this->smarty->assign('zoekform', new ForumZoekenForm());
+		$this->smarty->assign('deel', $this->model);
+		$this->smarty->assign('paging', $this->paging);
+		$this->smarty->assign('belangrijk', $this->belangrijk);
+		$this->smarty->assign('categorien', ForumModel::instance()->getForum());
 		$this->smarty->assign('post_form_tekst', $_SESSION['forum_concept']);
 		$this->smarty->display('MVC/forum/deel.tpl');
 	}
@@ -117,16 +123,20 @@ class ForumDeelForm extends PopupForm {
 
 class ForumDraadView extends SmartyTemplateView {
 
+	private $deel;
+	private $paging;
+
 	public function __construct(ForumDraad $draad, ForumDeel $deel, $paging = true) {
-		parent::__construct($draad);
-		$this->titel = $draad->titel;
-		$this->smarty->assign('zoekform', new ForumZoekenForm());
-		$this->smarty->assign('draad', $this->model);
-		$this->smarty->assign('deel', $deel);
-		$this->smarty->assign('paging', $paging AND ForumPostsModel::instance()->getAantalPaginas($draad->draad_id) > 1);
+		parent::__construct($draad, $draad->titel);
+		$this->deel = $deel;
+		$this->paging = ($paging AND ForumPostsModel::instance()->getAantalPaginas($draad->draad_id) > 1);
 	}
 
 	public function view() {
+		$this->smarty->assign('zoekform', new ForumZoekenForm());
+		$this->smarty->assign('draad', $this->model);
+		$this->smarty->assign('deel', $this->deel);
+		$this->smarty->assign('paging', $this->paging);
 		$this->smarty->assign('post_form_tekst', $_SESSION['forum_concept']);
 		$this->smarty->display('MVC/forum/draad.tpl');
 	}
@@ -171,12 +181,15 @@ class ForumDraadZijbalkView extends SmartyTemplateView {
  */
 class ForumPostZijbalkView extends SmartyTemplateView {
 
+	private $draden;
+
 	public function __construct(array $posts, array $draden) {
 		parent::__construct($posts);
-		$this->smarty->assign('draden', $draden);
+		$this->draden = $draden;
 	}
 
 	public function view() {
+		$this->smarty->assign('draden', $this->draden);
 		echo '<div class="zijbalk_forum"><h1><a href="/communicatie/profiel/' . LoginModel::getUid() . '/#forum">Forum (zelf gepost)</a></h1>';
 		foreach ($this->model as $post) {
 			$this->smarty->assign('post', $post);
@@ -189,14 +202,19 @@ class ForumPostZijbalkView extends SmartyTemplateView {
 
 class ForumPostView extends SmartyTemplateView {
 
+	private $draad;
+	private $deel;
+
 	public function __construct(ForumPost $post, ForumDraad $draad, ForumDeel $deel) {
 		parent::__construct($post);
-		$this->smarty->assign('post', $this->model);
-		$this->smarty->assign('draad', $draad);
-		$this->smarty->assign('deel', $deel);
+		$this->draad = $draad;
+		$this->deel = $deel;
 	}
 
 	public function view() {
+		$this->smarty->assign('post', $this->model);
+		$this->smarty->assign('draad', $this->draad);
+		$this->smarty->assign('deel', $this->deel);
 		$this->smarty->display('MVC/forum/post_lijst.tpl');
 	}
 
@@ -215,10 +233,11 @@ class ForumPostDeleteView extends SmartyTemplateView {
 
 class ForumResultatenView extends SmartyTemplateView {
 
+	private $delen;
+
 	public function __construct(array $draden, array $delen, $query = null) {
 		parent::__construct($draden);
-		$this->smarty->assign('resultaten', $this->model);
-		$this->smarty->assign('delen', $delen);
+		$this->delen = $delen;
 		if ($query !== null) {
 			//FIXME: verder zoeken $this->smarty->assign('query', $query);
 			$this->titel = 'Zoekresultaten voor: "' . $query . '"';
@@ -228,6 +247,8 @@ class ForumResultatenView extends SmartyTemplateView {
 	}
 
 	public function view() {
+		$this->smarty->assign('resultaten', $this->model);
+		$this->smarty->assign('delen', $this->delen);
 		$this->smarty->display('MVC/forum/resultaten.tpl');
 	}
 

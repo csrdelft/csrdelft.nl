@@ -9,14 +9,20 @@
 
 require_once 'courant/courantcontent.class.php';
 
-class CourantarchiefContent extends SmartyTemplateView {
+class CourantarchiefContent implements View {
+
+	private $courant;
 
 	public function __construct(&$courant) {
-		parent::__construct($courant);
+		$this->courant = $courant;
 		//opgevraagde mail inladen
 		if (isset($_GET['ID'])) {
-			$this->model->load((int) $_GET['ID']);
+			$this->courant->load((int) $_GET['ID']);
 		}
+	}
+
+	function getModel() {
+		return $this->courant;
 	}
 
 	function getTitel() {
@@ -24,7 +30,7 @@ class CourantarchiefContent extends SmartyTemplateView {
 	}
 
 	private function getArchiefmails() {
-		$aMails = $this->model->getArchiefmails();
+		$aMails = $this->courant->getArchiefmails();
 		$sReturn = '<h1>Archief C.S.R.-courant</h1>';
 		if (is_array($aMails)) {
 			$sLijst = '';
@@ -46,7 +52,7 @@ class CourantarchiefContent extends SmartyTemplateView {
 	}
 
 	function getVerzendMoment() {
-		return strftime('%d %B %Y', strtotime($this->model->getVerzendmoment()));
+		return strftime('%d %B %Y', strtotime($this->courant->getVerzendmoment()));
 	}
 
 	function view() {
@@ -59,12 +65,12 @@ class CourantarchiefContent extends SmartyTemplateView {
 			</li>
 		</ul>
 		<hr />';
-		if ($this->model->getID() == 0) {
+		if ($this->courant->getID() == 0) {
 			//overzicht
 			echo $this->getArchiefmails();
 		} else {
 			echo '<h1>C.S.R.-courant ' . $this->getVerzendMoment() . '</h1>';
-			echo '<iframe src="/actueel/courant/archief/iframe/' . $this->model->getID() . '"
+			echo '<iframe src="/actueel/courant/archief/iframe/' . $this->courant->getID() . '"
 					style="width: 700px; height: 700px; border: 0;"></iframe>';
 		}
 	}

@@ -8,22 +8,28 @@
  * 
  * Bekijken van een CmsPagina.
  */
-class CmsPaginaView extends SmartyTemplateView {
+class CmsPaginaView implements View {
+
+	private $pagina;
 
 	public function __construct(CmsPagina $pagina) {
-		parent::__construct($pagina);
+		$this->pagina = $pagina;
+	}
+
+	function getModel() {
+		return $this->pagina;
 	}
 
 	function getTitel() {
-		return $this->model->titel;
+		return $this->pagina->titel;
 	}
 
 	public function view() {
 		echo SimpleHTML::getMelding();
-		if ($this->model->magBewerken()) {
-			echo '<a href="/pagina/bewerken/' . $this->model->naam . '" class="knop" style="float:right;" title="Bewerk pagina&#013;' . $this->model->laatst_gewijzigd . '">' . Icon::getTag('bewerken') . '</a>';
+		if ($this->pagina->magBewerken()) {
+			echo '<a href="/pagina/bewerken/' . $this->pagina->naam . '" class="knop" style="float:right;" title="Bewerk pagina&#013;' . $this->pagina->laatst_gewijzigd . '">' . Icon::getTag('bewerken') . '</a>';
 		}
-		echo CsrHtmlUbb::parse(htmlspecialchars_decode($this->model->inhoud));
+		echo CsrHtmlUbb::parse(htmlspecialchars_decode($this->pagina->inhoud));
 	}
 
 }
@@ -55,11 +61,11 @@ class CmsPaginaForm extends Formulier {
 
 		$this->addFields($fields);
 
-		$this->model->laatst_gewijzigd = getDateTime();
+		$this->pagina->laatst_gewijzigd = getDateTime();
 	}
 
 	function getTitel() {
-		return 'Pagina bewerken: ' . $this->model->naam;
+		return 'Pagina bewerken: ' . $this->pagina->naam;
 	}
 
 	function view() {
@@ -89,8 +95,12 @@ class CmsPaginaZijkolomView implements View {
 		return $this->paginas;
 	}
 
+	public function getTitel() {
+		return 'Pagina\'s';
+	}
+
 	public function view() {
-		echo '<h1>Pagina\'s</h1>';
+		echo '<h1>' . $this->getTitel() . '</h1>';
 		foreach ($this->paginas as $pagina) {
 			echo '<div class="item">';
 			echo '<a href="/pagina/' . $pagina->naam . '" title="' . $pagina->naam . '" >' . $pagina->titel . '</a><br />';

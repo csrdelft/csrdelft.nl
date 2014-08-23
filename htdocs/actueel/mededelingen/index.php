@@ -217,9 +217,9 @@ switch ($actie) {
 		break;
 }
 
-$page = new CsrLayoutPage($content);
-$page->addStylesheet('/layout/css/mededelingen.css');
-$page->view();
+$pagina = new CsrLayoutPage($content);
+$pagina->addStylesheet('/layout/css/mededelingen.css');
+$pagina->view();
 
 function resize_plaatje($file) {
 	list($owdt, $ohgt, $otype) = @getimagesize($file);
@@ -248,5 +248,3 @@ function resize_plaatje($file) {
 		}
 	}
 }
-
-?>

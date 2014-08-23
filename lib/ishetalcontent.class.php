@@ -1,12 +1,13 @@
 <?php
 
-class IsHetAlContent extends SmartyTemplateView {
+class IsHetAlContent implements View {
 
+	private $model;
 	private $opties = array('dies', 'jarig', 'vrijdag', 'donderdag', 'zondag', 'borrel', 'lezing', 'lunch', 'avond');
 	private $ja = false; //ja of nee.
 
 	public function __construct($ishetal) {
-		parent::__construct($ishetal);
+		$this->model = $ishetal;
 		if ($this->model == 'willekeurig') {
 			$this->model = $this->opties[array_rand($this->opties)];
 		}
@@ -58,6 +59,14 @@ class IsHetAlContent extends SmartyTemplateView {
 				}
 				break;
 		}
+	}
+
+	public function getModel() {
+		return $this->model;
+	}
+
+	public function getTitel() {
+		return $this->model;
 	}
 
 	public function view() {

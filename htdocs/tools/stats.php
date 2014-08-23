@@ -8,14 +8,13 @@ if (!LoginModel::mag('P_ADMIN')) {
 	redirect(CSR_ROOT);
 }
 
-class stats extends SmartyTemplateView {
+class stats implements View {
 
-	public function __construct() {
-		parent::__construct(null);
+	public function getModel() {
+		return null;
 	}
 
 	function view() {
-
 		if (isset($_GET['uid'])) {
 			$this->uidLog($_GET['uid']);
 		} elseif (isset($_GET['ip'])) {

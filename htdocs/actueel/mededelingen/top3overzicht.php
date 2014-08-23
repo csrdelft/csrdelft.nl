@@ -12,6 +12,6 @@ if (!Mededeling::isModerator()) {
 
 $top3overzicht = new MededelingTopDrieOverzichtContent();
 
-$page = new CsrLayoutPage($top3overzicht);
-$page->addStylesheet('/layout/css/mededelingen.css');
-$page->view();
+$pagina = new CsrLayoutPage($top3overzicht);
+$pagina->addStylesheet('/layout/css/mededelingen.css');
+$pagina->view();

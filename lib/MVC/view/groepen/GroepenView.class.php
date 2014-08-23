@@ -25,12 +25,12 @@ abstract class GroepenView extends SmartyTemplateView {
 		if ($this->pagina) {
 			$this->titel = $this->pagina->titel;
 		}
-		$this->smarty->assign('groepen', $this->model);
 	}
 
 	public function view() {
+		$this->smarty->assign('groepen', $this->model);
 		$this->smarty->display('MVC/groepen/menu_pagina.tpl');
-//$this->smarty->display('MVC/groepen/inhoudsopgave.tpl'); //FIXME: cannot iterate more than once over PDO statement of groepen
+		//$this->smarty->display('MVC/groepen/inhoudsopgave.tpl'); //FIXME: cannot iterate more than once over PDO statement of groepen
 		if ($this->pagina) {
 			$pagina = new CmsPaginaView($this->pagina);
 			$pagina->view();
@@ -46,13 +46,13 @@ abstract class GroepenView extends SmartyTemplateView {
 
 abstract class GroepView extends SmartyTemplateView {
 
+	protected $tab;
 	protected $tabContent;
 
 	public function __construct(Groep $groep, $groepTab) {
 		parent::__construct($groep);
-		$this->smarty->assign('groep', $this->model);
-		$this->smarty->assign('tab', $groepTab);
-		switch ($groepTab) {
+		$this->tab = $groepTab;
+		switch ($this->tab) {
 			default:
 			case GroepTab::Lijst:
 				$this->tabContent = new GroepLijstView($groep);
@@ -70,6 +70,8 @@ abstract class GroepView extends SmartyTemplateView {
 	}
 
 	public function view() {
+		$this->smarty->assign('groep', $this->model);
+		$this->smarty->assign('tab', $this->tab);
 		$this->smarty->assign('tabContent', $this->tabContent);
 		$this->smarty->display('MVC/groepen/groep.tpl'); //TODO: get_class($this->model)
 	}

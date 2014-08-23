@@ -84,13 +84,17 @@ class ProfielContent extends SmartyTemplateView {
  */
 class ProfielEditContent extends SmartyTemplateView {
 
+	private $actie;
+
 	public function __construct($profiel, $actie) {
-		parent::__construct($profiel, 'profiel van ' . $profiel->getLid()->getNaam() . ' bewerken.');
-		$this->smarty->assign('profiel', $this->model);
-		$this->smarty->assign('actie', $actie);
+		parent::__construct($profiel);
+		$this->titel = 'profiel van ' . $profiel->getLid()->getNaam() . ' bewerken.';
+		$this->actie = $actie;
 	}
 
 	public function view() {
+		$this->smarty->assign('profiel', $this->model);
+		$this->smarty->assign('actie', $this->actie);
 		$this->smarty->display('profiel/bewerken.tpl');
 	}
 
@@ -101,13 +105,17 @@ class ProfielEditContent extends SmartyTemplateView {
  */
 class ProfielStatusContent extends SmartyTemplateView {
 
+	private $actie;
+
 	public function __construct($profiel, $actie) {
-		parent::__construct($profiel, 'lidstatus van ' . $profiel->getLid()->getNaam() . ' aanpassen.');
-		$this->smarty->assign('profiel', $this->model);
-		$this->smarty->assign('actie', $actie);
+		parent::__construct($profiel);
+		$this->titel = 'lidstatus van ' . $profiel->getLid()->getNaam() . ' aanpassen.';
+		$this->actie = $actie;
 	}
 
 	public function view() {
+		$this->smarty->assign('profiel', $this->model);
+		$this->smarty->assign('actie', $this->actie);
 		$gelijknamigenovieten = Zoeker::zoekLeden($this->model->getLid()->getProperty('voornaam'), 'voornaam', 'alle', 'achternaam', array('S_NOVIET'), array('uid'));
 		$gelijknamigeleden = Zoeker::zoekLeden($this->model->getLid()->getProperty('achternaam'), 'achternaam', 'alle', 'lidjaar', array('S_LID', 'S_GASTLID'), array('uid'));
 		$this->smarty->assign('gelijknamigenovieten', $gelijknamigenovieten);
@@ -122,13 +130,17 @@ class ProfielStatusContent extends SmartyTemplateView {
  */
 class ProfielVoorkeurContent extends SmartyTemplateView {
 
+	private $actie;
+
 	public function __construct($profiel, $actie) {
-		parent::__construct($profiel, 'voorkeur van ' . $profiel->getLid()->getNaam() . ' aanpassen.');
-		$this->smarty->assign('profiel', $this->model);
-		$this->smarty->assign('actie', $actie);
+		parent::__construct($profiel);
+		$this->titel = 'voorkeur van ' . $profiel->getLid()->getNaam() . ' aanpassen.';
+		$this->actie = $actie;
 	}
 
 	public function view() {
+		$this->smarty->assign('profiel', $this->model);
+		$this->smarty->assign('actie', $this->actie);
 		$this->smarty->display('profiel/wijzigvoorkeur.tpl');
 	}
 

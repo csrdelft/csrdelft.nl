@@ -30,23 +30,19 @@ class ToewijzenForm extends PopupForm {
 
 class SuggestieLijst extends SmartyTemplateView implements FormElement {
 
-	private $jongste_lichting;
+	private $taak;
 	private $voorkeurbaar;
 	private $voorkeur;
 	private $recent;
 
 	public function __construct(array $suggesties, CorveeTaak $taak) {
 		parent::__construct($suggesties);
-
-		$this->jongste_lichting = Lichting::getJongsteLichting();
-		$this->smarty->assign('suggesties', $this->model);
+		$this->taak = $taak;
 
 		$crid = $taak->getCorveeRepetitieId();
 		if ($crid !== null) {
 			$this->voorkeurbaar = CorveeRepetitiesModel::getRepetitie($crid)->getIsVoorkeurbaar();
-			$this->smarty->assign('voorkeurbaar', $this->voorkeurbaar);
 		}
-		$this->smarty->assign('kwalificatie_benodigd', $taak->getCorveeFunctie()->kwalificatie_benodigd);
 
 		if ($taak->getCorveeFunctie()->kwalificatie_benodigd) {
 			$this->voorkeur = Instellingen::get('corvee', 'suggesties_voorkeur_kwali_filter');
@@ -55,11 +51,18 @@ class SuggestieLijst extends SmartyTemplateView implements FormElement {
 			$this->voorkeur = Instellingen::get('corvee', 'suggesties_voorkeur_filter');
 			$this->recent = Instellingen::get('corvee', 'suggesties_recent_filter');
 		}
-		$this->smarty->assign('voorkeur', $this->voorkeur);
-		$this->smarty->assign('recent', $this->recent);
 	}
 
 	public function view() {
+		$this->smarty->assign('suggesties', $this->model);
+		$this->smarty->assign('jongsteLichting', Lichting::getJongsteLichting());
+		$this->smarty->assign('voorkeur', $this->voorkeur);
+		$this->smarty->assign('recent', $this->recent);
+		if (isset($this->voorkeurbaar)) {
+			$this->smarty->assign('voorkeurbaar', $this->voorkeurbaar);
+		}
+		$this->smarty->assign('kwalificatie_benodigd', $this->taak->getCorveeFunctie()->kwalificatie_benodigd);
+
 		$this->smarty->display('maalcie/corveetaak/suggesties_lijst.tpl');
 	}
 
@@ -76,10 +79,6 @@ class SuggestieLijst extends SmartyTemplateView implements FormElement {
 			$js .= 'taken_toggle_suggestie("recent"); ';
 		}
 		return $js;
-	}
-
-	public function getIsJongsteLichting($uid) {
-		return ($this->jongste_lichting === LidCache::getLid($uid)->getLichting());
 	}
 
 }

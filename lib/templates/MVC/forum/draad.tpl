@@ -3,7 +3,7 @@
 
 	{$zoekform->view()}
 
-	{capture name='titel'}
+	{capture name='kop'}
 		<div class="forumheadbtn">
 			{if $draad->isVerborgen()}
 				<a href="/forum/tonen/{$draad->draad_id}" class="knop post ReloadPage" title="Onderwerp tonen in zijbalk"
@@ -53,7 +53,7 @@
 		<h1>{$draad->titel}</h1>
 	{/capture}
 
-	{$smarty.capture.titel}
+	{$smarty.capture.kop}
 
 	{if $deel->magModereren()}
 		{include file='MVC/forum/draad_mod.tpl'}
@@ -152,7 +152,7 @@ pagecount=ForumPostsModel::instance()->getAantalPaginas($draad->draad_id) curpag
 
 		<tr>
 			<td colspan="5" style="padding: 5px 0;">
-				{$smarty.capture.titel}
+				{$smarty.capture.kop}
 			</td>
 		</tr>
 

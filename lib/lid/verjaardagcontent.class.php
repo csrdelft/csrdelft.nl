@@ -9,10 +9,20 @@
 
 require_once 'lid/verjaardag.class.php';
 
-class VerjaardagContent extends SmartyTemplateView {
+class VerjaardagContent implements View {
+
+	private $model;
+
+	public function __construct($verjaardagen) {
+		$this->model = $verjaardagen;
+	}
 
 	function getTitel() {
 		return 'Verjaardagen';
+	}
+
+	function getModel() {
+		return $this->model;
 	}
 
 	function view() {
@@ -41,18 +51,18 @@ class VerjaardagContent extends SmartyTemplateView {
 				$kolommen = 4;
 
 				$maanden = array(
-					1 => "Januari",
-					2 => "Februari",
-					3 => "Maart",
-					4 => "April",
-					5 => "Mei",
-					6 => "Juni",
-					7 => "Juli",
-					8 => "Augustus",
-					9 => "September",
-					10 => "Oktober",
-					11 => "November",
-					12 => "December",
+					1	 => "Januari",
+					2	 => "Februari",
+					3	 => "Maart",
+					4	 => "April",
+					5	 => "Mei",
+					6	 => "Juni",
+					7	 => "Juli",
+					8	 => "Augustus",
+					9	 => "September",
+					10	 => "Oktober",
+					11	 => "November",
+					12	 => "December",
 				);
 
 				echo '<table style="width: 100%;">';
@@ -146,5 +156,3 @@ class VerjaardagContent extends SmartyTemplateView {
 	}
 
 }
-
-?>

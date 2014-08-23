@@ -12,10 +12,10 @@ class DocumentenContent extends SmartyTemplateView {
 
 	public function __construct() {
 		parent::__construct(DocumentenCategorie::getAll(), 'Documentenketzer');
-		$this->smarty->assign('categorieen', $this->model);
 	}
 
 	public function view() {
+		$this->smarty->assign('categorieen', $this->model);
 		$this->smarty->display('documenten/documenten.tpl');
 	}
 
@@ -28,10 +28,10 @@ class DocumentCategorieContent extends SmartyTemplateView {
 
 	public function __construct(DocumentenCategorie $categorie) {
 		parent::__construct($categorie, 'Documenten in categorie: ' . $categorie->getNaam());
-		$this->smarty->assign('categorie', $this->model);
 	}
 
 	public function view() {
+		$this->smarty->assign('categorie', $this->model);
 		$this->smarty->display('documenten/documentencategorie.tpl');
 	}
 
@@ -66,10 +66,10 @@ class DocumentUbbContent extends SmartyTemplateView {
 
 	public function __construct(Document $document) {
 		parent::__construct($document);
-		$this->smarty->assign('document', $this->model);
 	}
 
 	public function getHTML() {
+		$this->smarty->assign('document', $this->model);
 		return $this->smarty->fetch('documenten/document.ubb.tpl');
 	}
 

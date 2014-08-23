@@ -12,15 +12,17 @@ require_once 'maalcie/controller/MijnMaaltijdenController.class.php';
  */
 class MaaltijdKetzerView extends SmartyTemplateView {
 
+	private $aanmelding;
+
 	public function __construct(Maaltijd $maaltijd, $aanmelding = null) {
 		parent::__construct($maaltijd, 'Maaltijdketzer');
-
-		$this->smarty->assign('standaardprijs', floatval(Instellingen::get('maaltijden', 'standaard_prijs')));
-		$this->smarty->assign('maaltijd', $this->model);
-		$this->smarty->assign('aanmelding', $aanmelding);
+		$this->aanmelding = $aanmelding;
 	}
 
 	public function getKetzer() {
+		$this->smarty->assign('standaardprijs', floatval(Instellingen::get('maaltijden', 'standaard_prijs')));
+		$this->smarty->assign('maaltijd', $this->model);
+		$this->smarty->assign('aanmelding', $this->aanmelding);
 		return $this->smarty->fetch('maalcie/maaltijd/maaltijd_ketzer.tpl');
 	}
 

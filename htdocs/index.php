@@ -60,5 +60,5 @@ catch (Exception $e) {
 	if (DEBUG && (LoginModel::mag('P_ADMIN') || LoginModel::instance()->isSued())) {
 		echo str_replace('#', '<br />#', $e); // stacktrace 
 	}
-	DebugLogModel::instance()->log('index.php', 'new ' . $class, array($request), $e);
+	DebugLogModel::instance()->log('index.php', 'new ' . $class, array(REQUEST_URI), $e);
 }

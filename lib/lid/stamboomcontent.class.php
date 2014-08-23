@@ -7,17 +7,24 @@
  * je doorklikken naar boven. Verder niet zo'n spannend ding, zou een
  * stuk mooier gelayout kunnen worden...
  */
-class StamboomContent extends SmartyTemplateView {
+class StamboomContent implements View {
 
+	/**
+	 * Root-lid
+	 * @var Lid
+	 */
 	private $root;
 	private $kinderen = 0;
 
 	public function __construct($startuid, $levels = 3) {
-		parent::__construct(null);
 		if (!Lid::isValidUid($startuid)) {
 			throw new Exception('Opgegeven uid is niet geldig');
 		}
 		$this->root = LidCache::getLid($startuid);
+	}
+
+	public function getModel() {
+		return $this->root;
 	}
 
 	public function getTitel() {
@@ -63,5 +70,3 @@ class StamboomContent extends SmartyTemplateView {
 	}
 
 }
-
-?>

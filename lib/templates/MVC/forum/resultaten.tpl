@@ -8,7 +8,7 @@
 
 {$smarty.capture.navlinks}
 
-<h1>{$view->getTitel()}</h1>
+<h1>{$titel}</h1>
 
 {if $resultaten}
 	<table id="forumtabel">
@@ -66,7 +66,7 @@
 		{/if}
 	</table>
 
-	<h1>{$view->getTitel()}</h1>
+	<h1>{$titel}</h1>
 	{$smarty.capture.navlinks}
 
 {else}

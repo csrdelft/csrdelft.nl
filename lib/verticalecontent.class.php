@@ -1,9 +1,9 @@
 <?php
 
-class VerticalenContent extends SmartyTemplateView {
+class VerticalenContent implements View {
 
-	public function __construct() {
-		parent::__construct(null);
+	public function getModel() {
+		return null;
 	}
 
 	public function getTitel() {
@@ -95,4 +95,3 @@ class VerticalenContent extends SmartyTemplateView {
 	}
 
 }
-?>

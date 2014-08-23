@@ -45,7 +45,6 @@ class CourantContent extends SmartyTemplateView {
 	}
 
 	function getMail($headers = false) {
-
 		$this->smarty->assign('instellingen', $this->instellingen);
 		$this->smarty->assignByRef('courant', $this->model);
 
@@ -58,11 +57,7 @@ class CourantContent extends SmartyTemplateView {
 	}
 
 	function view() {
-
 		echo $this->getMail();
 	}
 
 }
-
-//einde classe
-?>

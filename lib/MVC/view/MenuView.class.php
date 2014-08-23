@@ -13,6 +13,9 @@ abstract class MenuView extends SmartyTemplateView {
 
 	public function __construct(MenuItem $tree_root) {
 		parent::__construct($tree_root);
+	}
+
+	public function view() {
 		$this->smarty->assign('root', $this->model);
 	}
 
@@ -21,6 +24,8 @@ abstract class MenuView extends SmartyTemplateView {
 class MainMenuView extends MenuView {
 
 	public function view() {
+		parent::view();
+
 		// SocCie-saldi & MaalCie-saldi
 		$this->smarty->assign('saldi', LoginModel::instance()->getLid()->getSaldi());
 
@@ -42,6 +47,7 @@ class MainMenuView extends MenuView {
 class PageMenuView extends MenuView {
 
 	public function view() {
+		parent::view();
 		$this->smarty->display('MVC/menu/page.tpl');
 	}
 
@@ -50,6 +56,7 @@ class PageMenuView extends MenuView {
 class BlockMenuView extends MenuView {
 
 	public function view() {
+		parent::view();
 		$this->smarty->display('MVC/menu/block.tpl');
 	}
 

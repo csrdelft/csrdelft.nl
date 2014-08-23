@@ -10,19 +10,14 @@ class CourantBeheercontent extends SmartyTemplateView {
 	private $_edit = 0; //bericht wat bewerkt moet worden.
 
 	public function __construct(&$courant) {
-		parent::__construct($courant);
+		parent::__construct($courant, 'C.S.R.-courant');
 	}
 
 	function edit($iBerichtID) {
 		$this->_edit = (int) $iBerichtID;
 	}
 
-	function getTitel() {
-		return 'C.S.R.-courant';
-	}
-
 	function view() {
-
 		$formulier = array();
 
 		//standaardwaarden.
