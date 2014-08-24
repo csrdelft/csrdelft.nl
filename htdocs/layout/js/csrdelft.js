@@ -78,7 +78,6 @@ function init_lazy_images() {
 		content.attr('src', $(this).attr('src'));
 		$(this).html(content);
 		content.on('load', lazy_image_loaded);
-		werkomheen_layout();
 	});
 	werkomheen_layout();
 }
@@ -93,6 +92,7 @@ function werkomheen_layout() {
 
 function lazy_image_loaded() {
 	$(this).parent().replaceWith($(this));
+	werkomheen_layout();
 }
 
 function init_scroll_fixed() {
