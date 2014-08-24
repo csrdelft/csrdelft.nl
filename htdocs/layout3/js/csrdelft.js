@@ -76,7 +76,7 @@ function init_dataTables() {
 	});
 }
 
-function childRow(td, dataTable, url) {
+function childRow(td, dataTable) {
 	var tr = td.closest('tr');
 	var row = dataTable.row(tr);
 	if (row.child.isShown()) {
@@ -88,14 +88,15 @@ function childRow(td, dataTable, url) {
 	else {
 		row.child('').show();
 		tr.addClass('childrow-loading');
-		td = tr.next().children(':first');
+		var childrow = tr.next().addClass('childrow');
+		var childtd = childrow.children(':first');
 		$.ajax({
-			url: url
+			url: td.attr('href')
 		}).done(function(data) {
 			if (row.child.isShown()) {
 				tr.removeClass('childrow-loading');
 				tr.addClass('childrow-shown');
-				td.html(data);
+				childtd.html(data);
 			}
 		});
 	}

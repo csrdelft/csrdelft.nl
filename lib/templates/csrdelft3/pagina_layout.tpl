@@ -71,7 +71,6 @@
 						"ajax": '/layout3/example-data.json',
 						"columns": [
 							{
-								"data": null,
 								"class": 'details-control',
 								"orderable": false,
 								"searchable": false,
@@ -106,12 +105,13 @@
 						],
 						"order": [[getGroupByColumn('#example') | 0, "asc"], [1, "asc"]],
 						"createdRow": function(row, data, index) {
-							$(row).attr('id', data.name.replace(' ', ''));
+							$(row).attr('id', 'row-' + index);
+							$(row).children(':first').attr('href', '/onderhoud.html?name=' + encodeURI(data.name));
 						}
 					});
 					// Opening and closing details
 					$('#example tbody').on('click', 'td.details-control', function() {
-						childRow($(this), dataTable, '/onderhoud.html');
+						childRow($(this), dataTable);
 					});
 					// Multiple selection of rows
 					$('#example tbody').on('click', 'tr', function() {

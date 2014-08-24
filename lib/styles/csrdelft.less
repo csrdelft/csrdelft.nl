@@ -13,17 +13,20 @@ body {
 	padding-bottom: 30px;
 }
 
-/* DataTables dom positioning */
 .dataTables_wrapper {
 
 	/* DataTables footer */
 	.dataTables_length {
 		padding-top: 0.755em;
 	}
+	/* DataTables dom positioning */
 	.dataTables_info {
 		clear: none;
 		margin-left: 10%;
 	}
+}
+
+.dataTable tbody {
 
 	/* DataTables group-by */
 	tr.group,
@@ -35,6 +38,9 @@ body {
 	}
 
 	/* DataTables child-row */
+	tr.childrow:hover {
+		background-color: white !important;
+	}
 	td.details-control {
 		background: url('http://plaetjes.csrdelft.nl/layout3/dataTables/details_open.png') no-repeat center center;
 		cursor: pointer;
