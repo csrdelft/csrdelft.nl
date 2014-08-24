@@ -103,13 +103,6 @@ function init_scroll_fixed() {
 		var yfix = $(window).scrollTop();
 		$('.scroll-fix').each(function() {
 			if (yfix >= $(this).attr('yfix')) {
-				// crappy layout werkomheen
-				if ($('#mainright').height() < $('#mainleft').height()) {
-					$('#mainright').height($('#mainleft').height());
-				} else {
-					$('#mainright').height('');
-				}
-				// einde werkomheen
 				$(this).addClass('scroll-fixed');
 			} else {
 				$(this).removeClass('scroll-fixed');
