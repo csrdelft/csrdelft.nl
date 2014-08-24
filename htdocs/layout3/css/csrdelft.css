@@ -11,10 +11,6 @@ body {
   padding-top: 70px;
   padding-bottom: 30px;
 }
-/* Button disabled */
-button:disabled {
-  color: #999;
-}
 /* DataTables dom positioning */
 .dataTables_wrapper {
   /* DataTables footer */

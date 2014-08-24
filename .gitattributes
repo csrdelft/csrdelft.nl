@@ -329,8 +329,6 @@ htdocs/layout3/js/jquery.dataTables.js -text
 htdocs/layout3/js/jquery.dataTables.min.js -text
 htdocs/layout3/js/jquery.js -text
 htdocs/layout3/js/jquery.min.js -text
-htdocs/layout3/js/mustache.js -text
-htdocs/layout3/js/mustache.min.js -text
 htdocs/layout3/js/typeahead.bundle.js -text
 htdocs/layout3/js/typeahead.bundle.min.js -text
 htdocs/onderhoud.html -text

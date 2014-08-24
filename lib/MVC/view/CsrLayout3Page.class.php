@@ -29,7 +29,6 @@ class CsrLayout3Page extends HtmlPage {
 			$this->addStylesheet($css . 'jquery.dataTables.css');
 
 			$this->addScript($js . 'jquery.js');
-			$this->addScript($js . 'mustache.js');
 			$this->addScript($js . 'bootstrap.js');
 			$this->addScript($js . 'typeahead.bundle.js');
 			$this->addScript($js . 'jquery.dataTables.js');
@@ -44,7 +43,6 @@ class CsrLayout3Page extends HtmlPage {
 			$this->addStylesheet($css . 'jquery.dataTables.min.css');
 
 			$this->addScript($js . 'jquery.min.js');
-			$this->addScript($js . 'mustache.min.js');
 			$this->addScript($js . 'bootstrap.min.js');
 			$this->addScript($js . 'typeahead.bundle.min.js');
 			$this->addScript($js . 'jquery.dataTables.min.js');

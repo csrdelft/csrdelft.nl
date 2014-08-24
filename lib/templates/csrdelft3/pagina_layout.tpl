@@ -49,15 +49,32 @@
 
 
 			<!-- DataTables example -->
+			<div id="example_toolbar" class="dataTables_toolbar">
+				<button id="rowcount" class="btn btn-primary">Count selected rows</button>
+			</div>
+			<table id="example" class="display" groupByColumn="3">
+				<thead>
+					<tr>
+						<th></th>
+						<th>Name</th>
+						<th>Position</th>
+						<th>Office</th>
+						<th>Salary</th>
+						<th>Start date</th>
+						<th>Extn</th>
+					</tr>
+				</thead>
+			</table>
 			<script type="text/javascript">
 				$(document).ready(function() {
 					var dataTable = $('#example').DataTable({
 						"ajax": '/layout3/example-data.json',
 						"columns": [
 							{
+								"data": null,
 								"class": 'details-control',
 								"orderable": false,
-								"data": null,
+								"searchable": false,
 								"defaultContent": ''
 							},
 							{
@@ -73,21 +90,24 @@
 								"data": "salary"
 							},
 							{
-								"data": "start_date"
+								"data": "start_date",
+								"render": function(data, type, row) {
+									var date = Date.parse(data);
+									if (date < new Date("March 21, 2010")) {
+										return data;
+									}
+									return '<abbr class="timeago" title="Recent">' + data + '</abbr>';
+								}
 							},
 							{
-								"data": "extn"
+								"data": "extn",
+								"visible": false
 							}
 						],
-						"columnDefs": [
-							{
-								"render": function(data, type, row) {
-									return '<abbr class="timeago" title="' + data + '">' + data + '</abbr>';
-								},
-								"targets": [5]
-							}
-						],
-						"order": [[getGroupByColumn('#example') | 0, "asc"], [1, "asc"]]
+						"order": [[getGroupByColumn('#example') | 0, "asc"], [1, "asc"]],
+						"createdRow": function(row, data, index) {
+							$(row).attr('id', data.name.replace(' ', ''));
+						}
 					});
 					// Opening and closing details
 					$('#example tbody').on('click', 'td.details-control', function() {
@@ -101,7 +121,7 @@
 					// Setup toolbar
 					$('#example').on('draw.dt', function() {
 						var aantal = $('#example tbody tr.selected').length;
-						$('#example_toolbar #rowcount').prop('disabled', aantal < 1);
+						$('#example_toolbar #rowcount').toggleClass('disabled', aantal < 1);
 					});
 					$('#example_toolbar').insertBefore('#example');
 					$('#example_toolbar #rowcount').click(function() {
@@ -109,22 +129,6 @@
 					});
 				});
 			</script>
-			<div id="example_toolbar" class="dataTables_toolbar">
-				<button id="rowcount" class="btn btn-default">Count selected rows</button>
-			</div>
-			<table id="example" class="display" groupByColumn="3">
-				<thead>
-					<tr>
-						<th></th>
-						<th>Name</th>
-						<th>Position</th>
-						<th>Office</th>
-						<th>Salary</th>
-						<th>Start date</th>
-						<th>Extn</th>
-					</tr>
-				</thead>
-			</table>
 
 
 
