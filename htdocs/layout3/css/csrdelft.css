@@ -11,12 +11,6 @@ body {
   padding-top: 70px;
   padding-bottom: 30px;
 }
-/* Bootstrap dropdown-menu */
-.main-menu .dropdown-menu {
-  position: static;
-  display: block;
-  margin-bottom: 20px;
-}
 /* Button disabled */
 button:disabled {
   color: #999;

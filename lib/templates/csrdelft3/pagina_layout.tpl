@@ -110,7 +110,7 @@
 				});
 			</script>
 			<div id="example_toolbar" class="dataTables_toolbar">
-				<button id="rowcount">Count selected rows</button>
+				<button id="rowcount" class="btn btn-default">Count selected rows</button>
 			</div>
 			<table id="example" class="display" groupByColumn="3">
 				<thead>
