@@ -52,9 +52,7 @@
 			<script type="text/javascript">
 				$(document).ready(function() {
 					var dataTable = $('#example').DataTable({
-						"ajax": "/layout3/example-data.json",
-						"dom": 'frtpli',
-						"deferRender": true,
+						"ajax": '/layout3/example-data.json',
 						"columns": [
 							{
 								"class": 'details-control',
@@ -81,31 +79,45 @@
 								"data": "extn"
 							}
 						],
-						"order": [[getGroupByColumn('#example') | 0, "asc"], [1, "asc"]],
-						"lengthMenu": [[10, 15, 25, 50, 100], [10, 15, 25, 50, 100]],
-						"displayLength": 15,
-						"drawCallback": function(settings) {
-							groupByColumn(this);
-						}
+						"columnDefs": [
+							{
+								"render": function(data, type, row) {
+									return '<abbr class="timeago" title="' + data + '">' + data + '</abbr>';
+								},
+								"targets": [5]
+							}
+						],
+						"order": [[getGroupByColumn('#example') | 0, "asc"], [1, "asc"]]
 					});
-					// Multiple selection of rows
-					$('#example tbody').on('click', 'tr', multiSelect);
-					$('#example tbody').on('click', 'tr', updateToolbar);
 					// Opening and closing details
 					$('#example tbody').on('click', 'td.details-control', function() {
 						var tr = $(this).closest('tr');
 						var row = dataTable.row(tr);
 						if (row.child.isShown()) {
-							row.child.hide();
-							tr.removeClass('shown');
+							if (tr.hasClass('childrow-shown')) {
+								row.child.hide();
+								tr.removeClass('childrow-shown');
+							}
 						}
 						else {
-							var html = row.data().name;
-							row.child(html).show();
-							tr.addClass('shown');
+							row.child('').show();
+							tr.addClass('childrow-loading');
+							var td = tr.next().children(':first');
+							$.ajax({
+								url: '/onderhoud.html'
+							}).done(function(data) {
+								if (row.child.isShown()) {
+									tr.removeClass('childrow-loading');
+									tr.addClass('childrow-shown');
+									td.html(data);
+								}
+							});
 						}
 					});
+					// Multiple selection of rows
+					$('#example tbody').on('click', 'tr', multiSelect);
 					// Setup toolbar
+					$('#example tbody').on('click', 'tr', updateToolbar);
 					$('#example_toolbar').insertBefore('#example');
 					$('#example_toolbar #rowcount').click(function() {
 						alert($('#example tbody tr.selected').length + ' row(s) selected');

@@ -23,6 +23,7 @@ button:disabled {
 }
 /* DataTables dom positioning */
 .dataTables_wrapper {
+  /* DataTables footer */
   /* DataTables group-by */
   /* DataTables child-row */
 }
@@ -44,6 +45,10 @@ button:disabled {
   background: url('http://plaetjes.csrdelft.nl/layout3/dataTables/details_open.png') no-repeat center center;
   cursor: pointer;
 }
-.dataTables_wrapper tr.shown td.details-control {
+.dataTables_wrapper tr.childrow-loading td.details-control {
+  background: none;
+  cursor: wait;
+}
+.dataTables_wrapper tr.childrow-shown td.details-control {
   background: url('http://plaetjes.csrdelft.nl/layout3/dataTables/details_close.png') no-repeat center center;
 }

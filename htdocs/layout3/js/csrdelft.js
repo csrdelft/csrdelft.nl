@@ -10,9 +10,12 @@
 var shiftPressed = false;
 var ctrlPressed = false;
 
+/* Init functions */
+
 $(document).ready(function() {
 	init_keyPressed();
 	init_timeago();
+	init_dataTables();
 });
 
 function init_timeago() {
@@ -59,6 +62,19 @@ function init_keyPressed() {
 
 
 /* DataTables */
+
+function init_dataTables() {
+	// Default settings
+	$.extend($.fn.dataTable.defaults, {
+		"dom": 'frtpli',
+		"deferRender": true,
+		"lengthMenu": [[10, 15, 25, 50, 100], [10, 15, 25, 50, 100]],
+		"displayLength": 15,
+		"drawCallback": function(settings) {
+			groupByColumn(this);
+		}
+	});
+}
 
 function multiSelect() {
 	if ($(this).hasClass('group')) {

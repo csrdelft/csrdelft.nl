@@ -67,7 +67,7 @@ class CmsPaginaController extends Controller {
 			}
 			$this->view = new CsrLayout2Page($body, $tmpl, $menu);
 		} else {
-			$this->view = new CsrLayout3Page($body, $this->zijkolom);
+			$this->view = new CsrLayoutPage($body, $this->zijkolom);
 		}
 	}
 

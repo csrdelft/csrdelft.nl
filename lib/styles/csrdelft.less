@@ -28,6 +28,7 @@ button:disabled {
 /* DataTables dom positioning */
 .dataTables_wrapper {
 
+	/* DataTables footer */
 	.dataTables_length {
 		padding-top: 0.755em;
 	}
@@ -50,7 +51,11 @@ button:disabled {
 		background: url('http://plaetjes.csrdelft.nl/layout3/dataTables/details_open.png') no-repeat center center;
 		cursor: pointer;
 	}
-	tr.shown td.details-control {
+	tr.childrow-loading td.details-control {
+		background: none;
+		cursor: wait;
+	}
+	tr.childrow-shown td.details-control {
 		background: url('http://plaetjes.csrdelft.nl/layout3/dataTables/details_close.png') no-repeat center center;
 	}
 }
