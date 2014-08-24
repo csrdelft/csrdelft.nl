@@ -7,9 +7,32 @@
  * De stek layout uit 2014
  */
 
+var shiftPressed = false;
+var ctrlPressed = false;
+
 $(document).ready(function() {
+	init_keyPressed();
 	init_timeago();
 });
+
+function init_keyPressed() {
+	$(window).keydown(function(event) {
+		if (event.which === 16) { // shift
+			shiftPressed = true;
+		}
+		else if (event.which === 17) { // ctrl
+			ctrlPressed = true;
+		}
+	});
+	$(window).keyup(function(event) {
+		if (event.which === 16) { // shift
+			shiftPressed = false;
+		}
+		else if (event.which === 17) { // ctrl
+			ctrlPressed = false;
+		}
+	});
+}
 
 function init_timeago() {
 	$.timeago.settings.strings = {

@@ -7,13 +7,30 @@
  * De stek layout uit 2014
  */
 
+/* Bootstrap fixed header */
 body {
-	padding-top: 70px;
+	padding-top: 70px; 
 	padding-bottom: 30px;
 }
 
+/* Bootstrap dropdown-menu */
 .main-menu .dropdown-menu {
 	position: static;
 	display: block;
 	margin-bottom: 20px;
+}
+
+/* DataTables group-by */
+tr.group,
+tr.group:hover {
+    background-color: #ddd !important;
+}
+
+/* DataTables child-row */
+td.details-control {
+    background: url('http://plaetjes.csrdelft.nl/layout3/dataTables/details_open.png') no-repeat center center;
+    cursor: pointer;
+}
+tr.shown td.details-control {
+    background: url('http://plaetjes.csrdelft.nl/layout3/dataTables/details_close.png') no-repeat center center;
 }
