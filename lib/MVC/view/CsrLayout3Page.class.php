@@ -32,7 +32,6 @@ class CsrLayout3Page extends HtmlPage {
 		$this->addScript($js . 'bootstrap');
 		$this->addScript($js . 'typeahead.bundle');
 		$this->addScript($js . 'jquery.dataTables');
-		$this->addScript($js . 'dataTables.fixedHeader');
 		$this->addScript($plugin . 'jquery.autosize');
 		$this->addScript($plugin . 'jquery.hoverIntent');
 		$this->addScript($plugin . 'jquery.scrollTo');
@@ -53,6 +52,7 @@ class CsrLayout3Page extends HtmlPage {
 		$smarty->assign('titel', $this->getTitel());
 
 		$smarty->assign('body', $this->body);
+		$smarty->assign('dataTable', new DataTable(null, 'example'));
 
 		$smarty->display('csrdelft3/pagina_layout.tpl');
 	}

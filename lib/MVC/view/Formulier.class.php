@@ -45,7 +45,7 @@ class Formulier implements View, Validator {
 	protected $css_classes = array();
 	public $titel;
 
-	public function __construct($model, $formId, $action, $titel = '') {
+	public function __construct($model, $formId, $action, $titel = false) {
 		$this->model = $model;
 		$this->formId = $formId;
 		$this->action = $action;
@@ -219,14 +219,6 @@ class Formulier implements View, Validator {
 		return $javascript;
 	}
 
-	public function getTitleTag() {
-		if ($this->titel == '') {
-			return '';
-		} else {
-			return '<h1 class="formTitle">' . $this->titel . '</h1>';
-		}
-	}
-
 	public function getFormTag() {
 		return '<form enctype="' . $this->enctype . '" action="' . $this->action . '" id="' . $this->formId . '" class="' . implode(' ', $this->css_classes) . '" method="post">';
 	}
@@ -240,7 +232,9 @@ class Formulier implements View, Validator {
 	 */
 	public function view() {
 		echo SimpleHtml::getMelding();
-		echo $this->getTitleTag();
+		if ($this->getTitel()) {
+			echo '<h1 class="formTitle">' . $this->getTitel() . '</h1>';
+		}
 		echo $this->getFormTag();
 		foreach ($this->fields as $field) {
 			$field->view();

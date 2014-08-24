@@ -15,7 +15,7 @@ class FotoAlbumView extends SmartyTemplateView {
 	}
 
 	function getTitel() {
-		return $this->model->dirname;
+		return ucfirst($this->model->dirname);
 	}
 
 	function view() {

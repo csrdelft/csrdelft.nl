@@ -381,8 +381,6 @@ htdocs/layout3/js/bootstrap.js -text
 htdocs/layout3/js/bootstrap.min.js -text
 htdocs/layout3/js/csrdelft.js -text
 htdocs/layout3/js/csrdelft.min.js -text
-htdocs/layout3/js/dataTables.fixedHeader.js -text
-htdocs/layout3/js/dataTables.fixedHeader.min.js -text
 htdocs/layout3/js/jquery.dataTables.js -text
 htdocs/layout3/js/jquery.dataTables.min.js -text
 htdocs/layout3/js/jquery.js -text

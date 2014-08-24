@@ -19,7 +19,7 @@ abstract class GroepenView extends SmartyTemplateView {
 	 */
 	protected $pagina;
 
-	public function __construct($groepen, $pagina, $titel = '') {
+	public function __construct($groepen, $pagina, $titel = false) {
 		parent::__construct($groepen, $titel);
 		$this->pagina = CmsPaginaModel::instance()->getPagina($pagina);
 		if ($this->pagina) {
