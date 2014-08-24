@@ -15,25 +15,6 @@ $(document).ready(function() {
 	init_timeago();
 });
 
-function init_keyPressed() {
-	$(window).keydown(function(event) {
-		if (event.which === 16) { // shift
-			shiftPressed = true;
-		}
-		else if (event.which === 17) { // ctrl
-			ctrlPressed = true;
-		}
-	});
-	$(window).keyup(function(event) {
-		if (event.which === 16) { // shift
-			shiftPressed = false;
-		}
-		else if (event.which === 17) { // ctrl
-			ctrlPressed = false;
-		}
-	});
-}
-
 function init_timeago() {
 	$.timeago.settings.strings = {
 		prefiprefixAgo: "",
@@ -55,4 +36,93 @@ function init_timeago() {
 		numbers: []
 	};
 	$('abbr.timeago').timeago();
+}
+
+function init_keyPressed() {
+	$(window).keydown(function(event) {
+		if (event.which === 16) { // shift
+			shiftPressed = true;
+		}
+		else if (event.which === 17) { // ctrl
+			ctrlPressed = true;
+		}
+	});
+	$(window).keyup(function(event) {
+		if (event.which === 16) { // shift
+			shiftPressed = false;
+		}
+		else if (event.which === 17) { // ctrl
+			ctrlPressed = false;
+		}
+	});
+}
+
+
+/* DataTables */
+
+function multiSelect() {
+	if ($(this).hasClass('group')) {
+		if ($(this).nextUntil('.group').not('.selected').length !== 0) {
+			if (!shiftPressed) {
+				$(this).siblings('.selected').removeClass('selected');
+			}
+			$(this).nextUntil('.group').addClass('selected');
+		}
+		else {
+			$(this).nextUntil('.group').removeClass('selected');
+		}
+	}
+	else {
+		$(this).toggleClass('selected');
+		if (shiftPressed) {
+			var selected = $(this).hasClass('selected');
+			if ($(this).prevAll('.selected').not('.group').length !== 0) {
+				$(this).prevUntil('.selected').not('.group').each(function() {
+					$(this).toggleClass('selected', selected);
+				});
+			}
+			else if ($(this).nextAll('.selected').not('.group').length !== 0) {
+				$(this).nextUntil('.selected').not('.group').each(function() {
+					$(this).toggleClass('selected', selected);
+				});
+			}
+		}
+	}
+}
+
+function setGroupByColumn(table, column) {
+	$(table).attr('groupByColumn', column);
+}
+function getGroupByColumn(table) {
+	var groupByColumn = parseInt($(table).attr('groupByColumn'));
+	if (isNaN(groupByColumn)) {
+		return false;
+	}
+	return groupByColumn;
+}
+function groupByColumn(dataTable) {
+	var api = dataTable.api();
+	var rows = api.rows({page: 'current'}).nodes();
+	var last = null;
+	var groupByColumn = getGroupByColumn(dataTable.selector);
+	if (ctrlPressed) {
+		// Dynamic group by column
+		var primaryOrder = api.order()[0];
+		if (groupByColumn === false || groupByColumn !== primaryOrder[0]) {
+			groupByColumn = primaryOrder[0];
+		}
+		else if (groupByColumn === primaryOrder[0]) {
+			groupByColumn = false;
+		}
+		setGroupByColumn(dataTable.selector, groupByColumn);
+	}
+	if (groupByColumn === false) {
+		return;
+	}
+	api.column(groupByColumn, {page: 'current'}).data().each(function(group, i) {
+		if (last !== group) {
+			$(rows).eq(i).before('<tr class="group"><td colspan="7">' + group + '</td></tr>');
+			last = group;
+		}
+	});
 }

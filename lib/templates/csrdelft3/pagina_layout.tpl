@@ -51,9 +51,9 @@
 			<!-- DataTables example -->
 			<script type="text/javascript">
 				$(document).ready(function() {
-					var orderByColumn = 3;
 					var dataTable = $('#example').DataTable({
 						"ajax": "/layout3/example-data.json",
+						"dom": 'frtpli',
 						"deferRender": true,
 						"columns": [
 							{
@@ -62,71 +62,64 @@
 								"data": null,
 								"defaultContent": ''
 							},
-							{ "data": "name"},
-							{ "data": "position"},
-							{ "data": "office"},
-							{ "data": "salary"},
-							{ "data": "start_date"},
-							{ "data": "extn"}
-						],
-						"order": [[orderByColumn, "asc"], [1, "asc"]],
-						"displayLength": 25,
-						"drawCallback": function(settings) {
-							var api = this.api();
-							var rows = api.rows({ page: 'current'}).nodes();
-							var last = null;
-							if (ctrlPressed) {
-								// Dynamic group by column
-								orderByColumn = api.order()[0][0];
+							{
+								"data": "name"
+							},
+							{
+								"data": "position"
+							},
+							{
+								"data": "office"
+							},
+							{
+								"data": "salary"
+							},
+							{
+								"data": "start_date"
+							},
+							{
+								"data": "extn"
 							}
-							api.column(orderByColumn, { page: 'current'}).data().each(function(group, i) {
-								if (last !== group) {
-									$(rows).eq(i).before('<tr class="group"><td colspan="7">' + group + '</td></tr>');
-									last = group;
-								}
-							});
-						}
-					});
-					// Order by the grouping
-					$('#example tbody').on('click', 'tr.group', function() {
-						var currentOrder = dataTable.order()[0];
-						if (currentOrder[1] === 'asc') {
-							dataTable.order([currentOrder[0], 'desc']).draw();
-						} else {
-							dataTable.order([currentOrder[0], 'asc']).draw();
+						],
+						"order": [[getGroupByColumn('#example') | 0, "asc"], [1, "asc"]],
+						"lengthMenu": [[10, 15, 25, 50, 100], [10, 15, 25, 50, 100]],
+						"displayLength": 15,
+						"drawCallback": function(settings) {
+							groupByColumn(this);
 						}
 					});
 					// Multiple selection of rows
-					$('#example tbody').on('click', 'tr', function() {
-						$(this).toggleClass('selected');
-					});
+					$('#example tbody').on('click', 'tr', multiSelect);
+					$('#example tbody').on('click', 'tr', updateToolbar);
 					// Opening and closing details
 					$('#example tbody').on('click', 'td.details-control', function() {
 						var tr = $(this).closest('tr');
 						var row = dataTable.row(tr);
 						if (row.child.isShown()) {
-							// This row is already open - close it
 							row.child.hide();
 							tr.removeClass('shown');
 						}
 						else {
-							var childrow = $('#example').clone(true);
-							// Open this row
-							row.child(childrow).show();
+							var html = row.data().name;
+							row.child(html).show();
 							tr.addClass('shown');
 						}
 					});
 					// Setup toolbar
-					$('#example_toolbar').prependTo('#example_wrapper');
+					$('#example_toolbar').insertBefore('#example');
 					$('#example_toolbar #rowcount').click(function() {
 						alert($('#example tbody tr.selected').length + ' row(s) selected');
 					});
+					function updateToolbar() {
+						var aantal = $(this).parent().children('.selected').length;
+						$('#example_toolbar #rowcount').prop('disabled', aantal < 1);
+					}
 				});
 			</script>
 			<div id="example_toolbar" class="dataTables_toolbar">
-				<button id="rowcount">Count selected rows</button>
+				<button id="rowcount" disabled>Count selected rows</button>
 			</div>
-			<table id="example" class="display">
+			<table id="example" class="display" groupByColumn="3">
 				<thead>
 					<tr>
 						<th></th>

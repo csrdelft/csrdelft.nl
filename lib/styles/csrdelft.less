@@ -1,5 +1,5 @@
 /*!
- * csrdelft.less
+ * COMPILED csrdelft.less
  * 
  * @author C.S.R. Delft <pubcie@csrdelft.nl>
  * @author P.W.G. Brussee <brussee@live.nl>
@@ -20,17 +20,37 @@ body {
 	margin-bottom: 20px;
 }
 
-/* DataTables group-by */
-tr.group,
-tr.group:hover {
-    background-color: #ddd !important;
+/* Button disabled */
+button:disabled {
+	color: #999;
 }
 
-/* DataTables child-row */
-td.details-control {
-    background: url('http://plaetjes.csrdelft.nl/layout3/dataTables/details_open.png') no-repeat center center;
-    cursor: pointer;
-}
-tr.shown td.details-control {
-    background: url('http://plaetjes.csrdelft.nl/layout3/dataTables/details_close.png') no-repeat center center;
+/* DataTables dom positioning */
+.dataTables_wrapper {
+
+	.dataTables_length {
+		padding-top: 0.755em;
+	}
+	.dataTables_info {
+		clear: none;
+		margin-left: 10%;
+	}
+
+	/* DataTables group-by */
+	tr.group,
+	tr.group:hover {
+		background-color: #ddd !important;
+	}
+	tr.group {
+		line-height: 0.755em;
+	}
+
+	/* DataTables child-row */
+	td.details-control {
+		background: url('http://plaetjes.csrdelft.nl/layout3/dataTables/details_open.png') no-repeat center center;
+		cursor: pointer;
+	}
+	tr.shown td.details-control {
+		background: url('http://plaetjes.csrdelft.nl/layout3/dataTables/details_close.png') no-repeat center center;
+	}
 }

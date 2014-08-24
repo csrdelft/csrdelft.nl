@@ -164,7 +164,6 @@ htdocs/layout/js/datatables/images/sort_desc_disabled.png -text
 htdocs/layout/js/datatables/jquery.dataTables.min.js -text
 htdocs/layout/js/documenten.js -text
 htdocs/layout/js/dragobject.js -text
-htdocs/layout/js/fastlightbox.js -text
 htdocs/layout/js/flot/API.md -text
 htdocs/layout/js/flot/CONTRIBUTING.md -text
 htdocs/layout/js/flot/FAQ.md -text
@@ -287,7 +286,6 @@ htdocs/layout/js/jquery/plugins/jquery.scrollTo.min.js -text
 htdocs/layout/js/jquery/plugins/jquery.timeago.js -text
 htdocs/layout/js/jquery/plugins/jquery.timeago.min.js -text
 htdocs/layout/js/lightbox.js -text
-htdocs/layout/js/maaltijdabos.js -text
 htdocs/layout/js/menu.js -text
 htdocs/layout/js/minion.js -text
 htdocs/layout/js/peilingbeheer.js -text
