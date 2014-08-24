@@ -79,6 +79,13 @@ function init_lazy_images() {
 		$(this).html(content);
 		content.on('load', lazy_image_loaded);
 	});
+	// crappy layout werkomheen
+	if ($('#mainright').height() < $('#mainleft').height()) {
+		$('#mainright').height($('#mainleft').height());
+	} else {
+		$('#mainright').height('');
+	}
+	// einde werkomheen
 }
 
 function lazy_image_loaded() {
@@ -99,8 +106,10 @@ function init_scroll_fixed() {
 				// crappy layout werkomheen
 				if ($('#mainright').height() < $('#mainleft').height()) {
 					$('#mainright').height($('#mainleft').height());
+				} else {
+					$('#mainright').height('');
 				}
-
+				// einde werkomheen
 				$(this).addClass('scroll-fixed');
 			} else {
 				$(this).removeClass('scroll-fixed');

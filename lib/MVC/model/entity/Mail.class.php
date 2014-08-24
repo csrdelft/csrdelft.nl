@@ -85,7 +85,7 @@ class Mail {
 			if (!email_like($email)) {
 				throw new Exception('Invalid e-mailadres in TO "' . $email . '"');
 			}
-			$this->to[$this->production_safe($to)] = $name;
+			$this->to[$this->production_safe($email)] = $name;
 		}
 	}
 
@@ -106,7 +106,7 @@ class Mail {
 			if (!email_like($email)) {
 				throw new Exception('Invalid e-mailadres in BCC "' . $email . '"');
 			}
-			$this->bcc[$this->production_safe($bcc)] = $name;
+			$this->bcc[$this->production_safe($email)] = $name;
 		}
 	}
 
