@@ -155,11 +155,11 @@ if (!(LoginModel::mag('P_LEDEN_READ') or LoginModel::mag('P_OUDLEDEN_READ'))) {
 }
 
 $pagina = new CsrLayoutPage($midden);
-$pagina->addStylesheet('/layout/css/profiel.css');
-$pagina->addScript('/layout/js/profiel.js');
+$pagina->addStylesheet('/layout/css/profiel');
+$pagina->addScript('/layout/js/profiel');
 if ($actie == 'view') {
-	$pagina->addScript('/layout/js/flot/jquery.flot.min.js');
-	$pagina->addScript('/layout/js/flot/jquery.flot.threshold.min.js');
-	$pagina->addScript('/layout/js/flot/jquery.flot.time.min.js');
+	$pagina->addScript('/layout/js/flot/jquery.flot');
+	$pagina->addScript('/layout/js/flot/jquery.flot.threshold');
+	$pagina->addScript('/layout/js/flot/jquery.flot.time');
 }
 $pagina->view();

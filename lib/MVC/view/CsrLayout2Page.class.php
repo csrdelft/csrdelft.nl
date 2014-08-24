@@ -29,19 +29,19 @@ class CsrLayout2Page extends HtmlPage {
 		$this->menutmpl = $menu;
 
 		$layout2 = '/layout2/css/';
-		$this->addStylesheet($layout2 . 'style.css');
-		$this->addStylesheet($layout2 . 'foundation.css');
-		$this->addStylesheet($layout2 . 'normalize.css');
-		$this->addStylesheet('/layout/css/ubb.css');
+		$this->addStylesheet($layout2 . 'style');
+		$this->addStylesheet($layout2 . 'foundation');
+		$this->addStylesheet($layout2 . 'normalize');
+		$this->addStylesheet('/layout/css/ubb');
 
 		$layout = '/layout/js/';
-		$this->addScript('/layout2/js/jquery.js');
-		$this->addScript('/layout2/js/jquery.backstretch.js');
-		$this->addScript($layout . 'jquery/plugins/jquery.timeago.js');
-		$this->addScript($layout . 'jquery/plugins/jquery.hoverIntent.min.js');
-		$this->addScript('/layout2/js/init.js');
-		$this->addScript($layout . 'csrdelft.js');
-		$this->addScript($layout . 'dragobject.js');
+		$this->addScript('/layout2/js/jquery');
+		$this->addScript('/layout2/js/jquery.backstretch');
+		$this->addScript($layout . 'jquery/plugins/jquery.timeago');
+		$this->addScript($layout . 'jquery/plugins/jquery.hoverIntent');
+		$this->addScript('/layout2/js/init');
+		$this->addScript($layout . 'csrdelft');
+		$this->addScript($layout . 'dragobject');
 	}
 
 	function view() {

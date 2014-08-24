@@ -16,10 +16,10 @@ if (isset($_GET['querystring'])) {
 }
 
 $pagina = new CsrLayoutPage($docControl->getView());
-$pagina->addStylesheet('/layout/js/datatables/css/datatables_basic.css');
-$pagina->addStylesheet('/layout/css/documenten.css');
+$pagina->addStylesheet('/layout/js/datatables/css/datatables_basic');
+$pagina->addStylesheet('/layout/css/documenten');
 
-$pagina->addScript('/layout/js/datatables/jquery.dataTables.min.js');
-$pagina->addScript('/layout/js/documenten.js');
+$pagina->addScript('/layout/js/datatables/jquery.dataTables');
+$pagina->addScript('/layout/js/documenten');
 
 $pagina->view();

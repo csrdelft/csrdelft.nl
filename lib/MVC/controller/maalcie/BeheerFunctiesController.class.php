@@ -19,11 +19,11 @@ class BeheerFunctiesController extends AclController {
 			);
 		} else {
 			$this->acl = array(
-				'toevoegen' => 'P_CORVEE_MOD',
-				'bewerken' => 'P_CORVEE_MOD',
-				'verwijderen' => 'P_CORVEE_MOD',
-				'kwalificeer' => 'P_CORVEE_MOD',
-				'dekwalificeer' => 'P_CORVEE_MOD'
+				'toevoegen'		 => 'P_CORVEE_MOD',
+				'bewerken'		 => 'P_CORVEE_MOD',
+				'verwijderen'	 => 'P_CORVEE_MOD',
+				'kwalificeer'	 => 'P_CORVEE_MOD',
+				'dekwalificeer'	 => 'P_CORVEE_MOD'
 			);
 		}
 	}
@@ -46,8 +46,8 @@ class BeheerFunctiesController extends AclController {
 		$functies = $this->model->getAlleFuncties(); // grouped by functie_id
 		$this->view = new BeheerFunctiesView($functies);
 		$this->view = new CsrLayoutPage($this->getView(), array(), $popup);
-		$this->view->addStylesheet('/layout/css/taken.css');
-		$this->view->addScript('/layout/js/taken.js');
+		$this->view->addStylesheet('/layout/css/taken');
+		$this->view->addScript('/layout/js/taken');
 	}
 
 	public function toevoegen() {

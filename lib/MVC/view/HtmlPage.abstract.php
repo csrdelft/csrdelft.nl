@@ -56,6 +56,7 @@ abstract class HtmlPage implements View {
 	 */
 	public function addStylesheet($sheet, $remote = false) {
 		if (!$remote) {
+			$sheet .= (DEBUG ? '.css' : '.min.css');
 			$sheet .= '?' . filemtime(HTDOCS_PATH . $sheet);
 		}
 		$this->stylesheets[md5($sheet)] = $sheet;
@@ -77,6 +78,7 @@ abstract class HtmlPage implements View {
 	 */
 	public function addScript($script, $remote = false) {
 		if (!$remote) {
+			$script .= (DEBUG ? '.js' : '.min.js');
 			$script .= '?' . filemtime(HTDOCS_PATH . $script);
 		}
 		$this->scripts[md5($script)] = $script;

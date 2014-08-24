@@ -17,17 +17,17 @@ class MaaltijdLijstView extends HtmlPage {
 		$this->fiscaal = $fiscaal;
 
 		$jquery = '/layout/js/jquery/';
-		$this->addStylesheet($jquery . 'jquery-ui.min.css');
-		$this->addScript($jquery . 'jquery.min.js');
-		$this->addScript($jquery . 'jquery-ui.min.js');
-		$this->addScript($jquery . 'plugins/jquery.hoverIntent.min.js');
-		$this->addScript('/layout/js/csrdelft.js');
-		$this->addScript('/layout/js/taken.js');
+		$this->addStylesheet($jquery . 'jquery-ui');
+		$this->addScript($jquery . 'jquery');
+		$this->addScript($jquery . 'jquery-ui');
+		$this->addScript($jquery . 'plugins/jquery.hoverIntent');
+		$this->addScript('/layout/js/csrdelft');
+		$this->addScript('/layout/js/taken');
 
 		$smarty = CsrSmarty::instance();
 
 		if (!$this->fiscaal) {
-			$this->addStylesheet('/layout/css/maaltijdlijst.css');
+			$this->addStylesheet('/layout/css/maaltijdlijst');
 
 			for ($i = $maaltijd->getMarge(); $i > 0; $i--) { // ruimte voor marge eters
 				$aanmeldingen[] = new MaaltijdAanmelding();

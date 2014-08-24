@@ -20,9 +20,9 @@ if ($biebControl->getView() instanceof BibliotheekCatalogusContent) {
 	$pagina->zijkolom = false;
 }
 
-$pagina->addStylesheet('/layout/css/bibliotheek.css');
-$pagina->addStylesheet('/layout/js/datatables/css/datatables_basic.css');
-$pagina->addScript('/layout/js/datatables/jquery.dataTables.min.js');
-$pagina->addScript('/layout/js/csrdelft.js');
-$pagina->addScript('/layout/js/bibliotheek.js');
+$pagina->addStylesheet('/layout/css/bibliotheek');
+$pagina->addStylesheet('/layout/js/datatables/css/datatables_basic');
+$pagina->addScript('/layout/js/datatables/jquery.dataTables');
+$pagina->addScript('/layout/js/csrdelft');
+$pagina->addScript('/layout/js/bibliotheek');
 $pagina->view();

@@ -151,6 +151,13 @@ function groupByColumn(dataTable, settings) {
 		// Dynamic group by column
 		var primaryOrder = api.order()[0];
 		if (groupByColumn === false || groupByColumn !== primaryOrder[0]) {
+			if (groupByColumn !== false) {
+				// Toggle the visibility
+				var column = api.column(groupByColumn);
+				column.visible(!column.visible());
+				column = api.column(primaryOrder[0]);
+				column.visible(!column.visible());
+			}
 			groupByColumn = primaryOrder[0];
 		}
 		else if (groupByColumn === primaryOrder[0]) {

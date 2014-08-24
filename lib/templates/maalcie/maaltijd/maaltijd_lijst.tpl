@@ -2,12 +2,9 @@
 <html>{strip}
 	<head>
 		<title>{$titel} {$maaltijd->getDatum()|date_format:"%A %e %B"}</title>
-		{foreach from=$stylesheets item=sheet}
-			<link rel="stylesheet" href="{$sheet}" type="text/css" />
-		{/foreach}
-		{foreach from=$scripts item=script}
-			<script type="text/javascript" src="{$script}"></script>
-		{/foreach}
+	{foreach from=$stylesheets item=sheet}
+		<link rel="stylesheet" href="{$sheet}" type="text/css" />
+	{/foreach}
 	</head>
 	<body>
 		<a href="/" style="float: right;"><img alt="Beeldmerk van de Vereniging" src="{$CSR_PICS}/layout/beeldmerk.jpg" /></a>
@@ -99,5 +96,8 @@
 			</tr>
 		</tbody>
 	</table>
+{foreach from=$scripts item=script}
+	<script type="text/javascript" src="{$script}"></script>
+{/foreach}
 </body>
 {/strip}</html>

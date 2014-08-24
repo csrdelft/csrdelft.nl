@@ -19,6 +19,6 @@ $controller->performAction();
 
 $pagina = new CsrLayoutPage($controller->getView());
 
-$pagina->addStylesheet('/layout/css/groepen.css');
-$pagina->addScript('/layout/js/groepen.js');
+$pagina->addStylesheet('/layout/css/groepen');
+$pagina->addScript('/layout/js/groepen');
 $pagina->view();

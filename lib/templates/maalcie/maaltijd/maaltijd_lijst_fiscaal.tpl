@@ -5,9 +5,6 @@
 {foreach from=$stylesheets item=sheet}
 <link rel="stylesheet" href="{$sheet.naam}?{$sheet.datum}" type="text/css" />
 {/foreach}
-{foreach from=$scripts item=script}
-<script type="text/javascript" src="{$script.naam}?{$script.datum}"></script>
-{/foreach}
 </head>
 <body style="font-family: verdana; font-size: 11px; margin-left: 250px;" onload="selectText('lijst');">
 <a href="/"><img alt="Beeldmerk van de Vereniging" src="{$CSR_PICS}/layout/beeldmerk.jpg" style="position: absolute; left: 50px;" /></a>
@@ -26,5 +23,8 @@
 {else}
 <p>Nog geen aanmeldingen voor deze maaltijd.</p>
 {/if}
+{foreach from=$scripts item=script}
+<script type="text/javascript" src="{$script.naam}?{$script.datum}"></script>
+{/foreach}
 </body>
 </html>

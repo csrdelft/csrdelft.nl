@@ -22,40 +22,25 @@ class CsrLayout3Page extends HtmlPage {
 		$js = '/layout3/js/';
 		$plugin = '/layout/js/jquery/plugins/';
 
-		if (DEBUG) {
-			$this->addStylesheet($css . 'bootstrap.css');
-			$this->addStylesheet($css . 'bootstrap-theme.css');
-			$this->addStylesheet($css . 'bootstrap-typeahead.css');
-			$this->addStylesheet($css . 'jquery.dataTables.css');
+		$this->addStylesheet($css . 'bootstrap');
+		$this->addStylesheet($css . 'bootstrap-theme');
+		$this->addStylesheet($css . 'bootstrap-typeahead');
+		$this->addStylesheet($css . 'jquery.dataTables');
+		$this->addStylesheet($css . 'csrdelft');
 
-			$this->addScript($js . 'jquery.js');
-			$this->addScript($js . 'bootstrap.js');
-			$this->addScript($js . 'typeahead.bundle.js');
-			$this->addScript($js . 'jquery.dataTables.js');
-			$this->addScript($plugin . 'jquery.autosize.js');
-			$this->addScript($plugin . 'jquery.hoverIntent.js');
-			$this->addScript($plugin . 'jquery.scrollTo.js');
-			$this->addScript($plugin . 'jquery.timeago.js');
-		} else { // minimized
-			$this->addStylesheet($css . 'bootstrap.min.css');
-			$this->addStylesheet($css . 'bootstrap-theme.min.css');
-			$this->addStylesheet($css . 'bootstrap-typeahead.min.css');
-			$this->addStylesheet($css . 'jquery.dataTables.min.css');
-
-			$this->addScript($js . 'jquery.min.js');
-			$this->addScript($js . 'bootstrap.min.js');
-			$this->addScript($js . 'typeahead.bundle.min.js');
-			$this->addScript($js . 'jquery.dataTables.min.js');
-			$this->addScript($plugin . 'jquery.autosize.min.js');
-			$this->addScript($plugin . 'jquery.hoverIntent.min.js');
-			$this->addScript($plugin . 'jquery.scrollTo.min.js');
-			$this->addScript($plugin . 'jquery.timeago.min.js');
-		}
-		$this->addStylesheet($css . 'csrdelft.css');
-		$this->addScript($js . 'csrdelft.js');
+		$this->addScript($js . 'jquery');
+		$this->addScript($js . 'bootstrap');
+		$this->addScript($js . 'typeahead.bundle');
+		$this->addScript($js . 'jquery.dataTables');
+		$this->addScript($js . 'dataTables.fixedHeader');
+		$this->addScript($plugin . 'jquery.autosize');
+		$this->addScript($plugin . 'jquery.hoverIntent');
+		$this->addScript($plugin . 'jquery.scrollTo');
+		$this->addScript($plugin . 'jquery.timeago');
+		$this->addScript($js . 'csrdelft');
 
 		if (LidInstellingen::get('algemeen', 'sneltoetsen') == 'ja') {
-			$this->addScript('/layout/js/sneltoetsen.js');
+			$this->addScript('/layout/js/sneltoetsen');
 		}
 	}
 

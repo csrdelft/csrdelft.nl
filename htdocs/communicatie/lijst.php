@@ -86,7 +86,7 @@ if (isset($_GET['addToGoogle'])) {
 }
 $pagina = new CsrLayoutPage($ledenlijstcontent);
 
-$pagina->addStylesheet('/layout/js/datatables/css/datatables_basic.css');
-$pagina->addStylesheet('/layout/css/ledenlijst.css');
-$pagina->addScript('/layout/js/datatables/jquery.dataTables.min.js');
+$pagina->addStylesheet('/layout/js/datatables/css/datatables_basic');
+$pagina->addStylesheet('/layout/css/ledenlijst');
+$pagina->addScript('/layout/js/datatables/jquery.dataTables');
 $pagina->view();

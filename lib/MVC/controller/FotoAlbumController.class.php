@@ -108,9 +108,9 @@ class FotoAlbumController extends AclController {
 		} else { // uitgelogd heeft nieuwe layout
 			$this->view = new CsrLayout2Page($body);
 		}
-		$this->view->addStylesheet('/layout/js/jquery/plugins/jquery.prettyPhoto.min.css');
-		$this->view->addScript('/layout/js/jquery/plugins/jquery.prettyPhoto.min.js');
-		$this->view->addStylesheet('/layout/css/fotoalbum.css');
+		$this->view->addStylesheet('/layout/js/jquery/plugins/jquery.prettyPhoto');
+		$this->view->addScript('/layout/js/jquery/plugins/jquery.prettyPhoto');
+		$this->view->addStylesheet('/layout/css/fotoalbum');
 	}
 
 	public function verwerken(FotoAlbum $album) {

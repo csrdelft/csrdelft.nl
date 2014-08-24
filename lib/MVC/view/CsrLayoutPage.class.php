@@ -35,51 +35,41 @@ class CsrLayoutPage extends HtmlPage {
 		$js = '/layout/js/';
 		$plugin = $js . 'jquery/plugins/';
 
-		$this->addStylesheet($css . 'undohtml.css');
-		$this->addStylesheet($css . 'ubb.css');
-		$this->addStylesheet($css . 'csrdelft.css');
+		$this->addStylesheet($css . 'undohtml');
+		$this->addStylesheet($css . 'ubb');
+		$this->addStylesheet($css . 'csrdelft');
 		$layout = LidInstellingen::get('layout', 'layout');
-		$this->addStylesheet($css . $layout . '.css');
+		$this->addStylesheet($css . $layout);
 		if (LidInstellingen::get('layout', 'beeld') == 'breedbeeld') {
-			$this->addStylesheet($css . 'breedbeeld.css');
+			$this->addStylesheet($css . 'breedbeeld');
 		}
 		if (LidInstellingen::get('layout', 'sneeuw') != 'nee') {
 			if (LidInstellingen::get('layout', 'sneeuw') == 'ja') {
-				$this->addStylesheet($css . 'snow.anim.css');
+				$this->addStylesheet($css . 'snow.anim');
 			} else {
-				$this->addStylesheet($css . 'snow.css');
+				$this->addStylesheet($css . 'snow');
 			}
 		}
 		if (LidInstellingen::get('layout', 'minion') == 'ja') {
-			$this->addStylesheet($css . 'minion.css');
-			$this->addScript($js . 'minion.js');
+			$this->addStylesheet($css . 'minion');
+			$this->addScript($js . 'minion');
 		}
-		if (DEBUG AND LoginModel::mag('P_ADMIN')) {
-			$this->addStylesheet($js . 'jquery/jquery-ui.css');
-			$this->addScript($js . 'jquery/jquery.js');
-			$this->addScript($js . 'jquery/jquery-ui.js');
-			$this->addScript($js . 'autocomplete/jquery.autocomplete.js');
-			$this->addScript($plugin . 'jquery.autosize.js');
-			$this->addScript($plugin . 'jquery.hoverIntent.js');
-			$this->addScript($plugin . 'jquery.scrollTo.js');
-		} else { // minimized javascript
-			$this->addStylesheet($js . 'jquery/jquery-ui.min.css');
-			$this->addScript($js . 'jquery/jquery.min.js');
-			$this->addScript($js . 'jquery/jquery-ui.min.js');
-			$this->addScript($js . 'autocomplete/jquery.autocomplete.pack.js');
-			$this->addScript($plugin . 'jquery.autosize.min.js');
-			$this->addScript($plugin . 'jquery.hoverIntent.min.js');
-			$this->addScript($plugin . 'jquery.scrollTo.min.js');
-		}
-		$this->addStylesheet($js . 'autocomplete/jquery.autocomplete.css');
-		$this->addScript($plugin . 'jquery.timeago.js');
-		$this->addScript($js . 'csrdelft.js');
-		$this->addScript($js . 'dragobject.js');
-		$this->addScript($js . 'menu.js');
-		$this->addScript($js . 'groepen.js');
+		$this->addStylesheet($js . 'jquery/jquery-ui');
+		$this->addScript($js . 'jquery/jquery');
+		$this->addScript($js . 'jquery/jquery-ui');
+		$this->addStylesheet($js . 'autocomplete/jquery.autocomplete');
+		$this->addScript($js . 'autocomplete/jquery.autocomplete');
+		$this->addScript($plugin . 'jquery.autosize');
+		$this->addScript($plugin . 'jquery.hoverIntent');
+		$this->addScript($plugin . 'jquery.scrollTo');
+		$this->addScript($plugin . 'jquery.timeago');
+		$this->addScript($js . 'csrdelft');
+		$this->addScript($js . 'dragobject');
+		$this->addScript($js . 'menu');
+		$this->addScript($js . 'groepen');
 
 		if (LidInstellingen::get('algemeen', 'sneltoetsen') == 'ja') {
-			$this->addScript($js . 'sneltoetsen.js');
+			$this->addScript($js . 'sneltoetsen');
 		}
 	}
 
