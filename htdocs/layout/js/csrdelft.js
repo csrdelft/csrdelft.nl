@@ -78,14 +78,17 @@ function init_lazy_images() {
 		content.attr('src', $(this).attr('src'));
 		$(this).html(content);
 		content.on('load', lazy_image_loaded);
+		werkomheen_layout();
 	});
-	// crappy layout werkomheen
+	werkomheen_layout();
+}
+
+function werkomheen_layout() {
 	if ($('#mainright').height() < $('#mainleft').height()) {
 		$('#mainright').height($('#mainleft').height());
 	} else {
 		$('#mainright').height('');
 	}
-	// einde werkomheen
 }
 
 function lazy_image_loaded() {
