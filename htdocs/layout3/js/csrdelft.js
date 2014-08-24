@@ -71,7 +71,7 @@ function init_dataTables() {
 		"lengthMenu": [[10, 15, 25, 50, 100], [10, 15, 25, 50, 100]],
 		"displayLength": 15,
 		"drawCallback": function(settings) {
-			groupByColumn(this);
+			groupByColumn(this, settings);
 		}
 	});
 }
@@ -141,7 +141,7 @@ function getGroupByColumn(table) {
 	}
 	return groupByColumn;
 }
-function groupByColumn(dataTable) {
+function groupByColumn(dataTable, settings) {
 	var api = dataTable.api();
 	var rows = api.rows({page: 'current'}).nodes();
 	var last = null;
@@ -162,7 +162,7 @@ function groupByColumn(dataTable) {
 	}
 	api.column(groupByColumn, {page: 'current'}).data().each(function(group, i) {
 		if (last !== group) {
-			$(rows).eq(i).before('<tr class="group"><td colspan="7">' + group + '</td></tr>');
+			$(rows).eq(i).before('<tr class="group"><td colspan="' + settings.aoColumns.length + '">' + group + '</td></tr>');
 			last = group;
 		}
 	});
