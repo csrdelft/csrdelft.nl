@@ -91,41 +91,22 @@
 					});
 					// Opening and closing details
 					$('#example tbody').on('click', 'td.details-control', function() {
-						var tr = $(this).closest('tr');
-						var row = dataTable.row(tr);
-						if (row.child.isShown()) {
-							if (tr.hasClass('childrow-shown')) {
-								row.child.hide();
-								tr.removeClass('childrow-shown');
-							}
-						}
-						else {
-							row.child('').show();
-							tr.addClass('childrow-loading');
-							var td = tr.next().children(':first');
-							$.ajax({
-								url: '/onderhoud.html'
-							}).done(function(data) {
-								if (row.child.isShown()) {
-									tr.removeClass('childrow-loading');
-									tr.addClass('childrow-shown');
-									td.html(data);
-								}
-							});
-						}
+						childRow($(this), dataTable, '/onderhoud.html');
 					});
 					// Multiple selection of rows
-					$('#example tbody').on('click', 'tr', multiSelect);
+					$('#example tbody').on('click', 'tr', function() {
+						multiSelect($(this));
+						$('#example').trigger('draw.dt');
+					});
 					// Setup toolbar
-					$('#example tbody').on('click', 'tr', updateToolbar);
+					$('#example').on('draw.dt', function() {
+						var aantal = $('#example tbody tr.selected').length;
+						$('#example_toolbar #rowcount').prop('disabled', aantal < 1);
+					});
 					$('#example_toolbar').insertBefore('#example');
 					$('#example_toolbar #rowcount').click(function() {
 						alert($('#example tbody tr.selected').length + ' row(s) selected');
 					});
-					function updateToolbar() {
-						var aantal = $(this).parent().children('.selected').length;
-						$('#example_toolbar #rowcount').prop('disabled', aantal < 1);
-					}
 				});
 			</script>
 			<div id="example_toolbar" class="dataTables_toolbar">

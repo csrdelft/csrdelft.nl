@@ -76,29 +76,54 @@ function init_dataTables() {
 	});
 }
 
-function multiSelect() {
-	if ($(this).hasClass('group')) {
-		if ($(this).nextUntil('.group').not('.selected').length !== 0) {
-			if (!shiftPressed) {
-				$(this).siblings('.selected').removeClass('selected');
-			}
-			$(this).nextUntil('.group').addClass('selected');
-		}
-		else {
-			$(this).nextUntil('.group').removeClass('selected');
+function childRow(td, dataTable, url) {
+	var tr = td.closest('tr');
+	var row = dataTable.row(tr);
+	if (row.child.isShown()) {
+		if (tr.hasClass('childrow-shown')) {
+			row.child.hide();
+			tr.removeClass('childrow-shown');
 		}
 	}
 	else {
-		$(this).toggleClass('selected');
+		row.child('').show();
+		tr.addClass('childrow-loading');
+		td = tr.next().children(':first');
+		$.ajax({
+			url: url
+		}).done(function(data) {
+			if (row.child.isShown()) {
+				tr.removeClass('childrow-loading');
+				tr.addClass('childrow-shown');
+				td.html(data);
+			}
+		});
+	}
+}
+
+function multiSelect(row) {
+	if (row.hasClass('group')) {
+		if (row.nextUntil('.group').not('.selected').length !== 0) {
+			if (!shiftPressed) {
+				row.siblings('.selected').removeClass('selected');
+			}
+			row.nextUntil('.group').addClass('selected');
+		}
+		else {
+			row.nextUntil('.group').removeClass('selected');
+		}
+	}
+	else {
+		row.toggleClass('selected');
 		if (shiftPressed) {
-			var selected = $(this).hasClass('selected');
-			if ($(this).prevAll('.selected').not('.group').length !== 0) {
-				$(this).prevUntil('.selected').not('.group').each(function() {
+			var selected = row.hasClass('selected');
+			if (row.prevAll('.selected').not('.group').length !== 0) {
+				row.prevUntil('.selected').not('.group').each(function() {
 					$(this).toggleClass('selected', selected);
 				});
 			}
-			else if ($(this).nextAll('.selected').not('.group').length !== 0) {
-				$(this).nextUntil('.selected').not('.group').each(function() {
+			else if (row.nextAll('.selected').not('.group').length !== 0) {
+				row.nextUntil('.selected').not('.group').each(function() {
 					$(this).toggleClass('selected', selected);
 				});
 			}
