@@ -176,6 +176,7 @@ htdocs/layout/js/bibliotheek.min.js -text
 htdocs/layout/js/csrdelft.js -text
 htdocs/layout/js/csrdelft.min.js -text
 htdocs/layout/js/datatables/css/datatables_basic.css -text
+htdocs/layout/js/datatables/css/datatables_basic.min.css -text
 htdocs/layout/js/datatables/images/back_disabled.jpg -text
 htdocs/layout/js/datatables/images/back_enabled.jpg -text
 htdocs/layout/js/datatables/images/forward_disabled.jpg -text
