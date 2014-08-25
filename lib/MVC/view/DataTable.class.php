@@ -20,7 +20,7 @@ class DataTable implements View {
 	public function __construct($model, $tableId, $titel = false) {
 		$this->model = $model;
 		$this->tableId = $tableId;
-		$this->css_classes[] = 'init display groupByColumn';
+		$this->css_classes[] = 'init display groupByColumn'; // default group by
 		$this->titel = $titel;
 	}
 
@@ -40,7 +40,7 @@ class DataTable implements View {
 		<div id="<?= $this->tableId ?>_toolbar" class="dataTables_toolbar">
 			<button id="rowcount" class="btn btn-primary">Count selected rows</button>
 		</div>
-		<table id="<?= $this->tableId ?>" class="<?= implode(' ', $this->css_classes) ?>">
+		<table id="<?= $this->tableId ?>" class="<?= implode(' ', $this->css_classes) ?>" groupByColumn="3"><!-- // default group by -->
 			<thead>
 				<tr>
 					<th></th>
@@ -73,7 +73,8 @@ class DataTable implements View {
 							"data": "position"
 						},
 						{
-							"data": "office"
+							"data": "office",
+							"visible": false // default group by
 						},
 						{
 							"data": "salary"
@@ -92,7 +93,7 @@ class DataTable implements View {
 							"data": "extn"
 						}
 					],
-					"order": [[1, "asc"]],
+					"order": [[getGroupByColumn($(table)) | 1, "asc"]], // default group by
 					"createdRow": function(row, data, index) {
 						$(row).attr('id', tableId + '_' + index);
 						$(row).children(':first').attr('href', '/onderhoud.html?name=' + encodeURI(data.name));

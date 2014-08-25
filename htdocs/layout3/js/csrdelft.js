@@ -21,7 +21,7 @@ var ctrlPressed;
  * Determine if an order.dt events originates from a draw()
  * @type Boolean
  */
-var orderDraw;
+var orderDraw = true;
 
 /* Init functions */
 
@@ -118,7 +118,7 @@ function multiSelect(tr) {
 
 function setGroupByColumn(table, columnId) {
 	console.log(columnId);
-	table.data('groupByColumn', columnId);
+	table.attr('groupByColumn', columnId);
 	if (columnId === false) {
 		table.removeClass('collapseAll');
 		table.data('expandedGroups', []);
@@ -126,7 +126,7 @@ function setGroupByColumn(table, columnId) {
 	}
 }
 function getGroupByColumn(table) {
-	var columnId = parseInt(table.data('groupByColumn'));
+	var columnId = parseInt(table.attr('groupByColumn'));
 	if (isNaN(columnId)) {
 		return false;
 	}
