@@ -23,8 +23,5 @@
 {else}
 <p>Nog geen aanmeldingen voor deze maaltijd.</p>
 {/if}
-{foreach from=$scripts item=script}
-<script type="text/javascript" src="{$script.naam}?{$script.datum}"></script>
-{/foreach}
 </body>
 </html>

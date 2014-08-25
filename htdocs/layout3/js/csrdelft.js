@@ -7,8 +7,21 @@
  * De stek layout uit 2014
  */
 
-var shiftPressed = false;
-var ctrlPressed = false;
+/**
+ * Don't rely on event.shiftKey
+ * @type Boolean
+ */
+var shiftPressed;
+/**
+ * Don't rely on event.ctrlKey
+ * @type Boolean
+ */
+var ctrlPressed;
+/**
+ * Determine if an order.dt events originates from a draw()
+ * @type Boolean
+ */
+var orderDraw;
 
 /* Init functions */
 
@@ -41,15 +54,15 @@ function init_timeago() {
 }
 
 function init_keyPressed() {
-	$(window).keydown(function(event) {
-		if (event.which === 16) { // shift
-			shiftPressed = true;
-		}
-		else if (event.which === 17) { // ctrl
-			ctrlPressed = true;
-		}
-	});
-	$(window).keyup(function(event) {
+	$(window).on('keyup', function(event) {
+		$(window).one('keydown', function(event) {
+			if (event.which === 16) { // shift
+				shiftPressed = true;
+			}
+			else if (event.which === 17) { // ctrl
+				ctrlPressed = true;
+			}
+		});
 		if (event.which === 16) { // shift
 			shiftPressed = false;
 		}
@@ -57,6 +70,7 @@ function init_keyPressed() {
 			ctrlPressed = false;
 		}
 	});
+	$(window).trigger('keyup');
 }
 
 
@@ -69,29 +83,10 @@ function init_dataTables() {
 		"lengthMenu": [[10, 15, 25, 50, 100, -1], [10, 15, 25, 50, 100, "Alles"]],
 	});
 	// Custom global filter
-	$.fn.dataTable.ext.search.push(
-			function(settings, data, index) {
-				var table = settings.nTable;
-				if ($(table).hasClass('groupByColumn')) {
-					// TODO return false;
-				}
-				return true;
-			}
-	);
-	// Run initialisation function
-	$('table.init').each(function() {
-		var tableId = $(this).attr('id');
-		if (tableId) {
-			var init = 'init_' + tableId;
-			if (typeof window[init] === 'function') {
-				window[init]();
-				$(this).removeClass('init');
-			}
-		}
-	});
+	$.fn.dataTable.ext.search.push(groupExpandCollapseDraw);
 }
 
-function multiSelect(dataTable, tr) {
+function multiSelect(tr) {
 	if (tr.hasClass('group')) {
 		if (tr.nextUntil('.group').not('.selected').length !== 0) {
 			if (!shiftPressed) {
@@ -103,7 +98,7 @@ function multiSelect(dataTable, tr) {
 			tr.nextUntil('.group').removeClass('selected');
 		}
 	}
-	else {
+	else if (!tr.children(':first').hasClass('dataTables_empty')) {
 		tr.toggleClass('selected');
 		if (shiftPressed) {
 			var selected = tr.hasClass('selected');
@@ -121,54 +116,131 @@ function multiSelect(dataTable, tr) {
 	}
 }
 
-function setGroupByColumn(table, column) {
-	$(table).attr('groupByColumn', column);
+function setGroupByColumn(table, columnId) {
+	console.log(columnId);
+	table.data('groupByColumn', columnId);
+	if (columnId === false) {
+		table.removeClass('collapseAll');
+		table.data('expandedGroups', []);
+		table.data('collapsedGroups', []);
+	}
 }
 function getGroupByColumn(table) {
-	var groupByColumn = parseInt($(table).attr('groupByColumn'));
-	if (isNaN(groupByColumn)) {
+	var columnId = parseInt(table.data('groupByColumn'));
+	if (isNaN(columnId)) {
 		return false;
 	}
-	return groupByColumn;
+	return columnId;
 }
-function groupByColumn(dataTable, settings) {
-	var groupByColumn = getGroupByColumn(settings.nTable);
-	if (ctrlPressed) {
-		dataTable.column(groupByColumn).visible(true);
-		groupByColumn = dataTable.order()[0][0];
-		dataTable.column(groupByColumn).visible(false);
-	}
-	else if (!shiftPressed) {
-		dataTable.column(groupByColumn).visible(true);
-		groupByColumn = false;
-	}
-	setGroupByColumn(settings.nTable, groupByColumn);
-}
-function groupByColumnDraw(dataTable, settings) {
-	var groupByColumn = getGroupByColumn(settings.nTable);
-	if (groupByColumn === false) {
+function groupByColumn(e, settings) {
+	if (orderDraw) {
+		orderDraw = false;
 		return;
 	}
-	// Create group rows
-	var rows = dataTable.rows({page: 'current'}).nodes();
+	var table = $(settings.nTable);
+	var api = table.DataTable();
+	var columnId = getGroupByColumn(table);
+	if (ctrlPressed) {
+		api.column(columnId).visible(true);
+		columnId = api.order()[0][0];
+		api.column(columnId).visible(false);
+	}
+	else if (!shiftPressed) {
+		api.column(columnId).visible(true);
+		columnId = false;
+	}
+	setGroupByColumn(table, columnId);
+}
+function groupByColumnDraw(e, settings) {
+	var table = $(settings.nTable);
+	var api = table.DataTable();
+	var columnId = getGroupByColumn(table);
+	if (columnId === false) {
+		return;
+	}
+	// Create group rows for visible rows
+	var rows = api.rows({page: 'current'}).nodes();
 	var last = null;
-	dataTable.column(groupByColumn, {page: 'current'}).data().each(function(group, i) {
+	api.column(columnId, {page: 'current'}).data().each(function(group, i) {
 		if (last !== group) {
 			var colspan = settings.aoColumns.length - 1;
+			var expanded;
+			// TODO: if($.inArray(group, table.data('collapsedGroups'))) {
 			var html = '<tr class="group expanded"><td class="details-control"></td><td colspan="' + colspan + '">' + group + '</td></tr>';
 			$(rows).eq(i).before(html);
 			last = group;
 		}
 	});
 }
-function groupExpandCollapse(dataTable, td, tr) {
-	
+function groupExpandCollapse(dataTable, tr, td) {
+	var table = tr.parent().parent();
+	var expand = table.data('expandedGroups');
+	var collapse = table.data('collapsedGroups');
+	if (ctrlPressed) {
+		table.toggleClass('collapseAll');
+		expand = [];
+		collapse = [];
+	}
+	else {
+		tr.toggleClass('expanded');
+	}
+	var group = td.next().html();
+	if (table.hasClass('collapseAll')) {
+		if (tr.hasClass('expanded')) {
+			expand.push(group);
+		}
+		else {
+			expand = $.grep(expand, function(value) {
+				return value !== group;
+			});
+		}
+		if (expand.length < 1) {
+			table.removeClass('collapseAll');
+		}
+	}
+	else {
+		if (tr.hasClass('expanded')) {
+			collapse = $.grep(collapse, function(value) {
+				return value !== group;
+			});
+		}
+		else {
+			collapse.push(group);
+		}
+	}
+	table.data('expandedGroups', expand);
+	table.data('collapsedGroups', collapse);
+	orderDraw = true;
+	dataTable.draw();
+}
+function groupExpandCollapseDraw(settings, data, index) {
+	var table = $(settings.nTable);
+	var columnId = getGroupByColumn(table);
+	if (columnId === false) {
+		return true;
+	}
+	var group = data[columnId];
+	if (table.hasClass('collapseAll')) {
+		var expand = table.data('expandedGroups');
+		if ($.inArray(group, expand) > -1) {
+			return true;
+		}
+		return false;
+	}
+	else {
+		var collapse = table.data('collapsedGroups');
+		if ($.inArray(group, collapse) > -1) {
+			return false;
+		}
+		return true;
+	}
 }
 
 function childRow(dataTable, td) {
 	var tr = td.closest('tr');
 	if (tr.hasClass('group')) {
-		return groupExpandCollapse(dataTable, td, tr);
+		groupExpandCollapse(dataTable, tr, td);
+		return;
 	}
 	var row = dataTable.row(tr);
 	if (row.child.isShown()) {
@@ -178,7 +250,7 @@ function childRow(dataTable, td) {
 		else {
 			tr.removeClass('expanded');
 			var innerDiv = tr.next().children(':first').children(':first');
-			innerDiv.slideUp(400, function(event) {
+			innerDiv.slideUp(400, function() {
 				row.child.hide();
 			});
 		}

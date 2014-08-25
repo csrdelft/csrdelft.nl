@@ -54,7 +54,7 @@ class DataTable implements View {
 			</thead>
 		</table>
 		<script type="text/javascript">
-			function init_<?= $this->tableId ?>() {
+			$(document).ready(function() {
 				var tableId = '<?= $this->tableId ?>';
 				var table = '#' + tableId;
 				var dataTable = $(table).DataTable({
@@ -99,23 +99,19 @@ class DataTable implements View {
 					}
 				});
 				// Multiple selection of rows
-				$(table + ' tbody').on('click', 'tr', function(e) {
-					if (!$(e.target).hasClass('details-control')) {
-						multiSelect(dataTable, $(this));
+				$(table + ' tbody').on('click', 'tr', function(event) {
+					if (!$(event.target).hasClass('details-control')) {
+						multiSelect($(this));
 					}
-					$(table).trigger('draw.dt', [dataTable, dataTable.settings()]);
+					$(table).trigger('draw.dt', [event, dataTable.settings()]);
 				});
 				// Opening and closing details
-				$(table + ' tbody').on('click', 'td.details-control', function(e) {
+				$(table + ' tbody').on('click', 'td.details-control', function(event) {
 					childRow(dataTable, $(this));
 				});
 				// Group by column
-				$(table + '.groupByColumn').on('order.dt', function(e, settings) {
-					groupByColumn(dataTable, settings);
-				});
-				$(table + '.groupByColumn').on('draw.dt', function(e, settings) {
-					groupByColumnDraw(dataTable, settings);
-				});
+				$(table + '.groupByColumn').on('order.dt', groupByColumn);
+				$(table + '.groupByColumn').on('draw.dt', groupByColumnDraw);
 				// Setup toolbar
 				$(table).on('draw.dt', function(e, settings) {
 					var aantal = $(table + ' tbody tr.selected').length;
@@ -125,7 +121,7 @@ class DataTable implements View {
 				$(table + '_toolbar #rowcount').click(function() {
 					alert($(table + ' tbody tr.selected').length + ' row(s) selected');
 				});
-			}
+			});
 		</script>
 		<?php
 	}

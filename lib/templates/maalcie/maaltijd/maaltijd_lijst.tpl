@@ -96,8 +96,5 @@
 			</tr>
 		</tbody>
 	</table>
-{foreach from=$scripts item=script}
-	<script type="text/javascript" src="{$script}"></script>
-{/foreach}
 </body>
 {/strip}</html>
