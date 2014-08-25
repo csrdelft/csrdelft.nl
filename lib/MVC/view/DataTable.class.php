@@ -14,11 +14,13 @@ class DataTable implements View {
 
 	protected $model;
 	protected $tableId;
+	protected $css_classes = array();
 	public $titel;
 
 	public function __construct($model, $tableId, $titel = false) {
 		$this->model = $model;
 		$this->tableId = $tableId;
+		$this->css_classes[] = 'display groupByColumn';
 		$this->titel = $titel;
 	}
 
@@ -38,7 +40,7 @@ class DataTable implements View {
 		<div id="<?= $this->tableId ?>_toolbar" class="dataTables_toolbar">
 			<button id="rowcount" class="btn btn-primary">Count selected rows</button>
 		</div>
-		<table id="<?= $this->tableId ?>" class="display">
+		<table id="<?= $this->tableId ?>" class="<?= implode(' ', $this->css_classes) ?>">
 			<thead>
 				<tr>
 					<th></th>
@@ -98,15 +100,22 @@ class DataTable implements View {
 				});
 				// Multiple selection of rows
 				$(table + ' tbody').on('click', 'tr', function() {
-					multiSelect($(this));
-					$(table).trigger('draw.dt');
+					multiSelect(dataTable, $(this));
+					$(table).trigger('draw.dt', [dataTable, dataTable.settings()]);
 				});
 				// Opening and closing details
 				$(table + ' tbody').on('click', 'td.details-control', function() {
-					childRow($(this), dataTable);
+					childRow(dataTable, $(this));
+				});
+				// Group by column
+				$(table + '.groupByColumn').on('order.dt', function(e, settings) {
+					groupByColumn(dataTable, settings);
+				});
+				$(table + '.groupByColumn').on('draw.dt', function(e, settings) {
+					groupByColumnDraw(dataTable, settings);
 				});
 				// Setup toolbar
-				$(table).on('draw.dt', function() {
+				$(table).on('draw.dt', function(e, settings) {
 					var aantal = $(table + ' tbody tr.selected').length;
 					$(table + '_toolbar #rowcount').toggleClass('disabled', aantal < 1);
 				});

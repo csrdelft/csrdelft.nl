@@ -66,106 +66,123 @@ function init_dataTables() {
 	// Default settings
 	$.extend($.fn.dataTable.defaults, {
 		"dom": 'frtpli',
-		"deferRender": true,
 		"lengthMenu": [[10, 15, 25, 50, 100, -1], [10, 15, 25, 50, 100, "Alles"]],
-		"displayLength": 15,
-		"drawCallback": function(settings) {
-			groupByColumn(this, settings);
-		}
 	});
 	// Custom filter
 	$.fn.dataTable.ext.search.push(
 			function(settings, data, index) {
-				// TODO
+				var table = settings.nTable;
+				if ($(table).hasClass('groupByColumn')) {
+					// TODO return false;
+				}
 				return true;
 			}
 	);
 }
 
-function childRow(td, dataTable) {
+function multiSelect(dataTable, tr) {
+	if (tr.hasClass('group')) {
+		if (tr.nextUntil('.group').not('.selected').length !== 0) {
+			if (!shiftPressed) {
+				tr.siblings('.selected').removeClass('selected');
+			}
+			tr.nextUntil('.group').addClass('selected');
+		}
+		else {
+			tr.nextUntil('.group').removeClass('selected');
+		}
+	}
+	else {
+		tr.toggleClass('selected');
+		if (shiftPressed) {
+			var selected = tr.hasClass('selected');
+			if (tr.prevAll('.selected').not('.group').length !== 0) {
+				tr.prevUntil('.selected').not('.group').each(function() {
+					$(this).toggleClass('selected', selected);
+				});
+			}
+			else if (tr.nextAll('.selected').not('.group').length !== 0) {
+				tr.nextUntil('.selected').not('.group').each(function() {
+					$(this).toggleClass('selected', selected);
+				});
+			}
+		}
+	}
+}
+
+function setGroupByColumn(table, column) {
+	$(table).attr('groupByColumn', column);
+}
+function getGroupByColumn(table) {
+	var groupByColumn = parseInt($(table).attr('groupByColumn'));
+	if (isNaN(groupByColumn)) {
+		return false;
+	}
+	return groupByColumn;
+}
+function groupByColumn(dataTable, settings) {
+	var groupByColumn = getGroupByColumn(settings.nTable);
+	if (ctrlPressed) {
+		dataTable.column(groupByColumn).visible(true);
+		groupByColumn = dataTable.order()[0][0];
+		dataTable.column(groupByColumn).visible(false);
+	}
+	else if (!shiftPressed) {
+		dataTable.column(groupByColumn).visible(true);
+		groupByColumn = false;
+	}
+	setGroupByColumn(settings.nTable, groupByColumn);
+}
+function groupByColumnDraw(dataTable, settings) {
+	var groupByColumn = getGroupByColumn(settings.nTable);
+	if (groupByColumn === false) {
+		return;
+	}
+	// Create group rows
+	var rows = dataTable.rows({page: 'current'}).nodes();
+	var last = null;
+	dataTable.column(groupByColumn, {page: 'current'}).data().each(function(group, i) {
+		if (last !== group) {
+			var colspan = settings.aoColumns.length - 1;
+			var html = '<tr class="group"><td class="details-control"></td><td colspan="' + colspan + '">' + group + '</td></tr>';
+			$(rows).eq(i).before(html);
+			last = group;
+		}
+	});
+}
+function groupExpandCollapse(dataTable, td, tr) {
+
+}
+
+function childRow(dataTable, td) {
 	var tr = td.closest('tr');
+	if (tr.hasClass('group')) {
+		return groupExpandCollapse(dataTable, td, tr);
+	}
 	var row = dataTable.row(tr);
-	console.log(row);
 	if (row.child.isShown()) {
 		if (tr.hasClass('loading')) {
 			// TODO: abort ajax
 		}
 		else {
-			row.child.hide();
 			tr.removeClass('childrow-shown');
+			var innerDiv = tr.next().children(':first').children(':first');
+			innerDiv.slideUp(400, function(event) {
+				row.child.hide();
+			});
 		}
 	}
 	else {
-		row.child('').show();
+		row.child('<div class="innerDetails" style="display: none;"></div>').show();
 		tr.addClass('childrow-shown loading');
-		var childtd = tr.next().addClass('childrow').children(':first');
+		var innerDiv = tr.next().addClass('childrow').children(':first').children(':first');
 		$.ajax({
 			url: td.attr('href')
 		}).done(function(data) {
 			if (row.child.isShown()) {
 				tr.removeClass('loading');
-				childtd.html(data);
+				innerDiv.html(data).slideDown();
 			}
 		});
 	}
-}
-
-function multiSelect(row) {
-	if (row.hasClass('group')) {
-		if (row.nextUntil('.group').not('.selected').length !== 0) {
-			if (!shiftPressed) {
-				row.siblings('.selected').removeClass('selected');
-			}
-			row.nextUntil('.group').addClass('selected');
-		}
-		else {
-			row.nextUntil('.group').removeClass('selected');
-		}
-	}
-	else {
-		row.toggleClass('selected');
-		if (shiftPressed) {
-			var selected = row.hasClass('selected');
-			if (row.prevAll('.selected').not('.group').length !== 0) {
-				row.prevUntil('.selected').not('.group').each(function() {
-					$(this).toggleClass('selected', selected);
-				});
-			}
-			else if (row.nextAll('.selected').not('.group').length !== 0) {
-				row.nextUntil('.selected').not('.group').each(function() {
-					$(this).toggleClass('selected', selected);
-				});
-			}
-		}
-	}
-}
-
-function groupByColumn(dataTable, settings) {
-	var api = dataTable.api();
-	var groupByColumn = parseInt($(dataTable.selector).attr('groupByColumn'));
-	if (isNaN(groupByColumn)) {
-		groupByColumn = false;
-	}
-	if (ctrlPressed) {
-		api.column(groupByColumn).visible(true);
-		groupByColumn = api.order()[0][0];
-		$(dataTable.selector).attr('groupByColumn', groupByColumn);
-	}
-	else if (!shiftPressed) {
-		api.column(groupByColumn).visible(true);
-		groupByColumn = false;
-	}
-	if (groupByColumn === false) {
-		return;
-	}
-	api.column(groupByColumn).visible(false);
-	// Create group rows
-	var rows = api.rows({page: 'current'}).nodes();
-	var last = null;
-	api.column(groupByColumn, {page: 'current'}).data().each(function(group, i) {
-		if (last !== group) {
-			$(rows).eq(i).before('<tr class="group"><td colspan="' + settings.aoColumns.length + '">' + group + '</td></tr>');
-			last = group;
-		}
-	});
 }
