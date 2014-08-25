@@ -20,7 +20,7 @@ class DataTable implements View {
 	public function __construct($model, $tableId, $titel = false) {
 		$this->model = $model;
 		$this->tableId = $tableId;
-		$this->css_classes[] = 'init display groupByColumn'; // default group by
+		$this->css_classes[] = 'init display groupByColumn'; // group by available
 		$this->titel = $titel;
 	}
 
