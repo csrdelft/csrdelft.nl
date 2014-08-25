@@ -7,19 +7,21 @@
  * De stek layout uit 2014
  */
 
-/* Bootstrap fixed nav-bar */
 body {
-	padding-top: 70px; 
+	padding-top: 70px; /* Bootstrap fixed nav-bar */
 	padding-bottom: 30px;
+}
+
+.loading * {
+	cursor: wait !important;
 }
 
 .dataTables_wrapper {
 
-	/* DataTables footer */
+	/* DataTables footer positioning */
 	.dataTables_length {
 		padding-top: 0.755em;
 	}
-	/* DataTables dom positioning */
 	.dataTables_info {
 		clear: none;
 		margin-left: 10%;
@@ -38,16 +40,15 @@ body {
 	}
 
 	/* DataTables child-row */
-	tr.childrow:hover {
-		background-color: white !important;
+	tr.childrow:hover * {
+		background-color: white;
 	}
 	td.details-control {
 		background: url('http://plaetjes.csrdelft.nl/layout3/dataTables/details_open.png') no-repeat center center;
 		cursor: pointer;
 	}
-	tr.childrow-loading td.details-control {
+	tr.loading td.details-control {
 		background: none;
-		cursor: wait;
 	}
 	tr.childrow-shown td.details-control {
 		background: url('http://plaetjes.csrdelft.nl/layout3/dataTables/details_close.png') no-repeat center center;

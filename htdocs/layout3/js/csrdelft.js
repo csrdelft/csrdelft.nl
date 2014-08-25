@@ -38,7 +38,6 @@ function init_timeago() {
 		wordSeparator: " ",
 		numbers: []
 	};
-	$('abbr.timeago').timeago();
 }
 
 function init_keyPressed() {
@@ -68,34 +67,43 @@ function init_dataTables() {
 	$.extend($.fn.dataTable.defaults, {
 		"dom": 'frtpli',
 		"deferRender": true,
-		"lengthMenu": [[10, 15, 25, 50, 100], [10, 15, 25, 50, 100]],
+		"lengthMenu": [[10, 15, 25, 50, 100, -1], [10, 15, 25, 50, 100, "Alles"]],
 		"displayLength": 15,
 		"drawCallback": function(settings) {
 			groupByColumn(this, settings);
 		}
 	});
+	// Custom filter
+	$.fn.dataTable.ext.search.push(
+			function(settings, data, index) {
+				// TODO
+				return true;
+			}
+	);
 }
 
 function childRow(td, dataTable) {
 	var tr = td.closest('tr');
 	var row = dataTable.row(tr);
+	console.log(row);
 	if (row.child.isShown()) {
-		if (tr.hasClass('childrow-shown')) {
+		if (tr.hasClass('loading')) {
+			// TODO: abort ajax
+		}
+		else {
 			row.child.hide();
 			tr.removeClass('childrow-shown');
 		}
 	}
 	else {
 		row.child('').show();
-		tr.addClass('childrow-loading');
-		var childrow = tr.next().addClass('childrow');
-		var childtd = childrow.children(':first');
+		tr.addClass('childrow-shown loading');
+		var childtd = tr.next().addClass('childrow').children(':first');
 		$.ajax({
 			url: td.attr('href')
 		}).done(function(data) {
 			if (row.child.isShown()) {
-				tr.removeClass('childrow-loading');
-				tr.addClass('childrow-shown');
+				tr.removeClass('loading');
 				childtd.html(data);
 			}
 		});
@@ -132,42 +140,28 @@ function multiSelect(row) {
 	}
 }
 
-function setGroupByColumn(table, column) {
-	$(table).attr('groupByColumn', column);
-}
-function getGroupByColumn(table) {
-	var groupByColumn = parseInt($(table).attr('groupByColumn'));
-	if (isNaN(groupByColumn)) {
-		return false;
-	}
-	return groupByColumn;
-}
 function groupByColumn(dataTable, settings) {
 	var api = dataTable.api();
-	var rows = api.rows({page: 'current'}).nodes();
-	var last = null;
-	var groupByColumn = getGroupByColumn(dataTable.selector);
+	var groupByColumn = parseInt($(dataTable.selector).attr('groupByColumn'));
+	if (isNaN(groupByColumn)) {
+		groupByColumn = false;
+	}
 	if (ctrlPressed) {
-		// Dynamic group by column
-		var primaryOrder = api.order()[0];
-		if (groupByColumn === false || groupByColumn !== primaryOrder[0]) {
-			if (groupByColumn !== false) {
-				// Toggle the visibility
-				var column = api.column(groupByColumn);
-				column.visible(!column.visible());
-				column = api.column(primaryOrder[0]);
-				column.visible(!column.visible());
-			}
-			groupByColumn = primaryOrder[0];
-		}
-		else if (groupByColumn === primaryOrder[0]) {
-			groupByColumn = false;
-		}
-		setGroupByColumn(dataTable.selector, groupByColumn);
+		api.column(groupByColumn).visible(true);
+		groupByColumn = api.order()[0][0];
+		$(dataTable.selector).attr('groupByColumn', groupByColumn);
+	}
+	else if (!shiftPressed) {
+		api.column(groupByColumn).visible(true);
+		groupByColumn = false;
 	}
 	if (groupByColumn === false) {
 		return;
 	}
+	api.column(groupByColumn).visible(false);
+	// Create group rows
+	var rows = api.rows({page: 'current'}).nodes();
+	var last = null;
 	api.column(groupByColumn, {page: 'current'}).data().each(function(group, i) {
 		if (last !== group) {
 			$(rows).eq(i).before('<tr class="group"><td colspan="' + settings.aoColumns.length + '">' + group + '</td></tr>');

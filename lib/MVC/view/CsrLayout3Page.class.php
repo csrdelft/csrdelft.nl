@@ -52,7 +52,7 @@ class CsrLayout3Page extends HtmlPage {
 		$smarty->assign('titel', $this->getTitel());
 
 		$smarty->assign('body', $this->body);
-		$smarty->assign('dataTable', new DataTable(null, 'example'));
+		$smarty->assign('dataTable', new DataTable(null, 'example', 'DataTables example'));
 
 		$smarty->display('csrdelft3/pagina_layout.tpl');
 	}
