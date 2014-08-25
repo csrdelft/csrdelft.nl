@@ -20,7 +20,7 @@ class DataTable implements View {
 	public function __construct($model, $tableId, $titel = false) {
 		$this->model = $model;
 		$this->tableId = $tableId;
-		$this->css_classes[] = 'display groupByColumn';
+		$this->css_classes[] = 'init display groupByColumn';
 		$this->titel = $titel;
 	}
 
@@ -54,7 +54,7 @@ class DataTable implements View {
 			</thead>
 		</table>
 		<script type="text/javascript">
-			$(document).ready(function() {
+			function init_<?= $this->tableId ?>() {
 				var tableId = '<?= $this->tableId ?>';
 				var table = '#' + tableId;
 				var dataTable = $(table).DataTable({
@@ -99,12 +99,14 @@ class DataTable implements View {
 					}
 				});
 				// Multiple selection of rows
-				$(table + ' tbody').on('click', 'tr', function() {
-					multiSelect(dataTable, $(this));
+				$(table + ' tbody').on('click', 'tr', function(e) {
+					if (!$(e.target).hasClass('details-control')) {
+						multiSelect(dataTable, $(this));
+					}
 					$(table).trigger('draw.dt', [dataTable, dataTable.settings()]);
 				});
 				// Opening and closing details
-				$(table + ' tbody').on('click', 'td.details-control', function() {
+				$(table + ' tbody').on('click', 'td.details-control', function(e) {
 					childRow(dataTable, $(this));
 				});
 				// Group by column
@@ -123,7 +125,7 @@ class DataTable implements View {
 				$(table + '_toolbar #rowcount').click(function() {
 					alert($(table + ' tbody tr.selected').length + ' row(s) selected');
 				});
-			});
+			}
 		</script>
 		<?php
 	}

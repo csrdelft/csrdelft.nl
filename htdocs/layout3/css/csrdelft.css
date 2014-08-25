@@ -17,12 +17,15 @@ body {
 .dataTables_wrapper {
   /* DataTables footer positioning */
 }
-.dataTables_wrapper .dataTables_length {
-  padding-top: 0.755em;
+.dataTables_wrapper label {
+  font-weight: normal;
 }
 .dataTables_wrapper .dataTables_info {
   clear: none;
   margin-left: 10%;
+}
+.dataTables_wrapper .dataTables_length {
+  padding-top: 0.755em;
 }
 .dataTable tbody {
   /* DataTables group-by */
@@ -32,8 +35,8 @@ body {
 .dataTable tbody tr.group:hover {
   background-color: #ddd !important;
 }
-.dataTable tbody tr.group {
-  line-height: 0.755em;
+.dataTable tbody tr.group td {
+  font-weight: bold;
 }
 .dataTable tbody tr.childrow:hover * {
   background-color: white;
@@ -42,9 +45,6 @@ body {
   background: url('http://plaetjes.csrdelft.nl/layout3/dataTables/details_open.png') no-repeat center center;
   cursor: pointer;
 }
-.dataTable tbody tr.loading td.details-control {
-  background: none;
-}
-.dataTable tbody tr.childrow-shown td.details-control {
+.dataTable tbody tr.expanded td.details-control {
   background: url('http://plaetjes.csrdelft.nl/layout3/dataTables/details_close.png') no-repeat center center;
 }

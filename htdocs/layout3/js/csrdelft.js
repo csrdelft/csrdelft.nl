@@ -63,12 +63,12 @@ function init_keyPressed() {
 /* DataTables */
 
 function init_dataTables() {
-	// Default settings
+	// Default global settings
 	$.extend($.fn.dataTable.defaults, {
 		"dom": 'frtpli',
 		"lengthMenu": [[10, 15, 25, 50, 100, -1], [10, 15, 25, 50, 100, "Alles"]],
 	});
-	// Custom filter
+	// Custom global filter
 	$.fn.dataTable.ext.search.push(
 			function(settings, data, index) {
 				var table = settings.nTable;
@@ -78,6 +78,17 @@ function init_dataTables() {
 				return true;
 			}
 	);
+	// Run initialisation function
+	$('table.init').each(function() {
+		var tableId = $(this).attr('id');
+		if (tableId) {
+			var init = 'init_' + tableId;
+			if (typeof window[init] === 'function') {
+				window[init]();
+				$(this).removeClass('init');
+			}
+		}
+	});
 }
 
 function multiSelect(dataTable, tr) {
@@ -144,14 +155,14 @@ function groupByColumnDraw(dataTable, settings) {
 	dataTable.column(groupByColumn, {page: 'current'}).data().each(function(group, i) {
 		if (last !== group) {
 			var colspan = settings.aoColumns.length - 1;
-			var html = '<tr class="group"><td class="details-control"></td><td colspan="' + colspan + '">' + group + '</td></tr>';
+			var html = '<tr class="group expanded"><td class="details-control"></td><td colspan="' + colspan + '">' + group + '</td></tr>';
 			$(rows).eq(i).before(html);
 			last = group;
 		}
 	});
 }
 function groupExpandCollapse(dataTable, td, tr) {
-
+	
 }
 
 function childRow(dataTable, td) {
@@ -165,7 +176,7 @@ function childRow(dataTable, td) {
 			// TODO: abort ajax
 		}
 		else {
-			tr.removeClass('childrow-shown');
+			tr.removeClass('expanded');
 			var innerDiv = tr.next().children(':first').children(':first');
 			innerDiv.slideUp(400, function(event) {
 				row.child.hide();
@@ -174,7 +185,7 @@ function childRow(dataTable, td) {
 	}
 	else {
 		row.child('<div class="innerDetails" style="display: none;"></div>').show();
-		tr.addClass('childrow-shown loading');
+		tr.addClass('expanded loading');
 		var innerDiv = tr.next().addClass('childrow').children(':first').children(':first');
 		$.ajax({
 			url: td.attr('href')
