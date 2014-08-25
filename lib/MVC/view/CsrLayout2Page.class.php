@@ -36,6 +36,7 @@ class CsrLayout2Page extends HtmlPage {
 
 		$layout = '/layout/js/';
 		$this->addScript('/layout2/js/jquery');
+		$this->addScript('/layout2/js/foundation');
 		$this->addScript('/layout2/js/jquery.backstretch');
 		$this->addScript($layout . 'jquery/plugins/jquery.timeago');
 		$this->addScript($layout . 'jquery/plugins/jquery.hoverIntent');

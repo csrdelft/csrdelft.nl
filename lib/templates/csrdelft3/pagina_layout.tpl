@@ -624,5 +624,8 @@
 
 
 		</div> <!-- /container -->
+		{foreach from=$scripts item=script}
+			<script type="text/javascript" src="{$script}"></script>
+		{/foreach}
 	</body>
 </html>
