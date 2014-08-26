@@ -44,6 +44,10 @@ abstract class HtmlPage implements View {
 		return $this->titel;
 	}
 
+	function getBody() {
+		return $this->body;
+	}
+
 	/**
 	 * Zorg dat de HTML pagina een stylesheet inlaadt. Er zijn twee verianten:
 	 *

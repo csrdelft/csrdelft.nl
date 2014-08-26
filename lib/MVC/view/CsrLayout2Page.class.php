@@ -56,7 +56,7 @@ class CsrLayout2Page extends HtmlPage {
 		if ($this->menutmpl !== '') {
 			$smarty->assign('menutpl', $this->menutmpl);
 		}
-		$smarty->assign('body', $this->body);
+		$smarty->assign('body', $this->getBody());
 		$smarty->assign('loginform', new LoginForm());
 		$top = 180;
 		$left = 10;

@@ -1,95 +1,35 @@
 /*!
- * csrdelft.js
+ * csrdelft.dataTables.js
  * 
- * @author C.S.R. Delft <pubcie@csrdelft.nl>
  * @author P.W.G. Brussee <brussee@live.nl>
  * 
- * De stek layout uit 2014
+ * Group by & multi-select capabilities.
  */
 
 /**
- * Don't rely on event.shiftKey
+ * Fix recursion on draw inside order callback
  * @type Boolean
  */
-var shiftPressed;
-/**
- * Don't rely on event.ctrlKey
- * @type Boolean
- */
-var ctrlPressed;
-/**
- * Determine if an order.dt events originates from a draw()
- * @type Boolean
- */
-var orderDraw = true;
-
-/* Init functions */
+var bOrderDraw = false;
 
 $(document).ready(function() {
-	init_keyPressed();
-	init_timeago();
-	init_dataTables();
+	fnInitDataTables();
 });
 
-function init_timeago() {
-	$.timeago.settings.strings = {
-		prefiprefixAgo: "",
-		prefixFromNow: "sinds",
-		suffixAgo: "geleden",
-		suffixFromNow: "",
-		seconds: "minder dan een minuut",
-		minute: "1 minuut",
-		minutes: "%d minuten",
-		hour: "1 uur",
-		hours: "%d uur",
-		day: "een dag",
-		days: "%d dagen",
-		month: "een maand",
-		months: "%d maanden",
-		year: "een jaar",
-		years: "%d jaar",
-		wordSeparator: " ",
-		numbers: []
-	};
-}
-
-function init_keyPressed() {
-	$(window).on('keyup', function(event) {
-		$(window).one('keydown', function(event) {
-			if (event.which === 16) { // shift
-				shiftPressed = true;
-			}
-			else if (event.which === 17) { // ctrl
-				ctrlPressed = true;
-			}
-		});
-		if (event.which === 16) { // shift
-			shiftPressed = false;
-		}
-		else if (event.which === 17) { // ctrl
-			ctrlPressed = false;
-		}
-	});
-	$(window).trigger('keyup');
-}
-
-
-/* DataTables */
-
-function init_dataTables() {
+function fnInitDataTables() {
 	// Default global settings
 	$.extend($.fn.dataTable.defaults, {
 		"dom": 'frtpli',
 		"lengthMenu": [[10, 15, 25, 50, 100, -1], [10, 15, 25, 50, 100, "Alles"]],
 	});
 	// Custom global filter
-	$.fn.dataTable.ext.search.push(groupExpandCollapseDraw);
+	$.fn.dataTable.ext.search.push(fnGroupExpandCollapseDraw);
 }
 
-function multiSelect(tr) {
+function fnMultiSelect(tr) {
 	if (tr.hasClass('group')) {
 		if (tr.nextUntil('.group').not('.selected').length !== 0) {
-			if (!shiftPressed) {
+			if (!bShiftPressed) {
 				tr.siblings('.selected').removeClass('selected');
 			}
 			tr.nextUntil('.group').addClass('selected');
@@ -100,7 +40,7 @@ function multiSelect(tr) {
 	}
 	else if (!tr.children(':first').hasClass('dataTables_empty')) {
 		tr.toggleClass('selected');
-		if (shiftPressed) {
+		if (bShiftPressed) {
 			var selected = tr.hasClass('selected');
 			if (tr.prevAll('.selected').not('.group').length !== 0) {
 				tr.prevUntil('.selected').not('.group').each(function() {
@@ -116,75 +56,75 @@ function multiSelect(tr) {
 	}
 }
 
-function setGroupByColumn(table, columnId) {
-	console.log(columnId);
-	table.attr('groupByColumn', columnId);
-	if (columnId === false) {
-		table.removeClass('collapseAll');
-		table.data('expandedGroups', []);
-		table.data('collapsedGroups', []);
-	}
-}
-function getGroupByColumn(table) {
+function fnGetGroupByColumn(table) {
 	var columnId = parseInt(table.attr('groupByColumn'));
 	if (isNaN(columnId)) {
 		return false;
 	}
 	return columnId;
 }
-function groupByColumn(e, settings) {
-	if (orderDraw) {
-		orderDraw = false;
+
+function fnGroupByColumn(e, settings) {
+	if (bOrderDraw || !bCtrlPressed) {
 		return;
 	}
 	var table = $(settings.nTable);
-	var api = table.DataTable();
-	var columnId = getGroupByColumn(table);
-	if (ctrlPressed) {
-		api.column(columnId).visible(true);
-		columnId = api.order()[0][0];
-		api.column(columnId).visible(false);
-	}
-	else if (!shiftPressed) {
-		api.column(columnId).visible(true);
-		columnId = false;
-	}
-	setGroupByColumn(table, columnId);
+	var dataTable = table.DataTable();
+	var columnId = fnGetGroupByColumn(table);
+	var newOrder = dataTable.order();
+	dataTable.column(columnId).visible(true);
+	columnId = newOrder[0][0];
+	dataTable.column(columnId).visible(false);
+	table.attr('groupByColumn', columnId);
+	table.removeClass('collapseAll');
+	table.data('expandedGroups', []);
+	table.data('collapsedGroups', []);
+	settings.aaSortingFixed = newOrder.slice(); // copy by value
+	bOrderDraw = true;
+	dataTable.draw();
 }
-function groupByColumnDraw(e, settings) {
+
+function fnGroupByColumnDraw(e, settings) {
+	if (bOrderDraw) {
+		bOrderDraw = false;
+		return;
+	}
 	var table = $(settings.nTable);
-	var api = table.DataTable();
-	var columnId = getGroupByColumn(table);
+	var columnId = fnGetGroupByColumn(table);
 	if (columnId === false) {
 		return;
 	}
 	// Create group rows for visible rows
-	var rows = api.rows({page: 'current'}).nodes();
+	var dataTable = table.DataTable();
+	var rows = dataTable.rows({page: 'current'}).nodes();
+	if (rows.length < 1) {
+		console.log(rows.length);
+		return;
+	}
+	var firstRow = $(rows).first();
+	var groupRow;
+	var colspan = settings.aoColumns.length - 1;
+	var collapse = table.data('collapsedGroups');
+	collapse.forEach(function(group) {
+		groupRow = $('<tr class="group"><td class="details-control"></td><td colspan="' + colspan + '">' + group + '</td></tr>').data('groupData', group);
+		firstRow.before(groupRow);
+	});
 	var last = null;
-	api.column(columnId, {page: 'current'}).data().each(function(group, i) {
+	dataTable.column(columnId, {page: 'current'}).data().each(function(group, i) {
 		if (last !== group) {
-			var colspan = settings.aoColumns.length - 1;
-			var expanded;
-			// TODO: if($.inArray(group, table.data('collapsedGroups'))) {
-			var html = '<tr class="group expanded"><td class="details-control"></td><td colspan="' + colspan + '">' + group + '</td></tr>';
-			$(rows).eq(i).before(html);
+			groupRow = $('<tr class="group expanded"><td class="details-control"></td><td colspan="' + colspan + '">' + group + '</td></tr>').data('groupData', group);
+			$(rows).eq(i).before(groupRow);
 			last = group;
 		}
 	});
 }
-function groupExpandCollapse(dataTable, tr, td) {
+
+function fnGroupExpandCollapse(dataTable, tr, td) {
 	var table = tr.parent().parent();
 	var expand = table.data('expandedGroups');
 	var collapse = table.data('collapsedGroups');
-	if (ctrlPressed) {
-		table.toggleClass('collapseAll');
-		expand = [];
-		collapse = [];
-	}
-	else {
-		tr.toggleClass('expanded');
-	}
-	var group = td.next().html();
+	tr.toggleClass('expanded');
+	var group = tr.data('groupData');
 	if (table.hasClass('collapseAll')) {
 		if (tr.hasClass('expanded')) {
 			expand.push(group);
@@ -193,9 +133,6 @@ function groupExpandCollapse(dataTable, tr, td) {
 			expand = $.grep(expand, function(value) {
 				return value !== group;
 			});
-		}
-		if (expand.length < 1) {
-			table.removeClass('collapseAll');
 		}
 	}
 	else {
@@ -210,12 +147,13 @@ function groupExpandCollapse(dataTable, tr, td) {
 	}
 	table.data('expandedGroups', expand);
 	table.data('collapsedGroups', collapse);
-	orderDraw = true;
+	bCtrlPressed = false; // prevent order callback
 	dataTable.draw();
 }
-function groupExpandCollapseDraw(settings, data, index) {
+
+function fnGroupExpandCollapseDraw(settings, data, index) {
 	var table = $(settings.nTable);
-	var columnId = getGroupByColumn(table);
+	var columnId = fnGetGroupByColumn(table);
 	if (columnId === false) {
 		return true;
 	}
@@ -236,10 +174,10 @@ function groupExpandCollapseDraw(settings, data, index) {
 	}
 }
 
-function childRow(dataTable, td) {
+function fnChildRow(dataTable, td) {
 	var tr = td.closest('tr');
 	if (tr.hasClass('group')) {
-		groupExpandCollapse(dataTable, tr, td);
+		fnGroupExpandCollapse(dataTable, tr, td);
 		return;
 	}
 	var row = dataTable.row(tr);
@@ -260,7 +198,7 @@ function childRow(dataTable, td) {
 		tr.addClass('expanded loading');
 		var innerDiv = tr.next().addClass('childrow').children(':first').children(':first');
 		$.ajax({
-			url: td.attr('href')
+			url: td.attr('detailSource')
 		}).done(function(data) {
 			if (row.child.isShown()) {
 				tr.removeClass('loading');

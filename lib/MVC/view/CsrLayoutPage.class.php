@@ -50,24 +50,27 @@ class CsrLayoutPage extends HtmlPage {
 				$this->addStylesheet($css . 'snow');
 			}
 		}
-		if (LidInstellingen::get('layout', 'minion') == 'ja') {
-			$this->addStylesheet($css . 'minion');
-			$this->addScript($js . 'minion');
-		}
-		$this->addStylesheet($js . 'jquery/jquery-ui');
 		$this->addScript($js . 'jquery/jquery');
 		$this->addScript($js . 'jquery/jquery-ui');
-		$this->addStylesheet($js . 'autocomplete/jquery.autocomplete');
+		$this->addStylesheet($js . 'jquery/jquery-ui');
 		$this->addScript($js . 'autocomplete/jquery.autocomplete');
+		$this->addStylesheet($js . 'autocomplete/jquery.autocomplete');
+		//$this->addScript($plugin . 'jquery.dataTables');
+		//$this->addStylesheet($css . 'jquery.dataTables');
 		$this->addScript($plugin . 'jquery.autosize');
 		$this->addScript($plugin . 'jquery.hoverIntent');
 		$this->addScript($plugin . 'jquery.scrollTo');
 		$this->addScript($plugin . 'jquery.timeago');
 		$this->addScript($js . 'csrdelft');
+		//$this->addScript($js . 'csrdelft.dataTables');
+		//$this->addStylesheet($css . 'csrdelft.dataTables');
 		$this->addScript($js . 'dragobject');
 		$this->addScript($js . 'menu');
 		$this->addScript($js . 'groepen');
-
+		if (LidInstellingen::get('layout', 'minion') == 'ja') {
+			$this->addScript($js . 'minion');
+			$this->addStylesheet($css . 'minion');
+		}
 		if (LidInstellingen::get('algemeen', 'sneltoetsen') == 'ja') {
 			$this->addScript($js . 'sneltoetsen');
 		}
@@ -103,9 +106,10 @@ class CsrLayoutPage extends HtmlPage {
 		}
 
 		$smarty->assign('mainmenu', new MainMenuView(MenuModel::instance()->getMenuTree('main')));
-		$smarty->assign('body', $this->body);
+		$smarty->assign('body', $this->getBody());
 		$smarty->assign('zijkolom', $this->zijkolom);
 		$smarty->assign('popup', $this->popup);
+		//$smarty->assign('datatable', new DataTable('Example', '/onderhoud.html?name=', 3));
 
 		$top = 180;
 		$left = 190;

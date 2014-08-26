@@ -1,7 +1,7 @@
 /**
  *	Documentenketzerjavascriptcode.
  */
-jQuery(document).ready(function($) {
+$(document).ready(function($) {
 
 	//tabellen naar zebra converteren.
 	$("#documenten tr:odd").addClass('odd');

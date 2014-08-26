@@ -1,7 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xml:lang="nl" xmlns="http://www.w3.org/1999/xhtml">
+<!DOCTYPE html>
+<html>
 	<head>
-		<title>C.S.R. Delft mobiel | {$body->getTitel()}</title>
+		<title>C.S.R. Delft mobiel - {$body->getTitel()}</title>
 		{include file='csrdelft_head.tpl'}
 	</head>
 	<body style="background: none;">

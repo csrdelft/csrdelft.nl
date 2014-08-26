@@ -78,7 +78,7 @@ function taken_color_suggesties() {
 
 var lastSelectedId;
 function taken_select_range(e) {
-	var shift = isShiftKeyDown(e);
+	var shift = bShiftPressed;
 	var withinRange = false;
 	$("#maalcie-tabel tbody tr td a input[name='" + $(e.target).attr('name') + "']:visible").each(function() {
 		var thisId = $(this).attr('id');

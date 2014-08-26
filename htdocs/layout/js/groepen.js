@@ -1,41 +1,46 @@
 /**
  * Spul voor csrdelft.nl-groepenketzer.
  */
+
+$(document).ready(function() {
+	init_groepen();
+});
+
 function init_groepen() {
-	jQuery('.inline_edit').click(function() {
+	$('.inline_edit').click(function() {
 		//show edit field.
-		jQuery(this).children('span').hide();
-		jQuery(this).children('input,select').show();
+		$(this).children('span').hide();
+		$(this).children('input,select').show();
 	}).change(function() {
 		//id = 'bewerk_<gid>|<uid>'
-		var ids = jQuery(this).attr('id').substring(7).split('_');
+		var ids = $(this).attr('id').substring(7).split('_');
 		var gid = ids[0];
 		var uid = ids[1];
 		var values = [];
-		jQuery(this).children('input,select').each(function(index) {
-			values.push(jQuery(this).val());
+		$(this).children('input,select').each(function(index) {
+			values.push($(this).val());
 		});
 		var data = {'functie[]': values}
 		//update span
-		jQuery(this).children('span').html(values.join(' - '));
+		$(this).children('span').html(values.join(' - '));
 
-		jQuery.ajax({
+		$.ajax({
 			type: 'POST',
 			url: '/actueel/groepen/XHR/' + gid + '/bewerkfunctieLid/' + uid,
 			data: data,
 			cache: false,
 			success: function(response) {
-				jQuery('.editbox').hide();
-				jQuery('.text').show();
+				$('.editbox').hide();
+				$('.text').show();
 			}
 		});
 	});
 
 	// close editor if clicking outside editfield
-	jQuery(document).mouseup(function(object) {
-		if (!jQuery(object.target).hasClass('editbox')) { //in editbox mag je klikken
-			jQuery('.editbox').hide();
-			jQuery('.text').show();
+	$(document).mouseup(function(object) {
+		if (!$(object.target).hasClass('editbox')) { //in editbox mag je klikken
+			$('.editbox').hide();
+			$('.text').show();
 		}
 	});
 

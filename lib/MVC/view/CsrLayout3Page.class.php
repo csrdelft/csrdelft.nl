@@ -20,27 +20,14 @@ class CsrLayout3Page extends HtmlPage {
 
 		$css = '/layout3/css/';
 		$js = '/layout3/js/';
-		$plugin = '/layout/js/jquery/plugins/';
 
 		$this->addStylesheet($css . 'bootstrap');
 		$this->addStylesheet($css . 'bootstrap-theme');
 		$this->addStylesheet($css . 'bootstrap-typeahead');
-		$this->addStylesheet($css . 'jquery.dataTables');
-		$this->addStylesheet($css . 'csrdelft');
 
 		$this->addScript($js . 'jquery');
 		$this->addScript($js . 'bootstrap');
 		$this->addScript($js . 'typeahead.bundle');
-		$this->addScript($js . 'jquery.dataTables');
-		$this->addScript($plugin . 'jquery.autosize');
-		$this->addScript($plugin . 'jquery.hoverIntent');
-		$this->addScript($plugin . 'jquery.scrollTo');
-		$this->addScript($plugin . 'jquery.timeago');
-		$this->addScript($js . 'csrdelft');
-
-		if (LidInstellingen::get('algemeen', 'sneltoetsen') == 'ja') {
-			$this->addScript('/layout/js/sneltoetsen');
-		}
 	}
 
 	public function view() {
@@ -50,9 +37,7 @@ class CsrLayout3Page extends HtmlPage {
 		$smarty->assign('stylesheets', $this->getStylesheets());
 		$smarty->assign('scripts', $this->getScripts());
 		$smarty->assign('titel', $this->getTitel());
-
-		$smarty->assign('body', $this->body);
-		$smarty->assign('dataTable', new DataTable(null, 'example', 'DataTables example'));
+		$smarty->assign('body', $this->getBody());
 
 		$smarty->display('csrdelft3/pagina_layout.tpl');
 	}

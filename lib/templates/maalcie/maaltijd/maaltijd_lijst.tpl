@@ -1,10 +1,13 @@
-<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.1//EN' 'http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd'>
+<!DOCTYPE html>
 <html>{strip}
 	<head>
 		<title>{$titel} {$maaltijd->getDatum()|date_format:"%A %e %B"}</title>
-	{foreach from=$stylesheets item=sheet}
-		<link rel="stylesheet" href="{$sheet}" type="text/css" />
-	{/foreach}
+		{foreach from=$stylesheets item=sheet}
+			<link rel="stylesheet" href="{$sheet}" type="text/css" />
+		{/foreach}
+		{foreach from=$scripts item=script}
+			<script type="text/javascript" src="{$script}"></script>
+		{/foreach}
 	</head>
 	<body>
 		<a href="/" style="float: right;"><img alt="Beeldmerk van de Vereniging" src="{$CSR_PICS}/layout/beeldmerk.jpg" /></a>

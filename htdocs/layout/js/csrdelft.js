@@ -2,7 +2,12 @@
  * csrdelft.nl javascript libje...
  */
 
-var http = new XMLHttpRequest(); //DEPRECATED
+/**
+ * Ajax object
+ * @deprecated use jQuery.ajax() instead
+ * @type XMLHttpRequest
+ */
+var http = new XMLHttpRequest();
 
 function preload(arrayOfImages) {
 	$(arrayOfImages).each(function() {
@@ -17,6 +22,7 @@ preload([
 ]);
 
 $(document).ready(function() {
+	init_key_pressed();
 	init();
 });
 
@@ -33,12 +39,6 @@ function init() {
 	}
 	init_hoverIntents();
 	init_lazy_images();
-	try {
-		init_groepen();
-	}
-	catch (err) {
-		//FIXME missing js file
-	}
 	//undo_inline_css();
 }
 
@@ -67,6 +67,28 @@ function init_timeago() {
 		numbers: []
 	};
 	$('abbr.timeago').timeago();
+}
+
+var bShiftPressed = false;
+var bCtrlPressed = false;
+function init_key_pressed() {
+	$(window).on('keyup', function(event) {
+		$(window).one('keydown', function(event) {
+			if (event.which === 16) { // shift
+				bShiftPressed = true;
+			}
+			else if (event.which === 17) { // ctrl
+				bCtrlPressed = true;
+			}
+		});
+		if (event.which === 16) { // shift
+			bShiftPressed = false;
+		}
+		else if (event.which === 17) { // ctrl
+			bCtrlPressed = false;
+		}
+	});
+	$(window).trigger('keyup');
 }
 
 function init_lazy_images() {
@@ -116,19 +138,6 @@ function init_scroll_fixed() {
 
 function page_reload() {
 	location.reload();
-}
-
-function isShiftKeyDown(event) {
-	if ((window.event && window.event.shiftKey) || event.shiftKey) {
-		return true;
-	}
-	return false;
-}
-function isCtrlKeyDown(event) {
-	if ((window.event && window.event.ctrlKey) || event.ctrlKey) {
-		return true;
-	}
-	return false;
 }
 
 function init_buttons() {
