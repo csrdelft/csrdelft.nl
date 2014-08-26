@@ -20,7 +20,7 @@ function fnInitDataTables() {
 	// Default global settings
 	$.extend($.fn.dataTable.defaults, {
 		"dom": 'frtpli',
-		"lengthMenu": [[10, 15, 25, 50, 100, -1], [10, 15, 25, 50, 100, "Alles"]],
+		"lengthMenu": [[10, 15, 25, 50, 100, -1], [10, 15, 25, 50, 100, "Alles"]]
 	});
 	// Custom global filter
 	$.fn.dataTable.ext.search.push(fnGroupExpandCollapseDraw);
@@ -136,7 +136,7 @@ function fnGroupExpandCollapse(dataTable, table, tr) {
 		collapse.push(group);
 	}
 	table.data('collapsedGroups', collapse.sort());
-	bCtrlPressed = false; // prevent order callback
+	bCtrlPressed = false; // prevent order callback weird effect
 	dataTable.draw();
 }
 
