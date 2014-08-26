@@ -21,26 +21,36 @@
 
 }
 
-.dataTable tbody {
+.dataTable {
 
-	/* DataTables group-by */
-	tr.group,
-	tr.group:hover {
-		background-color: white !important;
-	}
-	tr.group td {
-		font-weight: bold;
+	tbody {
+
+		/* DataTables group-by */
+		tr.group,
+		tr.group:hover {
+			background-color: white !important;
+		}
+		tr.group td {
+			font-weight: bold;
+		}
+
+		/* DataTables child-row */
+		tr.childrow:hover * {
+			background-color: white;
+		}
 	}
 
-	/* DataTables child-row */
-	tr.childrow:hover * {
-		background-color: white;
-	}
-	td.details-control {
+	/* DataTables expand/collapse */
+	td.details-control,
+	th.details-control {
 		background: url('http://plaetjes.csrdelft.nl/dataTables/details_open.png') no-repeat center center;
 		cursor: pointer;
 	}
-	tr.expanded td.details-control {
-		background: url('http://plaetjes.csrdelft.nl/dataTables/details_close.png') no-repeat center center;
+	tr.expanded {
+
+		td.details-control,
+		th.details-control {
+			background: url('http://plaetjes.csrdelft.nl/dataTables/details_close.png') no-repeat center center;
+		}
 	}
 }

@@ -154,13 +154,20 @@ JS;
 					updateToolbar();
 				});
 				// Opening and closing details
-				$(table + ' tbody').on('click', 'td.details-control', function(event) {
+				$(table + ' tbody').on('click', 'tr:not(.group) td.details-control', function(event) {
 					fnChildRow(dataTable, $(this));
 				});
 				// Group by column
+				$(table + ' tbody').on('click', 'tr.group td.details-control', function(event) {
+					fnGroupExpandCollapse(dataTable, $(table), $(this).parent());
+				});
+				$(table + ' thead').on('click', 'th.details-control', function(event) {
+					fnGroupExpandCollapseAll(dataTable, $(table), $(this).parent());
+				});
 				$(table + '.groupByColumn:not(.groupByFixed)').on('order.dt', fnGroupByColumn);
 				$(table + '.groupByColumn').on('draw.dt', fnGroupByColumnDraw);
 				$(table + '.groupByColumn').data('collapsedGroups', []);
+				$(table + ' thead tr:first').addClass('expanded');
 				// Setup toolbar
 				$(table + '_toolbar').insertBefore(table);
 				var updateToolbar = function() {

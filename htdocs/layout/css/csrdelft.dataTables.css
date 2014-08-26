@@ -16,6 +16,9 @@
 .dataTables_wrapper .dataTables_length {
   padding-top: 0.755em;
 }
+.dataTable {
+  /* DataTables expand/collapse */
+}
 .dataTable tbody {
   /* DataTables group-by */
   /* DataTables child-row */
@@ -30,10 +33,12 @@
 .dataTable tbody tr.childrow:hover * {
   background-color: white;
 }
-.dataTable tbody td.details-control {
+.dataTable td.details-control,
+.dataTable th.details-control {
   background: url('http://plaetjes.csrdelft.nl/dataTables/details_open.png') no-repeat center center;
   cursor: pointer;
 }
-.dataTable tbody tr.expanded td.details-control {
+.dataTable tr.expanded td.details-control,
+.dataTable tr.expanded th.details-control {
   background: url('http://plaetjes.csrdelft.nl/dataTables/details_close.png') no-repeat center center;
 }

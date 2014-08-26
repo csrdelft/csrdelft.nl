@@ -77,6 +77,7 @@ function fnGroupByColumn(e, settings) {
 	dataTable.column(columnId).visible(false);
 	table.attr('groupByColumn', columnId);
 	table.data('collapsedGroups', []);
+	//table.find('thead tr:first').addClass('expanded');
 	settings.aaSortingFixed = newOrder.slice(); // copy by value
 	bOrderDraw = true;
 	dataTable.draw();
@@ -122,8 +123,7 @@ function fnGroupByColumnDraw(e, settings) {
 	});
 }
 
-function fnGroupExpandCollapse(dataTable, tr, td) {
-	var table = tr.parent().parent();
+function fnGroupExpandCollapse(dataTable, table, tr) {
 	var collapse = table.data('collapsedGroups');
 	tr.toggleClass('expanded');
 	var group = tr.data('groupData');
@@ -137,6 +137,26 @@ function fnGroupExpandCollapse(dataTable, tr, td) {
 	}
 	table.data('collapsedGroups', collapse.sort());
 	bCtrlPressed = false; // prevent order callback
+	dataTable.draw();
+}
+
+function fnGroupExpandCollapseAll(dataTable, table, tr) {
+	var columnId = fnGetGroupByColumn(table);
+	if (columnId === false) {
+		return;
+	}
+	tr.toggleClass('expanded');
+	var collapse = [];
+	if (!tr.hasClass('expanded')) {
+		var last = null;
+		dataTable.column(columnId).data().each(function(group, i) {
+			if (last !== group) {
+				collapse.push(group);
+				last = group;
+			}
+		});
+	}
+	table.data('collapsedGroups', collapse);
 	dataTable.draw();
 }
 
@@ -156,10 +176,6 @@ function fnGroupExpandCollapseDraw(settings, data, index) {
 
 function fnChildRow(dataTable, td) {
 	var tr = td.closest('tr');
-	if (tr.hasClass('group')) {
-		fnGroupExpandCollapse(dataTable, tr, td);
-		return;
-	}
 	var row = dataTable.row(tr);
 	if (row.child.isShown()) {
 		if (tr.hasClass('loading')) {
