@@ -77,7 +77,7 @@ function fnGroupByColumn(e, settings) {
 	dataTable.column(columnId).visible(false);
 	table.attr('groupByColumn', columnId);
 	table.data('collapsedGroups', []);
-	//table.find('thead tr:first').addClass('expanded');
+	table.find('thead tr:first').addClass('expanded');
 	settings.aaSortingFixed = newOrder.slice(); // copy by value
 	bOrderDraw = true;
 	dataTable.draw();
