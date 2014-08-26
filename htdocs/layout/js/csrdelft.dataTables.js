@@ -30,13 +30,42 @@ function fnMultiSelect(tr) {
 	if (tr.children(':first').hasClass('dataTables_empty')) {
 		return;
 	}
-	if (tr.hasClass('group')) {
-		if (bShiftPressed) {
+	if (bShiftPressed) {
+		// Calculate closest selected row
+		var prevAll = tr.prevAll(':not(.selected)').not('.group');
+		var prevUntil = tr.prevUntil('.selected').not('.group');
+		var before = prevUntil.length;
+
+		var nextAll = tr.nextAll(':not(.selected)').not('.group');
+		var nextUntil = tr.nextUntil('.selected').not('.group');
+		var after = nextUntil.length;
+
+		// Check for no selected row
+		if (prevUntil.length === prevAll.length) {
+			after = 0;
+		}
+		if (nextUntil.length === nextAll.length) {
+			before = 0;
+		}
+		// Extend from closest selection
+		if (before < after) {
+			prevUntil.addClass('selected');
+		}
+		else if (before > after) {
+			nextUntil.addClass('selected');
+		}
+		// Also select clicked group/row
+		if (tr.hasClass('group')) {
 			tr.nextUntil('.group').addClass('selected');
 		}
-		else if (bCtrlPressed) {
+		else {
+			tr.addClass('selected');
+		}
+	}
+	else if (bCtrlPressed) {
+		if (tr.hasClass('group')) {
 			var nextUntil = tr.nextUntil('.group');
-			var selected = nextUntil.not(':not(.selected)'); // filter selected
+			var selected = nextUntil.filter('.selected');
 			if (selected.length === nextUntil.length) {
 				nextUntil.removeClass('selected');
 			}
@@ -45,42 +74,15 @@ function fnMultiSelect(tr) {
 			}
 		}
 		else {
-			tr.siblings('.selected').removeClass('selected');
-			tr.nextUntil('.group').addClass('selected');
+			tr.toggleClass('selected');
 		}
 	}
 	else {
-		if (bShiftPressed) {
-			// Calculate closest selected row
-			var prevAll = tr.prevAll(':not(.selected.group)');
-			var prevUntil = tr.prevUntil('.selected:not(.group)');
-			var before = prevUntil.length;
-
-			var nextAll = tr.nextAll(':not(.selected.group)');
-			var nextUntil = tr.nextUntil('.selected:not(.group)');
-			var after = nextUntil.length;
-
-			// Check for no selected row
-			if (prevUntil.length === prevAll.length) {
-				after = 0;
-			}
-			if (nextUntil.length === nextAll.length) {
-				before = 0;
-			}
-
-			if (before < after) {
-				prevUntil.addClass('selected');
-			}
-			if (before > after) {
-				nextUntil.addClass('selected');
-			}
-			tr.addClass('selected');
-		}
-		else if (bCtrlPressed) {
-			tr.toggleClass('selected');
+		tr.siblings('.selected').removeClass('selected');
+		if (tr.hasClass('group')) {
+			tr.nextUntil('.group').addClass('selected');
 		}
 		else {
-			tr.siblings('.selected').removeClass('selected');
 			tr.addClass('selected');
 		}
 	}
