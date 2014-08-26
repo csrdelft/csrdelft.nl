@@ -110,6 +110,7 @@ htdocs/dies/programma.html -text
 htdocs/dies/styles.css -text
 htdocs/dies/themafilmpje.html -text
 htdocs/dies/thumbnailviewer.js -text
+htdocs/example-data-2.json -text
 htdocs/example-data.json -text
 htdocs/index.php -text
 htdocs/layout/css/agenda.css -text

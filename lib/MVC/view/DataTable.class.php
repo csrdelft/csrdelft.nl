@@ -13,20 +13,16 @@
 class DataTable implements View {
 
 	private $tableId;
-	private $detailSource;
 	private $groupByColumn;
 	protected $css_classes = array();
 	protected $columns = array('name', 'position', 'salary', 'start_date', 'office', 'extn'); // TODO
 
-	public function __construct($tableId, $detailSource = null, $groupByColumn = false, $groupByFixed = false) {
+	public function __construct($tableId, $groupByColumn = true, $groupByFixed = false) {
 		$this->tableId = $tableId;
-		$this->detailSource = $detailSource;
-		if ($detailSource) {
-			$this->columns[] = '';
-		}
 		$this->css_classes[] = 'init display';
 		if ($groupByColumn === true) {
 			$this->css_classes[] = 'groupByColumn';
+			$this->groupByColumn = null;
 		} elseif (is_int($groupByColumn)) {
 			$this->css_classes[] = 'groupByColumn';
 			if ($groupByFixed) {
@@ -98,7 +94,7 @@ JS;
 							"data": null,
 							"title": "",
 							"type": "string",
-							"class": "<?= ($this->detailSource ? 'details-control' : '') ?>",
+							"class": "details-control",
 							"orderable": false,
 							"searchable": false,
 							"defaultContent": ""
@@ -143,7 +139,11 @@ JS;
 					"order": [[1, "asc"]],
 					"createdRow": function(row, data, index) {
 						$(row).attr('id', tableId + '_' + index); // data array index
-						$(row).children(':first').attr('detailSource', '<?= $this->detailSource ?>' + encodeURI(data.name));
+						if ('detailSource' in data) {
+							$(row).children('td.details-control:first').data('detailSource', data.detailSource);
+						} else {
+							$(row).children('td.details-control:first').removeClass('details-control');
+						}
 					}<?= $this->getConditionalProps() ?>
 				});
 				// Multiple selection of rows
@@ -158,16 +158,17 @@ JS;
 					fnChildRow(dataTable, $(this));
 				});
 				// Group by column
-				$(table + ' tbody').on('click', 'tr.group td.details-control', function(event) {
+				$(table + '.groupByColumn tbody').on('click', 'tr.group td.details-control', function(event) {
 					fnGroupExpandCollapse(dataTable, $(table), $(this).parent());
 				});
-				$(table + ' thead').on('click', 'th.details-control', function(event) {
+				$(table + '.groupByColumn thead').on('click', 'th.details-control', function(event) {
 					fnGroupExpandCollapseAll(dataTable, $(table), $(this).parent());
 				});
 				$(table + '.groupByColumn:not(.groupByFixed)').on('order.dt', fnGroupByColumn);
 				$(table + '.groupByColumn').on('draw.dt', fnGroupByColumnDraw);
 				$(table + '.groupByColumn').data('collapsedGroups', []);
-				$(table + ' thead tr:first').addClass('expanded');
+				$(table + '.groupByColumn thead tr:first').addClass('expanded');
+				$(table + ':not(.groupByColumn) th.details-control').removeClass('details-control');
 				// Setup toolbar
 				$(table + '_toolbar').insertBefore(table);
 				var updateToolbar = function() {

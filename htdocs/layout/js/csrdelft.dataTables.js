@@ -39,9 +39,8 @@ function fnMultiSelect(tr) {
 		}
 	}
 	else if (!tr.children(':first').hasClass('dataTables_empty')) {
-		tr.toggleClass('selected');
 		if (bShiftPressed) {
-			var selected = tr.hasClass('selected');
+			var selected = !tr.hasClass('selected');
 			if (tr.prevAll('.selected').not('.group').length !== 0) {
 				tr.prevUntil('.selected').not('.group').each(function() {
 					$(this).toggleClass('selected', selected);
@@ -53,6 +52,10 @@ function fnMultiSelect(tr) {
 				});
 			}
 		}
+		else if (!bCtrlPressed) {
+			tr.siblings('.selected').removeClass('selected');
+		}
+		tr.toggleClass('selected');
 	}
 }
 
@@ -194,7 +197,7 @@ function fnChildRow(dataTable, td) {
 		tr.addClass('expanded loading');
 		var innerDiv = tr.next().addClass('childrow').children(':first').children(':first');
 		$.ajax({
-			url: td.attr('detailSource')
+			url: td.data('detailSource')
 		}).done(function(data) {
 			if (row.child.isShown()) {
 				tr.removeClass('loading');
