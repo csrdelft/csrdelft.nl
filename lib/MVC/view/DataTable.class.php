@@ -79,7 +79,7 @@ JS;
 		}
 		?>
 		<div id="<?= $this->tableId ?>_toolbar" class="dataTables_toolbar">
-			<button id="rowcount" class="button">Count selected rows</button>
+			<button id="rowcount">Count selected rows</button>
 		</div>
 		<table id="<?= $this->tableId ?>" class="<?= implode(' ', $this->css_classes) ?>" groupByColumn="<?= $this->groupByColumn ?>">
 			<?= $this->getTableHead() ?>
@@ -151,7 +151,7 @@ JS;
 					if (!$(event.target).hasClass('details-control')) {
 						fnMultiSelect($(this));
 					}
-					$(table).trigger('draw.dt', [event, dataTable.settings()]);
+					updateToolbar();
 				});
 				// Opening and closing details
 				$(table + ' tbody').on('click', 'td.details-control', function(event) {
@@ -160,14 +160,14 @@ JS;
 				// Group by column
 				$(table + '.groupByColumn:not(.groupByFixed)').on('order.dt', fnGroupByColumn);
 				$(table + '.groupByColumn').on('draw.dt', fnGroupByColumnDraw);
-				$(table + '.groupByColumn').data('expandedGroups', []);
 				$(table + '.groupByColumn').data('collapsedGroups', []);
 				// Setup toolbar
-				$(table).on('draw.dt', function(e, settings) {
-					var aantal = $(table + ' tbody tr.selected').length;
-					$(table + '_toolbar #rowcount').prop('disabled', aantal < 1);
-				});
 				$(table + '_toolbar').insertBefore(table);
+				var updateToolbar = function() {
+					var aantal = $(table + ' tbody tr.selected').length;
+					$(table + '_toolbar #rowcount').attr('disabled', aantal < 1);
+				};
+				$(table).on('draw.dt', updateToolbar);
 				$(table + '_toolbar #rowcount').click(function() {
 					alert($(table + ' tbody tr.selected').length + ' row(s) selected');
 				});

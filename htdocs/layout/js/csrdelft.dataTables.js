@@ -76,8 +76,6 @@ function fnGroupByColumn(e, settings) {
 	columnId = newOrder[0][0];
 	dataTable.column(columnId).visible(false);
 	table.attr('groupByColumn', columnId);
-	table.removeClass('collapseAll');
-	table.data('expandedGroups', []);
 	table.data('collapsedGroups', []);
 	settings.aaSortingFixed = newOrder.slice(); // copy by value
 	bOrderDraw = true;
@@ -94,59 +92,46 @@ function fnGroupByColumnDraw(e, settings) {
 	if (columnId === false) {
 		return;
 	}
-	// Create group rows for visible rows
-	var dataTable = table.DataTable();
-	var rows = dataTable.rows({page: 'current'}).nodes();
-	if (rows.length < 1) {
-		console.log(rows.length);
-		return;
-	}
-	var firstRow = $(rows).first();
-	var groupRow;
 	var colspan = settings.aoColumns.length - 1;
+	var groupRow;
+	var visibleRows = [];
+	if (settings.aiDisplay.length > 0) {
+		// Create group rows for visible rows
+		var dataTable = table.DataTable();
+		var rows = $(dataTable.rows({page: 'current'}).nodes());
+		var last = null;
+		dataTable.column(columnId, {page: 'current'}).data().each(function(group, i) {
+			if (last !== group) {
+				groupRow = $('<tr class="group expanded"><td class="details-control"></td><td colspan="' + colspan + '">' + group + '</td></tr>').data('groupData', group);
+				rows.eq(i).before(groupRow);
+				visibleRows.push(group);
+				last = group;
+			}
+		});
+	}
+	// Create group rows for collapsed groups
 	var collapse = table.data('collapsedGroups');
+	var body = table.children('tbody:first');
 	collapse.forEach(function(group) {
 		groupRow = $('<tr class="group"><td class="details-control"></td><td colspan="' + colspan + '">' + group + '</td></tr>').data('groupData', group);
-		firstRow.before(groupRow);
-	});
-	var last = null;
-	dataTable.column(columnId, {page: 'current'}).data().each(function(group, i) {
-		if (last !== group) {
-			groupRow = $('<tr class="group expanded"><td class="details-control"></td><td colspan="' + colspan + '">' + group + '</td></tr>').data('groupData', group);
-			$(rows).eq(i).before(groupRow);
-			last = group;
-		}
+		body.prepend(groupRow);
 	});
 }
 
 function fnGroupExpandCollapse(dataTable, tr, td) {
 	var table = tr.parent().parent();
-	var expand = table.data('expandedGroups');
 	var collapse = table.data('collapsedGroups');
 	tr.toggleClass('expanded');
 	var group = tr.data('groupData');
-	if (table.hasClass('collapseAll')) {
-		if (tr.hasClass('expanded')) {
-			expand.push(group);
-		}
-		else {
-			expand = $.grep(expand, function(value) {
-				return value !== group;
-			});
-		}
+	if (tr.hasClass('expanded')) {
+		collapse = $.grep(collapse, function(value) {
+			return value !== group;
+		});
 	}
 	else {
-		if (tr.hasClass('expanded')) {
-			collapse = $.grep(collapse, function(value) {
-				return value !== group;
-			});
-		}
-		else {
-			collapse.push(group);
-		}
+		collapse.push(group);
 	}
-	table.data('expandedGroups', expand);
-	table.data('collapsedGroups', collapse);
+	table.data('collapsedGroups', collapse.sort());
 	bCtrlPressed = false; // prevent order callback
 	dataTable.draw();
 }
@@ -158,20 +143,11 @@ function fnGroupExpandCollapseDraw(settings, data, index) {
 		return true;
 	}
 	var group = data[columnId];
-	if (table.hasClass('collapseAll')) {
-		var expand = table.data('expandedGroups');
-		if ($.inArray(group, expand) > -1) {
-			return true;
-		}
+	var collapse = table.data('collapsedGroups');
+	if ($.inArray(group, collapse) > -1) {
 		return false;
 	}
-	else {
-		var collapse = table.data('collapsedGroups');
-		if ($.inArray(group, collapse) > -1) {
-			return false;
-		}
-		return true;
-	}
+	return true;
 }
 
 function fnChildRow(dataTable, td) {
