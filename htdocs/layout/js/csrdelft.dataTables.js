@@ -92,9 +92,9 @@ function fnGroupByColumnDraw(e, settings) {
 	if (columnId === false) {
 		return;
 	}
+	var collapse = table.data('collapsedGroups').slice(); // copy by value
 	var colspan = settings.aoColumns.length - 1;
 	var groupRow;
-	var visibleRows = [];
 	if (settings.aiDisplay.length > 0) {
 		// Create group rows for visible rows
 		var dataTable = table.DataTable();
@@ -102,19 +102,23 @@ function fnGroupByColumnDraw(e, settings) {
 		var last = null;
 		dataTable.column(columnId, {page: 'current'}).data().each(function(group, i) {
 			if (last !== group) {
+				// Create group rows for collapsed groups
+				while (collapse.length > 0 && collapse[0].localeCompare(group) < 0) {
+					groupRow = $('<tr class="group"><td class="details-control"></td><td colspan="' + colspan + '">' + collapse[0] + '</td></tr>').data('groupData', collapse[0]);
+					rows.eq(i).before(groupRow);
+					collapse.shift();
+				}
 				groupRow = $('<tr class="group expanded"><td class="details-control"></td><td colspan="' + colspan + '">' + group + '</td></tr>').data('groupData', group);
 				rows.eq(i).before(groupRow);
-				visibleRows.push(group);
 				last = group;
 			}
 		});
 	}
 	// Create group rows for collapsed groups
-	var collapse = table.data('collapsedGroups');
-	var body = table.children('tbody:first');
+	var tbody = table.children('tbody:first');
 	collapse.forEach(function(group) {
 		groupRow = $('<tr class="group"><td class="details-control"></td><td colspan="' + colspan + '">' + group + '</td></tr>').data('groupData', group);
-		body.prepend(groupRow);
+		tbody.append(groupRow);
 	});
 }
 
