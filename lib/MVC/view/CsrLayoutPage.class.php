@@ -109,7 +109,10 @@ class CsrLayoutPage extends HtmlPage {
 		$smarty->assign('body', $this->getBody());
 		$smarty->assign('zijkolom', $this->zijkolom);
 		$smarty->assign('popup', $this->popup);
-		//$smarty->assign('datatable', new DataTable('Example', '/onderhoud.html?name=', 3));
+
+		//$dataTable = new DataTable('Example', 3, true);
+		//$dataTable->setDataSource('example-data-2.json');
+		//$smarty->assign('datatable', $dataTable);
 
 		$top = 180;
 		$left = 190;

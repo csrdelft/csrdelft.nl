@@ -15,6 +15,7 @@ class DataTable implements View {
 	private $tableId;
 	private $groupByColumn;
 	protected $css_classes = array();
+	protected $dataSource;
 	protected $columns = array('name', 'position', 'salary', 'start_date', 'office', 'extn'); // TODO
 
 	public function __construct($tableId, $groupByColumn = true, $groupByFixed = false) {
@@ -32,6 +33,10 @@ class DataTable implements View {
 		} else {
 			$this->groupByColumn = null;
 		}
+	}
+
+	public function setDataSource($url) {
+		$this->dataSource = $url;
 	}
 
 	public function getModel() {
@@ -55,18 +60,24 @@ class DataTable implements View {
 	}
 
 	private function getConditionalProps() {
-		if ($this->groupByColumn) {
-			return <<<JS
-			, "columnDefs": [
-				{
-					"visible": false,
-					"targets": [{$this->groupByColumn}]
-				}
-			]
-			, "orderFixed": [[{$this->groupByColumn}, "asc"]]
-JS;
+		$json = '';
+		if ($this->dataSource) {
+			$json .= <<<JSON
+	, "ajax": "{$this->dataSource}"
+JSON;
 		}
-		return null;
+		if ($this->groupByColumn) {
+			$json .= <<<JSON
+	, "columnDefs": [
+		{
+			"visible": false,
+			"targets": [{$this->groupByColumn}]
+		}
+	]
+	, "orderFixed": [[{$this->groupByColumn}, "asc"]]
+JSON;
+		}
+		return $json;
 	}
 
 	public function view() {
@@ -87,7 +98,6 @@ JS;
 				var tableId = '<?= $this->tableId ?>';
 				var table = '#' + tableId;
 				var dataTable = $(table).DataTable({
-					"ajax": "/example-data.json",
 					"columns": [
 						{
 							"name": "details",
