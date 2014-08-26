@@ -196,6 +196,7 @@ htdocs/layout/js/datatables/images/sort_both.png -text
 htdocs/layout/js/datatables/images/sort_desc.jpg -text
 htdocs/layout/js/datatables/images/sort_desc.png -text
 htdocs/layout/js/datatables/images/sort_desc_disabled.png -text
+htdocs/layout/js/datatables/jquery.dataTables.js -text
 htdocs/layout/js/datatables/jquery.dataTables.min.js -text
 htdocs/layout/js/documenten.js -text
 htdocs/layout/js/documenten.min.js -text
