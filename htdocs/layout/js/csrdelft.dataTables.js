@@ -27,36 +27,64 @@ function fnInitDataTables() {
 }
 
 function fnMultiSelect(tr) {
+	if (tr.children(':first').hasClass('dataTables_empty')) {
+		return;
+	}
 	if (tr.hasClass('group')) {
-		if (tr.nextUntil('.group').not('.selected').length !== 0) {
-			if (!bShiftPressed) {
-				tr.siblings('.selected').removeClass('selected');
-			}
+		if (bShiftPressed) {
 			tr.nextUntil('.group').addClass('selected');
 		}
+		else if (bCtrlPressed) {
+			var nextUntil = tr.nextUntil('.group');
+			var selected = nextUntil.not(':not(.selected)'); // filter selected
+			if (selected.length === nextUntil.length) {
+				nextUntil.removeClass('selected');
+			}
+			else {
+				nextUntil.addClass('selected');
+			}
+		}
 		else {
-			tr.nextUntil('.group').removeClass('selected');
-		}
-	}
-	else if (!tr.children(':first').hasClass('dataTables_empty')) {
-		if (bShiftPressed) {
-			var selected = !tr.hasClass('selected');
-			if (tr.prevAll('.selected').not('.group').length !== 0) {
-				tr.prevUntil('.selected').not('.group').each(function() {
-					$(this).toggleClass('selected', selected);
-				});
-			}
-			else if (tr.nextAll('.selected').not('.group').length !== 0) {
-				tr.nextUntil('.selected').not('.group').each(function() {
-					$(this).toggleClass('selected', selected);
-				});
-			}
-		}
-		else if (!bCtrlPressed) {
 			tr.siblings('.selected').removeClass('selected');
+			tr.nextUntil('.group').addClass('selected');
 		}
-		tr.toggleClass('selected');
 	}
+	else {
+		if (bShiftPressed) {
+			// Calculate closest selected row
+			var prevAll = tr.prevAll(':not(.selected.group)');
+			var prevUntil = tr.prevUntil('.selected:not(.group)');
+			var before = prevUntil.length;
+
+			var nextAll = tr.nextAll(':not(.selected.group)');
+			var nextUntil = tr.nextUntil('.selected:not(.group)');
+			var after = nextUntil.length;
+
+			// Check for no selected row
+			if (prevUntil.length === prevAll.length) {
+				after = 0;
+			}
+			if (nextUntil.length === nextAll.length) {
+				before = 0;
+			}
+
+			if (before < after) {
+				prevUntil.addClass('selected');
+			}
+			if (before > after) {
+				nextUntil.addClass('selected');
+			}
+			tr.addClass('selected');
+		}
+		else if (bCtrlPressed) {
+			tr.toggleClass('selected');
+		}
+		else {
+			tr.siblings('.selected').removeClass('selected');
+			tr.addClass('selected');
+		}
+	}
+	document.getSelection().removeAllRanges();
 }
 
 function fnGetGroupByColumn(table) {

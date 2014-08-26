@@ -17,7 +17,7 @@ class DataTable implements View {
 	protected $css_classes = array();
 	protected $columns = array('name', 'position', 'salary', 'start_date', 'office', 'extn'); // TODO
 
-	public function __construct($tableId, $groupByColumn = true, $groupByFixed = false) {
+	public function __construct($tableId, $groupByColumn = 2, $groupByFixed = false) {
 		$this->tableId = $tableId;
 		$this->css_classes[] = 'init display';
 		if ($groupByColumn === true) {
