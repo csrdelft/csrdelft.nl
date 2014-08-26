@@ -178,7 +178,9 @@ JSON;
 				$(table + '.groupByColumn').on('draw.dt', fnGroupByColumnDraw);
 				$(table + '.groupByColumn').data('collapsedGroups', []);
 				$(table + '.groupByColumn thead tr:first').addClass('expanded');
-				$(table + ':not(.groupByColumn) th.details-control').removeClass('details-control');
+				if (!$(table).hasClass('groupByColumn') || !fnGetGroupByColumn($(table))) {
+					$(table + ' thead tr th.details-control').removeClass('details-control');
+				}
 				// Setup toolbar
 				$(table + '_toolbar').insertBefore(table);
 				var updateToolbar = function() {
