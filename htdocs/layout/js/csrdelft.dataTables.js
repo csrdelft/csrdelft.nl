@@ -32,20 +32,20 @@ function fnMultiSelect(tr) {
 	}
 	if (bShiftPressed) {
 		// Calculate closest selected row
-		var prevAll = tr.prevAll(':not(.selected)').not('.group');
+		var prevAll = tr.prevAll(':not(.group)');
 		var prevUntil = tr.prevUntil('.selected').not('.group');
 		var before = prevUntil.length;
 
-		var nextAll = tr.nextAll(':not(.selected)').not('.group');
+		var nextAll = tr.nextAll(':not(.group)');
 		var nextUntil = tr.nextUntil('.selected').not('.group');
 		var after = nextUntil.length;
 
 		// Check for no selected row
 		if (prevUntil.length === prevAll.length) {
-			after = 0;
+			after = -1;
 		}
 		if (nextUntil.length === nextAll.length) {
-			before = 0;
+			before = -1;
 		}
 		// Extend from closest selection
 		if (before < after) {
