@@ -261,6 +261,7 @@ class ForumController extends Controller {
 				throw new Exception('Forum beheren mislukt!');
 			}
 			// ReloadPage
+			exit;
 		}
 	}
 
@@ -278,6 +279,7 @@ class ForumController extends Controller {
 			SimpleHTML::setMelding('Deelforum verwijderd', 1);
 		}
 		// ReloadPage
+		exit;
 	}
 
 	/**
@@ -290,6 +292,7 @@ class ForumController extends Controller {
 			ForumPostsModel::instance()->hertellenVoorDraadEnDeel($draad, $deel);
 		}
 		// ReloadPage
+		exit;
 	}
 
 	/**
@@ -307,6 +310,7 @@ class ForumController extends Controller {
 		}
 		ForumDradenVerbergenModel::instance()->setVerbergenVoorLid($draad);
 		// ReloadPage
+		exit;
 	}
 
 	/**
@@ -321,6 +325,7 @@ class ForumController extends Controller {
 		}
 		ForumDradenVerbergenModel::instance()->setVerbergenVoorLid($draad, false);
 		// ReloadPage
+		exit;
 	}
 
 	/**
@@ -331,6 +336,7 @@ class ForumController extends Controller {
 		ForumDradenVerbergenModel::instance()->toonAllesVoorLid(LoginModel::getUid());
 		SimpleHTML::setMelding($aantal . ' onderwerp' . ($aantal === 1 ? ' wordt' : 'en worden') . ' weer getoond in de zijbalk', 1);
 		// ReloadPage
+		exit;
 	}
 
 	/**
@@ -348,6 +354,7 @@ class ForumController extends Controller {
 		}
 		ForumDradenVolgenModel::instance()->setVolgenVoorLid($draad);
 		// ReloadPage
+		exit;
 	}
 
 	/**
@@ -362,6 +369,7 @@ class ForumController extends Controller {
 		}
 		ForumDradenVolgenModel::instance()->setVolgenVoorLid($draad, false);
 		// ReloadPage
+		exit;
 	}
 
 	/**
@@ -372,6 +380,7 @@ class ForumController extends Controller {
 		ForumDradenVolgenModel::instance()->volgNietsVoorLid(LoginModel::getUid());
 		SimpleHTML::setMelding($aantal . ' onderwerp' . ($aantal === 1 ? ' wordt' : 'en worden') . ' niet meer gevolgd', 1);
 		// ReloadPage
+		exit;
 	}
 
 	/**
@@ -426,6 +435,7 @@ class ForumController extends Controller {
 			$this->onderwerp($draad_id);
 		}
 		// ReloadPage
+		exit;
 	}
 
 	/**

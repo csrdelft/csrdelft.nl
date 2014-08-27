@@ -50,6 +50,7 @@ class MenuBeheerController extends AclController {
 			$this->view = new MenuItemView($item);
 		}
 		// ReloadPage
+		exit;
 	}
 
 	public function bewerken($item_id) {
@@ -65,6 +66,7 @@ class MenuBeheerController extends AclController {
 			$this->view = new MenuItemView($item);
 		}
 		// ReloadPage
+		exit;
 	}
 
 	public function verwijderen($item_id) {
@@ -73,6 +75,7 @@ class MenuBeheerController extends AclController {
 		SimpleHTML::setMelding('Verwijderd', 1);
 		$this->view = new MenuItemView($item);
 		// ReloadPage
+		exit;
 	}
 
 }
