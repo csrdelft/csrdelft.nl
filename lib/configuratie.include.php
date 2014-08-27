@@ -26,7 +26,7 @@ function fatal_handler() {
 			$headers[] = 'X-Mailer: nl.csrdelft.lib.Mail';
 			$subject = 'Fatal error on request ';
 			if (isset($_SERVER['SCRIPT_URL'])) {
-				$subject .= $_SERVER['SCRIPT_URL'];
+				$subject .= filter_var($_SERVER['SCRIPT_URL'], FILTER_SANITIZE_URL);
 			}
 			mail('pubcie@csrdelft.nl', $subject, print_r($debug, true), implode("\r\n", $headers));
 		} elseif (DEBUG) {
