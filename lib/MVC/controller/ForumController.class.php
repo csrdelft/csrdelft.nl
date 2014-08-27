@@ -22,7 +22,6 @@ class ForumController extends Controller {
 		}
 		if ($this->action === 'rss.xml') {
 			$this->action = 'rss';
-			header('Content-Disposition: attachment; filename="rss.xml"');
 		}
 		if (!isset($_SESSION['forum_concept'])) {
 			$_SESSION['forum_concept'] = '';
@@ -106,6 +105,7 @@ class ForumController extends Controller {
 	 */
 	public function rss() {
 		header('Content-Type: application/rss+xml; charset=UTF-8');
+		header('Content-Disposition: attachment; filename="rss.xml"');
 		$draden_delen = ForumDradenModel::instance()->getRssForumDradenEnDelen();
 		$this->view = new ForumRssView($draden_delen[0], $draden_delen[1]);
 	}
