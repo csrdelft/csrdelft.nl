@@ -66,6 +66,15 @@ class Lid implements Serializable, Agendeerbaar {
 		}
 	}
 
+	public function getICalLink() {
+		$url = 'http://csrdelft.nl/agenda/ical';
+		if ($this->getProperty('rssToken') == '') {
+			return $url . '.ics';
+		} else {
+			return $url . '/' . $this->getProperty('rssToken') . '.ics';
+		}
+	}
+
 	public function getRssLink() {
 		$url = 'http://csrdelft.nl/forum/rss';
 		if ($this->getProperty('rssToken') == '') {

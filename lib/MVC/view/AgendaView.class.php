@@ -197,7 +197,7 @@ class AgendaICalendarView extends SmartyTemplateView {
 	}
 
 	public function view() {
-		$this->smarty->assign('items', $this->model->getiCalendarItems());
+		$this->smarty->assign('items', $this->model->getICalendarItems());
 		$this->smarty->display('MVC/agenda/icalendar.tpl');
 	}
 

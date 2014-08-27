@@ -79,7 +79,7 @@ class AgendaModel extends PersistenceModel {
 		return $this->retrieveByPrimaryKey(array($itemId));
 	}
 
-	public function getiCalendarItems() {
+	public function getICalendarItems() {
 		return $this->getAllAgendeerbaar(strtotime('-1 year'), strtotime('+1 year'), true);
 	}
 

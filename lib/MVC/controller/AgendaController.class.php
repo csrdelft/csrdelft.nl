@@ -35,7 +35,7 @@ class AgendaController extends AclController {
 		if ($this->hasParam(2)) {
 			$this->action = $this->getParam(2);
 		}
-		if ($this->action === 'calendar.ics') {
+		if ($this->action === 'ical.ics') {
 			$this->action = 'ical';
 			header('Content-Disposition: attachment; filename="calendar.ics"');
 		}

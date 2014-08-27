@@ -63,4 +63,4 @@
 	{/foreach}
 </table>
 {$smarty.capture.navlinks}
-<div id="ical"><a href="/agenda/calendar.ics" title="ICalender export (Google calendar)"><img src="{$CSR_PICS}/knopjes/ical.gif" /></a></div>
+<div id="ical"><a href="{LoginModel::instance()->getLid()->getICalLink()}" title="ICalender feed"><img src="{$CSR_PICS}/knopjes/ical.gif" /></a></div>
