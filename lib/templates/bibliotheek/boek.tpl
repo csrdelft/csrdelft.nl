@@ -226,7 +226,7 @@
 						<td class="beschrijving b{cycle values="0,1"}" id="beschrijving{$beschrijving.id}">
 							{$beschrijving.beschrijving|ubb}
 							{if $beschrijving.bewerkdatum!='0000-00-00 00:00:00'}
-								<br /><div class="offtopic">Bewerkt {$beschrijving.bewerkdatum|reldate}</div>
+								<br /><span class="offtopic">Bewerkt {$beschrijving.bewerkdatum|reldate}</span>
 							{/if}
 						</td>
 					{/if}

@@ -11,10 +11,10 @@ div.preview.pagina{ padding: 2px; width: 100%;}
  *
  */
 
-div.offtopic{ font-size: 9px; color: #bbb; }
-div.offtopic a{ color: #bbb; }
-div.offtopic hr{ text-align: left; background-color: #bbb; }
-div.offtopic img{ opacity: 0.3; filter:alpha(opacity=30); }
+span.offtopic{ font-size: 9px; color: #bbb; }
+span.offtopic a{ color: #bbb; }
+span.offtopic hr{ text-align: left; background-color: #bbb; }
+span.offtopic img{ opacity: 0.3; filter:alpha(opacity=30); }
 
 .ubb_block{
     border: 1px solid #b8b8b8;

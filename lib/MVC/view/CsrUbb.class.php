@@ -756,7 +756,7 @@ HTML;
 
 	public function ubb_offtopic() {
 		$content = $this->parseArray(array('[/offtopic]', '[/vanonderwerp]'), array());
-		return '<div class="offtopic">' . $content . '</div>';
+		return '<span class="offtopic">' . $content . '</span>';
 	}
 
 	/**
