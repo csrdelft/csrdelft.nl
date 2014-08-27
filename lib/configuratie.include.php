@@ -21,10 +21,14 @@ function fatal_handler() {
 		$debug['GET'] = $_GET;
 		$debug['SERVER'] = $_SERVER;
 		if ($error['type'] === E_CORE_ERROR OR $error['type'] === E_ERROR) {
-			$headers[] = 'From: pubcie@csrdelft.nl';
+			$headers[] = 'From: Fatal error handler <pubcie@csrdelft.nl>';
 			$headers[] = 'Content-Type: text/plain; charset=UTF-8';
 			$headers[] = 'X-Mailer: nl.csrdelft.lib.Mail';
-			mail('pubcie@csrdelft.nl', 'Fatal error failsafe', print_r($debug, true), implode("\r\n", $headers));
+			$subject = 'Fatal error on request ';
+			if (isset($_SERVER['SCRIPT_URL'])) {
+				$subject .= $_SERVER['SCRIPT_URL'];
+			}
+			mail('pubcie@csrdelft.nl', $subject, print_r($debug, true), implode("\r\n", $headers));
 		} elseif (DEBUG) {
 			DebugLogModel::instance()->log(__FILE__, 'fatal_handler', func_get_args(), print_r($debug, true));
 		}
