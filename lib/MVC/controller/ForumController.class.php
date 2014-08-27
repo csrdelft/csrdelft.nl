@@ -422,6 +422,9 @@ class ForumController extends Controller {
 			$wijziging = $property . ' = ' . $value;
 		}
 		SimpleHTML::setMelding('Wijziging geslaagd: ' . $wijziging, 1);
+		if ($property === 'forum_id' OR $property === 'titel') {
+			$this->onderwerp($draad_id);
+		}
 		// ReloadPage
 	}
 
