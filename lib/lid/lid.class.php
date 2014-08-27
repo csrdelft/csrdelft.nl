@@ -1085,8 +1085,8 @@ class Lid implements Serializable, Agendeerbaar {
 		}
 	}
 
-	public static function getVerjaardagen($van, $tot, $limiet = 0) {
-		if (!LoginModel::mag('P_LOGGED_IN')) {
+	public static function getVerjaardagen($van, $tot, $limiet = 0, $ical = false) {
+		if (!LoginModel::mag('P_VERJAARDAGEN', $ical)) {
 			return array();
 		}
 

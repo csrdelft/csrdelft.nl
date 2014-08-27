@@ -3,7 +3,8 @@ RewriteEngine On
 
 RewriteRule ^facebook			https://www.facebook.com/delftcsr
 RewriteRule ^nieuws/?(.*)		/actueel/mededelingen/$1/ [R,L]
-RewriteRule ^forum/rss/([0-9a-z]*).xml	index.php?c=Forum&private_token=$1 [L]
+RewriteRule ^forum/rss/([0-9a-z]*).xml		index.php?c=Forum&private_token=$1 [L]
+RewriteRule ^agenda/ical/([0-9a-z]*).ics	index.php?c=Agenda&private_token=$1 [L]
 RewriteRule ^pauper				index.php?c=Login [L]
 RewriteRule ^login				index.php?c=Login [L]
 RewriteRule ^logout				index.php?c=Login [L]

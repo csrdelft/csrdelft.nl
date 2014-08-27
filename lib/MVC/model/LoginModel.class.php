@@ -370,9 +370,10 @@ class LoginModel extends PersistenceModel implements Validator {
 			'P_LOGGED_IN'		 => $this->createPermStr(1, 0), // Leden-menu, eigen profiel raadplegen
 			'P_PROFIEL_EDIT'	 => $this->createPermStr(1 + 2, 0), // Eigen gegevens aanpassen
 			'P_ALLEEN_OUDLID'	 => $this->createPermStr(4, 0), // Specifiek voor oudleden [[let op: niet cumulatief]]
-			'P_LEDEN_READ'		 => $this->createPermStr(1, 1), // Gegevens van leden raadplegen
-			'P_OUDLEDEN_READ'	 => $this->createPermStr(1 + 2, 1), // Gegevens van oudleden raadplegen
-			'P_LEDEN_MOD'		 => $this->createPermStr(1 + 2 + 4, 1), // (Oud)ledengegevens aanpassen
+			'P_VERJAARDAGEN'	 => $this->createPermStr(1, 1), // Verjaardagen van leden zien
+			'P_LEDEN_READ'		 => $this->createPermStr(1 + 2, 1), // Gegevens van leden raadplegen
+			'P_OUDLEDEN_READ'	 => $this->createPermStr(1 + 2 + 4, 1), // Gegevens van oudleden raadplegen
+			'P_LEDEN_MOD'		 => $this->createPermStr(1 + 2 + 4 + 6, 1), // (Oud)ledengegevens aanpassen
 			'P_FORUM_READ'		 => $this->createPermStr(1, 2), // Forum lezen
 			'P_FORUM_POST'		 => $this->createPermStr(1 + 2, 2), // Berichten plaatsen op het forum en eigen berichten wijzigen
 			'P_FORUM_MOD'		 => $this->createPermStr(1 + 2 + 4, 2), // Forum-moderator mag berichten van anderen wijzigen of verwijderen

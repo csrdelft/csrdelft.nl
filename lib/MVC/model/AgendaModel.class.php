@@ -18,7 +18,7 @@ class AgendaModel extends PersistenceModel {
 
 	protected static $instance;
 
-	public function getAllAgendeerbaar($van, $tot) {
+	public function getAllAgendeerbaar($van, $tot, $ical = false) {
 		$result = array();
 
 		if (!is_int($van)) {
@@ -31,7 +31,7 @@ class AgendaModel extends PersistenceModel {
 		// AgendaItems
 		$items = $this->find('eind_moment >= ? AND begin_moment <= ?', array(date('Y-m-d', $van), date('Y-m-d', $tot)), 'begin_moment ASC, titel ASC');
 		foreach ($items as $item) {
-			if ($item->magBekijken()) {
+			if ($item->magBekijken($ical)) {
 				$result[] = $item;
 			}
 		}
@@ -56,7 +56,7 @@ class AgendaModel extends PersistenceModel {
 			$GLOBALS['agenda_jaar'] = date('Y', $van);
 			$GLOBALS['agenda_maand'] = date('m', ($van + $tot) / 2);
 
-			$result = array_merge($result, Lid::getVerjaardagen($van, $tot));
+			$result = array_merge($result, Lid::getVerjaardagen($van, $tot, 0, $ical));
 		}
 
 		// Sorteren
@@ -80,7 +80,7 @@ class AgendaModel extends PersistenceModel {
 	}
 
 	public function getiCalendarItems() {
-		return $this->getAllAgendeerbaar(strtotime('-1 year'), strtotime('+1 year'));
+		return $this->getAllAgendeerbaar(strtotime('-1 year'), strtotime('+1 year'), true);
 	}
 
 	public function getItemsByDay($jaar, $maand, $dag) {

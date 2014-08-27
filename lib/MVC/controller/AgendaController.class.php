@@ -17,8 +17,8 @@ class AgendaController extends AclController {
 		parent::__construct($query, AgendaModel::instance());
 		if (!$this->isPosted()) {
 			$this->acl = array(
-				'maand'		 => 'P_AGENDA_READ',
-				'icalendar'	 => 'P_AGENDA_READ'
+				'maand'	 => 'P_AGENDA_READ',
+				'ical'	 => 'P_AGENDA_READ'
 			);
 		} else {
 			$this->acl = array(
@@ -34,10 +34,10 @@ class AgendaController extends AclController {
 		$this->action = 'maand';
 		if ($this->hasParam(2)) {
 			$this->action = $this->getParam(2);
-			if ($this->action === 'calendar.ics') {
-				$this->action = 'icalendar';
-				header('Content-Disposition: attachment; filename="calendar.ics"');
-			}
+		}
+		if ($this->action === 'calendar.ics') {
+			$this->action = 'ical';
+			header('Content-Disposition: attachment; filename="calendar.ics"');
 		}
 		parent::performAction($this->getParams(3));
 	}
@@ -61,8 +61,8 @@ class AgendaController extends AclController {
 		$this->view->zijkolom = false;
 	}
 
-	public function icalendar() {
-		header('Content-Type: text/calendar');
+	public function ical() {
+		header('Content-Type: text/calendar; charset=UTF-8');
 		$this->view = new AgendaICalendarView($this->model);
 	}
 
