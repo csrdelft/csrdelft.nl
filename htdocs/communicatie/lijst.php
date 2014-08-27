@@ -62,9 +62,10 @@ if (isset($_GET['addToGoogle'])) {
 	$message = $gSync->syncLidBatch($zoeker->getLeden());
 	$elapsed = microtime() - $start;
 
-	$ledenlijstcontent = new StringIncluder(
-			'<h1>Google-sync-resultaat:</h1>' . $message . '<br />' .
-			'<a href="/communicatie/lijst.php?q=' . htmlspecialchars($_GET['q']) . '">Terug naar de ledenlijst...</a>', 'Google-sync resultaat');
+	$ledenlijstcontent = SimpleHTML::setMelding(
+					'<h1>Google-sync-resultaat:</h1>' . $message . '<br />' .
+					'<a href="/communicatie/lijst.php?q=' . htmlspecialchars($_GET['q']) . '">Terug naar de ledenlijst...</a>', 'Google-sync resultaat'
+					, 0);
 
 	if (LoginModel::mag('P_ADMIN')) {
 		$ledenlijstcontent->append('<hr />Tijd nodig voor deze sync: ' . $elapsed . 'ms');
