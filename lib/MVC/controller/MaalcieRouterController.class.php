@@ -9,17 +9,10 @@
  */
 class MaalcieRouterController extends AclController {
 
-	/**
-	 * Pass through query
-	 * @var string
-	 */
-	private $query;
-
 	public function __construct($query) {
-		$this->query = $query;
-		$this->query = str_replace('maaltijden/', 'maaltijden', $this->query);
-		$this->query = str_replace('corvee/', 'corvee', $this->query);
-		parent::__construct($this->query, null);
+		$query = str_replace('maaltijden/', 'maaltijden', $query);
+		$query = str_replace('corvee/', 'corvee', $query);
+		parent::__construct($query, $query); // Use model to pass through query
 		$this->acl = array(
 			'maaltijdenketzer'				 => 'P_MAAL_IK',
 			'maaltijdenlijst'				 => 'P_MAAL_IK', // shortcut
@@ -73,83 +66,83 @@ class MaalcieRouterController extends AclController {
 
 	public function maaltijdenketzer() {
 		require_once 'maalcie/controller/MijnMaaltijdenController.class.php';
-		return new MijnMaaltijdenController($this->query);
+		return new MijnMaaltijdenController($this->model);
 	}
 
 	public function maaltijdenlijst() {
-		$this->query = str_replace('lijst/', 'ketzer/lijst/', $this->query);
-		$this->query = str_replace('lijst/sluit/', 'sluit/', $this->query);
+		$this->model = str_replace('lijst/', 'ketzer/lijst/', $this->model);
+		$this->model = str_replace('lijst/sluit/', 'sluit/', $this->model);
 		return $this->maaltijdenketzer();
 	}
 
 	public function maaltijdenbeheer() {
 		require_once 'maalcie/controller/BeheerMaaltijdenController.class.php';
-		return new BeheerMaaltijdenController($this->query);
+		return new BeheerMaaltijdenController($this->model);
 	}
 
 	public function maaltijdenrepetities() {
 		require_once 'maalcie/controller/MaaltijdRepetitiesController.class.php';
-		return new MaaltijdRepetitiesController($this->query);
+		return new MaaltijdRepetitiesController($this->model);
 	}
 
 	public function maaltijdenabonnementen() {
 		require_once 'maalcie/controller/MijnAbonnementenController.class.php';
-		return new MijnAbonnementenController($this->query);
+		return new MijnAbonnementenController($this->model);
 	}
 
 	public function maaltijdenabonnementenbeheer() {
 		require_once 'maalcie/controller/BeheerAbonnementenController.class.php';
-		return new BeheerAbonnementenController($this->query);
+		return new BeheerAbonnementenController($this->model);
 	}
 
 	public function maaltijdenmaalciesaldi() {
 		require_once 'maalcie/controller/MaalCieSaldiController.class.php';
-		return new MaalCieSaldiController($this->query);
+		return new MaalCieSaldiController($this->model);
 	}
 
 	public function corveemijn() {
 		require_once 'maalcie/controller/MijnCorveeController.class.php';
-		return new MijnCorveeController($this->query);
+		return new MijnCorveeController($this->model);
 	}
 
 	public function corveerooster() {
-		$this->query = str_replace('rooster', 'rooster/rooster', $this->query);
+		$this->model = str_replace('rooster', 'rooster/rooster', $this->model);
 		return $this->corveemijn();
 	}
 
 	public function corveebeheer() {
 		require_once 'maalcie/controller/BeheerTakenController.class.php';
-		return new BeheerTakenController($this->query);
+		return new BeheerTakenController($this->model);
 	}
 
 	public function corveerepetities() {
 		require_once 'maalcie/controller/CorveeRepetitiesController.class.php';
-		return new CorveeRepetitiesController($this->query);
+		return new CorveeRepetitiesController($this->model);
 	}
 
 	public function corveevoorkeuren() {
 		require_once 'maalcie/controller/MijnVoorkeurenController.class.php';
-		return new MijnVoorkeurenController($this->query);
+		return new MijnVoorkeurenController($this->model);
 	}
 
 	public function corveevoorkeurenbeheer() {
 		require_once 'maalcie/controller/BeheerVoorkeurenController.class.php';
-		return new BeheerVoorkeurenController($this->query);
+		return new BeheerVoorkeurenController($this->model);
 	}
 
 	public function corveepuntenbeheer() {
 		require_once 'maalcie/controller/BeheerPuntenController.class.php';
-		return new BeheerPuntenController($this->query);
+		return new BeheerPuntenController($this->model);
 	}
 
 	public function corveevrijstellingen() {
 		require_once 'maalcie/controller/BeheerVrijstellingenController.class.php';
-		return new BeheerVrijstellingenController($this->query);
+		return new BeheerVrijstellingenController($this->model);
 	}
 
 	public function corveefuncties() {
 		require_once 'MVC/controller/maalcie/BeheerFunctiesController.class.php';
-		return new BeheerFunctiesController($this->query);
+		return new BeheerFunctiesController($this->model);
 	}
 
 }

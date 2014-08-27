@@ -13,15 +13,8 @@ require_once 'MVC/view/groepen/GroepenView.class.php';
  */
 class GroepenRouterController extends Controller {
 
-	/**
-	 * Pass through query
-	 * @var string
-	 */
-	private $query;
-
 	public function __construct($query) {
-		parent::__construct($query);
-		$this->query = $query;
+		parent::__construct($query, $query); // Use model to pass through query
 	}
 
 	public function performAction(array $args = array()) {
@@ -60,47 +53,47 @@ class GroepenRouterController extends Controller {
 
 	public function commissies() {
 		require_once 'MVC/controller/groepen/CommissiesController.class.php';
-		return new CommissiesController($this->query);
+		return new CommissiesController($this->model);
 	}
 
 	public function besturen() {
 		require_once 'MVC/controller/groepen/BesturenController.class.php';
-		return new BesturenController($this->query);
+		return new BesturenController($this->model);
 	}
 
 	public function sjaarcies() {
 		require_once 'MVC/controller/groepen/SjaarciesController.class.php';
-		return new SjaarciesController($this->query);
+		return new SjaarciesController($this->model);
 	}
 
 	public function woonoorden() {
 		require_once 'MVC/controller/groepen/WoonoordenController.class.php';
-		return new WoonoordenController($this->query);
+		return new WoonoordenController($this->model);
 	}
 
 	public function werkgroepen() {
 		require_once 'MVC/controller/groepen/WerkgroepenController.class.php';
-		return new WerkgroepenController($this->query);
+		return new WerkgroepenController($this->model);
 	}
 
 	public function onderverenigingen() {
 		require_once 'MVC/controller/groepen/OnderverenigingenController.class.php';
-		return new OnderverenigingenController($this->query);
+		return new OnderverenigingenController($this->model);
 	}
 
 	public function ketzers() {
 		require_once 'MVC/controller/groepen/KetzersController.class.php';
-		return new KetzersController($this->query);
+		return new KetzersController($this->model);
 	}
 
 	public function activiteiten() {
 		require_once 'MVC/controller/groepen/ActiviteitenController.class.php';
-		return new ActiviteitenController($this->query);
+		return new ActiviteitenController($this->model);
 	}
 
 	public function conferenties() {
 		require_once 'MVC/controller/groepen/ConferentiesController.class.php';
-		return new ConferentiesController($this->query);
+		return new ConferentiesController($this->model);
 	}
 
 }
