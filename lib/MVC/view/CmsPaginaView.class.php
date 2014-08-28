@@ -61,11 +61,11 @@ class CmsPaginaForm extends Formulier {
 
 		$this->addFields($fields);
 
-		$this->pagina->laatst_gewijzigd = getDateTime();
+		$pagina->laatst_gewijzigd = getDateTime();
 	}
 
 	function getTitel() {
-		return 'Pagina bewerken: ' . $this->pagina->naam;
+		return 'Pagina bewerken: ' . $this->model->naam;
 	}
 
 	function view() {
