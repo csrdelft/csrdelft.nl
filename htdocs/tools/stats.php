@@ -14,7 +14,11 @@ class stats implements View {
 		return null;
 	}
 
-	function view() {
+	public function getTitel() {
+		return 'stats';
+	}
+
+	public function view() {
 		if (isset($_GET['uid'])) {
 			$this->uidLog($_GET['uid']);
 		} elseif (isset($_GET['ip'])) {
