@@ -2,7 +2,6 @@
  * flip.less
  */
 .flip {
-  position: relative;
   box-shadow: none;
   perspective: 600px;
   -webkit-perspective: 600px;

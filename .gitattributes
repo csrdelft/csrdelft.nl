@@ -48,6 +48,7 @@ htdocs/bar/js/nl_NL.js -text
 htdocs/communicatie/.htaccess -text
 htdocs/communicatie/bibliotheek.php -text
 htdocs/communicatie/documenten.php -text
+htdocs/communicatie/ledenmemory.php -text
 htdocs/communicatie/lijst.php -text
 htdocs/communicatie/profiel.php -text
 htdocs/communicatie/stamboom.php -text
@@ -135,6 +136,7 @@ htdocs/layout/css/jquery.dataTables.css -text
 htdocs/layout/css/jquery.dataTables.min.css -text
 htdocs/layout/css/ledenlijst.css -text
 htdocs/layout/css/ledenlijst.min.css -text
+htdocs/layout/css/ledenmemory.css -text
 htdocs/layout/css/lustrum.css -text
 htdocs/layout/css/lustrum.min.css -text
 htdocs/layout/css/maaltijdlijst.css -text
@@ -333,6 +335,7 @@ htdocs/layout/js/jquery/plugins/jquery.scrollTo.js -text
 htdocs/layout/js/jquery/plugins/jquery.scrollTo.min.js -text
 htdocs/layout/js/jquery/plugins/jquery.timeago.js -text
 htdocs/layout/js/jquery/plugins/jquery.timeago.min.js -text
+htdocs/layout/js/ledenmemory.js -text
 htdocs/layout/js/lightbox.js -text
 htdocs/layout/js/lightbox.min.js -text
 htdocs/layout/js/menu.js -text
