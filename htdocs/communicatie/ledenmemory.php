@@ -122,10 +122,10 @@ $memory = new MemoryView();
 	<head>
 		<title><?= $memory->getTitel() ?></title>
 		<link rel="stylesheet" href="/layout/css/flip.min.css" type="text/css" />
-		<link rel="stylesheet" href="/layout/css/ledenmemory.css" type="text/css" />
+		<link rel="stylesheet" href="/layout/css/ledenmemory.min.css" type="text/css" />
 		<script type="text/javascript" src="/layout/js/jquery/jquery.min.js"></script>
-		<script type="text/javascript" src="/layout2/js/jquery.backstretch.js"></script>
-		<script type="text/javascript" src="/layout/js/ledenmemory.js"></script>
+		<script type="text/javascript" src="/layout2/js/jquery.backstretch.min.js"></script>
+		<script type="text/javascript" src="/layout/js/ledenmemory.min.js"></script>
 	</head>
 	<body>
 		<?= $memory->view() ?>

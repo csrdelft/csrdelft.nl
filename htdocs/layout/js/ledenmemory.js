@@ -133,6 +133,9 @@ $(document).ready(function() {
 					flip1.removeClass('flipped');
 					flip2.removeClass('flipped');
 				}
+				else {
+					// hint correct answer?
+				}
 			}
 			else {
 				if (flip1.hasClass('goed') && flip2.hasClass('goed')) {
