@@ -134,7 +134,7 @@ $(document).ready(function() {
 					flip2.removeClass('flipped');
 				}
 				else {
-					// hint correct answer?
+					$('.memorycard[uid=' + flip1.attr('uid') + ']').not(flip1).effect('shake');
 				}
 			}
 			else {

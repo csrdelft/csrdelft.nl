@@ -124,6 +124,7 @@ $memory = new MemoryView();
 		<link rel="stylesheet" href="/layout/css/flip.min.css" type="text/css" />
 		<link rel="stylesheet" href="/layout/css/ledenmemory.min.css" type="text/css" />
 		<script type="text/javascript" src="/layout/js/jquery/jquery.min.js"></script>
+		<script type="text/javascript" src="/layout/js/jquery/jquery-ui.min.js"></script>
 		<script type="text/javascript" src="/layout2/js/jquery.backstretch.min.js"></script>
 		<script type="text/javascript" src="/layout/js/ledenmemory.min.js"></script>
 	</head>
