@@ -90,17 +90,19 @@ HTML;
 				<tr>
 					<td class="pasfotos">
 						<?php
-						$leden = $this->leden;
 						if (!$this->cheat) {
-							shuffle($leden);
+							shuffle($this->leden);
 						}
-						foreach ($leden as $lid) {
+						foreach ($this->leden as $lid) {
 							echo $this->getPasfotoMemorycard($lid);
 						}
 						?>
 					</td>
 					<td class="namen">
 						<?php
+						if (!$this->cheat) {
+							shuffle($this->leden);
+						}
 						foreach ($this->leden as $lid) {
 							echo $this->getNaamMemorycard($lid);
 						}

@@ -53,10 +53,10 @@ $(document).ready(function() {
 
 				flip1 = $(this);
 				if (flip1.hasClass('pasfoto')) {
-					$('.memorycard.pasfoto').not(flip1).fadeTo('slow', 0.5);
+					$('.memorycard.pasfoto').not(flip1).fadeTo('slow', 0.3);
 				}
 				else if (flip1.hasClass('naam')) {
-					$('.memorycard.naam').not(flip1).fadeTo('slow', 0.5);
+					$('.memorycard.naam').not(flip1).fadeTo('slow', 0.3);
 				}
 				else {
 					alert('error');
@@ -117,30 +117,32 @@ $(document).ready(function() {
 		if (flip1.attr('uid') === flip2.attr('uid')) { // goed
 			flip1.addClass('goed');
 			flip2.addClass('goed');
-			flip1.delay(1000).fadeTo('slow', 0.5);
-			flip2.delay(1000).fadeTo('slow', 0.5);
-			if (learnmode) {
-				$('.memorycard:not(.goed)').delay(500).fadeTo('slow', 1.0);
-			}
-			flip1 = false;
-			flip2 = false;
 			goed += 1;
 		}
-		else { // fout
-			delayed = true;
-			window.setTimeout(flipback, 1000);
-		}
+
+		delayed = true;
+		window.setTimeout(flipback, 1000);
 	}
 
 	function flipback() {
 		if (delayed) {
 			delayed = false;
 			if (learnmode) {
-				$('.memorycard:not(.goed)').fadeTo('slow', 1.0);
+				$('.memorycard').fadeTo('slow', 1.0);
+				if (flip1.hasClass('goed') && flip2.hasClass('goed')) {
+					flip1.removeClass('flipped');
+					flip2.removeClass('flipped');
+				}
 			}
 			else {
-				flip1.removeClass('flipped');
-				flip2.removeClass('flipped');
+				if (flip1.hasClass('goed') && flip2.hasClass('goed')) {
+					flip1.fadeTo('slow', 0.5);
+					flip2.fadeTo('slow', 0.5);
+				}
+				else {
+					flip1.removeClass('flipped');
+					flip2.removeClass('flipped');
+				}
 			}
 			flip1 = false;
 			flip2 = false;
