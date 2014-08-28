@@ -47,7 +47,7 @@ class MenuBeheerController extends AclController {
 		if ($this->view->validate()) {
 			$item->item_id = (int) $this->model->create($item);
 			SimpleHTML::setMelding('Toegevoegd', 1);
-			$this->view = new MenuItemView($item);
+			exit;
 		}
 		// ReloadPage
 		exit;
@@ -63,17 +63,15 @@ class MenuBeheerController extends AclController {
 			} else {
 				SimpleHTML::setMelding('Geen wijzigingen', 0);
 			}
-			$this->view = new MenuItemView($item);
+			exit;
 		}
 		// ReloadPage
-		exit;
 	}
 
 	public function verwijderen($item_id) {
 		$item = $this->model->getMenuItem($item_id);
 		$this->model->removeMenuItem($item);
 		SimpleHTML::setMelding('Verwijderd', 1);
-		$this->view = new MenuItemView($item);
 		// ReloadPage
 		exit;
 	}
