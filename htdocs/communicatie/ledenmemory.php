@@ -16,10 +16,12 @@ class MemoryView implements View {
 
 	private $lidjaar;
 	private $leden;
+	private $learnmode;
 	private $cheat;
 
 	public function __construct() {
 		$this->cheat = isset($_GET['rosebud']);
+		$this->learnmode = isset($_GET['oefenen']);
 		$this->lidjaar = filter_input(INPUT_GET, 'lichting', FILTER_SANITIZE_NUMBER_INT);
 		if ($this->lidjaar < 1950) {
 			$this->lidjaar = Lichting::getJongsteLichting();
@@ -28,7 +30,7 @@ class MemoryView implements View {
 	}
 
 	public function getTitel() {
-		return 'Ledenmemory lichting ' . $this->lidjaar;
+		return 'Ledenmemory lichting ' . $this->lidjaar . ($this->learnmode ? 'oefenen' : '');
 	}
 
 	public function getModel() {
@@ -53,12 +55,14 @@ class MemoryView implements View {
 
 	private function getPasfotoMemorycard($lid) {
 		$cheat = ($this->cheat ? $lid['uid'] : '');
+		$naam = ($this->cheat ? $lid['voornaam'] . ' ' . $lid['tussenvoegsel'] . ' ' . $lid['achternaam'] : '');
+		$flipped = ($this->learnmode ? 'flipped' : '');
 		$src = $this->getPasfotoPath($lid['uid']);
 		return <<<HTML
-<div uid="{$lid['uid']}" class="box flip memorycard pasfoto">
+<div uid="{$lid['uid']}" class="box flip memorycard pasfoto {$flipped}">
 	<div class="blue front">{$cheat}</div>
 	<div class="blue back">
-		<img src="{$src}" />
+		<img src="{$src}" title="{$naam}" />
 	</div>
 </div>
 HTML;
@@ -66,8 +70,9 @@ HTML;
 
 	private function getNaamMemorycard($lid) {
 		$cheat = ($this->cheat ? $lid['uid'] : '');
+		$flipped = ($this->learnmode ? 'flipped' : '');
 		return <<<HTML
-<div uid="{$lid['uid']}" class="box flip memorycard naam">
+<div uid="{$lid['uid']}" class="box flip memorycard naam {$flipped}">
 	<div class="blue front">{$cheat}</div>
 	<div class="blue back">
 		<h2>{$lid['voornaam']} {$lid['tussenvoegsel']} {$lid['achternaam']}</h2>

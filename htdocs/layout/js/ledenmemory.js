@@ -5,6 +5,7 @@ $(document).ready(function() {
 
 	var first = true;
 	var delayed = false;
+	var learnmode = document.title.indexOf('oefenen') >= 0;
 
 	var flip1 = false;
 	var flip2 = false;
@@ -16,41 +17,30 @@ $(document).ready(function() {
 		if (first) { // start de tijd
 			first = false;
 			starttijd = new Date();
-			window.setTimeout(update_title, 1000);
+			update_title();
 		}
 
 		if ($(this).hasClass('goed')) { // goed?
 			// ignore
 		}
-		else if ($(this).hasClass('flipped')) { // terugdraaien?
+		else if (learnmode) { // faden?
 
-			if (flip1.get(0) === $(this).get(0)) {
-				// ignore
-			}
-			else if (flip2.get(0) === $(this).get(0)) {
-				// ignore
-			}
-			else {
-				alert('flipback failed');
-			}
-
-		}
-		else { // omdraaien?
-
-			if (flip1 && flip2) { // het moet fout zijn geweest
-
-				flip1.removeClass('flipped');
-				flip2.removeClass('flipped');
-				flip1 = $(this);
-				flip2 = false;
-				flip1.addClass('flipped');
-
+			if (flip1 && flip2) {
+				alert('reset failed');
 			}
 			else if (flip1) { // dit is de tweede
 
 				if (($(this).hasClass('naam') && flip1.hasClass('pasfoto')) || ($(this).hasClass('pasfoto') && flip1.hasClass('naam'))) {
 					flip2 = $(this);
-					flip2.addClass('flipped');
+					if (flip2.hasClass('pasfoto')) {
+						$('.memorycard.pasfoto').not(flip2).fadeTo('fast', 0.5);
+					}
+					else if (flip2.hasClass('naam')) {
+						$('.memorycard.naam').not(flip2).fadeTo('fast', 0.5);
+					}
+					else {
+						alert('error');
+					}
 
 					check_correctness();
 				}
@@ -60,10 +50,59 @@ $(document).ready(function() {
 
 			}
 			else { // dit is de eerste
+
 				flip1 = $(this);
-				flip1.addClass('flipped');
+				if (flip1.hasClass('pasfoto')) {
+					$('.memorycard.pasfoto').not(flip1).fadeTo('slow', 0.5);
+				}
+				else if (flip1.hasClass('naam')) {
+					$('.memorycard.naam').not(flip1).fadeTo('slow', 0.5);
+				}
+				else {
+					alert('error');
+				}
+
 			}
 
+		}
+		else { // omdraaien?
+
+			if ($(this).hasClass('flipped')) {
+
+				if (flip1.get(0) === $(this).get(0)) {
+					// ignore
+				}
+				else if (flip2.get(0) === $(this).get(0)) {
+					// ignore
+				}
+				else {
+					alert('flipback failed');
+				}
+			}
+			else {
+
+				if (flip1 && flip2) {
+					alert('reset failed');
+				}
+				else if (flip1) { // dit is de tweede
+
+					if (($(this).hasClass('naam') && flip1.hasClass('pasfoto')) || ($(this).hasClass('pasfoto') && flip1.hasClass('naam'))) {
+						flip2 = $(this);
+						flip2.addClass('flipped');
+
+						check_correctness();
+					}
+					else {
+						// ignore
+					}
+
+				}
+				else { // dit is de eerste
+					flip1 = $(this);
+					flip1.addClass('flipped');
+				}
+
+			}
 		}
 
 	});
@@ -80,6 +119,9 @@ $(document).ready(function() {
 			flip2.addClass('goed');
 			flip1.delay(1000).fadeTo('slow', 0.5);
 			flip2.delay(1000).fadeTo('slow', 0.5);
+			if (learnmode) {
+				$('.memorycard:not(.goed)').delay(500).fadeTo('slow', 1.0);
+			}
 			flip1 = false;
 			flip2 = false;
 			goed += 1;
@@ -93,8 +135,13 @@ $(document).ready(function() {
 	function flipback() {
 		if (delayed) {
 			delayed = false;
-			flip1.removeClass('flipped');
-			flip2.removeClass('flipped');
+			if (learnmode) {
+				$('.memorycard:not(.goed)').fadeTo('slow', 1.0);
+			}
+			else {
+				flip1.removeClass('flipped');
+				flip2.removeClass('flipped');
+			}
 			flip1 = false;
 			flip2 = false;
 		}
@@ -104,12 +151,17 @@ $(document).ready(function() {
 	function update_title() {
 
 		var nu = new Date();
-		var diff = (nu - starttijd);
-		var seconds = diff / 1000;
-		var minutes = seconds / 60;
-		seconds %= 60;
+		var seconds = (nu - starttijd) / 1000;
+		var minutes = parseInt(seconds / 60);
+		seconds = parseInt(seconds % 60);
 
-		document.title = goed + '/' + beurten + ' (' + parseInt(minutes) + ':' + parseInt(seconds) + ')';
+		if (seconds < 10) {
+			seconds = '0' + seconds;
+		}
+		if (minutes < 10) {
+			minutes = '0' + minutes;
+		}
+		document.title = goed + '/' + beurten + ' (' + minutes + ':' + seconds + ')';
 
 		if ($('.memorycard').length === $('.memorycard.goed').length) { // stop de tijd
 			alert('Gefeliciteerd!\n\n' + document.title);
