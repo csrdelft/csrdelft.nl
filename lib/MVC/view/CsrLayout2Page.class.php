@@ -29,9 +29,10 @@ class CsrLayout2Page extends HtmlPage {
 		$this->menutmpl = $menu;
 
 		$layout2 = '/layout2/css/';
-		$this->addStylesheet($layout2 . 'style');
-		$this->addStylesheet($layout2 . 'foundation');
 		$this->addStylesheet($layout2 . 'normalize');
+		$this->addStylesheet($layout2 . 'foundation');
+		$this->addStylesheet($layout2 . 'style');
+		$this->addStylesheet('/layout/css/flip');
 		$this->addStylesheet('/layout/css/ubb');
 
 		$layout = '/layout/js/';

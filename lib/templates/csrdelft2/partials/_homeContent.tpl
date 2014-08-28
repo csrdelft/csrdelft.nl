@@ -23,7 +23,7 @@
 		</div>
 		<div class="columns large-2 small-2">
 			<div class="columns large-2">
-				<div class="box flip">
+				<div class="box flip fliphover">
 					<div class="blue front">
 						<h2 class="overlay">Lid worden?</h2>
 						<img src="{$CSR_PICS}/layout2/box-icon-lid.png">
@@ -49,7 +49,7 @@
 				</figure>
 			</div>
 			<div class="columns large-2">
-				<div class="box flip">
+				<div class="box flip fliphover">
 					<div class="blue front">
 						<h2 class="overlay">Bedrijven</h2>
 						<img src="{$CSR_PICS}/layout2/box-icon-bedrijven.png">
@@ -65,7 +65,7 @@
 		</div>
 		<div class="columns large-2 small-2">
 			<div class="columns large-2">
-				<div class="box flip">
+				<div class="box flip fliphover">
 					<div class="blue front">
 						<h2 class="overlay">(Oud)leden</h2>
 						<img src="{$CSR_PICS}/layout2/box-icon-oudleden.png">

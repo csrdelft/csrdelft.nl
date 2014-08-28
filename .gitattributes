@@ -125,6 +125,8 @@ htdocs/layout/css/csrdelft.dataTables.min.css -text
 htdocs/layout/css/csrdelft.min.css -text
 htdocs/layout/css/documenten.css -text
 htdocs/layout/css/documenten.min.css -text
+htdocs/layout/css/flip.css -text
+htdocs/layout/css/flip.min.css -text
 htdocs/layout/css/fotoalbum.css -text
 htdocs/layout/css/fotoalbum.min.css -text
 htdocs/layout/css/groepen.css -text
@@ -3859,6 +3861,7 @@ lib/smarty/libs/sysplugins/smarty_resource_uncompiled.php -text
 lib/smarty/libs/sysplugins/smarty_security.php -text
 lib/streeplijstcontent.class.php -text
 lib/styles/csrdelft.dataTables.less -text
+lib/styles/flip.less -text
 lib/templates/MVC/agenda/courant.tpl -text
 lib/templates/MVC/agenda/icalendar.tpl -text
 lib/templates/MVC/agenda/maand.tpl -text

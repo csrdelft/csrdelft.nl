@@ -105,6 +105,8 @@ figure.box img { display: block; width: 224px; height: 148px; border: 6px solid 
 img.border { width: 224px; border: 6px solid #fff; }
 .w2 img.border { width: 472px; }
 
+/* Flip box */
+.box.flip > div { box-shadow: inset 0 0 30px rgba(0,0,0,0.4), -1px 1px 10px rgba(0,0,0,0.5); }
 
 
 /* Modal page
@@ -165,89 +167,6 @@ img.border { width: 224px; border: 6px solid #fff; }
 #pageover .videos a { display: block; height: 36px; line-height: 36px; font-size: 18px; color: #fff; text-decoration: none; background: -webkit-linear-gradient(#1255a3 0%, #063379 100%); background: linear-gradient(#1255a3 0%, #063379 100%); background: -moz-linear-gradient(#1255a3 0%, #063379 100%); filter: progid:DXImageTransform.Microsoft.Gradient(startColorStr="#1255a3", endColorStr="#063379"); border: none; box-shadow: -1px 1px 10px rgba(0,0,0,0.5); opacity: 0.85; padding: 0 15px; }
 #pageover .videos .active a, #pageover .videos a:hover { opacity: 1; }
 #pageover .video { float: right; width: 494px; height: 402px; overflow: hidden; padding: 29px 0 0; }
-
-
-
-/* Box flip
-----------------------------------*/
-.flip { position: relative; z-index: 50; box-shadow: none; -webkit-perspective: 600px; perspective: 600px; -moz-perspective: 600px; }
-.flip > div { width: 236px; height: 169px; box-shadow: inset 0 0 30px rgba(0,0,0,0.4), -1px 1px 10px rgba(0,0,0,0.5); }
-.flip .front {
-	float: none;
-	position: absolute;
-	top: 0;
-	left: 0;
-	z-index: 900;
-	width: inherit;
-	height: inherit;
-
-	transform: rotateY(0deg);
-	transform-style: preserve-3d;
-	backface-visibility: hidden;
-
-	-webkit-transform: rotateY(0deg);
-	-webkit-transform-style: preserve-3d;
-	-webkit-backface-visibility: hidden;
-
-	-moz-transform: rotateY(0deg);
-	-moz-transform-style: preserve-3d;
-	-moz-backface-visibility: hidden;
-
-	-o-transition: all .4s ease-in-out;
-	-ms-transition: all .4s ease-in-out;
-	-moz-transition: all .4s ease-in-out;
-	-webkit-transition: all .4s ease-in-out;
-	transition: all .4s ease-in-out;
-}
-.flip .back {
-	float: none;
-	position: absolute;
-	top: 0;
-	left: 0;
-	z-index: 800;
-	width: inherit;
-	height: inherit;
-
-	transform: rotateY(-180deg);
-	transform-style: preserve-3d;
-	backface-visibility: hidden;
-
-	-webkit-transform: rotateY(-180deg);
-	-webkit-transform-style: preserve-3d;
-	-webkit-backface-visibility: hidden;
-
-	-moz-transform: rotateY(-180deg);
-	-moz-transform-style: preserve-3d;
-	-moz-backface-visibility: hidden;
-
-	-o-transition: all .4s ease-in-out;
-	-ms-transition: all .4s ease-in-out;
-	-moz-transition: all .4s ease-in-out;
-	-webkit-transition: all .4s ease-in-out;
-	transition: all .4s ease-in-out;
-}
-.flip .front {
-	transform: rotateX(0deg);
-	-webkit-transform: rotateX(0deg);
-	-moz-transform: rotateX(0deg);
-}
-.flip:hover .front, .flipped .front {
-	z-index: 900;
-	transform: rotateX(180deg);
-	-webkit-transform: rotateX(180deg);
-	-moz-transform: rotateX(180deg);
-}
-.flip .back {
-	transform: rotateX(-180deg);
-	-webkit-transform: rotateX(-180deg);
-	-moz-transform: rotateX(-180deg);
-}
-.flip:hover .back, .flipped .back {
-	z-index: 1000;
-	transform: rotateY(0deg);
-	-webkit-transform: rotateY(0deg);
-	-moz-transform: rotateY(0deg);
-}
 
 /* Login form */
 .login-form form {
