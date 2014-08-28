@@ -24,7 +24,7 @@ class MemoryView implements View {
 		if ($this->lidjaar < 1950) {
 			$this->lidjaar = Lichting::getJongsteLichting();
 		}
-		$this->leden = Database::instance()->sqlSelect(array('uid', 'geslacht', 'voorletters', 'voornaam', 'tussenvoegsel', 'achternaam', 'postfix'), 'lid', 'lidjaar = ?', array($this->lidjaar), 'achternaam, tussenvoegsel, voornaam, voorletters')->fetchAll(PDO::FETCH_ASSOC);
+		$this->leden = Database::instance()->sqlSelect(array('uid', 'geslacht', 'voorletters', 'voornaam', 'tussenvoegsel', 'achternaam', 'postfix'), 'lid', 'lidjaar = ? AND status IN ("S_GASTLID","S_LID","S_NOVIET","S_OUDLID","S_KRINGEL","S_ERELID","S_OVERLEDEN")', array($this->lidjaar), 'achternaam, tussenvoegsel, voornaam, voorletters')->fetchAll(PDO::FETCH_ASSOC);
 	}
 
 	public function getTitel() {
