@@ -55,14 +55,14 @@ class MemoryView implements View {
 
 	private function getPasfotoMemorycard($lid) {
 		$cheat = ($this->cheat ? $lid['uid'] : '');
-		$naam = ($this->cheat ? $lid['voornaam'] . ' ' . $lid['tussenvoegsel'] . ' ' . $lid['achternaam'] : '');
+		$title = ($this->cheat ? $lid['voornaam'] . ' ' . $lid['tussenvoegsel'] . ' ' . $lid['achternaam'] : '');
 		$flipped = ($this->learnmode ? 'flipped' : '');
 		$src = $this->getPasfotoPath($lid['uid']);
 		return <<<HTML
-<div uid="{$lid['uid']}" class="box flip memorycard pasfoto {$flipped}">
+<div uid="{$lid['uid']}" class="flip memorycard pasfoto {$flipped}">
 	<div class="blue front">{$cheat}</div>
 	<div class="blue back">
-		<img src="{$src}" title="{$naam}" />
+		<img src="{$src}" title="{$title}" />
 	</div>
 </div>
 HTML;
@@ -70,12 +70,14 @@ HTML;
 
 	private function getNaamMemorycard($lid) {
 		$cheat = ($this->cheat ? $lid['uid'] : '');
+		$title = $lid['voornaam'] . ' ' . $lid['tussenvoegsel'] . ' ' . $lid['achternaam'];
 		$flipped = ($this->learnmode ? 'flipped' : '');
+		$naam = Lid::naamLink($lid['uid'], 'civitas', 'plain');
 		return <<<HTML
-<div uid="{$lid['uid']}" class="box flip memorycard naam {$flipped}">
+<div uid="{$lid['uid']}" class="flip memorycard naam {$flipped}">
 	<div class="blue front">{$cheat}</div>
 	<div class="blue back">
-		<h2>{$lid['voornaam']} {$lid['tussenvoegsel']} {$lid['achternaam']}</h2>
+		<h2 title="{$title}">{$naam}</h2>
 	</div>
 </div>
 HTML;

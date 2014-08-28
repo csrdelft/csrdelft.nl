@@ -137,6 +137,7 @@ htdocs/layout/css/jquery.dataTables.min.css -text
 htdocs/layout/css/ledenlijst.css -text
 htdocs/layout/css/ledenlijst.min.css -text
 htdocs/layout/css/ledenmemory.css -text
+htdocs/layout/css/ledenmemory.min.css -text
 htdocs/layout/css/lustrum.css -text
 htdocs/layout/css/lustrum.min.css -text
 htdocs/layout/css/maaltijdlijst.css -text
@@ -336,6 +337,7 @@ htdocs/layout/js/jquery/plugins/jquery.scrollTo.min.js -text
 htdocs/layout/js/jquery/plugins/jquery.timeago.js -text
 htdocs/layout/js/jquery/plugins/jquery.timeago.min.js -text
 htdocs/layout/js/ledenmemory.js -text
+htdocs/layout/js/ledenmemory.min.js -text
 htdocs/layout/js/lightbox.js -text
 htdocs/layout/js/lightbox.min.js -text
 htdocs/layout/js/menu.js -text

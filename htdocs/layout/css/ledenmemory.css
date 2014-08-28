@@ -1,15 +1,3 @@
-/* copy from layout2 */
-
-.blue.h2 {
-    background-image: url("http://plaetjes.csrdelft.nl/layout2/blue-box-h2.png");
-}
-.blue.h2.w2 {
-    background-image: url("http://plaetjes.csrdelft.nl/layout2/blue-box-h2-w2.png");
-}
-.blue.h4 {
-    background-image: url("http://plaetjes.csrdelft.nl/layout2/blue-box-h4.png");
-}
-
 .blue {
     background: #1255a3;
     background-image: url("http://plaetjes.csrdelft.nl/layout2/blue-box.png");
@@ -19,32 +7,14 @@
     filter: progid:DXImageTransform.Microsoft.Gradient(startColorStr="#1255a3", endColorStr="#063379");
 }
 
-/* Content */
-.box h1 { font-family: SentinelBold; line-height: 24px; font-size: 24px; text-shadow: 1px 1px 1px rgba(0,0,0,0.1); padding: 30px 25px 0; margin:0; }
-.box h2 { font-family: SentinelBold; line-height: 31px; font-size: 28px; text-shadow: 1px 1px 1px rgba(0,0,0,0.4); padding: 12px 15px; margin:0; }
-.box h2.overlay { position: absolute; left: 0; top: 0; width: 100%; }
-.box p { line-height: 18px; font-size: 13px; text-align: left; padding: 25px 25px 0; }
-.box ul { text-align: left; font-size: 12px; padding: 20px 25px 0; }
-.box a { color: #fff; border-bottom: 1px solid rgba(255,255,255,0.6); }
-header.box a {
-    border-bottom: none!important; /* no line under logo */
-}
-.box a:hover { border-bottom-color: #fff; }
-.box .sign { position: absolute; bottom: 0; right: 0; font-family: SentinelBold; line-height: 112px; font-size: 112px; text-shadow: 1px 1px 1px rgba(0,0,0,0.4); padding: 0 18px; }
-.box.link a { display: block; height: 161px; border: none; }
-.box.link.h2 a { height: 334px; }
+.flip > div { box-shadow: inset 0 0 30px rgba(0,0,0,0.4), -1px 1px 10px rgba(0,0,0,0.5); }
 
-/* Flip box */
-.box.flip > div { box-shadow: inset 0 0 30px rgba(0,0,0,0.4), -1px 1px 10px rgba(0,0,0,0.5); }
-
-
-/* end copy */
-
-.memorycard { float: left; margin: 5px; }
+.memorycard { float: left; margin: 5px; cursor: pointer; }
 .memorycard.pasfoto { float: left; width: 162px; height: 162px; }
 .memorycard.pasfoto img { width: 150px; height: 150px; border: 6px solid #fff; }
 
-.memorycard.naam { width: 330px; height: 57px; padding: 6px }
+.memorycard.naam { width: 340px; height: 57px; }
+.memorycard.naam h2 { font-family: SentinelBold; line-height: 31px; font-size: 24px; text-shadow: 1px 1px 1px rgba(0,0,0,0.4); padding: 10px; margin: 0; }
 
 td { vertical-align: top; color: #fff; }
 td.pasfotos { width: 55%; }
