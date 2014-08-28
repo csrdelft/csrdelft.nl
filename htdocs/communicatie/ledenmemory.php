@@ -35,13 +35,30 @@ class MemoryView implements View {
 		return $this->leden;
 	}
 
+	private function getPasfotoPath($uid) {
+		$pasfoto = 'pasfoto/geen-foto.jpg';
+		foreach (array('png', 'jpeg', 'jpg', 'gif') as $validExtension) {
+			if (file_exists(PICS_PATH . 'pasfoto/' . $uid . '.' . $validExtension)) {
+				$pasfoto = 'pasfoto/' . $uid . '.' . $validExtension;
+				break;
+			}
+		}
+		// kijken of de vierkante bestaat, en anders maken.
+		$vierkant = PICS_PATH . 'pasfoto/' . $uid . '.vierkant.png';
+		if (!file_exists($vierkant)) {
+			square_crop(PICS_PATH . $pasfoto, $vierkant, 150);
+		}
+		return CSR_PICS . '/pasfoto/' . $uid . '.vierkant.png';
+	}
+
 	private function getPasfotoMemorycard($lid) {
 		$cheat = ($this->cheat ? $lid['uid'] : '');
+		$src = $this->getPasfotoPath($lid['uid']);
 		return <<<HTML
 <div uid="{$lid['uid']}" class="box flip memorycard pasfoto">
 	<div class="blue front">{$cheat}</div>
 	<div class="blue back">
-		<img src="http://plaetjes.csrdelft.nl/pasfoto/{$lid['uid']}.vierkant.png" />
+		<img src="{$src}" />
 	</div>
 </div>
 HTML;
