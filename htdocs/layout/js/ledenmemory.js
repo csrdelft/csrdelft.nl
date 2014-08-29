@@ -6,7 +6,7 @@ $(document).ready(function() {
 	var first = true;
 	var delayed = false;
 	var learnmode = document.title.indexOf('oefenen') >= 0;
-
+	var finished = false;
 	var flip1 = false;
 	var flip2 = false;
 
@@ -128,7 +128,10 @@ $(document).ready(function() {
 	function flipback() {
 		if (delayed) {
 			delayed = false;
-			if (learnmode) {
+			if ($('.memorycard').length === $('.memorycard.goed').length) { // einde: toon ales
+				finished = true;
+			}
+			else if (learnmode) {
 				$('.memorycard').fadeTo('slow', 1.0);
 				if (flip1.hasClass('goed') && flip2.hasClass('goed')) {
 					flip1.removeClass('flipped');
@@ -168,10 +171,9 @@ $(document).ready(function() {
 		}
 		document.title = goed + '/' + beurten + ' (' + minutes + ':' + seconds + ')';
 
-		if ($('.memorycard').length === $('.memorycard.goed').length) { // einde: stop de tijd
-			delayed = false;
-			$('.memorycard').addClass('flipped').fadeTo('fast', 1.0);
-			window.setTimeout(show_endscore, 1000);
+		if (finished) { // einde: stop de tijd
+			alert('Gefeliciteerd!\n\n' + document.title);
+			$('.memorycard').addClass('flipped').fadeTo('fast', 0.5);
 		}
 		else {
 			window.setTimeout(update_title, 1000);
@@ -204,10 +206,6 @@ $(document).ready(function() {
 		}, 'slow', function() {
 			$(box).remove();
 		});
-	}
-
-	function show_endscore() {
-		alert('Gefeliciteerd!\n\n' + document.title);
 	}
 
 });
