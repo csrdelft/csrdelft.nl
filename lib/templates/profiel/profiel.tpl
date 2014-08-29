@@ -266,6 +266,7 @@
 		</div>
 	</div>
 
+	{if LoginModel::getUid()==$profiel->getUid()}
 	<div class="profielregel" id="agenda">
 		<div class="gegevens" id="agenda_gegevens">
 			<div class="label">ICal-feed:</div>
@@ -275,11 +276,12 @@
 							<img src="{$CSR_PICS}/knopjes/ical.gif" /> Persoonlijke ICal-feed agenda
 						</a>
 					{/if}
-					Gebruikt dezelfde private token als het forum (zie hieronder)
+					<small>Gebruikt dezelfde private token als het forum (zie hieronder)</small>
 				</div>
 				<br />
 		</div>
 	</div>
+	{/if}
 
 	{if $profiel->getForumPostCount() > 0 OR LoginModel::getUid()==$profiel->getUid()}
 		<div class="profielregel" id="forum">
