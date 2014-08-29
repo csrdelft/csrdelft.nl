@@ -12,7 +12,7 @@ if (!LoginModel::mag('P_LEDEN_READ')) {
  * 
  * Het spelletje memory met pasfotos en namen van leden
  */
-class MemoryView implements View {
+class MemoryView extends HtmlPage {
 
 	private $lidjaar;
 	private $leden;
@@ -118,16 +118,21 @@ HTML;
 }
 
 $memory = new MemoryView();
+$memory->addStylesheet('/layout/css/flip');
+$memory->addStylesheet('/layout/css/ledenmemory');
+$memory->addScript('/layout/js/jquery/jquery');
+$memory->addScript('/layout/js/jquery/jquery-ui');
+$memory->addScript('/layout2/js/jquery.backstretch');
+$memory->addScript('/layout/js/ledenmemory');
+
+$smarty = CsrSmarty::instance();
+$smarty->assign('titel', $memory->getTitel());
+$smarty->assign('stylesheets', $memory->getStylesheets());
+$smarty->assign('scripts', $memory->getScripts());
 ?><!DOCTYPE html>
 <html>
 	<head>
-		<title><?= $memory->getTitel() ?></title>
-		<link rel="stylesheet" href="/layout/css/flip.min.css" type="text/css" />
-		<link rel="stylesheet" href="/layout/css/ledenmemory.min.css" type="text/css" />
-		<script type="text/javascript" src="/layout/js/jquery/jquery.min.js"></script>
-		<script type="text/javascript" src="/layout/js/jquery/jquery-ui.min.js"></script>
-		<script type="text/javascript" src="/layout2/js/jquery.backstretch.min.js"></script>
-		<script type="text/javascript" src="/layout/js/ledenmemory.min.js"></script>
+		<?= $smarty->fetch('csrdelft_head.tpl') ?>
 	</head>
 	<body>
 		<?= $memory->view() ?>
