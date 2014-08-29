@@ -221,17 +221,11 @@ function opConfide() {
 }
 
 /**
- * Is de huidige server syrinx?
+ * Is de huidige host genaamd 'syrinx'?
  * @return boolean
  */
 function isSyrinx() {
-	switch (constant('MODE')) {
-		case 'CLI':
-			return 'syrinx' === php_uname('n');
-		case 'WEB':
-		default:
-			return 'csrdelft.nl' === $_SERVER['SERVER_NAME'];
-	}
+	return 'syrinx' === php_uname('n');
 }
 
 /**
