@@ -227,7 +227,7 @@ function opConfide() {
 function isSyrinx() {
 	switch (constant('MODE')) {
 		case 'CLI':
-			return 'csrdelft.nl' === php_uname('n');
+			return 'syrinx' === php_uname('n');
 		case 'WEB':
 		default:
 			return 'csrdelft.nl' === $_SERVER['SERVER_NAME'];
