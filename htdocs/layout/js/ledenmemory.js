@@ -169,7 +169,7 @@ $(document).ready(function() {
 		document.title = goed + '/' + beurten + ' (' + minutes + ':' + seconds + ')';
 
 		if ($('.memorycard').length === $('.memorycard.goed').length) { // einde: stop de tijd
-			$('.memorycard').removeClass('flipped').fadeTo('fast', 1.0);
+			$('.memorycard').addClass('flipped').fadeTo('fast', 1.0);
 			window.setTimeout(show_endscore, 1000);
 		}
 		else {
