@@ -1,5 +1,5 @@
 
-body { color: #fff; }
+body { color: #fff; overflow-x: hidden; }
 
 .blue {
     background: #1255a3;
