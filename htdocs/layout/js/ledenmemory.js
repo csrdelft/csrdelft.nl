@@ -121,17 +121,21 @@ $(document).ready(function() {
 			show_reel();
 		}
 
-		delayed = true;
-		window.setTimeout(flipback, 1000);
+		if ($('.memorycard').length === $('.memorycard.goed').length) { // einde
+			finished = true;
+			$('.memorycard').addClass('flipped').fadeTo('fast', 0.5);
+		}
+		else {
+			delayed = true;
+			window.setTimeout(flipback, 1000);
+		}
+
 	}
 
 	function flipback() {
 		if (delayed) {
 			delayed = false;
-			if ($('.memorycard').length === $('.memorycard.goed').length) { // einde: toon ales
-				finished = true;
-			}
-			else if (learnmode) {
+			if (learnmode) {
 				$('.memorycard').fadeTo('slow', 1.0);
 				if (flip1.hasClass('goed') && flip2.hasClass('goed')) {
 					flip1.removeClass('flipped');
@@ -171,9 +175,8 @@ $(document).ready(function() {
 		}
 		document.title = goed + '/' + beurten + ' (' + minutes + ':' + seconds + ')';
 
-		if (finished) { // einde: stop de tijd
+		if (finished) { // einde: toon alles
 			alert('Gefeliciteerd!\n\n' + document.title);
-			$('.memorycard').addClass('flipped').fadeTo('fast', 0.5);
 		}
 		else {
 			window.setTimeout(update_title, 1000);
