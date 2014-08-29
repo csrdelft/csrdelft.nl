@@ -12,7 +12,10 @@
 					{$mededeling->getTitel()|ubb|html_substr:"40":"…"}
 				</a>
 			</div>
-			<div class="bericht">{$mededeling->getTekst()|ubb|html_substr:"170":"…"}</div>
+			<div class="bericht">
+				{$mededeling->getTekst()|ubb|html_substr:"175":"…"}
+				<small><a href="{MededelingenContent::mededelingenRoot}{$mededeling->getId()}">verder lezen</a></small>
+			</div>
 			<div class="clear"></div>
 		</div>
 	{/foreach}
