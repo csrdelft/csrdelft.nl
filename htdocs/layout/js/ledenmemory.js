@@ -170,6 +170,7 @@ $(document).ready(function() {
 
 		if ($('.memorycard').length === $('.memorycard.goed').length) { // stop de tijd
 			alert('Gefeliciteerd!\n\n' + document.title);
+			reset_game();
 		}
 		else {
 			window.setTimeout(update_title, 1000);
@@ -202,6 +203,18 @@ $(document).ready(function() {
 		}, 'slow', function() {
 			$(box).remove();
 		});
+	}
+
+	function reset_game() {
+		if (learnmode) {
+			$('.memorycard').removeClass('goed').addClass('flipped');
+		}
+		else {
+			$('.memorycard').removeClass('goed').removeClass('flipped').fadeTo('fast', 1.0);
+		}
+		first = true;
+		beurten = 0;
+		goed = 0;
 	}
 
 });
