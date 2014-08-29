@@ -168,9 +168,9 @@ $(document).ready(function() {
 		}
 		document.title = goed + '/' + beurten + ' (' + minutes + ':' + seconds + ')';
 
-		if ($('.memorycard').length === $('.memorycard.goed').length) { // stop de tijd
-			alert('Gefeliciteerd!\n\n' + document.title);
-			window.setTimeout(reset_game, 1000);
+		if ($('.memorycard').length === $('.memorycard.goed').length) { // einde: stop de tijd
+			$('.memorycard').removeClass('flipped').fadeTo('fast', 1.0);
+			window.setTimeout(show_endscore, 1000);
 		}
 		else {
 			window.setTimeout(update_title, 1000);
@@ -205,16 +205,8 @@ $(document).ready(function() {
 		});
 	}
 
-	function reset_game() {
-		if (learnmode) {
-			$('.memorycard').removeClass('goed').addClass('flipped');
-		}
-		else {
-			$('.memorycard').removeClass('goed').removeClass('flipped').fadeTo('fast', 1.0);
-		}
-		first = true;
-		beurten = 0;
-		goed = 0;
+	function show_endscore() {
+		alert('Gefeliciteerd!\n\n' + document.title);
 	}
 
 });
