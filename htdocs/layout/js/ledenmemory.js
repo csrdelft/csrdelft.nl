@@ -170,7 +170,7 @@ $(document).ready(function() {
 
 		if ($('.memorycard').length === $('.memorycard.goed').length) { // stop de tijd
 			alert('Gefeliciteerd!\n\n' + document.title);
-			reset_game();
+			window.setTimeout(reset_game, 1000);
 		}
 		else {
 			window.setTimeout(update_title, 1000);
