@@ -121,7 +121,7 @@ $(document).ready(function() {
 			show_reel();
 		}
 
-		if ($('.memorycard').length === $('.memorycard.goed').length) { // einde
+		if ($('.memorycard').length === $('.memorycard.goed').length) { // einde: toon alles
 			finished = true;
 			$('.memorycard').addClass('flipped').fadeTo('fast', 0.5);
 		}
@@ -175,7 +175,7 @@ $(document).ready(function() {
 		}
 		document.title = goed + '/' + beurten + ' (' + minutes + ':' + seconds + ')';
 
-		if (finished) { // einde: toon alles
+		if (finished) { // einde: stop de tijd
 			alert('Gefeliciteerd!\n\n' + document.title);
 		}
 		else {
