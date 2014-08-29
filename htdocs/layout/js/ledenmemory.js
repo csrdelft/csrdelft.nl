@@ -118,6 +118,7 @@ $(document).ready(function() {
 			flip1.addClass('goed');
 			flip2.addClass('goed');
 			goed += 1;
+			show_reel();
 		}
 
 		delayed = true;
@@ -152,7 +153,6 @@ $(document).ready(function() {
 		}
 	}
 
-
 	function update_title() {
 
 		var nu = new Date();
@@ -174,6 +174,34 @@ $(document).ready(function() {
 		else {
 			window.setTimeout(update_title, 1000);
 		}
+	}
+
+	function show_reel() {
+		var content = '<div class="box"><table><tbody><tr><td>';
+		if (flip1.hasClass('pasfoto')) {
+			content += flip1.find('img').parent().html();
+			content += '</td><td><h2>' + flip2.find('h2').attr('title') + '</h2>';
+		}
+		else if (flip2.hasClass('pasfoto')) {
+			content += flip2.find('img').parent().html();
+			content += '</td><td><h2>' + flip1.find('h2').attr('title') + '</h2>';
+		}
+		else {
+			alert('error');
+		}
+		content += '</td></tr></tbody></table></div>';
+		var box = $(content).appendTo('body');
+		box.animate({
+			left: '60%'
+		}, 'slow', function() {
+			$(this).css('left', '60%');
+		});
+
+		$(box).delay(1200).animate({
+			left: '-50%'
+		}, 'slow', function() {
+			$(box).remove();
+		});
 	}
 
 });
