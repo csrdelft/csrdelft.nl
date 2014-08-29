@@ -28,7 +28,7 @@ body { color: #fff; overflow-x: hidden; }
 .memorycard.pasfoto img, .box img { width: 150px; height: 150px; border: 6px solid #fff; }
 
 .memorycard.naam { width: 340px; height: 57px; }
-.memorycard.naam h2, .box h2 { font-family: SentinelBold; line-height: 31px; font-size: 24px; text-shadow: 1px 1px 1px rgba(0,0,0,0.4); padding: 10px; margin: 0; }
+.memorycard.naam h2, .box h2 { font-family: SentinelBold; line-height: 31px; font-size: 24px; text-shadow: 1px 1px 1px rgba(0,0,0,0.4); padding: 10px 0 10px 10px; margin: 0; }
 
 td { vertical-align: top; }
 td.pasfotos { width: 55%; }
