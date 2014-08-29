@@ -149,7 +149,7 @@ class Mail {
 			$headers[] = 'Reply-To: ' . $this->getReplyTo();
 		}
 		if (!empty($this->bcc)) {
-			$headers[] = 'BCC: ' . $this->getBcc();
+			$headers[] = 'Bcc: ' . $this->getBcc();
 		}
 		$headers[] = 'Content-Type: text/' . $this->type . '; charset=' . $this->charset;
 		$headers[] = 'X-Mailer: nl.csrdelft.lib.Mail';
