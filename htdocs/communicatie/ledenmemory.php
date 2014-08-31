@@ -14,7 +14,8 @@ if (!LoginModel::mag('P_LEDEN_READ')) {
  */
 class MemoryView extends HtmlPage {
 
-	private $lidjaar;
+	private $lichting;
+	private $verticale;
 	private $leden;
 	private $learnmode;
 	private $cheat;
@@ -22,15 +23,36 @@ class MemoryView extends HtmlPage {
 	public function __construct() {
 		$this->cheat = isset($_GET['rosebud']);
 		$this->learnmode = isset($_GET['oefenen']);
-		$this->lidjaar = filter_input(INPUT_GET, 'lichting', FILTER_SANITIZE_NUMBER_INT);
-		if ($this->lidjaar < 1950) {
-			$this->lidjaar = Lichting::getJongsteLichting();
+		$this->verticale = null;
+		if (isset($_GET['verticale'])) {
+			$this->verticale = filter_input(INPUT_GET, 'verticale', FILTER_SANITIZE_STRING);
+			$lettersById = Verticale::getLetters();
+			$namenById = Verticale::getNamen();
+			if (in_array($this->verticale, $namenById)) {
+				$this->verticale = array_search($this->verticale, $namenById);
+			} elseif (in_array($this->verticale, $lettersById)) {
+				$this->verticale = array_search($this->verticale, $lettersById);
+			}
+			if (array_key_exists($this->verticale, $lettersById)) {
+				$this->leden = Database::instance()->sqlSelect(array('uid', 'geslacht', 'voorletters', 'voornaam', 'tussenvoegsel', 'achternaam', 'postfix'), 'lid', 'verticale = ? AND status IN ("S_GASTLID","S_LID","S_NOVIET","S_KRINGEL")', array($this->verticale), 'achternaam, tussenvoegsel, voornaam, voorletters')->fetchAll(PDO::FETCH_ASSOC);
+			} else {
+				$this->verticale = null;
+			}
 		}
-		$this->leden = Database::instance()->sqlSelect(array('uid', 'geslacht', 'voorletters', 'voornaam', 'tussenvoegsel', 'achternaam', 'postfix'), 'lid', 'lidjaar = ? AND status IN ("S_GASTLID","S_LID","S_NOVIET","S_OUDLID","S_KRINGEL","S_ERELID","S_OVERLEDEN")', array($this->lidjaar), 'achternaam, tussenvoegsel, voornaam, voorletters')->fetchAll(PDO::FETCH_ASSOC);
+		if ($this->verticale === null) {
+			$this->lichting = (int) filter_input(INPUT_GET, 'lichting', FILTER_SANITIZE_NUMBER_INT);
+			if ($this->lichting < 1950) {
+				$this->lichting = Lichting::getJongsteLichting();
+			}
+			$this->leden = Database::instance()->sqlSelect(array('uid', 'geslacht', 'voorletters', 'voornaam', 'tussenvoegsel', 'achternaam', 'postfix'), 'lid', 'lidjaar = ? AND status IN ("S_GASTLID","S_LID","S_NOVIET","S_OUDLID","S_ERELID","S_OVERLEDEN")', array($this->lichting), 'achternaam, tussenvoegsel, voornaam, voorletters')->fetchAll(PDO::FETCH_ASSOC);
+		}
 	}
 
 	public function getTitel() {
-		return 'Ledenmemory lichting ' . $this->lidjaar . ($this->learnmode ? 'oefenen' : '');
+		if ($this->verticale === null) {
+			return 'Ledenmemory lichting ' . $this->lichting . ($this->learnmode ? 'oefenen' : '');
+		}
+		return 'Ledenmemory verticale ' . Verticale::getNaamById($this->verticale) . ($this->learnmode ? 'oefenen' : '');
 	}
 
 	public function getModel() {
