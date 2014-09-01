@@ -73,14 +73,27 @@ class FotoAlbumView extends SmartyTemplateView {
 
 }
 
-class FotoUploadForm extends PopupForm {
+class FotoAlbumToevoegenForm extends PopupForm {
+
+	public function __construct(FotoAlbum $album) {
+		parent::__construct($album, get_class(), '/fotoalbum/toevoegen/' . $album->getSubDir());
+		$this->css_classes[] = 'ReloadPage';
+		$this->titel = 'Fotoalbum toevoegen';
+		$fields[] = new RequiredFileNameField('subalbum', null, 'Naam');
+		$fields[] = new FormButtons('/fotoalbum', true, true, false);
+		$this->addFields($fields);
+	}
+
+}
+
+class PosterUploadForm extends Formulier {
 
 	public function __construct(FotoAlbum $album) {
 		parent::__construct($album, get_class(), '/fotoalbum/uploaden/' . $album->getSubDir());
-		$this->titel = 'Foto toevoegen';
+		$this->titel = 'Poster toevoegen';
 		$fields[] = new HtmlComment('Alleen jpeg afbeeldingen.<br/><br/>');
-		$fields[] = new RequiredImageField('foto', null, null, array('image/jpeg'));
-		$fields[] = new FileNameField('subalbum', null, 'Nieuw sub-album');
+		$fields[] = new RequiredFileNameField('posternaam', null, 'Posternaam', 50, 5);
+		$fields[] = new RequiredImageField('afbeelding', null, null, array('image/jpeg'));
 		$fields[] = new FormButtons('/fotoalbum', true, true, false);
 		$fields[] = new HtmlComment('<br /><i>Maak nooit inbreuk op de auteursrechten of het recht op privacy van anderen.</i>');
 		$this->addFields($fields);
@@ -88,13 +101,15 @@ class FotoUploadForm extends PopupForm {
 
 }
 
-class PosterUploadForm extends FotoUploadForm {
+class FotosDropzone extends DropzoneForm {
 
 	public function __construct(FotoAlbum $album) {
-		parent::__construct($album);
-		$this->titel = 'Poster toevoegen';
-		$field = new RequiredFileNameField('posternaam', null, 'Posternaam', 50, 5);
-		$this->insertAtPos(1, $field);
+		parent::__construct($album, get_class(), '/fotoalbum/uploaden/' . $album->getSubDir(), new ImageField('afbeelding', null, null, array('image/jpeg'), false), 'Fotos toevoegen');
+	}
+
+	public function view() {
+		echo parent::view();
+		echo '<br /><i>Maak nooit inbreuk op de auteursrechten of het recht op privacy van anderen.</i>';
 	}
 
 }

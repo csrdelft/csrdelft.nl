@@ -126,6 +126,10 @@ htdocs/layout/css/csrdelft.dataTables.min.css -text
 htdocs/layout/css/csrdelft.min.css -text
 htdocs/layout/css/documenten.css -text
 htdocs/layout/css/documenten.min.css -text
+htdocs/layout/css/dropzone.basic.css -text
+htdocs/layout/css/dropzone.basic.min.css -text
+htdocs/layout/css/dropzone.css -text
+htdocs/layout/css/dropzone.min.css -text
 htdocs/layout/css/flip.css -text
 htdocs/layout/css/flip.min.css -text
 htdocs/layout/css/fotoalbum.css -text
@@ -166,6 +170,8 @@ htdocs/layout/css/snow.css -text
 htdocs/layout/css/snow.min.css -text
 htdocs/layout/css/stamboom.css -text
 htdocs/layout/css/stamboom.min.css -text
+htdocs/layout/css/stylus/basic.styl -text
+htdocs/layout/css/stylus/dropzone.styl -text
 htdocs/layout/css/taken.css -text
 htdocs/layout/css/taken.min.css -text
 htdocs/layout/css/ubb.css -text
@@ -208,6 +214,8 @@ htdocs/layout/js/documenten.js -text
 htdocs/layout/js/documenten.min.js -text
 htdocs/layout/js/dragobject.js -text
 htdocs/layout/js/dragobject.min.js -text
+htdocs/layout/js/dropzone.js -text
+htdocs/layout/js/dropzone.min.js -text
 htdocs/layout/js/flot/API.md -text
 htdocs/layout/js/flot/CONTRIBUTING.md -text
 htdocs/layout/js/flot/FAQ.md -text

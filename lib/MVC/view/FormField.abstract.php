@@ -1480,6 +1480,10 @@ class VinkField extends InputField {
 		$this->label = $label;
 	}
 
+	public function isPosted() {
+		return true;
+	}
+
 	/**
 	 * Speciaal geval:
 	 * Niet gepost = uitgevinkt.
@@ -1487,7 +1491,7 @@ class VinkField extends InputField {
 	 * @return boolean
 	 */
 	public function getValue() {
-		if ($this->isPosted()) {
+		if (parent::isPosted()) {
 			return true;
 		} else {
 			return false;

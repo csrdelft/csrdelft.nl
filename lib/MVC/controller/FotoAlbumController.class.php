@@ -36,13 +36,14 @@ class FotoAlbumController extends AclController {
 				'bekijken'	 => 'P_ALBUM_READ',
 				'downloaden' => 'P_ALBUM_DOWN',
 				'verwerken'	 => 'P_ALBUM_ADMIN',
-				'toevoegen'	 => 'P_ALBUM_ADD'
+				'uploaden'	 => 'P_ALBUM_ADD'
 			);
 		} else {
 			$this->acl = array(
 				'albumcover'	 => 'P_ALBUM_MOD',
 				'verwijderen'	 => 'P_ALBUM_ADMIN',
 				'hernoemen'		 => 'P_ALBUM_MOD',
+				'toevoegen'		 => 'P_ALBUM_ADD',
 				'uploaden'		 => 'P_ALBUM_ADD'
 			);
 		}
@@ -130,41 +131,44 @@ class FotoAlbumController extends AclController {
 	}
 
 	public function toevoegen(FotoAlbum $album) {
-		$this->uploaden($album);
+		$formulier = new FotoAlbumToevoegenForm($album);
+		if ($this->isPosted() AND $formulier->validate()) {
+			$subalbum = $formulier->findByName('subalbum')->getValue();
+			$album->path .= $subalbum . '/';
+			if (!$album->exists()) {
+				mkdir($album->path);
+				chmod($album->path, 0755);
+			} else {
+				SimpleHTML::setMelding('Fotoalbum bestaat al', 0);
+			}
+			// ReloadPage
+			exit;
+		}
+		$this->view = $formulier;
 	}
 
 	public function uploaden(FotoAlbum $album) {
 		if ($album->dirname === 'Posters') {
 			$formulier = new PosterUploadForm($album);
-			$msg = 'Poster';
 		} else {
-			$formulier = new FotoUploadForm($album);
-			$msg = 'Foto';
+			$formulier = new FotosDropzone($album);
 		}
 		if ($this->isPosted() AND $formulier->validate()) {
-			try {
-				$uploader = $formulier->findByName('foto');
-				if ($album->dirname === 'Posters') {
-					$filenaam = $formulier->findByName('posternaam')->getValue() . '.jpg';
-				} else {
-					$filenaam = $uploader->getModel()->filename;
-				}
-				$subalbum = $formulier->findByName('subalbum')->getValue();
-				if ($subalbum != '') {
-					$album->path .= $subalbum . '/';
-				}
-				if ($uploader->opslaan($album->path, $filenaam)) {
-					FotoAlbumModel::verwerkFotos($album);
-					SimpleHTML::setMelding($msg . ' met succes toegevoegd', 1); //TODO: $album->getUrl() . '#' . direncode($filenaam)
-				} else {
-					SimpleHTML::setMelding($msg . ' toevoegen mislukt', -1);
-				}
-			} catch (Exception $e) {
-				SimpleHTML::setMelding($msg . ' toevoegen mislukt: ' . $e->getMessage(), -1);
-				DebugLogModel::instance()->log(get_called_class(), $this->action, array($album->path, $album->dirname), $e);
+			if ($album->dirname === 'Posters') {
+				$uploader = $formulier->findByName('afbeelding');
+				$filename = $formulier->findByName('posternaam')->getValue() . '.jpg';
+			} else {
+				$uploader = $formulier->getPostedUploader();
+				$filename = $uploader->getModel()->filename;
 			}
+			if ($uploader->opslaan($album->path, $filename)) {
+				FotoAlbumModel::verwerkFotos($album);
+			}
+			exit;
 		}
-		$this->view = $formulier;
+		$this->view = new CsrLayoutPage($formulier);
+		$this->view->addStylesheet('/layout/css/dropzone');
+		$this->view->addScript('/layout/js/dropzone');
 	}
 
 	public function downloaden(FotoAlbum $album) {

@@ -1,6 +1,7 @@
 <div style="float: right; margin: 0 0 10px 10px;">
-	{if LoginModel::mag('P_LEDEN_READ')}
-		<a class="knop get popup" href="/fotoalbum/toevoegen/{$album->getSubDir()}">{icon get="picture_add"} Toevoegen</a>
+	{if LoginModel::mag('P_ALBUM_ADD')}
+		<a class="knop" href="/fotoalbum/uploaden/{$album->getSubDir()}">{icon get="picture_add"} Toevoegen</a>
+		<a class="knop post popup" href="/fotoalbum/toevoegen/{$album->getSubDir()}">{icon get="folder_add"} Nieuw album</a>
 	{/if}
 	{if LoginModel::mag('P_LOGGED_IN') && $album->getFotos()!==false}
 		<a class="knop" href="/fotoalbum/downloaden/{$album->getSubDir()}" title="Download als TAR-bestand">{icon get="picture_save"} Download album</a>
@@ -38,11 +39,11 @@
 	</div>
 {/foreach}
 <script type="text/javascript">
-{literal}
-jQuery(document).ready(function($) {
-$("a[rel^='prettyPhoto']").prettyPhoto({
+	{literal}
+			jQuery(document).ready(function($) {
+	$("a[rel^='prettyPhoto']").prettyPhoto({
 	theme: 'dark_rounded',
-	markup: '<div class="pp_pic_holder"> \
+			markup: '<div class="pp_pic_holder"> \
 		<div class="ppt">&nbsp;</div> \
 		<div class="pp_top"> \
 			<div class="pp_left"></div> \
@@ -121,5 +122,5 @@ $("a[rel^='prettyPhoto']").prettyPhoto({
 			});
 		}
 	});
-{/literal}
+	{/literal}
 </script>

@@ -13,20 +13,20 @@ class FileField implements FormElement, Validator {
 
 	protected $opties;
 	protected $methode;
-	protected $filter;
+	protected $filterMime;
 	protected $behouden;
 	protected $name;  // naam van het veld in POST
 	public $not_null = false; // required
 
-	public function __construct($name, Bestand $behouden = null, $ftpSubDir = '', array $filterMime = array()) {
+	public function __construct($name, Bestand $behouden = null, $ftpSubDir = '', array $filterMime = array(), $multiple = false) {
 		$this->name = $name;
 		$this->opties = array(
 			'BestandBehouden'	 => new BestandBehouden($name, $behouden),
-			'UploadHttp'		 => new UploadHttp($name, $filterMime),
+			'UploadHttp'		 => new UploadHttp($name, $filterMime, $multiple),
 			'UploadFtp'			 => new UploadFtp($name, $ftpSubDir),
 			'UploadUrl'			 => new UploadUrl($name)
 		);
-		$this->filter = $filterMime;
+		$this->filterMime = $filterMime;
 		$this->behouden = $behouden;
 		foreach ($this->opties as $methode => $uploader) {
 			if (!$uploader->isAvailable()) {
@@ -56,8 +56,16 @@ class FileField implements FormElement, Validator {
 		return $this->name;
 	}
 
+	public function getFilter() {
+		return $this->filterMime;
+	}
+
 	public function getType() {
 		return $this->methode;
+	}
+
+	public function isPosted() {
+		return $this->opties[$this->methode]->isPosted();
 	}
 
 	public function getModel() {
@@ -72,7 +80,7 @@ class FileField implements FormElement, Validator {
 		if (!$this->opties[$this->methode]->validate()) {
 			return false;
 		}
-		if (!empty($this->filter) AND ! in_array($this->getModel()->mimetype, $this->filter)) {
+		if (!empty($this->filterMime) AND ! in_array($this->getModel()->mimetype, $this->filterMime)) {
 			if (empty($this->getModel()->mimetype)) {
 				if ($this->not_null) {
 					$this->opties[$this->methode]->error = 'Afbeelding is verplicht';
@@ -154,8 +162,8 @@ class ImageField extends FileField {
 	protected $maxWidth;
 	protected $maxHeight;
 
-	public function __construct($name, Afbeelding $behouden = null, $ftpSubDir = '', array $filterMime = null, $minWidth = null, $minHeight = null, $maxWidth = null, $maxHeight = null) {
-		parent::__construct($name, $behouden, $ftpSubDir, ($filterMime === null ? Afbeelding::$mimeTypes : $filterMime));
+	public function __construct($name, Afbeelding $behouden = null, $ftpSubDir = '', array $filterMime = null, $multiple = false, $minWidth = null, $minHeight = null, $maxWidth = null, $maxHeight = null) {
+		parent::__construct($name, $behouden, $ftpSubDir, ($filterMime === null ? Afbeelding::$mimeTypes : $filterMime), $multiple);
 		$this->minWidth = $minWidth;
 		$this->minHeight = $minHeight;
 		$this->maxWidth = $maxWidth;
@@ -196,16 +204,25 @@ class RequiredImageField extends ImageField {
 
 abstract class BestandUploader extends InputField {
 
-	protected $uploaderName;
+	protected $setName;
 	public $selected = false;
 
 	public function __construct($name) {
 		parent::__construct($name . get_class($this), null, 'Bestand uploaden');
-		$this->uploaderName = $name . 'BestandUploader';
+		$this->setName = $name . 'BestandUploader';
 	}
 
 	public function isPosted() {
-		return filter_input(INPUT_POST, $this->uploaderName, FILTER_SANITIZE_STRING) === $this->getType();
+		return filter_input(INPUT_POST, $this->getSetName(), FILTER_SANITIZE_STRING) === $this->getType();
+	}
+
+	/**
+	 * Naam van de set bij elkaar horende bestanduploaders
+	 * 
+	 * @return string
+	 */
+	public function getSetName() {
+		return $this->setName;
 	}
 
 	/**
@@ -260,7 +277,7 @@ class BestandBehouden extends BestandUploader {
 	}
 
 	public function getLabel() {
-		$label = '<input type="radio" class="UploadOptie" name="' . $this->uploaderName . '" id="' . $this->name . 'Optie" value="BestandBehouden"';
+		$label = '<input type="radio" class="UploadOptie" name="' . $this->setName . '" id="' . $this->name . 'Optie" value="BestandBehouden"';
 		if ($this->selected) {
 			$label .= ' checked="checked"';
 			$label .= ' style="visibility: hidden;"';
@@ -284,11 +301,13 @@ class BestandBehouden extends BestandUploader {
 
 class UploadHttp extends BestandUploader {
 
-	private $filterMime;
+	protected $filterMime;
+	protected $multiple;
 
-	public function __construct($name, $filterMime) {
+	public function __construct($name, array $filterMime, $multiple = false) {
 		parent::__construct($name);
 		$this->filterMime = $filterMime;
+		$this->multiple = $multiple;
 		if ($this->isPosted()) {
 			$this->value = $_FILES[$this->name];
 			if (in_array($this->value['type'], Afbeelding::$mimeTypes)) {
@@ -300,6 +319,10 @@ class UploadHttp extends BestandUploader {
 			$this->model->filesize = $this->value['size'];
 			$this->model->mimetype = $this->value['type'];
 		}
+	}
+
+	public function getFilter() {
+		return $this->filterMime;
 	}
 
 	public function isAvailable() {
@@ -331,7 +354,7 @@ class UploadHttp extends BestandUploader {
 	}
 
 	public function getLabel() {
-		$label = '<input type="radio" class="UploadOptie" name="' . $this->uploaderName . '" id="' . $this->name . 'Optie" value="UploadHttp"';
+		$label = '<input type="radio" class="UploadOptie" name="' . $this->setName . '" id="' . $this->name . 'Optie" value="UploadHttp"';
 		if ($this->selected) {
 			$label .= ' checked="checked"';
 			$label .= ' style="visibility: hidden;"';
@@ -345,7 +368,7 @@ class UploadHttp extends BestandUploader {
 		if (!$this->selected) {
 			echo ' style="display: none;"';
 		}
-		echo '><input type="file" class="' . implode(' ', $this->css_classes) . '" id="' . $this->name . '" name="' . $this->name . '" accept="' . implode('|', $this->filterMime) . '" /></div></div>';
+		echo '><input type="file" class="' . implode(' ', $this->css_classes) . '" id="' . $this->name . '" name="' . $this->name . '" accept="' . implode('|', $this->filterMime) . '"' . ($this->multiple ? ' multiple' : '') . ' /></div></div>';
 	}
 
 }
@@ -448,7 +471,7 @@ class UploadFtp extends BestandUploader {
 	}
 
 	public function getLabel() {
-		$label = '<input type="radio" class="UploadOptie" name="' . $this->uploaderName . '" id="' . $this->name . 'Optie" value="UploadFtp"';
+		$label = '<input type="radio" class="UploadOptie" name="' . $this->setName . '" id="' . $this->name . 'Optie" value="UploadFtp"';
 		if ($this->selected) {
 			$label .= ' checked="checked"';
 			$label .= ' style="visibility: hidden;"';
@@ -572,7 +595,7 @@ class UploadUrl extends BestandUploader {
 	}
 
 	public function getLabel() {
-		$label = '<input type="radio" class="UploadOptie" name="' . $this->uploaderName . '" id="' . $this->name . 'Optie" value="UploadUrl"';
+		$label = '<input type="radio" class="UploadOptie" name="' . $this->setName . '" id="' . $this->name . 'Optie" value="UploadUrl"';
 		if ($this->selected) {
 			$label .= ' checked="checked"';
 			$label .= ' style="visibility: hidden;"';
@@ -587,6 +610,18 @@ class UploadUrl extends BestandUploader {
 			echo ' style="display: none;"';
 		}
 		echo '><input type="text" class="' . implode(' ', $this->css_classes) . '" id="' . $this->name . '" name="' . $this->name . '" value="' . $this->url . '" /></div></div>';
+	}
+
+}
+
+class DropzoneUploader extends UploadHttp {
+
+	public function isPosted() {
+		return isset($_FILES[$this->name]);
+	}
+
+	public function view() {
+		parent::getErrorDiv();
 	}
 
 }

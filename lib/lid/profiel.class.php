@@ -264,7 +264,7 @@ class ProfielBewerken extends Profiel {
 				} else {
 					$duckfoto = null;
 				}
-				$form[] = new ImageField('duckfoto', $duckfoto, 'duck/', null, null, null, 250);
+				$form[] = new ImageField('duckfoto', $duckfoto, 'duck/', null, false, null, null, 250);
 			}
 			$form[] = new WachtwoordWijzigenField('password', $this->lid);
 		}

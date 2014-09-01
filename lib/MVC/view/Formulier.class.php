@@ -155,7 +155,7 @@ class Formulier implements View, Validator {
 	 */
 	public function isPosted() {
 		foreach ($this->fields as $field) {
-			if ($field instanceof InputField AND ! ($field->isPosted() OR $field instanceof VinkField)) {
+			if (($field instanceof InputField OR $field instanceof FileField) AND ! $field->isPosted()) {
 				return false;
 			}
 		}
@@ -291,6 +291,74 @@ class InlineForm extends Formulier {
 	public function getValue() {
 		$fields = $this->getFields();
 		return $fields['input']->getValue();
+	}
+
+}
+
+/**
+ * Formulier consisting of a DropzoneUploader and fallback FileField
+ */
+class DropzoneForm extends Formulier {
+
+	private $dropzone;
+	private $fallback;
+
+	public function __construct($model, $formId, $action, FileField $fallback, $titel = false) {
+		parent::__construct($model, $formId, $action, $titel);
+		$this->css_classes[] = 'dropzone';
+		$this->fallback = $fallback;
+
+		$this->dropzone = new DropzoneUploader($this->fallback->getName(), $this->fallback->getFilter(), false);
+		$fields[] = $this->dropzone;
+		$fields[] = new HtmlComment('<div class="fallback">');
+		$fields[] = $this->fallback;
+		$fields[] = new FormButtons(null, true, true, false);
+		$fields[] = new HtmlComment('</div>');
+
+		$this->addFields($fields);
+	}
+
+	public function getPostedUploader() {
+		if ($this->dropzone->isPosted()) {
+			return $this->dropzone;
+		} elseif ($this->fallback->isPosted()) {
+			return $this->fallback;
+		}
+		return null;
+	}
+
+	public function isPosted() {
+		if ($this->dropzone->isPosted()) {
+			return true;
+		} elseif ($this->fallback->isPosted()) {
+			return true;
+		}
+		return false;
+	}
+
+	public function validate() {
+		if (!$this->isPosted()) {
+			return false;
+		}
+		if ($this->dropzone->validate()) {
+			return true;
+		} elseif ($this->fallback->validate()) {
+			return true;
+		}
+		return false;
+	}
+
+	public function getJavascript() {
+		$js = parent::getJavascript();
+		$accept = implode(',', $this->dropzone->getFilter());
+		$js[] = <<<JS
+$("#{$this->formId}").dropzone({
+	paramName: "{$this->dropzone->getName()}",
+	url: "{$this->action}",
+	acceptedFiles: "{$accept}"
+});
+JS;
+		return $js;
 	}
 
 }

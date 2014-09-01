@@ -23,6 +23,12 @@ preload([
 
 $(document).ready(function() {
 	init_key_pressed();
+	try {
+		Dropzone.autoDiscover = false;
+	}
+	catch (err) {
+		// Missing js file
+	}
 	init();
 });
 
@@ -35,7 +41,7 @@ function init() {
 		init_timeago();
 	}
 	catch (err) {
-		//FIXME missing js file
+		// Missing js file
 	}
 	init_hoverIntents();
 	init_lazy_images();
