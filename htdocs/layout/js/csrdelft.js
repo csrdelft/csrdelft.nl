@@ -156,10 +156,10 @@ function init_buttons() {
 		event.preventDefault();
 		var button = $(this);
 		var content = button.next('div.spoiler-content');
-		if (content.is(':visible')) {
-			button.html('Toon verklapper');
-		} else {
+		if (button.html() === 'Toon verklapper') {
 			button.html('Verberg verklapper');
+		} else {
+			button.html('Toon verklapper');
 		}
 		content.toggle(800, 'easeInOutCubic', function(event) {
 			// effect complete
