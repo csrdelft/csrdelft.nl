@@ -357,7 +357,7 @@ $('#{$this->formId}').dropzone({
 	paramName: "{$this->dropzone->getName()}",
 	url: "{$this->action}",
 	acceptedFiles: "{$accept}",
-	addRemoveLinks: true
+	addRemoveLinks: false
 });
 $('#{$this->formId}').on('click', 'a.dz-remove', function() {
 	ajax_request('POST', '{$del}', null, $(this), dom_update, alert);
