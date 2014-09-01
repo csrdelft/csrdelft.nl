@@ -166,12 +166,10 @@ class FotoAlbumController extends AclController {
 					FotoAlbumModel::verwerkFotos($album);
 					exit;
 				} else {
-					http_response_code(500);
-					$this->view = new JsonResponse($uploader->getError());
+					$this->view = new JsonResponse(array('error' => $uploader->getError()), 500);
 				}
 			} else {
-				http_response_code(400);
-				$this->view = new JsonResponse($formulier->getError());
+				$this->view = new JsonResponse(array('error' => $formulier->getError()), 400);
 			}
 		} else {
 			$this->view = new CsrLayoutPage($formulier);
