@@ -49,8 +49,8 @@ class VerticalenContent implements View {
 		<hr style="width: 1024px;" />';
 
 		foreach ($verticalen as $verticale) {
-
-			echo '<br /><div class="verticale">';
+			echo '<p>&nbsp;</p>';
+			echo '<div class="verticale">';
 			echo '<h1>Verticale ' . $verticale->getNaam() . '</h1>';
 			foreach ($verticale->getKringen() as $kringnaam => $kring) {
 				$kringstyle = 'kring';
@@ -80,7 +80,11 @@ class VerticalenContent implements View {
 				echo '</div>';
 				echo '</div>';
 			}
-			echo '</div><br /><br /><br /><br /><br /><br /><br />';
+			echo '</div>';
+			echo '<p>&nbsp;</p>';
+			echo '<p>&nbsp;</p>';
+			echo '<p>&nbsp;</p>';
+			echo '<p>&nbsp;</p>';
 		}
 		?>
 		<script type="text/javascript">
