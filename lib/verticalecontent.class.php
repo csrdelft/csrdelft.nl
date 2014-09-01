@@ -81,10 +81,9 @@ class VerticalenContent implements View {
 				echo '</div>';
 			}
 			echo '</div>';
-			echo '<p>&nbsp;</p>';
-			echo '<p>&nbsp;</p>';
-			echo '<p>&nbsp;</p>';
-			echo '<p>&nbsp;</p>';
+			for ($i = 0; $i < 11; $i++) {
+				echo '<p>&nbsp;</p>';
+			}
 		}
 		?>
 		<script type="text/javascript">
