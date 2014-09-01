@@ -237,8 +237,9 @@ abstract class BestandUploader extends InputField {
 	 * 
 	 * @param string $destination fully qualified path with trailing slash
 	 * @param string $filename filename with extension
+	 * @param boolean $overwrite allowed to overwrite existing file
 	 */
-	public abstract function opslaan($destination, $filename);
+	public abstract function opslaan($destination, $filename, $overwrite = false);
 
 	public function view() {
 		echo $this->getDiv();
@@ -269,9 +270,9 @@ class BestandBehouden extends BestandUploader {
 		return $this->error === '';
 	}
 
-	public function opslaan($destination, $filename) {
+	public function opslaan($destination, $filename, $overwrite = false) {
 		if (!file_exists($destination . $filename)) {
-			SimpleHTML::setMelding('Bestand bestaat niet (meer): ' . mb_htmlentities($destination . $filename), -1);
+			throw new Exception('Bestand bestaat niet (meer): ' . $filename);
 		}
 		return true;
 	}
@@ -346,8 +347,12 @@ class UploadHttp extends BestandUploader {
 		return $this->error === '';
 	}
 
-	public function opslaan($destination, $filename) {
+	public function opslaan($destination, $filename, $overwrite = false) {
 		if (is_uploaded_file($this->value['tmp_name'])) {
+			if (file_exists($destination . $filename) AND ! $overwrite) {
+				$this->error = 'Bestandsnaam al in gebruikt: ' . $filename;
+				return false;
+			}
 			return move_uploaded_file($this->value['tmp_name'], $destination . $filename);
 		}
 		return false;
@@ -458,9 +463,13 @@ class UploadFtp extends BestandUploader {
 		return $this->error === '';
 	}
 
-	public function opslaan($destination, $filename) {
+	public function opslaan($destination, $filename, $overwrite = false) {
 		if (!file_exists($this->path . $this->model->filename)) {
 			throw new Exception('Bronbestand bestaat niet');
+		}
+		if (file_exists($destination . $filename) AND ! $overwrite) {
+			$this->error = 'Bestandsnaam al in gebruikt: ' . $filename;
+			return false;
 		}
 		$gelukt = copy($this->path . $this->model->filename, $destination . $filename);
 		// Moeten we het bestand ook verwijderen uit de publieke ftp?
@@ -590,7 +599,11 @@ class UploadUrl extends BestandUploader {
 		return $this->error === '';
 	}
 
-	public function opslaan($destination, $filename) {
+	public function opslaan($destination, $filename, $overwrite = false) {
+		if (file_exists($destination . $filename) AND ! $overwrite) {
+			$this->error = 'Bestandsnaam al in gebruikt: ' . $filename;
+			return false;
+		}
 		return file_put_contents($destination . $filename, $this->value);
 	}
 

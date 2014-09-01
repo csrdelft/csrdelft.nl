@@ -350,12 +350,17 @@ class DropzoneForm extends Formulier {
 
 	public function getJavascript() {
 		$js = parent::getJavascript();
+		$del = str_replace('uploaden', 'verwijderen', $this->action);
 		$accept = implode(',', $this->dropzone->getFilter());
 		$js[] = <<<JS
-$("#{$this->formId}").dropzone({
+$('#{$this->formId}').dropzone({
 	paramName: "{$this->dropzone->getName()}",
 	url: "{$this->action}",
-	acceptedFiles: "{$accept}"
+	acceptedFiles: "{$accept}",
+	addRemoveLinks: true
+});
+$('#{$this->formId}').on('click', 'a.dz-remove', function() {
+	ajax_request('POST', '{$del}', null, $(this), dom_update, alert);
 });
 JS;
 		return $js;

@@ -35,13 +35,13 @@ class FotoAlbumController extends AclController {
 			$this->acl = array(
 				'bekijken'	 => 'P_ALBUM_READ',
 				'downloaden' => 'P_ALBUM_DOWN',
-				'verwerken'	 => 'P_ALBUM_ADMIN',
+				'verwerken'	 => 'P_ADMIN',
 				'uploaden'	 => 'P_ALBUM_ADD'
 			);
 		} else {
 			$this->acl = array(
 				'albumcover'	 => 'P_ALBUM_MOD',
-				'verwijderen'	 => 'P_ALBUM_ADMIN',
+				'verwijderen'	 => 'P_ALBUM_DEL',
 				'hernoemen'		 => 'P_ALBUM_MOD',
 				'toevoegen'		 => 'P_ALBUM_ADD',
 				'uploaden'		 => 'P_ALBUM_ADD'
