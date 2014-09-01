@@ -49,7 +49,7 @@ class VerticalenContent implements View {
 		<hr style="width: 1024px;" />';
 
 		foreach ($verticalen as $verticale) {
-			echo '<p>&nbsp;</p>';
+
 			echo '<div class="verticale">';
 			echo '<h1>Verticale ' . $verticale->getNaam() . '</h1>';
 			foreach ($verticale->getKringen() as $kringnaam => $kring) {
@@ -81,9 +81,10 @@ class VerticalenContent implements View {
 				echo '</div>';
 			}
 			echo '</div>';
-			for ($i = 0; $i < 11; $i++) {
-				echo '<p>&nbsp;</p>';
-			}
+		}
+		// bottom spacing
+		for ($i = 0; $i < 11; $i++) {
+			echo '<p>&nbsp;</p>';
 		}
 		?>
 		<script type="text/javascript">
