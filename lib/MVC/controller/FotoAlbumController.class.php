@@ -164,6 +164,9 @@ class FotoAlbumController extends AclController {
 				}
 				if ($uploader->opslaan($album->path, $filename)) {
 					FotoAlbumModel::verwerkFotos($album);
+					if ($album->dirname === 'Posters') {
+						redirect($album->getUrl());
+					}
 					exit;
 				} else {
 					$this->view = new JsonResponse(array('error' => $uploader->getError()), 500);
