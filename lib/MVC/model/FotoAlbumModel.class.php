@@ -36,10 +36,10 @@ class FotoAlbumModel {
 			chmod($path, 0755);
 		}
 		foreach ($album->getFotos(true) as $foto) {
-			if (!$foto->bestaatThumb()) {
+			if (!$foto->hasThumb()) {
 				$foto->maakThumb();
 			}
-			if (!$foto->bestaatResized()) {
+			if (!$foto->hasResized()) {
 				$foto->maakResized();
 			}
 		}
@@ -56,8 +56,12 @@ class FotoAlbumModel {
 	public static function verwijderFoto(Foto $foto) {
 		$ret = true;
 		$ret &= unlink($foto->directory->path . $foto->filename);
-		$ret &= unlink($foto->getResizedPad());
-		$ret &= unlink($foto->getThumbPad());
+		if ($foto->hasResized()) {
+			$ret &= unlink($foto->getResizedPad());
+		}
+		if ($foto->hasThumb()) {
+			$ret &= unlink($foto->getThumbPad());
+		}
 		return $ret;
 	}
 

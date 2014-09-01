@@ -350,6 +350,7 @@ class DropzoneForm extends Formulier {
 
 	public function getJavascript() {
 		$js = parent::getJavascript();
+		$mag = (LoginModel::mag('P_ALBUM_DEL') ? 'true' : 'false');
 		$del = str_replace('uploaden', 'verwijderen', $this->action);
 		$accept = implode(',', $this->dropzone->getFilter());
 		$js[] = <<<JS
@@ -357,10 +358,24 @@ $('#{$this->formId}').dropzone({
 	paramName: "{$this->dropzone->getName()}",
 	url: "{$this->action}",
 	acceptedFiles: "{$accept}",
-	addRemoveLinks: false
-});
-$('#{$this->formId}').on('click', 'a.dz-remove', function() {
-	ajax_request('POST', '{$del}', null, $(this), dom_update, alert);
+	addRemoveLinks: {$mag},
+	removedfile: function(file) {
+		//if (!confirm('Foto definitief verwijderen?')) {
+		//	return;
+		//}
+		var jqXHR = $.ajax({
+			type: "POST",
+			url: "{$del}",
+			cache: false,
+			data: "foto=" + file.name
+		});
+		jqXHR.done(function(data, textStatus, jqXHR) {
+			$(file.previewElement).remove();
+		});
+		jqXHR.fail(function(jqXHR, textStatus, errorThrown) {
+			alert(textStatus);
+		});
+	}
 });
 JS;
 		return $js;

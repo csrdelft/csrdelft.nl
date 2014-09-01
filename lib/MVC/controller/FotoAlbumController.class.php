@@ -62,7 +62,7 @@ class FotoAlbumController extends AclController {
 		$path = PICS_PATH . urldecode(implode('/', $path));
 		$album = FotoAlbumModel::getFotoAlbum($path);
 		if (!$album) {
-			SimpleHTML::setMelding('Fotoalbum bestaat niet', -1);
+			SimpleHTML::setMelding('Fotoalbum bestaat niet: ' . $path, -1);
 			redirect(CSR_ROOT . '/fotoalbum');
 		}
 		$args[] = $album;

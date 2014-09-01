@@ -23,12 +23,7 @@ preload([
 
 $(document).ready(function() {
 	init_key_pressed();
-	try {
-		Dropzone.autoDiscover = false;
-	}
-	catch (err) {
-		// Missing js file
-	}
+	init_dropzone();
 	init();
 });
 
@@ -37,12 +32,7 @@ function init() {
 	init_links();
 	init_buttons();
 	init_forms();
-	try {
-		init_timeago();
-	}
-	catch (err) {
-		// Missing js file
-	}
+	init_timeago();
 	init_hoverIntents();
 	init_lazy_images();
 	//undo_inline_css();
@@ -52,27 +42,41 @@ function undo_inline_css() {
 	$('*').removeAttr('style width border cellSpacing cellPadding'); // etc
 }
 
+function init_dropzone() {
+	try {
+		Dropzone.autoDiscover = false;
+	}
+	catch (err) {
+		// Missing js file
+	}
+}
+
 function init_timeago() {
-	$.timeago.settings.strings = {
-		prefiprefixAgo: "",
-		prefixFromNow: "sinds",
-		suffixAgo: "geleden",
-		suffixFromNow: "",
-		seconds: "minder dan een minuut",
-		minute: "1 minuut",
-		minutes: "%d minuten",
-		hour: "1 uur",
-		hours: "%d uur",
-		day: "een dag",
-		days: "%d dagen",
-		month: "een maand",
-		months: "%d maanden",
-		year: "een jaar",
-		years: "%d jaar",
-		wordSeparator: " ",
-		numbers: []
-	};
-	$('abbr.timeago').timeago();
+	try {
+		$.timeago.settings.strings = {
+			prefiprefixAgo: "",
+			prefixFromNow: "sinds",
+			suffixAgo: "geleden",
+			suffixFromNow: "",
+			seconds: "minder dan een minuut",
+			minute: "1 minuut",
+			minutes: "%d minuten",
+			hour: "1 uur",
+			hours: "%d uur",
+			day: "een dag",
+			days: "%d dagen",
+			month: "een maand",
+			months: "%d maanden",
+			year: "een jaar",
+			years: "%d jaar",
+			wordSeparator: " ",
+			numbers: []
+		};
+		$('abbr.timeago').timeago();
+	}
+	catch (err) {
+		// Missing js file
+	}
 }
 
 var bShiftPressed = false;

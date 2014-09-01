@@ -41,12 +41,12 @@ class Foto extends Afbeelding {
 		return CSR_PICS . '/' . direncode($this->directory->getSubDir() . '_resized/' . $this->filename);
 	}
 
-	public function bestaatThumb() {
+	public function hasThumb() {
 		$pad = $this->getThumbPad();
 		return file_exists($pad) AND is_file($pad);
 	}
 
-	public function bestaatResized() {
+	public function hasResized() {
 		$pad = $this->getResizedPad();
 		return file_exists($pad) AND is_file($pad);
 	}
@@ -59,7 +59,7 @@ class Foto extends Afbeelding {
 			echo $command . '<br />';
 			echo $output;
 		}
-		if ($this->bestaatThumb()) {
+		if ($this->hasThumb()) {
 			chmod($this->getThumbPad(), 0644);
 		} else {
 			SimpleHTML::setMelding('Thumb maken mislukt voor: ' . $this->getThumbPad(), -1);
@@ -74,7 +74,7 @@ class Foto extends Afbeelding {
 			echo $command . '<br />';
 			echo $output;
 		}
-		if ($this->bestaatResized()) {
+		if ($this->hasResized()) {
 			chmod($this->getResizedPad(), 0644);
 		} else {
 			SimpleHTML::setMelding('Resized maken mislukt voor: ' . $this->getResizedPad(), -1);
@@ -82,7 +82,7 @@ class Foto extends Afbeelding {
 	}
 
 	public function isCompleet() {
-		return ($this->bestaatThumb() && $this->bestaatResized());
+		return ($this->hasThumb() && $this->hasResized());
 	}
 
 }
