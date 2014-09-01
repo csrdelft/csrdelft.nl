@@ -23,7 +23,7 @@ if (isset($_GET['xml'])) {
 		ORDER BY adres;";
 
 	$rLeden = $db->query($sLedenQuery);
-	header('content-type: text/xml');
+	header('Content-Type: text/xml');
 	echo '<?xml version="1.0" encoding="utf-8"?><markers>' . "\n";
 	$current = '';
 	while ($aLid = $db->next($rLeden)) {
@@ -51,7 +51,7 @@ if (isset($_GET['xml'])) {
 	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 	<head>
-		<meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 		<title>Leden der Civitas in een kaartje van Google.</title>
 		<script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=ABQIAAAATQu5ACWkfGjbh95oIqCLYxRY812Ew6qILNIUSbDumxwZYKk2hBShiPLD96Ep_T-MwdtX--5T5PYf1A"
 		type="text/javascript"></script>

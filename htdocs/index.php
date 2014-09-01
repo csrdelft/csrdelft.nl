@@ -43,7 +43,7 @@ try {
 			debugprint('DB_MODIFY_ENABLED');
 		} else {
 			header('Content-Type: text/x-sql');
-			header('Content-disposition: attachment;filename=DB_modify_' . time() . '.sql');
+			header('Content-Disposition: attachment;filename=DB_modify_' . time() . '.sql');
 			foreach ($queries as $query) {
 				echo $query . ";\n";
 			}

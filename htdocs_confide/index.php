@@ -44,7 +44,7 @@ $weekResult=$db->query($weekrapportQuery);
 <html xml:lang="nl" xmlns="http://www.w3.org/1999/xhtml">
 <head>
 	<title>SocCie streepcomputerrapportagegenereertool</title>
-	<meta http-equiv="Content-type" content="text/html; charset=UTF-8" />
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 	<meta name="author" content="PubCie C.S.R. Delft - Jieter" />
 	<meta name="robots" content="nfollow" />
 	<link rel="stylesheet" href="csrdelft.css" type="text/css" />

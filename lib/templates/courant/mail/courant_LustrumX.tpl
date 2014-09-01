@@ -4,7 +4,7 @@
 <html>
 <head>
   <title>C.S.R.-courant</title>
-  <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
   <meta name="author" content="PubCie der C.S.R. Delft" />
   <meta name="robots" content="index, follow" />
   <link href='http://fonts.googleapis.com/css?family=Parisienne' rel='stylesheet' type='text/css'>

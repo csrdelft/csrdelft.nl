@@ -12,7 +12,7 @@ if (!LoginModel::mag('P_LEDEN_READ')) {
 	redirect(CSR_ROOT);
 }
 
-header('content-type: text/csv');
+header('Content-Type: text/csv');
 $sLedenQuery = "
 	SELECT 
 		uid, voornaam, achternaam, tussenvoegsel, CONCAT(moot, '.', kring) AS kring,

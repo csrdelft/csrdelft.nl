@@ -3,7 +3,7 @@
 /*
  * Alphacursusbanner.
  */
-header('content-type: image/jpeg');
+header('Content-Type: image/jpeg');
 
 echo file_get_contents('gebedsgenezingreclametegeltje.jpg');
 exit;

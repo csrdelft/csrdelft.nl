@@ -3,7 +3,7 @@
 <html>
 <head>
   <title>OWee-Courant</title>
-  <meta http-equiv='content-type' content='text/html; charset=UTF-8' />
+  <meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
   <meta name='author' content='pubCie der C.S.R. Delft' />
   <meta name='robots' content='index, follow' />
   <style type="text/css"><!--

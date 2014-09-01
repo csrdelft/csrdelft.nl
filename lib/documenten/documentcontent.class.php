@@ -52,7 +52,7 @@ class DocumentDownloadContent extends SmartyTemplateView {
 		header('Pragma: public');
 		header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
 		header('Cache-Control: private', false);
-		header('content-type: ' . $mime);
+		header('Content-Type: ' . $mime);
 		if (!strstr($mime, 'image') AND ! strstr($mime, 'text')) {
 			header('Content-Disposition: attachment; filename="' . $this->model->getFileName() . '";');
 			header('Content-Lenght: ' . $this->model->getFileSize() . ';');

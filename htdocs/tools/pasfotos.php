@@ -39,13 +39,13 @@ if (isset($_GET['string'])) {
 		$pasfoto = $lid->getPasfotoPath();
 
 		if (in_array(substr($pasfoto, -3), $types)) {
-			header('Content-type: image/' . substr($pasfoto, -3));
+			header('Content-Type: image/' . substr($pasfoto, -3));
 		} else { //assumption is the mother of all...
-			header('Content-type: image/jpeg');
+			header('Content-Type: image/jpeg');
 		}
 		echo file_get_contents(PICS_PATH . $pasfoto);
 	} else {
-		header('Content-type: image/jpeg');
+		header('Content-Type: image/jpeg');
 		echo file_get_contents(PICS_PATH . 'pasfoto/geen-foto.jpg');
 	}
 }

@@ -17,6 +17,7 @@ class JsonResponse implements View {
 	}
 
 	public function view() {
+		header('Content-Type: application/json');
 		echo json_encode($this->model);
 	}
 

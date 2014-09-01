@@ -4,7 +4,7 @@
 <html>
 <head>
   <title>Delphia Daily</title>
-  <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
   <meta name="author" content="Broeders van Delphia" />
   <meta name="robots" content="index, follow" />
   <style type="text/css">{literal}<!--

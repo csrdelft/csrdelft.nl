@@ -153,26 +153,35 @@ class FotoAlbumController extends AclController {
 		} else {
 			$formulier = new FotosDropzone($album);
 		}
-		if ($this->isPosted() AND $formulier->validate()) {
-			if ($album->dirname === 'Posters') {
-				$uploader = $formulier->findByName('afbeelding');
-				$filename = $formulier->findByName('posternaam')->getValue() . '.jpg';
+		if ($this->isPosted()) {
+			if ($formulier->validate()) {
+				if ($album->dirname === 'Posters') {
+					$uploader = $formulier->findByName('afbeelding');
+					$filename = $formulier->findByName('posternaam')->getValue() . '.jpg';
+				} else {
+					$uploader = $formulier->getPostedUploader();
+					$filename = $uploader->getModel()->filename;
+				}
+				if ($uploader->opslaan($album->path, $filename)) {
+					FotoAlbumModel::verwerkFotos($album);
+					exit;
+				} else {
+					http_response_code(500);
+					$this->view = new JsonResponse($uploader->getError());
+				}
 			} else {
-				$uploader = $formulier->getPostedUploader();
-				$filename = $uploader->getModel()->filename;
+				http_response_code(400);
+				$this->view = new JsonResponse($formulier->getError());
 			}
-			if ($uploader->opslaan($album->path, $filename)) {
-				FotoAlbumModel::verwerkFotos($album);
-			}
-			exit;
+		} else {
+			$this->view = new CsrLayoutPage($formulier);
+			$this->view->addStylesheet('/layout/css/dropzone');
+			$this->view->addScript('/layout/js/dropzone');
 		}
-		$this->view = new CsrLayoutPage($formulier);
-		$this->view->addStylesheet('/layout/css/dropzone');
-		$this->view->addScript('/layout/js/dropzone');
 	}
 
 	public function downloaden(FotoAlbum $album) {
-		header('Content-type: application/x-tar');
+		header('Content-Type: application/x-tar');
 		header('Content-Disposition: attachment; filename="' . $album->dirname . '.tar"');
 		$fotos = $album->getFotos();
 		set_time_limit(0);
