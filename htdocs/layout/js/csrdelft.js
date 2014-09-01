@@ -156,12 +156,13 @@ function init_buttons() {
 		event.preventDefault();
 		var button = $(this);
 		var content = button.next('div.spoiler-content');
+		if (content.is(':visible')) {
+			button.html('Toon verklapper');
+		} else {
+			button.html('Verberg verklapper');
+		}
 		content.toggle(800, 'easeInOutCubic', function(event) {
-			if (content.is(':visible')) {
-				button.html('Verberg verklapper');
-			} else {
-				button.html('Toon verklapper');
-			}
+			// effect complete
 		});
 	});
 	$('button.popup').unbind('click.popup');
