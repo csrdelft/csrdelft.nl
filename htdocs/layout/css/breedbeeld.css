@@ -1,14 +1,5 @@
-/*
-To change this license header, choose License Headers in Project Properties.
-To change this template file, choose Tools | Templates
-and open the template in the editor.
-*/
-/* 
-    Created on : 28-dec-2013, 1:42:41
-    Author     : Paul Brussee
-*/
 
-#main {
+#main, #menu {
 	width: 100%;
 }
 
@@ -22,9 +13,4 @@ and open the template in the editor.
 
 #top3overzicht, #kolomrechts, div.bericht {
 	width: auto !important;
-}
-
-#adminding div {
-	position: absolute;
-	left: -100px;
 }
