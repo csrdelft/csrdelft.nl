@@ -27,13 +27,16 @@ class MainMenuView extends MenuView {
 		parent::view();
 
 		$instantsearch = array();
+		foreach (ForumDradenModel::instance()->getRecenteForumDraden(null, null) as $draad) {
+			$instantsearch[$draad->titel] = '/forum/onderwerp/' . $draad->draad_id;
+		}
+		foreach (ForumDelenModel::instance()->getForumDelenVoorLid() as $deel) {
+			$instantsearch[$deel->titel] = '/forum/deel/' . $deel->forum_id;
+		}
 		foreach (MenuModel::instance()->find() as $item) {
 			if ($item->magBekijken()) {
 				$instantsearch[$item->tekst] = $item->link;
 			}
-		}
-		foreach (ForumDradenModel::instance()->getRecenteForumDraden(null, null) as $draad) {
-			$instantsearch[$draad->titel] = '/forum/onderwerp/' . $draad->draad_id;
 		}
 		$this->smarty->assign('instantsearch', $instantsearch);
 
