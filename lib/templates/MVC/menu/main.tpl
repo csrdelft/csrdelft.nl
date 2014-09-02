@@ -94,7 +94,7 @@
 										clickFire: true,
 										max: 20,
 										matchContains: true,
-										noRecord: "Zoeken..."
+										noRecord: ""
 									}
 							);
 							$(document).keydown(function(event) {
