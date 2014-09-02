@@ -27,16 +27,15 @@ class MainMenuView extends MenuView {
 		parent::view();
 
 		$instantsearch = array();
-		foreach (ForumDradenModel::instance()->getRecenteForumDraden(null, null) as $draad) {
-			$instantsearch[$draad->titel] = '/forum/onderwerp/' . $draad->draad_id;
-		}
-		foreach (ForumDelenModel::instance()->getForumDelenVoorLid(false) as $deel) {
-			$instantsearch[$deel->titel] = '/forum/deel/' . $deel->forum_id;
-		}
+		require_once 'MVC/model/ForumModel.class.php';
+
 		foreach (MenuModel::instance()->find() as $item) {
 			if ($item->magBekijken()) {
 				$instantsearch[$item->tekst] = $item->link;
 			}
+		}
+		foreach (ForumDelenModel::instance()->getForumDelenVoorLid(false) as $deel) {
+			$instantsearch[$deel->titel] = '/forum/deel/' . $deel->forum_id;
 		}
 		$this->smarty->assign('instantsearch', $instantsearch);
 
@@ -44,8 +43,6 @@ class MainMenuView extends MenuView {
 		$this->smarty->assign('saldi', LoginModel::instance()->getLid()->getSaldi());
 
 		if (LoginModel::mag('P_ADMIN')) {
-
-			require_once 'MVC/model/ForumModel.class.php';
 			$this->smarty->assign('forumcount', ForumPostsModel::instance()->getAantalWachtOpGoedkeuring());
 
 			require_once 'savedquery.class.php';

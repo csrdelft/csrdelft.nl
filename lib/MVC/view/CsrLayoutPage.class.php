@@ -71,9 +71,6 @@ class CsrLayoutPage extends HtmlPage {
 			$this->addScript($js . 'minion');
 			$this->addStylesheet($css . 'minion');
 		}
-		if (LidInstellingen::get('algemeen', 'sneltoetsen') == 'ja') {
-			$this->addScript($js . 'sneltoetsen');
-		}
 	}
 
 	public function view() {

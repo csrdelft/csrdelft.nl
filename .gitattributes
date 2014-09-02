@@ -362,8 +362,6 @@ htdocs/layout/js/slideshow.js -text
 htdocs/layout/js/slideshow.min.js -text
 htdocs/layout/js/slideshow_intern.js -text
 htdocs/layout/js/slideshow_intern.min.js -text
-htdocs/layout/js/sneltoetsen.js -text
-htdocs/layout/js/sneltoetsen.min.js -text
 htdocs/layout/js/suggest.js -text
 htdocs/layout/js/suggest.min.js -text
 htdocs/layout/js/taken.js -text

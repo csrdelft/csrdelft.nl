@@ -79,42 +79,45 @@
 				{/if}
 				<br />
 				<form name="lidzoeker" method="get" action="/communicatie/lijst.php">
-					<p>
-						{if isset($smarty.get.q)}
-							<input type="text" value="{$smarty.get.q|escape:'htmlall'}" name="q" id="zoekveld" />
-						{else}
-							<input type="text" name="q" id="zoekveld" />
-						{/if}
-					</p>
+					<input type="text" name="q" id="zoekveld"{if isset($smarty.get.q)} value="{$smarty.get.q|escape:'htmlall'}"{/if} />
+					<script type="text/javascript">
+						$(document).ready(function() {
+							var instantsearch = {json_encode($instantsearch)};
+							$('#zoekveld').keyup(function(event) {
+								if (event.keyCode === 13 && typeof instantsearch[this.value] !== 'undefined') {
+									window.location.href = instantsearch[this.value];
+								}
+							});
+							$('#zoekveld').autocomplete(
+						{json_encode(array_keys($instantsearch))},
+									{
+										clickFire: true,
+										max: 20,
+										matchContains: true
+									}
+							);
+							$(document).keydown(function(event) {
+								// Geen instantsearch met modifiers
+								if (event.ctrlKey || event.altKey || event.shiftKey) {
+									return;
+								}
+								// Geen instantsearch als we in een input-element of text-area zitten.
+								var element = event.target.tagName.toUpperCase();
+								if (element == 'INPUT' || element == 'TEXTAREA' || element == 'SELECT') {
+									return;
+								}
+								$('#zoekveld').focus();
+							});
+						});
+					</script>
 				</form>
 			</div>
 		{/if}
 	</div>
 </div>
-<div id="submenu" onmouseover="ResetTimer();" onmouseout="StartTimer();">
+<div id="submenu" onmouseover="ResetTimer();" onmouseout="StartTimer()
+				;">
 	<div id="submenuitems">
-		<div class="instantsearch">
-			<input id="instantsearch" type="text" />
-			<script type="text/javascript">
-				$(document).ready(function() {
-					var instantsearch = {json_encode($instantsearch)};
-					$('#instantsearch').keyup(function(event) {
-						if (event.keyCode === 13 && typeof instantsearch[this.value] !== 'undefined') {
-							window.location.href = instantsearch[this.value];
-						}
-					});
-					$('#instantsearch').autocomplete(
-				{json_encode(array_keys($instantsearch))},
-							{
-								clickFire: true,
-								max: 20,
-								matchContains: true
-							}
-					);
-					$('#instantsearch').focus();
-				});
-			</script>
-		</div>
 		{assign var=active value=false}
 		{foreach name=level1 from=$root->children item=item}
 			<div id="sub{$smarty.foreach.level1.iteration}"{if !$active AND $item->active} class="active"{assign var=active value=true}{/if}>

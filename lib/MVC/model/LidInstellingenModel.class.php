@@ -35,7 +35,6 @@ class LidInstellingen extends PersistenceModel {
 	 */
 	private $instellingen = array(
 		'algemeen'		 => array(
-			'sneltoetsen'	 => array('Sneltoetsen op de webstek', T::Enumeration, array('ja', 'nee'), 'nee'),
 			'bijbel'		 => array('Bijbelvertaling voor bijbelrooster', T::Enumeration, array('NBV', 'NBG', 'Herziene Statenvertaling', 'Statenvertaling (Jongbloed)', 'Groot Nieuws Bijbel', 'Willibrordvertaling'), 'NBV')
 		),
 		'layout'		 => array(
