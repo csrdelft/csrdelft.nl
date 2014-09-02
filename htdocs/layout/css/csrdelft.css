@@ -232,10 +232,22 @@ ul.nobullets li{ list-style-type: none; }
 	text-decoration: none;
 }
 #submenu a:link, #submenu a:visited{
-	color: #ffffff;
+	color: #fff;
 }
 #submenu a:hover, #submenu a:active, #submenu a.active{
 	color: #e8cf2a;
+}
+
+#submenuitems div.instantsearch, #submenuitems div.InputField{
+	display: block;
+	float: left;
+	margin: 0 0 0 10px;
+	padding: 0;
+}
+#instantsearch{
+	border: none;
+	background: none;
+	color: #fff;
 }
 
 /**** MENU RIGHT **************************************************************/

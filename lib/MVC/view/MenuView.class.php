@@ -26,6 +26,17 @@ class MainMenuView extends MenuView {
 	public function view() {
 		parent::view();
 
+		$instantsearch = array();
+		foreach (MenuModel::instance()->find() as $item) {
+			if ($item->magBekijken()) {
+				$instantsearch[$item->tekst] = $item->link;
+			}
+		}
+		foreach (ForumDradenModel::instance()->getRecenteForumDraden(null, null) as $draad) {
+			$instantsearch[$draad->titel] = '/forum/onderwerp/' . $draad->draad_id;
+		}
+		$this->smarty->assign('instantsearch', $instantsearch);
+
 		// SocCie-saldi & MaalCie-saldi
 		$this->smarty->assign('saldi', LoginModel::instance()->getLid()->getSaldi());
 

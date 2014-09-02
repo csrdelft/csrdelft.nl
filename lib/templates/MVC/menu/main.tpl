@@ -93,6 +93,28 @@
 </div>
 <div id="submenu" onmouseover="ResetTimer();" onmouseout="StartTimer();">
 	<div id="submenuitems">
+		<div class="instantsearch">
+			<input id="instantsearch" type="text" />
+			<script type="text/javascript">
+				$(document).ready(function() {
+					var instantsearch = {json_encode($instantsearch)};
+					$('#instantsearch').keyup(function(event) {
+						if (event.keyCode === 13) {
+							window.location.href = instantsearch[this.value];
+						}
+					});
+					$('#instantsearch').autocomplete(
+				{json_encode(array_keys($instantsearch))},
+							{
+								clickFire: true,
+								max: 20,
+								matchContains: true
+							}
+					);
+					$('#instantsearch').focus();
+				});
+			</script>
+		</div>
 		{assign var=active value=false}
 		{foreach name=level1 from=$root->children item=item}
 			<div id="sub{$smarty.foreach.level1.iteration}"{if !$active AND $item->active} class="active"{assign var=active value=true}{/if}>

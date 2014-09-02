@@ -61,13 +61,13 @@ class MenuItem extends PersistentEntity {
 	 * @var array
 	 */
 	protected static $persistent_fields = array(
-		'item_id' => array(T::Integer, false, 'auto_increment'),
-		'parent_id' => array(T::Integer, false),
-		'prioriteit' => array(T::Integer, false),
-		'tekst' => array(T::String),
-		'link' => array(T::String),
-		'rechten_bekijken' => array(T::String, false),
-		'zichtbaar' => array(T::Boolean, false)
+		'item_id'			 => array(T::Integer, false, 'auto_increment'),
+		'parent_id'			 => array(T::Integer, false),
+		'prioriteit'		 => array(T::Integer, false),
+		'tekst'				 => array(T::String),
+		'link'				 => array(T::String),
+		'rechten_bekijken'	 => array(T::String, false),
+		'zichtbaar'			 => array(T::Boolean, false)
 	);
 	/**
 	 * Database primary key
@@ -97,6 +97,10 @@ class MenuItem extends PersistentEntity {
 			}
 		}
 		return false;
+	}
+
+	public function magBekijken() {
+		return LoginModel::mag($this->rechten_bekijken);
 	}
 
 }
