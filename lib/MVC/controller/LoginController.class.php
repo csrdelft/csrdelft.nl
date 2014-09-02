@@ -33,7 +33,7 @@ class LoginController extends AclController {
 		$values = $form->getValues();
 		$this->model->setPauper($values['mobiel']);
 		if ($form->validate()) {
-			if ($this->model->login($values['user'], $values['pass'], !$values['mobiel'])) {
+			if ($this->model->login($values['user'], $values['pass'], false)) {
 				redirect($values['url']);
 			}
 		}
