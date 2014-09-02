@@ -30,7 +30,7 @@ class MainMenuView extends MenuView {
 		foreach (ForumDradenModel::instance()->getRecenteForumDraden(null, null) as $draad) {
 			$instantsearch[$draad->titel] = '/forum/onderwerp/' . $draad->draad_id;
 		}
-		foreach (ForumDelenModel::instance()->getForumDelenVoorLid() as $deel) {
+		foreach (ForumDelenModel::instance()->getForumDelenVoorLid(false) as $deel) {
 			$instantsearch[$deel->titel] = '/forum/deel/' . $deel->forum_id;
 		}
 		foreach (MenuModel::instance()->find() as $item) {
