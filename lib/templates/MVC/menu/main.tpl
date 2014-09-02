@@ -99,7 +99,7 @@
 				$(document).ready(function() {
 					var instantsearch = {json_encode($instantsearch)};
 					$('#instantsearch').keyup(function(event) {
-						if (event.keyCode === 13) {
+						if (event.keyCode === 13 && typeof instantsearch[this.value] !== 'undefined') {
 							window.location.href = instantsearch[this.value];
 						}
 					});
