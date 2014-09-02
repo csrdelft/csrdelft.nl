@@ -1,11 +1,11 @@
 /**
- * taken.js	|	P.W.G. Brussee (brussee@live.nl)
+ * maalcie.js	|	P.W.G. Brussee (brussee@live.nl)
  * 
  * requires jQuery & dragobject.js
  */
 
 $(document).ready(function() {
-	$('#beheer-maalcie-menu').prependTo('#mainleft');
+	$('#beheer-maalcie-menu').prependTo('#zijkolom');
 	$('#beheer-maalcie-menu').show();
 	$('a.ruilen').each(function() {
 		$(this).removeClass('ruilen');

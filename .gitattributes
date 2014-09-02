@@ -144,6 +144,8 @@ htdocs/layout/css/ledenmemory.css -text
 htdocs/layout/css/ledenmemory.min.css -text
 htdocs/layout/css/lustrum.css -text
 htdocs/layout/css/lustrum.min.css -text
+htdocs/layout/css/maalcie.css -text
+htdocs/layout/css/maalcie.min.css -text
 htdocs/layout/css/maaltijdlijst.css -text
 htdocs/layout/css/maaltijdlijst.min.css -text
 htdocs/layout/css/mededelingen.css -text
@@ -172,8 +174,6 @@ htdocs/layout/css/stamboom.css -text
 htdocs/layout/css/stamboom.min.css -text
 htdocs/layout/css/stylus/basic.styl -text
 htdocs/layout/css/stylus/dropzone.styl -text
-htdocs/layout/css/taken.css -text
-htdocs/layout/css/taken.min.css -text
 htdocs/layout/css/ubb.css -text
 htdocs/layout/css/ubb.min.css -text
 htdocs/layout/css/undohtml.css -text
@@ -348,6 +348,8 @@ htdocs/layout/js/ledenmemory.js -text
 htdocs/layout/js/ledenmemory.min.js -text
 htdocs/layout/js/lightbox.js -text
 htdocs/layout/js/lightbox.min.js -text
+htdocs/layout/js/maalcie.js -text
+htdocs/layout/js/maalcie.min.js -text
 htdocs/layout/js/menu.js -text
 htdocs/layout/js/menu.min.js -text
 htdocs/layout/js/minion.js -text
@@ -364,8 +366,6 @@ htdocs/layout/js/slideshow_intern.js -text
 htdocs/layout/js/slideshow_intern.min.js -text
 htdocs/layout/js/suggest.js -text
 htdocs/layout/js/suggest.min.js -text
-htdocs/layout/js/taken.js -text
-htdocs/layout/js/taken.min.js -text
 htdocs/layout/js/ubb_slideshow.js -text
 htdocs/layout/js/ubb_slideshow.min.js -text
 htdocs/layout/js/verticalen.js -text

@@ -49,8 +49,8 @@ class MaaltijdRepetitiesController extends AclController {
 		}
 		$this->view = new MaaltijdRepetitiesView(MaaltijdRepetitiesModel::getAlleRepetities());
 		$this->view = new CsrLayoutPage($this->getView());
-		$this->view->addStylesheet('/layout/css/taken');
-		$this->view->addScript('/layout/js/taken');
+		$this->view->addStylesheet('/layout/css/maalcie');
+		$this->view->addScript('/layout/js/maalcie');
 		$this->view->popup = $popup;
 	}
 

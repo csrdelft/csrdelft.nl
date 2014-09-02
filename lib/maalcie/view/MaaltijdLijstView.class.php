@@ -22,7 +22,7 @@ class MaaltijdLijstView extends HtmlPage {
 		$this->addScript($jquery . 'jquery-ui');
 		$this->addScript($jquery . 'plugins/jquery.hoverIntent');
 		$this->addScript('/layout/js/csrdelft');
-		$this->addScript('/layout/js/taken');
+		$this->addScript('/layout/js/maalcie');
 
 		$smarty = CsrSmarty::instance();
 

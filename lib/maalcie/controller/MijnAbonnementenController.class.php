@@ -42,8 +42,8 @@ class MijnAbonnementenController extends AclController {
 		$abonnementen = MaaltijdAbonnementenModel::getAbonnementenVoorLid(LoginModel::getUid(), true, true);
 		$this->view = new MijnAbonnementenView($abonnementen);
 		$this->view = new CsrLayoutPage($this->getView());
-		$this->view->addStylesheet('/layout/css/taken');
-		$this->view->addScript('/layout/js/taken');
+		$this->view->addStylesheet('/layout/css/maalcie');
+		$this->view->addScript('/layout/js/maalcie');
 	}
 
 	public function inschakelen($mrid) {
