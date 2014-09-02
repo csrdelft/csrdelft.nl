@@ -27,15 +27,16 @@ class MainMenuView extends MenuView {
 		parent::view();
 
 		$instantsearch = array();
-		require_once 'MVC/model/ForumModel.class.php';
-
 		foreach (MenuModel::instance()->find() as $item) {
 			if ($item->magBekijken()) {
 				$instantsearch[$item->tekst] = $item->link;
 			}
 		}
+		require_once 'MVC/model/ForumModel.class.php';
 		foreach (ForumDelenModel::instance()->getForumDelenVoorLid(false) as $deel) {
-			$instantsearch[$deel->titel] = '/forum/deel/' . $deel->forum_id;
+			if (!array_key_exists($deel->titel, $instantsearch)) {
+				$instantsearch[$deel->titel] = '/forum/deel/' . $deel->forum_id;
+			}
 		}
 		$this->smarty->assign('instantsearch', $instantsearch);
 
