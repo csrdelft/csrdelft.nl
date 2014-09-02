@@ -356,7 +356,7 @@
 							<li>
 								<a href="/communicatie/bibliotheek/boek/{$boek.id}" title="Boek: {$boek.titel|escape:'html'}">
 									<span title="{$boek.status} boek" class="boekindicator {$boek.status}">•</span><span class="titel">{$boek.titel|escape:'html'}</span><span class="auteur">{$boek.auteur|escape:'html'}</span>
-								</a> {$boek.beschrijving|ubb|strip_tags}
+								</a>
 							</li>
 						{foreachelse}
 							<li>Geen boeken</li>
