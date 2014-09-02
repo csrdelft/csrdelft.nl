@@ -93,7 +93,8 @@
 									{
 										clickFire: true,
 										max: 20,
-										matchContains: true
+										matchContains: true,
+										noRecord: "Zoeken..."
 									}
 							);
 							$(document).keydown(function(event) {
