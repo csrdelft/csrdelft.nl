@@ -11,7 +11,7 @@
 {include file='MVC/forum/head_buttons.tpl'}
 
 {capture name='navlinks'}
-	<div class="forumNavigatie">
+	<div class="breadcrumbs">
 		<a href="/forum" class="forumGrootlink">Forum</a>
 		{if $categorien}
 			&raquo;

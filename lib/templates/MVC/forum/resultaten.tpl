@@ -1,7 +1,7 @@
 {SimpleHtml::getMelding()}
 
 {capture name='navlinks'}
-	<div class="forumNavigatie">
+	<div class="breadcrumbs">
 		<a href="/forum" class="forumGrootlink">Forum</a>
 	</div>
 {/capture}

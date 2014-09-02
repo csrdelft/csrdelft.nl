@@ -10,7 +10,7 @@
 
 {include file='MVC/forum/head_buttons.tpl'}
 
-<div class="forumNavigatie">
+<div class="breadcrumbs">
 	<a href="/forum/recent" class="forumGrootlink">Recent</a>
 </div>
 <h1>Forum</h1>
