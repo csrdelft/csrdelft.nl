@@ -164,7 +164,7 @@ abstract class AgendaItemsView extends SmartyTemplateView {
 		$beginMoment = strtotime(date('Y-m-d'));
 		$eindMoment = strtotime('+' . $aantalWeken . ' weeks', $beginMoment);
 		$eindMoment = strtotime('next saturday', $eindMoment);
-		$this->items = $this->model->getAllAgendeerbaar($beginMoment, $eindMoment);
+		$this->items = $this->model->getAllAgendeerbaar($beginMoment, $eindMoment, false, $this instanceof AgendaZijbalkView);
 	}
 
 }

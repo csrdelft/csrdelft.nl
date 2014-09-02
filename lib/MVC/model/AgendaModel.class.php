@@ -19,7 +19,7 @@ class AgendaModel extends PersistenceModel {
 
 	protected static $instance;
 
-	public function getAllAgendeerbaar($van, $tot, $ical = false) {
+	public function getAllAgendeerbaar($van, $tot, $ical = false, $zijbalk = false) {
 		$result = array();
 
 		if (!is_int($van)) {
@@ -38,7 +38,7 @@ class AgendaModel extends PersistenceModel {
 		}
 
 		// Bijbelrooster
-		if (LidInstellingen::get('agenda', 'toonBijbelrooster') === 'ja' && !($this instanceof AgendaZijbalkView)) {
+		if (LidInstellingen::get('agenda', 'toonBijbelrooster') === 'ja' && !$zijbalk) {
 			$result = array_merge($result, BijbelroosterModel::instance()->getBijbelroosterTussen($van, $tot)->fetchAll());
 		}
 
