@@ -124,6 +124,7 @@ class CsrLayoutPage extends HtmlPage {
 
 		if (LoginModel::instance()->isPauper()) {
 			$smarty->assign('menutree', MenuModel::instance()->getMenuTree('main'));
+			$smarty->assign('loginform', new LoginForm());
 			$smarty->display('MVC/layout/pauper.tpl');
 		} else {
 			$smarty->display('csrdelft.tpl');
