@@ -38,7 +38,7 @@ class AgendaModel extends PersistenceModel {
 		}
 
 		// Bijbelrooster
-		if (LidInstellingen::get('agenda', 'toonBijbelrooster') === 'ja') {
+		if (LidInstellingen::get('agenda', 'toonBijbelrooster') === 'ja' && !($this instanceof AgendaZijbalkView)) {
 			$result = array_merge($result, BijbelroosterModel::instance()->getBijbelroosterTussen($van, $tot)->fetchAll());
 		}
 
