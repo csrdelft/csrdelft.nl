@@ -52,6 +52,11 @@
 										{$item->getTitel()}
 									</a>
 								</li>
+							{elseif $item instanceof Bijbelrooster}
+								<li>
+									{icon get="book_open"}
+									{$item->getLink(true)}
+								</li>
 							{elseif $item instanceof AgendaItem}
 								{include file='MVC/agenda/maand_item.tpl'}
 							{/if}

@@ -1,6 +1,7 @@
 <?php
 
 require_once 'MVC/controller/AgendaController.class.php';
+require_once 'MVC/model/BijbelroosterModel.class.php';
 require_once 'maalcie/model/MaaltijdenModel.class.php';
 require_once 'maalcie/model/CorveeTakenModel.class.php';
 
@@ -34,6 +35,11 @@ class AgendaModel extends PersistenceModel {
 			if ($item->magBekijken($ical)) {
 				$result[] = $item;
 			}
+		}
+
+		// Bijbelrooster
+		if (LidInstellingen::get('agenda', 'toonBijbelrooster') === 'ja') {
+			$result = array_merge($result, BijbelroosterModel::instance()->getBijbelroosterTussen($van, $tot)->fetchAll());
 		}
 
 		// Maaltijden

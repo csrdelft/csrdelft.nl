@@ -9,8 +9,8 @@ RewriteRule ^owee/?$	/csrindeowee/
 # Als we naar /actueel/ gaan worden we doorgestuurd naar de mededelingen
 RewriteRule ^/?$	/actueel/mededelingen/
 
-# Bijbelleesrooster
-RewriteRule ^bijbelrooster/$	bijbelrooster.php
+# Bijbelleesrooster backwards compatibility
+RewriteRule ^bijbelrooster/?	/bijbelrooster [QSA,R=301,L]
 
 # Eetplan
 RewriteRule ^eetplan/$	eetplan.php

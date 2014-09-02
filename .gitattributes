@@ -7,7 +7,6 @@ etc/mysql.ini.sample -text
 etc/soccie.ini.sample -text
 htdocs/.htaccess -text
 htdocs/actueel/.htaccess -text
-htdocs/actueel/bijbelrooster.php -text
 htdocs/actueel/courant/.htaccess -text
 htdocs/actueel/courant/archief.php -text
 htdocs/actueel/courant/courant.php -text
@@ -3051,6 +3050,7 @@ images/robots.txt -text
 lib/MVC/Stek[!!-~]ERD.png -text
 lib/MVC/controller/AclController.abstract.php -text
 lib/MVC/controller/AgendaController.class.php -text
+lib/MVC/controller/BijbelroosterController.class.php -text
 lib/MVC/controller/CmsPaginaController.class.php -text
 lib/MVC/controller/Controller.abstract.php -text
 lib/MVC/controller/ForumController.class.php -text
@@ -3074,6 +3074,7 @@ lib/MVC/controller/groepen/WoonoordenController.class.php -text
 lib/MVC/controller/maalcie/BeheerFunctiesController.class.php -text
 lib/MVC/model/AgendaModel.class.php -text
 lib/MVC/model/Agendeerbaar.interface.php -text
+lib/MVC/model/BijbelroosterModel.class.php -text
 lib/MVC/model/CmsPaginaModel.class.php -text
 lib/MVC/model/CsrMemcache.singleton.php -text
 lib/MVC/model/Database.singleton.php -text
@@ -3093,6 +3094,7 @@ lib/MVC/model/PersistenceModel.abstract.php -text
 lib/MVC/model/entity/Afbeelding.class.php -text
 lib/MVC/model/entity/AgendaItem.class.php -text
 lib/MVC/model/entity/Bestand.class.php -text
+lib/MVC/model/entity/Bijbelrooster.class.php -text
 lib/MVC/model/entity/CmsPagina.class.php -text
 lib/MVC/model/entity/ForumCategorie.class.php -text
 lib/MVC/model/entity/ForumDeel.class.php -text
@@ -3141,6 +3143,7 @@ lib/MVC/model/entity/maalcie/CorveeKwalificatie.class.php -text
 lib/MVC/model/maalcie/FunctiesModel.class.php -text
 lib/MVC/model/maalcie/KwalificatiesModel.class.php -text
 lib/MVC/view/AgendaView.class.php -text
+lib/MVC/view/BijbelroosterView.class.php -text
 lib/MVC/view/CmsPaginaView.class.php -text
 lib/MVC/view/CsrLayout2Page.class.php -text
 lib/MVC/view/CsrLayout3Page.class.php -text
@@ -3539,7 +3542,6 @@ lib/bibliotheek/bibliotheekcontroller.class.php -text
 lib/bibliotheek/boek.class.php -text
 lib/bibliotheek/catalogus.class.php -text
 lib/bibliotheek/rubriek.class.php -text
-lib/bijbelrooster.class.php -text
 lib/chart/COPYING -text
 lib/chart/INSTALLATION -text
 lib/chart/IsoLatin1.enc -text

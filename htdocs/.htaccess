@@ -19,6 +19,7 @@ RewriteRule ^corvee				index.php?c=MaalcieRouter [L]
 RewriteRule ^instellingenbeheer	index.php?c=InstellingenBeheer [L]
 RewriteRule ^instellingen		index.php?c=LidInstellingen [L]
 RewriteRule ^menubeheer			index.php?c=MenuBeheer [L]
+RewriteRule ^bijbelrooster		index.php?c=Bijbelrooster [L]
 
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d

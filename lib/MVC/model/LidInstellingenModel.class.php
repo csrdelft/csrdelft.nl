@@ -35,7 +35,7 @@ class LidInstellingen extends PersistenceModel {
 	 */
 	private $instellingen = array(
 		'algemeen'		 => array(
-			'bijbel'		 => array('Bijbelvertaling voor bijbelrooster', T::Enumeration, array('NBV', 'NBG', 'Herziene Statenvertaling', 'Statenvertaling (Jongbloed)', 'Groot Nieuws Bijbel', 'Willibrordvertaling'), 'NBV')
+			'bijbel' => array('Bijbelvertaling voor bijbelrooster', T::Enumeration, array('NBV', 'NBG', 'Herziene Statenvertaling', 'Statenvertaling (Jongbloed)', 'Groot Nieuws Bijbel', 'Willibrordvertaling'), 'NBV')
 		),
 		'layout'		 => array(
 			'layout'		 => array('Websteklayout', T::Enumeration, array('normaal', 'owee', 'lustrum', 'sineregno', 'roze'), 'normaal'),
@@ -77,9 +77,10 @@ class LidInstellingen extends PersistenceModel {
 			'bijbelroosterblokje'	 => array('Bijbelroosterblokje weergeven', T::Enumeration, array('ja', 'nee'), 'ja')
 		),
 		'agenda'		 => array(
-			'toonVerjaardagen'	 => array('Verjaardagen in agenda', T::Enumeration, array('ja', 'nee'), 'ja'),
-			'toonMaaltijden'	 => array('Maaltijden in agenda', T::Enumeration, array('ja', 'nee'), 'ja'),
-			'toonCorvee'		 => array('Corvee in agenda', T::Enumeration, array('iedereen', 'eigen', 'nee'), 'eigen')
+			'toonBijbelrooster'	 => array('Bijbelrooster weergeven', T::Enumeration, array('ja', 'nee'), 'ja'),
+			'toonVerjaardagen'	 => array('Verjaardagen weergeven', T::Enumeration, array('ja', 'nee'), 'ja'),
+			'toonMaaltijden'	 => array('Maaltijden weergeven', T::Enumeration, array('ja', 'nee'), 'ja'),
+			'toonCorvee'		 => array('Corvee weergeven', T::Enumeration, array('iedereen', 'eigen', 'nee'), 'eigen')
 		),
 		'mededelingen'	 => array(
 			'aantalPerPagina' => array('Aantal mededeling per pagina', T::Integer, array(5, 50), 10)

@@ -1247,3 +1247,11 @@ div.forum-paginering span.curpage{
 
 div#ubbhulpverhaal h2{ font-size: 16px; }
 div#ubbhulpverhaal{ font-size: 12px; }
+
+/* Bijbelrooster */
+div.bijbelrooster{
+	line-height: 20px;
+	columns: 250px auto;
+	-webkit-columns: 250px auto;
+	-moz-columns: 250px auto;
+}

@@ -1,15 +1,14 @@
 <?php
 
+require_once 'configuratie.include.php';
+require_once 'voorkeur/overzicht.class.php';
+
 # C.S.R. Delft | pubcie@csrdelft.nl
 # -------------------------------------------------------------------
-# bijbelrooster.php
+# commissies.php
 # -------------------------------------------------------------------
-# Bijbelrooster.
+# Commissies.
 # -------------------------------------------------------------------
-
-require_once 'configuratie.include.php';
-
-require_once 'voorkeur/overzicht.class.php';
 
 if (LoginModel::mag('P_LEDEN_MOD')) {
 	$inhoud = new CommissieOverzicht();
@@ -19,4 +18,3 @@ if (LoginModel::mag('P_LEDEN_MOD')) {
 	$pagina = new CsrLayoutPage($inhoud);
 	$pagina->view();
 }
-?>
