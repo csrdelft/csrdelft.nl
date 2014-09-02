@@ -46,7 +46,7 @@ class VerticalenContent implements View {
 				<a href="/communicatie/verticalen/">Kringen</a>
 			</li>
 		</ul>
-		<hr style="width: 1024px;" />';
+		<hr />';
 
 		foreach ($verticalen as $verticale) {
 
