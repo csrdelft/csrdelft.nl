@@ -79,10 +79,13 @@
 				{/if}
 				<br />
 				<form name="lidzoeker" method="get" action="/communicatie/lijst.php">
-					<input type="text" name="q" id="zoekveld"{if isset($smarty.get.q)} value="{$smarty.get.q|escape:'htmlall'}"{/if} />
+					<input type="text" name="q" id="zoekveld" />
 					<script type="text/javascript">
 						$(document).ready(function() {
 							var instantsearch = {json_encode($instantsearch)};
+							$('#zoekveld').click(function(event) {
+								this.setSelectionRange(0, this.value.length);
+							});
 							$('#zoekveld').keyup(function(event) {
 								if (event.keyCode === 13 && typeof instantsearch[this.value] !== 'undefined') {
 									window.location.href = instantsearch[this.value];
