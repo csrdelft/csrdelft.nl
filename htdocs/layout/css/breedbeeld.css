@@ -8,29 +8,16 @@ and open the template in the editor.
     Author     : Paul Brussee
 */
 
-#container, #menu, #menuleft, #submenu, #main, #mainright, #footer {
-	margin: initial;
-	width: auto;
-	overflow-x: hidden;
+#main {
+	width: 100%;
 }
 
-#menuright {
-	margin-right: 20px;
+#menu {
+	margin: 0;
 }
 
 #submenuitems {
-	width: 966px;
-}
-
-#mainright {
 	float: left;
-	position: absolute;
-	margin-left: 210px;
-	width: auto !important;
-}
-
-#footer {
-	background: none;
 }
 
 #top3overzicht, #kolomrechts, div.bericht {

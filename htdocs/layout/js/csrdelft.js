@@ -121,10 +121,8 @@ function werkomheen_layout() {
 		$('#mainright').height('');
 	}
 }
-
 function lazy_image_loaded() {
 	$(this).parent().replaceWith($(this));
-	werkomheen_layout();
 }
 
 function init_scroll_fixed() {
