@@ -107,7 +107,9 @@
 								if (element == 'INPUT' || element == 'TEXTAREA' || element == 'SELECT') {
 									return;
 								}
-								$('#zoekveld').focus();
+								if (event.keyCode > 64 && event.keyCode < 91) {
+									$('#zoekveld').focus();
+								}
 							});
 						});
 					</script>
