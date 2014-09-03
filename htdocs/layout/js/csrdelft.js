@@ -143,7 +143,6 @@ function init_scroll_fixed() {
 				});
 			} else {
 				$(this).removeClass('scroll-fixed');
-				$(this).attr('xfix', $(this).offset().left);
 			}
 		});
 	});
