@@ -46,6 +46,7 @@ class CmsPaginaForm extends Formulier {
 
 	function __construct(CmsPagina $pagina) {
 		parent::__construct($pagina, 'cms-pagina-form', '/pagina/bewerken/' . $pagina->naam);
+		$this->titel = 'Pagina bewerken: ' . $pagina->naam;
 
 		$fields[] = new HtmlComment('<div><label>Laatst gewijzigd</label>' . reldate($pagina->laatst_gewijzigd) . '</div>');
 		$fields[] = new TextField('titel', $pagina->titel, 'Titel');
@@ -62,16 +63,6 @@ class CmsPaginaForm extends Formulier {
 		$fields['btn']->deleteAction = 'confirm ReloadPage';
 
 		$this->addFields($fields);
-
-		$pagina->laatst_gewijzigd = getDateTime();
-	}
-
-	function getTitel() {
-		return 'Pagina bewerken: ' . $this->model->naam;
-	}
-
-	function view() {
-		echo parent::view();
 	}
 
 }

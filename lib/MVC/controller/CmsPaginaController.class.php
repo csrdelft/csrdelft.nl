@@ -84,6 +84,7 @@ class CmsPaginaController extends Controller {
 		}
 		$form = new CmsPaginaForm($pagina); // fetches POST values itself
 		if ($form->validate()) {
+			$pagina->laatst_gewijzigd = getDateTime();
 			$rowcount = $this->model->update($pagina);
 			if ($rowcount > 0) {
 				SimpleHTML::setMelding('Bijgewerkt', 1);
