@@ -130,15 +130,17 @@ function init_scroll_fixed() {
 		var yfix = $(this).attr('yfix');
 		if (typeof yfix === typeof undefined || yfix === false) {
 			$(this).attr('yfix', $(this).offset().top);
+			$(this).attr('xfix', $(this).offset().left);
 		}
 	});
 	$(window).scroll(function() {
 		var yfix = $(window).scrollTop();
 		$('.scroll-fix').each(function() {
+			var xfix = $(this).attr('xfix');
 			if (yfix >= $(this).attr('yfix')) {
 				$(this).addClass('scroll-fixed');
 				$(this).css({
-					'left': 2 - $(window).scrollLeft()
+					'left': xfix - $(window).scrollLeft()
 				});
 			} else {
 				$(this).removeClass('scroll-fixed');
