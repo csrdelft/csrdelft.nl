@@ -181,7 +181,7 @@ function makepasswd($pass) {
 }
 
 function valid_filename($name) {
-	return preg_match('/^(?:[a-z0-9 \-_é]|\.(?!\.))+$/iD', $name);
+	return preg_match('/^(?:[a-z0-9 \-_\(\)é]|\.(?!\.))+$/iD', $name);
 }
 
 function email_like($email) {
