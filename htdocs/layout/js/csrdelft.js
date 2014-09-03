@@ -136,14 +136,14 @@ function init_scroll_fixed() {
 	$(window).scroll(function() {
 		var yfix = $(window).scrollTop();
 		$('.scroll-fix').each(function() {
-			var xfix = $(this).attr('xfix');
 			if (yfix >= $(this).attr('yfix')) {
 				$(this).addClass('scroll-fixed');
 				$(this).css({
-					'left': xfix - $(window).scrollLeft()
+					'left': $(this).attr('xfix') - $(window).scrollLeft()
 				});
 			} else {
 				$(this).removeClass('scroll-fixed');
+				$(this).attr('xfix', $(this).offset().left);
 			}
 		});
 	});
