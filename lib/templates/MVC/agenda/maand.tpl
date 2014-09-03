@@ -9,7 +9,7 @@
 {$smarty.capture.navlinks}
 <table class="agenda" id="maand">
 	<tr>
-		<th> </th>
+		<th style="width: 25px;"></th>
 		<th>Zondag</th>
 		<th>Maandag</th>
 		<th>Dinsdag</th>
