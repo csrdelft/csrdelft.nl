@@ -281,9 +281,8 @@ ul.nobullets li{ list-style-type: none; }
 
 #adminding div{
 	display: none;
-
 	position: relative; 
-	left: -3px; top: 1px;
+	left: -82px; top: 2px;
 	width: 200px; min-height: 50px;
 	z-index: 99;
 	border: 1px solid white; 
