@@ -9,6 +9,7 @@
 
 #submenuitems {
 	float: left;
+	margin-left: 200px;
 }
 
 #top3overzicht, #kolomrechts, div.bericht {
