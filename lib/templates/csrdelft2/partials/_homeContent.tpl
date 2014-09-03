@@ -116,7 +116,7 @@
 		<div class="blue box pad-left link">
 			<a href="/english" title="English">
 				<h2 class="overlay">English</h2>
-				<img src="/layout2/icon-flag-english.png" alt="English" style="width: 120px; position: absolute; top: 60px; right: 40px;">
+				<img src="{$CSR_PICS}/layout2/icon-flag-english.png" alt="English" style="width: 120px; height: 67px; position: absolute; top: 60px; right: 40px;">
 			</a>
 		</div>
 		{* <div class="columns large-2 small-2" style="width: auto; height: auto;">
