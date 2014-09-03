@@ -29,6 +29,9 @@ class CmsPaginaController extends Controller {
 			$this->action = 'bewerken';
 			$naam = $this->getParam(3);
 			$this->zijkolom[] = new CmsPaginaZijkolomView($this->model);
+		} elseif ($this->hasParam(3) AND $this->getParam(2) === 'verwijderen') {
+			$this->action = 'verwijderen';
+			$naam = $this->getParam(3);
 		} elseif ($this->hasParam(2)) {
 			$naam = $this->getParam(2);
 			if ($this->getParam(1) === 'pagina') {
@@ -99,7 +102,7 @@ class CmsPaginaController extends Controller {
 			$this->geentoegang();
 		}
 		if ($this->model->delete($pagina)) {
-			SimpleHTML::setMelding('Pagina succesvol verwijderd', 1);
+			SimpleHTML::setMelding('Pagina ' . $naam . ' succesvol verwijderd', 1);
 			redirect(CSR_ROOT);
 		} else {
 			SimpleHTML::setMelding('Verwijderen mislukt', -1);
