@@ -20,13 +20,11 @@ body{
 }
 #mainright{
 	padding: 10px 0;
-	background-color: #fff;
 }
 
 .scroll-fixed {
 	position: fixed;
 	top: 0;
-	z-index: -1;
 }
 
 h1{

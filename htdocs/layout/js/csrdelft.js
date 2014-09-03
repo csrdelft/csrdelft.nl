@@ -137,6 +137,9 @@ function init_scroll_fixed() {
 		$('.scroll-fix').each(function() {
 			if (yfix >= $(this).attr('yfix')) {
 				$(this).addClass('scroll-fixed');
+				$(this).css({
+					'left': 2 - $(window).scrollLeft()
+				});
 			} else {
 				$(this).removeClass('scroll-fixed');
 			}
