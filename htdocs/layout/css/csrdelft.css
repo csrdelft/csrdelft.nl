@@ -12,14 +12,14 @@ body{
 	text-align: center;
 }
 #main{
-	width: 920px;
+	width: 1004px;
 	margin: 0 auto;
 }
 #mainleft{
-	width: 200px;
+	width: 210px;
 }
 #mainright{
-
+	padding: 10px 0;
 }
 
 .scroll-fixed {
@@ -27,12 +27,11 @@ body{
 	top: 0;
 	height: 100%;
 	overflow-y: auto;
-	padding-right: 20px;
+	padding-right: 25px;
 }
 
 h1{
 	font-size: 1.6em;
-	padding-top: 10px;
 }
 h1.formTitle{
 	font-size: 1.6em;
@@ -130,12 +129,12 @@ ul.nobullets li{ list-style-type: none; }
 #menu{
 	margin: 0 auto;
 	padding: 10px 0 0;
-	width: 920px;
+	width: 966px;
 	height: 142px;
 }
 #menuleft{
 	float: left;
-	width: 200px;
+	width: 230px;
 	height: 142px;
 }
 #beeldmerk{
@@ -201,7 +200,7 @@ ul.nobullets li{ list-style-type: none; }
 /**** SUBMENU *****************************************************************/
 #submenu{
 	margin: 0 auto;
-	width: 920px;
+	width: 966px;
 	height: 24px;
 }
 
@@ -282,8 +281,9 @@ ul.nobullets li{ list-style-type: none; }
 
 #adminding div{
 	display: none;
+
 	position: relative; 
-	left: -82px; top: 2px;
+	left: -3px; top: 1px;
 	width: 200px; min-height: 50px;
 	z-index: 99;
 	border: 1px solid white; 
@@ -346,7 +346,7 @@ ul.nobullets li{ list-style-type: none; }
 /**** ZIJKOLOM *******************************************************************/
 #zijkolom .block{
 	width: 175px;
-	padding: 10px 0 0 5px;
+	padding: 10px 0 0 7px;
 }
 #zijkolom .block h1{
 	margin: 0;
