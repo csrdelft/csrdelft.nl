@@ -201,10 +201,11 @@ class FotoAlbumController extends AclController {
 	public function hernoemen(FotoAlbum $album) {
 		$naam = filter_input(INPUT_POST, 'Nieuwe_naam', FILTER_SANITIZE_STRING);
 		if ($album !== null AND FotoAlbumModel::hernoemAlbum($album, $naam)) {
-			echo '<div id="' . md5($album->dirname) . '" class="albumname">' . $naam . '</div>';
+			SimpleHTML::setMelding('Fotoalbum succesvol hernoemd', 1);
 		} else {
 			SimpleHTML::setMelding('Fotoalbum hernoemen mislukt', -1);
 		}
+		// ReloadPage
 		exit;
 	}
 
