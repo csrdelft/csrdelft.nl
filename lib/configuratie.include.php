@@ -99,7 +99,7 @@ switch (constant('MODE')) {
 		break;
 
 	case 'WEB':
-		if (defined('DB_MODIFY_ENABLE') OR defined('DB_DROP_ENABLE')) {
+		if (DB_MODIFY OR DB_DROP) {
 			if (!LoginModel::mag('P_ADMIN')) {
 				redirect(CSR_ROOT . '/onderhoud.html');
 				exit;

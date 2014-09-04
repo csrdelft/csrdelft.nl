@@ -132,7 +132,7 @@ class DatabaseAdmin extends Database {
 		}
 		$sql .= ') ENGINE=InnoDB DEFAULT CHARSET=utf8 auto_increment=1';
 		$query = self::instance()->prepare($sql);
-		if (defined('DB_MODIFY_ENABLE')) {
+		if (DB_MODIFY) {
 			$query->execute();
 		}
 		self::$queries[] = $query->queryString;
@@ -142,7 +142,7 @@ class DatabaseAdmin extends Database {
 		$sql = 'ALTER TABLE ' . $table . ' ADD ' . $field->toSQL();
 		$sql .= ($after_field === null ? ' FIRST' : ' AFTER ' . $after_field);
 		$query = self::instance()->prepare($sql);
-		if (defined('DB_MODIFY_ENABLE')) {
+		if (DB_MODIFY) {
 			$query->execute();
 		}
 		self::$queries[] = $query->queryString;
@@ -151,7 +151,7 @@ class DatabaseAdmin extends Database {
 	public static function sqlChangeField($table, PersistentField $field, $old_name = null) {
 		$sql = 'ALTER TABLE ' . $table . ' CHANGE ' . ($old_name === null ? $field->field : $old_name) . ' ' . $field->toSQL();
 		$query = self::instance()->prepare($sql);
-		if (defined('DB_MODIFY_ENABLE')) {
+		if (DB_MODIFY) {
 			$query->execute();
 		}
 		self::$queries[] = $query->queryString;
@@ -160,7 +160,7 @@ class DatabaseAdmin extends Database {
 	public static function sqlDeleteField($table, PersistentField $field) {
 		$sql = 'ALTER TABLE ' . $table . ' DROP ' . $field->field;
 		$query = self::instance()->prepare($sql);
-		if (defined('DB_MODIFY_ENABLE') AND defined('DB_DROP_ENABLE')) {
+		if (DB_MODIFY AND DB_DROP === true) {
 			$query->execute();
 		}
 		self::$queries[] = $query->queryString;

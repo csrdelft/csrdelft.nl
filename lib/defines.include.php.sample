@@ -6,15 +6,16 @@
 # allerlei paden enzo goed zetten.
 # -------------------------------------------------------------------
 # 
-# uncomment de volgende regel om de database automatisch te laten controleren
-#define('DB_CHECK_ENABLE', 'zie PersistentEntity::checkTable()');
+# database automatisch controleren
+define('DB_CHECK', false); # zie PersistentEntity::checkTable()
 # 
-# uncomment de volgende regel om de database automatisch te laten bijwerken
-#define('DB_MODIFY_ENABLE', 'heb je een backup gemaakt?');
+# database automatisch bijwerken
+define('DB_MODIFY', false); # heb je een backup gemaakt?
 # 
-# uncomment de volgende regel om de database automatisch te laten droppen
-#define('DB_DROP_ENABLE', 'heb je een backup gemaakt?');
-
+# database automatisch droppen
+define('DB_DROP', false); # heb je een backup gemaakt?
+# 
+# debug modus
 define('DEBUG', false);
 
 # wordt gebruikt om pagina's alleen op Confide te laten zien

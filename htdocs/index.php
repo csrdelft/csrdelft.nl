@@ -34,13 +34,13 @@ try {
 	$controller = new $class(REQUEST_URI);
 	$controller->performAction();
 
-	if (defined('DB_MODIFY_ENABLE') AND LoginModel::mag('P_ADMIN')) {
+	if (DB_MODIFY AND LoginModel::mag('P_ADMIN')) {
 
 		require_once 'MVC/model/DatabaseAdmin.singleton.php';
 		$queries = DatabaseAdmin::getQueries();
 
 		if (empty($queries)) {
-			debugprint('DB_MODIFY_ENABLED');
+			debugprint('DB_MODIFY ENABLED');
 		} else {
 			header('Content-Type: text/x-sql');
 			header('Content-Disposition: attachment;filename=DB_modify_' . time() . '.sql');
