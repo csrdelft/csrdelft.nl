@@ -130,7 +130,6 @@ function init_scroll_fixed() {
 		var yfix = $(this).attr('yfix');
 		if (typeof yfix === typeof undefined || yfix === false) {
 			$(this).attr('yfix', $(this).offset().top);
-			$(this).attr('xfix', $(this).offset().left);
 		}
 	});
 	$(window).scroll(function() {
@@ -139,7 +138,7 @@ function init_scroll_fixed() {
 			if (yfix >= $(this).attr('yfix')) {
 				$(this).addClass('scroll-fixed');
 				$(this).css({
-					'left': $(this).attr('xfix') - $(window).scrollLeft()
+					'left': $(this).parent().offset().left - $(window).scrollLeft()
 				});
 			} else {
 				$(this).removeClass('scroll-fixed');
