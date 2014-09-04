@@ -10,9 +10,13 @@ require_once 'MVC/model/BijbelroosterModel.class.php';
  */
 class BijbelroosterView implements View {
 
+	/**
+	 * Geen array want we itereren slechts 1x in de view
+	 * @var PDOStatement
+	 */
 	protected $rooster;
 
-	public function __construct(array $rooster) {
+	public function __construct($rooster) {
 		$this->rooster = $rooster;
 	}
 
