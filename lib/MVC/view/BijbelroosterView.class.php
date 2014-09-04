@@ -12,8 +12,8 @@ class BijbelroosterView implements View {
 
 	protected $rooster;
 
-	public function __construct(BijbelroosterModel $model) {
-		$this->rooster = $model->find();
+	public function __construct(array $rooster) {
+		$this->rooster = $rooster;
 	}
 
 	public function getModel() {
@@ -54,16 +54,13 @@ class BijbelroosterUbbView extends BijbelroosterView {
 		$dagen = (int) max((int) $dagen, 2);
 		$van = strtotime('-' . $dagen . ' days');
 		$tot = strtotime('+' . $dagen . ' days');
-		$this->rooster = BijbelroosterModel::instance()->getBijbelroosterTussen($van, $tot);
+		$rooster = BijbelroosterModel::instance()->getBijbelroosterTussen($van, $tot);
+		parent::__construct($rooster);
 	}
 
 	public function getHtml() {
 		$html = '<div class="mededeling-grotebalk"><div class="titel"><a href="/actueel/bijbelrooster/">Bijbelleesrooster</a></div>';
-		if (!$this->rooster) {
-			return 'Geen rooster aanwezig';
-		} else {
-			$html .= parent::getHtml();
-		}
+		$html .= parent::getHtml();
 		$html .= '<div class="clear"></div></div>';
 		return $html;
 	}

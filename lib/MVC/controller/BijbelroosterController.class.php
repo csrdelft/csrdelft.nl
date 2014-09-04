@@ -33,7 +33,8 @@ class BijbelroosterController extends AclController {
 	}
 
 	public function bekijken() {
-		$body = new BijbelroosterView($this->model);
+		$rooster = $this->model->find();
+		$body = new BijbelroosterView($rooster);
 		$this->view = new CsrLayoutPage($body);
 	}
 
