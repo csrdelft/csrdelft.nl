@@ -821,7 +821,7 @@ $(function () {
 				var html = '';
 				$.each(data.red, function() {
 				
-					html += '<tr><th>' + this.naam + '</th><td>' + saldoStr(this.saldo) + '</td></tr>';
+					html += '<tr><th>' + this.naam + '</th><td>' + saldoStr(this.saldo) + '</td><td>' + this.email + '</td></tr>';
 				
 				});
 				$("#red").html(html);

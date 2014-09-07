@@ -45,6 +45,7 @@ class Barsysteem
             $persoon["socCieId"] = $row["socCieId"];
             $persoon["bijnaam"] = $row["naam"];
             $persoon["saldo"] = $row["saldo"];
+            $persoon["email"] = $row["email"];
             $persoon["recent"] = $row["recent"];
             $result[$row["socCieId"]] = $persoon;
         }
