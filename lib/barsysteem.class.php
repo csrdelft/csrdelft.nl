@@ -45,7 +45,6 @@ class Barsysteem
             $persoon["socCieId"] = $row["socCieId"];
             $persoon["bijnaam"] = $row["naam"];
             $persoon["saldo"] = $row["saldo"];
-            $persoon["email"] = $row["email"];
             $persoon["recent"] = $row["recent"];
             $result[$row["socCieId"]] = $persoon;
         }
@@ -345,6 +344,7 @@ ORDER BY yearweek DESC
 		
 			$result[] = array(
 				'naam' => LidCache::getLid($r['stekUID'])->getNaam(),
+				'email' => LidCache::getLid($r['stekUID'])->getEmail(),
 				'saldo' => $r['saldo']
 			);
 		
