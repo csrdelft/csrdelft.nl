@@ -23,4 +23,3 @@ $conf['auth']['ldap']['debug']       = 0;
 
 $conf['auth']['ldap']['mapping']['name'] = 'cn';
 
-?>

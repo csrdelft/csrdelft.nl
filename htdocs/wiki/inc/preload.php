@@ -16,3 +16,9 @@
 //$config_cascade = array(
 //);
 
+/**
+ * Initialize C.S.R. stek essentials
+ */
+require_once 'configuratie.include.php';
+// csrdelft.nl laad alle nl locale settings, een uitzondering voor de wiki:
+setlocale(LC_NUMERIC, 'en_US.UTF-8');
