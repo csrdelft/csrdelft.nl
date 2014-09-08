@@ -101,6 +101,7 @@ class auth_plugin_authcsr extends DokuWiki_Auth_Plugin {
 
 			// okay we're logged in - set the globals
 			require_once 'groepen/groep.class.php';
+			/** @var Lid $lid */
 			$lid = LoginModel::instance()->getLid();
 			$USERINFO['name'] = $lid->getNaam();
 			$USERINFO['mail'] = $lid->getEmail();
