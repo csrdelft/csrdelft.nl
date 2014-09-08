@@ -174,7 +174,7 @@ if ($barsysteem->isLoggedIn()) {
 					</div>
 						
                 </div>
-                <div class="tab-pane" id="bestelLijstBeheer">
+                <div class="tab-pane" id="bestelLijstBeheer" <?= $barsysteem->isBeheer() ? "class='beheer'" : "" ?>>
 
                     <div class=" input-group input-group-lg input-daterange" id="datepicker">
 						<span class="input-group-btn">

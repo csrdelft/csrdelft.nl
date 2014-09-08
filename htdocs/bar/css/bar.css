@@ -388,7 +388,7 @@ body .dropdown-menu>li>a{
     color: #a94442;
 }
 
-#beheerDisplay table{
+#beheerDisplay table, #bestelLijstBeheer.beheer table{
     -webkit-touch-callout: all;
     -webkit-user-select: all;
     -khtml-user-select: all;
