@@ -54,11 +54,11 @@ class CsrUbb extends eamBBParser {
 	 * bij het citeren, slopen we hier alles wat in privé-tags staat weg.
 	 */
 	public static function filterPrive($string) {
-// .* is greedy by default, dat wil zeggen, matched zoveel mogelijk.
-// door er .*? van te maken matched het zo weinig mogelijk, dat is precies
-// wat we hier willen, omdat anders [prive]foo[/prive]bar[prive]foo[/prive]
-// niets zou opleveren.
-// de /s modifier zorgt ervoor dat een . ook alle newlines matched.
+		// .* is greedy by default, dat wil zeggen, matched zoveel mogelijk.
+		// door er .*? van te maken matched het zo weinig mogelijk, dat is precies
+		// wat we hier willen, omdat anders [prive]foo[/prive]bar[prive]foo[/prive]
+		// niets zou opleveren.
+		// de /s modifier zorgt ervoor dat een . ook alle newlines matched.
 		return preg_replace('/\[prive=?.*?\].*?\[\/prive\]/s', '', $string);
 	}
 
@@ -206,7 +206,7 @@ class CsrUbb extends eamBBParser {
 
 	/* todo
 	  function ubb_mail($arguments = array()) {
-	  return $this->ubb_email($arguments = array());
+	  return $this->ubb_email($arguments);
 	  }
 
 	  function ubb_email($arguments = array()){
@@ -232,7 +232,7 @@ class CsrUbb extends eamBBParser {
 	 */
 
 	function ubb_neuzen($arguments = array()) {
-		if (is_array($arguments = array())) {
+		if (is_array($arguments)) {
 			$content = $this->parseArray(array('[/neuzen]'), array());
 		} else {
 			$content = $arguments;
@@ -551,7 +551,7 @@ src="http://video.google.com/googleplayer.swf?docId=' . $content . '"></embed>';
 
 	function ubb_twitter($arguments = array()) {
 		$content = $this->parseArray(array('[/twitter]'), array());
-//widget size
+		// widget size
 		$lines = 4;
 		$width = 355;
 		$height = 300;
@@ -748,7 +748,7 @@ HTML;
 	 * Vanonderwerp = offtopic
 	 */
 	function ubb_vanonderwerp($arguments = array()) {
-		return $this->ubb_offtopic($arguments = array());
+		return $this->ubb_offtopic($arguments);
 	}
 
 	public function ubb_offtopic() {
@@ -760,7 +760,7 @@ HTML;
 	 * Verklapper = spoiler
 	 */
 	function ubb_verklapper($arguments = array()) {
-		return $this->ubb_spoiler($arguments = array());
+		return $this->ubb_spoiler($arguments);
 	}
 
 	public function ubb_spoiler() {
@@ -840,7 +840,7 @@ HTML;
 	 * Kaart = map
 	 */
 	function ubb_kaart($arguments = array()) {
-		return $this->ubb_map($arguments = array());
+		return $this->ubb_map($arguments);
 	}
 
 	/**
