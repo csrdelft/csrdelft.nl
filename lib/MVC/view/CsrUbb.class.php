@@ -176,7 +176,7 @@ class CsrUbb extends eamBBParser {
 	 * Rul = url
 	 */
 	function ubb_rul($arguments = array()) {
-		return $this->ubb_url($arguments = array());
+		return $this->ubb_url($arguments);
 	}
 
 	function ubb_url($arguments = array()) {
@@ -188,18 +188,15 @@ class CsrUbb extends eamBBParser {
 		} else { // [url][/url]
 			$href = $content;
 		}
-// only valid patterns
+		$href = filter_var($href, FILTER_SANITIZE_URL);
 		if (startsWith($href, '/')) { // locale paden
 			$href = CSR_ROOT . $href;
-		} elseif (!filter_var($href, FILTER_VALIDATE_URL)) { // http vergeten?
+			$extern = '';
+		} elseif (!startsWith($href, 'http://') AND ! startsWith($href, 'https://')) { // http(s) vergeten?
 			$href = 'http://' . $href;
+			$extern = ' target="_blank" class="external"'; // externe link
 		}
-		$pos = strpos($href, '://');
-		if ($pos > 2 && $pos < 6 && filter_var($href, FILTER_VALIDATE_URL)) {
-			$extern = ' target="_blank" class="external"';
-			if (startsWith($href, CSR_ROOT) || startsWith($href, CSR_PICS)) {
-				$extern = '';
-			}
+		if (filter_var($href, FILTER_VALIDATE_URL)) {
 			$result = '<a href="' . $href . '" title="' . $href . '"' . $extern . '>' . $content . '</a>';
 		} else {
 			$result = '[Ongeldige URL, tip: gebruik tinyurl.com]';
