@@ -189,12 +189,14 @@ class CsrUbb extends eamBBParser {
 			$href = $content;
 		}
 		$href = filter_var($href, FILTER_SANITIZE_URL);
-		$extern = '';
+		$extern = ' target="_blank" class="external"'; // externe link
 		if (startsWith($href, '/')) { // locale paden
 			$href = CSR_ROOT . $href;
+			$extern = '';
 		} elseif (!startsWith($href, 'http://') AND ! startsWith($href, 'https://')) { // http(s) vergeten?
 			$href = 'http://' . $href;
-			$extern = ' target="_blank" class="external"'; // externe link
+		} elseif (startsWith($href, CSR_ROOT) OR startsWith($href, CSR_PICS)) {
+			$extern = '';
 		}
 		if (filter_var($href, FILTER_VALIDATE_URL)) {
 			$result = '<a href="' . $href . '" title="' . $href . '"' . $extern . '>' . $content . '</a>';
