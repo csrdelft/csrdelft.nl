@@ -189,9 +189,9 @@ class CsrUbb extends eamBBParser {
 			$href = $content;
 		}
 		$href = filter_var($href, FILTER_SANITIZE_URL);
+		$extern = '';
 		if (startsWith($href, '/')) { // locale paden
 			$href = CSR_ROOT . $href;
-			$extern = '';
 		} elseif (!startsWith($href, 'http://') AND ! startsWith($href, 'https://')) { // http(s) vergeten?
 			$href = 'http://' . $href;
 			$extern = ' target="_blank" class="external"'; // externe link
