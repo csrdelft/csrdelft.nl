@@ -44,7 +44,8 @@ class FotoAlbumController extends AclController {
 				'verwijderen'	 => 'P_ALBUM_DEL',
 				'hernoemen'		 => 'P_ALBUM_MOD',
 				'toevoegen'		 => 'P_ALBUM_ADD',
-				'uploaden'		 => 'P_ALBUM_ADD'
+				'uploaden'		 => 'P_ALBUM_ADD',
+				'roteren'		 => 'P_ALBUM_ADD'
 			);
 		}
 	}
@@ -228,6 +229,15 @@ class FotoAlbumController extends AclController {
 			SimpleHTML::setMelding('Fotoalbum-cover instellen mislukt', -1);
 			redirect(CSR_ROOT . '/fotoalbum');
 		}
+	}
+
+	public function roteren(FotoAlbum $album, $degrees) {
+		$degrees = filter_input(INPU_POST, 'degrees', FILTER_SANITIZE_NUMBER_INT);
+		$naam = filter_input(INPUT_POST, 'foto', FILTER_SANITIZE_STRING);
+		$foto = new Foto($album, $naam);
+		$foto->rotate($degrees);
+		// ReloadPage
+		exit;
 	}
 
 }
