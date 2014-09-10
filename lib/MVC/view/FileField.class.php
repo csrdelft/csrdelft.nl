@@ -95,34 +95,7 @@ class FileField implements FormElement, Validator {
 	}
 
 	public function opslaan($destination, $filename, $overwrite = false) {
-		if (!valid_filename($filename)) {
-			throw new Exception('Ongeldige bestandsnaam');
-		}
-		if ($this->methode !== 'BestandBehouden') {
-			if ($this->behouden !== null) {
-				unlink($this->behouden->directory . $this->behouden->filename);
-			}
-			$filename = filter_var($filename, FILTER_SANITIZE_STRING);
-			if (!file_exists($destination)) {
-				mkdir($destination);
-				chmod($destination, 0755);
-			}
-			if (!is_writable($destination)) {
-				throw new Exception('Doelmap is niet beschrijfbaar: ' . $destination);
-			}
-			if (file_exists($destination . $filename)) {
-				if ($overwrite) {
-					unlink($destination . $filename);
-				} else {
-					throw new Exception('Bestandsnaam al in gebruik: ' . $filename);
-				}
-			}
-		}
-		$success = $this->opties[$this->methode]->opslaan($destination, $filename, $overwrite);
-		if ($success) {
-			chmod($destination . $filename, 0644);
-		}
-		return $success;
+		return $this->opties[$this->methode]->opslaan($destination, $filename, $overwrite);
 	}
 
 	public function view() {
@@ -239,7 +212,26 @@ abstract class BestandUploader extends InputField {
 	 * @param string $filename filename with extension
 	 * @param boolean $overwrite allowed to overwrite existing file
 	 */
-	public abstract function opslaan($destination, $filename, $overwrite = false);
+	public function opslaan($destination, $filename, $overwrite = false) {
+		$filename = filter_var($filename, FILTER_SANITIZE_STRING);
+		if (!valid_filename($filename)) {
+			throw new Exception('Ongeldige bestandsnaam');
+		}
+		if (!file_exists($destination)) {
+			mkdir($destination);
+			chmod($destination, 0755);
+		}
+		if (!is_writable($destination)) {
+			throw new Exception('Doelmap is niet beschrijfbaar: ' . $destination);
+		}
+		if (file_exists($destination . $filename)) {
+			if ($overwrite) {
+				unlink($destination . $filename);
+			} else {
+				throw new Exception('Bestandsnaam al in gebruik: ' . $filename);
+			}
+		}
+	}
 
 	public function view() {
 		echo $this->getDiv();
@@ -271,9 +263,11 @@ class BestandBehouden extends BestandUploader {
 	}
 
 	public function opslaan($destination, $filename, $overwrite = false) {
+		parent::opslaan($destination, $filename, $overwrite);
 		if (!file_exists($destination . $filename)) {
 			throw new Exception('Bestand bestaat niet (meer): ' . $filename);
 		}
+		chmod($destination . $filename, 0644);
 		return true;
 	}
 
@@ -348,12 +342,13 @@ class UploadHttp extends BestandUploader {
 	}
 
 	public function opslaan($destination, $filename, $overwrite = false) {
+		parent::opslaan($destination, $filename, $overwrite);
 		if (is_uploaded_file($this->value['tmp_name'])) {
-			if (file_exists($destination . $filename) AND ! $overwrite) {
-				$this->error = 'Bestandsnaam al in gebruikt: ' . $filename;
-				return false;
+			$success = move_uploaded_file($this->value['tmp_name'], $destination . $filename);
+			if ($success) {
+				chmod($destination . $filename, 0644);
 			}
-			return move_uploaded_file($this->value['tmp_name'], $destination . $filename);
+			return $success;
 		}
 		return false;
 	}
@@ -464,19 +459,19 @@ class UploadFtp extends BestandUploader {
 	}
 
 	public function opslaan($destination, $filename, $overwrite = false) {
+		parent::opslaan($destination, $filename, $overwrite);
 		if (!file_exists($this->path . $this->model->filename)) {
 			throw new Exception('Bronbestand bestaat niet');
 		}
-		if (file_exists($destination . $filename) AND ! $overwrite) {
-			$this->error = 'Bestandsnaam al in gebruikt: ' . $filename;
-			return false;
+		$success = copy($this->path . $this->model->filename, $destination . $filename);
+		if ($success) {
+			chmod($destination . $filename, 0644);
+			// Moeten we het bestand ook verwijderen uit de publieke ftp?
+			if (isset($_POST[$this->name . 'VerwijderVanFtp'])) {
+				return unlink($this->path . $this->model->filename);
+			}
 		}
-		$gelukt = copy($this->path . $this->model->filename, $destination . $filename);
-		// Moeten we het bestand ook verwijderen uit de publieke ftp?
-		if ($gelukt AND isset($_POST[$this->name . 'VerwijderVanFtp'])) {
-			return unlink($this->path . $this->model->filename);
-		}
-		return $gelukt;
+		return $success;
 	}
 
 	public function getLabel() {
@@ -600,11 +595,12 @@ class UploadUrl extends BestandUploader {
 	}
 
 	public function opslaan($destination, $filename, $overwrite = false) {
-		if (file_exists($destination . $filename) AND ! $overwrite) {
-			$this->error = 'Bestandsnaam al in gebruikt: ' . $filename;
-			return false;
+		parent::opslaan($destination, $filename, $overwrite);
+		$success = file_put_contents($destination . $filename, $this->value);
+		if ($success) {
+			chmod($destination . $filename, 0644);
 		}
-		return file_put_contents($destination . $filename, $this->value);
+		return $success;
 	}
 
 	public function getLabel() {

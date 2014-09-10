@@ -85,4 +85,13 @@ class Foto extends Afbeelding {
 		return ($this->hasThumb() && $this->hasResized());
 	}
 
+	public function rotate($degrees) {
+		$imagick = new Imagick();
+		$imagick->readImage($this->getPad());
+		$imagick->rotateImage(new ImagickPixel('none'), $degrees);
+		$imagick->writeImage($this->getPad());
+		$imagick->clear();
+		$imagick->destroy();
+	}
+
 }
