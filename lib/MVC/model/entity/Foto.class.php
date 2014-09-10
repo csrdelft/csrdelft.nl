@@ -53,7 +53,7 @@ class Foto extends Afbeelding {
 
 	public function maakThumb($rotate = 0) {
 		if ($rotate !== 0) {
-			$rotate = '-rotate ' . (float) $rotate . ' ';
+			$rotate = '-rotate ' . (int) $rotate . ' ';
 		}
 		set_time_limit(0);
 		$command = IMAGEMAGICK_PATH . 'convert ' . escapeshellarg($this->getPad()) . ' -thumbnail 150x150^^ -gravity center -extent 150x150 -format jpg -quality 80 ' . $rotate . escapeshellarg($this->getThumbPad());
@@ -71,7 +71,7 @@ class Foto extends Afbeelding {
 
 	public function maakResized($rotate = 0) {
 		if ($rotate !== 0) {
-			$rotate = '-rotate ' . (float) $rotate . ' ';
+			$rotate = '-rotate ' . (int) $rotate . ' ';
 		}
 		set_time_limit(0);
 		$command = IMAGEMAGICK_PATH . 'convert ' . escapeshellarg($this->getPad()) . ' -resize 1024x1024 -format jpg -quality 85 ' . $rotate . escapeshellarg($this->getResizedPad());
@@ -94,9 +94,10 @@ class Foto extends Afbeelding {
 	/**
 	 * Rotate resized & thumb for prettyPhoto to show the right way up.
 	 * 
-	 * @param float $degrees
+	 * @param int $degrees
 	 */
 	public function rotate($degrees) {
+		debugprint($degrees);
 		if ($this->hasResized()) {
 			unlink($this->getResizedPad());
 		}
