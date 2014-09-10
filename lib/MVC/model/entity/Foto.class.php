@@ -97,7 +97,7 @@ class Foto extends Afbeelding {
 			$imagick->rotateImage(new ImagickPixel('none'), $degrees);
 			unlink($this->getResizedPad());
 			$imagick->writeImage($this->getResizedPad());
-			chmod($this->getResizedPad(), 644);
+			chmod($this->getResizedPad(), 0644);
 			$imagick->clear();
 		}
 		if ($this->hasThumb()) {
@@ -105,7 +105,7 @@ class Foto extends Afbeelding {
 			$imagick->rotateImage(new ImagickPixel('none'), $degrees);
 			unlink($this->getThumbPad());
 			$imagick->writeImage($this->getThumbPad());
-			chmod($this->getResizedPad(), 644);
+			chmod($this->getResizedPad(), 0644);
 			$imagick->clear();
 		}
 		$imagick->destroy();
