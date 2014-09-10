@@ -105,7 +105,7 @@ class Foto extends Afbeelding {
 			$imagick->rotateImage(new ImagickPixel('none'), $degrees);
 			unlink($this->getThumbPad());
 			$imagick->writeImage($this->getThumbPad());
-			chmod($this->getResizedPad(), 0644);
+			chmod($this->getThumbPad(), 0644);
 			$imagick->clear();
 		}
 		$imagick->destroy();
