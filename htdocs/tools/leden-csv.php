@@ -25,6 +25,7 @@ $sLedenQuery = "
 		status='S_LID' OR status='S_GASTLID' OR status='S_NOVIET' OR status='S_KRINGEL'
 	ORDER BY achternaam, voornaam;";
 
+$db = MijnSqli::instance();
 $rLeden = $db->query($sLedenQuery);
 
 while ($aLid = $db->next($rLeden)) {
@@ -50,4 +51,3 @@ while ($aLid = $db->next($rLeden)) {
 	}
 	echo "\n";
 }
-?>

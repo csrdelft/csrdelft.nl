@@ -53,22 +53,28 @@ if (isset($_GET['q'])) {
 
 
 if (isset($_GET['addToGoogle'])) {
-	require_once 'googlesync.class.php';
-	GoogleSync::doRequestToken(CSR_ROOT . REQUEST_URI);
+	try {
+		require_once 'googlesync.class.php';
+		GoogleSync::doRequestToken(CSR_ROOT . REQUEST_URI);
 
-	$gSync = GoogleSync::instance();
+		$gSync = GoogleSync::instance();
 
-	$start = microtime();
-	$message = $gSync->syncLidBatch($zoeker->getLeden());
-	$elapsed = microtime() - $start;
+		$start = microtime();
+		$message = $gSync->syncLidBatch($zoeker->getLeden());
+		$elapsed = microtime() - $start;
 
-	$ledenlijstcontent = SimpleHTML::setMelding(
-					'<h1>Google-sync-resultaat:</h1>' . $message . '<br />' .
-					'<a href="/communicatie/lijst.php?q=' . htmlspecialchars($_GET['q']) . '">Terug naar de ledenlijst...</a>', 'Google-sync resultaat'
-					, 0);
+		$ledenlijstcontent = SimpleHTML::setMelding(
+						'<h1>Google-sync-resultaat:</h1>' . $message . '<br />' .
+						'<a href="/communicatie/lijst.php?q=' . htmlspecialchars($_GET['q']) . '">Terug naar de ledenlijst...</a>', 'Google-sync resultaat'
+						, 0);
 
-	if (LoginModel::mag('P_ADMIN')) {
-		$ledenlijstcontent->append('<hr />Tijd nodig voor deze sync: ' . $elapsed . 'ms');
+		if (LoginModel::mag('P_ADMIN')) {
+			$ledenlijstcontent->append('<hr />Tijd nodig voor deze sync: ' . $elapsed . 'ms');
+		}
+	} catch (Zend_Gdata_App_AuthException $e) {
+		$m = $e->getMessage();
+		$title = substr($m, strpos($m, '<title>') + 7, strpos($m, '</title>'));
+		setMelding($title, -1);
 	}
 } else {
 
