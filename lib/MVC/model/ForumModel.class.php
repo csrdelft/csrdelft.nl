@@ -717,7 +717,7 @@ class ForumPostsModel extends PersistenceModel implements Paging {
 	}
 
 	public function setPaginaVoorLaatstGelezen(ForumDraadGelezen $gelezen) {
-		$count = 1 + $this->count('draad_id = ? AND datum_tijd < ? AND wacht_goedkeuring = FALSE AND verwijderd = FALSE', array($gelezen->draad_id, $gelezen->datum_tijd));
+		$count = 1 + $this->count('draad_id = ? AND datum_tijd <= ? AND wacht_goedkeuring = FALSE AND verwijderd = FALSE', array($gelezen->draad_id, $gelezen->datum_tijd));
 		$this->setHuidigePagina((int) ceil($count / $this->per_pagina), $gelezen->draad_id);
 	}
 
