@@ -87,10 +87,18 @@ class Foto extends Afbeelding {
 
 	public function rotate($degrees) {
 		$imagick = new Imagick();
-		$imagick->readImage($this->getPad());
-		$imagick->rotateImage(new ImagickPixel('none'), $degrees);
-		$imagick->writeImage($this->getPad());
-		$imagick->clear();
+		if ($this->hasResized()) {
+			$imagick->readImage($this->getResizedPad());
+			$imagick->rotateImage(new ImagickPixel('none'), $degrees);
+			$imagick->writeImage($this->getResizedPad());
+			$imagick->clear();
+		}
+		if ($this->hasThumb()) {
+			$imagick->readImage($this->getThumbPad());
+			$imagick->rotateImage(new ImagickPixel('none'), $degrees);
+			$imagick->writeImage($this->getThumbPad());
+			$imagick->clear();
+		}
 		$imagick->destroy();
 	}
 
