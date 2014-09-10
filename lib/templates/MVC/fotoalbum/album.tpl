@@ -34,8 +34,10 @@
 				<a href="/fotoalbum/roteren/{$album->getSubDir()}" postdata="foto={$foto->filename}&rotate=-90" class="knop post ReloadPage hoverIntentContent" title="Foto tegen de klok in draaien">{icon get=arrow_rotate_anticlockwise}</a>
 				<a href="/fotoalbum/roteren/{$album->getSubDir()}" postdata="foto={$foto->filename}&rotate=90" class="knop post ReloadPage hoverIntentContent" title="Foto met de klok mee draaien" style="position: relative; left: 118px;">{icon get=arrow_rotate_clockwise}</a>
 				{if LoginModel::mag('P_ALBUM_MOD')}
-					<a href="/fotoalbum/verwijderen/{$album->getSubDir()}" postdata="foto={$foto->filename}" class="knop post confirm hoverIntentContent" title="Definitief verwijderen van deze foto" style="position: relative; top: 130px; left: -40px;">{icon get=cross}</a>
 					<a href="/fotoalbum/albumcover/{$album->getSubDir()}" postdata="cover={$foto->filename}" class="knop post confirm hoverIntentContent" title="Instellen als albumcover" style="position: relative; top: 130px; left: 45px;">{icon get=folder_picture}</a>
+					{if LoginModel::mag('P_ALBUM_DEL')}
+						<a href="/fotoalbum/verwijderen/{$album->getSubDir()}" postdata="foto={$foto->filename}" class="knop post confirm hoverIntentContent" title="Definitief verwijderen van deze foto" style="position: relative; top: 130px; left: -40px;">{icon get=cross}</a>
+					{/if}
 				{/if}
 			</div>
 		{/if}
@@ -45,8 +47,8 @@
 	</div>
 {/foreach}
 <script type="text/javascript">
-	{literal}
-			jQuery(document).ready(function($) {
+{literal}
+jQuery(document).ready(function($) {
 	$("a[rel^='prettyPhoto']").prettyPhoto({
 	theme: 'dark_rounded',
 			markup: '<div class="pp_pic_holder"> \
@@ -128,5 +130,5 @@
 			});
 		}
 	});
-	{/literal}
+{/literal}
 </script>
