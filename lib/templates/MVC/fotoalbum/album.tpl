@@ -6,7 +6,7 @@
 	{if LoginModel::mag('P_LOGGED_IN') && $album->getFotos()!==false}
 		<a class="knop" href="/fotoalbum/downloaden/{$album->getSubDir()}" title="Download als TAR-bestand">{icon get="picture_save"} Download album</a>
 	{/if}
-	{if LoginModel::mag('P_DOCS_MOD')}
+	{if LoginModel::mag('P_ALBUM_MOD')}
 		<a class="knop" href="/fotoalbum/verwerken/{$album->getSubDir()}">{icon get="application_view_gallery"} Verwerken</a>
 	{/if}
 </div>
@@ -19,7 +19,7 @@
 		<a href="{$subalbum->getUrl()}">
 			<img src="{$subalbum->getThumbURL()}" />
 			<div class="albumname">
-				{if LoginModel::mag('P_DOCS_MOD')}
+				{if LoginModel::mag('P_ALBUM_MOD')}
 					<a href="/fotoalbum/hernoemen/{$subalbum->getSubDir()}" class="knop post prompt ReloadPage hoverIntentContent" title="Fotoalbum hernoemen" postdata="Nieuwe naam={$subalbum->dirname}" style="position: absolute; top: -90px; left: 118px;">{icon get=pencil}</a>
 				{/if}
 				{$subalbum->dirname}
@@ -29,12 +29,14 @@
 {/foreach}
 {foreach from=$album->getFotos() item=foto}
 	<div id="{$foto->filename|md5}" class="thumb hoverIntent">
-		{if LoginModel::mag('P_DOCS_MOD')}
+		{if LoginModel::mag('P_ALBUM_ADD')}
 			<div style="position: absolute;">
-				<a href="/fotoalbum/verwijderen/{$album->getSubDir()}" postdata="foto={$foto->filename}" class="knop post confirm hoverIntentContent" title="Definitief verwijderen van deze foto">{icon get=cross}</a>
-				<a href="/fotoalbum/albumcover/{$album->getSubDir()}" postdata="cover={$foto->filename}" class="knop post confirm hoverIntentContent" title="Instellen als albumcover" style="position: relative; left: 118px;">{icon get=folder_picture}</a>
-				<a href="/fotoalbum/roteren/{$album->getSubDir()}" postdata="foto={$foto->filename}&rotate=-90" class="knop post ReloadPage hoverIntentContent" title="Foto tegen de klok in draaien" style="position: relative; top: 130px; left: -40px;">{icon get=arrow_rotate_anticlockwise}</a>
-				<a href="/fotoalbum/roteren/{$album->getSubDir()}" postdata="foto={$foto->filename}&rotate=90" class="knop post ReloadPage hoverIntentContent" title="Foto met de klok mee draaien" style="position: relative; top: 130px; left: 45px;">{icon get=arrow_rotate_clockwise}</a>
+				<a href="/fotoalbum/roteren/{$album->getSubDir()}" postdata="foto={$foto->filename}&rotate=-90" class="knop post ReloadPage hoverIntentContent" title="Foto tegen de klok in draaien">{icon get=arrow_rotate_anticlockwise}</a>
+				<a href="/fotoalbum/roteren/{$album->getSubDir()}" postdata="foto={$foto->filename}&rotate=90" class="knop post ReloadPage hoverIntentContent" title="Foto met de klok mee draaien" style="position: relative; left: 118px;">{icon get=arrow_rotate_clockwise}</a>
+				{if LoginModel::mag('P_ALBUM_MOD')}
+					<a href="/fotoalbum/verwijderen/{$album->getSubDir()}" postdata="foto={$foto->filename}" class="knop post confirm hoverIntentContent" title="Definitief verwijderen van deze foto" style="position: relative; top: 130px; left: -40px;">{icon get=cross}</a>
+					<a href="/fotoalbum/albumcover/{$album->getSubDir()}" postdata="cover={$foto->filename}" class="knop post confirm hoverIntentContent" title="Instellen als albumcover" style="position: relative; top: 130px; left: 45px;">{icon get=folder_picture}</a>
+				{/if}
 			</div>
 		{/if}
 		<a href="{$foto->getResizedURL()}" rel="prettyPhoto[album]">
@@ -43,8 +45,8 @@
 	</div>
 {/foreach}
 <script type="text/javascript">
-			{literal}
-	jQuery(document).ready(function($) {
+	{literal}
+			jQuery(document).ready(function($) {
 	$("a[rel^='prettyPhoto']").prettyPhoto({
 	theme: 'dark_rounded',
 			markup: '<div class="pp_pic_holder"> \
