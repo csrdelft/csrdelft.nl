@@ -30,16 +30,14 @@
 {foreach from=$album->getFotos() item=foto}
 	<div id="{$foto->filename|md5}" class="thumb hoverIntent">
 		{if LoginModel::mag('P_ALBUM_ADD')}
-			<div style="position: absolute;">
-				<a href="/fotoalbum/roteren/{$album->getSubDir()}" postdata="foto={$foto->filename}&rotate=-90" class="knop post ReloadPage hoverIntentContent" title="Foto tegen de klok in draaien" style="position: relative; top: 0px; left: 0px;">{icon get=arrow_rotate_anticlockwise}</a>
-				<a href="/fotoalbum/roteren/{$album->getSubDir()}" postdata="foto={$foto->filename}&rotate=90" class="knop post ReloadPage hoverIntentContent" title="Foto met de klok mee draaien" style="position: relative; top: 0px; left: 118px;">{icon get=arrow_rotate_clockwise}</a>
-				{if LoginModel::mag('P_ALBUM_MOD')}
-					<a href="/fotoalbum/albumcover/{$album->getSubDir()}" postdata="cover={$foto->filename}" class="knop post confirm hoverIntentContent" title="Instellen als albumcover" style="position: relative; top: 130px; left: -40px;">{icon get=folder_picture}</a>
-					{if LoginModel::mag('P_ALBUM_DEL')}
-						<a href="/fotoalbum/verwijderen/{$album->getSubDir()}" postdata="foto={$foto->filename}" class="knop post confirm hoverIntentContent" title="Definitief verwijderen van deze foto" style="position: relative; top: 130px; left: 80px;">{icon get=cross}</a>
-					{/if}
+			<a href="/fotoalbum/roteren/{$album->getSubDir()}" postdata="foto={$foto->filename}&rotate=-90" class="knop post ReloadPage hoverIntentContent" title="Foto tegen de klok in draaien" style="position:absolute; top: 0; left: 0;">{icon get=arrow_rotate_anticlockwise}</a>
+			<a href="/fotoalbum/roteren/{$album->getSubDir()}" postdata="foto={$foto->filename}&rotate=90" class="knop post ReloadPage hoverIntentContent" title="Foto met de klok mee draaien" style="position: absolute; top: 0; right: 0;">{icon get=arrow_rotate_clockwise}</a>
+			{if LoginModel::mag('P_ALBUM_MOD')}
+				<a href="/fotoalbum/albumcover/{$album->getSubDir()}" postdata="cover={$foto->filename}" class="knop post confirm hoverIntentContent" title="Instellen als albumcover" style="position: absolute; bottom: 0; left: 0;">{icon get=folder_picture}</a>
+				{if LoginModel::mag('P_ALBUM_DEL')}
+					<a href="/fotoalbum/verwijderen/{$album->getSubDir()}" postdata="foto={$foto->filename}" class="knop post confirm hoverIntentContent" title="Definitief verwijderen van deze foto" style="position: absolute; top: 0; right: 0;">{icon get=cross}</a>
 				{/if}
-			</div>
+			{/if}
 		{/if}
 		<a href="{$foto->getResizedURL()}" rel="prettyPhoto[album]">
 			<img src="{$foto->getThumbURL()}" />
