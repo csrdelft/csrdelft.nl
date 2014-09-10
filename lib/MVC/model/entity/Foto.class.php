@@ -51,9 +51,12 @@ class Foto extends Afbeelding {
 		return file_exists($pad) AND is_file($pad);
 	}
 
-	public function maakThumb() {
+	public function maakThumb($rotate = 0) {
+		if ($rotate !== 0) {
+			$rotate = '-rotate ' . (float) $rotate . ' ';
+		}
 		set_time_limit(0);
-		$command = IMAGEMAGICK_PATH . 'convert ' . escapeshellarg($this->getPad()) . ' -thumbnail 150x150^^ -gravity center -extent 150x150 -format jpg -quality 80 ' . escapeshellarg($this->getThumbPad());
+		$command = IMAGEMAGICK_PATH . 'convert ' . escapeshellarg($this->getPad()) . ' -thumbnail 150x150^^ -gravity center -extent 150x150 -format jpg -quality 80 ' . $rotate . escapeshellarg($this->getThumbPad());
 		$output = shell_exec($command) . '<hr />';
 		if (defined('RESIZE_OUTPUT')) {
 			echo $command . '<br />';
@@ -66,9 +69,12 @@ class Foto extends Afbeelding {
 		}
 	}
 
-	public function maakResized() {
+	public function maakResized($rotate = 0) {
+		if ($rotate !== 0) {
+			$rotate = '-rotate ' . (float) $rotate . ' ';
+		}
 		set_time_limit(0);
-		$command = IMAGEMAGICK_PATH . 'convert ' . escapeshellarg($this->getPad()) . ' -resize 1024x1024 -format jpg -quality 85 ' . escapeshellarg($this->getResizedPad());
+		$command = IMAGEMAGICK_PATH . 'convert ' . escapeshellarg($this->getPad()) . ' -resize 1024x1024 -format jpg -quality 85 ' . $rotate . escapeshellarg($this->getResizedPad());
 		$output = shell_exec($command) . '<hr />';
 		if (defined('RESIZE_OUTPUT')) {
 			echo $command . '<br />';
@@ -91,24 +97,14 @@ class Foto extends Afbeelding {
 	 * @param float $degrees
 	 */
 	public function rotate($degrees) {
-		$imagick = new Imagick();
 		if ($this->hasResized()) {
-			$imagick->readImage($this->getResizedPad());
-			$imagick->rotateImage(new ImagickPixel('none'), $degrees);
 			unlink($this->getResizedPad());
-			$imagick->writeImage($this->getResizedPad());
-			chmod($this->getResizedPad(), 0644);
-			$imagick->clear();
 		}
+		$this->maakResized($degrees);
 		if ($this->hasThumb()) {
-			$imagick->readImage($this->getThumbPad());
-			$imagick->rotateImage(new ImagickPixel('none'), $degrees);
 			unlink($this->getThumbPad());
-			$imagick->writeImage($this->getThumbPad());
-			chmod($this->getThumbPad(), 0644);
-			$imagick->clear();
 		}
-		$imagick->destroy();
+		$this->maakThumb($degrees);
 	}
 
 }
