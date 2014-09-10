@@ -231,7 +231,7 @@ class FotoAlbumController extends AclController {
 		}
 	}
 
-	public function roteren(FotoAlbum $album, $degrees) {
+	public function roteren(FotoAlbum $album) {
 		$degrees = filter_input(INPU_POST, 'degrees', FILTER_SANITIZE_NUMBER_INT);
 		$naam = filter_input(INPUT_POST, 'foto', FILTER_SANITIZE_STRING);
 		$foto = new Foto($album, $naam);

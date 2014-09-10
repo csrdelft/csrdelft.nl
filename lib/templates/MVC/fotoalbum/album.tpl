@@ -33,8 +33,8 @@
 			<div style="position: absolute;">
 				<a href="/fotoalbum/verwijderen/{$album->getSubDir()}" postdata="foto={$foto->filename}" class="knop post confirm hoverIntentContent" title="Definitief verwijderen van deze foto">{icon get=cross}</a>
 				<a href="/fotoalbum/albumcover/{$album->getSubDir()}" postdata="cover={$foto->filename}" class="knop post confirm hoverIntentContent" title="Instellen als albumcover" style="position: relative; left: 118px;">{icon get=folder_picture}</a>
-				<a href="/fotoalbum/roteren/{$album->getSubDir()}" postdata="foto={$foto->filename}&rotate=-90" class="knop post hoverIntentContent" title="Foto tegen de klok in draaien" style="position: relative; top: 118px;">{icon get=arrow_rotate_anticlockwise}</a>
-				<a href="/fotoalbum/roteren/{$album->getSubDir()}" postdata="foto={$foto->filename}&rotate=90" class="knop post hoverIntentContent" title="Foto met de klok mee draaien" style="position: relative; top: 118px; left: 118px;">{icon get=arrow_rotate_clockwise}</a>
+				<a href="/fotoalbum/roteren/{$album->getSubDir()}" postdata="foto={$foto->filename}&rotate=-90" class="knop post hoverIntentContent" title="Foto tegen de klok in draaien" style="position: relative; top: 125px; left: -25px;">{icon get=arrow_rotate_anticlockwise}</a>
+				<a href="/fotoalbum/roteren/{$album->getSubDir()}" postdata="foto={$foto->filename}&rotate=90" class="knop post hoverIntentContent" title="Foto met de klok mee draaien" style="position: relative; top: 125px; left: 75px;">{icon get=arrow_rotate_clockwise}</a>
 			</div>
 		{/if}
 		<a href="{$foto->getResizedURL()}" rel="prettyPhoto[album]">
@@ -43,8 +43,8 @@
 	</div>
 {/foreach}
 <script type="text/javascript">
-	{literal}
-			jQuery(document).ready(function($) {
+			{literal}
+	jQuery(document).ready(function($) {
 	$("a[rel^='prettyPhoto']").prettyPhoto({
 	theme: 'dark_rounded',
 			markup: '<div class="pp_pic_holder"> \
