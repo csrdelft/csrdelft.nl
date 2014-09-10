@@ -85,17 +85,24 @@ class Foto extends Afbeelding {
 		return ($this->hasThumb() && $this->hasResized());
 	}
 
+	/**
+	 * Rotate resized & thumb for prettyPhoto to show the right way up.
+	 * 
+	 * @param float $degrees
+	 */
 	public function rotate($degrees) {
 		$imagick = new Imagick();
 		if ($this->hasResized()) {
 			$imagick->readImage($this->getResizedPad());
 			$imagick->rotateImage(new ImagickPixel('none'), $degrees);
+			unlink($this->getResizedPad());
 			$imagick->writeImage($this->getResizedPad());
 			$imagick->clear();
 		}
 		if ($this->hasThumb()) {
 			$imagick->readImage($this->getThumbPad());
 			$imagick->rotateImage(new ImagickPixel('none'), $degrees);
+			unlink($this->getThumbPad());
 			$imagick->writeImage($this->getThumbPad());
 			$imagick->clear();
 		}
