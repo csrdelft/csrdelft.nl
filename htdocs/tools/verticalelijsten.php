@@ -13,6 +13,7 @@ echo <<<EOD
 	<tr valign="top">
 EOD;
 
+$db = MijnSqli::instance();
 for ($i = 1; $i <= 8; $i++) {
 	$result = $db->select("SELECT uid FROM `lid` WHERE verticale=" . $i . " AND (status='S_LID' OR status='S_GASTLID' OR status='S_NOVIET' OR status='S_KRINGEL')");
 	if ($result !== false and $db->numRows($result) > 0) {
