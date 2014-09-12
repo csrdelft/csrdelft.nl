@@ -21,10 +21,16 @@ $toegestanezoekfilters=array('leden', 'oudleden', 'alleleden', 'allepersonen', '
 if(isset($_GET['zoekin']) AND in_array($_GET['zoekin'], $toegestanezoekfilters)){
 	$zoekin=$_GET['zoekin'];
 }
+$zoekterm = '';
+if(isset($_GET['q'])) {
+	$zoekterm = $_GET['q'];
 
-$zoekterm=$_GET['q'];
+}
 $velden=array('uid', 'voornaam', 'tussenvoegsel', 'achternaam');
-$limiet=(int)$_GET['limit'];
+$limiet = 0;
+if(isset($_GET['limit'])) {
+	$limiet = (int)$_GET['limit'];
+}
 
 $namen=Zoeker::zoekLeden($zoekterm, 'naam', 'alle', 'achternaam', $zoekin, $velden, $limiet);
 
