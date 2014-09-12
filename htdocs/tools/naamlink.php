@@ -30,6 +30,7 @@ if (isset($_GET['uid'])) {
 //geen input
 } else {
 	echo 'Fout in invoer in tools/naamlink.php';
+	exit;
 }
 
 //welke subset van leden?
