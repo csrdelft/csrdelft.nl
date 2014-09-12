@@ -234,6 +234,7 @@ $ahs = array();
 //$result=$db->query($sql);
 # data die al in de tabel zit om later feuten toe te kunnen voegen
 $sql = 'SELECT avond, huis, GROUP_CONCAT(uid) AS uids FROM `eetplan` GROUP BY avond, huis';
+$db = MijnSqli::instance();
 $result = $db->query($sql);
 while ($rij = $db->next($result)) {
 	$sjaarsen = explode(',', $rij['uids']);

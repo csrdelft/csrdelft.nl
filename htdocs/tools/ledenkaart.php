@@ -22,6 +22,7 @@ if (isset($_GET['xml'])) {
 			status='S_LID' OR status='S_GASTLID' OR status='S_NOVIET' OR status='S_KRINGEL'
 		ORDER BY adres;";
 
+	$db = MijnSqli::instance();
 	$rLeden = $db->query($sLedenQuery);
 	header('Content-Type: text/xml');
 	echo '<?xml version="1.0" encoding="utf-8"?><markers>' . "\n";

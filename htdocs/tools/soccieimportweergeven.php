@@ -12,6 +12,7 @@ $sLedenQuery = "
 		voornaam, achternaam, tussenvoegsel, uid, soccieID, createTerm, socciesaldo
 	FROM
 		lid";
+$db = MijnSqli::instance();
 $rLeden = $db->query($sLedenQuery);
 while ($aData = $db->next($rLeden)) {
 	$aLeden[(int) $aData['soccieID'] . $aData['createTerm']] = $aData;
