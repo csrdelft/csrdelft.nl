@@ -70,9 +70,12 @@
 			<div style="color: red;">Dit onderwerp is verwijderd.</div>
 		{/if}
 	{/capture}
+
 {/strip}
+
 <table id="forumtabel">
 	<tbody>
+
 		{if $paging AND !($draad->eerste_post_plakkerig AND ForumPostsModel::instance()->getHuidigePagina() != 1)}
 			<tr class="tussenschot">
 				<td colspan="2"></td>
@@ -140,6 +143,7 @@ pagecount=ForumPostsModel::instance()->getAantalPaginas($draad->draad_id) curpag
 				</td>
 			</tr>
 		{/if}
+
 		{if !$vanaf AND ForumPostsModel::instance()->getHuidigePagina() === ForumPostsModel::instance()->getAantalPaginas($draad->draad_id)}
 			<tr class="ongelezenvanaf" title="Geen ongelezen berichten">
 				<td colspan="2">
@@ -152,8 +156,15 @@ pagecount=ForumPostsModel::instance()->getAantalPaginas($draad->draad_id) curpag
 			</tr>
 		{/if}
 
+		{if $smarty.capture.magreageren !== ''}
+			<tr>
+				<td>&nbsp;</td>
+				<td class="forumtekst">{$smarty.capture.magreageren}</td>
+			</tr>
+		{/if}
+
 		<tr>
-			<td colspan="5" style="padding: 5px 0;">
+			<td colspan="2" style="padding: 5px 0;">
 				{$smarty.capture.kop}
 			</td>
 		</tr>
@@ -163,6 +174,4 @@ pagecount=ForumPostsModel::instance()->getAantalPaginas($draad->draad_id) curpag
 
 {if !$draad->verwijderd AND !$draad->gesloten AND $deel->magPosten()}
 	{include file='MVC/forum/post_form.tpl'}
-{else}
-	{$smarty.capture.magreageren}
 {/if}

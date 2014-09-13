@@ -42,17 +42,18 @@
 		</tr>
 	</thead>
 	<tbody>
+
 		{if !$deel->hasForumDraden()}
 			<tr>
 				<td colspan="4">Dit forum is nog leeg.</td>
 			</tr>
 		{/if}
+
 		{foreach from=$deel->getForumDraden() item=draad}
 			{include file='MVC/forum/draad_lijst.tpl'}
 		{/foreach}
-	</tbody>
-	{if $paging}
-		<thead>
+
+		{if $paging}
 			<tr>
 				<th colspan="4">
 					{if isset($deel->forum_id)}
@@ -67,9 +68,8 @@
 					{/if}
 				</th>
 			</tr>
-		</thead>
-	{/if}
-	<tbody>
+		{/if}
+
 		<tr>
 			<td colspan="4">
 				<div class="forumdeel-omschrijving">
