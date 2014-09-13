@@ -101,18 +101,23 @@ function init_key_pressed() {
 	$(window).trigger('keyup');
 }
 
+
+
 function init_lazy_images() {
 	$('div.ubb_img_loading').each(function() {
 		var content = $(document.createElement('IMG'));
 		content.error(function() {
-			$(this).hide();
-		}).attr('src', 'http://plaetjes.csrdelft.nl/famfamfam/picture_error.png');
+			$(this).attr('src', 'http://plaetjes.csrdelft.nl/famfamfam/picture_error.png');
+			$(this).removeClass('ubb_img_loading').addClass('ubb_img');
+		});
 		content.addClass('ubb_img');
 		content.attr('alt', $(this).attr('title'));
 		content.attr('style', $(this).attr('style'));
 		content.attr('src', $(this).attr('src'));
 		$(this).html(content);
-		content.on('load', lazy_image_loaded);
+		content.on('load', function() {
+			$(this).parent().replaceWith($(this));
+		});
 	});
 	werkomheen_layout();
 }
@@ -123,9 +128,6 @@ function werkomheen_layout() {
 	} else {
 		$('#mainright').height('');
 	}
-}
-function lazy_image_loaded() {
-	$(this).parent().replaceWith($(this));
 }
 
 function init_scroll_fixed() {
