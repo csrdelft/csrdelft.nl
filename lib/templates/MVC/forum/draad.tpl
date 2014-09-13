@@ -43,8 +43,8 @@
 				{/if}
 				&nbsp;&nbsp;&nbsp;
 				<a class="knop" title="Moderatie-functies weergeven" onclick="$('#modereren').slideDown();
-					$.scrollTo('#modereren', 600, { easing: 'easeInOutCubic' });
-					$('#forumtabel a.forummodknop').fadeIn();">{icon get="wrench"} Modereren</a>
+						$.scrollTo('#modereren', 600, {easing: 'easeInOutCubic'});
+						$('#forumtabel a.forummodknop').fadeIn();">{icon get="wrench"} Modereren</a>
 			{/if}
 		</div>
 		<div class="breadcrumbs">
@@ -61,11 +61,11 @@
 
 	{capture name='magreageren'}
 		{if !$deel->magPosten()}
-			U mag in dit deel van het forum niet reageren.
+			<div style="font-style: italic;">U mag in dit deel van het forum niet reageren.</div>
 		{elseif $draad->gesloten}
-			U kunt hier niet meer reageren omdat dit onderwerp gesloten is.
+			<div style="font-style: italic;">U kunt hier niet meer reageren omdat dit onderwerp gesloten is.</div>
 		{elseif $draad->verwijderd}
-			<span style="color: red;">Dit onderwerp is verwijderd.</span>
+			<div style="color: red;">Dit onderwerp is verwijderd.</div>
 		{/if}
 	{/capture}
 {/strip}
@@ -78,7 +78,7 @@
 			<tr>
 				<td>&nbsp;</td>
 				<td>
-					<i>{$smarty.capture.magreageren}</i>
+					{$smarty.capture.magreageren}
 					<div class="forum-paginering" style="float: right;">
 						Pagina: {sliding_pager baseurl="/forum/onderwerp/"|cat:$draad->draad_id|cat:"/"
 									pagecount=ForumPostsModel::instance()->getAantalPaginas($draad->draad_id) curpage=ForumPostsModel::instance()->getHuidigePagina()}
@@ -88,7 +88,7 @@
 		{elseif $smarty.capture.magreageren !== ''}
 			<tr>
 				<td>&nbsp;</td>
-				<td class="forumtekst"><i>{$smarty.capture.magreageren}</i></td>
+				<td class="forumtekst">{$smarty.capture.magreageren}</td>
 			</tr>
 		{/if}
 
@@ -161,4 +161,6 @@ pagecount=ForumPostsModel::instance()->getAantalPaginas($draad->draad_id) curpag
 
 {if !$draad->verwijderd AND !$draad->gesloten AND $deel->magPosten()}
 	{include file='MVC/forum/post_form.tpl'}
+{else}
+	{$smarty.capture.magreageren}
 {/if}
