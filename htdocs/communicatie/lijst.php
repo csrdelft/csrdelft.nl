@@ -17,7 +17,9 @@ if (!(LoginModel::mag('P_LOGGED_IN') AND LoginModel::mag('P_OUDLEDEN_READ'))) {
 $message = '';
 
 $zoeker = new LidZoeker();
+
 if (isset($_GET['q'])) {
+
 	$zoeker->parseQuery($_GET);
 
 	//als er geen resultaten zijn dan kijken we of de query de naam is van een
@@ -51,6 +53,7 @@ if (isset($_GET['q'])) {
 	}
 }
 
+$ledenlijstcontent = new LedenlijstContent($zoeker);
 
 if (isset($_GET['addToGoogle'])) {
 	try {
@@ -63,13 +66,13 @@ if (isset($_GET['addToGoogle'])) {
 		$message = $gSync->syncLidBatch($zoeker->getLeden());
 		$elapsed = microtime() - $start;
 
-		$ledenlijstcontent = SimpleHTML::setMelding(
-						'<h1>Google-sync-resultaat:</h1>' . $message . '<br />' .
-						'<a href="/communicatie/lijst.php?q=' . htmlspecialchars($_GET['q']) . '">Terug naar de ledenlijst...</a>', 'Google-sync resultaat'
-						, 0);
+		SimpleHTML::setMelding(
+				'<h1>Google-sync-resultaat:</h1>' . $message . '<br />' .
+				'<a href="/communicatie/lijst.php?q=' . htmlspecialchars($_GET['q']) . '">Terug naar de ledenlijst...</a>', 'Google-sync resultaat'
+				, 0);
 
 		if (LoginModel::mag('P_ADMIN')) {
-			$ledenlijstcontent->append('<hr />Tijd nodig voor deze sync: ' . $elapsed . 'ms');
+			SimpleHTML::setMelding('<hr />Tijd nodig voor deze sync: ' . $elapsed . 'ms');
 		}
 	} catch (Zend_Gdata_App_AuthException $e) {
 		$m = $e->getMessage();
@@ -84,13 +87,12 @@ if (isset($_GET['addToGoogle'])) {
 		$lid = $leden[0];
 		redirect(CSR_ROOT . '/communicatie/profiel/' . $lid->getUid());
 	}
-
-	$ledenlijstcontent = new LedenlijstContent($zoeker);
-
-	if ($message != '') {
-		SimpleHTML::setMelding($message, 0);
-	}
 }
+
+if ($message != '') {
+	SimpleHTML::setMelding($message, 0);
+}
+
 $pagina = new CsrLayoutPage($ledenlijstcontent);
 
 $pagina->addStylesheet('/layout/js/datatables/css/datatables_basic');
