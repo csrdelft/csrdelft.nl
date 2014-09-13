@@ -109,8 +109,8 @@ function init_lazy_images() {
 		content.error(function() {
 			$(this).attr('title', 'Afbeelding bestaat niet of is niet toegankelijk!');
 			$(this).attr('src', 'http://plaetjes.csrdelft.nl/famfamfam/picture_error.png');
-			$(this).attr('width', '');
-			$(this).attr('height', '');
+			$(this).css('width', '16px');
+			$(this).css('height', '16px');
 			$(this).removeClass('ubb_img_loading').addClass('ubb_img');
 		});
 		content.addClass('ubb_img');
