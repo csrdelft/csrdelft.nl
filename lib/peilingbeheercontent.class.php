@@ -20,12 +20,10 @@ class PeilingBeheerContent implements View {
 
 	public function getHTML() {
 		$lijst = '<h3>Peilingen:</h3>';
-
-		foreach ($this->model as $peiling) {
+		foreach ($this->pijlingen as $peiling) {
 			$pcontent = new PeilingContent(new Peiling($peiling['id']));
 			$lijst.=$pcontent->getHTML($beheer = true);
 		}
-
 		$html = '
 		<h1>Peilingbeheertool</h1>
 		<div>
