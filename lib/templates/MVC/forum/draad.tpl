@@ -76,6 +76,13 @@
 <table id="forumtabel">
 	<tbody>
 
+		{if $smarty.capture.magreageren !== ''}
+			<tr>
+				<td>&nbsp;</td>
+				<td class="forumtekst">{$smarty.capture.magreageren}</td>
+			</tr>
+		{/if}
+
 		{capture name='paginering'}
 			<tr class="tussenschot">
 				<td colspan="2"></td>
@@ -94,13 +101,6 @@ pagecount=ForumPostsModel::instance()->getAantalPaginas($draad->draad_id) curpag
 		{* Paginering boven eerste post op de pagina als de eerste post van het draadje niet plakkerig is of dit de eerste pagina is *}
 		{if $paging AND (!$draad->eerste_post_plakkerig OR ForumPostsModel::instance()->getHuidigePagina() === 1)}
 			{$smarty.capture.paginering}
-		{/if}
-
-		{if $smarty.capture.magreageren !== ''}
-			<tr>
-				<td>&nbsp;</td>
-				<td class="forumtekst">{$smarty.capture.magreageren}</td>
-			</tr>
 		{/if}
 
 		{assign var=vanaf value=false}
