@@ -76,21 +76,27 @@
 <table id="forumtabel">
 	<tbody>
 
-		{if $paging AND !($draad->eerste_post_plakkerig AND ForumPostsModel::instance()->getHuidigePagina() != 1)}
+		{capture name='paginering'}
 			<tr class="tussenschot">
 				<td colspan="2"></td>
 			</tr>
 			<tr>
 				<td>&nbsp;</td>
 				<td>
-					<div style="float: left;">{$smarty.capture.magreageren}</div>
-					<div class="forum-paginering" style="float: right;">
+					<div class="forum-paginering">
 						Pagina: {sliding_pager baseurl="/forum/onderwerp/"|cat:$draad->draad_id|cat:"/"
-									pagecount=ForumPostsModel::instance()->getAantalPaginas($draad->draad_id) curpage=ForumPostsModel::instance()->getHuidigePagina()}
+pagecount=ForumPostsModel::instance()->getAantalPaginas($draad->draad_id) curpage=ForumPostsModel::instance()->getHuidigePagina()}
 					</div>
 				</td>
 			</tr>
-		{elseif $smarty.capture.magreageren !== ''}
+		{/capture}
+
+		{* Paginering boven eerste post op de pagina als de eerste post van het draadje niet plakkerig is of dit de eerste pagina is *}
+		{if $paging AND (!$draad->eerste_post_plakkerig OR ForumPostsModel::instance()->getHuidigePagina() === 1)}
+			{$smarty.capture.paginering}
+		{/if}
+
+		{if $smarty.capture.magreageren !== ''}
 			<tr>
 				<td>&nbsp;</td>
 				<td class="forumtekst">{$smarty.capture.magreageren}</td>
@@ -99,6 +105,7 @@
 
 		{assign var=vanaf value=false}
 		{foreach from=$draad->getForumPosts() item=post name=posts}
+
 			{if !$vanaf AND !$draad->alGelezen() AND strtotime($post->laatst_gewijzigd) > strtotime($draad->getWanneerGelezen()->datum_tijd)}
 				{* als posts gewijzigd zijn zonder draad gewijzigd te triggeren voorkomt !$draad->alGelezen() dat de gele lijn wordt getoont *}
 				{assign var=vanaf value=true}
@@ -112,38 +119,22 @@
 					<td colspan="2"></td>
 				</tr>
 			{/if}
+
 			{include file='MVC/forum/post_lijst.tpl'}
+
+			{* Paginering onder eerste plakkerige post op alle pagina's behalve de eerste *}
 			{if $paging AND $draad->eerste_post_plakkerig AND ForumPostsModel::instance()->getHuidigePagina() != 1 AND $smarty.foreach.posts.first}
-				<tr class="tussenschot">
-					<td colspan="2"></td>
-				</tr>
-				<tr>
-					<td>&nbsp;</td>
-					<td>
-						<div class="forum-paginering" style="float: right;">
-							Pagina: {sliding_pager baseurl="/forum/onderwerp/"|cat:$draad->draad_id|cat:"/"
-								pagecount=ForumPostsModel::instance()->getAantalPaginas($draad->draad_id) curpage=ForumPostsModel::instance()->getHuidigePagina()}
-						</div>
-					</td>
-				</tr>
+				{$smarty.capture.paginering}
 			{/if}
+
 		{/foreach}
 
+		{* Paginering onderaan pagina *}
 		{if $paging}
-			<tr class="tussenschot">
-				<td colspan="2"></td>
-			</tr>
-			<tr>
-				<td>&nbsp;</td>
-				<td>
-					<div class="forum-paginering">
-						Pagina: {sliding_pager baseurl="/forum/onderwerp/"|cat:$draad->draad_id|cat:"/"
-pagecount=ForumPostsModel::instance()->getAantalPaginas($draad->draad_id) curpage=ForumPostsModel::instance()->getHuidigePagina()}
-					</div>
-				</td>
-			</tr>
+			{$smarty.capture.paginering}
 		{/if}
 
+		{* Geen ongelezen berichten op de laatste pagina betekend in het geheel geen ongelezen berichten *}
 		{if !$vanaf AND ForumPostsModel::instance()->getHuidigePagina() === ForumPostsModel::instance()->getAantalPaginas($draad->draad_id)}
 			<tr class="ongelezenvanaf" title="Geen ongelezen berichten">
 				<td colspan="2">
