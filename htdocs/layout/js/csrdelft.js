@@ -107,6 +107,7 @@ function init_lazy_images() {
 	$('div.ubb_img_loading').each(function() {
 		var content = $(document.createElement('IMG'));
 		content.error(function() {
+			$(this).attr('title', 'Afbeelding bestaat niet of is niet toegankelijk!');
 			$(this).attr('src', 'http://plaetjes.csrdelft.nl/famfamfam/picture_error.png');
 			$(this).removeClass('ubb_img_loading').addClass('ubb_img');
 		});
