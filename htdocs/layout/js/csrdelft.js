@@ -104,6 +104,9 @@ function init_key_pressed() {
 function init_lazy_images() {
 	$('div.ubb_img_loading').each(function() {
 		var content = $(document.createElement('IMG'));
+		content.error(function() {
+			$(this).hide();
+		}).attr('src', 'http://plaetjes.csrdelft.nl/famfamfam/picture_error.png');
 		content.addClass('ubb_img');
 		content.attr('alt', $(this).attr('title'));
 		content.attr('style', $(this).attr('style'));
