@@ -30,7 +30,7 @@
 
 {if LoginModel::mag('P_BIEB_READ')}
 		<div id="filters">
-			<span id="alle" class="filter button">Alle</span><span id="csr" class="filter actief">C.S.R.</span><span id="leden" class="filter button">Leden</span><span id="eigen" class="filter button">Eigen</span><span id="geleend" class="filter button">Geleende boeken</span>
+			<span id="alle" class="filter button">Alle boeken</span><span id="csr" class="filter actief">C.S.R. bibliotheek</span><span id="leden" class="filter button">Van leden</span><span id="eigen" class="filter button">Eigen boeken</span><span id="geleend" class="filter button">Geleend</span>
 			<input id="boekstatus" type="checkbox" name="boekstatus" value="boekstatus"  /> <label for="boekstatus">Eigenaar en lener weergeven</label>
 		</div>
 {else}
