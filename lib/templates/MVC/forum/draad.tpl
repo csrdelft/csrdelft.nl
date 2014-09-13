@@ -83,7 +83,7 @@
 			<tr>
 				<td>&nbsp;</td>
 				<td>
-					{$smarty.capture.magreageren}
+					<div style="float: left;">{$smarty.capture.magreageren}</div>
 					<div class="forum-paginering" style="float: right;">
 						Pagina: {sliding_pager baseurl="/forum/onderwerp/"|cat:$draad->draad_id|cat:"/"
 									pagecount=ForumPostsModel::instance()->getAantalPaginas($draad->draad_id) curpage=ForumPostsModel::instance()->getHuidigePagina()}
