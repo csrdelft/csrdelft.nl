@@ -51,8 +51,8 @@ class Foto extends Afbeelding {
 		return file_exists($pad) AND is_file($pad);
 	}
 
-	public function maakThumb($rotate = 0) {
-		if ($rotate !== 0) {
+	public function maakThumb($rotate = '') {
+		if (!empty($rotate)) {
 			$rotate = '-rotate ' . (float) $rotate . ' ';
 		}
 		set_time_limit(0);
@@ -69,8 +69,8 @@ class Foto extends Afbeelding {
 		}
 	}
 
-	public function maakResized($rotate = 0) {
-		if ($rotate !== 0) {
+	public function maakResized($rotate = '') {
+		if (!empty($rotate)) {
 			$rotate = '-rotate ' . (float) $rotate . ' ';
 		}
 		set_time_limit(0);
