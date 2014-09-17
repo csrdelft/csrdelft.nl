@@ -66,6 +66,6 @@ a.opvallend{ font-style: italic; }
 #wijzigstatus .novieten, #wijzigstatus .leden {
 	margin: 0 0 5px 167px;
 }
-#statusForm input#field_postfix.FormField{
+#statusForm input#field_postfix.FormElement{
 	width: 100px;
 }

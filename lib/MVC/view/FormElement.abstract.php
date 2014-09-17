@@ -1,7 +1,7 @@
 <?php
 
 /**
- * FormField.abstract.php
+ * FormElement.abstract.php
  * 
  * @author Jan Pieter Waagmeester <jieter@jpwaag.com>
  * @author P.W.G. Brussee <brussee@live.nl>
@@ -86,7 +86,7 @@ abstract class InputField implements FormElement, Validator {
 	public $max_len = 0; //maximale lengte van de invoer
 	public $min_len = 0; //minimale lengte van de invoer
 	public $rows = 0; //aantal rijen van textarea
-	public $css_classes = array('FormField'); //array met classnames die later in de class-tag komen
+	public $css_classes = array('FormElement'); //array met classnames die later in de class-tag komen
 	public $suggestions = array(); //array met suggesties die de javascript-autocomplete aan gaat bieden
 	public $remotedatasource = ''; //een remotedatasource overruled suggestions
 

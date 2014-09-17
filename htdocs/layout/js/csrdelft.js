@@ -303,7 +303,7 @@ function init_forms() {
 
 function form_ischanged(form) {
 	var changed = false;
-	$(form).find('.FormField').each(function() {
+	$(form).find('.FormElement').each(function() {
 		if ($(this).is('input:radio')) {
 			if ($(this).is(':checked') && $(this).attr('origvalue') !== $(this).val()) {
 				changed = true;
@@ -350,7 +350,7 @@ function form_inline_toggle(form) {
 		toggle_inline_none($(this));
 	});
 	$(form).find('.InlineFormToggle').toggle();
-	$(form).find('.FormField').focus();
+	$(form).find('.FormElement').focus();
 }
 
 function form_toggle(event) {
@@ -402,7 +402,7 @@ function form_reset(event, form) {
 		form = $(this).closest('form');
 		event.preventDefault();
 	}
-	form.find('.FormField').each(function() {
+	form.find('.FormElement').each(function() {
 		var orig = $(this).attr('origvalue');
 		if (orig) {
 			$(this).val(orig);

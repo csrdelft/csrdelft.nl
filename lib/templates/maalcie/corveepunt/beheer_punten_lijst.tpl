@@ -23,7 +23,7 @@
 		<form action="{Instellingen::get('taken', 'url')}/wijzigpunten/{$puntenlijst.lid->getUid()}" method="post" class="Formulier InlineForm">
 			<div class="InlineFormToggle">{$puntenlijst.puntenTotaal}</div>
 			<div class="InputField">
-				<input type="text" name="totaal_punten" value="{$puntenlijst.puntenTotaal}" origvalue="{$puntenlijst.puntenTotaal}" class="FormField" maxlength="4" size="4" />
+				<input type="text" name="totaal_punten" value="{$puntenlijst.puntenTotaal}" origvalue="{$puntenlijst.puntenTotaal}" class="FormElement" maxlength="4" size="4" />
 			</div>
 			<div class="FormButtons">
 				<a class="knop submit" title="Wijzigingen opslaan">{icon get="accept"}</a>
@@ -35,7 +35,7 @@
 		<form action="{Instellingen::get('taken', 'url')}/wijzigbonus/{$puntenlijst.lid->getUid()}" method="post" class="Formulier InlineForm">
 			<div class="InlineFormToggle">{$puntenlijst.bonusTotaal}</div>
 			<div class="InputField">
-				<input type="text" name="totaal_bonus" value="{$puntenlijst.bonusTotaal}" origvalue="{$puntenlijst.bonusTotaal}" class="FormField" maxlength="4" size="4" />
+				<input type="text" name="totaal_bonus" value="{$puntenlijst.bonusTotaal}" origvalue="{$puntenlijst.bonusTotaal}" class="FormElement" maxlength="4" size="4" />
 			</div>
 			<div class="FormButtons">
 				<a class="knop submit" title="Wijzigingen opslaan">{icon get="accept"}</a>

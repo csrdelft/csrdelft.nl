@@ -27,7 +27,7 @@ Onderstaande tabel toont alle maaltijden die niet verwijderd zijn.
 </div>
 <form action="{Instellingen::get('taken', 'url')}/nieuw" method="post" class="Formulier popup SubmitReset">
 	<label for="mrid" style="width: auto;">{icon get="calendar_add"} Periodieke maaltijden aanmaken:</label>&nbsp;
-	<select name="mrid" origvalue="kies" class="FormField SubmitChange">
+	<select name="mrid" origvalue="kies" class="FormElement SubmitChange">
 		<option selected="selected">kies</option>
 	{foreach from=$repetities item=repetitie}
 		<option value="{$repetitie->getMaaltijdRepetitieId()}">{$repetitie->getStandaardTitel()}</option>

@@ -3072,6 +3072,7 @@ lib/MVC/controller/groepen/SjaarciesController.class.php -text
 lib/MVC/controller/groepen/WerkgroepenController.class.php -text
 lib/MVC/controller/groepen/WoonoordenController.class.php -text
 lib/MVC/controller/maalcie/BeheerFunctiesController.class.php -text
+lib/MVC/model/AccessModel.class.php -text
 lib/MVC/model/AgendaModel.class.php -text
 lib/MVC/model/Agendeerbaar.interface.php -text
 lib/MVC/model/BijbelroosterModel.class.php -text
@@ -3152,7 +3153,7 @@ lib/MVC/view/CsrSmarty.singleton.php -text
 lib/MVC/view/CsrUbb.class.php -text
 lib/MVC/view/DataTable.class.php -text
 lib/MVC/view/FileField.class.php -text
-lib/MVC/view/FormField.abstract.php -text
+lib/MVC/view/FormElement.abstract.php -text
 lib/MVC/view/Formulier.class.php -text
 lib/MVC/view/ForumView.class.php -text
 lib/MVC/view/FotoAlbumView.class.php -text

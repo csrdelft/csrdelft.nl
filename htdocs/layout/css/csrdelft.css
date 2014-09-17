@@ -816,7 +816,7 @@ input, textarea, select{
 .InlineForm .InputField, .InlineForm .FormButtons{
 	display: none;
 }
-.InlineForm .FormField{
+.InlineForm .FormElement{
 	width: auto !important;
 }
 .InlineForm div.InputField:hover{

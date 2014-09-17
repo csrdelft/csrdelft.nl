@@ -350,77 +350,7 @@ class MaaltijdAanmeldingenModel {
 		if ($filter === '') {
 			return true;
 		}
-		if (strpos($filter, '!') === 0) {
-			return !self::checkAanmeldFilter($uid, substr($filter, 1));
-		}
-
-		$filter = explode(':', $filter);
-		if (sizeof($filter) !== 2) {
-			throw new Exception('Check aanmeldfilter faalt');
-		}
-		switch ($filter[0]) {
-
-			// Behoort een lid tot een bepaalde verticale?
-			case 'verticale':
-
-				$verticale = strtoupper($filter[1]);
-				if (is_int($verticale)) {
-					if ($verticale === $lid->getVerticaleID()) {
-						return true;
-					}
-				} elseif ($verticale === $lid->getVerticaleLetter()) {
-					return true;
-				} elseif ($verticale === strtoupper($lid->getVerticale())) {
-					return true;
-				}
-				return false;
-
-			// Behoort een lid tot een bepaalde (h.t.) groep?
-			// als een string als bijvoorbeeld 'pubcie' wordt meegegeven zoekt de ketzer
-			// de h.t. groep met die korte naam erbij, als het getal is uiteraard de groep
-			// met dat id.
-			// met de toevoeging '>Fiscus' kan ook specifieke functie geëist worden binnen een groep
-			case 'groep':
-				require_once 'groepen/groep.class.php';
-
-				try {
-					$parts = explode('>', $filter[1], 2); // Splitst opgegeven term in groepsnaam en functie
-					$groep = new OldGroep($parts[0]);
-					if ($groep->isLid($uid)) {
-						// Wordt er een functie gevraagd?
-						if (isset($parts[1])) {
-							$functie = $groep->getFunctie();
-							if (strtolower($functie[0]) === strtolower($parts[1])) {
-								return true;
-							}
-						} else {
-							return true;
-						}
-					}
-				} catch (\Exception $e) { // groep bestaat niet
-				}
-				return false;
-
-			// Is een lid man of vrouw?
-			case 'geslacht':
-
-				$geslacht = strtolower($filter[1]);
-				if ($geslacht === $lid->getGeslacht()) {
-					return true;
-				}
-				return false;
-
-			// Behoort een lid tot een bepaalde lichting?
-			case 'lichting':
-			case 'lidjaar':
-
-				$lidjaar = $filter[1];
-				if ($lidjaar === $lid->getProperty('lidjaar')) {
-					return true;
-				}
-				return false;
-		}
-		return false;
+		return AccessModel::instance()->hasPermission($lid, $filter, false, false);
 	}
 
 	// Repetitie-Maaltijden ############################################################
