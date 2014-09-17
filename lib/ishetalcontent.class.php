@@ -28,9 +28,9 @@ class IsHetAlContent implements View {
 				break;
 			case 'jarig': $this->ja = LoginModel::instance()->getLid()->getJarigOver();
 				break;
-			case 'lunch': $this->ja = (date('Hi') > '1245' AND date('Hi') < '1345');
+			case 'lunch': $this->ja = (date('Hi') > '1230' AND date('Hi') < '1330');
 				break;
-			case 'avond': $this->ja = (date('Hi') > '1700');
+			case 'avond': $this->ja = (date('Hi') > '1800');
 				break;
 			case 'vrijdag': $this->ja = (date('w') == 5);
 				break;
