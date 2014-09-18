@@ -358,7 +358,8 @@ $('#{$this->getId()}', form).autocomplete(
 	{
 		clickFire: true,
 		max: 20,
-		matchContains: true
+		matchContains: true,
+		noRecord: ""
 	}
 );
 JS;
