@@ -93,7 +93,7 @@ class IsHetAlContent implements View {
 				echo '<div id="ishetal">Is er een ' . $this->model . '?<br />';
 				break;
 			case 'happie':
-				echo '<div id="ishetal">Wanneer opent Happietaria?<br />';
+				echo '<div id="ishetal">Wanneer opent <a href="http://www.facebook.com/HappieDelft" style="text-decoration:underline;">Happietaria?</a><br />';
 				break;
 			default:
 				echo '<div id="ishetal">Is het al ' . $this->model . '?<br />';
