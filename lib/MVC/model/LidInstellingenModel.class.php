@@ -4,7 +4,7 @@ require_once 'MVC/model/InstellingenModel.class.php';
 
 /**
  * LidInstellingenModel.class.php
- * 
+ *
  * @author C.S.R. Delft <pubcie@csrdelft.nl>
  *
  * Deze class houdt de instellingen bij voor een gebruiker.
@@ -22,15 +22,15 @@ class LidInstellingen extends PersistenceModel {
 
 	/**
 	 * 'module' => array( 'key' => array('beschrijving', 'type', type-opties, 'default value', technical-values) )
-	 * 
+	 *
 	 * type-opties:
 	 * enum: array
 	 * int: array( min, max )
 	 * string: array( min-lenght, max-lenght )
-	 * 
+	 *
 	 * technical-values:
 	 * array(type-optie-1 => technical-value-1, ...)
-	 * 
+	 *
 	 * @var array
 	 */
 	private $instellingen = array(
@@ -59,7 +59,7 @@ class LidInstellingen extends PersistenceModel {
 			'fotoWeergave'			 => array('Toon groter formaat afbeeldingen', T::Enumeration, array('nee', 'hoverIntent', 'altijd'), 'nee')
 		),
 		'zijbalk'		 => array(
-			'ishetal'				 => array('Is het al… weergeven', T::Enumeration, array('niet weergeven', 'donderdag', 'vrijdag', 'zondag', 'lunch', 'avond', 'borrel', 'lezing', 'jarig', 'dies', 'studeren', 'willekeurig'), 'willekeurig'),
+			'ishetal'				 => array('Is het al… weergeven', T::Enumeration, array('niet weergeven', 'donderdag', 'vrijdag', 'zondag', 'lunch', 'avond', 'borrel', 'lezing', 'jarig', 'dies', 'studeren', 'happie', 'willekeurig'), 'willekeurig'),
 			'agendaweken'			 => array('Aantal weken in agenda weergeven', T::Integer, array(0, 10), 2),
 			'agenda_max'			 => array('Maximaal aantal agenda-items', T::Integer, array(0, 50), 15),
 			'mededelingen'			 => array('Aantal mededelingen', T::Integer, array(0, 50), 5),

@@ -3,7 +3,7 @@
 class IsHetAlContent implements View {
 
 	private $model;
-	private $opties = array('dies', 'jarig', 'vrijdag', 'donderdag', 'zondag', 'borrel', 'lezing', 'lunch', 'avond');
+	private $opties = array('dies', 'jarig', 'vrijdag', 'donderdag', 'zondag', 'borrel', 'lezing', 'lunch', 'avond', 'happie');
 	private $ja = false; //ja of nee.
 
 	public function __construct($ishetal) {
@@ -19,6 +19,17 @@ class IsHetAlContent implements View {
 				if ($nu > $einde) {
 					$begin = strtotime('+1 year', $begin);
 				}
+				$dagen = round(($begin - $nu) / 86400);
+				if ($dagen <= 0) {
+					$this->ja = true;
+				} else {
+					$this->ja = $dagen;
+				}
+				break;
+			case 'happie' :
+				$begin = strtotime('2014-11-19');
+				$einde = strtotime('2014-12-19');
+				$nu = strtotime(date('Y-m-d'));
 				$dagen = round(($begin - $nu) / 86400);
 				if ($dagen <= 0) {
 					$this->ja = true;
@@ -81,6 +92,9 @@ class IsHetAlContent implements View {
 			case 'lezing':
 				echo '<div id="ishetal">Is er een ' . $this->model . '?<br />';
 				break;
+			case 'happie':
+				echo '<div id="ishetal">Wanneer opent Happietaria?<br />';
+				break;
 			default:
 				echo '<div id="ishetal">Is het al ' . $this->model . '?<br />';
 				break;
@@ -89,7 +103,7 @@ class IsHetAlContent implements View {
 		if ($this->ja === true) {
 			echo '<div class="ja">JA!</div>';
 		} else {
-			if ($this->model == 'jarig' || $this->model == 'dies') {
+			if ($this->model == 'jarig' || $this->model == 'dies' || this->model == 'happie') {
 				echo '<div class="nee">OVER ' . $this->ja . ' DAGEN!</div>';
 			} else {
 				echo '<div class="nee">NEE.</div>';
