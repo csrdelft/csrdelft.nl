@@ -479,7 +479,7 @@ class RechtenField extends TextField {
 		if (!parent::validate()) {
 			return false;
 		}
-		//parent checks not null
+		// parent checks not null
 		if ($this->value == '') {
 			return true;
 		}
@@ -492,7 +492,10 @@ class RechtenField extends TextField {
 			foreach ($and as $or2) {
 				$or2 = explode('|', $or2);
 				foreach ($or2 as $value) {
-					if (!LoginModel::instance()->isValidPerm($value)) { // mac?
+					if (startsWith('!')) {
+						$value = substr($value, 1);
+					}
+					if (!AccessModel::instance()->isValidPerm($value)) { // If not mac
 						$dac = explode(':', $value);
 						if ((sizeof($dac) !== 2 OR $dac[0] == '' OR $dac[1] == '')) {
 							$this->error = 'Ongeldige restrictie: "' . $value . '"';
@@ -528,7 +531,7 @@ class UidField extends TextField {
 		if (!parent::validate()) {
 			return false;
 		}
-		//parent checks not null
+		// parent checks not null
 		if ($this->value == '') {
 			return true;
 		}
@@ -608,7 +611,7 @@ class LidField extends TextField {
 		if (!parent::validate()) {
 			return false;
 		}
-		//parent checks not null
+		// parent checks not null
 		if ($this->value == '') {
 			return true;
 		}
@@ -685,7 +688,7 @@ class EmailField extends TextField {
 		if (!parent::validate()) {
 			return false;
 		}
-		//parent checks not null
+		// parent checks not null
 		if ($this->value == '') {
 			return true;
 		}
@@ -732,7 +735,7 @@ class UrlField extends TextField {
 		if (!parent::validate()) {
 			return false;
 		}
-		//parent checks not null
+		// parent checks not null
 		if ($this->value == '') {
 			return true;
 		}
@@ -774,7 +777,7 @@ class IntField extends TextField {
 		if (!parent::validate()) {
 			return false;
 		}
-		//parent checks not null
+		// parent checks not null
 		if ($this->value == '') {
 			return true;
 		} elseif (!preg_match('/\d+/', $this->value)) {
@@ -826,7 +829,7 @@ class FloatField extends TextField {
 		if (!parent::validate()) {
 			return false;
 		}
-		//parent checks not null
+		// parent checks not null
 		if ($this->value == '') {
 			return true;
 		} elseif (!preg_match('/\d+(,{1}\d*)?/', str_replace(',', '.', $this->value))) {
@@ -867,7 +870,7 @@ class NickField extends TextField {
 		if (!parent::validate()) {
 			return false;
 		}
-		//parent checks not null
+		// parent checks not null
 		if ($this->value == '') {
 			return true;
 		}
@@ -903,7 +906,7 @@ class DuckField extends TextField {
 		if (!parent::validate()) {
 			return false;
 		}
-		//parent checks not null
+		// parent checks not null
 		if ($this->value == '') {
 			return true;
 		}
@@ -929,7 +932,7 @@ class TelefoonField extends TextField {
 		if (!parent::validate()) {
 			return false;
 		}
-		//parent checks not null
+		// parent checks not null
 		if ($this->value == '') {
 			return true;
 		}

@@ -221,8 +221,8 @@ class AccessModel extends PersistenceModel {
 			return $result;
 		}
 		// Negatie van een permissie (gebruiker mag deze permissie niet bezitten)
-		if (substr($permission, 0, 1) === '!' && !$this->hasPermission($subject, substr($permission, 1), $token_authorizable, $mandatory_only)) {
-			return true;
+		if (startsWith($permission, '!')) {
+			return !$this->hasPermission($subject, substr($permission, 1), $token_authorizable, $mandatory_only);
 		}
 
 		// Is de gevraagde permissie voorgedefinieerd?
