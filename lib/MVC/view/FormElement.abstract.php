@@ -458,8 +458,9 @@ class RechtenField extends TextField {
 
 	public function __construct($name, $value = null, $description = null) {
 		parent::__construct($name, $value, $description);
-		$this->suggestions = LoginModel::instance()->getValidPerms();
-		$this->suggestions[] = 'groep:####';
+		$this->suggestions = AccessModel::instance()->getValidPerms();
+		$this->suggestions[] = 'groep:#nr#';
+		$this->suggestions[] = 'groep:KorteNaam';
 		$this->suggestions[] = 'geslacht:m';
 		$this->suggestions[] = 'geslacht:v';
 		$verticalen = Verticale::getNamen();
@@ -470,7 +471,7 @@ class RechtenField extends TextField {
 		for ($jaar = $jong; $jaar > $jong - 9; $jaar--) {
 			$this->suggestions[] = 'lichting:' . $jaar;
 		}
-		$this->title = 'Plaats een ! vooraan om van de restrictie een uitsluiting te maken.';
+		$this->title = 'Met , + | ! voor respectievelijk OR, AND, OR binnen AND (alsof er haakjes omheen staan) en negatie om van een restrictie een uitsluiting te maken.';
 	}
 
 	public function validate() {
