@@ -103,7 +103,7 @@ class IsHetAlContent implements View {
 		if ($this->ja === true) {
 			echo '<div class="ja">JA!</div>';
 		} else {
-			if ($this->model == 'jarig' || $this->model == 'dies' || this->model == 'happie') {
+			if ($this->model == 'jarig' || $this->model == 'dies' || $this->model == 'happie') {
 				echo '<div class="nee">OVER ' . $this->ja . ' DAGEN!</div>';
 			} else {
 				echo '<div class="nee">NEE.</div>';
