@@ -85,7 +85,7 @@ var bAltPressed = false;
 var bMetaPressed = false;
 /**
  * Houdt bij welke modifier keys worden ingedrukt.
- * Werkt dankzij jQuery voor Mac & PC.
+ * Werkt dankzij jQuery voor Mac & PC hetzelfde.
  * 
  * Slimme keydown constructie vanwege repeated
  * calls op die functie zolang er een toets wordt
