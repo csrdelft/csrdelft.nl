@@ -224,11 +224,11 @@ class FotoAlbumController extends AclController {
 		$naam = filter_input(INPUT_POST, 'cover', FILTER_SANITIZE_STRING);
 		if (FotoAlbumModel::setAlbumCover($album, new Foto($album, $naam))) {
 			SimpleHTML::setMelding('Fotoalbum-cover succesvol ingesteld', 1);
-			redirect(CSR_ROOT . '/' . $album->getSubDir());
 		} else {
 			SimpleHTML::setMelding('Fotoalbum-cover instellen mislukt', -1);
-			redirect(CSR_ROOT . '/fotoalbum');
 		}
+		// ReloadPage
+		exit;
 	}
 
 	public function roteren(FotoAlbum $album) {
