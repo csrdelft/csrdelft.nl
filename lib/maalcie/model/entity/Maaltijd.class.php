@@ -280,7 +280,7 @@ class Maaltijd implements Agendeerbaar {
 			// Ook hoeft een taak niet per se gekoppeld te zijn aan een maaltijd (maximaal aan 1 maaltijd).
 			$taken = CorveeTakenModel::getTakenVoorAgenda($this->getBeginMoment(), $this->getBeginMoment());
 			foreach ($taken as $taak) {
-				if ($taak->getUid() === $uid) { // niet checken op gekoppelde maaltijd (zie hierboven)
+				if ($taak->getUid() === $uid AND $taak->getMaaltijdId() !== null) { // checken op gekoppelde maaltijd (zie hierboven)
 					$this->maaltijdcorvee = $taak; // de taak die toegang geeft tot de maaltijdlijst
 					return true;
 				}
