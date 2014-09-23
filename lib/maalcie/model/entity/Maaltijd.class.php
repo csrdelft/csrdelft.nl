@@ -41,6 +41,11 @@ class Maaltijd implements Agendeerbaar {
 	private $aanmeld_filter; # string 255
 	private $aantal_aanmeldingen;
 	private $archief;
+	/**
+	 * De taak die rechten geeft voor het bekijken en sluiten van de maaltijd(-lijst)
+	 * @var CorveeTaak 
+	 */
+	public $maaltijdcorvee;
 
 	public function __construct($mid = 0, $mrid = null, $titel = '', $limiet = null, $datum = null, $tijd = null, $prijs = null, $gesloten = false, $wanneer_gesloten = null, $verwijderd = false, $filter = '') {
 		$this->maaltijd_id = (int) $mid;
@@ -264,22 +269,35 @@ class Maaltijd implements Agendeerbaar {
 	// Controller ############################################################
 
 	/**
+	 * Deze functie bepaalt of iemand de maaltijd(-lijst) mag zien.
+	 * 
+	 * @param string $uid
+	 * @return boolean
+	 */
+	public function magBekijken($uid) {
+		if (!isset($this->maaltijdcorvee)) {
+			// Zoek op datum, want er kunnen meerdere maaltijden op 1 dag zijn terwijl er maar 1 kookploeg is.
+			// Ook hoeft een taak niet per se gekoppeld te zijn aan een maaltijd (maximaal aan 1 maaltijd).
+			$taken = CorveeTakenModel::getTakenVoorAgenda($this->getBeginMoment(), $this->getBeginMoment());
+			foreach ($taken as $taak) {
+				if ($taak->getUid() === $uid) { // niet checken op gekoppelde maaltijd (zie hierboven)
+					$this->maaltijdcorvee = $taak; // de taak die toegang geeft tot de maaltijdlijst
+					return true;
+				}
+			}
+			$this->maaltijdcorvee = false;
+		}
+		return $this->maaltijdcorvee !== false;
+	}
+
+	/**
 	 * Deze functie bepaalt of iemand deze maaltijd mag sluiten of niet.
-	 * Wordt ook gebruikt voor tonen van (een link naar) de maaltijdlijst.
 	 * 
 	 * @param string $uid
 	 * @return boolean
 	 */
 	public function magSluiten($uid) {
-		// Zoek op datum, want er kunnen meerdere maaltijden op 1 dag zijn terwijl er maar 1 kookploeg is.
-		// Ook hoeft een taak niet per se gekoppeld te zijn aan een maaltijd (maximaal aan 1 maaltijd).
-		$taken = CorveeTakenModel::getTakenVoorAgenda($this->getBeginMoment(), $this->getBeginMoment());
-		foreach ($taken as $taak) {
-			if ($taak->getUid() === $uid AND $taak->getCorveeFunctie()->maaltijden_sluiten) { // mag iemand met deze functie maaltijden sluiten ?
-				return $taak; // de taak die toegang geeft tot de maaltijdlijst
-			}
-		}
-		return false;
+		return $this->magBekijken($uid) AND $this->maaltijdcorvee->getCorveeFunctie()->maaltijden_sluiten; // mag iemand met deze functie maaltijden sluiten?
 	}
 
 }
