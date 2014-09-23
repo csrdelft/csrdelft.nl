@@ -53,6 +53,7 @@ JS;
 		$fields['btn']->extraTitle = 'Opslaan & alle maaltijden bijwerken';
 		$fields['btn']->extraIcon = 'disk_multiple';
 		$fields['btn']->extraUrl = Instellingen::get('taken', 'url') . '/bijwerken/' . $mrid;
+		$fields['btn']->extraAction = 'submit';
 
 		$this->addFields($fields);
 	}

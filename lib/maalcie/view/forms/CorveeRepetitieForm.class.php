@@ -69,6 +69,7 @@ JS;
 		$fields['btn']->extraTitle = 'Opslaan & alle taken bijwerken';
 		$fields['btn']->extraIcon = 'disk_multiple';
 		$fields['btn']->extraUrl = Instellingen::get('taken', 'url') . '/bijwerken/' . $crid;
+		$fields['btn']->extraAction = 'submit';
 
 		$this->addFields($fields);
 	}
