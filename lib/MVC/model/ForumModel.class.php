@@ -35,10 +35,13 @@ class ForumModel extends PersistenceModel {
 		return $result;
 	}
 
-	/**
-	 * Voor alle ex-leden dingen verwijderen
-	 */
 	public function opschonen() {
+		// Niet-goedgekeurde posts verwijderen
+		$posts = ForumPostsModel::instance()->find('verwijderd = TRUE AND wacht_goedkeuring = TRUE');
+		foreach ($posts as $post) {
+			ForumPostsModel::instance()->delete($post);
+		}
+		// Voor alle ex-leden settings opschonen
 		$uids = Database::instance()->sqlSelect(array('uid'), 'lid', "status IN ('S_CIE','S_NOBODY','S_EXLID','S_OVERLEDEN')");
 		$uids->setFetchMode(PDO::FETCH_COLUMN, 0);
 		foreach ($uids as $uid) {
@@ -46,12 +49,25 @@ class ForumModel extends PersistenceModel {
 			ForumDradenVerbergenModel::instance()->toonAllesVoorLid($uid);
 			ForumDradenVolgenModel::instance()->volgNietsVoorLid($uid);
 		}
+		// Settings voor oude topics opschonen en oude/verwijderde topics en posts definitief verwijderen
 		$datetime = getDateTime(strtotime('-1 year'));
 		$draden = ForumDradenModel::instance()->find('verwijderd = TRUE OR (gesloten = TRUE AND (laatst_gewijzigd IS NULL OR laatst_gewijzigd < ?))', array($datetime));
 		foreach ($draden as $draad) {
+
+			// Settings verwijderen
 			ForumDradenVolgenModel::instance()->stopVolgenVoorIedereen($draad);
 			ForumDradenVerbergenModel::instance()->toonDraadVoorIedereen($draad);
 			ForumDradenGelezenModel::instance()->verwijderDraadGelezen($draad);
+
+			// Oude verwijderde posts definitief verwijderen
+			$posts = ForumPostsModel::instance()->find('verwijderd = TRUE AND draad_id = ?', array($draad->draad_id));
+			foreach ($posts as $post) {
+				ForumPostsModel::instance()->delete($post);
+			}
+			if ($draad->verwijderd) {
+				// Als het goed is zijn er nooit niet-verwijderde posts in een verwijderd draadje
+				ForumDradenModel::instance()->delete($draad);
+			}
 		}
 	}
 
