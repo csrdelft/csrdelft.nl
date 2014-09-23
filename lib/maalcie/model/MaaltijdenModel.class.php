@@ -215,7 +215,7 @@ class MaaltijdenModel {
 	private static function filterMaaltijdenVoorLid($maaltijden, $uid) {
 		$result = array();
 		foreach ($maaltijden as $maaltijd) {
-			if (MaaltijdAanmeldingenModel::checkAanmeldFilter($uid, $maaltijd->getAanmeldFilter())) {
+			if (MaaltijdAanmeldingenModel::checkAanmeldFilter($uid, $maaltijd->getAanmeldFilter()) AND $maaltijd->getAanmeldLimiet() > 0) {
 				$result[$maaltijd->getMaaltijdId()] = $maaltijd;
 			}
 		}
