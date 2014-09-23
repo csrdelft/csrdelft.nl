@@ -1,6 +1,8 @@
 <?php
 
 require_once 'maalcie/model/entity/MaaltijdRepetitie.class.php';
+require_once 'maalcie/model/MaaltijdAbonnementenModel.class.php';
+require_once 'maalcie/model/CorveeRepetitiesModel.class.php';
 
 /**
  * MaaltijdRepetitiesModel.class.php	| 	P.W.G. Brussee (brussee@live.nl)
@@ -150,7 +152,7 @@ class MaaltijdRepetitiesModel {
 		if (!is_int($mrid) || $mrid <= 0) {
 			throw new Exception('Verwijder maaltijd-repetitie faalt: Invalid $mrid =' . $mrid);
 		}
-		if (\CorveeRepetitiesModel::existMaaltijdRepetitieCorvee($mrid)) {
+		if (CorveeRepetitiesModel::existMaaltijdRepetitieCorvee($mrid)) {
 			throw new Exception('Ontkoppel of verwijder eerst de bijbehorende corvee-repetities!');
 		}
 		if (MaaltijdenModel::existRepetitieMaaltijden($mrid)) {
