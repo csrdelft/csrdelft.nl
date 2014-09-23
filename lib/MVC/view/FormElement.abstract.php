@@ -1485,13 +1485,19 @@ class VinkField extends InputField {
 		$this->label = $label;
 	}
 
+	/**
+	 * Speciaal geval:
+	 * Niets gepost = niet gepost.
+	 * 
+	 * @return boolean
+	 */
 	public function isPosted() {
-		return true;
+		return !empty($_POST);
 	}
 
 	/**
 	 * Speciaal geval:
-	 * Niet gepost = uitgevinkt.
+	 * Uitgevinkt = niet gepost.
 	 * 
 	 * @return boolean
 	 */
