@@ -77,8 +77,8 @@ class FotoAlbumToevoegenForm extends PopupForm {
 
 	public function __construct(FotoAlbum $album) {
 		parent::__construct($album, get_class(), '/fotoalbum/toevoegen/' . $album->getSubDir());
+		$this->titel = 'Fotoalbum toevoegen in: ' . $album->dirname;
 		$this->css_classes[] = 'ReloadPage';
-		$this->titel = 'Fotoalbum toevoegen';
 		$fields[] = new RequiredFileNameField('subalbum', null, 'Naam');
 		$fields[] = new FormButtons('/fotoalbum', true, true, false);
 		$this->addFields($fields);
@@ -90,7 +90,8 @@ class PosterUploadForm extends Formulier {
 
 	public function __construct(FotoAlbum $album) {
 		parent::__construct($album, get_class(), '/fotoalbum/uploaden/' . $album->getSubDir());
-		$this->titel = 'Poster toevoegen';
+		$path = explode(DIRECTORY_SEPARATOR, $album->getSubDir());
+		$this->titel = 'Poster toevoegen in: ' . $path[1];
 		$fields[] = new HtmlComment('Alleen jpeg afbeeldingen.<br/><br/>');
 		$fields[] = new RequiredFileNameField('posternaam', null, 'Posternaam', 50, 5);
 		$fields[] = new RequiredImageField('afbeelding', null, null, array('image/jpeg'));
@@ -109,7 +110,8 @@ class PosterUploadForm extends Formulier {
 class FotosDropzone extends DropzoneForm {
 
 	public function __construct(FotoAlbum $album) {
-		parent::__construct($album, get_class(), '/fotoalbum/uploaden/' . $album->getSubDir(), new ImageField('afbeelding', null, null, array('image/jpeg'), false), 'Fotos toevoegen');
+		parent::__construct($album, get_class(), '/fotoalbum/uploaden/' . $album->getSubDir(), new ImageField('afbeelding', null, null, array('image/jpeg'), false));
+		$this->titel = 'Fotos toevoegen aan album: ' . $album->dirname;
 	}
 
 	public function view() {
