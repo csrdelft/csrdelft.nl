@@ -163,10 +163,10 @@ class MaaltijdenModel {
 
 	public static function verwijderMaaltijd($mid) {
 		$maaltijd = self::loadMaaltijd($mid);
+		\CorveeTakenModel::verwijderMaaltijdCorvee($mid); // delete corveetaken first (foreign key)
 		if ($maaltijd->getIsVerwijderd()) {
 			if (\CorveeTakenModel::existMaaltijdCorvee($mid)) {
-				\CorveeTakenModel::verwijderMaaltijdCorvee($mid); // delete corveetaken first (foreign key)
-				throw new Exception('Alle bijbehorende corveetaken zijn naar de prullenbak verplaatst. Verwijder die eerst!');
+				throw new Exception('Er zitten nog bijbehorende corveetaken in de prullenbak. Verwijder die eerst definitief!');
 			}
 			self::deleteMaaltijd($mid); // definitief verwijderen
 		} else {
