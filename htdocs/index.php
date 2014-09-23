@@ -40,7 +40,7 @@ try {
 		$queries = DatabaseAdmin::getQueries();
 
 		if (empty($queries)) {
-			debugprint('DB_MODIFY ENABLED');
+			SimpleHTML::setMelding('DB_MODIFY ENABLED', 2);
 		} else {
 			header('Content-Type: text/x-sql');
 			header('Content-Disposition: attachment;filename=DB_modify_' . time() . '.sql');

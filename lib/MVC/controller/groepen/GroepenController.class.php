@@ -3,13 +3,13 @@
 require_once 'MVC/view/groepen/GroepenView.class.php';
 
 /**
- * GroepenController.abstract.php
+ * GroepenController.class.php
  * 
  * @author P.W.G. Brussee <brussee@live.nl>
  * 
  * Controller voor groepen.
  */
-abstract class GroepenController extends Controller {
+class GroepenController extends Controller {
 
 	public function __construct($query, GroepenModel $model) {
 		parent::__construct($query, $model);

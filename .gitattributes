@@ -3065,7 +3065,7 @@ lib/MVC/controller/groepen/ActiviteitenController.class.php -text
 lib/MVC/controller/groepen/BesturenController.class.php -text
 lib/MVC/controller/groepen/CommissiesController.class.php -text
 lib/MVC/controller/groepen/ConferentiesController.class.php -text
-lib/MVC/controller/groepen/GroepenController.abstract.php -text
+lib/MVC/controller/groepen/GroepenController.class.php -text
 lib/MVC/controller/groepen/KetzersController.class.php -text
 lib/MVC/controller/groepen/OnderverenigingenController.class.php -text
 lib/MVC/controller/groepen/SjaarciesController.class.php -text
@@ -3122,7 +3122,7 @@ lib/MVC/model/entity/groepen/Activiteit.class.php -text
 lib/MVC/model/entity/groepen/Bestuur.class.php -text
 lib/MVC/model/entity/groepen/Commissie.class.php -text
 lib/MVC/model/entity/groepen/Conferentie.class.php -text
-lib/MVC/model/entity/groepen/Groep.abstract.php -text
+lib/MVC/model/entity/groepen/Groep.class.php -text
 lib/MVC/model/entity/groepen/GroepCategorie.class.php -text
 lib/MVC/model/entity/groepen/GroepFunctie.enum.php -text
 lib/MVC/model/entity/groepen/GroepLid.class.php -text

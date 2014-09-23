@@ -11,31 +11,46 @@ require_once 'MVC/view/CmsPaginaView.class.php';
  * @author P.W.G. Brussee <brussee@live.nl>
  * 
  */
-abstract class GroepenView extends SmartyTemplateView {
+class GroepenView implements View {
 
+	protected $titel;
 	/**
 	 * Toon CMS pagina
 	 * @var string
 	 */
 	protected $pagina;
+	/**
+	 * Lijst van groepen
+	 * @var PDOStatement
+	 */
+	protected $groepen;
 
-	public function __construct($groepen, $pagina, $titel = false) {
-		parent::__construct($groepen, $titel);
+	public function __construct($groepen, $pagina) {
+		$this->groepen = $groepen;
 		$this->pagina = CmsPaginaModel::instance()->getPagina($pagina);
 		if ($this->pagina) {
 			$this->titel = $this->pagina->titel;
 		}
 	}
 
+	public function getModel() {
+		return $this->groepen;
+	}
+
+	public function getTitel() {
+		return $this->titel;
+	}
+
 	public function view() {
-		$this->smarty->assign('groepen', $this->model);
-		$this->smarty->display('MVC/groepen/menu_pagina.tpl');
+		$smarty = CsrSmarty::instance();
+		$smarty->assign('groepen', $this->groepen);
+		$smarty->display('MVC/groepen/menu_pagina.tpl');
 		//$this->smarty->display('MVC/groepen/inhoudsopgave.tpl'); //FIXME: cannot iterate more than once over PDO statement of groepen
 		if ($this->pagina) {
 			$pagina = new CmsPaginaView($this->pagina);
 			$pagina->view();
 		}
-		foreach ($this->model as $groep) {
+		foreach ($this->groepen as $groep) {
 			$class = get_class($groep) . 'View';
 			$class = new $class($groep, GroepTab::Lijst);
 			$class->view();
@@ -44,13 +59,14 @@ abstract class GroepenView extends SmartyTemplateView {
 
 }
 
-abstract class GroepView extends SmartyTemplateView {
+class GroepView implements View {
 
+	protected $groep;
 	protected $tab;
 	protected $tabContent;
 
 	public function __construct(Groep $groep, $groepTab) {
-		parent::__construct($groep);
+		$this->groep = $groep;
 		$this->tab = $groepTab;
 		switch ($this->tab) {
 			default:
@@ -69,11 +85,20 @@ abstract class GroepView extends SmartyTemplateView {
 		}
 	}
 
+	public function getModel() {
+		return $this->groep;
+	}
+
+	public function getTitel() {
+		return $this->getModel()->naam;
+	}
+
 	public function view() {
-		$this->smarty->assign('groep', $this->model);
-		$this->smarty->assign('tab', $this->tab);
-		$this->smarty->assign('tabContent', $this->tabContent);
-		$this->smarty->display('MVC/groepen/groep.tpl'); //TODO: get_class($this->model)
+		$smarty = CsrSmarty::instance();
+		$smarty->assign('groep', $this->groep);
+		$smarty->assign('tab', $this->tab);
+		$smarty->assign('tabContent', $this->tabContent);
+		$smarty->display('MVC/groepen/groep.tpl'); //TODO: get_class($this->groep)
 	}
 
 }

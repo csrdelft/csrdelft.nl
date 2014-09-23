@@ -4,14 +4,14 @@ require_once 'MVC/model/entity/groepen/GroepLid.class.php';
 require_once 'MVC/model/entity/groepen/GroepStatus.enum.php';
 
 /**
- * Groep.abstract.php
+ * Groep.class.php
  * 
  * @author P.W.G. Brussee <brussee@live.nl>
  * 
  * Een groep met leden en status.
  * Optioneel in familie voor opvolging.
  */
-abstract class Groep extends PersistentEntity {
+class Groep extends PersistentEntity {
 
 	/**
 	 * Primary key

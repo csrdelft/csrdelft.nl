@@ -1,6 +1,6 @@
 <?php
 
-require_once 'MVC/controller/groepen/GroepenController.abstract.php';
+require_once 'MVC/controller/groepen/GroepenController.class.php';
 require_once 'MVC/model/GroepenModel.class.php';
 require_once 'MVC/view/groepen/GroepenView.class.php';
 

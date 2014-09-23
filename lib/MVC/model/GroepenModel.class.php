@@ -1,6 +1,6 @@
 <?php
 
-require_once 'MVC/model/entity/groepen/Groep.abstract.php';
+require_once 'MVC/model/entity/groepen/Groep.class.php';
 
 /**
  * GroepenModel.class.php
@@ -8,7 +8,7 @@ require_once 'MVC/model/entity/groepen/Groep.abstract.php';
  * @author P.W.G. Brussee <brussee@live.nl>
  * 
  */
-abstract class GroepenModel extends PersistenceModel {
+class GroepenModel extends PersistenceModel {
 
 	protected function __construct() {
 		parent::__construct('groepen/');
