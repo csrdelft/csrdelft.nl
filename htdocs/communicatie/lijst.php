@@ -77,7 +77,7 @@ if (isset($_GET['addToGoogle'])) {
 	} catch (Zend_Gdata_App_AuthException $e) {
 		$m = $e->getMessage();
 		$title = substr($m, strpos($m, '<title>') + 7, strpos($m, '</title>'));
-		setMelding($title, -1);
+		SimpleHTML::setMelding($title, -1);
 	}
 } else {
 
