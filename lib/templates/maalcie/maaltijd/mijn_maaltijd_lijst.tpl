@@ -1,6 +1,6 @@
 {* mijn_maaltijd_lijst.tpl	|	P.W.G. Brussee (brussee@live.nl) *}
 {strip}
-	<tr id="maaltijd-row-{$maaltijd->getMaaltijdId()}"{if !$aanmelding and $maaltijd->getIsGesloten()} class="taak-grijs"{/if}>
+	<tr id="maaltijd-row-{$maaltijd->getMaaltijdId()}"{if $maaltijd->getAanmeldLimiet() === 0 or ($maaltijd->getIsGesloten() and ! $aanmelding)} class="taak-grijs"{/if}>
 		<td>
 			{$maaltijd->getDatum()|date_format:"%a %e %b"} {$maaltijd->getTijd()|date_format:"%H:%M"}
 			{if $maaltijd->magBekijken(LoginModel::getUid())}
