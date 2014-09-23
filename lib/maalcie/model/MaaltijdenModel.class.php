@@ -65,11 +65,11 @@ class MaaltijdenModel {
 	}
 
 	/**
-	 * Haalt de maaltijden op in de ingestelde periode achteraf.
+	 * Haalt de maaltijden in het verleden op voor de ingestelde periode.
 	 * 
 	 * @return Maaltijd[]
 	 */
-	public static function getRecenteMaaltijden() {
+	public static function getRecentBezochteMaaltijden() {
 		$maaltijden = self::loadMaaltijden('verwijderd = false AND datum >= ? AND datum <= ?', array(date('Y-m-d', strtotime(Instellingen::get('maaltijden', 'recent_lidprofiel'))), date('Y-m-d')));
 		$maaltijdenById = array();
 		foreach ($maaltijden as $maaltijd) {
@@ -215,7 +215,8 @@ class MaaltijdenModel {
 	private static function filterMaaltijdenVoorLid($maaltijden, $uid) {
 		$result = array();
 		foreach ($maaltijden as $maaltijd) {
-			if (MaaltijdAanmeldingenModel::checkAanmeldFilter($uid, $maaltijd->getAanmeldFilter()) AND $maaltijd->getAanmeldLimiet() > 0) {
+			// Kan en mag aanmelden of mag maaltijdlijst zien en sluiten? Dan maaltijd ook zien.
+			if (($maaltijd->getAanmeldLimiet() > 0 AND MaaltijdAanmeldingenModel::checkAanmeldFilter($uid, $maaltijd->getAanmeldFilter())) OR $maaltijd->magMaaltijdlijstTonen()) {
 				$result[$maaltijd->getMaaltijdId()] = $maaltijd;
 			}
 		}
