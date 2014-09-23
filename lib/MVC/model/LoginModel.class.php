@@ -301,9 +301,6 @@ class LoginModel extends PersistenceModel implements Validator {
 	}
 
 	public static function getUid() {
-		if (!isset(static::$instance)) {
-			throw new Exception('LoginModel not initialized!');
-		}
 		return LoginModel::instance()->getLid()->getUid();
 	}
 
