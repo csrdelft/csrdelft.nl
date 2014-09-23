@@ -24,7 +24,7 @@ class MaaltijdRepetitiesView extends SmartyTemplateView {
 
 class MaaltijdRepetitieView extends SmartyTemplateView {
 
-	public function __construct(MaltijdRepetitie $repetitie) {
+	public function __construct(MaaltijdRepetitie $repetitie) {
 		parent::__construct($repetitie);
 	}
 
