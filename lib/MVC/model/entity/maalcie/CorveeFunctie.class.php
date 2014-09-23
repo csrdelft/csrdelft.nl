@@ -55,6 +55,12 @@ class CorveeFunctie extends PersistentEntity {
 	 */
 	public $kwalificatie_benodigd;
 	/**
+	 * Geeft deze functie speciale rechten
+	 * om de maaltijd te kunnen sluiten
+	 * @var boolean
+	 */
+	public $maaltijd_sluiten;
+	/**
 	 * Kwalificaties
 	 * @var CorveeKwalificatie[]
 	 */
@@ -64,12 +70,13 @@ class CorveeFunctie extends PersistentEntity {
 	 * @var array
 	 */
 	protected static $persistent_fields = array(
-		'functie_id' => array(T::Integer, false, 'auto_increment'),
-		'naam' => array(T::String),
-		'afkorting' => array(T::String),
-		'email_bericht' => array(T::Text),
-		'standaard_punten' => array(T::Integer),
-		'kwalificatie_benodigd' => array(T::Boolean)
+		'functie_id'			 => array(T::Integer, false, 'auto_increment'),
+		'naam'					 => array(T::String),
+		'afkorting'				 => array(T::String),
+		'email_bericht'			 => array(T::Text),
+		'standaard_punten'		 => array(T::Integer),
+		'kwalificatie_benodigd'	 => array(T::Boolean),
+		'maaltijd_sluiten'		 => array(T::Boolean)
 	);
 	/**
 	 * Database primary key

@@ -216,7 +216,7 @@ class MaaltijdenModel {
 		$result = array();
 		foreach ($maaltijden as $maaltijd) {
 			// Kan en mag aanmelden of mag maaltijdlijst zien en sluiten? Dan maaltijd ook zien.
-			if (($maaltijd->getAanmeldLimiet() > 0 AND MaaltijdAanmeldingenModel::checkAanmeldFilter($uid, $maaltijd->getAanmeldFilter())) OR $maaltijd->magMaaltijdlijstTonen()) {
+			if (($maaltijd->getAanmeldLimiet() > 0 AND MaaltijdAanmeldingenModel::checkAanmeldFilter($uid, $maaltijd->getAanmeldFilter())) OR $maaltijd->magSluiten($uid)) {
 				$result[$maaltijd->getMaaltijdId()] = $maaltijd;
 			}
 		}

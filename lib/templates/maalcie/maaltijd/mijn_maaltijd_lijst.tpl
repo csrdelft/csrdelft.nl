@@ -5,7 +5,7 @@
 <tr id="maaltijd-row-{$maaltijd->getMaaltijdId()}"{if !$aanmelding and $maaltijd->getIsGesloten()} class="taak-grijs"{/if}>
 	<td>
 		{$maaltijd->getDatum()|date_format:"%a %e %b"} {$maaltijd->getTijd()|date_format:"%H:%M"}
-{assign var=corvee value=$maaltijd->magMaaltijdlijstTonen()}
+{assign var=corvee value=$maaltijd->magSluiten(LoginModel::getUid())}
 {if $corvee|is_a:'\CorveeTaak'}
 		<div style="float: right;">
 			{icon get="paintcan" title=$corvee->getCorveeFunctie()->naam}
