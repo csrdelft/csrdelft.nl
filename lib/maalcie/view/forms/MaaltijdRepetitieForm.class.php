@@ -30,7 +30,7 @@ class MaaltijdRepetitieForm extends PopupForm {
 		$fields[] = new IntField('periode_in_dagen', $periode, 'Periode (in dagen)', 0, 183);
 		$fields['abo'] = new VinkField('abonneerbaar', $abo, 'Abonneerbaar');
 		if ($mrid !== 0) {
-			$fields['abo']->onchange = "if (!this.checked && $(this).attr('origvalue') == 1) alert('Alle abonnementen zullen worden verwijderd!');";
+			$fields['abo']->onchange = "if (!this.checked && $(this).attr('origvalue') == 1) if (!confirm('Alle abonnementen zullen worden verwijderd!')) this.checked = true;";
 		}
 		$fields[] = new FloatField('standaard_prijs', $prijs, 'Standaard prijs (€)', 0, 50);
 		$fields[] = new IntField('standaard_limiet', $limiet, 'Standaard limiet', 0, 200);
