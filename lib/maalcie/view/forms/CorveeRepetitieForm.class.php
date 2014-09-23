@@ -46,7 +46,7 @@ class CorveeRepetitieForm extends PopupForm {
 		$fields['dag']->title = 'Als de periode ongelijk is aan 7 is dit de start-dag bij het aanmaken van periodiek corvee';
 		$fields['vrk'] = new VinkField('voorkeurbaar', $voorkeur, 'Voorkeurbaar');
 		if ($crid !== 0) {
-			$fields['vrk']->onchange = "if (this.origvalue) alert('Alle voorkeuren zullen worden verwijderd!');";
+			$fields['vrk']->onchange = "if (this.origvalue && !this.checked) alert('Alle voorkeuren zullen worden verwijderd!');";
 		}
 		$fields[] = new SelectField('mlt_repetitie_id', $mrid, 'Maaltijdrepetitie', $repetitieNamen);
 		$fields[] = new IntField('standaard_punten', $punten, 'Standaard punten', 0, 10);
