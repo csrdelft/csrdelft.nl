@@ -66,6 +66,7 @@ class CorveeRepetitiesModel {
 		if ($where !== null) {
 			$sql.= ' WHERE ' . $where;
 		}
+		$sql.= ' ORDER BY periode_in_dagen ASC, dag_vd_week ASC';
 		if (is_int($limit)) {
 			$sql.= ' LIMIT ' . $limit;
 		}
