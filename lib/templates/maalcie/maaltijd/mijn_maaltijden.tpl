@@ -7,7 +7,7 @@ Onderstaande tabel toont de maaltijden in de komende maand.
 De kolom "Aangemeld" geeft aan of u bent aangemeld voor de maaltijd met "Ja", of niet bent aangemeld met "Nee".
 Als u een abonnement heeft dat u automatisch heeft aangemeld staat er "(abo)" achter.
 Als u bent ingedeeld voor een corveetaak staat dat aangegeven door middel van dit icoon: {icon get="paintcan" title="Corvee"}
-In dat geval heeft u de mogelijkheid de maaltijdlijst te bekijken.
+Als u (kwali)kok bent heeft u tevens de mogelijkheid de maaltijdlijst te bekijken en de inschrijvingen te sluiten.
 </p>
 <h3>Gasten aanmelden</h3>
 <p>
