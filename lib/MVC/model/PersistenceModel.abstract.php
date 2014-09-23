@@ -27,7 +27,7 @@ abstract class PersistenceModel implements Persistence {
 		$orm = static::orm;
 		require_once 'MVC/model/entity/' . $subdir . $orm . '.class.php';
 		$orm::__constructStatic(); // extend persistent fields
-		if (defined('DB_CHECK_ENABLE')) {
+		if (DB_CHECK) {
 			require_once 'MVC/model/DatabaseAdmin.singleton.php';
 			$orm::checkTable();
 		}

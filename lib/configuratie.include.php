@@ -98,12 +98,6 @@ switch (constant('MODE')) {
 		break;
 
 	case 'WEB':
-		if (DB_MODIFY OR DB_DROP) {
-			if (!LoginModel::mag('P_ADMIN')) {
-				redirect(CSR_ROOT . '/onderhoud.html');
-				exit;
-			}
-		}
 		# terugvinden van temp upload files
 		ini_set('upload_tmp_dir', TMP_PATH);
 
@@ -116,7 +110,11 @@ switch (constant('MODE')) {
 		session_set_cookie_params(1036800, '/', '', false, false);
 		session_start();
 
-		LoginModel::instance();
+		if (DB_MODIFY OR DB_DROP) {
+			if (!LoginModel::mag('P_ADMIN')) {
+				redirect(CSR_ROOT . '/onderhoud.html');
+			}
+		}
 		break;
 
 	default:
