@@ -10,7 +10,7 @@
 var http = new XMLHttpRequest();
 
 function preload(arrayOfImages) {
-	$(arrayOfImages).each(function() {
+	$(arrayOfImages).each(function () {
 		$('<img/>')[0].src = this;
 	});
 }
@@ -21,7 +21,7 @@ preload([
 	'http://plaetjes.csrdelft.nl/layout/loading_bar_black.gif'
 ]);
 
-$(document).ready(function() {
+$(document).ready(function () {
 	init_key_pressed();
 	init_dropzone();
 	init();
@@ -81,32 +81,29 @@ function init_timeago() {
 
 var bShiftPressed = false;
 var bCtrlPressed = false;
+var bAltPressed = false;
+var bMetaPressed = false;
 function init_key_pressed() {
-	$(window).on('keyup', function(event) {
-		$(window).one('keydown', function(event) {
-			if (event.which === 16) { // shift
-				bShiftPressed = true;
-			}
-			else if (event.which === 17) { // ctrl
-				bCtrlPressed = true;
-			}
+	$(window).on('keyup', function (event) {
+		$(window).one('keydown', function (event) {
+			key_pressed_update(event);
 		});
-		if (event.which === 16) { // shift
-			bShiftPressed = false;
-		}
-		else if (event.which === 17) { // ctrl
-			bCtrlPressed = false;
-		}
+		key_pressed_update(event);
 	});
 	$(window).trigger('keyup');
 }
 
-
+function key_pressed_update(event) {
+	bShiftPressed = (event.shiftKey ? true : false);
+	bCtrlPressed = (event.ctrlKey ? true : false);
+	bAltPressed = (event.altKey ? true : false);
+	bMetaPressed = (event.metaKey ? true : false);
+}
 
 function init_lazy_images() {
-	$('div.ubb_img_loading').each(function() {
+	$('div.ubb_img_loading').each(function () {
 		var content = $(document.createElement('IMG'));
-		content.error(function() {
+		content.error(function () {
 			$(this).attr('title', 'Afbeelding bestaat niet of is niet toegankelijk!');
 			$(this).attr('src', 'http://plaetjes.csrdelft.nl/famfamfam/picture_error.png');
 			$(this).css('width', '16px');
@@ -118,7 +115,7 @@ function init_lazy_images() {
 		content.attr('style', $(this).attr('style'));
 		content.attr('src', $(this).attr('src'));
 		$(this).html(content);
-		content.on('load', function() {
+		content.on('load', function () {
 			$(this).parent().replaceWith($(this));
 		});
 	});
@@ -134,15 +131,15 @@ function werkomheen_layout() {
 }
 
 function init_scroll_fixed() {
-	$('.scroll-fix').each(function() {
+	$('.scroll-fix').each(function () {
 		var yfix = $(this).attr('yfix');
 		if (typeof yfix === typeof undefined || yfix === false) {
 			$(this).attr('yfix', $(this).offset().top);
 		}
 	});
-	$(window).scroll(function() {
+	$(window).scroll(function () {
 		var yfix = $(window).scrollTop();
-		$('.scroll-fix').each(function() {
+		$('.scroll-fix').each(function () {
 			if (yfix >= $(this).attr('yfix')) {
 				$(this).addClass('scroll-fixed');
 				$(this).css({
@@ -161,7 +158,7 @@ function page_reload() {
 
 function init_buttons() {
 	$('button.spoiler').unbind('click.spoiler');
-	$('button.spoiler').bind('click.spoiler', function(event) {
+	$('button.spoiler').bind('click.spoiler', function (event) {
 		event.preventDefault();
 		var button = $(this);
 		var content = button.next('div.spoiler-content');
@@ -170,12 +167,12 @@ function init_buttons() {
 		} else {
 			button.html('Toon verklapper');
 		}
-		content.toggle(800, 'easeInOutCubic', function(event) {
+		content.toggle(800, 'easeInOutCubic', function (event) {
 			// effect complete
 		});
 	});
 	$('button.popup').unbind('click.popup');
-	$('button.popup').bind('click.popup', function(event) {
+	$('button.popup').bind('click.popup', function (event) {
 		popup_open();
 	});
 	$('button.post').unbind('click.post');
@@ -186,10 +183,10 @@ function init_buttons() {
 
 function init_hoverIntents() {
 	$('.hoverIntent').hoverIntent({
-		over: function() {
+		over: function () {
 			$(this).find('.hoverIntentContent').fadeIn();
 		},
-		out: function() {
+		out: function () {
 			$(this).find('.hoverIntentContent').fadeOut();
 		},
 		timeout: 250
@@ -275,7 +272,7 @@ function popup_close() {
 }
 
 function init_forms() {
-	$('.Formulier').each(function() {
+	$('.Formulier').each(function () {
 		var formId = $(this).attr('id');
 		if (formId) {
 			var init = 'form_ready_' + formId;
@@ -303,7 +300,7 @@ function init_forms() {
 
 function form_ischanged(form) {
 	var changed = false;
-	$(form).find('.FormElement').each(function() {
+	$(form).find('.FormElement').each(function () {
 		if ($(this).is('input:radio')) {
 			if ($(this).is(':checked') && $(this).attr('origvalue') !== $(this).val()) {
 				changed = true;
@@ -343,10 +340,10 @@ function toggle_inline_none(elmnt) {
 }
 
 function form_inline_toggle(form) {
-	$(form).find('.InputField').each(function() {
+	$(form).find('.InputField').each(function () {
 		toggle_inline_none($(this));
 	});
-	$(form).find('.FormButtons').each(function() {
+	$(form).find('.FormButtons').each(function () {
 		toggle_inline_none($(this));
 	});
 	$(form).find('.InlineFormToggle').toggle();
@@ -385,7 +382,7 @@ function form_submit(event) {
 			done = page_reload;
 		}
 		var formData = new FormData(form.get(0));
-		ajax_request('POST', form.attr('action'), formData, source, done, alert, function() {
+		ajax_request('POST', form.attr('action'), formData, source, done, alert, function () {
 			if (form.hasClass('SubmitReset')) {
 				form_reset(event, form);
 			}
@@ -402,7 +399,7 @@ function form_reset(event, form) {
 		form = $(this).closest('form');
 		event.preventDefault();
 	}
-	form.find('.FormElement').each(function() {
+	form.find('.FormElement').each(function () {
 		var orig = $(this).attr('origvalue');
 		if (orig) {
 			$(this).val(orig);
@@ -440,7 +437,7 @@ function dom_update(htmlString) {
 		document.write(htmlString);
 	}
 	var html = $.parseHTML(htmlString);
-	$(html).each(function() {
+	$(html).each(function () {
 		var id = $(this).attr('id');
 		if (id === 'popup-content') {
 			popup_open(htmlString);
@@ -497,10 +494,10 @@ function ajax_request(type, url, data, source, onsuccess, onerror, onfinish) {
 		cache: false,
 		data: data
 	});
-	jqXHR.done(function(data, textStatus, jqXHR) {
+	jqXHR.done(function (data, textStatus, jqXHR) {
 		onsuccess(data);
 	});
-	jqXHR.fail(function(jqXHR, textStatus, errorThrown) {
+	jqXHR.fail(function (jqXHR, textStatus, errorThrown) {
 		if (errorThrown === '') {
 			errorThrown = 'Nog bezig met laden!';
 		}
@@ -514,7 +511,7 @@ function ajax_request(type, url, data, source, onsuccess, onerror, onfinish) {
 			onerror(errorThrown);
 		}
 	});
-	jqXHR.always(function() {
+	jqXHR.always(function () {
 		if (onfinish) {
 			onfinish();
 		}
@@ -529,15 +526,15 @@ function ketzer_ajax(url, ketzer) {
 		url: url,
 		data: ''
 	});
-	jqXHR.done(function(data, textStatus, jqXHR) {
+	jqXHR.done(function (data, textStatus, jqXHR) {
 		var html = $.parseHTML(data);
-		$('.ubb_maaltijd').each(function() {
+		$('.ubb_maaltijd').each(function () {
 			if ($(this).attr('id') === $(html).attr('id')) {
 				$(this).replaceWith(data);
 			}
 		});
 	});
-	jqXHR.fail(function(jqXHR, textStatus, errorThrown) {
+	jqXHR.fail(function (jqXHR, textStatus, errorThrown) {
 		$(ketzer + ' .aanmelddata').html('<span style="color: red; font-weight: bold;">Error: </span>' + errorThrown);
 		alert(errorThrown);
 	});
@@ -576,7 +573,7 @@ function selectText(id) {
 }
 
 function vergrootTextarea(id, rows) {
-	jQuery('#' + id).animate({'height': '+=' + rows * 30}, 800, function() {
+	jQuery('#' + id).animate({'height': '+=' + rows * 30}, 800, function () {
 	});
 }
 
@@ -587,7 +584,7 @@ function applyUBB(string, div) {
 		url: '/tools/ubb.php',
 		data: 'string=' + encodeURIComponent(string)
 	});
-	jqXHR.done(function(data, textStatus, jqXHR) {
+	jqXHR.done(function (data, textStatus, jqXHR) {
 		$(div).html(data);
 		init();
 	});
@@ -618,7 +615,7 @@ function importAgenda(id) {
 		url: '/agenda/courant/',
 		data: ''
 	});
-	jqXHR.done(function(data, textStatus, jqXHR) {
+	jqXHR.done(function (data, textStatus, jqXHR) {
 		document.getElementById(id).value += "\n" + data;
 	});
 }

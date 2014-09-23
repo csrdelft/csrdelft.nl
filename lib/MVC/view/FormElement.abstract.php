@@ -492,7 +492,7 @@ class RechtenField extends TextField {
 			foreach ($and as $or2) {
 				$or2 = explode('|', $or2);
 				foreach ($or2 as $value) {
-					if (startsWith('!')) {
+					if (startsWith($value, '!')) {
 						$value = substr($value, 1);
 					}
 					if (!AccessModel::instance()->isValidPerm($value)) { // If not mac

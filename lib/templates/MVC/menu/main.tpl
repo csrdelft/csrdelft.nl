@@ -16,7 +16,7 @@
 				{if !$active AND $item->active} 
 					{assign var=active value=true}
 					<script language="javascript" type="text/javascript">
-						$(document).ready(function() {
+						$(document).ready(function () {
 							SetActive({$smarty.foreach.main.iteration});
 						});
 					</script>
@@ -68,8 +68,8 @@
 					</div>
 					{literal}
 						<script>
-							jQuery(document).ready(function($) {
-								$('#adminding').click(function() {
+							jQuery(document).ready(function ($) {
+								$('#adminding').click(function () {
 									$(this).children('div').toggle();
 								});
 								$('#adminding div').hide();
@@ -81,12 +81,12 @@
 				<form name="lidzoeker" method="get" action="/communicatie/lijst.php">
 					<input type="text" name="q" id="zoekveld" />
 					<script type="text/javascript">
-						$(document).ready(function() {
+						$(document).ready(function () {
 							var instantsearch = {json_encode($instantsearch)};
-							$('#zoekveld').click(function(event) {
+							$('#zoekveld').click(function (event) {
 								this.setSelectionRange(0, this.value.length);
 							});
-							$('#zoekveld').keyup(function(event) {
+							$('#zoekveld').keyup(function (event) {
 								if (event.keyCode === 13 && typeof instantsearch[this.value] !== 'undefined') {
 									window.location.href = instantsearch[this.value];
 								}
@@ -100,9 +100,9 @@
 										noRecord: ""
 									}
 							);
-							$(document).keydown(function(event) {
+							$(document).keydown(function (event) {
 								// Geen instantsearch met modifiers
-								if (event.ctrlKey || event.altKey || event.shiftKey) {
+								if (bShiftPressed || bCtrlPressed || bAltPressed || bMetaPressed) {
 									return;
 								}
 								// Geen instantsearch als we in een input-element of text-area zitten.
