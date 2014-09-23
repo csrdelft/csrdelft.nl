@@ -263,17 +263,21 @@ class Maaltijd implements Agendeerbaar {
 
 	// Controller ############################################################
 
+	/**
+	 * Deze functie bepaalt of iemand deze maaltijd mag sluiten of niet.
+	 * Wordt ook gebruikt voor tonen van (een link naar) de maaltijdlijst.
+	 * 
+	 * @param string $uid
+	 * @return boolean
+	 */
 	public function magSluiten($uid) {
-		// Er kunnen meerdere maaltijden op 1 dag zijn terwijl er maar 1 kookploeg is.
-		// Een taak hoeft niet per se gekoppeld te zijn aan maaltijd en kan maximaal aan 1 maaltijd gekoppeld worden.
+		// Zoek op datum, want er kunnen meerdere maaltijden op 1 dag zijn terwijl er maar 1 kookploeg is.
+		// Ook hoeft een taak niet per se gekoppeld te zijn aan een maaltijd (maximaal aan 1 maaltijd).
 		$taken = CorveeTakenModel::getTakenVoorAgenda($this->getBeginMoment(), $this->getBeginMoment());
 		foreach ($taken as $taak) {
 			if ($taak->getUid() === $uid AND $taak->getCorveeFunctie()->maaltijden_sluiten) { // mag iemand met deze functie maaltijden sluiten ?
-				return $taak; // de taak die toegang geeft tot de maaltijdlijst (wordt ook gebruikt voor tonen van link naar maaltijdlijst)
+				return $taak; // de taak die toegang geeft tot de maaltijdlijst
 			}
-		}
-		if (opConfide() || LoginModel::mag('P_MAAL_MOD')) {
-			return true;
 		}
 		return false;
 	}

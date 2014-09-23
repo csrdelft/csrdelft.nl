@@ -56,7 +56,7 @@ class MijnMaaltijdenController extends AclController {
 
 	public function lijst($mid) {
 		$maaltijd = MaaltijdenModel::getMaaltijd($mid, true);
-		if (!$maaltijd->magSluiten(LoginModel::getUid())) {
+		if (!$maaltijd->magSluiten(LoginModel::getUid()) AND ! LoginModel::mag('P_MAAL_MOD')) {
 			$this->geentoegang();
 			return;
 		}
@@ -68,7 +68,7 @@ class MijnMaaltijdenController extends AclController {
 
 	public function sluit($mid) {
 		$maaltijd = MaaltijdenModel::getMaaltijd($mid);
-		if (!$maaltijd->magSluiten(LoginModel::getUid())) {
+		if (!$maaltijd->magSluiten(LoginModel::getUid()) AND ! LoginModel::mag('P_MAAL_MOD')) {
 			$this->geentoegang();
 			return;
 		}
