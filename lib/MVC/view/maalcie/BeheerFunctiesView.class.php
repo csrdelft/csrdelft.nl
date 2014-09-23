@@ -74,6 +74,9 @@ class FunctieForm extends PopupForm {
 		$fields['k'] = new VinkField('kwalificatie_benodigd', $functie->kwalificatie_benodigd, 'Kwalificatie benodigd');
 		$fields['k']->title = 'Is er een kwalificatie benodigd om deze functie uit te mogen voeren';
 
+		$fields['m'] = new VinkField('maaltijden_sluiten', $functie->maaltijden_sluiten, 'Maaltijden sluiten');
+		$fields['m']->title = 'Geeft deze functie speciale rechten om maaltijden te mogen sluiten';
+
 		$fields[] = new FormButtons();
 		$this->addFields($fields);
 	}
