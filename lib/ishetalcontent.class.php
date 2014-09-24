@@ -28,6 +28,7 @@ class IsHetAlContent implements View {
 	public static $wistudat = array(
 		'deze zijbalk geheel naar wens kan ingerichten'	 => '/instellingen#tabs-zijbalk',
 		'ongelezen draadjes als gelezen kan weergeven'	 => '/instellingen#tabs-forum',
+		'een eigen minion op de stek kan krijgen'		 => '/instellingen#tabs-layout',
 		'de C.S.R.-agenda kan importeren met ICAL'		 => '/agenda#ICAL'
 	);
 
