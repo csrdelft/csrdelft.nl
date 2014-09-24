@@ -542,7 +542,7 @@ class UidField extends TextField {
 	}
 
 	public function getPreviewDiv() {
-		return '<div id="lidPreview_' . $this->getName() . '" class="lidPreview"></div>';
+		return '<div id="lidPreview_' . $this->getId() . '" class="lidPreview"></div>';
 	}
 
 	public function getJavascript() {
@@ -550,13 +550,13 @@ class UidField extends TextField {
 $('#{$this->getId()}', form).unbind('keyup.autocomplete');
 $('#{$this->getId()}', form).bind('keyup.autocomplete', function(event) {
 	if ($(this).val().length < 4) {
-		$('#lidPreview_{$this->getName()}').html('');
+		$('#lidPreview_{$this->getId()}').html('');
 		return;
 	}
 	$.ajax({
 		url: "/tools/naamlink.php?uid="+$(this).val(),
 	}).done(function(response) {
-		$('#lidPreview_{$this->getName()}').html(response);
+		$('#lidPreview_{$this->getId()}').html(response);
 		init_hoverIntents();
 	});
 });
@@ -629,7 +629,7 @@ class LidField extends TextField {
 	}
 
 	public function getPreviewDiv() {
-		return '<div id="lidPreview_' . $this->getName() . '" class="lidPreview"></div>';
+		return '<div id="lidPreview_' . $this->getId() . '" class="lidPreview"></div>';
 	}
 
 	public function getJavascript() {
@@ -637,13 +637,13 @@ class LidField extends TextField {
 $('#{$this->getId()}', form).unbind('keyup.autocomplete');
 $('#{$this->getId()}', form).bind('keyup.autocomplete', function(event) {
 	if ($(this).val().length < 1) {
-		$('#lidPreview_{$this->getName()}').html('');
+		$('#lidPreview_{$this->getId()}').html('');
 		return;
 	}
 	$.ajax({
 		url: "/tools/naamlink.php?naam="+$(this).val()+"&zoekin={$this->zoekin}",
 	}).done(function(response) {
-		$('#lidPreview_{$this->getName()}').html(response);
+		$('#lidPreview_{$this->getId()}').html(response);
 		init_hoverIntents();
 	});
 });
@@ -1342,11 +1342,27 @@ class DatumField extends InputField {
 		return $this->error === '';
 	}
 
+	public function getPreviewDiv() {
+		return '<div id="datumPreview_' . $this->getId() . '" class="datumPreview"></div>';
+	}
+
+	public function getJavascript() {
+		return parent::getJavascript() . <<<JS
+onChange_{$this->getId()} = function (){
+	var datum = new Date($('#field_{$this->name}_jaar').val(), $('#field_{$this->name}_maand').val() - 1, $('#field_{$this->name}_dag').val());
+	var weekday = [ 'zondag', 'maandag', 'dinsdag', 'woensdag', 'donderdag', 'vrijdag', 'zaterdag' ];
+	$('#datumPreview_{$this->getId()}').html(weekday[datum.getDay()]);
+}
+onChange_{$this->getId()}();
+JS;
+	}
+
 	public function view() {
 		echo $this->getDiv();
 		echo $this->getLabel();
 		echo $this->getErrorDiv();
 
+		$onchange = ' onchange="onChange_' . $this->getId() . '()" onkeyup="onChange_' . $this->getId() . '()"';
 		$years = range($this->minyear, $this->maxyear);
 		$months = range(1, 12);
 		$days = range(1, 31);
@@ -1358,7 +1374,7 @@ class DatumField extends InputField {
 			$days[] = 0;
 		}
 
-		echo '<select id="field_' . $this->name . '_dag" name="' . $this->name . '_dag" origvalue="' . substr($this->origvalue, 8, 2) . '" ' . $this->getInputAttribute('class') . '>';
+		echo '<select id="field_' . $this->name . '_dag" name="' . $this->name . '_dag" origvalue="' . substr($this->origvalue, 8, 2) . '" ' . $this->getInputAttribute('class') . $onchange . '>';
 		foreach ($days as $value) {
 			$value = sprintf('%02d', $value);
 			echo '<option value="' . $value . '"';
@@ -1369,7 +1385,7 @@ class DatumField extends InputField {
 		}
 		echo '</select> ';
 
-		echo '<select id="field_' . $this->name . '_maand" name="' . $this->name . '_maand" origvalue="' . substr($this->origvalue, 5, 2) . '" ' . $this->getInputAttribute('class') . '>';
+		echo '<select id="field_' . $this->name . '_maand" name="' . $this->name . '_maand" origvalue="' . substr($this->origvalue, 5, 2) . '" ' . $this->getInputAttribute('class') . $onchange . '>';
 		foreach ($months as $value) {
 			$value = sprintf('%02d', $value);
 			echo '<option value="' . $value . '"';
@@ -1381,7 +1397,7 @@ class DatumField extends InputField {
 		}
 		echo '</select> ';
 
-		echo '<select id="field_' . $this->name . '_jaar" name="' . $this->name . '_jaar" origvalue="' . substr($this->origvalue, 0, 4) . '" ' . $this->getInputAttribute('class') . '>';
+		echo '<select id="field_' . $this->name . '_jaar" name="' . $this->name . '_jaar" origvalue="' . substr($this->origvalue, 0, 4) . '" ' . $this->getInputAttribute('class') . $onchange . '>';
 		foreach ($years as $value) {
 			echo '<option value="' . $value . '"';
 			if ($value == substr($this->value, 0, 4)) {
@@ -1390,6 +1406,8 @@ class DatumField extends InputField {
 			echo '>' . $value . '</option>';
 		}
 		echo '</select>';
+
+		echo $this->getPreviewDiv();
 		echo '</div>';
 	}
 

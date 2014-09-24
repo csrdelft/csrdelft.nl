@@ -773,6 +773,10 @@ input, textarea, select{
 	margin-left: 150px;
 	margin-top: -20px;
 }
+.Formulier .datumPreview{
+	display: inline-block;
+	margin-left: 10px;
+}
 .Formulier .UBBpreview{
 	float: left;
 	clear: both;
