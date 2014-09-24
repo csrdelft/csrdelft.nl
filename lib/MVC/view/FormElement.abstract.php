@@ -1348,13 +1348,13 @@ class DatumField extends InputField {
 		echo $this->getErrorDiv();
 
 		$years = range($this->minyear, $this->maxyear);
-		$mounths = range(1, 12);
+		$months = range(1, 12);
 		$days = range(1, 31);
 
 		//als de datum al nul is, moet ie dat ook weer kunnen worden...
 		if ($this->value == '0000-00-00' OR $this->value == 0) {
 			$years[] = '0000';
-			$mounths[] = 0;
+			$months[] = 0;
 			$days[] = 0;
 		}
 
@@ -1370,14 +1370,14 @@ class DatumField extends InputField {
 		echo '</select> ';
 
 		echo '<select id="field_' . $this->name . '_maand" name="' . $this->name . '_maand" origvalue="' . substr($this->origvalue, 5, 2) . '" ' . $this->getInputAttribute('class') . '>';
-		foreach ($mounths as $value) {
+		foreach ($months as $value) {
 			$value = sprintf('%02d', $value);
 			echo '<option value="' . $value . '"';
 			if ($value == substr($this->value, 5, 2)) {
 				echo ' selected="selected"';
 			}
 
-			echo '>' . date('M', $value) . '</option>';
+			echo '>' . date('M', strtotime($this->getValue())) . '</option>';
 		}
 		echo '</select> ';
 
