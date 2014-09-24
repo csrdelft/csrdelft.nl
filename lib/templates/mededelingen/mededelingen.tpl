@@ -27,7 +27,7 @@
 			{/if}
 			{if $geselecteerdeMededeling->isModerator()}
 				<a class="knop" href="#" onclick="$('#legenda').toggle();">{icon get="legenda"} Legenda</a>
-				<div id="legenda" style="display:none;">
+				<div id="legenda" class="dragobject" style="display:none;">
 					<span id="ubbsluiten" onclick="$('#legenda').toggle();" title="Legenda verbergen">&times;</span>
 					<h2>Legenda Mededelingen</h2>
 					<br />
