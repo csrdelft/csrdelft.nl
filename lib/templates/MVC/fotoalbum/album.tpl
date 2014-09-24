@@ -14,6 +14,7 @@
 <div class="breadcrumbs">{FotoAlbumView::getBreadcrumbs($album, true)}</div>
 
 <h1>{$album->dirname|ucfirst}</h1>
+
 {foreach from=$album->getSubAlbums() item=subalbum}
 	<div class="album hoverIntent">
 		{if LoginModel::mag('P_ALBUM_MOD')}
@@ -29,6 +30,7 @@
 		</a>
 	</div>
 {/foreach}
+
 {foreach from=$album->getFotos() item=foto}
 	<div id="{$foto->filename|md5}" class="thumb hoverIntent">
 		{if LoginModel::mag('P_ALBUM_ADD')}
@@ -50,9 +52,10 @@
 		</a>
 	</div>
 {/foreach}
+
+{literal}
 <script type="text/javascript">
-	{literal}
-			jQuery(document).ready(function($) {
+jQuery(document).ready(function($) {
 	$("a[rel^='prettyPhoto']").prettyPhoto({
 	theme: 'dark_rounded',
 			markup: '<div class="pp_pic_holder"> \
@@ -134,5 +137,5 @@
 			});
 		}
 	});
-	{/literal}
 </script>
+{/literal}
