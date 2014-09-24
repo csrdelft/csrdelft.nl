@@ -90,8 +90,7 @@ class PosterUploadForm extends Formulier {
 
 	public function __construct(FotoAlbum $album) {
 		parent::__construct($album, get_class(), '/fotoalbum/uploaden/' . $album->getSubDir());
-		$path = explode(DIRECTORY_SEPARATOR, $album->getSubDir());
-		$this->titel = 'Poster toevoegen in: ' . $path[1];
+		$this->titel = 'Poster toevoegen in: ' . basename(dirname($album->getSubDir()));
 		$fields[] = new HtmlComment('Alleen jpeg afbeeldingen.<br/><br/>');
 		$fields[] = new RequiredFileNameField('posternaam', null, 'Posternaam', 50, 5);
 		$fields[] = new RequiredImageField('afbeelding', null, null, array('image/jpeg'));
@@ -115,7 +114,7 @@ class FotosDropzone extends DropzoneForm {
 	}
 
 	public function view() {
-		echo FotoAlbumView::getBreadcrumbs($this->model, false);
+		echo FotoAlbumView::getBreadcrumbs($this->model, true);
 		echo parent::view();
 		echo '<br /><i>Maak nooit inbreuk op de auteursrechten of het recht op privacy van anderen.</i>';
 	}

@@ -173,7 +173,22 @@ class FotoAlbumController extends AclController {
 					$this->view = new JsonResponse(array('error' => $uploader->getError()), 500);
 				}
 			} else {
-				$this->view = new JsonResponse(array('error' => $formulier->getError()), 400);
+				$list = array();
+				$files = scandir($album->path . '_thumbs/');
+				if ($files !== false) {
+					foreach ($files as $file) {
+						if (endsWith($file, '.jpg')) {
+							$foto = new Foto($album, $file);
+							$foto->filesize = filesize($foto->getPad());
+							$obj['name'] = $foto->filename;
+							$obj['size'] = $foto->filesize;
+							$obj['type'] = 'image/jpeg';
+							$obj['thumb'] = $foto->getThumbURL();
+							$list[] = $obj;
+						}
+					}
+				}
+				$this->view = new JsonResponse($list);
 			}
 		} else {
 			$this->view = new CsrLayoutPage($formulier);

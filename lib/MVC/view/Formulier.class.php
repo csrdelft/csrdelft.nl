@@ -354,28 +354,35 @@ class DropzoneForm extends Formulier {
 		$del = str_replace('uploaden', 'verwijderen', $this->action);
 		$accept = implode(',', $this->dropzone->getFilter());
 		$js[] = <<<JS
-$('#{$this->formId}').dropzone({
+thisDropzone = new Dropzone('#{$this->formId}', {
 	paramName: "{$this->dropzone->getName()}",
 	url: "{$this->action}",
 	acceptedFiles: "{$accept}",
 	addRemoveLinks: {$mag},
-	removedfile: function(file) {
-		//if (!confirm('Foto definitief verwijderen?')) {
-		//	return;
-		//}
+	removedfile: function (file) {
+		if (!confirm('Foto definitief verwijderen?')) {
+			return;
+		}
 		var jqXHR = $.ajax({
 			type: "POST",
 			url: "{$del}",
 			cache: false,
 			data: "foto=" + file.name
 		});
-		jqXHR.done(function(data, textStatus, jqXHR) {
+		jqXHR.done(function (data, textStatus, jqXHR) {
 			$(file.previewElement).remove();
 		});
-		jqXHR.fail(function(jqXHR, textStatus, errorThrown) {
+		jqXHR.fail(function (jqXHR, textStatus, errorThrown) {
 			alert(textStatus);
 		});
 	}
+});
+$.post('{$this->action}', function (data) {
+	$.each(data, function (key, value) {
+		mockFile = { name: value.name, size: value.size, type: value.type };
+		thisDropzone.emit('addedfile', mockFile);
+		thisDropzone.emit('thumbnail', mockFile, value.thumb);
+	});
 });
 JS;
 		return $js;
