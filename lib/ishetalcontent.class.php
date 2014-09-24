@@ -28,9 +28,7 @@ class IsHetAlContent implements View {
 	public static $wistudat = array(
 		'deze zijbalk geheel naar wens kan ingerichten'	 => '/instellingen#tabs-zijbalk',
 		'ongelezen draadjes als gelezen kan weergeven'	 => '/instellingen#tabs-forum',
-		'de C.S.R.-agenda kan importeren met ICAL'		 => '/agenda#ICAL',
-		'zelf foto(-album)s kan toevoegen'				 => '/fotoalbum/uploaden/fotoalbum/',
-		'zelf ketzers kan maken'						 => '/actueel/groepen/Ketzers'
+		'de C.S.R.-agenda kan importeren met ICAL'		 => '/agenda#ICAL'
 	);
 
 	public function __construct($ishetal) {
