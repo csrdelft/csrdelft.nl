@@ -59,7 +59,7 @@ class LidInstellingen extends PersistenceModel {
 			'fotoWeergave'			 => array('Toon groter formaat afbeeldingen', T::Enumeration, array('nee', 'hoverIntent', 'altijd'), 'nee')
 		),
 		'zijbalk'		 => array(
-			'ishetal'				 => array('Is het al… weergeven', T::Enumeration, array('niet weergeven', 'willekeurig', 'wist u dat', 'weekend', 'kring', 'verticalekring', 'werkgroep', 'lezing', 'borrel', 'jarig', 'dies', 'happie', 'lunch', 'studeren'), 'willekeurig'),
+			'ishetal'				 => array('Is het al… weergeven', T::Enumeration, array('niet weergeven', 'willekeurig', 'wist u dat', 'weekend', 'kring', 'werkgroep', 'lezing', 'borrel', 'jarig', 'dies', 'happie', 'lunch', 'studeren'), 'willekeurig'),
 			'agendaweken'			 => array('Aantal weken in agenda weergeven', T::Integer, array(0, 10), 2),
 			'agenda_max'			 => array('Maximaal aantal agenda-items', T::Integer, array(0, 50), 15),
 			'mededelingen'			 => array('Aantal mededelingen', T::Integer, array(0, 50), 5),
