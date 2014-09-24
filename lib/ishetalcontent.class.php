@@ -117,9 +117,11 @@ class IsHetAlContent implements View {
 				echo 'Moet ik alweer studeren?';
 				break;
 			case 'kring':
+				echo 'Is er ' . $this->model . ' vanavond?';
+				break;
 			case 'lezing':
 			case 'borrel':
-				echo 'Is er een ' . $this->model . '?';
+				echo 'Is er een ' . $this->model . ' vanavond?';
 				break;
 			case 'happie':
 				echo 'Is <a href="http://www.facebook.com/HappieDelft" style="text-decoration: underline;">Happietaria</a> al geopend?';
@@ -142,7 +144,7 @@ class IsHetAlContent implements View {
 		} else {
 			// wist u dat
 		}
-		echo '</div>';
+		echo '</div><br />';
 	}
 
 }
