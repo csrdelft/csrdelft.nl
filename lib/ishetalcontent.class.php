@@ -119,8 +119,6 @@ class IsHetAlContent implements View {
 				echo 'Moet ik alweer studeren?';
 				break;
 			case 'kring':
-			case 'verticalekring':
-			case 'werkgroep':
 			case 'lezing':
 			case 'borrel':
 				echo 'Is er een ' . $this->model . '?';
