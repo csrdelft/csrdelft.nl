@@ -411,8 +411,8 @@ function strNthPos($haystack, $needle, $nth = 1) {
 }
 
 function reldate($datum) {
-	$nu = time();
 	$moment = strtotime($datum);
+	/*$nu = time();
 	$verschil = $nu - $moment;
 	if ($verschil <= 60) {
 		$return = $verschil . ' ';
@@ -432,7 +432,7 @@ function reldate($datum) {
 		$return .= ' geleden';
 	} elseif ($verschil <= (60 * 60 * 4)) {
 		$return = floor($verschil / (60 * 60)) . ' uur geleden';
-	} elseif (date('Y-m-d') == date('Y-m-d', $moment)) {
+	} else*/if (date('Y-m-d') == date('Y-m-d', $moment)) {
 		$return = 'vandaag om ' . date("G:i", $moment);
 	} elseif (date('Y-m-d', $moment) == date('Y-m-d', strtotime('1 day ago'))) {
 		$return = 'gisteren om ' . date("G:i", $moment);

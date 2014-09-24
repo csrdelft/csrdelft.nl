@@ -1377,7 +1377,7 @@ class DatumField extends InputField {
 				echo ' selected="selected"';
 			}
 
-			echo '>' . $value . '</option>';
+			echo '>' . date('M', $value) . '</option>';
 		}
 		echo '</select> ';
 
