@@ -16,7 +16,7 @@ class IsHetAlContent implements View {
 	 * Aftellen voor deze typen IsHetAlContent
 	 * @var array
 	 */
-	public static $aftellen = array('jarig', 'dies', 'weekend', 'kring', 'verticalekring', 'lezing', 'werkgroep', 'borrel', 'happie');
+	public static $aftellen = array('jarig', 'dies', 'happie');
 	/**
 	 * Wist u dat'tjes
 	 * 
@@ -69,7 +69,7 @@ class IsHetAlContent implements View {
 				break;
 			case 'lunch': $this->ja = (date('Hi') > '1230' AND date('Hi') < '1330');
 				break;
-			case 'weekend': $this->ja = (date('w') == 5 AND ( date('Hi') > '1700'));
+			case 'weekend': $this->ja = (date('w') == 0 OR date('w') > 5 OR ( date('w') == 5 AND date('Hi') > '1700'));
 				break;
 			case 'studeren':
 				if (isset($_COOKIE['studeren'])) {
@@ -144,7 +144,7 @@ class IsHetAlContent implements View {
 		} elseif (in_array($this->model, self::$aftellen)) {
 			echo '<div class="nee">OVER ' . $this->ja . ' DAGEN!</div>';
 		} else {
-			
+			// wist u dat
 		}
 		echo '</div><br />';
 	}
