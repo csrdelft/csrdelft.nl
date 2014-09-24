@@ -114,7 +114,7 @@ class FotosDropzone extends DropzoneForm {
 	}
 
 	public function view() {
-		echo FotoAlbumView::getBreadcrumbs($this->model, true);
+		echo FotoAlbumView::getBreadcrumbs($this->model, false);
 		echo parent::view();
 		echo '<br /><i>Maak nooit inbreuk op de auteursrechten of het recht op privacy van anderen.</i>';
 	}
