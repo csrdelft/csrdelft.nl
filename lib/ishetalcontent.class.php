@@ -76,6 +76,7 @@ class IsHetAlContent implements View {
 					$this->ja = (time() > ($_COOKIE['studeren'] + 5 * 60) AND date('w') != 0);
 					$tijd = $_COOKIE['studeren'];
 				} else {
+					$this->ja = false;
 					$tijd = time();
 				}
 				setcookie('studeren', $tijd, time() + 30 * 60);
@@ -93,6 +94,8 @@ class IsHetAlContent implements View {
 					} else {
 						$this->ja = $nu > $vandaag->getBeginMoment() AND $nu < $vandaag->getEindMoment();
 					}
+				} else {
+					$this->ja = false;
 				}
 				break;
 		}
