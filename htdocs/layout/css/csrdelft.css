@@ -77,6 +77,10 @@ ul.horizontal li{
 ul.horizontal li.active{ font-weight:bold; }
 ul.nobullets li{ list-style-type: none; }
 
+.dragobject{
+	position: fixed;
+	z-index: 111;
+}
 .dragobject:active{
 	cursor: move;
 }
@@ -590,8 +594,6 @@ div.arrows{
 /* ubb-hulp */
 div#ubbhulpverhaal{
 	display: none;
-	position: fixed;
-	z-index: 111;
 	width: 330px;
 	padding: 5px;
 	border: 1px solid #bbb;

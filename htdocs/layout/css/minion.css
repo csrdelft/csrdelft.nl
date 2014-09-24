@@ -6,8 +6,6 @@
  *                        Hashtag #CSSDrawing #Minion
  */
 #minion {
-  position: fixed;
-  z-index: 111;
   height: 400px;
   width: 250px;
 }
