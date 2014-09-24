@@ -2,14 +2,42 @@
 
 class IsHetAlContent implements View {
 
+	/**
+	 * Type of IsHetAlContent
+	 * @var string
+	 */
 	private $model;
-	private $opties = array('dies', 'jarig', 'vrijdag', 'donderdag', 'zondag', 'borrel', 'lezing', 'lunch', 'avond', 'happie');
-	private $ja = false; //ja of nee.
+	/**
+	 * True OR aantal dagen
+	 * @var boolean|int
+	 */
+	private $ja;
+	/**
+	 * Aftellen voor deze typen IsHetAlContent
+	 * @var array
+	 */
+	public static $aftellen = array('jarig', 'dies', 'weekend', 'kring', 'verticalekring', 'lezing', 'werkgroep', 'borrel', 'happie');
+	/**
+	 * Wist u dat'tjes
+	 * 
+	 * @prefix "Wist u dat... u "
+	 * @postfix "?"
+	 * 
+	 * @var array
+	 */
+	public static $wistudat = array(
+		'deze zijbalk geheel naar wens kan ingerichten'	 => '/instellingen#tabs-zijbalk',
+		'ongelezen draadjes als gelezen kan weergeven'	 => '/instellingen#tabs-forum',
+		'de C.S.R.-agenda kan importeren met ICAL'		 => '/agenda#ICAL',
+		'zelf foto(-album)s kan toevoegen'				 => '/fotoalbum/uploaden/fotoalbum/',
+		'zelf ketzers kan maken'						 => '/actueel/groepen/Ketzers'
+	);
 
 	public function __construct($ishetal) {
 		$this->model = $ishetal;
 		if ($this->model == 'willekeurig') {
-			$this->model = $this->opties[array_rand($this->opties)];
+			$opties = array_slice(LidInstellingen::instance()->getTypeOptions('zijbalk', 'ishetal'), 2);
+			$this->model = $opties[array_rand($opties)];
 		}
 		switch ($this->model) {
 			case 'dies' :
@@ -41,13 +69,7 @@ class IsHetAlContent implements View {
 				break;
 			case 'lunch': $this->ja = (date('Hi') > '1230' AND date('Hi') < '1330');
 				break;
-			case 'avond': $this->ja = (date('Hi') > '1800');
-				break;
-			case 'vrijdag': $this->ja = (date('w') == 5);
-				break;
-			case 'donderdag': $this->ja = (date('w') == 4);
-				break;
-			case 'zondag': $this->ja = (date('w') == 0);
+			case 'weekend': $this->ja = (date('w') == 5 AND ( date('Hi') > '1700'));
 				break;
 			case 'studeren':
 				if (isset($_COOKIE['studeren'])) {
@@ -58,14 +80,18 @@ class IsHetAlContent implements View {
 				}
 				setcookie('studeren', $tijd, time() + 30 * 60);
 				break;
+			case 'wist u dat':
+				$this->ja = null;
+				break;
 			default:
 				require_once 'MVC/model/AgendaModel.class.php';
 				$vandaag = AgendaModel::instance()->zoekWoordAgenda($this->model);
 				if ($vandaag instanceof AgendaItem) {
+					$nu = time();
 					if ($this->model == 'borrel') {
-						$this->ja = time() > $vandaag->getBeginMoment();
+						$this->ja = $nu > $vandaag->getBeginMoment();
 					} else {
-						$this->ja = time() > $vandaag->getBeginMoment() AND time() < $vandaag->getEindMoment();
+						$this->ja = $nu > $vandaag->getBeginMoment() AND $nu < $vandaag->getEindMoment();
 					}
 				}
 				break;
@@ -81,37 +107,41 @@ class IsHetAlContent implements View {
 	}
 
 	public function view() {
+		echo '<div class="ishetal">';
 		switch ($this->model) {
 			case 'jarig':
-				echo '<div id="ishetal">Ben ik al jarig?<br />';
+				echo 'Ben ik al jarig?';
 				break;
 			case 'studeren':
-				echo '<div id="ishetal">Moet ik alweer studeren?<br />';
+				echo 'Moet ik alweer studeren?';
 				break;
-			case 'borrel':
+			case 'kring':
+			case 'verticalekring':
+			case 'werkgroep':
 			case 'lezing':
-				echo '<div id="ishetal">Is er een ' . $this->model . '?<br />';
+			case 'borrel':
+				echo 'Is er een ' . $this->model . '?';
 				break;
 			case 'happie':
-				echo '<div id="ishetal">Wanneer opent <a href="http://www.facebook.com/HappieDelft" style="text-decoration:underline;">Happietaria</a>?<br />';
+				echo 'Is <a href="http://www.facebook.com/HappieDelft" style="text-decoration: underline;">Happietaria</a> al geopend?';
+				break;
+			case 'wist u dat':
+				$wistudat = array_rand(self::$wistudat);
+				echo '<div class="ja">Wist u dat...</div><a href="' . self::$wistudat[$wistudat] . '" style="font-style: italic;">u ' . $wistudat . '?</a>';
 				break;
 			default:
-				echo '<div id="ishetal">Is het al ' . $this->model . '?<br />';
+				echo 'Is het al ' . $this->model . '?';
 				break;
 		}
 
 		if ($this->ja === true) {
-			if ($this->model == 'happie') {
-				echo '<div class="ja">NU!</div>';
-			} else {
-				echo '<div class="ja">JA!</div>';
-			}
+			echo '<div class="ja">JA!</div>';
+		} elseif ($this->ja === false) {
+			echo '<div class="nee">NEE.</div>';
+		} elseif (in_array($this->model, self::$aftellen)) {
+			echo '<div class="nee">OVER ' . $this->ja . ' DAGEN!</div>';
 		} else {
-			if ($this->model == 'jarig' || $this->model == 'dies' || $this->model == 'happie') {
-				echo '<div class="nee">OVER ' . $this->ja . ' DAGEN!</div>';
-			} else {
-				echo '<div class="nee">NEE.</div>';
-			}
+			
 		}
 		echo '</div><br />';
 	}

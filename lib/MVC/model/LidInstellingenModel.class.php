@@ -52,14 +52,14 @@ class LidInstellingen extends PersistenceModel {
 			'zoekresultaten'		 => array('Zoekresultaten per pagina', T::Integer, array(10, 50), 20),
 			'naamWeergave'			 => array('Naamweergave', T::Enumeration, array('civitas', 'volledig', 'bijnaam', 'aaidrom', 'Duckstad'), 'civitas'),
 			'datumWeergave'			 => array('Datumweergave', T::Enumeration, array('relatief', 'vast'), 'relatief'),
-			'ongelezenWeergave'		 => array('Ongelezenweergave', T::Enumeration, array('schuingedrukt', 'dikgedrukt', 'onderstreept', 'gewoon'), 'schuingedrukt', array('schuingedrukt' => 'font-style: italic;', 'dikgedrukt' => 'font-weight: bold;', 'onderstreept' => 'text-decoration: underline;', 'gewoon' => '')),
+			'ongelezenWeergave'		 => array('Ongelezenweergave', T::Enumeration, array('schuingedrukt', 'dikgedrukt', 'onderstreept', 'alsof gelezen'), 'schuingedrukt', array('schuingedrukt' => 'font-style: italic;', 'dikgedrukt' => 'font-weight: bold;', 'onderstreept' => 'text-decoration: underline;', 'alsof gelezen' => '')),
 			'open_draad_op_pagina'	 => array('Open onderwerp op pagina', T::Enumeration, array('1', 'ongelezen', 'laatste'), 'ongelezen'),
 			'toonpasfotos'			 => array('Pasfoto\'s standaard weergeven', T::Enumeration, array('ja', 'nee'), 'ja'),
 			'filter2008'			 => array('Berichten van 2008 eerst verbergen', T::Enumeration, array('ja', 'nee'), 'nee'),
 			'fotoWeergave'			 => array('Toon groter formaat afbeeldingen', T::Enumeration, array('nee', 'hoverIntent', 'altijd'), 'nee')
 		),
 		'zijbalk'		 => array(
-			'ishetal'				 => array('Is het al… weergeven', T::Enumeration, array('niet weergeven', 'donderdag', 'vrijdag', 'zondag', 'lunch', 'avond', 'borrel', 'lezing', 'jarig', 'dies', 'studeren', 'happie', 'willekeurig'), 'willekeurig'),
+			'ishetal'				 => array('Is het al… weergeven', T::Enumeration, array('niet weergeven', 'willekeurig', 'wist u dat', 'weekend', 'kring', 'verticalekring', 'werkgroep', 'lezing', 'borrel', 'jarig', 'dies', 'happie', 'lunch', 'studeren'), 'willekeurig'),
 			'agendaweken'			 => array('Aantal weken in agenda weergeven', T::Integer, array(0, 10), 2),
 			'agenda_max'			 => array('Maximaal aantal agenda-items', T::Integer, array(0, 50), 15),
 			'mededelingen'			 => array('Aantal mededelingen', T::Integer, array(0, 50), 5),
