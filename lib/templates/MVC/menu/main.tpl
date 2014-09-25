@@ -121,8 +121,7 @@
 		{/if}
 	</div>
 </div>
-<div id="submenu" onmouseover="ResetTimer();" onmouseout="StartTimer()
-				;">
+<div id="submenu" onmouseover="ResetTimer();" onmouseout="StartTimer();">
 	<div id="submenuitems">
 		{assign var=active value=false}
 		{foreach name=level1 from=$root->children item=item}
