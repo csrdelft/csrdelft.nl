@@ -18,7 +18,7 @@ html, body, #main, #mainleft, #mainright, #zijkolom {
 	border-right: 1px solid #b8b8b8;
 }
 #mainright {
-	/*padding-left: 30px;*/
+	padding-left: 16px;
 }
 #zijkolom {
 	background-color: #F6F6F6;
