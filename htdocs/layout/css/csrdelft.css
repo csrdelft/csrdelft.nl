@@ -1287,3 +1287,9 @@ div.bijbelrooster{
 	-webkit-columns: 240px auto;
 	-moz-columns: 240px auto;
 }
+
+/* Login Form */
+.login-form .InputField, .login-form .InputField:hover {
+	border: none;
+	width: 100px;
+}
