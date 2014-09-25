@@ -59,7 +59,7 @@
 										</a>
 									{/foreach}
 								</span>
-								{if DEBUG}
+								{if $smarty.const.DEBUG}
 									<a href="/su/x101">&raquo; SU Jan Lid.</a><br />
 								{/if}
 							{/if}
