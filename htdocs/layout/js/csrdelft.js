@@ -125,6 +125,7 @@ function init_lazy_images() {
 		$(this).html(content);
 		content.on('load', function () {
 			$(this).parent().replaceWith($(this));
+			$(window).trigger('resize'); // layout_breedte_werkomheen
 		});
 	});
 }
@@ -145,11 +146,16 @@ function layout_breedte_werkomheen() {
 		}, 400);
 	};
 	z.hoverIntent(expand, collapse);
-	$(window).resize(function () {
+	var resetWidth = function () {
 		z.width(z.parent().width());
+	};
+	$(window).resize(function () {
+		resetWidth();
 		$(window).trigger('scroll');
 	});
-	$(window).trigger('resize');
+	resetWidth();
+	// set delay for adblockers that remove ads so wide they influence page width (very annoying)
+	window.setTimeout(resetWidth, 400);
 }
 
 function init_scroll_fixed() {
