@@ -86,7 +86,7 @@ class CsrLayoutPage extends HtmlPage {
 
 		if (LidInstellingen::get('layout', 'zijkolom') == 'verberg') {
 			$this->zijkolom = false;
-		} elseif ($this->zijkolom !== false) {
+		} elseif ($this->zijkolom !== false OR LidInstellingen::get('layout', 'beeld') == 'breedbeeld') {
 			if (is_array($this->zijkolom)) {
 				$this->zijkolom = array_merge($this->zijkolom, SimpleHTML::getStandaardZijkolom());
 			} else {
