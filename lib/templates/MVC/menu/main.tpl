@@ -59,10 +59,11 @@
 										</a>
 									{/foreach}
 								</span>
-								<a href="/su/x101">&raquo; SU Jan Lid.</a><br />
+								{if DEBUG}
+									<a href="/su/x101">&raquo; SU Jan Lid.</a><br />
+								{/if}
 							{/if}
 							<a href="/tools/query.php">&raquo; Opgeslagen queries</a><br />
-							<a href="/instellingenbeheer">&raquo; Instellingen</a><br />
 							<a href="/beheer">&raquo; Beheeroverzicht</a><br />
 						</div>
 					</div>
