@@ -25,6 +25,7 @@ $(document).ready(function () {
 	init_scroll_fixed();
 	init_key_pressed();
 	init_dropzone();
+	init_loginform();
 	init();
 });
 
@@ -49,6 +50,17 @@ function init_dropzone() {
 	catch (err) {
 		// Missing js file
 	}
+}
+
+/**
+ * duplicate code from layout2
+ */
+function init_loginform() {
+	// Submit form by clicking link
+	$('.login-submit').click(function (e) {
+		$('.login-form form').submit();
+		e.preventDefault();
+	});
 }
 
 function init_timeago() {
