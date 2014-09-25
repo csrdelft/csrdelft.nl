@@ -25,12 +25,6 @@ $(function() {
 	}).blur(function() {
 		$(this).parents('.flip').removeClass('flipped');
 	});
-	// Submit form by clicking link
-	$('.login-submit').click(function(e) {
-		$('.login-form form').submit();
-		e.preventDefault();
-	});
-
 
 	if (is_touch_device()) {
 		$('.flip').click(function() {
