@@ -18,11 +18,11 @@ html, body, #main, #mainleft, #mainright, #zijkolom {
 	border-right: 1px solid #b8b8b8;
 }
 #mainright {
-	//padding-left: 30px;
+	/*padding-left: 30px;*/
 }
 #zijkolom {
 	background-color: #F6F6F6;
-	//box-shadow: inset -10px 0 10px -5px #888;
+	/*box-shadow: inset -10px 0 10px -5px #888;*/
 }
 #zijkolom .block h1 {
 	background-image: url("http://plaetjes.csrdelft.nl/layout/portal-break.png");
