@@ -360,7 +360,7 @@ thisDropzone = new Dropzone('#{$this->formId}', {
 	acceptedFiles: "{$accept}",
 	addRemoveLinks: {$mag},
 	removedfile: function (file) {
-		if (!confirm('Definitief verwijderen van deze foto\n\nWeet u het zeker?')) {
+		if (!confirm('Foto definitief verwijderen?')) {
 			return;
 		}
 		var jqXHR = $.ajax({
