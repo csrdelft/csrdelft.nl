@@ -17,6 +17,9 @@ body{
 	margin: 0 auto;
 	border-collapse: collapse;
 }
+#mainleft{
+	width: 200px;
+}
 #mainright{
 	padding: 10px;
 }
