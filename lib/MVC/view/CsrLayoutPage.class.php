@@ -94,7 +94,9 @@ class CsrLayoutPage extends HtmlPage {
 			$smarty->assign('debug', SimpleHTML::getDebug());
 		}
 
-		if (LidInstellingen::get('layout', 'zijkolom') != 'verberg' AND ( $this->zijkolom !== false OR LidInstellingen::get('layout', 'beeld') === 'breedbeeld')) {
+		if (LidInstellingen::get('layout', 'zijkolom') == 'verberg') {
+			$this->zijkolom = false;
+		} elseif ($this->zijkolom !== false OR LidInstellingen::get('layout', 'beeld') == 'breedbeeld') {
 			if (is_array($this->zijkolom)) {
 				$this->zijkolom = array_merge($this->zijkolom, SimpleHTML::getStandaardZijkolom());
 			} else {
