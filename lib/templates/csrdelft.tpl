@@ -10,7 +10,7 @@
 			<tr>
 				{if is_array($zijkolom)}
 					<td id="mainleft">
-						<div id="zijkolom"{if LidInstellingen::get('layout', 'zijkolom') == 'fixeer'} class="scroll-fix"{/if}>
+						<div id="zijkolom"{if LidInstellingen::get('layout', 'zijkolom') == 'fixeer'} class="scroll-fix dragobject dragvertical"{/if}>
 							{foreach from=$zijkolom item=block}
 								<div class="block">{$block->view()}</div>
 							{/foreach}

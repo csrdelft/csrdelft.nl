@@ -136,17 +136,16 @@ function init_scroll_fixed() {
 		$(this).parent().width($(this).width());
 	});
 	$(window).scroll(function () {
-		var yfix = $(window).scrollTop();
 		$('.scroll-fix').each(function () {
-			if (yfix >= $(this).attr('yfix')) {
-				$(this).addClass('scroll-fixed');
-				$(this).css({
-					// fix sideways scrolling
-					'left': $(this).parent().offset().left - $(window).scrollLeft()
-				});
-			} else {
-				$(this).removeClass('scroll-fixed');
+			var top = $(this).parent().offset().top - $(window).scrollTop();
+			var left = $(this).parent().offset().left - $(window).scrollLeft();
+			if (top <= 0) {
+				top = 0;
 			}
+			$(this).css({
+				'top': top,
+				'left': left
+			});
 		});
 	});
 }
@@ -364,7 +363,6 @@ function form_esc(event) {
 
 function form_submit(event) {
 	var form = $(this).closest('form');
-	console.log(form);
 	if (form.hasClass('PreventUnchanged') && !form_ischanged(form)) {
 		event.preventDefault();
 		alert('Geen wijzigingen');

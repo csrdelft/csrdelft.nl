@@ -4,7 +4,7 @@
  * requires jQuery
  */
 
-$(document).ready(function() {
+$(document).ready(function () {
 	window.addEventListener('mousedown', startDrag, false);
 	window.addEventListener('mouseup', stopDrag, false);
 });
@@ -59,17 +59,32 @@ function mouseMoveHandler(e) {
 	e = e || window.event;
 	var newX = mouseX(e);
 	var newY = mouseY(e);
-	$('#' + dragobjectID).css('left', (dragobjLeft() + newX - oldX) + 'px');
-	$('#' + dragobjectID).css('top', (dragobjTop() + newY - oldY) + 'px');
+	var dragobject = $('#' + dragobjectID);
+	if (dragobject.hasClass('dragvertical')) {
+		dragobject.scrollTop(dragobject.scrollTop() + oldY - newY);
+		dragged = false;
+	}
+	else if (dragobject.hasClass('draghorizontal')) {
+		dragobject.scrollLeft(dragobject.scrollLeft() + oldX - newX);
+		dragged = false;
+	}
+	else {
+		dragobject.css({
+			'top': (dragobjTop() + newY - oldY) + 'px',
+			'left': (dragobjLeft() + newX - oldX) + 'px'
+		});
+	}
 	oldX = newX;
 	oldY = newY;
 }
+
 function docScrollLeft() {
 	return (document.documentElement.scrollLeft ? document.documentElement.scrollLeft : document.body.scrollLeft);
 }
 function docScrollTop() {
 	return (document.documentElement.scrollTop ? document.documentElement.scrollTop : document.body.scrollTop);
 }
+
 function mouseX(e) {
 	if (e.pageX) {
 		return e.pageX;
@@ -88,6 +103,7 @@ function mouseY(e) {
 	}
 	return null;
 }
+
 function dragobjLeft() {
 	return $('#' + dragobjectID).offset().left - docScrollLeft();
 }
