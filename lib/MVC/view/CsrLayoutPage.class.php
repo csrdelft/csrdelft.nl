@@ -128,7 +128,7 @@ class CsrLayoutPage extends HtmlPage {
 			$smarty->assign('loginform', new LoginForm());
 			$smarty->display('MVC/layout/pauper.tpl');
 		} else {
-			$smarty->display('csrdelft.tpl');
+			$smarty->display('MVC/layout/pagina.tpl');
 		}
 	}
 

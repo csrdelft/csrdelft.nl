@@ -3904,6 +3904,7 @@ lib/templates/MVC/instellingen/beheer/instelling_row.tpl -text
 lib/templates/MVC/instellingen/beheer/instellingen_page.tpl -text
 lib/templates/MVC/instellingen/lidinstelling.tpl -text
 lib/templates/MVC/instellingen/lidinstellingen_page.tpl -text
+lib/templates/MVC/layout/pagina.tpl -text
 lib/templates/MVC/layout/pauper.tpl -text
 lib/templates/MVC/layout/ubbhulp.tpl -text
 lib/templates/MVC/maalcie/functie/beheer_functie_lijst.tpl -text
@@ -3930,7 +3931,6 @@ lib/templates/courant/mail/courant_delphiadaily2011.tpl -text
 lib/templates/courant/mail/courant_draadloos2009.tpl -text
 lib/templates/courant/mail/courant_triomphedor2011.tpl -text
 lib/templates/courant/mail/csrmail_owee.tpl -text
-lib/templates/csrdelft.tpl -text
 lib/templates/csrdelft2/content.tpl -text
 lib/templates/csrdelft2/index.tpl -text
 lib/templates/csrdelft2/lidworden.tpl -text

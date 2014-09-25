@@ -5,20 +5,26 @@
 		{include file='csrdelft_head.tpl'}
 	</head>
 	<body style="background: none;">
-		<a href="/pauper/terug">Naar normale webstek</a>
-		<div style="float: right;">
-			<span class="waarschuwing">{LoginModel::instance()->getError()}</span>
-			{if LoginModel::mag('P_LOGGED_IN')}
-				<a href="/logout">Uitloggen</a>
-			{else}
-				<div class="login-form">{include file='csrdelft2/partials/_loginForm.tpl'}</div>
-			{/if}
+		<div style="text-align: center;">
+			<div style="float: left;">
+				<a href="#mainmenu">Menu</a>
+			</div>
+			<a href="/pauper/terug">Naar normale webstek</a>
+			<div style="float: right;">
+				<span class="waarschuwing">{LoginModel::instance()->getError()}</span>
+				{if LoginModel::mag('P_LOGGED_IN')}
+					<a href="/logout">Uitloggen</a>
+				{else}
+					<div class="login-form">{include file='csrdelft2/partials/_loginForm.tpl'}</div>
+				{/if}
+			</div>
 		</div>
+		<br />
 		{$body->view()}
 		<br />
 		<div id="paupermenu" style="clear: both;">
 			<br />
-			<h1>Menu</h1>
+			<a name="mainmenu"><h1>Menu</h1></a>
 			<ul>
 				{foreach from=$menutree->children item=item}
 					<li>
