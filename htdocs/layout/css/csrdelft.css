@@ -30,6 +30,13 @@ body{
 	height: 100%;
 	overflow-y: auto;
 }
+.dragobject{
+	position: fixed;
+	z-index: 111;
+}
+.dragobject:active{
+	cursor: move;
+}
 
 h1{
 	font-size: 1.6em;
@@ -78,13 +85,6 @@ ul.horizontal li{
 ul.horizontal li.active{ font-weight:bold; }
 ul.nobullets li{ list-style-type: none; }
 
-.dragobject{
-	position: fixed;
-	z-index: 111;
-}
-.dragobject:active{
-	cursor: move;
-}
 .outer-shadow{
 	-moz-box-shadow: 0 0 20px #000000;
 	-webkit-box-shadow: 0 0 20px #000000;
@@ -622,7 +622,7 @@ span#ubbsluiten:hover{
 }
 
 /* csrmail */
-div#pubciemail_form{ background-color: #f1f1f1; border: 1px solid lightgray; padding: 10px;}
+div#pubciemail_form{ background-color: #f5f5f5; border: 1px solid lightgray; padding: 10px;}
 
 /* archief C.S.R.-courant */
 div.courantArchiefJaar{
@@ -664,7 +664,7 @@ form#streeplijst input, form#streeplijst label{ text-align: left; margin: 3px; p
 	margin-bottom: 10px;
 	border-top: 1px solid #b8b8b8;
 	border-left: 1px solid #b8b8b8;
-	background-color: #f0f0f0;
+	background-color: #f5f5f5;
 }
 .mededeling-grotebalk .plaatje{
 	width: 70px;

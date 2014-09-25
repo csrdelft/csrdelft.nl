@@ -28,7 +28,7 @@ function taken_toggle_datum_first(datum, index) {
 }
 function taken_color_datum() {
 	$('tr.taak-datum-summary:visible:odd th').css('background-color', '#FAFAFA');
-	$('tr.taak-datum-summary:visible:even th').css('background-color', '#F0F0F0');
+	$('tr.taak-datum-summary:visible:even th').css('background-color', '#f5f5f5');
 }
 function taken_show_old() {
 	$('#taak-datum-head-first').show();

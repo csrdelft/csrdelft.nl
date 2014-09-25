@@ -80,38 +80,24 @@ class CsrLayoutPage extends HtmlPage {
 		$smarty->assign('stylesheets', $this->getStylesheets());
 		$smarty->assign('scripts', $this->getScripts());
 		$smarty->assign('titel', $this->getTitel());
-
-		if (LidInstellingen::get('layout', 'minion') == 'ja') {
-			$top = 40;
-			$left = 40;
-			DragObjectModel::getCoords('minion', $top, $left);
-			$smarty->assign('miniontop', $top);
-			$smarty->assign('minionleft', $left);
-			$smarty->assign('minion', $smarty->fetch('minion.tpl'));
-		}
-
-		if (DEBUG AND ( LoginModel::mag('P_ADMIN') OR LoginModel::instance()->isSued())) {
-			$smarty->assign('debug', SimpleHTML::getDebug());
-		}
+		$smarty->assign('mainmenu', new MainMenuView(MenuModel::instance()->getMenuTree('main')));
+		$smarty->assign('popup', $this->popup);
+		$smarty->assign('body', $this->getBody());
 
 		if (LidInstellingen::get('layout', 'zijkolom') == 'verberg') {
 			$this->zijkolom = false;
-		} elseif ($this->zijkolom !== false OR LidInstellingen::get('layout', 'beeld') == 'breedbeeld') {
+		} elseif ($this->zijkolom !== false) {
 			if (is_array($this->zijkolom)) {
 				$this->zijkolom = array_merge($this->zijkolom, SimpleHTML::getStandaardZijkolom());
 			} else {
 				$this->zijkolom = SimpleHTML::getStandaardZijkolom();
 			}
 		}
-
-		$smarty->assign('mainmenu', new MainMenuView(MenuModel::instance()->getMenuTree('main')));
-		$smarty->assign('body', $this->getBody());
 		$smarty->assign('zijkolom', $this->zijkolom);
-		$smarty->assign('popup', $this->popup);
 
-		//$dataTable = new DataTable('Example', 3, true);
-		//$dataTable->setDataSource('example-data-2.json');
-		//$smarty->assign('datatable', $dataTable);
+		if (DEBUG AND ( LoginModel::mag('P_ADMIN') OR LoginModel::instance()->isSued())) {
+			$smarty->assign('debug', SimpleHTML::getDebug());
+		}
 
 		$top = 180;
 		$left = 190;
@@ -123,6 +109,19 @@ class CsrLayoutPage extends HtmlPage {
 		DragObjectModel::getCoords('ubbhulpverhaal', $top, $left);
 		$smarty->assign('ubbtop', $top);
 		$smarty->assign('ubbleft', $left);
+
+		if (LidInstellingen::get('layout', 'minion') == 'ja') {
+			$top = 40;
+			$left = 40;
+			DragObjectModel::getCoords('minion', $top, $left);
+			$smarty->assign('miniontop', $top);
+			$smarty->assign('minionleft', $left);
+			$smarty->assign('minion', $smarty->fetch('minion.tpl'));
+		}
+
+		//$dataTable = new DataTable('Example', 3, true);
+		//$dataTable->setDataSource('example-data-2.json');
+		//$smarty->assign('datatable', $dataTable)
 
 		if (LoginModel::instance()->isPauper()) {
 			$smarty->assign('menutree', MenuModel::instance()->getMenuTree('main'));

@@ -10,7 +10,7 @@
 {/if}"
 {if isset($show)} style="display: none;"
 {/if} onclick="taken_toggle_datum('{$datum}');">
-	<th colspan="7" style="background-color: {cycle values="#F0F0F0,#FAFAFA"}; color: #000;">
+	<th colspan="7" style="background-color: {cycle values="#f5f5f5,#FAFAFA"}; color: #000;">
 	{foreach name=functie from=$perdatum key=fid item=perfunctie}
 		{foreach name=taken from=$perfunctie item=taak}
 			{if $smarty.foreach.taken.first}{* eerste taak van functie: reset ingedeeld-teller *}

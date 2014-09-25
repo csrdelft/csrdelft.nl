@@ -90,7 +90,7 @@ class VerticalenContent implements View {
 		<script type="text/javascript">
 			if (document.location.hash.substring(1, 6) == 'kring') {
 				kring = document.location.hash.substring(1);
-				document.getElementById(kring).style.backgroundColor = '#f1f1f1';
+				document.getElementById(kring).style.backgroundColor = '#f5f5f5';
 				document.getElementById(kring).style.borderBottom = '1px solid black';
 			}
 		</script>

@@ -580,7 +580,7 @@ HTML;
 			  height: " . $height . ",
 			  theme: {
 				shell: {
-				  background: '#F0F0F0',
+				  background: '#f5f5f5',
 				  color: '#000000'
 				},
 				tweets: {

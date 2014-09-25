@@ -31,7 +31,7 @@ N.B. Alle corveetaken in het verleden worden bij de reset naar de prullenbak ver
 		<tr style="vertical-align: bottom;">
 			<th>Lid</th>
 		{foreach from=$functies item=functie}
-			<th style="padding: 5px; background-color: {cycle values="#F0F0F0,#FAFAFA"};">{strip}
+			<th style="padding: 5px; background-color: {cycle values="#f5f5f5,#FAFAFA"};">{strip}
 				<div style="width: 17px; height: 160px;">
 					<div class="vertical" style="font-weight: normal; position: relative; top: 140px;">
 						<nobr>{$functie->naam}</nobr>
