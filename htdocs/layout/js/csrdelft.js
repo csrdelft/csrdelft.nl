@@ -147,6 +147,7 @@ function layout_breedte_werkomheen() {
 	z.hoverIntent(expand, collapse);
 	$(window).resize(function () {
 		z.width(z.parent().width());
+		$(window).trigger('scroll');
 	});
 	$(window).trigger('resize');
 }
