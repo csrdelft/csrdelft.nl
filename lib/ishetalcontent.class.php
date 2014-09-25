@@ -145,7 +145,7 @@ class IsHetAlContent implements View {
 		} else {
 			// wist u dat
 		}
-		echo '</div><br />';
+		echo '</div>';
 	}
 
 }
