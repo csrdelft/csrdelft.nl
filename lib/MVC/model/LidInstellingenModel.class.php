@@ -68,7 +68,8 @@ class LidInstellingen extends PersistenceModel {
 			'forum_zelf'			 => array('Aantal zelf geposte forumberichten', T::Integer, array(0, 50), 0),
 			//'forum_preview' => array('Laatste forumbericht weergeven', T::Enumeration, array('ja', 'nee'), 'ja'),
 			'fotoalbum'				 => array('Laatste fotoalbum weergeven', T::Enumeration, array('ja', 'nee'), 'ja'),
-			'verjaardagen'			 => array('Aantal verjaardagen in zijbalk', T::Integer, array(0, 50), 9),
+			'fotos'					 => array('Aantal foto\'s weergeven', T::Integer, array(0, 50), 6),
+			'verjaardagen'			 => array('Aantal verjaardagen weergeven', T::Integer, array(0, 50), 9),
 			'verjaardagen_pasfotos'	 => array('Pasfoto\'s bij verjaardagen', T::Enumeration, array('ja', 'nee'), 'ja')
 		),
 		'voorpagina'	 => array(

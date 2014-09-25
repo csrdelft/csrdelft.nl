@@ -164,8 +164,8 @@ class FotoAlbumZijbalkView extends SmartyTemplateView {
 		echo '<div class="fotos">';
 		$fotos = $this->model->getFotos();
 		$limit = sizeof($fotos);
-		if ($limit > 6) {
-			$limit = 6;
+		if ($limit > LidInstellingen::get('zijbalk', 'fotos')) {
+			$limit = LidInstellingen::get('zijbalk', 'fotos');
 		}
 		for ($i = 0; $i < $limit; $i++) {
 			$foto = $fotos[$i];
