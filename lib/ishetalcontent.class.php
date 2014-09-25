@@ -84,12 +84,15 @@ class IsHetAlContent implements View {
 				require_once 'MVC/model/AgendaModel.class.php';
 				$vandaag = AgendaModel::instance()->zoekWoordAgenda($this->model);
 				if ($vandaag instanceof AgendaItem) {
-					$nu = time();
-					if ($this->model == 'borrel') {
-						$this->ja = $nu > $vandaag->getBeginMoment();
-					} else {
-						$this->ja = $nu > $vandaag->getBeginMoment() AND $nu < $vandaag->getEindMoment();
-					}
+					$this->ja = true;
+					/*
+					  $nu = time();
+					  if ($this->model == 'borrel') {
+					  $this->ja = $nu > $vandaag->getBeginMoment();
+					  } else {
+					  $this->ja = $nu > $vandaag->getBeginMoment() AND $nu < $vandaag->getEindMoment();
+					  }
+					 */
 				} else {
 					$this->ja = false;
 				}
