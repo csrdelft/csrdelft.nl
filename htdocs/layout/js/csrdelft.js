@@ -129,12 +129,31 @@ function init_lazy_images() {
 	});
 }
 
-function init_scroll_fixed() {
-	$('.scroll-fix').each(function () {
-		$(this).attr('yfix', $(this).offset().top);
-		$(this).parent().height($(this).height());
-		$(this).parent().width($(this).width());
+function layout_breedte_werkomheen() {
+	// synchronize size with container
+	var z = $('#zijkolom');
+	var origWidth = z.width();
+	z.parent().width(origWidth);
+	var expand = function () {
+		z.animate({
+			width: origWidth
+		}, 400);
+	};
+	var collapse = function () {
+		z.animate({
+			width: z.parent().width()
+		}, 400);
+	};
+	z.hoverIntent(expand, collapse);
+	$(window).resize(function () {
+		z.width(z.parent().width());
 	});
+	$(window).trigger('resize');
+}
+
+function init_scroll_fixed() {
+	layout_breedte_werkomheen();
+	// synchronize position with window
 	$(window).scroll(function () {
 		$('.scroll-fix').each(function () {
 			var top = $(this).parent().offset().top - $(window).scrollTop();
