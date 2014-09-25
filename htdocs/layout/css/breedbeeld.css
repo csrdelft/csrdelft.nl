@@ -2,6 +2,9 @@
 #main, #menu, #submenu {
 	width: 100%;
 }
+#menuleft {
+	width: 200px;
+}
 #submenuitems div {
 	float: left;
 	margin-left: 50px;
