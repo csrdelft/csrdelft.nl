@@ -19,17 +19,14 @@ class IsHetAlContent implements View {
 	public static $aftellen = array('jarig', 'dies', 'happie');
 	/**
 	 * Wist u dat'tjes
-	 * 
-	 * @prefix "Wist u dat... u "
-	 * @postfix "?"
-	 * 
 	 * @var array
 	 */
 	public static $wistudat = array(
-		'deze zijbalk geheel naar wens kan ingerichten'	 => '/instellingen#tabs-zijbalk',
-		'ongelezen draadjes als gelezen kan weergeven'	 => '/instellingen#tabs-forum',
-		'een eigen minion op de stek kan krijgen'		 => '/instellingen#tabs-layout',
-		'de C.S.R.-agenda kan importeren met ICAL'		 => '/agenda#ICAL'
+		'u deze zijbalk geheel naar wens kan ingerichten?'	 => '/instellingen#tabs-zijbalk',
+		'u ongelezen draadjes als gelezen kan weergeven?'	 => '/instellingen#tabs-forum',
+		'u een eigen minion op de stek kan krijgen?'		 => '/instellingen#tabs-layout',
+		'de stek een breedbeeldmodus heeft?'				 => '/instellingen#tabs-layout',
+		'u de C.S.R.-agenda kan importeren met ICAL?'		 => '/agenda#ICAL'
 	);
 
 	public function __construct($ishetal) {
@@ -129,7 +126,7 @@ class IsHetAlContent implements View {
 				break;
 			case 'wist u dat':
 				$wistudat = array_rand(self::$wistudat);
-				echo '<div class="ja">Wist u dat...</div><a href="' . self::$wistudat[$wistudat] . '" style="font-style: italic;">u ' . $wistudat . '?</a>';
+				echo '<div class="ja">Wist u dat...</div><a href="' . self::$wistudat[$wistudat] . '" style="font-style: italic;">' . $wistudat . '</a>';
 				break;
 			default:
 				echo 'Is het al ' . $this->model . '?';

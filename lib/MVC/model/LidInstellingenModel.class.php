@@ -40,7 +40,7 @@ class LidInstellingen extends PersistenceModel {
 		'layout'		 => array(
 			'layout'		 => array('Websteklayout', T::Enumeration, array('normaal', 'owee', 'lustrum', 'sineregno', 'roze'), 'normaal'),
 			'beeld'			 => array('Schermmodus', T::Enumeration, array('normaal', 'breedbeeld'), 'normaal'),
-			'fixed'			 => array('Zijbalk scrollen', T::Enumeration, array('normaal', 'vast'), 'normaal'),
+			'zijkolom'		 => array('Zijbalk', T::Enumeration, array('normaal', 'fixeer', 'verberg'), 'normaal'),
 			'visitekaartjes' => array('Visitekaartjes', T::Enumeration, array('ja', 'nee'), 'ja'),
 			'sneeuw'		 => array('Sneeuw', T::Enumeration, array('ja', 'freeze!', 'nee'), 'nee'),
 			'neuzen'		 => array('Neuzen', T::Enumeration, array('overal', '2013', 'nee'), '2013'),
