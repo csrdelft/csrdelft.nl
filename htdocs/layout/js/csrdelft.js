@@ -140,6 +140,10 @@ function init_scroll_fixed() {
 		$('.scroll-fix').each(function () {
 			if (yfix >= $(this).attr('yfix')) {
 				$(this).addClass('scroll-fixed');
+				$(this).css({
+					// fix sideways scrolling
+					'left': $(this).parent().offset().left - $(window).scrollLeft()
+				});
 			} else {
 				$(this).removeClass('scroll-fixed');
 			}
