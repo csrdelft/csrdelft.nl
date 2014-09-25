@@ -4,10 +4,10 @@
  * requires jQuery & dragobject.js
  */
 
-$(document).ready(function() {
-	$('#beheer-maalcie-menu').prependTo('#zijkolom');
-	$('#beheer-maalcie-menu').show();
-	$('a.ruilen').each(function() {
+$(document).ready(function () {
+	$('#beheer-maalcie-menu').prependTo('#zijkolom').show();
+	$('#zijkolom.scroll-fix').parent().height($('#zijkolom').height()); // werkomheen voor vloeiend scrollen
+	$('a.ruilen').each(function () {
 		$(this).removeClass('ruilen');
 		$(this).attr('ondragover', 'taken_mag_ruilen(event);');
 		$(this).attr('ondrop', 'taken_ruilen(event);');
@@ -37,7 +37,7 @@ function taken_show_old() {
 }
 
 function taken_toggle_suggestie(soort, show) {
-	$('#suggesties-tabel .' + soort).each(function() {
+	$('#suggesties-tabel .' + soort).each(function () {
 		var verborgen = 0;
 		if (typeof show !== 'undefined') {
 			if (show) {
@@ -80,7 +80,7 @@ var lastSelectedId;
 function taken_select_range(e) {
 	var shift = bShiftPressed;
 	var withinRange = false;
-	$("#maalcie-tabel tbody tr td a input[name='" + $(e.target).attr('name') + "']:visible").each(function() {
+	$("#maalcie-tabel tbody tr td a input[name='" + $(e.target).attr('name') + "']:visible").each(function () {
 		var thisId = $(this).attr('id');
 		if (thisId === lastSelectedId) {
 			withinRange = !withinRange;
@@ -88,7 +88,7 @@ function taken_select_range(e) {
 		if (thisId === e.target.id) {
 			withinRange = !withinRange;
 			var check = $(this).prop('checked');
-			setTimeout(function() { // workaround e.preventDefault()
+			setTimeout(function () { // workaround e.preventDefault()
 				$('#' + thisId).prop('checked', check);
 			}, 50);
 		}
@@ -106,7 +106,7 @@ function taken_submit_range(e) {
 	if ($(e.target).hasClass('confirm') && !confirm($(e.target).attr('title') + '.\n\nWeet u het zeker?')) {
 		return false;
 	}
-	$("input[name='" + $(e.target).find('input:first').attr('name') + "']:visible").each(function() {
+	$("input[name='" + $(e.target).find('input:first').attr('name') + "']:visible").each(function () {
 		if ($(this).prop('checked')) {
 			ajax_request('POST', $(this).parent().attr('href'), $(this).parent().attr('post'), $(this).parent(), dom_update, alert);
 		}

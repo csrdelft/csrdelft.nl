@@ -13,21 +13,19 @@ body{
 }
 #main{
 	width: 1004px;
+	padding: 0;
 	margin: 0 auto;
-}
-#mainleft{
-	width: 210px;
+	border-collapse: collapse;
 }
 #mainright{
-	padding: 10px 0;
+	padding: 10px;
 }
 
-.scroll-fixed {
+.scroll-fixed{
 	position: fixed;
 	top: 0;
 	height: 100%;
 	overflow-y: auto;
-	padding-right: 25px;
 }
 
 h1{
@@ -347,6 +345,9 @@ ul.nobullets li{ list-style-type: none; }
 }
 
 /**** ZIJKOLOM *******************************************************************/
+#zijkolom{
+	width: 200px;
+}
 #zijkolom .block{
 	width: 175px;
 	padding: 10px 0 0 7px;
@@ -489,14 +490,12 @@ h2#mysql_debug_header{
 	text-align: center;
 }
 pre.pubcie_debug{
-	top: 10px;
-	left: 1000px; right: 10px;
 	margin: 10px;
 	overflow: auto;
 	font-size: 1.2em;
-	color: #000; background-color: #fff;
+	color: #000;
+	background-color: #fff;
 	border: 1px solid darkred;
-	z-index: 100;
 }
 
 table.query_table{

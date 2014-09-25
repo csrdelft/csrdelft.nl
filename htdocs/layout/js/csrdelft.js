@@ -22,13 +22,13 @@ preload([
 ]);
 
 $(document).ready(function () {
+	init_scroll_fixed();
 	init_key_pressed();
 	init_dropzone();
 	init();
 });
 
 function init() {
-	init_scroll_fixed();
 	init_links();
 	init_buttons();
 	init_forms();
@@ -127,32 +127,19 @@ function init_lazy_images() {
 			$(this).parent().replaceWith($(this));
 		});
 	});
-	werkomheen_layout();
-}
-
-function werkomheen_layout() {
-	if ($('#mainright').height() < $('#mainleft').height()) {
-		$('#mainright').height($('#mainleft').height());
-	} else {
-		$('#mainright').height('');
-	}
 }
 
 function init_scroll_fixed() {
 	$('.scroll-fix').each(function () {
-		var yfix = $(this).attr('yfix');
-		if (typeof yfix === typeof undefined || yfix === false) {
-			$(this).attr('yfix', $(this).offset().top);
-		}
+		$(this).attr('yfix', $(this).offset().top);
+		$(this).parent().height($(this).height());
+		$(this).parent().width($(this).width());
 	});
 	$(window).scroll(function () {
 		var yfix = $(window).scrollTop();
 		$('.scroll-fix').each(function () {
 			if (yfix >= $(this).attr('yfix')) {
 				$(this).addClass('scroll-fixed');
-				$(this).css({
-					'left': $(this).parent().offset().left - $(window).scrollLeft()
-				});
 			} else {
 				$(this).removeClass('scroll-fixed');
 			}
