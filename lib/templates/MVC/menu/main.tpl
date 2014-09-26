@@ -27,11 +27,11 @@
 	<div id="menuright">
 		{if LoginModel::mag('P_LOGGED_IN') }
 			<div id="ingelogd">
+				<div id="uitloggen"><a href="/logout">log&nbsp;uit</a></div>
 				{if LoginModel::instance()->isSued()}
 					<a href="/endsu/" style="color: red;">{LoginModel::instance()->getSuedFrom()->getNaamLink('civitas', 'plain')} als</a><br />»
 				{/if}
 				{LoginModel::getUid()|csrnaam}<br />
-				<div id="uitloggen"><a href="/logout">log&nbsp;uit</a></div>
 				<div id="saldi">
 					{foreach from=LoginModel::instance()->getLid()->getSaldi() item=saldo}
 						<div class="saldoregel">
