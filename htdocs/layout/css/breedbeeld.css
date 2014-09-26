@@ -1,6 +1,9 @@
 /** Menu **/
-#main, #submenu {
+#main, #menu, #submenu {
 	width: 100%;
+}
+#menu {
+	min-width: 900px;
 }
 #menuleft {
 	width: 200px;
@@ -21,6 +24,7 @@ html, body, #main, #mainleft, #mainright, #zijkolom {
 	padding-left: 16px;
 }
 #zijkolom {
+	min-width: 10px;
 	background-color: #f5f5f5;
 	/*box-shadow: inset -10px 0 10px -5px #888;*/
 }
