@@ -44,8 +44,8 @@ class LidInstellingenController extends AclController {
 	}
 
 	public function reset($module, $key, $value) {
-		$this->model->setForAll($module, $key, $value);
-		SimpleHTML::setMelding('Voor iedereen de instelling overschreven', 1);
+		$this->model->resetForAll($module, $key, $value);
+		SimpleHTML::setMelding('Voor iedereen de instelling ge-reset naar de standaard waarde', 1);
 		redirect(CSR_ROOT . '/instellingen/beheer');
 	}
 

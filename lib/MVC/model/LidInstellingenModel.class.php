@@ -230,6 +230,11 @@ class LidInstellingen extends PersistenceModel {
 		Database::sqlInsertMultiple($orm::getTableName(), $properties);
 	}
 
+	public function resetForAll($module, $key) {
+		$orm = self::orm;
+		Database::sqlDelete($orm::getTableName(), 'module = ? AND instelling_id = ?', array($module, $key));
+	}
+
 	public function setForAll($module, $key, $value) {
 		$properties[] = array('uid', 'module', 'instelling_id', 'waarde');
 		$this->setValue($module, $key, $value); // sanatize value

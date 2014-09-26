@@ -19,7 +19,7 @@ class LidInstellingenView extends SmartyTemplateView {
 			echo '<li><a href="#tabs-' . $module . '">' . ucfirst($module) . '</a></li>';
 		}
 		echo '</ul>';
-		$overwrite = LoginModel::mag('P_ADMIN');
+		$reset = LoginModel::mag('P_ADMIN');
 		foreach ($this->model->getInstellingen() as $module => $instellingen) {
 			echo '<div id="tabs-' . $module . '">';
 			foreach ($instellingen as $key => $def) {
@@ -30,7 +30,7 @@ class LidInstellingenView extends SmartyTemplateView {
 				$this->smarty->assign('label', $this->model->getDescription($module, $key));
 				$this->smarty->assign('waarde', $this->model->getValue($module, $key));
 				$this->smarty->assign('default', $this->model->getDefault($module, $key));
-				$this->smarty->assign('iedereen', $overwrite);
+				$this->smarty->assign('reset', $reset);
 				$this->smarty->display('MVC/instellingen/lidinstelling.tpl');
 			}
 			echo '</div>';
