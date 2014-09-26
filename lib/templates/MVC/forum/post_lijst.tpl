@@ -11,7 +11,7 @@
 <tr id="forumpost-row-{$post->post_id}"{if $post->gefilterd} style="display:none;"{/if}>
 	<td class="auteur">
 		<a href="/forum/reactie/{$post->post_id}#{$post->post_id}" id="{$post->post_id}" class="postlink" title="Link naar deze post">&rarr;</a>
-		<div style="width: 130px;">{$post->uid|csrnaam:'user':'visitekaartje'}</div>
+		<div class="auteurnaam">{$post->uid|csrnaam:'user':'visitekaartje'}</div>
 		{if LoginModel::mag('P_LEDEN_READ')}
 			<span tabindex="0" id="t{$post->uid}-{$post->post_id}" class="togglePasfoto"{if LidInstellingen::get('forum', 'toonpasfotos') == 'nee'} title="Toon pasfoto">&raquo;{else}>{/if}</span>
 		{/if}<br />

@@ -1070,6 +1070,9 @@ span#modsluiten:hover{
 }
 #forumtabel td.auteur div {
 	text-align: left;
+}
+#forumtabel td.auteur div.auteurnaam {
+	width: 130px;
 	display: inline-block;
 }
 a.postlink{ float:right; text-decoration: none; }
