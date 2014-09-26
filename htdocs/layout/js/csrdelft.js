@@ -135,25 +135,30 @@ function zijbalk_breedte_dynamisch() {
 	var origWidth = elmnt.width();
 	elmnt.parent().width(origWidth);
 	var showscrol = function () {
-		elmnt.css('padding-right', 10);
-		elmnt.css('overflow-y', 'auto');
+		elmnt.css({
+			'overflow-y': 'auto',
+			'padding-right': getScrollBarWidth()
+		});
 	};
 	var hidescrol = function () {
-		elmnt.css('padding-right', '');
-		elmnt.css('overflow-y', '');
+		elmnt.css({
+			'overflow-y': '',
+			'padding-right': ''
+		});
 	};
 	var expand = function () {
 		if (elmnt.width() < origWidth) {
 			elmnt.animate({
-				width: origWidth
+				'width': origWidth
 			}, 400, showscrol);
 		}
 	};
 	var collapse = function () {
 		if (elmnt.width() > elmnt.parent().width()) {
+			hidescrol();
 			elmnt.animate({
-				width: elmnt.parent().width()
-			}, 400, hidescrol);
+				'width': elmnt.parent().width()
+			}, 400);
 		}
 	};
 	elmnt.hoverIntent(expand, collapse);
@@ -605,9 +610,10 @@ function peiling_bevestig_stem(peiling) {
 		$(peiling).submit();
 	}
 }
+
 /**
- * Selecteer de tekst van een DOM-element
- * http://stackoverflow.com/questions/985272/jquery-selecting-text-in-an-element-akin-to-highlighting-with-your-mouse/987376#987376
+ * Selecteer de tekst van een DOM-element.
+ * @source http://stackoverflow.com/questions/985272/jquery-selecting-text-in-an-element-akin-to-highlighting-with-your-mouse/987376#987376
  * 
  * @param id DOM-object
  */
@@ -627,6 +633,39 @@ function selectText(id) {
 		selection.removeAllRanges();
 		selection.addRange(range);
 	}
+}
+
+/**
+ * Bereken de breedte van een native scrollbalk.
+ * @source http://www.alexandre-gomes.com/?p=115
+ * 
+ * @returns int
+ */
+function getScrollBarWidth() {
+	var inner = document.createElement('p');
+	inner.style.width = "100%";
+	inner.style.height = "200px";
+
+	var outer = document.createElement('div');
+	outer.style.position = "absolute";
+	outer.style.top = "0px";
+	outer.style.left = "0px";
+	outer.style.visibility = "hidden";
+	outer.style.width = "200px";
+	outer.style.height = "150px";
+	outer.style.overflow = "hidden";
+	outer.appendChild(inner);
+
+	document.body.appendChild(outer);
+	var w1 = inner.offsetWidth;
+	outer.style.overflow = 'scroll';
+	var w2 = inner.offsetWidth;
+	if (w1 === w2) {
+		w2 = outer.clientWidth;
+	}
+	document.body.removeChild(outer);
+
+	return (w1 - w2);
 }
 
 function vergrootTextarea(id, rows) {
