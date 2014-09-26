@@ -40,7 +40,7 @@ class CsrLayoutPage extends HtmlPage {
 		$this->addStylesheet($css . 'csrdelft');
 		$layout = LidInstellingen::get('layout', 'opmaak');
 		$this->addStylesheet($css . $layout);
-		if (LidInstellingen::get('layout', 'beeld') == 'breedbeeld') {
+		if (LidInstellingen::get('layout', 'beeld') == 'breed') {
 			$this->addStylesheet($css . 'breedbeeld');
 		}
 		if (LidInstellingen::get('layout', 'sneeuw') != 'nee') {
@@ -86,7 +86,7 @@ class CsrLayoutPage extends HtmlPage {
 
 		if (LidInstellingen::get('layout', 'zijkolom') == 'verberg') {
 			$this->zijkolom = false;
-		} elseif ($this->zijkolom !== false OR LidInstellingen::get('layout', 'beeld') == 'breedbeeld') {
+		} elseif ($this->zijkolom !== false OR LidInstellingen::get('layout', 'beeld') == 'breed') {
 			if (is_array($this->zijkolom)) {
 				$this->zijkolom = array_merge($this->zijkolom, SimpleHTML::getStandaardZijkolom());
 			} else {
