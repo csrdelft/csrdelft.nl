@@ -4,6 +4,9 @@
 			<div class="floatR">
 				{$profiel->getUid()|pasfoto}<br />
 				<div class="knopjes">
+					{if LoginModel::getUid()==$profiel->getUid()}
+						<a href="/instellingen" class="knop" title="Webstekinstellingen">{icon get="cog"}</a>
+					{/if}
 					{if $profiel->magBewerken()}
 						<a href="/communicatie/profiel/{$profiel->getUid()}/bewerken" class="knop" title="Bewerk dit profiel">{icon get="bewerken"}</a>
 						<a href="/communicatie/profiel/{$profiel->getUid()}/voorkeuren" class="knop" title="Pas voorkeuren voor commissies aan">{icon get="report_edit"}</a>
@@ -14,18 +17,15 @@
 					{if $isBestuur}
 						<a href="/communicatie/profiel/{$profiel->getUid()}/dd" class="knop" title="Wijzig de lidstatus">{icon get="group_edit"}</a>
 					{/if}
-					{if $isAdmin}
-						<a href="/tools/stats.php?uid={$profiel->getUid()}" class="knop" title="Toon bezoeklog">{icon get="server_chart"}</a>
-						<a href="/communicatie/profiel/{$profiel->getUid()}/wachtwoord" class="knop"
-						   title="Reset wachtwoord voor {$profiel->getNaam()}"
-						   onclick="return confirm('Weet u zeker dat u het wachtwoord van deze gebruiker wilt resetten?')">
-							{icon get="resetpassword"}</a>
-						{/if}
-						{if $profiel->getStatus()=='S_NOVIET' AND LoginModel::mag('groep:novcie')}
-						<a href="/communicatie/profiel/{$profiel->getUid()}/novietBewerken" class="knop"><img src="{$CSR_PICS}/forum/bewerken.png" title="Bewerk dit profiel" />Noviet bewerken</a><br />
-						{/if}
 					<a href="/communicatie/profiel/{$profiel->getUid()}/addToGoogleContacts/" class="knop" title="{*if $profiel->isInGoogleContacts()}Er bestaat al een contact met deze naam in je Google-contacts. Klik om te updaten.{else*}Voeg dit profiel toe aan mijn google adresboek{*/if*}"><img src="{$CSR_PICS}/knopjes/google.ico" /></a>
-					<br />
+					{if $isAdmin}
+						<br />
+						<a href="/tools/stats.php?uid={$profiel->getUid()}" class="knop" title="Toon bezoeklog">{icon get="server_chart"}</a>
+						<a href="/communicatie/profiel/{$profiel->getUid()}/wachtwoord" class="knop" title="Reset wachtwoord voor {$profiel->getNaam()}" onclick="return confirm('Weet u zeker dat u het wachtwoord van deze gebruiker wilt resetten?')">{icon get="resetpassword"}</a>
+					{/if}
+					{if $profiel->getStatus()=='S_NOVIET' AND LoginModel::mag('groep:novcie')}
+						<a href="/communicatie/profiel/{$profiel->getUid()}/novietBewerken" class="knop"><img src="{$CSR_PICS}/forum/bewerken.png" title="Bewerk dit profiel" />Noviet bewerken</a><br />
+					{/if}
 				</div>
 			</div>
 			{SimpleHtml::getMelding()}
@@ -267,9 +267,9 @@
 	</div>
 
 	{if LoginModel::getUid()==$profiel->getUid()}
-	<div class="profielregel" id="agenda">
-		<div class="gegevens" id="agenda_gegevens">
-			<div class="label">ICal-feed:</div>
+		<div class="profielregel" id="agenda">
+			<div class="gegevens" id="agenda_gegevens">
+				<div class="label">ICal-feed:</div>
 				<div class="data">
 					{if $profhtml.rssToken!=''}
 						<a href="{$profiel->getICalLink()}">
@@ -279,8 +279,8 @@
 					<small>Gebruikt dezelfde private token als het forum (zie hieronder)</small>
 				</div>
 				<br />
+			</div>
 		</div>
-	</div>
 	{/if}
 
 	{if $profiel->getForumPostCount() > 0 OR LoginModel::getUid()==$profiel->getUid()}
