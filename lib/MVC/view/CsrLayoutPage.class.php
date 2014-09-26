@@ -38,7 +38,7 @@ class CsrLayoutPage extends HtmlPage {
 		$this->addStylesheet($css . 'undohtml');
 		$this->addStylesheet($css . 'ubb');
 		$this->addStylesheet($css . 'csrdelft');
-		$layout = LidInstellingen::get('layout', 'layout');
+		$layout = LidInstellingen::get('layout', 'opmaak');
 		$this->addStylesheet($css . $layout);
 		if (LidInstellingen::get('layout', 'beeld') == 'breedbeeld') {
 			$this->addStylesheet($css . 'breedbeeld');

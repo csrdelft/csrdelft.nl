@@ -35,11 +35,11 @@ class LidInstellingen extends PersistenceModel {
 	 */
 	private $instellingen = array(
 		'algemeen'		 => array(
-			'bijbel' => array('Bijbelvertaling voor bijbelrooster', T::Enumeration, array('NBV', 'NBG', 'Herziene Statenvertaling', 'Statenvertaling (Jongbloed)', 'Groot Nieuws Bijbel', 'Willibrordvertaling'), 'NBV')
+			'bijbel' => array('Bijbelvertaling', T::Enumeration, array('NBV', 'NBG', 'Herziene Statenvertaling', 'Statenvertaling (Jongbloed)', 'Groot Nieuws Bijbel', 'Willibrordvertaling'), 'NBV')
 		),
 		'layout'		 => array(
-			'layout'		 => array('Opmaak', T::Enumeration, array('normaal', 'owee', 'lustrum', 'sineregno', 'roze'), 'normaal'),
-			'beeld'			 => array('Layout', T::Enumeration, array('smal', 'breedbeeld'), 'breedbeeld'),
+			'opmaak'		 => array('Opmaak', T::Enumeration, array('normaal', 'owee', 'lustrum', 'sineregno', 'roze'), 'normaal'),
+			'beeld'			 => array('Layout', T::Enumeration, array('smal', 'breed'), 'breed'),
 			'zijkolom'		 => array('Zijbalk', T::Enumeration, array('meescrollen', 'fixeer', 'verberg'), 'fixeer'),
 			'visitekaartjes' => array('Visitekaartjes', T::Enumeration, array('ja', 'nee'), 'ja'),
 			'sneeuw'		 => array('Sneeuw', T::Enumeration, array('ja', 'freeze!', 'nee'), 'nee'),
@@ -66,7 +66,6 @@ class LidInstellingen extends PersistenceModel {
 			'forum_belangrijk'		 => array('Aantal belangrijke forumberichten', T::Integer, array(0, 50), 5),
 			'forum'					 => array('Aantal forumberichten', T::Integer, array(0, 50), 10),
 			'forum_zelf'			 => array('Aantal zelf geposte forumberichten', T::Integer, array(0, 50), 0),
-			//'forum_preview' => array('Laatste forumbericht weergeven', T::Enumeration, array('ja', 'nee'), 'ja'),
 			'fotoalbum'				 => array('Laatste fotoalbum weergeven', T::Enumeration, array('ja', 'nee'), 'ja'),
 			'fotos'					 => array('Aantal foto\'s weergeven', T::Integer, array(0, 50), 6),
 			'verjaardagen'			 => array('Aantal verjaardagen weergeven', T::Integer, array(0, 50), 9),
