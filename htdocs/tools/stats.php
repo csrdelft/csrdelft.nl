@@ -191,5 +191,5 @@ class stats implements View {
 
 
 $pagina = new CsrLayoutPage(new stats());
-$pagina->zijkolom = false;
+$pagina->zijbalk = false;
 $pagina->view();

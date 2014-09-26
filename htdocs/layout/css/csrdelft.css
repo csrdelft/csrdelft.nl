@@ -370,17 +370,17 @@ ul.nobullets li{ list-style-type: none; }
 	color: #fff;
 }
 
-/**** ZIJKOLOM *******************************************************************/
-#zijkolom{
+/* Zijbalk */
+#zijbalk{
 	z-index: 50;
 	overflow: hidden;
 	width: 185px;
 }
-#zijkolom .block{
+#zijbalk .block{
 	width: 175px;
 	padding: 10px 0 0 7px;
 }
-#zijkolom .block h1{
+#zijbalk .block h1{
 	margin: 0;
 	padding: 1px 5px;
 	font-size: 11px;
@@ -390,10 +390,10 @@ ul.nobullets li{ list-style-type: none; }
 	background: url('http://plaetjes.csrdelft.nl/layout/blocktitle.png') no-repeat;
 	border-bottom: 1px solid #b8b8b8;
 }
-#zijkolom .block h1 a{
+#zijbalk .block h1 a{
 	color:  #162673;
 }
-#zijkolom .block .item{
+#zijbalk .block .item{
 	padding: 0 5px; 
 	font-size: 10px;
 	background-color: #f5f5f5;
@@ -405,14 +405,14 @@ ul.nobullets li{ list-style-type: none; }
 	-o-text-overflow: ellipsis;
 	white-space: nowrap;
 }
-#zijkolom a{
+#zijbalk a{
 	color: #000;
 	text-decoration: none;
 }
-#zijkolom .opvallend{
+#zijbalk .opvallend{
 	font-style: italic;
 }
-#zijkolom a:hover{
+#zijbalk a:hover{
 	text-decoration: underline;
 }
 div.ishetal{
@@ -427,7 +427,19 @@ div.ishetal div.ja, div.ishetal div.nee{
 div.ishetal div.ja{
 	color: green;
 }
-
+#zijbalk_quicknav{
+	background: #F5F5F5;
+	position: fixed;
+	z-index: 300;
+	bottom: 0;
+	padding: 5px 0;
+	box-shadow: 0 -5px 5px #F5F5F5;
+	-moz-box-shadow:0 -5px 5px #F5F5F5;
+	-webkit-box-shadow: 0 -5px 5px #F5F5F5;
+}
+#zijbalk_quicknav a{
+	margin: 0 7px;
+}
 /* Verjaardag in de zijbalk */
 #komende_pasfotos{ padding: 4px 0;}
 #komende_pasfotos .verjaardag{

@@ -16,19 +16,19 @@ require_once 'MVC/model/DragObjectModel.class.php';
 class CsrLayoutPage extends HtmlPage {
 
 	/**
-	 * Zijkolom SimpleHTML
+	 * Zijbalk SimpleHTML
 	 * @var array
 	 */
-	public $zijkolom;
+	public $zijbalk;
 	/**
 	 * Popup inhoud
 	 * @var View
 	 */
 	public $popup;
 
-	public function __construct(View $body, array $zijkolom = array(), $popup = null) {
+	public function __construct(View $body, array $zijbalk = array(), $popup = null) {
 		parent::__construct($body, $body->getTitel());
-		$this->zijkolom = $zijkolom;
+		$this->zijbalk = $zijbalk;
 		$this->popup = $popup;
 
 		$css = '/layout/css/';
@@ -84,16 +84,16 @@ class CsrLayoutPage extends HtmlPage {
 		$smarty->assign('popup', $this->popup);
 		$smarty->assign('body', $this->getBody());
 
-		if (LidInstellingen::get('layout', 'zijkolom') == 'verberg') {
-			$this->zijkolom = false;
-		} elseif ($this->zijkolom !== false OR LidInstellingen::get('layout', 'beeld') == 'dynamisch') {
-			if (is_array($this->zijkolom)) {
-				$this->zijkolom = array_merge($this->zijkolom, SimpleHTML::getStandaardZijkolom());
+		if (LidInstellingen::get('layout', 'zijbalk') == 'verberg') {
+			$this->zijbalk = false;
+		} elseif ($this->zijbalk !== false OR LidInstellingen::get('layout', 'beeld') == 'dynamisch') {
+			if (is_array($this->zijbalk)) {
+				$this->zijbalk = array_merge($this->zijbalk, SimpleHTML::getStandaardZijbalk());
 			} else {
-				$this->zijkolom = SimpleHTML::getStandaardZijkolom();
+				$this->zijbalk = SimpleHTML::getStandaardZijbalk();
 			}
 		}
-		$smarty->assign('zijkolom', $this->zijkolom);
+		$smarty->assign('zijbalk', $this->zijbalk);
 
 		if (DEBUG AND ( LoginModel::mag('P_ADMIN') OR LoginModel::instance()->isSued())) {
 			$smarty->assign('debug', SimpleHTML::getDebug());

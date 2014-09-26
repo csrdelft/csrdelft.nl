@@ -130,8 +130,8 @@ function init_lazy_images() {
 	});
 }
 
-function layout_breedte_werkomheen() {
-	var z = $('#zijkolom');
+function zijbalk_breedte_dynamisch() {
+	var z = $('#zijbalk');
 	var origWidth = z.width();
 	z.parent().width(origWidth);
 	var expand = function () {
@@ -162,7 +162,7 @@ function init_scroll_fixed() {
 	$('.scroll-fix').each(function () {
 		$(this).parent().height($(this).height());
 	});
-	layout_breedte_werkomheen();
+	zijbalk_breedte_dynamisch();
 	// synchronize position with window
 	$(window).scroll(function () {
 		$('.scroll-fix').each(function () {

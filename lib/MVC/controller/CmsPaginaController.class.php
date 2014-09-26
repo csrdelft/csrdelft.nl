@@ -14,10 +14,10 @@ require_once 'MVC/view/CmsPaginaView.class.php';
 class CmsPaginaController extends Controller {
 
 	/**
-	 * Lijst van pagina's om te bewerken in de zijkolom
-	 * @var CmsPaginaZijkolomView[]
+	 * Lijst van pagina's om te bewerken in de zijbalk
+	 * @var CmsPaginaZijbalkView[]
 	 */
-	private $zijkolom = array();
+	private $zijbalk = array();
 
 	public function __construct($query) {
 		parent::__construct($query, CmsPaginaModel::instance());
@@ -28,14 +28,14 @@ class CmsPaginaController extends Controller {
 		if ($this->hasParam(3) AND $this->getParam(2) === 'bewerken') {
 			$this->action = 'bewerken';
 			$naam = $this->getParam(3);
-			$this->zijkolom[] = new CmsPaginaZijkolomView($this->model);
+			$this->zijbalk[] = new CmsPaginaZijbalkView($this->model);
 		} elseif ($this->hasParam(3) AND $this->getParam(2) === 'verwijderen') {
 			$this->action = 'verwijderen';
 			$naam = $this->getParam(3);
 		} elseif ($this->hasParam(2)) {
 			$naam = $this->getParam(2);
 			if ($this->getParam(1) === 'pagina') {
-				$this->zijkolom[] = new CmsPaginaZijkolomView($this->model);
+				$this->zijbalk[] = new CmsPaginaZijbalkView($this->model);
 			}
 		} elseif ($this->hasParam(1)) {
 			$naam = $this->getParam(1);
@@ -70,7 +70,7 @@ class CmsPaginaController extends Controller {
 			}
 			$this->view = new CsrLayout2Page($body, $tmpl, $menu);
 		} else {
-			$this->view = new CsrLayoutPage($body, $this->zijkolom);
+			$this->view = new CsrLayoutPage($body, $this->zijbalk);
 		}
 	}
 
@@ -93,7 +93,7 @@ class CmsPaginaController extends Controller {
 			}
 			redirect(CSR_ROOT . '/' . $pagina->naam);
 		} else {
-			$this->view = new CsrLayoutPage($form, $this->zijkolom);
+			$this->view = new CsrLayoutPage($form, $this->zijbalk);
 		}
 	}
 

@@ -73,3 +73,15 @@ class BlockMenuView extends MenuView {
 	}
 
 }
+
+class QuickNavigateMenuView extends SmartyTemplateView {
+
+	public function __construct() {
+		parent::__construct(null);
+	}
+
+	public function view() {
+		$this->smarty->display('MVC/menu/quicknav.tpl');
+	}
+
+}

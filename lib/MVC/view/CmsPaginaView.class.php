@@ -68,14 +68,14 @@ class CmsPaginaForm extends Formulier {
 }
 
 /**
- * CmsPaginaZijkolomView.class.php
+ * CmsPaginaZijbalkView.class.php
  * 
  * @author C.S.R. Delft <pubcie@csrdelft.nl>
  * @author P.W.G. Brussee <brussee@live.nl>
  * 
- * Tonen van de lijst met CmsPaginas voor de zijkolom.
+ * Tonen van de lijst met CmsPaginas voor de zijbalk.
  */
-class CmsPaginaZijkolomView implements View {
+class CmsPaginaZijbalkView implements View {
 
 	private $paginas;
 

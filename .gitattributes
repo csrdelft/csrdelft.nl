@@ -3919,6 +3919,7 @@ lib/templates/MVC/menu/beheer/menu_tree.tpl -text
 lib/templates/MVC/menu/block.tpl -text
 lib/templates/MVC/menu/main.tpl -text
 lib/templates/MVC/menu/page.tpl -text
+lib/templates/MVC/menu/quicknav.tpl -text
 lib/templates/bibliotheek/boek.tpl -text
 lib/templates/bibliotheek/boek.ubb.tpl -text
 lib/templates/bibliotheek/catalogus.tpl -text

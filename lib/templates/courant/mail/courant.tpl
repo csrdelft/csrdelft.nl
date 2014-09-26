@@ -23,7 +23,7 @@ td{
 	vertical-align: top;
 	font-size: 11px; font-face: verdana, arial, sans-serif;
 }
-.zijKolom{
+.Zijbalk{
 	width: 150px;
 	margin: 0; padding: 0;
 	vertical-align: top;
@@ -88,7 +88,7 @@ li{
 <body >
 <table>
 <tr>
-<td class="zijKolom" valign="top">
+<td class="Zijbalk" valign="top">
 <img src="{$CSR_PICS}/csrmail/logo.jpg" width="150px" height="197px" alt="Logo van C.S.R." />
 <img src="{$CSR_PICS}/csrmail/balk.gif" width="150px" height="100%" />
 </td>

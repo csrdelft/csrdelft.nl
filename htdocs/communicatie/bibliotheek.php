@@ -17,7 +17,7 @@ if (isset($_GET['querystring'])) {
 
 $pagina = new CsrLayoutPage($biebControl->getView());
 if ($biebControl->getView() instanceof BibliotheekCatalogusContent) {
-	$pagina->zijkolom = false;
+	$pagina->zijbalk = false;
 }
 
 $pagina->addStylesheet('/layout/css/bibliotheek');

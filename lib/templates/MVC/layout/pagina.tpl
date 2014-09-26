@@ -8,10 +8,10 @@
 		<div id="header">{$mainmenu->view()}</div>
 		<table id="main">
 			<tr>
-				{if is_array($zijkolom)}
+				{if is_array($zijbalk)}
 					<td id="mainleft">
-						<div id="zijkolom"{if LidInstellingen::get('layout', 'zijkolom') == 'fixeer'} class="scroll-fix dragobject dragvertical"{/if}>
-							{foreach from=$zijkolom item=block}
+						<div id="zijbalk"{if LidInstellingen::get('layout', 'zijbalk') == 'fixeer'} class="scroll-fix dragobject dragvertical"{/if}>
+							{foreach from=$zijbalk item=block}
 								<div class="block">{$block->view()}</div>
 							{/foreach}
 						</div>

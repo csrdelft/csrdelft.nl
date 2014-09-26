@@ -13,7 +13,7 @@ h1{
 	margin-right: 5px;
 	font-size: 10px;
 }
-/*knoppen in zijkolom rechts*/
+/*knoppen in zijbalk rechts*/
 .controls		{float: right;}
 .controls .knop {line-height: 2em; width: 125px;}
 

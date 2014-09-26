@@ -68,29 +68,29 @@ abstract class SimpleHTML implements View {
 		}
 	}
 
-	public static function getStandaardZijkolom() {
-		$zijkolom = array();
+	public static function getStandaardZijbalk() {
+		$zijbalk = array();
 		// Is het al...
 		if (LidInstellingen::get('zijbalk', 'ishetal') != 'niet weergeven') {
 			require_once 'ishetalcontent.class.php';
-			$zijkolom[] = new IsHetAlContent(LidInstellingen::get('zijbalk', 'ishetal'));
+			$zijbalk[] = new IsHetAlContent(LidInstellingen::get('zijbalk', 'ishetal'));
 		}
 		// Agenda
 		if (LoginModel::mag('P_AGENDA_READ') && LidInstellingen::get('zijbalk', 'agendaweken') > 0) {
 			require_once 'MVC/model/AgendaModel.class.php';
-			$zijkolom[] = new AgendaZijbalkView(AgendaModel::instance(), LidInstellingen::get('zijbalk', 'agendaweken'));
+			$zijbalk[] = new AgendaZijbalkView(AgendaModel::instance(), LidInstellingen::get('zijbalk', 'agendaweken'));
 		}
 		// Laatste mededelingen
 		if (LidInstellingen::get('zijbalk', 'mededelingen') > 0) {
 			require_once 'mededelingen/mededeling.class.php';
 			require_once 'mededelingen/mededelingencontent.class.php';
-			$zijkolom[] = new MededelingenZijbalkContent((int) LidInstellingen::get('zijbalk', 'mededelingen'));
+			$zijbalk[] = new MededelingenZijbalkContent((int) LidInstellingen::get('zijbalk', 'mededelingen'));
 		}
 		// Nieuwste belangrijke forumberichten
 		if (LidInstellingen::get('zijbalk', 'forum_belangrijk') > 0) {
 			require_once 'MVC/model/ForumModel.class.php';
 			require_once 'MVC/view/ForumView.class.php';
-			$zijkolom[] = new ForumDraadZijbalkView(
+			$zijbalk[] = new ForumDraadZijbalkView(
 					ForumDradenModel::instance()->getRecenteForumDraden(
 							(int) LidInstellingen::get('zijbalk', 'forum_belangrijk'), true), true);
 		}
@@ -99,7 +99,7 @@ abstract class SimpleHTML implements View {
 			require_once 'MVC/model/ForumModel.class.php';
 			require_once 'MVC/view/ForumView.class.php';
 			$belangrijk = (LidInstellingen::get('zijbalk', 'forum_belangrijk') > 0 ? false : null);
-			$zijkolom[] = new ForumDraadZijbalkView(
+			$zijbalk[] = new ForumDraadZijbalkView(
 					ForumDradenModel::instance()->getRecenteForumDraden(
 							(int) LidInstellingen::get('zijbalk', 'forum'), $belangrijk), $belangrijk);
 		}
@@ -108,22 +108,26 @@ abstract class SimpleHTML implements View {
 			require_once 'MVC/model/ForumModel.class.php';
 			require_once 'MVC/view/ForumView.class.php';
 			$posts_draden = ForumPostsModel::instance()->getRecenteForumPostsVanLid(LoginModel::getUid(), LidInstellingen::get('zijbalk', 'forum_zelf'), true);
-			$zijkolom[] = new ForumPostZijbalkView($posts_draden[0], $posts_draden[1]);
+			$zijbalk[] = new ForumPostZijbalkView($posts_draden[0], $posts_draden[1]);
 		}
 		// Nieuwste fotoalbum
 		if (LidInstellingen::get('zijbalk', 'fotoalbum') == 'ja') {
 			require_once 'MVC/controller/FotoAlbumController.class.php';
 			$album = FotoAlbumModel::getMostRecentFotoAlbum();
 			if ($album !== null) {
-				$zijkolom[] = new FotoAlbumZijbalkView($album);
+				$zijbalk[] = new FotoAlbumZijbalkView($album);
 			}
 		}
 		// Komende verjaardagen
 		if (LidInstellingen::get('zijbalk', 'verjaardagen') > 0) {
 			require_once 'lid/verjaardagcontent.class.php';
-			$zijkolom[] = new VerjaardagContent('komende');
+			$zijbalk[] = new VerjaardagContent('komende');
 		}
-		return $zijkolom;
+		// Quick navigation buttons
+		if (LidInstellingen::get('layout', 'zijbalk') == 'fixeer' AND LidInstellingen::get('layout', 'beeld') == 'dynamisch') {
+			$zijbalk[] = new QuickNavigateMenuView();
+		}
+		return $zijbalk;
 	}
 
 	public static function getDebug($sql = true, $get = true, $post = true, $files = true, $cookie = true, $session = true) {

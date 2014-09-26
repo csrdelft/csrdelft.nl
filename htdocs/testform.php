@@ -55,7 +55,7 @@ if ($form->validate()) {
 }
 
 $pagina = new CsrLayoutPage($form);
-$pagina->zijkolom = false; //geen zijkolom, overzichterlijker debuggen
+$pagina->zijbalk = false; //geen zijbalk, overzichterlijker debuggen
 //$pagina->addStylesheet('/layout/css/profiel');
 //$pagina->addScript('/layout/js/profiel');
 $pagina->view();

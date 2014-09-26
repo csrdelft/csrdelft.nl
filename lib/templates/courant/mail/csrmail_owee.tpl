@@ -22,7 +22,7 @@ td{
 	vertical-align: top;
 	font-size: 11px;font-face: verdana, arial;
 }
-.zijKolom{
+.Zijbalk{
 	width: 150px;
 	margin: 0; padding: 0;
 	vertical-align: top;
@@ -89,7 +89,7 @@ a{
 <body >
 <table>
 <tr>
-<td class="zijKolom" valign="top">
+<td class="Zijbalk" valign="top">
 <img src="{$CSR_PICS}/csrmail/logo_owee2007.jpg" width="150" 
 height="187" alt="OWee-courant" />
 </td>
