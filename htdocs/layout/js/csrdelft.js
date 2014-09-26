@@ -131,7 +131,6 @@ function init_lazy_images() {
 }
 
 function layout_breedte_werkomheen() {
-	// synchronize size with container
 	var z = $('#zijkolom');
 	var origWidth = z.width();
 	z.parent().width(origWidth);
@@ -159,6 +158,10 @@ function layout_breedte_werkomheen() {
 }
 
 function init_scroll_fixed() {
+	// synchronize size with container
+	$('.scroll-fix').each(function () {
+		$(this).parent().height($(this).height());
+	});
 	layout_breedte_werkomheen();
 	// synchronize position with window
 	$(window).scroll(function () {
