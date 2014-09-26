@@ -135,9 +135,11 @@ function zijbalk_breedte_dynamisch() {
 	var origWidth = elmnt.width();
 	elmnt.parent().width(origWidth);
 	var showscrol = function () {
+		elmnt.css('padding-right', 10);
 		elmnt.css('overflow-y', 'auto');
 	};
 	var hidescrol = function () {
+		elmnt.css('padding-right', '');
 		elmnt.css('overflow-y', '');
 	};
 	var expand = function () {
