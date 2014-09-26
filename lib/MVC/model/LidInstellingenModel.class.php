@@ -56,7 +56,7 @@ class LidInstellingen extends PersistenceModel {
 			'open_draad_op_pagina'	 => array('Open onderwerp op pagina', T::Enumeration, array('1', 'ongelezen', 'laatste'), 'ongelezen'),
 			'toonpasfotos'			 => array('Pasfoto\'s standaard weergeven', T::Enumeration, array('ja', 'nee'), 'ja'),
 			'filter2008'			 => array('Berichten van 2008 eerst verbergen', T::Enumeration, array('ja', 'nee'), 'nee'),
-			'fotoWeergave'			 => array('Toon groter formaat afbeeldingen', T::Enumeration, array('nee', 'hoverIntent', 'altijd'), 'nee')
+			'fotoWeergave'			 => array('Toon groter formaat afbeeldingen', T::Enumeration, array('ja', 'nee', 'in bericht'), 'ja')
 		),
 		'zijbalk'		 => array(
 			'ishetal'				 => array('Is het al… weergeven', T::Enumeration, array('niet weergeven', 'willekeurig', 'wist u dat', 'weekend', 'kring', 'lezing', 'borrel', 'jarig', 'dies', 'happie', 'lunch', 'studeren'), 'willekeurig'),

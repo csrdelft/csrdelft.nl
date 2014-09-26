@@ -130,11 +130,11 @@ class FotoUbbView extends SmartyTemplateView {
 
 	public function getHTML() {
 		$html = '<a href="' . $this->model->getURL() . '" title="Klik voor origineel formaat"';
-		if (LidInstellingen::get('forum', 'fotoWeergave') === 'hoverIntent') {
+		if (LidInstellingen::get('forum', 'fotoWeergave') === 'ja') {
 			$html .= ' class="hoverIntent"><div class="hoverIntentContent"><div class="ubb_img_loading" src="' . $this->model->getResizedURL() . '"></div></div';
 		}
 		$html .= '><div class="ubb_img_loading" src="';
-		if (LidInstellingen::get('forum', 'fotoWeergave') === 'altijd') {
+		if (LidInstellingen::get('forum', 'fotoWeergave') === 'in bericht') {
 			$html .= $this->model->getResizedURL();
 		} else {
 			$html .= $this->model->getThumbURL();
