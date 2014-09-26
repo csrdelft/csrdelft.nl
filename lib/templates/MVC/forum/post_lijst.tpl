@@ -16,27 +16,21 @@
 				<td class="postlinktd"><a href="/forum/reactie/{$post->post_id}#{$post->post_id}" id="{$post->post_id}" class="postlink" title="Link naar deze post">&rarr;</a></td>
 			</tr>
 		</table>
-		<table>
-			<tr>
-				<td>
-					<span class="moment">
-						{if LidInstellingen::get('forum', 'datumWeergave') === 'relatief'}
-							{$post->datum_tijd|reldate}
-						{else}
-							{$post->datum_tijd}
-						{/if}
-					</span>
-				</td>
-				<td>
-					{if LoginModel::mag('P_LEDEN_READ')}
-						<span tabindex="0" id="t{$post->uid}-{$post->post_id}" class="togglePasfoto"{if LidInstellingen::get('forum', 'toonpasfotos') == 'nee'} title="Toon pasfoto">&raquo;{else}>{/if}</span>
-						<div id="p{$post->post_id}" class="forumpasfoto{if LidInstellingen::get('forum', 'toonpasfotos') == 'nee'} verborgen">{elseif LoginModel::mag('P_LEDEN_READ')}">{$post->uid|csrnaam:'pasfoto'}{/if}</div>
-					{/if}
-				</td>
-			</tr>
-		</table>
+		<span class="moment">
+			{if LidInstellingen::get('forum', 'datumWeergave') === 'relatief'}
+				{$post->datum_tijd|reldate}
+			{else}
+				{$post->datum_tijd}
+			{/if}
+		</span>
+		{if LoginModel::mag('P_LEDEN_READ')}
+			{if LidInstellingen::get('forum', 'toonpasfotos') == 'nee'}
+				<span id="t{$post->uid}-{$post->post_id}" class="togglePasfoto" title="Toon pasfoto">&raquo;</span>
+			{/if}
+			<div id="p{$post->post_id}" class="forumpasfoto{if LidInstellingen::get('forum', 'toonpasfotos') == 'nee'} verborgen">{elseif LoginModel::mag('P_LEDEN_READ')}">{$post->uid|csrnaam:'pasfoto'}{/if}</div>
+		{/if}
+		<br /><br />
 		{if $post->wacht_goedkeuring}
-			<br /><br />
 			<a href="/forum/goedkeuren/{$post->post_id}" class="knop post confirm" title="Bericht goedkeuren">goedkeuren</a>
 			<br /><br />
 			<a href="/tools/stats.php?ip={$post->auteur_ip}" class="knop" title="IP-log">IP-log</a>
