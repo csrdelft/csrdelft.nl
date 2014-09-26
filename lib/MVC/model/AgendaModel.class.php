@@ -75,10 +75,15 @@ class AgendaModel extends PersistenceModel {
 	 * Vergelijkt twee Agendeerbaars op beginMoment t.b.v. sorteren.
 	 */
 	public static function vergelijkAgendeerbaars(Agendeerbaar $foo, Agendeerbaar $bar) {
-		if ($foo->getBeginMoment() == $bar->getBeginMoment()) {
+		$a = $foo->getBeginMoment();
+		$b = $bar->getBeginMoment();
+		if ($a > $b) {
+			return 1;
+		} elseif ($a < $b) {
+			return -1;
+		} else {
 			return 0;
 		}
-		return ($foo->getBeginMoment() > $bar->getBeginMoment()) ? 1 : -1;
 	}
 
 	public function getAgendaItem($itemId) {

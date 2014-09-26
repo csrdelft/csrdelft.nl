@@ -27,7 +27,6 @@
 	<div id="menuright">
 		{if LoginModel::mag('P_LOGGED_IN') }
 			<div id="ingelogd">
-				<a href="/instellingen/" class="instellingen" title="Webstekinstellingen">{icon get="instellingen"}</a>
 				{if LoginModel::instance()->isSued()}
 					<a href="/endsu/" style="color: red;">{LoginModel::instance()->getSuedFrom()->getNaamLink('civitas', 'plain')} als</a><br />»
 				{/if}
