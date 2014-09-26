@@ -1159,7 +1159,6 @@ div.forumdeel-omschrijving{
 div.bewerkt{ font-size: 9px; color: #bbb; }
 div.bewerkt a{ color: #bbb; }
 div.bewerkt hr{ text-align: left; background-color: #bbb; }
-div.bewerkt img{ opacity: 0.3; filter:alpha(opacity=30); }
 
 a.forumGrootlink{
 	font-size: 1em;
