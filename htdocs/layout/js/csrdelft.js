@@ -130,19 +130,26 @@ function init_lazy_images() {
 	});
 }
 
-function zijbalk_breedte_dynamisch() {
+function zijbalk_dynamisch() {
 	var elmnt = $('#zijbalk');
 	var origWidth = elmnt.width();
 	elmnt.parent().width(origWidth);
-	var showscrol = function () {
-		if (window.innerHeight < elmnt.parent().height()) {
-			elmnt.css({
-				'overflow-y': 'auto',
-				'padding-right': getScrollBarWidth()
-			});
+	var scrollbarWidth = getScrollBarWidth();
+	var getPadding = function () {
+		if (elmnt.get(0).scrollHeight > elmnt.get(0).clientHeight) {
+			return scrollbarWidth;
+		}
+		else {
+			return '';
 		}
 	};
-	var hidescrol = function () {
+	var showscroll = function () {
+		elmnt.css({
+			'overflow-y': 'auto',
+			'padding-right': getPadding()
+		});
+	};
+	var hidescroll = function () {
 		elmnt.css({
 			'overflow-y': '',
 			'padding-right': ''
@@ -151,26 +158,28 @@ function zijbalk_breedte_dynamisch() {
 	var expand = function () {
 		if (elmnt.width() < origWidth) {
 			elmnt.animate({
-				'width': origWidth
-			}, 400, showscrol);
+				'width': origWidth,
+				'padding-right': getPadding()
+			}, 400, showscroll);
 		}
 	};
 	var collapse = function () {
 		if (elmnt.width() > elmnt.parent().width()) {
-			hidescrol();
+			hidescroll();
 			elmnt.animate({
-				'width': elmnt.parent().width()
+				'width': elmnt.parent().width(),
+				'padding-right': ''
 			}, 400);
 		}
 	};
 	elmnt.hoverIntent(expand, collapse);
 	elmnt.hover(function () {
 		if (elmnt.width() >= origWidth) {
-			showscrol();
+			showscroll();
 		}
 	}, function () {
 		if (elmnt.width() <= elmnt.parent().width()) {
-			hidescrol();
+			hidescroll();
 		}
 	});
 	var resetWidth = function () {
@@ -200,7 +209,7 @@ function init_scroll_fixed() {
 	$('.scroll-fix').each(function () {
 		$(this).parent().height($(this).height());
 	});
-	zijbalk_breedte_dynamisch();
+	zijbalk_dynamisch();
 	// synchronize position with window
 	$(window).scroll(function () {
 		$('.scroll-fix').each(function () {
