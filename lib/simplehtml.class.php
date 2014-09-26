@@ -124,7 +124,7 @@ abstract class SimpleHTML implements View {
 			$zijbalk[] = new VerjaardagContent('komende');
 		}
 		// Quick navigation buttons
-		if (LidInstellingen::get('layout', 'zijbalk') == 'fixeer' AND LidInstellingen::get('layout', 'beeld') == 'dynamisch') {
+		if (LidInstellingen::get('layout', 'zijbalk') == 'fixeer') {
 			$zijbalk[] = new QuickNavigateMenuView();
 		}
 		return $zijbalk;
