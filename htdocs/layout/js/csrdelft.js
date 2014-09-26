@@ -155,10 +155,12 @@ function zijbalk_breedte_dynamisch() {
 			margin = height;
 		}
 		$('#zijbalk_quicknav').css('margin-top', margin);
-	}
+	};
 	$(window).resize(function () {
 		resetWidth();
-		resetQuickNav();
+		if ($('#zijbalk_quicknav').length) {
+			resetQuickNav();
+		}
 		$(window).trigger('scroll');
 	});
 	$(window).trigger('resize');

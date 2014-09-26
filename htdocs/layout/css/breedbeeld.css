@@ -38,6 +38,7 @@ html, body, #main, #mainleft, #mainright, #zijbalk {
 }
 #zijbalk .block .item {
 	border: none;
+	background-color: transparent;
 }
 
 /** Mededelingen **/

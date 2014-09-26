@@ -431,9 +431,6 @@ div.ishetal div.ja{
 	background: #F5F5F5;
 	position: relative;
 	padding: 5px 0;
-	box-shadow: 0 -5px 5px #F5F5F5;
-	-moz-box-shadow:0 -5px 5px #F5F5F5;
-	-webkit-box-shadow: 0 -5px 5px #F5F5F5;
 }
 #zijbalk_quicknav a{
 	margin: 0 7px;
