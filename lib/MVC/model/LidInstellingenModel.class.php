@@ -170,15 +170,17 @@ class LidInstellingen extends PersistenceModel {
 
 	public function setValue($module, $key, $value) {
 		if (!$this->has($module, $key)) {
-			throw new Exception('Deze instelling  bestaat niet: ' . $module . '->' . $key);
+			return false;
 		}
 		if ($this->getType($module, $key) === T::Integer) {
 			$value = (int) $value;
 		}
 		if ($this->isValidValue($module, $key, $value)) {
 			Instellingen::setTemp($module, 'lid_' . $key, $value);
+			return true;
 		} else {
 			$this->setDefaultValue($module, $key);
+			return false;
 		}
 	}
 
@@ -194,24 +196,11 @@ class LidInstellingen extends PersistenceModel {
 		}
 		$instellingen = $this->find('uid = ?', array(LoginModel::getUid()));
 		foreach ($instellingen as $instelling) {
-			try {
-				// haal verwijderde instellingen uit de database
-				if (!array_key_exists($instelling->module, $this->instellingen) OR ! array_key_exists($instelling->instelling_id, $this->instellingen[$instelling->module])) {
-					$rowcount = $this->delete($instelling);
-					if ($rowcount !== 1) {
-						throw new Exception('Niet bestaande instelling verwijderen mislukt');
-					}
-				}
-				$this->setValue($instelling->module, $instelling->instelling_id, $instelling->waarde);
-			} catch (Exception $e) {
-				if (startsWith($e->getMessage(), 'Deze instelling  bestaat niet')) {
-					$rowcount = $this->deleteByPrimaryKey($instelling->getValues(true));
-					if ($rowcount !== 1) {
-						throw new Exception('Niet bestaande instelling verwijderen mislukt');
-					}
-				} else {
-					SimpleHTML::setMelding($e->getMessage(), -1);
-					DebugLogModel::instance()->log(get_called_class(), 'reload', func_get_args(), $e);
+			$ok = $this->setValue($instelling->module, $instelling->instelling_id, $instelling->waarde); // validate
+			if (!$ok) {
+				$rowcount = $this->delete($instelling);
+				if ($rowcount !== 1) {
+					throw new Exception('Niet bestaande instelling verwijderen mislukt');
 				}
 			}
 		}
@@ -222,8 +211,10 @@ class LidInstellingen extends PersistenceModel {
 		foreach ($this->instellingen as $module => $instellingen) {
 			foreach ($instellingen as $key => $value) {
 				$value = filter_input(INPUT_POST, $module . '_' . $key, FILTER_SANITIZE_STRING);
-				$this->setValue($module, $key, $value); // validate value
-				$properties[] = array(LoginModel::getUid(), $module, $key, $this->getValue($module, $key));
+				$ok = $this->setValue($module, $key, $value); // validate
+				if ($ok) {
+					$properties[] = array(LoginModel::getUid(), $module, $key, $this->getValue($module, $key));
+				}
 			}
 		}
 		$orm = self::orm;
@@ -237,7 +228,10 @@ class LidInstellingen extends PersistenceModel {
 
 	public function setForAll($module, $key, $value) {
 		$properties[] = array('uid', 'module', 'instelling_id', 'waarde');
-		$this->setValue($module, $key, $value); // sanatize value
+		$ok = $this->setValue($module, $key, $value); // validate
+		if (!$ok) {
+			return;
+		}
 		$value = $this->getValue($module, $key);
 		$leden = Database::sqlSelect(array('uid'), 'lid');
 		$leden->setFetchMode(PDO::FETCH_COLUMN, 0);
