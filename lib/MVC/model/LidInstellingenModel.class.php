@@ -55,7 +55,7 @@ class LidInstellingen extends PersistenceModel {
 			'ongelezenWeergave'		 => array('Ongelezenweergave', T::Enumeration, array('schuingedrukt', 'dikgedrukt', 'onderstreept', 'alsof gelezen'), 'schuingedrukt', array('schuingedrukt' => 'font-style: italic;', 'dikgedrukt' => 'font-weight: bold;', 'onderstreept' => 'text-decoration: underline;', 'alsof gelezen' => '')),
 			'open_draad_op_pagina'	 => array('Open onderwerp op pagina', T::Enumeration, array('1', 'ongelezen', 'laatste'), 'ongelezen'),
 			'toonpasfotos'			 => array('Pasfoto\'s standaard weergeven', T::Enumeration, array('ja', 'nee'), 'ja'),
-			'fotoWeergave'			 => array('Toon groter formaat afbeeldingen', T::Enumeration, array('ja', 'nee', 'in bericht'), 'ja'),
+			'fotoWeergave'			 => array('Toon groter formaat foto\'s', T::Enumeration, array('ja', 'nee', 'in bericht'), 'ja'),
 			'filter2008'			 => array('Berichten van 2008 eerst verbergen', T::Enumeration, array('ja', 'nee'), 'nee')
 		),
 		'zijbalk'		 => array(
