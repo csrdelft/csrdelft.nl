@@ -149,18 +149,17 @@ function zijbalk_breedte_dynamisch() {
 		elmnt.width(elmnt.parent().width());
 	};
 	var resetQuickNav = function () {
-		var height = 30;
-		var margin = window.innerHeight - $('#zijbalk_quicknav').position().top - height;
-		if (margin < height) {
-			margin = height;
+		if ($('#zijbalk_quicknav').length) {
+		var margin = $('#zijbalk').height() - $('#zijbalk_quicknav').position().top - 30;
+		if (margin < 0) {
+			margin = 0;
 		}
 		$('#zijbalk_quicknav').css('margin-top', margin);
+	}
 	};
 	$(window).resize(function () {
 		resetWidth();
-		if ($('#zijbalk_quicknav').length) {
-			resetQuickNav();
-		}
+		resetQuickNav();
 		$(window).trigger('scroll');
 	});
 	$(window).trigger('resize');
