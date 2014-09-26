@@ -33,7 +33,7 @@ class Instellingen extends PersistenceModel {
 
 	private $defaults = array(
 		'stek'		 => array(
-			'homepage'	 => 'thuis',
+			'homepage'		 => 'thuis',
 			'beschrijving'	 => 'De Civitas Studiosorum Reformatorum is een bruisende, actieve, christelijke studentenvereniging in Delft, rijk aan tradities die zijn ontstaan in haar 50-jarig bestaan. Het is een breed gezelschap van zo&lsquo;n 270 leden met een zeer gevarieerde (kerkelijke) achtergrond, maar met een duidelijke eenheid door het christelijk geloof. C.S.R. is de plek waar al tientallen jaren studenten goede vrienden van elkaar worden, op intellectueel en geestelijk gebied groeien en goede studentengrappen uithalen.'
 		),
 		'agenda'	 => array(
@@ -116,7 +116,7 @@ class Instellingen extends PersistenceModel {
 		foreach ($instellingen as $instelling) {
 			// haal verwijderde instellingen uit de database
 			if (!array_key_exists($instelling->module, $this->defaults) OR ! array_key_exists($instelling->instelling_id, $this->defaults[$instelling->module])) {
-				$rowcount = $this->deleteByPrimaryKey($instelling->getValues(true));
+				$rowcount = $this->delete($instelling);
 				if ($rowcount !== 1) {
 					throw new Exception('Niet bestaande instelling verwijderen mislukt');
 				}

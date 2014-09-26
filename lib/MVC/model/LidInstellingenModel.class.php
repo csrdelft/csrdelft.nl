@@ -178,7 +178,6 @@ class LidInstellingen extends PersistenceModel {
 		if ($this->isValidValue($module, $key, $value)) {
 			Instellingen::setTemp($module, 'lid_' . $key, $value);
 		} else {
-			// als waarde van deze instelling ongeldig is
 			$this->setDefaultValue($module, $key);
 		}
 	}
@@ -196,6 +195,13 @@ class LidInstellingen extends PersistenceModel {
 		$instellingen = $this->find('uid = ?', array(LoginModel::getUid()));
 		foreach ($instellingen as $instelling) {
 			try {
+				// haal verwijderde instellingen uit de database
+				if (!array_key_exists($instelling->module, $this->instellingen) OR ! array_key_exists($instelling->instelling_id, $this->instellingen[$instelling->module])) {
+					$rowcount = $this->delete($instelling);
+					if ($rowcount !== 1) {
+						throw new Exception('Niet bestaande instelling verwijderen mislukt');
+					}
+				}
 				$this->setValue($instelling->module, $instelling->instelling_id, $instelling->waarde);
 			} catch (Exception $e) {
 				if (startsWith($e->getMessage(), 'Deze instelling  bestaat niet')) {
@@ -216,7 +222,7 @@ class LidInstellingen extends PersistenceModel {
 		foreach ($this->instellingen as $module => $instellingen) {
 			foreach ($instellingen as $key => $value) {
 				$value = filter_input(INPUT_POST, $module . '_' . $key, FILTER_SANITIZE_STRING);
-				$this->setValue($module, $key, $value); // sanatize value
+				$this->setValue($module, $key, $value); // validate value
 				$properties[] = array(LoginModel::getUid(), $module, $key, $this->getValue($module, $key));
 			}
 		}
