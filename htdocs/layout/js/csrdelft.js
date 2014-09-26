@@ -135,10 +135,12 @@ function zijbalk_breedte_dynamisch() {
 	var origWidth = elmnt.width();
 	elmnt.parent().width(origWidth);
 	var showscrol = function () {
-		elmnt.css({
-			'overflow-y': 'auto',
-			'padding-right': getScrollBarWidth()
-		});
+		if (window.innerHeight < elmnt.parent().height()) {
+			elmnt.css({
+				'overflow-y': 'auto',
+				'padding-right': getScrollBarWidth()
+			});
+		}
 	};
 	var hidescrol = function () {
 		elmnt.css({
