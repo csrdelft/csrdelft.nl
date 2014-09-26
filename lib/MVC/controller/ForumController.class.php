@@ -269,8 +269,7 @@ class ForumController extends Controller {
 			if ($rowcount !== 1) {
 				throw new Exception('Forum beheren mislukt!');
 			}
-			// ReloadPage
-			exit;
+			$this->view = new JsonResponse(true);
 		}
 	}
 
@@ -287,8 +286,7 @@ class ForumController extends Controller {
 			ForumDelenModel::instance()->verwijderForumDeel($deel->forum_id);
 			SimpleHTML::setMelding('Deelforum verwijderd', 1);
 		}
-		// ReloadPage
-		exit;
+		$this->view = new JsonResponse(true);
 	}
 
 	/**
@@ -300,8 +298,7 @@ class ForumController extends Controller {
 		foreach ($draden as $draad) {
 			ForumPostsModel::instance()->hertellenVoorDraadEnDeel($draad, $deel);
 		}
-		// ReloadPage
-		exit;
+		$this->view = new JsonResponse(true);
 	}
 
 	/**
@@ -318,8 +315,7 @@ class ForumController extends Controller {
 			throw new Exception('Onderwerp is al verborgen');
 		}
 		ForumDradenVerbergenModel::instance()->setVerbergenVoorLid($draad);
-		// ReloadPage
-		exit;
+		$this->view = new JsonResponse(true);
 	}
 
 	/**
@@ -333,8 +329,7 @@ class ForumController extends Controller {
 			throw new Exception('Onderwerp is niet verborgen');
 		}
 		ForumDradenVerbergenModel::instance()->setVerbergenVoorLid($draad, false);
-		// ReloadPage
-		exit;
+		$this->view = new JsonResponse(true);
 	}
 
 	/**
@@ -344,8 +339,7 @@ class ForumController extends Controller {
 		$aantal = ForumDradenVerbergenModel::instance()->getAantalVerborgenVoorLid();
 		ForumDradenVerbergenModel::instance()->toonAllesVoorLid(LoginModel::getUid());
 		SimpleHTML::setMelding($aantal . ' onderwerp' . ($aantal === 1 ? ' wordt' : 'en worden') . ' weer getoond in de zijbalk', 1);
-		// ReloadPage
-		exit;
+		$this->view = new JsonResponse(true);
 	}
 
 	/**
@@ -362,8 +356,7 @@ class ForumController extends Controller {
 			throw new Exception('Onderwerp wordt al gevolgd');
 		}
 		ForumDradenVolgenModel::instance()->setVolgenVoorLid($draad);
-		// ReloadPage
-		exit;
+		$this->view = new JsonResponse(true);
 	}
 
 	/**
@@ -377,8 +370,7 @@ class ForumController extends Controller {
 			throw new Exception('Onderwerp wordt niet gevolgd');
 		}
 		ForumDradenVolgenModel::instance()->setVolgenVoorLid($draad, false);
-		// ReloadPage
-		exit;
+		$this->view = new JsonResponse(true);
 	}
 
 	/**
@@ -388,8 +380,7 @@ class ForumController extends Controller {
 		$aantal = ForumDradenVolgenModel::instance()->getAantalVolgenVoorLid();
 		ForumDradenVolgenModel::instance()->volgNietsVoorLid(LoginModel::getUid());
 		SimpleHTML::setMelding($aantal . ' onderwerp' . ($aantal === 1 ? ' wordt' : 'en worden') . ' niet meer gevolgd', 1);
-		// ReloadPage
-		exit;
+		$this->view = new JsonResponse(true);
 	}
 
 	/**
@@ -443,8 +434,7 @@ class ForumController extends Controller {
 		if ($property === 'forum_id' OR $property === 'titel') {
 			$this->onderwerp($draad_id);
 		} else {
-			// ReloadPage
-			exit;
+			$this->view = new JsonResponse(true);
 		}
 	}
 
@@ -612,7 +602,7 @@ class ForumController extends Controller {
 			$this->geentoegang();
 		}
 		echo ForumPostsModel::instance()->citeerForumPost($post);
-		exit;
+		exit; //TODO: JsonResponse
 	}
 
 	public function tekst($post_id) {
@@ -623,7 +613,7 @@ class ForumController extends Controller {
 			$this->geentoegang();
 		}
 		echo $post->tekst;
-		exit;
+		exit; //TODO: JsonResponse
 	}
 
 }

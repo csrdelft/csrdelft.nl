@@ -142,8 +142,7 @@ class FotoAlbumController extends AclController {
 			} else {
 				SimpleHTML::setMelding('Fotoalbum bestaat al', 0);
 			}
-			// ReloadPage
-			exit;
+			$this->view = new JsonResponse(true);
 		}
 		$this->view = $formulier;
 	}
@@ -221,8 +220,7 @@ class FotoAlbumController extends AclController {
 		} else {
 			SimpleHTML::setMelding('Fotoalbum hernoemen mislukt', -1);
 		}
-		// ReloadPage
-		exit;
+		$this->view = new JsonResponse(true);
 	}
 
 	public function verwijderen(FotoAlbum $album) {
@@ -232,7 +230,7 @@ class FotoAlbumController extends AclController {
 		} else {
 			SimpleHTML::setMelding('Foto verwijderen mislukt', -1);
 		}
-		exit;
+		exit; //TODO: JsonResponse
 	}
 
 	public function albumcover(FotoAlbum $album) {
@@ -242,8 +240,7 @@ class FotoAlbumController extends AclController {
 		} else {
 			SimpleHTML::setMelding('Fotoalbum-cover instellen mislukt', -1);
 		}
-		// ReloadPage
-		exit;
+		$this->view = new JsonResponse(true);
 	}
 
 	public function roteren(FotoAlbum $album) {
@@ -251,8 +248,7 @@ class FotoAlbumController extends AclController {
 		$naam = filter_input(INPUT_POST, 'foto', FILTER_SANITIZE_STRING);
 		$foto = new Foto($album, $naam);
 		$foto->rotate($degrees);
-		// ReloadPage
-		exit;
+		$this->view = new JsonResponse(true);
 	}
 
 }
