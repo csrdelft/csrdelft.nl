@@ -131,28 +131,37 @@ function init_lazy_images() {
 }
 
 function zijbalk_breedte_dynamisch() {
-	var z = $('#zijbalk');
-	var origWidth = z.width();
-	z.parent().width(origWidth);
+	var elmnt = $('#zijbalk');
+	var origWidth = elmnt.width();
+	elmnt.parent().width(origWidth);
 	var expand = function () {
-		z.animate({
+		elmnt.animate({
 			width: origWidth
 		}, 400);
 	};
 	var collapse = function () {
-		z.animate({
-			width: z.parent().width()
+		elmnt.animate({
+			width: elmnt.parent().width()
 		}, 400);
 	};
-	z.hoverIntent(expand, collapse);
+	elmnt.hoverIntent(expand, collapse);
 	var resetWidth = function () {
-		z.width(z.parent().width());
+		elmnt.width(elmnt.parent().width());
 	};
+	var resetQuickNav = function () {
+		var height = 30;
+		var margin = window.innerHeight - $('#zijbalk_quicknav').position().top - height;
+		if (margin < height) {
+			margin = height;
+		}
+		$('#zijbalk_quicknav').css('margin-top', margin);
+	}
 	$(window).resize(function () {
 		resetWidth();
+		resetQuickNav();
 		$(window).trigger('scroll');
 	});
-	resetWidth();
+	$(window).trigger('resize');
 	// set delay for adblockers that remove ads so wide they influence page width (very annoying)
 	window.setTimeout(resetWidth, 400);
 }

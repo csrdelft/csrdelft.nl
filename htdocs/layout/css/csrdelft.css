@@ -429,9 +429,7 @@ div.ishetal div.ja{
 }
 #zijbalk_quicknav{
 	background: #F5F5F5;
-	position: fixed;
-	z-index: 300;
-	bottom: 0;
+	position: relative;
 	padding: 5px 0;
 	box-shadow: 0 -5px 5px #F5F5F5;
 	-moz-box-shadow:0 -5px 5px #F5F5F5;
@@ -439,6 +437,12 @@ div.ishetal div.ja{
 }
 #zijbalk_quicknav a{
 	margin: 0 7px;
+	opacity: 0.3;
+	filter: alpha(opacity=30);
+}
+#zijbalk_quicknav a:hover{
+	opacity: 0.6;
+	filter: alpha(opacity=60);
 }
 /* Verjaardag in de zijbalk */
 #komende_pasfotos{ padding: 4px 0;}
@@ -461,8 +465,8 @@ div.ishetal div.ja{
 	bottom: 0;
 	background-color: white; color: black;
 	font-size: 9px;
-	opacity:0.6;
-	filter:alpha(opacity=60);
+	opacity: 0.5;
+	filter: alpha(opacity=50);
 }
 #zijbalk_fotoalbum a{
 	text-decoration: none;

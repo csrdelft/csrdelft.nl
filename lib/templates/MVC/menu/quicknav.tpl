@@ -1,4 +1,3 @@
-<br /><br /><br />
 <div id="zijbalk_quicknav">
 	<a href="/" title="Start"><img src="{$CSR_PICS}/knopjes/home-16.png" alt="start"></a>
 	<a href="/communicatie/ledenlijst" title="Ledenlijst"><img src="{$CSR_PICS}/knopjes/group-16.png" alt="leden"></a>
