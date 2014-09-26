@@ -1082,14 +1082,19 @@ span#modsluiten:hover{
 	font-size: 0.9em;
 	text-align: left;
 }
-#forumtabel td.auteur div {
+#forumtabel td.auteur div{
 	text-align: left;
 }
-#forumtabel td.auteur div.auteurnaam {
-	width: 130px;
-	display: inline-block;
+#forumtabel td.auteur table{
+	width: 100%;
 }
-a.postlink{ float:right; text-decoration: none; }
+#forumtabel .postlinktd{
+	width: 16px;
+}
+a.postlink{
+	float: right;
+	text-decoration: none;
+}
 span.togglePasfoto, a.postlink{
 	cursor: pointer;
 	color: #bbb;
