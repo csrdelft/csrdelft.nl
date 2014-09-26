@@ -1,11 +1,31 @@
-jQuery(document).ready(function($) {
-	$('#forumBericht').each(function() {
+jQuery(document).ready(function ($) {
+	var saveConcept = function () {
+		if ($('#forumBericht').val() !== $('#forumBericht').attr('origvalue')) {
+			$.post('/forum/concept', {
+				forumBericht: $('#forumBericht').val()
+			}, function () {
+				$('#forumBericht').attr('origvalue', $('#forumBericht').val());
+			});
+		}
+	};
+	$(window).unload(function () {
+		saveConcept();
+	});
+	var autosave;
+	$('#forumBericht').focusin(function () {
+		autosave = setInterval(saveConcept, 1000);
+	});
+	$('#forumBericht').focusout(function () {
+		clearInterval(autosave);
+	});
+
+	$('#forumBericht').each(function () {
 		$(this).wrap('<div id="meldingen"></div>');
 
 		if ($(this).hasClass('extern')) {
 			$('#meldingen').prepend('<div id="extern_melding"><strong>Openbaar forum</strong><br />Voor iedereen leesbaar, doorzoekbaar door zoekmachines.<br />Zet [prive] en [/prive] om uw persoonlijke contactgegevens in het bericht.</div>');
 		}
-	}).keyup(function(event) {
+	}).keyup(function (event) {
 		var textarea = $(this);
 
 		if (event.keyCode == 13) { //enter == 13
@@ -16,7 +36,7 @@ jQuery(document).ready(function($) {
 				if ($('#ubb_melding').length == 0) {
 					textarea.before('<div id="ubb_melding">UBB gevonden:<br /> controleer het voorbeeld.</div>');
 
-					$('#ubb_melding').click(function() {
+					$('#ubb_melding').click(function () {
 						$('#ubbhulpverhaal').toggle();
 					});
 				}
@@ -26,8 +46,8 @@ jQuery(document).ready(function($) {
 			textarea.before('<div id="ketzer_melding">Ketzer hebben?<br /><a href="/actueel/groepen/Ketzers" target="_blank">&raquo; Maak er zelf een aan.</a></div>');
 		}
 	});
-	$('.togglePasfoto').each(function() {
-		$(this).click(function() {
+	$('.togglePasfoto').each(function () {
+		$(this).click(function () {
 			var parts = $(this).attr('id').substr(1).split('-');
 			var pasfoto = $('#p' + parts[1]);
 			if (pasfoto.html() == '') {
@@ -40,10 +60,10 @@ jQuery(document).ready(function($) {
 		});
 	});
 	$('td.auteur').hoverIntent(
-			function() {
+			function () {
 				$(this).find('a.forummodknop').fadeIn();
 			},
-			function() {
+			function () {
 				$(this).find('a.forummodknop').fadeOut();
 			}
 	);
@@ -62,7 +82,7 @@ function togglePasfotos(uids, div) {
 	} else {
 		http.abort();
 		http.open("GET", "/tools/pasfotos.php?string=" + escape(uids), true);
-		http.onreadystatechange = function() {
+		http.onreadystatechange = function () {
 			if (http.readyState == 4) {
 				orig = div.innerHTML;
 				div.innerHTML = http.responseText;
@@ -80,7 +100,7 @@ var bewerkDivInnerHTML = null;
 function forumBewerken(postId) {
 	http.abort();
 	http.open("POST", "/forum/tekst/" + postId, true);
-	http.onreadystatechange = function() {
+	http.onreadystatechange = function () {
 		if (http.readyState == 4) {
 			if (document.getElementById('forumEditForm')) {
 				restorePost();
@@ -113,7 +133,7 @@ function forumBewerken(postId) {
 function forumCiteren(postId) {
 	http.abort();
 	http.open("POST", "/forum/citeren/" + postId, true);
-	http.onreadystatechange = function() {
+	http.onreadystatechange = function () {
 		if (http.readyState == 4) {
 			document.getElementById('forumBericht').value += http.responseText;
 			//helemaal naar beneden scrollen.
@@ -139,11 +159,11 @@ function submitPost() {
 		url: form.attr('action'),
 		data: form.serialize()
 	});
-	jqXHR.done(function(data, textStatus, jqXHR) {
+	jqXHR.done(function (data, textStatus, jqXHR) {
 		restorePost();
 		dom_update(data);
 	});
-	jqXHR.fail(function(jqXHR, textStatus, errorThrown) {
+	jqXHR.fail(function (jqXHR, textStatus, errorThrown) {
 		alert(textStatus);
 	});
 }

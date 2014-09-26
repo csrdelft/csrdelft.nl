@@ -85,12 +85,21 @@ class ForumController extends Controller {
 			case 'volgenaan':
 			case 'volgenuit':
 			case 'volgniets':
+			case 'concept':
 				return $this->isPosted();
 
 			default:
 				$this->action = 'forum';
 				return true;
 		}
+	}
+
+	/**
+	 * Concept bericht opslaan
+	 */
+	public function concept() {
+		$_SESSION['forum_concept'] = trim(filter_input(INPUT_POST, 'forumBericht', FILTER_UNSAFE_RAW));
+		$this->view = new JsonResponse(true);
 	}
 
 	/**
@@ -455,8 +464,8 @@ class ForumController extends Controller {
 			SimpleHTML::setMelding('SPAM', -1);
 			redirect(CSR_ROOT . '/forum/deel/' . $deel->forum_id);
 		}
-		$tekst = trim(filter_input(INPUT_POST, 'forumBericht', FILTER_UNSAFE_RAW));
-		$_SESSION['forum_concept'] = $tekst;
+		$this->concept(); // concept opslaan
+		$tekst = $_SESSION['forum_concept'];
 		require_once 'simplespamfilter.class.php';
 		$filter = new SimpleSpamfilter();
 		if ($filter->isSpam($tekst)) { //TODO: logging
