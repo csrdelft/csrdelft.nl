@@ -35,8 +35,8 @@
 	<div id="{$foto->filename|md5}" class="thumb hoverIntent">
 		{if LoginModel::mag('P_ALBUM_ADD')}
 			<div style="position: relative;">
-				<a href="/fotoalbum/roteren/{$album->getSubDir()}" postdata="foto={$foto->filename}&rotate=-90" class="knop post ReloadPage hoverIntentContent" title="Foto tegen de klok in draaien" style="position:absolute; top: 126px; left: 0;">{icon get=arrow_rotate_anticlockwise}</a>
-				<a href="/fotoalbum/roteren/{$album->getSubDir()}" postdata="foto={$foto->filename}&rotate=90" class="knop post ReloadPage hoverIntentContent" title="Foto met de klok mee draaien" style="position: absolute; top: 126px; right: 0;">{icon get=arrow_rotate_clockwise}</a>
+				<a href="/fotoalbum/roteren/{$album->getSubDir()}" postdata="foto={$foto->filename}&rotate=-90" class="knop post confirm ReloadPage hoverIntentContent" title="Foto tegen de klok in draaien" style="position:absolute; top: 126px; left: 0;">{icon get=arrow_rotate_anticlockwise}</a>
+				<a href="/fotoalbum/roteren/{$album->getSubDir()}" postdata="foto={$foto->filename}&rotate=90" class="knop post confirm ReloadPage hoverIntentContent" title="Foto met de klok mee draaien" style="position: absolute; top: 126px; right: 0;">{icon get=arrow_rotate_clockwise}</a>
 				{if LoginModel::mag('P_ALBUM_MOD')}
 					{if strpos($album->getSubDir(), 'Posters') === false}
 						<a href="/fotoalbum/albumcover/{$album->getSubDir()}" postdata="cover={$foto->filename}" class="knop post confirm ReloadPage hoverIntentContent" title="Instellen als albumcover" style="position: absolute; top: 0; left: 0;">{icon get=folder_picture}</a>
