@@ -193,16 +193,16 @@ class Courant {
 				return true;
 			}
 			if (!isset($this->berichten[$iBerichtID])) {
-				$this->sError = 'Bericht staat niet in cache (Courant::isBewerkbaar())';
+				$this->sError = 'Bericht staat niet in cache';
 			} else {
-				if (!LoginModel::getUid === $this->berichten[$iBerichtID]['uid']) {
-					$this->sError = 'U mag geen berichten van anderen aanpassen. (Courant::isBewerkbaar())';
+				if (!LoginModel::getUid() === $this->berichten[$iBerichtID]['uid']) {
+					$this->sError = 'U mag geen berichten van anderen aanpassen.';
 				} else {
 					return true;
 				}
 			}
 		} else {
-			$this->sError = 'Berichten mogen enkel in de cache worden ingevoerd. (Courant::isBewerkbaar())';
+			$this->sError = 'Berichten mogen enkel in de cache worden ingevoerd.';
 		}
 		return false;
 	}
