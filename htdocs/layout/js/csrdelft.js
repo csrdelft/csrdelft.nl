@@ -23,6 +23,7 @@ preload([
 
 $(document).ready(function () {
 	init_scroll_fixed();
+	zijbalk_dynamisch();
 	init_key_pressed();
 	init_dropzone();
 	init();
@@ -137,7 +138,7 @@ function zijbalk_dynamisch() {
 	var scrollbarWidth = getScrollBarWidth();
 	var getPadding = function () {
 		if (elmnt.hasClass('scroll-fix') && elmnt.get(0).scrollHeight > elmnt.get(0).clientHeight) {
-			return scrollbarWidth;
+			return scrollbarWidth / 2;
 		}
 		else {
 			return '';
@@ -211,7 +212,6 @@ function init_scroll_fixed() {
 	$('.scroll-fix').each(function () {
 		$(this).parent().height($(this).height());
 	});
-	zijbalk_dynamisch();
 	// synchronize position with window
 	$(window).scroll(function () {
 		$('.scroll-fix').each(function () {
