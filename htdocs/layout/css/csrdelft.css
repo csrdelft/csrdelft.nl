@@ -3,7 +3,7 @@ body, html, p, a, img, h1, h2, h3, h4, ul, li, form, fieldset, input{
 	margin: 0;
 	padding: 0;
 }
-body, textarea, input, select, option, tr, td, th, div, p {
+body, textarea, input, select, option, tr, td, th, div, p{
 	text-align: justify;
 }
 body{
@@ -69,8 +69,8 @@ p{
 abbr.timeago{ border: none; }
 abbr.timeago:hover{ border-bottom: 1px dotted grey; }
 
-a{color: #0a338d; text-decoration: none;}
-a:hover{color: #0a338d; text-decoration: underline;}
+a{ color: #0a338d; text-decoration: none; }
+a:hover{ color: #0a338d; text-decoration: underline; }
 a.external{
 	background-image: url('http://plaetjes.csrdelft.nl/layout/external-link-red.png');
 	background-repeat: no-repeat;
@@ -83,8 +83,8 @@ div{ margin: 0; padding: 0; }
 th{ text-align: left; }
 td{ vertical-align: top; padding: 0; }
 ul, ol{ }
-li{margin: 0 0 0 15px;}
-li li{ font-size: 1em;}
+li{ margin: 0 0 0 15px; }
+li li{ font-size: 1em; }
 hr{
 	height: 1px; background-color: black;
 	border: 0 none;
@@ -291,7 +291,7 @@ ul.nobullets li{ list-style-type: none; }
 #uitloggen{ position: absolute; top: -15px; right: 5px; }
 .instellingen{ float: right; }
 
-#saldi{clear: both; padding-top: 4px;}
+#saldi{clear: both; padding-top: 4px; }
 #saldi .saldo{ float: right; }
 #saldi .staatrood{ color: red; }
 
@@ -441,7 +441,7 @@ div.ishetal div.ja{
 	filter: alpha(opacity=60);
 }
 /* Verjaardag in de zijbalk */
-#komende_pasfotos{ padding: 4px 0;}
+#komende_pasfotos{ padding: 4px 0; }
 #komende_pasfotos .verjaardag{
 	position: relative;
 	float: left;
@@ -526,7 +526,7 @@ div.visitekaartje div.uid{
 
 /**** OVERIG ******************************************************************/
 
-p.naam, a.lidLink {
+p.naam, a.lidLink{
 	white-space: normal;
 }
 
@@ -598,9 +598,9 @@ table.query_table tbody tr td{
 p img{ margin: 15px 10px; }
 
 /* waarschuwing */
-.waarschuwing{ color: red;}
+.waarschuwing{ color: red; }
 /* geel blokje */
-div.blokje{ background-color: #ffffc1; margin: 10px 0; padding: 0;}
+div.blokje{ background-color: #ffffc1; margin: 10px 0; padding: 0; }
 
 
 /* algemeen hokje voor (fout)meldingen */
@@ -610,7 +610,7 @@ div#melding{
 	border: 1px solid black;
 	font-size: 1.3em;
 }
-#melding div{padding-left: 30px;}
+#melding div{padding-left: 30px; }
 div.msgerror{
 	color: red;
 	background: url(http://plaetjes.csrdelft.nl/famfamfam/exclamation.png) no-repeat;
@@ -663,7 +663,7 @@ span#ubbsluiten:hover{
 }
 
 /* csrmail */
-div#pubciemail_form{ background-color: #f5f5f5; border: 1px solid lightgray; padding: 10px;}
+div#pubciemail_form{ background-color: #f5f5f5; border: 1px solid lightgray; padding: 10px; }
 
 /* archief C.S.R.-courant */
 div.courantArchiefJaar{
@@ -674,7 +674,7 @@ div.courantArchiefJaar{
 /* Streeplijstgenereertool */
 form#streeplijst fieldset{ padding: 10px;  }
 form#streeplijst fieldset legend{ font-weight: bold; }
-form#streeplijst input, form#streeplijst label{ text-align: left; margin: 3px; padding: 0; line-height: 1em;}
+form#streeplijst input, form#streeplijst label{ text-align: left; margin: 3px; padding: 0; line-height: 1em; }
 
 
 #eetplanLETOP{
@@ -687,12 +687,12 @@ form#streeplijst input, form#streeplijst label{ text-align: left; margin: 3px; p
 .eetplantabel{
 	width: 100%; border-collapse: collapse;
 }
-.eetplantabel tr{ margin: 0; padding: 0;}
-.eetplantabel tr td{ margin: 0; padding: 0; text-align: left;}
+.eetplantabel tr{ margin: 0; padding: 0; }
+.eetplantabel tr td{ margin: 0; padding: 0; text-align: left; }
 .eetplantabel tr th{ border-bottom: 1px solid black; }
 .eetplantabel tr.kleur0 td{ background-color: #fff; }
 .eetplantabel tr.kleur1 td{ background-color: #f4f4f4; }
-.eetplantabel tr .huis{ border-left: 1px solid #000; padding:3px 4px; margin: 0; font-size: 10px;}
+.eetplantabel tr .huis{ border-left: 1px solid #000; padding:3px 4px; margin: 0; font-size: 10px; }
 
 
 .jarig{
@@ -732,10 +732,10 @@ form#streeplijst input, form#streeplijst label{ text-align: left; margin: 3px; p
 	margin: 0 0 0 20px;
 	width: 400px;
 }
-#nieuwePeiling label{ clear: left; float: left; width: 150px;}
-#nieuwePeiling input, #nieuwePeiling textarea{ margin-bottom: 4px;}
+#nieuwePeiling label{ clear: left; float: left; width: 150px; }
+#nieuwePeiling input, #nieuwePeiling textarea{ margin-bottom: 4px; }
 #nieuwePeiling textarea{ width: 400px; }
-#peilingOpties input{ width: 400px;}
+#peilingOpties input{ width: 400px; }
 
 
 /** FORMULIER **************************************************************/
@@ -1231,8 +1231,8 @@ div.citaat{
 	font-size: 0.98em;
 }
 div.citaat .offtopic{ color: #999; } 
-div.citaatContainer div.citaat div.citaatContainer div.citaat{ background-color: #e9e9e9;}
-div.citaatContainer div.citaat div.citaatContainer div.citaat div.citaatContainer div.citaat{ background-color: #efefef;}
+div.citaatContainer div.citaat div.citaatContainer div.citaat{ background-color: #e9e9e9; }
+div.citaatContainer div.citaat div.citaatContainer div.citaat div.citaatContainer div.citaat{ background-color: #efefef; }
 
 .ubb_code{
 	max-width: 566px;
@@ -1321,7 +1321,7 @@ div.bijbelrooster{
 }
 
 /* Login Form */
-.login-form .InputField, .login-form .InputField:hover {
+.login-form .InputField, .login-form .InputField:hover{
 	border: none;
 	width: 100px;
 }
