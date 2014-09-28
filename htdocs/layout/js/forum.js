@@ -136,8 +136,7 @@ function forumCiteren(postId) {
 	http.onreadystatechange = function () {
 		if (http.readyState == 4) {
 			document.getElementById('forumBericht').value += http.responseText;
-			//helemaal naar beneden scrollen.
-			window.scroll(0, document.body.clientHeight);
+			$(window).scrollTo('#reageren');
 		}
 	};
 	http.send(null);
