@@ -187,9 +187,25 @@ function zijbalk_dynamisch() {
 	var resetWidth = function () {
 		elmnt.width(elmnt.parent().width());
 	};
+	var alignQuickNav = function () {
+		var margin = elmnt.height() - $('#zijbalk_quicknav').position().top - 30;
+		// fix it to bottom of window
+		var top = elmnt.parent().offset().top - $(window).scrollTop();
+		if (top <= 0) {
+			top = 0;
+		}
+		margin -= top;
+		// stay below last block
+		if (margin < 0) {
+			margin = 0;
+		}
+		$('#zijbalk_quicknav').css('margin-top', margin);
+	};
+	if ($('#zijbalk_quicknav').length) {
+		$(window).scroll(alignQuickNav);
+	}
 	$(window).resize(function () {
 		resetWidth();
-		zijbalk_resetQuickNav();
 		$(window).trigger('scroll');
 	});
 	$(window).trigger('resize');
@@ -197,22 +213,14 @@ function zijbalk_dynamisch() {
 	window.setTimeout(resetWidth, 400);
 }
 
-function zijbalk_resetQuickNav() {
-	if ($('#zijbalk_quicknav').length) {
-		var margin = $('#zijbalk').height() - $('#zijbalk_quicknav').position().top - 30;
-		if (margin < 0) {
-			margin = 0;
-		}
-		$('#zijbalk_quicknav').css('margin-top', margin);
-	}
-}
-
-function zijbalk_container_reset() {
+function zijbalk_modified() {
+	// reset container height
 	var elmnt = $('#zijbalk');
 	if (elmnt.hasClass('scroll-fix')) {
 		elmnt.parent().height(elmnt.height());
 	}
-	zijbalk_resetQuickNav();
+	// align quick nav
+	$(window).trigger('scroll');
 }
 
 function init_scroll_fixed() {
