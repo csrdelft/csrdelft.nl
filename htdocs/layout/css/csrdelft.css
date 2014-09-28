@@ -1321,10 +1321,7 @@ div.bijbelrooster{
 }
 
 /* Login Form */
-.login-form .InputField, .login-form .InputField:hover{
+.login-form .InputField, .login-form .InputField:hover {
 	border: none;
 	width: 100px;
 }
-
-/* Sneltoets dummy divs */
-div.ak{display: none;}

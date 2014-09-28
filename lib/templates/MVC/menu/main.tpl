@@ -79,17 +79,6 @@
 				{/if}
 				<br />
 				<form name="lidzoeker" method="get" action="/communicatie/lijst.php">
-					<div class="ak" accesskey="a"></div>
-					<div class="ak" accesskey="b"></div>
-					<div class="ak" accesskey="c"></div>
-					<div class="ak" accesskey="d"></div>
-					<div class="ak" accesskey="f"></div>
-					<div class="ak" accesskey="h"></div>
-					<div class="ak" accesskey="i"></div>
-					<div class="ak" accesskey="l"></div>
-					<div class="ak" accesskey="m"></div>
-					<div class="ak" accesskey="p"></div>
-					<div class="ak" accesskey="z"></div>
 					<input type="text" name="q" id="zoekveld" />
 					<script type="text/javascript">
 						$(document).ready(function () {
@@ -113,7 +102,7 @@
 							);
 							$(document).keydown(function (event) {
 								// Geen instantsearch met modifiers
-								if (bShiftPressed || bCtrlPressed || bMetaPressed) {
+								if (bShiftPressed || bCtrlPressed || bAltPressed || bMetaPressed) {
 									return;
 								}
 								// Geen instantsearch als we in een input-element of text-area zitten.
@@ -121,45 +110,7 @@
 								if (element == 'INPUT' || element == 'TEXTAREA' || element == 'SELECT') {
 									return;
 								}
-								// Sneltoetsen
-								if (bAltPressed) {
-									switch (event.charCode) {
-										case 97: //a voor fotoalbum
-											location.href = "{$smarty.const.CSR_ROOT}/fotoalbum";
-											break;
-										case 98: //b voor besturen
-											location.href = "{$smarty.const.CSR_ROOT}/actueel/groepen/Besturen";
-											break;
-										case 99: //c voor courant
-											location.href = "{$smarty.const.CSR_ROOT}/actueel/courant";
-											break;
-										case 100: //d voor documenten
-											location.href = "{$smarty.const.CSR_ROOT}/communicatie/documenten";
-											break;
-										case 102: //f voor forum
-											location.href = "{$smarty.const.CSR_ROOT}/forum/recent";
-											break;
-										case 104: //h voor thuis
-											location.href = "{$smarty.const.CSR_ROOT}/";
-											break;
-										case 105: //i voor instellingen
-											location.href = "{$smarty.const.CSR_ROOT}/instellingen";
-											break;
-										case 108: //l voor ledenlijst
-											location.href = "{$smarty.const.CSR_ROOT}communicatie/ledenlijst";
-											break;
-										case 109: //m voor mededelingen
-											location.href = "{$smarty.const.CSR_ROOT}/actueel/mededelingen";
-											break;
-										case 112: //p voor profiel
-											location.href = "{$smarty.const.CSR_ROOT}/communicatie/profiel.php";
-											break;
-										case 122: //z voor focus naar het ledenzoekveldje.
-											jQuery('#zoekveld').focus();
-											break;
-									}
-								}
-								else if (event.keyCode > 64 && event.keyCode < 91) {
+								if (event.keyCode > 64 && event.keyCode < 91) {
 									$('#zoekveld').focus();
 								}
 							});
