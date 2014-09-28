@@ -189,12 +189,12 @@ function zijbalk_dynamisch() {
 	};
 	var alignQuickNav = function () {
 		var margin = elmnt.height() - $('#zijbalk_quicknav').position().top - 30;
-		// fix it to bottom of window
-		var top = elmnt.parent().offset().top - $(window).scrollTop();
-		if (top <= 0) {
-			top = 0;
-		}
-		margin -= top;
+		/*/ fix it to bottom of window
+		 var top = elmnt.parent().offset().top - $(window).scrollTop();
+		 if (top <= 0) {
+		 top = 0;
+		 }
+		 margin -= top;//*/
 		// stay below last block
 		if (margin < 0) {
 			margin = 0;
