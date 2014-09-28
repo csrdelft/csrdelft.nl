@@ -750,7 +750,7 @@ class Lid implements Serializable, Agendeerbaar {
 	 * Maak een link met de naam van het huidige lid naar zijn profiel.
 	 *
 	 * @vorm:	user, nick, bijnaam, streeplijst, full/volledig, civitas, aaidrom, Duckstad
-	 * @mode:	link, plain
+	 * @mode:	visitekaartje, link, plain
 	 */
 
 	public function getNaamLink($vorm, $mode) {

@@ -143,7 +143,7 @@ class VerjaardagContent implements View {
 						if ($lid->isJarig()) {
 							echo '<span class="opvallend">';
 						}
-						echo $lid->getNaamLink('civitas', 'link');
+						echo $lid->getNaamLink('civitas', 'visitekaartje');
 						if ($lid->isJarig()) {
 							echo '</span>';
 						}
