@@ -5,6 +5,7 @@
 html, body { height: 100%; }
 body { line-height: 20px; }
 body, input, textarea { font-family: Helvetica, "Helvetice Neue", Arial; font-size: 14px; }
+select { width: auto; }
 a { text-decoration: none; color: #000; }
 a.no-line {
 	border-bottom:none!important;
@@ -15,6 +16,24 @@ ul { list-style: none; }
 h1, h2, h3, h4, h5, h6 { font-weight: normal; }
 
 .verborgen { display: none; }
+
+.hoverIntentContent{
+	display: none;
+	position: absolute;
+}
+div.hoverIntentContent{
+	border: 1px solid #000;
+	background-color: #FFF;
+	-moz-box-shadow: 0 0 11px #000000;
+	-webkit-box-shadow: 0 0 11px #000000;
+	box-shadow: 0 0 11px #000000;
+	z-index: 250;
+	font-weight: normal !important;
+	font-style: normal !important;
+	float: none !important;
+	overflow: visible;
+	padding: 5px;
+}
 
 .dragobject {
 	position: fixed;
