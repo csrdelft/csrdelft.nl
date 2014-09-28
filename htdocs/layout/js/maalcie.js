@@ -6,7 +6,7 @@
 
 $(document).ready(function () {
 	$('#beheer-maalcie-menu').prependTo('#zijbalk').show();
-	$('#zijbalk.scroll-fix').parent().height($('#zijbalk').height()); // werkomheen voor vloeiend scrollen
+	zijbalk_container_reset(); // werkomheen voor vloeiend scrollen
 	$('a.ruilen').each(function () {
 		$(this).removeClass('ruilen');
 		$(this).attr('ondragover', 'taken_mag_ruilen(event);');

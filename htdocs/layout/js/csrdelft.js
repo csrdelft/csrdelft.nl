@@ -187,23 +187,32 @@ function zijbalk_dynamisch() {
 	var resetWidth = function () {
 		elmnt.width(elmnt.parent().width());
 	};
-	var resetQuickNav = function () {
-		if ($('#zijbalk_quicknav').length) {
-			var margin = $('#zijbalk').height() - $('#zijbalk_quicknav').position().top - 30;
-			if (margin < 0) {
-				margin = 0;
-			}
-			$('#zijbalk_quicknav').css('margin-top', margin);
-		}
-	};
 	$(window).resize(function () {
 		resetWidth();
-		resetQuickNav();
+		zijbalk_resetQuickNav();
 		$(window).trigger('scroll');
 	});
 	$(window).trigger('resize');
 	// set delay for adblockers that remove ads so wide they influence page width (very annoying)
 	window.setTimeout(resetWidth, 400);
+}
+
+function zijbalk_resetQuickNav() {
+	if ($('#zijbalk_quicknav').length) {
+		var margin = $('#zijbalk').height() - $('#zijbalk_quicknav').position().top - 30;
+		if (margin < 0) {
+			margin = 0;
+		}
+		$('#zijbalk_quicknav').css('margin-top', margin);
+	}
+}
+
+function zijbalk_container_reset() {
+	var elmnt = $('#zijbalk');
+	if (elmnt.hasClass('scroll-fix')) {
+		elmnt.parent().height(elmnt.height());
+	}
+	zijbalk_resetQuickNav();
 }
 
 function init_scroll_fixed() {
