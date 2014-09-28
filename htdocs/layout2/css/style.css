@@ -314,6 +314,9 @@ div.ubb_img_loading{
 td.auteur {
 	min-width: 100px;
 }
+td.auteur table {
+	border: none;
+}
 
 td.titel {
 	min-width: 180px;
