@@ -136,7 +136,7 @@ function zijbalk_dynamisch() {
 	elmnt.parent().width(origWidth);
 	var scrollbarWidth = getScrollBarWidth();
 	var getPadding = function () {
-		if (elmnt.get(0).scrollHeight > elmnt.get(0).clientHeight) {
+		if (elmnt.hasClass('scroll-fix') && elmnt.get(0).scrollHeight > elmnt.get(0).clientHeight) {
 			return scrollbarWidth;
 		}
 		else {
@@ -173,15 +173,17 @@ function zijbalk_dynamisch() {
 		}
 	};
 	elmnt.hoverIntent(expand, collapse);
-	elmnt.hover(function () {
-		if (elmnt.width() >= origWidth) {
-			showscroll();
-		}
-	}, function () {
-		if (elmnt.width() <= elmnt.parent().width()) {
-			hidescroll();
-		}
-	});
+	if (elmnt.hasClass('scroll-fix')) {
+		elmnt.hover(function () {
+			if (elmnt.width() >= origWidth) {
+				showscroll();
+			}
+		}, function () {
+			if (elmnt.width() <= elmnt.parent().width()) {
+				hidescroll();
+			}
+		});
+	}
 	var resetWidth = function () {
 		elmnt.width(elmnt.parent().width());
 	};
