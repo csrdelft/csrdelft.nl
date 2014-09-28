@@ -33,6 +33,7 @@ div.hoverIntentContent{
 	float: none !important;
 	overflow: visible;
 	padding: 5px;
+	margin-top: 15px;
 }
 
 .dragobject {
