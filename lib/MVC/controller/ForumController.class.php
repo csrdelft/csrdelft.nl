@@ -33,7 +33,7 @@ class ForumController extends Controller {
 			$this->action = 'forum';
 			parent::performAction(array());
 		}
-		if (!$this->isPosted() || $this->action == 'wijzigen' || $this->action == 'zoeken') {
+		if (!$this->isPosted()) {
 			if (LoginModel::mag('P_LOGGED_IN')) {
 				$this->view = new CsrLayoutPage($this->getView());
 			} else { // uitgelogd heeft nieuwe layout
@@ -149,7 +149,8 @@ class ForumController extends Controller {
 			$query = filter_var($query, FILTER_SANITIZE_SPECIAL_CHARS);
 		}
 		$draden_delen = ForumDelenModel::instance()->zoeken($query, $titel, $datum, $ouder, $jaar);
-		$this->view = new ForumResultatenView($draden_delen[0], $draden_delen[1], $query);
+		$body = new ForumResultatenView($draden_delen[0], $draden_delen[1], $query);
+		$this->view = new CsrLayoutPage($body);
 	}
 
 	/**
@@ -433,6 +434,7 @@ class ForumController extends Controller {
 		SimpleHTML::setMelding('Wijziging geslaagd: ' . $wijziging, 1);
 		if ($property === 'forum_id' OR $property === 'titel') {
 			$this->onderwerp($draad_id);
+			$this->view = new CsrLayoutPage($this->getView());
 		} else {
 			$this->view = new JsonResponse(true);
 		}
