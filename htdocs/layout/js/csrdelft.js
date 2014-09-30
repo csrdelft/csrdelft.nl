@@ -172,7 +172,9 @@ function zijbalk_dynamisch() {
 			}, 400);
 		}
 	};
-	elmnt.hoverIntent(expand, collapse);
+	if ($('#main').width() < 1004) {
+		elmnt.hoverIntent(expand, collapse);
+	}
 	if (elmnt.hasClass('scroll-fix')) {
 		elmnt.hover(function () {
 			if (elmnt.width() >= origWidth) {
