@@ -22,7 +22,7 @@ preload([
 ]);
 
 $(document).ready(function () {
-	init_scroll_fixed();
+	zijbalk_dynamisch();
 	init_key_pressed();
 	init_dropzone();
 	init();
@@ -132,11 +132,28 @@ function init_lazy_images() {
 
 function zijbalk_dynamisch() {
 	var elmnt = $('#zijbalk');
+
+	// synchronize size with container
 	var origWidth = elmnt.width();
 	elmnt.parent().width(origWidth);
+	elmnt.parent().height(elmnt.height());
+
+	// synchronize position with window
+	$(window).scroll(function () {
+		var top = elmnt.parent().offset().top - $(window).scrollTop();
+		var left = elmnt.parent().offset().left - $(window).scrollLeft();
+		if (top <= 0) {
+			top = 0;
+		}
+		elmnt.css({
+			'top': top,
+			'left': left
+		});
+	});
+
 	var scrollbarWidth = getScrollBarWidth();
 	var getPadding = function () {
-		if (elmnt.hasClass('scroll-fix') && elmnt.get(0).scrollHeight > elmnt.get(0).clientHeight) {
+		if (elmnt.hasClass('scroll-fixed') && elmnt.get(0).scrollHeight > elmnt.get(0).clientHeight) {
 			return scrollbarWidth;
 		}
 		else {
@@ -173,7 +190,7 @@ function zijbalk_dynamisch() {
 		}
 	};
 	elmnt.hoverIntent(expand, collapse);
-	if (elmnt.hasClass('scroll-fix')) {
+	if (elmnt.hasClass('scroll-fixed')) {
 		elmnt.hover(function () {
 			if (elmnt.width() >= origWidth) {
 				showscroll();
@@ -216,33 +233,11 @@ function zijbalk_dynamisch() {
 function zijbalk_modified() {
 	// reset container height
 	var elmnt = $('#zijbalk');
-	if (elmnt.hasClass('scroll-fix')) {
+	if (elmnt.hasClass('scroll-fixed')) {
 		elmnt.parent().height(elmnt.height());
 	}
 	// align quick nav
 	$(window).trigger('scroll');
-}
-
-function init_scroll_fixed() {
-	// synchronize size with container
-	$('.scroll-fix').each(function () {
-		$(this).parent().height($(this).height());
-	});
-	zijbalk_dynamisch();
-	// synchronize position with window
-	$(window).scroll(function () {
-		$('.scroll-fix').each(function () {
-			var top = $(this).parent().offset().top - $(window).scrollTop();
-			var left = $(this).parent().offset().left - $(window).scrollLeft();
-			if (top <= 0) {
-				top = 0;
-			}
-			$(this).css({
-				'top': top,
-				'left': left
-			});
-		});
-	});
 }
 
 function page_reload() {

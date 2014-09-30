@@ -8,7 +8,7 @@ html * {
 	-moz-osx-font-smoothing: grayscale;
 }
 
-*, *:after, *:before {
+html *, *, *:after, *:before {
 	-webkit-box-sizing: border-box;
 	-moz-box-sizing: border-box;
 	box-sizing: border-box;
@@ -33,23 +33,6 @@ a {
 
 /* -------------------------------- 
 
-Modules - reusable parts of our design
-
--------------------------------- */
-.cd-img-replace {
-	/* replace text with a background-image */
-	display: inline-block;
-	overflow: hidden;
-	text-indent: 100%;
-	white-space: nowrap;
-}
-
-.overflow-hidden {
-	overflow: hidden;
-}
-
-/* -------------------------------- 
-
 Main components 
 
 -------------------------------- */
@@ -58,7 +41,8 @@ Main components
 	min-height: 100%;
 	position: relative;
 	z-index: 2;
-	padding-top: 50px;
+	/* hide lateral navigation */
+	background-color: #ffffff;
 	/* Force Hardware Acceleration in WebKit */
 	-webkit-transform: translateZ(0);
 	-webkit-backface-visibility: hidden;
@@ -69,12 +53,6 @@ Main components
 	-moz-transition-duration: 0.4s;
 	transition-duration: 0.4s;
 }
-.cd-main-content h1 {
-	text-align: center;
-	font-size: 20px;
-	font-size: 1.25rem;
-	margin-top: 3em;
-}
 .cd-main-content.lateral-menu-is-open {
 	/* translate to show the lateral menu - all content needs to be put in the .cd-main-content to translate*/
 	-webkit-transform: translateX(-260px);
@@ -82,18 +60,6 @@ Main components
 	-ms-transform: translateX(-260px);
 	-o-transform: translateX(-260px);
 	transform: translateX(-260px);
-}
-@media only screen and (min-width: 768px) {
-	.cd-main-content {
-		padding-top: 70px;
-	}
-}
-@media only screen and (min-width: 1170px) {
-	.cd-main-content h1 {
-		font-size: 32px;
-		font-size: 2rem;
-		margin: 4em 0 1em;
-	}
 }
 
 /* -------------------------------- 
@@ -105,9 +71,8 @@ header {
 	position: absolute;
 	top: 0;
 	left: 0;
-	height: 50px;
+	height: 0;
 	width: 100%;
-	background: #0A3292;
 	z-index: 3;
 	/* Force Hardware Acceleration in WebKit */
 	-webkit-transform: translateZ(0);
@@ -127,79 +92,87 @@ header.lateral-menu-is-open {
 	-o-transform: translateX(-260px);
 	transform: translateX(-260px);
 }
-header.is-fixed {
-	position: fixed;
-}
-@media only screen and (min-width: 768px) {
-	header {
-		height: 70px;
-	}
-}
 
 #cd-logo {
 	display: block;
 	float: left;
-	margin: 12px 0 0 20px;
 }
 #cd-logo img {
 	display: block;
-}
-@media only screen and (min-width: 768px) {
-	#cd-logo {
-		margin: 22px 0 0 30px;
-	}
+	margin: 22px 0 0 30px;
 }
 
+/* -------------------------------- 
+
+Menu voor ingelogde gebruikers
+
+-------------------------------- */
+#cd-ingelogd-menu-trigger {
+	display: block;
+}
+#cd-ingelogd-menu-trigger .cd-ingelogd-menu-text {
+	padding: 0 1.25em;
+	color: #ffffff;
+	font-weight: 600;
+	cursor: pointer;
+}
+#cd-ingelogd-menu {
+	display: none;
+	position: absolute;
+}
+#cd-ingelogd-menu-trigger.ingelogd-menu-is-open {
+	background-color: #E8CF2A;
+	color: #333333;
+}
+#cd-ingelogd-menu li {
+	width: 100%;
+}
+
+/* -------------------------------- 
+
+Top navigation
+
+-------------------------------- */
 #cd-top-nav {
 	position: absolute;
 	top: 0;
-	right: 120px;
-	height: 100%;
-	display: none;
+	right: 0;
 }
 #cd-top-nav ul {
-	height: 100%;
-	padding-top: 18px;
+	background-color: #0A3292;
 }
 #cd-top-nav li {
 	display: inline-block;
-	margin-right: 1em;
+	height: 50px;
+	line-height: 3em;
 }
 #cd-top-nav a {
-	display: inline-block;
-	padding: .5em;
-	color: #ffffff;
-	text-transform: uppercase;
+	display: block;
+	padding: 0 1.25em;
 	font-weight: 600;
+	color: #ffffff;
+}
+#cd-top-nav a:hover {
+	color: #E8CF2A;
+	text-decoration: none;
 }
 #cd-top-nav a.current {
+	color: #ffffff;
 	background-color: #E8CF2A;
 }
-.no-touch #cd-top-nav a:hover {
-	color: #E8CF2A;
-}
-@media only screen and (min-width: 768px) {
-	#cd-top-nav {
-		display: block;
-	}
-}
 
-#cd-menu-trigger {
-	position: absolute;
-	right: 0;
-	top: 0;
-	height: 100%;
-	width: 50px;
+#cd-lateral-menu-trigger {
+	width: 110px;
+	padding-left: 1.25em;
 	background-color: #3262D7;
+	cursor: pointer;
 }
-#cd-menu-trigger .cd-menu-text {
-	height: 100%;
-	text-transform: uppercase;
+#cd-lateral-menu-trigger .cd-lateral-menu-text, #cd-ingelogd-menu-trigger .cd-ingelogd-menu-text {
+	display: inline-block;
 	color: #ffffff;
 	font-weight: 600;
-	display: none;
 }
-#cd-menu-trigger .cd-menu-icon {
+#cd-lateral-menu-trigger .cd-lateral-menu-icon {
 	/* this span is the central line in the menu menu */
 	display: inline-block;
 	position: absolute;
@@ -216,8 +189,15 @@ header.is-fixed {
 	height: 2px;
 	background-color: #ffffff;
 	/* these are the upper and lower lines in the menu menu */
+	left: auto;
+	right: 1.25em;
+	-webkit-transform: translateX(0);
+	-moz-transform: translateX(0);
+	-ms-transform: translateX(0);
+	-o-transform: translateX(0);
+	transform: translateX(0);
 }
-#cd-menu-trigger .cd-menu-icon::before, #cd-menu-trigger .cd-menu-icon:after {
+#cd-lateral-menu-trigger .cd-lateral-menu-icon::before, #cd-lateral-menu-trigger .cd-lateral-menu-icon:after {
 	content: '';
 	width: 100%;
 	height: 100%;
@@ -228,19 +208,19 @@ header.is-fixed {
 	-webkit-transform: translateZ(0);
 	-webkit-backface-visibility: hidden;
 }
-#cd-menu-trigger .cd-menu-icon::before {
+#cd-lateral-menu-trigger .cd-lateral-menu-icon::before {
 	bottom: 5px;
 }
-#cd-menu-trigger .cd-menu-icon::after {
+#cd-lateral-menu-trigger .cd-lateral-menu-icon::after {
 	top: 5px;
 }
-#cd-menu-trigger.is-clicked .cd-menu-icon {
+#cd-lateral-menu-trigger.is-clicked .cd-lateral-menu-icon {
+	background-color: rgba(255, 255, 255, 0);
+}
+#cd-lateral-menu-trigger.is-clicked .cd-lateral-menu-icon::before, #cd-lateral-menu-trigger.is-clicked .cd-lateral-menu-icon::after {
 	background-color: #ffffff;
 }
-#cd-menu-trigger.is-clicked .cd-menu-icon::before, #cd-menu-trigger.is-clicked .cd-menu-icon::after {
-	background-color: #ffffff;
-}
-#cd-menu-trigger.is-clicked .cd-menu-icon::before {
+#cd-lateral-menu-trigger.is-clicked .cd-lateral-menu-icon::before {
 	bottom: 0;
 	-webkit-transform: rotate(45deg);
 	-moz-transform: rotate(45deg);
@@ -248,32 +228,13 @@ header.is-fixed {
 	-o-transform: rotate(45deg);
 	transform: rotate(45deg);
 }
-#cd-menu-trigger.is-clicked .cd-menu-icon::after {
+#cd-lateral-menu-trigger.is-clicked .cd-lateral-menu-icon::after {
 	top: 0;
 	-webkit-transform: rotate(-45deg);
 	-moz-transform: rotate(-45deg);
 	-ms-transform: rotate(-45deg);
 	-o-transform: rotate(-45deg);
 	transform: rotate(-45deg);
-}
-@media only screen and (min-width: 768px) {
-	#cd-menu-trigger {
-		width: 110px;
-		padding-left: 1.25em;
-	}
-	#cd-menu-trigger .cd-menu-text {
-		display: inline-block;
-		line-height: 70px;
-	}
-	#cd-menu-trigger .cd-menu-icon {
-		left: auto;
-		right: 1.25em;
-		-webkit-transform: translateX(0);
-		-moz-transform: translateX(0);
-		-ms-transform: translateX(0);
-		-o-transform: translateX(0);
-		transform: translateX(0);
-	}
 }
 
 /* -------------------------------- 
@@ -283,9 +244,9 @@ Lateral navigation
 -------------------------------- */
 #cd-lateral-nav {
 	position: fixed;
-	height: 100%;
-	right: 0;
 	top: 0;
+	right: 0;
+	height: 100%;
 	/* the secondary navigation is covered by the main element */
 	z-index: 1;
 	width: 260px;
@@ -308,7 +269,7 @@ Lateral navigation
 	transform: translateX(80px);
 }
 #cd-lateral-nav .cd-navigation {
-	margin: 10px 0 16px;
+	margin: 20px 0;
 }
 #cd-lateral-nav .sub-menu {
 	padding: 0 10px 20px 15px;
@@ -321,17 +282,13 @@ Lateral navigation
 	color: #ffffff;
 }
 #cd-lateral-nav a.current {
-	background-color: #3a4a4d;
+	background-color: #E8CF2A;
+	color: #333333;
+}
+#cd-lateral-nav a:hover {
 	color: #E8CF2A;
 }
-.no-touch #cd-lateral-nav a:hover {
-	color: #E8CF2A;
-}
-@media only screen and (min-width: 768px) {
-	#cd-lateral-nav .cd-navigation {
-		margin: 20px 0;
-	}
-}
+
 #cd-lateral-nav.lateral-menu-is-open {
 	-webkit-transform: translateX(0);
 	-moz-transform: translateX(0);
@@ -345,7 +302,6 @@ Lateral navigation
 /* style menu items which have a submenu  */
 #cd-lateral-nav .item-has-children > a {
 	position: relative;
-	text-transform: uppercase;
 	font-weight: 600;
 	/* this is the right arrow to show that the item has a submenu  */
 }
@@ -363,7 +319,7 @@ Lateral navigation
 	-o-transform: translateY(-50%);
 	transform: translateY(-50%);
 	right: 1em;
-	background: url("../img/cd-arrow.svg") no-repeat center center;
+	background: url("http://plaetjes.csrdelft.nl/knopjes/cd-arrow.svg") no-repeat center center;
 	background-size: 8px 11px;
 	-webkit-transition-property: -webkit-transform;
 	-moz-transition-property: -moz-transform;
@@ -372,58 +328,10 @@ Lateral navigation
 	-moz-transition-duration: 0.2s;
 	transition-duration: 0.2s;
 }
-#cd-lateral-nav .item-has-children > a.submenu-open::after {
+#cd-lateral-nav .item-has-children > a.sub-menu-open::after {
 	-webkit-transform: translateY(-50%) rotate(90deg);
 	-moz-transform: translateY(-50%) rotate(90deg);
 	-ms-transform: translateY(-50%) rotate(90deg);
 	-o-transform: translateY(-50%) rotate(90deg);
 	transform: translateY(-50%) rotate(90deg);
-}
-
-#cd-lateral-nav .socials {
-	padding: 0 32px;
-}
-#cd-lateral-nav .socials:after {
-	content: "";
-	display: table;
-	clear: both;
-}
-#cd-lateral-nav .socials a {
-	height: 32px;
-	width: 32px;
-	float: left;
-	padding: 0;
-	background-image: url("../img/cd-socials.svg");
-	background-repeat: no-repeat;
-	background-size: 128px 64px;
-	background-color: #ffffff;
-	margin-right: .5em;
-	border-radius: 0.25em;
-}
-#cd-lateral-nav .socials a.cd-twitter {
-	background-position: 0 0;
-}
-#cd-lateral-nav .socials a.cd-github {
-	background-position: -32px 0;
-}
-#cd-lateral-nav .socials a.cd-facebook {
-	background-position: -64px 0;
-}
-#cd-lateral-nav .socials a.cd-google {
-	background-position: -96px 0;
-}
-.no-touch #cd-lateral-nav .socials a:hover {
-	background-color: #E8CF2A;
-}
-.no-touch #cd-lateral-nav .socials a:hover.cd-twitter {
-	background-position: 0 -32px;
-}
-.no-touch #cd-lateral-nav .socials a:hover.cd-github {
-	background-position: -32px -32px;
-}
-.no-touch #cd-lateral-nav .socials a:hover.cd-facebook {
-	background-position: -64px -32px;
-}
-.no-touch #cd-lateral-nav .socials a:hover.cd-google {
-	background-position: -96px -32px;
 }

@@ -11,7 +11,7 @@
 				<tr>
 					{if is_array($zijbalk)}
 						<td id="mainleft">
-							<div id="zijbalk"{if LidInstellingen::get('layout', 'zijbalk') == 'fixeer'} class="scroll-fix dragobject dragvertical"{/if}>
+							<div id="zijbalk"{if LidInstellingen::get('layout', 'zijbalk') == 'fixeer'} class="scroll-fixed dragobject dragvertical"{/if}>
 								{foreach from=$zijbalk item=block}
 									<div class="block">{$block->view()}</div>
 								{/foreach}
@@ -38,6 +38,6 @@
 				</tr>
 			</table>
 		</main> <!-- cd-main-content -->
-		{include file='MVC/menu/main.tpl'}
+		{$mainmenu->view()}
 	</body>
 </html>

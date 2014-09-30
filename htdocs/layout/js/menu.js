@@ -1,46 +1,77 @@
 jQuery(document).ready(function ($) {
-	var $lateral_menu_trigger = $('#cd-menu-trigger'),
-			$content_wrapper = $('.cd-main-content'),
-			$navigation = $('header');
 
-	//open-close lateral menu clicking on the menu icon
+	var $ingelogd_menu_trigger = $('#cd-ingelogd-menu-trigger');
+	var $ingelogd_menu = $('#cd-ingelogd-menu');
+	var $lateral_menu_trigger = $('#cd-lateral-menu-trigger');
+	var $content_wrapper = $('.cd-main-content');
+	var $top_nav = $('#cd-top-nav');
+	var $header = $('header');
+
+	//toggle ingelogd menu clicking on the name item
+	$ingelogd_menu_trigger.on('click', function (event) {
+		if (!$(event.target).is('#cd-ingelogd-menu a')) {
+			event.preventDefault();
+
+			$ingelogd_menu_trigger.toggleClass('ingelogd-menu-is-open');
+			$ingelogd_menu.slideToggle();
+		}
+	});
+
+	//toggle lateral menu clicking on the menu icon
 	$lateral_menu_trigger.on('click', function (event) {
 		event.preventDefault();
 
 		$lateral_menu_trigger.toggleClass('is-clicked');
-		$navigation.toggleClass('lateral-menu-is-open');
-		$content_wrapper.toggleClass('lateral-menu-is-open').one('webkitTransitionEnd otransitionend oTransitionEnd msTransitionEnd transitionend', function () {
-			// firefox transitions break when parent overflow is changed, so we need to wait for the end of the trasition to give the body an overflow hidden
-			$('body').toggleClass('overflow-hidden');
-		});
+		$header.toggleClass('lateral-menu-is-open');
+		$content_wrapper.toggleClass('lateral-menu-is-open');
 		$('#cd-lateral-nav').toggleClass('lateral-menu-is-open');
-
-		//check if transitions are not supported - i.e. in IE9
-		if ($('html').hasClass('no-csstransitions')) {
-			$('body').toggleClass('overflow-hidden');
-		}
 	});
 
-	//close lateral menu clicking outside the menu itself
+	//close all menus clicking outside the menu itself
 	$content_wrapper.on('click', function (event) {
-		if (!$(event.target).is('#cd-menu-trigger, #cd-menu-trigger span')) {
-			$lateral_menu_trigger.removeClass('is-clicked');
-			$navigation.removeClass('lateral-menu-is-open');
-			$content_wrapper.removeClass('lateral-menu-is-open').one('webkitTransitionEnd otransitionend oTransitionEnd msTransitionEnd transitionend', function () {
-				$('body').removeClass('overflow-hidden');
-			});
-			$('#cd-lateral-nav').removeClass('lateral-menu-is-open');
-			//check if transitions are not supported
-			if ($('html').hasClass('no-csstransitions')) {
-				$('body').removeClass('overflow-hidden');
-			}
+		if (!$(event.target).is('#cd-ingelogd-menu-trigger, #cd-ingelogd-menu-trigger span, #cd-lateral-menu-trigger, #cd-lateral-menu-trigger span')) {
+			//close ingelogd menu
+			$ingelogd_menu_trigger.removeClass('ingelogd-menu-is-open');
+			$ingelogd_menu.slideUp();
 
+			//close lateral menu
+			$lateral_menu_trigger.removeClass('is-clicked');
+			$header.removeClass('lateral-menu-is-open');
+			$content_wrapper.removeClass('lateral-menu-is-open');
+			$('#cd-lateral-nav').removeClass('lateral-menu-is-open');
 		}
 	});
 
 	//open (or close) submenu items in the lateral menu. Close all the other open submenu items.
 	$('.item-has-children').children('a').on('click', function (event) {
 		event.preventDefault();
-		$(this).toggleClass('submenu-open').next('.sub-menu').slideToggle(200).end().parent('.item-has-children').siblings('.item-has-children').children('a').removeClass('submenu-open').next('.sub-menu').slideUp(200);
+		$(this).toggleClass('sub-menu-open').next('.sub-menu').slideToggle(200).end().parent('.item-has-children').siblings('.item-has-children').children('a').removeClass('sub-menu-open').next('.sub-menu').slideUp(200);
+	});
+
+	//open lateral menu for instant search
+	$(document).keydown(function (event) {
+		// Geen instantsearch met modifiers
+		if (bShiftPressed || bCtrlPressed || bAltPressed || bMetaPressed) {
+			return;
+		}
+		// Geen instantsearch als we in een input-element of text-area zitten.
+		var element = event.target.tagName.toUpperCase();
+		if (element == 'INPUT' || element == 'TEXTAREA' || element == 'SELECT') {
+			return;
+		}
+		if (event.keyCode > 64 && event.keyCode < 91) {
+			$('#zoekveld').focus();
+
+			//open lateral menu
+			$lateral_menu_trigger.addClass('is-clicked');
+			$header.addClass('lateral-menu-is-open');
+			$content_wrapper.addClass('lateral-menu-is-open');
+			$('#cd-lateral-nav').addClass('lateral-menu-is-open');
+		}
+	});
+
+	//fixed position of top navigation in window
+	$(window).scroll(function () {
+		$top_nav.css('top', $(window).scrollTop());
 	});
 });

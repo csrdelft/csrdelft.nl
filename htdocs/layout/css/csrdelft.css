@@ -36,7 +36,7 @@
 	cursor: ew-resize;
 }
 
-.scroll-fix{
+.scroll-fixed{
 	position: fixed;
 	height: 100%;
 }
@@ -56,7 +56,7 @@ abbr.timeago{ border: none; }
 abbr.timeago:hover{ border-bottom: 1px dotted grey; }
 
 a{ color: #0a338d; text-decoration: none; }
-a:hover{ color: #0a338d; text-decoration: underline; }
+#main a:hover{ color: #0a338d; text-decoration: underline; }
 a.external{
 	background-image: url('http://plaetjes.csrdelft.nl/layout/external-link-red.png');
 	background-repeat: no-repeat;
@@ -128,10 +128,11 @@ ul.nobullets li{ list-style-type: none; }
 	background-position: 50% 300px;
 	background-repeat: no-repeat;
 }
-#saldi{ clear: both; padding-top: 4px; }
-#saldi .saldo{ float: right; }
-#saldi .staatrood{ color: red; }
 
+#menuzoekform{
+	line-height: 2em;
+    padding: 0 16px 0 32px;
+}
 #zoekveld{
 	background-image: url('http://plaetjes.csrdelft.nl/search-bg.png');
 	background-position: 100% 50%;
