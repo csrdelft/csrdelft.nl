@@ -99,6 +99,10 @@ class MenuItem extends PersistentEntity {
 		return false;
 	}
 
+	public function hasChildren() {
+		return !empty($this->children);
+	}
+
 	public function magBekijken() {
 		return LoginModel::mag($this->rechten_bekijken);
 	}

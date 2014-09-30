@@ -132,6 +132,9 @@ function init_lazy_images() {
 
 function zijbalk_dynamisch() {
 	var elmnt = $('#zijbalk');
+	if (!elmnt.length) {
+		return;
+	}
 
 	// synchronize size with container
 	var origWidth = elmnt.width();

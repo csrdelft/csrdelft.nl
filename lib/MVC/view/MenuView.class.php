@@ -38,7 +38,7 @@ class MainMenuView extends MenuView {
 			}
 		}
 		$this->smarty->assign('instantsearch', $instantsearch);
-		$this->smarty->display('MVC/menu/main.tpl');
+		$this->smarty->display('MVC/menu/main_menu.tpl');
 	}
 
 }

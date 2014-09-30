@@ -147,13 +147,12 @@ ul.nobullets li{ list-style-type: none; }
 }
 #zijbalk .block{
 	width: 175px;
-	padding: 10px 0 0 7px;
+	padding: 10px 0 0 0;
 }
 #zijbalk .block h1{
 	margin: 0;
 	padding: 1px 5px;
 	font-size: 11px;
-	height: 13px;
 	color: #162673;
 	font-weight: bold;
 	background: url('http://plaetjes.csrdelft.nl/layout/blocktitle.png') no-repeat;

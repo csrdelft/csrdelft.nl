@@ -4,7 +4,7 @@
 		{include file='html_head.tpl'}
 	</head>
 	<body>
-		{include file='MVC/layout/header.tpl'}
+		{include file='MVC/layout/pagina_header.tpl'}
 		<main class="cd-main-content">
 			<div id="popup-background"{if isset($popup)} style="display: block;"{/if}></div>
 			<table id="main">
@@ -12,6 +12,7 @@
 					{if is_array($zijbalk)}
 						<td id="mainleft">
 							<div id="zijbalk"{if LidInstellingen::get('layout', 'zijbalk') == 'fixeer'} class="scroll-fixed dragobject dragvertical"{/if}>
+								<a id="cd-logo" href="/"><div id="beeldmerk"></div></a>
 								{foreach from=$zijbalk item=block}
 									<div class="block">{$block->view()}</div>
 								{/foreach}

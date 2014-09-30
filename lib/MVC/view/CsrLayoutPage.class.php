@@ -36,7 +36,7 @@ class CsrLayoutPage extends HtmlPage {
 		$plugin = $js . 'jquery/plugins/';
 
 		$this->addStylesheet($css . 'reset');
-		$this->addStylesheet($css . 'pagina');
+		$this->addStylesheet($css . 'layout_pagina');
 		$this->addStylesheet($css . 'ubb');
 		$this->addStylesheet($css . 'csrdelft');
 		$layout = LidInstellingen::get('layout', 'opmaak');
@@ -66,7 +66,7 @@ class CsrLayoutPage extends HtmlPage {
 		//$this->addScript($js . 'csrdelft.dataTables');
 		//$this->addStylesheet($css . 'csrdelft.dataTables');
 		$this->addScript($js . 'dragobject');
-		$this->addScript($js . 'menu');
+		$this->addScript($js . 'main_menu');
 		$this->addScript($js . 'groepen');
 		if (LidInstellingen::get('layout', 'minion') == 'ja') {
 			$this->addScript($js . 'minion');

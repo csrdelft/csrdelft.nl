@@ -137,6 +137,8 @@ htdocs/layout/css/groepen.css -text
 htdocs/layout/css/groepen.min.css -text
 htdocs/layout/css/jquery.dataTables.css -text
 htdocs/layout/css/jquery.dataTables.min.css -text
+htdocs/layout/css/layout_pagina.css -text
+htdocs/layout/css/layout_pagina.min.css -text
 htdocs/layout/css/ledenlijst.css -text
 htdocs/layout/css/ledenlijst.min.css -text
 htdocs/layout/css/ledenmemory.css -text
@@ -157,8 +159,6 @@ htdocs/layout/css/normaal.css -text
 htdocs/layout/css/normaal.min.css -text
 htdocs/layout/css/owee.css -text
 htdocs/layout/css/owee.min.css -text
-htdocs/layout/css/pagina.css -text
-htdocs/layout/css/pagina.min.css -text
 htdocs/layout/css/profiel.css -text
 htdocs/layout/css/profiel.min.css -text
 htdocs/layout/css/reset.css -text
@@ -351,8 +351,8 @@ htdocs/layout/js/lightbox.js -text
 htdocs/layout/js/lightbox.min.js -text
 htdocs/layout/js/maalcie.js -text
 htdocs/layout/js/maalcie.min.js -text
-htdocs/layout/js/menu.js -text
-htdocs/layout/js/menu.min.js -text
+htdocs/layout/js/main_menu.js -text
+htdocs/layout/js/main_menu.min.js -text
 htdocs/layout/js/minion.js -text
 htdocs/layout/js/minion.min.js -text
 htdocs/layout/js/peilingbeheer.js -text
@@ -3905,8 +3905,8 @@ lib/templates/MVC/instellingen/beheer/instelling_row.tpl -text
 lib/templates/MVC/instellingen/beheer/instellingen_page.tpl -text
 lib/templates/MVC/instellingen/lidinstelling.tpl -text
 lib/templates/MVC/instellingen/lidinstellingen_page.tpl -text
-lib/templates/MVC/layout/header.tpl -text
 lib/templates/MVC/layout/pagina.tpl -text
+lib/templates/MVC/layout/pagina_header.tpl -text
 lib/templates/MVC/layout/pauper.tpl -text
 lib/templates/MVC/layout/ubbhulp.tpl -text
 lib/templates/MVC/maalcie/functie/beheer_functie_lijst.tpl -text
@@ -3920,7 +3920,7 @@ lib/templates/MVC/menu/beheer/menu_item.tpl -text
 lib/templates/MVC/menu/beheer/menu_root.tpl -text
 lib/templates/MVC/menu/beheer/menu_tree.tpl -text
 lib/templates/MVC/menu/block.tpl -text
-lib/templates/MVC/menu/main.tpl -text
+lib/templates/MVC/menu/main_menu.tpl -text
 lib/templates/MVC/menu/page.tpl -text
 lib/templates/MVC/menu/quicknav.tpl -text
 lib/templates/bibliotheek/boek.tpl -text

@@ -1,5 +1,5 @@
 <header>
-	<a id="cd-logo" href="/"><img id="beeldmerk" src="http://plaetjes.csrdelft.nl/layout/beeldmerk.jpg" alt="beeldmerk" /></a>
+	<!--a id="cd-logo" href="/"><div id="beeldmerk"></div></a-->
 	<nav id="cd-top-nav">
 		<ul>
 			{if LoginModel::mag('P_LOGGED_IN')}

@@ -97,9 +97,10 @@ header.lateral-menu-is-open {
 	display: block;
 	float: left;
 }
-#cd-logo img {
-	display: block;
-	margin: 22px 0 0 30px;
+#cd-logo #beeldmerk {
+	width: 120px;
+	height: 150px;
+	margin: 30px;
 }
 
 /* -------------------------------- 
