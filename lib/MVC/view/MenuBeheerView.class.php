@@ -44,7 +44,7 @@ class MenuItemView extends SmartyTemplateView {
 
 }
 
-class MenuItemForm extends PopupForm {
+class MenuItemForm extends ModalForm {
 
 	public function __construct(MenuItem $item, $actie) {
 		parent::__construct($item, 'menu-item-form', '/menubeheer/' . $actie . '/' . $item->item_id);

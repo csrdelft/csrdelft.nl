@@ -264,9 +264,9 @@ function init_buttons() {
 			// effect complete
 		});
 	});
-	$('button.popup').unbind('click.popup');
-	$('button.popup').bind('click.popup', function (event) {
-		popup_open();
+	$('button.modal').unbind('click.modal');
+	$('button.modal').bind('click.modal', function (event) {
+		modal_open();
 	});
 	$('button.post').unbind('click.post');
 	$('button.post').bind('click.post', knop_post);
@@ -287,8 +287,8 @@ function init_hoverIntents() {
 }
 
 function init_links() {
-	$('a.popup').unbind('click.popup');
-	$('a.popup').bind('click.popup', popup_open);
+	$('a.modal').unbind('click.modal');
+	$('a.modal').bind('click.modal', modal_open);
 	$('a.post').unbind('click.post');
 	$('a.post').bind('click.post', knop_post);
 	$('a.get').unbind('click.get');
@@ -297,7 +297,7 @@ function init_links() {
 
 function knop_ajax(knop, type) {
 	if (knop.hasClass('confirm') && !confirm(knop.attr('title') + '.\n\nWeet u het zeker?')) {
-		popup_close();
+		modal_close();
 		return false;
 	}
 	if (knop.hasClass('prompt')) {
@@ -311,9 +311,9 @@ function knop_ajax(knop, type) {
 	}
 	var source = knop;
 	var done = dom_update;
-	if (knop.hasClass('popup')) {
+	if (knop.hasClass('modal')) {
 		source = false;
-		done = popup_open;
+		done = modal_open;
 	}
 	if (knop.hasClass('ReloadPage')) {
 		done = page_reload;
@@ -342,26 +342,26 @@ function knop_get(event) {
 	return false;
 }
 
-function popup_open(htmlString) {
+function modal_open(htmlString) {
 	if (htmlString) {
-		$('#popup').html(htmlString);
+		$('#modal').html(htmlString);
 		init();
-		$('#popup').show();
-		$('#popup-background').css('background-image', 'none');
-		$('#popup input:visible:first').focus();
+		$('#modal').show();
+		$('#modal-background').css('background-image', 'none');
+		$('#modal input:visible:first').focus();
 	}
 	else {
-		$('#popup-background').css('background-image', 'url("http://plaetjes.csrdelft.nl/layout/loading_bar_black.gif")');
-		$('#popup').hide();
-		$('#popup').html('');
+		$('#modal-background').css('background-image', 'url("http://plaetjes.csrdelft.nl/layout/loading_bar_black.gif")');
+		$('#modal').hide();
+		$('#modal').html('');
 	}
-	$('#popup-background').fadeIn();
+	$('#modal-background').fadeIn();
 }
 
-function popup_close() {
-	$('#popup').hide();
-	$('#popup').html('');
-	$('#popup-background').fadeOut();
+function modal_close() {
+	$('#modal').hide();
+	$('#modal').html('');
+	$('#modal-background').fadeOut();
 }
 
 function init_forms() {
@@ -463,7 +463,7 @@ function form_submit(event) {
 		alert('Geen wijzigingen');
 		return false;
 	}
-	if (form.hasClass('popup') || form.hasClass('InlineForm')) {
+	if (form.hasClass('modal') || form.hasClass('InlineForm')) {
 		event.preventDefault();
 		var source = false;
 		if (form.hasClass('InlineForm')) {
@@ -512,10 +512,10 @@ function form_cancel(event) {
 		knop_post(event);
 		return false;
 	}
-	if (form.hasClass('popup')) {
+	if (form.hasClass('modal')) {
 		event.preventDefault();
 		if (!form_ischanged(form) || confirm('Sluiten zonder wijzigingen op te slaan?')) {
-			popup_close();
+			modal_close();
 		}
 		return false;
 	}
@@ -531,11 +531,11 @@ function dom_update(htmlString) {
 	var html = $.parseHTML(htmlString);
 	$(html).each(function () {
 		var id = $(this).attr('id');
-		if (id === 'popup-content') {
-			popup_open(htmlString);
+		if (id === 'modal-content') {
+			modal_open(htmlString);
 		}
 		else {
-			popup_close();
+			modal_close();
 		}
 		var elmnt = $('#' + id);
 		if (elmnt.length === 1) {
@@ -569,7 +569,7 @@ function ajax_request(type, url, data, source, onsuccess, onerror, onfinish) {
 		source = 'img[title="' + url + '"]';
 	}
 	else {
-		popup_open();
+		modal_open();
 	}
 	var contentType = 'application/x-www-form-urlencoded; charset=UTF-8';
 	var processData = true;
@@ -597,7 +597,7 @@ function ajax_request(type, url, data, source, onsuccess, onerror, onfinish) {
 			$(source).replaceWith('<img title="' + errorThrown + '" src="http://plaetjes.csrdelft.nl/famfamfam/cancel.png" />');
 		}
 		else {
-			popup_close();
+			modal_close();
 		}
 		if (onerror) {
 			onerror(errorThrown);

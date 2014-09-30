@@ -246,13 +246,13 @@ class Formulier implements View, Validator {
 }
 
 /**
- * Formulier as popup content
+ * Formulier as modal content
  */
-class PopupForm extends Formulier {
+class ModalForm extends Formulier {
 
 	public function view() {
-		$this->css_classes[] = 'popup';
-		echo '<div id="popup-content">';
+		$this->css_classes[] = 'modal';
+		echo '<div id="modal-content">';
 		echo parent::view();
 		echo '</div>';
 	}

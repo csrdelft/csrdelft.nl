@@ -8,7 +8,7 @@
  * Formulier voor een nieuwe of te bewerken maaltijd.
  * 
  */
-class MaaltijdForm extends PopupForm {
+class MaaltijdForm extends ModalForm {
 
 	public function __construct($mid, $mrid = null, $titel = null, $limiet = null, $datum = null, $tijd = null, $prijs = null, $filter = null) {
 		parent::__construct(null, 'maalcie-maaltijd-form', Instellingen::get('taken', 'url') . '/opslaan/' . $mid);

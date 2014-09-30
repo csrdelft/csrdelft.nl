@@ -44,11 +44,11 @@ class CorveeRepetitiesController extends AclController {
 	}
 
 	public function beheer($crid = null, $mrid = null) {
-		$popup = null;
+		$modal = null;
 		$maaltijdrepetitie = null;
 		if (is_int($crid) && $crid > 0) {
 			$this->bewerk($crid);
-			$popup = $this->getView();
+			$modal = $this->getView();
 			$repetities = CorveeRepetitiesModel::getAlleRepetities();
 		} elseif (is_int($mrid) && $mrid > 0) {
 			$repetities = CorveeRepetitiesModel::getRepetitiesVoorMaaltijdRepetitie($mrid);
@@ -60,7 +60,7 @@ class CorveeRepetitiesController extends AclController {
 		$this->view = new CsrLayoutPage($this->getView());
 		$this->view->addStylesheet('/layout/css/maalcie');
 		$this->view->addScript('/layout/js/maalcie');
-		$this->view->popup = $popup;
+		$this->view->modal = $modal;
 	}
 
 	public function maaltijd($mrid) {

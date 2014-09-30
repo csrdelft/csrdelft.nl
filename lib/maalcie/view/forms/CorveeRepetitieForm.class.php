@@ -8,7 +8,7 @@
  * Formulier voor een nieuwe of te bewerken corvee-repetitie.
  * 
  */
-class CorveeRepetitieForm extends PopupForm {
+class CorveeRepetitieForm extends ModalForm {
 
 	public function __construct($crid, $mrid = null, $dag = null, $periode = null, $fid = null, $punten = null, $aantal = null, $voorkeur = null, $verplaats = null) {
 		parent::__construct(null, 'maalcie-corvee-repetitie-form', Instellingen::get('taken', 'url') . '/opslaan/' . $crid);

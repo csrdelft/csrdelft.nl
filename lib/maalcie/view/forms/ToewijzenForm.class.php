@@ -8,7 +8,7 @@
  * Formulier om een corveetaak toe te wijzen aan een lid.
  * 
  */
-class ToewijzenForm extends PopupForm {
+class ToewijzenForm extends ModalForm {
 
 	public function __construct(CorveeTaak $taak, array $suggesties) {
 		parent::__construct(null, 'maalcie-taak-toewijzen-form', Instellingen::get('taken', 'url') . '/toewijzen/' . $taak->getTaakId());

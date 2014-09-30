@@ -21,15 +21,15 @@ class CsrLayoutPage extends HtmlPage {
 	 */
 	public $zijbalk;
 	/**
-	 * Popup inhoud
+	 * modal inhoud
 	 * @var View
 	 */
-	public $popup;
+	public $modal;
 
-	public function __construct(View $body, array $zijbalk = array(), $popup = null) {
+	public function __construct(View $body, array $zijbalk = array(), $modal = null) {
 		parent::__construct($body, $body->getTitel());
 		$this->zijbalk = $zijbalk;
-		$this->popup = $popup;
+		$this->modal = $modal;
 
 		$css = '/layout/css/';
 		$js = '/layout/js/';
@@ -82,7 +82,7 @@ class CsrLayoutPage extends HtmlPage {
 		$smarty->assign('scripts', $this->getScripts());
 		$smarty->assign('titel', $this->getTitel());
 		$smarty->assign('mainmenu', new MainMenuView(MenuModel::instance()->getMenuTree('main')));
-		$smarty->assign('popup', $this->popup);
+		$smarty->assign('modal', $this->modal);
 		$smarty->assign('body', $this->getBody());
 
 		if (LidInstellingen::get('layout', 'zijbalk') == 'verberg') {
@@ -115,9 +115,9 @@ class CsrLayoutPage extends HtmlPage {
 
 		$top = 180;
 		$left = 190;
-		DragObjectModel::getCoords('popup', $top, $left);
-		$smarty->assign('popuptop', $top);
-		$smarty->assign('popupleft', $left);
+		DragObjectModel::getCoords('modal', $top, $left);
+		$smarty->assign('modaltop', $top);
+		$smarty->assign('modalleft', $left);
 		$top = 180;
 		$left = 10;
 		DragObjectModel::getCoords('ubbhulpverhaal', $top, $left);

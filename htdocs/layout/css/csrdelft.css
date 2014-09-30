@@ -102,8 +102,8 @@ ul.nobullets li{ list-style-type: none; }
 	opacity: 1;
 }
 
-/**** POPUP ********************************************************************/
-#popup{
+/**** modal ********************************************************************/
+#modal{
 	display: none;
 	position: fixed;
 	width: 500px;
@@ -114,7 +114,7 @@ ul.nobullets li{ list-style-type: none; }
 	background-position: top right;
 	background-repeat: no-repeat;*/
 }
-#popup-background{
+#modal-background{
 	display: none;
 	position: fixed;
 	top: 0;

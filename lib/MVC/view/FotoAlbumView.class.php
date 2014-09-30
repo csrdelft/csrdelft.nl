@@ -73,7 +73,7 @@ class FotoAlbumView extends SmartyTemplateView {
 
 }
 
-class FotoAlbumToevoegenForm extends PopupForm {
+class FotoAlbumToevoegenForm extends ModalForm {
 
 	public function __construct(FotoAlbum $album) {
 		parent::__construct($album, get_class(), '/fotoalbum/toevoegen/' . $album->getSubDir());

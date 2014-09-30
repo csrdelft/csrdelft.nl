@@ -6,7 +6,6 @@
 	<body>
 		{include file='MVC/layout/pagina_header.tpl'}
 		<main class="cd-main-content">
-			<div id="popup-background"{if isset($popup)} style="display: block;"{/if}></div>
 			<table id="main">
 				<tr>
 					{if is_array($zijbalk)}
@@ -20,11 +19,6 @@
 						</td>
 					{/if}
 					<td id="mainright">
-						<div id="popup" class="outer-shadow dragobject" style="top: {$popuptop}px; left: {$popupleft}px;{if isset($popup)} display: block;{/if}">
-							{if isset($popup)}
-								{$popup->view()}
-							{/if}
-						</div>
 						{*$datatable->view()*}
 						{$body->view()}
 						{if isset($debug)}
@@ -38,7 +32,13 @@
 					</td>
 				</tr>
 			</table>
-		</main> <!-- cd-main-content -->
+		</main>
 		{$mainmenu->view()}
+		<div id="modal-background"{if isset($modal)} style="display: block;"{/if}></div>
+		<div id="modal" class="outer-shadow dragobject" style="top: {$modaltop}px; left: {$modalleft}px;{if isset($modal)} display: block;{/if}">
+			{if isset($modal)}
+				{$modal->view()}
+			{/if}
+		</div>
 	</body>
 </html>

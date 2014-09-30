@@ -7,19 +7,19 @@
 
 
 /**
- * Smarty {popup_init} function plugin
+ * Smarty {modal_init} function plugin
  *
  * Type:     function<br>
- * Name:     popup_init<br>
+ * Name:     modal_init<br>
  * Purpose:  initialize overlib
- * @link http://smarty.php.net/manual/en/language.function.popup.init.php {popup_init}
+ * @link http://smarty.php.net/manual/en/language.function.modal.init.php {modal_init}
  *          (Smarty online manual)
  * @author   Monte Ohrt <monte at ohrt dot com>
  * @param array
  * @param Smarty
  * @return string
  */
-function smarty_function_popup_init($params, &$smarty)
+function smarty_function_modal_init($params, &$smarty)
 {
     $zindex = 1000;
     
@@ -31,7 +31,7 @@ function smarty_function_popup_init($params, &$smarty)
         return '<div id="overDiv" style="position:absolute; visibility:hidden; z-index:'.$zindex.';"></div>' . "\n"
          . '<script type="text/javascript" language="JavaScript" src="'.$params['src'].'"></script>' . "\n";
     } else {
-        $smarty->trigger_error("popup_init: missing src parameter");
+        $smarty->trigger_error("modal_init: missing src parameter");
     }
 }
 

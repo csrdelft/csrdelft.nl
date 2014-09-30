@@ -12,9 +12,9 @@
 {elseif $maaltijd->getIsVerwijderd()}
 		<a href="{Instellingen::get('taken', 'url')}/herstel/{$maaltijd->getMaaltijdId()}" title="Maaltijd herstellen" class="knop post">{icon get="arrow_undo"}</a>
 {else}
-		<a href="{Instellingen::get('taken', 'url')}/bewerk/{$maaltijd->getMaaltijdId()}" title="Maaltijd wijzigen" class="knop post popup">{icon get="pencil"}</a>
+		<a href="{Instellingen::get('taken', 'url')}/bewerk/{$maaltijd->getMaaltijdId()}" title="Maaltijd wijzigen" class="knop post modal">{icon get="pencil"}</a>
 	{if $maaltijd->getMaaltijdRepetitieId()}
-		<a href="/maaltijdenrepetities/beheer/{$maaltijd->getMaaltijdRepetitieId()}" title="Wijzig gekoppelde maaltijdrepetitie" class="knop popup">{icon get="calendar_edit"}</a>
+		<a href="/maaltijdenrepetities/beheer/{$maaltijd->getMaaltijdRepetitieId()}" title="Wijzig gekoppelde maaltijdrepetitie" class="knop modal">{icon get="calendar_edit"}</a>
 	{else}
 		<div style="display: inline-block; width: 28px;"></div>
 	{/if}
@@ -33,8 +33,8 @@
 	<td>
 {if !$maaltijd->getIsVerwijderd() and $maaltijd->getArchief() === null}
 		<div style="float: right;">
-			<a href="{Instellingen::get('taken', 'url')}/anderaanmelden/{$maaltijd->getMaaltijdId()}" title="Aanmelding toevoegen" class="knop post popup">{icon get="user_add"}</a>
-			<a href="{Instellingen::get('taken', 'url')}/anderafmelden/{$maaltijd->getMaaltijdId()}" title="Aanmelding verwijderen" class="knop post popup">{icon get="user_delete"}</a>
+			<a href="{Instellingen::get('taken', 'url')}/anderaanmelden/{$maaltijd->getMaaltijdId()}" title="Aanmelding toevoegen" class="knop post modal">{icon get="user_add"}</a>
+			<a href="{Instellingen::get('taken', 'url')}/anderafmelden/{$maaltijd->getMaaltijdId()}" title="Aanmelding verwijderen" class="knop post modal">{icon get="user_delete"}</a>
 		</div>
 {/if}
 {if $maaltijd->getAanmeldFilter()}
