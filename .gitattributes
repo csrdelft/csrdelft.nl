@@ -157,8 +157,12 @@ htdocs/layout/css/normaal.css -text
 htdocs/layout/css/normaal.min.css -text
 htdocs/layout/css/owee.css -text
 htdocs/layout/css/owee.min.css -text
+htdocs/layout/css/pagina.css -text
+htdocs/layout/css/pagina.min.css -text
 htdocs/layout/css/profiel.css -text
 htdocs/layout/css/profiel.min.css -text
+htdocs/layout/css/reset.css -text
+htdocs/layout/css/reset.min.css -text
 htdocs/layout/css/roodschopper.css -text
 htdocs/layout/css/roodschopper.min.css -text
 htdocs/layout/css/roze.css -text
@@ -175,8 +179,6 @@ htdocs/layout/css/stylus/basic.styl -text
 htdocs/layout/css/stylus/dropzone.styl -text
 htdocs/layout/css/ubb.css -text
 htdocs/layout/css/ubb.min.css -text
-htdocs/layout/css/undohtml.css -text
-htdocs/layout/css/undohtml.min.css -text
 htdocs/layout/css/verticalen.css -text
 htdocs/layout/css/verticalen.min.css -text
 htdocs/layout/js/autocomplete/README[!!-~]PubCie -text
@@ -3903,6 +3905,7 @@ lib/templates/MVC/instellingen/beheer/instelling_row.tpl -text
 lib/templates/MVC/instellingen/beheer/instellingen_page.tpl -text
 lib/templates/MVC/instellingen/lidinstelling.tpl -text
 lib/templates/MVC/instellingen/lidinstellingen_page.tpl -text
+lib/templates/MVC/layout/header.tpl -text
 lib/templates/MVC/layout/pagina.tpl -text
 lib/templates/MVC/layout/pauper.tpl -text
 lib/templates/MVC/layout/ubbhulp.tpl -text
@@ -3942,7 +3945,6 @@ lib/templates/csrdelft2/partials/_lidWordenContent.tpl -text
 lib/templates/csrdelft2/partials/_loginForm.tpl -text
 lib/templates/csrdelft2/partials/_menuVereniging.tpl -text
 lib/templates/csrdelft3/pagina_layout.tpl -text
-lib/templates/csrdelft_head.tpl -text
 lib/templates/documenten/document.ubb.tpl -text
 lib/templates/documenten/documenten.tpl -text
 lib/templates/documenten/documentencategorie.tpl -text
@@ -3951,6 +3953,7 @@ lib/templates/groepen/groep.ubb.tpl -text
 lib/templates/groepen/groepen.tpl -text
 lib/templates/groepen/groepformulier.tpl -text
 lib/templates/groepen/groepleden.tpl -text
+lib/templates/html_head.tpl -text
 lib/templates/maalcie/abonnement/beheer_abonnement_head.tpl -text
 lib/templates/maalcie/abonnement/beheer_abonnement_lijst.tpl -text
 lib/templates/maalcie/abonnement/beheer_abonnement_veld.tpl -text

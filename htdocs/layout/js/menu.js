@@ -1,52 +1,46 @@
-/* Kleine vertraging bij wisselen tussen menu items */
-var menu_t;
-var menu_timeout = 250;
-var menu_timeout_next = 100;
+jQuery(document).ready(function ($) {
+	var $lateral_menu_trigger = $('#cd-menu-trigger'),
+			$content_wrapper = $('.cd-main-content'),
+			$navigation = $('header');
 
-function ShowMenu(div) {
-	menu_timeout = menu_timeout_next;
+	//open-close lateral menu clicking on the menu icon
+	$lateral_menu_trigger.on('click', function (event) {
+		event.preventDefault();
 
-	document.getElementById('sub1').style.display = "none";
-	document.getElementById('sub2').style.display = "none";
-	document.getElementById('sub3').style.display = "none";
-	document.getElementById('sub4').style.display = "none";
-	document.getElementById('banner1').style.display = "none";
-	document.getElementById('banner2').style.display = "none";
-	document.getElementById('banner3').style.display = "none";
-	document.getElementById('banner4').style.display = "none";
-	document.getElementById('top1').className = '';
-	document.getElementById('top2').className = '';
-	document.getElementById('top3').className = '';
-	document.getElementById('top4').className = '';
+		$lateral_menu_trigger.toggleClass('is-clicked');
+		$navigation.toggleClass('lateral-menu-is-open');
+		$content_wrapper.toggleClass('lateral-menu-is-open').one('webkitTransitionEnd otransitionend oTransitionEnd msTransitionEnd transitionend', function () {
+			// firefox transitions break when parent overflow is changed, so we need to wait for the end of the trasition to give the body an overflow hidden
+			$('body').toggleClass('overflow-hidden');
+		});
+		$('#cd-lateral-nav').toggleClass('lateral-menu-is-open');
 
-	if (div > 0) {
-		document.getElementById('sub' + div).style.display = "block";
-		document.getElementById('top' + div).className = 'active';
-		document.getElementById('banner' + div).style.display = "block";
-	}
-}
+		//check if transitions are not supported - i.e. in IE9
+		if ($('html').hasClass('no-csstransitions')) {
+			$('body').toggleClass('overflow-hidden');
+		}
+	});
 
-function StartShowMenu(div) {
-	menu_t = setTimeout("ShowMenu(" + div + ")", menu_timeout);
-}
+	//close lateral menu clicking outside the menu itself
+	$content_wrapper.on('click', function (event) {
+		if (!$(event.target).is('#cd-menu-trigger, #cd-menu-trigger span')) {
+			$lateral_menu_trigger.removeClass('is-clicked');
+			$navigation.removeClass('lateral-menu-is-open');
+			$content_wrapper.removeClass('lateral-menu-is-open').one('webkitTransitionEnd otransitionend oTransitionEnd msTransitionEnd transitionend', function () {
+				$('body').removeClass('overflow-hidden');
+			});
+			$('#cd-lateral-nav').removeClass('lateral-menu-is-open');
+			//check if transitions are not supported
+			if ($('html').hasClass('no-csstransitions')) {
+				$('body').removeClass('overflow-hidden');
+			}
 
-function ResetShowMenu() {
-	clearTimeout(menu_t);
-}
+		}
+	});
 
-/* Na bepaalde tijd uit menu, terugswitchen naar actieve menu item */
-var menu_active = 0;
-var menu_t2;
-var menu_timeout2 = 4000;
-
-function ResetTimer() {
-	clearTimeout(menu_t2);
-}
-
-function StartTimer() {
-	menu_t2 = setTimeout("ShowMenu(" + menu_active + ")", menu_timeout2);
-}
-
-function SetActive(a) {
-	menu_active = a;
-}
+	//open (or close) submenu items in the lateral menu. Close all the other open submenu items.
+	$('.item-has-children').children('a').on('click', function (event) {
+		event.preventDefault();
+		$(this).toggleClass('submenu-open').next('.sub-menu').slideToggle(200).end().parent('.item-has-children').siblings('.item-has-children').children('a').removeClass('submenu-open').next('.sub-menu').slideUp(200);
+	});
+});

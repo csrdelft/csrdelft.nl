@@ -35,7 +35,8 @@ class CsrLayoutPage extends HtmlPage {
 		$js = '/layout/js/';
 		$plugin = $js . 'jquery/plugins/';
 
-		$this->addStylesheet($css . 'undohtml');
+		$this->addStylesheet($css . 'reset');
+		$this->addStylesheet($css . 'pagina');
 		$this->addStylesheet($css . 'ubb');
 		$this->addStylesheet($css . 'csrdelft');
 		$layout = LidInstellingen::get('layout', 'opmaak');
@@ -97,6 +98,19 @@ class CsrLayoutPage extends HtmlPage {
 
 		if (DEBUG AND ( LoginModel::mag('P_ADMIN') OR LoginModel::instance()->isSued())) {
 			$smarty->assign('debug', SimpleHTML::getDebug());
+		}
+
+		// SocCie-saldi & MaalCie-saldi
+		$smarty->assign('saldi', LoginModel::instance()->getLid()->getSaldi());
+
+		if (LoginModel::mag('P_ADMIN')) {
+			require_once 'MVC/model/ForumModel.class.php';
+			$smarty->assign('forumcount', ForumPostsModel::instance()->getAantalWachtOpGoedkeuring());
+
+			require_once 'savedquery.class.php';
+			$smarty->assign('queues', array(
+				'meded' => new SavedQuery(62) //ROW ID QUEUE MEDEDELINGEN
+			));
 		}
 
 		$top = 180;

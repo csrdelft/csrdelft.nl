@@ -2,7 +2,7 @@
 <html>
 	<head>
 		<title>C.S.R. Delft mobiel - {$body->getTitel()}</title>
-		{include file='csrdelft_head.tpl'}
+		{include file='html_head.tpl'}
 	</head>
 	<body style="background: none;">
 		<div style="text-align: center;">

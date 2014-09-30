@@ -25,7 +25,6 @@ class MainMenuView extends MenuView {
 
 	public function view() {
 		parent::view();
-
 		$instantsearch = array();
 		foreach (MenuModel::instance()->find() as $item) {
 			if ($item->magBekijken() AND $item->parent_id > 0) {
@@ -39,18 +38,6 @@ class MainMenuView extends MenuView {
 			}
 		}
 		$this->smarty->assign('instantsearch', $instantsearch);
-
-		// SocCie-saldi & MaalCie-saldi
-		$this->smarty->assign('saldi', LoginModel::instance()->getLid()->getSaldi());
-
-		if (LoginModel::mag('P_ADMIN')) {
-			$this->smarty->assign('forumcount', ForumPostsModel::instance()->getAantalWachtOpGoedkeuring());
-
-			require_once 'savedquery.class.php';
-			$this->smarty->assign('queues', array(
-				'meded' => new SavedQuery(62) //ROW ID QUEUE MEDEDELINGEN
-			));
-		}
 		$this->smarty->display('MVC/menu/main.tpl');
 	}
 

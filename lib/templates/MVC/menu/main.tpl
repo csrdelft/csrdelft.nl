@@ -1,138 +1,90 @@
-<div id="menu" onmouseover="ResetTimer()" onmouseout="StartTimer()">
-	<div id="menuleft"><a href="/"><div id="beeldmerk"></div></a></div>
-	<div id="menucenter">
-		<div id="menubanners">
-			{assign var=active value=false}
-			{foreach from=$root->children item=item name=banner}
-				<div id="banner{$smarty.foreach.banner.iteration}" class="menubanner"{if !$active AND $item->active} style="display: block;"{assign var=active value=true}{/if}></div>
-			{/foreach}
-		</div>
-		<ul id="mainmenu">
-			{assign var=active value=false}
-			{foreach from=$root->children item=item name=main}
-				<li>
-					<a href="{$item->link}" id="top{$smarty.foreach.main.iteration}" onmouseover="StartShowMenu('{$smarty.foreach.main.iteration}');" onmouseout="ResetShowMenu();"{if !$active AND $item->active} class="active"{/if} title="{$item->tekst}">{$item->tekst}</a>
-				</li>
-				{if !$active AND $item->active} 
-					{assign var=active value=true}
-					<script language="javascript" type="text/javascript">
-						$(document).ready(function () {
-							SetActive({$smarty.foreach.main.iteration});
-						});
-					</script>
-				{/if}
-			{/foreach}
-		</ul>
-	</div>
-	<div id="menuright">
-		{if LoginModel::mag('P_LOGGED_IN') }
-			<div id="ingelogd">
-				<div id="uitloggen"><a href="/logout">log&nbsp;uit</a></div>
-				{if LoginModel::instance()->isSued()}
-					<a href="/endsu/" style="color: red;">{LoginModel::instance()->getSuedFrom()->getNaamLink('civitas', 'plain')} als</a><br />»
-				{/if}
-				{LoginModel::getUid()|csrnaam}<br />
-				<div id="saldi">
-					{foreach from=LoginModel::instance()->getLid()->getSaldi() item=saldo}
-						<div class="saldoregel">
-							<div class="saldo{if $saldo.saldo < 0 AND LoginModel::getUid()!='0524'} staatrood{/if}">&euro; {$saldo.saldo|number_format:2:",":"."}</div>
-							{$saldo.naam}:
-						</div>
-					{/foreach}
-				</div>
-				{if LoginModel::mag('P_LEDEN_MOD')}
-					<div id="adminding">
-						Beheer
-						{if LoginModel::mag('P_ADMIN')}
-							{if $forumcount > 0 OR $queues.meded->count()>0}
-								({$forumcount}/{$queues.meded->count()})
-							{/if}
-						{/if}
-						<div>
-							{if LoginModel::mag('P_ADMIN')}
-								<span class="queues">
-									<a href="/forum/wacht">Forum: <span class="count">{$forumcount}</span><br /></a>
-										{foreach from=$queues item=queue key=name}
-										<a href="/tools/query.php?id={$queue->getID()}">
-											{$name|ucfirst}: <span class="count">{$queue->count()}</span><br />
-										</a>
-									{/foreach}
-								</span>
-								{if $smarty.const.DEBUG}
-									<a href="/su/x101">&raquo; SU Jan Lid.</a><br />
-								{/if}
-							{/if}
-							<a href="/tools/query.php">&raquo; Opgeslagen queries</a><br />
-							<a href="/beheer">&raquo; Beheeroverzicht</a><br />
-						</div>
-					</div>
-					{literal}
-						<script>
-							jQuery(document).ready(function ($) {
-								$('#adminding').click(function () {
-									$(this).children('div').toggle();
-								});
-								$('#adminding div').hide();
-							});
-						</script>
-					{/literal}
-				{/if}
-				<br />
-				<form name="lidzoeker" method="get" action="/communicatie/lijst.php">
-					<input type="text" name="q" id="zoekveld" />
-					<script type="text/javascript">
-						$(document).ready(function () {
-							var instantsearch = {json_encode($instantsearch)};
-							$('#zoekveld').click(function (event) {
-								this.setSelectionRange(0, this.value.length);
-							});
-							$('#zoekveld').keyup(function (event) {
-								if (event.keyCode === 13 && typeof instantsearch[this.value] !== 'undefined') {
-									window.location.href = instantsearch[this.value];
-								}
-							});
-							$('#zoekveld').autocomplete(
-						{json_encode(array_keys($instantsearch))},
-									{
-										clickFire: true,
-										max: 20,
-										matchContains: true,
-										noRecord: ""
-									}
-							);
-							$(document).keydown(function (event) {
-								// Geen instantsearch met modifiers
-								if (bShiftPressed || bCtrlPressed || bAltPressed || bMetaPressed) {
-									return;
-								}
-								// Geen instantsearch als we in een input-element of text-area zitten.
-								var element = event.target.tagName.toUpperCase();
-								if (element == 'INPUT' || element == 'TEXTAREA' || element == 'SELECT') {
-									return;
-								}
-								if (event.keyCode > 64 && event.keyCode < 91) {
-									$('#zoekveld').focus();
-								}
-							});
-						});
-					</script>
-				</form>
-			</div>
-		{/if}
-	</div>
-</div>
-<div id="submenu" onmouseover="ResetTimer();" onmouseout="StartTimer();">
-	<div id="submenuitems">
-		{assign var=active value=false}
-		{foreach name=level1 from=$root->children item=item}
-			<div id="sub{$smarty.foreach.level1.iteration}"{if !$active AND $item->active} class="active"{assign var=active value=true}{/if}>
-				{foreach name=level2 from=$item->children item=subitem}
-					<a href="{$subitem->link}" title="{$subitem->tekst}"{if $subitem->active} class="active"{/if}>{$subitem->tekst}</a>
-					{if !$smarty.foreach.level2.last}
-						<span class="separator">&nbsp;&nbsp;</span>
-					{/if}
-				{/foreach}
-			</div>
-		{/foreach}
-	</div>
-</div>
+<nav id="cd-lateral-nav">
+
+	<form name="lidzoeker" method="get" action="/communicatie/lijst.php">
+		<input type="text" name="q" id="zoekveld" />
+		<script type="text/javascript">
+			$(document).ready(function () {
+				$('#zoekveld').autocomplete({json_encode(array_keys($instantsearch))}, {
+					clickFire: true,
+					max: 20,
+					matchContains: true,
+					noRecord: ""
+				});
+				var instantsearch = {json_encode($instantsearch)};
+				$('#zoekveld').click(function (event) {
+					this.setSelectionRange(0, this.value.length);
+				});
+				$('#zoekveld').keyup(function (event) {
+					if (event.keyCode === 13 && typeof instantsearch[this.value] !== 'undefined') {
+						window.location.href = instantsearch[this.value];
+					}
+				});
+				$(document).keydown(function (event) {
+					// Geen instantsearch met modifiers
+					if (bShiftPressed || bCtrlPressed || bAltPressed || bMetaPressed) {
+						return;
+					}
+					// Geen instantsearch als we in een input-element of text-area zitten.
+					var element = event.target.tagName.toUpperCase();
+					if (element == 'INPUT' || element == 'TEXTAREA' || element == 'SELECT') {
+						return;
+					}
+					if (event.keyCode > 64 && event.keyCode < 91) {
+						$('#zoekveld').focus();
+					}
+				});
+			});
+		</script>
+	</form>
+
+	<ul class="cd-navigation">
+		<li class="item-has-children">
+			<a href="#0">Services</a>
+			<ul class="sub-menu">
+				<li><a href="#0">Brand</a></li>
+				<li><a href="#0">Web Apps</a></li>
+				<li><a href="#0">Mobile Apps</a></li>
+			</ul>
+		</li> <!-- item-has-children -->
+
+		<li class="item-has-children">
+			<a href="#0">Products</a>
+			<ul class="sub-menu">
+				<li><a href="#0">Product 1</a></li>
+				<li><a href="#0">Product 2</a></li>
+				<li><a href="#0">Product 3</a></li>
+				<li><a href="#0">Product 4</a></li>
+				<li><a href="#0">Product 5</a></li>
+			</ul>
+		</li> <!-- item-has-children -->
+
+		<li class="item-has-children">
+			<a href="#0">Stockists</a>
+			<ul class="sub-menu">
+				<li><a href="#0">London</a></li>
+				<li><a href="#0">New York</a></li>
+				<li><a href="#0">Milan</a></li>
+				<li><a href="#0">Paris</a></li>
+			</ul>
+		</li> <!-- item-has-children -->
+	</ul> <!-- cd-navigation -->
+
+	<ul class="cd-navigation cd-single-item-wrapper">
+		<li><a href="#0">Tour</a></li>
+		<li><a href="#0">Login</a></li>
+		<li><a href="#0">Register</a></li>
+		<li><a href="#0">Pricing</a></li>
+		<li><a href="#0">Support</a></li>
+	</ul> <!-- cd-single-item-wrapper -->
+
+	<ul class="cd-navigation cd-single-item-wrapper">
+		<li><a href="/contact">Contact</a></li>
+	</ul> <!-- cd-single-item-wrapper -->
+
+	<!-- div class="cd-navigation socials">
+		<a class="cd-twitter cd-img-replace" href="#0">Twitter</a>
+		<a class="cd-github cd-img-replace" href="#0">Git Hub</a>
+		<a class="cd-facebook cd-img-replace" href="#0">Facebook</a>
+		<a class="cd-google cd-img-replace" href="#0">Google Plus</a>
+	</div> <!-- socials -->
+</nav>

@@ -1,19 +1,6 @@
 /**** GENERAL *****************************************************************/
-body, html, p, a, img, h1, h2, h3, h4, ul, li, form, fieldset, input{
-	margin: 0;
-	padding: 0;
-}
-body, textarea, input, select, option, tr, td, th, div, p{
-	text-align: justify;
-}
-body{
-	font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
-	font-size: 11px;
-	text-align: center;
-}
 #main{
 	width: 1004px;
-	padding: 0;
 	margin: 0 auto;
 	border-collapse: collapse;
 }
@@ -23,7 +10,6 @@ body{
 #mainright{
 	padding: 10px;
 }
-
 .dragobject{
 	position: fixed;
 	z-index: 50;
@@ -78,13 +64,9 @@ a.external{
 	padding-right: 14px;
 }
 
-div{ margin: 0; padding: 0; }
-
 th{ text-align: left; }
 td{ vertical-align: top; padding: 0; }
-ul, ol{ }
-li{ margin: 0 0 0 15px; }
-li li{ font-size: 1em; }
+
 hr{
 	height: 1px; background-color: black;
 	border: 0 none;
@@ -146,228 +128,14 @@ ul.nobullets li{ list-style-type: none; }
 	background-position: 50% 300px;
 	background-repeat: no-repeat;
 }
-
-/**** MENU ********************************************************************/
-#menu{
-	margin: 0 auto;
-	padding: 10px 0 0;
-	width: 966px;
-	height: 142px;
-	overflow: hidden;
-	white-space: nowrap !important;
-}
-#menuleft{
-	float: left;
-	display: inline-block;
-	width: 230px;
-	height: 142px;
-}
-#beeldmerk{
-	background-repeat: no-repeat;
-	width: 133px;
-	height: 133px;
-	border: 0;
-	margin: 4px 30px 0;
-}
-#menucenter{
-	float: left;
-	display: inline-block;
-	width: 553px;
-	height: 142px;
-}
-
-/**** MENU BANNER *************************************************************/
-#menubanners, #menubanners .menubanner{
-	margin: 2px 0;
-	width: 553px;
-	height: 106px;
-}
-#banner1{
-	display: none;
-}
-#banner2{
-	display: none;
-}
-#banner3{
-	display: none;
-}
-#banner4{
-	display: none;
-}
-
-/**** MAIN MENU ***************************************************************/
-#mainmenu{
-	line-height: 0; /*Fix voor Opera*/
-	list-style-type: none;
-}
-#mainmenu li{
-	display: inline;
-	float: left;
-}
-#mainmenu a{
-	line-height: 27px;
-	overflow: visible;
-	display: block;
-	text-align: center;
-	font-size: 13px;
-	width: 122px;
-	height: 32px;
-	font-weight: bold;
-	text-decoration: none;
-	background-repeat: no-repeat;
-}
-#mainmenu a:link, #mainmenu a:visited{
-	color: #ffffff;
-}
-#mainmenu a:hover, #mainmenu a:active, #mainmenu a.active{
-	background-repeat: no-repeat;
-}
-
-/**** SUBMENU *****************************************************************/
-#submenu{
-	margin: 0 auto;
-	width: 966px;
-	height: 24px;
-}
-
-#submenuitems{
-	padding-top: 5px;
-}
-#submenuitems div{
-	display: none;
-	float: right;
-	white-space: nowrap;
-	margin-right: 50px;
-}
-#submenuitems span.separator{
-	background-image: url('http://plaetjes.csrdelft.nl/layout/submenuseperator.gif');
-	background-repeat: no-repeat;
-	background-position: center;
-}
-#sub1, #sub2, #sub3, #sub4{
-	display: none;
-}
-#sub1.active, #sub2.active, #sub3.active, #sub4.active{
-	display: block;
-}
-#submenu img{
-	margin-top: 4px;
-	vertical-align: top;
-}
-#submenu a{
-	padding: 3px 2px;
-	font-size: 12px;
-	text-decoration: none;
-}
-#submenu a:link, #submenu a:visited{
-	color: #fff;
-}
-#submenu a:hover, #submenu a:active, #submenu a.active{
-	color: #e8cf2a;
-}
-
-/**** MENU RIGHT **************************************************************/
-#menuright{
-	float: right;
-	display: inline-block;
-	width: 138px;
-	height: 142px;
-}
-#key img{
-	float: right;
-	padding: 10px;
-	border: 0;
-	cursor: pointer;
-}
-#ingelogd{
-	color: #fff;
-	margin-top: 7px;
-	width: 133px;
-	text-align: left;
-	position: relative;
-}
-#ingelogd a{ color: #fff; }
-#profiellink{ float: left; }
-#uitloggen{ position: absolute; top: -15px; right: 5px; }
-.instellingen{ float: right; }
-
 #saldi{ clear: both; padding-top: 4px; }
 #saldi .saldo{ float: right; }
 #saldi .staatrood{ color: red; }
 
-#adminding{
-	border: 1px solid white;
-	background-color: #3262D7;
-	padding: 1px 2px;
-	margin-top: 4px;
-	cursor: pointer;
-	height: 13px;
-	padding: 2px;
-	text-align: center;
-}
-
-
-#adminding div{
-	display: none;
-	position: relative; 
-	left: -82px; top: 2px;
-	width: 200px;
-	z-index: 50;
-	border: 1px solid white; 
-	background-color: #3262D7;
-	padding: 5px;
-}
-#adminding span.queues{
-	float: right;
-	display: block;
-	width: 60px;
-	overflow-x: hidden;
-}
-
 #zoekveld{
-	width: 127px;
-	text-align: left;
-	padding: 2px;
-	position: absolute;
-	top: 107px;
 	background-image: url('http://plaetjes.csrdelft.nl/search-bg.png');
 	background-position: 100% 50%;
 	background-repeat: no-repeat;
-}
-#login{
-	margin-right: 10px;
-	float: right;
-}
-#login fieldset{
-	border: 0;
-}
-#login input{
-	padding: 1px;
-	margin: 1px 0;
-	width: 125px;
-	_width: 85px; /*IE6 Fix*/
-	border: 1px solid #000;
-	background-color: #fff;
-}
-#login input.checkbox{
-	_margin-left: -3px;
-	width: auto;
-	border: 0;
-	background: none;
-	float: left;
-}
-#login input.submit{
-	background-color: #0178e3;
-	color: #fff;
-	text-align: center;
-	margin-top: 5px;
-}
-#login label{
-	margin: 1px;
-	_margin-top: 5px;
-	padding: 0;
-	float: right;
-	color: #fff;
 }
 
 /* Zijbalk */

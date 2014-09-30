@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="nl">
 	<head>
-		{include file='csrdelft_head.tpl'}
+		{include file='html_head.tpl'}
 	</head>
 
 	<body role="document">
