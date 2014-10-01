@@ -981,6 +981,7 @@ a.forumGrootlink{
 textarea.forumBericht{
 	height: 197px;
 	width: 574px;
+	display: block;
 }
 div.forumBericht{
 	max-width: 574px;
