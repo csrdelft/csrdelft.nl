@@ -27,6 +27,7 @@ class MaaltijdLijstView extends HtmlPage {
 		$smarty = CsrSmarty::instance();
 
 		if (!$this->fiscaal) {
+			$this->addStylesheet('/layout/css/ubb');
 			$this->addStylesheet('/layout/css/maaltijdlijst');
 
 			for ($i = $maaltijd->getMarge(); $i > 0; $i--) { // ruimte voor marge eters
