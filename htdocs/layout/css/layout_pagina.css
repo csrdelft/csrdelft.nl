@@ -297,12 +297,13 @@ Lateral navigation
 	line-height: 3em;
 }
 #cd-lateral-nav .sub-menu {
-	padding: 0 10px 20px 15px;
+	padding: 0 0 20px 0;
 	display: none;
 }
 #cd-lateral-nav .sub-menu li a {
 	height: 50px;
 	line-height: 3em;
+    padding: 0 26px 0 47px;
 }
 #cd-lateral-nav a {
 	display: block;
