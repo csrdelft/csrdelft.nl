@@ -6,10 +6,10 @@
         http://cssdeck.com/labs/css3-snow
 */
 
-#header, div.pp_overlay {
+#cd-lateral-nav {
     background-image:  url('http://plaetjes.csrdelft.nl/layout/snow/snowh.png'), url('http://plaetjes.csrdelft.nl/layout/snow/snow3q.png'), url('http://plaetjes.csrdelft.nl/layout/snow/snow2l.png') !important;
 }
 
-#header a:hover, #header a:active, #header a.active {
+#cd-lateral-nav a:hover, #cd-lateral-nav a:active, #cd-lateral-nav a.active {
 	text-shadow: 0 0 50px #FFF, 0 0 25px #FFF, 0 0 10px #FFF;
 }
