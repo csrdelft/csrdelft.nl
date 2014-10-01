@@ -7,46 +7,7 @@ h2 {
 	font-size: 15px;
 	margin: 30px 0 15px 0;
 }
-p img {
-	margin: 0;
-}
-div#melding {
-	background-color: white;
-	-moz-box-shadow: 0 0 20px #000000;
-	-webkit-box-shadow: 0 0 20px #000000;
-	box-shadow: 0 0 20px #000000;
-}
-div.msgnotify {
-	color: #DDAA00;
-}
-input {
-	padding: 2px !important;
-	margin: 0 !important;
-}
-select {
-	padding: 1px;
-	padding-left: 3px;
-	height: 20px;
-}
-select.multiple {
-	height: auto;
-	width: 250px;
-}
-option {
-	padding: 5px;
-	padding-left: 20px;
-	background-repeat: no-repeat;
-	background-position: left;
-}
-option.arrow {
-	background-image: url("http://plaetjes.csrdelft.nl/famfamfam/bullet_go.png");
-}
-option.warning {
-	background-image: url("http://plaetjes.csrdelft.nl/famfamfam/bullet_error.png");
-}
-option.save {
-	background-image: url("http://plaetjes.csrdelft.nl/famfamfam/bullet_disk.png");
-}
+
 div.vertical {
 	-webkit-transform: rotate(-90deg); /* Chrome,Saf3.1+ */
 	-moz-transform: rotate(-90deg); /* FF3.5+ */
@@ -183,5 +144,5 @@ td.maaltijd-aangemeld, td.maaltijd-afgemeld {
 }
 
 #eetwens-form .InlineFormToggle {
-	width: 300px;
+	width: 90%;
 }

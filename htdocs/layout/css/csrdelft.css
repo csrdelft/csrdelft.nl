@@ -122,9 +122,9 @@ ul.nobullets li{ list-style-type: none; }
 #modal{
 	display: none;
 	position: fixed;
-	width: 500px;
 	z-index: 200;
 	padding: 50px;
+	font-size: 14px;
 	background-color: white;/*
 	background-image: url("http://plaetjes.csrdelft.nl/layout/beeldmerk.jpg");
 	background-position: top right;
@@ -348,6 +348,7 @@ table.query_table tbody{
 }
 table.query_table tr{
 	height: 20px;
+	
 	background-color: #FAFAFA;
 }
 table.query_table tr:nth-child(odd){
@@ -393,13 +394,17 @@ div.blokje{ background-color: #ffffc1; margin: 10px 0; padding: 0; }
 
 
 /* algemeen hokje voor (fout)meldingen */
-div#melding{
+#melding{
 	margin: 10px; padding: 10px;
-	background-color: lightgrey;
 	border: 1px solid black;
 	font-size: 1.3em;
+	background-color: #ffffff;
+	-moz-box-shadow: 0 0 20px #000000;
+	-webkit-box-shadow: 0 0 20px #000000;
+	box-shadow: 0 0 20px #000000;
 }
 #melding div{ padding-left: 30px; }
+
 div.msgerror{
 	color: red;
 	background: url(http://plaetjes.csrdelft.nl/famfamfam/exclamation.png) no-repeat;
@@ -413,7 +418,7 @@ div.msgsuccess{
 	background: url(http://plaetjes.csrdelft.nl/famfamfam/accept.png) no-repeat;
 }
 div.msgnotify{
-	color: #FFF500;
+	color: #DDAA00;
 	background: url(http://plaetjes.csrdelft.nl/famfamfam/bell.png) no-repeat;
 }
 
