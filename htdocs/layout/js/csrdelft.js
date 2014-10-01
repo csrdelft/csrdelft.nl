@@ -142,7 +142,7 @@ function zijbalk_dynamisch() {
 			return scrollbarWidth;
 		}
 		else {
-			return '';
+			return 0;
 		}
 	};
 	var origWidth = elmnt.width() + getPadding();
