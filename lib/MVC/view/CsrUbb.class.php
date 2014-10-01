@@ -780,6 +780,26 @@ HTML;
 		return $html;
 	}
 
+	function ubb_b() {
+		if ($this->nobold === true AND $this->quote_level == 0) {
+			return $this->parseArray(array('[/b]'), array('b'));
+		} else {
+			return '<span class="dikgedrukt">' . $this->parseArray(array('[/b]'), array('b')) . '</span>';
+		}
+	}
+
+	function ubb_i() {
+		return '<span class="cursief">' . $this->parseArray(array('[/i]'), array('i')) . '</span>';
+	}
+
+	function ubb_s() {
+		return '<span class="doorgestreept">' . $this->parseArray(array('[/s]'), array('s')) . '</span>';
+	}
+
+	function ubb_u() {
+		return '<span class="onderstreept">' . $this->parseArray(array('[/u]'), array('u')) . '</span>';
+	}
+
 	function ubb_clear($arguments = array()) {
 		$sClear = 'clear';
 		if (isset($arguments['clear']) AND ( $arguments['clear'] === 'left' OR $arguments['clear'] === 'right' )) {

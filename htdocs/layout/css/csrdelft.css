@@ -79,6 +79,7 @@ hr{
 .cursief{ font-style: italic; }
 .dikgedrukt{ font-weight: bold; }
 .onderstreept{ text-decoration: underline; }
+.doorgestreept{ text-decoration: line-through; }
 .alsof-gelezen{ }
 .draad-readonly{ }
 .draad-gesloten{ }
