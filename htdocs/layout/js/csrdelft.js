@@ -154,6 +154,7 @@ function zijbalk_dynamisch() {
 	});
 	var origWidth = elmnt.width();
 	onResize();
+	elmnt.scrollTop(elmnt.attr('scrollfix'));
 
 	var showscroll = function () {
 		if (elmnt.hasClass('scroll-fixed')) {
@@ -194,8 +195,6 @@ function zijbalk_dynamisch() {
 			hidescroll();
 		}
 	});
-
-	elmnt.scrollTop(elmnt.attr('scrollfix'));
 
 	var is_chrome = navigator.userAgent.toLowerCase().indexOf('chrome') > -1;
 	if (is_chrome) {

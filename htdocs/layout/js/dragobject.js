@@ -53,8 +53,8 @@ function stopDrag(e) {
 		$.post('/tools/dragobject.php', {
 			id: dragobjectID,
 			coords: {
-				top: dragobjTop(),
-				left: dragobjLeft()
+				top: top,
+				left: left
 			}
 		});
 		dragged = false;
