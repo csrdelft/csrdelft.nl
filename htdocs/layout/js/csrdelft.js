@@ -145,21 +145,8 @@ function zijbalk_dynamisch() {
 			return '';
 		}
 	};
-
-	// synchronize size with container
 	var origWidth = elmnt.width() + getPadding();
-	elmnt.parent().width(origWidth);
-	elmnt.parent().height(elmnt.height());
 
-	// synchronize position with window
-	$(window).scroll(function () {
-		var top = $(window).scrollTop();
-		var left = elmnt.parent().offset().left - $(window).scrollLeft();
-		elmnt.css({
-			'top': top,
-			'left': left
-		});
-	});
 	var showscroll = function () {
 		if (elmnt.hasClass('scroll-fixed')) {
 			elmnt.css({
@@ -203,31 +190,19 @@ function zijbalk_dynamisch() {
 			hidescroll();
 		}
 	});
-	var alignQuickNav = function () {
-		var margin = elmnt.height() - $('#zijbalk_quicknav').position().top - 30;
-		/*/ fix it to bottom of window
-		 var top = elmnt.parent().offset().top - $(window).scrollTop();
-		 if (top <= 0) {
-		 top = 0;
-		 }
-		 margin -= top;//*/
-		// stay below last block
-		if (margin < 0) {
-			margin = 0;
-		}
-		$('#zijbalk_quicknav').css('margin-top', margin);
-	};
-	if ($('#zijbalk_quicknav').length) {
-		$(window).scroll(alignQuickNav);
-	}
 	var onResize = function () {
 		elmnt.css('max-height', window.innerHeight);
 		elmnt.width(elmnt.parent().width());
-		alignQuickNav();
 	};
 	$(window).resize(function () {
 		onResize();
 	});
+	var is_chrome = navigator.userAgent.toLowerCase().indexOf('chrome') > -1;
+	if (is_chrome) {
+		$(window).scroll(function () {
+			elmnt.css('top', $(window).scrollTop());
+		});
+	}
 	$(window).trigger('resize');
 	// set delay for adblockers that remove ads so wide they influence page width (very annoying)
 	window.setTimeout(onResize, 400);

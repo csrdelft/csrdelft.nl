@@ -6,7 +6,6 @@
 
 $(document).ready(function () {
 	$('#beheer-maalcie-menu').prependTo('#zijbalk').show();
-	$(window).trigger('scroll');
 	$('a.ruilen').each(function () {
 		$(this).removeClass('ruilen');
 		$(this).attr('ondragover', 'taken_mag_ruilen(event);');

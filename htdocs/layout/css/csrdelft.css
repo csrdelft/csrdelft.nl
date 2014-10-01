@@ -195,8 +195,7 @@ div.ishetal div.ja{
 	color: green;
 }
 #zijbalk_quicknav{
-	position: relative;
-	padding: 5px 0;
+	margin: 5px 0;
 }
 #zijbalk_quicknav a{
 	margin: 0 7px;
