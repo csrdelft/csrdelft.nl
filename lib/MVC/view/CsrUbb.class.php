@@ -777,11 +777,11 @@ HTML;
 	}
 
 	function ubb_clear($arguments = array()) {
-		$sClear = 'both';
+		$sClear = 'clear';
 		if (isset($arguments['clear']) AND ( $arguments['clear'] === 'left' OR $arguments['clear'] === 'right' )) {
-			$sClear = $arguments['clear'];
+			$sClear .= '-' . $arguments['clear'];
 		}
-		return '<br style="height: 0; clear: ' . $sClear . ';" />';
+		return '<div class="' . $sClear . '"></div>';
 	}
 
 	/**
