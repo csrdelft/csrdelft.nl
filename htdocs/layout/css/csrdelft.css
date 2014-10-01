@@ -1,6 +1,6 @@
 /**** GENERAL *****************************************************************/
 #main{
-	width: 1004px;
+	max-width: 1004px;
 	margin: 0 auto;
 	border-collapse: collapse;
 }
@@ -42,10 +42,9 @@
 }
 
 h1{
-	font-size: 1.6em;
-}
-h1.formTitle{
-	font-size: 1.6em;
+	font-family: Verdana,Geneva,Arial,Helvetica,sans-serif;
+	font-weight: 600;
+    font-size: 1.5em;
 	margin-bottom: 20px;
 }
 p{
@@ -56,7 +55,8 @@ abbr.timeago{ border: none; }
 abbr.timeago:hover{ border-bottom: 1px dotted grey; }
 
 a{ color: #0a338d; text-decoration: none; }
-#main a:hover{ color: #0a338d; text-decoration: underline; }
+a:hover{ color: #0a338d; text-decoration: underline; }
+a.knop{ text-decoration: none; }
 a.external{
 	background-image: url('http://plaetjes.csrdelft.nl/layout/external-link-red.png');
 	background-repeat: no-repeat;
@@ -129,14 +129,15 @@ ul.nobullets li{ list-style-type: none; }
 	background-repeat: no-repeat;
 }
 
-#menuzoekform{
-	line-height: 2em;
-    padding: 0 16px 0 32px;
+#menuZoekForm{
+	width: 212px;
+	margin-left: 32px;
 }
-#zoekveld{
+#menuZoekveld{
 	background-image: url('http://plaetjes.csrdelft.nl/search-bg.png');
 	background-position: 100% 50%;
 	background-repeat: no-repeat;
+	line-height: 1.5em;
 }
 
 /* Zijbalk */
@@ -152,36 +153,28 @@ ul.nobullets li{ list-style-type: none; }
 #zijbalk .block h1{
 	margin: 0;
 	padding: 1px 5px;
-	font-size: 11px;
+	font-size: 12px;
 	color: #162673;
 	font-weight: bold;
 	background: url('http://plaetjes.csrdelft.nl/layout/blocktitle.png') no-repeat;
 	border-bottom: 1px solid #b8b8b8;
 }
-#zijbalk .block h1 a{
-	color:  #162673;
-}
 #zijbalk .block .item{
-	padding: 0 5px; 
-	font-size: 10px;
+	padding: 1px 5px; 
+	font-size: 11px;
 	background-color: #f5f5f5;
 	border: 1px solid #b8b8b8;
 	border-top: 0;
 	text-align: left;
-	overflow:hidden;
+	overflow: hidden;
 	text-overflow: ellipsis;
 	-o-text-overflow: ellipsis;
-	white-space: nowrap;
 }
 #zijbalk a{
 	color: #000;
-	text-decoration: none;
 }
 #zijbalk .opvallend{
 	font-style: italic;
-}
-#zijbalk a:hover{
-	text-decoration: underline;
 }
 div.ishetal{
 	text-align: center;
@@ -298,10 +291,13 @@ p.naam, a.lidLink{
 	white-space: normal;
 }
 
-h2#mysql_debug_header{
+#mysql_debug_toggle{
 	text-align: center;
 }
-pre.pubcie_debug{
+#mysql_debug{
+	display: none;
+}
+.pubcie_debug{
 	margin: 10px;
 	overflow: auto;
 	font-size: 1.2em;
@@ -512,7 +508,6 @@ input, textarea, select{
 	padding: 2px;
 	border: 1px solid #A9A9A9;
 	font-size: 1em;
-	font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
 }
 .Formulier *{
 	margin: 0;

@@ -1,8 +1,4 @@
 /**** GENERAL *****************************************************************/
-body {
-	background: url('http://plaetjes.csrdelft.nl/layout/body.png') repeat-x;
-}
-
 a.external {
 	background-image: url('http://plaetjes.csrdelft.nl/layout/external-link-blue.png');
 }

@@ -68,7 +68,7 @@ Header
 
 -------------------------------- */
 header {
-	position: absolute;
+	position: fixed;
 	top: 0;
 	left: 0;
 	height: 0;
@@ -117,13 +117,15 @@ Menu voor ingelogde gebruikers
 	font-weight: 600;
 	cursor: pointer;
 }
+#cd-ingelogd-menu-trigger.ingelogd-menu-is-open  .cd-ingelogd-menu-text {
+	color: #333333;
+}
 #cd-ingelogd-menu {
 	display: none;
 	position: absolute;
 }
 #cd-ingelogd-menu-trigger.ingelogd-menu-is-open {
 	background-color: #E8CF2A;
-	color: #333333;
 }
 #cd-ingelogd-menu li {
 	width: 100%;
@@ -157,9 +159,9 @@ Top navigation
 	color: #E8CF2A;
 	text-decoration: none;
 }
-#cd-top-nav a.current {
-	color: #ffffff;
+#cd-top-nav a.current, #cd-top-nav a.current:hover {
 	background-color: #E8CF2A;
+	color: #333333;
 }
 
 #cd-lateral-menu-trigger {
@@ -282,12 +284,13 @@ Lateral navigation
 	padding: 0 16px 0 32px;
 	color: #ffffff;
 }
-#cd-lateral-nav a.current {
-	background-color: #E8CF2A;
-	color: #333333;
-}
 #cd-lateral-nav a:hover {
 	color: #E8CF2A;
+	text-decoration: none;
+}
+#cd-lateral-nav a.current, #cd-lateral-nav a.current:hover {
+	background-color: #E8CF2A;
+	color: #333333;
 }
 
 #cd-lateral-nav.lateral-menu-is-open {

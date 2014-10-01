@@ -4,7 +4,6 @@ jQuery(document).ready(function ($) {
 	var $ingelogd_menu = $('#cd-ingelogd-menu');
 	var $lateral_menu_trigger = $('#cd-lateral-menu-trigger');
 	var $content_wrapper = $('.cd-main-content');
-	var $top_nav = $('#cd-top-nav');
 	var $header = $('header');
 
 	//toggle ingelogd menu clicking on the name item
@@ -61,7 +60,7 @@ jQuery(document).ready(function ($) {
 			return;
 		}
 		if (event.keyCode > 64 && event.keyCode < 91) {
-			$('#zoekveld').focus();
+			$('#menuZoekveld').focus();
 
 			//open lateral menu
 			$lateral_menu_trigger.addClass('is-clicked');
@@ -69,10 +68,5 @@ jQuery(document).ready(function ($) {
 			$content_wrapper.addClass('lateral-menu-is-open');
 			$('#cd-lateral-nav').addClass('lateral-menu-is-open');
 		}
-	});
-
-	//fixed position of top navigation in window
-	$(window).scroll(function () {
-		$top_nav.css('top', $(window).scrollTop());
 	});
 });

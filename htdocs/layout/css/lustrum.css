@@ -44,7 +44,7 @@ h1,h2,h3,h4,strong, #menu *, #submenu *{
 
 /* zooitje extra uitzonderingen */
 
-#zoekveld{
+#menuZoekveld{
 	color: white;
 }
 #mainleft h1{ border: 1px solid #bbb !important; }

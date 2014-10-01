@@ -50,17 +50,17 @@ class MenuModel extends PersistenceModel {
 	public function getChildren(MenuItem $parent, $beheer = false) {
 		$where = 'parent_id = ?' . ($beheer ? '' : ' AND zichtbaar = true');
 		$parent->children = $this->find($where, array($parent->item_id), 'prioriteit ASC')->fetchAll();
-		$child_active = false;
+		$child_current = false;
 		foreach ($parent->children as $i => $child) {
 			if (!$beheer AND ! $child->magBekijken()) {
 				unset($parent->children[$i]);
 				continue;
 			}
-			$child->active = startsWith(REQUEST_URI, $child->link);
-			$child_active |= $child->active;
+			$child->current = startsWith(REQUEST_URI, $child->link);
+			$child_current |= $child->current;
 			$this->getChildren($child, $beheer);
 		}
-		$parent->active |= $child_active; // make parent of active child also active
+		$parent->current |= $child_current; // make parent of current child also current
 	}
 
 	public function getMenuItem($id) {

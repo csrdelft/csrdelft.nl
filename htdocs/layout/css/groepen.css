@@ -72,11 +72,11 @@ ul.groepledenlijst{ width: 230px; float: right; padding: 10px 20px 20px 20px; ma
 	padding:1px;
 }
 .inline_edit{
-	background:url(http://plaetjes.csrdelft.nl/knopjes/bewerken.png) right no-repeat;
+	background:url(http://plaetjes.csrdelft.nl/famfamfam/pencil.png) right no-repeat;
 	padding-right:18px!important;
 }
 .inline_edit:hover{
-	background:url(http://plaetjes.csrdelft.nl/knopjes/bewerken.png) right no-repeat #f5f5f5;
+	background:url(http://plaetjes.csrdelft.nl/famfamfam/pencil.png) right no-repeat #f5f5f5;
 	cursor:pointer;
 }
 .inline_edit input{

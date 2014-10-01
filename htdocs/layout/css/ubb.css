@@ -76,11 +76,11 @@ a.maaltijd-afgemeld, span.maaltijd-afgemeld{
 .ubb_groep .groepleden a.toonmeer{ float: left; }
 .ubb_groep .groepleden .editbox{ display:none; background-color:#ffffcc; border:solid 1px #000; padding:1px;}
 .ubb_groep .groepleden .inline_edit{
-    background:url(http://plaetjes.csrdelft.nl/knopjes/bewerken.png) right no-repeat;
+    background:url(http://plaetjes.csrdelft.nl/famfamfam/pencil.png) right no-repeat;
     padding-right:18px!important;
 }
 .ubb_groep .groepleden .inline_edit:hover{
-    background:url(http://plaetjes.csrdelft.nl/knopjes/bewerken.png) right no-repeat #f5f5f5;
+    background:url(http://plaetjes.csrdelft.nl/famfamfam/pencil.png) right no-repeat #f5f5f5;
     cursor:pointer;
 }
 .ubb_groep .groepleden .inline_edit input{	width: 120px;}

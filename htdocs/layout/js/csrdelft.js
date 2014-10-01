@@ -35,11 +35,11 @@ function init() {
 	init_timeago();
 	init_hoverIntents();
 	init_lazy_images();
-	//undo_inline_css();
+	undo_inline_css();
 }
 
 function undo_inline_css() {
-	$('*').removeAttr('style width border cellSpacing cellPadding'); // etc
+	$('#main *').removeAttr('style width border cellSpacing cellPadding'); // etc
 }
 
 function init_dropzone() {
@@ -192,7 +192,7 @@ function zijbalk_dynamisch() {
 			}, 400);
 		}
 	};
-	if ($('#main').width() < 1004) {
+	if ($('#main').width() < 860) {
 		elmnt.hoverIntent(expand, collapse);
 	}
 	if (elmnt.hasClass('scroll-fixed')) {

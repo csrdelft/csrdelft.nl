@@ -11,7 +11,11 @@
 						{/if}
 						<li><a href="/communicatie/profiel/{LoginModel::getUid()}">Profiel</a></li>
 						{foreach from=LoginModel::instance()->getLid()->getSaldi() item=saldo}
-							<li>{$saldo.naam}: <span{if $saldo.saldo < 0} style="color: red;"{/if}>&euro; {$saldo.saldo|number_format:2:",":"."}</span></li>
+							<li>
+								<a href="/communicatie/profiel/{LoginModel::getUid()}">
+									{$saldo.naam}: <span{if $saldo.saldo < 0} style="color: red;"{/if}>&euro; {$saldo.saldo|number_format:2:",":"."}</span>
+								</a>
+							</li>
 						{/foreach}
 						<li><a href="/instellingen">Instellingen</a></li>
 						{if LoginModel::mag('P_LEDEN_MOD')}

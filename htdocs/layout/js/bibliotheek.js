@@ -106,7 +106,7 @@ jQuery(document).ready(function($) {
 	biebCodeVakvuller();
 
 	// boekpagina: 
-	//   Suggesties voor zoekveld uit Google books. 
+	//   Suggesties voor menuZoekveld uit Google books. 
 	//   Kiezen van een suggestie plaatst in alle velden de juiste info.
 	function getAuteur(datarow){ 		return datarow.authors ? datarow.authors.join(', ') : ''; }
 	function getPublishedDate(datarow){ return datarow.publishedDate ? datarow.publishedDate.substring(0,4) : ''; }

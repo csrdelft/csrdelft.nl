@@ -144,7 +144,6 @@ p.biebuitleg {
 	background: none;
 	border: 1px solid white;
 	font-size: 11px;
-	font-family : Verdana, Geneva, Arial, Helvetica, sans-serif;
 	padding: 1px 2px 1px 2px;
 	margin: 0 0;
 }
@@ -168,7 +167,7 @@ select{
 
 .InputField label{	width:71px;}
 .boek .InputField:hover{
-	background: url(http://plaetjes.csrdelft.nl/knopjes/bewerken.png) no-repeat 488px #f3f3f3;
+	background: url(http://plaetjes.csrdelft.nl/famfamfam/pencil.png) no-repeat 488px #f3f3f3;
 }
 .InputField:hover input,
 .InputField:hover textarea,

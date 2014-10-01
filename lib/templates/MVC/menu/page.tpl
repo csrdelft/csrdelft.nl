@@ -1,6 +1,6 @@
 <ul class="horizontal">
 {foreach from=$root->children item=item}
-<li class="item{if $item->active} active{/if}">&raquo; <a href="{$item->link}" title="{$item->tekst}">{$item->tekst}</a></li>
+<li class="item{if $item->current} active{/if}">&raquo; <a href="{$item->link}" title="{$item->tekst}">{$item->tekst}</a></li>
 {/foreach}
 </ul>
 <hr/>

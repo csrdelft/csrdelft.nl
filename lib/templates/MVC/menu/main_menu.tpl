@@ -1,22 +1,21 @@
 <nav id="cd-lateral-nav">
-
 	<ul class="cd-navigation cd-single-item-wrapper">
 		<li>
-			<form id="menuzoekform" name="lidzoeker" method="get" action="/communicatie/lijst.php">
-				<input type="text" name="q" id="zoekveld" />
+			<form id="menuZoekForm" name="lidzoeker" method="get" action="/communicatie/lijst.php">
+				<input id="menuZoekveld" name="q" type="text" />
 				<script type="text/javascript">
 					$(document).ready(function () {
-						$('#zoekveld').autocomplete({json_encode(array_keys($instantsearch))}, {
+						$('#menuZoekveld').autocomplete({json_encode(array_keys($instantsearch))}, {
 							clickFire: true,
 							max: 20,
 							matchContains: true,
 							noRecord: ""
 						});
 						var instantsearch = {json_encode($instantsearch)};
-						$('#zoekveld').click(function (event) {
+						$('#menuZoekveld').click(function (event) {
 							this.setSelectionRange(0, this.value.length);
 						});
-						$('#zoekveld').keyup(function (event) {
+						$('#menuZoekveld').keyup(function (event) {
 							if (event.keyCode === 27) { // esc
 								this.value = '';
 								$(this).blur();
@@ -31,16 +30,15 @@
 			</form>
 		</li>
 	</ul>
-
 	<ul class="cd-navigation">
 		{foreach from=$root->children item=item}
-			<li class="{if $item->hasChildren()}item-has-children{/if} {if $item->active}active{/if}">
+			<li class="{if $item->hasChildren()}item-has-children{/if} {if $item->current}current{/if}">
 				<a href="{$item->link}" title="{$item->tekst}">{$item->tekst}</a>
 				{if $item->hasChildren()}
 					<ul class="sub-menu">
 						{foreach from=$item->children item=child}
-							<li><a href="{$child->link}" title="{$child->tekst}">{$child->tekst}</a></li>
-							{/foreach}
+							<li><a href="{$child->link}" title="{$child->tekst}"{if $child->current} class="current"{/if}>{$child->tekst}</a></li>
+						{/foreach}
 					</ul>
 				{/if}
 			</li>
