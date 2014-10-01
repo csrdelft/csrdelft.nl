@@ -1028,6 +1028,11 @@ img.ubb_img{
 	max-width: 586px;
 	border: 0;
 }
+img.neus2013{
+	width: 16px;
+	height: 16px;
+	margin: -5px;
+}
 div.ubb_img_loading{
 	max-width: 586px;
 	min-width: 16px;

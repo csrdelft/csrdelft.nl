@@ -241,7 +241,7 @@ class CsrUbb extends eamBBParser {
 			$content = $arguments;
 		}
 		if (LidInstellingen::get('layout', 'neuzen') != 'nee') {
-			$neus = '<img src="' . CSR_PICS . '/famfamfam/bullet_red.png" width="16" height="16" alt="o" style="margin: -5px;">';
+			$neus = '<img src="' . CSR_PICS . '/famfamfam/bullet_red.png" alt="o" class="neus2013">';
 			$content = str_replace('o', $neus, $content);
 		}
 		return $content;
