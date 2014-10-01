@@ -65,11 +65,11 @@ function mouseMoveHandler(e) {
 	if (!dragobjectID) {
 		return;
 	}
-	dragged = true;
+	var dragobject = $('#' + dragobjectID);
+	dragged = dragobject.hasClass('savepos');
 	e = e || window.event;
 	var newX = mouseX(e);
 	var newY = mouseY(e);
-	var dragobject = $('#' + dragobjectID);
 	if (dragobject.hasClass('dragvertical')) {
 		dragobject.scrollTop(dragobject.scrollTop() + oldY - newY);
 	}

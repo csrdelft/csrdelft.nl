@@ -203,19 +203,25 @@ function zijbalk_dynamisch() {
 				'top': $(window).scrollTop()
 			});
 		});
-		var saveCoords = function () {
-			$.post('/tools/dragobject.php', {
-				id: 'zijbalk',
-				coords: {
-					top: elmnt.scrollTop(),
-					left: elmnt.scrollLeft()
-				}
-			}, alert);
-		};
-		$(window).unload(function () {
-			saveCoords();
-		});
 	}
+
+	var trigger = false;
+	var saveCoords = function () {
+		$.post('/tools/dragobject.php', {
+			id: 'zijbalk',
+			coords: {
+				top: elmnt.scrollTop(),
+				left: elmnt.scrollLeft()
+			}
+		});
+		trigger = false;
+	};
+	elmnt.scroll(function () {
+		if (!trigger) {
+			trigger = true;
+			$(window).one('mouseup', saveCoords);
+		}
+	});
 }
 
 function page_reload() {

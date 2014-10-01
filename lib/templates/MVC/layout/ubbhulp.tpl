@@ -1,4 +1,4 @@
-<div id="ubbhulpverhaal" class="outer-shadow dragobject" style="top: {$ubbtop}px; left: {$ubbleft}px;">
+<div id="ubbhulpverhaal" class="outer-shadow dragobject savepos" style="top: {$ubbtop}px; left: {$ubbleft}px;">
 	<span id="ubbsluiten" onclick="$('#ubbhulpverhaal').fadeOut();" title="Opmaakhulp verbergen">&times;</span>
 	<h2>Tekst opmaken</h2>
 	<p>U kunt uw berichten opmaken met een simpel opmaaktaaltje wat ubb genoemd wordt. Het lijkt wat op html, maar dan met vierkante haken:</p>
