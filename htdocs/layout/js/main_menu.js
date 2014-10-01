@@ -59,7 +59,7 @@ jQuery(document).ready(function ($) {
 		if (element == 'INPUT' || element == 'TEXTAREA' || element == 'SELECT') {
 			return;
 		}
-		if (event.keyCode > 64 && event.keyCode < 91) {
+		if ((event.keyCode > 64 && event.keyCode < 91) || (event.keyCode > 47 && event.keyCode < 58)) {
 			$('#menuZoekveld').focus();
 
 			//open lateral menu
