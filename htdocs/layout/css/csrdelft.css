@@ -72,14 +72,10 @@ hr{
 	border: 0 none;
 }
 .opvallend{ font-style: italic; }
-.float-left{ float: left; }
-.float-right{ float: right; }
-.clear{	clear: both; }
 .verborgen{ display: none; }
-
-.scrollpane{ overflow: auto; }
 .small{ font-size: smaller; }
 .lichtgrijs{ color: #aaa; }
+
 ul.horizontal li{
 	display: inline;
 	padding-right: 20px;

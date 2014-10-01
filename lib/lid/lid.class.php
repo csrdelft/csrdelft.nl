@@ -941,7 +941,7 @@ class Lid implements Serializable, Agendeerbaar {
 				} else {
 					$naam = $k . $l . $naam . '</a>';
 				}
-				return '<div style="display: inline-block;">' . $naam . '</span></div>';
+				return '<div class="inline">' . $naam . '</span></div>';
 			}
 			return $l . $naam . '</a>';
 		} else {

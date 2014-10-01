@@ -31,6 +31,14 @@ a {
 	text-decoration: none;
 }
 
+.scrollpane { overflow: auto; }
+.float-left { float: left; }
+.float-right { float: right; }
+.clear { clear: both; }
+.inline { display: inline; }
+div.inline { display: inline-block; }
+table.inline { display: inline-table; }
+
 /* -------------------------------- 
 
 Main components 
@@ -275,9 +283,15 @@ Lateral navigation
 #cd-lateral-nav .cd-navigation {
 	margin: 20px 0;
 }
+#cd-lateral-nav .cd-navigation li a {
+	height: 50px;
+}
 #cd-lateral-nav .sub-menu {
 	padding: 0 10px 20px 15px;
 	display: none;
+}
+#cd-lateral-nav .sub-menu li a {
+	height: 50px;
 }
 #cd-lateral-nav a {
 	display: block;
