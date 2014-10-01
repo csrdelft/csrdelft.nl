@@ -57,7 +57,7 @@
 								{/foreach}
 							</table>
 							{if !$smarty.foreach.tabellen.last}
-								<div style="display: inline-block; width: 20px;"></div>
+								<div class="inline" style="width: 20px;"></div>
 							{/if}
 						</td>
 					{/foreach}

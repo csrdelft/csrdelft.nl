@@ -1,5 +1,5 @@
 <div id="groep-{$groep->id}" class="groep">
-	<div style="float: left;">
+	<div class="float-left">
 		<h2>
 			<a href="{Instellingen::get('groepen', 'url')}/{$groep->id}">
 				{$groep->naam}

@@ -11,7 +11,7 @@
 	N.B. Deze instellingen zijn essentieel voor de werking van de stek!
 </p>
 <div class="float-right">
-	<div style="display: inline-block;"><label for="toon">Toon module:</label>
+	<div class="inline"><label for="toon">Toon module:</label>
 	</div><select name="toon" onchange="location.href = '/instellingenbeheer/module/' + this.value;">
 		<option selected="selected">kies</option>
 		{foreach from=$modules item=module}

@@ -30,7 +30,7 @@ class ForumZoekenForm extends Formulier {
 		$fields['z'] = new TextField('zoekopdracht');
 		$fields['z']->placeholder = 'Zoeken in forum';
 		$fields['z']->onkeyup = "if (event.keyCode == 13) { this.form.submit(); };";
-		$fields[] = new HtmlComment('<div class="forumZoekenGeavanceerd hoverIntentContent" style="display: none;">');
+		$fields[] = new HtmlComment('<div class="forumZoekenGeavanceerd hoverIntentContent verborgen">');
 		$fields[] = new VinkField('alleentitel', false, null, 'Alleen op titel zoeken');
 		$fields[] = new HtmlComment('<div class="inline">');
 		$fields[] = new KeuzeRondjeField('datumsoort', 'reactie', null, array('reactie' => 'Laatste reactie', 'gemaakt' => 'Aanmaak-datum'));

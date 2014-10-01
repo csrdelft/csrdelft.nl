@@ -260,7 +260,7 @@ class GroepenProfielContent extends SmartyTemplateView {
 			$return .= '<h6>' . str_replace(array('ht', 'ot', 'ft'), array('h.t.', 'o.t.', 'f.t.'), $status) . ' groepen:</h6>';
 			$return .= '<ul class="groeplijst nobullets">';
 			$i = 0;
-			$style = '';
+			$class = '';
 
 			//zorg dat als het aantal tussen onder en bovengrens in zit gewoon alles wordt weergegeven,
 			$display_limit = $this->display_lower_limit;
@@ -270,11 +270,11 @@ class GroepenProfielContent extends SmartyTemplateView {
 
 			foreach ($groepen as $groep) {
 				if ($i > $display_limit) {
-					$style = 'style="display: none;" ';
+					$class = ' class="verborgen"';
 				}
 				//op een of andere manier werkt het hier niet als ik een class-property gebruik,
 				//dus daarom maar met inline style.
-				$return .= '<li ' . $style . '>' . $groep->getLink() . '</li>';
+				$return .= '<li' . $class . '>' . $groep->getLink() . '</li>';
 				$i++;
 			}
 

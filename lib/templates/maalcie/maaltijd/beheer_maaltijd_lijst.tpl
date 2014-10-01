@@ -8,7 +8,7 @@
 {/if}>
 	<td>
 {if $maaltijd->getArchief() !== null}
-		<div style="display: inline-block; width: 28px;">{icon get="compress" title="Maaltijd is gearchiveerd"}</div>
+		<div class="inline" style="width: 28px;">{icon get="compress" title="Maaltijd is gearchiveerd"}</div>
 {elseif $maaltijd->getIsVerwijderd()}
 		<a href="{Instellingen::get('taken', 'url')}/herstel/{$maaltijd->getMaaltijdId()}" title="Maaltijd herstellen" class="knop post">{icon get="arrow_undo"}</a>
 {else}
@@ -16,7 +16,7 @@
 	{if $maaltijd->getMaaltijdRepetitieId()}
 		<a href="/maaltijdenrepetities/beheer/{$maaltijd->getMaaltijdRepetitieId()}" title="Wijzig gekoppelde maaltijdrepetitie" class="knop modal">{icon get="calendar_edit"}</a>
 	{else}
-		<div style="display: inline-block; width: 28px;"></div>
+		<div class="inline" style="width: 28px;"></div>
 	{/if}
 {/if}
 		<a href="/corveebeheer/maaltijd/{$maaltijd->getMaaltijdId()}" title="Beheer maaltijdcorvee" class="knop">{icon get="chart_organisation"}</a>
@@ -27,7 +27,7 @@
 		<a href="{Instellingen::get('taken', 'url')}/fiscaal/{$maaltijd->getMaaltijdId()}" title="Toon fiscale maaltijdlijst&#013;Maaltijdprijs: &euro; {$maaltijd->getPrijs()|string_format:"%.2f"}" class="knop">{icon get="money_euro"}</a>
 		<a href="/maaltijdenlijst/{$maaltijd->getMaaltijdId()}" title="Toon maaltijdlijst" class="knop" style="margin-right:10px;">{icon get="table"}</a>
 	</td>
-	<td style="text-align: center;">
+	<td class="center-text">
 		{$maaltijd->getAantalAanmeldingen()} ({$maaltijd->getAanmeldLimiet()})
 	</td>
 	<td>

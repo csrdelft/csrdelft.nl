@@ -76,7 +76,7 @@ class LedenlijstContent implements View {
 			} else {
 				$url = REQUEST_URI . '?addToGoogle=true';
 			}
-			echo '<a href="' . $url . '" class="knop" style="float: right" title="Huidige selectie exporteren naar Google Contacts" onclick="return confirm(\'Weet u zeker dat u deze ' . $this->lidzoeker->count() . ' leden wilt importeren in uw Google-contacts?\')"><img src="' . CSR_PICS . '/knopjes/google.ico" alt="google"/></a>';
+			echo '<a href="' . $url . '" class="knop float-right" title="Huidige selectie exporteren naar Google Contacts" onclick="return confirm(\'Weet u zeker dat u deze ' . $this->lidzoeker->count() . ' leden wilt importeren in uw Google-contacts?\')"><img src="' . CSR_PICS . '/knopjes/google.ico" alt="google"/></a>';
 		}
 		echo SimpleHTML::getMelding();
 		echo '<h1>' . (LoginModel::instance()->getLid()->isOudlid() ? 'Oud-leden en l' : 'L') . 'edenlijst </h1>';

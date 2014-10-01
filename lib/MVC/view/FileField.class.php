@@ -283,11 +283,11 @@ class BestandBehouden extends BestandUploader {
 
 	public function view() {
 		parent::view();
-		echo '<div class="UploadKeuze" id="' . $this->name . 'Keuze"';
+		echo '<div class="UploadKeuze';
 		if (!$this->selected) {
-			echo ' style="display: none;"';
+			echo ' verborgen';
 		}
-		echo '><div id="' . $this->name . '" style="height: 2em;">';
+		echo '" id="' . $this->name . 'Keuze"><div id="' . $this->name . '" style="height: 2em;">';
 		echo $this->model->filename . ' (' . format_filesize($this->model->filesize) . ')';
 		echo '</div></div></div>';
 	}
@@ -364,11 +364,11 @@ class UploadHttp extends BestandUploader {
 
 	public function view() {
 		parent::view();
-		echo '<div class="UploadKeuze" id="' . $this->name . 'Keuze"';
+		echo '<div class="UploadKeuze';
 		if (!$this->selected) {
-			echo ' style="display: none;"';
+			echo ' verborgen';
 		}
-		echo '><input type="file" class="' . implode(' ', $this->css_classes) . '" id="' . $this->name . '" name="' . $this->name . '" accept="' . implode('|', $this->filterMime) . '"' . ($this->multiple ? ' multiple' : '') . ' /></div></div>';
+		echo '" id="' . $this->name . 'Keuze"><input type="file" class="' . implode(' ', $this->css_classes) . '" id="' . $this->name . '" name="' . $this->name . '" accept="' . implode('|', $this->filterMime) . '"' . ($this->multiple ? ' multiple' : '') . ' /></div></div>';
 	}
 
 }
@@ -485,11 +485,11 @@ class UploadFtp extends BestandUploader {
 
 	public function view() {
 		parent::view();
-		echo '<div class="UploadKeuze" id="' . $this->name . 'Keuze"';
+		echo '<div class="UploadKeuze';
 		if (!$this->selected) {
-			echo ' style="display: none;"';
+			echo ' verborgen';
 		}
-		echo '>';
+		echo '" id="' . $this->name . 'Keuze">';
 		if (count($this->getFileList()) > 0) {
 			echo '<select id="' . $this->name . '" name="' . $this->name . '" class="' . implode(' ', $this->css_classes) . '">';
 			foreach ($this->getFileList() as $filename) {
@@ -503,7 +503,7 @@ class UploadFtp extends BestandUploader {
 			if (!$this->isPosted() OR isset($_POST[$this->name . 'VerwijderVanFtp'])) {
 				echo ' checked="checked"';
 			}
-			echo ' /><label for="verwijderVanFtp" style="float: none;"> Bestand verwijderen uit FTP-map</label>';
+			echo ' /><label for="verwijderVanFtp" class="float-none"> Bestand verwijderen uit FTP-map</label>';
 		} else {
 			echo 'Geen bestanden gevonden in:<br />ftp://csrdelft.nl/incoming/csrdelft/' . $this->subdir;
 		}
@@ -614,11 +614,11 @@ class UploadUrl extends BestandUploader {
 
 	public function view() {
 		parent::view();
-		echo '<div class="UploadKeuze" id="' . $this->name . 'Keuze"';
+		echo '<div class="UploadKeuze';
 		if (!$this->selected) {
-			echo ' style="display: none;"';
+			echo ' verborgen';
 		}
-		echo '><input type="text" class="' . implode(' ', $this->css_classes) . '" id="' . $this->name . '" name="' . $this->name . '" value="' . $this->url . '" /></div></div>';
+		echo '" id="' . $this->name . 'Keuze"><input type="text" class="' . implode(' ', $this->css_classes) . '" id="' . $this->name . '" name="' . $this->name . '" value="' . $this->url . '" /></div></div>';
 	}
 
 }

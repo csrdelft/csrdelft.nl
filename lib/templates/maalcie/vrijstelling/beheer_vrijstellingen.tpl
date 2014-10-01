@@ -17,7 +17,7 @@ N.B. Pas bij het resetten van het corveejaar worden de punten toegekend (te beha
 			<th>Tot</th>
 			<th>Percentage</th>
 			<th>Punten</th>
-			<th title="Definitief verwijderen" style="text-align: center;">{icon get="cross"}</th>
+			<th title="Definitief verwijderen" class="center-text">{icon get="cross"}</th>
 		</tr>
 	</thead>
 	<tbody>

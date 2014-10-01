@@ -29,7 +29,7 @@ Dan pas zullen ook alle abonnementen op deze maaltijdrepetitie automatisch worde
 			<th>Limiet</th>
 			<th>{icon get="tick" title="Abonneerbaar"}</th>
 			<th>Filter</th>
-			<th title="Definitief verwijderen" style="text-align: center;">{icon get="cross"}</th>
+			<th title="Definitief verwijderen" class="center-text">{icon get="cross"}</th>
 		</tr>
 	</thead>
 	<tbody>

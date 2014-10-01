@@ -954,21 +954,6 @@ HTML;
 			}
 		}
 
-		$width = 355;
-		$height = 238;
-		if (isset($arguments['w']) && $arguments['w'] < 800) {
-			$width = (int) $arguments['w'];
-		}
-		if (isset($arguments['h']) && $arguments['h'] < 600) {
-			$height = $arguments['h'];
-		}
-
-		$style = 'style="width:' . $width . 'px;height:' . $height . 'px;';
-		if (isset($arguments['float']) && in_array($arguments['float'], array('left', 'right'))) {
-			$style = ' float: ' . $arguments['float'] . '';
-		}
-		$style .= '"';
-
 		if (count($slides) == 0) {
 			$content = '[slideshow]: geen geldige afbeeldingen gegeven';
 		} else {

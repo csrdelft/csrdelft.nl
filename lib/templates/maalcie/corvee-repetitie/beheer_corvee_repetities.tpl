@@ -32,7 +32,7 @@ N.B. Als u kiest voor "Alles bijwerken" worden alle corveetaken die behoren tot 
 			<th>{icon get="tick" title="Voorkeurbaar"}</th>
 			<th>Standaard<br />punten</th>
 			<th>Aantal<br />corveeërs</th>
-			<th title="Definitief verwijderen" style="text-align: center;">{icon get="cross"}</th>
+			<th title="Definitief verwijderen" class="center-text">{icon get="cross"}</th>
 		</tr>
 	</thead>
 	<tbody>

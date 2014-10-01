@@ -45,7 +45,6 @@
 	</td>
 	<td style="text-align: right; background-color: #{$puntenlijst.prognoseColor};"{if $puntenlijst.vrijstelling} title="{$puntenlijst.vrijstelling->getPercentage()}% vrijstelling"{/if}>
 		{$puntenlijst.prognose}
-		<div style="display: inline-block; width: 25px;"{if $puntenlijst.vrijstelling}>*{else}>&nbsp;{/if}</div>
-		</div>
+		<div class="inline" style="width: 25px;">{if $puntenlijst.vrijstelling}*{else}&nbsp;{/if}</div>
 	</td>
 </tr>

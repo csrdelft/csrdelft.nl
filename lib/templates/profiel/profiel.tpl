@@ -236,7 +236,7 @@
 					-
 				{/if}
 				{if LoginModel::getUid()==$profhtml.uid}
-					&nbsp;<div style="display: inline-block; position: absolute;"><a href="/corveevoorkeuren" title="Bewerk voorkeuren" class="knop">{icon get="pencil"}</a></div>
+					&nbsp;<div class="inline" style="position: absolute;"><a href="/corveevoorkeuren" title="Bewerk voorkeuren" class="knop">{icon get="pencil"}</a></div>
 					{/if}
 			</div>{/strip}
 			<br />

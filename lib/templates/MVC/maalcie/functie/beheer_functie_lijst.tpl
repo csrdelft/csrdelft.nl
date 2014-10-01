@@ -11,14 +11,14 @@
 	<td title="{$functie->email_bericht}">{if strlen($functie->email_bericht) > 0}{icon get="email"}{/if}</td>
 	<td>
 		{if $functie->kwalificatie_benodigd}
-			<div style="float: left;"><a href="{Instellingen::get('taken', 'url')}/kwalificeer/{$functie->functie_id}" title="Kwalificatie toewijzen" class="knop post modal">{icon get="vcard_add"} Kwalificeer</a></div>
+			<div class="float-left"><a href="{Instellingen::get('taken', 'url')}/kwalificeer/{$functie->functie_id}" title="Kwalificatie toewijzen" class="knop post modal">{icon get="vcard_add"} Kwalificeer</a></div>
 		{/if}
 		{if $functie->hasKwalificaties()}
 			<div class="kwali"><a title="Toon oudleden" class="knop" onclick="$('div.kwali').toggle();">{icon get="eye"} Toon oudleden</a></div>
-			<div class="kwali" style="display: none;"><a title="Toon leden" class="knop" onclick="$('div.kwali').toggle();">{icon get="eye"} Toon leden</a></div>
+			<div class="kwali verborgen"><a title="Toon leden" class="knop" onclick="$('div.kwali').toggle();">{icon get="eye"} Toon leden</a></div>
 		{/if}
 		{foreach from=$functie->getKwalificaties() item=kwali}
-			<div class="kwali"{if LidCache::getLid($kwali->uid)->isOudlid()} style="display: none;"{/if}>
+			<div class="kwali{if LidCache::getLid($kwali->uid)->isOudlid()} verborgen{/if}">
 				<a href="{Instellingen::get('taken', 'url')}/dekwalificeer/{$functie->functie_id}/{$kwali->uid}" title="Kwalificatie intrekken" class="knop post">{icon get="vcard_delete"}</a>
 				&nbsp;{LidCache::getLid($kwali->uid)->getNaamLink(Instellingen::get('corvee', 'weergave_ledennamen_beheer'), Instellingen::get('corvee', 'weergave_link_ledennamen'))}
 				<span style="color: gray;"> (sinds {$kwali->wanneer_toegewezen})</span>

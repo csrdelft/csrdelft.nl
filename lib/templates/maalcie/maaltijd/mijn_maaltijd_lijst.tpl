@@ -23,7 +23,7 @@
 				{/if}
 			</div>
 		</td>
-		<td style="text-align: center;">
+		<td class="center-text">
 			{$maaltijd->getAantalAanmeldingen()} ({$maaltijd->getAanmeldLimiet()})
 			{if $maaltijd->magSluiten(LoginModel::getUid())}
 				<div class="float-right">

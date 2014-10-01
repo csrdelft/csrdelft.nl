@@ -122,7 +122,7 @@
 		{* <div class="columns large-2 small-2" style="width: auto; height: auto;">
 		<div class="box h2 link" style="width: auto; height: auto;">
 		<a href="https://ddb.tudelft.nl/" style="width: auto; height: auto;">
-		<img style="float: left; width: 120px;" src="{$CSR_PICS}/ddb.gif" class="border">
+		<img class="float-left" width="120" src="{$CSR_PICS}/ddb.gif" class="border">
 		</a>
 		</div>
 		</div> *}

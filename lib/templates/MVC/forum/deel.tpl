@@ -37,7 +37,7 @@
 		<tr>
 			<th>Titel</th>
 			<th>Reacties</th>
-			<th style="text-align: center;">Auteur</th>
+			<th class="center-text">Auteur</th>
 			<th>Recente wijziging</th>
 		</tr>
 	</thead>

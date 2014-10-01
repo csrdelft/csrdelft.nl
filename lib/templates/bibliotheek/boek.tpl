@@ -102,7 +102,7 @@
 		<div class="blok gegevens exemplaren" id="exemplaren">
 			<h2>Exemplaren</h2>
 			{foreach from=$boek->getExemplaren() item=exemplaar name=exemplaren}
-				<div class="exemplaar uitgebreid" {if $smarty.foreach.exemplaren.total>4 AND !$boek->isEigenaar($exemplaar.id) AND ($exemplaar.eigenaar_uid!='x222' OR $total_exemplaren_bibliotheek>0 )}style="display: none;"{/if}>
+				<div class="exemplaar uitgebreid {if $smarty.foreach.exemplaren.total>4 AND !$boek->isEigenaar($exemplaar.id) AND ($exemplaar.eigenaar_uid!='x222' OR $total_exemplaren_bibliotheek>0 )}verborgen{/if}">
 					<div class="fotolabel">{$exemplaar.eigenaar_uid|pasfoto}</div>
 					<div class="gegevensexemplaar" id="ex{$exemplaar.id}">
 					{* eigenaar *}

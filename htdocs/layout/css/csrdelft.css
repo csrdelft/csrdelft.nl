@@ -320,6 +320,12 @@ p.naam, a.lidLink{
 	border: 1px solid darkred;
 }
 
+div.sqCategorie{
+	float: left;
+	width: 450px;
+	margin-right: 20px;
+	margin-bottom: 10px;
+}
 table.query_table{
 	display: inline-block;
 	margin: 10px;

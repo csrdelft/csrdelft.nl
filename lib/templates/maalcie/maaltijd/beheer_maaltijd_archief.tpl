@@ -8,10 +8,10 @@
 	<td style="color:grey;">{$maaltijd->getMaaltijdId()}</td>
 	<td>&euro; {$maaltijd->getPrijs()|string_format:"%.2f"}</td>
 	<td>
-		<div class="aanmeldingen-{$maaltijd->getMaaltijdId()}" style="display: inline-block;">
+		<div class="aanmeldingen-{$maaltijd->getMaaltijdId()} inline">
 			<a title="Toon aanmeldingen" class="knop" onclick="$('div.aanmeldingen-{$maaltijd->getMaaltijdId()}').toggle();">{icon get="eye"} Toon <strong>{$maaltijd->getAantalAanmeldingen()}</strong></a>
 		</div>
-		<div class="aanmeldingen-{$maaltijd->getMaaltijdId()}" style="display: none;">
+		<div class="aanmeldingen-{$maaltijd->getMaaltijdId()} verborgen">
 			<a title="Toon aanmeldingen" class="knop" onclick="$('div.aanmeldingen-{$maaltijd->getMaaltijdId()}').toggle();">{icon get="eye"} Verberg <strong>{$maaltijd->getAantalAanmeldingen()}</strong></a>
 		{foreach from=$maaltijd->getAanmeldingenArray() item=aanmelding}
 			<li>

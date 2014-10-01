@@ -14,7 +14,7 @@
 		<th style="text-align: right;">Eters</th>
 		<th style="width: 80px;">(Limiet)</th>
 		<th>Status</th>
-		<th style="text-align: center;">{if $prullenbak}{icon get="cross" title="Definitief verwijderen"}{else}{icon get="bin_empty" title="Naar de prullenbak verplaatsen"}{/if}</th>
+		<th class="center-text">{if $prullenbak}{icon get="cross" title="Definitief verwijderen"}{else}{icon get="bin_empty" title="Naar de prullenbak verplaatsen"}{/if}</th>
 	{/if}
 	</tr>
 </thead>

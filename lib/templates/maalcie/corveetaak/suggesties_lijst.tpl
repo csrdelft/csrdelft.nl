@@ -24,7 +24,7 @@ mijn_rooster.tpl	|	P.W.G. Brussee (brussee@live.nl)
 			</thead>
 		</table>
 		<div class="scrollpane" style="height: 250px;">
-			<table id="suggesties-tabel" class="maalcie-tabel" style="display: none;">
+			<table id="suggesties-tabel" class="maalcie-tabel verborgen">
 				<tbody>
 					{foreach name="tabel" from=$suggesties key=uid item=suggestie}
 						<tr class="

@@ -27,6 +27,7 @@ body {
 }
 
 .scrollpane { overflow: auto; }
+.float-none { float: none; }
 .float-left { float: left; }
 .float-right { float: right; }
 .clear { clear: both; }
@@ -35,6 +36,7 @@ body {
 .inline { display: inline; }
 div.inline { display: inline-block; }
 table.inline { display: inline-table; }
+.center-text { text-align: center; }
 
 /* -------------------------------- 
 

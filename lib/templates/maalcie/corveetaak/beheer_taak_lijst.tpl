@@ -4,7 +4,7 @@
 {strip}
 <tr id="corveetaak-row-{$taak->getTaakId()}" class="taak-datum-{$taak->getDatum()}
 {if ($taak->getBeginMoment() < strtotime('-1 day') and !isset($maaltijd)) or $taak->getIsVerwijderd()} taak-oud{/if}
-"{if !isset($show) and !$prullenbak} style="display: none;"{/if}>
+{if !isset($show) and !$prullenbak} verborgen{/if}">
 	<td>
 {if $taak->getIsVerwijderd()}
 		<a href="{Instellingen::get('taken', 'url')}/herstel/{$taak->getTaakId()}" title="Corveetaak herstellen" class="knop post">{icon get="arrow_undo"}</a>
@@ -13,14 +13,14 @@
 	{if $taak->getCorveeRepetitieId()}
 		<a href="/corveerepetities/beheer/{$taak->getCorveeRepetitieId()}" title="Wijzig gekoppelde corveerepetitie" class="knop modal">{icon get="calendar_edit"}</a>
 	{else}
-		<div style="display: inline-block; width: 28px;"></div>
+		<div class="inline" style="width: 28px;"></div>
 	{/if}
 {/if}
 {if !isset($maaltijd) and $taak->getMaaltijdId()}
 	<a href="/corveebeheer/maaltijd/{$taak->getMaaltijdId()}" title="Beheer maaltijdcorvee" class="knop">{icon get="cup_link"}</a>
 {/if}
 	</td>
-	<td style="width: 50px; text-align: center;">
+	<td class="center-text" style="width: 50px;">
 {assign var=aantal value=$taak->getAantalKeerGemaild()}
 {if !$taak->getIsVerwijderd() and (!isset($maaltijd) or !$maaltijd->getIsVerwijderd())}
 	{assign var="wijzigbaar" value="true"}

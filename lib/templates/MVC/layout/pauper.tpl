@@ -4,9 +4,9 @@
 		<title>C.S.R. Delft mobiel - {$body->getTitel()}</title>
 		{include file='html_head.tpl'}
 	</head>
-	<body style="background: none;">
-		<div style="text-align: center;">
-			<div style="float: left;">
+	<body>
+		<div class="center-text">
+			<div class="float-left">
 				<a href="#mainmenu">Menu</a>
 			</div>
 			<a href="/pauper/terug">Naar normale webstek</a>

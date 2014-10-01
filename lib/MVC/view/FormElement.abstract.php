@@ -1633,7 +1633,7 @@ class FormButtons implements FormElement {
 	public function view() {
 		echo '<div class="FormButtons">';
 		if (isset($this->deleteIcon) OR isset($this->deleteText)) {
-			echo '<div style="float: left;"><a id="deleteButton" class="knop';
+			echo '<div class="float-left"><a id="deleteButton" class="knop';
 			if (isset($this->deleteAction)) {
 				echo ' ' . $this->deleteAction;
 			}

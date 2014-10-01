@@ -15,11 +15,11 @@
 	<td>
 		<form id="form-{$instelling->instelling_id}" method="post" action="/instellingenbeheer/opslaan/{$instelling->module}/{$instelling->instelling_id}" class="Formulier InlineForm">
 			<div class="InstellingToggle">{$instelling->waarde}</div>
-			<div class="InstellingToggle" style="display: none;">&nbsp;</div>
+			<div class="InstellingToggle verborgen">&nbsp;</div>
 			<div class="InputField">
 				<textarea name="waarde" origvalue="{htmlspecialchars($instelling->waarde)}" class="FormElement" rows="1" style="width: 400px !important;">{$instelling->waarde}</textarea>
 			</div>
-			<div class="InstellingToggle" style="display: none;"></div>
+			<div class="InstellingToggle verborgen"></div>
 			<div class="FormButtons">
 				<a class="knop submit confirm" title="Wijzigingen opslaan">{icon get="accept"} Opslaan</a>
 				<a class="knop reset cancel" title="Annuleren" onclick="

@@ -7,18 +7,18 @@
 {if strtotime($datum) < strtotime('-1 day')}
 	{if !isset($show) and !$prullenbak} taak-datum-oud
 	{/if} taak-oud
-{/if}"
-{if isset($show)} style="display: none;"
-{/if} onclick="taken_toggle_datum('{$datum}');">
+{/if}
+{if isset($show)} verborgen
+{/if}" onclick="taken_toggle_datum('{$datum}');">
 	<th colspan="7" style="background-color: {cycle values="#f5f5f5,#FAFAFA"}; color: #000;">
 	{foreach name=functie from=$perdatum key=fid item=perfunctie}
 		{foreach name=taken from=$perfunctie item=taak}
 			{if $smarty.foreach.taken.first}{* eerste taak van functie: reset ingedeeld-teller *}
 				{counter assign=count start=0}
 				{if $smarty.foreach.functie.first}
-		<div style="display: inline-block; width: 80px; font-weight: normal;">{$taak->getDatum()|date_format:"%a %e %b"}</div>
+		<div class="inline" style="width: 80px; font-weight: normal;">{$taak->getDatum()|date_format:"%a %e %b"}</div>
 				{/if}
-		<div style="display: inline-block; width: 70px;">
+		<div class="inline" style="width: 70px;">
 			<span title="{$taak->getCorveeFunctie()->naam}">
 				&nbsp;{$taak->getCorveeFunctie()->afkorting}:&nbsp;
 			</span>
