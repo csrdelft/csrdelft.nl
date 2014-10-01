@@ -28,7 +28,7 @@ $(document).ready(function () {
 	init();
 });
 
-var undo_inline_css = true;
+var undo_inline_css_once = true;
 function init() {
 	init_links();
 	init_buttons();
@@ -36,8 +36,8 @@ function init() {
 	init_timeago();
 	init_hoverIntents();
 	init_lazy_images();
-	if (undo_inline_css) { // do it only once to fix screw-ups
-		undo_inline_css = false;
+	if (undo_inline_css_once) { // do it only once to fix screw-ups
+		undo_inline_css_once = false;
 		undo_inline_css();
 	}
 }
