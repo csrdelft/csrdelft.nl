@@ -30,7 +30,7 @@
 								{icon get="new"}
 							</span>
 						{else}
-							<a id="{$draad->draad_id}" href="/forum/onderwerp/{$draad->draad_id}"{if !$draad->alGelezen()} style="{LidInstellingen::instance()->getTechnicalValue('forum', 'ongelezenWeergave')}"{/if}>
+							<a id="{$draad->draad_id}" href="/forum/onderwerp/{$draad->draad_id}"{if !$draad->alGelezen()} class="{LidInstellingen::get('forum', 'ongelezenWeergave')}"{/if}>
 								<small style="font-weight: normal;">[{$delen[$draad->forum_id]->titel}]</small>
 								{$draad->titel}
 								{if $draad->gesloten}

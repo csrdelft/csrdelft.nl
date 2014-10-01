@@ -147,7 +147,7 @@
 								{if $exemplaar.status=='beschikbaar'}
 									{if $exemplaar.eigenaar_uid=='x222'} {* bibliothecaris werkt met kaartjes *}
 										{if !$boek->isEigenaar($exemplaar.id)} {* basfcie hoeft opmerking niet te zien *}
-											<span class="suggestie" style="font-style: normal;">Biebboek lenen: laat het kaartje achter voor de bibliothecaris.</span><br />
+											<span class="suggestie recht">Biebboek lenen: laat het kaartje achter voor de bibliothecaris.</span><br />
 										{/if}
 									{else}
 										<a class="knop" href="/communicatie/bibliotheek/exemplaarlenen/{$boek->getId()}/{$exemplaar.id}" title="Leen dit boek" onclick="return confirm('U wilt dit boek van {$exemplaar.eigenaar_uid|csrnaam:'civitas':'plain'} lenen?')">{icon get="lorry"} Exemplaar lenen</a>

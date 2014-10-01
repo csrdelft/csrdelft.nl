@@ -128,7 +128,7 @@ class IsHetAlContent implements View {
 				break;
 			case 'wist u dat':
 				$wistudat = array_rand(self::$wistudat);
-				echo '<div class="ja">Wist u dat...</div><a href="' . self::$wistudat[$wistudat] . '" style="font-style: italic;">' . $wistudat . '</a>';
+				echo '<div class="ja">Wist u dat...</div><a href="' . self::$wistudat[$wistudat] . '" class="cursief">' . $wistudat . '</a>';
 				break;
 			default:
 				echo 'Is het al ' . $this->model . '?';

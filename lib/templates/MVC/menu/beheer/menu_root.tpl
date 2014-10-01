@@ -3,8 +3,8 @@
 *}
 <a href="/menubeheer/bewerken/{$root->item_id}" class="knop post modal" title="Naam van dit menu bewerken">{icon get="bewerken"}</a>
 <a href="/menubeheer/toevoegen/{$root->item_id}" class="knop post modal" title="Menu-item toevoegen">{icon get="add"}</a>
-<span style="font-style: italic;">{$root->tekst}</span>
-<span style="color: grey;">{$root->item_id}</span>
+<span class="">{$root->tekst}</span>
+<span class="lichtgrijs">{$root->item_id}</span>
 <div class="float-right">
 	<a href="{$root->link}">{$root->link}</a>
 {if !$root->children}
@@ -12,4 +12,3 @@
 {/if}
 </div>
 <hr />
-</li>

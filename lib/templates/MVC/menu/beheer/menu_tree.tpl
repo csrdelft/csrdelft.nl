@@ -15,7 +15,7 @@
 <br />
 <ul class="menubeheer-tree">
 	{if $root}
-		{include file='MVC/menu/beheer/menu_root.tpl'}
+		<li>{include file='MVC/menu/beheer/menu_root.tpl'}</li>
 		{if $root->children}
 			{foreach from=$root->children item=child}
 				{include file='MVC/menu/beheer/menu_item.tpl' item=$child}

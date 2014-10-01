@@ -73,10 +73,18 @@ hr{
 	background-color: black;
 	border: 0 none;
 }
-.opvallend{ font-style: italic; }
+
 .verborgen{ display: none; }
-.small{ font-size: smaller; }
+.recht{ font-style: normal; }
+.cursief{ font-style: italic; }
+.dikgedrukt{ font-weight: bold; }
+.onderstreept{ text-decoration: underline; }
+.alsof-gelezen{ }
+.draad-readonly{ }
+.draad-gesloten{ }
+.draad-verwijderd{ color: red; }
 .lichtgrijs{ color: #aaa; }
+.small{ font-size: smaller; }
 
 ul.horizontal li{
 	display: inline;
@@ -219,7 +227,6 @@ div.ishetal div.ja{
 #komende_pasfotos .verjaardag .lidfoto{
 	width: 50px;
 }
-#komende_pasfotos .opvallend .datum{ font-weight: bold;  }
 .verjaardag .datum{
 	position: absolute;
 	display: block;

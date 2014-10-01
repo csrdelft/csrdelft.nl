@@ -13,7 +13,7 @@
 					{/if}
 					<div class="itemtitel">
 						{* {$mededeling->getDatum()} *}
-						<a href="{$pagina_root}{$mededeling->getId()}"{if $mededeling->isModerator()} style="{if !$mededeling->isPrive()}font-style: italic;{/if}{if $mededeling->getZichtbaarheid()=='wacht_goedkeuring'}font-weight: bold;{/if}"{/if}>{$mededeling->getTitel()|ubb|html_substr:"40":"…"}</a>
+						<a href="{$pagina_root}{$mededeling->getId()}"{if $mededeling->isModerator()} class="{if !$mededeling->isPrive()}cursief{/if} {if $mededeling->getZichtbaarheid()=='wacht_goedkeuring'}dikgedrukt{/if}"{/if}>{$mededeling->getTitel()|ubb|html_substr:"40":"…"}</a>
 					</div>
 				</div>
 			{/foreach}
