@@ -739,6 +739,18 @@ table.groepStats td, table.groepStats th{
 
 
 /**************************** FORUM *******************************/
+#modereren{
+	display: none;
+	border: 1px solid #999;
+	margin: 10px;
+	padding: 10px;
+}
+#modereren table{
+	width: 100%;
+}
+#modereren table input[type="text"]{
+	width: 300px;
+}
 #forumZoekenForm{
 	float: right;
 }
