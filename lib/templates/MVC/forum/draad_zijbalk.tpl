@@ -11,7 +11,7 @@
 				{$timestamp|date_format:"%d-%m"}
 			{/if}
 			&nbsp;
-			{$draad->titel|truncate:25:"…":true}
+			{$draad->titel}
 		</a>
 	</div>
 {/strip}

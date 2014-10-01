@@ -1,9 +1,9 @@
 {SimpleHtml::getMelding()}
 {capture name='navlinks'}
 	<div class="maandnavigatie">
+		<a class="knop float-left" href="{$urlVorige}">&laquo; {$prevMaand}</a>
 		<h1>{$datum|date_format:"%B %Y"}</h1>
-		<a class="knop" href="{$urlVorige}" style="float: left;">&laquo; {$prevMaand}</a>
-		<a class="knop" href="{$urlVolgende}" style="float: right;">{$nextMaand} &raquo;</a>
+		<a class="knop float-right" href="{$urlVolgende}">{$nextMaand} &raquo;</a>
 	</div>
 {/capture}
 {$smarty.capture.navlinks}

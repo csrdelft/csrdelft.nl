@@ -71,6 +71,13 @@ hr{
 	height: 1px; background-color: black;
 	border: 0 none;
 }
+
+.float-left {
+	float: left;
+}
+.float-right {
+	float: right;
+}
 .clear{	clear: both; }
 .verborgen{ display: none; }
 
@@ -152,15 +159,15 @@ ul.nobullets li{ list-style-type: none; }
 }
 #zijbalk .block h1{
 	margin: 0;
-	padding: 1px 5px;
-	font-size: 12px;
+	padding: 2px 5px;
+	font-size: 11px;
 	color: #162673;
 	font-weight: bold;
 	background: url('http://plaetjes.csrdelft.nl/layout/blocktitle.png') no-repeat;
 	border-bottom: 1px solid #b8b8b8;
 }
 #zijbalk .block .item{
-	padding: 1px 5px; 
+	padding: 1px 5px;
 	font-size: 11px;
 	background-color: #f5f5f5;
 	border: 1px solid #b8b8b8;
@@ -169,6 +176,7 @@ ul.nobullets li{ list-style-type: none; }
 	overflow: hidden;
 	text-overflow: ellipsis;
 	-o-text-overflow: ellipsis;
+	white-space: nowrap;
 }
 #zijbalk a{
 	color: #000;

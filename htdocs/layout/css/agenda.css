@@ -100,14 +100,14 @@ table#maand td ul{
 table#maand td ul li{
 	margin: 0;
 	padding: 4px 4px;
-	font-size: 10px;
+	font-size: 11px;
 	line-height: 1.4em;
 }
 table#maand td ul li:nth-child(even){
 	background-color: #eaeaea;
 }
 table#maand td ul li .tijd{
-	font-size: 10px;
+	font-size: 11px;
 	color: #777;
 }
 table#maand td ul li  img.icon{
