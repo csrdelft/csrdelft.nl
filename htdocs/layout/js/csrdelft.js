@@ -190,15 +190,16 @@ function zijbalk_dynamisch() {
 		elmnt.css('max-height', window.innerHeight);
 		elmnt.width(elmnt.parent().width());
 	};
+	var is_chrome = navigator.userAgent.toLowerCase().indexOf('chrome') > -1;
+	$(window).scroll(function () {
+		elmnt.css('top', $(window).scrollTop());
+	});
 	$(window).resize(function () {
 		onResize();
+		if (is_chrome) {
+			$(window).trigger('scroll');
+		}
 	});
-	var is_chrome = navigator.userAgent.toLowerCase().indexOf('chrome') > -1;
-	if (is_chrome) {
-		$(window).scroll(function () {
-			elmnt.css('top', $(window).scrollTop());
-		});
-	}
 	$(window).trigger('resize');
 	// set delay for adblockers that remove ads so wide they influence page width (very annoying)
 	window.setTimeout(onResize, 400);
@@ -711,6 +712,6 @@ function ubbPreview(source, dest) {
 		var previewDiv = document.getElementById(dest);
 		applyUBB(ubb, previewDiv);
 		$(previewDiv).addClass('preview-show');
-		$(window).trigger('resize'); // werkomheen zijbalk jump chrome
+		$(window).trigger('resize');
 	}
 }
