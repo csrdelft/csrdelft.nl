@@ -154,7 +154,6 @@ function zijbalk_dynamisch() {
 	});
 	var origWidth = elmnt.width();
 	onResize();
-	elmnt.scrollTop(elmnt.attr('scrollfix'));
 
 	var showscroll = function () {
 		if (elmnt.hasClass('scroll-fixed')) {
@@ -202,6 +201,7 @@ function zijbalk_dynamisch() {
 			elmnt.css('top', $(window).scrollTop());
 		});
 	}
+	elmnt.scrollTop(elmnt.attr('scrollfix'));
 }
 
 function page_reload() {
