@@ -66,13 +66,17 @@ Main components
 	transition-duration: 0.4s;
 }
 .cd-main-content.lateral-menu-is-open {
-	z-index: 0;
 	/* translate to show the lateral menu - all content needs to be put in the .cd-main-content to translate*/
 	-webkit-transform: translateX(-260px);
 	-moz-transform: translateX(-260px);
 	-ms-transform: translateX(-260px);
 	-o-transform: translateX(-260px);
 	transform: translateX(-260px);
+}
+@media (max-width: 1000px) {
+    .cd-main-content.lateral-menu-is-open{
+        z-index: 0;
+    }
 }
 
 /* -------------------------------- 
