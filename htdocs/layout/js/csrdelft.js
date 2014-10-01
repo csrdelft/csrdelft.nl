@@ -176,9 +176,7 @@ function zijbalk_dynamisch() {
 			}, 400);
 		}
 	};
-	if ($('#main').width() < 1004) {
-		elmnt.hoverIntent(expand, collapse);
-	}
+	elmnt.hoverIntent(expand, collapse);
 	elmnt.hover(function () {
 		if (elmnt.width() >= origWidth) {
 			showscroll();
