@@ -25,7 +25,6 @@ class IsHetAlContent implements View {
 		'u deze zijbalk geheel naar wens kan ingerichten?'	 => '/instellingen#tabs-zijbalk',
 		'u ongelezen draadjes als gelezen kan weergeven?'	 => '/instellingen#tabs-forum',
 		'u een eigen minion op de stek kan krijgen?'		 => '/instellingen#tabs-layout',
-		'de stek een breedbeeldmodus heeft?'				 => '/instellingen#tabs-layout',
 		'u de C.S.R.-agenda kan importeren met ICAL?'		 => '/agenda#ICAL'
 	);
 

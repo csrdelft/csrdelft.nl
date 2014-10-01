@@ -39,7 +39,6 @@ class LidInstellingen extends PersistenceModel {
 		),
 		'layout'		 => array(
 			'opmaak'		 => array('Opmaak', T::Enumeration, array('normaal', 'owee', 'lustrum', 'sineregno', 'roze'), 'normaal'),
-			'beeld'			 => array('Breedte', T::Enumeration, array('vast', 'dynamisch'), 'dynamisch'),
 			'zijbalk'		 => array('Zijbalk', T::Enumeration, array('meescrollen', 'fixeer', 'verberg'), 'fixeer'),
 			'visitekaartjes' => array('Visitekaartjes', T::Enumeration, array('ja', 'nee'), 'ja'),
 			'sneeuw'		 => array('Sneeuw', T::Enumeration, array('ja', 'freeze!', 'nee'), 'nee'),

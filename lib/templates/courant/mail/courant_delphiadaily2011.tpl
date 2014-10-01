@@ -95,9 +95,6 @@ div.citaatContainer{
 <font size="2" face="garamond"><h4>Inhoud</h4></font>
 <table class="inhoud" width="800">
 <tr>
-{*
-	Weergave van de kopjes bovenaan. Beetje een raar verhaal geworden, maar zo is het wel lekker dynamisch
-*}
 {foreach from=$indexCats item=categorie key=catKey}
 	{if $categorie!='voorwoord' AND $categorie!='sponsor'}
 		<td class="inhoudKolom" valign="top">

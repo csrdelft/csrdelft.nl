@@ -1,14 +1,15 @@
 /**** GENERAL *****************************************************************/
 #main{
-	max-width: 1004px;
 	margin: 0 auto;
 	border-collapse: collapse;
 	font-size: 12px;
 }
 #mainleft{
-	width: 185px;
+	width: 200px;
+	background-color: #ffffff;
 }
 #mainright{
+	max-width: 1004px;
 	padding: 10px;
 }
 .dragobject{
@@ -55,11 +56,8 @@ p{
 abbr.timeago{ border: none; }
 abbr.timeago:hover{ border-bottom: 1px dotted grey; }
 
-a{ color: #0a338d; text-decoration: none; }
-a:hover{ color: #0a338d; text-decoration: underline; }
 a.knop{ text-decoration: none; }
 a.external{
-	background-image: url('http://plaetjes.csrdelft.nl/layout/external-link-red.png');
 	background-repeat: no-repeat;
 	background-position: center right;
 	padding-right: 14px;
@@ -69,16 +67,13 @@ th{ text-align: left; }
 td{ vertical-align: top; padding: 0; }
 
 hr{
-	height: 1px; background-color: black;
+	height: 1px;
+	background-color: black;
 	border: 0 none;
 }
-
-.float-left {
-	float: left;
-}
-.float-right {
-	float: right;
-}
+.opvallend{ font-style: italic; }
+.float-left{ float: left; }
+.float-right{ float: right; }
 .clear{	clear: both; }
 .verborgen{ display: none; }
 
@@ -151,42 +146,45 @@ ul.nobullets li{ list-style-type: none; }
 /* Zijbalk */
 #zijbalk{
 	z-index: 50;
+	width: 200px;
+	min-width: 10px;
 	overflow: hidden;
-	width: 185px;
+	background-color: inherit;
 }
 #zijbalk .block{
-	width: 175px;
 	padding: 10px 0 0 0;
 }
 #zijbalk .block h1{
+	border: none;
+	font-size: 12px;
+	font-weight: normal;
 	margin: 0;
+	margin-bottom: 5px;
 	padding: 2px 5px;
-	font-size: 11px;
-	color: #162673;
-	font-weight: bold;
-	background: url('http://plaetjes.csrdelft.nl/layout/blocktitle.png') no-repeat;
-	border-bottom: 1px solid #b8b8b8;
+	padding-bottom: 5px;
+	background-image: url("http://plaetjes.csrdelft.nl/layout/portal-break.png");
+	background-repeat: no-repeat;
+	background-position: bottom left;
+	background-color: transparent;
 }
 #zijbalk .block .item{
 	padding: 1px 5px;
 	font-size: 11px;
-	background-color: #f5f5f5;
-	border: 1px solid #b8b8b8;
-	border-top: 0;
+	border: none;
+	background-color: transparent;
 	text-align: left;
 	overflow: hidden;
 	text-overflow: ellipsis;
 	-o-text-overflow: ellipsis;
 	white-space: nowrap;
 }
-#zijbalk a{
+#zijbalk .block .item a{
 	color: #000;
-}
-#zijbalk .opvallend{
-	font-style: italic;
 }
 div.ishetal{
 	text-align: center;
+	width: 180px;
+	margin: 20px 20px 10px 0;
 }
 div.ishetal div.ja, div.ishetal div.nee{
 	font-size: 16px;

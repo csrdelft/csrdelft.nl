@@ -52,8 +52,6 @@ p.profielBewerken .pasfoto{ float: right; margin-left: 10px;}
 
 li.verborgen{ display: none; }
 
-a.opvallend{ font-style: italic; }
-
 #wijzigstatus label {
 	width: 153px;
 	margin: 0;

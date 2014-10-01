@@ -117,8 +117,6 @@ htdocs/layout/css/agenda.css -text
 htdocs/layout/css/agenda.min.css -text
 htdocs/layout/css/bibliotheek.css -text
 htdocs/layout/css/bibliotheek.min.css -text
-htdocs/layout/css/breedbeeld.css -text
-htdocs/layout/css/breedbeeld.min.css -text
 htdocs/layout/css/csrdelft.css -text
 htdocs/layout/css/csrdelft.dataTables.css -text
 htdocs/layout/css/csrdelft.dataTables.min.css -text

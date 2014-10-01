@@ -41,9 +41,6 @@ class CsrLayoutPage extends HtmlPage {
 		$this->addStylesheet($css . 'csrdelft');
 		$layout = LidInstellingen::get('layout', 'opmaak');
 		$this->addStylesheet($css . $layout);
-		if (LidInstellingen::get('layout', 'beeld') == 'dynamisch') {
-			$this->addStylesheet($css . 'breedbeeld');
-		}
 		if (LidInstellingen::get('layout', 'sneeuw') != 'nee') {
 			if (LidInstellingen::get('layout', 'sneeuw') == 'ja') {
 				$this->addStylesheet($css . 'snow.anim');
@@ -87,7 +84,7 @@ class CsrLayoutPage extends HtmlPage {
 
 		if (LidInstellingen::get('layout', 'zijbalk') == 'verberg') {
 			$this->zijbalk = false;
-		} elseif ($this->zijbalk !== false OR LidInstellingen::get('layout', 'beeld') == 'dynamisch') {
+		} else {
 			if (is_array($this->zijbalk)) {
 				$this->zijbalk = array_merge($this->zijbalk, SimpleHTML::getStandaardZijbalk());
 			} else {

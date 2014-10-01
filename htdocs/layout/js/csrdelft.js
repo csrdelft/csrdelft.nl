@@ -165,21 +165,21 @@ function zijbalk_dynamisch() {
 	};
 	var showscroll = function () {
 		elmnt.css({
-			'overflow-y': 'auto',
-			'padding-right': getPadding()
+			'overflow-y': 'auto'/*,
+			 'padding-right': getPadding()*/
 		});
 	};
 	var hidescroll = function () {
 		elmnt.css({
-			'overflow-y': '',
-			'padding-right': ''
+			'overflow-y': ''/*,
+			 'padding-right': ''*/
 		});
 	};
 	var expand = function () {
 		if (elmnt.width() < origWidth) {
 			elmnt.animate({
-				'width': origWidth,
-				'padding-right': getPadding()
+				'width': origWidth/*,
+				 'padding-right': getPadding()*/
 			}, 400, showscroll);
 		}
 	};
@@ -187,8 +187,8 @@ function zijbalk_dynamisch() {
 		if (elmnt.width() > elmnt.parent().width()) {
 			hidescroll();
 			elmnt.animate({
-				'width': elmnt.parent().width(),
-				'padding-right': ''
+				'width': elmnt.parent().width()/*,
+				 'padding-right': ''*/
 			}, 400);
 		}
 	};
