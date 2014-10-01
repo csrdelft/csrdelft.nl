@@ -28,6 +28,7 @@ $(document).ready(function () {
 	init();
 });
 
+var undo_inline_css = true;
 function init() {
 	init_links();
 	init_buttons();
@@ -35,7 +36,10 @@ function init() {
 	init_timeago();
 	init_hoverIntents();
 	init_lazy_images();
-	undo_inline_css();
+	if (undo_inline_css) { // do it only once to fix screw-ups
+		undo_inline_css = false;
+		undo_inline_css();
+	}
 }
 
 function undo_inline_css() {
@@ -200,8 +204,6 @@ function zijbalk_dynamisch() {
 		});
 	}
 	$(window).trigger('resize');
-	// set delay for adblockers that remove ads so wide they influence page width (very annoying)
-	window.setTimeout(onResize, 400);
 }
 
 function page_reload() {
@@ -705,19 +707,12 @@ function importAgenda(id) {
 	});
 }
 
-function preview_werkomheen_chrome() {
-	if (navigator.userAgent.toLowerCase().indexOf('chrome') > -1) {
-		$('#zijbalk').css('top', $(window).scrollTop());
-		$(window).trigger('resize');
-	}
-}
-
 function ubbPreview(source, dest) {
 	var ubb = document.getElementById(source).value;
 	if (ubb.length !== '') {
 		var previewDiv = document.getElementById(dest);
 		applyUBB(ubb, previewDiv);
 		$(previewDiv).addClass('preview-show');
-		window.setTimeout(preview_werkomheen_chrome, 100);
+		$(window).scrollTo($(source));
 	}
 }
