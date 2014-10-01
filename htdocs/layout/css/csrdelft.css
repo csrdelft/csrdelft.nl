@@ -9,8 +9,9 @@
 }
 #mainright{
 	max-width: 1004px;
-	padding: 50px;
+	padding: 50px 0 0 50px;
 	line-height: 1.25em;
+	background-color: #ffffff;
 }
 .dragobject{
 	position: fixed;
