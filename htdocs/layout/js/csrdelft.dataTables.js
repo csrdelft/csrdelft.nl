@@ -223,7 +223,7 @@ function fnChildRow(dataTable, td) {
 		}
 	}
 	else {
-		row.child('<div class="innerDetails" style="display: none;"></div>').show();
+		row.child('<div class="innerDetails verborgen"></div>').show();
 		tr.addClass('expanded loading');
 		var innerDiv = tr.next().addClass('childrow').children(':first').children(':first');
 		$.ajax({

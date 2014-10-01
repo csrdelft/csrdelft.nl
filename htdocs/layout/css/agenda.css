@@ -18,7 +18,10 @@ table.agenda th {
 	vertical-align: top;
 	background-color: #dddddd;
 }
-div#tijden a{
+#tijden{
+	line-height: 2em;
+}
+#tijden a{
 	cursor: pointer;
 }
 

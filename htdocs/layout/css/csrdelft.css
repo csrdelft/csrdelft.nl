@@ -74,6 +74,7 @@ hr{
 	border: 0 none;
 }
 
+.onzichtbaar{ visibility: hidden; }
 .verborgen{ display: none; }
 .recht{ font-style: normal; }
 .cursief{ font-style: italic; }
@@ -98,6 +99,10 @@ ul.nobullets li{ list-style-type: none; }
 	-moz-box-shadow: 0 0 20px #000000;
 	-webkit-box-shadow: 0 0 20px #000000;
 	box-shadow: 0 0 20px #000000;
+}
+.error{
+	color: red;
+	font-weight: bold;
 }
 
 .fade-content{
@@ -453,6 +458,9 @@ div.courantArchiefJaar{
 	width: 100px;
 	float: left;
 }
+#courantIframe{
+	width: 700px; height: 700px; border: 0;
+}
 
 /* Streeplijstgenereertool */
 form#streeplijst fieldset{ padding: 10px;  }
@@ -593,6 +601,12 @@ input, textarea, select{
 }
 .Formulier .UploadOptie{
 	min-height: 2em;
+}
+.Formulier .BestandBehoudenNaam{
+	height: 2em;
+}
+.Formulier .VerwijderVanFtpCheckbox{
+	vertical-align: middle;
 }
 .Formulier .UploadKeuze{
 	margin-left: 150px;
@@ -842,7 +856,8 @@ span#modsluiten{
 	float: right;
 	margin: 0; padding: 0;
 	font-weight: bold; font-size: 14px;
-	text-align: center;	vertical-align: middle;
+	text-align: center;
+	vertical-align: middle;
 	color: black;
 	cursor: pointer;
 	border: 1px solid #fff;
@@ -967,6 +982,13 @@ div.forumdeel-omschrijving{
 	margin: 10px 0;;
 	background-color: #F5F5F5;
     border: 1px solid #B8B8B8;
+}
+#forumBewerkBericht{
+	width: 100%;
+	height: 250px;
+}
+#forumBewerkReden{
+	width: 250px;
 }
 
 div.bewerkt{ font-size: 9px; color: #bbb; }

@@ -22,13 +22,13 @@ preload([
 ]);
 
 $(document).ready(function () {
+	undo_inline_css();
 	zijbalk_dynamisch();
 	init_key_pressed();
 	init_dropzone();
 	init();
 });
 
-var undo_inline_css_once = true;
 function init() {
 	init_links();
 	init_buttons();
@@ -36,14 +36,10 @@ function init() {
 	init_timeago();
 	init_hoverIntents();
 	init_lazy_images();
-	if (undo_inline_css_once) { // do it only once to fix screw-ups
-		undo_inline_css_once = false;
-		undo_inline_css();
-	}
 }
 
 function undo_inline_css() {
-	$('#main *').removeAttr('style width border cellSpacing cellPadding'); // etc
+	$('#mainright *').removeAttr('style width border cellSpacing cellPadding');
 }
 
 function init_dropzone() {
@@ -198,14 +194,14 @@ function zijbalk_dynamisch() {
 			hidescroll();
 		}
 	});
-
-	var is_chrome = navigator.userAgent.toLowerCase().indexOf('chrome') > -1;
-	if (is_chrome) {
-		$(window).scroll(function () {
-			elmnt.css('top', $(window).scrollTop());
-		});
-		window.setTimeout(onResize, 100);
-	}
+	/*
+	 var is_chrome = navigator.userAgent.toLowerCase().indexOf('chrome') > -1;
+	 if (is_chrome) {
+	 $(window).scroll(function () {
+	 elmnt.css('top', $(window).scrollTop());
+	 });
+	 window.setTimeout(onResize, 100);
+	 }*/
 }
 
 function page_reload() {
@@ -590,7 +586,7 @@ function ketzer_ajax(url, ketzer) {
 		});
 	});
 	jqXHR.fail(function (jqXHR, textStatus, errorThrown) {
-		$(ketzer + ' .aanmelddata').html('<span style="color: red; font-weight: bold;">Error: </span>' + errorThrown);
+		$(ketzer + ' .aanmelddata').html('<span class="error">Error: </span>' + errorThrown);
 		alert(errorThrown);
 	});
 	return true;

@@ -144,9 +144,9 @@ jQuery(document).ready(function($) {
 			return rows;
 		},
 		formatItem: function(row, i, n) {
-			var item = '<span style="display:block" title="titel: '+row.title+"\nAuteur: "+getAuteur(row)+"\nPagina's: "+row.pageCount+"\nTaal: "+getLanguage(row)+"\nISBN: "+getIsbn(row)+"\nUitgeverij: "+row.publisher+"\nUitgavejaar: "+getPublishedDate(row)+'">';
+			var item = '<div title="titel: '+row.title+"\nAuteur: "+getAuteur(row)+"\nPagina's: "+row.pageCount+"\nTaal: "+getLanguage(row)+"\nISBN: "+getIsbn(row)+"\nUitgeverij: "+row.publisher+"\nUitgavejaar: "+getPublishedDate(row)+'">';
 			item 	+= row.title+'<br /><i>'+getAuteur(row)+'</i>';
-			item 	+= '</span>'
+			item 	+= '</div>'
 			return item;
 		},
 		formatResult: function(row) {

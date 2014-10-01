@@ -87,7 +87,7 @@ class AgendaItemForm extends ModalForm {
 		$fields['titel']->suggestions = array('Kring', 'Lezing', 'Werkgroep', 'Eetplan', 'Borrel', 'Alpha-avond');
 		$fields['datum'] = new DatumField('datum', date('Y-m-d', $item->getBeginMoment()), 'Datum', date('Y') + 5, date('Y') - 5);
 
-		$html = '<div id="tijden" class="InputField" style="line-height: 2em;"><label>Standaard tijden</label>';
+		$html = '<div id="tijden" class="InputField"><label>Standaard tijden</label>';
 		$tijden = explode(',', Instellingen::get('agenda', 'standaard_tijden'));
 		$aantal = count($tijden) / 2;
 		for ($i = 0; $i < $aantal; $i++) {

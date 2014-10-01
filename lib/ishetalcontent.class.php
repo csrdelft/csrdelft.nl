@@ -124,7 +124,7 @@ class IsHetAlContent implements View {
 				echo 'Is er een ' . $this->model . ' vanavond?';
 				break;
 			case 'happie':
-				echo 'Is <a href="http://www.facebook.com/HappieDelft" style="text-decoration: underline;">Happietaria</a> al geopend?';
+				echo 'Is <a href="http://www.facebook.com/HappieDelft" class="understreept">Happietaria</a> al geopend?';
 				break;
 			case 'wist u dat':
 				$wistudat = array_rand(self::$wistudat);

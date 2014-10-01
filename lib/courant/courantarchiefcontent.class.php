@@ -70,11 +70,8 @@ class CourantarchiefContent implements View {
 			echo $this->getArchiefmails();
 		} else {
 			echo '<h1>C.S.R.-courant ' . $this->getVerzendMoment() . '</h1>';
-			echo '<iframe src="/actueel/courant/archief/iframe/' . $this->courant->getID() . '"
-					style="width: 700px; height: 700px; border: 0;"></iframe>';
+			echo '<iframe src="/actueel/courant/archief/iframe/' . $this->courant->getID() . '" id="courantIframe"></iframe>';
 		}
 	}
 
 }
-
-//einde classe

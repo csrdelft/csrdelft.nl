@@ -272,12 +272,11 @@ class BestandBehouden extends BestandUploader {
 	}
 
 	public function getLabel() {
-		$label = '<input type="radio" class="UploadOptie" name="' . $this->setName . '" id="' . $this->name . 'Optie" value="BestandBehouden"';
+		$label = '<input type="radio" name="' . $this->setName . '" id="' . $this->name . 'Optie" value="BestandBehouden" class="UploadOptie';
 		if ($this->selected) {
-			$label .= ' checked="checked"';
-			$label .= ' style="visibility: hidden;"';
+			$label .= ' onzichtbaar" checked="checked';
 		}
-		$label .= ' /><label for="' . $this->name . 'Optie">Huidig bestand behouden</label>';
+		$label .= '" /><label for="' . $this->name . 'Optie">Huidig bestand behouden</label>';
 		return $label;
 	}
 
@@ -287,7 +286,7 @@ class BestandBehouden extends BestandUploader {
 		if (!$this->selected) {
 			echo ' verborgen';
 		}
-		echo '" id="' . $this->name . 'Keuze"><div id="' . $this->name . '" style="height: 2em;">';
+		echo '" id="' . $this->name . 'Keuze"><div id="' . $this->name . '" class="BestandBehoudenNaam">';
 		echo $this->model->filename . ' (' . format_filesize($this->model->filesize) . ')';
 		echo '</div></div></div>';
 	}
@@ -354,12 +353,11 @@ class UploadHttp extends BestandUploader {
 	}
 
 	public function getLabel() {
-		$label = '<input type="radio" class="UploadOptie" name="' . $this->setName . '" id="' . $this->name . 'Optie" value="UploadHttp"';
+		$label = '<input type="radio" name="' . $this->setName . '" id="' . $this->name . 'Optie" value="UploadHttp" class="UploadOptie';
 		if ($this->selected) {
-			$label .= ' checked="checked"';
-			$label .= ' style="visibility: hidden;"';
+			$label .= ' onzichtbaar" checked="checked';
 		}
-		return $label . ' /><label for="' . $this->name . 'Optie"> Uploaden in browser</label>';
+		return $label . '" /><label for="' . $this->name . 'Optie"> Uploaden in browser</label>';
 	}
 
 	public function view() {
@@ -475,12 +473,11 @@ class UploadFtp extends BestandUploader {
 	}
 
 	public function getLabel() {
-		$label = '<input type="radio" class="UploadOptie" name="' . $this->setName . '" id="' . $this->name . 'Optie" value="UploadFtp"';
+		$label = '<input type="radio" name="' . $this->setName . '" id="' . $this->name . 'Optie" value="UploadFtp" class="UploadOptie';
 		if ($this->selected) {
-			$label .= ' checked="checked"';
-			$label .= ' style="visibility: hidden;"';
+			$label .= ' onzichtbaar" checked="checked';
 		}
-		return $label . ' /><label for="' . $this->name . 'Optie"> Uit publieke FTP-map</label>';
+		return $label . '" /><label for="' . $this->name . 'Optie"> Uit publieke FTP-map</label>';
 	}
 
 	public function view() {
@@ -499,7 +496,7 @@ class UploadFtp extends BestandUploader {
 				}
 				echo '>' . htmlspecialchars($filename) . '</option>';
 			}
-			echo '</select><br /><input type="checkbox" name="' . $this->name . 'VerwijderVanFtp" id="' . $this->name . 'VerwijderVanFtp" style="vertical-align: middle;"';
+			echo '</select><br /><input type="checkbox" name="' . $this->name . 'VerwijderVanFtp" id="' . $this->name . 'VerwijderVanFtp" class="VerwijderVanFtpCheckbox"';
 			if (!$this->isPosted() OR isset($_POST[$this->name . 'VerwijderVanFtp'])) {
 				echo ' checked="checked"';
 			}
@@ -604,12 +601,11 @@ class UploadUrl extends BestandUploader {
 	}
 
 	public function getLabel() {
-		$label = '<input type="radio" class="UploadOptie" name="' . $this->setName . '" id="' . $this->name . 'Optie" value="UploadUrl"';
+		$label = '<input type="radio" name="' . $this->setName . '" id="' . $this->name . 'Optie" value="UploadUrl" class="UploadOptie';
 		if ($this->selected) {
-			$label .= ' checked="checked"';
-			$label .= ' style="visibility: hidden;"';
+			$label .= ' onzichtbaar" checked="checked';
 		}
-		return $label . ' /><label for="' . $this->name . 'Optie"> Downloaden van URL</label>';
+		return $label . '" /><label for="' . $this->name . 'Optie"> Downloaden van URL</label>';
 	}
 
 	public function view() {

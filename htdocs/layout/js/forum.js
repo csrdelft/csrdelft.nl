@@ -110,8 +110,8 @@ function forumBewerken(postId) {
 			bewerkForm = '<form id="forumEditForm" class="Formulier InlineForm" action="/forum/bewerken/' + postId + '" method="post">';
 			bewerkForm += '<h3>Bericht bewerken</h3>Als u dingen aanpast zet er dan even bij w&aacute;t u aanpast! Gebruik bijvoorbeeld [s]...[/s]<br />';
 			bewerkForm += '<div id="bewerkPreview" class="preview forumBericht"></div>';
-			bewerkForm += '<textarea name="forumBericht" id="forumBewerkBericht" class="tekst" rows="8" style="width: 100%;"></textarea>';
-			bewerkForm += 'Reden van bewerking: <input type="text" name="reden" style="width: 250px;"/><br /><br />';
+			bewerkForm += '<textarea name="forumBericht" id="forumBewerkBericht" class="tekst" rows="8"></textarea>';
+			bewerkForm += 'Reden van bewerking: <input type="text" name="reden" id="forumBewerkReden"/><br /><br />';
 			bewerkForm += '<a class="knop float-right" onclick="$(\'#ubbhulpverhaal\').toggle();" title="Opmaakhulp weergeven">Opmaak</a>';
 			bewerkForm += '<a class="knop float-right" onclick="vergrootTextarea(\'forumBewerkBericht\', 10)" title="Vergroot het invoerveld"><div class="arrows">&uarr;&darr;</div>&nbsp;&nbsp;&nbsp;&nbsp;</a>';
 			bewerkForm += '<input type="button" value="Opslaan" onclick="submitPost();" /> ' +
