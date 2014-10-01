@@ -114,7 +114,7 @@ Menu voor ingelogde gebruikers
 #cd-ingelogd-menu-trigger .cd-ingelogd-menu-text {
 	padding: 0 1.25em;
 	color: #ffffff;
-	font-weight: 600;
+	font-weight: bold;
 	cursor: pointer;
 }
 #cd-ingelogd-menu-trigger.ingelogd-menu-is-open  .cd-ingelogd-menu-text {
@@ -152,7 +152,7 @@ Top navigation
 #cd-top-nav a {
 	display: block;
 	padding: 0 1.25em;
-	font-weight: 600;
+	font-weight: bold;
 	color: #ffffff;
 }
 #cd-top-nav a:hover {
@@ -173,7 +173,7 @@ Top navigation
 #cd-lateral-menu-trigger .cd-lateral-menu-text, #cd-ingelogd-menu-trigger .cd-ingelogd-menu-text {
 	display: inline-block;
 	color: #ffffff;
-	font-weight: 600;
+	font-weight: bold;
 }
 #cd-lateral-menu-trigger .cd-lateral-menu-icon {
 	/* this span is the central line in the menu menu */
@@ -306,7 +306,7 @@ Lateral navigation
 /* style menu items which have a submenu  */
 #cd-lateral-nav .item-has-children > a {
 	position: relative;
-	font-weight: 600;
+	font-weight: bold;
 	/* this is the right arrow to show that the item has a submenu  */
 }
 #cd-lateral-nav .item-has-children > a::after {
