@@ -38,7 +38,7 @@ class LidInstellingen extends PersistenceModel {
 			'bijbel' => array('Bijbelvertaling', T::Enumeration, array('NBV', 'NBG', 'Herziene Statenvertaling', 'Statenvertaling (Jongbloed)', 'Groot Nieuws Bijbel', 'Willibrordvertaling'), 'NBV')
 		),
 		'layout'		 => array(
-			'toegankelijk'	 => array('Leesbaarheid', T::Enumeration, array('standaard', 'bredere letters', 'hoog contrast'), 'standaard'),
+			'toegankelijk'	 => array('Leesbaarheid', T::Enumeration, array('standaard', 'bredere letters'), 'standaard'),
 			'opmaak'		 => array('Opmaak', T::Enumeration, array('normaal', 'owee', 'lustrum', 'sineregno', 'roze'), 'normaal'),
 			'zijbalk'		 => array('Zijbalk', T::Enumeration, array('meescrollen', 'fixeer', 'verberg'), 'fixeer'),
 			'visitekaartjes' => array('Visitekaartjes', T::Enumeration, array('ja', 'nee'), 'ja'),
