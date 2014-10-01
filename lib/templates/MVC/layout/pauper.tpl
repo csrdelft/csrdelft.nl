@@ -10,7 +10,7 @@
 				<a href="#mainmenu">Menu</a>
 			</div>
 			<a href="/pauper/terug">Naar normale webstek</a>
-			<div style="float: right;">
+			<div class="float-right">
 				<span class="waarschuwing">{LoginModel::instance()->getError()}</span>
 				{if LoginModel::mag('P_LOGGED_IN')}
 					<a href="/logout">Uitloggen</a>

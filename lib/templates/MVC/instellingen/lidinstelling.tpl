@@ -6,8 +6,7 @@
 		{if $reset}
 			<img src="{$CSR_PICS}/famfamfam/arrow_rotate_anticlockwise.png" title="U gaat nu deze instelling voor iedereen resetten naar de standaard waarde. (Die moet in de code worden aangepast.)" onclick="if (confirm(this.title + '\n\nWeet u het zeker?')) {
 				location.href = '/instellingen/reset/{$module}/{$id}/' + $('#inst_{$module}_{$id}').val();
-			}
-			;" style="cursor: pointer; border: 1px solid #999;" />&nbsp;&nbsp;
+			}" style="cursor: pointer; border: 1px solid #999;" />&nbsp;&nbsp;
 		{/if}
 		{$label}
 	</label>

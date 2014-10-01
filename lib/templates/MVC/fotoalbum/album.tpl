@@ -1,4 +1,4 @@
-<div style="float: right; margin: 0 0 10px 10px;">
+<div class="float-right">
 	{if LoginModel::mag('P_ALBUM_ADD')}
 		<a class="knop" href="/fotoalbum/uploaden/{$album->getSubDir()}">{icon get="picture_add"} Toevoegen</a>
 		<a class="knop post modal" href="/fotoalbum/toevoegen/{$album->getSubDir()}">{icon get="folder_add"} Nieuw album</a>

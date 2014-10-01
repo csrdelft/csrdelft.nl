@@ -61,12 +61,12 @@
 		<strong>Bericht:</strong><br />
 		<div id="bewerkPreview" class="preview"></div>
 		<textarea name="bericht" id="courantBericht" cols="80" style="width: 100%;" rows="15" class="tekst">{$form.bericht|escape:'html'}</textarea>
-		<a style="float: right;" class="knop" onclick="$('#ubbhulpverhaal').toggle();" title="Opmaakhulp weergeven">Opmaak</a>
-		<a style="float: right; margin-right: 3px;" class="knop" onclick="vergrootTextarea('courantBericht', 10)" title="Vergroot het invoerveld"><div class="arrows">&uarr;&darr;</div>&nbsp;&nbsp;&nbsp;</a>
+		<a class="knop float-right" onclick="$('#ubbhulpverhaal').toggle();" title="Opmaakhulp weergeven">Opmaak</a>
+		<a class="knop float-right" onclick="vergrootTextarea('courantBericht', 10)" title="Vergroot het invoerveld"><div class="arrows">&uarr;&darr;</div>&nbsp;&nbsp;&nbsp;&nbsp;</a>
 		<input type="submit" name="verzenden" value="Opslaan" class="tekst" /> 
 		<input type="button" value="Voorbeeld" onclick="ubbPreview('courantBericht', 'bewerkPreview');" />
 		{if $courant->magBeheren()}
-			&nbsp;&nbsp;<input type="button" value="Importeer agenda" onclick="importAgenda('courantBericht');" />
+			<input type="button" value="Importeer agenda" onclick="importAgenda('courantBericht');" />
 		{/if}
 	</div>
 </form>

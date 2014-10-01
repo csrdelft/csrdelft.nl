@@ -73,7 +73,7 @@
 		<tr>
 			<td colspan="4">
 				<div class="forumdeel-omschrijving">
-					<div style="float: right;">{$smarty.capture.navlinks}</div>
+					<div class="float-right">{$smarty.capture.navlinks}</div>
 					<h1>{$deel->titel}</h1>
 					{$deel->omschrijving}
 				</div>

@@ -2,7 +2,7 @@
 	menu_tree.tpl	|	P.W.G. Brussee (brussee@live.nl)
 *}
 {SimpleHtml::getMelding()}
-<div style="float: right;">
+<div class="float-right">
 	<div style="display: inline-block;"><label for="toon">Toon menu:</label>
 	</div><select name="toon" onchange="location.href = '/menubeheer/beheer/' + this.value;">
 		<option selected="selected">kies</option>

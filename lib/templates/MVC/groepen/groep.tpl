@@ -16,7 +16,7 @@
 			</div>
 		{/if}
 	</div>
-	<div style="float: right;">
+	<div class="float-right">
 		<ul class="tabs nobullets">
 			<li>
 				<a class="knop get{if $tab === GroepTab::Lijst} active{/if}" href="{Instellingen::get('groepen', 'url')}/{$groep->id}/{GroepTab::Lijst}" title="Lijst en opmerking tonen">

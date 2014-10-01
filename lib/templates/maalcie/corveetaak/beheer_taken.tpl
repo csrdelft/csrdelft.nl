@@ -33,7 +33,7 @@
 {/if}
 <br />
 
-<div style="float: right;">
+<div class="float-right">
 	{*if !$prullenbak and !isset($maaltijd)}
 		<a href="/corveebeheer/indelen" title="Leden automatisch indelen voor taken" class="knop">{icon get="date"} Automatisch indelen</a>
 		<a href="/corveebeheer/herinneren" title="Verstuur herinneringen" class="knop">{icon get="clock"} Herinneringen versturen</a>

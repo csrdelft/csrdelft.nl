@@ -32,13 +32,13 @@
 	</td>
 	<td>
 {if !$maaltijd->getIsVerwijderd() and $maaltijd->getArchief() === null}
-		<div style="float: right;">
+		<div class="float-right">
 			<a href="{Instellingen::get('taken', 'url')}/anderaanmelden/{$maaltijd->getMaaltijdId()}" title="Aanmelding toevoegen" class="knop post modal">{icon get="user_add"}</a>
 			<a href="{Instellingen::get('taken', 'url')}/anderafmelden/{$maaltijd->getMaaltijdId()}" title="Aanmelding verwijderen" class="knop post modal">{icon get="user_delete"}</a>
 		</div>
 {/if}
 {if $maaltijd->getAanmeldFilter()}
-		<div style="float: right;">
+		<div class="float-right">
 			&nbsp;{icon get="group_key" title="Aanmeldfilter actief:&#013;"|cat:$maaltijd->getAanmeldFilter()}&nbsp;
 		</div>
 {/if}
@@ -46,7 +46,7 @@
 {if $maaltijd->getIsVerwijderd() or $maaltijd->getArchief() !== null}
 	{if $maaltijd->getIsGesloten()}
 	<td class="maaltijd-gesloten">Gesloten
-		<div style="float: right;">
+		<div class="float-right">
 			{icon get="lock" title="Laatst gesloten: "|cat:$maaltijd->getLaatstGesloten()}
 		</div>
 	{else}

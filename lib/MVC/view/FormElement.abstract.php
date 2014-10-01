@@ -993,7 +993,7 @@ class UbbPreviewField extends TextareaField {
 
 	public function getPreviewDiv() {
 		return <<<HTML
-<div style="float: right;">
+<div class="float-right">
 	<input type="button" value="Voorbeeld" onclick="ubbPreview('{$this->getId()}', '{$this->getName()}Preview');"/>
 	&nbsp;<a class="knop" onclick="$('#ubbhulpverhaal').toggle();" title="Opmaakhulp weergeven">Opmaak</a>
 </div>

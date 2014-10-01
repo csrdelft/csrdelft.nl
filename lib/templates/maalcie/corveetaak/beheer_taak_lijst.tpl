@@ -27,7 +27,7 @@
 	{if $taak->getUid()}
 		{$aantal}x
 	{/if}
-	<div style="float: right;">
+	<div class="float-right">
 	{if $taak->getUid()}
 		<a href="{Instellingen::get('taken', 'url')}/email/{$taak->getTaakId()}" title="Verstuur een (extra) herinnering voor deze taak" class="knop post confirm">
 	{/if}
@@ -76,7 +76,7 @@
 	{$taak->getBonusMalus()}
 {/if}
 {if isset($wijzigbaar) and $taak->getUid()}
-		<div style="float: right;">
+		<div class="float-right">
 	{if $taak->getWanneerToegekend()}
 		<a href="{Instellingen::get('taken', 'url')}/puntenintrekken/{$taak->getTaakId()}" title="Punten intrekken" class="knop post">{icon get="medal_silver_delete"}</a>
 	{else}

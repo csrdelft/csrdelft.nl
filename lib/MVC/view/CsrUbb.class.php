@@ -73,25 +73,22 @@ class CsrUbb extends eamBBParser {
 
 	function ubb_img($arguments = array()) {
 		$style = '';
+		$class = '';
 		if (isset($arguments['float'])) {
 			switch ($arguments['float']) {
 				case 'left':
-					$style.='float: left; margin: 0 10px 10px 0; ';
+					$class = 'float-left';
 					break;
 				case 'right':
-					$style.='float: right; margin: 0 0 10px 10px; ';
+					$class = 'float-right';
 					break;
 			}
 		}
 		if (isset($arguments['w']) AND $arguments['w'] > 10) {
-			$style .= 'width: ' . ((int) $arguments['w']) . 'px; ';
+			$style = 'width: ' . ((int) $arguments['w']) . 'px;';
 		}
 		if (isset($arguments['h']) AND $arguments['h'] > 10) {
-			$style .= 'height: ' . ((int) $arguments['h']) . 'px; ';
-		}
-		$class = '';
-		if (isset($arguments['class'])) {
-			$class = ' ' . htmlspecialchars($arguments['class']);
+			$style = 'height: ' . ((int) $arguments['h']) . 'px;';
 		}
 		$content = $this->parseArray(array('[/img]', '[/IMG]'), array());
 		// only valid patterns & prevent CSRF
