@@ -153,27 +153,28 @@ function zijbalk_dynamisch() {
 
 	// synchronize position with window
 	$(window).scroll(function () {
-		var top = elmnt.parent().offset().top - $(window).scrollTop();
+		var top = $(window).scrollTop();
 		var left = elmnt.parent().offset().left - $(window).scrollLeft();
-		if (top <= 0) {
-			top = 0;
-		}
 		elmnt.css({
 			'top': top,
 			'left': left
 		});
 	});
 	var showscroll = function () {
-		elmnt.css({
-			'overflow-y': 'auto'/*,
-			 'padding-right': getPadding()*/
-		});
+		if (elmnt.hasClass('scroll-fixed')) {
+			elmnt.css({
+				'overflow-y': 'auto'/*,
+				 'padding-right': getPadding()*/
+			});
+		}
 	};
 	var hidescroll = function () {
-		elmnt.css({
-			'overflow-y': ''/*,
-			 'padding-right': ''*/
-		});
+		if (elmnt.hasClass('scroll-fixed')) {
+			elmnt.css({
+				'overflow-y': ''/*,
+				 'padding-right': ''*/
+			});
+		}
 	};
 	var expand = function () {
 		if (elmnt.width() < origWidth) {
@@ -193,17 +194,15 @@ function zijbalk_dynamisch() {
 		}
 	};
 	elmnt.hoverIntent(expand, collapse);
-	if (elmnt.hasClass('scroll-fixed')) {
-		elmnt.hover(function () {
-			if (elmnt.width() >= origWidth) {
-				showscroll();
-			}
-		}, function () {
-			if (elmnt.width() <= elmnt.parent().width()) {
-				hidescroll();
-			}
-		});
-	}
+	elmnt.hover(function () {
+		if (elmnt.width() >= origWidth) {
+			showscroll();
+		}
+	}, function () {
+		if (elmnt.width() <= elmnt.parent().width()) {
+			hidescroll();
+		}
+	});
 	var resetWidth = function () {
 		elmnt.width(elmnt.parent().width());
 	};
@@ -225,22 +224,13 @@ function zijbalk_dynamisch() {
 		$(window).scroll(alignQuickNav);
 	}
 	$(window).resize(function () {
+		elmnt.css('max-height', window.innerHeight);
 		resetWidth();
 		$(window).trigger('scroll');
 	});
 	$(window).trigger('resize');
 	// set delay for adblockers that remove ads so wide they influence page width (very annoying)
 	window.setTimeout(resetWidth, 400);
-}
-
-function zijbalk_modified() {
-	// reset container height
-	var elmnt = $('#zijbalk');
-	if (elmnt.hasClass('scroll-fixed')) {
-		elmnt.parent().height(elmnt.height());
-	}
-	// align quick nav
-	$(window).trigger('scroll');
 }
 
 function page_reload() {
