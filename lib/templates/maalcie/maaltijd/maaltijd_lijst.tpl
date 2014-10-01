@@ -29,7 +29,7 @@
 								{foreach from=$tabel item="aanmelding"}
 									<tr>
 										{if $aanmelding->getUid()}
-											<td>{Lid::naamLink($aanmelding->getUid(), Instellingen::get('maaltijden', 'weergave_ledennamen_maaltijdlijst'), Instellingen::get('maaltijden', 'weergave_link_ledennamen'))}
+											<td>{Lid::naamLink($aanmelding->getUid(), Instellingen::get('maaltijden', 'weergave_ledennamen_maaltijdlijst'), Instellingen::get('maaltijden', 'weergave_link_ledennamen'))}<br />
 												{assign var=eetwens value=LidCache::getLid($aanmelding->getUid())->getProperty('eetwens')}
 												{if $eetwens !== ''}
 													<span class="eetwens">
