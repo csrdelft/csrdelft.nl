@@ -1,4 +1,3 @@
-
 .thumb{
 	width: 150px;
 	height: 150px;
@@ -6,7 +5,6 @@
 	margin: 10px;
 	float: left;
 }
-
 .album{
 	width: 150px;
 	height: 150px;
@@ -19,12 +17,10 @@
 	position: relative;
 	cursor: pointer;
 }
-
 .album:hover{
 	text-decoration: none;
 	border-color: #aaaaaa;
 }
-
 .album .albumname{
 	position: absolute;
 	top: 90px;
@@ -35,11 +31,12 @@
 	background-color: white;
 	opacity: 0.8;
 }
-
 .album:hover .albumname{
 	opacity: 0.9;
 }
-
 #fullsizeLink{
 	float: right;
+}
+.thumb-mod{
+	position: relative;
 }
