@@ -11,6 +11,7 @@
 #mainright{
 	max-width: 1004px;
 	padding: 50px;
+	line-height: 1.25em;
 }
 .dragobject{
 	position: fixed;
@@ -451,12 +452,12 @@ div.courantArchiefJaar{
 /* Streeplijstgenereertool */
 form#streeplijst fieldset{ padding: 10px;  }
 form#streeplijst fieldset legend{ font-weight: bold; }
-form#streeplijst input, form#streeplijst label{ text-align: left; margin: 3px; padding: 0; line-height: 1em; }
+form#streeplijst input, form#streeplijst label{ text-align: left; margin: 3px; padding: 0; }
 
 
 #eetplanLETOP{
-	color: darkred; font-size: 1.8em;
-	line-height: 1.1em;
+	color: darkred;
+	font-size: 1.8em;
 	padding: 10px; font-weight: bold;
 	text-align: justify; display: block;
 	border: 1px solid #000; background-color: lightgrey;
