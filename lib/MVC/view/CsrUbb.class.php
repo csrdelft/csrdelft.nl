@@ -944,7 +944,6 @@ HTML;
 	 */
 	public function ubb_slideshow($arguments = array()) {
 		$content = $this->parseArray(array('[/slideshow]'), array());
-
 		$slides_tainted = explode('[br]', $content);
 		$slides = array();
 		foreach ($slides_tainted as $slide) {
@@ -953,13 +952,11 @@ HTML;
 				$slides[] = $slide;
 			}
 		}
-
 		if (count($slides) == 0) {
 			$content = '[slideshow]: geen geldige afbeeldingen gegeven';
 		} else {
 			$content = '
 				<div class="image_reel">';
-
 			foreach ($slides as $slide) {
 				$content .= '<img src="' . $slide . '" alt="slide" />' . "\n";
 			}
@@ -968,15 +965,13 @@ HTML;
 			for ($i = 1; $i <= count($slides); $i++) {
 				$content .= '<a href="#" rel="' . $i . '">&bull;</a>' . "\n";
 			}
-
 			$content .= '</div>' . "\n"; //end paging
 			if ($this->slideshowJsIncluded === false) {
 				$content .= '<script type="text/javascript" src="/layout/js/ubb_slideshow.js"></script>';
 				$this->slideshowJsIncluded = true;
 			}
 		}
-
-		return '<div class="ubb_slideshow" ' . $style . '>' . $content . '</div>';
+		return '<div class="ubb_slideshow">' . $content . '</div>';
 	}
 
 	/**
