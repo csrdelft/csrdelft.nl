@@ -19,7 +19,7 @@
 						</td>
 					{/if}
 					<td id="mainright">
-						<br /><br /><br />
+						<br /><br /><br /><br />
 						{*$datatable->view()*}
 						{$body->view()}
 						{if isset($debug)}

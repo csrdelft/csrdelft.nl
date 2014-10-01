@@ -192,9 +192,7 @@ function zijbalk_dynamisch() {
 			}, 400);
 		}
 	};
-	if ($('#main').width() < 860) {
-		elmnt.hoverIntent(expand, collapse);
-	}
+	elmnt.hoverIntent(expand, collapse);
 	if (elmnt.hasClass('scroll-fixed')) {
 		elmnt.hover(function () {
 			if (elmnt.width() >= origWidth) {

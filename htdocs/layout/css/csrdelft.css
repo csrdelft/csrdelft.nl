@@ -5,8 +5,8 @@
 	font-size: 12px;
 }
 #mainleft{
-	width: 200px;
-	background-color: #ffffff;
+	width: 210px;
+	background-color: #ffffff; /* #f5f5f5 */
 }
 #mainright{
 	max-width: 1004px;
@@ -146,7 +146,7 @@ ul.nobullets li{ list-style-type: none; }
 /* Zijbalk */
 #zijbalk{
 	z-index: 50;
-	width: 200px;
+	width: 210px;
 	min-width: 10px;
 	overflow: hidden;
 	background-color: inherit;
@@ -184,7 +184,7 @@ ul.nobullets li{ list-style-type: none; }
 div.ishetal{
 	text-align: center;
 	width: 180px;
-	margin: 20px 20px 10px 0;
+	margin: 0 20px 20px 0;
 }
 div.ishetal div.ja, div.ishetal div.nee{
 	font-size: 16px;

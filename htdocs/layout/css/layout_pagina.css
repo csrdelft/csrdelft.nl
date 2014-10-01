@@ -95,12 +95,13 @@ header.lateral-menu-is-open {
 
 #cd-logo {
 	display: block;
-	float: left;
+	margin: 0 auto;
 }
 #cd-logo #beeldmerk {
-	width: 120px;
-	height: 150px;
+	width: 150px;
+	height: 200px;
 	margin: 10px 30px;
+	background-size: cover;
 }
 
 /* -------------------------------- 
