@@ -154,6 +154,7 @@ function zijbalk_dynamisch() {
 	});
 	var origWidth = elmnt.width();
 	onResize();
+	elmnt.scrollTop(elmnt.attr('scrollfix'));
 
 	var showscroll = function () {
 		if (elmnt.hasClass('scroll-fixed')) {
@@ -198,10 +199,23 @@ function zijbalk_dynamisch() {
 	var is_chrome = navigator.userAgent.toLowerCase().indexOf('chrome') > -1;
 	if (is_chrome) {
 		$(window).scroll(function () {
-			elmnt.css('top', $(window).scrollTop());
+			elmnt.css({
+				'top': $(window).scrollTop()
+			});
+		});
+		var saveCoords = function () {
+			$.post('/tools/dragobject.php', {
+				id: 'zijbalk',
+				coords: {
+					top: elmnt.scrollTop(),
+					left: elmnt.scrollLeft()
+				}
+			}, alert);
+		};
+		$(window).unload(function () {
+			saveCoords();
 		});
 	}
-	elmnt.scrollTop(elmnt.attr('scrollfix'));
 }
 
 function page_reload() {
