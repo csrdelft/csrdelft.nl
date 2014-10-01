@@ -6,11 +6,11 @@
 }
 #mainleft{
 	width: 210px;
-	background-color: #ffffff; /* #f5f5f5 */
+	background-color: #f5f5f5;
 }
 #mainright{
 	max-width: 1004px;
-	padding: 10px;
+	padding: 50px;
 }
 .dragobject{
 	position: fixed;
@@ -47,7 +47,7 @@ h1{
 	font-family: Verdana,Geneva,Arial,Helvetica,sans-serif;
 	font-weight: bold;
     font-size: 1.5em;
-	margin-bottom: 20px;
+	margin: 20px 0;
 }
 p{
 	margin-bottom: 1em;
@@ -56,12 +56,14 @@ p{
 abbr.timeago{ border: none; }
 abbr.timeago:hover{ border-bottom: 1px dotted grey; }
 
-a.knop{ text-decoration: none; }
+
+a, a.knop { text-decoration: none; }
 a.external{
 	background-repeat: no-repeat;
 	background-position: center right;
 	padding-right: 14px;
 }
+a:hover { text-decoration: underline; }
 
 th{ text-align: left; }
 td{ vertical-align: top; padding: 0; }
@@ -142,8 +144,9 @@ ul.nobullets li{ list-style-type: none; }
 /* Zijbalk */
 #zijbalk{
 	z-index: 50;
-	width: 210px;
-	min-width: 10px;
+	width: 200px;
+	padding-left: 10px;
+	min-width: 15px;
 	overflow: hidden;
 	background-color: inherit;
 }
@@ -1102,4 +1105,21 @@ div.bijbelrooster{
 .login-form .InputField, .login-form .InputField:hover{
 	border: none;
 	width: 100px;
+}
+
+/* lidinstellingen */
+label.instelling{
+	float: left;
+	clear: left;
+	width: 250px;
+}
+img.vooriedereen{
+	cursor: pointer;
+	border: 1px solid #999;
+}
+input.instString{
+	width: 111px !important;
+}
+input.instInt{
+	width: 33px !important;
 }

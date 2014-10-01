@@ -26,11 +26,6 @@ body {
 	background-color: #ffffff;
 }
 
-a {
-	color: #162673;
-	text-decoration: none;
-}
-
 .scrollpane { overflow: auto; }
 .float-left { float: left; }
 .float-right { float: right; }
@@ -264,7 +259,7 @@ Lateral navigation
 	/* the secondary navigation is covered by the main element */
 	z-index: 1;
 	width: 260px;
-	background-color: #162673;
+	background-color: #0a338d;
 	overflow-y: auto;
 	/* Force Hardware Acceleration in WebKit */
 	-webkit-transform: translateZ(0);

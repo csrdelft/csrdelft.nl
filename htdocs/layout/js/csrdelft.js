@@ -136,8 +136,18 @@ function zijbalk_dynamisch() {
 		return;
 	}
 
+	var scrollbarWidth = getScrollBarWidth();
+	var getPadding = function () {
+		if (elmnt.hasClass('scroll-fixed') && elmnt.get(0).scrollHeight > elmnt.get(0).clientHeight) {
+			return scrollbarWidth;
+		}
+		else {
+			return '';
+		}
+	};
+
 	// synchronize size with container
-	var origWidth = elmnt.width();
+	var origWidth = elmnt.width() + getPadding();
 	elmnt.parent().width(origWidth);
 	elmnt.parent().height(elmnt.height());
 
@@ -153,16 +163,6 @@ function zijbalk_dynamisch() {
 			'left': left
 		});
 	});
-
-	var scrollbarWidth = getScrollBarWidth();
-	var getPadding = function () {
-		if (elmnt.hasClass('scroll-fixed') && elmnt.get(0).scrollHeight > elmnt.get(0).clientHeight) {
-			return scrollbarWidth;
-		}
-		else {
-			return '';
-		}
-	};
 	var showscroll = function () {
 		elmnt.css({
 			'overflow-y': 'auto'/*,
