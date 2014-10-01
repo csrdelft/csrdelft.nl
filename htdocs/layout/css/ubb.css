@@ -146,6 +146,8 @@ a.maaltijd-afgemeld, span.maaltijd-afgemeld{
 .ubb_slideshow {
     overflow: hidden; /*--Hides anything outside of the set width/height--*/
     position: relative;
+	width: 355px;
+	height: 238px;
 }
 .ubb_slideshow .image_reel {
     position: absolute;

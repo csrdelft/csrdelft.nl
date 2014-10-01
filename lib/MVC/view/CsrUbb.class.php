@@ -144,8 +144,12 @@ class CsrUbb extends eamBBParser {
 	protected function ubb_fotoalbum($arguments = array()) {
 		require_once 'MVC/controller/FotoAlbumController.class.php';
 		$url = urldecode($this->parseArray(array('[/fotoalbum]'), array()));
-		$path = PICS_PATH . 'fotoalbum' . $url;
-		$album = FotoAlbumModel::getFotoAlbum($path);
+		if ($url === 'laatste') {
+			$album = FotoAlbumModel::getMostRecentFotoAlbum();
+		} else {
+			$path = PICS_PATH . 'fotoalbum' . $url;
+			$album = FotoAlbumModel::getFotoAlbum($path);
+		}
 		if (!$album) {
 			return '<div class="ubb_block">Fotoalbum niet gevonden: ' . $url . '</div>';
 		}
