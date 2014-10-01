@@ -705,14 +705,18 @@ function importAgenda(id) {
 	});
 }
 
+function preview_werkomheen_chrome() {
+	if (navigator.userAgent.toLowerCase().indexOf('chrome') > -1) {
+		$('#zijbalk').css('top', $(window).scrollTop());
+	}
+}
+
 function ubbPreview(source, dest) {
 	var ubb = document.getElementById(source).value;
 	if (ubb.length !== '') {
 		var previewDiv = document.getElementById(dest);
 		applyUBB(ubb, previewDiv);
 		$(previewDiv).addClass('preview-show');
-		if (navigator.userAgent.toLowerCase().indexOf('chrome') > -1) {
-			$('#zijbalk').css('top', $(window).scrollTop());
-		}
+		window.setTimeout(preview_werkomheen_chrome, 100);
 	}
 }
