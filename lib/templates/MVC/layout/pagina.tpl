@@ -21,20 +21,16 @@
 					<td id="mainright">
 						{*$datatable->view()*}
 						{$body->view()}
+						{if isset($debug)}
+							<h2 id="mysql_debug_toggle"><a href="#mysql_debug_toggle" onclick="$('#mysql_debug').toggle();">Debug Tonen/Verstoppen</a></h2>
+							<div id="mysql_debug">{$debug}</div>
+						{/if}
 						{include file='MVC/layout/ubbhulp.tpl'}
 						{if isset($minion)}
 							{$minion}
 						{/if}
 					</td>
 				</tr>
-				{if isset($debug)}
-					<tr>
-						<td>
-							<h2 id="mysql_debug_toggle"><a href="#mysql_debug_toggle" onclick="$('#mysql_debug').toggle();">Debug Tonen/Verstoppen</a></h2>
-							<div id="mysql_debug">{$debug}</div>
-						</td>
-					</tr>
-				{/if}
 			</table>
 		</main>
 		{$mainmenu->view()}
