@@ -211,6 +211,8 @@ div.ishetal div.ja{
 }
 #zijbalk_quicknav{
 	margin: 5px 0;
+	overflow: hidden;
+	white-space: nowrap;
 }
 #zijbalk_quicknav a{
 	margin: 0 6px;
@@ -348,7 +350,7 @@ table.query_table tbody{
 }
 table.query_table tr{
 	height: 20px;
-	
+
 	background-color: #FAFAFA;
 }
 table.query_table tr:nth-child(odd){
