@@ -204,3 +204,7 @@ a.maaltijd-afgemeld, span.maaltijd-afgemeld{
 .spoiler-content{
 	display:none;	
 }
+
+.citaatpuntjes{
+	cursor: pointer;
+}

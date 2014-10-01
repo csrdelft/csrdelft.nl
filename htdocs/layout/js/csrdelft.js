@@ -708,6 +708,7 @@ function importAgenda(id) {
 function preview_werkomheen_chrome() {
 	if (navigator.userAgent.toLowerCase().indexOf('chrome') > -1) {
 		$('#zijbalk').css('top', $(window).scrollTop());
+		$(window).trigger('resize');
 	}
 }
 

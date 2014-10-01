@@ -256,7 +256,7 @@ class CsrUbb extends eamBBParser {
 			$this->quote_level++;
 			$content = $this->parseArray(array('[/citaat]'), array());
 			$this->quote_level--;
-			$content = '<div onclick="$(this).children(\'.citaatpuntjes\').slideUp();$(this).children(\'.meercitaat\').slideDown();"><div class="meercitaat" style="display:none;">' . $content . '</div><div class="citaatpuntjes" style="cursor:pointer;" title="Toon citaat">...</div></div>';
+			$content = '<div onclick="$(this).children(\'.citaatpuntjes\').slideUp();$(this).children(\'.meercitaat\').slideDown();"><div class="meercitaat verborgen">' . $content . '</div><div class="citaatpuntjes" title="Toon citaat">...</div></div>';
 		}
 		$text = '<div class="citaatContainer"><strong>Citaat';
 		$citaat = '';
