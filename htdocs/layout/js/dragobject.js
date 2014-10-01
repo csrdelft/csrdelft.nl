@@ -40,11 +40,21 @@ function stopDrag(e) {
 	}
 	window.removeEventListener('mousemove', mouseMoveHandler, true);
 	if (dragged) {
+		var dragobject = $('#' + dragobjectID);
+		var top, left;
+		if (dragobject.hasClass('dragvertical') || dragobject.hasClass('draghorizontal')) {
+			top = dragobject.scrollTop();
+			left = dragobject.scrollLeft();
+		}
+		else {
+			top = dragobjTop();
+			left = dragobjLeft();
+		}
 		$.post('/tools/dragobject.php', {
 			id: dragobjectID,
 			coords: {
-				left: dragobjLeft(),
-				top: dragobjTop()
+				top: dragobjTop(),
+				left: dragobjLeft()
 			}
 		});
 		dragged = false;
@@ -62,11 +72,9 @@ function mouseMoveHandler(e) {
 	var dragobject = $('#' + dragobjectID);
 	if (dragobject.hasClass('dragvertical')) {
 		dragobject.scrollTop(dragobject.scrollTop() + oldY - newY);
-		dragged = false;
 	}
 	else if (dragobject.hasClass('draghorizontal')) {
 		dragobject.scrollLeft(dragobject.scrollLeft() + oldX - newX);
-		dragged = false;
 	}
 	else {
 		dragobject.css({

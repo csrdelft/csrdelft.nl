@@ -93,6 +93,12 @@ class CsrLayoutPage extends HtmlPage {
 			} else {
 				$this->zijbalk = SimpleHTML::getStandaardZijbalk();
 			}
+			if (LidInstellingen::get('layout', 'zijbalk') == 'apart scrollen') {
+				$top = 0;
+				$left = 0;
+				DragObjectModel::getCoords('zijbalk', $top, $left);
+				$smarty->assign('scrollfix', $top);
+			}
 		}
 		$smarty->assign('zijbalk', $this->zijbalk);
 

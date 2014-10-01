@@ -195,6 +195,8 @@ function zijbalk_dynamisch() {
 		}
 	});
 
+	elmnt.scrollTop(elmnt.attr('scrollfix'));
+
 	var is_chrome = navigator.userAgent.toLowerCase().indexOf('chrome') > -1;
 	if (is_chrome) {
 		$(window).scroll(function () {
@@ -215,7 +217,8 @@ function init_buttons() {
 		var content = button.next('div.spoiler-content');
 		if (button.html() === 'Toon verklapper') {
 			button.html('Verberg verklapper');
-		} else {
+		}
+		else {
 			button.html('Toon verklapper');
 		}
 		content.toggle(800, 'easeInOutCubic', function (event) {
@@ -381,7 +384,8 @@ function form_replace_action(event) {
 function toggle_vertical_align(elmnt) {
 	if ($(elmnt).css('vertical-align') !== 'top') {
 		$(elmnt).css('vertical-align', 'top');
-	} else {
+	}
+	else {
 		$(elmnt).css('vertical-align', 'bottom');
 	}
 }
