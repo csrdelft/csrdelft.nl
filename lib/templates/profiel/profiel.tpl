@@ -97,7 +97,7 @@
 						</div>
 					</div>
 				{/if}
-				<div style="clear: left;"></div>
+				<div class="clear-left"></div>
 			</div>
 		</div>
 	{/if}
@@ -180,13 +180,13 @@
 					</div>
 				{/if}
 			</div>
-			<div style="clear: left;"></div>
+			<div class="clear-left"></div>
 		</div>
 	</div>
-	<div class="profielregel" id="groepen" style="clear: right;">
+	<div id="groepen" class="profielregel clear-right">
 		<div class="gegevens">
 			{$profhtml.groepen->view()}
-			<div style="clear: left;"></div>
+			<div class="clear-left"></div>
 		</div>
 	</div>
 	{if ($profiel->isLid() OR (LoginModel::mag('P_LEDEN_MOD') AND ($profhtml.soccieSaldo < 0 OR $profhtml.maalcieSaldo < 0))) AND (isset($saldografiek) OR $profhtml.bankrekening!='')}

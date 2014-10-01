@@ -185,7 +185,7 @@ class SavedQueryContent implements View {
 				}
 				$return .= '</tr>';
 			}
-			$return .= '</tbody></table><a class="knop" style="clear:right;" onclick="' . <<<JS
+			$return .= '</tbody></table><a class="knop clear-right" onclick="' . <<<JS
 $('#{$id} tbody').animate({'max-height': '+=300'}, 800, function() {});
 JS;
 			$return .= '" title="Vergroot de lijst"><div class="arrows">&uarr;&darr;</div>&nbsp;&nbsp;&nbsp;&nbsp;</a>';

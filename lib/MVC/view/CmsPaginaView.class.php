@@ -55,7 +55,7 @@ class CmsPaginaForm extends Formulier {
 			$fields[] = new RechtenField('rechten_bewerken', $pagina->rechten_bewerken, 'Rechten bewerken');
 		} else {
 			$fields[] = new HtmlComment('<div><label>Rechten bekijken</label>' . $pagina->rechten_bekijken .
-					'</div><div style="clear:left;"><label>Rechten bewerken</label>' . $pagina->rechten_bewerken . '</div>');
+					'</div><div class="clear-left"><label>Rechten bewerken</label>' . $pagina->rechten_bewerken . '</div>');
 		}
 		$fields[] = new UbbPreviewField('inhoud', $pagina->inhoud, 'Inhoud');
 		$fields['btn'] = new FormButtons('/pagina/' . $pagina->naam, true, true, true, '/pagina/verwijderen/' . $pagina->naam);

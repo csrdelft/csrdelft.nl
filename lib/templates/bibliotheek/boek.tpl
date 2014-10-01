@@ -92,7 +92,7 @@
 			</div>
 		{/if}
 
-		<div style="clear: left;"></div>
+		<div class="clear-left"></div>
 
 
 
@@ -186,7 +186,7 @@
 							{assign var=total_exemplaren_bibliotheek value=$total_exemplaren_bibliotheek+1}
 						{/if}
 					{/foreach}
-					<br /><div style="clear: both;"></div>
+					<br /><div class="clear"></div>
 					<label>&nbsp;</label><a onclick="jQuery(this).parent().parent().children('div.exemplaar.uitgebreid').show(); jQuery(this).parent().remove();">» meer informatie</a>
 				</div>
 			{/if}

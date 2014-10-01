@@ -22,7 +22,7 @@
 		<br />
 		{$body->view()}
 		<br />
-		<div id="paupermenu" style="clear: both;">
+		<div id="paupermenu" class="clear">
 			<br />
 			<a name="mainmenu"><h1>Menu</h1></a>
 			<ul>
