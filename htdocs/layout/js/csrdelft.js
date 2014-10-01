@@ -710,6 +710,6 @@ function ubbPreview(source, dest) {
 	if (ubb.length !== '') {
 		var previewDiv = document.getElementById(dest);
 		applyUBB(ubb, previewDiv);
-		previewDiv.style.display = 'block';
+		$(previewDiv).show();
 	}
 }
