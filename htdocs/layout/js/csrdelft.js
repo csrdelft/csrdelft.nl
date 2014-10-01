@@ -194,14 +194,13 @@ function zijbalk_dynamisch() {
 			hidescroll();
 		}
 	});
-	/*
-	 var is_chrome = navigator.userAgent.toLowerCase().indexOf('chrome') > -1;
-	 if (is_chrome) {
-	 $(window).scroll(function () {
-	 elmnt.css('top', $(window).scrollTop());
-	 });
-	 window.setTimeout(onResize, 100);
-	 }*/
+
+	var is_chrome = navigator.userAgent.toLowerCase().indexOf('chrome') > -1;
+	if (is_chrome) {
+		$(window).scroll(function () {
+			elmnt.css('top', $(window).scrollTop());
+		});
+	}
 }
 
 function page_reload() {
