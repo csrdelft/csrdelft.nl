@@ -50,7 +50,7 @@
 				&nbsp; (&euro; {$maaltijd->getPrijs()|string_format:"%.2f"})
 			{/if}
 			{if $maaltijd->magBekijken(LoginModel::getUid())}
-				<div style="float: right; margin: 15px 10px 0 0;">
+				<div class="float-right">
 					{icon get="paintcan" title=$maaltijd->maaltijdcorvee->getCorveeFunctie()->naam}
 				</div>
 			{/if}

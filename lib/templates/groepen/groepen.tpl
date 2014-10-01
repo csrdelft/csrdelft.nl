@@ -24,8 +24,8 @@
 			<label for="beschrijving"><strong>Beschrijving:</strong><br /><br />UBB staat aan.</label>
 			<textarea id="typeBeschrijving" name="beschrijving" style="width:444px;" rows="15">{$groepen->getBeschrijving()|escape:'html'}</textarea><br />
 			<label for="submit"></label><input type="submit" id="submit" value="Opslaan" /> <input type="button" value="Voorbeeld" onclick="return ubbPreview('typeBeschrijving', 'bewerkPreview')" /> <a href="/actueel/groepen/{$groepen->getNaam()}/" class="knop">Terug</a>
-			<a style="float: right;" class="knop" onclick="$('#ubbhulpverhaal').toggle();" title="Opmaakhulp weergeven">Opmaak</a>
-			<a style="float: right; margin-right: 3px;" class="knop" onclick="vergrootTextarea('typeBeschrijving', 10)" title="Vergroot het invoerveld"><div class="arrows">&uarr;&darr;</div>&nbsp;&nbsp;&nbsp;</a>
+			<a class="knop float-right" onclick="$('#ubbhulpverhaal').toggle();" title="Opmaakhulp weergeven">Opmaak</a>
+			<a class="knop float-right" onclick="vergrootTextarea('typeBeschrijving', 10)" title="Vergroot het invoerveld"><div class="arrows">&uarr;&darr;</div>&nbsp;&nbsp;&nbsp;&nbsp;</a>
 			<hr />
 		</div>
 	</form>
@@ -44,7 +44,7 @@
 	{/if}
 	{if LoginModel::mag('P_ADMIN') AND $action!='edit'}
 		<a class="knop" href="/actueel/groepen/{$groepen->getNaam()}/?bewerken=true">
-			<img src="{$CSR_PICS}/knopjes/bewerken.png" title="Bewerk beschrijving" />
+			<img src="{$CSR_PICS}/famfamfam/pencil.png" title="Bewerk beschrijving" />
 		</a>
 	{/if}
 </div>

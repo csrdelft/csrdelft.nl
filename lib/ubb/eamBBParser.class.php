@@ -141,8 +141,8 @@ class eamBBParser {
 		$this->parseArray = array();
 		// Define aliasses
 		$this->aliassen = array(
-			'*' => 'lishort',
-			'ulist' => 'list'
+			'*'		 => 'lishort',
+			'ulist'	 => 'list'
 		);
 		// Define preParsePatterns
 		$this->preParsePattern = array(
@@ -767,28 +767,6 @@ class eamBBParser {
 	}
 
 	function ubb_img($arguments) {
-		$style = '';
-		if (isset($arguments['float'])) {
-			switch ($arguments['float']) {
-				case 'left':
-					$style.='float: left; margin: 0 10px 10px 0; ';
-					break;
-				case 'right':
-					$style.='float: right; margin: 0 0 10px 10px; ';
-					break;
-			}
-		}
-		if (isset($arguments['w'])) {
-			$style.='width: ' . ((int) $arguments['w']) . 'px; ';
-		}
-		if (isset($arguments['h'])) {
-			$style.='height: ' . ((int) $arguments['h']) . 'px; ';
-		}
-		$class = '';
-		if (isset($arguments['class'])) {
-			$class = ' ' . htmlspecialchars($arguments['class']);
-		}
-
 		$content = $this->parseArray(array('[/img]', '[/IMG]'), array());
 
 		// only valid patterns
@@ -799,7 +777,7 @@ class eamBBParser {
 			if (!$this->allow_html) {
 				$content = htmlspecialchars($content);
 			}
-			$html = '<img class="ubb_img' . $class . '" src="' . $content . '" alt="' . $content . '" style="' . $style . '" />';
+			$html = '<img class="ubb_img" src="' . $content . '" alt="' . $content . '" />';
 		}
 		return $html;
 	}
@@ -844,15 +822,21 @@ class eamBBParser {
 
 	function ubb_div($arguments = array()) {
 		$content = $this->parseArray(array('[/div]'), array());
-
-		$style = '';
-		if (isset($arguments['clear'])) {
-			$style.='clear: both; ';
-		} elseif (isset($arguments['float']) AND $arguments['float'] == 'left') {
-			$style.='float: left;';
-		} elseif (isset($arguments['float']) AND $arguments['float'] == 'right') {
-			$style.='float: right;';
+		$class = '';
+		if (isset($arguments['class'])) {
+			$class .= htmlspecialchars($arguments['class']);
 		}
+		if (isset($arguments['clear'])) {
+			$class.=' clear';
+		} elseif (isset($arguments['float']) AND $arguments['float'] == 'left') {
+			$class.=' float-left';
+		} elseif (isset($arguments['float']) AND $arguments['float'] == 'right') {
+			$class.=' float-right';
+		}
+		if ($class != '') {
+			$class = ' class="' . $class . '"';
+		}
+		$style = '';
 		if (isset($arguments['w'])) {
 			$style.='width: ' . ((int) $arguments['w']) . 'px; ';
 		}
@@ -862,14 +846,7 @@ class eamBBParser {
 		if ($style != '') {
 			$style = ' style="' . $style . '" ';
 		}
-
-		$class = '';
-		if (isset($arguments['class'])) {
-			$class = ' class="' . htmlspecialchars($arguments['class']) . '"';
-		}
-		return '<div' . $style . $class . '>' . $content . '</div>';
+		return '<div' . $class . $style . '>' . $content . '</div>';
 	}
 
 }
-
-?>

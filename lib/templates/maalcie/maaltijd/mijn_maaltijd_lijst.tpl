@@ -4,13 +4,13 @@
 		<td>
 			{$maaltijd->getDatum()|date_format:"%a %e %b"} {$maaltijd->getTijd()|date_format:"%H:%M"}
 			{if $maaltijd->magBekijken(LoginModel::getUid())}
-				<div style="float: right;">
+				<div class="float-right">
 					{icon get="paintcan" title=$maaltijd->maaltijdcorvee->getCorveeFunctie()->naam}
 				</div>
 			{/if}
 		</td>
 		<td>{$maaltijd->getTitel()}
-			<div style="float: right;">
+			<div class="float-right">
 				{assign var=prijs value=$maaltijd->getPrijs()|string_format:"%.2f"}
 				{if $aanmelding and $aanmelding->getSaldoStatus() < 0}
 					{icon get="money_delete" title="U staat rood bij de MaalCie!&#013;Maaltijdprijs: &euro; "|cat:$prijs}
@@ -26,7 +26,7 @@
 		<td style="text-align: center;">
 			{$maaltijd->getAantalAanmeldingen()} ({$maaltijd->getAanmeldLimiet()})
 			{if $maaltijd->magSluiten(LoginModel::getUid())}
-				<div style="float: right;">
+				<div class="float-right">
 					<a href="/maaltijdenlijst/{$maaltijd->getMaaltijdId()}" title="Toon maaltijdlijst" class="knop">{icon get="table"}</a>
 				</div>
 			{/if}
@@ -36,7 +36,7 @@
 				<td class="maaltijd-aangemeld">
 					Ja
 					{if $aanmelding->getDoorAbonnement()} (abo){/if}
-					<div style="float: right;">
+					<div class="float-right">
 						{assign var=date value=$maaltijd->getLaatstGesloten()|date_format:"%H:%M"}
 						{icon get="lock" title="Maaltijd is gesloten om "|cat:$date}
 					</div>
@@ -96,7 +96,7 @@
 					{/if}
 					Nee
 					{if $maaltijd->getIsGesloten()}
-						<span style="float: right;">
+						<span class="float-right">
 							{assign var=date value=$maaltijd->getLaatstGesloten()|date_format:"%H:%M"}
 							{icon get="lock" title="Maaltijd is gesloten om "|cat:$date}
 						</span>

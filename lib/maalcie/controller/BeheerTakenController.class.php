@@ -53,10 +53,10 @@ class BeheerTakenController extends AclController {
 	}
 
 	public function beheer($tid = null, $mid = null) {
-		$popup = null;
+		$modal = null;
 		if (is_int($tid) && $tid > 0) {
 			$this->bewerk($tid);
-			$popup = $this->getView();
+			$modal = $this->getView();
 		} elseif (is_int($mid) && $mid > 0) {
 			$maaltijd = MaaltijdenModel::getMaaltijd($mid, true);
 			$taken = CorveeTakenModel::getTakenVoorMaaltijd($mid, true);
@@ -68,7 +68,7 @@ class BeheerTakenController extends AclController {
 		$this->view = new CsrLayoutPage($this->getView());
 		$this->view->addStylesheet('/layout/css/maalcie');
 		$this->view->addScript('/layout/js/maalcie');
-		$this->view->popup = $popup;
+		$this->view->modal = $modal;
 	}
 
 	public function maaltijd($mid) {

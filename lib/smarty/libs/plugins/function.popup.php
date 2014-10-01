@@ -7,19 +7,19 @@
 
 
 /**
- * Smarty {popup} function plugin
+ * Smarty {modal} function plugin
  *
  * Type:     function<br>
- * Name:     popup<br>
+ * Name:     modal<br>
  * Purpose:  make text pop up in windows via overlib
- * @link http://smarty.php.net/manual/en/language.function.popup.php {popup}
+ * @link http://smarty.php.net/manual/en/language.function.modal.php {modal}
  *          (Smarty online manual)
  * @author   Monte Ohrt <monte at ohrt dot com>
  * @param array
  * @param Smarty
  * @return string
  */
-function smarty_function_popup($params, &$smarty)
+function smarty_function_modal($params, &$smarty)
 {
     $append = '';
     foreach ($params as $_key=>$_value) {
@@ -94,7 +94,7 @@ function smarty_function_popup($params, &$smarty)
                 break;
 
             default:
-                $smarty->trigger_error("[popup] unknown parameter $_key", E_USER_WARNING);
+                $smarty->trigger_error("[modal] unknown parameter $_key", E_USER_WARNING);
         }
     }
 

@@ -50,7 +50,7 @@ class MenuItem extends PersistentEntity {
 	 * State of menu GUI
 	 * @var boolean
 	 */
-	public $active;
+	public $current;
 	/**
 	 * De sub-items van dit menu-item
 	 * @var array
@@ -97,6 +97,10 @@ class MenuItem extends PersistentEntity {
 			}
 		}
 		return false;
+	}
+
+	public function hasChildren() {
+		return !empty($this->children);
 	}
 
 	public function magBekijken() {

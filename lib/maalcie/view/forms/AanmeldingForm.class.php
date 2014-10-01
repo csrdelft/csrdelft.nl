@@ -8,7 +8,7 @@
  * Formulier voor een nieuwe of te verwijderen maaltijd-aanmelding.
  * 
  */
-class AanmeldingForm extends PopupForm {
+class AanmeldingForm extends ModalForm {
 
 	public function __construct($mid, $nieuw, $uid = null, $gasten = 0) {
 		parent::__construct(null, 'maalcie-aanmelding-form', Instellingen::get('taken', 'url') . '/ander' . ($nieuw ? 'aanmelden' : 'afmelden') . '/' . $mid);

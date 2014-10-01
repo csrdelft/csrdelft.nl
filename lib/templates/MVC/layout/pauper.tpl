@@ -2,7 +2,7 @@
 <html>
 	<head>
 		<title>C.S.R. Delft mobiel - {$body->getTitel()}</title>
-		{include file='csrdelft_head.tpl'}
+		{include file='html_head.tpl'}
 	</head>
 	<body style="background: none;">
 		<div style="text-align: center;">
@@ -10,7 +10,7 @@
 				<a href="#mainmenu">Menu</a>
 			</div>
 			<a href="/pauper/terug">Naar normale webstek</a>
-			<div style="float: right;">
+			<div class="float-right">
 				<span class="waarschuwing">{LoginModel::instance()->getError()}</span>
 				{if LoginModel::mag('P_LOGGED_IN')}
 					<a href="/logout">Uitloggen</a>

@@ -63,11 +63,11 @@
 
 	{capture name='magreageren'}
 		{if !$deel->magPosten()}
-			<div style="font-style: italic;">U mag in dit deel van het forum niet reageren.</div>
+			<div class="draad-readonly">U mag in dit deel van het forum niet reageren.</div>
 		{elseif $draad->gesloten}
-			<div style="font-style: italic;">U kunt hier niet meer reageren omdat dit onderwerp gesloten is.</div>
+			<div class="draad-gesloten">U kunt hier niet meer reageren omdat dit onderwerp gesloten is.</div>
 		{elseif $draad->verwijderd}
-			<div style="color: red;">Dit onderwerp is verwijderd.</div>
+			<div class="draad-verwijderd">Dit onderwerp is verwijderd.</div>
 		{/if}
 	{/capture}
 

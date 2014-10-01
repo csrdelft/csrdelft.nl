@@ -8,7 +8,7 @@
  * Formulier voor een nieuwe of te bewerken maaltijd-repetitie.
  * 
  */
-class MaaltijdRepetitieForm extends PopupForm {
+class MaaltijdRepetitieForm extends ModalForm {
 
 	public function __construct($mrid, $dag = null, $periode = null, $titel = null, $tijd = null, $prijs = null, $abo = null, $limiet = null, $filter = null, $verplaats = null) {
 		parent::__construct(null, 'maalcie-maaltijd-repetitie-form', Instellingen::get('taken', 'url') . '/opslaan/' . $mrid);

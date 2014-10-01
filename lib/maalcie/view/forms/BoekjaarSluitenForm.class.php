@@ -8,7 +8,7 @@
  * Formulier voor het sluiten van het MaalCie-boekjaar.
  * 
  */
-class BoekjaarSluitenForm extends PopupForm {
+class BoekjaarSluitenForm extends ModalForm {
 
 	public function __construct($beginDatum = null, $eindDatum = null) {
 		parent::__construct(null, 'maalcie-boekjaar-sluiten-form', Instellingen::get('taken', 'url') . '/sluitboekjaar');

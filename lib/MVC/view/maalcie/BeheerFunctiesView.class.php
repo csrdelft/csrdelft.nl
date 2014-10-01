@@ -51,7 +51,7 @@ class FunctieDeleteView extends SmartyTemplateView {
 /**
  * Formulier voor een nieuwe of te bewerken corveefunctie.
  */
-class FunctieForm extends PopupForm {
+class FunctieForm extends ModalForm {
 
 	public function __construct(CorveeFunctie $functie, $actie) {
 		parent::__construct($functie, 'maalcie-functie-form', Instellingen::get('taken', 'url') . '/' . $actie . '/' . $functie->functie_id);
@@ -86,7 +86,7 @@ class FunctieForm extends PopupForm {
 /**
  * Formulier voor het toewijzen van een corvee-kwalificatie.
  */
-class KwalificatieForm extends PopupForm {
+class KwalificatieForm extends ModalForm {
 
 	public function __construct(CorveeKwalificatie $kwalificatie) {
 		parent::__construct($kwalificatie, 'maalcie-kwalificatie-form', Instellingen::get('taken', 'url') . '/kwalificeer/' . $kwalificatie->functie_id);

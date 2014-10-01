@@ -10,7 +10,7 @@ require_once 'maalcie/model/MaaltijdenModel.class.php';
  * Formulier voor een nieuwe of te bewerken corveetaak.
  * 
  */
-class TaakForm extends PopupForm {
+class TaakForm extends ModalForm {
 
 	public function __construct($tid, $fid = null, $uid = null, $crid = null, $mid = null, $datum = null, $punten = null, $bonus_malus = null) {
 		parent::__construct(null, 'maalcie-corveetaak-form', Instellingen::get('taken', 'url') . '/opslaan/' . $tid);

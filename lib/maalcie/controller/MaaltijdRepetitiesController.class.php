@@ -42,16 +42,16 @@ class MaaltijdRepetitiesController extends AclController {
 	}
 
 	public function beheer($mrid = null) {
-		$popup = null;
+		$modal = null;
 		if (is_int($mrid) && $mrid > 0) {
 			$this->bewerk($mrid);
-			$popup = $this->getView();
+			$modal = $this->getView();
 		}
 		$this->view = new MaaltijdRepetitiesView(MaaltijdRepetitiesModel::getAlleRepetities());
 		$this->view = new CsrLayoutPage($this->getView());
 		$this->view->addStylesheet('/layout/css/maalcie');
 		$this->view->addScript('/layout/js/maalcie');
-		$this->view->popup = $popup;
+		$this->view->modal = $modal;
 	}
 
 	public function nieuw() {

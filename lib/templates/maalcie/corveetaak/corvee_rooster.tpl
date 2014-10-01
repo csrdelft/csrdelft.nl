@@ -3,7 +3,7 @@
 *}
 {strip}
 	{if $toonverleden}
-		<div style="float: right;">
+		<div class="float-right">
 			<a href="{Instellingen::get('taken', 'url')}/verleden" title="Taken in het verleden tonen" class="knop">{icon get="time"} Toon verleden</a>
 		</div>
 	{/if}

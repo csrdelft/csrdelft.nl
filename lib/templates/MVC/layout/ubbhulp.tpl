@@ -3,10 +3,10 @@
 	<h2>Tekst opmaken</h2>
 	<p>U kunt uw berichten opmaken met een simpel opmaaktaaltje wat ubb genoemd wordt. Het lijkt wat op html, maar dan met vierkante haken:</p>
 	<ul>
-		<li>[b]...[/b] voor <strong>dikgedrukte tekst</strong></li>
-		<li>[i]...[/i] voor <em>cursieve tekst</em></li>
-		<li>[u]...[/u] voor <span style="text-decoration: underline;">onderstreepte tekst</span></li>
-		<li>[s]...[/s] voor <span style="text-decoration: line-through;">doorgestreepte tekst</span></li>
+		<li>[b]...[/b] voor <span class="dikgedrukt">dikgedrukte tekst</span></li>
+		<li>[i]...[/i] voor <span class="cursief">cursieve tekst</span></li>
+		<li>[u]...[/u] voor <span class="onderstreept">onderstreepte tekst</span></li>
+		<li>[s]...[/s] voor <span class="doorgestreept">doorgestreepte tekst</span></li>
 		<li>[email=e@mail.nl]Stuur email[/email] voor een email-link</li>
 		<li>[url=http://csrdelft.nl]Webstek van C.S.R.[/url] voor een externe link</li>
 		<li>[citaat][/citaat] voor een citaat. [citaat=<em>lidnummer</em>][/citaat] voor een citaat van een lid</li>

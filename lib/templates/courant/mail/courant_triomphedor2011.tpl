@@ -85,9 +85,6 @@ li{
 <font size="-1" face="verdana"><h4>Inhoud</h4></font>
 <table class="inhoud">
 <tr>
-{*
-	Weergave van de kopjes bovenaan. Beetje een raar verhaal geworden, maar zo is het wel lekker dynamisch
-*}
 {foreach from=$indexCats item=categorie key=catKey}
 	{if $categorie!='voorwoord' AND $categorie!='sponsor'}
 		<td class="inhoudKolom" valign="top">

@@ -4,7 +4,7 @@
 
 {if isset($deel->forum_id) AND LoginModel::mag('P_ADMIN')}
 	<div class="forumheadbtn">
-		<a href="/forum/beheren/{$deel->forum_id}" class="knop post popup" title="Deelforum beheren">{icon get="wrench_orange"} Beheren</a>
+		<a href="/forum/beheren/{$deel->forum_id}" class="knop post modal" title="Deelforum beheren">{icon get="wrench_orange"} Beheren</a>
 	</div>
 {/if}
 
@@ -73,7 +73,7 @@
 		<tr>
 			<td colspan="4">
 				<div class="forumdeel-omschrijving">
-					<div style="float: right;">{$smarty.capture.navlinks}</div>
+					<div class="float-right">{$smarty.capture.navlinks}</div>
 					<h1>{$deel->titel}</h1>
 					{$deel->omschrijving}
 				</div>

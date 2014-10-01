@@ -973,7 +973,7 @@
 
 13/02/2011
 - bufix replace $smarty->triggerError() by exception
-- removed obsolete {popup_init..} plugin from demo templates
+- removed obsolete {modal_init..} plugin from demo templates
 - bugfix replace $smarty->triggerError() by exception in smarty_internal_resource_extends.php
 
 ===== Smarty 3.0.7  =====
@@ -2267,7 +2267,7 @@ NOTICE: existing compiled template and cache files must be deleted
 - experimental solution for variable functions in static class
 
 02/05/2009
-- update of popup plugin
+- update of modal plugin
 - added config variables to template parser (load config functions still missing)
 - parser bugfix for empty quoted strings
 

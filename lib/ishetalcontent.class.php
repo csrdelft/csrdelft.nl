@@ -25,7 +25,6 @@ class IsHetAlContent implements View {
 		'u deze zijbalk geheel naar wens kan ingerichten?'	 => '/instellingen#tabs-zijbalk',
 		'u ongelezen draadjes als gelezen kan weergeven?'	 => '/instellingen#tabs-forum',
 		'u een eigen minion op de stek kan krijgen?'		 => '/instellingen#tabs-layout',
-		'de stek een breedbeeldmodus heeft?'				 => '/instellingen#tabs-layout',
 		'u de C.S.R.-agenda kan importeren met ICAL?'		 => '/agenda#ICAL'
 	);
 
@@ -129,7 +128,7 @@ class IsHetAlContent implements View {
 				break;
 			case 'wist u dat':
 				$wistudat = array_rand(self::$wistudat);
-				echo '<div class="ja">Wist u dat...</div><a href="' . self::$wistudat[$wistudat] . '" style="font-style: italic;">' . $wistudat . '</a>';
+				echo '<div class="ja">Wist u dat...</div><a href="' . self::$wistudat[$wistudat] . '" class="cursief">' . $wistudat . '</a>';
 				break;
 			default:
 				echo 'Is het al ' . $this->model . '?';

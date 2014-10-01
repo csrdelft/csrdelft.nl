@@ -8,7 +8,7 @@
  * Formulier voor nieuw periodiek corvee.
  * 
  */
-class RepetitieCorveeForm extends PopupForm {
+class RepetitieCorveeForm extends ModalForm {
 
 	public function __construct(CorveeRepetitie $repetitie, $beginDatum = null, $eindDatum = null, $mid = null) {
 		parent::__construct(null, 'maalcie-repetitie-aanmaken-form', Instellingen::get('taken', 'url') . '/aanmaken/' . $repetitie->getCorveeRepetitieId());

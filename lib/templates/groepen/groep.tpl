@@ -122,7 +122,7 @@
 
 			{if $groep->magBewerken()}
 				<a class="knop" href="/actueel/groepen/{$groep->getType()->getNaam()}/{$groep->getId()}/bewerken#groepFormulier">
-					<img src="{$CSR_PICS}/knopjes/bewerken.png" title="Bewerk groep" />
+					<img src="{$CSR_PICS}/famfamfam/pencil.png" title="Bewerk groep" />
 				</a>
 			{/if}
 			{if $groep->isAdmin()}

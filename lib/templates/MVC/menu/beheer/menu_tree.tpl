@@ -2,7 +2,7 @@
 	menu_tree.tpl	|	P.W.G. Brussee (brussee@live.nl)
 *}
 {SimpleHtml::getMelding()}
-<div style="float: right;">
+<div class="float-right">
 	<div style="display: inline-block;"><label for="toon">Toon menu:</label>
 	</div><select name="toon" onchange="location.href = '/menubeheer/beheer/' + this.value;">
 		<option selected="selected">kies</option>
@@ -15,7 +15,7 @@
 <br />
 <ul class="menubeheer-tree">
 	{if $root}
-		{include file='MVC/menu/beheer/menu_root.tpl'}
+		<li>{include file='MVC/menu/beheer/menu_root.tpl'}</li>
 		{if $root->children}
 			{foreach from=$root->children item=child}
 				{include file='MVC/menu/beheer/menu_item.tpl' item=$child}

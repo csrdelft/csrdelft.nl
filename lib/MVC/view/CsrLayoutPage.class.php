@@ -21,28 +21,26 @@ class CsrLayoutPage extends HtmlPage {
 	 */
 	public $zijbalk;
 	/**
-	 * Popup inhoud
+	 * modal inhoud
 	 * @var View
 	 */
-	public $popup;
+	public $modal;
 
-	public function __construct(View $body, array $zijbalk = array(), $popup = null) {
+	public function __construct(View $body, array $zijbalk = array(), $modal = null) {
 		parent::__construct($body, $body->getTitel());
 		$this->zijbalk = $zijbalk;
-		$this->popup = $popup;
+		$this->modal = $modal;
 
 		$css = '/layout/css/';
 		$js = '/layout/js/';
 		$plugin = $js . 'jquery/plugins/';
 
-		$this->addStylesheet($css . 'undohtml');
+		$this->addStylesheet($css . 'reset');
+		$this->addStylesheet($css . 'layout_pagina');
 		$this->addStylesheet($css . 'ubb');
 		$this->addStylesheet($css . 'csrdelft');
 		$layout = LidInstellingen::get('layout', 'opmaak');
 		$this->addStylesheet($css . $layout);
-		if (LidInstellingen::get('layout', 'beeld') == 'dynamisch') {
-			$this->addStylesheet($css . 'breedbeeld');
-		}
 		if (LidInstellingen::get('layout', 'sneeuw') != 'nee') {
 			if (LidInstellingen::get('layout', 'sneeuw') == 'ja') {
 				$this->addStylesheet($css . 'snow.anim');
@@ -65,7 +63,7 @@ class CsrLayoutPage extends HtmlPage {
 		//$this->addScript($js . 'csrdelft.dataTables');
 		//$this->addStylesheet($css . 'csrdelft.dataTables');
 		$this->addScript($js . 'dragobject');
-		$this->addScript($js . 'menu');
+		$this->addScript($js . 'main_menu');
 		$this->addScript($js . 'groepen');
 		if (LidInstellingen::get('layout', 'minion') == 'ja') {
 			$this->addScript($js . 'minion');
@@ -81,12 +79,12 @@ class CsrLayoutPage extends HtmlPage {
 		$smarty->assign('scripts', $this->getScripts());
 		$smarty->assign('titel', $this->getTitel());
 		$smarty->assign('mainmenu', new MainMenuView(MenuModel::instance()->getMenuTree('main')));
-		$smarty->assign('popup', $this->popup);
+		$smarty->assign('modal', $this->modal);
 		$smarty->assign('body', $this->getBody());
 
 		if (LidInstellingen::get('layout', 'zijbalk') == 'verberg') {
 			$this->zijbalk = false;
-		} elseif ($this->zijbalk !== false OR LidInstellingen::get('layout', 'beeld') == 'dynamisch') {
+		} else {
 			if (is_array($this->zijbalk)) {
 				$this->zijbalk = array_merge($this->zijbalk, SimpleHTML::getStandaardZijbalk());
 			} else {
@@ -99,11 +97,24 @@ class CsrLayoutPage extends HtmlPage {
 			$smarty->assign('debug', SimpleHTML::getDebug());
 		}
 
+		// SocCie-saldi & MaalCie-saldi
+		$smarty->assign('saldi', LoginModel::instance()->getLid()->getSaldi());
+
+		if (LoginModel::mag('P_ADMIN')) {
+			require_once 'MVC/model/ForumModel.class.php';
+			$smarty->assign('forumcount', ForumPostsModel::instance()->getAantalWachtOpGoedkeuring());
+
+			require_once 'savedquery.class.php';
+			$smarty->assign('queues', array(
+				'meded' => new SavedQuery(62) //ROW ID QUEUE MEDEDELINGEN
+			));
+		}
+
 		$top = 180;
 		$left = 190;
-		DragObjectModel::getCoords('popup', $top, $left);
-		$smarty->assign('popuptop', $top);
-		$smarty->assign('popupleft', $left);
+		DragObjectModel::getCoords('modal', $top, $left);
+		$smarty->assign('modaltop', $top);
+		$smarty->assign('modalleft', $left);
 		$top = 180;
 		$left = 10;
 		DragObjectModel::getCoords('ubbhulpverhaal', $top, $left);

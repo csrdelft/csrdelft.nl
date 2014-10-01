@@ -8,7 +8,7 @@
  * Formulier voor nieuwe periodieke maaltijden.
  * 
  */
-class RepetitieMaaltijdenForm extends PopupForm {
+class RepetitieMaaltijdenForm extends ModalForm {
 
 	public function __construct(MaaltijdRepetitie $repetitie, $beginDatum = null, $eindDatum = null) {
 		parent::__construct(null, 'maalcie-repetitie-aanmaken-form', Instellingen::get('taken', 'url') . '/aanmaken/' . $repetitie->getMaaltijdRepetitieId());

@@ -38,14 +38,14 @@ class BeheerFunctiesController extends AclController {
 
 	public function beheer($fid = null) {
 		$fid = (int) $fid;
-		$popup = null;
+		$modal = null;
 		if ($fid > 0) {
 			$this->bewerken($fid);
-			$popup = $this->getView();
+			$modal = $this->getView();
 		}
 		$functies = $this->model->getAlleFuncties(); // grouped by functie_id
 		$this->view = new BeheerFunctiesView($functies);
-		$this->view = new CsrLayoutPage($this->getView(), array(), $popup);
+		$this->view = new CsrLayoutPage($this->getView(), array(), $modal);
 		$this->view->addStylesheet('/layout/css/maalcie');
 		$this->view->addScript('/layout/js/maalcie');
 	}

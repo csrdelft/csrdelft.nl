@@ -3,7 +3,7 @@
 *}
 <tr id="corveefunctie-row-{$functie->functie_id}">
 	<td>
-		<a href="{Instellingen::get('taken', 'url')}/bewerken/{$functie->functie_id}" title="Functie wijzigen" class="knop post popup">{icon get="pencil"}</a>
+		<a href="{Instellingen::get('taken', 'url')}/bewerken/{$functie->functie_id}" title="Functie wijzigen" class="knop post modal">{icon get="pencil"}</a>
 	</td>
 	<td>{$functie->afkorting}</td>
 	<td>{$functie->naam}</td>
@@ -11,7 +11,7 @@
 	<td title="{$functie->email_bericht}">{if strlen($functie->email_bericht) > 0}{icon get="email"}{/if}</td>
 	<td>
 		{if $functie->kwalificatie_benodigd}
-			<div style="float: left;"><a href="{Instellingen::get('taken', 'url')}/kwalificeer/{$functie->functie_id}" title="Kwalificatie toewijzen" class="knop post popup">{icon get="vcard_add"} Kwalificeer</a></div>
+			<div style="float: left;"><a href="{Instellingen::get('taken', 'url')}/kwalificeer/{$functie->functie_id}" title="Kwalificatie toewijzen" class="knop post modal">{icon get="vcard_add"} Kwalificeer</a></div>
 		{/if}
 		{if $functie->hasKwalificaties()}
 			<div class="kwali"><a title="Toon oudleden" class="knop" onclick="$('div.kwali').toggle();">{icon get="eye"} Toon oudleden</a></div>

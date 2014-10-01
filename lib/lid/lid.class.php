@@ -941,7 +941,7 @@ class Lid implements Serializable, Agendeerbaar {
 				} else {
 					$naam = $k . $l . $naam . '</a>';
 				}
-				return '<div style="display: inline-block;">' . $naam . '</span></div>';
+				return '<div class="inline">' . $naam . '</span></div>';
 			}
 			return $l . $naam . '</a>';
 		} else {
@@ -1151,21 +1151,21 @@ class Lid implements Serializable, Agendeerbaar {
  */
 class Zoeker {
 
-	static function zoekLeden($zoekterm, $zoekveld, $verticale, $sort, $zoekstatus = '', $velden = array(), $aantalresultaten = null) {
+	static function zoekLeden($zoekterm, $menuZoekveld, $verticale, $sort, $zoekstatus = '', $velden = array(), $aantalresultaten = null) {
 		$db = MijnSqli::instance();
 		$leden = array();
 		$zoekfilter = '';
 
 		# mysql escape dingesen
 		$zoekterm = trim($db->escape($zoekterm));
-		$zoekveld = trim($db->escape($zoekveld));
+		$menuZoekveld = trim($db->escape($menuZoekveld));
 		/* TODO: velden checken op rare dingen. Niet dat de velden() array nu buiten code opgegeven kan worden, maar het moet nog wel
 		  foreach ($velden as &$veld) {
 		  $veld = trim, escape, lalala
 		  } */
 
 		//Zoeken standaard in voornaam, achternaam, bijnaam en uid.
-		if ($zoekveld == 'naam' AND ! preg_match('/^\d{2}$/', $zoekterm)) {
+		if ($menuZoekveld == 'naam' AND ! preg_match('/^\d{2}$/', $zoekterm)) {
 			if (preg_match('/ /', trim($zoekterm))) {
 				$zoekdelen = explode(' ', $zoekterm);
 				$iZoekdelen = count($zoekdelen);
@@ -1183,15 +1183,15 @@ class Zoeker {
 					nickname LIKE '%{$zoekterm}%' OR duckname LIKE '%{$zoekterm}%' OR
 					uid LIKE '%{$zoekterm}%'";
 			}
-		} elseif ($zoekveld == 'adres') {
+		} elseif ($menuZoekveld == 'adres') {
 			$zoekfilter = "adres LIKE '%{$zoekterm}%' OR woonplaats LIKE '%{$zoekterm}%' OR
 				postcode LIKE '%{$zoekterm}%' OR REPLACE(postcode, ' ', '') LIKE '%" . str_replace(' ', '', $zoekterm) . "%'";
 		} else {
-			if (preg_match('/^\d{2}$/', $zoekterm) AND ( $zoekveld == 'uid' OR $zoekveld == 'naam')) {
+			if (preg_match('/^\d{2}$/', $zoekterm) AND ( $menuZoekveld == 'uid' OR $menuZoekveld == 'naam')) {
 				//zoeken op lichtingen...
 				$zoekfilter = "SUBSTRING(uid, 1, 2)='" . $zoekterm . "'";
 			} else {
-				$zoekfilter = "{$zoekveld} LIKE '%{$zoekterm}%'";
+				$zoekfilter = "{$menuZoekveld} LIKE '%{$zoekterm}%'";
 			}
 		}
 

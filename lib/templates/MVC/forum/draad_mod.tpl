@@ -1,5 +1,5 @@
-<div id="modereren" style="display: none; border: 1px solid #999; margin: 10px; padding: 10px;">
-	<table style="width: 100%;">
+<div id="modereren">
+	<table>
 		<tbody>
 			<tr>
 				<td>
@@ -42,11 +42,11 @@
 					<br />
 					<form action="/forum/wijzigen/{$draad->draad_id}/titel" method="post">
 						<label for="titel">Titel aanpassen &nbsp;</label>
-						<input type="text" name="titel" value="{$draad->titel}" style="width: 300px;" />
+						<input type="text" name="titel" value="{$draad->titel}" />
 						<input type="submit" value="Opslaan" />
 					</form>
 				</td>
-				<td style="width: 25px;">
+				<td>
 					<span id="modsluiten" onclick="$('#togglemodknop').toggle();
 							$('#modereren').slideUp();
 							$('#forumtabel a.forummodknop').fadeOut();" title="Moderatie-functies verbergen">×</span>

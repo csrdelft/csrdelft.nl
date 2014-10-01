@@ -14,7 +14,7 @@
 			</div>
 			<div class="bericht">
 				{$mededeling->getTekst()|ubb|html_substr:"250":"…"}
-				<small style="float: right;"><a href="{MededelingenContent::mededelingenRoot}{$mededeling->getId()}">Verder lezen »</a></small>
+				<small class="float-right"><a href="{MededelingenContent::mededelingenRoot}{$mededeling->getId()}">Verder lezen »</a></small>
 			</div>
 			<div class="clear"></div>
 		</div>

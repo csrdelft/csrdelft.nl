@@ -30,10 +30,10 @@ class MenuModel extends PersistenceModel {
 	 * Filtert de menu-items met de permissies van het ingelogede lid.
 	 * 
 	 * @param string $menu_naam
-	 * @param boolean $admin
+	 * @param boolean $beheer
 	 * @return MenuItem[]
 	 */
-	public function getMenuTree($menu_naam, $admin = false) {
+	public function getMenuTree($menu_naam, $beheer = false) {
 		// get root
 		$where = 'parent_id = 0 AND tekst = ?';
 		$params = array($menu_naam);
@@ -43,24 +43,24 @@ class MenuModel extends PersistenceModel {
 			$item->tekst = $menu_naam;
 			return $item;
 		}
-		$this->getChildren($root, $admin);
+		$this->getChildren($root, $beheer);
 		return $root;
 	}
 
-	public function getChildren(MenuItem $parent, $admin = false) {
-		$where = 'parent_id = ?' . ($admin ? '' : ' AND zichtbaar = true');
+	public function getChildren(MenuItem $parent, $beheer = false) {
+		$where = 'parent_id = ?' . ($beheer ? '' : ' AND zichtbaar = true');
 		$parent->children = $this->find($where, array($parent->item_id), 'prioriteit ASC')->fetchAll();
-		$child_active = false;
+		$child_current = false;
 		foreach ($parent->children as $i => $child) {
-			if (!$admin AND ! $child->magBekijken()) {
+			if (!$beheer AND ! $child->magBekijken()) {
 				unset($parent->children[$i]);
 				continue;
 			}
-			$child->active = startsWith(REQUEST_URI, $child->link);
-			$child_active |= $child->active;
-			$this->getChildren($child, $admin);
+			$child->current = startsWith(REQUEST_URI, $child->link);
+			$child_current |= $child->current;
+			$this->getChildren($child, $beheer);
 		}
-		$parent->active |= $child_active; // make parent of active child also active
+		$parent->current |= $child_current; // make parent of current child also current
 	}
 
 	public function getMenuItem($id) {

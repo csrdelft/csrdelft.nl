@@ -3,12 +3,12 @@
 *}
 <li id="menu-item-{$item->item_id}" parentid="{$item->parent_id}" class="menu-item">
 	{$item->prioriteit}
-	<a href="/menubeheer/bewerken/{$item->item_id}" class="knop post popup" title="Dit agenda-item bewerken">{icon get="bewerken"}</a>
-	<a href="/menubeheer/toevoegen/{$item->item_id}" class="knop post popup" title="Sub-menu-item toevoegen">{icon get="add"}</a>
+	<a href="/menubeheer/bewerken/{$item->item_id}" class="knop post modal" title="Dit agenda-item bewerken">{icon get="bewerken"}</a>
+	<a href="/menubeheer/toevoegen/{$item->item_id}" class="knop post modal" title="Sub-menu-item toevoegen">{icon get="add"}</a>
 	<img src="{$CSR_PICS}/famfamfam/{if $item->zichtbaar}eye{else}shading{/if}.png" title="{if $item->zichtbaar}Menu-item is nu zichtbaar.{else}Menu-item is nu onzichtbaar.{/if}" />
 	{$item->tekst}
 	<span style="color: grey;">{$item->item_id}</span>
-	<div style="float: right;">
+	<div class="float-right">
 		{if $item->rechten_bekijken !== 'P_PUBLIC'}
 			&nbsp;{icon get="group_key" title="Rechten bekijken:&#013;"|cat:$item->rechten_bekijken}&nbsp;
 		{/if}

@@ -1,0 +1,355 @@
+/* -------------------------------- 
+
+Primary style
+
+-------------------------------- */
+html * {
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+}
+
+html *, *, *:after, *:before {
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+}
+
+html, body {
+	/* you need to set this to assign to the main element a min height of 100% */
+	height: 100%;
+}
+
+body {
+	font-size: 100%;
+	font-family: Helvetica,"Helvetice Neue",Arial;
+	color: #000000;
+	background-color: #ffffff;
+}
+
+.scrollpane { overflow: auto; }
+.float-left { float: left; }
+.float-right { float: right; }
+.clear { clear: both; }
+.clear-left { clear: left; }
+.clear-right { clear: right; }
+.inline { display: inline; }
+div.inline { display: inline-block; }
+table.inline { display: inline-table; }
+
+/* -------------------------------- 
+
+Main components 
+
+-------------------------------- */
+.cd-main-content {
+	/* set a min-height and a z-index to be sure that the main element completely covers the lateral menu */
+	min-height: 100%;
+	position: relative;
+	z-index: 2;
+	/* hide lateral navigation */
+	background-color: #ffffff;
+	/* Force Hardware Acceleration in WebKit */
+	-webkit-transform: translateZ(0);
+	-webkit-backface-visibility: hidden;
+	-webkit-transition-property: -webkit-transform;
+	-moz-transition-property: -moz-transform;
+	transition-property: transform;
+	-webkit-transition-duration: 0.4s;
+	-moz-transition-duration: 0.4s;
+	transition-duration: 0.4s;
+}
+.cd-main-content.lateral-menu-is-open {
+	/* translate to show the lateral menu - all content needs to be put in the .cd-main-content to translate*/
+	-webkit-transform: translateX(-260px);
+	-moz-transform: translateX(-260px);
+	-ms-transform: translateX(-260px);
+	-o-transform: translateX(-260px);
+	transform: translateX(-260px);
+}
+
+/* -------------------------------- 
+
+Header
+
+-------------------------------- */
+header {
+	position: fixed;
+	top: 0;
+	left: 0;
+	height: 0;
+	width: 100%;
+	z-index: 3;
+	/* Force Hardware Acceleration in WebKit */
+	-webkit-transform: translateZ(0);
+	-webkit-backface-visibility: hidden;
+	-webkit-transition-property: -webkit-transform;
+	-moz-transition-property: -moz-transform;
+	transition-property: transform;
+	-webkit-transition-duration: 0.4s;
+	-moz-transition-duration: 0.4s;
+	transition-duration: 0.4s;
+}
+header.lateral-menu-is-open {
+	/* translate to show the lateral menu */
+	-webkit-transform: translateX(-260px);
+	-moz-transform: translateX(-260px);
+	-ms-transform: translateX(-260px);
+	-o-transform: translateX(-260px);
+	transform: translateX(-260px);
+}
+
+#cd-logo {
+	display: block;
+	margin: 0 auto;
+}
+#cd-logo #beeldmerk {
+	width: 150px;
+	height: 200px;
+	margin: 10px 30px;
+	background-size: cover;
+}
+
+/* -------------------------------- 
+
+Menu voor ingelogde gebruikers
+
+-------------------------------- */
+#cd-ingelogd-menu-trigger {
+	display: block;
+}
+#cd-ingelogd-menu-trigger .cd-ingelogd-menu-text {
+	padding: 0 1.25em;
+	color: #ffffff;
+	font-weight: bold;
+	cursor: pointer;
+}
+#cd-ingelogd-menu-trigger.ingelogd-menu-is-open  .cd-ingelogd-menu-text {
+	color: #333333;
+}
+#cd-ingelogd-menu {
+	display: none;
+	position: absolute;
+}
+#cd-ingelogd-menu-trigger.ingelogd-menu-is-open {
+	background-color: #E8CF2A;
+}
+#cd-ingelogd-menu li {
+	width: 100%;
+}
+
+/* -------------------------------- 
+
+Top navigation
+
+-------------------------------- */
+#cd-top-nav {
+	position: absolute;
+	top: 0;
+	right: 0;
+}
+#cd-top-nav ul {
+	background-color: #0A3292;
+}
+#cd-top-nav li {
+	display: inline-block;
+	height: 50px;
+	line-height: 3em;
+}
+#cd-top-nav a {
+	display: block;
+	padding: 0 1.25em;
+	font-weight: bold;
+	color: #ffffff;
+}
+#cd-top-nav a:hover {
+	color: #E8CF2A;
+	text-decoration: none;
+}
+#cd-top-nav a.current, #cd-top-nav a.current:hover {
+	background-color: #E8CF2A;
+	color: #333333;
+}
+
+#cd-lateral-menu-trigger {
+	width: 110px;
+	padding-left: 1.25em;
+	background-color: #3262D7;
+	cursor: pointer;
+}
+#cd-lateral-menu-trigger .cd-lateral-menu-text, #cd-ingelogd-menu-trigger .cd-ingelogd-menu-text {
+	display: inline-block;
+	color: #ffffff;
+	font-weight: bold;
+}
+#cd-lateral-menu-trigger .cd-lateral-menu-icon {
+	/* this span is the central line in the menu menu */
+	display: inline-block;
+	position: absolute;
+	left: 50%;
+	top: 50%;
+	bottom: auto;
+	right: auto;
+	-webkit-transform: translateX(-50%) translateY(-50%);
+	-moz-transform: translateX(-50%) translateY(-50%);
+	-ms-transform: translateX(-50%) translateY(-50%);
+	-o-transform: translateX(-50%) translateY(-50%);
+	transform: translateX(-50%) translateY(-50%);
+	width: 18px;
+	height: 2px;
+	background-color: #ffffff;
+	/* these are the upper and lower lines in the menu menu */
+	left: auto;
+	right: 1.25em;
+	-webkit-transform: translateX(0);
+	-moz-transform: translateX(0);
+	-ms-transform: translateX(0);
+	-o-transform: translateX(0);
+	transform: translateX(0);
+}
+#cd-lateral-menu-trigger .cd-lateral-menu-icon::before, #cd-lateral-menu-trigger .cd-lateral-menu-icon:after {
+	content: '';
+	width: 100%;
+	height: 100%;
+	position: absolute;
+	background-color: inherit;
+	left: 0;
+	/* Force Hardware Acceleration in WebKit */
+	-webkit-transform: translateZ(0);
+	-webkit-backface-visibility: hidden;
+}
+#cd-lateral-menu-trigger .cd-lateral-menu-icon::before {
+	bottom: 5px;
+}
+#cd-lateral-menu-trigger .cd-lateral-menu-icon::after {
+	top: 5px;
+}
+#cd-lateral-menu-trigger.is-clicked .cd-lateral-menu-icon {
+	background-color: rgba(255, 255, 255, 0);
+}
+#cd-lateral-menu-trigger.is-clicked .cd-lateral-menu-icon::before, #cd-lateral-menu-trigger.is-clicked .cd-lateral-menu-icon::after {
+	background-color: #ffffff;
+}
+#cd-lateral-menu-trigger.is-clicked .cd-lateral-menu-icon::before {
+	bottom: 0;
+	-webkit-transform: rotate(45deg);
+	-moz-transform: rotate(45deg);
+	-ms-transform: rotate(45deg);
+	-o-transform: rotate(45deg);
+	transform: rotate(45deg);
+}
+#cd-lateral-menu-trigger.is-clicked .cd-lateral-menu-icon::after {
+	top: 0;
+	-webkit-transform: rotate(-45deg);
+	-moz-transform: rotate(-45deg);
+	-ms-transform: rotate(-45deg);
+	-o-transform: rotate(-45deg);
+	transform: rotate(-45deg);
+}
+
+/* -------------------------------- 
+
+Lateral navigation
+
+-------------------------------- */
+#cd-lateral-nav {
+	position: fixed;
+	top: 0;
+	right: 0;
+	height: 100%;
+	/* the secondary navigation is covered by the main element */
+	z-index: 1;
+	width: 260px;
+	background-color: #0a338d;
+	overflow-y: auto;
+	/* Force Hardware Acceleration in WebKit */
+	-webkit-transform: translateZ(0);
+	-webkit-backface-visibility: hidden;
+	-webkit-transition-property: -webkit-transform;
+	-moz-transition-property: -moz-transform;
+	transition-property: transform;
+	-webkit-transition-duration: 0.4s;
+	-moz-transition-duration: 0.4s;
+	transition-duration: 0.4s;
+	/* this creates the subtle slide in animation of the navigation */
+	-webkit-transform: translateX(80px);
+	-moz-transform: translateX(80px);
+	-ms-transform: translateX(80px);
+	-o-transform: translateX(80px);
+	transform: translateX(80px);
+}
+#cd-lateral-nav .cd-navigation {
+	margin: 20px 0;
+}
+#cd-lateral-nav .cd-navigation li a {
+	height: 50px;
+	line-height: 3em;
+}
+#cd-lateral-nav .sub-menu {
+	padding: 0 10px 20px 15px;
+	display: none;
+}
+#cd-lateral-nav .sub-menu li a {
+	height: 50px;
+	line-height: 3em;
+}
+#cd-lateral-nav a {
+	display: block;
+	line-height: 2em;
+	padding: 0 16px 0 32px;
+	color: #ffffff;
+}
+#cd-lateral-nav a:hover {
+	color: #E8CF2A;
+	text-decoration: none;
+}
+#cd-lateral-nav a.current, #cd-lateral-nav a.current:hover {
+	background-color: #E8CF2A;
+	color: #333333;
+}
+
+#cd-lateral-nav.lateral-menu-is-open {
+	-webkit-transform: translateX(0);
+	-moz-transform: translateX(0);
+	-ms-transform: translateX(0);
+	-o-transform: translateX(0);
+	transform: translateX(0);
+	/* smooth the scrolling on touch devices - webkit browsers */
+	-webkit-overflow-scrolling: touch;
+}
+
+/* style menu items which have a submenu  */
+#cd-lateral-nav .item-has-children > a {
+	position: relative;
+	font-weight: bold;
+	/* this is the right arrow to show that the item has a submenu  */
+}
+#cd-lateral-nav .item-has-children > a::after {
+	content: '';
+	display: block;
+	height: 11px;
+	width: 8px;
+	position: absolute;
+	top: 50%;
+	bottom: auto;
+	-webkit-transform: translateY(-50%);
+	-moz-transform: translateY(-50%);
+	-ms-transform: translateY(-50%);
+	-o-transform: translateY(-50%);
+	transform: translateY(-50%);
+	right: 1em;
+	background: url("http://plaetjes.csrdelft.nl/knopjes/cd-arrow.svg") no-repeat center center;
+	background-size: 8px 11px;
+	-webkit-transition-property: -webkit-transform;
+	-moz-transition-property: -moz-transform;
+	transition-property: transform;
+	-webkit-transition-duration: 0.2s;
+	-moz-transition-duration: 0.2s;
+	transition-duration: 0.2s;
+}
+#cd-lateral-nav .item-has-children > a.sub-menu-open::after {
+	-webkit-transform: translateY(-50%) rotate(90deg);
+	-moz-transform: translateY(-50%) rotate(90deg);
+	-ms-transform: translateY(-50%) rotate(90deg);
+	-o-transform: translateY(-50%) rotate(90deg);
+	transform: translateY(-50%) rotate(90deg);
+}

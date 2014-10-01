@@ -129,7 +129,7 @@ class VerjaardagContent implements View {
 					foreach ($aVerjaardagen as $lid) {
 						echo '<div class="verjaardag';
 						if ($lid->isJarig()) {
-							echo ' opvallend';
+							echo ' cursief';
 						}
 						echo '">';
 						echo $lid->getNaamLink('pasfoto', 'link');
@@ -141,7 +141,7 @@ class VerjaardagContent implements View {
 					foreach ($aVerjaardagen as $lid) {
 						echo '<div class="item">' . date('d-m', strtotime($lid->getGeboortedatum())) . ' ';
 						if ($lid->isJarig()) {
-							echo '<span class="opvallend">';
+							echo '<span class="cursief">';
 						}
 						echo $lid->getNaamLink('civitas', 'visitekaartje');
 						if ($lid->isJarig()) {

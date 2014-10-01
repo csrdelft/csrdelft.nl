@@ -45,9 +45,8 @@
 	
 	<div id="submitContainer">
 		<label for="submit">&nbsp;</label>
-		<a class="knop" title="Opmaakhulp weergeven" onclick="$('#ubbhulpverhaal').toggle();" style="float: right;">Opmaak</a>
-		<a class="knop" title="Vergroot het invoerveld" onclick="vergrootTextarea('berichtInvoer', 10)" style="float: right; margin-right: 3px;"><div class="arrows">&uarr;&darr;</div>&nbsp;&nbsp;&nbsp;</a>
-
+		<a class="knop float-right" title="Opmaakhulp weergeven" onclick="$('#ubbhulpverhaal').toggle();">Opmaak</a>
+		<a class="knop float-right" title="Vergroot het invoerveld" onclick="vergrootTextarea('berichtInvoer', 10)"><div class="arrows">&uarr;&darr;</div>&nbsp;&nbsp;&nbsp;&nbsp;</a>
 		<input type="button" name="submit" id="submit" value="Verder gaan" onclick="roodschopper('simulate'); return false;" />
 		<input id="forumVoorbeeld" type="button" onclick="ubbPreview('berichtInvoer', 'berichtPreview')" style="color: rgb(119, 119, 119);" value="Voorbeeld"/>
 	</div>

@@ -9,9 +9,9 @@
 {if $taak->getIsVerwijderd()}
 		<a href="{Instellingen::get('taken', 'url')}/herstel/{$taak->getTaakId()}" title="Corveetaak herstellen" class="knop post">{icon get="arrow_undo"}</a>
 {else}
-		<a href="{Instellingen::get('taken', 'url')}/bewerk/{$taak->getTaakId()}" title="Taak wijzigen" class="knop post popup">{icon get="pencil"}</a>
+		<a href="{Instellingen::get('taken', 'url')}/bewerk/{$taak->getTaakId()}" title="Taak wijzigen" class="knop post modal">{icon get="pencil"}</a>
 	{if $taak->getCorveeRepetitieId()}
-		<a href="/corveerepetities/beheer/{$taak->getCorveeRepetitieId()}" title="Wijzig gekoppelde corveerepetitie" class="knop popup">{icon get="calendar_edit"}</a>
+		<a href="/corveerepetities/beheer/{$taak->getCorveeRepetitieId()}" title="Wijzig gekoppelde corveerepetitie" class="knop modal">{icon get="calendar_edit"}</a>
 	{else}
 		<div style="display: inline-block; width: 28px;"></div>
 	{/if}
@@ -27,7 +27,7 @@
 	{if $taak->getUid()}
 		{$aantal}x
 	{/if}
-	<div style="float: right;">
+	<div class="float-right">
 	{if $taak->getUid()}
 		<a href="{Instellingen::get('taken', 'url')}/email/{$taak->getTaakId()}" title="Verstuur een (extra) herinnering voor deze taak" class="knop post confirm">
 	{/if}
@@ -54,7 +54,7 @@
 	<td style="width: 100px;">{$taak->getCorveeFunctie()->naam}</td>
 	<td class="taak-{if $taak->getUid()}toegewezen{elseif  $taak->getBeginMoment() < strtotime(Instellingen::get('corvee', 'waarschuwing_taaktoewijzing_vooraf'))}warning{else}open{/if}" style="font-weight: normal;">
 {if isset($wijzigbaar)}
-		<a href="{Instellingen::get('taken', 'url')}/toewijzen/{$taak->getTaakId()}" title="Deze taak toewijzen aan een lid&#013;Sleep om te ruilen" class="knop post popup dragobject ruilen" style="position: static;" id="taak-{$taak->getTaakId()}"{if $taak->getUid()} uid="{$taak->getUid()}">{icon get="user_green"}{else}>{icon get="user_red"}{/if}</a>
+		<a href="{Instellingen::get('taken', 'url')}/toewijzen/{$taak->getTaakId()}" title="Deze taak toewijzen aan een lid&#013;Sleep om te ruilen" class="knop post modal dragobject ruilen" style="position: static;" id="taak-{$taak->getTaakId()}"{if $taak->getUid()} uid="{$taak->getUid()}">{icon get="user_green"}{else}>{icon get="user_red"}{/if}</a>
 {/if}
 {if $taak->getUid()}
 		&nbsp;{Lid::naamLink($taak->getUid(), Instellingen::get('corvee', 'weergave_ledennamen_beheer'), Instellingen::get('corvee', 'weergave_link_ledennamen'))}
@@ -76,7 +76,7 @@
 	{$taak->getBonusMalus()}
 {/if}
 {if isset($wijzigbaar) and $taak->getUid()}
-		<div style="float: right;">
+		<div class="float-right">
 	{if $taak->getWanneerToegekend()}
 		<a href="{Instellingen::get('taken', 'url')}/puntenintrekken/{$taak->getTaakId()}" title="Punten intrekken" class="knop post">{icon get="medal_silver_delete"}</a>
 	{else}

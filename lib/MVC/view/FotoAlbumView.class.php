@@ -73,7 +73,7 @@ class FotoAlbumView extends SmartyTemplateView {
 
 }
 
-class FotoAlbumToevoegenForm extends PopupForm {
+class FotoAlbumToevoegenForm extends ModalForm {
 
 	public function __construct(FotoAlbum $album) {
 		parent::__construct($album, get_class(), '/fotoalbum/toevoegen/' . $album->getSubDir());
@@ -115,7 +115,7 @@ class FotosDropzone extends DropzoneForm {
 
 	public function view() {
 		echo FotoAlbumView::getBreadcrumbs($this->model, false);
-		echo '<div style="float: right;"><a class="knop" onclick="showExisting_afbeeldingDropzoneUploader();$(this).remove();"><img src="http://plaetjes.csrdelft.nl/famfamfam/photos.png" width="16" height="16" alt="photos" class="icon"> Toon bestaande foto\'s in dit album</a></div>';
+		echo '<div class="float-right"><a class="knop" onclick="showExisting_afbeeldingDropzoneUploader();$(this).remove();"><img src="http://plaetjes.csrdelft.nl/famfamfam/photos.png" width="16" height="16" alt="photos" class="icon"> Toon bestaande foto\'s in dit album</a></div>';
 		echo parent::view();
 		echo '<br /><i>Maak nooit inbreuk op de auteursrechten of het recht op privacy van anderen.</i>';
 	}

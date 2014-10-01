@@ -6,8 +6,11 @@
 
 
 /**** GENERAL *****************************************************************/
-a, a:HOVER{
+a, a:hover{
 	color: #ed1c24;
+}
+a.external {
+	background-image: url('http://plaetjes.csrdelft.nl/layout/external-link-red.png');
 }
 h1, h2, h3, h4 {
 	color: #555555;

@@ -15,13 +15,13 @@ class MenuBeheerController extends AclController {
 		parent::__construct($query, MenuModel::instance());
 		if (!$this->isPosted()) {
 			$this->acl = array(
-				'beheer' => 'P_ADMIN'
+				'beheer' => 'P_ADMIN,groep:Bestuur'
 			);
 		} else {
 			$this->acl = array(
-				'toevoegen'		 => 'P_ADMIN',
-				'bewerken'		 => 'P_ADMIN',
-				'verwijderen'	 => 'P_ADMIN'
+				'toevoegen'		 => 'P_ADMIN,groep:Bestuur',
+				'bewerken'		 => 'P_ADMIN,groep:Bestuur',
+				'verwijderen'	 => 'P_ADMIN,groep:Bestuur'
 			);
 		}
 	}

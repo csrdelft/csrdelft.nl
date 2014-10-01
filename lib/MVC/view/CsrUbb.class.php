@@ -73,25 +73,22 @@ class CsrUbb extends eamBBParser {
 
 	function ubb_img($arguments = array()) {
 		$style = '';
+		$class = '';
 		if (isset($arguments['float'])) {
 			switch ($arguments['float']) {
 				case 'left':
-					$style.='float: left; margin: 0 10px 10px 0; ';
+					$class = 'float-left';
 					break;
 				case 'right':
-					$style.='float: right; margin: 0 0 10px 10px; ';
+					$class = 'float-right';
 					break;
 			}
 		}
 		if (isset($arguments['w']) AND $arguments['w'] > 10) {
-			$style .= 'width: ' . ((int) $arguments['w']) . 'px; ';
+			$style = 'width: ' . ((int) $arguments['w']) . 'px;';
 		}
 		if (isset($arguments['h']) AND $arguments['h'] > 10) {
-			$style .= 'height: ' . ((int) $arguments['h']) . 'px; ';
-		}
-		$class = '';
-		if (isset($arguments['class'])) {
-			$class = ' ' . htmlspecialchars($arguments['class']);
+			$style = 'height: ' . ((int) $arguments['h']) . 'px;';
 		}
 		$content = $this->parseArray(array('[/img]', '[/IMG]'), array());
 		// only valid patterns & prevent CSRF
@@ -147,8 +144,12 @@ class CsrUbb extends eamBBParser {
 	protected function ubb_fotoalbum($arguments = array()) {
 		require_once 'MVC/controller/FotoAlbumController.class.php';
 		$url = urldecode($this->parseArray(array('[/fotoalbum]'), array()));
-		$path = PICS_PATH . 'fotoalbum' . $url;
-		$album = FotoAlbumModel::getFotoAlbum($path);
+		if ($url === 'laatste') {
+			$album = FotoAlbumModel::getMostRecentFotoAlbum();
+		} else {
+			$path = PICS_PATH . 'fotoalbum' . $url;
+			$album = FotoAlbumModel::getFotoAlbum($path);
+		}
 		if (!$album) {
 			return '<div class="ubb_block">Fotoalbum niet gevonden: ' . $url . '</div>';
 		}
@@ -240,7 +241,7 @@ class CsrUbb extends eamBBParser {
 			$content = $arguments;
 		}
 		if (LidInstellingen::get('layout', 'neuzen') != 'nee') {
-			$neus = '<img src="' . CSR_PICS . '/famfamfam/bullet_red.png" width="16" height="16" alt="o" style="margin: -5px;">';
+			$neus = '<img src="' . CSR_PICS . '/famfamfam/bullet_red.png" alt="o" class="neus2013">';
 			$content = str_replace('o', $neus, $content);
 		}
 		return $content;
@@ -779,12 +780,32 @@ HTML;
 		return $html;
 	}
 
-	function ubb_clear($arguments = array()) {
-		$sClear = 'both';
-		if (isset($arguments['clear']) AND ( $arguments['clear'] === 'left' OR $arguments['clear'] === 'right' )) {
-			$sClear = $arguments['clear'];
+	function ubb_b() {
+		if ($this->nobold === true AND $this->quote_level == 0) {
+			return $this->parseArray(array('[/b]'), array('b'));
+		} else {
+			return '<span class="dikgedrukt">' . $this->parseArray(array('[/b]'), array('b')) . '</span>';
 		}
-		return '<br style="height: 0; clear: ' . $sClear . ';" />';
+	}
+
+	function ubb_i() {
+		return '<span class="cursief">' . $this->parseArray(array('[/i]'), array('i')) . '</span>';
+	}
+
+	function ubb_s() {
+		return '<span class="doorgestreept">' . $this->parseArray(array('[/s]'), array('s')) . '</span>';
+	}
+
+	function ubb_u() {
+		return '<span class="onderstreept">' . $this->parseArray(array('[/u]'), array('u')) . '</span>';
+	}
+
+	function ubb_clear($arguments = array()) {
+		$sClear = 'clear';
+		if (isset($arguments['clear']) AND ( $arguments['clear'] === 'left' OR $arguments['clear'] === 'right' )) {
+			$sClear .= '-' . $arguments['clear'];
+		}
+		return '<div class="' . $sClear . '"></div>';
 	}
 
 	/**

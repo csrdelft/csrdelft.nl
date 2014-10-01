@@ -21,7 +21,7 @@
 							{$item->getBeginMoment()|date_format:"%d-%m"}
 						{/if}
 						&nbsp;
-						{$item->getTitel()|truncate:25:"…":true}
+						{$item->getTitel()}
 					</a>
 				</div>
 			{/if}

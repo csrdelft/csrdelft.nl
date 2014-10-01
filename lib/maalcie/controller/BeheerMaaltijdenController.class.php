@@ -55,13 +55,13 @@ class BeheerMaaltijdenController extends AclController {
 	}
 
 	public function beheer($mid = null) {
-		$popup = null;
+		$modal = null;
 		if (is_int($mid) && $mid > 0) {
 			$this->bewerk($mid);
-			$popup = $this->getView();
+			$modal = $this->getView();
 		}
 		$body = new BeheerMaaltijdenView(MaaltijdenModel::getAlleMaaltijden(), false, false, MaaltijdRepetitiesModel::getAlleRepetities());
-		$this->view = new CsrLayoutPage($body, array(), $popup);
+		$this->view = new CsrLayoutPage($body, array(), $modal);
 		$this->view->addStylesheet('/layout/css/maalcie');
 		$this->view->addScript('/layout/js/maalcie');
 	}

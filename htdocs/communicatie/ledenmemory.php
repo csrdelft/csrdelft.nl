@@ -154,7 +154,7 @@ $smarty->assign('scripts', $memory->getScripts());
 ?><!DOCTYPE html>
 <html>
 	<head>
-		<?= $smarty->fetch('csrdelft_head.tpl') ?>
+		<?= $smarty->fetch('html_head.tpl') ?>
 	</head>
 	<body>
 		<?= $memory->view() ?>

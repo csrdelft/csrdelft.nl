@@ -74,7 +74,7 @@ class AgendaItemDeleteView extends SmartyTemplateView {
 
 }
 
-class AgendaItemForm extends PopupForm {
+class AgendaItemForm extends ModalForm {
 
 	public function __construct(AgendaItem $item, $actie) {
 		parent::__construct($item, 'agenda-item-form', '/agenda/' . $actie . '/' . $item->item_id);

@@ -88,7 +88,7 @@ class ForumDeelView extends SmartyTemplateView {
 
 }
 
-class ForumDeelForm extends PopupForm {
+class ForumDeelForm extends ModalForm {
 
 	public function __construct(ForumDeel $deel) {
 		parent::__construct($deel, 'beheerdeelforum', '/forum/beheren/' . $deel->forum_id);
@@ -114,7 +114,7 @@ class ForumDeelForm extends PopupForm {
 		$fields['btn']->extraTitle = 'Alle posts en draden hertellen';
 		$fields['btn']->extraIcon = 'calculator';
 		$fields['btn']->extraUrl = '/forum/hertellen/' . $deel->forum_id;
-		$fields['btn']->extraAction = 'post popup ReloadPage';
+		$fields['btn']->extraAction = 'post modal ReloadPage';
 
 		$this->addFields($fields);
 	}

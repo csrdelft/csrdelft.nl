@@ -8,7 +8,7 @@
  * Formulier voor een nieuwe of te bewerken vrijstelling.
  * 
  */
-class VrijstellingForm extends PopupForm {
+class VrijstellingForm extends ModalForm {
 
 	public function __construct($uid = null, $begin = null, $eind = null, $percentage = null) {
 		parent::__construct(null, 'maalcie-vrijstelling-form', Instellingen::get('taken', 'url') . '/opslaan' . ($uid === null ? '' : '/' . $uid));

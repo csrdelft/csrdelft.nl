@@ -134,36 +134,36 @@ abstract class SimpleHTML implements View {
 		$debug = '';
 		if ($sql) {
 			$debug .= '<hr />SQL<hr />';
-			$debug .= '<pre>' . mb_htmlentities(print_r(array("PDO" => Database::getQueries(), "MySql" => MijnSqli::instance()->getQueries()), true)) . '</pre>';
+			$debug .= mb_htmlentities(print_r(array("PDO" => Database::getQueries(), "MySql" => MijnSqli::instance()->getQueries()), true));
 		}
 		if ($get) {
 			$debug .= '<hr />GET<hr />';
 			if (count($_GET) > 0) {
-				$debug .= '<pre>' . mb_htmlentities(print_r($_GET, true)) . '</pre>';
+				$debug .= mb_htmlentities(print_r($_GET, true));
 			}
 		}
 		if ($post) {
 			$debug .= '<hr />POST<hr />';
 			if (count($_POST) > 0) {
-				$debug .= '<pre>' . mb_htmlentities(print_r($_POST, true)) . '</pre>';
+				$debug .= mb_htmlentities(print_r($_POST, true));
 			}
 		}
 		if ($files) {
 			$debug .= '<hr />FILES<hr />';
 			if (count($_FILES) > 0) {
-				$debug .= '<pre>' . mb_htmlentities(print_r($_FILES, true)) . '</pre>';
+				$debug .= mb_htmlentities(print_r($_FILES, true));
 			}
 		}
 		if ($cookie) {
 			$debug .= '<hr />COOKIE<hr />';
 			if (count($_COOKIE) > 0) {
-				$debug .= '<pre>' . mb_htmlentities(print_r($_COOKIE, true)) . '</pre>';
+				$debug .= mb_htmlentities(print_r($_COOKIE, true));
 			}
 		}
 		if ($session) {
 			$debug .= '<hr />SESSION<hr />';
 			if (count($_SESSION) > 0) {
-				$debug .= '<pre>' . mb_htmlentities(print_r($_SESSION, true)) . '</pre>';
+				$debug .= mb_htmlentities(print_r($_SESSION, true));
 			}
 		}
 		return $debug;

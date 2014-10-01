@@ -39,7 +39,7 @@
 {* nieuw boek formulier *}
 {if $boek->getId()==0}
 	<h1>Nieuw boek toevoegen</h1>
-	<p>Zoek via het Google Books-zoekveld je boek en kies een van de suggesties om de boekgegevens hieronder in te vullen.</p>
+	<p>Zoek via het Google Books-menuZoekveld je boek en kies een van de suggesties om de boekgegevens hieronder in te vullen.</p>
 	<div class="boekzoeker" title="Geef titel, auteur, isbn of een ander kenmerk van het boek. Minstens 7 tekens, na 1 seconde verschijnen suggesties.">
 		<label for="boekzoeker"><img src="{$CSR_PICS}/knopjes/google.ico" />Google Books:</label><input type="text" placeholder="Zoek en kies een suggestie om de velden te vullen" id="boekzoeker">
 	</div>
@@ -147,7 +147,7 @@
 								{if $exemplaar.status=='beschikbaar'}
 									{if $exemplaar.eigenaar_uid=='x222'} {* bibliothecaris werkt met kaartjes *}
 										{if !$boek->isEigenaar($exemplaar.id)} {* basfcie hoeft opmerking niet te zien *}
-											<span class="suggestie" style="font-style: normal;">Biebboek lenen: laat het kaartje achter voor de bibliothecaris.</span><br />
+											<span class="suggestie recht">Biebboek lenen: laat het kaartje achter voor de bibliothecaris.</span><br />
 										{/if}
 									{else}
 										<a class="knop" href="/communicatie/bibliotheek/exemplaarlenen/{$boek->getId()}/{$exemplaar.id}" title="Leen dit boek" onclick="return confirm('U wilt dit boek van {$exemplaar.eigenaar_uid|csrnaam:'civitas':'plain'} lenen?')">{icon get="lorry"} Exemplaar lenen</a>

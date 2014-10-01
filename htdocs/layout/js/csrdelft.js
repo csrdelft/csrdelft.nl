@@ -22,7 +22,7 @@ preload([
 ]);
 
 $(document).ready(function () {
-	init_scroll_fixed();
+	zijbalk_dynamisch();
 	init_key_pressed();
 	init_dropzone();
 	init();
@@ -35,11 +35,11 @@ function init() {
 	init_timeago();
 	init_hoverIntents();
 	init_lazy_images();
-	//undo_inline_css();
+	undo_inline_css();
 }
 
 function undo_inline_css() {
-	$('*').removeAttr('style width border cellSpacing cellPadding'); // etc
+	$('#main *').removeAttr('style width border cellSpacing cellPadding'); // etc
 }
 
 function init_dropzone() {
@@ -132,34 +132,39 @@ function init_lazy_images() {
 
 function zijbalk_dynamisch() {
 	var elmnt = $('#zijbalk');
-	var origWidth = elmnt.width();
-	elmnt.parent().width(origWidth);
+	if (!elmnt.length) {
+		return;
+	}
+
 	var scrollbarWidth = getScrollBarWidth();
 	var getPadding = function () {
-		if (elmnt.hasClass('scroll-fix') && elmnt.get(0).scrollHeight > elmnt.get(0).clientHeight) {
+		if (elmnt.hasClass('scroll-fixed') && elmnt.get(0).scrollHeight > elmnt.get(0).clientHeight) {
 			return scrollbarWidth;
 		}
 		else {
-			return '';
+			return 0;
 		}
 	};
+	var origWidth = elmnt.width() + getPadding();
+
 	var showscroll = function () {
-		elmnt.css({
-			'overflow-y': 'auto',
-			'padding-right': getPadding()
-		});
+		if (elmnt.hasClass('scroll-fixed')) {
+			elmnt.css({
+				'overflow-y': 'auto'
+			});
+		}
 	};
 	var hidescroll = function () {
-		elmnt.css({
-			'overflow-y': '',
-			'padding-right': ''
-		});
+		if (elmnt.hasClass('scroll-fixed')) {
+			elmnt.css({
+				'overflow-y': ''
+			});
+		}
 	};
 	var expand = function () {
 		if (elmnt.width() < origWidth) {
 			elmnt.animate({
-				'width': origWidth,
-				'padding-right': getPadding()
+				'width': origWidth + getPadding()
 			}, 400, showscroll);
 		}
 	};
@@ -167,84 +172,38 @@ function zijbalk_dynamisch() {
 		if (elmnt.width() > elmnt.parent().width()) {
 			hidescroll();
 			elmnt.animate({
-				'width': elmnt.parent().width(),
-				'padding-right': ''
+				'width': elmnt.parent().width()
 			}, 400);
 		}
 	};
 	if ($('#main').width() < 1004) {
 		elmnt.hoverIntent(expand, collapse);
 	}
-	if (elmnt.hasClass('scroll-fix')) {
-		elmnt.hover(function () {
-			if (elmnt.width() >= origWidth) {
-				showscroll();
-			}
-		}, function () {
-			if (elmnt.width() <= elmnt.parent().width()) {
-				hidescroll();
-			}
-		});
-	}
-	var resetWidth = function () {
+	elmnt.hover(function () {
+		if (elmnt.width() >= origWidth) {
+			showscroll();
+		}
+	}, function () {
+		if (elmnt.width() <= elmnt.parent().width()) {
+			hidescroll();
+		}
+	});
+	var onResize = function () {
+		elmnt.css('max-height', window.innerHeight);
 		elmnt.width(elmnt.parent().width());
 	};
-	var alignQuickNav = function () {
-		var margin = elmnt.height() - $('#zijbalk_quicknav').position().top - 30;
-		/*/ fix it to bottom of window
-		 var top = elmnt.parent().offset().top - $(window).scrollTop();
-		 if (top <= 0) {
-		 top = 0;
-		 }
-		 margin -= top;//*/
-		// stay below last block
-		if (margin < 0) {
-			margin = 0;
-		}
-		$('#zijbalk_quicknav').css('margin-top', margin);
-	};
-	if ($('#zijbalk_quicknav').length) {
-		$(window).scroll(alignQuickNav);
-	}
 	$(window).resize(function () {
-		resetWidth();
-		$(window).trigger('scroll');
+		onResize();
 	});
+	var is_chrome = navigator.userAgent.toLowerCase().indexOf('chrome') > -1;
+	if (is_chrome) {
+		$(window).scroll(function () {
+			elmnt.css('top', $(window).scrollTop());
+		});
+	}
 	$(window).trigger('resize');
 	// set delay for adblockers that remove ads so wide they influence page width (very annoying)
-	window.setTimeout(resetWidth, 400);
-}
-
-function zijbalk_modified() {
-	// reset container height
-	var elmnt = $('#zijbalk');
-	if (elmnt.hasClass('scroll-fix')) {
-		elmnt.parent().height(elmnt.height());
-	}
-	// align quick nav
-	$(window).trigger('scroll');
-}
-
-function init_scroll_fixed() {
-	// synchronize size with container
-	$('.scroll-fix').each(function () {
-		$(this).parent().height($(this).height());
-	});
-	zijbalk_dynamisch();
-	// synchronize position with window
-	$(window).scroll(function () {
-		$('.scroll-fix').each(function () {
-			var top = $(this).parent().offset().top - $(window).scrollTop();
-			var left = $(this).parent().offset().left - $(window).scrollLeft();
-			if (top <= 0) {
-				top = 0;
-			}
-			$(this).css({
-				'top': top,
-				'left': left
-			});
-		});
-	});
+	window.setTimeout(onResize, 400);
 }
 
 function page_reload() {
@@ -266,9 +225,9 @@ function init_buttons() {
 			// effect complete
 		});
 	});
-	$('button.popup').unbind('click.popup');
-	$('button.popup').bind('click.popup', function (event) {
-		popup_open();
+	$('button.modal').unbind('click.modal');
+	$('button.modal').bind('click.modal', function (event) {
+		modal_open();
 	});
 	$('button.post').unbind('click.post');
 	$('button.post').bind('click.post', knop_post);
@@ -289,8 +248,8 @@ function init_hoverIntents() {
 }
 
 function init_links() {
-	$('a.popup').unbind('click.popup');
-	$('a.popup').bind('click.popup', popup_open);
+	$('a.modal').unbind('click.modal');
+	$('a.modal').bind('click.modal', modal_open);
 	$('a.post').unbind('click.post');
 	$('a.post').bind('click.post', knop_post);
 	$('a.get').unbind('click.get');
@@ -299,7 +258,7 @@ function init_links() {
 
 function knop_ajax(knop, type) {
 	if (knop.hasClass('confirm') && !confirm(knop.attr('title') + '.\n\nWeet u het zeker?')) {
-		popup_close();
+		modal_close();
 		return false;
 	}
 	if (knop.hasClass('prompt')) {
@@ -313,9 +272,9 @@ function knop_ajax(knop, type) {
 	}
 	var source = knop;
 	var done = dom_update;
-	if (knop.hasClass('popup')) {
+	if (knop.hasClass('modal')) {
 		source = false;
-		done = popup_open;
+		done = modal_open;
 	}
 	if (knop.hasClass('ReloadPage')) {
 		done = page_reload;
@@ -344,26 +303,26 @@ function knop_get(event) {
 	return false;
 }
 
-function popup_open(htmlString) {
+function modal_open(htmlString) {
 	if (htmlString) {
-		$('#popup').html(htmlString);
+		$('#modal').html(htmlString);
 		init();
-		$('#popup').show();
-		$('#popup-background').css('background-image', 'none');
-		$('#popup input:visible:first').focus();
+		$('#modal').show();
+		$('#modal-background').css('background-image', 'none');
+		$('#modal input:visible:first').focus();
 	}
 	else {
-		$('#popup-background').css('background-image', 'url("http://plaetjes.csrdelft.nl/layout/loading_bar_black.gif")');
-		$('#popup').hide();
-		$('#popup').html('');
+		$('#modal-background').css('background-image', 'url("http://plaetjes.csrdelft.nl/layout/loading_bar_black.gif")');
+		$('#modal').hide();
+		$('#modal').html('');
 	}
-	$('#popup-background').fadeIn();
+	$('#modal-background').fadeIn();
 }
 
-function popup_close() {
-	$('#popup').hide();
-	$('#popup').html('');
-	$('#popup-background').fadeOut();
+function modal_close() {
+	$('#modal').hide();
+	$('#modal').html('');
+	$('#modal-background').fadeOut();
 }
 
 function init_forms() {
@@ -465,7 +424,7 @@ function form_submit(event) {
 		alert('Geen wijzigingen');
 		return false;
 	}
-	if (form.hasClass('popup') || form.hasClass('InlineForm')) {
+	if (form.hasClass('modal') || form.hasClass('InlineForm')) {
 		event.preventDefault();
 		var source = false;
 		if (form.hasClass('InlineForm')) {
@@ -514,10 +473,10 @@ function form_cancel(event) {
 		knop_post(event);
 		return false;
 	}
-	if (form.hasClass('popup')) {
+	if (form.hasClass('modal')) {
 		event.preventDefault();
 		if (!form_ischanged(form) || confirm('Sluiten zonder wijzigingen op te slaan?')) {
-			popup_close();
+			modal_close();
 		}
 		return false;
 	}
@@ -533,11 +492,11 @@ function dom_update(htmlString) {
 	var html = $.parseHTML(htmlString);
 	$(html).each(function () {
 		var id = $(this).attr('id');
-		if (id === 'popup-content') {
-			popup_open(htmlString);
+		if (id === 'modal-content') {
+			modal_open(htmlString);
 		}
 		else {
-			popup_close();
+			modal_close();
 		}
 		var elmnt = $('#' + id);
 		if (elmnt.length === 1) {
@@ -571,7 +530,7 @@ function ajax_request(type, url, data, source, onsuccess, onerror, onfinish) {
 		source = 'img[title="' + url + '"]';
 	}
 	else {
-		popup_open();
+		modal_open();
 	}
 	var contentType = 'application/x-www-form-urlencoded; charset=UTF-8';
 	var processData = true;
@@ -599,7 +558,7 @@ function ajax_request(type, url, data, source, onsuccess, onerror, onfinish) {
 			$(source).replaceWith('<img title="' + errorThrown + '" src="http://plaetjes.csrdelft.nl/famfamfam/cancel.png" />');
 		}
 		else {
-			popup_close();
+			modal_close();
 		}
 		if (onerror) {
 			onerror(errorThrown);
