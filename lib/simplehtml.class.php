@@ -70,6 +70,8 @@ abstract class SimpleHTML implements View {
 
 	public static function getStandaardZijbalk() {
 		$zijbalk = array();
+		// Quick navigation buttons
+		$zijbalk[] = new QuickNavigateMenuView();
 		// Is het al...
 		if (LidInstellingen::get('zijbalk', 'ishetal') != 'niet weergeven') {
 			require_once 'ishetalcontent.class.php';
@@ -122,10 +124,6 @@ abstract class SimpleHTML implements View {
 		if (LidInstellingen::get('zijbalk', 'verjaardagen') > 0) {
 			require_once 'lid/verjaardagcontent.class.php';
 			$zijbalk[] = new VerjaardagContent('komende');
-		}
-		// Quick navigation buttons
-		if (LidInstellingen::get('layout', 'zijbalk') == 'fixeer') {
-			$zijbalk[] = new QuickNavigateMenuView();
 		}
 		return $zijbalk;
 	}
