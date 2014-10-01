@@ -203,9 +203,6 @@ function zijbalk_dynamisch() {
 			hidescroll();
 		}
 	});
-	var resetWidth = function () {
-		elmnt.width(elmnt.parent().width());
-	};
 	var alignQuickNav = function () {
 		var margin = elmnt.height() - $('#zijbalk_quicknav').position().top - 30;
 		/*/ fix it to bottom of window
@@ -223,14 +220,17 @@ function zijbalk_dynamisch() {
 	if ($('#zijbalk_quicknav').length) {
 		$(window).scroll(alignQuickNav);
 	}
-	$(window).resize(function () {
+	var resetSize = function () {
 		elmnt.css('max-height', window.innerHeight);
-		resetWidth();
+		elmnt.width(elmnt.parent().width());
+	};
+	$(window).resize(function () {
+		resetSize();
 		$(window).trigger('scroll');
 	});
 	$(window).trigger('resize');
 	// set delay for adblockers that remove ads so wide they influence page width (very annoying)
-	window.setTimeout(resetWidth, 400);
+	window.setTimeout(resetSize, 400);
 }
 
 function page_reload() {
