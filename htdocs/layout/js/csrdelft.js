@@ -150,24 +150,21 @@ function zijbalk_dynamisch() {
 	var showscroll = function () {
 		if (elmnt.hasClass('scroll-fixed')) {
 			elmnt.css({
-				'overflow-y': 'auto'/*,
-				 'padding-right': getPadding()*/
+				'overflow-y': 'auto'
 			});
 		}
 	};
 	var hidescroll = function () {
 		if (elmnt.hasClass('scroll-fixed')) {
 			elmnt.css({
-				'overflow-y': ''/*,
-				 'padding-right': ''*/
+				'overflow-y': ''
 			});
 		}
 	};
 	var expand = function () {
 		if (elmnt.width() < origWidth) {
 			elmnt.animate({
-				'width': origWidth/*,
-				 'padding-right': getPadding()*/
+				'width': origWidth + getPadding()
 			}, 400, showscroll);
 		}
 	};
@@ -175,8 +172,7 @@ function zijbalk_dynamisch() {
 		if (elmnt.width() > elmnt.parent().width()) {
 			hidescroll();
 			elmnt.animate({
-				'width': elmnt.parent().width()/*,
-				 'padding-right': ''*/
+				'width': elmnt.parent().width()
 			}, 400);
 		}
 	};
