@@ -220,17 +220,17 @@ function zijbalk_dynamisch() {
 	if ($('#zijbalk_quicknav').length) {
 		$(window).scroll(alignQuickNav);
 	}
-	var resetSize = function () {
+	var onResize = function () {
 		elmnt.css('max-height', window.innerHeight);
 		elmnt.width(elmnt.parent().width());
+		alignQuickNav();
 	};
 	$(window).resize(function () {
-		resetSize();
-		$(window).trigger('scroll');
+		onResize();
 	});
 	$(window).trigger('resize');
 	// set delay for adblockers that remove ads so wide they influence page width (very annoying)
-	window.setTimeout(resetSize, 400);
+	window.setTimeout(onResize, 400);
 }
 
 function page_reload() {

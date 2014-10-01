@@ -282,6 +282,7 @@ Lateral navigation
 }
 #cd-lateral-nav .cd-navigation li a {
 	height: 50px;
+	line-height: 3em;
 }
 #cd-lateral-nav .sub-menu {
 	padding: 0 10px 20px 15px;
@@ -289,6 +290,7 @@ Lateral navigation
 }
 #cd-lateral-nav .sub-menu li a {
 	height: 50px;
+	line-height: 3em;
 }
 #cd-lateral-nav a {
 	display: block;
