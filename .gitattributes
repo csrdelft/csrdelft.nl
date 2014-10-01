@@ -175,6 +175,8 @@ htdocs/layout/css/stamboom.css -text
 htdocs/layout/css/stamboom.min.css -text
 htdocs/layout/css/stylus/basic.styl -text
 htdocs/layout/css/stylus/dropzone.styl -text
+htdocs/layout/css/toegankelijk_bredere_letters.css -text
+htdocs/layout/css/toegankelijk_bredere_letters.min.css -text
 htdocs/layout/css/ubb.css -text
 htdocs/layout/css/ubb.min.css -text
 htdocs/layout/css/verticalen.css -text

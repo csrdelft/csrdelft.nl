@@ -1,0 +1,11 @@
+/*
+	Opmaak voor bijv. mensen met dyslexie
+*/
+/* 
+    Created on : 1-okt-2014, 17:29:35
+    Author     : Paul Brussee
+*/
+
+body, textarea, input[type="text"] {
+	font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
+}

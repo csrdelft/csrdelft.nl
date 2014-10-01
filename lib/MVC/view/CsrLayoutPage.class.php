@@ -41,6 +41,9 @@ class CsrLayoutPage extends HtmlPage {
 		$this->addStylesheet($css . 'csrdelft');
 		$layout = LidInstellingen::get('layout', 'opmaak');
 		$this->addStylesheet($css . $layout);
+		if (LidInstellingen::get('layout', 'toegankelijk') == 'bredere letters') {
+			$this->addStylesheet($css . 'toegankelijk_bredere_letters');
+		}
 		if (LidInstellingen::get('layout', 'sneeuw') != 'nee') {
 			if (LidInstellingen::get('layout', 'sneeuw') == 'ja') {
 				$this->addStylesheet($css . 'snow.anim');
