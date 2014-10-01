@@ -711,5 +711,6 @@ function ubbPreview(source, dest) {
 		var previewDiv = document.getElementById(dest);
 		applyUBB(ubb, previewDiv);
 		$(previewDiv).addClass('preview-show');
+		$(window).trigger('scroll'); // werkomheen zijbalk jump chrome
 	}
 }
