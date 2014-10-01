@@ -135,20 +135,29 @@ function init_lazy_images() {
 
 function zijbalk_dynamisch() {
 	var elmnt = $('#zijbalk');
-	if (!elmnt.length) {
+	if (!elmnt.length || !elmnt.hasClass('scroll-fixed')) {
 		return;
 	}
 
 	var scrollbarWidth = getScrollBarWidth();
 	var getPadding = function () {
-		if (elmnt.hasClass('scroll-fixed') && elmnt.get(0).scrollHeight > elmnt.get(0).clientHeight) {
+		if (elmnt.get(0).scrollHeight > elmnt.get(0).clientHeight) {
 			return scrollbarWidth;
 		}
 		else {
 			return 0;
 		}
 	};
-	var origWidth = elmnt.width() + getPadding();
+
+	var onResize = function () {
+		elmnt.css('max-height', window.innerHeight);
+		elmnt.width(elmnt.parent().width());
+	};
+	$(window).resize(function () {
+		onResize();
+	});
+	var origWidth = elmnt.width();
+	onResize();
 
 	var showscroll = function () {
 		if (elmnt.hasClass('scroll-fixed')) {
@@ -189,13 +198,7 @@ function zijbalk_dynamisch() {
 			hidescroll();
 		}
 	});
-	var onResize = function () {
-		elmnt.css('max-height', window.innerHeight);
-		elmnt.width(elmnt.parent().width());
-	};
-	$(window).resize(function () {
-		onResize();
-	});
+
 	var is_chrome = navigator.userAgent.toLowerCase().indexOf('chrome') > -1;
 	if (is_chrome) {
 		$(window).scroll(function () {
