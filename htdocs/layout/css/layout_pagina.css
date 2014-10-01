@@ -19,7 +19,7 @@ html, body {
 	height: 100%;
 }
 
-body {
+body, textarea, input[type="text"] {
 	font-size: 100%;
 	font-family: Helvetica,"Helvetice Neue",Arial;
 	color: #000000;
