@@ -129,7 +129,6 @@ function init_lazy_images() {
 		$(this).html(content);
 		content.on('load', function () {
 			$(this).parent().replaceWith($(this));
-			$(window).trigger('resize'); // layout_breedte_werkomheen
 		});
 	});
 }
@@ -202,8 +201,8 @@ function zijbalk_dynamisch() {
 		$(window).scroll(function () {
 			elmnt.css('top', $(window).scrollTop());
 		});
+		window.setTimeout(onResize, 100);
 	}
-	$(window).trigger('resize');
 }
 
 function page_reload() {
