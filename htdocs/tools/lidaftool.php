@@ -21,16 +21,22 @@ if (isset($_POST['namenRaw'])) {
 			if (isset($aLid['uid'])) {
 				$lid = LidCache::getLid($aLid['uid']);
 				//naam is gevonden en uniek, dus direct goed.
-				$saldi = $lid->getSaldi();
 				echo '<tr>';
 				echo '<td ><input type="hidden" name="naam[]" value="' . $aLid['uid'] . '" />' . $aLid['naam'] . '</td>';
-				foreach ($lid->getSaldi() as $saldo) {
-					echo '<td style="text-align: right;';
-					if ($saldo['saldo'] < 0) {
-						echo ' color: red;';
-					}
-					echo '">' . sprintf('&euro; %01.2f', $saldo['saldo']) . '</td>';
+
+				$saldo = $lid->getSoccieSaldo();
+				echo '<td style="text-align: right;';
+				if ($saldo < 0) {
+					echo ' color: red;';
 				}
+				echo '">' . sprintf('&euro; %01.2f', $saldo) . '</td>';
+
+				$saldo = $lid->getMaalCieSaldo();
+				echo '<td style="text-align: right;';
+				if ($saldo < 0) {
+					echo ' color: red;';
+				}
+				echo '">' . sprintf('&euro; %01.2f', $saldo) . '</td>';
 
 				require_once 'maalcie/model/MaaltijdAbonnementenModel.class.php';
 				$abos = MaaltijdAbonnementenModel::getAbonnementenVoorLid($aLid['uid']);

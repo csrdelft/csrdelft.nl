@@ -10,13 +10,18 @@
 							<li><a href="/endsu/" style="color: red;">SU {LoginModel::instance()->getSuedFrom()->getNaamLink('civitas', 'plain')}</a></li>
 						{/if}
 						<li><a href="/communicatie/profiel/{LoginModel::getUid()}">Profiel</a></li>
-						{foreach from=LoginModel::instance()->getLid()->getSaldi() item=saldo}
-							<li>
-								<a href="/communicatie/profiel/{LoginModel::getUid()}">
-									{$saldo.naam}: <span{if $saldo.saldo < 0} style="color: red;"{/if}>&euro; {$saldo.saldo|number_format:2:",":"."}</span>
-								</a>
-							</li>
-						{/foreach}
+						<li>
+							<a href="/communicatie/profiel/{LoginModel::getUid()}">
+								{assign var=saldo value=LoginModel::instance()->getLid()->getSoccieSaldo()}
+								SocCie: <span{if $saldo < 0} style="color: red;"{/if}>&euro; {$saldo|number_format:2:",":"."}</span>
+							</a>
+						</li>
+						<li>
+							<a href="/communicatie/profiel/{LoginModel::getUid()}">
+								{assign var=saldo value=LoginModel::instance()->getLid()->getMaalcieSaldo()}
+								MaalCie: <span{if $saldo < 0} style="color: red;"{/if}>&euro; {$saldo|number_format:2:",":"."}</span>
+							</a>
+						</li>
 						<li><a href="/instellingen">Instellingen</a></li>
 						{if LoginModel::mag('P_LEDEN_MOD')}
 							<li><a href="/beheer">Beheeroverzicht</a></li>

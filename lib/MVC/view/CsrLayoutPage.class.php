@@ -102,9 +102,6 @@ class CsrLayoutPage extends HtmlPage {
 			$smarty->assign('debug', SimpleHTML::getDebug());
 		}
 
-		// SocCie-saldi & MaalCie-saldi
-		$smarty->assign('saldi', LoginModel::instance()->getLid()->getSaldi());
-
 		if (LoginModel::mag('P_ADMIN')) {
 			require_once 'MVC/model/ForumModel.class.php';
 			$smarty->assign('forumcount', ForumPostsModel::instance()->getAantalWachtOpGoedkeuring());

@@ -34,7 +34,7 @@ class Lid implements Serializable, Agendeerbaar {
 
 	private function load($uid) {
 		$db = MijnSqli::instance();
-		$query = "SELECT * FROM lid LEFT JOIN socCieKlanten ON uid = stekUID WHERE uid = '" . $db->escape($uid) . "' LIMIT 1;";
+		$query = "SELECT * FROM lid WHERE uid = '" . $db->escape($uid) . "' LIMIT 1;";
 		$lid = $db->getRow($query);
 		if (is_array($lid)) {
 			$this->profiel = $lid;
@@ -99,8 +99,6 @@ class Lid implements Serializable, Agendeerbaar {
 	public function save() {
 		$db = MijnSqli::instance();
 		$donotsave = array('uid', 'rssToken');
-		$soccieBeunhaas = array('stekUID', 'socCieId', 'naam', 'saldo', 'deleted');
-		$donotsave = array_merge($donotsave, $soccieBeunhaas);
 
 		$queryfields = array();
 		foreach ($this->profiel as $veld => $value) {
@@ -639,15 +637,18 @@ class Lid implements Serializable, Agendeerbaar {
 	}
 
 	/**
-	 * Geef de saldi van het lid terug, vanuit de lid-tabel.
-	 * Als het goed is is die waarde actueel.
-	 *
-	 * (25-11-2010) $alleenRood-parameter weggehaald, werd nergens gebruikt.
+	 * Vraag SocCie saldo aan SocCie systeem
 	 */
-	public function getSaldi() {
-		return array(
-			array('naam' => 'SocCie', 'saldo' => !empty($this->profiel['saldo']) ? $this->profiel['saldo'] / 100 : 0),
-			array('naam' => 'MaalCie', 'saldo' => $this->profiel['maalcieSaldo']));
+	public function getSoccieSaldo() {
+		return -11;
+		return SocCieModel::instance()->getSaldoVoorLid($this->uid);
+	}
+
+	/**
+	 * Vraag MaalCie saldo aan MaalCie systeem (helaas niet zo mooi, staat gewoon in lid-tabel)
+	 */
+	public function getMaalCieSaldo() {
+		return $this->profiel['maalcieSaldo'];
 	}
 
 	/**

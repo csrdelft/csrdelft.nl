@@ -642,9 +642,8 @@ class ProfielStatus extends Profiel {
 	private function notifyFisci($oudestatus, $nieuwestatus) {
 		//saldi ophalen
 		$saldi = '';
-		foreach ($this->bewerktLid->getSaldi() as $saldo) {
-			$saldi .= $saldo['naam'] . ': ' . $saldo['saldo'] . "\n";
-		}
+		$saldi .= 'SocCie: ' . $this->bewerktLid->getSoccieSaldo() . "\n";
+		$saldi .= 'MaalCie: ' . $this->bewerktLid->getMaalCieSaldo() . "\n";
 
 		$bericht = file_get_contents(SMARTY_TEMPLATE_DIR . 'MVC/mail/lidafmeldingfisci.mail');
 		$uid = $this->bewerktLid->getUid();
