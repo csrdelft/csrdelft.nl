@@ -401,8 +401,9 @@ class ForumController extends Controller {
 			$value = !$draad->$property;
 		} elseif ($property === 'forum_id') {
 			$value = (int) filter_input(INPUT_POST, $property, FILTER_SANITIZE_NUMBER_INT);
-			if (!ForumDelenModel::instance()->bestaatForumDeel($value)) {
-				throw new Exception('Forum bestaat niet!');
+			$deel = ForumDelenModel::instance()->getForumDeel($value);
+			if (!$deel->magModereren()) {
+				$this->geentoegang();
 			}
 		} elseif ($property === 'titel' OR $property === 'gedeeld_met') {
 			$value = trim(filter_input(INPUT_POST, $property, FILTER_SANITIZE_STRING));
