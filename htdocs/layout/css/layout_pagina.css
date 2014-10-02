@@ -66,6 +66,7 @@ Main components
 	transition-duration: 0.4s;
 }
 .cd-main-content.lateral-menu-is-open {
+	/* ensures that the menu is visible if scrolled, but also causes jump in scrolling that is masked by z-index: 0 */
 	overflow: hidden;
 	/* translate to show the lateral menu - all content needs to be put in the .cd-main-content to translate*/
 	-webkit-transform: translateX(-260px);
@@ -76,9 +77,8 @@ Main components
 }
 @media (max-width: 1004px) {
 	.cd-main-content.lateral-menu-is-open{ 
-		/* prevent main content from overlapping lateral menu */
+		/* prevent main content from overlapping lateral menu, and also masks the jump caused by overflow: hidden */
 		z-index: 0; 
-		/* also masks the jump caused by overflow: hidden in csrdelft.css */
 	}
 }
 
