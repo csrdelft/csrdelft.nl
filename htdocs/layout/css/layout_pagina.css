@@ -76,6 +76,7 @@ Main components
 }
 @media (max-width: 1024px) {
     .cd-main-content.lateral-menu-is-open{
+		/* prevent main content from overlapping lateral menu */
         z-index: 0;
     }
 }
@@ -166,7 +167,13 @@ Top navigation
 #cd-top-nav li {
 	display: inline-block;
 	height: 50px;
-	line-height: 3em;
+	line-height: 50px;
+}
+@media (max-width: 640px) {
+	#cd-top-nav li {
+		height: 25px;
+		line-height: 25px;
+	}
 }
 #cd-top-nav a {
 	display: block;
@@ -304,7 +311,7 @@ Lateral navigation
 #cd-lateral-nav .sub-menu li a {
 	height: 50px;
 	line-height: 3em;
-    padding: 0 26px 0 47px;
+	padding: 0 26px 0 47px;
 }
 #cd-lateral-nav a {
 	display: block;
