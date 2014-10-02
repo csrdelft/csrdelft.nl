@@ -12,7 +12,7 @@
 						<li><a href="/communicatie/profiel/{LoginModel::getUid()}">Profiel</a></li>
 						<li>
 							<a href="/communicatie/profiel/{LoginModel::getUid()}">
-								{assign var=saldo value=LoginModel::instance()->getLid()->getSoccieSaldo()}
+								{assign var=saldo value=SaldoModel::instance()->getSaldo()}
 								SocCie: <span{if $saldo < 0} style="color: red;"{/if}>&euro; {$saldo|number_format:2:",":"."}</span>
 							</a>
 						</li>
