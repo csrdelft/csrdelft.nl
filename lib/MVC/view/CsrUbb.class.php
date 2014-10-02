@@ -77,10 +77,10 @@ class CsrUbb extends eamBBParser {
 		if (isset($arguments['float'])) {
 			switch ($arguments['float']) {
 				case 'left':
-					$class = 'float-left';
+					$class = ' float-left';
 					break;
 				case 'right':
-					$class = 'float-right';
+					$class = ' float-right';
 					break;
 			}
 		}
