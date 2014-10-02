@@ -300,7 +300,7 @@ Lateral navigation
 	padding: 0 0 20px 0;
 	display: none;
 }
-#cd-lateral-nav .sub-menu li.hidden{
+#cd-lateral-nav li.hidden{
     display: none;
 }
 #cd-lateral-nav .sub-menu li a {
