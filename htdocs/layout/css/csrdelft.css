@@ -4,15 +4,17 @@
 	border-collapse: collapse;
 	font-size: 12px;
 }
-#mainleft{
-	width: 220px;
-}
 #mainright{
 	max-width: 1004px;
 	min-width: 750px;
 	padding: 50px 0 0 50px;
 	line-height: 1.25em;
 	background-color: #ffffff;
+}
+@media (max-width: 1024px) {
+    #mainright{
+        padding: 50px 0 0 10px;
+    }
 }
 .dragobject{
 	position: fixed;
@@ -161,29 +163,26 @@ ul.nobullets li{ list-style-type: none; }
 #zijbalk{
 	position: static;
 	width: 220px;
-	padding-left: 10px;
-	min-width: 15px;
+	padding-left: 15px;
 	overflow: hidden;
 	background-color: #f5f5f5;
 }
 #zijbalk .block{
-	padding: 10px 0 0 0;
+	width: 190px;
 }
 #zijbalk .block h1{
 	border: none;
 	font-size: 12px;
 	font-weight: normal;
-	margin: 0;
-	margin-bottom: 5px;
-	padding: 2px 5px;
-	padding-bottom: 5px;
+	margin: 10px 0 5px 0;
+	padding: 2px 0 5px 0;
 	background-image: url("http://plaetjes.csrdelft.nl/layout/portal-break.png");
 	background-repeat: no-repeat;
 	background-position: bottom left;
 	background-color: transparent;
 }
 #zijbalk .block .item{
-	padding: 1px 5px;
+	padding: 1px 0;
 	font-size: 11px;
 	border: none;
 	background-color: transparent;
@@ -199,7 +198,7 @@ ul.nobullets li{ list-style-type: none; }
 div.ishetal{
 	text-align: center;
 	width: 180px;
-	margin: 0 20px 20px 0;
+	margin: 15px 20px 20px 0;
 }
 div.ishetal div.ja, div.ishetal div.nee{
 	font-size: 16px;
@@ -211,7 +210,7 @@ div.ishetal div.ja{
 	color: green;
 }
 #zijbalk_quicknav{
-	margin: 5px 0;
+	margin: 10px 0;
 	overflow: hidden;
 	white-space: nowrap;
 }
