@@ -464,7 +464,7 @@ class RechtenField extends TextField {
 		$this->suggestions[] = 'groep:KorteNaam';
 		$this->suggestions[] = 'geslacht:m';
 		$this->suggestions[] = 'geslacht:v';
-		$verticalen = Verticale::getNamen();
+		$verticalen = OldVerticale::getNamen();
 		foreach ($verticalen as $naam) {
 			$this->suggestions[] = 'verticale:' . $naam;
 		}
@@ -1227,7 +1227,7 @@ class WeekdagField extends SelectField {
 class VerticaleField extends SelectField {
 
 	public function __construct($name, $value, $description = null) {
-		$verticalen = Verticale::getNamen();
+		$verticalen = OldVerticale::getNamen();
 		parent::__construct($name, $value, $description, $verticalen);
 	}
 

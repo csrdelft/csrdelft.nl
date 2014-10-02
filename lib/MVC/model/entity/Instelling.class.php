@@ -48,7 +48,7 @@ class Instelling extends PersistentEntity {
 	 * Database primary key
 	 * @var array
 	 */
-	protected static $primary_keys = array('module', 'instelling_id');
+	protected static $primary_key = array('module', 'instelling_id');
 	/**
 	 * Database table name
 	 * @var string

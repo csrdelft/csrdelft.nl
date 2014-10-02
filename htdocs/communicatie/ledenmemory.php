@@ -26,8 +26,8 @@ class MemoryView extends HtmlPage {
 		$this->verticale = null;
 		if (isset($_GET['verticale'])) {
 			$this->verticale = filter_input(INPUT_GET, 'verticale', FILTER_SANITIZE_STRING);
-			$lettersById = Verticale::getLetters();
-			$namenById = Verticale::getNamen();
+			$lettersById = OldVerticale::getLetters();
+			$namenById = OldVerticale::getNamen();
 			if (in_array($this->verticale, $namenById)) {
 				$this->verticale = array_search($this->verticale, $namenById);
 			} elseif (in_array($this->verticale, $lettersById)) {
@@ -52,7 +52,7 @@ class MemoryView extends HtmlPage {
 		if ($this->verticale === null) {
 			return 'Ledenmemory lichting ' . $this->lichting . ($this->learnmode ? 'oefenen' : '');
 		}
-		return 'Ledenmemory verticale ' . Verticale::getNaamById($this->verticale) . ($this->learnmode ? 'oefenen' : '');
+		return 'Ledenmemory verticale ' . OldVerticale::getNaamById($this->verticale) . ($this->learnmode ? 'oefenen' : '');
 	}
 
 	public function getModel() {

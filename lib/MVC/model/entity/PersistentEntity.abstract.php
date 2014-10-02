@@ -9,7 +9,7 @@ require_once 'MVC/model/entity/PersistentField.class.php';
  * 
  * @author P.W.G. Brussee <brussee@live.nl>
  * 
- * Requires static properties in superclass: $table_name, $persistent_fields, $primary_keys
+ * Requires static properties in superclass: $table_name, $persistent_fields, $primary_key
  * Optional: static $rename_fields = array('oldname' => 'newname');
  */
 abstract class PersistentEntity implements JsonSerializable {
@@ -53,7 +53,7 @@ abstract class PersistentEntity implements JsonSerializable {
 	}
 
 	public static function getPrimaryKey() {
-		return static::$primary_keys;
+		return static::$primary_key;
 	}
 
 	public function getUUID() {
@@ -76,12 +76,12 @@ abstract class PersistentEntity implements JsonSerializable {
 	/**
 	 * Get the fields and their values of this object.
 	 * 
-	 * @param boolean $primary_keys_only
+	 * @param boolean $primary_key_only
 	 * @return array
 	 */
-	public function getValues($primary_keys_only = false) {
+	public function getValues($primary_key_only = false) {
 		$values = array();
-		if ($primary_keys_only) {
+		if ($primary_key_only) {
 			$fields = $this->getPrimaryKey();
 		} else {
 			$fields = $this->getFields();
@@ -93,7 +93,7 @@ abstract class PersistentEntity implements JsonSerializable {
 				$values[$field] = (int) $values[$field];
 			}
 		}
-		if ($primary_keys_only) {
+		if ($primary_key_only) {
 			return array_values($values);
 		}
 		return $values;
@@ -142,6 +142,8 @@ abstract class PersistentEntity implements JsonSerializable {
 			$field->type = 'int(11)';
 		} elseif ($field->type === T::String) {
 			$field->type = 'varchar(255)';
+		} elseif ($field->type === T::Char) {
+			$field->type = 'varchar(1)';
 		} elseif ($field->type === T::UID) {
 			$field->type = 'varchar(4)';
 		} elseif ($field->type === T::Enumeration) {

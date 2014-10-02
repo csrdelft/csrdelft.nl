@@ -4,6 +4,7 @@ require_once 'ldap.class.php';
 require_once 'status.class.php';
 require_once 'lichting.class.php';
 require_once 'verticale.class.php';
+require_once 'MVC/model/VerticalenModel.class.php';
 require_once 'groepen/groep.class.php';
 require_once 'MVC/model/Agendeerbaar.interface.php';
 
@@ -397,11 +398,11 @@ class Lid implements Serializable, Agendeerbaar {
 	//einde implements Agendeerbaar
 	//Verticale: respectievelijk naam, letter en id. Bijvooreeld voor 'Diagonaal', 'D', 4
 	public function getVerticale() {
-		return Verticale::getNaamById($this->getVerticaleID());
+		return OldVerticale::getNaamById($this->getVerticaleID());
 	}
 
 	public function getVerticaleLetter() {
-		return Verticale::getLetterById($this->getVerticaleID());
+		return OldVerticale::getLetterById($this->getVerticaleID());
 	}
 
 	public function getVerticaleID() {

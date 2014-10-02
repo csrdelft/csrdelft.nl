@@ -78,7 +78,7 @@ class GroepLid extends PersistentEntity {
 	 * Database primary key
 	 * @var array
 	 */
-	protected static $primary_keys = array('groep_type', 'groep_id', 'uid');
+	protected static $primary_key = array('groep_type', 'groep_id', 'uid');
 	/**
 	 * Database table name
 	 * @var string

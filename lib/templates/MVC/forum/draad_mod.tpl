@@ -3,15 +3,19 @@
 		<tbody>
 			<tr>
 				<td>
-					<a href="/forum/wijzigen/{$draad->draad_id}/plakkerig" class="knop post ReloadPage" title="Verander plakkerigheid">
-						{icon get="note"} maak {if $draad->plakkerig}<strong>niet</strong> {/if}plakkerig
-					</a>
-					<br /><br />
 					{if LoginModel::mag('P_FORUM_BELANGRIJK')}
 						<a href="/forum/wijzigen/{$draad->draad_id}/belangrijk" class="knop post ReloadPage" title="Verander belangrijkheid">
-							{icon get="asterisk_orange"} maak {if $draad->belangrijk}<strong>niet</strong> {/if}belangrijk
+							{icon get="asterisk_orange"} maak {if $draad->belangrijk}<span class="dikgedrukt">niet</span> {/if}belangrijk
 						</a>
+						<br /><br />
 					{/if}
+					<a href="/forum/wijzigen/{$draad->draad_id}/plakkerig" class="knop post ReloadPage" title="Verander plakkerigheid">
+						{icon get="note"} maak {if $draad->plakkerig}<span class="dikgedrukt">niet</span> {/if}plakkerig
+					</a>
+					<br /><br />
+					<a href="/forum/wijzigen/{$draad->draad_id}/eerste_post_plakkerig" class="knop post ReloadPage" title="Verander plakkerigheid van eerste post">
+						{icon get="note"} maak eerste post {if $draad->eerste_post_plakkerig}<span class="dikgedrukt">niet</span> {/if}plakkerig
+					</a>
 					<br /><br />
 					<a href="/forum/wijzigen/{$draad->draad_id}/verwijderd" class="knop post confirm ReloadPage" title="Verander status verwijderd (incl. alle reacties)">
 						{if $draad->verwijderd}
@@ -22,12 +26,28 @@
 					</a>
 				</td>
 				<td>
-					<a href="/forum/wijzigen/{$draad->draad_id}/eerste_post_plakkerig" class="knop post ReloadPage" title="Verander plakkerigheid van eerste post">
-						{icon get="note"} maak eerste post {if $draad->eerste_post_plakkerig}<strong>niet</strong> {/if}plakkerig
-					</a>
-					<br /><br />
+					<form action="/forum/wijzigen/{$draad->draad_id}/gedeeld_met" method="post">
+						<label>Delen met &nbsp;</label>
+						<select name="gedeeld_met">
+							<option value="" selected="selected">niemand</option>
+							{assign var=found value=false}
+							<optgroup label="Verticalen">
+								{foreach from=VerticalenModel::instance()->find() item=verticale}
+									{if $verticale->id > 0}
+										{assign var=filter value="verticale:"|cat:$verticale->naam}
+										<option value="{$filter}"{if $filter === $draad->gedeeld_met}{assign var=found value=true} selected="selected"{/if}>{$verticale->naam}</option>
+									{/if}
+								{/foreach}
+							</optgroup>
+							{if !$found and !empty($draad->gedeeld_met)}
+								<option value="{$draad->gedeeld_met}" selected="selected">{$draad->gedeeld_met}</option>
+							{/if}
+						</select>
+						<input type="submit" value="Opslaan" />
+					</form>
+					<br />
 					<form action="/forum/wijzigen/{$draad->draad_id}/forum_id" method="post">
-						<label for="forum_id">Verplaats naar &nbsp;</label>
+						<label>Verplaats naar &nbsp;</label>
 						<select name="forum_id">
 							{foreach from=ForumModel::instance()->getForum() item=cat}
 								<optgroup label="{$cat->titel}">
@@ -41,7 +61,7 @@
 					</form>
 					<br />
 					<form action="/forum/wijzigen/{$draad->draad_id}/titel" method="post">
-						<label for="titel">Titel aanpassen &nbsp;</label>
+						<label>Titel aanpassen &nbsp;</label>
 						<input type="text" name="titel" value="{$draad->titel}" />
 						<input type="submit" value="Opslaan" />
 					</form>

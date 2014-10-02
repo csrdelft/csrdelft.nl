@@ -33,7 +33,7 @@ class Bijbelrooster extends PersistentEntity implements Agendeerbaar {
 	 * Database primary key
 	 * @var array
 	 */
-	protected static $primary_keys = array('dag');
+	protected static $primary_key = array('dag');
 	/**
 	 * Database table name
 	 * @var string

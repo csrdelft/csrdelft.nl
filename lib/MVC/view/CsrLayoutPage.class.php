@@ -102,7 +102,7 @@ class CsrLayoutPage extends HtmlPage {
 			$smarty->assign('debug', SimpleHTML::getDebug());
 		}
 
-		if (LoginModel::mag('P_ADMIN')) {
+		if (LoginModel::mag('P_LEDEN_MOD')) {
 			require_once 'MVC/model/ForumModel.class.php';
 			$smarty->assign('forumcount', ForumPostsModel::instance()->getAantalWachtOpGoedkeuring());
 

@@ -3095,6 +3095,7 @@ lib/MVC/model/Paging.interface.php -text
 lib/MVC/model/Persistence.interface.php -text
 lib/MVC/model/PersistenceModel.abstract.php -text
 lib/MVC/model/SocCieModel.class.php -text
+lib/MVC/model/VerticalenModel.class.php -text
 lib/MVC/model/entity/Afbeelding.class.php -text
 lib/MVC/model/entity/AgendaItem.class.php -text
 lib/MVC/model/entity/Bestand.class.php -text
@@ -3122,6 +3123,7 @@ lib/MVC/model/entity/PersistentEnum.interface.php -text
 lib/MVC/model/entity/PersistentField.class.php -text
 lib/MVC/model/entity/PersistentType.enum.php -text
 lib/MVC/model/entity/SocCie.class.php -text
+lib/MVC/model/entity/Verticale.class.php -text
 lib/MVC/model/entity/groepen/Activiteit.class.php -text
 lib/MVC/model/entity/groepen/Bestuur.class.php -text
 lib/MVC/model/entity/groepen/Commissie.class.php -text
@@ -4119,3 +4121,4 @@ sql/5600_rename_lid_id.sql -text
 sql/5609_door_lid_id.sql -text
 sql/5615_verberg_verjaardagen.sql -text
 sql/5668_default_values_lid__v3.sql -text
+sql/6175_forum_gedeeld_met.sql -text

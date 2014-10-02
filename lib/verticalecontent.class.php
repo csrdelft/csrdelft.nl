@@ -12,12 +12,12 @@ class VerticalenContent implements View {
 
 	public function viewEmails($vertkring) {
 		try {
-			$verticale = new Verticale(substr($vertkring, 0, 1));
+			$verticale = new OldVerticale(substr($vertkring, 0, 1));
 		} catch (Exception $e) {
 			echo 'Verticale bestaat niet';
 			return false;
 		}
-		if ($verticale instanceof Verticale) {
+		if ($verticale instanceof OldVerticale) {
 			try {
 				$kring = $verticale->getKring((int) substr($vertkring, 2, 1));
 			} catch (Exception $e) {
@@ -33,7 +33,7 @@ class VerticalenContent implements View {
 	}
 
 	public function view() {
-		$verticalen = Verticale::getAll();
+		$verticalen = OldVerticale::getAll();
 
 		echo '<ul class="horizontal nobullets">
 			<li>

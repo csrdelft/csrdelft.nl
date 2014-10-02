@@ -117,18 +117,18 @@ class DatabaseAdmin extends Database {
 	 * 
 	 * @param string $name
 	 * @param array $fields
-	 * @param array $primary_keys
+	 * @param array $primary_key
 	 * @return string SQL query
 	 */
-	public static function sqlCreateTable($name, array $fields, array $primary_keys) {
+	public static function sqlCreateTable($name, array $fields, array $primary_key) {
 		$sql = 'CREATE TABLE ' . $name . ' (';
 		foreach ($fields as $name => $field) {
 			$sql .= $field->toSQL() . ', ';
 		}
-		if (empty($primary_keys)) {
+		if (empty($primary_key)) {
 			$sql = substr($sql, 0, -2); // remove last ,
 		} else {
-			$sql .= 'PRIMARY KEY (' . implode(', ', $primary_keys) . ')';
+			$sql .= 'PRIMARY KEY (' . implode(', ', $primary_key) . ')';
 		}
 		$sql .= ') ENGINE=InnoDB DEFAULT CHARSET=utf8 auto_increment=1';
 		$query = self::instance()->prepare($sql);

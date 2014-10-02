@@ -48,7 +48,7 @@ class CorveeKwalificatie extends PersistentEntity {
 	 * Database primary key
 	 * @var array
 	 */
-	protected static $primary_keys = array('uid', 'functie_id');
+	protected static $primary_key = array('uid', 'functie_id');
 	/**
 	 * Database table name
 	 * @var string

@@ -11,6 +11,7 @@
 abstract class T implements PersistentEnum {
 
 	const String = 'string';
+	const Char = 'char';
 	const Boolean = 'boolean';
 	const Integer = 'int';
 	const Float = 'float';
@@ -21,7 +22,7 @@ abstract class T implements PersistentEnum {
 	const UID = 'uid';
 
 	public static function getTypeOptions() {
-		return array(self::String, self::Boolean, self::Integer, self::Float, self::DateTime, self::Text, self::LongText, self::Enumeration, self::UID);
+		return array(self::String, self::Char, self::Boolean, self::Integer, self::Float, self::DateTime, self::Text, self::LongText, self::Enumeration, self::UID);
 	}
 
 }

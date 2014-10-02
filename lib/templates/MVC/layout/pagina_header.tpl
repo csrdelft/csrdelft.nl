@@ -31,7 +31,7 @@
 								<li><a href="/tools/query.php?id={$queue->getID()}">{$name|ucfirst}: {$queue->count()}</a></li>
 							{/foreach}
 						{/if}
-						{if LoginModel::mag('P_ADMIN') and $smarty.const.DEBUG}
+						{if LoginModel::mag('P_ADMIN')}
 							<li><a href="/su/x101">SU Jan Lid.</a></li>
 						{/if}
 						<li><a href="/logout">Log uit</a></li>

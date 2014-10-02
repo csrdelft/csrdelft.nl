@@ -74,7 +74,7 @@ class GroepCategorie extends PersistentEntity {
 	 * Database primary key
 	 * @var array
 	 */
-	protected static $primary_keys = array('categorie_id');
+	protected static $primary_key = array('categorie_id');
 	/**
 	 * Database table name
 	 * @var string

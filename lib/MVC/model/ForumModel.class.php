@@ -550,7 +550,7 @@ class ForumDradenModel extends PersistenceModel implements Paging {
 	}
 
 	public function getForumDradenVoorDeel(ForumDeel $deel) {
-		return $this->find('forum_id = ? AND wacht_goedkeuring = FALSE AND verwijderd = FALSE', array($deel->forum_id), 'plakkerig DESC, laatst_gewijzigd DESC', null, $this->per_pagina, ($this->pagina - 1) * $this->per_pagina)->fetchAll();
+		return $this->find('(forum_id = ? OR gedeeld_met = ?) AND wacht_goedkeuring = FALSE AND verwijderd = FALSE', array($deel->forum_id, $deel->rechten_posten), 'plakkerig DESC, laatst_gewijzigd DESC', null, $this->per_pagina, ($this->pagina - 1) * $this->per_pagina)->fetchAll();
 	}
 
 	/**
@@ -849,7 +849,7 @@ class ForumPostsModel extends PersistenceModel implements Paging {
 		foreach ($delen as $forum_id => $deel) {
 			if (!$deel->magLezen()) {
 				foreach ($draden as $draad_id => $draad) {
-					if ($draad->forum_id === $forum_id) {
+					if ($draad->forum_id === $forum_id AND ! LoginModel::mag($draad->gedeeld_met)) {
 						foreach ($posts as $i => $post) {
 							if ($post->draad_id === $draad_id) {
 								unset($posts[$i]);

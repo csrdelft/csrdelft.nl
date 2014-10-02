@@ -78,7 +78,7 @@ class LogEntry extends PersistentEntity {
 	 * Database primary key
 	 * @var array
 	 */
-	protected static $primary_keys = array('class_function', 'moment');
+	protected static $primary_key = array('class_function', 'moment');
 	/**
 	 * Database table name
 	 * @var string

@@ -103,7 +103,7 @@ class ForumDeel extends PersistentEntity {
 	 * Database primary key
 	 * @var array
 	 */
-	protected static $primary_keys = array('forum_id');
+	protected static $primary_key = array('forum_id');
 	/**
 	 * Database table name
 	 * @var string
@@ -115,11 +115,11 @@ class ForumDeel extends PersistentEntity {
 	}
 
 	public function magPosten() {
-		return $this->magLezen() AND LoginModel::mag($this->rechten_posten);
+		return LoginModel::mag($this->rechten_posten);
 	}
 
 	public function magModereren() {
-		return $this->magPosten() AND LoginModel::mag($this->rechten_modereren);
+		return LoginModel::mag($this->rechten_modereren);
 	}
 
 	public function isOpenbaar() {

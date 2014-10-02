@@ -172,10 +172,10 @@ class LidZoeker {
 			$query = "uid IN('" . implode("','", $uids) . "') ";
 		} elseif (preg_match('/^verticale:\w*$/', $zoekterm)) { //verticale, id, letter
 			$verticale = substr($zoekterm, 10);
-			if (in_array($verticale, Verticale::getNamen())) {
-				$verticale = array_search($verticale, Verticale::getNamen());
-			} elseif (in_array($verticale, Verticale::getLetters())) {
-				$verticale = array_search($verticale, Verticale::getLetters());
+			if (in_array($verticale, OldVerticale::getNamen())) {
+				$verticale = array_search($verticale, OldVerticale::getNamen());
+			} elseif (in_array($verticale, OldVerticale::getLetters())) {
+				$verticale = array_search($verticale, OldVerticale::getLetters());
 			}
 			$query = "verticale=" . (int) $verticale . ' ';
 		} elseif (preg_match('/^\d{2}$/', $zoekterm)) { //lichting bij een string van 2 cijfers

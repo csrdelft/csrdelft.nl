@@ -56,7 +56,7 @@ class CmsPagina extends PersistentEntity {
 	 * Database primary key
 	 * @var array
 	 */
-	protected static $primary_keys = array('naam');
+	protected static $primary_key = array('naam');
 	/**
 	 * Database table name
 	 * @var string

@@ -86,6 +86,10 @@ class ForumDraad extends PersistentEntity {
 	 */
 	public $eerste_post_plakkerig;
 	/**
+	 * Rechten voor met wie dit draad gedeeld is
+	 */
+	public $gedeeld_met;
+	/**
 	 * Forumposts
 	 * @var ForumPost[]
 	 */
@@ -129,13 +133,14 @@ class ForumDraad extends PersistentEntity {
 		'wacht_goedkeuring'		 => array(T::Boolean),
 		'plakkerig'				 => array(T::Boolean),
 		'belangrijk'			 => array(T::Boolean),
-		'eerste_post_plakkerig'	 => array(T::Boolean)
+		'eerste_post_plakkerig'	 => array(T::Boolean),
+		'gedeeld_met'			 => array(T::String)
 	);
 	/**
 	 * Database primary key
 	 * @var array
 	 */
-	protected static $primary_keys = array('draad_id');
+	protected static $primary_key = array('draad_id');
 	/**
 	 * Database table name
 	 * @var string

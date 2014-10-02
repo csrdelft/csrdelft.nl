@@ -32,7 +32,7 @@ class ForumDraadVerbergen extends PersistentEntity {
 	 * Database primary key
 	 * @var array
 	 */
-	protected static $primary_keys = array('draad_id', 'uid');
+	protected static $primary_key = array('draad_id', 'uid');
 	/**
 	 * Database table name
 	 * @var string

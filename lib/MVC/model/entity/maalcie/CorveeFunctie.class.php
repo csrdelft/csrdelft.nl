@@ -82,7 +82,7 @@ class CorveeFunctie extends PersistentEntity {
 	 * Database primary key
 	 * @var array
 	 */
-	protected static $primary_keys = array('functie_id');
+	protected static $primary_key = array('functie_id');
 	/**
 	 * Database table name
 	 * @var string

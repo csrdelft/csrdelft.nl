@@ -70,7 +70,7 @@ class AgendaItem extends PersistentEntity implements Agendeerbaar {
 	 * Database primary key
 	 * @var array
 	 */
-	protected static $primary_keys = array('item_id');
+	protected static $primary_key = array('item_id');
 	/**
 	 * Database table name
 	 * @var string

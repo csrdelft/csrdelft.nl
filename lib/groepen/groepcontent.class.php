@@ -114,12 +114,12 @@ class Groepcontent extends SmartyTemplateView {
 			'geslacht:v'	 => 'Alleen vrouwen');
 
 		//verticalen.
-		foreach (Verticale::getLetters() as $key => $verticale) {
+		foreach (OldVerticale::getLetters() as $key => $verticale) {
 			if ($verticale == 'Geen') {
 				continue;
 			}
 			$filter = 'verticale:' . $verticale;
-			$filters[$filter] = 'Verticale ' . Verticale::getNaamById($key);
+			$filters[$filter] = 'Verticale ' . OldVerticale::getNaamById($key);
 		}
 
 		//lichtingen

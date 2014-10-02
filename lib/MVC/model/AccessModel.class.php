@@ -184,6 +184,9 @@ class AccessModel extends PersistenceModel {
 	 * 
 	 */
 	public function hasPermission(Lid $subject, $permission, $token_authorizable = false, $mandatory_only = false) {
+		if (empty($permission)) {
+			return false;
+		}
 		// OR
 		if (strpos($permission, ',') !== false) {
 			// Het gevraagde mag een enkele permissie zijn, of meerdere, door komma's
@@ -312,13 +315,32 @@ class AccessModel extends PersistenceModel {
 		// Behoort een lid tot een bepaalde verticale?
 		elseif (substr($descr, 0, 9) === 'verticale') {
 			$verticale = strtoupper(substr($descr, 10));
-			if (is_numeric($verticale)) {
-				if ($verticale == $subject->getVerticaleID()) {
+
+			// splitst opgegeven term in verticale en functie
+			$parts = explode('>', $verticale, 2);
+
+			// check verticale first
+			if (is_numeric($parts[0])) {
+				if ($parts[0] == $subject->getVerticaleID()) {
+					$verticale = true;
+				}
+			} elseif ($parts[0] == $subject->getVerticaleLetter()) {
+				$verticale = true;
+			} elseif ($parts[0] == strtoupper($subject->getVerticale())) {
+				$verticale = true;
+			}
+
+			// no need to check functie if verticale not true
+			if ($verticale !== true) {
+				return false;
+			}
+
+			// wordt er een functie gevraagd?
+			if (isset($parts[1])) {
+				if ($parts[1] === 'leider' AND $subject->isVerticaan()) {
 					return true;
 				}
-			} elseif ($verticale == $subject->getVerticaleLetter()) {
-				return true;
-			} elseif ($verticale == strtoupper($subject->getVerticale())) {
+			} else { // geen functie gevraagd en verticale = true
 				return true;
 			}
 		}
@@ -330,7 +352,7 @@ class AccessModel extends PersistenceModel {
 		elseif (substr($descr, 0, 5) === 'groep') {
 			require_once 'groepen/groep.class.php';
 			// splitst opgegeven term in groepsnaam en functie
-			$parts = explode(">", substr($descr, 6), 2);
+			$parts = explode('>', substr($descr, 6), 2);
 			try {
 				$groep = new OldGroep($parts[0]);
 				if ($groep->isLid()) {

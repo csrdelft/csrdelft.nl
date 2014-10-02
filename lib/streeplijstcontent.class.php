@@ -171,7 +171,7 @@ class Streeplijstcontent implements View {
 			if ($moot == 'alle') {
 				echo $moot;
 			} else {
-				echo Verticale::getNaamById($moot);
+				echo OldVerticale::getNaamById($moot);
 			}
 			echo '</label>';
 		}

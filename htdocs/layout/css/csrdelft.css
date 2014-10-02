@@ -841,6 +841,7 @@ div.forumheadbtn{
 }
 #forumtabel tr.kleur0 td{ background-color: #fff; }
 #forumtabel tr.kleur1 td{ background-color: #f4f4f4; }
+
 #forumtabel tr div.forumpostKnoppen{
 	min-height: 60px;
 }
@@ -850,10 +851,10 @@ div.forumheadbtn{
 	padding: 2px 5px;
 	float: left;
 }
-#forumtabel a.forummodknop{
+a.forummodknop{
 	display: none;
 }
-span#modsluiten{
+#modsluiten{
 	display: block;
 	width: 18px; height: 18px;
 	float: right;

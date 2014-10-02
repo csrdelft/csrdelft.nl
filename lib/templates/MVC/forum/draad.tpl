@@ -62,7 +62,7 @@
 	{/if}
 
 	{capture name='magreageren'}
-		{if !$deel->magPosten()}
+		{if !ForumController::magPosten($draad, $deel)}
 			<div class="draad-readonly">U mag in dit deel van het forum niet reageren.</div>
 		{elseif $draad->gesloten}
 			<div class="draad-gesloten">U kunt hier niet meer reageren omdat dit onderwerp gesloten is.</div>
@@ -163,6 +163,6 @@ pagecount=ForumPostsModel::instance()->getAantalPaginas($draad->draad_id) curpag
 	</tbody>
 </table>
 
-{if !$draad->verwijderd AND !$draad->gesloten AND $deel->magPosten()}
+{if ForumController::magPosten($draad, $deel)}
 	{include file='MVC/forum/post_form.tpl'}
 {/if}

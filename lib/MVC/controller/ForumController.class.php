@@ -213,7 +213,7 @@ class ForumController extends Controller {
 	public function onderwerp($draad_id, $pagina = null) {
 		$draad = ForumDradenModel::instance()->getForumDraad((int) $draad_id);
 		$deel = ForumDelenModel::instance()->getForumDeel($draad->forum_id);
-		if (!$deel->magLezen()) {
+		if (!$deel->magLezen() AND ! LoginModel::mag($draad->gedeeld_met)) {
 			$this->geentoegang();
 		}
 		$gelezen = $draad->getWanneerGelezen(); // laad gelezen voordat database geupdate wordt
@@ -404,8 +404,8 @@ class ForumController extends Controller {
 			if (!ForumDelenModel::instance()->bestaatForumDeel($value)) {
 				throw new Exception('Forum bestaat niet!');
 			}
-		} elseif ($property === 'titel') {
-			$value = trim(filter_input(INPUT_POST, $property, FILTER_SANITIZE_STRIPPED));
+		} elseif ($property === 'titel' OR $property === 'gedeeld_met') {
+			$value = trim(filter_input(INPUT_POST, $property, FILTER_SANITIZE_STRING));
 		} else {
 			$this->geentoegang();
 		}
@@ -431,12 +431,21 @@ class ForumController extends Controller {
 			$wijziging = $property . ' = ' . $value;
 		}
 		SimpleHTML::setMelding('Wijziging geslaagd: ' . $wijziging, 1);
-		if ($property === 'forum_id' OR $property === 'titel') {
-			$this->onderwerp($draad_id);
-			$this->view = new CsrLayoutPage($this->getView());
+		if ($property === 'forum_id' OR $property === 'titel' OR $property === 'gedeeld_met') {
+			redirect(CSR_ROOT . '/forum/onderwerp/' . $draad_id);
 		} else {
 			$this->view = new JsonResponse(true);
 		}
+	}
+
+	public static function magPosten(ForumDraad $draad, ForumDeel $deel) {
+		if ($draad->verwijderd OR $draad->gesloten) {
+			return false;
+		}
+		if ($deel->magPosten() OR LoginModel::mag($draad->gedeeld_met)) {
+			return true;
+		}
+		return false;
 	}
 
 	/**
@@ -447,7 +456,12 @@ class ForumController extends Controller {
 	 */
 	public function posten($forum_id, $draad_id = null) {
 		$deel = ForumDelenModel::instance()->getForumDeel((int) $forum_id);
-		if (!$deel->magPosten()) {
+		if ($draad_id !== null) { // post in bestaand draadje
+			$draad = ForumDradenModel::instance()->getForumDraad((int) $draad_id);
+			if ($draad->forum_id !== $deel->forum_id OR ! ForumController::magPosten($draad, $deel)) {
+				$this->geentoegang();
+			}
+		} elseif (!$deel->magPosten()) {
 			$this->geentoegang();
 		}
 		$spamtrap = filter_input(INPUT_POST, 'firstname', FILTER_UNSAFE_RAW);
@@ -476,7 +490,7 @@ class ForumController extends Controller {
 			$mailadres = filter_input(INPUT_POST, 'email', FILTER_SANITIZE_EMAIL);
 			if (!email_like($mailadres)) {
 				SimpleHTML::setMelding('U moet een geldig email-adres opgeven!', -1);
-				$url = CSR_ROOT . ($draad_id === null ? '/forum/deel/' . $deel->forum_id : '/forum/onderwerp/' . $draad_id);
+				$url = CSR_ROOT . ($draad_id === null ? '/forum/deel/' . $deel->forum_id : '/forum/onderwerp/' . (int) $draad_id);
 				redirect($url);
 			}
 			if ($filter->isSpam($mailadres)) { //TODO: logging
@@ -484,12 +498,7 @@ class ForumController extends Controller {
 				redirect(CSR_ROOT . '/forum/deel/' . $deel->forum_id);
 			}
 		}
-		if ($draad_id !== null) { // post in bestaand draadje
-			$draad = ForumDradenModel::instance()->getForumDraad((int) $draad_id);
-			if ($draad->gesloten OR $draad->forum_id !== $deel->forum_id) {
-				$this->geentoegang();
-			}
-		} else { // post in nieuw draadje
+		if ($draad_id === null) { // post in nieuw draadje
 			$titel = trim(filter_input(INPUT_POST, 'titel', FILTER_SANITIZE_STRING));
 			if (empty($titel)) {
 				SimpleHTML::setMelding('U moet een titel opgeven!', -1);
@@ -521,13 +530,35 @@ class ForumController extends Controller {
 		redirect(CSR_ROOT . '/forum/reactie/' . $post->post_id . '#' . $post->post_id);
 	}
 
+	public static function magForumPostBewerken(ForumPost $post, ForumDraad $draad, ForumDeel $deel) {
+		if ($deel->magModereren()) {
+			return true;
+		}
+		if ($draad->verwijderd OR $draad->gesloten OR $post->uid !== LoginModel::getUid()) {
+			return false;
+		}
+		if (LoginModel::mag('P_LOGGED_IN') AND ( $deel->magPosten() OR LoginModel::mag($draad->gedeeld_met) )) {
+			return true;
+		}
+		return false;
+	}
+
+	public function tekst($post_id) {
+		$post = ForumPostsModel::instance()->getForumPost((int) $post_id);
+		$draad = ForumDradenModel::instance()->getForumDraad($post->draad_id);
+		$deel = ForumDelenModel::instance()->getForumDeel($draad->forum_id);
+		if (!ForumController::magForumPostBewerken($post, $draad, $deel)) {
+			$this->geentoegang();
+		}
+		echo $post->tekst;
+		exit; //TODO: JsonResponse
+	}
+
 	public function bewerken($post_id) {
 		$post = ForumPostsModel::instance()->getForumPost((int) $post_id);
 		$draad = ForumDradenModel::instance()->getForumDraad($post->draad_id);
 		$deel = ForumDelenModel::instance()->getForumDeel($draad->forum_id);
-		if (($deel->magPosten() AND ! $draad->gesloten AND $post->uid === LoginModel::getUid() AND LoginModel::mag('P_LOGGED_IN')) OR $deel->magModereren()) {
-			// same if-statement in post_lijst.tpl
-		} else {
+		if (!ForumController::magForumPostBewerken($post, $draad, $deel)) {
 			$this->geentoegang();
 		}
 		$tekst = trim(filter_input(INPUT_POST, 'forumBericht', FILTER_UNSAFE_RAW));
@@ -599,21 +630,10 @@ class ForumController extends Controller {
 		$post = ForumPostsModel::instance()->getForumPost((int) $post_id);
 		$draad = ForumDradenModel::instance()->getForumDraad($post->draad_id);
 		$deel = ForumDelenModel::instance()->getForumDeel($draad->forum_id);
-		if (!$deel->magLezen()) {
+		if (!ForumController::magPosten($draad, $deel)) {
 			$this->geentoegang();
 		}
 		echo ForumPostsModel::instance()->citeerForumPost($post);
-		exit; //TODO: JsonResponse
-	}
-
-	public function tekst($post_id) {
-		$post = ForumPostsModel::instance()->getForumPost((int) $post_id);
-		$draad = ForumDradenModel::instance()->getForumDraad($post->draad_id);
-		$deel = ForumDelenModel::instance()->getForumDeel($draad->forum_id);
-		if (!$deel->magLezen()) {
-			$this->geentoegang();
-		}
-		echo $post->tekst;
 		exit; //TODO: JsonResponse
 	}
 
