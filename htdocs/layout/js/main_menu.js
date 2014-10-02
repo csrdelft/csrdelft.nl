@@ -6,48 +6,6 @@ jQuery(document).ready(function ($) {
 	var $content_wrapper = $('.cd-main-content');
 	var $header = $('header');
 
-    // Search on main menu tree
-    $("#menuZoekveld").each(function() {
-
-        var submenu = $(".sub-menu");
-        var items =  submenu.find("> li > a");
-        var search = false;
-
-        $(this).on('keyup', function() {
-
-            var value = $(this).val();
-            var regEx = new RegExp(value, 'gi');
-
-            if(value.length > 1) {
-                $("#cd-lateral-nav").addClass("search-mode");
-                if(!search) {
-                    $(".cd-navigation .item-has-children").each(function () {
-                        $("ul", this).stop(true, true).css("display", "block");
-                    }).has("sub-menu-open").addClass("remember");
-                }
-                items.each(function () {
-                    $(this).parent().toggleClass("verborgen", $(this).text().match(regEx) === null);
-                });
-                submenu.each(function() {
-                    $(this).parent().toggleClass("verborgen", $(this).find("li").not(".hidden").size() == 0);
-                });
-                search = true;
-            } else{
-                $("#cd-lateral-nav").removeClass("search-mode");
-                items.parent().removeClass("verborgen");
-                submenu.parent().removeClass("verborgen");
-                if(search) {
-                    $(".cd-navigation .item-has-children").each(function () {
-                        if (!$(this).hasClass("sub-menu-open"))
-                            $("ul", this).stop(true, true).css("display", "none");
-                    }).removeClass("sub-menu-open").has("remember").addClass("sub-menu-open");
-                }
-                search = false;
-            }
-
-        });
-    });
-
 	//toggle ingelogd menu clicking on the name item
 	$ingelogd_menu_trigger.on('click', function (event) {
 		if (!$(event.target).is('#cd-ingelogd-menu a')) {

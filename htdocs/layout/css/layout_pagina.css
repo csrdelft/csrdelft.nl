@@ -359,8 +359,7 @@ Lateral navigation
 	-moz-transition-duration: 0.2s;
 	transition-duration: 0.2s;
 }
-#cd-lateral-nav .item-has-children > a.sub-menu-open::after,
-#cd-lateral-nav.search-mode .item-has-children > a::after {
+#cd-lateral-nav .item-has-children > a.sub-menu-open::after {
 	-webkit-transform: translateY(-50%) rotate(90deg);
 	-moz-transform: translateY(-50%) rotate(90deg);
 	-ms-transform: translateY(-50%) rotate(90deg);
