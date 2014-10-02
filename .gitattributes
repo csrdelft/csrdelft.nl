@@ -3094,7 +3094,7 @@ lib/MVC/model/MenuModel.class.php -text
 lib/MVC/model/Paging.interface.php -text
 lib/MVC/model/Persistence.interface.php -text
 lib/MVC/model/PersistenceModel.abstract.php -text
-lib/MVC/model/SaldoModel.class.php -text
+lib/MVC/model/SocCieModel.class.php -text
 lib/MVC/model/entity/Afbeelding.class.php -text
 lib/MVC/model/entity/AgendaItem.class.php -text
 lib/MVC/model/entity/Bestand.class.php -text
@@ -3121,7 +3121,7 @@ lib/MVC/model/entity/PersistentEntity.abstract.php -text
 lib/MVC/model/entity/PersistentEnum.interface.php -text
 lib/MVC/model/entity/PersistentField.class.php -text
 lib/MVC/model/entity/PersistentType.enum.php -text
-lib/MVC/model/entity/Saldo.class.php -text
+lib/MVC/model/entity/SocCie.class.php -text
 lib/MVC/model/entity/groepen/Activiteit.class.php -text
 lib/MVC/model/entity/groepen/Bestuur.class.php -text
 lib/MVC/model/entity/groepen/Commissie.class.php -text
