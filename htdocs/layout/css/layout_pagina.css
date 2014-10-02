@@ -66,6 +66,7 @@ Main components
 	transition-duration: 0.4s;
 }
 .cd-main-content.lateral-menu-is-open {
+	overflow: hidden;
 	/* translate to show the lateral menu - all content needs to be put in the .cd-main-content to translate*/
 	-webkit-transform: translateX(-260px);
 	-moz-transform: translateX(-260px);
