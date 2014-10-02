@@ -637,6 +637,13 @@ class Lid implements Serializable, Agendeerbaar {
 	}
 
 	/**
+	 * Vraag SocCie saldo aan SocCie systeem
+	 */
+	public function getSoccieSaldo() {
+		return SaldoModel::instance()->getSaldo($this->uid);
+	}
+
+	/**
 	 * Vraag MaalCie saldo aan MaalCie systeem (helaas niet zo mooi, staat gewoon in lid-tabel)
 	 */
 	public function getMaalCieSaldo() {

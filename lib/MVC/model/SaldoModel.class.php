@@ -12,11 +12,11 @@ class SaldoModel extends PersistenceModel {
 
     protected static $instance;
 
-    public function getSaldo() {
+    public function getSaldo($uid) {
 
         $sql = 'SELECT saldo / 100 AS saldo FROM socCieKlanten WHERE stekUID = :uid';
         $query = Database::instance()->prepare($sql);
-        $query->bindValue(':uid', LoginModel::getUid());
+        $query->bindValue(':uid', $uid);
 
         $query->execute();
         $result = $query->fetch(PDO::FETCH_ASSOC);
