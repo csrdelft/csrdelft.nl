@@ -57,12 +57,12 @@
 					<td>
 						{if in_array($groep->getTypeId(), array(2, 3)) AND $groep->getStatus()=='ht'}{* maak lid ot voor huizen/onderverenigingen. Dit kunnen leden ook bij zichzelf doen. *}
 								<a href="/actueel/groepen/{$groep->getType()->getNaam()}/{$groep->getId()}/maakLidOt/{$groeplid.uid}" title="Verplaats lid naar o.t.-groep" 
-								   {if !$groep->isAdmin()}onclick="return confirm('Weet u zeker dat u deze bewoner naar de oudbewonersgroep wilt verplaatsen?')"{/if}>
+								   {if !$groep->isAdmin()}onclick="return confirm('Weet u zeker dat u deze bewoner naar de oudbewonersgroep wilt verplaatsen?');"{/if}>
 									&raquo;
 								</a>
 							{/if}
 							{if $groep->isAdmin() OR $groep->isEigenaar() OR $groeplid.uid!=LoginModel::getUid()} {* We kunnen onzelf niet uit een groep gooien gooien *}
-									<a href="/actueel/groepen/{$groep->getType()->getNaam()}/{$groep->getId()}/verwijderLid/{$groeplid.uid}" title="Verwijder lid uit groep">X</a>
+									<a href="/actueel/groepen/{$groep->getType()->getNaam()}/{$groep->getId()}/verwijderLid/{$groeplid.uid}" title="Verwijder lid uit groep" onclick="return confirm('Weet u zeker dat u dit groeplid wilt verwijderen?');">X</a>
 								{/if}
 							</td>
 						{/if}
