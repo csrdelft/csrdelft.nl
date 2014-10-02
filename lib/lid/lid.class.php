@@ -394,10 +394,13 @@ class Lid implements Serializable, Agendeerbaar {
 		return true;
 	}
 
-//verjaardagen altijd als whole day event.
 	//einde implements Agendeerbaar
-	//Verticale: respectievelijk naam, letter en id. Bijvooreeld voor 'Diagonaal', 'D', 4
+
 	public function getVerticale() {
+		return VerticalenModel::instance()->getVerticaleById($this->profiel['verticale']);
+	}
+
+	public function getVerticaleNaam() {
 		return OldVerticale::getNaamById($this->getVerticaleID());
 	}
 
@@ -433,7 +436,7 @@ class Lid implements Serializable, Agendeerbaar {
 			$postfix = '';
 		}
 		if ($link) {
-			return '<a href="/communicatie/verticalen#kring' . $vertkring . '" title="Verticale ' . $this->getVerticale() . ' (' . $this->getVerticaleLetter() . ') - kring ' . $this->profiel['kring'] . '">' . $this->getVerticale() . ' ' . $vertkring . '</a> ' . $postfix;
+			return '<a href="/communicatie/verticalen#kring' . $vertkring . '" title="Verticale ' . $this->getVerticaleNaam() . ' (' . $this->getVerticaleLetter() . ') - kring ' . $this->profiel['kring'] . '">' . $this->getVerticaleNaam() . ' ' . $vertkring . '</a> ' . $postfix;
 		} else {
 			return $vertkring . ' ' . $postfix;
 		}
@@ -936,7 +939,7 @@ class Lid implements Serializable, Agendeerbaar {
 				$k.= $this->profiel['mobiel'] . '</p>';
 				$k.= '<p>' . $this->profiel['adres'] . '<br />';
 				$k.= $this->profiel['postcode'] . ' ' . $this->profiel['woonplaats'] . '</p>';
-				$k.= '<p class="uitgebreid">' . $this->profiel['lidjaar'] . ' ' . $this->getVerticale() . '</p>';
+				$k.= '<p class="uitgebreid">' . $this->profiel['lidjaar'] . ' ' . $this->getVerticaleNaam() . '</p>';
 				$k.= '</div>';
 				if ($vorm === 'leeg') {
 					$naam = $k . $naam;

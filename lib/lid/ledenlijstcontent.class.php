@@ -303,7 +303,7 @@ class LLLijst extends LLweergave {
 					echo $lid->getStatus()->getDescription();
 					break;
 				case 'verticale':
-					echo mb_htmlentities($lid->getVerticale());
+					echo mb_htmlentities($lid->getVerticaleNaam());
 					break;
 				case 'woonoord':
 					echo $lid->getWoonoord();
@@ -403,7 +403,7 @@ class LLCSV extends LLweergave {
 					$return.=$lid->getAdresseringechtpaar();
 					break;
 				case 'verticale':
-					$return.=$lid->getVerticale();
+					$return.=$lid->getVerticaleNaam();
 					break;
 				case 'woonoord':
 					$woonoord = $lid->getWoonoord();

@@ -326,7 +326,7 @@ class AccessModel extends PersistenceModel {
 				}
 			} elseif ($parts[0] == $subject->getVerticaleLetter()) {
 				$verticale = true;
-			} elseif ($parts[0] == strtoupper($subject->getVerticale())) {
+			} elseif ($parts[0] == strtoupper($subject->getVerticaleNaam())) {
 				$verticale = true;
 			}
 

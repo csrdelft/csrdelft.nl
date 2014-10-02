@@ -572,7 +572,6 @@ class ForumDradenModel extends PersistenceModel implements Paging {
 			$pagina = 1;
 		}
 		$delen = ForumDelenModel::instance()->getForumDelenVoorLid($rss);
-		$params = array_keys($delen);
 		$count = count($delen);
 		if ($count < 1) {
 			if ($rss) {
@@ -581,6 +580,8 @@ class ForumDradenModel extends PersistenceModel implements Paging {
 			return array();
 		}
 		$forum_ids = implode(', ', array_fill(0, $count, '?'));
+		$params = array_keys($delen);
+		$params[] = 'verticale:' . LoginModel::instance()->getLid()->getVerticale()->naam;
 		$verbergen = ForumDradenVerbergenModel::instance()->find('uid = ?', array(LoginModel::getUid()));
 		$draden_ids = array_keys(group_by_distinct('draad_id', $verbergen));
 		$count = count($draden_ids);
@@ -596,7 +597,7 @@ class ForumDradenModel extends PersistenceModel implements Paging {
 		} else {
 			$belangrijk = '';
 		}
-		$draden = $this->find('forum_id IN (' . $forum_ids . ')' . $verborgen . ' AND wacht_goedkeuring = FALSE AND verwijderd = FALSE' . $belangrijk, $params, 'laatst_gewijzigd DESC', null, $aantal, ($pagina - 1) * $aantal)->fetchAll();
+		$draden = $this->find('(forum_id IN (' . $forum_ids . ') OR gedeeld_met = ?)' . $verborgen . ' AND wacht_goedkeuring = FALSE AND verwijderd = FALSE' . $belangrijk, $params, 'laatst_gewijzigd DESC', null, $aantal, ($pagina - 1) * $aantal)->fetchAll();
 		$posts_ids = array_keys(group_by_distinct('laatste_post_id', $draden, false));
 		$posts = ForumPostsModel::instance()->getForumPostsById($posts_ids, ' AND wacht_goedkeuring = FALSE AND verwijderd = FALSE');
 		foreach ($draden as $i => $draad) {
