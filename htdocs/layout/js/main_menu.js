@@ -17,7 +17,7 @@ jQuery(document).ready(function ($) {
             var value = $(this).val();
             var regEx = new RegExp(value, 'gi');
 
-            if(value != "") {
+            if(value.length > 1) {
                 $("#cd-lateral-nav").addClass("search-mode");
                 if(!search) {
                     $(".cd-navigation .item-has-children").each(function () {
