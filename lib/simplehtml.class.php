@@ -71,7 +71,9 @@ abstract class SimpleHTML implements View {
 	public static function getStandaardZijbalk() {
 		$zijbalk = array();
 		// Quick navigation buttons
-		$zijbalk[] = new QuickNavigateMenuView();
+		if (LidInstellingen::get('zijbalk', 'quicknav') == 'ja') {
+			$zijbalk[] = new QuickNavigateMenuView();
+		}
 		// Is het al...
 		if (LidInstellingen::get('zijbalk', 'ishetal') != 'niet weergeven') {
 			require_once 'ishetalcontent.class.php';
