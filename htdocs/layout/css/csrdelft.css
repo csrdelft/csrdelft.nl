@@ -11,11 +11,6 @@
 	line-height: 1.25em;
 	background-color: #ffffff;
 }
-@media (max-width: 1024px) {
-    #mainright{
-        padding: 50px 0 0 10px;
-    }
-}
 .dragobject{
 	position: fixed;
 	z-index: 50;
@@ -1171,4 +1166,18 @@ input.instString{
 }
 input.instInt{
 	width: 33px !important;
+}
+
+@media (max-width: 1004px) {
+	#mainright{
+		min-width: 730px;
+        padding: 50px 0 0 0;
+    }
+	#zijbalk{
+		padding-left: 5px;
+		width: 195px;
+	}
+	#zijbalk_quicknav a{
+		margin: 0 5px;
+    }
 }

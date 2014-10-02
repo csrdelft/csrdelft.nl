@@ -74,12 +74,6 @@ Main components
 	-o-transform: translateX(-260px);
 	transform: translateX(-260px);
 }
-@media (max-width: 1024px) {
-    .cd-main-content.lateral-menu-is-open{
-		/* prevent main content from overlapping lateral menu */
-        z-index: 0;
-    }
-}
 
 /* -------------------------------- 
 
