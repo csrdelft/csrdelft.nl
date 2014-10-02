@@ -260,6 +260,7 @@ $(function () {
 				$.each(sorteerbaar, function () {
 					zetProductInLijst(this[0]);
 				});
+                setProductenBeheer();
 			});
 	} laadProducten();
 
@@ -573,89 +574,121 @@ $(function () {
     /* Beheer
     /*************************************************************************************************/
 
+    /* Add product */
+    $("#addProduct").submit(function(e) {
+
+        e.preventDefault();
+        var $this = $(this);
+
+        $.ajax({
+            url: $(this).attr("action"),
+            method: $(this).attr("method"),
+            data: $(this).serializeArray(),
+            success: function(data) {
+
+                if(data == "1") {
+                    zetBericht("Product toegevoegd.", "success");
+                    laadProducten();
+                    $this.trigger("reset");
+                } else {
+                    zetBericht("Er is iets misgegeaan met het toevoegen van een product!", "danger");
+                }
+
+            },
+            error: function() {
+                zetBericht("Er is iets misgegeaan met het toevoegen van een product!", "danger");
+            }
+        });
+
+    });
+
+    function setProductenBeheer() {
+
+        $("#productBeheerLijst").empty();
+
+        $.each(producten, function (id) {
+
+            var product = producten[id];
+            $("#productBeheerLijst").append("<a href='#' class='list-group-item' id='productBeheerLijst" + product.productId + "'>" + product.beschrijving + "</a>");
+
+            $("#productBeheerLijst" + product.productId).click(function() {
+
+                $(this).parent().find("> a").removeClass("active");
+                $(this).addClass("active");
+                setProduct(product)
+
+            });
+
+            function setProduct(product) {
+
+                $("#editProduct").each(function() {
+
+                    var html = '';
+                    html += '<h2>Wijzigen van \'' + product.beschrijving + '\'</h2>';
+
+                    html += '<div class="row">';
+
+                    html += '<div class="col-xs-6">';
+                    html += '<h3>Update prijs</h3>';
+                    html += '<form method="post" action="ajax.php" class="form-horizontal" role="form">';
+                    html += '<input type="hidden" name="productId" value="' + product.productId + '" />';
+                    html += '<input type="hidden" name="q" value="updatePrice" />';
+
+                    html += '<div class="input-group">';
+                    html += '<label class="input-group-addon" for="product' + product.productId + '">Nieuwe prijs in centen</label>';
+                    html += '<input id="product' + product.productId + '" name="price" type="text" class="form-control" placeholder="' + producten[product.productId].prijs + '" />';
+                    html += '<div class="input-group-btn"><button type="submit" class="btn btn-primary">Prijs aanpassen</button></div>';
+                    html += '</div>';
+                    html += '</div>';
+
+                    html += '</div>';
+
+                    html += '</form>';
+
+                    $(this).html(html);
+
+                });
+
+                $("#editProduct form").submit(function(e) {
+
+                    e.preventDefault();
+                    var $this = $(this);
+
+                    var postdata = $(this).serializeArray();
+
+                    $.ajax({
+                        url: $(this).attr("action"),
+                        method: $(this).attr("method"),
+                        data: postdata,
+                        success: function(data) {
+
+                            if(data == "1") {
+                                zetBericht("Prijs van '" + product.beschrijving + "' gewijziged.", "success");
+                                $("#editProduct form input[name=price]").attr("placeholder", postdata[2].value);
+                                $this.trigger("reset");
+                                laadProducten();
+                            } else {
+                                zetBericht("Er is iets misgegeaan met het wijzigen van een prijs!", "danger");
+                            }
+
+                        },
+                        error: function() {
+                            zetBericht("Er is iets misgegeaan met het wijzigen van een prijs!", "danger");
+                        }
+                    });
+
+                });
+
+            }
+
+        });
+
+    }
+
     $("#laadProducten").click(function () {
 	
 		$(this).parent().find("> button").addClass("btn-default").removeClass("btn-primary");
 		$(this).removeClass("btn-default").addClass("btn-primary");
-		
-		$("#productBeheerLijst").empty();
-	
-        $.each(producten, function (id) {
-		
-            var product = producten[id];
-            $("#productBeheerLijst").append("<a href='#' class='list-group-item' id='productBeheerLijst" + product.productId + "'>" + product.beschrijving + "</a>");
-            
-			$("#productBeheerLijst" + product.productId).click(function() {
-				
-				$(this).parent().find("> a").removeClass("active");
-				$(this).addClass("active");
-				setProduct(product)
-				
-			});
-
-            function setProduct(product) {
-
-				$("#editProduct").each(function() {
-				
-					var html = '';
-					html += '<h2>Wijzigen van \'' + product.beschrijving + '\'</h2>';
-					
-					html += '<div class="row">';
-					
-					html += '<div class="col-xs-6">';
-					html += '<h3>Update prijs</h3>';
-					html += '<form method="post" action="ajax.php" class="form-horizontal" role="form">';
-					html += '<input type="hidden" name="productId" value="' + product.productId + '" />';
-					html += '<input type="hidden" name="q" value="updatePrice" />';
-					
-					html += '<div class="input-group">';
-					html += '<label class="input-group-addon" for="product' + product.productId + '">Nieuwe prijs in centen</label>';
-					html += '<input id="product' + product.productId + '" name="price" type="text" class="form-control" placeholder="' + producten[product.productId].prijs + '" />';
-					html += '<div class="input-group-btn"><button type="submit" class="btn btn-primary">Prijs aanpassen</button></div>';
-					html += '</div>';
-					html += '</div>';
-					
-					html += '</div>';
-					
-					html += '</form>';
-					
-					$(this).html(html);
-				
-				});
-				
-				$("#editProduct form").submit(function(e) {
-				
-					e.preventDefault();
-					var $this = $(this);
-					
-					var postdata = $(this).serializeArray();
-					
-					$.ajax({
-						url: $(this).attr("action"),
-						method: $(this).attr("method"),
-						data: postdata,
-						success: function(data) {
-						
-							if(data == "1") {
-								zetBericht("Prijs van '" + product.beschrijving + "' gewijziged.", "success");
-								$("#editProduct form input[name=price]").attr("placeholder", postdata[2].value);
-								$this.trigger("reset");
-								laadProducten();
-							} else {
-								zetBericht("Er is iets misgegeaan met het wijzigen van een prijs!", "danger");
-							}
-						
-						},
-						error: function() {
-							zetBericht("Er is iets misgegeaan met het wijzigen van een prijs!", "danger");
-						}
-					});
-				
-				});
-			
-            }
-			
-        });
 		
 		$("#productBeheer").removeClass("hidden");
 		$("#grootboekInvoer, #persoonBeheer, #tools").addClass("hidden");

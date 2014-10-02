@@ -228,6 +228,30 @@ if ($barsysteem->isLoggedIn()) {
 					<?php if ($barsysteem->isBeheer()): ?>
                         
 						<div id="productBeheer" class="hidden">
+
+                            <h2>Product toevoegen</h2>
+
+                            <form id="addProduct" class="form-inline" action="ajax.php" method="post">
+
+                                <div id="input-group">
+
+                                    <input type="hidden" name="add_product" value="on" />
+                                    <input placeholder="Naam" name="name" type="text" class="form-control" />
+                                    <input placeholder="Prijs in centen" name="price" type="text" class="form-control" />
+                                    <select class="form-control" name="grootboekId">
+                                        <option>Selecteer grootboek</option>
+                                        <?php
+                                            foreach($barsysteem->getGrootboeken() as $grootboek) {
+                                                echo '<option value="' . $grootboek['id'] . '">' . $grootboek['type'] . '</option>';
+                                            }
+                                        ?>
+                                    </select>
+
+                                    <button type="submit" class="btn btn-primary"><span class="glyphicon glyphicon-plus"></span></button>
+
+                                </div>
+
+                            </form>
 						
 							<h2>Wijzig een product</h2>
 							

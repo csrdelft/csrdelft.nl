@@ -27,6 +27,9 @@ if ($barsysteem->isLoggedIn()){
 		if(isset($_GET['q']) && $_GET['q'] == 'tools') {
 			echo json_encode($barsysteem->getToolData());
 		}
+        if(isset($_POST["add_product"])) {
+            echo $barsysteem->addProduct($_POST['name'], $_POST['price'], $_POST['grootboekId']);
+        }
 		if(isset($_POST['q']) && $_POST['q'] == 'updatePrice') {
 			echo $barsysteem->updatePrice($_POST['productId'], $_POST['price']);
 		}

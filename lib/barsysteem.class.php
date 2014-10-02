@@ -69,6 +69,14 @@ class Barsysteem
         return $result;
     }
 
+    function getGrootboeken() {
+
+        $q = $this->db->prepare("SELECT id, type FROM socCieGrootboekType");
+        $q->execute();
+        return $q->fetchAll(PDO::FETCH_ASSOC);
+
+    }
+
     function verwerkBestelling($data)
     {
         $this->db->beginTransaction();
@@ -353,6 +361,32 @@ ORDER BY yearweek DESC
 		return $result;
 	
 	}
+
+    public function addProduct($name, $price, $type) {
+
+        if($type < 1)
+            return false;
+
+        $this->db->beginTransaction();
+
+        $q = $this->db->prepare("INSERT INTO socCieProduct(status, beschrijving, prioriteit, grootboekId, beheer) VALUES(1, :name, -5000, :type, 0)");
+        $q->bindValue(':name', $name);
+        $q->bindValue(':type', $type);
+        $q->execute();
+
+        $q = $this->db->prepare("INSERT INTO socCiePrijs(productId, prijs) VALUES(:productId, :price)");
+        $q->bindValue(':productId', $this->db->lastInsertId());
+        $q->bindValue(':price', $price);
+        $q->execute();
+
+        if (!$this->db->commit()) {
+            $this->db->rollBack();
+            return false;
+        }
+
+        return true;
+
+    }
 	
 	public function updatePerson($id, $name) {
 	
