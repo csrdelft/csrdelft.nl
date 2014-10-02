@@ -853,7 +853,7 @@ div.forumheadbtn{
 #forumtabel tr div.forumpostKnoppen a{
 	border: none;
 	background: none;
-	margin-top: 5px;
+	padding: 2px 5px;
 	float: left;
 }
 #forumtabel a.forummodknop{
