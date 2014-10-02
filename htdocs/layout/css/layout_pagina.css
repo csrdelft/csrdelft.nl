@@ -118,7 +118,7 @@ header.lateral-menu-is-open {
 #cd-logo #beeldmerk {
 	width: 150px;
 	height: 200px;
-	margin: 0 auto;
+	margin-left: 25px;
 	background-size: cover;
 }
 
