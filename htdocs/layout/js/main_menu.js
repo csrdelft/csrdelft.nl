@@ -6,6 +6,43 @@ jQuery(document).ready(function ($) {
 	var $content_wrapper = $('.cd-main-content');
 	var $header = $('header');
 
+    // Search on main menu tree
+    $("#menuZoekveld").each(function() {
+
+        var items = $(".sub-menu > li > a");
+        var search = false;
+
+        $(this).on('keyup', function() {
+
+            var value = $(this).val();
+            var regEx = new RegExp(value, 'gi');
+
+            if(value != "") {
+                $("#cd-lateral-nav").addClass("search-mode");
+                if(!search) {
+                    $(".cd-navigation .item-has-children").each(function () {
+                        $("ul", this).slideDown(200);
+                    }).has("sub-menu-open").addClass("remember");
+                }
+                items.each(function () {
+                    $(this).parent().toggleClass("hidden", $(this).text().match(regEx) === null);
+                });
+                search = true;
+            } else{
+                $("#cd-lateral-nav").removeClass("search-mode");
+                items.removeClass("hidden");
+                if(search) {
+                    $(".cd-navigation .item-has-children").each(function () {
+                        if (!$(this).hasClass("sub-menu-open"))
+                            $("ul", this).slideUp(200);
+                    }).removeClass("sub-menu-open").has("remember").addClass("sub-menu-open");
+                }
+                search = false;
+            }
+
+        });
+    });
+
 	//toggle ingelogd menu clicking on the name item
 	$ingelogd_menu_trigger.on('click', function (event) {
 		if (!$(event.target).is('#cd-ingelogd-menu a')) {
