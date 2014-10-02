@@ -29,7 +29,7 @@
 					<form action="/forum/wijzigen/{$draad->draad_id}/gedeeld_met" method="post">
 						<label>Delen met &nbsp;</label>
 						<select name="gedeeld_met">
-							<option value="" selected="selected">niemand</option>
+							<option value="" selected="selected"></option>
 							{assign var=found value=false}
 							<optgroup label="Verticalen">
 								{foreach from=VerticalenModel::instance()->find() item=verticale}
