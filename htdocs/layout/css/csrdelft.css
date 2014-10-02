@@ -1171,7 +1171,7 @@ input.instInt{
 @media (max-width: 1004px) {
 	#mainright{
 		min-width: 730px;
-        padding: 50px 0 0 0;
+        padding: 50px 0 0 5px;
     }
 	#zijbalk{
 		padding-left: 5px;
