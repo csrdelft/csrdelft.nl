@@ -40,7 +40,6 @@ class LidInstellingen extends PersistenceModel {
 		'layout'		 => array(
 			'toegankelijk'	 => array('Leesbaarheid', T::Enumeration, array('standaard', 'bredere letters'), 'standaard'),
 			'opmaak'		 => array('Opmaak', T::Enumeration, array('normaal', 'owee', 'lustrum', 'sineregno', 'roze'), 'normaal'),
-			'zijbalk'		 => array('Zijbalk', T::Enumeration, array('meescrollen', 'apart scrollen', 'verberg'), 'meescrollen'),
 			'visitekaartjes' => array('Visitekaartjes', T::Enumeration, array('ja', 'nee'), 'nee'),
 			'sneeuw'		 => array('Sneeuw', T::Enumeration, array('ja', 'freeze!', 'nee'), 'nee'),
 			'neuzen'		 => array('Neuzen', T::Enumeration, array('overal', '2013', 'nee'), '2013'),
@@ -59,6 +58,8 @@ class LidInstellingen extends PersistenceModel {
 			'filter2008'			 => array('Berichten van 2008 eerst verbergen', T::Enumeration, array('ja', 'nee'), 'nee')
 		),
 		'zijbalk'		 => array(
+			'scrollen'				 => array('Scrollen', T::Enumeration, array('met pagina mee', 'apart scrollen'), 'apart scrollen'),
+			'quicknav'				 => array('Navigatie knopjes weergeven', T::Enumeration, array('ja', 'nee'), 'ja'),
 			'ishetal'				 => array('Is het al… weergeven', T::Enumeration, array('niet weergeven', 'willekeurig', 'wist u dat', 'weekend', 'kring', 'lezing', 'borrel', 'jarig', 'dies', 'happie', 'lunch', 'studeren'), 'willekeurig'),
 			'agendaweken'			 => array('Aantal weken in agenda weergeven', T::Integer, array(0, 10), 2),
 			'agenda_max'			 => array('Maximaal aantal agenda-items', T::Integer, array(0, 50), 15),

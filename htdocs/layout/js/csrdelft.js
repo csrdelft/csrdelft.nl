@@ -23,7 +23,7 @@ preload([
 
 $(document).ready(function () {
 	undo_inline_css();
-	zijbalk_dynamisch();
+	zijbalk_scroll_fixed();
 	init_key_pressed();
 	init_dropzone();
 	init();
@@ -129,82 +129,29 @@ function init_lazy_images() {
 	});
 }
 
-function zijbalk_dynamisch() {
+function zijbalk_scroll_fixed() {
 	var elmnt = $('#zijbalk');
 	if (!elmnt.length || !elmnt.hasClass('scroll-fixed')) {
 		return;
 	}
 
-	var scrollbarWidth = getScrollBarWidth();
-	var getPadding = function () {
-		if (elmnt.get(0).scrollHeight > elmnt.get(0).clientHeight) {
-			return scrollbarWidth;
-		}
-		else {
-			return 0;
-		}
-	};
-
-	var onResize = function () {
-		elmnt.css('max-height', window.innerHeight);
-		elmnt.width(elmnt.parent().width());
-	};
+	// adjust to container size
 	$(window).resize(function () {
-		onResize();
+		elmnt.css('max-height', window.innerHeight);
 	});
-	var origWidth = elmnt.width();
-	onResize();
+	$(window).trigger('resize');
+
+	// fix position on screen
+	$(window).scroll(function () {
+		elmnt.css({
+			'margin-top': $(window).scrollTop()
+		});
+	});
+
+	// set scroll position
 	elmnt.scrollTop(elmnt.attr('scrollfix'));
 
-	var showscroll = function () {
-		if (elmnt.hasClass('scroll-fixed')) {
-			elmnt.css({
-				'overflow-y': 'auto'
-			});
-		}
-	};
-	var hidescroll = function () {
-		if (elmnt.hasClass('scroll-fixed')) {
-			elmnt.css({
-				'overflow-y': ''
-			});
-		}
-	};
-	var expand = function () {
-		if (elmnt.width() < origWidth) {
-			elmnt.animate({
-				'width': origWidth + getPadding()
-			}, 400, showscroll);
-		}
-	};
-	var collapse = function () {
-		if (elmnt.width() > elmnt.parent().width()) {
-			hidescroll();
-			elmnt.animate({
-				'width': elmnt.parent().width()
-			}, 400);
-		}
-	};
-	elmnt.hoverIntent(expand, collapse);
-	elmnt.hover(function () {
-		if (elmnt.width() >= origWidth) {
-			showscroll();
-		}
-	}, function () {
-		if (elmnt.width() <= elmnt.parent().width()) {
-			hidescroll();
-		}
-	});
-
-	var is_chrome = navigator.userAgent.toLowerCase().indexOf('chrome') > -1;
-	if (is_chrome) {
-		$(window).scroll(function () {
-			elmnt.css({
-				'top': $(window).scrollTop()
-			});
-		});
-	}
-
+	// remember scroll position
 	var trigger = false;
 	var saveCoords = function () {
 		$.post('/tools/dragobject.php', {
@@ -222,6 +169,19 @@ function zijbalk_dynamisch() {
 			$(window).one('mouseup', saveCoords);
 		}
 	});
+
+	// show-hide scrollbar
+	var showscroll = function () {
+		elmnt.css({
+			'overflow-y': 'auto'
+		});
+	};
+	var hidescroll = function () {
+		elmnt.css({
+			'overflow-y': ''
+		});
+	};
+	elmnt.hover(showscroll, hidescroll);
 }
 
 function page_reload() {
