@@ -34,7 +34,7 @@
 							<optgroup label="Verticalen">
 								{foreach from=VerticalenModel::instance()->find() item=verticale}
 									{if $verticale->id > 0}
-										{assign var=filter value="verticale:"|cat:$verticale->naam}
+										{assign var=filter value="verticale:"|cat:$verticale->id}
 										<option value="{$filter}"{if $filter === $draad->gedeeld_met}{assign var=found value=true} selected="selected"{/if}>{$verticale->naam}</option>
 									{/if}
 								{/foreach}
