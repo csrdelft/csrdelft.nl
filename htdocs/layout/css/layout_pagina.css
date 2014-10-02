@@ -114,12 +114,11 @@ header.lateral-menu-is-open {
 
 #cd-logo {
 	display: block;
-	margin: 0 auto;
 }
 #cd-logo #beeldmerk {
 	width: 150px;
 	height: 200px;
-	margin: 0 30px;
+	margin: 0 auto;
 	background-size: cover;
 }
 
