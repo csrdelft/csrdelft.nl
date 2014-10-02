@@ -169,12 +169,6 @@ Top navigation
 	height: 50px;
 	line-height: 50px;
 }
-@media (max-width: 640px) {
-	#cd-top-nav li {
-		height: 25px;
-		line-height: 25px;
-	}
-}
 #cd-top-nav a {
 	display: block;
 	padding: 0 1.25em;
