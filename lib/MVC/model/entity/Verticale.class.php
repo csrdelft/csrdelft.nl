@@ -33,9 +33,9 @@ class Verticale extends PersistentEntity {
 	 * @var array
 	 */
 	protected static $persistent_fields = array(
-		'id'	 => array(T::Integer, false),
-		'letter' => array(T::Char, false),
-		'naam'	 => array(T::String, false)
+		'id'	 => array(T::Integer),
+		'letter' => array(T::Char),
+		'naam'	 => array(T::String)
 	);
 	/**
 	 * Database primary key
