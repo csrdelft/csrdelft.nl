@@ -12,9 +12,10 @@
 						<td id="mainleft">
 							<div id="zijbalk"{if LidInstellingen::get('zijbalk', 'scrollen') == 'apart scrollen'} class="scroll-fixed dragobject dragvertical" scrollfix="{$scrollfix}"{/if}>
 								<a id="cd-logo" href="/"><div id="beeldmerk"></div></a>
-									{foreach from=$zijbalk item=block}
+								{foreach from=$zijbalk item=block}
 									<div class="block">{$block->view()}</div>
 								{/foreach}
+								<br /><br /><br />
 							</div>
 						</td>
 					{/if}
