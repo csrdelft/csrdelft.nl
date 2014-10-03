@@ -50,7 +50,7 @@
 			{/if}
 		</div>
 		<div class="breadcrumbs">
-			<a href="/forum/" class="forumGrootlink">Forum</a> &raquo; <a href="/forum/deel/{$deel->forum_id}/{ForumDradenModel::instance()->getPaginaVoorDraad($draad)}#{$draad->draad_id}" class="forumGrootlink">{$deel->titel}</a>
+			<a href="/forum/">Forum</a> &raquo; <a href="/forum/deel/{$deel->forum_id}/{ForumDradenModel::instance()->getPaginaVoorDraad($draad)}#{$draad->draad_id}">{$deel->titel}</a>
 		</div>
 		<h1>{$draad->titel}</h1>
 	{/capture}

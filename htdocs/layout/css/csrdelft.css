@@ -106,6 +106,9 @@ ul.nobullets li{ list-style-type: none; }
 	color: red;
 	font-weight: bold;
 }
+.breadcrumbs{
+	font-weight: bold;
+}
 
 .fade-content{
 	opacity: 0;
@@ -1004,10 +1007,6 @@ div.bewerkt{ font-size: 9px; color: #bbb; }
 div.bewerkt a{ color: #bbb; }
 div.bewerkt hr{ text-align: left; background-color: #bbb; }
 
-a.forumGrootlink{
-	font-size: 1em;
-	font-weight: bold;
-}
 textarea.forumBericht{
 	height: 197px;
 	width: 574px;

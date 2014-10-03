@@ -194,7 +194,7 @@ class ForumDelenModel extends PersistenceModel {
 		foreach ($gevonden_delen as $forum_id => $deel) {
 			if (!$deel->magModereren()) {
 				foreach ($gevonden_draden as $draad_id => $draad) {
-					if ($draad->forum_id === $deel->forum_id) {
+					if ($draad->forum_id === $deel->forum_id AND ! LoginModel::mag($draad->gedeeld_met)) {
 						unset($gevonden_draden[$draad_id]);
 					}
 				}
@@ -245,7 +245,7 @@ class ForumDelenModel extends PersistenceModel {
 		foreach ($gevonden_delen as $forum_id => $deel) {
 			if (!$deel->magLezen()) {
 				foreach ($gevonden_draden as $draad_id => $draad) {
-					if ($draad->forum_id === $deel->forum_id) {
+					if ($draad->forum_id === $deel->forum_id AND ! LoginModel::mag($draad->gedeeld_met)) {
 						unset($gevonden_draden[$draad_id]);
 					}
 				}
@@ -550,7 +550,7 @@ class ForumDradenModel extends PersistenceModel implements Paging {
 	}
 
 	public function getForumDradenVoorDeel(ForumDeel $deel) {
-		return $this->find('(forum_id = ? OR gedeeld_met = ?) AND wacht_goedkeuring = FALSE AND verwijderd = FALSE', array($deel->forum_id, $deel->rechten_posten), 'plakkerig DESC, laatst_gewijzigd DESC', null, $this->per_pagina, ($this->pagina - 1) * $this->per_pagina)->fetchAll();
+		return $this->find('(forum_id = ? OR gedeeld_met REGEXP ?) AND wacht_goedkeuring = FALSE AND verwijderd = FALSE', array($deel->forum_id, $deel->rechten_posten), 'plakkerig DESC, laatst_gewijzigd DESC', null, $this->per_pagina, ($this->pagina - 1) * $this->per_pagina)->fetchAll();
 	}
 
 	/**
@@ -581,7 +581,7 @@ class ForumDradenModel extends PersistenceModel implements Paging {
 		}
 		$forum_ids = implode(', ', array_fill(0, $count, '?'));
 		$params = array_keys($delen);
-		$params[] = 'verticale:' . LoginModel::instance()->getLid()->getVerticale()->naam;
+		$params[] = '(verticale:' . LoginModel::instance()->getLid()->getVerticale()->naam . '|lidjaar:' . LoginModel::instance()->getLid()->getLichting() . ')';
 		$verbergen = ForumDradenVerbergenModel::instance()->find('uid = ?', array(LoginModel::getUid()));
 		$draden_ids = array_keys(group_by_distinct('draad_id', $verbergen));
 		$count = count($draden_ids);
@@ -597,7 +597,7 @@ class ForumDradenModel extends PersistenceModel implements Paging {
 		} else {
 			$belangrijk = '';
 		}
-		$draden = $this->find('(forum_id IN (' . $forum_ids . ') OR gedeeld_met = ?)' . $verborgen . ' AND wacht_goedkeuring = FALSE AND verwijderd = FALSE' . $belangrijk, $params, 'laatst_gewijzigd DESC', null, $aantal, ($pagina - 1) * $aantal)->fetchAll();
+		$draden = $this->find('(forum_id IN (' . $forum_ids . ') OR gedeeld_met REGEXP ?)' . $verborgen . ' AND wacht_goedkeuring = FALSE AND verwijderd = FALSE' . $belangrijk, $params, 'laatst_gewijzigd DESC', null, $aantal, ($pagina - 1) * $aantal)->fetchAll();
 		$posts_ids = array_keys(group_by_distinct('laatste_post_id', $draden, false));
 		$posts = ForumPostsModel::instance()->getForumPostsById($posts_ids, ' AND wacht_goedkeuring = FALSE AND verwijderd = FALSE');
 		foreach ($draden as $i => $draad) {

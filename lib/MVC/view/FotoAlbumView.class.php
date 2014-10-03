@@ -63,7 +63,7 @@ class FotoAlbumView extends SmartyTemplateView {
 		foreach (array_reverse($dirs) as $value => $description) {
 			$dropdown .= '<option value="' . $value . '"';
 			if ($value === $locatie . $albumnaam) {
-				$dropdown .= ' selected="selected" onclick="location.href=this.value;"';
+				$dropdown .= ' selected="selected"';
 			}
 			$dropdown .= '>' . htmlspecialchars($description) . '</option>';
 		}
