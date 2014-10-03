@@ -16,6 +16,9 @@ ul { list-style: none; }
 h1, h2, h3, h4, h5, h6 { font-weight: normal; }
 
 .verborgen { display: none; }
+.float-none { float: none; }
+.float-left { float: left; }
+.float-right { float: right; }
 
 .hoverIntentContent{
 	display: none;
