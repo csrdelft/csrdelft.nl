@@ -504,6 +504,7 @@ form#streeplijst input, form#streeplijst label{ text-align: left; margin: 3px; p
 .mededeling-grotebalk .plaatje{
 	width: 70px;
 	height: 70px;
+	margin-top: 3px;
 	margin-right: 10px;
 	float: left;
 	overflow: hidden;
@@ -512,6 +513,7 @@ form#streeplijst input, form#streeplijst label{ text-align: left; margin: 3px; p
 	font-weight: bold;
 	font-size: 1.1em;
 	padding: 0 0 3px;
+	margin-left: 80px;
 }
 .mededeling-grotebalk .bericht{
 	text-align: left;
