@@ -241,7 +241,7 @@ div.ishetal div.ja{
 	opacity: 0.5;
 	filter: alpha(opacity=50);
 }
-#zijbalk_fotoalbum a{
+#zijbalk_fotoalbum div.fotos a{
 	text-decoration: none;
 }
 #zijbalk_fotoalbum img{
