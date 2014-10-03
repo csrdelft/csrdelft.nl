@@ -24,8 +24,6 @@
 						</li>
 						<li><a href="/instellingen">Instellingen</a></li>
 						{if LoginModel::mag('P_LEDEN_MOD')}
-							<li><a href="/beheer">Beheeroverzicht</a></li>
-							<li><a href="/tools/query.php">Opgeslagen queries</a></li>
 							<li><a href="/forum/wacht">Forum: {$forumcount}</a></li>
 							{foreach from=$queues item=queue key=name}
 								<li><a href="/tools/query.php?id={$queue->getID()}">{$name|ucfirst}: {$queue->count()}</a></li>
