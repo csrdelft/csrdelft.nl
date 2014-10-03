@@ -472,7 +472,8 @@ class RechtenField extends TextField {
 		for ($jaar = $jong; $jaar > $jong - 7; $jaar--) {
 			$this->suggestions[] = 'lichting:' . $jaar;
 		}
-		$this->title = 'Met , + | ! voor respectievelijk OR, AND, OR binnen AND (alsof er haakjes omheen staan) en negatie om van een restrictie een uitsluiting te maken.';
+		$this->title = 'Met , en + voor respectievelijk OR en AND. Gebruik | voor OR binnen AND (alsof er haakjes omheen staan)';
+		// Gebruik van ! voor negatie en > voor functie binnen verticale of groep niet vermelden, werkt wel
 	}
 
 	public function validate() {

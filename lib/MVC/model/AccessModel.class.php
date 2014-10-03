@@ -318,6 +318,9 @@ class AccessModel extends PersistenceModel {
 
 			// splitst opgegeven term in verticale en functie
 			$parts = explode('>', $verticale, 2);
+			if (!isset($parts[1])) {
+				$parts = explode('&gt;', $verticale, 2);
+			}
 
 			// check verticale first
 			if (is_numeric($parts[0])) {
@@ -350,10 +353,15 @@ class AccessModel extends PersistenceModel {
 		// met dat id.
 		// met de toevoeging '>Fiscus' kan ook specifieke functie geëist worden binnen een groep
 		elseif (substr($descr, 0, 5) === 'groep') {
-			require_once 'groepen/groep.class.php';
+			$groep = substr($descr, 6);
+
 			// splitst opgegeven term in groepsnaam en functie
-			$parts = explode('>', substr($descr, 6), 2);
+			$parts = explode('>', $groep, 2);
+			if (!isset($parts[1])) {
+				$parts = explode('&gt;', $groep, 2);
+			}
 			try {
+				require_once 'groepen/groep.class.php';
 				$groep = new OldGroep($parts[0]);
 				if ($groep->isLid()) {
 					// wordt er een functie gevraagd?
