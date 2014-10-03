@@ -3,10 +3,27 @@ jQuery(document).ready(function ($) {
 	var $ingelogd_menu_trigger = $('#cd-ingelogd-menu-trigger');
 	var $ingelogd_menu = $('#cd-ingelogd-menu');
 	var $lateral_menu_trigger = $('#cd-lateral-menu-trigger');
+	var $lateral_menu = $('#cd-lateral-nav');
 	var $content_wrapper = $('.cd-main-content');
 	var $header = $('header');
 
-	//toggle ingelogd menu clicking on the name item
+	// Open ingelogd menu on hover over trigger
+	var open_ingelogd_menu = function () {
+		$ingelogd_menu_trigger.addClass('ingelogd-menu-is-open');
+		$ingelogd_menu.slideDown(200);
+	};
+	//$ingelogd_menu_trigger.hoverIntent(open_ingelogd_menu, function () {});
+
+	// Open lateral menu on hover over trigger
+	var open_lateral_menu = function () {
+		$lateral_menu_trigger.addClass('is-clicked');
+		$header.addClass('lateral-menu-is-open');
+		$content_wrapper.addClass('lateral-menu-is-open');
+		$lateral_menu.addClass('lateral-menu-is-open');
+	};
+	//$lateral_menu_trigger.hoverIntent(open_lateral_menu, function () {});
+
+	// Toggle ingelogd menu clicking on the trigger
 	$ingelogd_menu_trigger.on('click', function (event) {
 		if (!$(event.target).is('#cd-ingelogd-menu a, #cd-ingelogd-menu a span')) {
 			event.preventDefault();
@@ -16,58 +33,66 @@ jQuery(document).ready(function ($) {
 		}
 	});
 
-	//toggle lateral menu clicking on the menu icon
+	// Toggle lateral menu clicking on the trigger
 	$lateral_menu_trigger.on('click', function (event) {
 		event.preventDefault();
 
 		$lateral_menu_trigger.toggleClass('is-clicked');
 		$header.toggleClass('lateral-menu-is-open');
 		$content_wrapper.toggleClass('lateral-menu-is-open');
-		$('#cd-lateral-nav').toggleClass('lateral-menu-is-open');
+		$lateral_menu.toggleClass('lateral-menu-is-open');
 	});
 
-	//close all menus clicking outside the menu itself
+	// Close all menus clicking outside the menu itself
 	$content_wrapper.on('click', function (event) {
 		if (!$(event.target).is('#cd-ingelogd-menu-trigger, #cd-ingelogd-menu-trigger span, #cd-lateral-menu-trigger, #cd-lateral-menu-trigger span')) {
-			//close ingelogd menu
+			// Close ingelogd menu
 			$ingelogd_menu_trigger.removeClass('ingelogd-menu-is-open');
 			$ingelogd_menu.slideUp(200);
 
-			//close lateral menu
+			// Close lateral menu
 			$lateral_menu_trigger.removeClass('is-clicked');
 			$header.removeClass('lateral-menu-is-open');
 			$content_wrapper.removeClass('lateral-menu-is-open');
-			$('#cd-lateral-nav').removeClass('lateral-menu-is-open');
+			$lateral_menu.removeClass('lateral-menu-is-open');
+
+			// Clear value and de-focus instant search field
+			$('#menuZoekveld').val('').blur();
 		}
 	});
 
-	//open (or close) submenu items in the lateral menu. Close all the other open submenu items.
+	// Open or close submenu items in the lateral menu and close all the other open submenu items
 	$('.item-has-children').children('a').on('click', function (event) {
 		event.preventDefault();
 
 		$(this).toggleClass('sub-menu-open').next('.sub-menu').slideToggle(200).end().parent('.item-has-children').siblings('.item-has-children').children('a').removeClass('sub-menu-open').next('.sub-menu').slideUp(200);
 	});
 
-	//open lateral menu for instant search
+	// Catch keystrokes for instant search
 	$(document).keydown(function (event) {
+
 		// Geen instantsearch met modifiers
 		if (bShiftPressed || bCtrlPressed || bAltPressed || bMetaPressed) {
 			return;
 		}
+
 		// Geen instantsearch als we in een input-element of text-area zitten.
 		var element = event.target.tagName.toUpperCase();
 		if (element == 'INPUT' || element == 'TEXTAREA' || element == 'SELECT') {
 			return;
 		}
-		if ((event.keyCode > 64 && event.keyCode < 91) || (event.keyCode > 47 && event.keyCode < 58)) {
-			$('#menuZoekveld').focus();
 
-			//open lateral menu
-			$lateral_menu_trigger.addClass('is-clicked');
-			$header.addClass('lateral-menu-is-open');
-			$content_wrapper.addClass('lateral-menu-is-open');
-			$('#cd-lateral-nav').addClass('lateral-menu-is-open');
+		// a-z en 0-9 incl. numpad
+		if ((event.keyCode > 64 && event.keyCode < 91) || (event.keyCode > 47 && event.keyCode < 58) || (event.keyCode > 95 && event.keyCode < 106)) {
+			$('#menuZoekveld').focus();
+			open_lateral_menu();
 		}
 	});
 
+	$('#menuZoekveld').keyup(function (event) {
+		if (event.keyCode === 27) { // esc
+			// Close lateral menu
+			$content_wrapper.trigger('click');
+		}
+	});
 });

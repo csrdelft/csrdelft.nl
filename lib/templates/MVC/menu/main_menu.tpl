@@ -16,12 +16,7 @@
 							this.setSelectionRange(0, this.value.length);
 						});
 						$('#menuZoekveld').keyup(function (event) {
-							if (event.keyCode === 27) { // esc
-								this.value = '';
-								$(this).blur();
-								$('.cd-main-content').trigger('click'); // close lateral menu
-							}
-							else if (event.keyCode === 13 && typeof instantsearch[this.value] !== 'undefined') { // enter
+							if (event.keyCode === 13 && typeof instantsearch[this.value] !== 'undefined') { // enter
 								window.location.href = instantsearch[this.value]; // goto url
 							}
 						});
