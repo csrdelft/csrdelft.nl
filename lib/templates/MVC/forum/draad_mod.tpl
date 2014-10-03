@@ -49,6 +49,8 @@
 										<option value="{$filter}"{if $filter === $draad->gedeeld_met}{assign var=found value=true} selected="selected"{/if}>{$lidjaar}</option>
 									{/for}
 								</optgroup>
+							{else}
+								<optgroup label="Niet in deelforum van lichting of verticale" title="hoi"></optgroup>
 							{/if}
 							{if !$found and !empty($draad->gedeeld_met)}
 								<option value="{$draad->gedeeld_met}" selected="selected">{$draad->gedeeld_met}</option>
