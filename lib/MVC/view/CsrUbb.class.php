@@ -74,13 +74,16 @@ class CsrUbb extends eamBBParser {
 	function ubb_img($arguments = array()) {
 		$style = '';
 		$class = '';
+		if (isset($arguments['class'])) {
+			$class .= htmlspecialchars($arguments['class']);
+		}
 		if (isset($arguments['float'])) {
 			switch ($arguments['float']) {
 				case 'left':
-					$class = ' float-left';
+					$class .= ' float-left';
 					break;
 				case 'right':
-					$class = ' float-right';
+					$class .= ' float-right';
 					break;
 			}
 		}
