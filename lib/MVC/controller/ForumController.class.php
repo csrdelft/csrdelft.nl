@@ -577,8 +577,12 @@ class ForumController extends Controller {
 			$this->geentoegang();
 		}
 		$nieuw = filter_input(INPUT_POST, 'Draad_id', FILTER_SANITIZE_NUMBER_INT);
-		$nieuw = ForumDradenModel::instance()->getForumDraad($nieuw);
-		ForumPostsModel::instance()->verplaatsForumPost($nieuw, $post, $draad, $deel);
+		$nieuwDraad = ForumDradenModel::instance()->getForumDraad($nieuw);
+		$nieuwDeel = ForumDelenModel::instance()->getForumDeel($nieuwDraad->forum_id);
+		if (!$nieuwDeel->magModereren()) {
+			$this->geentoegang();
+		}
+		ForumPostsModel::instance()->verplaatsForumPost($nieuwDraad, $post, $draad, $deel);
 		$this->view = new ForumPostDeleteView($post->post_id);
 	}
 
