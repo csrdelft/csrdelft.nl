@@ -26,6 +26,7 @@ $(document).ready(function () {
 	zijbalk_scroll_fixed();
 	init_key_pressed();
 	init_dropzone();
+	init_sluit_meldingen();
 	init();
 });
 
@@ -126,6 +127,12 @@ function init_lazy_images() {
 		content.on('load', function () {
 			$(this).parent().replaceWith($(this));
 		});
+	});
+}
+
+function init_sluit_meldingen() {
+	$('#mainright').on('click', '#melding', function () {
+		$(this).fadeOut();
 	});
 }
 
