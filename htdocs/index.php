@@ -57,7 +57,7 @@ catch (Exception $e) {
 	$code = ($e->getCode() >= 100 ? $e->getCode() : 500);
 	header($protocol . ' ' . $code . ' ' . $e->getMessage());
 
-	if (DEBUG && (LoginModel::mag('P_ADMIN') || LoginModel::instance()->isSued())) {
+	if (LoginModel::mag('P_ADMIN') OR LoginModel::instance()->isSued()) {
 		echo str_replace('#', '<br />#', $e); // stacktrace 
 		echo '<br />DatabaseAdmin queries:<br /><pre>';
 		require_once 'MVC/model/DatabaseAdmin.singleton.php';
