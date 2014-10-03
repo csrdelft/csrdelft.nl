@@ -42,10 +42,10 @@ class SocCieKlant extends PersistentEntity {
 	 */
 	protected static $persistent_fields = array(
 		'socCieId'	 => array(T::Integer),
-		'stekUID'	 => array(T::UID),
-		'saldo'		 => array(T::Integer),
-		'naam'		 => array(T::Text),
-		'deleted'	 => array(T::Boolean, false)
+		'stekUID'	 => array(T::UID, true),
+		'saldo'		 => array(T::Integer, true),
+		'naam'		 => array(T::Text, true),
+		'deleted'	 => array(T::Boolean)
 	);
 	/**
 	 * Database table name

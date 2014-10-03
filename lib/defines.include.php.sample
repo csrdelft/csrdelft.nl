@@ -7,7 +7,7 @@
 # -------------------------------------------------------------------
 # 
 # database automatisch controleren
-define('DB_CHECK', false); # zie PersistentEntity::checkTable()
+define('DB_CHECK', true); # zie PersistentEntity::checkTable()
 # 
 # database automatisch bijwerken
 define('DB_MODIFY', false); # heb je een backup gemaakt?

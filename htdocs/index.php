@@ -59,6 +59,10 @@ catch (Exception $e) {
 
 	if (DEBUG && (LoginModel::mag('P_ADMIN') || LoginModel::instance()->isSued())) {
 		echo str_replace('#', '<br />#', $e); // stacktrace 
+		echo '<br />DatabaseAdmin queries:<br /><pre>';
+		require_once 'MVC/model/DatabaseAdmin.singleton.php';
+		debugprint(DatabaseAdmin::getQueries());
+		echo '</pre>';
 	}
 	DebugLogModel::instance()->log('index.php', 'new ' . $class, array(REQUEST_URI), $e);
 }
