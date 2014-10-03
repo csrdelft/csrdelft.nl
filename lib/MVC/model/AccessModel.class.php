@@ -319,6 +319,7 @@ class AccessModel extends PersistenceModel {
 			// splitst opgegeven term in verticale en functie
 			$parts = explode('>', $verticale, 2);
 			if (!isset($parts[1])) {
+				// RechtenField maakt van > een &gt;
 				$parts = explode('&gt;', $verticale, 2);
 			}
 
@@ -358,6 +359,7 @@ class AccessModel extends PersistenceModel {
 			// splitst opgegeven term in groepsnaam en functie
 			$parts = explode('>', $groep, 2);
 			if (!isset($parts[1])) {
+				// RechtenField maakt van > een &gt;
 				$parts = explode('&gt;', $groep, 2);
 			}
 			try {
