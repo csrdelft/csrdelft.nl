@@ -86,7 +86,7 @@ class ForumDraad extends PersistentEntity {
 	 */
 	public $eerste_post_plakkerig;
 	/**
-	 * Rechten voor met wie dit draad gedeeld is
+	 * Rechten posten voor met wie dit draad gedeeld is
 	 */
 	public $gedeeld_met;
 	/**
