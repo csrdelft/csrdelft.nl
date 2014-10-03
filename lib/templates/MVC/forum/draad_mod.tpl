@@ -29,16 +29,27 @@
 					<form action="/forum/wijzigen/{$draad->draad_id}/gedeeld_met" method="post">
 						<label>Delen met &nbsp;</label>
 						<select name="gedeeld_met">
-							<option value="" selected="selected"></option>
+							<option value=""{if empty($draad->gedeeld_met)} selected="selected"{/if}></option>
 							{assign var=found value=false}
-							<optgroup label="Verticalen">
-								{foreach from=VerticalenModel::instance()->find() item=verticale}
-									{if $verticale->id > 0}
-										{assign var=filter value="verticale:"|cat:$verticale->naam}
-										<option value="{$filter}"{if $filter === $draad->gedeeld_met}{assign var=found value=true} selected="selected"{/if}>{$verticale->naam}</option>
-									{/if}
-								{/foreach}
-							</optgroup>
+							{if startsWith($deel->rechten_posten, 'verticale:')}
+								<optgroup label="Verticalen">
+									{foreach from=VerticalenModel::instance()->find() item=verticale}
+										{if $verticale->id > 0}
+											{assign var=filter value="verticale:"|cat:$verticale->naam}
+											<option value="{$filter}"{if $filter === $draad->gedeeld_met}{assign var=found value=true} selected="selected"{/if}>{$verticale->naam}</option>
+										{/if}
+									{/foreach}
+								</optgroup>
+							{elseif startsWith($deel->rechten_posten, 'lidjaar:')}
+								<optgroup label="Lichting">
+									{assign var=start value=Lichting::getJongsteLichting()}
+									{assign var=end value=$start-7}
+									{for $lidjaar=$start to $end step -1}
+										{assign var=filter value="lidjaar:"|cat:$lidjaar}
+										<option value="{$filter}"{if $filter === $draad->gedeeld_met}{assign var=found value=true} selected="selected"{/if}>{$lidjaar}</option>
+									{/for}
+								</optgroup>
+							{/if}
 							{if !$found and !empty($draad->gedeeld_met)}
 								<option value="{$draad->gedeeld_met}" selected="selected">{$draad->gedeeld_met}</option>
 							{/if}

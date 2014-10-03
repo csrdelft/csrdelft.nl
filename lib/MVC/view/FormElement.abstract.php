@@ -469,7 +469,7 @@ class RechtenField extends TextField {
 			$this->suggestions[] = 'verticale:' . $naam;
 		}
 		$jong = Lichting::getJongsteLichting();
-		for ($jaar = $jong; $jaar > $jong - 9; $jaar--) {
+		for ($jaar = $jong; $jaar > $jong - 7; $jaar--) {
 			$this->suggestions[] = 'lichting:' . $jaar;
 		}
 		$this->title = 'Met , + | ! voor respectievelijk OR, AND, OR binnen AND (alsof er haakjes omheen staan) en negatie om van een restrictie een uitsluiting te maken.';
