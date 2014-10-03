@@ -62,12 +62,12 @@
 	{/if}
 
 	{capture name='magreageren'}
-		{if !ForumController::magPosten($draad, $deel)}
-			<div class="draad-readonly">U mag in dit deel van het forum niet reageren.</div>
+		{if $draad->verwijderd}
+			<div class="draad-verwijderd">Dit onderwerp is verwijderd.</div>
 		{elseif $draad->gesloten}
 			<div class="draad-gesloten">U kunt hier niet meer reageren omdat dit onderwerp gesloten is.</div>
-		{elseif $draad->verwijderd}
-			<div class="draad-verwijderd">Dit onderwerp is verwijderd.</div>
+		{elseif !ForumController::magPosten($draad, $deel)}
+			<div class="draad-readonly">U mag in dit deel van het forum niet reageren.</div>
 		{/if}
 	{/capture}
 
