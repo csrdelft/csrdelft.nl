@@ -20,7 +20,7 @@
 	<a href="/corveebeheer/maaltijd/{$taak->getMaaltijdId()}" title="Beheer maaltijdcorvee" class="knop">{icon get="cup_link"}</a>
 {/if}
 	</td>
-	<td class="center-text" style="width: 50px;">
+	<td class="text-center" style="width: 50px;">
 {assign var=aantal value=$taak->getAantalKeerGemaild()}
 {if !$taak->getIsVerwijderd() and (!isset($maaltijd) or !$maaltijd->getIsVerwijderd())}
 	{assign var="wijzigbaar" value="true"}
@@ -52,7 +52,7 @@
 	</td>
 	<td>{$taak->getDatum()|date_format:"%a %e %b"}</td>
 	<td style="width: 100px;">{$taak->getCorveeFunctie()->naam}</td>
-	<td class="taak-{if $taak->getUid()}toegewezen{elseif  $taak->getBeginMoment() < strtotime(Instellingen::get('corvee', 'waarschuwing_taaktoewijzing_vooraf'))}warning{else}open{/if}" style="font-weight: normal;">
+	<td class="niet-dik taak-{if $taak->getUid()}toegewezen{elseif  $taak->getBeginMoment() < strtotime(Instellingen::get('corvee', 'waarschuwing_taaktoewijzing_vooraf'))}warning{else}open{/if}">
 {if isset($wijzigbaar)}
 		<a href="{Instellingen::get('taken', 'url')}/toewijzen/{$taak->getTaakId()}" title="Deze taak toewijzen aan een lid&#013;Sleep om te ruilen" class="knop post modal dragobject static ruilen" id="taak-{$taak->getTaakId()}"{if $taak->getUid()} uid="{$taak->getUid()}">{icon get="user_green"}{else}>{icon get="user_red"}{/if}</a>
 {/if}

@@ -11,8 +11,7 @@
 		{/foreach}
 	</select>
 </div>
-<h1 style="width: 650px;">{$titel}</h1>
-<br />
+<h1>{$titel}</h1>
 <ul class="menubeheer-tree">
 	{if $root}
 		<li>{include file='MVC/menu/beheer/menu_root.tpl'}</li>

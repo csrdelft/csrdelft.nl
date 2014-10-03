@@ -15,7 +15,7 @@
 		<a href="/forum" class="forumGrootlink">Forum</a>
 		{if $categorien}
 			&raquo;
-			<select name="forum_id" style="padding: 0;" onchange="document.location.href = '/forum/' + this.value;">
+			<select name="forum_id" onchange="document.location.href = '/forum/' + this.value;">
 				<option value="recent"{if 0 === $deel->forum_id} selected="selected"{/if}>Recent gewijzigd</option>
 				{foreach from=$categorien item=cat}
 					<optgroup label="{$cat->titel}">
@@ -37,7 +37,7 @@
 		<tr>
 			<th>Titel</th>
 			<th>Reacties</th>
-			<th class="center-text">Auteur</th>
+			<th class="text-center">Auteur</th>
 			<th>Recente wijziging</th>
 		</tr>
 	</thead>

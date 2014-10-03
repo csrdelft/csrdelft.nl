@@ -28,12 +28,12 @@ N.B. Alle corveetaken in het verleden worden bij de reset naar de prullenbak ver
 	{if $smarty.foreach.tabel.index % 25 === 0}
 		{if !$smarty.foreach.tabel.first}</tbody>{/if}
 	<thead>
-		<tr style="vertical-align: bottom;">
+		<tr class="text-bottom">
 			<th>Lid</th>
 		{foreach from=$functies item=functie}
-			<th style="padding: 5px; background-color: {cycle values="#f5f5f5,#FAFAFA"};">{strip}
+			<th class="{cycle values="rowColor0,rowColor1"}" style="padding: 5px;">{strip}
 				<div style="width: 17px; height: 160px;">
-					<div class="vertical" style="font-weight: normal; position: relative; top: 140px;">
+					<div class="vertical niet-dik" style="position: relative; top: 140px;">
 						<nobr>{$functie->naam}</nobr>
 					</div>
 				</div>

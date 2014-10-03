@@ -21,7 +21,7 @@
 			<div class="kwali{if LidCache::getLid($kwali->uid)->isOudlid()} verborgen{/if}">
 				<a href="{Instellingen::get('taken', 'url')}/dekwalificeer/{$functie->functie_id}/{$kwali->uid}" title="Kwalificatie intrekken" class="knop post">{icon get="vcard_delete"}</a>
 				&nbsp;{LidCache::getLid($kwali->uid)->getNaamLink(Instellingen::get('corvee', 'weergave_ledennamen_beheer'), Instellingen::get('corvee', 'weergave_link_ledennamen'))}
-				<span style="color: gray;"> (sinds {$kwali->wanneer_toegewezen})</span>
+				<span class="lichtgrijs"> (sinds {$kwali->wanneer_toegewezen})</span>
 			</div>
 		{/foreach}
 	</td>

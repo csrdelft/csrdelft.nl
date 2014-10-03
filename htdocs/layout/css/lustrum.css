@@ -67,7 +67,7 @@ a.knop, textarea, input, select, #filters span, #boekencatalogus_wrapper *, .med
 #profielForm div.InputField:hover{ background-color: #222 !important; }
 
 #maand #dezeweek td.vandaag, .eetplantabel tr.kleur1 td, .eetplantabel tr.kleur1 td a{ background-color: #666 !important; }
-.blokje{ color: black !important; }
+.geelblokje{ color: black !important; }
 .groepleden{ background-color: black !important; }
 
 

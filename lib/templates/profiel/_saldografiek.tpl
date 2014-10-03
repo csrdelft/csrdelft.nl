@@ -22,7 +22,7 @@ function makePlot(){
 		});
 	}
 
-	jQuery('<div class="button" style="cursor: pointer; font-size: 12px; line-height: 12px; position: absolute; padding: 0; left:10px;bottom: 0" title="Verder terug in de tijd...">&laquo;</div>').appendTo("#saldografiek").click(function (e) {
+	jQuery('<div class="button" style="cursor: pointer; font-size: 12px; line-height: 12px; position: absolute; padding: 0; left: 10px; bottom: 0;" title="Verder terug in de tijd...">&laquo;</div>').appendTo("#saldografiek").click(function (e) {
 		timespan=timespan*2;
 		if(timespan>(15*365)){
 			return;

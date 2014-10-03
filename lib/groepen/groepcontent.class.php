@@ -213,7 +213,7 @@ class Groepgeschiedeniscontent extends SmartyTemplateView {
 			echo '<tr>';
 			$startspacer = 12 - substr($groep->getBegin(), 5, 2);
 			if ($startspacer != 0) {
-				echo '<td colspan="' . $startspacer . '" style="font-size: 8px; background-color: lightgray;">(' . $startspacer . ')</td>';
+				echo '<td colspan="' . $startspacer . '" class="lichtgrijs" style="font-size: 8px;">(' . $startspacer . ')</td>';
 			}
 
 			$oudeGr = OldGroep::getGroepgeschiedenis($groep->getSnaam(), $jaren);
@@ -229,7 +229,7 @@ class Groepgeschiedeniscontent extends SmartyTemplateView {
 			}
 			if (count($oudeGr) < $maanden) {
 				$spacer = $maanden - count($oudeGr);
-				echo '<td colspan="' . $spacer . '" style="background-color: lightgray;">&nbsp;</td>';
+				echo '<td colspan="' . $spacer . '" class="lichtgrijs">&nbsp;</td>';
 			}
 			echo '</tr>';
 		}

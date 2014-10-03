@@ -195,7 +195,7 @@
 				{if $profhtml.bankrekening!=''}
 					<div class="label">Bankrekening:</div> {$profhtml.bankrekening}
 					{if LoginModel::mag('P_MAAL_MOD')}
-						<span style="color: gray;">({if $profhtml.machtiging=='nee'}geen {/if}machtiging getekend)</span>
+						<span class="lichtgrijs">({if $profhtml.machtiging=='nee'}geen {/if}machtiging getekend)</span>
 					{/if}
 					<br />
 				{/if}
@@ -214,7 +214,7 @@
 				<div class="label">Recent:</div>
 				<ul class="nobullets data">
 					{foreach from=$profhtml.recenteAanmeldingen item=aanmelding}
-						<li>{$aanmelding->getMaaltijd()->getTitel()} <span style="color: #676767">({$aanmelding->getMaaltijd()->getDatum()|date_format:"%a %e %b"})</span></li>
+						<li>{$aanmelding->getMaaltijd()->getTitel()} <span class="lichtgrijs">({$aanmelding->getMaaltijd()->getDatum()|date_format:"%a %e %b"})</span></li>
 						{/foreach}
 				</ul>
 				<br />
@@ -250,14 +250,14 @@
 			<div class="label">Kwalificaties:</div>
 			<ul class="nobullets data">
 				{foreach from=$corveekwalificaties item=kwali}
-					<li>{$kwali->getCorveeFunctie()->naam}<span style="color: gray;"> (sinds {$kwali->wanneer_toegewezen})</span></li>
+					<li>{$kwali->getCorveeFunctie()->naam}<span class="lichtgrijs"> (sinds {$kwali->wanneer_toegewezen})</span></li>
 					{/foreach}
 			</ul>
 			<br />
 			<div class="label">Corveetaken:</div>
 			<ul class="nobullets data">
 				{foreach from=$corveetaken item=taak}
-					<li>{$taak->getCorveeFunctie()->naam} <span style="color: #676767">({$taak->getDatum()|date_format:"%a %e %b"})</span></li>
+					<li>{$taak->getCorveeFunctie()->naam} <span class="lichtgrijs">({$taak->getDatum()|date_format:"%a %e %b"})</span></li>
 					{/foreach}
 			</ul>
 			<br />

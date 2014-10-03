@@ -1,7 +1,7 @@
 <tr class="forumdraad kleur{cycle values="0,1"}">
 	<td class="titel">
 		{if $draad->wacht_goedkeuring}
-			<small style="font-weight: normal;">[ter goedkeuring...]</small>
+			<small class="niet-dik">[ter goedkeuring...]</small>
 		{/if}
 		<a id="{$draad->draad_id}" href="/forum/onderwerp/{$draad->draad_id}{if LidInstellingen::get('forum', 'open_draad_op_pagina') == 'ongelezen'}#ongelezen{elseif LidInstellingen::get('forum', 'open_draad_op_pagina') == 'laatste'}#reageren{/if}"{if !$draad->alGelezen()} class="{LidInstellingen::get('forum', 'ongelezenWeergave')}"{/if}>
 			{if $draad->gesloten}

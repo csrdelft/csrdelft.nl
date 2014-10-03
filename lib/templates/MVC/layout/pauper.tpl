@@ -5,7 +5,7 @@
 		{include file='html_head.tpl'}
 	</head>
 	<body>
-		<div class="center-text">
+		<div class="text-center">
 			<div class="float-left">
 				<a href="#mainmenu">Menu</a>
 			</div>

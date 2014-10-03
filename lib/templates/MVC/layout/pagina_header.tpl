@@ -7,7 +7,7 @@
 					<span class="cd-ingelogd-menu-text">{LoginModel::instance()->getLid()->getNaamLink('civitas', 'plain')}</span>
 					<ul id="cd-ingelogd-menu">
 						{if LoginModel::instance()->isSued()}
-							<li><a href="/endsu/" style="color: red;">SU {LoginModel::instance()->getSuedFrom()->getNaamLink('civitas', 'plain')}</a></li>
+							<li><a href="/endsu/" class="error">SU {LoginModel::instance()->getSuedFrom()->getNaamLink('civitas', 'plain')}</a></li>
 						{/if}
 						<li><a href="/communicatie/profiel/{LoginModel::getUid()}">Profiel</a></li>
 						<li>
@@ -19,7 +19,7 @@
 						<li>
 							<a href="/communicatie/profiel/{LoginModel::getUid()}">
 								{assign var=saldo value=LoginModel::instance()->getLid()->getMaalcieSaldo()}
-								MaalCie: <span{if $saldo < 0} style="color: red;"{/if}>&euro; {$saldo|number_format:2:",":"."}</span>
+								MaalCie: <span{if $saldo < 0} class="error"{/if}>&euro; {$saldo|number_format:2:",":"."}</span>
 							</a>
 						</li>
 						<li><a href="/instellingen">Instellingen</a></li>

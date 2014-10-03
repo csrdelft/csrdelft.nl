@@ -1,4 +1,5 @@
 /**** GENERAL *****************************************************************/
+
 #maintable{
 	margin: 0 auto;
 	border-collapse: collapse;
@@ -78,9 +79,11 @@ hr{
 
 .onzichtbaar{ visibility: hidden; }
 .verborgen{ display: none; }
+.block{ display: block; }
 .recht{ font-style: normal; }
 .cursief{ font-style: italic; }
 .dikgedrukt{ font-weight: bold; }
+.niet-dik{ font-weight: normal; }
 .onderstreept{ text-decoration: underline; }
 .doorgestreept{ text-decoration: line-through; }
 .alsof-gelezen{ }
@@ -351,7 +354,6 @@ table.query_table tbody{
 }
 table.query_table tr{
 	height: 20px;
-
 	background-color: #FAFAFA;
 }
 table.query_table tr:nth-child(odd){
@@ -387,13 +389,11 @@ table.query_table tbody tr td{
 	float: left;
 }
 
-/* plaatjes in tekst */
 p img{ margin: 15px 10px; }
 
-/* waarschuwing */
 .waarschuwing{ color: red; }
-/* geel blokje */
-div.blokje{ background-color: #ffffc1; margin: 10px 0; padding: 0; }
+
+div.geelblokje{ background-color: #ffffc1; margin: 10px 0; padding: 0; }
 
 
 /* algemeen hokje voor (fout)meldingen */
@@ -786,9 +786,6 @@ table.groepStats td, table.groepStats th{
 	margin: 10px;
 	padding: 10px;
 }
-#modereren table{
-	width: 100%;
-}
 #modereren table input[type="text"]{
 	width: 300px;
 }
@@ -1015,11 +1012,17 @@ textarea.forumBericht{
 div.forumBericht{
 	max-width: 574px;
 }
+input#titel{
+	width: 574px;
+}
+input.forumEmail{
+	width: 250px;
+}
 div.butn{
 	width: 580px;
 }
-form.gesloten{
-	display: none;
+.forumdraadtitelbottom h1{
+	margin-top: 5px;
 }
 
 #meldingen{

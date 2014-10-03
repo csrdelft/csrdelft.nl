@@ -5,7 +5,7 @@
 <tr id="maaltijd-row-{$maaltijd->getMaaltijdId()}">
 	<td>{$maaltijd->getDatum()|date_format:"%d-%m-%Y"} {$maaltijd->getTijd()|date_format:"%H:%M"}</td>
 	<td>{$maaltijd->getTitel()}</td>
-	<td style="color:grey;">{$maaltijd->getMaaltijdId()}</td>
+	<td class="lichtgrijs">{$maaltijd->getMaaltijdId()}</td>
 	<td>&euro; {$maaltijd->getPrijs()|string_format:"%.2f"}</td>
 	<td>
 		<div class="aanmeldingen-{$maaltijd->getMaaltijdId()} inline">

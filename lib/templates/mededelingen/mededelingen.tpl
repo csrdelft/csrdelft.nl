@@ -15,7 +15,8 @@
 <div id="mededelingenketser">
 	{if $prullenbak}
 		<h1>Mededelingen Prullenbak</h1>
-		<span style="display:block; margin-bottom: 10px;">Deze pagina bevat alleen verborgen, verwijderde en vervallen mededelingen.</span>
+		<div>Deze pagina bevat alleen verborgen, verwijderde en vervallen mededelingen.</div>
+		<br />
 	{/if}
 	{SimpleHtml::getMelding()}
 	{if $geselecteerdeMededeling!==null}		{*	Check of er een mededeling geselecteerd is.	Zo niet, dan
@@ -27,7 +28,7 @@
 			{/if}
 			{if $geselecteerdeMededeling->isModerator()}
 				<a class="knop" href="#" onclick="$('#legenda').toggle();">{icon get="legenda"} Legenda</a>
-				<div id="legenda" class="dragobject" style="display:none;">
+				<div id="legenda" class="dragobject verborgen">
 					<span id="ubbsluiten" onclick="$('#legenda').toggle();" title="Legenda verbergen">&times;</span>
 					<h2>Legenda Mededelingen</h2>
 					<br />
@@ -37,8 +38,8 @@
 						<li><em>schuingedrukte</em> mededelingen zijn zichtbaar voor iedereen (mits ze goedgekeurd zijn)</li>
 						<li>normale tekst geeft aan dat mededelingen alleen zichtbaar zijn voor (oud)leden</li>
 							{if $prullenbak}
-							<li><span style="color: grey;">grijs gekleurde</span> mededelingen zijn verborgen en dus alleen zichtbaar in de prullenbak</li>
-							<li><span style="color: #CC0000">rood gekleurde</span> mededelingen zijn verwijderd en dus alleen zichtbaar in de prullenbak</li>
+							<li><span class="lichtgrijs">grijs gekleurde</span> mededelingen zijn verborgen en dus alleen zichtbaar in de prullenbak</li>
+							<li><span class="error">rood gekleurde</span> mededelingen zijn verwijderd en dus alleen zichtbaar in de prullenbak</li>
 							{/if}
 					</ul>
 					<br />

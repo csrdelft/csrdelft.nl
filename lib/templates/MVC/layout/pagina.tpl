@@ -34,7 +34,7 @@
 			</table>
 		</main>
 		{$mainmenu->view()}
-		<div id="modal-background"{if isset($modal)} style="display: block;"{/if}></div>
+		<div id="modal-background"{if isset($modal)} class="block"{/if}></div>
 		<div id="modal" class="outer-shadow dragobject savepos" style="top: {$modaltop}px; left: {$modalleft}px;{if isset($modal)} display: block;{/if}">
 			{if isset($modal)}
 				{$modal->view()}

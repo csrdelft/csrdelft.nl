@@ -9,13 +9,13 @@
 		Hier kunt u een bericht toevoegen aan het forum. Het zal echter niet direct zichtbaar worden, maar
 		&eacute;&eacute;rst door de PubCie worden goedgekeurd. Zoekmachines nemen berichten van dit openbare
 		forumdeel op in hun zoekresultaten.<br />
-		<span style="text-decoration: underline;">Het is hierbij verplicht om uw naam in het bericht te plaatsen.</span><br /><br />
+		<span class="onderstreept">Het is hierbij verplicht om uw naam in het bericht te plaatsen.</span><br /><br />
 		<label for="email" class="externeemail">Email-adres</label>
 		<input type="text" id="email" name="email" /><br /><br />
 		{* spam trap, must be kept empty! *}
 		<input type="text" name="firstname" value="" class="verborgen" />
 	{/if}
-	<input type="text" name="titel" id="titel" value="" class="tekst" placeholder="Onderwerp titel" style="width: 574px;" /><br /><br />
+	<input type="text" name="titel" id="titel" value="" class="tekst" placeholder="Onderwerp titel" /><br /><br />
 	<div id="berichtPreview" class="preview forumBericht"></div>
 	<textarea name="forumBericht" id="forumBericht" class="forumBericht{if $deel->isOpenbaar()} extern{/if}" rows="12" origvalue="{$post_form_tekst}">{$post_form_tekst}</textarea>
 	<div class="butn">

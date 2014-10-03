@@ -8,7 +8,7 @@
 		</td>
 	</tr>
 {/if}
-<tr id="forumpost-row-{$post->post_id}"{if $post->gefilterd} style="display:none;"{/if}>
+<tr id="forumpost-row-{$post->post_id}"{if $post->gefilterd} class="verborgen"{/if}>
 	<td class="auteur">
 		<table>
 			<tr>
@@ -52,7 +52,7 @@
 					<a href="/forum/verplaatsen/{$post->post_id}" class="knop post prompt{if !$post->wacht_goedkeuring} forummodknop{/if}" title="Verplaats bericht" postdata="Draad id={$post->draad_id}">{icon get=arrow_right}</a>
 				{/if}
 				{if $post->verwijderd}
-					<span style="color: red;">Deze reactie is verwijderd.</span>
+					<span class="error">Deze reactie is verwijderd.</span>
 				{/if}
 			</div>
 		{/if}

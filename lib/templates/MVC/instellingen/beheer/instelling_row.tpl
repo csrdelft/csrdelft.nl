@@ -17,7 +17,7 @@
 			<div class="InstellingToggle">{$instelling->waarde}</div>
 			<div class="InstellingToggle verborgen">&nbsp;</div>
 			<div class="InputField">
-				<textarea name="waarde" origvalue="{htmlspecialchars($instelling->waarde)}" class="FormElement" rows="1" style="width: 400px !important;">{$instelling->waarde}</textarea>
+				<textarea name="waarde" origvalue="{htmlspecialchars($instelling->waarde)}" class="FormElement" rows="1">{$instelling->waarde}</textarea>
 			</div>
 			<div class="InstellingToggle verborgen"></div>
 			<div class="FormButtons">

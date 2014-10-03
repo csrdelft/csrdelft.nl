@@ -18,6 +18,9 @@ table.agenda th {
 	vertical-align: top;
 	background-color: #dddddd;
 }
+table.agenda th.weeknr {
+	width: 25px;
+}
 #tijden{
 	line-height: 2em;
 }
