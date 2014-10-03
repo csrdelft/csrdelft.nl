@@ -152,7 +152,7 @@
 					<br />
 				{elseif $profhtml.verticale!=0}
 					<div class="label">Verticale:</div>
-					<a href="/communicatie/lijst.php?q=verticale:{$profiel->getVerticale()}">{$profiel->getVerticale()}</a><br />
+					<a href="/communicatie/lijst.php?q=verticale:{$profiel->getVerticale()->naam}">{$profiel->getVerticale()->naam}</a><br />
 				{/if}
 				{if $profhtml.moot!=0}
 					<div class="label">Oude moot:</div>

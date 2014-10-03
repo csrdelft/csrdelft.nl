@@ -396,19 +396,20 @@ class Lid implements Serializable, Agendeerbaar {
 
 	//einde implements Agendeerbaar
 
+	/**
+	 * Lazy loading
+	 * @var Verticale
+	 */
+	private $verticale;
+
 	public function getVerticale() {
-		return VerticalenModel::instance()->getVerticaleById($this->profiel['verticale']);
+		if (!isset($this->verticale)) {
+			$this->verticale = VerticalenModel::instance()->getVerticaleById($this->getVerticaleId());
+		}
+		return $this->verticale;
 	}
 
-	public function getVerticaleNaam() {
-		return OldVerticale::getNaamById($this->getVerticaleID());
-	}
-
-	public function getVerticaleLetter() {
-		return OldVerticale::getLetterById($this->getVerticaleID());
-	}
-
-	public function getVerticaleID() {
+	public function getVerticaleId() {
 		return $this->profiel['verticale'];
 	}
 
@@ -421,10 +422,10 @@ class Lid implements Serializable, Agendeerbaar {
 	}
 
 	public function getKring($link = false) {
-		if ($this->getVerticaleLetter() == 'Geen') {
+		if ($this->getVerticaleId() == 0) {
 			return 'Geen kring';
 		}
-		$vertkring = $this->getVerticaleLetter() . '.' . $this->profiel['kring'];
+		$vertkring = $this->getVerticale()->letter . '.' . $this->profiel['kring'];
 
 		if ($this->getStatus() == 'S_KRINGEL') {
 			$postfix = '(kringel)';
@@ -436,7 +437,7 @@ class Lid implements Serializable, Agendeerbaar {
 			$postfix = '';
 		}
 		if ($link) {
-			return '<a href="/communicatie/verticalen#kring' . $vertkring . '" title="Verticale ' . $this->getVerticaleNaam() . ' (' . $this->getVerticaleLetter() . ') - kring ' . $this->profiel['kring'] . '">' . $this->getVerticaleNaam() . ' ' . $vertkring . '</a> ' . $postfix;
+			return '<a href="/communicatie/verticalen#kring' . $vertkring . '" title="Verticale ' . $this->getVerticale()->naam . ' (' . $this->getVerticale()->letter . ') - kring ' . $this->profiel['kring'] . '">' . $this->getVerticale()->naam . ' ' . $vertkring . '</a> ' . $postfix;
 		} else {
 			return $vertkring . ' ' . $postfix;
 		}
@@ -939,7 +940,7 @@ class Lid implements Serializable, Agendeerbaar {
 				$k.= $this->profiel['mobiel'] . '</p>';
 				$k.= '<p>' . $this->profiel['adres'] . '<br />';
 				$k.= $this->profiel['postcode'] . ' ' . $this->profiel['woonplaats'] . '</p>';
-				$k.= '<p class="uitgebreid">' . $this->profiel['lidjaar'] . ' ' . $this->getVerticaleNaam() . '</p>';
+				$k.= '<p class="uitgebreid">' . $this->profiel['lidjaar'] . ' ' . $this->getVerticale()->naam . '</p>';
 				$k.= '</div>';
 				if ($vorm === 'leeg') {
 					$naam = $k . $naam;

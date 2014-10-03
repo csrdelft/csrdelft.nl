@@ -325,12 +325,12 @@ class AccessModel extends PersistenceModel {
 
 			// check verticale first
 			if (is_numeric($parts[0])) {
-				if ($parts[0] == $subject->getVerticaleID()) {
+				if ($parts[0] == $subject->getVerticaleId()) {
 					$verticale = true;
 				}
-			} elseif ($parts[0] == strtolower($subject->getVerticaleLetter())) {
+			} elseif ($parts[0] == strtolower($subject->getVerticale()->letter)) {
 				$verticale = true;
-			} elseif ($parts[0] == strtolower($subject->getVerticaleNaam())) {
+			} elseif ($parts[0] == strtolower($subject->getVerticale()->naam)) {
 				$verticale = true;
 			}
 

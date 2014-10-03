@@ -1,5 +1,7 @@
 <?php
-/*
+require_once 'lid/lidzoeker.class.php';
+
+/**
  *  C.S.R. Delft | pubcie@csrdelft.nl
  * 
  * LLWeergave, LLLijst, LLKaartje, LLCSV:
@@ -11,8 +13,6 @@
  * LedenlijstContent
  * 		Algemene View voor de ledenlijst.
  */
-require_once 'lid/lidzoeker.class.php';
-
 class LedenlijstContent implements View {
 
 	/**
@@ -133,8 +133,8 @@ class LedenlijstContent implements View {
 				}
 			}
 
-			jQuery(document).ready(function($) {
-				$('#toggleAdvanced').click(function() {
+			jQuery(document).ready(function ($) {
+				$('#toggleAdvanced').click(function () {
 					adv = $('#advanced');
 					adv.toggleClass('verborgen');
 
@@ -156,7 +156,7 @@ class LedenlijstContent implements View {
 					$('#advanced select').attr('disabled', 'disabled');
 				}
 				//weergave van selectie beschikbare veldjes
-				$('#fweergave').change(function() {
+				$('#fweergave').change(function () {
 					updateVeldselectie();
 					$('#zoekform').submit();
 				});
@@ -195,10 +195,9 @@ abstract class LLWeergave {
 
 }
 
-/*
+/**
  * De 'normale' ledenlijst, zoals het is zoals het was.
  */
-
 class LLLijst extends LLweergave {
 
 	private function viewVeldnamen() {
@@ -244,7 +243,7 @@ class LLLijst extends LLweergave {
 		}
 		?>
 		<script type="text/javascript">
-			jQuery(document).ready(function($) {
+			jQuery(document).ready(function ($) {
 				$("#zoekResultaat").dataTable({
 					"aaSorting": [],
 					"bStateSave": true,
@@ -303,7 +302,7 @@ class LLLijst extends LLweergave {
 					echo $lid->getStatus()->getDescription();
 					break;
 				case 'verticale':
-					echo mb_htmlentities($lid->getVerticaleNaam());
+					echo mb_htmlentities($lid->getVerticale()->naam);
 					break;
 				case 'woonoord':
 					echo $lid->getWoonoord();
@@ -327,10 +326,9 @@ class LLLijst extends LLweergave {
 
 }
 
-/*
+/**
  * Visitekaartjes, 3 op één regel.
  */
-
 class LLKaartje extends LLweergave {
 
 	public function viewHeader() {
@@ -347,11 +345,10 @@ class LLKaartje extends LLweergave {
 
 }
 
-/*
+/**
  * CSV in een textarea. 
  * Eventueel zou het nog geforceerd downloadbaar gemaakt kunnen worden
  */
-
 class LLCSV extends LLweergave {
 
 	public function viewHeader() {
@@ -403,7 +400,7 @@ class LLCSV extends LLweergave {
 					$return.=$lid->getAdresseringechtpaar();
 					break;
 				case 'verticale':
-					$return.=$lid->getVerticaleNaam();
+					$return.=$lid->getVerticale()->naam;
 					break;
 				case 'woonoord':
 					$woonoord = $lid->getWoonoord();
@@ -425,11 +422,9 @@ class LLCSV extends LLweergave {
 
 }
 
-/*
+/**
  * Google wil een CSV met kolomnamen erboven.
  */
-
 class LLGoogleCSV extends LLCSV {
 	
 }
-?>
