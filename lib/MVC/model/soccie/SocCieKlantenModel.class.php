@@ -17,6 +17,10 @@ class SocCieKlantenModel extends PersistenceModel {
 		parent::__construct('soccie/');
 	}
 
+	public function getKlant($uid) {
+		return $this->find('stekUID = ?', array($uid), null, null, 1)->fetch();
+	}
+
 	/**
 	 * Haalt het saldo op voor de klant met opgegeven lidnummer.
 	 * 
@@ -24,7 +28,7 @@ class SocCieKlantenModel extends PersistenceModel {
 	 * @return float
 	 */
 	public function getSaldoVoorLid($uid) {
-		$klant = $this->find('stekUID = ?', array($uid), null, null, 1)->fetch();
+		$klant = $this->getKlant($uid);
 		if (!$klant) {
 			return 0;
 		}

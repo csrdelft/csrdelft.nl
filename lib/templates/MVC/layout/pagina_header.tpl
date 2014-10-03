@@ -11,9 +11,9 @@
 						{/if}
 						<li><a href="/communicatie/profiel/{LoginModel::getUid()}">Profiel</a></li>
 						<li>
-							<a href="/communicatie/profiel/{LoginModel::getUid()}">
+							<a href="/socciesaldo">
                                 {assign var=saldo value=LoginModel::instance()->getLid()->getSoccieSaldo()}
-								SocCie: <span{if $saldo < 0} style="color: red;"{/if}>&euro; {$saldo|number_format:2:",":"."}</span>
+								SocCie: <span{if $saldo < 0} class="staatrood"{/if}>&euro; {$saldo|number_format:2:",":"."}</span>
 							</a>
 						</li>
 						<li>

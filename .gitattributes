@@ -171,6 +171,8 @@ htdocs/layout/css/snow.anim.css -text
 htdocs/layout/css/snow.anim.min.css -text
 htdocs/layout/css/snow.css -text
 htdocs/layout/css/snow.min.css -text
+htdocs/layout/css/soccie.css -text
+htdocs/layout/css/soccie.min.css -text
 htdocs/layout/css/stamboom.css -text
 htdocs/layout/css/stamboom.min.css -text
 htdocs/layout/css/stylus/basic.styl -text
@@ -3063,6 +3065,7 @@ lib/MVC/controller/LidInstellingenController.class.php -text
 lib/MVC/controller/LoginController.class.php -text
 lib/MVC/controller/MaalcieRouterController.class.php -text
 lib/MVC/controller/MenuBeheerController.class.php -text
+lib/MVC/controller/SoccieRouterController.class.php -text
 lib/MVC/controller/groepen/ActiviteitenController.class.php -text
 lib/MVC/controller/groepen/BesturenController.class.php -text
 lib/MVC/controller/groepen/CommissiesController.class.php -text
@@ -3074,6 +3077,7 @@ lib/MVC/controller/groepen/SjaarciesController.class.php -text
 lib/MVC/controller/groepen/WerkgroepenController.class.php -text
 lib/MVC/controller/groepen/WoonoordenController.class.php -text
 lib/MVC/controller/maalcie/BeheerFunctiesController.class.php -text
+lib/MVC/controller/soccie/SocCieKlantenController.class.php -text
 lib/MVC/model/AccessModel.class.php -text
 lib/MVC/model/AgendaModel.class.php -text
 lib/MVC/model/Agendeerbaar.interface.php -text
@@ -3187,6 +3191,7 @@ lib/MVC/view/groepen/SjaarciesView.class.php -text
 lib/MVC/view/groepen/WerkgroepenView.class.php -text
 lib/MVC/view/groepen/WoonoordenView.class.php -text
 lib/MVC/view/maalcie/BeheerFunctiesView.class.php -text
+lib/MVC/view/soccie/SocCieKlantenView.class.php -text
 lib/MijnSqli.class.php -text
 lib/Soccie[!!-~]ERD.png -text
 lib/Zend/Exception.php -text
@@ -3927,6 +3932,7 @@ lib/templates/MVC/menu/block.tpl -text
 lib/templates/MVC/menu/main_menu.tpl -text
 lib/templates/MVC/menu/page.tpl -text
 lib/templates/MVC/menu/quicknav.tpl -text
+lib/templates/MVC/soccie/klanten/saldo.tpl -text
 lib/templates/bibliotheek/boek.tpl -text
 lib/templates/bibliotheek/boek.ubb.tpl -text
 lib/templates/bibliotheek/catalogus.tpl -text

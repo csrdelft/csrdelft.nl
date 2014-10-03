@@ -83,7 +83,7 @@ hr{
 .alsof-gelezen{ }
 .draad-readonly{ }
 .draad-gesloten{ }
-.draad-verwijderd{ color: red; }
+.draad-verwijderd, .staatrood{ color: red; }
 .lichtgrijs{ color: #aaa; }
 .small{ font-size: smaller; }
 
