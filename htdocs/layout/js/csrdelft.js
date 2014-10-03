@@ -144,7 +144,7 @@ function zijbalk_scroll_fixed() {
 
 	// adjust to container size
 	$(window).resize(function () {
-		elmnt.css('max-height', window.innerHeight);
+		elmnt.css('height', window.innerHeight);
 	});
 	$(window).trigger('resize');
 
