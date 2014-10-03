@@ -314,7 +314,7 @@ class AccessModel extends PersistenceModel {
 		}
 		// Behoort een lid tot een bepaalde verticale?
 		elseif (substr($descr, 0, 9) === 'verticale') {
-			$verticale = strtoupper(substr($descr, 10));
+			$verticale = strtolower(substr($descr, 10));
 
 			// splitst opgegeven term in verticale en functie
 			$parts = explode('>', $verticale, 2);
@@ -327,9 +327,9 @@ class AccessModel extends PersistenceModel {
 				if ($parts[0] == $subject->getVerticaleID()) {
 					$verticale = true;
 				}
-			} elseif ($parts[0] == $subject->getVerticaleLetter()) {
+			} elseif ($parts[0] == strtolower($subject->getVerticaleLetter())) {
 				$verticale = true;
-			} elseif ($parts[0] == strtoupper($subject->getVerticaleNaam())) {
+			} elseif ($parts[0] == strtolower($subject->getVerticaleNaam())) {
 				$verticale = true;
 			}
 
@@ -353,7 +353,7 @@ class AccessModel extends PersistenceModel {
 		// met dat id.
 		// met de toevoeging '>Fiscus' kan ook specifieke functie geëist worden binnen een groep
 		elseif (substr($descr, 0, 5) === 'groep') {
-			$groep = substr($descr, 6);
+			$groep = strtolower(substr($descr, 6));
 
 			// splitst opgegeven term in groepsnaam en functie
 			$parts = explode('>', $groep, 2);
@@ -367,7 +367,7 @@ class AccessModel extends PersistenceModel {
 					// wordt er een functie gevraagd?
 					if (isset($parts[1])) {
 						$functie = $groep->getFunctie();
-						if (strtolower($functie[0]) == strtolower($parts[1])) {
+						if (strtolower($functie[0]) == $parts[1]) {
 							return true;
 						}
 					} else {

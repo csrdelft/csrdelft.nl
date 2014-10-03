@@ -285,7 +285,7 @@ function isGeldigeDatum($datum) {
  * @param string $cssID
  */
 function debugprint($sString, $cssID = 'pubcie_debug') {
-	if (LoginModel::mag('P_ADMIN')) {
+	if (LoginModel::mag('P_ADMIN') OR LoginModel::instance()->isSued()) {
 		ob_start();
 		echo '<pre class="' . $cssID . '">' . print_r($sString, true) . '</pre>';
 	}
