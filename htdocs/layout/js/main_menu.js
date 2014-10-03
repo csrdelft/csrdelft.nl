@@ -12,7 +12,7 @@ jQuery(document).ready(function ($) {
 			event.preventDefault();
 
 			$ingelogd_menu_trigger.toggleClass('ingelogd-menu-is-open');
-			$ingelogd_menu.slideToggle();
+			$ingelogd_menu.slideToggle(200);
 		}
 	});
 
@@ -31,7 +31,7 @@ jQuery(document).ready(function ($) {
 		if (!$(event.target).is('#cd-ingelogd-menu-trigger, #cd-ingelogd-menu-trigger span, #cd-lateral-menu-trigger, #cd-lateral-menu-trigger span')) {
 			//close ingelogd menu
 			$ingelogd_menu_trigger.removeClass('ingelogd-menu-is-open');
-			$ingelogd_menu.slideUp();
+			$ingelogd_menu.slideUp(200);
 
 			//close lateral menu
 			$lateral_menu_trigger.removeClass('is-clicked');
