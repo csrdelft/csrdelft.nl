@@ -9,15 +9,15 @@
 						{if LoginModel::instance()->isSued()}
 							<li><a href="/endsu/" class="error">SU {LoginModel::instance()->getSuedFrom()->getNaamLink('civitas', 'plain')}</a></li>
 						{/if}
-						<li><a href="/communicatie/profiel/{LoginModel::getUid()}">Profiel</a></li>
+						<li><a href="/communicatie/profiel/{LoginModel::getUid()}#SocCieSaldo">Profiel</a></li>
 						<li>
-							<a href="/socciesaldo">
+							<a href="/communicatie/profiel/{LoginModel::getUid()}">
                                 {assign var=saldo value=LoginModel::instance()->getLid()->getSoccieSaldo()}
 								SocCie: <span{if $saldo < 0} class="staatrood"{/if}>&euro; {$saldo|number_format:2:",":"."}</span>
 							</a>
 						</li>
 						<li>
-							<a href="/communicatie/profiel/{LoginModel::getUid()}">
+							<a href="/communicatie/profiel/{LoginModel::getUid()}#MaalCieSaldo">
 								{assign var=saldo value=LoginModel::instance()->getLid()->getMaalcieSaldo()}
 								MaalCie: <span{if $saldo < 0} class="error"{/if}>&euro; {$saldo|number_format:2:",":"."}</span>
 							</a>
