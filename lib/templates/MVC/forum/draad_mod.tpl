@@ -50,7 +50,7 @@
 									{/for}
 								</optgroup>
 							{else}
-								<optgroup label="Niet in deelforum van lichting of verticale" title="hoi"></optgroup>
+								<optgroup label="Draad zit niet in lichting of verticale deelforum"></optgroup>
 							{/if}
 							{if !$found and !empty($draad->gedeeld_met)}
 								<option value="{$draad->gedeeld_met}" selected="selected">{$draad->gedeeld_met}</option>
