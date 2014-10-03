@@ -179,9 +179,11 @@ function zijbalk_scroll_fixed() {
 
 	// show-hide scrollbar
 	var showscroll = function () {
-		elmnt.css({
-			'overflow-y': 'auto'
-		});
+		if (elmnt.get(0).scrollHeight > elmnt.get(0).clientHeight) {
+			elmnt.css({
+				'overflow-y': 'scroll'
+			});
+		}
 	};
 	var hidescroll = function () {
 		elmnt.css({
