@@ -1,7 +1,6 @@
 {*
 	menu_pagina.tpl	|	P.W.G. Brussee (brussee@live.nl)
 *}
-{include file='maalcie/menu_beheer.tpl'}
 <div id="maalcie-menu">
 	<ul class="horizontal">
 		{assign var="link" value="/maaltijdenketzer"}

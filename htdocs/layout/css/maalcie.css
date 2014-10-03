@@ -36,10 +36,7 @@ div.vertical {
 #maalcie-menu td.active {
 	font-weight: bold;
 }
-#beheer-maalcie-menu {
-	display: none;
-}
-#beheer-maalcie-menu div.active {
+.maalcie-beheer-menu div.active {
 	font-weight: bold;
 }
 

@@ -3679,6 +3679,7 @@ lib/maalcie/view/BeheerVoorkeurenView.class.php -text
 lib/maalcie/view/BeheerVrijstellingenView.class.php -text
 lib/maalcie/view/CorveeRepetitiesView.class.php -text
 lib/maalcie/view/CorveeRoosterView.class.php -text
+lib/maalcie/view/MaalCieBeheerMenuView.class.php -text
 lib/maalcie/view/MaalCieSaldiView.class.php -text
 lib/maalcie/view/MaaltijdKetzerView.class.php -text
 lib/maalcie/view/MaaltijdLijstView.class.php -text
@@ -3995,7 +3996,8 @@ lib/templates/maalcie/maaltijd/maaltijd_lijst.tpl -text
 lib/templates/maalcie/maaltijd/maaltijd_lijst_fiscaal.tpl -text
 lib/templates/maalcie/maaltijd/mijn_maaltijd_lijst.tpl -text
 lib/templates/maalcie/maaltijd/mijn_maaltijden.tpl -text
-lib/templates/maalcie/menu_beheer.tpl -text
+lib/templates/maalcie/menu_beheer_corvee.tpl -text
+lib/templates/maalcie/menu_beheer_maaltijden.tpl -text
 lib/templates/maalcie/menu_pagina.tpl -text
 lib/templates/maalcie/voorkeur/beheer_voorkeur_lijst.tpl -text
 lib/templates/maalcie/voorkeur/beheer_voorkeur_veld.tpl -text

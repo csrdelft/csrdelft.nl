@@ -5,7 +5,6 @@
  */
 
 $(document).ready(function () {
-	$('#beheer-maalcie-menu').prependTo('#zijbalk').show();
 	$('a.ruilen').each(function () {
 		$(this).removeClass('ruilen');
 		$(this).attr('ondragover', 'taken_mag_ruilen(event);');

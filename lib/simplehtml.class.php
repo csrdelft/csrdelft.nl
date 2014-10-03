@@ -68,16 +68,15 @@ abstract class SimpleHTML implements View {
 		}
 	}
 
-	public static function getStandaardZijbalk() {
-		$zijbalk = array();
-		// Quick navigation buttons
-		if (LidInstellingen::get('zijbalk', 'quicknav') == 'ja') {
-			$zijbalk[] = new QuickNavigateMenuView();
-		}
+	public static function addStandaardZijbalk(array $zijbalk) {
 		// Is het al...
 		if (LidInstellingen::get('zijbalk', 'ishetal') != 'niet weergeven') {
 			require_once 'ishetalcontent.class.php';
-			$zijbalk[] = new IsHetAlContent(LidInstellingen::get('zijbalk', 'ishetal'));
+			array_unshift($zijbalk, new IsHetAlContent(LidInstellingen::get('zijbalk', 'ishetal')));
+		}
+		// Quick navigation buttons
+		if (LidInstellingen::get('zijbalk', 'quicknav') == 'ja') {
+			array_unshift($zijbalk, new QuickNavigateMenuView());
 		}
 		// Agenda
 		if (LoginModel::mag('P_AGENDA_READ') && LidInstellingen::get('zijbalk', 'agendaweken') > 0) {
