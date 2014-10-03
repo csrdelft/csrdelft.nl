@@ -22,7 +22,7 @@ preload([
 ]);
 
 $(document).ready(function () {
-	undo_inline_css();
+	//undo_inline_css();
 	zijbalk_scroll_fixed();
 	init_key_pressed();
 	init_dropzone();
