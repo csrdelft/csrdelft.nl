@@ -8,7 +8,7 @@ jQuery(document).ready(function ($) {
 
 	//toggle ingelogd menu clicking on the name item
 	$ingelogd_menu_trigger.on('click', function (event) {
-		if (!$(event.target).is('#cd-ingelogd-menu a')) {
+		if (!$(event.target).is('#cd-ingelogd-menu a, #cd-ingelogd-menu a span')) {
 			event.preventDefault();
 
 			$ingelogd_menu_trigger.toggleClass('ingelogd-menu-is-open');
@@ -69,4 +69,5 @@ jQuery(document).ready(function ($) {
 			$('#cd-lateral-nav').addClass('lateral-menu-is-open');
 		}
 	});
+
 });
