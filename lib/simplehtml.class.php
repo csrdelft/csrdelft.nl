@@ -74,10 +74,10 @@ abstract class SimpleHTML implements View {
 			require_once 'ishetalcontent.class.php';
 			array_unshift($zijbalk, new IsHetAlContent(LidInstellingen::get('zijbalk', 'ishetal')));
 		}
-		/*/ Quick navigation buttons
+		// Quick navigation buttons
 		if (LidInstellingen::get('zijbalk', 'quicknav') == 'ja') {
 			array_unshift($zijbalk, new QuickNavigateMenuView());
-		}*/
+		}
 		// Agenda
 		if (LoginModel::mag('P_AGENDA_READ') && LidInstellingen::get('zijbalk', 'agendaweken') > 0) {
 			require_once 'MVC/model/AgendaModel.class.php';
