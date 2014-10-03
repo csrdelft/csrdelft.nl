@@ -3928,7 +3928,6 @@ lib/templates/MVC/menu/block.tpl -text
 lib/templates/MVC/menu/main_menu.tpl -text
 lib/templates/MVC/menu/page.tpl -text
 lib/templates/MVC/menu/quicknav.tpl -text
-lib/templates/MVC/soccie/klanten/saldo.tpl -text
 lib/templates/bibliotheek/boek.tpl -text
 lib/templates/bibliotheek/boek.ubb.tpl -text
 lib/templates/bibliotheek/catalogus.tpl -text
