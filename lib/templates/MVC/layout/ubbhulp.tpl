@@ -3,26 +3,26 @@
 	<h2>Tekst opmaken</h2>
 	<p>U kunt uw berichten opmaken met een simpel opmaaktaaltje wat ubb genoemd wordt. Het lijkt wat op html, maar dan met vierkante haken:</p>
 	<ul>
-		<li>[b]...[/b] voor <span class="dikgedrukt">dikgedrukte tekst</span></li>
-		<li>[i]...[/i] voor <span class="cursief">cursieve tekst</span></li>
-		<li>[u]...[/u] voor <span class="onderstreept">onderstreepte tekst</span></li>
-		<li>[s]...[/s] voor <span class="doorgestreept">doorgestreepte tekst</span></li>
-		<li>[email=e@mail.nl]Stuur email[/email] voor een email-link</li>
-		<li>[url=http://csrdelft.nl]Webstek van C.S.R.[/url] voor een externe link</li>
-		<li>[citaat][/citaat] voor een citaat. [citaat=<em>lidnummer</em>][/citaat] voor een citaat van een lid</li>
-		<li>[lid]<em>lidnummer</em>[/lid] voor een link naar het profiel van een lid of oudlid</li>
-		<li>[offtopic]...[/offtopic] voor een stukje tekst van-het-onderwerp</li>
-		<li>[ubboff]...[/ubboff] voor een stukje met ubb-tags zonder dat ze geïnterpreteerd worden</li>
+		<li><span class="pre">[b]...[/b]</span> voor <span class="dikgedrukt">dikgedrukte tekst</span></li>
+		<li><span class="pre">[i]...[/i]</span> voor <span class="cursief">cursieve tekst</span></li>
+		<li><span class="pre">[u]...[/u]</span> voor <span class="onderstreept">onderstreepte tekst</span></li>
+		<li><span class="pre">[s]...[/s]</span> voor <span class="doorgestreept">doorgestreepte tekst</span></li>
+		<li><span class="pre">[email=e@mail.nl]Stuur email[/email]</span> voor een email-link</li>
+		<li><span class="pre">[url=http://csrdelft.nl]Webstek van C.S.R.[/url]</span> voor een externe link</li>
+		<li><span class="pre">[citaat=lidnummer][/citaat]</span> voor een citaat van een lid</li>
+		<li><span class="pre">[citaat=externe_bron][/citaat]</span> voor een citaat.</li>
+		<li><span class="pre">[lid]lidnummer[/lid]</span> voor een link naar het profiel van een lid of oudlid</li>
+		<li><span class="pre">[offtopic]...[/offtopic]</span> voor een stukje tekst van-het-onderwerp</li>
+		<li><span class="pre">[ubboff]...[/ubboff]</span> voor een stukje met ubb-tags zonder dat ze geïnterpreteerd worden</li>
 	</ul>
 	<h2>Elementen invoegen</h2>
 	<ul>
-		<li>[img]http://csrdelft.nl/plaetje.jpg[/img] voor een plaetje</li>
-		<li>[foto]/2014-2015/album/foto.jpg[/foto] voor een foto uit het fotoalbum met link</li>
-		<li>[video]<em>url</em>[/video] url van een youtube, vimeo, dailymotion, 123video of godtube voor een filmpje direct in je post</li>
-		<li>[document]<em>documentid</em>[/document] nummer van document</li>
-		<li>[peiling=<em>peilingid</em>] nummer van peiling</li>
-		<li>[groep]<em>groepid</em>[/groep] nummer van de ketzer / groep / commissie</li>
+		<li><span class="pre">[img]http://csrdelft.nl/plaetje.jpg[/img]</span> voor een plaetje</li>
+		<li><span class="pre">[foto]/2014-2015/album/foto.jpg[/foto]</span> voor een foto uit het fotoalbum</li>
+		<li><span class="pre">[video]url[/video]</span> url van een youtube, vimeo, dailymotion, 123video of godtube voor een filmpje direct in je post</li>
+		<li><span class="pre">[document]documentid[/document]</span> document invoegen</li>
+		<li><span class="pre">[peiling=peilingid]</span> peiling invoegen</li>
+		<li><span class="pre">[groep]groepid[/groep]</span> ketzer invoegen</li>
 	</ul>
-	In de beperking toont zich de meester!<br />
-	<a href="http://csrdelft.nl/wiki/cie:diensten:forum" target="_blank">meer info...</a>
+	<p>In de beperking toont zich de meester!<a href="http://csrdelft.nl/wiki/cie:diensten:forum" target="_blank" class="float-right">meer info...</a></p>
 </div>

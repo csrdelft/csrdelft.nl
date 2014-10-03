@@ -434,14 +434,18 @@ div.arrows{
 /* ubb-hulp */
 div#ubbhulpverhaal{
 	display: none;
-	width: 330px;
+	width: 450px;
 	padding: 5px;
 	border: 1px solid #bbb;
 	background-color: white;
 	text-align: left;
+	line-height: 1.5em;
+}
+div#ubbhulpverhaal span.pre{
+	font-family: monospace;
 }
 div#ubbhulpverhaal h2, div#ubbhulpverhaal p, div#ubbhulpverhaal ul{
-	margin-bottom: 5px;
+	margin-top: 10px;
 }
 span#ubbsluiten{
 	display: block;

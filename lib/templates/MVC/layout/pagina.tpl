@@ -25,10 +25,6 @@
 							<h2 id="mysql_debug_toggle"><a href="#mysql_debug_toggle" onclick="$('#mysql_debug').toggle();">Debug Tonen/Verstoppen</a></h2>
 							<div id="mysql_debug">{$debug}</div>
 						{/if}
-						{include file='MVC/layout/ubbhulp.tpl'}
-						{if isset($minion)}
-							{$minion}
-						{/if}
 					</td>
 				</tr>
 			</table>
@@ -40,5 +36,9 @@
 				{$modal->view()}
 			{/if}
 		</div>
+		{include file='MVC/layout/ubbhulp.tpl'}
+		{if isset($minion)}
+			{$minion}
+		{/if}
 	</body>
 </html>
