@@ -142,10 +142,10 @@ abstract class PersistentEntity implements JsonSerializable {
 			$field->type = 'int(11)';
 		} elseif ($field->type === T::String) {
 			$field->type = 'varchar(255)';
-		} elseif ($field->type === T::Char) {
-			$field->type = 'varchar(1)';
 		} elseif ($field->type === T::UID) {
 			$field->type = 'varchar(4)';
+		} elseif ($field->type === T::Char) {
+			$field->type = 'char(1)';
 		} elseif ($field->type === T::Enumeration) {
 			$max = 0;
 			$class = $field->extra;
