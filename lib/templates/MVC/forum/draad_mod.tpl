@@ -9,12 +9,12 @@
 						</a>
 						<br /><br />
 					{/if}
-					<a href="/forum/wijzigen/{$draad->draad_id}/plakkerig" class="knop post ReloadPage" title="Verander plakkerigheid">
-						{icon get="note"} maak {if $draad->plakkerig}<span class="dikgedrukt">niet</span> {/if}plakkerig
-					</a>
-					<br /><br />
 					<a href="/forum/wijzigen/{$draad->draad_id}/eerste_post_plakkerig" class="knop post ReloadPage" title="Verander plakkerigheid van eerste post">
 						{icon get="note"} maak eerste post {if $draad->eerste_post_plakkerig}<span class="dikgedrukt">niet</span> {/if}plakkerig
+					</a>
+					<br /><br />
+					<a href="/forum/wijzigen/{$draad->draad_id}/plakkerig" class="knop post ReloadPage" title="Verander plakkerigheid">
+						{icon get="note"} maak {if $draad->plakkerig}<span class="dikgedrukt">niet</span> {/if}plakkerig
 					</a>
 					<br /><br />
 					<a href="/forum/wijzigen/{$draad->draad_id}/verwijderd" class="knop post confirm ReloadPage" title="Verander status verwijderd (incl. alle reacties)">
