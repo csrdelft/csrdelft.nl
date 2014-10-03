@@ -134,7 +134,7 @@ class ForumDraad extends PersistentEntity {
 		'plakkerig'				 => array(T::Boolean),
 		'belangrijk'			 => array(T::Boolean),
 		'eerste_post_plakkerig'	 => array(T::Boolean),
-		'gedeeld_met'			 => array(T::String)
+		'gedeeld_met'			 => array(T::String, true)
 	);
 	/**
 	 * Database primary key
