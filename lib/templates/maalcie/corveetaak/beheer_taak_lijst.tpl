@@ -54,7 +54,7 @@
 	<td style="width: 100px;">{$taak->getCorveeFunctie()->naam}</td>
 	<td class="taak-{if $taak->getUid()}toegewezen{elseif  $taak->getBeginMoment() < strtotime(Instellingen::get('corvee', 'waarschuwing_taaktoewijzing_vooraf'))}warning{else}open{/if}" style="font-weight: normal;">
 {if isset($wijzigbaar)}
-		<a href="{Instellingen::get('taken', 'url')}/toewijzen/{$taak->getTaakId()}" title="Deze taak toewijzen aan een lid&#013;Sleep om te ruilen" class="knop post modal dragobject ruilen" id="taak-{$taak->getTaakId()}"{if $taak->getUid()} uid="{$taak->getUid()}">{icon get="user_green"}{else}>{icon get="user_red"}{/if}</a>
+		<a href="{Instellingen::get('taken', 'url')}/toewijzen/{$taak->getTaakId()}" title="Deze taak toewijzen aan een lid&#013;Sleep om te ruilen" class="knop post modal dragobject static ruilen" id="taak-{$taak->getTaakId()}"{if $taak->getUid()} uid="{$taak->getUid()}">{icon get="user_green"}{else}>{icon get="user_red"}{/if}</a>
 {/if}
 {if $taak->getUid()}
 		&nbsp;{Lid::naamLink($taak->getUid(), Instellingen::get('corvee', 'weergave_ledennamen_beheer'), Instellingen::get('corvee', 'weergave_link_ledennamen'))}

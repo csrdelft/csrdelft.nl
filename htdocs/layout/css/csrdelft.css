@@ -21,6 +21,9 @@
 	-ms-user-select: none;
 	user-select: none;
 }
+.static{
+	position: static;
+}
 .dragobject:active{
 	cursor: move;
 }
