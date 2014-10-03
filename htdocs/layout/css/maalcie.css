@@ -18,6 +18,13 @@ div.vertical {
 	-ms-filter: "progid:DXImageTransform.Microsoft.BasicImage(rotation=3)"; /* IE8 */
 }
 
+.rowColor0 {
+	background-color: #EBEBEB;
+}
+.rowColor1 {
+	background-color: #FAFAFA;
+}
+
 /* maalcie-menu */
 
 #maalcie-menu {

@@ -29,15 +29,15 @@
 						<tr>
 							{if $firstOfWeek eq 'true'}
 								{cycle name="firstOfWeek" assign="firstOfWeek"}
-								{cycle name="weekColor" assign="weekColor" values="#EBEBEB,#FAFAFA"}
-								<td rowspan="{$smarty.foreach.datum.total}"{if !isset($mijn)} style="background-color: {$weekColor};"{/if}><nobr>{$datum|date_format:"%W"}</nobr></td>
+								{cycle name="weekColor" assign="weekColor" values="rowColor0,rowColor1"}
+								<td rowspan="{$smarty.foreach.datum.total}"{if !isset($mijn)} class="{$weekColor}"{/if}><nobr>{$datum|date_format:"%W"}</nobr></td>
 							{elseif $firstOfDatum eq 'true'}
-					<td rowspan="{$smarty.foreach.datum.total}"{if !isset($mijn)} style="background-color: {$weekColor};"{/if}></td>
+					<td rowspan="{$smarty.foreach.datum.total}"{if !isset($mijn)} class="{$weekColor}"{/if}></td>
 				{/if}
 				{if $firstOfDatum eq 'true'}
 					{cycle name="firstOfDatum" assign="firstOfDatum"}
-					{cycle name="datumColor" assign="datumColor" values="#EBEBEB,#FAFAFA"}
-					<td rowspan="{$smarty.foreach.datum.total}"{if !isset($mijn)} style="background-color: {$datumColor};"{/if}><nobr>{$datum|date_format:"%a %e %b"}</nobr></td>
+					{cycle name="datumColor" assign="datumColor" values="rowColor0,rowColor1"}
+					<td rowspan="{$smarty.foreach.datum.total}"{if !isset($mijn)} class="{$datumColor}"{/if}><nobr>{$datum|date_format:"%a %e %b"}</nobr></td>
 					{/if}
 					{if array_key_exists(0, $taken)}
 				<td><nobr>{$taken[0]->getCorveeFunctie()->naam}</nobr></td>
