@@ -16,7 +16,7 @@ if (!LoginModel::mag('P_LOGGED_IN')) {
 $id = 0;
 if (isset($_GET['id']) AND (int) $_GET['id'] == $_GET['id']) {
 	$id = (int) $_GET['id'];
-	$savedquery = new savedQuery($id);
+	$savedquery = new SavedQuery($id);
 } else {
 	$savedquery = null;
 }

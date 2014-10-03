@@ -88,6 +88,7 @@ class CsrLayoutPage extends HtmlPage {
 		if (!is_array($this->zijbalk)) {
 			$this->zijbalk = array();
 		}
+		// negeer zijbalk = false
 		$this->zijbalk = SimpleHTML::addStandaardZijbalk($this->zijbalk);
 		if (LidInstellingen::get('zijbalk', 'scrollen') == 'apart scrollen') {
 			$top = 0;
