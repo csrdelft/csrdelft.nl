@@ -4,9 +4,6 @@
 			<div class="floatR">
 				{$profiel->getUid()|pasfoto}<br />
 				<div class="knopjes">
-					{if LoginModel::getUid()==$profiel->getUid()}
-						<a href="/instellingen" class="knop" title="Webstekinstellingen">{icon get="cog"}</a>
-					{/if}
 					{if $profiel->magBewerken()}
 						<a href="/communicatie/profiel/{$profiel->getUid()}/bewerken" class="knop" title="Bewerk dit profiel">{icon get="bewerken"}</a>
 						<a href="/communicatie/profiel/{$profiel->getUid()}/voorkeuren" class="knop" title="Pas voorkeuren voor commissies aan">{icon get="report_edit"}</a>
