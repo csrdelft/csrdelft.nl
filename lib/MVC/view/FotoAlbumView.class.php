@@ -44,7 +44,7 @@ class FotoAlbumView extends SmartyTemplateView {
 					$breadcrumbs .= ' » ';
 				}
 				$subdir .= $albumnaam . '/';
-				$breadcrumbs .= '<a href="/' . $subdir . '">' . $albumnaam . '</a>';
+				$breadcrumbs .= '<a href="/' . $subdir . '">' . ucfirst($albumnaam) . '</a>';
 			}
 		}
 		return $breadcrumbs;
