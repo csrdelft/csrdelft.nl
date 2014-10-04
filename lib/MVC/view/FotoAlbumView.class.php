@@ -24,48 +24,43 @@ class FotoAlbumView extends SmartyTemplateView {
 		$this->smarty->display('MVC/fotoalbum/album.tpl');
 	}
 
-	public static function getBreadcrumbs(FotoAlbum $album, $dropdown = false) {
+	public static function getBreadcrumbs(FotoAlbum $album, $dropdown) {
 		$breadcrumbs = '';
-		$mappen = array_filter(explode('/', $album->getSubDir()));
-		while (!empty($mappen)) {
-			$mapnaam = array_pop($mappen);
-			$locatie = '/' . implode('/', $mappen) . '/';
-			if ($locatie === '//') {
-				$breadcrumbs = '<a href="/fotoalbum/">Fotoalbum</a> » ' . $breadcrumbs;
-			} elseif ($dropdown AND $breadcrumbs === '') {
-				$breadcrumbs = FotoAlbumView::getDropDown($locatie, $mapnaam);
+		$mappen = explode('/', $album->getSubDir());
+		$subdir = '';
+		$first = true;
+		foreach ($mappen as $albumnaam) {
+			if ($albumnaam === $album->dirname) {
+				if ($dropdown AND ! $first) {
+					$breadcrumbs .= ' » ' . FotoAlbumView::getDropDown(PICS_PATH . $subdir, $albumnaam);
+				}
+				break;
 			} else {
-				$breadcrumbs = '<a href="' . $locatie . $mapnaam . '">' . ucfirst($mapnaam) . '</a> » ' . $breadcrumbs;
+				if ($first) {
+					$first = false;
+				} else {
+					$breadcrumbs .= ' » ';
+				}
+				$subdir .= $albumnaam . '/';
+				$breadcrumbs .= '<a href="/' . $subdir . '">' . ucfirst($albumnaam) . '</a>';
 			}
-		}
-		if (endsWith($breadcrumbs, ' » ')) {
-			return substr($breadcrumbs, 0, strrpos($breadcrumbs, ' » '));
 		}
 		return $breadcrumbs;
 	}
 
-	public static function getDropDown($locatie, $albumnaam) {
-		$dirs = array();
-		$glob = glob(PICS_PATH . $locatie . '*', GLOB_ONLYDIR);
-		if (is_array($glob)) {
-			foreach ($glob as $path) {
-				$album = FotoAlbumModel::getFotoAlbum($path);
-				if ($album) {
-					$path = str_replace(PICS_PATH, '', $path);
-					$dirs[$path] = $album->dirname;
-				}
-			}
-		}
-		if (empty($dirs)) {
+	private static function getDropDown($subdir, $albumnaam) {
+		$parent = FotoAlbumModel::getFotoAlbum($subdir);
+		if (!$parent) {
 			return '';
 		}
+		$albums = $parent->getSubAlbums();
 		$dropdown = '<select onchange="location.href=this.value;">';
-		foreach (array_reverse($dirs) as $value => $description) {
-			$dropdown .= '<option value="' . $value . '"';
-			if ($value === $locatie . $albumnaam) {
+		foreach ($albums as $album) {
+			$dropdown .= '<option value="' . $album->getUrl() . '"';
+			if ($album->getSubDir() === $subdir . $albumnaam) {
 				$dropdown .= ' selected="selected"';
 			}
-			$dropdown .= '>' . htmlspecialchars($description) . '</option>';
+			$dropdown .= '>' . htmlspecialchars($album->dirname) . '</option>';
 		}
 		$dropdown .= '</select>';
 		return $dropdown;
@@ -342,7 +337,7 @@ class FotoAlbumUbbView extends SmartyTemplateView {
 		} else {
 			$content = $this->getGridHtml();
 		}
-		return '<div class="ubb_block ubb_fotoalbum"><h2>' . FotoAlbumView::getBreadcrumbs($this->model) . '</a></h2>' . $content . '</div>';
+		return '<div class="ubb_block ubb_fotoalbum"><h2>' . FotoAlbumView::getBreadcrumbs($this->model, false) . '</a></h2>' . $content . '</div>';
 	}
 
 }
