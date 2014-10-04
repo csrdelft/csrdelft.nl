@@ -19,6 +19,9 @@ jQuery(document).ready(function ($) {
 		$header.removeClass('lateral-menu-is-open');
 		$content_wrapper.removeClass('lateral-menu-is-open');
 		$lateral_menu.removeClass('lateral-menu-is-open');
+
+		// Clear value and de-focus instant search field
+		$('#menuZoekveld').val('').blur();
 	};
 
 	// Open ingelogd menu on hover over trigger
@@ -71,9 +74,6 @@ jQuery(document).ready(function ($) {
 			// Close menus
 			close_ingelogd_menu();
 			close_lateral_menu();
-
-			// Clear value and de-focus instant search field
-			$('#menuZoekveld').val('').blur();
 		}
 	});
 
@@ -107,8 +107,7 @@ jQuery(document).ready(function ($) {
 
 	$('#menuZoekveld').keyup(function (event) {
 		if (event.keyCode === 27) { // esc
-			// Close lateral menu
-			$content_wrapper.trigger('click');
+			close_lateral_menu();
 		}
 	});
 });
