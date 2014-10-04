@@ -31,7 +31,9 @@ class FotoAlbumView extends SmartyTemplateView {
 		$first = true;
 		foreach ($mappen as $albumnaam) {
 			if ($albumnaam === $album->dirname) {
-				if ($dropdown AND ! $first) {
+				if ($first) {
+					$breadcrumbs = '<a href="/fotoalbum">Fotoalbum</a>';
+				} elseif ($dropdown) {
 					$breadcrumbs .= ' » ' . FotoAlbumView::getDropDown(PICS_PATH . $subdir, $albumnaam);
 				}
 				break;
@@ -42,7 +44,7 @@ class FotoAlbumView extends SmartyTemplateView {
 					$breadcrumbs .= ' » ';
 				}
 				$subdir .= $albumnaam . '/';
-				$breadcrumbs .= '<a href="/' . $subdir . '">' . ucfirst($albumnaam) . '</a>';
+				$breadcrumbs .= '<a href="/' . $subdir . '">' . $albumnaam . '</a>';
 			}
 		}
 		return $breadcrumbs;
@@ -60,7 +62,7 @@ class FotoAlbumView extends SmartyTemplateView {
 			if ($album->path === $subdir . $albumnaam . '/') {
 				$dropdown .= ' selected="selected"';
 			}
-			$dropdown .= '>' . htmlspecialchars($album->dirname) . '</option>';
+			$dropdown .= '>' . $album->dirname . '</option>';
 		}
 		$dropdown .= '</select>';
 		return $dropdown;
