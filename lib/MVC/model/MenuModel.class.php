@@ -23,7 +23,7 @@ class MenuModel extends PersistenceModel {
 	 * @return PDOStatement
 	 */
 	public function getAlleMenuRoots() {
-		return $this->find('parent_id = 0');
+		return $this->find('parent_id = ?', array(0), 'prioriteit ASC');
 	}
 
 	/**
@@ -39,8 +39,14 @@ class MenuModel extends PersistenceModel {
 		if (isset($naam, $this->menus[$beheer])) {
 			return $this->menus[$beheer][$naam];
 		}
+		// in beheer modus ook onzichtbare items tonen
+		if ($beheer) {
+			$where = null;
+		} else {
+			$where = 'zichtbaar = TRUE';
+		}
 		// haal alle menu items op en groupeer op parent id
-		$items = group_by('parent_id', $this->find());
+		$items = group_by('parent_id', $this->find($where, array(), 'prioriteit ASC'));
 		// leeg menu?
 		if (empty($items)) {
 			$item = $this->newMenuItem(0);
