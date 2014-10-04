@@ -45,23 +45,26 @@ class MenuModel extends PersistenceModel {
 		} else {
 			$where = 'zichtbaar = TRUE';
 		}
-		// haal alle menu items op en groupeer op parent id
+		// haal alle menu items op en groepeer op parent id
 		$items = group_by('parent_id', $this->find($where, array(), 'prioriteit ASC'));
-		// totaal geen menus of niet bestaand menu?
-		if (!isset($items[0]) OR ! array_key_exists($naam, $items[0])) {
+		// totaal geen menu roots?
+		if (isset($items[0])) {
+			// voor alle menus de tree opbouwen
+			foreach ($items[0] as $i => $root) {
+				$this->setChildren($root, $items, $beheer);
+				// opruimen uit root lijst
+				unset($items[0][$i]);
+				// zet in cache
+				$this->menus[$beheer][$root->tekst] = $root;
+			}
+		}
+		// niet bestaand menu?
+		if (!isset($this->menus[$beheer][$naam])) {
 			$item = $this->newMenuItem(0);
 			$item->tekst = $naam;
 			return $item;
 		}
-		// voor alle menus de tree opbouwen
-		foreach ($items[0] as $i => $root) {
-			$this->setChildren($root, $items, $beheer);
-			// opruimen uit root lijst
-			unset($items[0][$i]);
-			// zet in cache
-			$this->menus[$beheer][$naam] = $root;
-		}
-		return $root;
+		return $this->menus[$beheer][$naam];
 	}
 
 	private function setChildren(MenuItem $parent, &$items, $beheer) {
@@ -75,9 +78,9 @@ class MenuModel extends PersistenceModel {
 		unset($items[$parent->item_id]);
 		// voor elk kind ook kinderen zetten
 		foreach ($parent->children as $i => $child) {
-			// is dit menu item actief?
+			// is dit menu item current?
 			$child->current = startsWith(REQUEST_URI, $child->link);
-			// onthoud om parent ook op actief te zetten
+			// parent is current als child current is
 			$parent->current |= $child->current;
 			// mag gebruiker menu item zien?
 			if ($beheer OR $child->magBekijken()) {
