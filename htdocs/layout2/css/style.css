@@ -19,7 +19,10 @@ h1, h2, h3, h4, h5, h6 { font-weight: normal; }
 .float-none { float: none; }
 .float-left { float: left; }
 .float-right { float: right; }
-
+.breadcrumbs{
+	display: inline-block;
+	font-weight: bold;
+}
 .hoverIntentContent{
 	display: none;
 	position: absolute;

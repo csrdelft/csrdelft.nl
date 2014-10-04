@@ -25,14 +25,14 @@ class FotoAlbumView extends SmartyTemplateView {
 	}
 
 	public static function getBreadcrumbs(FotoAlbum $album, $dropdown) {
-		$breadcrumbs = '';
+		$breadcrumbs = '<div class="breadcrumbs">';
 		$mappen = explode('/', $album->getSubDir());
 		$subdir = '';
 		$first = true;
 		foreach ($mappen as $albumnaam) {
 			if ($albumnaam === $album->dirname) {
 				if ($first) {
-					$breadcrumbs = '<a href="/fotoalbum">Fotoalbum</a>';
+					$breadcrumbs .= '<a href="/fotoalbum">Fotoalbum</a>';
 				} elseif ($dropdown) {
 					$breadcrumbs .= ' » ' . FotoAlbumView::getDropDown(PICS_PATH . $subdir, $albumnaam);
 				}
@@ -47,7 +47,7 @@ class FotoAlbumView extends SmartyTemplateView {
 				$breadcrumbs .= '<a href="/' . $subdir . '">' . ucfirst($albumnaam) . '</a>';
 			}
 		}
-		return $breadcrumbs;
+		return $breadcrumbs . '</div>';
 	}
 
 	public static function getDropDown($subdir, $albumnaam) {

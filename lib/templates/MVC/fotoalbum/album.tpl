@@ -11,7 +11,7 @@
 	{/if}
 </div>
 
-<div class="breadcrumbs">{FotoAlbumView::getBreadcrumbs($album, true)}</div>
+{FotoAlbumView::getBreadcrumbs($album, true)}
 
 <h1>{$album->dirname|ucfirst}</h1>
 

@@ -110,6 +110,7 @@ ul.nobullets li{ list-style-type: none; }
 	font-weight: bold;
 }
 .breadcrumbs{
+	display: inline-block;
 	font-weight: bold;
 }
 
