@@ -48,7 +48,7 @@ class FotoAlbumView extends SmartyTemplateView {
 		return $breadcrumbs;
 	}
 
-	private static function getDropDown($subdir, $albumnaam) {
+	public static function getDropDown($subdir, $albumnaam) {
 		$parent = FotoAlbumModel::getFotoAlbum($subdir);
 		if (!$parent) {
 			return '';
@@ -57,7 +57,7 @@ class FotoAlbumView extends SmartyTemplateView {
 		$dropdown = '<select onchange="location.href=this.value;">';
 		foreach ($albums as $album) {
 			$dropdown .= '<option value="' . $album->getUrl() . '"';
-			if ($album->getSubDir() === $subdir . $albumnaam) {
+			if ($album->path === $subdir . $albumnaam . '/') {
 				$dropdown .= ' selected="selected"';
 			}
 			$dropdown .= '>' . htmlspecialchars($album->dirname) . '</option>';
