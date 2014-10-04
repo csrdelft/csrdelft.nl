@@ -87,11 +87,9 @@ class MenuBeheerController extends AclController {
 	public function verwijderen($item_id) {
 		$item = $this->model->getMenuItem($item_id);
 		$rowcount = $this->model->removeMenuItem($item);
+		SimpleHTML::setMelding($item->tekst . ' verwijderd', 1);
 		if ($rowcount > 0) {
-			SimpleHTML::setMelding($item->tekst . ' verwijderd', 1);
 			SimpleHTML::setMelding($rowcount . ' menu-items niveau omhoog verplaatst.', 2);
-		} else {
-			SimpleHTML::setMelding($item->tekst . ' ongewijzigd', -1);
 		}
 		$this->view = new JsonResponse(true);
 	}
