@@ -21,7 +21,8 @@ class MenuBeheerController extends AclController {
 			$this->acl = array(
 				'toevoegen'		 => 'P_LOGGED_IN',
 				'bewerken'		 => 'P_LOGGED_IN',
-				'verwijderen'	 => 'P_LOGGED_IN'
+				'verwijderen'	 => 'P_LOGGED_IN',
+				'zichtbaar'		 => 'P_LOGGED_IN'
 			);
 		}
 	}
@@ -71,9 +72,9 @@ class MenuBeheerController extends AclController {
 		if ($this->view->validate()) {
 			$rowcount = $this->model->update($item);
 			if ($rowcount > 0) {
-				SimpleHTML::setMelding('Bijgewerkt', 1);
+				SimpleHTML::setMelding($item->tekst . ' bijgewerkt', 1);
 			} else {
-				SimpleHTML::setMelding('Geen wijzigingen', 0);
+				SimpleHTML::setMelding($item->tekst . ' ongewijzigd', -1);
 			}
 			$this->view = new JsonResponse(true);
 		}
@@ -81,8 +82,25 @@ class MenuBeheerController extends AclController {
 
 	public function verwijderen($item_id) {
 		$item = $this->model->getMenuItem($item_id);
-		$this->model->removeMenuItem($item);
-		SimpleHTML::setMelding('Verwijderd', 1);
+		$rowcount = $this->model->removeMenuItem($item);
+		if ($rowcount > 0) {
+			SimpleHTML::setMelding($item->tekst . ' verwijderd', 1);
+			SimpleHTML::setMelding($rowcount . ' menu-items niveau omhoog verplaatst.', 2);
+		} else {
+			SimpleHTML::setMelding($item->tekst . ' ongewijzigd', -1);
+		}
+		$this->view = new JsonResponse(true);
+	}
+
+	public function zichtbaar($item_id) {
+		$item = $this->model->getMenuItem($item_id);
+		$item->zichtbaar = !$item->zichtbaar;
+		$rowcount = $this->model->update($item);
+		if ($rowcount > 0) {
+			SimpleHTML::setMelding($item->tekst . ($item->zichtbaar ? ' ' : ' on') . 'zichtbaar gemaakt', 1);
+		} else {
+			SimpleHTML::setMelding($item->tekst . ' ongewijzigd', -1);
+		}
 		$this->view = new JsonResponse(true);
 	}
 

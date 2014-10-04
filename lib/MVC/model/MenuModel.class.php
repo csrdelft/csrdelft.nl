@@ -142,10 +142,10 @@ class MenuModel extends PersistenceModel {
 			$update = array('parent_id' => $item->parent_id);
 			$where = 'parent_id = :oldid';
 			$orm = self::orm;
-			$count = Database::sqlUpdate($orm::getTableName(), $update, $where, array(':oldid' => $item->item_id));
+			$rowcount = Database::sqlUpdate($orm::getTableName(), $update, $where, array(':oldid' => $item->item_id));
 			$this->delete($item);
 			$db->commit();
-			SimpleHTML::setMelding($count . ' menu-items niveau omhoog verplaatst.', 2);
+			return $rowcount;
 		} catch (Exception $e) {
 			$db->rollback();
 			throw $e; // rethrow to controller
