@@ -4,7 +4,7 @@
 {strip}
 	<label class="instelling" for="inst_{$module}_{$id}">
 		{if $reset}
-			<a href="/instellingen/reset/{$module}/{$id}" class="knop post confirm vooriedereen" title="Voor iedereen deze instelling resetten naar de standaard waarde. (Zie Lidinstellingen.class.php)">{icon get=arrow_rotate_anticlockwise}</a>
+			<a href="/instellingen/reset/{$module}/{$id}" class="knop post confirm vooriedereen" title="Voor iedereen deze instelling resetten naar de standaard waarde. (Zie LidInstellingenModel.class.php)">{icon get=arrow_rotate_anticlockwise}</a>
 		{/if}
 		{$label}
 	</label>
