@@ -1,5 +1,4 @@
-<header>
-	<!--a id="cd-logo" href="/"><div id="beeldmerk"></div></a-->
+<header>{strip}
 	<nav id="cd-top-nav">
 		<ul>
 			{if LoginModel::mag('P_LOGGED_IN')}
@@ -38,4 +37,4 @@
 			<li id="cd-lateral-menu-trigger"><span class="cd-lateral-menu-text">Menu</span><span class="cd-lateral-menu-icon"></span></li>
 		</ul>
 	</nav>
-</header>
+</header>{/strip}
