@@ -92,7 +92,7 @@ class PosterUploadForm extends Formulier {
 		$fields[] = new RequiredFileNameField('posternaam', null, 'Posternaam', 50, 5);
 		$fields[] = new RequiredImageField('afbeelding', null, null, array('image/jpeg'));
 		$fields[] = new FormButtons('/fotoalbum', true, true, false);
-		$fields[] = new HtmlComment('<br /><i>Maak nooit inbreuk op de auteursrechten of het recht op privacy van anderen.</i>');
+		$fields[] = new HtmlComment('<br /><span class="cursief">Maak nooit inbreuk op de auteursrechten of het recht op privacy van anderen.</span>');
 		$this->addFields($fields);
 	}
 
@@ -114,7 +114,7 @@ class FotosDropzone extends DropzoneForm {
 		echo FotoAlbumView::getBreadcrumbs($this->model, false);
 		echo '<div class="float-right"><a class="knop" onclick="showExisting_afbeeldingDropzoneUploader();$(this).remove();"><img src="http://plaetjes.csrdelft.nl/famfamfam/photos.png" width="16" height="16" alt="photos" class="icon"> Toon bestaande foto\'s in dit album</a></div>';
 		echo parent::view();
-		echo '<br /><i>Maak nooit inbreuk op de auteursrechten of het recht op privacy van anderen.</i>';
+		echo '<br /><span class="cursief">Maak nooit inbreuk op de auteursrechten of het recht op privacy van anderen.</span>';
 	}
 
 }

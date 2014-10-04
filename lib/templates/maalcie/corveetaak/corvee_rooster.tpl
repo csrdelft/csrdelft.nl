@@ -62,7 +62,7 @@
 					{/if}
 					{Lid::naamLink($taak->getUid(), Instellingen::get('corvee', 'weergave_ledennamen_corveerooster'), Instellingen::get('corvee', 'weergave_link_ledennamen'))}
 				{else}
-					<i>vacature</i>
+					<span class="cursief">vacature</span>
 				{/if}
 			<td>
 				{/table_foreach}

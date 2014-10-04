@@ -11,7 +11,7 @@
 	</div>
 
 	<p>
-		Na het selecteren van lidstatus verschijnen de juiste velden, die u verder mag aanpassen. Bij opslaan worden ook overbodige <u>gegevens verwijderd</u> en <u>abonnementen uitgezet</u>, onomkeerbaar, opletten dus!
+		Na het selecteren van lidstatus verschijnen de juiste velden, die u verder mag aanpassen. Bij opslaan worden ook overbodige <span class="onderstreept">gegevens verwijderd</span> en <span class="onderstreept">abonnementen uitgezet</span>, onomkeerbaar, opletten dus!
 	</p>
 
 	{$profiel->getFormulier()->view()}

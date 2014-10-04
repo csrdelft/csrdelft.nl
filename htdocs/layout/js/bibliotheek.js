@@ -145,7 +145,7 @@ jQuery(document).ready(function($) {
 		},
 		formatItem: function(row, i, n) {
 			var item = '<div title="titel: '+row.title+"\nAuteur: "+getAuteur(row)+"\nPagina's: "+row.pageCount+"\nTaal: "+getLanguage(row)+"\nISBN: "+getIsbn(row)+"\nUitgeverij: "+row.publisher+"\nUitgavejaar: "+getPublishedDate(row)+'">';
-			item 	+= row.title+'<br /><i>'+getAuteur(row)+'</i>';
+			item 	+= row.title+'<br /><span class="cursief">'+getAuteur(row)+'</span>';
 			item 	+= '</div>'
 			return item;
 		},

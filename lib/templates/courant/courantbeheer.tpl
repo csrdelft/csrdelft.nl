@@ -34,7 +34,7 @@
 	<dl>
 		{foreach from=$courant->getBerichtenVoorGebruiker() item=bericht}
 			<dt>
-			<u>{$bericht.categorie|replace:'csr':'C.S.R.'}</u>
+			<span class="onderstreept">{$bericht.categorie|replace:'csr':'C.S.R.'}</span>
 			{if $courant->magBeheren()}({$bericht.uid|csrnaam:'full':false}){/if}
 			<strong>{$bericht.titel}</strong>
 			[ <a href="/actueel/courant/bewerken/{$bericht.ID}">bewerken</a> | 

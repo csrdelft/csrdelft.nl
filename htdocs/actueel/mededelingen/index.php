@@ -107,11 +107,11 @@ switch ($actie) {
 			// Check if all values appear to be OK.
 			$tijdelijkeMededeling = $mededelingId > 0 ? new Mededeling($mededelingId) : null;
 			if (strlen($mededelingProperties['titel']) < 2) {
-				SimpleHTML::setMelding('Het veld <b>Titel</b> moet minstens 2 tekens bevatten.', -1);
+				SimpleHTML::setMelding('Het veld <span class="dikgedrukt">Titel</span> moet minstens 2 tekens bevatten.', -1);
 				$allOK = false;
 			}
 			if (strlen($mededelingProperties['tekst']) < 5) {
-				SimpleHTML::setMelding('Het veld <b>Tekst</b> moet minstens 5 tekens bevatten.', -1);
+				SimpleHTML::setMelding('Het veld <span class="dikgedrukt">Tekst</span> moet minstens 5 tekens bevatten.', -1);
 				$allOK = false;
 			}
 
