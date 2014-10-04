@@ -71,7 +71,8 @@ class FotoAlbumController extends AclController {
 	}
 
 	public static function magBekijken($path) {
-		if (!startsWith($path, PICS_PATH . 'fotoalbum/')) {
+		$mapnaam = basename($path);
+		if (startsWith($mapnaam, '_') OR ! startsWith($path, PICS_PATH . 'fotoalbum/')) {
 			return false;
 		}
 		if (LoginModel::mag('P_LEDEN_READ')) {

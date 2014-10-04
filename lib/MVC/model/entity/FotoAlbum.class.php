@@ -82,12 +82,9 @@ class FotoAlbum extends Map {
 			return array();
 		}
 		foreach ($glob as $path) {
-			$mapnaam = basename($path);
-			if (!startsWith($mapnaam, '_')) {
-				$subalbum = FotoAlbumModel::getFotoAlbum($path);
-				if ($subalbum) {
-					$this->subalbums[] = $subalbum;
-				}
+			$subalbum = FotoAlbumModel::getFotoAlbum($path);
+			if ($subalbum) {
+				$this->subalbums[] = $subalbum;
 			}
 		}
 		$this->subalbums = array_reverse($this->subalbums);

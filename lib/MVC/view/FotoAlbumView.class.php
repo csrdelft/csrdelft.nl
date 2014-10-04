@@ -49,10 +49,10 @@ class FotoAlbumView extends SmartyTemplateView {
 		$glob = glob(PICS_PATH . $locatie . '*', GLOB_ONLYDIR);
 		if (is_array($glob)) {
 			foreach ($glob as $path) {
-				$mapnaam = basename($path);
-				if (!startsWith($mapnaam, '_')) {
+				$album = FotoAlbumModel::getFotoAlbum($path);
+				if ($album) {
 					$path = str_replace(PICS_PATH, '', $path);
-					$dirs[$path] = $mapnaam;
+					$dirs[$path] = $album->dirname;
 				}
 			}
 		}
