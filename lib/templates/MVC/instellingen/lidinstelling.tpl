@@ -4,9 +4,7 @@
 {strip}
 	<label class="instelling" for="inst_{$module}_{$id}">
 		{if $reset}
-			<img src="{$CSR_PICS}/famfamfam/arrow_rotate_anticlockwise.png" title="Voor iedereen deze instelling resetten naar de standaard waarde. (Zie Lidinstellingen.class.php)" onclick="if (confirm(this.title + '\n\nWeet u het zeker?')) {
-				location.href = '/instellingen/reset/{$module}/{$id}/' + $('#inst_{$module}_{$id}').val();
-			}" class="vooriedereen" />
+			<a href="/instellingen/reset/{$module}/{$id}" class="knop post confirm vooriedereen" title="Voor iedereen deze instelling resetten naar de standaard waarde. (Zie Lidinstellingen.class.php)">{icon get=arrow_rotate_anticlockwise}</a>
 		{/if}
 		{$label}
 	</label>
