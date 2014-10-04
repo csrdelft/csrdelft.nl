@@ -24,27 +24,31 @@ class FotoAlbumView extends SmartyTemplateView {
 		$this->smarty->display('MVC/fotoalbum/album.tpl');
 	}
 
-	public static function getBreadcrumbs(FotoAlbum $album, $dropdown) {
+	public static function getBreadcrumbs(FotoAlbum $album, $dropdown = false, $self = false) {
 		$breadcrumbs = '<div class="breadcrumbs">';
 		$mappen = explode('/', $album->getSubDir());
-		$subdir = '';
+		$subdir = 'fotoalbum/';
 		$first = true;
 		foreach ($mappen as $albumnaam) {
-			if ($albumnaam === $album->dirname) {
-				if ($first) {
-					$breadcrumbs .= '<a href="/fotoalbum">Fotoalbum</a>';
-				} elseif ($dropdown) {
-					$breadcrumbs .= ' » ' . FotoAlbumView::getDropDown(PICS_PATH . $subdir, $albumnaam);
-				}
+			if ($first) {
+				$first = false;
+				$breadcrumbs .= '<a href="/fotoalbum">Fotoalbum</a>';
+			} elseif ($albumnaam === '') {
+				// trailing slash: allerlaatste
 				break;
 			} else {
-				if ($first) {
-					$first = false;
-				} else {
-					$breadcrumbs .= ' » ';
+				if ($albumnaam === $album->dirname) {
+					// laatste
+					if ($dropdown) {
+						$breadcrumbs .= ' » ' . FotoAlbumView::getDropDown(PICS_PATH . $subdir, $albumnaam);
+						break;
+					} elseif (!$self) {
+						// alleen parent folders tonen
+						break;
+					}
 				}
 				$subdir .= $albumnaam . '/';
-				$breadcrumbs .= '<a href="/' . $subdir . '">' . ucfirst($albumnaam) . '</a>';
+				$breadcrumbs .= ' » <a href="/' . $subdir . '">' . ucfirst($albumnaam) . '</a>';
 			}
 		}
 		return $breadcrumbs . '</div>';
@@ -97,7 +101,7 @@ class PosterUploadForm extends Formulier {
 	}
 
 	public function view() {
-		echo FotoAlbumView::getBreadcrumbs($this->model, false);
+		echo FotoAlbumView::getBreadcrumbs($this->model, false, true);
 		parent::view();
 	}
 
@@ -111,7 +115,7 @@ class FotosDropzone extends DropzoneForm {
 	}
 
 	public function view() {
-		echo FotoAlbumView::getBreadcrumbs($this->model, false);
+		echo FotoAlbumView::getBreadcrumbs($this->model, false, true);
 		echo '<div class="float-right"><a class="knop" onclick="showExisting_afbeeldingDropzoneUploader();$(this).remove();"><img src="http://plaetjes.csrdelft.nl/famfamfam/photos.png" width="16" height="16" alt="photos" class="icon"> Toon bestaande foto\'s in dit album</a></div>';
 		echo parent::view();
 		echo '<br /><span class="cursief">Maak nooit inbreuk op de auteursrechten of het recht op privacy van anderen.</span>';
@@ -339,7 +343,7 @@ class FotoAlbumUbbView extends SmartyTemplateView {
 		} else {
 			$content = $this->getGridHtml();
 		}
-		return '<div class="ubb_block ubb_fotoalbum"><h2>' . FotoAlbumView::getBreadcrumbs($this->model, false) . '</a></h2>' . $content . '</div>';
+		return '<div class="ubb_block ubb_fotoalbum"><h2>' . FotoAlbumView::getBreadcrumbs($this->model, false, true) . '</a></h2>' . $content . '</div>';
 	}
 
 }
