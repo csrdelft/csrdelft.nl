@@ -9,12 +9,12 @@
 class LidInstellingenView extends SmartyTemplateView {
 
 	public function __construct(LidInstellingen $model) {
-		parent::__construct($model, 'Stekinstellingen');
+		parent::__construct($model, 'Webstekinstellingen');
 	}
 
 	public function view() {
 		$this->smarty->display('MVC/instellingen/lidinstellingen_page.tpl');
-		echo '<form id="form" action="/instellingen/opslaan" method="post" class="Formulier"><div id="tabs"><ul>';
+		echo '<form id="lidinstellingenform" action="/instellingen/opslaan" method="post" class="Formulier"><div id="tabs"><ul>';
 		foreach ($this->model->getModules() as $module) {
 			echo '<li><a href="#tabs-' . $module . '">' . ucfirst($module) . '</a></li>';
 		}
@@ -35,7 +35,10 @@ class LidInstellingenView extends SmartyTemplateView {
 			}
 			echo '</div>';
 		}
-		echo '</div><br /><input type="submit" value="Opslaan" />&nbsp;<input type="button" value="Annuleren" onclick="location.href=\'/\';" /></form>';
+		echo '</div>';
+		$btns = new FormButtons('/');
+		$btns->view();
+		echo '</form>';
 	}
 
 }

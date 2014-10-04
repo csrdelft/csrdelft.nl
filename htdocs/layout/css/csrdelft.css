@@ -1166,19 +1166,14 @@ div.bijbelrooster{
 
 /* lidinstellingen */
 label.instelling{
-	float: left;
 	clear: left;
 	width: 250px;
 }
 img.vooriedereen{
 	cursor: pointer;
 	border: 1px solid #999;
-}
-input.instString{
-	width: 111px !important;
-}
-input.instInt{
-	width: 33px !important;
+	margin-left: -30px;
+	margin-right: 10px;
 }
 
 @media (max-width: 1004px) {
