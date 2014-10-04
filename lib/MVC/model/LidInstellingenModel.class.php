@@ -45,18 +45,6 @@ class LidInstellingen extends PersistenceModel {
 			'neuzen'		 => array('Neuzen', T::Enumeration, array('overal', '2013', 'nee'), '2013'),
 			'minion'		 => array('Minion', T::Enumeration, array('ja', 'nee'), 'nee')
 		),
-		'forum'			 => array(
-			'draden_per_pagina'		 => array('Draadjes per pagina', T::Integer, array(5, 100), 20),
-			'posts_per_pagina'		 => array('Berichten per pagina', T::Integer, array(5, 100), 20),
-			'zoekresultaten'		 => array('Zoekresultaten per pagina', T::Integer, array(10, 50), 20),
-			'naamWeergave'			 => array('Naamweergave', T::Enumeration, array('civitas', 'volledig', 'bijnaam', 'aaidrom', 'Duckstad'), 'civitas'),
-			'datumWeergave'			 => array('Datumweergave', T::Enumeration, array('relatief', 'vast'), 'relatief'),
-			'ongelezenWeergave'		 => array('Ongelezenweergave', T::Enumeration, array('cursief', 'dikgedrukt', 'onderstreept', 'alsof-gelezen'), 'cursief'),
-			'open_draad_op_pagina'	 => array('Open onderwerp op pagina', T::Enumeration, array('1', 'ongelezen', 'laatste'), 'ongelezen'),
-			'toonpasfotos'			 => array('Pasfoto\'s standaard weergeven', T::Enumeration, array('ja', 'nee'), 'ja'),
-			'fotoWeergave'			 => array('Toon groter formaat foto\'s', T::Enumeration, array('nee', 'boven bericht', 'in bericht'), 'boven bericht'),
-			'filter2008'			 => array('Berichten van 2008 eerst verbergen', T::Enumeration, array('ja', 'nee'), 'nee')
-		),
 		'zijbalk'		 => array(
 			'scrollen'				 => array('Scrollen', T::Enumeration, array('met pagina mee', 'apart scrollen'), 'met pagina mee'),
 			'quicknav'				 => array('Navigatie knopjes weergeven', T::Enumeration, array('ja', 'nee'), 'ja'),
@@ -82,6 +70,18 @@ class LidInstellingen extends PersistenceModel {
 			'toonVerjaardagen'	 => array('Verjaardagen weergeven', T::Enumeration, array('ja', 'nee'), 'ja'),
 			'toonMaaltijden'	 => array('Maaltijden weergeven', T::Enumeration, array('ja', 'nee'), 'ja'),
 			'toonCorvee'		 => array('Corvee weergeven', T::Enumeration, array('iedereen', 'eigen', 'nee'), 'eigen')
+		),
+		'forum'			 => array(
+			'draden_per_pagina'		 => array('Draadjes per pagina', T::Integer, array(5, 100), 20),
+			'posts_per_pagina'		 => array('Berichten per pagina', T::Integer, array(5, 100), 20),
+			'zoekresultaten'		 => array('Zoekresultaten per pagina', T::Integer, array(10, 50), 20),
+			'naamWeergave'			 => array('Naamweergave', T::Enumeration, array('civitas', 'volledig', 'bijnaam', 'aaidrom', 'Duckstad'), 'civitas'),
+			'datumWeergave'			 => array('Datumweergave', T::Enumeration, array('relatief', 'vast'), 'relatief'),
+			'ongelezenWeergave'		 => array('Ongelezenweergave', T::Enumeration, array('cursief', 'dikgedrukt', 'onderstreept', 'alsof-gelezen'), 'cursief'),
+			'open_draad_op_pagina'	 => array('Open onderwerp op pagina', T::Enumeration, array('1', 'ongelezen', 'laatste'), 'ongelezen'),
+			'toonpasfotos'			 => array('Pasfoto\'s standaard weergeven', T::Enumeration, array('ja', 'nee'), 'ja'),
+			'fotoWeergave'			 => array('Toon groter formaat foto\'s', T::Enumeration, array('nee', 'boven bericht', 'in bericht'), 'boven bericht'),
+			'filter2008'			 => array('Berichten van 2008 eerst verbergen', T::Enumeration, array('ja', 'nee'), 'nee')
 		),
 		'mededelingen'	 => array(
 			'aantalPerPagina' => array('Aantal mededeling per pagina', T::Integer, array(5, 50), 10)

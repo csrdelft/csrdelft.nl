@@ -18,12 +18,21 @@ class MenuModel extends PersistenceModel {
 	private $menus = array();
 
 	/**
-	 * Array van alle menu roots.
+	 * Array van alle menu roots om te beheren
 	 * 
-	 * @return PDOStatement
+	 * @return MenuItem[]
 	 */
-	public function getAlleMenuRoots() {
-		return $this->find('parent_id = ?', array(0), 'prioriteit ASC');
+	public function getBeheerMenusVoorLid() {
+		$roots = array();
+		foreach ($this->find('parent_id = ?', array(0), 'prioriteit ASC') as $root) {
+			if ($root->tekst === 'main' AND ! LoginModel::mag('P_ADMIN')) {
+				continue;
+			}
+			if ($root->magBekijken()) {
+				$roots[] = $root;
+			}
+		}
+		return $roots;
 	}
 
 	/**
@@ -51,11 +60,15 @@ class MenuModel extends PersistenceModel {
 		if (isset($items[0])) {
 			// voor alle menus de tree opbouwen
 			foreach ($items[0] as $i => $root) {
-				$this->setChildren($root, $items, $beheer);
+				// is dit het gevraagde menu?
+				if ($root->tekst === $naam) {
+					$this->setChildren($root, $items, $beheer);
+					// zet in cache
+					$this->menus[$beheer][$root->tekst] = $root;
+					break;
+				}
 				// opruimen uit root lijst
 				unset($items[0][$i]);
-				// zet in cache
-				$this->menus[$beheer][$root->tekst] = $root;
 			}
 		}
 		// niet bestaand menu?
@@ -126,12 +139,13 @@ class MenuModel extends PersistenceModel {
 		try {
 			$db->beginTransaction();
 			// give new parent to otherwise future orphans
-			$properties = array('parent_id' => $item->parent_id);
+			$update = array('parent_id' => $item->parent_id);
+			$where = 'parent_id = :oldid';
 			$orm = self::orm;
-			$count = Database::sqlUpdate($orm::getTableName(), $properties, 'parent_id = :oldid', array(':oldid' => $item->item_id));
+			$count = Database::sqlUpdate($orm::getTableName(), $update, $where, array(':oldid' => $item->item_id));
 			$this->delete($item);
 			$db->commit();
-			SimpleHTML::setMelding($count . ' menu-items nieuwe parent gegeven.', 2);
+			SimpleHTML::setMelding($count . ' menu-items niveau omhoog verplaatst.', 2);
 		} catch (Exception $e) {
 			$db->rollback();
 			throw $e; // rethrow to controller

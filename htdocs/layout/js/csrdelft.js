@@ -250,13 +250,13 @@ function knop_ajax(knop, type) {
 		return false;
 	}
 	if (knop.hasClass('prompt')) {
-		var data = knop.attr('postdata');
+		var data = knop.attr('data');
 		data = data.split('=');
 		var val = prompt(data[0], data[1]);
 		if (!val) {
 			return false;
 		}
-		knop.attr('postdata', encodeURIComponent(data[0]) + '=' + encodeURIComponent(val));
+		knop.attr('data', encodeURIComponent(data[0]) + '=' + encodeURIComponent(val));
 	}
 	var source = knop;
 	var done = dom_update;
@@ -267,7 +267,7 @@ function knop_ajax(knop, type) {
 	if (knop.hasClass('ReloadPage')) {
 		done = page_reload;
 	}
-	ajax_request(type, knop.attr('href'), knop.attr('postdata'), source, done, alert);
+	ajax_request(type, knop.attr('href'), knop.attr('data'), source, done, alert);
 }
 
 function knop_post(event) {

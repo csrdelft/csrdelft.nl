@@ -15,13 +15,13 @@ class MenuBeheerController extends AclController {
 		parent::__construct($query, MenuModel::instance());
 		if (!$this->isPosted()) {
 			$this->acl = array(
-				'beheer' => 'P_ADMIN,groep:Bestuur'
+				'beheer' => 'P_LOGGED_IN'
 			);
 		} else {
 			$this->acl = array(
-				'toevoegen'		 => 'P_ADMIN,groep:Bestuur',
-				'bewerken'		 => 'P_ADMIN,groep:Bestuur',
-				'verwijderen'	 => 'P_ADMIN,groep:Bestuur'
+				'toevoegen'		 => 'P_LOGGED_IN',
+				'bewerken'		 => 'P_LOGGED_IN',
+				'verwijderen'	 => 'P_LOGGED_IN'
 			);
 		}
 	}
@@ -31,12 +31,26 @@ class MenuBeheerController extends AclController {
 		if ($this->hasParam(2)) {
 			$this->action = $this->getParam(2);
 		}
+		if ($this->action === 'beheer' AND $this->hasParam(3)) {
+			$naam = $this->getParam(3);
+		} else {
+			$naam = filter_input(INPUT_POST, 'menu');
+		}
+		if (empty($naam) OR $naam === 'main') {
+			if (!LoginModel::mag('P_ADMIN')) {
+				$this->geentoegang();
+			}
+		} else {
+			if (!LoginModel::mag($naam)) {
+				$this->geentoegang();
+			}
+		}
 		parent::performAction($this->getParams(3));
 	}
 
-	public function beheer($menu_naam = '') {
-		$menu_naam = str_replace('%20', ' ', $menu_naam); // eigenlijk rawurldecode()
-		$body = new MenuBeheerView($this->model->getMenuTree($menu_naam, true), $this->model->getAlleMenuRoots());
+	public function beheer($naam = '') {
+		$root = $this->model->getMenuTree($naam, LoginModel::mag('P_ADMIN'));
+		$body = new MenuBeheerView($root, $this->model->getBeheerMenusVoorLid());
 		$this->view = new CsrLayoutPage($body);
 		$this->view->addStylesheet('/layout/css/menubeheer');
 	}

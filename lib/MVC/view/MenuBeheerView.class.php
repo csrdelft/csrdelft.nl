@@ -11,12 +11,12 @@
 class MenuBeheerView extends SmartyTemplateView {
 
 	/**
-	 * Lijst van menu roots
-	 * @var PDOStatement
+	 * Array van menu roots
+	 * @var MenuItem[]
 	 */
 	private $menuroots;
 
-	public function __construct(MenuItem $tree_root, $menuroots) {
+	public function __construct(MenuItem $tree_root, array $menuroots) {
 		parent::__construct($tree_root);
 		$this->menuroots = $menuroots;
 		if ($tree_root->tekst === '') {
