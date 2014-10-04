@@ -60,7 +60,7 @@ class BeheerTakenLijstView extends SmartyTemplateView {
 	public function view() {
 		$this->smarty->assign('show', true);
 		$this->smarty->assign('prullenbak', false);
-		echo '<tr id="maalcie-melding"><td>' . SimpleHTML::getMelding() . '</td></tr>';
+		echo '<tr id="maalcie-melding"><td>' . getMelding() . '</td></tr>';
 		foreach ($this->model as $taak) {
 			$this->smarty->assign('taak', $taak);
 			$this->smarty->display('maalcie/corveetaak/beheer_taak_lijst.tpl');

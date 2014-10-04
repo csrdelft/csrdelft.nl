@@ -47,16 +47,16 @@ class LoginController extends AclController {
 
 	public function su($uid = null) {
 		$this->model->switchUser($uid);
-		SimpleHTML::setMelding('U bekijkt de webstek nu als ' . Lid::naamLink($uid, 'full', 'plain') . '!', 1);
+		setMelding('U bekijkt de webstek nu als ' . Lid::naamLink($uid, 'full', 'plain') . '!', 1);
 		redirect(HTTP_REFERER);
 	}
 
 	public function endsu() {
 		if (!$this->model->isSued()) {
-			SimpleHTML::setMelding('Niet gesued!', -1);
+			setMelding('Niet gesued!', -1);
 		} else {
 			LoginModel::instance()->endSwitchUser();
-			SimpleHTML::setMelding('Switch-useractie is beëindigd.', 1);
+			setMelding('Switch-useractie is beëindigd.', 1);
 		}
 		redirect(HTTP_REFERER);
 	}

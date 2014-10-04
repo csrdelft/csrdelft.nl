@@ -63,9 +63,9 @@ class FotoAlbumController extends AclController {
 		$path = PICS_PATH . urldecode(implode('/', $path));
 		$album = FotoAlbumModel::getFotoAlbum($path);
 		if (!$album) {
-			SimpleHTML::setMelding('Fotoalbum bestaat niet!', -1);
+			setMelding('Fotoalbum bestaat niet!', -1);
 			if (DEBUG) {
-				SimpleHTML::setMelding($path, 0);
+				setMelding($path, 0);
 			}
 			redirect(CSR_ROOT . '/fotoalbum');
 		}
@@ -130,7 +130,7 @@ class FotoAlbumController extends AclController {
 		if (defined('RESIZE_OUTPUT')) {
 			exit;
 		} else {
-			SimpleHTML::setMelding('Fotoalbum ' . $album->dirname . ' succesvol verwerkt', 1);
+			setMelding('Fotoalbum ' . $album->dirname . ' succesvol verwerkt', 1);
 			redirect(CSR_ROOT . '/' . $album->getSubDir());
 		}
 	}
@@ -144,7 +144,7 @@ class FotoAlbumController extends AclController {
 				mkdir($album->path);
 				chmod($album->path, 0755);
 			} else {
-				SimpleHTML::setMelding('Fotoalbum bestaat al', 0);
+				setMelding('Fotoalbum bestaat al', 0);
 			}
 			$this->view = new JsonResponse(true);
 		}
@@ -220,9 +220,9 @@ class FotoAlbumController extends AclController {
 	public function hernoemen(FotoAlbum $album) {
 		$naam = filter_input(INPUT_POST, 'Nieuwe_naam', FILTER_SANITIZE_STRING);
 		if ($album !== null AND FotoAlbumModel::hernoemAlbum($album, $naam)) {
-			SimpleHTML::setMelding('Fotoalbum succesvol hernoemd', 1);
+			setMelding('Fotoalbum succesvol hernoemd', 1);
 		} else {
-			SimpleHTML::setMelding('Fotoalbum hernoemen mislukt', -1);
+			setMelding('Fotoalbum hernoemen mislukt', -1);
 		}
 		$this->view = new JsonResponse(true);
 	}
@@ -232,7 +232,7 @@ class FotoAlbumController extends AclController {
 		if ($album !== null AND FotoAlbumModel::verwijderFoto(new Foto($album, $naam))) {
 			echo '<div id="' . md5($naam) . '" class="remove"></div>';
 		} else {
-			SimpleHTML::setMelding('Foto verwijderen mislukt', -1);
+			setMelding('Foto verwijderen mislukt', -1);
 		}
 		exit; //TODO: JsonResponse
 	}
@@ -240,9 +240,9 @@ class FotoAlbumController extends AclController {
 	public function albumcover(FotoAlbum $album) {
 		$naam = filter_input(INPUT_POST, 'cover', FILTER_SANITIZE_STRING);
 		if (FotoAlbumModel::setAlbumCover($album, new Foto($album, $naam))) {
-			SimpleHTML::setMelding('Fotoalbum-cover succesvol ingesteld', 1);
+			setMelding('Fotoalbum-cover succesvol ingesteld', 1);
 		} else {
-			SimpleHTML::setMelding('Fotoalbum-cover instellen mislukt', -1);
+			setMelding('Fotoalbum-cover instellen mislukt', -1);
 		}
 		$this->view = new JsonResponse(true);
 	}

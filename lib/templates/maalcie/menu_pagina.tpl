@@ -26,5 +26,5 @@
 	</ul>
 </div>
 <hr/>
-<table><tr id="maalcie-melding"><td id="maalcie-melding-veld">{SimpleHtml::getMelding()}</td></tr></table>
+<table><tr id="maalcie-melding"><td id="maalcie-melding-veld">{getMelding()}</td></tr></table>
 <h1>{$titel}</h1>

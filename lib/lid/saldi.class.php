@@ -89,7 +89,7 @@ class Saldi {
 			$s['soccie'] = new Saldi($uid, 'soccie', $timespan);
 		} catch (Exception $e) {
 			if (!startsWith($e->getMessage(), 'Saldi::load() gefaald.')) {
-				SimpleHTML::setMelding($e->getMessage(), -1);
+				setMelding($e->getMessage(), -1);
 			}
 		}
 		$series = array();
@@ -216,9 +216,9 @@ class Saldi {
 				}
 			}
 			if ($bCorrect === true) {
-				SimpleHTML::setMelding('Er zijn ' . $row . ' regels ingevoerd. Als dit er minder zijn dan u verwacht zitten er ongeldige regels in uw bestand.', 0);
+				setMelding('Er zijn ' . $row . ' regels ingevoerd. Als dit er minder zijn dan u verwacht zitten er ongeldige regels in uw bestand.', 0);
 			} else {
-				SimpleHTML::setMelding('Helaas, er ging iets mis. Controleer uw bestand! mysql gaf terug <' . $db->error() . '>', -1);
+				setMelding('Helaas, er ging iets mis. Controleer uw bestand! mysql gaf terug <' . $db->error() . '>', -1);
 			}
 		}
 	}

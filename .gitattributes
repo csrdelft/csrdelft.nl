@@ -3174,6 +3174,7 @@ lib/MVC/view/MenuView.class.php -text
 lib/MVC/view/SmartyTemplateView.abstract.php -text
 lib/MVC/view/Validator.interface.php -text
 lib/MVC/view/View.interface.php -text
+lib/MVC/view/Zijbalk.abstract.php -text
 lib/MVC/view/groepen/ActiviteitenView.class.php -text
 lib/MVC/view/groepen/BesturenView.class.php -text
 lib/MVC/view/groepen/CommissiesView.class.php -text
@@ -3705,7 +3706,6 @@ lib/peilingcontent.class.php -text
 lib/roodschopper.class.php -text
 lib/roodschoppercontent.class.php -text
 lib/savedquery.class.php -text
-lib/simplehtml.class.php -text
 lib/simplespamfilter.class.php -text
 lib/smarty/3.1.16_RELEASE_NOTES.txt -text
 lib/smarty/COPYING.lib -text
@@ -3927,7 +3927,6 @@ lib/templates/MVC/menu/beheer/menu_tree.tpl -text
 lib/templates/MVC/menu/block.tpl -text
 lib/templates/MVC/menu/main_menu.tpl -text
 lib/templates/MVC/menu/page.tpl -text
-lib/templates/MVC/menu/quicknav.tpl -text
 lib/templates/bibliotheek/boek.tpl -text
 lib/templates/bibliotheek/boek.ubb.tpl -text
 lib/templates/bibliotheek/catalogus.tpl -text

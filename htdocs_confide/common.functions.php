@@ -541,3 +541,100 @@ function format_filesize($size) {
 	}
 	return round($size, 2) . $units[$i];
 }
+
+function getDebug($sql = true, $get = true, $post = true, $files = true, $cookie = true, $session = true) {
+	$debug = '';
+	if ($sql) {
+		$debug .= '<hr />SQL<hr />';
+		$debug .= mb_htmlentities(print_r(array("PDO" => Database::getQueries(), "MySql" => MijnSqli::instance()->getQueries()), true));
+	}
+	if ($get) {
+		$debug .= '<hr />GET<hr />';
+		if (count($_GET) > 0) {
+			$debug .= mb_htmlentities(print_r($_GET, true));
+		}
+	}
+	if ($post) {
+		$debug .= '<hr />POST<hr />';
+		if (count($_POST) > 0) {
+			$debug .= mb_htmlentities(print_r($_POST, true));
+		}
+	}
+	if ($files) {
+		$debug .= '<hr />FILES<hr />';
+		if (count($_FILES) > 0) {
+			$debug .= mb_htmlentities(print_r($_FILES, true));
+		}
+	}
+	if ($cookie) {
+		$debug .= '<hr />COOKIE<hr />';
+		if (count($_COOKIE) > 0) {
+			$debug .= mb_htmlentities(print_r($_COOKIE, true));
+		}
+	}
+	if ($session) {
+		$debug .= '<hr />SESSION<hr />';
+		if (count($_SESSION) > 0) {
+			$debug .= mb_htmlentities(print_r($_SESSION, true));
+		}
+	}
+	return $debug;
+}
+
+/**
+ * Stores a message.
+ *
+ * Levels can be:
+ *
+ * -1 error
+ *  0 info
+ *  1 success
+ *  2 notify
+ *
+ * @see    getMelding()
+ * gebaseerd op DokuWiki code
+ */
+function setMelding($msg, $lvl) {
+	$errors[-1] = 'error';
+	$errors[0] = 'info';
+	$errors[1] = 'success';
+	$errors[2] = 'notify';
+	$msg = trim($msg);
+	if (!empty($msg) AND ( $lvl === -1 OR $lvl === 0 OR $lvl === 1 OR $lvl === 2 )) {
+		if (!isset($_SESSION['melding'])) {
+			$_SESSION['melding'] = array();
+		}
+		// gooit verouderde gegevens weg
+		if (is_string($_SESSION['melding'])) {
+			$_SESSION['melding'] = array();
+		}
+		$_SESSION['melding'][] = array('lvl' => $errors[$lvl], 'msg' => $msg);
+	}
+}
+
+/**
+ * Geeft berichten weer die opgeslagen zijn in de sessie met met setMelding($msg, $lvl)
+ * 
+ * @return string html van melding(en) of lege string
+ */
+function getMelding() {
+	if (isset($_SESSION['melding']) AND is_array($_SESSION['melding'])) {
+		$sMelding = '<div id="melding">';
+		$shown = array();
+		foreach ($_SESSION['melding'] as $msg) {
+			$hash = md5($msg['msg']);
+			//if (isset($shown[$hash]))
+			//	continue; // skip double messages
+			$sMelding .= '<div class="msg' . $msg['lvl'] . '">';
+			$sMelding .= $msg['msg'];
+			$sMelding .= '</div>';
+			$shown[$hash] = 1;
+		}
+		$sMelding .= '</div>';
+		// maar één keer tonen, de melding.
+		unset($_SESSION['melding']);
+		return $sMelding;
+	} else {
+		return '';
+	}
+}

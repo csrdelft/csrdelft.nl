@@ -66,18 +66,18 @@ if (isset($_GET['addToGoogle'])) {
 		$message = $gSync->syncLidBatch($zoeker->getLeden());
 		$elapsed = microtime() - $start;
 
-		SimpleHTML::setMelding(
+		setMelding(
 				'<h1>Google-sync-resultaat:</h1>' . $message . '<br />' .
 				'<a href="/communicatie/lijst.php?q=' . htmlspecialchars($_GET['q']) . '">Terug naar de ledenlijst...</a>', 'Google-sync resultaat'
 				, 0);
 
 		if (LoginModel::mag('P_ADMIN')) {
-			SimpleHTML::setMelding('<hr />Tijd nodig voor deze sync: ' . $elapsed . 'ms');
+			setMelding('<hr />Tijd nodig voor deze sync: ' . $elapsed . 'ms');
 		}
 	} catch (Zend_Gdata_App_AuthException $e) {
 		$m = $e->getMessage();
 		$title = substr($m, strpos($m, '<title>') + 7, strpos($m, '</title>'));
-		SimpleHTML::setMelding($title, -1);
+		setMelding($title, -1);
 	}
 } else {
 
@@ -90,7 +90,7 @@ if (isset($_GET['addToGoogle'])) {
 }
 
 if ($message != '') {
-	SimpleHTML::setMelding($message, 0);
+	setMelding($message, 0);
 }
 
 $pagina = new CsrLayoutPage($ledenlijstcontent);

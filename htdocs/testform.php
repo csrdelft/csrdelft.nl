@@ -27,7 +27,7 @@ class TestFormulier extends Formulier {
 	}
 
 	public function view() {
-		echo SimpleHTML::getMelding();
+		echo getMelding();
 		echo parent::view();
 		debugprint($this->getModel());
 	}
@@ -49,9 +49,9 @@ $model->uidtest = '0436';
 
 $form = new TestFormulier($model); // fetches POST values itself
 if ($form->validate()) {
-	SimpleHTML::setMelding('Save to DB here', 1);
+	setMelding('Save to DB here', 1);
 } else {
-	SimpleHTML::setMelding($form->getError(), -1);
+	setMelding($form->getError(), -1);
 }
 
 $pagina = new CsrLayoutPage($form);

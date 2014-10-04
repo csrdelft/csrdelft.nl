@@ -70,7 +70,7 @@ if (!(LoginModel::mag('P_LEDEN_READ') or LoginModel::mag('P_OUDLEDEN_READ'))) {
 
 				// nieuwe leden mogen worden aangemaakt door P_ADMIN,P_LEDEN_MOD,
 				// novieten ook door de novcie.
-				SimpleHTML::setMelding('U mag geen nieuwe leden aanmaken', -1);
+				setMelding('U mag geen nieuwe leden aanmaken', -1);
 				redirect(CSR_ROOT . '/communicatie/profiel/');
 			}
 			try {
@@ -84,13 +84,13 @@ if (!(LoginModel::mag('P_LEDEN_READ') or LoginModel::mag('P_OUDLEDEN_READ'))) {
 				}
 				redirect(CSR_ROOT . '/communicatie/profiel/' . $nieuwUid . '/' . $bewerkactie);
 			} catch (Exception $e) {
-				SimpleHTML::setMelding('<h2>Nieuw lidnummer aanmaken mislukt.</h2>' . $e->getMessage(), -1);
+				setMelding('<h2>Nieuw lidnummer aanmaken mislukt.</h2>' . $e->getMessage(), -1);
 				redirect(CSR_ROOT . '/communicatie/profiel/');
 			}
 			break;
 		case 'wijzigstatus':
 			if (!LoginModel::mag('P_ADMIN,P_LEDEN_MOD')) {
-				SimpleHTML::setMelding('U mag lidstatus niet aanpassen', -1);
+				setMelding('U mag lidstatus niet aanpassen', -1);
 				redirect(CSR_ROOT . '/communicatie/profiel/');
 			}
 			$profiel = new ProfielStatus($uid, $actie);
@@ -107,7 +107,7 @@ if (!(LoginModel::mag('P_LEDEN_READ') or LoginModel::mag('P_OUDLEDEN_READ'))) {
 
 			if ($voorkeur->magBewerken()) {
 				if ($voorkeur->isPosted() AND $voorkeur->save()) {
-					SimpleHTML::setMelding('Voorkeuren opgeslagen', 1);
+					setMelding('Voorkeuren opgeslagen', 1);
 				}
 				$midden = new ProfielVoorkeurContent($voorkeur, $actie);
 			} else {
@@ -117,9 +117,9 @@ if (!(LoginModel::mag('P_LEDEN_READ') or LoginModel::mag('P_OUDLEDEN_READ'))) {
 		case 'wachtwoord':
 			if (LoginModel::mag('P_ADMIN')) {
 				if (Profiel::resetWachtwoord($uid)) {
-					SimpleHTML::setMelding('Nieuw wachtwoord met succes verzonden.', 1);
+					setMelding('Nieuw wachtwoord met succes verzonden.', 1);
 				} else {
-					SimpleHTML::setMelding('Wachtwoord resetten mislukt.', -1);
+					setMelding('Wachtwoord resetten mislukt.', -1);
 				}
 			}
 			redirect(CSR_ROOT . '/communicatie/profiel/' . $uid);
@@ -130,7 +130,7 @@ if (!(LoginModel::mag('P_LEDEN_READ') or LoginModel::mag('P_OUDLEDEN_READ'))) {
 
 			$gSync = GoogleSync::instance();
 			$message = $gSync->syncLid($uid);
-			SimpleHTML::setMelding('<h2>Opgeslagen in Google Contacts:</h2>' . $message, 2);
+			setMelding('<h2>Opgeslagen in Google Contacts:</h2>' . $message, 2);
 			redirect(CSR_ROOT . '/communicatie/profiel/' . $uid);
 			break;
 
@@ -146,7 +146,7 @@ if (!(LoginModel::mag('P_LEDEN_READ') or LoginModel::mag('P_OUDLEDEN_READ'))) {
 		default;
 			$lid = LidCache::getLid($uid);
 			if (!$lid instanceof Lid) {
-				SimpleHTML::setMelding('<h2>Helaas</h2>Dit lid bestaat niet.<br /> U kunt verder zoeken in deze ledenlijst.', -1);
+				setMelding('<h2>Helaas</h2>Dit lid bestaat niet.<br /> U kunt verder zoeken in deze ledenlijst.', -1);
 				redirect(CSR_ROOT . '/communicatie/ledenlijst/');
 			}
 			$midden = new ProfielContent($lid);

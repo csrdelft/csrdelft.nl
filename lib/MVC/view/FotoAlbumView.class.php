@@ -19,7 +19,7 @@ class FotoAlbumView extends SmartyTemplateView {
 	}
 
 	function view() {
-		echo SimpleHTML::getMelding();
+		echo getMelding();
 		$this->smarty->assign('album', $this->model);
 		$this->smarty->display('MVC/fotoalbum/album.tpl');
 	}

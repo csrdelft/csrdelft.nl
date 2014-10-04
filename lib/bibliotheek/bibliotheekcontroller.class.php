@@ -99,7 +99,7 @@ class BibliotheekController extends Controller {
 			try {
 				$this->boek = new BewerkBoek($boekid, $beschrijvingsid);
 			} catch (Exception $e) {
-				SimpleHTML::setMelding($e->getMessage(), -1);
+				setMelding($e->getMessage(), -1);
 				redirect(CSR_ROOT . '/communicatie/bibliotheek/');
 			}
 		}
@@ -156,7 +156,7 @@ class BibliotheekController extends Controller {
 		$this->boek = new NieuwBoek();
 		//Eerst ongewensten de deur wijzen
 		if (!$this->boek->magBekijken()) {
-			SimpleHTML::setMelding('Onvoldoende rechten voor deze actie. Biebcontrllr::addboek', -1);
+			setMelding('Onvoldoende rechten voor deze actie. Biebcontrllr::addboek', -1);
 			redirect(CSR_ROOT . '/communicatie/bibliotheek/');
 		}
 		//formulier verwerken, als het onvoldoende is terug naar formulier
@@ -175,13 +175,13 @@ class BibliotheekController extends Controller {
 	protected function verwijderboek() {
 		$this->loadBoek();
 		if (!$this->boek->magVerwijderen()) {
-			SimpleHTML::setMelding('Onvoldoende rechten voor deze actie. Biebcontrllr::addbeschrijving', -1);
+			setMelding('Onvoldoende rechten voor deze actie. Biebcontrllr::addbeschrijving', -1);
 			redirect(CSR_ROOT . '/communicatie/bibliotheek/');
 		}
 		if ($this->boek->delete()) {
-			SimpleHTML::setMelding('Boek met succes verwijderd.', 1);
+			setMelding('Boek met succes verwijderd.', 1);
 		} else {
-			SimpleHTML::setMelding('Boek verwijderen mislukt. ' . $this->boek->getError() . 'Biebcontrllr::verwijderboek()', -1);
+			setMelding('Boek verwijderen mislukt. ' . $this->boek->getError() . 'Biebcontrllr::verwijderboek()', -1);
 		}
 		redirect(CSR_ROOT . '/communicatie/bibliotheek/');
 	}
@@ -194,7 +194,7 @@ class BibliotheekController extends Controller {
 	protected function bewerkbeschrijving() {
 		$this->loadBoek();
 		if ($this->boek->getEditBeschrijving()->getId() != 0 AND ! $this->boek->magBeschrijvingVerwijderen()) {
-			SimpleHTML::setMelding('Onvoldoende rechten voor deze actie. Biebcontrllr::bewerkbeschrijving()', -1);
+			setMelding('Onvoldoende rechten voor deze actie. Biebcontrllr::bewerkbeschrijving()', -1);
 			redirect(CSR_ROOT . '/communicatie/bibliotheek/boek/' . $this->boek->getId());
 		}
 		//controleer en sla op of geef de bewerkvelden met eventuele foutmeldingen
@@ -213,13 +213,13 @@ class BibliotheekController extends Controller {
 	protected function verwijderbeschrijving() {
 		$this->loadBoek();
 		if (!$this->boek->magBeschrijvingVerwijderen()) {
-			SimpleHTML::setMelding('Onvoldoende rechten voor deze actie. Biebcontrllr::verwijderbeschrijving()', -1);
+			setMelding('Onvoldoende rechten voor deze actie. Biebcontrllr::verwijderbeschrijving()', -1);
 			redirect(CSR_ROOT . '/communicatie/bibliotheek/boek/' . $this->boek->getId());
 		}
 		if ($this->boek->verwijderBeschrijving()) {
-			SimpleHTML::setMelding('Beschrijving met succes verwijderd.', 1);
+			setMelding('Beschrijving met succes verwijderd.', 1);
 		} else {
-			SimpleHTML::setMelding('Beschrijving verwijderen mislukt. ' . $this->boek->getError() . 'Biebcontrllr::verwijderbeschrijving()', -1);
+			setMelding('Beschrijving verwijderen mislukt. ' . $this->boek->getError() . 'Biebcontrllr::verwijderbeschrijving()', -1);
 		}
 		redirect(CSR_ROOT . '/communicatie/bibliotheek/boek/' . $this->boek->getId());
 	}
@@ -231,7 +231,7 @@ class BibliotheekController extends Controller {
 	protected function addexemplaar() {
 		$this->loadBoek();
 		if (!$this->boek->magBekijken()) {
-			SimpleHTML::setMelding('Onvoldoende rechten voor deze actie. Biebcontrllr::addexemplaar()', -1);
+			setMelding('Onvoldoende rechten voor deze actie. Biebcontrllr::addexemplaar()', -1);
 			redirect(CSR_ROOT . '/communicatie/bibliotheek/boek/' . $this->boek->getId());
 		}
 		if ($this->hasParam(2)) {
@@ -241,12 +241,12 @@ class BibliotheekController extends Controller {
 		}
 		if (Lid::isValidUid($eigenaar)) {
 			if ($this->boek->addExemplaar($eigenaar)) {
-				SimpleHTML::setMelding('Exemplaar met succes toegevoegd.', 1);
+				setMelding('Exemplaar met succes toegevoegd.', 1);
 			} else {
-				SimpleHTML::setMelding('Exemplaar toevoegen mislukt. ' . $this->boek->getError() . 'Biebcontrllr::addexemplaar()', -1);
+				setMelding('Exemplaar toevoegen mislukt. ' . $this->boek->getError() . 'Biebcontrllr::addexemplaar()', -1);
 			}
 		} else {
-			SimpleHTML::setMelding('Ongeldig uid "' . $eigenaar . '" Biebcontrllr::addexemplaar()', -1);
+			setMelding('Ongeldig uid "' . $eigenaar . '" Biebcontrllr::addexemplaar()', -1);
 		}
 		redirect(CSR_ROOT . '/communicatie/bibliotheek/boek/' . $this->boek->getId());
 	}
@@ -259,12 +259,12 @@ class BibliotheekController extends Controller {
 		$this->loadBoek();
 		if ($this->hasParam(2) AND $this->boek->isEigenaar($this->getParam(2))) {
 			if ($this->boek->verwijderExemplaar($this->getParam(2))) {
-				SimpleHTML::setMelding('Exemplaar met succes verwijderd.', 1);
+				setMelding('Exemplaar met succes verwijderd.', 1);
 			} else {
-				SimpleHTML::setMelding('Exemplaar verwijderen mislukt. ' . $this->boek->getError() . 'Biebcontrllr::verwijderexemplaar()', -1);
+				setMelding('Exemplaar verwijderen mislukt. ' . $this->boek->getError() . 'Biebcontrllr::verwijderexemplaar()', -1);
 			}
 		} else {
-			SimpleHTML::setMelding('Onvoldoende rechten voor deze actie. Biebcontrllr::verwijderexemplaar()', -1);
+			setMelding('Onvoldoende rechten voor deze actie. Biebcontrllr::verwijderexemplaar()', -1);
 		}
 		redirect(CSR_ROOT . '/communicatie/bibliotheek/boek/' . $this->boek->getId());
 	}
@@ -283,26 +283,26 @@ class BibliotheekController extends Controller {
 				if ($this->boek->isEigenaar($this->getParam(2))) {
 					if (isset($_POST['id'])) {
 						if ($this->boek->validField($_POST['id']) AND $this->boek->saveField($_POST['id'])) {
-							SimpleHTML::setMelding('Exemplaar uitgeleend', 1);
+							setMelding('Exemplaar uitgeleend', 1);
 						} else {
-							SimpleHTML::setMelding('Exemplaar uitlenen is mislukt. ' . $this->boek->getField($_POST['id'])->getError() . '- ' . $this->boek->getError() . 'Biebcontrllr::exemplaarlenen()', -1);
+							setMelding('Exemplaar uitlenen is mislukt. ' . $this->boek->getField($_POST['id'])->getError() . '- ' . $this->boek->getError() . 'Biebcontrllr::exemplaarlenen()', -1);
 						}
 					} else {
-						SimpleHTML::setMelding('$_POST[id] is leeg', -1);
+						setMelding('$_POST[id] is leeg', -1);
 					}
 				} else {
-					SimpleHTML::setMelding('U moet eigenaar zijn voor deze actie. Biebcontrllr::exemplaarlenen()', -1);
+					setMelding('U moet eigenaar zijn voor deze actie. Biebcontrllr::exemplaarlenen()', -1);
 				}
 				// iemand leent een exemplaar
 			} else {
 				if ($this->boek->leenExemplaar($this->getParam(2))) {
-					SimpleHTML::setMelding('Exemplaar geleend.', 1);
+					setMelding('Exemplaar geleend.', 1);
 				} else {
-					SimpleHTML::setMelding('Exemplaar lenen is mislukt. ' . $this->boek->getError() . 'Biebcontrllr::exemplaarlenen()', -1);
+					setMelding('Exemplaar lenen is mislukt. ' . $this->boek->getError() . 'Biebcontrllr::exemplaarlenen()', -1);
 				}
 			}
 		} else {
-			SimpleHTML::setMelding('Onvoldoende rechten voor deze actie. Biebcontrllr::exemplaarlenen()', -1);
+			setMelding('Onvoldoende rechten voor deze actie. Biebcontrllr::exemplaarlenen()', -1);
 		}
 		redirect(CSR_ROOT . '/communicatie/bibliotheek/boek/' . $this->boek->getId() . '#exemplaren');
 	}
@@ -317,12 +317,12 @@ class BibliotheekController extends Controller {
 		$this->loadBoek();
 		if ($this->hasParam(2) AND $this->boek->isLener($this->getParam(2))) {
 			if ($this->boek->teruggevenExemplaar($this->getParam(2))) {
-				SimpleHTML::setMelding('Exemplaar is teruggegeven.', 1);
+				setMelding('Exemplaar is teruggegeven.', 1);
 			} else {
-				SimpleHTML::setMelding('Teruggave van exemplaar melden is mislukt. ' . $this->boek->getError() . 'Biebcontrllr::exemplaarteruggegeven()', -1);
+				setMelding('Teruggave van exemplaar melden is mislukt. ' . $this->boek->getError() . 'Biebcontrllr::exemplaarteruggegeven()', -1);
 			}
 		} else {
-			SimpleHTML::setMelding('Onvoldoende rechten voor deze actie. ' . $this->boek->getError() . ' Biebcontrllr::exemplaarteruggegeven()', -1);
+			setMelding('Onvoldoende rechten voor deze actie. ' . $this->boek->getError() . ' Biebcontrllr::exemplaarteruggegeven()', -1);
 		}
 		redirect(CSR_ROOT . '/communicatie/bibliotheek/boek/' . $this->boek->getId());
 	}
@@ -337,12 +337,12 @@ class BibliotheekController extends Controller {
 		$this->loadBoek();
 		if ($this->hasParam(2) AND $this->boek->isEigenaar($this->getParam(2))) {
 			if ($this->boek->terugontvangenExemplaar($this->getParam(2))) {
-				SimpleHTML::setMelding('Exemplaar terugontvangen.', 1);
+				setMelding('Exemplaar terugontvangen.', 1);
 			} else {
-				SimpleHTML::setMelding('Exemplaar terugontvangen melden is mislukt. ' . $this->boek->getError() . 'Biebcontrllr::exemplaarterugontvangen()', -1);
+				setMelding('Exemplaar terugontvangen melden is mislukt. ' . $this->boek->getError() . 'Biebcontrllr::exemplaarterugontvangen()', -1);
 			}
 		} else {
-			SimpleHTML::setMelding('Onvoldoende rechten voor deze actie. Biebcontrllr::exemplaarterugontvangen()', -1);
+			setMelding('Onvoldoende rechten voor deze actie. Biebcontrllr::exemplaarterugontvangen()', -1);
 		}
 		redirect(CSR_ROOT . '/communicatie/bibliotheek/boek/' . $this->boek->getId());
 	}
@@ -357,12 +357,12 @@ class BibliotheekController extends Controller {
 		$this->loadBoek();
 		if ($this->hasParam(2) AND $this->boek->isEigenaar($this->getParam(2))) {
 			if ($this->boek->vermistExemplaar($this->getParam(2))) {
-				SimpleHTML::setMelding('Exemplaar vermist.', 1);
+				setMelding('Exemplaar vermist.', 1);
 			} else {
-				SimpleHTML::setMelding('Exemplaar vermist melden is mislukt. ' . $this->boek->getError() . 'Biebcontrllr::exemplaarvermist()', -1);
+				setMelding('Exemplaar vermist melden is mislukt. ' . $this->boek->getError() . 'Biebcontrllr::exemplaarvermist()', -1);
 			}
 		} else {
-			SimpleHTML::setMelding('Onvoldoende rechten voor deze actie. Biebcontrllr::exemplaarvermist()', -1);
+			setMelding('Onvoldoende rechten voor deze actie. Biebcontrllr::exemplaarvermist()', -1);
 		}
 		redirect(CSR_ROOT . '/communicatie/bibliotheek/boek/' . $this->boek->getId());
 	}
@@ -377,12 +377,12 @@ class BibliotheekController extends Controller {
 		$this->loadBoek();
 		if ($this->hasParam(2) AND $this->boek->isEigenaar($this->getParam(2))) {
 			if ($this->boek->gevondenExemplaar($this->getParam(2))) {
-				SimpleHTML::setMelding('Exemplaar gevonden.', 1);
+				setMelding('Exemplaar gevonden.', 1);
 			} else {
-				SimpleHTML::setMelding('Exemplaar gevonden melden is mislukt. ' . $this->boek->getError() . 'Biebcontrllr::exemplaargevonden()', -1);
+				setMelding('Exemplaar gevonden melden is mislukt. ' . $this->boek->getError() . 'Biebcontrllr::exemplaargevonden()', -1);
 			}
 		} else {
-			SimpleHTML::setMelding('Onvoldoende rechten voor deze actie. Biebcontrllr::exemplaargevonden()', -1);
+			setMelding('Onvoldoende rechten voor deze actie. Biebcontrllr::exemplaargevonden()', -1);
 		}
 		redirect(CSR_ROOT . '/communicatie/bibliotheek/boek/' . $this->boek->getId());
 	}

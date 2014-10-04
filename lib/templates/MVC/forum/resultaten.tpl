@@ -1,4 +1,4 @@
-{SimpleHtml::getMelding()}
+{getMelding()}
 
 {capture name='navlinks'}
 	<div class="breadcrumbs">

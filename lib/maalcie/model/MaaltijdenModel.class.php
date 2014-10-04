@@ -155,7 +155,7 @@ class MaaltijdenModel {
 				self::verwijderMaaltijd($maaltijd->getMaaltijdId());
 				$aantal++;
 			} catch (\Exception $e) {
-				SimpleHTML::setMelding($e->getMessage(), -1);
+				setMelding($e->getMessage(), -1);
 			}
 		}
 		return $aantal;
@@ -367,11 +367,11 @@ class MaaltijdenModel {
 			try {
 				self::verplaatsNaarArchief($maaltijd);
 				if (\CorveeTakenModel::existMaaltijdCorvee($maaltijd->getMaaltijdId())) {
-					SimpleHTML::setMelding($maaltijd->getDatum() . ' ' . $maaltijd->getTitel() . ' heeft nog gekoppelde corveetaken!', 2);
+					setMelding($maaltijd->getDatum() . ' ' . $maaltijd->getTitel() . ' heeft nog gekoppelde corveetaken!', 2);
 				}
 			} catch (\Exception $e) {
 				$errors[] = $e;
-				SimpleHTML::setMelding($e->getMessage(), -1);
+				setMelding($e->getMessage(), -1);
 			}
 		}
 		return array($errors, sizeof($maaltijden));

@@ -1,4 +1,4 @@
-{SimpleHtml::getMelding()}
+{getMelding()}
 <ul class="horizontal nobullets">
 	{foreach from=$groeptypes item=groeptype}
 		<li{if $groeptype.id==$groep->getTypeId()} class="active"{/if}>

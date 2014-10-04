@@ -75,7 +75,7 @@ class MaaltijdRepetitiesController extends AclController {
 			$repetitie_aantal = MaaltijdRepetitiesModel::saveRepetitie($mrid, $values['dag_vd_week'], $values['periode_in_dagen'], $values['standaard_titel'], $values['standaard_tijd'], $values['standaard_prijs'], $values['abonneerbaar'], $values['standaard_limiet'], $values['abonnement_filter']);
 			$this->view = new MaaltijdRepetitieView($repetitie_aantal[0]);
 			if ($repetitie_aantal[1] > 0) {
-				SimpleHTML::setMelding($repetitie_aantal[1] . ' abonnement' . ($repetitie_aantal[1] !== 1 ? 'en' : '') . ' uitgeschakeld.', 2);
+				setMelding($repetitie_aantal[1] . ' abonnement' . ($repetitie_aantal[1] !== 1 ? 'en' : '') . ' uitgeschakeld.', 2);
 			}
 		}
 	}
@@ -83,9 +83,9 @@ class MaaltijdRepetitiesController extends AclController {
 	public function verwijder($mrid) {
 		$aantal = MaaltijdRepetitiesModel::verwijderRepetitie($mrid);
 		if ($aantal > 0) {
-			SimpleHTML::setMelding($aantal . ' abonnement' . ($aantal !== 1 ? 'en' : '') . ' uitgeschakeld.', 2);
+			setMelding($aantal . ' abonnement' . ($aantal !== 1 ? 'en' : '') . ' uitgeschakeld.', 2);
 		}
-		echo '<tr id="maalcie-melding"><td>' . SimpleHTML::getMelding() . '</td></tr>';
+		echo '<tr id="maalcie-melding"><td>' . getMelding() . '</td></tr>';
 		echo '<tr id="repetitie-row-' . $mrid . '" class="remove"></tr>';
 		exit;
 	}
@@ -95,9 +95,9 @@ class MaaltijdRepetitiesController extends AclController {
 		if ($this->view instanceof MaaltijdRepetitiesView) { // opslaan succesvol
 			$verplaats = isset($_POST['verplaats_dag']);
 			$updated_aanmeldingen = MaaltijdenModel::updateRepetitieMaaltijden($this->view->getModel(), $verplaats);
-			SimpleHTML::setMelding($updated_aanmeldingen[0] . ' maaltijd' . ($updated_aanmeldingen[0] !== 1 ? 'en' : '') . ' bijgewerkt' . ($verplaats ? ' en eventueel verplaatst.' : '.'), 1);
+			setMelding($updated_aanmeldingen[0] . ' maaltijd' . ($updated_aanmeldingen[0] !== 1 ? 'en' : '') . ' bijgewerkt' . ($verplaats ? ' en eventueel verplaatst.' : '.'), 1);
 			if ($updated_aanmeldingen[1] > 0) {
-				SimpleHTML::setMelding($updated_aanmeldingen[1] . ' aanmelding' . ($updated_aanmeldingen[1] !== 1 ? 'en' : '') . ' verwijderd vanwege aanmeldrestrictie: ' . $this->view->getModel()->getAbonnementFilter(), 2);
+				setMelding($updated_aanmeldingen[1] . ' aanmelding' . ($updated_aanmeldingen[1] !== 1 ? 'en' : '') . ' verwijderd vanwege aanmeldrestrictie: ' . $this->view->getModel()->getAbonnementFilter(), 2);
 			}
 		}
 	}

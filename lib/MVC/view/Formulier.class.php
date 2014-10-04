@@ -231,7 +231,7 @@ class Formulier implements View, Validator {
 	 * Toont het formulier en javascript van alle fields
 	 */
 	public function view() {
-		echo SimpleHtml::getMelding();
+		echo getMelding();
 		if ($this->getTitel()) {
 			echo '<h1 class="formTitle">' . $this->getTitel() . '</h1>';
 		}

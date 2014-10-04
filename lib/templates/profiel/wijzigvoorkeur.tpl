@@ -1,7 +1,7 @@
 <div id="wijzigstatus" >
 	<div id="profielregel">
 		<div class="naam">
-			{SimpleHtml::getMelding()}
+			{getMelding()}
 			<h1>Voorkeuren Opgeven</h1>
 			<div class="lidgegevens">
 				<label for="">Naam:</label>{$profiel->getUid()|csrnaam:'full'}<br />

@@ -1,4 +1,4 @@
-{SimpleHtml::getMelding()}
+{getMelding()}
 {strip}
 
 	{$zoekform->view()}

@@ -27,7 +27,7 @@ class PeilingBeheerContent implements View {
 		$html = '
 		<h1>Peilingbeheertool</h1>
 		<div>
-			' . SimpleHTML::getMelding() . '
+			' . getMelding() . '
 			<span class="dikgedrukt">Nieuwe peiling:</span><br/>
 			<form id="nieuwePeiling" action="/tools/peilingbeheer.php?action=toevoegen" method="post">
 				<label for="titel">Titel:</label><input name="titel" type="text"/><br />

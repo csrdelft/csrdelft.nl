@@ -6,7 +6,7 @@ require_once 'mededelingen/mededelingencontent.class.php';
 require_once 'mededelingen/mededelingtopdrieoverzichtcontent.class.php';
 
 if (!Mededeling::isModerator()) {
-	SimpleHTML::setMelding('U heeft daar niets te zoeken.', -1);
+	setMelding('U heeft daar niets te zoeken.', -1);
 	redirect(CSR_ROOT . MededelingenContent::mededelingenRoot);
 }
 

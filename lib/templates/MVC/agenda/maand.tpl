@@ -1,4 +1,4 @@
-{SimpleHtml::getMelding()}
+{getMelding()}
 {capture name='navlinks'}
 	<div class="maandnavigatie">
 		<a class="knop float-left" href="{$urlVorige}">&laquo; {$prevMaand}</a>

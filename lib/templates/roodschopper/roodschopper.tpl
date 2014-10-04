@@ -1,4 +1,4 @@
-{SimpleHtml::getMelding()}
+{getMelding()}
 <h1>Roodschopper</h1>
 <p>Met deze tool kan de SocCie en de MaalCie zelf een roodschopmail versturen. U stelt een aantal parameters in, typt een verhaaltje,
 	en drukt op 'Verder gaan'. Dan krijgt u een overzichtje te zien van de mensen die rood staan, en kunt u het verzenden bevestigen.</p>

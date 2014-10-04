@@ -54,8 +54,7 @@ class MenuBeheerController extends AclController {
 	}
 
 	public function beheer($naam = '') {
-		$root = $this->model->getMenuTree($naam, LoginModel::mag('P_ADMIN'));
-		$body = new MenuBeheerView($root, $this->model->getBeheerMenusVoorLid());
+		$body = new MenuBeheerView($this->model->getMenuTree($naam, LoginModel::mag('P_ADMIN')));
 		$this->view = new CsrLayoutPage($body);
 		$this->view->addStylesheet('/layout/css/menubeheer');
 	}
@@ -65,7 +64,7 @@ class MenuBeheerController extends AclController {
 		$this->view = new MenuItemForm($item, $this->action, (int) $parent_id); // fetches POST values itself
 		if ($this->view->validate()) {
 			$item->item_id = (int) $this->model->create($item);
-			SimpleHTML::setMelding('Toegevoegd', 1);
+			setMelding('Toegevoegd', 1);
 			$this->view = new JsonResponse(true);
 		}
 	}
@@ -76,9 +75,9 @@ class MenuBeheerController extends AclController {
 		if ($this->view->validate()) {
 			$rowcount = $this->model->update($item);
 			if ($rowcount > 0) {
-				SimpleHTML::setMelding($item->tekst . ' bijgewerkt', 1);
+				setMelding($item->tekst . ' bijgewerkt', 1);
 			} else {
-				SimpleHTML::setMelding($item->tekst . ' ongewijzigd', -1);
+				setMelding($item->tekst . ' ongewijzigd', -1);
 			}
 			$this->view = new JsonResponse(true);
 		}
@@ -87,9 +86,9 @@ class MenuBeheerController extends AclController {
 	public function verwijderen($item_id) {
 		$item = $this->model->getMenuItem($item_id);
 		$rowcount = $this->model->removeMenuItem($item);
-		SimpleHTML::setMelding($item->tekst . ' verwijderd', 1);
+		setMelding($item->tekst . ' verwijderd', 1);
 		if ($rowcount > 0) {
-			SimpleHTML::setMelding($rowcount . ' menu-items niveau omhoog verplaatst.', 2);
+			setMelding($rowcount . ' menu-items niveau omhoog verplaatst.', 2);
 		}
 		$this->view = new JsonResponse(true);
 	}
@@ -99,9 +98,9 @@ class MenuBeheerController extends AclController {
 		$item->zichtbaar = !$item->zichtbaar;
 		$rowcount = $this->model->update($item);
 		if ($rowcount > 0) {
-			SimpleHTML::setMelding($item->tekst . ($item->zichtbaar ? ' ' : ' on') . 'zichtbaar gemaakt', 1);
+			setMelding($item->tekst . ($item->zichtbaar ? ' ' : ' on') . 'zichtbaar gemaakt', 1);
 		} else {
-			SimpleHTML::setMelding($item->tekst . ' ongewijzigd', -1);
+			setMelding($item->tekst . ' ongewijzigd', -1);
 		}
 		$this->view = new JsonResponse(true);
 	}

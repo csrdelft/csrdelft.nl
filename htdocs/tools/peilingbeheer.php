@@ -20,7 +20,7 @@ if (isset($_GET['action'])) {
 					}
 				}
 				$peiling = Peiling::maakPeiling($properties);
-				SimpleHTML::setMelding('De nieuwe peiling heeft id ' . $peiling->getId() . '.', 1);
+				setMelding('De nieuwe peiling heeft id ' . $peiling->getId() . '.', 1);
 				redirect(CSR_ROOT . '/tools/peilingbeheer.php');
 				exit;
 			}
@@ -58,7 +58,7 @@ require_once 'peilingbeheercontent.class.php';
 $beheer = new PeilingBeheerContent(Peiling::getLijst());
 
 if ($error != '') {
-	SimpleHTML::setMelding($error, -1);
+	setMelding($error, -1);
 }
 
 if (!LoginModel::mag('P_LOGGED_IN') OR ! Peiling::magBewerken()) {

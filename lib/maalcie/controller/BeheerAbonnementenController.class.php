@@ -68,7 +68,7 @@ class BeheerAbonnementenController extends AclController {
 			$this->view = new BeheerAbonnementenLijstView($matrix);
 		} else {
 			$this->view = new BeheerAbonnementenLijstView(array());
-			SimpleHTML::setMelding($InputField->error, -1);
+			setMelding($InputField->error, -1);
 		}
 	}
 
@@ -78,7 +78,7 @@ class BeheerAbonnementenController extends AclController {
 		$matrix = MaaltijdAbonnementenModel::getAbonnementenVanNovieten();
 		$novieten = sizeof($matrix);
 		$this->view = new BeheerAbonnementenLijstView($matrix);
-		SimpleHTML::setMelding(
+		setMelding(
 				$aantal . ' abonnement' . ($aantal !== 1 ? 'en' : '') . ' aangemaakt voor ' .
 				$novieten . ' noviet' . ($novieten !== 1 ? 'en' : '') . '.', 1);
 	}
@@ -91,7 +91,7 @@ class BeheerAbonnementenController extends AclController {
 		$this->view = new BeheerAbonnementView($abo_aantal[0]);
 		if ($abo_aantal[1] > 0) {
 			$melding = 'Automatisch aangemeld voor ' . $abo_aantal[1] . ' maaltijd' . ($abo_aantal[1] === 1 ? '' : 'en');
-			SimpleHTML::setMelding($melding, 2);
+			setMelding($melding, 2);
 		}
 	}
 
@@ -103,7 +103,7 @@ class BeheerAbonnementenController extends AclController {
 		$this->view = new BeheerAbonnementView($abo_aantal[0]);
 		if ($abo_aantal[1] > 0) {
 			$melding = 'Automatisch afgemeld voor ' . $abo_aantal[1] . ' maaltijd' . ($abo_aantal[1] === 1 ? '' : 'en');
-			SimpleHTML::setMelding($melding, 2);
+			setMelding($melding, 2);
 		}
 	}
 

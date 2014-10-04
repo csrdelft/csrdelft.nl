@@ -31,7 +31,7 @@ class FunctieView extends SmartyTemplateView {
 	public function view() {
 		$this->smarty->assign('functie', $this->model);
 		$this->smarty->display('MVC/maalcie/functie/beheer_functie_lijst.tpl');
-		echo '<tr id="maalcie-melding"><td>' . SimpleHTML::getMelding() . '</td></tr>';
+		echo '<tr id="maalcie-melding"><td>' . getMelding() . '</td></tr>';
 	}
 
 }
@@ -43,7 +43,7 @@ class FunctieDeleteView extends SmartyTemplateView {
 
 	public function view() {
 		echo '<tr id="corveefunctie-row-' . $this->model . '" class="remove"></tr>';
-		echo '<tr id="maalcie-melding"><td>' . SimpleHTML::getMelding() . '</td></tr>';
+		echo '<tr id="maalcie-melding"><td>' . getMelding() . '</td></tr>';
 	}
 
 }

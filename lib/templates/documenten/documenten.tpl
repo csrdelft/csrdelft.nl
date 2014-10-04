@@ -8,7 +8,7 @@
 	{/if}
 </div>
 <h1>Documenten</h1>
-<div class="foutje">{SimpleHtml::getMelding()}</div>
+<div class="foutje">{getMelding()}</div>
 
 <table id="documenten" class="documenten">
 	<thead>

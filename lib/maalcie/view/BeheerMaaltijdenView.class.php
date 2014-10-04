@@ -48,7 +48,7 @@ class BeheerMaaltijdenLijstView extends SmartyTemplateView {
 
 	public function view() {
 		$this->smarty->assign('prullenbak', false);
-		echo '<tr id="maalcie-melding"><td>' . SimpleHTML::getMelding() . '</td></tr>';
+		echo '<tr id="maalcie-melding"><td>' . getMelding() . '</td></tr>';
 		foreach ($this->model as $maaltijd) {
 			$this->smarty->assign('maaltijd', $maaltijd);
 			$this->smarty->display('maalcie/maaltijd/beheer_maaltijd_lijst.tpl');
@@ -70,7 +70,7 @@ class BeheerMaaltijdView extends SmartyTemplateView {
 		$this->smarty->assign('maaltijd', $this->model);
 		$this->smarty->assign('prullenbak', $this->prullenbak);
 
-		echo '<tr id="maalcie-melding"><td>' . SimpleHTML::getMelding() . '</td></tr>';
+		echo '<tr id="maalcie-melding"><td>' . getMelding() . '</td></tr>';
 		$this->smarty->display('maalcie/maaltijd/beheer_maaltijd_lijst.tpl');
 	}
 

@@ -66,7 +66,7 @@ if (isset($_POST['actie'])) {
 			break;
 		case 'verzenden':
 			$roodschopper->doit();
-			SimpleHTML::setMelding('Roodschopmails met succes verzonden.', 1);
+			setMelding('Roodschopmails met succes verzonden.', 1);
 			break;
 	}
 	exit; //exit voor de XHR-acties.

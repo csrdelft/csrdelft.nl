@@ -37,7 +37,7 @@ class DebugLogModel extends PersistenceModel {
 		$entry->user_agent = $_SERVER['HTTP_USER_AGENT'];
 		$this->create($entry);
 		if (DEBUG AND Database::instance()->inTransaction()) {
-			SimpleHTML::setMelding('Debuglog may not be committed: database transaction', 2);
+			setMelding('Debuglog may not be committed: database transaction', 2);
 		}
 		return $entry;
 	}

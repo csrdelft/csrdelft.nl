@@ -41,7 +41,7 @@ class CorveeRepetitieView extends SmartyTemplateView {
 
 	public function view() {
 		$this->smarty->assign('repetitie', $this->model);
-		echo '<tr id="maalcie-melding"><td>' . SimpleHTML::getMelding() . '</td></tr>';
+		echo '<tr id="maalcie-melding"><td>' . getMelding() . '</td></tr>';
 		$this->smarty->display('maalcie/corvee-repetitie/beheer_corvee_repetitie_lijst.tpl');
 	}
 

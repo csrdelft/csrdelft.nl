@@ -39,13 +39,13 @@ class LidInstellingenController extends AclController {
 
 	public function opslaan() {
 		$this->model->save(); // fetches $_POST values itself
-		SimpleHTML::setMelding('Instellingen opgeslagen', 1);
+		setMelding('Instellingen opgeslagen', 1);
 		redirect(CSR_ROOT . '/instellingen');
 	}
 
 	public function reset($module, $key, $value) {
 		$this->model->resetForAll($module, $key, $value);
-		SimpleHTML::setMelding('Voor iedereen de instelling ge-reset naar de standaard waarde', 1);
+		setMelding('Voor iedereen de instelling ge-reset naar de standaard waarde', 1);
 		redirect(CSR_ROOT . '/instellingen');
 	}
 

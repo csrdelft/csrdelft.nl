@@ -10,26 +10,13 @@
  */
 class MenuBeheerView extends SmartyTemplateView {
 
-	/**
-	 * Array van menu roots
-	 * @var MenuItem[]
-	 */
-	private $menuroots;
-
-	public function __construct(MenuItem $tree_root, array $menuroots) {
-		parent::__construct($tree_root);
-		$this->menuroots = $menuroots;
-		if ($tree_root->tekst === '') {
-			$this->titel = 'Menubeheer';
-			$this->model = false;
-		} else {
-			$this->titel = 'Beheer ' . $tree_root->tekst . '-menu';
-		}
+	public function __construct(MenuItem $tree_root) {
+		parent::__construct($tree_root, 'Menubeheer');
 	}
 
 	public function view() {
 		$this->smarty->assign('root', $this->model);
-		$this->smarty->assign('menuroots', $this->menuroots);
+		$this->smarty->assign('menus', MenuModel::instance()->getBeheerMenusVoorLid());
 		$this->smarty->display('MVC/menu/beheer/menu_tree.tpl');
 	}
 
@@ -58,8 +45,10 @@ class MenuItemForm extends ModalForm {
 		}
 		$this->css_classes[] = 'ReloadPage';
 
-		$fields['pid'] = new RequiredIntField('parent_id', $item->parent_id, 'Parent ID', 0);
-		$fields['pid']->title = 'ID van het menu-item waar dit item onder valt';
+		if (LoginModel::mag('P_ADMIN')) {
+			$fields['pid'] = new RequiredIntField('parent_id', $item->parent_id, 'Parent ID', 0);
+			$fields['pid']->title = 'ID van het menu-item waar dit item onder valt';
+		}
 
 		$fields['prio'] = new IntField('prioriteit', $item->prioriteit, 'Volgorde');
 		$fields['prio']->title = 'Volgorde van menu-items';

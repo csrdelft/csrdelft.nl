@@ -18,7 +18,7 @@
 		<div>Deze pagina bevat alleen verborgen, verwijderde en vervallen mededelingen.</div>
 		<br />
 	{/if}
-	{SimpleHtml::getMelding()}
+	{getMelding()}
 	{if $geselecteerdeMededeling!==null}		{*	Check of er een mededeling geselecteerd is.	Zo niet, dan
 		is de database leeg en geven we een nette foutmelding.	*}
 		<div id="kolomlinks">

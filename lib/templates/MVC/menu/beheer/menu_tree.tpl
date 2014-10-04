@@ -1,16 +1,18 @@
 {*
 	menu_tree.tpl	|	P.W.G. Brussee (brussee@live.nl)
 *}
-{SimpleHtml::getMelding()}
-<div class="float-right">
-	<div class="inline"><label for="toon">Toon menu:</label>
-	</div><select name="toon" onchange="location.href='/menubeheer/beheer/'+this.value;">
-		<option selected="selected">kies</option>
-		{foreach from=$menuroots item=item}
-			<option value="{$item->tekst}">{$item->tekst}</option>
-		{/foreach}
-	</select>
-</div>
+{getMelding()}
+{if count($menus) > 1}
+	<div class="float-right">
+		<label>Toon menu:</label>
+		<select name="toon" onchange="location.href = '/menubeheer/beheer/' + this.value;">
+			<option selected="selected">kies</option>
+			{foreach from=$menus item=item}
+				<option value="{$item->tekst}">{$item->tekst}</option>
+			{/foreach}
+		</select>
+	</div>
+{/if}
 <h1>{$titel}</h1>
 <ul class="menubeheer-tree">
 	{if $root}

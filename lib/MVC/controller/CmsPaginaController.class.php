@@ -87,9 +87,9 @@ class CmsPaginaController extends Controller {
 			$pagina->laatst_gewijzigd = getDateTime();
 			$rowcount = $this->model->update($pagina);
 			if ($rowcount > 0) {
-				SimpleHTML::setMelding('Bijgewerkt', 1);
+				setMelding('Bijgewerkt', 1);
 			} else {
-				SimpleHTML::setMelding('Geen wijzigingen', 0);
+				setMelding('Geen wijzigingen', 0);
 			}
 			redirect(CSR_ROOT . '/' . $pagina->naam);
 		} else {
@@ -103,10 +103,10 @@ class CmsPaginaController extends Controller {
 			$this->geentoegang();
 		}
 		if ($this->model->delete($pagina)) {
-			SimpleHTML::setMelding('Pagina ' . $naam . ' succesvol verwijderd', 1);
+			setMelding('Pagina ' . $naam . ' succesvol verwijderd', 1);
 			redirect(CSR_ROOT);
 		} else {
-			SimpleHTML::setMelding('Verwijderen mislukt', -1);
+			setMelding('Verwijderen mislukt', -1);
 			redirect(CSR_ROOT);
 		}
 	}

@@ -1,5 +1,6 @@
 <?php
 
+require_once 'MVC/view/Zijbalk.abstract.php';
 require_once 'MVC/view/HtmlPage.abstract.php';
 require_once 'MVC/view/MenuView.class.php';
 require_once 'MVC/model/MenuModel.class.php';
@@ -16,8 +17,8 @@ require_once 'MVC/model/DragObjectModel.class.php';
 class CsrLayoutPage extends HtmlPage {
 
 	/**
-	 * Zijbalk SimpleHTML
-	 * @var array
+	 * Zijbalk
+	 * @var View[]
 	 */
 	public $zijbalk;
 	/**
@@ -89,7 +90,7 @@ class CsrLayoutPage extends HtmlPage {
 			$this->zijbalk = array();
 		}
 		// negeer zijbalk = false
-		$this->zijbalk = SimpleHTML::addStandaardZijbalk($this->zijbalk);
+		$this->zijbalk = Zijbalk::addStandaardZijbalk($this->zijbalk);
 		if (LidInstellingen::get('zijbalk', 'scrollen') == 'apart scrollen') {
 			$top = 0;
 			$left = 0;
@@ -99,7 +100,7 @@ class CsrLayoutPage extends HtmlPage {
 		$smarty->assign('zijbalk', $this->zijbalk);
 
 		if (DEBUG AND ( LoginModel::mag('P_ADMIN') OR LoginModel::instance()->isSued())) {
-			$smarty->assign('debug', SimpleHTML::getDebug());
+			$smarty->assign('debug', getDebug());
 		}
 
 		if (LoginModel::mag('P_LEDEN_MOD')) {

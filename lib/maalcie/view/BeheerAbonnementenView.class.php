@@ -52,7 +52,7 @@ class BeheerAbonnementenLijstView extends SmartyTemplateView {
 	}
 
 	public function view() {
-		echo '<tr id="maalcie-melding"><td id="maalcie-melding-veld">' . SimpleHTML::getMelding() . '</td></tr>';
+		echo '<tr id="maalcie-melding"><td id="maalcie-melding-veld">' . getMelding() . '</td></tr>';
 		foreach ($this->model as $vanuid => $abonnementen) {
 			$this->smarty->assign('vanuid', $vanuid);
 			$this->smarty->assign('abonnementen', $abonnementen);
@@ -72,7 +72,7 @@ class BeheerAbonnementView extends SmartyTemplateView {
 		$this->smarty->assign('abonnement', $this->model);
 		$this->smarty->assign('uid', $this->model->getUid());
 		$this->smarty->assign('vanuid', $this->model->getVanUid());
-		echo '<td id="maalcie-melding-veld">' . SimpleHTML::getMelding() . '</td>';
+		echo '<td id="maalcie-melding-veld">' . getMelding() . '</td>';
 		$this->smarty->display('maalcie/abonnement/beheer_abonnement_veld.tpl');
 	}
 

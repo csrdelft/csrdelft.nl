@@ -8,7 +8,7 @@
 </div>
 
 <a href="/communicatie/documenten">Documenten</a><h1>{$categorie->getNaam()}</h1>
-<div class="foutje">{SimpleHtml::getMelding()}</div>
+<div class="foutje">{getMelding()}</div>
 
 {if !is_array($categorie->getAll())}
 	Geen documenten in deze categorie.

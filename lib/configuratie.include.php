@@ -83,7 +83,6 @@ require_once 'MVC/view/CsrUbb.class.php';
 require_once 'MVC/view/CsrLayoutPage.class.php';
 require_once 'MVC/view/CsrLayout2Page.class.php';
 require_once 'MVC/view/CsrLayout3Page.class.php';
-require_once 'simplehtml.class.php'; # DEPRECATED
 require_once 'icon.class.php';
 
 # Controller

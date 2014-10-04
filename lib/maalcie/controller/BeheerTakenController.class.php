@@ -90,18 +90,18 @@ class BeheerTakenController extends AclController {
 		$aantal = sizeof($verstuurd);
 		$count = sizeof($errors);
 		if ($count > 0) {
-			SimpleHTML::setMelding($count . ' herinnering' . ($count !== 1 ? 'en' : '') . ' niet kunnen versturen!', -1);
+			setMelding($count . ' herinnering' . ($count !== 1 ? 'en' : '') . ' niet kunnen versturen!', -1);
 			foreach ($errors as $error) {
-				SimpleHTML::setMelding($error->getMessage(), 2); // toon wat fout is gegaan
+				setMelding($error->getMessage(), 2); // toon wat fout is gegaan
 			}
 		}
 		if ($aantal > 0) {
-			SimpleHTML::setMelding($aantal . ' herinnering' . ($aantal !== 1 ? 'en' : '') . ' verstuurd!', 1);
+			setMelding($aantal . ' herinnering' . ($aantal !== 1 ? 'en' : '') . ' verstuurd!', 1);
 			foreach ($verstuurd as $melding) {
-				SimpleHTML::setMelding($melding, 1); // toon wat goed is gegaan
+				setMelding($melding, 1); // toon wat goed is gegaan
 			}
 		} else {
-			SimpleHTML::setMelding('Geen herinneringen verstuurd.', 0);
+			setMelding('Geen herinneringen verstuurd.', 0);
 		}
 		redirect(Instellingen::get('taken', 'url'));
 	}
@@ -209,7 +209,7 @@ class BeheerTakenController extends AclController {
 
 	public function leegmaken() {
 		$aantal = CorveeTakenModel::prullenbakLeegmaken();
-		SimpleHTML::setMelding($aantal . ($aantal === 1 ? ' taak' : ' taken') . ' definitief verwijderd.', ($aantal === 0 ? 0 : 1));
+		setMelding($aantal . ($aantal === 1 ? ' taak' : ' taken') . ' definitief verwijderd.', ($aantal === 0 ? 0 : 1));
 		redirect(Instellingen::get('taken', 'url') . '/prullenbak');
 	}
 

@@ -94,7 +94,7 @@ class AgendaItemForm extends ModalForm {
 			$naam = $tijden[$i * 2 + 1];
 			$standaard_tijd = 'standaard_tijd_' . ($i + 1);
 			if (!Instellingen::has('agenda', $standaard_tijd)) {
-				SimpleHTML::setMelding($standaard_tijd . ' "' . $naam . '" is niet gedefinieerd', -1);
+				setMelding($standaard_tijd . ' "' . $naam . '" is niet gedefinieerd', -1);
 				continue;
 			}
 			$tijd = explode('-', Instellingen::get('agenda', $standaard_tijd));

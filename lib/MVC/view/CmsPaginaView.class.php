@@ -25,7 +25,7 @@ class CmsPaginaView implements View {
 	}
 
 	public function view() {
-		echo SimpleHTML::getMelding();
+		echo getMelding();
 		if ($this->pagina->magBewerken()) {
 			echo '<a href="/pagina/bewerken/' . $this->pagina->naam . '" class="knop float-right"title="Bewerk pagina&#013;' . $this->pagina->laatst_gewijzigd . '">' . Icon::getTag('bewerken') . '</a>';
 		}
