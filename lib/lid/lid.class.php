@@ -642,14 +642,14 @@ class Lid implements Serializable, Agendeerbaar {
 	}
 
 	/**
-	 * Vraag SocCie saldo aan SocCie systeem
+	 * Vraag SocCie saldo aan SocCie systeem (staat gewoon in klant-tabel)
 	 */
 	public function getSoccieSaldo() {
 		return Database::instance()->sqlSelect(array('saldo'), 'socCieKlanten', 'stekUID = ?', array($this->uid), null, null, 1)->fetchColumn() / (float) 100;
 	}
 
 	/**
-	 * Vraag MaalCie saldo aan MaalCie systeem (helaas niet zo mooi, staat gewoon in lid-tabel)
+	 * Vraag MaalCie saldo aan MaalCie systeem (staat gewoon in lid-tabel)
 	 */
 	public function getMaalCieSaldo() {
 		return $this->profiel['maalcieSaldo'];

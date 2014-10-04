@@ -109,7 +109,7 @@ class CsrLayoutPage extends HtmlPage {
 
 			require_once 'savedquery.class.php';
 			$smarty->assign('queues', array(
-				'meded' => new SavedQuery(62) //ROW ID QUEUE MEDEDELINGEN
+				'Mededelingen' => new SavedQuery(62)
 			));
 		}
 
