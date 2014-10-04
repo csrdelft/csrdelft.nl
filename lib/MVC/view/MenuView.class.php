@@ -27,7 +27,7 @@ class MainMenuView extends MenuView {
 		parent::view();
 		$instantsearch = array();
 		foreach (MenuModel::instance()->find() as $item) {
-			if ($item->magBekijken() AND $item->parent_id > 0) {
+			if ($item->zichtbaar AND $item->item_id > 0 AND $item->magBekijken()) {
 				$instantsearch[$item->tekst] = $item->link;
 			}
 		}

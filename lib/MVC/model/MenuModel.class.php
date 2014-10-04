@@ -47,8 +47,8 @@ class MenuModel extends PersistenceModel {
 		}
 		// haal alle menu items op en groupeer op parent id
 		$items = group_by('parent_id', $this->find($where, array(), 'prioriteit ASC'));
-		// leeg menu?
-		if (empty($items)) {
+		// totaal geen menus of niet bestaand menu?
+		if (!isset($items[0]) OR ! array_key_exists($naam, $items[0])) {
 			$item = $this->newMenuItem(0);
 			$item->tekst = $naam;
 			return $item;
