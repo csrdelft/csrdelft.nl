@@ -3145,10 +3145,8 @@ lib/MVC/model/entity/groepen/Werkgroep.class.php -text
 lib/MVC/model/entity/groepen/Woonoord.class.php -text
 lib/MVC/model/entity/maalcie/CorveeFunctie.class.php -text
 lib/MVC/model/entity/maalcie/CorveeKwalificatie.class.php -text
-lib/MVC/model/entity/soccie/SocCieKlant.class.php -text
 lib/MVC/model/maalcie/FunctiesModel.class.php -text
 lib/MVC/model/maalcie/KwalificatiesModel.class.php -text
-lib/MVC/model/soccie/SocCieKlantenModel.class.php -text
 lib/MVC/view/AgendaView.class.php -text
 lib/MVC/view/BijbelroosterView.class.php -text
 lib/MVC/view/CmsPaginaView.class.php -text

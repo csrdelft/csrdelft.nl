@@ -68,7 +68,7 @@ class FavorietenMenuView extends SmartyTemplateView {
 	}
 
 	public function view() {
-		//$this->smarty->display('MVC/menu/quicknav.tpl');
+		
 	}
 
 }

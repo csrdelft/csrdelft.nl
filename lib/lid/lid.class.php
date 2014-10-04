@@ -645,8 +645,7 @@ class Lid implements Serializable, Agendeerbaar {
 	 * Vraag SocCie saldo aan SocCie systeem
 	 */
 	public function getSoccieSaldo() {
-		require_once 'MVC/model/soccie/SocCieKlantenModel.class.php';
-		return SocCieKlantenModel::instance()->getSaldoVoorLid($this->uid);
+		return Database::instance()->sqlSelect(array('saldo'), 'socCieKlanten', 'stekUID = ?', array($this->uid), null, null, 1)->fetchColumn() / (float) 100;
 	}
 
 	/**
