@@ -59,18 +59,20 @@ class MenuItemForm extends ModalForm {
 		$this->css_classes[] = 'ReloadPage';
 
 		$fields['pid'] = new RequiredIntField('parent_id', $item->parent_id, 'Parent ID', 0);
-		$fields['pid']->title = 'Item id van element 1 niveau hoger';
+		$fields['pid']->title = 'ID van het menu-item waar dit item onder valt';
 
 		$fields['prio'] = new IntField('prioriteit', $item->prioriteit, 'Volgorde');
-		$fields['prio']->title = 'Sortering van items';
+		$fields['prio']->title = 'Volgorde van menu-items';
 
 		$fields[] = new TextField('tekst', $item->tekst, 'Korte aanduiding', 50);
 
 		$fields['url'] = new TextField('link', $item->link, 'Link');
-		$fields['url']->title = 'URL als er op het menu item geklikt wordt';
+		$fields['url']->title = 'URL als er op het menu-item geklikt wordt';
 
-		$fields['r'] = new RechtenField('rechten_bekijken', $item->rechten_bekijken, 'Lees-rechten');
-		$fields['r']->title = 'Wie mag dit menu item zien';
+		if (LoginModel::mag('P_ADMIN')) {
+			$fields['r'] = new RechtenField('rechten_bekijken', $item->rechten_bekijken, 'Lees-rechten');
+			$fields['r']->title = 'Wie mag dit menu-item zien';
+		}
 
 		$fields['z'] = new SelectField('zichtbaar', ($item->zichtbaar ? '1' : '0'), 'Tonen', array('1' => 'Zichtbaar', '0' => 'Verborgen'));
 		$fields['z']->title = 'Wel of niet tonen';
