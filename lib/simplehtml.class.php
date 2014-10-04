@@ -79,7 +79,7 @@ abstract class SimpleHTML implements View {
 			array_unshift($zijbalk, new QuickNavigateMenuView());
 		}
 		// Agenda
-		if (LoginModel::mag('P_AGENDA_READ') && LidInstellingen::get('zijbalk', 'agendaweken') > 0) {
+		if (LoginModel::mag('P_AGENDA_READ') && LidInstellingen::get('zijbalk', 'agendaweken') > 0 && LidInstellingen::get('zijbalk', 'agenda_max') > 0) {
 			require_once 'MVC/model/AgendaModel.class.php';
 			$zijbalk[] = new AgendaZijbalkView(AgendaModel::instance(), LidInstellingen::get('zijbalk', 'agendaweken'));
 		}

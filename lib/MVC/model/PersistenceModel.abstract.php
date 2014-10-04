@@ -41,7 +41,7 @@ abstract class PersistenceModel implements Persistence {
 	 * @param string $orderby
 	 * @param int $limit max amount of results
 	 * @param int $start results from index
-	 * @return PersistentEntity[]
+	 * @return PDOStatement
 	 */
 	public function find($criteria = null, array $criteria_params = array(), $orderby = null, $groupby = null, $limit = null, $start = 0) {
 		$orm = static::orm;
@@ -124,7 +124,7 @@ abstract class PersistenceModel implements Persistence {
 	 * Requires positional values.
 	 * 
 	 * @param array $primary_key_values
-	 * @return PersistentEntity or FALSE on failure
+	 * @return PersistentEntity|false
 	 */
 	protected function retrieveByPrimaryKey(array $primary_key_values) {
 		$orm = static::orm;

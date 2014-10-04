@@ -10,11 +10,15 @@
  */
 class MenuBeheerView extends SmartyTemplateView {
 
-	private $menus;
+	/**
+	 * Lijst van menu roots
+	 * @var PDOStatement
+	 */
+	private $menuroots;
 
-	public function __construct(MenuItem $tree_root, $menus) {
+	public function __construct(MenuItem $tree_root, $menuroots) {
 		parent::__construct($tree_root);
-		$this->menus = $menus;
+		$this->menuroots = $menuroots;
 		if ($tree_root->tekst === '') {
 			$this->titel = 'Menubeheer';
 			$this->model = false;
@@ -25,7 +29,7 @@ class MenuBeheerView extends SmartyTemplateView {
 
 	public function view() {
 		$this->smarty->assign('root', $this->model);
-		$this->smarty->assign('menus', $this->menus);
+		$this->smarty->assign('menuroots', $this->menuroots);
 		$this->smarty->display('MVC/menu/beheer/menu_tree.tpl');
 	}
 

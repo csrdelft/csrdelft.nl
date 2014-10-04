@@ -33,6 +33,9 @@
 					<ul class="sub-menu">
 						{foreach from=$item->children item=child}
 							<li><a href="{$child->link}" title="{$child->tekst}"{if $child->current} class="current"{/if}>{$child->tekst}</a></li>
+							{foreach from=$child->children item=level3}
+								<li class="verborgen"><a href="{$level3->link}" title="{$level3->tekst}"{if $level3->current} class="current"{/if}>{$level3->tekst}</a></li>
+							{/foreach}
 						{/foreach}
 					</ul>
 				{/if}

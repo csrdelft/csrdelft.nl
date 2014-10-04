@@ -36,7 +36,7 @@ class MenuBeheerController extends AclController {
 
 	public function beheer($menu_naam = '') {
 		$menu_naam = str_replace('%20', ' ', $menu_naam); // eigenlijk rawurldecode()
-		$body = new MenuBeheerView($this->model->getMenuTree($menu_naam, true), $this->model->getAlleMenus());
+		$body = new MenuBeheerView($this->model->getMenuTree($menu_naam, true), $this->model->getAlleMenuRoots());
 		$this->view = new CsrLayoutPage($body);
 		$this->view->addStylesheet('/layout/css/menubeheer');
 	}

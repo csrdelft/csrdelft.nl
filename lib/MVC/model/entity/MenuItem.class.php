@@ -104,7 +104,7 @@ class MenuItem extends PersistentEntity {
 	}
 
 	public function magBekijken() {
-		return LoginModel::mag($this->rechten_bekijken);
+		return $this->zichtbaar AND LoginModel::mag($this->rechten_bekijken);
 	}
 
 }

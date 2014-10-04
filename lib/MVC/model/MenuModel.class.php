@@ -11,40 +11,75 @@ class MenuModel extends PersistenceModel {
 	const orm = 'MenuItem';
 
 	protected static $instance;
+	/**
+	 * Menus[$beheer] by name
+	 * @var array
+	 */
+	private $menus = array();
 
 	/**
-	 * Lijst van alle menus.
+	 * Array van alle menu roots.
 	 * 
 	 * @return PDOStatement
 	 */
-	public function getAlleMenus() {
-		$sql = 'SELECT tekst FROM menus WHERE parent_id = 0';
-		$query = Database::instance()->prepare($sql);
-		$query->execute();
-		$query->setFetchMode(PDO::FETCH_COLUMN, 0);
-		return $query;
+	public function getAlleMenuRoots() {
+		return $this->find('parent_id = 0');
 	}
 
 	/**
 	 * Haalt alle menu-items op (die zichtbaar zijn voor de gebruiker).
 	 * Filtert de menu-items met de permissies van het ingelogede lid.
 	 * 
-	 * @param string $menu_naam
+	 * @param string $naam
 	 * @param boolean $beheer
 	 * @return MenuItem[]
 	 */
-	public function getMenuTree($menu_naam, $beheer = false) {
-		// get root
-		$where = 'parent_id = 0 AND tekst = ?';
-		$params = array($menu_naam);
-		$root = $this->find($where, $params)->fetch(); // should be only 1
-		if (!$root) {
+	public function getMenuTree($naam, $beheer = false) {
+		// haal uit cache?
+		if (isset($naam, $this->menus[$beheer])) {
+			return $this->menus[$beheer][$naam];
+		}
+		// haal alle menu items op en groupeer op parent id
+		$items = group_by('parent_id', $this->find());
+		// leeg menu?
+		if (empty($items)) {
 			$item = $this->newMenuItem(0);
-			$item->tekst = $menu_naam;
+			$item->tekst = $naam;
 			return $item;
 		}
-		$this->getChildren($root, $beheer);
+		// voor alle menus de tree opbouwen
+		foreach ($items[0] as $i => $root) {
+			$this->setChildren($root, $items, $beheer);
+			// opruimen uit root lijst
+			unset($items[0][$i]);
+			// zet in cache
+			$this->menus[$beheer][$naam] = $root;
+		}
 		return $root;
+	}
+
+	private function setChildren(MenuItem $parent, &$items, $beheer) {
+		// geen items met dit id = geen kinderen
+		if (!array_key_exists($parent->item_id, $items)) {
+			return;
+		}
+		// zet kinderen
+		$parent->children = $items[$parent->item_id];
+		// kind kan maar 1 parent hebben
+		unset($items[$parent->item_id]);
+		// voor elk kind ook kinderen zetten
+		foreach ($parent->children as $i => $child) {
+			// is dit menu item actief?
+			$child->current = startsWith(REQUEST_URI, $child->link);
+			// onthoud om parent ook op actief te zetten
+			$parent->current |= $child->current;
+			// mag gebruiker menu item zien?
+			if ($beheer OR $child->magBekijken()) {
+				$this->setChildren($child, $items, $beheer);
+			} else {
+				unset($parent->children[$i]);
+			}
+		}
 	}
 
 	public function getChildren(MenuItem $parent, $beheer = false) {

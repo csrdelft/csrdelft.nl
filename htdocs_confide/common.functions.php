@@ -60,7 +60,7 @@ function betweenString($string, $start, $end) {
  * @return array $out
  */
 function group_by($prop, $in, $del = true) {
-	$del&=is_array($in);
+	$del &= is_array($in);
 	$out = array();
 	foreach ($in as $i => $obj) {
 		$out[$obj->$prop][] = $obj; // add to array

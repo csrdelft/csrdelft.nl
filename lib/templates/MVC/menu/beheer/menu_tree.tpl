@@ -4,10 +4,10 @@
 {SimpleHtml::getMelding()}
 <div class="float-right">
 	<div class="inline"><label for="toon">Toon menu:</label>
-	</div><select name="toon" onchange="location.href = '/menubeheer/beheer/' + this.value;">
+	</div><select name="toon" onchange="location.href='/menubeheer/beheer/'+this.value;">
 		<option selected="selected">kies</option>
-		{foreach from=$menus item=menu}
-			<option value="{$menu}">{$menu}</option>
+		{foreach from=$menuroots item=item}
+			<option value="{$item->tekst}">{$item->tekst}</option>
 		{/foreach}
 	</select>
 </div>
