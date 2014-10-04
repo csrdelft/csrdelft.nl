@@ -32,16 +32,20 @@ class MenuBeheerController extends AclController {
 		if ($this->hasParam(2)) {
 			$this->action = $this->getParam(2);
 		}
+		// fetch menu naam
 		if ($this->action === 'beheer' AND $this->hasParam(3)) {
 			$naam = $this->getParam(3);
 		} else {
 			$naam = filter_input(INPUT_POST, 'menu');
 		}
+		// check beheer rechten
 		if (empty($naam) OR $naam === 'main') {
+			// P_ADMIN voor main
 			if (!LoginModel::mag('P_ADMIN')) {
 				$this->geentoegang();
 			}
 		} else {
+			// lidnummer voor persoonlijk menu
 			if (!LoginModel::mag($naam)) {
 				$this->geentoegang();
 			}

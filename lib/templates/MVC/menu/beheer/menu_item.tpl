@@ -3,7 +3,7 @@
 *}
 <li id="menu-item-{$item->item_id}" parentid="{$item->parent_id}" class="menu-item">
 	<span class="lichtgrijs">{$item->prioriteit}</span>
-	<a href="/menubeheer/bewerken/{$item->item_id}" data="menu={$root->tekst}" class="knop post modal" title="Dit agenda-item bewerken">{icon get="bewerken"}</a>
+	<a href="/menubeheer/bewerken/{$item->item_id}" data="menu={$root->tekst}" class="knop post modal" title="Dit menu-item bewerken">{icon get="bewerken"}</a>
 	<a href="/menubeheer/toevoegen/{$item->item_id}" data="menu={$root->tekst}" class="knop post modal" title="Sub-menu-item toevoegen">{icon get="add"}</a>
 	<a href="/menubeheer/zichtbaar/{$item->item_id}" data="menu={$root->tekst}" class="knop post ReloadPage" title="Menu-item is nu {if !$item->zichtbaar}on{/if}zichtbaar"><img src="{$CSR_PICS}/famfamfam/{if $item->zichtbaar}eye{else}shading{/if}.png" /></a>
 	<span>{$item->tekst}</span>
