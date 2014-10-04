@@ -7,8 +7,24 @@ jQuery(document).ready(function ($) {
 	var $content_wrapper = $('.cd-main-content');
 	var $header = $('header');
 
+	// Close ingelogd menu
+	var close_ingelogd_menu = function () {
+		$ingelogd_menu_trigger.removeClass('ingelogd-menu-is-open');
+		$ingelogd_menu.slideUp(200);
+	};
+
+	// Close lateral menu
+	var close_lateral_menu = function () {
+		$lateral_menu_trigger.removeClass('is-clicked');
+		$header.removeClass('lateral-menu-is-open');
+		$content_wrapper.removeClass('lateral-menu-is-open');
+		$lateral_menu.removeClass('lateral-menu-is-open');
+	};
+
 	// Open ingelogd menu on hover over trigger
 	var open_ingelogd_menu = function () {
+		//close_lateral_menu();
+
 		$ingelogd_menu_trigger.addClass('ingelogd-menu-is-open');
 		$ingelogd_menu.slideDown(200);
 	};
@@ -16,6 +32,8 @@ jQuery(document).ready(function ($) {
 
 	// Open lateral menu on hover over trigger
 	var open_lateral_menu = function () {
+		//close_ingelogd_menu();
+
 		$lateral_menu_trigger.addClass('is-clicked');
 		$header.addClass('lateral-menu-is-open');
 		$content_wrapper.addClass('lateral-menu-is-open');
@@ -28,8 +46,11 @@ jQuery(document).ready(function ($) {
 		if (!$(event.target).is('#cd-ingelogd-menu a, #cd-ingelogd-menu a span')) {
 			event.preventDefault();
 
-			$ingelogd_menu_trigger.toggleClass('ingelogd-menu-is-open');
-			$ingelogd_menu.slideToggle(200);
+			if ($ingelogd_menu_trigger.hasClass('ingelogd-menu-is-open')) {
+				close_ingelogd_menu();
+			} else {
+				open_ingelogd_menu();
+			}
 		}
 	});
 
@@ -37,24 +58,19 @@ jQuery(document).ready(function ($) {
 	$lateral_menu_trigger.on('click', function (event) {
 		event.preventDefault();
 
-		$lateral_menu_trigger.toggleClass('is-clicked');
-		$header.toggleClass('lateral-menu-is-open');
-		$content_wrapper.toggleClass('lateral-menu-is-open');
-		$lateral_menu.toggleClass('lateral-menu-is-open');
+		if ($lateral_menu_trigger.hasClass('is-clicked')) {
+			close_lateral_menu();
+		} else {
+			open_lateral_menu();
+		}
 	});
 
 	// Close all menus clicking outside the menu itself
 	$content_wrapper.on('click', function (event) {
 		if (!$(event.target).is('#cd-ingelogd-menu-trigger, #cd-ingelogd-menu-trigger span, #cd-lateral-menu-trigger, #cd-lateral-menu-trigger span')) {
-			// Close ingelogd menu
-			$ingelogd_menu_trigger.removeClass('ingelogd-menu-is-open');
-			$ingelogd_menu.slideUp(200);
-
-			// Close lateral menu
-			$lateral_menu_trigger.removeClass('is-clicked');
-			$header.removeClass('lateral-menu-is-open');
-			$content_wrapper.removeClass('lateral-menu-is-open');
-			$lateral_menu.removeClass('lateral-menu-is-open');
+			// Close menus
+			close_ingelogd_menu();
+			close_lateral_menu();
 
 			// Clear value and de-focus instant search field
 			$('#menuZoekveld').val('').blur();
