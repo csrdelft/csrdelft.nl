@@ -23,6 +23,10 @@ abstract class MenuView extends SmartyTemplateView {
 
 class MainMenuView extends MenuView {
 
+	public function __construct() {
+		parent::__construct(MenuModel::instance()->getMenuTree('main'));
+	}
+
 	public function view() {
 		parent::view();
 		$instantsearch = array();
@@ -57,18 +61,6 @@ class BlockMenuView extends MenuView {
 	public function view() {
 		parent::view();
 		$this->smarty->display('MVC/menu/block.tpl');
-	}
-
-}
-
-class FavorietenMenuView extends SmartyTemplateView {
-
-	public function __construct() {
-		parent::__construct(null);
-	}
-
-	public function view() {
-		
 	}
 
 }

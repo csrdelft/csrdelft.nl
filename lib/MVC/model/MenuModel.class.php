@@ -12,10 +12,19 @@ class MenuModel extends PersistenceModel {
 
 	protected static $instance;
 	/**
-	 * Menus[$beheer] by name
+	 * Menus by name
 	 * @var array
 	 */
-	private $menus = array();
+	private $menus;
+
+	protected function __construct() {
+		parent::__construct();
+		$this->loadMenus(array('main', LoginModel::getUid()));
+	}
+
+	public function getMenuRoot($naam) {
+		return $this->find('parent_id = ? AND tekst = ? ', array(0, $naam), null, null, 1)->fetch();
+	}
 
 	/**
 	 * Array van alle menu roots om te beheren
@@ -28,7 +37,7 @@ class MenuModel extends PersistenceModel {
 			if ($root->tekst === 'main' AND ! LoginModel::mag('P_ADMIN')) {
 				continue;
 			}
-			if ($root->magBekijken()) {
+			if ($root->magBeheren()) {
 				$roots[] = $root;
 			}
 		}
@@ -40,47 +49,46 @@ class MenuModel extends PersistenceModel {
 	 * Filtert de menu-items met de permissies van het ingelogede lid.
 	 * 
 	 * @param string $naam
-	 * @param boolean $beheer
 	 * @return MenuItem[]
 	 */
-	public function getMenuTree($naam, $beheer = false) {
+	public function getMenuTree($naam) {
 		// haal uit cache?
-		if (isset($naam, $this->menus[$beheer])) {
-			return $this->menus[$beheer][$naam];
+		if (!isset($this->menus[$naam])) {
+			$this->loadMenus(array($naam));
 		}
-		// in beheer modus ook onzichtbare items tonen
-		if ($beheer) {
-			$where = null;
-		} else {
-			$where = 'zichtbaar = TRUE';
+		// niet bestaand menu?
+		if (!isset($this->menus[$naam])) {
+			$item = $this->newMenuItem(0);
+			$item->tekst = $naam;
+			$item->item_id = (int) $this->create($item);
+			$this->menus[$naam] = $item;
 		}
+		return $this->menus[$naam];
+	}
+
+	private function loadMenus(array $menus) {
 		// haal alle menu items op en groepeer op parent id
-		$items = group_by('parent_id', $this->find($where, array(), 'prioriteit ASC'));
+		$items = group_by('parent_id', $this->find(null, array(), 'prioriteit ASC'));
 		// totaal geen menu roots?
 		if (isset($items[0])) {
 			// voor alle menus de tree opbouwen
 			foreach ($items[0] as $i => $root) {
-				// is dit het gevraagde menu?
-				if ($root->tekst === $naam) {
-					$this->setChildren($root, $items, $beheer);
+				// is dit een van de gevraagde menus?
+				if (in_array($root->tekst, $menus)) {
+					$this->setChildren($root, $items);
 					// zet in cache
-					$this->menus[$beheer][$root->tekst] = $root;
-					break;
+					$this->menus[$root->tekst] = $root;
+				} else {
+					// directe kinderen uit lijst verwijderen
+					unset($items[$root->item_id]);
 				}
 				// opruimen uit root lijst
 				unset($items[0][$i]);
 			}
 		}
-		// niet bestaand menu?
-		if (!isset($this->menus[$beheer][$naam])) {
-			$item = $this->newMenuItem(0);
-			$item->tekst = $naam;
-			return $item;
-		}
-		return $this->menus[$beheer][$naam];
 	}
 
-	private function setChildren(MenuItem $parent, &$items, $beheer) {
+	private function setChildren(MenuItem $parent, &$items) {
 		// geen items met dit id = geen kinderen
 		if (!array_key_exists($parent->item_id, $items)) {
 			return;
@@ -91,33 +99,17 @@ class MenuModel extends PersistenceModel {
 		unset($items[$parent->item_id]);
 		// voor elk kind ook kinderen zetten
 		foreach ($parent->children as $i => $child) {
-			// is dit menu item current?
-			$child->current = startsWith(REQUEST_URI, $child->link);
-			// parent is current als child current is
-			$parent->current |= $child->current;
+			// is dit menu item active?
+			$child->active = startsWith(REQUEST_URI, $child->link);
+			// parent is active als child active is
+			$parent->active |= $child->active;
 			// mag gebruiker menu item zien?
-			if ($beheer OR $child->magBekijken()) {
-				$this->setChildren($child, $items, $beheer);
+			if ($child->magBekijken()) {
+				$this->setChildren($child, $items);
 			} else {
 				unset($parent->children[$i]);
 			}
 		}
-	}
-
-	public function getChildren(MenuItem $parent, $beheer = false) {
-		$where = 'parent_id = ?' . ($beheer ? '' : ' AND zichtbaar = true');
-		$parent->children = $this->find($where, array($parent->item_id), 'prioriteit ASC')->fetchAll();
-		$child_current = false;
-		foreach ($parent->children as $i => $child) {
-			if (!$beheer AND ! $child->magBekijken()) {
-				unset($parent->children[$i]);
-				continue;
-			}
-			$child->current = startsWith(REQUEST_URI, $child->link);
-			$child_current |= $child->current;
-			$this->getChildren($child, $beheer);
-		}
-		$parent->current |= $child_current; // make parent of current child also current
 	}
 
 	public function getMenuItem($id) {
@@ -129,8 +121,8 @@ class MenuModel extends PersistenceModel {
 		$item->parent_id = $parent_id;
 		$item->prioriteit = 0;
 		$item->link = '/';
-		$item->rechten_bekijken = 'P_PUBLIC';
-		$item->zichtbaar = false;
+		$item->rechten_bekijken = LoginModel::getUid();
+		$item->zichtbaar = true;
 		return $item;
 	}
 

@@ -50,7 +50,7 @@ class MenuItem extends PersistentEntity {
 	 * State of menu GUI
 	 * @var boolean
 	 */
-	public $current;
+	public $active;
 	/**
 	 * De sub-items van dit menu-item
 	 * @var array
@@ -105,6 +105,10 @@ class MenuItem extends PersistentEntity {
 
 	public function magBekijken() {
 		return LoginModel::mag($this->rechten_bekijken);
+	}
+
+	public function magBeheren() {
+		return $this->rechten_bekijken == LoginModel::getUid() OR LoginModel::mag('P_ADMIN');
 	}
 
 }

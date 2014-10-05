@@ -1,7 +1,9 @@
 <ul class="horizontal">
-{foreach from=$root->children item=item}
-<li class="item{if $item->current} active{/if}">&raquo; <a href="{$item->link}" title="{$item->tekst}">{$item->tekst}</a></li>
-{/foreach}
+	{foreach from=$root->children item=item}
+		{if $item->zichtbaar}
+			<li class="item{if $item->active} active{/if}">&raquo; <a href="{$item->link}" title="{$item->tekst}">{$item->tekst}</a></li>
+		{/if}
+	{/foreach}
 </ul>
 <hr/>
 <table><tr id="melding"><td id="melding-veld">{getMelding()}</td></tr></table>

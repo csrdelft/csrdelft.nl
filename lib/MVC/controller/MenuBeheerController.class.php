@@ -32,35 +32,27 @@ class MenuBeheerController extends AclController {
 		if ($this->hasParam(2)) {
 			$this->action = $this->getParam(2);
 		}
-		// fetch menu naam
-		if ($this->action === 'beheer' AND $this->hasParam(3)) {
-			$naam = $this->getParam(3);
-		} else {
-			$naam = filter_input(INPUT_POST, 'menu');
-		}
-		// check beheer rechten
-		if (empty($naam) OR $naam === 'main') {
-			// P_ADMIN voor main
-			if (!LoginModel::mag('P_ADMIN')) {
-				$this->geentoegang();
-			}
-		} else {
-			// lidnummer voor persoonlijk menu
-			if (!LoginModel::mag($naam)) {
-				$this->geentoegang();
-			}
-		}
 		parent::performAction($this->getParams(3));
 	}
 
-	public function beheer($naam = '') {
-		$body = new MenuBeheerView($this->model->getMenuTree($naam, LoginModel::mag('P_ADMIN')));
+	public function beheer($menu_name) {
+		if ($menu_name != LoginModel::getUid() AND ! LoginModel::mag('P_ADMIN')) {
+			$this->geentoegang();
+		}
+		$root = $this->model->getMenuTree($menu_name, true);
+		if (!$root OR ! $root->magBeheren()) {
+			$this->geentoegang();
+		}
+		$body = new MenuBeheerView($root);
 		$this->view = new CsrLayoutPage($body);
 		$this->view->addStylesheet('/layout/css/menubeheer');
 	}
 
 	public function toevoegen($parent_id) {
 		$item = $this->model->newMenuItem((int) $parent_id);
+		if (!$item OR ! $item->magBeheren()) {
+			$this->geentoegang();
+		}
 		$this->view = new MenuItemForm($item, $this->action, (int) $parent_id); // fetches POST values itself
 		if ($this->view->validate()) {
 			$item->item_id = (int) $this->model->create($item);
@@ -70,7 +62,10 @@ class MenuBeheerController extends AclController {
 	}
 
 	public function bewerken($item_id) {
-		$item = $this->model->getMenuItem($item_id);
+		$item = $this->model->getMenuItem((int) $item_id);
+		if (!$item OR ! $item->magBeheren()) {
+			$this->geentoegang();
+		}
 		$this->view = new MenuItemForm($item, $this->action, $item->item_id); // fetches POST values itself
 		if ($this->view->validate()) {
 			$rowcount = $this->model->update($item);
@@ -84,7 +79,10 @@ class MenuBeheerController extends AclController {
 	}
 
 	public function verwijderen($item_id) {
-		$item = $this->model->getMenuItem($item_id);
+		$item = $this->model->getMenuItem((int) $item_id);
+		if (!$item OR ! $item->magBeheren()) {
+			$this->geentoegang();
+		}
 		$rowcount = $this->model->removeMenuItem($item);
 		setMelding($item->tekst . ' verwijderd', 1);
 		if ($rowcount > 0) {
@@ -94,7 +92,10 @@ class MenuBeheerController extends AclController {
 	}
 
 	public function zichtbaar($item_id) {
-		$item = $this->model->getMenuItem($item_id);
+		$item = $this->model->getMenuItem((int) $item_id);
+		if (!$item OR ! $item->magBeheren()) {
+			$this->geentoegang();
+		}
 		$item->zichtbaar = !$item->zichtbaar;
 		$rowcount = $this->model->update($item);
 		if ($rowcount > 0) {

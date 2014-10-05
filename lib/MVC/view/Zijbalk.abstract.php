@@ -15,7 +15,9 @@ abstract class Zijbalk {
 			array_unshift($zijbalk, new IsHetAlContent(LidInstellingen::get('zijbalk', 'ishetal')));
 		}
 		// Favorieten menu
-		array_unshift($zijbalk, new FavorietenMenuView());
+		if (LidInstellingen::get('zijbalk', 'favorieten') == 'ja') {
+			array_unshift($zijbalk, new BlockMenuView(MenuModel::instance()->getMenuTree(LoginModel::getUid())));
+		}
 		// Agenda
 		if (LoginModel::mag('P_AGENDA_READ') && LidInstellingen::get('zijbalk', 'agendaweken') > 0 && LidInstellingen::get('zijbalk', 'agenda_max') > 0) {
 			require_once 'MVC/model/AgendaModel.class.php';

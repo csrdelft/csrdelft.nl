@@ -27,19 +27,25 @@
 	</ul>
 	<ul class="cd-navigation">
 		{foreach from=$root->children item=item}
-			<li class="{if $item->hasChildren()}item-has-children{/if} {if $item->current}current{/if}">
-				<a href="{$item->link}" title="{$item->tekst}">{$item->tekst}</a>
-				{if $item->hasChildren()}
-					<ul class="sub-menu">
-						{foreach from=$item->children item=child}
-							<li><a href="{$child->link}" title="{$child->tekst}"{if $child->current} class="current"{/if}>{$child->tekst}</a></li>
-							{foreach from=$child->children item=level3}
-								<li class="verborgen"><a href="{$level3->link}" title="{$level3->tekst}"{if $level3->current} class="current"{/if}>{$level3->tekst}</a></li>
+			{if $item->zichtbaar}
+				<li class="{if $item->hasChildren()}item-has-children{/if} {if $item->active}active{/if}">
+					<a href="{$item->link}" title="{$item->tekst}">{$item->tekst}</a>
+					{if $item->hasChildren()}
+						<ul class="sub-menu">
+							{foreach from=$item->children item=child}
+								{if $child->zichtbaar}
+									<li><a href="{$child->link}" title="{$child->tekst}"{if $child->active} class="active"{/if}>{$child->tekst}</a></li>
+								{/if}
+								{foreach from=$child->children item=level3}
+									{if $level3->zichtbaar}
+										<li class="verborgen"><a href="{$level3->link}" title="{$level3->tekst}"{if $level3->active} class="active"{/if}>{$level3->tekst}</a></li>
+									{/if}
+								{/foreach}
 							{/foreach}
-						{/foreach}
-					</ul>
-				{/if}
-			</li>
+						</ul>
+					{/if}
+				</li>
+			{/if}
 		{/foreach}
 	</ul>
 </nav>

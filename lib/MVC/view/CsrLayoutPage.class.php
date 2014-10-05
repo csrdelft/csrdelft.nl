@@ -82,7 +82,7 @@ class CsrLayoutPage extends HtmlPage {
 		$smarty->assign('stylesheets', $this->getStylesheets());
 		$smarty->assign('scripts', $this->getScripts());
 		$smarty->assign('titel', $this->getTitel());
-		$smarty->assign('mainmenu', new MainMenuView(MenuModel::instance()->getMenuTree('main')));
+		$smarty->assign('mainmenu', new MainMenuView());
 		$smarty->assign('modal', $this->modal);
 		$smarty->assign('body', $this->getBody());
 

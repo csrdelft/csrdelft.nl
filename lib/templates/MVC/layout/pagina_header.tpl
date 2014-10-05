@@ -22,6 +22,7 @@
 							</a>
 						</li>
 						<li><a href="/instellingen">Instellingen</a></li>
+						<li><a href="/menubeheer/beheer/{LoginModel::getUid()}">Favorieten</a></li>
 						{if LoginModel::mag('P_LEDEN_MOD')}
 							<li><a href="/forum/wacht">Forum: {$forumcount}</a></li>
 							{foreach from=$queues item=queue key=name}

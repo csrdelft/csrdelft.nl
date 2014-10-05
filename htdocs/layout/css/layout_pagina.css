@@ -180,7 +180,7 @@ Top navigation
 	color: #E8CF2A;
 	text-decoration: none;
 }
-#cd-top-nav a.current, #cd-top-nav a.current:hover {
+#cd-top-nav a.active, #cd-top-nav a.active:hover {
 	background-color: #E8CF2A;
 	color: #333333;
 }
@@ -318,7 +318,7 @@ Lateral navigation
 	color: #E8CF2A;
 	text-decoration: none;
 }
-#cd-lateral-nav a.current, #cd-lateral-nav a.current:hover {
+#cd-lateral-nav a.active, #cd-lateral-nav a.active:hover {
 	background-color: #E8CF2A;
 	color: #333333;
 }
