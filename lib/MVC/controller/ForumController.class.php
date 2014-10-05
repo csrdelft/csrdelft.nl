@@ -408,9 +408,13 @@ class ForumController extends Controller {
 			$value = !$draad->$property;
 		} elseif ($property === 'forum_id' OR $property === 'gedeeld_met') {
 			$value = (int) filter_input(INPUT_POST, $property, FILTER_SANITIZE_NUMBER_INT);
-			$deel = ForumDelenModel::instance()->getForumDeel($value);
-			if (!$deel->magModereren()) {
-				$this->geentoegang();
+			if ($value !== 0 OR $property === 'forum_id') {
+				$deel = ForumDelenModel::instance()->getForumDeel($value);
+				if (!$deel->magModereren()) {
+					$this->geentoegang();
+				}
+			} else {
+				$value = null;
 			}
 		} elseif ($property === 'titel') {
 			$value = trim(filter_input(INPUT_POST, $property, FILTER_SANITIZE_STRING));
