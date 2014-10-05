@@ -51,7 +51,7 @@ class MenuItemForm extends ModalForm {
 
 		$fields['pid'] = new RequiredIntField('parent_id', $item->parent_id, 'Parent ID', 0);
 		$fields['pid']->title = 'ID van het menu-item waar dit item onder valt';
-		if (!LoginModel::mag('P_ADMIN')) {
+		if (!LoginModel::mag('P_ADMIN') OR $id === 'favoriet') {
 			$fields['pid']->hidden = true;
 			$fields['pid']->locked = true;
 		}
@@ -66,7 +66,7 @@ class MenuItemForm extends ModalForm {
 
 		$fields['r'] = new RechtenField('rechten_bekijken', $item->rechten_bekijken, 'Lees-rechten');
 		$fields['r']->title = 'Wie mag dit menu-item zien';
-		if (!LoginModel::mag('P_ADMIN')) {
+		if (!LoginModel::mag('P_ADMIN') OR $id === 'favoriet') {
 			$fields['r']->hidden = true;
 			$fields['r']->locked = true;
 		}
