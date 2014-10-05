@@ -123,7 +123,6 @@ class MenuModel extends PersistenceModel {
 		$item = new MenuItem();
 		$item->parent_id = $parent_id;
 		$item->prioriteit = 0;
-		$item->link = '/';
 		$item->rechten_bekijken = LoginModel::getUid();
 		$item->zichtbaar = true;
 		return $item;
