@@ -726,12 +726,18 @@ class UrlField extends TextField {
 		if ($this->value == '') {
 			return true;
 		}
-		// controleren of het een geldige url is...
-		if (!is_utf8($this->value) OR ! preg_match('#([\w]+?://[^ "\n\r\t<]*?)#is', $this->value)) {
-			$this->error = 'Ongeldige karakters';
+		// controleren of het een geldige url is
+		if (!url_like($this->value)) {
+			$this->error = 'Geen geldige url';
 		}
 		return $this->error === '';
 	}
+
+}
+
+class RequiredUrlField extends UrlField {
+
+	public $not_null = true;
 
 }
 
