@@ -60,6 +60,9 @@ class MenuModel extends PersistenceModel {
 		if (!isset($this->menus[$naam])) {
 			$item = $this->newMenuItem(0);
 			$item->tekst = $naam;
+			if ($naam == LoginModel::getUid()) {
+				$item->link = '/menubeheer/beheer/' . $naam;
+			}
 			$item->item_id = (int) $this->create($item);
 			$this->menus[$naam] = $item;
 		}

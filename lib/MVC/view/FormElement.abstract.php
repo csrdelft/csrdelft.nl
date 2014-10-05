@@ -457,21 +457,12 @@ class RequiredLandField extends LandField {
 
 class RechtenField extends TextField {
 
-	public function __construct($name, $value = null, $description = null) {
+	protected $mandatory_only;
+
+	public function __construct($name, $value = null, $description = null, $mandatory_only = false) {
 		parent::__construct($name, $value, $description);
+		$this->mandatory_only = $mandatory_only;
 		$this->suggestions = AccessModel::instance()->getValidPerms();
-		$this->suggestions[] = 'groep:#nr#';
-		$this->suggestions[] = 'groep:KorteNaam';
-		$this->suggestions[] = 'geslacht:m';
-		$this->suggestions[] = 'geslacht:v';
-		$verticalen = OldVerticale::getNamen();
-		foreach ($verticalen as $naam) {
-			$this->suggestions[] = 'verticale:' . $naam;
-		}
-		$jong = Lichting::getJongsteLichting();
-		for ($jaar = $jong; $jaar > $jong - 7; $jaar--) {
-			$this->suggestions[] = 'lichting:' . $jaar;
-		}
 		$this->title = 'Met , en + voor respectievelijk OR en AND. Gebruik | voor OR binnen AND (alsof er haakjes omheen staan)';
 		// Gebruik van ! voor negatie en > voor functie binnen verticale of groep niet vermelden, werkt wel
 	}
@@ -496,11 +487,8 @@ class RechtenField extends TextField {
 					if (startsWith($value, '!')) {
 						$value = substr($value, 1);
 					}
-					if (!AccessModel::instance()->isValidPerm($value)) { // If not mac
-						$dac = explode(':', $value);
-						if ((sizeof($dac) !== 2 OR $dac[0] == '' OR $dac[1] == '')) {
-							$this->error = 'Ongeldige restrictie: "' . $value . '"';
-						}
+					if (!AccessModel::instance()->isValidPerm($value, $this->mandatory_only)) { // If not uid and not mac
+						$this->error = 'Ongeldige restrictie: "' . $value . '"';
 					}
 				}
 			}

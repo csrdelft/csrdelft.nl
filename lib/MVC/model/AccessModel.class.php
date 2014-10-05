@@ -32,19 +32,49 @@ class AccessModel extends PersistenceModel {
 	 * een gebruiker.
 	 */
 	private $permissions = array();
+	/**
+	 * Gebruikte discretionary access control prefixes
+	 * @var array
+	 */
+	private static $dac = array('verticale', 'groep', 'geslacht', 'lidjaar', 'lichting', 'ouderjaars', 'eerstejaars');
 
 	protected function __construct() {
 		//TODO: parent::__construct();
 		$this->loadPermissions();
 	}
 
-	public function getValidPerms() {
-		return array_keys($this->permissions);
+	public function getValidPerms($mandatory_only = false) {
+		$valid = array_keys($this->permissions);
+		if (!$mandatory_only) {
+			$valid[] = 'groep:1234';
+			$valid[] = 'groep:KorteNaam';
+			$valid[] = 'geslacht:m';
+			$valid[] = 'geslacht:v';
+			$valid[] = 'ouderjaars';
+			$valid[] = 'eerstejaars';
+			foreach (VerticalenModel::instance()->find() as $verticale) {
+				$this->suggestions[] = 'verticale:' . $verticale->naam;
+			}
+			$jong = Lichting::getJongsteLichting();
+			for ($jaar = $jong; $jaar > $jong - 7; $jaar--) {
+				$this->suggestions[] = 'lichting:' . $jaar;
+			}
+		}
+		return $valid;
 	}
 
-	public function isValidPerm($perm) {
+	public function isValidPerm($perm, $mandatory_only = true) {
 		if (isset($this->permissions[$perm])) {
 			return true;
+		} elseif (!$mandatory_only) {
+			if (Lid::isValidUid($perm)) {
+				return true;
+			} else {
+				$dac = explode(':', $perm);
+				if (sizeof($dac) === 2 AND ! empty($dac[1]) AND in_array($dac[0], self::$dac)) {
+					return true;
+				}
+			}
 		}
 		return false;
 	}
@@ -229,7 +259,7 @@ class AccessModel extends PersistenceModel {
 		}
 
 		// Is de gevraagde permissie voorgedefinieerd?
-		if ($this->isValidPerm($permission)) {
+		if ($this->isValidPerm($permission, true)) {
 			return $this->mandatoryAccessControl($subject, $permission, $token_authorizable);
 		}
 		// Voorgedefinieerde permissie verplicht?
@@ -241,6 +271,9 @@ class AccessModel extends PersistenceModel {
 	}
 
 	private function mandatoryAccessControl(Lid $subject, $permission, $token_authorizable = false) {
+
+		// case insensitive
+		$permission = strtoupper($permission);
 
 		// zoek de rechten van de gebruiker op
 		$role = $subject->getRole();
@@ -308,13 +341,16 @@ class AccessModel extends PersistenceModel {
 
 	private function discretionaryAccessControl(Lid $subject, $descr, $token_authorizable = false) {
 
+		// case insensitive
+		$descr = strtolower($descr);
+
 		// als een uid ingevoerd wordt true teruggeven als het om de huidige gebruiker gaat.
 		if ($descr === $subject->getUid()) {
 			return true;
 		}
 		// Behoort een lid tot een bepaalde verticale?
 		elseif (substr($descr, 0, 9) === 'verticale') {
-			$verticale = strtolower(substr($descr, 10));
+			$verticale = substr($descr, 10);
 
 			// splitst opgegeven term in verticale en functie
 			$parts = explode('>', $verticale, 2);
@@ -354,7 +390,7 @@ class AccessModel extends PersistenceModel {
 		// met dat id.
 		// met de toevoeging '>Fiscus' kan ook specifieke functie geëist worden binnen een groep
 		elseif (substr($descr, 0, 5) === 'groep') {
-			$groep = strtolower(substr($descr, 6));
+			$groep = substr($descr, 6);
 
 			// splitst opgegeven term in groepsnaam en functie
 			$parts = explode('>', $groep, 2);
@@ -382,7 +418,7 @@ class AccessModel extends PersistenceModel {
 		}
 		// Is lid man of vrouw?
 		elseif (substr($descr, 0, 8) === 'geslacht') {
-			$geslacht = strtolower(substr($descr, 9));
+			$geslacht = substr($descr, 9);
 			// Niet ingelogd heeft geslacht m dus check of ingelogd
 			if ($geslacht === $subject->getGeslacht() AND $this->hasPermission($subject, 'P_LOGGED_IN', true)) {
 				return true;
@@ -399,13 +435,13 @@ class AccessModel extends PersistenceModel {
 			if ($lidjaar == $subject->getProperty('lidjaar')) {
 				return true;
 			}
-		} elseif (substr($descr, 0, 10) === 'Ouderjaars' OR substr($descr, 0, 10) === 'ouderjaars') {
+		} elseif (substr($descr, 0, 10) === 'ouderjaars') {
 			$lidjaar = $subject->getProperty('lidjaar');
 			// Niet ingelogd heeft lichting 0
 			if ($lidjaar > 0 AND Lichting::getJongsteLichting() > $lidjaar) {
 				return true;
 			}
-		} elseif (substr($descr, 0, 11) === 'Eerstejaars' OR substr($descr, 0, 11) === 'eerstejaars') {
+		} elseif (substr($descr, 0, 11) === 'eerstejaars') {
 			$lidjaar = $subject->getProperty('lidjaar');
 			// Niet ingelogd heeft lichting 0
 			if ($lidjaar > 0 AND Lichting::getJongsteLichting() == $lidjaar) {

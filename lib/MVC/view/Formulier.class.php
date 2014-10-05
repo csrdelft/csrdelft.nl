@@ -176,6 +176,9 @@ class Formulier implements View, Validator {
 				$valid = false; // niet gelijk retourneren om voor alle velden eventueel errors te zetten
 			}
 		}
+		if (!$valid) {
+			$this->css_classes[] = 'metFouten';
+		}
 		return $valid;
 	}
 

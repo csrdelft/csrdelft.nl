@@ -22,7 +22,9 @@
 							</a>
 						</li>
 						<li><a href="/instellingen">Instellingen</a></li>
-						<li><a href="/menubeheer/beheer/{LoginModel::getUid()}">Favorieten</a></li>
+						{if LidInstellingen::get('zijbalk', 'favorieten') == 'ja'}
+							<li><a href="/menubeheer/toevoegen/favoriet" class="post modal addfav">Toevoegen aan favorieten</a></li>
+						{/if}
 						{if LoginModel::mag('P_LEDEN_MOD')}
 							<li><a href="/forum/wacht">Forum: {$forumcount}</a></li>
 							{foreach from=$queues item=queue key=name}

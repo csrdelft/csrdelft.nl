@@ -193,7 +193,12 @@ function zijbalk_scroll_fixed() {
 	elmnt.hover(showscroll, hidescroll);
 }
 
-function page_reload() {
+function page_reload(htmlString) {
+	// prevent hidden errors
+	if (typeof htmlString == 'string' && htmlString.substring(0, 24) == '<div id="modal-content">') {
+		modal_open(htmlString);
+		return;
+	}
 	location.reload();
 }
 
@@ -249,17 +254,23 @@ function knop_ajax(knop, type) {
 		modal_close();
 		return false;
 	}
+	var source = knop;
+	var done = dom_update;
+	var data = knop.attr('data');
 	if (knop.hasClass('prompt')) {
-		var data = knop.attr('data');
 		data = data.split('=');
 		var val = prompt(data[0], data[1]);
 		if (!val) {
 			return false;
 		}
-		knop.attr('data', encodeURIComponent(data[0]) + '=' + encodeURIComponent(val));
+		data = encodeURIComponent(data[0]) + '=' + encodeURIComponent(val);
 	}
-	var source = knop;
-	var done = dom_update;
+	if (knop.hasClass('addfav')) {
+		var data = {
+			'tekst': document.title.replace('C.S.R. Delft - ', ''),
+			'link': this.location.href.replace('http://csrdelft.nl', '')
+		};
+	}
 	if (knop.hasClass('modal')) {
 		source = false;
 		done = modal_open;
@@ -267,7 +278,7 @@ function knop_ajax(knop, type) {
 	if (knop.hasClass('ReloadPage')) {
 		done = page_reload;
 	}
-	ajax_request(type, knop.attr('href'), knop.attr('data'), source, done, alert);
+	ajax_request(type, knop.attr('href'), data, source, done, alert);
 }
 
 function knop_post(event) {

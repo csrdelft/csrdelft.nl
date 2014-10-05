@@ -49,6 +49,9 @@ class MenuBeheerController extends AclController {
 	}
 
 	public function toevoegen($parent_id) {
+		if ($parent_id == 'favoriet') {
+			$parent_id = $this->model->getMenuRoot(LoginModel::getUid())->item_id;
+		}
 		$item = $this->model->newMenuItem((int) $parent_id);
 		if (!$item OR ! $item->magBeheren()) {
 			$this->geentoegang();
