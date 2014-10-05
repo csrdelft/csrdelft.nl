@@ -9,7 +9,9 @@
 	{/if}
 	<a href="/menubeheer/zichtbaar/{$item->item_id}" class="knop post ReloadPage" title="Menu-item is nu {if !$item->zichtbaar}on{/if}zichtbaar"><img src="{$CSR_PICS}/famfamfam/{if $item->zichtbaar}eye{else}shading{/if}.png" /></a>
 	<span>{$item->tekst}</span>
-	<span class="lichtgrijs">{$item->item_id}</span>
+	{if LoginModel::mag('P_ADMIN')}
+		<span class="lichtgrijs">{$item->item_id}</span>
+	{/if}
 	<div class="float-right">
 		{if $item->rechten_bekijken !== 'P_PUBLIC' and $item->rechten_bekijken != LoginModel::getUid()}
 			&nbsp;{icon get="group_key" title="Rechten bekijken:&#013;"|cat:$item->rechten_bekijken}&nbsp;
