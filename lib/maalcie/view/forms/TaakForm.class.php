@@ -42,7 +42,8 @@ class TaakForm extends ModalForm {
 		$fields[] = new DatumField('datum', $datum, 'Datum', date('Y') + 2, date('Y') - 2);
 		$fields[] = new IntField('punten', $punten, 'Punten', 0, 10);
 		$fields[] = new IntField('bonus_malus', $bonus_malus, 'Bonus/malus', -10, 10);
-		$fields[] = new HiddenField('crv_repetitie_id', $crid);
+		$fields['crid'] = new IntField('crv_repetitie_id', $crid, null);
+		$fields['crid']->hidden = true;
 		$fields['mid'] = new IntField('maaltijd_id', $mid, 'Gekoppelde maaltijd', 0);
 		$fields['mid']->title = 'Het ID van de maaltijd waar deze taak bij hoort.';
 		$fields[] = new FormButtons();

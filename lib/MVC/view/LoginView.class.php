@@ -18,8 +18,10 @@ class LoginForm extends Formulier {
 		$fields['pass'] = new WachtwoordField('pass');
 		$fields['pass']->placeholder = 'Wachtwoord';
 
-		$fields[] = new VinkField('mobiel', LoginModel::instance()->isPauper(), null, 'Mobiel');
-		$fields[] = new HiddenField('url', HTTP_REFERER);
+		$fields['pauper'] = new VinkField('mobiel', LoginModel::instance()->isPauper(), null, 'Mobiel');
+
+		$fields['url'] = new UrlField('url', HTTP_REFERER);
+		$fields['url']->hidden = true;
 
 		$this->addFields($fields);
 	}

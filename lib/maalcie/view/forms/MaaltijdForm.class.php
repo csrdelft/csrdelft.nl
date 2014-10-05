@@ -23,7 +23,8 @@ class MaaltijdForm extends ModalForm {
 			$this->css_classes[] = 'PreventUnchanged';
 		}
 
-		$fields[] = new HiddenField('mlt_repetitie_id', $mrid);
+		$fields['mrid'] = new IntField('mlt_repetitie_id', $mrid, null);
+		$fields['mrid']->hidden = true;
 		$fields[] = new TextField('titel', $titel, 'Titel', 255);
 		$fields[] = new DatumField('datum', $datum, 'Datum', date('Y') + 2, date('Y') - 2);
 		$fields[] = new TijdField('tijd', $tijd, 'Tijd', 15);

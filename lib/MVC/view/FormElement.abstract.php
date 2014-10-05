@@ -74,6 +74,7 @@ abstract class InputField implements FormElement, Validator {
 	public $title; //omschrijving bij mouseover title
 	public $description; //omschrijving in label
 	public $disabled = false; //veld uitgeschakeld?
+	public $hidden = false; //veld onzichtbaar voor gebruiker?
 	public $not_null = false; //mag het veld leeg zijn?
 	public $preview = true; //preview tonen? (waar van toepassing)
 	public $leden_mod = false; //uitzondering leeg verplicht veld voor LEDEN_MOD
@@ -170,6 +171,9 @@ abstract class InputField implements FormElement, Validator {
 	 */
 	protected function getDiv() {
 		$cssclass = 'InputField';
+		if ($this->hidden) {
+			$cssclass .= ' verborgen';
+		}
 		if ($this->title) {
 			$cssclass .= ' hoverIntent';
 		}
@@ -316,7 +320,12 @@ abstract class InputField implements FormElement, Validator {
 		if ($this->preview) {
 			echo $this->getPreviewDiv();
 		}
-		echo '<input type="text"' . $this->getInputAttribute(array('id', 'name', 'class', 'value', 'origvalue', 'disabled', 'maxlength', 'placeholder', 'autocomplete', 'onchange', 'onclick', 'onkeyup')) . ' />';
+		if ($this->hidden) {
+			$type = 'hidden';
+		} else {
+			$type = 'text';
+		}
+		echo '<input type="' . $type . '"' . $this->getInputAttribute(array('id', 'name', 'class', 'value', 'origvalue', 'disabled', 'maxlength', 'placeholder', 'autocomplete', 'onchange', 'onclick', 'onkeyup')) . ' />';
 		echo '</div>';
 	}
 
@@ -364,17 +373,6 @@ $('#{$this->getId()}', form).autocomplete(
 );
 JS;
 		}
-	}
-
-}
-
-/**
- * Verborgen veld voor de gebruiker.
- */
-class HiddenField extends InputField {
-
-	public function view() {
-		echo '<input type="hidden"' . $this->getInputAttribute(array('id', 'name', 'class', 'value', 'origvalue', 'disabled', 'maxlength', 'placeholder', 'autocomplete')) . ' />';
 	}
 
 }
