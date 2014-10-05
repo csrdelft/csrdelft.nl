@@ -791,6 +791,9 @@ table.groepStats td, table.groepStats th{
 	margin: 10px;
 	padding: 10px;
 }
+#modereren table{
+	width: 100%;
+}
 #modereren label{
 	display: inline-block;
 	width: 95px;
