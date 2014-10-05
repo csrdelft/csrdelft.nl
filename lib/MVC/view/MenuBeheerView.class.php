@@ -37,23 +37,18 @@ class MenuItemView extends SmartyTemplateView {
 
 class MenuItemForm extends ModalForm {
 
-	public function __construct(MenuItem $item, $actie) {
+	public function __construct(MenuItem $item, $actie, $title = 'Menu-item ') {
 		parent::__construct($item, 'menu-item-form', '/menubeheer/' . $actie . '/' . $item->item_id);
-		$pos = strpos($actie, '/');
-		if ($pos !== false) {
-			$actie = substr($actie, 0, $pos);
-			$this->titel = 'Favoriet ' . $actie;
-		} else {
-			$this->titel = 'Menu-item ' . $actie;
-		}
+		$this->titel = $title . $actie;
 		if ($actie === 'bewerken') {
 			$this->css_classes[] = 'PreventUnchanged';
 		}
 		$this->css_classes[] = 'ReloadPage';
 
-		if (LoginModel::mag('P_ADMIN')) {
-			$fields['pid'] = new RequiredIntField('parent_id', $item->parent_id, 'Parent ID', 0);
-			$fields['pid']->title = 'ID van het menu-item waar dit item onder valt';
+		$fields['pid'] = new RequiredIntField('parent_id', $item->parent_id, 'Parent ID', 0);
+		$fields['pid']->title = 'ID van het menu-item waar dit item onder valt';
+		if (!LoginModel::mag('P_ADMIN')) {
+			$fields['pid']->css_classes[] = 'verborgen';
 		}
 
 		$fields['prio'] = new IntField('prioriteit', $item->prioriteit, 'Volgorde');
@@ -64,9 +59,10 @@ class MenuItemForm extends ModalForm {
 		$fields['url'] = new TextField('link', $item->link, 'Link');
 		$fields['url']->title = 'URL als er op het menu-item geklikt wordt';
 
-		if (LoginModel::mag('P_ADMIN')) {
-			$fields['r'] = new RechtenField('rechten_bekijken', $item->rechten_bekijken, 'Lees-rechten');
-			$fields['r']->title = 'Wie mag dit menu-item zien';
+		$fields['r'] = new RechtenField('rechten_bekijken', $item->rechten_bekijken, 'Lees-rechten');
+		$fields['r']->title = 'Wie mag dit menu-item zien';
+		if (!LoginModel::mag('P_ADMIN')) {
+			$fields['r']->css_classes[] = 'verborgen';
 		}
 
 		$fields['z'] = new SelectField('zichtbaar', ($item->zichtbaar ? '1' : '0'), 'Tonen', array('1' => 'Zichtbaar', '0' => 'Verborgen'));

@@ -6,5 +6,7 @@
 {/if}
 <a href="/menubeheer/toevoegen/{$root->item_id}" class="knop post modal" title="Menu-item toevoegen">{icon get="add"}</a>
 <span>{if $root->tekst == LoginModel::getUid()}Favorieten{else}{$root->tekst}{/if}</span>
-<span class="lichtgrijs">{$root->item_id}</span>
+{if LoginModel::mag('P_ADMIN')}
+	<span class="lichtgrijs">{$root->item_id}</span>
+{/if}
 <hr />

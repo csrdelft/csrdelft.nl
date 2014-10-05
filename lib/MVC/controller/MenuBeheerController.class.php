@@ -51,14 +51,20 @@ class MenuBeheerController extends AclController {
 	public function toevoegen($parent_id) {
 		if ($parent_id == 'favoriet') {
 			$parent_id = $this->model->getMenuRoot(LoginModel::getUid())->item_id;
-			// parent_id is not posted by the form, so form submit action forgets it
-			$this->action .= '/' . $parent_id; // remember parent_id after form submit
 		}
 		$item = $this->model->newMenuItem((int) $parent_id);
+		$title = 'Menu-item ';
 		if (!$item OR ! $item->magBeheren()) {
 			$this->geentoegang();
+		} elseif ($item->rechten_bekijken == LoginModel::getUid() AND ! LoginModel::mag('P_ADMIN')) {
+			// check of nieuw item wel aan favorieten van gebruiker wordt toegevoegd
+			if ($item->parent_id !== $this->model->getMenuRoot(LoginModel::getUid())->item_id) {
+				$this->geentoegang();
+			} else {
+				$title = 'Favoriet ';
+			}
 		}
-		$this->view = new MenuItemForm($item, $this->action, (int) $parent_id); // fetches POST values itself
+		$this->view = new MenuItemForm($item, $this->action, (int) $parent_id, $title); // fetches POST values itself
 		if ($this->view->validate()) {
 			$item->item_id = (int) $this->model->create($item);
 			setMelding('Toegevoegd: ' . $item->tekst, 1);
