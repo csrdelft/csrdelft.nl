@@ -51,6 +51,8 @@ class MenuBeheerController extends AclController {
 	public function toevoegen($parent_id) {
 		if ($parent_id == 'favoriet') {
 			$parent_id = $this->model->getMenuRoot(LoginModel::getUid())->item_id;
+			// parent_id is not posted by the form so forum submit action forgets it
+			$this->action .= '/' . $parent_id; // remember parent_id after form submit
 		}
 		$item = $this->model->newMenuItem((int) $parent_id);
 		if (!$item OR ! $item->magBeheren()) {
@@ -59,7 +61,7 @@ class MenuBeheerController extends AclController {
 		$this->view = new MenuItemForm($item, $this->action, (int) $parent_id); // fetches POST values itself
 		if ($this->view->validate()) {
 			$item->item_id = (int) $this->model->create($item);
-			setMelding('Toegevoegd', 1);
+			setMelding('Toegevoegd: ' . $item->tekst, 1);
 			$this->view = new JsonResponse(true);
 		}
 	}
