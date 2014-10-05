@@ -29,11 +29,11 @@ class MenuModel extends PersistenceModel {
 	/**
 	 * Lijst van alle menu roots om te beheren.
 	 * 
-	 * @return PDOStatement
+	 * @return MenuItem[]
 	 */
 	public function getBeheerMenusVoorLid() {
 		if (LoginModel::mag('P_ADMIN')) {
-			return $this->find('parent_id = ?', array(0), 'tekst ASC');
+			return $this->find('parent_id = ?', array(0), 'tekst ASC')->fetchAll();
 		} else {
 			return array();
 		}
