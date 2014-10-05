@@ -8,9 +8,9 @@
 						{if LoginModel::instance()->isSued()}
 							<li><a href="/endsu/" class="error" title="Switch user actie beeindingen">SU {LoginModel::instance()->getSuedFrom()->getNaamLink('civitas', 'plain')}</a></li>
 						{/if}
-						<li><a href="/communicatie/profiel/{LoginModel::getUid()}#SocCieSaldo" title="Ga naar mijn profiel">Profiel</a></li>
+						<li><a href="/communicatie/profiel/{LoginModel::getUid()}" title="Ga naar mijn profiel">Profiel</a></li>
 						<li>
-							<a href="/communicatie/profiel/{LoginModel::getUid()}" title="Bekijk SocCie saldo historie">
+							<a href="/communicatie/profiel/{LoginModel::getUid()}#SocCieSaldo" title="Bekijk SocCie saldo historie">
                                 {assign var=saldo value=LoginModel::instance()->getLid()->getSoccieSaldo()}
 								SocCie: <span{if $saldo < 0} class="staatrood"{/if}>&euro; {$saldo|number_format:2:",":"."}</span>
 							</a>

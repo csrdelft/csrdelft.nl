@@ -196,7 +196,7 @@
 					{/if}
 					<br />
 				{/if}
-
+				<a name="SocCieSaldo"></a><a name="MaalCieSaldo"></a>
 				{if isset($saldografiek)}
 					<br />
 					{include file='profiel/_saldografiek.tpl'}
