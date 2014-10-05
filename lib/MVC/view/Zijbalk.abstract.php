@@ -9,14 +9,14 @@
 abstract class Zijbalk {
 
 	public static function addStandaardZijbalk(array $zijbalk) {
+		// Favorieten menu
+		if (LidInstellingen::get('zijbalk', 'favorieten') == 'ja') {
+			array_unshift($zijbalk, new BlockMenuView(MenuModel::instance()->getMenuTree(LoginModel::getUid())));
+		}
 		// Is het al...
 		if (LidInstellingen::get('zijbalk', 'ishetal') != 'niet weergeven') {
 			require_once 'ishetalcontent.class.php';
 			array_unshift($zijbalk, new IsHetAlContent(LidInstellingen::get('zijbalk', 'ishetal')));
-		}
-		// Favorieten menu
-		if (LidInstellingen::get('zijbalk', 'favorieten') == 'ja') {
-			array_unshift($zijbalk, new BlockMenuView(MenuModel::instance()->getMenuTree(LoginModel::getUid())));
 		}
 		// Agenda
 		if (LoginModel::mag('P_AGENDA_READ') && LidInstellingen::get('zijbalk', 'agendaweken') > 0 && LidInstellingen::get('zijbalk', 'agenda_max') > 0) {

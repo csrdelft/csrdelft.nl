@@ -48,6 +48,8 @@ class MededelingenContent extends SmartyTemplateView {
 				$this->geselecteerdeMededeling = $topMost[0];
 			}
 		}
+
+		$this->smarty->assign('prullenbak', $this->prullenbak);
 	}
 
 	public function setPaginaNummer($pagina) {
@@ -61,7 +63,6 @@ class MededelingenContent extends SmartyTemplateView {
 		if (!$this->paginaNummerOpgevraagd) {
 			$this->paginaNummer = $this->geselecteerdeMededeling->getPaginaNummer($this->prullenbak);
 		}
-		$this->smarty->assign('prullenbak', $this->prullenbak);
 
 		// De link om terug te gaan naar de mededelingenketser.
 		$this->smarty->assign('mededelingenketser_root', self::mededelingenRoot);

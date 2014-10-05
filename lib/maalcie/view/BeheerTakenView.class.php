@@ -34,6 +34,8 @@ class BeheerTakenView extends SmartyTemplateView {
 			}
 			$this->model[$datum][$taak->getFunctieId()][] = $taak;
 		}
+
+		$this->smarty->assign('prullenbak', $this->prullenbak);
 	}
 
 	public function view() {
@@ -42,7 +44,6 @@ class BeheerTakenView extends SmartyTemplateView {
 			$this->smarty->assign('show', true);
 		}
 		$this->smarty->assign('taken', $this->model);
-		$this->smarty->assign('prullenbak', $this->prullenbak);
 		$this->smarty->assign('repetities', $this->repetities);
 
 		$this->smarty->display('maalcie/menu_pagina.tpl');

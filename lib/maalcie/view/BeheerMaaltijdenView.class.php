@@ -26,12 +26,13 @@ class BeheerMaaltijdenView extends SmartyTemplateView {
 		} else {
 			$this->titel = 'Beheer maaltijden';
 		}
+
+		$this->smarty->assign('prullenbak', $this->prullenbak);
+		$this->smarty->assign('archief', $this->archief);
 	}
 
 	public function view() {
 		$this->smarty->assign('maaltijden', $this->model);
-		$this->smarty->assign('prullenbak', $this->prullenbak);
-		$this->smarty->assign('archief', $this->archief);
 		$this->smarty->assign('repetities', $this->repetities);
 
 		$this->smarty->display('maalcie/menu_pagina.tpl');
