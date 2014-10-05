@@ -75,6 +75,7 @@ abstract class InputField implements FormElement, Validator {
 	public $description; //omschrijving in label
 	public $disabled = false; //veld uitgeschakeld?
 	public $hidden = false; //veld onzichtbaar voor gebruiker?
+	public $locked = false; //veld mag niet worden aangepast door client?
 	public $not_null = false; //mag het veld leeg zijn?
 	public $preview = true; //preview tonen? (waar van toepassing)
 	public $leden_mod = false; //uitzondering leeg verplicht veld voor LEDEN_MOD
@@ -94,12 +95,12 @@ abstract class InputField implements FormElement, Validator {
 	public function __construct($name, $value, $description = null, $model = null) {
 		$this->model = $model;
 		$this->name = $name;
+		$this->origvalue = $value;
 		if ($this->isPosted()) {
 			$this->value = $this->getValue();
 		} else {
 			$this->value = $value;
 		}
-		$this->origvalue = $value;
 		$this->description = $description;
 		// add *Field classname to css_classes
 		$this->css_classes[] = $this->getType();
@@ -144,13 +145,14 @@ abstract class InputField implements FormElement, Validator {
 	 * testen mogelijk te maken.
 	 */
 	public function validate() {
-		//vallen over lege velden als dat aangezet is voor het veld
-		//(tenzij gebruiker LEDEN_MOD heeft en deze optie aan staat voor dit veld)
 		if (!$this->isPosted()) {
 			$this->error = 'Veld is niet gepost';
+		} elseif ($this->locked AND $this->value !== $this->origvalue) {
+			$this->error = 'Dit veld mag niet worden aangepast';
 		} elseif ($this->value == '' AND $this->not_null) {
+			//vallen over lege velden als dat aangezet is voor het veld
 			if ($this->leden_mod AND LoginModel::mag('P_LEDEN_MOD')) {
-				// exception for leden mod
+				//tenzij gebruiker P_LEDEN_MOD heeft en deze optie aan staat voor dit veld
 			} else {
 				$this->error = 'Dit is een verplicht veld';
 			}
@@ -271,6 +273,11 @@ abstract class InputField implements FormElement, Validator {
 					return 'disabled';
 				}
 				break;
+			case 'readonly':
+				if ($this->locked) {
+					return 'readonly';
+				}
+				break;
 			case 'placeholder':
 				if ($this->placeholder != null) {
 					return 'placeholder="' . $this->placeholder . '"';
@@ -325,7 +332,7 @@ abstract class InputField implements FormElement, Validator {
 		} else {
 			$type = 'text';
 		}
-		echo '<input type="' . $type . '"' . $this->getInputAttribute(array('id', 'name', 'class', 'value', 'origvalue', 'disabled', 'maxlength', 'placeholder', 'autocomplete', 'onchange', 'onclick', 'onkeyup')) . ' />';
+		echo '<input type="' . $type . '"' . $this->getInputAttribute(array('id', 'name', 'class', 'value', 'origvalue', 'disabled', 'readonly', 'maxlength', 'placeholder', 'autocomplete', 'onchange', 'onclick', 'onkeyup')) . ' />';
 		echo '</div>';
 	}
 
@@ -385,11 +392,9 @@ JS;
 class TextField extends InputField {
 
 	public function __construct($name, $value = null, $description = null, $max_len = 255, $min_len = 0, $model = null) {
-		parent::__construct($name, $value, $description, $model);
+		parent::__construct($name, htmlspecialchars_decode($value), $description, $model);
 		$this->max_len = (int) $max_len;
 		$this->min_len = (int) $min_len;
-		$this->value = htmlspecialchars_decode($this->value);
-		$this->origvalue = htmlspecialchars_decode($value);
 	}
 
 	public function validate() {
@@ -953,7 +958,7 @@ class TextareaField extends TextField {
 		echo $this->getLabel();
 		echo $this->getErrorDiv();
 		echo $this->getPreviewDiv();
-		echo '<textarea' . $this->getInputAttribute(array('id', 'name', 'origvalue', 'class', 'disabled', 'placeholder', 'maxlength', 'rows', 'autocomplete', 'onchange', 'onclick', 'onkeyup')) . '>' . $this->value . '</textarea>';
+		echo '<textarea' . $this->getInputAttribute(array('id', 'name', 'origvalue', 'class', 'disabled', 'readonly', 'placeholder', 'maxlength', 'rows', 'autocomplete', 'onchange', 'onclick', 'onkeyup')) . '>' . $this->value . '</textarea>';
 		echo '</div>';
 	}
 
@@ -1024,7 +1029,7 @@ class WachtwoordField extends TextField {
 		echo $this->getDiv();
 		echo $this->getLabel();
 		echo $this->getErrorDiv();
-		echo '<input type="password"' . $this->getInputAttribute(array('id', 'name', 'class', 'value', 'origvalue', 'disabled', 'maxlength', 'placeholder', 'autocomplete', 'onchange', 'onclick', 'onkeyup')) . ' />';
+		echo '<input type="password"' . $this->getInputAttribute(array('id', 'name', 'class', 'value', 'origvalue', 'disabled', 'readonly', 'maxlength', 'placeholder', 'autocomplete', 'onchange', 'onclick', 'onkeyup')) . ' />';
 		echo '</div>';
 	}
 
@@ -1155,7 +1160,7 @@ class SelectField extends InputField {
 		if ($this->size > 1) {
 			echo ' size="' . $this->size . '"';
 		}
-		echo $this->getInputAttribute(array('id', 'name', 'origvalue', 'class', 'disabled', 'onchange', 'onclick', 'onkeyup')) . '>';
+		echo $this->getInputAttribute(array('id', 'name', 'origvalue', 'class', 'disabled', 'readonly', 'onchange', 'onclick', 'onkeyup')) . '>';
 
 		foreach ($this->options as $value => $description) {
 			echo '<option value="' . $value . '"';
@@ -1258,7 +1263,7 @@ class KeuzeRondjeField extends SelectField {
 
 		echo '<div class="KeuzeRondjeFieldOptions">';
 		foreach ($this->options as $value => $description) {
-			echo '<input type="radio" id="field_' . $this->getName() . '_option_' . $value . '" value="' . $value . '"' . $this->getInputAttribute(array('name', 'origvalue', 'class', 'disabled', 'onchange', 'onclick', 'onkeyup'));
+			echo '<input type="radio" id="field_' . $this->getName() . '_option_' . $value . '" value="' . $value . '"' . $this->getInputAttribute(array('name', 'origvalue', 'class', 'disabled', 'readonly', 'onchange', 'onclick', 'onkeyup'));
 			if ($value == $this->value) {
 				echo ' checked="checked"';
 			}
@@ -1536,7 +1541,7 @@ class VinkField extends InputField {
 		echo $this->getLabel();
 		echo $this->getErrorDiv();
 
-		echo '<input type="checkbox"' . $this->getInputAttribute(array('id', 'name', 'value', 'origvalue', 'class', 'disabled', 'onchange', 'onclick', 'onkeyup'));
+		echo '<input type="checkbox"' . $this->getInputAttribute(array('id', 'name', 'value', 'origvalue', 'class', 'disabled', 'readonly', 'onchange', 'onclick', 'onkeyup'));
 		if ($this->value) {
 			echo ' checked="checked" ';
 		}

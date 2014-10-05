@@ -19,6 +19,7 @@ class RepetitieCorveeForm extends ModalForm {
 		$fields['eind'] = new DatumField('einddatum', $eindDatum, 'Tot en met', date('Y') + 1, date('Y'));
 		$fields['mid'] = new IntField('maaltijd_id', $mid, null);
 		$fields['mid']->hidden = true;
+		$fields['mid']->locked = true;
 		$fields[] = new FormButtons();
 
 		$this->addFields($fields);
@@ -30,10 +31,6 @@ class RepetitieCorveeForm extends ModalForm {
 		if (strtotime($fields['eind']->getValue()) < strtotime($fields['begin']->getValue())) {
 			$fields['eind']->error = 'Moet na begindatum liggen';
 			$valid = false;
-		}
-		// wijzigen van verborgen veld mag niet
-		if ($this->getModel() !== $this->findByName('maaltijd_id')->getValue()) {
-			return false;
 		}
 		return $valid;
 	}

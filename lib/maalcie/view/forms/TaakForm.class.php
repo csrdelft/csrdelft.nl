@@ -44,6 +44,7 @@ class TaakForm extends ModalForm {
 		$fields[] = new IntField('bonus_malus', $bonus_malus, 'Bonus/malus', -10, 10);
 		$fields['crid'] = new IntField('crv_repetitie_id', $crid, null);
 		$fields['crid']->hidden = true;
+		$fields['crid']->locked = true;
 		$fields['mid'] = new IntField('maaltijd_id', $mid, 'Gekoppelde maaltijd', 0);
 		$fields['mid']->title = 'Het ID van de maaltijd waar deze taak bij hoort.';
 		$fields[] = new FormButtons();
@@ -61,10 +62,6 @@ class TaakForm extends ModalForm {
 				$fields['mid']->error = 'Maaltijd bestaat niet.';
 				$valid = false;
 			}
-		}
-		// wijzigen van verborgen veld mag niet
-		if ($this->getModel() !== $this->findByName('crv_repetitie_id')->getValue()) {
-			return false;
 		}
 		return $valid;
 	}

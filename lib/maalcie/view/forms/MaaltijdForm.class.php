@@ -25,6 +25,7 @@ class MaaltijdForm extends ModalForm {
 
 		$fields['mrid'] = new IntField('mlt_repetitie_id', $mrid, null);
 		$fields['mrid']->hidden = true;
+		$fields['mrid']->locked = true;
 		$fields[] = new TextField('titel', $titel, 'Titel', 255);
 		$fields[] = new DatumField('datum', $datum, 'Datum', date('Y') + 2, date('Y') - 2);
 		$fields[] = new TijdField('tijd', $tijd, 'Tijd', 15);
@@ -34,17 +35,6 @@ class MaaltijdForm extends ModalForm {
 		$fields[] = new FormButtons();
 
 		$this->addFields($fields);
-	}
-
-	public function validate() {
-		if (!parent::validate()) {
-			return false;
-		}
-		// wijzigen van verborgen veld mag niet
-		if ($this->getModel() !== $this->findByName('mlt_repetitie_id')->getValue()) {
-			return false;
-		}
-		return true;
 	}
 
 }

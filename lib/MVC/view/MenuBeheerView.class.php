@@ -53,6 +53,7 @@ class MenuItemForm extends ModalForm {
 		$fields['pid']->title = 'ID van het menu-item waar dit item onder valt';
 		if (!LoginModel::mag('P_ADMIN')) {
 			$fields['pid']->hidden = true;
+			$fields['pid']->locked = true;
 		}
 
 		$fields['prio'] = new IntField('prioriteit', $item->prioriteit, 'Volgorde');
@@ -67,6 +68,7 @@ class MenuItemForm extends ModalForm {
 		$fields['r']->title = 'Wie mag dit menu-item zien';
 		if (!LoginModel::mag('P_ADMIN')) {
 			$fields['r']->hidden = true;
+			$fields['r']->locked = true;
 		}
 
 		$fields['z'] = new SelectField('zichtbaar', ($item->zichtbaar ? '1' : '0'), 'Tonen', array('1' => 'Zichtbaar', '0' => 'Verborgen'));
@@ -74,22 +76,6 @@ class MenuItemForm extends ModalForm {
 
 		$fields[] = new FormButtons();
 		$this->addFields($fields);
-	}
-
-	public function validate() {
-		if (!parent::validate()) {
-			return false;
-		}
-		if (!LoginModel::mag('P_ADMIN')) {
-			// gebruiker mag niet stiekem deze velden wijzigen
-			if ($this->getModel()->parent_id !== $this->findByName('parent_id')->getValue()) {
-				return false;
-			}
-			if ($this->getModel()->rechten_bekijken !== $this->findByName('rechten_bekijken')->getValue()) {
-				return false;
-			}
-		}
-		return true;
 	}
 
 }
