@@ -112,10 +112,10 @@ class ForumDelenModel extends PersistenceModel {
 	 */
 	public function getForumDelenOptiesOmTeDelen(ForumDeel $deel) {
 		if (strpos($deel->rechten_posten, 'verticale:') !== false) {
-			$type = 'verticale:%';
+			$type = '%verticale:%';
 			$sort = 'titel ASC';
 		} elseif (strpos($deel->rechten_posten, 'lidjaar:') !== false) {
-			$type = 'lidjaar:%';
+			$type = '%lidjaar:%';
 			$sort = 'titel DESC';
 		} else {
 			return array();
