@@ -60,7 +60,7 @@ class MenuItemForm extends ModalForm {
 
 		$fields[] = new TextField('tekst', $item->tekst, 'Korte aanduiding', 50);
 
-		$fields['url'] = new TextField('link', $item->link, 'Link');
+		$fields['url'] = new UrlField('link', $item->link, 'Link');
 		$fields['url']->title = 'URL als er op het menu-item geklikt wordt';
 
 		$fields['r'] = new RechtenField('rechten_bekijken', $item->rechten_bekijken, 'Lees-rechten');
