@@ -33,7 +33,7 @@ class MenuModel extends PersistenceModel {
 	 */
 	public function getBeheerMenusVoorLid() {
 		if (LoginModel::mag('P_ADMIN')) {
-			return $this->find('parent_id = ?', array(0), 'tekst ASC')->fetchAll();
+			return $this->find('parent_id = ?', array(0), 'tekst DESC')->fetchAll();
 		} else {
 			return array();
 		}
