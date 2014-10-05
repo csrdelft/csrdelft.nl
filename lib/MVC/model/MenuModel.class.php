@@ -56,6 +56,7 @@ class MenuModel extends PersistenceModel {
 			$item = $this->newMenuItem(0);
 			$item->tekst = $naam;
 			if ($naam == LoginModel::getUid()) {
+				// maak favorieten menu
 				$item->link = '/menubeheer/beheer/' . $naam;
 			}
 			$item->item_id = (int) $this->create($item);
@@ -102,7 +103,7 @@ class MenuModel extends PersistenceModel {
 			// parent is active als child active is
 			$parent->active |= $child->active;
 			// mag gebruiker menu item zien?
-			if ($child->magBekijken()) {
+			if ($child->magBekijken() OR $child->magBeheren()) {
 				$this->setChildren($child, $items);
 			} else {
 				unset($parent->children[$i]);
