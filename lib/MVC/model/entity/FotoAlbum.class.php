@@ -112,7 +112,7 @@ class FotoAlbum extends Map {
 	public function getMostRecentSubAlbum() {
 		$recent = $this;
 		foreach ($this->getSubAlbums() as $subalbum) {
-			if ($subalbum->modified() >= $recent->modified()) {
+			if ($subalbum->modified() > $recent->modified()) {
 				$recent = $subalbum->getMostRecentSubAlbum();
 			}
 		}
