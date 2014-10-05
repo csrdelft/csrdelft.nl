@@ -74,12 +74,12 @@ class MenuBeheerController extends AclController {
 		if (!$item OR ! $item->magBeheren()) {
 			$this->geentoegang();
 		}
-		$parent = $this->model->getMenuItem($item->parent_id);
-		if (!$parent OR ! $parent->magBeheren()) {
-			$this->geentoegang();
-		}
 		$this->view = new MenuItemForm($item, $this->action, $item->item_id); // fetches POST values itself
 		if ($this->view->validate()) {
+			$parent = $this->model->getMenuItem($item->parent_id);
+			if (!$parent OR ! $parent->magBeheren()) {
+				$this->geentoegang();
+			}
 			$rowcount = $this->model->update($item);
 			if ($rowcount > 0) {
 				setMelding($item->tekst . ' bijgewerkt', 1);
