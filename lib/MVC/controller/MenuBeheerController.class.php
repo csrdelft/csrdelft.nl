@@ -77,7 +77,7 @@ class MenuBeheerController extends AclController {
 		if (!$item OR ! $item->magBeheren()) {
 			$this->geentoegang();
 		}
-		$this->view = new MenuItemForm($item, $this->action, $item->item_id); // fetches POST values itself
+		$this->view = new MenuItemForm($item, $this->action); // fetches POST values itself
 		if ($this->view->validate()) {
 			$rowcount = $this->model->update($item);
 			if ($rowcount > 0) {
