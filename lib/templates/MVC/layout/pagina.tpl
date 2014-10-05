@@ -15,7 +15,7 @@
 								{foreach from=$zijbalk item=block}
 									<div class="block">{$block->view()}</div>
 								{/foreach}
-								<br /><br /><br />
+								{if LidInstellingen::get('zijbalk', 'scrollen') != 'apart scrollen'}<br /><br /><br />{/if}
 							</div>
 						</td>
 					{/if}
