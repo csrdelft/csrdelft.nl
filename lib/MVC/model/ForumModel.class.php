@@ -17,7 +17,7 @@ class ForumModel extends PersistenceModel {
 	 * 
 	 * @return ForumCategorie[]
 	 */
-	public function getForum() {
+	public function getForumIndeling() {
 		$delen = ForumDelenModel::instance()->getAlleForumDelenPerCategorie();
 		$categorien = $this->find(null, array(), 'volgorde ASC');
 		$result = array();
@@ -102,6 +102,25 @@ class ForumDelenModel extends PersistenceModel {
 			}
 		}
 		return $delen;
+	}
+
+	/**
+	 * Geeft de mogelijke opties om een draadje mee te delen.
+	 * 
+	 * @param ForumDeel $deel
+	 * @return ForumDeel[]
+	 */
+	public function getForumDelenOptiesOmTeDelen(ForumDeel $deel) {
+		if (startsWith($deel->rechten_posten, 'verticale:')) {
+			$type = 'verticale:%';
+			$sort = 'titel ASC';
+		} elseif (startsWith($deel->rechten_posten, 'lidjaar:')) {
+			$type = 'lidjaar:%';
+			$sort = 'titel DESC';
+		} else {
+			return array();
+		}
+		return $this->find('rechten_posten != ? AND rechten_posten LIKE ?', array($deel->rechten_posten, $type), $sort)->fetchAll();
 	}
 
 	public function bestaatForumDeel($id) {
@@ -194,7 +213,7 @@ class ForumDelenModel extends PersistenceModel {
 		foreach ($gevonden_delen as $forum_id => $deel) {
 			if (!$deel->magModereren()) {
 				foreach ($gevonden_draden as $draad_id => $draad) {
-					if ($draad->forum_id === $deel->forum_id AND ! LoginModel::mag($draad->gedeeld_met)) {
+					if ($draad->forum_id === $deel->forum_id) {
 						unset($gevonden_draden[$draad_id]);
 					}
 				}
@@ -242,20 +261,22 @@ class ForumDelenModel extends PersistenceModel {
 		// check permissies op delen
 		$delen_ids = array_keys(group_by_distinct('forum_id', $gevonden_draden, false));
 		$gevonden_delen = group_by_distinct('forum_id', ForumDelenModel::instance()->getForumDelenById($delen_ids));
+		$gedeeld_ids = array_keys(group_by_distinct('gedeeld_met', $gevonden_draden, false));
+		$gedeeld_delen = group_by_distinct('forum_id', ForumDelenModel::instance()->getForumDelenById($gedeeld_ids));
 		foreach ($gevonden_delen as $forum_id => $deel) {
-			if (!$deel->magLezen()) {
-				foreach ($gevonden_draden as $draad_id => $draad) {
-					if ($draad->forum_id === $deel->forum_id AND ! LoginModel::mag($draad->gedeeld_met)) {
+			foreach ($gevonden_draden as $draad_id => $draad) {
+				// if binnen foreach draad vanwege check op draad gedeeld met
+				if (!$deel->magLezen() AND ! $gedeeld_delen[$draad->gedeeld_met]->magLezen()) {
+					if ($draad->forum_id === $deel->forum_id) {
 						unset($gevonden_draden[$draad_id]);
 					}
 				}
-				unset($gevonden_delen[$forum_id]);
 			}
 		}
 		if ($titel !== true) {
 			usort($gevonden_draden, array($this, 'sorteren'));
 		}
-		return array($gevonden_draden, $gevonden_delen);
+		return array($gevonden_draden, $gevonden_delen + $gedeeld_delen);
 	}
 
 	function sorteren($a, $b) {
@@ -550,7 +571,7 @@ class ForumDradenModel extends PersistenceModel implements Paging {
 	}
 
 	public function getForumDradenVoorDeel(ForumDeel $deel) {
-		return $this->find('(forum_id = ? OR gedeeld_met REGEXP ?) AND wacht_goedkeuring = FALSE AND verwijderd = FALSE', array($deel->forum_id, $deel->rechten_posten), 'plakkerig DESC, laatst_gewijzigd DESC', null, $this->per_pagina, ($this->pagina - 1) * $this->per_pagina)->fetchAll();
+		return $this->find('(forum_id = ? OR gedeeld_met = ?) AND wacht_goedkeuring = FALSE AND verwijderd = FALSE', array($deel->forum_id, $deel->forum_id), 'plakkerig DESC, laatst_gewijzigd DESC', null, $this->per_pagina, ($this->pagina - 1) * $this->per_pagina)->fetchAll();
 	}
 
 	/**
@@ -579,15 +600,15 @@ class ForumDradenModel extends PersistenceModel implements Paging {
 			}
 			return array();
 		}
-		$forum_ids = implode(', ', array_fill(0, $count, '?'));
-		$params = array_keys($delen);
-		$params[] = '(verticale:' . LoginModel::instance()->getLid()->getVerticale()->naam . '|lidjaar:' . LoginModel::instance()->getLid()->getLichting() . ')';
+		$forum_ids_stub = implode(', ', array_fill(0, $count, '?'));
+		$forum_ids = array_keys($delen);
+		$params = array_merge($forum_ids, $forum_ids);
 		$verbergen = ForumDradenVerbergenModel::instance()->find('uid = ?', array(LoginModel::getUid()));
 		$draden_ids = array_keys(group_by_distinct('draad_id', $verbergen));
 		$count = count($draden_ids);
 		if ($count > 0) {
-			$params = array_merge($params, $draden_ids);
 			$verborgen = ' AND draad_id NOT IN (' . implode(', ', array_fill(0, $count, '?')) . ')';
+			$params = array_merge($params, $draden_ids);
 		} else {
 			$verborgen = '';
 		}
@@ -597,7 +618,7 @@ class ForumDradenModel extends PersistenceModel implements Paging {
 		} else {
 			$belangrijk = '';
 		}
-		$draden = $this->find('(forum_id IN (' . $forum_ids . ') OR gedeeld_met REGEXP ?)' . $verborgen . ' AND wacht_goedkeuring = FALSE AND verwijderd = FALSE' . $belangrijk, $params, 'laatst_gewijzigd DESC', null, $aantal, ($pagina - 1) * $aantal)->fetchAll();
+		$draden = $this->find('(forum_id IN (' . $forum_ids_stub . ') OR gedeeld_met IN (' . $forum_ids_stub . '))' . $verborgen . ' AND wacht_goedkeuring = FALSE AND verwijderd = FALSE' . $belangrijk, $params, 'laatst_gewijzigd DESC', null, $aantal, ($pagina - 1) * $aantal)->fetchAll();
 		$posts_ids = array_keys(group_by_distinct('laatste_post_id', $draden, false));
 		$posts = ForumPostsModel::instance()->getForumPostsById($posts_ids, ' AND wacht_goedkeuring = FALSE AND verwijderd = FALSE');
 		foreach ($draden as $i => $draad) {
@@ -848,10 +869,13 @@ class ForumPostsModel extends PersistenceModel implements Paging {
 		$draden = ForumDradenModel::instance()->getForumDradenById($draden_ids);
 		$delen_ids = array_keys(group_by_distinct('forum_id', $draden, false));
 		$delen = ForumDelenModel::instance()->getForumDelenById($delen_ids);
+		$gedeeld_ids = array_keys(group_by_distinct('gedeeld_met', $draden, false));
+		$gedeeld = group_by_distinct('forum_id', ForumDelenModel::instance()->getForumDelenById($gedeeld_ids));
 		foreach ($delen as $forum_id => $deel) {
-			if (!$deel->magLezen()) {
-				foreach ($draden as $draad_id => $draad) {
-					if ($draad->forum_id === $forum_id AND ! LoginModel::mag($draad->gedeeld_met)) {
+			foreach ($draden as $draad_id => $draad) {
+				// if binnen foreach draad vanwege check op draad gedeeld met
+				if (!$deel->magLezen() AND ! $gedeeld[$draad->gedeeld_met]->magLezen()) {
+					if ($draad->forum_id === $forum_id) {
 						foreach ($posts as $i => $post) {
 							if ($post->draad_id === $draad_id) {
 								unset($posts[$i]);
@@ -860,7 +884,6 @@ class ForumPostsModel extends PersistenceModel implements Paging {
 						unset($draden[$draad_id]);
 					}
 				}
-				unset($delen[$forum_id]);
 			}
 		}
 		return array($posts, $draden);

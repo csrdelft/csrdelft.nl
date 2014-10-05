@@ -21,6 +21,11 @@ class ForumDraad extends PersistentEntity {
 	 */
 	public $forum_id;
 	/**
+	 * Forum waarmee dit topic gedeeld is
+	 * @var int
+	 */
+	public $gedeeld_met;
+	/**
 	 * Uid van auteur
 	 * @var string
 	 */
@@ -86,10 +91,6 @@ class ForumDraad extends PersistentEntity {
 	 */
 	public $eerste_post_plakkerig;
 	/**
-	 * Rechten posten voor met wie dit draad gedeeld is
-	 */
-	public $gedeeld_met;
-	/**
 	 * Forumposts
 	 * @var ForumPost[]
 	 */
@@ -121,6 +122,7 @@ class ForumDraad extends PersistentEntity {
 	protected static $persistent_fields = array(
 		'draad_id'				 => array(T::Integer, false, 'auto_increment'),
 		'forum_id'				 => array(T::Integer),
+		'gedeeld_met'			 => array(T::Integer, true),
 		'uid'					 => array(T::UID),
 		'titel'					 => array(T::String),
 		'datum_tijd'			 => array(T::DateTime),
@@ -133,8 +135,7 @@ class ForumDraad extends PersistentEntity {
 		'wacht_goedkeuring'		 => array(T::Boolean),
 		'plakkerig'				 => array(T::Boolean),
 		'belangrijk'			 => array(T::Boolean),
-		'eerste_post_plakkerig'	 => array(T::Boolean),
-		'gedeeld_met'			 => array(T::String, true)
+		'eerste_post_plakkerig'	 => array(T::Boolean)
 	);
 	/**
 	 * Database primary key

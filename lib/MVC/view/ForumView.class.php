@@ -9,8 +9,8 @@
  */
 class ForumView extends SmartyTemplateView {
 
-	public function __construct(array $categorien) {
-		parent::__construct($categorien, 'Forum');
+	public function __construct() {
+		parent::__construct(ForumModel::instance()->getForumIndeling(), 'Forum');
 	}
 
 	public function view() {
@@ -81,7 +81,7 @@ class ForumDeelView extends SmartyTemplateView {
 		$this->smarty->assign('deel', $this->model);
 		$this->smarty->assign('paging', $this->paging);
 		$this->smarty->assign('belangrijk', $this->belangrijk);
-		$this->smarty->assign('categorien', ForumModel::instance()->getForum());
+		$this->smarty->assign('categorien', ForumModel::instance()->getForumIndeling());
 		$this->smarty->assign('post_form_tekst', $_SESSION['forum_concept']);
 		$this->smarty->display('MVC/forum/deel.tpl');
 	}
@@ -138,6 +138,8 @@ class ForumDraadView extends SmartyTemplateView {
 		$this->smarty->assign('deel', $this->deel);
 		$this->smarty->assign('paging', $this->paging);
 		$this->smarty->assign('post_form_tekst', $_SESSION['forum_concept']);
+		$this->smarty->assign('categorien', ForumModel::instance()->getForumIndeling());
+		$this->smarty->assign('gedeeld_met_opties', ForumDelenModel::instance()->getForumDelenOptiesOmTeDelen($this->deel));
 		$this->smarty->display('MVC/forum/draad.tpl');
 	}
 

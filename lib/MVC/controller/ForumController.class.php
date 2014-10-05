@@ -106,7 +106,7 @@ class ForumController extends Controller {
 	 * Overzicht met categorien en forumdelen laten zien.
 	 */
 	public function forum() {
-		$this->view = new ForumView(ForumModel::instance()->getForum());
+		$this->view = new ForumView();
 	}
 
 	/**
@@ -213,8 +213,15 @@ class ForumController extends Controller {
 	public function onderwerp($draad_id, $pagina = null) {
 		$draad = ForumDradenModel::instance()->getForumDraad((int) $draad_id);
 		$deel = ForumDelenModel::instance()->getForumDeel($draad->forum_id);
-		if (!$deel->magLezen() AND ! LoginModel::mag($draad->gedeeld_met)) {
-			$this->geentoegang();
+		if (!$deel->magLezen()) {
+			if ($draad->gedeeld_met) {
+				$gedeeld = ForumDelenModel::instance()->getForumDeel($draad->gedeeld_met);
+				if (!$gedeeld->magLezen()) {
+					$this->geentoegang();
+				}
+			} else {
+				$this->geentoegang();
+			}
 		}
 		$gelezen = $draad->getWanneerGelezen(); // laad gelezen voordat database geupdate wordt
 		if ($pagina === null) {
@@ -399,13 +406,13 @@ class ForumController extends Controller {
 		}
 		if (in_array($property, array('verwijderd', 'gesloten', 'plakkerig', 'belangrijk', 'eerste_post_plakkerig'))) {
 			$value = !$draad->$property;
-		} elseif ($property === 'forum_id') {
+		} elseif ($property === 'forum_id' OR $property === 'gedeeld_met') {
 			$value = (int) filter_input(INPUT_POST, $property, FILTER_SANITIZE_NUMBER_INT);
 			$deel = ForumDelenModel::instance()->getForumDeel($value);
 			if (!$deel->magModereren()) {
 				$this->geentoegang();
 			}
-		} elseif ($property === 'titel' OR $property === 'gedeeld_met') {
+		} elseif ($property === 'titel') {
 			$value = trim(filter_input(INPUT_POST, $property, FILTER_SANITIZE_STRING));
 		} else {
 			$this->geentoegang();
@@ -443,7 +450,10 @@ class ForumController extends Controller {
 		if ($draad->verwijderd OR $draad->gesloten) {
 			return false;
 		}
-		if ($deel->magPosten() OR LoginModel::mag($draad->gedeeld_met)) {
+		if ($deel->magPosten()) {
+			return true;
+		}
+		if ($draad->gedeeld_met AND ForumDelenModel::instance()->getForumDeel($draad->gedeeld_met)->magPosten()) {
 			return true;
 		}
 		return false;
@@ -535,10 +545,13 @@ class ForumController extends Controller {
 		if ($deel->magModereren()) {
 			return true;
 		}
-		if ($draad->verwijderd OR $draad->gesloten OR $post->uid !== LoginModel::getUid()) {
+		if ($draad->verwijderd OR $draad->gesloten OR $post->uid !== LoginModel::getUid() OR ! LoginModel::mag('P_LOGGED_IN')) {
 			return false;
 		}
-		if (LoginModel::mag('P_LOGGED_IN') AND ( $deel->magPosten() OR LoginModel::mag($draad->gedeeld_met) )) {
+		if ($deel->magPosten()) {
+			return true;
+		}
+		if ($draad->gedeeld_met AND ForumDelenModel::instance()->getForumDeel($draad->gedeeld_met)->magPosten()) {
 			return true;
 		}
 		return false;

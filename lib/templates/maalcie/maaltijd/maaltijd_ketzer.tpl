@@ -57,9 +57,9 @@
 			<div class="small">
 				{if $maaltijd->magSluiten(LoginModel::getUid())}
 					<a href="/maaltijdenlijst/{$maaltijd->getMaaltijdId()}" title="Toon maaltijdlijst">
-					{/if}
-					Inschrijvingen: <em>{$maaltijd->getAantalAanmeldingen()}</em> van <em>{$maaltijd->getAanmeldLimiet()}</em>
-					{if $maaltijd->magSluiten(LoginModel::getUid())}
+				{/if}
+				Inschrijvingen: <em>{$maaltijd->getAantalAanmeldingen()}</em> van <em>{$maaltijd->getAanmeldLimiet()}</em>
+				{if $maaltijd->magSluiten(LoginModel::getUid())}
 					</a>
 				{/if}
 			</div>
