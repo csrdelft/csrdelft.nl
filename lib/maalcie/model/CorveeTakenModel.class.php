@@ -316,7 +316,7 @@ class CorveeTakenModel {
 			$taak->getBonusToegekend(),
 			$taak->getWanneerToegekend(),
 			$taak->getWanneerGemaild(),
-			$taak->getIsVerwijderd(),
+			werkomheen_pdo_bool($taak->getIsVerwijderd()),
 			$taak->getTaakId()
 		);
 		$db = \Database::instance();

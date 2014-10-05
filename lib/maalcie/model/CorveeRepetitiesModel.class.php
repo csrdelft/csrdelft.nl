@@ -127,7 +127,7 @@ class CorveeRepetitiesModel {
 			$repetitie->getFunctieId(),
 			$repetitie->getStandaardPunten(),
 			$repetitie->getStandaardAantal(),
-			$repetitie->getIsVoorkeurbaar(),
+			werkomheen_pdo_bool($repetitie->getIsVoorkeurbaar()),
 			$repetitie->getCorveeRepetitieId()
 		);
 		$db = \Database::instance();
@@ -142,7 +142,7 @@ class CorveeRepetitiesModel {
 		$sql = 'INSERT INTO crv_repetities';
 		$sql.= ' (crv_repetitie_id, mlt_repetitie_id, dag_vd_week, periode_in_dagen, functie_id, standaard_punten, standaard_aantal, voorkeurbaar)';
 		$sql.= ' VALUES (?, ?, ?, ?, ?, ?, ?, ?)';
-		$values = array(null, $mrid, $dag, $periode, $fid, $punten, $aantal, $voorkeur);
+		$values = array(null, $mrid, $dag, $periode, $fid, $punten, $aantal, werkomheen_pdo_bool($voorkeur));
 		$db = \Database::instance();
 		$query = $db->prepare($sql);
 		$query->execute($values);

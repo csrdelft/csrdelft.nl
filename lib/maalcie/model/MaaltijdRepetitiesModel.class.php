@@ -122,7 +122,7 @@ class MaaltijdRepetitiesModel {
 			$repetitie->getStandaardTitel(),
 			$repetitie->getStandaardTijd(),
 			$repetitie->getStandaardPrijs(),
-			$repetitie->getIsAbonneerbaar(),
+			werkomheen_pdo_bool($repetitie->getIsAbonneerbaar()),
 			$repetitie->getStandaardLimiet(),
 			$repetitie->getAbonnementFilter(),
 			$repetitie->getMaaltijdRepetitieId()
@@ -139,7 +139,7 @@ class MaaltijdRepetitiesModel {
 		$sql = 'INSERT INTO mlt_repetities';
 		$sql.= ' (mlt_repetitie_id, dag_vd_week, periode_in_dagen, standaard_titel, standaard_tijd, standaard_prijs, abonneerbaar, standaard_limiet, abonnement_filter)';
 		$sql.= ' VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)';
-		$values = array(null, $dag, $periode, $titel, $tijd, $prijs, $abo, $limiet, $filter);
+		$values = array(null, $dag, $periode, $titel, $tijd, $prijs, werkomheen_pdo_bool($abo), $limiet, $filter);
 		$db = \Database::instance();
 		$query = $db->prepare($sql);
 		$query->execute($values);

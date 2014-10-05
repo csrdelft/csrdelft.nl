@@ -6,6 +6,16 @@
 # -------------------------------------------------------------------
 
 /**
+ * PDO does a stringcast (false = '') and MySql uses tinyint for booleans so expects 0/1
+ */
+function werkomheen_pdo_bool($value) {
+	if (is_bool($value)) {
+		$value = (int) $value;
+	}
+	return $value;
+}
+
+/**
  * Is the current request posted?
  * @return boolean
  */

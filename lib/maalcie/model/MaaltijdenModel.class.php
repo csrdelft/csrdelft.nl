@@ -255,9 +255,9 @@ class MaaltijdenModel {
 			$maaltijd->getDatum(),
 			$maaltijd->getTijd(),
 			$maaltijd->getPrijs(),
-			$maaltijd->getIsGesloten(),
+			werkomheen_pdo_bool($maaltijd->getIsGesloten()),
 			$maaltijd->getLaatstGesloten(),
-			$maaltijd->getIsVerwijderd(),
+			werkomheen_pdo_bool($maaltijd->getIsVerwijderd()),
 			$maaltijd->getAanmeldFilter(),
 			$maaltijd->getMaaltijdId()
 		);
@@ -279,7 +279,7 @@ class MaaltijdenModel {
 		$sql = 'INSERT INTO mlt_maaltijden';
 		$sql.= ' (maaltijd_id, mlt_repetitie_id, titel, aanmeld_limiet, datum, tijd, prijs, gesloten, laatst_gesloten, verwijderd, aanmeld_filter)';
 		$sql.= ' VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
-		$values = array(null, $mrid, $titel, $limiet, $datum, $tijd, $prijs, $gesloten, $wanneer, false, $filter);
+		$values = array(null, $mrid, $titel, $limiet, $datum, $tijd, $prijs, werkomheen_pdo_bool($gesloten), $wanneer, werkomheen_pdo_bool(false), $filter);
 		$db = \Database::instance();
 		$query = $db->prepare($sql);
 		$query->execute($values);

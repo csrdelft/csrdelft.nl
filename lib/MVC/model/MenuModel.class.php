@@ -27,21 +27,16 @@ class MenuModel extends PersistenceModel {
 	}
 
 	/**
-	 * Array van alle menu roots om te beheren
+	 * Lijst van alle menu roots om te beheren.
 	 * 
-	 * @return MenuItem[]
+	 * @return PDOStatement
 	 */
 	public function getBeheerMenusVoorLid() {
-		$roots = array();
-		foreach ($this->find('parent_id = ?', array(0), 'prioriteit ASC') as $root) {
-			if ($root->tekst === 'main' AND ! LoginModel::mag('P_ADMIN')) {
-				continue;
-			}
-			if ($root->magBeheren()) {
-				$roots[] = $root;
-			}
+		if (LoginModel::mag('P_ADMIN')) {
+			return $this->find('parent_id = ?', array(0), 'tekst ASC');
+		} else {
+			return array();
 		}
-		return $roots;
 	}
 
 	/**

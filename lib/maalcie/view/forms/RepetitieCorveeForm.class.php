@@ -11,7 +11,7 @@
 class RepetitieCorveeForm extends ModalForm {
 
 	public function __construct(CorveeRepetitie $repetitie, $beginDatum = null, $eindDatum = null, $mid = null) {
-		parent::__construct(null, 'maalcie-repetitie-aanmaken-form', Instellingen::get('taken', 'url') . '/aanmaken/' . $repetitie->getCorveeRepetitieId());
+		parent::__construct($mid, 'maalcie-repetitie-aanmaken-form', Instellingen::get('taken', 'url') . '/aanmaken/' . $repetitie->getCorveeRepetitieId());
 		$this->titel = 'Periodiek corvee aanmaken';
 
 		$fields[] = new HtmlComment('<p>Aanmaken op de eerste ' . $repetitie->getDagVanDeWeekText() . 'en vervolgens ' . $repetitie->getPeriodeInDagenText() . ' in de periode:</p>');
@@ -30,6 +30,10 @@ class RepetitieCorveeForm extends ModalForm {
 		if (strtotime($fields['eind']->getValue()) < strtotime($fields['begin']->getValue())) {
 			$fields['eind']->error = 'Moet na begindatum liggen';
 			$valid = false;
+		}
+		// wijzigen van verborgen veld mag niet
+		if ($this->getModel() !== $this->findByName('maaltijd_id')->getValue()) {
+			return false;
 		}
 		return $valid;
 	}

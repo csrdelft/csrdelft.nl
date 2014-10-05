@@ -87,11 +87,7 @@ abstract class PersistentEntity implements JsonSerializable {
 			$fields = $this->getFields();
 		}
 		foreach ($fields as $field) {
-			$values[$field] = $this->$field;
-			//FIXME: werkomheen PDO/MySQL bug boolean/smallint
-			if (is_bool($values[$field])) {
-				$values[$field] = (int) $values[$field];
-			}
+			$values[$field] = werkomheen_pdo_bool($this->$field);
 		}
 		if ($primary_key_only) {
 			return array_values($values);

@@ -76,4 +76,20 @@ class MenuItemForm extends ModalForm {
 		$this->addFields($fields);
 	}
 
+	public function validate() {
+		if (!parent::validate()) {
+			return false;
+		}
+		if (!LoginModel::mag('P_ADMIN')) {
+			// gebruiker mag niet stiekem deze velden wijzigen
+			if ($this->getModel()->parent_id !== $this->findByName('parent_id')->getValue()) {
+				return false;
+			}
+			if ($this->getModel()->rechten_bekijken !== $this->findByName('rechten_bekijken')->getValue()) {
+				return false;
+			}
+		}
+		return true;
+	}
+
 }

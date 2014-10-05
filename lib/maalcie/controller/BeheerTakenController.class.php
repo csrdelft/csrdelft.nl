@@ -145,8 +145,8 @@ class BeheerTakenController extends AclController {
 		if ($this->view->validate()) {
 			$values = $this->view->getValues();
 			$uid = ($values['uid'] === '' ? null : $values['uid']);
-			$crid = ($values['crv_repetitie_id'] === '' ? null : intval($values['crv_repetitie_id']));
 			$mid = ($values['maaltijd_id'] === 0 ? null : $values['maaltijd_id']);
+			$crid = ($values['crv_repetitie_id'] === 0 ? null : $values['crv_repetitie_id']);
 			$taak = CorveeTakenModel::saveTaak($tid, intval($values['functie_id']), $uid, $crid, $mid, $values['datum'], intval($values['punten']), intval($values['bonus_malus']));
 			$maaltijd = null;
 			if (endsWith($_SERVER['HTTP_REFERER'], Instellingen::get('taken', 'url') . '/maaltijd/' . $values['maaltijd_id'])) { // state of gui
