@@ -50,21 +50,18 @@ class MenuBeheerController extends AclController {
 
 	public function toevoegen($parent_id) {
 		if ($parent_id == 'favoriet') {
-			$parent_id = $this->model->getMenuRoot(LoginModel::getUid())->item_id;
+			$parent = $this->model->getMenuRoot(LoginModel::getUid());
+		} else {
+			$parent = $this->model->getMenuItem((int) $parent_id);
 		}
-		$item = $this->model->newMenuItem((int) $parent_id);
-		$title = 'Menu-item ';
+		if (!$parent OR ! $parent->magBeheren()) {
+			$this->geentoegang();
+		}
+		$item = $this->model->newMenuItem($parent->item_id);
 		if (!$item OR ! $item->magBeheren()) {
 			$this->geentoegang();
-		} elseif ($item->rechten_bekijken == LoginModel::getUid() AND ! LoginModel::mag('P_ADMIN')) {
-			// check of nieuw item wel aan favorieten van gebruiker wordt toegevoegd
-			if ($item->parent_id !== $this->model->getMenuRoot(LoginModel::getUid())->item_id) {
-				$this->geentoegang();
-			} else {
-				$title = 'Favoriet ';
-			}
 		}
-		$this->view = new MenuItemForm($item, $this->action, (int) $parent_id, $title); // fetches POST values itself
+		$this->view = new MenuItemForm($item, $this->action, $parent_id); // fetches POST values itself
 		if ($this->view->validate()) {
 			$item->item_id = (int) $this->model->create($item);
 			setMelding('Toegevoegd: ' . $item->tekst, 1);
@@ -77,7 +74,7 @@ class MenuBeheerController extends AclController {
 		if (!$item OR ! $item->magBeheren()) {
 			$this->geentoegang();
 		}
-		$this->view = new MenuItemForm($item, $this->action); // fetches POST values itself
+		$this->view = new MenuItemForm($item, $this->action, $item->item_id); // fetches POST values itself
 		if ($this->view->validate()) {
 			$rowcount = $this->model->update($item);
 			if ($rowcount > 0) {
