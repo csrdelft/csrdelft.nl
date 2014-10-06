@@ -16,7 +16,7 @@ class FileField implements FormElement, Validator {
 	protected $filterMime;
 	protected $behouden;
 	protected $name;  // naam van het veld in POST
-	public $not_null = false; // required
+	public $required = false;
 
 	public function __construct($name, Bestand $behouden = null, $ftpSubDir = '', array $filterMime = array(), $multiple = false) {
 		$this->name = $name;
@@ -32,7 +32,7 @@ class FileField implements FormElement, Validator {
 			if (!$uploader->isAvailable()) {
 				unset($this->opties[$methode]);
 			} else {
-				$this->opties[$methode]->required = $this->not_null;
+				$this->opties[$methode]->required = $this->required;
 			}
 		}
 		if (isset($_POST[$name . 'BestandUploader'])) {
@@ -82,7 +82,7 @@ class FileField implements FormElement, Validator {
 		}
 		if (!empty($this->filterMime) AND ! in_array($this->getModel()->mimetype, $this->filterMime)) {
 			if (empty($this->getModel()->mimetype)) {
-				if ($this->not_null) {
+				if ($this->required) {
 					$this->opties[$this->methode]->error = 'Afbeelding is verplicht';
 					return false;
 				}
@@ -124,7 +124,7 @@ JS;
 
 class RequiredFileField extends FileField {
 
-	public $not_null = true;
+	public $required = true;
 
 }
 
@@ -160,7 +160,7 @@ class ImageField extends FileField {
 				$this->opties[$this->methode]->error = 'Afbeelding is te hoog.';
 			}
 		} else {
-			if ($this->not_null) {
+			if ($this->required) {
 				$this->opties[$this->methode]->error = 'Afbeelding is verplicht';
 			}
 		}
@@ -171,7 +171,7 @@ class ImageField extends FileField {
 
 class RequiredImageField extends ImageField {
 
-	public $not_null = true;
+	public $required = true;
 
 }
 

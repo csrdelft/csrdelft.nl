@@ -425,7 +425,7 @@ class TextField extends InputField {
 
 class RequiredTextField extends TextField {
 
-	public $not_null = true;
+	public $required = true;
 
 }
 
@@ -445,7 +445,7 @@ class FileNameField extends TextField {
 
 class RequiredFileNameField extends FileNameField {
 
-	public $not_null = true;
+	public $required = true;
 
 }
 
@@ -464,7 +464,7 @@ class LandField extends TextField {
 
 class RequiredLandField extends LandField {
 
-	public $not_null = true;
+	public $required = true;
 
 }
 
@@ -513,7 +513,7 @@ class RechtenField extends TextField {
 
 class RequiredRechtenField extends RechtenField {
 
-	public $not_null = true;
+	public $required = true;
 
 }
 
@@ -656,7 +656,7 @@ JS;
 
 class RequiredLidField extends LidField {
 
-	public $not_null = true;
+	public $required = true;
 
 }
 
@@ -724,7 +724,7 @@ class EmailField extends TextField {
 
 class RequiredEmailField extends EmailField {
 
-	public $not_null = true;
+	public $required = true;
 
 }
 
@@ -752,7 +752,7 @@ class UrlField extends TextField {
 
 class RequiredUrlField extends UrlField {
 
-	public $not_null = true;
+	public $required = true;
 
 }
 
@@ -805,7 +805,7 @@ class IntField extends TextField {
 
 class RequiredIntField extends IntField {
 
-	public $not_null = true;
+	public $required = true;
 
 }
 
@@ -856,7 +856,7 @@ class FloatField extends TextField {
 
 class RequiredFloatField extends FloatField {
 
-	public $not_null = true;
+	public $required = true;
 
 }
 
@@ -879,7 +879,7 @@ class BedragField extends FloatField {
 
 class RequiredBedragField extends FloatField {
 
-	public $not_null = true;
+	public $required = true;
 
 }
 
@@ -1009,7 +1009,7 @@ class TextareaField extends TextField {
 
 class RequiredTextareaField extends TextareaField {
 
-	public $not_null = true;
+	public $required = true;
 
 }
 
@@ -1054,7 +1054,7 @@ JS;
 
 class RequiredUbbPreviewField extends UbbPreviewField {
 
-	public $not_null = true;
+	public $required = true;
 
 }
 
@@ -1072,7 +1072,7 @@ class WachtwoordField extends TextField {
 
 class RequiredWachtwoordField extends WachtwoordField {
 
-	public $not_null = true;
+	public $required = true;
 
 }
 
@@ -1230,7 +1230,7 @@ class SelectField extends InputField {
 
 class RequiredSelectField extends SelectField {
 
-	public $not_null = true;
+	public $required = true;
 
 }
 
@@ -1614,7 +1614,7 @@ class VinkField extends InputField {
 
 class RequiredVinkField extends VinkField {
 
-	public $not_null = true;
+	public $required = true;
 
 }
 
