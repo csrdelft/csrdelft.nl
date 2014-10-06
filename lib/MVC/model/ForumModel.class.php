@@ -266,7 +266,7 @@ class ForumDelenModel extends PersistenceModel {
 		foreach ($gevonden_delen as $forum_id => $deel) {
 			foreach ($gevonden_draden as $draad_id => $draad) {
 				// if binnen foreach draad vanwege check op draad gedeeld met
-				if (!$deel->magLezen() AND ! $gedeeld_delen[$draad->gedeeld_met]->magLezen()) {
+				if (!$deel->magLezen() AND ! ($draad->gedeeld_met AND $gedeeld_delen[$draad->gedeeld_met]->magLezen())) {
 					if ($draad->forum_id === $deel->forum_id) {
 						unset($gevonden_draden[$draad_id]);
 					}
@@ -874,7 +874,7 @@ class ForumPostsModel extends PersistenceModel implements Paging {
 		foreach ($delen as $forum_id => $deel) {
 			foreach ($draden as $draad_id => $draad) {
 				// if binnen foreach draad vanwege check op draad gedeeld met
-				if (!$deel->magLezen() AND ! $gedeeld[$draad->gedeeld_met]->magLezen()) {
+				if (!$deel->magLezen() AND ! ($draad->gedeeld_met AND $gedeeld[$draad->gedeeld_met]->magLezen())) {
 					if ($draad->forum_id === $forum_id) {
 						foreach ($posts as $i => $post) {
 							if ($post->draad_id === $draad_id) {
