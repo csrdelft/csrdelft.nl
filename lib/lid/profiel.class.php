@@ -316,7 +316,7 @@ class ProfielBewerken extends Profiel {
 		$email = new RequiredEmailField('email', $profiel['email'], 'Emailadres');
 		if (LoginModel::getUid() === $this->lid->getUid()) {
 			//als we ons *eigen* profiel bewerken is het email-adres verplicht
-			$email->not_null = true;
+			$email->required = true;
 		}
 		$form[] = $email;
 		$form[] = new EmailField('msn', $profiel['msn'], 'MSN');

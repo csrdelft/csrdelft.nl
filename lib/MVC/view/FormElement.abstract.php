@@ -36,7 +36,8 @@
  *  	* UidField					Uid's  met preview
  * 		* LidField					Leden selecteren
  * 		* IntField					Integers 
- * 		* FloatField				Bedragen
+ * 		* FloatField				Kommagetallen
+ * 			- BedragField			Bedragen met 2 cijfers achter de komma
  * 	- WachtwoordWijzigenField		Wachtwoorden (oude, nieuwe, nieuwe ter bevestiging)
  * 	- SelectField
  * 		* GeslachtField				m/v
@@ -76,7 +77,8 @@ abstract class InputField implements FormElement, Validator {
 	public $disabled = false; //veld uitgeschakeld?
 	public $hidden = false; //veld onzichtbaar voor gebruiker?
 	public $locked = false; //veld mag niet worden aangepast door client?
-	public $not_null = false; //mag het veld leeg zijn?
+	public $required = false; //mag het veld leeg zijn?
+	public $empty_null = false; //lege waarden teruggeven als null
 	public $preview = true; //preview tonen? (waar van toepassing)
 	public $leden_mod = false; //uitzondering leeg verplicht veld voor LEDEN_MOD
 	public $autocomplete = true; //browser laten autoaanvullen?
@@ -149,7 +151,7 @@ abstract class InputField implements FormElement, Validator {
 			$this->error = 'Veld is niet gepost';
 		} elseif ($this->locked AND $this->value !== $this->origvalue) {
 			$this->error = 'Dit veld mag niet worden aangepast';
-		} elseif ($this->value == '' AND $this->not_null) {
+		} elseif ($this->value == '' AND $this->required) {
 			//vallen over lege velden als dat aangezet is voor het veld
 			if ($this->leden_mod AND LoginModel::mag('P_LEDEN_MOD')) {
 				//tenzij gebruiker P_LEDEN_MOD heeft en deze optie aan staat voor dit veld
@@ -191,7 +193,7 @@ abstract class InputField implements FormElement, Validator {
 	protected function getLabel() {
 		if (!empty($this->description)) {
 			$required = '';
-			if ($this->not_null) {
+			if ($this->required) {
 				if ($this->leden_mod AND LoginModel::mag('P_LEDEN_MOD')) {
 					// exception for leden mod
 				} else {
@@ -232,7 +234,7 @@ abstract class InputField implements FormElement, Validator {
 	 * Geef lijst van allerlei CSS-classes voor dit veld terug.
 	 */
 	protected function getCssClasses() {
-		if ($this->not_null) {
+		if ($this->required) {
 			if ($this->leden_mod AND LoginModel::mag('P_LEDEN_MOD')) {
 				// exception for leden mod
 			} else {
@@ -395,6 +397,10 @@ class TextField extends InputField {
 		parent::__construct($name, htmlspecialchars_decode($value), $description, $model);
 		$this->max_len = (int) $max_len;
 		$this->min_len = (int) $min_len;
+		if ($this->isPosted()) {
+			// reverse InputField constructor $this->getValue()
+			$this->value = htmlspecialchars_decode($this->value);
+		}
 	}
 
 	public function validate() {
@@ -408,7 +414,11 @@ class TextField extends InputField {
 	}
 
 	public function getValue() {
-		return htmlspecialchars(parent::getValue());
+		$value = parent::getValue();
+		if ($this->empty_null AND empty($value)) {
+			return null;
+		}
+		return htmlspecialchars($value);
 	}
 
 }
@@ -765,10 +775,11 @@ class IntField extends TextField {
 	}
 
 	public function getValue() {
-		if (parent::getValue() == '') {
+		$value = parent::getValue();
+		if ($value === null OR $value === '') {
 			return null;
 		}
-		return (int) parent::getValue();
+		return (int) $value;
 	}
 
 	public function validate() {
@@ -817,10 +828,11 @@ class FloatField extends TextField {
 	}
 
 	public function getValue() {
-		if (parent::getValue() == '') {
+		$value = parent::getValue();
+		if ($value === null OR $value === '') {
 			return null;
 		}
-		return (float) str_replace(',', '.', parent::getValue());
+		return (float) str_replace(',', '.', $value);
 	}
 
 	public function validate() {
@@ -843,6 +855,29 @@ class FloatField extends TextField {
 }
 
 class RequiredFloatField extends FloatField {
+
+	public $not_null = true;
+
+}
+
+/**
+ * Invoeren van een bedrag. Precisie van 2 cijfers achter de komma.
+ * 
+ * TODO: view aanpassen zodat altijd 2 decimalen worden weergegeven.
+ */
+class BedragField extends FloatField {
+
+	public function getValue() {
+		$value = parent::getValue();
+		if ($value === null OR $value === '') {
+			return null;
+		}
+		return round($value, 2);
+	}
+
+}
+
+class RequiredBedragField extends FloatField {
 
 	public $not_null = true;
 
@@ -1059,9 +1094,14 @@ class WachtwoordWijzigenField extends InputField {
 
 	public function getValue() {
 		if ($this->isPosted()) {
-			return $_POST[$this->name . '_new'];
+			$value = $_POST[$this->name . '_new'];
+		} else {
+			$value = false;
 		}
-		return false;
+		if ($this->empty_null AND empty($value)) {
+			return null;
+		}
+		return $value;
 	}
 
 	public function validate() {
@@ -1116,33 +1156,43 @@ class WachtwoordWijzigenField extends InputField {
 
 /**
  * SelectField
- * Basis html-select met een aantal opties.
- *
- * is valid als één van de opties geselecteerd is //TODO: of meerdere
+ * HTML select met opties.
  */
 class SelectField extends InputField {
 
 	public $options;
 	public $size;
-	public $multiple; //TODO
+	public $multiple;
 
 	public function __construct($name, $value, $description, array $options, $size = 1, $multiple = false) {
 		parent::__construct($name, $value, $description);
 		$this->options = $options;
 		$this->size = (int) $size;
 		$this->multiple = $multiple;
-		if (count($this->options) < 1) {
+		if (!$this->multiple AND count($this->options) < 1) {
 			throw new Exception('Tenminste 1 optie nodig voor selectieveld: ' . $name);
 		}
 	}
 
+	public function getValue() {
+		$value = parent::getValue();
+		if ($this->empty_null AND empty($value)) {
+			return null;
+		}
+		return $value;
+	}
+
 	public function validate() {
-		if (!array_key_exists($this->value, $this->options)) {
-			if ($this->value !== null) {
+		if (!parent::validate()) {
+			return false;
+		}
+		if ($this->multiple) {
+			if (array_intersect($this->value, $this->options) !== $this->value) {
 				$this->error = 'Onbekende optie gekozen';
 			}
-			if ($this->size === 1 && !parent::validate()) {
-				return false;
+		} else {
+			if (!array_key_exists($this->value, $this->options)) {
+				$this->error = 'Onbekende optie gekozen';
 			}
 		}
 		return $this->error === '';
@@ -1153,14 +1203,16 @@ class SelectField extends InputField {
 		echo $this->getLabel();
 		echo $this->getErrorDiv();
 
-		echo '<select';
+		echo '<select name="' . $this->name;
 		if ($this->multiple) {
-			echo ' multiple';
+			echo '[]" multiple';
+		} else {
+			echo '"';
 		}
 		if ($this->size > 1) {
 			echo ' size="' . $this->size . '"';
 		}
-		echo $this->getInputAttribute(array('id', 'name', 'origvalue', 'class', 'disabled', 'readonly', 'onchange', 'onclick', 'onkeyup')) . '>';
+		echo $this->getInputAttribute(array('id', 'origvalue', 'class', 'disabled', 'readonly', 'onchange', 'onclick', 'onkeyup')) . '>';
 
 		foreach ($this->options as $value => $description) {
 			echo '<option value="' . $value . '"';
@@ -1320,10 +1372,14 @@ class DatumField extends InputField {
 
 	public function getValue() {
 		if ($this->isPosted()) {
-			return $this->getJaar() . '-' . $this->getMaand() . '-' . $this->getDag();
+			$value = $this->getJaar() . '-' . $this->getMaand() . '-' . $this->getDag();
 		} else {
-			return parent::getValue();
+			$value = parent::getValue();
 		}
+		if ($this->empty_null AND $value == '0000-00-00') {
+			return null;
+		}
+		return $value;
 	}
 
 	public function validate() {
@@ -1526,7 +1582,7 @@ class VinkField extends InputField {
 	}
 
 	public function validate() {
-		if (!$this->value AND $this->not_null) {
+		if (!$this->value AND $this->required) {
 			if ($this->leden_mod AND LoginModel::mag('P_LEDEN_MOD')) {
 				// exception for leden mod
 			} else {

@@ -32,7 +32,7 @@ class MaaltijdRepetitieForm extends ModalForm {
 		if ($mrid !== 0) {
 			$fields['abo']->onchange = "if (!this.checked && $(this).attr('origvalue') == 1) if (!confirm('Alle abonnementen zullen worden verwijderd!')) this.checked = true;";
 		}
-		$fields[] = new FloatField('standaard_prijs', $prijs, 'Standaard prijs (€)', 0, 50);
+		$fields[] = new BedragField('standaard_prijs', $prijs, 'Standaard prijs (€)', 0, 50);
 		$fields[] = new IntField('standaard_limiet', $limiet, 'Standaard limiet', 0, 200);
 		$fields[] = new RechtenField('abonnement_filter', $filter, 'Aanmeldrestrictie');
 		if ($mrid !== 0) {

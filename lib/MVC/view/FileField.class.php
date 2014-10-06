@@ -32,7 +32,7 @@ class FileField implements FormElement, Validator {
 			if (!$uploader->isAvailable()) {
 				unset($this->opties[$methode]);
 			} else {
-				$this->opties[$methode]->not_null = $this->not_null;
+				$this->opties[$methode]->required = $this->not_null;
 			}
 		}
 		if (isset($_POST[$name . 'BestandUploader'])) {
@@ -328,7 +328,7 @@ class UploadHttp extends BestandUploader {
 			return false;
 		}
 		if ($this->value['error'] == UPLOAD_ERR_NO_FILE) {
-			if ($this->not_null) {
+			if ($this->required) {
 				$this->error = 'Selecteer een bestand';
 			}
 		} elseif ($this->value['error'] == UPLOAD_ERR_INI_SIZE) {

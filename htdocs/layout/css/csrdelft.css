@@ -653,7 +653,7 @@ input, textarea, select{
 	margin-left: 30%;
 	padding: 5px;
 }
-.Formulier input.IntField, .Formulier input.FloatField{
+.Formulier input.IntField, .Formulier input.FloatField, .Formulier input.BedragField{
 	width: 40px;
 	text-align: right;
 }
