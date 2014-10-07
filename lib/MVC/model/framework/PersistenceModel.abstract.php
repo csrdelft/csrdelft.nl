@@ -139,6 +139,25 @@ abstract class PersistenceModel implements Persistence {
 	/**
 	 * Retrieve the value of sparse attributes.
 	 * 
+	 * Usage example:
+	 * 
+	 * $user = UserModel::instance()->getUser($uid); // retrieves non-sparse attributes
+	 * echo $user->getAddress(); // suppose address is sparse: retrieve address
+	 * 
+	 * class User {
+	 * public function getAddress() {
+	 *  $attr = array('city' 'street', 'number', 'postalcode');
+	 *  UserModel::instance()->retrieveAttributes($this, $attr);
+	 *  $this->attr_retrieved = array_merge($this->attr_retrieved, $attr);
+	 * }
+	 * 
+	 * Wrong usage: forget to register retrieved atributes, problematic for ->getValues()
+	 * 
+	 * $model = UserModel::instance();
+	 * $user = $model->getUser($uid); // retrieves non-sparse attributes
+	 * $model->retrieveAttributes($user, array('city' 'street', 'number', 'postalcode')); // suppose address is sparse: retrieve address
+	 * echo ...
+	 * 
 	 * @param array $attributes
 	 */
 	public function retrieveAttributes(PersistentEntity $entity, array $attributes) {
