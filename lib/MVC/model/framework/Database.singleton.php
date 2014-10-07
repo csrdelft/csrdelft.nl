@@ -66,23 +66,23 @@ class Database extends PDO {
 	 * @return string The interpolated query
 	 */
 	public static function interpolateQuery($query, $params) {
-		$fields = array();
+		$attributes = array();
 		// build a regular expression for each parameter
-		foreach ($params as $field => $value) {
-			if (is_string($field)) {
-				$fields[] = '/:' . $field . '/';
+		foreach ($params as $attribute => $value) {
+			if (is_string($attribute)) {
+				$attributes[] = '/:' . $attribute . '/';
 			} else {
-				$fields[] = '/[?]/';
+				$attributes[] = '/[?]/';
 			}
-			$params[$field] = '"' . $value . '"'; // quotes
+			$params[$attribute] = '"' . $value . '"'; // quotes
 		}
-		return preg_replace($fields, $params, $query, 1);
+		return preg_replace($attributes, $params, $query, 1);
 	}
 
 	/**
 	 * Optional named parameters.
 	 * 
-	 * @param array $fields
+	 * @param array $attributes
 	 * @param string $from
 	 * @param string $where
 	 * @param array $params
@@ -91,8 +91,8 @@ class Database extends PDO {
 	 * @param int $start
 	 * @return PDOStatement
 	 */
-	public static function sqlSelect(array $fields, $from, $where = null, array $params = array(), $orderby = null, $groupby = null, $limit = null, $start = 0) {
-		$sql = 'SELECT ' . implode(', ', $fields) . ' FROM ' . $from;
+	public static function sqlSelect(array $attributes, $from, $where = null, array $params = array(), $orderby = null, $groupby = null, $limit = null, $start = 0) {
+		$sql = 'SELECT ' . implode(', ', $attributes) . ' FROM ' . $from;
 		if ($where !== null) {
 			$sql .= ' WHERE ' . $where;
 		}
@@ -143,8 +143,8 @@ class Database extends PDO {
 	 */
 	public static function sqlInsert($into, array $properties, $replace = false) {
 		$insert_params = array();
-		foreach ($properties as $field => $value) {
-			$insert_params[':I' . $field] = $value; // name parameters after field
+		foreach ($properties as $attribute => $value) {
+			$insert_params[':I' . $attribute] = $value; // name parameters after attribute
 		}
 		if ($replace) {
 			$sql = 'REPLACE';
@@ -168,7 +168,7 @@ class Database extends PDO {
 	 * Default REPLACE (DELETE & INSERT) if primary key already exists.
 	 * 
 	 * @param string $into
-	 * @param array $properties = array( array("propname1", "propname2", ...), array("entry1value1", "entry1value2", ...), array("entry2value1", "entry2value2", ...), ...)
+	 * @param array $properties = array( array("attr_name1", "attr_name2", ...), array("entry1value1", "entry1value2", ...), array("entry2value1", "entry2value2", ...), ...)
 	 * @param boolean $replace
 	 * @return int number of rows affected
 	 * @throws Exception if number of values !== number of properties
@@ -180,9 +180,9 @@ class Database extends PDO {
 			$sql = 'INSERT';
 		}
 		$insert_values = array();
-		$fields = array_shift($properties);
-		$count = count($fields);
-		$sql .= ' INTO ' . $into . ' (' . implode(', ', $fields) . ') VALUES ';
+		$attributes = array_shift($properties);
+		$count = count($attributes);
+		$sql .= ' INTO ' . $into . ' (' . implode(', ', $attributes) . ') VALUES ';
 		foreach ($properties as $i => $props) { // for all entries
 			if (count($props) !== $count) {
 				throw new Exception('Missing property value(s) for entry: ' . $i);
@@ -192,7 +192,7 @@ class Database extends PDO {
 			}
 			$sql .= '(';
 			foreach ($props as $j => $value) {
-				$param = ':I' . $i . $fields[$j]; // name parameters after field with index
+				$param = ':I' . $i . $attributes[$j]; // name parameters after attribute with index
 				$insert_values[$param] = $value;
 				if ($j > 0) {
 					$sql .= ', ';
@@ -220,15 +220,15 @@ class Database extends PDO {
 	 */
 	public static function sqlUpdate($table, array $properties, $where, array $where_params = array(), $limit = null) {
 		$sql = 'UPDATE ' . $table . ' SET ';
-		$fields = array();
-		foreach ($properties as $field => $value) {
-			$fields[] = $field . ' = :U' . $field; // name parameters after field
-			if (array_key_exists(':U' . $field, $where_params)) {
-				throw new Exception('Named parameter already defined: ' . $field);
+		$attributes = array();
+		foreach ($properties as $attribute => $value) {
+			$attributes[] = $attribute . ' = :U' . $attribute; // name parameters after attribute
+			if (array_key_exists(':U' . $attribute, $where_params)) {
+				throw new Exception('Named parameter already defined: ' . $attribute);
 			}
-			$where_params[':U' . $field] = $value;
+			$where_params[':U' . $attribute] = $value;
 		}
-		$sql .= implode(', ', $fields);
+		$sql .= implode(', ', $attributes);
 		$sql .= ' WHERE ' . $where;
 		if (is_int($limit)) {
 			$sql .= ' LIMIT ' . $limit;
