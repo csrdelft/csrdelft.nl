@@ -59,7 +59,7 @@ class LogEntry extends PersistentEntity {
 	 */
 	public $user_agent;
 	/**
-	 * Database table fields
+	 * Database table columns
 	 * @var array
 	 */
 	protected static $persistent_attributes = array(

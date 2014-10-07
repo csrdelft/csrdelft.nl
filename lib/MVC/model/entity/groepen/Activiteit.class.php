@@ -16,7 +16,7 @@ class Activiteit extends Ketzer implements Agendeerbaar {
 	 */
 	public $locatie;
 	/**
-	 * Database table fields
+	 * Database table columns
 	 * @var array
 	 */
 	protected static $persistent_attributes = array(
@@ -29,7 +29,7 @@ class Activiteit extends Ketzer implements Agendeerbaar {
 	protected static $table_name = 'activiteiten';
 
 	/**
-	 * Extend the persistent fields.
+	 * Extend the persistent attributes.
 	 */
 	public static function __constructStatic() {
 		parent::__constructStatic();

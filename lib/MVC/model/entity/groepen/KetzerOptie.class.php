@@ -31,14 +31,14 @@ class KetzerOptie extends PersistentEntity {
 	 */
 	public $waarde;
 	/**
-	 * Database table fields
+	 * Database table columns
 	 * @var array
 	 */
 	protected static $persistent_attributes = array(
-		'ketzer_id' => array(T::Integer),
-		'select_id' => array(T::Integer),
-		'optie_id' => array(T::Integer),
-		'waarde' => array(T::String)
+		'ketzer_id'	 => array(T::Integer),
+		'select_id'	 => array(T::Integer),
+		'optie_id'	 => array(T::Integer),
+		'waarde'	 => array(T::String)
 	);
 	/**
 	 * Database table name

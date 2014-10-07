@@ -29,7 +29,7 @@ class Verticale extends PersistentEntity {
 	 */
 	private $leider;
 	/**
-	 * Database table fields
+	 * Database table columns
 	 * @var array
 	 */
 	protected static $persistent_attributes = array(

@@ -41,15 +41,15 @@ class Ketzer extends Groep {
 	 */
 	private $ketzer_selectors;
 	/**
-	 * Database table fields
+	 * Database table columns
 	 * @var array
 	 */
 	protected static $persistent_attributes = array(
-		'aanmeld_limiet' => array(T::Integer, true),
-		'aanmelden_vanaf' => array(T::DateTime),
-		'aanmelden_tot' => array(T::DateTime),
-		'kosten_bedrag' => array(T::Float, true),
-		'machtiging_rekening' => array(T::String, true)
+		'aanmeld_limiet'		 => array(T::Integer, true),
+		'aanmelden_vanaf'		 => array(T::DateTime),
+		'aanmelden_tot'			 => array(T::DateTime),
+		'kosten_bedrag'			 => array(T::Float, true),
+		'machtiging_rekening'	 => array(T::String, true)
 	);
 	/**
 	 * Database table name
@@ -58,7 +58,7 @@ class Ketzer extends Groep {
 	protected static $table_name = 'ketzers';
 
 	/**
-	 * Extend the persistent fields.
+	 * Extend the persistent attributes.
 	 */
 	public static function __constructStatic() {
 		parent::__constructStatic();

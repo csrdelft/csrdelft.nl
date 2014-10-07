@@ -54,7 +54,7 @@ class Mededeling extends PersistentEntity {
 	 */
 	public $afbeelding_url;
 	/**
-	 * Database table fields
+	 * Database table columns
 	 * @var array
 	 */
 	protected static $persistent_attributes = array(

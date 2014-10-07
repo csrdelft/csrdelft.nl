@@ -60,19 +60,19 @@ class GroepLid extends PersistentEntity {
 	 */
 	public $door_uid;
 	/**
-	 * Database table fields
+	 * Database table columns
 	 * @var array
 	 */
 	protected static $persistent_attributes = array(
 		'groep_type' => array(T::String),
-		'groep_id' => array(T::Integer),
-		'uid' => array(T::UID),
-		'opmerking' => array(T::String),
-		'lid_sinds' => array(T::DateTime),
-		'lid_tot' => array(T::DateTime, true),
-		'status' => array(T::Enumeration, false, 'GroepStatus'),
+		'groep_id'	 => array(T::Integer),
+		'uid'		 => array(T::UID),
+		'opmerking'	 => array(T::String),
+		'lid_sinds'	 => array(T::DateTime),
+		'lid_tot'	 => array(T::DateTime, true),
+		'status'	 => array(T::Enumeration, false, 'GroepStatus'),
 		'prioriteit' => array(T::Integer),
-		'door_uid' => array(T::UID)
+		'door_uid'	 => array(T::UID)
 	);
 	/**
 	 * Database primary key

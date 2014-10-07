@@ -84,23 +84,23 @@ class Groep extends PersistentEntity {
 	 */
 	private $groep_leden;
 	/**
-	 * Database table fields
+	 * Database table columns
 	 * @var array
 	 */
 	protected static $persistent_attributes = array(
-		'id' => array(T::Integer, false, 'auto_increment'),
-		'categorie_id' => array(T::Integer),
-		'familie_id' => array(T::String),
-		'naam' => array(T::String),
-		'samenvatting' => array(T::Text),
-		'omschrijving' => array(T::Text),
-		'begin_moment' => array(T::DateTime, true),
-		'eind_moment' => array(T::DateTime, true),
-		'status' => array(T::Enumeration, false, 'GroepStatus'),
-		'rechten_bekijken' => array(T::String),
-		'rechten_aanmelden' => array(T::String),
-		'rechten_beheren' => array(T::String),
-		'website' => array(T::String)
+		'id'				 => array(T::Integer, false, 'auto_increment'),
+		'categorie_id'		 => array(T::Integer),
+		'familie_id'		 => array(T::String),
+		'naam'				 => array(T::String),
+		'samenvatting'		 => array(T::Text),
+		'omschrijving'		 => array(T::Text),
+		'begin_moment'		 => array(T::DateTime, true),
+		'eind_moment'		 => array(T::DateTime, true),
+		'status'			 => array(T::Enumeration, false, 'GroepStatus'),
+		'rechten_bekijken'	 => array(T::String),
+		'rechten_aanmelden'	 => array(T::String),
+		'rechten_beheren'	 => array(T::String),
+		'website'			 => array(T::String)
 	);
 	/**
 	 * Database primary key

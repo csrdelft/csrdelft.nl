@@ -81,7 +81,7 @@ class ForumDeel extends PersistentEntity {
 	 */
 	private $forum_draden;
 	/**
-	 * Database table fields
+	 * Database table columns
 	 * @var array
 	 */
 	protected static $persistent_attributes = array(

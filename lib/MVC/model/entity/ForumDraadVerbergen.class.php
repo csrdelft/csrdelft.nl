@@ -21,7 +21,7 @@ class ForumDraadVerbergen extends PersistentEntity {
 	 */
 	public $uid;
 	/**
-	 * Database table fields
+	 * Database table columns
 	 * @var array
 	 */
 	protected static $persistent_attributes = array(

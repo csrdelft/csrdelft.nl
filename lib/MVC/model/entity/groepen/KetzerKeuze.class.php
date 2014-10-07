@@ -31,14 +31,14 @@ class KetzerKeuze extends PersistentEntity {
 	 */
 	public $uid;
 	/**
-	 * Database table fields
+	 * Database table columns
 	 * @var array
 	 */
 	protected static $persistent_attributes = array(
-		'ketzer_id' => array(T::Integer),
-		'select_id' => array(T::Integer),
-		'optie_id' => array(T::Integer),
-		'uid' => array(T::UID)
+		'ketzer_id'	 => array(T::Integer),
+		'select_id'	 => array(T::Integer),
+		'optie_id'	 => array(T::Integer),
+		'uid'		 => array(T::UID)
 	);
 	/**
 	 * Database table name

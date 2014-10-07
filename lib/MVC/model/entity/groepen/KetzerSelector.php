@@ -29,13 +29,13 @@ class KetzerSelector extends PersistentEntity {
 	 */
 	public $keuze_soort;
 	/**
-	 * Database table fields
+	 * Database table columns
 	 * @var array
 	 */
 	protected static $persistent_attributes = array(
-		'ketzer_id' => array(T::Integer),
-		'select_id' => array(T::Integer),
-		'keuze_soort' => array(T::Enumeration, false, 'KetzerSelectorSoort')
+		'ketzer_id'		 => array(T::Integer),
+		'select_id'		 => array(T::Integer),
+		'keuze_soort'	 => array(T::Enumeration, false, 'KetzerSelectorSoort')
 	);
 	/**
 	 * Database table name

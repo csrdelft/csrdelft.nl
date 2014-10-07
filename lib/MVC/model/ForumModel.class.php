@@ -533,8 +533,8 @@ class ForumDradenModel extends PersistenceModel implements Paging {
 	public function zoeken($query, $datum, $ouder, $jaar) {
 		$this->per_pagina = (int) LidInstellingen::get('forum', 'zoekresultaten');
 		$orm = self::orm;
-		$fields = $orm::getAttributes();
-		$fields[] = 'MATCH(titel) AGAINST (? IN BOOLEAN MODE) AS score';
+		$attributes = $orm::getAttributes();
+		$attributes[] = 'MATCH(titel) AGAINST (? IN BOOLEAN MODE) AS score';
 		$where = 'wacht_goedkeuring = FALSE AND verwijderd = FALSE AND ';
 		if ($datum === 'gemaakt') {
 			$order = 'datum_tijd';
@@ -557,7 +557,7 @@ class ForumDradenModel extends PersistenceModel implements Paging {
 			}
 		}
 		$query = implode(' +', $terms); // set terms to AND
-		$results = Database::sqlSelect($fields, $orm::getTableName(), $where, array($query, $datum), $order, null, $this->per_pagina, ($this->pagina - 1) * $this->per_pagina);
+		$results = Database::sqlSelect($attributes, $orm::getTableName(), $where, array($query, $datum), $order, null, $this->per_pagina, ($this->pagina - 1) * $this->per_pagina);
 		$results->setFetchMode(PDO::FETCH_CLASS, $orm, array($cast = true));
 		return $results;
 	}
@@ -792,8 +792,8 @@ class ForumPostsModel extends PersistenceModel implements Paging {
 	public function zoeken($query, $datum, $ouder, $jaar) {
 		$this->per_pagina = (int) LidInstellingen::get('forum', 'zoekresultaten');
 		$orm = self::orm;
-		$fields = $orm::getAttributes();
-		$fields[] = 'MATCH(tekst) AGAINST (? IN NATURAL LANGUAGE MODE) AS score';
+		$attributes = $orm::getAttributes();
+		$attributes[] = 'MATCH(tekst) AGAINST (? IN NATURAL LANGUAGE MODE) AS score';
 		$where = 'wacht_goedkeuring = FALSE AND verwijderd = FALSE AND ';
 		if ($datum === 'gemaakt') {
 			$where .= 'datum_tijd';
@@ -807,7 +807,7 @@ class ForumPostsModel extends PersistenceModel implements Paging {
 		}
 		$datum = getDateTime(strtotime('-' . $jaar . ' year'));
 		$where .= ' HAVING score > 0';
-		$results = Database::sqlSelect($fields, $orm::getTableName(), $where, array($query, $datum), 'score DESC', null, $this->per_pagina, ($this->pagina - 1) * $this->per_pagina);
+		$results = Database::sqlSelect($attributes, $orm::getTableName(), $where, array($query, $datum), 'score DESC', null, $this->per_pagina, ($this->pagina - 1) * $this->per_pagina);
 		$results->setFetchMode(PDO::FETCH_CLASS, $orm, array($cast = true));
 		return $results;
 	}

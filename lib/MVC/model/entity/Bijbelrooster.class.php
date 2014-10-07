@@ -22,7 +22,7 @@ class Bijbelrooster extends PersistentEntity implements Agendeerbaar {
 	 */
 	public $stukje;
 	/**
-	 * Database table fields
+	 * Database table columns
 	 * @var array
 	 */
 	protected static $persistent_attributes = array(

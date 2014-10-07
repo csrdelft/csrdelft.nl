@@ -56,19 +56,19 @@ class GroepCategorie extends PersistentEntity {
 	 */
 	public $rechten_aanmelden;
 	/**
-	 * Database table fields
+	 * Database table columns
 	 * @var array
 	 */
 	protected static $persistent_attributes = array(
-		'categorie_id' => array(T::Integer, false, 'auto_increment'),
-		'titel' => array(T::String),
-		'toon_overzicht' => array(T::Boolean),
-		'toon_profiel' => array(T::Boolean),
-		'sync_ldap' => array(T::Boolean),
-		'rechten_aanmaken' => array(T::String),
-		'rechten_beheren' => array(T::String),
-		'rechten_bekijken' => array(T::String),
-		'rechten_aanmelden' => array(T::String)
+		'categorie_id'		 => array(T::Integer, false, 'auto_increment'),
+		'titel'				 => array(T::String),
+		'toon_overzicht'	 => array(T::Boolean),
+		'toon_profiel'		 => array(T::Boolean),
+		'sync_ldap'			 => array(T::Boolean),
+		'rechten_aanmaken'	 => array(T::String),
+		'rechten_beheren'	 => array(T::String),
+		'rechten_bekijken'	 => array(T::String),
+		'rechten_aanmelden'	 => array(T::String)
 	);
 	/**
 	 * Database primary key

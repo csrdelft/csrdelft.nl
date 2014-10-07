@@ -41,7 +41,7 @@ class LidInstelling extends PersistentEntity {
 	 */
 	public $waarde;
 	/**
-	 * Database table fields
+	 * Database table columns
 	 * @var array
 	 */
 	protected static $persistent_attributes = array(
