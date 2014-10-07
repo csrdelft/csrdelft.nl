@@ -56,7 +56,7 @@ class AgendaItem extends PersistentEntity implements Agendeerbaar {
 	 * Database table fields
 	 * @var array
 	 */
-	protected static $persistent_fields = array(
+	protected static $persistent_attributes = array(
 		'item_id'			 => array(T::Integer, false, 'auto_increment'),
 		'titel'				 => array(T::String),
 		'beschrijving'		 => array(T::Text),

@@ -44,7 +44,7 @@ class CmsPagina extends PersistentEntity {
 	 * Database table fields
 	 * @var array
 	 */
-	protected static $persistent_fields = array(
+	protected static $persistent_attributes = array(
 		'naam'				 => array(T::String),
 		'titel'				 => array(T::String),
 		'inhoud'			 => array(T::LongText),

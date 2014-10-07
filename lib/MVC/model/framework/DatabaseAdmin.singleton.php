@@ -1,6 +1,6 @@
 <?php
 
-require_once 'MVC/model/Database.singleton.php';
+require_once 'MVC/model/framework/Database.singleton.php';
 
 /**
  * DatabaseAdmin.singleton.php
@@ -58,7 +58,7 @@ class DatabaseAdmin extends Database {
 	}
 
 	/**
-	 * Get table fields.
+	 * Get table attributes.
 	 * 
 	 * @param string $name
 	 * @return PDOStatement
@@ -66,10 +66,10 @@ class DatabaseAdmin extends Database {
 	public static function sqlDescribeTable($name) {
 		$sql = 'DESCRIBE ' . $name;
 		$query = self::instance()->prepare($sql);
-		self::instance()->setAttribute(PDO::ATTR_CASE, PDO::CASE_LOWER); // lowercase field properties
+		self::instance()->setAttribute(PDO::ATTR_CASE, PDO::CASE_LOWER); // lowercase attribute properties
 		$query->execute();
 		self::instance()->setAttribute(PDO::ATTR_CASE, PDO::CASE_NATURAL); // reset
-		$query->setFetchMode(PDO::FETCH_CLASS, 'PersistentField');
+		$query->setFetchMode(PDO::FETCH_CLASS, 'PersistentAttribute');
 		return $query;
 	}
 
@@ -116,14 +116,14 @@ class DatabaseAdmin extends Database {
 	 * Create table and return SQL.
 	 * 
 	 * @param string $name
-	 * @param array $fields
+	 * @param array $attributes
 	 * @param array $primary_key
 	 * @return string SQL query
 	 */
-	public static function sqlCreateTable($name, array $fields, array $primary_key) {
+	public static function sqlCreateTable($name, array $attributes, array $primary_key) {
 		$sql = 'CREATE TABLE ' . $name . ' (';
-		foreach ($fields as $name => $field) {
-			$sql .= $field->toSQL() . ', ';
+		foreach ($attributes as $name => $attribute) {
+			$sql .= $attribute->toSQL() . ', ';
 		}
 		if (empty($primary_key)) {
 			$sql = substr($sql, 0, -2); // remove last ,
@@ -138,9 +138,9 @@ class DatabaseAdmin extends Database {
 		self::$queries[] = $query->queryString;
 	}
 
-	public static function sqlAddField($table, PersistentField $field, $after_field = null) {
-		$sql = 'ALTER TABLE ' . $table . ' ADD ' . $field->toSQL();
-		$sql .= ($after_field === null ? ' FIRST' : ' AFTER ' . $after_field);
+	public static function sqlAddAttribute($table, PersistentAttribute $attribute, $after_attribute = null) {
+		$sql = 'ALTER TABLE ' . $table . ' ADD ' . $attribute->toSQL();
+		$sql .= ($after_attribute === null ? ' FIRST' : ' AFTER ' . $after_attribute);
 		$query = self::instance()->prepare($sql);
 		if (DB_MODIFY) {
 			$query->execute();
@@ -148,8 +148,8 @@ class DatabaseAdmin extends Database {
 		self::$queries[] = $query->queryString;
 	}
 
-	public static function sqlChangeField($table, PersistentField $field, $old_name = null) {
-		$sql = 'ALTER TABLE ' . $table . ' CHANGE ' . ($old_name === null ? $field->field : $old_name) . ' ' . $field->toSQL();
+	public static function sqlChangeAttribute($table, PersistentAttribute $attribute, $old_name = null) {
+		$sql = 'ALTER TABLE ' . $table . ' CHANGE ' . ($old_name === null ? $attribute->field : $old_name) . ' ' . $attribute->toSQL();
 		$query = self::instance()->prepare($sql);
 		if (DB_MODIFY) {
 			$query->execute();
@@ -157,8 +157,8 @@ class DatabaseAdmin extends Database {
 		self::$queries[] = $query->queryString;
 	}
 
-	public static function sqlDeleteField($table, PersistentField $field) {
-		$sql = 'ALTER TABLE ' . $table . ' DROP ' . $field->field;
+	public static function sqlDeleteAttribute($table, PersistentAttribute $attribute) {
+		$sql = 'ALTER TABLE ' . $table . ' DROP ' . $attribute->field;
 		$query = self::instance()->prepare($sql);
 		if (DB_MODIFY AND DB_DROP === true) {
 			$query->execute();

@@ -66,17 +66,17 @@ class Database extends PDO {
 	 * @return string The interpolated query
 	 */
 	public static function interpolateQuery($query, $params) {
-		$keys = array();
+		$fields = array();
 		// build a regular expression for each parameter
-		foreach ($params as $key => $value) {
-			if (is_string($key)) {
-				$keys[] = '/:' . $key . '/';
+		foreach ($params as $field => $value) {
+			if (is_string($field)) {
+				$fields[] = '/:' . $field . '/';
 			} else {
-				$keys[] = '/[?]/';
+				$fields[] = '/[?]/';
 			}
-			$params[$key] = '"' . $value . '"'; // quotes
+			$params[$field] = '"' . $value . '"'; // quotes
 		}
-		return preg_replace($keys, $params, $query, 1);
+		return preg_replace($fields, $params, $query, 1);
 	}
 
 	/**
@@ -143,8 +143,8 @@ class Database extends PDO {
 	 */
 	public static function sqlInsert($into, array $properties, $replace = false) {
 		$insert_params = array();
-		foreach ($properties as $key => $value) {
-			$insert_params[':I' . $key] = $value; // name parameters after field
+		foreach ($properties as $field => $value) {
+			$insert_params[':I' . $field] = $value; // name parameters after field
 		}
 		if ($replace) {
 			$sql = 'REPLACE';
@@ -221,12 +221,12 @@ class Database extends PDO {
 	public static function sqlUpdate($table, array $properties, $where, array $where_params = array(), $limit = null) {
 		$sql = 'UPDATE ' . $table . ' SET ';
 		$fields = array();
-		foreach ($properties as $key => $value) {
-			$fields[] = $key . ' = :U' . $key; // name parameters after field
-			if (array_key_exists(':U' . $key, $where_params)) {
-				throw new Exception('Named parameter already defined: ' . $key);
+		foreach ($properties as $field => $value) {
+			$fields[] = $field . ' = :U' . $field; // name parameters after field
+			if (array_key_exists(':U' . $field, $where_params)) {
+				throw new Exception('Named parameter already defined: ' . $field);
 			}
-			$where_params[':U' . $key] = $value;
+			$where_params[':U' . $field] = $value;
 		}
 		$sql .= implode(', ', $fields);
 		$sql .= ' WHERE ' . $where;

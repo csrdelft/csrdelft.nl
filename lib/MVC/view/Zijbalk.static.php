@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Zijbalk.abstract.php
+ * Zijbalk.static.php
  * 
  * @author C.S.R. Delft <pubcie@csrdelft.nl>
  * 

@@ -32,7 +32,7 @@ class KetzerSelector extends PersistentEntity {
 	 * Database table fields
 	 * @var array
 	 */
-	protected static $persistent_fields = array(
+	protected static $persistent_attributes = array(
 		'ketzer_id' => array(T::Integer),
 		'select_id' => array(T::Integer),
 		'keuze_soort' => array(T::Enumeration, false, 'KetzerSelectorSoort')

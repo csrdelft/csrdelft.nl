@@ -1,16 +1,16 @@
 <?php
 
 /**
- * PersistentField.class.php
+ * PersistentAttribute.class.php
  * 
  * @author P.W.G. Brussee <brussee@live.nl>
  * 
  * MySQL definitions.
  * 
- * @see PersistentEntity::makePersistentField()
+ * @see PersistentEntity::makePersistentAttribute()
  * 
  */
-class PersistentField {
+class PersistentAttribute {
 
 	/**
 	 * Name

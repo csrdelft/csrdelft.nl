@@ -44,7 +44,7 @@ class Ketzer extends Groep {
 	 * Database table fields
 	 * @var array
 	 */
-	protected static $persistent_fields = array(
+	protected static $persistent_attributes = array(
 		'aanmeld_limiet' => array(T::Integer, true),
 		'aanmelden_vanaf' => array(T::DateTime),
 		'aanmelden_tot' => array(T::DateTime),
@@ -62,7 +62,7 @@ class Ketzer extends Groep {
 	 */
 	public static function __constructStatic() {
 		parent::__constructStatic();
-		self::$persistent_fields = parent::$persistent_fields + self::$persistent_fields;
+		self::$persistent_attributes = parent::$persistent_attributes + self::$persistent_attributes;
 	}
 
 	/**

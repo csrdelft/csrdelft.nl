@@ -119,7 +119,7 @@ class ForumDraad extends PersistentEntity {
 	 * Database table fields
 	 * @var array
 	 */
-	protected static $persistent_fields = array(
+	protected static $persistent_attributes = array(
 		'draad_id'				 => array(T::Integer, false, 'auto_increment'),
 		'forum_id'				 => array(T::Integer),
 		'gedeeld_met'			 => array(T::Integer, true),

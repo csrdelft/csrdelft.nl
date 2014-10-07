@@ -87,7 +87,7 @@ class Groep extends PersistentEntity {
 	 * Database table fields
 	 * @var array
 	 */
-	protected static $persistent_fields = array(
+	protected static $persistent_attributes = array(
 		'id' => array(T::Integer, false, 'auto_increment'),
 		'categorie_id' => array(T::Integer),
 		'familie_id' => array(T::String),

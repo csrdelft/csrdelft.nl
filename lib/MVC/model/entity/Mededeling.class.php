@@ -57,7 +57,7 @@ class Mededeling extends PersistentEntity {
 	 * Database table fields
 	 * @var array
 	 */
-	protected static $persistent_fields = array(
+	protected static $persistent_attributes = array(
 		'mededeling_id'		 => array(T::Integer, false, 'auto_increment'),
 		'uid'				 => array(T::UID),
 		'type'				 => array(T::String),

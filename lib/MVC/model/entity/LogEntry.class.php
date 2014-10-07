@@ -62,7 +62,7 @@ class LogEntry extends PersistentEntity {
 	 * Database table fields
 	 * @var array
 	 */
-	protected static $persistent_fields = array(
+	protected static $persistent_attributes = array(
 		'class_function' => array(T::String),
 		'dump'			 => array(T::LongText, true),
 		'call_trace'	 => array(T::Text),

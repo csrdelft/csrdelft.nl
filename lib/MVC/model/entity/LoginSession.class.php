@@ -37,7 +37,7 @@ class LoginSession extends PersistentEntity {
 	 * Database table fields
 	 * @var array
 	 */
-	protected static $persistent_fields = array(
+	protected static $persistent_attributes = array(
 		'session_id'	 => array(T::String),
 		'uid'			 => array(T::UID),
 		'last_active'	 => array(T::DateTime),

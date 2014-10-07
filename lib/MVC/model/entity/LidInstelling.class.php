@@ -44,7 +44,7 @@ class LidInstelling extends PersistentEntity {
 	 * Database table fields
 	 * @var array
 	 */
-	protected static $persistent_fields = array(
+	protected static $persistent_attributes = array(
 		'uid'			 => array(T::UID),
 		'module'		 => array(T::String),
 		'instelling_id'	 => array(T::String),

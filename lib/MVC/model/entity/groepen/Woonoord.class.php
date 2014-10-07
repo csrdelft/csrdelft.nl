@@ -25,7 +25,7 @@ class Woonoord extends Groep {
 	 * Database table fields
 	 * @var array
 	 */
-	protected static $persistent_fields = array(
+	protected static $persistent_attributes = array(
 		'status_historie' => array(T::Text, true),
 		'huis_status' => array(T::String, true)
 	);
@@ -40,7 +40,7 @@ class Woonoord extends Groep {
 	 */
 	public static function __constructStatic() {
 		parent::__constructStatic();
-		self::$persistent_fields = parent::$persistent_fields + self::$persistent_fields;
+		self::$persistent_attributes = parent::$persistent_attributes + self::$persistent_attributes;
 	}
 
 }

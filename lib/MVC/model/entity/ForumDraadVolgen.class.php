@@ -24,7 +24,7 @@ class ForumDraadVolgen extends PersistentEntity {
 	 * Database table fields
 	 * @var array
 	 */
-	protected static $persistent_fields = array(
+	protected static $persistent_attributes = array(
 		'draad_id'	 => array(T::Integer),
 		'uid'		 => array(T::UID)
 	);

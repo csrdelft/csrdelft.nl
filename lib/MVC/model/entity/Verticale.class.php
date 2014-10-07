@@ -32,7 +32,7 @@ class Verticale extends PersistentEntity {
 	 * Database table fields
 	 * @var array
 	 */
-	protected static $persistent_fields = array(
+	protected static $persistent_attributes = array(
 		'id'	 => array(T::Integer),
 		'letter' => array(T::Char),
 		'naam'	 => array(T::String)

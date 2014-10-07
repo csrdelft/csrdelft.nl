@@ -1,6 +1,6 @@
 <?php
 
-require_once 'MVC/model/Database.singleton.php';
+require_once 'MVC/model/framework/Database.singleton.php';
 
 
 class Barsysteem

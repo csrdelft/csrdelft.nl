@@ -1,8 +1,8 @@
 <?php
 
-require_once 'MVC/model/Database.singleton.php';
-require_once 'MVC/model/Persistence.interface.php';
-require_once 'MVC/model/entity/PersistentEntity.abstract.php';
+require_once 'MVC/model/framework/Database.singleton.php';
+require_once 'MVC/model/framework/Persistence.interface.php';
+require_once 'MVC/model/entity/framework/PersistentEntity.abstract.php';
 
 /**
  * PersistenceModel.abstract.php
@@ -26,9 +26,9 @@ abstract class PersistenceModel implements Persistence {
 	protected function __construct($subdir = '') {
 		$orm = static::orm;
 		require_once 'MVC/model/entity/' . $subdir . $orm . '.class.php';
-		$orm::__constructStatic(); // extend persistent fields
+		$orm::__constructStatic(); // extend persistent attributes
 		if (DB_CHECK) {
-			require_once 'MVC/model/DatabaseAdmin.singleton.php';
+			require_once 'MVC/model/framework/DatabaseAdmin.singleton.php';
 			$orm::checkTable();
 		}
 	}
@@ -45,7 +45,7 @@ abstract class PersistenceModel implements Persistence {
 	 */
 	public function find($criteria = null, array $criteria_params = array(), $orderby = null, $groupby = null, $limit = null, $start = 0) {
 		$orm = static::orm;
-		$result = Database::sqlSelect($orm::getFields(), $orm::getTableName(), $criteria, $criteria_params, $orderby, $groupby, $limit, $start);
+		$result = Database::sqlSelect($orm::getNonSparseAttributes(), $orm::getTableName(), $criteria, $criteria_params, $orderby, $groupby, $limit, $start);
 		$result->setFetchMode(PDO::FETCH_CLASS, $orm, array($cast = true));
 		return $result;
 	}
@@ -132,12 +132,28 @@ abstract class PersistenceModel implements Persistence {
 		foreach ($orm::getPrimaryKey() as $key) {
 			$where[] = $key . ' = ?';
 		}
-		$result = Database::sqlSelect($orm::getFields(), $orm::getTableName(), implode(' AND ', $where), $primary_key_values, null, null, 1);
+		$result = Database::sqlSelect($orm::getNonSparseAttributes(), $orm::getTableName(), implode(' AND ', $where), $primary_key_values, null, null, 1);
 		return $result->fetchObject($orm, array($cast = true));
 	}
 
 	/**
+	 * Retrieve the value of sparse attributes.
+	 * 
+	 * @param array $attributes
+	 */
+	public function retrieveAttributes(PersistentEntity $entity, array $attributes) {
+		$where = array();
+		foreach ($entity->getPrimaryKey() as $key) {
+			$where[] = $key . ' = ?';
+		}
+		$result = Database::sqlSelect($attributes, $entity->getTableName(), implode(' AND ', $where), $entity->getValues(true), null, null, 1);
+		$result->setFetchMode(PDO::FETCH_INTO, $entity);
+		return $result->fetch();
+	}
+
+	/**
 	 * Save existing entity.
+	 * Sparse attributes that have not been retrieved are excluded.
 	 *
 	 * @param PersistentEntity $entity
 	 * @return int rows affected

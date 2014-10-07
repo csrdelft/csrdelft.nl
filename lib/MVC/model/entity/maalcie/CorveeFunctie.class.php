@@ -69,7 +69,7 @@ class CorveeFunctie extends PersistentEntity {
 	 * Database table fields
 	 * @var array
 	 */
-	protected static $persistent_fields = array(
+	protected static $persistent_attributes = array(
 		'functie_id'			 => array(T::Integer, false, 'auto_increment'),
 		'naam'					 => array(T::String),
 		'afkorting'				 => array(T::String),

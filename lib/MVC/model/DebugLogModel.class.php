@@ -1,7 +1,5 @@
 <?php
 
-require_once 'MVC/model/PersistenceModel.abstract.php';
-
 /**
  * DebugLogModel.class.php
  * 

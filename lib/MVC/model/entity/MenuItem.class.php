@@ -60,7 +60,7 @@ class MenuItem extends PersistentEntity {
 	 * Database table fields
 	 * @var array
 	 */
-	protected static $persistent_fields = array(
+	protected static $persistent_attributes = array(
 		'item_id'			 => array(T::Integer, false, 'auto_increment'),
 		'parent_id'			 => array(T::Integer, false),
 		'prioriteit'		 => array(T::Integer, false),

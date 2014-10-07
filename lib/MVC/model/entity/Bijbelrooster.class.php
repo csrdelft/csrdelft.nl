@@ -25,7 +25,7 @@ class Bijbelrooster extends PersistentEntity implements Agendeerbaar {
 	 * Database table fields
 	 * @var array
 	 */
-	protected static $persistent_fields = array(
+	protected static $persistent_attributes = array(
 		'dag'	 => array(T::DateTime, false),
 		'stukje' => array(T::String)
 	);

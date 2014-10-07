@@ -1,6 +1,6 @@
 <?php
 
-require_once 'MVC/view/Zijbalk.abstract.php';
+require_once 'MVC/view/Zijbalk.static.php';
 require_once 'MVC/view/HtmlPage.abstract.php';
 require_once 'MVC/view/MenuView.class.php';
 require_once 'MVC/model/MenuModel.class.php';

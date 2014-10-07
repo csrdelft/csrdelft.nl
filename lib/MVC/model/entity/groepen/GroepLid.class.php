@@ -63,7 +63,7 @@ class GroepLid extends PersistentEntity {
 	 * Database table fields
 	 * @var array
 	 */
-	protected static $persistent_fields = array(
+	protected static $persistent_attributes = array(
 		'groep_type' => array(T::String),
 		'groep_id' => array(T::Integer),
 		'uid' => array(T::UID),
