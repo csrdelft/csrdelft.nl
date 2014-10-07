@@ -13,6 +13,8 @@ require_once 'MVC/model/entity/framework/PersistentAttribute.class.php';
  * Requires static properties in superclass: $table_name, $persistent_attributes, $primary_key
  * Requires getters and setters for every sparse attribute to update: $attr_retrieved
  * 
+ * @see documentation of PersistenceModel->retrieveAttributes() for usage of sparse attributes
+ * 
  * Optional: static $rename_attributes = array('oldname' => 'newname');
  */
 abstract class PersistentEntity implements Sparse, JsonSerializable {
@@ -227,7 +229,7 @@ abstract class PersistentEntity implements Sparse, JsonSerializable {
 		if ($cast) {
 			$this->castValues();
 		}
-		if (isset(static::$sparse_attributes)) {
+		if (isset(static::$sparse_attributes)) { // bookkeeping
 			$this->attr_retrieved = $this->getNonSparseAttributes();
 		}
 	}
@@ -296,6 +298,7 @@ abstract class PersistentEntity implements Sparse, JsonSerializable {
 	 */
 	private function castValues() {
 		foreach (static::$persistent_attributes as $attribute => $definition) {
+			// Only cast retrieved values
 			if (isset(static::$sparse_attributes) AND ! in_array($attribute, $this->attr_retrieved)) {
 				continue;
 			}

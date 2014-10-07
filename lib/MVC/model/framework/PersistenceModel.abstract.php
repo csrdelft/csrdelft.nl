@@ -148,10 +148,10 @@ abstract class PersistenceModel implements Persistence {
 	 * public function getAddress() {
 	 *  $attr = array('city' 'street', 'number', 'postalcode');
 	 *  UserModel::instance()->retrieveAttributes($this, $attr);
-	 *  $this->attr_retrieved = array_merge($this->attr_retrieved, $attr);
+	 *  $this->attr_retrieved = array_merge($this->attr_retrieved, $attr); // bookkeeping
 	 * }
 	 * 
-	 * Wrong usage: forget to register retrieved atributes, problematic for ->getValues()
+	 * Wrong usage: forget to register retrieved atributes, problematic for $entity->getValues() and $entity->isSparse()
 	 * 
 	 * $model = UserModel::instance();
 	 * $user = $model->getUser($uid); // retrieves non-sparse attributes
