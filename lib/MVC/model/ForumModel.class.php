@@ -533,7 +533,7 @@ class ForumDradenModel extends PersistenceModel implements Paging {
 	public function zoeken($query, $datum, $ouder, $jaar) {
 		$this->per_pagina = (int) LidInstellingen::get('forum', 'zoekresultaten');
 		$orm = self::orm;
-		$fields = $orm::getFields();
+		$fields = $orm::getAttributes();
 		$fields[] = 'MATCH(titel) AGAINST (? IN BOOLEAN MODE) AS score';
 		$where = 'wacht_goedkeuring = FALSE AND verwijderd = FALSE AND ';
 		if ($datum === 'gemaakt') {
@@ -792,7 +792,7 @@ class ForumPostsModel extends PersistenceModel implements Paging {
 	public function zoeken($query, $datum, $ouder, $jaar) {
 		$this->per_pagina = (int) LidInstellingen::get('forum', 'zoekresultaten');
 		$orm = self::orm;
-		$fields = $orm::getFields();
+		$fields = $orm::getAttributes();
 		$fields[] = 'MATCH(tekst) AGAINST (? IN NATURAL LANGUAGE MODE) AS score';
 		$where = 'wacht_goedkeuring = FALSE AND verwijderd = FALSE AND ';
 		if ($datum === 'gemaakt') {
