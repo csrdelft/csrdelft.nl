@@ -46,7 +46,7 @@
 		<div class="maaltijdgegevens">
 			<h2><a href="/maaltijdenketzer">Maaltijd</a> van {$maaltijd->getDatum()|date_format:"%A %e %b"} {$maaltijd->getTijd()|date_format:"%H:%M"}</h2>
 			{$maaltijd->getTitel()}
-			{if $maaltijd->getPrijsFloat() !== $standaardprijs}
+			{if $maaltijd->getPrijs() !== $standaardprijs}
 				&nbsp; (&euro; {$maaltijd->getPrijsFloat()|string_format:"%.2f"})
 			{/if}
 			{if $maaltijd->magBekijken(LoginModel::getUid())}
