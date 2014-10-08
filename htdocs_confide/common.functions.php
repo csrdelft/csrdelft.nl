@@ -454,7 +454,7 @@ function reldate($datum) {
 
 function internationalizePhonenumber($phonenumber, $prefix = '+31') {
 	$number = str_replace(array(' ', '-'), '', $phonenumber);
-	if ($number[0] == 0) {
+	if ($number[0] != '+' OR $number[0] != '0') {
 		return $prefix . substr($number, 1);
 	} else {
 		return $phonenumber;
