@@ -103,7 +103,7 @@
 					{/if}
 				{else}
 				<td class="maaltijd-afgemeld">
-					<a href="{Instellingen::get('taken', 'url')}/aanmelden/{$maaltijd->getMaaltijdId()}" class="knop rounded post maaltijd-afgemeld"><input type="checkbox" /> Nee</a>
+					<a href="{Instellingen::get('taken', 'url')}/aanmelden/{$maaltijd->getMaaltijdId()}" class="knop post maaltijd-afgemeld"><input type="checkbox" /> Nee</a>
 					{/if}
 			</td>
 			<td>-</td>
