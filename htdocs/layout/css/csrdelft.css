@@ -913,6 +913,9 @@ span#modsluiten:hover{
 	padding: 5px 10px 5px 15px;
 	height: 19px;
 }
+#forumtabel th a, #forumtabel th a:active{
+	color: #fff;
+}
 #forumtabel td.auteur{
 	vertical-align: top;
 	width: 150px;
