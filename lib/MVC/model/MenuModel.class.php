@@ -39,7 +39,12 @@ class MenuModel extends CachedPersistenceModel {
 			$root = unserialize($cached);
 		} else {
 			$root = $this->getMenuRoot($naam);
-			$this->getTree($root);
+			if ($root) {
+				$this->getTree($root);
+			} else {
+				$root = $this->newMenuItem(0);
+				$root->tekst = $naam;
+			}
 			CsrMemcache::instance()->set($naam . '-menu', serialize($root));
 		}
 		$this->setCache($naam, $root);

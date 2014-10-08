@@ -1131,11 +1131,16 @@ div.forum-paginering a:hover{
 	background-color: #ddd;
 	text-decoration: none;
 }
-div.forum-paginering span.curpage{
+span.curpage{
 	padding: 4px 5px;
 	font-weight: bold;
-	color: #e8cf2a;
+	background-color: #e8cf2a;
+	color: #000;
 }
+.forum-paginering span.curpage{
+	background-color: initial;
+}
+
 
 
 /*
