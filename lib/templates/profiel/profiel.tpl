@@ -159,7 +159,7 @@
 			<div class="familie">
 				{if $profiel->getPatroon() instanceof Lid OR $profiel->getKinderen()|@count > 0}
 					<a class="stamboom" href="/communicatie/stamboom.php?uid={$profiel->getUid()}" title="Stamboom van {$profiel->getNaam()}">
-						<img src="{$CSR_PICS}/knop roundjes/stamboom.jpg" alt="Stamboom van {$profiel->getNaam()}" />
+						<img src="{$CSR_PICS}/knopjes/stamboom.jpg" alt="Stamboom van {$profiel->getNaam()}" />
 					</a>
 				{/if}
 				{if $profiel->getPatroon() instanceof Lid}

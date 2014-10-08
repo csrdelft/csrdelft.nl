@@ -10,7 +10,7 @@
 		<th style="width: 100px;">Wijzig</th>
 		<th style="width: 70px;">Datum</th>
 		<th>Titel</th>
-		<th style="width: 80px;">Lijst</th>
+		<th style="width: 100px;">Lijst</th>
 		<th style="text-align: right;">Eters</th>
 		<th style="width: 100px;">(Limiet)</th>
 		<th>Status</th>

@@ -615,7 +615,7 @@ input, textarea, select{
 	text-align: right;
 	margin-top: 25px;
 }
-.Formulier .FormButtons .knop .icon {
+#modal .Formulier .FormButtons .knop .icon {
 	vertical-align: bottom;
 }
 .Formulier .UploadOptie{
@@ -707,7 +707,7 @@ a.knop, input[type=submit], input[type=button]{
 	background-color: #f5f5f5;
 	border: 1px solid #a9a9a9;
 }
-a.knop.rounded {
+a.round {
 	padding: 6px;
 }
 .icon {
