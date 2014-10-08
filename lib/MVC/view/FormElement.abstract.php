@@ -772,6 +772,8 @@ class IntField extends TextField {
 		if ($max !== null) {
 			$this->max = (int) $max;
 		}
+		// niet standaard leeg casten naar 0
+		$this->empty_null = true;
 	}
 
 	public function getValue() {
@@ -827,6 +829,8 @@ class DecimalField extends TextField {
 		if ($max !== null) {
 			$this->max = (float) $max;
 		}
+		// niet standaard leeg casten naar 0
+		$this->empty_null = true;
 	}
 
 	public function getValue() {
