@@ -88,7 +88,8 @@ class MenuItem extends PersistentEntity {
 	}
 
 	public function hasChildren() {
-		return !empty($this->getChildren());
+		$this->getChildren();
+		return !empty($this->children);
 	}
 
 	/**
