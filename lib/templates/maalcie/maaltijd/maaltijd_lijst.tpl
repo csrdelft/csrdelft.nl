@@ -37,6 +37,9 @@
 													</span>
 												{/if}
 												{if $aanmelding->getGastenEetwens() !== ''}
+													{if $eetwens !== ''}
+														<br />
+													{/if}
 													<span class="opmerking">Gasten: </span>
 													<span class="eetwens">
 														{$aanmelding->getGastenEetwens()}
