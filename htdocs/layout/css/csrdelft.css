@@ -152,6 +152,9 @@ ul.nobullets li{ list-style-type: none; }
 	background-position: 50% 300px;
 	background-repeat: no-repeat;
 }
+#modal .icon {
+	vertical-align: bottom;
+}
 
 #menuZoekForm{
 	width: 212px;
@@ -703,7 +706,7 @@ a.knop, input[type=submit], input[type=button]{
 	border: 1px solid #a9a9a9;
 }
 .icon {
-	vertical-align: bottom;
+	vertical-align: text-bottom;
 }
 input[type=submit]::-moz-focus-inner, input[type=button]::-moz-focus-inner{
     padding: 0;
