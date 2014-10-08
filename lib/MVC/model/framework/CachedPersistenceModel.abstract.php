@@ -32,15 +32,15 @@ abstract class CachedPersistenceModel extends PersistenceModel {
 		return isset($this->runtime_cache[$key]);
 	}
 
-	protected function cacheGet($key) {
+	protected function getCached($key) {
 		return $this->runtime_cache[$key];
 	}
 
-	protected function cacheSet($key, $value) {
+	protected function setCache($key, $value) {
 		$this->runtime_cache[$key] = $value;
 	}
 
-	protected function cacheUnset($key) {
+	protected function unsetCache($key) {
 		unset($this->runtime_cache[$key]);
 	}
 
@@ -58,7 +58,7 @@ abstract class CachedPersistenceModel extends PersistenceModel {
 	public function prefetch($criteria = null, array $criteria_params = array(), $orderby = null, $groupby = null, $limit = null, $start = 0) {
 		$result = parent::find($criteria, $criteria_params, $orderby, $groupby, $limit, $start);
 		foreach ($result as $item) {
-			$this->cacheSet($this->cacheKey($item->getValues(true)));
+			$this->setCache($this->cacheKey($item->getValues(true)));
 		}
 	}
 
@@ -77,7 +77,7 @@ abstract class CachedPersistenceModel extends PersistenceModel {
 	public function prefetchSparse(array $attributes, $criteria = null, array $criteria_params = array(), $orderby = null, $groupby = null, $limit = null, $start = 0) {
 		$result = parent::findSparse($attributes, $criteria, $criteria_params, $orderby, $groupby, $limit, $start);
 		foreach ($result as $item) {
-			$this->cacheSet($this->cacheKey($item->getValues(true)));
+			$this->setCache($this->cacheKey($item->getValues(true)));
 		}
 	}
 
@@ -105,7 +105,7 @@ abstract class CachedPersistenceModel extends PersistenceModel {
 	protected function retrieveByPrimaryKey(array $primary_key_values) {
 		$key = $this->cacheKey($primary_key_values);
 		if ($this->isCached($key)) {
-			return $this->cacheGet($key);
+			return $this->getCached($key);
 		} else {
 			return parent::retrieveByPrimaryKey($primary_key_values);
 		}
@@ -118,7 +118,7 @@ abstract class CachedPersistenceModel extends PersistenceModel {
 	 * @return boolean rows affected
 	 */
 	protected function deleteByPrimaryKey(array $primary_key_values) {
-		$this->cacheUnset($this->cacheKey($primary_key_values));
+		$this->unsetCache($this->cacheKey($primary_key_values));
 		return parent::deleteByPrimaryKey($primary_key_values);
 	}
 

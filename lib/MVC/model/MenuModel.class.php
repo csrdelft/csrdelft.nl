@@ -6,16 +6,11 @@
  * @author P.W.G. Brussee <brussee@live.nl>
  * 
  */
-class MenuModel extends PersistenceModel {
+class MenuModel extends CachedPersistenceModel {
 
 	const orm = 'MenuItem';
 
 	protected static $instance;
-	/**
-	 * Menus by name
-	 * @var array
-	 */
-	private $menus;
 
 	protected function __construct() {
 		parent::__construct();
@@ -23,7 +18,10 @@ class MenuModel extends PersistenceModel {
 	}
 
 	public function getMenuRoot($naam) {
-		return $this->find('parent_id = ? AND tekst = ? ', array(0, $naam), null, null, 1)->fetch();
+		if (!$this->isCached($naam)) {
+			$this->setCache($naam, $this->find('parent_id = ? AND tekst = ? ', array(0, $naam), null, null, 1)->fetch());
+		}
+		return $this->getCached($naam);
 	}
 
 	/**
@@ -48,11 +46,11 @@ class MenuModel extends PersistenceModel {
 	 */
 	public function getMenuTree($naam) {
 		// haal uit cache?
-		if (!isset($this->menus[$naam])) {
+		if (!$this->isCached($naam)) {
 			$this->loadMenus(array($naam));
 		}
 		// niet bestaand menu?
-		if (!isset($this->menus[$naam])) {
+		if (!$this->isCached($naam)) {
 			$item = $this->newMenuItem(0);
 			$item->tekst = $naam;
 			if ($naam == LoginModel::getUid()) {
@@ -60,9 +58,9 @@ class MenuModel extends PersistenceModel {
 				$item->link = '/menubeheer/beheer/' . $naam;
 			}
 			$item->item_id = (int) $this->create($item);
-			$this->menus[$naam] = $item;
+			$this->setCache($naam, $item);
 		}
-		return $this->menus[$naam];
+		return $this->getCached($naam);
 	}
 
 	private function loadMenus(array $menus) {
@@ -70,13 +68,13 @@ class MenuModel extends PersistenceModel {
 		$items = group_by('parent_id', $this->find(null, array(), 'prioriteit ASC'));
 		// totaal geen menu roots?
 		if (isset($items[0])) {
-			// voor alle menus de tree opbouwen
+			// voor alle gevraagde menus de tree opbouwen
 			foreach ($items[0] as $i => $root) {
 				// is dit een van de gevraagde menus?
 				if (in_array($root->tekst, $menus)) {
 					$this->setChildren($root, $items);
 					// zet in cache
-					$this->menus[$root->tekst] = $root;
+					$this->setCache($root->tekst, $root);
 				} else {
 					// directe kinderen uit lijst verwijderen
 					unset($items[$root->item_id]);

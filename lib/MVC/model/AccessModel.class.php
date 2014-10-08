@@ -219,7 +219,7 @@ class AccessModel extends CachedPersistenceModel {
 		}
 		// Try cache
 		if ($this->isCached($permission)) {
-			return $this->cacheGet($permission);
+			return $this->getCached($permission);
 		}
 		// OR
 		if (strpos($permission, ',') !== false) {
@@ -276,7 +276,7 @@ class AccessModel extends CachedPersistenceModel {
 		}
 
 		// Cache
-		$this->cacheSet($permission, $result);
+		$this->setCache($permission, $result);
 
 		return $result;
 	}
@@ -288,7 +288,7 @@ class AccessModel extends CachedPersistenceModel {
 
 		// Try cache
 		if ($this->isCached($permission)) {
-			return $this->cacheGet($permission);
+			return $this->getCached($permission);
 		}
 
 		// zoek de rechten van de gebruiker op
@@ -362,7 +362,7 @@ class AccessModel extends CachedPersistenceModel {
 
 		// Try cache
 		if ($this->isCached($descr)) {
-			return $this->cacheGet($descr);
+			return $this->getCached($descr);
 		}
 
 		// als een uid ingevoerd wordt true teruggeven als het om de huidige gebruiker gaat.
