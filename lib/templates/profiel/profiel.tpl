@@ -3,7 +3,7 @@
 		<div class="naam">
 			<div class="floatR">
 				{$profiel->getUid()|pasfoto}<br />
-				<div class="knop roundjes">
+				<div class="knopjes">
 					{if $profiel->magBewerken()}
 						<a href="/communicatie/profiel/{$profiel->getUid()}/bewerken" class="knop round" title="Bewerk dit profiel">{icon get="bewerken"}</a>
 						<a href="/communicatie/profiel/{$profiel->getUid()}/voorkeuren" class="knop round" title="Pas voorkeuren voor commissies aan">{icon get="report_edit"}</a>
@@ -14,7 +14,7 @@
 					{if $isBestuur}
 						<a href="/communicatie/profiel/{$profiel->getUid()}/dd" class="knop round" title="Wijzig de lidstatus">{icon get="group_edit"}</a>
 					{/if}
-					<a href="/communicatie/profiel/{$profiel->getUid()}/addToGoogleContacts/" class="knop round" title="{*if $profiel->isInGoogleContacts()}Er bestaat al een contact met deze naam in je Google-contacts. Klik om te updaten.{else*}Voeg dit profiel toe aan mijn google adresboek{*/if*}"><img src="{$CSR_PICS}/knop roundjes/google.ico" /></a>
+					<a href="/communicatie/profiel/{$profiel->getUid()}/addToGoogleContacts/" class="knop round" title="{*if $profiel->isInGoogleContacts()}Er bestaat al een contact met deze naam in je Google-contacts. Klik om te updaten.{else*}Voeg dit profiel toe aan mijn google adresboek{*/if*}"><img src="{$CSR_PICS}/knopjes/google.ico" width="16" height="16" /></a>
 					{if $isAdmin}
 						<br />
 						<a href="/tools/stats.php?uid={$profiel->getUid()}" class="knop round" title="Toon bezoeklog">{icon get="server_chart"}</a>
