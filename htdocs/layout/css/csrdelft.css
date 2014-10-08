@@ -79,7 +79,7 @@ hr{
 
 .onzichtbaar{ visibility: hidden; }
 .verborgen{ display: none; }
-.block{ display: block !important; }
+.block{ display: block; }
 .recht{ font-style: normal; }
 .cursief{ font-style: italic; }
 .dikgedrukt{ font-weight: bold; }
