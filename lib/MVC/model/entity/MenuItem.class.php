@@ -80,6 +80,27 @@ class MenuItem extends PersistentEntity {
 	 */
 	protected static $table_name = 'menus';
 
+	public function getChildren() {
+		if (!isset($this->children)) {
+			$this->children = MenuModel::instance()->getChildren($this);
+		}
+		return $this->children;
+	}
+
+	public function hasChildren() {
+		return !empty($this->getChildren());
+	}
+
+	/**
+	 * Do not store parent as well as children:
+	 * bi-directional not possible for serialization.
+	 * 
+	 * @return MenuItem
+	 */
+	public function getParent() {
+		return MenuModel::instance()->getParent($this);
+	}
+
 	/**
 	 * Bepaald of het gevraagde menu-item een
 	 * sub-item is van dit menu-item.
@@ -89,18 +110,14 @@ class MenuItem extends PersistentEntity {
 	 */
 	public function isParentOf(MenuItem $item) {
 		if ($this->item_id === $item->parent_id) {
-			return true;
+			return false;
 		}
-		foreach ($this->children as $child) {
+		foreach ($this->getChildren() as $child) {
 			if ($child->isParentOf($item)) {
 				return true;
 			}
 		}
 		return false;
-	}
-
-	public function hasChildren() {
-		return !empty($this->children);
 	}
 
 	public function magBekijken() {

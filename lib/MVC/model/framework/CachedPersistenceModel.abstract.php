@@ -44,6 +44,10 @@ abstract class CachedPersistenceModel extends PersistenceModel {
 		unset($this->runtime_cache[$key]);
 	}
 
+	protected function flushCache() {
+		$this->runtime_cache = array();
+	}
+
 	/**
 	 * Find and cache existing entities with optional search criteria.
 	 * Retrieves all attributes.

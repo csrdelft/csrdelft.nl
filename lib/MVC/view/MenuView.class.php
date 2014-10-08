@@ -24,7 +24,7 @@ abstract class MenuView extends SmartyTemplateView {
 class MainMenuView extends MenuView {
 
 	public function __construct() {
-		parent::__construct(MenuModel::instance()->getMenuTree('main'));
+		parent::__construct(MenuModel::instance()->getMenu('main'));
 	}
 
 	public function view() {

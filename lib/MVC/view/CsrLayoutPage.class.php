@@ -82,7 +82,6 @@ class CsrLayoutPage extends HtmlPage {
 		$smarty->assign('stylesheets', $this->getStylesheets());
 		$smarty->assign('scripts', $this->getScripts());
 		$smarty->assign('titel', $this->getTitel());
-		$smarty->assign('mainmenu', new MainMenuView());
 		$smarty->assign('modal', $this->modal);
 		$smarty->assign('body', $this->getBody());
 
@@ -138,10 +137,11 @@ class CsrLayoutPage extends HtmlPage {
 		//$smarty->assign('datatable', $dataTable)
 
 		if (LoginModel::instance()->isPauper()) {
-			$smarty->assign('menutree', MenuModel::instance()->getMenuTree('main'));
+			$smarty->assign('menutree', MenuModel::instance()->getMenu('main'));
 			$smarty->assign('loginform', new LoginForm());
 			$smarty->display('MVC/layout/pauper.tpl');
 		} else {
+			$smarty->assign('mainmenu', new MainMenuView());
 			$smarty->display('MVC/layout/pagina.tpl');
 		}
 	}

@@ -39,8 +39,8 @@ class MenuBeheerController extends AclController {
 		if ($menu_name != LoginModel::getUid() AND ! LoginModel::mag('P_ADMIN')) {
 			$this->geentoegang();
 		}
-		$root = $this->model->getMenuTree($menu_name, true);
-		if (!$root OR ! $root->magBeheren()) {
+		$root = $this->model->getMenuBeheer($menu_name);
+		if (!$root) {
 			$this->geentoegang();
 		}
 		$body = new MenuBeheerView($root);
@@ -63,7 +63,7 @@ class MenuBeheerController extends AclController {
 		}
 		$this->view = new MenuItemForm($item, $this->action, $parent_id); // fetches POST values itself
 		if ($this->view->validate()) { // form checks if hidden fields are modified
-			$item->item_id = (int) $this->model->create($item);
+			$this->model->create($item);
 			setMelding('Toegevoegd: ' . $item->tekst, 1);
 			$this->view = new JsonResponse(true);
 		}

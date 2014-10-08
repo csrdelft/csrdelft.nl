@@ -12,16 +12,88 @@ class MenuModel extends CachedPersistenceModel {
 
 	protected static $instance;
 
-	protected function __construct() {
-		parent::__construct();
-		$this->loadMenus(array('main', LoginModel::getUid()));
+	/**
+	 * Remove cached menu from memcache and clear runtime cache.
+	 * 
+	 * @param MenuItem $item
+	 */
+	public function clearCache(MenuItem $item) {
+		CsrMemcache::instance()->delete($this->getRoot($item)->tekst);
+		$this->flushCache();
+	}
+
+	/**
+	 * Get menu for viewing.
+	 * 
+	 * @param string $naam
+	 * @return MenuItem root
+	 */
+	public function getMenu($naam) {
+		$root = CsrMemcache::instance()->get($naam);
+		if ($root !== false) {
+			return unserialize($root);
+		} else {
+			$root = $this->getMenuRoot($naam);
+			CsrMemcache::instance()->set($naam, serialize($this->getTree($root)));
+			return $root;
+		}
+	}
+
+	/**
+	 * Build tree structure.
+	 * 
+	 * @param MenuItem $root
+	 * @return MenuItem root
+	 */
+	public function getTree(MenuItem $root) {
+		foreach ($root->getChildren() as $child) {
+			if ($child->zichtbaar) {
+				$this->getTree($child);
+			}
+		}
+		return $root;
 	}
 
 	public function getMenuRoot($naam) {
-		if (!$this->isCached($naam)) {
-			$this->setCache($naam, $this->find('parent_id = ? AND tekst = ? ', array(0, $naam), null, null, 1)->fetch());
+		return $this->find('parent_id = ? AND tekst = ? ', array(0, $naam), null, null, 1)->fetch();
+	}
+
+	public function getChildren(MenuItem $parent) {
+		$children = array();
+		foreach ($this->find('parent_id = ?', array($parent->item_id), 'prioriteit ASC') as $child) {
+			$children[] = $child;
+			// cache for getParent()
+			$key = $this->cacheKey($child->getValues(true));
+			$this->setCache($key, $child);
 		}
-		return $this->getCached($naam);
+		return $children;
+	}
+
+	/**
+	 * Get menu for beheer.
+	 * 
+	 * @param string $naam
+	 * @return MenuItem root
+	 */
+	public function getMenuBeheer($naam) {
+		$root = $this->getMenuRoot($naam);
+		if ($root->magBeheren()) {
+			return $this->getTreeBeheer($root);
+		}
+		return false;
+	}
+
+	/**
+	 * Build tree structure for beheer.
+	 * 
+	 * @param MenuItem $root
+	 * @return MenuItem
+	 */
+	public function getTreeBeheer(MenuItem $root) {
+		foreach ($root->getChildren() as $child) {
+			$this->getTree($child);
+		}
+		return $root;
 	}
 
 	/**
@@ -29,7 +101,7 @@ class MenuModel extends CachedPersistenceModel {
 	 * 
 	 * @return MenuItem[]
 	 */
-	public function getBeheerMenusVoorLid() {
+	public function getMenuRootsBeheer() {
 		if (LoginModel::mag('P_ADMIN')) {
 			return $this->find('parent_id = ?', array(0), 'tekst DESC')->fetchAll();
 		} else {
@@ -37,80 +109,31 @@ class MenuModel extends CachedPersistenceModel {
 		}
 	}
 
+	public function getRoot(MenuItem $item) {
+		if ($item->parent_id === 0) {
+			return $item;
+		}
+		return $this->getRoot($item->getParent());
+	}
+
 	/**
-	 * Haalt alle menu-items op (die zichtbaar zijn voor de gebruiker).
-	 * Filtert de menu-items met de permissies van het ingelogede lid.
+	 * Get menu item by id (cached).
 	 * 
-	 * @param string $naam
-	 * @return MenuItem[]
+	 * @param int $id
+	 * @return MenuItem
 	 */
-	public function getMenuTree($naam) {
-		// haal uit cache?
-		if (!$this->isCached($naam)) {
-			$this->loadMenus(array($naam));
-		}
-		// niet bestaand menu?
-		if (!$this->isCached($naam)) {
-			$item = $this->newMenuItem(0);
-			$item->tekst = $naam;
-			if ($naam == LoginModel::getUid()) {
-				// maak favorieten menu
-				$item->link = '/menubeheer/beheer/' . $naam;
-			}
-			$item->item_id = (int) $this->create($item);
-			$this->setCache($naam, $item);
-		}
-		return $this->getCached($naam);
-	}
-
-	private function loadMenus(array $menus) {
-		// haal alle menu items op en groepeer op parent id
-		$items = group_by('parent_id', $this->find(null, array(), 'prioriteit ASC'));
-		// totaal geen menu roots?
-		if (isset($items[0])) {
-			// voor alle gevraagde menus de tree opbouwen
-			foreach ($items[0] as $i => $root) {
-				// is dit een van de gevraagde menus?
-				if (in_array($root->tekst, $menus)) {
-					$this->setChildren($root, $items);
-					// zet in cache
-					$this->setCache($root->tekst, $root);
-				} else {
-					// directe kinderen uit lijst verwijderen
-					unset($items[$root->item_id]);
-				}
-				// opruimen uit root lijst
-				unset($items[0][$i]);
-			}
-		}
-	}
-
-	private function setChildren(MenuItem $parent, &$items) {
-		// geen items met dit id = geen kinderen
-		if (!array_key_exists($parent->item_id, $items)) {
-			return;
-		}
-		// zet kinderen
-		$parent->children = $items[$parent->item_id];
-		// kind kan maar 1 parent hebben
-		unset($items[$parent->item_id]);
-		// voor elk kind ook kinderen zetten
-		foreach ($parent->children as $i => $child) {
-			// is dit menu item active?
-			$child->active = startsWith(REQUEST_URI, $child->link);
-			// parent is active als child active is
-			$parent->active |= $child->active;
-			// mag gebruiker menu item zien?
-			if ($child->magBekijken() OR $child->magBeheren()) {
-				$this->setChildren($child, $items);
-			} else {
-				unset($parent->children[$i]);
-			}
-		}
-	}
-
 	public function getMenuItem($id) {
 		return $this->retrieveByPrimaryKey(array($id));
+	}
+
+	/**
+	 * Get the parent of a menu item (cached).
+	 * 
+	 * @param MenuItem $item
+	 * @return MenuItem
+	 */
+	public function getParent(MenuItem $item) {
+		return $this->getMenuItem($item->parent_id);
 	}
 
 	public function newMenuItem($parent_id) {
@@ -120,6 +143,17 @@ class MenuModel extends CachedPersistenceModel {
 		$item->rechten_bekijken = LoginModel::getUid();
 		$item->zichtbaar = true;
 		return $item;
+	}
+
+	public function create(PersistentEntity $entity) {
+		$entity->item_id = (int) parent::create($entity);
+		$this->clearCache($entity);
+	}
+
+	public function update(PersistentEntity $entity) {
+		$rowcount = parent::update($entity);
+		$this->clearCache($entity);
+		return $rowcount;
 	}
 
 	public function removeMenuItem(MenuItem $item) {
@@ -133,6 +167,7 @@ class MenuModel extends CachedPersistenceModel {
 			$rowcount = Database::sqlUpdate($orm::getTableName(), $update, $where, array(':oldid' => $item->item_id));
 			$this->delete($item);
 			$db->commit();
+			$this->clearCache($item);
 			return $rowcount;
 		} catch (Exception $e) {
 			$db->rollback();
