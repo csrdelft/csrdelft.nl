@@ -790,7 +790,7 @@ class IntField extends TextField {
 		if ($this->value == '') {
 			return true;
 		} elseif (!preg_match('/\d+/', $this->value)) {
-			$this->error = 'Alleen getallen toegestaan';
+			$this->error = 'Alleen gehele getallen toegestaan';
 		} elseif ($this->max !== null AND $this->value > $this->max) {
 			$this->error = 'Maximale waarde is ' . $this->max . ' ';
 		} elseif ($this->leden_mod AND LoginModel::mag('P_LEDEN_MOD')) {
@@ -834,9 +834,14 @@ class FloatField extends TextField {
 		if ($value === null OR $value === '') {
 			return null;
 		}
-		return round((float) str_replace(',', '.', $value), $this->precision);
+		return (float) round((float) str_replace(',', '.', $value), $this->precision);
 	}
 
+	/**
+	 * Some tricky typecasting is going on.
+	 * 
+	 * @return boolean
+	 */
 	public function validate() {
 		if (!parent::validate()) {
 			return false;
@@ -844,8 +849,8 @@ class FloatField extends TextField {
 		// parent checks not null
 		if ($this->value == '') {
 			return true;
-		} elseif (!preg_match('/^(\d+(,{1}\d{' . $this->precision . '})?)$/', str_replace(',', '.', $this->value))) {
-			$this->error = 'Alleen komma-getallen toegestaan';
+		} elseif (!preg_match('/^(\d+.\d{' . $this->precision . '})$/', parent::getValue())) {
+			$this->error = 'Voer precies ' . $this->precision . ' decimalen in';
 		} elseif ($this->max !== null AND $this->value > $this->max) {
 			$this->error = 'Maximale waarde is ' . $this->max . ' ';
 		} elseif ($this->min !== null AND $this->value < $this->min) {
@@ -888,8 +893,14 @@ class BedragField extends FloatField {
 			$type = 'text';
 		}
 		echo $this->valuta . ' <input type="' . $type . '"' . $this->getInputAttribute(array('id', 'name', 'class', 'disabled', 'readonly', 'maxlength', 'placeholder', 'autocomplete', 'onchange', 'onclick', 'onkeyup'));
-		echo ' value="' . number_format(str_replace(',', '.', $this->value), $this->precision, ',', '');
-		echo '" origvalue="' . number_format(str_replace(',', '.', $this->origvalue), $this->precision, ',', '');
+		echo ' value="' . number_format(str_replace(',', '.', $this->value), $this->precision, ',', '') . '" origvalue="';
+		// if an error occured do not re-format the original value
+		// prevent unchanged is not smart enough for rounding and such
+		if ($this->getError() != '') {
+			echo $this->origvalue;
+		} else {
+			echo number_format(str_replace(',', '.', $this->origvalue), $this->precision, ',', '');
+		}
 		echo '" /></div>';
 	}
 
