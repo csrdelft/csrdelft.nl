@@ -20,7 +20,7 @@ class MaaltijdKetzerView extends SmartyTemplateView {
 	}
 
 	public function getKetzer() {
-		$this->smarty->assign('standaardprijs', floatval(Instellingen::get('maaltijden', 'standaard_prijs')));
+		$this->smarty->assign('standaardprijs', intval(Instellingen::get('maaltijden', 'standaard_prijs')));
 		$this->smarty->assign('maaltijd', $this->model);
 		$this->smarty->assign('aanmelding', $this->aanmelding);
 		return $this->smarty->fetch('maalcie/maaltijd/maaltijd_ketzer.tpl');

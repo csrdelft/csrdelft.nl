@@ -10,7 +10,7 @@
 	<td>{$repetitie->getDagVanDeWeekText()}</td>
 	<td>{$repetitie->getPeriodeInDagenText()}</td>
 	<td>{$repetitie->getStandaardTijd()|date_format:"%H:%M"}</td>
-	<td>&euro; {$repetitie->getStandaardPrijs()|string_format:"%.2f"}</td>
+	<td>&euro; {$repetitie->getStandaardPrijsFloat()|string_format:"%.2f"}</td>
 	<td>{$repetitie->getStandaardLimiet()}</td>
 	<td>{if $repetitie->getIsAbonneerbaar()}{icon get="tick" title="Abonneerbaar"}{/if}</td>
 	<td>{$repetitie->getAbonnementFilter()}</td>

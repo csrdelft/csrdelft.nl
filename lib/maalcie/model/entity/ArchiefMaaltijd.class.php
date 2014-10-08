@@ -25,7 +25,7 @@ class ArchiefMaaltijd implements Agendeerbaar {
 	private $titel; # string 255
 	private $datum; # date
 	private $tijd; # time
-	private $prijs; # float
+	private $prijs; # int 11
 	private $aanmeldingen; # text
 
 	public function __construct($mid = 0, $titel = null, $datum = null, $tijd = null, $prijs = null, $aanmeldingen = array()) {
@@ -68,7 +68,7 @@ class ArchiefMaaltijd implements Agendeerbaar {
 	}
 
 	public function getPrijs() {
-		return (float) $this->prijs;
+		return (int) $this->prijs;
 	}
 
 	public function getAanmeldingen() {

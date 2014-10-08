@@ -36,7 +36,7 @@
  *  	* UidField					Uid's  met preview
  * 		* LidField					Leden selecteren
  * 		* IntField					Integers 
- * 		* FloatField				Kommagetallen
+ * 		* DecimalField				Kommagetallen
  * 			- BedragField			Bedragen met 2 cijfers achter de komma
  * 	- WachtwoordWijzigenField		Wachtwoorden (oude, nieuwe, nieuwe ter bevestiging)
  * 	- SelectField
@@ -776,7 +776,7 @@ class IntField extends TextField {
 
 	public function getValue() {
 		$value = parent::getValue();
-		if ($value === null OR $value === '') {
+		if ($this->empty_null AND empty($value)) {
 			return null;
 		}
 		return (int) $value;
@@ -810,9 +810,9 @@ class RequiredIntField extends IntField {
 }
 
 /**
- * Invoeren van een float. Eventueel met minima/maxima. Leeg evt. toegestaan.
+ * Invoeren van een decimaal getal. Eventueel met minima/maxima. Leeg evt. toegestaan.
  */
-class FloatField extends TextField {
+class DecimalField extends TextField {
 
 	public $precision;
 	public $min = null;
@@ -831,10 +831,10 @@ class FloatField extends TextField {
 
 	public function getValue() {
 		$value = parent::getValue();
-		if ($value === null OR $value === '') {
+		if ($this->empty_null AND empty($value)) {
 			return null;
 		}
-		return (float) round((float) str_replace(',', '.', $value), $this->precision);
+		return round((float) str_replace(',', '.', $value), $this->precision);
 	}
 
 	/**
@@ -861,23 +861,31 @@ class FloatField extends TextField {
 
 }
 
-class RequiredFloatField extends FloatField {
+class RequiredDecimalField extends DecimalField {
 
 	public $required = true;
 
 }
 
 /**
- * Invoeren van een bedrag. Precisie van 2 cijfers achter de komma.
+ * Invoeren van een bedrag in centen, dus precisie van 2 cijfers achter de komma.
  * 
  */
-class BedragField extends FloatField {
+class BedragField extends DecimalField {
 
 	public $valuta;
 
 	public function __construct($name, $value, $description, $valuta = '€', $min = null, $max = null) {
-		parent::__construct($name, $value, $description, 2, $min, $max);
+		parent::__construct($name, $value / 100, $description, 2, $min, $max);
 		$this->valuta = $valuta;
+	}
+
+	public function getValue() {
+		$value = parent::getValue();
+		if ($this->empty_null AND empty($value)) {
+			return null;
+		}
+		return (int) $value * 100;
 	}
 
 	public function view() {
@@ -906,7 +914,7 @@ class BedragField extends FloatField {
 
 }
 
-class RequiredBedragField extends FloatField {
+class RequiredBedragField extends DecimalField {
 
 	public $required = true;
 

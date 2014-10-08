@@ -51,7 +51,7 @@ class MaaltijdRepetitie {
 		}
 		$this->setStandaardTijd($tijd);
 		if ($prijs === null) {
-			$prijs = floatval(Instellingen::get('maaltijden', 'standaard_prijs'));
+			$prijs = intval(Instellingen::get('maaltijden', 'standaard_prijs'));
 		}
 		$this->setStandaardPrijs($prijs);
 		if ($abo === null) {
@@ -108,7 +108,11 @@ class MaaltijdRepetitie {
 	}
 
 	public function getStandaardPrijs() {
-		return (float) $this->standaard_prijs;
+		return (int) $this->standaard_prijs;
+	}
+
+	public function getStandaardPrijsFloat() {
+		return (float) $this->getStandaardPrijs() / 100.0;
 	}
 
 	public function getIsAbonneerbaar() {
@@ -152,8 +156,8 @@ class MaaltijdRepetitie {
 	}
 
 	public function setStandaardPrijs($prijs) {
-		if (!is_float($prijs)) {
-			throw new Exception('Geen float: standaard prijs: ' . $prijs);
+		if (!is_int($prijs)) {
+			throw new Exception('Geen integer: standaard prijs: ' . $prijs);
 		}
 		$this->standaard_prijs = $prijs;
 	}

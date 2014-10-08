@@ -11,12 +11,12 @@
 		</td>
 		<td>{$maaltijd->getTitel()}
 			<div class="float-right">
-				{assign var=prijs value=$maaltijd->getPrijs()|string_format:"%.2f"}
+				{assign var=prijs value=$maaltijd->getPrijsFloat()|string_format:"%.2f"}
 				{if $aanmelding and $aanmelding->getSaldoStatus() < 0}
 					{icon get="money_delete" title="U staat rood bij de MaalCie!&#013;Maaltijdprijs: &euro; "|cat:$prijs}
 				{elseif $aanmelding and $aanmelding->getSaldoStatus() < 2}
 					{icon get="money_delete" title="Uw MaalCie saldo is te laag!&#013;Maaltijdprijs: &euro; "|cat:$prijs}
-				{elseif $prijs !== $standaardprijs}
+				{elseif $maaltijd->getPrijs() !== $standaardprijs}
 					{icon get="money" title="Afwijkende maaltijdprijs: &euro; "|cat:$prijs}
 				{else}
 					{icon get="money_euro" title="Maaltijdprijs: &euro; "|cat:$prijs}

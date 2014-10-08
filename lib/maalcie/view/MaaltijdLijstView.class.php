@@ -43,7 +43,7 @@ class MaaltijdLijstView extends HtmlPage {
 			$smarty->assign('aanmeldingen', $aanmeldingen);
 		}
 		$smarty->assign('maaltijd', $maaltijd);
-		$smarty->assign('prijs', sprintf('%.2f', $maaltijd->getPrijs()));
+		$smarty->assign('prijs', sprintf('%.2f', $maaltijd->getPrijsFloat()));
 	}
 
 	public function view() {

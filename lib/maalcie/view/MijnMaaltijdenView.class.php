@@ -24,7 +24,7 @@ class MijnMaaltijdenView extends SmartyTemplateView {
 	}
 
 	public function view() {
-		$this->smarty->assign('standaardprijs', sprintf('%.2f', floatval(Instellingen::get('maaltijden', 'standaard_prijs'))));
+		$this->smarty->assign('standaardprijs', intval(Instellingen::get('maaltijden', 'standaard_prijs')));
 		$this->smarty->assign('maaltijden', $this->model);
 		$this->smarty->assign('aanmeldingen', $this->aanmeldingen);
 
@@ -46,7 +46,7 @@ class MijnMaaltijdView extends SmartyTemplateView {
 	public function view() {
 		$this->smarty->assign('maaltijd', $this->model);
 		$this->smarty->assign('aanmelding', $this->aanmelding);
-		$this->smarty->assign('standaardprijs', sprintf('%.2f', floatval(Instellingen::get('maaltijden', 'standaard_prijs'))));
+		$this->smarty->assign('standaardprijs', intval(Instellingen::get('maaltijden', 'standaard_prijs')));
 		$this->smarty->display('maalcie/maaltijd/mijn_maaltijd_lijst.tpl');
 	}
 

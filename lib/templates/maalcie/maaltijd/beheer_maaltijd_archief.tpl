@@ -6,7 +6,7 @@
 	<td>{$maaltijd->getDatum()|date_format:"%d-%m-%Y"} {$maaltijd->getTijd()|date_format:"%H:%M"}</td>
 	<td>{$maaltijd->getTitel()}</td>
 	<td class="lichtgrijs">{$maaltijd->getMaaltijdId()}</td>
-	<td>&euro; {$maaltijd->getPrijs()|string_format:"%.2f"}</td>
+	<td>&euro; {$maaltijd->getPrijsFloat()|string_format:"%.2f"}</td>
 	<td>
 		<div class="aanmeldingen-{$maaltijd->getMaaltijdId()} inline">
 			<a title="Toon aanmeldingen" class="knop" onclick="$('div.aanmeldingen-{$maaltijd->getMaaltijdId()}').toggle();">{icon get="eye"} Toon <strong>{$maaltijd->getAantalAanmeldingen()}</strong></a>

@@ -105,7 +105,7 @@ class MaaltijdAanmelding {
 	 */
 	public function getSaldoStatus() {
 		$saldo = $this->getSaldo();
-		$prijs = $this->getMaaltijd()->getPrijs();
+		$prijs = $this->getMaaltijd()->getPrijsFloat();
 
 		if ($saldo > $prijs) { // saldo meer dan genoeg
 			return 3;
@@ -127,7 +127,7 @@ class MaaltijdAanmelding {
 	 */
 	public function getSaldoMelding() {
 		$status = $this->getSaldoStatus();
-		$prijs = sprintf('%.2f', $this->getMaaltijd()->getPrijs());
+		$prijs = sprintf('%.2f', $this->getMaaltijd()->getPrijsFloat());
 		switch ($status) {
 			case 3: return 'ok';
 			case 2: return $prijs;

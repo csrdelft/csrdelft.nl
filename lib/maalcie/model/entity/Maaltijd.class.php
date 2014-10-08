@@ -34,7 +34,7 @@ class Maaltijd implements Agendeerbaar {
 	private $aanmeld_limiet; # int 11
 	private $datum; # date
 	private $tijd; # time
-	private $prijs; # float
+	private $prijs; # int 11
 	private $gesloten; # boolean
 	private $laatst_gesloten; # int 11
 	private $verwijderd; # boolean
@@ -66,7 +66,7 @@ class Maaltijd implements Agendeerbaar {
 		}
 		$this->setTijd($tijd);
 		if ($prijs === null) {
-			$prijs = floatval(Instellingen::get('maaltijden', 'standaard_prijs'));
+			$prijs = intval(Instellingen::get('maaltijden', 'standaard_prijs'));
 		}
 		$this->setPrijs($prijs);
 		$this->setGesloten($gesloten);
@@ -103,7 +103,11 @@ class Maaltijd implements Agendeerbaar {
 	}
 
 	public function getPrijs() {
-		return (float) $this->prijs;
+		return (int) $this->prijs;
+	}
+
+	public function getPrijsFloat() {
+		return (float) $this->getPrijs() / 100.0;
 	}
 
 	public function getIsGesloten() {
@@ -151,7 +155,9 @@ class Maaltijd implements Agendeerbaar {
 	 * @return double
 	 */
 	public function getBudget() {
-		return ((float) ($this->getAantalAanmeldingen() + $this->getMarge())) * ($this->getPrijs() - floatval(Instellingen::get('maaltijden', 'budget_maalcie')));
+		$budget = $this->getAantalAanmeldingen() + $this->getMarge();
+		$budget *= $this->getPrijs() - intval(Instellingen::get('maaltijden', 'budget_maalcie'));
+		return floatval($budget) / 100.0;
 	}
 
 	public function getArchief() {
@@ -187,8 +193,8 @@ class Maaltijd implements Agendeerbaar {
 	}
 
 	public function setPrijs($prijs) {
-		if (!is_float($prijs)) {
-			throw new Exception('Geen float: prijs');
+		if (!is_int($prijs)) {
+			throw new Exception('Geen integer: prijs');
 		}
 		$this->prijs = $prijs;
 	}

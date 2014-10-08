@@ -73,14 +73,14 @@ class Instellingen extends PersistenceModel {
 			'mail_niet_meeeten'						 => 'P.S.: U eet NIET mee met de maaltijd.'
 		),
 		'maaltijden' => array(
-			'budget_maalcie'					 => '1.00',
+			'budget_maalcie'					 => '100',
 			'toon_ketzer_vooraf'				 => '+1 month',
 			'recent_lidprofiel'					 => '-2 months',
 			'standaard_repetitie_weekdag'		 => '4',
 			'standaard_repetitie_periode'		 => '7',
 			'standaard_abonneerbaar'			 => '1',
 			'standaard_aanvang'					 => '18:00',
-			'standaard_prijs'					 => '3.00',
+			'standaard_prijs'					 => '300',
 			'standaard_limiet'					 => '0',
 			'marge_gasten_verhouding'			 => '10',
 			'marge_gasten_min'					 => '3',
