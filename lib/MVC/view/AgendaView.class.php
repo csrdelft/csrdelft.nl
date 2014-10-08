@@ -102,7 +102,7 @@ class AgendaItemForm extends ModalForm {
 			$eind = explode(':', $tijd[1]);
 			$html .= '<a onclick="setTijd(\'' . $begin[0] . '\',\'' . $begin[1] . '\',\'' . $eind[0] . '\',\'' . $eind[1] . '\');">» ' . $naam . '</a> &nbsp;';
 		}
-		$html .= '<div class="float-right"><a title="Wijzig standaard tijden" href="/instellingenbeheer/module/agenda"><img width="16" height="16" class="icon" alt="edit" src="' . CSR_PICS . '/famfamfam/pencil.png"></a></div>
+		$html .= '<div class="float-right"><a class="knop" title="Wijzig standaard tijden" href="/instellingenbeheer/module/agenda"><img width="16" height="16" class="icon" alt="edit" src="' . CSR_PICS . '/famfamfam/pencil.png"></a></div>
 <script type="text/javascript">
 function setTijd(a, b, c, d) {
 	document.getElementById(\'field_begin_uur\').value = a;

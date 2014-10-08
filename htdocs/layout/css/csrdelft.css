@@ -152,9 +152,6 @@ ul.nobullets li{ list-style-type: none; }
 	background-position: 50% 300px;
 	background-repeat: no-repeat;
 }
-#modal .knop .icon {
-	vertical-align: bottom;
-}
 
 #menuZoekForm{
 	width: 212px;
@@ -615,6 +612,9 @@ input, textarea, select{
 .Formulier .FormButtons{
 	text-align: right;
 	margin-top: 25px;
+}
+.Formulier .FormButtons .knop .icon {
+	vertical-align: bottom;
 }
 .Formulier .UploadOptie{
 	min-height: 2em;
