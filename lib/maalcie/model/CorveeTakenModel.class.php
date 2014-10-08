@@ -334,7 +334,7 @@ class CorveeTakenModel {
 		$sql = 'INSERT INTO crv_taken';
 		$sql.= ' (taak_id, functie_id, uid, crv_repetitie_id, maaltijd_id, datum, punten, bonus_malus, punten_toegekend, bonus_toegekend, wanneer_toegekend, wanneer_gemaild, verwijderd)';
 		$sql.= ' VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
-		$values = array(null, $fid, $uid, $crid, $mid, $datum, $punten, $bonus_malus, 0, 0, null, '', false);
+		$values = array(null, $fid, $uid, $crid, $mid, $datum, $punten, $bonus_malus, 0, 0, null, '', werkomheen_pdo_bool(false));
 		$db = \Database::instance();
 		$query = $db->prepare($sql);
 		$query->execute($values);

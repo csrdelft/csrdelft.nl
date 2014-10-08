@@ -772,13 +772,11 @@ class IntField extends TextField {
 		if ($max !== null) {
 			$this->max = (int) $max;
 		}
-		// niet standaard leeg casten naar 0
-		$this->empty_null = true;
 	}
 
 	public function getValue() {
 		$value = parent::getValue();
-		if ($this->empty_null AND empty($value)) {
+		if ($value == '') {
 			return null;
 		}
 		return (int) $value;
@@ -829,13 +827,11 @@ class DecimalField extends TextField {
 		if ($max !== null) {
 			$this->max = (float) $max;
 		}
-		// niet standaard leeg casten naar 0
-		$this->empty_null = true;
 	}
 
 	public function getValue() {
 		$value = parent::getValue();
-		if ($this->empty_null AND empty($value)) {
+		if ($value == '') {
 			return null;
 		}
 		return round((float) str_replace(',', '.', $value), $this->precision);
