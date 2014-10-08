@@ -18,7 +18,7 @@ class MenuModel extends CachedPersistenceModel {
 	 * @param MenuItem $item
 	 */
 	public function clearCache(MenuItem $item) {
-		CsrMemcache::instance()->delete($this->getRoot($item)->tekst);
+		CsrMemcache::instance()->delete($this->getRoot($item)->tekst . '-menu');
 		$this->flushCache();
 	}
 
@@ -29,12 +29,12 @@ class MenuModel extends CachedPersistenceModel {
 	 * @return MenuItem root
 	 */
 	public function getMenu($naam) {
-		$root = CsrMemcache::instance()->get($naam);
+		$root = CsrMemcache::instance()->get($naam . '-menu');
 		if ($root !== false) {
 			return unserialize($root);
 		} else {
 			$root = $this->getMenuRoot($naam);
-			CsrMemcache::instance()->set($naam, serialize($this->getTree($root)));
+			CsrMemcache::instance()->set($naam . '-menu', serialize($this->getTree($root)));
 			return $root;
 		}
 	}
