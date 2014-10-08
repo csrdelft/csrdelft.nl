@@ -28,6 +28,9 @@ li {
 	list-style-type: square;
 	list-style-position: inside;
 }
+#gesloten-melding {
+	color: red;
+}
 table {
 	border-collapse: collapse;
 	width: 100%;

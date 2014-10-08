@@ -14,7 +14,7 @@
 		<h1>{$titel} op {$maaltijd->getDatum()|date_format:"%A %e %B %Y"}</h1>
 		<div class="header">{Instellingen::get('maaltijden', 'maaltijdlijst_tekst')|replace:'MAALTIJDPRIJS':$prijs}</div>
 		{if !$maaltijd->getIsGesloten()}
-			<h1 id="gesloten-melding" class="error">De maaltijd is nog niet gesloten
+			<h1 id="gesloten-melding">De maaltijd is nog niet gesloten
 				{if !$maaltijd->getIsVerwijderd() and !$maaltijd->getIsGesloten()}
 					&nbsp;<button href="{Instellingen::get('taken', 'url')}/sluit/{$maaltijd->getMaaltijdId()}" class="knop post confirm" title="Het sluiten van de maaltijd betekent dat niemand zich meer kan aanmelden voor deze maaltijd">Inschrijving sluiten</button>
 				{/if}
