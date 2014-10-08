@@ -29,7 +29,7 @@ class MaaltijdForm extends ModalForm {
 		$fields[] = new TextField('titel', $titel, 'Titel', 255);
 		$fields[] = new DatumField('datum', $datum, 'Datum', date('Y') + 2, date('Y') - 2);
 		$fields[] = new TijdField('tijd', $tijd, 'Tijd', 15);
-		$fields[] = new BedragField('prijs', $prijs, 'Prijs (€)', 0, 50);
+		$fields[] = new BedragField('prijs', $prijs, 'Prijs', '€', 0, 50);
 		$fields[] = new IntField('aanmeld_limiet', $limiet, 'Aanmeldlimiet', 0, 200);
 		$fields[] = new RechtenField('aanmeld_filter', $filter, 'Aanmeldrestrictie');
 		$fields[] = new FormButtons();

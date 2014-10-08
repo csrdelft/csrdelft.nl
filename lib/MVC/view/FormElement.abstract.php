@@ -814,11 +814,13 @@ class RequiredIntField extends IntField {
  */
 class FloatField extends TextField {
 
+	public $precision;
 	public $min = null;
 	public $max = null;
 
-	public function __construct($name, $value, $description, $min = null, $max = null) {
+	public function __construct($name, $value, $description, $precision, $min = null, $max = null) {
 		parent::__construct($name, $value, $description, 11);
+		$this->precision = $precision;
 		if ($min !== null) {
 			$this->min = (float) $min;
 		}
@@ -832,7 +834,7 @@ class FloatField extends TextField {
 		if ($value === null OR $value === '') {
 			return null;
 		}
-		return (float) str_replace(',', '.', $value);
+		return round((float) str_replace(',', '.', $value), $this->precision);
 	}
 
 	public function validate() {
@@ -842,7 +844,7 @@ class FloatField extends TextField {
 		// parent checks not null
 		if ($this->value == '') {
 			return true;
-		} elseif (!preg_match('/\d+(,{1}\d*)?/', str_replace(',', '.', $this->value))) {
+		} elseif (!preg_match('/^(\d+(,{1}\d{' . $this->precision . '})?)$/', str_replace(',', '.', $this->value))) {
 			$this->error = 'Alleen komma-getallen toegestaan';
 		} elseif ($this->max !== null AND $this->value > $this->max) {
 			$this->error = 'Maximale waarde is ' . $this->max . ' ';
@@ -863,16 +865,32 @@ class RequiredFloatField extends FloatField {
 /**
  * Invoeren van een bedrag. Precisie van 2 cijfers achter de komma.
  * 
- * TODO: view aanpassen zodat altijd 2 decimalen worden weergegeven.
  */
 class BedragField extends FloatField {
 
-	public function getValue() {
-		$value = parent::getValue();
-		if ($value === null OR $value === '') {
-			return null;
+	public $valuta;
+
+	public function __construct($name, $value, $description, $valuta = '€', $min = null, $max = null) {
+		parent::__construct($name, $value, $description, 2, $min, $max);
+		$this->valuta = $valuta;
+	}
+
+	public function view() {
+		echo $this->getDiv();
+		echo $this->getLabel();
+		echo $this->getErrorDiv();
+		if ($this->preview) {
+			echo $this->getPreviewDiv();
 		}
-		return round($value, 2);
+		if ($this->hidden) {
+			$type = 'hidden';
+		} else {
+			$type = 'text';
+		}
+		echo $this->valuta . ' <input type="' . $type . '"' . $this->getInputAttribute(array('id', 'name', 'class', 'disabled', 'readonly', 'maxlength', 'placeholder', 'autocomplete', 'onchange', 'onclick', 'onkeyup'));
+		echo ' value="' . number_format(str_replace(',', '.', $this->value), $this->precision, ',', '');
+		echo '" origvalue="' . number_format(str_replace(',', '.', $this->origvalue), $this->precision, ',', '');
+		echo '" /></div>';
 	}
 
 }
