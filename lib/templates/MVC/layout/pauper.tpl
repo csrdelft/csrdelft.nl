@@ -27,25 +27,25 @@
 			<a name="mainmenu"><h1>Menu</h1></a>
 			<ul>
 				{foreach from=$menutree->children item=item}
-					{if $item->zichtbaar and $item->magBekijken()}
-					<li>
-						<h2>
-							<a href="{$item->link}">
-								{$item->tekst}
-							</a>
-						</h2>
-						<ul>
-							{foreach from=$item->children item=subitem}
-								{if $subitem->zichtbaar and $subitem->magBekijken()}
-								<li>
-									<a href="{$subitem->link}">
-										{$subitem->tekst}
-									</a>
-								</li>
-								{/if}
-							{/foreach}
-						</ul>
-					</li>
+					{if $item->magBekijken()}
+						<li>
+							<h2>
+								<a href="{$item->link}">
+									{$item->tekst}
+								</a>
+							</h2>
+							<ul>
+								{foreach from=$item->children item=subitem}
+									{if $subitem->magBekijken()}
+										<li>
+											<a href="{$subitem->link}">
+												{$subitem->tekst}
+											</a>
+										</li>
+									{/if}
+								{/foreach}
+							</ul>
+						</li>
 					{/if}
 				{/foreach}
 			</ul>

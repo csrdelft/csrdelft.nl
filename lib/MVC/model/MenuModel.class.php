@@ -47,9 +47,7 @@ class MenuModel extends CachedPersistenceModel {
 	 */
 	public function getTree(MenuItem $root) {
 		foreach ($root->getChildren() as $child) {
-			if ($child->zichtbaar) {
-				$this->getTree($child);
-			}
+			$this->getTree($child);
 		}
 		return $root;
 	}
@@ -70,38 +68,11 @@ class MenuModel extends CachedPersistenceModel {
 	}
 
 	/**
-	 * Get menu for beheer.
-	 * 
-	 * @param string $naam
-	 * @return MenuItem root
-	 */
-	public function getMenuBeheer($naam) {
-		$root = $this->getMenuRoot($naam);
-		if ($root->magBeheren()) {
-			return $this->getTreeBeheer($root);
-		}
-		return false;
-	}
-
-	/**
-	 * Build tree structure for beheer.
-	 * 
-	 * @param MenuItem $root
-	 * @return MenuItem
-	 */
-	public function getTreeBeheer(MenuItem $root) {
-		foreach ($root->getChildren() as $child) {
-			$this->getTree($child);
-		}
-		return $root;
-	}
-
-	/**
 	 * Lijst van alle menu roots om te beheren.
 	 * 
 	 * @return MenuItem[]
 	 */
-	public function getMenuRootsBeheer() {
+	public function getMenuBeheerLijst() {
 		if (LoginModel::mag('P_ADMIN')) {
 			return $this->find('parent_id = ?', array(0), 'tekst DESC')->fetchAll();
 		} else {

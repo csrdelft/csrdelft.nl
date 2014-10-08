@@ -7,7 +7,7 @@
 		</a>
 	{/if}
 	{foreach from=$root->children item=item}
-		{if $item->zichtbaar}
+		{if $item->magBekijken()}
 			<div class="item{if $item->active} active{/if}">&raquo; <a href="{$item->link}" title="{$item->tekst}">{$item->tekst}</a></div>
 		{/if}
 	{/foreach}

@@ -27,17 +27,17 @@
 	</ul>
 	<ul class="cd-navigation">
 		{foreach from=$root->children item=item}
-			{if $item->zichtbaar and $item->magBekijken()}
+			{if $item->magBekijken()}
 				<li class="{if $item->hasChildren()}item-has-children{/if} {if $item->active}active{/if}">
 					<a href="{$item->link}" title="{$item->tekst}">{$item->tekst}</a>
 					{if $item->hasChildren()}
 						<ul class="sub-menu">
 							{foreach from=$item->children item=child}
-								{if $child->zichtbaar and $child->magBekijken()}
+								{if $child->magBekijken()}
 									<li><a href="{$child->link}" title="{$child->tekst}"{if $child->active} class="active"{/if}>{$child->tekst}</a></li>
 								{/if}
 								{foreach from=$child->children item=level3}
-									{if $level3->zichtbaar and $level3->magBekijken()}
+									{if $level3->magBekijken()}
 										<li class="verborgen"><a href="{$level3->link}" title="{$level3->tekst}"{if $level3->active} class="active"{/if}>{$level3->tekst}</a></li>
 									{/if}
 								{/foreach}

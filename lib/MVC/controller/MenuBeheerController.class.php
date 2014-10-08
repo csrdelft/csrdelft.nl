@@ -39,8 +39,8 @@ class MenuBeheerController extends AclController {
 		if ($menu_name != LoginModel::getUid() AND ! LoginModel::mag('P_ADMIN')) {
 			$this->geentoegang();
 		}
-		$root = $this->model->getMenuBeheer($menu_name);
-		if (!$root) {
+		$root = $this->model->getMenu($menu_name);
+		if (!$root OR ! $root->magBeheren()) {
 			$this->geentoegang();
 		}
 		$body = new MenuBeheerView($root);
