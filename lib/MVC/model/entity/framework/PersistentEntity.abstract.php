@@ -21,12 +21,6 @@ abstract class PersistentEntity implements Sparse, JsonSerializable {
 	// N.B. non-static part below
 
 	/**
-	 * The names of attributes that should not be retrieved by default.
-	 * @var array
-	 */
-	protected static $sparse_attributes;
-
-	/**
 	 * Static constructor is called (by inheritance) first and only from PersistenceModel.
 	 */
 	public static function __constructStatic() {
@@ -45,30 +39,6 @@ abstract class PersistentEntity implements Sparse, JsonSerializable {
 
 	public static function getTableName() {
 		return static::$table_name;
-	}
-
-	/**
-	 * Return the names of attributes that should be retrieved by default.
-	 * 
-	 * @return array
-	 */
-	public static function getNonSparseAttributes() {
-		if (isset(static::$sparse_attributes)) {
-			return array_diff(static::getAttributes(), static::$sparse_attributes);
-		}
-		return static::getAttributes();
-	}
-
-	/**
-	 * Return the names of attributes that should NOT be retrieved by default.
-	 * 
-	 * @return array
-	 */
-	public static function getSparseAttributes() {
-		if (isset(static::$sparse_attributes)) {
-			return static::$sparse_attributes;
-		}
-		return array();
 	}
 
 	/**
@@ -213,24 +183,29 @@ abstract class PersistentEntity implements Sparse, JsonSerializable {
 
 	/**
 	 * The names of attributes that have been retrieved for this instance.
-	 * Relies on getters and setters to update this.
-	 * Used to discern values that have not been retrieved as these are invalid.
+	 * Relies on getters and setters to update this in case of sparse retrieval.
+	 * Used to discern unset values as these are invalid.
 	 * @var array
 	 */
-	protected $attr_retrieved = array();
+	protected $attr_retrieved;
 
 	/**
 	 * Constructor is called late (after attributes are set)
-	 * by PDO::FETCH_CLASS with $cast = true.
+	 * by PDO::FETCH_CLASS with $cast = true
 	 * 
-	 * @param boolean $cast Regular construction should not cast unset properties!
+	 * @param boolean $cast Regular construction should not cast (unset) attributes!
+	 * @param array $attr_retrieved Names of attributes that are set before construction in case of sparse retrieval
 	 */
-	public function __construct($cast = false) {
-		if ($cast) {
-			$this->castValues();
+	public function __construct($cast = false, array $attr_retrieved = null) {
+		if (is_array($attr_retrieved)) {
+			// Bookkeeping only if not all attributes are set before construction
+			$this->attr_retrieved = $attr_retrieved;
+		} else {
+			// Cast all attributes
+			$attr_retrieved = static::$persistent_attributes;
 		}
-		if (isset(static::$sparse_attributes)) { // bookkeeping
-			$this->attr_retrieved = $this->getNonSparseAttributes();
+		if ($cast) {
+			$this->castValues($attr_retrieved);
 		}
 	}
 
@@ -253,13 +228,17 @@ abstract class PersistentEntity implements Sparse, JsonSerializable {
 
 	/**
 	 * Are there any attributes not yet retrieved?
+	 * Requires tracking of retrieved attributes to discern invalid values.
 	 * 
+	 * @param array $attributes to check for
 	 * @return boolean
 	 */
-	public function isSparse() {
-		if (isset(static::$sparse_attributes)) {
-			$attr = $this->getAttributes();
-			return array_intersect($attr, $this->attr_retrieved) !== $attr;
+	public function isSparse(array $attributes = null) {
+		if (isset($this->attr_retrieved)) {
+			if (empty($attributes)) {
+				$attributes = $this->getAttributes();
+			}
+			return array_intersect($attributes, $this->attr_retrieved) !== $attributes;
 		}
 		return false;
 	}
@@ -269,18 +248,17 @@ abstract class PersistentEntity implements Sparse, JsonSerializable {
 	 * Relies on getters and setters to update $attr_retrieved
 	 * 
 	 * @param boolean $primary_key_only
-	 * @param boolean $sparse
 	 * @return array
 	 */
-	public function getValues($primary_key_only = false, $sparse = true) {
+	public function getValues($primary_key_only = false) {
 		$values = array();
 		if ($primary_key_only) {
 			$attributes = $this->getPrimaryKey();
 		} else {
 			$attributes = $this->getAttributes();
 		}
-		// Do not return sparse attribute values that have not been retrieved (these are invalid) unless specifically requested
-		if ($sparse AND isset(static::$sparse_attributes)) {
+		// Do not return sparse attribute values as these are invalid
+		if (isset($this->attr_retrieved)) {
 			$attributes = array_intersect($attributes, $this->attr_retrieved);
 		}
 		foreach ($attributes as $attribute) {
@@ -295,13 +273,11 @@ abstract class PersistentEntity implements Sparse, JsonSerializable {
 	/**
 	 * Cast values to defined type.
 	 * PDO does not do this automatically (yet).
+	 * 
+	 * @param boolean $attributes Attributes to cast
 	 */
-	private function castValues() {
-		foreach (static::$persistent_attributes as $attribute => $definition) {
-			// Only cast retrieved values
-			if (isset(static::$sparse_attributes) AND ! in_array($attribute, $this->attr_retrieved)) {
-				continue;
-			}
+	protected function castValues(array $attributes) {
+		foreach ($attributes as $attribute => $definition) {
 			if ($definition[0] === T::Boolean) {
 				$this->$attribute = (boolean) $this->$attribute;
 			} elseif ($definition[0] === T::Integer) {

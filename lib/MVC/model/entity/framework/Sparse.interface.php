@@ -7,23 +7,17 @@ require_once 'MVC/model/framework/Persistence.interface.php';
  * 
  * @author P.W.G. Brussee <brussee@live.nl>
  *
- * Object that may not have all its persistent attributes set.
+ * Object that may not have all its persistent attributes retrieved.
  * 
  */
 interface Sparse {
 
 	/**
-	 * Attributes that are always retrieved.
-	 * 
-	 * @return array
-	 */
-	public static function getNonSparseAttributes();
-
-	/**
 	 * Are there any attributes not yet retrieved?
-	 * Required tracking of retrieved attributes to discern invalid values.
+	 * Requires tracking of retrieved attributes to discern invalid values.
 	 * 
+	 * @param array $attributes to check for
 	 * @return boolean
 	 */
-	public function isSparse();
+	public function isSparse(array $attributes);
 }

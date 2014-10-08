@@ -11,7 +11,7 @@ require_once 'MVC/model/LoginModel.class.php';
  * Role-based access control
  * @see http://en.wikipedia.org/wiki/Role-based_access_control
  */
-class AccessModel extends PersistenceModel {
+class AccessModel extends CachedPersistenceModel {
 
 	const orm = 'LoginSession';
 
@@ -217,6 +217,10 @@ class AccessModel extends PersistenceModel {
 		if (empty($permission)) {
 			return false;
 		}
+		// Try cache
+		if ($this->isCached($permission)) {
+			return $this->cacheGet($permission);
+		}
 		// OR
 		if (strpos($permission, ',') !== false) {
 			// Het gevraagde mag een enkele permissie zijn, of meerdere, door komma's
@@ -260,20 +264,32 @@ class AccessModel extends PersistenceModel {
 
 		// Is de gevraagde permissie voorgedefinieerd?
 		if ($this->isValidPerm($permission, true)) {
-			return $this->mandatoryAccessControl($subject, $permission, $token_authorizable);
+			$result = $this->mandatoryAccessControl($subject, $permission, $token_authorizable);
 		}
 		// Voorgedefinieerde permissie verplicht?
 		elseif (!$mandatory_only) {
-			return $this->discretionaryAccessControl($subject, $permission, $token_authorizable);
+			$result = $this->discretionaryAccessControl($subject, $permission, $token_authorizable);
+		}
+		// Fall-through
+		else {
+			$result = false;
 		}
 
-		return false;
+		// Cache
+		$this->cacheSet($permission, $result);
+
+		return $result;
 	}
 
 	private function mandatoryAccessControl(Lid $subject, $permission, $token_authorizable = false) {
 
 		// case insensitive
 		$permission = strtoupper($permission);
+
+		// Try cache
+		if ($this->isCached($permission)) {
+			return $this->cacheGet($permission);
+		}
 
 		// zoek de rechten van de gebruiker op
 		$role = $subject->getRole();
@@ -343,6 +359,11 @@ class AccessModel extends PersistenceModel {
 
 		// case insensitive
 		$descr = strtolower($descr);
+
+		// Try cache
+		if ($this->isCached($descr)) {
+			return $this->cacheGet($descr);
+		}
 
 		// als een uid ingevoerd wordt true teruggeven als het om de huidige gebruiker gaat.
 		if ($descr === $subject->getUid()) {

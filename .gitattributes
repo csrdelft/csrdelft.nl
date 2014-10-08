@@ -3142,6 +3142,7 @@ lib/MVC/model/entity/groepen/Werkgroep.class.php -text
 lib/MVC/model/entity/groepen/Woonoord.class.php -text
 lib/MVC/model/entity/maalcie/CorveeFunctie.class.php -text
 lib/MVC/model/entity/maalcie/CorveeKwalificatie.class.php -text
+lib/MVC/model/framework/CachedPersistenceModel.abstract.php -text
 lib/MVC/model/framework/Database.singleton.php -text
 lib/MVC/model/framework/DatabaseAdmin.singleton.php -text
 lib/MVC/model/framework/Persistence.interface.php -text

@@ -35,6 +35,7 @@ abstract class PersistenceModel implements Persistence {
 
 	/**
 	 * Find existing entities with optional search criteria.
+	 * Retrieves all attributes.
 	 * 
 	 * @param string $criteria WHERE
 	 * @param array $criteria_params optional named parameters
@@ -45,8 +46,28 @@ abstract class PersistenceModel implements Persistence {
 	 */
 	public function find($criteria = null, array $criteria_params = array(), $orderby = null, $groupby = null, $limit = null, $start = 0) {
 		$orm = static::orm;
-		$result = Database::sqlSelect($orm::getNonSparseAttributes(), $orm::getTableName(), $criteria, $criteria_params, $orderby, $groupby, $limit, $start);
+		$result = Database::sqlSelect($orm::getAttributes(), $orm::getTableName(), $criteria, $criteria_params, $orderby, $groupby, $limit, $start);
 		$result->setFetchMode(PDO::FETCH_CLASS, $orm, array($cast = true));
+		return $result;
+	}
+
+	/**
+	 * Find existing entities with optional search criteria.
+	 * Retrieves only requested attributes and the primary key values.
+	 * 
+	 * @param array $attributes to retrieve
+	 * @param string $criteria WHERE
+	 * @param array $criteria_params optional named parameters
+	 * @param string $orderby
+	 * @param int $limit max amount of results
+	 * @param int $start results from index
+	 * @return PDOStatement
+	 */
+	public function findSparse(array $attributes, $criteria = null, array $criteria_params = array(), $orderby = null, $groupby = null, $limit = null, $start = 0) {
+		$orm = static::orm;
+		$attributes = array_merge($orm::getPrimaryKey(), $attributes);
+		$result = Database::sqlSelect($attributes, $orm::getTableName(), $criteria, $criteria_params, $orderby, $groupby, $limit, $start);
+		$result->setFetchMode(PDO::FETCH_CLASS, $orm, array($cast = true, $attributes));
 		return $result;
 	}
 
@@ -86,7 +107,7 @@ abstract class PersistenceModel implements Persistence {
 	}
 
 	/**
-	 * Requires positional values.
+	 * Check if enitity with primary key exists.
 	 * 
 	 * @param array $primary_key_values
 	 * @return boolean primary key exists
@@ -111,17 +132,22 @@ abstract class PersistenceModel implements Persistence {
 	}
 
 	/**
-	 * Load saved enitity data and replace entity.
+	 * Load saved enitity data and replace entity object.
+	 * 
+	 * WARNING: returns new object!
+	 * @see retrieveAttributes
+	 * 
+	 * Todo: something clever with references
 	 * 
 	 * @param PersistentEntity $entity
-	 * @return PersistentEntity
+	 * @return PersistentEntity|false
 	 */
 	public function retrieve(PersistentEntity $entity) {
 		return $this->retrieveByPrimaryKey($entity->getValues(true));
 	}
 
 	/**
-	 * Requires positional values.
+	 * Load saved entity data and create new object.
 	 * 
 	 * @param array $primary_key_values
 	 * @return PersistentEntity|false
@@ -132,7 +158,7 @@ abstract class PersistenceModel implements Persistence {
 		foreach ($orm::getPrimaryKey() as $key) {
 			$where[] = $key . ' = ?';
 		}
-		$result = Database::sqlSelect($orm::getNonSparseAttributes(), $orm::getTableName(), implode(' AND ', $where), $primary_key_values, null, null, 1);
+		$result = Database::sqlSelect($orm::getAttributes(), $orm::getTableName(), implode(' AND ', $where), $primary_key_values, null, null, 1);
 		return $result->fetchObject($orm, array($cast = true));
 	}
 
@@ -141,17 +167,19 @@ abstract class PersistenceModel implements Persistence {
 	 * 
 	 * Usage example:
 	 * 
-	 * $user = UserModel::instance()->getUser($uid); // retrieves non-sparse attributes
-	 * echo $user->getAddress(); // suppose address is sparse: retrieve address
-	 * 
+	 * $users = UserModel::instance()->findSparse(array('naam'), ...); // retrieves only naam attribute
+	 * foreach ($users as $user) {
+	 *   echo $user->getAddress(); // address is sparse: retrieve address
+	 * }
 	 * class User {
 	 * public function getAddress() {
-	 *  $attr = array('city' 'street', 'number', 'postalcode');
-	 *  UserModel::instance()->retrieveAttributes($this, $attr);
-	 *  $this->attr_retrieved = array_merge($this->attr_retrieved, $attr); // bookkeeping
+	 *   $attr = array('city' 'street', 'number', 'postalcode');
+	 *   UserModel::instance()->retrieveAttributes($this, $attr);
+	 *   $this->castValues($attr); // because PDO does not do this automatically (yet)
+	 *   $this->attr_retrieved = array_merge($this->attr_retrieved, $attr); // bookkeeping
 	 * }
 	 * 
-	 * Wrong usage: forget to register retrieved atributes, problematic for $entity->getValues() and $entity->isSparse()
+	 * Wrong usage: forget to register retrieved atributes and to cast the values, problematic for $entity->getValues() and $entity->isSparse()
 	 * 
 	 * $model = UserModel::instance();
 	 * $user = $model->getUser($uid); // retrieves non-sparse attributes
