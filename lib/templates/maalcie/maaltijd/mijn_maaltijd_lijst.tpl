@@ -56,8 +56,8 @@
 							<input type="text" name="aantal_gasten" value="{$aanmelding->getAantalGasten()}" origvalue="{$aanmelding->getAantalGasten()}" class="FormElement" maxlength="4" size="4" />
 						</div>
 						<div class="FormButtons">
-							<a class="knop submit" title="Wijzigingen opslaan">{icon get="accept"}</a>
-							<a class="knop reset cancel" title="Annuleren">{icon get="delete"}</a>
+							<a class="knop rounded submit" title="Wijzigingen opslaan">{icon get="accept"}</a>
+							<a class="knop rounded reset cancel" title="Annuleren">{icon get="delete"}</a>
 						</div>
 					</form>
 				{/if}
