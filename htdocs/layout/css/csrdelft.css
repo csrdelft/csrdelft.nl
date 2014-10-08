@@ -92,6 +92,8 @@ hr{
 .draad-verwijderd, .staatrood{ color: red; }
 .lichtgrijs{ color: #aaa; }
 .small{ font-size: smaller; }
+.round{ border-radius: 50%; }
+.rounded{ border-radius: 25%; }
 
 ul.horizontal li{
 	display: inline;

@@ -3,25 +3,25 @@
 		<div class="naam">
 			<div class="floatR">
 				{$profiel->getUid()|pasfoto}<br />
-				<div class="knopjes">
+				<div class="knop roundjes">
 					{if $profiel->magBewerken()}
-						<a href="/communicatie/profiel/{$profiel->getUid()}/bewerken" class="knop" title="Bewerk dit profiel">{icon get="bewerken"}</a>
-						<a href="/communicatie/profiel/{$profiel->getUid()}/voorkeuren" class="knop" title="Pas voorkeuren voor commissies aan">{icon get="report_edit"}</a>
+						<a href="/communicatie/profiel/{$profiel->getUid()}/bewerken" class="knop round" title="Bewerk dit profiel">{icon get="bewerken"}</a>
+						<a href="/communicatie/profiel/{$profiel->getUid()}/voorkeuren" class="knop round" title="Pas voorkeuren voor commissies aan">{icon get="report_edit"}</a>
 					{/if}
 					{if $isLidMod}
-						<a href="/communicatie/profiel/{$profiel->getUid()}/wijzigstatus" class="knop" title="Wijzig de lidstatus">{icon get="group_edit"}</a>
+						<a href="/communicatie/profiel/{$profiel->getUid()}/wijzigstatus" class="knop round" title="Wijzig de lidstatus">{icon get="group_edit"}</a>
 					{/if}
 					{if $isBestuur}
-						<a href="/communicatie/profiel/{$profiel->getUid()}/dd" class="knop" title="Wijzig de lidstatus">{icon get="group_edit"}</a>
+						<a href="/communicatie/profiel/{$profiel->getUid()}/dd" class="knop round" title="Wijzig de lidstatus">{icon get="group_edit"}</a>
 					{/if}
-					<a href="/communicatie/profiel/{$profiel->getUid()}/addToGoogleContacts/" class="knop" title="{*if $profiel->isInGoogleContacts()}Er bestaat al een contact met deze naam in je Google-contacts. Klik om te updaten.{else*}Voeg dit profiel toe aan mijn google adresboek{*/if*}"><img src="{$CSR_PICS}/knopjes/google.ico" /></a>
+					<a href="/communicatie/profiel/{$profiel->getUid()}/addToGoogleContacts/" class="knop round" title="{*if $profiel->isInGoogleContacts()}Er bestaat al een contact met deze naam in je Google-contacts. Klik om te updaten.{else*}Voeg dit profiel toe aan mijn google adresboek{*/if*}"><img src="{$CSR_PICS}/knop roundjes/google.ico" /></a>
 					{if $isAdmin}
 						<br />
-						<a href="/tools/stats.php?uid={$profiel->getUid()}" class="knop" title="Toon bezoeklog">{icon get="server_chart"}</a>
-						<a href="/communicatie/profiel/{$profiel->getUid()}/wachtwoord" class="knop" title="Reset wachtwoord voor {$profiel->getNaam()}" onclick="return confirm('Weet u zeker dat u het wachtwoord van deze gebruiker wilt resetten?')">{icon get="resetpassword"}</a>
+						<a href="/tools/stats.php?uid={$profiel->getUid()}" class="knop round" title="Toon bezoeklog">{icon get="server_chart"}</a>
+						<a href="/communicatie/profiel/{$profiel->getUid()}/wachtwoord" class="knop round" title="Reset wachtwoord voor {$profiel->getNaam()}" onclick="return confirm('Weet u zeker dat u het wachtwoord van deze gebruiker wilt resetten?')">{icon get="resetpassword"}</a>
 					{/if}
 					{if $profiel->getStatus()=='S_NOVIET' AND LoginModel::mag('groep:novcie')}
-						<a href="/communicatie/profiel/{$profiel->getUid()}/novietBewerken" class="knop"><img src="{$CSR_PICS}/forum/bewerken.png" title="Bewerk dit profiel" />Noviet bewerken</a><br />
+						<a href="/communicatie/profiel/{$profiel->getUid()}/novietBewerken" class="knop round"><img src="{$CSR_PICS}/forum/bewerken.png" title="Bewerk dit profiel" />Noviet bewerken</a><br />
 					{/if}
 				</div>
 			</div>
@@ -159,7 +159,7 @@
 			<div class="familie">
 				{if $profiel->getPatroon() instanceof Lid OR $profiel->getKinderen()|@count > 0}
 					<a class="stamboom" href="/communicatie/stamboom.php?uid={$profiel->getUid()}" title="Stamboom van {$profiel->getNaam()}">
-						<img src="{$CSR_PICS}/knopjes/stamboom.jpg" alt="Stamboom van {$profiel->getNaam()}" />
+						<img src="{$CSR_PICS}/knop roundjes/stamboom.jpg" alt="Stamboom van {$profiel->getNaam()}" />
 					</a>
 				{/if}
 				{if $profiel->getPatroon() instanceof Lid}
@@ -233,7 +233,7 @@
 					-
 				{/if}
 				{if LoginModel::getUid()==$profhtml.uid}
-					&nbsp;<div class="inline" style="position: absolute;"><a href="/corveevoorkeuren" title="Bewerk voorkeuren" class="knop">{icon get="pencil"}</a></div>
+					&nbsp;<div class="inline" style="position: absolute;"><a href="/corveevoorkeuren" title="Bewerk voorkeuren" class="knop round">{icon get="pencil"}</a></div>
 					{/if}
 			</div>{/strip}
 			<br />
@@ -270,7 +270,7 @@
 				<div class="data">
 					{if $profhtml.rssToken!=''}
 						<a href="{$profiel->getICalLink()}">
-							<img src="{$CSR_PICS}/knopjes/ical.gif" /> Persoonlijke ICal-feed agenda
+							<img src="{$CSR_PICS}/knop roundjes/ical.gif" /> Persoonlijke ICal-feed agenda
 						</a>
 					{/if}
 					<small>Gebruikt dezelfde private token als het forum (zie hieronder)</small>
@@ -291,7 +291,7 @@
 								{icon get='feed'} Persoonlijke RSS-feed forum
 							</a>
 						{/if}
-						<a class="knop" href="/communicatie/profiel/{$profiel->getUid()}/rssToken#forum">Nieuwe aanvragen</a>
+						<a class="knop round" href="/communicatie/profiel/{$profiel->getUid()}/rssToken#forum">Nieuwe aanvragen</a>
 					</div>
 					<br />
 				{/if}
@@ -342,7 +342,7 @@
 					</ul>
 				{/if}
 				{if LoginModel::getUid()==$profhtml.uid}
-					<a class="knop" href="/communicatie/bibliotheek/nieuwboek" title="Nieuw boek toevoegen">{icon get="book_add"} Boek toevoegen</a>
+					<a class="knop round" href="/communicatie/bibliotheek/nieuwboek" title="Nieuw boek toevoegen">{icon get="book_add"} Boek toevoegen</a>
 					<br />
 				{/if}
 				{if $gerecenseerdeboeken}

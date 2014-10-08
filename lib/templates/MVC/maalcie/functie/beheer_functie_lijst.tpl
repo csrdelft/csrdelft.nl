@@ -3,7 +3,7 @@
 *}
 <tr id="corveefunctie-row-{$functie->functie_id}">
 	<td>
-		<a href="{Instellingen::get('taken', 'url')}/bewerken/{$functie->functie_id}" title="Functie wijzigen" class="knop post modal">{icon get="pencil"}</a>
+		<a href="{Instellingen::get('taken', 'url')}/bewerken/{$functie->functie_id}" title="Functie wijzigen" class="knop rounded post modal">{icon get="pencil"}</a>
 	</td>
 	<td>{$functie->afkorting}</td>
 	<td>{$functie->naam}</td>
@@ -27,6 +27,6 @@
 	</td>
 	<td title="Mag maaltijden sluiten">{if $functie->maaltijden_sluiten}{icon get="cup_key"}{/if}</td>
 	<td class="col-del">
-		<a href="{Instellingen::get('taken', 'url')}/verwijderen/{$functie->functie_id}" title="Functie definitief verwijderen" class="knop post confirm">{icon get="cross"}</a>
+		<a href="{Instellingen::get('taken', 'url')}/verwijderen/{$functie->functie_id}" title="Functie definitief verwijderen" class="knop rounded post confirm">{icon get="cross"}</a>
 	</td>
 </tr>

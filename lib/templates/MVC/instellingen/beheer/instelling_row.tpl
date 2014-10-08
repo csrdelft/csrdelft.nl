@@ -2,7 +2,7 @@
 {strip}
 <tr id="instelling-row-{$instelling->instelling_id}">
 	<td>
-		<a title="Instelling wijzigen" class="knop wijzigknop" onclick="
+		<a title="Instelling wijzigen" class="knop round wijzigknop" onclick="
 			if (confirm($(this).attr('title') + '.\n\nWeet u het zeker?')) {
 				var form = $('#form-{$instelling->instelling_id}');
 				form_inline_toggle(form);
@@ -30,7 +30,7 @@
 		</form>
 	</td>
 	<td class="col-del">
-		<a href="/instellingenbeheer/reset/{$instelling->module}/{$instelling->instelling_id}" title="Instelling resetten" class="knop post confirm">{icon get="arrow_rotate_anticlockwise"}</a>
+		<a href="/instellingenbeheer/reset/{$instelling->module}/{$instelling->instelling_id}" title="Instelling resetten" class="knop round post confirm">{icon get="arrow_rotate_anticlockwise"}</a>
 	</td>
 </tr>
 {/strip}

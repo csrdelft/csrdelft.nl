@@ -27,7 +27,7 @@
 			{$maaltijd->getAantalAanmeldingen()} ({$maaltijd->getAanmeldLimiet()})
 			{if $maaltijd->magSluiten(LoginModel::getUid())}
 				<div class="float-right">
-					<a href="/maaltijdenlijst/{$maaltijd->getMaaltijdId()}" title="Toon maaltijdlijst" class="knop">{icon get="table"}</a>
+					<a href="/maaltijdenlijst/{$maaltijd->getMaaltijdId()}" title="Toon maaltijdlijst" class="knop rounded">{icon get="table"}</a>
 				</div>
 			{/if}
 		</td>
@@ -42,7 +42,7 @@
 					</div>
 				{else}
 				<td class="maaltijd-aangemeld">
-					<a href="{Instellingen::get('taken', 'url')}/afmelden/{$maaltijd->getMaaltijdId()}" class="knop post maaltijd-aangemeld"><input type="checkbox" checked="checked" /> Ja</a>
+					<a href="{Instellingen::get('taken', 'url')}/afmelden/{$maaltijd->getMaaltijdId()}" class="knop rounded post maaltijd-aangemeld"><input type="checkbox" checked="checked" /> Ja</a>
 					{if $aanmelding->getDoorAbonnement()} (abo){/if}
 				{/if}
 			</td>
@@ -56,8 +56,8 @@
 							<input type="text" name="aantal_gasten" value="{$aanmelding->getAantalGasten()}" origvalue="{$aanmelding->getAantalGasten()}" class="FormElement" maxlength="4" size="4" />
 						</div>
 						<div class="FormButtons">
-							<a class="knop submit" title="Wijzigingen opslaan">{icon get="accept"}</a>
-							<a class="knop reset cancel" title="Annuleren">{icon get="delete"}</a>
+							<a class="knop rounded submit" title="Wijzigingen opslaan">{icon get="accept"}</a>
+							<a class="knop rounded reset cancel" title="Annuleren">{icon get="delete"}</a>
 						</div>
 					</form>
 				{/if}
@@ -72,17 +72,17 @@
 						<form action="{Instellingen::get('taken', 'url')}/opmerking/{$maaltijd->getMaaltijdId()}" method="post" class="Formulier InlineForm">
 							<div class="InlineFormToggle" title="{$aanmelding->getGastenEetwens()}">
 								{if $aanmelding->getGastenEetwens()}
-									<a class="knop">{icon get="comment_edit" title=$aanmelding->getGastenEetwens()}</a>
+									<a class="knop rounded">{icon get="comment_edit" title=$aanmelding->getGastenEetwens()}</a>
 								{else}
-									<a class="knop">{icon get="comment_add" title="Gasten allergie/diëet"}</a>
+									<a class="knop rounded">{icon get="comment_add" title="Gasten allergie/diëet"}</a>
 								{/if}
 							</div>
 							<div class="InputField">
 								<input type="text" name="gasten_eetwens" value="{$aanmelding->getGastenEetwens()}" origvalue="{$aanmelding->getGastenEetwens()}" class="FormElement" maxlength="255" size="20" />
 							</div>
 							<div class="FormButtons">
-								<a class="knop submit" title="Wijzigingen opslaan">{icon get="accept"}</a>
-								<a class="knop reset cancel" title="Annuleren">{icon get="delete"}</a>
+								<a class="knop rounded submit" title="Wijzigingen opslaan">{icon get="accept"}</a>
+								<a class="knop rounded reset cancel" title="Annuleren">{icon get="delete"}</a>
 							</div>
 						</form>
 					{/if}
@@ -103,7 +103,7 @@
 					{/if}
 				{else}
 				<td class="maaltijd-afgemeld">
-					<a href="{Instellingen::get('taken', 'url')}/aanmelden/{$maaltijd->getMaaltijdId()}" class="knop post maaltijd-afgemeld"><input type="checkbox" /> Nee</a>
+					<a href="{Instellingen::get('taken', 'url')}/aanmelden/{$maaltijd->getMaaltijdId()}" class="knop rounded post maaltijd-afgemeld"><input type="checkbox" /> Nee</a>
 					{/if}
 			</td>
 			<td>-</td>
