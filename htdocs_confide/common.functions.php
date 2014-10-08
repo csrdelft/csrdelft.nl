@@ -461,8 +461,9 @@ function reldate($datum) {
  */
 function internationalizePhonenumber($phonenumber, $prefix = '+31') {
 	$number = str_replace(array(' ', '-'), '', $phonenumber);
-	if ($number[0] == 0) {
-		if ($number[1] == 0) {
+	if ($number[0] === '0') {
+		// vergelijken met == 0 levert problemen op want (int) '+' = 0 dankzij php
+		if ($number[1] === '0') {
 			return '+' . substr($number, 2);
 		}
 		return $prefix . substr($number, 1);
