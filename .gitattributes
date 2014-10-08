@@ -446,6 +446,7 @@ htdocs/tools/peilingbeheer.php -text
 htdocs/tools/phpinfo.php -text
 htdocs/tools/query.php -text
 htdocs/tools/roodschopper.php -text
+htdocs/tools/runtimecachetest.php -text
 htdocs/tools/saldodata.php -text
 htdocs/tools/saldografiek.php -text
 htdocs/tools/soccie.php -text
