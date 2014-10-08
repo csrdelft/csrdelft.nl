@@ -1165,9 +1165,9 @@ div#ubbhulpverhaal{ font-size: 12px; }
 /* Bijbelrooster */
 div.bijbelrooster{
 	line-height: 20px;
-	columns: 240px auto;
-	-webkit-columns: 240px auto;
-	-moz-columns: 240px auto;
+	-webkit-columns: 200px auto;
+	-moz-columns: 200px auto;
+	columns: 200px auto;
 }
 
 /* Login Form */
