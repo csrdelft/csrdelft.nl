@@ -92,7 +92,7 @@ class MaaltijdRepetitiesController extends AclController {
 
 	public function bijwerken($mrid) {
 		$this->opslaan($mrid);
-		if ($this->view instanceof MaaltijdRepetitiesView) { // opslaan succesvol
+		if ($this->view instanceof MaaltijdRepetitieView) { // opslaan succesvol
 			$verplaats = isset($_POST['verplaats_dag']);
 			$updated_aanmeldingen = MaaltijdenModel::updateRepetitieMaaltijden($this->view->getModel(), $verplaats);
 			setMelding($updated_aanmeldingen[0] . ' maaltijd' . ($updated_aanmeldingen[0] !== 1 ? 'en' : '') . ' bijgewerkt' . ($verplaats ? ' en eventueel verplaatst.' : '.'), 1);
