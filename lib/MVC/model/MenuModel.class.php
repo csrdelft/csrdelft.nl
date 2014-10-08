@@ -42,8 +42,14 @@ class MenuModel extends CachedPersistenceModel {
 			if ($root) {
 				$this->getTree($root);
 			} else {
+				// niet bestaand menu?
 				$root = $this->newMenuItem(0);
 				$root->tekst = $naam;
+				if ($naam == LoginModel::getUid()) {
+					// maak favorieten menu 
+					$root->link = '/menubeheer/beheer/' . $naam;
+				}
+				$this->create($root);
 			}
 			CsrMemcache::instance()->set($naam . '-menu', serialize($root));
 		}
