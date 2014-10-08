@@ -24,19 +24,26 @@ class MenuModel extends CachedPersistenceModel {
 
 	/**
 	 * Get menu for viewing.
+	 * Use 2 levels of caching.
 	 * 
 	 * @param string $naam
 	 * @return MenuItem root
 	 */
 	public function getMenu($naam) {
-		$root = CsrMemcache::instance()->get($naam . '-menu');
-		if ($root !== false) {
-			return unserialize($root);
+		// Only unserialize once
+		if ($this->isCached($naam)) {
+			return $this->getCached($naam);
+		}
+		$cached = CsrMemcache::instance()->get($naam . '-menu');
+		if ($cached !== false) {
+			$root = unserialize($cached);
 		} else {
 			$root = $this->getMenuRoot($naam);
-			CsrMemcache::instance()->set($naam . '-menu', serialize($this->getTree($root)));
-			return $root;
+			$this->getTree($root);
+			CsrMemcache::instance()->set($naam . '-menu', serialize($root));
 		}
+		$this->setCache($naam, $root);
+		return $root;
 	}
 
 	/**
