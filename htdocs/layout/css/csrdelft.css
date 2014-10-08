@@ -903,7 +903,7 @@ span#modsluiten:hover{
 }
 #forumtabel th{
 	font-weight: bold;
-	color: #000; background-color: lightblue;
+	color: #fff; background-color: #0a338d;
 	vertical-align: middle;
 	padding: 5px 10px 5px 15px;
 	height: 19px;
@@ -1010,7 +1010,7 @@ div.forumdeel-omschrijving{
     border: 1px solid #B8B8B8;
 }
 div.forumdeel-omschrijving h1{
-	margin-top: 0;
+	margin-top: 10px;
 }
 #forumBewerkBericht{
 	width: 100%;

@@ -7,8 +7,6 @@
 #profiel img.pasfoto{ border: 1px solid black; margin-left: 20px;}
 #profiel .knopjes{ margin-left: 20px; line-height: 2.5em;}
 
-#profiel .knopjes .inGoogleContacts{ border: 1px solid darkblue; background-color: lightblue; }
-
 #profiel .profielregel{ margin-bottom: 20px; clear: left; }
 	#profiel .left{ display: none; float: left; width: 10px; text-align: right; font-style: italic; font-size: 0.9em; }
 	#profiel .gegevens{ margin-left: 20px; padding-left: 15px; border-left: 1px solid #0a338d; }
