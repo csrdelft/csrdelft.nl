@@ -36,12 +36,7 @@ while ($aLid = $db->next($rLeden)) {
 			case 'telefoon':
 			case 'o_telefoon':
 				if ($veld != '') {
-					$veld = str_replace(array('-', ' '), '', $veld);
-					if ($veld[0] != '+' OR $veld[0] != '0') {
-						echo '+31' . substr($veld, 1);
-					} else {
-						echo $veld;
-					}
+					echo internationalizePhonenumber($veld);
 				}
 				break;
 			default:

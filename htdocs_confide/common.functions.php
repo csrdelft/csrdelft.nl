@@ -452,9 +452,19 @@ function reldate($datum) {
 	return '<abbr class="timeago" title="' . date('Y-m-d\TG:i:sO', $moment) . '">' . $return . '</abbr>'; // ISO8601
 }
 
+/**
+ * Voeg landcode toe als nummer met 0 begint of vervang 00 met +
+ * 
+ * @param string $phonenumber
+ * @param string $prefix
+ * @return string
+ */
 function internationalizePhonenumber($phonenumber, $prefix = '+31') {
 	$number = str_replace(array(' ', '-'), '', $phonenumber);
-	if ($number[0] != '+' AND $number[0] == 0) {
+	if ($number[0] == 0) {
+		if ($number[1] == 0) {
+			return '+' . substr($number, 2);
+		}
 		return $prefix . substr($number, 1);
 	} else {
 		return $phonenumber;
