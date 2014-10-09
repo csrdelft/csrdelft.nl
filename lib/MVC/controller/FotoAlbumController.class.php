@@ -110,7 +110,7 @@ class FotoAlbumController extends AclController {
 		$body = new FotoAlbumView($album);
 		if (LoginModel::mag('P_LOGGED_IN')) {
 			$this->view = new CsrLayoutPage($body);
-			$this->view->zijbalk = false;
+			//$this->view->zijbalk = false;
 		} else { // uitgelogd heeft nieuwe layout
 			$this->view = new CsrLayout2Page($body);
 		}
