@@ -56,7 +56,7 @@ jQuery(document).ready(function ($) {
 		$lateral_menu.removeClass('lateral-menu-is-open');
 
 		// Clear value and de-focus instant search field
-		$('#menuZoekveld').val('').blur();
+		$('#cd-zoek-veld').val('').blur();
 	};
 
 	// Open ingelogd menu on hover over trigger
@@ -135,12 +135,12 @@ jQuery(document).ready(function ($) {
 
 		// a-z en 0-9 incl. numpad
 		if ((event.keyCode > 64 && event.keyCode < 91) || (event.keyCode > 47 && event.keyCode < 58) || (event.keyCode > 95 && event.keyCode < 106)) {
-			$('#menuZoekveld').focus();
+			$('#cd-zoek-veld').focus();
 			open_lateral_menu();
 		}
 	});
 
-	$('#menuZoekveld').keyup(function (event) {
+	$('#cd-zoek-veld').keyup(function (event) {
 		if (event.keyCode === 27) { // esc
 			close_lateral_menu();
 		}

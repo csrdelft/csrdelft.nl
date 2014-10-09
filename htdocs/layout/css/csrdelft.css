@@ -49,11 +49,6 @@
 	cursor: ew-resize;
 }
 
-.scroll-fixed{
-	position: fixed;
-	height: 100%;
-}
-
 h1{
 	font-family: Verdana,Geneva,Arial,Helvetica,sans-serif;
 	font-weight: bold;

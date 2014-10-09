@@ -1,22 +1,22 @@
 <nav id="cd-lateral-nav">
 	<ul class="cd-navigation cd-single-item-wrapper">
 		<li>
-			<form id="menuZoekForm" name="lidzoeker" method="get" action="/communicatie/lijst.php">
-				<input id="menuZoekveld" name="q" type="text" />
+			<form id="cd-zoek-form" name="lidzoeker" method="get" action="/communicatie/lijst.php">
+				<input id="cd-zoek-veld" name="q" type="text" />
 				<script type="text/javascript">
 					$(document).ready(function () {
 						{assign var=instantsearch value=$mainmenu->getInstantSearchSuggestions()}
-						$('#menuZoekveld').autocomplete({json_encode(array_keys($instantsearch))}, {
+						$('#cd-zoek-veld').autocomplete({json_encode(array_keys($instantsearch))}, {
 							clickFire: true,
 							max: 20,
 							matchContains: true,
 							noRecord: ""
 						});
 						var instantsearch = {json_encode($instantsearch)};
-						$('#menuZoekveld').click(function (event) {
+						$('#cd-zoek-veld').click(function (event) {
 							this.setSelectionRange(0, this.value.length);
 						});
-						$('#menuZoekveld').keyup(function (event) {
+						$('#cd-zoek-veld').keyup(function (event) {
 							if (event.keyCode === 13 && typeof instantsearch[this.value] !== 'undefined') { // enter
 								window.location.href = instantsearch[this.value]; // goto url
 							}

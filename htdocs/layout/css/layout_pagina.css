@@ -77,7 +77,7 @@ main.cd-main-content.lateral-menu-is-open {
 	transform: translateX(-260px);
 }
 @media (max-width: 1004px) {
-	.cd-main-content.lateral-menu-is-open{ 
+	main.cd-main-content.lateral-menu-is-open{ 
 		/* prevent main content from overlapping lateral menu, and also masks the jump caused by overflow: hidden */
 		z-index: 0; 
 	}
@@ -360,11 +360,11 @@ Lateral navigation
 	transform: translateY(-50%) rotate(90deg);
 }
 
-#menuZoekForm{
+#cd-lateral-nav #cd-zoek-form{
 	width: 212px;
 	margin-left: 32px;
 }
-#menuZoekveld{
+#cd-lateral-nav #cd-zoek-veld{
 	background-image: url('http://plaetjes.csrdelft.nl/search-bg.png');
 	background-position: 100% 50%;
 	background-repeat: no-repeat;

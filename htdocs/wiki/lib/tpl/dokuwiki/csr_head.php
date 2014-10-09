@@ -9,7 +9,7 @@ class WikiHeader extends HtmlPage {
 		$js = '/layout/js/';
 		//$plugin = $js . 'jquery/plugins/';
 
-		$this->addStylesheet($css . 'reset');
+		$this->addStylesheet($css . 'reset_nav');
 		$this->addStylesheet($css . 'layout_pagina');
 		//$this->addStylesheet($css . 'ubb');
 		//$this->addStylesheet($css . 'csrdelft');
