@@ -85,16 +85,17 @@ class CsrLayoutPage extends HtmlPage {
 		$smarty->assign('modal', $this->modal);
 		$smarty->assign('body', $this->getBody());
 
-		if (!is_array($this->zijbalk)) {
-			$this->zijbalk = array();
-		}
-		// negeer zijbalk = false
-		$this->zijbalk = Zijbalk::addStandaardZijbalk($this->zijbalk);
-		if (LidInstellingen::get('zijbalk', 'scrollen') == 'apart scrollen') {
-			$top = 0;
-			$left = 0;
-			DragObjectModel::getCoords('zijbalk', $top, $left);
-			$smarty->assign('scrollfix', $top);
+		if ($this->zijbalk !== false) {
+			if (!is_array($this->zijbalk)) {
+				$this->zijbalk = array();
+			}
+			$this->zijbalk = Zijbalk::addStandaardZijbalk($this->zijbalk);
+			if (LidInstellingen::get('zijbalk', 'scrollen') == 'apart scrollen') {
+				$top = 0;
+				$left = 0;
+				DragObjectModel::getCoords('zijbalk', $top, $left);
+				$smarty->assign('scrollfix', $top);
+			}
 		}
 		$smarty->assign('zijbalk', $this->zijbalk);
 

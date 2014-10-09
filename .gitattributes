@@ -3331,6 +3331,7 @@ lib/MVC/controller/LidInstellingenController.class.php -text
 lib/MVC/controller/LoginController.class.php -text
 lib/MVC/controller/MaalcieRouterController.class.php -text
 lib/MVC/controller/MenuBeheerController.class.php -text
+lib/MVC/controller/WikiController.class.php -text
 lib/MVC/controller/groepen/ActiviteitenController.class.php -text
 lib/MVC/controller/groepen/BesturenController.class.php -text
 lib/MVC/controller/groepen/CommissiesController.class.php -text
@@ -3442,6 +3443,7 @@ lib/MVC/view/MenuView.class.php -text
 lib/MVC/view/SmartyTemplateView.abstract.php -text
 lib/MVC/view/Validator.interface.php -text
 lib/MVC/view/View.interface.php -text
+lib/MVC/view/WikiView.class.php -text
 lib/MVC/view/Zijbalk.static.php -text
 lib/MVC/view/groepen/ActiviteitenView.class.php -text
 lib/MVC/view/groepen/BesturenView.class.php -text
