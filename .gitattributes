@@ -2868,6 +2868,48 @@ htdocs/wiki/lib/plugins/testing/_test/dummy_plugin_integration_test.test.php -te
 htdocs/wiki/lib/plugins/testing/_test/dummy_plugin_test.test.php -text
 htdocs/wiki/lib/plugins/testing/action.php -text
 htdocs/wiki/lib/plugins/testing/plugin.info.txt -text
+htdocs/wiki/lib/plugins/upgrade/README -text
+htdocs/wiki/lib/plugins/upgrade/VerboseTarLib.class.php -text
+htdocs/wiki/lib/plugins/upgrade/admin.php -text
+htdocs/wiki/lib/plugins/upgrade/lang/da/lang.php -text
+htdocs/wiki/lib/plugins/upgrade/lang/da/safemode.txt -text
+htdocs/wiki/lib/plugins/upgrade/lang/de-informal/lang.php -text
+htdocs/wiki/lib/plugins/upgrade/lang/de-informal/safemode.txt -text
+htdocs/wiki/lib/plugins/upgrade/lang/de/lang.php -text
+htdocs/wiki/lib/plugins/upgrade/lang/de/safemode.txt -text
+htdocs/wiki/lib/plugins/upgrade/lang/en/lang.php -text
+htdocs/wiki/lib/plugins/upgrade/lang/en/safemode.txt -text
+htdocs/wiki/lib/plugins/upgrade/lang/en/step0.txt -text
+htdocs/wiki/lib/plugins/upgrade/lang/eo/lang.php -text
+htdocs/wiki/lib/plugins/upgrade/lang/eo/safemode.txt -text
+htdocs/wiki/lib/plugins/upgrade/lang/eo/step0.txt -text
+htdocs/wiki/lib/plugins/upgrade/lang/fr/lang.php -text
+htdocs/wiki/lib/plugins/upgrade/lang/fr/safemode.txt -text
+htdocs/wiki/lib/plugins/upgrade/lang/fr/step0.txt -text
+htdocs/wiki/lib/plugins/upgrade/lang/hu/lang.php -text
+htdocs/wiki/lib/plugins/upgrade/lang/hu/safemode.txt -text
+htdocs/wiki/lib/plugins/upgrade/lang/it/lang.php -text
+htdocs/wiki/lib/plugins/upgrade/lang/it/safemode.txt -text
+htdocs/wiki/lib/plugins/upgrade/lang/it/step0.txt -text
+htdocs/wiki/lib/plugins/upgrade/lang/ja/lang.php -text
+htdocs/wiki/lib/plugins/upgrade/lang/ja/safemode.txt -text
+htdocs/wiki/lib/plugins/upgrade/lang/ja/step0.txt -text svneol=unset#application/octet-stream
+htdocs/wiki/lib/plugins/upgrade/lang/ko/lang.php -text
+htdocs/wiki/lib/plugins/upgrade/lang/ko/safemode.txt -text
+htdocs/wiki/lib/plugins/upgrade/lang/ko/step0.txt -text svneol=unset#application/octet-stream
+htdocs/wiki/lib/plugins/upgrade/lang/nl/lang.php -text
+htdocs/wiki/lib/plugins/upgrade/lang/nl/safemode.txt -text
+htdocs/wiki/lib/plugins/upgrade/lang/nl/step0.txt -text
+htdocs/wiki/lib/plugins/upgrade/lang/ru/lang.php -text
+htdocs/wiki/lib/plugins/upgrade/lang/ru/safemode.txt -text
+htdocs/wiki/lib/plugins/upgrade/lang/ru/step0.txt -text svneol=unset#application/octet-stream
+htdocs/wiki/lib/plugins/upgrade/lang/tr/lang.php -text
+htdocs/wiki/lib/plugins/upgrade/lang/tr/safemode.txt -text
+htdocs/wiki/lib/plugins/upgrade/lang/zh/lang.php -text
+htdocs/wiki/lib/plugins/upgrade/lang/zh/safemode.txt -text
+htdocs/wiki/lib/plugins/upgrade/lang/zh/step0.txt -text svneol=unset#application/octet-stream
+htdocs/wiki/lib/plugins/upgrade/plugin.info.txt -text
+htdocs/wiki/lib/plugins/upgrade/style.css -text
 htdocs/wiki/lib/plugins/usermanager/_test/csv_export.test.php -text
 htdocs/wiki/lib/plugins/usermanager/_test/csv_import.test.php -text
 htdocs/wiki/lib/plugins/usermanager/_test/mocks.class.php -text
