@@ -14,11 +14,7 @@
 	<a href="/forum/recent" class="forumGrootlink">Recent</a>
 </div>
 
-<h1>Forum<a href="{LoginModel::instance()->getLid()->getRssLink()}" class="float-right" title="Persoonlijke RSS-feed forum">{icon get="feed"}</a></h1>
-
-<div class="float-right">
-	<a href="{LoginModel::instance()->getLid()->getRssLink()}" title="Persoonlijke RSS-feed forum">{icon get="feed"}</a>
-</div>
+<h1>Forum{include file='MVC/forum/rss_link.tpl'}</h1>
 
 <table id="forumtabel">
 	{foreach from=$categorien item=cat}

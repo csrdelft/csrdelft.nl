@@ -31,7 +31,7 @@
 
 {$smarty.capture.navlinks}
 
-<h1>{$deel->titel}<a href="{LoginModel::instance()->getLid()->getRssLink()}" class="float-right" title="Persoonlijke RSS-feed forum">{icon get="feed"}</a></h1>
+<h1>{$deel->titel}{if !isset($deel->forum_id)}{include file='MVC/forum/rss_link.tpl'}{/if}</h1>
 
 <table id="forumtabel">
 	<thead>

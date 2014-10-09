@@ -4169,6 +4169,7 @@ lib/templates/MVC/forum/post_lijst.tpl -text
 lib/templates/MVC/forum/post_zijbalk.tpl -text
 lib/templates/MVC/forum/resultaten.tpl -text
 lib/templates/MVC/forum/rss.tpl -text
+lib/templates/MVC/forum/rss_link.tpl -text
 lib/templates/MVC/fotoalbum/album.tpl -text
 lib/templates/MVC/groepen/groep.tpl -text
 lib/templates/MVC/groepen/inhoudsopgave.tpl -text
