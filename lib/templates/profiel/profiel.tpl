@@ -14,14 +14,14 @@
 					{if $isBestuur}
 						<a href="/communicatie/profiel/{$profiel->getUid()}/dd" class="knop round" title="Wijzig de lidstatus">{icon get="group_edit"}</a>
 					{/if}
-					<a href="/communicatie/profiel/{$profiel->getUid()}/addToGoogleContacts/" class="knop round" title="{*if $profiel->isInGoogleContacts()}Er bestaat al een contact met deze naam in je Google-contacts. Klik om te updaten.{else*}Voeg dit profiel toe aan mijn google adresboek{*/if*}"><img src="{$CSR_PICS}/knopjes/google.ico" width="16" height="16" /></a>
+					<a href="/communicatie/profiel/{$profiel->getUid()}/addToGoogleContacts/" class="knop round" title="{*if $profiel->isInGoogleContacts()}Er bestaat al een contact met deze naam in je Google-contacts. Klik om te updaten.{else*}Voeg dit profiel toe aan mijn google adresboek{*/if*}"><img src="{$CSR_PICS}/knopjes/google.ico" width="16" height="16" alt="tovoegen aan Google contacts"/></a>
 					{if $isAdmin}
 						<br />
 						<a href="/tools/stats.php?uid={$profiel->getUid()}" class="knop round" title="Toon bezoeklog">{icon get="server_chart"}</a>
 						<a href="/communicatie/profiel/{$profiel->getUid()}/wachtwoord" class="knop round" title="Reset wachtwoord voor {$profiel->getNaam()}" onclick="return confirm('Weet u zeker dat u het wachtwoord van deze gebruiker wilt resetten?')">{icon get="resetpassword"}</a>
 					{/if}
 					{if $profiel->getStatus()=='S_NOVIET' AND LoginModel::mag('groep:novcie')}
-						<a href="/communicatie/profiel/{$profiel->getUid()}/novietBewerken" class="knop round"><img src="{$CSR_PICS}/forum/bewerken.png" title="Bewerk dit profiel" />Noviet bewerken</a><br />
+						<a href="/communicatie/profiel/{$profiel->getUid()}/novietBewerken" class="knop round"><img src="{$CSR_PICS}/forum/bewerken.png" title="Bewerk dit profiel" alt="bewerken" />Noviet bewerken</a><br />
 					{/if}
 				</div>
 			</div>
@@ -270,7 +270,7 @@
 				<div class="data">
 					{if $profhtml.rssToken!=''}
 						<a href="{$profiel->getICalLink()}">
-							<img src="{$CSR_PICS}/knop roundjes/ical.gif" /> Persoonlijke ICal-feed agenda
+							<img src="{$CSR_PICS}/knopjes/ical.gif" /> Persoonlijke ICal-feed agenda
 						</a>
 					{/if}
 					<small>Gebruikt dezelfde private token als het forum (zie hieronder)</small>
