@@ -225,7 +225,6 @@ htdocs/layout/js/flot/Makefile -text
 htdocs/layout/js/flot/NEWS.md -text
 htdocs/layout/js/flot/PLUGINS.md -text
 htdocs/layout/js/flot/README.md -text
-htdocs/layout/js/flot/build.log -text
 htdocs/layout/js/flot/excanvas.js -text
 htdocs/layout/js/flot/excanvas.min.js -text
 htdocs/layout/js/flot/jquery.colorhelpers.js -text
@@ -3976,7 +3975,6 @@ lib/roodschopper.class.php -text
 lib/roodschoppercontent.class.php -text
 lib/savedquery.class.php -text
 lib/simplespamfilter.class.php -text
-lib/smarty/3.1.16_RELEASE_NOTES.txt -text
 lib/smarty/COPYING.lib -text
 lib/smarty/README -text
 lib/smarty/SMARTY_2_BC_NOTES.txt -text

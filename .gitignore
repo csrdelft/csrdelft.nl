@@ -23,6 +23,7 @@ htdocs/download
 htdocs/enquete
 htdocs/handelingen
 htdocs/happening
+htdocs/layout/js/flot/examples
 htdocs/owee
 htdocs/tools/alphabanner/alphabanner.cache.*
 htdocs/wiki/*.iml
