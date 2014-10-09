@@ -12,6 +12,10 @@
 	line-height: 1.25em;
 	background-color: #ffffff;
 }
+#wikiframe{
+	min-width: 1024px;
+	min-height: 768px;
+}
 .dragobject{
 	position: fixed;
 	z-index: 50;

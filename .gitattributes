@@ -370,6 +370,8 @@ htdocs/layout/js/ubb_slideshow.js -text
 htdocs/layout/js/ubb_slideshow.min.js -text
 htdocs/layout/js/verticalen.js -text
 htdocs/layout/js/verticalen.min.js -text
+htdocs/layout/js/wiki.js -text
+htdocs/layout/js/wiki.min.js -text
 htdocs/layout2/css/foundation.css -text
 htdocs/layout2/css/foundation.min.css -text
 htdocs/layout2/css/normalize.css -text
