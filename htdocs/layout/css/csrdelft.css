@@ -1,5 +1,7 @@
 /**** GENERAL *****************************************************************/
-
+#wikiframe{
+	width: 100%;
+}
 #maintable{
 	margin: 0 auto;
 	border-collapse: collapse;
@@ -11,10 +13,6 @@
 	padding: 50px 0 0 50px;
 	line-height: 1.25em;
 	background-color: #ffffff;
-}
-#wikiframe{
-	min-width: 1024px;
-	min-height: 768px;
 }
 .dragobject{
 	position: fixed;
