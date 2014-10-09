@@ -482,6 +482,7 @@ htdocs/wiki/conf/interwiki.local.conf -text
 htdocs/wiki/conf/lang/nl/adminplugins.txt -text
 htdocs/wiki/conf/lang/nl/denied.txt -text
 htdocs/wiki/conf/lang/nl/edit.txt -text
+htdocs/wiki/conf/lang/nl/lang.php -text
 htdocs/wiki/conf/lang/nl/lang.php.backup -text
 htdocs/wiki/conf/lang/nl/login.txt -text
 htdocs/wiki/conf/lang/nl/newpage.txt -text
