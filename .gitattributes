@@ -1104,10 +1104,8 @@ htdocs/wiki/lib/images/fileicons/xpi.png -text
 htdocs/wiki/lib/images/fileicons/xvid.png -text
 htdocs/wiki/lib/images/fileicons/zip.png -text
 htdocs/wiki/lib/images/history.png -text
-htdocs/wiki/lib/images/icon-file.png -text
 htdocs/wiki/lib/images/icon-list.png -text
 htdocs/wiki/lib/images/icon-sort.png -text
-htdocs/wiki/lib/images/icon-thumb.png -text
 htdocs/wiki/lib/images/index.html -text
 htdocs/wiki/lib/images/info.png -text
 htdocs/wiki/lib/images/interwiki.png -text
@@ -1123,7 +1121,6 @@ htdocs/wiki/lib/images/interwiki/paypal.gif -text
 htdocs/wiki/lib/images/interwiki/phpfn.gif -text
 htdocs/wiki/lib/images/interwiki/sb.gif -text
 htdocs/wiki/lib/images/interwiki/skype.gif -text
-htdocs/wiki/lib/images/interwiki/skype.png -text
 htdocs/wiki/lib/images/interwiki/tag.gif -text
 htdocs/wiki/lib/images/interwiki/user.png -text
 htdocs/wiki/lib/images/interwiki/wg.png -text
@@ -1247,7 +1244,6 @@ htdocs/wiki/lib/plugins/acl/admin.php -text
 htdocs/wiki/lib/plugins/acl/lang/en/help.txt -text
 htdocs/wiki/lib/plugins/acl/lang/en/lang.php -text
 htdocs/wiki/lib/plugins/acl/lang/kk/lang.php -text
-htdocs/wiki/lib/plugins/acl/lang/ms/lang.php -text
 htdocs/wiki/lib/plugins/acl/lang/nl/help.txt -text
 htdocs/wiki/lib/plugins/acl/lang/nl/lang.php -text
 htdocs/wiki/lib/plugins/acl/pix/group.png -text
@@ -1256,7 +1252,6 @@ htdocs/wiki/lib/plugins/acl/pix/page.png -text
 htdocs/wiki/lib/plugins/acl/pix/user.png -text
 htdocs/wiki/lib/plugins/acl/plugin.info.txt -text
 htdocs/wiki/lib/plugins/acl/remote.php -text
-htdocs/wiki/lib/plugins/acl/rtl.css -text
 htdocs/wiki/lib/plugins/acl/script.js -text
 htdocs/wiki/lib/plugins/acl/style.css -text
 htdocs/wiki/lib/plugins/action.php -text
@@ -1345,7 +1340,6 @@ htdocs/wiki/lib/plugins/authldap/lang/fr/settings.php -text
 htdocs/wiki/lib/plugins/authldap/lang/it/settings.php -text
 htdocs/wiki/lib/plugins/authldap/lang/ja/settings.php -text
 htdocs/wiki/lib/plugins/authldap/lang/ko/settings.php -text
-htdocs/wiki/lib/plugins/authldap/lang/lv/settings.php -text
 htdocs/wiki/lib/plugins/authldap/lang/nl/settings.php -text
 htdocs/wiki/lib/plugins/authldap/lang/pt-br/settings.php -text
 htdocs/wiki/lib/plugins/authldap/lang/ru/settings.php -text
@@ -1360,12 +1354,10 @@ htdocs/wiki/lib/plugins/authmysql/lang/de-informal/settings.php -text
 htdocs/wiki/lib/plugins/authmysql/lang/de/settings.php -text
 htdocs/wiki/lib/plugins/authmysql/lang/en/settings.php -text
 htdocs/wiki/lib/plugins/authmysql/lang/eo/settings.php -text
-htdocs/wiki/lib/plugins/authmysql/lang/fi/settings.php -text
 htdocs/wiki/lib/plugins/authmysql/lang/fr/settings.php -text
 htdocs/wiki/lib/plugins/authmysql/lang/it/settings.php -text
 htdocs/wiki/lib/plugins/authmysql/lang/ja/settings.php -text
 htdocs/wiki/lib/plugins/authmysql/lang/ko/settings.php -text
-htdocs/wiki/lib/plugins/authmysql/lang/lv/settings.php -text
 htdocs/wiki/lib/plugins/authmysql/lang/nl/settings.php -text
 htdocs/wiki/lib/plugins/authmysql/lang/pt-br/settings.php -text
 htdocs/wiki/lib/plugins/authmysql/lang/ru/settings.php -text
@@ -1380,12 +1372,9 @@ htdocs/wiki/lib/plugins/authpgsql/lang/de-informal/settings.php -text
 htdocs/wiki/lib/plugins/authpgsql/lang/de/settings.php -text
 htdocs/wiki/lib/plugins/authpgsql/lang/en/settings.php -text
 htdocs/wiki/lib/plugins/authpgsql/lang/eo/settings.php -text
-htdocs/wiki/lib/plugins/authpgsql/lang/fi/settings.php -text
 htdocs/wiki/lib/plugins/authpgsql/lang/fr/settings.php -text
-htdocs/wiki/lib/plugins/authpgsql/lang/it/settings.php -text
 htdocs/wiki/lib/plugins/authpgsql/lang/ja/settings.php -text
 htdocs/wiki/lib/plugins/authpgsql/lang/ko/settings.php -text
-htdocs/wiki/lib/plugins/authpgsql/lang/lv/settings.php -text
 htdocs/wiki/lib/plugins/authpgsql/lang/nl/settings.php -text
 htdocs/wiki/lib/plugins/authpgsql/lang/pt-br/settings.php -text
 htdocs/wiki/lib/plugins/authpgsql/lang/ru/settings.php -text
@@ -1506,12 +1495,9 @@ htdocs/wiki/lib/plugins/config/images/security.png -text
 htdocs/wiki/lib/plugins/config/images/warning.png -text
 htdocs/wiki/lib/plugins/config/lang/en/intro.txt -text
 htdocs/wiki/lib/plugins/config/lang/en/lang.php -text
-htdocs/wiki/lib/plugins/config/lang/kk/lang.php -text
-htdocs/wiki/lib/plugins/config/lang/ms/lang.php -text
 htdocs/wiki/lib/plugins/config/lang/nl/intro.txt -text
 htdocs/wiki/lib/plugins/config/lang/nl/lang.php -text
 htdocs/wiki/lib/plugins/config/plugin.info.txt -text
-htdocs/wiki/lib/plugins/config/rtl.css -text
 htdocs/wiki/lib/plugins/config/settings/config.class.php -text
 htdocs/wiki/lib/plugins/config/settings/config.metadata.php -text
 htdocs/wiki/lib/plugins/config/settings/extra.class.php -text
@@ -2704,8 +2690,6 @@ htdocs/wiki/lib/plugins/popularity/helper.php -text
 htdocs/wiki/lib/plugins/popularity/lang/en/intro.txt -text
 htdocs/wiki/lib/plugins/popularity/lang/en/lang.php -text
 htdocs/wiki/lib/plugins/popularity/lang/en/submitted.txt -text
-htdocs/wiki/lib/plugins/popularity/lang/kk/lang.php -text
-htdocs/wiki/lib/plugins/popularity/lang/ms/lang.php -text
 htdocs/wiki/lib/plugins/popularity/lang/nl/intro.txt -text
 htdocs/wiki/lib/plugins/popularity/lang/nl/lang.php -text
 htdocs/wiki/lib/plugins/popularity/lang/nl/submitted.txt -text
@@ -2714,8 +2698,6 @@ htdocs/wiki/lib/plugins/remote.php -text
 htdocs/wiki/lib/plugins/revert/admin.php -text
 htdocs/wiki/lib/plugins/revert/lang/en/intro.txt -text
 htdocs/wiki/lib/plugins/revert/lang/en/lang.php -text
-htdocs/wiki/lib/plugins/revert/lang/kk/lang.php -text
-htdocs/wiki/lib/plugins/revert/lang/ms/lang.php -text
 htdocs/wiki/lib/plugins/revert/lang/nl/intro.txt -text
 htdocs/wiki/lib/plugins/revert/lang/nl/lang.php -text
 htdocs/wiki/lib/plugins/revert/plugin.info.txt -text
@@ -2923,7 +2905,6 @@ htdocs/wiki/lib/plugins/usermanager/lang/en/intro.txt -text
 htdocs/wiki/lib/plugins/usermanager/lang/en/lang.php -text
 htdocs/wiki/lib/plugins/usermanager/lang/en/list.txt -text
 htdocs/wiki/lib/plugins/usermanager/lang/kk/lang.php -text
-htdocs/wiki/lib/plugins/usermanager/lang/ms/lang.php -text
 htdocs/wiki/lib/plugins/usermanager/lang/nl/add.txt -text
 htdocs/wiki/lib/plugins/usermanager/lang/nl/delete.txt -text
 htdocs/wiki/lib/plugins/usermanager/lang/nl/edit.txt -text
