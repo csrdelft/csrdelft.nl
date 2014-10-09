@@ -3016,6 +3016,8 @@ htdocs/wiki/lib/plugins/wrap/syntax/divwrap.php -text
 htdocs/wiki/lib/plugins/wrap/syntax/span.php -text
 htdocs/wiki/lib/plugins/wrap/syntax/spaninline.php -text
 htdocs/wiki/lib/plugins/wrap/syntax/spanwrap.php -text
+htdocs/wiki/lib/plugins/xhtmlniceurltitles/plugin.info.txt -text
+htdocs/wiki/lib/plugins/xhtmlniceurltitles/renderer.php -text
 htdocs/wiki/lib/scripts/behaviour.js -text
 htdocs/wiki/lib/scripts/compatibility.js -text
 htdocs/wiki/lib/scripts/cookie.js -text
