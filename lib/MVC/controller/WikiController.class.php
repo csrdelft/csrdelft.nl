@@ -23,6 +23,7 @@ class WikiController extends Controller {
 	public function tonen() {
 		$body = new WikiView($this->model);
 		$this->view = new CsrLayoutPage($body);
+		$this->view->addScript('wiki');
 		$this->view->zijbalk = false;
 	}
 
