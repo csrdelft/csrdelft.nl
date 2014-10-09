@@ -291,7 +291,7 @@
 								{icon get='feed'} Persoonlijke RSS-feed forum
 							</a>
 						{/if}
-						<a class="knop round" href="/communicatie/profiel/{$profiel->getUid()}/rssToken#forum">Nieuwe aanvragen</a>
+						<a name="tokenaanvragen" class="knop" href="/communicatie/profiel/{$profiel->getUid()}/rssToken#forum">Nieuwe aanvragen</a>
 					</div>
 					<br />
 				{/if}
@@ -342,7 +342,7 @@
 					</ul>
 				{/if}
 				{if LoginModel::getUid()==$profhtml.uid}
-					<a class="knop round" href="/communicatie/bibliotheek/nieuwboek" title="Nieuw boek toevoegen">{icon get="book_add"} Boek toevoegen</a>
+					<a class="knop" href="/communicatie/bibliotheek/nieuwboek" title="Nieuw boek toevoegen">{icon get="book_add"} Boek toevoegen</a>
 					<br />
 				{/if}
 				{if $gerecenseerdeboeken}

@@ -98,10 +98,10 @@ class VerjaardagContent implements View {
 				echo '</table><br>' . "\n";
 				break;
 			case 'komende':
-				if (LoginModel::getUid() == 'x999') {
-					$toonpasfotos = false;
-				} else {
+				if (LoginModel::mag('P_LEDEN_READ')) {
 					$toonpasfotos = LidInstellingen::get('zijbalk', 'verjaardagen_pasfotos') == 'ja';
+				} else {
+					$toonpasfotos = false;
 				}
 
 				echo '<div id="zijbalk_verjaardagen"><h1>';

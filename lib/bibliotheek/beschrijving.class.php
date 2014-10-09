@@ -73,11 +73,11 @@ class Beschrijving {
 	 */
 
 	public function isSchrijver($uid = null) {
+		if (!LoginModel::mag('P_LOGGED_IN')) {
+			return false;
+		}
 		if ($uid === null) {
 			$uid = LoginModel::getUid();
-		}
-		if ($uid == 'x999') {
-			return false;
 		}
 		return $this->beschrijving['schrijver_uid'] == $uid;
 	}

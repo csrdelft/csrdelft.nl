@@ -13,7 +13,12 @@
 <div class="breadcrumbs">
 	<a href="/forum/recent" class="forumGrootlink">Recent</a>
 </div>
-<h1>Forum</h1>
+
+<h1>Forum<a href="{LoginModel::instance()->getLid()->getRssLink()}" class="float-right" title="Persoonlijke RSS-feed forum">{icon get="feed"}</a></h1>
+
+<div class="float-right">
+	<a href="{LoginModel::instance()->getLid()->getRssLink()}" title="Persoonlijke RSS-feed forum">{icon get="feed"}</a>
+</div>
 
 <table id="forumtabel">
 	{foreach from=$categorien item=cat}

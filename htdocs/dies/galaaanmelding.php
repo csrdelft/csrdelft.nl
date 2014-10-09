@@ -6,7 +6,7 @@ $data = array();
 $ingelogd = true;
 $bericht = '';
 
-if (LoginModel::instance()->instance()->getUid() == 'x999') {
+if (!LoginModel::mag('P_LOGGED_IN')) {
 	$ingelogd = false;
 } else {
 	$dies = new DiesAanmelding(LoginModel::getUid());
@@ -99,13 +99,13 @@ $ingelogd = false;
 				<img src="./Afbeeldingen/aanmelding_konijn.png" width="291" height="500" vspace="25" style="position:relative;left:50% ; margin-left:-145px;">
 			</div>
 			<div id="column4">
-<?php
+				<?php
 				echo $bericht;
 				if ($ingelogd) {
-?>
+					?>
 					<h4>Aanmelding gala 21 februari 2014</h4>
 					<p>Met behulp van dit formulier kunt u zich aanmelden voor het Dies Natalis gala der Civitas Studiosorum Reformatorum op 21 februari 2014. U dient hier de gegevens van u en uw Diesdame of -heer in te vullen. Door u aan te melden gaat u akkoord met het betalen van twee galakaartjes d.m.v. een machtiging (wilt u geen machtiging dan dient u contact op te nemen met de DiesCie).</p>
-<?php
+					<?php
 					$eetopties = array('vlees', 'vis', 'vegatarisch');
 					$leeftijdopties = array('nee', 'ja');
 
@@ -124,12 +124,12 @@ $ingelogd = false;
 					$form->addFields($fields);
 					$form->view();
 				} else {
-?>
+					?>
 					<h4>Aanmelding gala 21 februari 2014</h4>
 					<p>De inschrijving voor het gala is gesloten, wijzigingen doorgeven is ook niet meer mogelijk</p>
-<?php
+					<?php
 				}
-?>
+				?>
 			</div>
 		</div>
 
