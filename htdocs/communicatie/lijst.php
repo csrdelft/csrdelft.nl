@@ -23,15 +23,17 @@ if (isset($_GET['q'])) {
 	$zoeker->parseQuery($_GET);
 
 	//als er geen resultaten zijn dan kijken we of de query de naam is van een
-	//h.t. groep. Als dat zo is refreshen we naar die groep.
+	//h.t. groep (geen nummers). Als dat zo is refreshen we naar die groep.
 	if ($zoeker->count() == 0) {
-		try {
-			$groep = new OldGroep($_GET['q']);
-			if ($groep instanceof OldGroep) {
-				redirect($groep->getUrl());
+		if (!preg_match('/^\d+$/', $_GET['q'])) {
+			try {
+				$groep = new OldGroep($_GET['q']);
+				if ($groep instanceof OldGroep) {
+					redirect($groep->getUrl());
+				}
+			} catch (Exception $e) {
+				//bestaat ie niet, dan doen we niets.
 			}
-		} catch (Exception $e) {
-			//bestaat ie niet, dan doen we niets.
 		}
 
 		//als er ook geen h.t. groep is kijken we of er wel resultaat is bij
