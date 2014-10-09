@@ -3077,6 +3077,9 @@ htdocs/wiki/lib/tpl/default/images/documenten.png -text svneol=unset#unset
 htdocs/wiki/lib/tpl/default/images/forum.png -text svneol=unset#unset
 htdocs/wiki/lib/tpl/default/images/irc.png -text svneol=unset#unset
 htdocs/wiki/lib/tpl/default/images/wiki.png -text svneol=unset#unset
+htdocs/wiki/lib/tpl/dokuwiki/csr_head.php -text
+htdocs/wiki/lib/tpl/dokuwiki/csr_main_close.php -text
+htdocs/wiki/lib/tpl/dokuwiki/csr_main_open.php -text
 htdocs/wiki/lib/tpl/dokuwiki/css/_admin.css -text
 htdocs/wiki/lib/tpl/dokuwiki/css/_diff.css -text
 htdocs/wiki/lib/tpl/dokuwiki/css/_edit.css -text
