@@ -23,11 +23,11 @@ $showSidebar = $hasSidebar && ($ACT=='show');
     <meta name="viewport" content="width=device-width,initial-scale=1" />
     <?php echo tpl_favicon(array('favicon', 'mobile')) ?>
     <?php tpl_includeFile('meta.html') ?>
-	<?php inlcude('csr_head.php') ?>
+	<?php include('csr_head.php') ?>
 </head>
 
 <body>
-<?php inlcude('csr_main_open.php') ?>
+<?php include('csr_main_open.php') ?>
 
     <!--[if lte IE 7 ]><div id="IE7"><![endif]--><!--[if IE 8 ]><div id="IE8"><![endif]-->
     <div id="dokuwiki__site"><div id="dokuwiki__top" class="site <?php echo tpl_classes(); ?> <?php
@@ -110,6 +110,6 @@ $showSidebar = $hasSidebar && ($ACT=='show');
     <div id="screen__mode" class="no"></div><?php /* helper to detect CSS media query in script.js */ ?>
     <!--[if ( lte IE 7 | IE 8 ) ]></div><![endif]-->
 
-<?php inlcude('csr_main_close.php') ?>
+<?php include('csr_main_close.php') ?>
 </body>
 </html>
