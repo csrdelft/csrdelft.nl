@@ -84,7 +84,10 @@ hr{
 	background-color: black;
 	border: 0 none;
 }
-
+.error{
+	color: red !important;
+	font-weight: bold !important;
+}
 .onzichtbaar{ visibility: hidden; }
 .verborgen{ display: none; }
 .block{ display: block; }

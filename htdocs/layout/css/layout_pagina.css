@@ -25,10 +25,7 @@ body, textarea, input[type="text"] {
 	color: #000000;
 	background-color: #ffffff;
 }
-.error{
-	color: red !important;
-	font-weight: bold !important;
-}
+.staatrood { color: red; }
 .scrollpane { overflow: auto; }
 .float-none { float: none; }
 .float-left { float: left; }
