@@ -14,6 +14,15 @@
 	line-height: 1.25em;
 	background-color: #ffffff;
 }
+#cd-logo {
+	display: block;
+}
+#cd-logo #beeldmerk {
+	width: 150px;
+	height: 200px;
+	margin-left: 25px;
+	background-size: cover;
+}
 .dragobject{
 	position: fixed;
 	z-index: 50;
@@ -155,17 +164,6 @@ ul.nobullets li{ list-style-type: none; }
 	background-image: url("http://plaetjes.csrdelft.nl/layout/loading_bar_black.gif");*/
 	background-position: 50% 300px;
 	background-repeat: no-repeat;
-}
-
-#menuZoekForm{
-	width: 212px;
-	margin-left: 32px;
-}
-#menuZoekveld{
-	background-image: url('http://plaetjes.csrdelft.nl/search-bg.png');
-	background-position: 100% 50%;
-	background-repeat: no-repeat;
-	line-height: 1.5em;
 }
 
 /* Zijbalk */
