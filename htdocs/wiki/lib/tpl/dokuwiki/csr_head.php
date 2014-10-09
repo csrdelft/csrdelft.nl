@@ -1,31 +1,46 @@
 <?php
 
-class WikiSmarty extends SmartyTemplateView {
-
-	public function view() {
-		$this->smarty->assign('mainmenu', new MainMenuView());
-	}
-
-}
-
 class WikiHeader extends HtmlPage {
 
 	public function __construct() {
-		parent::__construct(new WikiSmarty(null, null), null);
-		$this->addStylesheet('/layout/css/layout_pagina');
+		parent::__construct(new MainMenuView(), null);
+
+		$css = '/layout/css/';
+		$js = '/layout/js/';
+		//$plugin = $js . 'jquery/plugins/';
+
+		$this->addStylesheet($css . 'reset');
+		$this->addStylesheet($css . 'layout_pagina');
+		//$this->addStylesheet($css . 'ubb');
+		//$this->addStylesheet($css . 'csrdelft');
+		$layout = LidInstellingen::get('layout', 'opmaak');
+		$this->addStylesheet($css . $layout);
+		if (LidInstellingen::get('layout', 'toegankelijk') == 'bredere letters') {
+			$this->addStylesheet($css . 'toegankelijk_bredere_letters');
+		}
+		if (LidInstellingen::get('layout', 'sneeuw') != 'nee') {
+			if (LidInstellingen::get('layout', 'sneeuw') == 'ja') {
+				$this->addStylesheet($css . 'snow.anim');
+			} else {
+				$this->addStylesheet($css . 'snow');
+			}
+		}
+		$this->addScript($js . 'jquery/jquery');
+		//$this->addScript($js . 'jquery/jquery-ui');
+		//$this->addStylesheet($js . 'jquery/jquery-ui');
+		$this->addScript($js . 'autocomplete/jquery.autocomplete');
+		$this->addStylesheet($js . 'autocomplete/jquery.autocomplete');
+
 		$this->addScript('/layout/js/main_menu');
 	}
 
 	public function view() {
-
 		foreach ($this->getStylesheets() as $sheet) {
 			echo '<link rel="stylesheet" href="' . $sheet . '" type="text/css" />';
 		}
 		foreach ($this->getScripts() as $script) {
 			echo '<script type="text/javascript" src="' . $script . '"></script>';
 		}
-		// assign mainmenu
-		$this->body->view();
 	}
 
 }

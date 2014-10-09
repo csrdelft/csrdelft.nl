@@ -1,4 +1,5 @@
 <?php
 
 echo '</main>';
-$mainmenu->view();
+
+$wiki->getBody()->view();
