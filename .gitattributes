@@ -4186,6 +4186,7 @@ lib/templates/MVC/layout/pagina.tpl -text
 lib/templates/MVC/layout/pagina_header.tpl -text
 lib/templates/MVC/layout/pauper.tpl -text
 lib/templates/MVC/layout/ubbhulp.tpl -text
+lib/templates/MVC/layout/wiki.tpl -text
 lib/templates/MVC/maalcie/functie/beheer_functie_lijst.tpl -text
 lib/templates/MVC/maalcie/functie/beheer_functies.tpl -text
 lib/templates/MVC/mail/layout/letter.tpl -text

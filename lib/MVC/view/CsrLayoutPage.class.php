@@ -143,7 +143,12 @@ class CsrLayoutPage extends HtmlPage {
 			$smarty->display('MVC/layout/pauper.tpl');
 		} else {
 			$smarty->assign('mainmenu', new MainMenuView());
-			$smarty->display('MVC/layout/pagina.tpl');
+			// uitzondering voor wiki (geen main table)
+			if ($this->body instanceof WikiView) {
+				$smarty->display('MVC/layout/wiki.tpl');
+			} else {
+				$smarty->display('MVC/layout/pagina.tpl');
+			}
 		}
 	}
 
