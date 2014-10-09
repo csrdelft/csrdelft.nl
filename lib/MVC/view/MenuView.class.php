@@ -27,8 +27,7 @@ class MainMenuView extends MenuView {
 		parent::__construct(MenuModel::instance()->getMenu('main'));
 	}
 
-	public function view() {
-		parent::view();
+	public function getInstantSearchSuggestions() {
 		$instantsearch = array();
 		foreach (MenuModel::instance()->find() as $item) {
 			if ($item->parent_id > 0 AND $item->magBekijken()) {
@@ -41,7 +40,11 @@ class MainMenuView extends MenuView {
 				$instantsearch[$deel->titel] = '/forum/deel/' . $deel->forum_id;
 			}
 		}
-		$this->smarty->assign('instantsearch', $instantsearch);
+		return $instantsearch;
+	}
+
+	public function view() {
+		parent::view();
 		$this->smarty->display('MVC/menu/main_menu.tpl');
 	}
 

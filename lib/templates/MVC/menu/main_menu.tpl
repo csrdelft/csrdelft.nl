@@ -5,6 +5,7 @@
 				<input id="menuZoekveld" name="q" type="text" />
 				<script type="text/javascript">
 					$(document).ready(function () {
+						{assign var=instantsearch value=$mainmenu->getInstantSearchSuggestions()}
 						$('#menuZoekveld').autocomplete({json_encode(array_keys($instantsearch))}, {
 							clickFire: true,
 							max: 20,
