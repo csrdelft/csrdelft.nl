@@ -1,9 +1,8 @@
 jQuery(document).ready(function () {
-	var scrollbar = getScrollBarWidth();
 	var $iframe = jQuery('#wikiframe');
 	jQuery(window).resize(function () {
 		$iframe.css({
-			'height': window.innerHeight - 2
+			'height': window.innerHeight - 3
 		});
 	});
 	jQuery(document).trigger('resize');
