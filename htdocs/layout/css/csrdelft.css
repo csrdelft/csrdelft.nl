@@ -311,10 +311,6 @@ table.query_table tr:nth-child(odd){
 }
 table.query_table thead th{
 	width: 170px !important;
-	font-weight: bold !important;
-	padding: 10px !important;
-	border-bottom: none !important;
-	background-color: #FAFAFA !important;
 }
 table.query_table tbody tr td{
 	width: 175px;
