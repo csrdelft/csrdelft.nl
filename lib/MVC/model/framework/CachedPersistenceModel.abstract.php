@@ -8,8 +8,8 @@ require_once 'MVC/model/framework/PersistenceModel.abstract.php';
  * @author P.W.G. Brussee <brussee@live.nl>
  * 
  * Uses runtime cache to provide caching on top of PersistenceModel.
- * Very useful for (lazy loading of) retrieved entities from foreign key relations.
- * Prefetch is useful for grouping queries of foreign key relations.
+ * Lazy loading: request-multiple-retrieve-once entities from foreign key relations.
+ * Prefetch: grouping queries of foreign key relations beforehand.
  * 
  * N.B. modifying objects in the cache affects every reference to it!
  * 
@@ -25,7 +25,7 @@ abstract class CachedPersistenceModel extends PersistenceModel {
 	 * @return int
 	 */
 	protected function cacheKey(array $primary_key_values) {
-		return crc32(implode('', $primary_key_values));
+		return crc32(implode('-', $primary_key_values));
 	}
 
 	protected function isCached($key) {
@@ -48,6 +48,21 @@ abstract class CachedPersistenceModel extends PersistenceModel {
 		$this->runtime_cache = array();
 	}
 
+	protected function cacheResult($resultKey, PDOStatement $result, $sparse) {
+		$return = array();
+		foreach ($result as $item) {
+			$key = $this->cacheKey($item->getValues(true));
+			// do NOT update (requires explicit unsetCache)
+			if ($this->isCached($key)) {
+				$return[] = $this->getCached($key);
+			} else {
+				$this->setCache($key, $item);
+				$return[] = $item;
+			}
+		}
+		$this->setCache($resultKey, $return);
+	}
+
 	/**
 	 * Find and cache existing entities with optional search criteria.
 	 * Retrieves all attributes.
@@ -57,18 +72,21 @@ abstract class CachedPersistenceModel extends PersistenceModel {
 	 * @param string $orderby
 	 * @param int $limit max amount of results
 	 * @param int $start results from index
-	 * @return PDOStatement
+	 * @return array
 	 */
-	public function prefetch($criteria = null, array $criteria_params = array(), $orderby = null, $groupby = null, $limit = null, $start = 0) {
-		$result = parent::find($criteria, $criteria_params, $orderby, $groupby, $limit, $start);
-		foreach ($result as $item) {
-			$this->setCache($this->cacheKey($item->getValues(true)));
+	public function find($criteria = null, array $criteria_params = array(), $orderby = null, $groupby = null, $limit = null, $start = 0) {
+		$key = $this->cacheKey(array($criteria, implode('+', $criteria_params), $orderby, $groupby, $limit, $start));
+		if ($this->isCached($key)) {
+			return $this->getCached($key);
 		}
+		$result = parent::find($criteria, $criteria_params, $orderby, $groupby, $limit, $start);
+		$this->cacheResult($key, $result, false);
+		return $this->getCached($key);
 	}
 
 	/**
 	 * Find and cache existing entities with optional search criteria.
-	 * Retrieves only requested attributes.
+	 * Retrieves only requested attributes and the primary key values.
 	 * 
 	 * @param array $attributes to retrieve
 	 * @param string $criteria WHERE
@@ -76,13 +94,16 @@ abstract class CachedPersistenceModel extends PersistenceModel {
 	 * @param string $orderby
 	 * @param int $limit max amount of results
 	 * @param int $start results from index
-	 * @return PDOStatement
+	 * @return array
 	 */
-	public function prefetchSparse(array $attributes, $criteria = null, array $criteria_params = array(), $orderby = null, $groupby = null, $limit = null, $start = 0) {
-		$result = parent::findSparse($attributes, $criteria, $criteria_params, $orderby, $groupby, $limit, $start);
-		foreach ($result as $item) {
-			$this->setCache($this->cacheKey($item->getValues(true)));
+	public function findSparse(array $attributes, $criteria = null, array $criteria_params = array(), $orderby = null, $groupby = null, $limit = null, $start = 0) {
+		$key = $this->cacheKey(array($criteria, implode('+', $criteria_params), $orderby, $groupby, $limit, $start));
+		if ($this->isCached($key)) {
+			return $this->getCached($key);
 		}
+		$result = parent::findSparse($attributes, $criteria, $criteria_params, $orderby, $groupby, $limit, $start);
+		$this->cacheResult($key, $result, true);
+		return $this->getCached($key);
 	}
 
 	/**

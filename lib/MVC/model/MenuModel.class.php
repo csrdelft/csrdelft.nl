@@ -71,10 +71,17 @@ class MenuModel extends CachedPersistenceModel {
 	}
 
 	public function getMenuRoot($naam) {
-		return $this->find('parent_id = ? AND tekst = ? ', array(0, $naam), null, null, 1)->fetch();
+		$result = $this->find('parent_id = ? AND tekst = ? ', array(0, $naam), null, null, 1);
+		if (count($result) === 1) {
+			return $result[0];
+		} else {
+			return false;
+		}
 	}
 
 	public function getChildren(MenuItem $parent) {
+		var_dump($parent);
+
 		$children = array();
 		foreach ($this->find('parent_id = ?', array($parent->item_id), 'prioriteit ASC') as $child) {
 			$children[] = $child;
@@ -92,7 +99,7 @@ class MenuModel extends CachedPersistenceModel {
 	 */
 	public function getMenuBeheerLijst() {
 		if (LoginModel::mag('P_ADMIN')) {
-			return $this->find('parent_id = ?', array(0), 'tekst DESC')->fetchAll();
+			return $this->find('parent_id = ?', array(0), 'tekst DESC');
 		} else {
 			return array();
 		}
