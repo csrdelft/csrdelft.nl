@@ -80,8 +80,6 @@ class MenuModel extends CachedPersistenceModel {
 	}
 
 	public function getChildren(MenuItem $parent) {
-		var_dump($parent);
-
 		$children = array();
 		foreach ($this->find('parent_id = ?', array($parent->item_id), 'prioriteit ASC') as $child) {
 			$children[] = $child;
