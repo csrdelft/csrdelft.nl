@@ -11,30 +11,30 @@ class TimerModel extends PersistenceModel {
 	const orm = 'ExecutionTime';
 
 	protected static $instance;
+	/**
+	 * Log twice: before and after view
+	 * @var float
+	 */
+	private $time_before_view;
 
-	public function log($including_view = false) {
+	public function time() {
+		$this->time_before_view = microtime(true) - $_SERVER['REQUEST_TIME_FLOAT'];
+	}
+
+	public function log() {
 		$time = microtime(true) - $_SERVER['REQUEST_TIME_FLOAT'];
 		$measurement = $this->retrieveByPrimaryKey(array(REQUEST_URI));
 		if ($measurement) {
-			// log twice: remember to divide counter by 2
 			$measurement->counter++;
-			if ($including_view) {
-				$measurement->total_time_view += $time;
-			} else {
-				$measurement->total_time += $time;
-			}
+			$measurement->total_time += $this->time_before_view;
+			$measurement->total_time_view += $time;
 			$this->update($measurement);
 		} else {
 			$measurement = new ExecutionTime();
 			$measurement->request = REQUEST_URI;
 			$measurement->counter = 1;
-			if ($including_view) {
-				$measurement->total_time = 0;
-				$measurement->total_time_view = $time;
-			} else {
-				$measurement->total_time = $time;
-				$measurement->total_time_view = 0;
-			}
+			$measurement->total_time = $this->time_before_view;
+			$measurement->total_time_view = $time;
 			$this->create($measurement);
 		}
 	}

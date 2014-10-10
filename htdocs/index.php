@@ -52,7 +52,7 @@ try {
 	}
 
 	if (TIME_MEASURE) {
-		TimerModel::instance()->log(false);
+		TimerModel::instance()->time();
 	}
 
 	$controller->getView()->view();

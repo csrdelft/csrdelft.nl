@@ -15,7 +15,7 @@ register_shutdown_function('fatal_handler');
 function fatal_handler() {
 
 	if (TIME_MEASURE) {
-		TimerModel::instance()->log(true);
+		TimerModel::instance()->log();
 	}
 
 	$error = error_get_last();
