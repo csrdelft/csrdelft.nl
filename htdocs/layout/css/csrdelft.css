@@ -1,4 +1,22 @@
 /**** GENERAL *****************************************************************/
+
+body, textarea, input[type="text"] {
+	font-size: 100%;
+	font-family: Helvetica,"Helvetice Neue",Arial;
+	color: #000000;
+	background-color: #ffffff;
+}
+
+input, textarea, select{
+	padding: 2px;
+	border: 1px solid #A9A9A9;
+	font-size: 1em;
+}
+
+#dokuwiki__header{
+	padding-top: 50px !important;
+}
+
 #maintable{
 	margin: 0 auto;
 	border-collapse: collapse;
@@ -20,33 +38,46 @@
 	margin-left: 25px;
 	background-size: cover;
 }
-.dragobject{
-	position: fixed;
-	z-index: 50;
-	-webkit-touch-callout: none;
-	-webkit-user-select: none;
-	-khtml-user-select: none;
-	-moz-user-select: none;
-	-ms-user-select: none;
-	user-select: none;
+
+div#ubbhulpverhaal h2{ font-size: 16px; }
+div#ubbhulpverhaal{ font-size: 12px; }
+
+/* Bijbelrooster */
+div.bijbelrooster{
+	line-height: 20px;
+	-webkit-columns: 200px auto;
+	-moz-columns: 200px auto;
+	columns: 200px auto;
 }
-.static{
-	position: static;
+
+/* Login Form */
+.login-form .InputField, .login-form .InputField:hover{
+	border: none;
+	width: 100px;
 }
-.dragobject:active{
-	cursor: move;
+
+/* lidinstellingen */
+label.instelling{
+	clear: left;
+	width: 250px;
 }
-.dragvertical{
-	overflow-y: hidden;
+a.vooriedereen{
+	margin-left: -30px;
+	margin-right: 10px;
 }
-.dragvertical:active{
-	cursor: ns-resize;
-}
-.draghorizontal{
-	overflow-x: hidden;
-}
-.draghorizontal:active{
-	cursor: ew-resize;
+
+@media (max-width: 1004px) {
+	#mainright{
+		min-width: 730px;
+        padding: 50px 0 0 5px;
+    }
+	#zijbalk{
+		padding-left: 5px;
+		width: 195px;
+	}
+	#zijbalk_quicknav a{
+		margin: 0 5px;
+    }
 }
 
 h1{
@@ -128,33 +159,6 @@ ul.nobullets li{ list-style-type: none; }
 }
 .fade-container:hover .fade-content{
 	opacity: 1;
-}
-
-/**** modal ********************************************************************/
-#modal{
-	display: none;
-	position: fixed;
-	z-index: 200;
-	padding: 50px;
-	font-size: 14px;
-	background-color: white;/*
-	background-image: url("http://plaetjes.csrdelft.nl/layout/beeldmerk.jpg");
-	background-position: top right;
-	background-repeat: no-repeat;*/
-}
-#modal-background{
-	display: none;
-	position: fixed;
-	top: 0;
-	left: 0;
-	width: 100%;
-	height: 100%;
-	z-index: 100;
-	opacity: 0.5;
-	background-color: black;/*
-	background-image: url("http://plaetjes.csrdelft.nl/layout/loading_bar_black.gif");*/
-	background-position: 50% 300px;
-	background-repeat: no-repeat;
 }
 
 /* Zijbalk */
@@ -259,56 +263,8 @@ div.ishetal div.ja{
 	text-align: right;
 }
 
-/**** hoverIntent ******************************************************************/
-.hoverIntentContent{
-	display: none;
-	position: absolute;
-}
-div.hoverIntentContent{
-	border: 1px solid #000;
-	background-color: #FFF;
-	-moz-box-shadow: 0 0 11px #000000;
-	-webkit-box-shadow: 0 0 11px #000000;
-	box-shadow: 0 0 11px #000000;
-	z-index: 250;
-	font-weight: normal !important;
-	font-style: normal !important;
-	float: none !important;
-	overflow: visible;
-	padding: 5px;
-}
-div.visitekaartje{
-	width: 330px;
-	font-size: 11px !important;
-}
-div.visitekaartje img{
-	float: right;
-	height: auto !important;
-}
-div.visitekaartje p{
-	margin: 8px 0 0 10px;
-	color: #000 !important;
-}
-div.visitekaartje p a{
-	color: #0a338d !important;
-}
-div.visitekaartje p.naam a{
-	font-weight: bold;
-	color: #000 !important;
-}
-div.visitekaartje div.uid{
-	float: right;
-	padding-right: 5px;
-	margin-top: 8px;
-	color: #999;
-}
-
 
 /**** OVERIG ******************************************************************/
-
-p.naam, a.lidLink{
-	white-space: normal;
-}
 
 #mysql_debug_toggle{
 	text-align: center;
@@ -495,54 +451,9 @@ form#streeplijst input, form#streeplijst label{ text-align: left; margin: 3px; p
 	background-image: url("http://plaetjes.csrdelft.nl/layout/jarig.jpg");
 }
 
-/* Mededelingen */
-.mededeling-grotebalk{
-	padding: 8px 12px 8px 6px;
-	margin-bottom: 10px;
-	border-top: 1px solid #b8b8b8;
-	border-left: 1px solid #b8b8b8;
-	background-color: #f5f5f5;
-}
-.mededeling-grotebalk .plaatje{
-	width: 70px;
-	height: 70px;
-	margin-top: 3px;
-	margin-right: 10px;
-	float: left;
-	overflow: hidden;
-}
-.mededeling-grotebalk .titel{
-	font-weight: bold;
-	font-size: 1.1em;
-	padding: 0 0 3px;
-	margin-left: 80px;
-}
-.mededeling-grotebalk .bericht{
-	text-align: left;
-}
-.mededeling-grotebalk .half{
-	width: 49%;
-	float: left;
-	margin-bottom: 0;
-}
-#mededelingen-top3block{
-	float: left;
-	margin: 0 0 0 20px;
-	width: 400px;
-}
-#nieuwePeiling label{ clear: left; float: left; width: 150px; }
-#nieuwePeiling input, #nieuwePeiling textarea{ margin-bottom: 4px; }
-#nieuwePeiling textarea{ width: 400px; }
-#peilingOpties input{ width: 400px; }
-
 
 /** FORMULIER **************************************************************/
 
-input, textarea, select{
-	padding: 2px;
-	border: 1px solid #A9A9A9;
-	font-size: 1em;
-}
 .Formulier *{
 	margin: 0;
 	padding: 0;
@@ -701,7 +612,7 @@ a.knop, input[type=submit], input[type=button]{
 a.round {
 	padding: 6px;
 }
-.icon {
+img.icon {
 	vertical-align: text-bottom;
 }
 input[type=submit]::-moz-focus-inner, input[type=button]::-moz-focus-inner{
@@ -715,6 +626,46 @@ a.knop:hover, input[type=submit]:hover, input[type=button]:hover{
 a.knop:active, input[type=submit]:active, input[type=button]:active{
 	border-style: inset;
 }
+
+/** MEDEDELINGEN **************************************************************/
+.mededeling-grotebalk{
+	padding: 8px 12px 8px 6px;
+	margin-bottom: 10px;
+	border-top: 1px solid #b8b8b8;
+	border-left: 1px solid #b8b8b8;
+	background-color: #f5f5f5;
+}
+.mededeling-grotebalk .plaatje{
+	width: 70px;
+	height: 70px;
+	margin-top: 3px;
+	margin-right: 10px;
+	float: left;
+	overflow: hidden;
+}
+.mededeling-grotebalk .titel{
+	font-weight: bold;
+	font-size: 1.1em;
+	padding: 0 0 3px;
+	margin-left: 80px;
+}
+.mededeling-grotebalk .bericht{
+	text-align: left;
+}
+.mededeling-grotebalk .half{
+	width: 49%;
+	float: left;
+	margin-bottom: 0;
+}
+#mededelingen-top3block{
+	float: left;
+	margin: 0 0 0 20px;
+	width: 400px;
+}
+#nieuwePeiling label{ clear: left; float: left; width: 150px; }
+#nieuwePeiling input, #nieuwePeiling textarea{ margin-bottom: 4px; }
+#nieuwePeiling textarea{ width: 400px; }
+#peilingOpties input{ width: 400px; }
 
 
 /** GROEPEN **************************************************************/
@@ -1132,7 +1083,53 @@ span.curpage{
 	background-color: initial;
 }
 
+/* -------------------------------- 
 
+HoverIntent visitekaartjes
+
+-------------------------------- */
+.hoverIntentContent{
+	display: none;
+	position: absolute;
+}
+div.hoverIntentContent{
+	border: 1px solid #000;
+	background-color: #FFF;
+	-moz-box-shadow: 0 0 11px #000000;
+	-webkit-box-shadow: 0 0 11px #000000;
+	box-shadow: 0 0 11px #000000;
+	z-index: 250;
+	font-weight: normal !important;
+	font-style: normal !important;
+	float: none !important;
+	overflow: visible;
+	padding: 5px;
+}
+div.visitekaartje{
+	width: 330px;
+	font-size: 11px !important;
+}
+div.visitekaartje img{
+	float: right;
+	height: auto !important;
+}
+div.visitekaartje p{
+	margin: 8px 0 0 10px;
+	color: #000 !important;
+}
+div.visitekaartje p a{
+	color: #0a338d !important;
+}
+div.visitekaartje p.naam a{
+	font-weight: bold;
+	color: #000 !important;
+}
+div.visitekaartje div.uid{
+	float: right;
+	padding-right: 5px;
+	margin-top: 8px;
+	color: #999;
+}
 
 /*
  * Nieuwe layout heeft wat extra nodig om over #pageover .content heen te komen
@@ -1167,43 +1164,6 @@ span.curpage{
 #pageover .content span.offtopic hr{ text-align: left; background-color: #bbb; }
 #pageover .content span.offtopic img{ opacity: 0.3; filter:alpha(opacity=30); }
 
-div#ubbhulpverhaal h2{ font-size: 16px; }
-div#ubbhulpverhaal{ font-size: 12px; }
-
-/* Bijbelrooster */
-div.bijbelrooster{
-	line-height: 20px;
-	-webkit-columns: 200px auto;
-	-moz-columns: 200px auto;
-	columns: 200px auto;
-}
-
-/* Login Form */
-.login-form .InputField, .login-form .InputField:hover{
-	border: none;
-	width: 100px;
-}
-
-/* lidinstellingen */
-label.instelling{
-	clear: left;
-	width: 250px;
-}
-a.vooriedereen{
-	margin-left: -30px;
-	margin-right: 10px;
-}
-
-@media (max-width: 1004px) {
-	#mainright{
-		min-width: 730px;
-        padding: 50px 0 0 5px;
-    }
-	#zijbalk{
-		padding-left: 5px;
-		width: 195px;
-	}
-	#zijbalk_quicknav a{
-		margin: 0 5px;
-    }
-}
+/*
+ * einde nieuwe layout
+ */

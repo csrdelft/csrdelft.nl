@@ -161,8 +161,8 @@ htdocs/layout/css/profiel.css -text
 htdocs/layout/css/profiel.min.css -text
 htdocs/layout/css/reset.css -text
 htdocs/layout/css/reset.min.css -text
-htdocs/layout/css/reset_nav.css -text
-htdocs/layout/css/reset_nav.min.css -text
+htdocs/layout/css/reset_wiki.css -text
+htdocs/layout/css/reset_wiki.min.css -text
 htdocs/layout/css/roodschopper.css -text
 htdocs/layout/css/roodschopper.min.css -text
 htdocs/layout/css/roze.css -text
@@ -3893,7 +3893,7 @@ lib/icon.class.php -text
 lib/ishetalcontent.class.php -text
 lib/knop.class.php -text
 lib/ldap.class.php -text
-lib/less/reset_nav.less -text
+lib/less/reset_wiki.less -text
 lib/lichting.class.php -text
 lib/lid/ledenlijstcontent.class.php -text
 lib/lid/lid.class.php -text

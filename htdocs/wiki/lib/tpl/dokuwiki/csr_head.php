@@ -7,12 +7,12 @@ class WikiHeader extends HtmlPage {
 
 		$css = '/layout/css/';
 		$js = '/layout/js/';
-		//$plugin = $js . 'jquery/plugins/';
+		$plugin = $js . 'jquery/plugins/';
 
-		$this->addStylesheet($css . 'reset_nav');
+		$this->addStylesheet($css . 'reset_wiki');
 		$this->addStylesheet($css . 'layout_pagina');
-		//$this->addStylesheet($css . 'ubb');
-		//$this->addStylesheet($css . 'csrdelft');
+		$this->addStylesheet($css . 'ubb');
+		$this->addStylesheet($css . 'csrdelft');
 		$layout = LidInstellingen::get('layout', 'opmaak');
 		$this->addStylesheet($css . $layout);
 		if (LidInstellingen::get('layout', 'toegankelijk') == 'bredere letters') {
@@ -30,8 +30,22 @@ class WikiHeader extends HtmlPage {
 		//$this->addStylesheet($js . 'jquery/jquery-ui');
 		$this->addScript($js . 'autocomplete/jquery.autocomplete');
 		$this->addStylesheet($js . 'autocomplete/jquery.autocomplete');
-
-		$this->addScript('/layout/js/main_menu');
+		//$this->addScript($plugin . 'jquery.dataTables');
+		//$this->addStylesheet($css . 'jquery.dataTables');
+		//$this->addScript($plugin . 'jquery.autosize');
+		$this->addScript($plugin . 'jquery.hoverIntent');
+		//$this->addScript($plugin . 'jquery.scrollTo');
+		//$this->addScript($plugin . 'jquery.timeago');
+		$this->addScript($js . 'csrdelft');
+		//$this->addScript($js . 'csrdelft.dataTables');
+		//$this->addStylesheet($css . 'csrdelft.dataTables');
+		$this->addScript($js . 'dragobject');
+		$this->addScript($js . 'main_menu');
+		//$this->addScript($js . 'groepen');
+		//if (LidInstellingen::get('layout', 'minion') == 'ja') {
+		//	$this->addScript($js . 'minion');
+		//	$this->addStylesheet($css . 'minion');
+		//}
 	}
 
 	public function view() {

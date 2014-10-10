@@ -113,12 +113,12 @@ class CsrLayoutPage extends HtmlPage {
 			));
 		}
 
-		$top = 180;
-		$left = 190;
+		$top = 175;
+		$left = 200;
 		DragObjectModel::getCoords('modal', $top, $left);
 		$smarty->assign('modaltop', $top);
 		$smarty->assign('modalleft', $left);
-		$top = 180;
+		$top = 175;
 		$left = 10;
 		DragObjectModel::getCoords('ubbhulpverhaal', $top, $left);
 		$smarty->assign('ubbtop', $top);
