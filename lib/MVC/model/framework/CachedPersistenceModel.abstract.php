@@ -32,20 +32,21 @@ abstract class CachedPersistenceModel extends PersistenceModel {
 	protected function isCached($key, $memcache = false) {
 		if (isset($this->runtime_cache[$key])) {
 			return true;
-		} elseif ($memcache) {
+		} elseif ($memcache AND CsrMemcache::isAvailable()) {
 			// exists without retrieval
 			if (CsrMemcache::instance()->add($key, '')) {
 				CsrMemcache::instance()->delete($key);
-				return true;
+				return false;
 			}
+			return true;
 		}
 		return false;
 	}
 
 	protected function getCached($key, $memcache = false) {
-		if (isset($this->runtime_cache[$key])) {
+		if (array_key_exists($key, $this->runtime_cache)) {
 			return $this->runtime_cache[$key];
-		} elseif ($memcache) {
+		} elseif ($memcache AND CsrMemcache::isAvailable()) {
 			$cache = CsrMemcache::instance()->get($key);
 			if ($cache !== false) {
 				$value = unserialize($cache);
@@ -58,20 +59,20 @@ abstract class CachedPersistenceModel extends PersistenceModel {
 
 	protected function setCache($key, $value, $memcache = false) {
 		$this->runtime_cache[$key] = $value;
-		if ($memcache) {
+		if ($memcache AND CsrMemcache::isAvailable()) {
 			CsrMemcache::instance()->set($key, serialize($value));
 		}
 	}
 
 	protected function unsetCache($key, $memcache = false) {
 		unset($this->runtime_cache[$key]);
-		if ($memcache) {
+		if ($memcache AND CsrMemcache::isAvailable()) {
 			CsrMemcache::instance()->delete($key);
 		}
 	}
 
 	protected function flushCache($memcache = false) {
-		if ($memcache) {
+		if ($memcache AND CsrMemcache::isAvailable()) {
 			foreach ($this->runtime_cache as $key => $value) {
 				CsrMemcache::instance()->delete($key);
 			}
