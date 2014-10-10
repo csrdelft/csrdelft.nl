@@ -141,6 +141,9 @@ Top navigation
 	color: #E8CF2A;
 	text-decoration: none;
 }
+#cd-top-nav a:focus {
+	text-decoration: none;
+}
 #cd-top-nav a.active, #cd-top-nav a.active:hover {
 	background-color: #E8CF2A;
 	color: #333333;

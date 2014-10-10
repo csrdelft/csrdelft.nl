@@ -403,7 +403,7 @@ span#ubbsluiten{
 	font-weight: bold; font-size: 14px;
 	text-align: center;	vertical-align: middle;
 	color: black;
-	cursor: pointer; cursor: hand;
+	cursor: pointer;
 	border: 1px solid #fff;
 }
 span#ubbsluiten:hover{
@@ -470,6 +470,7 @@ form#streeplijst input, form#streeplijst label{ text-align: left; margin: 3px; p
 	float: left;
 	width: 30%;
 	vertical-align: middle;
+	cursor: default;
 }
 .Formulier label .required{
 	color: red;
@@ -516,9 +517,6 @@ form#streeplijst input, form#streeplijst label{ text-align: left; margin: 3px; p
 .Formulier .FormButtons{
 	text-align: right;
 	margin-top: 25px;
-}
-#modal .Formulier .FormButtons .knop .icon {
-	vertical-align: bottom;
 }
 .Formulier .UploadOptie{
 	min-height: 2em;
@@ -572,6 +570,9 @@ form#streeplijst input, form#streeplijst label{ text-align: left; margin: 3px; p
 }
 .Formulier .password{
 	padding: 2px 1px;
+}
+h1.formTitle{
+	font-size: 1.5em;
 }
 .Formulier h3{
 	margin-top: 8px;
