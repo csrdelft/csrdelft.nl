@@ -56,11 +56,8 @@ try {
 	}
 
 	$controller->getView()->view();
-
-	if (TIME_MEASURE) {
-		TimerModel::instance()->log(true);
-	}
-} catch (Exception $e) {
+}
+catch (Exception $e) {
 	$protocol = (isset($_SERVER['SERVER_PROTOCOL']) ? $_SERVER['SERVER_PROTOCOL'] : 'HTTP/1.0');
 	$code = ($e->getCode() >= 100 ? $e->getCode() : 500);
 	header($protocol . ' ' . $code . ' ' . $e->getMessage());
