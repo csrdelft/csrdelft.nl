@@ -1,27 +1,28 @@
-var saveConcept;
+function saveConceptForumBericht() {
+	$('#forumConcept').fadeOut();
+	if ($('#forumBericht').val() !== $('#forumBericht').attr('origvalue')) {
+		$.post('/forum/concept', {
+			forumBericht: $('#forumBericht').val()
+		}, function () {
+			$('#forumBericht').attr('origvalue', $('#forumBericht').val());
+		});
+	}
+}
 
 jQuery(document).ready(function ($) {
-	saveConcept = function () {
-		$('#forumConcept').fadeOut();
-		if ($('#forumBericht').val() !== $('#forumBericht').attr('origvalue')) {
-			$.post('/forum/concept', {
-				forumBericht: $('#forumBericht').val()
-			}, function () {
-				$('#forumBericht').attr('origvalue', $('#forumBericht').val());
-			});
-		}
-	};
 	$(window).unload(function () {
-		saveConcept();
+		saveConceptForumBericht();
 	});
-	var showSaveConcept = function () {
+	var toggleShowSaveConcept = function () {
 		if ($('#forumBericht').val() !== $('#forumBericht').attr('origvalue')) {
 			$('#forumConcept').fadeIn();
+		} else {
+			$('#forumConcept').fadeOut();
 		}
 	};
 	var autosave;
 	$('#forumBericht').focusin(function () {
-		autosave = setInterval(showSaveConcept, 1000);
+		autosave = setInterval(toggleShowSaveConcept, 1000);
 	});
 	$('#forumBericht').focusout(function () {
 		clearInterval(autosave);
