@@ -33,7 +33,7 @@ class ForumController extends Controller {
 			$this->action = 'forum';
 			parent::performAction(array());
 		}
-		if (!$this->isPosted() || $this->action == 'zoeken') {
+		if ((!$this->isPosted() OR $this->action == 'zoeken') AND $this->action != 'rss') {
 			if (LoginModel::mag('P_LOGGED_IN')) {
 				$this->view = new CsrLayoutPage($this->getView());
 			} else { // uitgelogd heeft nieuwe layout
