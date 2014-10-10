@@ -26,7 +26,9 @@
 							<li><a href="/menubeheer/toevoegen/favoriet" class="post modal addfav" title="Huidige pagina toevoegen aan favorieten">Favoriet toevoegen</a></li>
 						{/if}
 						{if LoginModel::mag('P_LEDEN_MOD')}
-							<li><a href="/forum/wacht" title="Aantal forumberichten dat wacht op goedkeuring">Forum: {$forumcount}</a></li>
+							{if isset($forumcount)}
+								<li><a href="/forum/wacht" title="Aantal forumberichten dat wacht op goedkeuring">Forum: {$forumcount}</a></li>
+							{/if}
 							{foreach from=$queues item=queue key=name}
 								<li><a href="/tools/query.php?id={$queue->getID()}" title="Aantal {$name} dat wacht op goedkeuring">{$name|ucfirst}: {$queue->count()}</a></li>
 							{/foreach}
