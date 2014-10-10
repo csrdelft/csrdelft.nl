@@ -68,12 +68,12 @@ class Lid implements Serializable, Agendeerbaar {
 	}
 
 	public function hasPrivateToken() {
-		return $this->uid == 'x999' OR $this->getProperty('rssToken') != '';
+		return $this->getProperty('rssToken') != '' OR $this->uid == 'x999';
 	}
 
 	public function getICalLink() {
 		$url = 'http://csrdelft.nl/agenda/ical';
-		if ($this->hasPrivateToken()) {
+		if ($this->uid != 'x999' AND $this->hasPrivateToken()) {
 			return $url . '/' . $this->getProperty('rssToken') . '.ics';
 		} else {
 			return $url . '.ics';
@@ -82,7 +82,7 @@ class Lid implements Serializable, Agendeerbaar {
 
 	public function getRssLink() {
 		$url = 'http://csrdelft.nl/forum/rss';
-		if ($this->hasPrivateToken()) {
+		if ($this->uid != 'x999' AND $this->hasPrivateToken()) {
 			return $url . '/' . $this->getProperty('rssToken') . '.xml';
 		} else {
 			return $url . '.xml';
