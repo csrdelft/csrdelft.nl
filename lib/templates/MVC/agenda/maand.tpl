@@ -72,7 +72,7 @@
 	{if LoginModel::instance()->getLid()->hasPrivateToken()}
 		<a name="ICAL" href="{LoginModel::instance()->getLid()->getICalLink()}" title="{if LoginModel::mag('P_LOGGED_IN')}Persoonlijke {/if}ICalender feed">
 	{else}
-		<a name="ICAL" href="/communicatie/profiel/{$profiel->getUid()}#tokenaanvragen" title="Persoonlijke ICalender feed aanvragen">
+		<a name="ICAL" href="/communicatie/profiel/{LoginModel::getUid()}#tokenaanvragen" title="Persoonlijke ICalender feed aanvragen">
 	{/if}
 	<img src="{$CSR_PICS}/knopjes/ical.gif" alt="ICAL" /></a>
 </div>
