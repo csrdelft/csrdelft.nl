@@ -36,7 +36,7 @@ try {
 
 	if (DB_MODIFY AND LoginModel::mag('P_ADMIN')) {
 
-		require_once 'MVC/model/DatabaseAdmin.singleton.php';
+		require_once 'MVC/model/framework/DatabaseAdmin.singleton.php';
 		$queries = DatabaseAdmin::getQueries();
 
 		if (empty($queries)) {
@@ -50,9 +50,17 @@ try {
 			exit;
 		}
 	}
+
+	if (TIME_MEASURE) {
+		TimerModel::instance()->log(false);
+	}
+
 	$controller->getView()->view();
-}
-catch (Exception $e) {
+
+	if (TIME_MEASURE) {
+		TimerModel::instance()->log(true);
+	}
+} catch (Exception $e) {
 	$protocol = (isset($_SERVER['SERVER_PROTOCOL']) ? $_SERVER['SERVER_PROTOCOL'] : 'HTTP/1.0');
 	$code = ($e->getCode() >= 100 ? $e->getCode() : 500);
 	header($protocol . ' ' . $code . ' ' . $e->getMessage());
@@ -60,7 +68,7 @@ catch (Exception $e) {
 	if (LoginModel::mag('P_ADMIN') OR LoginModel::instance()->isSued()) {
 		echo str_replace('#', '<br />#', $e); // stacktrace 
 		echo '<br />DatabaseAdmin queries:<br /><pre>';
-		require_once 'MVC/model/DatabaseAdmin.singleton.php';
+		require_once 'MVC/model/framework/DatabaseAdmin.singleton.php';
 		debugprint(DatabaseAdmin::getQueries());
 		echo '</pre>';
 	}

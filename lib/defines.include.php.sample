@@ -17,6 +17,9 @@ define('DB_DROP', false); # heb je een backup gemaakt?
 # 
 # debug modus
 define('DEBUG', false);
+# 
+# measure time
+define('TIME_MEASURE', false);
 
 # wordt gebruikt om pagina's alleen op Confide te laten zien
 define('CONFIDE_IP', '80.112.180.123');

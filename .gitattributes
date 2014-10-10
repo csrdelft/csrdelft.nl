@@ -3363,12 +3363,14 @@ lib/MVC/model/LidInstellingenModel.class.php -text
 lib/MVC/model/LoginModel.class.php -text
 lib/MVC/model/MenuModel.class.php -text
 lib/MVC/model/Paging.interface.php -text
+lib/MVC/model/TimerModel.class.php -text
 lib/MVC/model/VerticalenModel.class.php -text
 lib/MVC/model/entity/Afbeelding.class.php -text
 lib/MVC/model/entity/AgendaItem.class.php -text
 lib/MVC/model/entity/Bestand.class.php -text
 lib/MVC/model/entity/Bijbelrooster.class.php -text
 lib/MVC/model/entity/CmsPagina.class.php -text
+lib/MVC/model/entity/ExecutionTime.class.php -text
 lib/MVC/model/entity/ForumCategorie.class.php -text
 lib/MVC/model/entity/ForumDeel.class.php -text
 lib/MVC/model/entity/ForumDraad.class.php -text
@@ -4398,3 +4400,4 @@ sql/5615_verberg_verjaardagen.sql -text
 sql/5668_default_values_lid__v3.sql -text
 sql/6175_forum_gedeeld_met.sql -text
 sql/6320_maalcie_int_prijzen.sql -text
+sql/6391_execution_times.sql -text
