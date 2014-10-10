@@ -49,7 +49,8 @@ abstract class CachedPersistenceModel extends PersistenceModel {
 			$cache = CsrMemcache::instance()->get($key);
 			if ($cache !== false) {
 				$value = unserialize($cache);
-				$this->setCache($key, $value, true);
+				// unserialize once 
+				$this->setCache($key, $value, false);
 				return $value;
 			}
 		}
