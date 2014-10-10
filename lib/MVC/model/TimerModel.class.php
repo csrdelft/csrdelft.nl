@@ -27,8 +27,13 @@ class TimerModel extends PersistenceModel {
 			$measurement = new ExecutionTime();
 			$measurement->request = REQUEST_URI;
 			$measurement->counter = 1;
-			$measurement->total_time = $time;
-			$measurement->total_time_view = 0;
+			if ($including_view) {
+				$measurement->total_time = 0;
+				$measurement->total_time_view = $time;
+			} else {
+				$measurement->total_time = $time;
+				$measurement->total_time_view = 0;
+			}
 			$this->create($measurement);
 		}
 	}
