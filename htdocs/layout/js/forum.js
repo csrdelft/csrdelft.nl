@@ -1,5 +1,8 @@
+var saveConcept;
+
 jQuery(document).ready(function ($) {
-	var saveConcept = function () {
+	saveConcept = function () {
+		$('#forumConcept').fadeOut();
 		if ($('#forumBericht').val() !== $('#forumBericht').attr('origvalue')) {
 			$.post('/forum/concept', {
 				forumBericht: $('#forumBericht').val()
@@ -11,9 +14,14 @@ jQuery(document).ready(function ($) {
 	$(window).unload(function () {
 		saveConcept();
 	});
+	var showSaveConcept = function () {
+		if ($('#forumBericht').val() !== $('#forumBericht').attr('origvalue')) {
+			$('#forumConcept').fadeIn();
+		}
+	};
 	var autosave;
 	$('#forumBericht').focusin(function () {
-		autosave = setInterval(saveConcept, 1000);
+		autosave = setInterval(showSaveConcept, 1000);
 	});
 	$('#forumBericht').focusout(function () {
 		clearInterval(autosave);

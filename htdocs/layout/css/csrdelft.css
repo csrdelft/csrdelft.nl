@@ -966,6 +966,9 @@ div.forumdeel-omschrijving h1{
 #forumBewerkReden{
 	width: 250px;
 }
+#forumConcept{
+	display: none;
+}
 
 div.bewerkt{ font-size: 9px; color: #bbb; }
 div.bewerkt a{ color: #bbb; }

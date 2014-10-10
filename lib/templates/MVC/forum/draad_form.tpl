@@ -22,6 +22,7 @@
 		<a class="knop float-right" onclick="$('#ubbhulpverhaal').toggle();" title="Opmaakhulp weergeven">Opmaak</a>
 		<a class="knop float-right" onclick="vergrootTextarea('forumBericht', 10)" title="Vergroot het invoerveld"><div class="arrows">&uarr;&darr;</div>&nbsp;&nbsp;&nbsp;&nbsp;</a>
 		<input type="submit" name="submit" value="Opslaan" id="forumOpslaan" />
-		<input type="button" value="Voorbeeld" id="forumVoorbeeld" onclick="ubbPreview('forumBericht', 'berichtPreview')"/>
+		<input type="button" value="Voorbeeld" id="forumVoorbeeld" onclick="ubbPreview('forumBericht', 'berichtPreview');" />
+		<input type="button" value="Concept opslaan" id="forumConcept" onclick="saveConcept();" title="Blijft bewaard totdat u uitlogd!" />
 	</div>
 </form>
