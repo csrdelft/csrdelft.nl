@@ -15,7 +15,7 @@ class TimerModel extends PersistenceModel {
 	 * Time before and after view
 	 * @var float
 	 */
-	private $time_before_view;
+	private $time_before_view = 0;
 
 	public function time() {
 		$this->time_before_view = microtime(true) - $_SERVER['REQUEST_TIME_FLOAT'];
