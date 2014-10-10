@@ -828,12 +828,17 @@ class ForumPostsModel extends PersistenceModel implements Paging {
 	}
 
 	public function getForumPostsVoorDraad(ForumDraad $draad) {
-		$posts = $this->find('draad_id = ? AND wacht_goedkeuring = FALSE AND verwijderd = FALSE', array($draad->draad_id), 'post_id ASC', null, $this->per_pagina, ($this->pagina - 1) * $this->per_pagina)->fetchAll();
+		if (LoginModel::mag('P_FORUM_MOD')) {
+			$goedkeuring = '';
+		} else {
+			$goedkeuring = ' AND wacht_goedkeuring = FALSE';
+		}
+		$posts = $this->find('draad_id = ?' . $goedkeuring . ' AND verwijderd = FALSE', array($draad->draad_id), 'post_id ASC', null, $this->per_pagina, ($this->pagina - 1) * $this->per_pagina)->fetchAll();
 		if ($draad->eerste_post_plakkerig AND $this->pagina !== 1) {
 			$first_post = $this->find('draad_id = ? AND wacht_goedkeuring = FALSE AND verwijderd = FALSE', array($draad->draad_id), 'post_id ASC', null, 1)->fetch();
 			array_unshift($posts, $first_post);
 		}
-// 2008-filter
+		// 2008-filter
 		if (LidInstellingen::get('forum', 'filter2008') == 'ja') {
 			foreach ($posts as $post) {
 				if (startsWith($post->uid, '08')) {
