@@ -18,8 +18,9 @@ class MenuModel extends CachedPersistenceModel {
 	 * @param MenuItem $item
 	 */
 	public function clearCache(MenuItem $item) {
-		CsrMemcache::instance()->delete($this->getRoot($item)->tekst . '-menu');
-		$this->flushCache();
+		$key = $this->getRoot($item)->tekst . '-menu';
+		$this->unsetCache($key, true);
+		$this->flushCache(false);
 	}
 
 	/**
@@ -30,30 +31,25 @@ class MenuModel extends CachedPersistenceModel {
 	 * @return MenuItem root
 	 */
 	public function getMenu($naam) {
-		// Only unserialize once
-		if ($this->isCached($naam)) {
-			return $this->getCached($naam);
+		$key = $naam . '-menu';
+		if ($this->isCached($key, true)) {
+			return $this->getCached($key, true);
 		}
-		$cached = CsrMemcache::instance()->get($naam . '-menu');
-		if ($cached !== false) {
-			$root = unserialize($cached);
+		// not cached
+		$root = $this->getMenuRoot($naam);
+		if ($root) {
+			$this->getTree($root);
 		} else {
-			$root = $this->getMenuRoot($naam);
-			if ($root) {
-				$this->getTree($root);
-			} else {
-				// niet bestaand menu?
-				$root = $this->newMenuItem(0);
-				$root->tekst = $naam;
-				if ($naam == LoginModel::getUid()) {
-					// maak favorieten menu 
-					$root->link = '/menubeheer/beheer/' . $naam;
-				}
-				$this->create($root);
+			// niet bestaand menu?
+			$root = $this->newMenuItem(0);
+			$root->tekst = $naam;
+			if ($naam == LoginModel::getUid()) {
+				// maak favorieten menu 
+				$root->link = '/menubeheer/beheer/' . $naam;
 			}
-			CsrMemcache::instance()->set($naam . '-menu', serialize($root));
+			$this->create($root);
 		}
-		$this->setCache($naam, $root);
+		$this->setCache($key, $root, true);
 		return $root;
 	}
 
@@ -73,13 +69,15 @@ class MenuModel extends CachedPersistenceModel {
 	public function getMenuRoot($naam) {
 		$result = $this->find('parent_id = ? AND tekst = ? ', array(0, $naam), null, null, 1);
 		if (count($result) === 1) {
-			return $result[0];
+			return reset($result);
 		} else {
 			return false;
 		}
 	}
 
 	public function getChildren(MenuItem $parent) {
+		var_dump($parent);
+
 		$children = array();
 		foreach ($this->find('parent_id = ?', array($parent->item_id), 'prioriteit ASC') as $child) {
 			$children[] = $child;
