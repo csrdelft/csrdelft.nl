@@ -16,10 +16,11 @@ class TimerModel extends PersistenceModel {
 		$time = microtime(true) - $_SERVER['REQUEST_TIME_FLOAT'];
 		$measurement = $this->retrieveByPrimaryKey(array(REQUEST_URI));
 		if ($measurement) {
+			// log twice: remember to divide counter by 2
+			$measurement->counter++;
 			if ($including_view) {
 				$measurement->total_time_view += $time;
 			} else {
-				$measurement->counter++;
 				$measurement->total_time += $time;
 			}
 			$this->update($measurement);
