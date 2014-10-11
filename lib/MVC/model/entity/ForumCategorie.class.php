@@ -82,6 +82,11 @@ class ForumCategorie extends PersistentEntity {
 		return sizeof($this->getForumDelen()) > 0;
 	}
 
+	/**
+	 * Public for search results and all sorts of prefetching.
+	 * 
+	 * @param array $forum_delen
+	 */
 	public function setForumDelen(array $forum_delen) {
 		$this->forum_delen = $forum_delen;
 	}

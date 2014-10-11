@@ -142,7 +142,12 @@ class ForumDeel extends PersistentEntity {
 		return sizeof($this->getForumDraden()) > 0;
 	}
 
-	private function setForumDraden(array $forum_draden) {
+	/**
+	 * Public for search results and all sorts of prefetching.
+	 * 
+	 * @param array $forum_draden
+	 */
+	public function setForumDraden(array $forum_draden) {
 		$this->forum_draden = $forum_draden;
 	}
 
