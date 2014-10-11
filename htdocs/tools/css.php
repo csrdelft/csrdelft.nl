@@ -50,6 +50,7 @@ function csr_css_out() {
 	}
 
 	//voeg modules toe afhankelijk van instelling
+	$module[] = LidInstellingen::get('layout', 'opmaak');
 	if (LidInstellingen::get('layout', 'toegankelijk') == 'bredere letters') {
 		$module[] = 'bredeletters';
 	}
