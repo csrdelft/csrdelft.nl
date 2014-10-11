@@ -312,12 +312,25 @@ class ForumDradenGelezenModel extends PersistenceModel {
 		return $gelezen;
 	}
 
-	public function setWanneerGelezenDoorLid(ForumDraad $draad) {
-		$gelezen = $this->getWanneerGelezenDoorLid($draad);
-		if (strtotime($draad->laatst_gewijzigd) > strtotime($draad->getWanneerGelezen()->datum_tijd)) {
-			$gelezen->datum_tijd = $draad->laatst_gewijzigd;
-			$this->update($gelezen);
+	/**
+	 * Ga na welke posts op de huidige pagina het laatst is geplaatst of gewijzigd.
+	 * 
+	 * @param ForumDraadGelezen $gelezen
+	 * @param ForumDraad $draad
+	 */
+	public function setWanneerGelezenDoorLid(ForumDraadGelezen $gelezen, ForumDraad $draad) {
+		foreach ($draad->getForumPosts() as $post) {
+			if ($post->laatst_gewijzigd) {
+				if ($post->laatst_gewijzigd > $gelezen->datum_tijd) {
+					$gelezen->datum_tijd = $post->laatst_gewijzigd;
+				}
+			} else {
+				if ($post->datum_tijd > $gelezen->datum_tijd) {
+					$gelezen->datum_tijd = $post->datum_tijd;
+				}
+			}
 		}
+		$this->update($gelezen);
 	}
 
 	public function verwijderDraadGelezen(ForumDraad $draad) {

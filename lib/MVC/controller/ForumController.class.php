@@ -238,7 +238,7 @@ class ForumController extends Controller {
 		} else {
 			ForumPostsModel::instance()->setHuidigePagina((int) $pagina, $draad->draad_id);
 		}
-		ForumDradenGelezenModel::instance()->setWanneerGelezenDoorLid($draad);
+		ForumDradenGelezenModel::instance()->setWanneerGelezenDoorLid($gelezen, $draad);
 		$this->view = new ForumDraadView($draad, $deel, $paging); // lazy loading ForumPost[]
 	}
 
