@@ -335,6 +335,30 @@ class ForumDradenGelezenModel extends PersistenceModel {
 		$this->update($gelezen);
 	}
 
+	/**
+	 * Bereken het percentage lezers dat een post heeft gelezen.
+	 * 
+	 * @param ForumPost $post
+	 * @param array $draad
+	 * @return int percentage
+	 */
+	public function getGelezenPercentage(Forumpost $post, ForumDraad $draad) {
+		$lezers = $draad->getLezers();
+		$counter = 0;
+		foreach ($lezers as $gelezen) {
+			if ($post->laatst_gewijzigd) {
+				if ($post->laatst_gewijzigd <= $gelezen->datum_tijd) {
+					$counter++;
+				}
+			} else {
+				if ($post->datum_tijd <= $gelezen->datum_tijd) {
+					$counter++;
+				}
+			}
+		}
+		return (int) ($counter * 100 / $draad->getAantalLezers());
+	}
+
 	public function getLezersVanDraad(ForumDraad $draad) {
 		return $this->find('draad_id = ?', array($draad->draad_id))->fetchAll();
 	}

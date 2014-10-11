@@ -31,7 +31,7 @@
 		{/if}
 		<br />
 		{if $draad->belangrijk AND LoginModel::mag('P_FORUM_BELANGRIJK')}
-			<span class="lichtgrijs small" title="Gelezen door lezers">{$post->isGelezenPercentage($draad->getLezers())}%</span>
+			<span class="lichtgrijs small" title="Gelezen door lezers">{ForumGelezenModel::instance()->getGelezenPercentage($post, $draad)}%</span>
 		{/if}
 		<br />
 		{if $post->wacht_goedkeuring}
