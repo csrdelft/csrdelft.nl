@@ -34,8 +34,7 @@ csr_js_out();
  *
  * @author Andreas Gohr <andi@splitbrain.org>
  */
-function csr_js_out()
-{
+function csr_js_out() {
 	global $conf;
 	global $INPUT;
 
@@ -46,29 +45,28 @@ function csr_js_out()
 		$layout = $allowedlayouts[0];
 	}
 
-	// algemene module toevoegen
-	$excludegeneralstyles = ($INPUT->str('general') == 'no');
-	if ($excludegeneralstyles) {
-		$modules = array();
-	} else {
-		$modules = array('general');
-	}
+	// elke module bestaat uit een set scripts
+	$modules = array();
 
-	// modules toevoegen via instellingen
-	if (LidInstellingen::get('layout', 'minion') == 'ja') {
-		$module[] = 'minion';
-	}
-
-	// gevraagde module toevoegen
 	$activemodule = trim(preg_replace('/[^\w-]+/', '', $INPUT->str('m')));
-	if ($activemodule) {
-		$modules[] = $activemodule;
-	}
+	if($activemodule == 'general') {
+		$modules[] = 'general';
 
+		// modules toevoegen via instellingen
+		if (LidInstellingen::get('layout', 'minion') == 'ja') {
+			$modules[] = 'minion';
+		}
+
+	} else {
+		// een niet-algemene module gevraagd
+		if ($activemodule) {
+			$modules[] = $activemodule;
+		}
+	}
 
 
 	// The generated script depends on some dynamic options
-	$cache = new cache('scripts' . $_SERVER['HTTP_HOST'] . $_SERVER['SERVER_PORT'] . $layout . implode('', $modules) . $excludegeneralstyles, '.js');
+	$cache = new cache('scripts' . $_SERVER['HTTP_HOST'] . $_SERVER['SERVER_PORT'] . $layout . implode('', $modules), '.js');
 	$cache->_event = 'JS_CACHE_USE';
 
 //	// load minified version for some files
@@ -211,8 +209,7 @@ function csr_js_out()
  * @param string $layout the used layout
  * @return array with keys 'scripts'
  */
-function js_csr_scriptini($layout)
-{
+function js_csr_scriptini($layout) {
 	$scripts = array(); // mode, file => base
 
 	// load layout's script.ini

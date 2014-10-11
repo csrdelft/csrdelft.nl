@@ -16,7 +16,7 @@ $conf['compress'] = 1; //stripping of whitespace and comments
 $conf['cssdatauri'] = 0; //filesize in bytes. Embed images below the thresshold in css. (Bad supported by IE < 8)
 $conf['allowdebug'] = 0;
 $conf['cachedir'] = DATA_PATH . 'compressorcache';
-$conf['cachetime'] = 100*60*60*24; // -1, 0, ..
+$conf['cachetime'] = 100 * 60 * 60 * 24; // -1, 0, ..
 
 
 //generate css file
@@ -41,40 +41,39 @@ function csr_css_out() {
 		$layout = $allowedlayouts[0];
 	}
 
-	// algemene module toevoegen
-	$excludegeneralstyles = ($INPUT->str('general') == 'no');
-	if ($excludegeneralstyles) {
-		$modules = array();
-	} else {
-		$modules = array('general');
-	}
+	// elke module bestaat uit een set css-bestanden
+	$modules = array();
 
-	//voeg modules toe afhankelijk van instelling
-	$module[] = LidInstellingen::get('layout', 'opmaak');
-	if (LidInstellingen::get('layout', 'toegankelijk') == 'bredere letters') {
-		$module[] = 'bredeletters';
-	}
-	if (LidInstellingen::get('layout', 'sneeuw') != 'nee') {
-		if (LidInstellingen::get('layout', 'sneeuw') == 'ja') {
-			$module[] = 'snowanim';
-		} else {
-			$module[] = 'snow';
+	$activemodule = trim(preg_replace('/[^\w-]+/', '', $INPUT->str('m')));
+	if ($activemodule == 'general') {
+		$modules[] = 'general';
+
+		//voeg modules toe afhankelijk van instelling
+		$modules[] = LidInstellingen::get('layout', 'opmaak');
+		if (LidInstellingen::get('layout', 'toegankelijk') == 'bredere letters') {
+			$modules[] = 'bredeletters';
+		}
+		if (LidInstellingen::get('layout', 'sneeuw') != 'nee') {
+			if (LidInstellingen::get('layout', 'sneeuw') == 'ja') {
+				$modules[] = 'snowanim';
+			} else {
+				$modules[] = 'snow';
+			}
+		}
+		if (LidInstellingen::get('layout', 'minion') == 'ja') {
+			$modules[] = 'minion';
+		}
+
+	} else {
+		// een niet-algemene module gevraagd
+		if ($activemodule) {
+			$modules[] = $activemodule;
 		}
 	}
-	if (LidInstellingen::get('layout', 'minion') == 'ja') {
-		$module[] = 'minion';
-	}
-
-	// gevraagde module toevoegen
-	$activemodule = trim(preg_replace('/[^\w-]+/', '', $INPUT->str('m')));
-	if ($activemodule) {
-		$modules[] = $activemodule;
-	}
-
 
 
 	// The generated script depends on some dynamic options
-	$cache = new cache('styles' . $_SERVER['HTTP_HOST'] . $_SERVER['SERVER_PORT'] . DOKU_BASE . $layout . implode('', $modules) . $excludegeneralstyles, '.css');
+	$cache = new cache('styles' . $_SERVER['HTTP_HOST'] . $_SERVER['SERVER_PORT'] . DOKU_BASE . $layout . implode('', $modules), '.css');
 
 	// load style.ini
 	$styleini = css_csr_styleini($layout);
