@@ -3451,9 +3451,11 @@ lib/MVC/view/SmartyTemplateView.abstract.php -text
 lib/MVC/view/Validator.interface.php -text
 lib/MVC/view/View.interface.php -text
 lib/MVC/view/Zijbalk.static.php -text
-lib/MVC/view/formulier/FileField.class.php -text
 lib/MVC/view/formulier/FormElement.abstract.php -text
 lib/MVC/view/formulier/Formulier.class.php -text
+lib/MVC/view/formulier/InvoerVelden.class.php -text
+lib/MVC/view/formulier/KeuzeVelden.class.php -text
+lib/MVC/view/formulier/UploadVelden.class.php -text
 lib/MVC/view/groepen/ActiviteitenView.class.php -text
 lib/MVC/view/groepen/BesturenView.class.php -text
 lib/MVC/view/groepen/CommissiesView.class.php -text

@@ -3,11 +3,24 @@
 require_once 'MVC/model/entity/Afbeelding.class.php';
 
 /**
- * FileField.class.php
+ * UploadVelden.class.php
  * 
+ * @author Jan Pieter Waagmeester <jieter@jpwaag.com>
  * @author P.W.G. Brussee <brussee@live.nl>
  * 
- * Verschillende manieren om een bestand te uploaden.
+ * 
+ * Verschillende manieren om een bestand of afbeelding(en) te uploaden.
+ * 
+ * 	- FileField						uitbreiding van FormElement
+ * 		* ImageField
+ * 
+ * 	- BestandUploader				uitbreiding van InputField
+ * 		* BestandBehouden
+ * 		* UploadHttp
+ * 			- DropZoneUploader
+ * 		* UploadFtp
+ * 		* UploadUrl
+ * 
  */
 class FileField implements FormElement, Validator {
 
