@@ -101,6 +101,11 @@ class ForumDraad extends PersistentEntity {
 	 */
 	private $wanneer_gelezen;
 	/**
+	 * Lijst van lezers (wanneer)
+	 * @var ForumDraadGelezen[]
+	 */
+	private $lezers;
+	/**
 	 * Verbergen voor gebruiker
 	 * @var boolean
 	 */
@@ -175,6 +180,13 @@ class ForumDraad extends PersistentEntity {
 			$this->volgers = ForumDradenVolgenModel::instance()->getVolgersVanDraad($this);
 		}
 		return $this->volgers;
+	}
+
+	public function getLezers() {
+		if (!isset($this->lezers)) {
+			$this->lezers = ForumDradenGelezenModel::instance()->getLezersVanDraad($this);
+		}
+		return $this->lezers;
 	}
 
 	public function getWanneerGelezen() {

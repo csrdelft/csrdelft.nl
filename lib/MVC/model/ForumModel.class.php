@@ -335,6 +335,10 @@ class ForumDradenGelezenModel extends PersistenceModel {
 		$this->update($gelezen);
 	}
 
+	public function getLezersVanDraad(ForumDraad $draad) {
+		return $this->find('draad_id = ?', array($draad->draad_id))->fetchAll();
+	}
+
 	public function verwijderDraadGelezen(ForumDraad $draad) {
 		foreach ($this->find('draad_id = ?', array($draad->draad_id)) as $gelezen) {
 			$this->delete($gelezen);

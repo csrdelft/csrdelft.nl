@@ -53,6 +53,8 @@
 				{/if}
 				{if $post->verwijderd}
 					<span class="error">Deze reactie is verwijderd.</span>
+				{elseif $draad->belangrijk AND LoginModel::mag('P_FORUM_BELANGRIJK')}
+					<span class="lichtgrijs small" title="Gelezen door lezers">{$post->isGelezenPercentage($draad->getLezers())}%</span>
 				{/if}
 			</div>
 		{/if}

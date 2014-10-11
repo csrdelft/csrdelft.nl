@@ -92,4 +92,26 @@ class ForumPost extends PersistentEntity {
 	 */
 	protected static $table_name = 'forum_posts';
 
+	/**
+	 * Bereken het percentage lezers dat deze post heeft gelezen.
+	 * 
+	 * @param array $lezers
+	 * @return int percentage
+	 */
+	public function isGelezenPercentage(array $lezers) {
+		$counter = 0;
+		foreach ($lezers as $lezer) {
+			if ($this->laatst_gewijzigd) {
+				if ($this->laatst_gewijzigd <= $lezer->datum_tijd) {
+					$counter++;
+				}
+			} else {
+				if ($this->datum_tijd <= $lezer->datum_tijd) {
+					$counter++;
+				}
+			}
+		}
+		return (int) ($counter * 100 / count($lezers));
+	}
+
 }
