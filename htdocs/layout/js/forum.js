@@ -3,9 +3,9 @@ function saveConceptForumBericht() {
 	if ($('#forumBericht').val() !== $('#forumBericht').attr('origvalue')) {
 		$.post('/forum/concept', {
 			forumBericht: $('#forumBericht').val()
-		}, function () {
+		}).done(function () {
 			$('#forumBericht').attr('origvalue', $('#forumBericht').val());
-		});
+		}).fail(alert);
 	}
 }
 
