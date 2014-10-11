@@ -1,6 +1,6 @@
 <?php
 /**
- * DokuWiki StyleSheet creator
+ * C.S.R. stylesheet creator based on DokuWiki StyleSheet creator
  *
  * @author     Gerrit Uitslag <klapinklapin@gmail.com>
  */
@@ -28,7 +28,7 @@ csr_css_out();
 /**
  * Output all needed Styles
  *
- * @author Andreas Gohr <andi@splitbrain.org>
+ * @see css_out() Based on css_out()
  */
 function csr_css_out(){
 	global $conf;
@@ -62,7 +62,7 @@ function csr_css_out(){
 	// cache influencers
 	$tplinc = HTDOCS_PATH.$layout;
 	$cache_files = array();
-	$cache_files[] = $tplinc.'style.ini';
+	$cache_files[] = $tplinc.'/style.ini';
 	$cache_files[] = __FILE__;
 
 	// Array of needed files and their web locations, the latter ones
