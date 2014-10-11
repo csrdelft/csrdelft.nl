@@ -318,7 +318,9 @@ class ForumDradenGelezenModel extends PersistenceModel {
 	 * @param ForumDraadGelezen $gelezen
 	 * @param ForumDraad $draad
 	 */
-	public function setWanneerGelezenDoorLid(ForumDraadGelezen $gelezen, ForumDraad $draad) {
+	public function setWanneerGelezenDoorLid(ForumDraad $draad) {
+		// Haal nieuw object op omdat de view de ongewijzigde nodig heeft
+		$gelezen = $this->getWanneerGelezenDoorLid($draad);
 		foreach ($draad->getForumPosts() as $post) {
 			if ($post->laatst_gewijzigd) {
 				if ($post->laatst_gewijzigd > $gelezen->datum_tijd) {
