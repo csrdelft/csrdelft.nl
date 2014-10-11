@@ -43,8 +43,10 @@ function csr_css_out(){
 
 	// determine module
 	$activemodule = trim(preg_replace('/[^\w-]+/','',$INPUT->str('m')));
+	$excludegeneralstyles = ($INPUT->str('general') == 'no');
+
 	if(!$activemodule) $activemodule = '';
-	if($INPUT->str('general') == 'no') {
+	if($excludegeneralstyles) {
 		$modules = array();
 	} else {
 		$modules = array('general');
@@ -52,7 +54,7 @@ function csr_css_out(){
 	$modules[] = $activemodule;
 
 	// The generated script depends on some dynamic options
-	$cache = new cache('styles'.$_SERVER['HTTP_HOST'].$_SERVER['SERVER_PORT'].DOKU_BASE.$layout.$activemodule,'.css');
+	$cache = new cache('styles'.$_SERVER['HTTP_HOST'].$_SERVER['SERVER_PORT'].DOKU_BASE.$layout.$activemodule.$excludegeneralstyles,'.css');
 
 	// load styl.ini
 	$styleini = css_csrstyleini($layout);
