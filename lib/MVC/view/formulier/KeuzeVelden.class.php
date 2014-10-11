@@ -104,8 +104,8 @@ class RequiredSelectField extends SelectField {
  */
 class EntityDropDown extends SelectField {
 
-	public function __construct($name, $value, $description, array $options, array $label_attributes, $size = 1, $multiple = false) {
-		parent::__construct($name, $value, $description, array(), $size, $multiple);
+	public function __construct($name, array $primary_key_values, $description, array $options, array $label_attributes, $size = 1, $multiple = false) {
+		parent::__construct($name, json_encode($primary_key_values), $description, array(), $size, $multiple);
 		if (!$this->required) {
 			$this->options[''] = '';
 		}

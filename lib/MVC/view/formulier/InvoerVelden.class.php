@@ -630,7 +630,7 @@ class RequiredLidField extends LidField {
 /**
  * Select an entity based on primary key values in hidden input fields, supplied by remote data source.
  */
-class EntityField extends TextField {
+class EntityField extends InputField {
 
 	private $show_value;
 
