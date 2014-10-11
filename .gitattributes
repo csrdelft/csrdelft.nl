@@ -372,6 +372,7 @@ htdocs/layout/js/ubb_slideshow.js -text
 htdocs/layout/js/ubb_slideshow.min.js -text
 htdocs/layout/js/verticalen.js -text
 htdocs/layout/js/verticalen.min.js -text
+htdocs/layout/style.ini -text
 htdocs/layout2/css/foundation.css -text
 htdocs/layout2/css/foundation.min.css -text
 htdocs/layout2/css/normalize.css -text
@@ -389,6 +390,7 @@ htdocs/layout2/js/jquery.backstretch.js -text
 htdocs/layout2/js/jquery.backstretch.min.js -text
 htdocs/layout2/js/jquery.js -text
 htdocs/layout2/js/jquery.min.js -text
+htdocs/layout2/style.ini -text
 htdocs/layout3/css/bootstrap-theme.css -text
 htdocs/layout3/css/bootstrap-theme.min.css -text
 htdocs/layout3/css/bootstrap-typeahead.css -text
@@ -409,6 +411,7 @@ htdocs/layout3/js/jquery.js -text
 htdocs/layout3/js/jquery.min.js -text
 htdocs/layout3/js/typeahead.bundle.js -text
 htdocs/layout3/js/typeahead.bundle.min.js -text
+htdocs/layout3/style.ini -text
 htdocs/onderhoud.html -text
 htdocs/robots.txt -text
 htdocs/testform.php -text
@@ -431,6 +434,7 @@ htdocs/tools/alphabanner/tegel_dagen.jpg -text
 htdocs/tools/alphabanner/tegel_in.jpg -text
 htdocs/tools/alphabanner/tegel_leeg.jpg -text
 htdocs/tools/alphabanner/tegel_start.jpg -text
+htdocs/tools/css.php -text
 htdocs/tools/dragobject.php -text
 htdocs/tools/dump.php -text
 htdocs/tools/eetplan.php -text
