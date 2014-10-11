@@ -9,10 +9,8 @@ function saveConceptForumBericht() {
 	}
 }
 
-jQuery(document).ready(function ($) {
-	$(window).unload(function () {
-		saveConceptForumBericht();
-	});
+$(document).ready(function ($) {
+
 	var toggleShowSaveConcept = function () {
 		if ($('#forumBericht').val() !== $('#forumBericht').attr('origvalue')) {
 			$('#forumConcept').fadeIn();
