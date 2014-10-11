@@ -66,20 +66,6 @@ a.vooriedereen{
 	margin-right: 10px;
 }
 
-@media (max-width: 1004px) {
-	#mainright{
-		min-width: 730px;
-        padding: 50px 0 0 5px;
-    }
-	#zijbalk{
-		padding-left: 5px;
-		width: 195px;
-	}
-	#zijbalk_quicknav a{
-		margin: 0 5px;
-    }
-}
-
 h1{
 	font-family: Verdana,Geneva,Arial,Helvetica,sans-serif;
 	font-weight: bold;
@@ -1167,3 +1153,22 @@ div.visitekaartje div.uid{
 /*
  * einde nieuwe layout
  */
+
+/* -------------------------------- 
+
+Overrides voor smalle schermen
+
+-------------------------------- */
+@media (max-width: 1004px) {
+	#mainright{
+		min-width: 730px;
+        padding: 50px 0 0 5px;
+    }
+	#zijbalk{
+		padding-left: 5px;
+		width: 195px;
+	}
+	#zijbalk_quicknav a{
+		margin: 0 5px;
+    }
+}
