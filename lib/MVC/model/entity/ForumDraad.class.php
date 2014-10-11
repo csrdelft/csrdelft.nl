@@ -201,6 +201,11 @@ class ForumDraad extends PersistentEntity {
 		return $this->aantal_lezers;
 	}
 
+	/**
+	 * FALSE if ongelezen!
+	 * 
+	 * @return ForumDraadGelezen|boolean $gelezen
+	 */
 	public function getWanneerGelezen() {
 		if (!isset($this->wanneer_gelezen)) {
 			$this->setWanneerGelezen(ForumDradenGelezenModel::instance()->getWanneerGelezenDoorLid($this));
@@ -209,13 +214,13 @@ class ForumDraad extends PersistentEntity {
 	}
 
 	public function onGelezen() {
-		if (strtotime($this->laatst_gewijzigd) > strtotime($this->getWanneerGelezen()->datum_tijd)) {
+		if ($this->getWanneerGelezen() AND strtotime($this->laatst_gewijzigd) > strtotime($this->wanneer_gelezen->datum_tijd)) {
 			return true;
 		}
 		return false;
 	}
 
-	private function setWanneerGelezen(ForumDraadGelezen $gelezen) {
+	private function setWanneerGelezen($gelezen) {
 		$this->wanneer_gelezen = $gelezen;
 	}
 
