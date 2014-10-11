@@ -158,7 +158,7 @@ abstract class CachedPersistenceModel extends PersistenceModel {
 	}
 
 	/**
-	 * Load saved entity data and create new object.
+	 * Load and cache saved entity data and create new object.
 	 * 
 	 * @param array $primary_key_values
 	 * @return PersistentEntity|false
@@ -167,9 +167,12 @@ abstract class CachedPersistenceModel extends PersistenceModel {
 		$key = $this->cacheKey($primary_key_values);
 		if ($this->isCached($key)) {
 			return $this->getCached($key);
-		} else {
-			return parent::retrieveByPrimaryKey($primary_key_values);
 		}
+		$result = parent::retrieveByPrimaryKey($primary_key_values);
+		if ($result) {
+			$this->setCache($key, $result);
+		}
+		return $result;
 	}
 
 	/**
