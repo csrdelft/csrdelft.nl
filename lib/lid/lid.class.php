@@ -909,7 +909,7 @@ class Lid implements Serializable, Agendeerbaar {
 				if ($vorm !== 'leeg') {
 					$k .=' class="hoverIntent"';
 				}
-				$k .= '><div style="margin-top: -10px; margin-left: -10px;" class="';
+				$k .= '><div style="margin-top: -15px; margin-left: -15px;" class="';
 				if ($vorm !== 'leeg') {
 					$k .= 'hoverIntentContent ';
 				}
