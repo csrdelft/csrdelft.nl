@@ -23,7 +23,7 @@ try {
 		case 'FotoAlbum':
 		case 'Agenda':
 			break; // toegestaan voor iedereen
-		default: // alleen ingelode gebruikers
+		default: // alleen ingelogde gebruikers
 			if (!LoginModel::mag('P_LOGGED_IN')) {
 				redirect(CSR_ROOT);
 			}
