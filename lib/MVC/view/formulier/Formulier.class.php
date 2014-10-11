@@ -2,8 +2,8 @@
 
 require_once 'MVC/view/View.interface.php';
 require_once 'MVC/view/Validator.interface.php';
-require_once 'MVC/view/FormElement.abstract.php';
-require_once 'MVC/view/FileField.class.php';
+require_once 'MVC/view/formulier/FormElement.abstract.php';
+require_once 'MVC/view/formulier/FileField.class.php';
 
 /**
  * Formulier.class.php

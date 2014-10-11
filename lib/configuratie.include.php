@@ -85,7 +85,7 @@ require_once 'MVC/model/Paging.interface.php';
 require_once 'MVC/view/JsonResponse.class.php';
 require_once 'MVC/view/SmartyTemplateView.abstract.php';
 require_once 'MVC/view/DataTable.class.php';
-require_once 'MVC/view/Formulier.class.php';
+require_once 'MVC/view/formulier/Formulier.class.php';
 require_once 'MVC/view/CsrUbb.class.php';
 require_once 'MVC/view/CsrLayoutPage.class.php';
 require_once 'MVC/view/CsrLayout2Page.class.php';

@@ -3437,9 +3437,6 @@ lib/MVC/view/CsrLayoutPage.class.php -text
 lib/MVC/view/CsrSmarty.singleton.php -text
 lib/MVC/view/CsrUbb.class.php -text
 lib/MVC/view/DataTable.class.php -text
-lib/MVC/view/FileField.class.php -text
-lib/MVC/view/FormElement.abstract.php -text
-lib/MVC/view/Formulier.class.php -text
 lib/MVC/view/ForumView.class.php -text
 lib/MVC/view/FotoAlbumView.class.php -text
 lib/MVC/view/HtmlPage.abstract.php -text
@@ -3454,6 +3451,9 @@ lib/MVC/view/SmartyTemplateView.abstract.php -text
 lib/MVC/view/Validator.interface.php -text
 lib/MVC/view/View.interface.php -text
 lib/MVC/view/Zijbalk.static.php -text
+lib/MVC/view/formulier/FileField.class.php -text
+lib/MVC/view/formulier/FormElement.abstract.php -text
+lib/MVC/view/formulier/Formulier.class.php -text
 lib/MVC/view/groepen/ActiviteitenView.class.php -text
 lib/MVC/view/groepen/BesturenView.class.php -text
 lib/MVC/view/groepen/CommissiesView.class.php -text
