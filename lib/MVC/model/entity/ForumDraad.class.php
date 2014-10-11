@@ -191,7 +191,7 @@ class ForumDraad extends PersistentEntity {
 		return false;
 	}
 
-	public function setWanneerGelezen(ForumDraadGelezen $gelezen) {
+	private function setWanneerGelezen(ForumDraadGelezen $gelezen) {
 		$this->wanneer_gelezen = $gelezen;
 	}
 
@@ -211,6 +211,11 @@ class ForumDraad extends PersistentEntity {
 		return sizeof($this->getForumPosts()) > 0;
 	}
 
+	/**
+	 * Public for search results and all sorts of prefetching.
+	 * 
+	 * @param array $forum_posts
+	 */
 	public function setForumPosts(array $forum_posts) {
 		$this->forum_posts = $forum_posts;
 	}

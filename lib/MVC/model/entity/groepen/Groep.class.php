@@ -124,7 +124,7 @@ class Groep extends PersistentEntity {
 		return count($this->getGroepLeden()) > 0;
 	}
 
-	public function setGroepLeden(array $leden) {
+	private function setGroepLeden(array $leden) {
 		$this->groep_leden = $leden;
 	}
 

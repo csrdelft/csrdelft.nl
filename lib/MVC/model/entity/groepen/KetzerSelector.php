@@ -64,7 +64,7 @@ class KetzerSelector extends PersistentEntity {
 		return count($this->getKetzerOpties()) > 0;
 	}
 
-	public function setKetzerOpties(array $opties) {
+	private function setKetzerOpties(array $opties) {
 		$this->ketzer_selectors = $opties;
 	}
 

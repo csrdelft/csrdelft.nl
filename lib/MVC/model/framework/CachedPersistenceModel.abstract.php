@@ -92,6 +92,7 @@ abstract class CachedPersistenceModel extends PersistenceModel {
 	 * 
 	 * @param PDOStatement $result
 	 * @param boolean $memcache
+	 * @return array resultset of PDOStatement
 	 */
 	protected function cacheResult(PDOStatement $result, $memcache = false) {
 		$cache = array();

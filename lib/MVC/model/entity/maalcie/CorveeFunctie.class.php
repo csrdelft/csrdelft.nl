@@ -105,7 +105,7 @@ class CorveeFunctie extends PersistentEntity {
 		return sizeof($this->getKwalificaties()) > 0;
 	}
 
-	public function setKwalificaties(array $kwalificaties) {
+	private function setKwalificaties(array $kwalificaties) {
 		$this->kwalificaties = $kwalificaties;
 	}
 

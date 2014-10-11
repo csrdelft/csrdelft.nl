@@ -81,7 +81,7 @@ class Ketzer extends Groep {
 		return count($this->getKetzerSelectors()) > 0;
 	}
 
-	public function setKetzerSelectors(array $selectors) {
+	private function setKetzerSelectors(array $selectors) {
 		$this->ketzer_selectors = $selectors;
 	}
 

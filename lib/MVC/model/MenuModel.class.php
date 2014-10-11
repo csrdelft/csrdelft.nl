@@ -67,12 +67,7 @@ class MenuModel extends CachedPersistenceModel {
 	}
 
 	public function getMenuRoot($naam) {
-		$result = $this->find('parent_id = ? AND tekst = ? ', array(0, $naam), null, null, 1);
-		if (count($result) === 1) {
-			return reset($result);
-		} else {
-			return false;
-		}
+		return $this->find('parent_id = ? AND tekst = ? ', array(0, $naam), null, null, 1)->fetch(); // is cached at higher level
 	}
 
 	public function getChildren(MenuItem $parent) {
