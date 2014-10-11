@@ -4,7 +4,7 @@
  *
  * @author     Gerrit Uitslag <klapinklapin@gmail.com>
  */
-if(!defined('DOKU_INC')) define('DOKU_INC',dirname(__FILE__).'/../wiki/');
+if (!defined('DOKU_INC')) define('DOKU_INC', dirname(__FILE__) . '/../wiki/');
 
 //reuse the CSS dispatcher functions of DokuWiki without triggering the main function css_out()
 define('SIMPLE_TEST', 1);
@@ -14,10 +14,10 @@ require_once(DOKU_INC . 'lib/exe/css.php');
 
 // overrule sommige instellingen, zie voor uitleg op https://www.dokuwiki.org/config
 //$conf['template'] = 'dokuwiki';
-$conf['compress'] = 1;   //stripping of whitespace and comments
+$conf['compress'] = 1; //stripping of whitespace and comments
 //$conf['cssdatauri'] = 0; //filesize in bytes. Embed images below the thresshold in css. (Bad supported by IE < 8)
 //$conf['allowdebug'] = 0;
-$conf['cachedir'] = DATA_PATH.'compressorcache';
+$conf['cachedir'] = DATA_PATH . 'compressorcache';
 //$conf['cachetime'] = 60*60*24; // -1, 0, ..
 
 
@@ -30,23 +30,23 @@ csr_css_out();
  *
  * @see css_out() Based on css_out()
  */
-function csr_css_out(){
+function csr_css_out() {
 	global $conf;
 	global $INPUT;
 
 	// decide from where to get the layout
 	$layout = $INPUT->str('l');
 	$allowedlayouts = array('layout', 'layout2', 'layout3');
-	if(!in_array($layout, $allowedlayouts)) {
+	if (!in_array($layout, $allowedlayouts)) {
 		$layout = $allowedlayouts[0];
 	}
 
 	// determine module
-	$activemodule = trim(preg_replace('/[^\w-]+/','',$INPUT->str('m')));
+	$activemodule = trim(preg_replace('/[^\w-]+/', '', $INPUT->str('m')));
 	$excludegeneralstyles = ($INPUT->str('general') == 'no');
 
-	if(!$activemodule) $activemodule = '';
-	if($excludegeneralstyles) {
+	if (!$activemodule) $activemodule = '';
+	if ($excludegeneralstyles) {
 		$modules = array();
 	} else {
 		$modules = array('general');
@@ -54,21 +54,21 @@ function csr_css_out(){
 	$modules[] = $activemodule;
 
 	// The generated script depends on some dynamic options
-	$cache = new cache('styles'.$_SERVER['HTTP_HOST'].$_SERVER['SERVER_PORT'].DOKU_BASE.$layout.$activemodule.$excludegeneralstyles,'.css');
+	$cache = new cache('styles' . $_SERVER['HTTP_HOST'] . $_SERVER['SERVER_PORT'] . DOKU_BASE . $layout . $activemodule . $excludegeneralstyles, '.css');
 
 	// load styl.ini
 	$styleini = css_csrstyleini($layout);
 
 	// cache influencers
-	$tplinc = HTDOCS_PATH.$layout;
+	$tplinc = HTDOCS_PATH . $layout;
 	$cache_files = array();
-	$cache_files[] = $tplinc.'/style.ini';
+	$cache_files[] = $tplinc . '/style.ini';
 	$cache_files[] = __FILE__;
 
 	// Array of needed files and their web locations, the latter ones
 	// are needed to fix relative paths in the stylesheets
 	$files = array();
-	foreach($modules as $module) {
+	foreach ($modules as $module) {
 		$files[$module] = array();
 //		// load core styles
 //		$files[$mediatype][DOKU_INC.'lib/styles/'.$mediatype.'.css'] = DOKU_BASE.'lib/styles/';
@@ -103,13 +103,13 @@ function csr_css_out(){
 
 		// load files
 		$css_content = '';
-		foreach($files[$module] as $file => $location){
+		foreach ($files[$module] as $file => $location) {
 			$display = str_replace(fullpath(HTDOCS_PATH), '', fullpath($file));
 			$css_content .= "\n/* XXXXXXXXX $display XXXXXXXXX */\n";
 			$css_content .= css_loadfile($file, $location);
 		}
 
-		print NL.$css_content.NL;
+		print NL . $css_content . NL;
 
 //		switch ($module) {
 //			case 'screen':
@@ -139,14 +139,14 @@ function csr_css_out(){
 	$css = css_parseless($css);
 
 	// compress whitespace and comments
-	if($conf['compress']){
+	if ($conf['compress']) {
 		$css = css_compress($css);
 	}
 
 	// embed small images right into the stylesheet
-	if($conf['cssdatauri']){
-		$base = preg_quote(DOKU_BASE,'#');
-		$css = preg_replace_callback('#(url\([ \'"]*)('.$base.')(.*?(?:\.(png|gif)))#i','css_datauri',$css);
+	if ($conf['cssdatauri']) {
+		$base = preg_quote(DOKU_BASE, '#');
+		$css = preg_replace_callback('#(url\([ \'"]*)(' . $base . ')(.*?(?:\.(png|gif)))#i', 'css_datauri', $css);
 	}
 
 	http_cached_finish($cache->cache, $css);
@@ -169,18 +169,18 @@ function css_csrstyleini($layout) {
 	// load template's style.ini
 	$incbase = HTDOCS_PATH;
 	$webbase = CSR_ROOT;
-	$ini = $incbase.$layout.'/style.ini';
-	if(file_exists($ini)){
+	$ini = $incbase . $layout . '/style.ini';
+	if (file_exists($ini)) {
 		$data = parse_ini_file($ini, true);
 
 		// stylesheets
-		if(is_array($data['stylesheets'])) foreach($data['stylesheets'] as $file => $module){
-			$stylesheets[$module][$incbase.$file] = $webbase;
+		if (is_array($data['stylesheets'])) foreach ($data['stylesheets'] as $file => $module) {
+			$stylesheets[$module][$incbase . $file] = $webbase;
 		}
 
 		// replacements
-		if(is_array($data['replacements'])){
-			$replacements = array_merge($replacements, css_fixreplacementurls($data['replacements'],$webbase));
+		if (is_array($data['replacements'])) {
+			$replacements = array_merge($replacements, css_fixreplacementurls($data['replacements'], $webbase));
 		}
 	}
 
