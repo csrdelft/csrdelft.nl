@@ -29,7 +29,11 @@
 			{/if}
 			<div id="p{$post->post_id}" class="forumpasfoto{if LidInstellingen::get('forum', 'toonpasfotos') == 'nee'} verborgen">{elseif LoginModel::mag('P_LEDEN_READ')}">{$post->uid|csrnaam:'pasfoto'}{/if}</div>
 		{/if}
-		<br /><br />
+		<br />
+		{if $draad->belangrijk AND LoginModel::mag('P_FORUM_BELANGRIJK')}
+			<span class="lichtgrijs small" title="Gelezen door lezers">{$post->isGelezenPercentage($draad->getLezers())}%</span>
+		{/if}
+		<br />
 		{if $post->wacht_goedkeuring}
 			<a href="/forum/goedkeuren/{$post->post_id}" class="knop post confirm" title="Bericht goedkeuren">goedkeuren</a>
 			<br /><br />
@@ -53,8 +57,6 @@
 				{/if}
 				{if $post->verwijderd}
 					<span class="error">Deze reactie is verwijderd.</span>
-				{elseif $draad->belangrijk AND LoginModel::mag('P_FORUM_BELANGRIJK')}
-					<span class="lichtgrijs small" title="Gelezen door lezers">{$post->isGelezenPercentage($draad->getLezers())}%</span>
 				{/if}
 			</div>
 		{/if}
