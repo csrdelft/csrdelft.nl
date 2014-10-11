@@ -372,6 +372,7 @@ htdocs/layout/js/ubb_slideshow.js -text
 htdocs/layout/js/ubb_slideshow.min.js -text
 htdocs/layout/js/verticalen.js -text
 htdocs/layout/js/verticalen.min.js -text
+htdocs/layout/script.ini -text
 htdocs/layout/style.ini -text
 htdocs/layout2/css/foundation.css -text
 htdocs/layout2/css/foundation.min.css -text
@@ -390,6 +391,7 @@ htdocs/layout2/js/jquery.backstretch.js -text
 htdocs/layout2/js/jquery.backstretch.min.js -text
 htdocs/layout2/js/jquery.js -text
 htdocs/layout2/js/jquery.min.js -text
+htdocs/layout2/script.ini -text
 htdocs/layout2/style.ini -text
 htdocs/layout3/css/bootstrap-theme.css -text
 htdocs/layout3/css/bootstrap-theme.min.css -text
@@ -411,6 +413,7 @@ htdocs/layout3/js/jquery.js -text
 htdocs/layout3/js/jquery.min.js -text
 htdocs/layout3/js/typeahead.bundle.js -text
 htdocs/layout3/js/typeahead.bundle.min.js -text
+htdocs/layout3/script.ini -text
 htdocs/layout3/style.ini -text
 htdocs/onderhoud.html -text
 htdocs/robots.txt -text
@@ -440,6 +443,7 @@ htdocs/tools/dump.php -text
 htdocs/tools/eetplan.php -text
 htdocs/tools/flushcache.php -text
 htdocs/tools/index.php -text
+htdocs/tools/js.php -text
 htdocs/tools/leden-csv.php -text
 htdocs/tools/ledenkaart.php -text
 htdocs/tools/lidaftool.php -text

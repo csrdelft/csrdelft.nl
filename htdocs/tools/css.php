@@ -6,24 +6,24 @@
  */
 if (!defined('DOKU_INC')) define('DOKU_INC', dirname(__FILE__) . '/../wiki/');
 
-//reuse the CSS dispatcher functions of DokuWiki without triggering the main function css_out()
+//reuse the CSS functions of DokuWiki without triggering the main function css_out()
 define('SIMPLE_TEST', 1);
 require_once(DOKU_INC . 'lib/exe/css.php');
 
-// ---------------------- C.S.R. functions ------------------------------
 
 // overrule sommige instellingen, zie voor uitleg op https://www.dokuwiki.org/config
-//$conf['template'] = 'dokuwiki';
 $conf['compress'] = 1; //stripping of whitespace and comments
-//$conf['cssdatauri'] = 0; //filesize in bytes. Embed images below the thresshold in css. (Bad supported by IE < 8)
-//$conf['allowdebug'] = 0;
+$conf['cssdatauri'] = 0; //filesize in bytes. Embed images below the thresshold in css. (Bad supported by IE < 8)
+$conf['allowdebug'] = 0;
 $conf['cachedir'] = DATA_PATH . 'compressorcache';
-//$conf['cachetime'] = 60*60*24; // -1, 0, ..
+$conf['cachetime'] = 100*60*60*24; // -1, 0, ..
 
 
 //generate css file
 header('Content-Type: text/css; charset=utf-8');
 csr_css_out();
+
+// ---------------------- C.S.R. functions ------------------------------
 
 /**
  * Output all needed Styles
@@ -41,28 +41,46 @@ function csr_css_out() {
 		$layout = $allowedlayouts[0];
 	}
 
-	// determine module
-	$activemodule = trim(preg_replace('/[^\w-]+/', '', $INPUT->str('m')));
+	// algemene module toevoegen
 	$excludegeneralstyles = ($INPUT->str('general') == 'no');
-
-	if (!$activemodule) $activemodule = '';
 	if ($excludegeneralstyles) {
 		$modules = array();
 	} else {
 		$modules = array('general');
 	}
-	$modules[] = $activemodule;
+
+	//voeg modules toe afhankelijk van instelling
+	if (LidInstellingen::get('layout', 'toegankelijk') == 'bredere letters') {
+		$module[] = 'bredeletters';
+	}
+	if (LidInstellingen::get('layout', 'sneeuw') != 'nee') {
+		if (LidInstellingen::get('layout', 'sneeuw') == 'ja') {
+			$module[] = 'snowanim';
+		} else {
+			$module[] = 'snow';
+		}
+	}
+	if (LidInstellingen::get('layout', 'minion') == 'ja') {
+		$module[] = 'minion';
+	}
+
+	// gevraagde module toevoegen
+	$activemodule = trim(preg_replace('/[^\w-]+/', '', $INPUT->str('m')));
+	if ($activemodule) {
+		$modules[] = $activemodule;
+	}
+
+
 
 	// The generated script depends on some dynamic options
-	$cache = new cache('styles' . $_SERVER['HTTP_HOST'] . $_SERVER['SERVER_PORT'] . DOKU_BASE . $layout . $activemodule . $excludegeneralstyles, '.css');
+	$cache = new cache('styles' . $_SERVER['HTTP_HOST'] . $_SERVER['SERVER_PORT'] . DOKU_BASE . $layout . implode('', $modules) . $excludegeneralstyles, '.css');
 
-	// load styl.ini
-	$styleini = css_csrstyleini($layout);
+	// load style.ini
+	$styleini = css_csr_styleini($layout);
 
 	// cache influencers
-	$tplinc = HTDOCS_PATH . $layout;
 	$cache_files = array();
-	$cache_files[] = $tplinc . '/style.ini';
+	$cache_files[] = HTDOCS_PATH . $layout . '/script.ini';
 	$cache_files[] = __FILE__;
 
 	// Array of needed files and their web locations, the latter ones
@@ -70,9 +88,6 @@ function csr_css_out() {
 	$files = array();
 	foreach ($modules as $module) {
 		$files[$module] = array();
-//		// load core styles
-//		$files[$mediatype][DOKU_INC.'lib/styles/'.$mediatype.'.css'] = DOKU_BASE.'lib/styles/';
-//
 
 		// load styles
 		if (isset($styleini['stylesheets'][$module])) {
@@ -84,23 +99,14 @@ function csr_css_out() {
 
 	// check cache age & handle conditional request
 	// This may exit if a cache can be used
-	http_cached($cache->cache,
-		$cache->useCache(array('files' => $cache_files)));
+	$cache_ok = $cache->useCache(array('files' => $cache_files));
+	http_cached($cache->cache, $cache_ok);
 
 	// start output buffering
 	ob_start();
 
 	// build the stylesheet
 	foreach ($modules as $module) {
-
-//		// print the default classes for interwiki links and file downloads
-//		if ($module == 'screen') {
-//			print '@media screen {';
-//			css_interwiki();
-//			css_filetypes();
-//			print '}';
-//		}
-
 		// load files
 		$css_content = '';
 		foreach ($files[$module] as $file => $location) {
@@ -110,21 +116,8 @@ function csr_css_out() {
 		}
 
 		print NL . $css_content . NL;
-
-//		switch ($module) {
-//			case 'screen':
-//				print NL.'@media screen { /* START screen styles */'.NL.$css_content.NL.'} /* /@media END screen styles */'.NL;
-//				break;
-//			case 'print':
-//				print NL.'@media print { /* START print styles */'.NL.$css_content.NL.'} /* /@media END print styles */'.NL;
-//				break;
-//			case 'all':
-//			case 'feed':
-//			default:
-//				print NL.'/* START rest styles */ '.NL.$css_content.NL.'/* END rest styles */'.NL;
-//				break;
-//		}
 	}
+
 	// end output buffering and get contents
 	$css = ob_get_contents();
 	ob_end_clean();
@@ -162,7 +155,7 @@ function csr_css_out() {
  * @param string $layout the used layout
  * @return array with keys 'stylesheets' and 'replacements'
  */
-function css_csrstyleini($layout) {
+function css_csr_styleini($layout) {
 	$stylesheets = array(); // mode, file => base
 	$replacements = array(); // placeholder => value
 
