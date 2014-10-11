@@ -9,7 +9,7 @@ require_once 'MVC/model/CsrMemcache.singleton.php';
  * @author P.W.G. Brussee <brussee@live.nl>
  * 
  * Uses runtime cache and Memcache to provide caching on top of PersistenceModel.
- * Lazy loading: request-multiple-retrieve-once entities from foreign key relations.
+ * Lazy loading: request-multiple-retrieve-once entities by primary key from foreign key relations.
  * Prefetch: grouping queries of foreign key relations beforehand.
  * 
  * N.B. modifying objects in the cache affects every reference to it!
@@ -72,7 +72,7 @@ abstract class CachedPersistenceModel extends PersistenceModel {
 	}
 
 	/**
-	 * Flushing memcache should not be necessary!
+	 * Remove from memcache rather than flushing.
 	 * 
 	 * @param boolean $memcache This can be used to partially clear memcache.
 	 */
@@ -90,24 +90,22 @@ abstract class CachedPersistenceModel extends PersistenceModel {
 	 * Cache entire resultset from a PDOStatement.
 	 * Optional: put in memcache.
 	 * 
-	 * @param string $resultKey
 	 * @param PDOStatement $result
-	 * @param boolean $memcache_result
-	 * @param boolean $memcache_individual
+	 * @param boolean $memcache
 	 */
-	protected function cacheResult($resultKey, PDOStatement $result, $memcache_result = false, $memcache_individual = false) {
+	protected function cacheResult(PDOStatement $result, $memcache = false) {
 		$cache = array();
 		foreach ($result as $item) {
 			$key = $this->cacheKey($item->getValues(true));
 			// do NOT update (requires explicit unsetCache)
-			if ($this->isCached($key, $memcache_individual)) {
-				$cache[] = $this->getCached($key, $memcache_individual);
+			if ($this->isCached($key, $memcache)) {
+				$cache[] = $this->getCached($key, $memcache);
 			} else {
-				$this->setCache($key, $item, $memcache_individual);
+				$this->setCache($key, $item, $memcache);
 				$cache[] = $item;
 			}
 		}
-		$this->setCache($resultKey, $cache, $memcache_result);
+		return $cache;
 	}
 
 	/**
@@ -121,13 +119,9 @@ abstract class CachedPersistenceModel extends PersistenceModel {
 	 * @param int $start results from index
 	 * @return array
 	 */
-	public function find($criteria = null, array $criteria_params = array(), $orderby = null, $groupby = null, $limit = null, $start = 0) {
-		$key = 'f' . $this->cacheKey(array($criteria, implode('+', $criteria_params), $orderby, $groupby, $limit, $start));
-		if (!$this->isCached($key)) {
-			$result = parent::find($criteria, $criteria_params, $orderby, $groupby, $limit, $start);
-			$this->cacheResult($key, $result);
-		}
-		return $this->getCached($key);
+	public function prefetch($criteria = null, array $criteria_params = array(), $orderby = null, $groupby = null, $limit = null, $start = 0) {
+		$result = parent::find($criteria, $criteria_params, $orderby, $groupby, $limit, $start);
+		return $this->cacheResult($result);
 	}
 
 	/**
@@ -142,13 +136,9 @@ abstract class CachedPersistenceModel extends PersistenceModel {
 	 * @param int $start results from index
 	 * @return array
 	 */
-	public function findSparse(array $attributes, $criteria = null, array $criteria_params = array(), $orderby = null, $groupby = null, $limit = null, $start = 0) {
-		$key = 'f' . $this->cacheKey(array($criteria, implode('+', $criteria_params), $orderby, $groupby, $limit, $start));
-		if (!$this->isCached($key)) {
-			$result = parent::findSparse($attributes, $criteria, $criteria_params, $orderby, $groupby, $limit, $start);
-			$this->cacheResult($key, $result);
-		}
-		return $this->getCached($key);
+	public function prefetchSparse(array $attributes, $criteria = null, array $criteria_params = array(), $orderby = null, $groupby = null, $limit = null, $start = 0) {
+		$result = parent::findSparse($attributes, $criteria, $criteria_params, $orderby, $groupby, $limit, $start);
+		return $this->cacheResult($result);
 	}
 
 	/**
