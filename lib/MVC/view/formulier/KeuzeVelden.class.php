@@ -37,9 +37,6 @@ class SelectField extends InputField {
 		$this->options = $options;
 		$this->size = (int) $size;
 		$this->multiple = $multiple;
-		if (!$this->multiple AND count($this->options) < 1) {
-			throw new Exception('Tenminste 1 optie nodig voor selectieveld: ' . $name);
-		}
 	}
 
 	public function getValue() {
@@ -97,6 +94,41 @@ class SelectField extends InputField {
 }
 
 class RequiredSelectField extends SelectField {
+
+	public $required = true;
+
+}
+
+/**
+ * Select an entity based on the primary key while showing the label attributes
+ */
+class EntityDropDown extends SelectField {
+
+	public function __construct($name, $value, $description, array $options, array $label_attributes, $size = 1, $multiple = false) {
+		parent::__construct($name, $value, $description, array(), $size, $multiple);
+		if (!$this->required) {
+			$this->options[''] = '';
+		}
+		foreach ($options as $option) {
+			$label = array();
+			foreach ($label_attributes as $attr) {
+				$label[] = $option->$attr;
+			}
+			$this->options[json_encode($option->getValues(true))] = implode(' ', $label);
+		}
+	}
+
+	public function getValue() {
+		$value = json_decode(parent::getValue());
+		if ($this->empty_null AND empty($value)) {
+			return null;
+		}
+		return $value;
+	}
+
+}
+
+class RequiredEntityDropDown extends EntityDropDown {
 
 	public $required = true;
 
