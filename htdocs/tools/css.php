@@ -80,7 +80,7 @@ function csr_css_out() {
 
 	// cache influencers
 	$cache_files = array();
-	$cache_files[] = HTDOCS_PATH . $layout . '/script.ini';
+	$cache_files[] = HTDOCS_PATH . $layout . '/style.ini';
 	$cache_files[] = __FILE__;
 
 	// Array of needed files and their web locations, the latter ones
@@ -167,8 +167,10 @@ function css_csr_styleini($layout) {
 		$data = parse_ini_file($ini, true);
 
 		// stylesheets
-		if (is_array($data['stylesheets'])) foreach ($data['stylesheets'] as $file => $module) {
-			$stylesheets[$module][$incbase . $file] = $webbase;
+		if (is_array($data['stylesheets'])) foreach ($data['stylesheets'] as $module => $files) {
+			foreach ($files as $file) {
+				$stylesheets[$module][$incbase . $file] = $webbase;
+			}
 		}
 
 		// replacements

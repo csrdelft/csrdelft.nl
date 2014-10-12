@@ -220,8 +220,10 @@ function js_csr_scriptini($layout) {
 		$data = parse_ini_file($ini, true);
 
 		// stylesheets
-		if (is_array($data['scripts'])) foreach ($data['scripts'] as $file => $module) {
-			$scripts[$module][$incbase . $file] = $webbase;
+		if (is_array($data['scripts'])) foreach ($data['scripts'] as $module => $files) {
+			foreach($files as $file) {
+				$scripts[$module][$incbase . $file] = $webbase;
+			}
 		}
 	}
 
