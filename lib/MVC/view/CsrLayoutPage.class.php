@@ -32,47 +32,50 @@ class CsrLayoutPage extends HtmlPage {
 		$this->zijbalk = $zijbalk;
 		$this->modal = $modal;
 
-		$css = '/layout/css/';
-		$js = '/layout/js/';
-		$plugin = $js . 'jquery/plugins/';
+//		$css = '/layout/css/';
+//		$js = '/layout/js/';
+//		$plugin = $js . 'jquery/plugins/';
+//
+//		$this->addStylesheet($css . 'reset');
+//		$this->addStylesheet($css . 'layout_pagina');
+//		$this->addStylesheet($css . 'ubb');
+//		$this->addStylesheet($css . 'csrdelft');
+//		$layout = LidInstellingen::get('layout', 'opmaak');
+//		$this->addStylesheet($css . $layout);
+//		if (LidInstellingen::get('layout', 'toegankelijk') == 'bredere letters') {
+//			$this->addStylesheet($css . 'toegankelijk_bredere_letters');
+//		}
+//		if (LidInstellingen::get('layout', 'sneeuw') != 'nee') {
+//			if (LidInstellingen::get('layout', 'sneeuw') == 'ja') {
+//				$this->addStylesheet($css . 'snow.anim');
+//			} else {
+//				$this->addStylesheet($css . 'snow');
+//			}
+//		}
+//		$this->addScript($js . 'jquery/jquery');
+//		$this->addScript($js . 'jquery/jquery-ui');
+//		$this->addStylesheet($js . 'jquery/jquery-ui');
+//		$this->addScript($js . 'autocomplete/jquery.autocomplete');
+//		$this->addStylesheet($js . 'autocomplete/jquery.autocomplete');
+//		//$this->addScript($plugin . 'jquery.dataTables');
+//		//$this->addStylesheet($css . 'jquery.dataTables');
+//		$this->addScript($plugin . 'jquery.autosize');
+//		$this->addScript($plugin . 'jquery.hoverIntent');
+//		$this->addScript($plugin . 'jquery.scrollTo');
+//		$this->addScript($plugin . 'jquery.timeago');
+//		$this->addScript($js . 'csrdelft');
+//		//$this->addScript($js . 'csrdelft.dataTables');
+//		//$this->addStylesheet($css . 'csrdelft.dataTables');
+//		$this->addScript($js . 'dragobject');
+//		$this->addScript($js . 'main_menu');
+//		$this->addScript($js . 'groepen');
+//		if (LidInstellingen::get('layout', 'minion') == 'ja') {
+//			$this->addScript($js . 'minion');
+//			$this->addStylesheet($css . 'minion');
+//		}
+		$this->addStylesheet('/tools/css.php?l=layout&m=general', true);
+		$this->addScript('/tools/js.php?l=layout&m=general', true);
 
-		$this->addStylesheet($css . 'reset');
-		$this->addStylesheet($css . 'layout_pagina');
-		$this->addStylesheet($css . 'ubb');
-		$this->addStylesheet($css . 'csrdelft');
-		$layout = LidInstellingen::get('layout', 'opmaak');
-		$this->addStylesheet($css . $layout);
-		if (LidInstellingen::get('layout', 'toegankelijk') == 'bredere letters') {
-			$this->addStylesheet($css . 'toegankelijk_bredere_letters');
-		}
-		if (LidInstellingen::get('layout', 'sneeuw') != 'nee') {
-			if (LidInstellingen::get('layout', 'sneeuw') == 'ja') {
-				$this->addStylesheet($css . 'snow.anim');
-			} else {
-				$this->addStylesheet($css . 'snow');
-			}
-		}
-		$this->addScript($js . 'jquery/jquery');
-		$this->addScript($js . 'jquery/jquery-ui');
-		$this->addStylesheet($js . 'jquery/jquery-ui');
-		$this->addScript($js . 'autocomplete/jquery.autocomplete');
-		$this->addStylesheet($js . 'autocomplete/jquery.autocomplete');
-		//$this->addScript($plugin . 'jquery.dataTables');
-		//$this->addStylesheet($css . 'jquery.dataTables');
-		$this->addScript($plugin . 'jquery.autosize');
-		$this->addScript($plugin . 'jquery.hoverIntent');
-		$this->addScript($plugin . 'jquery.scrollTo');
-		$this->addScript($plugin . 'jquery.timeago');
-		$this->addScript($js . 'csrdelft');
-		//$this->addScript($js . 'csrdelft.dataTables');
-		//$this->addStylesheet($css . 'csrdelft.dataTables');
-		$this->addScript($js . 'dragobject');
-		$this->addScript($js . 'main_menu');
-		$this->addScript($js . 'groepen');
-		if (LidInstellingen::get('layout', 'minion') == 'ja') {
-			$this->addScript($js . 'minion');
-			$this->addStylesheet($css . 'minion');
-		}
 	}
 
 	public function view() {
