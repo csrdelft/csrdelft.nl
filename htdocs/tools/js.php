@@ -16,7 +16,7 @@ require_once(DOKU_INC . 'lib/exe/js.php');
 
 
 // overrule sommige instellingen, zie voor uitleg op https://www.dokuwiki.org/config
-$conf['compress'] = DEBUG ? 0 : 1; //stripping of whitespace and comments
+$conf['compress'] = 0;//DEBUG ? 0 : 1; //stripping of whitespace and comments
 $conf['allowdebug'] = 0;
 $conf['cachedir'] = DATA_PATH . 'compressorcache';
 $conf['cachetime'] = 100*60*60*24; // -1, 0, ..
@@ -83,7 +83,7 @@ function csr_js_out() {
 //		DOKU_INC."lib/scripts/fileuploaderextended.js",
 //		DOKU_INC.'lib/scripts/helpers.js',
 //		DOKU_INC.'lib/scripts/delay.js',
-//		DOKU_INC.'lib/scripts/cookie.js',
+//	 	DOKU_INC.'lib/scripts/cookie.js',
 //		DOKU_INC.'lib/scripts/script.js',
 //		DOKU_INC.'lib/scripts/tw-sack.js',
 //		DOKU_INC.'lib/scripts/qsearch.js',
@@ -111,6 +111,7 @@ function csr_js_out() {
 	$cache_files = array();
 	$cache_files[] = HTDOCS_PATH . $layout . '/script.ini';
 	$cache_files[] = __FILE__;
+	$cache_files[] = __FILE__ . '/../../lib/defines.include.php';
 
 
 	$files = array();
@@ -222,6 +223,12 @@ function js_csr_scriptini($layout) {
 		// stylesheets
 		if (is_array($data['scripts'])) foreach ($data['scripts'] as $module => $files) {
 			foreach($files as $file) {
+				if(DEBUG && substr($file, -7) == '.min.js') {
+					$uncompressedfile = substr_replace($file, '', -7, 4);
+					if(file_exists($incbase . $uncompressedfile)) {
+						$file = $uncompressedfile;
+					}
+				}
 				$scripts[$module][$incbase . $file] = $webbase;
 			}
 		}

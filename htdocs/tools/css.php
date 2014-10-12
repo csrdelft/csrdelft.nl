@@ -82,6 +82,8 @@ function csr_css_out() {
 	$cache_files = array();
 	$cache_files[] = HTDOCS_PATH . $layout . '/style.ini';
 	$cache_files[] = __FILE__;
+	$cache_files[] = __FILE__ . '/../../lib/defines.include.php';
+
 
 	// Array of needed files and their web locations, the latter ones
 	// are needed to fix relative paths in the stylesheets
@@ -169,6 +171,12 @@ function css_csr_styleini($layout) {
 		// stylesheets
 		if (is_array($data['stylesheets'])) foreach ($data['stylesheets'] as $module => $files) {
 			foreach ($files as $file) {
+				if(DEBUG && substr($file, -8) == '.min.css') {
+					$uncompressedfile = substr_replace($file, '', -8, 4);
+					if(file_exists($incbase . $uncompressedfile)) {
+						$file = $uncompressedfile;
+					}
+				}
 				$stylesheets[$module][$incbase . $file] = $webbase;
 			}
 		}
