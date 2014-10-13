@@ -47,10 +47,10 @@ class Instellingen extends PersistenceModel {
 		'corvee'	 => array(
 			'punten_per_jaar'						 => '11',
 			'herinnering_aantal_mails'				 => '2',
-			'herinnering_1e_mail'					 => '-5 weeks',
-			'herinnering_1e_mail_uiterlijk'			 => '-4 weeks',
-			'herinnering_2e_mail'					 => '-3 weeks',
-			'herinnering_2e_mail_uiterlijk'			 => '-2 weeks',
+			'herinnering_1e_mail'					 => '-4 weeks',
+			'herinnering_1e_mail_uiterlijk'			 => '-3 weeks',
+			'herinnering_2e_mail'					 => '-2 weeks',
+			'herinnering_2e_mail_uiterlijk'			 => '-1 weeks',
 			'suggesties_recent_verbergen'			 => '-2 months',
 			'suggesties_recent_filter'				 => '1',
 			'suggesties_recent_kwali_filter'		 => '0',
@@ -62,7 +62,7 @@ class Instellingen extends PersistenceModel {
 			'standaard_kwalificatie'				 => '0',
 			'standaard_aantal_corveers'				 => '1',
 			'standaard_vrijstelling_percentage'		 => '100',
-			'vrijstelling_percentage_max'			 => '200',
+			'vrijstelling_percentage_max'			 => '100',
 			'vrijstelling_percentage_min'			 => '0',
 			'weergave_link_ledennamen'				 => 'visitekaartje',
 			'weergave_ledennamen_beheer'			 => 'volledig',
@@ -95,7 +95,7 @@ class Instellingen extends PersistenceModel {
 <li>Betaald met machtiging = omcirkel "m" en vul bedrag in.</li>
 <li>Contant betaald = bedrag invullen.</li>
 <li>Schrijf duidelijk in het hokje hoeveel je in de helm hebt gegooid.</li>
-<li>Bevat derde kolom "ok"? Dan hebt u nog voldoende tegoed voor deze maaltijd.</li>
+<li>Bevat derde kolom "ok"? Dan heeft u nog voldoende tegoed voor deze maaltijd.</li>
 <li>Als u onvoldoende saldo hebt bij de MaalCie en u betaalt niet voor deze maaltijd dan krijgt u een boete van 20 cent, 1 euro of 2 euro, afhankelijk van hoe negatief uw saldo is!</li>
 </ul>'
 		)
