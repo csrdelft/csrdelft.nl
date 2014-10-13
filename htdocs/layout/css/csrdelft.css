@@ -356,8 +356,7 @@ div.msgnotify{
 }
 
 div.arrows{
-	position: absolute;
-	margin-top: -3px;
+	display: inline-block;
 	font-size: 14px;
 }
 

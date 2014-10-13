@@ -120,7 +120,7 @@ function forumBewerken(postId) {
 			bewerkForm += '<textarea name="forumBericht" id="forumBewerkBericht" class="tekst" rows="8"></textarea>';
 			bewerkForm += 'Reden van bewerking: <input type="text" name="reden" id="forumBewerkReden"/><br /><br />';
 			bewerkForm += '<a class="knop float-right" onclick="$(\'#ubbhulpverhaal\').toggle();" title="Opmaakhulp weergeven">Opmaak</a>';
-			bewerkForm += '<a class="knop float-right" onclick="vergrootTextarea(\'forumBewerkBericht\', 10)" title="Vergroot het invoerveld"><div class="arrows">&uarr;&darr;</div>&nbsp;&nbsp;&nbsp;&nbsp;</a>';
+			bewerkForm += '<a class="knop float-right" onclick="vergrootTextarea(\'forumBewerkBericht\', 10)" title="Vergroot het invoerveld"><div class="arrows">&uarr;&darr;</div></a>';
 			bewerkForm += '<input type="button" value="Opslaan" onclick="submitPost();" /> ' +
 					'<input type="button" value="Voorbeeld" onclick="ubbPreview(\'forumBewerkBericht\', \'bewerkPreview\');" /> ' +
 					'<input type="button" value="Annuleren" onclick="restorePost();" />';
