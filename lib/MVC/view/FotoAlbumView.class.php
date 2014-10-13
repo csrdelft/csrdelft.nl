@@ -125,17 +125,20 @@ class FotosDropzone extends DropzoneForm {
 
 class FotoUbbView extends SmartyTemplateView {
 
-	public function __construct(Foto $foto) {
+	private $groot;
+
+	public function __construct(Foto $foto, $groot = false) {
 		parent::__construct($foto);
+		$this->groot = $groot;
 	}
 
 	public function getHTML() {
 		$html = '<a href="' . $this->model->getURL() . '" title="Klik voor origineel formaat"';
-		if (LidInstellingen::get('forum', 'fotoWeergave') === 'boven bericht') {
+		if (!$this->groot AND LidInstellingen::get('forum', 'fotoWeergave') == 'boven bericht') {
 			$html .= ' class="hoverIntent"><div class="hoverIntentContent"><div class="ubb_img_loading" src="' . $this->model->getResizedURL() . '"></div></div';
 		}
 		$html .= '><div class="ubb_img_loading" src="';
-		if (LidInstellingen::get('forum', 'fotoWeergave') === 'in bericht') {
+		if (($this->groot AND LidInstellingen::get('forum', 'fotoWeergave') != 'nee') OR LidInstellingen::get('forum', 'fotoWeergave') == 'in bericht') {
 			$html .= $this->model->getResizedURL();
 		} else {
 			$html .= $this->model->getThumbURL();
