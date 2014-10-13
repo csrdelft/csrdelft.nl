@@ -45,10 +45,8 @@
 	</td>
 {if $maaltijd->getIsVerwijderd() or $maaltijd->getArchief() !== null}
 	{if $maaltijd->getIsGesloten()}
-	<td class="maaltijd-gesloten">Gesloten
-		<div class="float-right">
-			{icon get="lock" title="Laatst gesloten: "|cat:$maaltijd->getLaatstGesloten()}
-		</div>
+	<td class="maaltijd-gesloten">
+		Gesloten {icon get="lock" title="Laatst gesloten: "|cat:$maaltijd->getLaatstGesloten()}
 	{else}
 	<td class="maaltijd-open">Open
 	{/if}
