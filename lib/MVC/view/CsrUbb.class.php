@@ -117,7 +117,7 @@ class CsrUbb extends eamBBParser {
 	function ubb_foto($arguments = array()) {
 		require_once 'MVC/controller/FotoAlbumController.class.php';
 		$groot = false;
-		if (isset($arguments['foto']) AND $arguments['foto'] === 'groot') {
+		if (isset($arguments['formaat']) AND $arguments['formaat'] == 'groot') {
 			$groot = true;
 		}
 		$url = urldecode($this->parseArray(array('[/foto]'), array()));
