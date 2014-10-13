@@ -117,9 +117,9 @@ mijn_rooster.tpl	|	P.W.G. Brussee (brussee@live.nl)
 			</td>
 			<td style="width: 25px;">
 				<br />
-				<a class="knop" onclick="$('.scrollpane' + id).animate({
+				<a class="knop arrows" onclick="$('.scrollpane' + id).animate({
 						'height': '+=250'
-					}, 800);" title="Vergroot de lijst met suggesties"><div class="arrows">&uarr;&darr;</div></a>
+					}, 800);" title="Vergroot de lijst met suggesties">&uarr;&darr;</a>
 			</td>
 		</tr>
 	</table>

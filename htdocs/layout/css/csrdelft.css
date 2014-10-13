@@ -87,7 +87,9 @@ a.external{
 	padding-right: 14px;
 }
 a:hover { text-decoration: underline; }
-
+.arrows{
+	font-size: 14px;
+}
 th{ text-align: left; }
 td{ vertical-align: top; padding: 0; }
 
@@ -353,11 +355,6 @@ div.msgsuccess{
 div.msgnotify{
 	color: #DDAA00;
 	background: url(http://plaetjes.csrdelft.nl/famfamfam/bell.png) no-repeat;
-}
-
-div.arrows{
-	display: inline-block;
-	font-size: 14px;
 }
 
 /* ubb-hulp */

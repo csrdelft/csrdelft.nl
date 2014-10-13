@@ -11,7 +11,7 @@
 		<div id="bewerkPreview" class="preview"></div>
 		<textarea id="tekst" name="tekst" rows="12" class="tekst">{$mededeling->getTekst()|escape:'html'}</textarea><br />
 		<a id="voorbeeld" class="knop" onclick="return ubbPreview('tekst', 'bewerkPreview')">Voorbeeld</a>
-		<a id="vergroot" class="knop" onclick="vergrootTextarea('tekst', 10)" title="Vergroot het invoerveld"><div class="arrows">&uarr;&darr;</div></a>
+		<a id="vergroot" class="knop arrows" onclick="vergrootTextarea('tekst', 10)" title="Vergroot het invoerveld">&uarr;&darr;</a>
 		<a id="opmaakhulp" class="knop" onclick="$('#ubbhulpverhaal').toggle();" title="Opmaakhulp weergeven">Opmaak</a>
 	</div>
 

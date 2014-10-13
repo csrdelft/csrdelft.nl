@@ -185,10 +185,10 @@ class SavedQueryContent implements View {
 				}
 				$return .= '</tr>';
 			}
-			$return .= '</tbody></table><a class="knop clear-right" onclick="' . <<<JS
+			$return .= '</tbody></table><a class="knop clear-right arrows" onclick="' . <<<JS
 $('#{$id} tbody').animate({'max-height': '+=300'}, 800, function() {});
 JS;
-			$return .= '" title="Vergroot de lijst"><div class="arrows">&uarr;&darr;</div></a>';
+			$return .= '" title="Vergroot de lijst">&uarr;&darr;</a>';
 		} else {
 			//foutmelding in geval van geen resultaat, dus of geen query die bestaat, of niet
 			//voldoende rechten.

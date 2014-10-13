@@ -25,7 +25,7 @@
 			<textarea id="typeBeschrijving" name="beschrijving" style="width:444px;" rows="15">{$groepen->getBeschrijving()|escape:'html'}</textarea><br />
 			<label for="submit"></label><input type="submit" id="submit" value="Opslaan" /> <input type="button" value="Voorbeeld" onclick="return ubbPreview('typeBeschrijving', 'bewerkPreview')" /> <a href="/actueel/groepen/{$groepen->getNaam()}/" class="knop">Terug</a>
 			<a class="knop float-right" onclick="$('#ubbhulpverhaal').toggle();" title="Opmaakhulp weergeven">Opmaak</a>
-			<a class="knop float-right" onclick="vergrootTextarea('typeBeschrijving', 10)" title="Vergroot het invoerveld"><div class="arrows">&uarr;&darr;</div></a>
+			<a class="knop float-right arrows" onclick="vergrootTextarea('typeBeschrijving', 10)" title="Vergroot het invoerveld">&uarr;&darr;</a>
 			<hr />
 		</div>
 	</form>
