@@ -3,8 +3,6 @@
 require_once 'rubriek.class.php';
 require_once 'beschrijving.class.php';
 
-require_once 'MVC/view/Formulier.class.php';
-
 /**
  * boek.class.php	| 	Gerrit Uitslag
  *
