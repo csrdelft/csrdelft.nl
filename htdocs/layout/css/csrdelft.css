@@ -956,22 +956,13 @@ div.bewerkt{ font-size: 9px; color: #bbb; }
 div.bewerkt a{ color: #bbb; }
 div.bewerkt hr{ text-align: left; background-color: #bbb; }
 
-textarea.forumBericht{
+div.forumBericht, textarea.forumBericht, div.butn, input#titel{
 	height: 197px;
 	width: 574px;
 	display: block;
 }
-div.forumBericht{
-	max-width: 574px;
-}
-input#titel{
-	width: 574px;
-}
 input.forumEmail{
 	width: 250px;
-}
-div.butn{
-	width: 580px;
 }
 .forumdraadtitelbottom h1{
 	margin-top: 5px;

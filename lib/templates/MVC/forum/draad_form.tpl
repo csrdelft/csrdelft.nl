@@ -19,7 +19,7 @@
 	<div id="berichtPreview" class="preview forumBericht"></div>
 	<textarea name="forumBericht" id="forumBericht" class="forumBericht{if $deel->isOpenbaar()} extern{/if}" rows="12" origvalue="{$post_form_tekst}">{$post_form_tekst}</textarea>
 	<div class="butn">
-		<a class="knop float-right" onclick="$('#ubbhulpverhaal').toggle();" title="Opmaakhulp weergeven">Opmaak</a>
+		<a class="knop float-right" onclick="$('#ubbhulpverhaal').toggle();" title="Opmaakhulp weergeven">Opmaak</a>&nbsp;
 		<a class="knop float-right arrows" onclick="vergrootTextarea('forumBericht', 10)" title="Vergroot het invoerveld">&uarr;&darr;</a>
 		<input type="submit" name="submit" value="Opslaan" id="forumOpslaan" />
 		<input type="button" value="Voorbeeld" id="forumVoorbeeld" onclick="ubbPreview('forumBericht', 'berichtPreview');" />
