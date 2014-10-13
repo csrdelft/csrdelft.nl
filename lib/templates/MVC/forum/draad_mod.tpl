@@ -10,7 +10,7 @@
 							{icon get="cross"} draad verwijderen
 						{/if}
 					</a>
-					<a href="/forum/wijzigen/{$draad->draad_id}/prullenbak" class="knop" title="Bekijk de reacties die zijn verwijderd">{icon get="bin_closed"}</a>
+					&nbsp;<a href="/forum/onderwerp/{$draad->draad_id}/prullenbak" class="knop" title="Bekijk de reacties die zijn verwijderd">{icon get="bin_closed"}</a>
 					<br /><br />
 					<a href="/forum/wijzigen/{$draad->draad_id}/plakkerig" class="knop post ReloadPage" title="Verander plakkerigheid">
 						{icon get="note"} maak {if $draad->plakkerig}<span class="dikgedrukt">niet</span> {/if}plakkerig
