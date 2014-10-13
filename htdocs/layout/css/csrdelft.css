@@ -6,9 +6,6 @@ body, textarea, input[type="text"] {
 	color: #000000;
 	background-color: #ffffff;
 }
-.ui-widget, .ui-widget button {
-	font-family: Helvetica,"Helvetice Neue",Arial;
-}
 
 input, textarea, select{
 	padding: 2px;

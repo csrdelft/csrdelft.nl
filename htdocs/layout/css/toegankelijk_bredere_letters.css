@@ -6,6 +6,6 @@
     Author     : Paul Brussee
 */
 
-body, textarea, input[type="text"], .ui-widget, .ui-widget button {
+body, textarea, input[type="text"] {
 	font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
 }
