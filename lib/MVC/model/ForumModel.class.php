@@ -296,7 +296,10 @@ class ForumDradenGelezenModel extends PersistenceModel {
 	protected static $instance;
 
 	public function getWanneerGelezenDoorLid(ForumDraad $draad) {
-		return $this->retrieveByPrimaryKey(array($draad->draad_id, LoginModel::getUid()));
+		if (LoginModel::mag('P_LOGGED_IN')) {
+			return $this->retrieveByPrimaryKey(array($draad->draad_id, LoginModel::getUid()));
+		}
+		return false;
 	}
 
 	/**
