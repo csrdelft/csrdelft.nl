@@ -214,10 +214,13 @@ class ForumDraad extends PersistentEntity {
 	}
 
 	public function onGelezen() {
-		if ($this->getWanneerGelezen() AND strtotime($this->laatst_gewijzigd) > strtotime($this->wanneer_gelezen->datum_tijd)) {
-			return true;
+		if ($this->getWanneerGelezen()) {
+			if (strtotime($this->laatst_gewijzigd) > strtotime($this->wanneer_gelezen->datum_tijd)) {
+				return true;
+			}
+			return false;
 		}
-		return false;
+		return true;
 	}
 
 	private function setWanneerGelezen($gelezen) {
