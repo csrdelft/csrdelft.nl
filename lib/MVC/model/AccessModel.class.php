@@ -177,7 +177,7 @@ class AccessModel extends CachedPersistenceModel {
 		$this->roles['R_PUBCIE'] = $this->roles['R_MODERATOR'] | $p['P_ADMIN'] | $p['P_MAIL_SEND'] | $p['P_CORVEE_SCHED'] | $p['P_MAAL_SALDI'] | $p['P_FORUM_ADMIN'];
 
 		// save in cache
-		$this->setCached($key, $this->permissions, true);
+		$this->setCache($key, $this->permissions, true);
 		$this->setCache('roles', $this->roles, true);
 	}
 
