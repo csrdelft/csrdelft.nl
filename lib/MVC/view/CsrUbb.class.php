@@ -116,12 +116,13 @@ class CsrUbb extends eamBBParser {
 	 */
 	function ubb_foto($arguments = array()) {
 		require_once 'MVC/controller/FotoAlbumController.class.php';
-		$groot = false;
-		if (isset($arguments['formaat']) AND $arguments['formaat'] == 'groot') {
-			$groot = true;
-		}
 		$url = urldecode($this->parseArray(array('[/foto]'), array()));
 		$parts = explode('/', $url);
+		if (in_array('Posters', $parts)) {
+			$groot = true;
+		} else {
+			$groot = false;
+		}
 		$naam = str_replace('#', '', array_pop($parts)); // replace # (foolproof)
 		$path = PICS_PATH . 'fotoalbum' . implode('/', $parts);
 		$album = FotoAlbumModel::getFotoAlbum($path);
