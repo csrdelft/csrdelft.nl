@@ -161,7 +161,7 @@ select{
 	min-height: 22px;
 }
 
-.gegevens .regel{ min-height: 15px;}
+.gegevens .regel{ min-height: 15px; clear: left; }
 .regel label{	  width:75px;}
 
 
