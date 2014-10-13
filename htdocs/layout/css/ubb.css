@@ -91,7 +91,7 @@ a.maaltijd-afgemeld, span.maaltijd-afgemeld{
 
 .ubb_document{ width: 450px; padding: 4px 6px; display: block; text-align: left; }
 .ubb_document .size{ float: right; color: #777; }
-.ubb_document .icon{ float: left; padding-right: 5px; }
+.ubb_document .icon{ float: left; margin-right: 5px; }
 
 .ubb_boek{ padding: 4px 6px; display: block; text-align: left; text-decoration: none !important;}
 .ubb_boek .auteur { color: #777; margin-left:10px; }
