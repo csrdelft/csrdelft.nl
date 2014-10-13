@@ -87,9 +87,9 @@ class AccessModel extends CachedPersistenceModel {
 	}
 
 	/**
-	 * Hier staan de permissies die voor enkele onderdelen van de website nodig zijn.
-	 *
-	 * Ze worden zowel op de 'echte' website als in het beheergedeelte gebruikt.
+	 * Hier staan de 'vaste' permissies, die gegeven worden door de PubCie.
+	 * In tegenstelling tot de variabele permissies zoals lidmaatschap van een groep.
+	 * 
 	 * READ = Rechten om het onderdeel in te zien
 	 * POST = Rechten om iets toe te voegen
 	 * MOD  = Moderate rechten, dus verwijderen enzo
@@ -101,6 +101,15 @@ class AccessModel extends CachedPersistenceModel {
 	 *
 	 */
 	private function loadPermissions() {
+		// see if cached
+		$key = 'permissions-' . getlastmod();
+		if ($this->isCached($key, true) AND $this->isCached('roles', true)) {
+			$this->permissions = $this->getCached($key, true);
+			$this->roles = $this->getCached('roles', true);
+			return;
+		}
+
+		// build permissions
 		$this->permissions = array(
 			'P_PUBLIC'			 => $this->createPermStr(0, 0), // Iedereen op het Internet
 			'P_LOGGED_IN'		 => $this->createPermStr(1, 0), // Leden-menu, eigen profiel raadplegen
@@ -166,6 +175,10 @@ class AccessModel extends CachedPersistenceModel {
 		$this->roles['R_MODERATOR'] = $this->roles['R_LID'] | $p['P_LEDEN_MOD'] | $p['P_FORUM_MOD'] | $p['P_DOCS_MOD'] | $p['P_AGENDA_MOD'] | $p['P_NEWS_MOD'] | $p['P_BIEB_MOD'] | $p['P_MAAL_IK'] | $p['P_CORVEE_IK'] | $p['P_MAIL_COMPOSE'] | $p['P_ALBUM_DEL'];
 		$this->roles['R_BESTUUR'] = $this->roles['R_MODERATOR'] | $p['P_MAAL_MOD'] | $p['P_CORVEE_MOD'] | $p['P_MAIL_COMPOSE'] | $p['P_FORUM_BELANGRIJK'];
 		$this->roles['R_PUBCIE'] = $this->roles['R_MODERATOR'] | $p['P_ADMIN'] | $p['P_MAIL_SEND'] | $p['P_CORVEE_SCHED'] | $p['P_MAAL_SALDI'] | $p['P_FORUM_ADMIN'];
+
+		// save in cache
+		$this->setCached($key, $this->permissions, true);
+		$this->setCache('roles', $this->roles, true);
 	}
 
 	/**
