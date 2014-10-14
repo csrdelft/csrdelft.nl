@@ -44,120 +44,46 @@ function csr_js_out() {
 	if (!in_array($layout, $allowedlayouts)) {
 		$layout = $allowedlayouts[0];
 	}
-
-	// elke module bestaat uit een set scripts
-	$modules = array();
-
-	$activemodule = trim(preg_replace('/[^\w-]+/', '', $INPUT->str('m')));
-	if($activemodule == 'general') {
-		$modules[] = 'general';
-
-		// modules toevoegen via instellingen
-		if (LidInstellingen::get('layout', 'minion') == 'ja') {
-			$modules[] = 'minion';
-		}
-
-	} else {
-		// een niet-algemene module gevraagd
-		if ($activemodule) {
-			$modules[] = $activemodule;
-		}
-	}
-
+	// module
+	$selectedmodule = trim(preg_replace('/[^\w-]+/', '', $INPUT->str('m')));
 
 	// The generated script depends on some dynamic options
-	$cache = new cache('scripts' . $_SERVER['HTTP_HOST'] . $_SERVER['SERVER_PORT'] . $layout . implode('', $modules), '.js');
-	$cache->_event = 'JS_CACHE_USE';
+	list(/* $timestamp */, $cache_ok, $modules,	$files,	$cache,	$inicontent) = HtmlPage::checkCache($layout, $selectedmodule, 'js');
 
-//	// load minified version for some files
-//	$min = $conf['compress'] ? '.min' : '';
+//	$cache = new cache('scripts' . $key, '.js');
+//	//$cache->_event = 'JS_CACHE_USE';
+
+//	// load style.ini
+//	$styleini = js_csr_scriptini($layout);
 //
-//	// array of core files
-//	$files = array(
-//		DOKU_INC."lib/scripts/jquery/jquery$min.js",
-//		DOKU_INC.'lib/scripts/jquery/jquery.cookie.js',
-//		DOKU_INC."lib/scripts/jquery/jquery-ui$min.js",
-//		DOKU_INC."lib/scripts/jquery/jquery-migrate$min.js",
-//		DOKU_INC.'inc/lang/'.$conf['lang'].'/jquery.ui.datepicker.js',
-//		DOKU_INC."lib/scripts/fileuploader.js",
-//		DOKU_INC."lib/scripts/fileuploaderextended.js",
-//		DOKU_INC.'lib/scripts/helpers.js',
-//		DOKU_INC.'lib/scripts/delay.js',
-//	 	DOKU_INC.'lib/scripts/cookie.js',
-//		DOKU_INC.'lib/scripts/script.js',
-//		DOKU_INC.'lib/scripts/tw-sack.js',
-//		DOKU_INC.'lib/scripts/qsearch.js',
-//		DOKU_INC.'lib/scripts/tree.js',
-//		DOKU_INC.'lib/scripts/index.js',
-//		DOKU_INC.'lib/scripts/drag.js',
-//		DOKU_INC.'lib/scripts/textselection.js',
-//		DOKU_INC.'lib/scripts/toolbar.js',
-//		DOKU_INC.'lib/scripts/edit.js',
-//		DOKU_INC.'lib/scripts/editor.js',
-//		DOKU_INC.'lib/scripts/locktimer.js',
-//		DOKU_INC.'lib/scripts/linkwiz.js',
-//		DOKU_INC.'lib/scripts/media.js',
-//# deprecated                DOKU_INC.'lib/scripts/compatibility.js',
-//# disabled for FS#1958                DOKU_INC.'lib/scripts/hotkeys.js',
-//		DOKU_INC.'lib/scripts/behaviour.js',
-//		DOKU_INC.'lib/scripts/page.js',
-//		tpl_incdir().'script.js',
-//	);
-
-	// load style.ini
-	$styleini = js_csr_scriptini($layout);
-
-	// cache influencers
-	$cache_files = array();
-	$cache_files[] = HTDOCS_PATH . $layout . '/script.ini';
-	$cache_files[] = __FILE__;
-	$cache_files[] = __FILE__ . '/../../lib/defines.include.php';
-
-
-	$files = array();
-	foreach ($modules as $module) {
-		$files[$module] = array();
-
-		// collect scripts
-		if (isset($styleini['scripts'][$module])) {
-			$files[$module] = array_merge($files[$module], $styleini['scripts'][$module]);
-		}
-
-		$cache_files = array_merge($cache_files, array_keys($files[$module]));
-	}
-
-
-	// check cache age & handle conditional request
+//	// cache influencers
+//	$cache_files = array();
+//	$cache_files[] = HTDOCS_PATH . $layout . '/script.ini';
+//	$cache_files[] = __FILE__;
+//	$cache_files[] = LIB_PATH . 'defines.include.php';
+//
+//
+//	$files = array();
+//	foreach ($modules as $module) {
+//		$files[$module] = array();
+//
+//		// collect scripts
+//		if (isset($styleini['scripts'][$module])) {
+//			$files[$module] = array_merge($files[$module], $styleini['scripts'][$module]);
+//		}
+//
+//		$cache_files = array_merge($cache_files, array_keys($files[$module]));
+//	}
+//
+//
+//
+//	$cache_ok = $cache->useCache(array('files' => $cache_files));
+	// checked cache age & handle conditional request
 	// This may exit if a cache can be used
-	$cache_ok = $cache->useCache(array('files' => $cache_files));
 	http_cached($cache->cache, $cache_ok);
 
 	// start output buffering and build the script
 	ob_start();
-
-//	$json = new JSON();
-//	// add some global variables
-//	print "var DOKU_BASE   = '".DOKU_BASE."';";
-//	print "var DOKU_TPL    = '".tpl_basedir()."';";
-//	print "var DOKU_COOKIE_PARAM = " . $json->encode(
-//			array(
-//				'path' => empty($conf['cookiedir']) ? DOKU_REL : $conf['cookiedir'],
-//				'secure' => $conf['securecookie'] && is_ssl()
-//			)).";";
-//	// FIXME: Move those to JSINFO
-//	print "var DOKU_UHN    = ".((int) useHeading('navigation')).";";
-//	print "var DOKU_UHC    = ".((int) useHeading('content')).";";
-
-//	// load JS specific translations
-//	$lang['js']['plugins'] = js_pluginstrings();
-//	$templatestrings = js_templatestrings();
-//	if(!empty($templatestrings)) {
-//		$lang['js']['template'] = $templatestrings;
-//	}
-//	echo 'LANG = '.$json->encode($lang['js']).";\n";
-
-//	// load toolbar
-//	toolbar_JSdefines('toolbar');
 
 	// load files
 	foreach ($modules as $module) {
@@ -176,13 +102,6 @@ function csr_js_out() {
 		}
 
 	}
-
-//	// init stuff
-//	if($conf['locktime'] != 0){
-//		js_runonstart("dw_locktimer.init(".($conf['locktime'] - 60).",".$conf['usedraft'].")");
-//	}
-	// init hotkeys - must have been done after init of toolbar
-# disabled for FS#1958    js_runonstart('initializeHotkeys()');
 
 	// end output buffering and get contents
 	$js = ob_get_contents();

@@ -73,8 +73,8 @@ class CsrLayoutPage extends HtmlPage {
 //			$this->addScript($js . 'minion');
 //			$this->addStylesheet($css . 'minion');
 //		}
-		$this->addStylesheet('/tools/css.php?l=layout&m=general', true);
-		$this->addScript('/tools/js.php?l=layout&m=general', true);
+		$this->addStylesheet($this->getCompressedStyleUrl('layout', 'general'), true);
+		$this->addScript($this->getCompressedScriptUrl('layout', 'general'), true);
 
 	}
 
