@@ -182,7 +182,7 @@
   top: -73px;
   left: 11px;
   background: #FFF; /* Old browsers */
-  background: -webkit-gradient(linear,left bottom,right top,color-stop(0#minion .54, #FFF), color-stop(0#minion .91, #AAA));
+  background: -webkit-gradient(linear,left bottom,right top,color-stop(.54, #FFF), color-stop(.91, #AAA));
   background: -webkit-linear-gradient(left bottom,right top, #FFF 54%,#AAA 91%);
   background:    -moz-linear-gradient(left bottom,right top, #FFF 54%,#AAA 91%);
   background:     -ms-linear-gradient(left bottom,right top, #FFF 54%,#AAA 91%);
@@ -253,7 +253,7 @@
   border: 0;
   overflow: hidden;
   background: #222;
-  background: -webkit-gradient(linear, 0 0, 0 100%, from(#222), color-stop(0#minion .79, #bd736a));
+  background: -webkit-gradient(linear, 0 0, 0 100%, from(#222), color-stop(.79, #bd736a));
   background: -webkit-linear-gradient(#222, #bd736a 99%);
   background:    -moz-linear-gradient(#222, #bd736a 99%);
   background:      -o-linear-gradient(#222, #bd736a 99%);
@@ -877,7 +877,7 @@
   0%, 100% {
     background:#fcda6d;
     border: none;
-    border-bottom: 1ox solid #222;
+    border-bottom: 1px solid #222;
     box-shadow: 0 0 0 #fff;
   }
   15%, 95% {
