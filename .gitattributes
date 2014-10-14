@@ -500,8 +500,8 @@ htdocs/wiki/conf/lang/nl/read.txt -text
 htdocs/wiki/conf/lang/nl/revisions.txt -text
 htdocs/wiki/conf/lang/nl/searchpage.txt -text
 htdocs/wiki/conf/license.php -text
+htdocs/wiki/conf/local.php.csrsample -text
 htdocs/wiki/conf/local.php.dist -text
-htdocs/wiki/conf/local.php.sample -text
 htdocs/wiki/conf/local.protected.php.example -text
 htdocs/wiki/conf/mediameta.php -text
 htdocs/wiki/conf/mime.conf -text
