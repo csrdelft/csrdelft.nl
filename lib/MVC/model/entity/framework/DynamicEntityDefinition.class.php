@@ -25,7 +25,7 @@ class DynamicEntityDefinition extends PersistentEntity {
 	 * Table that stores the persistent entity objects
 	 * @var string
 	 */
-	public $table_name;
+	public $table;
 	/**
 	 * Database table columns
 	 * @var array
@@ -33,7 +33,7 @@ class DynamicEntityDefinition extends PersistentEntity {
 	protected static $persistent_attributes = array(
 		'entity_name'	 => array(T::String),
 		'parent_entity'	 => array(T::String),
-		'table_name'	 => array(T::String),
+		'table'			 => array(T::String),
 	);
 	/**
 	 * Database primary key

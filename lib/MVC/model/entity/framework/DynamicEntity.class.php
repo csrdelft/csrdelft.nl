@@ -1,5 +1,7 @@
 <?php
 
+require_once 'MVC/model/entity/framework/PersistentEntity.abstract.php';
+
 /**
  * DynamicEntity.class.php
  * 
@@ -11,17 +13,24 @@
 class DynamicEntity extends PersistentEntity {
 
 	/**
+	 * The definition of this entity
+	 * @var DynamicEntityDefinition
+	 */
+	public static $definition;
+
+	/**
 	 * Static constructor is called (by inheritance) first and only from PersistenceModel.
 	 */
 	public static function __constructStatic() {
-		foreach (DatabaseAdmin::instance()->sqlDescribeTable(static::getTableName()) as $attribute) {
-			static::$persistent_attributes[] = $this->translatePersistentAttribute($attribute);
+		$orm = self::$definition->parent_entity;
+		$orm::__constructStatic();
+		self::$table_name = self::$definition->table;
+		foreach (DatabaseAdmin::instance()->sqlDescribeTable(self::getTableName()) as $attribute) {
+			self::$persistent_attributes[] = $this->translatePersistentAttribute($attribute);
 			if ($attribute->key === 'PRI') {
-				static::$primary_key[] = $attribute->field;
+				self::$primary_key[] = $attribute->field;
 			}
 		}
-		static::$table_name = ''; // TODO weet je pas on runtime
-		// TODO: inheritance
 	}
 
 	/**

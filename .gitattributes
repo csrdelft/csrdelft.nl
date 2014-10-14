@@ -3430,6 +3430,7 @@ lib/MVC/model/entity/maalcie/CorveeKwalificatie.class.php -text
 lib/MVC/model/framework/CachedPersistenceModel.abstract.php -text
 lib/MVC/model/framework/Database.singleton.php -text
 lib/MVC/model/framework/DatabaseAdmin.singleton.php -text
+lib/MVC/model/framework/DynamicPersistenceModel.class.php -text
 lib/MVC/model/framework/Persistence.interface.php -text
 lib/MVC/model/framework/PersistenceModel.abstract.php -text
 lib/MVC/model/maalcie/FunctiesModel.class.php -text
