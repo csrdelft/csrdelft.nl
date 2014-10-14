@@ -223,9 +223,9 @@ div.li a.indexmenu_idx {
 /*
  * Clean up 'dokuwiki' template
  */
-.tpl_dokuwiki #dokuwiki__usertools .user {
-    display: none;
-}
-.tpl_dokuwiki #dokuwiki__usertools .action.logout {
-    display: none;
-}
+/*.tpl_dokuwiki #dokuwiki__usertools .user {*/
+    /*display: none;*/
+/*}*/
+/*.tpl_dokuwiki #dokuwiki__usertools .action.logout {*/
+    /*display: none;*/
+/*}*/
