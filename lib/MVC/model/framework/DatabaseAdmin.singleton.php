@@ -58,22 +58,6 @@ class DatabaseAdmin extends Database {
 	}
 
 	/**
-	 * Get table attributes.
-	 * 
-	 * @param string $name
-	 * @return PDOStatement
-	 */
-	public static function sqlDescribeTable($name) {
-		$sql = 'DESCRIBE ' . $name;
-		$query = self::instance()->prepare($sql);
-		self::instance()->setAttribute(PDO::ATTR_CASE, PDO::CASE_LOWER); // lowercase attribute properties
-		$query->execute();
-		self::instance()->setAttribute(PDO::ATTR_CASE, PDO::CASE_NATURAL); // reset
-		$query->setFetchMode(PDO::FETCH_CLASS, 'PersistentAttribute');
-		return $query;
-	}
-
-	/**
 	 * Backup table structure and data.
 	 * 
 	 * @param string $name
@@ -90,7 +74,7 @@ class DatabaseAdmin extends Database {
 	/**
 	 * Get all tables.
 	 * 
-	 * @return string SQL query
+	 * @return PDOStatement
 	 */
 	public static function sqlShowTables() {
 		$sql = 'SHOW TABLES';
@@ -100,7 +84,23 @@ class DatabaseAdmin extends Database {
 	}
 
 	/**
-	 * Get create table query.
+	 * Get table attributes.
+	 * 
+	 * @param string $name
+	 * @return PDOStatement
+	 */
+	public static function sqlDescribeTable($name) {
+		$sql = 'DESCRIBE ' . $name;
+		$query = self::instance()->prepare($sql);
+		self::instance()->setAttribute(PDO::ATTR_CASE, PDO::CASE_LOWER); // lowercase attribute properties
+		$query->execute();
+		self::instance()->setAttribute(PDO::ATTR_CASE, PDO::CASE_NATURAL); // reset
+		$query->setFetchMode(PDO::FETCH_CLASS, 'PersistentAttribute');
+		return $query;
+	}
+
+	/**
+	 * Get query to (re-)create existing table.
 	 * 
 	 * @param string $name
 	 * @return string SQL query
@@ -112,14 +112,6 @@ class DatabaseAdmin extends Database {
 		return $query->fetchColumn(1);
 	}
 
-	/**
-	 * Create table and return SQL.
-	 * 
-	 * @param string $name
-	 * @param array $attributes
-	 * @param array $primary_key
-	 * @return string SQL query
-	 */
 	public static function sqlCreateTable($name, array $attributes, array $primary_key) {
 		$sql = 'CREATE TABLE ' . $name . ' (';
 		foreach ($attributes as $name => $attribute) {
@@ -133,6 +125,15 @@ class DatabaseAdmin extends Database {
 		$sql .= ') ENGINE=InnoDB DEFAULT CHARSET=utf8 auto_increment=1';
 		$query = self::instance()->prepare($sql);
 		if (DB_MODIFY) {
+			$query->execute();
+		}
+		self::$queries[] = $query->queryString;
+	}
+
+	public static function sqlDropTable($name) {
+		$sql = 'DROP TABLE ' . $name;
+		$query = self::instance()->prepare($sql);
+		if (DB_MODIFY AND DB_DROP === true) {
 			$query->execute();
 		}
 		self::$queries[] = $query->queryString;
