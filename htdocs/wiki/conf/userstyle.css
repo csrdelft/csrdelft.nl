@@ -219,3 +219,13 @@ div.li a.indexmenu_idx {
     border: solid __border__;
     border-width: 0 0 0 .25em;
 }
+
+/*
+ * Clean up 'dokuwiki' template
+ */
+.tpl_dokuwiki #dokuwiki__usertools .user {
+    display: none;
+}
+.tpl_dokuwiki #dokuwiki__usertools .action.logout {
+    display: none;
+}

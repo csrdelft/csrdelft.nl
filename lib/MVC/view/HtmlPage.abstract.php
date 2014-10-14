@@ -133,8 +133,8 @@ abstract class HtmlPage implements View {
 	 */
 	public static function checkCache($layout, $selectedmodule, $extension) {
 
+		//als deze functie niet in wiki context wordt gedraaid, zijn enkele settings en includes nodig
 		if (!defined('DOKU_INC')) {
-			//als deze functie niet in wiki context wordt gedraaid, zijn enkele settings en includes nodig
 			define('DOKU_INC', HTDOCS_PATH . 'wiki/');
 
 			global $conf;
