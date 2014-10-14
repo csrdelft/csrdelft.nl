@@ -203,7 +203,11 @@ function css_parseless($css) {
             'If you recently installed a new plugin or template it '.
             'might be broken and you should try disabling it again. ['.$msg.']';
 
-        echo ".dokuwiki:before {
+		//geef less/css parse-fouten duidelijk weer.
+		global $attachcsswarningbefore;
+		if(!isset($attachcsswarningbefore)) $attachcsswarningbefore = '.dokuwiki';
+
+        echo "$attachcsswarningbefore:before {
             content: '$error';
             background-color: red;
             display: block;

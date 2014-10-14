@@ -18,6 +18,28 @@ $conf['allowdebug'] = 0;
 $conf['cachedir'] = DATA_PATH . 'compressorcache';
 $conf['cachetime'] = 100 * 60 * 60 * 24; // -1, 0, ..
 
+// foutmeldingen van de css/less-parser voor de header-tag plakken
+$attachcsswarningbefore= 'header';
+/**
+ *
+ * TODO: na wiki-update dit terugzetten in: wiki/lib/exe/css.php op ongeveer lijn 206
+ *
+global $attachcsswarningbefore;
+if(!isset($attachcsswarningbefore)) $attachcsswarningbefore = '.dokuwiki';
+
+echo "$attachcsswarningbefore:before {
+            content: '$error';
+            background-color: red;
+            display: block;
+            background-color: #fcc;
+            border-color: #ebb;
+            color: #000;
+            padding: 0.5em;
+        }";
+ *
+ *
+ */
+
 
 //generate css file
 header('Content-Type: text/css; charset=utf-8');
