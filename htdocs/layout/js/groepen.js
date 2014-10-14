@@ -20,7 +20,7 @@ function init_groepen() {
 		$(this).children('input,select').each(function(index) {
 			values.push($(this).val());
 		});
-		var data = {'functie[]': values}
+		var data = {'functie[]': values};
 		//update span
 		$(this).children('span').html(values.join(' - '));
 

@@ -16,7 +16,7 @@ require_once(DOKU_INC . 'lib/exe/js.php');
 
 
 // overrule sommige instellingen, zie voor uitleg op https://www.dokuwiki.org/config
-$conf['compress'] = 0;//DEBUG ? 0 : 1; //stripping of whitespace and comments
+$conf['compress'] = DEBUG ? 0 : 1; //stripping of whitespace and comments
 $conf['allowdebug'] = 0;
 $conf['cachedir'] = DATA_PATH . 'compressorcache';
 $conf['cachetime'] = 100*60*60*24; // -1, 0, ..
