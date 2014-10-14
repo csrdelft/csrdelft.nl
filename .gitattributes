@@ -3397,6 +3397,8 @@ lib/MVC/model/entity/Map.class.php -text
 lib/MVC/model/entity/Mededeling.class.php -text
 lib/MVC/model/entity/MenuItem.class.php -text
 lib/MVC/model/entity/Verticale.class.php -text
+lib/MVC/model/entity/framework/DynamicEntity.class.php -text
+lib/MVC/model/entity/framework/DynamicEntityDefinition.class.php -text
 lib/MVC/model/entity/framework/PersistentAttribute.class.php -text
 lib/MVC/model/entity/framework/PersistentEntity.abstract.php -text
 lib/MVC/model/entity/framework/PersistentEnum.interface.php -text
