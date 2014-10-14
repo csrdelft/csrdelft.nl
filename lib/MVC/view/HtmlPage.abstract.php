@@ -36,6 +36,7 @@ abstract class HtmlPage implements View {
 		$this->titel = $titel;
 	}
 
+
 	function getModel() {
 		return $this->body;
 	}
@@ -145,7 +146,7 @@ abstract class HtmlPage implements View {
 			$conf['allowdebug'] = 0;
 			$conf['cachedir'] = DATA_PATH . 'compressorcache';
 			//$conf['compress'] = DEBUG ? 0 : 1; //stripping of whitespace and comments
-			$conf['cachetime'] = 100*60*60*24; // -1, 0, ..
+			$conf['cachetime'] = 100 * 60 * 60 * 24; // -1, 0, ..
 			$conf['cssdatauri'] = 0; //filesize in bytes. Embed images below the thresshold in css. (Bad supported by IE < 8)
 
 			require_once HTDOCS_PATH . 'wiki/inc/cache.php';
@@ -167,15 +168,68 @@ abstract class HtmlPage implements View {
 			$layout = $allowedlayouts[0];
 		}
 
-		// elke module bestaat uit een set css-bestanden
+		// bepaal de benodigde modules, afhankelijk van instellingen
+		$modules = self::getModules($selectedmodule, $extension);
+
+		// initieer een cache
+		$key = ($extension == 'js' ? 'scripts' : 'styles') . $_SERVER['HTTP_HOST'] . $_SERVER['SERVER_PORT'] . $layout . implode('', $modules);
+		$cache = new cache($key, '.' . $extension);
+
+		// load style.ini/script.ini
+		$inicontent = HtmlPage::ini_parser($layout, $extension);
+
+		// cache influencers
+		$cache_files = array();
+		$cache_files[] = HTDOCS_PATH . $layout . '/' . ($extension == 'js' ? 'script' : 'style') . '.ini';
+		$cache_files[] = HTDOCS_PATH . 'tools/' . $extension . '.php';
+		$cache_files[] = LIB_PATH . 'defines.include.php';
+
+		// Array of needed files and their web locations, the latter ones
+		// are needed to fix relative paths in the stylesheets
+		$files = array();
+		foreach ($modules as $module) {
+			$files[$module] = array();
+
+			// read files
+			if (isset($inicontent['files'][$module])) {
+				$files[$module] = array_merge($files[$module], $inicontent['files'][$module]);
+			}
+
+			$cache_files = array_merge($cache_files, array_keys($files[$module]));
+		}
+
+		// check cache age
+		// This is used for deciding if the cache can be used
+		$cache_ok = $cache->useCache(array('files' => $cache_files));
+		$timestamp = @filemtime($cache->cache);
+
+		return array(
+			$timestamp,
+			$cache_ok,
+			$modules,
+			$files,
+			$cache,
+			$inicontent['replacements']
+		);
+	}
+
+
+	/**
+	 * Geeft een array met gevraagde modules, afhankelijk van lidinstellingen
+	 * [elke module bestaat uit een set css- of js-bestanden]
+	 *
+	 * @param $selectedmodule
+	 * @param $extension
+	 * @return array
+	 */
+	public static function getModules($selectedmodule, $extension) {
 		$modules = array();
 
-		$selectedmodule = trim(preg_replace('/[^\w-]+/', '', $selectedmodule));
 		if ($selectedmodule == 'general') {
 			// de algemene module gevraagd, ook worden modules gekoppeld aan instellingen opgezocht
 			$modules[] = 'general';
 
-			if($extension == 'css') {
+			if ($extension == 'css') {
 				//voeg modules toe afhankelijk van instelling
 				$modules[] = LidInstellingen::get('layout', 'opmaak');
 				if (LidInstellingen::get('layout', 'toegankelijk') == 'bredere letters') {
@@ -192,99 +246,18 @@ abstract class HtmlPage implements View {
 
 			if (LidInstellingen::get('layout', 'minion') == 'ja') {
 				$modules[] = 'minion';
+				return $modules;
 			}
+			return $modules;
 
 		} else {
 			// een niet-algemene module gevraagd
 			if ($selectedmodule) {
 				$modules[] = $selectedmodule;
+				return $modules;
 			}
+			return $modules;
 		}
-
-		$key = ($extension == 'js' ? 'scripts' : 'styles') . $_SERVER['HTTP_HOST'] . $_SERVER['SERVER_PORT'] . $layout . implode('', $modules);
-		$cache = new cache($key, '.' . $extension);
-
-		// load style.ini/script.ini
-		if($extension == 'js') {
-			$inicontent = HtmlPage::js_csr_scriptini($layout);
-			$section = 'scripts';
-		} else {
-			$inicontent = HtmlPage::css_csr_styleini($layout);
-			$section = 'stylesheets';
-		}
-
-
-		// cache influencers
-		$cache_files = array();
-		$cache_files[] = HTDOCS_PATH . $layout . '/'.($extension == 'js' ? 'script' : 'style') . '.ini';
-		$cache_files[] = HTDOCS_PATH . 'tools/' . $extension . '.php';
-		$cache_files[] = LIB_PATH . 'defines.include.php';
-
-		// Array of needed files and their web locations, the latter ones
-		// are needed to fix relative paths in the stylesheets
-		$files = array();
-		foreach ($modules as $module) {
-			$files[$module] = array();
-
-			// read files
-			if (isset($inicontent[$section][$module])) {
-				$files[$module] = array_merge($files[$module], $inicontent[$section][$module]);
-			}
-
-			$cache_files = array_merge($cache_files, array_keys($files[$module]));
-		}
-
-		// check cache age & handle conditional request
-		// This may exit if a cache can be used
-		$cache_ok = $cache->useCache(array('files' => $cache_files));
-		$timestamp = @filemtime($cache->cache);
-
-		return array(
-			$timestamp,
-			$cache_ok,
-			$modules,
-			$files,
-			$cache,
-			$inicontent
-		);
-	}
-
-	/**
-	 * Load script ini contents
-	 *
-	 * @author Andreas Gohr <andi@splitbrain.org>
-	 * @author Gerrit Uitslag <klapinklapin@gmail.com>
-	 *
-	 * @param string $layout the used layout
-	 * @return array with keys 'scripts'
-	 */
-	static function js_csr_scriptini($layout) {
-		$scripts = array(); // mode, file => base
-
-		// load layout's script.ini
-		$incbase = HTDOCS_PATH;
-		$webbase = CSR_ROOT;
-		$ini = $incbase . $layout . '/script.ini';
-		if (file_exists($ini)) {
-			$data = parse_ini_file($ini, true);
-
-			// stylesheets
-			if (is_array($data['scripts'])) foreach ($data['scripts'] as $module => $files) {
-				foreach($files as $file) {
-					if(DEBUG && substr($file, -7) == '.min.js') {
-						$uncompressedfile = substr_replace($file, '', -7, 4);
-						if(file_exists($incbase . $uncompressedfile)) {
-							$file = $uncompressedfile;
-						}
-					}
-					$scripts[$module][$incbase . $file] = $webbase;
-				}
-			}
-		}
-
-		return array(
-			'scripts' => $scripts,
-		);
 	}
 
 	/**
@@ -294,29 +267,43 @@ abstract class HtmlPage implements View {
 	 * @author Gerrit Uitslag <klapinklapin@gmail.com>
 	 *
 	 * @param string $layout the used layout
+	 * @param string $extension 'js' or 'css'
 	 * @return array with keys 'stylesheets' and 'replacements'
 	 */
-	static function  css_csr_styleini($layout) {
-		$stylesheets = array(); // mode, file => base
+	static function  ini_parser($layout, $extension) {
+		if ($extension == 'js') {
+			$ininame = 'script';
+			$sectionname = 'scripts';
+		} else {
+			$ininame = 'style';
+			$sectionname = 'stylesheets';
+		}
+
+		$includes = array(); // mode, file => base
 		$replacements = array(); // placeholder => value
 
-		// load template's style.ini
+		// load style.ini/script.ini
 		$incbase = HTDOCS_PATH;
 		$webbase = CSR_ROOT;
-		$ini = $incbase . $layout . '/style.ini';
+		$ini = $incbase . $layout . '/' . $ininame . '.ini';
 		if (file_exists($ini)) {
 			$data = parse_ini_file($ini, true);
 
 			// stylesheets
-			if (is_array($data['stylesheets'])) foreach ($data['stylesheets'] as $module => $files) {
+			if (is_array($data[$sectionname])) foreach ($data[$sectionname] as $module => $files) {
 				foreach ($files as $file) {
-					if(DEBUG && substr($file, -8) == '.min.css') {
-						$uncompressedfile = substr_replace($file, '', -8, 4);
-						if(file_exists($incbase . $uncompressedfile)) {
+
+					//in DEBUG select the non-minified file, if available
+					$minext = '.min.' . $extension;
+					$length_mintex = strlen($minext);
+					if (DEBUG && substr($file, -$length_mintex) == $minext) {
+						$uncompressedfile = substr_replace($file, '', -$length_mintex, 4);
+						if (file_exists($incbase . $uncompressedfile)) {
 							$file = $uncompressedfile;
 						}
 					}
-					$stylesheets[$module][$incbase . $file] = $webbase;
+
+					$includes[$module][$incbase . $file] = $webbase;
 				}
 			}
 
@@ -327,7 +314,7 @@ abstract class HtmlPage implements View {
 		}
 
 		return array(
-			'stylesheets' => $stylesheets,
+			'files' => $includes,
 			'replacements' => $replacements
 		);
 	}

@@ -48,37 +48,9 @@ function csr_js_out() {
 	$selectedmodule = trim(preg_replace('/[^\w-]+/', '', $INPUT->str('m')));
 
 	// The generated script depends on some dynamic options
-	list(/* $timestamp */, $cache_ok, $modules,	$files,	$cache,	$inicontent) = HtmlPage::checkCache($layout, $selectedmodule, 'js');
+	list(/* $timestamp */, $cache_ok, $modules,	$files,	$cache,	/* $replacements */) = HtmlPage::checkCache($layout, $selectedmodule, 'js');
 
-//	$cache = new cache('scripts' . $key, '.js');
-//	//$cache->_event = 'JS_CACHE_USE';
-
-//	// load style.ini
-//	$styleini = js_csr_scriptini($layout);
-//
-//	// cache influencers
-//	$cache_files = array();
-//	$cache_files[] = HTDOCS_PATH . $layout . '/script.ini';
-//	$cache_files[] = __FILE__;
-//	$cache_files[] = LIB_PATH . 'defines.include.php';
-//
-//
-//	$files = array();
-//	foreach ($modules as $module) {
-//		$files[$module] = array();
-//
-//		// collect scripts
-//		if (isset($styleini['scripts'][$module])) {
-//			$files[$module] = array_merge($files[$module], $styleini['scripts'][$module]);
-//		}
-//
-//		$cache_files = array_merge($cache_files, array_keys($files[$module]));
-//	}
-//
-//
-//
-//	$cache_ok = $cache->useCache(array('files' => $cache_files));
-	// checked cache age & handle conditional request
+	// handle conditional request, based on cache state
 	// This may exit if a cache can be used
 	http_cached($cache->cache, $cache_ok);
 

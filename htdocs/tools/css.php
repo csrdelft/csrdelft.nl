@@ -67,71 +67,10 @@ function csr_css_out() {
 	$selectedmodule = trim(preg_replace('/[^\w-]+/', '', $INPUT->str('m')));
 
 	// The generated script depends on some dynamic options
-	list(/* $timestamp */, $cache_ok, $modules,	$files,	$cache,	$inicontent) = HtmlPage::checkCache($layout, $selectedmodule, 'css');
+	list(/* $timestamp */, $cache_ok, $modules,	$files,	$cache,	$replacements) = HtmlPage::checkCache($layout, $selectedmodule, 'css');
 
-
-//	// elke module bestaat uit een set css-bestanden
-//	$modules = array();
-//
-//	$selectedmodule = trim(preg_replace('/[^\w-]+/', '', $INPUT->str('m')));
-//	if ($selectedmodule == 'general') {
-//		$modules[] = 'general';
-//
-//		//voeg modules toe afhankelijk van instelling
-//		$modules[] = LidInstellingen::get('layout', 'opmaak');
-//		if (LidInstellingen::get('layout', 'toegankelijk') == 'bredere letters') {
-//			$modules[] = 'bredeletters';
-//		}
-//		if (LidInstellingen::get('layout', 'sneeuw') != 'nee') {
-//			if (LidInstellingen::get('layout', 'sneeuw') == 'ja') {
-//				$modules[] = 'snowanim';
-//			} else {
-//				$modules[] = 'snow';
-//			}
-//		}
-//		if (LidInstellingen::get('layout', 'minion') == 'ja') {
-//			$modules[] = 'minion';
-//		}
-//
-//	} else {
-//		// een niet-algemene module gevraagd
-//		if ($selectedmodule) {
-//			$modules[] = $selectedmodule;
-//		}
-//	}
-//
-//	// The generated script depends on some dynamic options
-//	$key = ($js ? 'scripts' : 'styles') . $_SERVER['HTTP_HOST'] . $_SERVER['SERVER_PORT'] . $layout . implode('', $modules);
-//	$cache = new cache($key, '.css');
-//
-//	// load style.ini
-//	$inicontent = css_csr_styleini($layout);
-//
-//	// cache influencers
-//	$cache_files = array();
-//	$cache_files[] = HTDOCS_PATH . $layout . '/style.ini';
-//	$cache_files[] = __FILE__;
-//	$cache_files[] = LIB_PATH . 'defines.include.php';
-//
-////	print_r( LIB_PATH . 'defines.include.php');echo "\n"; print_r(filemtime( LIB_PATH . 'defines.include.php'));
-//
-//	// Array of needed files and their web locations, the latter ones  m
-//	// are needed to fix relative paths in the stylesheets
-//	$files = array();
-//	foreach ($modules as $module) {
-//		$files[$module] = array();
-//
-//		// load styles
-//		if (isset($inicontent['stylesheets'][$module])) {
-//			$files[$module] = array_merge($files[$module], $inicontent['stylesheets'][$module]);
-//		}
-//
-//		$cache_files = array_merge($cache_files, array_keys($files[$module]));
-//	}
-//
-//	// check cache age & handle conditional request
-//	// This may exit if a cache can be used
-//	$cache_ok = $cache->useCache(array('files' => $cache_files));
+	// handle conditional request, based on cache state
+	// This may exit if a cache can be used
 	http_cached($cache->cache, $cache_ok);
 
 	// start output buffering
@@ -158,7 +97,7 @@ function csr_css_out() {
 	stripsourcemaps($css);
 
 	// apply style replacements
-	$css = css_applystyle($css, $inicontent['replacements']);
+	$css = css_applystyle($css, $replacements);
 
 	// parse less
 	$css = css_parseless($css);
