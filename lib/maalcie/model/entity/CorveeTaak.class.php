@@ -309,9 +309,9 @@ class CorveeTaak implements Agendeerbaar {
 
 	public function getTitel() {
 		if ($this->getUid()) {
-			return 'Corvee ' . Lid::naamLink($this->getUid(), 'civitas', 'plain');
+			return $this->getCorveeFunctie()->naam . ' ' . Lid::naamLink($this->getUid(), 'civitas', 'plain');
 		}
-		return 'Corvee ' . $this->getCorveeFunctie()->naam;
+		return 'Corvee vacature (' . $this->getCorveeFunctie()->naam . ')';
 	}
 
 	public function getBeschrijving() {
