@@ -51,6 +51,7 @@
 	list-style:none;
 	float:left;
 	position:relative;
+	padding:4px;
 }
 .markItUpHeader ul li:hover > ul{
 	display:block;
@@ -82,7 +83,6 @@
 	width:1px;
 	height:16px;
 	overflow:hidden;
-	background-color:#CCC;
 }
 .markItUpHeader ul ul .markItUpSeparator {
 	width:auto; height:1px;

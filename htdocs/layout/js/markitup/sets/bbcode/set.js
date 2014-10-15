@@ -16,10 +16,10 @@ mySettings = {
 		{name: 'Cursief', key: 'I', openWith: '[i]', closeWith: '[/i]'},
 		{name: 'Onderstreept', key: 'U', openWith: '[u]', closeWith: '[/u]'},
 		{name: 'Doorgestreept', key: 'S', openWith: '[s]', closeWith: '[/s]'},
-		{separator: '---------------'},
+		{separator: ' '},
 		{name: 'Afbeelding', replaceWith: '[img][![Url]!][/img]'},
 		{name: 'Link', key: 'L', openWith: '[url=[![Url]!]]', closeWith: '[/url]', placeHolder: 'Link tekst'},
-		{separator: '---------------'},
+		{separator: ' '},
 		/*{name: 'Grootte', key: 'G', openWith: '[size=[![Text size]!]]', closeWith: '[/size]',
 			dropMenu: [
 				{name: 'Groot', openWith: '[size=200]', closeWith: '[/size]'},
@@ -33,7 +33,7 @@ mySettings = {
 		{separator: '---------------'},*/
 		{name: 'Citaat', key: 'Q', openWith: '[citaat=Naam_of_lidnummer]', closeWith: '[/citaat]'},
 		{name: 'Code', openWith: '[code]', closeWith: '[/code]'},
-		{separator: '---------------'},
+		{separator: ' '},
 		{name: 'Opmaak wissen', className: "clean", replaceWith: function (markitup) {
 				return markitup.selection.replace(/\[(.*?)\]/g, "")
 			}}/*,
