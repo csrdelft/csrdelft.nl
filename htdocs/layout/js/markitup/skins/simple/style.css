@@ -19,12 +19,11 @@
 	font:11px Verdana, Arial, Helvetica, sans-serif;
 }
 .markItUpEditor {
-	font:12px 'Courier New', Courier, monospace;
+	font-size:12px;
 	padding:5px;
 	width:690px;
 	height:320px;
 	clear:both;
-	line-height:18px;
 	overflow:auto;
 }
 .markItUpPreviewFrame	{
