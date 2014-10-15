@@ -11,16 +11,6 @@
 class DynamicEntityDefinition {
 
 	/**
-	 * Primary key
-	 * @var string
-	 */
-	public $entity_name;
-	/**
-	 * Superclass (can be any subclass of PersistentEntity)
-	 * @var string
-	 */
-	public $parent_entity;
-	/**
 	 * Non-static attribute of PersistentEntity
 	 * @var array
 	 */

@@ -39,18 +39,6 @@ class DynamicEntity extends PersistentEntity {
 		return $this->definition->primary_key;
 	}
 
-	public function __call($name, $arguments) {
-		$class = $this->definition->entity_name;
-		if (!class_exists($class)) {
-			$class = $this->definition->parent_entity;
-		}
-		if (class_exists($class)) {
-			if (method_exists($class, $name)) {
-				return call_user_func_array(array($class, $name), $arguments);
-			}
-		}
-	}
-
 	public function __set($attribute, $value) {
 		$this->$attribute = $value;
 	}

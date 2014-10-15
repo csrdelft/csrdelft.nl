@@ -20,8 +20,8 @@ class DynamicEntityModel extends PersistenceModel {
 
 	protected static $instance;
 
-	public static function makeModel($table_name, $entity_name = null, $parent_entity = null) {
-		return new DynamicEntityModel($table_name, $entity_name, $parent_entity);
+	public static function makeModel($table_name) {
+		return new DynamicEntityModel($table_name);
 	}
 
 	/**
@@ -34,14 +34,10 @@ class DynamicEntityModel extends PersistenceModel {
 	 * Override the constructor of PersistentModel and create DynamicEntityDefinition from table structure.
 	 * 
 	 * @param string $table_name
-	 * @param string $entity_name
-	 * @param string $parent_entity
 	 */
-	protected function __construct($table_name, $entity_name = null, $parent_entity = null) {
+	protected function __construct($table_name) {
 		$this->definition = new DynamicEntityDefinition();
 		$this->definition->table_name = $table_name;
-		$this->definition->entity_name = $entity_name;
-		$this->definition->parent_entity = $parent_entity;
 		foreach (DatabaseAdmin::instance()->sqlDescribeTable($this->definition->table_name) as $attribute) {
 			$this->definition->persistent_attributes[] = PersistentAttribute::makeDefinition($attribute);
 			if ($attribute->key === 'PRI') {
