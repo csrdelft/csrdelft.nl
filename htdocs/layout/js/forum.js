@@ -132,6 +132,7 @@ function forumBewerken(postId) {
 			bewerkDiv.innerHTML = bewerkForm;
 			document.getElementById('forumBewerkBericht').value = http.responseText;
 			$('#forumBewerkBericht').autosize();
+			$('#forumBewerkBericht').markItUp(mySettings); // mySettings located in set.js
 			//invoerveldjes van het normale toevoegformulier even uitzetten.
 			document.getElementById('forumBericht').disabled = true;
 			document.getElementById('forumOpslaan').disabled = true;
