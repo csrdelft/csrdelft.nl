@@ -48,7 +48,7 @@
 								</li>
 							{elseif $item instanceof CorveeTaak}
 								<li>
-									{if $item->getCorveeFunctie()->naam|strstr:"klus"}
+									{if $item->getCorveeFunctie()->naam|stristr:"klus"}
 										<img src="http://plaetjes.csrdelft.nl/maalcie/drill.png" width="16" height="16" alt="drill" class="icon" />
 									{else}
 										{icon get="paintcan"}
