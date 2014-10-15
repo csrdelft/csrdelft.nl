@@ -355,6 +355,7 @@ htdocs/layout/js/maalcie.min.js -text
 htdocs/layout/js/main_menu.js -text
 htdocs/layout/js/main_menu.min.js -text
 htdocs/layout/js/markitup/jquery.markitup.js -text
+htdocs/layout/js/markitup/jquery.markitup.min.js -text
 htdocs/layout/js/markitup/sets/bbcode/images/bold.png -text
 htdocs/layout/js/markitup/sets/bbcode/images/clean.png -text
 htdocs/layout/js/markitup/sets/bbcode/images/code.png -text
@@ -371,13 +372,17 @@ htdocs/layout/js/markitup/sets/bbcode/images/stroke.png -text
 htdocs/layout/js/markitup/sets/bbcode/images/underline.png -text
 htdocs/layout/js/markitup/sets/bbcode/readme.txt -text
 htdocs/layout/js/markitup/sets/bbcode/set.js -text
+htdocs/layout/js/markitup/sets/bbcode/set.min.js -text
 htdocs/layout/js/markitup/sets/bbcode/style.css -text
+htdocs/layout/js/markitup/sets/bbcode/style.min.css -text
 htdocs/layout/js/markitup/skins/simple/images/handle.png -text
 htdocs/layout/js/markitup/skins/simple/images/menu.png -text
 htdocs/layout/js/markitup/skins/simple/images/submenu.png -text
 htdocs/layout/js/markitup/skins/simple/style.css -text
+htdocs/layout/js/markitup/skins/simple/style.min.css -text
 htdocs/layout/js/markitup/templates/preview.css -text
 htdocs/layout/js/markitup/templates/preview.html -text
+htdocs/layout/js/markitup/templates/preview.min.css -text
 htdocs/layout/js/minion.js -text
 htdocs/layout/js/minion.min.js -text
 htdocs/layout/js/peilingbeheer.js -text
