@@ -299,8 +299,7 @@ div.beschrijvingen{ margin-top: 40px;}
 }
 .boekzoeker label img{
 	float: left;
-	margin:-3px 4px 0 2px;
-    width: 23px;
+	margin: 0 4px 0 2px;
 }
 
 .Formulier input.FormElement,.Formulier textarea, .boekzoeker input{
