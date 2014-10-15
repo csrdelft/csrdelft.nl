@@ -700,6 +700,7 @@ class ForumDradenModel extends PersistenceModel implements Paging {
 	public function maakForumDraad($forum_id, $titel, $wacht_goedkeuring) {
 		$draad = new ForumDraad();
 		$draad->forum_id = (int) $forum_id;
+		$draad->gedeeld_met = null;
 		$draad->uid = LoginModel::getUid();
 		$draad->titel = $titel;
 		$draad->datum_tijd = getDateTime();
@@ -713,7 +714,6 @@ class ForumDradenModel extends PersistenceModel implements Paging {
 		$draad->plakkerig = false;
 		$draad->belangrijk = false;
 		$draad->eerste_post_plakkerig = false;
-		$draad->gedeeld_met = null;
 		$draad->draad_id = (int) ForumDradenModel::instance()->create($draad);
 		return $draad;
 	}
