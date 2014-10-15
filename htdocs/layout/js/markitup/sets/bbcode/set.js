@@ -17,7 +17,7 @@ mySettings = {
 		{name: 'Onderstreept', key: 'U', openWith: '[u]', closeWith: '[/u]'},
 		{name: 'Doorgestreept', key: 'S', openWith: '[s]', closeWith: '[/s]'},
 		{separator: '---------------'},
-		{name: 'Afbeelding', key: 'A', replaceWith: '[img][![Url]!][/img]'},
+		{name: 'Afbeelding', replaceWith: '[img][![Url]!][/img]'},
 		{name: 'Link', key: 'L', openWith: '[url=[![Url]!]]', closeWith: '[/url]', placeHolder: 'Link tekst'},
 		{separator: '---------------'},
 		/*{name: 'Grootte', key: 'G', openWith: '[size=[![Text size]!]]', closeWith: '[/size]',
@@ -31,7 +31,7 @@ mySettings = {
 		{name: 'Ongenummerde lijst', openWith: '[list]\n', closeWith: '\n[/list]'},
 		{name: 'Lijstpunt', openWith: '[*] '},
 		{separator: '---------------'},*/
-		{name: 'Citaat', openWith: '[citaat=Naam_of_lidnummer]', closeWith: '[/citaat]'},
+		{name: 'Citaat', key: 'Q', openWith: '[citaat=Naam_of_lidnummer]', closeWith: '[/citaat]'},
 		{name: 'Code', openWith: '[code]', closeWith: '[/code]'},
 		{separator: '---------------'},
 		{name: 'Opmaak wissen', className: "clean", replaceWith: function (markitup) {
