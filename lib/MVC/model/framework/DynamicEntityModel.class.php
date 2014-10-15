@@ -18,7 +18,13 @@ class DynamicEntityModel extends PersistenceModel {
 
 	const orm = 'DynamicEntity';
 
-	protected static $instance;
+	/**
+	 * Factory pattern instead of singleton.
+	 * @see ::makeModel()
+	 */
+	public static function instance() {
+		// use makeModel
+	}
 
 	public static function makeModel($table_name) {
 		return new DynamicEntityModel($table_name);
