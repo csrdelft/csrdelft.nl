@@ -75,6 +75,7 @@ require_once 'defines.include.php';
 require_once 'common.functions.php';
 require_once 'MijnSqli.class.php'; # DEPRECATED
 require_once 'MVC/model/framework/DynamicEntityModel.class.php';
+require_once 'MVC/model/framework/CachedPersistenceModel.abstract.php';
 require_once 'MVC/model/DebugLogModel.class.php';
 require_once 'MVC/model/TimerModel.class.php';
 require_once 'MVC/model/AccessModel.class.php';

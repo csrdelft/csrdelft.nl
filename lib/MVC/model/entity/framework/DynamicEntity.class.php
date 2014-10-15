@@ -1,7 +1,5 @@
 <?php
 
-require_once 'MVC/model/entity/framework/PersistentEntity.abstract.php';
-
 /**
  * DynamicEntity.class.php
  * 
@@ -17,38 +15,29 @@ class DynamicEntity extends PersistentEntity {
 	 * The definition of this entity
 	 * @var DynamicEntityDefinition
 	 */
-	public static $definition;
+	public $definition;
 
-	/**
-	 * Static constructor is called (by inheritance) first and only from PersistenceModel.
-	 */
-	public static function __constructStatic() {
-		$orm = self::$definition->parent_entity;
-		$orm::__constructStatic();
-		self::$table_name = self::$definition->table;
-		foreach (DatabaseAdmin::instance()->sqlDescribeTable(self::getTableName()) as $attribute) {
-			self::$persistent_attributes[] = PersistentAttribute::makeDefinition($attribute);
-			if ($attribute->key === 'PRI') {
-				self::$primary_key[] = $attribute->field;
-			}
-		}
+	public function __construct($cast = false, array $attr_retrieved = null, DynamicEntityDefinition $definition = null) {
+		parent::__construct($cast, $attr_retrieved);
+		$this->definition = $definition;
 	}
 
 	/**
-	 * Database table columns
-	 * @var array
+	 * Get all attribute names.
+	 * 
+	 * @return array
 	 */
-	protected static $persistent_attributes = array();
-	/**
-	 * Database primary key
-	 * @var array
-	 */
-	protected static $primary_key = array();
-	/**
-	 * Database table name
-	 * @var string
-	 */
-	protected static $table_name;
+	public function getAttributes() {
+		return array_keys($this->definition->persistent_attributes);
+	}
+
+	public function getAttributeDefinition($attribute_name) {
+		return $this->definition->persistent_attributes[$attribute_name];
+	}
+
+	public function getPrimaryKey() {
+		return $this->definition->primary_key;
+	}
 
 	public function __set($attribute, $value) {
 		$this->$attribute = $value;

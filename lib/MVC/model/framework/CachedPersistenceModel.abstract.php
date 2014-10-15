@@ -1,6 +1,5 @@
 <?php
 
-require_once 'MVC/model/framework/PersistenceModel.abstract.php';
 require_once 'MVC/model/CsrMemcache.singleton.php';
 
 /**

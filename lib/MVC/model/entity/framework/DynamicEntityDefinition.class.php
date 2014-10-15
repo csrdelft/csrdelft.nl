@@ -5,10 +5,10 @@
  * 
  * @author P.W.G. Brussee <brussee@live.nl>
  * 
- * Type of dynamic entity to keep track and inherit superclass attributes.
+ * The database table defines the dynamic entity.
  * 
  */
-class DynamicEntityDefinition extends PersistentEntity {
+class DynamicEntityDefinition {
 
 	/**
 	 * Primary key
@@ -21,28 +21,19 @@ class DynamicEntityDefinition extends PersistentEntity {
 	 */
 	public $parent_entity;
 	/**
-	 * Table that stores the persistent entity objects
-	 * @var string
-	 */
-	public $table;
-	/**
-	 * Database table columns
+	 * Non-static attribute of PersistentEntity
 	 * @var array
 	 */
-	protected static $persistent_attributes = array(
-		'entity_name'	 => array(T::String),
-		'parent_entity'	 => array(T::String),
-		'table'			 => array(T::String),
-	);
+	public $persistent_attributes;
 	/**
-	 * Database primary key
+	 * Non-static attribute of PersistentEntity
 	 * @var array
 	 */
-	protected static $primary_key = array('entity_name');
+	public $primary_key;
 	/**
-	 * Database table name
+	 * Non-static attribute of PersistentEntity
 	 * @var string
 	 */
-	protected static $table_name = 'dynamic_entities';
+	public $table_name;
 
 }

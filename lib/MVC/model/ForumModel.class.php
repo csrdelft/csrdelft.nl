@@ -562,8 +562,7 @@ class ForumDradenModel extends PersistenceModel implements Paging {
 	}
 
 	public function hertellenVoorDeel(ForumDeel $deel) {
-		$orm = self::orm;
-		$result = Database::sqlSelect(array('SUM(aantal_posts)'), $orm::getTableName(), 'forum_id = ?', array($deel->forum_id));
+		$result = Database::sqlSelect(array('SUM(aantal_posts)'), $this->orm->getTableName(), 'forum_id = ?', array($deel->forum_id));
 		$deel->aantal_posts = (int) $result->fetchColumn();
 		$deel->aantal_draden = $this->count('forum_id = ? AND wacht_goedkeuring = FALSE AND verwijderd = FALSE', array($deel->forum_id));
 		// reset laatst gewijzigd
@@ -576,8 +575,7 @@ class ForumDradenModel extends PersistenceModel implements Paging {
 
 	public function zoeken($query, $datum, $ouder, $jaar) {
 		$this->per_pagina = (int) LidInstellingen::get('forum', 'zoekresultaten');
-		$orm = self::orm;
-		$attributes = $orm::getAttributes();
+		$attributes = $this->orm->getAttributes();
 		$attributes[] = 'MATCH(titel) AGAINST (? IN BOOLEAN MODE) AS score';
 		$where = 'wacht_goedkeuring = FALSE AND verwijderd = FALSE AND ';
 		if ($datum === 'gemaakt') {
@@ -601,8 +599,8 @@ class ForumDradenModel extends PersistenceModel implements Paging {
 			}
 		}
 		$query = implode(' +', $terms); // set terms to AND
-		$results = Database::sqlSelect($attributes, $orm::getTableName(), $where, array($query, $datum), $order, null, $this->per_pagina, ($this->pagina - 1) * $this->per_pagina);
-		$results->setFetchMode(PDO::FETCH_CLASS, $orm, array($cast = true));
+		$results = Database::sqlSelect($attributes, $this->orm->getTableName(), $where, array($query, $datum), $order, null, $this->per_pagina, ($this->pagina - 1) * $this->per_pagina);
+		$results->setFetchMode(PDO::FETCH_CLASS, self::orm, array($cast = true));
 		return $results;
 	}
 
@@ -835,8 +833,7 @@ class ForumPostsModel extends PersistenceModel implements Paging {
 
 	public function zoeken($query, $datum, $ouder, $jaar) {
 		$this->per_pagina = (int) LidInstellingen::get('forum', 'zoekresultaten');
-		$orm = self::orm;
-		$attributes = $orm::getAttributes();
+		$attributes = $this->orm->getAttributes();
 		$attributes[] = 'MATCH(tekst) AGAINST (? IN NATURAL LANGUAGE MODE) AS score';
 		$where = 'wacht_goedkeuring = FALSE AND verwijderd = FALSE AND ';
 		if ($datum === 'gemaakt') {
@@ -851,8 +848,8 @@ class ForumPostsModel extends PersistenceModel implements Paging {
 		}
 		$datum = getDateTime(strtotime('-' . $jaar . ' year'));
 		$where .= ' HAVING score > 0';
-		$results = Database::sqlSelect($attributes, $orm::getTableName(), $where, array($query, $datum), 'score DESC', null, $this->per_pagina, ($this->pagina - 1) * $this->per_pagina);
-		$results->setFetchMode(PDO::FETCH_CLASS, $orm, array($cast = true));
+		$results = Database::sqlSelect($attributes, $this->orm->getTableName(), $where, array($query, $datum), 'score DESC', null, $this->per_pagina, ($this->pagina - 1) * $this->per_pagina);
+		$results->setFetchMode(PDO::FETCH_CLASS, self::orm, array($cast = true));
 		return $results;
 	}
 
@@ -905,11 +902,10 @@ class ForumPostsModel extends PersistenceModel implements Paging {
 	public function getRecenteForumPostsVanLid($uid, $aantal, $draad_uniek = false) {
 		$where = 'uid = ? AND wacht_goedkeuring = FALSE AND verwijderd = FALSE';
 		if ($draad_uniek) {
-			$orm = self::orm;
 			$where = 'post_id = (
 	SELECT MAX(post_id)
-	FROM ' . $orm::getTableName() . ' AS zelfde_draad
-	WHERE ' . $orm::getTableName() . '.draad_id = zelfde_draad.draad_id
+	FROM ' . $this->orm->getTableName() . ' AS zelfde_draad
+	WHERE ' . $this->orm->getTableName() . '.draad_id = zelfde_draad.draad_id
 	AND ' . $where . '
 )';
 		}
@@ -986,8 +982,7 @@ class ForumPostsModel extends PersistenceModel implements Paging {
 	}
 
 	public function verwijderForumPostsVoorDraad(ForumDraad $draad, ForumDeel $deel) {
-		$orm = self::orm;
-		Database::sqlUpdate($orm::getTableName(), array('verwijderd' => $draad->verwijderd), 'draad_id = :id', array(':id' => $draad->draad_id));
+		Database::sqlUpdate($this->orm->getTableName(), array('verwijderd' => $draad->verwijderd), 'draad_id = :id', array(':id' => $draad->draad_id));
 		$this->hertellenVoorDraadEnDeel($draad, $deel);
 	}
 

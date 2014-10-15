@@ -218,13 +218,11 @@ class LidInstellingen extends PersistenceModel {
 				}
 			}
 		}
-		$orm = self::orm;
-		Database::sqlInsertMultiple($orm::getTableName(), $properties);
+		Database::sqlInsertMultiple($this->orm->getTableName(), $properties);
 	}
 
 	public function resetForAll($module, $key) {
-		$orm = self::orm;
-		Database::sqlDelete($orm::getTableName(), 'module = ? AND instelling_id = ?', array($module, $key));
+		Database::sqlDelete($this->orm->getTableName(), 'module = ? AND instelling_id = ?', array($module, $key));
 	}
 
 	public function setForAll($module, $key, $value) {
@@ -239,8 +237,7 @@ class LidInstellingen extends PersistenceModel {
 		foreach ($leden as $uid) {
 			$properties[] = array($uid, $module, $key, $value);
 		}
-		$orm = self::orm;
-		Database::sqlInsertMultiple($orm::getTableName(), $properties);
+		Database::sqlInsertMultiple($this->orm->getTableName(), $properties);
 	}
 
 }

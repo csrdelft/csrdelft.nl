@@ -649,9 +649,10 @@ class EntityField extends InputField {
 			return true;
 		}
 		// bestaat er een entity met opgegeven primary key?
-		$orm = $this->model->orm;
 		$where = array();
-		foreach ($orm::getPrimaryKey() as $key) {
+		$class = $this->model->orm;
+		$orm = new $class();
+		foreach ($orm->getPrimaryKey() as $key) {
 			$where[] = $key . ' = ?';
 		}
 		if (!$this->model->exist(implode(' AND ', $where), $this->value)) {
@@ -674,8 +675,9 @@ class EntityField extends InputField {
 		echo '<input type="text" name="' . $this->name . '_show" id="' . $this->getId() . '" value="' . $show_value . '" origvalue="' . $this->show_value . '"' . $this->getInputAttribute(array('class', 'disabled', 'readonly', 'maxlength', 'placeholder', 'autocomplete', 'onchange', 'onclick', 'onkeyup')) . ' />';
 
 		// actual values
-		$orm = $this->model->orm;
-		foreach ($orm::getPrimaryKey() as $i => $key) {
+		$class = $this->model->orm;
+		$orm = new $class();
+		foreach ($orm->getPrimaryKey() as $i => $key) {
 			echo '<input type="hidden" name="' . $this->name . '[]" id="' . $this->getId() . '_' . $key . '" value="' . $this->value[$i] . '" origvalue="' . $this->origvalue[$i] . '" />';
 		}
 

@@ -18,7 +18,7 @@ class DatabaseAdmin extends Database {
 	private static $instance;
 
 	/**
-	 * Get singleton Database instance.
+	 * Get singleton DatabaseAdmin instance.
 	 * 
 	 * @return DatabaseAdmin
 	 */

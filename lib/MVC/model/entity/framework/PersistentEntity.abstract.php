@@ -18,7 +18,6 @@ require_once 'MVC/model/entity/framework/PersistentAttribute.class.php';
  * Optional: static $rename_attributes = array('oldname' => 'newname');
  */
 abstract class PersistentEntity implements Sparse, JsonSerializable {
-	// N.B. non-static part below
 
 	/**
 	 * Static constructor is called (by inheritance) first and only from PersistenceModel.
@@ -35,110 +34,6 @@ abstract class PersistentEntity implements Sparse, JsonSerializable {
 		/*
 		 * Optional: run conversion code before checkTables()
 		 */
-	}
-
-	public static function getTableName() {
-		return static::$table_name;
-	}
-
-	/**
-	 * Get all attribute names.
-	 * 
-	 * @return array
-	 */
-	public static function getAttributes() {
-		return array_keys(static::$persistent_attributes);
-	}
-
-	public static function getAttributeDefinition($attribute_name) {
-		return static::$persistent_attributes[$attribute_name];
-	}
-
-	public static function getPrimaryKey() {
-		return static::$primary_key;
-	}
-
-	/**
-	 * Check for differences in persistent attributes.
-	 * 
-	 * @unsupported INDEX check; FOREIGN KEY check;
-	 */
-	public static function checkTable() {
-		$orm = get_called_class();
-		$attributes = array();
-		foreach (static::$persistent_attributes as $name => $definition) {
-			$attributes[$name] = PersistentAttribute::makeAttribute($name, $definition);
-			if (in_array($name, static::getPrimaryKey())) {
-				$attributes[$name]->key = 'PRI';
-			} else {
-				$attributes[$name]->key = '';
-			}
-		}
-		try {
-			$database_attributes = group_by_distinct('field', DatabaseAdmin::instance()->sqlDescribeTable(static::getTableName()));
-		} catch (Exception $e) {
-			if (endsWith($e->getMessage(), static::getTableName() . "' doesn't exist")) {
-				DatabaseAdmin::instance()->sqlCreateTable(static::getTableName(), $attributes, static::getPrimaryKey());
-				return;
-			} else {
-				throw $e; // rethrow to controller
-			}
-		}
-		// Rename attributes
-		if (property_exists($orm, 'rename_attributes')) {
-			foreach (static::$rename_attributes as $oldname => $newname) {
-				if (property_exists($orm, $newname)) {
-					DatabaseAdmin::instance()->sqlChangeAttribute(static::getTableName(), $attributes[$newname], $oldname);
-				}
-			}
-		}
-		$previous_attribute = null;
-		foreach (static::$persistent_attributes as $name => $definition) {
-			// Add missing persistent attributes
-			if (!array_key_exists($name, $database_attributes)) {
-				if (!(property_exists($orm, 'rename_attributes') AND in_array($name, static::$rename_attributes))) {
-					DatabaseAdmin::instance()->sqlAddAttribute(static::getTableName(), $attributes[$name], $previous_attribute);
-				}
-			} else {
-				// Check exisiting persistent attributes for differences
-				$diff = false;
-				if ($attributes[$name]->type !== $database_attributes[$name]->type) {
-					$diff = true;
-				}
-				if ($attributes[$name]->null !== $database_attributes[$name]->null) {
-					$diff = true;
-				}
-				// Cast database value if default value is defined
-				if ($attributes[$name]->default !== null) {
-					if ($definition[0] === T::Boolean) {
-						$database_attributes[$name]->default = (boolean) $database_attributes[$name]->default;
-					} elseif ($definition[0] === T::Integer) {
-						$database_attributes[$name]->default = (int) $database_attributes[$name]->default;
-					} elseif ($definition[0] === T::Float) {
-						$database_attributes[$name]->default = (float) $database_attributes[$name]->default;
-					}
-				}
-				if ($attributes[$name]->default !== $database_attributes[$name]->default) {
-					$diff = true;
-				}
-				if ($attributes[$name]->extra !== $database_attributes[$name]->extra) {
-					$diff = true;
-				}
-				if ($attributes[$name]->key !== $database_attributes[$name]->key AND ! ($attributes[$name]->key === '' AND $database_attributes[$name]->key === 'MUL')) {
-					$diff = true;
-				}
-				if ($diff) {
-					DatabaseAdmin::instance()->sqlChangeAttribute(static::getTableName(), $attributes[$name]);
-				}
-			}
-			$previous_attribute = $name;
-		}
-		// Remove non-persistent attributes
-		foreach ($database_attributes as $name => $attribute) {
-			if (!array_key_exists($name, static::$persistent_attributes) AND ! (property_exists($orm, 'rename_attributes') AND array_key_exists($name, static::$rename_attributes))) {
-				DatabaseAdmin::instance()->sqlDeleteAttribute(static::getTableName(), $attribute);
-			}
-		}
 	}
 
 	/**
@@ -167,6 +62,27 @@ abstract class PersistentEntity implements Sparse, JsonSerializable {
 		if ($cast) {
 			$this->castValues($attr_retrieved);
 		}
+	}
+
+	public function getTableName() {
+		return static::$table_name;
+	}
+
+	/**
+	 * Get all attribute names.
+	 * 
+	 * @return array
+	 */
+	public function getAttributes() {
+		return array_keys(static::$persistent_attributes);
+	}
+
+	public function getAttributeDefinition($attribute_name) {
+		return static::$persistent_attributes[$attribute_name];
+	}
+
+	public function getPrimaryKey() {
+		return static::$primary_key;
 	}
 
 	public function getUUID() {
@@ -246,7 +162,93 @@ abstract class PersistentEntity implements Sparse, JsonSerializable {
 				$this->$attribute = (float) $this->$attribute;
 			} elseif (DB_CHECK AND $definition[0] === T::Enumeration AND ! in_array($this->$attribute, $definition[2]::getTypeOptions())
 			) {
-				debugprint(static::getTableName() . '.' . $attribute . ' invalid ' . $definition[2] . ' value: ' . $this->$attribute);
+				debugprint(static::$table_name . '.' . $attribute . ' invalid ' . $definition[2] . ' value: ' . $this->$attribute);
+			}
+		}
+	}
+
+	/**
+	 * Check for differences in persistent attributes.
+	 * 
+	 * @unsupported INDEX check; FOREIGN KEY check;
+	 */
+	public static function checkTable() {
+		$orm = get_called_class();
+		$attributes = array();
+		foreach (static::$persistent_attributes as $name => $definition) {
+			$attributes[$name] = PersistentAttribute::makeAttribute($name, $definition);
+			if (in_array($name, static::$primary_key)) {
+				$attributes[$name]->key = 'PRI';
+			} else {
+				$attributes[$name]->key = '';
+			}
+		}
+		try {
+			$database_attributes = group_by_distinct('field', DatabaseAdmin::instance()->sqlDescribeTable(static::$table_name));
+		} catch (Exception $e) {
+			if (endsWith($e->getMessage(), static::$table_name . "' doesn't exist")) {
+				DatabaseAdmin::instance()->sqlCreateTable(static::$table_name, $attributes, static::$primary_key);
+				return;
+			} else {
+				throw $e; // rethrow to controller
+			}
+		}
+		// Rename attributes
+		if (property_exists($orm, 'rename_attributes')) {
+			$rename = static::$rename_attributes;
+			foreach ($rename as $oldname => $newname) {
+				if (property_exists($orm, $newname)) {
+					DatabaseAdmin::instance()->sqlChangeAttribute(static::$table_name, $attributes[$newname], $oldname);
+				}
+			}
+		} else {
+			$rename = array();
+		}
+		$previous_attribute = null;
+		foreach (static::$persistent_attributes as $name => $definition) {
+			// Add missing persistent attributes
+			if (!isset($database_attributes[$name])) {
+				if (!(isset($rename[$name]))) {
+					DatabaseAdmin::instance()->sqlAddAttribute(static::$table_name, $attributes[$name], $previous_attribute);
+				}
+			} else {
+				// Check exisiting persistent attributes for differences
+				$diff = false;
+				if ($attributes[$name]->type !== $database_attributes[$name]->type) {
+					$diff = true;
+				}
+				if ($attributes[$name]->null !== $database_attributes[$name]->null) {
+					$diff = true;
+				}
+				// Cast database value if default value is defined
+				if ($attributes[$name]->default !== null) {
+					if ($definition[0] === T::Boolean) {
+						$database_attributes[$name]->default = (boolean) $database_attributes[$name]->default;
+					} elseif ($definition[0] === T::Integer) {
+						$database_attributes[$name]->default = (int) $database_attributes[$name]->default;
+					} elseif ($definition[0] === T::Float) {
+						$database_attributes[$name]->default = (float) $database_attributes[$name]->default;
+					}
+				}
+				if ($attributes[$name]->default !== $database_attributes[$name]->default) {
+					$diff = true;
+				}
+				if ($attributes[$name]->extra !== $database_attributes[$name]->extra) {
+					$diff = true;
+				}
+				if ($attributes[$name]->key !== $database_attributes[$name]->key AND ! ($attributes[$name]->key === '' AND $database_attributes[$name]->key === 'MUL')) {
+					$diff = true;
+				}
+				if ($diff) {
+					DatabaseAdmin::instance()->sqlChangeAttribute(static::$table_name, $attributes[$name]);
+				}
+			}
+			$previous_attribute = $name;
+		}
+		// Remove non-persistent attributes
+		foreach ($database_attributes as $name => $attribute) {
+			if (!isset(static::$persistent_attributes[$name]) AND ! isset($rename[$name])) {
+				DatabaseAdmin::instance()->sqlDeleteAttribute(static::$table_name, $attribute);
 			}
 		}
 	}

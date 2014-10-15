@@ -148,8 +148,7 @@ class MenuModel extends CachedPersistenceModel {
 			// give new parent to otherwise future orphans
 			$update = array('parent_id' => $item->parent_id);
 			$where = 'parent_id = :oldid';
-			$orm = self::orm;
-			$rowcount = Database::sqlUpdate($orm::getTableName(), $update, $where, array(':oldid' => $item->item_id));
+			$rowcount = Database::sqlUpdate($this->orm->getTableName(), $update, $where, array(':oldid' => $item->item_id));
 			$this->delete($item);
 			$db->commit();
 			$this->clearCache($item);
