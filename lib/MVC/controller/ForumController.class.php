@@ -40,6 +40,11 @@ class ForumController extends Controller {
 				$this->view = new CsrLayout2Page($this->getView());
 			}
 			$this->view->addScript('/layout/js/forum');
+			$markitup = '/layout/js/markitup/';
+			$this->view->addStylesheet($markitup . 'skins/simple/style');
+			$this->view->addStylesheet($markitup . 'sets/bbcode/style');
+			$this->view->addScript($markitup . 'jquery.markitup');
+			$this->view->addScript($markitup . 'sets/bbcode/set');
 		}
 	}
 

@@ -639,7 +639,7 @@ function applyUBB(string, div) {
 		type: 'POST',
 		cache: false,
 		url: '/tools/ubb.php',
-		data: 'string=' + encodeURIComponent(string)
+		data: 'data=' + encodeURIComponent(string)
 	});
 	jqXHR.done(function (data, textStatus, jqXHR) {
 		$(div).html(data);

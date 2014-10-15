@@ -27,7 +27,8 @@ $(document).ready(function ($) {
 	});
 
 	$('#forumBericht').each(function () {
-		$(this).wrap('<div id="meldingen"></div>');
+
+		$(this).markItUp(mySettings); // mySettings located in set.js
 
 		if ($(this).hasClass('extern')) {
 			$('#meldingen').prepend('<div id="extern_melding"><strong>Openbaar forum</strong><br />Voor iedereen leesbaar, doorzoekbaar door zoekmachines.<br />Zet [prive] en [/prive] om uw persoonlijke contactgegevens in het bericht.</div>');
@@ -50,9 +51,10 @@ $(document).ready(function ($) {
 			}
 		}
 		if ($('#ketzer_melding').length == 0 && /ketzer/.test(textarea.val())) {
-			textarea.before('<div id="ketzer_melding">Ketzer hebben?<br /><a href="/actueel/groepen/Ketzers" target="_blank">&raquo; Maak er zelf een aan.</a></div>');
+			$('#meldingen').prepend('<div id="ketzer_melding">Ketzer hebben?<br /><a href="/actueel/groepen/Ketzers" target="_blank">&raquo; Maak er zelf een aan.</a></div>');
 		}
 	});
+
 	$('.togglePasfoto').each(function () {
 		$(this).click(function () {
 			var parts = $(this).attr('id').substr(1).split('-');
@@ -66,6 +68,7 @@ $(document).ready(function ($) {
 			}
 		});
 	});
+
 	$('td.auteur').hoverIntent(
 			function () {
 				$(this).find('a.forummodknop').fadeIn();
@@ -81,6 +84,7 @@ $(document).ready(function ($) {
 		window.location.hash = '#' + reactieid;
 	}
 });
+
 var orig = null;
 function togglePasfotos(uids, div) {
 	if (orig != null) {

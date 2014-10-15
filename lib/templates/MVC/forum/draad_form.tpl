@@ -17,6 +17,7 @@
 	{/if}
 	<input type="text" name="titel" id="titel" value="" class="tekst" placeholder="Onderwerp titel" /><br /><br />
 	<div id="berichtPreview" class="preview forumBericht"></div>
+	<div id="meldingen"></div>
 	<textarea name="forumBericht" id="forumBericht" class="forumBericht{if $deel->isOpenbaar()} extern{/if}" rows="12" origvalue="{$post_form_tekst}">{$post_form_tekst}</textarea>
 	<div class="butn">
 		<input type="submit" name="submit" value="Opslaan" id="forumOpslaan" />

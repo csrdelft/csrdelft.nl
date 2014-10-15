@@ -970,12 +970,10 @@ input.forumEmail{
 }
 
 #meldingen{
-	position: relative;
+	float: right;
+	width: 140px;
 }
 #meldingen div{
-	width: 140px;
-	position: absolute;
-	left: 580px;
 	color: white;
 	padding: 4px 8px 4px 4px;
 	text-align: left;
