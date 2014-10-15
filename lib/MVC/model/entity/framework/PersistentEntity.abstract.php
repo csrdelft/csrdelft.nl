@@ -2,7 +2,7 @@
 
 require_once 'MVC/model/entity/framework/Sparse.interface.php';
 require_once 'MVC/model/entity/framework/PersistentEnum.interface.php';
-require_once 'MVC/model/entity/framework/PersistentType.enum.php';
+require_once 'MVC/model/entity/framework/PersistentAttributeType.enum.php';
 require_once 'MVC/model/entity/framework/PersistentAttribute.class.php';
 
 /**
@@ -59,51 +59,6 @@ abstract class PersistentEntity implements Sparse, JsonSerializable {
 	}
 
 	/**
-	 * To compare table description of MySQL.
-	 * 
-	 * @param string $name
-	 * @param array $definition
-	 * @return PersistentAttribute
-	 */
-	private static function makePersistentAttribute($name, array $definition) {
-		$attribute = new PersistentAttribute();
-		$attribute->field = $name;
-		$attribute->type = $definition[0];
-		$attribute->default = null;
-		if (isset($definition[1]) AND $definition[1]) {
-			$attribute->null = 'YES';
-		} else {
-			$attribute->null = 'NO';
-		}
-		$attribute->extra = (isset($definition[2]) ? $definition[2] : '');
-		if ($attribute->type === T::Boolean) {
-			$attribute->type = 'tinyint(1)';
-		} elseif ($attribute->type === T::Integer) {
-			$attribute->type = 'int(11)';
-		} elseif ($attribute->type === T::String) {
-			$attribute->type = 'varchar(255)';
-		} elseif ($attribute->type === T::UID) {
-			$attribute->type = 'varchar(4)';
-		} elseif ($attribute->type === T::Char) {
-			$attribute->type = 'char(1)';
-		} elseif ($attribute->type === T::Enumeration) {
-			$max = 0;
-			$class = $attribute->extra;
-			foreach ($class::getTypeOptions() as $option) {
-				$max = max($max, strlen($option));
-			}
-			$attribute->type = 'varchar(' . $max . ')';
-			$attribute->extra = '';
-		}
-		if (in_array($name, static::getPrimaryKey())) {
-			$attribute->key = 'PRI';
-		} else {
-			$attribute->key = '';
-		}
-		return $attribute;
-	}
-
-	/**
 	 * Check for differences in persistent attributes.
 	 * 
 	 * @unsupported INDEX check; FOREIGN KEY check;
@@ -112,7 +67,12 @@ abstract class PersistentEntity implements Sparse, JsonSerializable {
 		$orm = get_called_class();
 		$attributes = array();
 		foreach (static::$persistent_attributes as $name => $definition) {
-			$attributes[$name] = self::makePersistentAttribute($name, $definition);
+			$attributes[$name] = PersistentAttribute::makeAttribute($name, $definition);
+			if (in_array($name, static::getPrimaryKey())) {
+				$attributes[$name]->key = 'PRI';
+			} else {
+				$attributes[$name]->key = '';
+			}
 		}
 		try {
 			$database_attributes = group_by_distinct('field', DatabaseAdmin::instance()->sqlDescribeTable(static::getTableName()));

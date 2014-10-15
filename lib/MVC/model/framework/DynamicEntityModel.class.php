@@ -6,15 +6,14 @@ require_once 'MVC/model/entity/framework/DynamicEntityDefinition.class.php';
 require_once 'MVC/model/entity/framework/DynamicEntity.class.php';
 
 /**
- * DynamicPersistenceModel.class.php
+ * DynamicEntityModel.class.php
  * 
  * @author P.W.G. Brussee <brussee@live.nl>
  * 
- * Builds the DynamicEntity class with the attributes from the database table
- * defined as defined by the DynamicEntityDefinition.
+ * Defines the DynamicEntity class from the DynamicEntityDefinition table and parent entity class.
  * 
  */
-class DynamicPersistenceModel extends CachedPersistenceModel {
+class DynamicEntityModel extends CachedPersistenceModel {
 
 	const orm = 'DynamicEntity';
 

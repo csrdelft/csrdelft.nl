@@ -3400,9 +3400,9 @@ lib/MVC/model/entity/Verticale.class.php -text
 lib/MVC/model/entity/framework/DynamicEntity.class.php -text
 lib/MVC/model/entity/framework/DynamicEntityDefinition.class.php -text
 lib/MVC/model/entity/framework/PersistentAttribute.class.php -text
+lib/MVC/model/entity/framework/PersistentAttributeType.enum.php -text
 lib/MVC/model/entity/framework/PersistentEntity.abstract.php -text
 lib/MVC/model/entity/framework/PersistentEnum.interface.php -text
-lib/MVC/model/entity/framework/PersistentType.enum.php -text
 lib/MVC/model/entity/framework/Sparse.interface.php -text
 lib/MVC/model/entity/groepen/Activiteit.class.php -text
 lib/MVC/model/entity/groepen/Bestuur.class.php -text
@@ -3430,7 +3430,7 @@ lib/MVC/model/entity/maalcie/CorveeKwalificatie.class.php -text
 lib/MVC/model/framework/CachedPersistenceModel.abstract.php -text
 lib/MVC/model/framework/Database.singleton.php -text
 lib/MVC/model/framework/DatabaseAdmin.singleton.php -text
-lib/MVC/model/framework/DynamicPersistenceModel.class.php -text
+lib/MVC/model/framework/DynamicEntityModel.class.php -text
 lib/MVC/model/framework/Persistence.interface.php -text
 lib/MVC/model/framework/PersistenceModel.abstract.php -text
 lib/MVC/model/maalcie/FunctiesModel.class.php -text

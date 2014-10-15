@@ -8,6 +8,7 @@ require_once 'MVC/model/entity/framework/PersistentEntity.abstract.php';
  * @author P.W.G. Brussee <brussee@live.nl>
  * 
  * Dynamic entities are defined by the table structure instead of the other way around. 
+ * Conversion: only define the new class and dynamicly load the old class definition.
  * 
  */
 class DynamicEntity extends PersistentEntity {
@@ -26,7 +27,7 @@ class DynamicEntity extends PersistentEntity {
 		$orm::__constructStatic();
 		self::$table_name = self::$definition->table;
 		foreach (DatabaseAdmin::instance()->sqlDescribeTable(self::getTableName()) as $attribute) {
-			self::$persistent_attributes[] = $this->translatePersistentAttribute($attribute);
+			self::$persistent_attributes[] = PersistentAttribute::makeDefinition($attribute);
 			if ($attribute->key === 'PRI') {
 				self::$primary_key[] = $attribute->field;
 			}
@@ -49,55 +50,25 @@ class DynamicEntity extends PersistentEntity {
 	 */
 	protected static $table_name;
 
-	public function __set($name, $value) {
-		$this->$name = $value;
+	public function __set($attribute, $value) {
+		$this->$attribute = $value;
 	}
 
-	public function __get($name) {
-		if (property_exists(get_called_class(), $name)) {
-			return $this->$name;
+	public function __get($attribute) {
+		if (property_exists(get_called_class(), $attribute)) {
+			return $this->$attribute;
 		}
 		return null;
 	}
 
-	public function __isset($name) {
-		return $this->__get($name) !== null;
+	public function __isset($attribute) {
+		return $this->__get($attribute) !== null;
 	}
 
-	public function __unset($name) {
-		if ($this->__isset($name)) {
-			unset($this->$name);
+	public function __unset($attribute) {
+		if ($this->__isset($attribute)) {
+			unset($this->$attribute);
 		}
-	}
-
-	/**
-	 * To compare table description of MySQL.
-	 * 
-	 * @param PersistentAttribute $attribute
-	 * @reaturn array $definition
-	 */
-	private static function translatePersistentAttribute(PersistentAttribute $attribute) {
-		$definition = array();
-		if ($attribute->type === 'tinyint(1)') {
-			$definition[] = T::Boolean;
-		} elseif ($attribute->type === 'int(11)') {
-			$definition[] = T::Integer;
-		} elseif ($attribute->type === 'varchar(255)') {
-			$definition[] = T::String;
-		} elseif ($attribute->type === 'varchar(4)') {
-			$definition[] = T::UID;
-		} elseif ($attribute->type === 'char(1)') {
-			$definition[] = T::Char;
-		} else {
-			$definition[] = T::Enumeration;
-		}
-		if ($attribute->null === 'YES') {
-			$definition[] = true;
-		} else {
-			$definition[] = false;
-		}
-		$definition[] = $attribute->extra;
-		return $definition;
 	}
 
 }

@@ -5,8 +5,7 @@
  * 
  * @author P.W.G. Brussee <brussee@live.nl>
  * 
- * The definition of dynamic entity types to keep track
- * and inherit superclass attributes.
+ * Type of dynamic entity to keep track and inherit superclass attributes.
  * 
  */
 class DynamicEntityDefinition extends PersistentEntity {
@@ -39,7 +38,7 @@ class DynamicEntityDefinition extends PersistentEntity {
 	 * Database primary key
 	 * @var array
 	 */
-	protected static $primary_key = array('entity_id');
+	protected static $primary_key = array('entity_name');
 	/**
 	 * Database table name
 	 * @var string
