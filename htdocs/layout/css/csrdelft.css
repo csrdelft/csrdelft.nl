@@ -958,7 +958,7 @@ textarea.forumBericht, #forumBewerkBericht{
 	padding: 5px;
 	resize: none;
 }
-#berichtPreview{
+#berichtPreview, #bewerkPreview{
 	margin:0;
 }
 #forumConcept{

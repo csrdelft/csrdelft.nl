@@ -58,12 +58,12 @@ div.forumBericht, textarea.forumBericht, div.butn, input#titel{
 	width: 580px;
 }
 #forumBewerkBericht{
-	width: 578px;
+	width: 570px;
 	margin: 0;
 }
 textarea.forumBericht, #forumBewerkBericht{
 	height: 225px;
-	max-width: 578px;
+	max-width: 570px;
 	border: none !important;
 	padding: 5px;
 	resize: none;
