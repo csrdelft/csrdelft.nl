@@ -944,12 +944,12 @@ div.forumdeel-omschrijving h1{
 #forumBewerkReden, input.forumEmail{
 	width: 250px;
 }
+div.forumBericht, textarea.forumBericht, div.butn, input#titel{
+	width: 580px;
+}
 #forumBewerkBericht{
 	width: 578px;
 	margin: 0;
-}
-div.forumBericht, textarea.forumBericht, div.butn, input#titel{
-	width: 578px;
 }
 textarea.forumBericht, #forumBewerkBericht{
 	height: 225px;
@@ -957,6 +957,9 @@ textarea.forumBericht, #forumBewerkBericht{
 	border: none;
 	padding: 5px;
 	resize: none;
+}
+#berichtPreview{
+	margin:0;
 }
 #forumConcept{
 	display: none;

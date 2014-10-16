@@ -54,12 +54,12 @@ div.hoverIntentContent{
 	box-shadow: 0 0 20px #000000;
 }
 
+div.forumBericht, textarea.forumBericht, div.butn, input#titel{
+	width: 580px;
+}
 #forumBewerkBericht{
 	width: 578px;
 	margin: 0;
-}
-div.forumBericht, textarea.forumBericht, div.butn, input#titel{
-	width: 578px;
 }
 textarea.forumBericht, #forumBewerkBericht{
 	height: 225px;
