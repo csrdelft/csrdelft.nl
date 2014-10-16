@@ -196,8 +196,8 @@ class FotoAlbumController extends AclController {
 			}
 		} else {
 			$this->view = new CsrLayoutPage($formulier);
-			$this->addStylesheet($this->getCompressedStyleUrl('layout', 'fotoalbum'), true);
-			$this->addScript($this->getCompressedScriptUrl('layout', 'fotoalbum'), true);
+			$this->view->addStylesheet($this->view->getCompressedStyleUrl('layout', 'fotoalbum'), true);
+			$this->view->addScript($this->view->getCompressedScriptUrl('layout', 'fotoalbum'), true);
 		}
 	}
 
