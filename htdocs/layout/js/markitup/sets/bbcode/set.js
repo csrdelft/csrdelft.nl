@@ -26,8 +26,14 @@ mySettings = {
 		{separator: '|'},
 		{className: 'knop-album', name: 'Fotoalbum', replaceWith: '[fotoalbum][![Url]!][/fotoalbum]'},
 		{className: 'knop-foto', name: 'Poster of foto uit album', replaceWith: function (markitup) {
-				var url = prompt('Url', '').replace('http://plaetjes.csrdelft.nl/fotoalbum/', '/').replace('_resized/', '').replace('_thumbs/', '').replace('#', '').replace('%20', ' ');
-				return '[foto]' + url + '[/foto]';
+				var url = window.prompt('Url', '').trim();
+				var pos = url.indexOf('/fotoalbum/');
+				if (pos > 0) {
+					url = url.substring(pos + 10).replace('_resized/', '').replace('_thumbs/', '').replace('#', '').replace('%20', ' ');
+					return '[foto]' + url + '[/foto]';
+				}
+				alert('Ongeldige url!');
+				return markitup.selection;
 			}},
 		{className: 'knop-img', name: 'Afbeelding', replaceWith: '[img][![Url]!][/img]'},
 		{className: 'knop-vid', name: 'Video', replaceWith: '[video][![Url]!][/video]'},
