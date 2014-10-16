@@ -16,6 +16,14 @@
 }
 .markItUpContainer  {
 	font:11px Verdana, Arial, Helvetica, sans-serif;
+	width:580px;
+	background-color:#FFF;
+	border:1px solid #A9A9A9;
+}
+.markItUpHeader {
+	height:30px;
+	padding:2px;
+	border-bottom:1px solid #D3D3D3;
 }
 .markItUpEditor {
 	font-size:12px;
@@ -38,8 +46,7 @@
 .markItUpResizeHandle {
 	overflow:hidden;
 	width:22px; height:5px;
-	margin-left:auto;
-	margin-right:auto;
+	margin-left:280px;
 	background-image:url(images/handle.png);
 	cursor:n-resize;
 }
@@ -78,7 +85,7 @@
 }
 .markItUpHeader ul .markItUpSeparator {
 	margin:0 5px;
-	color:#FFF;
+	color:transparent;
 }
 .markItUpHeader ul ul .markItUpSeparator {
 	width:auto; height:1px;

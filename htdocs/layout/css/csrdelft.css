@@ -89,8 +89,6 @@ a.external{
 a:hover { text-decoration: underline; }
 a.knop.arrows{
 	font-size: 14px;
-	padding: 3px 7px;
-	vertical-align: middle;
 }
 th{ text-align: left; }
 td{ vertical-align: top; padding: 0; }
@@ -945,6 +943,7 @@ div.forumdeel-omschrijving h1{
 }
 #forumBewerkBericht{
 	width: 580px;
+	margin: 0;
 }
 #forumBewerkReden{
 	width: 250px;
@@ -962,7 +961,10 @@ div.forumBericht, textarea.forumBericht, div.butn, input#titel{
 }
 textarea.forumBericht, #forumBewerkBericht{
 	height: 225px;
-	max-width: 580px;
+	max-width: 578px;
+	border: none;
+	padding: 5px;
+	resize: none;
 }
 input.forumEmail{
 	width: 250px;
