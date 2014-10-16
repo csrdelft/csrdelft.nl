@@ -25,7 +25,7 @@
 			</div>
 		{/foreach}
 	</td>
-	<td title="Mag maaltijden sluiten">{if $functie->maaltijden_sluiten}{icon get="cup_key"}{/if}</td>
+	<td title="Mag maaltijden sluiten">{if $functie->maaltijden_sluiten}{icon get="lock_add"}{/if}</td>
 	<td class="col-del">
 		<a href="{Instellingen::get('taken', 'url')}/verwijderen/{$functie->functie_id}" title="Functie definitief verwijderen" class="knop rounded post confirm">{icon get="cross"}</a>
 	</td>

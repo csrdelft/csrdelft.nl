@@ -19,7 +19,7 @@ N.B. Voordat een corveefunctie verwijderd kan worden moeten eerst alle bijbehore
 			<th>Standaard<br />punten</th>
 			<th title="Email bericht">{icon get="email"}</th>
 			<th>Gekwalificeerden</th>
-			<th title="Mag maaltijden sluiten">{icon get="cup_key"}</th>
+			<th title="Mag maaltijden sluiten">{icon get="lock_add"}</th>
 			<th title="Definitief verwijderen" class="text-center">{icon get="cross"}</th>
 		</tr>
 	</thead>
