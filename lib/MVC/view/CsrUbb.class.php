@@ -266,23 +266,22 @@ class CsrUbb extends eamBBParser {
 			$this->quote_level--;
 			$content = '<div onclick="$(this).children(\'.citaatpuntjes\').slideUp();$(this).children(\'.meercitaat\').slideDown();"><div class="meercitaat verborgen">' . $content . '</div><div class="citaatpuntjes" title="Toon citaat">...</div></div>';
 		}
-		$text = '<div class="citaatContainer"><strong>Citaat';
-		$citaat = '';
+		$text = '<div class="citaatContainer">Citaat';
+		$van = '';
 		if (isset($arguments['citaat'])) {
-			$citaat = trim(str_replace('_', ' ', $arguments['citaat']));
+			$van = trim(str_replace('_', ' ', $arguments['citaat']));
 		}
-		$naam = Lid::naamLink($citaat, 'user', 'visitekaartje');
-		if ($naam !== false) {
-			$text .= ' van ' . $naam;
-		} elseif (array_key_exists('url', $arguments) AND startsWith($arguments['url'], 'http')) {
-			if ($citaat == '') {
-				$citaat = $arguments['url'];
+		$lid = Lid::naamLink($van, 'user', 'visitekaartje');
+		if ($lid !== false) {
+			$text .= ' van ' . $lid;
+		} elseif ($van !== '') {
+			if (isset($arguments['url']) AND url_like($arguments['url'])) {
+				$text .= ' van <a href="' . $arguments['url'] . '" title="' . $arguments['url'] . '" target="_blank" class="external">' . $van . '</a>';
+			} else {
+				$text .= ' van ' . $van;
 			}
-			$text .= ' van <a href="' . $arguments['url'] . '" title="' . $arguments['url'] . '" target="_blank" class="external">' . $citaat . '</a>';
-		} elseif ($citaat !== '') {
-			$text .= ' van ' . $citaat;
 		}
-		$text .= ':</strong><div class="citaat">' . trim($content) . '</div></div>';
+		$text .= ':<div class="citaat">' . trim($content) . '</div></div>';
 		return $text;
 	}
 

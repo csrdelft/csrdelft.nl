@@ -36,7 +36,7 @@
 			<dt>
 			<span class="onderstreept">{$bericht.categorie|replace:'csr':'C.S.R.'}</span>
 			{if $courant->magBeheren()}({$bericht.uid|csrnaam:'full':false}){/if}
-			<strong>{$bericht.titel}</strong>
+			<span class="dikgedrukt">{$bericht.titel}</span>
 			[ <a href="/actueel/courant/bewerken/{$bericht.ID}">bewerken</a> | 
 			<a href="/actueel/courant/verwijder/{$bericht.ID}" onclick="return confirm('Weet u zeker dat u dit bericht wilt verwijderen?')" >verwijderen</a> ]
 			</dt>

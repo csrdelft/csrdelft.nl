@@ -2,11 +2,11 @@
 	<a class="forumpostlink" id="reageren">Reageren</a>
 	{* berichtje weergeven voor niet-ingeloggede gebruikers dat ze een naam moeten vermelden. *}
 	{if !LoginModel::mag('P_LOGGED_IN')}
-		<strong>
+		<span class="dikgedrukt">
 			Uw bericht wordt pas geplaatst nadat het bekeken en goedgekeurd is door de
 			<a href="/actueel/groepen/Commissies/PubCie/">PubCie</a>.
-			Het vermelden van <em>uw naam en email-adres</em> is verplicht.
-		</strong> 
+			Het vermelden van <span class="cursief">uw naam en email-adres</span> is verplicht.
+		</span> 
 		<br /><br />
 		<input type="text" name="email" class="forumEmail" placeholder="Email-adres" />
 		<br /><br/>

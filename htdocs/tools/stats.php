@@ -53,7 +53,7 @@ class stats implements View {
 			echo '<tr><td class="forumtitel">' . date('D H:i', strtotime($aLogRegel['moment'])) . '</td>';
 			echo '<td class="forumtitel" ><a href="?uid=' . htmlspecialchars($aLogRegel['uid']) . '">+</a> ' . (string) $lid . '</td>';
 			echo '<td class="forumtitel"><a href="?ip=' . htmlspecialchars($aLogRegel['ip']) . '">+</a>
-				' . gethostbyaddr($aLogRegel['ip']) . ' <strong>(' . $aLogRegel['locatie'] . ')</strong></td>';
+				' . gethostbyaddr($aLogRegel['ip']) . ' <span class="dikgedrukt">(' . $aLogRegel['locatie'] . ')</span></td>';
 			echo '<td class="forumtitel" ';
 			if (preg_match('/toevoegen/', $aLogRegel['url'])) {
 				echo 'style="background-color: yellow;"';
