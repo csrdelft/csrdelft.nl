@@ -31,6 +31,7 @@ mySettings = {
 		{name: 'Ongenummerde lijst', openWith: '[list]\n', closeWith: '\n[/list]'},
 		{name: 'Lijstpunt', openWith: '[*] '},
 		{separator: '---------------'},*/
+		{name: 'Offtopic', key: 'O', openWith: '[offtopic]', closeWith: '[/offtopic]'},
 		{name: 'Citaat', key: 'Q', openWith: '[citaat=Naam_of_lidnummer]', closeWith: '[/citaat]'},
 		{name: 'Code', openWith: '[code]', closeWith: '[/code]'},
 		{separator: ' '},
