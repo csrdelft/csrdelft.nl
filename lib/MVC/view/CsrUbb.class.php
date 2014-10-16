@@ -197,7 +197,7 @@ class CsrUbb extends eamBBParser {
 		} else { // [url][/url]
 			$href = $content;
 		}
-		return internal_url($href);
+		return internal_url($href, $content);
 	}
 
 	/* todo
