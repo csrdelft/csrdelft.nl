@@ -54,6 +54,21 @@ div.hoverIntentContent{
 	box-shadow: 0 0 20px #000000;
 }
 
+#forumBewerkBericht{
+	width: 580px;
+	margin: 0;
+}
+div.forumBericht, textarea.forumBericht, div.butn, input#titel{
+	width: 580px;
+}
+textarea.forumBericht, #forumBewerkBericht{
+	height: 225px;
+	max-width: 578px;
+	border: none;
+	padding: 5px;
+	resize: none;
+}
+
 /* Fonts
 ----------------------------------*/
 

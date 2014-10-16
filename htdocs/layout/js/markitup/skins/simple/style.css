@@ -52,7 +52,7 @@
 /***************************************************************************************/
 /* first row of buttons */
 .markItUpHeader ul {
-	padding: 0;
+	padding: 0 !important;
 }
 .markItUpHeader ul li	{
 	list-style: none;
