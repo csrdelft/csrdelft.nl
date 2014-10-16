@@ -67,16 +67,17 @@
 .markItUp .markItUpButton16 a	{
 	background-image:url(http://plaetjes.csrdelft.nl/famfamfam/text_heading_1.png);
 }
-.markItUp .markItUpButton17 a	{
+*/
+.markItUp .markItUpButton16 a	{
 	background-image:url(http://plaetjes.csrdelft.nl/famfamfam/script_code_red.png);
 }
-
-.markItUp .markItUpButton18 a	{
+.markItUp .markItUpButton17 a	{
 	background-image:url(http://plaetjes.csrdelft.nl/famfamfam/tag.png);
 }
 .markItUp .clean a {
 	background-image:url(images/clean.png);
 }
+/*
 .markItUp .preview a {
 	background-image:url(images/preview.png);
 }

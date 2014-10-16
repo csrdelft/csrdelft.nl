@@ -30,8 +30,7 @@ mySettings = {
 		{separator: ' '},
 		{name: 'Kaart', openWith: '[locatie]', closeWith: '[/locatie]', placeHolder: 'C.S.R. Delft'},
 		{name: 'Verklapper', openWith: '[verklapper]', closeWith: '[/verklapper]'},
-		{name: 'Privé', openWith: '[prive]', closeWith: '[/prive]', placeHolder: 'Afgeschermde gegevens'}
-		/*
+		{name: 'Privé', openWith: '[prive]', closeWith: '[/prive]', placeHolder: 'Afgeschermde gegevens'},/*
 		{name: 'Kop',
 			dropMenu: [
 				{name: 'H1', openWith: '[h=1]', closeWith: '[/h]'},
@@ -44,15 +43,14 @@ mySettings = {
 		{separator: ' '},
 		{name: 'Genummerde lijst', openWith: '[list=[![Starting number]!]]\n', closeWith: '\n[/list]'},
 		{name: 'Ongenummerde lijst', openWith: '[list]\n', closeWith: '\n[/list]'},
-		{name: 'Lijstpunt', openWith: '[*] '},
+		{name: 'Lijstpunt', openWith: '[*] '},*/
 		{separator: ' '},
 		{name: 'Code', openWith: '[code]', closeWith: '[/code]'},
 		{name: 'Opmaakcode tonen', openWith: '[ubboff]', closeWith: '[/ubboff]'},
 		{separator: ' '},
 		{name: 'Opmaak wissen', className: "clean", replaceWith: function (markitup) {
 				return markitup.selection.replace(/\[(.*?)\]/g, "")
-			}},
-		{name: 'Voorbeeld', className: "preview", call: 'preview'}
-		 */
+			}}
+		//{name: 'Voorbeeld', className: "preview", call: 'preview'}
 	]
 };
