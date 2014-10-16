@@ -395,9 +395,9 @@ class CsrUbb extends eamBBParser {
 	 * 		height	Hoogte van het filmpje
 	 */
 	function ubb_video($arguments = array()) {
-		$content = $this->parseArray(array('[/video]'), array());
+		$content = preg_replace('|^https://|', 'http://', $this->parseArray(array('[/video]'), array()));
 
-//determine type and id
+		//determine type and id
 		$id = '';
 		if (preg_match('/^[0-9a-zA-Z\-_]{11}$/', $content) OR strstr($content, 'youtube')) {
 			$type = 'youtube';
@@ -415,7 +415,7 @@ class CsrUbb extends eamBBParser {
 			}
 		} elseif (strstr($content, '123video')) {
 			$type = '123video';
-//example url: http://www.123video.nl/playvideos.asp?MovieID=946848
+			//example url: http://www.123video.nl/playvideos.asp?MovieID=946848
 			if (preg_match('|^(http://)?(www\.)?123video\.nl/playvideos\.asp\?MovieID=(\d+)(.*)$|', $content, $matches) > 0) {
 				$id = $matches[3];
 			}
@@ -426,7 +426,7 @@ class CsrUbb extends eamBBParser {
 			}
 		} elseif (strstr($content, 'godtube')) {
 			$type = 'godtube';
-//example: http://www.godtube.com/watch/?v=9CFEMMNU
+			//example: http://www.godtube.com/watch/?v=9CFEMMNU
 			if (preg_match('|^(http://)?(www\.)?godtube\.com/watch/\?v=([a-zA-Z0-9]+)$|', $content, $matches) > 0) {
 				$id = $matches[3];
 			}
@@ -434,12 +434,12 @@ class CsrUbb extends eamBBParser {
 			$type = 'unknown';
 		}
 
-//error message if no valid id found in tag content.
+		//error message if no valid id found in tag content.
 		if ($id == '') {
 			return '[video (' . $type . ')] ongeldige url: (' . mb_htmlentities($content) . ')';
 		}
 
-//video size
+		//video size
 		$width = 560;
 		$height = 420;
 		if (isset($arguments['width']) AND (int) $arguments['width'] > 100) {
@@ -449,14 +449,14 @@ class CsrUbb extends eamBBParser {
 			$height = (int) $arguments['height'];
 		}
 
-//render embed html
+		//render embed html
 		switch ($type) {
 			case 'youtube':
 				if (isset($this->youtube[$id]) AND ! isset($arguments['force'])) {
 					return '<a href="#youtube' . $content . '" onclick="youtubeDisplay(\'' . $content . '\')" >&raquo; youtube-filmpje (ergens anders op deze pagina)</a>';
 				} else {
-//sla het youtube-id op in een array, dan plaatsen we de tweede keer dat
-//het filmpje in een topic geplaatst wordt een linkje.
+					//sla het youtube-id op in een array, dan plaatsen we de tweede keer dat
+					//het filmpje in een topic geplaatst wordt een linkje.
 					$this->youtube[$id] = $id;
 					return '<div id="youtube' . $id . '" class="youtubeVideo">
 						<a href="http://www.youtube.com/watch?v=' . $id . '" class="afspelen" onclick="return youtubeDisplay(\'' . $id . '\')"><img width="36" height="36" src="' . CSR_PICS . '/forum/afspelen.gif" alt="afspelen" /></a>
@@ -495,11 +495,11 @@ class CsrUbb extends eamBBParser {
 	 */
 	function ubb_youtube($arguments = array()) {
 		$content = $this->parseArray(array('[/youtube]'), array());
-//alleen de eerste 11 tekens zijn relevant...
+		//alleen de eerste 11 tekens zijn relevant...
 		$content = substr($content, 0, 11);
 		if (preg_match('/[0-9a-zA-Z\-_]{11}/', $content)) {
-//als we in een quote-tag zijn, geen embed weergeven maar een link naar de embed,
-//en het filmpje ook maar meteen starten.
+			//als we in een quote-tag zijn, geen embed weergeven maar een link naar de embed,
+			//en het filmpje ook maar meteen starten.
 			if ($this->quote_level > 0 OR isset($this->youtube[$content])) {
 				$html = '<a href="#youtube' . $content . '" onclick="youtubeDisplay(\'' . $content . '\')" >&raquo; youtube-filmpje (ergens anders op deze pagina)</a>';
 			} else {
@@ -507,8 +507,8 @@ class CsrUbb extends eamBBParser {
 					<a href="http://www.youtube.com/watch?v=' . $content . '" class="afspelen" onclick="return youtubeDisplay(\'' . $content . '\')"><img width="36" height="36" src="' . CSR_PICS . '/forum/afspelen.gif" alt="afspelen" /></a>
 					<img src="http://img.youtube.com/vi/' . $content . '/default.jpg" style="width: 130px; height: 97px;"
 						alt="klik op de afbeelding om de video te starten"/></div>';
-//sla het youtube-id op in een array, dan plaatsen we de tweede keer dat
-//het filmpje in een topic geplaatst wordt een linkje.
+				//sla het youtube-id op in een array, dan plaatsen we de tweede keer dat
+				//het filmpje in een topic geplaatst wordt een linkje.
 				$this->youtube[$content] = $content;
 			}
 		} else {

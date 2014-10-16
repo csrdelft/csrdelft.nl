@@ -10,47 +10,51 @@
 // Feel free to add more tags
 // ----------------------------------------------------------------------------
 mySettings = {
+	nameSpace: 'bbcode',
 	previewParserPath: '/tools/ubb.php', // path to your BBCode parser
 	markupSet: [
-		{name: 'Dikgedrukt', key: 'B', openWith: '[b]', closeWith: '[/b]'},
-		{name: 'Cursief', key: 'I', openWith: '[i]', closeWith: '[/i]'},
-		{name: 'Onderstreept', key: 'U', openWith: '[u]', closeWith: '[/u]'},
-		{name: 'Doorgestreept', key: 'S', openWith: '[s]', closeWith: '[/s]'},
+		{className: 'knop-b', name: 'Dikgedrukt', key: 'B', openWith: '[b]', closeWith: '[/b]'},
+		{className: 'knop-i', name: 'Cursief', key: 'I', openWith: '[i]', closeWith: '[/i]'},
+		{className: 'knop-u', name: 'Onderstreept', key: 'U', openWith: '[u]', closeWith: '[/u]'},
+		{className: 'knop-s', name: 'Doorgestreept', key: 'S', openWith: '[s]', closeWith: '[/s]'},
 		{separator: '|'},
-		{name: 'Offtopic', key: 'O', openWith: '[offtopic]', closeWith: '[/offtopic]'},
-		{name: 'Citaat', key: 'Q', openWith: '[citaat=Naam_of_lidnummer]', closeWith: '[/citaat]'},
+		{className: 'knop-ot', name: 'Offtopic', key: 'O', openWith: '[offtopic]', closeWith: '[/offtopic]'},
+		{className: 'knop-quote', name: 'Citaat', key: 'Q', openWith: '[citaat=Naam_of_lidnummer]', closeWith: '[/citaat]'},
 		{separator: '|'},
-		{name: 'Link', key: 'L', openWith: '[url=[![Url]!]]', closeWith: '[/url]', placeHolder: 'Link tekst'},
-		{name: 'Email', key: 'E', openWith: '[email=[![Email adres]!]]', closeWith: '[/email]', placeHolder: 'Link tekst'},
+		{className: 'knop-link', name: 'Link', key: 'L', openWith: '[url=[![Url]!]]', closeWith: '[/url]', placeHolder: 'Link tekst'},
+		{className: 'knop-mail', name: 'Email', key: 'E', openWith: '[email=[![Email adres]!]]', closeWith: '[/email]', placeHolder: 'Link tekst'},
 		{separator: '|'},
-		{name: 'Fotoalbum', replaceWith: '[fotoalbum][![Url]!][/fotoalbum]'},
-		{name: 'Poster of foto uit album', replaceWith: '[foto][![Url]!][/foto]'},
-		{name: 'Afbeelding', replaceWith: '[img][![Url]!][/img]'},
-		{name: 'Video', replaceWith: '[video][![Url]!][/video]'},
+		{className: 'knop-album', name: 'Fotoalbum', replaceWith: '[fotoalbum][![Url]!][/fotoalbum]'},
+		{className: 'knop-foto', name: 'Poster of foto uit album', replaceWith: function (markitup) {
+				var url = prompt('Url', '').replace('http://plaetjes.csrdelft.nl/fotoalbum/', '/').replace('_resized/', '').replace('_thumbs/', '').replace('#', '').replace('%20', ' ');
+				return '[foto]' + url + '[/foto]';
+			}},
+		{className: 'knop-img', name: 'Afbeelding', replaceWith: '[img][![Url]!][/img]'},
+		{className: 'knop-vid', name: 'Video', replaceWith: '[video][![Url]!][/video]'},
 		{separator: '|'},
-		{name: 'Kaart', openWith: '[locatie]', closeWith: '[/locatie]', placeHolder: 'C.S.R. Delft'},
-		{name: 'Verklapper', openWith: '[verklapper]', closeWith: '[/verklapper]'},
-		{name: 'Privé', openWith: '[prive]', closeWith: '[/prive]', placeHolder: 'Afgeschermde gegevens'},/*
-		{name: 'Kop',
-			dropMenu: [
-				{name: 'H1', openWith: '[h=1]', closeWith: '[/h]'},
-				{name: 'H2', openWith: '[h=2]', closeWith: '[/h]'},
-				{name: 'H3', openWith: '[h=3]', closeWith: '[/h]'},
-				{name: 'H4', openWith: '[h=4]', closeWith: '[/h]'},
-				{name: 'H5', openWith: '[h=5]', closeWith: '[/h]'},
-				{name: 'H6', openWith: '[h=6]', closeWith: '[/h]'}
-			]},
+		{className: 'knop-map', name: 'Kaart', openWith: '[locatie]', closeWith: '[/locatie]', placeHolder: 'C.S.R. Delft'},
+		{className: 'knop-spoiler', name: 'Verklapper', openWith: '[verklapper]', closeWith: '[/verklapper]'},
+		{className: 'knop-prive', name: 'Privé', openWith: '[prive]', closeWith: '[/prive]', placeHolder: 'Afgeschermde gegevens'},
+		//{className: 'knop-kop', name: 'Kop',
+		//	dropMenu: [
+		//		{className: 'knop-h1', name: 'H1', openWith: '[h=1]', closeWith: '[/h]'},
+		//		{className: 'knop-h2', name: 'H2', openWith: '[h=2]', closeWith: '[/h]'},
+		//		{className: 'knop-h3', name: 'H3', openWith: '[h=3]', closeWith: '[/h]'},
+		//		{className: 'knop-h4', name: 'H4', openWith: '[h=4]', closeWith: '[/h]'},
+		//		{className: 'knop-h5', name: 'H5', openWith: '[h=5]', closeWith: '[/h]'},
+		//		{className: 'knop-h6', name: 'H6', openWith: '[h=6]', closeWith: '[/h]'}
+		//	]},
+		//{separator: '|'},
+		//{className: 'knop-lijst-1', name: 'Genummerde lijst', openWith: '[list=[![Starting number]!]]\n', closeWith: '\n[/list]'},
+		//{className: 'knop-lijst-a', name: 'Ongenummerde lijst', openWith: '[list]\n', closeWith: '\n[/list]'},
+		//{className: 'knop-lijst-punt', name: 'Lijstpunt', openWith: '[*] '},
 		{separator: '|'},
-		{name: 'Genummerde lijst', openWith: '[list=[![Starting number]!]]\n', closeWith: '\n[/list]'},
-		{name: 'Ongenummerde lijst', openWith: '[list]\n', closeWith: '\n[/list]'},
-		{name: 'Lijstpunt', openWith: '[*] '},*/
+		{className: 'knop-code', name: 'Code', openWith: '[code]', closeWith: '[/code]'},
+		{className: 'knop-off', name: 'Opmaakcode tonen', openWith: '[ubboff]', closeWith: '[/ubboff]'},
 		{separator: '|'},
-		{name: 'Code', openWith: '[code]', closeWith: '[/code]'},
-		{name: 'Opmaakcode tonen', openWith: '[ubboff]', closeWith: '[/ubboff]'},
-		{separator: '|'},
-		{name: 'Opmaak wissen', className: "clean", replaceWith: function (markitup) {
-				return markitup.selection.replace(/\[(.*?)\]/g, "")
+		{className: 'knop-clean', name: 'Opmaak wissen', replaceWith: function (markitup) {
+				return markitup.selection.replace(/\[(.*?)\]/g, '');
 			}}
-		//{name: 'Voorbeeld', className: "preview", call: 'preview'}
+		//{className: 'knop-preview', name: 'Voorbeeld', call: 'preview'}
 	]
 };
