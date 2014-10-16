@@ -87,8 +87,10 @@ a.external{
 	padding-right: 14px;
 }
 a:hover { text-decoration: underline; }
-.arrows{
+a.knop.arrows{
 	font-size: 14px;
+	padding: 3px 7px;
+	vertical-align: middle;
 }
 th{ text-align: left; }
 td{ vertical-align: top; padding: 0; }
