@@ -213,6 +213,25 @@ function url_like($url) {
 			'(/~)?[-\w./]*([-@()\#?/&;:+,._\w= ]+)?$#', $url);
 }
 
+function internal_url($url, $label) {
+	$href = filter_var($url, FILTER_SANITIZE_URL);
+	$extern = ' target="_blank" class="external"'; // externe link
+	if (startsWith($href, '/')) { // locale paden
+		$href = CSR_ROOT . $href;
+		$extern = '';
+	} elseif (!startsWith($href, 'http://') AND ! startsWith($href, 'https://')) { // http(s) vergeten?
+		$href = 'http://' . $href;
+	} elseif (startsWith($href, CSR_ROOT) OR startsWith($href, CSR_PICS)) {
+		$extern = '';
+	}
+	if (filter_var($href, FILTER_VALIDATE_URL)) {
+		$result = '<a href="' . $href . '" title="' . $href . '"' . $extern . '>' . $label . '</a>';
+	} else {
+		$result = '[Ongeldige URL, tip: gebruik tinyurl.com]';
+	}
+	return $result;
+}
+
 /**
  * Gebruik over de hele site dezelfde htmlentities parameters.
  * @param string $string

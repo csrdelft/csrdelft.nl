@@ -197,22 +197,7 @@ class CsrUbb extends eamBBParser {
 		} else { // [url][/url]
 			$href = $content;
 		}
-		$href = filter_var($href, FILTER_SANITIZE_URL);
-		$extern = ' target="_blank" class="external"'; // externe link
-		if (startsWith($href, '/')) { // locale paden
-			$href = CSR_ROOT . $href;
-			$extern = '';
-		} elseif (!startsWith($href, 'http://') AND ! startsWith($href, 'https://')) { // http(s) vergeten?
-			$href = 'http://' . $href;
-		} elseif (startsWith($href, CSR_ROOT) OR startsWith($href, CSR_PICS)) {
-			$extern = '';
-		}
-		if (filter_var($href, FILTER_VALIDATE_URL)) {
-			$result = '<a href="' . $href . '" title="' . $href . '"' . $extern . '>' . $content . '</a>';
-		} else {
-			$result = '[Ongeldige URL, tip: gebruik tinyurl.com]';
-		}
-		return $result;
+		return internal_url($href);
 	}
 
 	/* todo
@@ -276,7 +261,7 @@ class CsrUbb extends eamBBParser {
 			$text .= ' van ' . $lid;
 		} elseif ($van !== '') {
 			if (isset($arguments['url']) AND url_like($arguments['url'])) {
-				$text .= ' van <a href="' . $arguments['url'] . '" title="' . $arguments['url'] . '" target="_blank" class="external">' . $van . '</a>';
+				$text .= ' van ' . internal_url($arguments['url'], $van);
 			} else {
 				$text .= ' van ' . $van;
 			}
