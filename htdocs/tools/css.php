@@ -19,7 +19,7 @@ $conf['cachedir'] = DATA_PATH . 'compressorcache';
 $conf['cachetime'] = 100 * 60 * 60 * 24; // -1, 0, ..
 
 // foutmeldingen van de css/less-parser voor de header-tag plakken
-$attachcsswarningbefore= 'header';
+$attachcsswarningbefore = 'header';
 /**
  *
  * TODO: na wiki-update dit terugzetten in: wiki/lib/exe/css.php op ongeveer lijn 206

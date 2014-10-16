@@ -45,7 +45,7 @@ class MenuBeheerController extends AclController {
 		}
 		$body = new MenuBeheerView($root);
 		$this->view = new CsrLayoutPage($body);
-		$this->view->addStylesheet('/layout/css/menubeheer');
+		$this->view->addStylesheet($this->view->getCompressedStyleUrl('layout', 'menubeheer'), true);
 	}
 
 	public function toevoegen($parent_id) {

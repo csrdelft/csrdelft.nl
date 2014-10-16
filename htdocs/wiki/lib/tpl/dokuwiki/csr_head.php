@@ -5,47 +5,9 @@ class WikiHeader extends HtmlPage {
 	public function __construct() {
 		parent::__construct(new MainMenuView(), null);
 
-		$css = '/layout/css/';
-		$js = '/layout/js/';
-		$plugin = $js . 'jquery/plugins/';
+		$this->addStylesheet($this->getCompressedStyleUrl('layout', 'wiki'), true);
+		$this->addScript($this->getCompressedScriptUrl('layout', 'wiki'), true);
 
-		$this->addStylesheet($css . 'reset_wiki');
-		$this->addStylesheet($css . 'layout_pagina');
-		$this->addStylesheet($css . 'ubb');
-		$this->addStylesheet($css . 'csrdelft');
-		$layout = LidInstellingen::get('layout', 'opmaak');
-		$this->addStylesheet($css . $layout);
-		if (LidInstellingen::get('layout', 'toegankelijk') == 'bredere letters') {
-			$this->addStylesheet($css . 'toegankelijk_bredere_letters');
-		}
-		if (LidInstellingen::get('layout', 'sneeuw') != 'nee') {
-			if (LidInstellingen::get('layout', 'sneeuw') == 'ja') {
-				$this->addStylesheet($css . 'snow.anim');
-			} else {
-				$this->addStylesheet($css . 'snow');
-			}
-		}
-		$this->addScript($js . 'jquery/jquery');
-		//$this->addScript($js . 'jquery/jquery-ui');
-		//$this->addStylesheet($js . 'jquery/jquery-ui');
-		$this->addScript($js . 'autocomplete/jquery.autocomplete');
-		$this->addStylesheet($js . 'autocomplete/jquery.autocomplete');
-		//$this->addScript($plugin . 'jquery.dataTables');
-		//$this->addStylesheet($css . 'jquery.dataTables');
-		//$this->addScript($plugin . 'jquery.autosize');
-		$this->addScript($plugin . 'jquery.hoverIntent');
-		//$this->addScript($plugin . 'jquery.scrollTo');
-		//$this->addScript($plugin . 'jquery.timeago');
-		$this->addScript($js . 'csrdelft');
-		//$this->addScript($js . 'csrdelft.dataTables');
-		//$this->addStylesheet($css . 'csrdelft.dataTables');
-		$this->addScript($js . 'dragobject');
-		$this->addScript($js . 'main_menu');
-		//$this->addScript($js . 'groepen');
-		//if (LidInstellingen::get('layout', 'minion') == 'ja') {
-		//	$this->addScript($js . 'minion');
-		//	$this->addStylesheet($css . 'minion');
-		//}
 	}
 
 	public function view() {

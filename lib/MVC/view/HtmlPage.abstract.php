@@ -303,7 +303,8 @@ abstract class HtmlPage implements View {
 						}
 					}
 
-					$includes[$module][$incbase . $file] = $webbase;
+					$relativedir = dirname($file);
+					$includes[$module][$incbase . $file] = $webbase . '/' . $relativedir . '/';
 				}
 			}
 

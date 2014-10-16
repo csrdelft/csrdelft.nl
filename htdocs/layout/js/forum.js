@@ -98,7 +98,7 @@ function togglePasfotos(uids, div) {
 				orig = div.innerHTML;
 				div.innerHTML = http.responseText;
 			}
-		}
+		};
 		http.send(null);
 	}
 }

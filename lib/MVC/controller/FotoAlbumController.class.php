@@ -111,12 +111,13 @@ class FotoAlbumController extends AclController {
 		if (LoginModel::mag('P_LOGGED_IN')) {
 			$this->view = new CsrLayoutPage($body);
 			//$this->view->zijbalk = false;
+			$layoutfolder = 'layout';
 		} else { // uitgelogd heeft nieuwe layout
 			$this->view = new CsrLayout2Page($body);
+			$layoutfolder = 'layout2';
 		}
-		$this->view->addStylesheet('/layout/js/jquery/plugins/jquery.prettyPhoto');
-		$this->view->addScript('/layout/js/jquery/plugins/jquery.prettyPhoto');
-		$this->view->addStylesheet('/layout/css/fotoalbum');
+		$this->view->addStylesheet($this->view->getCompressedStyleUrl($layoutfolder, 'fotoalbum'), true);
+		$this->view->addScript($this->view->getCompressedScriptUrl($layoutfolder, 'fotoalbum'), true);
 	}
 
 	public function verwerken(FotoAlbum $album) {
@@ -195,8 +196,8 @@ class FotoAlbumController extends AclController {
 			}
 		} else {
 			$this->view = new CsrLayoutPage($formulier);
-			$this->view->addStylesheet('/layout/css/dropzone');
-			$this->view->addScript('/layout/js/dropzone');
+			$this->addStylesheet($this->getCompressedStyleUrl('layout', 'fotoalbum'), true);
+			$this->addScript($this->getCompressedScriptUrl('layout', 'fotoalbum'), true);
 		}
 	}
 

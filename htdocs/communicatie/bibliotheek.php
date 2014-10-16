@@ -20,9 +20,6 @@ $pagina = new CsrLayoutPage($biebControl->getView());
 //	$pagina->zijbalk = false;
 //}
 
-$pagina->addStylesheet('/layout/css/bibliotheek');
-$pagina->addStylesheet('/layout/js/datatables/css/datatables_basic');
-$pagina->addScript('/layout/js/datatables/jquery.dataTables');
-$pagina->addScript('/layout/js/csrdelft');
-$pagina->addScript('/layout/js/bibliotheek');
+$pagina->addStylesheet($pagina->getCompressedStyleUrl('layout', 'bibliotheek'), true);
+$pagina->addScript($pagina->getCompressedScriptUrl('layout', 'bibliotheek'), true);
 $pagina->view();

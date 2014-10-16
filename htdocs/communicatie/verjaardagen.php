@@ -16,4 +16,3 @@ if (LoginModel::mag('P_LEDEN_READ')) {
 
 $pagina = new CsrLayoutPage($midden);
 $pagina->view();
-?>

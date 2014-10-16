@@ -66,8 +66,8 @@ class BeheerTakenController extends AclController {
 		}
 		$this->view = new BeheerTakenView($taken, $maaltijd, false, CorveeRepetitiesModel::getAlleRepetities());
 		$this->view = new CsrLayoutPage($this->getView());
-		$this->view->addStylesheet('/layout/css/maalcie');
-		$this->view->addScript('/layout/js/maalcie');
+		$this->view->addStylesheet($this->view->getCompressedStyleUrl('layout', 'maalcie'), true);
+		$this->view->addScript($this->view->getCompressedScriptUrl('layout', 'maalcie'), true);
 		$this->view->modal = $modal;
 	}
 
@@ -78,8 +78,8 @@ class BeheerTakenController extends AclController {
 	public function prullenbak() {
 		$this->view = new BeheerTakenView(CorveeTakenModel::getVerwijderdeTaken(), null, true);
 		$this->view = new CsrLayoutPage($this->getView());
-		$this->view->addStylesheet('/layout/css/maalcie');
-		$this->view->addScript('/layout/js/maalcie');
+		$this->view->addStylesheet($this->view->getCompressedStyleUrl('layout', 'maalcie'), true);
+		$this->view->addScript($this->view->getCompressedScriptUrl('layout', 'maalcie'), true);
 	}
 
 	public function herinneren() {

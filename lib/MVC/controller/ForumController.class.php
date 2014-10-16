@@ -36,21 +36,20 @@ class ForumController extends Controller {
 		if ((!$this->isPosted() OR $this->action == 'zoeken') AND $this->action != 'rss') {
 			if (LoginModel::mag('P_LOGGED_IN')) {
 				$this->view = new CsrLayoutPage($this->getView());
+				$layoutmap = 'layout';
 			} else { // uitgelogd heeft nieuwe layout
 				$this->view = new CsrLayout2Page($this->getView());
+				$layoutmap = 'layout2';
 			}
-			$this->view->addScript('/layout/js/forum');
-			$markitup = '/layout/js/markitup/';
-			$this->view->addStylesheet($markitup . 'skins/simple/style');
-			$this->view->addStylesheet($markitup . 'sets/bbcode/style');
-			$this->view->addScript($markitup . 'jquery.markitup');
-			$this->view->addScript($markitup . 'sets/bbcode/set');
+			$this->view->addStylesheet($this->view->getCompressedStyleUrl($layoutmap, 'forum'), true);
+			$this->view->addScript($this->view->getCompressedScriptUrl($layoutmap, 'forum'), true);
 		}
 	}
 
 	/**
 	 * Check permissions & valid params in actions.
-	 * 
+	 *
+	 * @param string $action
 	 * @return boolean
 	 */
 	protected function mag($action) {

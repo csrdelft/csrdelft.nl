@@ -46,8 +46,8 @@ class BeheerFunctiesController extends AclController {
 		$functies = $this->model->getAlleFuncties(); // grouped by functie_id
 		$this->view = new BeheerFunctiesView($functies);
 		$this->view = new CsrLayoutPage($this->getView(), array(), $modal);
-		$this->view->addStylesheet('/layout/css/maalcie');
-		$this->view->addScript('/layout/js/maalcie');
+		$this->view->addStylesheet($this->view->getCompressedStyleUrl('layout', 'maalcie'), true);
+		$this->view->addScript($this->view->getCompressedScriptUrl('layout', 'maalcie'), true);
 	}
 
 	public function toevoegen() {

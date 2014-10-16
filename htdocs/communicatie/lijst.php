@@ -74,7 +74,7 @@ if (isset($_GET['addToGoogle'])) {
 				, 0);
 
 		if (LoginModel::mag('P_ADMIN')) {
-			setMelding('<hr />Tijd nodig voor deze sync: ' . $elapsed . 'ms');
+			setMelding('<hr />Tijd nodig voor deze sync: ' . $elapsed . 'ms', 0);
 		}
 	} catch (Zend_Gdata_App_AuthException $e) {
 		$m = $e->getMessage();
@@ -97,7 +97,6 @@ if ($message != '') {
 
 $pagina = new CsrLayoutPage($ledenlijstcontent);
 
-$pagina->addStylesheet('/layout/js/datatables/css/datatables_basic');
-$pagina->addStylesheet('/layout/css/ledenlijst');
-$pagina->addScript('/layout/js/datatables/jquery.dataTables');
+$pagina->addStylesheet($pagina->getCompressedStyleUrl('layout', 'ledenlijst'), true);
+$pagina->addScript($pagina->getCompressedScriptUrl('layout', 'ledenlijst'), true);
 $pagina->view();

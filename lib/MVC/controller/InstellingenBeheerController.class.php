@@ -54,8 +54,9 @@ class InstellingenBeheerController extends AclController {
 	public function module($module = null) {
 		$body = new InstellingenBeheerView($this->model, $module);
 		$this->view = new CsrLayoutPage($body);
-		$this->view->addStylesheet('/layout/css/maalcie');
-		$this->view->addScript('/layout/js/maalcie');
+		$this->view->addStylesheet($this->view->getCompressedStyleUrl('layout', 'maalcie'), true);
+		$this->view->addScript($this->view->getCompressedScriptUrl('layout', 'maalcie'), true);
+
 	}
 
 	public function opslaan($module, $key) {

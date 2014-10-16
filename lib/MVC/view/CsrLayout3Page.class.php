@@ -18,16 +18,8 @@ class CsrLayout3Page extends HtmlPage {
 	public function __construct(View $body) {
 		parent::__construct($body, $body->getTitel());
 
-		$css = '/layout3/css/';
-		$js = '/layout3/js/';
-
-		$this->addStylesheet($css . 'bootstrap');
-		$this->addStylesheet($css . 'bootstrap-theme');
-		$this->addStylesheet($css . 'bootstrap-typeahead');
-
-		$this->addScript($js . 'jquery');
-		$this->addScript($js . 'bootstrap');
-		$this->addScript($js . 'typeahead.bundle');
+		$this->addStylesheet($this->getCompressedStyleUrl('layout3', 'general'), true);
+		$this->addScript($this->getCompressedScriptUrl('layout3', 'general'), true);
 	}
 
 	public function view() {

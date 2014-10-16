@@ -3,7 +3,7 @@
 	<head>
 		<title>{$maaltijd->getDatum()|date_format:"%Y-%m-%d"} {$maaltijd->getTijd()|date_format:"%H:%M"}</title>
 		{foreach from=$stylesheets item=sheet}
-			<link rel="stylesheet" href="{$sheet.naam}?{$sheet.datum}" type="text/css" />
+			<link rel="stylesheet" href="{$sheet}" type="text/css" />
 		{/foreach}
 		{foreach from=$scripts item=script}
 			<script type="text/javascript" src="{$script}"></script>

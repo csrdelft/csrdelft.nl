@@ -140,12 +140,8 @@ HTML;
 }
 
 $memory = new MemoryView();
-$memory->addStylesheet('/layout/css/flip');
-$memory->addStylesheet('/layout/css/ledenmemory');
-$memory->addScript('/layout/js/jquery/jquery');
-$memory->addScript('/layout/js/jquery/jquery-ui');
-$memory->addScript('/layout2/js/jquery.backstretch');
-$memory->addScript('/layout/js/ledenmemory');
+$memory->addStylesheet($memory->getCompressedStyleUrl('layout', 'ledenmemory'), true);
+$memory->addScript($memory->getCompressedScriptUrl('layout', 'ledenmemory'), true);
 
 $smarty = CsrSmarty::instance();
 $smarty->assign('titel', $memory->getTitel());

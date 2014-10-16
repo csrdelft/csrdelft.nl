@@ -1,4 +1,4 @@
-var kringen = new Array();
+var kringen = [];
 
 function toggleEmails(vertkring) {
 	if (typeof (kringen[vertkring]) == 'undefined') {

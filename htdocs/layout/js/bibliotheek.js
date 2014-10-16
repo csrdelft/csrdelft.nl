@@ -6,7 +6,7 @@ jQuery(document).ready(function($) {
 	 * Catalogus
 	 *********************************************/
 	//catalogus: tabellen naar zebra converteren.
-	jQuery("#boeken tr:odd").addClass('odd');
+	jQuery("#boeken").find("tr:odd").addClass('odd');
 
 
 	//catalogus: hippe sorteerbare tabel fixen.
@@ -135,7 +135,7 @@ jQuery(document).ready(function($) {
 	$("#boekzoeker").autocomplete("https://www.googleapis.com/books/v1/volumes",{
 		dataType: 'jsonp',
 		parse: function(data) {
-			var rows = new Array();
+			var rows = [];
 			data = data.items;
 			for(var i=0; i<data.length; i++){
 				var datarow = data[i].volumeInfo;
@@ -146,7 +146,7 @@ jQuery(document).ready(function($) {
 		formatItem: function(row, i, n) {
 			var item = '<div title="titel: '+row.title+"\nAuteur: "+getAuteur(row)+"\nPagina's: "+row.pageCount+"\nTaal: "+getLanguage(row)+"\nISBN: "+getIsbn(row)+"\nUitgeverij: "+row.publisher+"\nUitgavejaar: "+getPublishedDate(row)+'">';
 			item 	+= row.title+'<br /><span class="cursief">'+getAuteur(row)+'</span>';
-			item 	+= '</div>'
+			item 	+= '</div>';
 			return item;
 		},
 		formatResult: function(row) {
@@ -176,7 +176,7 @@ jQuery(document).ready(function($) {
 
 	//kleurt invoerveld rood bij te korte zoekterm
 	}).keyup(function(event){
-		var inputlen = $(this).val().length
+		var inputlen = $(this).val().length;
 		if(inputlen>0 && inputlen < 7){
 			$(this).css("background-color","#ffcc96");
 		}else{
@@ -199,7 +199,9 @@ jQuery(document).ready(function($) {
 		formatItem: function(row, i, n) {
             return 'Ga naar: <a href="/communicatie/bibliotheek/boek/'+row.id+'" target="_blank">'+row.titel+'</a>';
         },
-		clickFire: true, 
+		clickFire: true,
+        cacheLength: 0,
+        delay: 600,
 		max: 20
 	};
 
@@ -226,9 +228,10 @@ jQuery(document).ready(function($) {
 					dataType: "json",
 					success: function(result){
 						var field = $("#"+fieldname);
+                        var $inputelem = $("#"+input.id);
 						if(result.value){
 							//opgeslagen waarde in input zetten en een tijdelijke succesmelding
-							$("#"+input.id).val(result.value);
+                            $inputelem.val(result.value);
 							field.removeClass('metFouten').addClass('opgeslagen');
 							window.setTimeout(function(){
 								field.removeClass('opgeslagen');
@@ -241,7 +244,7 @@ jQuery(document).ready(function($) {
 						}
 						//meldingsboodschap plaatsen, en verwijder bewerkt-markering
 						field.find(".melding").html(result.melding).show();
-						$("#"+input.id).removeClass('nonsavededits')
+                        $inputelem.removeClass('nonsavededits');
 					}
 				});
 			})
