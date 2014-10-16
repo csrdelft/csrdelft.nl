@@ -929,7 +929,7 @@ span.togglePasfoto:hover, a.postlink:hover{
     margin: 24px 0 13px 0;
 }
 #forumtabel td.forumtekst input#titel{
-    width: 574px;
+    width: 580px;
 }
 div.forumdeel-omschrijving{
 	text-align: left;
@@ -942,8 +942,7 @@ div.forumdeel-omschrijving h1{
 	margin-top: 10px;
 }
 #forumBewerkBericht{
-	width: 100%;
-	height: 250px;
+	width: 580px;
 }
 #forumBewerkReden{
 	width: 250px;
@@ -957,10 +956,11 @@ div.bewerkt a{ color: #bbb; }
 div.bewerkt hr{ text-align: left; background-color: #bbb; }
 
 div.forumBericht, textarea.forumBericht, div.butn, input#titel{
-	width: 574px;
+	width: 580px;
 }
-textarea.forumBericht{
-	height: 197px;
+textarea.forumBericht, #forumBewerkBericht{
+	height: 225px;
+	max-width: 580px;
 }
 input.forumEmail{
 	width: 250px;
