@@ -77,8 +77,8 @@
 	background:#FFF url(images/submenu.png) no-repeat 100% 50%;
 }
 .markItUpHeader ul .markItUpSeparator {
-	margin:0 10px;
-	color:#d3d3d3;
+	margin:0 5px;
+	color:#FFF;
 }
 .markItUpHeader ul ul .markItUpSeparator {
 	width:auto; height:1px;
