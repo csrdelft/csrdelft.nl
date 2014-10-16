@@ -16,10 +16,10 @@
 }
 
 .markItUp .markItUpButton5 a	{
-	background-image:url(http://plaetjes.csrdelft.nl/famfamfam/picture.png);
+	background-image:url(http://plaetjes.csrdelft.nl/famfamfam/text_smallcaps.png);
 }
 .markItUp .markItUpButton6 a	{
-	background-image:url(http://plaetjes.csrdelft.nl/famfamfam/link.png);
+	background-image:url(http://plaetjes.csrdelft.nl/famfamfam/user_comment.png);
 }
 /*
 .markItUp .markItUpButton7 a	{
@@ -36,18 +36,48 @@
 }
 */
 .markItUp .markItUpButton7 a	{
-	background-image:url(http://plaetjes.csrdelft.nl/famfamfam/text_smallcaps.png);
+	background-image:url(http://plaetjes.csrdelft.nl/famfamfam/link.png);
 }
 .markItUp .markItUpButton8 a	{
-	background-image:url(http://plaetjes.csrdelft.nl/famfamfam/user_comment.png);
+	background-image:url(http://plaetjes.csrdelft.nl/famfamfam/email_link.png);
 }
+
 .markItUp .markItUpButton9 a	{
+	background-image:url(http://plaetjes.csrdelft.nl/famfamfam/photos.png);
+}
+.markItUp .markItUpButton10 a	{
+	background-image:url(http://plaetjes.csrdelft.nl/famfamfam/photo.png);
+}
+.markItUp .markItUpButton11 a	{
+	background-image:url(http://plaetjes.csrdelft.nl/famfamfam/picture.png);
+}
+.markItUp .markItUpButton12 a	{
+	background-image:url(http://plaetjes.csrdelft.nl/famfamfam/film.png);
+}
+.markItUp .markItUpButton13 a	{
+	background-image:url(http://plaetjes.csrdelft.nl/famfamfam/map.png);
+}
+.markItUp .markItUpButton14 a	{
+	background-image:url(http://plaetjes.csrdelft.nl/famfamfam/comment_delete.png);
+}
+.markItUp .markItUpButton15 a	{
+	background-image:url(http://plaetjes.csrdelft.nl/famfamfam/shield.png);
+}
+/*
+.markItUp .markItUpButton16 a	{
+	background-image:url(http://plaetjes.csrdelft.nl/famfamfam/text_heading_1.png);
+}
+.markItUp .markItUpButton17 a	{
 	background-image:url(http://plaetjes.csrdelft.nl/famfamfam/script_code_red.png);
 }
 
+.markItUp .markItUpButton18 a	{
+	background-image:url(http://plaetjes.csrdelft.nl/famfamfam/tag.png);
+}
 .markItUp .clean a {
 	background-image:url(images/clean.png);
-}/*
+}
 .markItUp .preview a {
 	background-image:url(images/preview.png);
-}*/
+}
+*/
