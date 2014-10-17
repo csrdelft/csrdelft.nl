@@ -111,7 +111,7 @@ function zijbalk_scroll_fixed() {
 		return;
 	}
 
-	if (elmnt.hasClass('desktop-only') && window.innerWidth < 960) {
+	if (elmnt.hasClass('desktop-only') && (window.innerWidth < 900 || window.innerHeight < 900)) {
 		elmnt.removeClass('desktop-only scroll-fixed dragobject dragvertical');
 		return;
 	}
