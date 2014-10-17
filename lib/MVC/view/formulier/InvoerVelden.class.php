@@ -1097,7 +1097,7 @@ class UbbPreviewField extends TextareaField {
 		return <<<HTML
 <div class="float-right">
 	<input type="button" value="Voorbeeld" onclick="ubbPreview('{$this->getId()}', '{$this->getName()}Preview');"/>
-	&nbsp;<a class="knop" onclick="$('#ubbhulpverhaal').toggle();" title="Opmaakhulp weergeven">Opmaak</a>
+	&nbsp;<a class="knop opmaakhulp" title="Opmaakhulp weergeven">Opmaak</a>
 </div>
 <br />
 <div id="{$this->getName()}Preview" class="preview"></div>

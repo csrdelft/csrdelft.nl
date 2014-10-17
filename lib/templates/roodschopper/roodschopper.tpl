@@ -42,10 +42,9 @@
 	SALDO = Saldo van lid</em></label>
 	<textarea name="bericht" id="berichtInvoer" rows="10" cols="80">{$roodschopper->getBericht()}</textarea><br />
 	
-	
 	<div id="submitContainer">
 		<label for="submit">&nbsp;</label>
-		<a class="knop float-right" title="Opmaakhulp weergeven" onclick="$('#ubbhulpverhaal').toggle();">Opmaak</a>
+		<a class="knop float-right opmaakhulp" title="Opmaakhulp weergeven">Opmaak</a>
 		<a class="knop float-right vergroot" data-vergroot="#bericht" title="Vergroot het invoerveld">&uarr;&darr;</a>
 		<input type="button" name="submit" id="submit" value="Verder gaan" onclick="roodschopper('simulate'); return false;" />
 		<input id="forumVoorbeeld" type="button" onclick="ubbPreview('berichtInvoer', 'berichtPreview')" value="Voorbeeld"/>

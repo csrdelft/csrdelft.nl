@@ -193,6 +193,10 @@ function init_buttons() {
 	$('button.post').bind('click.post', knop_post);
 	$('button.get').unbind('click.get');
 	$('button.get').bind('click.get', knop_get);
+	$('a.opmaakhulp').unbind('click.opmaakhulp');
+	$('a.opmaakhulp').bind('click.opmaakhulp', function (event) {
+		$('#ubbhulpverhaal').toggle();
+	});
 	$('a.vergroot').unbind('click.vergroot');
 	$('a.vergroot').bind('click.vergroot', function (event) {
 		var id = $(this).attr('data-vergroot');
