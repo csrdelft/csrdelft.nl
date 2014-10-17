@@ -51,23 +51,30 @@ table#maand tr th{
 	border: 1px solid #ccc;
 }
 table#maand tr td{
-	height: 100px; border: 1px solid #ddd;
+	height: 100px;
+	border: 1px solid #ddd;
 }
 table#maand tr td.dag{
 	padding: 0;
 	text-align: left;
+	position: relative;
 }
 table#maand tr td.dag a.toevoegen{
 	display: none;
 }
-table#maand tr td.dag a.beheren{
+table#maand tr td.dag div.beheren{
 	display: none;
+	position: absolute;
+	right: 0;
+}
+table#maand td div a.toevoegen{
+	float: right; 
 }
 table#maand tr td.dag:hover a.toevoegen{
 	display: inline;
 }
-table#maand tr td.dag:hover a.beheren{
-	display: inline;
+table#maand tr td.dag:hover div.beheren{
+	display: block;
 }
 table#maand td div.meta{
 	padding: 3px 4px;
@@ -81,22 +88,15 @@ table#maand td.anderemaand { /* De dagen die van andere maanden in de maand-tabe
 }
 table#maand tr#dezeweek td.dag{
 	background-color: #fffff0;
-	border-bottom: 1px solid #ccc;
-	border-top: 1px solid #ccc;
 }
 table#maand tr td.vandaag{
 	background-color: #ffffd0 !important;
-	border: 1px solid #bbb;
 }
 table#maand tr td:hover{
 	background-color: #fafafa ;
-	border: 1px solid #bbb;
 }
 table#maand tr td#vandaag div.meta{ 
 	font-weight: bold;
-}
-table#maand td div a.toevoegen{
-	float: right; 
 }
 table#maand td ul{
 	clear: both;
@@ -118,9 +118,4 @@ table#maand td ul li .tijd{
 }
 table#maand td ul li  img.icon{
 	float: right;
-}
-table#maand td ul li a.beheren{
-	float: right; 
-	margin-left: 1px;
-	margin-top: -3px;
 }
