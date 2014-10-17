@@ -492,7 +492,7 @@ form#streeplijst input, form#streeplijst label{ text-align: left; margin: 3px; p
 	width: auto;
 	vertical-align: top;
 }
-.Formulier .FormButtons{
+.Formulier .FormKnoppen{
 	text-align: right;
 	margin-top: 25px;
 }
@@ -558,7 +558,7 @@ h1.formTitle{
 }
 
 /* Inline Formulier */
-.InlineForm .InputField, .InlineForm .FormButtons{
+.InlineForm .InputField, .InlineForm .FormKnoppen{
 	display: none;
 }
 .InlineForm .FormElement{
@@ -791,7 +791,7 @@ div.forumheadbtn{
 #forumtabel tr.kleur1 td{ background-color: #f4f4f4; }
 
 #forumtabel tr div.forumpostKnoppen{
-	min-height: 60px;
+	min-height: 70px;
 }
 #forumtabel tr div.forumpostKnoppen a{
 	border: none;
@@ -841,7 +841,7 @@ span#modsluiten:hover{
 	vertical-align: top;
 	width: 150px;
 	background-color: #fff;
-	padding: 2px 10px 5px 5px;
+	padding: 2px 10px 0 5px;
 	font-size: 0.9em;
 	text-align: left;
 }
