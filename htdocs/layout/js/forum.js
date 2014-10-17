@@ -36,7 +36,7 @@ $(document).ready(function ($) {
 	}
 
 	//klein beetje terug omhoog scrollen bij ongelezen lijn
-	if (window.innerWidth > 1000 && window.innerWidth < 1900 && window.location.hash == '#ongelezen') {
+	if (window.innerWidth > 960 && window.innerWidth < 1550 && window.location.hash == '#ongelezen') {
 		try {
 			$(window).scrollTo('#ongelezen', 1, {
 				offset: {
