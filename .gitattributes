@@ -3810,7 +3810,7 @@ lib/bbcode/plugins/rainbow.php -text
 lib/bibliotheek/beschrijving.class.php -text
 lib/bibliotheek/bibliotheekcontroller.class.php -text
 lib/bibliotheek/boek.class.php -text
-lib/bibliotheek/boekbbcontent.php -text
+lib/bibliotheek/boekcontent.php -text
 lib/bibliotheek/catalogus.class.php -text
 lib/bibliotheek/rubriek.class.php -text
 lib/chart/COPYING -text
@@ -3870,7 +3870,7 @@ lib/defines.include.php.sample -text
 lib/diesAanmelding.class.php -text
 lib/documenten/categorie.class.php -text
 lib/documenten/document.class.php -text
-lib/documenten/documentbbcontent.php -text
+lib/documenten/documentcontent.php -text
 lib/documenten/documentcontroller.class.php -text
 lib/eetplan.class.php -text
 lib/eetplancontent.class.php -text
