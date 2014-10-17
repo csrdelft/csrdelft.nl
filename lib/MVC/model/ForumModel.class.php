@@ -296,10 +296,10 @@ class ForumDradenGelezenModel extends PersistenceModel {
 	protected static $instance;
 
 	public function getWanneerGelezenDoorLid(ForumDraad $draad) {
-		if (LoginModel::mag('P_LOGGED_IN')) {
-			return $this->retrieveByPrimaryKey(array($draad->draad_id, LoginModel::getUid()));
+		if (!LoginModel::mag('P_LOGGED_IN')) {
+			return false;
 		}
-		return false;
+		return $this->retrieveByPrimaryKey(array($draad->draad_id, LoginModel::getUid()));
 	}
 
 	/**
@@ -309,6 +309,9 @@ class ForumDradenGelezenModel extends PersistenceModel {
 	 * @param ForumDraad $draad
 	 */
 	public function setWanneerGelezenDoorLid(ForumDraad $draad) {
+		if (!LoginModel::mag('P_LOGGED_IN')) {
+			return;
+		}
 		$create = false;
 		// Haal nieuw object op omdat de view de ongewijzigde nodig heeft
 		$gelezen = $this->getWanneerGelezenDoorLid($draad);
