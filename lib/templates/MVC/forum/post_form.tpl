@@ -21,7 +21,7 @@
 		<div id="forummeldingen">
 			<div id="ketzer-melding">
 				Ketzer hebben?<br />
-				<a href="/actueel/groepen/Ketzers" target="_blank">Maak er zelf een aan.</a>
+				<a href="/actueel/groepen/Ketzers" target="_blank"><span class="onderstreept">Maak er zelf een aan</span></a>
 			</div>
 			{if $deel->isOpenbaar()}
 				<div id="public-melding">
