@@ -55,9 +55,14 @@ $(document).ready(function ($) {
 		if (event.keyCode == 13) { //enter
 			CsrBBPreview('forumBericht', 'berichtPreview');
 		}
-		if ($('#ketzer-melding').length == 0 && /ketzer/.test($textarea.val())) {
-			$('#forummeldingen').prepend('<div id="ketzer-melding">Ketzer hebben?<br /><a href="/actueel/groepen/Ketzers" target="_blank">&raquo; Maak er zelf een aan.</a></div>');
-			$('#ketzer-melding').slideDown(200);
+		if (/ketzer/.test($textarea.val())) {
+			if ($('#ketzer-melding').filter(":visible").length == 0) {
+				$('#ketzer-melding').slideDown(200);
+			}
+		} else {
+			if ($('#ketzer-melding').filter(":visible").length != 0) {
+				$('#ketzer-melding').slideUp(200);
+			}
 		}
 	});
 

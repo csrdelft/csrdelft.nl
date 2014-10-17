@@ -19,6 +19,10 @@
 		{/if}
 
 		<div id="forummeldingen">
+			<div id="ketzer-melding">
+				Ketzer hebben?<br />
+				<a href="/actueel/groepen/Ketzers" target="_blank">Maak er zelf een aan.</a>
+			</div>
 			{if $deel->isOpenbaar()}
 				<div id="public-melding">
 					<div class="dikgedrukt">Openbaar forum</div>
