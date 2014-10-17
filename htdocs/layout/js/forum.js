@@ -1,28 +1,31 @@
 function saveConceptForumBericht() {
 	$('#forumConcept').fadeOut();
-	if ($('#forumBericht').val() !== $('#forumBericht').attr('origvalue')) {
+	var $textarea = $textarea;
+	if ($textarea.val() !== $textarea.attr('origvalue')) {
 		$.post('/forum/concept', {
-			forumBericht: $('#forumBericht').val()
+			forumBericht: $textarea.val()
 		}).done(function () {
-			$('#forumBericht').attr('origvalue', $('#forumBericht').val());
+			$textarea.attr('origvalue', $textarea.val());
 		}).fail(alert);
 	}
 }
 
 $(document).ready(function ($) {
 
+	var $textarea = $('#forumBericht');
+
 	var toggleShowSaveConcept = function () {
-		if ($('#forumBericht').val() !== $('#forumBericht').attr('origvalue')) {
+		if ($textarea.val() !== $textarea.attr('origvalue')) {
 			$('#forumConcept').fadeIn();
 		} else {
 			$('#forumConcept').fadeOut();
 		}
 	};
 	var autosave;
-	$('#forumBericht').focusin(function () {
+	$textarea.focusin(function () {
 		autosave = setInterval(toggleShowSaveConcept, 1000);
 	});
-	$('#forumBericht').focusout(function () {
+	$textarea.focusout(function () {
 		clearInterval(autosave);
 	});
 
@@ -46,31 +49,26 @@ $(document).ready(function ($) {
 		}
 	}
 
-	$('#forumBericht').each(function () {
+	$textarea.markItUp(mySettings); // mySettings located in set.js
 
-		$(this).markItUp(mySettings); // mySettings located in set.js
+	if ($textarea.hasClass('extern')) {
+		$('#meldingen').prepend('<div id="public-melding"><strong>Openbaar forum</strong><br />Voor iedereen leesbaar, doorzoekbaar door zoekmachines.<br />Zet [prive] en [/prive] om uw persoonlijke contactgegevens in het bericht.</div>');
+	}
 
-		if ($(this).hasClass('extern')) {
-			$('#meldingen').prepend('<div id="public-melding"><strong>Openbaar forum</strong><br />Voor iedereen leesbaar, doorzoekbaar door zoekmachines.<br />Zet [prive] en [/prive] om uw persoonlijke contactgegevens in het bericht.</div>');
-		}
-	}).keyup(function (event) {
-		var textarea = $(this);
+	$textarea.keyup(function (event) {
+		if (event.keyCode == 13) { //enter
 
-		if (event.keyCode == 13) { //enter == 13
-			if (/\[.*\]/.test(textarea.val())) {
-				//detected ubbcode use, trigger preview and display message.
-				CsrBBPreview('forumBericht', 'berichtPreview');
+			CsrBBPreview('forumBericht', 'berichtPreview');
 
-				if ($('#bbcode-melding').length == 0) {
-					textarea.before('<div id="bbcode-melding">BBCode gevonden:<br /> controleer het voorbeeld.</div>');
+			if ($('#bbcode-melding').length == 0) {
+				$textarea.before('<div id="bbcode-melding">BBCode gevonden:<br /> controleer het voorbeeld.</div>');
 
-					$('#bbcode-melding').click(function () {
-						$('#bbcodehulp').toggle();
-					});
-				}
+				$('#bbcode-melding').click(function () {
+					$('#bbcodehulp').toggle();
+				});
 			}
 		}
-		if ($('#ketzer-melding').length == 0 && /ketzer/.test(textarea.val())) {
+		if ($('#ketzer-melding').length == 0 && /ketzer/.test($textarea.val())) {
 			$('#meldingen').prepend('<div id="ketzer-melding">Ketzer hebben?<br /><a href="/actueel/groepen/Ketzers" target="_blank">&raquo; Maak er zelf een aan.</a></div>');
 		}
 	});
