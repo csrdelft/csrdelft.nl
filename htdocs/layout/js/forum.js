@@ -34,7 +34,7 @@ $(document).ready(function ($) {
 
 	//klein beetje terug omhoog scrollen bij ongelezen lijn
 	if (window.location.hash == '#ongelezen') {
-		$(window).scrollTo('#ongelezen', 400, {
+		$(window).scrollTo('#ongelezen', 0, {
 			offset: {
 				top: -100,
 				left: 0

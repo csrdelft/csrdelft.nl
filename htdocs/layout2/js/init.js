@@ -1,9 +1,9 @@
 // On Document.ready
-$(function() {
+$(function () {
 
 
 	// Random rotation between -2 and +2 degrees
-	$('.rotate').each(function() {
+	$('.rotate').each(function () {
 
 		// Random int between -2 and +2
 		var random = Math.random() * 4 - 2;
@@ -20,14 +20,14 @@ $(function() {
 
 
 	// Login form enhancing
-	$('.login-form input.text').focus(function() {
+	$('.login-form input.text').focus(function () {
 		$(this).parents('.flip').addClass('flipped');
-	}).blur(function() {
+	}).blur(function () {
 		$(this).parents('.flip').removeClass('flipped');
 	});
 
 	if (is_touch_device()) {
-		$('.flip').click(function() {
+		$('.flip').click(function () {
 			$(this).addClass("flipped");
 		});
 	}
@@ -40,12 +40,12 @@ $(function() {
 	if ($("#blackout").size())
 		$("body").css({overflowY: "hidden"});
 
-	$('body').bind('click.outside', function(e) {
-		if (!$(e.target).parents('#pageover').length > 0 && !$(e.target).hasClass('pp_overlay')) {
+	$('body').bind('click.outside', function (e) {
+		if (!$(e.target).parents('#pageover').length > 0 && !$(e.target).hasClass('pp_overlay') && !$(e.target).hasClass('#dragobject')) {
 			escape(e);
 		}
 	});
-	$(document).keyup(function(e) {
+	$(document).keyup(function (e) {
 		if (e.keyCode == 27) { // esc
 			escape(e);
 		}
@@ -58,7 +58,7 @@ $(function() {
 	 imageHolder.attr("src", image.attr("src"));
 	 image.hide(); */
 
-	$("div.pg-mid img.rotate-left, div.pg-mid img.rotate-right").each(function() {
+	$("div.pg-mid img.rotate-left, div.pg-mid img.rotate-right").each(function () {
 
 		$(this).css({margin: 0}).wrap('<figure class="' + $(this).attr("class") + '" />').after('<div class="clip"></div>');
 
@@ -66,17 +66,17 @@ $(function() {
 
 
 	// Random rotation
-	$('figure.rotate-left, figure.rotate-right').each(function() {
+	$('figure.rotate-left, figure.rotate-right').each(function () {
 		var random = Math.random() * 4 - 2; // Random between -2 and +2 degrees
 		$(this).css('-webkit-transform', 'rotate(' + random + 'deg)');
 		$(this).css('-moz-transform', 'rotate(' + random + 'deg)');
 	});
 
 	// Filmpjes meuk
-	$("#video_unit").each(function() {
+	$("#video_unit").each(function () {
 
 		el = $(".videos > li");
-		el.find("> a").click(function() {
+		el.find("> a").click(function () {
 
 			el.removeClass("active");
 			$(this).parent().addClass("active");
@@ -98,7 +98,7 @@ function escape(e) {
 	$('#blackout').css({overflowY: "hidden"});
 	$('body').css({overflowY: "scroll"});
 	$('#pageover').animate({top: '100%'}, 300);
-	$('#blackout').fadeOut(300, function() {
+	$('#blackout').fadeOut(300, function () {
 		$(this).remove();
 	});
 	return false;
