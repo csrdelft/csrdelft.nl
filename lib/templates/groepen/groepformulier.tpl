@@ -105,7 +105,7 @@
 		<label for="submit"></label>
 		<input type="button" class="voorbeeld" value="Voorbeeld" onclick="return ubbPreview('sbeschrijving', 'sbewerkPreview')" />
 		<a class="knop extraknopjespreview" onclick="$('#ubbhulpverhaal').toggle();" title="Opmaakhulp weergeven">Opmaak</a>
-		<a class="knop extraknopjespreview arrows" onclick="vergrootTextarea('sbeschrijving', 5)" title="Vergroot het invoerveld">&uarr;&darr;</a><br />
+		<a class="knop extraknopjespreview vergroot" data-vergroot="#sbeschrijving" title="Vergroot het invoerveld">&uarr;&darr;</a><br />
 	{/if}
 
 	{* voor sjaarsactie geen lange beschrijving *}
@@ -118,7 +118,7 @@
 		<label for="submit"></label>
 		<input type="button" class="voorbeeld" value="Voorbeeld" onclick="return ubbPreview('beschrijving', 'bewerkPreview')" /> 
 		<a class="knop extraknopjespreview" onclick="$('#ubbhulpverhaal').toggle();" title="Opmaakhulp weergeven">Opmaak</a>
-		<a class="knop extraknopjespreview arrows" onclick="vergrootTextarea('beschrijving', 10)" title="Vergroot het invoerveld">&uarr;&darr;</a><br />
+		<a class="knop extraknopjespreview vergroot" data-vergroot="#beschrijving" title="Vergroot het invoerveld">&uarr;&darr;</a><br />
 	{/if}
 
 	<hr />

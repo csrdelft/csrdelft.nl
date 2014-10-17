@@ -30,7 +30,6 @@ $(document).ready(function () {
 });
 
 function init() {
-	init_links();
 	init_buttons();
 	init_forms();
 	init_timeago();
@@ -184,9 +183,7 @@ function init_buttons() {
 		else {
 			button.html('Toon verklapper');
 		}
-		content.toggle(800, 'easeInOutCubic', function (event) {
-			// effect complete
-		});
+		content.toggle(800, 'easeInOutCubic');
 	});
 	$('button.modal').unbind('click.modal');
 	$('button.modal').bind('click.modal', function (event) {
@@ -196,6 +193,20 @@ function init_buttons() {
 	$('button.post').bind('click.post', knop_post);
 	$('button.get').unbind('click.get');
 	$('button.get').bind('click.get', knop_get);
+	$('a.vergroot').unbind('click.vergroot');
+	$('a.vergroot').bind('click.vergroot', function (event) {
+		var id = $(this).attr('data-vergroot');
+		var height = $(id).height();
+		$(id).animate({
+			'height': '+=' + height
+		}, 600);
+	});
+	$('a.modal').unbind('click.modal');
+	$('a.modal').bind('click.modal', modal_open);
+	$('a.post').unbind('click.post');
+	$('a.post').bind('click.post', knop_post);
+	$('a.get').unbind('click.get');
+	$('a.get').bind('click.get', knop_get);
 }
 
 function init_hoverIntents() {
@@ -208,15 +219,6 @@ function init_hoverIntents() {
 		},
 		timeout: 250
 	});
-}
-
-function init_links() {
-	$('a.modal').unbind('click.modal');
-	$('a.modal').bind('click.modal', modal_open);
-	$('a.post').unbind('click.post');
-	$('a.post').bind('click.post', knop_post);
-	$('a.get').unbind('click.get');
-	$('a.get').bind('click.get', knop_get);
 }
 
 function knop_ajax(knop, type) {
@@ -627,11 +629,6 @@ function getScrollBarWidth() {
 	document.body.removeChild(outer);
 
 	return (w1 - w2);
-}
-
-function vergrootTextarea(id, rows) {
-	jQuery('#' + id).animate({'height': '+=' + rows * 30}, 800, function () {
-	});
 }
 
 function applyUBB(string, div) {

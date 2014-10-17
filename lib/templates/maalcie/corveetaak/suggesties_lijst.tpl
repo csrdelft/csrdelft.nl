@@ -23,7 +23,7 @@ mijn_rooster.tpl	|	P.W.G. Brussee (brussee@live.nl)
 				</tr>
 			</thead>
 		</table>
-		<div class="scrollpane" style="height: 250px;">
+		<div class="scrollpane" id="suggesties-scrollpane" style="height: 250px;">
 			<table id="suggesties-tabel" class="maalcie-tabel verborgen">
 				<tbody>
 					{foreach name="tabel" from=$suggesties key=uid item=suggestie}
@@ -117,9 +117,7 @@ mijn_rooster.tpl	|	P.W.G. Brussee (brussee@live.nl)
 			</td>
 			<td style="width: 25px;">
 				<br />
-				<a class="knop arrows" onclick="$('.scrollpane' + id).animate({
-						'height': '+=250'
-					}, 800);" title="Vergroot de lijst met suggesties">&uarr;&darr;</a>
+				<a class="knop vergroot" data-vergroot="#suggesties-scrollpane" title="Vergroot de lijst met suggesties">&uarr;&darr;</a>
 			</td>
 		</tr>
 	</table>
