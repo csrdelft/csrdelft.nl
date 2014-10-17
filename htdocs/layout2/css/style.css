@@ -54,7 +54,7 @@ div.hoverIntentContent{
 	box-shadow: 0 0 20px #000000;
 }
 
-div.forumBericht, textarea.forumBericht, div.butn, input#titel{
+div.forumBericht, textarea.forumBericht, div.butn, #nieuweTitel{
 	width: 580px;
 }
 #forumBewerkBericht{

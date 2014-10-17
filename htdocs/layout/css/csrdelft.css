@@ -926,12 +926,6 @@ span.togglePasfoto:hover, a.postlink:hover{
     display: block;
     margin-bottom: 22px;
 }
-#forumtabel td.auteur label.externeemail{
-    margin: 24px 0 13px 0;
-}
-#forumtabel td.forumtekst input#titel{
-    width: 580px;
-}
 div.forumdeel-omschrijving{
 	text-align: left;
 	padding: 10px;
@@ -945,7 +939,7 @@ div.forumdeel-omschrijving h1{
 #forumBewerkReden, input.forumEmail{
 	width: 250px;
 }
-div.forumBericht, textarea.forumBericht, div.butn, input#titel{
+div.forumBericht, textarea.forumBericht, div.butn, #nieuweTitel{
 	width: 580px;
 }
 #forumBewerkBericht{
