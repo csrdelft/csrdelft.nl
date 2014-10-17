@@ -3406,6 +3406,7 @@ lib/MVC/model/maalcie/KwalificatiesModel.class.php -text
 lib/MVC/view/AgendaView.class.php -text
 lib/MVC/view/BijbelroosterView.class.php -text
 lib/MVC/view/CmsPaginaView.class.php -text
+lib/MVC/view/CsrBB.class.php -text
 lib/MVC/view/CsrLayout2Page.class.php -text
 lib/MVC/view/CsrLayout3Page.class.php -text
 lib/MVC/view/CsrLayoutPage.class.php -text
@@ -3800,7 +3801,6 @@ lib/Zend/Validate/Interface.php -text
 lib/Zend/Validate/Ip.php -text
 lib/Zend/Version.php -text
 lib/barsysteem.class.php -text
-lib/bbparser/CsrBB.class.php -text
 lib/bbparser/LICENSE -text
 lib/bbparser/README -text
 lib/bbparser/TODO -text
