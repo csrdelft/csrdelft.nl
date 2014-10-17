@@ -20,7 +20,7 @@
 				<textarea name="waarde" origvalue="{htmlspecialchars($instelling->waarde)}" class="FormElement" rows="1">{$instelling->waarde}</textarea>
 			</div>
 			<div class="InstellingToggle verborgen"></div>
-			<div class="FormButtons">
+			<div class="FormKnoppen">
 				<a class="knop submit confirm" title="Wijzigingen opslaan">{icon get="accept"} Opslaan</a>
 				<a class="knop reset cancel" title="Annuleren" onclick="
 					$(this).parent().find('.InstellingToggle').toggle();

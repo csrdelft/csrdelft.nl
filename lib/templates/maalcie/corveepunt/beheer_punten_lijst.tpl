@@ -25,7 +25,7 @@
 			<div class="InputField">
 				<input type="text" name="totaal_punten" value="{$puntenlijst.puntenTotaal}" origvalue="{$puntenlijst.puntenTotaal}" class="FormElement" maxlength="4" size="4" />
 			</div>
-			<div class="FormButtons">
+			<div class="FormKnoppen">
 				<a class="knop submit" title="Wijzigingen opslaan">{icon get="accept"}</a>
 				<a class="knop reset cancel" title="Annuleren" >{icon get="delete"}</a>
 			</div>
@@ -37,7 +37,7 @@
 			<div class="InputField">
 				<input type="text" name="totaal_bonus" value="{$puntenlijst.bonusTotaal}" origvalue="{$puntenlijst.bonusTotaal}" class="FormElement" maxlength="4" size="4" />
 			</div>
-			<div class="FormButtons">
+			<div class="FormKnoppen">
 				<a class="knop submit" title="Wijzigingen opslaan">{icon get="accept"}</a>
 				<a class="knop reset cancel" title="Annuleren">{icon get="delete"}</a>
 			</div>

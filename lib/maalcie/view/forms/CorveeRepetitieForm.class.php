@@ -64,7 +64,7 @@ if (this.checked) {
 $('#extraButton').html(txt);
 JS;
 		}
-		$fields['btn'] = new FormButtons();
+		$fields['btn'] = new FormKnoppen();
 		$fields['btn']->extraText = 'Alles bijwerken';
 		$fields['btn']->extraTitle = 'Opslaan & alle taken bijwerken';
 		$fields['btn']->extraIcon = 'disk_multiple';

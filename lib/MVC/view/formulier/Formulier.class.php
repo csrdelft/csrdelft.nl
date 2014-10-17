@@ -6,6 +6,7 @@ require_once 'MVC/view/formulier/FormElement.abstract.php';
 require_once 'MVC/view/formulier/InvoerVelden.class.php';
 require_once 'MVC/view/formulier/KeuzeVelden.class.php';
 require_once 'MVC/view/formulier/UploadVelden.class.php';
+require_once 'MVC/view/formulier/FormKnoppen.class.php';
 
 /**
  * Formulier.class.php
@@ -269,14 +270,12 @@ class ModalForm extends Formulier {
  */
 class InlineForm extends Formulier {
 
-	public function __construct($model, $formId, $action, InputField $field, $tekst = false) {
+	public function __construct($model, $formId, $action, InputField $field, $label = false) {
 		parent::__construct($model, $formId, $action);
 
 		$fields = array();
 		$fields['input'] = $field;
-		$fields['btn'] = new FormButtons(null, true, $tekst, false);
-		$fields['btn']->submitIcon = 'accept';
-		$fields['btn']->cancelReset = true;
+		$fields['btn'] = new FormKnoppen(null, true, $label, false, true);
 
 		$this->addFields($fields);
 	}
@@ -317,7 +316,7 @@ class DropzoneForm extends Formulier {
 		$fields[] = $this->dropzone;
 		$fields[] = new HtmlComment('<div class="fallback">');
 		$fields[] = $this->fallback;
-		$fields[] = new FormButtons(null, true, true, false);
+		$fields[] = new FormKnoppen(null, true, true, false);
 		$fields[] = new HtmlComment('</div>');
 
 		$this->addFields($fields);

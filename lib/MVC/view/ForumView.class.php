@@ -108,13 +108,11 @@ class ForumDeelForm extends ModalForm {
 		$fields[] = new RechtenField('rechten_posten', $deel->rechten_posten, 'Post-rechten');
 		$fields[] = new RechtenField('rechten_modereren', $deel->rechten_modereren, 'Mod-rechten');
 		$fields[] = new IntField('volgorde', $deel->volgorde, 'Volgorde');
-		$fields['btn'] = new FormButtons(null, true, true, true, '/forum/opheffen/' . $deel->forum_id);
-		$fields['btn']->deleteTitle = 'Deelforum opheffen';
-		$fields['btn']->extraText = 'Hertellen';
-		$fields['btn']->extraTitle = 'Alle posts en draden hertellen';
-		$fields['btn']->extraIcon = 'calculator';
-		$fields['btn']->extraUrl = '/forum/hertellen/' . $deel->forum_id;
-		$fields['btn']->extraAction = 'post modal ReloadPage';
+		$fields['btn'] = new FormKnoppen(null, true, true, true);
+		$recount = new FormulierKnop('/forum/hertellen/' . $deel->forum_id, 'post modal ReloadPage', 'Hertellen', 'Alle posts en draden hertellen', 'calculator', true);
+		$delete = new DeleteKnop('/forum/opheffen/' . $deel->forum_id);
+		$fields['btn']->addKnop($recount);
+		$fields['btn']->addKnop($delete);
 
 		$this->addFields($fields);
 	}

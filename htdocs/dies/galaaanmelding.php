@@ -117,7 +117,7 @@ $ingelogd = false;
 					$fields[] = new SelectField('eetDate', $data['eetDate'], 'Eetvoorkeur', $eetopties);
 					$fields[] = new TextField('allerDate', $data['allerDate'], 'Allergie-informatie:');
 					$fields[] = new SelectField('date18', $data['date18'], 'Is uw Diesdame of Diesheer meerderjarig op de dag van het gala?', $leeftijdopties);
-					$fields['btn'] = new FormButtons('/dies', false);
+					$fields['btn'] = new FormKnoppen('/dies', false);
 					$fields['btn']->submitTitle = 'Aanmelding opslaan';
 
 					$form = new Formulier(null, 'galaaanmelding', '/dies/galaaanmelding.php');

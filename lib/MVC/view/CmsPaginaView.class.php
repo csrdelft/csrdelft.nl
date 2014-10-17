@@ -58,9 +58,9 @@ class CmsPaginaForm extends Formulier {
 					'</div><div class="clear-left"><label>Rechten bewerken</label>' . $pagina->rechten_bewerken . '</div>');
 		}
 		$fields[] = new UbbPreviewField('inhoud', $pagina->inhoud, 'Inhoud');
-		$fields['btn'] = new FormButtons('/pagina/' . $pagina->naam, true, true, true, '/pagina/verwijderen/' . $pagina->naam);
-		$fields['btn']->deleteTitle = 'Pagina definitief verwijderen';
-		$fields['btn']->deleteAction = 'confirm ReloadPage';
+		$fields['btn'] = new FormKnoppen('/pagina/' . $pagina->naam);
+		$delete = new DeleteKnop('/pagina/verwijderen/' . $pagina->naam);
+		$fields['btn']->addKnop($delete);
 
 		$this->addFields($fields);
 	}

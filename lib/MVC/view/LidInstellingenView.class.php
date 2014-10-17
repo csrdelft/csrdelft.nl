@@ -36,7 +36,7 @@ class LidInstellingenView extends SmartyTemplateView {
 			echo '</div>';
 		}
 		echo '</div>';
-		$btns = new FormButtons('/');
+		$btns = new FormKnoppen('/');
 		$btns->view();
 		echo '</form>';
 	}

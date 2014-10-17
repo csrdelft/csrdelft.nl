@@ -81,7 +81,7 @@ class FotoAlbumToevoegenForm extends ModalForm {
 		$this->titel = 'Fotoalbum toevoegen in: ' . $album->dirname;
 		$this->css_classes[] = 'ReloadPage';
 		$fields[] = new RequiredFileNameField('subalbum', null, 'Naam');
-		$fields[] = new FormButtons('/fotoalbum', true, true, false);
+		$fields[] = new FormKnoppen('/fotoalbum', true, true, false);
 		$this->addFields($fields);
 	}
 
@@ -95,7 +95,7 @@ class PosterUploadForm extends Formulier {
 		$fields[] = new HtmlComment('Alleen jpeg afbeeldingen.<br/><br/>');
 		$fields[] = new RequiredFileNameField('posternaam', null, 'Posternaam', 50, 5);
 		$fields[] = new RequiredImageField('afbeelding', null, null, array('image/jpeg'));
-		$fields[] = new FormButtons('/fotoalbum', true, true, false);
+		$fields[] = new FormKnoppen('/fotoalbum', true, true, false);
 		$fields[] = new HtmlComment('<br /><span class="cursief">Maak nooit inbreuk op de auteursrechten of het recht op privacy van anderen.</span>');
 		$this->addFields($fields);
 	}

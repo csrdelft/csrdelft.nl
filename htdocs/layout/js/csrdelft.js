@@ -344,7 +344,7 @@ function form_ischanged(form) {
 	return changed;
 }
 
-function form_replace_action(event) {
+function form_set_action(event) {
 	var form = $(event.target).closest('form');
 	var url = $(event.target).closest('a.knop').attr('href');
 	form.attr('action', url);
@@ -367,7 +367,7 @@ function form_inline_toggle(form) {
 	$(form).find('.InputField').each(function () {
 		toggle_inline_none($(this));
 	});
-	$(form).find('.FormButtons').each(function () {
+	$(form).find('.FormKnoppen').each(function () {
 		toggle_inline_none($(this));
 	});
 	$(form).find('.InlineFormToggle').toggle();
@@ -424,7 +424,7 @@ function form_reset(event, form) {
 	}
 	form.find('.FormElement').each(function () {
 		var orig = $(this).attr('origvalue');
-		if (orig) {
+		if (typeof orig == 'string') {
 			$(this).val(orig);
 		}
 	});

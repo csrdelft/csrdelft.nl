@@ -47,7 +47,7 @@ class TaakForm extends ModalForm {
 		$fields['crid']->locked = true;
 		$fields['mid'] = new IntField('maaltijd_id', $mid, 'Gekoppelde maaltijd', 0);
 		$fields['mid']->title = 'Het ID van de maaltijd waar deze taak bij hoort.';
-		$fields[] = new FormButtons();
+		$fields[] = new FormKnoppen();
 
 		$this->addFields($fields);
 	}

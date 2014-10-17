@@ -128,7 +128,7 @@ function setTijd(a, b, c, d) {
 		$fields['b'] = new TextareaField('beschrijving', $item->beschrijving, 'Beschrijving');
 		$fields['b']->title = 'Extra info als de cursor boven de titel gehouden wordt';
 
-		$fields['btn'] = new FormButtons();
+		$fields['btn'] = new FormKnoppen();
 		if ($actie === 'toevoegen') {
 			$fields['btn']->extraText = 'Opslaan en doorgaan';
 			$fields['btn']->extraTitle = 'Opslaan & nog een agenda item toevoegen';

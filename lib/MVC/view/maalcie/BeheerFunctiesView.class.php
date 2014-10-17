@@ -77,7 +77,7 @@ class FunctieForm extends ModalForm {
 		$fields['m'] = new VinkField('maaltijden_sluiten', $functie->maaltijden_sluiten, 'Maaltijden sluiten');
 		$fields['m']->title = 'Geeft deze functie speciale rechten om maaltijden te mogen sluiten';
 
-		$fields[] = new FormButtons();
+		$fields[] = new FormKnoppen();
 		$this->addFields($fields);
 	}
 
@@ -94,7 +94,7 @@ class KwalificatieForm extends ModalForm {
 		$this->css_classes[] = 'PreventUnchanged';
 
 		$fields[] = new LidField('uid', $kwalificatie->uid, 'Naam of lidnummer', 'leden');
-		$fields[] = new FormButtons();
+		$fields[] = new FormKnoppen();
 
 		$this->addFields($fields);
 	}
