@@ -746,6 +746,13 @@ HTML;
 		return $this->ubb_offtopic($arguments);
 	}
 
+	/**
+	 * OT = offtopic
+	 */
+	function ubb_ot($arguments = array()) {
+		return $this->ubb_offtopic($arguments);
+	}
+
 	public function ubb_offtopic() {
 		$content = $this->parseArray(array('[/offtopic]', '[/vanonderwerp]'), array());
 		return '<span class="offtopic">' . $content . '</span>';
