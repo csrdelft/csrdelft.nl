@@ -4,15 +4,17 @@
 		<table>
 			<tr>
 				{* todo: invoerveld voor naam niet-ingelogd*}
-				<td>{LoginModel::getUid()|csrnaam:'user':'visitekaartje'}</td>
+				<td>
+					{LoginModel::getUid()|csrnaam:'user':'visitekaartje'}
+					{if LidInstellingen::get('forum', 'toonpasfotos') == 'nee'}
+						<span id="t{LoginModel::getUid()}-reageren" class="togglePasfoto" title="Toon pasfoto">&raquo;</span>
+					{/if}
+				</td>
 				<td class="postlinktd"><a class="postlink">&rarr;</a></td>
 			</tr>
 		</table>
 
 		{if LoginModel::mag('P_LEDEN_READ')}
-			{if LidInstellingen::get('forum', 'toonpasfotos') == 'nee'}
-				<span id="t{LoginModel::getUid()}-reageren" class="togglePasfoto" title="Toon pasfoto">&raquo;</span>
-			{/if}
 			<div id="preageren" class="forumpasfoto{if LidInstellingen::get('forum', 'toonpasfotos') == 'nee'} verborgen">{elseif LoginModel::mag('P_LEDEN_READ')}">{LoginModel::getUid()|csrnaam:'pasfoto'}{/if}</div>
 		{/if}
 

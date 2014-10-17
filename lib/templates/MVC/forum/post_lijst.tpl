@@ -12,7 +12,12 @@
 	<td class="auteur">
 		<table>
 			<tr>
-				<td>{$post->uid|csrnaam:'user':'visitekaartje'}</td>
+				<td>
+					{$post->uid|csrnaam:'user':'visitekaartje'}
+					{if LidInstellingen::get('forum', 'toonpasfotos') == 'nee'}
+						<span id="t{$post->uid}-{$post->post_id}" class="togglePasfoto" title="Toon pasfoto">&raquo;</span>
+					{/if}
+				</td>
 				<td class="postlinktd"><a href="/forum/reactie/{$post->post_id}#{$post->post_id}" id="{$post->post_id}" class="postlink" title="Link naar deze post">&rarr;</a></td>
 			</tr>
 		</table>
@@ -24,9 +29,6 @@
 			{/if}
 		</span>
 		{if LoginModel::mag('P_LEDEN_READ')}
-			{if LidInstellingen::get('forum', 'toonpasfotos') == 'nee'}
-				<span id="t{$post->uid}-{$post->post_id}" class="togglePasfoto" title="Toon pasfoto">&raquo;</span>
-			{/if}
 			<div id="p{$post->post_id}" class="forumpasfoto{if LidInstellingen::get('forum', 'toonpasfotos') == 'nee'} verborgen">{elseif LoginModel::mag('P_LEDEN_READ')}">{$post->uid|csrnaam:'pasfoto'}{/if}</div>
 		{/if}
 		<br />

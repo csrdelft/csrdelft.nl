@@ -861,7 +861,6 @@ a.postlink{
 	text-decoration: none;
 }
 span.togglePasfoto, a.postlink{
-	float: right;
 	cursor: pointer;
 	color: #bbb;
 }
