@@ -40,7 +40,8 @@ class LidInstellingenController extends AclController {
 	public function opslaan() {
 		$this->model->save(); // fetches $_POST values itself
 		setMelding('Instellingen opgeslagen', 1);
-		redirect(HTTP_REFERER);
+		$from = new UrlField('referer', HTTP_REFERER);
+		redirect($from->getValue());
 	}
 
 	public function reset($module, $key, $value) {

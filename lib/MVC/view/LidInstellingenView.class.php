@@ -36,6 +36,9 @@ class LidInstellingenView extends SmartyTemplateView {
 			echo '</div>';
 		}
 		echo '</div>';
+		$from = new UrlField('referer', HTTP_REFERER);
+		$from->hidden = true;
+		$from->view();
 		$btns = new FormKnoppen('/');
 		$btns->view();
 		echo '</form>';
