@@ -40,10 +40,8 @@ $(function () {
 	if ($("#blackout").size())
 		$("body").css({overflowY: "hidden"});
 
-	$('body').bind('click.outside', function (e) {
-		if (!$(e.target).parents('#pageover').length > 0 && !$(e.target).hasClass('pp_overlay') && !$(e.target).hasClass('#dragobject')) {
-			escape(e);
-		}
+	$('#blackout').bind('click.outside', function (e) {
+		escape(e);
 	});
 	$(document).keyup(function (e) {
 		if (e.keyCode == 27) { // esc
