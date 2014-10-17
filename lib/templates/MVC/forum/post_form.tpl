@@ -48,6 +48,7 @@
 				<label for="email" id="externeemail">Email-adres</label>
 				<input type="text" id="email" name="email" class="forumEmail" placeholder="Email-adres" />
 				<input type="text" name="firstname" value="" class="verborgen" />{* spam trap, must be kept empty! *}
+				<br /><br />
 			{/if}
 			{if $draad === null}
 				<input type="text" id="nieuweTitel" name="titel" id="titel" value="" class="tekst" placeholder="Onderwerp titel" />
