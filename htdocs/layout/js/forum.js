@@ -61,11 +61,11 @@ $(document).ready(function ($) {
 		}
 	});
 
-	if ($('#draad-melding').length != 0) {
-		$textarea.focusin(function () {
+	if ($('#nieuweTitel').length != 0) {
+		$('#nieuweTitel').focusin(function () {
 			$('#draad-melding').slideDown(200);
 		});
-		$textarea.focusout(function () {
+		$('#nieuweTitel').focusout(function () {
 			$('#draad-melding').slideUp(200);
 		});
 	}

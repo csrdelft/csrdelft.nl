@@ -50,7 +50,7 @@
 				<input type="text" name="firstname" value="" class="verborgen" />{* spam trap, must be kept empty! *}
 			{/if}
 			{if $draad === null}
-				<input type="text" name="titel" id="titel" value="" class="tekst" placeholder="Onderwerp titel" />
+				<input type="text" id="nieuweTitel" name="titel" id="titel" value="" class="tekst" placeholder="Onderwerp titel" />
 				<br /><br />
 			{/if}
 			<div id="berichtPreview" class="preview forumBericht"></div>
