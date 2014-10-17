@@ -51,25 +51,12 @@ $(document).ready(function ($) {
 
 	$textarea.markItUp(mySettings); // mySettings located in set.js
 
-	if ($textarea.hasClass('extern')) {
-		$('#meldingen').prepend('<div id="public-melding"><strong>Openbaar forum</strong><br />Voor iedereen leesbaar, doorzoekbaar door zoekmachines.<br />Zet [prive] en [/prive] om uw persoonlijke contactgegevens in het bericht.</div>');
-	}
-
 	$textarea.keyup(function (event) {
 		if (event.keyCode == 13) { //enter
-
 			CsrBBPreview('forumBericht', 'berichtPreview');
-
-			if ($('#bbcode-melding').length == 0) {
-				$textarea.before('<div id="bbcode-melding">BBCode gevonden:<br /> controleer het voorbeeld.</div>');
-
-				$('#bbcode-melding').click(function () {
-					$('#bbcodehulp').toggle();
-				});
-			}
 		}
 		if ($('#ketzer-melding').length == 0 && /ketzer/.test($textarea.val())) {
-			$('#meldingen').prepend('<div id="ketzer-melding">Ketzer hebben?<br /><a href="/actueel/groepen/Ketzers" target="_blank">&raquo; Maak er zelf een aan.</a></div>');
+			$('#forummeldingen').prepend('<div id="ketzer-melding">Ketzer hebben?<br /><a href="/actueel/groepen/Ketzers" target="_blank">&raquo; Maak er zelf een aan.</a></div>');
 		}
 	});
 
@@ -131,7 +118,7 @@ function forumBewerken(postId) {
 			bewerkDiv = document.getElementById('post' + postId);
 			bewerkDivInnerHTML = bewerkDiv.innerHTML;
 			bewerkForm = '<form id="forumEditForm" class="Formulier InlineForm" action="/forum/bewerken/' + postId + '" method="post">';
-			bewerkForm += '<div class="cursief">Bericht bewerken</div>Als u dingen aanpast zet er dan even bij w&aacute;t u aanpast! Gebruik bijvoorbeeld [s]...[/s]<br />';
+			bewerkForm += '<br /><div class="">Als u dingen aanpast zet er dan even bij w&aacute;t u aanpast! Gebruik bijvoorbeeld [s]...[/s]</div><br />';
 			bewerkForm += '<div id="bewerkPreview" class="preview forumBericht"></div>';
 			bewerkForm += '<textarea name="forumBericht" id="forumBewerkBericht" class="tekst" rows="8"></textarea>';
 			bewerkForm += 'Reden van bewerking: <input type="text" name="reden" id="forumBewerkReden"/><br /><br />';

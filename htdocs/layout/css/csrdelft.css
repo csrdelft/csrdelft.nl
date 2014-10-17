@@ -973,20 +973,16 @@ div.bewerkt hr{ text-align: left; background-color: #bbb; }
 .forumdraadtitelbottom h1{
 	margin-top: 5px;
 }
-
-#meldingen{
+#forumForm{
 	float: right;
+}
+#forummeldingen{
 	width: 140px;
 }
-#meldingen div{
+#forummeldingen div{
 	color: white;
 	padding: 4px 8px 4px 4px;
 	text-align: left;
-}
-
-#bbcode-melding{
-	background-color: #f66;
-	margin-top: 1px;
 }
 #ketzer-melding{
 	background-color: #4b4;

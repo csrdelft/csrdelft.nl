@@ -1,5 +1,5 @@
-<form id="forumReageren" action="/forum/posten/{$deel->forum_id}/{$draad->draad_id}" method="post">
-	<a class="forumpostlink" id="reageren">Reageren</a>
+<a class="forumpostlink" id="reageren">Reageren</a>
+<form id="forumForm" action="/forum/posten/{$deel->forum_id}/{$draad->draad_id}" method="post">
 	{* berichtje weergeven voor niet-ingeloggede gebruikers dat ze een naam moeten vermelden. *}
 	{if !LoginModel::mag('P_LOGGED_IN')}
 		<span class="dikgedrukt">
@@ -17,8 +17,7 @@
 		{* Openbaar forum: Iedereen mag dit lezen en zoekmachines nemen het op in hun zoekresultaten. *}
 	{/if}
 	<div id="berichtPreview" class="preview forumBericht"></div>
-	<div id="meldingen"></div>
-	<textarea name="forumBericht" id="forumBericht" class="forumBericht{if $deel->isOpenbaar()} extern{/if}" rows="12" origvalue="{$post_form_tekst}">{$post_form_tekst}</textarea>
+	<textarea name="forumBericht" id="forumBericht" class="forumBericht" rows="12" origvalue="{$post_form_tekst}">{$post_form_tekst}</textarea>
 	<div class="butn">
 		<input type="submit" name="submit" value="Opslaan" id="forumOpslaan" />
 		<input type="button" value="Voorbeeld" id="forumVoorbeeld" onclick="CsrBBPreview('forumBericht', 'berichtPreview');" />
@@ -29,3 +28,12 @@
 		</div>
 	</div>
 </form>
+<div id="forummeldingen">
+	{if $deel->isOpenbaar()}
+		<div id="public-melding">
+			<div class="dikgedrukt">Openbaar forum</div>
+			Voor iedereen leesbaar, doorzoekbaar door zoekmachines.<br />
+			Zet [prive] en [/prive] om uw persoonlijke contactgegevens in het bericht.
+		</div>
+	{/if}
+</div>
