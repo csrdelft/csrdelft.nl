@@ -41,7 +41,9 @@ $(function () {
 		$("body").css({overflowY: "hidden"});
 
 	$('#blackout').bind('click.outside', function (e) {
-		escape(e);
+		if (e.target === document.getElementById('blackout')) {
+			escape(e);
+		}
 	});
 	$(document).keyup(function (e) {
 		if (e.keyCode == 27) { // esc
