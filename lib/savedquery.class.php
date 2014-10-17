@@ -185,7 +185,7 @@ class SavedQueryContent implements View {
 				}
 				$return .= '</tr>';
 			}
-			$return .= '</tbody></table><a class="knop clear-right vergroot" data-vergroot="#' . $id . '" title="Vergroot de lijst">&uarr;&darr;</a>';
+			$return .= '</tbody></table><a class="knop clear-right vergroot" data-vergroot="#' . $id . ' tbody" title="Vergroot de lijst">&uarr;&darr;</a>';
 		} else {
 			//foutmelding in geval van geen resultaat, dus of geen query die bestaat, of niet
 			//voldoende rechten.
@@ -210,16 +210,16 @@ class SavedQueryContent implements View {
 				if ($current != '') {
 					$return .= '</ul></div>';
 				}
-				$return .= '<div class="sqCategorie"><strong>' . $query['categorie'] . '</strong><ul>';
+				$return .= '<div class="sqCategorie "><span class="dikgedrukt">' . $query['categorie'] . '</span><ul>';
 				$current = $query['categorie'];
 			}
 			$return .= '<li><a href="query.php?id=' . $query['ID'] . '">';
 			if ($id == $query['ID']) {
-				$return .= '<em>';
+				$return .= '<span class="cursief">';
 			}
 			$return.=mb_htmlentities($query['beschrijving']);
 			if ($id == $query['ID']) {
-				$return .= '</em>';
+				$return .= '</span>';
 			}
 			$return .= '</a></li>';
 		}

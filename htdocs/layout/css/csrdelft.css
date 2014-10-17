@@ -286,7 +286,7 @@ table.query_table thead{
 	display: block;
 }
 table.query_table tbody{
-	max-height: 300px;
+	height: 300px;
 	overflow: auto;
 	display: block;
 }
