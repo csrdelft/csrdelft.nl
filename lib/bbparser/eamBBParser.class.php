@@ -643,7 +643,7 @@ class eamBBParser {
 		return $text;
 	}
 
-	function bbcode($args = array()) {
+	function bb_code($args = array()) {
 
 		$content = $this->parseArray(array('[/code]'), array('code', 'br', 'all' => 'all'));
 

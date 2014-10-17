@@ -1,6 +1,6 @@
 <?php
 
-require_once 'bbcode/eamBBParser.class.php';
+require_once 'bbparser/eamBBParser.class.php';
 
 /**
  * CsrBB.class.php
