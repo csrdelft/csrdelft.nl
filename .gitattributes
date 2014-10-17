@@ -4154,7 +4154,6 @@ lib/templates/MVC/agenda/zijbalk.tpl -text
 lib/templates/MVC/forum/deel.tpl -text
 lib/templates/MVC/forum/deel_lijst.tpl -text
 lib/templates/MVC/forum/draad.tpl -text
-lib/templates/MVC/forum/draad_form.tpl -text
 lib/templates/MVC/forum/draad_lijst.tpl -text
 lib/templates/MVC/forum/draad_mod.tpl -text
 lib/templates/MVC/forum/draad_zijbalk.tpl -text

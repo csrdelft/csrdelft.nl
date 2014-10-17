@@ -974,22 +974,31 @@ div.bewerkt hr{ text-align: left; background-color: #bbb; }
 	margin-top: 5px;
 }
 #forumForm{
-	float: right;
+
 }
 #forummeldingen{
-	width: 140px;
+	margin-top: 100px;
 }
-#forummeldingen div{
-	color: white;
+#draad-melding, #bewerk-melding, #ketzer-melding, #public-melding{
+	margin-bottom: 5px;
 	padding: 4px 8px 4px 4px;
 	text-align: left;
 }
+#draad-melding{
+	display: none;
+	background-color: #ffffc1;
+}
+#bewerk-melding{
+	display: none;
+	background-color: #ffffc1;
+}
 #ketzer-melding{
+	display: none;
+	color: #fff;
 	background-color: #4b4;
-	margin-top: 34px;
 }
 #public-melding{
-	margin-top: 67px;
+	color: #fff;
 	background-color: #f66;
 }
 div.citaatContainer{

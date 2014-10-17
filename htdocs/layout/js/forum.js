@@ -57,8 +57,18 @@ $(document).ready(function ($) {
 		}
 		if ($('#ketzer-melding').length == 0 && /ketzer/.test($textarea.val())) {
 			$('#forummeldingen').prepend('<div id="ketzer-melding">Ketzer hebben?<br /><a href="/actueel/groepen/Ketzers" target="_blank">&raquo; Maak er zelf een aan.</a></div>');
+			$('#ketzer-melding').slideDown(200);
 		}
 	});
+
+	if ($('#draad-melding').length != 0) {
+		$textarea.focusin(function () {
+			$('#draad-melding').slideDown(200);
+		});
+		$textarea.focusout(function () {
+			$('#draad-melding').slideUp(200);
+		});
+	}
 
 	$('.togglePasfoto').each(function () {
 		$(this).click(function () {
@@ -105,8 +115,8 @@ function togglePasfotos(uids, div) {
  * Een post bewerken in het forum.
  * Haal een post op, bouw een formuliertje met javascript.
  */
-var bewerkDiv = null;
-var bewerkDivInnerHTML = null;
+var bewerkContainer = null;
+var bewerkContainerInnerHTML = null;
 function forumBewerken(postId) {
 	http.abort();
 	http.open("POST", "/forum/tekst/" + postId, true);
@@ -115,10 +125,9 @@ function forumBewerken(postId) {
 			if (document.getElementById('forumEditForm')) {
 				restorePost();
 			}
-			bewerkDiv = document.getElementById('post' + postId);
-			bewerkDivInnerHTML = bewerkDiv.innerHTML;
+			bewerkContainer = document.getElementById('post' + postId);
+			bewerkContainerInnerHTML = bewerkContainer.innerHTML;
 			bewerkForm = '<form id="forumEditForm" class="Formulier InlineForm" action="/forum/bewerken/' + postId + '" method="post">';
-			bewerkForm += '<br /><div class="">Als u dingen aanpast zet er dan even bij w&aacute;t u aanpast! Gebruik bijvoorbeeld [s]...[/s]</div><br />';
 			bewerkForm += '<div id="bewerkPreview" class="preview forumBericht"></div>';
 			bewerkForm += '<textarea name="forumBericht" id="forumBewerkBericht" class="tekst" rows="8"></textarea>';
 			bewerkForm += 'Reden van bewerking: <input type="text" name="reden" id="forumBewerkReden"/><br /><br />';
@@ -128,10 +137,12 @@ function forumBewerken(postId) {
 					'<input type="button" value="Voorbeeld" onclick="CsrBBPreview(\'forumBewerkBericht\', \'bewerkPreview\');" /> ' +
 					'<input type="button" value="Annuleren" onclick="restorePost();" />';
 			bewerkForm += '</form>';
-			bewerkDiv.innerHTML = bewerkForm;
+			bewerkContainer.innerHTML = bewerkForm;
 			document.getElementById('forumBewerkBericht').value = http.responseText;
 			$('#forumBewerkBericht').autosize();
 			$('#forumBewerkBericht').markItUp(mySettings); // mySettings located in set.js
+			$(bewerkContainer).parent().children('td.auteur:first').append('<div id="bewerk-melding">Als u dingen aanpast zet er dan even bij w&aacute;t u aanpast! Gebruik bijvoorbeeld [s]...[/s]</div>');
+			$('#bewerk-melding').slideDown(200);
 			//invoerveldjes van het normale toevoegformulier even uitzetten.
 			document.getElementById('forumBericht').disabled = true;
 			document.getElementById('forumOpslaan').disabled = true;
@@ -156,7 +167,8 @@ function forumCiteren(postId) {
 	return false;
 }
 function restorePost() {
-	bewerkDiv.innerHTML = bewerkDivInnerHTML;
+	bewerkContainer.innerHTML = bewerkContainerInnerHTML;
+	$('#bewerk-melding').slideUp(200);
 	document.getElementById('forumBericht').disabled = false;
 	document.getElementById('forumOpslaan').disabled = false;
 	document.getElementById('forumVoorbeeld').disabled = false;

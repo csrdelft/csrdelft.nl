@@ -80,8 +80,17 @@
 				</div>
 			</td>
 		</tr>
+
+		{if $deel->magPosten()}
+			<tr>
+				<td colspan="4">
+					<br />
+					<table>
+						{include file='MVC/forum/post_form.tpl' draad=null}
+					</table>
+				</td>
+			</tr>
+		{/if}
+
 	</tbody>
 </table>
-{if $deel->magPosten()}
-	{include file='MVC/forum/draad_form.tpl'}
-{/if}

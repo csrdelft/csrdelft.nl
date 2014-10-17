@@ -51,7 +51,7 @@
 								left: 0
 							}
 						});
-				">{icon get="wrench"} Modereren</a>
+				   ">{icon get="wrench"} Modereren</a>
 			{/if}
 		</div>
 		<div class="breadcrumbs">
@@ -171,9 +171,9 @@ pagecount=ForumPostsModel::instance()->getAantalPaginas($draad->draad_id) curpag
 			</td>
 		</tr>
 
+		{if ForumController::magPosten($draad, $deel)}
+			{include file='MVC/forum/post_form.tpl'}
+		{/if}
+
 	</tbody>
 </table>
-
-{if ForumController::magPosten($draad, $deel)}
-	{include file='MVC/forum/post_form.tpl'}
-{/if}
