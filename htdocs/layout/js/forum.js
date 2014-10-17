@@ -26,6 +26,22 @@ $(document).ready(function ($) {
 		clearInterval(autosave);
 	});
 
+	//naar juiste forumreactie scrollen door hash toe te voegen
+	if (!window.location.hash && window.location.pathname.substr(0, 15) == '/forum/reactie/') {
+		var reactieid = parseInt(window.location.pathname.substr(15), 10);
+		window.location.hash = '#' + reactieid;
+	}
+
+	//klein beetje terug omhoog scrollen bij ongelezen lijn
+	if (window.location.hash == '#ongelezen') {
+		$(window).scrollTo('#ongelezen', 400, {
+			offset: {
+				top: -100,
+				left: 0
+			}
+		});
+	}
+
 	$('#forumBericht').each(function () {
 
 		$(this).markItUp(mySettings); // mySettings located in set.js
@@ -77,19 +93,6 @@ $(document).ready(function ($) {
 				$(this).find('a.forummodknop').fadeOut();
 			}
 	);
-
-	//naar juiste forumreactie scrollen door hash toe te voegen
-	if (!window.location.hash && window.location.pathname.substr(0, 15) == '/forum/reactie/') {
-		var reactieid = parseInt(window.location.pathname.substr(15), 10);
-		window.location.hash = '#' + reactieid;
-	}
-
-	//klein beetje terug omhoog scrollen bij ongelezen lijn
-	if (window.location.hash == '#ongelezen') {
-		$(window).scrollTo({
-			top: '-=100px'
-		}, 400);
-	}
 });
 
 var orig = null;
