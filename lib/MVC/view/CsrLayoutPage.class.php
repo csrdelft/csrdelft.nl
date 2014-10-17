@@ -93,7 +93,7 @@ class CsrLayoutPage extends HtmlPage {
 				$this->zijbalk = array();
 			}
 			$this->zijbalk = Zijbalk::addStandaardZijbalk($this->zijbalk);
-			if (LidInstellingen::get('zijbalk', 'scrollen') == 'apart scrollen') {
+			if (LidInstellingen::get('zijbalk', 'scrollen') != 'met pagina mee') {
 				$top = 0;
 				$left = 0;
 				DragObjectModel::getCoords('zijbalk', $top, $left);

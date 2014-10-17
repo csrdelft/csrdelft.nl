@@ -111,6 +111,11 @@ function zijbalk_scroll_fixed() {
 		return;
 	}
 
+	if (elmnt.hasClass('desktop-only') && window.innerWidth < 960) {
+		elmnt.removeClass('desktop-only scroll-fixed dragobject dragvertical');
+		return;
+	}
+
 	// adjust to container size
 	$(window).resize(function () {
 		elmnt.css('height', window.innerHeight);
@@ -125,7 +130,7 @@ function zijbalk_scroll_fixed() {
 	});
 
 	// set scroll position
-	elmnt.scrollTop(elmnt.attr('scrollfix'));
+	elmnt.scrollTop(elmnt.attr('data-scrollfix'));
 
 	// remember scroll position
 	var trigger = false;

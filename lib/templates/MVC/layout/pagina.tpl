@@ -10,12 +10,12 @@
 				<tr>
 					{if is_array($zijbalk)}
 						<td id="mainleft">
-							<div id="zijbalk"{if LidInstellingen::get('zijbalk', 'scrollen') == 'apart scrollen'} class="scroll-fixed dragobject dragvertical" scrollfix="{$scrollfix}"{/if}>
+							<div id="zijbalk"{if LidInstellingen::get('zijbalk', 'scrollen') != 'met pagina mee'} class="{if LidInstellingen::get('zijbalk', 'scrollen') == '(alleen desktop)'}desktop-only {/if}scroll-fixed dragobject dragvertical" data-scrollfix="{$scrollfix}"{/if}>
 								<a id="cd-logo" href="/"><div id="beeldmerk"></div></a>
 								{foreach from=$zijbalk item=block}
 									<div class="block">{$block->view()}</div>
 								{/foreach}
-								{if LidInstellingen::get('zijbalk', 'scrollen') != 'apart scrollen'}<br /><br /><br />{/if}
+								{if LidInstellingen::get('zijbalk', 'scrollen') == 'met pagina mee'}<br /><br /><br />{/if}
 							</div>
 						</td>
 					{/if}
