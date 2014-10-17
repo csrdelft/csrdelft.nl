@@ -13,7 +13,7 @@
 		<li><span class="pre">[citaat=externe_bron][/citaat]</span> voor een citaat.</li>
 		<li><span class="pre">[lid]lidnummer[/lid]</span> voor een link naar het profiel van een lid of oudlid</li>
 		<li><span class="pre">[offtopic]...[/offtopic]</span> voor een stukje tekst van-het-onderwerp</li>
-		<li><span class="pre">[ubboff]...[/ubboff]</span> voor een stukje met ubb-tags zonder dat ze geïnterpreteerd worden</li>
+		<li><span class="pre">[tekst]...[/tekst]</span> voor een stukje met bbcode zonder dat het omgezet wordt</li>
 	</ul>
 	<h2>Elementen invoegen</h2>
 	<ul>

@@ -1,6 +1,6 @@
 <?php
 
-require_once 'ubb/eamBBParser.class.php';
+require_once 'bbcode/eamBBParser.class.php';
 
 /**
  * CsrBB.class.php
@@ -37,7 +37,7 @@ class CsrBB extends eamBBParser {
 				} elseif ($char == ';') {
 					$counter2 = 0;
 				} elseif ($char == 'o' && $counter == 0 && $counter2 <= 0) {
-					$neus = $this->bb-neuzen($char);
+					$neus = $this->bb_neuzen($char);
 					$this->HTML = substr($this->HTML, 0, $pointer) . $neus . substr($this->HTML, $pointer + 1);
 					$pointer += strlen($neus);
 					continue;
@@ -185,7 +185,7 @@ class CsrBB extends eamBBParser {
 	 * Rul = url
 	 */
 	function bb_rul($arguments = array()) {
-		return $this->bb-url($arguments);
+		return $this->bb_url($arguments);
 	}
 
 	function bb_url($arguments = array()) {
@@ -740,21 +740,28 @@ HTML;
 	}
 
 	/**
+	 * tekst = ubboff
+	 */
+	function bb_tekst() {
+		return $this->bb_ubboff($arguments);
+	}
+
+	/**
 	 * Vanonderwerp = offtopic
 	 */
 	function bb_vanonderwerp($arguments = array()) {
-		return $this->bb-offtopic($arguments);
+		return $this->bb_offtopic($arguments);
 	}
 
 	/**
 	 * OT = offtopic
 	 */
 	function bb_ot($arguments = array()) {
-		return $this->bb-offtopic($arguments);
+		return $this->bb_offtopic($arguments);
 	}
 
 	public function bb_offtopic() {
-		$content = $this->parseArray(array('[/offtopic]', '[/vanonderwerp]'), array());
+		$content = $this->parseArray(array('[/ot]', '[/offtopic]', '[/vanonderwerp]'), array());
 		return '<span class="offtopic">' . $content . '</span>';
 	}
 
@@ -762,7 +769,7 @@ HTML;
 	 * Verklapper = spoiler
 	 */
 	function bb_verklapper($arguments = array()) {
-		return $this->bb-spoiler($arguments);
+		return $this->bb_spoiler($arguments);
 	}
 
 	public function bb_spoiler() {
@@ -862,7 +869,7 @@ HTML;
 	 * Kaart = map
 	 */
 	function bb_kaart($arguments = array()) {
-		return $this->bb-map($arguments);
+		return $this->bb_map($arguments);
 	}
 
 	/**

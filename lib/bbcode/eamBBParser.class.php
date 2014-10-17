@@ -115,8 +115,9 @@ class eamBBParser {
 	 * @access private
 	 */
 	var $paragraph_required;
-	// It's possible with the ubboff tag to switch processing off.
 	/**
+	 * It's possible with the ubboff tag to switch processing off.
+	 * 
 	 * Keep track of ubb status
 	 *
 	 * When we're in a [ubboff] block, this will be false. Otherwise true.
@@ -718,7 +719,7 @@ class eamBBParser {
 
 	function bb_ubboff() {
 		$this->bb_mode = false;
-		$content = $this->parseArray(array('[/ubboff]'), array());
+		$content = $this->parseArray(array('[/ubboff]', '[/tekst]'), array());
 		$this->bb_mode = true;
 		return $content;
 	}

@@ -16,7 +16,7 @@ class PeilingContent extends SmartyTemplateView {
 	public function getHTML($beheer = false) {
 		$this->smarty->assign('peiling', $this->model);
 		$this->smarty->assign('beheer', $beheer);
-		return $this->smarty->fetch('peiling.ubb.tpl');
+		return $this->smarty->fetch('peiling.bb.tpl');
 	}
 
 	public function view() {

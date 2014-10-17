@@ -172,7 +172,7 @@ class BoekBBContent extends SmartyTemplateView {
 
 	public function view() {
 		$this->smarty->assign('boek', $this->model);
-		return $this->smarty->fetch('bibliotheek/boek.ubb.tpl');
+		return $this->smarty->fetch('bibliotheek/boek.bb.tpl');
 	}
 
 }

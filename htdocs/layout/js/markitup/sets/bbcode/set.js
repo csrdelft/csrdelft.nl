@@ -56,7 +56,7 @@ mySettings = {
 		//{className: 'knop-lijst-punt', name: 'Lijstpunt', openWith: '[*] '},
 		{separator: '|'},
 		{className: 'knop-code', name: 'Code', openWith: '[code]', closeWith: '[/code]'},
-		{className: 'knop-off', name: 'Opmaakcode tonen', openWith: '[ubboff]', closeWith: '[/ubboff]'},
+		{className: 'knop-off', name: 'Opmaakcode tonen', openWith: '[tekst]', closeWith: '[/tekst]'},
 		{separator: '|'},
 		{className: 'knop-clean', name: 'Opmaak wissen', replaceWith: function (markitup) {
 				return markitup.selection.replace(/\[(.*?)\]/g, '');

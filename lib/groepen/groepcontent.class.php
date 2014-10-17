@@ -301,7 +301,7 @@ class GroepBBContent extends SmartyTemplateView {
 
 	public function getHTML() {
 		$this->smarty->assign('groep', $this->model);
-		return $this->smarty->fetch('groepen/groep.ubb.tpl');
+		return $this->smarty->fetch('groepen/groep.bb.tpl');
 	}
 
 	public function view() {

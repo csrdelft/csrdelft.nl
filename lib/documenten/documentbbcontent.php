@@ -70,7 +70,7 @@ class DocumentBBContent extends SmartyTemplateView {
 
 	public function getHTML() {
 		$this->smarty->assign('document', $this->model);
-		return $this->smarty->fetch('documenten/document.ubb.tpl');
+		return $this->smarty->fetch('documenten/document.bb.tpl');
 	}
 
 	public function view() {
