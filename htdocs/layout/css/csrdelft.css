@@ -936,7 +936,7 @@ div.forumdeel-omschrijving{
 div.forumdeel-omschrijving h1{
 	margin-top: 10px;
 }
-#forumBewerkReden, input.forumEmail{
+#forumBewerkReden{
 	width: 250px;
 }
 div.forumBericht, textarea.forumBericht, div.butn, #nieuweTitel{
