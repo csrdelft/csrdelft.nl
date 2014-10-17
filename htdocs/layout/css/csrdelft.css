@@ -493,8 +493,10 @@ form#streeplijst input, form#streeplijst label{ text-align: left; margin: 3px; p
 	vertical-align: top;
 }
 .Formulier .FormKnoppen{
-	text-align: right;
 	margin-top: 25px;
+}
+.Formulier .FormKnoppen .knop{
+	margin-right: 4px;
 }
 .Formulier .UploadOptie{
 	min-height: 2em;

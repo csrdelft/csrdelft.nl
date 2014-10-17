@@ -46,7 +46,7 @@ class FormulierKnop implements FormElement {
 	}
 
 	public function view() {
-		echo '<a id="' . $this->id . '"' . ($this->url ? ' href="' . $this->url . '"' : '') . ' class="knop ' . $this->action . ($this->float_left ? ' float-left' : '') . '" title="' . $this->title . '">';
+		echo '<a id="' . $this->id . '"' . ($this->url ? ' href="' . $this->url . '"' : '') . ' class="knop ' . $this->action . ($this->float_left ? ' float-left' : ' float-right') . '" title="' . $this->title . '">';
 		if ($this->icon) {
 			echo '<img src="' . CSR_PICS . $this->icon . '" class="icon" width="16" height="16" /> ';
 		}
@@ -138,7 +138,7 @@ class FormKnoppen implements FormElement {
 
 	public function view() {
 		echo '<div class="' . $this->getType() . '">';
-		foreach ($this->knoppen as $knop) {
+		foreach (array_reverse($this->knoppen) as $knop) {
 			$knop->view();
 		}
 		echo '</div>';

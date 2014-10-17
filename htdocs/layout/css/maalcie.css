@@ -149,6 +149,6 @@ td.maaltijd-aangemeld, td.maaltijd-afgemeld {
 	display: none;
 }
 
-#eetwens-form .InlineFormToggle {
-	width: 90%;
+#field_eetwens, #eetwens-form .InlineFormToggle {
+	width: 580px !important;
 }
