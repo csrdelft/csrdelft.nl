@@ -83,6 +83,13 @@ $(document).ready(function ($) {
 		var reactieid = parseInt(window.location.pathname.substr(15), 10);
 		window.location.hash = '#' + reactieid;
 	}
+
+	//klein beetje terug omhoog scrollen bij ongelezen lijn
+	if (window.location.hash == '#ongelezen') {
+		$(window).scrollTo({
+			top: '-=100px'
+		}, 400);
+	}
 });
 
 var orig = null;
