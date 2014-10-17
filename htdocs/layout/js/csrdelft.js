@@ -578,6 +578,16 @@ function peiling_bevestig_stem(peiling) {
 	}
 }
 
+function getSelectedText() {
+	var text = '';
+	if (window.getSelection) {
+		text = window.getSelection().toString();
+	} else if (document.selection && document.selection.type != 'Control') {
+		text = document.selection.createRange().text;
+	}
+	return text;
+}
+
 /**
  * Selecteer de tekst van een DOM-element.
  * @source http://stackoverflow.com/questions/985272/jquery-selecting-text-in-an-element-akin-to-highlighting-with-your-mouse/987376#987376

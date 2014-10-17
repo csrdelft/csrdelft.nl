@@ -43,8 +43,8 @@
 			<a href="/forum/verwijderen/{$post->post_id}" class="knop post confirm" title="Verwijder bericht of draad">{icon get="cross"}</a>
 		{else}
 			<div class="forumpostKnoppen">
-				{if ForumController::magPosten($draad, $deel)}
-					<a href="#reageren" class="knop" onclick="forumCiteren({$post->post_id});" title="Citeer bericht">{icon get="comments"}</a>
+				{if LoginModel::mag('P_LOGGED_IN') AND ForumController::magPosten($draad, $deel)}
+					<a href="#reageren" class="knop citeren" data-citeren="{$post->post_id}" title="Citeer bericht">{icon get="comments"}</a>
 				{/if}
 				{if ForumController::magForumPostBewerken($post, $draad, $deel)}
 					<a href="#{$post->post_id}" class="knop

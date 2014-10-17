@@ -97,6 +97,11 @@ $(document).ready(function ($) {
 				$(this).find('a.forummodknop').fadeOut();
 			}
 	);
+
+	$('a.citeren').click(function () {
+		var postid = $(this).attr('data-citeren');
+		forumCiteren(postid);
+	});
 });
 
 var orig = null;
@@ -159,7 +164,7 @@ function forumBewerken(postId) {
 }
 function forumCiteren(postId) {
 	http.abort();
-	http.open("POST", "/forum/citeren/" + postId, true);
+	http.open('POST', '/forum/citeren/' + postId, true);
 	http.onreadystatechange = function () {
 		if (http.readyState == 4) {
 			document.getElementById('forumBericht').value += http.responseText;

@@ -66,6 +66,10 @@ class ForumController extends Controller {
 			case 'wacht':
 				return !$this->isPosted();
 
+			case 'citeren':
+				if (!LoginModel::mag('P_LOGGED_IN')) {
+					return false;
+				}
 			case 'aanmaken':
 			case 'beheren':
 			case 'opheffen':
@@ -81,7 +85,7 @@ class ForumController extends Controller {
 			case 'afsplitsen':
 			case 'offtopic':
 			case 'goedkeuren':
-			case 'citeren':
+
 			case 'tekst':
 			case 'verbergen':
 			case 'tonen':
