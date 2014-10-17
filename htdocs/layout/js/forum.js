@@ -34,12 +34,16 @@ $(document).ready(function ($) {
 
 	//klein beetje terug omhoog scrollen bij ongelezen lijn
 	if (window.location.hash == '#ongelezen') {
-		$(window).scrollTo('#ongelezen', 1, {
-			offset: {
-				top: -100,
-				left: 0
-			}
-		});
+		try {
+			$(window).scrollTo('#ongelezen', 1, {
+				offset: {
+					top: -100,
+					left: 0
+				}
+			});
+		} catch (e) {
+			// missing scrollTo
+		}
 	}
 
 	$('#forumBericht').each(function () {
