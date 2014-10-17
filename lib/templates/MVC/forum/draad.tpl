@@ -42,19 +42,16 @@
 					   >{icon get="lock_open"}</a>
 				{/if}
 				&nbsp;&nbsp;&nbsp;
-				<a class="knop" title="Moderatie-functies weergeven" onclick="$('#modereren').slideDown();
-						try {
-							$(window).scrollTo('#modereren', 600, {
-								easing: 'easeInOutCubic',
-								offset: {
-									top: -100,
-									left: 0
-								}
-							});
-						} catch (e) {
-							// missing scrollTo
-						}
-						$('#forumtabel a.forummodknop').fadeIn();">{icon get="wrench"} Modereren</a>
+				<a class="knop" title="Moderatie-functies weergeven" onclick="$('#forumtabel a.forummodknop').fadeIn();
+						$('#modereren').slideDown();
+						$(window).scrollTo('#modereren', 600, {
+							easing: 'easeInOutCubic',
+							offset: {
+								top: -100,
+								left: 0
+							}
+						});
+				">{icon get="wrench"} Modereren</a>
 			{/if}
 		</div>
 		<div class="breadcrumbs">
