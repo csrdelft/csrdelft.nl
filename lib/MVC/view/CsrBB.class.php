@@ -742,7 +742,7 @@ HTML;
 	/**
 	 * tekst = ubboff
 	 */
-	function bb_tekst() {
+	function bb_tekst($arguments = array()) {
 		return $this->bb_ubboff($arguments);
 	}
 
@@ -760,7 +760,7 @@ HTML;
 		return $this->bb_offtopic($arguments);
 	}
 
-	public function bb_offtopic() {
+	public function bb_offtopic($arguments = array()) {
 		$content = $this->parseArray(array('[/ot]', '[/offtopic]', '[/vanonderwerp]'), array());
 		return '<span class="offtopic">' . $content . '</span>';
 	}
@@ -772,12 +772,12 @@ HTML;
 		return $this->bb_spoiler($arguments);
 	}
 
-	public function bb_spoiler() {
+	public function bb_spoiler($arguments = array()) {
 		$content = $this->parseArray(array('[/spoiler]', '[/verklapper]'), array());
 		return '<button class="spoiler">Toon verklapper</button><div class="spoiler-content">' . $content . '</div>';
 	}
 
-	function bb_1337() {
+	function bb_1337($arguments = array()) {
 		$html = $this->parseArray(array('[/1337]'), array());
 		$html = str_replace('er ', '0r ', $html);
 		$html = str_replace('you', 'j00', $html);
@@ -908,7 +908,7 @@ HTML;
 		$mapid = 'map' . $GLOBALS['mapJsLoaded'];
 		$jscall = "writeStaticGmap('$mapid', '$address',$width,$height);";
 		if (!isset($arguments['static'])) {
-			$jscall = "$(document).ready(function() {loadGmaps('$mapid','$address');});";
+			$jscall = "$(document).ready(function($arguments = array()) {loadGmaps('$mapid','$address');});";
 		}
 		$html .= '<div class="bb-gmap" id="' . $mapid . '" style="width:' . $width . 'px;height:' . $height . 'px;"></div><script type="text/javascript">' . $jscall . '</script>';
 		return $html;
@@ -1047,7 +1047,7 @@ HTML;
  */
 class CsrBBHtml extends CsrBB {
 
-	public function __construct() {
+	public function __construct($arguments = array()) {
 		parent::__construct();
 		$this->allow_html = true;
 	}

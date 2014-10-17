@@ -706,11 +706,11 @@ class eamBBParser {
 		return '<li>' . $this->parseArray(array('[/li]')) . '</li>';
 	}
 
-	function bb_me($parameters) {
+	function bb_me($arguments) {
 		$content = $this->parseArray(array('[br]'), array());
 		array_unshift($this->parseArray, '[br]');
-		if (isset($parameters['me'])) {
-			$html = '<font color="red">* ' . $parameters['me'] . $content . '</font>';
+		if (isset($arguments['me'])) {
+			$html = '<font color="red">* ' . $arguments['me'] . $content . '</font>';
 		} else {
 			$html = '<font color="red">/me' . $content . '</font>';
 		}
@@ -724,7 +724,7 @@ class eamBBParser {
 		return $content;
 	}
 
-	function bb_email($parameters) {
+	function bb_email($arguments) {
 		$html = '';
 
 		$mailto = array_shift($this->parseArray);
@@ -735,9 +735,9 @@ class eamBBParser {
 
 		// only valid patterns
 		if ($endtag == '[/email]') {
-			if (isset($parameters['email'])) {
-				if (email_like($parameters['email'])) {
-					$email = $parameters['email'];
+			if (isset($arguments['email'])) {
+				if (email_like($arguments['email'])) {
+					$email = $arguments['email'];
 					$text = $mailto;
 				}
 			} else {
@@ -746,9 +746,9 @@ class eamBBParser {
 				}
 			}
 		} else {
-			if (isset($parameters['email'])) {
-				if (email_like($parameters['email'])) {
-					$email = $text = $parameters['email'];
+			if (isset($arguments['email'])) {
+				if (email_like($arguments['email'])) {
+					$email = $text = $arguments['email'];
 				}
 			}
 			array_unshift($this->parseArray, $endtag);
@@ -758,7 +758,7 @@ class eamBBParser {
 			$html = '<a href="mailto:' . $email . '">' . $text . '</a>';
 
 			//spamprotectie: rot13 de email-tags, en voeg javascript toe om dat weer terug te rot13-en.
-			if (isset($parameters['spamsafe'])) {
+			if (isset($arguments['spamsafe'])) {
 				$html = '<script>document.write("' . str_rot13(addslashes($html)) . '".replace(/[a-zA-Z]/g, function(c){ return String.fromCharCode((c<="Z"?90:122)>=(c=c.charCodeAt(0)+13)?c:c-26);}));</script>';
 			}
 		} else {
@@ -783,10 +783,10 @@ class eamBBParser {
 		return $html;
 	}
 
-	function bb_table($parameters) {
+	function bb_table($arguments) {
 		$tableProperties = array('border', 'color', 'background-color', 'border-collapse');
 		$style = '';
-		foreach ($parameters as $name => $value) {
+		foreach ($arguments as $name => $value) {
 			if (in_array($name, $tableProperties)) {
 				$style.=$name . ': ' . str_replace('_', ' ', htmlspecialchars($value)) . '; ';
 			}
@@ -803,12 +803,12 @@ class eamBBParser {
 		return $html;
 	}
 
-	function bb_td($parameters = array()) {
+	function bb_td($arguments = array()) {
 		$content = $this->parseArray(array('[/td]'), array());
 
 		$style = '';
-		if (isset($parameters['w'])) {
-			$style.='width: ' . (int) $parameters['w'] . 'px; ';
+		if (isset($arguments['w'])) {
+			$style.='width: ' . (int) $arguments['w'] . 'px; ';
 		}
 
 		$html = '<td style="' . $style . '">' . $content . '</td>';
