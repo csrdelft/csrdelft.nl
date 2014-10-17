@@ -43,9 +43,17 @@
 				{/if}
 				&nbsp;&nbsp;&nbsp;
 				<a class="knop" title="Moderatie-functies weergeven" onclick="$('#modereren').slideDown();
-						$.scrollTo('#modereren', 600, {
-							easing: 'easeInOutCubic'
-						});
+						try {
+							$(window).scrollTo('#modereren', 600, {
+								easing: 'easeInOutCubic',
+								offset: {
+									top: -100,
+									left: 0
+								}
+							});
+						} catch (e) {
+							// missing scrollTo
+						}
 						$('#forumtabel a.forummodknop').fadeIn();">{icon get="wrench"} Modereren</a>
 			{/if}
 		</div>
