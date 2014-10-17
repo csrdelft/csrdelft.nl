@@ -1,7 +1,7 @@
-<div id="ubbhulpverhaal" class="outer-shadow dragobject savepos" style="top: {$ubbtop}px; left: {$ubbleft}px;">
-	<span id="ubbsluiten" onclick="$('#ubbhulpverhaal').fadeOut();" title="Opmaakhulp verbergen">&times;</span>
+<div id="bbcodepopup" class="outer-shadow dragobject savepos" style="top: {$ubbtop}px; left: {$ubbleft}px;">
+	<span id="ubbsluiten" onclick="$('#bbcodepopup').fadeOut();" title="Opmaakhulp verbergen">&times;</span>
 	<h2>Tekst opmaken</h2>
-	<p>U kunt uw berichten opmaken met een simpel opmaakhulptaaltje wat ubb genoemd wordt. Het lijkt wat op html, maar dan met vierkante haken:</p>
+	<p>U kunt uw berichten opmaken met een simpel opmaaktaaltje wat bbcode genoemd wordt. Het lijkt wat op html, maar dan met vierkante haken:</p>
 	<ul>
 		<li><span class="pre">[b]...[/b]</span> voor <span class="dikgedrukt">dikgedrukte tekst</span></li>
 		<li><span class="pre">[i]...[/i]</span> voor <span class="cursief">cursieve tekst</span></li>

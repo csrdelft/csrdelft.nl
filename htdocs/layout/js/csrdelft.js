@@ -195,7 +195,7 @@ function init_buttons() {
 	$('button.get').bind('click.get', knop_get);
 	$('a.opmaakhulp').unbind('click.opmaakhulp');
 	$('a.opmaakhulp').bind('click.opmaakhulp', function (event) {
-		$('#ubbhulpverhaal').toggle();
+		$('#bbcodepopup').toggle();
 	});
 	$('a.vergroot').unbind('click.vergroot');
 	$('a.vergroot').bind('click.vergroot', function (event) {
@@ -639,7 +639,7 @@ function applyUBB(string, div) {
 	var jqXHR = $.ajax({
 		type: 'POST',
 		cache: false,
-		url: '/tools/ubb.php',
+		url: '/tools/bbcode.php',
 		data: 'data=' + encodeURIComponent(string)
 	});
 	jqXHR.done(function (data, textStatus, jqXHR) {

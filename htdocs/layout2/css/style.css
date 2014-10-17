@@ -270,7 +270,7 @@ div.rommel img { height: 77px; }
 .box.list a:hover { background: #d9d0c1; }
 
 /* ubb-hulp */
-div#ubbhulpverhaal{
+div#bbcodepopup{
 	display: none;
 	position: fixed;
 	z-index: 111;
@@ -280,7 +280,7 @@ div#ubbhulpverhaal{
 	background-color: white;
 	text-align: left;
 }
-div#ubbhulpverhaal h2, div#ubbhulpverhaal p, div#ubbhulpverhaal ul{
+div#bbcodepopup h2, div#bbcodepopup p, div#bbcodepopup ul{
 	margin-bottom: 5px;
 }
 span#ubbsluiten{

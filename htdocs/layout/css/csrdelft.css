@@ -39,8 +39,8 @@ input, textarea, select{
 	background-size: cover;
 }
 
-div#ubbhulpverhaal h2{ font-size: 16px; }
-div#ubbhulpverhaal{ font-size: 12px; }
+div#bbcodepopup h2{ font-size: 16px; }
+div#bbcodepopup{ font-size: 12px; }
 
 /* Bijbelrooster */
 div.bijbelrooster{
@@ -358,7 +358,7 @@ div.msgnotify{
 }
 
 /* ubb-hulp */
-div#ubbhulpverhaal{
+div#bbcodepopup{
 	display: none;
 	width: 450px;
 	padding: 5px;
@@ -367,10 +367,10 @@ div#ubbhulpverhaal{
 	text-align: left;
 	line-height: 1.5em;
 }
-div#ubbhulpverhaal span.pre{
+div#bbcodepopup span.pre{
 	font-family: monospace;
 }
-div#ubbhulpverhaal h2, div#ubbhulpverhaal p, div#ubbhulpverhaal ul{
+div#bbcodepopup h2, div#bbcodepopup p, div#bbcodepopup ul{
 	margin-top: 10px;
 }
 span#ubbsluiten{

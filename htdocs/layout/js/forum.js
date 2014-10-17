@@ -65,7 +65,7 @@ $(document).ready(function ($) {
 					textarea.before('<div id="ubb_melding">UBB gevonden:<br /> controleer het voorbeeld.</div>');
 
 					$('#ubb_melding').click(function () {
-						$('#ubbhulpverhaal').toggle();
+						$('#bbcodepopup').toggle();
 					});
 				}
 			}

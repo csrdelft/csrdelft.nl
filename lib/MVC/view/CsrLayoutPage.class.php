@@ -123,7 +123,7 @@ class CsrLayoutPage extends HtmlPage {
 		$smarty->assign('modalleft', $left);
 		$top = 175;
 		$left = 10;
-		DragObjectModel::getCoords('ubbhulpverhaal', $top, $left);
+		DragObjectModel::getCoords('bbcodepopup', $top, $left);
 		$smarty->assign('ubbtop', $top);
 		$smarty->assign('ubbleft', $left);
 

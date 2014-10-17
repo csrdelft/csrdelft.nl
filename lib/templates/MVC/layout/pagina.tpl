@@ -37,7 +37,7 @@
 				{$modal->view()}
 			{/if}
 		</div>
-		{include file='MVC/layout/ubbhulp.tpl'}
+		{include file='MVC/layout/bbcodehulp.tpl'}
 		{if isset($minion)}
 			{$minion}
 		{/if}
