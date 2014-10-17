@@ -50,8 +50,8 @@
 			{/if}
 			{if $draad === null}
 				<input type="text" name="titel" id="titel" value="" class="tekst" placeholder="Onderwerp titel" />
+				<br /><br />
 			{/if}
-			<br /><br />
 			<div id="berichtPreview" class="preview forumBericht"></div>
 			<textarea name="forumBericht" id="forumBericht" class="forumBericht" rows="12" origvalue="{$post_form_tekst}">{$post_form_tekst}</textarea>
 			<div class="butn">
