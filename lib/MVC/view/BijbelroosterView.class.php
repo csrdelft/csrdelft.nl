@@ -52,7 +52,7 @@ class BijbelroosterView implements View {
 
 }
 
-class BijbelroosterUbbView extends BijbelroosterView {
+class BijbelroosterBBView extends BijbelroosterView {
 
 	public function __construct($dagen) {
 		$dagen = (int) max((int) $dagen, 2);

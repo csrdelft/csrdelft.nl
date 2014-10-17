@@ -12,7 +12,7 @@ require_once 'groepen/groep.class.php';
  * Groepencontent				Weergeven van een groepenoverzicht
  * Groepengeschiedeniscontent	Weergeven van een mooie patchwork van groepjes.
  * GroepenProfielConcent		Weergeven van groepenlijstje in profiel
- * GroepUbbContent				Weergeven van enkele zaken van een groep met een ubb-tag
+ * GroepBBContent				Weergeven van enkele zaken van een groep met bbcode
  */
 class Groepcontent extends SmartyTemplateView {
 
@@ -294,11 +294,10 @@ class GroepenProfielContent extends SmartyTemplateView {
 
 }
 
-/*
- * Contentclasse voor de groep-ubb-tag
+/**
+ * Contentclasse voor de groep-bbcode-tag
  */
-
-class GroepUbbContent extends SmartyTemplateView {
+class GroepBBContent extends SmartyTemplateView {
 
 	public function getHTML() {
 		$this->smarty->assign('groep', $this->model);

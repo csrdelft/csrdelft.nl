@@ -1,6 +1,6 @@
 {* maaltijd_ketzer.tpl	|	P.W.G. Brussee (brussee@live.nl) *}
 {strip}
-	<div class="ubb_block ubb_maaltijd" id="maaltijdketzer-{$maaltijd->getMaaltijdId()}">
+	<div class="bb-block bb-maaltijd" id="maaltijdketzer-{$maaltijd->getMaaltijdId()}">
 		{if LoginModel::mag('P_LOGGED_IN')}
 			<div class="aanmelddata maaltijd-{if $aanmelding}aan{else}af{/if}gemeld">Aangemeld:<br />
 

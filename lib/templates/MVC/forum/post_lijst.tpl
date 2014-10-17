@@ -63,11 +63,11 @@
 	</td>
 	<td class="bericht{cycle values="0,1"}" id="post{$post->post_id}">
 		<div class="bericht">
-			{$post->tekst|ubb}
+			{$post->tekst|bbcode}
 			{if $post->bewerkt_tekst}
 				<div class="bewerkt clear">
 					<hr />
-					{$post->bewerkt_tekst|ubb}
+					{$post->bewerkt_tekst|bbcode}
 				</div>
 			{/if}
 		</div>

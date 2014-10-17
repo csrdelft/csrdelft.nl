@@ -23,7 +23,7 @@
  * 
  * Uitbreidingen van HtmlComment:
  * 		- HtmlComment				invoer wordt als html weergegeven
- * 		- UbbComment				invoer wordt als ubb geparsed
+ * 		- BBComment					invoer wordt als bbcode geparsed
  * 		- Subkopje					invoer wordt als <h3> weergegeven
  * 
  */
@@ -69,10 +69,10 @@ class HtmlComment implements FormElement {
 
 }
 
-class UbbComment extends HtmlComment {
+class BBComment extends HtmlComment {
 
 	public function view() {
-		echo CsrUbb::parse($this->comment);
+		echo CsrBB::parse($this->comment);
 	}
 
 }

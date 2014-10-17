@@ -30,7 +30,7 @@
 		{foreach from=$draden item=draad}<item>
 				<title>{$draad->titel|escape:'html'}</title>
 				<link>http://csrdelft.nl/forum/reactie/{$draad->laatste_post_id}</link>
-				{foreach from=$draad->getForumPosts() item=post}<description><![CDATA[ {$post->tekst|ubb} ]]></description>
+				{foreach from=$draad->getForumPosts() item=post}<description><![CDATA[ {$post->tekst|bbcode} ]]></description>
 					<pubDate>{$post->datum_tijd|rfc2822}</pubDate>
 					{/foreach}
 				<dc:creator>{$draad->laatste_wijziging_uid|csrnaam:'user':'link'|escape:'html'}</dc:creator>

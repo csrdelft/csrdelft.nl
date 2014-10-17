@@ -99,11 +99,11 @@
 			</div>
 		{/if}
 		<div id="sbewerkPreview" class="preview"></div>
-		<label for="sbeschrijving"><strong>Korte beschrijving:</strong><br /><br />UBB staat aan.</label>
+		<label for="sbeschrijving"><strong>Korte beschrijving:</strong><br /><br />bbcode mogelijk</label>
 		<textarea id="sbeschrijving" name="sbeschrijving" rows="7">{$groep->getSbeschrijving()|escape:'html'}</textarea>
 		<br />
 		<label for="submit"></label>
-		<input type="button" class="voorbeeld" value="Voorbeeld" onclick="return ubbPreview('sbeschrijving', 'sbewerkPreview')" />
+		<input type="button" class="voorbeeld" value="Voorbeeld" onclick="return CsrBBPreview('sbeschrijving', 'sbewerkPreview')" />
 		<a class="knop extraknopjespreview opmaakhulp" title="Opmaakhulp weergeven">Opmaak</a>
 		<a class="knop extraknopjespreview vergroot" data-vergroot="#sbeschrijving" title="Vergroot het invoerveld">&uarr;&darr;</a><br />
 	{/if}
@@ -113,10 +113,10 @@
 		<input type="hidden" id="beschrijving" name="beschrijving" value="" />
 	{else}
 		<div id="bewerkPreview" class="preview"></div>
-		<label for="beschrijving"><strong>Lange beschrijving:</strong><br /><br />UBB staat aan.</label>
+		<label for="beschrijving"><strong>Lange beschrijving:</strong><br /><br />bbcode mogelijk</label>
 		<textarea id="beschrijving" name="beschrijving" rows="15">{$groep->getBeschrijving()|escape:'html'}</textarea><br />
 		<label for="submit"></label>
-		<input type="button" class="voorbeeld" value="Voorbeeld" onclick="return ubbPreview('beschrijving', 'bewerkPreview')" /> 
+		<input type="button" class="voorbeeld" value="Voorbeeld" onclick="return CsrBBPreview('beschrijving', 'bewerkPreview')" /> 
 		<a class="knop extraknopjespreview opmaakhulp" title="Opmaakhulp weergeven">Opmaak</a>
 		<a class="knop extraknopjespreview vergroot" data-vergroot="#beschrijving" title="Vergroot het invoerveld">&uarr;&darr;</a><br />
 	{/if}

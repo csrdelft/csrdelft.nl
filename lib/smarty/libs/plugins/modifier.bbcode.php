@@ -10,11 +10,11 @@
  * Smarty cat modifier plugin
  *
  * Type:     modifier<br>
- * Name:     ubb<br>
+ * Name:     bbcode<br>
  * Date:     August, 27 2007
- * Purpose:  process ubb-tags to html
+ * Purpose:  process bbcode-tags to html
  * Input:    string to be processed
- * Example:  {$var|ubb}
+ * Example:  {$var|bbcode}
  * @link http://csrdelft.nl/feuten
  *          (svn repository)
  * @author   Jan Pieter Waagmeester < jpwaag at jpwaag dot com>
@@ -22,6 +22,6 @@
  * @param string
  * @return string
  */
-function smarty_modifier_ubb($string){
-	return CsrUbb::parse($string);
+function smarty_modifier_bbcode($string){
+	return CsrBB::parse($string);
 }

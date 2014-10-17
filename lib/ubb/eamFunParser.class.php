@@ -16,7 +16,7 @@ class eamFunParser extends eamBBParser
         $this->plugindir = $plugindir;
     }
     
-    function ubb_1337()
+    function bb_1337()
     {
         $html = $this->parseArray(array('[/1337]'), array());
         
@@ -30,7 +30,7 @@ class eamFunParser extends eamBBParser
         return $html;
     }
 
-    function ubb_bork()
+    function bb_bork()
     {
         $html = $this->parseArray(array('[/bork]'), array());
         
@@ -42,7 +42,7 @@ class eamFunParser extends eamBBParser
         }        
     }
     
-    function ubb_colorize()
+    function bb_colorize()
     {
         $string = $this->parseArray(array('[/colorize]'), array());
         $returnstring = "";
@@ -68,7 +68,7 @@ class eamFunParser extends eamBBParser
     return $returnstring;
     
     }
-    function ubb_rainbow()
+    function bb_rainbow()
     {
         $string = $this->parseArray(array('[/rainbow]'), array());
         

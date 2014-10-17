@@ -176,7 +176,7 @@ class Mail {
 			$body = str_replace($key, $value, $body);
 		}
 		if ($this->type === 'html') {
-			$body = CsrUbb::parse($body);
+			$body = CsrBB::parse($body);
 		}
 		return $body;
 	}

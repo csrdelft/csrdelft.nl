@@ -1,4 +1,4 @@
-<div class="ubb_block ubb_peiling" id="peiling{$peiling->getId()}">
+<div class="bb-block bb-peiling" id="peiling{$peiling->getId()}">
 	{if $beheer AND $peiling->magBewerken()}
 		<a href="/tools/peilingbeheer.php?action=verwijder&amp;id={$peiling->getId()}" class="knop beheer" >Verwijder</a>
 	{/if}

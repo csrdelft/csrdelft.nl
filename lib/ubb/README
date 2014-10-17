@@ -1,7 +1,7 @@
 eamBBParser - Readme
 ===================
 
-  eamBBParser is a UBB Parser (or BB-code parser), written in PHP. It provides
+  eamBBParser is a BB-code parser, written in PHP. It provides
   a class for transforming BB-code to HTML.
   
   Requirements:

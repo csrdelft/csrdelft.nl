@@ -5,7 +5,7 @@
  *
  * Stuur mensen die rood staan een schopmailtje.
  *
- * Er wordt ubb over gedaan, maar de mail wordt plaintext verzonden, dus erg veel zal daar niet
+ * Er wordt bbcode geparsed, maar de mail wordt plaintext verzonden, dus erg veel zal daar niet
  * van overblijven. Wellicht kan er later nog een html-optie ingeklust worden.
  */
 require_once 'configuratie.include.php';
@@ -136,7 +136,7 @@ h.t. Fiscus.';
 
 		$data = $db->query2array($query);
 
-		$bericht = CsrUbb::parse($this->bericht);
+		$bericht = CsrBB::parse($this->bericht);
 
 		$this->teschoppen = array();
 		if (is_array($data)) {

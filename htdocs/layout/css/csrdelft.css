@@ -39,8 +39,8 @@ input, textarea, select{
 	background-size: cover;
 }
 
-div#bbcodepopup h2{ font-size: 16px; }
-div#bbcodepopup{ font-size: 12px; }
+div#bbcodehulp h2{ font-size: 16px; }
+div#bbcodehulp{ font-size: 12px; }
 
 /* Bijbelrooster */
 div.bijbelrooster{
@@ -357,8 +357,8 @@ div.msgnotify{
 	background: url(http://plaetjes.csrdelft.nl/famfamfam/bell.png) no-repeat;
 }
 
-/* ubb-hulp */
-div#bbcodepopup{
+/* bbcodehulp */
+div#bbcodehulp{
 	display: none;
 	width: 450px;
 	padding: 5px;
@@ -367,13 +367,13 @@ div#bbcodepopup{
 	text-align: left;
 	line-height: 1.5em;
 }
-div#bbcodepopup span.pre{
+div#bbcodehulp span.pre{
 	font-family: monospace;
 }
-div#bbcodepopup h2, div#bbcodepopup p, div#bbcodepopup ul{
+div#bbcodehulp h2, div#bbcodehulp p, div#bbcodehulp ul{
 	margin-top: 10px;
 }
-span#ubbsluiten{
+span#bbcodehulpsluiten{
 	display: block;
 	width: 18px; height: 18px;
 	float: right;
@@ -384,7 +384,7 @@ span#ubbsluiten{
 	cursor: pointer;
 	border: 1px solid #fff;
 }
-span#ubbsluiten:hover{
+span#bbcodehulpsluiten:hover{
 	border: 1px solid #000;
 	background-color: #eee;
 }
@@ -515,7 +515,7 @@ form#streeplijst input, form#streeplijst label{ text-align: left; margin: 3px; p
 	display: inline-block;
 	margin-left: 10px;
 }
-.Formulier .UBBpreview{
+.Formulier .CsrBBPreview{
 	float: left;
 	clear: both;
 	width: 100%;
@@ -984,19 +984,18 @@ div.bewerkt hr{ text-align: left; background-color: #bbb; }
 	text-align: left;
 }
 
-#ubb_melding{
+#bbcode-melding{
 	background-color: #f66;
 	margin-top: 1px;
 }
-#ketzer_melding{
+#ketzer-melding{
 	background-color: #4b4;
 	margin-top: 34px;
 }
-#extern_melding{
+#public-melding{
 	margin-top: 67px;
 	background-color: #f66;
 }
-/* ubb-code */
 div.citaatContainer{
 	margin: 5px 5px 5px 20px;
 }
@@ -1009,10 +1008,10 @@ div.citaat .offtopic{ color: #999; }
 div.citaatContainer div.citaat div.citaatContainer div.citaat{ background-color: #e9e9e9; }
 div.citaatContainer div.citaat div.citaatContainer div.citaat div.citaatContainer div.citaat{ background-color: #efefef; }
 
-.ubb_code{
+.bbcode{
 	max-width: 566px;
 }
-img.ubb_img{
+img.bb-img{
 	max-width: 586px;
 	border: 0;
 }
@@ -1021,7 +1020,7 @@ img.neus2013{
 	height: 16px;
 	margin: -5px;
 }
-div.ubb_img_loading{
+div.bb-img-loading{
 	max-width: 586px;
 	min-width: 16px;
 	min-height: 11px;
@@ -1030,8 +1029,8 @@ div.ubb_img_loading{
 	background-position: bottom left;
 }
 /* zorg dat de plaatjes ook in citaten niet te breed worden */
-div.citaatContainer div.citaat img.ubb_img{ max-width: 545px; }
-div.citaatContainer div.citaat div.citaatContainer div.citaat img.ubb_img{ max-width: 516px; }
+div.citaatContainer div.citaat img.bb-img{ max-width: 545px; }
+div.citaatContainer div.citaat div.citaatContainer div.citaat img.bb-img{ max-width: 516px; }
 
 fieldset{
 	padding: 10px;

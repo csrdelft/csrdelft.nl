@@ -51,27 +51,27 @@ $(document).ready(function ($) {
 		$(this).markItUp(mySettings); // mySettings located in set.js
 
 		if ($(this).hasClass('extern')) {
-			$('#meldingen').prepend('<div id="extern_melding"><strong>Openbaar forum</strong><br />Voor iedereen leesbaar, doorzoekbaar door zoekmachines.<br />Zet [prive] en [/prive] om uw persoonlijke contactgegevens in het bericht.</div>');
+			$('#meldingen').prepend('<div id="public-melding"><strong>Openbaar forum</strong><br />Voor iedereen leesbaar, doorzoekbaar door zoekmachines.<br />Zet [prive] en [/prive] om uw persoonlijke contactgegevens in het bericht.</div>');
 		}
 	}).keyup(function (event) {
 		var textarea = $(this);
 
 		if (event.keyCode == 13) { //enter == 13
 			if (/\[.*\]/.test(textarea.val())) {
-				//detected ubb tag use, trigger preview and display message.
-				ubbPreview('forumBericht', 'berichtPreview');
+				//detected ubbcode use, trigger preview and display message.
+				CsrBBPreview('forumBericht', 'berichtPreview');
 
-				if ($('#ubb_melding').length == 0) {
-					textarea.before('<div id="ubb_melding">UBB gevonden:<br /> controleer het voorbeeld.</div>');
+				if ($('#bbcode-melding').length == 0) {
+					textarea.before('<div id="bbcode-melding">BBCode gevonden:<br /> controleer het voorbeeld.</div>');
 
-					$('#ubb_melding').click(function () {
-						$('#bbcodepopup').toggle();
+					$('#bbcode-melding').click(function () {
+						$('#bbcodehulp').toggle();
 					});
 				}
 			}
 		}
-		if ($('#ketzer_melding').length == 0 && /ketzer/.test(textarea.val())) {
-			$('#meldingen').prepend('<div id="ketzer_melding">Ketzer hebben?<br /><a href="/actueel/groepen/Ketzers" target="_blank">&raquo; Maak er zelf een aan.</a></div>');
+		if ($('#ketzer-melding').length == 0 && /ketzer/.test(textarea.val())) {
+			$('#meldingen').prepend('<div id="ketzer-melding">Ketzer hebben?<br /><a href="/actueel/groepen/Ketzers" target="_blank">&raquo; Maak er zelf een aan.</a></div>');
 		}
 	});
 
@@ -140,7 +140,7 @@ function forumBewerken(postId) {
 			bewerkForm += '<a class="knop float-right opmaakhulp" title="Opmaakhulp weergeven">Opmaak</a>';
 			bewerkForm += '<a class="knop float-right vergroot" data-vergroot="#forumBewerkBericht" title="Vergroot het invoerveld">&uarr;&darr;</a>';
 			bewerkForm += '<input type="button" value="Opslaan" onclick="submitPost();" /> ' +
-					'<input type="button" value="Voorbeeld" onclick="ubbPreview(\'forumBewerkBericht\', \'bewerkPreview\');" /> ' +
+					'<input type="button" value="Voorbeeld" onclick="CsrBBPreview(\'forumBewerkBericht\', \'bewerkPreview\');" /> ' +
 					'<input type="button" value="Annuleren" onclick="restorePost();" />';
 			bewerkForm += '</form>';
 			bewerkDiv.innerHTML = bewerkForm;

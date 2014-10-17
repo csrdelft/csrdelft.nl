@@ -5,7 +5,7 @@
 				{$groep->naam}
 			</a>
 		</h2>
-		{$groep->samenvatting|ubb}
+		{$groep->samenvatting|bbcode}
 		{if isset($generaties)}
 			<div class="generaties">
 				<ul class="nobullets">

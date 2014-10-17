@@ -162,9 +162,9 @@ class BibliotheekBoekContent extends SmartyTemplateView {
 }
 
 /**
- * Contentclasse voor de boek-ubb-tag
+ * Contentclasse voor de boek-bbcode-tag
  */
-class BoekUbbContent extends SmartyTemplateView {
+class BoekBBContent extends SmartyTemplateView {
 
 	public function __construct(Boek $boek) {
 		parent::__construct($boek);

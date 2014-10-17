@@ -41,7 +41,7 @@
 			<a href="/actueel/courant/verwijder/{$bericht.ID}" onclick="return confirm('Weet u zeker dat u dit bericht wilt verwijderen?')" >verwijderen</a> ]
 			</dt>
 			<dd id="courantbericht{$bericht.ID}"></dd>
-			{if !$courant->magBeheren()}<dd>{$bericht.bericht|ubb}</dd>{/if}
+			{if !$courant->magBeheren()}<dd>{$bericht.bericht|bbcode}</dd>{/if}
 		{/foreach}
 	</dl>
 {/if}
@@ -64,7 +64,7 @@
 		<a class="knop float-right opmaakhulp" title="Opmaakhulp weergeven">Opmaak</a>
 		<a class="knop float-right vergroot" data-vergroot="#courantBericht" title="Vergroot het invoerveld">&uarr;&darr;</a>
 		<input type="submit" name="verzenden" value="Opslaan" class="tekst" /> 
-		<input type="button" value="Voorbeeld" onclick="ubbPreview('courantBericht', 'bewerkPreview');" />
+		<input type="button" value="Voorbeeld" onclick="CsrBBPreview('courantBericht', 'bewerkPreview');" />
 		{if $courant->magBeheren()}
 			<input type="button" value="Importeer agenda" onclick="importAgenda('courantBericht');" />
 		{/if}

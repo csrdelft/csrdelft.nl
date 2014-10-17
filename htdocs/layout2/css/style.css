@@ -269,8 +269,7 @@ div.rommel img { height: 77px; }
 .box.list a { display: block; height: 32px; line-height: 32px; font-size: 14px; color: #46443a; border-bottom: 0; border-top: 1px solid #cac5aa; padding: 0 8px; }
 .box.list a:hover { background: #d9d0c1; }
 
-/* ubb-hulp */
-div#bbcodepopup{
+div#bbcodehulp{
 	display: none;
 	position: fixed;
 	z-index: 111;
@@ -280,10 +279,10 @@ div#bbcodepopup{
 	background-color: white;
 	text-align: left;
 }
-div#bbcodepopup h2, div#bbcodepopup p, div#bbcodepopup ul{
+div#bbcodehulp h2, div#bbcodehulp p, div#bbcodehulp ul{
 	margin-bottom: 5px;
 }
-span#ubbsluiten{
+span#bbcodehulpsluiten{
 	display: block;
 	width: 18px; height: 18px;
 	float: right;
@@ -294,7 +293,7 @@ span#ubbsluiten{
 	cursor: pointer; cursor: hand;
 	border: 1px solid #fff;
 }
-span#ubbsluiten:hover{
+span#bbcodehulpsluiten:hover{
 	border: 1px solid #000;
 	background-color: #eee;
 }
@@ -339,11 +338,11 @@ div.msgnotify {
     border-color: #eeb;
 }
 
-/* ubb-image lazy loading */
-img.ubb_img{
+/* image lazy loading */
+img.bb-img{
 	max-width: 586px; border: 0;
 }
-div.ubb_img_loading{
+div.bb-img-loading{
 	min-width: 16px;
 	min-height: 11px;
 	background-image: url("http://plaetjes.csrdelft.nl/layout/loading-fb.gif");

@@ -1082,7 +1082,7 @@ class ForumPostsModel extends PersistenceModel implements Paging {
 	}
 
 	public function citeerForumPost(ForumPost $post) {
-		$tekst = CsrUbb::filterPrive($post->tekst);
+		$tekst = CsrBB::filterPrive($post->tekst);
 		return '[citaat=' . $post->uid . ']' . $tekst . '[/citaat]';
 	}
 

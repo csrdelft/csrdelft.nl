@@ -47,9 +47,9 @@ class CsrLayout2Page extends HtmlPage {
 		$smarty->assign('loginform', new LoginForm());
 		$top = 180;
 		$left = 10;
-		DragObjectModel::getCoords('bbcodepopup', $top, $left);
-		$smarty->assign('ubbtop', $top);
-		$smarty->assign('ubbleft', $left);
+		DragObjectModel::getCoords('bbcodehulp', $top, $left);
+		$smarty->assign('bbhulptop', $top);
+		$smarty->assign('bbhulpleft', $left);
 
 		if (LoginModel::instance()->isPauper()) {
 			$smarty->assign('menutree', MenuModel::instance()->getMenu('main'));

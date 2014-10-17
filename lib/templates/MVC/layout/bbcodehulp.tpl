@@ -1,5 +1,5 @@
-<div id="bbcodepopup" class="outer-shadow dragobject savepos" style="top: {$ubbtop}px; left: {$ubbleft}px;">
-	<span id="ubbsluiten" onclick="$('#bbcodepopup').fadeOut();" title="Opmaakhulp verbergen">&times;</span>
+<div id="bbcodehulp" class="outer-shadow dragobject savepos" style="top: {$bbhulptop}px; left: {$bbhulpleft}px;">
+	<span id="bbcodehulpsluiten" onclick="$('#bbcodehulp').fadeOut();" title="Opmaakhulp verbergen">&times;</span>
 	<h2>Tekst opmaken</h2>
 	<p>U kunt uw berichten opmaken met een simpel opmaaktaaltje wat bbcode genoemd wordt. Het lijkt wat op html, maar dan met vierkante haken:</p>
 	<ul>

@@ -1,13 +1,13 @@
 <?php
 
 /**
- * Main UBB Parser file
+ * Main BB-code Parser file
  *
  * This file holds the eamBBParser class, the main class of the eamBBParser project.
  */
 
 /**
- * Main UBB Parser Class, the core of the eamBBParser package.
+ * Main BB-code Parser Class, the core of the eamBBParser package.
  *
  * This class does all of the work, and also holds some basic tag definitions.
  * @package eamBBParser
@@ -23,7 +23,7 @@ class eamBBParser {
 	 * Storage for BB code
 	 * @access private
 	 */
-	var $UBB;
+	var $bbcode;
 	/**
 	 * Storage for outgoing HTML
 	 * @access private
@@ -123,7 +123,7 @@ class eamBBParser {
 	 * Also used by [commentaar] and [prive]
 	 * @access private
 	 */
-	var $ubb_mode;
+	var $bb_mode;
 
 	/**
 	 * returns Version of eamBB
@@ -173,31 +173,31 @@ class eamBBParser {
 		$this->paragraphless_tags = array('h', 'quote', 'hr', 'table', 'br');
 		$this->paragraph_required = true;
 
-		// Whether or not to parse ubb code
-		$this->ubb_mode = true;
+		// Whether or not to parse bbcode
+		$this->bb_mode = true;
 	}
 
 	/**
 	 * Transform BB code to HTML code.
 	 *
 	 * This method takes a text with BB code and transforms it to HTML.
-	 * @param string $ubb BB code to be transformed
+	 * @param string $bbcode BB code to be transformed
 	 * @return string HTML
 	 * @example examples.php
 	 */
-	function getHTML($ubb) {
-		if (strlen($ubb) == 0) {
+	function getHTML($bbcode) {
+		if (strlen($bbcode) == 0) {
 			return null;
 		}
 
-		$this->UBB = str_replace(array("\r\n", "\n"), '[br]', $ubb);
+		$this->bbcode = str_replace(array("\r\n", "\n"), '[br]', $bbcode);
 
 		// preparsing, auto linkification, html on/off and stuff
 		$this->preParse();
 
 		// Create the parsearray with the buildarray function, pretty nice ;)
 		$this->tags_counted = 0;
-		$this->parseArray = $this->buildArray($this->UBB);
+		$this->parseArray = $this->buildArray($this->bbcode);
 
 		// Fix html rights
 		$this->htmlFix();
@@ -348,7 +348,7 @@ class eamBBParser {
 	/**
 	 * Process array
 	 *
-	 * Walks through the array until one of the stoppers is found. When encountering an 'open' tag, which is not in $forbidden, open corresponding ubb_ function.
+	 * Walks through the array until one of the stoppers is found. When encountering an 'open' tag, which is not in $forbidden, open corresponding bb_ function.
 	 * @access private
 	 */
 	function parseArray($stoppers = array(), $forbidden = array()) {
@@ -372,7 +372,7 @@ class eamBBParser {
 					$forbidden_aantal_open--;
 					$text .= $entry;
 				}
-			} elseif ($this->ubb_mode && $entry == '[/]') { // [ubboff] cannot be switched off with this tag.
+			} elseif ($this->bb_mode && $entry == '[/]') { // [ubboff] cannot be switched off with this tag.
 				if ($this->level >= 1) {
 					$this->level--;
 
@@ -393,10 +393,10 @@ class eamBBParser {
 				}
 
 
-				if ($this->ubb_mode && substr($entry, 0, 1) == '[' && substr($entry, strlen($entry) - 1, 1) == ']' && substr($entry, 1, 1) != '/' && (method_exists($this, 'ubb_' . $tag) || (isset($this->aliassen[$tag]) && method_exists($this, 'ubb_' . $this->aliassen[$tag]))) && !in_array($tag, $forbidden) && !isset($forbidden['all'])) {
-					$functionname = 'ubb_' . $tag;
+				if ($this->bb_mode && substr($entry, 0, 1) == '[' && substr($entry, strlen($entry) - 1, 1) == ']' && substr($entry, 1, 1) != '/' && (method_exists($this, 'bb_' . $tag) || (isset($this->aliassen[$tag]) && method_exists($this, 'bb_' . $this->aliassen[$tag]))) && !in_array($tag, $forbidden) && !isset($forbidden['all'])) {
+					$functionname = 'bb_' . $tag;
 					if (!method_exists($this, $functionname))
-						$functionname = 'ubb_' . $this->aliassen[$tag];
+						$functionname = 'bb_' . $this->aliassen[$tag];
 
 					$arguments = $this->getArguments($entry);
 
@@ -555,7 +555,7 @@ class eamBBParser {
 		return $argument_array;
 	}
 
-	function ubb_h($args) { //Heading ;)
+	function bb_h($args) { //Heading ;)
 		$id = '';
 		if (isset($args['id'])) {
 			$id = ' id="' . htmlspecialchars($args['id']) . '"';
@@ -584,7 +584,7 @@ class eamBBParser {
 
 	protected $nobold = false;
 
-	function ubb_nobold($arguments = array()) {
+	function bb_nobold($arguments = array()) {
 		$this->nobold = true;
 		$return = $this->parseArray(array('[/nobold]'), array());
 		$this->nobold = false;
@@ -592,7 +592,7 @@ class eamBBParser {
 		return $return;
 	}
 
-	function ubb_b() {
+	function bb_b() {
 		if ($this->nobold === true AND $this->quote_level == 0) {
 			return $this->parseArray(array('[/b]'), array('b'));
 		} else {
@@ -600,27 +600,27 @@ class eamBBParser {
 		}
 	}
 
-	function ubb_sub() {
+	function bb_sub() {
 		return '<sub>' . $this->parseArray(array('[/sub]'), array('sub', 'sup')) . '</sub>';
 	}
 
-	function ubb_sup() {
+	function bb_sup() {
 		return '<sup>' . $this->parseArray(array('[/sup]'), array('sub', 'sup')) . '</sup>';
 	}
 
-	function ubb_i() {
+	function bb_i() {
 		return '<em>' . $this->parseArray(array('[/i]'), array('i')) . '</em>';
 	}
 
-	function ubb_s() {
+	function bb_s() {
 		return '<span style="text-decoration: line-through;">' . $this->parseArray(array('[/s]'), array('s')) . '</span>';
 	}
 
-	function ubb_u() {
+	function bb_u() {
 		return '<span style="text-decoration: underline;">' . $this->parseArray(array('[/u]'), array('u')) . '</span>';
 	}
 
-	function ubb_url($arguments = array()) {
+	function bb_url($arguments = array()) {
 
 		$content = $this->parseArray(array('[/url]', '[/rul]'), array());
 		//[url=
@@ -642,20 +642,20 @@ class eamBBParser {
 		return $text;
 	}
 
-	function ubb_code($args = array()) {
+	function bbcode($args = array()) {
 
 		$content = $this->parseArray(array('[/code]'), array('code', 'br', 'all' => 'all'));
 
 		if (isset($args['code'])) {
-			$text = '<br /><sub>' . $args['code'] . ' code:</sub><pre class="ubb_code">' . $content . '</pre>';
+			$text = '<br /><sub>' . $args['code'] . ' code:</sub><pre class="bbcode">' . $content . '</pre>';
 		} else {
-			$text = '<br /><sub>code:</sub><pre class="ubb_code">' . $content . '</pre>';
+			$text = '<br /><sub>code:</sub><pre class="bbcode">' . $content . '</pre>';
 		}
 
 		return $text;
 	}
 
-	function ubb_php() {
+	function bb_php() {
 
 		$content = $this->parseArray(array('[/php]'), array('all' => 'all'));
 		$content_nice = highlight_string(trim(str_replace('[br]', "\n", $content)), true);
@@ -666,7 +666,7 @@ class eamBBParser {
 		return $text;
 	}
 
-	function ubb_quote() {
+	function bb_quote() {
 		if ($this->quote_level == 0) {
 			$this->quote_level = 1;
 			$content = $this->parseArray(array('[/quote]'), array());
@@ -683,7 +683,7 @@ class eamBBParser {
 		return $text;
 	}
 
-	function ubb_list($arguments) {
+	function bb_list($arguments) {
 		$content = $this->parseArray(array('[/list]', '[/ulist]'), array('br'));
 		if (!isset($arguments['list'])) {
 			$text = '<ul>' . $content . '</ul>';
@@ -693,19 +693,19 @@ class eamBBParser {
 		return $text;
 	}
 
-	function ubb_hr($arguments) {
+	function bb_hr($arguments) {
 		return '<hr />';
 	}
 
-	function ubb_lishort($arguments) {
+	function bb_lishort($arguments) {
 		return '<li>' . $this->parseArray(array('[br]')) . '</li>';
 	}
 
-	function ubb_li($arguments) {
+	function bb_li($arguments) {
 		return '<li>' . $this->parseArray(array('[/li]')) . '</li>';
 	}
 
-	function ubb_me($parameters) {
+	function bb_me($parameters) {
 		$content = $this->parseArray(array('[br]'), array());
 		array_unshift($this->parseArray, '[br]');
 		if (isset($parameters['me'])) {
@@ -716,14 +716,14 @@ class eamBBParser {
 		return $html;
 	}
 
-	function ubb_ubboff() {
-		$this->ubb_mode = false;
+	function bb_ubboff() {
+		$this->bb_mode = false;
 		$content = $this->parseArray(array('[/ubboff]'), array());
-		$this->ubb_mode = true;
+		$this->bb_mode = true;
 		return $content;
 	}
 
-	function ubb_email($parameters) {
+	function bb_email($parameters) {
 		$html = '';
 
 		$mailto = array_shift($this->parseArray);
@@ -766,7 +766,7 @@ class eamBBParser {
 		return $html;
 	}
 
-	function ubb_img($arguments) {
+	function bb_img($arguments) {
 		$content = $this->parseArray(array('[/img]', '[/IMG]'), array());
 
 		// only valid patterns
@@ -777,12 +777,12 @@ class eamBBParser {
 			if (!$this->allow_html) {
 				$content = htmlspecialchars($content);
 			}
-			$html = '<img class="ubb_img" src="' . $content . '" alt="' . $content . '" />';
+			$html = '<img class="bb-img" src="' . $content . '" alt="' . $content . '" />';
 		}
 		return $html;
 	}
 
-	function ubb_table($parameters) {
+	function bb_table($parameters) {
 		$tableProperties = array('border', 'color', 'background-color', 'border-collapse');
 		$style = '';
 		foreach ($parameters as $name => $value) {
@@ -792,17 +792,17 @@ class eamBBParser {
 		}
 
 		$content = $this->parseArray(array('[/table]'), array('br'));
-		$html = '<table class="ubb_table" style="' . $style . '">' . $content . '</table>';
+		$html = '<table class="bb-table" style="' . $style . '">' . $content . '</table>';
 		return $html;
 	}
 
-	function ubb_tr() {
+	function bb_tr() {
 		$content = $this->parseArray(array('[/tr]'), array('br'));
 		$html = '<tr>' . $content . '</tr>';
 		return $html;
 	}
 
-	function ubb_td($parameters = array()) {
+	function bb_td($parameters = array()) {
 		$content = $this->parseArray(array('[/td]'), array());
 
 		$style = '';
@@ -814,13 +814,13 @@ class eamBBParser {
 		return $html;
 	}
 
-	function ubb_th() {
+	function bb_th() {
 		$content = $this->parseArray(array('[/th]'), array());
 		$html = '<th>' . $content . '</th>';
 		return $html;
 	}
 
-	function ubb_div($arguments = array()) {
+	function bb_div($arguments = array()) {
 		$content = $this->parseArray(array('[/div]'), array());
 		$class = '';
 		if (isset($arguments['class'])) {

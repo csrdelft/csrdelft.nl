@@ -1001,7 +1001,7 @@ class BewerkBoek extends Boek {
 				$posturl .= '/' . $this->editbeschrijving;
 			}
 			$boekbeschrijvingform[] = new Subkopje($titeltekst);
-			$textfield = new RequiredUbbPreviewField('beschrijving', $this->getEditBeschrijving()->getTekst(), $schrijver, true, 255);
+			$textfield = new RequiredCsrBBPreviewField('beschrijving', $this->getEditBeschrijving()->getTekst(), $schrijver, true, 255);
 			$boekbeschrijvingform[] = $textfield;
 			$boekbeschrijvingform[] = new FormKnoppen($annuleer);
 

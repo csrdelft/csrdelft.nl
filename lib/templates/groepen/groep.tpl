@@ -91,7 +91,7 @@
 	{include file='groepen/groepformulier.tpl'}
 {else}
 	{if $groep->getTypeId()==11 }Ouderejaars: {$groep->getEigenaar()}<br /><br />{/if} {* alleen bij Sjaarsacties *}
-	{$groep->getSbeschrijving()|ubb}
+	{$groep->getSbeschrijving()|bbcode}
 	<div class="clear" id="voorgangerOpvolger">
 		<ul class="nobullets">
 			{if is_array($opvolgerVoorganger)}
@@ -132,6 +132,6 @@
 			{/if}
 		</div>
 	{/if}
-	{$groep->getBeschrijving()|ubb}
+	{$groep->getBeschrijving()|bbcode}
 	{/if}
 		<div class="clear"></div>

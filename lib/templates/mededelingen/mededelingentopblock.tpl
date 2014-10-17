@@ -4,7 +4,7 @@
 		<div class="mededeling-grotebalk">
 			<div class="titel">
 				<a href="{MededelingenContent::mededelingenRoot}{$mededeling->getId()}">
-					{$mededeling->getTitel()|ubb|html_substr:"90":"…"}
+					{$mededeling->getTitel()|bbcode|html_substr:"90":"…"}
 				</a>
 			</div>
 			<div class="plaatje">
@@ -13,7 +13,7 @@
 				</a>
 			</div>
 			<div class="bericht">
-				{$mededeling->getTekst()|ubb|html_substr:"250":"…"}
+				{$mededeling->getTekst()|bbcode|html_substr:"250":"…"}
 				<small class="float-right"><a href="{MededelingenContent::mededelingenRoot}{$mededeling->getId()}">Verder lezen »</a></small>
 			</div>
 			<div class="clear"></div>

@@ -138,9 +138,7 @@ class Profiel {
 	}
 
 	/**
-	 * Maak een stukje ubb-code aan met daarin de huidige wijziging,
-	 * door wie en wanneer.
-	 *
+	 * Maak een stukje bbcode aan met daarin de huidige wijziging, door wie en wanneer.
 	 */
 	public function changelog() {
 		$return = '[div]';

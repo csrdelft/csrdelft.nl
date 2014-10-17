@@ -38,7 +38,7 @@ class CsrLayoutPage extends HtmlPage {
 //
 //		$this->addStylesheet($css . 'reset');
 //		$this->addStylesheet($css . 'layout_pagina');
-//		$this->addStylesheet($css . 'ubb');
+//		$this->addStylesheet($css . 'bbcode');
 //		$this->addStylesheet($css . 'csrdelft');
 //		$layout = LidInstellingen::get('layout', 'opmaak');
 //		$this->addStylesheet($css . $layout);
@@ -123,9 +123,9 @@ class CsrLayoutPage extends HtmlPage {
 		$smarty->assign('modalleft', $left);
 		$top = 175;
 		$left = 10;
-		DragObjectModel::getCoords('bbcodepopup', $top, $left);
-		$smarty->assign('ubbtop', $top);
-		$smarty->assign('ubbleft', $left);
+		DragObjectModel::getCoords('bbcodehulp', $top, $left);
+		$smarty->assign('bbhulptop', $top);
+		$smarty->assign('bbhulpleft', $left);
 
 		if (LidInstellingen::get('layout', 'minion') == 'ja') {
 			$top = 40;

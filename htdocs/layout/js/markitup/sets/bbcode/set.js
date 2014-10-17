@@ -10,7 +10,7 @@
 // Feel free to add more tags
 // ----------------------------------------------------------------------------
 mySettings = {
-	nameSpace: 'bbcode',
+	nameSpace: 'CsrBB',
 	previewParserPath: '/tools/bbcode.php', // path to your BBCode parser
 	markupSet: [
 		{className: 'knop-b', name: 'Dikgedrukt', key: 'B', openWith: '[b]', closeWith: '[/b]'},

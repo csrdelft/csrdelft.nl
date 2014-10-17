@@ -115,12 +115,11 @@ htdocs/example-data.json -text
 htdocs/index.php -text
 htdocs/layout/css/agenda.css -text
 htdocs/layout/css/agenda.min.css -text
+htdocs/layout/css/bbcode.css -text
 htdocs/layout/css/bibliotheek.css -text
-htdocs/layout/css/bibliotheek.min.css -text
 htdocs/layout/css/csrdelft.css -text
 htdocs/layout/css/csrdelft.dataTables.css -text
 htdocs/layout/css/csrdelft.dataTables.min.css -text
-htdocs/layout/css/csrdelft.min.css -text
 htdocs/layout/css/documenten.css -text
 htdocs/layout/css/documenten.min.css -text
 htdocs/layout/css/dropzone.basic.css -text
@@ -142,7 +141,6 @@ htdocs/layout/css/ledenlijst.min.css -text
 htdocs/layout/css/ledenmemory.css -text
 htdocs/layout/css/ledenmemory.min.css -text
 htdocs/layout/css/lustrum.css -text
-htdocs/layout/css/lustrum.min.css -text
 htdocs/layout/css/maalcie.css -text
 htdocs/layout/css/maalcie.min.css -text
 htdocs/layout/css/maaltijdlijst.css -text
@@ -179,8 +177,6 @@ htdocs/layout/css/stylus/basic.styl -text
 htdocs/layout/css/stylus/dropzone.styl -text
 htdocs/layout/css/toegankelijk_bredere_letters.css -text
 htdocs/layout/css/toegankelijk_bredere_letters.min.css -text
-htdocs/layout/css/ubb.css -text
-htdocs/layout/css/ubb.min.css -text
 htdocs/layout/css/verticalen.css -text
 htdocs/layout/css/verticalen.min.css -text
 htdocs/layout/js/autocomplete/README[!!-~]PubCie -text
@@ -196,7 +192,6 @@ htdocs/layout/js/bibliotheek.min.js -text
 htdocs/layout/js/csrdelft.dataTables.js -text
 htdocs/layout/js/csrdelft.dataTables.min.js -text
 htdocs/layout/js/csrdelft.js -text
-htdocs/layout/js/csrdelft.min.js -text
 htdocs/layout/js/datatables/css/datatables_basic.css -text
 htdocs/layout/js/datatables/css/datatables_basic.min.css -text
 htdocs/layout/js/datatables/images/back_disabled.jpg -text
@@ -264,7 +259,6 @@ htdocs/layout/js/flot/jquery.flot.time.min.js -text
 htdocs/layout/js/flot/jquery.js -text
 htdocs/layout/js/flot/jquery.min.js -text
 htdocs/layout/js/forum.js -text
-htdocs/layout/js/forum.min.js -text
 htdocs/layout/js/gmaps.js -text
 htdocs/layout/js/gmaps.min.js -text
 htdocs/layout/js/groepen.js -text
@@ -398,7 +392,6 @@ htdocs/layout/js/slideshow_intern.min.js -text
 htdocs/layout/js/suggest.js -text
 htdocs/layout/js/suggest.min.js -text
 htdocs/layout/js/ubb_slideshow.js -text
-htdocs/layout/js/ubb_slideshow.min.js -text
 htdocs/layout/js/verticalen.js -text
 htdocs/layout/js/verticalen.min.js -text
 htdocs/layout/script.ini -text
@@ -408,7 +401,6 @@ htdocs/layout2/css/foundation.min.css -text
 htdocs/layout2/css/normalize.css -text
 htdocs/layout2/css/normalize.min.css -text
 htdocs/layout2/css/style.css -text
-htdocs/layout2/css/style.min.css -text
 htdocs/layout2/fonts/SentinelBold.eot -text
 htdocs/layout2/fonts/SentinelBold.otf -text
 htdocs/layout2/fonts/SentinelBold.woff -text
@@ -3467,11 +3459,11 @@ lib/MVC/model/maalcie/KwalificatiesModel.class.php -text
 lib/MVC/view/AgendaView.class.php -text
 lib/MVC/view/BijbelroosterView.class.php -text
 lib/MVC/view/CmsPaginaView.class.php -text
+lib/MVC/view/CsrBB.class.php -text
 lib/MVC/view/CsrLayout2Page.class.php -text
 lib/MVC/view/CsrLayout3Page.class.php -text
 lib/MVC/view/CsrLayoutPage.class.php -text
 lib/MVC/view/CsrSmarty.singleton.php -text
-lib/MVC/view/CsrUbb.class.php -text
 lib/MVC/view/DataTable.class.php -text
 lib/MVC/view/ForumView.class.php -text
 lib/MVC/view/FotoAlbumView.class.php -text
@@ -3863,9 +3855,9 @@ lib/Zend/Validate/Ip.php -text
 lib/Zend/Version.php -text
 lib/barsysteem.class.php -text
 lib/bibliotheek/beschrijving.class.php -text
-lib/bibliotheek/bibliotheekcontent.class.php -text
 lib/bibliotheek/bibliotheekcontroller.class.php -text
 lib/bibliotheek/boek.class.php -text
+lib/bibliotheek/boekbbcontent.php -text
 lib/bibliotheek/catalogus.class.php -text
 lib/bibliotheek/rubriek.class.php -text
 lib/chart/COPYING -text
@@ -3925,7 +3917,7 @@ lib/defines.include.php.sample -text
 lib/diesAanmelding.class.php -text
 lib/documenten/categorie.class.php -text
 lib/documenten/document.class.php -text
-lib/documenten/documentcontent.class.php -text
+lib/documenten/documentbbcontent.php -text
 lib/documenten/documentcontroller.class.php -text
 lib/eetplan.class.php -text
 lib/eetplancontent.class.php -text
@@ -4071,6 +4063,7 @@ lib/smarty/libs/plugins/function.math.php -text
 lib/smarty/libs/plugins/function.popup.php -text
 lib/smarty/libs/plugins/function.popup_init.php -text
 lib/smarty/libs/plugins/function.sliding_pager.php -text
+lib/smarty/libs/plugins/modifier.bbcode.php -text
 lib/smarty/libs/plugins/modifier.capitalize.php -text
 lib/smarty/libs/plugins/modifier.cat.php -text
 lib/smarty/libs/plugins/modifier.count_characters.php -text
@@ -4098,7 +4091,6 @@ lib/smarty/libs/plugins/modifier.string_format.php -text
 lib/smarty/libs/plugins/modifier.strip.php -text
 lib/smarty/libs/plugins/modifier.strip_tags.php -text
 lib/smarty/libs/plugins/modifier.truncate.php -text
-lib/smarty/libs/plugins/modifier.ubb.php -text
 lib/smarty/libs/plugins/modifier.unescape.php -text
 lib/smarty/libs/plugins/modifier.upper.php -text
 lib/smarty/libs/plugins/modifier.wordwrap.php -text

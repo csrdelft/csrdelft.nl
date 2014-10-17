@@ -1,5 +1,5 @@
 /*
- * ubb_slideshow, 
+ * bb-slideshow, 
  * 
  * depends: jquery.
  */
@@ -13,7 +13,7 @@ jQuery(document).ready(function($) {
 	$(".paging a:first").addClass("active");
 		
 	//Get size of images, how many there are, then determine the size of the image reel.
-	var imageWidth = $(".ubb_slideshow").width();
+	var imageWidth = $(".bb-slideshow").width();
 	var imageSum = $(".image_reel img").size();
 	var imageReelWidth = imageWidth * imageSum;
 	

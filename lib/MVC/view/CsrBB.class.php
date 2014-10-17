@@ -3,24 +3,24 @@
 require_once 'ubb/eamBBParser.class.php';
 
 /**
- * CsrUbb.class.php
+ * CsrBB.class.php
  * 
  * @author C.S.R. Delft <pubcie@csrdelft.nl>
  */
-class CsrUbb extends eamBBParser {
+class CsrBB extends eamBBParser {
 
 	public function __construct() {
 		$this->eamBBParser();
 		$this->paragraph_mode = false;
 	}
 
-	public static function parse($ubb) {
-		$parser = new CsrUbb();
-		return $parser->getHTML($ubb);
+	public static function parse($bbcode) {
+		$parser = new CsrBB();
+		return $parser->getHTML($bbcode);
 	}
 
-	function getHTML($ubb) {
-		parent::getHTML($ubb);
+	function getHTML($bbcode) {
+		parent::getHTML($bbcode);
 
 		if (LidInstellingen::get('layout', 'neuzen') == 'overal') {
 			$pointer = 0;
@@ -37,7 +37,7 @@ class CsrUbb extends eamBBParser {
 				} elseif ($char == ';') {
 					$counter2 = 0;
 				} elseif ($char == 'o' && $counter == 0 && $counter2 <= 0) {
-					$neus = $this->ubb_neuzen($char);
+					$neus = $this->bb-neuzen($char);
 					$this->HTML = substr($this->HTML, 0, $pointer) . $neus . substr($this->HTML, $pointer + 1);
 					$pointer += strlen($neus);
 					continue;
@@ -65,13 +65,13 @@ class CsrUbb extends eamBBParser {
 	/**
 	 * Dit laad de twitter account van het hidden cash spel.
 	 */
-	function ubb_hidden($arguments = array()) {
+	function bb_hidden($arguments = array()) {
 		$html = '<a class="twitter-timeline" href="https://twitter.com/HiddenCashCSR" data-widget-id="477465734352621568">Tweets by @HiddenCashCSR</a>
 							<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http://.test(d.location)?\'http\':\'https\';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+"://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>';
 		return $html;
 	}
 
-	function ubb_img($arguments = array()) {
+	function bb_img($arguments = array()) {
 		$style = '';
 		$class = '';
 		if (isset($arguments['class'])) {
@@ -104,9 +104,9 @@ class CsrUbb extends eamBBParser {
 		}
 		// lazy loading van externe images bijv. op het forum
 		if (!startsWith($content, CSR_PICS) OR startsWith($content, CSR_PICS . '/fotoalbum/')) {
-			return '<div class="ubb_img_loading" src="' . $content . '" title="' . $content . '" style="' . $style . '"></div>';
+			return '<div class="bb-img-loading" src="' . $content . '" title="' . $content . '" style="' . $style . '"></div>';
 		}
-		return '<img class="ubb_img ' . $class . '" src="' . $content . '" alt="' . $content . '" style="' . $style . '" />';
+		return '<img class="bb-img ' . $class . '" src="' . $content . '" alt="' . $content . '" style="' . $style . '" />';
 	}
 
 	/**
@@ -114,7 +114,7 @@ class CsrUbb extends eamBBParser {
 	 * 
 	 * Toont de thumbnail met link naar fotoalbum.
 	 */
-	function ubb_foto($arguments = array()) {
+	function bb_foto($arguments = array()) {
 		require_once 'MVC/controller/FotoAlbumController.class.php';
 		$url = urldecode($this->parseArray(array('[/foto]'), array()));
 		$parts = explode('/', $url);
@@ -127,10 +127,10 @@ class CsrUbb extends eamBBParser {
 		$path = PICS_PATH . 'fotoalbum' . implode('/', $parts);
 		$album = FotoAlbumModel::getFotoAlbum($path);
 		if (!$album) {
-			return '<div class="ubb_block">Fotoalbum niet gevonden: ' . $url . '</div>';
+			return '<div class="bb-block">Fotoalbum niet gevonden: ' . $url . '</div>';
 		}
 		$foto = new Foto($album, $naam);
-		$fototag = new FotoUbbView($foto, $groot);
+		$fototag = new FotoBBView($foto, $groot);
 		return $fototag->getHTML();
 	}
 
@@ -149,7 +149,7 @@ class CsrUbb extends eamBBParser {
 	 * 			compact=true
 	 *
 	 */
-	protected function ubb_fotoalbum($arguments = array()) {
+	protected function bb_fotoalbum($arguments = array()) {
 		require_once 'MVC/controller/FotoAlbumController.class.php';
 		$url = urldecode($this->parseArray(array('[/fotoalbum]'), array()));
 		if ($url === 'laatste') {
@@ -159,9 +159,9 @@ class CsrUbb extends eamBBParser {
 			$album = FotoAlbumModel::getFotoAlbum($path);
 		}
 		if (!$album) {
-			return '<div class="ubb_block">Fotoalbum niet gevonden: ' . $url . '</div>';
+			return '<div class="bb-block">Fotoalbum niet gevonden: ' . $url . '</div>';
 		}
-		$fotoalbumtag = new FotoAlbumUbbView($album);
+		$fotoalbumtag = new FotoAlbumBBView($album);
 		if ($this->quote_level > 0 || isset($arguments['compact'])) {
 			$fotoalbumtag->makeCompact();
 		}
@@ -184,11 +184,11 @@ class CsrUbb extends eamBBParser {
 	/**
 	 * Rul = url
 	 */
-	function ubb_rul($arguments = array()) {
-		return $this->ubb_url($arguments);
+	function bb_rul($arguments = array()) {
+		return $this->bb-url($arguments);
 	}
 
-	function ubb_url($arguments = array()) {
+	function bb_url($arguments = array()) {
 		$content = $this->parseArray(array('[/url]', '[/rul]'), array());
 		if (isset($arguments['url'])) { // [url=
 			$href = $arguments['url'];
@@ -201,11 +201,11 @@ class CsrUbb extends eamBBParser {
 	}
 
 	/* todo
-	  function ubb_mail($arguments = array()) {
-	  return $this->ubb_email($arguments);
+	  function bb_mail($arguments = array()) {
+	  return $this->bb-email($arguments);
 	  }
 
-	  function ubb_email($arguments = array()){
+	  function bb_email($arguments = array()){
 	  $content = $this->parseArray(array('[/email]', '[/mail]'), array());
 	  if (isset($arguments['email'])) { // [email=
 	  $email = $arguments['email'];
@@ -227,7 +227,7 @@ class CsrUbb extends eamBBParser {
 	  }
 	 */
 
-	function ubb_neuzen($arguments = array()) {
+	function bb_neuzen($arguments = array()) {
 		if (is_array($arguments)) {
 			$content = $this->parseArray(array('[/neuzen]'), array());
 		} else {
@@ -240,7 +240,7 @@ class CsrUbb extends eamBBParser {
 		return $content;
 	}
 
-	function ubb_citaat($arguments = array()) {
+	function bb_citaat($arguments = array()) {
 		if ($this->quote_level == 0) {
 			$this->quote_level = 1;
 			$content = $this->parseArray(array('[/citaat]'), array());
@@ -273,7 +273,7 @@ class CsrUbb extends eamBBParser {
 	/**
 	 * Geef de relatieve datum terug.
 	 */
-	function ubb_reldate($arguments = array()) {
+	function bb_reldate($arguments = array()) {
 		$content = $this->parseArray(array('[/reldate]'), array());
 		return '<span title="' . mb_htmlentities($content) . '">' . reldate($content) . '</span>';
 	}
@@ -286,7 +286,7 @@ class CsrUbb extends eamBBParser {
 	 * of
 	 * [lid]0436[/lid]
 	 */
-	function ubb_lid($arguments = array()) {
+	function bb_lid($arguments = array()) {
 		if (isset($arguments['lid'])) {
 			$uid = $arguments['lid'];
 		} else {
@@ -305,7 +305,7 @@ class CsrUbb extends eamBBParser {
 	 * Tekst binnen de privé-tag wordt enkel weergegeven voor leden met
 	 * (standaard) P_LOGGED_IN. Een andere permissie kan worden meegegeven.
 	 */
-	function ubb_prive($arguments = array()) {
+	function bb_prive($arguments = array()) {
 		if (isset($arguments['prive'])) {
 			$permissie = $arguments['prive'];
 		} else {
@@ -315,13 +315,13 @@ class CsrUbb extends eamBBParser {
 //tag gewoon staan.
 		$forbidden = array();
 		if (!LoginModel::mag($permissie)) {
-			$this->ubb_mode = false;
+			$this->bb_mode = false;
 			$forbidden = array('prive');
 		}
 		$content = $this->parseArray(array('[/prive]'), $forbidden);
 		if (!LoginModel::mag($permissie)) {
 			$content = '';
-			$this->ubb_mode = true;
+			$this->bb_mode = true;
 		}
 		return $content;
 	}
@@ -332,7 +332,7 @@ class CsrUbb extends eamBBParser {
 	 *
 	 * [instelling=maaltijdblokje module=voorpagina][maaltijd=next][/instelling]
 	 */
-	function ubb_instelling($arguments = array()) {
+	function bb_instelling($arguments = array()) {
 		$content = $this->parseArray(array('[/instelling]'), array());
 		if (!array_key_exists('instelling', $arguments) OR ! isset($arguments['instelling'])) {
 			return 'Geen of een niet bestaande instelling opgegeven: ' . mb_htmlentities($arguments['instelling']);
@@ -361,7 +361,7 @@ class CsrUbb extends eamBBParser {
 	 *
 	 * [query=1] of [query]1[/query]
 	 */
-	function ubb_query($arguments = array()) {
+	function bb_query($arguments = array()) {
 		if (isset($arguments['query'])) {
 			$queryID = $arguments['query'];
 		} else {
@@ -394,7 +394,7 @@ class CsrUbb extends eamBBParser {
 	 * 		width	Breedte van het filmpje
 	 * 		height	Hoogte van het filmpje
 	 */
-	function ubb_video($arguments = array()) {
+	function bb_video($arguments = array()) {
 		$content = preg_replace('|^https://|', 'http://', $this->parseArray(array('[/video]'), array()));
 
 		//determine type and id
@@ -493,7 +493,7 @@ class CsrUbb extends eamBBParser {
 	 * 
 	 * [youtube]youtubeid[/youtube]
 	 */
-	function ubb_youtube($arguments = array()) {
+	function bb_youtube($arguments = array()) {
 		$content = $this->parseArray(array('[/youtube]'), array());
 		//alleen de eerste 11 tekens zijn relevant...
 		$content = substr($content, 0, 11);
@@ -517,7 +517,7 @@ class CsrUbb extends eamBBParser {
 		return $html;
 	}
 
-	function ubb_googlevideo($arguments = array()) {
+	function bb_googlevideo($arguments = array()) {
 		$content = $this->parseArray(array('[/googlevideo]'), array());
 		if (preg_match('/-?\d*/', $content)) {
 			$html = '<embed style="width:400px; height:326px;" id="VideoPlayback" type="application/x-shockwave-flash"
@@ -528,7 +528,7 @@ src="http://video.google.com/googleplayer.swf?docId=' . $content . '"></embed>';
 		return $html;
 	}
 
-	function ubb_vimeo($arguments = array()) {
+	function bb_vimeo($arguments = array()) {
 		$content = $this->parseArray(array('[/vimeo]'), array());
 		if (preg_match('/^\d*$/', $content)) {
 			$html = '<object width="549" height="309">
@@ -544,7 +544,7 @@ src="http://video.google.com/googleplayer.swf?docId=' . $content . '"></embed>';
 		return $html;
 	}
 
-	function ubb_twitter($arguments = array()) {
+	function bb_twitter($arguments = array()) {
 		$content = $this->parseArray(array('[/twitter]'), array());
 		// widget size
 		$lines = 4;
@@ -601,7 +601,7 @@ HTML;
 	 * of
 	 * [groep=123]
 	 */
-	protected function ubb_groep($arguments = array()) {
+	protected function bb_groep($arguments = array()) {
 		if (isset($arguments['groep'])) {
 			$groepid = $arguments['groep'];
 		} else {
@@ -612,7 +612,7 @@ HTML;
 		require_once 'groepen/groepcontent.class.php';
 		try {
 			$groep = new OldGroep($groepid);
-			$groeptag = new GroepUbbContent($groep);
+			$groeptag = new GroepBBContent($groep);
 			return $groeptag->getHTML();
 		} catch (Exception $e) {
 			return '[groep] Geen geldig groep-id (' . mb_htmlentities($groepid) . ')';
@@ -627,7 +627,7 @@ HTML;
 	 * of
 	 * [boek=123]
 	 */
-	protected function ubb_boek($arguments = array()) {
+	protected function bb_boek($arguments = array()) {
 		if (isset($arguments['boek'])) {
 			$boekid = $arguments['boek'];
 		} else {
@@ -638,7 +638,7 @@ HTML;
 		require_once 'bibliotheek/bibliotheekcontent.class.php';
 		try {
 			$boek = new Boek((int) $boekid);
-			$content = new BoekUbbContent($boek);
+			$content = new BoekBBContent($boek);
 			return $content->view();
 		} catch (Exception $e) {
 			return '[boek] Boek [boekid:' . (int) $boekid . '] bestaat niet.';
@@ -652,7 +652,7 @@ HTML;
 	 * of
 	 * [document=1234]
 	 */
-	protected function ubb_document($arguments = array()) {
+	protected function bb_document($arguments = array()) {
 		if (isset($arguments['document'])) {
 			$id = $arguments['document'];
 		} else {
@@ -662,10 +662,10 @@ HTML;
 		require_once 'documenten/documentcontent.class.php';
 		try {
 			$document = new Document((int) $id);
-			$content = new DocumentUbbContent($document);
+			$content = new DocumentBBContent($document);
 			return $content->getHTML();
 		} catch (Exception $e) {
-			return '<div class="ubb_document">[document] Ongeldig document (id:' . $id . ')</div>';
+			return '<div class="bb-document">[document] Ongeldig document (id:' . $id . ')</div>';
 		}
 	}
 
@@ -678,7 +678,7 @@ HTML;
 	 * of
 	 * [maaltijd]123[/maaltijd]
 	 */
-	public function ubb_maaltijd($arguments = array()) {
+	public function bb_maaltijd($arguments = array()) {
 		if (isset($arguments['maaltijd'])) {
 			$mid = $arguments['maaltijd'];
 		} else {
@@ -710,12 +710,12 @@ HTML;
 			}
 		} catch (Exception $e) {
 			if (strpos($e->getMessage(), 'Not found') !== false) {
-				return '<div class="ubb_block ubb_maaltijd">Maaltijd niet gevonden: ' . mb_htmlentities($mid) . '</div>';
+				return '<div class="bb-block bb-maaltijd">Maaltijd niet gevonden: ' . mb_htmlentities($mid) . '</div>';
 			}
 			return $e->getMessage();
 		}
 		if (!isset($maaltijd)) {
-			return '<div class="ubb_block ubb_maaltijd">Maaltijd niet gevonden: ' . mb_htmlentities($mid) . '</div>';
+			return '<div class="bb-block bb-maaltijd">Maaltijd niet gevonden: ' . mb_htmlentities($mid) . '</div>';
 		}
 		$aanmeldingen = MaaltijdAanmeldingenModel::getAanmeldingenVoorLid(array($maaltijd->getMaaltijdId() => $maaltijd), \LoginModel::getUid());
 		if (empty($aanmeldingen)) {
@@ -742,18 +742,18 @@ HTML;
 	/**
 	 * Vanonderwerp = offtopic
 	 */
-	function ubb_vanonderwerp($arguments = array()) {
-		return $this->ubb_offtopic($arguments);
+	function bb_vanonderwerp($arguments = array()) {
+		return $this->bb-offtopic($arguments);
 	}
 
 	/**
 	 * OT = offtopic
 	 */
-	function ubb_ot($arguments = array()) {
-		return $this->ubb_offtopic($arguments);
+	function bb_ot($arguments = array()) {
+		return $this->bb-offtopic($arguments);
 	}
 
-	public function ubb_offtopic() {
+	public function bb_offtopic() {
 		$content = $this->parseArray(array('[/offtopic]', '[/vanonderwerp]'), array());
 		return '<span class="offtopic">' . $content . '</span>';
 	}
@@ -761,16 +761,16 @@ HTML;
 	/**
 	 * Verklapper = spoiler
 	 */
-	function ubb_verklapper($arguments = array()) {
-		return $this->ubb_spoiler($arguments);
+	function bb_verklapper($arguments = array()) {
+		return $this->bb-spoiler($arguments);
 	}
 
-	public function ubb_spoiler() {
+	public function bb_spoiler() {
 		$content = $this->parseArray(array('[/spoiler]', '[/verklapper]'), array());
 		return '<button class="spoiler">Toon verklapper</button><div class="spoiler-content">' . $content . '</div>';
 	}
 
-	function ubb_1337() {
+	function bb_1337() {
 		$html = $this->parseArray(array('[/1337]'), array());
 		$html = str_replace('er ', '0r ', $html);
 		$html = str_replace('you', 'j00', $html);
@@ -779,7 +779,7 @@ HTML;
 		return $html;
 	}
 
-	function ubb_b() {
+	function bb_b() {
 		if ($this->nobold === true AND $this->quote_level == 0) {
 			return $this->parseArray(array('[/b]'), array('b'));
 		} else {
@@ -787,19 +787,19 @@ HTML;
 		}
 	}
 
-	function ubb_i() {
+	function bb_i() {
 		return '<span class="cursief">' . $this->parseArray(array('[/i]'), array('i')) . '</span>';
 	}
 
-	function ubb_s() {
+	function bb_s() {
 		return '<span class="doorgestreept">' . $this->parseArray(array('[/s]'), array('s')) . '</span>';
 	}
 
-	function ubb_u() {
+	function bb_u() {
 		return '<span class="onderstreept">' . $this->parseArray(array('[/u]'), array('u')) . '</span>';
 	}
 
-	function ubb_clear($arguments = array()) {
+	function bb_clear($arguments = array()) {
 		$sClear = 'clear';
 		if (isset($arguments['clear']) AND ( $arguments['clear'] === 'left' OR $arguments['clear'] === 'right' )) {
 			$sClear .= '-' . $arguments['clear'];
@@ -814,7 +814,7 @@ HTML;
 	 * of
 	 * [mededeling]top3[/mededeling]
 	 */
-	public function ubb_mededelingen($arguments = array()) {
+	public function bb_mededelingen($arguments = array()) {
 		if (isset($arguments['mededelingen'])) {
 			$type = $arguments['mededelingen'];
 		} else {
@@ -842,17 +842,17 @@ HTML;
 	/**
 	 * Commentaar niet weergeven
 	 */
-	function ubb_commentaar($arguments = array()) {
-		$this->ubb_mode = false;
+	function bb_commentaar($arguments = array()) {
+		$this->bb_mode = false;
 		$content = $this->parseArray(array('[/commentaar]'), array());
-		$this->ubb_mode = true;
+		$this->bb_mode = true;
 		return '';
 	}
 
 	/**
 	 * Locatie = map in hoverIntentContent
 	 */
-	function ubb_locatie($arguments = array()) {
+	function bb_locatie($arguments = array()) {
 		$address = $this->parseArray(array('[/locatie]'), array());
 		$map = $this->maps(htmlspecialchars($address), $arguments);
 		return '<span class="hoverIntent"><a href="http://maps.google.nl/maps?q=' . htmlspecialchars($address) . '">' . $address . ' <img src="' . CSR_PICS . '/famfamfam/map.png" alt="map" title="Kaart" /></a><div class="hoverIntentContent">' . $map . '</div></span>';
@@ -861,18 +861,18 @@ HTML;
 	/**
 	 * Kaart = map
 	 */
-	function ubb_kaart($arguments = array()) {
-		return $this->ubb_map($arguments);
+	function bb_kaart($arguments = array()) {
+		return $this->bb-map($arguments);
 	}
 
 	/**
-	 * Google-maps ubb-tag.
+	 * Google-maps
 	 * 
 	 * @author Piet-Jan Spaans
 	 * 
 	 * [map dynamic=false w=100 h=100]Oude Delft 9[/map]
 	 */
-	public function ubb_map($arguments = array()) {
+	public function bb_map($arguments = array()) {
 		$address = $this->parseArray(array('[/map]', '[/kaart]'), array());
 		return $this->maps(htmlspecialchars($address), $arguments);
 	}
@@ -903,12 +903,12 @@ HTML;
 		if (!isset($arguments['static'])) {
 			$jscall = "$(document).ready(function() {loadGmaps('$mapid','$address');});";
 		}
-		$html .= '<div class="ubb_gmap" id="' . $mapid . '" style="width:' . $width . 'px;height:' . $height . 'px;"></div><script type="text/javascript">' . $jscall . '</script>';
+		$html .= '<div class="bb-gmap" id="' . $mapid . '" style="width:' . $width . 'px;height:' . $height . 'px;"></div><script type="text/javascript">' . $jscall . '</script>';
 		return $html;
 	}
 
 	/**
-	 * Peiling ubb-tag.
+	 * Peiling
 	 * 
 	 * @author Piet-Jan Spaans
 	 * 
@@ -916,7 +916,7 @@ HTML;
 	 * of
 	 * [peiling]2[/peiling]
 	 */
-	public function ubb_peiling($arguments = array()) {
+	public function bb_peiling($arguments = array()) {
 		if (isset($arguments['peiling'])) {
 			$peilingid = $arguments['peiling'];
 		} else {
@@ -941,7 +941,7 @@ HTML;
 	 * example:
 	 * [slideshow]http://example.com/image_1.jpg[/slideshow]
 	 */
-	public function ubb_slideshow($arguments = array()) {
+	public function bb_slideshow($arguments = array()) {
 		$content = $this->parseArray(array('[/slideshow]'), array());
 		$slides_tainted = explode('[br]', $content);
 		$slides = array();
@@ -966,11 +966,11 @@ HTML;
 			}
 			$content .= '</div>' . "\n"; //end paging
 			if ($this->slideshowJsIncluded === false) {
-				$content .= '<script type="text/javascript" src="/layout/js/ubb_slideshow.js"></script>';
+				$content .= '<script type="text/javascript" src="/layout/js/bb-slideshow.js"></script>';
 				$this->slideshowJsIncluded = true;
 			}
 		}
-		return '<div class="ubb_slideshow">' . $content . '</div>';
+		return '<div class="bb-slideshow">' . $content . '</div>';
 	}
 
 	/**
@@ -980,18 +980,18 @@ HTML;
 	 * of
 	 * [bijbelrooster]10[/bijbelrooster]
 	 */
-	public function ubb_bijbelrooster($arguments = array()) {
+	public function bb_bijbelrooster($arguments = array()) {
 		if (isset($arguments['bijbelrooster'])) {
 			$dagen = $arguments['bijbelrooster'];
 		} else {
 			$dagen = $this->parseArray(array('[/bijbelrooster]'), array());
 		}
 		require_once 'MVC/view/BijbelroosterView.class.php';
-		$view = new BijbelroosterUbbView($dagen);
+		$view = new BijbelroosterBBView($dagen);
 		return $view->getHtml();
 	}
 
-	function ubb_bijbel($arguments = array()) {
+	function bb_bijbel($arguments = array()) {
 		$content = $this->parseArray(array('[/bijbel]'), array());
 		if (isset($arguments['bijbel'])) { // [bijbel=
 			$stukje = str_replace('_', ' ', $arguments['bijbel']);
@@ -1038,16 +1038,16 @@ HTML;
 /**
  * We staan normaal geen HTML toe, maar met deze mag het wel.
  */
-class CsrHtmlUbb extends CsrUbb {
+class CsrBBHtml extends CsrBB {
 
 	public function __construct() {
 		parent::__construct();
 		$this->allow_html = true;
 	}
 
-	public static function parse($ubb) {
-		$parser = new CsrHtmlUbb();
-		return $parser->getHTML($ubb);
+	public static function parse($bbcode) {
+		$parser = new CsrBBHtml();
+		return $parser->getHTML($bbcode);
 	}
 
 }

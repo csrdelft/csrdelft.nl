@@ -60,7 +60,7 @@ a.knop, textarea, input, select, #filters span, #boekencatalogus_wrapper *, .med
 .bericht1, .forumtekst{ background-color: #333 !important; }
 .citaat{ background-color: #444 !important; }
 
-.ubb_block, .ubb_block .groepleden{
+.bb-block, .bb-block .groepleden{
 	background-color: #444 !important;
 }
 #profielForm div.InputField{ border: 0 !important; }

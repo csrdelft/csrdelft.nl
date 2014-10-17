@@ -4,7 +4,7 @@ require_once 'configuratie.include.php';
 /**
  * bbcode.php	| 	Jan Pieter Waagmeester (jieter@jpwaag.com)
  *
- * Dit scriptje doet niets meer dan ubb toepassen op een gegeven string.
+ * Dit scriptje doet niets meer dan server side bbcode parsen op de gegeven string.
  */
 if (isset($_POST['data'])) {
 	$string = urldecode($_POST['data']);
@@ -16,4 +16,4 @@ if (isset($_POST['data'])) {
 
 $string = trim($string);
 
-echo CsrUbb::parse($string);
+echo CsrBB::parse($string);

@@ -47,7 +47,7 @@
 		<a class="knop float-right opmaakhulp" title="Opmaakhulp weergeven">Opmaak</a>
 		<a class="knop float-right vergroot" data-vergroot="#bericht" title="Vergroot het invoerveld">&uarr;&darr;</a>
 		<input type="button" name="submit" id="submit" value="Verder gaan" onclick="roodschopper('simulate'); return false;" />
-		<input id="forumVoorbeeld" type="button" onclick="ubbPreview('berichtInvoer', 'berichtPreview')" value="Voorbeeld"/>
+		<input id="forumVoorbeeld" type="button" onclick="CsrBBPreview('berichtInvoer', 'berichtPreview')" value="Voorbeeld"/>
 	</div>
 	<div id="messageContainer" class="verborgen"></div>
 	

@@ -79,16 +79,16 @@ function init_timeago() {
 }
 
 function init_lazy_images() {
-	$('div.ubb_img_loading').each(function () {
+	$('div.bb-img-loading').each(function () {
 		var content = $(document.createElement('IMG'));
 		content.error(function () {
 			$(this).attr('title', 'Afbeelding bestaat niet of is niet toegankelijk!');
 			$(this).attr('src', 'http://plaetjes.csrdelft.nl/famfamfam/picture_error.png');
 			$(this).css('width', '16px');
 			$(this).css('height', '16px');
-			$(this).removeClass('ubb_img_loading').addClass('ubb_img');
+			$(this).removeClass('bb-img-loading').addClass('bb-img');
 		});
-		content.addClass('ubb_img');
+		content.addClass('bb-img');
 		content.attr('alt', $(this).attr('title'));
 		content.attr('style', $(this).attr('style'));
 		content.attr('src', $(this).attr('src'));
@@ -195,7 +195,7 @@ function init_buttons() {
 	$('button.get').bind('click.get', knop_get);
 	$('a.opmaakhulp').unbind('click.opmaakhulp');
 	$('a.opmaakhulp').bind('click.opmaakhulp', function (event) {
-		$('#bbcodepopup').toggle();
+		$('#bbcodehulp').toggle();
 	});
 	$('a.vergroot').unbind('click.vergroot');
 	$('a.vergroot').bind('click.vergroot', function (event) {
@@ -557,7 +557,7 @@ function ketzer_ajax(url, ketzer) {
 	});
 	jqXHR.done(function (data, textStatus, jqXHR) {
 		var html = $.parseHTML(data);
-		$('.ubb_maaltijd').each(function () {
+		$('.bb-maaltijd').each(function () {
 			if ($(this).attr('id') === $(html).attr('id')) {
 				$(this).replaceWith(data);
 			}
@@ -635,7 +635,7 @@ function getScrollBarWidth() {
 	return (w1 - w2);
 }
 
-function applyUBB(string, div) {
+function parseBBCode(string, div) {
 	var jqXHR = $.ajax({
 		type: 'POST',
 		cache: false,
@@ -678,11 +678,11 @@ function importAgenda(id) {
 	});
 }
 
-function ubbPreview(source, dest) {
-	var ubb = document.getElementById(source).value;
-	if (ubb.length !== '') {
+function CsrBBPreview(source, dest) {
+	var code = document.getElementById(source).value;
+	if (code.length !== '') {
 		var previewDiv = document.getElementById(dest);
-		applyUBB(ubb, previewDiv);
+		parseBBCode(code, previewDiv);
 		$(previewDiv).addClass('preview-show');
 		$(window).scrollTo($(source));
 	}

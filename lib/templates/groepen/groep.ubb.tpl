@@ -1,4 +1,4 @@
-<div id="groep{$groep->getId()}" class="ubb_block ubb_groep">
+<div id="groep{$groep->getId()}" class="bb-block bb-groep">
  	<div class="groepleden">
 		{if $groep->toonPasfotos()}
 			{assign var='actie' value='pasfotos'}
@@ -6,6 +6,6 @@
 		{include file='groepen/groepleden.tpl'}
 	</div>
 	<h2>{$groep->getLink()}</h2>
-	<p>{$groep->getSbeschrijving()|ubb}</p>
+	<p>{$groep->getSbeschrijving()|bbcode}</p>
 	<div class="clear">&nbsp;</div>
 </div>

@@ -24,7 +24,7 @@ class Mededeling extends PersistentEntity {
 	 */
 	public $type;
 	/**
-	 * Textuele inhoud met eventueel UBB
+	 * Textuele inhoud met eventueel bbcode
 	 * @var string 
 	 */
 	public $tekst;

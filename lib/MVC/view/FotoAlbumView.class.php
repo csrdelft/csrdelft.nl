@@ -123,7 +123,7 @@ class FotosDropzone extends DropzoneForm {
 
 }
 
-class FotoUbbView extends SmartyTemplateView {
+class FotoBBView extends SmartyTemplateView {
 
 	private $groot;
 
@@ -135,9 +135,9 @@ class FotoUbbView extends SmartyTemplateView {
 	public function getHTML() {
 		$html = '<a href="' . $this->model->getURL() . '" title="Klik voor origineel formaat"';
 		if (!$this->groot AND LidInstellingen::get('forum', 'fotoWeergave') == 'boven bericht') {
-			$html .= ' class="hoverIntent"><div class="hoverIntentContent"><div class="ubb_img_loading" src="' . $this->model->getResizedURL() . '"></div></div';
+			$html .= ' class="hoverIntent"><div class="hoverIntentContent"><div class="bb-img-loading" src="' . $this->model->getResizedURL() . '"></div></div';
 		}
-		$html .= '><div class="ubb_img_loading" src="';
+		$html .= '><div class="bb-img-loading" src="';
 		if (($this->groot AND LidInstellingen::get('forum', 'fotoWeergave') != 'nee') OR LidInstellingen::get('forum', 'fotoWeergave') == 'in bericht') {
 			$html .= $this->model->getResizedURL();
 		} else {
@@ -186,7 +186,7 @@ class FotoAlbumZijbalkView extends SmartyTemplateView {
 
 }
 
-class FotoAlbumUbbView extends SmartyTemplateView {
+class FotoAlbumBBView extends SmartyTemplateView {
 
 	private $compact = false; //compact or expanded tag.
 	private $rows = 2;  //number of rows
@@ -346,7 +346,7 @@ class FotoAlbumUbbView extends SmartyTemplateView {
 		} else {
 			$content = $this->getGridHtml();
 		}
-		return '<div class="ubb_block ubb_fotoalbum"><h2>' . FotoAlbumView::getBreadcrumbs($this->model, false, true) . '</a></h2>' . $content . '</div>';
+		return '<div class="bb-block bb-fotoalbum"><h2>' . FotoAlbumView::getBreadcrumbs($this->model, false, true) . '</a></h2>' . $content . '</div>';
 	}
 
 }

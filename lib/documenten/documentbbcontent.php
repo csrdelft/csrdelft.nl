@@ -62,7 +62,7 @@ class DocumentDownloadContent extends SmartyTemplateView {
 
 }
 
-class DocumentUbbContent extends SmartyTemplateView {
+class DocumentBBContent extends SmartyTemplateView {
 
 	public function __construct(Document $document) {
 		parent::__construct($document);

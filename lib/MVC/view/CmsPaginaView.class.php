@@ -29,7 +29,7 @@ class CmsPaginaView implements View {
 		if ($this->pagina->magBewerken()) {
 			echo '<a href="/pagina/bewerken/' . $this->pagina->naam . '" class="knop round float-right"title="Bewerk pagina&#013;' . $this->pagina->laatst_gewijzigd . '">' . Icon::getTag('bewerken') . '</a>';
 		}
-		echo CsrHtmlUbb::parse(htmlspecialchars_decode($this->pagina->inhoud));
+		echo CsrBBHtml::parse(htmlspecialchars_decode($this->pagina->inhoud));
 	}
 
 }
@@ -57,7 +57,7 @@ class CmsPaginaForm extends Formulier {
 			$fields[] = new HtmlComment('<div><label>Rechten bekijken</label>' . $pagina->rechten_bekijken .
 					'</div><div class="clear-left"><label>Rechten bewerken</label>' . $pagina->rechten_bewerken . '</div>');
 		}
-		$fields[] = new UbbPreviewField('inhoud', $pagina->inhoud, 'Inhoud');
+		$fields[] = new CsrBBPreviewField('inhoud', $pagina->inhoud, 'Inhoud');
 		$fields['btn'] = new FormKnoppen('/pagina/' . $pagina->naam);
 		$delete = new DeleteKnop('/pagina/verwijderen/' . $pagina->naam);
 		$fields['btn']->addKnop($delete);

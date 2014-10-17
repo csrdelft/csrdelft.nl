@@ -17,7 +17,7 @@
  * 		* UrlField					Url's
  * 		* TelefoonField				Telefoonnummers
  * 		* TextareaField				Textarea die automagisch uitbreidt bij typen
- * 			- UbbPreviewField		Textarea met ubb voorbeeld
+ * 			- CsrBBPreviewField		Textarea met bbcode voorbeeld
  *  	* NickField					Nicknames
  *  	* DuckField					Ducknames
  *  	* UidField					Uid's  met preview
@@ -1083,9 +1083,9 @@ class RequiredTextareaField extends TextareaField {
 }
 
 /**
- * Textarea met een ubb-preview erbij.
+ * Textarea met een bbcode-preview erbij.
  */
-class UbbPreviewField extends TextareaField {
+class CsrBBPreviewField extends TextareaField {
 
 	public $previewOnEnter = false;
 
@@ -1096,7 +1096,7 @@ class UbbPreviewField extends TextareaField {
 	public function getPreviewDiv() {
 		return <<<HTML
 <div class="float-right">
-	<input type="button" value="Voorbeeld" onclick="ubbPreview('{$this->getId()}', '{$this->getName()}Preview');"/>
+	<input type="button" value="Voorbeeld" onclick="CsrBBPreview('{$this->getId()}', '{$this->getName()}Preview');"/>
 	&nbsp;<a class="knop opmaakhulp" title="Opmaakhulp weergeven">Opmaak</a>
 </div>
 <br />
@@ -1113,7 +1113,7 @@ HTML;
 $('#{$this->getId()}', form).unbind('keyup.preview');
 $('#{$this->getId()}', form).bind('keyup.preview', function(event) {
 	if(event.keyCode === 13) { // enter
-		ubbPreview('{$this->getId()}', '{$this->getName()}Preview');
+		CsrBBPreview('{$this->getId()}', '{$this->getName()}Preview');
 	}
 });
 JS;
@@ -1121,7 +1121,7 @@ JS;
 
 }
 
-class RequiredUbbPreviewField extends UbbPreviewField {
+class RequiredCsrBBPreviewField extends CsrBBPreviewField {
 
 	public $required = true;
 

@@ -29,7 +29,7 @@
 			{if $geselecteerdeMededeling->isModerator()}
 				<a class="knop" href="#" onclick="$('#legenda').toggle();">{icon get="legenda"} Legenda</a>
 				<div id="legenda" class="dragobject verborgen">
-					<span id="ubbsluiten" onclick="$('#legenda').toggle();" title="Legenda verbergen">&times;</span>
+					<span id="bbcodehulpsluiten" onclick="$('#legenda').toggle();" title="Legenda verbergen">&times;</span>
 					<h2>Legenda Mededelingen</h2>
 					<br />
 					Voor de moderators zijn mededelingen in de lijst gemarkeerd. Dit is de betekenis van de markering:<br />
@@ -71,7 +71,7 @@
 									{/if}
 									<div class="itemtitel">
 										{* {$mededeling->getDatum()} *}
-										<a href="{$pagina_root}{$mededeling->getId()}"{if $mededeling->isModerator()} class="{if !$mededeling->isPrive()}cursief{/if} {if $mededeling->getZichtbaarheid()=='wacht_goedkeuring'}dikgedrukt{/if}"{/if}>{$mededeling->getTitel()|ubb|html_substr:"40":"…"}</a>
+										<a href="{$pagina_root}{$mededeling->getId()}"{if $mededeling->isModerator()} class="{if !$mededeling->isPrive()}cursief{/if} {if $mededeling->getZichtbaarheid()=='wacht_goedkeuring'}dikgedrukt{/if}"{/if}>{$mededeling->getTitel()|bbcode|html_substr:"40":"…"}</a>
 									</div>
 								</div>
 							{/foreach}
@@ -87,7 +87,7 @@
 				<div class="nieuwsbody">
 					<div class="nieuwstitel">{$geselecteerdeMededeling->getTitel()|escape:'html'}</div>
 					<img class="nieuwsplaatje" src="{$CSR_PICS}/nieuws/{$geselecteerdeMededeling->getPlaatje()}" width="200px" height="200px" alt="{$geselecteerdeMededeling->getPlaatje()}" />
-					{$geselecteerdeMededeling->getTekst()|ubb}<br />
+					{$geselecteerdeMededeling->getTekst()|bbcode}<br />
 				</div>
 				<div class="informatie">
 					<hr />
@@ -121,7 +121,7 @@
 
 			{* Het Topmost block *}
 			{if !$prullenbak}
-				{'[mededelingen=top3leden]'|ubb}
+				{'[mededelingen=top3leden]'|bbcode}
 			{/if}
 
 		{else}		{* als $geselecteerdeMededeling===null *}

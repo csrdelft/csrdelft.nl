@@ -366,7 +366,7 @@
 	{if LoginModel::mag('P_ADMIN,R_BESTUUR,groep:novcie') AND $profiel->getStatus()=='S_NOVIET' AND $profhtml.kgb!=''}
 		<div class="profielregel" id="novcieopmerking">
 			<div style="cursor: pointer;" onclick="$('#novcie_gegevens').toggle();">NovCie-Opmerking &raquo;</div>
-			<div class="gegevens verborgen" id="novcie_gegevens">{$profhtml.kgb|ubb}</div>
+			<div class="gegevens verborgen" id="novcie_gegevens">{$profhtml.kgb|bbcode}</div>
 		</div>
 	{/if}
 	{if ($isAdmin OR $isLidMod) AND $profhtml.changelog!=''}
@@ -375,7 +375,7 @@
 				<div style="cursor: pointer;" onclick="$('#changelog_gegevens').toggle();
 						this.remove()">Bewerklog &raquo;</div>
 				<div class="verborgen" id="changelog_gegevens">
-					{$profhtml.changelog|ubb}
+					{$profhtml.changelog|bbcode}
 				</div>
 			</div>
 		</div>
