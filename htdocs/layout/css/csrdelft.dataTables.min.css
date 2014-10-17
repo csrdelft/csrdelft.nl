@@ -1,5 +1,0 @@
-/*!
- * csrdelft.dataTables.less
- * 
- * @author P.W.G. Brussee <brussee@live.nl>
- */.dataTables_wrapper label{font-weight:normal}.dataTables_wrapper .dataTables_info{clear:none;margin-left:10%}.dataTables_wrapper .dataTables_length{padding-top:.755em}.dataTable tbody tr.group,.dataTable tbody tr.group:hover{background-color:white!important}.dataTable tbody tr.group td{font-weight:bold}.dataTable tbody tr.childrow:hover *{background-color:white}.dataTable td.details-control,.dataTable th.details-control{background:url('http://plaetjes.csrdelft.nl/dataTables/details_open.png') no-repeat center center;cursor:pointer}.dataTable tr.expanded td.details-control,.dataTable tr.expanded th.details-control{background:url('http://plaetjes.csrdelft.nl/dataTables/details_close.png') no-repeat center center}
