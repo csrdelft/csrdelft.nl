@@ -155,7 +155,17 @@ class CsrBB extends eamBBParser {
 		if ($url === 'laatste') {
 			$album = FotoAlbumModel::getMostRecentFotoAlbum();
 		} else {
-			$path = PICS_PATH . 'fotoalbum' . $url;
+			//vervang url met pad
+			$url = str_ireplace(CSR_ROOT, '', $url);
+			$path = PICS_PATH;
+			//check fotoalbum in url
+			$url = str_ireplace('fotoalbum/', '', $url);
+			$path .= 'fotoalbum/';
+			//check slash voor pad
+			if (startsWith($url, '/')) {
+				$url = substr($url, 1);
+			}
+			$path .= $url;
 			$album = FotoAlbumModel::getFotoAlbum($path);
 		}
 		if (!$album) {
