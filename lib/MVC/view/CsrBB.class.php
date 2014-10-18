@@ -906,9 +906,9 @@ HTML;
 			$GLOBALS['mapJsLoaded'] += 1;
 		}
 		$mapid = 'map' . $GLOBALS['mapJsLoaded'];
-		$jscall = "writeStaticGmap('$mapid', '$address',$width,$height);";
+		$jscall = "writeStaticGmap('$mapid', '$address', $width, $height);";
 		if (!isset($arguments['static'])) {
-			$jscall = "$(document).ready(function($arguments = array()) {loadGmaps('$mapid','$address');});";
+			$jscall = "$(document).ready(function() {loadGmaps('$mapid','$address');});";
 		}
 		$html .= '<div class="bb-gmap" id="' . $mapid . '" style="width:' . $width . 'px;height:' . $height . 'px;"></div><script type="text/javascript">' . $jscall . '</script>';
 		return $html;
