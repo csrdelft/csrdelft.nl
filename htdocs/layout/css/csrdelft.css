@@ -1122,4 +1122,7 @@ Overrides voor smalle schermen
 	#zijbalk_quicknav a{
 		margin: 0 5px;
     }
+	#forumtabel{
+		width: 720px;
+	}
 }
