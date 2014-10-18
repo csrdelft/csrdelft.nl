@@ -40,9 +40,6 @@ div.maandnavigatie{
 div.maandnavigatie h1{
 	display: inline;
 }
-div.maandnavigatie a{
-	padding: 3px 2px;
-}
 table#maand{
 	clear: both;
 }
