@@ -485,7 +485,7 @@ function dom_update(htmlString) {
 				elmnt.effect('puff', {}, 400, remove);
 			}
 			else {
-				elmnt.replaceWith($(this)).show().effect('highlight');
+				elmnt.replaceWith($(this).show()).effect('highlight');
 			}
 		}
 		else {
