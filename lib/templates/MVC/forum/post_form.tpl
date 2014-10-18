@@ -39,7 +39,7 @@
 		</div>
 
 	</td>
-	<td>
+	<td class="bericht0">
 		<form id="forumForm" action="/forum/posten/{$deel->forum_id}{if isset($draad)}/{$draad->draad_id}{/if}" method="post">
 
 			{if !LoginModel::mag('P_LOGGED_IN')}

@@ -141,11 +141,8 @@ function forumBewerken(postId) {
 			bewerkForm += '<div id="bewerkPreview" class="preview forumBericht"></div>';
 			bewerkForm += '<textarea name="forumBericht" id="forumBewerkBericht" class="tekst" rows="8"></textarea>';
 			bewerkForm += 'Reden van bewerking: <input type="text" name="reden" id="forumBewerkReden"/><br /><br />';
-			bewerkForm += '<a class="knop float-right opmaakhulp" title="Opmaakhulp weergeven">Opmaak</a>';
-			bewerkForm += '<a class="knop float-right vergroot" data-vergroot="#forumBewerkBericht" title="Vergroot het invoerveld">&uarr;&darr;</a>';
-			bewerkForm += '<input type="button" value="Opslaan" onclick="submitPost();" /> ' +
-					'<input type="button" value="Voorbeeld" onclick="CsrBBPreview(\'forumBewerkBericht\', \'bewerkPreview\');" /> ' +
-					'<input type="button" value="Annuleren" onclick="restorePost();" />';
+			bewerkForm += '<div class="float-right"><a class="knop vergroot" data-vergroot="#forumBewerkBericht" title="Vergroot het invoerveld">&uarr;&darr;</a> <a class="knop opmaakhulp" title="Opmaakhulp weergeven">Opmaak</a></div>';
+			bewerkForm += '<input type="button" value="Opslaan" onclick="submitPost();" /> <input type="button" value="Voorbeeld" onclick="CsrBBPreview(\'forumBewerkBericht\', \'bewerkPreview\');" /> <input type="button" value="Annuleren" onclick="restorePost();" />';
 			bewerkForm += '</form>';
 			bewerkContainer.innerHTML = bewerkForm;
 			document.getElementById('forumBewerkBericht').value = http.responseText;
