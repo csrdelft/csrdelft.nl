@@ -284,7 +284,7 @@ function knop_get(event) {
 }
 
 function modal_open(htmlString) {
-	if (htmlString) {
+	if (typeof htmlString == 'string' && htmlString != '') {
 		$('#modal').html(htmlString);
 		init();
 		$('#modal').show();
@@ -485,16 +485,16 @@ function dom_update(htmlString) {
 				elmnt.effect('puff', {}, 400, remove);
 			}
 			else {
-				elmnt.replaceWith($(this)).effect('highlight');
+				elmnt.replaceWith($(this)).show().effect('highlight');
 			}
 		}
 		else {
 			var parentid = $(this).attr('parentid');
 			if (parentid) {
-				$(this).prependTo('#' + parentid).effect('highlight');
+				$(this).prependTo('#' + parentid).show().effect('highlight');
 			}
 			else {
-				$(this).prependTo('#maalcie-tabel tbody:visible:first').effect('highlight'); //FIXME: make generic
+				$(this).prependTo('#maalcie-tabel tbody:visible:first').show().effect('highlight'); //FIXME: make generic
 			}
 		}
 		init();
