@@ -357,12 +357,22 @@ Modal popup
 	position: fixed;
 	z-index: 200;
 	padding: 50px;
-	font-size: 14px;
-	background-color: white;/*
+	font-size: 13px;
+	background-color: white;
+}/*
+#modal::after{
+	content: "";
 	background-image: url("http://plaetjes.csrdelft.nl/layout/beeldmerk.jpg");
-	background-position: top right;
-	background-repeat: no-repeat;*/
-}
+	background-position: top 10px right 15px;
+	background-repeat: no-repeat;
+	opacity: 0.1;
+	top: 0;
+	left: 0;
+	bottom: 0;
+	right: 0;
+	position: absolute;
+	z-index: -1;  
+}*/
 #modal-background{
 	display: none;
 	position: fixed;
