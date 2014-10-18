@@ -763,7 +763,7 @@ div.forumheadbtn{
 }
 #forumtabel{
 	border: 0; padding: 0;
-	width: 760px;
+	width: 750px;
 }
 #forumtabel td{ border: 0; }
 #forumtabel tr.tussenschot td{
@@ -1104,43 +1104,6 @@ div.visitekaartje div.uid{
 	margin-top: 8px;
 	color: #999;
 }
-
-/*
- * Nieuwe layout heeft wat extra nodig om over #pageover .content heen te komen
- */
-#pageover .mid{ padding-top: 5px; }
-#pageover .content{ width: 760px; margin-left: 15px; }
-#pageover .content h1{ margin-top:0; padding: 4px 0 0 0; }
-#pageover .content fieldset{ padding: 0; }
-
-#pageover .content #forumtabel{ border-spacing: 2px; border-collapse: separate; }
-#pageover .content table{ background: none; border-width: 0; }
-#pageover .content table tr:nth-of-type(even){ background: none; }
-#pageover .content #forumtabel th{ background-color: #AFCDFC; }
-#pageover .content td{ font-size: 1em; }
-
-/* forumonderwerp */
-#pageover .content a.postlink,
-#pageover .content span.togglePasfoto{ color: #bbb; text-decoration: none; }
-#pageover .content textarea{ margin-top:10px; }
-#pageover .content hr{ margin:4px 0; }
-#pageover .content .bewerkt{ line-height: 1em; }
-
-/* formulier onderwerpen pagina */
-#pageover .content #forumtabel label{ width: 166px; }
-#pageover .content #forumtabel #titel{ margin:0; }
-
-/* forum zoekresultaten */
-#pageover .content select{ width: auto; }
-
-#pageover .content span.offtopic{ font-size: 9px; color: #bbb; }
-#pageover .content span.offtopic a{ color: #bbb; }
-#pageover .content span.offtopic hr{ text-align: left; background-color: #bbb; }
-#pageover .content span.offtopic img{ opacity: 0.3; filter:alpha(opacity=30); }
-
-/*
- * einde nieuwe layout
- */
 
 /* -------------------------------- 
 
