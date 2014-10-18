@@ -112,7 +112,7 @@ function zijbalk_scroll_fixed() {
 	}
 
 	if (elmnt.hasClass('desktop-only') && (window.innerWidth < 900 || window.innerHeight < 900)) {
-		elmnt.removeClass('desktop-only scroll-fixed dragobject dragvertical');
+		elmnt.removeClass('desktop-only scroll-fixed dragobject dragvertical scroll-hover');
 		return;
 	}
 
@@ -152,19 +152,21 @@ function zijbalk_scroll_fixed() {
 	});
 
 	// show-hide scrollbar
-	var showscroll = function () {
-		if (elmnt.get(0).scrollHeight > elmnt.get(0).clientHeight) {
+	if (elmnt.hasClass('scroll-hover')) {
+		var showscroll = function () {
+			if (elmnt.get(0).scrollHeight > elmnt.get(0).clientHeight) {
+				elmnt.css({
+					'overflow-y': 'scroll'
+				});
+			}
+		};
+		var hidescroll = function () {
 			elmnt.css({
-				'overflow-y': 'scroll'
+				'overflow-y': ''
 			});
-		}
-	};
-	var hidescroll = function () {
-		elmnt.css({
-			'overflow-y': ''
-		});
-	};
-	elmnt.hover(showscroll, hidescroll);
+		};
+		elmnt.hover(showscroll, hidescroll);
+	}
 }
 
 function page_reload(htmlString) {

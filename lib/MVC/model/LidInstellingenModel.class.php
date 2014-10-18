@@ -47,6 +47,7 @@ class LidInstellingen extends PersistenceModel {
 		),
 		'zijbalk'		 => array(
 			'scrollen'				 => array('Scrollen', T::Enumeration, array('met pagina mee', 'apart scrollen', 'pauper/desktop'), 'met pagina mee'),
+			'scrollbalk'			 => array('Scrollbalk tonen', T::Enumeration, array('ja', 'nee'), 'ja'),
 			'ishetal'				 => array('Is het al… weergeven', T::Enumeration, array('niet weergeven', 'willekeurig', 'wist u dat', 'weekend', 'kring', 'lezing', 'borrel', 'jarig', 'dies', 'happie', 'lunch', 'studeren'), 'willekeurig'),
 			'favorieten'			 => array('Favorieten menu weergeven', T::Enumeration, array('ja', 'nee'), 'ja'),
 			'agendaweken'			 => array('Aantal weken in agenda weergeven', T::Integer, array(0, 10), 2),
