@@ -1,4 +1,4 @@
-<tr>
+<tr id="forumPosten">
 	<td class="auteur">
 
 		<table>

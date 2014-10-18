@@ -150,10 +150,7 @@ function forumBewerken(postId) {
 			$('#forumBewerkBericht').markItUp(mySettings); // mySettings located in set.js
 			$(bewerkContainer).parent().children('td.auteur:first').append('<div id="bewerk-melding">Als u dingen aanpast zet er dan even bij w&aacute;t u aanpast! Gebruik bijvoorbeeld [s]...[/s]</div>');
 			$('#bewerk-melding').slideDown(200);
-			//invoerveldjes van het normale toevoegformulier even uitzetten.
-			document.getElementById('forumBericht').disabled = true;
-			document.getElementById('forumOpslaan').disabled = true;
-			document.getElementById('forumVoorbeeld').disabled = true;
+			$('#forumPosten').css('visibility', 'hidden');
 		}
 	};
 	http.send(null);
@@ -176,9 +173,7 @@ function forumCiteren(postId) {
 function restorePost() {
 	bewerkContainer.innerHTML = bewerkContainerInnerHTML;
 	$('#bewerk-melding').slideUp(200);
-	document.getElementById('forumBericht').disabled = false;
-	document.getElementById('forumOpslaan').disabled = false;
-	document.getElementById('forumVoorbeeld').disabled = false;
+	$('#forumPosten').css('visibility', 'visible');
 }
 function submitPost() {
 	var form = $('#forumEditForm');
