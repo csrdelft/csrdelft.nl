@@ -49,13 +49,12 @@
 					forumdeel op in hun zoekresultaten.<br />
 					Het vermelden van <span class="cursief">uw naam en email-adres</span> is verplicht.
 				</div>
-				<label for="externeemail">Email-adres</label>
-				<input type="text" id="externeemail" name="email" class="forumEmail" placeholder="Email-adres" />
+				<input type="text" name="email" class="forumEmail" placeholder="Email-adres" />
 				<input type="text" name="firstname" value="" class="verborgen" />{* spam trap, must be kept empty! *}
 				<br /><br />
 			{/if}
 			{if $draad === null}
-				<input type="text" id="nieuweTitel" name="titel" id="titel" value="" class="tekst" placeholder="Onderwerp titel" />
+				<input type="text" id="nieuweTitel" name="titel" value="" class="tekst" placeholder="Onderwerp titel" />
 				<br /><br />
 			{/if}
 			<div id="berichtPreview" class="preview forumBericht"></div>
