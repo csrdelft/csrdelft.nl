@@ -172,7 +172,7 @@ function forumCiteren(postId) {
 }
 function restorePost() {
 	bewerkContainer.innerHTML = bewerkContainerInnerHTML;
-	$('#bewerk-melding').slideUp(200);
+	$('#bewerk-melding').slideUp(200, remove);
 	$('#forumPosten').css('visibility', 'visible');
 }
 function submitPost() {
