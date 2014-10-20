@@ -48,7 +48,7 @@ class Saldi {
 				$bestellingen = $model->find('socCieId = ? AND deleted = FALSE AND tijd > ?', array($klant->socCieId, strtotime('-' . $timespan . ' days')), 'tijd DESC');
 				foreach ($bestellingen as $bestelling) {
 					$saldo += $bestelling->totaal;
-					$data[] = array('moment' => getDateTime($bestelling->tijd), 'saldo' => round($saldo / 100, 2));
+					$data[] = array('moment' => $bestelling->tijd, 'saldo' => round($saldo / 100, 2));
 				}
 				$this->data = array_merge($this->data, array_reverse($data));
 			}
