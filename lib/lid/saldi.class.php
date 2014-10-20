@@ -46,7 +46,9 @@ class Saldi {
 				$data = array();
 				$model = DynamicEntityModel::makeModel('socCieBestelling');
 				$bestellingen = $model->find('socCieId = ? AND tijd > ?', array($klant->socCieId, strtotime('-' . $timespan . ' days')), 'tijd DESC');
-				setMelding(count($bestellingen), 0);
+
+				setMelding($klant->socCieId . ' - ' . count($bestellingen), 0); //DEBUG
+
 				foreach ($bestellingen as $bestelling) {
 					$saldo += $bestelling->totaal;
 					$data[] = array($bestelling->tijd, round($saldo / 100, 2));
