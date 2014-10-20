@@ -39,7 +39,6 @@ class Saldi {
 		}
 
 		setMelding($this->cie, 0); //DEBUG
-
 		// fetch new data from soccie system
 		$now = time();
 		$date_back = strtotime('-' . $timespan . ' days', $now);
@@ -107,8 +106,8 @@ class Saldi {
 	public static function getDatapoints($uid, $timespan) {
 		$saldi = array();
 		try {
-			$saldi['maalcie'] = new Saldi($uid, 'maalcie', $timespan);
 			$saldi['soccie'] = new Saldi($uid, 'soccie', $timespan);
+			$saldi['maalcie'] = new Saldi($uid, 'maalcie', $timespan);
 		} catch (Exception $e) {
 			if (!startsWith($e->getMessage(), 'Saldi::load() gefaald.')) {
 				setMelding($e->getMessage(), -1);
@@ -116,14 +115,20 @@ class Saldi {
 		}
 		$series = array();
 		foreach ($saldi as $cie) {
+
+			setMelding($cie, 0); // DEBUG
+
 			if (!Saldi::magGrafiekZien($uid, $cie->cie)) {
+
+				setMelding('!!', 2); // DEBUG
+
 				//deze slaan we over, die mogen we niet zien kennelijk
 				continue;
 			}
 			$points = array();
 			foreach ($cie->getData() as $data) {
 				$p = '[';
-				$p .= strtotime($data['moment']);
+				$p .= strtotime($data['moment']) * 1000;
 				$p .= ', ';
 				$p .= sprintf('%.2F', $data['saldo']);
 				$p .= "]";

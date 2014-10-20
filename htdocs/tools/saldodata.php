@@ -29,7 +29,7 @@ if($timespan>(10*365)){
 	$timespan=(10*365);
 }
 
-if(Saldi::magGrafiekZien(LoginModel::getUid())){
+if(Saldi::magGrafiekZien($uid)){
 	echo Saldi::getDatapoints($uid, $timespan);
 }
 
