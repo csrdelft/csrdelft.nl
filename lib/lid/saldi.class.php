@@ -103,28 +103,29 @@ class Saldi {
 	 * Geef wat javascriptcode terug met data-series defenities voor Flot
 	 */
 	public static function getDatapoints($uid, $timespan) {
-		$saldi = array();
+		$aSaldi = array();
 		try {
-			$saldi['soccie'] = new Saldi($uid, 'soccie', $timespan);
-			$saldi['maalcie'] = new Saldi($uid, 'maalcie', $timespan);
+			$aSaldi['soccie'] = new Saldi($uid, 'soccie', $timespan);
+			$aSaldi['maalcie'] = new Saldi($uid, 'maalcie', $timespan);
 		} catch (Exception $e) {
 			if (!startsWith($e->getMessage(), 'Saldi::load() gefaald.')) {
 				setMelding($e->getMessage(), -1);
 			}
 		}
 		$series = array();
-		foreach ($saldi as $cie) {
+		foreach ($aSaldi as $saldi) {
 
-			setMelding($cie, 0); // DEBUG
+			setMelding($saldi->getNaam(), 2); // DEBUG
 
-			if (!Saldi::magGrafiekZien($uid, $cie->cie)) {
+			if (!Saldi::magGrafiekZien($uid, $saldi->cie)) {
 
 				setMelding('!!', 2); // DEBUG
+
 				//deze slaan we over, die mogen we niet zien kennelijk
 				continue;
 			}
 			$points = array();
-			foreach ($cie->getData() as $data) {
+			foreach ($saldi->getData() as $data) {
 				$p = '[';
 				$p .= strtotime($data['moment']) * 1000;
 				$p .= ', ';
@@ -133,7 +134,7 @@ class Saldi {
 				$points[] = $p;
 			}
 			$series[] = '{
-	"label": "' . $cie->getNaam() . '", 
+	"label": "' . $saldi->getNaam() . '", 
 	"data": [ ' . implode(", ", $points) . ' ],
 	"threshold": { "below": 0, "color": "red" },
 	"lines": { "steps": true }
