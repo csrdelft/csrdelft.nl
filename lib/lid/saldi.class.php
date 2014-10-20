@@ -45,9 +45,10 @@ class Saldi {
 				$logModel = DynamicEntityModel::makeModel('socCieLog');
 				$log = $logModel->find('id = ? AND timestamp > ?', array($klant->socCieId, strtotime('-' . $timespan . ' days')));
 				foreach ($log as $entry) {
-					$moment = $entry->timestamp;
+					$moment = (int) $entry->timestamp;
 					$bestelling = json_decode($entry->value);
-					$saldo = $bestelling['saldo'];
+					var_dump($bestelling);
+					$saldo = round(intval($bestelling['saldo']) / 100, 2);
 					$this->data[] = array($moment, $saldo);
 				}
 			}
