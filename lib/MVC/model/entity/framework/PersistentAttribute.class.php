@@ -72,6 +72,8 @@ class PersistentAttribute {
 			$attribute->type = 'tinyint(1)';
 		} elseif ($attribute->type === T::Integer) {
 			$attribute->type = 'int(11)';
+		} elseif ($attribute->type === T::DateTime) {
+			$attribute->type = 'datetime';
 		} elseif ($attribute->type === T::String) {
 			$attribute->type = 'varchar(255)';
 		} elseif ($attribute->type === T::UID) {
@@ -102,8 +104,10 @@ class PersistentAttribute {
 		$definition = array();
 		if ($attribute->type === 'tinyint(1)') {
 			$definition[] = T::Boolean;
-		} elseif ($attribute->type === 'int(11)') {
+		} elseif ($attribute->type === 'int(11)' OR $attribute->type === 'timestamp') {
 			$definition[] = T::Integer;
+		} elseif ($attribute->type === 'datetime') {
+			$definition[] = T::DateTime;
 		} elseif ($attribute->type === 'varchar(4)') {
 			$definition[] = T::UID;
 		} elseif ($attribute->type === 'char(1)') {

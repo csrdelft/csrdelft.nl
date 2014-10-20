@@ -41,15 +41,13 @@ class Saldi {
 		if ($this->uid != '0000' AND $this->cie == 'soccie') {
 			$klantModel = DynamicEntityModel::makeModel('socCieKlanten');
 			$klant = $klantModel->find('stekUID = ?', array($this->uid), null, null, 1)->fetch();
+			$saldo = $klant->saldo;
 			if ($klant) {
-				$logModel = DynamicEntityModel::makeModel('socCieLog');
-				$log = $logModel->find('id = ? AND timestamp > ?', array($klant->socCieId, strtotime('-' . $timespan . ' days')));
-				foreach ($log as $entry) {
-					$moment = (int) $entry->timestamp;
-					$bestelling = json_decode($entry->value);
-					var_dump($bestelling);
-					$saldo = round(intval($bestelling['saldo']) / 100, 2);
-					$this->data[] = array($moment, $saldo);
+				$bestellingModel = DynamicEntityModel::makeModel('socCieBestelling');
+				$bestellingen = $bestellingModel->find('socCieId = ? AND tijd > ?', array($klant->socCieId, strtotime('-' . $timespan . ' days')), 'tijd DESC');
+				foreach ($bestellingen as $bestelling) {
+					$saldo += $bestelling->totaal;
+					$this->data[] = array($bestelling->tijd, round($saldo / 100, 2));
 				}
 			}
 		}
