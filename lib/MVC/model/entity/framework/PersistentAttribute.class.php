@@ -129,7 +129,9 @@ class PersistentAttribute {
 		} else {
 			$definition[] = false;
 		}
-		$definition[] = $attribute->extra;
+		if (!empty($attribute->extra)) {
+			$definition[] = $attribute->extra;
+		}
 		return $definition;
 	}
 
