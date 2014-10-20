@@ -57,7 +57,7 @@ abstract class PersistentEntity implements Sparse, JsonSerializable {
 			$this->attr_retrieved = $attr_retrieved;
 		} else {
 			// Cast all attributes
-			$attr_retrieved = static::$persistent_attributes;
+			$attr_retrieved = $this->getAttributes();
 		}
 		if ($cast) {
 			$this->castValues($attr_retrieved);
@@ -153,7 +153,8 @@ abstract class PersistentEntity implements Sparse, JsonSerializable {
 	 * @param boolean $attributes Attributes to cast
 	 */
 	protected function castValues(array $attributes) {
-		foreach ($attributes as $attribute => $definition) {
+		foreach ($attributes as $attribute) {
+			$definition = $this->getAttributeDefinition($attribute);
 			if ($definition[0] === T::Boolean) {
 				$this->$attribute = (boolean) $this->$attribute;
 			} elseif ($definition[0] === T::Integer) {
