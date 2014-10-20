@@ -1,13 +1,5 @@
 {getMelding()}
 
-{capture name='navlinks'}
-	<div class="breadcrumbs">
-		<a href="/forum" class="forumGrootlink">Forum</a>
-	</div>
-{/capture}
-
-{$smarty.capture.navlinks}
-
 <h1>{$titel}</h1>
 
 {if $resultaten}
@@ -67,7 +59,7 @@
 	</table>
 
 	<h1>{$titel}</h1>
-	{$smarty.capture.navlinks}
+	{$breadcrumbs}
 
 {else}
 	Geen resultaten.

@@ -44,14 +44,13 @@ class AgendaController extends AclController {
 	/**
 	 * Maandoverzicht laten zien.
 	 */
-	public function maand($datum = '') {
-		// Standaard tonen we het huidige jaar en maand, maar
-		// als er een andere datum is opgegeven gebruiken we die.
-		if (preg_match('/^[0-9]{4}\-[0-9]{1,2}$/', $datum)) {
-			$jaar = (int) substr($datum, 0, 4);
-			$maand = (int) substr($datum, 5);
-		} else {
+	public function maand($jaar = 0, $maand = 0) {
+		$jaar = intval($jaar);
+		if ($jaar < 1970 OR $jaar > 2100) {
 			$jaar = date('Y');
+		}
+		$maand = intval($maand);
+		if ($maand < 1 OR $maand > 12) {
 			$maand = date('n');
 		}
 		$body = new AgendaMaandView($this->model, $jaar, $maand);

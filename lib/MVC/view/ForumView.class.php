@@ -22,7 +22,7 @@ class ForumOverzichtView extends ForumView {
 	}
 
 	public function getBreadcrumbs() {
-		return parent::getBreadcrumbs() . ' » <a href="/forum/recent" class="forumGrootlink">Recent</a>';
+		return parent::getBreadcrumbs() . ' » <a href="/forum/recent">Recent</a>';
 	}
 
 	public function view() {

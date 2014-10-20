@@ -19,7 +19,7 @@ class EetplanContent extends SmartyTemplateView {
 		if ($aEetplan === false) {
 			echo '<h1>Ongeldig uid</h1>';
 		} else {
-			echo '<h2><a class="forumGrootlink" href="/actueel/eetplan/">Eetplan</a> &raquo; voor ' . Lid::naamLink($uid, 'full', 'plain') . '</h2>
+			echo '<h2><a href="/actueel/eetplan/">Eetplan</a> &raquo; voor ' . Lid::naamLink($uid, 'full', 'plain') . '</h2>
 				Profiel van ' . Lid::naamLink($uid, 'civitas', 'link') . '<br /><br />';
 			echo '<table class="eetplantabel">
 				<tr><th style="width: 150px">Avond</th><th style="width: 200px">Huis</th></tr>';
@@ -82,7 +82,7 @@ class EetplanContent extends SmartyTemplateView {
 					</tr>';
 			}
 			$sUitvoer .= '</table>';
-			echo '<h2><a class="forumGrootlink"href="/actueel/eetplan/">Eetplan</a> &raquo; voor ' . mb_htmlentities($aEetplanData['huisnaam']) . '</h2>
+			echo '<h2><a href="/actueel/eetplan/">Eetplan</a> &raquo; voor ' . mb_htmlentities($aEetplanData['huisnaam']) . '</h2>
 				' . mb_htmlentities($aEetplanData['huisadres']) . ' <br />';
 			if ($huis instanceof OldGroep AND $huis->getId() != 0) {
 				echo 'Huispagina: ' . $huis->getLink() . '<br /><br />';

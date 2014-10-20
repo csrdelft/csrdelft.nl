@@ -33,7 +33,35 @@ class AgendaMaandView extends AgendaView {
 	}
 
 	public function getBreadcrumbs() {
-		return parent::getBreadcrumbs() . ' » ' . $this->titel;
+		return parent::getBreadcrumbs() . ' » ' . $this->getDropDownYear() . ' » ' . $this->getDropDownMonth();
+	}
+
+	private function getDropDownYear() {
+		$dropdown = '<select onchange="location.href=this.value;">';
+		$minyear = $this->jaar - 5;
+		$maxyear = $this->jaar + 5;
+		for ($year = $minyear; $year < $maxyear; $year++) {
+			$dropdown .= '<option value="/agenda/maand/' . $year . '/1"';
+			if ($year == $this->jaar) {
+				$dropdown .= ' selected="selected"';
+			}
+			$dropdown .= '>' . $year . '</option>';
+		}
+		$dropdown .= '</select>';
+		return $dropdown;
+	}
+
+	private function getDropDownMonth() {
+		$dropdown = '<select onchange="location.href=this.value;">';
+		for ($month = 1; $month < 12; $month++) {
+			$dropdown .= '<option value="/agenda/maand/' . $this->jaar . '/' . $month . '"';
+			if ($month == $this->maand) {
+				$dropdown .= ' selected="selected"';
+			}
+			$dropdown .= '>' . strftime('%B', strtotime($this->jaar . '-' . $month . '-01')) . '</option>';
+		}
+		$dropdown .= '</select>';
+		return $dropdown;
 	}
 
 	public function view() {
@@ -44,9 +72,9 @@ class AgendaMaandView extends AgendaView {
 		// URL voor vorige maand
 		$urlVorige = '/agenda/maand/';
 		if ($this->maand == 1) {
-			$urlVorige .= ($this->jaar - 1) . '-12/';
+			$urlVorige .= ($this->jaar - 1) . '/12';
 		} else {
-			$urlVorige .= $this->jaar . '-' . ($this->maand - 1) . '/';
+			$urlVorige .= $this->jaar . '/' . ($this->maand - 1);
 		}
 		$this->smarty->assign('urlVorige', $urlVorige);
 		$this->smarty->assign('prevMaand', strftime('%B', strtotime('-1 Month', $cur)));
@@ -54,9 +82,9 @@ class AgendaMaandView extends AgendaView {
 		// URL voor volgende maand
 		$urlVolgende = '/agenda/maand/';
 		if ($this->maand == 12) {
-			$urlVolgende .= ($this->jaar + 1) . '-1/';
+			$urlVolgende .= ($this->jaar + 1) . '/1';
 		} else {
-			$urlVolgende .= $this->jaar . '-' . ($this->maand + 1) . '/';
+			$urlVolgende .= $this->jaar . '/' . ($this->maand + 1);
 		}
 		$this->smarty->assign('urlVolgende', $urlVolgende);
 		$this->smarty->assign('nextMaand', strftime('%B', strtotime('+1 Month', $cur)));
