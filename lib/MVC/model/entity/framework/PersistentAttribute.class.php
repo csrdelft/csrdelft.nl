@@ -104,14 +104,21 @@ class PersistentAttribute {
 			$definition[] = T::Boolean;
 		} elseif ($attribute->type === 'int(11)') {
 			$definition[] = T::Integer;
-		} elseif ($attribute->type === 'varchar(255)') {
-			$definition[] = T::String;
 		} elseif ($attribute->type === 'varchar(4)') {
 			$definition[] = T::UID;
 		} elseif ($attribute->type === 'char(1)') {
 			$definition[] = T::Char;
+		} elseif (startsWith($attribute->type, 'enum')) {
+			$start = strpos($attribute->type, '(');
+			$length = strpos($attribute->type, ')') - $start;
+			$values = explode(',' . substr($attribute->type, $start, $length));
+			foreach ($values as $i => $value) {
+				$values[$i] = str_replace('"', "", $value);
+				$values[$i] = str_replace("'", "", $value);
+			}
+			$definition[] = array(T::Enumeration, false, $values);
 		} else {
-			$definition[] = T::Enumeration;
+			$definition[] = T::String;
 		}
 		if ($attribute->null === 'YES') {
 			$definition[] = true;
