@@ -38,7 +38,7 @@ class Saldi {
 			throw new Exception('Saldi::load() gefaald.' . $sQuery);
 		}
 		// fetch new data from soccie system
-		if ($this->uid != '0000' AND $this->cie == 'soccie') {
+		if ($this->cie == 'soccie') {
 			$model = DynamicEntityModel::makeModel('socCieKlanten');
 			$klant = $model->find('stekUID = ?', array($this->uid), null, null, 1)->fetch();
 			$saldo = $klant->saldo;
@@ -121,14 +121,12 @@ class Saldi {
 			$points = array();
 			foreach ($cie->getData() as $data) {
 				$p = '[';
-				$p.=strtotime(substr($data['moment'], 0, 16) . ':11') * 1000;
+				$p .= strtotime($data['moment']);
 				$p .= ', ';
-				$p.=sprintf('%.2F', $data['saldo']);
-				//$p.=", '".$data['moment']."'";
-				$p.="]";
+				$p .= sprintf('%.2F', $data['saldo']);
+				$p .= "]";
 				$points[] = $p;
 			}
-
 			$series[] = '{
 	"label": "' . $cie->getNaam() . '", 
 	"data": [ ' . implode(", ", $points) . ' ],
@@ -240,40 +238,6 @@ class Saldi {
 			} else {
 				setMelding('Helaas, er ging iets mis. Controleer uw bestand! mysql gaf terug <' . $db->error() . '>', -1);
 			}
-		}
-	}
-
-	public static function getSaldi($uid, $alleenRood = false) {
-		$db = MijnSqli::instance();
-		$query = "
-			SELECT moment, cie, saldo
-			FROM saldolog
-			WHERE uid='" . $uid . "'
-			  AND moment IN(
-				SELECT MAX(moment) FROM saldolog WHERE uid='" . $uid . "'
-			  )
-			LIMIT 1;";
-		$rSaldo = $db->query($query);
-		if ($rSaldo !== false AND $db->numRows($rSaldo)) {
-			$aSaldo = $db->next($rSaldo);
-			if ($alleenRood) {
-				$return = false;
-				if ($aSaldo['soccieSaldo'] < 0) {
-					$return[] = array(
-						'naam'	 => 'SocCie',
-						'saldo'	 => sprintf("%01.2f", $aSaldo['soccieSaldo']));
-				}
-				if ($aSaldo['maalcieSaldo'] < 0) {
-					$return[] = array(
-						'naam'	 => 'MaalCie',
-						'saldo'	 => sprintf("%01.2f", $aSaldo['maalcieSaldo']));
-				}
-				return $return;
-			} else {
-				return $aSaldo;
-			}
-		} else {
-			return false;
 		}
 	}
 
