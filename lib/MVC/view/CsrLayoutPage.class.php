@@ -69,7 +69,7 @@ class CsrLayoutPage extends HtmlPage {
 //		$this->addScript($js . 'dragobject');
 //		$this->addScript($js . 'main_menu');
 //		$this->addScript($js . 'groepen');
-//		if (LidInstellingen::get('layout', 'minion') == 'ja') {
+//		if (LidInstellingen::get('algemeen', 'minion') == 'ja') {
 //			$this->addScript($js . 'minion');
 //			$this->addStylesheet($css . 'minion');
 //		}
@@ -136,7 +136,7 @@ class CsrLayoutPage extends HtmlPage {
 		$smarty->assign('bbhulptop', $top);
 		$smarty->assign('bbhulpleft', $left);
 
-		if (LidInstellingen::get('layout', 'minion') == 'ja') {
+		if (LidInstellingen::get('algemeen', 'minion') == 'ja') {
 			$top = 40;
 			$left = 40;
 			DragObjectModel::getCoords('minion', $top, $left);

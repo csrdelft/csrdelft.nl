@@ -5,7 +5,7 @@
 	</head>
 	<body>
 		{include file='MVC/layout/pagina_header.tpl'}
-		<main class="cd-main-content">
+		<main class="cd-main-content{if LidInstellingen::get('layout', 'bgimages') == 'ja'} bgimages{/if}">
 			<table id="maintable">
 				<tr>
 					{if is_array($zijbalk)}

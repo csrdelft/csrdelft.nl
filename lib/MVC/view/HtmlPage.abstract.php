@@ -242,7 +242,7 @@ abstract class HtmlPage implements View {
 				}
 			}
 
-			if (LidInstellingen::get('layout', 'minion') == 'ja') {
+			if (LidInstellingen::get('algemeen', 'minion') == 'ja') {
 				$modules[] = 'minion';
 				return $modules;
 			}
