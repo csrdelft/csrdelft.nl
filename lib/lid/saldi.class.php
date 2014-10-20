@@ -1,11 +1,9 @@
 <?php
 
-/*
- * class.saldi.php	| 	Jan Pieter Waagmeester (jieter@jpwaag.com)
- *
+/**
+ * saldi.class.php	| 	Jan Pieter Waagmeester (jieter@jpwaag.com)
  *
  */
-
 class Saldi {
 
 	private $uid;
@@ -27,6 +25,21 @@ class Saldi {
 				WHERE cie='" . $this->cie . "'
 				  AND moment>(NOW() - INTERVAL " . $timespan . " DAY)
 				GROUP BY LEFT(moment, 16);";
+		} elseif ($this->cie == 'soccie') {
+			$this->data = array();
+			$klantModel = DynamicEntityModel::makeModel('socCieKlanten');
+			$klant = $klantModel->find('stekUID = ?', array($this->uid), null, null, 1)->fetch();
+			if ($klant) {
+				$logModel = DynamicEntityModel::makeModel('socCieLog');
+				$log = $logModel->find('socCieId = ? AND timestamp > (NOW() - INTERVAL ? DAY)', array($klant->socCieId, $timespan));
+				foreach ($log as $entry) {
+					$moment = $entry->timestamp;
+					$bestelling = json_decode($entry->value);
+					$saldo = $bestelling['saldo'];
+					$this->data[] = array('moment' => $moment, 'saldo' => $saldo);
+				}
+				return;
+			}
 		} else {
 			$sQuery = "
 				SELECT moment, saldo
@@ -83,17 +96,17 @@ class Saldi {
 	 * Geef wat javascriptcode terug met data-series defenities voor Flot
 	 */
 	public static function getDatapoints($uid, $timespan) {
-		$s = array();
+		$saldi = array();
 		try {
-			$s['maalcie'] = new Saldi($uid, 'maalcie', $timespan);
-			$s['soccie'] = new Saldi($uid, 'soccie', $timespan);
+			$saldi['maalcie'] = new Saldi($uid, 'maalcie', $timespan);
+			$saldi['soccie'] = new Saldi($uid, 'soccie', $timespan);
 		} catch (Exception $e) {
 			if (!startsWith($e->getMessage(), 'Saldi::load() gefaald.')) {
 				setMelding($e->getMessage(), -1);
 			}
 		}
 		$series = array();
-		foreach ($s as $cie) {
+		foreach ($saldi as $cie) {
 			if (!Saldi::magGrafiekZien($uid, $cie->cie)) {
 				//deze slaan we over, die mogen we niet zien kennelijk
 				continue;
