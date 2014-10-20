@@ -10,7 +10,7 @@
 						<span id="t{LoginModel::getUid()}-reageren" class="togglePasfoto" title="Toon pasfoto">&raquo;</span>
 					{/if}
 				</td>
-				<td class="postlinktd"><a class="postlink">&rarr;</a></td>
+				<td class="postlinktd"><a id="reageren" name="reageren" class="postlink">&rarr;</a></td>
 			</tr>
 		</table>
 
