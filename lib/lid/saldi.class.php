@@ -46,10 +46,10 @@ class Saldi {
 				$data = array();
 				$model = DynamicEntityModel::makeModel('socCieBestelling');
 				$bestellingen = $model->find('socCieId = ? AND deleted = FALSE AND tijd > ?', array($klant->socCieId, strtotime('-' . $timespan . ' days')), 'tijd DESC');
-
-				setMelding(print_r($bestellingen, true)); //DEBUG
-
 				foreach ($bestellingen as $bestelling) {
+
+					setMelding(print_r($bestelling, true), 0); //DEBUG
+
 					$saldo += $bestelling->totaal;
 					$data[] = array('moment' => $bestelling->tijd, 'saldo' => round($saldo / 100, 2));
 				}
