@@ -25,21 +25,6 @@ class Saldi {
 				WHERE cie='" . $this->cie . "'
 				  AND moment>(NOW() - INTERVAL " . $timespan . " DAY)
 				GROUP BY LEFT(moment, 16);";
-		} elseif ($this->cie == 'soccie') {
-			$this->data = array();
-			$klantModel = DynamicEntityModel::makeModel('socCieKlanten');
-			$klant = $klantModel->find('stekUID = ?', array($this->uid), null, null, 1)->fetch();
-			if ($klant) {
-				$logModel = DynamicEntityModel::makeModel('socCieLog');
-				$log = $logModel->find('id = ? AND timestamp > (NOW() - INTERVAL ? DAY)', array($klant->socCieId, $timespan));
-				foreach ($log as $entry) {
-					$moment = $entry->timestamp;
-					$bestelling = json_decode($entry->value);
-					$saldo = $bestelling['saldo'];
-					$this->data[] = array('moment' => $moment, 'saldo' => $saldo);
-				}
-				return;
-			}
 		} else {
 			$sQuery = "
 				SELECT moment, saldo
@@ -51,6 +36,22 @@ class Saldi {
 		$this->data = MijnSqli::instance()->query2array($sQuery);
 		if (!is_array($this->data)) {
 			throw new Exception('Saldi::load() gefaald.' . $sQuery);
+		}
+		// fetch new data from soccie system
+		if ($this->uid != '0000' AND $this->cie == 'soccie') {
+			$this->data = array();
+			$klantModel = DynamicEntityModel::makeModel('socCieKlanten');
+			$klant = $klantModel->find('stekUID = ?', array($this->uid), null, null, 1)->fetch();
+			if ($klant) {
+				$logModel = DynamicEntityModel::makeModel('socCieLog');
+				$log = $logModel->find('id = ? AND timestamp > ?)', array($klant->socCieId, getDateTime(strtotime('-' . $timespan . 'days'))));
+				foreach ($log as $entry) {
+					$moment = $entry->timestamp;
+					$bestelling = json_decode($entry->value);
+					$saldo = $bestelling['saldo'];
+					$this->data[] = array('moment' => $moment, 'saldo' => $saldo);
+				}
+			}
 		}
 	}
 
@@ -238,7 +239,6 @@ class Saldi {
 
 	public static function getSaldi($uid, $alleenRood = false) {
 		$db = MijnSqli::instance();
-
 		$query = "
 			SELECT moment, cie, saldo
 			FROM saldolog
@@ -272,5 +272,3 @@ class Saldi {
 	}
 
 }
-
-?>
