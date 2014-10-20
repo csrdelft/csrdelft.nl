@@ -16,6 +16,10 @@ class ProfielContent extends SmartyTemplateView {
 		parent::__construct($lid, 'Het profiel van ' . $lid->getNaam());
 	}
 
+	public function getBreadcrumbs() {
+		return '<a href="/communicatie/ledenlijst" title="Ledenlijst"><img src="' . CSR_PICS . '/knopjes/people-16.png" class="module-icon"></a> » ' . $this->model->getNaam();
+	}
+
 	function view() {
 		$profhtml = array();
 		foreach ($this->model->getProfiel() as $key => $value) {
