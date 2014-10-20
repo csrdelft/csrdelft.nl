@@ -606,9 +606,6 @@ img.module-icon {
 img.module-icon:hover {
 	opacity: 0.5;
 }
-.breadcrumbs select {
-	border: none;
-}
 input[type=submit]::-moz-focus-inner, input[type=button]::-moz-focus-inner {
     padding: 0;
     border: 0

@@ -12,7 +12,7 @@
 						<td id="mainleft">
 							<div id="zijbalk"{if LidInstellingen::get('zijbalk', 'scrollen') != 'met pagina mee'} class="{if LidInstellingen::get('zijbalk', 'scrollen') == 'pauper/desktop'}desktop-only {/if}{if LidInstellingen::get('zijbalk', 'scrollbalk') == 'ja'}scroll-hover {/if}scroll-fixed dragobject dragvertical" data-scrollfix="{$scrollfix}"{/if}>
 								<a id="cd-logo" href="/"><div id="beeldmerk"></div></a>
-									{foreach from=$zijbalk item=block}
+								{foreach from=$zijbalk item=block}
 									<div class="block">{$block->view()}</div>
 								{/foreach}
 								{if LidInstellingen::get('zijbalk', 'scrollen') == 'met pagina mee'}<br /><br /><br />{/if}

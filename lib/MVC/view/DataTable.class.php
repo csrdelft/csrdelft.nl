@@ -95,7 +95,7 @@ JSON;
 		<table id="<?= $this->tableId ?>" class="<?= implode(' ', $this->css_classes) ?>" groupByColumn="<?= $this->groupByColumn ?>">
 			<?= $this->getTableHead() ?>
 			<?= $this->getTableBody() ?>
-		<?= $this->getTableFoot() ?>
+			<?= $this->getTableFoot() ?>
 		</table>
 		<script type="text/javascript">
 			$(document).ready(function () {
