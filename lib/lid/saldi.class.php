@@ -39,16 +39,18 @@ class Saldi {
 		}
 		// fetch new data from soccie system
 		if ($this->uid != '0000' AND $this->cie == 'soccie') {
-			$klantModel = DynamicEntityModel::makeModel('socCieKlanten');
-			$klant = $klantModel->find('stekUID = ?', array($this->uid), null, null, 1)->fetch();
+			$model = DynamicEntityModel::makeModel('socCieKlanten');
+			$klant = $model->find('stekUID = ?', array($this->uid), null, null, 1)->fetch();
 			$saldo = $klant->saldo;
 			if ($klant) {
-				$bestellingModel = DynamicEntityModel::makeModel('socCieBestelling');
-				$bestellingen = $bestellingModel->find('socCieId = ? AND tijd > ?', array($klant->socCieId, strtotime('-' . $timespan . ' days')), 'tijd DESC');
+				$data = array();
+				$model = DynamicEntityModel::makeModel('socCieBestelling');
+				$bestellingen = $model->find('socCieId = ? AND tijd > ?', array($klant->socCieId, strtotime('-' . $timespan . ' days')), 'tijd ASC');
 				foreach ($bestellingen as $bestelling) {
 					$saldo += $bestelling->totaal;
-					$this->data[] = array($bestelling->tijd, round($saldo / 100, 2));
+					$data[] = array($bestelling->tijd, round($saldo / 100, 2));
 				}
+				$this->data = array_merge($this->data, $data);
 			}
 		}
 	}
