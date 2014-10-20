@@ -43,12 +43,18 @@ class Saldi {
 			$klant = $model->find('stekUID = ?', array($this->uid), null, null, 1)->fetch();
 			$saldo = $klant->saldo;
 			if ($klant) {
-				$data = array(array('moment' => getDateTime(), 'saldo' => round($saldo / 100, 2)));
+				$now = time();
+				$date_back = strtotime('-' . $timespan . ' days', $now);
+				$data = array(array('moment' => getDateTime($now), 'saldo' => round($saldo / 100, 2)));
 				$model = DynamicEntityModel::makeModel('socCieBestelling');
-				$bestellingen = $model->find('socCieId = ? AND deleted = FALSE AND tijd > ?', array($klant->socCieId, strtotime('-' . $timespan . ' days')), 'tijd DESC');
+				$bestellingen = $model->find('socCieId = ? AND deleted = FALSE AND tijd > ?', array($klant->socCieId, $date_back), 'tijd DESC');
 				foreach ($bestellingen as $bestelling) {
 					$saldo += $bestelling->totaal;
 					$data[] = array('moment' => $bestelling->tijd, 'saldo' => round($saldo / 100, 2));
+				}
+				if (sizeof($data) == 1) {
+					// extra datapunt om grafiek te zien
+					$data[] = array('moment' => getDateTime($date_back), 'saldo' => round($saldo / 100, 2));
 				}
 				$this->data = array_merge($this->data, array_reverse($data));
 			}
