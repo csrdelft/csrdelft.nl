@@ -35,7 +35,7 @@ class Saldi {
 		}
 		$this->data = MijnSqli::instance()->query2array($sQuery);
 		if (!is_array($this->data)) {
-			throw new Exception('Saldi::load() gefaald.' . $sQuery);
+			$this->data = array();
 		}
 		// fetch new data from soccie system
 		if ($this->cie == 'soccie') {
@@ -54,6 +54,11 @@ class Saldi {
 				}
 				$this->data = array_merge($this->data, array_reverse($data));
 			}
+		}
+		if (sizeof($this->data) > 0) {
+			// herhaal eerste datapunt om grafiek te tekenen vanaf begin timespan 
+			$row = reset($this->data);
+			array_unshift($this->data, array('moment' => getDateTime($date_back + 3600), 'saldo' => $row['saldo']));
 		}
 	}
 
@@ -101,8 +106,8 @@ class Saldi {
 	public static function getDatapoints($uid, $timespan) {
 		$aSaldi = array();
 		try {
-			$aSaldi['soccie'] = new Saldi($uid, 'soccie', $timespan);
 			$aSaldi['maalcie'] = new Saldi($uid, 'maalcie', $timespan);
+			$aSaldi['soccie'] = new Saldi($uid, 'soccie', $timespan);
 		} catch (Exception $e) {
 			if (!startsWith($e->getMessage(), 'Saldi::load() gefaald.')) {
 				setMelding($e->getMessage(), -1);
