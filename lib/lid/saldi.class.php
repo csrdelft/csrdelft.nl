@@ -48,7 +48,7 @@ class Saldi {
 					$moment = $entry->timestamp;
 					$bestelling = json_decode($entry->value);
 					$saldo = $bestelling['saldo'];
-					$this->data[] = array('moment' => $moment, 'saldo' => $saldo);
+					$this->data[] = array($moment, $saldo);
 				}
 			}
 		}
