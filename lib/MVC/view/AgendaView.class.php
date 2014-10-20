@@ -40,7 +40,7 @@ class AgendaMaandView extends AgendaView {
 		$dropdown = '<select onchange="location.href=this.value;">';
 		$minyear = $this->jaar - 5;
 		$maxyear = $this->jaar + 5;
-		for ($year = $minyear; $year < $maxyear; $year++) {
+		for ($year = $minyear; $year <= $maxyear; $year++) {
 			$dropdown .= '<option value="/agenda/maand/' . $year . '/1"';
 			if ($year == $this->jaar) {
 				$dropdown .= ' selected="selected"';
@@ -53,7 +53,7 @@ class AgendaMaandView extends AgendaView {
 
 	private function getDropDownMonth() {
 		$dropdown = '<select onchange="location.href=this.value;">';
-		for ($month = 1; $month < 12; $month++) {
+		for ($month = 1; $month <= 12; $month++) {
 			$dropdown .= '<option value="/agenda/maand/' . $this->jaar . '/' . $month . '"';
 			if ($month == $this->maand) {
 				$dropdown .= ' selected="selected"';
