@@ -22,7 +22,7 @@ class Barsysteem
 	function isBeheer()
 	{
 		if(!$this->beheer)
-			$this->beheer = isset($_COOKIE['barsysteembeheer']) && md5('my_salt_is_strong' . $_COOKIE['barsysteembeheer']) == '49ee17fb49f2075df6bb538eee4e415e';
+			$this->beheer = isset($_COOKIE['barsysteembeheer']) && md5('my_salt_is_strong' . $_COOKIE['barsysteembeheer']) == '5367b4668337c47a02cf87793a6a05d5';
 		
 		return $this->beheer;
 	}
