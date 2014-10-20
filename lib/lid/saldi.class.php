@@ -55,11 +55,11 @@ class Saldi {
 				$this->data = array_merge($this->data, array_reverse($data));
 			}
 		}
-		if (sizeof($this->data) > 0) {
-			// herhaal eerste datapunt om grafiek te tekenen vanaf begin timespan 
-			$row = reset($this->data);
-			array_unshift($this->data, array('moment' => getDateTime($date_back + 3600), 'saldo' => $row['saldo']));
-		}
+		//if (sizeof($this->data) > 0) {
+		// herhaal eerste datapunt om grafiek te tekenen vanaf begin timespan
+		//	$row = reset($this->data);
+		//	array_unshift($this->data, array('moment' => getDateTime($date_back + 3600), 'saldo' => $row['saldo']));
+		//}
 	}
 
 	public function getNaam() {
@@ -115,12 +115,7 @@ class Saldi {
 		}
 		$series = array();
 		foreach ($aSaldi as $saldi) {
-
-			setMelding($saldi->getNaam(), 2); // DEBUG
-
 			if (!Saldi::magGrafiekZien($uid, $saldi->cie)) {
-
-				setMelding('!!', 2); // DEBUG
 				//deze slaan we over, die mogen we niet zien kennelijk
 				continue;
 			}
