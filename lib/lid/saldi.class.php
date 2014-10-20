@@ -37,6 +37,9 @@ class Saldi {
 		if (!is_array($this->data)) {
 			throw new Exception('Saldi::load() gefaald.' . $sQuery);
 		}
+
+		setMelding($this->cie, 0); //DEBUG
+
 		// fetch new data from soccie system
 		$now = time();
 		$date_back = strtotime('-' . $timespan . ' days', $now);
