@@ -38,8 +38,6 @@ function makePlot(){
 				previousPoint = item.datapoint;
 
 				jQuery("#tooltip").remove();
-				
-				console.log(item); // DEBUG
 
 				thedate=new Date(item.datapoint[0]);
 				var x = thedate.getDate()+'-'+(thedate.getMonth()+1)+'-'+thedate.getFullYear();

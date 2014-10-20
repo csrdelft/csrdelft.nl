@@ -37,8 +37,6 @@ class Saldi {
 		if (!is_array($this->data)) {
 			throw new Exception('Saldi::load() gefaald.' . $sQuery);
 		}
-
-		setMelding($this->cie, 0); //DEBUG
 		// fetch new data from soccie system
 		if ($this->cie == 'soccie') {
 			$model = DynamicEntityModel::makeModel('socCieKlanten');
@@ -54,8 +52,6 @@ class Saldi {
 					$saldo += $bestelling->totaal;
 					$data[] = array('moment' => $bestelling->tijd, 'saldo' => round($saldo / 100, 2));
 				}
-				// herhaal datapunt om grafiek te tekenen vanaf begin timespan
-				$data[] = array('moment' => getDateTime($date_back + 3600), 'saldo' => $saldo);
 				$this->data = array_merge($this->data, array_reverse($data));
 			}
 		}
@@ -120,7 +116,6 @@ class Saldi {
 			if (!Saldi::magGrafiekZien($uid, $saldi->cie)) {
 
 				setMelding('!!', 2); // DEBUG
-
 				//deze slaan we over, die mogen we niet zien kennelijk
 				continue;
 			}
