@@ -45,12 +45,13 @@ class Saldi {
 			if ($klant) {
 				$data = array();
 				$model = DynamicEntityModel::makeModel('socCieBestelling');
-				$bestellingen = $model->find('socCieId = ? AND tijd > ?', array($klant->socCieId, strtotime('-' . $timespan . ' days')), 'tijd ASC');
+				$bestellingen = $model->find('socCieId = ? AND tijd > ?', array($klant->socCieId, strtotime('-' . $timespan . ' days')), 'tijd DESC');
+				setMelding(count($bestellingen), 0);
 				foreach ($bestellingen as $bestelling) {
 					$saldo += $bestelling->totaal;
 					$data[] = array($bestelling->tijd, round($saldo / 100, 2));
 				}
-				$this->data = array_merge($this->data, $data);
+				$this->data = array_merge($this->data, array_reverse($data));
 			}
 		}
 	}
