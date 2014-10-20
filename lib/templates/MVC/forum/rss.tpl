@@ -33,7 +33,7 @@
 				{foreach from=$draad->getForumPosts() item=post}<description><![CDATA[ {$post->tekst|bbcode} ]]></description>
 					<pubDate>{$post->datum_tijd|rfc2822}</pubDate>
 					{/foreach}
-				<dc:creator>{$draad->laatste_wijziging_uid|csrnaam:'civitas':'plain'}</dc:creator>
+				<dc:creator>{$draad->laatste_wijziging_uid|csrnaam:'user':'link'|escape:'html'}</dc:creator>
 				<category>forum/{$delen[$draad->forum_id]->titel|escape:'html'}</category>
 				<comments>http://csrdelft.nl/forum/onderwerp/{$draad->draad_id}</comments>
 				<guid isPermaLink="true">http://csrdelft.nl/forum/reactie/{$draad->laatste_post_id}#{$draad->laatste_post_id}</guid>
