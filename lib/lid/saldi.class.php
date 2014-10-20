@@ -39,12 +39,11 @@ class Saldi {
 		}
 		// fetch new data from soccie system
 		if ($this->uid != '0000' AND $this->cie == 'soccie') {
-			$this->data = array();
 			$klantModel = DynamicEntityModel::makeModel('socCieKlanten');
 			$klant = $klantModel->find('stekUID = ?', array($this->uid), null, null, 1)->fetch();
 			if ($klant) {
 				$logModel = DynamicEntityModel::makeModel('socCieLog');
-				$log = $logModel->find('id = ? AND timestamp > ?)', array($klant->socCieId, getDateTime(strtotime('-' . $timespan . 'days'))));
+				$log = $logModel->find('id = ? AND timestamp > ?)', array($klant->socCieId, strtotime('-' . $timespan . ' days')));
 				foreach ($log as $entry) {
 					$moment = $entry->timestamp;
 					$bestelling = json_decode($entry->value);
