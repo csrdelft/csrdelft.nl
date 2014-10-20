@@ -29,7 +29,7 @@
 			{/if}
 		</span>
 		{if LoginModel::mag('P_LEDEN_READ')}
-			<div id="p{$post->post_id}" class="forumpasfoto{if LidInstellingen::get('forum', 'toonpasfotos') == 'nee'} verborgen">{elseif LoginModel::mag('P_LEDEN_READ')}">{$post->uid|csrnaam:'pasfoto'}{/if}</div>
+			<div id="p{$post->post_id}" class="forumpasfoto{if LidInstellingen::get('forum', 'toonpasfotos') == 'nee'} verborgen">{elseif LoginModel::mag('P_LEDEN_READ')}">{$post->uid|csrnaam:'pasfoto':'link'}{/if}</div>
 		{/if}
 		<br />
 		{if $draad->belangrijk AND LoginModel::mag('P_FORUM_BELANGRIJK')}

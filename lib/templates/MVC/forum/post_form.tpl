@@ -15,7 +15,7 @@
 		</table>
 
 		{if LoginModel::mag('P_LEDEN_READ')}
-			<div id="preageren" class="forumpasfoto{if LidInstellingen::get('forum', 'toonpasfotos') == 'nee'} verborgen">{elseif LoginModel::mag('P_LEDEN_READ')}">{LoginModel::getUid()|csrnaam:'pasfoto'}{/if}</div>
+			<div id="preageren" class="forumpasfoto{if LidInstellingen::get('forum', 'toonpasfotos') == 'nee'} verborgen">{elseif LoginModel::mag('P_LEDEN_READ')}">{LoginModel::getUid()|csrnaam:'pasfoto':'link'}{/if}</div>
 		{/if}
 
 		<div id="forummeldingen">
