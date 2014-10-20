@@ -45,9 +45,10 @@ class Saldi {
 			if ($klant) {
 				$data = array();
 				$model = DynamicEntityModel::makeModel('socCieBestelling');
-				$bestellingen = $model->find('socCieId = ? AND tijd > ?', array($klant->socCieId, strtotime('-' . $timespan . ' days')), 'tijd DESC');
+				$time = strtotime('-' . $timespan . ' days');
+				$bestellingen = $model->find('socCieId = ? AND deleted = FALSE AND tijd > ?', array($klant->socCieId, $time), 'tijd DESC');
 
-				setMelding($klant->socCieId . ' - ' . count($bestellingen), 0); //DEBUG
+				setMelding($time . ' - ' . count($bestellingen), 0); //DEBUG
 
 				foreach ($bestellingen as $bestelling) {
 					$saldo += $bestelling->totaal;
