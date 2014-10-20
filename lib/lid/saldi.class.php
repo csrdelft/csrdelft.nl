@@ -31,7 +31,7 @@ class Saldi {
 			$klant = $klantModel->find('stekUID = ?', array($this->uid), null, null, 1)->fetch();
 			if ($klant) {
 				$logModel = DynamicEntityModel::makeModel('socCieLog');
-				$log = $logModel->find('socCieId = ? AND timestamp > (NOW() - INTERVAL ? DAY)', array($klant->socCieId, $timespan));
+				$log = $logModel->find('id = ? AND timestamp > (NOW() - INTERVAL ? DAY)', array($klant->socCieId, $timespan));
 				foreach ($log as $entry) {
 					$moment = $entry->timestamp;
 					$bestelling = json_decode($entry->value);
