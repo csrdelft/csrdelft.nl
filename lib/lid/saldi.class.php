@@ -40,13 +40,13 @@ class Saldi {
 
 		setMelding($this->cie, 0); //DEBUG
 		// fetch new data from soccie system
-		$now = time();
-		$date_back = strtotime('-' . $timespan . ' days', $now);
 		if ($this->cie == 'soccie') {
 			$model = DynamicEntityModel::makeModel('socCieKlanten');
 			$klant = $model->find('stekUID = ?', array($this->uid), null, null, 1)->fetch();
 			$saldo = $klant->saldo;
 			if ($klant) {
+				$now = time();
+				$date_back = strtotime('-' . $timespan . ' days', $now);
 				$data = array(array('moment' => getDateTime($now), 'saldo' => round($saldo / 100, 2)));
 				$model = DynamicEntityModel::makeModel('socCieBestelling');
 				$bestellingen = $model->find('socCieId = ? AND deleted = FALSE AND tijd > ?', array($klant->socCieId, $date_back), 'tijd DESC');
@@ -54,12 +54,11 @@ class Saldi {
 					$saldo += $bestelling->totaal;
 					$data[] = array('moment' => $bestelling->tijd, 'saldo' => round($saldo / 100, 2));
 				}
+				// herhaal datapunt om grafiek te tekenen vanaf begin timespan
+				$data[] = array('moment' => getDateTime($date_back + 3600), 'saldo' => $saldo);
 				$this->data = array_merge($this->data, array_reverse($data));
 			}
 		}
-		// herhaal eerste datapunt om grafiek te tekenen vanaf begin timespan
-		$row = reset($this->data);
-		array_unshift($this->data, array('moment' => getDateTime($date_back + 3600), 'saldo' => $row['saldo']));
 	}
 
 	public function getNaam() {
@@ -121,7 +120,6 @@ class Saldi {
 			if (!Saldi::magGrafiekZien($uid, $cie->cie)) {
 
 				setMelding('!!', 2); // DEBUG
-
 				//deze slaan we over, die mogen we niet zien kennelijk
 				continue;
 			}
