@@ -22,6 +22,10 @@ class Streeplijstcontent implements View {
 		return null;
 	}
 
+	public function getBreadcrumbs() {
+		return null;
+	}
+
 	function getTitel() {
 		return 'Bestel- & inschrijflijst-generator voor C.S.R. Delft';
 	}
@@ -64,7 +68,7 @@ class Streeplijstcontent implements View {
 		return implode(', ', $this->getGoederenArray());
 	}
 
-	function getHTML() {
+	function getHtml() {
 		$sReturn = '
 			<html>
 				<head>

@@ -35,7 +35,7 @@ class syntax_plugin_bureaucracy_field_submit extends syntax_plugin_bureaucracy_f
             $helper = null;
             if(@is_dir(DOKU_PLUGIN.'captcha')) $helper = plugin_load('helper','captcha');
             if(!is_null($helper) && $helper->isEnabled()){
-                $form->addElement($helper->getHTML());
+                $form->addElement($helper->getHtml());
             }
         }
         $this->tpl = form_makeButton('submit','', '@@DISPLAY|' . $this->getLang('submit') . '@@');

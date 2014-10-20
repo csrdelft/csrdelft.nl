@@ -24,6 +24,10 @@ class BijbelroosterView implements View {
 		return $this->rooster;
 	}
 
+	public function getBreadcrumbs() {
+		return null;
+	}
+
 	public function getTitel() {
 		return 'Bijbelrooster';
 	}

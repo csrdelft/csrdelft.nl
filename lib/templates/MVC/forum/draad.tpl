@@ -54,9 +54,7 @@
 				   ">{icon get="wrench"} Modereren</a>
 			{/if}
 		</div>
-		<div class="breadcrumbs">
-			<a href="/forum/">Forum</a> &raquo; <a href="/forum/deel/{$deel->forum_id}/{ForumDradenModel::instance()->getPaginaVoorDraad($draad)}#{$draad->draad_id}">{$deel->titel}</a>
-		</div>
+
 		<h1>
 			{$draad->titel}
 			{if $draad->belangrijk AND LoginModel::mag('P_FORUM_BELANGRIJK')}
@@ -167,6 +165,7 @@ pagecount=ForumPostsModel::instance()->getAantalPaginas($draad->draad_id) curpag
 		<tr>
 			<td colspan="2" class="forumdraadtitelbottom">
 				<br />
+				<div class="breadcrumbs">{$breadcrumbs}</div>
 				{$smarty.capture.kop}
 			</td>
 		</tr>

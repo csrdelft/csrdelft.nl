@@ -20,6 +20,10 @@ class CmsPaginaView implements View {
 		return $this->pagina;
 	}
 
+	public function getBreadcrumbs() {
+		return null;
+	}
+
 	function getTitel() {
 		return $this->pagina->titel;
 	}
@@ -85,6 +89,10 @@ class CmsPaginaZijbalkView implements View {
 
 	public function getModel() {
 		return $this->paginas;
+	}
+
+	public function getBreadcrumbs() {
+		return null;
 	}
 
 	public function getTitel() {

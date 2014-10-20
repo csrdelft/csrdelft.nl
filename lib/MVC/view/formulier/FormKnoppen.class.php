@@ -37,6 +37,10 @@ class FormulierKnop implements FormElement {
 		return null;
 	}
 
+	public function getBreadcrumbs() {
+		return null;
+	}
+
 	public function getTitel() {
 		return $this->getType();
 	}
@@ -122,6 +126,10 @@ class FormKnoppen implements FormElement {
 
 	public function getModel() {
 		return $this->knoppen;
+	}
+
+	public function getBreadcrumbs() {
+		return null;
 	}
 
 	public function getTitel() {

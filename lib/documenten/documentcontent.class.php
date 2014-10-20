@@ -8,7 +8,15 @@ require_once 'document.class.php';
  * Overzicht van alle categorieën met een bepaald aantal documenten per
  * categorie, zeg maar de standaarpagina voor de documentenketzer.
  */
-class DocumentenContent extends SmartyTemplateView {
+abstract class DocumentenView extends SmartyTemplateView {
+
+	public function getBreadcrumbs() {
+		return '<a href="/communicatie/documenten" title="Documenten"><img src="' . CSR_PICS . '/knopjes/document-16.png" class="module-icon"></a>';
+	}
+
+}
+
+class DocumentenContent extends DocumentenView {
 
 	public function __construct() {
 		parent::__construct(DocumentenCategorie::getAll(), 'Documentenketzer');
@@ -28,6 +36,10 @@ class DocumentCategorieContent extends SmartyTemplateView {
 
 	public function __construct(DocumentenCategorie $categorie) {
 		parent::__construct($categorie, 'Documenten in categorie: ' . $categorie->getNaam());
+	}
+
+	public function getBreadcrumbs() {
+		return parent::getBreadcrumbs() . ' » ' . $this->model->getNaam();
 	}
 
 	public function view() {
@@ -68,13 +80,13 @@ class DocumentBBContent extends SmartyTemplateView {
 		parent::__construct($document);
 	}
 
-	public function getHTML() {
+	public function getHtml() {
 		$this->smarty->assign('document', $this->model);
 		return $this->smarty->fetch('documenten/document.bb.tpl');
 	}
 
 	public function view() {
-		echo $this->getHTML();
+		echo $this->getHtml();
 	}
 
 }

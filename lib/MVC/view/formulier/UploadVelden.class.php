@@ -85,6 +85,10 @@ class FileField implements FormElement, Validator {
 		return $this->opties[$this->methode]->getModel();
 	}
 
+	public function getBreadcrumbs() {
+		return null;
+	}
+
 	public function getError() {
 		return $this->opties[$this->methode]->getError();
 	}

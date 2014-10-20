@@ -14,8 +14,12 @@ class stats implements View {
 		return null;
 	}
 
+	public function getBreadcrumbs() {
+		return null;
+	}
+
 	public function getTitel() {
-		return 'stats';
+		return 'Statistieken';
 	}
 
 	public function view() {

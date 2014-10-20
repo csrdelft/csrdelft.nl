@@ -14,15 +14,19 @@ class PeilingBeheerContent implements View {
 		return $this->pijlingen;
 	}
 
+	public function getBreadcrumbs() {
+		return null;
+	}
+
 	public function getTitel() {
 		return 'Peilingbeheer';
 	}
 
-	public function getHTML() {
+	public function getHtml() {
 		$lijst = '<h3>Peilingen:</h3>';
 		foreach ($this->pijlingen as $peiling) {
 			$pcontent = new PeilingContent(new Peiling($peiling['id']));
-			$lijst.=$pcontent->getHTML($beheer = true);
+			$lijst.=$pcontent->getHtml($beheer = true);
 		}
 		$html = '
 		<h1>Peilingbeheertool</h1>
@@ -49,7 +53,7 @@ class PeilingBeheerContent implements View {
 	}
 
 	public function view() {
-		echo $this->getHTML();
+		echo $this->getHtml();
 	}
 
 }

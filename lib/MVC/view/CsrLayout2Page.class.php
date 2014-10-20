@@ -32,6 +32,10 @@ class CsrLayout2Page extends HtmlPage {
 		$this->addScript($this->getCompressedScriptUrl('layout2', 'general'), true);
 	}
 
+	public function getBreadcrumbs() {
+		return null;
+	}
+
 	function view() {
 		header('Content-Type: text/html; charset=UTF-8');
 

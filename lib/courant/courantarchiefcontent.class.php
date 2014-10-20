@@ -25,7 +25,14 @@ class CourantarchiefContent implements View {
 		return $this->courant;
 	}
 
+	public function getBreadcrumbs() {
+		return '<a href="/actueel/courant" title="Courant"><img src="' . CSR_PICS . '/knopjes/email-16.png" class="module-icon"></a> » ' . $this->getTitel();
+	}
+
 	function getTitel() {
+		if ($this->courant->getID() == 0) {
+			return 'Archief';
+		}
 		return 'C.S.R.-courant van ' . $this->getVerzendMoment();
 	}
 

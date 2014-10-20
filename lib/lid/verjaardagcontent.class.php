@@ -21,6 +21,10 @@ class VerjaardagContent implements View {
 		return 'Verjaardagen';
 	}
 
+	public function getBreadcrumbs() {
+		return '<a href="/communicatie/ledenlijst" title="Ledenlijst"><img src="' . CSR_PICS . '/knopjes/people-16.png" class="module-icon"></a> » ' . $this->getTitel();
+	}
+
 	function getModel() {
 		return $this->model;
 	}

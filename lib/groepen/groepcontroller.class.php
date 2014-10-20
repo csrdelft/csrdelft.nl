@@ -55,7 +55,7 @@ class Groepcontroller extends Controller {
 			$this->action = $this->getParam(1);
 		}
 		//content-object aanmaken..
-		$this->view = new Groepcontent($this->groep);
+		$this->view = new GroepContent($this->groep);
 
 		//controleer dat we geen lege groep weergeven.
 		if ($this->action == 'standaard' AND $this->groep->getId() == 0) {

@@ -114,7 +114,7 @@ class ForumController extends Controller {
 	 * Overzicht met categorien en forumdelen laten zien.
 	 */
 	public function forum() {
-		$this->view = new ForumView();
+		$this->view = new ForumOverzichtView();
 	}
 
 	/**

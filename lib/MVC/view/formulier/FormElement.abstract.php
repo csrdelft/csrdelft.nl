@@ -51,6 +51,10 @@ class HtmlComment implements FormElement {
 		return $this->comment;
 	}
 
+	public function getBreadcrumbs() {
+		return null;
+	}
+
 	public function view() {
 		echo $this->comment;
 	}

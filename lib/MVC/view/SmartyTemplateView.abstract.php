@@ -39,6 +39,10 @@ abstract class SmartyTemplateView implements View {
 		return $this->model;
 	}
 
+	public function getBreadcrumbs() {
+		return null;
+	}
+
 	public function getTitel() {
 		return $this->titel;
 	}

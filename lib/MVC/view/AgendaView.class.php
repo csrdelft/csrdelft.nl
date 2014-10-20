@@ -8,7 +8,15 @@
  * 
  * Klasse voor het weergeven begin agenda-gerelateerde dingen.
  */
-class AgendaMaandView extends SmartyTemplateView {
+abstract class AgendaView extends SmartyTemplateView {
+
+	public function getBreadcrumbs() {
+		return '<a href="/agenda" title="Agenda"><img src="' . CSR_PICS . '/knopjes/calendar-16.png" class="module-icon"></a>';
+	}
+
+}
+
+class AgendaMaandView extends AgendaView {
 
 	private $jaar;
 	private $maand;
@@ -17,7 +25,15 @@ class AgendaMaandView extends SmartyTemplateView {
 		parent::__construct($agenda);
 		$this->jaar = $jaar;
 		$this->maand = $maand;
-		$this->titel = 'Agenda - Maandoverzicht voor ' . strftime('%B %Y', strtotime($this->jaar . '-' . $this->maand . '-01'));
+		$this->titel = 'Maandoverzicht voor ' . strftime('%B %Y', strtotime($this->jaar . '-' . $this->maand . '-01'));
+	}
+
+	public function getTitel() {
+		return 'Agenda - ' . $this->titel;
+	}
+
+	public function getBreadcrumbs() {
+		return parent::getBreadcrumbs() . ' » ' . $this->titel;
 	}
 
 	public function view() {
@@ -50,7 +66,7 @@ class AgendaMaandView extends SmartyTemplateView {
 
 }
 
-class AgendaItemMaandView extends SmartyTemplateView {
+class AgendaItemMaandView extends AgendaView {
 
 	public function __construct(AgendaItem $item) {
 		parent::__construct($item);
@@ -66,7 +82,7 @@ class AgendaItemMaandView extends SmartyTemplateView {
 /**
  * Requires id of deleted agenda item.
  */
-class AgendaItemDeleteView extends SmartyTemplateView {
+class AgendaItemDeleteView extends AgendaView {
 
 	public function view() {
 		echo '<div id="item-' . $this->model . '" class="remove"></div>';
@@ -155,7 +171,7 @@ function setTijd(a, b, c, d) {
 
 }
 
-abstract class AgendaItemsView extends SmartyTemplateView {
+abstract class AgendaItemsView extends AgendaView {
 
 	protected $items;
 
@@ -190,7 +206,7 @@ class AgendaCourantView extends AgendaItemsView {
 
 }
 
-class AgendaICalendarView extends SmartyTemplateView {
+class AgendaICalendarView extends AgendaView {
 
 	public function __construct(AgendaModel $agenda) {
 		parent::__construct($agenda);

@@ -24,20 +24,24 @@ class FotoAlbumView extends SmartyTemplateView {
 		$this->smarty->display('MVC/fotoalbum/album.tpl');
 	}
 
-	public static function getBreadcrumbs(FotoAlbum $album, $dropdown = false, $self = false) {
-		$breadcrumbs = '<div class="breadcrumbs">';
-		$mappen = explode('/', $album->getSubDir());
+	public function getBreadcrumbs() {
+		return $this->getBreadcrumbsDropdown(true);
+	}
+
+	protected function getBreadcrumbsDropdown($dropdown = false, $self = false) {
+		$breadcrumbs = '<a href="/fotoalbum" title="Fotoalbum"><img src="' . CSR_PICS . '/knopjes/camera-16.png" class="module-icon"></a>';
+		$mappen = explode('/', $this->model->getSubDir());
 		$subdir = 'fotoalbum/';
 		$first = true;
 		foreach ($mappen as $albumnaam) {
 			if ($first) {
 				$first = false;
-				$breadcrumbs .= '<a href="/fotoalbum">Fotoalbum</a>';
+				// module icon
 			} elseif ($albumnaam === '') {
 				// trailing slash: allerlaatste
 				break;
 			} else {
-				if ($albumnaam === $album->dirname) {
+				if ($albumnaam === $this->model->dirname) {
 					// laatste
 					if ($dropdown) {
 						$breadcrumbs .= ' » ' . FotoAlbumView::getDropDown(PICS_PATH . $subdir, $albumnaam);
@@ -51,10 +55,10 @@ class FotoAlbumView extends SmartyTemplateView {
 				$breadcrumbs .= ' » <a href="/' . $subdir . '">' . ucfirst($albumnaam) . '</a>';
 			}
 		}
-		return $breadcrumbs . '</div>';
+		return $breadcrumbs;
 	}
 
-	public static function getDropDown($subdir, $albumnaam) {
+	private function getDropDown($subdir, $albumnaam) {
 		$parent = FotoAlbumModel::getFotoAlbum($subdir);
 		if (!$parent) {
 			return '';
@@ -100,9 +104,9 @@ class PosterUploadForm extends Formulier {
 		$this->addFields($fields);
 	}
 
-	public function view() {
-		echo FotoAlbumView::getBreadcrumbs($this->model, false, true);
-		parent::view();
+	public function getBreadcrumbs() {
+		$view = new FotoAlbumView($this->model);
+		return $view->getBreadcrumbsDropdown(false, true);
 	}
 
 }
@@ -114,8 +118,12 @@ class FotosDropzone extends DropzoneForm {
 		$this->titel = 'Fotos toevoegen aan album: ' . $album->dirname;
 	}
 
+	public function getBreadcrumbs() {
+		$view = new FotoAlbumView($this->model);
+		return $view->getBreadcrumbsDropdown(false, true);
+	}
+
 	public function view() {
-		echo FotoAlbumView::getBreadcrumbs($this->model, false, true);
 		echo '<div class="float-right"><a class="knop" onclick="showExisting_afbeeldingDropzoneUploader();$(this).remove();"><img src="http://plaetjes.csrdelft.nl/famfamfam/photos.png" width="16" height="16" alt="photos" class="icon"> Toon bestaande foto\'s in dit album</a></div>';
 		echo parent::view();
 		echo '<br /><span class="cursief">Maak nooit inbreuk op de auteursrechten of het recht op privacy van anderen.</span>';
@@ -132,7 +140,7 @@ class FotoBBView extends SmartyTemplateView {
 		$this->groot = $groot;
 	}
 
-	public function getHTML() {
+	public function getHtml() {
 		$html = '<a href="' . $this->model->getURL() . '" title="Klik voor origineel formaat"';
 		if (!$this->groot AND LidInstellingen::get('forum', 'fotoWeergave') == 'boven bericht') {
 			$html .= ' class="hoverIntent"><div class="hoverIntentContent"><div class="bb-img-loading" src="' . $this->model->getResizedURL() . '"></div></div';
@@ -148,12 +156,12 @@ class FotoBBView extends SmartyTemplateView {
 	}
 
 	public function view() {
-		echo $this->getHTML();
+		echo $this->getHtml();
 	}
 
 }
 
-class FotoAlbumZijbalkView extends SmartyTemplateView {
+class FotoAlbumZijbalkView extends FotoAlbumView {
 
 	public function __construct(FotoAlbum $album) {
 		parent::__construct($album);
@@ -186,7 +194,7 @@ class FotoAlbumZijbalkView extends SmartyTemplateView {
 
 }
 
-class FotoAlbumBBView extends SmartyTemplateView {
+class FotoAlbumBBView extends FotoAlbumView {
 
 	private $compact = false; //compact or expanded tag.
 	private $rows = 2;  //number of rows
@@ -200,7 +208,7 @@ class FotoAlbumBBView extends SmartyTemplateView {
 	}
 
 	public function view() {
-		echo $this->getHTML();
+		echo $this->getHtml();
 	}
 
 	public function makeCompact() {
@@ -338,7 +346,7 @@ class FotoAlbumBBView extends SmartyTemplateView {
 		return $ret;
 	}
 
-	public function getHTML() {
+	public function getHtml() {
 		$url = $this->model->getUrl();
 		if ($this->compact) {
 			// compacte versie van de tag is alleen een thumbnail.
@@ -346,7 +354,7 @@ class FotoAlbumBBView extends SmartyTemplateView {
 		} else {
 			$content = $this->getGridHtml();
 		}
-		return '<div class="bb-block bb-fotoalbum"><h2>' . FotoAlbumView::getBreadcrumbs($this->model, false, true) . '</a></h2>' . $content . '</div>';
+		return '<div class="bb-block bb-fotoalbum"><h2>' . $this->getBreadcrumbsDropdown(false, true) . '</a></h2>' . $content . '</div>';
 	}
 
 }

@@ -75,7 +75,10 @@ class CsrLayoutPage extends HtmlPage {
 //		}
 		$this->addStylesheet($this->getCompressedStyleUrl('layout', 'general'), true);
 		$this->addScript($this->getCompressedScriptUrl('layout', 'general'), true);
+	}
 
+	public function getBreadcrumbs() {
+		return '<a href="/" title="Startpagina"><img src="' . CSR_PICS . '/knopjes/home-16.png" class="module-icon"></a> » ' . $this->getTitel();
 	}
 
 	public function view() {
@@ -87,6 +90,12 @@ class CsrLayoutPage extends HtmlPage {
 		$smarty->assign('titel', $this->getTitel());
 		$smarty->assign('modal', $this->modal);
 		$smarty->assign('body', $this->getBody());
+
+		$breadcrumbs = $this->body->getBreadcrumbs();
+		if (!$breadcrumbs) {
+			$breadcrumbs = $this->getBreadcrumbs();
+		}
+		$smarty->assign('breadcrumbs', $breadcrumbs);
 
 		if ($this->zijbalk !== false) {
 			if (!is_array($this->zijbalk)) {

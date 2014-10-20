@@ -3,20 +3,40 @@
 require_once 'groepen/groep.class.php';
 
 /**
- * class.groepcontent.php	| 	Jan Pieter Waagmeester (jieter@jpwaag.com)
+ * GroepContent.class.php	| 	Jan Pieter Waagmeester (jieter@jpwaag.com)
  *
  *
  * Een verzameling contentclassen voor de groepenketzer.
  *
- * Groepcontent					Weergeven van een groep & bewerken en etc.
+ * GroepContent					Weergeven van een groep & bewerken en etc.
  * Groepencontent				Weergeven van een groepenoverzicht
  * Groepengeschiedeniscontent	Weergeven van een mooie patchwork van groepjes.
  * GroepenProfielConcent		Weergeven van groepenlijstje in profiel
  * GroepBBContent				Weergeven van enkele zaken van een groep met bbcode
  */
-class Groepcontent extends SmartyTemplateView {
+abstract class OldGroepView extends SmartyTemplateView {
+
+	public function getBreadcrumbs() {
+		return '<a href="/actueel/groepen" title="Groepen"><img src="' . CSR_PICS . '/knopjes/group-16.png" class="module-icon"></a>';
+	}
+
+}
+
+class GroepContent extends OldGroepView {
 
 	private $action = 'view';
+	private $groeptype;
+	private $groeptypes;
+
+	public function __construct(OldGroep $groep, $titel = false) {
+		parent::__construct($groep, $titel);
+		$this->groeptypes = Groepen::getGroeptypes();
+		foreach ($this->groeptypes as $type) {
+			if ($type['id'] == $groep->getTypeId()) {
+				$this->groeptype = $type['naam'];
+			}
+		}
+	}
 
 	public function setAction($action) {
 		$this->action = $action;
@@ -26,11 +46,14 @@ class Groepcontent extends SmartyTemplateView {
 		return $_GET['gtype'] . ' - ' . $this->model->getNaam();
 	}
 
-	/*
+	public function getBreadcrumbs() {
+		return parent::getBreadcrumbs() . ' » ' . $this->groeptype . ' » ' . $this->model->getNaam();
+	}
+
+	/**
 	 * Deze functie geeft een formulierding voor het eenvoudig toevoegen van leden
 	 * aan een bepaalde groep.
 	 */
-
 	private function getLidAdder() {
 		if (isset($_POST['rawNamen']) AND trim($_POST['rawNamen']) != '') {
 			$return = '';
@@ -82,11 +105,10 @@ class Groepcontent extends SmartyTemplateView {
 		return false;
 	}
 
-	/*
+	/**
 	 * Niet-admins kunnen kiezen uit een van te voren vastgesteld lijstje met functies, zodat
 	 * we  niet allerlei onzinnamen krijgen zoals Kücherführer enzo.
 	 */
-
 	private function getFunctieSelector($uid = '') {
 		$return = '';
 		$aFuncties = array('Q.Q.', 'Praeses', 'Fiscus', 'Redacteur', 'Computeur', 'Archivaris',
@@ -135,7 +157,7 @@ class Groepcontent extends SmartyTemplateView {
 		$this->smarty->assign('groep', $this->model);
 		$this->smarty->assign('opvolgerVoorganger', $this->model->getOpvolgerVoorganger());
 		$this->smarty->assign('action', $this->action);
-		$this->smarty->assign('groeptypes', Groepen::getGroeptypes());
+		$this->smarty->assign('groeptypes', $this->groeptypes);
 		$this->smarty->assign('aanmeldfilters', $this->getAanmeldfilters());
 		$oud = null;
 		if (isset($_SESSION['oudegroep'])) {
@@ -150,7 +172,7 @@ class Groepcontent extends SmartyTemplateView {
 
 }
 
-class Groepencontent extends SmartyTemplateView {
+class Groepencontent extends OldGroepView {
 
 	private $action = 'view';
 
@@ -160,6 +182,10 @@ class Groepencontent extends SmartyTemplateView {
 
 	public function getTitel() {
 		return 'Groepen - ' . $this->model->getNaam();
+	}
+
+	public function getBreadcrumbs() {
+		return parent::getBreadcrumbs() . ' » ' . $this->model->getNaam();
 	}
 
 	public function view() {
@@ -172,7 +198,7 @@ class Groepencontent extends SmartyTemplateView {
 
 }
 
-class GroepledenContent extends SmartyTemplateView {
+class GroepledenContent extends OldGroepView {
 
 	private $actie = 'standaard';
 
@@ -189,11 +215,7 @@ class GroepledenContent extends SmartyTemplateView {
 
 }
 
-class Groepgeschiedeniscontent extends SmartyTemplateView {
-
-	public function getTitel() {
-		return 'Groepen - ' . $this->model->getNaam();
-	}
+class Groepgeschiedeniscontent extends OldGroepView {
 
 	public function view() {
 		$jaren = 5;
@@ -238,16 +260,15 @@ class Groepgeschiedeniscontent extends SmartyTemplateView {
 
 }
 
-/*
+/**
  * Weergave van groepen in het profiel.
  */
-
-class GroepenProfielContent extends SmartyTemplateView {
+class GroepenProfielContent extends OldGroepView {
 
 	private $display_lower_limit = 8;
 	private $display_upper_limit = 12;
 
-	public function getHTML() {
+	public function getHtml() {
 		//per status in een array rammen
 		$groepenPerStatus = array();
 		foreach (Groepen::getByUid($this->model) as $groep) {
@@ -289,7 +310,7 @@ class GroepenProfielContent extends SmartyTemplateView {
 	}
 
 	public function view() {
-		echo $this->getHTML();
+		echo $this->getHtml();
 	}
 
 }
@@ -297,20 +318,20 @@ class GroepenProfielContent extends SmartyTemplateView {
 /**
  * Contentclasse voor de groep-bbcode-tag
  */
-class GroepBBContent extends SmartyTemplateView {
+class GroepBBContent extends OldGroepView {
 
-	public function getHTML() {
+	public function getHtml() {
 		$this->smarty->assign('groep', $this->model);
 		return $this->smarty->fetch('groepen/groep.bb.tpl');
 	}
 
 	public function view() {
-		echo $this->getHTML();
+		echo $this->getHtml();
 	}
 
 }
 
-class GroepStatsContent extends SmartyTemplateView {
+class GroepStatsContent extends OldGroepView {
 
 	public function view() {
 		$stats = $this->model->getStats();
@@ -338,7 +359,7 @@ class GroepStatsContent extends SmartyTemplateView {
 
 }
 
-class GroepEmailContent extends SmartyTemplateView {
+class GroepEmailContent extends OldGroepView {
 
 	public function view() {
 		$emails = array();

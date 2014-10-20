@@ -64,6 +64,10 @@ class Formulier implements View, Validator {
 		return $this->model;
 	}
 
+	public function getBreadcrumbs() {
+		return null;
+	}
+
 	public function loadProperty(InputField $field) {
 		$fieldName = $field->getName();
 		if ($this->model instanceof PersistentEntity AND property_exists($this->model, $fieldName)) {

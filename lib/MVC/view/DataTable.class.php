@@ -43,6 +43,10 @@ class DataTable implements View {
 		return null;
 	}
 
+	public function getBreadcrumbs() {
+		return null;
+	}
+
 	public function getTitel() {
 		return null;
 	}
@@ -91,10 +95,10 @@ JSON;
 		<table id="<?= $this->tableId ?>" class="<?= implode(' ', $this->css_classes) ?>" groupByColumn="<?= $this->groupByColumn ?>">
 			<?= $this->getTableHead() ?>
 			<?= $this->getTableBody() ?>
-			<?= $this->getTableFoot() ?>
+		<?= $this->getTableFoot() ?>
 		</table>
 		<script type="text/javascript">
-			$(document).ready(function() {
+			$(document).ready(function () {
 				var tableId = '<?= $this->tableId ?>';
 				var table = '#' + tableId;
 				var dataTable = $(table).DataTable({
@@ -147,7 +151,7 @@ JSON;
 						}
 					],
 					"order": [[1, "asc"]],
-					"createdRow": function(row, data, index) {
+					"createdRow": function (row, data, index) {
 						$(row).attr('id', tableId + '_' + index); // data array index
 						if ('detailSource' in data) {
 							$(row).children('td.details-control:first').data('detailSource', data.detailSource);
@@ -157,21 +161,21 @@ JSON;
 					}<?= $this->getConditionalProps() ?>
 				});
 				// Multiple selection of rows
-				$(table + ' tbody').on('click', 'tr', function(event) {
+				$(table + ' tbody').on('click', 'tr', function (event) {
 					if (!$(event.target).hasClass('details-control')) {
 						fnMultiSelect($(this));
 					}
 					updateToolbar();
 				});
 				// Opening and closing details
-				$(table + ' tbody').on('click', 'tr:not(.group) td.details-control', function(event) {
+				$(table + ' tbody').on('click', 'tr:not(.group) td.details-control', function (event) {
 					fnChildRow(dataTable, $(this));
 				});
 				// Group by column
-				$(table + '.groupByColumn tbody').on('click', 'tr.group td.details-control', function(event) {
+				$(table + '.groupByColumn tbody').on('click', 'tr.group td.details-control', function (event) {
 					fnGroupExpandCollapse(dataTable, $(table), $(this).parent());
 				});
-				$(table + '.groupByColumn thead').on('click', 'th.details-control', function(event) {
+				$(table + '.groupByColumn thead').on('click', 'th.details-control', function (event) {
 					fnGroupExpandCollapseAll(dataTable, $(table), $(this).parent());
 				});
 				$(table + '.groupByColumn:not(.groupByFixed)').on('order.dt', fnGroupByColumn);
@@ -183,12 +187,12 @@ JSON;
 				}
 				// Setup toolbar
 				$(table + '_toolbar').insertBefore(table);
-				var updateToolbar = function() {
+				var updateToolbar = function () {
 					var aantal = $(table + ' tbody tr.selected').length;
 					$(table + '_toolbar #rowcount').attr('disabled', aantal < 1);
 				};
 				$(table).on('draw.dt', updateToolbar);
-				$(table + '_toolbar #rowcount').click(function() {
+				$(table + '_toolbar #rowcount').click(function () {
 					alert($(table + ' tbody tr.selected').length + ' row(s) selected');
 				});
 			});

@@ -67,7 +67,7 @@ class Knop {
 		return $img;
 	}
 
-	public function getHTML() {
+	public function getHtml() {
 		$html = '<a href="' . $this->url . '" title="' . $this->title . '" class="' . $this->class . '" ';
 		if ($this->confirm !== false) {
 			if ($this->confirm === true) {
@@ -81,7 +81,7 @@ class Knop {
 		if ($this->type == 'default') {
 			//knopje zonder plaatje, checken of er wel een tekst is, anders een foutmelding meegeven
 			if ($this->text === null) {
-				$this->text = 'Knop::getHTML(): Geen tekst opgegeven bij een knop zonder plaatje.';
+				$this->text = 'Knop::getHtml(): Geen tekst opgegeven bij een knop zonder plaatje.';
 			}
 		} else {
 			//we gaan een plaatje erbij doen.
@@ -95,14 +95,14 @@ class Knop {
 	}
 
 	public function view() {
-		echo $this->getHTML();
+		echo $this->getHtml();
 	}
 
 	public static function getKnop($url, $type, $text = null) {
 		$knop = new Knop($url);
 		$knop->setType($type);
 		$knop->setText($text);
-		return $knop->getHTML();
+		return $knop->getHtml();
 	}
 
 	public static function viewKnop($url, $type, $text = null) {

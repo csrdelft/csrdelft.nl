@@ -186,7 +186,7 @@ class eamBBParser {
 	 * @return string HTML
 	 * @example examples.php
 	 */
-	function getHTML($bbcode) {
+	function getHtml($bbcode) {
 		if (strlen($bbcode) == 0) {
 			return null;
 		}

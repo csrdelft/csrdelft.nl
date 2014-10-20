@@ -8,7 +8,15 @@ require_once 'catalogus.class.php';
  * @author Gerrit Uitslag <klapinklapin@gmail.com>
  *
  */
-class BibliotheekCatalogusContent extends SmartyTemplateView {
+abstract class BibliotheekView extends SmartyTemplateView {
+
+	public function getBreadcrumbs() {
+		return '<a href="/communicatie/bibliotheek" title="Bibliotheek"><img src="' . CSR_PICS . '/knopjes/book-16.png" class="module-icon"></a>';
+	}
+
+}
+
+class BibliotheekCatalogusContent extends BibliotheekView {
 
 	public function __construct() {
 		parent::__construct(null, 'Bibliotheek | Catalogus');
@@ -20,7 +28,7 @@ class BibliotheekCatalogusContent extends SmartyTemplateView {
 
 }
 
-class BibliotheekCatalogusDatatableContent extends SmartyTemplateView {
+class BibliotheekCatalogusDatatableContent extends BibliotheekView {
 
 	public function __construct(Catalogus $catalogus) {
 		parent::__construct($catalogus);
@@ -148,10 +156,18 @@ Rubriek: ' . $aBoek['categorie'] . '"';
 /**
  * Boek weergeven
  */
-class BibliotheekBoekContent extends SmartyTemplateView {
+class BibliotheekBoekContent extends BibliotheekView {
 
 	public function __construct(Boek $boek) {
-		parent::__construct($boek, 'Bibliotheek | Boek: ' . $boek->getTitel());
+		parent::__construct($boek);
+	}
+
+	public function getTitel() {
+		return 'Bibliotheek - Boek: ' . $this->model->getTitel();
+	}
+
+	public function getBreadcrumbs() {
+		return parent::getBreadcrumbs() . ' » ' . $this->model->getTitel();
 	}
 
 	public function view() {
@@ -164,7 +180,7 @@ class BibliotheekBoekContent extends SmartyTemplateView {
 /**
  * Contentclasse voor de boek-bbcode-tag
  */
-class BoekBBContent extends SmartyTemplateView {
+class BoekBBContent extends BibliotheekView {
 
 	public function __construct(Boek $boek) {
 		parent::__construct($boek);

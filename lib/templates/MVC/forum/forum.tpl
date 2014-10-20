@@ -10,10 +10,6 @@
 
 {include file='MVC/forum/head_buttons.tpl'}
 
-<div class="breadcrumbs">
-	<a href="/forum/recent" class="forumGrootlink">Recent</a>
-</div>
-
 <h1>Forum{include file='MVC/forum/rss_link.tpl'}</h1>
 
 <table id="forumtabel">

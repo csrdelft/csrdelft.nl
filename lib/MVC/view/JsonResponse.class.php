@@ -28,6 +28,10 @@ class JsonResponse implements View {
 		return $this->model;
 	}
 
+	public function getBreadcrumbs() {
+		return null;
+	}
+
 	public function getTitel() {
 		return null;
 	}

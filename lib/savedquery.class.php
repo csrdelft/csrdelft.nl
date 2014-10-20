@@ -129,6 +129,10 @@ class SavedQueryContent implements View {
 		return $this->sq;
 	}
 
+	public function getBreadcrumbs() {
+		return null;
+	}
+
 	public function getTitel() {
 		return 'Opgeslagen query\'s';
 	}

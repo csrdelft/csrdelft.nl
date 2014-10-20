@@ -12,6 +12,10 @@ class CommissieOverzicht implements View {
 		$this->id;
 	}
 
+	public function getBreadcrumbs() {
+		return '<a href="/communicatie/ledenlijst" title="Ledenlijst"><img src="' . CSR_PICS . '/knopjes/people-16.png" class="module-icon"></a> » ' . $this->getTitel();
+	}
+
 	public function getTitel() {
 		return 'Voorkeuren voor commissies';
 	}
@@ -59,6 +63,10 @@ class LidOverzicht implements View {
 
 	public function getModel() {
 		return $this->id;
+	}
+
+	public function getBreadcrumbs() {
+		return '<a href="/communicatie/ledenlijst" title="Ledenlijst"><img src="' . CSR_PICS . '/knopjes/people-16.png" class="module-icon"></a> » ' . $this->getTitel();
 	}
 
 	public function getTitel() {

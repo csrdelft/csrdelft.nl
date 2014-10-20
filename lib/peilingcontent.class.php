@@ -13,14 +13,14 @@ class PeilingContent extends SmartyTemplateView {
 		parent::__construct($peiling);
 	}
 
-	public function getHTML($beheer = false) {
+	public function getHtml($beheer = false) {
 		$this->smarty->assign('peiling', $this->model);
 		$this->smarty->assign('beheer', $beheer);
 		return $this->smarty->fetch('peiling.bb.tpl');
 	}
 
 	public function view() {
-		echo $this->getHTML();
+		echo $this->getHtml();
 	}
 
 }

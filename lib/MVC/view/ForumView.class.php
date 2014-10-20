@@ -7,10 +7,22 @@
  * 
  * Tonen van het forum.
  */
-class ForumView extends SmartyTemplateView {
+abstract class ForumView extends SmartyTemplateView {
+
+	public function getBreadcrumbs() {
+		return '<a href="/forum" title="Forum"><img src="' . CSR_PICS . '/knopjes/chat-16.png" class="module-icon"></a>';
+	}
+
+}
+
+class ForumOverzichtView extends ForumView {
 
 	public function __construct() {
 		parent::__construct(ForumModel::instance()->getForumIndeling(), 'Forum');
+	}
+
+	public function getBreadcrumbs() {
+		return parent::getBreadcrumbs() . ' » <a href="/forum/recent" class="forumGrootlink">Recent</a>';
 	}
 
 	public function view() {
@@ -47,7 +59,7 @@ class ForumZoekenForm extends Formulier {
 
 }
 
-class ForumRssView extends SmartyTemplateView {
+class ForumRssView extends ForumView {
 
 	private $delen;
 
@@ -65,7 +77,7 @@ class ForumRssView extends SmartyTemplateView {
 
 }
 
-class ForumDeelView extends SmartyTemplateView {
+class ForumDeelView extends ForumView {
 
 	private $paging;
 	private $belangrijk;
@@ -76,12 +88,28 @@ class ForumDeelView extends SmartyTemplateView {
 		$this->belangrijk = ($belangrijk ? '/belangrijk' : '');
 	}
 
+	public function getBreadcrumbs() {
+		$dropdown = parent::getBreadcrumbs() . ' » <select name="forum_id" onchange="document.location.href=this.value;"><option value="/forum/recent">Recent gewijzigd</option>';
+		foreach (ForumModel::instance()->getForumIndeling() as $cat) {
+			$dropdown .= '<optgroup label="' . $cat->titel . '">';
+			foreach ($cat->getForumDelen() as $newDeel) {
+				$dropdown .= '<option value="/forum/deel/' . $newDeel->forum_id . '"';
+				if ($newDeel->forum_id === $this->model->forum_id) {
+					$dropdown .= ' selected="selected"';
+				}
+				$dropdown .= '>' . $newDeel->titel . '</option>';
+			}
+			$dropdown .= '</optgroup>';
+		}
+		$dropdown .='</select>';
+		return $dropdown;
+	}
+
 	public function view() {
 		$this->smarty->assign('zoekform', new ForumZoekenForm());
 		$this->smarty->assign('deel', $this->model);
 		$this->smarty->assign('paging', $this->paging);
 		$this->smarty->assign('belangrijk', $this->belangrijk);
-		$this->smarty->assign('categorien', ForumModel::instance()->getForumIndeling());
 		$this->smarty->assign('post_form_tekst', $_SESSION['forum_concept']);
 		$this->smarty->display('MVC/forum/deel.tpl');
 	}
@@ -122,7 +150,7 @@ class ForumDeelForm extends ModalForm {
 
 }
 
-class ForumDraadView extends SmartyTemplateView {
+class ForumDraadView extends ForumView {
 
 	private $deel;
 	private $paging;
@@ -131,6 +159,10 @@ class ForumDraadView extends SmartyTemplateView {
 		parent::__construct($draad, $draad->titel);
 		$this->deel = $deel;
 		$this->paging = ($paging AND ForumPostsModel::instance()->getAantalPaginas($draad->draad_id) > 1);
+	}
+
+	public function getBreadcrumbs() {
+		return parent::getBreadcrumbs() . ' » <a href="/forum/deel/' . $this->deel->forum_id . '/' . ForumDradenModel::instance()->getPaginaVoorDraad($this->model) . '#' . $this->model->draad_id . '">' . $this->deel->titel . '</a>';
 	}
 
 	public function view() {
@@ -149,7 +181,7 @@ class ForumDraadView extends SmartyTemplateView {
 /**
  * Requires ForumDraad[]
  */
-class ForumDraadZijbalkView extends SmartyTemplateView {
+class ForumDraadZijbalkView extends ForumView {
 
 	private $belangrijk;
 
@@ -182,7 +214,7 @@ class ForumDraadZijbalkView extends SmartyTemplateView {
 /**
  * Requires ForumPost[] and ForumDraad[]
  */
-class ForumPostZijbalkView extends SmartyTemplateView {
+class ForumPostZijbalkView extends ForumView {
 
 	private $draden;
 
@@ -203,7 +235,7 @@ class ForumPostZijbalkView extends SmartyTemplateView {
 
 }
 
-class ForumPostView extends SmartyTemplateView {
+class ForumPostView extends ForumView {
 
 	private $draad;
 	private $deel;
@@ -226,7 +258,7 @@ class ForumPostView extends SmartyTemplateView {
 /**
  * Requires id of deleted forumpost.
  */
-class ForumPostDeleteView extends SmartyTemplateView {
+class ForumPostDeleteView extends ForumView {
 
 	public function view() {
 		echo '<tr id="forumpost-row-' . $this->model . '" class="remove"><td></td></tr>';
@@ -234,7 +266,7 @@ class ForumPostDeleteView extends SmartyTemplateView {
 
 }
 
-class ForumResultatenView extends SmartyTemplateView {
+class ForumResultatenView extends ForumView {
 
 	private $delen;
 

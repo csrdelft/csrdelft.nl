@@ -29,6 +29,10 @@ class LedenlijstContent implements View {
 		return $this->lidzoeker;
 	}
 
+	public function getBreadcrumbs() {
+		return '<a href="/communicatie/ledenlijst" title="Ledenlijst"><img src="' . CSR_PICS . '/knopjes/people-16.png" class="module-icon"></a> » ' . $this->getTitel();
+	}
+
 	public function getTitel() {
 		return 'Ledenlijst der Civitas';
 	}

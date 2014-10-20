@@ -36,7 +36,6 @@ abstract class HtmlPage implements View {
 		$this->titel = $titel;
 	}
 
-
 	function getModel() {
 		return $this->body;
 	}
@@ -104,7 +103,7 @@ abstract class HtmlPage implements View {
 	 */
 	public function getCompressedStyleUrl($layout, $module, $extension = 'css') {
 		$allowedextensions = array('css', 'js');
-		if(!in_array($extension, $allowedextensions, true)){
+		if (!in_array($extension, $allowedextensions, true)) {
 			throw new Exception('Unknown extension: ' . hsc($extension));
 		}
 		list($timestamp, $cache_ok, /* $modules */, /* $files */) = $this->checkCache($layout, $module, $extension);
@@ -213,7 +212,6 @@ abstract class HtmlPage implements View {
 		);
 	}
 
-
 	/**
 	 * Geeft een array met gevraagde modules, afhankelijk van lidinstellingen
 	 * [elke module bestaat uit een set css- of js-bestanden]
@@ -249,7 +247,6 @@ abstract class HtmlPage implements View {
 				return $modules;
 			}
 			return $modules;
-
 		} else {
 			// een niet-algemene module gevraagd
 			if ($selectedmodule) {
@@ -270,7 +267,7 @@ abstract class HtmlPage implements View {
 	 * @param string $extension 'js' or 'css'
 	 * @return array with keys 'stylesheets' and 'replacements'
 	 */
-	static function  ini_parser($layout, $extension) {
+	static function ini_parser($layout, $extension) {
 		if ($extension == 'js') {
 			$ininame = 'script';
 			$sectionname = 'scripts';
@@ -281,7 +278,6 @@ abstract class HtmlPage implements View {
 
 		$includes = array(); // mode, file => base
 		$replacements = array(); // placeholder => value
-
 		// load style.ini/script.ini
 		$incbase = HTDOCS_PATH;
 		$webbase = CSR_ROOT;
@@ -290,23 +286,24 @@ abstract class HtmlPage implements View {
 			$data = parse_ini_file($ini, true);
 
 			// stylesheets
-			if (is_array($data[$sectionname])) foreach ($data[$sectionname] as $module => $files) {
-				foreach ($files as $file) {
+			if (is_array($data[$sectionname]))
+				foreach ($data[$sectionname] as $module => $files) {
+					foreach ($files as $file) {
 
-					//in DEBUG select the non-minified file, if available
-					$minext = '.min.' . $extension;
-					$length_mintex = strlen($minext);
-					if (DEBUG && substr($file, -$length_mintex) == $minext) {
-						$uncompressedfile = substr_replace($file, '', -$length_mintex, 4);
-						if (file_exists($incbase . $uncompressedfile)) {
-							$file = $uncompressedfile;
+						//in DEBUG select the non-minified file, if available
+						$minext = '.min.' . $extension;
+						$length_mintex = strlen($minext);
+						if (DEBUG && substr($file, -$length_mintex) == $minext) {
+							$uncompressedfile = substr_replace($file, '', -$length_mintex, 4);
+							if (file_exists($incbase . $uncompressedfile)) {
+								$file = $uncompressedfile;
+							}
 						}
-					}
 
-					$relativedir = dirname($file);
-					$includes[$module][$incbase . $file] = $webbase . '/' . $relativedir . '/';
+						$relativedir = dirname($file);
+						$includes[$module][$incbase . $file] = $webbase . '/' . $relativedir . '/';
+					}
 				}
-			}
 
 			// replacements
 			if (isset($data['replacements']) && is_array($data['replacements'])) {
@@ -315,8 +312,9 @@ abstract class HtmlPage implements View {
 		}
 
 		return array(
-			'files' => $includes,
-			'replacements' => $replacements
+			'files'			 => $includes,
+			'replacements'	 => $replacements
 		);
 	}
+
 }

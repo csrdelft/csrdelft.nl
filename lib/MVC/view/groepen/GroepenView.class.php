@@ -37,6 +37,10 @@ class GroepenView implements View {
 		return $this->groepen;
 	}
 
+	public function getBreadcrumbs() {
+		return null;
+	}
+
 	public function getTitel() {
 		return $this->titel;
 	}
@@ -87,6 +91,10 @@ class GroepView implements View {
 
 	public function getModel() {
 		return $this->groep;
+	}
+
+	public function getBreadcrumbs() {
+		return null;
 	}
 
 	public function getTitel() {

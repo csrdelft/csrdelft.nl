@@ -10,27 +10,6 @@
 
 {include file='MVC/forum/head_buttons.tpl'}
 
-{capture name='navlinks'}
-	<div class="breadcrumbs">
-		<a href="/forum" class="forumGrootlink">Forum</a>
-		{if $categorien}
-			&raquo;
-			<select name="forum_id" onchange="document.location.href = '/forum/' + this.value;">
-				<option value="recent"{if 0 === $deel->forum_id} selected="selected"{/if}>Recent gewijzigd</option>
-				{foreach from=$categorien item=cat}
-					<optgroup label="{$cat->titel}">
-						{foreach from=$cat->getForumDelen() item=newDeel}
-							<option value="deel/{$newDeel->forum_id}"{if $newDeel->forum_id === $deel->forum_id} selected="selected"{/if}>{$newDeel->titel}</option>
-						{/foreach}
-					</optgroup>
-				{/foreach}
-			</select>
-		{/if}
-	</div>
-{/capture}
-
-{$smarty.capture.navlinks}
-
 <h1>{$deel->titel}{if !isset($deel->forum_id)}{include file='MVC/forum/rss_link.tpl'}{/if}</h1>
 
 <table id="forumtabel">
@@ -74,7 +53,7 @@
 		<tr>
 			<td colspan="4">
 				<div class="forumdeel-omschrijving">
-					<div class="float-right">{$smarty.capture.navlinks}</div>
+					<div class="float-right">{$breadcrumbs}</div>
 					<h1>{$deel->titel}</h1>
 					{$deel->omschrijving}
 				</div>

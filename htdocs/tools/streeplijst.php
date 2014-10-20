@@ -19,7 +19,7 @@ $body = new Streeplijstcontent();
 if (isset($_GET['pdf'])) {
 	echo $body->getPdf();
 } elseif (isset($_GET['iframe'])) {
-	echo $body->getHTML();
+	echo $body->getHtml();
 } else {
 	$pagina = new CsrLayoutPage($body);
 	$pagina->view();

@@ -11,8 +11,6 @@
 	{/if}
 </div>
 
-{FotoAlbumView::getBreadcrumbs($album, true)}
-
 <h1>{$album->dirname|ucfirst}</h1>
 
 {foreach from=$album->getSubAlbums() item=subalbum}

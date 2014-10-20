@@ -19,7 +19,7 @@ class MaaltijdKetzerView extends SmartyTemplateView {
 		$this->aanmelding = $aanmelding;
 	}
 
-	public function getKetzer() {
+	public function getHtml() {
 		$this->smarty->assign('standaardprijs', intval(Instellingen::get('maaltijden', 'standaard_prijs')));
 		$this->smarty->assign('maaltijd', $this->model);
 		$this->smarty->assign('aanmelding', $this->aanmelding);
@@ -27,7 +27,7 @@ class MaaltijdKetzerView extends SmartyTemplateView {
 	}
 
 	public function view() {
-		echo $this->getKetzer();
+		echo $this->getHtml();
 	}
 
 }

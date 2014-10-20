@@ -16,11 +16,11 @@ class CsrBB extends eamBBParser {
 
 	public static function parse($bbcode) {
 		$parser = new CsrBB();
-		return $parser->getHTML($bbcode);
+		return $parser->getHtml($bbcode);
 	}
 
-	function getHTML($bbcode) {
-		parent::getHTML($bbcode);
+	function getHtml($bbcode) {
+		parent::getHtml($bbcode);
 
 		if (LidInstellingen::get('layout', 'neuzen') == 'overal') {
 			$pointer = 0;
@@ -131,7 +131,7 @@ class CsrBB extends eamBBParser {
 		}
 		$foto = new Foto($album, $naam);
 		$fototag = new FotoBBView($foto, $groot);
-		return $fototag->getHTML();
+		return $fototag->getHtml();
 	}
 
 	/**
@@ -188,7 +188,7 @@ class CsrBB extends eamBBParser {
 				$fotoalbumtag->setBig($arguments['big']);
 			}
 		}
-		return $fotoalbumtag->getHTML();
+		return $fotoalbumtag->getHtml();
 	}
 
 	/**
@@ -623,7 +623,7 @@ HTML;
 		try {
 			$groep = new OldGroep($groepid);
 			$groeptag = new GroepBBContent($groep);
-			return $groeptag->getHTML();
+			return $groeptag->getHtml();
 		} catch (Exception $e) {
 			return '[groep] Geen geldig groep-id (' . mb_htmlentities($groepid) . ')';
 		}
@@ -673,7 +673,7 @@ HTML;
 		try {
 			$document = new Document((int) $id);
 			$content = new DocumentBBContent($document);
-			return $content->getHTML();
+			return $content->getHtml();
 		} catch (Exception $e) {
 			return '<div class="bb-document">[document] Ongeldig document (id:' . $id . ')</div>';
 		}
@@ -734,7 +734,7 @@ HTML;
 			$aanmelding = $aanmeldingen[$maaltijd->getMaaltijdId()];
 		}
 		$ketzer = new MaaltijdKetzerView($maaltijd, $aanmelding);
-		$result = $ketzer->getKetzer();
+		$result = $ketzer->getHtml();
 
 		if ($maaltijd2 !== null) {
 			$aanmeldingen2 = MaaltijdAanmeldingenModel::getAanmeldingenVoorLid(array($maaltijd2->getMaaltijdId() => $maaltijd2), \LoginModel::getUid());
@@ -744,7 +744,7 @@ HTML;
 				$aanmelding2 = $aanmeldingen2[$maaltijd2->getMaaltijdId()];
 			}
 			$ketzer2 = new MaaltijdKetzerView($maaltijd2, $aanmelding2);
-			$result .= $ketzer2->getKetzer();
+			$result .= $ketzer2->getHtml();
 		}
 		return $result;
 	}
@@ -944,7 +944,7 @@ HTML;
 		try {
 			$peiling = new Peiling((int) $peilingid);
 			$peilingcontent = new PeilingContent($peiling);
-			return $peilingcontent->getHTML();
+			return $peilingcontent->getHtml();
 		} catch (Exception $e) {
 			return '[peiling] Er bestaat geen peiling met (id:' . (int) $peilingid . ')';
 		}
@@ -1064,7 +1064,7 @@ class CsrBBHtml extends CsrBB {
 
 	public static function parse($bbcode) {
 		$parser = new CsrBBHtml();
-		return $parser->getHTML($bbcode);
+		return $parser->getHtml($bbcode);
 	}
 
 }
