@@ -41,7 +41,7 @@ class AgendaMaandView extends AgendaView {
 		$minyear = $this->jaar - 5;
 		$maxyear = $this->jaar + 5;
 		for ($year = $minyear; $year <= $maxyear; $year++) {
-			$dropdown .= '<option value="/agenda/maand/' . $year . '/1"';
+			$dropdown .= '<option value="/agenda/maand/' . $year . '/' . $this->maand . '"';
 			if ($year == $this->jaar) {
 				$dropdown .= ' selected="selected"';
 			}
