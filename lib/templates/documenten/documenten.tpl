@@ -54,7 +54,7 @@
 					<td class="size">{$document->getFileSize()|filesize}</td>
 					<td title="{$document->getMimetype()}">{$document->getMimetype()|mimeicon}</td>
 					<td>{$document->getToegevoegd()|reldate}</td>
-					<td>{$document->getEigenaar()|csrnaam:'civitas':'visitekaartje'}</td>
+					<td>{$document->getEigenaar()|csrnaam}</td>
 				</tr>
 			{foreachelse}
 				<tr><td class="document" colspan="5">Geen documenten in deze categorie</td></tr>

@@ -1,4 +1,4 @@
-Beste {$uid|csrnaam:civitas:false},
+Beste {$uid|csrnaam:"civitas":"plain"},
 
 Via dit mailtje wil ik u bewust maken van het feit dat uw saldo negatief is
 bij de MaalCie. Dit komt door een aantal niet-betaalde maaltijden. Uw schuld

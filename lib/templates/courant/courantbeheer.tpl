@@ -35,7 +35,7 @@
 		{foreach from=$courant->getBerichtenVoorGebruiker() item=bericht}
 			<dt>
 			<span class="onderstreept">{$bericht.categorie|replace:'csr':'C.S.R.'}</span>
-			{if $courant->magBeheren()}({$bericht.uid|csrnaam:'full':false}){/if}
+			{if $courant->magBeheren()}({$bericht.uid|csrnaam:'full'}){/if}
 			<span class="dikgedrukt">{$bericht.titel}</span>
 			[ <a href="/actueel/courant/bewerken/{$bericht.ID}">bewerken</a> | 
 			<a href="/actueel/courant/verwijder/{$bericht.ID}" onclick="return confirm('Weet u zeker dat u dit bericht wilt verwijderen?')" >verwijderen</a> ]

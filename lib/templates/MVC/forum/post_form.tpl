@@ -5,7 +5,7 @@
 			<tr>
 				{* todo: invoerveld voor naam niet-ingelogd*}
 				<td>
-					{LoginModel::getUid()|csrnaam:'user':'visitekaartje'}
+					{LoginModel::getUid()|csrnaam:'user'}
 					{if LidInstellingen::get('forum', 'toonpasfotos') == 'nee'}
 						<span id="t{LoginModel::getUid()}-reageren" class="togglePasfoto" title="Toon pasfoto">&raquo;</span>
 					{/if}

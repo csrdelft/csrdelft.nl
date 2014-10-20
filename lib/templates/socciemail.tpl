@@ -1,4 +1,4 @@
-Beste {$uid|csrnaam:civitas:false},
+Beste {$uid|csrnaam:"civitas":"plain"},
 
 Het zal je niet ontgaan zijn, er is een geheel vernieuwde SocCie al enige tijd actief.
 Zoals je misschien al op het forum hebt gelezen, aanstaande donderdag (19 mrt) houdt 

@@ -24,7 +24,7 @@
  * @param bool
  * @return string
  */
-function smarty_modifier_csrnaam($uid, $vorm='civitas', $mode='link') {
+function smarty_modifier_csrnaam($uid, $vorm='civitas', $mode='visitekaartje') {
 	if($naam = Lid::naamLink($uid, $vorm, $mode)) {
 		return $naam;
 	} else {

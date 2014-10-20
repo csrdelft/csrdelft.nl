@@ -13,7 +13,7 @@
 		<table>
 			<tr>
 				<td>
-					{$post->uid|csrnaam:'user':'visitekaartje'}
+					{$post->uid|csrnaam:'user'}
 					{if LidInstellingen::get('forum', 'toonpasfotos') == 'nee'}
 						<span id="t{$post->uid}-{$post->post_id}" class="togglePasfoto" title="Toon pasfoto">&raquo;</span>
 					{/if}
