@@ -22,6 +22,10 @@ class DynamicEntity extends PersistentEntity {
 		$this->definition = $definition;
 	}
 
+	public function getTableName() {
+		return $this->definition->table_name;
+	}
+
 	/**
 	 * Get all attribute names.
 	 * 
