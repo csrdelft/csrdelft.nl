@@ -65,7 +65,7 @@ class Bijbelrooster extends PersistentEntity implements Agendeerbaar {
 	}
 
 	public function getLink($tag = false) {
-		return CsrBB::getBiblijaLink($this->stukje, null, $tag);
+		return CsrBB::getBijbelLink($this->stukje, null, $tag);
 	}
 
 	public function isHeledag() {

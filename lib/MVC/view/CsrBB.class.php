@@ -1015,34 +1015,22 @@ HTML;
 		} else { // [bijbel][/bijbel]
 			$stukje = $content;
 		}
-		$vertaling = null;
 		if (isset($arguments['vertaling'])) {
-			$vert = strtolower(str_replace('_', ' ', $arguments['vertaling']));
-			foreach (self::$bijbelvertalingen as $v => $id) {
-				if (startsWith(strtolower($v), $vert)) {
-					$vertaling = $v;
-				}
-			}
+			$vertaling = $arguments['vertaling'];
+		} else {
+			$vertaling = null;
 		}
-		return self::getBiblijaLink($stukje, $vertaling, true);
+		return self::getBijbelLink($stukje, $vertaling, true);
 	}
 
-	private static $bijbelvertalingen = array(
-		'NBV'							 => 'id18=1',
-		'NBG'							 => 'id16=1',
-		'Herziene Statenvertaling'		 => 'id47=1',
-		'Statenvertaling (Jongbloed)'	 => 'id37=1',
-		'Groot Nieuws Bijbel'			 => 'id17=1',
-		'Willibrordvertaling'			 => 'id35=1'
-	);
-
-	public static function getBiblijaLink($stukje, $vertaling = null, $tag = false) {
+	public static function getBijbelLink($stukje, $vertaling = null, $tag = false) {
+		if (!LidInstellingen::instance()->isValidValue('algemeen', 'bijbel', $vertaling)) {
+			$vertaling = null;
+		}
 		if ($vertaling === null) {
 			$vertaling = LidInstellingen::get('algemeen', 'bijbel');
 		}
-// fix http://stackoverflow.com/questions/10152894/php-replacing-special-characters-like-a-a-e-e
-		$fix = iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE', $stukje);
-		$link = 'http://www.biblija.net/biblija.cgi?m=' . urlencode($fix) . '&' . self::$bijbelvertalingen[$vertaling] . '&l=nl&set=10';
+		$link = 'https://www.debijbel.nl/bijbel/zoeken/' . $vertaling . '/' . $stukje;
 		if ($tag) {
 			return '<a href="' . $link . '" target="_blank">' . $stukje . '</a>';
 		} else {

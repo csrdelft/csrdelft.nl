@@ -35,7 +35,7 @@ class LidInstellingen extends PersistenceModel {
 	 */
 	private $instellingen = array(
 		'algemeen'		 => array(
-			'bijbel'		 => array('Bijbelvertaling', T::Enumeration, array('NBV', 'NBG', 'Herziene Statenvertaling', 'Statenvertaling (Jongbloed)', 'Groot Nieuws Bijbel', 'Willibrordvertaling'), 'NBV'),
+			'bijbel'		 => array('Bijbelvertaling', T::Enumeration, array('De Nieuwe Bijbelvertaling' => 'NBV', 'Bijbel in Gewone Taal' => 'BGT', 'Groot Nieuws Bijbel' => 'GNB96', 'Nije Fryske Bibeloersetting' => 'NFB', 'NBG-vertaling 1951' => 'NBG51', 'Statenvertaling (Jongbloed-editie)' => 'SVJ', 'Herziene Statenvertaling' => 'HSVI', 'Contemporary English Version' => 'CEVD', 'Good News Translation' => 'GNTD'), 'NBV'),
 			'visitekaartjes' => array('Visitekaartjes', T::Enumeration, array('ja', 'nee'), 'nee'),
 			'minion'		 => array('Minion', T::Enumeration, array('ja', 'nee'), 'nee')
 		),
@@ -157,8 +157,9 @@ class LidInstellingen extends PersistenceModel {
 
 	public function getTechnicalValue($module, $key) {
 		$value = $this->getValue($module, $key);
-		if (array_key_exists(4, $this->instellingen[$module][$key]) AND array_key_exists($value, $this->instellingen[$module][$key][4])) {
-			return $this->instellingen[$module][$key][4][$value];
+		$id = array_search($value, $this->instellingen[$module][$key][2]);
+		if (isset($this->instellingen[$module][$key][4]) AND isset($this->instellingen[$module][$key][4][$id])) {
+			return $this->instellingen[$module][$key][4][$id];
 		}
 		return $value;
 	}

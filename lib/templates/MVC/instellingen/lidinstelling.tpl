@@ -10,8 +10,8 @@
 	</label>
 	{if $type === T::Enumeration}
 		<select type="select" id="inst_{$module}_{$id}" name="{$module}_{$id}" class="FormElement SelectField" origvalue="{$waarde}">
-			{foreach from=$opties item=optie}
-				<option value="{$optie}"{if $optie === $waarde} selected="selected"{/if}>{ucfirst($optie)}</option>
+			{foreach from=$opties key=title item=optie}
+				<option value="{$optie}"{if $optie === $waarde} selected="selected"{/if}{if !is_int($title)} title="{$title}"{/if}>{ucfirst($optie)}</option>
 			{/foreach}
 		</select>
 	{else}
