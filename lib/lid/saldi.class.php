@@ -37,14 +37,14 @@ class Saldi {
 		if (!is_array($this->data)) {
 			$this->data = array();
 		}
-		$now = time();
-		$date_back = strtotime('-' . $timespan . ' days', $now);
+		// fetch additional data from soccie system
 		if ($this->cie == 'soccie') {
-			// fetch new data from soccie system
 			$model = DynamicEntityModel::makeModel('socCieKlanten');
 			$klant = $model->find('stekUID = ?', array($this->uid), null, null, 1)->fetch();
-			$saldo = $klant->saldo;
 			if ($klant) {
+				$now = time();
+				$date_back = strtotime('-' . $timespan . ' days', $now);
+				$saldo = $klant->saldo;
 				$data = array(array('moment' => getDateTime($now), 'saldo' => round($saldo / 100, 2)));
 				$model = DynamicEntityModel::makeModel('socCieBestelling');
 				$bestellingen = $model->find('socCieId = ? AND deleted = FALSE AND tijd > ?', array($klant->socCieId, $date_back), 'tijd DESC');
