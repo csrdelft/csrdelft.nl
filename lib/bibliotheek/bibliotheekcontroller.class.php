@@ -66,7 +66,7 @@ class BibliotheekController extends Controller {
 	 * 
 	 */
 	protected function catalogustonen() {
-		$this->view = new BiebView();
+		$this->view = new BibliotheekCatalogusContent();
 	}
 
 	/**
