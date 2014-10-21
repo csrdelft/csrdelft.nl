@@ -14,12 +14,12 @@ class LidInstellingenController extends AclController {
 		parent::__construct($query, LidInstellingen::instance());
 		if (!$this->isPosted()) {
 			$this->acl = array(
-				'beheer' => 'P_LOGGED_IN',
-				'reset'	 => 'P_ADMIN'
+				'beheer' => 'P_LOGGED_IN'
 			);
 		} else {
 			$this->acl = array(
-				'opslaan' => 'P_LOGGED_IN'
+				'opslaan'	 => 'P_LOGGED_IN',
+				'reset'		 => 'P_ADMIN'
 			);
 		}
 	}
@@ -47,7 +47,7 @@ class LidInstellingenController extends AclController {
 	public function reset($module, $key) {
 		$this->model->resetForAll($module, $key);
 		setMelding('Voor iedereen de instelling ge-reset naar de standaard waarde', 1);
-		redirect(CSR_ROOT . '/instellingen');
+		$this->view = new JsonResponse(true);
 	}
 
 }
