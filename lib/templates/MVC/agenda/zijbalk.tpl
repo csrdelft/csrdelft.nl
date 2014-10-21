@@ -11,7 +11,7 @@
 					{if $item->getLink()}
 						<a href="{$item->getLink()}" title="{$item->getBeschrijving()}">
 						{else}
-							<a title="{$item->getTitel()}" href="/agenda/maand/{$item->getBeginMoment()|date_format:"%Y-%m"}/#dag-{$item->getBeginMoment()|date_format:"%Y-%m-%d"}">
+							<a title="{$item->getTitel()}" href="/agenda/maand/{$item->getBeginMoment()|date_format:"%Y/%m"}/#dag-{$item->getBeginMoment()|date_format:"%Y-%m-%d"}">
 						{/if}
 						{if date('d-m', $item->getBeginMoment()) === date('d-m')}
 							{$item->getBeginMoment()|date_format:"%H:%M"}
