@@ -32,7 +32,7 @@ class DocumentenContent extends DocumentenView {
 /**
  * Documenten voor een bepaalde categorie tonen.
  */
-class DocumentCategorieContent extends SmartyTemplateView {
+class DocumentCategorieContent extends DocumentenView {
 
 	public function __construct(DocumentenCategorie $categorie) {
 		parent::__construct($categorie, 'Documenten in categorie: ' . $categorie->getNaam());
@@ -53,7 +53,7 @@ class DocumentCategorieContent extends SmartyTemplateView {
  * Document downloaden, allemaal headers goedzetten.
  * Ongeldig aangevraagde documenten worden in de controller afgehandeld.
  */
-class DocumentDownloadContent extends SmartyTemplateView {
+class DocumentDownloadContent extends DocumentenView {
 
 	public function __construct(Document $document) {
 		parent::__construct($document);
@@ -74,7 +74,7 @@ class DocumentDownloadContent extends SmartyTemplateView {
 
 }
 
-class DocumentBBContent extends SmartyTemplateView {
+class DocumentBBContent extends DocumentenView {
 
 	public function __construct(Document $document) {
 		parent::__construct($document);
