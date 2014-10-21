@@ -39,6 +39,10 @@ class MaaltijdLijstView extends HtmlPage {
 		$smarty->assign('prijs', sprintf('%.2f', $maaltijd->getPrijsFloat()));
 	}
 
+	public function getBreadcrumbs() {
+		return null;
+	}
+
 	public function view() {
 		$smarty = CsrSmarty::instance();
 		$smarty->assign('stylesheets', $this->getStylesheets());

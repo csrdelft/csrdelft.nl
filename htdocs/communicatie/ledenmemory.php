@@ -59,6 +59,10 @@ class MemoryView extends HtmlPage {
 		return $this->leden;
 	}
 
+	public function getBreadcrumbs() {
+		return null;
+	}
+
 	private function getPasfotoPath($uid) {
 		$pasfoto = 'pasfoto/geen-foto.jpg';
 		foreach (array('png', 'jpeg', 'jpg', 'gif') as $validExtension) {

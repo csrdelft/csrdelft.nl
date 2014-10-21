@@ -7,7 +7,10 @@ class WikiHeader extends HtmlPage {
 
 		$this->addStylesheet($this->getCompressedStyleUrl('layout', 'wiki'), true);
 		$this->addScript($this->getCompressedScriptUrl('layout', 'wiki'), true);
+	}
 
+	public function getBreadcrumbs() {
+		return null;
 	}
 
 	public function view() {
