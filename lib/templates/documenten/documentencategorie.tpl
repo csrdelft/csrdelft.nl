@@ -1,14 +1,14 @@
-{*
- * Toon een overzicht van documenten in een bepaalde categorie
- *}
+{* Toon een overzicht van documenten in een bepaalde categorie *}
+
 <div id="controls">
 	{if LoginModel::mag('P_DOCS_MOD')}
 		<a class="knop" href="/communicatie/documenten/toevoegen/?catID={$categorie->getID()}">{icon get="toevoegen"} Toevoegen</a>
 	{/if}
 </div>
 
-<a href="/communicatie/documenten">Documenten</a><h1>{$categorie->getNaam()}</h1>
-<div class="foutje">{getMelding()}</div>
+{getMelding()}
+
+<h1>{$categorie->getNaam()}</h1>
 
 {if !is_array($categorie->getAll())}
 	Geen documenten in deze categorie.

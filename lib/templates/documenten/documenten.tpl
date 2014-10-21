@@ -1,14 +1,14 @@
-{*
-* Toon een overzicht van documenten in de verschillende categorieën
-*}
+{* Toon een overzicht van documenten in de verschillende categorieën *}
 
 <div id="controls">
 	{if LoginModel::mag('P_DOCS_MOD')}
 		<a class="knop" href="/communicatie/documenten/toevoegen/">{icon get="toevoegen"} Toevoegen</a>
 	{/if}
 </div>
+
+{getMelding()}
+
 <h1>Documenten</h1>
-<div class="foutje">{getMelding()}</div>
 
 <table id="documenten" class="documenten">
 	<thead>
