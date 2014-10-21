@@ -48,6 +48,13 @@ class CsrLayout2Page extends HtmlPage {
 			$smarty->assign('menutpl', $this->menutmpl);
 		}
 		$smarty->assign('body', $this->getBody());
+
+		$breadcrumbs = $this->getBody()->getBreadcrumbs();
+		if (!$breadcrumbs) {
+			$breadcrumbs = $this->getBreadcrumbs();
+		}
+		$smarty->assign('breadcrumbs', $breadcrumbs);
+
 		$smarty->assign('loginform', new LoginForm());
 		$top = 180;
 		$left = 10;

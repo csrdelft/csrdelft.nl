@@ -91,7 +91,7 @@ class CsrLayoutPage extends HtmlPage {
 		$smarty->assign('modal', $this->modal);
 		$smarty->assign('body', $this->getBody());
 
-		$breadcrumbs = $this->body->getBreadcrumbs();
+		$breadcrumbs = $this->getBody()->getBreadcrumbs();
 		if (!$breadcrumbs) {
 			$breadcrumbs = $this->getBreadcrumbs();
 		}
