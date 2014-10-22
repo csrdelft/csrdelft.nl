@@ -4,15 +4,58 @@
  *
  * @author     Gerrit Uitslag <klapinklapin@gmail.com>
  */
-if (!defined('DOKU_INC')) define('DOKU_INC', dirname(__FILE__) . '/../wiki/');
+if (!defined('DOKU_INC')) define('DOKU_INC', realpath(dirname(__FILE__) . '/../wiki/').'/');
 
 //reuse the CSS functions of DokuWiki without triggering the main function css_out()
 define('SIMPLE_TEST', 1);
 require_once(DOKU_INC . 'lib/exe/css.php');
 
+/**
+ *  TODO LET OP:  DokuCssFileCSR extends DokuCssFile uit wiki/lib/exe/css.php,
+ *  AANGEPAST: alle 'private' declaraties moeten 'protected' worden in: DokuCssFile
+ *  @see DokuCssFile
+ *
+ *  Helper class to abstract loading of css/less files
+ *
+ *  @author Chris Smith <chris@jalakai.co.uk>
+ */
+class DokuCssFileCSR extends DokuCssFile {
+
+	/**
+	 * TODO LET OP Dit is een kopie van getRelative(), zodat relatieve pad op onze manier kunnen bepalen (2 mods)
+	 * @see getRelativePath()
+	 *
+	 * Get the relative file system path of this file, relative to dokuwiki's root folder, DOKU_INC
+	 *
+	 * @return string   relative file system path
+	 */
+	public function createRelativePath(){
+
+		if (is_null($this->relative_path)) {
+			//$basedir = array(DOKU_INC);
+			//mod: een map omhoog vanaf /[absolute path]/htdocs/wiki/ naar /[absolute path]/htdocs/
+			$basedir = array(realpath(DOKU_INC. '..').'/');
+
+			// during testing, files may be found relative to a second base dir, TMP_DIR
+			if (defined('DOKU_UNITTEST')) {
+				$basedir[] = realpath(TMP_DIR);
+			}
+
+			$basedir = array_map('preg_quote_cb', $basedir);
+			$regex = '/^('.join('|',$basedir).')/';
+			$this->relative_path = preg_replace($regex, '', dirname($this->filepath));
+
+			//mod: creëer een relatief pad t.o.v. DOKU_INC, welke door less-parser zal worden gebruikt
+			$this->relative_path = '../' . $this->relative_path;
+		}
+
+		$this->relative_path;
+	}
+
+}
 
 // overrule sommige instellingen, zie voor uitleg op https://www.dokuwiki.org/config
-$conf['compress'] = DEBUG ? 0 : 1; //stripping of whitespace and comments
+$conf['compress'] = 0;//DEBUG ? 0 : 1; //stripping of whitespace and comments
 $conf['cssdatauri'] = 0; //filesize in bytes. Embed images below the thresshold in css. (Bad supported by IE < 8)
 $conf['allowdebug'] = 0;
 $conf['cachedir'] = DATA_PATH . 'compressorcache';
@@ -83,7 +126,7 @@ function csr_css_out() {
 		foreach ($files[$module] as $file => $location) {
 			$display = str_replace(fullpath(HTDOCS_PATH), '', fullpath($file));
 			$css_content .= "\n/* XXXXXXXXX $display XXXXXXXXX */\n";
-			$css_content .= css_loadfile($file, $location);
+			$css_content .= csr_css_loadfile($file, $location);
 		}
 
 		print NL . $css_content . NL;
@@ -115,6 +158,20 @@ function csr_css_out() {
 
 	http_cached_finish($cache->cache, $css);
 }
+
+
+/**
+ * COPY van wiki/lib/exe/css.php, AANGEPAST: gebruikt DokuCssFileCSR
+ *
+ * Loads a given file and fixes relative URLs with the
+ * given location prefix
+ */
+function csr_css_loadfile($file,$location=''){
+	$css_file = new DokuCssFileCSR($file);
+	$css_file->createRelativePath();
+	return $css_file->load($location);
+}
+
 
 
 /**

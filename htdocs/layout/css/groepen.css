@@ -1,4 +1,72 @@
-/* Groepen nieuwe stijl */
+
+/** GROEPEN **************************************************************/
+
+ul.tabs {
+    float: right;
+}
+ul.tabs li {
+    float: left;
+    margin-left: 2px;
+    text-align: center;
+}
+ul.tabs a {
+    float: left;
+    width: 20px;
+    height: 20px;
+    color: white;
+    background-color: #cfcfcf;
+}
+ul.tabs a.active {
+    background-color: #0a338d;
+}
+div.generaties {
+    margin: 10px 0;
+    padding: 3px 20px;
+}
+div.vorigeGroep {
+    list-style-image: url(http://plaetjes.csrdelft.nl/groepen/up.png);
+}
+div.volgendeGroep {
+    list-style-image: url(http://plaetjes.csrdelft.nl/groepen/down.png);
+}
+div.groepTabContent {
+    clear: both;
+    width: 300px;
+}
+table.groepLeden td {
+    width: 150px;
+}
+div.pasfoto img.lidfoto {
+    float: left;
+    width: 50px;
+    height: 67px;
+    border: 1px solid grey;
+    margin: 3px 0 0 3px;
+}
+table.groepStats {
+    border-spacing: 0;
+    border: 1px solid #000;
+    float: right;
+}
+table.groepStats tr:nth-child(even) {
+    background-color: #ccc;
+}
+table.groepStats tr:nth-child(odd) {
+    background-color: #eee;
+}
+table.groepStats th {
+    background-color: #0A338D;
+    color: #fff;
+}
+table.groepStats td {
+    width: 90px;
+}
+table.groepStats td, table.groepStats th {
+    padding: 5px 10px;
+}
+
+
+
 
 /* Groepenlijst */
 #groepLijst{ float: right; width: 200px; background-color: #EEE; }

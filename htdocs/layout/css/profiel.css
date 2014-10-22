@@ -65,3 +65,8 @@ li.verborgen{ display: none; }
 #statusForm input#field_postfix.FormElement{
 	width: 100px;
 }
+
+
+.jarig {
+    background-image: url("http://plaetjes.csrdelft.nl/layout/jarig.jpg");
+}

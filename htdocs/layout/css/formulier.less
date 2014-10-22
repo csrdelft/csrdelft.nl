@@ -1,0 +1,154 @@
+/** FORMULIER **************************************************************/
+
+.Formulier {
+    * {
+        margin: 0;
+        padding: 0;
+        font-size: 1em;
+    }
+    input, textarea, select {
+        padding: 2px;
+    }
+    label, div {
+        line-height: 2em;
+    }
+    label {
+        padding-left: 5px;
+        float: left;
+        width: 30%;
+        vertical-align: middle;
+        cursor: default;
+    }
+    label .required {
+        color: red;
+    }
+    label .help {
+        position: absolute;
+        margin-left: -25px;
+    }
+    input[type="text"] {
+        width: 250px;
+    }
+    input[type="radio"] {
+        vertical-align: middle;
+    }
+    input[type="file"] {
+        border: none;
+    }
+    textarea {
+        width: 490px;
+        margin: 4px;
+    }
+    .AutoSize {
+        resize: none;
+    }
+    .InputField, h3, .password {
+        clear: both;
+    }
+    .InputField {
+        border: 1px solid transparent;
+        width: 500px;
+    }
+    .InputField:hover {
+        border: 1px solid #ddd;
+        background-color: #eee;
+    }
+    .VinkField {
+        margin: 4px 0 0 4px;
+    }
+    .VinkFieldLabel {
+        float: none;
+        width: auto;
+        vertical-align: top;
+    }
+    .FormKnoppen {
+        margin-top: 25px;
+    }
+    .FormKnoppen .knop {
+        margin-right: 4px;
+    }
+    .UploadOptie {
+        min-height: 2em;
+    }
+    .BestandBehoudenNaam {
+        height: 2em;
+    }
+    .VerwijderVanFtpCheckbox {
+        vertical-align: middle;
+    }
+    .UploadKeuze {
+        margin-left: 150px;
+        margin-top: -20px;
+    }
+    .datumPreview {
+        display: inline-block;
+        margin-left: 10px;
+    }
+    .CsrBBPreview {
+        float: left;
+        clear: both;
+        width: 100%;
+    }
+    input.UidField {
+        width: 70px;
+    }
+    .lidPreview {
+        float: right;
+    }
+    input.LidField, input.RequiredLidField {
+        width: 160px;
+    }
+    label.KeuzeRondjeField {
+        float: none;
+    }
+    .KeuzeRondjeFieldOptions {
+        margin-left: 30%;
+        padding: 5px;
+    }
+    input.IntField, input.DecimalField, input.BedragField {
+        width: 40px;
+        text-align: right;
+    }
+    .metFouten {
+        background-color: #FFC3CE;
+        padding: 4px 2px;
+    }
+    .InputField .waarschuwing {
+        float: right;
+        margin-right: 10px;
+    }
+    .password {
+        padding: 2px 1px;
+    }
+
+    h3 {
+        margin-top: 8px;
+        margin-bottom: 1px;
+    }
+}
+
+h1.formTitle {
+  font-size: 1.5em;
+}
+
+
+/* Inline Formulier */
+.InlineForm {
+    .InputField, .FormKnoppen {
+        display: none;
+    }
+    .FormElement {
+        width: auto !important;
+    }
+    div.InputField:hover {
+        border: 1px solid transparent;
+        background-color: transparent;
+    }
+    .InlineFormToggle {
+        border-bottom: 1px dotted grey;
+        width: 100%;
+        height: 15px;
+        cursor: pointer;
+        font-style: italic;
+    }
+}

@@ -2,20 +2,12 @@
  * Eigen aanpassingen op default opmaak
  */
 
-/* custom CSS to make upload button more visisble*/ 
-.qq-upload-button { 
-	background-color: beige; 
-	border: 1px solid #AAAAAA; 
-	padding: 4px; 
-} 
-
-.qq-upload-button:hover { 
-	background-color: #dee7ec; 
-}
-
-
-div.dokuwiki .toolbar button {
-    margin: 0 0 1px 0;
+/**
+ * C.S.R. Menu gebruikt een witte background voor main.cd-main-content,
+ * dit herstelt de originele achtergrond van de body weer
+ */
+main.cd-main-content {
+    background: #fbfaf9 url(/wiki/lib/tpl/dokuwiki/images/page-gradient.png) top left repeat-x;
 }
 
 /**
@@ -86,67 +78,45 @@ ul.dataplugin_cloud li.cl2 { font-size: 110% }
 ul.dataplugin_cloud li.cl3 { font-size: 130% }
 ul.dataplugin_cloud li.cl4 { font-size: 150% }
 
-/**
- * Search form plugin 
- * extra zoekvakje dat in pagina geplaatst kan worden
+
+
+/*
+ * Tuning layout Vector template
  */
+.skin-vector {
 
+    /* custom CSS to make upload button more visisble */
+    .qq-upload-button {
+        background-color: beige;
+        border: 1px solid #AAAAAA;
+        padding: 4px;
+    }
 
-div#qsearch2__out {
-    position: absolute;
-    right: auto;
-    left: 0;
-}
+    .qq-upload-button:hover {
+        background-color: #dee7ec;
+    }
 
-#qsearch2__out {
-	top: 35px;
-	display: none;
-	left: auto;
-	right: 7.93335px;
-	bottom: auto;
-	height: auto;
-	font-family: sans-serif;
-	font-size: 0.8em;
-	background-color: window;
-	border: 1px solid #aaa;
-	padding: 0;
-	position: static;
-}
+    div.dokuwiki .toolbar button {
+        margin: 0 0 1px 0;
+    }
 
-#qsearch2__out ul {
-	padding: 0;
-	margin: 0;
-	list-style: none;
-}
-#qsearch2__out li {
-	color: windowtext;
-	margin: 0;
-	width: 100%;
-	padding: 1px;
-}
-#qsearch2__out li a {
-	width: 97%; /* leave some space for browser rounding errors */
-	display: block;
-}
-#qsearch2__out li:hover {
-	background-color: #bbb;
-}
-#qsearch2__out li a,
-#qsearch2__out li a:link,
-#qsearch2__out li a:visited,
-#qsearch2__out li a:hover {
-	color: windowtext;
-	text-decoration: none;
+    /* different layout for wrap-plugin in sidebar of Vector template */
+    #panel .dokuwiki {
+        div.wrap_info,
+        div.wrap_important,
+        div.wrap_alert,
+        div.wrap_tip,
+        div.wrap_help,
+        div.wrap_todo,
+        div.wrap_download {
+            background-position: 50% 10px;
+            padding: 70px 1em .5em 1em;
+        }
+    }
 }
 
-/* different layout for wrap-plugin in sidebar of Vector template*/
-#panel .dokuwiki div.wrap_info, #panel .dokuwiki div.wrap_important, #panel .dokuwiki div.wrap_alert, #panel .dokuwiki div.wrap_tip, #panel .dokuwiki div.wrap_help, #panel .dokuwiki div.wrap_todo, #panel .dokuwiki div.wrap_download {
-    background-position: 50% 10px;
-    padding: 70px 1em .5em 1em;
-}
-
-/* 
- * disccussion plugin 
+/*
+ * disccussion plugin
  */
 div.dokuwiki div.comment_wrapper {
 	background-color: #fff;
@@ -155,49 +125,62 @@ div.dokuwiki div.comment_wrapper {
 	padding: 0.5em 0 0 0;
 }
 
-div.dokuwiki div#discussion__comment_preview {
-    padding: 0;
-}
-
 div.dokuwiki div.comment_wrapper h2 {
     border-bottom: 1px solid #ccc;
     border-top: 1px solid #ccc;
     padding: 5px;
-    color: #888
+
+    a {
+        color: #888;
+    }
 }
 
 div.dokuwiki .comment_head {
     color: #888;
-}
-div.dokuwiki .comment_head span.author {
-    background: transparent  url(/wiki/lib/plugins/discussion/images/grayuser.gif) 0 1px no-repeat;
-}
 
+    span.author {
+        background: transparent url(/wiki/lib/plugins/discussion/images/grayuser.gif) 0 1px no-repeat;
+    }
+}
 div.dokuwiki div.comment_buttons input.button {
     margin: 0;
     padding: .1em .5em;
     color: #555;
 }
-div.dokuwiki div.comment_form input.comment_submit {
-    float: left;
+div.dokuwiki div.comment_form {
+    margin: 0 0.5em;
+
+    input.comment_submit {
+        float: left;
+    }
+
+    input.comment_preview_button {
+        margin-left: 0.5em;
+        float: left;
+    }
 }
-div.dokuwiki div.comment_form input.comment_preview_button {
-    margin-left: 0.5em;
-    float: left;
+
+div.dokuwiki div#discussion__comment_preview {
+    padding: 0;
 }
 
 div.dokuwiki div.discussion__comment_toolbar {
     display: none;
 }
 
+/* onduidelijk waarvoor dit was??
 div.dokuwiki label.block {
     font-weight: normal;
     font-size: 0.8em;
-}
+} */
 
-div.dokuwiki div.comment_form {            margin: 0 0.5em; }
-div.dokuwiki div.comment_subscribe {       padding: 2px 1.5em; }
-div.dokuwiki div.comment_subscribe input { margin: 2px 0 2px 0; }
+div.dokuwiki div.comment_subscribe {
+    padding: 2px 1.5em;
+
+    input {
+        margin: 2px 0 2px 0;
+    }
+}
 
 /**
  * plugin indexmenu
@@ -205,12 +188,7 @@ div.dokuwiki div.comment_subscribe input { margin: 2px 0 2px 0; }
  * Namespace in index without page link in nojs mode. !important has to be used
  */
 div.li a.indexmenu_idx {
-	color: __text_neu__ !important; /* original: __missing__*/
-}
-
-/* interwiki link -- internal referers get also internal color */
-.dokuwiki a.interwiki.internal {
-    color: __existing__;
+    color: __text_neu__ !important; /* original: __missing__*/
 }
 
 /* extra class for Wrap Plugin */
@@ -219,6 +197,7 @@ div.li a.indexmenu_idx {
     border: solid __border__;
     border-width: 0 0 0 .25em;
 }
+
 
 /*
  * Clean up 'dokuwiki' template
