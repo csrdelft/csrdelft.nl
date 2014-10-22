@@ -113,7 +113,7 @@ class EetplanContent extends SmartyTemplateView {
 			echo '<tr class="kleur' . ($row % 2) . '"><td><a href="/actueel/eetplan/sjaars/' . $aEetplanVoorPheut[0]['uid'] . '">' . $aEetplanVoorPheut[0]['naam'] . '</a></td>';
 			for ($iTeller = 1; $iTeller <= 3; $iTeller++) {
 				$huisnaam = $aHuizenArray[$aEetplanVoorPheut[$iTeller] - 1]['huisNaam'];
-				$huisnaam = str_replace(array('Huize ', 'De '), '', $huisnaam);
+				$huisnaam = str_replace(array('Huize ', 'De ', 'Villa '), '', $huisnaam);
 				$huisnaam = substr($huisnaam, 0, 15);
 
 				echo '<td class="huis"><a href="/actueel/eetplan/huis/' . $aEetplanVoorPheut[$iTeller] . '">' .
