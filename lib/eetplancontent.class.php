@@ -114,7 +114,7 @@ class EetplanContent extends SmartyTemplateView {
 			for ($iTeller = 1; $iTeller <= 3; $iTeller++) {
 				$huisnaam = $aHuizenArray[$aEetplanVoorPheut[$iTeller] - 1]['huisNaam'];
 				$huisnaam = str_replace(array('Huize ', 'De ', 'Villa '), '', $huisnaam);
-				$huisnaam = substr($huisnaam, 0, 15);
+				$huisnaam = substr($huisnaam, 0, 18);
 
 				echo '<td class="huis"><a href="/actueel/eetplan/huis/' . $aEetplanVoorPheut[$iTeller] . '">' .
 				mb_htmlentities($huisnaam) .
