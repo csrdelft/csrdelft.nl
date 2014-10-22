@@ -63,6 +63,12 @@ main.cd-main-content {
     border-bottom-width: 0;
     border-top-width: 0;
 }
+.dokuwiki div.breadcrumbs div:first-child {
+    border-top-width: 0;
+}
+.dokuwiki div.breadcrumbs div:last-child {
+    border-bottom-width: 0;
+}
 /* vergelijkbare layout csrdelft.nl */
 .dokuwiki .youarehere {
    font-weight: bold;
