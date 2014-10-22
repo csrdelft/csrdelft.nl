@@ -24,11 +24,11 @@ class FotoAlbumView extends SmartyTemplateView {
 		$this->smarty->display('MVC/fotoalbum/album.tpl');
 	}
 
-	public function getBreadcrumbs() {
-		return $this->getBreadcrumbsDropdown(true);
+	public function getBreadcrumbs($dropdown = true, $self = false) {
+		return $this->getBreadcrumbsDropdown($dropdown, $self);
 	}
 
-	protected function getBreadcrumbsDropdown($dropdown = false, $self = false) {
+	private function getBreadcrumbsDropdown($dropdown = false, $self = true) {
 		$breadcrumbs = '<a href="/fotoalbum" title="Fotoalbum"><img src="' . CSR_PICS . '/knopjes/camera-16.png" class="module-icon"></a>';
 		$mappen = explode('/', $this->model->getSubDir());
 		$subdir = 'fotoalbum/';
@@ -106,7 +106,7 @@ class PosterUploadForm extends Formulier {
 
 	public function getBreadcrumbs() {
 		$view = new FotoAlbumView($this->model);
-		return $view->getBreadcrumbsDropdown(false, true);
+		return $view->getBreadcrumbs(false, true);
 	}
 
 }
@@ -120,7 +120,7 @@ class FotosDropzone extends DropzoneForm {
 
 	public function getBreadcrumbs() {
 		$view = new FotoAlbumView($this->model);
-		return $view->getBreadcrumbsDropdown(false, true);
+		return $view->getBreadcrumbs(false, true);
 	}
 
 	public function view() {
@@ -354,7 +354,7 @@ class FotoAlbumBBView extends FotoAlbumView {
 		} else {
 			$content = $this->getGridHtml();
 		}
-		return '<div class="bb-block bb-fotoalbum"><h2>' . $this->getBreadcrumbsDropdown(false, true) . '</a></h2>' . $content . '</div>';
+		return '<div class="bb-block bb-fotoalbum"><h2>' . $this->getBreadcrumbs(false, true) . '</a></h2>' . $content . '</div>';
 	}
 
 }
