@@ -63,7 +63,7 @@ $h = 23; // $h = (int)$_GET['h']; # aantal huizen
 $a = 3;  // $a = (int)$_GET['a']; # aantal avonden
 //$m = (int)floor($s/$h);
 //$m = (int)$_GET['m']; # max aantal sjaars per huis per avond
-$r = 1;  // $r = (int)$_GET['r']; # wel of niet random
+$r = 0;  // $r = (int)$_GET['r']; # wel of niet random
 
 echo "<b>Parameterisatie:</b>\nAantal Sjaars: $s\nAantal Huizen: $h\nAantal Avonden: $a\n\n";
 
@@ -104,7 +104,7 @@ $ahs = array();
 //$sql='DELETE FROM `eetplan` WHERE `avond` > 4';
 //$result=$db->query($sql);
 # data die al in de tabel zit om later feuten toe te kunnen voegen
-$sql = 'SELECT avond, huis, GROUP_CONCAT(uid) AS uids FROM `eetplan` GROUP BY avond, huis';
+/*$sql = 'SELECT avond, huis, GROUP_CONCAT(uid) AS uids FROM `eetplan` GROUP BY avond, huis';
 $db = MijnSqli::instance();
 $result = $db->query($sql);
 while ($rij = $db->next($result)) {
@@ -121,7 +121,7 @@ while ($rij = $db->next($result)) {
 			$seen[$sjaars][$subsjaars] = true;
 		}
 	}
-}
+}*/
 
 # huizen laten rondtellen
 if ($r == 0)
