@@ -3098,6 +3098,7 @@ htdocs/wiki/lib/tpl/dokuwiki/images/usertools.png -text
 htdocs/wiki/lib/tpl/dokuwiki/main.php -text
 htdocs/wiki/lib/tpl/dokuwiki/mediamanager.php -text
 htdocs/wiki/lib/tpl/dokuwiki/script.js -text
+htdocs/wiki/lib/tpl/dokuwiki/sidebarheader.html -text
 htdocs/wiki/lib/tpl/dokuwiki/style.ini -text
 htdocs/wiki/lib/tpl/dokuwiki/style.local.ini -text
 htdocs/wiki/lib/tpl/dokuwiki/template.info.txt -text

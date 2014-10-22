@@ -16,3 +16,13 @@ if (window.toolbar != undefined) {
         }
     });
 }
+jQuery(function(){
+    //geef een module icoontje weer ipv de tekst 'Je bent hier:'
+    jQuery('span.bchead')
+        .after('<a href="/wiki/" title="Wiki"><img src="http://plaetjes.csrdelft.nl/knopjes/wiki.png" class="module-icon"></a> » ')
+        .hide();
+
+    //vervang url in de wikiheader
+    jQuery('#dokuwiki__header').
+        find('.headings h1 a').attr('href', '/');
+});

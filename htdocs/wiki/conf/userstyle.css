@@ -10,6 +10,68 @@ main.cd-main-content {
     background: #fbfaf9 url(/wiki/lib/tpl/dokuwiki/images/page-gradient.png) top left repeat-x;
 }
 
+
+/*
+ * Verberg knopjes die dubbel zijn tov CSRmenu in 'dokuwiki' template
+ */
+.cd-main-content .tpl_dokuwiki #dokuwiki__usertools .user {
+    display: none;
+}
+.cd-main-content .tpl_dokuwiki #dokuwiki__usertools .action.logout {
+    display: none;
+}
+
+/* zoekvak net onder CSRmenu */
+#dokuwiki__header .tools {
+    padding-top: 35px;
+    margin-bottom: 0;
+}
+/* usertools net naast CSRmenu */
+#dokuwiki__usertools {
+    right: 245px;
+}
+
+@media (max-width: @ini_phone_width) { /* note: media rule is combined with @media screen */
+    /* voor telefoonbreedte, alles onder menu plaatsen */
+    #dokuwiki__header {
+        padding-top: 50px !important; /* to override @media only screen and (max-width: ...etc */
+        /* en verplaatsen zoekveld ongedaan maken */
+        .tools {
+            padding-top: 0;
+        }
+    }
+}
+/* zoekvakje is net voordat telefoonbreedte bereikt wordt net iets te breed.. */
+@media (max-width: 550px) {
+    form.search input.edit {
+        width: 15em;
+    }
+}
+ /*geen lijntjes om broodkruimels */
+.dokuwiki div.breadcrumbs {
+    border-bottom-width: 0;
+    border-top-width: 0;
+    margin-left: @ini_sidebar_width+2em;
+    margin-bottom: .5em;
+}
+@media (max-width: @ini_tablet_width) {
+    .dokuwiki div.breadcrumbs {
+        margin-left: 0;
+    }
+}
+.dokuwiki div.breadcrumbs div:only-child {
+    border-bottom-width: 0;
+    border-top-width: 0;
+}
+/* vergelijkbare layout csrdelft.nl */
+.dokuwiki .youarehere {
+   font-weight: bold;
+}
+.dokuwiki img.module-icon {
+    top: 0;
+}
+
+
 /**
  * CSS edits for data plugin
  */
@@ -199,12 +261,3 @@ div.li a.indexmenu_idx {
 }
 
 
-/*
- * Clean up 'dokuwiki' template
- */
-/*.tpl_dokuwiki #dokuwiki__usertools .user {*/
-    /*display: none;*/
-/*}*/
-/*.tpl_dokuwiki #dokuwiki__usertools .action.logout {*/
-    /*display: none;*/
-/*}*/
