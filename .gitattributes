@@ -3883,7 +3883,6 @@ lib/icon.class.php -text
 lib/ishetalcontent.class.php -text
 lib/knop.class.php -text
 lib/ldap.class.php -text
-lib/less/reset_wiki.less -text
 lib/lichting.class.php -text
 lib/lid/ledenlijstcontent.class.php -text
 lib/lid/lid.class.php -text

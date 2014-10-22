@@ -66,15 +66,16 @@ class ForumController extends Controller {
 			case 'wacht':
 				return !$this->isPosted();
 
-			case 'citeren':
-				if (!LoginModel::mag('P_LOGGED_IN')) {
-					return false;
-				}
+
 			case 'aanmaken':
 			case 'beheren':
 			case 'opheffen':
 			case 'hertellen':
 				if (!LoginModel::mag('P_FORUM_ADMIN')) {
+					return false;
+				}
+			case 'citeren':
+				if (!LoginModel::mag('P_LOGGED_IN')) {
 					return false;
 				}
 			case 'wijzigen':
