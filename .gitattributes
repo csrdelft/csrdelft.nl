@@ -116,6 +116,8 @@ htdocs/index.php -text
 htdocs/layout/css/agenda.css -text
 htdocs/layout/css/bbcode.css -text
 htdocs/layout/css/bibliotheek.css -text
+htdocs/layout/css/common.less -text
+htdocs/layout/css/common_wiki.less -text
 htdocs/layout/css/csrdelft.dataTables.css -text
 htdocs/layout/css/csrdelft.less -text
 htdocs/layout/css/documenten.css -text

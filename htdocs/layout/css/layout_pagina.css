@@ -1,16 +1,4 @@
-#cd-top-nav,
-#cd-lateral-nav {
-    html * {
-        -webkit-font-smoothing: antialiased;
-        -moz-osx-font-smoothing: grayscale;
-    }
 
-    html *, *, *:after, *:before {
-        -webkit-box-sizing: border-box;
-        -moz-box-sizing: border-box;
-        box-sizing: border-box;
-    }
-}
 
 html, body {
 	/* you need to set this to assign to the main element a min height of 100% */
@@ -424,23 +412,3 @@ Dragable objects
 	cursor: ew-resize;
 }
 
-.static { position: static; }
-.scrollpane { overflow: auto; }
-.float-none { float: none; }
-.float-left { float: left; }
-.float-right { float: right; }
-.clear { clear: both; }
-.clear-left { clear: left; }
-.clear-right { clear: right; }
-.inline { display: inline; }
-div.inline { display: inline-block; }
-table.inline { display: inline-table; }
-.text-center { text-align: center; }
-.text-bottom { vertical-align: bottom; }
-/* don't forget to use these within a relative component */
-.top-left { position: absolute; top: 0; left: 0; }
-.top-right { position: absolute; top: 0; right: 0; }
-.bottom-left { position: absolute; bottom: 0; left: 0; }
-.bottom-right { position: absolute; bottom: 0; right: 0; }
-
-.staatrood { color: red; }
