@@ -1928,6 +1928,7 @@ htdocs/wiki/lib/plugins/extension/plugin.info.txt -text
 htdocs/wiki/lib/plugins/extension/script.js -text
 htdocs/wiki/lib/plugins/extension/style.less -text
 htdocs/wiki/lib/plugins/fontcolor/action.php -text
+htdocs/wiki/lib/plugins/fontcolor/images/color-icon.php -text
 htdocs/wiki/lib/plugins/fontcolor/images/toolbar_icon.png -text
 htdocs/wiki/lib/plugins/fontcolor/lang/de/lang.php -text
 htdocs/wiki/lib/plugins/fontcolor/lang/en/lang.php -text
