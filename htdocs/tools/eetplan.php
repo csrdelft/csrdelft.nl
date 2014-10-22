@@ -21,8 +21,7 @@ for ($es = 1; $es <= 47; $es++) {
 
 
 # koppel de huizennummers aan huizen
-//$kh = array(0,3,6,7,10,11,13,1,15,16,17,19,21,2,22,8,18,5);0,3,5,6,19,20
-$kh = array(0, 1, 2, 3, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23); // 3,5,6,19 missen
+$kh = array(0, 1, 2, 3, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23);
 $khd = array(
 	0 => array('', '', ''),
 	1 => array('Huize Ihnshthabhielh', 1438, ''),
@@ -34,20 +33,20 @@ $khd = array(
 	7 => array("H.U.P.", 2116, ''),
 	8 => array("Theloneum", 1441, ''),
 	9 => array("Huize A.D.A.M. & Villa E.V.A.", 554, ''),
-	10 => array("De Preekstoel", 62, ""),
-	11 => array("Lachai-Roi", 57, ""),
-	12 => array("De Koornmarkt", 33, ""),
-	13 => array('t Internaat', 9, ""),
+	10 => array("De Preekstoel", 62, ''),
+	11 => array("Lachai-Roi", 57, ''),
+	12 => array("De Koornmarkt", 33, ''),
+	13 => array('t Internaat', 9, ''),
 	14 => array("Verdieping 1", 1683, ''),
 	15 => array('De Zilveren Hinde', 1017, ''),
 	16 => array('Oranje Boven', 1016, ''),
-	17 => array("Huize Van Speijk", 39, ""),
+	17 => array("Huize Van Speijk", 39, ''),
 	18 => array("Hotel Vlaams Gaius", 32, ''),
 	19 => array("De Zuidpool", 2120, ''),
 	20 => array("Villa Delphia", 37, ''),
 	21 => array('Huize * Asterix', 46, ''),
-	22 => array("OD11", 14, ""),
-	23 => array("De Balpolgroep", 13)
+	22 => array("OD11", 14, ''),
+	23 => array("De Balpolgroep", 13, '')
 );
 
 # namen opzoeken in de database
