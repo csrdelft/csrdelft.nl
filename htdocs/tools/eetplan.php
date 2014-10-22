@@ -1,6 +1,8 @@
 <?php
 $hist_a = 0;
 
+$lichting = 1400;
+
 # koppel de sjaarsnummers aan de sjaars
 #
 # 3 oud uid (uit oude lichtingen): 0946, 1045, 1053
@@ -10,9 +12,9 @@ $hist_a = 0;
 
 # nummers die missen in 13:
 # eerste semester: 14,42,56,57,58,62,63,68
-for ($es = 1; $es <= 67; $es++) {
-	if (!in_array($es, array(14, 42, 56, 57, 58, 62, 63, 68))) {
-		$uid = str_pad($es + 1300, 4, "0", STR_PAD_LEFT);
+for ($es = 1; $es <= 47; $es++) {
+	if (!in_array($es, array())) {
+		$uid = str_pad($es + $lichting, 4, "0", STR_PAD_LEFT);
 		$ks[$uid] = $uid;
 	}
 }
@@ -20,40 +22,32 @@ for ($es = 1; $es <= 67; $es++) {
 
 # koppel de huizennummers aan huizen
 //$kh = array(0,3,6,7,10,11,13,1,15,16,17,19,21,2,22,8,18,5);0,3,5,6,19,20
-$kh = array(0, 1, 2, 4, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31); // 3,5,6,19 missen
+$kh = array(0, 1, 2, 3, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23); // 3,5,6,19 missen
 $khd = array(
 	0 => array('', '', ''),
 	1 => array('Huize Ihnshthabhielh', 1438, ''),
-	2 => array("Sonnenvanck", 36, ''),
-	3 => array("OD11", 14, ""),
-	4 => array("De Koornmarkt", 33, ""),
-	5 => array("Lachai-Roi", 57, ""),
-	6 => array("De Ambassade", 6, ""),
-	7 => array('De Zilveren Hinde', 1017, ''),
-	8 => array('Oranje Boven', 1016, ''),
-	9 => array('Huize * Asterix', 46, ''),
-	10 => array('t Internaat', 9, ""),
-	11 => array("De Koornmarkt", 33, ""),
-	12 => array("Lachai-Roi", 57, ""),
-	13 => array("OD11", 14, ""),
-	14 => array("De Preekstoel", 62, ""),
-	15 => array("Sonnenvanck", 36, ''),
-	16 => array("Huize Van Speijk", 39, ""),
-	17 => array("De Tolhuis-Alliantie", 10, ''),
+	2 => array("Huize Den Hertog", 52, ''),
+	3 => array("De Molshoop", 34, ''),
+	4 => array("Sonnenvanck", 36, ''),
+	5 => array("De Gouden Leeuw", 8, ''),
+	6 => array("C.C.V.", 1303, ''),
+	7 => array("H.U.P.", 2116, ''),
+	8 => array("Theloneum", 1441, ''),
+	9 => array("Huize A.D.A.M. & Villa E.V.A.", 554, ''),
+	10 => array("De Preekstoel", 62, ""),
+	11 => array("Lachai-Roi", 57, ""),
+	12 => array("De Koornmarkt", 33, ""),
+	13 => array('t Internaat', 9, ""),
+	14 => array("Verdieping 1", 1683, ''),
+	15 => array('De Zilveren Hinde', 1017, ''),
+	16 => array('Oranje Boven', 1016, ''),
+	17 => array("Huize Van Speijk", 39, ""),
 	18 => array("Hotel Vlaams Gaius", 32, ''),
-	19 => array("Residentes in Vita Detissima", 494, ''),
-	20 => array("Huize A.D.A.M.", 554, ''),
-	21 => array("C.C.V.", 1303, ''),
-	22 => array("'t Ailand", 5, ''),
-	23 => array("Ihnshthabhielh", 1438, ''),
-	24 => array("Verdiplein 2012-ers", 1683, ''),
-	25 => array("Huize Op Stand", 512, ''),
-	26 => array("De Nachtwacht", 1178, ''),
-	27 => array("Theloneum", 1441, ''),
-	28 => array("Huize Den Hertog", 52, ''),
-	29 => array("De Paplepel", 1338, ''),
-	30 => array("De Zevende Hemel", 1048, ''),
-	31 => array("Hendrik Tollensstraat 386", 1798, '')
+	19 => array("De Zuidpool", 2120, ''),
+	20 => array("Villa Delphia", 37, ''),
+	21 => array('Huize * Asterix', 46, ''),
+	22 => array("OD11", 14, ""),
+	23 => array("De Balpolgroep", 13)
 );
 
 # namen opzoeken in de database
@@ -65,9 +59,9 @@ require_once 'configuratie.include.php';
 #}
 echo '<pre>';
 
-$s = 60; //(int)$_GET['s']; # aantal sjaars
-$h = 27; // $h = (int)$_GET['h']; # aantal huizen
-$a = 4;  // $a = (int)$_GET['a']; # aantal avonden
+$s = 47; //(int)$_GET['s']; # aantal sjaars
+$h = 23; // $h = (int)$_GET['h']; # aantal huizen
+$a = 3;  // $a = (int)$_GET['a']; # aantal avonden
 //$m = (int)floor($s/$h);
 //$m = (int)$_GET['m']; # max aantal sjaars per huis per avond
 $r = 1;  // $r = (int)$_GET['r']; # wel of niet random
@@ -82,147 +76,25 @@ $visited_sh = array(); # $visited_sh[sjaars][huis] = true
 # ... en welke sjaars welke andere al heeft ontmoet
 $seen = array(); # $seen[sjaars][] = sjaars
 # sjaars die elkaar gezien hebben
-$seen[1208][1203] = true;
-$seen[1203][1208] = true;
-$seen[1210][1205] = true;
-$seen[1210][1238] = true;
-$seen[1205][1210] = true;
-$seen[1205][1238] = true;
-$seen[1238][1210] = true;
-$seen[1238][1205] = true;
-$seen[1211][1235] = true;
-$seen[1235][1211] = true;
-$seen[1222][1239] = true;
-$seen[1222][1243] = true;
-$seen[1239][1222] = true;
-$seen[1239][1243] = true;
-$seen[1243][1222] = true;
-$seen[1243][1239] = true;
-$seen[1204][1231] = true;
-$seen[1231][1204] = true;
-$seen[1213][1229] = true;
-$seen[1229][1213] = true;
-$seen[1240][1221] = true;
-$seen[1240][1219] = true;
-$seen[1221][1240] = true;
-$seen[1221][1219] = true;
-$seen[1219][1240] = true;
-$seen[1219][1221] = true;
-$seen[1209][1228] = true;
-$seen[1209][1234] = true;
-$seen[1228][1209] = true;
-$seen[1228][1234] = true;
-$seen[1234][1209] = true;
-$seen[1234][1228] = true;
-$seen[1215][1226] = true;
-$seen[1215][1212] = true;
-$seen[1226][1215] = true;
-$seen[1226][1212] = true;
-$seen[1212][1215] = true;
-$seen[1212][1226] = true;
-$seen[1206][1227] = true;
-$seen[1206][1201] = true;
-$seen[1227][1206] = true;
-$seen[1227][1201] = true;
-$seen[1201][1206] = true;
-$seen[1201][1227] = true;
-$seen[1237][1223] = true;
-$seen[1237][1216] = true;
-$seen[1223][1237] = true;
-$seen[1223][1216] = true;
-$seen[1216][1237] = true;
-$seen[1216][1223] = true;
-$seen[1236][1220] = true;
-$seen[1220][1236] = true;
-$seen[1207][1232] = true;
-$seen[1207][1233] = true;
-$seen[1232][1207] = true;
-$seen[1232][1233] = true;
-$seen[1233][1207] = true;
-$seen[1233][1232] = true;
-$seen[1202][1230] = true;
-$seen[1202][1214] = true;
-$seen[1230][1202] = true;
-$seen[1230][1214] = true;
-$seen[1214][1202] = true;
-$seen[1214][1230] = true;
-$seen[1217][1218] = true;
-$seen[1217][1225] = true;
-$seen[1218][1217] = true;
-$seen[1218][1225] = true;
-$seen[1225][1217] = true;
-$seen[1225][1218] = true;
-$seen[1211][1225] = true;
-$seen[1211][1220] = true;
-$seen[1225][1211] = true;
-$seen[1225][1220] = true;
-$seen[1220][1211] = true;
-$seen[1220][1225] = true;
-$seen[1219][1244] = true;
-$seen[1244][1219] = true;
-$seen[1208][1209] = true;
-$seen[1209][1208] = true;
-$seen[1234][1235] = true;
-$seen[1235][1234] = true;
-$seen[1246][1247] = true;
-$seen[1247][1246] = true;
-$seen[1246][1247] = true;
-$seen[1246][1224] = true;
-$seen[1246][1242] = true;
-$seen[1246][1244] = true;
-$seen[1246][1241] = true;
-$seen[1247][1246] = true;
-$seen[1247][1224] = true;
-$seen[1247][1242] = true;
-$seen[1247][1244] = true;
-$seen[1247][1241] = true;
-$seen[1224][1246] = true;
-$seen[1224][1247] = true;
-$seen[1224][1242] = true;
-$seen[1224][1244] = true;
-$seen[1224][1241] = true;
-$seen[1242][1246] = true;
-$seen[1242][1247] = true;
-$seen[1242][1224] = true;
-$seen[1242][1244] = true;
-$seen[1242][1241] = true;
-$seen[1244][1246] = true;
-$seen[1244][1247] = true;
-$seen[1244][1224] = true;
-$seen[1244][1242] = true;
-$seen[1244][1241] = true;
-$seen[1241][1246] = true;
-$seen[1241][1247] = true;
-$seen[1241][1224] = true;
-$seen[1241][1242] = true;
-$seen[1241][1244] = true;
+$seen[1411][1445] = true; // Annemijn, Henria (Huisgenoten)
 
 
 # sjaars die al in huizen wonen alvast rekening mee houden
 # voorbeeld: $visited_sh[$sjaarsuid][$huisuid]=true;
-/* $visited_sh[1138][5]=true;//Martijn van den Berg (De Lindenburgh)
-  $visited_sh[0946][11]=true;//Niels Brandhorst (OD11)
-  $visited_sh[1109][11]=true;//Melanie Schippers (OD11)
-  $visited_sh[1113][13]=true;//Job van Stiphout (SSS)
-  $visited_sh[1112][16]=true;//Matthias Floor (internaat)
-  $visited_sh[1045][16]=true;//Vlot sr. (internaat)
-  $visited_sh[1151][9]=true;//Kirsten Neels (KMT)
-  $visited_sh[1139][1]=true;//Roos van Riggelen (Oranje Boven)
-  $visited_sh[1144][10]=true;//Margriet Vlot (Lacha-Roi) */
-$visited_sh[1329][1] = true;
-$visited_sh[1346][17] = true;
-$visited_sh[1320][8] = true;
-$visited_sh[1311][8] = true;
-$visited_sh[1317][11] = true;
-$visited_sh[1304][19] = true;
-$visited_sh[1311][13] = true;
-$visited_sh[1350][13] = true;
-$visited_sh[1307][16] = true;
-$visited_sh[1310][16] = true;
-$visited_sh[1367][16] = true;
-$visited_sh[1344][2] = true;
-$visited_sh[1365][3] = true;
-
+$visited_sh[1401][1] = true; // Rico, Instabiel
+$visited_sh[1411][16] = true; // Annemijn, Oranje Boven
+$visited_sh[1419][9] = true; // Gerianne, E.V.A.
+$visited_sh[1415][2] = true; // Jacko, HdH
+$visited_sh[1412][22] = true; // Mirjam, OD11
+$visited_sh[1444][17] = true; // Daan, van Speijk
+$visited_sh[1414][20] = true; // Robin, Villa Delphia
+$visited_sh[1424][10] = true; // rupSTER, Preekstoel
+$visited_sh[1416][21] = true; // Bert, Asterix
+$visited_sh[1423][4] = true; // Bram, Sonnenvanck
+$visited_sh[1417][12] = true; // Paul, Koornmarkt
+$visited_sh[1441][11] = true; // Thirza, Lachai-Roi
+$visited_sh[1427][5] = true; // Wessel, DGL
+$visited_sh[1445][16] = true; // Henria, Oranje Boven
 
 # het uiteindelijke rooster
 # $sah[sjaars][avond] = huis.. etc...
