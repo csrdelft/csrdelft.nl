@@ -79,6 +79,14 @@ a.maaltijd-afgemeld, span.maaltijd-afgemeld{
 .bb-groep .aanmelden{ clear: left; padding-top: 6px; }
 .bb-groep .aanmelden .pasfoto{ margin-right: 10px; }
 
+div.pasfoto img.lidfoto {
+    float: left;
+    width: 50px;
+    height: 67px;
+    border: 1px solid grey;
+    margin: 3px 0 0 3px;
+}
+
 .bb-document{ width: 450px; padding: 4px 6px; display: block; text-align: left; }
 .bb-document .size{ float: right; color: #777; }
 .bb-document .icon{ float: left; margin-right: 5px; }
