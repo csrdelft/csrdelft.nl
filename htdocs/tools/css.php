@@ -55,7 +55,7 @@ class DokuCssFileCSR extends DokuCssFile {
 }
 
 // overrule sommige instellingen, zie voor uitleg op https://www.dokuwiki.org/config
-$conf['compress'] = 0;//DEBUG ? 0 : 1; //stripping of whitespace and comments
+$conf['compress'] = DEBUG ? 0 : 1; //stripping of whitespace and comments
 $conf['cssdatauri'] = 0; //filesize in bytes. Embed images below the thresshold in css. (Bad supported by IE < 8)
 $conf['allowdebug'] = 0;
 $conf['cachedir'] = DATA_PATH . 'compressorcache';

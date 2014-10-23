@@ -132,12 +132,12 @@ abstract class HtmlPage implements View {
 	 * @return array met: string key en array met alle modules die geladen moeten worden
 	 */
 	public static function checkCache($layout, $selectedmodule, $extension) {
+		global $conf;
 
 		//als deze functie niet in wiki context wordt gedraaid, zijn enkele settings en includes nodig
 		if (!defined('DOKU_INC')) {
 			define('DOKU_INC', HTDOCS_PATH . 'wiki/');
 
-			global $conf;
 			// enkele instellingen, zie voor uitleg op https://www.dokuwiki.org/config
 			// Let op: duplicaat van tools/js.php en tools/css.php
 			$conf['dmode'] = 493;
@@ -159,6 +159,10 @@ abstract class HtmlPage implements View {
 			// input handle class
 			global $INPUT;
 			$INPUT = new Input();
+		} elseif(substr($conf['cachedir'], -15) != 'compressorcache') {
+			//schakel naar csr cache, terwijl wij in wiki context runnen
+			$conf['cachedirbackup'] = $conf['cachedir'];
+			$conf['cachedir'] = DATA_PATH . 'compressorcache';
 		}
 
 		// decide from where to get the layout
@@ -201,6 +205,11 @@ abstract class HtmlPage implements View {
 		// This is used for deciding if the cache can be used
 		$cache_ok = $cache->useCache(array('files' => $cache_files));
 		$timestamp = @filemtime($cache->cache);
+
+		//pad herstellen als wij in wiki context runnen
+		if(isset($conf['cachedirbackup'])) {
+			$conf['cachedir'] = $conf['cachedirbackup'];
+		}
 
 		return array(
 			$timestamp,
