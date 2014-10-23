@@ -121,7 +121,7 @@ class Eetplan {
 		$aAvonden=array(
 			'28-10-2014',
 			'25-11-2014',
-			'20-12-2014',
+			'23-12-2014',
 			'07-01-2014');
 		if($iAvond<sizeof($aAvonden)){
 			return $aAvonden[$iAvond-1];
