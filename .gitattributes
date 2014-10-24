@@ -417,7 +417,6 @@ htdocs/tools/index.php -text
 htdocs/tools/js.php -text
 htdocs/tools/leden-csv.php -text
 htdocs/tools/ledenkaart.php -text
-htdocs/tools/lidaftool.php -text
 htdocs/tools/memcachestats.php -text
 htdocs/tools/naamlink.php -text
 htdocs/tools/naamsuggesties.php -text
