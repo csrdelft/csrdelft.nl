@@ -73,8 +73,22 @@ main.cd-main-content {
 .dokuwiki .youarehere {
    font-weight: bold;
 }
+/*tekst verbergen en zelfde afmetingen geven als module-icon dat dit vervangt */
+.dokuwiki .youarehere .bchead {
+    width: 29px;
+    float: left;
+    text-indent: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+}
 .dokuwiki img.module-icon {
     top: 0;
+}
+/* h4 kopjes (===heading===) meer op csrdelft.nl laten lijken */
+#dokuwiki__aside .content h4 {
+    font-weight: normal;
+    padding: 2px 0 5px 0;
+    background: transparent url("http://plaetjes.csrdelft.nl/layout/portal-break.png") no-repeat bottom left;
 }
 
 
