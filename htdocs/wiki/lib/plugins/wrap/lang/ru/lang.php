@@ -5,10 +5,9 @@
  * 
  * @author Aleksandr Selivanov <alexgearbox@gmail.com>
  * @author Ilya Rozhkov <impeck@ya.ru>
- * @author Aleksandr Selivanov <alexgearbox@yandex.ru>
  */
 $lang['picker']                = 'Wrap';
-$lang['column']                = 'колонки';
+$lang['column']                = 'колонка';
 $lang['box']                   = 'простой центрированный блок';
 $lang['info']                  = 'блок «Информация»';
 $lang['tip']                   = 'блок «Подсказка»';

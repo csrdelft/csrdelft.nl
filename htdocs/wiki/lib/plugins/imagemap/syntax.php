@@ -121,7 +121,7 @@ class syntax_plugin_imagemap extends DokuWiki_Syntax_Plugin {
             $renderer->doc .= ' height="'.$renderer->_xmlEntities($height).'"';
         $renderer->doc .= ' />'.DOKU_LF;
         $renderer->doc .= '</p>'.DOKU_LF;
-        $renderer->doc .= '<map name="'.$name.'">'.DOKU_LF;
+        $renderer->doc .= '<map name="'.$name.'" id="'.$name.'">'.DOKU_LF;
         $has_content = false;
         break;
       case DOKU_LEXER_MATCHED:
