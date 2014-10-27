@@ -185,7 +185,8 @@ div.pasfoto img.lidfoto {
     color: #000;
 }
 .bb-slideshow .paging a:hover {
-    text-decoration: underline;}
+    text-decoration: underline;
+}
 
 .youtubeVideo{
     position: relative;
