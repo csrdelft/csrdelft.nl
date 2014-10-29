@@ -1,0 +1,57 @@
+/*
+ * extra widths for Wrap Plugin
+ */
+
+.dokuwiki .wrap_onetwothird {
+    width: 30%;
+    margin-right: 5%;
+}
+
+.dokuwiki .wrap_twoonethird {
+    width: 65%;
+    margin-right: 5%;
+}
+.dokuwiki .wrap_onetwothird:nth-of-type(2n) {
+    width: 65%;
+}
+
+.dokuwiki .wrap_twoonethird:nth-of-type(2n) {
+    width: 30%;
+}
+
+.dokuwiki .wrap_onetwothird:nth-of-type(2n),
+.dokuwiki .wrap_twoonethird:nth-of-type(2n) {
+    margin-right: 0;
+}
+
+.dokuwiki .wrap_onetwothird:nth-of-type(2n+1),
+.dokuwiki .wrap_twoonethird:nth-of-type(2n+1) {
+    clear: left;
+}
+
+/* show full width on smaller screens (mobile, etc) */
+@media (max-width: 950px) {
+
+    .dokuwiki .wrap_quarter {
+        width: 48%;
+    }
+    .dokuwiki .wrap_quarter:nth-of-type(2n) {
+        margin-right: 0;
+    }
+    .dokuwiki .wrap_quarter:nth-of-type(2n+1) {
+        clear: left;
+    }
+
+}
+
+/* show full width on smaller screens (mobile, etc) */
+@media (max-width: 600px) {
+
+    .dokuwiki .wrap_onetwothird,
+    .dokuwiki .wrap_twoonethird {
+        width: auto;
+        margin-right: 0;
+        margin-left: 0;
+        float: none;
+    }
+}

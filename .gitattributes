@@ -479,6 +479,7 @@ htdocs/wiki/conf/mysql.conf.php.example -text
 htdocs/wiki/conf/plugins.required.php -text
 htdocs/wiki/conf/scheme.conf -text
 htdocs/wiki/conf/smileys.conf -text
+htdocs/wiki/conf/userall.css -text
 htdocs/wiki/conf/users.auth.php.dist -text
 htdocs/wiki/conf/userscript.js -text
 htdocs/wiki/conf/userstyle.css -text

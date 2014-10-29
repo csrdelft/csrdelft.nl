@@ -273,11 +273,12 @@ div.li a.indexmenu_idx {
     color: __text_neu__ !important; /* original: __missing__*/
 }
 
-/* extra class for Wrap Plugin */
+/*
+ * extra class for Wrap Plugin
+ */
 .dokuwiki div.wrap_blockquote {
     padding: 0 1.25em;
     border: solid __border__;
     border-width: 0 0 0 .25em;
 }
-
 
