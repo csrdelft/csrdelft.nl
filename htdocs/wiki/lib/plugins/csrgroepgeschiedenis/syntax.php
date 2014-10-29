@@ -9,37 +9,80 @@
 // must be run within Dokuwiki
 if (!defined('DOKU_INC')) die();
 
-if (!defined('DOKU_LF')) define('DOKU_LF', "\n");
-if (!defined('DOKU_TAB')) define('DOKU_TAB', "\t");
-if (!defined('DOKU_PLUGIN')) define('DOKU_PLUGIN',DOKU_INC.'lib/plugins/');
-
-require_once DOKU_PLUGIN.'syntax.php';
-
+/**
+ * Class syntax_plugin_csrgroepgeschiedenis
+ */
 class syntax_plugin_csrgroepgeschiedenis extends DokuWiki_Syntax_Plugin {
-    public function getType() {  return 'substition'; }
-    public function getPType() { return 'block'; }
-    public function getSort() {  return 155; }
+	/**
+	 * Syntax Type
+	 *
+	 * @return string
+	 */
+	public function getType() {  return 'substition'; }
 
-    public function connectTo($mode) {
+	/**
+	 * Paragraph Type
+	 *
+	 * Defines how this syntax is handled regarding paragraphs. This is important
+	 * for correct XHTML nesting. Should return one of the following:
+	 *
+	 * 'normal' - The plugin can be used inside paragraphs
+	 * 'block'  - Open paragraphs need to be closed before plugin output
+	 * 'stack'  - Special case. Plugin wraps other paragraphs.
+	 *
+	 * @see Doku_Handler_Block
+	 * @return string
+	 */
+	public function getPType() { return 'block'; }
+
+	/**
+	 * Sort for applying this mode
+	 *
+	 * @return int
+	 */
+	public function getSort() {  return 155; }
+
+	/**
+	 * @param string $mode
+	 */
+	public function connectTo($mode) {
         $this->Lexer->addSpecialPattern('<csrgroepgeschiedenis.+?</csrgroepgeschiedenis>',$mode,'plugin_csrgroepgeschiedenis');
     }
 
-    public function handle($match, $state, $pos, &$handler){
+	/**
+	 * Handler to prepare matched data for the rendering process
+	 *
+	 * @param   string       $match   The text matched by the patterns
+	 * @param   int          $state   The lexer state for the match
+	 * @param   int          $pos     The character position of the matched text
+	 * @param   Doku_Handler $handler The Doku_Handler object
+	 * @return  array Return an array with all data you want to use in render
+	 */
+	public function handle($match, $state, $pos, Doku_Handler $handler){
         $match = substr($match, 21, -23);  // strip markup
         list($flags, $snaam) = explode('>', $match, 2);
         $flags = explode('&', substr($flags, 1));
 
         require_once 'groepen/groep.class.php';
-        $geschiedenis = Groep::getGroepgeschiedenis($snaam, 70);
+        $geschiedenis = OldGroep::getGroepgeschiedenis($snaam, 70);
 
         $data = array($flags,$geschiedenis);
         return $data;
     }
 
-    public function render($mode, &$renderer, $data) {
+
+	/**
+	 * Handles the actual output creation.
+	 *
+	 * @param   $mode   string        output format being rendered
+	 * @param   $renderer Doku_Renderer the current renderer object
+	 * @param   $data     array         data created by handler()
+	 * @return  boolean                 rendered correctly?
+	 */
+	public function render($mode, Doku_Renderer $renderer, $data) {
         if($mode != 'xhtml') return false;
 
-        list($flags,$geschiedenis) = $data;
+        list(/*$flags*/,$geschiedenis) = $data;
 
         // create a correctly nested list 
         $open = false;
