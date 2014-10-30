@@ -1,0 +1,7 @@
+base dokuteaser
+author Andreas Gohr
+email andi@splitbrain.org
+date 2013-02-16
+name DokuTeaser Plugin
+desc A plugin for internal use on dokuwiki.org only
+url http://dokuwiki.org/

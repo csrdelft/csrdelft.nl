@@ -1814,6 +1814,13 @@ htdocs/wiki/lib/plugins/docnavigation/style.css -text
 htdocs/wiki/lib/plugins/docnavigation/syntax/chapnav.php -text
 htdocs/wiki/lib/plugins/docnavigation/syntax/pagenav.php -text
 htdocs/wiki/lib/plugins/docnavigation/syntax/toc.php -text
+htdocs/wiki/lib/plugins/dokuteaser/action.php -text
+htdocs/wiki/lib/plugins/dokuteaser/all.css -text
+htdocs/wiki/lib/plugins/dokuteaser/manager.dat -text
+htdocs/wiki/lib/plugins/dokuteaser/plugin.info.txt -text
+htdocs/wiki/lib/plugins/dokuteaser/style.css -text
+htdocs/wiki/lib/plugins/dokuteaser/syntax/closesection.php -text
+htdocs/wiki/lib/plugins/dokuteaser/syntax/dokuteaser.php -text
 htdocs/wiki/lib/plugins/doodle/lang/ca/lang.php -text
 htdocs/wiki/lib/plugins/doodle/lang/de/lang.php -text
 htdocs/wiki/lib/plugins/doodle/lang/en/lang.php -text

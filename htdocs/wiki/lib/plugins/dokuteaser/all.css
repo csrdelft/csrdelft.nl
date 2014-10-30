@@ -1,0 +1,10 @@
+
+@media only screen and (max-width: 600px) {
+
+div.dokuteaser {
+    width: auto;
+    margin-right: 0;
+    float: none;
+}
+
+} /* /@media */

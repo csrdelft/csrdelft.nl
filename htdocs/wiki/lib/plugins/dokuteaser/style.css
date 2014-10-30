@@ -1,0 +1,39 @@
+
+div.dokuteaser {
+    width: 48%;
+    margin-right: 4%;
+    float: left;
+    clear: right; /* stay away from the TOC */
+}
+
+div.dokuteaser:nth-child(odd) {
+    margin-right: 0;
+}
+div.dokuteaser:nth-child(even) {
+    clear: left;
+}
+
+#IE8 div.dokuteaser {
+    float: none;
+    display: inline-block;
+    vertical-align: top;
+    margin-right: 2%;
+}
+/* make teaser full width in IE7 */
+#IE7 div.dokuteaser {
+    float: none;
+    margin-right: 0;
+    width: auto;
+}
+
+
+div.dokuteaser img {
+    margin-top: -2em;
+    margin-left: 0.5em;
+}
+
+/* right align last single link */
+div.dokuteaser p:last-child > a {
+    display: block;
+    text-align: right;
+}
