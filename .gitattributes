@@ -2705,8 +2705,6 @@ htdocs/wiki/lib/plugins/revert/lang/en/lang.php -text
 htdocs/wiki/lib/plugins/revert/lang/nl/intro.txt -text
 htdocs/wiki/lib/plugins/revert/lang/nl/lang.php -text
 htdocs/wiki/lib/plugins/revert/plugin.info.txt -text
-htdocs/wiki/lib/plugins/safefnrecode/action.php -text
-htdocs/wiki/lib/plugins/safefnrecode/plugin.info.txt -text
 htdocs/wiki/lib/plugins/searchform/README.md -text
 htdocs/wiki/lib/plugins/searchform/action.php -text
 htdocs/wiki/lib/plugins/searchform/manager.dat -text
