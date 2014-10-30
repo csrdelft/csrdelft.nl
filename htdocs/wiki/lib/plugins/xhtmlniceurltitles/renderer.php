@@ -31,17 +31,7 @@ class renderer_plugin_xhtmlniceurltitles extends Doku_Renderer_xhtml {
 	function _simpleTitle($name) {
 		global $conf;
 
-		//if there is a hash we use the ancor name only
-		@list($name, $hash) = explode('#', $name, 2);
-		if($hash) return $hash;
-
-		if($conf['useslash']) {
-			$name = strtr($name, ';/', ';:');
-		} else {
-			$name = strtr($name, ';', ':');
-		}
-
-		$name = noNSorNS($name);
+		$name = parent::_simpleTitle($name);
 
  		//replace the sepchar i.e. _, - or . by spaces in titles
  		return strtr($name, $conf['sepchar'], ' ');
