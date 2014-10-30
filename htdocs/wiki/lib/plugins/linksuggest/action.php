@@ -20,7 +20,7 @@ class action_plugin_linksuggest extends DokuWiki_Action_Plugin {
     function register(Doku_Event_Handler $controller) {
         $controller->register_hook('AJAX_CALL_UNKNOWN', 'BEFORE', $this, '_ajax_call');
     }
-
+    
     /**
      * ajax Request Handler
      * 
@@ -34,12 +34,18 @@ class action_plugin_linksuggest extends DokuWiki_Action_Plugin {
         //no other ajax call handlers needed
         $event->stopPropagation();
         $event->preventDefault();
-    
+
         global $INPUT;
 
         $page_ns  = trim($INPUT->post->str('ns')); //current namespace
         $page_id = trim($INPUT->post->str('id')); //current id
         $q = trim($INPUT->post->str('q')); //entered string
+
+        //keep hashlink if exists
+        $hash = null;
+        if(strpos($q,'#') !== false) {
+            list($q,$hash) = explode('#',$q,2);
+        }
 
         $ns_user = $ns = getNS($q); //namespace of entered string
         $id = cleanID(noNS($q)); //page of entered string
@@ -59,20 +65,46 @@ class action_plugin_linksuggest extends DokuWiki_Action_Plugin {
         } else {
             $data = $this->search_pages($ns,$id);
         }
-
+        
+        
         $data_r =array();
-        foreach($data as $entry){
+        $link= '';
+        
+        if($hash !== null && count($data) === 1 && $data[0]['type']==='f') {
+            //if hash is given and a page was found
+            $page = $data[0]['id'];
+            $meta = p_get_metadata($page, false, METADATA_RENDER_USING_CACHE);
+
+            if(isset($meta['internal']['toc'])) {
+                $toc = $meta['description']['tableofcontents'];
+                trigger_event('TPL_TOC_RENDER', $toc, null, false);
+                if(is_array($toc) && count($toc) !== 0 ){
+                    foreach($toc as &$t){ //loop through toc and compare
+                        if($hash === '' || strpos($t['hid'],$hash) === 0){
+                            $data_r[] = $t;
+                        }
+                    }
+                    $link = $q; 
+                }
+            }
+        } else {
             
-            $data_r[] = array(
-                'id'=>noNS($entry['id']), 
-                'ns'=>($ns_user !== "")?$ns_user:':', //return what user has typed in
-                'type'=>$entry['type'], // d/f
-                'title'=>$entry['title'],
-                'rootns'=>$entry['ns']?0:1,
-            );
+            foreach($data as $entry){
+                
+                $data_r[] = array(
+                    'id'=>noNS($entry['id']), 
+                    'ns'=>($ns_user !== "")?$ns_user:':', //return what user has typed in
+                    'type'=>$entry['type'], // d/f
+                    'title'=>$entry['title'],
+                    'rootns'=>$entry['ns']?0:1,
+                );
+            }
         }
-        echo json_encode(array('data'=>$data_r));
+
+        echo json_encode(array('data'=>$data_r,'deb'=>$deb,'link'=>$link));
     }
+    
+
     
     protected  function search_pages($ns,$id,$pagesonly=false){
         global $conf;

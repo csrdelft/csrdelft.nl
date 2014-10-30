@@ -1,22 +1,14 @@
-plugin-linksuggest
-==================
+linksuggest Plugin for DokuWiki
+=====
 
-Dokuwiki Plugin
+![](/examples/example2.gif)
 
-Example:
+All documentation for the linksuggest Plugin is available online at:
 
-If following Namespaces are available
-- `ns:ns1:page1`
-- `ns:page`
-- `page0`
+  * http://dokuwiki.org/plugin:linksuggest
 
-and user is on page `ns:page`
+(c) 2014 by lisps
 
-Possible links to `ns:ns1:page1`
+The plugin is using the jquery textcomplete Plugin (https://github.com/yuku-t/jquery-textcomplete)
 
-- `[[ns:ns1:page1]]` (absolute)  //not supported by  this plugin
-- `[[:ns:ns1:page1]]` (explizite absolute)
-- `[[ns1:page1]` (relative)
-- `[[.:ns1:page1]]` (explizite relative)
-- `[[..:ns:ns1:page1]]` (relative, with backlink)
-
+See LICENSE for license info.

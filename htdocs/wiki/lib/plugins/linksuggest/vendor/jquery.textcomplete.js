@@ -367,6 +367,7 @@
         var term;
         this.strategy = searchQuery[0];
         term = searchQuery[1];
+        this.listView.strategy = this.strategy; //fix https://github.com/yuku-t/jquery-textcomplete/issues/47
         this.strategy.search(term, this.searchCallbackFactory(free));
       })
     });

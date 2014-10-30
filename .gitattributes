@@ -2578,6 +2578,9 @@ htdocs/wiki/lib/plugins/info/syntax.php -text
 htdocs/wiki/lib/plugins/linksuggest/LICENSE -text
 htdocs/wiki/lib/plugins/linksuggest/README.md -text
 htdocs/wiki/lib/plugins/linksuggest/action.php -text
+htdocs/wiki/lib/plugins/linksuggest/examples/example1.png -text
+htdocs/wiki/lib/plugins/linksuggest/examples/example2.gif -text
+htdocs/wiki/lib/plugins/linksuggest/manager.dat -text
 htdocs/wiki/lib/plugins/linksuggest/plugin.info.txt -text
 htdocs/wiki/lib/plugins/linksuggest/script.js -text
 htdocs/wiki/lib/plugins/linksuggest/style.css -text
