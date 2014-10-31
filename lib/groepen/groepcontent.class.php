@@ -136,12 +136,12 @@ class GroepContent extends OldGroepView {
 			'geslacht:v'	 => 'Alleen vrouwen');
 
 		//verticalen.
-		foreach (OldVerticale::getLetters() as $key => $verticale) {
-			if ($verticale == 'Geen') {
+		foreach (VerticalenModel::instance()->find() as $verticale) {
+			if ($verticale->id == 0) {
 				continue;
 			}
-			$filter = 'verticale:' . $verticale;
-			$filters[$filter] = 'Verticale ' . OldVerticale::getNaamById($key);
+			$filter = 'verticale:' . $verticale->letter;
+			$filters[$filter] = 'Verticale ' . $verticale->naam;
 		}
 
 		//lichtingen

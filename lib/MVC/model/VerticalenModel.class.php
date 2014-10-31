@@ -17,10 +17,10 @@ class VerticalenModel extends PersistenceModel {
 	}
 
 	public function getVerticaleByLetter($letter) {
-		return $this->find('letter = ?', array($letter));
+		return $this->find('letter = ?', array($letter))->fetch();
 	}
 
-	public function getVerticaleByName($naam) {
+	public function findVerticaleByName($naam) {
 		return $this->find('naam LIKE ?', array($naam));
 	}
 

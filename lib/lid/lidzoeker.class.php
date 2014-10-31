@@ -168,16 +168,24 @@ class LidZoeker {
 			} catch (Exception $e) {
 				//care.
 			}
-
 			$query = "uid IN('" . implode("','", $uids) . "') ";
 		} elseif (preg_match('/^verticale:\w*$/', $zoekterm)) { //verticale, id, letter
-			$verticale = substr($zoekterm, 10);
-			if (in_array($verticale, OldVerticale::getNamen())) {
-				$verticale = array_search($verticale, OldVerticale::getNamen());
-			} elseif (in_array($verticale, OldVerticale::getLetters())) {
-				$verticale = array_search($verticale, OldVerticale::getLetters());
+			$v = substr($zoekterm, 10);
+			if (strlen($v) > 1) {
+				$result = VerticalenModel::instance()->findVerticaleByName($v);
+				$query = array();
+				foreach ($result as $v) {
+					$query[] = 'verticale=' . $v->id;
+				}
+				$query = '(' . implode(' OR ', $query) . ') ';
+			} else {
+				$verticale = VerticalenModel::instance()->getVerticaleByLetter($v);
+				if ($verticale instanceof Verticale) {
+					$query = 'verticale=' . $verticale->id . ' ';
+				} else {
+					$query = 'verticale=' . (int) $v . ' ';
+				}
 			}
-			$query = "verticale=" . (int) $verticale . ' ';
 		} elseif (preg_match('/^\d{2}$/', $zoekterm)) { //lichting bij een string van 2 cijfers
 			$query = "RIGHT(lidjaar,2)=" . (int) $zoekterm . " ";
 		} elseif (preg_match('/^lichting:\d\d(\d\d)?$/', $zoekterm)) { //lichting op de explicite manier

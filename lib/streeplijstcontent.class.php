@@ -9,7 +9,7 @@
 
 class Streeplijstcontent implements View {
 
-	private $moot = 'alle';
+	private $verticale = 'alle';
 	private $lichting = '';
 	private $aGoederen;
 	private $aLeden;
@@ -39,13 +39,13 @@ class Streeplijstcontent implements View {
 		$this->parseGoederen($sGoederen);
 
 		if (isset($_GET['moot']) AND (int) $_GET['moot'] == $_GET['moot']) {
-			$this->moot = (int) $_GET['moot'];
+			$this->verticale = (int) $_GET['moot'];
 		}
 		if (isset($_GET['lichting']) AND preg_match('/^\d{2}$/', $_GET['lichting']) == 1) {
 			$this->lichting = $_GET['lichting'];
 		}
 		//leden welke in de lijst moeten laden.
-		$this->aLeden = Zoeker::zoekLeden($this->lichting, 'uid', $this->moot, 'achternaam', 'leden');
+		$this->aLeden = Zoeker::zoekLeden($this->lichting, 'uid', $this->verticale, 'achternaam', 'leden');
 	}
 
 	function parseGoederen($sGoederen) {
@@ -140,7 +140,7 @@ class Streeplijstcontent implements View {
 
 	function getUrl() {
 		$sReturn = 'streeplijst.php?goederen=' . urlencode($this->getGoederen()) .
-				'&moot=' . $this->moot . '&lichting=' . $this->lichting . '&';
+				'&moot=' . $this->verticale . '&lichting=' . $this->lichting . '&';
 		if (isset($_GET['colorCols'])) {
 			$sReturn .= 'colorCols&';
 		}
@@ -163,19 +163,19 @@ class Streeplijstcontent implements View {
 			<br />
 			<fieldset>
 				<legend>Ledenselectie</legend><br />';
-		//mootselectie
+		//verticaleselectie
 		echo '<strong>Verticale:</strong><br />';
-		$moten = array_merge(array('alle'), range(1, 8));
-		foreach ($moten as $moot) {
-			echo '<input type="radio" name="moot" id="m' . $moot . '" value="' . $moot . '" ';
-			if ($moot == $this->moot) {
+		$verticalen = array_merge(array('alle'), range(1, 8));
+		foreach ($verticalen as $v) {
+			echo '<input type="radio" name="moot" id="m' . $v . '" value="' . $v . '" ';
+			if ($v == $this->verticale) {
 				echo 'checked="checked" ';
 			}
-			echo '/> <label for="m' . $moot . '">';
-			if ($moot == 'alle') {
-				echo $moot;
+			echo '/> <label for="m' . $v . '">';
+			if ($v == 'alle') {
+				echo $v;
 			} else {
-				echo OldVerticale::getNaamById($moot);
+				echo VerticalenModel::instance()->getVerticaleById($v)->naam;
 			}
 			echo '</label>';
 		}

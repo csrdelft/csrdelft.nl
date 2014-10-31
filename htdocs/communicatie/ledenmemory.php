@@ -23,23 +23,21 @@ class MemoryView extends HtmlPage {
 	public function __construct() {
 		$this->cheat = isset($_GET['rosebud']);
 		$this->learnmode = isset($_GET['oefenen']);
-		$this->verticale = null;
 		if (isset($_GET['verticale'])) {
-			$this->verticale = filter_input(INPUT_GET, 'verticale', FILTER_SANITIZE_STRING);
-			$lettersById = OldVerticale::getLetters();
-			$namenById = OldVerticale::getNamen();
-			if (in_array($this->verticale, $namenById)) {
-				$this->verticale = array_search($this->verticale, $namenById);
-			} elseif (in_array($this->verticale, $lettersById)) {
-				$this->verticale = array_search($this->verticale, $lettersById);
-			}
-			if (array_key_exists($this->verticale, $lettersById)) {
-				$this->leden = Database::instance()->sqlSelect(array('uid', 'geslacht', 'voorletters', 'voornaam', 'tussenvoegsel', 'achternaam', 'postfix'), 'lid', 'verticale = ? AND status IN ("S_GASTLID","S_LID","S_NOVIET","S_KRINGEL")', array($this->verticale), 'achternaam, tussenvoegsel, voornaam, voorletters')->fetchAll(PDO::FETCH_ASSOC);
+			$v = filter_input(INPUT_GET, 'verticale', FILTER_SANITIZE_STRING);
+			if (strlen($v) > 1) {
+				$result = VerticalenModel::instance()->findVerticaleByName($v);
+				if ($result->rowCount() === 1) {
+					$this->verticale = $result->fetch();
+				}
 			} else {
-				$this->verticale = null;
+				$verticale = VerticalenModel::instance()->getVerticaleByLetter($v);
+				if ($verticale instanceof Verticale) {
+					$this->verticale = $verticale;
+				}
 			}
-		}
-		if ($this->verticale === null) {
+			$this->leden = Database::instance()->sqlSelect(array('uid', 'geslacht', 'voorletters', 'voornaam', 'tussenvoegsel', 'achternaam', 'postfix'), 'lid', 'verticale = ? AND status IN ("S_GASTLID","S_LID","S_NOVIET","S_KRINGEL")', array($this->verticale->id), 'achternaam, tussenvoegsel, voornaam, voorletters')->fetchAll(PDO::FETCH_ASSOC);
+		} else {
 			$this->lichting = (int) filter_input(INPUT_GET, 'lichting', FILTER_SANITIZE_NUMBER_INT);
 			if ($this->lichting < 1950) {
 				$this->lichting = Lichting::getJongsteLichting();
@@ -49,10 +47,10 @@ class MemoryView extends HtmlPage {
 	}
 
 	public function getTitel() {
-		if ($this->verticale === null) {
+		if (isset($this->lichting)) {
 			return 'Ledenmemory lichting ' . $this->lichting . ($this->learnmode ? 'oefenen' : '');
 		}
-		return 'Ledenmemory verticale ' . OldVerticale::getNaamById($this->verticale) . ($this->learnmode ? 'oefenen' : '');
+		return 'Ledenmemory verticale ' . $this->verticale->naam . ($this->learnmode ? 'oefenen' : '');
 	}
 
 	public function getModel() {

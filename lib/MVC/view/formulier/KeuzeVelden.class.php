@@ -177,7 +177,10 @@ class WeekdagField extends SelectField {
 class VerticaleField extends SelectField {
 
 	public function __construct($name, $value, $description = null) {
-		$verticalen = OldVerticale::getNamen();
+		$verticalen = array();
+		foreach (VerticalenModel::instance()->find() as $v) {
+			$verticalen[$v->id] = $v->naam;
+		}
 		parent::__construct($name, $value, $description, $verticalen);
 	}
 
