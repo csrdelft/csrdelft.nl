@@ -40,14 +40,14 @@ class Saldi {
 		// fetch additional data from soccie system
 		if ($this->cie == 'soccie') {
 			$model = DynamicEntityModel::makeModel('socCieKlanten');
-			$klant = $model->find('stekUID = ?', array($this->uid), null, null, 1)->fetch();
+			$klant = $model->findSparse(array('socCieId', 'saldo'), 'stekUID = ?', array($this->uid), null, null, 1)->fetch();
 			if ($klant) {
 				$now = time();
 				$date_back = strtotime('-' . $timespan . ' days', $now);
 				$saldo = $klant->saldo;
 				$data = array(array('moment' => getDateTime($now), 'saldo' => round($saldo / 100, 2)));
 				$model = DynamicEntityModel::makeModel('socCieBestelling');
-				$bestellingen = $model->find('socCieId = ? AND deleted = FALSE AND tijd > ?', array($klant->socCieId, $date_back), 'tijd DESC');
+				$bestellingen = $model->findSparse(array('tijd', 'totaal'), 'socCieId = ? AND deleted = FALSE AND tijd > ?', array($klant->socCieId, $date_back), 'tijd DESC');
 				foreach ($bestellingen as $bestelling) {
 					$saldo += $bestelling->totaal;
 					$data[] = array('moment' => $bestelling->tijd, 'saldo' => round($saldo / 100, 2));
