@@ -21,7 +21,7 @@ class VerticalenModel extends PersistenceModel {
 	}
 
 	public function findVerticaleByName($naam) {
-		return $this->find('naam LIKE ?', array($naam));
+		return $this->find('naam LIKE ?', array('%' . $naam . '%'));
 	}
 
 	/**
