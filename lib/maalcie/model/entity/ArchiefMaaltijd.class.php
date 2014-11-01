@@ -71,6 +71,10 @@ class ArchiefMaaltijd implements Agendeerbaar {
 		return (int) $this->prijs;
 	}
 
+	public function getPrijsFloat() {
+		return (float) $this->getPrijs() / 100.0;
+	}
+
 	public function getAanmeldingen() {
 		return $this->aanmeldingen;
 	}
