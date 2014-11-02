@@ -24,12 +24,21 @@ mySettings = {
 		{className: 'knop-link', name: 'Link', key: 'L', openWith: '[url=[![Url]!]]', closeWith: '[/url]', placeHolder: 'Link tekst'},
 		{className: 'knop-mail', name: 'Email', key: 'E', openWith: '[email=[![Email adres]!]]', closeWith: '[/email]', placeHolder: 'Link tekst'},
 		{separator: '|'},
-		{className: 'knop-album', name: 'Fotoalbum', replaceWith: '[fotoalbum][![Url]!][/fotoalbum]'},
-		{className: 'knop-foto', name: 'Poster of foto uit album', replaceWith: function (markitup) {
-				var url = window.prompt('Url', '').trim();
+		{className: 'knop-album', name: 'Fotoalbum', replaceWith: function (markitup) {
+				var url = decodeURIComponent(window.prompt('Url', '').trim());
 				var pos = url.indexOf('/fotoalbum/');
 				if (pos > 0) {
-					url = url.substring(pos + 10).replace('_resized/', '').replace('_thumbs/', '').replace('#', '').replace('%20', ' ');
+					url = url.substring(pos + 10);
+					return '[fotoalbum]' + url + '[/fotoalbum]';
+				}
+				alert('Ongeldige url!');
+				return markitup.selection;
+			}},
+		{className: 'knop-foto', name: 'Poster of foto uit album', replaceWith: function (markitup) {
+				var url = decodeURIComponent(window.prompt('Url', '').trim());
+				var pos = url.indexOf('/fotoalbum/');
+				if (pos > 0) {
+					url = url.substring(pos + 10).replace('_resized/', '').replace('_thumbs/', '').replace('#', '');
 					return '[foto]' + url + '[/foto]';
 				}
 				alert('Ongeldige url!');
