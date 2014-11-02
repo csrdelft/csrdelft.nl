@@ -111,10 +111,6 @@ class CsrLayoutPage extends HtmlPage {
 		}
 		$smarty->assign('zijbalk', $this->zijbalk);
 
-		if (DEBUG AND ( LoginModel::mag('P_ADMIN') OR LoginModel::instance()->isSued())) {
-			$smarty->assign('debug', getDebug());
-		}
-
 		if (LoginModel::mag('P_LEDEN_MOD')) {
 			require_once 'MVC/model/ForumModel.class.php';
 			$smarty->assign('forumcount', ForumPostsModel::instance()->getAantalWachtOpGoedkeuring());

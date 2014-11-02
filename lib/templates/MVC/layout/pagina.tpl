@@ -23,9 +23,9 @@
 						<div id="page-top"><div class="breadcrumbs">{$breadcrumbs}</div></div>
 						{*$datatable->view()*}
 						{$body->view()}
-						{if isset($debug)}
+						{if $smarty.const.DEBUG AND (LoginModel::mag('P_ADMIN') OR LoginModel::instance()->isSued())}
 							<h2 id="mysql_debug_toggle"><a href="#mysql_debug_toggle" onclick="$('#mysql_debug').toggle();">Debug Tonen/Verstoppen</a></h2>
-							<div id="mysql_debug" class="pre">{$debug}</div>
+							<div id="mysql_debug" class="pre">{getDebug()}</div>
 						{/if}
 					</td>
 				</tr>
