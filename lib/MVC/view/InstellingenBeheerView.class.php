@@ -23,7 +23,7 @@ class InstellingenBeheerView extends SmartyTemplateView {
 			$this->smarty->assign('instellingen', $this->model->getModuleInstellingen($this->module));
 		} else {
 			$this->titel = 'Beheer instellingen stek';
-			$this->smarty->assign('instellingen', array());
+			$this->smarty->assign('instellingen', false);
 		}
 		$this->smarty->assign('modules', $this->model->getModules());
 		$this->smarty->display('MVC/instellingen/beheer/instellingen_page.tpl');
