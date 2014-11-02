@@ -26,3 +26,13 @@ jQuery(function(){
     jQuery('#dokuwiki__header').
         find('.headings h1 a').attr('href', '/');
 });
+
+/**
+ * Discussion Plugin
+ *
+ * initial hide the toolbar, show toolbar on focus
+ */
+jQuery('#discussion__comment_toolbar').hide();
+jQuery('#discussion__comment_text').focus(function () {
+    jQuery('#discussion__comment_toolbar').show();
+});

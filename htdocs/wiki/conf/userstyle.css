@@ -246,10 +246,6 @@ div.dokuwiki div#discussion__comment_preview {
     padding: 0;
 }
 
-div.dokuwiki div.discussion__comment_toolbar {
-    display: none;
-}
-
 /* onduidelijk waarvoor dit was??
 div.dokuwiki label.block {
     font-weight: normal;
