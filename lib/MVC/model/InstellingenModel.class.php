@@ -6,32 +6,30 @@
  * @author P.W.G. Brussee <brussee@live.nl>
  * 
  */
-class Instellingen extends PersistenceModel {
+class Instellingen extends CachedPersistenceModel {
 
 	const orm = 'Instelling';
 
 	protected static $instance;
 
-	public static function has($module, $key) {
-		return array_key_exists($module, static::instance()->instellingen) AND is_array(static::instance()->instellingen[$module]) AND array_key_exists($key, static::instance()->instellingen[$module]);
+	public static function has($module, $id) {
+		return isset(static::$defaults[$module][$id]);
 	}
 
-	public static function get($module, $key) {
-		return static::instance()->instellingen[$module][$key];
+	public static function get($module, $id) {
+		return static::instance()->getValue($module, $id);
 	}
 
-	/**
-	 * Temporary setting (behaves like $GLOBAL).
-	 * 
-	 * @param string $module
-	 * @param string $key
-	 * @param mixed $value
-	 */
-	public static function setTemp($module, $key, $value) {
-		static::instance()->instellingen[$module][$key] = $value;
+	public function setTemp($module, $id, $waarde) {
+		$instelling = new Instelling();
+		$instelling->module = $module;
+		$instelling->instelling_id = $id;
+		$instelling->waarde = $waarde;
+		$key = static::instance()->cacheKey($instelling->getValues(true));
+		static::instance()->setCache($key, $instelling);
 	}
 
-	private $defaults = array(
+	protected static $defaults = array(
 		'stek'		 => array(
 			'homepage'		 => 'thuis',
 			'beschrijving'	 => 'De Civitas Studiosorum Reformatorum is een bruisende, actieve, christelijke studentenvereniging in Delft, rijk aan tradities die zijn ontstaan in haar 50-jarig bestaan. Het is een breed gezelschap van zo&lsquo;n 270 leden met een zeer gevarieerde (kerkelijke) achtergrond, maar met een duidelijke eenheid door het christelijk geloof. C.S.R. is de plek waar al tientallen jaren studenten goede vrienden van elkaar worden, op intellectueel en geestelijk gebied groeien en goede studentengrappen uithalen.'
@@ -100,112 +98,90 @@ class Instellingen extends PersistenceModel {
 </ul>'
 		)
 	);
-	/**
-	 * Instellingen array like $defaults
-	 * @var array
-	 */
-	private $instellingen = array();
 
-	/**
-	 * Laad alle instellingen uit de database.
-	 * Als default instellingen ontbreken worden deze aangemaakt en opgeslagen.
-	 */
-	protected function __construct() {
-		parent::__construct();
-		$instellingen = $this->find(); // load all from db
-		foreach ($instellingen as $instelling) {
-			// haal verwijderde instellingen uit de database
-			if (!array_key_exists($instelling->module, $this->defaults) OR ! array_key_exists($instelling->instelling_id, $this->defaults[$instelling->module])) {
-				$rowcount = $this->delete($instelling);
-				if ($rowcount !== 1) {
-					throw new Exception('Niet bestaande instelling verwijderen mislukt');
-				}
-			}
-			$this->instellingen[$instelling->module][$instelling->instelling_id] = $instelling->waarde;
-		}
-		foreach ($this->defaults as $module => $instellingen) {
-			foreach ($instellingen as $key => $value) {
-				// maak missende instellingen opnieuw aan met default waarde
-				if (!array_key_exists($module, $this->instellingen) OR ! array_key_exists($key, $this->instellingen[$module])) {
-					$this->instellingen[$module][$key] = $value;
-					$this->newInstelling($module, $key, $value); // save to db
-				}
+	public function find($criteria = null, array $criteria_params = array(), $orderby = null, $groupby = null, $limit = null, $start = 0) {
+		$result = parent::find($criteria, $criteria_params, $orderby, $groupby, $limit, $start);
+		$return = array();
+		// Haal niet-bestaande instellingen uit de database
+		foreach ($result as $instelling) {
+			if (static::has($instelling->module, $instelling->instelling_id)) {
+				$return[] = $instelling;
+			} else {
+				$this->delete($instelling);
 			}
 		}
+		return $return;
 	}
 
-	/**
-	 * Lijst van alle modules.
-	 * 
-	 * @return PDOStatement
-	 */
-	public function getAlleModules() {
-		$sql = 'SELECT DISTINCT module FROM instellingen';
-		$query = Database::instance()->prepare($sql);
-		$query->execute();
-		$query->setFetchMode(PDO::FETCH_COLUMN, 0);
-		return $query;
+	public function getModules() {
+		return array_keys(static::$defaults);
 	}
 
-	/**
-	 * Haalt alle instellingen op voor een module.
-	 * 
-	 * @param string $module
-	 * @return Instelling[]
-	 */
 	public function getModuleInstellingen($module) {
-		$where = 'module = ?';
-		$params = array($module);
-		return $this->find($where, $params);
+		return array_keys(static::$defaults[$module]);
+	}
+
+	public function getInstellingen() {
+		$instellingen = array();
+		foreach ($this->getModules() as $module) {
+			$instellingen[$module] = $this->getModuleInstellingen($module);
+		}
+		return $instellingen;
+	}
+
+	public function getValue($module, $id) {
+		return $this->getInstelling($module, $id)->waarde;
+	}
+
+	public function getDefault($module, $id) {
+		return static::$defaults[$module][$id];
 	}
 
 	/**
-	 * Zoek een instelling voor bewerken of na verwijderen.
+	 * Haal een instelling op uit het cache of de database.
 	 * Als een instelling niet is gezet wordt deze aangemaakt met de default waarde en opgeslagen.
 	 * 
 	 * @param string $module
-	 * @param string $key
+	 * @param string $id
 	 * @return Instelling
 	 * @throws Exception indien de default waarde ontbreekt (de instelling bestaat niet)
 	 */
-	private function getInstelling($module, $key) {
-		if (!array_key_exists($module, $this->instellingen) OR ! array_key_exists($key, $this->instellingen[$module])) {
-			// get default for missing instelling
-			if (array_key_exists($module, $this->defaults) AND array_key_exists($key, $this->defaults[$module])) {
-				$this->instellingen[$module][$key] = $this->defaults[$module][$key];
-				return $this->newInstelling($module, $key, $this->defaults[$module][$key]); // save to db
-			} else { // geen default instelling
-				throw new Exception('Instelling default not found: ' . $key . ' module: ' . $module);
+	protected function getInstelling($module, $id) {
+		$instelling = $this->retrieveByPrimaryKey(array($module, $id));
+		if (!$instelling) {
+			if (static::has($module, $id)) {
+				$instelling = $this->newInstelling($module, $id);
+			} else {
+				throw new Exception('Instelling bestaat niet: ' . $id . ' module: ' . $module);
 			}
 		}
-		return $this->retrieveByPrimaryKey(array($module, $key));
+		return $instelling;
 	}
 
-	private function newInstelling($module, $key, $value) {
+	protected function newInstelling($module, $id) {
 		$instelling = new Instelling();
 		$instelling->module = $module;
-		$instelling->instelling_id = $key;
-		$instelling->waarde = $value;
+		$instelling->instelling_id = $id;
+		$instelling->waarde = $this->getDefault($module, $id);
 		$this->create($instelling);
 		return $instelling;
 	}
 
-	public function wijzigInstelling($module, $key, $value) {
+	public function wijzigInstelling($module, $id, $waarde) {
 		$instelling = new Instelling();
 		$instelling->module = $module;
-		$instelling->instelling_id = $key;
-		$instelling->waarde = $value;
+		$instelling->instelling_id = $id;
+		$instelling->waarde = $waarde;
 		$this->update($instelling);
 		return $instelling;
 	}
 
-	public function resetInstelling($module, $key) {
-		$rowcount = $this->deleteByPrimaryKey(array($module, $key));
+	public function resetInstelling($module, $id) {
+		$rowcount = $this->deleteByPrimaryKey(array($module, $id));
 		if ($rowcount !== 1) {
 			throw new Exception('Instelling resetten mislukt');
 		}
-		unset($this->instellingen[$module][$key]);
-		return $this->getInstelling($module, $key); // creates new with default value
+		return $this->getInstelling($module, $id); // creates new with default value
 	}
 
 }

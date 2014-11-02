@@ -17,6 +17,15 @@ class LoginModel extends PersistenceModel implements Validator {
 	const orm = 'LoginSession';
 
 	protected static $instance;
+
+	public static function getUid() {
+		return LoginModel::instance()->getLid()->getUid();
+	}
+
+	public static function mag($permission, $token_authorizable = false, $mandatory_only = false) {
+		return AccessModel::instance()->hasPermission(self::instance()->getLid(), $permission, $token_authorizable, $mandatory_only);
+	}
+
 	/**
 	 * Lid dat op dit moment is ingelogd.
 	 */
@@ -59,15 +68,15 @@ class LoginModel extends PersistenceModel implements Validator {
 
 		// Als we x999 zijn checken we of er misschien een validatietoken in de $_GET staat
 		// om zonder sessie bepaalde rechten te krijgen.
-		if ($this->loggedinLid->getUid() === 'x999') {
+		if ($this->getLid()->getUid() === 'x999') {
 			$token = filter_input(INPUT_GET, 'private_token', FILTER_SANITIZE_STRING);
 			if (preg_match('/^[a-z0-9]{25}$/', $token)) {
 				$uid = Database::instance()->sqlSelect(array('uid'), 'lid', 'rssToken = ?', array($token), null, null, 1)->fetchColumn();
 				$lid = LidCache::getLid($uid);
 				if ($lid instanceof Lid) {
-					// Subject Assignment:
-					$this->loggedinLid = $lid;
 					$this->authenticatedByToken = true;
+					// Subject Assignment:
+					$this->setLid($lid);
 				}
 			}
 		}
@@ -89,8 +98,7 @@ class LoginModel extends PersistenceModel implements Validator {
 		$lid = LidCache::getLid($_SESSION['_uid']);
 		if ($lid instanceof Lid) {
 			// Subject Assignment:
-			$this->loggedinLid = $lid;
-
+			$this->setLid($lid);
 			if (isset($_SESSION['_suedFrom'])) {
 				$this->suedFrom = LidCache::getLid($_SESSION['_suedFrom']);
 			}
@@ -129,7 +137,7 @@ class LoginModel extends PersistenceModel implements Validator {
 	 */
 	private function logBezoek() {
 		$db = MijnSqli::instance();
-		$uid = $this->loggedinLid->getUid();
+		$uid = $this->getLid()->getUid();
 		$datumtijd = getDateTime();
 		$locatie = '';
 		if (isset($_SERVER['REMOTE_ADDR'])) {
@@ -240,8 +248,7 @@ class LoginModel extends PersistenceModel implements Validator {
 
 		// als dat klopt laden we het profiel in en richten de sessie in
 		// Subject Assignment:
-		$this->loggedinLid = $lid;
-		$_SESSION['_uid'] = $lid->getUid();
+		$this->setLid($lid);
 
 		// sessie koppelen aan ip?
 		if ($checkip == true) {
@@ -274,18 +281,17 @@ class LoginModel extends PersistenceModel implements Validator {
 		if (in_array($suNaar->getStatus(), array('S_NOBODY', 'S_EXLID'))) {
 			throw new Exception('Kan niet su-en naar S_NOBODY of S_EXLID');
 		}
-		$_SESSION['_suedFrom'] = $this->loggedinLid->getUid();
-		$_SESSION['_uid'] = $uid;
+		$this->suedFrom = $this->getLid();
+		$_SESSION['_suedFrom'] = $this->suedFrom->getUid();
 		// Subject Assignment:
-		$this->loggedinLid = $suNaar;
+		$this->setLid($suNaar);
 	}
 
 	public function endSwitchUser() {
-		$_SESSION['_uid'] = $_SESSION['_suedFrom'];
 		// Subject Assignment:
-		$this->loggedinLid = $this->suedFrom;
-		unset($_SESSION['_suedFrom']);
+		$this->setLid($this->suedFrom);
 		$this->suedFrom = null;
+		unset($_SESSION['_suedFrom']);
 	}
 
 	public function isSued() {
@@ -300,20 +306,19 @@ class LoginModel extends PersistenceModel implements Validator {
 		return !$this->isSued() AND $lid->getUid() !== $this->getUid() AND $lid->getUid() !== 'x999' AND ! in_array($lid->getStatus(), array('S_NOBODY', 'S_EXLID'));
 	}
 
-	public static function getUid() {
-		return LoginModel::instance()->getLid()->getUid();
-	}
-
 	public function getLid() {
 		return $this->loggedinLid;
 	}
 
-	public function isAuthenticatedByToken() {
-		return $this->authenticatedByToken;
+	private function setLid(Lid $lid) {
+		$this->loggedinLid = $lid;
+		$uid = $lid->getUid();
+		$_SESSION['_uid'] = $uid;
+		LidInstellingen::instance()->prefetch('uid = ?', array($uid));
 	}
 
-	public static function mag($permission, $token_authorizable = false, $mandatory_only = false) {
-		return AccessModel::instance()->hasPermission(self::instance()->getLid(), $permission, $token_authorizable, $mandatory_only);
+	public function isAuthenticatedByToken() {
+		return $this->authenticatedByToken;
 	}
 
 }

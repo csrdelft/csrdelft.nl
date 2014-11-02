@@ -48,7 +48,11 @@ class LoginController extends AclController {
 	public function su($uid = null) {
 		$this->model->switchUser($uid);
 		setMelding('U bekijkt de webstek nu als ' . Lid::naamLink($uid, 'full', 'plain') . '!', 1);
-		redirect(HTTP_REFERER);
+		if (startsWith(REQUEST_URI, '/su')) {
+			redirect(CSR_ROOT);
+		} else {
+			redirect(HTTP_REFERER);
+		}
 	}
 
 	public function endsu() {
@@ -58,7 +62,11 @@ class LoginController extends AclController {
 			LoginModel::instance()->endSwitchUser();
 			setMelding('Switch-useractie is beëindigd.', 1);
 		}
-		redirect(HTTP_REFERER);
+		if (startsWith(REQUEST_URI, '/endsu')) {
+			redirect(CSR_ROOT);
+		} else {
+			redirect(HTTP_REFERER);
+		}
 	}
 
 	public function pauper($terug = null) {

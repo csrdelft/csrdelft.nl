@@ -22,14 +22,14 @@ class LidInstellingenView extends SmartyTemplateView {
 		$reset = LoginModel::mag('P_ADMIN');
 		foreach ($this->model->getInstellingen() as $module => $instellingen) {
 			echo '<div id="tabs-' . $module . '">';
-			foreach ($instellingen as $key => $def) {
+			foreach ($instellingen as $id) {
 				$this->smarty->assign('module', $module);
-				$this->smarty->assign('id', $key);
-				$this->smarty->assign('type', $this->model->getType($module, $key));
-				$this->smarty->assign('opties', $this->model->getTypeOptions($module, $key));
-				$this->smarty->assign('label', $this->model->getDescription($module, $key));
-				$this->smarty->assign('waarde', $this->model->getValue($module, $key));
-				$this->smarty->assign('default', $this->model->getDefault($module, $key));
+				$this->smarty->assign('id', $id);
+				$this->smarty->assign('type', $this->model->getType($module, $id));
+				$this->smarty->assign('opties', $this->model->getTypeOptions($module, $id));
+				$this->smarty->assign('label', $this->model->getDescription($module, $id));
+				$this->smarty->assign('waarde', $this->model->getValue($module, $id));
+				$this->smarty->assign('default', $this->model->getDefault($module, $id));
 				$this->smarty->assign('reset', $reset);
 				$this->smarty->display('MVC/instellingen/lidinstelling.tpl');
 			}

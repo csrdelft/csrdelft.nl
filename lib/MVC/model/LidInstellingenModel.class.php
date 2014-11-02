@@ -10,16 +10,11 @@ require_once 'MVC/model/InstellingenModel.class.php';
  * Deze class houdt de instellingen bij voor een gebruiker.
  * In de sessie en in het profiel van leden.
  */
-class LidInstellingen extends PersistenceModel {
+class LidInstellingen extends Instellingen {
 
 	const orm = 'LidInstelling';
 
 	protected static $instance;
-
-	public static function get($module, $key = null) {
-		return static::instance()->getValue($module, $key);
-	}
-
 	/**
 	 * 'module' => array( 'key' => array('beschrijving', 'type', type-opties, 'default value', technical-values) )
 	 *
@@ -33,7 +28,7 @@ class LidInstellingen extends PersistenceModel {
 	 *
 	 * @var array
 	 */
-	private $instellingen = array(
+	protected static $defaults = array(
 		'algemeen'		 => array(
 			'bijbel'		 => array('Bijbelvertaling', T::Enumeration, array('De Nieuwe Bijbelvertaling' => 'NBV', 'Bijbel in Gewone Taal' => 'BGT', 'Groot Nieuws Bijbel' => 'GNB96', 'Nije Fryske Bibeloersetting' => 'NFB', 'NBG-vertaling 1951' => 'NBG51', 'Statenvertaling (Jongbloed-editie)' => 'SVJ', 'Herziene Statenvertaling' => 'HSVI', 'Contemporary English Version' => 'CEVD', 'Good News Translation' => 'GNTD'), 'NBV'),
 			'visitekaartjes' => array('Visitekaartjes', T::Enumeration, array('ja', 'nee'), 'nee'),
@@ -94,60 +89,63 @@ class LidInstellingen extends PersistenceModel {
 		)
 	);
 
-	protected function __construct() {
-		parent::__construct();
-		$this->reload();
+	protected function retrieveByPrimaryKey(array $primary_key_values) {
+		$primary_key_values[] = LoginModel::getUid();
+		return parent::retrieveByPrimaryKey($primary_key_values);
 	}
 
-	public function has($module, $key) {
-		return array_key_exists($module, $this->instellingen) AND is_array($this->instellingen[$module]) AND array_key_exists($key, $this->instellingen[$module]);
+	protected function newInstelling($module, $id) {
+		$instelling = new LidInstelling();
+		$instelling->module = $module;
+		$instelling->instelling_id = $id;
+		$instelling->waarde = $this->getDefault($module, $id);
+		$instelling->uid = LoginModel::getUid();
+		$this->create($instelling);
+		return $instelling;
 	}
 
-	public function getInstellingen() {
-		return $this->instellingen;
+	public function getDescription($module, $id) {
+		return static::$defaults[$module][$id][0];
 	}
 
-	public function getModules() {
-		return array_keys($this->instellingen);
+	public function getType($module, $id) {
+		return static::$defaults[$module][$id][1];
 	}
 
-	public function getDescription($module, $key) {
-		return $this->instellingen[$module][$key][0];
+	public function getTypeOptions($module, $id) {
+		return static::$defaults[$module][$id][2];
 	}
 
-	public function getType($module, $key) {
-		return $this->instellingen[$module][$key][1];
+	public function getDefault($module, $id) {
+		return static::$defaults[$module][$id][3];
 	}
 
-	public function getTypeOptions($module, $key) {
-		return $this->instellingen[$module][$key][2];
+	public function getTechnicalValue($module, $id) {
+		$waarde = static::get($module, $id);
+		$index = array_search($waarde, static::$defaults[$module][$id][2]);
+		if (isset(static::$defaults[$module][$id][4]) AND isset(static::$defaults[$module][$id][4][$index])) {
+			return static::$defaults[$module][$id][4][$index];
+		}
+		return $waarde;
 	}
 
-	public function getDefault($module, $key) {
-		return $this->instellingen[$module][$key][3];
-	}
-
-	public function isValidValue($module, $key, $value) {
-		switch ($this->getType($module, $key)) {
+	public function isValidValue($module, $id, $waarde) {
+		$options = $this->getTypeOptions($module, $id);
+		switch ($this->getType($module, $id)) {
 			case T::Enumeration:
-				if (in_array($value, $this->getTypeOptions($module, $key))) {
+				if (in_array($waarde, $options)) {
 					return true;
 				}
 				break;
 
 			case T::Integer:
-				if ($value >= $this->instellingen[$module][$key][2][0] AND
-						$value <= $this->instellingen[$module][$key][2][1]
-				) {
+				if ($waarde >= $options[0] AND $waarde <= $options[1]) {
 					return true;
 				}
 				break;
 
 			case T::String:
-				if (strlen($value) >= $this->instellingen[$module][$key][2][0] AND
-						strlen($value) <= $this->instellingen[$module][$key][2][1] AND
-						preg_match('/^[\w\-_\. ]*$/', $value)
-				) {
+				if (strlen($waarde) >= $options[0] AND strlen($waarde) <= $options[1] AND preg_match('/^[\w\-_\. ]*$/', $waarde)) {
 					return true;
 				}
 				break;
@@ -155,92 +153,30 @@ class LidInstellingen extends PersistenceModel {
 		return false;
 	}
 
-	public function getTechnicalValue($module, $key) {
-		$value = $this->getValue($module, $key);
-		$id = array_search($value, $this->instellingen[$module][$key][2]);
-		if (isset($this->instellingen[$module][$key][4]) AND isset($this->instellingen[$module][$key][4][$id])) {
-			return $this->instellingen[$module][$key][4][$id];
-		}
-		return $value;
-	}
-
-	public function getValue($module, $key) {
-		if (!Instellingen::instance()->has($module, 'lid_' . $key) AND $this->has($module, $key)) {
-			// als deze instelling wel bestaat maar niet is gezet door de gebruiker
-			$this->setDefaultValue($module, $key);
-		}
-		return Instellingen::get($module, 'lid_' . $key);
-	}
-
-	public function setValue($module, $key, $value) {
-		if (!$this->has($module, $key)) {
-			return false;
-		}
-		if ($this->getType($module, $key) === T::Integer) {
-			$value = (int) $value;
-		}
-		if ($this->isValidValue($module, $key, $value)) {
-			Instellingen::setTemp($module, 'lid_' . $key, $value);
-			return true;
-		} else {
-			$this->setDefaultValue($module, $key);
-			return false;
-		}
-	}
-
-	public function setDefaultValue($module, $key) {
-		Instellingen::setTemp($module, 'lid_' . $key, $this->getDefault($module, $key));
-	}
-
-	public function reload() {
-		foreach ($this->instellingen as $module => $instellingen) {
-			foreach ($instellingen as $key => $value) {
-				$this->setDefaultValue($module, $key);
-			}
-		}
-		$instellingen = $this->find('uid = ?', array(LoginModel::getUid()));
-		foreach ($instellingen as $instelling) {
-			$ok = $this->setValue($instelling->module, $instelling->instelling_id, $instelling->waarde); // validate
-			if (!$ok) {
-				$rowcount = $this->delete($instelling);
-				if ($rowcount !== 1) {
-					throw new Exception('Niet bestaande instelling verwijderen mislukt');
-				}
-			}
-		}
-	}
-
 	public function save() {
-		$properties[] = array('uid', 'module', 'instelling_id', 'waarde');
-		foreach ($this->instellingen as $module => $instellingen) {
-			foreach ($instellingen as $key => $value) {
-				$value = filter_input(INPUT_POST, $module . '_' . $key, FILTER_SANITIZE_STRING);
-				$ok = $this->setValue($module, $key, $value); // validate
-				if ($ok) {
-					$properties[] = array(LoginModel::getUid(), $module, $key, $this->getValue($module, $key));
+		// create matrix for sqlInsertMultiple
+		$properties[] = $this->orm->getAttributes();
+
+		foreach (static::$defaults as $module => $instellingen) {
+			foreach ($instellingen as $id => $waarde) {
+				if ($this->getType($module, $id) === T::Integer) {
+					$filter = FILTER_SANITIZE_NUMBER_INT;
+				} else {
+					$filter = FILTER_SANITIZE_STRING;
 				}
+				$waarde = filter_input(INPUT_POST, $module . '_' . $id, $filter);
+				if (!$this->isValidValue($module, $id, $waarde)) {
+					$waarde = $this->getDefault($module, $id);
+				}
+				$properties[] = array($module, $id, $waarde, LoginModel::getUid());
 			}
 		}
-		Database::sqlInsertMultiple($this->orm->getTableName(), $properties);
+		Database::sqlInsertMultiple($this->orm->getTableName(), $properties, true);
 	}
 
-	public function resetForAll($module, $key) {
-		Database::sqlDelete($this->orm->getTableName(), 'module = ? AND instelling_id = ?', array($module, $key));
-	}
-
-	public function setForAll($module, $key, $value) {
-		$properties[] = array('uid', 'module', 'instelling_id', 'waarde');
-		$ok = $this->setValue($module, $key, $value); // validate
-		if (!$ok) {
-			return;
-		}
-		$value = $this->getValue($module, $key);
-		$leden = Database::sqlSelect(array('uid'), 'lid');
-		$leden->setFetchMode(PDO::FETCH_COLUMN, 0);
-		foreach ($leden as $uid) {
-			$properties[] = array($uid, $module, $key, $value);
-		}
-		Database::sqlInsertMultiple($this->orm->getTableName(), $properties);
+	public function resetForAll($module, $id) {
+		Database::sqlDelete($this->orm->getTableName(), 'module = ? AND instelling_id = ?', array($module, $id));
+		$this->flushCache();
 	}
 
 }

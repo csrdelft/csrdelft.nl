@@ -102,8 +102,8 @@ class Database extends PDO {
 		if ($groupby !== null) {
 			$sql .= ' GROUP BY ' . $groupby;
 		}
-		if (is_int($limit)) {
-			$sql .= ' LIMIT ' . (int) $start . ', ' . $limit;
+		if ($limit !== null) {
+			$sql .= ' LIMIT ' . (int) $start . ', ' . (int) $limit;
 		}
 		$query = self::instance()->prepare($sql);
 		$query->execute($params);
@@ -165,15 +165,14 @@ class Database extends PDO {
 
 	/**
 	 * Requires positional parameters.
-	 * Default REPLACE (DELETE & INSERT) if primary key already exists.
 	 * 
 	 * @param string $into
 	 * @param array $properties = array( array("attr_name1", "attr_name2", ...), array("entry1value1", "entry1value2", ...), array("entry2value1", "entry2value2", ...), ...)
-	 * @param boolean $replace
+	 * @param boolean $replace DELETE & INSERT if primary key already exists
 	 * @return int number of rows affected
 	 * @throws Exception if number of values !== number of properties
 	 */
-	public static function sqlInsertMultiple($into, array $properties, $replace = true) {
+	public static function sqlInsertMultiple($into, array $properties, $replace = false) {
 		if ($replace) {
 			$sql = 'REPLACE';
 		} else {
@@ -230,8 +229,8 @@ class Database extends PDO {
 		}
 		$sql .= implode(', ', $attributes);
 		$sql .= ' WHERE ' . $where;
-		if (is_int($limit)) {
-			$sql .= ' LIMIT ' . $limit;
+		if ($limit !== null) {
+			$sql .= ' LIMIT ' . (int) $limit;
 		}
 		$query = self::instance()->prepare($sql);
 		$query->execute($where_params);
@@ -251,8 +250,8 @@ class Database extends PDO {
 	public static function sqlDelete($from, $where, array $where_params, $limit = null) {
 		$sql = 'DELETE FROM ' . $from;
 		$sql .= ' WHERE ' . $where;
-		if (is_int($limit)) {
-			$sql .= ' LIMIT ' . $limit;
+		if ($limit !== null) {
+			$sql .= ' LIMIT ' . (int) $limit;
 		}
 		$query = self::instance()->prepare($sql);
 		$query->execute($where_params);

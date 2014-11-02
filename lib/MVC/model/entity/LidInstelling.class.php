@@ -6,19 +6,11 @@
  * @author P.W.G. Brussee <brussee@live.nl>
  * 
  * 
- * Een instelling instantie beschrijft een key-value pair voor een module.
+ * Een LidInstelling beschrijft een Instelling per Lid.
  * 
- * Bijvoorbeeld:
- * 
- * Voor maaltijden-module:
- *  - Standaard maaltijdprijs
- *  - Marge in verband met gasten
- * 
- * Voor corvee-module:
- *  - Corveepunten per jaar
- * 
+ * @see Instelling.class.php
  */
-class LidInstelling extends PersistentEntity {
+class LidInstelling extends Instelling {
 
 	/**
 	 * Uid
@@ -26,39 +18,41 @@ class LidInstelling extends PersistentEntity {
 	 */
 	public $uid;
 	/**
-	 * Module
-	 * @var string
-	 */
-	public $module;
-	/**
-	 * Key
-	 * @var string
-	 */
-	public $instelling_id;
-	/**
-	 * Value
-	 * @var string
-	 */
-	public $waarde;
-	/**
 	 * Database table columns
 	 * @var array
 	 */
 	protected static $persistent_attributes = array(
-		'uid'			 => array(T::UID),
-		'module'		 => array(T::String),
-		'instelling_id'	 => array(T::String),
-		'waarde'		 => array(T::String)
+		'uid' => array(T::UID)
 	);
 	/**
 	 * Database primary key
 	 * @var array
 	 */
-	protected static $primary_key = array('uid', 'module', 'instelling_id');
+	protected static $primary_key = array('module', 'instelling_id', 'uid');
 	/**
 	 * Database table name
 	 * @var string
 	 */
 	protected static $table_name = 'lidinstellingen';
+
+	/**
+	 * Extend the persistent attributes.
+	 */
+	public static function __constructStatic() {
+		parent::__constructStatic();
+		self::$persistent_attributes = parent::$persistent_attributes + self::$persistent_attributes;
+	}
+
+	/**
+	 * Cast values to defined type.
+	 * 
+	 * @param boolean $attributes Attributes to cast
+	 */
+	protected function castValues(array $attributes) {
+		parent::castValues($attributes);
+		if (LidInstellingen::instance()->getType($this->module, $this->instelling_id) === T::Integer) {
+			$this->waarde = (int) $this->waarde;
+		}
+	}
 
 }
