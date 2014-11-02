@@ -23,7 +23,7 @@
 			</div>
 			<div class="InstellingToggle verborgen"></div>
 			<div class="FormKnoppen">
-				<a class="knop submit confirm" title="Wijzigingen opslaan">{icon get="accept"} Opslaan</a>
+				<a class="knop submit" title="Wijzigingen opslaan">{icon get="accept"} Opslaan</a>
 				<a class="knop reset cancel" title="Annuleren" onclick="
 					$(this).parent().find('.InstellingToggle').toggle();
 					$(this).parent().parent().parent().find('.wijzigknop').toggle();

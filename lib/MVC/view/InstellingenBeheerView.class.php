@@ -38,7 +38,9 @@ class InstellingBeheerView extends SmartyTemplateView {
 	}
 
 	public function view() {
-		$this->smarty->assign('instelling', $this->model);
+		$this->smarty->assign('module', $this->model->module);
+		$this->smarty->assign('id', $this->model->instelling_id);
+		$this->smarty->assign('waarde', $this->model->waarde);
 		$this->smarty->display('MVC/instellingen/beheer/instelling_row.tpl');
 	}
 
