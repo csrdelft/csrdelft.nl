@@ -32,7 +32,7 @@
 		</thead>
 		<tbody>
 			{foreach from=$instellingen item=instelling}
-				{include file='MVC/instellingen/beheer/instelling_row.tpl' instelling=$instelling}
+				{include file='MVC/instellingen/beheer/instelling_row.tpl' instelling=InstellingenModel::instance()->getInstelling($instelling)}
 			{/foreach}
 		</tbody>
 	</table>
