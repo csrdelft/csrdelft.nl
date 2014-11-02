@@ -12,7 +12,7 @@ class InstellingenBeheerView extends SmartyTemplateView {
 
 	private $module;
 
-	public function __construct(Instellingen $instellingen, $module = null) {
+	public function __construct(Instellingen $instellingen, $module) {
 		parent::__construct($instellingen, 'Instellingenbeheer');
 		$this->module = $module;
 	}

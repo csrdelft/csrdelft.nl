@@ -1,5 +1,5 @@
 {*
-instellingen_page.tpl	|	P.W.G. Brussee (brussee@live.nl)
+	instellingen_page.tpl	|	P.W.G. Brussee (brussee@live.nl)
 *}
 <table><tr id="maalcie-melding"><td id="maalcie-melding-veld">{getMelding()}</td></tr></table>
 <h1>{$titel}</h1>
@@ -32,7 +32,7 @@ instellingen_page.tpl	|	P.W.G. Brussee (brussee@live.nl)
 		</thead>
 		<tbody>
 			{foreach from=$instellingen item=id}
-				{include file='MVC/instellingen/beheer/instelling_row.tpl' instelling=Instellingen::get($module, $id)}
+				{include file='MVC/instellingen/beheer/instelling_row.tpl' waarde=Instellingen::get($module, $id)}
 			{/foreach}
 		</tbody>
 	</table>
