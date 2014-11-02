@@ -28,7 +28,9 @@ class DebugLogModel extends PersistenceModel {
 		$entry->call_trace = $e->getTraceAsString();
 		$entry->moment = getDateTime();
 		$entry->uid = LoginModel::getUid();
-		$entry->su_uid = LoginModel::instance()->getSuedFrom()->getUid();
+		if (LoginModel::instance()->isSued()) {
+			$entry->su_uid = LoginModel::instance()->getSuedFrom()->getUid();
+		}
 		$entry->ip = $_SERVER['REMOTE_ADDR'];
 		$entry->request = REQUEST_URI;
 		$entry->referer = HTTP_REFERER;
