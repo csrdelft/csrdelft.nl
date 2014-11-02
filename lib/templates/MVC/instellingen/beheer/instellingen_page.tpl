@@ -1,5 +1,5 @@
 {*
-	instellingen_page.tpl	|	P.W.G. Brussee (brussee@live.nl)
+instellingen_page.tpl	|	P.W.G. Brussee (brussee@live.nl)
 *}
 <table><tr id="maalcie-melding"><td id="maalcie-melding-veld">{getMelding()}</td></tr></table>
 <h1>{$titel}</h1>
@@ -14,13 +14,13 @@
 	<div class="inline"><label for="toon">Toon module:</label>
 	</div><select name="toon" onchange="location.href = '/instellingenbeheer/module/' + this.value;">
 		<option selected="selected">kies</option>
-		{foreach from=$modules item=module}
-			<option value="{$module}">{$module}</option>
+		{foreach from=$modules item=m}
+			<option value="{$m}">{$m}</option>
 		{/foreach}
 	</select>
 </div>
 <br />
-{if $instellingen}
+{if $module}
 	<table id="maalcie-tabel" class="maalcie-tabel">
 		<thead>
 			<tr>
