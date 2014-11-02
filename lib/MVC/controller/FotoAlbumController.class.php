@@ -43,9 +43,10 @@ class FotoAlbumController extends AclController {
 				'albumcover'	 => 'P_ALBUM_MOD',
 				'verwijderen'	 => 'P_ALBUM_DEL',
 				'hernoemen'		 => 'P_ALBUM_MOD',
+				'roteren'		 => 'P_ALBUM_ADD',
 				'toevoegen'		 => 'P_ALBUM_ADD',
+				'bestaande'		 => 'P_ALBUM_ADD',
 				'uploaden'		 => 'P_ALBUM_ADD',
-				'roteren'		 => 'P_ALBUM_ADD'
 			);
 		}
 	}
@@ -173,32 +174,33 @@ class FotoAlbumController extends AclController {
 						redirect($album->getUrl());
 					}
 					exit;
-				} else {
-					$this->view = new JsonResponse(array('error' => $uploader->getError()), 500);
 				}
-			} else {
-				$list = array();
-				$files = scandir($album->path . '_thumbs/');
-				if ($files !== false) {
-					foreach ($files as $file) {
-						if (endsWith($file, '.jpg')) {
-							$foto = new Foto($album, $file);
-							$foto->filesize = filesize($foto->getPad());
-							$obj['name'] = $foto->filename;
-							$obj['size'] = $foto->filesize;
-							$obj['type'] = 'image/jpeg';
-							$obj['thumb'] = $foto->getThumbURL();
-							$list[] = $obj;
-						}
-					}
-				}
-				$this->view = new JsonResponse($list);
 			}
+			$this->view = new JsonResponse(array('error' => $uploader->getError()), 500);
 		} else {
 			$this->view = new CsrLayoutPage($formulier);
 			$this->view->addStylesheet($this->view->getCompressedStyleUrl('layout', 'fotoalbum'), true);
 			$this->view->addScript($this->view->getCompressedScriptUrl('layout', 'fotoalbum'), true);
 		}
+	}
+
+	public function bestaande(FotoAlbum $album) {
+		$list = array();
+		$files = scandir($album->path . '_thumbs/');
+		if ($files !== false) {
+			foreach ($files as $file) {
+				if (endsWith($file, '.jpg')) {
+					$foto = new Foto($album, $file);
+					$foto->filesize = filesize($foto->getPad());
+					$obj['name'] = $foto->filename;
+					$obj['size'] = $foto->filesize;
+					$obj['type'] = 'image/jpeg';
+					$obj['thumb'] = $foto->getThumbURL();
+					$list[] = $obj;
+				}
+			}
+		}
+		$this->view = new JsonResponse($list);
 	}
 
 	public function downloaden(FotoAlbum $album) {

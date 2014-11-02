@@ -359,7 +359,8 @@ class DropzoneForm extends Formulier {
 	public function getJavascript() {
 		$js = parent::getJavascript();
 		$mag = (LoginModel::mag('P_ALBUM_DEL') ? 'true' : 'false');
-		$del = str_replace('uploaden', 'verwijderen', $this->action);
+		$delete = str_replace('uploaden', 'verwijderen', $this->action);
+		$existing = str_replace('uploaden', 'bestaande', $this->action);
 		$accept = implode(',', $this->dropzone->getFilter());
 		$js[] = <<<JS
 thisDropzone = new Dropzone('#{$this->formId}', {
@@ -373,7 +374,7 @@ thisDropzone = new Dropzone('#{$this->formId}', {
 		}
 		var jqXHR = $.ajax({
 			type: "POST",
-			url: "{$del}",
+			url: "{$delete}",
 			cache: false,
 			data: "foto=" + file.name
 		});
@@ -386,7 +387,7 @@ thisDropzone = new Dropzone('#{$this->formId}', {
 	}
 });
 showExisting_{$this->dropzone->getName()} = function (){
-	$.post('{$this->action}', function (data) {
+	$.post('{$existing}', function (data) {
 		$.each(data, function (key, value) {
 			mockFile = { name: value.name, size: value.size, type: value.type };
 			thisDropzone.emit('addedfile', mockFile);
