@@ -1081,6 +1081,10 @@ class ForumPostsModel extends PersistenceModel implements Paging {
 
 	public function citeerForumPost(ForumPost $post) {
 		$tekst = CsrBB::filterPrive($post->tekst);
+		$verschil = substr_count($tekst, '[') - 2 * substr_count($tekst, '[/');
+		for ($i = $verschil / 2; $i > 0; $i--) {
+			$tekst .= '[/]';
+		}
 		return '[citaat=' . $post->uid . ']' . $tekst . '[/citaat]';
 	}
 
