@@ -5,7 +5,7 @@
 <td id="abonnement-cell-{$vanuid}-{$abonnement->getMaaltijdRepetitieId()}"
 	class="abonnement-{if $abonnement->getWaarschuwing()}warning{else}{if $uid}in{else}uit{/if}geschakeld{/if}"
 	title="{$abonnement->getWaarschuwing()}">
-	<a href="{Instellingen::get('taken', 'url')}/{if $uid}uit{else}in{/if}schakelen/{$abonnement->getMaaltijdRepetitieId()}/{$vanuid}" class="knop post abonnement-{if $uid}in{else}uit{/if}geschakeld">
+	<a href="{maalcieUrl}/{if $uid}uit{else}in{/if}schakelen/{$abonnement->getMaaltijdRepetitieId()}/{$vanuid}" class="knop post abonnement-{if $uid}in{else}uit{/if}geschakeld">
 		<input type="checkbox"
 			   id="box-{$vanuid}-{$abonnement->getMaaltijdRepetitieId()}"
 			   name="abo-{$abonnement->getMaaltijdRepetitieId()}"

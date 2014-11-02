@@ -11,7 +11,7 @@
 class VrijstellingForm extends ModalForm {
 
 	public function __construct($uid = null, $begin = null, $eind = null, $percentage = null) {
-		parent::__construct(null, 'maalcie-vrijstelling-form', Instellingen::get('taken', 'url') . '/opslaan' . ($uid === null ? '' : '/' . $uid));
+		parent::__construct(null, 'maalcie-vrijstelling-form', maalcieUrl . '/opslaan' . ($uid === null ? '' : '/' . $uid));
 
 		if ($uid === null) {
 			$this->titel = 'Vrijstelling aanmaken';

@@ -4,7 +4,7 @@
 {strip}
 	{if $toonverleden}
 		<div class="float-right">
-			<a href="{Instellingen::get('taken', 'url')}/verleden" title="Taken in het verleden tonen" class="knop">{icon get="time"} Toon verleden</a>
+			<a href="{maalcieUrl}/verleden" title="Taken in het verleden tonen" class="knop">{icon get="time"} Toon verleden</a>
 		</div>
 	{/if}
 	<table id="maalcie-tabel" class="maalcie-tabel">

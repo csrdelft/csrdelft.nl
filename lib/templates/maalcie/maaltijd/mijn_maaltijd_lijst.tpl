@@ -42,7 +42,7 @@
 					</div>
 				{else}
 				<td class="maaltijd-aangemeld">
-					<a href="{Instellingen::get('taken', 'url')}/afmelden/{$maaltijd->getMaaltijdId()}" class="knop post maaltijd-aangemeld"><input type="checkbox" checked="checked" /> Ja</a>
+					<a href="{maalcieUrl}/afmelden/{$maaltijd->getMaaltijdId()}" class="knop post maaltijd-aangemeld"><input type="checkbox" checked="checked" /> Ja</a>
 					{if $aanmelding->getDoorAbonnement()} (abo){/if}
 				{/if}
 			</td>
@@ -50,7 +50,7 @@
 				{if $maaltijd->getIsGesloten()}
 					{$aanmelding->getAantalGasten()}
 				{else}
-					<form action="{Instellingen::get('taken', 'url')}/gasten/{$maaltijd->getMaaltijdId()}" method="post" class="Formulier InlineForm">
+					<form action="{maalcieUrl}/gasten/{$maaltijd->getMaaltijdId()}" method="post" class="Formulier InlineForm">
 						<div class="InlineFormToggle maaltijd-gasten">{$aanmelding->getAantalGasten()}</div>
 						<div class="InputField">
 							<input type="text" name="aantal_gasten" value="{$aanmelding->getAantalGasten()}" origvalue="{$aanmelding->getAantalGasten()}" class="FormElement" maxlength="4" size="4" />
@@ -69,7 +69,7 @@
 					{/if}
 				{else}
 					{if $aanmelding->getAantalGasten() > 0}
-						<form action="{Instellingen::get('taken', 'url')}/opmerking/{$maaltijd->getMaaltijdId()}" method="post" class="Formulier InlineForm">
+						<form action="{maalcieUrl}/opmerking/{$maaltijd->getMaaltijdId()}" method="post" class="Formulier InlineForm">
 							<div class="InlineFormToggle" title="{$aanmelding->getGastenEetwens()}">
 								{if $aanmelding->getGastenEetwens()}
 									<a class="knop rounded">{icon get="comment_edit" title=$aanmelding->getGastenEetwens()}</a>
@@ -103,7 +103,7 @@
 					{/if}
 				{else}
 				<td class="maaltijd-afgemeld">
-					<a href="{Instellingen::get('taken', 'url')}/aanmelden/{$maaltijd->getMaaltijdId()}" class="knop post maaltijd-afgemeld"><input type="checkbox" /> Nee</a>
+					<a href="{maalcieUrl}/aanmelden/{$maaltijd->getMaaltijdId()}" class="knop post maaltijd-afgemeld"><input type="checkbox" /> Nee</a>
 					{/if}
 			</td>
 			<td>-</td>

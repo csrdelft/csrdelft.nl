@@ -21,7 +21,7 @@ En zet vervolgens de bonus/malus weer op nul.
 N.B. Alle corveetaken in het verleden worden bij de reset naar de prullenbak verplaatst en alle verlopen vrijstellingen worden definitief verwijderd!
 </p>
 <div class="float-right">
-	<a href="{Instellingen::get('taken', 'url')}/resetjaar" title="Reset corveejaar" class="knop confirm">{icon get="lightning"} Corveejaar resetten</a>
+	<a href="{maalcieUrl}/resetjaar" title="Reset corveejaar" class="knop confirm">{icon get="lightning"} Corveejaar resetten</a>
 </div>
 <table id="maalcie-tabel" class="maalcie-tabel">
 {foreach name=tabel from=$matrix item=puntenlijst}

@@ -19,7 +19,7 @@ class BeheerAbonnementenView extends SmartyTemplateView {
 		$this->repetities = $repetities;
 
 		$field = new LidField('voor_lid', null, 'Toon abonnementen van persoon:', 'allepersonen');
-		$this->form = new Formulier(null, 'maalcie-subform-abos', Instellingen::get('taken', 'url') . '/voorlid');
+		$this->form = new Formulier(null, 'maalcie-subform-abos', maalcieUrl . '/voorlid');
 		$this->form->addFields(array($field));
 
 		$this->status = 'abo';

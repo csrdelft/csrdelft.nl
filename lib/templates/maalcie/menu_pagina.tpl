@@ -4,23 +4,23 @@
 <div id="maalcie-menu">
 	<ul class="horizontal">
 		{assign var="link" value="/maaltijdenketzer"}
-		<li{if Instellingen::get('taken', 'url') === $link} class="active"{/if}>
+		<li{if maalcieUrl === $link} class="active"{/if}>
 			<a href="{$link}">Maaltijdenketzer</a>
 		</li>
 		{assign var="link" value="/maaltijdenabonnementen"}
-		<li{if Instellingen::get('taken', 'url') === $link} class="active"{/if}>
+		<li{if maalcieUrl === $link} class="active"{/if}>
 			<a href="{$link}">Mijn abonnementen</a>
 		</li>
 		{assign var="link" value="/corveerooster"}
-		<li{if Instellingen::get('taken', 'url') === $link} class="active"{/if}>
+		<li{if maalcieUrl === $link} class="active"{/if}>
 			<a href="{$link}">Corveerooster</a>
 		</li>
 		{assign var="link" value="/corvee"}
-		<li{if Instellingen::get('taken', 'url') === $link} class="active"{/if}>
+		<li{if maalcieUrl === $link} class="active"{/if}>
 			<a href="{$link}">Mijn corveeoverzicht</a>
 		</li>
 		{assign var="link" value="/corveevoorkeuren"}
-		<li{if Instellingen::get('taken', 'url') === $link} class="active"{/if}>
+		<li{if maalcieUrl === $link} class="active"{/if}>
 			<a href="{$link}">Mijn voorkeuren</a>
 		</li>
 	</ul>

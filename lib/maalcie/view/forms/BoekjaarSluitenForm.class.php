@@ -11,7 +11,7 @@
 class BoekjaarSluitenForm extends ModalForm {
 
 	public function __construct($beginDatum = null, $eindDatum = null) {
-		parent::__construct(null, 'maalcie-boekjaar-sluiten-form', Instellingen::get('taken', 'url') . '/sluitboekjaar');
+		parent::__construct(null, 'maalcie-boekjaar-sluiten-form', maalcieUrl . '/sluitboekjaar');
 		$this->titel = 'Boekjaar sluiten';
 
 		$fields[] = new HtmlComment('<p class="error">Dit is een onomkeerbare stap!</p>');

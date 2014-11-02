@@ -40,12 +40,12 @@
 	{/if*}
 	{if !($prullenbak or (isset($maaltijd) and $maaltijd->getIsVerwijderd()))}
 		<a class="knop" onclick="$(this).hide(); taken_show_old();">{icon get="eye"} Toon verleden</a>
-		<a href="{Instellingen::get('taken', 'url')}/nieuw{if isset($maaltijd)}/{$maaltijd->getMaaltijdId()}{/if}" title="Nieuwe taak" class="knop post modal">{icon get="add"} Nieuwe taak</a>
+		<a href="{maalcieUrl}/nieuw{if isset($maaltijd)}/{$maaltijd->getMaaltijdId()}{/if}" title="Nieuwe taak" class="knop post modal">{icon get="add"} Nieuwe taak</a>
 	{/if}
 </div>
 
 {if isset($repetities) and (!isset($maaltijd) or !$maaltijd->getIsVerwijderd())}
-	<form action="{Instellingen::get('taken', 'url')}/nieuw{if isset($maaltijd)}/{$maaltijd->getMaaltijdId()}{/if}" method="post" class="Formulier modal SubmitReset">
+	<form action="{maalcieUrl}/nieuw{if isset($maaltijd)}/{$maaltijd->getMaaltijdId()}{/if}" method="post" class="Formulier modal SubmitReset">
 		<label for="crid" style="width: auto;">{icon get="calendar_add"} Periodieke taken aanmaken:</label>&nbsp;
 		<select name="crid" value="kies" origvalue="kies" class="FormElement SubmitChange">
 			<option selected="selected">kies</option>

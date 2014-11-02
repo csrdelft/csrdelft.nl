@@ -11,7 +11,7 @@
 class MaaltijdForm extends ModalForm {
 
 	public function __construct($mid, $mrid = null, $titel = null, $limiet = null, $datum = null, $tijd = null, $prijs = null, $filter = null) {
-		parent::__construct($mrid, 'maalcie-maaltijd-form', Instellingen::get('taken', 'url') . '/opslaan/' . $mid);
+		parent::__construct($mrid, 'maalcie-maaltijd-form', maalcieUrl . '/opslaan/' . $mid);
 
 		if (!is_int($mid) || $mid < 0) {
 			throw new Exception('invalid mid');

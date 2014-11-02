@@ -20,15 +20,6 @@ class Instellingen extends CachedPersistenceModel {
 		return static::instance()->getValue($module, $id);
 	}
 
-	public function setTemp($module, $id, $waarde) {
-		$instelling = new Instelling();
-		$instelling->module = $module;
-		$instelling->instelling_id = $id;
-		$instelling->waarde = $waarde;
-		$key = static::instance()->cacheKey($instelling->getValues(true));
-		static::instance()->setCache($key, $instelling);
-	}
-
 	protected static $defaults = array(
 		'stek'		 => array(
 			'homepage'		 => 'thuis',

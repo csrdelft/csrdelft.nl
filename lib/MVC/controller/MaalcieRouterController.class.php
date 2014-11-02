@@ -43,9 +43,9 @@ class MaalcieRouterController extends AclController {
 			$this->action = 'corveemijn';
 		}
 		if ($this->action === 'corveemijn') {
-			Instellingen::setTemp('taken', 'url', '/corvee'); // strip "mijn" from url
+			define('takenUrl', '/corvee'); // strip "mijn" from url
 		} else {
-			Instellingen::setTemp('taken', 'url', '/' . $this->action);
+			define('takenUrl', '/' . $this->action);
 		}
 		$controller = parent::performAction();
 		if ($controller !== null) {

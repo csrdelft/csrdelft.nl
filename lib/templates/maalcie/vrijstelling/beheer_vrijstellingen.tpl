@@ -7,7 +7,7 @@ Op deze pagina kunt u vrijstellingen aanmaken, wijzigen en verwijderen. Ondersta
 <p>
 N.B. Pas bij het resetten van het corveejaar worden de punten toegekend (te behalen corveepunten per jaar maal het vrijstellingspercentage afgerond naar boven).
 </p>
-<div class="float-right"><a href="{Instellingen::get('taken', 'url')}/nieuw" title="Nieuwe vrijstelling" class="knop post modal">{icon get="add"} Nieuwe vrijstelling</a></div>
+<div class="float-right"><a href="{maalcieUrl}/nieuw" title="Nieuwe vrijstelling" class="knop post modal">{icon get="add"} Nieuwe vrijstelling</a></div>
 <table id="maalcie-tabel" class="maalcie-tabel">
 	<thead>
 		<tr>

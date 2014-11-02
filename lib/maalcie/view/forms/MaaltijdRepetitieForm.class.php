@@ -11,7 +11,7 @@
 class MaaltijdRepetitieForm extends ModalForm {
 
 	public function __construct($mrid, $dag = null, $periode = null, $titel = null, $tijd = null, $prijs = null, $abo = null, $limiet = null, $filter = null, $verplaats = null) {
-		parent::__construct(null, 'maalcie-maaltijd-repetitie-form', Instellingen::get('taken', 'url') . '/opslaan/' . $mrid);
+		parent::__construct(null, 'maalcie-maaltijd-repetitie-form', maalcieUrl . '/opslaan/' . $mrid);
 
 		if (!is_int($mrid) || $mrid < 0) {
 			throw new Exception('invalid mrid');
@@ -52,7 +52,7 @@ JS;
 		$fields['btn']->extraText = 'Alles bijwerken';
 		$fields['btn']->extraTitle = 'Opslaan & alle maaltijden bijwerken';
 		$fields['btn']->extraIcon = 'disk_multiple';
-		$fields['btn']->extraUrl = Instellingen::get('taken', 'url') . '/bijwerken/' . $mrid;
+		$fields['btn']->extraUrl = maalcieUrl . '/bijwerken/' . $mrid;
 		$fields['btn']->extraAction = 'submit';
 
 		$this->addFields($fields);

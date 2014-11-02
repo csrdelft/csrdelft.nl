@@ -11,7 +11,7 @@
 class RepetitieCorveeForm extends ModalForm {
 
 	public function __construct(CorveeRepetitie $repetitie, $beginDatum = null, $eindDatum = null, $mid = null) {
-		parent::__construct($mid, 'maalcie-repetitie-aanmaken-form', Instellingen::get('taken', 'url') . '/aanmaken/' . $repetitie->getCorveeRepetitieId());
+		parent::__construct($mid, 'maalcie-repetitie-aanmaken-form', maalcieUrl . '/aanmaken/' . $repetitie->getCorveeRepetitieId());
 		$this->titel = 'Periodiek corvee aanmaken';
 
 		$fields[] = new HtmlComment('<p>Aanmaken op de eerste ' . $repetitie->getDagVanDeWeekText() . 'en vervolgens ' . $repetitie->getPeriodeInDagenText() . ' in de periode:</p>');

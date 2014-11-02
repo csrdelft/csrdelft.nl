@@ -114,7 +114,7 @@ class GroepView implements View {
 class GroepForm extends Formulier {
 
 	public function __construct(Groep $groep, $action) {
-		parent::__construct($groep, 'groepform-' . $groep->id, Instellingen::get('groepen', 'url') . '/' . $action . '/' . $groep->id);
+		parent::__construct($groep, 'groepform-' . $groep->id, groepenUrl . '/' . $action . '/' . $groep->id);
 		$this->titel = get_class($groep) . ' ' . $action;
 		$this->generateFields();
 	}
@@ -124,7 +124,7 @@ class GroepForm extends Formulier {
 class GroepLidForm extends InlineForm {
 
 	public function __construct(GroepLid $groeplid) {
-		parent::__construct($groeplid, 'lidform-' . $groeplid->uid, Instellingen::get('groepen', 'url') . '/wijzigen/' . $groeplid->groep_id . '/' . $groeplid->uid, $field = new TextField('opmerking', $groeplid->opmerking, null, 255, 0, $groeplid));
+		parent::__construct($groeplid, 'lidform-' . $groeplid->uid, groepenUrl . '/wijzigen/' . $groeplid->groep_id . '/' . $groeplid->uid, $field = new TextField('opmerking', $groeplid->opmerking, null, 255, 0, $groeplid));
 		$field->suggestions = GroepFunctie::getTypeOptions();
 	}
 

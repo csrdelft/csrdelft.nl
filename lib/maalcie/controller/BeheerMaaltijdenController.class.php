@@ -174,7 +174,7 @@ class BeheerMaaltijdenController extends AclController {
 	public function leegmaken() {
 		$aantal = MaaltijdenModel::prullenbakLeegmaken();
 		setMelding($aantal . ($aantal === 1 ? ' maaltijd' : ' maaltijden') . ' definitief verwijderd.', ($aantal === 0 ? 0 : 1));
-		redirect(Instellingen::get('taken', 'url') . '/prullenbak');
+		redirect(maalcieUrl . '/prullenbak');
 	}
 
 	// Repetitie-Maaltijden ############################################################
