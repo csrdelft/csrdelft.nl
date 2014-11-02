@@ -24,8 +24,7 @@
 						{*$datatable->view()*}
 						{$body->view()}
 						{if $smarty.const.DEBUG AND (LoginModel::mag('P_ADMIN') OR LoginModel::instance()->isSued())}
-							<h2 id="mysql_debug_toggle"><a href="#mysql_debug_toggle" onclick="$('#mysql_debug').toggle();">Debug Tonen/Verstoppen</a></h2>
-							<div id="mysql_debug" class="pre">{getDebug()}</div>
+							<div><a id="mysql_debug_toggle" onclick="$(this).replaceWith($('#mysql_debug').toggle());">DEBUG</a></div>
 						{/if}
 					</td>
 				</tr>
@@ -41,6 +40,9 @@
 		{include file='MVC/layout/bbcodehulp.tpl'}
 		{if isset($minion)}
 			{$minion}
+		{/if}
+		{if $smarty.const.DEBUG AND (LoginModel::mag('P_ADMIN') OR LoginModel::instance()->isSued())}
+			<div id="mysql_debug" class="pre">{getDebug()}</div>
 		{/if}
 	</body>
 </html>
