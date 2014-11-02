@@ -175,13 +175,13 @@ class FotoAlbumController extends AclController {
 					}
 					exit;
 				}
+				$this->view = new JsonResponse(array('error' => $uploader->getError()), 500);
+				return;
 			}
-			$this->view = new JsonResponse(array('error' => $uploader->getError()), 500);
-		} else {
-			$this->view = new CsrLayoutPage($formulier);
-			$this->view->addStylesheet($this->view->getCompressedStyleUrl('layout', 'fotoalbum'), true);
-			$this->view->addScript($this->view->getCompressedScriptUrl('layout', 'fotoalbum'), true);
 		}
+		$this->view = new CsrLayoutPage($formulier);
+		$this->view->addStylesheet($this->view->getCompressedStyleUrl('layout', 'fotoalbum'), true);
+		$this->view->addScript($this->view->getCompressedScriptUrl('layout', 'fotoalbum'), true);
 	}
 
 	public function bestaande(FotoAlbum $album) {
