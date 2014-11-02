@@ -50,16 +50,41 @@ class CsrBB extends eamBBParser {
 	}
 
 	/**
+	 * Bij citeren mogen er geen ongesloten tags zijn om problemen te voorkomen.
+	 * Werkt niet bij [ubboff] / [tekst].
+	 * 
+	 * @param string $bbcode
+	 * @return string
+	 */
+	public static function sluitTags($bbcode) {
+		$verschil = self::aantalOngeslotenTags($bbcode);
+		for ($i = 0; $i < $verschil; $i++) {
+			$bbcode .= '[/]';
+		}
+		return $bbcode;
+	}
+
+	/**
+	 * Aantal ongesloten tags.
+	 * 
+	 * @param string $bbcode
+	 * @return int
+	 */
+	public static function aantalOngeslotenTags($bbcode) {
+		return substr_count($bbcode, '[') - 2 * substr_count($bbcode, '[/');
+	}
+
+	/**
 	 * Omdat we niet willen dat dingen die in privé staan alsnog gezien kunnen worden 
 	 * bij het citeren, slopen we hier alles wat in privé-tags staat weg.
 	 */
-	public static function filterPrive($string) {
+	public static function filterPrive($bbcode) {
 		// .* is greedy by default, dat wil zeggen, matched zoveel mogelijk.
 		// door er .*? van te maken matched het zo weinig mogelijk, dat is precies
 		// wat we hier willen, omdat anders [prive]foo[/prive]bar[prive]foo[/prive]
 		// niets zou opleveren.
 		// de /s modifier zorgt ervoor dat een . ook alle newlines matched.
-		return preg_replace('/\[prive=?.*?\].*?\[\/prive\]/s', '', $string);
+		return preg_replace('/\[prive=?.*?\].*?\[\/prive\]/s', '', $bbcode);
 	}
 
 	/**

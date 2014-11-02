@@ -188,6 +188,6 @@ function submitPost() {
 		dom_update(data);
 	});
 	jqXHR.fail(function (jqXHR, textStatus, errorThrown) {
-		alert(textStatus);
+		alert(jqXHR.responseJSON);
 	});
 }

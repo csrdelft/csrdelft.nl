@@ -480,7 +480,10 @@ class ForumController extends Controller {
 	 */
 	public function posten($forum_id, $draad_id = null) {
 		$deel = ForumDelenModel::instance()->getForumDeel((int) $forum_id);
-		if ($draad_id !== null) { // post in bestaand draadje
+		$url = CSR_ROOT . ($draad_id === null ? '/forum/deel/' . $deel->forum_id : '/forum/onderwerp/' . (int) $draad_id);
+
+		// post in bestaand draadje?
+		if ($draad_id !== null) {
 			$draad = ForumDradenModel::instance()->getForumDraad((int) $draad_id);
 			if ($draad->forum_id !== $deel->forum_id OR ! ForumController::magPosten($draad, $deel)) {
 				$this->geentoegang();
@@ -488,25 +491,35 @@ class ForumController extends Controller {
 		} elseif (!$deel->magPosten()) {
 			$this->geentoegang();
 		}
-		$spamtrap = filter_input(INPUT_POST, 'firstname', FILTER_UNSAFE_RAW);
-		if (!empty($spamtrap)) { //TODO: logging
-			setMelding('SPAM', -1);
-			redirect(CSR_ROOT . '/forum/deel/' . $deel->forum_id);
-		}
-		$this->concept(); // concept opslaan
+
+		// concept opslaan
+		$this->concept();
 		$tekst = $_SESSION['forum_concept'];
+
+		// spam controle
 		require_once 'simplespamfilter.class.php';
 		$filter = new SimpleSpamfilter();
-		if ($filter->isSpam($tekst)) { //TODO: logging
-			setMelding('SPAM', -1);
-			redirect(CSR_ROOT . '/forum/deel/' . $deel->forum_id);
-		}
-		// voorkomen dubbelposts
-		if (isset($_SESSION['forum_laatste_post_tekst']) AND $_SESSION['forum_laatste_post_tekst'] === $tekst) {
+		$spamtrap = filter_input(INPUT_POST, 'firstname', FILTER_UNSAFE_RAW);
+		if (!empty($spamtrap) OR $filter->isSpam($tekst)) { //TODO: logging
 			$_SESSION['forum_concept'] = '';
-			setMelding('Uw reactie is al geplaatst', 0);
-			redirect(CSR_ROOT . '/forum/deel/' . $deel->forum_id);
+			setMelding('SPAM', -1);
+			redirect(CSR_ROOT . '/forum');
 		}
+
+		// voorkom dubbelposts
+		if (isset($_SESSION['forum_laatste_post_tekst']) AND $_SESSION['forum_laatste_post_tekst'] === $tekst) {
+			setMelding('Uw reactie is al geplaatst', 0);
+			redirect($url);
+		}
+
+		// voorkom ongesloten tags
+		$aantal = CsrBB::aantalOngeslotenTags($tekst);
+		if ($aantal > 0) {
+			setMelding('Uw bericht bevat een fout in de bbcode: ' . $aantal . ' ongesloten tags', -1);
+			redirect($url);
+		}
+
+		// externen checks
 		$mailadres = null;
 		$wacht_goedkeuring = false;
 		if (!LoginModel::mag('P_LOGGED_IN')) {
@@ -514,7 +527,6 @@ class ForumController extends Controller {
 			$mailadres = filter_input(INPUT_POST, 'email', FILTER_SANITIZE_EMAIL);
 			if (!email_like($mailadres)) {
 				setMelding('U moet een geldig email-adres opgeven!', -1);
-				$url = CSR_ROOT . ($draad_id === null ? '/forum/deel/' . $deel->forum_id : '/forum/onderwerp/' . (int) $draad_id);
 				redirect($url);
 			}
 			if ($filter->isSpam($mailadres)) { //TODO: logging
@@ -522,7 +534,9 @@ class ForumController extends Controller {
 				redirect(CSR_ROOT . '/forum/deel/' . $deel->forum_id);
 			}
 		}
-		if ($draad_id === null) { // post in nieuw draadje
+
+		// post in nieuw draadje?
+		if ($draad_id === null) {
 			$titel = trim(filter_input(INPUT_POST, 'titel', FILTER_SANITIZE_STRING));
 			if (empty($titel)) {
 				setMelding('U moet een titel opgeven!', -1);
@@ -530,16 +544,22 @@ class ForumController extends Controller {
 			}
 			$draad = ForumDradenModel::instance()->maakForumDraad($deel->forum_id, $titel, $wacht_goedkeuring);
 		}
+
+		// maak post
 		$post = ForumPostsModel::instance()->maakForumPost($draad->draad_id, $tekst, $_SERVER['REMOTE_ADDR'], $wacht_goedkeuring, $mailadres);
 		$_SESSION['forum_laatste_post_tekst'] = $tekst;
 		$_SESSION['forum_concept'] = '';
 		ForumDradenGelezenModel::instance()->setWanneerGelezenDoorLid($draad);
+
+		// bericht sturen naar pubcie@csrdelft dat er een bericht op goedkeuring wacht?
 		if ($wacht_goedkeuring) {
 			setMelding('Uw bericht is opgeslagen en zal als het goedgekeurd is geplaatst worden.', 1);
-			//bericht sturen naar pubcie@csrdelft dat er een bericht op goedkeuring wacht
+
 			mail('pubcie@csrdelft.nl', 'Nieuw bericht wacht op goedkeuring', "http://csrdelft.nl/forum/onderwerp/" . $draad->draad_id . "/wacht#" . $post->post_id . "\r\n" . "\r\nDe inhoud van het bericht is als volgt: \r\n\r\n" . str_replace('\r\n', "\n", $tekst) . "\r\n\r\nEINDE BERICHT", "From: pubcie@csrdelft.nl\nReply-To: " . $mailadres);
 			redirect(CSR_ROOT . '/forum/deel/' . $deel->forum_id);
 		} else {
+
+			// direct goedkeuren voor ingelogd
 			ForumPostsModel::instance()->goedkeurenForumPost($post, $draad, $deel);
 			foreach ($draad->getVolgers() as $uid) {
 				require_once 'MVC/model/entity/Mail.class.php';
@@ -550,7 +570,8 @@ class ForumController extends Controller {
 			}
 			setMelding(($draad_id === null ? 'Draad' : 'Post') . ' succesvol toegevoegd', 1);
 		}
-		// redirect naar (altijd) juiste pagina
+
+		// redirect naar post
 		redirect(CSR_ROOT . '/forum/reactie/' . $post->post_id . '#' . $post->post_id);
 	}
 
@@ -589,7 +610,15 @@ class ForumController extends Controller {
 			$this->geentoegang();
 		}
 		$tekst = trim(filter_input(INPUT_POST, 'forumBericht', FILTER_UNSAFE_RAW));
-		$reden = trim(filter_input(INPUT_POST, 'reden', FILTER_SANITIZE_STRING));
+
+		// voorkom ongesloten tags
+		$aantal = CsrBB::aantalOngeslotenTags($tekst);
+		if ($aantal > 0) {
+			$this->view = new JsonResponse('Uw bericht bevat een fout in de bbcode: ' . $aantal . ' ongesloten tags', 400);
+			return;
+		}
+		$reden = CsrBB::sluitTags(trim(filter_input(INPUT_POST, 'reden', FILTER_SANITIZE_STRING)));
+
 		ForumPostsModel::instance()->bewerkForumPost($tekst, $reden, $post, $draad, $deel);
 		ForumDradenGelezenModel::instance()->setWanneerGelezenDoorLid($draad);
 		$this->view = new ForumPostView($post, $draad, $deel);
