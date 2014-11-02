@@ -20,7 +20,7 @@ Bij het verwijderen van een gekoppelde maaltijdrepetitie blijven de eventuele ge
 N.B. Als u kiest voor "Alles bijwerken" worden alle corveetaken die behoren tot de betreffende corveerepetitie bijgewerkt, ongeacht of ze tot een maaltijd behoren. Er worden ook extra taken aangemaakt tot aan het standaard aantal.
 </p>
 <div class="float-right">
-	<a href="{maalcieUrl}/nieuw{if isset($maaltijdrepetitie)}/{$maaltijdrepetitie->getMaaltijdRepetitieId()}{/if}" title="Nieuwe repetitie" class="knop post modal">{icon get="add"} Nieuwe repetitie</a>
+	<a href="{$smarty.const.maalcieUrl}/nieuw{if isset($maaltijdrepetitie)}/{$maaltijdrepetitie->getMaaltijdRepetitieId()}{/if}" title="Nieuwe repetitie" class="knop post modal">{icon get="add"} Nieuwe repetitie</a>
 </div>
 <table id="maalcie-tabel" class="maalcie-tabel">
 	<thead>

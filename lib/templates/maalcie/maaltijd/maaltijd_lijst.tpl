@@ -16,7 +16,7 @@
 		{if !$maaltijd->getIsGesloten()}
 			<h1 id="gesloten-melding">De maaltijd is nog niet gesloten
 				{if !$maaltijd->getIsVerwijderd() and !$maaltijd->getIsGesloten()}
-					&nbsp;<button href="{maalcieUrl}/sluit/{$maaltijd->getMaaltijdId()}" class="knop post confirm" title="Het sluiten van de maaltijd betekent dat niemand zich meer kan aanmelden voor deze maaltijd">Inschrijving sluiten</button>
+					&nbsp;<button href="{$smarty.const.maalcieUrl}/sluit/{$maaltijd->getMaaltijdId()}" class="knop post confirm" title="Het sluiten van de maaltijd betekent dat niemand zich meer kan aanmelden voor deze maaltijd">Inschrijving sluiten</button>
 				{/if}
 			</h1>
 		{/if}

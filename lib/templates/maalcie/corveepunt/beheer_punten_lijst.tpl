@@ -20,7 +20,7 @@
 	</td>{/strip}
 {/foreach}
 	<td>
-		<form action="{maalcieUrl}/wijzigpunten/{$puntenlijst.lid->getUid()}" method="post" class="Formulier InlineForm">
+		<form action="{$smarty.const.maalcieUrl}/wijzigpunten/{$puntenlijst.lid->getUid()}" method="post" class="Formulier InlineForm">
 			<div class="InlineFormToggle">{$puntenlijst.puntenTotaal}</div>
 			<div class="InputField">
 				<input type="text" name="totaal_punten" value="{$puntenlijst.puntenTotaal}" origvalue="{$puntenlijst.puntenTotaal}" class="FormElement" maxlength="4" size="4" />
@@ -32,7 +32,7 @@
 		</form>
 	</td>
 	<td>
-		<form action="{maalcieUrl}/wijzigbonus/{$puntenlijst.lid->getUid()}" method="post" class="Formulier InlineForm">
+		<form action="{$smarty.const.maalcieUrl}/wijzigbonus/{$puntenlijst.lid->getUid()}" method="post" class="Formulier InlineForm">
 			<div class="InlineFormToggle">{$puntenlijst.bonusTotaal}</div>
 			<div class="InputField">
 				<input type="text" name="totaal_bonus" value="{$puntenlijst.bonusTotaal}" origvalue="{$puntenlijst.bonusTotaal}" class="FormElement" maxlength="4" size="4" />
