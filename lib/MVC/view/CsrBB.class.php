@@ -196,6 +196,9 @@ class CsrBB extends eamBBParser {
 		if (!$album) {
 			return '<div class="bb-block">Fotoalbum niet gevonden: ' . $url . '</div>';
 		}
+		if (count($album->getFotos()) < 1) {
+			return '<div class="bb-block">Fotoalbum is leeg: ' . $url . '</div>';
+		}
 		$fotoalbumtag = new FotoAlbumBBView($album);
 		if ($this->quote_level > 0 || isset($arguments['compact'])) {
 			$fotoalbumtag->makeCompact();
