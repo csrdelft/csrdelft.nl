@@ -406,151 +406,81 @@ class CsrBB extends eamBBParser {
 	 */
 	function bb_video($arguments = array()) {
 		$content = preg_replace('|^https://|', 'http://', $this->parseArray(array('[/video]'), array()));
+		$id = null;
+		$matches = array();
 
 		//determine type and id
-		$id = '';
-		if (preg_match('/^[0-9a-zA-Z\-_]{11}$/', $content) OR strstr($content, 'youtube')) {
+		if (strstr($content, 'youtube.com') OR strstr($content, 'youtu.be') OR preg_match('/^[0-9a-zA-Z\-_]{11}$/', $content)) {
 			$type = 'youtube';
-			if (strlen($content) == 11) {
+			if (strlen($content) === 11) {
 				$id = $content;
-			} else {
-				if (preg_match('|^(http://)?(www\.)?youtube\.com/watch\?v=([0-9a-zA-Z\-_]{11}).*$|', $content, $matches) > 0) {
-					$id = $matches[3];
-				}
+			} elseif (preg_match('|^(http://)?(www\.)?youtube\.com/watch\?v=([0-9a-zA-Z\-_]{11}).*$|', $content, $matches) > 0) {
+				$id = $matches[3];
+			} elseif (preg_match('|^(http://)?(www\.)?youtu.be/([0-9a-zA-Z\-_]{11}).*$|', $content, $matches) > 0) {
+				$id = $matches[3];
 			}
+			$params['movie'] = 'https://www.youtube.com/v/' . $id . '?version=3';
 		} elseif (strstr($content, 'vimeo')) {
 			$type = 'vimeo';
 			if (preg_match('|^(http://)?(www\.)?vimeo\.com/(clip\:)?(\d+).*$|', $content, $matches) > 0) {
 				$id = $matches[4];
 			}
-		} elseif (strstr($content, '123video')) {
-			$type = '123video';
-			//example url: http://www.123video.nl/playvideos.asp?MovieID=946848
-			if (preg_match('|^(http://)?(www\.)?123video\.nl/playvideos\.asp\?MovieID=(\d+)(.*)$|', $content, $matches) > 0) {
-				$id = $matches[3];
-			}
+			$params['movie'] = 'http://vimeo.com/moogaloop.swf?clip_id=' . $id . '&amp;server=vimeo.com&amp;show_title=1&amp;show_byline=1&amp;show_portrait=0&amp;color=00ADEF&amp;fullscreen=1';
 		} elseif (strstr($content, 'dailymotion')) {
 			$type = 'dailymotion';
 			if (preg_match('|^(http://)?(www\.)?dailymotion\.com/video/([a-z0-9]+)(_.*)?$|', $content, $matches) > 0) {
 				$id = $matches[3];
 			}
+			$params['movie'] = 'http://www.dailymotion.com/swf/video/' . $id;
 		} elseif (strstr($content, 'godtube')) {
 			$type = 'godtube';
 			//example: http://www.godtube.com/watch/?v=9CFEMMNU
 			if (preg_match('|^(http://)?(www\.)?godtube\.com/watch/\?v=([a-zA-Z0-9]+)$|', $content, $matches) > 0) {
 				$id = $matches[3];
 			}
+			$params['movie'] = 'http://www.godtube.com/resource/mediaplayer/5.3/player.swf';
+			$params['flashvars'] = 'file=http://www.godtube.com/resource/mediaplayer/' . $id . '.file&image=http://www.godtube.com/resource/mediaplayer/' . $id . '.jpg&screencolor=000000&type=video&autostart=false&playonce=true&skin=http://www.godtube.com//resource/mediaplayer/skin/carbon/carbon.zip&logo.file=http://media.salemwebnetwork.com/godtube/theme/default/media/embed-logo.png&logo.link=http://www.godtube.com/watch/?v=' . $id . '&logo.position=top-left&logo.hide=false&controlbar.position=over';
+		} elseif (strstr($content, 'video.google')) {
+			$type = 'google video';
+			if (preg_match('/-?\d*/', $content)) {
+				$id = $content;
+			}
+			$params['movie'] = 'http://video.google.com/googleplayer.swf?docId=' . $id;
 		} else {
-			$type = 'unknown';
+			return '[video] Niet-ondersteunde video-website (' . mb_htmlentities($content) . ')';
 		}
 
 		//error message if no valid id found in tag content.
-		if ($id == '') {
-			return '[video (' . $type . ')] ongeldige url: (' . mb_htmlentities($content) . ')';
+		if (empty($id)) {
+			return '[video (' . $type . ')] ongeldige url (' . mb_htmlentities($content) . ')';
 		}
 
-		//video size
-		$width = 560;
-		$height = 420;
-		if (isset($arguments['width']) AND (int) $arguments['width'] > 100) {
-			$width = (int) $arguments['width'];
+		$attr['type'] = 'application/x-shockwave-flash';
+		$attr['width'] = 570;
+		$attr['height'] = 370;
+
+		$html = '<object';
+		foreach ($attr as $key => $value) {
+			$html .= ' ' . $key . '="' . $value . '"';
 		}
-		if (isset($arguments['height']) AND (int) $arguments['height'] > 100) {
-			$height = (int) $arguments['height'];
+		$html .= '>';
+
+		$params['allowscriptaccess'] = 'always';
+
+		foreach ($params as $key => $value) {
+			$html .= '<param name="' . $key . '" value="' . $value . '"></param>';
 		}
 
-		//render embed html
-		switch ($type) {
-			case 'youtube':
-				if (isset($this->youtube[$id]) AND ! isset($arguments['force'])) {
-					return '<a href="#youtube' . $content . '" onclick="youtubeDisplay(\'' . $content . '\')" >&raquo; youtube-filmpje (ergens anders op deze pagina)</a>';
-				} else {
-					//sla het youtube-id op in een array, dan plaatsen we de tweede keer dat
-					//het filmpje in een topic geplaatst wordt een linkje.
-					$this->youtube[$id] = $id;
-					return '<div id="youtube' . $id . '" class="youtubeVideo">
-						<a href="http://www.youtube.com/watch?v=' . $id . '" class="afspelen" onclick="return youtubeDisplay(\'' . $id . '\')"><img width="36" height="36" src="' . CSR_PICS . '/forum/afspelen.gif" alt="afspelen" /></a>
-						<img src="http://img.youtube.com/vi/' . $id . '/default.jpg" style="width: 130px; height: 97px;"
-							alt="klik op de afbeelding om de video te starten"/></div>';
-				}
-				break;
-			case 'vimeo':
-				return '<object width="' . $width . '" height="' . $height . '">
-					<param name="allowfullscreen" value="true" /><param name="allowscriptaccess" value="always" /><param name="movie" value="http://vimeo.com/moogaloop.swf?clip_id=' . $id . '&amp;server=vimeo.com&amp;show_title=1&amp;show_byline=1&amp;show_portrait=0&amp;color=00ADEF&amp;fullscreen=1" />
-					<embed src="http://vimeo.com/moogaloop.swf?clip_id=' . $id . '&amp;server=vimeo.com&amp;show_title=1&amp;show_byline=1&amp;show_portrait=0&amp;color=00ADEF&amp;fullscreen=1" type="application/x-shockwave-flash" allowfullscreen="true" allowscriptaccess="always" width="' . $width . '" height="' . $height . '">
-					</embed>
-				</object>';
-				break;
-			case 'dailymotion':
-				return '<object width="' . $width . '" height="' . $height . '"><param name="movie" value="http://www.dailymotion.com/swf/video/' . $id . '?width=560&theme=none"></param><param name="allowFullScreen" value="true"></param><param name="allowScriptAccess" value="always"></param><embed type="application/x-shockwave-flash" src="http://www.dailymotion.com/swf/video/' . $id . '?width=560&theme=none" width="' . $width . '" height="' . $height . '" allowfullscreen="true" allowscriptaccess="always"></embed></object>';
-				break;
-			case '123video':
-				return '<object classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000" codebase="http://fpdownload.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=7,0,0,0" id="123movie_' . $id . '" width="' . $width . '" height="' . $height . '"><param name="movie" value="http://www.123video.nl/123video_emb.swf?mediaSrc=' . $id . '" /><param name="quality" value="high" /><param name="allowScriptAccess" value="always"/> <param name="allowFullScreen" value="true"></param><embed src="http://www.123video.nl/123video_emb.swf?mediaSrc=' . $id . '" quality="high" width="' . $width . '" height="' . $height . '" allowfullscreen="true" type="application/x-shockwave-flash"  allowscriptaccess="always" pluginspage="http://www.macromedia.com/go/getflashplayer" /></object>';
-				break;
-			case 'godtube':
-				return '<object height="' . $height . '" width="' . $width . '" type="application/x-shockwave-flash" data="http://www.godtube.com/resource/mediaplayer/5.3/player.swf"><param name="movie" value="http://www.godtube.com/resource/mediaplayer/5.3/player.swf"><param name="allowfullscreen" value="true"><param name="allowscriptaccess" value="always"><param name="wmode" value="opaque"><param name="flashvars" value="file=http://www.godtube.com/resource/mediaplayer/' . $id . '.file&image=http://www.godtube.com/resource/mediaplayer/' . $id . '.jpg&screencolor=000000&type=video&autostart=false&playonce=true&skin=http://www.godtube.com//resource/mediaplayer/skin/carbon/carbon.zip&logo.file=http://media.salemwebnetwork.com/godtube/theme/default/media/embed-logo.png&logo.link=http://www.godtube.com/watch/?v=' . $id . '&logo.position=top-left&logo.hide=false&controlbar.position=over"></object>';
-			default:
-				return '[video] Niet-ondersteunde video-website (' . mb_htmlentities($content) . ')';
-				break;
-		}
-	}
+		$attr['src'] = $params['movie'];
+		unset($params['movie']);
+		$attr += $params;
 
-	private $youtube = array();
-
-	/**
-	 * Geeft een miniatuurafbeelding weer van een youtube-video waarop geklikt kan worden om
-	 * het filmpje af te spelen.
-	 * 
-	 * [youtube]youtubeid[/youtube]
-	 */
-	function bb_youtube($arguments = array()) {
-		$content = $this->parseArray(array('[/youtube]'), array());
-		//alleen de eerste 11 tekens zijn relevant...
-		$content = substr($content, 0, 11);
-		if (preg_match('/[0-9a-zA-Z\-_]{11}/', $content)) {
-			//als we in een quote-tag zijn, geen embed weergeven maar een link naar de embed,
-			//en het filmpje ook maar meteen starten.
-			if ($this->quote_level > 0 OR isset($this->youtube[$content])) {
-				$html = '<a href="#youtube' . $content . '" onclick="youtubeDisplay(\'' . $content . '\')" >&raquo; youtube-filmpje (ergens anders op deze pagina)</a>';
-			} else {
-				$html = '<div id="youtube' . $content . '" class="youtubeVideo">
-					<a href="http://www.youtube.com/watch?v=' . $content . '" class="afspelen" onclick="return youtubeDisplay(\'' . $content . '\')"><img width="36" height="36" src="' . CSR_PICS . '/forum/afspelen.gif" alt="afspelen" /></a>
-					<img src="http://img.youtube.com/vi/' . $content . '/default.jpg" style="width: 130px; height: 97px;"
-						alt="klik op de afbeelding om de video te starten"/></div>';
-				//sla het youtube-id op in een array, dan plaatsen we de tweede keer dat
-				//het filmpje in een topic geplaatst wordt een linkje.
-				$this->youtube[$content] = $content;
-			}
-		} else {
-			$html = 'Ongeldig youtube-id: ' . mb_htmlentities($content) . '. Kies alleen de 11 tekens na v=';
+		$html .= '<embed';
+		foreach ($attr as $key => $value) {
+			$html .= ' ' . $key . '="' . $value . '"';
 		}
-		return $html;
-	}
 
-	function bb_googlevideo($arguments = array()) {
-		$content = $this->parseArray(array('[/googlevideo]'), array());
-		if (preg_match('/-?\d*/', $content)) {
-			$html = '<embed style="width:400px; height:326px;" id="VideoPlayback" type="application/x-shockwave-flash"
-src="http://video.google.com/googleplayer.swf?docId=' . $content . '"></embed>';
-		} else {
-			$html = '[googlevideo] Ongeldig googlevideo-id';
-		}
-		return $html;
-	}
-
-	function bb_vimeo($arguments = array()) {
-		$content = $this->parseArray(array('[/vimeo]'), array());
-		if (preg_match('/^\d*$/', $content)) {
-			$html = '<object width="549" height="309">
-			<param name="allowfullscreen" value="true" />
-			<param name="allowscriptaccess" value="always" />
-			<param name="movie" value="http://vimeo.com/moogaloop.swf?clip_id=' . $content . '&amp;server=vimeo.com&amp;show_title=1&amp;show_byline=1&amp;show_portrait=0&amp;color=00ADEF&amp;fullscreen=1" />
-			<embed src="http://vimeo.com/moogaloop.swf?clip_id=' . $content . '&amp;server=vimeo.com&amp;show_title=1&amp;show_byline=1&amp;show_portrait=0&amp;color=00ADEF&amp;fullscreen=1" type="application/x-shockwave-flash" allowfullscreen="true" allowscriptaccess="always" width="549" height="309">
-			</embed>
-			</object>';
-		} else {
-			$html = '[vimeo] Ongeldig vimeo-id';
-		}
+		$html .= '></embed></object>';
 		return $html;
 	}
 

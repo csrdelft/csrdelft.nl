@@ -188,18 +188,6 @@ div.pasfoto img.lidfoto {
     text-decoration: underline;
 }
 
-.youtubeVideo{
-    position: relative;
-}
-
-.afspelen{
-    cursor: pointer;
-    position: absolute;
-    left: 45px;
-    top: 30px;
-    opacity: 0.7;
-}
-
 .spoiler-content{
 	display:none;	
 }

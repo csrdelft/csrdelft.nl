@@ -665,13 +665,6 @@ function parseBBCode(string, div) {
 	});
 }
 
-function youtubeDisplay(ytID) {
-	$('#youtube' + ytID).html('<object width="640" height="480">' +
-			'<param name="movie" value="http://www.youtube.com/v/' + ytID + '&autoplay=1&fs=1"></param><param name="allowFullScreen" value="true"></param>' +
-			'<embed src="http://www.youtube.com/v/' + ytID + '&autoplay=1&fs=1" type="application/x-shockwave-flash" wmode="transparent" width="640" height="480" allowfullscreen="true"></embed></object>');
-	return false;
-}
-
 function readableFileSize(size) {
 	var units = ['B', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
 	var i = 0;

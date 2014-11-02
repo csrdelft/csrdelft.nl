@@ -164,6 +164,7 @@ htdocs/layout/js/autocomplete/jquery.autocomplete.css -text
 htdocs/layout/js/autocomplete/jquery.autocomplete.js -text
 htdocs/layout/js/autocomplete/jquery.autocomplete.min.css -text
 htdocs/layout/js/autocomplete/jquery.autocomplete.min.js -text
+htdocs/layout/js/bb-slideshow.js -text
 htdocs/layout/js/bibliotheek.js -text
 htdocs/layout/js/csrdelft.dataTables.js -text
 htdocs/layout/js/csrdelft.js -text
@@ -345,7 +346,6 @@ htdocs/layout/js/roodschopper.js -text
 htdocs/layout/js/slideshow.js -text
 htdocs/layout/js/slideshow_intern.js -text
 htdocs/layout/js/suggest.js -text
-htdocs/layout/js/ubb_slideshow.js -text
 htdocs/layout/js/verticalen.js -text
 htdocs/layout/script.ini -text
 htdocs/layout/style.ini -text
