@@ -31,8 +31,8 @@
 			</tr>
 		</thead>
 		<tbody>
-			{foreach from=$instellingen item=instelling}
-				{include file='MVC/instellingen/beheer/instelling_row.tpl' instelling=InstellingenModel::instance()->getInstelling($instelling)}
+			{foreach from=$instellingen item=id}
+				{include file='MVC/instellingen/beheer/instelling_row.tpl' instelling=Instellingen::get($module, $id)}
 			{/foreach}
 		</tbody>
 	</table>
