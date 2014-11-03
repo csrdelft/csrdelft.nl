@@ -27,6 +27,10 @@ class Groepcontroller extends Controller {
 	public function __construct($querystring) {
 		parent::__construct($querystring, null);
 
+		if (!LoginModel::mag('P_LOGGED_IN')) { // nieuwe layout altijd voor uitgelogde bezoekers
+			redirect(CSR_ROOT . '/vereniging');
+		}
+
 		//groep-object inladen
 		if ($this->hasParam(0)) {
 			try {
