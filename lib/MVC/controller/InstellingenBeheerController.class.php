@@ -56,17 +56,16 @@ class InstellingenBeheerController extends AclController {
 		$this->view = new CsrLayoutPage($body);
 		$this->view->addStylesheet($this->view->getCompressedStyleUrl('layout', 'maalcie'), true);
 		$this->view->addScript($this->view->getCompressedScriptUrl('layout', 'maalcie'), true);
-
 	}
 
-	public function opslaan($module, $key) {
-		$value = filter_input(INPUT_POST, 'waarde', FILTER_UNSAFE_RAW);
-		$instelling = $this->model->wijzigInstelling($module, $key, $value);
+	public function opslaan($module, $id) {
+		$waarde = filter_input(INPUT_POST, 'waarde', FILTER_UNSAFE_RAW);
+		$instelling = $this->model->wijzigInstelling($module, $id, $waarde);
 		$this->view = new InstellingBeheerView($instelling);
 	}
 
-	public function reset($module, $key) {
-		$instelling = $this->model->resetInstelling($module, $key);
+	public function reset($module, $id) {
+		$instelling = $this->model->wijzigInstelling($module, $id, $this->model->getDefault($module, $id));
 		$this->view = new InstellingBeheerView($instelling);
 	}
 

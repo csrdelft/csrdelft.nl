@@ -90,18 +90,33 @@ class Instellingen extends CachedPersistenceModel {
 		)
 	);
 
-	public function find($criteria = null, array $criteria_params = array(), $orderby = null, $groupby = null, $limit = null, $start = 0) {
-		$result = parent::find($criteria, $criteria_params, $orderby, $groupby, $limit, $start);
-		$return = array();
-		// Haal niet-bestaande instellingen uit de database
-		foreach ($result as $instelling) {
-			if (static::has($instelling->module, $instelling->instelling_id)) {
-				$return[] = $instelling;
-			} else {
-				$this->delete($instelling);
-			}
+	protected function cacheKey(array $primary_key_values = null, $memcache = false) {
+		if ($memcache) {
+			return get_called_class();
 		}
-		return $return;
+		return parent::cacheKey($primary_key_values);
+	}
+
+	/**
+	 * Remove cached instellingen from memcache and clear runtime cache.
+	 */
+	protected function clearCache() {
+		$key = $this->cacheKey(null, true);
+		$this->unsetCache($key, true);
+		$this->flushCache(false);
+	}
+
+	public function prefetch($criteria = null, array $criteria_params = array(), $orderby = null, $groupby = null, $limit = null, $start = 0) {
+		// use memcache
+		$key = $this->cacheKey(null, true);
+		if ($this->isCached($key, true)) {
+			return $this->getCached($key, true);
+		}
+		$result = parent::prefetch($criteria, $criteria_params, $orderby, $groupby, $limit, $start);
+		if ($result) {
+			$this->setCache($key, $result, true);
+		}
+		return $result;
 	}
 
 	public function getModules() {
@@ -139,12 +154,17 @@ class Instellingen extends CachedPersistenceModel {
 	 */
 	protected function getInstelling($module, $id) {
 		$instelling = $this->retrieveByPrimaryKey(array($module, $id));
-		if (!$instelling) {
-			if (static::has($module, $id)) {
+		if (static::has($module, $id)) {
+			if (!$instelling) {
 				$instelling = $this->newInstelling($module, $id);
-			} else {
-				throw new Exception('Instelling bestaat niet: ' . $id . ' module: ' . $module);
 			}
+			return $instelling;
+		} else {
+			if ($instelling) {
+				// Haal niet-bestaande instelling uit de database
+				$this->delete($instelling);
+			}
+			throw new Exception('Instelling bestaat niet: ' . $id . ' module: ' . $module);
 		}
 		return $instelling;
 	}
@@ -155,24 +175,16 @@ class Instellingen extends CachedPersistenceModel {
 		$instelling->instelling_id = $id;
 		$instelling->waarde = $this->getDefault($module, $id);
 		$this->create($instelling);
+		$this->clearCache();
 		return $instelling;
 	}
 
 	public function wijzigInstelling($module, $id, $waarde) {
-		$instelling = new Instelling();
-		$instelling->module = $module;
-		$instelling->instelling_id = $id;
+		$instelling = $this->getInstelling($module, $id);
 		$instelling->waarde = $waarde;
 		$this->update($instelling);
+		$this->clearCache();
 		return $instelling;
-	}
-
-	public function resetInstelling($module, $id) {
-		$rowcount = $this->deleteByPrimaryKey(array($module, $id));
-		if ($rowcount !== 1) {
-			throw new Exception('Instelling resetten mislukt');
-		}
-		return $this->getInstelling($module, $id); // creates new with default value
 	}
 
 }

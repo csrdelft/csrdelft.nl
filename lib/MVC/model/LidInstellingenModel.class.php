@@ -89,6 +89,13 @@ class LidInstellingen extends Instellingen {
 		)
 	);
 
+	protected function cacheKey(array $primary_key_values = null, $memcache = false) {
+		if ($memcache) {
+			return get_called_class() . '-' . $_SESSION['_uid'];
+		}
+		return parent::cacheKey($primary_key_values);
+	}
+
 	protected function retrieveByPrimaryKey(array $primary_key_values) {
 		$primary_key_values[] = LoginModel::getUid();
 		return parent::retrieveByPrimaryKey($primary_key_values);
@@ -101,6 +108,7 @@ class LidInstellingen extends Instellingen {
 		$instelling->waarde = $this->getDefault($module, $id);
 		$instelling->uid = LoginModel::getUid();
 		$this->create($instelling);
+		$this->clearCache();
 		return $instelling;
 	}
 
@@ -172,11 +180,12 @@ class LidInstellingen extends Instellingen {
 			}
 		}
 		Database::sqlInsertMultiple($this->orm->getTableName(), $properties, true);
+		$this->clearCache();
 	}
 
 	public function resetForAll($module, $id) {
 		Database::sqlDelete($this->orm->getTableName(), 'module = ? AND instelling_id = ?', array($module, $id));
-		$this->flushCache();
+		$this->clearCache();
 	}
 
 }

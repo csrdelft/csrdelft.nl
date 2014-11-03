@@ -120,7 +120,7 @@ abstract class CachedPersistenceModel extends PersistenceModel {
 	 * @return array
 	 */
 	public function prefetch($criteria = null, array $criteria_params = array(), $orderby = null, $groupby = null, $limit = null, $start = 0) {
-		$result = parent::find($criteria, $criteria_params, $orderby, $groupby, $limit, $start);
+		$result = $this->find($criteria, $criteria_params, $orderby, $groupby, $limit, $start);
 		return $this->cacheResult($result);
 	}
 
@@ -137,7 +137,7 @@ abstract class CachedPersistenceModel extends PersistenceModel {
 	 * @return array
 	 */
 	public function prefetchSparse(array $attributes, $criteria = null, array $criteria_params = array(), $orderby = null, $groupby = null, $limit = null, $start = 0) {
-		$result = parent::findSparse($attributes, $criteria, $criteria_params, $orderby, $groupby, $limit, $start);
+		$result = $this->findSparse($attributes, $criteria, $criteria_params, $orderby, $groupby, $limit, $start);
 		return $this->cacheResult($result);
 	}
 

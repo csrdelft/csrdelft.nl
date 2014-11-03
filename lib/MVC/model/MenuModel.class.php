@@ -17,7 +17,7 @@ class MenuModel extends CachedPersistenceModel {
 	 * 
 	 * @param MenuItem $item
 	 */
-	public function clearCache(MenuItem $item) {
+	protected function clearCache(MenuItem $item) {
 		$key = $this->getRoot($item)->tekst . '-menu';
 		$this->unsetCache($key, true);
 		$this->flushCache(false);
