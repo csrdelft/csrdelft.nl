@@ -517,7 +517,7 @@ class UploadFtp extends BestandUploader {
 			if (!$this->isPosted() OR isset($_POST[$this->name . 'VerwijderVanFtp'])) {
 				echo ' checked="checked"';
 			}
-			echo ' /><label for="verwijderVanFtp" class="float-none"> Bestand verwijderen uit FTP-map</label>';
+			echo ' /><label for="verwijderVanFtp" class="VinkFieldLabel"> Bestand verwijderen uit FTP-map</label>';
 		} else {
 			echo 'Geen bestanden gevonden in:<br />ftp://csrdelft.nl/incoming/csrdelft/' . $this->subdir;
 		}
