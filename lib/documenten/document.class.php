@@ -39,6 +39,7 @@ class Document extends Bestand {
 				//zetten we de defaultwaarden voor het nieuwe document.
 				$this->setToegevoegd(getDateTime());
 				$this->setEigenaar(LoginModel::getUid());
+				$this->setLeesrechten('P_LEDEN_READ');
 			} else {
 				$db = MijnSqli::instance();
 				$query = "
@@ -205,8 +206,8 @@ class Document extends Bestand {
 		return $uid == $this->getEigenaar();
 	}
 
-	public function magBewerken() {
-		return $this->isEigenaar() OR LoginModel::mag('P_DOCS_MOD');
+	public function setLeesrechten($rechten) {
+		$this->leesrechten = $rechten;
 	}
 
 	public function getLeesrechten() {
@@ -215,6 +216,10 @@ class Document extends Bestand {
 
 	public function magBekijken() {
 		return LoginModel::mag($this->getLeesrechten());
+	}
+
+	public function magBewerken() {
+		return $this->isEigenaar() OR LoginModel::mag('P_DOCS_MOD');
 	}
 
 	public function magVerwijderen() {

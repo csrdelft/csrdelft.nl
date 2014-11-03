@@ -166,6 +166,8 @@ class DocumentController extends Controller {
 		$fields['catID'] = new SelectField('catID', $this->document->getCatID(), 'Categorie', $namen);
 		$fields['naam'] = new RequiredTextField('naam', $this->document->getNaam(), 'Documentnaam');
 		$fields['uploader'] = new RequiredFileField('document', $bestand, 'documenten/');
+		$fields['rechten'] = new RechtenField('leesrechten', $this->document->getLeesrechten(), 'Leesrechten');
+		$fields['rechten']->readonly = true;
 		$fields['btn'] = new FormKnoppen('/communicatie/documenten/');
 		$formulier = new Formulier(null, 'documentForm', '/communicatie/documenten/bewerken/' . $this->document->getId());
 		$formulier->addFields($fields);
@@ -193,6 +195,7 @@ class DocumentController extends Controller {
 				$this->document->setFileName($bestand->filename);
 				$this->document->setFileSize($bestand->filesize);
 				$this->document->setMimetype($bestand->mimetype);
+				$this->document->setLeesrechten($fields['rechten']->getValue());
 			}
 			if ($this->document->save()) {
 				try {

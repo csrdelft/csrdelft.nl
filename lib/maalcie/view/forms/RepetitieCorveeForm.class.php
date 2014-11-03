@@ -19,7 +19,7 @@ class RepetitieCorveeForm extends ModalForm {
 		$fields['eind'] = new DatumField('einddatum', $eindDatum, 'Tot en met', date('Y') + 1, date('Y'));
 		$fields['mid'] = new IntField('maaltijd_id', $mid, null);
 		$fields['mid']->hidden = true;
-		$fields['mid']->locked = true;
+		$fields['mid']->readonly = true;
 		$fields[] = new FormKnoppen();
 
 		$this->addFields($fields);

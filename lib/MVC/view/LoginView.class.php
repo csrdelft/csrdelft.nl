@@ -22,7 +22,7 @@ class LoginForm extends Formulier {
 
 		$fields['url'] = new UrlField('url', HTTP_REFERER);
 		$fields['url']->hidden = true;
-		$fields['url']->locked = true;
+		$fields['url']->readonly = true;
 
 		$this->addFields($fields);
 	}

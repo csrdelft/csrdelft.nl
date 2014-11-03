@@ -46,7 +46,7 @@ abstract class InputField implements FormElement, Validator {
 	public $description; // omschrijving in label
 	public $disabled = false; // veld uitgeschakeld?
 	public $hidden = false; // veld onzichtbaar voor gebruiker?
-	public $locked = false; // veld mag niet worden aangepast door client?
+	public $readonly = false; // veld mag niet worden aangepast door client?
 	public $required = false; // mag het veld leeg zijn?
 	public $empty_null = false; // lege waarden teruggeven als null
 	public $preview = true; // preview tonen? (waar van toepassing)
@@ -125,7 +125,7 @@ abstract class InputField implements FormElement, Validator {
 	public function validate() {
 		if (!$this->isPosted()) {
 			$this->error = 'Veld is niet gepost';
-		} elseif ($this->locked AND $this->value !== $this->origvalue) {
+		} elseif ($this->readonly AND $this->value !== $this->origvalue) {
 			$this->error = 'Dit veld mag niet worden aangepast';
 		} elseif ($this->value == '' AND $this->required) {
 			// vallen over lege velden als dat aangezet is voor het veld
@@ -225,6 +225,9 @@ abstract class InputField implements FormElement, Validator {
 				$this->css_classes[] = 'required';
 			}
 		}
+		if ($this->readonly) {
+			$this->css_classes[] = 'readonly';
+		}
 		return $this->css_classes;
 	}
 
@@ -260,7 +263,7 @@ abstract class InputField implements FormElement, Validator {
 				}
 				break;
 			case 'readonly':
-				if ($this->locked) {
+				if ($this->readonly) {
 					return 'readonly';
 				}
 				break;

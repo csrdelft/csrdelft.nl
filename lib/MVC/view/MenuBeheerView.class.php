@@ -53,7 +53,7 @@ class MenuItemForm extends ModalForm {
 		$fields['pid']->title = 'ID van het menu-item waar dit item onder valt';
 		if (!LoginModel::mag('P_ADMIN') OR $id === 'favoriet') {
 			$fields['pid']->hidden = true;
-			$fields['pid']->locked = true;
+			$fields['pid']->readonly = true;
 		}
 
 		$fields['prio'] = new IntField('prioriteit', $item->prioriteit, 'Volgorde');
@@ -68,7 +68,7 @@ class MenuItemForm extends ModalForm {
 		$fields['r']->title = 'Wie mag dit menu-item zien';
 		if (!LoginModel::mag('P_ADMIN') OR $id === 'favoriet') {
 			$fields['r']->hidden = true;
-			$fields['r']->locked = true;
+			$fields['r']->readonly = true;
 		}
 
 		$fields['z'] = new SelectField('zichtbaar', ($item->zichtbaar ? '1' : '0'), 'Tonen', array('1' => 'Zichtbaar', '0' => 'Verborgen'));
