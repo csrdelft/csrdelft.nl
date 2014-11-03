@@ -8,6 +8,10 @@
 
 require_once 'configuratie.include.php';
 
+if (!LoginModel::mag('P_LOGGED_IN')) { // nieuwe layout altijd voor uitgelogde bezoekers
+	redirect(CSR_ROOT . '/vereniging');
+}
+
 require_once 'groepen/groep.class.php';
 require_once 'groepen/groepcontent.class.php';
 require_once 'groepen/groepcontroller.class.php';
