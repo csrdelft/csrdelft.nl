@@ -122,7 +122,7 @@ class syntax_plugin_csrlink_documentlink extends DokuWiki_Syntax_Plugin {
         }
 
         //DokuWiki mimetype icons
-        $documenturl = $document->getDownloadurl();
+        $documenturl = $document->getDownloadUrl();
         list($ext, /* $mime */, /* $dl */) = mimetype($documenturl,false);
         $class = preg_replace('/[^_\-a-z0-9]+/i','_',$ext);
 

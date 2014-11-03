@@ -37,7 +37,7 @@
 				<tr class="document">
 					<td>
 						{if $document->hasFile()}
-							<a href="{$document->getDownloadurl()}">
+							<a href="{$document->getUrl()}" target="_blank">
 							{else}
 								<a title="Bestand niet gevonden..." class="filenotfound">
 								{/if}

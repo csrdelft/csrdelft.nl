@@ -21,7 +21,7 @@ class Document extends Bestand {
 	private $categorie = null; //DocumentCategorie-object van dit bestand
 	private $toegevoegd; //toevoegdatum
 	private $eigenaar;  //uid van de eigenaar
-	private $leesrechten = 'P_LEDEN_READ'; //rechten nodig om bestand te mogen downloaden
+	private $leesrechten = 'P_LEDEN_READ'; //rechten nodig om bestand te mogen bekijken en downloaden
 
 	public function __construct($init) {
 		$this->filesize = 0;  //bestandsafmeting in bytes
@@ -134,6 +134,9 @@ class Document extends Bestand {
 		$bestand->filename = $this->getFullFileName();
 		$bestand->filesize = $this->getFileSize();
 		$bestand->mimetype = $this->getMimetype();
+		if (!$this->magBekijken()) {
+			return false;
+		}
 		return $bestand;
 	}
 
@@ -142,6 +145,9 @@ class Document extends Bestand {
 	}
 
 	public function hasFile() {
+		if (!$this->magBekijken()) {
+			return false;
+		}
 		return $this->getFileName() != '' AND file_exists($this->getFullPath());
 	}
 
@@ -258,7 +264,11 @@ class Document extends Bestand {
 		return $this->getID() . '_' . $this->filename;
 	}
 
-	public function getDownloadurl() {
+	public function getUrl() {
+		return CSR_ROOT . '/communicatie/documenten/bekijken/' . $this->getID() . '/' . $this->getFullFileName();
+	}
+
+	public function getDownloadUrl() {
 		return CSR_ROOT . '/communicatie/documenten/download/' . $this->getID() . '/' . $this->getFullFileName();
 	}
 

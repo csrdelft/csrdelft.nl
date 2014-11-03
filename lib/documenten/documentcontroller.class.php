@@ -36,7 +36,7 @@ class DocumentController extends Controller {
 			//niet alle acties mag iedereen doen, hier whitelisten voor de gebruikers
 			//zonder P_DOCS_MOD, en gebruikers met, zodat bij niet bestaande acties
 			//netjes gewoon het documentoverzicht getoond wordt.
-			$allow = array('default', 'download', 'categorie');
+			$allow = array('recenttonen', 'bekijken', 'download', 'categorie');
 			if (LoginModel::mag('P_DOCS_MOD')) {
 				$allow = array_merge($allow, array('bewerken', 'toevoegen', 'verwijderen'));
 			}
@@ -97,13 +97,31 @@ class DocumentController extends Controller {
 		}
 	}
 
+	public function bekijken() {
+		$this->loadDocument();
+		if (!$this->document->magBekijken()) {
+			$this->geentoegang();
+		}
+		if ($this->document->hasFile()) {
+			$this->view = new DocumentContent($this->document);
+			$this->view->view();
+		} else {
+			setMelding('Document heeft geen bestand.', -1);
+			redirect($this->baseurl);
+		}
+		exit;
+	}
+
 	public function download() {
 		$this->loadDocument();
+		if (!$this->document->magBekijken()) {
+			$this->geentoegang();
+		}
 		if ($this->document->hasFile()) {
 			$this->view = new DocumentDownloadContent($this->document);
 			$this->view->view();
 		} else {
-			setMelding('Document heeft geen bestand, sorry voor het ongemak.', -1);
+			setMelding('Document heeft geen bestand.', -1);
 			redirect($this->baseurl);
 		}
 		exit;
