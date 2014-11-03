@@ -14,11 +14,11 @@
  * 		* JaNeeField				ja/nee
  * 		* VerticaleField			Verticalen
  * 		* KerkField					Denominaties
+ * 		* KeuzeRondjeField			Keuzerondje
+ * 
+ * 	- VinkField						Keuzevakje
  * 	- DatumField					Datums (want data is zo ambigu)
  * 	- TijdField						Tijsstip
- * 
- *  - KeuzeRondjeField				Keuzerondje
- * 	- VinkField						Keuzevakje
  * 
  */
 
@@ -231,6 +231,12 @@ class KeuzeRondjeField extends SelectField {
 
 }
 
+class RequiredKeuzeRondjeField extends KeuzeRondjeField {
+
+	public $required = true;
+
+}
+
 /**
  * DatumField
  *
@@ -370,6 +376,12 @@ JS;
 
 }
 
+class RequiredDatumField extends DatumField {
+
+	public $required = true;
+
+}
+
 class TijdField extends InputField {
 
 	protected $minutensteps;
@@ -448,6 +460,12 @@ class TijdField extends InputField {
 		echo '</select>';
 		echo '</div>';
 	}
+
+}
+
+class RequiredTijdField extends TijdField {
+
+	public $required = true;
 
 }
 

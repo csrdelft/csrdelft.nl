@@ -27,6 +27,9 @@
  * 			- BedragField			Bedragen met 2 cijfers achter de komma
  * 	- WachtwoordWijzigenField		Wachtwoorden (oude, nieuwe, nieuwe ter bevestiging)
  * 
+ * 
+ * Meer uitbreidingen van InputField @see KeuzeVelden.class.php
+ * 
  */
 
 /**
@@ -60,6 +63,8 @@ abstract class InputField implements FormElement, Validator {
 	public $css_classes = array('FormElement'); // array met classnames die later in de class-tag komen
 	public $suggestions = array(); // array met suggesties die de javascript-autocomplete aan gaat bieden
 	public $remotedatasource = ''; // een remotedatasource overruled suggestions
+	public $blacklist = null; // array met niet tegestane waarden
+	public $whitelist = null; // array met exclusief toegestane waarden
 
 	public function __construct($name, $value, $description = null, $model = null) {
 		$this->model = $model;
@@ -137,6 +142,14 @@ abstract class InputField implements FormElement, Validator {
 		// als min_len > 0 dan checken of de lengte er niet onder zit
 		if ($this->min_len > 0 AND strlen($this->value) < $this->min_len) {
 			$this->error = 'Dit veld moet minimaal ' . $this->min_len . ' tekens lang zijn';
+		}
+		// als blacklist is gezet dan controleren
+		if (is_array($this->blacklist) AND in_array($this->value, $this->blacklist)) {
+			$this->error = 'Deze waarde is niet toegestaan';
+		}
+		// als whitelist is gezet dan controleren
+		if (is_array($this->whitelist) AND ! in_array($this->value, $this->whitelist)) {
+			$this->error = 'Deze waarde is niet toegestaan';
 		}
 		return $this->error === '';
 	}

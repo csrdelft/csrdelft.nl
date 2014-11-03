@@ -17,6 +17,7 @@
  * 
  * FormElement
  *  - InputField					Elementen die data leveren
+ * 		* SelectField				Lijst van invoeropties
  *  - FileField						Bestand upload ketzer
  *  - HtmlComment					Uitleg/commentaar in een formulier stoppen
  *  - FormulierKnop					Submitten, resetten en custom functies van het formulier
