@@ -11,7 +11,7 @@
 class AccessControl extends PersistentEntity {
 
 	/**
-	 * AclController
+	 * AclController / PersistentEntity / View / etc.
 	 * @var string
 	 */
 	public $environment;
