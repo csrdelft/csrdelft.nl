@@ -23,7 +23,6 @@ class LoginForm extends Formulier {
 		$fields['url'] = new UrlField('url', HTTP_REFERER);
 		$fields['url']->empty_null = true;
 		$fields['url']->hidden = true;
-		$fields['url']->readonly = true;
 
 		$this->addFields($fields);
 	}
