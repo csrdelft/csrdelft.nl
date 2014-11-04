@@ -21,6 +21,7 @@ class LoginForm extends Formulier {
 		$fields['pauper'] = new VinkField('mobiel', LoginModel::instance()->isPauper(), null, 'Mobiel');
 
 		$fields['url'] = new UrlField('url', HTTP_REFERER);
+		$fields['url']->empty_null = true;
 		$fields['url']->hidden = true;
 		$fields['url']->readonly = true;
 
