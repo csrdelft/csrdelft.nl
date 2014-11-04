@@ -30,7 +30,9 @@ class MaaltijdAbonnementenModel {
 		$abos = self::loadAbonnementen(null, $uid);
 		foreach ($abos as $abo) { // ingeschakelde abonnementen
 			$mrid = $abo->getMaaltijdRepetitieId();
-			// ingeschakelde abonnementen altijd weergeven
+			if (!array_key_exists($mrid, $repById)) { // ingeschakelde abonnementen altijd weergeven
+				$repById[$mrid] = MaaltijdRepetitiesModel::getRepetitie($mrid);
+			}
 			$abo->setMaaltijdRepetitie($repById[$mrid]);
 			$abo->setVanUid($uid);
 			$lijst[$mrid] = $abo;
