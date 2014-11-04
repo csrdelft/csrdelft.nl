@@ -463,7 +463,7 @@ class CsrBB extends eamBBParser {
 			}
 			$params['src'] = 'http://vimeo.com/moogaloop.swf?clip_id=' . $id . '&server=vimeo.com&show_title=1&show_byline=1&show_portrait=0&color=00ADEF&fullscreen=1&autoplay=1';
 			$data = unserialize(file_get_contents('http://vimeo.com/api/v2/video/' . $id . '.php'));
-			$params['preview'] = $data[0]['thumbnail_small'];
+			$params['preview'] = $data[0]['thumbnail_medium'];
 		} elseif (strstr($content, 'dailymotion')) {
 			$type = 'dailymotion';
 			if (preg_match('|^(http://)?(www\.)?dailymotion\.com/video/([a-z0-9]+)(_.*)?$|', $content, $matches) > 0) {
