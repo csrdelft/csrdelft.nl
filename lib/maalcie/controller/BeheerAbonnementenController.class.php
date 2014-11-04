@@ -39,9 +39,8 @@ class BeheerAbonnementenController extends AclController {
 	}
 
 	private function beheer($alleenWaarschuwingen, $ingeschakeld = null) {
-		$repetities = MaaltijdRepetitiesModel::getAlleRepetities();
-		$matrix = MaaltijdAbonnementenModel::getAbonnementenMatrix($repetities, false, $alleenWaarschuwingen, $ingeschakeld);
-		$this->view = new BeheerAbonnementenView($matrix, $repetities, $alleenWaarschuwingen, $ingeschakeld);
+		$matrix_repetities = MaaltijdAbonnementenModel::getAbonnementenMatrix(false, $alleenWaarschuwingen, $ingeschakeld);
+		$this->view = new BeheerAbonnementenView($matrix_repetities[0], $matrix_repetities[1], $alleenWaarschuwingen, $ingeschakeld);
 		$this->view = new CsrLayoutPage($this->getView());
 		$this->view->addStylesheet($this->view->getCompressedStyleUrl('layout', 'maalcie'), true);
 		$this->view->addScript($this->view->getCompressedScriptUrl('layout', 'maalcie'), true);

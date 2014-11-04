@@ -81,9 +81,9 @@ class CorveeVoorkeurenModel {
 	 * @return CorveeVoorkeur[uid][crid]
 	 */
 	public static function getVoorkeurenMatrix() {
-		$matrix = array();
 		$repById = CorveeRepetitiesModel::getVoorkeurbareRepetities(true); // grouped by crid
 		$leden_voorkeuren = self::loadLedenVoorkeuren();
+		$matrix = array();
 		foreach ($leden_voorkeuren as $lv) { // build matrix
 			$crid = $lv['crid'];
 			$uid = $lv['van'];

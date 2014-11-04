@@ -69,11 +69,8 @@ class MaaltijdAbonnementenModel {
 	 * 
 	 * @return MaaltijdAbonnement[uid][mrid]
 	 */
-	public static function getAbonnementenMatrix($repetities, $alleenNovieten = false, $alleenWaarschuwingen = false, $ingeschakeld = null, $voorLid = null) {
-		$repById = array();
-		foreach ($repetities as $repetitie) {
-			$repById[$repetitie->getMaaltijdRepetitieId()] = $repetitie;
-		}
+	public static function getAbonnementenMatrix($alleenNovieten = false, $alleenWaarschuwingen = false, $ingeschakeld = null, $voorLid = null) {
+		$repById = MaaltijdRepetitiesModel::getAlleRepetities(true); // grouped by mrid
 		$abos = self::loadLedenAbonnementen($alleenNovieten, $alleenWaarschuwingen, $ingeschakeld, $voorLid);
 		$matrix = array();
 		foreach ($abos as $abo) { // build matrix
@@ -113,7 +110,7 @@ class MaaltijdAbonnementenModel {
 				ksort($matrix[$uid]);
 			}
 		}
-		return $matrix;
+		return array($matrix, $repById);
 	}
 
 	private static function loadLedenAbonnementen($alleenNovieten = false, $alleenWaarschuwingen = false, $ingeschakeld = null, $voorLid = null) {
@@ -154,8 +151,8 @@ class MaaltijdAbonnementenModel {
 	}
 
 	public static function getAbonnementenVanNovieten() {
-		$repetities = MaaltijdRepetitiesModel::getAlleRepetities();
-		return self::getAbonnementenMatrix($repetities, true);
+		$matrix_repetities = self::getAbonnementenMatrix(true);
+		return $matrix_repetities[0];
 	}
 
 	/**
