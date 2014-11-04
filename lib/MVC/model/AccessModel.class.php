@@ -408,18 +408,25 @@ class AccessModel extends CachedPersistenceModel {
 			}
 
 			// check verticale first
+			$found = false;
 			if (is_numeric($parts[0])) {
 				if ($parts[0] == $subject->getVerticaleId()) {
-					$verticale = true;
+					$found = true;
 				}
-			} elseif ($parts[0] == strtolower($subject->getVerticale()->letter)) {
-				$verticale = true;
-			} elseif ($parts[0] == strtolower($subject->getVerticale()->naam)) {
-				$verticale = true;
+			} elseif (strlen($parts[0] == 1)) {
+				$verticale = VerticalenModel::instance()->getVerticaleByLetter($parts[0]);
+				if ($verticale AND $verticale->id == $subject->getVerticaleId()) {
+					$found = true;
+				}
+			} else {
+				$verticale = $subject->getVerticale();
+				if ($verticale AND $parts[0] == strtolower($verticale->naam)) {
+					$found = true;
+				}
 			}
 
-			// no need to check functie if verticale not true
-			if ($verticale !== true) {
+			// no need to check functie if not found
+			if (!$found) {
 				return false;
 			}
 

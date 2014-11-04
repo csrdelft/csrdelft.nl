@@ -90,8 +90,8 @@ class MaaltijdAbonnementenModel {
 					$abonnement->setWaarschuwing('Geen huidig lid');
 				} elseif ($abo['kring_err']) {
 					$abonnement->setWaarschuwing('Geen actief kringlid');
-				} elseif (!MaaltijdAanmeldingenModel::checkAanmeldFilter($uid, $abo['abonnement_filter'])) {
-					$abonnement->setWaarschuwing('Niet toegestaan vanwege aanmeldrestrictie: ' . $abo['abonnement_filter']);
+				} elseif (!MaaltijdAanmeldingenModel::checkAanmeldFilter($uid, $abo['filter'])) {
+					$abonnement->setWaarschuwing('Niet toegestaan vanwege aanmeldrestrictie: ' . $abo['filter']);
 				} else {
 					continue;
 				}
@@ -103,7 +103,7 @@ class MaaltijdAbonnementenModel {
 				if (!array_key_exists($mrid, $abos)) {
 					$abonnement = new MaaltijdAbonnement(($ingeschakeld ? $mrid : null), null);
 					$abonnement->setVanUid($uid);
-					$abonnement->setMaaltijdRepetitie($repById[$mrid]);
+					$abonnement->setMaaltijdRepetitie($repetitie);
 					$matrix[$uid][$mrid] = $abonnement;
 				}
 				ksort($repById);
@@ -115,15 +115,13 @@ class MaaltijdAbonnementenModel {
 
 	private static function loadLedenAbonnementen($alleenNovieten = false, $alleenWaarschuwingen = false, $ingeschakeld = null, $voorLid = null) {
 		$sql = 'SELECT lid.uid AS van, r.mlt_repetitie_id AS mrid,';
-		if ($alleenWaarschuwingen) {
-			$sql.= ' r.abonnement_filter,'; // controleer later
-			$sql.= ' (r.abonneerbaar = false) AS abo_err, (lid.kring = 0) AS kring_err, (lid.status NOT IN("S_LID", "S_GASTLID", "S_NOVIET")) AS status_err,';
-		}
+		$sql.= ' r.abonnement_filter AS filter,'; // controleer later
+		$sql.= ' (r.abonneerbaar = false) AS abo_err, (lid.kring = 0) AS kring_err, (lid.status NOT IN("S_LID", "S_GASTLID", "S_NOVIET")) AS status_err,';
 		$sql.= ' (EXISTS ( SELECT * FROM mlt_abonnementen AS a WHERE a.mlt_repetitie_id = mrid AND a.uid = van )) AS abo';
 		$sql.= ' FROM lid, mlt_repetities AS r';
 		$values = array();
 		if ($alleenWaarschuwingen) {
-			$sql.= ' HAVING abo AND (r.abonnement_filter != "" OR abo_err OR kring_err OR status_err)'; // niet-(kring)-leden met abo
+			$sql.= ' HAVING abo AND (filter <> "" OR abo_err OR kring_err OR status_err)'; // niet-(kring)-leden met abo
 		} elseif ($voorLid !== null) { // alles voor specifiek lid
 			$sql.= ' WHERE lid.uid = ?';
 			$values[] = $voorLid;
