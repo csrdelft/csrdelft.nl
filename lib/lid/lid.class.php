@@ -598,7 +598,7 @@ class Lid implements Serializable, Agendeerbaar {
 	 */
 	public function getCorveeVoorkeuren() {
 		require_once 'maalcie/model/CorveeVoorkeurenModel.class.php';
-		return \CorveeVoorkeurenModel::getVoorkeurenVoorLid($this->getUid(), true);
+		return \CorveeVoorkeurenModel::getVoorkeurenVoorLid($this->getUid());
 	}
 
 	/**

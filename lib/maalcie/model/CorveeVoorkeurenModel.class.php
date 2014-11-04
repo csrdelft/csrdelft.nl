@@ -27,37 +27,40 @@ class CorveeVoorkeurenModel {
 	 * Voor elk ander lid worden de permissies niet gefilterd.
 	 * 
 	 * @param string $uid
-	 * @param boolean $alleenIngeschakeld 
+	 * @param boolean $uitgeschakeld 
 	 * @return CorveeVoorkeur[]
 	 */
-	public static function getVoorkeurenVoorLid($uid, $alleenIngeschakeld = false) {
+	public static function getVoorkeurenVoorLid($uid, $uitgeschakeld = true) {
 		$repById = CorveeRepetitiesModel::getVoorkeurbareRepetities(true); // grouped by crid
-		$result = array();
+		$lijst = array();
 		$voorkeuren = self::loadVoorkeuren(null, $uid);
 		foreach ($voorkeuren as $voorkeur) {
 			$crid = $voorkeur->getCorveeRepetitieId();
-			if (array_key_exists($crid, $repById)) { // ingeschakeld en voorkeurbaar
-				$voorkeur->setCorveeRepetitie($repById[$crid]);
-				$voorkeur->setVanUid($uid);
-				$result[$crid] = $voorkeur;
+			if (!array_key_exists($crid, $repById)) { // ingeschakelde voorkeuren altijd weergeven
+				$repById[$crid] = CorveeRepetitiesModel::getRepetitie($crid);
 			}
+			$voorkeur->setCorveeRepetitie($repById[$crid]);
+			$voorkeur->setVanUid($uid);
+			$lijst[$crid] = $voorkeur;
 		}
 		foreach ($repById as $crid => $repetitie) {
-			if (!$alleenIngeschakeld && !array_key_exists($crid, $result)) { // uitgeschakeld en voorkeurbaar
-				if ($repetitie->getCorveeFunctie()->kwalificatie_benodigd) {
-					require_once 'MVC/model/maalcie/KwalificatiesModel.class.php';
-					if (!KwalificatiesModel::instance()->isLidGekwalificeerdVoorFunctie($uid, $repetitie->getFunctieId())) {
-						continue;
-					}
+			if ($repetitie->getCorveeFunctie()->kwalificatie_benodigd) {
+				require_once 'MVC/model/maalcie/KwalificatiesModel.class.php';
+				if (!KwalificatiesModel::instance()->isLidGekwalificeerdVoorFunctie($uid, $repetitie->getFunctieId())) {
+					continue;
 				}
-				$voorkeur = new CorveeVoorkeur($crid, null);
-				$voorkeur->setCorveeRepetitie($repetitie);
-				$voorkeur->setVanUid($uid);
-				$result[$crid] = $voorkeur;
+			}
+			if (!array_key_exists($crid, $lijst)) { // uitgeschakelde voorkeuren weergeven
+				if ($uitgeschakeld) {
+					$voorkeur = new CorveeVoorkeur($crid, null);
+					$voorkeur->setCorveeRepetitie($repetitie);
+					$voorkeur->setVanUid($uid);
+					$lijst[$crid] = $voorkeur;
+				}
 			}
 		}
-		ksort($result);
-		return $result;
+		ksort($lijst);
+		return $lijst;
 	}
 
 	public static function getHeeftVoorkeur($crid, $uid) {
@@ -81,28 +84,27 @@ class CorveeVoorkeurenModel {
 		$matrix = array();
 		$repById = CorveeRepetitiesModel::getVoorkeurbareRepetities(true); // grouped by crid
 		$leden_voorkeuren = self::loadLedenVoorkeuren();
-		foreach ($leden_voorkeuren as $lv) {
+		foreach ($leden_voorkeuren as $lv) { // build matrix
 			$crid = $lv['crid'];
-			$uid = $lv['uid'];
-			if ($lv['voorkeur']) {
+			$uid = $lv['van'];
+			if ($lv['voorkeur']) { // ingeschakelde voorkeuren
 				$voorkeur = new CorveeVoorkeur($crid, $uid);
-			} else {
+			} else { // uitgeschakelde voorkeuren
 				$voorkeur = new CorveeVoorkeur($crid, null);
 			}
 			$voorkeur->setCorveeRepetitie($repById[$crid]);
 			$voorkeur->setVanUid($uid);
 			$matrix[$uid][$crid] = $voorkeur;
-			ksort($matrix[$uid]);
 		}
 		return array($matrix, $repById);
 	}
 
 	private static function loadLedenVoorkeuren() {
-		$sql = 'SELECT uid, crv_repetitie_id AS crid,';
-		$sql.= ' (EXISTS ( SELECT * FROM crv_voorkeuren WHERE crv_repetitie_id = crid AND uid = uid )) AS voorkeur';
-		$sql.= ' FROM lid, crv_repetities';
-		$sql.= ' WHERE voorkeurbaar = true AND lid.status IN("S_LID", "S_GASTLID", "S_NOVIET")'; // alleen leden
-		$sql.= ' ORDER BY achternaam, voornaam ASC';
+		$sql = 'SELECT lid.uid AS van, r.crv_repetitie_id AS crid,';
+		$sql.= ' (EXISTS (SELECT * FROM crv_voorkeuren AS v WHERE v.crv_repetitie_id = crid AND v.uid = van )) AS voorkeur';
+		$sql.= ' FROM lid, crv_repetities AS r';
+		$sql.= ' WHERE r.voorkeurbaar = true AND lid.status IN("S_LID", "S_GASTLID", "S_NOVIET")'; // alleen leden
+		$sql.= ' ORDER BY lid.achternaam, lid.voornaam ASC';
 		$db = \Database::instance();
 		$values = array();
 		$query = $db->prepare($sql);
@@ -147,6 +149,12 @@ class CorveeVoorkeurenModel {
 		$repetitie = CorveeRepetitiesModel::getRepetitie($crid);
 		if (!$repetitie->getIsVoorkeurbaar()) {
 			throw new Exception('Niet voorkeurbaar');
+		}
+		if ($repetitie->getCorveeFunctie()->kwalificatie_benodigd) {
+			require_once 'MVC/model/maalcie/KwalificatiesModel.class.php';
+			if (!KwalificatiesModel::instance()->isLidGekwalificeerdVoorFunctie($uid, $repetitie->getFunctieId())) {
+				throw new Exception('Niet gekwalificeerd');
+			}
 		}
 		return self::newVoorkeur($crid, $uid);
 	}

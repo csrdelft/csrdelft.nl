@@ -77,8 +77,8 @@ class MaaltijdAbonnementenModel {
 		$abos = self::loadLedenAbonnementen($alleenNovieten, $alleenWaarschuwingen, $ingeschakeld, $voorLid);
 		$matrix = array();
 		foreach ($abos as $abo) { // build matrix
-			$uid = $abo['uid'];
 			$mrid = $abo['mrid'];
+			$uid = $abo['van'];
 			if ($abo['abo']) { // ingeschakelde abonnementen
 				$abonnement = new MaaltijdAbonnement($mrid, $uid);
 			} else { // uitgeschakelde abonnementen
@@ -97,7 +97,6 @@ class MaaltijdAbonnementenModel {
 					$abonnement->setWaarschuwing('Niet toegestaan vanwege aanmeldrestrictie: ' . $abo['abonnement_filter']);
 				} else {
 					continue;
-					;
 				}
 			}
 			$matrix[$uid][$mrid] = $abonnement;
@@ -110,25 +109,25 @@ class MaaltijdAbonnementenModel {
 					$abonnement->setMaaltijdRepetitie($repById[$mrid]);
 					$matrix[$uid][$mrid] = $abonnement;
 				}
-				ksort($matrix[$uid]);
+				//ksort($matrix[$uid]);
 			}
 		}
 		return $matrix;
 	}
 
 	private static function loadLedenAbonnementen($alleenNovieten = false, $alleenWaarschuwingen = false, $ingeschakeld = null, $voorLid = null) {
-		$sql = 'SELECT uid, mlt_repetitie_id AS mrid,';
+		$sql = 'SELECT lid.uid AS van, r.mlt_repetitie_id AS mrid,';
 		if ($alleenWaarschuwingen) {
-			$sql.= ' abonnement_filter,'; // controleer later
-			$sql.= ' (abonneerbaar = false) AS abo_err, (lid.kring = 0) AS kring_err, (lid.status NOT IN("S_LID", "S_GASTLID", "S_NOVIET")) AS status_err,';
+			$sql.= ' r.abonnement_filter,'; // controleer later
+			$sql.= ' (r.abonneerbaar = false) AS abo_err, (lid.kring = 0) AS kring_err, (lid.status NOT IN("S_LID", "S_GASTLID", "S_NOVIET")) AS status_err,';
 		}
-		$sql.= ' (EXISTS ( SELECT * FROM mlt_abonnementen WHERE mlt_repetitie_id = mrid AND uid = uid )) AS abo';
-		$sql.= ' FROM lid, mlt_repetities';
+		$sql.= ' (EXISTS ( SELECT * FROM mlt_abonnementen AS a WHERE a.mlt_repetitie_id = mrid AND a.uid = van )) AS abo';
+		$sql.= ' FROM lid, mlt_repetities AS r';
 		$values = array();
 		if ($alleenWaarschuwingen) {
-			$sql.= ' HAVING abo AND (abonnement_filter != "" OR abo_err OR kring_err OR status_err)'; // niet-(kring)-leden met abo
+			$sql.= ' HAVING abo AND (r.abonnement_filter != "" OR abo_err OR kring_err OR status_err)'; // niet-(kring)-leden met abo
 		} elseif ($voorLid !== null) { // alles voor specifiek lid
-			$sql.= ' WHERE uid = ?';
+			$sql.= ' WHERE lid.uid = ?';
 			$values[] = $voorLid;
 		} elseif ($alleenNovieten) { // alles voor novieten
 			$sql.= ' WHERE lid.status = "S_NOVIET"';
@@ -138,7 +137,7 @@ class MaaltijdAbonnementenModel {
 		} else { // abonneerbaar alleen voor leden
 			$sql.= ' WHERE lid.status IN("S_LID", "S_GASTLID", "S_NOVIET")';
 		}
-		$sql.= ' ORDER BY achternaam, voornaam ASC';
+		$sql.= ' ORDER BY lid.achternaam, lid.voornaam ASC';
 		$db = \Database::instance();
 		$query = $db->prepare($sql);
 		$query->execute($values);
