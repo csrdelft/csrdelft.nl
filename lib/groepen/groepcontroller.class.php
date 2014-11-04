@@ -68,8 +68,10 @@ class Groepcontroller extends Controller {
 		$this->view->setAction('view');
 	}
 
+	/**
+	 * Wordt afgehandeld per actie
+	 */
 	protected function mag($action, $resource) {
-		// wordt afgehandeld per actie
 		return true;
 	}
 

@@ -24,14 +24,6 @@ class InstellingenBeheerController extends AclController {
 		}
 	}
 
-	public function performAction(array $args = array()) {
-		$this->action = 'module';
-		if ($this->hasParam(2)) {
-			$this->action = $this->getParam(2);
-		}
-		parent::performAction($this->getParams(3));
-	}
-
 	protected function mag($action, $resource) {
 		if (!parent::mag($action, $resource)) {
 			return false;
@@ -49,6 +41,14 @@ class InstellingenBeheerController extends AclController {
 			}
 		}
 		return true; // hoofdpagina: geen module
+	}
+
+	public function performAction(array $args = array()) {
+		$this->action = 'module';
+		if ($this->hasParam(2)) {
+			$this->action = $this->getParam(2);
+		}
+		parent::performAction($this->getParams(3));
 	}
 
 	public function module($module = null) {

@@ -39,7 +39,7 @@ class GroepenController extends Controller {
 	 */
 	protected function mag($action, $resource) {
 		if (!LoginModel::mag('P_LEDEN_READ')) {
-			$this->geentoegang();
+			return false;
 		}
 		switch ($action) {
 			case 'overzicht':

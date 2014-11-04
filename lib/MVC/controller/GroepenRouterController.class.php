@@ -43,11 +43,10 @@ class GroepenRouterController extends Controller {
 			case 'ketzers':
 			case 'activiteiten':
 			case 'conferenties':
-				return true;
+				return LoginModel::mag('P_LEDEN_READ');
 
 			default:
-				$this->action = 'commissies';
-				return true;
+				return false;
 		}
 	}
 

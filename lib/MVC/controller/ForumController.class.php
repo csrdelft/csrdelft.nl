@@ -57,6 +57,7 @@ class ForumController extends Controller {
 			case 'zoeken':
 				return true;
 
+			// Forum
 			case 'rss':
 			case 'recent':
 			case 'belangrijk':
@@ -66,7 +67,7 @@ class ForumController extends Controller {
 			case 'wacht':
 				return !$this->isPosted();
 
-
+			// ForumDeel
 			case 'aanmaken':
 			case 'beheren':
 			case 'opheffen':
@@ -74,10 +75,14 @@ class ForumController extends Controller {
 				if (!LoginModel::mag('P_FORUM_ADMIN')) {
 					return false;
 				}
+
+			// ForumPost
 			case 'citeren':
 				if (!LoginModel::mag('P_LOGGED_IN')) {
 					return false;
 				}
+
+			// ForumDraad
 			case 'wijzigen':
 			case 'posten':
 			case 'bewerken':
@@ -87,6 +92,7 @@ class ForumController extends Controller {
 			case 'offtopic':
 			case 'goedkeuren':
 
+			// ForumPost
 			case 'tekst':
 			case 'verbergen':
 			case 'tonen':
