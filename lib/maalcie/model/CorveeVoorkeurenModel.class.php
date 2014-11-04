@@ -95,6 +95,8 @@ class CorveeVoorkeurenModel {
 			$voorkeur->setCorveeRepetitie($repById[$crid]);
 			$voorkeur->setVanUid($uid);
 			$matrix[$uid][$crid] = $voorkeur;
+			ksort($repById);
+			ksort($matrix[$uid]);
 		}
 		return array($matrix, $repById);
 	}

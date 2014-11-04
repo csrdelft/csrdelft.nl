@@ -109,7 +109,8 @@ class MaaltijdAbonnementenModel {
 					$abonnement->setMaaltijdRepetitie($repById[$mrid]);
 					$matrix[$uid][$mrid] = $abonnement;
 				}
-				//ksort($matrix[$uid]);
+				ksort($repById);
+				ksort($matrix[$uid]);
 			}
 		}
 		return $matrix;
