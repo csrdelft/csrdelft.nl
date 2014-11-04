@@ -13,18 +13,6 @@ class MenuBeheerController extends AclController {
 
 	public function __construct($query) {
 		parent::__construct($query, MenuModel::instance());
-		if (!$this->isPosted()) {
-			$this->acl = array(
-				'beheer' => 'P_LOGGED_IN'
-			);
-		} else {
-			$this->acl = array(
-				'toevoegen'		 => 'P_LOGGED_IN',
-				'bewerken'		 => 'P_LOGGED_IN',
-				'verwijderen'	 => 'P_LOGGED_IN',
-				'zichtbaar'		 => 'P_LOGGED_IN'
-			);
-		}
 	}
 
 	public function performAction(array $args = array()) {
@@ -35,7 +23,7 @@ class MenuBeheerController extends AclController {
 		parent::performAction($this->getParams(3));
 	}
 
-	public function beheer($menu_name) {
+	public function beheer($menu_name = 'main') {
 		if ($menu_name != LoginModel::getUid() AND ! LoginModel::mag('P_ADMIN')) {
 			$this->geentoegang();
 		}

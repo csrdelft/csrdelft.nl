@@ -42,10 +42,22 @@ class PersistentAttribute {
 	public $extra;
 
 	public function toSQL() {
-		return $this->field . ' ' . $this->type .
-				($this->null === 'YES' ? '' : ' NOT NULL') .
-				($this->default === null ? '' : ' DEFAULT "' . $this->default . '"') .
-				(empty($this->extra) ? '' : ' ' . $this->extra);
+		$sql = $this->field . ' ' . $this->type;
+		if ($this->null === 'YES') {
+			$sql .= ' NULL';
+			if ($this->default === null) {
+				$sql .= ' DEFAULT NULL';
+			}
+		} else {
+			$sql .= ' NOT NULL';
+			if ($this->default !== null) {
+				$sql .= ' DEFAULT "' . $this->default . '"';
+			}
+		}
+		if (!empty($this->extra)) {
+			$sql .= ' ' . $this->extra;
+		}
+		return $sql;
 	}
 
 	/**

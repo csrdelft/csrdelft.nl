@@ -1,0 +1,2 @@
+CREATE TABLE acl (environment varchar(255) NOT NULL, action varchar(255) NOT NULL, resource varchar(255) NOT NULL, subject varchar(255) NOT NULL, PRIMARY KEY (environment, action, resource)) ENGINE=InnoDB DEFAULT CHARSET=utf8 auto_increment=1;
+INSERT INTO `csrdelft`.`acl` (`environment`, `action`, `resource`, `subject`) VALUES ('MenuBeheerController', 'beheer', '', 'P_LOGGED_IN');

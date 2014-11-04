@@ -138,11 +138,11 @@ abstract class Controller {
 		return method_exists($this, $action);
 	}
 
-	abstract protected function mag($action);
+	abstract protected function mag($action, $resource = '');
 
 	public function performAction(array $args = array()) {
 		if (!$this->mag($this->action)) {
-			//DebugLogModel::instance()->log(get_called_class(), $this->action, $args, 'geentoegang');
+			//DebugLogModel::instance()->log(get_class($this), $this->action, $args, 'geentoegang');
 			$this->action = 'geentoegang';
 		}
 		if (!$this->hasAction($this->action)) {

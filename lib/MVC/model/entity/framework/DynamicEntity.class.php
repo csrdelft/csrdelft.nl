@@ -48,7 +48,7 @@ class DynamicEntity extends PersistentEntity {
 	}
 
 	public function __get($attribute) {
-		if (property_exists(get_called_class(), $attribute)) {
+		if (property_exists(get_class($this), $attribute)) {
 			return $this->$attribute;
 		}
 		return null;

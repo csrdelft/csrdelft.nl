@@ -92,7 +92,7 @@ class Instellingen extends CachedPersistenceModel {
 
 	protected function cacheKey(array $primary_key_values = null, $memcache = false) {
 		if ($memcache) {
-			return get_called_class();
+			return get_class($this);
 		}
 		return parent::cacheKey($primary_key_values);
 	}

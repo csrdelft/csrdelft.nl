@@ -45,13 +45,13 @@ class CmsPaginaController extends Controller {
 		parent::performAction(array($naam));
 	}
 
-	protected function mag($action) {
+	protected function mag($action, $resource = '') {
 		return true; // check permission on page itself
 	}
 
 	public function bekijken($naam) {
 		$pagina = $this->model->getPagina($naam);
-		if (!($pagina instanceof CmsPagina)) { // 404
+		if (!$pagina) { // 404
 			$pagina = $this->model->getPagina('thuis');
 		}
 		if (!$pagina->magBekijken()) { // 403
@@ -76,7 +76,7 @@ class CmsPaginaController extends Controller {
 
 	public function bewerken($naam) {
 		$pagina = $this->model->getPagina($naam);
-		if (!($pagina instanceof CmsPagina)) {
+		if (!$pagina) {
 			$pagina = $this->model->newPagina($naam);
 		}
 		if (!$pagina->magBewerken()) {

@@ -34,22 +34,24 @@ try {
 	$controller = new $class(REQUEST_URI);
 	$controller->performAction();
 
-	if (DB_MODIFY AND LoginModel::mag('P_ADMIN')) {
+	if (DB_CHECK AND LoginModel::mag('P_ADMIN')) {
 
 		require_once 'MVC/model/framework/DatabaseAdmin.singleton.php';
 		$queries = DatabaseAdmin::getQueries();
 
 		if (empty($queries)) {
-			if (!DEBUG) {
+			if (DB_MODIFY AND ! DEBUG) {
 				setMelding('DB_MODIFY ENABLED', 2);
 			}
-		} else {
+		} elseif (DB_MODIFY) {
 			header('Content-Type: text/x-sql');
 			header('Content-Disposition: attachment;filename=DB_modify_' . time() . '.sql');
 			foreach ($queries as $query) {
 				echo $query . ";\n";
 			}
 			exit;
+		} else {
+			debugprint($queries);
 		}
 	}
 

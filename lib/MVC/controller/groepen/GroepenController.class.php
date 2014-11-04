@@ -37,7 +37,7 @@ class GroepenController extends Controller {
 	 * 
 	 * @return boolean
 	 */
-	protected function mag($action) {
+	protected function mag($action, $resource = '') {
 		if (!LoginModel::mag('P_LEDEN_READ')) {
 			$this->geentoegang();
 		}

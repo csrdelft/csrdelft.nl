@@ -31,6 +31,9 @@ class MenuModel extends CachedPersistenceModel {
 	 * @return MenuItem root
 	 */
 	public function getMenu($naam) {
+		if (empty($naam)) {
+			return null;
+		}
 		$key = $naam . '-menu';
 		if ($this->isCached($key, true)) {
 			return $this->getCached($key, true);
@@ -47,6 +50,7 @@ class MenuModel extends CachedPersistenceModel {
 				// maak favorieten menu 
 				$root->link = '/menubeheer/beheer/' . $naam;
 			}
+			$root->link = '';
 			$this->create($root);
 		}
 		$this->setCache($key, $root, true);
@@ -90,7 +94,7 @@ class MenuModel extends CachedPersistenceModel {
 		if (LoginModel::mag('P_ADMIN')) {
 			return $this->find('parent_id = ?', array(0), 'tekst DESC');
 		} else {
-			return array();
+			return false;
 		}
 	}
 

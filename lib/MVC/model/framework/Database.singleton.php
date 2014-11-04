@@ -74,7 +74,11 @@ class Database extends PDO {
 			} else {
 				$attributes[] = '/[?]/';
 			}
-			$params[$attribute] = '"' . $value . '"'; // quotes
+			if (is_string($value)) {
+				$params[$attribute] = '"' . $value . '"'; // quotes
+			} else {
+				$params[$attribute] = $value;
+			}
 		}
 		return preg_replace($attributes, $params, $query, 1);
 	}

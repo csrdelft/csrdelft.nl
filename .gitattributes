@@ -3385,6 +3385,7 @@ lib/MVC/model/MenuModel.class.php -text
 lib/MVC/model/Paging.interface.php -text
 lib/MVC/model/TimerModel.class.php -text
 lib/MVC/model/VerticalenModel.class.php -text
+lib/MVC/model/entity/AccessControl.class.php -text
 lib/MVC/model/entity/Afbeelding.class.php -text
 lib/MVC/model/entity/AgendaItem.class.php -text
 lib/MVC/model/entity/Bestand.class.php -text
@@ -4426,3 +4427,4 @@ sql/6175_forum_gedeeld_met.sql -text
 sql/6320_maalcie_int_prijzen.sql -text
 sql/6391_execution_times.sql -text
 sql/6421_ongelezen.txt -text
+sql/6743_acl.sql -text

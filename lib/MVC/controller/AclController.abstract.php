@@ -23,10 +23,13 @@ abstract class AclController extends Controller {
 	 * @see LoginModel::mag()
 	 * @var array
 	 */
-	protected $acl = array();
+	protected $acl;
 
-	protected function mag($action) {
-		return array_key_exists($action, $this->acl) && isset($this->acl[$action]) && LoginModel::mag($this->acl[$action]);
+	protected function mag($action, $resource = '') {
+		if (isset($this->acl[$action])) {
+			return LoginModel::mag($this->acl[$action]);
+		}
+		return LoginModel::mag(AccessModel::get(get_class($this), $action, $resource));
 	}
 
 }

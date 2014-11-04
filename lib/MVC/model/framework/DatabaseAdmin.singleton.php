@@ -133,10 +133,12 @@ class DatabaseAdmin extends Database {
 	public static function sqlDropTable($name) {
 		$sql = 'DROP TABLE ' . $name;
 		$query = self::instance()->prepare($sql);
+		$esc = '-- ';
 		if (DB_MODIFY AND DB_DROP === true) {
 			$query->execute();
+			$esc = '';
 		}
-		self::$queries[] = $query->queryString;
+		self::$queries[] = $esc . $query->queryString;
 	}
 
 	public static function sqlAddAttribute($table, PersistentAttribute $attribute, $after_attribute = null) {
@@ -161,10 +163,12 @@ class DatabaseAdmin extends Database {
 	public static function sqlDeleteAttribute($table, PersistentAttribute $attribute) {
 		$sql = 'ALTER TABLE ' . $table . ' DROP ' . $attribute->field;
 		$query = self::instance()->prepare($sql);
+		$esc = '-- ';
 		if (DB_MODIFY AND DB_DROP === true) {
 			$query->execute();
+			$esc = '';
 		}
-		self::$queries[] = $query->queryString;
+		self::$queries[] = $esc . $query->queryString;
 	}
 
 }

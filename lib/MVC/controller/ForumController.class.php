@@ -52,7 +52,7 @@ class ForumController extends Controller {
 	 * @param string $action
 	 * @return boolean
 	 */
-	protected function mag($action) {
+	protected function mag($action, $resource = '') {
 		switch ($action) {
 			case 'zoeken':
 				return true;

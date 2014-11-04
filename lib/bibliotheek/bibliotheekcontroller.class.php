@@ -55,7 +55,7 @@ class BibliotheekController extends Controller {
 	/**
 	 * Wordt op diverse plekken geregeld.
 	 */
-	protected function mag($action) {
+	protected function mag($action, $resource = '') {
 		return true;
 	}
 

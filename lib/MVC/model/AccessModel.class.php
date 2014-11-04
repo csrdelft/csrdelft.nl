@@ -8,18 +8,27 @@ require_once 'MVC/model/LoginModel.class.php';
  * @author Jan Pieter Waagmeester <jieter@jpwaag.com>
  * @author P.W.G. Brussee <brussee@live.nl>
  * 
- * Role-based access control
- * @see http://en.wikipedia.org/wiki/Role-based_access_control
+ * RBAC met MAC en DAC implementatie.
+ * 
  */
 class AccessModel extends CachedPersistenceModel {
 
-	const orm = 'LoginSession';
+	const orm = 'AccessControl';
 
 	protected static $instance;
+
+	public static function get($environment, $action, $resource) {
+		$ac = static::instance()->getAccessControl($environment, $action, $resource);
+		if ($ac) {
+			return $ac->subject;
+		}
+		return null;
+	}
+
 	/**
 	 * Partially ordered Role Hierarchy:
 	 * 
-	 * TODO: A subject can have multiple roles.
+	 * WONTFIX: A subject can have multiple roles.
 	 * A role can have multiple subjects.
 	 * A role can have many permissions.
 	 * A permission can be assigned to many roles.
@@ -39,8 +48,12 @@ class AccessModel extends CachedPersistenceModel {
 	private static $dac = array('verticale', 'groep', 'geslacht', 'lidjaar', 'lichting', 'ouderjaars', 'eerstejaars');
 
 	protected function __construct() {
-		//TODO: parent::__construct();
+		parent::__construct();
 		$this->loadPermissions();
+	}
+
+	private function getAccessControl($environment, $action, $resource) {
+		return $this->retrieveByPrimaryKey(array($environment, $action, $resource));
 	}
 
 	public function getValidPerms($mandatory_only = false) {
@@ -118,7 +131,7 @@ class AccessModel extends CachedPersistenceModel {
 			'P_VERJAARDAGEN'	 => $this->createPermStr(1, 1), // Verjaardagen van leden zien
 			'P_LEDEN_READ'		 => $this->createPermStr(1 + 2, 1), // Gegevens van leden raadplegen
 			'P_OUDLEDEN_READ'	 => $this->createPermStr(1 + 2 + 4, 1), // Gegevens van oudleden raadplegen
-			'P_LEDEN_MOD'		 => $this->createPermStr(1 + 2 + 4 + 6, 1), // (Oud)ledengegevens aanpassen
+			'P_LEDEN_MOD'		 => $this->createPermStr(1 + 2 + 4 + 8, 1), // (Oud)ledengegevens aanpassen
 			'P_FORUM_READ'		 => $this->createPermStr(1, 2), // Forum lezen
 			'P_FORUM_POST'		 => $this->createPermStr(1 + 2, 2), // Berichten plaatsen op het forum en eigen berichten wijzigen
 			'P_FORUM_MOD'		 => $this->createPermStr(1 + 2 + 4, 2), // Forum-moderator mag berichten van anderen wijzigen of verwijderen

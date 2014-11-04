@@ -32,8 +32,8 @@ class InstellingenBeheerController extends AclController {
 		parent::performAction($this->getParams(3));
 	}
 
-	protected function mag($action) {
-		if (!parent::mag($action)) {
+	protected function mag($action, $resource = '') {
+		if (!parent::mag($action, $resource)) {
 			return false;
 		}
 		if ($this->hasParam(3)) {

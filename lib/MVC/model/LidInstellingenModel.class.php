@@ -91,7 +91,7 @@ class LidInstellingen extends Instellingen {
 
 	protected function cacheKey(array $primary_key_values = null, $memcache = false) {
 		if ($memcache) {
-			return get_called_class() . '-' . $_SESSION['_uid'];
+			return get_class($this) . '-' . $_SESSION['_uid'];
 		}
 		return parent::cacheKey($primary_key_values);
 	}

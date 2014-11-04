@@ -352,7 +352,7 @@ class UploadHttp extends BestandUploader {
 			$this->error = 'Bestand is te groot: Maximaal ' . ini_get('upload_max_filesize') . 'B';
 		} elseif ($this->value['error'] != UPLOAD_ERR_OK) {
 			$this->error = 'Upload-error: code ' . $this->value['error'];
-			DebugLogModel::instance()->log(get_called_class(), 'validate', array(), $this->error);
+			DebugLogModel::instance()->log(get_class($this), 'validate', array(), $this->error);
 		}
 		return $this->error === '';
 	}

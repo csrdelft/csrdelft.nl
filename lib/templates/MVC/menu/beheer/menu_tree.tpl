@@ -2,7 +2,7 @@
 	menu_tree.tpl	|	P.W.G. Brussee (brussee@live.nl)
 *}
 {getMelding()}
-{if count($menus) > 1}
+{if $menus}
 	<div class="float-right">
 		<label>Toon menu:</label>
 		<select name="toon" onchange="location.href = '/menubeheer/beheer/' + this.value;">
