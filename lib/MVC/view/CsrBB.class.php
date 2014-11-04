@@ -488,7 +488,7 @@ class CsrBB extends eamBBParser {
 		}
 
 		if (empty($type) OR empty($id)) {
-			return internal_url($content, mb_htmlentities($content));
+			return '[video] Niet-ondersteunde video-website (' . mb_htmlentities($content) . ')';
 		}
 		return $this->video_preview($attr);
 	}
