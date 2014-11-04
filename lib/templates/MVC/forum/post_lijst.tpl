@@ -69,7 +69,7 @@
 			{if $post->bewerkt_tekst}
 				<div class="bewerkt clear">
 					<hr />
-					{$post->bewerkt_tekst|replace:"[":"&#91;"|bbcode}
+					{$post->bewerkt_tekst|bbcode|replace:"&#91;":"["}
 				</div>
 			{/if}
 		</div>
