@@ -32,7 +32,7 @@
 	clear: both;
 	overflow: auto;
 }
-.markItUpPreviewFrame	{
+.markItUpPreviewFrame {
 	overflow: auto;
 	background-color: #FFF;
 	width: 99.9%;
@@ -71,13 +71,17 @@
 .markItUpHeader ul {
 	padding: 0 !important;
 }
-.markItUpHeader ul li	{
+.markItUpHeader ul li {
 	list-style: none;
 	float: left;
 	position: relative;
 	padding: 4px;
 }
-.markItUpHeader ul li:hover > ul{
+.markItUpHeader ul li.markItUpButton:hover {
+	padding: 3px;
+	border: 1px solid #D3D3D3;
+}
+.markItUpHeader ul li:hover > ul {
 	display: block;
 }
 .markItUpHeader ul .markItUpDropMenu {
