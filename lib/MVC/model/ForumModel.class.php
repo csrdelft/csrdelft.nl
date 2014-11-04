@@ -993,7 +993,7 @@ class ForumPostsModel extends PersistenceModel implements Paging {
 		$post->laatst_gewijzigd = getDateTime();
 		$bewerkt = 'bewerkt door [lid=' . LoginModel::getUid() . '] [reldate]' . $post->laatst_gewijzigd . '[/reldate]';
 		if ($reden !== '') {
-			$bewerkt .= ': ' . str_replace('[', '&#91;', $reden); // geen bbcode in reden
+			$bewerkt .= ': ' . $reden;
 		}
 		$bewerkt .= "\n";
 		$post->bewerkt_tekst .= $bewerkt;
