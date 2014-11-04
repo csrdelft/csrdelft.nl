@@ -69,7 +69,7 @@
 			{if $post->bewerkt_tekst}
 				<div class="bewerkt clear">
 					<hr />
-					{$post->bewerkt_tekst|replace:": ":": [ubboff]"|bbcode}
+					{$post->bewerkt_tekst|bbcode}
 				</div>
 			{/if}
 		</div>

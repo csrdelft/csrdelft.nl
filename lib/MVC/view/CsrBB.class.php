@@ -75,6 +75,13 @@ class CsrBB extends eamBBParser {
 	}
 
 	/**
+	 * Soms willen we voorkomen dat de gebruiker een ubboff tag gebruikt, zoals in forum reden.
+	 */
+	public static function escapeUbbOff($bbcode) {
+		return str_replace(array('[/ubboff]', '[/tekst]'), array('[/]', '[/]'), $bbcode);
+	}
+
+	/**
 	 * Omdat we niet willen dat dingen die in privé staan alsnog gezien kunnen worden 
 	 * bij het citeren, slopen we hier alles wat in privé-tags staat weg.
 	 */
