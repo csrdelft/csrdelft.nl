@@ -447,7 +447,7 @@ class CsrBB extends eamBBParser {
 			} elseif (preg_match('|^(http://)?(www\.)?youtu.be/([0-9a-zA-Z\-_]{11}).*$|', $content, $matches) > 0) {
 				$id = $matches[3];
 			}
-			$params['movie'] = 'https://www.youtube.com/v/' . $id . '?version=3';
+			$params['movie'] = 'http://www.youtube.com/v/' . $id . '?version=3';
 		} elseif (strstr($content, 'vimeo')) {
 			$type = 'vimeo';
 			if (preg_match('|^(http://)?(www\.)?vimeo\.com/(clip\:)?(\d+).*$|', $content, $matches) > 0) {
