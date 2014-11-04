@@ -417,6 +417,20 @@ class CsrBB extends eamBBParser {
 		}
 	}
 
+	function bb_youtube($arguments = array()) {
+		$id = $this->parseArray(array('[/youtube]'), array());
+		if (isset($arguments['youtube'])) { // [youtube=
+			$id = $arguments['youtube'];
+		}
+		if (preg_match('/^[0-9a-zA-Z\-_]{11}$/', $id)) {
+			$attr['src'] = 'http://www.youtube.com/v/' . $id . '?version=3&autoplay=1';
+			$attr['preview'] = 'http://img.youtube.com/vi/' . $id . '/default.jpg';
+			$this->video_preview($attr);
+		} else {
+			return '[youtube] Geen geldig youtube-id (' . mb_htmlentities($id) . ')';
+		}
+	}
+
 	/**
 	 * Universele videotag, gewoon urls erin stoppen. Ik heb een poging
 	 * gedaan hem een beetje vergevingsgezind te laten zijn...
@@ -434,18 +448,12 @@ class CsrBB extends eamBBParser {
 	 */
 	function bb_video($arguments = array()) {
 		$content = preg_replace('|^https://|', 'http://', $this->parseArray(array('[/video]'), array()));
-
 		$type = null;
 		$id = null;
 		$matches = array();
 
-		$attr['frameborder'] = 0;
-		$attr['allowfullscreen'] = true;
-		$attr['width'] = 570;
-		$attr['height'] = 360;
-
 		//match type and id
-		if (strstr($content, 'youtube.com') OR strstr($content, 'youtu.be') OR preg_match('/^[0-9a-zA-Z\-_]{11}$/', $content)) {
+		if (strstr($content, 'youtube.com') OR strstr($content, 'youtu.be')) {
 			$type = 'youtube';
 			if (strlen($content) === 11) {
 				$id = $content;
@@ -454,23 +462,23 @@ class CsrBB extends eamBBParser {
 			} elseif (preg_match('|^(http://)?(www\.)?youtu.be/([0-9a-zA-Z\-_]{11}).*$|', $content, $matches) > 0) {
 				$id = $matches[3];
 			}
-			$params['src'] = 'http://www.youtube.com/v/' . $id . '?version=3&autoplay=1';
-			$params['preview'] = 'http://img.youtube.com/vi/' . $id . '/default.jpg';
+			$attr['src'] = 'http://www.youtube.com/v/' . $id . '?version=3&autoplay=1';
+			$attr['preview'] = 'http://img.youtube.com/vi/' . $id . '/default.jpg';
 		} elseif (strstr($content, 'vimeo')) {
 			$type = 'vimeo';
 			if (preg_match('|^(http://)?(www\.)?vimeo\.com/(clip\:)?(\d+).*$|', $content, $matches) > 0) {
 				$id = $matches[4];
 			}
-			$params['src'] = 'http://vimeo.com/moogaloop.swf?clip_id=' . $id . '&server=vimeo.com&show_title=1&show_byline=1&show_portrait=0&color=00ADEF&fullscreen=1&autoplay=1';
+			$attr['src'] = 'http://vimeo.com/moogaloop.swf?clip_id=' . $id . '&server=vimeo.com&show_title=1&show_byline=1&show_portrait=0&color=00ADEF&fullscreen=1&autoplay=1';
 			$data = unserialize(file_get_contents('http://vimeo.com/api/v2/video/' . $id . '.php'));
-			$params['preview'] = $data[0]['thumbnail_medium'];
+			$attr['preview'] = $data[0]['thumbnail_medium'];
 		} elseif (strstr($content, 'dailymotion')) {
 			$type = 'dailymotion';
 			if (preg_match('|^(http://)?(www\.)?dailymotion\.com/video/([a-z0-9]+)(_.*)?$|', $content, $matches) > 0) {
 				$id = $matches[3];
 			}
-			$params['src'] = 'http://www.dailymotion.com/swf/video/' . $id . '?autoplay=1';
-			$params['preview'] = 'http://www.dailymotion.com/thumbnail/video/' . $id;
+			$attr['src'] = 'http://www.dailymotion.com/swf/video/' . $id . '?autoplay=1';
+			$attr['preview'] = 'http://www.dailymotion.com/thumbnail/video/' . $id;
 		} elseif (strstr($content, 'godtube')) {
 			$type = 'godtube';
 			if (preg_match('|^(http://)?(www\.)?godtube\.com/watch/\?v=([a-zA-Z0-9]+)$|', $content, $matches) > 0) {
@@ -482,19 +490,24 @@ class CsrBB extends eamBBParser {
 		if (empty($type) OR empty($id)) {
 			return internal_url($content, mb_htmlentities($content));
 		}
+		return $this->video_preview($attr);
+	}
+
+	function video_preview(array $attr) {
+		$attr['frameborder'] = 0;
+		$attr['width'] = 570;
+		$attr['height'] = 360;
 
 		$html = '<div class="bb-video">';
 
-		if (isset($params['preview'])) {
+		if (isset($attr['preview'])) {
 			$html .= <<<HTML
 <div class="bb-video-preview" onclick="$(this).hide();$(this).next('iframe').show();" title="Klik om de video af te spelen">
 	<div class="play-button"></div>
-	<img src="{$params['preview']}" />
+	<img src="{$attr['preview']}" />
 </div>
 HTML;
 		}
-
-		$attr += $params;
 
 		$html .= '<iframe';
 		foreach ($attr as $key => $value) {
