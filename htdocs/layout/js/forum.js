@@ -1,6 +1,6 @@
 function saveConceptForumBericht() {
 	$('#forumConcept').fadeOut();
-	var $textarea = $textarea;
+	var $textarea = $('#forumBericht');
 	if ($textarea.val() !== $textarea.attr('origvalue')) {
 		$.post('/forum/concept', {
 			forumBericht: $textarea.val()
