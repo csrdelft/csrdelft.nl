@@ -9,10 +9,22 @@ require_once 'MVC/view/MenuBeheerView.class.php';
  * @author P.W.G. Brussee <brussee@live.nl>
  * 
  */
-class MenuBeheerController extends AclController {
+class MenuBeheerController extends Controller {
 
 	public function __construct($query) {
 		parent::__construct($query, MenuModel::instance());
+	}
+
+	public function mag($action, $resource) {
+		switch ($action) {
+			case 'beheer':
+				return !$this->isPosted() AND LoginModel::mag('P_LOGGED_IN');
+			case 'toevoegen':
+			case 'bewerken':
+			case 'verwijderen':
+			case 'zichtbaar':
+				return $this->isPosted() AND LoginModel::mag('P_LOGGED_IN');
+		}
 	}
 
 	public function performAction(array $args = array()) {
