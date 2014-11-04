@@ -24,6 +24,8 @@ class MenuBeheerController extends Controller {
 			case 'verwijderen':
 			case 'zichtbaar':
 				return $this->isPosted() AND LoginModel::mag('P_LOGGED_IN');
+			default:
+				return false;
 		}
 	}
 
