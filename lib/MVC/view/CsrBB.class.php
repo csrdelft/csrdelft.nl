@@ -425,7 +425,7 @@ class CsrBB extends eamBBParser {
 		if (preg_match('/^[0-9a-zA-Z\-_]{11}$/', $id)) {
 			$attr['src'] = 'http://www.youtube.com/v/' . $id . '?version=3&autoplay=1';
 			$attr['preview'] = 'http://img.youtube.com/vi/' . $id . '/default.jpg';
-			$this->video_preview($attr);
+			return $this->video_preview($attr);
 		} else {
 			return '[youtube] Geen geldig youtube-id (' . mb_htmlentities($id) . ')';
 		}
