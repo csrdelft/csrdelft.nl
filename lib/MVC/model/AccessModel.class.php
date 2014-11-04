@@ -10,6 +10,8 @@ require_once 'MVC/model/LoginModel.class.php';
  * 
  * RBAC met MAC en DAC implementatie.
  * 
+ * @see http://csrc.nist.gov/groups/SNS/rbac/faq.html
+ * 
  */
 class AccessModel extends CachedPersistenceModel {
 
@@ -28,7 +30,7 @@ class AccessModel extends CachedPersistenceModel {
 	/**
 	 * Partially ordered Role Hierarchy:
 	 * 
-	 * WONTFIX: A subject can have multiple roles.
+	 * A subject can have multiple roles.	<- NIET ondersteund met MAC, wel met DAC
 	 * A role can have multiple subjects.
 	 * A role can have many permissions.
 	 * A permission can be assigned to many roles.
@@ -37,15 +39,14 @@ class AccessModel extends CachedPersistenceModel {
 	 */
 	private $roles = array();
 	/**
-	 * Permissies die we gebruiken om te vergelijken met de permissies van
-	 * een gebruiker.
+	 * Permissies die we gebruiken om te vergelijken met de permissies van een gebruiker.
 	 */
 	private $permissions = array();
 	/**
-	 * Gebruikte discretionary access control prefixes
+	 * Geldige prefixes voor rechten
 	 * @var array
 	 */
-	private static $dac = array('verticale', 'groep', 'geslacht', 'lidjaar', 'lichting', 'ouderjaars', 'eerstejaars');
+	private static $prefix = array('verticale', 'groep', 'geslacht', 'lidjaar', 'lichting', 'ouderjaars', 'eerstejaars');
 
 	protected function __construct() {
 		parent::__construct();
@@ -84,7 +85,7 @@ class AccessModel extends CachedPersistenceModel {
 				return true;
 			} else {
 				$dac = explode(':', $perm);
-				if (sizeof($dac) === 2 AND ! empty($dac[1]) AND in_array($dac[0], self::$dac)) {
+				if (sizeof($dac) === 2 AND ! empty($dac[1]) AND in_array($dac[0], self::$prefix)) {
 					return true;
 				}
 			}
