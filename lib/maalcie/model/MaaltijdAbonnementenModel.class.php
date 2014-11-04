@@ -83,18 +83,17 @@ class MaaltijdAbonnementenModel {
 			}
 			$abonnement->setVanUid($uid);
 			$abonnement->setMaaltijdRepetitie($repById[$mrid]);
-			if ($alleenWaarschuwingen) {
-				if ($abo['abo_err']) {
-					$abonnement->setWaarschuwing('Niet abonneerbaar');
-				} elseif ($abo['status_err']) {
-					$abonnement->setWaarschuwing('Geen huidig lid');
-				} elseif ($abo['kring_err']) {
-					$abonnement->setWaarschuwing('Geen actief kringlid');
-				} elseif (!MaaltijdAanmeldingenModel::checkAanmeldFilter($uid, $abo['filter'])) {
-					$abonnement->setWaarschuwing('Niet toegestaan vanwege aanmeldrestrictie: ' . $abo['filter']);
-				} else {
-					continue;
-				}
+			// toon waarschuwingen
+			if ($abo['abo_err']) {
+				$abonnement->setWaarschuwing('Niet abonneerbaar');
+			} elseif ($abo['status_err']) {
+				$abonnement->setWaarschuwing('Geen huidig lid');
+			} elseif ($abo['kring_err']) {
+				$abonnement->setWaarschuwing('Geen actief kringlid');
+			} elseif (!MaaltijdAanmeldingenModel::checkAanmeldFilter($uid, $abo['filter'])) {
+				$abonnement->setWaarschuwing('Niet toegestaan vanwege aanmeldrestrictie: ' . $abo['filter']);
+			} elseif ($alleenWaarschuwingen) {
+				continue;
 			}
 			$matrix[$uid][$mrid] = $abonnement;
 		}
