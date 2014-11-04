@@ -617,7 +617,7 @@ class ForumController extends Controller {
 			$this->view = new JsonResponse('Uw bericht bevat een fout in de bbcode: ' . $aantal . ' ongesloten tags', 400);
 			return;
 		}
-		$reden = CsrBB::sluitTags(trim(filter_input(INPUT_POST, 'reden', FILTER_SANITIZE_STRING)));
+		$reden = trim(filter_input(INPUT_POST, 'reden', FILTER_SANITIZE_STRING));
 
 		ForumPostsModel::instance()->bewerkForumPost($tekst, $reden, $post, $draad, $deel);
 		ForumDradenGelezenModel::instance()->setWanneerGelezenDoorLid($draad);
