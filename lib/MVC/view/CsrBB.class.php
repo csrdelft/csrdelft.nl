@@ -430,7 +430,7 @@ class CsrBB extends eamBBParser {
 			$id = $arguments['youtube'];
 		}
 		if (preg_match('/^[0-9a-zA-Z\-_]{11}$/', $id)) {
-			$attr['src'] = 'http://www.youtube.com/v/' . $id . '?version=3&autoplay=1';
+			$attr['movie'] = 'http://www.youtube.com/v/' . $id . '?version=3&autoplay=1';
 			$attr['preview'] = 'http://img.youtube.com/vi/' . $id . '/default.jpg';
 			return $this->video_preview($attr);
 		} else {
@@ -469,14 +469,14 @@ class CsrBB extends eamBBParser {
 			} elseif (preg_match('|^(http://)?(www\.)?youtu.be/([0-9a-zA-Z\-_]{11}).*$|', $content, $matches) > 0) {
 				$id = $matches[3];
 			}
-			$attr['src'] = 'http://www.youtube.com/v/' . $id . '?version=3&autoplay=1';
+			$attr['movie'] = 'http://www.youtube.com/v/' . $id . '?version=3&autoplay=1';
 			$attr['preview'] = 'http://img.youtube.com/vi/' . $id . '/default.jpg';
 		} elseif (strstr($content, 'vimeo')) {
 			$type = 'vimeo';
 			if (preg_match('|^(http://)?(www\.)?vimeo\.com/(clip\:)?(\d+).*$|', $content, $matches) > 0) {
 				$id = $matches[4];
 			}
-			$attr['src'] = 'http://vimeo.com/moogaloop.swf?clip_id=' . $id . '&server=vimeo.com&show_title=1&show_byline=1&show_portrait=0&color=00ADEF&fullscreen=1&autoplay=1';
+			$attr['movie'] = 'http://vimeo.com/moogaloop.swf?clip_id=' . $id . '&server=vimeo.com&show_title=1&show_byline=1&show_portrait=0&color=00ADEF&fullscreen=1&autoplay=1';
 			$data = unserialize(file_get_contents('http://vimeo.com/api/v2/video/' . $id . '.php'));
 			$attr['preview'] = $data[0]['thumbnail_medium'];
 		} elseif (strstr($content, 'dailymotion')) {
@@ -484,7 +484,7 @@ class CsrBB extends eamBBParser {
 			if (preg_match('|^(http://)?(www\.)?dailymotion\.com/video/([a-z0-9]+)(_.*)?$|', $content, $matches) > 0) {
 				$id = $matches[3];
 			}
-			$attr['src'] = 'http://www.dailymotion.com/swf/video/' . $id . '?autoplay=1';
+			$attr['movie'] = 'http://www.dailymotion.com/swf/video/' . $id . '?autoplay=1';
 			$attr['preview'] = 'http://www.dailymotion.com/thumbnail/video/' . $id;
 		} elseif (strstr($content, 'godtube')) {
 			$type = 'godtube';
@@ -509,7 +509,7 @@ class CsrBB extends eamBBParser {
 
 		if (isset($attr['preview'])) {
 			$html .= <<<HTML
-<div class="bb-video-preview" onclick="$(this).hide();$(this).next('iframe').show();" title="Klik om de video af te spelen">
+<div class="bb-video-preview" onclick="$(this).hide();var iframe=$(this).next('iframe');iframe.show().attr('src', iframe.attr('movie'));" title="Klik om de video af te spelen">
 	<div class="play-button"></div>
 	<img src="{$attr['preview']}" />
 </div>
