@@ -32,7 +32,7 @@ class GroepenRouterController extends Controller {
 	 * 
 	 * @return boolean
 	 */
-	protected function mag($action, $resource = '') {
+	protected function mag($action, $resource) {
 		switch ($action) {
 			case 'commissies':
 			case 'besturen':

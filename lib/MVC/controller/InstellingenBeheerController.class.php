@@ -32,7 +32,7 @@ class InstellingenBeheerController extends AclController {
 		parent::performAction($this->getParams(3));
 	}
 
-	protected function mag($action, $resource = '') {
+	protected function mag($action, $resource) {
 		if (!parent::mag($action, $resource)) {
 			return false;
 		}

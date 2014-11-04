@@ -25,7 +25,7 @@ abstract class AclController extends Controller {
 	 */
 	protected $acl;
 
-	protected function mag($action, $resource = '') {
+	protected function mag($action, $resource) {
 		if (isset($this->acl[$action])) {
 			return LoginModel::mag($this->acl[$action]);
 		}
