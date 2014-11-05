@@ -195,7 +195,7 @@ div.pasfoto img.lidfoto {
 }
 
 .bbcode {
-	max-width: 566px;
+	max-width: 570px;
 }
 
 .citaatpuntjes {
@@ -216,8 +216,8 @@ div.citaatContainer div.citaat div.citaatContainer div.citaat div.citaatContaine
 	background-color: #efefef;
 }
 
-div.bb-img-loading {
-	max-width: 586px;
+.bb-img-loading {
+	max-width: 570px;
 	min-width: 16px;
 	min-height: 11px;
 	background-image: url('http://plaetjes.csrdelft.nl/layout/loading-fb.gif');
@@ -225,25 +225,28 @@ div.bb-img-loading {
 	background-position: bottom left;
 }
 img.bb-img {
-	max-width: 586px;
+	max-width: 570px;
 	border: 0;
 }
 
 /* zorg dat de plaatjes ook in citaten niet te breed worden */
 div.citaatContainer div.citaat img.bb-img {
-	max-width: 545px;
+	max-width: 540px;
 }
 div.citaatContainer div.citaat div.citaatContainer div.citaat img.bb-img {
-	max-width: 516px;
+	max-width: 510px;
 }
 
-.bb-video iframe {
+.bb-video-play {
 	display: none;
 }
 .bb-video-preview {
 	display: inline-block;
 	position: relative;
-	cursor: pointer; 
+	cursor: pointer;
+}
+.bb-video-preview img {
+	max-height: 150px;
 }
 .bb-video-preview .play-button {
 	position: absolute;

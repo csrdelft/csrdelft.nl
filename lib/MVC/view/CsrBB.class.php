@@ -430,8 +430,15 @@ class CsrBB extends eamBBParser {
 			$id = $arguments['youtube'];
 		}
 		if (preg_match('/^[0-9a-zA-Z\-_]{11}$/', $id)) {
-			$attr['movie'] = 'http://www.youtube.com/v/' . $id . '?version=3&autoplay=1';
-			$attr['preview'] = 'http://img.youtube.com/vi/' . $id . '/default.jpg';
+
+			$attr['class'] = 'bb-video-play';
+			$attr['width'] = 570;
+			$attr['height'] = 360;
+			$attr['frameborder'] = 0;
+
+			$attr['data-src'] = 'http://www.youtube.com/v/' . $id . '?version=3&autoplay=1';
+			$attr['preview'] = 'http://img.youtube.com/vi/' . $id . '/0.jpg';
+
 			return $this->video_preview($attr);
 		} else {
 			return '[youtube] Geen geldig youtube-id (' . mb_htmlentities($id) . ')';
@@ -455,6 +462,12 @@ class CsrBB extends eamBBParser {
 	 */
 	function bb_video($arguments = array()) {
 		$content = preg_replace('|^https://|', 'http://', $this->parseArray(array('[/video]'), array()));
+
+		$attr['class'] = 'bb-video-play';
+		$attr['width'] = 570;
+		$attr['height'] = 360;
+		$attr['frameborder'] = 0;
+
 		$type = null;
 		$id = null;
 		$matches = array();
@@ -469,14 +482,14 @@ class CsrBB extends eamBBParser {
 			} elseif (preg_match('|^(http://)?(www\.)?youtu.be/([0-9a-zA-Z\-_]{11}).*$|', $content, $matches) > 0) {
 				$id = $matches[3];
 			}
-			$attr['movie'] = 'http://www.youtube.com/v/' . $id . '?version=3&autoplay=1';
-			$attr['preview'] = 'http://img.youtube.com/vi/' . $id . '/default.jpg';
+			$attr['data-src'] = 'http://www.youtube.com/v/' . $id . '?version=3&autoplay=1';
+			$attr['preview'] = 'http://img.youtube.com/vi/' . $id . '/0.jpg';
 		} elseif (strstr($content, 'vimeo')) {
 			$type = 'vimeo';
 			if (preg_match('|^(http://)?(www\.)?vimeo\.com/(clip\:)?(\d+).*$|', $content, $matches) > 0) {
 				$id = $matches[4];
 			}
-			$attr['movie'] = 'http://vimeo.com/moogaloop.swf?clip_id=' . $id . '&server=vimeo.com&show_title=1&show_byline=1&show_portrait=0&color=00ADEF&fullscreen=1&autoplay=1';
+			$attr['data-src'] = 'http://vimeo.com/moogaloop.swf?clip_id=' . $id . '&server=vimeo.com&show_title=1&show_byline=1&show_portrait=0&color=00ADEF&fullscreen=1&autoplay=1';
 			$data = unserialize(file_get_contents('http://vimeo.com/api/v2/video/' . $id . '.php'));
 			$attr['preview'] = $data[0]['thumbnail_medium'];
 		} elseif (strstr($content, 'dailymotion')) {
@@ -484,14 +497,24 @@ class CsrBB extends eamBBParser {
 			if (preg_match('|^(http://)?(www\.)?dailymotion\.com/video/([a-z0-9]+)(_.*)?$|', $content, $matches) > 0) {
 				$id = $matches[3];
 			}
-			$attr['movie'] = 'http://www.dailymotion.com/swf/video/' . $id . '?autoplay=1';
+			$attr['data-src'] = 'http://www.dailymotion.com/swf/video/' . $id . '?autoplay=1';
 			$attr['preview'] = 'http://www.dailymotion.com/thumbnail/video/' . $id;
 		} elseif (strstr($content, 'godtube')) {
 			$type = 'godtube';
 			if (preg_match('|^(http://)?(www\.)?godtube\.com/watch/\?v=([a-zA-Z0-9]+)$|', $content, $matches) > 0) {
 				$id = $matches[3];
 			}
-			return '<object width="570" height="360" type="application/x-shockwave-flash" data="http://www.godtube.com/resource/mediaplayer/5.3/player.swf"><param name="movie" value="http://www.godtube.com/resource/mediaplayer/5.3/player.swf"><param name="allowfullscreen" value="true"><param name="allowscriptaccess" value="always"><param name="wmode" value="opaque"><param name="flashvars" value="file=http://www.godtube.com/resource/mediaplayer/' . $id . '.file&image=http://www.godtube.com/resource/mediaplayer/' . $id . '.jpg&screencolor=000000&type=video&autostart=false&playonce=true&skin=http://www.godtube.com//resource/mediaplayer/skin/carbon/carbon.zip&logo.file=http://media.salemwebnetwork.com/godtube/theme/default/media/embed-logo.png&logo.link=http://www.godtube.com/watch/?v=' . $id . '&logo.position=top-left&logo.hide=false&controlbar.position=over"></object>';
+			$attr['data-object'] = <<<HTML
+<object class="{$attr['class']}" width="{$attr['width']}" height="{$attr['height']}" type="application/x-shockwave-flash" data="http://www.godtube.com/resource/mediaplayer/5.3/player.swf">
+	<param name="autostart" value="true" />
+	<param name="allowfullscreen" value="true" />
+	<param name="allowscriptaccess" value="always" />
+	<param name="movie" value="http://www.godtube.com/resource/mediaplayer/5.3/player.swf" />
+	<param name="wmode" value="opaque" />
+	<param name="flashvars" value="file=http://www.godtube.com/resource/mediaplayer/{$id}.file&image=http://www.godtube.com/resource/mediaplayer/{$id}.jpg&screencolor=000000&type=video&autostart=true&playonce=true&skin=http://www.godtube.com//resource/mediaplayer/skin/carbon/carbon.zip&logo.file=http://media.salemwebnetwork.com/godtube/theme/default/media/embed-logo.png&logo.link=http://www.godtube.com/watch/?v={$id}&logo.position=top-left&logo.hide=false&controlbar.position=over">
+</object>
+HTML;
+			$attr['preview'] = 'http://www.godtube.com/resource/mediaplayer/' . $id . '.jpg';
 		}
 
 		if (empty($type) OR empty($id)) {
@@ -501,28 +524,55 @@ class CsrBB extends eamBBParser {
 	}
 
 	function video_preview(array $attr) {
-		$attr['frameborder'] = 0;
-		$attr['width'] = 570;
-		$attr['height'] = 360;
 
 		$html = '<div class="bb-video">';
 
-		if (isset($attr['preview'])) {
-			$html .= <<<HTML
-<div class="bb-video-preview" onclick="$(this).hide();var iframe=$(this).next('iframe');iframe.show().attr('src', iframe.attr('movie'));" title="Klik om de video af te spelen">
+		if (isset($attr['data-object'])) {
+			$attr['data-object'] = rawurlencode($attr['data-object']);
+			$js = <<<JS
+var html = play.contents().find('html');
+html.html(decodeURIComponent('{$attr['data-object']}'));
+html.find('body').css({
+	margin: 0
+});
+JS;
+			unset($attr['data-object']);
+		} elseif (isset($attr['data-src'])) {
+			$js = "play.attr('src', '{$attr['data-src']}');";
+			unset($attr['data-src']);
+		}
+		$js = <<<JS
+var play = $(this).next('.bb-video-play');
+if (play) {
+	play.addClass('bb-img-loading');
+	{$js}
+	play.show();
+}
+else {
+	alert('Video niet gevonden');
+}
+$(this).remove();
+play.removeClass('bb-img-loading');
+JS;
+		if (!isset($attr['preview'])) {
+			$attr['preview'] = CSR_PICS . '/_geen_thumb.jpg';
+		}
+
+		$html .= <<<HTML
+<div class="bb-video-preview" onclick="{$js}" title="Klik om de video af te spelen">
 	<div class="play-button"></div>
-	<img src="{$attr['preview']}" />
+	<div class="bb-img-loading" src="{$attr['preview']}"></div>
 </div>
 HTML;
-		}
+		unset($attr['preview']);
 
 		$html .= '<iframe';
 		foreach ($attr as $key => $value) {
 			$html .= ' ' . $key . '="' . $value . '"';
 		}
-		$html .= '></iframe>';
+		$html .= '></iframe></div>';
 
-		return $html . '</div>';
+		return $html;
 	}
 
 	function bb_twitter($arguments = array()) {
