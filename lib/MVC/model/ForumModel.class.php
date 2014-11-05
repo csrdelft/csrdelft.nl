@@ -48,6 +48,7 @@ class ForumModel extends PersistenceModel {
 			ForumDradenGelezenModel::instance()->verwijderDraadGelezenVoorLid($uid);
 			ForumDradenVerbergenModel::instance()->toonAllesVoorLid($uid);
 			ForumDradenVolgenModel::instance()->volgNietsVoorLid($uid);
+			ForumDradenReagerenModel::instance()->verwijderReagerenVoorLid($uid);
 		}
 		// Settings voor oude topics opschonen en oude/verwijderde topics en posts definitief verwijderen
 		$datetime = getDateTime(strtotime('-1 year'));
@@ -58,6 +59,7 @@ class ForumModel extends PersistenceModel {
 			ForumDradenVolgenModel::instance()->stopVolgenVoorIedereen($draad);
 			ForumDradenVerbergenModel::instance()->toonDraadVoorIedereen($draad);
 			ForumDradenGelezenModel::instance()->verwijderDraadGelezen($draad);
+			ForumDradenReagerenModel::instance()->verwijderReagerenVoorDraad($draad);
 
 			// Oude verwijderde posts definitief verwijderen
 			$posts = ForumPostsModel::instance()->find('verwijderd = TRUE AND draad_id = ?', array($draad->draad_id));
@@ -313,6 +315,18 @@ class ForumDradenReagerenModel extends PersistenceModel {
 		return $this->find('draad_id = ? AND datum_tijd > ?', array($draad->draad_id, getDateTime(strtotime(Instellingen::get('forum', 'reageren_tijd')))));
 	}
 
+	public function verwijderReagerenVoorDraad(ForumDraad $draad) {
+		foreach ($this->find('draad_id = ?', array($draad->draad_id)) as $reageren) {
+			$this->delete($reageren);
+		}
+	}
+
+	public function verwijderReagerenVoorLid($uid) {
+		foreach ($this->find('uid = ?', array($uid)) as $reageren) {
+			$this->delete($reageren);
+		}
+	}
+
 	public function setWanneerReagerenDoorLid(ForumDraad $draad) {
 		$reageren = $this->getReagerenDoorLid($draad);
 		if (!$reageren) {
@@ -321,7 +335,6 @@ class ForumDradenReagerenModel extends PersistenceModel {
 			$reageren->datum_tijd = getDateTime();
 			$this->update($reageren);
 		}
-		return true;
 	}
 
 	public function getConcept(ForumDraad $draad) {
@@ -333,21 +346,20 @@ class ForumDradenReagerenModel extends PersistenceModel {
 	}
 
 	public function setConcept(ForumDraad $draad, $bericht) {
-		if (empty($bericht)) {
-			$bericht = null;
-			$wanneer = getDateTime(strtotime(Instellingen::get('forum', 'reageren_tijd'))); // voorkom verouderde melding
-		} else {
-			$wanneer = getDateTime();
-		}
 		$reageren = $this->getReagerenDoorLid($draad);
-		if (!$reageren) {
-			$this->nieuwReagerenDoorLid($draad, $bericht);
+		if (empty($bericht)) {
+			if ($reageren) {
+				$this->delete($reageren);
+			}
 		} else {
-			$reageren->datum_tijd = $wanneer;
-			$reageren->concept = $bericht;
-			$this->update($reageren);
+			if (!$reageren) {
+				$this->nieuwReagerenDoorLid($draad, $bericht);
+			} else {
+				$reageren->concept = $bericht;
+				$reageren->datum_tijd = getDateTime();
+				$this->update($reageren);
+			}
 		}
-		return true;
 	}
 
 }
