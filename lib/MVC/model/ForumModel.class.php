@@ -312,7 +312,7 @@ class ForumDradenReagerenModel extends PersistenceModel {
 	}
 
 	public function getReagerenVoorDraad(ForumDraad $draad) {
-		return $this->find('draad_id = ? AND datum_tijd > ?', array($draad->draad_id, getDateTime(strtotime(Instellingen::get('forum', 'reageren_tijd')))));
+		return $this->find('draad_id = ? AND uid != ? AND datum_tijd > ?', array($draad->draad_id, LoginModel::getUid(), getDateTime(strtotime(Instellingen::get('forum', 'reageren_tijd')))));
 	}
 
 	public function verwijderReagerenVoorDraad(ForumDraad $draad) {
