@@ -157,7 +157,7 @@ function forumBewerken(postId) {
 			bewerkForm += '<input type="button" value="Opslaan" onclick="submitPost();" /> <input type="button" value="Voorbeeld" onclick="CsrBBPreview(\'forumBewerkBericht\', \'bewerkPreview\');" /> <input type="button" value="Annuleren" onclick="restorePost();" />';
 			bewerkForm += '</form>';
 			bewerkContainer.innerHTML = bewerkForm;
-			document.getElementById('forumBewerkBericht').value = http.responseText.substring(1, http.responseText.length - 1);
+			document.getElementById('forumBewerkBericht').value = http.responseText;
 			$('#forumBewerkBericht').autosize();
 			$('#forumBewerkBericht').markItUp(mySettings); // mySettings located in set.js
 			$(bewerkContainer).parent().children('td.auteur:first').append('<div id="bewerk-melding">Als u dingen aanpast zet er dan even bij w&aacute;t u aanpast! Gebruik bijvoorbeeld [s]...[/s]</div>');
@@ -173,7 +173,7 @@ function forumCiteren(postId) {
 	http.open('POST', '/forum/citeren/' + postId, true);
 	http.onreadystatechange = function () {
 		if (http.readyState == 4) {
-			document.getElementById('forumBericht').value += http.responseText.substring(1, http.responseText.length - 1);
+			document.getElementById('forumBericht').value += http.responseText;
 			$(window).scrollTo('#reageren');
 		}
 	};

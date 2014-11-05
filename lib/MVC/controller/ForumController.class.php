@@ -599,7 +599,8 @@ class ForumController extends Controller {
 		if (!ForumController::magForumPostBewerken($post, $draad, $deel)) {
 			$this->geentoegang();
 		}
-		$this->view = new JsonResponse($post->tekst);
+		echo $post->tekst;
+		exit; //TODO: JsonResponse
 	}
 
 	public function bewerken($post_id) {
@@ -693,7 +694,8 @@ class ForumController extends Controller {
 		if (!ForumController::magPosten($draad, $deel)) {
 			$this->geentoegang();
 		}
-		$this->view = new JsonResponse(ForumPostsModel::instance()->citeerForumPost($post));
+		echo ForumPostsModel::instance()->citeerForumPost($post);
+		exit; //TODO: JsonResponse
 	}
 
 	/**
