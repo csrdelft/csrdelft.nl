@@ -738,7 +738,7 @@ class OldGroep {
 				'verticale' => "SELECT CONCAT('Verticale ', verticale.naam) AS verticale, count(*) as aantal FROM lid LEFT JOIN verticale ON(lid.verticale=verticale.id) WHERE uid IN(" . $this->getLedenCSV(true) . ") GROUP BY verticale;",
 				'geslacht' => "SELECT REPLACE(REPLACE(geslacht, 'm', 'Man'), 'v', 'Vrouw') AS geslacht, count(*) as aantal FROM lid WHERE uid IN( " . $this->getLedenCSV(true) . ") group by geslacht;",
 				'lidjaar' => "SELECT lidjaar, count(*) as aantal FROM lid WHERE uid IN( " . $this->getLedenCSV(true) . ") group by lidjaar;",
-				'opmerking' => "SELECT functie, count(*) as aantal FROM groeplid WHERE groepid=" . $this->getId() . " AND functie <> '' GROUP BY functie;"
+				'opmerking' => "SELECT functie, count(*) as aantal FROM groeplid WHERE groepid=" . $this->getId() . " AND functie != '' GROUP BY functie;"
 			);
 
 			foreach ($statqueries as $key => $query) {

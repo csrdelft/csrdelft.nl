@@ -40,6 +40,7 @@
 
 	</td>
 	<td class="bericht0">
+
 		<form id="forumForm" action="/forum/posten/{$deel->forum_id}{if isset($draad)}/{$draad->draad_id}{/if}" method="post">
 
 			{if !LoginModel::mag('P_LOGGED_IN')}
@@ -62,14 +63,16 @@
 			<div class="butn">
 				<input type="submit" name="submit" value="Opslaan" id="forumOpslaan" />
 				<input type="button" value="Voorbeeld" id="forumVoorbeeld" onclick="CsrBBPreview('forumBericht', 'berichtPreview');" />
-				<input type="button" value="Concept opslaan" id="forumConcept" onclick="saveConceptForumBericht();" title="Blijft bewaard zolang u bent ingelogd" />
+				{if $draad AND LoginModel::mag('P_LOGGED_IN')}
+					<input type="button" value="Concept opslaan" id="forumConcept" onclick="saveConceptForumBericht();" data-draad="{$draad->draad_id}" title="Bewaar uw concept reactie voor dit draadje" />
+				{/if}
 				<div class="float-right">
 					<a class="knop vergroot" data-vergroot="#forumBericht" title="Vergroot het invoerveld">&uarr;&darr;</a>
 					<a class="knop opmaakhulp" title="Opmaakhulp weergeven">Opmaak</a>
 				</div>
 			</div>
-		</form>
 
+		</form>
 		<br /><br />
 	</td>
 </tr>

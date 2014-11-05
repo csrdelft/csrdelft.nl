@@ -1,8 +1,9 @@
 function saveConceptForumBericht() {
-	$('#forumConcept').fadeOut();
+	var $concept = $('#forumConcept');
+	$concept.fadeOut();
 	var $textarea = $('#forumBericht');
 	if ($textarea.val() !== $textarea.attr('origvalue')) {
-		$.post('/forum/concept', {
+		$.post('/forum/concept/save/' + $concept.attr('data-draad'), {
 			forumBericht: $textarea.val()
 		}).done(function () {
 			$textarea.attr('origvalue', $textarea.val());
@@ -13,21 +14,40 @@ function saveConceptForumBericht() {
 $(document).ready(function ($) {
 
 	var $textarea = $('#forumBericht');
+	var $concept = $('#forumConcept');
 
-	var toggleShowSaveConcept = function () {
-		if ($textarea.val() !== $textarea.attr('origvalue')) {
-			$('#forumConcept').fadeIn();
-		} else {
-			$('#forumConcept').fadeOut();
-		}
-	};
-	var autosave;
-	$textarea.focusin(function () {
-		autosave = setInterval(toggleShowSaveConcept, 1000);
-	});
-	$textarea.focusout(function () {
-		clearInterval(autosave);
-	});
+	if ($concept) {
+		var update = true; // stop updaten bij reageren
+
+		var toggleShowSaveConcept = function () {
+			if ($textarea.val() !== $textarea.attr('origvalue')) {
+				$concept.fadeIn();
+
+				if (update) {
+					update = false;
+					updateReageren();
+				}
+			} else {
+				$concept.fadeOut();
+			}
+		};
+		var updateReageren = function () {
+			$.post('/forum/concept/ping/' + $concept.attr('data-draad'), {
+				reageren: $textarea.val() !== $textarea.attr('origvalue')
+			}).done(dom_update).fail(alert);
+		};
+
+		var ping = setInterval(updateReageren, 60000);
+		var autosave;
+
+		$textarea.focusin(function () {
+			clearInterval(ping);
+			autosave = setInterval(toggleShowSaveConcept, 3000);
+		});
+		$textarea.focusout(function () {
+			clearInterval(autosave);
+		});
+	}
 
 	//naar juiste forumreactie scrollen door hash toe te voegen
 	if (!window.location.hash && window.location.pathname.substr(0, 15) == '/forum/reactie/') {

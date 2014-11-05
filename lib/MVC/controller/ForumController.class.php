@@ -16,36 +16,6 @@ class ForumController extends Controller {
 		parent::__construct($query, null);
 	}
 
-	public function performAction(array $args = array()) {
-		if ($this->hasParam(2)) {
-			$this->action = $this->getParam(2);
-		}
-		if ($this->action === 'rss.xml') {
-			$this->action = 'rss';
-		}
-		if (!isset($_SESSION['forum_concept'])) {
-			$_SESSION['forum_concept'] = '';
-		}
-		try {
-			parent::performAction($this->getParams(3));
-		} catch (Exception $e) {
-			setMelding($e->getMessage(), -1);
-			$this->action = 'forum';
-			parent::performAction(array());
-		}
-		if ((!$this->isPosted() OR $this->action == 'zoeken') AND $this->action != 'rss') {
-			if (LoginModel::mag('P_LOGGED_IN')) {
-				$this->view = new CsrLayoutPage($this->getView());
-				$layoutmap = 'layout';
-			} else { // uitgelogd heeft nieuwe layout
-				$this->view = new CsrLayout2Page($this->getView());
-				$layoutmap = 'layout2';
-			}
-			$this->view->addStylesheet($this->view->getCompressedStyleUrl($layoutmap, 'forum'), true);
-			$this->view->addScript($this->view->getCompressedScriptUrl($layoutmap, 'forum'), true);
-		}
-	}
-
 	/**
 	 * Check permissions & valid params in actions.
 	 *
@@ -109,12 +79,31 @@ class ForumController extends Controller {
 		}
 	}
 
-	/**
-	 * Concept bericht opslaan
-	 */
-	public function concept() {
-		$_SESSION['forum_concept'] = trim(filter_input(INPUT_POST, 'forumBericht', FILTER_UNSAFE_RAW));
-		$this->view = new JsonResponse(true);
+	public function performAction(array $args = array()) {
+		if ($this->hasParam(2)) {
+			$this->action = $this->getParam(2);
+		}
+		if ($this->action === 'rss.xml') {
+			$this->action = 'rss';
+		}
+		try {
+			parent::performAction($this->getParams(3));
+		} catch (Exception $e) {
+			setMelding($e->getMessage(), -1);
+			$this->action = 'forum';
+			parent::performAction(array());
+		}
+		if ((!$this->isPosted() OR $this->action == 'zoeken') AND $this->action != 'rss') {
+			if (LoginModel::mag('P_LOGGED_IN')) {
+				$this->view = new CsrLayoutPage($this->getView());
+				$layoutmap = 'layout';
+			} else { // uitgelogd heeft nieuwe layout
+				$this->view = new CsrLayout2Page($this->getView());
+				$layoutmap = 'layout2';
+			}
+			$this->view->addStylesheet($this->view->getCompressedStyleUrl($layoutmap, 'forum'), true);
+			$this->view->addScript($this->view->getCompressedScriptUrl($layoutmap, 'forum'), true);
+		}
 	}
 
 	/**
@@ -499,15 +488,15 @@ class ForumController extends Controller {
 		}
 
 		// concept opslaan
-		$this->concept();
-		$tekst = $_SESSION['forum_concept'];
+		$tekst = trim(filter_input(INPUT_POST, 'forumBericht', FILTER_UNSAFE_RAW));
+		ForumDradenReagerenModel::instance()->setConcept($draad, $tekst);
 
 		// spam controle
 		require_once 'simplespamfilter.class.php';
 		$filter = new SimpleSpamfilter();
 		$spamtrap = filter_input(INPUT_POST, 'firstname', FILTER_UNSAFE_RAW);
 		if (!empty($spamtrap) OR $filter->isSpam($tekst)) { //TODO: logging
-			$_SESSION['forum_concept'] = '';
+			ForumDradenReagerenModel::instance()->setConcept($draad, null);
 			setMelding('SPAM', -1);
 			redirect(CSR_ROOT . '/forum');
 		}
@@ -554,7 +543,7 @@ class ForumController extends Controller {
 		// maak post
 		$post = ForumPostsModel::instance()->maakForumPost($draad->draad_id, $tekst, $_SERVER['REMOTE_ADDR'], $wacht_goedkeuring, $mailadres);
 		$_SESSION['forum_laatste_post_tekst'] = $tekst;
-		$_SESSION['forum_concept'] = '';
+		ForumDradenReagerenModel::instance()->setConcept($draad, null);
 		ForumDradenGelezenModel::instance()->setWanneerGelezenDoorLid($draad);
 
 		// bericht sturen naar pubcie@csrdelft dat er een bericht op goedkeuring wacht?
@@ -701,6 +690,37 @@ class ForumController extends Controller {
 		}
 		echo ForumPostsModel::instance()->citeerForumPost($post);
 		exit; //TODO: JsonResponse
+	}
+
+	/**
+	 * Concept bericht opslaan
+	 */
+	public function concept($action, $draad_id) {
+		if (!LoginModel::mag('P_LOGGED_IN')) {
+			$this->geentoegang();
+		}
+		$draad = ForumDradenModel::instance()->getForumDraad((int) $draad_id);
+		$deel = ForumDelenModel::instance()->getForumDeel($draad->forum_id);
+		if (!ForumController::magPosten($draad, $deel)) {
+			$this->geentoegang();
+		}
+		switch ($action) {
+			case 'save':
+				$tekst = trim(filter_input(INPUT_POST, 'forumBericht', FILTER_UNSAFE_RAW));
+				ForumDradenReagerenModel::instance()->setConcept($draad, $tekst);
+				break;
+
+			case 'ping':
+				if ('true' === filter_input(INPUT_POST, 'reageren', FILTER_SANITIZE_STRING)) {
+					ForumDradenReagerenModel::instance()->setWanneerReagerenDoorLid($draad);
+				}
+				break;
+
+			default:
+				$this->geentoegang();
+		}
+		$reageren = ForumDradenReagerenModel::instance()->getReagerenVoorDraad($draad);
+		$this->view = new ForumDraadReagerenView($reageren);
 	}
 
 }

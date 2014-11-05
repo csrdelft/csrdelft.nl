@@ -120,7 +120,7 @@ class MaaltijdAbonnementenModel {
 		$sql.= ' FROM lid, mlt_repetities AS r';
 		$values = array();
 		if ($alleenWaarschuwingen) {
-			$sql.= ' HAVING abo AND (filter <> "" OR abo_err OR kring_err OR status_err)'; // niet-(kring)-leden met abo
+			$sql.= ' HAVING abo AND (filter != "" OR abo_err OR kring_err OR status_err)'; // niet-(kring)-leden met abo
 		} elseif ($voorLid !== null) { // alles voor specifiek lid
 			$sql.= ' WHERE lid.uid = ?';
 			$values[] = $voorLid;

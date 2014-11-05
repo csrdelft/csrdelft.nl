@@ -40,9 +40,9 @@ $sStreeplijstQuery="
         FROM
                 Leden
         WHERE
-                achternaam <> ''
+                achternaam != ''
         AND
-                voornaam <> ''
+                voornaam != ''
         ORDER BY
                 Achternaam, Voornaam;";
 $rStreeplijstResult=mysql_query($sStreeplijstQuery, $db);

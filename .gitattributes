@@ -3396,6 +3396,7 @@ lib/MVC/model/entity/ForumCategorie.class.php -text
 lib/MVC/model/entity/ForumDeel.class.php -text
 lib/MVC/model/entity/ForumDraad.class.php -text
 lib/MVC/model/entity/ForumDraadGelezen.class.php -text
+lib/MVC/model/entity/ForumDraadReageren.class.php -text
 lib/MVC/model/entity/ForumDraadVerbergen.class.php -text
 lib/MVC/model/entity/ForumDraadVolgen.class.php -text
 lib/MVC/model/entity/ForumPost.class.php -text
@@ -4200,6 +4201,7 @@ lib/templates/MVC/forum/deel_lijst.tpl -text
 lib/templates/MVC/forum/draad.tpl -text
 lib/templates/MVC/forum/draad_lijst.tpl -text
 lib/templates/MVC/forum/draad_mod.tpl -text
+lib/templates/MVC/forum/draad_reageren.tpl -text
 lib/templates/MVC/forum/draad_zijbalk.tpl -text
 lib/templates/MVC/forum/forum.tpl -text
 lib/templates/MVC/forum/head_buttons.tpl -text
@@ -4428,3 +4430,4 @@ sql/6320_maalcie_int_prijzen.sql -text
 sql/6391_execution_times.sql -text
 sql/6421_ongelezen.txt -text
 sql/6743_acl.sql -text
+sql/6780_forum_reageren.sql -text

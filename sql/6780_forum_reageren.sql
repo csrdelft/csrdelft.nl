@@ -1,0 +1,1 @@
+CREATE TABLE forum_draden_reageren (draad_id int(11) NOT NULL, uid varchar(4) NOT NULL, datum_tijd datetime NOT NULL, concept text NULL DEFAULT NULL, PRIMARY KEY (draad_id, uid)) ENGINE=InnoDB DEFAULT CHARSET=utf8 auto_increment=1;

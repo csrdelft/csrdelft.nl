@@ -289,6 +289,69 @@ class ForumDelenModel extends PersistenceModel {
 
 }
 
+class ForumDradenReagerenModel extends PersistenceModel {
+
+	const orm = 'ForumDraadReageren';
+
+	protected static $instance;
+
+	private function getReagerenDoorLid(ForumDraad $draad) {
+		return $this->retrieveByPrimaryKey(array($draad->draad_id, LoginModel::getUid()));
+	}
+
+	private function nieuwReagerenDoorLid(ForumDraad $draad, $bericht) {
+		$reageren = new ForumDraadReageren();
+		$reageren->draad_id = $draad->draad_id;
+		$reageren->uid = LoginModel::getUid();
+		$reageren->datum_tijd = getDateTime();
+		$reageren->concept = $bericht;
+		$this->create($reageren);
+		return $reageren;
+	}
+
+	public function getReagerenVoorDraad(ForumDraad $draad) {
+		return $this->find('draad_id = ? AND datum_tijd > ?', array($draad->draad_id, getDateTime(strtotime(Instellingen::get('forum', 'reageren_tijd')))));
+	}
+
+	public function setWanneerReagerenDoorLid(ForumDraad $draad) {
+		$reageren = $this->getReagerenDoorLid($draad);
+		if (!$reageren) {
+			$this->nieuwReagerenDoorLid($draad, null);
+		} else {
+			$reageren->datum_tijd = getDateTime();
+			$this->update($reageren);
+		}
+		return true;
+	}
+
+	public function getConcept(ForumDraad $draad) {
+		$reageren = $this->getReagerenDoorLid($draad);
+		if ($reageren) {
+			return $reageren->concept;
+		}
+		return null;
+	}
+
+	public function setConcept(ForumDraad $draad, $bericht) {
+		if (empty($bericht)) {
+			$bericht = null;
+			$wanneer = getDateTime(strtotime(Instellingen::get('forum', 'reageren_tijd'))); // voorkom verouderde melding
+		} else {
+			$wanneer = getDateTime();
+		}
+		$reageren = $this->getReagerenDoorLid($draad);
+		if (!$reageren) {
+			$this->nieuwReagerenDoorLid($draad, $bericht);
+		} else {
+			$reageren->datum_tijd = $wanneer;
+			$reageren->concept = $bericht;
+			$this->update($reageren);
+		}
+		return true;
+	}
+
+}
+
 class ForumDradenGelezenModel extends PersistenceModel {
 
 	const orm = 'ForumDraadGelezen';
