@@ -16,7 +16,7 @@ $(document).ready(function ($) {
 	var $textarea = $('#forumBericht');
 	var $concept = $('#forumConcept');
 
-	if ($concept) {
+	if ($concept.length === 1) {
 		var update = true; // stop updaten bij reageren
 
 		var toggleShowSaveConcept = function () {
