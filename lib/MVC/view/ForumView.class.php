@@ -110,8 +110,8 @@ class ForumDeelView extends ForumView {
 		$this->smarty->assign('deel', $this->model);
 		$this->smarty->assign('paging', $this->paging);
 		$this->smarty->assign('belangrijk', $this->belangrijk);
-		$this->smarty->assign('post_form_titel', ForumDradenReagerenModel::instance()->getConceptTitel($this->deel));
-		$this->smarty->assign('post_form_tekst', ForumDradenReagerenModel::instance()->getConcept($this->deel));
+		$this->smarty->assign('post_form_titel', ForumDradenReagerenModel::instance()->getConceptTitel($this->model));
+		$this->smarty->assign('post_form_tekst', ForumDradenReagerenModel::instance()->getConcept($this->model));
 		$this->smarty->assign('reageren', ForumDradenReagerenModel::instance()->getReagerenVoorDeel($this->model));
 		$this->smarty->display('MVC/forum/deel.tpl');
 	}
