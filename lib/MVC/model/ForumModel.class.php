@@ -305,13 +305,13 @@ class ForumDradenReagerenModel extends PersistenceModel {
 	 * @return ForumDraadReageren
 	 */
 	private function getReagerenDoorLid(ForumDeel $deel, $draad_id = null) {
-		return $this->retrieveByPrimaryKey(array($deel->forum_id, $draad_id, LoginModel::getUid()));
+		return $this->retrieveByPrimaryKey(array($deel->forum_id, (int) $draad_id, LoginModel::getUid()));
 	}
 
 	private function nieuwReagerenDoorLid(ForumDeel $deel, $draad_id = null, $concept = null, $titel = null) {
 		$reageren = new ForumDraadReageren();
 		$reageren->forum_id = $deel->forum_id;
-		$reageren->draad_id = $draad_id;
+		$reageren->draad_id = (int) $draad_id;
 		$reageren->uid = LoginModel::getUid();
 		$reageren->datum_tijd = getDateTime();
 		$reageren->concept = $concept;
@@ -325,7 +325,7 @@ class ForumDradenReagerenModel extends PersistenceModel {
 	}
 
 	public function getReagerenVoorDeel(ForumDeel $deel) {
-		return $this->find('forum_id = ? AND draad_id IS NULL AND uid != ? AND datum_tijd > ?', array($deel->forum_id, LoginModel::getUid(), getDateTime(strtotime(Instellingen::get('forum', 'reageren_tijd')))));
+		return $this->find('forum_id = ? AND draad_id = 0 AND uid != ? AND datum_tijd > ?', array($deel->forum_id, LoginModel::getUid(), getDateTime(strtotime(Instellingen::get('forum', 'reageren_tijd')))));
 	}
 
 	public function verwijderReagerenVoorDraad(ForumDraad $draad) {
