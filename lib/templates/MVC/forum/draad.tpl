@@ -159,7 +159,6 @@ pagecount=ForumPostsModel::instance()->getAantalPaginas($draad->draad_id) curpag
 			<td>&nbsp;</td>
 			<td class="forumtekst">
 				{$smarty.capture.magreageren}
-				{include file='MVC/forum/draad_reageren.tpl'}
 			</td>
 		</tr>
 
@@ -167,7 +166,6 @@ pagecount=ForumPostsModel::instance()->getAantalPaginas($draad->draad_id) curpag
 			<td colspan="2" class="forumdraadtitelbottom">
 				<div class="breadcrumbs">{$breadcrumbs}</div>
 				{$smarty.capture.kop}
-				<br />
 			</td>
 		</tr>
 

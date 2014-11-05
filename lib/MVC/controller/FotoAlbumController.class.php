@@ -235,9 +235,8 @@ class FotoAlbumController extends AclController {
 		if ($album !== null AND FotoAlbumModel::verwijderFoto(new Foto($album, $naam))) {
 			echo '<div id="' . md5($naam) . '" class="remove"></div>';
 		} else {
-			setMelding('Foto verwijderen mislukt', -1);
+			$this->view = new JsonResponse('Foto verwijderen mislukt', 503);
 		}
-		exit; //TODO: JsonResponse
 	}
 
 	public function albumcover(FotoAlbum $album) {

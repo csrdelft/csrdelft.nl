@@ -297,22 +297,35 @@ class ForumDradenReagerenModel extends PersistenceModel {
 
 	protected static $instance;
 
-	private function getReagerenDoorLid(ForumDraad $draad) {
-		return $this->retrieveByPrimaryKey(array($draad->draad_id, LoginModel::getUid()));
+	/**
+	 * Fetch reageren object voor deel of draad.
+	 * 
+	 * @param ForumDeel $deel
+	 * @param int $draad_id
+	 * @return ForumDraadReageren
+	 */
+	private function getReagerenDoorLid(ForumDeel $deel, $draad_id = null) {
+		return $this->retrieveByPrimaryKey(array($deel->forum_id, $draad_id, LoginModel::getUid()));
 	}
 
-	private function nieuwReagerenDoorLid(ForumDraad $draad, $bericht) {
+	private function nieuwReagerenDoorLid(ForumDeel $deel, $draad_id = null, $concept = null, $titel = null) {
 		$reageren = new ForumDraadReageren();
-		$reageren->draad_id = $draad->draad_id;
+		$reageren->forum_id = $deel->forum_id;
+		$reageren->draad_id = $draad_id;
 		$reageren->uid = LoginModel::getUid();
 		$reageren->datum_tijd = getDateTime();
-		$reageren->concept = $bericht;
+		$reageren->concept = $concept;
+		$reageren->titel = $titel;
 		$this->create($reageren);
 		return $reageren;
 	}
 
 	public function getReagerenVoorDraad(ForumDraad $draad) {
 		return $this->find('draad_id = ? AND uid != ? AND datum_tijd > ?', array($draad->draad_id, LoginModel::getUid(), getDateTime(strtotime(Instellingen::get('forum', 'reageren_tijd')))));
+	}
+
+	public function getReagerenVoorDeel(ForumDeel $deel) {
+		return $this->find('forum_id = ? AND draad_id IS NULL AND uid != ? AND datum_tijd > ?', array($deel->forum_id, LoginModel::getUid(), getDateTime(strtotime(Instellingen::get('forum', 'reageren_tijd')))));
 	}
 
 	public function verwijderReagerenVoorDraad(ForumDraad $draad) {
@@ -327,36 +340,44 @@ class ForumDradenReagerenModel extends PersistenceModel {
 		}
 	}
 
-	public function setWanneerReagerenDoorLid(ForumDraad $draad) {
-		$reageren = $this->getReagerenDoorLid($draad);
+	public function setWanneerReagerenDoorLid(ForumDeel $deel, $draad_id = null) {
+		$reageren = $this->getReagerenDoorLid($deel, $draad_id);
 		if (!$reageren) {
-			$this->nieuwReagerenDoorLid($draad, null);
+			$this->nieuwReagerenDoorLid($deel, $draad_id);
 		} else {
 			$reageren->datum_tijd = getDateTime();
 			$this->update($reageren);
 		}
 	}
 
-	public function getConcept(ForumDraad $draad) {
-		$reageren = $this->getReagerenDoorLid($draad);
+	public function getConcept(ForumDeel $deel, $draad_id = null) {
+		$reageren = $this->getReagerenDoorLid($deel, $draad_id);
 		if ($reageren) {
 			return $reageren->concept;
 		}
 		return null;
 	}
 
-	public function setConcept(ForumDraad $draad, $bericht) {
-		$reageren = $this->getReagerenDoorLid($draad);
-		if (empty($bericht)) {
+	public function getConceptTitel(ForumDeel $deel) {
+		$reageren = $this->getReagerenDoorLid($deel);
+		if ($reageren) {
+			return $reageren->titel;
+		}
+		return null;
+	}
+
+	public function setConcept(ForumDeel $deel, $draad_id = null, $concept = null, $titel = null) {
+		$reageren = $this->getReagerenDoorLid($deel, $draad_id);
+		if (empty($concept)) {
 			if ($reageren) {
 				$this->delete($reageren);
 			}
 		} else {
 			if (!$reageren) {
-				$this->nieuwReagerenDoorLid($draad, $bericht);
+				$this->nieuwReagerenDoorLid($deel, $draad_id, $concept, $titel);
 			} else {
-				$reageren->concept = $bericht;
-				$reageren->datum_tijd = getDateTime();
+				$reageren->concept = $concept;
+				$reageren->titel = $titel;
 				$this->update($reageren);
 			}
 		}
@@ -803,6 +824,17 @@ class ForumDradenModel extends PersistenceModel implements Paging {
 		$rowcount = $this->update($draad);
 		if ($rowcount !== 1) {
 			throw new Exception('Wijzigen van ' . $property . ' mislukt');
+		}
+		if ($property === 'belangrijk') {
+			ForumDradenVerbergenModel::instance()->toonDraadVoorIedereen($draad);
+		} elseif ($property === 'gesloten') {
+			ForumDradenVolgenModel::instance()->stopVolgenVoorIedereen($draad);
+		} elseif ($property === 'verwijderd') {
+			ForumDradenVolgenModel::instance()->stopVolgenVoorIedereen($draad);
+			ForumDradenVerbergenModel::instance()->toonDraadVoorIedereen($draad);
+			ForumDradenGelezenModel::instance()->verwijderDraadGelezen($draad);
+			ForumDradenReagerenModel::instance()->verwijderReagerenVoorDraad($draad);
+			ForumPostsModel::instance()->verwijderForumPostsVoorDraad($draad, $deel); // hertellen
 		}
 	}
 

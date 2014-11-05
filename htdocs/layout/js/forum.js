@@ -2,9 +2,11 @@ function saveConceptForumBericht() {
 	var $concept = $('#forumConcept');
 	$concept.fadeOut();
 	var $textarea = $('#forumBericht');
+	var $titel = $('#nieuweTitel');
 	if ($textarea.val() !== $textarea.attr('origvalue')) {
-		$.post('/forum/concept/save/' + $concept.attr('data-draad'), {
-			forumBericht: $textarea.val()
+		$.post($concept.attr('data-url'), {
+			forumBericht: $textarea.val(),
+			titel: ($titel.length === 1 ? $titel.val() : ''),
 		}).done(function () {
 			$textarea.attr('origvalue', $textarea.val());
 		}).fail(alert);
@@ -17,31 +19,21 @@ $(document).ready(function ($) {
 	var $concept = $('#forumConcept');
 
 	if ($concept.length === 1) {
-		var update = true; // stop updaten bij reageren
-
 		var toggleShowSaveConcept = function () {
 			if ($textarea.val() !== $textarea.attr('origvalue')) {
 				$concept.fadeIn();
-
-				if (update) {
-					update = false;
-					updateReageren();
-				}
 			} else {
 				$concept.fadeOut();
 			}
 		};
 		var updateReageren = function () {
-			$.post('/forum/concept/ping/' + $concept.attr('data-draad'), {
-				reageren: $textarea.val() !== $textarea.attr('origvalue')
+			$.post($concept.attr('data-url'), {
+				ping: ($textarea.val() !== $textarea.attr('origvalue'))
 			}).done(dom_update).fail(alert);
 		};
-
 		var ping = setInterval(updateReageren, 60000);
 		var autosave;
-
 		$textarea.focusin(function () {
-			clearInterval(ping);
 			autosave = setInterval(toggleShowSaveConcept, 3000);
 		});
 		$textarea.focusout(function () {
@@ -165,7 +157,7 @@ function forumBewerken(postId) {
 			bewerkForm += '<input type="button" value="Opslaan" onclick="submitPost();" /> <input type="button" value="Voorbeeld" onclick="CsrBBPreview(\'forumBewerkBericht\', \'bewerkPreview\');" /> <input type="button" value="Annuleren" onclick="restorePost();" />';
 			bewerkForm += '</form>';
 			bewerkContainer.innerHTML = bewerkForm;
-			document.getElementById('forumBewerkBericht').value = http.responseText;
+			document.getElementById('forumBewerkBericht').value = http.responseText.substring(1, http.responseText.length - 1);
 			$('#forumBewerkBericht').autosize();
 			$('#forumBewerkBericht').markItUp(mySettings); // mySettings located in set.js
 			$(bewerkContainer).parent().children('td.auteur:first').append('<div id="bewerk-melding">Als u dingen aanpast zet er dan even bij w&aacute;t u aanpast! Gebruik bijvoorbeeld [s]...[/s]</div>');
@@ -181,7 +173,7 @@ function forumCiteren(postId) {
 	http.open('POST', '/forum/citeren/' + postId, true);
 	http.onreadystatechange = function () {
 		if (http.readyState == 4) {
-			document.getElementById('forumBericht').value += http.responseText;
+			document.getElementById('forumBericht').value += http.responseText.substring(1, http.responseText.length - 1);
 			$(window).scrollTo('#reageren');
 		}
 	};

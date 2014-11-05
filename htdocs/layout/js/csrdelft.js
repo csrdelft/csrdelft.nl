@@ -694,15 +694,15 @@ function CsrBBPreview(source, dest) {
 		var previewDiv = document.getElementById(dest);
 		parseBBCode(code, previewDiv);
 		$(previewDiv).addClass('preview-show');
-		try {
-			$(window).scrollTo('#' + source, 1, {
-				offset: {
-					top: 0,
-					left: 0
-				}
-			});
-		} catch (e) {
-			// missing scrollTo
-		}
+		/*try {
+		 $(window).scrollTo('#' + source, 1, {
+		 offset: {
+		 top: 0,
+		 left: 0
+		 }
+		 });
+		 } catch (e) {
+		 // missing scrollTo
+		 }*/
 	}
 }
