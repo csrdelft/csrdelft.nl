@@ -136,7 +136,10 @@ td.maaltijd-aangemeld, td.maaltijd-afgemeld {
 .abonnement-warning, .taak-warning {
 	background-color: #FFEE66;
 }
-.abonnement-warning, .maaltijd-gasten {
+.abonnement-error {
+	background-color: #000000;
+}
+.abonnement-error, .abonnement-warning, .maaltijd-gasten {
 	text-align: center;
 }
 .taak-grijs, .taak-grijs a {

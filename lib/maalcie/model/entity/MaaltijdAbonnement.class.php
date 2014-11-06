@@ -35,6 +35,7 @@ class MaaltijdAbonnement {
 	private $maaltijd_repetitie;
 	private $van_uid;
 	private $waarschuwing;
+	private $foutmelding;
 
 	public function __construct($mrid = 0, $uid = '', $wanneer = '') {
 		$this->mlt_repetitie_id = (int) $mrid;
@@ -66,6 +67,10 @@ class MaaltijdAbonnement {
 		return $this->waarschuwing;
 	}
 
+	public function getFoutmelding() {
+		return $this->foutmelding;
+	}
+
 	public function setWanneerIngeschakeld($datumtijd) {
 		if (!is_string($datumtijd)) {
 			throw new Exception('Geen string: wanneer ingeschakeld');
@@ -88,6 +93,11 @@ class MaaltijdAbonnement {
 		$this->waarschuwing = $string;
 	}
 
-}
+	public function setFoutmelding($string) {
+		if (!is_string($string)) {
+			throw new Exception('Geen string: set foutmelding');
+		}
+		$this->foutmelding = $string;
+	}
 
-?>
+}

@@ -85,13 +85,13 @@ class MaaltijdAbonnementenModel {
 			$abonnement->setMaaltijdRepetitie($repById[$mrid]);
 			// toon waarschuwingen
 			if ($abo['abo_err']) {
-				$abonnement->setWaarschuwing('Niet abonneerbaar');
+				$abonnement->setFoutmelding('Niet abonneerbaar');
 			} elseif ($abo['status_err']) {
 				$abonnement->setWaarschuwing('Geen huidig lid');
 			} elseif ($abo['kring_err']) {
 				$abonnement->setWaarschuwing('Geen actief kringlid');
 			} elseif (!MaaltijdAanmeldingenModel::checkAanmeldFilter($uid, $abo['filter'])) {
-				$abonnement->setWaarschuwing('Niet toegestaan vanwege aanmeldrestrictie: ' . $abo['filter']);
+				$abonnement->setFoutmelding('Niet toegestaan vanwege aanmeldrestrictie: ' . $abo['filter']);
 			} elseif ($alleenWaarschuwingen) {
 				continue;
 			}
