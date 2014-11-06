@@ -110,7 +110,7 @@ pre.bbcode {
 	border-bottom: 2px solid #aaa;
 	max-width: 570px;
 	max-height: 360px;
-	white-space: normal;
+	white-space: pre-wrap;
 	overflow-y: auto;
 }
 
