@@ -24,7 +24,6 @@ class BeheerAbonnementenController extends AclController {
 			$this->acl = array(
 				'inschakelen'	 => 'P_MAAL_MOD',
 				'uitschakelen'	 => 'P_MAAL_MOD',
-				'voorlid'		 => 'P_MAAL_MOD',
 				'novieten'		 => 'P_MAAL_MOD'
 			);
 		}
@@ -56,19 +55,6 @@ class BeheerAbonnementenController extends AclController {
 
 	public function abonneerbaar() {
 		$this->beheer(false, false);
-	}
-
-	public function voorlid() {
-		$InputField = new LidField('voor_lid', null, null, 'allepersonen'); // fetches POST values itself
-		if ($InputField->validate()) {
-			$uid = $InputField->getValue();
-			$matrix = array();
-			$matrix[$uid] = MaaltijdAbonnementenModel::getAbonnementenVoorLid($uid, false, true);
-			$this->view = new BeheerAbonnementenLijstView($matrix);
-		} else {
-			$this->view = new BeheerAbonnementenLijstView(array());
-			setMelding($InputField->error, -1);
-		}
 	}
 
 	public function novieten() {

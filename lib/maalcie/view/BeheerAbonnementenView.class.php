@@ -12,15 +12,10 @@ class BeheerAbonnementenView extends SmartyTemplateView {
 
 	private $repetities;
 	private $status;
-	private $form;
 
 	public function __construct(array $matrix, array $repetities, $alleenWaarschuwingen = false, $ingeschakeld = null) {
 		parent::__construct($matrix, 'Beheer abonnementen');
 		$this->repetities = $repetities;
-
-		$field = new LidField('voor_lid', null, 'Toon abonnementen van persoon:', 'allepersonen');
-		$this->form = new Formulier(null, 'maalcie-subform-abos', maalcieUrl . '/voorlid');
-		$this->form->addFields(array($field));
 
 		$this->status = 'abo';
 		if (is_bool($ingeschakeld)) {
@@ -32,7 +27,6 @@ class BeheerAbonnementenView extends SmartyTemplateView {
 	}
 
 	public function view() {
-		$this->smarty->assign('form', $this->form);
 		$this->smarty->assign('toon', $this->status);
 
 		$this->smarty->assign('aborepetities', MaaltijdRepetitiesModel::getAbonneerbareRepetities());
