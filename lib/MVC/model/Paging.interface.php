@@ -12,6 +12,8 @@ interface Paging {
 
 	public function getAantalPerPagina();
 
+	public function setAantalPerPagina($aantal);
+
 	public function getHuidigePagina();
 
 	public function setHuidigePagina($pagina, $voor);

@@ -231,6 +231,9 @@ class ForumController extends Controller {
 		if ($pagina === null) {
 			$pagina = LidInstellingen::get('forum', 'open_draad_op_pagina');
 		}
+		if ($draad->pagina_per_post) {
+			ForumPostsModel::instance()->setAantalPerPagina(1);
+		}
 		$paging = true;
 		if ($pagina === 'ongelezen' AND $gelezen) {
 			ForumPostsModel::instance()->setPaginaVoorLaatstGelezen($gelezen);
@@ -408,7 +411,7 @@ class ForumController extends Controller {
 		if (!$deel->magModereren()) {
 			$this->geentoegang();
 		}
-		if (in_array($property, array('verwijderd', 'gesloten', 'plakkerig', 'belangrijk', 'eerste_post_plakkerig'))) {
+		if (in_array($property, array('verwijderd', 'gesloten', 'plakkerig', 'belangrijk', 'eerste_post_plakkerig', 'pagina_per_post'))) {
 			$value = !$draad->$property;
 			if ($property === 'belangrijk' AND ! LoginModel::mag('P_FORUM_BELANGRIJK')) {
 				$this->geentoegang();

@@ -91,6 +91,11 @@ class ForumDraad extends PersistentEntity {
 	 */
 	public $eerste_post_plakkerig;
 	/**
+	 * Een post per pagina
+	 * @var boolean
+	 */
+	public $pagina_per_post;
+	/**
 	 * Forumposts
 	 * @var ForumPost[]
 	 */
@@ -145,7 +150,8 @@ class ForumDraad extends PersistentEntity {
 		'wacht_goedkeuring'		 => array(T::Boolean),
 		'plakkerig'				 => array(T::Boolean),
 		'belangrijk'			 => array(T::Boolean),
-		'eerste_post_plakkerig'	 => array(T::Boolean)
+		'eerste_post_plakkerig'	 => array(T::Boolean),
+		'pagina_per_post'		 => array(T::Boolean)
 	);
 	/**
 	 * Database primary key

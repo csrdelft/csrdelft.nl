@@ -622,6 +622,10 @@ class ForumDradenModel extends PersistenceModel implements Paging {
 		return $this->per_pagina;
 	}
 
+	public function setAantalPerPagina($aantal) {
+		$this->per_pagina = (int) $aantal;
+	}
+
 	public function getHuidigePagina() {
 		return $this->pagina;
 	}
@@ -875,6 +879,10 @@ class ForumPostsModel extends PersistenceModel implements Paging {
 
 	public function getAantalPerPagina() {
 		return $this->per_pagina;
+	}
+
+	public function setAantalPerPagina($aantal) {
+		$this->per_pagina = (int) $aantal;
 	}
 
 	public function getHuidigePagina() {

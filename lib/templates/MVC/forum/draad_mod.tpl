@@ -3,6 +3,24 @@
 		<tbody>
 			<tr>
 				<td>
+					{if LoginModel::mag('P_FORUM_BELANGRIJK')}
+						<a href="/forum/wijzigen/{$draad->draad_id}/belangrijk" class="knop post ReloadPage" title="Verander belangrijkheid">
+							{icon get="asterisk_orange"} maak {if $draad->belangrijk}<span class="dikgedrukt">niet</span> {/if}belangrijk
+						</a>
+						<br /><br />
+					{/if}
+					<a href="/forum/wijzigen/{$draad->draad_id}/plakkerig" class="knop post ReloadPage" title="Verander plakkerigheid">
+						{icon get="note"} maak {if $draad->plakkerig}<span class="dikgedrukt">niet</span> {/if}plakkerig
+					</a>
+					<br /><br />
+					<a href="/forum/wijzigen/{$draad->draad_id}/eerste_post_plakkerig" class="knop post ReloadPage" title="Verander plakkerigheid van eerste post">
+						<input type="checkbox" {if $draad->eerste_post_plakkerig}checked="checked"{/if}/> 1e post plakkerig
+					</a>
+					<br /><br />
+					<a href="/forum/wijzigen/{$draad->draad_id}/pagina_per_post" class="knop post ReloadPage" title="Verander 1 pagina per post">
+						<input type="checkbox" {if $draad->pagina_per_post}checked="checked"{/if}/> 1 pagina per post
+					</a>
+					<br /><br />
 					<a href="/forum/wijzigen/{$draad->draad_id}/verwijderd" class="knop post confirm ReloadPage" title="Verander status verwijderd (incl. alle reacties)">
 						{if $draad->verwijderd}
 							{icon get="arrow_undo"} draad herstellen
@@ -10,21 +28,8 @@
 							{icon get="cross"} draad verwijderen
 						{/if}
 					</a>
-					&nbsp;<a href="/forum/onderwerp/{$draad->draad_id}/prullenbak" class="knop" title="Bekijk de reacties die zijn verwijderd">{icon get="bin_closed"}</a>
-					<br /><br />
-					<a href="/forum/wijzigen/{$draad->draad_id}/plakkerig" class="knop post ReloadPage" title="Verander plakkerigheid">
-						{icon get="note"} maak {if $draad->plakkerig}<span class="dikgedrukt">niet</span> {/if}plakkerig
-					</a>
-					<br /><br />
-					<a href="/forum/wijzigen/{$draad->draad_id}/eerste_post_plakkerig" class="knop post ReloadPage" title="Verander plakkerigheid van eerste post">
-						{icon get="note"} maak eerste post {if $draad->eerste_post_plakkerig}<span class="dikgedrukt">niet</span> {/if}plakkerig
-					</a>
-					{if LoginModel::mag('P_FORUM_BELANGRIJK')}
-						<br /><br />
-						<a href="/forum/wijzigen/{$draad->draad_id}/belangrijk" class="knop post ReloadPage" title="Verander belangrijkheid">
-							{icon get="asterisk_orange"} maak {if $draad->belangrijk}<span class="dikgedrukt">niet</span> {/if}belangrijk
-						</a>
-					{/if}
+					&nbsp;
+					<a href="/forum/onderwerp/{$draad->draad_id}/prullenbak" class="knop" title="Bekijk de reacties die zijn verwijderd">{icon get="bin_closed"}</a>
 				</td>
 				<td>
 					<form action="/forum/wijzigen/{$draad->draad_id}/forum_id" method="post">
