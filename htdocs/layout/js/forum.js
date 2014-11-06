@@ -41,30 +41,16 @@ $(document).ready(function ($) {
 		});
 	}
 
-	//naar juiste forumreactie scrollen door hash toe te voegen
+	// naar juiste forumreactie scrollen door hash toe te voegen
 	if (!window.location.hash && window.location.pathname.substr(0, 15) == '/forum/reactie/') {
 		var reactieid = parseInt(window.location.pathname.substr(15), 10);
 		window.location.hash = '#' + reactieid;
 	}
 
-	//klein beetje terug omhoog scrollen bij ongelezen lijn
-	if (window.innerWidth > 960 && window.innerWidth < 1550 && window.location.hash == '#ongelezen') {
-		try {
-			$(window).scrollTo('#ongelezen', 1, {
-				offset: {
-					top: -100,
-					left: 0
-				}
-			});
-		} catch (e) {
-			// missing scrollTo
-		}
-	}
-
 	$textarea.markItUp(mySettings); // mySettings located in set.js
 
 	$textarea.keyup(function (event) {
-		if (event.keyCode == 13) { //enter
+		if (event.keyCode == 13) { // enter
 			CsrBBPreview('forumBericht', 'berichtPreview');
 		}
 		if (/ketzer/.test($textarea.val())) {
@@ -133,7 +119,8 @@ function togglePasfotos(uids, div) {
 		http.send(null);
 	}
 }
-/*
+
+/**
  * Een post bewerken in het forum.
  * Haal een post op, bouw een formuliertje met javascript.
  */
@@ -178,8 +165,8 @@ function forumCiteren(postId) {
 		}
 	};
 	http.send(null);
-	//we returnen altijd false, dan wordt de href= van <a> niet meer uitgevoerd.
-	//Het werkt dan dus nog wel als javascript uit staat.
+	// We returnen altijd false, dan wordt de href= van <a> niet meer uitgevoerd.
+	// Het werkt dan dus nog wel als javascript uit staat.
 	return false;
 }
 function restorePost() {

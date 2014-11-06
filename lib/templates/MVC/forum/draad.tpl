@@ -71,11 +71,11 @@
 
 	{capture name='magreageren'}
 		{if $draad->verwijderd}
-			<div class="draad-verwijderd">Dit onderwerp is verwijderd.</div>
+			<span class="draad-verwijderd">Dit onderwerp is verwijderd.</span>
 		{elseif $draad->gesloten}
-			<div class="draad-gesloten">U kunt hier niet meer reageren omdat dit onderwerp gesloten is.</div>
+			<span class="draad-gesloten">U kunt hier niet meer reageren omdat dit onderwerp gesloten is.</span>
 		{elseif !ForumController::magPosten($draad, $deel)}
-			<div class="draad-readonly">U mag in dit deel van het forum niet reageren.</div>
+			<span class="draad-readonly">U mag in dit deel van het forum niet reageren.</span>
 		{/if}
 	{/capture}
 
@@ -83,13 +83,6 @@
 
 <table id="forumtabel">
 	<tbody>
-
-		{if $smarty.capture.magreageren !== ''}
-			<tr>
-				<td>&nbsp;</td>
-				<td class="forumtekst">{$smarty.capture.magreageren}</td>
-			</tr>
-		{/if}
 
 		{capture name='paginering'}
 			<tr class="tussenschot">
@@ -162,7 +155,7 @@ pagecount=ForumPostsModel::instance()->getAantalPaginas($draad->draad_id) curpag
 
 		<tr>
 			<td>&nbsp;</td>
-			<td class="forumtekst">
+			<td class="forumtekst magreageren">
 				{$smarty.capture.magreageren}
 			</td>
 		</tr>
