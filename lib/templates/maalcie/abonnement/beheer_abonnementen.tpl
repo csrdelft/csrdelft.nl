@@ -19,6 +19,7 @@ Op deze pagina kunt u alle abonnementen beheren en zoeken.
 	<option value="ingeschakeld" class="arrow"{if $toon === 'in'} selected="selected"{/if}>ingeschakeld</option>
 	<option value="abonneerbaar" class="arrow"{if $toon === 'abo'} selected="selected"{/if}>abonneerbaar</option>
 </select>
+<p>&nbsp;</p>
 <table id="maalcie-tabel" class="maalcie-tabel">
 {foreach name=tabel from=$matrix key=vanuid item=abonnementen}
 	{if $smarty.foreach.tabel.index % 25 === 0}
