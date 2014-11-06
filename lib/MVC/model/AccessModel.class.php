@@ -467,9 +467,11 @@ class AccessModel extends CachedPersistenceModel {
 		// Is lid man of vrouw?
 		elseif (substr($attribute, 0, 8) === 'GESLACHT') {
 			$geslacht = substr($attribute, 9);
-			// Niet ingelogd heeft geslacht m dus check of ingelogd
-			if ($geslacht === $subject->getGeslacht() AND $this->hasPermission($subject, 'P_LOGGED_IN', true)) {
-				return true;
+			if ($geslacht === strtoupper($subject->getGeslacht())) {
+				// Niet ingelogd heeft geslacht m dus check of ingelogd
+				if ($this->hasPermission($subject, 'P_LOGGED_IN', true, true)) {
+					return true;
+				}
 			}
 		}
 		// Behoort een lid tot een bepaalde lichting?
