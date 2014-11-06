@@ -60,28 +60,18 @@ class AccessModel extends CachedPersistenceModel {
 	 * 
 	 */
 	public static function mag(Lid $subject, $permission, $token_authorizable = false) {
-		// case insensitive
-		$permission = strtoupper($permission);
-
-		// Try cache
-		$key = 'mag' . crc32(implode('-', array($subject->getUid(), $permission, $token_authorizable)));
-		if (self::instance()->isCached($key)) {
-			return self::instance()->getCached($key);
-		}
 
 		// Als het gaat om het ingelogde lid doe extra check op token.
 		// Alleen als $token_authorizable toegestaan is testen we met
 		// de permissies van het ingelogde lid, anders met niet-ingelogd.
-		if (!$token_authorizable AND LoginModel::instance()->isAuthenticatedByToken() AND $subject === LoginModel::instance()->getLid()) {
+		if (LoginModel::instance()->isAuthenticatedByToken() AND $subject->getUid() === LoginModel::getUid() AND ! $token_authorizable) {
 			$subject = LidCache::getLid('x999');
 		}
 
-		$result = self::instance()->hasPermission($subject, $permission);
+		// case insensitive
+		$permission = strtoupper($permission);
 
-		// Save result in cache
-		self::instance()->setCache($key, $result);
-
-		return $result;
+		return self::instance()->hasPermission($subject, $permission);
 	}
 
 	/**
@@ -103,7 +93,7 @@ class AccessModel extends CachedPersistenceModel {
 	 * Geldige prefixes voor rechten
 	 * @var array
 	 */
-	private static $prefix = array('verticale', 'groep', 'geslacht', 'lidjaar', 'lichting', 'ouderjaars', 'eerstejaars');
+	private static $prefix = array('GROEP', 'VERTICALE', 'GESLACHT', 'LICHTING', 'LIDJAAR', 'OUDERJAARS', 'EERSTEJAARS');
 
 	protected function __construct() {
 		parent::__construct();
@@ -114,7 +104,7 @@ class AccessModel extends CachedPersistenceModel {
 		return $this->retrieveByPrimaryKey(array($environment, $action, $resource));
 	}
 
-	public function getValidPerms() {
+	public function getPermissionSuggestions() {
 		$valid = array_keys($this->permissions);
 		$valid[] = 'groep:1234';
 		$valid[] = 'groep:KorteNaam';
@@ -123,11 +113,11 @@ class AccessModel extends CachedPersistenceModel {
 		$valid[] = 'ouderjaars';
 		$valid[] = 'eerstejaars';
 		foreach (VerticalenModel::instance()->find() as $verticale) {
-			$this->suggestions[] = 'verticale:' . $verticale->naam;
+			$valid[] = 'verticale:' . $verticale->naam;
 		}
 		$jong = Lichting::getJongsteLichting();
 		for ($jaar = $jong; $jaar > $jong - 7; $jaar--) {
-			$this->suggestions[] = 'lichting:' . $jaar;
+			$valid[] = 'lichting:' . $jaar;
 		}
 		return $valid;
 	}
@@ -136,28 +126,22 @@ class AccessModel extends CachedPersistenceModel {
 		// case insensitive
 		$permission = strtoupper($permission);
 
-		$or = explode(',', $permission);
-		foreach ($or as $and) {
-			$and = explode('+', $and);
-			foreach ($and as $or2) {
-				$or2 = explode('|', $or2);
-				foreach ($or2 as $perm) {
-					if (startsWith($perm, '!')) {
-						$perm = substr($perm, 1);
-					}
-					if (isset($this->permissions[$perm])) {
-						return true;
-					}
-					if (Lid::isValidUid($perm)) {
-						return true;
-					}
-					$perm = explode(':', $perm);
-					if (sizeof($perm) === 2 AND ! empty($perm[1]) AND in_array($perm[0], self::$prefix)) {
-						return true;
-					}
-				}
-			}
+		// Is de gevraagde permissie het uid van de gevraagde gebruiker?
+		if (Lid::isValidUid($permission)) {
+			return true;
 		}
+
+		// Is de gevraagde permissie voorgedefinieerd?
+		if (isset($this->permissions[$permission])) {
+			return true;
+		}
+
+		// splits permissie in type en waarde
+		$p = explode(':', $permission);
+		if (sizeof($p) === 2 AND ! empty($p[1]) AND in_array($p[0], self::$prefix)) {
+			return true;
+		}
+
 		return false;
 	}
 
@@ -281,6 +265,12 @@ class AccessModel extends CachedPersistenceModel {
 			return false;
 		}
 
+		// Try cache
+		$key = 'hasPermission' . crc32(implode('-', array($subject->getUid(), $permission)));
+		if ($this->isCached($key)) {
+			return $this->getCached($key);
+		}
+
 		// OR
 		if (strpos($permission, ',') !== false) {
 			// Het gevraagde mag een enkele permissie zijn, of meerdere, door komma's
@@ -292,10 +282,9 @@ class AccessModel extends CachedPersistenceModel {
 			foreach ($p as $perm) {
 				$result |= $this->hasPermission($subject, $perm);
 			}
-			return $result;
 		}
 		// AND
-		if (strpos($permission, '+') !== false) {
+		elseif (strpos($permission, '+') !== false) {
 			// Gecombineerde permissie:
 			// gebruiker moet alle permissies bezitten
 			$p = explode('+', $permission);
@@ -303,10 +292,9 @@ class AccessModel extends CachedPersistenceModel {
 			foreach ($p as $perm) {
 				$result &= $this->hasPermission($subject, $perm);
 			}
-			return $result;
 		}
 		// OR (secondary)
-		if (strpos($permission, '|') !== false) {
+		elseif (strpos($permission, '|') !== false) {
 			// Mogelijkheid voor OR binnen een AND
 			// Hierdoor zijn er geen haakjes nodig in de syntax voor niet al te ingewikkelde statements.
 			// Statements waarbij haakjes wel nodig zijn moet je niet willen.
@@ -315,21 +303,17 @@ class AccessModel extends CachedPersistenceModel {
 			foreach ($p as $perm) {
 				$result |= $this->hasPermission($subject, $perm);
 			}
-			return $result;
 		}
 		// Negatie van een permissie (gebruiker mag deze permissie niet bezitten)
-		if (startsWith($permission, '!')) {
-			return !$this->hasPermission($subject, substr($permission, 1));
+		elseif (startsWith($permission, '!')) {
+			$result = !$this->hasPermission($subject, substr($permission, 1));
 		}
-
-		// Try cache
-		$key = 'hasPermission' . crc32(implode('-', array($subject->getUid(), $permission)));
-		if ($this->isCached($key)) {
-			return $this->getCached($key);
+		// Is de gevraagde permissie het uid van de gevraagde gebruiker?
+		elseif ($permission === $subject->getUid()) {
+			$result = true;
 		}
-
 		// Is de gevraagde permissie voorgedefinieerd?
-		if (isset($this->permissions[$permission])) {
+		elseif (isset($this->permissions[$permission])) {
 			$result = $this->mandatoryAccessControl($subject, $permission);
 		} else {
 			$result = $this->discretionaryAccessControl($subject, $permission);
@@ -398,120 +382,149 @@ class AccessModel extends CachedPersistenceModel {
 		return false;
 	}
 
-	private function discretionaryAccessControl(Lid $subject, $attribute) {
+	private function discretionaryAccessControl(Lid $subject, $permission) {
 
-		// als een uid ingevoerd wordt true teruggeven als het om de huidige gebruiker gaat.
-		if ($attribute === $subject->getUid()) {
-			return true;
+		// splits permissie in type en waarde
+		$p = explode(':', $permission);
+		if (sizeof($p) === 2 AND ! empty($p[1]) AND in_array($p[0], self::$prefix)) {
+			$prefix = $p[0];
+			$gevraagd = $p[1];
+		} else {
+			return false;
 		}
-		// Behoort een lid tot een bepaalde verticale?
-		elseif (substr($attribute, 0, 9) === 'VERTICALE') {
-			$verticale = substr($attribute, 10);
 
-			// splitst opgegeven term in verticale en functie
-			$parts = explode('>', $verticale, 2);
-			if (!isset($parts[1])) {
-				// RechtenField maakt van > een &gt;
-				$parts = explode('&gt;', $verticale, 2);
-			}
+		switch ($prefix) {
 
-			// check verticale first
-			$found = false;
-			if (is_numeric($parts[0])) {
-				if ($parts[0] == $subject->getVerticaleId()) {
-					$found = true;
+			/**
+			 * Behoort een lid tot een bepaalde (h.t.) groep?
+			 * Als een string als bijvoorbeeld 'pubcie' wordt meegegeven zoekt de ketzer de h.t.
+			 * groep met die korte naam erbij, als het getal is uiteraard de groep met dat id.
+			 * Met de toevoeging '>Fiscus' kan ook specifieke functie geëist worden binnen een groep.
+			 */
+			case 'GROEP':
+
+				// splits gevraagde term in groepsnaam en functie
+				$parts = explode('>', $gevraagd, 2);
+				if (!isset($parts[1])) {
+					// RechtenField maakt van > een &gt;
+					$parts = explode('&gt;', $gevraagd, 2);
 				}
-			} elseif (strlen($parts[0] == 1)) {
-				$verticale = VerticalenModel::instance()->getVerticaleByLetter($parts[0]);
-				if ($verticale AND $verticale->id == $subject->getVerticaleId()) {
-					$found = true;
-				}
-			} else {
-				$verticale = $subject->getVerticale();
-				if ($verticale AND $parts[0] == strtoupper($verticale->naam)) {
-					$found = true;
-				}
-			}
 
-			// no need to check functie if not found
-			if (!$found) {
-				return false;
-			}
-
-			// wordt er een functie gevraagd?
-			if (isset($parts[1])) {
-				if ($parts[1] === 'LEIDER' AND $subject->isVerticaan()) {
-					return true;
-				}
-			} else { // geen functie gevraagd en verticale = true
-				return true;
-			}
-		}
-		// Behoort een lid tot een bepaalde (h.t.) groep?
-		// als een string als bijvoorbeeld 'pubcie' wordt meegegeven zoekt de ketzer
-		// de h.t. groep met die korte naam erbij, als het getal is uiteraard de groep
-		// met dat id.
-		// met de toevoeging '>Fiscus' kan ook specifieke functie geëist worden binnen een groep
-		elseif (substr($attribute, 0, 5) === 'GROEP') {
-			$groep = substr($attribute, 6);
-
-			// splitst opgegeven term in groepsnaam en functie
-			$parts = explode('>', $groep, 2);
-			if (!isset($parts[1])) {
-				// RechtenField maakt van > een &gt;
-				$parts = explode('&gt;', $groep, 2);
-			}
-			try {
-				require_once 'groepen/groep.class.php';
-				$groep = new OldGroep($parts[0]);
-				if ($groep->isLid()) {
-					// wordt er een functie gevraagd?
-					if (isset($parts[1])) {
-						$functie = $groep->getFunctie();
-						if ($parts[1] == strtoupper($functie[0])) {
+				try {
+					// zoek groep
+					require_once 'groepen/groep.class.php';
+					$groep = new OldGroep($parts[0]);
+					if ($groep->isLid()) {
+						// wordt er een functie gevraagd?
+						if (isset($parts[1])) {
+							$functie = $groep->getFunctie();
+							if ($parts[1] == strtoupper($functie[0])) {
+								return true;
+							}
+						} else {
 							return true;
 						}
-					} else {
+					}
+				} catch (Exception $e) {
+					// gevraagde groep bestaat niet
+				}
+
+				return false;
+
+			/**
+			 * Behoort een lid tot een bepaalde verticale?
+			 */
+			case 'VERTICALE':
+
+				// splits gevraagde term in verticalenaam en functie
+				$parts = explode('>', $gevraagd, 2);
+				if (!isset($parts[1])) {
+					// RechtenField maakt van > een &gt;
+					$parts = explode('&gt;', $gevraagd, 2);
+				}
+
+				// zoek verticale
+				$found = false;
+				if (is_numeric($parts[0])) {
+					if ($parts[0] == $subject->getVerticaleId()) {
+						$found = true;
+					}
+				} elseif (strlen($parts[0] == 1)) {
+					$verticale = VerticalenModel::instance()->getVerticaleByLetter($parts[0]);
+					if ($verticale AND $verticale->id == $subject->getVerticaleId()) {
+						$found = true;
+					}
+				} else {
+					$verticale = $subject->getVerticale();
+					if ($verticale AND $parts[0] == strtoupper($verticale->naam)) {
+						$found = true;
+					}
+				}
+
+				// no need to check functie if not found
+				if (!$found) {
+					return false;
+				}
+
+				// wordt er een functie gevraagd?
+				if (isset($parts[1])) {
+					if ($parts[1] === 'LEIDER' AND $subject->isVerticaan()) {
+						return true;
+					}
+				} else { // geen functie gevraagd en verticale = true
+					return true;
+				}
+
+				return false;
+
+			/**
+			 * Is lid man of vrouw?
+			 */
+			case 'GESLACHT':
+
+				if ($gevraagd === strtoupper($subject->getGeslacht())) {
+					// Niet ingelogd heeft geslacht m dus check of ingelogd
+					if ($this->hasPermission($subject, 'P_LOGGED_IN')) {
 						return true;
 					}
 				}
-			} catch (Exception $e) {
-				// de groep bestaat niet, we gaan verder.
-			}
-		}
-		// Is lid man of vrouw?
-		elseif (substr($attribute, 0, 8) === 'GESLACHT') {
-			$geslacht = substr($attribute, 9);
-			if ($geslacht === strtoupper($subject->getGeslacht())) {
-				// Niet ingelogd heeft geslacht m dus check of ingelogd
-				if ($this->hasPermission($subject, 'P_LOGGED_IN')) {
+
+				return false;
+
+			/**
+			 * Behoort een lid tot een bepaalde lichting?
+			 */
+			case 'LIDJAAR':
+			case 'LICHTING':
+
+				if ($gevraagd == $subject->getProperty('lidjaar')) {
 					return true;
 				}
-			}
-		}
-		// Behoort een lid tot een bepaalde lichting?
-		elseif (substr($attribute, 0, 7) === 'LIDJAAR') {
-			$lidjaar = substr($attribute, 8);
-			if ($lidjaar == $subject->getProperty('lidjaar')) {
-				return true;
-			}
-		} elseif (substr($attribute, 0, 8) === 'LICHTING') {
-			$lidjaar = substr($attribute, 9);
-			if ($lidjaar == $subject->getProperty('lidjaar')) {
-				return true;
-			}
-		} elseif (substr($attribute, 0, 10) === 'OUDERJAARS') {
-			$lidjaar = $subject->getProperty('lidjaar');
-			// Niet ingelogd heeft lichting 0
-			if ($lidjaar > 0 AND Lichting::getJongsteLichting() > $lidjaar) {
-				return true;
-			}
-		} elseif (substr($attribute, 0, 11) === 'EERSTEJAARS') {
-			$lidjaar = $subject->getProperty('lidjaar');
-			// Niet ingelogd heeft lichting 0
-			if ($lidjaar > 0 AND Lichting::getJongsteLichting() == $lidjaar) {
-				return true;
-			}
+
+				return false;
+
+			case 'OUDERJAARS':
+
+				$lidjaar = $subject->getProperty('lidjaar');
+				// Niet ingelogd heeft lichting 0
+				if ($lidjaar > 0 AND Lichting::getJongsteLichting() > $lidjaar) {
+					return true;
+				}
+
+				return false;
+
+			case 'EERSTEJAARS':
+
+				$lidjaar = $subject->getProperty('lidjaar');
+				// Niet ingelogd heeft lichting 0
+				if ($lidjaar > 0 AND Lichting::getJongsteLichting() == $lidjaar) {
+					return true;
+				}
+
+				return false;
+
+			default:
+				return false;
 		}
 
 		return false;

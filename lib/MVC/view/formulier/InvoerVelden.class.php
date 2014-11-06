@@ -459,7 +459,7 @@ class RechtenField extends TextField {
 
 	public function __construct($name, $value = null, $description = null) {
 		parent::__construct($name, $value, $description);
-		$this->suggestions = AccessModel::instance()->getValidPerms();
+		$this->suggestions = AccessModel::instance()->getPermissionSuggestions();
 		$this->title = 'Met , en + voor respectievelijk OR en AND. Gebruik | voor OR binnen AND (alsof er haakjes omheen staan)';
 		// Gebruik van ! voor negatie en > voor functie binnen verticale of groep niet vermelden, werkt wel
 	}
@@ -472,9 +472,27 @@ class RechtenField extends TextField {
 		if ($this->value == '') {
 			return true;
 		}
-		if (!AccessModel::instance()->isValidPerm($this->value)) {
-			$this->error = 'Bevat niet bestaand recht';
+		$error = array();
+		// OR
+		$or = explode(',', $this->value);
+		foreach ($or as $and) {
+			// AND
+			$and = explode('+', $and);
+			foreach ($and as $or2) {
+				// OR (secondary)
+				$or2 = explode('|', $or2);
+				foreach ($or2 as $perm) {
+					// Negatie van een permissie (gebruiker mag deze permissie niet bezitten)
+					if (startsWith($perm, '!')) {
+						$perm = substr($perm, 1);
+					}
+					if (!AccessModel::instance()->isValidPerm($perm)) {
+						$error[] = 'Ongeldig: "' . $perm . '"';
+					}
+				}
+			}
 		}
+		$this->error = implode(' & ', $error);
 		return $this->error === '';
 	}
 
