@@ -32,7 +32,6 @@ class AccessModel extends CachedPersistenceModel {
 	 * @param string $permission Gevraagde permissie(s).
 	 * @param boolean $token_authorizable Of het subject geauthenticeerd mag zijn door een token,
 	 * 										anders werkt het alsof gebruiker x999 is.
-	 * @param boolean $mandatory_only Sta alleen voorgedefinieerde permissies toe.
 	 * 
 	 * Met deze functies kan op één of meerdere permissies worden getest,
 	 * onderling gescheiden door komma's. Als een lid één van de
@@ -60,8 +59,29 @@ class AccessModel extends CachedPersistenceModel {
 	 * 		of mensen die in het bestuur zitten
 	 * 
 	 */
-	public static function mag(Lid $subject, $permission, $token_authorizable = false, $mandatory_only = false) {
-		return self::instance()->hasPermission($subject, $permission, $token_authorizable, $mandatory_only);
+	public static function mag(Lid $subject, $permission, $token_authorizable = false) {
+		// case insensitive
+		$permission = strtoupper($permission);
+
+		// Try cache
+		$key = 'mag' . crc32(implode('-', array($subject->getUid(), $permission, $token_authorizable)));
+		if ($this->isCached($key)) {
+			return $this->getCached($key);
+		}
+
+		// Als het gaat om het ingelogde lid doe extra check op token.
+		// Alleen als $token_authorizable toegestaan is testen we met
+		// de permissies van het ingelogde lid, anders met niet-ingelogd.
+		if (!$token_authorizable AND LoginModel::instance()->isAuthenticatedByToken() AND $subject === LoginModel::instance()->getLid()) {
+			$subject = LidCache::getLid('x999');
+		}
+
+		$result = self::instance()->hasPermission($subject, $permission);
+
+		// Save result in cache
+		$this->setCache($key, $result);
+
+		return $result;
 	}
 
 	/**
@@ -94,36 +114,47 @@ class AccessModel extends CachedPersistenceModel {
 		return $this->retrieveByPrimaryKey(array($environment, $action, $resource));
 	}
 
-	public function getValidPerms($mandatory_only = false) {
+	public function getValidPerms() {
 		$valid = array_keys($this->permissions);
-		if (!$mandatory_only) {
-			$valid[] = 'groep:1234';
-			$valid[] = 'groep:KorteNaam';
-			$valid[] = 'geslacht:m';
-			$valid[] = 'geslacht:v';
-			$valid[] = 'ouderjaars';
-			$valid[] = 'eerstejaars';
-			foreach (VerticalenModel::instance()->find() as $verticale) {
-				$this->suggestions[] = 'verticale:' . $verticale->naam;
-			}
-			$jong = Lichting::getJongsteLichting();
-			for ($jaar = $jong; $jaar > $jong - 7; $jaar--) {
-				$this->suggestions[] = 'lichting:' . $jaar;
-			}
+		$valid[] = 'groep:1234';
+		$valid[] = 'groep:KorteNaam';
+		$valid[] = 'geslacht:m';
+		$valid[] = 'geslacht:v';
+		$valid[] = 'ouderjaars';
+		$valid[] = 'eerstejaars';
+		foreach (VerticalenModel::instance()->find() as $verticale) {
+			$this->suggestions[] = 'verticale:' . $verticale->naam;
+		}
+		$jong = Lichting::getJongsteLichting();
+		for ($jaar = $jong; $jaar > $jong - 7; $jaar--) {
+			$this->suggestions[] = 'lichting:' . $jaar;
 		}
 		return $valid;
 	}
 
-	public function isValidPerm($perm, $mandatory_only = true) {
-		if (isset($this->permissions[$perm])) {
-			return true;
-		} elseif (!$mandatory_only) {
-			if (Lid::isValidUid($perm)) {
-				return true;
-			} else {
-				$dac = explode(':', $perm);
-				if (sizeof($dac) === 2 AND ! empty($dac[1]) AND in_array($dac[0], self::$prefix)) {
-					return true;
+	public function isValidPerm($permission) {
+		// case insensitive
+		$permission = strtoupper($permission);
+
+		$or = explode(',', $permission);
+		foreach ($or as $and) {
+			$and = explode('+', $and);
+			foreach ($and as $or2) {
+				$or2 = explode('|', $or2);
+				foreach ($or2 as $perm) {
+					if (startsWith($perm, '!')) {
+						$perm = substr($perm, 1);
+					}
+					if (isset($this->permissions[$perm])) {
+						return true;
+					}
+					if (Lid::isValidUid($perm)) {
+						return true;
+					}
+					$perm = explode(':', $perm);
+					if (sizeof($perm) === 2 AND ! empty($perm[1]) AND in_array($perm[0], self::$prefix)) {
+						return true;
+					}
 				}
 			}
 		}
@@ -244,26 +275,10 @@ class AccessModel extends CachedPersistenceModel {
 		return substr_replace($nulperm, chr($level), $onderdeelnummer, 1);
 	}
 
-	private function hasPermission(Lid $subject, $permission, $token_authorizable, $mandatory_only) {
-		// Vergeten rechten beveiliging
+	private function hasPermission(Lid $subject, $permission) {
+		// Rechten vergeten?
 		if (empty($permission)) {
 			return false;
-		} else {
-			// case insensitive
-			$permission = strtoupper($permission);
-		}
-
-		// Als het gaat om het ingelogde lid doe extra check op token.
-		// Alleen als $token_authorizable toegestaan is testen we met
-		// de permissies van het ingelogde lid, anders met niet-ingelogd.
-		if (!$token_authorizable AND LoginModel::instance()->isAuthenticatedByToken() AND $subject === LoginModel::instance()->getLid()) {
-			$subject = LidCache::getLid('x999');
-		}
-
-		// Try cache
-		$key = 'hasPermission' . crc32(implode('-', array($subject->getUid(), $permission, $token_authorizable, $mandatory_only)));
-		if ($this->isCached($key)) {
-			return $this->getCached($key);
 		}
 
 		// OR
@@ -275,7 +290,7 @@ class AccessModel extends CachedPersistenceModel {
 			$p = explode(',', $permission);
 			$result = false;
 			foreach ($p as $perm) {
-				$result |= $this->hasPermission($subject, $perm, $token_authorizable, $mandatory_only);
+				$result |= $this->hasPermission($subject, $perm);
 			}
 			return $result;
 		}
@@ -286,7 +301,7 @@ class AccessModel extends CachedPersistenceModel {
 			$p = explode('+', $permission);
 			$result = true;
 			foreach ($p as $perm) {
-				$result &= $this->hasPermission($subject, $perm, $token_authorizable, $mandatory_only);
+				$result &= $this->hasPermission($subject, $perm);
 			}
 			return $result;
 		}
@@ -298,26 +313,26 @@ class AccessModel extends CachedPersistenceModel {
 			$p = explode('|', $permission);
 			$result = false;
 			foreach ($p as $perm) {
-				$result |= $this->hasPermission($subject, $perm, $token_authorizable, $mandatory_only);
+				$result |= $this->hasPermission($subject, $perm);
 			}
 			return $result;
 		}
 		// Negatie van een permissie (gebruiker mag deze permissie niet bezitten)
 		if (startsWith($permission, '!')) {
-			return !$this->hasPermission($subject, substr($permission, 1), $token_authorizable, $mandatory_only);
+			return !$this->hasPermission($subject, substr($permission, 1));
+		}
+
+		// Try cache
+		$key = 'hasPermission' . crc32(implode('-', array($subject->getUid(), $permission)));
+		if ($this->isCached($key)) {
+			return $this->getCached($key);
 		}
 
 		// Is de gevraagde permissie voorgedefinieerd?
-		if ($this->isValidPerm($permission, true)) {
+		if (isset($this->permissions[$permission])) {
 			$result = $this->mandatoryAccessControl($subject, $permission);
-		}
-		// Voorgedefinieerde permissie verplicht?
-		elseif (!$mandatory_only) {
+		} else {
 			$result = $this->discretionaryAccessControl($subject, $permission);
-		}
-		// Fall-through
-		else {
-			$result = false;
 		}
 
 		// Save result in cache
@@ -469,7 +484,7 @@ class AccessModel extends CachedPersistenceModel {
 			$geslacht = substr($attribute, 9);
 			if ($geslacht === strtoupper($subject->getGeslacht())) {
 				// Niet ingelogd heeft geslacht m dus check of ingelogd
-				if ($this->hasPermission($subject, 'P_LOGGED_IN', true, true)) {
+				if ($this->hasPermission($subject, 'P_LOGGED_IN')) {
 					return true;
 				}
 			}

@@ -457,11 +457,8 @@ class RequiredLandField extends LandField {
 
 class RechtenField extends TextField {
 
-	protected $mandatory_only;
-
-	public function __construct($name, $value = null, $description = null, $mandatory_only = false) {
+	public function __construct($name, $value = null, $description = null) {
 		parent::__construct($name, $value, $description);
-		$this->mandatory_only = $mandatory_only;
 		$this->suggestions = AccessModel::instance()->getValidPerms();
 		$this->title = 'Met , en + voor respectievelijk OR en AND. Gebruik | voor OR binnen AND (alsof er haakjes omheen staan)';
 		// Gebruik van ! voor negatie en > voor functie binnen verticale of groep niet vermelden, werkt wel
@@ -475,23 +472,8 @@ class RechtenField extends TextField {
 		if ($this->value == '') {
 			return true;
 		}
-		if (preg_match('/\s/', $this->value)) {
-			$this->error = 'Mag geen spaties bevatten';
-		}
-		$or = explode(',', $this->value);
-		foreach ($or as $and) {
-			$and = explode('+', $and);
-			foreach ($and as $or2) {
-				$or2 = explode('|', $or2);
-				foreach ($or2 as $value) {
-					if (startsWith($value, '!')) {
-						$value = substr($value, 1);
-					}
-					if (!AccessModel::instance()->isValidPerm($value, $this->mandatory_only)) { // If not uid and not mac
-						$this->error = 'Ongeldige restrictie: "' . $value . '"';
-					}
-				}
-			}
+		if (!AccessModel::instance()->isValidPerm($this->value)) {
+			$this->error = 'Bevat niet bestaand recht';
 		}
 		return $this->error === '';
 	}

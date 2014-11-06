@@ -22,8 +22,8 @@ class LoginModel extends PersistenceModel implements Validator {
 		return self::instance()->getLid()->getUid();
 	}
 
-	public static function mag($permission, $token_authorizable = false, $mandatory_only = false) {
-		return AccessModel::mag(self::instance()->getLid(), $permission, $token_authorizable, $mandatory_only);
+	public static function mag($permission, $token_authorizable = false) {
+		return AccessModel::mag(self::instance()->getLid(), $permission, $token_authorizable);
 	}
 
 	/**
