@@ -103,6 +103,7 @@ div.pasfoto img.lidfoto {
 .boekindicator.geen			 {color: red;}
 
 pre.bbcode {
+	font-family: monospace;
 	background-color: #f5f5f5;
 	margin-top: 4px;
 	border-top: 2px solid #aaa;
