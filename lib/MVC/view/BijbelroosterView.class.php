@@ -43,7 +43,7 @@ class BijbelroosterView implements View {
 			if (strtotime($stukje->dag) < $nu) {
 				$html .= ' class="lichtgrijs"';
 			}
-			$html .= '>' . $stukje->dag . ': </span>' . $stukje->getLink(true) . '<br/>';
+			$html .= '>' . date('Y-m-d', strtotime($stukje->dag)) . ': </span>' . $stukje->getLink(true) . '<br/>';
 		}
 		$html .= '</div>';
 		return $html;
