@@ -20,11 +20,48 @@ class AccessModel extends CachedPersistenceModel {
 	protected static $instance;
 
 	public static function get($environment, $action, $resource) {
-		$ac = static::instance()->getAccessControl($environment, $action, $resource);
+		$ac = self::instance()->getAccessControl($environment, $action, $resource);
 		if ($ac) {
 			return $ac->subject;
 		}
 		return null;
+	}
+
+	/**
+	 * @param Lid $subject Het lid dat de gevraagde permissies zou moeten bezitten.
+	 * @param string $permission Gevraagde permissie(s).
+	 * @param boolean $token_authorizable Of het subject geauthenticeerd mag zijn door een token,
+	 * 										anders werkt het alsof gebruiker x999 is.
+	 * @param boolean $mandatory_only Sta alleen voorgedefinieerde permissies toe.
+	 * 
+	 * Met deze functies kan op één of meerdere permissies worden getest,
+	 * onderling gescheiden door komma's. Als een lid één van de
+	 * permissies 'heeft', geeft de functie true terug. Het is dus een
+	 * logische OF tussen de verschillende te testen permissies. Een
+	 * permissie kan met een uitroepteken geïnverteerd worden.
+	 * 
+	 * Voorbeeldjes:
+	 *  groep:novcie				geeft true leden van de h.t. NovCie.
+	 *  groep:pubcie,groep:bestuur	geeft true voor leden van h.t. bestuur en h.t. novcie
+	 *  groep:SocCie>Fiscus			geeft true voor h.t. Soccielid met functie fiscus
+	 *  geslacht:m					geeft true voor alle mannelijke leden
+	 *  verticale:d					geeft true voor alle leden van verticale d.
+	 *  !lichting:2009				geeft true voor iedereen behalve lichting 2009.
+	 * 
+	 * Gecompliceerde voorbeeld:
+	 * 		groep:novcie+groep:wcie|1137,groep:bestuur
+	 * 
+	 * Equivalent met haakjes:
+	 * 		(groep:novcie AND (groep:wcie OR 1137)) OR groep:bestuur
+	 * 
+	 * Geeft toegang aan:
+	 * 		de mensen die én in de NovCie zitten én in de WCie zitten
+	 * 		of mensen die in de NovCie zitten en lidnummer 1137 hebben
+	 * 		of mensen die in het bestuur zitten
+	 * 
+	 */
+	public static function mag(Lid $subject, $permission, $token_authorizable = false, $mandatory_only = false) {
+		return self::instance()->hasPermission($subject, $permission, $token_authorizable, $mandatory_only);
 	}
 
 	/**
@@ -207,40 +244,7 @@ class AccessModel extends CachedPersistenceModel {
 		return substr_replace($nulperm, chr($level), $onderdeelnummer, 1);
 	}
 
-	/**
-	 * @param string $permission permissie(s).
-	 * @param boolean $token_authorizable als false dan werkt mag alsof gebruiker
-	 * 						x999 is, als true dan wordt op de permissies van
-	 * 						de met de token geäuthenticeerde gebruiker getest
-	 * @param boolean $mandatory_only sta alleen permissies toe op basis van rol
-	 * 
-	 * Met deze functies kan op één of meerdere permissies worden getest,
-	 * onderling gescheiden door komma's. Als een lid één van de
-	 * permissies 'heeft', geeft de functie true terug. Het is dus een
-	 * logische OF tussen de verschillende te testen permissies. Een
-	 * permissie kan met een uitroepteken geïnverteerd worden.
-	 * 
-	 * Voorbeeldjes:
-	 *  groep:novcie				geeft true leden van de h.t. NovCie.
-	 *  groep:pubcie,groep:bestuur	geeft true voor leden van h.t. bestuur en h.t. novcie
-	 *  groep:SocCie>Fiscus			geeft true voor h.t. Soccielid met functie fiscus
-	 *  geslacht:m					geeft true voor alle mannelijke leden
-	 *  verticale:d					geeft true voor alle leden van verticale d.
-	 *  !lichting:2009				geeft true voor iedereen behalve lichting 2009.
-	 * 
-	 * Gecompliceerde voorbeeld:
-	 * 		groep:novcie+groep:wcie|1137,groep:bestuur
-	 * 
-	 * Equivalent met haakjes:
-	 * 		(groep:novcie EN (groep:wcie OF 1137)) OF groep:bestuur
-	 * 
-	 * Geeft toegang aan:
-	 * 		de mensen die én in de NovCie zitten én in de WCie zitten
-	 * 		of mensen die in de NovCie zitten en lidnummer 1137 hebben
-	 * 		of mensen die in het bestuur zitten
-	 * 
-	 */
-	public function hasPermission(Lid $subject, $permission, $token_authorizable = false, $mandatory_only = false) {
+	private function hasPermission(Lid $subject, $permission, $token_authorizable, $mandatory_only) {
 		// Vergeten rechten beveiliging
 		if (empty($permission)) {
 			return false;

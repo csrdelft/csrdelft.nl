@@ -19,11 +19,11 @@ class LoginModel extends PersistenceModel implements Validator {
 	protected static $instance;
 
 	public static function getUid() {
-		return LoginModel::instance()->getLid()->getUid();
+		return self::instance()->getLid()->getUid();
 	}
 
 	public static function mag($permission, $token_authorizable = false, $mandatory_only = false) {
-		return AccessModel::instance()->hasPermission(self::instance()->getLid(), $permission, $token_authorizable, $mandatory_only);
+		return AccessModel::mag(self::instance()->getLid(), $permission, $token_authorizable, $mandatory_only);
 	}
 
 	/**
