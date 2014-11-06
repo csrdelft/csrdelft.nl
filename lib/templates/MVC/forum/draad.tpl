@@ -99,7 +99,12 @@
 				<td>&nbsp;</td>
 				<td>
 					<div class="forum-paginering">
-						Pagina: {sliding_pager baseurl="/forum/onderwerp/"|cat:$draad->draad_id|cat:"/"
+						{if $draad->pagina_per_post}
+							Bericht:
+						{else}
+							Pagina:
+						{/if}
+						{sliding_pager baseurl="/forum/onderwerp/"|cat:$draad->draad_id|cat:"/"
 pagecount=ForumPostsModel::instance()->getAantalPaginas($draad->draad_id) curpage=ForumPostsModel::instance()->getHuidigePagina()}
 					</div>
 				</td>
