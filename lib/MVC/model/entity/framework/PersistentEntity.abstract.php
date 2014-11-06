@@ -155,14 +155,18 @@ abstract class PersistentEntity implements Sparse, JsonSerializable {
 	protected function castValues(array $attributes) {
 		foreach ($attributes as $attribute) {
 			$definition = $this->getAttributeDefinition($attribute);
-			if ($definition[0] === T::Boolean) {
+			if (isset($definition[1]) AND $definition[1] AND $this->$attribute === null) {
+				// do not cast allowed null fields
+			} elseif ($definition[0] === T::Boolean) {
 				$this->$attribute = (boolean) $this->$attribute;
 			} elseif ($definition[0] === T::Integer) {
 				$this->$attribute = (int) $this->$attribute;
 			} elseif ($definition[0] === T::Float) {
 				$this->$attribute = (float) $this->$attribute;
-			} elseif (DB_CHECK AND $definition[0] === T::Enumeration AND ! in_array($this->$attribute, $definition[2]::getTypeOptions())
-			) {
+			} else {
+				$this->$attribute = (string) $this->$attribute;
+			}
+			if (DB_CHECK AND $definition[0] === T::Enumeration AND ! in_array($this->$attribute, $definition[2]::getTypeOptions())) {
 				debugprint(static::$table_name . '.' . $attribute . ' invalid ' . $definition[2] . ' value: ' . $this->$attribute);
 			}
 		}

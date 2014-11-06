@@ -114,7 +114,8 @@ abstract class CachedPersistenceModel extends PersistenceModel {
 	 * 
 	 * @param string $criteria WHERE
 	 * @param array $criteria_params optional named parameters
-	 * @param string $orderby
+	 * @param string $orderby ORDER BY
+	 * @param string $groupby GROUP BY
 	 * @param int $limit max amount of results
 	 * @param int $start results from index
 	 * @return array
@@ -131,7 +132,8 @@ abstract class CachedPersistenceModel extends PersistenceModel {
 	 * @param array $attributes to retrieve
 	 * @param string $criteria WHERE
 	 * @param array $criteria_params optional named parameters
-	 * @param string $orderby
+	 * @param string $orderby ORDER BY
+	 * @param string $groupby GROUP BY
 	 * @param int $limit max amount of results
 	 * @param int $start results from index
 	 * @return array

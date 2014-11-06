@@ -46,7 +46,8 @@ abstract class PersistenceModel implements Persistence {
 	 * 
 	 * @param string $criteria WHERE
 	 * @param array $criteria_params optional named parameters
-	 * @param string $orderby
+	 * @param string $orderby ORDER BY
+	 * @param string $groupby GROUP BY
 	 * @param int $limit max amount of results
 	 * @param int $start results from index
 	 * @return PDOStatement
@@ -64,7 +65,8 @@ abstract class PersistenceModel implements Persistence {
 	 * @param array $attributes to retrieve
 	 * @param string $criteria WHERE
 	 * @param array $criteria_params optional named parameters
-	 * @param string $orderby
+	 * @param string $orderby ORDER BY
+	 * @param string $groupby GROUP BY
 	 * @param int $limit max amount of results
 	 * @param int $start results from index
 	 * @return PDOStatement

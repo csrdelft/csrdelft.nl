@@ -91,6 +91,7 @@ class Database extends PDO {
 	 * @param string $where
 	 * @param array $params
 	 * @param string $orderby
+	 * @param string $groupby
 	 * @param int $limit
 	 * @param int $start
 	 * @return PDOStatement

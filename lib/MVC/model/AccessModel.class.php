@@ -241,13 +241,27 @@ class AccessModel extends CachedPersistenceModel {
 	 * 
 	 */
 	public function hasPermission(Lid $subject, $permission, $token_authorizable = false, $mandatory_only = false) {
+		// Vergeten rechten beveiliging
 		if (empty($permission)) {
 			return false;
 		}
-		// Try cache
-		if ($this->isCached($permission)) {
-			return $this->getCached($permission);
+
+		// case insensitive
+		$permission = strtoupper($permission);
+
+		// Als het gaat om het ingelogde lid doe extra check op token.
+		// Alleen als $token_authorizable toegestaan is testen we met
+		// de permissies van het ingelogde lid, anders met niet-ingelogd.
+		if (!$token_authorizable AND LoginModel::instance()->isAuthenticatedByToken() AND $subject === LoginModel::instance()->getLid()) {
+			$subject = LidCache::getLid('x999');
 		}
+
+		// Try cache
+		$key = $this->cacheKey(array($subject->getUid(), $permission, $token_authorizable, $mandatory_only));
+		if ($this->isCached($key)) {
+			return $this->getCached($key);
+		}
+
 		// OR
 		if (strpos($permission, ',') !== false) {
 			// Het gevraagde mag een enkele permissie zijn, of meerdere, door komma's
@@ -291,44 +305,27 @@ class AccessModel extends CachedPersistenceModel {
 
 		// Is de gevraagde permissie voorgedefinieerd?
 		if ($this->isValidPerm($permission, true)) {
-			$result = $this->mandatoryAccessControl($subject, $permission, $token_authorizable);
+			$result = $this->mandatoryAccessControl($subject, $permission);
 		}
 		// Voorgedefinieerde permissie verplicht?
 		elseif (!$mandatory_only) {
-			$result = $this->discretionaryAccessControl($subject, $permission, $token_authorizable);
+			$result = $this->discretionaryAccessControl($subject, $permission);
 		}
 		// Fall-through
 		else {
 			$result = false;
 		}
 
-		// Cache
-		$this->setCache($permission, $result);
+		// Save result in cache
+		$this->setCache($key, $result);
 
 		return $result;
 	}
 
-	private function mandatoryAccessControl(Lid $subject, $permission, $token_authorizable = false) {
-
-		// case insensitive
-		$permission = strtoupper($permission);
-
-		// Try cache
-		if ($this->isCached($permission)) {
-			return $this->getCached($permission);
-		}
+	private function mandatoryAccessControl(Lid $subject, $permission) {
 
 		// zoek de rechten van de gebruiker op
 		$role = $subject->getRole();
-
-		// als het gaat om het ingelogde lid doe extra check op token
-		if (LoginModel::instance()->getLid() === $subject) {
-			// alleen als $token_authorizable true is testen we met de permissies van het
-			// geauthenticeerde lid, anders met R_NOBODY
-			if (LoginModel::instance()->isAuthenticatedByToken() AND ! $token_authorizable) {
-				$role = 'R_NOBODY';
-			}
-		}
 
 		// ga alleen verder als er een geldige permissie wordt teruggegeven
 		if (!$this->isValidRole($role)) {
@@ -382,23 +379,15 @@ class AccessModel extends CachedPersistenceModel {
 		return false;
 	}
 
-	private function discretionaryAccessControl(Lid $subject, $descr, $token_authorizable = false) {
-
-		// case insensitive
-		$descr = strtolower($descr);
-
-		// Try cache
-		if ($this->isCached($descr)) {
-			return $this->getCached($descr);
-		}
+	private function discretionaryAccessControl(Lid $subject, $attribute) {
 
 		// als een uid ingevoerd wordt true teruggeven als het om de huidige gebruiker gaat.
-		if ($descr === $subject->getUid()) {
+		if ($attribute === $subject->getUid()) {
 			return true;
 		}
 		// Behoort een lid tot een bepaalde verticale?
-		elseif (substr($descr, 0, 9) === 'verticale') {
-			$verticale = substr($descr, 10);
+		elseif (substr($attribute, 0, 9) === 'VERTICALE') {
+			$verticale = substr($attribute, 10);
 
 			// splitst opgegeven term in verticale en functie
 			$parts = explode('>', $verticale, 2);
@@ -420,7 +409,7 @@ class AccessModel extends CachedPersistenceModel {
 				}
 			} else {
 				$verticale = $subject->getVerticale();
-				if ($verticale AND $parts[0] == strtolower($verticale->naam)) {
+				if ($verticale AND $parts[0] == strtoupper($verticale->naam)) {
 					$found = true;
 				}
 			}
@@ -432,7 +421,7 @@ class AccessModel extends CachedPersistenceModel {
 
 			// wordt er een functie gevraagd?
 			if (isset($parts[1])) {
-				if ($parts[1] === 'leider' AND $subject->isVerticaan()) {
+				if ($parts[1] === 'LEIDER' AND $subject->isVerticaan()) {
 					return true;
 				}
 			} else { // geen functie gevraagd en verticale = true
@@ -444,8 +433,8 @@ class AccessModel extends CachedPersistenceModel {
 		// de h.t. groep met die korte naam erbij, als het getal is uiteraard de groep
 		// met dat id.
 		// met de toevoeging '>Fiscus' kan ook specifieke functie geëist worden binnen een groep
-		elseif (substr($descr, 0, 5) === 'groep') {
-			$groep = substr($descr, 6);
+		elseif (substr($attribute, 0, 5) === 'GROEP') {
+			$groep = substr($attribute, 6);
 
 			// splitst opgegeven term in groepsnaam en functie
 			$parts = explode('>', $groep, 2);
@@ -460,7 +449,7 @@ class AccessModel extends CachedPersistenceModel {
 					// wordt er een functie gevraagd?
 					if (isset($parts[1])) {
 						$functie = $groep->getFunctie();
-						if (strtolower($functie[0]) == $parts[1]) {
+						if ($parts[1] == strtoupper($functie[0])) {
 							return true;
 						}
 					} else {
@@ -472,31 +461,31 @@ class AccessModel extends CachedPersistenceModel {
 			}
 		}
 		// Is lid man of vrouw?
-		elseif (substr($descr, 0, 8) === 'geslacht') {
-			$geslacht = substr($descr, 9);
+		elseif (substr($attribute, 0, 8) === 'GESLACHT') {
+			$geslacht = substr($attribute, 9);
 			// Niet ingelogd heeft geslacht m dus check of ingelogd
 			if ($geslacht === $subject->getGeslacht() AND $this->hasPermission($subject, 'P_LOGGED_IN', true)) {
 				return true;
 			}
 		}
 		// Behoort een lid tot een bepaalde lichting?
-		elseif (substr($descr, 0, 7) === 'lidjaar') {
-			$lidjaar = substr($descr, 8);
+		elseif (substr($attribute, 0, 7) === 'LIDJAAR') {
+			$lidjaar = substr($attribute, 8);
 			if ($lidjaar == $subject->getProperty('lidjaar')) {
 				return true;
 			}
-		} elseif (substr($descr, 0, 8) === 'lichting') {
-			$lidjaar = substr($descr, 9);
+		} elseif (substr($attribute, 0, 8) === 'LICHTING') {
+			$lidjaar = substr($attribute, 9);
 			if ($lidjaar == $subject->getProperty('lidjaar')) {
 				return true;
 			}
-		} elseif (substr($descr, 0, 10) === 'ouderjaars') {
+		} elseif (substr($attribute, 0, 10) === 'OUDERJAARS') {
 			$lidjaar = $subject->getProperty('lidjaar');
 			// Niet ingelogd heeft lichting 0
 			if ($lidjaar > 0 AND Lichting::getJongsteLichting() > $lidjaar) {
 				return true;
 			}
-		} elseif (substr($descr, 0, 11) === 'eerstejaars') {
+		} elseif (substr($attribute, 0, 11) === 'EERSTEJAARS') {
 			$lidjaar = $subject->getProperty('lidjaar');
 			// Niet ingelogd heeft lichting 0
 			if ($lidjaar > 0 AND Lichting::getJongsteLichting() == $lidjaar) {
