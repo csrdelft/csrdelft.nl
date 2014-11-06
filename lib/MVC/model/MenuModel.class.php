@@ -75,14 +75,7 @@ class MenuModel extends CachedPersistenceModel {
 	}
 
 	public function getChildren(MenuItem $parent) {
-		$children = array();
-		foreach ($this->find('parent_id = ?', array($parent->item_id), 'prioriteit ASC, tekst ASC') as $child) {
-			$children[] = $child;
-			// cache for getParent()
-			$key = $this->cacheKey($child->getValues(true));
-			$this->setCache($key, $child);
-		}
-		return $children;
+		return $this->prefetch('parent_id = ?', array($parent->item_id), 'prioriteit ASC, tekst ASC'); // cache for getParent()
 	}
 
 	/**

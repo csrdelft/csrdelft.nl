@@ -24,8 +24,8 @@ abstract class CachedPersistenceModel extends PersistenceModel {
 	 * @param array $primary_key_values
 	 * @return int
 	 */
-	protected function cacheKey(array $primary_key_values) {
-		return get_class($this) . crc32(implode('-', $primary_key_values));
+	private function cacheKey(array $primary_key_values) {
+		return static::orm . crc32(implode('-', $primary_key_values));
 	}
 
 	protected function isCached($key, $memcache = false) {

@@ -244,10 +244,10 @@ class AccessModel extends CachedPersistenceModel {
 		// Vergeten rechten beveiliging
 		if (empty($permission)) {
 			return false;
+		} else {
+			// case insensitive
+			$permission = strtoupper($permission);
 		}
-
-		// case insensitive
-		$permission = strtoupper($permission);
 
 		// Als het gaat om het ingelogde lid doe extra check op token.
 		// Alleen als $token_authorizable toegestaan is testen we met
@@ -257,7 +257,7 @@ class AccessModel extends CachedPersistenceModel {
 		}
 
 		// Try cache
-		$key = $this->cacheKey(array($subject->getUid(), $permission, $token_authorizable, $mandatory_only));
+		$key = 'hasPermission' . crc32(implode('-', array($subject->getUid(), $permission, $token_authorizable, $mandatory_only)));
 		if ($this->isCached($key)) {
 			return $this->getCached($key);
 		}

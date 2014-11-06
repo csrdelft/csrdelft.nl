@@ -93,25 +93,18 @@ class Instellingen extends CachedPersistenceModel {
 		)
 	);
 
-	protected function cacheKey(array $primary_key_values = null, $memcache = false) {
-		if ($memcache) {
-			return get_class($this);
-		}
-		return parent::cacheKey($primary_key_values);
-	}
-
 	/**
 	 * Remove cached instellingen from memcache and clear runtime cache.
 	 */
 	protected function clearCache() {
-		$key = $this->cacheKey(null, true);
+		$key = get_class($this);
 		$this->unsetCache($key, true);
 		$this->flushCache(false);
 	}
 
 	public function prefetch($criteria = null, array $criteria_params = array(), $orderby = null, $groupby = null, $limit = null, $start = 0) {
 		// use memcache
-		$key = $this->cacheKey(null, true);
+		$key = get_class($this);
 		if ($this->isCached($key, true)) {
 			return $this->getCached($key, true);
 		}
