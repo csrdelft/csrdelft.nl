@@ -65,8 +65,8 @@ class AccessModel extends CachedPersistenceModel {
 
 		// Try cache
 		$key = 'mag' . crc32(implode('-', array($subject->getUid(), $permission, $token_authorizable)));
-		if ($this->isCached($key)) {
-			return $this->getCached($key);
+		if (self::instance()->isCached($key)) {
+			return self::instance()->getCached($key);
 		}
 
 		// Als het gaat om het ingelogde lid doe extra check op token.
@@ -79,7 +79,7 @@ class AccessModel extends CachedPersistenceModel {
 		$result = self::instance()->hasPermission($subject, $permission);
 
 		// Save result in cache
-		$this->setCache($key, $result);
+		self::instance()->setCache($key, $result);
 
 		return $result;
 	}
