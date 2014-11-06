@@ -44,7 +44,7 @@
 		{else}
 			<div class="forumpostKnoppen">
 				{if $post->verwijderd}
-					<div class="error">Deze reactie is verwijderd.</div>
+					<div class="post-verwijderd">Deze reactie is verwijderd.</div>
 					<a href="/forum/verwijderen/{$post->post_id}" class="knop post confirm" title="Bericht herstellen">{icon get="arrow_undo"}</a>
 				{/if}
 				{if LoginModel::mag('P_LOGGED_IN') AND ForumController::magPosten($draad, $deel)}
