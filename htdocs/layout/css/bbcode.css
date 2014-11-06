@@ -5,20 +5,20 @@ div.preview.pagina { padding: 2px; width: 100%;}
 span.offtopic { font-size: 9px; color: #bbb; }
 span.offtopic a { color: #bbb; }
 span.offtopic hr { text-align: left; background-color: #bbb; }
-span.offtopic img { opacity: 0.3; filter:alpha(opacity=30); }
+span.offtopic img { opacity: 0.3; filter: alpha(opacity=30); }
 
 .bb-block {
-    border: 1px solid #b8b8b8;
-    background-color: #f5f5f5;
-    padding: 8px 12px;
-    margin: 0 0 10px;
+	border: 1px solid #b8b8b8;
+	background-color: #f5f5f5;
+	padding: 8px 12px;
+	margin: 0 0 10px;
 }
 
 #forumtabel td .bb-block { margin: 2px 0; }
 
 .bb-maaltijd {
-    width: 329px;
-    overflow: auto;
+	width: 329px;
+	overflow: auto;
 }
 .bb-maaltijd h2 { white-space: nowrap; overflow: hidden; }
 .bb-maaltijd {
@@ -26,10 +26,10 @@ span.offtopic img { opacity: 0.3; filter:alpha(opacity=30); }
 }
 .bb-maaltijd .aanmelddata {
 	text-align: center;
-    float: right;
-    width: 80px;
+	float: right;
+	width: 80px;
 	height: 45px;
-    padding: 4px;
+	padding: 4px;
 	border: 1px solid #B8B8B8;
 }
 div.maaltijd-aangemeld {
@@ -48,43 +48,43 @@ a.maaltijd-afgemeld, span.maaltijd-afgemeld {
 }
 
 .bb-gmap {
-    width:300px;
-    height: 200px;
-    border:1px solid darkgrey;
-    margin:2px;
+	width: 300px;
+	height: 200px;
+	border: 1px solid darkgrey;
+	margin: 2px;
 }
 
 .bb-groep {
-    padding: 5px 10px 5px 10px;
+	padding: 5px 10px 5px 10px;
 }
 .bb-groep .groepleden {
-    width: 275px;
-    float: right;
-    margin-left: 10px;
+	width: 275px;
+	float: right;
+	margin-left: 10px;
 }
 .bb-groep .groepleden table.leden { width: 100%; }
 .bb-groep .groepleden table.leden td { padding: 0 5px 0 0; text-align: left; }
 .bb-groep .groepleden a.toonmeer { float: left; }
-.bb-groep .groepleden .editbox { display:none; background-color:#ffffcc; border:solid 1px #000; padding:1px;}
+.bb-groep .groepleden .editbox { display: none; background-color: #ffffcc; border: solid 1px #000; padding: 1px;}
 .bb-groep .groepleden .inline_edit {
-    background:url(http://plaetjes.csrdelft.nl/famfamfam/pencil.png) right no-repeat;
-    padding-right:18px!important;
+	background: url(http://plaetjes.csrdelft.nl/famfamfam/pencil.png) right no-repeat;
+	padding-right: 18px!important;
 }
-.bb-groep .groepleden .inline_edit:hover {
-    background:url(http://plaetjes.csrdelft.nl/famfamfam/pencil.png) right no-repeat #f5f5f5;
-    cursor:pointer;
+.bb-groep .groepleden .inline_edit: hover {
+	background: url(http://plaetjes.csrdelft.nl/famfamfam/pencil.png) right no-repeat #f5f5f5;
+	cursor: pointer;
 }
 .bb-groep .groepleden .inline_edit input {	width: 120px;}
-.bb-groep .groepleden .melding { color:red;}
+.bb-groep .groepleden .melding { color: red;}
 .bb-groep .aanmelden { clear: left; padding-top: 6px; }
 .bb-groep .aanmelden .pasfoto { margin-right: 10px; }
 
 div.pasfoto img.lidfoto {
-    float: left;
-    width: 50px;
-    height: 67px;
-    border: 1px solid grey;
-    margin: 3px 0 0 3px;
+	float: left;
+	width: 50px;
+	height: 67px;
+	border: 1px solid grey;
+	margin: 3px 0 0 3px;
 }
 
 .bb-document { width: 450px; padding: 4px 6px; display: block; text-align: left; }
@@ -94,22 +94,23 @@ div.pasfoto img.lidfoto {
 .bb-document .icon { float: left; margin-right: 5px; }
 
 .bb-boek { padding: 4px 6px; display: block; text-align: left; text-decoration: none !important;}
-.bb-boek .auteur { color: #777; margin-left:10px; }
-.bb-boek .titel:hover {color: #0a338d; text-decoration: underline;}
+.bb-boek .auteur { color: #777; margin-left: 10px; }
+.bb-boek .titel: hover {color: #0a338d; text-decoration: underline;}
 .bb-boek .icon { float: left; padding-right: 5px; }
-.boekindicator { margin-right:5px;}
-.boekindicator.beschikbaar	 {color:green;}
-.boekindicator.teruggegeven	 {color:orange;}
-.boekindicator.geen			 {color:red;}
+.boekindicator { margin-right: 5px;}
+.boekindicator.beschikbaar	 {color: green;}
+.boekindicator.teruggegeven	 {color: orange;}
+.boekindicator.geen			 {color: red;}
 
-.bbcode {
-    font-family: monospace;
-    background-color: #f5f5f5;
-    margin-top: 4px;
-    border-top: 2px solid #aaa;
-    border-bottom: 2px solid #aaa;
-    max-width: 640px;
-    overflow-x:auto; overflow-y:hidden;
+pre.bbcode {
+	background-color: #f5f5f5;
+	margin-top: 4px;
+	border-top: 2px solid #aaa;
+	border-bottom: 2px solid #aaa;
+	max-width: 570px;
+	max-height: 360px;
+	white-space: normal;
+	overflow-y: auto;
 }
 
 .bb-peiling { margin: 10px;  padding: 5px 10px; }
@@ -137,65 +138,61 @@ div.pasfoto img.lidfoto {
 .bb-fotoalbum .images a.big img { width: 154px; height: 154px;}
 
 .bb-fotoalbum img.compact {
-    float: right;
-    width: 50px;
-    margin-top: -1em;
+	float: right;
+	width: 50px;
+	margin-top: -1em;
 }
 
 /* Slider voorpagina */
 /* Slider: Window/Masking Styles */
 .bb-slideshow {
-    overflow: hidden; /*--Hides anything outside of the set width/height--*/
-    position: relative;
+	overflow: hidden; /*--Hides anything outside of the set width/height--*/
+	position: relative;
 	width: 355px;
 	height: 238px;
 }
 .bb-slideshow .image_reel {
-    position: absolute;
-    top: 0; left: 0;
+	position: absolute;
+	top: 0; left: 0;
 }
-.bb-slideshow .image_reel img {float: left;width:355px;}
+.bb-slideshow .image_reel img {float: left;width: 355px;}
 
 /* Slider: Paging Styles */
 .bb-slideshow .paging {
-    position: absolute;
-    bottom: 5px; right: 5px;
-    width: 170px; height:15px;
-    z-index: 100; /*--Assures the paging stays on the top layer--*/
-    text-align: center;
-    line-height: 9px;
-    background: #000;
-    border: #000;
-    opacity:0.4;filter:alpha(opacity=40);
-    display: none; /*--Hidden by default, will be later shown with jQuery--*/
-    -moz-border-radius: 8px;
-    -khtml-border-radius: 8px;
-    -webkit-border-radius: 8px;
+	position: absolute;
+	bottom: 5px; right: 5px;
+	width: 170px; height: 15px;
+	z-index: 100; /*--Assures the paging stays on the top layer--*/
+	text-align: center;
+	line-height: 9px;
+	background: #000;
+	border: #000;
+	opacity: 0.4;filter: alpha(opacity=40);
+	display: none; /*--Hidden by default, will be later shown with jQuery--*/
+	-moz-border-radius: 8px;
+	-khtml-border-radius: 8px;
+	-webkit-border-radius: 8px;
 }
 .bb-slideshow .paging a {
-    padding: 4px;
-    text-decoration: none;
-    color: #fff;
-    font: normal 8px Verdana, Arial, Helvetica, sans-serif;
+	padding: 4px;
+	text-decoration: none;
+	color: #fff;
+	font: normal 8px Verdana, Arial, Helvetica, sans-serif;
 }
 .bb-slideshow .paging a.active {
-    background: #777;
-    border: 1px solid #000;
-    -moz-border-radius: 3px;
-    -khtml-border-radius: 3px;
-    -webkit-border-radius: 3px;
-    color: #000;
+	background: #777;
+	border: 1px solid #000;
+	-moz-border-radius: 3px;
+	-khtml-border-radius: 3px;
+	-webkit-border-radius: 3px;
+	color: #000;
 }
-.bb-slideshow .paging a:hover {
-    text-decoration: underline;
+.bb-slideshow .paging a: hover {
+	text-decoration: underline;
 }
 
 .spoiler-content {
-	display:none;	
-}
-
-.bbcode {
-	max-width: 570px;
+	display: none;	
 }
 
 .citaatpuntjes {
@@ -253,7 +250,7 @@ div.citaatContainer div.citaat div.citaatContainer div.citaat img.bb-img {
 	top: 50%;
 	left: 50%;
 	margin-top: -18px;
-    margin-left: -18px;
+	margin-left: -18px;
 	background-image: url('http://plaetjes.csrdelft.nl/forum/afspelen.gif');
 	width: 36px;
 	height: 36px;
@@ -263,36 +260,36 @@ div.citaatContainer div.citaat div.citaatContainer div.citaat img.bb-img {
 
 /** Mededelingen Top3 [mededelingen=...] **************************************************************/
 .mededeling-grotebalk {
-    padding: 8px 12px 8px 6px;
-    margin-bottom: 10px;
-    border-top: 1px solid #b8b8b8;
-    border-left: 1px solid #b8b8b8;
-    background-color: #f5f5f5;
+	padding: 8px 12px 8px 6px;
+	margin-bottom: 10px;
+	border-top: 1px solid #b8b8b8;
+	border-left: 1px solid #b8b8b8;
+	background-color: #f5f5f5;
 }
 .mededeling-grotebalk .plaatje {
-    width: 70px;
-    height: 70px;
-    margin-top: 3px;
-    margin-right: 10px;
-    float: left;
-    overflow: hidden;
+	width: 70px;
+	height: 70px;
+	margin-top: 3px;
+	margin-right: 10px;
+	float: left;
+	overflow: hidden;
 }
 .mededeling-grotebalk .titel {
-    font-weight: bold;
-    font-size: 1.1em;
-    padding: 0 0 3px;
-    margin-left: 80px;
+	font-weight: bold;
+	font-size: 1.1em;
+	padding: 0 0 3px;
+	margin-left: 80px;
 }
 .mededeling-grotebalk .bericht {
-    text-align: left;
+	text-align: left;
 }
 .mededeling-grotebalk .half {
-    width: 49%;
-    float: left;
-    margin-bottom: 0;
+	width: 49%;
+	float: left;
+	margin-bottom: 0;
 }
 #mededelingen-top3block {
-    float: left;
-    margin: 0 0 0 20px;
-    width: 400px;
+	float: left;
+	margin: 0 0 0 20px;
+	width: 400px;
 }
