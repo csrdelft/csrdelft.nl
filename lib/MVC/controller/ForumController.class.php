@@ -474,9 +474,12 @@ class ForumController extends Controller {
 		// post in bestaand draadje?
 		if ($draad_id !== null) {
 			$draad = ForumDradenModel::instance()->getForumDraad((int) $draad_id);
+
+			// mag posten?
 			if (!$draad OR $draad->forum_id !== $deel->forum_id OR ! ForumController::magPosten($draad, $deel)) {
 				$this->geentoegang();
 			}
+
 			$url = CSR_ROOT . '/forum/onderwerp/' . $draad->draad_id;
 			$nieuw = false;
 		} else {
@@ -498,11 +501,6 @@ class ForumController extends Controller {
 		$filter = new SimpleSpamfilter();
 		$spamtrap = filter_input(INPUT_POST, 'firstname', FILTER_UNSAFE_RAW);
 		if (!empty($spamtrap) OR $filter->isSpam($tekst)) { //TODO: logging
-			if ($nieuw) {
-				ForumDradenReagerenModel::instance()->setConcept($deel);
-			} else {
-				ForumDradenReagerenModel::instance()->setConcept($deel, $draad->draad_id);
-			}
 			setMelding('SPAM', -1);
 			redirect(CSR_ROOT . '/forum');
 		}
@@ -510,6 +508,14 @@ class ForumController extends Controller {
 		// voorkom dubbelposts
 		if (isset($_SESSION['forum_laatste_post_tekst']) AND $_SESSION['forum_laatste_post_tekst'] === $tekst) {
 			setMelding('Uw reactie is al geplaatst', 0);
+
+			// concept wissen
+			if ($nieuw) {
+				ForumDradenReagerenModel::instance()->setConcept($deel);
+			} else {
+				ForumDradenReagerenModel::instance()->setConcept($deel, $draad->draad_id);
+			}
+
 			redirect($url);
 		}
 
@@ -532,7 +538,7 @@ class ForumController extends Controller {
 			}
 			if ($filter->isSpam($mailadres)) { //TODO: logging
 				setMelding('SPAM', -1);
-				redirect(CSR_ROOT . '/forum/deel/' . $deel->forum_id);
+				redirect($url);
 			}
 		}
 
@@ -540,27 +546,24 @@ class ForumController extends Controller {
 		if ($nieuw) {
 			if (empty($titel)) {
 				setMelding('U moet een titel opgeven!', -1);
-				redirect(CSR_ROOT . '/forum/deel/' . $deel->forum_id);
+				redirect($url);
 			}
+			// maak draad
 			$draad = ForumDradenModel::instance()->maakForumDraad($deel->forum_id, $titel, $wacht_goedkeuring);
 		}
 
 		// maak post
 		$post = ForumPostsModel::instance()->maakForumPost($draad->draad_id, $tekst, $_SERVER['REMOTE_ADDR'], $wacht_goedkeuring, $mailadres);
-		$_SESSION['forum_laatste_post_tekst'] = $tekst;
-		if ($nieuw) {
-			ForumDradenReagerenModel::instance()->setConcept($deel);
-		} else {
-			ForumDradenReagerenModel::instance()->setConcept($deel, $draad->draad_id);
-		}
-		ForumDradenGelezenModel::instance()->setWanneerGelezenDoorLid($draad);
 
 		// bericht sturen naar pubcie@csrdelft dat er een bericht op goedkeuring wacht?
 		if ($wacht_goedkeuring) {
 			setMelding('Uw bericht is opgeslagen en zal als het goedgekeurd is geplaatst worden.', 1);
 
 			mail('pubcie@csrdelft.nl', 'Nieuw bericht wacht op goedkeuring', "http://csrdelft.nl/forum/onderwerp/" . $draad->draad_id . "/wacht#" . $post->post_id . "\r\n" . "\r\nDe inhoud van het bericht is als volgt: \r\n\r\n" . str_replace('\r\n', "\n", $tekst) . "\r\n\r\nEINDE BERICHT", "From: pubcie@csrdelft.nl\nReply-To: " . $mailadres);
-			redirect(CSR_ROOT . '/forum/deel/' . $deel->forum_id);
+
+			if ($nieuw) {
+				redirect(CSR_ROOT . '/forum/deel/' . $deel->forum_id);
+			}
 		} else {
 
 			// direct goedkeuren voor ingelogd
@@ -572,11 +575,27 @@ class ForumController extends Controller {
 				$mail->setReplyTo('no-reply@csrdelft.nl');
 				$mail->send();
 			}
-			setMelding(($draad ? 'Draad' : 'Post') . ' succesvol toegevoegd', 1);
+
+			setMelding(($nieuw ? 'Draad' : 'Post') . ' succesvol toegevoegd', 1);
+
+			$url = CSR_ROOT . '/forum/reactie/' . $post->post_id . '#' . $post->post_id;
 		}
 
+		// concept wissen
+		if ($nieuw) {
+			ForumDradenReagerenModel::instance()->setConcept($deel);
+		} else {
+			ForumDradenReagerenModel::instance()->setConcept($deel, $draad->draad_id);
+		}
+
+		// markeer als gelezen
+		ForumDradenGelezenModel::instance()->setWanneerGelezenDoorLid($draad);
+
+		// voorkom dubbelposts
+		$_SESSION['forum_laatste_post_tekst'] = $tekst;
+
 		// redirect naar post
-		redirect(CSR_ROOT . '/forum/reactie/' . $post->post_id . '#' . $post->post_id);
+		redirect($url);
 	}
 
 	public static function magForumPostBewerken(ForumPost $post, ForumDraad $draad, ForumDeel $deel) {
