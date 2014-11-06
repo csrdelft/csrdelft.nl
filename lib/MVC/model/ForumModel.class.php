@@ -1086,10 +1086,7 @@ class ForumPostsModel extends PersistenceModel implements Paging {
 	}
 
 	public function verwijderForumPost(ForumPost $post, ForumDraad $draad, ForumDeel $deel) {
-		if ($post->verwijderd) {
-			throw new Exception('Al verwijderd!');
-		}
-		$post->verwijderd = true;
+		$post->verwijderd = !$post->verwijderd;
 		$rowcount = $this->update($post);
 		if ($rowcount !== 1) {
 			throw new Exception('Verwijderen mislukt');

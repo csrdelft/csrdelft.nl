@@ -43,6 +43,10 @@
 			<a href="/forum/verwijderen/{$post->post_id}" class="knop post confirm" title="Verwijder bericht of draad">{icon get="cross"}</a>
 		{else}
 			<div class="forumpostKnoppen">
+				{if $post->verwijderd}
+					<div class="error">Deze reactie is verwijderd.</div>
+					<a href="/forum/verwijderen/{$post->post_id}" class="knop post confirm" title="Bericht herstellen">{icon get="arrow_undo"}</a>
+				{/if}
 				{if LoginModel::mag('P_LOGGED_IN') AND ForumController::magPosten($draad, $deel)}
 					<a href="#reageren" class="knop citeren" data-citeren="{$post->post_id}" title="Citeer bericht">{icon get="comments"}</a>
 				{/if}
@@ -53,12 +57,11 @@
 				{/if}
 				{if $deel->magModereren()}
 					<a href="/forum/offtopic/{$post->post_id}" class="knop post confirm{if !$post->wacht_goedkeuring} forummodknop{/if}" title="Offtopic markeren">{icon get="thumb_down"}</a>
-					<a href="/forum/verwijderen/{$post->post_id}" class="knop post confirm{if !$post->wacht_goedkeuring} forummodknop{/if}" title="Verwijder bericht">{icon get="cross"}</a>
+					{if !$post->verwijderd}
+						<a href="/forum/verwijderen/{$post->post_id}" class="knop post confirm{if !$post->wacht_goedkeuring} forummodknop{/if}" title="Verwijder bericht">{icon get="cross"}</a>
+					{/if}
 					<a href="/forum/afsplitsen/{$post->post_id}" class="knop post prompt{if !$post->wacht_goedkeuring} forummodknop{/if}" title="Bericht afsplitsen" data="Naam van nieuwe draad=">{icon get=arrow_branch}</a>
 					<a href="/forum/verplaatsen/{$post->post_id}" class="knop post prompt{if !$post->wacht_goedkeuring} forummodknop{/if}" title="Verplaats bericht" data="Draad id={$post->draad_id}">{icon get=arrow_right}</a>
-				{/if}
-				{if $post->verwijderd}
-					<span class="error">Deze reactie is verwijderd.</span>
 				{/if}
 			</div>
 		{/if}
