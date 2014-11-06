@@ -10,7 +10,7 @@ require_once 'voorkeur/overzicht.class.php';
 # Lidpagina.
 # -------------------------------------------------------------------
 
-if (LoginModel::mag('P_LEDEN_MOD')) {
+if (LoginModel::mag('groep:bestuur')) {
 	$inhoud = new LidOverzicht();
 	if (isset($_GET['lid'])) {
 		$inhoud = new LidOverzicht($_GET['lid']);

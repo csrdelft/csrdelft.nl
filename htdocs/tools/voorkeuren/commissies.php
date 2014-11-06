@@ -10,7 +10,7 @@ require_once 'voorkeur/overzicht.class.php';
 # Commissies.
 # -------------------------------------------------------------------
 
-if (LoginModel::mag('P_LEDEN_MOD')) {
+if (LoginModel::mag('groep:bestuur')) {
 	$inhoud = new CommissieOverzicht();
 	if (isset($_GET['c'])) {
 		$inhoud = new CommissieOverzicht($_GET['c']);

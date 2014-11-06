@@ -13,13 +13,7 @@
 						{icon get="note"} maak {if $draad->plakkerig}<span class="dikgedrukt">niet</span> {/if}plakkerig
 					</a>
 					<br /><br />
-					<a href="/forum/wijzigen/{$draad->draad_id}/eerste_post_plakkerig" class="knop post ReloadPage" title="Verander plakkerigheid van eerste post">
-						<input type="checkbox" {if $draad->eerste_post_plakkerig}checked="checked"{/if}/> 1e post plakkerig
-					</a>
-					<br /><br />
-					<a href="/forum/wijzigen/{$draad->draad_id}/pagina_per_post" class="knop post ReloadPage" title="Verander 1 pagina per post">
-						<input type="checkbox" {if $draad->pagina_per_post}checked="checked"{/if}/> 1 pagina per post
-					</a>
+					<a href="/forum/onderwerp/{$draad->draad_id}/prullenbak" class="knop" title="Bekijk de reacties die zijn verwijderd">{icon get="bin_closed"} verwijderde reacties</a>
 					<br /><br />
 					<a href="/forum/wijzigen/{$draad->draad_id}/verwijderd" class="knop post confirm ReloadPage" title="Verander status verwijderd (incl. alle reacties)">
 						{if $draad->verwijderd}
@@ -28,10 +22,16 @@
 							{icon get="cross"} draad verwijderen
 						{/if}
 					</a>
-					&nbsp;
-					<a href="/forum/onderwerp/{$draad->draad_id}/prullenbak" class="knop" title="Bekijk de reacties die zijn verwijderd">{icon get="bin_closed"}</a>
 				</td>
 				<td>
+					<a href="/forum/wijzigen/{$draad->draad_id}/eerste_post_plakkerig" class="knop post ReloadPage" title="Verander plakkerigheid van eerste post">
+						<input type="checkbox" {if $draad->eerste_post_plakkerig}checked="checked"{/if}/> 1e post plakkerig
+					</a>
+					&nbsp;
+					<a href="/forum/wijzigen/{$draad->draad_id}/pagina_per_post" class="knop post ReloadPage" title="Verander 1 pagina per post">
+						<input type="checkbox" {if $draad->pagina_per_post}checked="checked"{/if}/> 1 pagina per post
+					</a>
+					<br /><br />
 					<form action="/forum/wijzigen/{$draad->draad_id}/forum_id" method="post">
 						<label>Verplaats naar &nbsp;</label>
 						<select name="forum_id">
