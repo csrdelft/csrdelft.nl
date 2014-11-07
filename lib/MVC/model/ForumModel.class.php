@@ -1144,19 +1144,6 @@ class ForumPostsModel extends PersistenceModel implements Paging {
 		}
 	}
 
-	public function samenvoegenForumDraad(ForumDraad $nieuwDraad, ForumDeel $nieuwDeel, ForumDraad $draad, ForumDeel $deel) {
-		foreach ($this->find('draad_id = ?', array($draad->draad_id)) as $post) {
-			$post->draad_id = $nieuwDraad->draad_id;
-			$rowcount = $this->update($post);
-			if ($rowcount !== 1) {
-				throw new Exception('Verplaatsen mislukt');
-			}
-		}
-		ForumDradenModel::instance()->wijzigForumDraad($draad, 'verwijderd', true, $deel);
-		$this->hertellenVoorDraadEnDeel($draad, $deel);
-		$this->hertellenVoorDraadEnDeel($nieuwDraad, $nieuwDeel);
-	}
-
 	public function offtopicForumPost(ForumPost $post) {
 		$post->tekst = '[offtopic]' . $post->tekst . '[/offtopic]';
 		$post->laatst_gewijzigd = getDateTime();

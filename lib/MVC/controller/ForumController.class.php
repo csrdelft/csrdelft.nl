@@ -60,7 +60,6 @@ class ForumController extends Controller {
 			case 'verplaatsen':
 			case 'offtopic':
 			case 'goedkeuren':
-			case 'samenvoegen':
 
 			// ForumPost
 			case 'tekst':
@@ -394,26 +393,6 @@ class ForumController extends Controller {
 		$aantal = ForumDradenVolgenModel::instance()->getAantalVolgenVoorLid();
 		ForumDradenVolgenModel::instance()->volgNietsVoorLid(LoginModel::getUid());
 		setMelding($aantal . ' onderwerp' . ($aantal === 1 ? ' wordt' : 'en worden') . ' niet meer gevolgd', 1);
-		$this->view = new JsonResponse(true);
-	}
-
-	/**
-	 * Forum draden samenvoegen
-	 * @param int $draad_id
-	 */
-	public function samenvoegen($draad_id) {
-		$draad = ForumDradenModel::instance()->getForumDraad((int) $draad_id);
-		$deel = ForumDelenModel::instance()->getForumDeel($draad->forum_id);
-		if (!$deel->magModereren()) {
-			$this->geentoegang();
-		}
-		$nieuw = filter_input(INPUT_POST, 'Draad_id', FILTER_SANITIZE_NUMBER_INT);
-		$nieuwDraad = ForumDradenModel::instance()->getForumDraad((int) $nieuw);
-		$nieuwDeel = ForumDelenModel::instance()->getForumDeel($nieuwDraad->forum_id);
-		if (!$nieuwDeel->magModereren()) {
-			$this->geentoegang();
-		}
-		ForumPostsModel::instance()->samenvoegenForumDraad($nieuwDraad, $nieuwDeel, $draad, $deel);
 		$this->view = new JsonResponse(true);
 	}
 
