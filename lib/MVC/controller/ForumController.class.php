@@ -58,9 +58,9 @@ class ForumController extends Controller {
 			case 'bewerken':
 			case 'verwijderen':
 			case 'verplaatsen':
-			case 'afsplitsen':
 			case 'offtopic':
 			case 'goedkeuren':
+			case 'samenvoegen':
 
 			// ForumPost
 			case 'tekst':
@@ -398,6 +398,26 @@ class ForumController extends Controller {
 	}
 
 	/**
+	 * Forum draden samenvoegen
+	 * @param int $draad_id
+	 */
+	public function samenvoegen($draad_id) {
+		$draad = ForumDradenModel::instance()->getForumDraad((int) $draad_id);
+		$deel = ForumDelenModel::instance()->getForumDeel($draad->forum_id);
+		if (!$deel->magModereren()) {
+			$this->geentoegang();
+		}
+		$nieuw = filter_input(INPUT_POST, 'Draad_id', FILTER_SANITIZE_NUMBER_INT);
+		$nieuwDraad = ForumDradenModel::instance()->getForumDraad((int) $nieuw);
+		$nieuwDeel = ForumDelenModel::instance()->getForumDeel($nieuwDraad->forum_id);
+		if (!$nieuwDeel->magModereren()) {
+			$this->geentoegang();
+		}
+		ForumPostsModel::instance()->samenvoegenForumDraad($nieuwDraad, $nieuwDeel, $draad, $deel);
+		$this->view = new JsonResponse(true);
+	}
+
+	/**
 	 * Wijzig een eigenschap van een draadje.
 	 * 
 	 * @param int $draad_id
@@ -431,7 +451,7 @@ class ForumController extends Controller {
 		} else {
 			$this->geentoegang();
 		}
-		ForumDradenModel::instance()->wijzigForumDraad($draad, $property, $value);
+		ForumDradenModel::instance()->wijzigForumDraad($draad, $property, $value, $deel);
 		if (is_bool($value)) {
 			$wijziging = ($value ? 'wel ' : 'niet ') . $property;
 		} else {
@@ -567,7 +587,7 @@ class ForumController extends Controller {
 		} else {
 
 			// direct goedkeuren voor ingelogd
-			ForumPostsModel::instance()->goedkeurenForumPost($post, $draad, $deel);
+			ForumPostsModel::instance()->tellenEnGoedkeurenForumPost($post, $draad, $deel);
 			foreach ($draad->getVolgers() as $uid) {
 				require_once 'MVC/model/entity/Mail.class.php';
 				$bericht = "[url]http://csrdelft.nl/forum/reactie/" . $post->post_id . "#" . $post->post_id . "[/url]\r\n" . "\r\nDe inhoud van het bericht is als volgt: \r\n\r\n" . str_replace('\r\n', "\n", $tekst) . "\r\n\r\nEINDE BERICHT";
@@ -655,24 +675,14 @@ class ForumController extends Controller {
 			$this->geentoegang();
 		}
 		$nieuw = filter_input(INPUT_POST, 'Draad_id', FILTER_SANITIZE_NUMBER_INT);
-		$nieuwDraad = ForumDradenModel::instance()->getForumDraad($nieuw);
+		$nieuwDraad = ForumDradenModel::instance()->getForumDraad((int) $nieuw);
 		$nieuwDeel = ForumDelenModel::instance()->getForumDeel($nieuwDraad->forum_id);
 		if (!$nieuwDeel->magModereren()) {
 			$this->geentoegang();
 		}
-		ForumPostsModel::instance()->verplaatsForumPost($nieuwDraad, $post, $draad, $deel);
-		$this->view = new ForumPostDeleteView($post->post_id);
-	}
-
-	public function afsplitsen($post_id) {
-		$post = ForumPostsModel::instance()->getForumPost((int) $post_id);
-		$draad = ForumDradenModel::instance()->getForumDraad($post->draad_id);
-		$deel = ForumDelenModel::instance()->getForumDeel($draad->forum_id);
-		if (!$deel->magModereren()) {
-			$this->geentoegang();
-		}
-		$nieuw = filter_input(INPUT_POST, 'Naam_van_nieuwe_draad', FILTER_SANITIZE_STRING);
-		ForumPostsModel::instance()->afsplitsenForumPost($nieuw, $post, $draad, $deel);
+		ForumPostsModel::instance()->verplaatsForumPost($nieuwDraad, $post);
+		ForumPostsModel::instance()->tellenEnGoedkeurenForumPost($post, $nieuwDraad, $nieuwDeel);
+		ForumPostsModel::instance()->hertellenVoorDraadEnDeel($draad, $deel);
 		$this->view = new ForumPostDeleteView($post->post_id);
 	}
 
@@ -705,7 +715,7 @@ class ForumController extends Controller {
 		if (!$deel->magModereren()) {
 			$this->geentoegang();
 		}
-		ForumPostsModel::instance()->goedkeurenForumPost($post, $draad, $deel);
+		ForumPostsModel::instance()->tellenEnGoedkeurenForumPost($post, $draad, $deel);
 		$this->view = new ForumPostView($post, $draad, $deel);
 	}
 

@@ -821,7 +821,7 @@ class ForumDradenModel extends PersistenceModel implements Paging {
 		return $draad;
 	}
 
-	public function wijzigForumDraad(ForumDraad $draad, $property, $value) {
+	public function wijzigForumDraad(ForumDraad $draad, $property, $value, ForumDeel $deel) {
 		if (!property_exists($draad, $property)) {
 			throw new Exception('Property undefined: ' . $property);
 		}
@@ -927,7 +927,7 @@ class ForumPostsModel extends PersistenceModel implements Paging {
 				$draad->verwijderd = true;
 				setMelding('Draad ' . $draad->draad_id . ' bevat geen berichten. Automatische actie: draad verwijderd', 2);
 			} elseif ($draad->aantal_posts > 0) {
-				ForumDradenModel::instance()->verwijderForumPostsVoorDraad($draad);
+				ForumDradenModel::instance()->verwijderForumPostsVoorDraad($draad, $deel);
 				setMelding('Draad ' . $draad->draad_id . ' bevat nog berichten. Automatische actie: berichten verwijderd', 2);
 			}
 			$draad->laatste_post_id = null;
@@ -936,6 +936,7 @@ class ForumPostsModel extends PersistenceModel implements Paging {
 			ForumDradenGelezenModel::instance()->verwijderDraadGelezen($draad);
 			ForumDradenVerbergenModel::instance()->toonDraadVoorIedereen($draad);
 			ForumDradenVolgenModel::instance()->stopVolgenVoorIedereen($draad);
+			ForumDradenReagerenModel::instance()->verwijderReagerenVoorDraad($draad);
 		} else { // reset last post
 			$last_post = $this->find('draad_id = ? AND wacht_goedkeuring = FALSE AND verwijderd = FALSE', array($draad->draad_id), 'laatst_gewijzigd DESC', null, 1)->fetch();
 			$draad->laatste_post_id = $last_post->post_id;
@@ -943,6 +944,7 @@ class ForumPostsModel extends PersistenceModel implements Paging {
 			$draad->laatst_gewijzigd = $last_post->laatst_gewijzigd;
 			if ($draad->gesloten) {
 				ForumDradenVolgenModel::instance()->stopVolgenVoorIedereen($draad);
+				ForumDradenReagerenModel::instance()->verwijderReagerenVoorDraad($draad);
 			}
 		}
 		ForumDradenModel::instance()->update($draad);
@@ -1132,22 +1134,27 @@ class ForumPostsModel extends PersistenceModel implements Paging {
 		}
 	}
 
-	public function verplaatsForumPost(ForumDraad $nieuw, ForumPost $post, ForumDraad $draad, ForumDeel $deel) {
-		$post->draad_id = $nieuw->draad_id;
+	public function verplaatsForumPost(ForumDraad $nieuwDraad, ForumPost $post) {
+		$post->draad_id = $nieuwDraad->draad_id;
 		$post->laatst_gewijzigd = getDateTime();
 		$post->bewerkt_tekst .= 'verplaatst door [lid=' . LoginModel::getUid() . '] [reldate]' . $post->laatst_gewijzigd . '[/reldate]' . "\n";
 		$rowcount = $this->update($post);
 		if ($rowcount !== 1) {
 			throw new Exception('Verplaatsen mislukt');
 		}
-		$this->goedkeurenForumPost($post, $nieuw, $deel);
-		$this->hertellenVoorDraadEnDeel($draad, $deel);
 	}
 
-	public function afsplitsenForumPost($nieuw_draad_naam, ForumPost $post, ForumDraad $draad, ForumDeel $deel) {
-		$nieuw = ForumDradenModel::instance()->maakForumDraad($draad->forum_id, $nieuw_draad_naam, false);
-		$this->verplaatsForumPost($nieuw, $post, $draad, $deel);
-		return $nieuw;
+	public function samenvoegenForumDraad(ForumDraad $nieuwDraad, ForumDeel $nieuwDeel, ForumDraad $draad, ForumDeel $deel) {
+		foreach ($this->find('draad_id = ?', array($draad->draad_id)) as $post) {
+			$post->draad_id = $nieuwDraad->draad_id;
+			$rowcount = $this->update($post);
+			if ($rowcount !== 1) {
+				throw new Exception('Verplaatsen mislukt');
+			}
+		}
+		ForumDradenModel::instance()->wijzigForumDraad($draad, 'verwijderd', true, $deel);
+		$this->hertellenVoorDraadEnDeel($draad, $deel);
+		$this->hertellenVoorDraadEnDeel($nieuwDraad, $nieuwDeel);
 	}
 
 	public function offtopicForumPost(ForumPost $post) {
@@ -1160,7 +1167,7 @@ class ForumPostsModel extends PersistenceModel implements Paging {
 		}
 	}
 
-	public function goedkeurenForumPost(ForumPost $post, ForumDraad $draad, ForumDeel $deel) {
+	public function tellenEnGoedkeurenForumPost(ForumPost $post, ForumDraad $draad, ForumDeel $deel) {
 		if ($post->wacht_goedkeuring) {
 			$post->wacht_goedkeuring = false;
 			$post->laatst_gewijzigd = getDateTime();

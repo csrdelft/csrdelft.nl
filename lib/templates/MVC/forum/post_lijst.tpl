@@ -60,7 +60,6 @@
 					{if !$post->verwijderd}
 						<a href="/forum/verwijderen/{$post->post_id}" class="knop post confirm{if !$post->wacht_goedkeuring} forummodknop{/if}" title="Verwijder bericht">{icon get="cross"}</a>
 					{/if}
-					<a href="/forum/afsplitsen/{$post->post_id}" class="knop post prompt{if !$post->wacht_goedkeuring} forummodknop{/if}" title="Bericht afsplitsen" data="Naam van nieuwe draad=">{icon get=arrow_branch}</a>
 					<a href="/forum/verplaatsen/{$post->post_id}" class="knop post prompt{if !$post->wacht_goedkeuring} forummodknop{/if}" title="Verplaats bericht" data="Draad id={$post->draad_id}">{icon get=arrow_right}</a>
 				{/if}
 			</div>

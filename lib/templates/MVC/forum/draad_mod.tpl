@@ -31,6 +31,8 @@
 					<a href="/forum/wijzigen/{$draad->draad_id}/pagina_per_post" class="knop post ReloadPage" title="Verander 1 pagina per post">
 						<input type="checkbox" {if $draad->pagina_per_post}checked="checked"{/if}/> 1 pagina per post
 					</a>
+					&nbsp;
+					<a href="/forum/samenvoegen/{$draad->draad_id}" class="knop post confirm prompt ReloadPage" title="Draad samenvoegen met ander draad" data="Draad id={$draad->draad_id}">{icon get=arrow_join} samenvoegen</a>
 					<br /><br />
 					<form action="/forum/wijzigen/{$draad->draad_id}/forum_id" method="post">
 						<label>Verplaats naar &nbsp;</label>
