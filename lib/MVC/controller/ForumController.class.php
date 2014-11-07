@@ -431,7 +431,7 @@ class ForumController extends Controller {
 			$this->geentoegang();
 		}
 		ForumDradenModel::instance()->wijzigForumDraad($draad, $property, $value);
-		ForumDradenModel::instance()->hertellenVoorDraadEnDeel($draad, $deel);
+		ForumPostsModel::instance()->hertellenVoorDraadEnDeel($draad, $deel);
 		if (is_bool($value)) {
 			$wijziging = ($value ? 'wel ' : 'niet ') . $property;
 		} else {
