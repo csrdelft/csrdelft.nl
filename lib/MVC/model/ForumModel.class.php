@@ -821,7 +821,7 @@ class ForumDradenModel extends PersistenceModel implements Paging {
 		return $draad;
 	}
 
-	public function wijzigForumDraad(ForumDraad $draad, $property, $value, ForumDeel $deel) {
+	public function wijzigForumDraad(ForumDraad $draad, $property, $value) {
 		if (!property_exists($draad, $property)) {
 			throw new Exception('Property undefined: ' . $property);
 		}
@@ -839,7 +839,7 @@ class ForumDradenModel extends PersistenceModel implements Paging {
 			ForumDradenVerbergenModel::instance()->toonDraadVoorIedereen($draad);
 			ForumDradenGelezenModel::instance()->verwijderDraadGelezen($draad);
 			ForumDradenReagerenModel::instance()->verwijderReagerenVoorDraad($draad);
-			ForumPostsModel::instance()->verwijderForumPostsVoorDraad($draad, $deel); // hertellen
+			ForumPostsModel::instance()->verwijderForumPostsVoorDraad($draad);
 		}
 	}
 
@@ -927,7 +927,8 @@ class ForumPostsModel extends PersistenceModel implements Paging {
 				$draad->verwijderd = true;
 				setMelding('Draad ' . $draad->draad_id . ' bevat geen berichten. Automatische actie: draad verwijderd', 2);
 			} elseif ($draad->aantal_posts > 0) {
-				ForumDradenModel::instance()->verwijderForumPostsVoorDraad($draad, $deel);
+				ForumPostsModel::instance()->verwijderForumPostsVoorDraad($draad);
+				$draad->aantal_posts = 0;
 				setMelding('Draad ' . $draad->draad_id . ' bevat nog berichten. Automatische actie: berichten verwijderd', 2);
 			}
 			$draad->laatste_post_id = null;
@@ -1097,9 +1098,8 @@ class ForumPostsModel extends PersistenceModel implements Paging {
 		$this->hertellenVoorDraadEnDeel($draad, $deel);
 	}
 
-	public function verwijderForumPostsVoorDraad(ForumDraad $draad, ForumDeel $deel) {
+	public function verwijderForumPostsVoorDraad(ForumDraad $draad) {
 		Database::sqlUpdate($this->orm->getTableName(), array('verwijderd' => $draad->verwijderd), 'draad_id = :id', array(':id' => $draad->draad_id));
-		$this->hertellenVoorDraadEnDeel($draad, $deel);
 	}
 
 	public function bewerkForumPost($nieuwe_tekst, $reden, ForumPost $post, ForumDraad $draad, ForumDeel $deel) {
