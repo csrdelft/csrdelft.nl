@@ -192,6 +192,9 @@ pre.bbcode {
 	text-decoration: underline;
 }
 
+.spoiler {
+	display: block;
+}
 .spoiler-content {
 	display: none;	
 }
