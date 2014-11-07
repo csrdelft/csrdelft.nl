@@ -26,13 +26,16 @@ class CorveePuntenModel {
 				if (array_key_exists($uid, $vrijstellingen) && time() > strtotime($vrijstellingen[$uid]->getBeginDatum())) {
 					$vrijstelling = $vrijstellingen[$uid];
 					$punten += $vrijstelling->getPunten();
+					if (time() > strtotime($vrijstelling->getEindDatum())) {
+						CorveeVrijstellingenModel::verwijderVrijstelling($vrijstelling->getUid());
+						$aantal++;
+					} else { // niet dubbel toekennen
+						$vrijstelling->setPercentage(0);
+						CorveeVrijstellingenModel::saveVrijstelling($vrijstelling->getUid(), $vrijstelling->getBeginDatum(), $vrijstelling->getEindDatum(), $vrijstelling->getPercentage());
+					}
 				}
 				$punten -= intval(Instellingen::get('corvee', 'punten_per_jaar'));
 				self::savePuntenVoorLid($lid, $punten, 0);
-				if ($vrijstelling !== null && time() > strtotime($vrijstelling->getEindDatum())) {
-					CorveeVrijstellingenModel::verwijderVrijstelling($vrijstelling->getUid());
-					$aantal++;
-				}
 			} catch (\Exception $e) {
 				$errors[] = $e;
 			}
