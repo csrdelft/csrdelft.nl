@@ -149,8 +149,9 @@ class FotoAlbumController extends AclController {
 				setMelding('Fotoalbum bestaat al', 0);
 			}
 			$this->view = new JsonResponse(true);
+		} else {
+			$this->view = $formulier;
 		}
-		$this->view = $formulier;
 	}
 
 	public function uploaden(FotoAlbum $album) {
