@@ -497,7 +497,15 @@ class CsrBB extends eamBBParser {
 			if (preg_match('|^(http://)?(www\.)?dailymotion\.com/video/([a-z0-9]+)(_.*)?$|', $content, $matches) > 0) {
 				$id = $matches[3];
 			}
-			$attr['data-src'] = 'http://www.dailymotion.com/swf/video/' . $id . '?autoplay=1';
+			$attr['data-object'] = <<<HTML
+<object type="application/x-shockwave-flash" data="https://www.dailymotion.com/swf/video/{$id}?autoPlay=1" class="{$attr['class']}" width="{$attr['width']}" height="{$attr['height']}">
+	<param name="allowfullScreen" value="true" />
+	<param name="allowscriptaccess" value="always" />
+	<param name="wmode" value="opaque" />
+	<param name="movie" value="https://www.dailymotion.com/swf/video/{$id}?autoPlay=1" />
+	<param name="flashvars" value="height={$attr['height']}&amp;width={$attr['width']}" />
+</object>
+HTML;
 			$attr['preview'] = 'http://www.dailymotion.com/thumbnail/video/' . $id;
 		} elseif (strstr($content, 'godtube')) {
 			$type = 'godtube';
@@ -505,12 +513,12 @@ class CsrBB extends eamBBParser {
 				$id = $matches[3];
 			}
 			$attr['data-object'] = <<<HTML
-<object class="{$attr['class']}" width="{$attr['width']}" height="{$attr['height']}" type="application/x-shockwave-flash" data="http://www.godtube.com/resource/mediaplayer/5.3/player.swf">
-	<param name="autostart" value="true" />
+<object type="application/x-shockwave-flash" data="http://www.godtube.com/resource/mediaplayer/5.3/player.swf" class="{$attr['class']}" width="{$attr['width']}" height="{$attr['height']}">
 	<param name="allowfullscreen" value="true" />
 	<param name="allowscriptaccess" value="always" />
-	<param name="movie" value="http://www.godtube.com/resource/mediaplayer/5.3/player.swf" />
 	<param name="wmode" value="opaque" />
+	<param name="movie" value="http://www.godtube.com/resource/mediaplayer/5.3/player.swf" />
+	<param name="autostart" value="true" />
 	<param name="flashvars" value="file=http://www.godtube.com/resource/mediaplayer/{$id}.file&image=http://www.godtube.com/resource/mediaplayer/{$id}.jpg&screencolor=000000&type=video&autostart=true&playonce=true&skin=http://www.godtube.com//resource/mediaplayer/skin/carbon/carbon.zip&logo.file=http://media.salemwebnetwork.com/godtube/theme/default/media/embed-logo.png&logo.link=http://www.godtube.com/watch/?v={$id}&logo.position=top-left&logo.hide=false&controlbar.position=over">
 </object>
 HTML;
