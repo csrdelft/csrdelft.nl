@@ -486,8 +486,14 @@ class CsrBB extends eamBBParser {
 				$id = $matches[1];
 			}
 			$params['src'] = '//player.vimeo.com/video/' . $id . '?autoplay=1';
-			$data = unserialize(file_get_contents('http://vimeo.com/api/v2/video/' . $id . '.php'));
-			$previewthumb = $data[0]['thumbnail_medium'];
+
+			$handle = fopen ('http://vimeo.com/api/v2/video/' . $id . '.php', "r");
+			if($handle) {
+				$data = stream_get_contents($handle);
+				fclose($handle);
+				$data = unserialize($data);
+				$previewthumb = $data[0]['thumbnail_medium'];
+			}
 
 		} elseif (strstr($content, 'dailymotion')) {
 			$type = 'dailymotion';
