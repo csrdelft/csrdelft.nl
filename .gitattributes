@@ -165,6 +165,7 @@ htdocs/layout/js/autocomplete/jquery.autocomplete.js -text
 htdocs/layout/js/autocomplete/jquery.autocomplete.min.css -text
 htdocs/layout/js/autocomplete/jquery.autocomplete.min.js -text
 htdocs/layout/js/bb-slideshow.js -text
+htdocs/layout/js/bbcode.js -text
 htdocs/layout/js/bibliotheek.js -text
 htdocs/layout/js/csrdelft.dataTables.js -text
 htdocs/layout/js/csrdelft.js -text
