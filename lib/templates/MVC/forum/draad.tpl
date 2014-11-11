@@ -57,7 +57,7 @@
 
 		<h1>
 			{$draad->titel}
-			{if $draad->belangrijk AND LoginModel::mag('P_FORUM_BELANGRIJK')}
+			{if isset($statistiek)}
 				<span class="lichtgrijs small" title="Aantal lezers"> {$draad->getAantalLezers()}</span>
 			{/if}
 		</h1>

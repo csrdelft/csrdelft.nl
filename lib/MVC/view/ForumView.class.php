@@ -156,11 +156,13 @@ class ForumDraadView extends ForumView {
 
 	private $deel;
 	private $paging;
+	private $statistiek;
 
-	public function __construct(ForumDraad $draad, ForumDeel $deel, $paging = true) {
+	public function __construct(ForumDraad $draad, ForumDeel $deel, $paging = true, $statistiek = false) {
 		parent::__construct($draad, $draad->titel);
 		$this->deel = $deel;
 		$this->paging = ($paging AND ForumPostsModel::instance()->getAantalPaginas($draad->draad_id) > 1);
+		$this->statistiek = $statistiek;
 	}
 
 	public function getBreadcrumbs() {
@@ -176,6 +178,9 @@ class ForumDraadView extends ForumView {
 		$this->smarty->assign('reageren', ForumDradenReagerenModel::instance()->getReagerenVoorDraad($this->model));
 		$this->smarty->assign('categorien', ForumModel::instance()->getForumIndeling());
 		$this->smarty->assign('gedeeld_met_opties', ForumDelenModel::instance()->getForumDelenOptiesOmTeDelen($this->deel));
+		if ($this->statistiek) {
+			$this->smarty->assign('statistiek', true);
+		}
 		$this->smarty->display('MVC/forum/draad.tpl');
 	}
 

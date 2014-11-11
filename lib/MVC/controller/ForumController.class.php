@@ -169,7 +169,7 @@ class ForumController extends Controller {
 			$belangrijk = null;
 		}
 		$deel = ForumDelenModel::instance()->getRecent($belangrijk);
-		$this->view = new ForumDeelView($deel, true, $belangrijk);
+		$this->view = new ForumDeelView($deel, false, true, $belangrijk);
 	}
 
 	/**
@@ -213,7 +213,7 @@ class ForumController extends Controller {
 	 * @param int $draad_id
 	 * @param int $pagina or 'laatste' or 'ongelezen'
 	 */
-	public function onderwerp($draad_id, $pagina = null) {
+	public function onderwerp($draad_id, $pagina = null, $statistiek = null) {
 		$draad = ForumDradenModel::instance()->getForumDraad((int) $draad_id);
 		$deel = ForumDelenModel::instance()->getForumDeel($draad->forum_id);
 		if (!$deel->magLezen()) {
@@ -245,7 +245,12 @@ class ForumController extends Controller {
 			ForumPostsModel::instance()->setHuidigePagina((int) $pagina, $draad->draad_id);
 		}
 		ForumDradenGelezenModel::instance()->setWanneerGelezenDoorLid($draad);
-		$this->view = new ForumDraadView($draad, $deel, $paging); // lazy loading ForumPost[]
+		if ($statistiek === 'statistiek' AND $deel->magModereren()) {
+			$statistiek = true;
+		} else {
+			$statistiek = false;
+		}
+		$this->view = new ForumDraadView($draad, $deel, $paging, $statistiek); // lazy loading ForumPost[]
 	}
 
 	/**

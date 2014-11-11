@@ -13,6 +13,8 @@
 						{icon get="note"} maak {if $draad->plakkerig}<span class="dikgedrukt">niet</span> {/if}plakkerig
 					</a>
 					<br /><br />
+					<a href="/forum/onderwerp/{$draad->draad_id}/{ForumPostsModel::instance()->getHuidigePagina()}/statistiek" class="knop" title="Bekijk statistieken gelezen door">{icon get="chart_line"} gelezen statistiek</a>
+					<br /><br />
 					<a href="/forum/onderwerp/{$draad->draad_id}/prullenbak" class="knop" title="Bekijk de reacties die zijn verwijderd">{icon get="bin_closed"} verwijderde reacties</a>
 					<br /><br />
 					<a href="/forum/wijzigen/{$draad->draad_id}/verwijderd" class="knop post confirm ReloadPage" title="Verander status verwijderd (incl. alle reacties)">

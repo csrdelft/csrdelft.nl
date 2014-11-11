@@ -32,7 +32,7 @@
 			<div id="p{$post->post_id}" class="forumpasfoto{if LidInstellingen::get('forum', 'toonpasfotos') == 'nee'} verborgen">{elseif LoginModel::mag('P_LEDEN_READ')}">{$post->uid|csrnaam:'pasfoto':'link'}{/if}</div>
 		{/if}
 		<br />
-		{if $draad->belangrijk AND LoginModel::mag('P_FORUM_BELANGRIJK')}
+		{if isset($statistiek)}
 			<span class="lichtgrijs small" title="Gelezen door lezers">{ForumDradenGelezenModel::instance()->getGelezenPercentage($post, $draad)}%</span>
 		{/if}
 		<br />
