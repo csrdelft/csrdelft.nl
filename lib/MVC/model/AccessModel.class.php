@@ -123,8 +123,8 @@ class AccessModel extends CachedPersistenceModel {
 	}
 
 	public function isValidPerm($permission) {
-		// case insensitive & RechtenField maakt van > een &gt;
-		$permission = strtoupper(str_replace('&gt;', '>', $permission));
+		// case insensitive
+		$permission = strtoupper($permission);
 
 		// Is de gevraagde permissie het uid van de gevraagde gebruiker?
 		if (Lid::isValidUid(strtolower($permission))) {
@@ -136,20 +136,9 @@ class AccessModel extends CachedPersistenceModel {
 			return true;
 		}
 
-		// splits permissie in type en waarde
-		$p = explode(':', $permission);
-		if (sizeof($p) === 2 AND ! empty($p[1]) AND in_array($p[0], self::$prefix)) {
-			$prefix = $p[0];
-			$gevraagd = $p[1];
-		} else {
-			return false;
-		}
-
-		// splits gevraagde term in groep en rol
-		$p = explode('>', $gevraagd, 2);
-		$gevraagd = $p[0];
-		$role = $p[1];
-		if (!empty($gevraagd)) {
+		// splits permissie in type, waarde en rol
+		$p = explode(':', $permission, 3);
+		if (in_array($p[0], self::$prefix) AND ! empty($p[1])) {
 			return true;
 		}
 
@@ -395,22 +384,18 @@ class AccessModel extends CachedPersistenceModel {
 
 	private function discretionaryAccessControl(Lid $subject, $permission) {
 
-		// splits permissie in type en waarde
-		$p = explode(':', $permission);
-		if (sizeof($p) === 2 AND ! empty($p[1]) AND in_array($p[0], self::$prefix)) {
+		// splits permissie in type, waarde en rol
+		$p = explode(':', $permission, 3);
+		if (in_array($p[0], self::$prefix) AND ! empty($p[1])) {
 			$prefix = $p[0];
 			$gevraagd = $p[1];
+			if (isset($p[2])) {
+				$role = $p[2];
+			} else {
+				$role = false;
+			}
 		} else {
 			return false;
-		}
-
-		// splits gevraagde term in groep en rol
-		$p = explode('>', $gevraagd, 2);
-		$gevraagd = $p[0];
-		if (sizeof($p) === 2) {
-			$role = $p[1];
-		} else {
-			$role = false;
 		}
 
 		switch ($prefix) {
@@ -427,16 +412,17 @@ class AccessModel extends CachedPersistenceModel {
 					// zoek groep
 					require_once 'groepen/groep.class.php';
 					$groep = new OldGroep($gevraagd);
-					if ($groep->isLid()) {
-						// wordt er een functie gevraagd?
-						if ($role) {
-							$functie = $groep->getFunctie();
-							if ($role == strtoupper($functie[0])) {
-								return true;
-							}
-						} else {
+					if (!$groep->isLid()) {
+						return false;
+					}
+					// wordt er een functie gevraagd?
+					if ($role) {
+						$functie = $groep->getFunctie();
+						if ($role == strtoupper($functie[0])) {
 							return true;
 						}
+					} else {
+						return true;
 					}
 				} catch (Exception $e) {
 					// gevraagde groep bestaat niet
@@ -451,13 +437,13 @@ class AccessModel extends CachedPersistenceModel {
 
 				// zoek verticale
 				$verticale = $subject->getVerticale();
-				if ($gevraagd != $verticale->id AND $gevraagd != $verticale->letter AND $gevraagd != $verticale->naam) {
+				if ($gevraagd != $verticale->id AND $gevraagd != strtoupper($verticale->letter) AND $gevraagd != strtoupper($verticale->naam)) {
 					return false;
 				}
 
 				// wordt er een role gevraagd?
 				if ($role) {
-					if ($role === 'LEIDER' AND $subject->isVerticaan()) {
+					if ($role == 'LEIDER' AND $subject->isVerticaan()) {
 						return true;
 					}
 				} else { // geen role gevraagd
@@ -471,7 +457,7 @@ class AccessModel extends CachedPersistenceModel {
 			 */
 			case 'GESLACHT':
 
-				if ($gevraagd === strtoupper($subject->getGeslacht())) {
+				if ($gevraagd == strtoupper($subject->getGeslacht())) {
 					// Niet ingelogd heeft geslacht m dus check of ingelogd
 					if ($this->hasPermission($subject, 'P_LOGGED_IN')) {
 						return true;
