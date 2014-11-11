@@ -41,7 +41,7 @@ class CsrBB extends eamBBParser {
 	 * @return int
 	 */
 	public static function aantalOngeslotenTags($bbcode) {
-		return substr_count($bbcode, '[') - 2 * substr_count($bbcode, '[/');
+		return substr_count($bbcode, '[') - substr_count($bbcode, '[*]') - 2 * substr_count($bbcode, '[/');
 	}
 
 	/**
