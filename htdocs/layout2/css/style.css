@@ -272,35 +272,6 @@ div.rommel img { height: 77px; }
 .box.list a { display: block; height: 32px; line-height: 32px; font-size: 14px; color: #46443a; border-bottom: 0; border-top: 1px solid #cac5aa; padding: 0 8px; }
 .box.list a:hover { background: #d9d0c1; }
 
-div#bbcodehulp{
-	display: none;
-	position: fixed;
-	z-index: 111;
-	width: 330px;
-	padding: 5px;
-	border: 1px solid #bbb;
-	background-color: white;
-	text-align: left;
-}
-div#bbcodehulp h2, div#bbcodehulp p, div#bbcodehulp ul{
-	margin-bottom: 5px;
-}
-span#bbcodehulpsluiten{
-	display: block;
-	width: 18px; height: 18px;
-	float: right;
-	margin: 0; padding: 0;
-	font-weight: bold; font-size: 14px;
-	text-align: center;	vertical-align: middle;
-	color: black;
-	cursor: pointer; cursor: hand;
-	border: 1px solid #fff;
-}
-span#bbcodehulpsluiten:hover{
-	border: 1px solid #000;
-	background-color: #eee;
-}
-
 /* messages with setMelding($msg, $lvl) */
 div.msgerror,
 div.msginfo,

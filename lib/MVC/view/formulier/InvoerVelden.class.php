@@ -1116,8 +1116,8 @@ class CsrBBPreviewField extends TextareaField {
 	public function getPreviewDiv() {
 		return <<<HTML
 <div class="float-right">
+	<a href="http://csrdelft.nl/wiki/cie:diensten:forum" target="_blank">Opmaakhulp</a>
 	<input type="button" value="Voorbeeld" onclick="CsrBBPreview('{$this->getId()}', '{$this->getName()}Preview');"/>
-	&nbsp;<a class="knop opmaakhulp" title="Opmaakhulp weergeven">Opmaak</a>
 </div>
 <br />
 <div id="{$this->getName()}Preview" class="preview"></div>

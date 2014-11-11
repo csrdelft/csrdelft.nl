@@ -72,8 +72,8 @@
 					<input type="button" value="Concept opslaan" id="forumConcept" onclick="saveConceptForumBericht();" data-url="/forum/concept/{$deel->forum_id}{if isset($draad)}/{$draad->draad_id}{/if}" />
 				{/if}
 				<div class="float-right">
+					<a href="http://csrdelft.nl/wiki/cie:diensten:forum" target="_blank">Opmaakhulp</a>
 					<a class="knop vergroot" data-vergroot="#forumBericht" title="Vergroot het invoerveld">&uarr;&darr;</a>
-					<a class="knop opmaakhulp" title="Opmaakhulp weergeven">Opmaak</a>
 				</div>
 			</div>
 

@@ -126,11 +126,6 @@ class CsrLayoutPage extends HtmlPage {
 		DragObjectModel::getCoords('modal', $top, $left);
 		$smarty->assign('modaltop', $top);
 		$smarty->assign('modalleft', $left);
-		$top = 175;
-		$left = 10;
-		DragObjectModel::getCoords('bbcodehulp', $top, $left);
-		$smarty->assign('bbhulptop', $top);
-		$smarty->assign('bbhulpleft', $left);
 
 		if (LidInstellingen::get('algemeen', 'minion') == 'ja') {
 			$top = 40;

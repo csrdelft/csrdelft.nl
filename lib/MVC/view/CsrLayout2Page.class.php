@@ -43,6 +43,7 @@ class CsrLayout2Page extends HtmlPage {
 		$smarty->assign('stylesheets', $this->getStylesheets());
 		$smarty->assign('scripts', $this->getScripts());
 		$smarty->assign('titel', $this->getTitel());
+		$smarty->assign('loginform', new LoginForm());
 
 		if ($this->menutmpl !== '') {
 			$smarty->assign('menutpl', $this->menutmpl);
@@ -54,13 +55,6 @@ class CsrLayout2Page extends HtmlPage {
 			$breadcrumbs = $this->getBreadcrumbs();
 		}
 		$smarty->assign('breadcrumbs', $breadcrumbs);
-
-		$smarty->assign('loginform', new LoginForm());
-		$top = 180;
-		$left = 10;
-		DragObjectModel::getCoords('bbcodehulp', $top, $left);
-		$smarty->assign('bbhulptop', $top);
-		$smarty->assign('bbhulpleft', $left);
 
 		if (LoginModel::instance()->isPauper()) {
 			$smarty->assign('menutree', MenuModel::instance()->getMenu('main'));

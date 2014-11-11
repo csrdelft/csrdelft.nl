@@ -61,7 +61,7 @@
 		<strong>Bericht:</strong><br />
 		<div id="bewerkPreview" class="preview"></div>
 		<textarea name="bericht" id="courantBericht" cols="80" style="width: 100%;" rows="15" class="tekst">{$form.bericht|escape:'html'}</textarea>
-		<a class="knop float-right opmaakhulp" title="Opmaakhulp weergeven">Opmaak</a>
+		<a href="http://csrdelft.nl/wiki/cie:diensten:forum" target="_blank">Opmaakhulp</a>
 		<a class="knop float-right vergroot" data-vergroot="#courantBericht" title="Vergroot het invoerveld">&uarr;&darr;</a>
 		<input type="submit" name="verzenden" value="Opslaan" class="tekst" /> 
 		<input type="button" value="Voorbeeld" onclick="CsrBBPreview('courantBericht', 'bewerkPreview');" />

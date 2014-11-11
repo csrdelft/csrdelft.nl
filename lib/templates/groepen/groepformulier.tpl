@@ -104,7 +104,7 @@
 		<br />
 		<label for="submit"></label>
 		<input type="button" class="voorbeeld" value="Voorbeeld" onclick="return CsrBBPreview('sbeschrijving', 'sbewerkPreview')" />
-		<a class="knop extraknopjespreview opmaakhulp" title="Opmaakhulp weergeven">Opmaak</a>
+		<a href="http://csrdelft.nl/wiki/cie:diensten:forum" target="_blank">Opmaakhulp</a>
 		<a class="knop extraknopjespreview vergroot" data-vergroot="#sbeschrijving" title="Vergroot het invoerveld">&uarr;&darr;</a><br />
 	{/if}
 
@@ -117,7 +117,7 @@
 		<textarea id="beschrijving" name="beschrijving" rows="15">{$groep->getBeschrijving()|escape:'html'}</textarea><br />
 		<label for="submit"></label>
 		<input type="button" class="voorbeeld" value="Voorbeeld" onclick="return CsrBBPreview('beschrijving', 'bewerkPreview')" /> 
-		<a class="knop extraknopjespreview opmaakhulp" title="Opmaakhulp weergeven">Opmaak</a>
+		<a href="http://csrdelft.nl/wiki/cie:diensten:forum" target="_blank">Opmaakhulp</a> 
 		<a class="knop extraknopjespreview vergroot" data-vergroot="#beschrijving" title="Vergroot het invoerveld">&uarr;&darr;</a><br />
 	{/if}
 

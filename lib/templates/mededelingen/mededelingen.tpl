@@ -29,7 +29,7 @@
 			{if $geselecteerdeMededeling->isModerator()}
 				<a class="knop" href="#" onclick="$('#legenda').toggle();">{icon get="legenda"} Legenda</a>
 				<div id="legenda" class="dragobject verborgen">
-					<span id="bbcodehulpsluiten" onclick="$('#legenda').toggle();" title="Legenda verbergen">&times;</span>
+					<div class="float-right" onclick="$('#legenda').fadeOut();" title="Legenda verbergen">&times;</div>
 					<h2>Legenda Mededelingen</h2>
 					<br />
 					Voor de moderators zijn mededelingen in de lijst gemarkeerd. Dit is de betekenis van de markering:<br />

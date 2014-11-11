@@ -4221,7 +4221,6 @@ lib/templates/MVC/instellingen/beheer/instelling_row.tpl -text
 lib/templates/MVC/instellingen/beheer/instellingen_page.tpl -text
 lib/templates/MVC/instellingen/lidinstelling.tpl -text
 lib/templates/MVC/instellingen/lidinstellingen_page.tpl -text
-lib/templates/MVC/layout/bbcodehulp.tpl -text
 lib/templates/MVC/layout/pagina.tpl -text
 lib/templates/MVC/layout/pagina_header.tpl -text
 lib/templates/MVC/layout/pauper.tpl -text
