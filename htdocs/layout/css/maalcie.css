@@ -2,24 +2,6 @@
  * maalcie.css	| 	P.W.G. Brussee (brussee@live.nl)
  */
 
-h2 {
-	font-size: 16px;
-	margin: 30px 0 15px 0;
-}
-
-a.knop.rounded {
-	padding: 4px;
-}
-div.vertical {
-	-webkit-transform: rotate(-90deg); /* Chrome,Saf3.1+ */
-	-moz-transform: rotate(-90deg); /* FF3.5+ */
-	-ms-transform: rotate(-90deg);
-	-o-transform: rotate(-90deg); /* Opera 10.5 */
-	transform: rotate(-90deg);
-	filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=3); /* IE6,IE7 */
-	-ms-filter: "progid:DXImageTransform.Microsoft.BasicImage(rotation=3)"; /* IE8 */
-}
-
 .rowColor0 {
 	background-color: #EBEBEB;
 }

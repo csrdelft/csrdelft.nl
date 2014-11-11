@@ -20,7 +20,11 @@ span.offtopic img { opacity: 0.3; filter: alpha(opacity=30); }
 	width: 329px;
 	overflow: auto;
 }
-.bb-maaltijd h2 { white-space: nowrap; overflow: hidden; }
+.bb-maaltijd h2 {
+	margin: 0;
+	white-space: nowrap;
+	overflow: hidden;
+}
 .bb-maaltijd {
 	line-height: 1.7em;
 }

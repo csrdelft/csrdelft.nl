@@ -74,6 +74,20 @@ h1 {
     font-size: 1.5em;
 	margin: 20px 0;
 }
+h2 {
+	font-size: 16px;
+	margin: 30px 0 15px 0;
+}
+
+div.vertical {
+	-webkit-transform: rotate(-90deg); /* Chrome,Saf3.1+ */
+	-moz-transform: rotate(-90deg); /* FF3.5+ */
+	-ms-transform: rotate(-90deg);
+	-o-transform: rotate(-90deg); /* Opera 10.5 */
+	transform: rotate(-90deg);
+	filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=3); /* IE6,IE7 */
+	-ms-filter: "progid:DXImageTransform.Microsoft.BasicImage(rotation=3)"; /* IE8 */
+}
 
 .Formulier p {
 	margin-bottom: 0.5em;
@@ -120,7 +134,10 @@ hr {
 .lichtgrijs { color: #aaa; }
 .small { font-size: smaller; }
 .round { border-radius: 50%; }
-.rounded { border-radius: 25%; }
+.rounded {
+	border-radius: 25%;
+	padding: 4px;
+}
 
 ul.horizontal li {
 	display: inline;
@@ -276,9 +293,6 @@ div#bbcodehulp {
 div#bbcodehulp span.pre {
 	display: inline-block;
 	color: #007;
-}
-div#bbcodehulp h2 {
-    font-size: 16px;
 }
 div#bbcodehulp h2, div#bbcodehulp p, div#bbcodehulp ul {
 	margin-top: 10px;
