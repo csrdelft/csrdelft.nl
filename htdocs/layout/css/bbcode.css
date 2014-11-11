@@ -20,8 +20,7 @@ span.offtopic img { opacity: 0.3; filter: alpha(opacity=30); }
 	width: 329px;
 	overflow: auto;
 }
-.bb-maaltijd h2 {
-	margin: 0;
+.bb-maaltijd .titel {
 	white-space: nowrap;
 	overflow: hidden;
 }

@@ -354,7 +354,7 @@ class FotoAlbumBBView extends FotoAlbumView {
 		} else {
 			$content = $this->getGridHtml();
 		}
-		return '<div class="bb-block bb-fotoalbum"><h2>' . $this->getBreadcrumbs(false, true) . '</a></h2>' . $content . '</div>';
+		return '<div class="bb-block bb-fotoalbum">' . $this->getBreadcrumbs(false, true) . '</a>' . $content . '</div>';
 	}
 
 }
