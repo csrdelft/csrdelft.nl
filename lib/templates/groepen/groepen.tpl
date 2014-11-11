@@ -58,12 +58,13 @@
 			{include file='groepen/groepleden.tpl'}
 		</div>
 		<h2><a href="/actueel/groepen/{$groepen->getNaam()}/{$groep->getId()}/">{$groep->getNaam()}</a></h2>
-		{if $groep->getType()->getId()==11 }Ouderejaars: {$groep->getEigenaar()}<br /><br />{/if} {* alleen bij Sjaarsacties *}
-			{$groep->getSbeschrijving()|bbcode}
-		</div>
-		{/foreach}
-			<hr class="clear" />
-			{if $groepen->isAdmin() OR $groepen->isGroepAanmaker()}
-				<a href="/actueel/groepen/{$groepen->getNaam()}/0/bewerken" class="knop">Nieuwe {$groepen->getNaamEnkelvoud()}</a>
-			{/if}
-
+		{if $groep->getType()->getId()==11}
+			Ouderejaars: {$groep->getEigenaar()}<br /><br />
+		{/if} {* alleen bij Sjaarsacties *}
+		{$groep->getSbeschrijving()|bbcode}
+	</div>
+{/foreach}
+<hr class="clear" />
+{if $groepen->isAdmin() OR $groepen->isGroepAanmaker()}
+	<a href="/actueel/groepen/{$groepen->getNaam()}/0/bewerken" class="knop">Nieuwe {$groepen->getNaamEnkelvoud()}</a>
+{/if}
