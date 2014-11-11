@@ -5,7 +5,7 @@
 		{/if}
 		{include file='groepen/groepleden.tpl'}
 	</div>
-	<div>{$groep->getLink()}</div>
-	<p>{$groep->getSbeschrijving()|bbcode}</p>
+	<div class="titel">{$groep->getLink()}</div>
+	<div class="beschrijving">{$groep->getSbeschrijving()|bbcode}</div>
 	<div class="clear">&nbsp;</div>
 </div>

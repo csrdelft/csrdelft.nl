@@ -60,6 +60,13 @@ a.maaltijd-afgemeld, span.maaltijd-afgemeld {
 .bb-groep {
 	padding: 5px 10px 5px 10px;
 }
+.bb-groep .titel {
+	margin: 1em 0;
+	font-size: 11pt;
+}
+.bb-groep .beschrijving {
+	line-height: 1.5em;
+}
 .bb-groep .groepleden {
 	width: 275px;
 	float: right;
