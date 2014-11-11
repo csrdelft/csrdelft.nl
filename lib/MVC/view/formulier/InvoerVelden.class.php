@@ -461,7 +461,7 @@ class RechtenField extends TextField {
 		parent::__construct($name, $value, $description);
 		$this->suggestions = AccessModel::instance()->getPermissionSuggestions();
 		$this->title = 'Met , en + voor respectievelijk OR en AND. Gebruik | voor OR binnen AND (alsof er haakjes omheen staan)';
-		// Gebruik van ! voor negatie en > voor functie binnen verticale of groep niet vermelden, werkt wel
+		// Gebruik van ! voor negatie en extra : voor functie binnen groep niet vermelden.
 	}
 
 	public function validate() {

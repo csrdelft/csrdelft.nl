@@ -137,8 +137,14 @@ class AccessModel extends CachedPersistenceModel {
 		}
 
 		// splits permissie in type, waarde en rol
-		$p = explode(':', $permission, 3);
-		if (in_array($p[0], self::$prefix) AND ! empty($p[1])) {
+		$p = explode(':', $permission);
+		if (in_array($p[0], self::$prefix) AND sizeof($p) <= 3) {
+			if (isset($p[1]) AND $p[1] == '') {
+				return false;
+			}
+			if (isset($p[2]) AND $p[2] == '') {
+				return false;
+			}
 			return true;
 		}
 
