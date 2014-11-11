@@ -552,13 +552,11 @@ class UploadUrl extends BestandUploader {
 		$this->downloader = new UrlDownloader();
 		if ($this->isPosted()) {
 			$this->url = filter_input(INPUT_POST, $this->name, FILTER_SANITIZE_URL);
-			if (!url_like($this->url)) {
-				$this->error = 'Ongeldige url';
+			if (!startsWith($this->url, 'http://') AND ! startsWith($this->url, 'https://')) {
 				return;
 			}
 			$this->value = $this->file_get_contents($this->url);
 			if (!$this->value) {
-				$this->error = 'Niets gevonden op url';
 				return;
 			}
 			$url_name = substr(trim($this->url), strrpos($this->url, '/') + 1);
@@ -566,8 +564,7 @@ class UploadUrl extends BestandUploader {
 			// Bestand tijdelijk omslaan om mime-type te bepalen
 			$tmp_bestand = TMP_PATH . LoginModel::getUid() . '_' . time();
 			if (!is_writable(TMP_PATH)) {
-				$this->error = 'TMP_PATH is niet beschrijfbaar';
-				return;
+				throw new Exception('TMP_PATH is niet beschrijfbaar');
 			}
 			$filesize = file_put_contents($tmp_bestand, $this->value);
 			$finfo = finfo_open(FILEINFO_MIME_TYPE);
@@ -594,15 +591,17 @@ class UploadUrl extends BestandUploader {
 	}
 
 	public function validate() {
-		if (!parent::validate()) {
-			return false;
-		}
 		if (!$this->isAvailable()) {
-			$this->error = 'PHP.ini configuratie: cURL of allow_url_fopen moet aan staan.';
-		} elseif (!url_like(urldecode($this->url))) {
-			$this->error = 'Ongeldige url.';
-		} elseif (empty($this->value)) {
-			$this->error = 'Bestand is leeg, check de url.';
+			$this->error = 'PHP.ini configuratie: fsocked, cURL of allow_url_fopen moet aan staan.';
+		} elseif (!parent::validate()) {
+			if (!startsWith($this->url, 'http://') AND ! startsWith($this->url, 'https://')) {
+				$this->error = 'Ongeldige url';
+			} elseif (empty($this->value)) {
+				$error = error_get_last();
+				$pos = strrpos($error['message'], ': ') + 2;
+				$this->error = substr($error['message'], $pos);
+			}
+			return false;
 		}
 		return $this->error === '';
 	}
