@@ -21,7 +21,6 @@
 		<li><span class="pre">[foto]/2014-2015/album/foto.jpg[/foto]</span> voor een foto uit het fotoalbum</li>
 		<li><span class="pre">[video]url[/video]</span> youtube, godtube, vimeo of dailymotion url voor een filmpje direct in je post</li>
 		<li><span class="pre">[document]documentid[/document]</span> document invoegen</li>
-		<li><span class="pre">[peiling=peilingid]</span> peiling invoegen</li>
 		<li><span class="pre">[groep]groepid[/groep]</span> ketzer invoegen</li>
 	</ul>
 	<p>In de beperking toont zich de meester!<a href="http://csrdelft.nl/wiki/cie:diensten:forum" target="_blank" class="float-right">meer info...</a></p>
