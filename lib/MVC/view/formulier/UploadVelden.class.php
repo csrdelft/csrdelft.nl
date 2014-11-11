@@ -591,17 +591,16 @@ class UploadUrl extends BestandUploader {
 	}
 
 	public function validate() {
+		parent::validate();
+		// override met specifiekere foutmeldingen
 		if (!$this->isAvailable()) {
 			$this->error = 'PHP.ini configuratie: fsocked, cURL of allow_url_fopen moet aan staan.';
-		} elseif (!parent::validate()) {
-			if (!startsWith($this->url, 'http://') AND ! startsWith($this->url, 'https://')) {
-				$this->error = 'Ongeldige url';
-			} elseif (empty($this->value)) {
-				$error = error_get_last();
-				$pos = strrpos($error['message'], ': ') + 2;
-				$this->error = substr($error['message'], $pos);
-			}
-			return false;
+		} elseif (!startsWith($this->url, 'http://') AND ! startsWith($this->url, 'https://')) {
+			$this->error = 'Ongeldige url';
+		} elseif (empty($this->value)) {
+			$error = error_get_last();
+			$pos = strrpos($error['message'], ': ') + 2;
+			$this->error = substr($error['message'], $pos);
 		}
 		return $this->error === '';
 	}
