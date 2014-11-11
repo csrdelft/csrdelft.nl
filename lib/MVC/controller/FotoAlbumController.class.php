@@ -142,14 +142,12 @@ class FotoAlbumController extends AclController {
 		if ($this->isPosted() AND $formulier->validate()) {
 			$subalbum = $formulier->findByName('subalbum')->getValue();
 			$album->path .= $subalbum . '/';
-			if ($album->exists()) {
-				setMelding('Fotoalbum bestaat al', 0);
-			} else {
+			if (!$album->exists()) {
 				mkdir($album->path);
 				chmod($album->path, 0755);
-				$this->view = new JsonResponse($album->getUrl());
-				return;
 			}
+			$this->view = new JsonResponse($album->getUrl());
+			return;
 		}
 		$this->view = $formulier;
 	}

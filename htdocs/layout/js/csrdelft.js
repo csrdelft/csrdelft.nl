@@ -178,8 +178,13 @@ function page_reload(htmlString) {
 	location.reload();
 }
 
-function page_redirect(url) {
-	window.location.href = url;
+function page_redirect(htmlString) {
+	// prevent hidden errors
+	if (typeof htmlString == 'string' && htmlString.substring(0, 24) == '<div id="modal-content">') {
+		modal_open(htmlString);
+		return;
+	}
+	window.location.href = htmlString;
 }
 
 function init_buttons() {
