@@ -178,6 +178,10 @@ function page_reload(htmlString) {
 	location.reload();
 }
 
+function page_redirect(url) {
+	window.location.href = url;
+}
+
 function init_buttons() {
 	$('button.spoiler').unbind('click.spoiler');
 	$('button.spoiler').bind('click.spoiler', function (event) {
@@ -416,6 +420,9 @@ function form_submit(event) {
 		var done = dom_update;
 		if (form.hasClass('ReloadPage')) {
 			done = page_reload;
+		}
+		else if (form.hasClass('redirect')) {
+			done = page_redirect;
 		}
 		var formData = new FormData(form.get(0));
 		ajax_request('POST', form.attr('action'), formData, source, done, alert, function () {
