@@ -1,6 +1,10 @@
 <?php
 
 /**
+ * UrlDownloader.class.php
+ * 
+ * @author Gerrit Uitslag <klapinklapin@gmail.com>
+ * 
  * Download content van de gegeven url, gebruikt beschikbare mechanisme.
  */
 class UrlDownloader {
@@ -22,7 +26,7 @@ class UrlDownloader {
 	public function file_get_contents($url) {
 		if ($this->file_get_contents_available()) {
 			return @file_get_contents($url);
-		} elseif(function_exists('curl_init')) {
+		} elseif (function_exists('curl_init')) {
 			return $this->curl_file_get_contents($url);
 		} else {
 			return $this->dokuhttpclient_get_contents($url);
@@ -71,7 +75,7 @@ class UrlDownloader {
 	 * @return string
 	 * @see SimplePie_File
 	 */
-	protected function fsocket_file_get_contents($url){
+	protected function fsocket_file_get_contents($url) {
 		$timeout = 10;
 		$useragent = null;
 
@@ -138,11 +142,12 @@ class UrlDownloader {
 			fclose($fp);
 		}
 
-		if($success) {
+		if ($success) {
 			return $data;
 		} else {
 			setMelding($error, -1);
 			return '';
 		}
 	}
+
 }

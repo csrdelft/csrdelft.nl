@@ -3479,6 +3479,7 @@ lib/MVC/view/formulier/Formulier.class.php -text
 lib/MVC/view/formulier/InvoerVelden.class.php -text
 lib/MVC/view/formulier/KeuzeVelden.class.php -text
 lib/MVC/view/formulier/UploadVelden.class.php -text
+lib/MVC/view/formulier/UrlDownloader.class.php -text
 lib/MVC/view/groepen/ActiviteitenView.class.php -text
 lib/MVC/view/groepen/BesturenView.class.php -text
 lib/MVC/view/groepen/CommissiesView.class.php -text
@@ -3494,7 +3495,6 @@ lib/MVC/view/groepen/WoonoordenView.class.php -text
 lib/MVC/view/maalcie/BeheerFunctiesView.class.php -text
 lib/MijnSqli.class.php -text
 lib/Soccie[!!-~]ERD.png -text
-lib/UrlDownloader.class.php -text
 lib/Zend/Exception.php -text
 lib/Zend/Gdata.php -text
 lib/Zend/Gdata/App.php -text

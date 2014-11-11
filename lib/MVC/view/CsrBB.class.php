@@ -479,7 +479,6 @@ class CsrBB extends eamBBParser {
 			}
 			$params['src'] = '//www.youtube.com/embed/' . $id . '?autoplay=1';
 			$previewthumb = 'http://img.youtube.com/vi/' . $id . '/0.jpg';
-
 		} elseif (strstr($content, 'vimeo')) {
 			$type = 'vimeo';
 			if (preg_match('#vimeo\.com/(?:clip\:)?(\d+)#', $content, $matches) > 0) {
@@ -488,17 +487,15 @@ class CsrBB extends eamBBParser {
 			$params['src'] = '//player.vimeo.com/video/' . $id . '?autoplay=1';
 
 			$videodataurl = 'http://vimeo.com/api/v2/video/' . $id . '.php';
-			require_once 'UrlDownloader.class.php';
 			$data = '';
 			$downloader = new UrlDownloader;
-			if($downloader->isAvailable()) {
+			if ($downloader->isAvailable()) {
 				$data = $downloader->file_get_contents($videodataurl);
 			}
-			if($data) {
+			if ($data) {
 				$data = unserialize($data);
 				$previewthumb = $data[0]['thumbnail_medium'];
 			}
-
 		} elseif (strstr($content, 'dailymotion')) {
 			$type = 'dailymotion';
 			if (preg_match('#dailymotion\.com/video/([a-z0-9]+)#', $content, $matches) > 0) {
@@ -506,7 +503,6 @@ class CsrBB extends eamBBParser {
 			}
 			$params['src'] = '//www.dailymotion.com/embed/video/' . $id . '?autoPlay=1';
 			$previewthumb = 'http://www.dailymotion.com/thumbnail/video/' . $id;
-
 		} elseif (strstr($content, 'godtube')) {
 			$type = 'godtube';
 			if (preg_match('#godtube\.com/watch/\?v=([a-zA-Z0-9]+)#', $content, $matches) > 0) {

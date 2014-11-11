@@ -1,7 +1,7 @@
 <?php
 
+require_once 'MVC/view/formulier/UrlDownloader.class.php';
 require_once 'MVC/model/entity/Afbeelding.class.php';
-require_once 'UrlDownloader.class.php';
 
 /**
  * UploadVelden.class.php
