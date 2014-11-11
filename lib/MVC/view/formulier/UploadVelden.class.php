@@ -1,6 +1,7 @@
 <?php
 
 require_once 'MVC/model/entity/Afbeelding.class.php';
+require_once 'UrlDownloader.class.php';
 
 /**
  * UploadVelden.class.php
@@ -23,7 +24,7 @@ require_once 'MVC/model/entity/Afbeelding.class.php';
  * 
  */
 class FileField implements FormElement, Validator {
-
+	/** @var BestandUploader[] */
 	protected $opties;
 	protected $methode;
 	protected $filterMime;
@@ -224,10 +225,11 @@ abstract class BestandUploader extends InputField {
 
 	/**
 	 * Bestand uiteindelijk opslaan op de juiste plek.
-	 * 
+	 *
 	 * @param string $destination fully qualified path with trailing slash
 	 * @param string $filename filename with extension
 	 * @param boolean $overwrite allowed to overwrite existing file
+	 * @throws Exception Ongeldige bestandsnaam, doelmap niet schrijfbaar of naam ingebruik
 	 */
 	public function opslaan($destination, $filename, $overwrite = false) {
 		$filename = filter_var($filename, FILTER_SANITIZE_STRING);
@@ -414,9 +416,10 @@ class UploadFtp extends BestandUploader {
 
 	/**
 	 * Trailing slash required for subdir!
-	 * 
+	 *
 	 * @param string $name
 	 * @param string $subdir
+	 * @throws Exception
 	 */
 	public function __construct($name, $subdir) {
 		parent::__construct($name);
@@ -536,8 +539,11 @@ class UploadFtp extends BestandUploader {
 class UploadUrl extends BestandUploader {
 
 	protected $url;
+	protected $downloader;
 
 	public function __construct($name, $url = 'http://') {
+		$this->downloader = new UrlDownloader();
+
 		parent::__construct($name);
 		$this->url = $url;
 		if ($this->isPosted()) {
@@ -572,26 +578,12 @@ class UploadUrl extends BestandUploader {
 	}
 
 	public function isAvailable() {
-		return $this->file_get_contents_available() OR function_exists('curl_init');
+		return $this->downloader->isAvailable();
 	}
 
-	protected function file_get_contents_available() {
-		return in_array(ini_get('allow_url_fopen'), array('On', 'Yes', 1));
-	}
-
-	protected function curl_file_get_contents($url) {
-		$ch = curl_init();
-		curl_setopt($ch, CURLOPT_URL, $url);
-		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-		return curl_exec($ch);
-	}
 
 	protected function file_get_contents($url) {
-		if ($this->file_get_contents_available()) {
-			return @file_get_contents($url);
-		} else {
-			return $this->curl_file_get_contents($url);
-		}
+		return $this->downloader->file_get_contents($url);
 	}
 
 	public function validate() {
