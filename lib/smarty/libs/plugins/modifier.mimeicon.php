@@ -40,7 +40,7 @@ function smarty_modifier_mimeicon($mimetype){
 	}elseif(strpos($mimetype, 'html')!==false){			return Icon::getTag('mime-html');
 	}elseif(strpos($mimetype, 'zip')!==false OR
 			strpos($mimetype, 'rar')!==false OR
-			strpos($mimetype, '7z')!==false){			return Icon::getTag('mime-zip');
+			strpos($mimetype, 'compressed')!==false){	return Icon::getTag('mime-zip');
 	}else{												return Icon::getTag('mime-onbekend');
 	}
 }
