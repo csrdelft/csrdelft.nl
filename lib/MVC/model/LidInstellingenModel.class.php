@@ -39,7 +39,7 @@ class LidInstellingen extends Instellingen {
 			'opmaak'		 => array('Opmaak', T::Enumeration, array('normaal', 'owee', 'lustrum', 'sineregno', 'roze'), 'normaal'),
 			'bgimages'		 => array('Achtergrondafbeeldingen', T::Enumeration, array('ja', 'nee'), 'ja'),
 			'sneeuw'		 => array('Sneeuw', T::Enumeration, array('ja', 'freeze!', 'nee'), 'nee'),
-			'neuzen'		 => array('Neuzen', T::Enumeration, array('overal', '2013', 'nee'), '2013'),
+			'neuzen'		 => array('Neuzen', T::Enumeration, array('2013', 'nee'), '2013'),
 		),
 		'zijbalk'		 => array(
 			'scrollen'				 => array('Scrollen', T::Enumeration, array('met pagina mee', 'apart scrollen', 'pauper/desktop'), 'met pagina mee'),

@@ -19,36 +19,6 @@ class CsrBB extends eamBBParser {
 		return $parser->getHtml($bbcode);
 	}
 
-	function getHtml($bbcode) {
-		parent::getHtml($bbcode);
-
-		if (LidInstellingen::get('layout', 'neuzen') == 'overal') {
-			$pointer = 0;
-			$counter = 0;
-			$counter2 = 0;
-			while ($pointer < strlen($this->HTML)) {
-				$char = substr($this->HTML, $pointer, 1);
-				if ($char == '<') {
-					$counter += 1;
-				} elseif ($char == '>') {
-					$counter -= 1;
-				} elseif ($char == '&') {
-					$counter2 = 5;
-				} elseif ($char == ';') {
-					$counter2 = 0;
-				} elseif ($char == 'o' && $counter == 0 && $counter2 <= 0) {
-					$neus = $this->bb_neuzen($char);
-					$this->HTML = substr($this->HTML, 0, $pointer) . $neus . substr($this->HTML, $pointer + 1);
-					$pointer += strlen($neus);
-					continue;
-				}
-				$counter2--;
-				$pointer++;
-			}
-		}
-		return $this->HTML;
-	}
-
 	/**
 	 * Bij citeren mogen er geen ongesloten tags zijn om problemen te voorkomen.
 	 * Werkt niet bij [ubboff] / [tekst].
