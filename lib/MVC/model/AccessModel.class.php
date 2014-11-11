@@ -48,14 +48,14 @@ class AccessModel extends CachedPersistenceModel {
 	 *  !lichting:2009				geeft true voor iedereen behalve lichting 2009.
 	 * 
 	 * Gecompliceerde voorbeeld:
-	 * 		groep:novcie+groep:wcie|1137,groep:bestuur
+	 * 		groep:novcie+groep:maalcie|1337,groep:bestuur
 	 * 
 	 * Equivalent met haakjes:
-	 * 		(groep:novcie AND (groep:wcie OR 1137)) OR groep:bestuur
+	 * 		(groep:novcie AND (groep:maalcie OR 1337)) OR groep:bestuur
 	 * 
 	 * Geeft toegang aan:
-	 * 		de mensen die én in de NovCie zitten én in de WCie zitten
-	 * 		of mensen die in de NovCie zitten en lidnummer 1137 hebben
+	 * 		de mensen die én in de NovCie zitten én in de MaalCie zitten
+	 * 		of mensen die in de NovCie zitten en lidnummer 1337 hebben
 	 * 		of mensen die in het bestuur zitten
 	 * 
 	 */
@@ -64,12 +64,12 @@ class AccessModel extends CachedPersistenceModel {
 		// Als het gaat om het ingelogde lid doe extra check op token.
 		// Alleen als $token_authorizable toegestaan is testen we met
 		// de permissies van het ingelogde lid, anders met niet-ingelogd.
-		if (LoginModel::instance()->isAuthenticatedByToken() AND $subject->getUid() === LoginModel::getUid() AND ! $token_authorizable) {
+		if (LoginModel::instance()->isAuthenticatedByToken() AND $subject->getUid() == LoginModel::getUid() AND ! $token_authorizable) {
 			$subject = LidCache::getLid('x999');
 		}
 
-		// case insensitive
-		$permission = strtoupper($permission);
+		// case insensitive & RechtenField maakt van > een &gt;
+		$permission = strtoupper(str_replace('&gt;', '>', $permission));
 
 		return self::instance()->hasPermission($subject, $permission);
 	}
@@ -123,11 +123,11 @@ class AccessModel extends CachedPersistenceModel {
 	}
 
 	public function isValidPerm($permission) {
-		// case insensitive
-		$permission = strtoupper($permission);
+		// case insensitive & RechtenField maakt van > een &gt;
+		$permission = strtoupper(str_replace('&gt;', '>', $permission));
 
 		// Is de gevraagde permissie het uid van de gevraagde gebruiker?
-		if (Lid::isValidUid($permission)) {
+		if (Lid::isValidUid(strtolower($permission))) {
 			return true;
 		}
 
@@ -139,6 +139,17 @@ class AccessModel extends CachedPersistenceModel {
 		// splits permissie in type en waarde
 		$p = explode(':', $permission);
 		if (sizeof($p) === 2 AND ! empty($p[1]) AND in_array($p[0], self::$prefix)) {
+			$prefix = $p[0];
+			$gevraagd = $p[1];
+		} else {
+			return false;
+		}
+
+		// splits gevraagde term in groep en rol
+		$p = explode('>', $gevraagd, 2);
+		$gevraagd = $p[0];
+		$role = $p[1];
+		if (!empty($gevraagd)) {
 			return true;
 		}
 
@@ -309,7 +320,7 @@ class AccessModel extends CachedPersistenceModel {
 			$result = !$this->hasPermission($subject, substr($permission, 1));
 		}
 		// Is de gevraagde permissie het uid van de gevraagde gebruiker?
-		elseif ($permission === $subject->getUid()) {
+		elseif ($subject->getUid() == strtolower($permission)) {
 			$result = true;
 		}
 		// Is de gevraagde permissie voorgedefinieerd?
@@ -393,6 +404,15 @@ class AccessModel extends CachedPersistenceModel {
 			return false;
 		}
 
+		// splits gevraagde term in groep en rol
+		$p = explode('>', $gevraagd, 2);
+		$gevraagd = $p[0];
+		if (sizeof($p) === 2) {
+			$role = $p[1];
+		} else {
+			$role = false;
+		}
+
 		switch ($prefix) {
 
 			/**
@@ -403,22 +423,15 @@ class AccessModel extends CachedPersistenceModel {
 			 */
 			case 'GROEP':
 
-				// splits gevraagde term in groepsnaam en functie
-				$parts = explode('>', $gevraagd, 2);
-				if (!isset($parts[1])) {
-					// RechtenField maakt van > een &gt;
-					$parts = explode('&gt;', $gevraagd, 2);
-				}
-
 				try {
 					// zoek groep
 					require_once 'groepen/groep.class.php';
-					$groep = new OldGroep($parts[0]);
+					$groep = new OldGroep($gevraagd);
 					if ($groep->isLid()) {
 						// wordt er een functie gevraagd?
-						if (isset($parts[1])) {
+						if ($role) {
 							$functie = $groep->getFunctie();
-							if ($parts[1] == strtoupper($functie[0])) {
+							if ($role == strtoupper($functie[0])) {
 								return true;
 							}
 						} else {
@@ -436,42 +449,18 @@ class AccessModel extends CachedPersistenceModel {
 			 */
 			case 'VERTICALE':
 
-				// splits gevraagde term in verticalenaam en functie
-				$parts = explode('>', $gevraagd, 2);
-				if (!isset($parts[1])) {
-					// RechtenField maakt van > een &gt;
-					$parts = explode('&gt;', $gevraagd, 2);
-				}
-
 				// zoek verticale
-				$found = false;
-				if (is_numeric($parts[0])) {
-					if ($parts[0] == $subject->getVerticaleId()) {
-						$found = true;
-					}
-				} elseif (strlen($parts[0] == 1)) {
-					$verticale = VerticalenModel::instance()->getVerticaleByLetter($parts[0]);
-					if ($verticale AND $verticale->id == $subject->getVerticaleId()) {
-						$found = true;
-					}
-				} else {
-					$verticale = $subject->getVerticale();
-					if ($verticale AND $parts[0] == strtoupper($verticale->naam)) {
-						$found = true;
-					}
-				}
-
-				// no need to check functie if not found
-				if (!$found) {
+				$verticale = $subject->getVerticale();
+				if ($gevraagd != $verticale->id AND $gevraagd != $verticale->letter AND $gevraagd != $verticale->naam) {
 					return false;
 				}
 
-				// wordt er een functie gevraagd?
-				if (isset($parts[1])) {
-					if ($parts[1] === 'LEIDER' AND $subject->isVerticaan()) {
+				// wordt er een role gevraagd?
+				if ($role) {
+					if ($role === 'LEIDER' AND $subject->isVerticaan()) {
 						return true;
 					}
-				} else { // geen functie gevraagd en verticale = true
+				} else { // geen role gevraagd
 					return true;
 				}
 
