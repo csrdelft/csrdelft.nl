@@ -44,7 +44,7 @@ class LedenlijstContent implements View {
 			if ($key == $this->lidzoeker->getRawQuery($name)) {
 				echo ' selected="selected"';
 			}
-			echo '>' . mb_htmlentities($value) . '</option>';
+			echo '>' . htmlspecialchars($value) . '</option>';
 		}
 		echo '</select> ';
 	}
@@ -269,7 +269,7 @@ class LLLijst extends LLweergave {
 			echo '<td class="' . $veld . '">';
 			switch ($veld) {
 				case 'adres':
-					echo mb_htmlentities($lid->getAdres());
+					echo htmlspecialchars($lid->getAdres());
 					break;
 				case 'kring':
 					echo $lid->getKring(true);
@@ -306,18 +306,18 @@ class LLLijst extends LLweergave {
 					echo $lid->getStatus()->getDescription();
 					break;
 				case 'verticale':
-					echo mb_htmlentities($lid->getVerticale()->naam);
+					echo htmlspecialchars($lid->getVerticale()->naam);
 					break;
 				case 'woonoord':
 					echo $lid->getWoonoord();
 					break;
 				case 'linkedin':
 				case 'website':
-					echo '<a href="' . mb_htmlentities($lid->getProperty($veld)) . '" class="linkExt">' . mb_htmlentities($lid->getProperty($veld)) . '</a>';
+					echo '<a href="' . htmlspecialchars($lid->getProperty($veld)) . '" class="linkExt">' . htmlspecialchars($lid->getProperty($veld)) . '</a>';
 					break;
 				default:
 					try {
-						echo mb_htmlentities($lid->getProperty($veld));
+						echo htmlspecialchars($lid->getProperty($veld));
 					} catch (Exception $e) {
 						echo ' - ';
 					}

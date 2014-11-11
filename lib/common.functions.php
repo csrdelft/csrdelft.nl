@@ -225,20 +225,11 @@ function internal_url($url, $label) {
 		$extern = '';
 	}
 	if (filter_var($href, FILTER_VALIDATE_URL)) {
-		$result = '<a href="' . $href . '" title="' . $href . '"' . $extern . '>' . $label . '</a>';
+		$result = '<a href="' . $href . '" title="' . htmlspecialchars($href) . '"' . $extern . '>' . $label . '</a>';
 	} else {
 		$result = '[Ongeldige URL, tip: gebruik tinyurl.com]';
 	}
 	return $result;
-}
-
-/**
- * Gebruik over de hele site dezelfde htmlentities parameters.
- * @param string $string
- * @return string
- */
-function mb_htmlentities($string) {
-	return htmlentities($string, ENT_QUOTES, 'UTF-8');
 }
 
 /**
@@ -586,36 +577,36 @@ function getDebug($sql = true, $get = true, $post = true, $files = true, $cookie
 	$debug = '';
 	if ($sql) {
 		$debug .= '<hr />SQL<hr />';
-		$debug .= mb_htmlentities(print_r(array("PDO" => Database::getQueries(), "MySql" => MijnSqli::instance()->getQueries()), true));
+		$debug .= htmlspecialchars(print_r(array("PDO" => Database::getQueries(), "MySql" => MijnSqli::instance()->getQueries()), true));
 	}
 	if ($get) {
 		$debug .= '<hr />GET<hr />';
 		if (count($_GET) > 0) {
-			$debug .= mb_htmlentities(print_r($_GET, true));
+			$debug .= htmlspecialchars(print_r($_GET, true));
 		}
 	}
 	if ($post) {
 		$debug .= '<hr />POST<hr />';
 		if (count($_POST) > 0) {
-			$debug .= mb_htmlentities(print_r($_POST, true));
+			$debug .= htmlspecialchars(print_r($_POST, true));
 		}
 	}
 	if ($files) {
 		$debug .= '<hr />FILES<hr />';
 		if (count($_FILES) > 0) {
-			$debug .= mb_htmlentities(print_r($_FILES, true));
+			$debug .= htmlspecialchars(print_r($_FILES, true));
 		}
 	}
 	if ($cookie) {
 		$debug .= '<hr />COOKIE<hr />';
 		if (count($_COOKIE) > 0) {
-			$debug .= mb_htmlentities(print_r($_COOKIE, true));
+			$debug .= htmlspecialchars(print_r($_COOKIE, true));
 		}
 	}
 	if ($session) {
 		$debug .= '<hr />SESSION<hr />';
 		if (count($_SESSION) > 0) {
-			$debug .= mb_htmlentities(print_r($_SESSION, true));
+			$debug .= htmlspecialchars(print_r($_SESSION, true));
 		}
 	}
 	return $debug;

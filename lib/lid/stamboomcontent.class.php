@@ -49,7 +49,7 @@ class StamboomContent implements View {
 		if ($viewPatroon) {
 			$patroon = $lid->getPatroon();
 			if ($patroon instanceof Lid) {
-				echo '<br /><a href="/communicatie/stamboom.php?uid=' . $patroon->getUid() . '" title="Stamboom van ' . $patroon->getNaam() . '"> &uArr; ' . $patroon->getNaam('civitas') . '</a>';
+				echo '<br /><a href="/communicatie/stamboom.php?uid=' . $patroon->getUid() . '" title="Stamboom van ' . htmlspecialchars($patroon->getNaam()) . '"> &uArr; ' . $patroon->getNaam('civitas') . '</a>';
 			}
 		}
 		echo '</div>';

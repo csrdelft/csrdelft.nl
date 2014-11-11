@@ -441,7 +441,7 @@ class Lid implements Serializable, Agendeerbaar {
 			$postfix = '';
 		}
 		if ($link) {
-			return '<a href="/communicatie/verticalen#kring' . $vertkring . '" title="Verticale ' . $this->getVerticale()->naam . ' (' . $this->getVerticale()->letter . ') - kring ' . $this->profiel['kring'] . '">' . $this->getVerticale()->naam . ' ' . $vertkring . '</a> ' . $postfix;
+			return '<a href="/communicatie/verticalen#kring' . $vertkring . '" title="Verticale ' . htmlspecialchars($this->getVerticale()->naam) . ' (' . $this->getVerticale()->letter . ') - kring ' . $this->profiel['kring'] . '">' . $this->getVerticale()->naam . ' ' . $vertkring . '</a> ' . $postfix;
 		} else {
 			return $vertkring . ' ' . $postfix;
 		}
@@ -727,7 +727,7 @@ class Lid implements Serializable, Agendeerbaar {
 	function getDuckfoto($imgTag = true, $cssClass = 'pasfoto', $vierkant = false) {
 		$pasfoto = CSR_PICS . '/' . $this->getDuckfotoPath($vierkant);
 		if ($imgTag === true OR $imgTag === 'small') {
-			$html = '<img class="' . mb_htmlentities($cssClass) . '" src="' . $pasfoto . '" ';
+			$html = '<img class="' . htmlspecialchars($cssClass) . '" src="' . $pasfoto . '" ';
 			if ($imgTag === 'small') {
 				$html .= 'style="width: 100px;" ';
 			}
@@ -744,7 +744,7 @@ class Lid implements Serializable, Agendeerbaar {
 	function getPasfoto($imgTag = true, $cssClass = 'pasfoto', $vierkant = false) {
 		$pasfoto = CSR_PICS . '/' . $this->getPasfotoPath($vierkant);
 		if ($imgTag === true OR $imgTag === 'small') {
-			$html = '<img class="' . mb_htmlentities($cssClass) . '" src="' . $pasfoto . '" ';
+			$html = '<img class="' . htmlspecialchars($cssClass) . '" src="' . $pasfoto . '" ';
 			if ($imgTag === 'small') {
 				$html .= 'style="width: 100px;" ';
 			}
@@ -902,7 +902,7 @@ class Lid implements Serializable, Agendeerbaar {
 				$naam = CsrBB::parse('[neuzen]' . $naam . '[/neuzen]');
 			}
 			$k = '';
-			$l = '<a href="' . CSR_ROOT . '/communicatie/profiel/' . $this->getUid() . '" title="' . $sVolledigeNaam . '" class="lidLink ' . $this->profiel['status'] . '">';
+			$l = '<a href="' . CSR_ROOT . '/communicatie/profiel/' . $this->getUid() . '" title="' . htmlspecialchars($sVolledigeNaam) . '" class="lidLink ' . htmlspecialchars($this->profiel['status']) . '">';
 
 			if (($vorm === 'leeg' || $mode === 'visitekaartje') && LidInstellingen::get('algemeen', 'visitekaartjes') == 'ja') {
 				$k = '<span';

@@ -27,11 +27,11 @@ class Knop {
 	}
 
 	public function setText($text) {
-		$this->text = mb_htmlentities($text);
+		$this->text = htmlspecialchars($text);
 	}
 
 	public function setTitle($text) {
-		$this->title = mb_htmlentities($text);
+		$this->title = htmlspecialchars($text);
 	}
 
 	public function setType($type) {
@@ -45,7 +45,7 @@ class Knop {
 	}
 
 	public function setClass($class) {
-		$this->class = mb_htmlentities($class);
+		$this->class = htmlspecialchars($class);
 	}
 
 	/*
@@ -68,7 +68,7 @@ class Knop {
 	}
 
 	public function getHtml() {
-		$html = '<a href="' . $this->url . '" title="' . $this->title . '" class="' . $this->class . '" ';
+		$html = '<a href="' . $this->url . '" title="' . htmlspecialchars($this->title) . '" class="' . htmlspecialchars($this->class) . '" ';
 		if ($this->confirm !== false) {
 			if ($this->confirm === true) {
 				$confirm = 'Weet u het zeker?';

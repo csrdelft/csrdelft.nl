@@ -45,7 +45,7 @@ function uid2naam($uid) {
 	if ($naam !== false) {
 		return $naam;
 	} else {
-		return 'Lid[' . mb_htmlentities($uid) . '] &notin; db.';
+		return 'Lid[' . htmlspecialchars($uid) . '] &notin; db.';
 	}
 }
 

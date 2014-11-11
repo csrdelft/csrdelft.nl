@@ -136,7 +136,7 @@ class CsrBB extends eamBBParser {
 		}
 		// lazy loading van externe images bijv. op het forum
 		if (!startsWith($content, CSR_PICS) OR startsWith($content, CSR_PICS . '/fotoalbum/')) {
-			return '<div class="bb-img-loading" src="' . $content . '" title="' . $content . '" style="' . $style . '"></div>';
+			return '<div class="bb-img-loading" src="' . $content . '" title="' . htmlspecialchars($content) . '" style="' . $style . '"></div>';
 		}
 		return '<img class="bb-img ' . $class . '" src="' . $content . '" alt="' . $content . '" style="' . $style . '" />';
 	}
@@ -320,7 +320,7 @@ class CsrBB extends eamBBParser {
 	 */
 	function bb_reldate($arguments = array()) {
 		$content = $this->parseArray(array('[/reldate]'), array());
-		return '<span title="' . mb_htmlentities($content) . '">' . reldate($content) . '</span>';
+		return '<span title="' . htmlspecialchars($content) . '">' . reldate($content) . '</span>';
 	}
 
 	/**
@@ -342,7 +342,7 @@ class CsrBB extends eamBBParser {
 		if ($naam !== false) {
 			return $naam;
 		} else {
-			return '[lid] ' . mb_htmlentities($uid) . '] &notin; db.';
+			return '[lid] ' . htmlspecialchars($uid) . '] &notin; db.';
 		}
 	}
 
@@ -380,7 +380,7 @@ class CsrBB extends eamBBParser {
 	function bb_instelling($arguments = array()) {
 		$content = $this->parseArray(array('[/instelling]'), array());
 		if (!array_key_exists('instelling', $arguments) OR ! isset($arguments['instelling'])) {
-			return 'Geen of een niet bestaande instelling opgegeven: ' . mb_htmlentities($arguments['instelling']);
+			return 'Geen of een niet bestaande instelling opgegeven: ' . htmlspecialchars($arguments['instelling']);
 		}
 		if (!array_key_exists('module', $arguments) OR ! isset($arguments['module'])) { // backwards compatibility
 			$key = explode('_', $arguments['instelling'], 2);
@@ -440,7 +440,7 @@ class CsrBB extends eamBBParser {
 
 			return $this->video_preview($attr, $previewthumb);
 		} else {
-			return '[youtube] Geen geldig youtube-id (' . mb_htmlentities($id) . ')';
+			return '[youtube] Geen geldig youtube-id (' . htmlspecialchars($id) . ')';
 		}
 	}
 
@@ -519,7 +519,7 @@ class CsrBB extends eamBBParser {
 		}
 
 		if (empty($type) OR empty($id)) {
-			return '[video] Niet-ondersteunde video-website (' . mb_htmlentities($content) . ')';
+			return '[video] Niet-ondersteunde video-website (' . htmlspecialchars($content) . ')';
 		}
 		return $this->video_preview($params, $previewthumb);
 	}
@@ -584,7 +584,7 @@ HTML;
 				live: false,
 				behavior: 'all'
 			  }
-			}).render().setUser('" . mb_htmlentities($content) . "').start();
+			}).render().setUser('" . htmlspecialchars($content) . "').start();
 			</script>";
 		return $html;
 	}
@@ -611,7 +611,7 @@ HTML;
 			$groeptag = new GroepBBContent($groep);
 			return $groeptag->getHtml();
 		} catch (Exception $e) {
-			return '[groep] Geen geldig groep-id (' . mb_htmlentities($groepid) . ')';
+			return '[groep] Geen geldig groep-id (' . htmlspecialchars($groepid) . ')';
 		}
 	}
 
@@ -706,12 +706,12 @@ HTML;
 			}
 		} catch (Exception $e) {
 			if (strpos($e->getMessage(), 'Not found') !== false) {
-				return '<div class="bb-block bb-maaltijd">Maaltijd niet gevonden: ' . mb_htmlentities($mid) . '</div>';
+				return '<div class="bb-block bb-maaltijd">Maaltijd niet gevonden: ' . htmlspecialchars($mid) . '</div>';
 			}
 			return $e->getMessage();
 		}
 		if (!isset($maaltijd)) {
-			return '<div class="bb-block bb-maaltijd">Maaltijd niet gevonden: ' . mb_htmlentities($mid) . '</div>';
+			return '<div class="bb-block bb-maaltijd">Maaltijd niet gevonden: ' . htmlspecialchars($mid) . '</div>';
 		}
 		$aanmeldingen = MaaltijdAanmeldingenModel::getAanmeldingenVoorLid(array($maaltijd->getMaaltijdId() => $maaltijd), \LoginModel::getUid());
 		if (empty($aanmeldingen)) {
@@ -839,7 +839,7 @@ HTML;
 			case 'top3oudleden':
 				return $mededelingenContent->getTopBlock('oudleden');
 		}
-		return '[mededelingen] Geen geldig type (' . mb_htmlentities($type) . ').';
+		return '[mededelingen] Geen geldig type (' . htmlspecialchars($type) . ').';
 	}
 
 	/**

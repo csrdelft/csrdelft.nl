@@ -24,7 +24,7 @@ class ProfielContent extends SmartyTemplateView {
 		$profhtml = array();
 		foreach ($this->model->getProfiel() as $key => $value) {
 			if (!is_array($value) AND $key != 'changelog') {
-				$profhtml[$key] = mb_htmlentities($value);
+				$profhtml[$key] = htmlspecialchars($value);
 			} elseif ($key == 'changelog') {
 				$profhtml[$key] = $value;
 			}

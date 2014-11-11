@@ -95,7 +95,7 @@ class OldGroep {
 			ORDER BY groeplid.prioriteit ASC, lid.achternaam ASC, lid.voornaam ASC;";
 		$rGroep = $db->query($qGroep);
 		if ($db->numRows($rGroep) < 1) {
-			throw new Exception('Groep [groepid:' . mb_htmlentities($groepId) . '] bestaat niet.');
+			throw new Exception('Groep [groepid:' . htmlspecialchars($groepId) . '] bestaat niet.');
 		}
 		while ($aGroep = $db->next($rGroep)) {
 			//groepseigenschappen worden alleen de eerste iteratie opgeslagen
@@ -696,7 +696,7 @@ class OldGroep {
 		} else {
 			$class = 'groeplink';
 		}
-		return '<a href="' . $this->getUrl() . '" class="' . $class . '">' . mb_htmlentities($this->getNaam()) . '</a>';
+		return '<a href="' . $this->getUrl() . '" class="' . $class . '">' . htmlspecialchars($this->getNaam()) . '</a>';
 	}
 
 	public function __toString() {

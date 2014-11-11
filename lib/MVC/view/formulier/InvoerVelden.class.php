@@ -254,7 +254,7 @@ abstract class InputField implements FormElement, Validator {
 			case 'name': return 'name="' . $this->name . '"';
 			case 'title':
 				if ($this->title) {
-					return 'title="' . $this->title . '"';
+					return 'title="' . htmlspecialchars($this->title) . '"';
 				}
 				break;
 			case 'disabled':

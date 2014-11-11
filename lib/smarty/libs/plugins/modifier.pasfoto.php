@@ -1,10 +1,10 @@
 <?php
+
 /**
  * Smarty plugin
  * @package Smarty
  * @subpackage plugins
  */
-
 
 /**
  * Smarty cat modifier plugin
@@ -31,12 +31,11 @@ function smarty_modifier_pasfoto($uid, $cssclass = 'pasfoto', $link = true) {
 		$lid = LidCache::getLid($uid);
 		if ($lid instanceof Lid) {
 			if ($link) {
-				$return.='<a href="/communicatie/profiel/' . $uid . '" title="' . $lid->getNaamLink('full', 'plain') . '">';
+				$return.='<a href="/communicatie/profiel/' . $uid . '" title="' . htmlspecialchars($lid->getNaamLink('full', 'plain')) . '">';
 			}
 			if (LidInstellingen::get('forum', 'naamWeergave') === 'Duckstad') {
 				$return.=$lid->getDuckfoto(true, $cssclass);
-			}
-			else {
+			} else {
 				$return.=$lid->getPasfoto(true, $cssclass);
 			}
 			if ($link) {

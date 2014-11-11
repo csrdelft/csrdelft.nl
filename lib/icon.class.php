@@ -13,43 +13,43 @@ class Icon {
 	//in de lijst met icons.
 	public static $alias = array(
 		// algemeen
-		'toevoegen' => 'add',
-		'bewerken' => 'pencil',
-		'verwijderen' => 'cross',
-		'alert' => 'stop',
-		'goedkeuren' => 'tick',
-		'verjaardag' => 'cake',
-		'vraagteken' => 'help',
-		'fout' => 'error',
+		'toevoegen'					 => 'add',
+		'bewerken'					 => 'pencil',
+		'verwijderen'				 => 'cross',
+		'alert'						 => 'stop',
+		'goedkeuren'				 => 'tick',
+		'verjaardag'				 => 'cake',
+		'vraagteken'				 => 'help',
+		'fout'						 => 'error',
 		//documumenten
-		'mime-audio' => 'ipod',
-		'mime-word' => 'page_white_word',
-		'mime-excel' => 'page_white_excel',
-		'mime-powerpoint' => 'page_white_powerpoint',
-		'mime-image' => 'page_white_picture',
-		'mime-onbekend' => 'page_white',
-		'mime-pdf' => 'page_white_acrobat',
-		'mime-plain' => 'page_white_text',
-		'mime-zip' => 'page_white_zip',
+		'mime-audio'				 => 'ipod',
+		'mime-word'					 => 'page_white_word',
+		'mime-excel'				 => 'page_white_excel',
+		'mime-powerpoint'			 => 'page_white_powerpoint',
+		'mime-image'				 => 'page_white_picture',
+		'mime-onbekend'				 => 'page_white',
+		'mime-pdf'					 => 'page_white_acrobat',
+		'mime-plain'				 => 'page_white_text',
+		'mime-zip'					 => 'page_white_zip',
 		// forum
-		'citeren' => 'comments',
-		'slotje' => 'lock',
-		'plakkerig' => 'note',
-		'belangrijk' => 'asterisk_orange',
+		'citeren'					 => 'comments',
+		'slotje'					 => 'lock',
+		'plakkerig'					 => 'note',
+		'belangrijk'				 => 'asterisk_orange',
 		// corvee
-		'taken_bewerken' => 'text_list_bullets',
-		'punten_bewerken' => 'award_star_gold_1',
-		'punten_bewerken_toegekend' => 'award_star_gold_2',
-		'gemaild' => 'email_go',
-		'gemaildoranje' => 'email_go_orange',
-		'niet_gemaild' => 'email',
+		'taken_bewerken'			 => 'text_list_bullets',
+		'punten_bewerken'			 => 'award_star_gold_1',
+		'punten_bewerken_toegekend'	 => 'award_star_gold_2',
+		'gemaild'					 => 'email_go',
+		'gemaildoranje'				 => 'email_go_orange',
+		'niet_gemaild'				 => 'email',
 		// profiel
-		'stats' => 'server_chart',
-		'su' => 'user_go',
-		'resetpassword' => 'user_gray',
-		'instellingen' => 'cog',
+		'stats'						 => 'server_chart',
+		'su'						 => 'user_go',
+		'resetpassword'				 => 'user_gray',
+		'instellingen'				 => 'cog',
 		// mededelingen
-		'legenda' => 'tag_yellow'
+		'legenda'					 => 'tag_yellow'
 	);
 
 	private static function loadIndex() {
@@ -92,9 +92,9 @@ class Icon {
 	public static function getTag($key, $title = null, $class = 'icon') {
 		$icon = self::get($key);
 		if ($title !== null) {
-			$title = 'title="' . $title . '" ';
+			$title = 'title="' . htmlspecialchars($title) . '" ';
 		}
-		return '<img src="' . $icon . '" width="16" height="16" alt="' . $key . '" ' . $title . 'class="' . htmlspecialchars($class) . '" />';
+		return '<img src="' . $icon . '" width="16" height="16" alt="' . $key . '" ' . htmlspecialchars($title) . 'class="' . htmlspecialchars($class) . '" />';
 	}
 
 	/*

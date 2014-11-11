@@ -167,7 +167,7 @@ class SavedQueryContent implements View {
 			return '<a href="/actueel/mededelingen/' . $contents . '">' . $contents . '</a>';
 		}
 
-		return mb_htmlentities($contents);
+		return htmlspecialchars($contents);
 	}
 
 	public function render_queryResult() {
@@ -221,7 +221,7 @@ class SavedQueryContent implements View {
 			if ($id == $query['ID']) {
 				$return .= '<span class="cursief">';
 			}
-			$return.=mb_htmlentities($query['beschrijving']);
+			$return.=htmlspecialchars($query['beschrijving']);
 			if ($id == $query['ID']) {
 				$return .= '</span>';
 			}

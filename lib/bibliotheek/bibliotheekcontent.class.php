@@ -84,9 +84,9 @@ class BibliotheekCatalogusDatatableContent extends BibliotheekView {
 	// Geeft html voor titel-celinhoud
 	protected function render_titel($aBoek) {
 		//urltitle
-		$urltitle = 'title="Boek: ' . $aBoek['titel'] . '
-Auteur: ' . $aBoek['auteur'] . ' 
-Rubriek: ' . $aBoek['categorie'] . '"';
+		$urltitle = 'title="Boek: ' . htmlspecialchars($aBoek['titel']) . '
+Auteur: ' . htmlspecialchars($aBoek['auteur']) . ' 
+Rubriek: ' . htmlspecialchars($aBoek['categorie']) . '"';
 		//url
 		if (LoginModel::mag('P_BIEB_READ')) {
 			$titel = '<a href="/communicatie/bibliotheek/boek/' . $aBoek['id'] . '" ' . $urltitle . '>'

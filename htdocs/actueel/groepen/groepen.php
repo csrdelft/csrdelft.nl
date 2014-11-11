@@ -28,7 +28,7 @@ try {
 
 	$content = new Groepencontent($groepen);
 } catch (Exception $e) {
-	setMelding('Groeptype (' . mb_htmlentities($gtype) . ') bestaat niet', -1);
+	setMelding('Groeptype (' . htmlspecialchars($gtype) . ') bestaat niet', -1);
 	redirect(CSR_ROOT . '/actueel/groepen/');
 }
 

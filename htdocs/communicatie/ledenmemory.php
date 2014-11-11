@@ -79,7 +79,7 @@ class MemoryView extends HtmlPage {
 
 	private function getPasfotoMemorycard($lid) {
 		$cheat = ($this->cheat ? $lid['uid'] : '');
-		$title = ($this->cheat ? $lid['voornaam'] . ' ' . $lid['tussenvoegsel'] . ' ' . $lid['achternaam'] : '');
+		$title = htmlspecialchars($this->cheat ? $lid['voornaam'] . ' ' . $lid['tussenvoegsel'] . ' ' . $lid['achternaam'] : '');
 		$flipped = ($this->learnmode ? 'flipped' : '');
 		$src = $this->getPasfotoPath($lid['uid']);
 		return <<<HTML
@@ -94,7 +94,7 @@ HTML;
 
 	private function getNaamMemorycard($lid) {
 		$cheat = ($this->cheat ? $lid['uid'] : '');
-		$title = $lid['voornaam'] . ' ' . $lid['tussenvoegsel'] . ' ' . $lid['achternaam'];
+		$title = htmlspecialchars($lid['voornaam'] . ' ' . $lid['tussenvoegsel'] . ' ' . $lid['achternaam']);
 		$flipped = ($this->learnmode ? 'flipped' : '');
 		$naam = Lid::naamLink($lid['uid'], 'civitas', 'plain');
 		return <<<HTML

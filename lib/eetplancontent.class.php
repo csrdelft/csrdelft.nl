@@ -29,7 +29,7 @@ class EetplanContent extends SmartyTemplateView {
 				echo '
 					<tr class="kleur' . ($row % 2) . '">
 						<td >' . $this->model->getDatum($aEetplanData['avond']) . '</td>
-						<td><a href="/actueel/eetplan/huis/' . $aEetplanData['huisID'] . '"><strong>' . mb_htmlentities($aEetplanData['huisnaam']) . '</strong></a><br />';
+						<td><a href="/actueel/eetplan/huis/' . $aEetplanData['huisID'] . '"><strong>' . htmlspecialchars($aEetplanData['huisnaam']) . '</strong></a><br />';
 				if ($huis instanceof OldGroep AND $huis->getId() != 0) {
 					echo 'Huispagina van ' . $huis->getLink();
 				}
@@ -76,14 +76,14 @@ class EetplanContent extends SmartyTemplateView {
 						<td>' . $ertussen;
 				$sUitvoer .= '</td>
 					<td>' . Lid::naamLink($aEetplanData['pheut'], 'civitas', 'link') . '<br /></td>
-					<td>' . mb_htmlentities($aEetplanData['mobiel']) . '</td>
-					<td>' . mb_htmlentities($aEetplanData['email']) . '</td>
-					<td>' . mb_htmlentities($aEetplanData['eetwens']) . '</td>
+					<td>' . htmlspecialchars($aEetplanData['mobiel']) . '</td>
+					<td>' . htmlspecialchars($aEetplanData['email']) . '</td>
+					<td>' . htmlspecialchars($aEetplanData['eetwens']) . '</td>
 					</tr>';
 			}
 			$sUitvoer .= '</table>';
-			echo '<h2><a href="/actueel/eetplan/">Eetplan</a> &raquo; voor ' . mb_htmlentities($aEetplanData['huisnaam']) . '</h2>
-				' . mb_htmlentities($aEetplanData['huisadres']) . ' <br />';
+			echo '<h2><a href="/actueel/eetplan/">Eetplan</a> &raquo; voor ' . htmlspecialchars($aEetplanData['huisnaam']) . '</h2>
+				' . htmlspecialchars($aEetplanData['huisadres']) . ' <br />';
 			if ($huis instanceof OldGroep AND $huis->getId() != 0) {
 				echo 'Huispagina: ' . $huis->getLink() . '<br /><br />';
 			}
@@ -117,7 +117,7 @@ class EetplanContent extends SmartyTemplateView {
 				$huisnaam = substr($huisnaam, 0, 18);
 
 				echo '<td class="huis"><a href="/actueel/eetplan/huis/' . $aEetplanVoorPheut[$iTeller] . '">' .
-				mb_htmlentities($huisnaam) .
+				htmlspecialchars($huisnaam) .
 				'</a></td>';
 			}
 			echo '</tr>';
@@ -138,7 +138,7 @@ class EetplanContent extends SmartyTemplateView {
 			}
 
 			echo '<tr class="kleur' . ($row % 2) . '">';
-			echo '<td><a href="/actueel/eetplan/huis/' . $aHuis['huisID'] . '">' . mb_htmlentities($aHuis['huisNaam']) . '</a></td><td>';
+			echo '<td><a href="/actueel/eetplan/huis/' . $aHuis['huisID'] . '">' . htmlspecialchars($aHuis['huisNaam']) . '</a></td><td>';
 			if ($huis instanceof OldGroep AND $huis->getId() != 0) {
 				echo $huis->getLink();
 			}

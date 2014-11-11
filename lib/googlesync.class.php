@@ -125,7 +125,7 @@ class GoogleSync {
 					'id' => (string) $contact->id,
 					'self' => $contact->getLink('self')->href,
 					'csruid' => $uid
-						//, 'xml'=>mb_htmlentities(str_replace('><', ">\n<", $contact->getXML()))
+						//, 'xml'=>htmlspecialchars(str_replace('><', ">\n<", $contact->getXML()))
 				);
 			}
 		}
