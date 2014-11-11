@@ -97,7 +97,12 @@
 						{else}
 							Pagina:
 						{/if}
-						{sliding_pager baseurl="/forum/onderwerp/"|cat:$draad->draad_id|cat:"/"
+						{if isset($statistiek)}
+							{assign var="append" value="/statistiek"}
+						{else}
+							{assign var="append" value=""}
+						{/if}
+						{sliding_pager baseurl="/forum/onderwerp/"|cat:$draad->draad_id|cat:"/" url_append=$append
 pagecount=ForumPostsModel::instance()->getAantalPaginas($draad->draad_id) curpage=ForumPostsModel::instance()->getHuidigePagina()}
 					</div>
 				</td>
