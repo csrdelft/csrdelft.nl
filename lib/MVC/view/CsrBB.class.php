@@ -488,16 +488,16 @@ class CsrBB extends eamBBParser {
 			$params['src'] = '//player.vimeo.com/video/' . $id . '?autoplay=1';
 
 			$videodataurl = 'http://vimeo.com/api/v2/video/' . $id . '.php';
-			if(in_array(ini_get('allow_url_fopen'), array('On', 'Yes', 1))) {
-				$data = @file_get_contents($videodataurl);
-			} else {
-				$ch = curl_init();
-				curl_setopt($ch, CURLOPT_URL, $videodataurl);
-				curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-				$data = curl_exec($ch);
+			require_once 'UrlDownloader.class.php';
+			$data = '';
+			$downloader = new UrlDownloader;
+			if($downloader->isAvailable()) {
+				$data = $downloader->file_get_contents($videodataurl);
 			}
-			$data = unserialize($data);
-			$previewthumb = $data[0]['thumbnail_medium'];
+			if($data) {
+				$data = unserialize($data);
+				$previewthumb = $data[0]['thumbnail_medium'];
+			}
 
 		} elseif (strstr($content, 'dailymotion')) {
 			$type = 'dailymotion';
