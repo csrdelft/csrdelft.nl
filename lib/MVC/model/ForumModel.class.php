@@ -1170,13 +1170,13 @@ class ForumPostsModel extends PersistenceModel implements Paging {
 		$draad->laatste_wijziging_uid = $post->uid;
 		if ($draad->wacht_goedkeuring) {
 			$draad->wacht_goedkeuring = false;
+			$deel->aantal_draden++;
 		}
 		$rowcount = ForumDradenModel::instance()->update($draad);
 		if ($rowcount !== 1) {
 			throw new Exception('Goedkeuren mislukt');
 		}
 		$deel->aantal_posts++;
-		$deel->aantal_draden++;
 		$deel->laatst_gewijzigd = $post->laatst_gewijzigd;
 		$deel->laatste_post_id = $post->post_id;
 		$deel->laatste_wijziging_uid = $post->uid;

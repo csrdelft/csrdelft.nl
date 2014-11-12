@@ -555,6 +555,9 @@ class ForumController extends Controller {
 			}
 			// maak draad
 			$draad = ForumDradenModel::instance()->maakForumDraad($deel->forum_id, $titel, $wacht_goedkeuring);
+			if (!$wacht_goedkeuring) {
+				$deel->aantal_draden++;
+			}
 		}
 
 		// maak post
