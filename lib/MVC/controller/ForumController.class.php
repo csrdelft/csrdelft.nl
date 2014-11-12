@@ -499,7 +499,7 @@ class ForumController extends Controller {
 		require_once 'simplespamfilter.class.php';
 		$filter = new SimpleSpamfilter();
 		$spamtrap = filter_input(INPUT_POST, 'firstname', FILTER_UNSAFE_RAW);
-		if (!empty($spamtrap) OR $filter->isSpam($tekst) OR $filter->isSpam($titel)) { //TODO: logging
+		if (!empty($spamtrap) OR $filter->isSpam($tekst) OR ( isset($titel) AND $filter->isSpam($titel) )) { //TODO: logging
 			setMelding('SPAM', -1);
 			redirect(CSR_ROOT . '/forum');
 		}
