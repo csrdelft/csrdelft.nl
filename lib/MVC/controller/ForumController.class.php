@@ -169,7 +169,7 @@ class ForumController extends Controller {
 			$belangrijk = null;
 		}
 		$deel = ForumDelenModel::instance()->getRecent($belangrijk);
-		$this->view = new ForumDeelView($deel, false, true, $belangrijk);
+		$this->view = new ForumDeelView($deel, true, $belangrijk);
 	}
 
 	/**
