@@ -490,22 +490,16 @@ class ForumController extends Controller {
 		} else {
 			$url = CSR_ROOT . '/forum/deel/' . $deel->forum_id;
 			$nieuw = true;
-		}
 
-		// concept opslaan
-		$tekst = trim(filter_input(INPUT_POST, 'forumBericht', FILTER_UNSAFE_RAW));
-		if ($nieuw) {
 			$titel = trim(filter_input(INPUT_POST, 'titel', FILTER_SANITIZE_STRING));
-			ForumDradenReagerenModel::instance()->setConcept($deel, null, $tekst, $titel);
-		} else {
-			ForumDradenReagerenModel::instance()->setConcept($deel, $draad->draad_id, $tekst);
 		}
+		$tekst = trim(filter_input(INPUT_POST, 'forumBericht', FILTER_UNSAFE_RAW));
 
 		// spam controle
 		require_once 'simplespamfilter.class.php';
 		$filter = new SimpleSpamfilter();
 		$spamtrap = filter_input(INPUT_POST, 'firstname', FILTER_UNSAFE_RAW);
-		if (!empty($spamtrap) OR $filter->isSpam($tekst)) { //TODO: logging
+		if (!empty($spamtrap) OR $filter->isSpam($tekst) OR $filter->isSpam($titel)) { //TODO: logging
 			setMelding('SPAM', -1);
 			redirect(CSR_ROOT . '/forum');
 		}
@@ -522,6 +516,13 @@ class ForumController extends Controller {
 			}
 
 			redirect($url);
+		}
+
+		// concept opslaan
+		if ($nieuw) {
+			ForumDradenReagerenModel::instance()->setConcept($deel, null, $tekst, $titel);
+		} else {
+			ForumDradenReagerenModel::instance()->setConcept($deel, $draad->draad_id, $tekst);
 		}
 
 		// voorkom ongesloten tags
