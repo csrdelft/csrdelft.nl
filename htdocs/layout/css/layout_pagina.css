@@ -38,9 +38,9 @@ main.cd-main-content.lateral-menu-is-open {
 	transform: translateX(-260px);
 }
 @media (max-width: 1004px) {
-	main.cd-main-content.lateral-menu-is-open{ 
+	main.cd-main-content.lateral-menu-is-open{
 		/* prevent main content from overlapping lateral menu, and also masks the jump caused by overflow: hidden */
-		z-index: 0; 
+		z-index: 0;
 	}
 }
 
@@ -338,7 +338,7 @@ Lateral navigation
 	line-height: 1.5em;
 }
 
-/* -------------------------------- 
+/* --------------------------------
 
 Modal popup
 
@@ -362,7 +362,7 @@ Modal popup
 	bottom: 0;
 	right: 0;
 	position: absolute;
-	z-index: -1;  
+	z-index: -1;
 }*/
 #modal-background{
 	display: none;
