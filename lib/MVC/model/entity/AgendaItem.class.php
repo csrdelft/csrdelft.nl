@@ -118,7 +118,7 @@ class AgendaItem extends PersistentEntity implements Agendeerbaar {
 			return true;
 		}
 		$verticale = 'verticale:' . LoginModel::instance()->getLid()->getVerticale()->letter;
-		if ($this->rechten_bekijken == $verticale AND LoginModel::mag($verticale . ':leider')) {
+		if ($this->rechten_bekijken == $verticale AND LoginModel::mag('verticaleleider')) {
 			return true;
 		}
 		return false;
