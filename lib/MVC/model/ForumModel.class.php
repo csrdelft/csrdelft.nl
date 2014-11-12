@@ -36,11 +36,15 @@ class ForumModel extends PersistenceModel {
 	}
 
 	public function opschonen() {
+		// Oude lege concepten verwijderen
+		ForumDradenReagerenModel::instance()->verwijderLegeConcepten();
+
 		// Niet-goedgekeurde posts verwijderen
 		$posts = ForumPostsModel::instance()->find('verwijderd = TRUE AND wacht_goedkeuring = TRUE');
 		foreach ($posts as $post) {
 			ForumPostsModel::instance()->delete($post);
 		}
+
 		// Voor alle ex-leden settings opschonen
 		$uids = Database::instance()->sqlSelect(array('uid'), 'lid', "status IN ('S_CIE','S_NOBODY','S_EXLID','S_OVERLEDEN')");
 		$uids->setFetchMode(PDO::FETCH_COLUMN, 0);
@@ -50,6 +54,7 @@ class ForumModel extends PersistenceModel {
 			ForumDradenVolgenModel::instance()->volgNietsVoorLid($uid);
 			ForumDradenReagerenModel::instance()->verwijderReagerenVoorLid($uid);
 		}
+
 		// Settings voor oude topics opschonen en oude/verwijderde topics en posts definitief verwijderen
 		$datetime = getDateTime(strtotime('-1 year'));
 		$draden = ForumDradenModel::instance()->find('verwijderd = TRUE OR (gesloten = TRUE AND (laatst_gewijzigd IS NULL OR laatst_gewijzigd < ?))', array($datetime));
@@ -67,6 +72,7 @@ class ForumModel extends PersistenceModel {
 				ForumPostsModel::instance()->delete($post);
 			}
 			if ($draad->verwijderd) {
+
 				// Als het goed is zijn er nooit niet-verwijderde posts in een verwijderd draadje
 				ForumDradenModel::instance()->delete($draad);
 			}
@@ -326,6 +332,12 @@ class ForumDradenReagerenModel extends PersistenceModel {
 
 	public function getReagerenVoorDeel(ForumDeel $deel) {
 		return $this->find('forum_id = ? AND draad_id = 0 AND uid != ? AND datum_tijd > ?', array($deel->forum_id, LoginModel::getUid(), getDateTime(strtotime(Instellingen::get('forum', 'reageren_tijd')))));
+	}
+
+	public function verwijderLegeConcepten() {
+		foreach ($this->find('concept IS NULL AND datum_tijd < ?', array(getDateTime(strtotime(Instellingen::get('forum', 'reageren_tijd'))))) as $reageren) {
+			$this->delete($reageren);
+		}
 	}
 
 	public function verwijderReagerenVoorDraad(ForumDraad $draad) {
