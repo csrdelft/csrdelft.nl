@@ -100,9 +100,9 @@ class BeheerMaaltijdenController extends AclController {
 	}
 
 	public function nieuw() {
-		if (isset($_POST['mrid'])) {
-			$mrid = (int) filter_input(INPUT_POST, 'mrid', FILTER_SANITIZE_NUMBER_INT);
-			$repetitie = MaaltijdRepetitiesModel::getRepetitie($mrid);
+		$mrid = (int) filter_input(INPUT_POST, 'mlt_repetitie_id', FILTER_SANITIZE_NUMBER_INT);
+		if ($mrid !== null) {
+			$repetitie = MaaltijdRepetitiesModel::getRepetitie((int) $mrid);
 			$beginDatum = MaaltijdRepetitiesModel::getFirstOccurrence($repetitie);
 			if ($repetitie->getPeriodeInDagen() > 0) {
 				$this->view = new RepetitieMaaltijdenForm($repetitie, $beginDatum, $beginDatum); // fetches POST values itself

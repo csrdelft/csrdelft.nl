@@ -111,9 +111,9 @@ class BeheerTakenController extends AclController {
 			$maaltijd = MaaltijdenModel::getMaaltijd($mid);
 			$beginDatum = $maaltijd->getDatum();
 		}
-		if (isset($_POST['crid'])) {
-			$crid = (int) filter_input(INPUT_POST, 'crid', FILTER_SANITIZE_NUMBER_INT);
-			$repetitie = CorveeRepetitiesModel::getRepetitie($crid);
+		$crid = filter_input(INPUT_POST, 'crv_repetitie_id', FILTER_SANITIZE_NUMBER_INT);
+		if ($crid !== null) {
+			$repetitie = CorveeRepetitiesModel::getRepetitie((int) $crid);
 			if ($mid === null) {
 				$beginDatum = CorveeRepetitiesModel::getFirstOccurrence($repetitie);
 				if ($repetitie->getPeriodeInDagen() > 0) {
@@ -121,7 +121,7 @@ class BeheerTakenController extends AclController {
 					return;
 				}
 			}
-			$this->view = new TaakForm(0, $repetitie->getFunctieId(), null, $crid, $mid, $beginDatum, $repetitie->getStandaardPunten(), 0); // fetches POST values itself
+			$this->view = new TaakForm(0, $repetitie->getFunctieId(), null, $repetitie->getCorveeRepetitieId(), $mid, $beginDatum, $repetitie->getStandaardPunten(), 0); // fetches POST values itself
 		} else {
 			$taak = new CorveeTaak();
 			if (isset($beginDatum)) {
