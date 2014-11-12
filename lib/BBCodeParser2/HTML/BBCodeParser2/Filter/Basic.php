@@ -28,18 +28,18 @@
 require_once 'HTML/BBCodeParser2/Filter.php';
 
 
-
-
-class HTML_BBCodeParser2_Filter_Basic extends HTML_BBCodeParser2_Filter
-{
+/**
+ * Filter for basic formatting
+ */
+class HTML_BBCodeParser2_Filter_Basic extends HTML_BBCodeParser2_Filter {
 
     /**
     * An array of tags parsed by the engine
     *
-    * @access   private
     * @var      array
     */
-    var $_definedTags = array(  'b' => array(   'htmlopen'  => 'strong',
+	protected $_definedTags = array(
+								'b' => array(   'htmlopen'  => 'strong',
                                                 'htmlclose' => 'strong',
                                                 'allowed'   => 'all',
                                                 'attributes'=> array()),

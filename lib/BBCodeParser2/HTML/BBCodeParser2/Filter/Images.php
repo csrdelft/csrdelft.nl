@@ -25,16 +25,17 @@
 */
 require_once 'HTML/BBCodeParser2/Filter.php';
 
-class HTML_BBCodeParser2_Filter_Images extends HTML_BBCodeParser2_Filter
-{
+/**
+ * Filter for image tag
+ */
+class HTML_BBCodeParser2_Filter_Images extends HTML_BBCodeParser2_Filter {
 
     /**
     * An array of tags parsed by the engine
     *
-    * @access   private
     * @var      array
     */
-    var $_definedTags = array(
+    protected $_definedTags = array(
         'img' => array(
             'htmlopen'  => 'img',
             'htmlclose' => '',
@@ -59,13 +60,10 @@ class HTML_BBCodeParser2_Filter_Images extends HTML_BBCodeParser2_Filter
     * method if it exists. The filters should modify their private $_text
     * variable.
     *
-    * @return   none
-    * @access   private
     * @see      $_text
     * @author   Stijn de Reede  <sjr@gmx.co.uk>
     */
-    function _preparse()
-    {
+    protected function _preparse() {
         $options = $this->_options;
         $o  = $options['open'];
         $c  = $options['close'];

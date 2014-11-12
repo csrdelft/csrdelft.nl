@@ -26,33 +26,30 @@
 require_once 'HTML/BBCodeParser2/Filter.php';
 
 /**
- *
+ * Filter for link tags and links
  */
 class HTML_BBCodeParser2_Filter_Links extends HTML_BBCodeParser2_Filter
 {
     /**
      * List of allowed schemes
      *
-     * @access  private
      * @var     array
      */
-    var $_allowedSchemes = array('http', 'https', 'ftp', 'irc');
+    private $_allowedSchemes = array('http', 'https', 'ftp', 'irc');
 
     /**
      * Default scheme
      *
-     * @access  private
      * @var     string
      */
-    var $_defaultScheme = 'http';
+    private $_defaultScheme = 'http';
 
     /**
      * An array of tags parsed by the engine
      *
-     * @access   private
      * @var      array
      */
-    var $_definedTags = array(
+    protected $_definedTags = array(
         'url' => array(
             'htmlopen'  => 'a',
             'htmlclose' => 'a',
@@ -74,14 +71,11 @@ class HTML_BBCodeParser2_Filter_Links extends HTML_BBCodeParser2_Filter
      * method if it exists. The filters should modify their private $_text
      * variable.
      *
-     * @return   none
-     * @access   private
      * @see      $_text
      * @author   Stijn de Reede <sjr@gmx.co.uk>
      * @author   Seth Price <seth@pricepages.org>
      */
-    function _preparse()
-    {
+    protected function _preparse() {
         $options = $this->_options;
         $o = $options['open'];
         $c = $options['close'];
@@ -101,15 +95,15 @@ class HTML_BBCodeParser2_Filter_Links extends HTML_BBCodeParser2_Filter
     }
 
     /**
-     * Intelligently expand a URL into a link
+     * [callback] Intelligently expand a URL into a link
      *
+	 * @param   array   $matches
      * @return  string
      * @access  private
      * @author  Seth Price <seth@pricepages.org>
      * @author  Lorenzo Alberton <l.alberton@quipo.it>
      */
-    function smarterPPLinkExpand($matches)
-    {
+    public function smarterPPLinkExpand($matches) {
         $options = $this->_options;
         $o = $options['open'];
         $c = $options['close'];
@@ -160,14 +154,14 @@ class HTML_BBCodeParser2_Filter_Links extends HTML_BBCodeParser2_Filter
     }
 
     /**
-     * Finish preparsing URL to clean it up
+     * [callback] Finish preparsing URL to clean it up
      *
+	 * @param   array $matches
      * @return  string
-     * @access  private
+	 *
      * @author  Seth Price <seth@pricepages.org>
      */
-    function smarterPPLink($matches)
-    {
+    public function smarterPPLink($matches) {
         $options = $this->_options;
         $o = $options['open'];
         $c = $options['close'];
@@ -199,4 +193,3 @@ class HTML_BBCodeParser2_Filter_Links extends HTML_BBCodeParser2_Filter
         return $matches[6];
     }
 }
-?>

@@ -28,7 +28,7 @@
 require_once 'HTML/BBCodeParser2/Filter.php';
 
 /**
- * 
+ * Filter for listing tags
  */
 class HTML_BBCodeParser2_Filter_Lists extends HTML_BBCodeParser2_Filter
 {
@@ -36,10 +36,10 @@ class HTML_BBCodeParser2_Filter_Lists extends HTML_BBCodeParser2_Filter
     /**
     * An array of tags parsed by the engine
     *
-    * @access   private
     * @var      array
     */
-    var $_definedTags = array(  'list'  => array(   'htmlopen'  => 'ol',
+    protected $_definedTags = array(
+		                        'list'  => array(   'htmlopen'  => 'ol',
                                                     'htmlclose' => 'ol',
                                                     'allowed'   => 'all',
                                                     'child'     => 'none^li',
@@ -57,7 +57,7 @@ class HTML_BBCodeParser2_Filter_Lists extends HTML_BBCodeParser2_Filter
                                                     'parent'    => 'none^ulist,list',
                                                     'attributes'=> array()
                                                     )
-                                );
+                              );
 
 
     /**
@@ -71,13 +71,10 @@ class HTML_BBCodeParser2_Filter_Lists extends HTML_BBCodeParser2_Filter
     * method if it exists. The filters should modify their private $_text
     * variable.
     *
-    * @return   none
-    * @access   private
     * @see      $_text
     * @author   Stijn de Reede <sjr@gmx.co.uk>, Seth Price <seth@pricepages.org>
     */
-    function _preparse()
-    {
+    protected function _preparse() {
         $options = $this->_options;
         $o = $options['open'];
         $c = $options['close'];

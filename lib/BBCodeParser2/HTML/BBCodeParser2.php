@@ -75,55 +75,48 @@
 *           => (...)
 *       )
 */
-class HTML_BBCodeParser2
-{
+class HTML_BBCodeParser2 {
     /**
      * An array of tags parsed by the engine, should be overwritten by filters
      *
-     * @access   private
      * @var      array
      */
-    var $_definedTags  = array();
+	protected $_definedTags  = array();
 
     /**
      * A string containing the input
      *
-     * @access   private
      * @var      string
      */
-    var $_text          = '';
+	protected $_text          = '';
 
     /**
      * A string containing the preparsed input
      *
-     * @access   private
      * @var      string
      */
-    var $_preparsed     = '';
+	protected $_preparsed     = '';
 
     /**
      * An array tags and texts build from the input text
      *
-     * @access   private
      * @var      array
      */
-    var $_tagArray      = array();
+	private $_tagArray      = array();
 
     /**
      * A string containing the parsed version of the text
      *
-     * @access   private
      * @var      string
      */
-    var $_parsed        = '';
+    private $_parsed        = '';
 
     /**
      * An array of options, filled by an ini file or through the contructor
      *
-     * @access   private
      * @var      array
      */
-    var $_options = array(
+    protected $_options = array(
         'quotestyle'    => 'double',
         'quotewhat'     => 'all',
         'open'          => '[',
@@ -135,27 +128,24 @@ class HTML_BBCodeParser2
     /**
      * An array of filters used for parsing
      *
-     * @access   private
-     * @var      array
+     * @var      HTML_BBCodeParser2_Filter[]
      */
-    var $_filters       = array();
-    
-    /**
-     * Constructor, initialises the options and filters
-     *
-     * Sets options to properly escape the tag
-     * characters in preg_replace() etc.
-     * 
-     * All the filters in the options are initialised and their defined tags
-     * are copied into the private variable _definedTags.
-     *
-     * @param    array           options to use, can be left out
-     * @return   none
-     * @access   public
-     * @author   Stijn de Reede  <sjr@gmx.co.uk>
-     */
-    function __construct($options = array())
-    {
+    private $_filters       = array();
+
+	/**
+	 * Constructor, initialises the options and filters
+	 *
+	 * Sets options to properly escape the tag
+	 * characters in preg_replace() etc.
+	 *
+	 * All the filters in the options are initialised and their defined tags
+	 * are copied into the private variable _definedTags.
+	 *
+	 * @param    array $options to use, can be left out
+	 *
+	 * @author   Stijn de Reede  <sjr@gmx.co.uk>
+	 */
+    public function __construct($options = array()) {
         // set the options passed as an argument
         foreach ($options as $k => $v )  {
             $this->_options[$k] = $v;
@@ -187,26 +177,27 @@ class HTML_BBCodeParser2
         $this->addFilters($this->_options['filters']);
     }
 
-    /**
-     * Option setter
-     *
-     * @param string option name
-     * @param mixed  option value
-     * @author Lorenzo Alberton <l.alberton@quipo.it>
-     */
-    function setOption($name, $value)
-    {
+	/**
+	 * Option setter
+	 *
+	 * @param string $name of option
+	 * @param mixed $value of option
+	 *
+	 * @author Lorenzo Alberton <l.alberton@quipo.it>
+	 */
+    function setOption($name, $value) {
         $this->_options[$name] = $value;
     }
 
-    /**
-     * Add a new filter
-     *
-     * @param string filter
-     * @author Lorenzo Alberton <l.alberton@quipo.it>
-     */
-    function addFilter($filter)
-    {
+	/**
+	 * Add a new filter
+	 *
+	 * @param string $filter
+	 * @throws InvalidArgumentException
+	 *
+	 * @author Lorenzo Alberton <l.alberton@quipo.it>
+	 */
+    public function addFilter($filter) {
         $filter = ucfirst($filter);
         if (!array_key_exists($filter, $this->_filters)) {
             $class = 'HTML_BBCodeParser2_Filter_'.$filter;
@@ -226,10 +217,10 @@ class HTML_BBCodeParser2
      * Remove an existing filter
      *
      * @param string $filter
+	 *
      * @author Lorenzo Alberton <l.alberton@quipo.it>
      */
-    function removeFilter($filter)
-    {
+    public function removeFilter($filter) {
         $filter = ucfirst(trim($filter));
         if (!empty($filter) && array_key_exists($filter, $this->_filters)) {
             unset($this->_filters[$filter]);
@@ -248,12 +239,12 @@ class HTML_BBCodeParser2
     /**
      * Add new filters
      *
-     * @param mixed (array or string)
+     * @param array|string $filters
      * @return boolean true if all ok, false if not.
+	 *
      * @author Lorenzo Alberton <l.alberton@quipo.it>
      */
-    function addFilters($filters)
-    {
+    public function addFilters($filters) {
         if (is_string($filters)) {
             //comma-separated list
             if (strpos($filters, ',') !== false) {
@@ -285,13 +276,10 @@ class HTML_BBCodeParser2
      * method. The filters should modify their private $_preparsed
      * variable, with input from $_text.
      *
-     * @return   none
-     * @access   private
      * @see      $_text
      * @author   Stijn de Reede  <sjr@gmx.co.uk>
      */
-    function _preparse()
-    {
+    protected function _preparse() {
         // default: assign _text to _preparsed, to be overwritten by filters
         $this->_preparsed = $this->_text;
 
@@ -318,15 +306,12 @@ class HTML_BBCodeParser2
      * TODO: - rewrite whole method, as this one is old and probably slow
      *       - see if a recursive method would be better than an iterative one
      *
-     * @return   none
-     * @access   private
      * @see      _buildTag()
      * @see      $_text
      * @see      $_tagArray
      * @author   Stijn de Reede  <sjr@gmx.co.uk>
      */
-    function _buildTagArray()
-    {
+    private function _buildTagArray() {
         $this->_tagArray = array();
         $str = $this->_preparsed;
         $strPos = 0;
@@ -337,7 +322,6 @@ class HTML_BBCodeParser2
             $openPos = strpos($str, $this->_options['open'], $strPos);
             if ($openPos === false) {
                 $openPos = $strLength;
-                $nextOpenPos = $strLength;
             }
             if ($openPos + 1 > $strLength) {
                 $nextOpenPos = $strLength;
@@ -399,12 +383,10 @@ class HTML_BBCodeParser2
      *
      * @param    string          string to build tag from
      * @return   array           tag in array format
-     * @access   private
      * @see      _buildTagArray()
      * @author   Stijn de Reede  <sjr@gmx.co.uk>
      */
-    function _buildTag($str)
-    {
+    private function _buildTag($str) {
         $tag = array('text' => $str, 'attributes' => array());
 
         if (substr($str, 1, 1) == '/') {        // closing tag
@@ -469,14 +451,11 @@ class HTML_BBCodeParser2
      * there is correct (xml compliant) nesting.
      * In the end all still opened tags are closed.
      *
-     * @return   none
-     * @access   private
      * @see      _isAllowed()
      * @see      $_tagArray
      * @author   Stijn de Reede  <sjr@gmx.co.uk>, Seth Price <seth@pricepages.org>
      */
-    function _validateTagArray()
-    {
+    private function _validateTagArray() {
         $newTagArray = array();
         $openTags = array();
         foreach ($this->_tagArray as $tag) {
@@ -588,16 +567,14 @@ class HTML_BBCodeParser2
      * does, then it returns false. If a parent is needed, then it returns the
      * first tag in the list to add to the stack.
      *
-     * @param    array           tag that is on the outside
-     * @param    array           tag that is on the inside
+     * @param    string  $out    tag that is on the outside
+     * @param    string  $in     tag that is on the inside
      * @return   boolean         false if not needed, tag if needed, true if out
      *                           of  our minds
-     * @access   private
      * @see      _validateTagArray()
      * @author   Seth Price <seth@pricepages.org>
      */
-    function _parentNeeded($out, $in)
-    {
+    private function _parentNeeded($out, $in) {
         if (!isset($this->_definedTags[$in]['parent']) ||
             ($this->_definedTags[$in]['parent'] == 'all')
         ) {
@@ -628,16 +605,15 @@ class HTML_BBCodeParser2
      * does, then it returns false. If a child is needed, then it returns the
      * first tag in the list to add to the stack.
      *
-     * @param    array           tag that is on the outside
-     * @param    array           tag that is on the inside
+     * @param    string  $out    tag that is on the outside
+     * @param    string  $in     tag that is on the inside
      * @return   boolean         false if not needed, tag if needed, true if out
      *                           of our minds
-     * @access   private
+	 *
      * @see      _validateTagArray()
      * @author   Seth Price <seth@pricepages.org>
      */
-    function _childNeeded($out, $in)
-    {
+    private function _childNeeded($out, $in) {
         if (!isset($this->_definedTags[$out]['child']) ||
            ($this->_definedTags[$out]['child'] == 'all')
         ) {
@@ -666,16 +642,15 @@ class HTML_BBCodeParser2
      *
      * The allowed tags are extracted from the private _definedTags array.
      *
-     * @param    array           tag that is on the outside
-     * @param    array           tag that is on the inside
+     * @param    string  $out    tag that is on the outside
+     * @param    string  $in     tag that is on the inside
      * @return   boolean         return true if the tag is allowed, false
      *                           otherwise
-     * @access   private
+     *
      * @see      _validateTagArray()
      * @author   Stijn de Reede  <sjr@gmx.co.uk>
      */
-    function _isAllowed($out, $in)
-    {
+    private function _isAllowed($out, $in) {
         if (!$out || ($this->_definedTags[$out]['allowed'] == 'all')) {
             return true;
         }
@@ -700,17 +675,21 @@ class HTML_BBCodeParser2
      * The correct html and attribute values are extracted from the private
      * _definedTags array.
      *
-     * @return   none
-     * @access   private
      * @see      $_tagArray
      * @see      $_parsed
      * @author   Stijn de Reede  <sjr@gmx.co.uk>
      */
-    function _buildParsedString()
-    {
+	private function _buildParsedString() {
         $this->_parsed = '';
         foreach ($this->_tagArray as $tag) {
-            switch ($tag['type']) {
+			if(isset($this->_definedTags[$tag['tag']]['plugin'])) {
+
+
+
+				continue;
+			}
+
+			switch ($tag['type']) {
 
             // just text
             case 0:
@@ -720,6 +699,7 @@ class HTML_BBCodeParser2
             // opening tag
             case 1:
                 $this->_parsed .= '<'.$this->_definedTags[$tag['tag']]['htmlopen'];
+				$q = '"';
                 if ($this->_options['quotestyle'] == 'single') $q = "'";
                 if ($this->_options['quotestyle'] == 'double') $q = '"';
                 foreach ($tag['attributes'] as $a => $v) {
@@ -756,15 +736,13 @@ class HTML_BBCodeParser2
     /**
      * Sets text in the object to be parsed
      *
-     * @param    string          the text to set in the object
-     * @return   none
-     * @access   public
+     * @param    string $str         the text to set in the object
+	 *
      * @see      getText()
      * @see      $_text
      * @author   Stijn de Reede  <sjr@gmx.co.uk>
      */
-    function setText($str)
-    {
+    public function setText($str) {
         $this->_text = $str;
     }
 
@@ -772,13 +750,12 @@ class HTML_BBCodeParser2
      * Gets the unparsed text from the object
      *
      * @return   string          the text set in the object
-     * @access   public
+	 *
      * @see      setText()
      * @see      $_text
      * @author   Stijn de Reede  <sjr@gmx.co.uk>
      */
-    function getText()
-    {
+    public function getText() {
         return $this->_text;
     }
 
@@ -786,13 +763,12 @@ class HTML_BBCodeParser2
      * Gets the preparsed text from the object
      *
      * @return   string          the text set in the object
-     * @access   public
-     * @see      _preparse()
+	 *
+	 * @see      _preparse()
      * @see      $_preparsed
      * @author   Stijn de Reede  <sjr@gmx.co.uk>
      */
-    function getPreparsed()
-    {
+    public function getPreparsed() {
         return $this->_preparsed;
     }
 
@@ -800,29 +776,25 @@ class HTML_BBCodeParser2
      * Gets the parsed text from the object
      *
      * @return   string          the parsed text set in the object
-     * @access   public
+	 *
      * @see      parse()
      * @see      $_parsed
      * @author   Stijn de Reede  <sjr@gmx.co.uk>
      */
-    function getParsed()
-    {
+    public function getParsed() {
         return $this->_parsed;
     }
 
     /**
      * Parses the text set in the object
      *
-     * @return   none
-     * @access   public
      * @see      _preparse()
      * @see      _buildTagArray()
      * @see      _validateTagArray()
      * @see      _buildParsedString()
      * @author   Stijn de Reede  <sjr@gmx.co.uk>
      */
-    function parse()
-    {
+    public function parse() {
         $this->_preparse();
         $this->_buildTagArray();
         $this->_validateTagArray();
@@ -832,14 +804,14 @@ class HTML_BBCodeParser2
     /**
      * Quick method to do setText(), parse() and getParsed at once
      *
-     * @return   none
-     * @access   public
+	 * @param    string $str
+     * @return   string
+	 *
      * @see      parse()
      * @see      $_text
      * @author   Stijn de Reede  <sjr@gmx.co.uk>
      */
-    function qparse($str)
-    {
+    public function qparse($str) {
         $this->_text = $str;
         $this->parse();
         return $this->_parsed;
@@ -848,18 +820,17 @@ class HTML_BBCodeParser2
     /**
      * Quick static method to do setText(), parse() and getParsed at once
      *
-     * @return   none
-     * @access   public
+	 * @param    string $str
+     * @return   string
+	 *
      * @see      parse()
      * @see      $_text
      * @author   Stijn de Reede  <sjr@gmx.co.uk>
      */
-    function staticQparse($str)
-    {
+    public function staticQparse($str) {
         $p = new HTML_BBCodeParser2();
         $str = $p->qparse($str);
         unset($p);
         return $str;
     }
 }
-?>
