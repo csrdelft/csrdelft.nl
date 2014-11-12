@@ -49,11 +49,9 @@ $('#extraButton').html(txt);
 JS;
 		}
 		$fields['btn'] = new FormKnoppen();
-		$fields['btn']->extraText = 'Alles bijwerken';
-		$fields['btn']->extraTitle = 'Opslaan & alle maaltijden bijwerken';
-		$fields['btn']->extraIcon = 'disk_multiple';
-		$fields['btn']->extraUrl = maalcieUrl . '/bijwerken/' . $mrid;
-		$fields['btn']->extraAction = 'submit';
+
+		$bijwerken = new FormulierKnop(maalcieUrl . '/bijwerken/' . $mrid, 'submit', 'Alles bijwerken', 'Opslaan & alle maaltijden bijwerken', '/famfamfam/disk_multiple.png');
+		$fields['btn']->addKnop($bijwerken, true);
 
 		$this->addFields($fields);
 	}

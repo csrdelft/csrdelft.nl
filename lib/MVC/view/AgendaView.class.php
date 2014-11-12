@@ -178,8 +178,8 @@ function setTijd(a, b, c, d) {
 
 		$fields['btn'] = new FormKnoppen();
 		if ($actie === 'toevoegen') {
-			$doorgaan = new FormulierKnop('/agenda/toevoegen/doorgaan', 'submit', 'Opslaan en doorgaan', 'Opslaan & nog een agenda item toevoegen', 'add');
-			$fields['btn']->addKnop($doorgaan);
+			$doorgaan = new FormulierKnop('/agenda/toevoegen/doorgaan', 'submit', 'Opslaan en doorgaan', 'Opslaan & nog een agenda item toevoegen', '/famfamfam/add.png');
+			$fields['btn']->addKnop($doorgaan, true);
 		}
 
 		$this->addFields($fields);

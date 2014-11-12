@@ -140,8 +140,12 @@ class FormKnoppen implements FormElement {
 		return get_class($this);
 	}
 
-	public function addKnop(FormulierKnop $knop) {
-		$this->knoppen[] = $knop;
+	public function addKnop(FormulierKnop $knop, $prepend = false) {
+		if ($prepend) {
+			array_unshift($this->knoppen, $knop);
+		} else {
+			$this->knoppen[] = $knop;
+		}
 	}
 
 	public function view() {
