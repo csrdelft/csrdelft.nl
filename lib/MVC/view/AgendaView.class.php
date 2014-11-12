@@ -146,7 +146,10 @@ class AgendaItemForm extends ModalForm {
 			$eind = explode(':', $tijd[1]);
 			$html .= '<a onclick="setTijd(\'' . $begin[0] . '\',\'' . $begin[1] . '\',\'' . $eind[0] . '\',\'' . $eind[1] . '\');">» ' . $naam . '</a> &nbsp;';
 		}
-		$html .= '<div class="float-right"><a class="knop round" title="Wijzig standaard tijden" href="/instellingenbeheer/module/agenda"><img width="16" height="16" class="icon" alt="edit" src="' . CSR_PICS . '/famfamfam/pencil.png"></a></div>
+		if (LoginModel::mag('P_AGENDA_MOD')) {
+			$html .= '<div class="float-right"><a class="knop round" title="Wijzig standaard tijden" href="/instellingenbeheer/module/agenda"><img width="16" height="16" class="icon" alt="edit" src="' . CSR_PICS . '/famfamfam/pencil.png"></a></div>';
+		}
+		$html .= '
 <script type="text/javascript">
 function setTijd(a, b, c, d) {
 	document.getElementById(\'field_begin_uur\').value = a;
@@ -161,7 +164,8 @@ function setTijd(a, b, c, d) {
 		$fields['begin'] = new TijdField('begin', date('H:i', $item->getBeginMoment()), 'Van');
 		$fields['eind'] = new TijdField('eind', date('H:i', $item->getEindMoment()), 'Tot');
 
-		$fields[] = new RechtenField('rechten_bekijken', $item->rechten_bekijken, 'Zichtbaar voor');
+		$fields['r'] = new RechtenField('rechten_bekijken', $item->rechten_bekijken, 'Zichtbaar voor');
+		$fields['r']->readonly = !LoginModel::mag('P_AGENDA_MOD');
 
 		$fields['l'] = new TextField('locatie', $item->locatie, 'Locatie');
 		$fields['l']->title = 'Een kaart kan worden weergegeven in de agenda';

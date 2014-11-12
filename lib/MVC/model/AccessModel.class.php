@@ -93,7 +93,7 @@ class AccessModel extends CachedPersistenceModel {
 	 * Geldige prefixes voor rechten
 	 * @var array
 	 */
-	private static $prefix = array('GROEP', 'VERTICALE', 'GESLACHT', 'LICHTING', 'LIDJAAR', 'OUDERJAARS', 'EERSTEJAARS');
+	private static $prefix = array('GROEP', 'VERTICALE', 'VERTICALELEIDER', 'GESLACHT', 'LICHTING', 'LIDJAAR', 'OUDERJAARS', 'EERSTEJAARS');
 
 	protected function __construct() {
 		parent::__construct();
@@ -435,6 +435,14 @@ class AccessModel extends CachedPersistenceModel {
 				}
 
 				return false;
+
+			/**
+			 * Is lid een verticaleleider?
+			 */
+			case 'VERTICALELEIDER':
+
+				$gevraagd = $subject->getVerticaleId();
+				$role = 'LEIDER';
 
 			/**
 			 * Behoort een lid tot een bepaalde verticale?

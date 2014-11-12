@@ -114,7 +114,14 @@ class AgendaItem extends PersistentEntity implements Agendeerbaar {
 	}
 
 	public function magBeheren($ical = false) {
-		return LoginModel::mag('P_AGENDA_MOD', $ical);
+		if (LoginModel::mag('P_AGENDA_MOD', $ical)) {
+			return true;
+		}
+		$verticale = 'verticale:' . LoginModel::instance()->getLid()->getVerticale()->letter;
+		if ($this->rechten_bekijken == $verticale AND LoginModel::mag($verticale . ':leider')) {
+			return true;
+		}
+		return false;
 	}
 
 }

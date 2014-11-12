@@ -23,9 +23,9 @@ class AgendaController extends AclController {
 		} else {
 			$this->acl = array(
 				'courant'		 => 'P_MAIL_COMPOSE',
-				'toevoegen'		 => 'P_AGENDA_ADD',
-				'bewerken'		 => 'P_AGENDA_MOD',
-				'verwijderen'	 => 'P_AGENDA_MOD'
+				'toevoegen'		 => 'P_AGENDA_ADD,verticaleleider',
+				'bewerken'		 => 'P_AGENDA_MOD,verticaleleider',
+				'verwijderen'	 => 'P_AGENDA_MOD,verticaleleider'
 			);
 		}
 	}
@@ -75,9 +75,9 @@ class AgendaController extends AclController {
 		if ($this->view->validate()) {
 			$item->item_id = (int) $this->model->create($item);
 			if ($datum === 'doorgaan') {
+				$_POST = array(); // clear post values of previous input
 				setMelding('Toegevoegd: ' . $item->titel . ' (' . $item->begin_moment . ')', 1);
 				$item->item_id = null;
-				$_POST = array(); // clear post values of previous input
 				$item->begin_moment = getDateTime($item->getEindMoment() + 60); // spring naar volgende dag bij 23:59
 				$this->view = new AgendaItemForm($item, $this->action); // fetches POST values itself
 			} else {
@@ -87,7 +87,10 @@ class AgendaController extends AclController {
 	}
 
 	public function bewerken($aid) {
-		$item = $this->model->getAgendaItem($aid);
+		$item = $this->model->getAgendaItem((int) $aid);
+		if (!$item->magBeheren()) {
+			$this->geentoegang();
+		}
 		$this->view = new AgendaItemForm($item, $this->action); // fetches POST values itself
 		if ($this->view->validate()) {
 			$rowcount = $this->model->update($item);
@@ -101,9 +104,13 @@ class AgendaController extends AclController {
 	}
 
 	public function verwijderen($aid) {
-		$this->model->removeAgendaItem($aid);
+		$item = $this->model->getAgendaItem((int) $aid);
+		if (!$item->magBeheren()) {
+			$this->geentoegang();
+		}
+		$this->model->delete($item);
 		//setMelding('Verwijderd', 1);
-		$this->view = new AgendaItemDeleteView($aid);
+		$this->view = new AgendaItemDeleteView($item->item_id);
 	}
 
 }
