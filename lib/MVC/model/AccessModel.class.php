@@ -392,16 +392,20 @@ class AccessModel extends CachedPersistenceModel {
 
 		// splits permissie in type, waarde en rol
 		$p = explode(':', $permission, 3);
-		if (in_array($p[0], self::$prefix) AND ! empty($p[1])) {
+		if (isset($p[0])) {
 			$prefix = $p[0];
-			$gevraagd = $p[1];
-			if (isset($p[2])) {
-				$role = $p[2];
-			} else {
-				$role = false;
-			}
 		} else {
 			return false;
+		}
+		if (isset($p[1])) {
+			$gevraagd = $p[1];
+		} else {
+			$gevraagd = false;
+		}
+		if (isset($p[2])) {
+			$role = $p[2];
+		} else {
+			$role = false;
 		}
 
 		switch ($prefix) {
@@ -451,6 +455,7 @@ class AccessModel extends CachedPersistenceModel {
 
 				// zoek verticale
 				$verticale = $subject->getVerticale();
+
 				if ($gevraagd != $verticale->id AND $gevraagd != strtoupper($verticale->letter) AND $gevraagd != strtoupper($verticale->naam)) {
 					return false;
 				}

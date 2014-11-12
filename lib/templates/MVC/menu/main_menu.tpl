@@ -5,7 +5,7 @@
 				<input id="cd-zoek-veld" name="q" type="text" />
 				<script type="text/javascript">
 					$(document).ready(function () {
-						{assign var=instantsearch value=$mainmenu->getInstantSearchSuggestions()}
+					{assign var=instantsearch value=$mainmenu->getInstantSearchSuggestions()}
 						$('#cd-zoek-veld').autocomplete({json_encode(array_keys($instantsearch))}, {
 							clickFire: true,
 							max: 20,
@@ -17,8 +17,16 @@
 							this.setSelectionRange(0, this.value.length);
 						});
 						$('#cd-zoek-veld').keyup(function (event) {
-							if (event.keyCode === 13 && typeof instantsearch[this.value] !== 'undefined') { // enter
-								window.location.href = instantsearch[this.value]; // goto url
+							if (event.keyCode === 13) { // enter
+								if (typeof instantsearch[this.value] !== 'undefined') { // known shortcut
+									window.location.href = instantsearch[this.value]; // goto url
+								}
+								else if (this.value.indexOf('su ') == 0) {
+									window.location.href = '/su/'.this.value.substring(3);
+								}
+								else if (this.value == 'endsu') {
+									window.location = '/endsu';
+								}
 							}
 						});
 					});
@@ -36,13 +44,13 @@
 							{foreach from=$item->children item=child}
 								{if $child->magBekijken()}
 									<li><a href="{$child->link}" title="{$child->tekst}"{if $child->active} class="active"{/if}>{$child->tekst}</a></li>
-								{/if}
-								{foreach from=$child->children item=level3}
-									{if $level3->magBekijken()}
-										<li class="verborgen"><a href="{$level3->link}" title="{$level3->tekst}"{if $level3->active} class="active"{/if}>{$level3->tekst}</a></li>
 									{/if}
+									{foreach from=$child->children item=level3}
+										{if $level3->magBekijken()}
+										<li class="verborgen"><a href="{$level3->link}" title="{$level3->tekst}"{if $level3->active} class="active"{/if}>{$level3->tekst}</a></li>
+										{/if}
+									{/foreach}
 								{/foreach}
-							{/foreach}
 						</ul>
 					{/if}
 				</li>
