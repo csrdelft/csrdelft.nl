@@ -58,8 +58,8 @@ class BeheerAbonnementenController extends AclController {
 	}
 
 	public function novieten() {
-		$mrid = (int) filter_input(INPUT_POST, 'mrid', FILTER_SANITIZE_NUMBER_INT);
-		$aantal = MaaltijdAbonnementenModel::inschakelenAbonnementVoorNovieten($mrid);
+		$mrid = filter_input(INPUT_POST, 'mrid', FILTER_SANITIZE_NUMBER_INT);
+		$aantal = MaaltijdAbonnementenModel::inschakelenAbonnementVoorNovieten((int) $mrid);
 		$matrix = MaaltijdAbonnementenModel::getAbonnementenVanNovieten();
 		$novieten = sizeof($matrix);
 		$this->view = new BeheerAbonnementenLijstView($matrix);
