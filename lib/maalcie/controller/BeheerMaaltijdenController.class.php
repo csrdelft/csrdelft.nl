@@ -100,9 +100,8 @@ class BeheerMaaltijdenController extends AclController {
 	}
 
 	public function nieuw() {
-		$mrid = filter_input(INPUT_POST, 'mlt_repetitie_id', FILTER_SANITIZE_NUMBER_INT);
-		if ($mrid !== null) {
-			$repetitie = MaaltijdRepetitiesModel::getRepetitie((int) $mrid);
+		if (isset($_POST['mlt_repetitie_id'])) {
+			$repetitie = MaaltijdRepetitiesModel::getRepetitie((int) filter_input(INPUT_POST, 'mlt_repetitie_id', FILTER_SANITIZE_NUMBER_INT));
 			$beginDatum = MaaltijdRepetitiesModel::getFirstOccurrence($repetitie);
 			if ($repetitie->getPeriodeInDagen() > 0) {
 				$this->view = new RepetitieMaaltijdenForm($repetitie, $beginDatum, $beginDatum); // fetches POST values itself
@@ -124,11 +123,18 @@ class BeheerMaaltijdenController extends AclController {
 		if ($mid > 0) {
 			$this->bewerk($mid);
 		} else {
-			$this->view = new MaaltijdForm($mid); // fetches POST values itself
+			//FIXME: lost original value of mrid
+			if (isset($_POST['mlt_repetitie_id'])) {
+				$mrid = (int) filter_input(INPUT_POST, 'mlt_repetitie_id', FILTER_SANITIZE_NUMBER_INT);
+			}
+			if (empty($mrid)) {
+				$mrid = null;
+			}
+			$this->view = new MaaltijdForm($mid, $mrid); // fetches POST values itself
 		}
 		if ($this->view->validate()) {
 			$values = $this->view->getValues();
-			$mrid = ($values['mlt_repetitie_id'] === 0 ? null : $values['mlt_repetitie_id']);
+			$mrid = empty($values['mlt_repetitie_id']) ? null : (int) $values['mlt_repetitie_id'];
 			$maaltijd_aanmeldingen = MaaltijdenModel::saveMaaltijd($mid, $mrid, $values['titel'], $values['aanmeld_limiet'], $values['datum'], $values['tijd'], $values['prijs'], $values['aanmeld_filter']);
 			$this->view = new BeheerMaaltijdView($maaltijd_aanmeldingen[0]);
 			if ($maaltijd_aanmeldingen[1] > 0) {

@@ -27,7 +27,7 @@ Onderstaande tabel toont alle maaltijden die niet verwijderd zijn.
 </div>
 <form action="{$smarty.const.maalcieUrl}/nieuw" method="post" class="Formulier modal SubmitReset">
 	<label for="mrid" style="width: auto;">{icon get="calendar_add"} Periodieke maaltijden aanmaken:</label>&nbsp;
-	<select name="mrid" origvalue="kies" class="FormElement SubmitChange">
+	<select id="mrid" name="mlt_repetitie_id" origvalue="kies" class="FormElement SubmitChange">
 		<option selected="selected">kies</option>
 	{foreach from=$repetities item=repetitie}
 		<option value="{$repetitie->getMaaltijdRepetitieId()}">{$repetitie->getStandaardTitel()}</option>

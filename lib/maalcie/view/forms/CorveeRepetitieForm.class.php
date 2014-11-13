@@ -48,7 +48,8 @@ class CorveeRepetitieForm extends ModalForm {
 		if ($crid !== 0) {
 			$fields['vrk']->onchange = "if (!this.checked && $(this).attr('origvalue') == 1) if (!confirm('Alle voorkeuren zullen worden verwijderd!')) this.checked = true;";
 		}
-		$fields[] = new SelectField('mlt_repetitie_id', $mrid, 'Maaltijdrepetitie', $repetitieNamen);
+		$fields['mrid'] = new SelectField('mlt_repetitie_id', $mrid, 'Maaltijdrepetitie', $repetitieNamen);
+		$fields['mrid']->empty_null = true;
 		$fields[] = new IntField('standaard_punten', $punten, 'Standaard punten', 0, 10);
 		$fields[] = new IntField('standaard_aantal', $aantal, 'Aantal corveeërs', 1, 10);
 		if ($crid !== 0) {
