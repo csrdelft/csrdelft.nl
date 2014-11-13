@@ -422,12 +422,12 @@ class ForumController extends Controller {
 			}
 		} elseif ($property === 'forum_id' OR $property === 'gedeeld_met') {
 			$value = (int) filter_input(INPUT_POST, $property, FILTER_SANITIZE_NUMBER_INT);
-			if ($value !== 0 OR $property === 'forum_id') {
+			if ($property === 'forum_id') {
 				$deel = ForumDelenModel::instance()->getForumDeel($value);
 				if (!$deel->magModereren()) {
 					$this->geentoegang();
 				}
-			} else {
+			} elseif ($value === 0) {
 				$value = null;
 			}
 		} elseif ($property === 'titel') {
