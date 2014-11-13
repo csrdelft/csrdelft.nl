@@ -66,7 +66,7 @@ class FotoAlbumView extends SmartyTemplateView {
 		$albums = $parent->getSubAlbums();
 		$dropdown = '<select onchange="location.href=this.value;">';
 		foreach ($albums as $album) {
-			$dropdown .= '<option value="' . $album->getFullUrl() . '"';
+			$dropdown .= '<option value="' . $album->getUrl() . '"';
 			if ($album->path === $subdir . $albumnaam . '/') {
 				$dropdown .= ' selected="selected"';
 			}
