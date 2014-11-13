@@ -28,15 +28,11 @@ class HTML_BBCodeParser2_Filter_Html extends HTML_BBCodeParser2_Filter {
 	 * Don't escape html
 	 *
 	 * @param array  $tag
-	 * @param string $enabled (reference) modify unmatched text or use htmlspecialchar()
+	 * @param string $enabled (reference) modify unmatched text (type 1 and 2)
 	 * @return false|string html or false for using default
 	 */
 	protected function html_html(array $tag, &$enabled) {
 		switch ($tag['type']) {
-			case 0:
-				//no htmlspecialchar()
-				$enabled = false;
-				return $tag['text'];
 			case 1:
 				$enabled = true;
 				return '';

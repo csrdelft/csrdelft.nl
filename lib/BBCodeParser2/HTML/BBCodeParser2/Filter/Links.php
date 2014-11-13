@@ -83,11 +83,16 @@ class HTML_BBCodeParser2_Filter_Links extends HTML_BBCodeParser2_Filter
 
         $schemes = implode('|', $this->_allowedSchemes);
 
+		//allow [rul], [/rul]
+		$regrul = "#".$oe."(/?)rul(.*)".$ce."#iU";
+		$replace = $o."\$1url\$2".$c;
+		$pp = preg_replace($regrul, $replace, $this->_text);
+
         $pattern = array(   "/(?<![\"'=".$ce."\/])(".$oe."[^".$ce."]*".$ce.")?(((".$schemes."):\/\/|www)[@-a-z0-9.]+\.[a-z]{2,4}[^\s()\[\]]*)/i",
                             "!".$oe."url(".$ce."|\s.*".$ce.")(.*)".$oe."/url".$ce."!iU",
                             "!".$oe."url=((([a-z]*:(//)?)|www)[@-a-z0-9.]+)([^\s\[\]]*)".$ce."(.*)".$oe."/url".$ce."!i");
 
-        $pp = preg_replace_callback($pattern[0], array($this, 'smarterPPLinkExpand'), $this->_text);
+        $pp = preg_replace_callback($pattern[0], array($this, 'smarterPPLinkExpand'), $pp);
         $pp = preg_replace($pattern[1], $o."url=\$2\$1\$2".$o."/url".$c, $pp);
         $this->_preparsed = preg_replace_callback($pattern[2], array($this, 'smarterPPLink'), $pp);
 

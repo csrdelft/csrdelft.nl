@@ -24,14 +24,14 @@ $parsed = $parser->getParsed();
 <title>HTML_BBCodeParser2 (by Stijn de Reede)</title>
 </head>
 <body>
-<form method='get' action='parser.php'>
+<form method='get' action='bbcodeparser.php'>
 <table border='1' cellpadding='5' cellspacing='0'>
 <tr><td valign='top'>
 input:<br/>
-<textarea cols='45' rows='10' name='string'><?php echo @$_GET['string']?></textarea><br/>
+<textarea cols='70' rows='20' name='string'><?php echo @$_GET['string']?></textarea><br/>
 <td valign='top'>
 ouput:<br/>
-<textarea cols='45' rows='10'><?php echo htmlentities($parsed, ENT_QUOTES)?></textarea><br/>
+<textarea cols='70' rows='20'><?php echo htmlentities($parsed, ENT_QUOTES)?></textarea><br/>
 </tr>
 <tr><td valign='top' colspan='2' align='center'>
 <input type='submit' value='          parse          '><br/>

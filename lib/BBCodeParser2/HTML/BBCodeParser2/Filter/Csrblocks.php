@@ -119,9 +119,22 @@ class HTML_BBCodeParser2_Filter_Csrblocks extends HTML_BBCodeParser2_Filter {
 				'bigfirst' 	=> '',
 				'compact' 	=> ''),
 			'plugin'    => 'Csrblocks'),
-
-
+		'citaat' => array(
+			'allowed'   => 'all',
+			'attributes'=> array('citaat' => ''),
+			'plugin'    => 'Csrblocks'),
+		'quote' => array(
+			'allowed'   => 'all',
+			'attributes'=> array('quote' => ''),
+			'plugin'    => 'Csrblocks'),
 	);
+
+	/**
+	 * Number of nested quotes
+	 *
+	 * @var int
+	 */
+	protected $quote_level = 0;
 
 	/**
 	 * Executes statements before the actual array building starts
@@ -937,7 +950,7 @@ HTML;
 				}
 				$naam = str_replace('#', '', array_pop($parts)); // replace # (foolproof)
 				$path = PICS_PATH . 'fotoalbum' . implode('/', $parts);
-				$album = FotoAlbumModel::getFotoAlbum($path);
+				$album = FotoAlbumModel::instance()->getFotoAlbum($path);
 				if (!$album) {
 					return '<div class="bb-block">Fotoalbum niet gevonden: ' . $url . '</div>';
 				}
@@ -981,7 +994,7 @@ HTML;
 				}
 
 				if ($url === 'laatste') {
-					$album = FotoAlbumModel::getMostRecentFotoAlbum();
+					$album = FotoAlbumModel::instance()->getMostRecentFotoAlbum();
 				} else {
 					//vervang url met pad
 					$url = str_ireplace(CSR_ROOT, '', $url);
@@ -994,7 +1007,7 @@ HTML;
 						$url = substr($url, 1);
 					}
 					$path .= $url;
-					$album = FotoAlbumModel::getFotoAlbum($path);
+					$album = FotoAlbumModel::instance()->getFotoAlbum($path);
 				}
 				if (!$album) {
 					return '<div class="bb-block">Fotoalbum niet gevonden: /' . $url . '</div>';
@@ -1022,5 +1035,66 @@ HTML;
 				return $fotoalbumtag->getHtml();
 		}
 		return false;
+	}
+
+	/**
+	 * Citaat, geneste citaten worden compact weergegeven
+	 *
+	 * @param array  $tag
+	 * @param string $enabled (reference) modify unmatched text or use htmlspecialchar()
+	 * @return false|string html or false for using default
+	 */
+	protected function html_citaat(array $tag, &$enabled) {
+		switch ($tag['type']) {
+			case 1:
+				$arguments = $tag['attributes'];
+				if (isset($arguments[$tag['tag']])) {
+					$van = trim($arguments[$tag['tag']]);
+					$van = trim(str_replace('_', ' ', $van)); //backward compatible
+				} else {
+					$van = '';
+				}
+
+				$spreker = '';
+				$lid = Lid::naamLink($van, 'user', 'visitekaartje');
+				if ($lid !== false) {
+					$spreker = ' van ' . $lid;
+				} elseif ($van !== '') {
+					if (isset($arguments['url']) AND url_like($arguments['url'])) {
+						$spreker = ' van ' . internal_url($arguments['url'], $van);
+					} else {
+						$spreker = ' van ' . $van;
+					}
+				}
+
+				$this->quote_level++;
+
+				$html = '<div class="citaatContainer">Citaat' . $spreker . ':';
+				$html .= '<div class="citaat">';
+				if($this->quote_level > 1) {
+					$html .= '<div onclick="$(this).children(\'.citaatpuntjes\').slideUp();$(this).children(\'.meercitaat\').slideDown();">'
+						   . '<div class="meercitaat verborgen">';
+				}
+				return $html;
+			case 2:
+				$html = '';
+				if($this->quote_level > 1) {
+					$html .=  '</div>'
+							. '<div class="citaatpuntjes" title="Toon citaat">...</div>'
+							. '</div>';
+				}
+				$html .= '</div></div>';
+
+				$this->quote_level--;
+				return $html;
+		}
+		return false;
+	}
+
+	/**
+	 * quote = citaat
+	 */
+	protected function html_quote(array $tag, &$enabled) {
+		$this->html_citaat($tag, $enabled);
 	}
 }

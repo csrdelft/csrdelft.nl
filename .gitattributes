@@ -410,6 +410,7 @@ htdocs/tools/alphabanner/tegel_in.jpg -text
 htdocs/tools/alphabanner/tegel_leeg.jpg -text
 htdocs/tools/alphabanner/tegel_start.jpg -text
 htdocs/tools/bbcode.php -text
+htdocs/tools/bbcodeparser.php -text
 htdocs/tools/css.php -text
 htdocs/tools/dragobject.php -text
 htdocs/tools/dump.php -text
@@ -422,7 +423,6 @@ htdocs/tools/ledenkaart.php -text
 htdocs/tools/memcachestats.php -text
 htdocs/tools/naamlink.php -text
 htdocs/tools/naamsuggesties.php -text
-htdocs/tools/parser.php -text
 htdocs/tools/pasfotos.php -text
 htdocs/tools/peilingbeheer.php -text
 htdocs/tools/phpinfo.php -text

@@ -90,10 +90,10 @@ class CsrBB extends eamBBParser {
 			}
 		}
 		if (isset($arguments['w']) AND $arguments['w'] > 10) {
-			$style = 'width: ' . ((int) $arguments['w']) . 'px;';
+			$style .= 'width: ' . ((int) $arguments['w']) . 'px; ';
 		}
 		if (isset($arguments['h']) AND $arguments['h'] > 10) {
-			$style = 'height: ' . ((int) $arguments['h']) . 'px;';
+			$style .= 'height: ' . ((int) $arguments['h']) . 'px;';
 		}
 		$content = $this->parseArray(array('[/img]', '[/IMG]'), array());
 		// only valid patterns & prevent CSRF

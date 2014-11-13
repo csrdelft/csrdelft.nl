@@ -124,7 +124,8 @@ class HTML_BBCodeParser2 {
         'open'          => '[',
         'close'         => ']',
         'xmlclose'      => true,
-        'filters'       => 'Basic'
+        'filters'       => 'Basic',
+		'allowhtml'		=> false
     );
 
     /**
@@ -134,8 +135,19 @@ class HTML_BBCodeParser2 {
      */
     private $_filters       = array();
 
-
+	/**
+	 * List of plugins with open tags, which will modify the unmatched text between their tags
+	 *
+	 * @var array
+	 */
 	private $_pluginsModifyingText = array();
+
+	/**
+	 * string pluginname that disabled html output or null if html output is enabled
+	 *
+	 * @var bool|string
+	 */
+	private $_outputDisabledBy = null;
 
 	/**
 	 * Constructor, initialises the options and filters
@@ -299,7 +311,6 @@ class HTML_BBCodeParser2 {
             $filter->_preparse();
             $this->_preparsed = $filter->getPreparsed();
         }
-//		echo 'PREPARSED:'; print_r($this->_preparsed); echo 'BB';
     }
 
     /**
@@ -691,8 +702,11 @@ class HTML_BBCodeParser2 {
 	private function _buildParsedString() {
         $this->_parsed = '';
         foreach ($this->_tagArray as $tag) {
-			print_r($tag);
-//
+
+			if(!$this->isOutputEnabled($tag)) {
+				//html output is disabled by a plugin
+				continue;
+			}
 
 			switch ($tag['type']) {
 
@@ -703,17 +717,15 @@ class HTML_BBCodeParser2 {
 				//     'type' => 1
 			    // )
 
-				$enable_hsc = true;
+				//if between html tags don't escape html
+				if(!$this->isHtmlAllowed()) {
+					$tag['text'] = htmlspecialchars($tag['text']);
+				}
 
 				//plugins which modify the plain text
 				foreach($this->_pluginsModifyingText as $tagname) {
 					$tag['tag'] = $tagname;
-					$tag['text'] = $this->renderPlugin($tag, $enable_hsc);
-				}
-
-				//escape html
-				if($enable_hsc) {
-					$tag['text'] = htmlspecialchars($tag['text']);
+					$tag['text'] = $this->renderPlugin($tag, $enable);
 				}
 
 				$this->_parsed .= $tag['text'];
@@ -733,12 +745,16 @@ class HTML_BBCodeParser2 {
 
 				//let plugin parse
 				if(isset($definedTag['plugin'])) {
-					$enable_modtext = false;
-					$this->_parsed .= $this->renderPlugin($tag, $enable_modtext);
+					$enabled = false;
+					$this->_parsed .= $this->renderPlugin($tag, $enabled);
 
-					//start modifying unmatched text
-					if($enable_modtext) {
-						$this->addTextModifyingPlugin($tag);
+					//start modifying unmatched text by this plugin
+					if($enabled === true) {
+						$this->addTextModifyingPlugin($tag['tag']);
+					}
+					//disable output between these tags
+					if($enabled === 'disable_output') {
+						$this->disableOutput($tag['tag']);
 					}
 					continue;
 				}
@@ -765,12 +781,16 @@ class HTML_BBCodeParser2 {
 
 				//let plugin parse
 				if(isset($this->_definedTags[$tag['tag']]['plugin'])) {
-					$enable = true;
-					$this->_parsed .= $this->renderPlugin($tag, $enable);
+					$enabled = true;
+					$this->_parsed .= $this->renderPlugin($tag, $enabled);
 
-					//finish modifying unmatched text
-					if ($enable === false) {
-						$this->removeTextModifyingPlugin($tag);
+					//finish modifying unmatched text by this plugin
+					if ($enabled === false) {
+						$this->removeTextModifyingPlugin($tag['tag']);
+					}
+					//enable output again after this close tag
+					if($enabled === 'enable_output') {
+						$this->enableOutput($tag['tag']);
 					}
 					continue;
 				}
@@ -963,6 +983,66 @@ class HTML_BBCodeParser2 {
 		}
 	}
 
+	/**
+	 * @param string $tag
+	 * @throws Exception
+	 */
+	private function disableOutput($tag) {
+		if($this->_outputDisabledBy !== null) {
+			throw new Exception('Html Output is al uitgeschakeld door een andere plugin');
+		}
+		$this->_outputDisabledBy = $tag;
+	}
+
+	/**
+	 * @param string $tag
+	 * @throws Exception
+	 */
+	private function enableOutput($tag) {
+		if($tag !== $this->_outputDisabledBy) {
+			throw new Exception('Html Output is uitgeschakeld door een andere plugin');
+		}
+		$this->_outputDisabledBy = null;
+	}
+
+	/**
+	 * @param $tag
+	 * @return bool
+	 */
+	private function isOutputEnabled($tag)	{
+		//if enabled no pluginname is set
+		if($this->_outputDisabledBy === null) {
+			return true;
+		}
+
+		//unmatched text has no name, so disable
+		if(!isset($tag['tag'])) {
+			return false;
+		}
+
+		//only the blocking plugin may pass
+		if($this->_outputDisabledBy == $tag['tag']) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	/**
+	 * Is Html allowed at the moment (during html building)
+	 * @see _buildParsedString
+	 *
+	 * @return bool
+	 */
+	private function isHtmlAllowed() {
+		//allowed by general option
+		if($this->_options['allowhtml']) {
+			return true;
+		}
+
+		//are we between [html]..[/html] tags
+		return in_array('html', $this->_pluginsModifyingText);
+	}
 
 
 }

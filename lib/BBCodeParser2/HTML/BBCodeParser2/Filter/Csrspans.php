@@ -46,7 +46,7 @@ class HTML_BBCodeParser2_Filter_Csrspans extends HTML_BBCodeParser2_Filter {
 			'allowed'   => 'all',
 			'attributes'=> array()),
 		's' => array(
-			'htmlopen'  => 'span class="doorgestreept',
+			'htmlopen'  => 'span class="doorgestreept"',
 			'htmlclose' => 'span',
 			'allowed'   => 'all',
 			'attributes'=> array()),
@@ -75,7 +75,7 @@ class HTML_BBCodeParser2_Filter_Csrspans extends HTML_BBCodeParser2_Filter {
 			'attributes'=> array(),
 			'plugin'    => 'Csrspans'),
 
-		'1337' => array(
+		'l337' => array(
 			'allowed'   => 'all',
 			'attributes'=> array(),
 			'plugin'    => 'Csrspans'),
@@ -97,7 +97,31 @@ class HTML_BBCodeParser2_Filter_Csrspans extends HTML_BBCodeParser2_Filter {
 			'htmlclose' => 'div',
 			'allowed'   => 'all',
 			'attributes'=> array()),
+
+		'reldate' => array(
+			'allowed'   => 'none',
+			'attributes'=> array(),
+			'plugin'    => 'Csrspans'),
+		'neuzen' => array(
+			'allowed'   => 'all',
+			'attributes'=> array(),
+			'plugin'    => 'Csrspans'),
+		'instelling' => array(
+			'allowed'   => 'all',
+			'attributes'=> array(),
+			'plugin'    => 'Csrspans'),
+		'prive' => array(
+			'allowed'   => 'all',
+			'attributes'=> array(),
+			'plugin'    => 'Csrspans'),
 	);
+
+	/**
+	 * [instelling] en [prive] kunnen output uitzetten
+	 *
+	 * @var bool
+	 */
+	protected $outputdisabled = false;
 
 	/**
 	 * Deletes unmatched text
@@ -128,7 +152,7 @@ class HTML_BBCodeParser2_Filter_Csrspans extends HTML_BBCodeParser2_Filter {
 	 * @param string $enabled (reference) modify unmatched text or use htmlspecialchar()
 	 * @return false|string html or false for using default
 	 */
-	protected function html_1337(array $tag, &$enabled) {
+	protected function html_l337(array $tag, &$enabled) {
 		switch ($tag['type']) {
 			case 0:
 				$html = str_replace('er ', '0r ', $tag['text']);
@@ -148,23 +172,139 @@ class HTML_BBCodeParser2_Filter_Csrspans extends HTML_BBCodeParser2_Filter {
 
 	/**
 	 * Geef de relatieve datum terug.
+	 *
+	 * @param array  $tag
+	 * @param string $enabled (reference) modify unmatched text or use htmlspecialchar()
+	 * @return false|string html or false for using default
 	 */
-	function bb_reldate($arguments = array()) {
-		$content = $this->parseArray(array('[/reldate]'), array());
-		return '<span title="' . htmlspecialchars($content) . '">' . reldate($content) . '</span>';
+	protected function html_reldate(array $tag, &$enabled) {
+		switch ($tag['type']) {
+			case 1:
+				if (isset($tag['attributes']['reldate'])) {
+					$content = trim($tag['attributes']['reldate']);
+				} else {
+					$content = '';
+				}
+
+				return '<span title="' . htmlspecialchars($content) . '">' . reldate($content) . '</span>';
+		}
+		return false;
 	}
 
-	function bb_neuzen($arguments = array()) {
-		if (is_array($arguments)) {
-			$content = $this->parseArray(array('[/neuzen]'), array());
-		} else {
-			$content = $arguments;
+	/**
+	 * Vervang neuzen in tekst
+	 *
+	 * @param array  $tag
+	 * @param string $enabled (reference) modify unmatched text or use htmlspecialchar()
+	 * @return false|string html or false for using default
+	 */
+	protected function html_neuzen(array $tag, &$enabled) {
+		switch ($tag['type']) {
+			case 0:
+				$content = $tag['text'];
+
+				if (LidInstellingen::get('layout', 'neuzen') != 'nee') {
+					$neus = '<img src="' . CSR_PICS . '/famfamfam/bullet_red.png" alt="o" class="neus2013" />';
+					$content = str_replace('o', $neus, $content);
+				}
+				return $content;
+			case 1:
+				$enabled = true;
+				return '';
+			case 2:
+				$enabled = false;
+				return '';
 		}
-		if (LidInstellingen::get('layout', 'neuzen') != 'nee') {
-			$neus = '<img src="' . CSR_PICS . '/famfamfam/bullet_red.png" alt="o" class="neus2013">';
-			$content = str_replace('o', $neus, $content);
+		return false;
+	}
+
+
+	/**
+	 * Toont content als instelling een bepaalde waarde heeft,
+	 * standaard 'ja';
+	 *
+	 * [instelling=maaltijdblokje module=voorpagina][maaltijd=next][/instelling]
+	 *
+	 * @param array  $tag
+	 * @param string $enabled (reference) modify unmatched text or use htmlspecialchar()
+	 * @return false|string html or false for using default
+	 */
+	protected function html_instelling(array $tag, &$enabled) {
+		switch ($tag['type']) {
+			case 1:
+				$arguments = $tag['attributes'];
+
+				if (isset($arguments['instelling'])) {
+					$arguments['instelling'] = trim($arguments['instelling']);
+				} else {
+					return 'Geen of een niet bestaande instelling opgegeven: ' . htmlspecialchars($arguments['instelling']);
+				}
+
+				if (!isset($arguments['module'])) { // backwards compatibility
+					$key = explode('_', $arguments['instelling'], 2);
+					$arguments['module'] = $key[0];
+					$arguments['instelling'] = $key[1];
+				}
+
+				$testwaarde = 'ja';
+				if (isset($arguments['waarde'])) {
+					$testwaarde = $arguments['waarde'];
+				}
+
+				try {
+					if (LidInstellingen::get($arguments['module'], $arguments['instelling']) == $testwaarde) {
+						$enabled = 'disable_output';
+						$this->outputdisabled = true;
+					}
+					return '';
+				} catch (Exception $e) {
+					return '[instelling]: ' . $e->getMessage();
+				}
+
+			case 2:
+				if($this->outputdisabled) {
+					$enabled = 'enable_output';
+					$this->outputdisabled = false;
+				}
+
+				return '';
 		}
-		return $content;
+		return false;
+	}
+
+	/**
+	 * Tekst binnen de privé-tag wordt enkel weergegeven voor leden met
+	 * (standaard) P_LOGGED_IN. Een andere permissie kan worden meegegeven.
+	 *
+	 * @param array  $tag
+	 * @param string $enabled (reference) modify unmatched text or use htmlspecialchar()
+	 * @return false|string html or false for using default
+	 */
+	protected function html_prive(array $tag, &$enabled) {
+		switch ($tag['type']) {
+			case 1:
+				if (isset($tag['attributes']['prive'])) {
+					$permissie = trim($tag['attributes']['prive']);
+				} else {
+					$permissie = 'P_LOGGED_IN';
+				}
+
+				$forbidden = !LoginModel::mag($permissie);
+
+				if($forbidden) {
+					$enabled = 'disable_output';
+					$this->outputdisabled = true;
+				}
+				return '';
+
+			case 2:
+				if($this->outputdisabled) {
+					$enabled = 'enable_output';
+					$this->outputdisabled = false;
+				}
+				return '';
+		}
+		return false;
 	}
 
 	/**
@@ -177,8 +317,10 @@ class HTML_BBCodeParser2_Filter_Csrspans extends HTML_BBCodeParser2_Filter {
 		$oe = $options['open_esc'];
 		$ce = $options['close_esc'];
 
-		$pattern = array(	"#".$oe."hr".$ce."(?!".$oe."/hr".$ce.")#Ui"); 	// [hr] zonder [/hr] erachter
-		$replace = array(   $o."hr".$c.$o."/hr".$c);                        // [hr][/hr]
+		$pattern = array(	"#".$oe."hr".$ce."(?!".$oe."/hr".$ce.")#Ui",   	// [hr] zonder [/hr] erachter
+							"#".$oe."(/?)1337".$ce."#U");                   // [/?1337] no both case match
+		$replace = array(   $o."hr".$c.$o."/hr".$c,                         // [hr][/hr]
+							$o."\$1l337".$c);                               // [/?l337]
 		$this->_preparsed = preg_replace($pattern, $replace, $this->_text);
 	}
 

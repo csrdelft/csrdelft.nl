@@ -36,15 +36,18 @@ class HTML_BBCodeParser2_Filter_Images extends HTML_BBCodeParser2_Filter {
     */
     protected $_definedTags = array(
         'img' => array(
-            'htmlopen'  => 'img',
-            'htmlclose' => '',
+//            'htmlopen'  => 'img',
+//            'htmlclose' => '',
             'allowed'   => 'none',
             'attributes'=> array(
                 'img'   => ' src=%2$s%1$s%2$s',
                 'w'     => ' width=%2$s%1$d%2$s',
                 'h'     => ' height=%2$s%1$d%2$s',
                 'alt'   => ' alt=%2$s%1$s%2$s',
-            )
+				'class' => '',
+				'float' => ''
+            ),
+			'plugin' => 'Images'
         )
     );
 
@@ -72,5 +75,61 @@ class HTML_BBCodeParser2_Filter_Images extends HTML_BBCodeParser2_Filter {
 		$pattern = "!".$oe."img(\s?.*)".$ce."(.*)".$oe."/img".$ce."!Ui";
 		$replace = $o."img=\"\$2\" alt=\"\"\$1".$c.$o."/img".$c;
         $this->_preparsed = preg_replace($pattern, $replace, $this->_text);
+	}
+
+	/**
+	 *
+	 * @param array  $tag
+	 * @param string $enabled (reference) modify unmatched text or use htmlspecialchar()
+	 * @return false|string html or false for using default
+	 */
+	protected function html_img(array $tag, &$enabled) {
+
+		switch ($tag['type']) {
+			case 1:
+				$arguments = $tag['attributes'];
+				$style = '';
+				$class = '';
+
+				if (isset($arguments['img'])) {
+					$url = trim($arguments['img']);
+				} else {
+					$url = '';
+				}
+				if (isset($arguments['class'])) {
+					$class .= htmlspecialchars($arguments['class']);
+				}
+				if (isset($arguments['float'])) {
+					switch ($arguments['float']) {
+						case 'left':
+							$class .= ' float-left';
+							break;
+						case 'right':
+							$class .= ' float-right';
+							break;
+					}
+				}
+				if (isset($arguments['w']) AND $arguments['w'] > 10) {
+					$style .= 'width: ' . ((int)$arguments['w']) . 'px; ';
+				}
+				if (isset($arguments['h']) AND $arguments['h'] > 10) {
+					$style .= 'height: ' . ((int)$arguments['h']) . 'px;';
+				}
+
+				// only valid patterns & prevent CSRF
+				if (!url_like(urldecode($url)) OR startsWith($url, CSR_ROOT)) {
+					return '[img: Ongeldige URL, tip: gebruik tinyurl.com]';
+				}
+				// als de html toegestaan is hebben we genoeg vertrouwen om sommige karakters niet te encoderen
+//				if (!$this->allow_html) {             //todo afhankelijk maken van Html filter??
+					$url = htmlspecialchars($url);
+//				}
+				// lazy loading van externe images bijv. op het forum
+				if (!startsWith($url, CSR_PICS) OR startsWith($url, CSR_PICS . '/fotoalbum/')) {
+					return '<div class="bb-img-loading" src="' . $url . '" title="' . htmlspecialchars($url) . '" style="' . $style . '"></div>';
+				}
+				return '<img class="bb-img ' . $class . '" src="' . $url . '" alt="' . $url . '" style="' . $style . '" />';
+		}
+		return false;
 	}
 }
