@@ -90,7 +90,7 @@ class Lid implements Serializable, Agendeerbaar {
 	}
 
 	public function generateRssToken() {
-		$token = substr(md5($this->uid . getDateTime()), 0, 25);
+		$token = VerifyModel::rand(50);
 		$query = "UPDATE lid SET rssToken='" . $token . "' WHERE uid='" . $this->uid . "' LIMIT 1;";
 		if (MijnSqli::instance()->query($query)) {
 			LidCache::flushLid($this->uid);

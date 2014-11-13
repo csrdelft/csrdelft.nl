@@ -63,7 +63,7 @@ class VerifyModel extends PersistenceModel {
 		$token = new OneTimeToken();
 		$token->uid = $uid;
 		$token->url = $url;
-		$token->token = $this->getToken(255);
+		$token->token = self::rand(150);
 		$token->verified = false;
 		$token->expire = getDateTime($expire);
 	}
@@ -71,18 +71,18 @@ class VerifyModel extends PersistenceModel {
 	/**
 	 * @source http://stackoverflow.com/a/13733588
 	 */
-	private function getToken($length) {
+	public static function rand($length) {
 		$token = '';
 		$codeAlphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
 		$codeAlphabet.= 'abcdefghijklmnopqrstuvwxyz';
 		$codeAlphabet.= '0123456789';
 		for ($i = 0; $i < $length; $i++) {
-			$token .= $codeAlphabet[$this->crypto_rand_secure(0, strlen($codeAlphabet))];
+			$token .= $codeAlphabet[self::crypto_rand_secure(0, strlen($codeAlphabet))];
 		}
 		return $token;
 	}
 
-	private function crypto_rand_secure($min, $max) {
+	private static function crypto_rand_secure($min, $max) {
 		$range = $max - $min;
 		if ($range < 0) {
 			return $min; // not so random...
