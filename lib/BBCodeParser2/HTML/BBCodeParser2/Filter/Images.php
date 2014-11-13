@@ -23,7 +23,6 @@
 * @package  HTML_BBCodeParser
 * @author   Stijn de Reede  <sjr@gmx.co.uk>
 */
-require_once 'HTML/BBCodeParser2/Filter.php';
 
 /**
  * Filter for image tag
@@ -41,10 +40,10 @@ class HTML_BBCodeParser2_Filter_Images extends HTML_BBCodeParser2_Filter {
             'htmlclose' => '',
             'allowed'   => 'none',
             'attributes'=> array(
-                'img'   => 'src=%2$s%1$s%2$s',
-                'w'     => 'width=%2$s%1$d%2$s',
-                'h'     => 'height=%2$s%1$d%2$s',
-                'alt'   => 'alt=%2$s%1$s%2$s',
+                'img'   => ' src=%2$s%1$s%2$s',
+                'w'     => ' width=%2$s%1$d%2$s',
+                'h'     => ' height=%2$s%1$d%2$s',
+                'alt'   => ' alt=%2$s%1$s%2$s',
             )
         )
     );
@@ -64,14 +63,14 @@ class HTML_BBCodeParser2_Filter_Images extends HTML_BBCodeParser2_Filter {
     * @author   Stijn de Reede  <sjr@gmx.co.uk>
     */
     protected function _preparse() {
-        $options = $this->_options;
+		$options = $this->_options;
         $o  = $options['open'];
         $c  = $options['close'];
         $oe = $options['open_esc'];
         $ce = $options['close_esc'];
-        $this->_preparsed = preg_replace(
-			"!".$oe."img(\s?.*)".$ce."(.*)".$oe."/img".$ce."!Ui",
-			$o."img=\"\$2\" alt=\"\"\$1".$c.$o."/img".$c,
-                        $this->_text);
-    }
+
+		$pattern = "!".$oe."img(\s?.*)".$ce."(.*)".$oe."/img".$ce."!Ui";
+		$replace = $o."img=\"\$2\" alt=\"\"\$1".$c.$o."/img".$c;
+        $this->_preparsed = preg_replace($pattern, $replace, $this->_text);
+	}
 }

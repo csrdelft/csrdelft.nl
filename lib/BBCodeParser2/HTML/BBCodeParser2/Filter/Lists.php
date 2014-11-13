@@ -25,7 +25,6 @@
 * @author   Stijn de Reede  <sjr@gmx.co.uk>
 */
 
-require_once 'HTML/BBCodeParser2/Filter.php';
 
 /**
  * Filter for listing tags
@@ -43,13 +42,13 @@ class HTML_BBCodeParser2_Filter_Lists extends HTML_BBCodeParser2_Filter
                                                     'htmlclose' => 'ol',
                                                     'allowed'   => 'all',
                                                     'child'     => 'none^li',
-                                                    'attributes'=> array('list'  => 'style=%2$slist-style-type:%1$s;%2$s')
+                                                    'attributes'=> array('list'  => ' style=%2$slist-style-type:%1$s;%2$s')
                                                     ),
                                 'ulist' => array(   'htmlopen'  => 'ul',
                                                     'htmlclose' => 'ul',
                                                     'allowed'   => 'all',
                                                     'child'     => 'none^li',
-                                                    'attributes'=> array('list'  => 'style=%2$slist-style-type:%1$s;%2$s')
+                                                    'attributes'=> array('list'  => ' style=%2$slist-style-type:%1$s;%2$s')
                                                     ),
                                 'li'    => array(   'htmlopen'  => 'li',
                                                     'htmlclose' => 'li',

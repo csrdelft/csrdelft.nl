@@ -1,5 +1,5 @@
 <?php
-require_once 'HTML/BBCodeParser2.php';
+require_once 'BBCodeParser2/HTML/BBCodeParser2.php';
 
 /**
 *   Dummy class that filters need to extend from.

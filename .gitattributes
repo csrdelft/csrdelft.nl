@@ -390,6 +390,7 @@ htdocs/onderhoud.html -text
 htdocs/robots.txt -text
 htdocs/testform.php -text
 htdocs/tools/.htaccess -text
+htdocs/tools/BBCodeParser2.ini -text
 htdocs/tools/alphabanner/alphabanner.php -text
 htdocs/tools/alphabanner/gebedsgenezingreclametegeltje.jpg -text
 htdocs/tools/alphabanner/tegel_0.jpg -text
@@ -421,6 +422,7 @@ htdocs/tools/ledenkaart.php -text
 htdocs/tools/memcachestats.php -text
 htdocs/tools/naamlink.php -text
 htdocs/tools/naamsuggesties.php -text
+htdocs/tools/parser.php -text
 htdocs/tools/pasfotos.php -text
 htdocs/tools/peilingbeheer.php -text
 htdocs/tools/phpinfo.php -text
@@ -3346,11 +3348,17 @@ images/robots.txt -text
 lib/BBCodeParser2/HTML/BBCodeParser2.php -text
 lib/BBCodeParser2/HTML/BBCodeParser2/Filter.php -text
 lib/BBCodeParser2/HTML/BBCodeParser2/Filter/Basic.php -text
+lib/BBCodeParser2/HTML/BBCodeParser2/Filter/Bbcodeoff.php -text
+lib/BBCodeParser2/HTML/BBCodeParser2/Filter/Csrblocks.php -text
+lib/BBCodeParser2/HTML/BBCodeParser2/Filter/Csrspans.php -text
+lib/BBCodeParser2/HTML/BBCodeParser2/Filter/Div.php -text
 lib/BBCodeParser2/HTML/BBCodeParser2/Filter/Email.php -text
 lib/BBCodeParser2/HTML/BBCodeParser2/Filter/Extended.php -text
+lib/BBCodeParser2/HTML/BBCodeParser2/Filter/Html.php -text
 lib/BBCodeParser2/HTML/BBCodeParser2/Filter/Images.php -text
 lib/BBCodeParser2/HTML/BBCodeParser2/Filter/Links.php -text
 lib/BBCodeParser2/HTML/BBCodeParser2/Filter/Lists.php -text
+lib/BBCodeParser2/HTML/BBCodeParser2/Filter/Table.php -text
 lib/BBCodeParser2/README -text
 lib/BBCodeParser2/TODO -text
 lib/BBCodeParser2/composer.json -text
@@ -3358,6 +3366,7 @@ lib/BBCodeParser2/example/BBCodeParser2.ini -text
 lib/BBCodeParser2/example/parser.php -text
 lib/BBCodeParser2/package.xml -text
 lib/BBCodeParser2/tests/HTML_BBCodeParser2Test.php -text
+lib/BBCodeParser2/tests/HTML_BBCodeParser2_CSR_Test.php -text
 lib/MVC/Stek[!!-~]ERD.png -text
 lib/MVC/controller/AclController.abstract.php -text
 lib/MVC/controller/AgendaController.class.php -text

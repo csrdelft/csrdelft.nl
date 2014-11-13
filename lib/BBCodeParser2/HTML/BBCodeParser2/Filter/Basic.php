@@ -25,8 +25,6 @@
 */
 
 
-require_once 'HTML/BBCodeParser2/Filter.php';
-
 
 /**
  * Filter for basic formatting
@@ -39,22 +37,22 @@ class HTML_BBCodeParser2_Filter_Basic extends HTML_BBCodeParser2_Filter {
     * @var      array
     */
 	protected $_definedTags = array(
-								'b' => array(   'htmlopen'  => 'strong',
-                                                'htmlclose' => 'strong',
-                                                'allowed'   => 'all',
-                                                'attributes'=> array()),
-                                'i' => array(   'htmlopen'  => 'em',
-                                                'htmlclose' => 'em',
-                                                'allowed'   => 'all',
-                                                'attributes'=> array()),
-                                'u' => array(   'htmlopen'  => 'span style="text-decoration:underline;"',
-                                                'htmlclose' => 'span',
-                                                'allowed'   => 'all',
-                                                'attributes'=> array()),
-                                's' => array(   'htmlopen'  => 'del',
-                                                'htmlclose' => 'del',
-                                                'allowed'   => 'all',
-                                                'attributes'=> array()),
+//								'b' => array(   'htmlopen'  => 'strong',
+//                                                'htmlclose' => 'strong',
+//                                                'allowed'   => 'all',
+//                                                'attributes'=> array()),
+//                                'i' => array(   'htmlopen'  => 'em',
+//                                                'htmlclose' => 'em',
+//                                                'allowed'   => 'all',
+//                                                'attributes'=> array()),
+//                                'u' => array(   'htmlopen'  => 'span style="text-decoration:underline;"',
+//                                                'htmlclose' => 'span',
+//                                                'allowed'   => 'all',
+//                                                'attributes'=> array()),
+//                                's' => array(   'htmlopen'  => 'del',
+//                                                'htmlclose' => 'del',
+//                                                'allowed'   => 'all',
+//                                                'attributes'=> array()),
                                 'sub' => array( 'htmlopen'  => 'sub',
                                                 'htmlclose' => 'sub',
                                                 'allowed'   => 'all',

@@ -19,6 +19,8 @@
 // $Id$
 //
 
+require_once 'BBCodeParser2/HTML/BBCodeParser2/Filter.php';
+
 /**
 * @package  HTML_BBCodeParser2
 * @author   Stijn de Reede  <sjr@gmx.co.uk>
@@ -132,6 +134,9 @@ class HTML_BBCodeParser2 {
      */
     private $_filters       = array();
 
+
+	private $_pluginsModifyingText = array();
+
 	/**
 	 * Constructor, initialises the options and filters
 	 *
@@ -201,7 +206,7 @@ class HTML_BBCodeParser2 {
         $filter = ucfirst($filter);
         if (!array_key_exists($filter, $this->_filters)) {
             $class = 'HTML_BBCodeParser2_Filter_'.$filter;
-            @include_once 'HTML/BBCodeParser2/Filter/'.$filter.'.php';
+            @include_once 'BBCodeParser2/HTML/BBCodeParser2/Filter/'.$filter.'.php';
             if (!class_exists($class)) {
                 throw new InvalidArgumentException("Failed to load filter $filter");
             }
@@ -294,6 +299,7 @@ class HTML_BBCodeParser2 {
             $filter->_preparse();
             $this->_preparsed = $filter->getPreparsed();
         }
+//		echo 'PREPARSED:'; print_r($this->_preparsed); echo 'BB';
     }
 
     /**
@@ -421,11 +427,14 @@ class HTML_BBCodeParser2 {
             // tnx to Onno for the regex
             // validate the arguments
             $attributeArray = array();
-            $regex = "![\s$oe]([a-z0-9]+)=(\"[^\s$ce]+\"|[^\s$ce]";
+            $regex = "![\s$oe]([a-z0-9]+)=(\"[^\s$ce]+\"|";
             if ($tag['tag'] != 'url') {
-                $regex .= "[^=]";
-            }
-            $regex .= "+)(?=[\s$ce])!i";
+                $regex .= "[^\s$ce][^=$ce]*";
+            } else {
+				$regex .= "[^\s$ce]+";
+			}
+            $regex .= ")(?=[\s$ce])!i";
+
             preg_match_all($regex, $str, $attributeArray, PREG_SET_ORDER);
             foreach ($attributeArray as $attribute) {
                 $attNam = strtolower($attribute[1]);
@@ -682,42 +691,64 @@ class HTML_BBCodeParser2 {
 	private function _buildParsedString() {
         $this->_parsed = '';
         foreach ($this->_tagArray as $tag) {
-			if(isset($this->_definedTags[$tag['tag']]['plugin'])) {
-
-
-
-				continue;
-			}
+			print_r($tag);
+//
 
 			switch ($tag['type']) {
 
             // just text
             case 0:
-                $this->_parsed .= $tag['text'];
+				// $tag = array(
+				//     'text' => 'unmatched text'
+				//     'type' => 1
+			    // )
+
+				$enable_hsc = true;
+
+				//plugins which modify the plain text
+				foreach($this->_pluginsModifyingText as $tagname) {
+					$tag['tag'] = $tagname;
+					$tag['text'] = $this->renderPlugin($tag, $enable_hsc);
+				}
+
+				//escape html
+				if($enable_hsc) {
+					$tag['text'] = htmlspecialchars($tag['text']);
+				}
+
+				$this->_parsed .= $tag['text'];
                 break;
 
             // opening tag
             case 1:
-                $this->_parsed .= '<'.$this->_definedTags[$tag['tag']]['htmlopen'];
-				$q = '"';
-                if ($this->_options['quotestyle'] == 'single') $q = "'";
-                if ($this->_options['quotestyle'] == 'double') $q = '"';
-                foreach ($tag['attributes'] as $a => $v) {
-                    //prevent XSS attacks. IMHO this is not enough, though...
-                    //@see http://pear.php.net/bugs/bug.php?id=5609
-                    $v = preg_replace('#(script|about|applet|activex|chrome):#is', "\\1&#058;", $v);
-                    $v = htmlspecialchars($v);
-                    $v = str_replace('&amp;amp;', '&amp;', $v);
+				// $tag = array(
+				//     'text' => '[tag=etc etc]'
+				//     'type' => 1
+				//     'tag'  => 'tag'
+				//     'attributes' => Array(
+				//		    'key' => 'value'
+				//		))
 
-                    if (($this->_options['quotewhat'] == 'nothing') ||
-                        (($this->_options['quotewhat'] == 'strings') && is_numeric($v))
-                    ) {
-                        $this->_parsed .= ' '.sprintf($this->_definedTags[$tag['tag']]['attributes'][$a], $v, '');
-                    } else {
-                        $this->_parsed .= ' '.sprintf($this->_definedTags[$tag['tag']]['attributes'][$a], $v, $q);
-                    }
-                }
-                if ($this->_definedTags[$tag['tag']]['htmlclose'] == '' && $this->_options['xmlclose']) {
+				$definedTag = $this->_definedTags[$tag['tag']];
+
+				//let plugin parse
+				if(isset($definedTag['plugin'])) {
+					$enable_modtext = false;
+					$this->_parsed .= $this->renderPlugin($tag, $enable_modtext);
+
+					//start modifying unmatched text
+					if($enable_modtext) {
+						$this->addTextModifyingPlugin($tag);
+					}
+					continue;
+				}
+
+				$this->_parsed .= '<'.$definedTag['htmlopen'];
+				$this->_parsed .= $this->buildAttributes($tag);
+				if(isset($definedTag['htmlopen_postfix'])) {
+					$this->_parsed .= $definedTag['htmlopen_postfix'];
+				}
+                if ($definedTag['htmlclose'] == '' && $this->_options['xmlclose']) {
                     $this->_parsed .= ' /';
                 }
                 $this->_parsed .= '>';
@@ -725,6 +756,25 @@ class HTML_BBCodeParser2 {
 
             // closing tag
             case 2:
+				// $tag = array(
+				//     'text' => [/tag]
+    			//     'type' => 2
+				//     'tag' => 'tag'
+    			//     'attributes' => array()
+				// )
+
+				//let plugin parse
+				if(isset($this->_definedTags[$tag['tag']]['plugin'])) {
+					$enable = true;
+					$this->_parsed .= $this->renderPlugin($tag, $enable);
+
+					//finish modifying unmatched text
+					if ($enable === false) {
+						$this->removeTextModifyingPlugin($tag);
+					}
+					continue;
+				}
+
                 if ($this->_definedTags[$tag['tag']]['htmlclose'] != '') {
                     $this->_parsed .= '</'.$this->_definedTags[$tag['tag']]['htmlclose'].'>';
                 }
@@ -732,6 +782,37 @@ class HTML_BBCodeParser2 {
             }
         }
     }
+
+	/**
+	 * Build attributes included escaping
+	 *
+	 * @param array $tag
+	 * @return string
+	 */
+	private function buildAttributes($tag) {
+		//quote style
+		$q = '"';
+		if ($this->_options['quotestyle'] == 'single') $q = "'";
+		if ($this->_options['quotestyle'] == 'double') $q = '"';
+
+		$str = '';
+		foreach ($tag['attributes'] as $a => $v) {
+			//prevent XSS attacks. IMHO this is not enough, though...
+			//@see http://pear.php.net/bugs/bug.php?id=5609
+			$v = preg_replace('#(script|about|applet|activex|chrome):#is', "\\1&#058;", $v);
+			$v = htmlspecialchars($v);
+			$v = str_replace('&amp;amp;', '&amp;', $v);
+
+			$usequotes = ($this->_options['quotewhat'] == 'nothing') ||
+						 (($this->_options['quotewhat'] == 'strings') && is_numeric($v));
+			if ($usequotes) {
+				$str .= sprintf($this->_definedTags[$tag['tag']]['attributes'][$a], $v, '');
+			} else {
+				$str .= sprintf($this->_definedTags[$tag['tag']]['attributes'][$a], $v, $q);
+			}
+		}
+		return $str;
+	}
 
     /**
      * Sets text in the object to be parsed
@@ -833,4 +914,55 @@ class HTML_BBCodeParser2 {
         unset($p);
         return $str;
     }
+
+	/**
+	 * Calls the html build method of the right plugin
+	 *
+	 * @param array $tag
+	 * @param bool  $enabled (reference) type 1 and 2: if plugin should be called on unmatched text between tags
+	 *                                   type 0:       if htmlspecialchars is enabled
+	 * @return array
+	 */
+	private function renderPlugin($tag, &$enabled) {
+		$method = 'html_' . $tag['tag'];
+		$filterobjectname = $this->_definedTags[$tag['tag']]['plugin'];
+
+		//defaults
+		if($tag['type'] == 0) {
+			$str = $tag['text']; //unmatched text
+		} else {
+			$str = ''; //no tag
+		}
+
+		$return = $this->_filters[$filterobjectname]->$method($tag, $enabled);
+		if ($return !== false) {
+			$str = $return;
+		}
+		return $str;
+	}
+
+
+	/**
+	 * Add plugin to list of plugins that will modify unmatched text
+	 *
+	 * @param string $tagname
+	 */
+	private function addTextModifyingPlugin($tagname) {
+		$this->_pluginsModifyingText[] = $tagname;
+	}
+
+	/**
+	 * Remove plugin from list of plugins that will modify unmatched text
+	 *
+	 * @param string $tagname
+	 */
+	private function removeTextModifyingPlugin($tagname) {
+		$key = array_search($tagname, $this->_pluginsModifyingText);
+		if (false !== $key) {
+			unset($this->_pluginsModifyingText[$key]);
+		}
+	}
+
+
+
 }

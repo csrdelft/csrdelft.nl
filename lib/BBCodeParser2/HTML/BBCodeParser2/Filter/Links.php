@@ -23,7 +23,6 @@
 * @package  HTML_BBCodeParser2
 * @author   Stijn de Reede  <sjr@gmx.co.uk>
 */
-require_once 'HTML/BBCodeParser2/Filter.php';
 
 /**
  * Filter for link tags and links
@@ -54,8 +53,8 @@ class HTML_BBCodeParser2_Filter_Links extends HTML_BBCodeParser2_Filter
             'htmlopen'  => 'a',
             'htmlclose' => 'a',
             'allowed'   => 'none^img',
-            'attributes'=> array('url' => 'href=%2$s%1$s%2$s',
-                                 't'   => 'target=%2$s%1$s%2$s')
+            'attributes'=> array('url' => ' href=%2$s%1$s%2$s',
+                                 't'   => ' target=%2$s%1$s%2$s')
         )
     );
 

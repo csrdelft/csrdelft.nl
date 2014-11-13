@@ -25,8 +25,6 @@
 */
 
 
-require_once 'HTML/BBCodeParser2/Filter.php';
-
 
 /**
  * Filter for email tags
@@ -42,7 +40,7 @@ class HTML_BBCodeParser2_Filter_Email extends HTML_BBCodeParser2_Filter {
 		                        'email' => array(   'htmlopen'  => 'a',
                                                     'htmlclose' => 'a',
                                                     'allowed'   => 'none^img',
-                                                    'attributes'=> array('email' =>'href=%2$smailto:%1$s%2$s')
+                                                    'attributes'=> array('email' =>' href=%2$smailto:%1$s%2$s')
                                                )
                               );
 
@@ -67,7 +65,7 @@ class HTML_BBCodeParser2_Filter_Email extends HTML_BBCodeParser2_Filter {
         $c = $options['close'];
         $oe = $options['open_esc'];
         $ce = $options['close_esc'];
-        $pattern = array(   "!(^|\s)([-a-z0-9_.]+@[-a-z0-9.]+\.[a-z]{2,4})!i",
+        $pattern = array(   "!(^|\s)([-a-z0-9_.+]+@[-a-z0-9.]+\.[a-z]{2,4})!i",
                             "!".$oe."email(".$ce."|\s.*".$ce.")(.*)".$oe."/email".$ce."!Ui");
         $replace = array(   "\\1".$o."email=\\2".$c."\\2".$o."/email".$c,
                             $o."email=\\2\\1\\2".$o."/email".$c);

@@ -386,7 +386,7 @@ class CsrBB extends eamBBParser {
 
 		if ($queryID != 0) {
 			require_once 'savedquery.class.php';
-			$sqc = new SavedQueryContent(new SavedQuery((int) $arguments['query']));
+			$sqc = new SavedQueryContent(new SavedQuery($queryID));
 
 			return $sqc->render_queryResult();
 		} else {
