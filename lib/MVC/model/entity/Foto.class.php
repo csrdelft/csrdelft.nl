@@ -99,7 +99,7 @@ class Foto extends Afbeelding {
 
 	public function createThumb() {
 		if (!empty($this->rotation)) {
-			$rotate = '-rotate ' . (float) $this->rotation . ' ';
+			$rotate = '-rotate ' . $this->rotation . ' ';
 		}
 		set_time_limit(0);
 		$command = IMAGEMAGICK_PATH . 'convert ' . escapeshellarg($this->getFullPath()) . ' -thumbnail 150x150^^ -gravity center -extent 150x150 -format jpg -quality 80 ' . $rotate . escapeshellarg($this->getThumbPath());
@@ -119,7 +119,7 @@ class Foto extends Afbeelding {
 		if (empty($this->rotation)) {
 			$rotate = '';
 		} else {
-			$rotate = '-rotate ' . (float) $this->rotation . ' ';
+			$rotate = '-rotate ' . $this->rotation . ' ';
 		}
 		set_time_limit(0);
 		$command = IMAGEMAGICK_PATH . 'convert ' . escapeshellarg($this->getFullPath()) . ' -resize 1024x1024 -format jpg -quality 85 ' . $rotate . escapeshellarg($this->getResizedPath());
