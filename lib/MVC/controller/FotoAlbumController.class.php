@@ -210,7 +210,7 @@ class FotoAlbumController extends AclController {
 		if (!LoginModel::mag('P_ALBUM_MOD') AND ! $foto->isOwner()) {
 			$this->geentoegang();
 		}
-		$degrees = (int) filter_input(INPUT_POST, 'rotate', FILTER_SANITIZE_NUMBER_INT);
+		$degrees = (int) filter_input(INPUT_POST, 'rotation', FILTER_SANITIZE_NUMBER_INT);
 		$foto->rotate($degrees);
 		$this->view = new JsonResponse(true);
 	}

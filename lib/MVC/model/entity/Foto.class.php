@@ -146,7 +146,7 @@ class Foto extends Afbeelding {
 	 */
 	public function rotate($degrees) {
 		if (!isset($this->rotation)) {
-			$this->rotation = (int) FotoModel::instance()->retrieveAttributes($this, array('rotation'));
+			$this->rotation = (int) FotoModel::instance()->retrieveAttributes($this, array('rotation', 'owner'));
 		}
 		$this->rotation += $degrees;
 		FotoModel::instance()->update($this);
