@@ -28,7 +28,7 @@ class Foto extends Afbeelding {
 	protected static $persistent_attributes = array(
 		'directory'	 => array(T::String),
 		'filename'	 => array(T::String),
-		'rotation'	 => array(T::Integer, true),
+		'rotation'	 => array(T::Integer),
 		'owner'		 => array(T::UID)
 	);
 	/**
@@ -146,7 +146,9 @@ class Foto extends Afbeelding {
 	 */
 	public function rotate($degrees) {
 		if (!isset($this->rotation)) {
-			$this->rotation = (int) FotoModel::instance()->retrieveAttributes($this, array('rotation', 'owner'));
+			$attr = array('rotation', 'owner');
+			$this->rotation = FotoModel::instance()->retrieveAttributes($this, $attr);
+			$this->castValues($attr);
 		}
 		$this->rotation += $degrees;
 		FotoModel::instance()->update($this);
