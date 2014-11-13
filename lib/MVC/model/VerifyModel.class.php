@@ -63,7 +63,7 @@ class VerifyModel extends PersistenceModel {
 		$token = new OneTimeToken();
 		$token->uid = $uid;
 		$token->url = $url;
-		$token->token = self::rand(255);
+		$token->token = self::rand();
 		$token->verified = false;
 		$token->expire = getDateTime($expire);
 	}
@@ -71,7 +71,7 @@ class VerifyModel extends PersistenceModel {
 	/**
 	 * @source http://stackoverflow.com/a/13733588
 	 */
-	public static function rand($length) {
+	public static function rand($length = 200) {
 		$token = '';
 		$codeAlphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
 		$codeAlphabet.= 'abcdefghijklmnopqrstuvwxyz';
