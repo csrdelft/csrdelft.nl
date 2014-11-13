@@ -1,5 +1,6 @@
 <?php
 
+require_once 'MVC/model/VerifyModel.class.php';
 require_once 'lid/lidcache.class.php';
 require_once 'MVC/view/Validator.interface.php';
 
