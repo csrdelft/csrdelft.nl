@@ -15,13 +15,20 @@ class FotoAlbumModel extends PersistenceModel {
 	/**
 	 * Create database entry if fotoalbum does not exist.
 	 * 
-	 * @param PersistentEntity $fotoalbum
+	 * @param PersistentEntity $album
 	 * @param array $attributes
 	 * @return mixed false on failure
 	 */
-	public function retrieveAttributes(PersistentEntity $fotoalbum, array $attributes) {
-		$this->verwerkFotos($fotoalbum);
-		return parent::retrieveAttributes($fotoalbum, $attributes);
+	public function retrieveAttributes(PersistentEntity $album, array $attributes) {
+		$this->verwerkFotos($album);
+		return parent::retrieveAttributes($album, $attributes);
+	}
+
+	public function create(PersistentEntity $album) {
+		mkdir($album->path);
+		chmod($album->path, 0755);
+		$album->owner = LoginModel::getUid();
+		parent::create($album);
 	}
 
 	public function getFotoAlbum($path) {
@@ -119,10 +126,14 @@ class FotoModel extends PersistenceModel {
 		return parent::retrieveAttributes($foto, $attributes);
 	}
 
+	public function create(PersistentEntity $foto) {
+		$foto->owner = LoginModel::getUid();
+		$foto->rotation = 0;
+		parent::create($foto);
+	}
+
 	public function verwerkFoto(Foto $foto) {
 		if (!$this->exists($foto)) {
-			$foto->owner = LoginModel::getUid();
-			$foto->rotation = 0;
 			$this->create($foto);
 		}
 		if (!$foto->hasThumb()) {

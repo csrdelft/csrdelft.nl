@@ -24,9 +24,9 @@ class FotoAlbumController extends AclController {
 			);
 		} else {
 			$this->acl = array(
-				'albumcover'	 => 'P_ALBUM_MOD',
+				'albumcover'	 => 'P_ALBUM_ADD',
 				'verwijderen'	 => 'P_ALBUM_ADD',
-				'hernoemen'		 => 'P_ALBUM_MOD',
+				'hernoemen'		 => 'P_ALBUM_ADD',
 				'roteren'		 => 'P_ALBUM_ADD',
 				'toevoegen'		 => 'P_ALBUM_ADD',
 				'bestaande'		 => 'P_ALBUM_ADD',
@@ -94,8 +94,7 @@ class FotoAlbumController extends AclController {
 			$subalbum = $formulier->findByName('subalbum')->getValue();
 			$album->path .= $subalbum . '/';
 			if (!$album->exists()) {
-				mkdir($album->path);
-				chmod($album->path, 0755);
+				$this->model->create($album);
 			}
 			$this->view = new JsonResponse($album->getUrl());
 			return;
@@ -172,6 +171,9 @@ class FotoAlbumController extends AclController {
 	}
 
 	public function hernoemen(FotoAlbum $album) {
+		if (!LoginModel::mag('P_ALBUM_MOD') AND ! $album->isOwner()) {
+			$this->geentoegang();
+		}
 		$naam = filter_input(INPUT_POST, 'Nieuwe_naam', FILTER_SANITIZE_STRING);
 		if ($album !== null AND $this->model->hernoemAlbum($album, $naam)) {
 			setMelding('Fotoalbum succesvol hernoemd', 1);
@@ -182,6 +184,9 @@ class FotoAlbumController extends AclController {
 	}
 
 	public function albumcover(FotoAlbum $album) {
+		if (!LoginModel::mag('P_ALBUM_MOD') AND ! $album->isOwner()) {
+			$this->geentoegang();
+		}
 		$naam = filter_input(INPUT_POST, 'cover', FILTER_SANITIZE_STRING);
 		if ($this->model->setAlbumCover($album, new Foto($album, $naam))) {
 			setMelding('Fotoalbum-cover succesvol ingesteld', 1);
