@@ -237,27 +237,28 @@ class LoginModel extends PersistenceModel implements Validator {
 		if (!($lid instanceof Lid)) {
 			$lid = Lid::loadByDuckname($user);
 		}
+
+		// check timeout
+		if ($lid instanceof Lid) {
+			$uid = $lid->getUid();
+		} else {
+			$uid = 'x999';
+		}
+		$timeout = TimeoutModel::instance()->moetWachten($uid);
+		if ($timeout > 0) {
+			$_SESSION['auth_error'] = 'Wacht ' . $timeout . ' seconden';
+			return false;
+		}
+
 		// als we een gebruiker hebben gevonden controleren we het wachtwoord
 		if (!($lid instanceof Lid) OR ! $lid->checkpw($pass)) {
-			if ($lid instanceof Lid) {
-				$uid = $lid->getUid();
-			} else {
-				$uid = 'x999';
-			}
-
-			// check timeout
-			$timeout = TimeoutModel::instance()->moetWachten($uid);
-			if ($timeout > 0) {
-				$_SESSION['auth_error'] = 'Wacht ' . $timeout . ' seconden';
-				return false;
-			}
-
 			$_SESSION['auth_error'] = 'Inloggen niet geslaagd';
 			TimeoutModel::instance()->fout($uid);
 			return false;
 		}
 
 		// als dat klopt laden we het profiel in en richten de sessie in
+		TimeoutModel::instance()->goed($lid->getUid());
 		// Subject Assignment:
 		$this->setLid($lid);
 
@@ -267,6 +268,7 @@ class LoginModel extends PersistenceModel implements Validator {
 		} elseif (isset($_SESSION['_ip'])) {
 			unset($_SESSION['_ip']);
 		}
+
 		return true;
 	}
 

@@ -134,4 +134,11 @@ class TimeoutModel extends PersistenceModel {
 		}
 	}
 
+	public function goed($uid) {
+		$timeout = $this->retrieveByPrimaryKey(array($uid));
+		if ($timeout) {
+			$this->delete($timeout);
+		}
+	}
+
 }
