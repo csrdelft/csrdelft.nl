@@ -8,8 +8,8 @@ if (!LoginModel::mag('P_LEDEN_READ')) {
 }
 
 /* get options from the ini file */
-$config = parse_ini_file('BBCodeParser2.ini', true);
-$options = $config['HTML_BBCodeParser2'];
+$config = parse_ini_file(LIB_PATH.'BBCodeParser2/HTML/CSRBBCodeSettings.ini', true);
+$options = $config['toolsbbcodeparser'];
 
 /* do yer stuff! */
 $parser = new HTML_BBCodeParser2($options);

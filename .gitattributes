@@ -390,7 +390,6 @@ htdocs/onderhoud.html -text
 htdocs/robots.txt -text
 htdocs/testform.php -text
 htdocs/tools/.htaccess -text
-htdocs/tools/BBCodeParser2.ini -text
 htdocs/tools/alphabanner/alphabanner.php -text
 htdocs/tools/alphabanner/gebedsgenezingreclametegeltje.jpg -text
 htdocs/tools/alphabanner/tegel_0.jpg -text
@@ -3359,6 +3358,7 @@ lib/BBCodeParser2/HTML/BBCodeParser2/Filter/Images.php -text
 lib/BBCodeParser2/HTML/BBCodeParser2/Filter/Links.php -text
 lib/BBCodeParser2/HTML/BBCodeParser2/Filter/Lists.php -text
 lib/BBCodeParser2/HTML/BBCodeParser2/Filter/Table.php -text
+lib/BBCodeParser2/HTML/CSRBBCodeSettings.ini -text
 lib/BBCodeParser2/README -text
 lib/BBCodeParser2/TODO -text
 lib/BBCodeParser2/composer.json -text
