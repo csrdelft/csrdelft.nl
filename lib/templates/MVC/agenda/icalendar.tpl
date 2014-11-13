@@ -33,7 +33,7 @@ UID:{$item->getUUID()}
 SUMMARY:{str_replace(';','\;',str_replace(',','\,',$item->getTitel()))|html_substr:"60":"…"}
 {if $item->getLink()}URL:{if startsWith($item->getLink(), '/')}http://csrdelft.nl{/if}{$item->getLink()}
 {/if}
-{if $item->getLocatie()}LOCATION:{$item->getLocatie()}
+{if $item->getLocatie()}LOCATION:{str_replace(';','\;',str_replace(',','\,',$item->getLocatie()))}
 {/if}
 {if $item->getBeschrijving()}DESCRIPTION:{str_replace("\r",'',str_replace("\n",'\n',str_replace(';','\;',str_replace(',','\,',$item->getBeschrijving()))))|html_substr:"60":"…"}
 {/if}
