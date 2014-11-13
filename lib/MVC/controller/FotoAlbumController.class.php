@@ -13,35 +13,19 @@ require_once 'MVC/view/FotoAlbumView.class.php';
  */
 class FotoAlbumController extends AclController {
 
-	/**
-	 * Als deze regexp matched is het album alleen voor leden toegankelijk
-	 * @var string
-	 */
-	private static $alleenLeden = '/(intern|novitiaat|ontvoering|feuten|slachten|zuipen|prive|privé|Posters)/i';
-	/**
-	 * Als deze regexp matched is het album alleen voor vrouwen toegankelijk
-	 * @var string
-	 */
-	private static $alleenVrouwen = '/(DéDé-privé|DeDe-prive|vrouwen-only)/i';
-	/**
-	 * Als deze regexp matched is het album alleen voor mannen toegankelijk
-	 * @var string
-	 */
-	private static $alleenMannen = '/(men-only|mannen-only)/i';
-
 	public function __construct($query) {
-		parent::__construct($query, null);
+		parent::__construct($query, FotoAlbumModel::instance());
 		if (!$this->isPosted()) {
 			$this->acl = array(
 				'bekijken'	 => 'P_ALBUM_READ',
 				'downloaden' => 'P_ALBUM_DOWN',
-				'verwerken'	 => 'P_ADMIN',
+				'verwerken'	 => 'P_ALBUM_MOD',
 				'uploaden'	 => 'P_ALBUM_ADD'
 			);
 		} else {
 			$this->acl = array(
 				'albumcover'	 => 'P_ALBUM_MOD',
-				'verwijderen'	 => 'P_ALBUM_DEL',
+				'verwijderen'	 => 'P_ALBUM_ADD',
 				'hernoemen'		 => 'P_ALBUM_MOD',
 				'roteren'		 => 'P_ALBUM_ADD',
 				'toevoegen'		 => 'P_ALBUM_ADD',
@@ -62,7 +46,7 @@ class FotoAlbumController extends AclController {
 			$path = $this->getParams(3);
 		}
 		$path = PICS_PATH . urldecode(implode('/', $path));
-		$album = FotoAlbumModel::getFotoAlbum($path);
+		$album = $this->model->getFotoAlbum($path);
 		if (!$album) {
 			setMelding('Fotoalbum bestaat niet!', -1);
 			if (DEBUG) {
@@ -72,39 +56,6 @@ class FotoAlbumController extends AclController {
 		}
 		$args[] = $album;
 		parent::performAction($args);
-	}
-
-	public static function magBekijken($path) {
-		$mapnaam = basename($path);
-		if (startsWith($mapnaam, '_') OR ! startsWith($path, PICS_PATH . 'fotoalbum/')) {
-			return false;
-		}
-		if (LoginModel::mag('P_LEDEN_READ')) {
-			if (preg_match(self::$alleenVrouwen, $path)) { // Deze foto's alleen voor vrouwen
-				if (LoginModel::instance()->getLid()->getGeslacht() == 'v') {
-					return true;
-				}
-				return false;
-			}
-			if (preg_match(self::$alleenMannen, $path)) { // Deze foto's alleen voor mannen
-				if (LoginModel::instance()->getLid()->getGeslacht() == 'm') {
-					return true;
-				}
-				return false;
-			}
-			return true;
-		} else {
-			if (preg_match(self::$alleenLeden, $path)) {
-				return false; // Deze foto's alleen voor leden
-			}
-			if (preg_match(self::$alleenVrouwen, $path)) {
-				return false; // Deze foto's alleen voor vrouwen
-			}
-			if (preg_match(self::$alleenMannen, $path)) {
-				return false; // Deze foto's alleen voor mannen
-			}
-			return true;
-		}
 	}
 
 	public function bekijken(FotoAlbum $album) {
@@ -128,7 +79,7 @@ class FotoAlbumController extends AclController {
 			echo 'Dit kan even duren<br />';
 			flush();
 		}
-		FotoAlbumModel::verwerkFotos($album);
+		$this->model->verwerkFotos($album);
 		if (defined('RESIZE_OUTPUT')) {
 			exit;
 		} else {
@@ -168,7 +119,8 @@ class FotoAlbumController extends AclController {
 					$filename = $uploader->getModel()->filename;
 				}
 				if ($uploader->opslaan($album->path, $filename)) {
-					FotoAlbumModel::verwerkFotos($album);
+					$foto = new Foto($album, $filename);
+					$this->model->verwerkFoto($foto);
 					if ($album->dirname === 'Posters') {
 						redirect($album->getUrl());
 					}
@@ -187,14 +139,14 @@ class FotoAlbumController extends AclController {
 		$list = array();
 		$files = scandir($album->path . '_thumbs/');
 		if ($files !== false) {
-			foreach ($files as $file) {
-				if (endsWith($file, '.jpg')) {
-					$foto = new Foto($album, $file);
-					$foto->filesize = filesize($foto->getPad());
+			foreach ($files as $$filename) {
+				if (endsWith($$filename, '.jpg')) {
+					$foto = new Foto($album, $$filename);
+					$foto->filesize = filesize($foto->getFullPath());
 					$obj['name'] = $foto->filename;
 					$obj['size'] = $foto->filesize;
 					$obj['type'] = 'image/jpeg';
-					$obj['thumb'] = $foto->getThumbURL();
+					$obj['thumb'] = $foto->getThumbUrl();
 					$list[] = $obj;
 				}
 			}
@@ -221,7 +173,7 @@ class FotoAlbumController extends AclController {
 
 	public function hernoemen(FotoAlbum $album) {
 		$naam = filter_input(INPUT_POST, 'Nieuwe_naam', FILTER_SANITIZE_STRING);
-		if ($album !== null AND FotoAlbumModel::hernoemAlbum($album, $naam)) {
+		if ($album !== null AND $this->model->hernoemAlbum($album, $naam)) {
 			setMelding('Fotoalbum succesvol hernoemd', 1);
 		} else {
 			setMelding('Fotoalbum hernoemen mislukt', -1);
@@ -229,18 +181,9 @@ class FotoAlbumController extends AclController {
 		$this->view = new JsonResponse(true);
 	}
 
-	public function verwijderen(FotoAlbum $album) {
-		$naam = filter_input(INPUT_POST, 'foto', FILTER_SANITIZE_STRING);
-		if ($album !== null AND FotoAlbumModel::verwijderFoto(new Foto($album, $naam))) {
-			echo '<div id="' . md5($naam) . '" class="remove"></div>';
-		} else {
-			$this->view = new JsonResponse('Foto verwijderen mislukt', 503);
-		}
-	}
-
 	public function albumcover(FotoAlbum $album) {
 		$naam = filter_input(INPUT_POST, 'cover', FILTER_SANITIZE_STRING);
-		if (FotoAlbumModel::setAlbumCover($album, new Foto($album, $naam))) {
+		if ($this->model->setAlbumCover($album, new Foto($album, $naam))) {
 			setMelding('Fotoalbum-cover succesvol ingesteld', 1);
 		} else {
 			setMelding('Fotoalbum-cover instellen mislukt', -1);
@@ -248,10 +191,26 @@ class FotoAlbumController extends AclController {
 		$this->view = new JsonResponse(true);
 	}
 
-	public function roteren(FotoAlbum $album) {
-		$degrees = filter_input(INPUT_POST, 'rotate', FILTER_SANITIZE_NUMBER_INT);
+	public function verwijderen(FotoAlbum $album) {
 		$naam = filter_input(INPUT_POST, 'foto', FILTER_SANITIZE_STRING);
 		$foto = new Foto($album, $naam);
+		if (!LoginModel::mag('P_ALBUM_DEL') AND ! $foto->isOwner()) {
+			$this->geentoegang();
+		}
+		if (FotoModel::instance()->verwijderFoto($foto)) {
+			echo '<div id="' . md5($naam) . '" class="remove"></div>';
+		} else {
+			$this->view = new JsonResponse('Foto verwijderen mislukt', 503);
+		}
+	}
+
+	public function roteren(FotoAlbum $album) {
+		$naam = filter_input(INPUT_POST, 'foto', FILTER_SANITIZE_STRING);
+		$foto = new Foto($album, $naam);
+		if (!LoginModel::mag('P_ALBUM_MOD') AND ! $foto->isOwner()) {
+			$this->geentoegang();
+		}
+		$degrees = (int) filter_input(INPUT_POST, 'rotate', FILTER_SANITIZE_NUMBER_INT);
 		$foto->rotate($degrees);
 		$this->view = new JsonResponse(true);
 	}

@@ -105,7 +105,7 @@ abstract class PersistenceModel implements Persistence {
 	 * Check if enitity exists.
 	 * 
 	 * @param PersistentEntity $entity
-	 * @return string last insert id
+	 * @return boolean entity exists
 	 */
 	public function exists(PersistentEntity $entity) {
 		return $this->existsByPrimaryKey($entity->getValues(true));
@@ -189,7 +189,9 @@ abstract class PersistenceModel implements Persistence {
 	 * $model->retrieveAttributes($user, array('city' 'street', 'number', 'postalcode')); // suppose address is sparse: retrieve address
 	 * echo ...
 	 * 
+	 * @param PersistentEntity $entity
 	 * @param array $attributes
+	 * @return mixed false on failure
 	 */
 	public function retrieveAttributes(PersistentEntity $entity, array $attributes) {
 		$where = array();
@@ -224,10 +226,10 @@ abstract class PersistenceModel implements Persistence {
 	 * Remove existing entity.
 	 * 
 	 * @param PersistentEntity $entity
-	 * @return boolean rows affected
+	 * @return boolean rows affected === 1
 	 */
 	public function delete(PersistentEntity $entity) {
-		return $this->deleteByPrimaryKey($entity->getValues(true));
+		return 1 === $this->deleteByPrimaryKey($entity->getValues(true));
 	}
 
 	/**

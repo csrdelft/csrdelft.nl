@@ -41,8 +41,8 @@
 						<a href="/fotoalbum/verwijderen/{$album->getSubDir()}" data="foto={$foto->filename}" class="knop post confirm hoverIntentContent top-right" title="Definitief verwijderen van deze foto">{icon get=cross}</a>
 					{/if}
 				{/if}
-				<a href="/fotoalbum/roteren/{$album->getSubDir()}" data="foto={$foto->filename}&rotate=-90" class="knop post confirm ReloadPage hoverIntentContent bottom-left" title="Foto tegen de klok in draaien">{icon get=arrow_rotate_anticlockwise}</a>
-				<a href="/fotoalbum/roteren/{$album->getSubDir()}" data="foto={$foto->filename}&rotate=90" class="knop post confirm ReloadPage hoverIntentContent bottom-right" title="Foto met de klok mee draaien">{icon get=arrow_rotate_clockwise}</a>
+				<a href="/fotoalbum/roteren/{$album->getSubDir()}" data="foto={$foto->filename}&rotation=-90" class="knop post confirm ReloadPage hoverIntentContent bottom-left" title="Foto tegen de klok in draaien">{icon get=arrow_rotate_anticlockwise}</a>
+				<a href="/fotoalbum/roteren/{$album->getSubDir()}" data="foto={$foto->filename}&rotation=90" class="knop post confirm ReloadPage hoverIntentContent bottom-right" title="Foto met de klok mee draaien">{icon get=arrow_rotate_clockwise}</a>
 			{/if}
 			<a href="{$foto->getResizedURL()}" rel="prettyPhoto[album]">
 				<img src="{$foto->getThumbURL()}" />

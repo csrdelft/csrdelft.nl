@@ -1,30 +1,48 @@
 <?php
 
-require_once 'MVC/model/entity/Foto.class.php';
-
 /**
  * FotoAlbumModel.class.php
  * 
  * @author P.W.G. Brussee <brussee@live.nl>
  * 
  */
-class FotoAlbumModel {
+class FotoAlbumModel extends PersistenceModel {
 
-	public static function getFotoAlbum($path) {
+	const orm = 'FotoAlbum';
+
+	protected static $instance;
+
+	/**
+	 * Create database entry if fotoalbum does not exist.
+	 * 
+	 * @param PersistentEntity $fotoalbum
+	 * @param array $attributes
+	 * @return mixed false on failure
+	 */
+	public function retrieveAttributes(PersistentEntity $fotoalbum, array $attributes) {
+		$this->verwerkFotos($fotoalbum);
+		return parent::retrieveAttributes($fotoalbum, $attributes);
+	}
+
+	public function getFotoAlbum($path) {
 		if (!endsWith($path, '/')) {
 			$path .= '/';
 		}
-		if (!FotoAlbumController::magBekijken($path)) {
+		$album = new FotoAlbum($path);
+		if (!$album->magBekijken()) {
 			return false;
 		}
-		$album = new FotoAlbum($path);
 		if (!$album->exists()) {
 			return null;
 		}
 		return $album;
 	}
 
-	public static function verwerkFotos(FotoAlbum $album) {
+	public function verwerkFotos(FotoAlbum $album) {
+		if (!$this->exists($album)) {
+			$album->owner = LoginModel::getUid();
+			$this->create($album);
+		}
 		$path = $album->path . '_thumbs';
 		if (!file_exists($path)) {
 			mkdir($path);
@@ -36,65 +54,97 @@ class FotoAlbumModel {
 			chmod($path, 0755);
 		}
 		foreach ($album->getFotos(true) as $foto) {
-			if (!$foto->hasThumb()) {
-				$foto->maakThumb();
-			}
-			if (!$foto->hasResized()) {
-				$foto->maakResized();
-			}
+			FotoModel::instance()->verwerkFoto($foto);
 		}
 	}
 
-	public static function getMostRecentFotoAlbum() {
-		$album = FotoAlbumModel::getFotoAlbum(PICS_PATH . 'fotoalbum/');
+	public function getMostRecentFotoAlbum() {
+		$album = $this->getFotoAlbum(PICS_PATH . 'fotoalbum/');
 		if (!$album) {
 			return null;
 		}
 		return $album->getMostRecentSubAlbum();
 	}
 
-	public static function verwijderFoto(Foto $foto) {
-		$ret = true;
-		$ret &= unlink($foto->directory->path . $foto->filename);
-		if ($foto->hasResized()) {
-			$ret &= unlink($foto->getResizedPad());
-		}
-		if ($foto->hasThumb()) {
-			$ret &= unlink($foto->getThumbPad());
-		}
-		return $ret;
-	}
-
-	public static function hernoemAlbum(FotoAlbum $album, $nieuwenaam) {
+	public function hernoemAlbum(FotoAlbum $album, $nieuwenaam) {
 		if (!valid_filename($nieuwenaam)) {
 			throw new Exception('Ongeldige naam');
 		}
 		return rename($album->path, str_replace($album->dirname, $nieuwenaam, $album->path));
 	}
 
-	public static function setAlbumCover(FotoAlbum $album, Foto $cover) {
+	public function setAlbumCover(FotoAlbum $album, Foto $cover) {
 		$ret = true;
 		// find old cover
 		foreach ($album->getFotos() as $foto) {
 			if (strpos($foto->filename, 'folder') !== false) {
-				if ($foto->getPad() === $cover->getPad()) {
+				if ($foto->getFullPath() === $cover->getFullPath()) {
 					return $ret;
 				}
-				$old = $foto->getPad();
+				$old = $foto->getFullPath();
 				$ret &= rename($old, str_replace('folder', '', $old));
-				$old = $foto->getResizedPad();
+				$old = $foto->getResizedPath();
 				$ret &= rename($old, str_replace('folder', '', $old));
-				$old = $foto->getThumbPad();
+				$old = $foto->getThumbPath();
 				$ret &= rename($old, str_replace('folder', '', $old));
 			}
 		}
 		// set new cover
-		$old = $cover->getPad();
+		$old = $cover->getFullPath();
 		$ret &= rename($old, substr_replace($old, 'folder', strrpos($old, '.'), 0));
-		$old = $cover->getResizedPad();
+		$old = $cover->getResizedPath();
 		$ret &= rename($old, substr_replace($old, 'folder', strrpos($old, '.'), 0));
-		$old = $cover->getThumbPad();
+		$old = $cover->getThumbPath();
 		$ret &= rename($old, substr_replace($old, 'folder', strrpos($old, '.'), 0));
+		return $ret;
+	}
+
+}
+
+class FotoModel extends PersistenceModel {
+
+	const orm = 'Foto';
+
+	protected static $instance;
+
+	/**
+	 * Create database entry if foto does not exist.
+	 * 
+	 * @param PersistentEntity $foto
+	 * @param array $attributes
+	 * @return mixed false on failure
+	 */
+	public function retrieveAttributes(PersistentEntity $foto, array $attributes) {
+		$this->verwerkFoto($foto);
+		return parent::retrieveAttributes($foto, $attributes);
+	}
+
+	public function verwerkFoto(Foto $foto) {
+		if (!$this->exists($foto)) {
+			$foto->owner = LoginModel::getUid();
+			$foto->rotation = 0;
+			$this->create($foto);
+		}
+		if (!$foto->hasThumb()) {
+			$foto->createThumb();
+		}
+		if (!$foto->hasResized()) {
+			$foto->createResized();
+		}
+	}
+
+	public function verwijderFoto(Foto $foto) {
+		$ret = true;
+		$ret &= unlink($foto->directory->path . $foto->filename);
+		if ($foto->hasResized()) {
+			$ret &= unlink($foto->getResizedPath());
+		}
+		if ($foto->hasThumb()) {
+			$ret &= unlink($foto->getThumbPath());
+		}
+		if ($ret) {
+			$this->delete($foto);
+		}
 		return $ret;
 	}
 

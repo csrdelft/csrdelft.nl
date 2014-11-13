@@ -59,7 +59,7 @@ class FotoAlbumView extends SmartyTemplateView {
 	}
 
 	private function getDropDown($subdir, $albumnaam) {
-		$parent = FotoAlbumModel::getFotoAlbum($subdir);
+		$parent = FotoAlbumModel::instance()->getFotoAlbum($subdir);
 		if (!$parent) {
 			return '';
 		}
@@ -183,7 +183,7 @@ class FotoAlbumZijbalkView extends FotoAlbumView {
 			$foto = $fotos[$i];
 			if ($foto instanceof Foto) {
 				echo '<a href="' . $url . '#' . direncode($foto->filename) . '">';
-				echo '<img src="' . $foto->getThumbURL() . '">';
+				echo '<img src="' . $foto->getThumbUrl() . '">';
 				echo '</a>' . "\n";
 			}
 		}
@@ -337,7 +337,7 @@ class FotoAlbumBBView extends FotoAlbumView {
 					$ret .= '<a href="' . $url . '#' . direncode($foto['foto']->filename) . '"';
 					$ret.=in_array($foto['index'], $this->big) ? 'class="big"' : 'class="sml"';
 					$ret .= 'style=" left: ' . ($delta * $col) . 'px; top: ' . ($delta * $row) . 'px;">';
-					$ret .= '<img src="' . $foto['foto']->getThumbURL() . '">';
+					$ret .= '<img src="' . $foto['foto']->getThumbUrl() . '">';
 					$ret .= '</a>' . "\n";
 				}
 			}

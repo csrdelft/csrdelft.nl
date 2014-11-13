@@ -8,7 +8,7 @@ require_once 'MVC/model/entity/Map.class.php';
  * @author P.W.G. Brussee <brussee@live.nl>
  * 
  */
-class Bestand {
+class Bestand extends PersistentEntity {
 
 	/**
 	 * Bestandsnaam

@@ -127,7 +127,7 @@ class CsrBB extends eamBBParser {
 		}
 		$naam = str_replace('#', '', array_pop($parts)); // replace # (foolproof)
 		$path = PICS_PATH . 'fotoalbum' . implode('/', $parts);
-		$album = FotoAlbumModel::getFotoAlbum($path);
+		$album = FotoAlbumModel::instance()->getFotoAlbum($path);
 		if (!$album) {
 			return '<div class="bb-block">Fotoalbum niet gevonden: ' . $url . '</div>';
 		}
@@ -155,7 +155,7 @@ class CsrBB extends eamBBParser {
 		require_once 'MVC/controller/FotoAlbumController.class.php';
 		$url = urldecode($this->parseArray(array('[/fotoalbum]'), array()));
 		if ($url === 'laatste') {
-			$album = FotoAlbumModel::getMostRecentFotoAlbum();
+			$album = FotoAlbumModel::instance()->getMostRecentFotoAlbum();
 		} else {
 			//vervang url met pad
 			$url = str_ireplace(CSR_ROOT, '', $url);
@@ -168,7 +168,7 @@ class CsrBB extends eamBBParser {
 				$url = substr($url, 1);
 			}
 			$path .= $url;
-			$album = FotoAlbumModel::getFotoAlbum($path);
+			$album = FotoAlbumModel::instance()->getFotoAlbum($path);
 		}
 		if (!$album) {
 			return '<div class="bb-block">Fotoalbum niet gevonden: /' . $url . '</div>';

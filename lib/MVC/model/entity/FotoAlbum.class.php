@@ -1,5 +1,7 @@
 <?php
 
+require_once 'MVC/model/entity/Foto.class.php';
+
 /**
  * FotoAlbum.class.php
  * 
@@ -10,6 +12,11 @@
 class FotoAlbum extends Map {
 
 	/**
+	 * Als deze regexp matched is het album alleen voor leden toegankelijk
+	 * @var string
+	 */
+	private static $alleenLeden = '/(intern|novitiaat|ontvoering|feuten|slachten|zuipen|prive|privé|Posters)/i';
+	/**
 	 * Fotos in dit album
 	 * @var Foto[]
 	 */
@@ -19,8 +26,32 @@ class FotoAlbum extends Map {
 	 * @var FotoAlbum[]
 	 */
 	private $subalbums;
+	/**
+	 * Creator
+	 * @var Lid
+	 */
+	public $owner;
+	/**
+	 * Database table columns
+	 * @var array
+	 */
+	protected static $persistent_attributes = array(
+		'directory'	 => array(T::String),
+		'owner'		 => array(T::UID)
+	);
+	/**
+	 * Database primary key
+	 * @var array
+	 */
+	protected static $primary_key = array('directory');
+	/**
+	 * Database table name
+	 * @var string
+	 */
+	protected static $table_name = 'fotoalbums';
 
-	public function FotoAlbum($locatie) {
+	public function __construct($locatie = null) {
+		parent::__construct();
 		$this->path = $locatie;
 		$this->dirname = basename($locatie);
 		if (!$this->exists()) {
@@ -62,9 +93,9 @@ class FotoAlbum extends Map {
 		}
 		foreach ($glob as $path) {
 			if (is_file($path)) {
-				$bestandsnaam = basename($path);
-				$foto = new Foto($this, $bestandsnaam);
-				if ($incompleet OR $foto->isCompleet()) {
+				$filename = basename($path);
+				$foto = new Foto($this, $filename);
+				if ($incompleet OR $foto->isComplete()) {
 					$this->fotos[] = $foto;
 				}
 			}
@@ -82,7 +113,7 @@ class FotoAlbum extends Map {
 			return array();
 		}
 		foreach ($glob as $path) {
-			$subalbum = FotoAlbumModel::getFotoAlbum($path);
+			$subalbum = FotoAlbumModel::instance()->getFotoAlbum($path);
 			if ($subalbum) {
 				$this->subalbums[] = $subalbum;
 			}
@@ -94,12 +125,12 @@ class FotoAlbum extends Map {
 	public function getThumbURL() {
 		foreach ($this->getFotos() as $foto) {
 			if (strpos($foto->filename, 'folder') !== false) {
-				return $foto->getThumbURL();
+				return $foto->getThumbUrl();
 			}
 		}
 		// Anders gewoon de eerste:
 		if (isset($this->fotos[0])) {
-			return $this->fotos[0]->getThumbURL();
+			return $this->fotos[0]->getThumbUrl();
 		}
 		// Foto uit subalbum:
 		foreach ($this->getSubAlbums() as $album) {
@@ -117,6 +148,27 @@ class FotoAlbum extends Map {
 			}
 		}
 		return $recent;
+	}
+
+	public function magBekijken() {
+		if (startsWith($this->dirname, '_') OR ! startsWith($this->path, PICS_PATH . 'fotoalbum/')) {
+			return false;
+		}
+		if (LoginModel::mag('P_LEDEN_READ')) {
+			return true;
+		} else {
+			if (preg_match(self::$alleenLeden, $this->path)) {
+				return false; // Deze foto's alleen voor leden
+			}
+			return true;
+		}
+	}
+
+	public function isOwner() {
+		if (!isset($this->owner)) {
+			$this->owner = FotoAlbumModel::instance()->retrieveAttributes($this, array('owner'));
+		}
+		return LoginModel::mag($this->owner);
 	}
 
 }

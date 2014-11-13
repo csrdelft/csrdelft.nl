@@ -167,8 +167,8 @@ class ImageField extends FileField {
 			return false;
 		}
 		if ($this->getModel() instanceof Afbeelding) {
-			$width = $this->getModel()->breedte;
-			$height = $this->getModel()->hoogte;
+			$width = $this->getModel()->width;
+			$height = $this->getModel()->height;
 			if ($this->minWidth !== null AND $width < $this->minWidth) {
 				$this->opties[$this->methode]->error = 'Afbeelding is niet breed genoeg.';
 			} elseif ($this->minHeight !== null AND $height < $this->minHeight) {

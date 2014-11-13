@@ -56,7 +56,7 @@ abstract class Zijbalk {
 		// Nieuwste fotoalbum
 		if (LidInstellingen::get('zijbalk', 'fotoalbum') == 'ja') {
 			require_once 'MVC/controller/FotoAlbumController.class.php';
-			$album = FotoAlbumModel::getMostRecentFotoAlbum();
+			$album = FotoAlbumModel::instance()->getMostRecentFotoAlbum();
 			if ($album !== null) {
 				$zijbalk[] = new FotoAlbumZijbalkView($album);
 			}
