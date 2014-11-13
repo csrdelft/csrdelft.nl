@@ -8,7 +8,7 @@
  * Model voor two-step verification.
  * 
  */
-class VerifyModel extends PersistenceModel implements Validator {
+class VerifyModel extends PersistenceModel {
 
 	const orm = 'OneTimeToken';
 
@@ -19,7 +19,7 @@ class VerifyModel extends PersistenceModel implements Validator {
 	 */
 	private $error;
 
-	public function validate($uid, $tokenValue) {
+	public function verifyToken($uid, $tokenValue) {
 		$timeout = TimeoutModel::instance()->moetWachten($uid);
 		if ($timeout > 0) {
 			$this->error = 'Wacht ' . $timeout . ' seconden';
@@ -59,6 +59,45 @@ class VerifyModel extends PersistenceModel implements Validator {
 		$this->deleteByPrimaryKey(array($uid, $url));
 	}
 
+	public function createToken($uid, $url, $expire) {
+		$token = new OneTimeToken();
+		$token->uid = $uid;
+		$token->url = $url;
+		$token->token = $this->getToken(255);
+		$token->verified = false;
+		$token->expire = getDateTime($expire);
+	}
+
+	/**
+	 * @source http://stackoverflow.com/a/13733588
+	 */
+	private function getToken($length) {
+		$token = '';
+		$codeAlphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+		$codeAlphabet.= 'abcdefghijklmnopqrstuvwxyz';
+		$codeAlphabet.= '0123456789';
+		for ($i = 0; $i < $length; $i++) {
+			$token .= $codeAlphabet[$this->crypto_rand_secure(0, strlen($codeAlphabet))];
+		}
+		return $token;
+	}
+
+	private function crypto_rand_secure($min, $max) {
+		$range = $max - $min;
+		if ($range < 0) {
+			return $min; // not so random...
+		}
+		$log = log($range, 2);
+		$bytes = (int) ($log / 8) + 1; // length in bytes
+		$bits = (int) $log + 1; // length in bits
+		$filter = (int) (1 << $bits) - 1; // set all lower bits to 1
+		do {
+			$rnd = hexdec(bin2hex(openssl_random_pseudo_bytes($bytes)));
+			$rnd = $rnd & $filter; // discard irrelevant bits
+		} while ($rnd >= $range);
+		return $min + $rnd;
+	}
+
 }
 
 class TimeoutModel extends PersistenceModel {
@@ -70,7 +109,7 @@ class TimeoutModel extends PersistenceModel {
 	public function moetWachten($uid) {
 		$timeout = $this->retrieveByPrimaryKey(array($uid));
 		if ($timeout) {
-			$diff = time() - strtotime($timeout->last_try) + 10 * pow(2, $timeout->count - 1);
+			$diff = time() - (strtotime($timeout->last_try) + (10 * pow(2, $timeout->count - 1)));
 			if ($diff > 0) {
 				return $diff;
 			}

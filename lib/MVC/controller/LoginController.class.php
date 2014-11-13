@@ -87,7 +87,7 @@ class LoginController extends AclController {
 
 	public function verify() {
 		$token = urldecode(filter_input(INPUT_GET, 'token', FILTER_SANITIZE_STRING));
-		if (VerifyModel::instance()->validate(LoginModel::getUid(), $token)) {
+		if (VerifyModel::instance()->verifyToken(LoginModel::getUid(), $token)) {
 			// redirect in validate
 		} else {
 			setMelding(VerifyModel::instance()->getError(), -1);
