@@ -55,6 +55,6 @@ class OneTimeToken extends PersistentEntity {
 	 * Database table name
 	 * @var string
 	 */
-	protected static $table_name = 'onetimetokens';
+	protected static $table_name = 'onetime_tokens';
 
 }

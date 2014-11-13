@@ -109,7 +109,7 @@ class TimeoutModel extends PersistenceModel {
 	public function moetWachten($uid) {
 		$timeout = $this->retrieveByPrimaryKey(array($uid));
 		if ($timeout) {
-			$diff = time() - (strtotime($timeout->last_try) + (10 * pow(2, $timeout->count - 1)));
+			$diff = strtotime($timeout->last_try) + 10 * pow(2, $timeout->count - 1) - time();
 			if ($diff > 0) {
 				return $diff;
 			}
