@@ -61,9 +61,6 @@ div.forumBericht, textarea.forumBericht, div.butn, #nieuweTitel, .forumEmail {
 	width: 570px;
 	margin: 0;
 }
-#ketzer-melding {
-	display: none;
-}
 textarea.forumBericht, #forumBewerkBericht {
 	height: 225px;
 	max-width: 570px;

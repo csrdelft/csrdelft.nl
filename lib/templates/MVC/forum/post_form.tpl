@@ -24,10 +24,6 @@
 		{/if}
 
 		<div id="forummeldingen">
-			<div id="ketzer-melding">
-				Ketzer hebben?<br />
-				<a href="/actueel/groepen/Ketzers" target="_blank"><span class="onderstreept">Maak er zelf een aan</span></a>
-			</div>
 			{if $deel->isOpenbaar()}
 				<div id="public-melding">
 					<div class="dikgedrukt">Openbaar forum</div>
@@ -72,7 +68,9 @@
 					<input type="button" value="Concept opslaan" id="forumConcept" onclick="saveConceptForumBericht();" data-url="/forum/concept/{$deel->forum_id}{if isset($draad)}/{$draad->draad_id}{/if}" />
 				{/if}
 				<div class="float-right">
-					<a href="http://csrdelft.nl/wiki/cie:diensten:forum" target="_blank">Opmaakhulp</a>
+					<a href="/fotoalbum/uploaden/fotoalbum/{Lichting::getHuidigeJaargang()}/Posters" target="_blank">Poster opladen</a> &nbsp;
+					<a href="/actueel/groepen/Ketzers" target="_blank">Ketzer maken</a> &nbsp;
+					<a href="http://csrdelft.nl/wiki/cie:diensten:forum" target="_blank">Opmaakhulp</a> &nbsp;
 					<a class="knop vergroot" data-vergroot="#forumBericht" title="Vergroot het invoerveld">&uarr;&darr;</a>
 				</div>
 			</div>

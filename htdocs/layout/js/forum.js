@@ -53,15 +53,6 @@ $(document).ready(function ($) {
 		if (event.keyCode == 13) { // enter
 			CsrBBPreview('forumBericht', 'berichtPreview');
 		}
-		if (/ketzer/.test($textarea.val())) {
-			if ($('#ketzer-melding').filter(":visible").length == 0) {
-				$('#ketzer-melding').slideDown(200);
-			}
-		} else {
-			if ($('#ketzer-melding').filter(":visible").length != 0) {
-				$('#ketzer-melding').slideUp(200);
-			}
-		}
 	});
 
 	if ($('#nieuweTitel').length != 0) {
