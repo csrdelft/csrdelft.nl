@@ -3409,6 +3409,7 @@ lib/MVC/model/LoginModel.class.php -text
 lib/MVC/model/MenuModel.class.php -text
 lib/MVC/model/Paging.interface.php -text
 lib/MVC/model/TimerModel.class.php -text
+lib/MVC/model/VerifyModel.class.php -text
 lib/MVC/model/VerticalenModel.class.php -text
 lib/MVC/model/entity/AccessControl.class.php -text
 lib/MVC/model/entity/Afbeelding.class.php -text
@@ -3435,6 +3436,8 @@ lib/MVC/model/entity/Mail.class.php -text
 lib/MVC/model/entity/Map.class.php -text
 lib/MVC/model/entity/Mededeling.class.php -text
 lib/MVC/model/entity/MenuItem.class.php -text
+lib/MVC/model/entity/OneTimeToken.class.php -text
+lib/MVC/model/entity/VerifyTimeout.class.php -text
 lib/MVC/model/entity/Verticale.class.php -text
 lib/MVC/model/entity/framework/DynamicEntity.class.php -text
 lib/MVC/model/entity/framework/DynamicEntityDefinition.class.php -text

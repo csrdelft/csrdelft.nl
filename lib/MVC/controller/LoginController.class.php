@@ -16,7 +16,8 @@ class LoginController extends AclController {
 			'logout' => 'P_LOGGED_IN',
 			'su'	 => 'P_ADMIN',
 			'endsu'	 => 'P_LOGGED_IN',
-			'pauper' => 'P_PUBLIC'
+			'pauper' => 'P_PUBLIC',
+			'verify' => 'P_LOGGED_IN'
 		);
 	}
 
@@ -82,6 +83,16 @@ class LoginController extends AclController {
 
 		$body = new CmsPaginaView(CmsPaginaModel::instance()->getPagina('mobiel'));
 		$this->view = new CsrLayoutPage($body);
+	}
+
+	public function verify() {
+		$token = urldecode(filter_input(INPUT_GET, 'token', FILTER_SANITIZE_STRING));
+		if (VerifyModel::instance()->validate(LoginModel::getUid(), $token)) {
+			// redirect in validate
+		} else {
+			setMelding(VerifyModel::instance()->getError(), -1);
+			redirect(CSR_ROOT);
+		}
 	}
 
 }

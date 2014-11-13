@@ -223,6 +223,7 @@ class LoginModel extends PersistenceModel implements Validator {
 	 */
 	private function loginWeb($user, $pass, $checkip = true) {
 		$lid = false;
+
 		// eerst met uid proberen, komt daar een zinnige gebruiker uit, die gebruiken.
 		if (Lid::isValidUid($user)) {
 			$lid = LidCache::getLid($user);
@@ -235,14 +236,23 @@ class LoginModel extends PersistenceModel implements Validator {
 		if (!($lid instanceof Lid)) {
 			$lid = Lid::loadByDuckname($user);
 		}
-		// als er geen lid-object terugkomt, haken we af
-		// als we hebben nu een gebruiker gevonden en gaan eerst het wachtwoord controleren
+		// als we een gebruiker hebben gevonden controleren we het wachtwoord
 		if (!($lid instanceof Lid) OR ! $lid->checkpw($pass)) {
-			$_SESSION['auth_error'] = 'Het spijt ons heel erg, maar met de gegeven
-				inloggegevens is het niet mogelijk in te loggen. Zou het
-				eventueel mogelijk zijn dat u, geheel per ongeluk, een fout heeft
-				gemaakt met invoeren? In dat geval bieden wij u onze nederige
-				excuses aan en vragen wij u het nog eens te proberen.';
+			if ($lid instanceof Lid) {
+				$uid = $lid->getUid();
+			} else {
+				$uid = 'x999';
+			}
+
+			// check timeout
+			$timeout = TimeoutModel::instance()->moetWachten($uid);
+			if ($timeout > 0) {
+				$_SESSION['auth_error'] = 'Wacht ' . $timeout . ' seconden';
+				return false;
+			}
+
+			$_SESSION['auth_error'] = 'Inloggen niet geslaagd';
+			TimeoutModel::instance()->fout($uid);
 			return false;
 		}
 
