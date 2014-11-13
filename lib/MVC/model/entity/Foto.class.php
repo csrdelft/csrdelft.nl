@@ -49,6 +49,13 @@ class Foto extends Afbeelding {
 	}
 
 	/**
+	 * Bestaat er een bestand met de naam en het pad.
+	 */
+	public function exists() {
+		return @is_readable($this->directory->path . $this->filename) AND is_file($this->path . $this->filename);
+	}
+
+	/**
 	 * Return path of FotoAlbum instead of 
 	 * 
 	 * @param boolean $primary_key_only

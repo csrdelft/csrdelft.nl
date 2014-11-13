@@ -106,6 +106,14 @@ class FotoAlbumModel extends PersistenceModel {
 		return $ret;
 	}
 
+	public function cleanup() {
+		foreach ($this->find() as $album) {
+			if (!$album->exists()) {
+				$this->delete($album);
+			}
+		}
+	}
+
 }
 
 class FotoModel extends PersistenceModel {
@@ -157,6 +165,14 @@ class FotoModel extends PersistenceModel {
 			$this->delete($foto);
 		}
 		return $ret;
+	}
+
+	public function cleanup() {
+		foreach ($this->find() as $foto) {
+			if (!$foto->exists()) {
+				$this->delete($foto);
+			}
+		}
 	}
 
 }
