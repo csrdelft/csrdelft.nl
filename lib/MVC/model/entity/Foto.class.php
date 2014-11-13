@@ -151,6 +151,7 @@ class Foto extends Afbeelding {
 			$this->castValues($attr);
 		}
 		$this->rotation += $degrees;
+		$this->rotation %= 360;
 		FotoModel::instance()->update($this);
 		if ($this->hasResized()) {
 			unlink($this->getResizedPath());
