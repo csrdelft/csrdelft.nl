@@ -50,4 +50,6 @@ try {
 }
 
 $finish = microtime(true) - $start;
-echo getDateTime() . ' Finished in ' . (int) $finish . " seconds.\r\n";
+if ($finish > 1) {
+	echo getDateTime() . ' Finished in ' . (int) $finish . " seconds.\r\n";
+}
