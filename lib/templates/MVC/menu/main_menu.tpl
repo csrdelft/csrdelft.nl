@@ -22,7 +22,7 @@
 									window.location.href = instantsearch[this.value]; // goto url
 								}
 								else if (this.value.indexOf('su ') == 0) {
-									window.location.href = '/su/'.this.value.substring(3);
+									window.location.href = '/su/' + this.value.substring(3);
 								}
 								else if (this.value == 'endsu') {
 									window.location = '/endsu';
