@@ -168,7 +168,7 @@ class FotoAlbumZijbalkView extends FotoAlbumView {
 	}
 
 	public function view() {
-		$url = $this->model->getFullUrl();
+		$url = $this->model->getUrl();
 		echo '<div id="zijbalk_fotoalbum">';
 		echo '<h1><a href="/actueel/fotoalbum/">Laatste fotoalbum</a></h1>';
 		echo '<div class="item">';
@@ -328,7 +328,7 @@ class FotoAlbumBBView extends FotoAlbumView {
 
 	public function getGridHtml() {
 		$grid = $this->getGrid();
-		$url = $this->model->getFullUrl();
+		$url = $this->model->getUrl();
 		$delta = $this->picsize + (2 * $this->rowmargin);
 		$ret = '<div class="images" style="height: ' . (count($grid) * $delta) . 'px">';
 		foreach ($grid as $row => $rowcontents) {
@@ -347,7 +347,7 @@ class FotoAlbumBBView extends FotoAlbumView {
 	}
 
 	public function getHtml() {
-		$url = $this->model->getFullUrl();
+		$url = $this->model->getUrl();
 		if ($this->compact) {
 			// compacte versie van de tag is alleen een thumbnail.
 			$content = '<a href="' . $url . '"><img src="' . $this->model->getThumbUrl() . '" class="compact" /></a><div class="clear"></div>';
