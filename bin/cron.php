@@ -50,4 +50,4 @@ try {
 }
 
 $finish = microtime(true) - $start;
-echo getDateTime() . ' Finished in ' . ($finish / 1000) . " seconds.\r\n";
+echo getDateTime() . ' Finished in ' . (int) $finish . " seconds.\r\n";
