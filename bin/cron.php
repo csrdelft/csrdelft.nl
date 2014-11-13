@@ -22,6 +22,8 @@ chdir(dirname(__FILE__) . '/../lib/');
 
 require_once 'configuratie.include.php';
 
+$start = microtime(true);
+
 // Corvee herinneringen
 try {
 	require_once 'maalcie/model/CorveeHerinneringenModel.class.php';
@@ -46,3 +48,6 @@ try {
 } catch (Exception $e) {
 	DebugLogModel::instance()->log('cron.php', 'FotoAlbumModel::instance()->cleanup()', array(), $e);
 }
+
+$finish = microtime(true) - $start;
+echo getDateTime() . ' Finished in ' . ($finish / 1000) . " seconds.\r\n";
