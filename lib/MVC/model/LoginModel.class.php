@@ -288,22 +288,23 @@ class LoginModel extends PersistenceModel implements Validator {
 		}
 
 		// Login sessie aanmaken
-		if ($this->existsByPrimaryKey(array(session_id()))) {
-			throw new Exception('login session');
-		}
 		$session = new LoginSession();
 		$session->session_id = session_id();
 		$session->uid = $lid->getUid();
 		$session->login_moment = getDateTime();
 		$session->user_agent = filter_var($_SERVER['HTTP_USER_AGENT'], FILTER_SANITIZE_STRING);
 		$session->ip = $ip;
-		$this->create($session);
+		if ($this->existsByPrimaryKey(array(session_id()))) {
+			$this->update($session);
+		} else {
+			$this->create($session);
+		}
 
 		return true;
 	}
 
 	public function logout() {
-		$this->deleteByPrimaryKey(array(self::getUid()));
+		$this->deleteByPrimaryKey(array(session_id()));
 		session_destroy();
 		$this->login('x999', 'x999', true);
 	}
