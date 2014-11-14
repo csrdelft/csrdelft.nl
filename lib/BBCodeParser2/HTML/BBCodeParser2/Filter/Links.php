@@ -92,7 +92,8 @@ class HTML_BBCodeParser2_Filter_Links extends HTML_BBCodeParser2_Filter
                             "!".$oe."url(".$ce."|\s.*".$ce.")(.*)".$oe."/url".$ce."!iU",
                             "!".$oe."url=((([a-z]*:(//)?)|www)[@-a-z0-9.]+)([^\s\[\]]*)".$ce."(.*)".$oe."/url".$ce."!i");
 
-        $pp = preg_replace_callback($pattern[0], array($this, 'smarterPPLinkExpand'), $pp);
+		// Uitgezet: van urls niet standaard linkjes maken
+		// $pp = preg_replace_callback($pattern[0], array($this, 'smarterPPLinkExpand'), $pp);
         $pp = preg_replace($pattern[1], $o."url=\$2\$1\$2".$o."/url".$c, $pp);
         $this->_preparsed = preg_replace_callback($pattern[2], array($this, 'smarterPPLink'), $pp);
 

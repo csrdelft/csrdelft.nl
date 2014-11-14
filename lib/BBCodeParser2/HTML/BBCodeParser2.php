@@ -717,12 +717,14 @@ class HTML_BBCodeParser2 {
 				//     'type' => 1
 			    // )
 
-				//if between html tags don't escape html
+				//if only bbcode is allowed, escape html and replace newlines
 				if(!$this->isHtmlAllowed()) {
 					$tag['text'] = htmlspecialchars($tag['text']);
+
+					$tag['text'] = nl2br($tag['text'], $this->_options['xmlclose']);
 				}
 
-				//plugins which modify the plain text
+				//plugins which modify the unmatched text
 				foreach($this->_pluginsModifyingText as $tagname) {
 					$tag['tag'] = $tagname;
 					$tag['text'] = $this->renderPlugin($tag, $enable);
@@ -800,8 +802,8 @@ class HTML_BBCodeParser2 {
                 }
                 break;
             }
-        }
-    }
+		}
+	}
 
 	/**
 	 * Build attributes included escaping
