@@ -20,181 +20,180 @@
 //
 
 /**
-* @package  HTML_BBCodeParser2
-* @author   Stijn de Reede  <sjr@gmx.co.uk>
-*/
+ * @package  HTML_BBCodeParser2
+ * @author   Stijn de Reede  <sjr@gmx.co.uk>
+ */
 
 /**
  * Filter for link tags and links
  */
-class HTML_BBCodeParser2_Filter_Links extends HTML_BBCodeParser2_Filter
-{
-    /**
-     * List of allowed schemes
-     *
-     * @var     array
-     */
-    private $_allowedSchemes = array('http', 'https', 'ftp', 'irc');
+class HTML_BBCodeParser2_Filter_Links extends HTML_BBCodeParser2_Filter {
+	/**
+	 * List of allowed schemes
+	 *
+	 * @var     array
+	 */
+	private $_allowedSchemes = array('http', 'https', 'ftp', 'irc');
 
-    /**
-     * Default scheme
-     *
-     * @var     string
-     */
-    private $_defaultScheme = 'http';
+	/**
+	 * Default scheme
+	 *
+	 * @var     string
+	 */
+	private $_defaultScheme = 'http';
 
-    /**
-     * An array of tags parsed by the engine
-     *
-     * @var      array
-     */
-    protected $_definedTags = array(
-        'url' => array(
-            'htmlopen'  => 'a',
-            'htmlclose' => 'a',
-            'allowed'   => 'none^img',
-            'attributes'=> array('url' => ' href=%2$s%1$s%2$s',
-                                 't'   => ' target=%2$s%1$s%2$s')
-        )
-    );
+	/**
+	 * An array of tags parsed by the engine
+	 *
+	 * @var      array
+	 */
+	protected $_definedTags = array(
+		'url' => array(
+			'htmlopen'   => 'a',
+			'htmlclose'  => 'a',
+			'allowed'    => 'none^img',
+			'attributes' => array('url' => ' href=%2$s%1$s%2$s',
+								  't'   => ' target=%2$s%1$s%2$s')
+		)
+	);
 
 
-    /**
-     * Executes statements before the actual array building starts
-     *
-     * This method should be overwritten in a filter if you want to do
-     * something before the parsing process starts. This can be useful to
-     * allow certain short alternative tags which then can be converted into
-     * proper tags with preg_replace() calls.
-     * The main class walks through all the filters and and calls this
-     * method if it exists. The filters should modify their private $_text
-     * variable.
-     *
-     * @see      $_text
-     * @author   Stijn de Reede <sjr@gmx.co.uk>
-     * @author   Seth Price <seth@pricepages.org>
-     */
-    protected function _preparse() {
-        $options = $this->_options;
-        $o = $options['open'];
-        $c = $options['close'];
-        $oe = $options['open_esc'];
-        $ce = $options['close_esc'];
+	/**
+	 * Executes statements before the actual array building starts
+	 *
+	 * This method should be overwritten in a filter if you want to do
+	 * something before the parsing process starts. This can be useful to
+	 * allow certain short alternative tags which then can be converted into
+	 * proper tags with preg_replace() calls.
+	 * The main class walks through all the filters and and calls this
+	 * method if it exists. The filters should modify their private $_text
+	 * variable.
+	 *
+	 * @see      $_text
+	 * @author   Stijn de Reede <sjr@gmx.co.uk>
+	 * @author   Seth Price <seth@pricepages.org>
+	 */
+	protected function _preparse() {
+		$options = $this->_options;
+		$o = $options['open'];
+		$c = $options['close'];
+		$oe = $options['open_esc'];
+		$ce = $options['close_esc'];
 
-        $schemes = implode('|', $this->_allowedSchemes);
+		$schemes = implode('|', $this->_allowedSchemes);
 
 		//allow [rul], [/rul]
 		$regrul = "#".$oe."(/?)rul(.*)".$ce."#iU";
 		$replace = $o."\$1url\$2".$c;
 		$pp = preg_replace($regrul, $replace, $this->_text);
 
-        $pattern = array(   "/(?<![\"'=".$ce."\/])(".$oe."[^".$ce."]*".$ce.")?(((".$schemes."):\/\/|www)[@-a-z0-9.]+\.[a-z]{2,4}[^\s()\[\]]*)/i",
-                            "!".$oe."url(".$ce."|\s.*".$ce.")(.*)".$oe."/url".$ce."!iU",
-                            "!".$oe."url=((([a-z]*:(//)?)|www)[@-a-z0-9.]+)([^\s\[\]]*)".$ce."(.*)".$oe."/url".$ce."!i");
+		$pattern = array(	"/(?<![\"'=".$ce."\/])(".$oe."[^".$ce."]*".$ce.")?(((".$schemes."):\/\/|www)[@-a-z0-9.]+\.[a-z]{2,4}[^\s()\[\]]*)/i",
+							"!".$oe."url(".$ce."|\s.*".$ce.")(.*)".$oe."/url".$ce."!iU",
+							"!".$oe."url=((([a-z]*:(//)?)|www)[@-a-z0-9.]+)([^\s\[\]]*)".$ce."(.*)".$oe."/url".$ce."!i");
 
 		// Uitgezet: van urls niet standaard linkjes maken
 		// $pp = preg_replace_callback($pattern[0], array($this, 'smarterPPLinkExpand'), $pp);
-        $pp = preg_replace($pattern[1], $o."url=\$2\$1\$2".$o."/url".$c, $pp);
-        $this->_preparsed = preg_replace_callback($pattern[2], array($this, 'smarterPPLink'), $pp);
+		$pp = preg_replace($pattern[1], $o."url=\$2\$1\$2".$o."/url".$c, $pp);
+		$this->_preparsed = preg_replace_callback($pattern[2], array($this, 'smarterPPLink'), $pp);
 
-    }
+	}
 
-    /**
-     * [callback] Intelligently expand a URL into a link
-     *
-	 * @param   array   $matches
-     * @return  string
-     * @access  private
-     * @author  Seth Price <seth@pricepages.org>
-     * @author  Lorenzo Alberton <l.alberton@quipo.it>
-     */
-    public function smarterPPLinkExpand($matches) {
-        $options = $this->_options;
-        $o = $options['open'];
-        $c = $options['close'];
-        $oe = $options['open_esc'];
-        $ce = $options['close_esc'];
-
-        //If we have an intro tag that is [url], then skip this match
-        if (preg_match("/".$oe."url(=[^\s()\[\]=]+)?".$ce."/i", $matches[1])) {
-            return $matches[0];
-        }
-
-        $punctuation = '.,;:'; // Links can't end with these chars
-        $trailing = '';
-        // Knock off ending punctuation
-        $last = substr($matches[2], -1);
-        while (strpos($punctuation, $last) !== false) {
-            // Last character is punctuation - remove it from the url
-            $trailing = $last.$trailing;
-            $matches[2] = substr($matches[2], 0, -1);
-            $last = substr($matches[2], -1);
-        }
-
-        $off = strpos($matches[2], ':');
-
-        //Is a ":" (therefore a scheme) defined?
-        if ($off === false) {
-            /*
-             * Create a link with the default scheme of http. Notice that the
-             * text that is viewable to the user is unchanged, but the link
-             * itself contains the "http://".
-             */
-            return $matches[1].$o.'url='.$this->_defaultScheme.'://'.$matches[2].$c.$matches[2].$o.'/url'.$c.$trailing;
-        }
-
-        $scheme = substr($matches[2], 0, $off);
-
-        /*
-         * If protocol is in the approved list than allow it. Note that this
-         * check isn't really needed, but the created link will just be deleted
-         * later in smarterPPLink() if we create it now and it isn't on the
-         * scheme list.
-         */
-        if (in_array($scheme, $this->_allowedSchemes)) {
-            return $matches[1].$o.'url'.$c.$matches[2].$o.'/url'.$c.$trailing;
-        }
-        
-        return $matches[0];
-    }
-
-    /**
-     * [callback] Finish preparsing URL to clean it up
-     *
-	 * @param   array $matches
-     * @return  string
+	/**
+	 * [callback] Intelligently expand a URL into a link
 	 *
-     * @author  Seth Price <seth@pricepages.org>
-     */
-    public function smarterPPLink($matches) {
-        $options = $this->_options;
-        $o = $options['open'];
-        $c = $options['close'];
+	 * @param   array $matches
+	 * @return  string
+	 * @access  private
+	 * @author  Seth Price <seth@pricepages.org>
+	 * @author  Lorenzo Alberton <l.alberton@quipo.it>
+	 */
+	public function smarterPPLinkExpand($matches) {
+		$options = $this->_options;
+		$o = $options['open'];
+		$c = $options['close'];
+		$oe = $options['open_esc'];
+		$ce = $options['close_esc'];
 
-        $urlServ = $matches[1];
-        $path = $matches[5];
+		//If we have an intro tag that is [url], then skip this match
+		if (preg_match("/".$oe."url(=[^\s()\[\]=]+)?".$ce."/i", $matches[1])) {
+			return $matches[0];
+		}
 
-        $off = strpos($urlServ, ':');
+		$punctuation = '.,;:'; // Links can't end with these chars
+		$trailing = '';
+		// Knock off ending punctuation
+		$last = substr($matches[2], -1);
+		while (strpos($punctuation, $last) !== false) {
+			// Last character is punctuation - remove it from the url
+			$trailing = $last . $trailing;
+			$matches[2] = substr($matches[2], 0, -1);
+			$last = substr($matches[2], -1);
+		}
 
-        if ($off === false) {
-            //Default to http
-            $urlServ = $this->_defaultScheme.'://'.$urlServ;
-            $off = strpos($urlServ, ':');
-        }
+		$off = strpos($matches[2], ':');
 
-        //Add trailing slash if missing (to create a valid URL)
-        if (!$path) {
-            $path = '/';
-        }
+		//Is a ":" (therefore a scheme) defined?
+		if ($off === false) {
+			/*
+			 * Create a link with the default scheme of http. Notice that the
+			 * text that is viewable to the user is unchanged, but the link
+			 * itself contains the "http://".
+			 */
+			return $matches[1].$o.'url='.$this->_defaultScheme.'://'.$matches[2].$c.$matches[2].$o.'/url'.$c.$trailing;
+		}
 
-        $protocol = substr($urlServ, 0, $off);
+		$scheme = substr($matches[2], 0, $off);
 
-        if (in_array($protocol, $this->_allowedSchemes)) {
-            //If protocol is in the approved list than allow it
-            return $o.'url='.$urlServ.$path.$c.$matches[6].$o.'/url'.$c;
-        }
-        
-        //Else remove url tag
-        return $matches[6];
-    }
+		/*
+		 * If protocol is in the approved list than allow it. Note that this
+		 * check isn't really needed, but the created link will just be deleted
+		 * later in smarterPPLink() if we create it now and it isn't on the
+		 * scheme list.
+		 */
+		if (in_array($scheme, $this->_allowedSchemes)) {
+			return $matches[1].$o.'url'.$c.$matches[2].$o.'/url'.$c.$trailing;
+		}
+
+		return $matches[0];
+	}
+
+	/**
+	 * [callback] Finish preparsing URL to clean it up
+	 *
+	 * @param   array $matches
+	 * @return  string
+	 *
+	 * @author  Seth Price <seth@pricepages.org>
+	 */
+	public function smarterPPLink($matches) {
+		$options = $this->_options;
+		$o = $options['open'];
+		$c = $options['close'];
+
+		$urlServ = $matches[1];
+		$path = $matches[5];
+
+		$off = strpos($urlServ, ':');
+
+		if ($off === false) {
+			//Default to http
+			$urlServ = $this->_defaultScheme . '://' . $urlServ;
+			$off = strpos($urlServ, ':');
+		}
+
+		//Add trailing slash if missing (to create a valid URL)
+		if (!$path) {
+			$path = '/';
+		}
+
+		$protocol = substr($urlServ, 0, $off);
+
+		if (in_array($protocol, $this->_allowedSchemes)) {
+			//If protocol is in the approved list than allow it
+			return $o.'url='.$urlServ.$path.$c.$matches[6].$o.'/url'.$c;
+		}
+
+		//Else remove url tag
+		return $matches[6];
+	}
 }

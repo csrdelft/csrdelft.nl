@@ -19,114 +19,114 @@ class HTML_BBCodeParser2_Filter_Csrblocks extends HTML_BBCodeParser2_Filter {
 	 */
 	protected $_definedTags = array(
 		'groep' => array(
-			'allowed'   => 'none',
-			'attributes'=> array('groep' => ''),
-			'plugin'    => 'Csrblocks'),
+					'allowed'    => 'none',
+					'attributes' => array('groep' => ''),
+					'plugin'     => 'Csrblocks'),
 		'lid' => array(
-			'allowed'   => 'none',
-			'attributes'=> array('lid' => ''),
-			'plugin'    => 'Csrblocks'),
+					'allowed'    => 'none',
+					'attributes' => array('lid' => ''),
+					'plugin'     => 'Csrblocks'),
 		'boek' => array(
-			'allowed'   => 'none',
-			'attributes'=> array('boek' => ''),
-			'plugin'    => 'Csrblocks'),
+					'allowed'    => 'none',
+					'attributes' => array('boek' => ''),
+					'plugin'     => 'Csrblocks'),
 		'document' => array(
-			'allowed'   => 'none',
-			'attributes'=> array('document' => ''),
-			'plugin'    => 'Csrblocks'),
+					'allowed'    => 'none',
+					'attributes' => array('document' => ''),
+					'plugin'     => 'Csrblocks'),
 
 		'locatie' => array(
-			'allowed'   => 'none',
-			'attributes'=> array(
-				'locatie' => '',
-				'w' => '',
-				'h' => '',
-				'static' => ''),
-			'plugin'    => 'Csrblocks'),
+					'allowed'    => 'none',
+					'attributes' => array(
+						'locatie' => '',
+						'w'       => '',
+						'h'       => '',
+						'static'  => ''),
+					'plugin'     => 'Csrblocks'),
 		'map' => array(
-			'allowed'   => 'none',
-			'attributes'=> array(
-				'map' => '',
-				'w' => '',
-				'h' => '',
-				'static' => ''),
-			'plugin'    => 'Csrblocks'),
+					'allowed'    => 'none',
+					'attributes' => array(
+						'map'    => '',
+						'w'      => '',
+						'h'      => '',
+						'static' => ''),
+					'plugin'     => 'Csrblocks'),
 		'kaart' => array(
-			'allowed'   => 'none',
-			'attributes'=> array(
-				'kaart' => '',
-				'w' => '',
-				'h' => '',
-				'static' => ''),
-			'plugin'    => 'Csrblocks'),
+					'allowed'    => 'none',
+					'attributes' => array(
+						'kaart'  => '',
+						'w'      => '',
+						'h'      => '',
+						'static' => ''),
+					'plugin'     => 'Csrblocks'),
 
 		'peiling' => array(
-			'allowed'   => 'none',
-			'attributes'=> array('peiling' => ''),
-			'plugin'    => 'Csrblocks'),
+					'allowed'    => 'none',
+					'attributes' => array('peiling' => ''),
+					'plugin'     => 'Csrblocks'),
 		'slideshow' => array(
-			'allowed'   => 'none',
-			'attributes'=> array('slideshow' => ''),
-			'plugin'    => 'Csrblocks'),
+					'allowed'    => 'none',
+					'attributes' => array('slideshow' => ''),
+					'plugin'     => 'Csrblocks'),
 		'bijbelrooster' => array(
-			'allowed'   => 'none',
-			'attributes'=> array(
-				'bijbelrooster' => '',
-				'vertaling' => ''),
-			'plugin'    => 'Csrblocks'),
+					'allowed'    => 'none',
+					'attributes' => array(
+						'bijbelrooster' => '',
+						'vertaling'     => ''),
+					'plugin'     => 'Csrblocks'),
 		'bijbel' => array(
-			'allowed'   => 'none',
-			'attributes'=> array('bijbel' => ''),
-			'plugin'    => 'Csrblocks'),
+					'allowed'    => 'none',
+					'attributes' => array('bijbel' => ''),
+					'plugin'     => 'Csrblocks'),
 		'mededelingen' => array(
-			'allowed'   => 'none',
-			'attributes'=> array('mededelingen' => ''),
-			'plugin'    => 'Csrblocks'),
+					'allowed'    => 'none',
+					'attributes' => array('mededelingen' => ''),
+					'plugin'     => 'Csrblocks'),
 		'maaltijd' => array(
-			'allowed'   => 'none',
-			'attributes'=> array('maaltijd' => ''),
-			'plugin'    => 'Csrblocks'),
+					'allowed'    => 'none',
+					'attributes' => array('maaltijd' => ''),
+					'plugin'     => 'Csrblocks'),
 		'query' => array(
-			'allowed'   => 'none',
-			'attributes'=> array('query' => ''),
-			'plugin'    => 'Csrblocks'),
+					'allowed'    => 'none',
+					'attributes' => array('query' => ''),
+					'plugin'     => 'Csrblocks'),
 		'youtube' => array(
-			'allowed'   => 'none',
-			'attributes'=> array('youtube' => ''),
-			'plugin'    => 'Csrblocks'),
+					'allowed'    => 'none',
+					'attributes' => array('youtube' => ''),
+					'plugin'     => 'Csrblocks'),
 		'video' => array(
-			'allowed'   => 'none',
-			'attributes'=> array('video' => ''),
-			'plugin'    => 'Csrblocks'),
+					'allowed'    => 'none',
+					'attributes' => array('video' => ''),
+					'plugin'     => 'Csrblocks'),
 		'twitter' => array(
-			'allowed'   => 'none',
-			'attributes'=> array(
-				'twitter' => '',
-				'lines' => '',
-				'width' => '',
-				'height' => ''),
-			'plugin'    => 'Csrblocks'),
+					'allowed'    => 'none',
+					'attributes' => array(
+						'twitter' => '',
+						'lines'   => '',
+						'width'   => '',
+						'height'  => ''),
+					'plugin'     => 'Csrblocks'),
 		'foto' => array(
-			'allowed'   => 'none',
-			'attributes'=> array('foto' => ''),
-			'plugin'    => 'Csrblocks'),
+					'allowed'    => 'none',
+					'attributes' => array('foto' => ''),
+					'plugin'     => 'Csrblocks'),
 		'fotoalbum' => array(
-			'allowed'   => 'none',
-			'attributes'=> array(
-				'fotoalbum' => '',
-				'rows' 		=> '',
-				'big' 		=> '',
-				'bigfirst' 	=> '',
-				'compact' 	=> ''),
-			'plugin'    => 'Csrblocks'),
+					'allowed'    => 'none',
+					'attributes' => array(
+						'fotoalbum' => '',
+						'rows'      => '',
+						'big'       => '',
+						'bigfirst'  => '',
+						'compact'   => ''),
+					'plugin'     => 'Csrblocks'),
 		'citaat' => array(
-			'allowed'   => 'all',
-			'attributes'=> array('citaat' => ''),
-			'plugin'    => 'Csrblocks'),
+					'allowed'    => 'all',
+					'attributes' => array('citaat' => ''),
+					'plugin'     => 'Csrblocks'),
 		'quote' => array(
-			'allowed'   => 'all',
-			'attributes'=> array('quote' => ''),
-			'plugin'    => 'Csrblocks'),
+					'allowed'    => 'all',
+					'attributes' => array('quote' => ''),
+					'plugin'     => 'Csrblocks'),
 	);
 
 	/**
@@ -152,8 +152,8 @@ class HTML_BBCodeParser2_Filter_Csrblocks extends HTML_BBCodeParser2_Filter {
 	 */
 	protected function _preparse() {
 		$options = $this->_options;
-		$o  = $options['open'];
-		$c  = $options['close'];
+		$o = $options['open'];
+		$c = $options['close'];
 		$oe = $options['open_esc'];
 		$ce = $options['close_esc'];
 
@@ -166,7 +166,7 @@ class HTML_BBCodeParser2_Filter_Csrblocks extends HTML_BBCodeParser2_Filter {
 		);
 		$pattern = array();
 		$replace = array();
-		foreach($tags as $tag) {
+		foreach ($tags as $tag) {
 			$pattern[] = "#".$oe.$tag."=([^".$ce."]*?)".$ce."(?!".$oe."/".$tag.$ce.")#Ui"; // [groep=.*] zonder [/groep] erachter
 			$pattern[] = "#".$oe.$tag."(?!=)(\s?.*)".$ce."(.+?)".$oe."/".$tag.$ce."#Ui";   // [groep .*].+[/groep]
 			$replace[] = $o.$tag."=\$1".    $c.$o."/".$tag.$c;                             // [groep=.*][/groep]
@@ -187,7 +187,7 @@ class HTML_BBCodeParser2_Filter_Csrblocks extends HTML_BBCodeParser2_Filter {
 	protected function html_groep(array $tag, &$enabled) {
 		switch ($tag['type']) {
 			case 1:
-				if(isset($tag['attributes']['groep'])) {
+				if (isset($tag['attributes']['groep'])) {
 					$groepid = trim($tag['attributes']['groep']);
 				} else {
 					$groepid = '';
@@ -202,7 +202,7 @@ class HTML_BBCodeParser2_Filter_Csrblocks extends HTML_BBCodeParser2_Filter {
 				} catch (Exception $e) {
 					return '[groep] Geen geldig groep-id (' . htmlspecialchars($groepid) . ')';
 				}
-			break;
+				break;
 		}
 		return false;
 	}
@@ -269,7 +269,7 @@ class HTML_BBCodeParser2_Filter_Csrblocks extends HTML_BBCodeParser2_Filter {
 				} catch (Exception $e) {
 					return '[boek] Boek [boekid:' . (int)$boekid . '] bestaat niet.';
 				}
-			break;
+				break;
 		}
 		return false;
 	}
@@ -288,7 +288,7 @@ class HTML_BBCodeParser2_Filter_Csrblocks extends HTML_BBCodeParser2_Filter {
 	protected function html_document(array $tag, &$enabled) {
 		switch ($tag['type']) {
 			case 1:
-				if(isset($tag['attributes']['document'])) {
+				if (isset($tag['attributes']['document'])) {
 					$id = trim($tag['attributes']['document']);
 				} else {
 					$id = '';
@@ -296,7 +296,7 @@ class HTML_BBCodeParser2_Filter_Csrblocks extends HTML_BBCodeParser2_Filter {
 
 				require_once 'documenten/documentcontent.class.php';
 				try {
-					$document = new Document((int) $id);
+					$document = new Document((int)$id);
 					$content = new DocumentBBContent($document);
 					return $content->getHtml();
 				} catch (Exception $e) {
@@ -338,6 +338,7 @@ class HTML_BBCodeParser2_Filter_Csrblocks extends HTML_BBCodeParser2_Filter {
 		}
 		return false;
 	}
+
 	/**
 	 * Google-maps
 	 *
@@ -362,6 +363,7 @@ class HTML_BBCodeParser2_Filter_Csrblocks extends HTML_BBCodeParser2_Filter {
 		}
 		return false;
 	}
+
 	/**
 	 * map = kaart
 	 */
@@ -379,12 +381,12 @@ class HTML_BBCodeParser2_Filter_Csrblocks extends HTML_BBCodeParser2_Filter {
 			return 'Geen adres opgegeven';
 		}
 		if (isset($arguments['w']) AND $arguments['w'] < 800) {
-			$width = (int) $arguments['w'];
+			$width = (int)$arguments['w'];
 		} else {
 			$width = 400;
 		}
 		if (isset($arguments['h']) AND $arguments['h'] < 600) {
-			$height = (int) $arguments['h'];
+			$height = (int)$arguments['h'];
 		} else {
 			$height = 300;
 		}
@@ -460,7 +462,7 @@ class HTML_BBCodeParser2_Filter_Csrblocks extends HTML_BBCodeParser2_Filter {
 					$content = '';
 				}
 
-				$slides_tainted = explode('[br]', $content);         //todo BR??
+				$slides_tainted = explode('[br]', $content); //todo BR??
 				$slides = array();
 				foreach ($slides_tainted as $slide) {
 					$slide = trim($slide);
@@ -482,7 +484,7 @@ class HTML_BBCodeParser2_Filter_Csrblocks extends HTML_BBCodeParser2_Filter {
 						$content .= '<a href="#" rel="' . $i . '">&bull;</a>' . "\n";
 					}
 					$content .= '</div>' . "\n"; //end paging
-					if ($this->slideshowJsIncluded === false) {                                                      //TODO check
+					if ($this->slideshowJsIncluded === false) { //TODO check
 						$content .= '<script type="text/javascript" src="/layout/js/bb-slideshow.js"></script>';
 						$this->slideshowJsIncluded = true;
 					}
@@ -548,9 +550,9 @@ class HTML_BBCodeParser2_Filter_Csrblocks extends HTML_BBCodeParser2_Filter {
 	}
 
 	/**
-	 * @param string $stukje
+	 * @param string      $stukje
 	 * @param string|null $vertaling
-	 * @param bool $tag
+	 * @param bool        $tag
 	 * @return string
 	 */
 	public static function getBijbelLink($stukje, $vertaling = null, $tag = false) {
@@ -721,6 +723,7 @@ class HTML_BBCodeParser2_Filter_Csrblocks extends HTML_BBCodeParser2_Filter {
 		}
 		return false;
 	}
+
 	/**
 	 *
 	 * @param array  $tag
@@ -764,9 +767,9 @@ class HTML_BBCodeParser2_Filter_Csrblocks extends HTML_BBCodeParser2_Filter {
 	 * [video]http://vimeo.com/1582112[/video]
 	 *
 	 * tag parameters:
-	 * 		force	Forceer weergave filmpje ook als het al een keer op de pagina voorkomt.
-	 * 		width	Breedte van het filmpje
-	 * 		height	Hoogte van het filmpje
+	 *        force    Forceer weergave filmpje ook als het al een keer op de pagina voorkomt.
+	 *        width    Breedte van het filmpje
+	 *        height    Hoogte van het filmpje
 	 *
 	 * @param array  $tag
 	 * @param string $enabled (reference) modify unmatched text or use htmlspecialchar()
@@ -856,6 +859,7 @@ HTML;
 
 		return $html;
 	}
+
 	/**
 	 *
 	 * @param array  $tag
@@ -865,7 +869,7 @@ HTML;
 	protected function html_twitter(array $tag, &$enabled) {
 		switch ($tag['type']) {
 			case 1:
-				$arguments =  $tag['attributes'];
+				$arguments = $tag['attributes'];
 				if (isset($arguments['twitter'])) {
 					$content = trim($arguments['twitter']);
 				} else {
@@ -965,15 +969,15 @@ HTML;
 	 * [fotoalbum]/pad/naar/album[/fotoalbum]
 	 *
 	 * Parameters:
-	 * 	rows	Aantal regels weergeven
-	 * 			rows=4
+	 *    rows    Aantal regels weergeven
+	 *            rows=4
 	 *
-	 * 	big		Lijstje met indexen van afbeeldingen die groot moeten
-	 * 			worden.
-	 * 			big=0,5,14 | big=a | big=b |
+	 *    big        Lijstje met indexen van afbeeldingen die groot moeten
+	 *            worden.
+	 *            big=0,5,14 | big=a | big=b |
 	 *
-	 * 	compact	Compacte versie van de tag weergeven
-	 * 			compact=true
+	 *    compact    Compacte versie van de tag weergeven
+	 *            compact=true
 	 *
 	 *  bigfirst
 	 *
@@ -986,7 +990,7 @@ HTML;
 			case 1:
 				require_once 'MVC/controller/FotoAlbumController.class.php';
 
-				$arguments =  $tag['attributes'];
+				$arguments = $tag['attributes'];
 				if (isset($arguments['fotoalbum'])) {
 					$url = urldecode(trim($arguments['fotoalbum']));
 				} else {
@@ -1071,17 +1075,17 @@ HTML;
 
 				$html = '<div class="citaatContainer">Citaat' . $spreker . ':';
 				$html .= '<div class="citaat">';
-				if($this->quote_level > 1) {
+				if ($this->quote_level > 1) {
 					$html .= '<div onclick="$(this).children(\'.citaatpuntjes\').slideUp();$(this).children(\'.meercitaat\').slideDown();">'
 						   . '<div class="meercitaat verborgen">';
 				}
 				return $html;
 			case 2:
 				$html = '';
-				if($this->quote_level > 1) {
-					$html .=  '</div>'
-							. '<div class="citaatpuntjes" title="Toon citaat">...</div>'
-							. '</div>';
+				if ($this->quote_level > 1) {
+					$html .= '</div>'
+						   . '<div class="citaatpuntjes" title="Toon citaat">...</div>'
+						   . '</div>';
 				}
 				$html .= '</div></div>';
 

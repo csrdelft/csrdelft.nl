@@ -7,7 +7,6 @@
  */
 
 
-
 /**
  * Filter for basic formatting
  */
@@ -20,36 +19,36 @@ class HTML_BBCodeParser2_Filter_Div extends HTML_BBCodeParser2_Filter {
 	 */
 	protected $_definedTags = array(
 		'div' => array(
-			'plugin' 		=> 'Div',
-			'allowed'   	=> 'all',
-			'attributes'	=> array(
-				'class' 			=> '',
-				'clear' 			=> '',
-				'float' 			=> '',
-				'w' 				=> '',
-				'h'					=> '')),
+			'plugin'     => 'Div',
+			'allowed'    => 'all',
+			'attributes' => array(
+				'class' => '',
+				'clear' => '',
+				'float' => '',
+				'w'     => '',
+				'h'     => '')),
 		'clear' => array(
-			'htmlopen'  => 'div class="clear',
+			'htmlopen'         => 'div class="clear',
 			'htmlopen_postfix' => '"',
-			'htmlclose' => 'div',
-			'allowed'   => 'all',
-			'attributes'=> array(
-				'clear' =>'-%1$s')),
+			'htmlclose'        => 'div',
+			'allowed'          => 'all',
+			'attributes'       => array(
+				'clear' => '-%1$s')),
 		'spoiler' => array(
-			'htmlopen'  => 'button class="spoiler">Toon verklapper</button><div class="spoiler-content"',
-			'htmlclose' => 'div',
-			'allowed'   => 'all',
-			'attributes'=> array()),
+			'htmlopen'   => 'button class="spoiler">Toon verklapper</button><div class="spoiler-content"',
+			'htmlclose'  => 'div',
+			'allowed'    => 'all',
+			'attributes' => array()),
 		'verklapper' => array(
-			'htmlopen'  => 'button class="spoiler">Toon verklapper</button><div class="spoiler-content"',
-			'htmlclose' => 'div',
-			'allowed'   => 'all',
-			'attributes'=> array())
+			'htmlopen'   => 'button class="spoiler">Toon verklapper</button><div class="spoiler-content"',
+			'htmlclose'  => 'div',
+			'allowed'    => 'all',
+			'attributes' => array())
 
 	);
 
 	/**
-	 * @param array $tag
+	 * @param array  $tag
 	 * @param string $flag (reference) provide tagname if htmltext_<tag> should be called on text between tags
 	 * @return false|string html or false for using default
 	 */
@@ -62,21 +61,21 @@ class HTML_BBCodeParser2_Filter_Div extends HTML_BBCodeParser2_Filter {
 					$class .= htmlspecialchars($attr['class']);
 				}
 				if (isset($attr['clear'])) {
-					$class.=' clear';
+					$class .= ' clear';
 				} elseif (isset($attr['float']) AND $attr['float'] == 'left') {
-					$class.=' float-left';
+					$class .= ' float-left';
 				} elseif (isset($attr['float']) AND $attr['float'] == 'right') {
-					$class.=' float-right';
+					$class .= ' float-right';
 				}
 				if ($class != '') {
 					$class = ' class="' . $class . '"';
 				}
 				$style = '';
 				if (isset($attr['w'])) {
-					$style.='width: ' . ((int) $attr['w']) . 'px; ';
+					$style .= 'width: ' . ((int)$attr['w']) . 'px; ';
 				}
 				if (isset($attr['h'])) {
-					$style.='height: ' . ((int) $attr['h']) . 'px; ';
+					$style .= 'height: ' . ((int)$attr['h']) . 'px; ';
 				}
 				if ($style != '') {
 					$style = ' style="' . $style . '" ';
@@ -104,8 +103,8 @@ class HTML_BBCodeParser2_Filter_Div extends HTML_BBCodeParser2_Filter {
 	 */
 	protected function _preparse() {
 		$options = $this->_options;
-		$o  = $options['open'];
-		$c  = $options['close'];
+		$o = $options['open'];
+		$c = $options['close'];
 		$oe = $options['open_esc'];
 		$ce = $options['close_esc'];
 

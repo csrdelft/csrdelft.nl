@@ -7,7 +7,6 @@
  */
 
 
-
 /**
  * Filter for basic formatting
  */
@@ -20,8 +19,8 @@ class HTML_BBCodeParser2_Filter_Html extends HTML_BBCodeParser2_Filter {
 	 */
 	protected $_definedTags = array(
 		'html' => array(
-			'allowed'   => 'all',
-			'plugin'=> 'Html')
+			'allowed' => 'all',
+			'plugin'  => 'Html')
 	);
 
 	/**

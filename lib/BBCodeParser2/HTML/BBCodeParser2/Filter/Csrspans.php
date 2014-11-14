@@ -7,7 +7,6 @@
  */
 
 
-
 /**
  * Filter for basic formatting
  */
@@ -262,7 +261,7 @@ class HTML_BBCodeParser2_Filter_Csrspans extends HTML_BBCodeParser2_Filter {
 				}
 
 			case 2:
-				if($this->outputdisabled) {
+				if ($this->outputdisabled) {
 					$enabled = 'enable_output';
 					$this->outputdisabled = false;
 				}
@@ -291,14 +290,14 @@ class HTML_BBCodeParser2_Filter_Csrspans extends HTML_BBCodeParser2_Filter {
 
 				$forbidden = !LoginModel::mag($permissie);
 
-				if($forbidden) {
+				if ($forbidden) {
 					$enabled = 'disable_output';
 					$this->outputdisabled = true;
 				}
 				return '';
 
 			case 2:
-				if($this->outputdisabled) {
+				if ($this->outputdisabled) {
 					$enabled = 'enable_output';
 					$this->outputdisabled = false;
 				}

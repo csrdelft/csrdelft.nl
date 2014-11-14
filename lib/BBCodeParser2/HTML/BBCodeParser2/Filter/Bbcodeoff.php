@@ -18,14 +18,14 @@ class HTML_BBCodeParser2_Filter_Bbcodeoff extends HTML_BBCodeParser2_Filter {
 	 * @var      array
 	 */
 	protected $_definedTags = array(
-		'ubboff' => array( 	'htmlopen'  => '',
-							'htmlclose' => '',
-							'allowed'   => 'none',
-							'attributes'=> array('')),
-		'tekst' => array( 	'htmlopen'  => '',
-							'htmlclose' => '',
-							'allowed'   => 'none',
-							'attributes'=> array(''))
+		'ubboff' => array('htmlopen'   => '',
+						  'htmlclose'  => '',
+						  'allowed'    => 'none',
+						  'attributes' => array('')),
+		'tekst'  => array('htmlopen'   => '',
+						  'htmlclose'  => '',
+						  'allowed'    => 'none',
+						  'attributes' => array(''))
 	);
 
 

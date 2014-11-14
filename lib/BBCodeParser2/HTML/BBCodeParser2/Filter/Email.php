@@ -20,10 +20,9 @@
 //
 
 /**
-* @package  HTML_BBCodeParser2
-* @author   Stijn de Reede  <sjr@gmx.co.uk>
-*/
-
+ * @package  HTML_BBCodeParser2
+ * @author   Stijn de Reede  <sjr@gmx.co.uk>
+ */
 
 
 /**
@@ -31,46 +30,45 @@
  */
 class HTML_BBCodeParser2_Filter_Email extends HTML_BBCodeParser2_Filter {
 
-    /**
-    * An array of tags parsed by the engine
-    *
-    * @var      array
-    */
-    protected $_definedTags = array(
-		                        'email' => array(   'htmlopen'  => 'a',
-                                                    'htmlclose' => 'a',
-                                                    'allowed'   => 'none^img',
-                                                    'attributes'=> array('email' =>' href=%2$smailto:%1$s%2$s')
-                                               )
-                              );
+	/**
+	 * An array of tags parsed by the engine
+	 *
+	 * @var      array
+	 */
+	protected $_definedTags = array(
+		'email' => array('htmlopen'   => 'a',
+						 'htmlclose'  => 'a',
+						 'allowed'    => 'none^img',
+						 'attributes' => array('email' => ' href=%2$smailto:%1$s%2$s')
+		)
+	);
 
 
-    /**
-    * Executes statements before the actual array building starts
-    *
-    * This method should be overwritten in a filter if you want to do
-    * something before the parsing process starts. This can be useful to
-    * allow certain short alternative tags which then can be converted into
-    * proper tags with preg_replace() calls.
-    * The main class walks through all the filters and and calls this
-    * method if it exists. The filters should modify their private $_text
-    * variable.
-    *
-    * @see      $_text
-    * @author   Stijn de Reede  <sjr@gmx.co.uk>
-    */
-    protected function _preparse() {
-        $options = $this->_options;
-        $o = $options['open'];
-        $c = $options['close'];
-        $oe = $options['open_esc'];
-        $ce = $options['close_esc'];
-        $pattern = array(   "!(^|\s)([-a-z0-9_.+]+@[-a-z0-9.]+\.[a-z]{2,4})!i",
-                            "!".$oe."email(".$ce."|\s.*".$ce.")(.*)".$oe."/email".$ce."!Ui");
-        $replace = array(   "\\1".$o."email=\\2".$c."\\2".$o."/email".$c,
-                            $o."email=\\2\\1\\2".$o."/email".$c);
-        $this->_preparsed = preg_replace($pattern, $replace, $this->_text);
-    }
-
+	/**
+	 * Executes statements before the actual array building starts
+	 *
+	 * This method should be overwritten in a filter if you want to do
+	 * something before the parsing process starts. This can be useful to
+	 * allow certain short alternative tags which then can be converted into
+	 * proper tags with preg_replace() calls.
+	 * The main class walks through all the filters and and calls this
+	 * method if it exists. The filters should modify their private $_text
+	 * variable.
+	 *
+	 * @see      $_text
+	 * @author   Stijn de Reede  <sjr@gmx.co.uk>
+	 */
+	protected function _preparse() {
+		$options = $this->_options;
+		$o  = $options['open'];
+		$c  = $options['close'];
+		$oe = $options['open_esc'];
+		$ce = $options['close_esc'];
+		$pattern = array(	"!(^|\s)([-a-z0-9_.+]+@[-a-z0-9.]+\.[a-z]{2,4})!i",
+							"!".$oe."email(".$ce."|\s.*".$ce.")(.*)".$oe."/email".$ce."!Ui");
+		$replace = array(	"\\1".$o."email=\\2".$c."\\2".$o."/email".$c,
+							$o."email=\\2\\1\\2".$o."/email".$c);
+		$this->_preparsed = preg_replace($pattern, $replace, $this->_text);
+	}
 
 }
