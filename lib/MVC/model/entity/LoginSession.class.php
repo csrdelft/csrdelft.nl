@@ -41,8 +41,8 @@ class LoginSession extends PersistentEntity {
 		'session_id'	 => array(T::String),
 		'uid'			 => array(T::UID),
 		'login_moment'	 => array(T::DateTime),
-		'user_agent'	 => array(T::String, null),
-		'ip'			 => array(T::String, null)
+		'user_agent'	 => array(T::String, true),
+		'ip'			 => array(T::String, true)
 	);
 	/**
 	 * Database primary key
