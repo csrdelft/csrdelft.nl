@@ -134,13 +134,20 @@ class LoginController extends AclController {
 				setMelding('Wacht ' . $timeout . ' seconden', -1);
 			} elseif ($lid instanceof Lid AND AccessModel::mag($lid, 'P_LOGGED_IN') AND $lid->getEmail() == $values['mail']) {
 				TimeoutModel::instance()->goed($uid);
-				$tokenValue = VerifyModel::instance()->createToken($uid, '/wachtwoord/reset');
-				require_once 'MVC/model/entity/Mail.class.php';
-				$bericht = "Wachtwoord instellen: [url]http://csrdelft.nl/verify?token=" . $tokenValue . "[/url]\r\n";
-				$mail = new Mail(array($uid . '@csrdelft.nl' => Lid::naamLink($uid, 'civitas', 'plain')), 'C.S.R. webstek: nieuw wachtwoord instellen', $bericht);
-				$mail->setReplyTo('no-reply@csrdelft.nl');
-				$mail->send();
-				setMelding('Wachtwoord instellen email verzonden', 1);
+				try {
+					$tokenValue = VerifyModel::instance()->createToken($uid, '/wachtwoord/reset');
+
+					require_once 'MVC/model/entity/Mail.class.php';
+					$bericht = "Wachtwoord instellen: [url]http://csrdelft.nl/verify/" . $tokenValue . "[/url]";
+					$mail = new Mail(array($uid . '@csrdelft.nl' => Lid::naamLink($uid, 'civitas', 'plain')), 'C.S.R. webstek: nieuw wachtwoord instellen', $bericht);
+					$mail->setReplyTo('no-reply@csrdelft.nl');
+					$mail->send();
+
+					setMelding('Wachtwoord reset email verzonden', 1);
+				} catch (Exception $e) {
+					setMelding('Wachtwoord reset email niet verzonden', -1);
+				}
+				redirect();
 			} else {
 				TimeoutModel::instance()->fout($uid);
 			}
