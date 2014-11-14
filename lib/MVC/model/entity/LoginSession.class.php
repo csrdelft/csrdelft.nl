@@ -14,7 +14,7 @@ class LoginSession extends PersistentEntity {
 	 */
 	public $session_id;
 	/**
-	 * UID
+	 * Lid
 	 * @var string
 	 */
 	public $uid;
@@ -22,17 +22,17 @@ class LoginSession extends PersistentEntity {
 	 * DateTime
 	 * @var string
 	 */
-	public $moment;
-	/**
-	 * IP address
-	 * @var string
-	 */
-	public $ip;
+	public $login_moment;
 	/**
 	 * User agent
 	 * @var string
 	 */
 	public $user_agent;
+	/**
+	 * IP address
+	 * @var string
+	 */
+	public $ip;
 	/**
 	 * Database table columns
 	 * @var array
@@ -40,10 +40,9 @@ class LoginSession extends PersistentEntity {
 	protected static $persistent_attributes = array(
 		'session_id'	 => array(T::String),
 		'uid'			 => array(T::UID),
-		'last_active'	 => array(T::DateTime),
-		'ip'			 => array(T::String),
-		'user_agent'	 => array(T::String),
-		'locked_to_ip'	 => array(T::Boolean)
+		'login_moment'	 => array(T::DateTime),
+		'user_agent'	 => array(T::String, null),
+		'ip'			 => array(T::String, null)
 	);
 	/**
 	 * Database primary key

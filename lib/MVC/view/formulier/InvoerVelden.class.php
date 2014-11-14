@@ -1170,15 +1170,24 @@ class RequiredWachtwoordField extends WachtwoordField {
  *
  * Aanpassen van wachtwoorden.
  * Vreemde eend in de 'bijt', deze unit produceert 3 velden: oud, nieuw en bevestiging.
+ * 
+ * Bij wachtwoord resetten produceert deze 2 velden.
  */
 class WachtwoordWijzigenField extends InputField {
 
-	public function __construct($name, Lid $lid) {
+	private $reset;
+
+	public function __construct($name, Lid $lid, $reset = false) {
 		parent::__construct($name, $name, null, $lid);
+		$this->reset = $reset;
 	}
 
 	public function isPosted() {
-		return isset($_POST[$this->name . '_current'], $_POST[$this->name . '_new'], $_POST[$this->name . '_confirm']);
+		$return = true;
+		if (!$this->reset) {
+			$return = isset($_POST[$this->name . '_current']);
+		}
+		return $return AND isset($_POST[$this->name . '_new'], $_POST[$this->name . '_confirm']);
 	}
 
 	public function getValue() {
@@ -1200,26 +1209,26 @@ class WachtwoordWijzigenField extends InputField {
 		if (!parent::validate()) {
 			return false;
 		}
-		$current = $_POST[$this->name . '_current'];
-		$new = $_POST[$this->name . '_new'];
-		$confirm = $_POST[$this->name . '_confirm'];
-		if ($current != '') {
-			if (!$this->model->checkpw($current)) {
-				$this->error = 'Uw huidige wachtwoord is niet juist';
-			} else {
-				if ($new == '' OR $confirm == '') {
-					$this->error = 'Vul uw nieuwe wachtwoord twee keer in';
-				} elseif ($new != $confirm) {
-					$this->error = 'Nieuwe wachtwoorden komen niet overeen';
-				} elseif (preg_match('/^[0-9]*$/', $new)) {
-					$this->error = 'Het nieuwe wachtwoord moet ook letters of leestekens bevatten... :-|';
-				} elseif (mb_strlen($new) < 6 OR mb_strlen($new) > 60) {
-					$this->error = 'Het wachtwoord moet minimaal 6 en maximaal 16 tekens bevatten';
-				}
-			}
+		if (!$this->reset) {
+			$current = filter_input(INPUT_POST, $this->name . '_current', FILTER_SANITIZE_STRING);
 		}
-		if ($new != '' AND $current == '') {
+		$new = filter_input(INPUT_POST, $this->name . '_new', FILTER_SANITIZE_STRING);
+		$confirm = filter_input(INPUT_POST, $this->name . '_confirm', FILTER_SANITIZE_STRING);
+		$length = strlen(utf8_decode($new));
+		if (!$this->reset AND empty($current)) {
 			$this->error = 'U dient uw huidige wachtwoord ook in te voeren';
+		} elseif (!$this->reset AND ! $this->model->checkpw($current)) {
+			$this->error = 'Uw huidige wachtwoord is niet juist';
+		} elseif (empty($new) OR empty($confirm)) {
+			$this->error = 'Vul uw nieuwe wachtwoord twee keer in';
+		} elseif (preg_match('/^[0-9]*$/', $new)) {
+			$this->error = 'Het nieuwe wachtwoord moet ook letters of leestekens bevatten';
+		} elseif (preg_match('/^[a-zA-Z]*$/', $new)) {
+			$this->error = 'Het nieuwe wachtwoord moet ook cijfers of leestekens bevatten';
+		} elseif ($length < 8 OR $length > 16) {
+			$this->error = 'Het wachtwoord moet minimaal 8 en maximaal 16 tekens bevatten';
+		} elseif ($new != $confirm) {
+			$this->error = 'Nieuwe wachtwoorden komen niet overeen';
 		}
 		return $this->error === '';
 	}
@@ -1228,8 +1237,10 @@ class WachtwoordWijzigenField extends InputField {
 		echo $this->getDiv();
 		echo '<div class="password">';
 		echo $this->getErrorDiv();
-		echo '<label for="' . $this->name . '_current">Huidige wachtwoord</label>';
-		echo '<input type="password" autocomplete="off" id="' . $this->getId() . '_current" name="' . $this->name . '_current" /></div>';
+		if (!$this->reset) {
+			echo '<label for="' . $this->name . '_current">Huidige wachtwoord</label>';
+			echo '<input type="password" autocomplete="off" id="' . $this->getId() . '_current" name="' . $this->name . '_current" /></div>';
+		}
 		echo '<div class="password"><label for="' . $this->name . '_new">Nieuw wachtwoord</label>';
 		echo '<input type="password" autocomplete="off" id="' . $this->getId() . '_new" name="' . $this->name . '_new" /></div>';
 		echo '<div class="password"><label for="' . $this->name . '_confirm">Nogmaals</label>';

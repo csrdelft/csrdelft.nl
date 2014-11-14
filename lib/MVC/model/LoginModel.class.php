@@ -49,13 +49,12 @@ class LoginModel extends PersistenceModel implements Validator {
 	private $error;
 
 	protected function __construct() {
-		//TODO: parent::__construct();
-
+		parent::__construct();
+		/**
+		 * Werkomheen
+		 * @source www.nabble.com/problem-with-sessions-in-1.4.8-t2550641.html
+		 */
 		if (session_id() == 'deleted') {
-			/**
-			 * Werkomheen
-			 * @source www.nabble.com/problem-with-sessions-in-1.4.8-t2550641.html
-			 */
 			session_regenerate_id();
 		}
 
@@ -71,7 +70,7 @@ class LoginModel extends PersistenceModel implements Validator {
 		// om zonder sessie bepaalde rechten te krijgen.
 		if ($this->getLid()->getUid() === 'x999') {
 			$token = filter_input(INPUT_GET, 'private_token', FILTER_SANITIZE_STRING);
-			if (preg_match('/^[a-z0-9]{25}$/', $token)) {
+			if (preg_match('/^[a-zA-Z0-9]{150}$/', $token)) {
 				$uid = Database::instance()->sqlSelect(array('uid'), 'lid', 'rssToken = ?', array($token), null, null, 1)->fetchColumn();
 				$lid = LidCache::getLid($uid);
 				if ($lid instanceof Lid) {
@@ -88,21 +87,38 @@ class LoginModel extends PersistenceModel implements Validator {
 	 * Is de huidige gebruiker al actief in een sessie?
 	 */
 	public function validate() {
+
 		// Er is geen _uid gezet in _SESSION dus er is nog niemand ingelogged.
 		if (!isset($_SESSION['_uid'])) {
 			return false;
 		}
+
 		// Sessie is gekoppeld aan ip, het ip checken:
 		if (isset($_SESSION['_ip']) AND $_SESSION['_ip'] !== $_SERVER['REMOTE_ADDR']) {
 			return false;
 		}
+
 		$lid = LidCache::getLid($_SESSION['_uid']);
 		if ($lid instanceof Lid) {
+
 			// Subject Assignment:
 			$this->setLid($lid);
 			if (isset($_SESSION['_suedFrom'])) {
 				$this->suedFrom = LidCache::getLid($_SESSION['_suedFrom']);
 			}
+
+			// Check login session
+			$session = $this->retrieveByPrimaryKey(array(session_id()));
+			if (!$session) {
+				return false;
+			} elseif ($session->user_agent != $_SERVER['USER_AGENT']) {
+				return false;
+			} elseif (isset($this->suedFrom) AND $session->uid != $this->suedFrom->getUid()) {
+				return false;
+			} elseif ($session->uid != $lid->getUid()) {
+				return false;
+			}
+
 			return true;
 		}
 		return false;
@@ -182,7 +198,7 @@ class LoginModel extends PersistenceModel implements Validator {
 	 * @param type $checkip
 	 * @return boolean
 	 */
-	public function login($user, $pass = '', $checkip = true) {
+	public function login($user, $pass = '', $checkip = false) {
 		$user = filter_var($user, FILTER_SANITIZE_STRING);
 		$pass = filter_var($pass, FILTER_SANITIZE_STRING);
 		switch (constant('MODE')) {
@@ -222,7 +238,7 @@ class LoginModel extends PersistenceModel implements Validator {
 	 * @param boolean $checkip
 	 * @return boolean
 	 */
-	private function loginWeb($user, $pass, $checkip = true) {
+	private function loginWeb($user, $pass, $checkip) {
 		$lid = false;
 
 		// eerst met uid proberen, komt daar een zinnige gebruiker uit, die gebruiken.
@@ -263,17 +279,32 @@ class LoginModel extends PersistenceModel implements Validator {
 		$this->setLid($lid);
 
 		// sessie koppelen aan ip?
-		if ($checkip == true) {
-			$_SESSION['_ip'] = $_SERVER['REMOTE_ADDR'];
+		$ip = null;
+		if ($checkip) {
+			$ip = filter_var($_SERVER['REMOTE_ADDR'], FILTER_SANITIZE_STRING);
+			$_SESSION['_ip'] = $ip;
 		} elseif (isset($_SESSION['_ip'])) {
 			unset($_SESSION['_ip']);
 		}
+
+		// Login sessie aanmaken
+		if ($this->existsByPrimaryKey(array(session_id()))) {
+			throw new Exception('login session');
+		}
+		$session = new LoginSession();
+		$session->session_id = session_id();
+		$session->uid = $lid->getUid();
+		$session->login_moment = getDateTime();
+		$session->user_agent = filter_var($_SERVER['HTTP_USER_AGENT'], FILTER_SANITIZE_STRING);
+		$session->ip = $ip;
+		$this->create($session);
 
 		return true;
 	}
 
 	public function logout() {
-		session_unset();
+		$this->deleteByPrimaryKey(array(self::getUid()));
+		session_destroy();
 		$this->login('x999', 'x999', true);
 	}
 

@@ -29,10 +29,14 @@ class VerifyModel extends PersistenceModel {
 		if ($token) {
 			if (time() < strtotime($token->expire)) {
 				$token->verified = true;
+				$_SESSION['_verifiedUid'] = $token->uid;
 				$this->update($token);
+				TimeoutModel::instance()->goed($token->uid);
 				redirect($token->url);
 			} else {
 				$this->error = 'Token expired';
+				unset($_SESSION['_verifiedUid']);
+				$this->delete($token);
 			}
 		} else {
 			$this->error = 'Token invalid';
@@ -56,16 +60,22 @@ class VerifyModel extends PersistenceModel {
 	}
 
 	public function discardToken($uid, $url) {
+		unset($_SESSION['_verifiedUid']);
 		$this->deleteByPrimaryKey(array($uid, $url));
 	}
 
-	public function createToken($uid, $url, $expire) {
+	public function createToken($uid, $url, $expire = '+30 minutes') {
 		$token = new OneTimeToken();
 		$token->uid = $uid;
 		$token->url = $url;
+		if ($this->exists($token)) { // overwrite existing
+			$this->delete($token);
+		}
 		$token->token = self::rand(255);
 		$token->verified = false;
-		$token->expire = getDateTime($expire);
+		$token->expire = getDateTime(strtotime($expire));
+		$this->create($token);
+		return $token->token;
 	}
 
 	/**

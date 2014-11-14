@@ -28,3 +28,30 @@ class LoginForm extends Formulier {
 	}
 
 }
+
+class WachtwoordVergetenForm extends Formulier {
+
+	public function __construct() {
+		parent::__construct(null, 'vergetenform', '/wachtwoord/vergeten', 'Wachtwoord vergeten');
+
+		$fields[] = new RequiredTextField('user', null, 'Lidnummer');
+		$fields[] = new RequiredEmailField('mail', null, 'E-mail adres');
+		$fields[] = new FormKnoppen(CSR_ROOT, true, true, false, true);
+
+		$this->addFields($fields);
+	}
+
+}
+
+class WachtwoordInstellenForm extends Formulier {
+
+	public function __construct(Lid $lid) {
+		parent::__construct($lid, 'wwresetform', '/wachtwoord/instellen', 'Wachtwoord instellen');
+
+		$fields[] = new WachtwoordWijzigenField('wwreset', $lid, true);
+		$fields[] = new FormKnoppen(CSR_ROOT, true, true, false, true);
+
+		$this->addFields($fields);
+	}
+
+}

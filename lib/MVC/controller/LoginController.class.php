@@ -12,12 +12,13 @@ class LoginController extends AclController {
 	public function __construct($query) {
 		parent::__construct($query, LoginModel::instance());
 		$this->acl = array(
-			'login'	 => 'P_PUBLIC',
-			'logout' => 'P_LOGGED_IN',
-			'su'	 => 'P_ADMIN',
-			'endsu'	 => 'P_LOGGED_IN',
-			'pauper' => 'P_PUBLIC',
-			'verify' => 'P_LOGGED_IN'
+			'login'		 => 'P_PUBLIC',
+			'logout'	 => 'P_LOGGED_IN',
+			'su'		 => 'P_ADMIN',
+			'endsu'		 => 'P_LOGGED_IN',
+			'pauper'	 => 'P_PUBLIC',
+			'wachtwoord' => 'P_PUBLIC',
+			'verify'	 => 'P_LOGGED_IN'
 		);
 	}
 
@@ -34,7 +35,7 @@ class LoginController extends AclController {
 		$values = $form->getValues();
 		if ($form->validate()) {
 			$this->model->setPauper($values['mobiel']);
-			if ($this->model->login($values['user'], $values['pass'], false)) {
+			if ($this->model->login($values['user'], $values['pass'])) {
 				redirect($values['url']);
 			}
 		}
@@ -85,7 +86,53 @@ class LoginController extends AclController {
 		$this->view = new CsrLayoutPage($body);
 	}
 
-	public function verify() {
+	public function wachtwoord($action = null) {
+		if ($action === 'instellen') { // resetten
+			if (isset($_SESSION['_verifiedUid'])) {
+				$lid = LidCache::getLid($_SESSION['_verifiedUid']);
+				if ($lid instanceof Lid AND VerifyModel::instance()->isVerified($lid->getUid(), '/wachtwoord/instellen')) {
+					$this->view = new WachtwoordInstellenForm($lid);
+					if ($this->view->validate()) {
+						$pw = $this->view->findByName('wwreset')->getValue();
+						if ($lid->setProperty('password', $pw)) {
+							if ($lid->save()) {
+								setMelding('Wachtwoord instellen geslaagd', 1);
+								VerifyModel::instance()->discardToken($lid->getUid(), '/wachtwoord/instellen');
+								if ($this->model->login($lid->getUid(), $pw)) {
+									redirect(CSR_ROOT);
+								}
+							}
+						}
+					}
+				}
+			}
+		} else { // wachtwoord vergeten
+			$this->view = new WachtwoordVergetenForm();
+			if ($this->view->validate()) {
+				$values = $this->view->getValues();
+				$lid = LidCache::getLid($values['user']);
+				if ($lid instanceof Lid AND $lid->getEmail() == $values['mail']) {
+					$uid = $lid->getUid();
+					$tokenValue = VerifyModel::instance()->createToken();
+					require_once 'MVC/model/entity/Mail.class.php';
+					$bericht = "Wachtwoord instellen: [url]http://csrdelft.nl/verify?token=" . $tokenValue . "[/url]\r\n";
+					$mail = new Mail(array($uid . '@csrdelft.nl' => Lid::naamLink($uid, 'civitas', 'plain')), 'C.S.R. webstek: nieuw wachtwoord instellen', $bericht);
+					$mail->setReplyTo('no-reply@csrdelft.nl');
+					$mail->send();
+					setMelding('Wachtwoord instellen email verzonden', 1);
+				} else {
+					if ($lid instanceof Lid) {
+						$uid = $lid->getUid();
+					} else {
+						$uid = 'x999';
+					}
+					TimeoutModel::instance()->fout($uid);
+				}
+			}
+		}
+	}
+
+	function verify() {
 		$token = urldecode(filter_input(INPUT_GET, 'token', FILTER_SANITIZE_STRING));
 		if (VerifyModel::instance()->verifyToken(LoginModel::getUid(), $token)) {
 			// redirect in validate

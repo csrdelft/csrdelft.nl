@@ -4463,3 +4463,4 @@ sql/6785_concept_draad.sql -text
 sql/6789_pagina_per_post.sql -text
 sql/6868_fotoalbum_owner.sql -text
 sql/6888_verify_timeout.sql -text
+sql/6901_login_sessions.sql -text
