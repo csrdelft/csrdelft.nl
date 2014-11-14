@@ -111,7 +111,7 @@ class LoginModel extends PersistenceModel implements Validator {
 			$session = $this->retrieveByPrimaryKey(array(session_id()));
 			if (!$session) {
 				return false;
-			} elseif ($session->user_agent != $_SERVER['USER_AGENT']) {
+			} elseif ($session->user_agent != $_SERVER['HTTP_USER_AGENT']) {
 				return false;
 			} elseif (isset($this->suedFrom) AND $session->uid != $this->suedFrom->getUid()) {
 				return false;
