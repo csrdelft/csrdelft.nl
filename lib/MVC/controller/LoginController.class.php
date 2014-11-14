@@ -111,8 +111,18 @@ class LoginController extends AclController {
 			if ($this->view->validate()) {
 				$values = $this->view->getValues();
 				$lid = LidCache::getLid($values['user']);
-				if ($lid instanceof Lid AND $lid->getEmail() == $values['mail']) {
+				if ($lid instanceof Lid) {
 					$uid = $lid->getUid();
+				} else {
+					$uid = 'x999';
+				}
+				$timeout = TimeoutModel::instance()->moetWachten($uid);
+				if ($timeout > 0) {
+					setMelding('Wacht ' . $timeout . ' seconden', -1);
+					return false;
+				}
+
+				if ($lid instanceof Lid AND $lid->getEmail() == $values['mail']) {
 					$tokenValue = VerifyModel::instance()->createToken();
 					require_once 'MVC/model/entity/Mail.class.php';
 					$bericht = "Wachtwoord instellen: [url]http://csrdelft.nl/verify?token=" . $tokenValue . "[/url]\r\n";
@@ -120,12 +130,8 @@ class LoginController extends AclController {
 					$mail->setReplyTo('no-reply@csrdelft.nl');
 					$mail->send();
 					setMelding('Wachtwoord instellen email verzonden', 1);
+					TimeoutModel::instance()->goed($uid);
 				} else {
-					if ($lid instanceof Lid) {
-						$uid = $lid->getUid();
-					} else {
-						$uid = 'x999';
-					}
 					TimeoutModel::instance()->fout($uid);
 				}
 			}
