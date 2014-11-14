@@ -68,10 +68,8 @@ class AccessModel extends CachedPersistenceModel {
 			$subject = LidCache::getLid('x999');
 		}
 
-		// case insensitive & RechtenField maakt van > een &gt;
-		$permission = strtoupper(str_replace('&gt;', '>', $permission));
-
-		return self::instance()->hasPermission($subject, $permission);
+		// case insensitive
+		return self::instance()->hasPermission($subject, strtoupper($permission));
 	}
 
 	/**

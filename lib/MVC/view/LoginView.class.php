@@ -29,6 +29,19 @@ class LoginForm extends Formulier {
 
 }
 
+class VerifyForm extends Formulier {
+
+	public function __construct($tokenValue) {
+		parent::__construct(null, 'verifyform', '/verify/' . $tokenValue, 'Verifieren');
+
+		$fields[] = new RequiredTextField('user', null, 'Lidnummer');
+		$fields[] = new FormKnoppen(CSR_ROOT, true, true, false, true);
+
+		$this->addFields($fields);
+	}
+
+}
+
 class WachtwoordVergetenForm extends Formulier {
 
 	public function __construct() {
