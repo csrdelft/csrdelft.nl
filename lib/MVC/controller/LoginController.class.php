@@ -87,50 +87,62 @@ class LoginController extends AclController {
 	}
 
 	public function wachtwoord($action = null) {
-		if ($action === 'instellen') { // resetten
+		// resetten
+		if ($action === 'reset') {
 			if (isset($_SESSION['_verifiedUid'])) {
 				$lid = LidCache::getLid($_SESSION['_verifiedUid']);
-				if ($lid instanceof Lid AND VerifyModel::instance()->isVerified($lid->getUid(), '/wachtwoord/instellen')) {
-					$this->view = new WachtwoordInstellenForm($lid);
-					if ($this->view->validate()) {
-						$pw = $this->view->findByName('wwreset')->getValue();
-						if ($lid->setProperty('password', $pw)) {
-							if ($lid->save()) {
-								setMelding('Wachtwoord instellen geslaagd', 1);
-								VerifyModel::instance()->discardToken($lid->getUid(), '/wachtwoord/instellen');
-								if ($this->model->login($lid->getUid(), $pw)) {
-									redirect(CSR_ROOT);
-								}
-							}
-						}
-					}
-				}
-			}
-		} else { // wachtwoord vergeten
-			$this->view = new WachtwoordVergetenForm();
-			if ($this->view->validate()) {
-				$values = $this->view->getValues();
-				$lid = LidCache::getLid($values['user']);
 				if ($lid instanceof Lid) {
 					$uid = $lid->getUid();
 				} else {
 					$uid = 'x999';
 				}
-				$timeout = TimeoutModel::instance()->moetWachten($uid);
-				if ($timeout > 0) {
-					setMelding('Wacht ' . $timeout . ' seconden', -1);
-				} elseif ($lid instanceof Lid AND AccessModel::mag($lid, 'P_LOGGED_IN') AND $lid->getEmail() == $values['mail']) {
-					TimeoutModel::instance()->goed($uid);
-					$tokenValue = VerifyModel::instance()->createToken();
-					require_once 'MVC/model/entity/Mail.class.php';
-					$bericht = "Wachtwoord instellen: [url]http://csrdelft.nl/verify?token=" . $tokenValue . "[/url]\r\n";
-					$mail = new Mail(array($uid . '@csrdelft.nl' => Lid::naamLink($uid, 'civitas', 'plain')), 'C.S.R. webstek: nieuw wachtwoord instellen', $bericht);
-					$mail->setReplyTo('no-reply@csrdelft.nl');
-					$mail->send();
-					setMelding('Wachtwoord instellen email verzonden', 1);
-				} else {
-					TimeoutModel::instance()->fout($uid);
+				if ($lid instanceof Lid AND AccessModel::mag($lid, 'P_LOGGED_IN') AND VerifyModel::instance()->isVerified($uid, '/wachtwoord/reset')) {
+					$this->view = new WachtwoordResetForm($lid);
+					if ($this->view->validate()) {
+						$pw = $this->view->findByName('wwreset')->getValue();
+						if ($lid->setProperty('password', $pw)) {
+							if ($lid->save()) {
+								setMelding('Wachtwoord instellen geslaagd', 1);
+								VerifyModel::instance()->discardToken($uid, '/wachtwoord/reset');
+								if ($this->model->login($uid, $pw)) {
+									redirect(CSR_ROOT);
+								}
+							}
+						}
+						setMelding('Wachtwoord instellen faalt', -1);
+						redirect();
+					} else {
+						$this->view = new CsrLayoutPage($this->view);
+						return;
+					}
 				}
+			}
+			redirect(CSR_ROOT);
+		}
+		// wachtwoord vergeten
+		$this->view = new WachtwoordVergetenForm();
+		if ($this->view->validate()) {
+			$values = $this->view->getValues();
+			$lid = LidCache::getLid($values['user']);
+			if ($lid instanceof Lid) {
+				$uid = $lid->getUid();
+			} else {
+				$uid = 'x999';
+			}
+			$timeout = TimeoutModel::instance()->moetWachten($uid);
+			if ($timeout > 0) {
+				setMelding('Wacht ' . $timeout . ' seconden', -1);
+			} elseif ($lid instanceof Lid AND AccessModel::mag($lid, 'P_LOGGED_IN') AND $lid->getEmail() == $values['mail']) {
+				TimeoutModel::instance()->goed($uid);
+				$tokenValue = VerifyModel::instance()->createToken($uid, '/wachtwoord/reset');
+				require_once 'MVC/model/entity/Mail.class.php';
+				$bericht = "Wachtwoord instellen: [url]http://csrdelft.nl/verify?token=" . $tokenValue . "[/url]\r\n";
+				$mail = new Mail(array($uid . '@csrdelft.nl' => Lid::naamLink($uid, 'civitas', 'plain')), 'C.S.R. webstek: nieuw wachtwoord instellen', $bericht);
+				$mail->setReplyTo('no-reply@csrdelft.nl');
+				$mail->send();
+				setMelding('Wachtwoord instellen email verzonden', 1);
+			} else {
+				TimeoutModel::instance()->fout($uid);
 			}
 		}
 		$this->view = new CsrLayoutPage($this->view);

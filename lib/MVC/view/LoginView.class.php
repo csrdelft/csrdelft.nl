@@ -56,10 +56,10 @@ class WachtwoordVergetenForm extends Formulier {
 
 }
 
-class WachtwoordInstellenForm extends Formulier {
+class WachtwoordResetForm extends Formulier {
 
 	public function __construct(Lid $lid) {
-		parent::__construct($lid, 'wwresetform', '/wachtwoord/instellen', 'Wachtwoord instellen');
+		parent::__construct($lid, 'wwresetform', '/wachtwoord/reset', 'Wachtwoord instellen');
 
 		$fields[] = new WachtwoordWijzigenField('wwreset', $lid, true);
 		$fields[] = new FormKnoppen(CSR_ROOT, true, true, false, true);
