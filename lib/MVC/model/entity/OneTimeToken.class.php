@@ -43,8 +43,8 @@ class OneTimeToken extends PersistentEntity {
 		'uid'		 => array(T::UID),
 		'url'		 => array(T::String),
 		'token'		 => array(T::String),
-		'verified'	 => array(T::Boolean),
-		'expire'	 => array(T::DateTime)
+		'expire'	 => array(T::DateTime),
+		'verified'	 => array(T::Boolean)
 	);
 	/**
 	 * Database primary key

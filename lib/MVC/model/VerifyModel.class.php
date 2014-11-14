@@ -64,17 +64,18 @@ class VerifyModel extends PersistenceModel {
 		$this->deleteByPrimaryKey(array($uid, $url));
 	}
 
-	public function createToken($uid, $url, $expire = '+30 minutes') {
+	public function createToken($uid, $url, $expire = '+1 hour') {
 		$token = new OneTimeToken();
 		$token->uid = $uid;
 		$token->url = $url;
-		if ($this->exists($token)) { // overwrite existing
-			$this->delete($token);
-		}
-		$token->token = self::rand(255);
-		$token->verified = false;
+		$token->token = self::rand(200);
 		$token->expire = getDateTime(strtotime($expire));
-		$this->create($token);
+		$token->verified = false;
+		if ($this->exists($token)) {
+			$this->update($token);
+		} else {
+			$this->create($token);
+		}
 		return $token->token;
 	}
 

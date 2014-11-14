@@ -296,7 +296,7 @@ class LoginModel extends PersistenceModel implements Validator {
 		$session->login_moment = getDateTime();
 		$session->user_agent = filter_var($_SERVER['HTTP_USER_AGENT'], FILTER_SANITIZE_STRING);
 		$session->ip = $ip;
-		if ($this->existsByPrimaryKey(array(session_id()))) {
+		if ($this->exists($session)) {
 			$this->update($session);
 		} else {
 			$this->create($session);

@@ -18,7 +18,7 @@ class LoginController extends AclController {
 			'endsu'		 => 'P_LOGGED_IN',
 			'pauper'	 => 'P_PUBLIC',
 			'wachtwoord' => 'P_PUBLIC',
-			'verify'	 => 'P_LOGGED_IN'
+			'verify'	 => 'P_PUBLIC'
 		);
 	}
 
