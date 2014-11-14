@@ -130,6 +130,7 @@ class LoginController extends AclController {
 				}
 			}
 		}
+		$this->view = new CsrLayoutPage($this->view);
 	}
 
 	function verify() {
