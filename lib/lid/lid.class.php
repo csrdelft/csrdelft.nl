@@ -100,6 +100,22 @@ class Lid implements Serializable, Agendeerbaar {
 		}
 	}
 
+	/**
+	 * Reset het wachtwoord van de gebruiker.
+	 *  - Controleerd GEEN eisen aan wachtwoord
+	 *  - Reset naar random wachtwoord als null
+	 *  - Wordt niet gelogged in de changelog van het profiel
+	 */
+	public function resetWachtwoord($password = null) {
+		if (empty($password)) {
+			$password = crypto_rand_token(16);
+		}
+		$passwordhash = makepasswd($password);
+		$sNieuwWachtwoord = "UPDATE lid SET password='" . $passwordhash . "' WHERE uid='" . $this->getUid() . "' LIMIT 1;";
+
+		return MijnSqli::instance()->query($sNieuwWachtwoord) AND LidCache::flushLid($this->getUid()) AND $this->save_ldap();
+	}
+
 	// sla huidige objectstatus op in db, en update het huidige lid in de LidCache
 	public function save() {
 		$db = MijnSqli::instance();

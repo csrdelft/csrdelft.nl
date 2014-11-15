@@ -370,17 +370,4 @@ class LoginModel extends PersistenceModel implements Validator {
 		return $this->authenticatedByToken;
 	}
 
-	public function checkpw(Lid $lid, $pass) {
-		// Verify SSHA hash
-		$ohash = base64_decode(substr($lid->getPassword(), 6));
-		$osalt = substr($ohash, 20);
-		$ohash = substr($ohash, 0, 20);
-		$nhash = pack("H*", sha1($pass . $osalt));
-		#echo "ohash: {$ohash}, nhash: {$nhash}";
-		if ($ohash === $nhash) {
-			return true;
-		}
-		return false;
-	}
-
 }

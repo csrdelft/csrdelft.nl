@@ -177,38 +177,6 @@ class Profiel {
 	}
 
 	/**
-	 * Reset het wachtwoord van een gebruiker.
-	 *  - Stuur een mail naar de gebruiker
-	 *  - Wordt niet gelogged in de changelog van het profiel
-	 */
-	public static function resetWachtwoord($uid) {
-		if (!Lid::exists($uid)) {
-			return false;
-		}
-		$lid = LidCache::getLid($uid);
-
-		$password = substr(md5(time()), 0, 8);
-		$passwordhash = makepasswd($password);
-		$sNieuwWachtwoord = "UPDATE lid SET password='" . $passwordhash . "' WHERE uid='" . $uid . "' LIMIT 1;";
-
-		$bericht = file_get_contents(SMARTY_TEMPLATE_DIR . 'MVC/mail/nieuwwachtwoord.mail');
-		$values = array(
-			'NAAM'	 => $lid->getNaam(),
-			'UID'	 => $lid->getUid(),
-			'PW'	 => $password,
-			'ADMIN'	 => LoginModel::instance()->getLid()->getNaam()
-		);
-		$mail = new Mail(array($lid->getEmail() => $lid->getNaamLink('civitas', 'plain')), 'Nieuw wachtwoord voor de C.S.R.-stek', $bericht);
-		$mail->addBcc(array('pubcie@csrdelft.nl' => 'PubCie C.S.R.'));
-		$mail->setPlaceholders($values);
-		return
-				MijnSqli::instance()->query($sNieuwWachtwoord) AND
-				LidCache::flushLid($uid) AND
-				$lid->save_ldap() AND
-				$mail->send();
-	}
-
-	/**
 	 * Geef een array terug met de velden in het profiel in $fields als
 	 * ze niet leeg zijn. Velden krijgen veldnaam als key.
 	 */

@@ -16,19 +16,7 @@ if ($result !== false and $db->numRows($result) > 0) {
 	while ($sjaars = $db->next($result)) {
 		$nanonovieten = array();
 		if (!(in_array($sjaars['uid'], $nanonovieten))) {
-			$tekens = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890';
-			$pass = '';
-			for ($i = 0; $i < 8; $i++) {
-				$pass .= substr($tekens, rand(0, strlen($tekens)), 1);
-			}
-
-			$passwordhash = makepasswd($pass);
-			$sQuery = "UPDATE lid SET password='" . $passwordhash . "' WHERE uid='" . $sjaars['uid'] . "' LIMIT 1;";
-			$db->query($sQuery);
-
-			//cache resetten.
-			LidCache::flushLid($sjaars['uid']);
-
+			$url = CSR_ROOT . '/wachtwoord/vergeten';
 			$tekst = <<<EOD
 Beste noviet {$sjaars['voornaam']},
 
@@ -44,11 +32,9 @@ Kun je niet op een maaltijd aanwezig zijn, meld je dan af op de webstek, voor om
 Waarom is dit belangrijk? Omdat een maaltijd €3,- kost en als je jezelf vergeet af te melden en niet komt, dit bedrag toch van je maalcie-saldo wordt afgeschreven. Het is goed om naar maaltijden te gaan, maar als je niet kunt, meld je dan af! Dat scheelt je pieken.
 Voor verdere vragen of opmerkingen of je maalcie-saldo kun je de MaalCie fiscus altijd mailen op maalcief@csrdelft.nl
 
-Je inloggegevens zijn als volgt:
-Lidnummer: {$sjaars['uid']}
-Wachtwoord: {$pass}
-
-Nadat je bent ingelogd kun je het wachtwoord veranderen, en een bijnaam instellen die je in plaats van je lidnummer kunt gebruiken om in te loggen.
+Gebruik je lidnummer om in te loggen op de webstek: {$sjaars['uid']}
+Gebruik de eerste keer de [url={$url}]wachtwoord vergeten[/url] functie om je eigen wachtwoord in te stellen.
+Nadat je bent ingelogd kun een bijnaam instellen die je in plaats van je lidnummer kunt gebruiken om in te loggen.
 
 Wanneer je problemen hebt met inloggen, of andere vragen over de webstek, kun je terecht bij de PubliciteitsCommissie.
 Stuur dan een e-mail of kom even langs in ons IRC-kanaal #pubcie (zie Communicatie->IRC), of stuur een e-mail.

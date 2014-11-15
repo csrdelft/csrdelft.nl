@@ -1239,7 +1239,7 @@ class WachtwoordWijzigenField extends InputField {
 		} elseif (preg_match('/^[a-zA-Z]*$/', $new)) {
 			$this->error = 'Het nieuwe wachtwoord moet ook cijfers of leestekens bevatten';
 		} elseif ($length < 8 OR $length > 16) {
-			$this->error = 'Het wachtwoord moet minimaal 8 en maximaal 16 tekens bevatten';
+			$this->error = 'Het wachtwoord moet minimaal 8 en maximaal 16 tekens lang zijn';
 		} elseif ($new != $confirm) {
 			$this->error = 'Nieuwe wachtwoorden komen niet overeen';
 		}

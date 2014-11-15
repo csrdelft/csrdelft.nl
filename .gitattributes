@@ -4256,7 +4256,6 @@ lib/templates/MVC/maalcie/functie/beheer_functies.tpl -text
 lib/templates/MVC/mail/layout/letter.tpl -text
 lib/templates/MVC/mail/lidafgeleendebiebboeken.mail -text
 lib/templates/MVC/mail/lidafmeldingfisci.mail -text
-lib/templates/MVC/mail/nieuwwachtwoord.mail -text
 lib/templates/MVC/mail/toekomstigcorveeverwijderd.mail -text
 lib/templates/MVC/menu/beheer/menu_item.tpl -text
 lib/templates/MVC/menu/beheer/menu_root.tpl -text
