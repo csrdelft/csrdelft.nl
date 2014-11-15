@@ -146,7 +146,10 @@ function redirect($url = null) {
 	if (empty($url)) {
 		$url = CSR_ROOT . REQUEST_URI;
 	} else if (!startsWith($url, CSR_ROOT)) {
-		$url = CSR_ROOT;
+		if (!startsWith($url, '/')) {
+			$url = '/' . $url;
+		}
+		$url = CSR_ROOT . $url;
 	}
 	header('location: ' . $url);
 	exit;
