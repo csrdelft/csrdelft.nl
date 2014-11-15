@@ -49,6 +49,7 @@ abstract class InputField implements FormElement, Validator {
 	public $readonly = false; // veld mag niet worden aangepast door client?
 	public $required = false; // mag het veld leeg zijn?
 	public $empty_null = false; // lege waarden teruggeven als null
+	public $enter_submit = false; // bij op enter drukken form submitten
 	public $preview = true; // preview tonen? (waar van toepassing)
 	public $leden_mod = false; // uitzondering leeg verplicht veld voor LEDEN_MOD
 	public $autocomplete = true; // browser laten autoaanvullen?
@@ -298,6 +299,13 @@ abstract class InputField implements FormElement, Validator {
 				}
 				break;
 			case 'onkeyup':
+				if ($this->enter_submit) {
+					$this->onkeyup .= <<<JS
+if (event.keyCode == 13) { // enter
+	this.form.submit();
+}
+JS;
+				}
 				if ($this->onkeyup != null) {
 					return 'onkeyup="' . $this->onkeyup . '"';
 				}
@@ -1151,6 +1159,8 @@ class RequiredCsrBBPreviewField extends CsrBBPreviewField {
 }
 
 class WachtwoordField extends TextField {
+
+	public $enter_submit = true;
 
 	public function view() {
 		echo $this->getDiv();
