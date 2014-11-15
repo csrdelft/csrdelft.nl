@@ -80,7 +80,7 @@ a.maaltijd-afgemeld, span.maaltijd-afgemeld {
 	background: url(http://plaetjes.csrdelft.nl/famfamfam/pencil.png) right no-repeat;
 	padding-right: 18px!important;
 }
-.bb-groep .groepleden .inline_edit: hover {
+.bb-groep .groepleden .inline_edit:hover {
 	background: url(http://plaetjes.csrdelft.nl/famfamfam/pencil.png) right no-repeat #f5f5f5;
 	cursor: pointer;
 }
@@ -105,7 +105,7 @@ div.pasfoto img.lidfoto {
 
 .bb-boek { padding: 4px 6px; display: block; text-align: left; text-decoration: none !important;}
 .bb-boek .auteur { color: #777; margin-left: 10px; }
-.bb-boek .titel: hover {color: #0a338d; text-decoration: underline;}
+.bb-boek .titel:hover {color: #0a338d; text-decoration: underline;}
 .bb-boek .icon { float: left; padding-right: 5px; }
 .boekindicator { margin-right: 5px;}
 .boekindicator.beschikbaar	 {color: green;}
@@ -198,7 +198,7 @@ pre.bbcode {
 	-webkit-border-radius: 3px;
 	color: #000;
 }
-.bb-slideshow .paging a: hover {
+.bb-slideshow .paging a:hover {
 	text-decoration: underline;
 }
 
