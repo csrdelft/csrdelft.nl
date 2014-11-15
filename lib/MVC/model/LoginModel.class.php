@@ -233,6 +233,7 @@ class LoginModel extends PersistenceModel implements Validator {
 				'pass'	 => 'pw'
 			);
 		}
+		$_SERVER['HTTP_USER_AGENT'] = 'CLI';
 		return $this->loginWeb($cred['user'], $cred['pass'], false);
 	}
 
