@@ -1220,7 +1220,7 @@ class WachtwoordWijzigenField extends InputField {
 		$length = strlen(utf8_decode($new));
 		if (!$this->reset AND empty($current)) {
 			$this->error = 'U dient uw huidige wachtwoord ook in te voeren';
-		} elseif (!$this->reset AND ! $this->model->checkpw($current)) {
+		} elseif (!$this->reset AND ! LoginModel::instance()->checkpw($this->model, $current)) {
 			$this->error = 'Uw huidige wachtwoord is niet juist';
 		} elseif (empty($new) OR empty($confirm)) {
 			$this->error = 'Vul uw nieuwe wachtwoord twee keer in';

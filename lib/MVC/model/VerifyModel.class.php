@@ -25,7 +25,7 @@ class VerifyModel extends PersistenceModel {
 			$this->error = 'Wacht ' . $timeout . ' seconden';
 			return false;
 		}
-		$token = $this->find('uid = ? AND token = ?', array($uid, $tokenValue), null, null, 1);
+		$token = $this->find('uid = ? AND token = ?', array($uid, $tokenValue), null, null, 1)->fetch();
 		if ($token) {
 			if (time() < strtotime($token->expire)) {
 				$token->verified = true;

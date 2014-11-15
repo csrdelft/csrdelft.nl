@@ -276,7 +276,7 @@ class LoginModel extends PersistenceModel implements Validator {
 		}
 
 		// als we een gebruiker hebben gevonden controleren we het wachtwoord
-		if (!($lid instanceof Lid) OR ! $lid->checkpw($pass)) {
+		if (!($lid instanceof Lid) OR ! $this->checkpw($lid, $pass)) {
 			$_SESSION['auth_error'] = 'Inloggen niet geslaagd';
 			TimeoutModel::instance()->fout($uid);
 			return false;
@@ -364,6 +364,19 @@ class LoginModel extends PersistenceModel implements Validator {
 
 	public function isAuthenticatedByToken() {
 		return $this->authenticatedByToken;
+	}
+
+	public function checkpw(Lid $lid, $pass) {
+		// Verify SSHA hash
+		$ohash = base64_decode(substr($lid->getPassword(), 6));
+		$osalt = substr($ohash, 20);
+		$ohash = substr($ohash, 0, 20);
+		$nhash = pack("H*", sha1($pass . $osalt));
+		#echo "ohash: {$ohash}, nhash: {$nhash}";
+		if ($ohash === $nhash) {
+			return true;
+		}
+		return false;
 	}
 
 }

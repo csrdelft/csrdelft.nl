@@ -451,19 +451,6 @@ class Lid implements Serializable, Agendeerbaar {
 		return $this->profiel['password'];
 	}
 
-	public function checkpw($pass) {
-		// Verify SSHA hash
-		$ohash = base64_decode(substr($this->getPassword(), 6));
-		$osalt = substr($ohash, 20);
-		$ohash = substr($ohash, 0, 20);
-		$nhash = pack("H*", sha1($pass . $osalt));
-		#echo "ohash: {$ohash}, nhash: {$nhash}";
-		if ($ohash === $nhash) {
-			return true;
-		}
-		return false;
-	}
-
 	public function getRole() {
 		return $this->profiel['permissies'];
 	}
