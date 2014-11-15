@@ -171,8 +171,9 @@ class LoginController extends AclController {
 			$uid = $this->view->findByName('user')->getValue();
 			$lid = LidCache::getLid($uid);
 			if ($lid instanceof Lid AND AccessModel::mag($lid, 'P_LOGGED_IN') AND VerifyModel::instance()->verifyToken($lid->getUid(), $tokenValue)) {
-				// redirect in validate
+				// redirect by verifyToken
 			}
+			setMelding(VerifyModel::instance()->getError(), -1);
 		}
 		$this->view = new CsrLayoutPage($this->view);
 	}

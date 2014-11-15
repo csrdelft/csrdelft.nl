@@ -20,13 +20,16 @@ class VerifyModel extends PersistenceModel {
 	private $error;
 
 	public function verifyToken($uid, $tokenValue) {
+		// check timeout
 		$timeout = TimeoutModel::instance()->moetWachten($uid);
 		if ($timeout > 0) {
 			$this->error = 'Wacht ' . $timeout . ' seconden';
 			return false;
 		}
+		// check token
 		$token = $this->find('uid = ? AND token = ?', array($uid, $tokenValue), null, null, 1)->fetch();
 		if ($token) {
+			// expired?
 			if (time() < strtotime($token->expire)) {
 				$token->verified = true;
 				$_SESSION['_verifiedUid'] = $token->uid;
@@ -35,12 +38,12 @@ class VerifyModel extends PersistenceModel {
 				redirect($token->url);
 			} else {
 				$this->error = 'Token expired';
-				unset($_SESSION['_verifiedUid']);
 				$this->delete($token);
 			}
 		} else {
 			$this->error = 'Token invalid';
 		}
+		unset($_SESSION['_verifiedUid']);
 		TimeoutModel::instance()->fout($uid);
 		return false;
 	}
