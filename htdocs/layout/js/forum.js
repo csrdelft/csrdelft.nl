@@ -1,6 +1,6 @@
 function saveConceptForumBericht() {
 	var $concept = $('#forumConcept');
-	$concept.fadeOut();
+	$concept.prop('disabled', true);
 	var $textarea = $('#forumBericht');
 	var $titel = $('#nieuweTitel');
 	if ($textarea.val() !== $textarea.attr('origvalue')) {
