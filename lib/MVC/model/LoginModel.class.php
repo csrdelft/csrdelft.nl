@@ -93,11 +93,6 @@ class LoginModel extends PersistenceModel implements Validator {
 			return false;
 		}
 
-		// Sessie is gekoppeld aan ip, het ip checken:
-		if (isset($_SESSION['_ip']) AND $_SESSION['_ip'] !== $_SERVER['REMOTE_ADDR']) {
-			return false;
-		}
-
 		$lid = LidCache::getLid($_SESSION['_uid']);
 		if ($lid instanceof Lid) {
 
@@ -111,13 +106,23 @@ class LoginModel extends PersistenceModel implements Validator {
 			$session = $this->retrieveByPrimaryKey(array(session_id()));
 			if (!$session) {
 				return false;
-			} elseif (isset($session->ip) AND $session->ip != $_SERVER['REMOTE_ADDR']) {
+			}
+			// Controleer consistentie van browser:
+			elseif ($session->user_agent != $_SERVER['HTTP_USER_AGENT']) {
 				return false;
-			} elseif ($session->user_agent != $_SERVER['HTTP_USER_AGENT']) {
+			}
+			// Controleer gekoppeld ip:
+			elseif (isset($session->ip) AND $session->ip != $_SERVER['REMOTE_ADDR']) {
 				return false;
-			} elseif (isset($this->suedFrom) AND $session->uid != $this->suedFrom->getUid()) {
-				return false;
-			} elseif ($session->uid != $lid->getUid()) {
+			}
+			// Controleer switch user status:
+			elseif (isset($this->suedFrom)) {
+				if ($session->uid != $this->suedFrom->getUid()) {
+					return false;
+				}
+			}
+			// Controleer consistentie van ingelogd lid:
+			elseif ($session->uid != $lid->getUid()) {
 				return false;
 			}
 
@@ -241,6 +246,8 @@ class LoginModel extends PersistenceModel implements Validator {
 	 * @return boolean
 	 */
 	private function loginWeb($user, $pass, $checkip) {
+		// clear session
+		session_unset();
 		$lid = false;
 
 		// eerst met uid proberen, komt daar een zinnige gebruiker uit, die gebruiken.
@@ -280,22 +287,13 @@ class LoginModel extends PersistenceModel implements Validator {
 		// Subject Assignment:
 		$this->setLid($lid);
 
-		// sessie koppelen aan ip?
-		$ip = null;
-		if ($checkip) {
-			$ip = filter_var($_SERVER['REMOTE_ADDR'], FILTER_SANITIZE_STRING);
-			$_SESSION['_ip'] = $ip;
-		} elseif (isset($_SESSION['_ip'])) {
-			unset($_SESSION['_ip']);
-		}
-
 		// Login sessie aanmaken
 		$session = new LoginSession();
 		$session->session_id = session_id();
 		$session->uid = $lid->getUid();
 		$session->login_moment = getDateTime();
 		$session->user_agent = filter_var($_SERVER['HTTP_USER_AGENT'], FILTER_SANITIZE_STRING);
-		$session->ip = $ip;
+		$session->ip = $checkip ? filter_var($_SERVER['REMOTE_ADDR'], FILTER_SANITIZE_STRING) : null; // sessie koppelen aan ip?
 		if ($this->exists($session)) {
 			$this->update($session);
 		} else {

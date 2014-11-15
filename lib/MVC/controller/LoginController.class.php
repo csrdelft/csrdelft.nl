@@ -50,10 +50,10 @@ class LoginController extends AclController {
 	public function su($uid = null) {
 		$this->model->switchUser($uid);
 		setMelding('U bekijkt de webstek nu als ' . Lid::naamLink($uid, 'full', 'plain') . '!', 1);
-		if (startsWith(REQUEST_URI, '/su')) {
-			redirect(CSR_ROOT);
-		} else {
+		if (strpos(HTTP_REFERER, '/su') === false) {
 			redirect(HTTP_REFERER);
+		} else {
+			redirect(CSR_ROOT);
 		}
 	}
 
@@ -64,10 +64,10 @@ class LoginController extends AclController {
 			LoginModel::instance()->endSwitchUser();
 			setMelding('Switch-useractie is beëindigd.', 1);
 		}
-		if (startsWith(REQUEST_URI, '/endsu')) {
-			redirect(CSR_ROOT);
-		} else {
+		if (strpos(HTTP_REFERER, '/endsu') === false) {
 			redirect(HTTP_REFERER);
+		} else {
+			redirect(CSR_ROOT);
 		}
 	}
 
@@ -147,23 +147,15 @@ class LoginController extends AclController {
 			// mag wachtwoord resetten?
 			elseif ($lid instanceof Lid AND AccessModel::mag($lid, 'P_LOGGED_IN') AND $lid->getEmail() == $values['mail']) {
 				TimeoutModel::instance()->goed($uid);
+				$token = VerifyModel::instance()->createToken($uid, '/wachtwoord/reset');
 
-				try {
-					$tokenValue = VerifyModel::instance()->createToken($uid, '/wachtwoord/reset');
+				require_once 'MVC/model/entity/Mail.class.php';
+				$bericht = "Wachtwoord instellen (tot " . $token->expire . "): [url]http://csrdelft.nl/verify/" . $token->token . "[/url]";
+				$mail = new Mail(array($uid . '@csrdelft.nl' => Lid::naamLink($uid, 'civitas', 'plain')), 'C.S.R. webstek: nieuw wachtwoord instellen', $bericht);
+				$mail->setReplyTo('no-reply@csrdelft.nl');
+				$mail->send();
 
-					var_dump($uid);
-					var_dump($tokenValue);
-
-					require_once 'MVC/model/entity/Mail.class.php';
-					$bericht = "Wachtwoord instellen: [url]http://csrdelft.nl/verify/" . $tokenValue . "[/url]";
-					$mail = new Mail(array($uid . '@csrdelft.nl' => Lid::naamLink($uid, 'civitas', 'plain')), 'C.S.R. webstek: nieuw wachtwoord instellen', $bericht);
-					$mail->setReplyTo('no-reply@csrdelft.nl');
-					$mail->send();
-
-					setMelding('Wachtwoord reset email verzonden', 1);
-				} catch (Exception $e) {
-					setMelding('Wachtwoord reset email niet verzonden', -1);
-				}
+				setMelding('Wachtwoord reset email verzonden', 1);
 				redirect();
 			} else {
 				TimeoutModel::instance()->fout($uid);

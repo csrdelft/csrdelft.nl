@@ -76,7 +76,7 @@ class VerifyModel extends PersistenceModel {
 		} else {
 			$this->create($token);
 		}
-		return $token->token;
+		return $token;
 	}
 
 	/**

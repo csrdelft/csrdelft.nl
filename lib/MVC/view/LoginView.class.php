@@ -21,7 +21,6 @@ class LoginForm extends Formulier {
 		$fields['pauper'] = new VinkField('mobiel', LoginModel::instance()->isPauper(), null, 'Mobiel');
 
 		$fields['url'] = new UrlField('url', HTTP_REFERER);
-		$fields['url']->empty_null = true;
 		$fields['url']->hidden = true;
 
 		$this->addFields($fields);
@@ -45,7 +44,7 @@ class VerifyForm extends Formulier {
 class WachtwoordVergetenForm extends Formulier {
 
 	public function __construct() {
-		parent::__construct(null, 'vergetenform', '/wachtwoord/vergeten', 'Wachtwoord vergeten');
+		parent::__construct(null, 'wwvergetenform', '/wachtwoord/vergeten', 'Wachtwoord vergeten');
 
 		$fields[] = new RequiredTextField('user', null, 'Lidnummer');
 		$fields[] = new RequiredEmailField('mail', null, 'E-mail adres');

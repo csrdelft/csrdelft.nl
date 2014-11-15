@@ -110,6 +110,9 @@ class FormKnoppen implements FormElement {
 		$this->knoppen['cancel'] = new CancelKnop($cancel_url);
 		if ($reset_cancel) {
 			$this->knoppen['cancel']->action .= ' reset';
+			$this->knoppen['cancel']->title = 'Niet bevestigen en terugkeren';
+			$this->knoppen['submit']->label = 'Bevestigen';
+			$this->knoppen['submit']->title = 'Invoer bevestigen';
 			$this->knoppen['submit']->icon = '/famfamfam/accept.png';
 		}
 		if (!$icons) {

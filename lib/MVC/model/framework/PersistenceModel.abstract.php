@@ -226,10 +226,10 @@ abstract class PersistenceModel implements Persistence {
 	 * Remove existing entity.
 	 * 
 	 * @param PersistentEntity $entity
-	 * @return boolean rows affected === 1
+	 * @return boolean rows affected
 	 */
 	public function delete(PersistentEntity $entity) {
-		return 1 === $this->deleteByPrimaryKey($entity->getValues(true));
+		return $this->deleteByPrimaryKey($entity->getValues(true));
 	}
 
 	/**
