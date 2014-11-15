@@ -50,6 +50,7 @@ class LoginModel extends PersistenceModel implements Validator {
 
 	protected function __construct() {
 		parent::__construct();
+
 		/**
 		 * Werkomheen
 		 * @source www.nabble.com/problem-with-sessions-in-1.4.8-t2550641.html
@@ -246,8 +247,6 @@ class LoginModel extends PersistenceModel implements Validator {
 	 * @return boolean
 	 */
 	private function loginWeb($user, $pass, $checkip) {
-		// clear session
-		session_unset();
 		$lid = false;
 
 		// eerst met uid proberen, komt daar een zinnige gebruiker uit, die gebruiken.
@@ -282,8 +281,12 @@ class LoginModel extends PersistenceModel implements Validator {
 			return false;
 		}
 
-		// als dat klopt laden we het profiel in en richten de sessie in
+		// als het wachtwoord klopt laden we het profiel en richten de sessie in
 		TimeoutModel::instance()->goed($lid->getUid());
+
+		// clear session
+		session_unset();
+
 		// Subject Assignment:
 		$this->setLid($lid);
 
@@ -305,6 +308,7 @@ class LoginModel extends PersistenceModel implements Validator {
 
 	public function logout() {
 		$this->deleteByPrimaryKey(array(session_id()));
+		session_unset();
 		session_destroy();
 		$this->login('x999', 'x999', true);
 	}
