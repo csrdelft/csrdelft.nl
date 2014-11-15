@@ -71,7 +71,7 @@ class VerifyModel extends PersistenceModel {
 		$token = new OneTimeToken();
 		$token->uid = $uid;
 		$token->url = $url;
-		$token->token = self::rand(200);
+		$token->token = crypto_rand_token(200);
 		$token->expire = getDateTime(strtotime($expire));
 		$token->verified = false;
 		if ($this->exists($token)) {
