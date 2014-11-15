@@ -417,12 +417,13 @@ class AccessModel extends CachedPersistenceModel {
 			case 'GROEP':
 
 				try {
-					// zoek groep
 					require_once 'groepen/groep.class.php';
-					$groep = new OldGroep($gevraagd);
+
+					$groep = new OldGroep($gevraagd); // zoek groep
 					if (!$groep->isLid()) {
 						return false;
 					}
+
 					// wordt er een functie gevraagd?
 					if ($role) {
 						$functie = $groep->getFunctie();
@@ -454,17 +455,16 @@ class AccessModel extends CachedPersistenceModel {
 				// zoek verticale
 				$verticale = $subject->getVerticale();
 
-				if ($gevraagd != $verticale->id AND $gevraagd != strtoupper($verticale->letter) AND $gevraagd != strtoupper($verticale->naam)) {
+				if (!$verticale) {
 					return false;
-				}
+				} elseif ($gevraagd == $verticale->id OR $gevraagd == strtoupper($verticale->letter) OR $gevraagd == strtoupper($verticale->naam)) {
 
-				// wordt er een role gevraagd?
-				if ($role) {
-					if ($role == 'LEIDER' AND $subject->isVerticaan()) {
+					// wordt er een role gevraagd?
+					if (!$role) {
+						return true;
+					} elseif ($role == 'LEIDER' AND $subject->isVerticaan()) {
 						return true;
 					}
-				} else { // geen role gevraagd
-					return true;
 				}
 
 				return false;

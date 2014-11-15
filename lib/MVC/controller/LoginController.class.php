@@ -89,21 +89,32 @@ class LoginController extends AclController {
 	public function wachtwoord($action = null) {
 		// resetten
 		if ($action === 'reset') {
+
+			// is in deze sessie geverifieerd?
 			if (isset($_SESSION['_verifiedUid'])) {
+
 				$lid = LidCache::getLid($_SESSION['_verifiedUid']);
 				if ($lid instanceof Lid) {
 					$uid = $lid->getUid();
 				} else {
 					$uid = 'x999';
 				}
+
+				// mag wachtwoord resetten?
 				if ($lid instanceof Lid AND AccessModel::mag($lid, 'P_LOGGED_IN') AND VerifyModel::instance()->isVerified($uid, '/wachtwoord/reset')) {
+
 					$this->view = new WachtwoordResetForm($lid);
 					if ($this->view->validate()) {
 						$pw = $this->view->findByName('wwreset')->getValue();
+
+						// wachtwoord opslaan
 						if ($lid->setProperty('password', $pw)) {
 							if ($lid->save()) {
 								setMelding('Wachtwoord instellen geslaagd', 1);
+
+								// token verbruikt
 								VerifyModel::instance()->discardToken($uid, '/wachtwoord/reset');
+
 								if ($this->model->login($uid, $pw)) {
 									redirect(CSR_ROOT);
 								}
@@ -132,10 +143,16 @@ class LoginController extends AclController {
 			$timeout = TimeoutModel::instance()->moetWachten($uid);
 			if ($timeout > 0) {
 				setMelding('Wacht ' . $timeout . ' seconden', -1);
-			} elseif ($lid instanceof Lid AND AccessModel::mag($lid, 'P_LOGGED_IN') AND $lid->getEmail() == $values['mail']) {
+			}
+			// mag wachtwoord resetten?
+			elseif ($lid instanceof Lid AND AccessModel::mag($lid, 'P_LOGGED_IN') AND $lid->getEmail() == $values['mail']) {
 				TimeoutModel::instance()->goed($uid);
+
 				try {
 					$tokenValue = VerifyModel::instance()->createToken($uid, '/wachtwoord/reset');
+
+					var_dump($uid);
+					var_dump($tokenValue);
 
 					require_once 'MVC/model/entity/Mail.class.php';
 					$bericht = "Wachtwoord instellen: [url]http://csrdelft.nl/verify/" . $tokenValue . "[/url]";
