@@ -277,7 +277,7 @@ class LoginModel extends PersistenceModel implements Validator {
 
 		// als we een gebruiker hebben gevonden controleren we het wachtwoord
 		if (!($lid instanceof Lid) OR ! $this->checkpw($lid, $pass)) {
-			$_SESSION['auth_error'] = 'Inloggen niet geslaagd';
+			$_SESSION['auth_error'] = 'Inloggen niet geslaagd<br><a href="/wachtwoord/vergeten">Wachtwoord vergeten?</a>';
 			TimeoutModel::instance()->fout($uid);
 			return false;
 		}

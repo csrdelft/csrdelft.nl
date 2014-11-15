@@ -150,7 +150,10 @@ class LoginController extends AclController {
 				$token = VerifyModel::instance()->createToken($uid, '/wachtwoord/reset');
 
 				require_once 'MVC/model/entity/Mail.class.php';
-				$bericht = "Wachtwoord instellen (tot " . $token->expire . "): [url]http://csrdelft.nl/verify/" . $token->token . "[/url]";
+				$bericht = 'Geachte ' . $lid->getNaamLink('civitas', 'plain') .
+						",\n\nU heeft verzocht om uw wachtwoord opnieuw in te stellen. Dit is mogelijk met de onderstaande link tot " . $token->expire .
+						".\n\n[url=http://csrdelft.nl/verify/" . $token->token .
+						"]Wachtwoord instellen[/url].\n\nAls dit niet uw eigen verzoek is kunt u dit bericht negeren.\n\nMet amicale groet,\nUw PubCie";
 				$mail = new Mail(array($uid . '@csrdelft.nl' => Lid::naamLink($uid, 'civitas', 'plain')), 'C.S.R. webstek: nieuw wachtwoord instellen', $bericht);
 				$mail->setReplyTo('no-reply@csrdelft.nl');
 				$mail->send();
