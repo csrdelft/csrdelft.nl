@@ -339,6 +339,9 @@ abstract class InputField implements FormElement, Validator {
 	 * formatItem geneert html-items voor de suggestielijst, afstemmen op data-array
 	 */
 	public function getJavascript() {
+		if ($this->readonly) {
+			return;
+		}
 		if (!empty($this->remotedatasource)) {
 			$autocomplete = json_encode($this->remotedatasource);
 			return <<<JS
