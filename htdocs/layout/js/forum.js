@@ -21,9 +21,9 @@ $(document).ready(function ($) {
 	if ($concept.length === 1) {
 		var toggleShowSaveConcept = function () {
 			if ($textarea.val() !== $textarea.attr('origvalue')) {
-				$concept.fadeIn();
+				$concept.prop('disabled', false);
 			} else {
-				$concept.fadeOut();
+				$concept.prop('disabled', true);
 			}
 		};
 		var updateReageren = function () {
