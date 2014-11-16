@@ -8,7 +8,7 @@
  * Tonen van de lijst van aanmeldingen, betaalmogelijkheden en maaltijdgegevens.
  * 
  */
-class MaaltijdLijstView extends HtmlPage {
+class MaaltijdLijstView extends CompressedLayout {
 
 	private $fiscaal;
 
@@ -16,9 +16,7 @@ class MaaltijdLijstView extends HtmlPage {
 		parent::__construct($this, $maaltijd->getTitel());
 		$this->fiscaal = $fiscaal;
 
-		$this->addStylesheet($this->getCompressedStyleUrl('layout', 'maalcielijst'), true);
-		$this->addScript($this->getCompressedScriptUrl('layout', 'maalcielijst'), true);
-
+		$this->addCompressedResources('maalcielijst');
 		$smarty = CsrSmarty::instance();
 
 		if (!$this->fiscaal) {

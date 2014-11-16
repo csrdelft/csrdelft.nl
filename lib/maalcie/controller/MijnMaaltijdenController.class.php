@@ -50,8 +50,7 @@ class MijnMaaltijdenController extends AclController {
 		$aanmeldingen = MaaltijdAanmeldingenModel::getAanmeldingenVoorLid($maaltijden, LoginModel::getUid());
 		$this->view = new MijnMaaltijdenView($maaltijden, $aanmeldingen);
 		$this->view = new CsrLayoutPage($this->getView());
-		$this->view->addStylesheet($this->view->getCompressedStyleUrl('layout', 'maalcie'), true);
-		$this->view->addScript($this->view->getCompressedScriptUrl('layout', 'maalcie'), true);
+		$this->view->addCompressedResources('maalcie');
 	}
 
 	public function lijst($mid) {

@@ -19,7 +19,5 @@ $pagina = new CsrLayoutPage($biebControl->getView());
 //if ($biebControl->getView() instanceof BibliotheekCatalogusContent) {
 //	$pagina->zijbalk = false;
 //}
-
-$pagina->addStylesheet($pagina->getCompressedStyleUrl('layout', 'bibliotheek'), true);
-$pagina->addScript($pagina->getCompressedScriptUrl('layout', 'bibliotheek'), true);
+$pagina->addCompressedResources('bibliotheek');
 $pagina->view();

@@ -1,12 +1,10 @@
 <?php
 
-class WikiHeader extends HtmlPage {
+class WikiHeader extends CompressedLayout {
 
 	public function __construct() {
 		parent::__construct(new MainMenuView(), null);
-
-		$this->addStylesheet($this->getCompressedStyleUrl('layout', 'wiki'), true);
-		$this->addScript($this->getCompressedScriptUrl('layout', 'wiki'), true);
+		$this->addCompressedResources('wiki');
 	}
 
 	public function getBreadcrumbs() {

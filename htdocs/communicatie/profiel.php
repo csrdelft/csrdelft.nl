@@ -156,6 +156,5 @@ if (!(LoginModel::mag('P_LEDEN_READ') or LoginModel::mag('P_OUDLEDEN_READ'))) {
 }
 
 $pagina = new CsrLayoutPage($midden);
-$pagina->addStylesheet($pagina->getCompressedStyleUrl('layout', 'profiel'), true);
-$pagina->addScript($pagina->getCompressedScriptUrl('layout', 'profiel'), true);
+$pagina->addCompressedResources('profiel');
 $pagina->view();

@@ -62,22 +62,19 @@ class BeheerMaaltijdenController extends AclController {
 		}
 		$body = new BeheerMaaltijdenView(MaaltijdenModel::getAlleMaaltijden(), false, false, MaaltijdRepetitiesModel::getAlleRepetities());
 		$this->view = new CsrLayoutPage($body, array(), $modal);
-		$this->view->addStylesheet($this->view->getCompressedStyleUrl('layout', 'maalcie'), true);
-		$this->view->addScript($this->view->getCompressedScriptUrl('layout', 'maalcie'), true);
+		$this->view->addCompressedResources('maalcie');
 	}
 
 	public function prullenbak() {
 		$body = new BeheerMaaltijdenView(MaaltijdenModel::getVerwijderdeMaaltijden(), true);
 		$this->view = new CsrLayoutPage($body);
-		$this->view->addStylesheet($this->view->getCompressedStyleUrl('layout', 'maalcie'), true);
-		$this->view->addScript($this->view->getCompressedScriptUrl('layout', 'maalcie'), true);
+		$this->view->addCompressedResources('maalcie');
 	}
 
 	public function archief() {
 		$body = new BeheerMaaltijdenView(MaaltijdenModel::getArchiefMaaltijdenTussen(), false, true);
 		$this->view = new CsrLayoutPage($body);
-		$this->view->addStylesheet($this->view->getCompressedStyleUrl('layout', 'maalcie'), true);
-		$this->view->addScript($this->view->getCompressedScriptUrl('layout', 'maalcie'), true);
+		$this->view->addCompressedResources('maalcie');
 	}
 
 	public function fiscaal($mid) {

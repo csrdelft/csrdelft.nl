@@ -100,8 +100,7 @@ class ForumController extends Controller {
 				$this->view = new CsrLayout2Page($this->getView());
 				$layoutmap = 'layout2';
 			}
-			$this->view->addStylesheet($this->view->getCompressedStyleUrl($layoutmap, 'forum'), true);
-			$this->view->addScript($this->view->getCompressedScriptUrl($layoutmap, 'forum'), true);
+			$this->view->addCompressedResources('forum');
 		}
 	}
 

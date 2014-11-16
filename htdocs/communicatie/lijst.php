@@ -96,7 +96,5 @@ if ($message != '') {
 }
 
 $pagina = new CsrLayoutPage($ledenlijstcontent);
-
-$pagina->addStylesheet($pagina->getCompressedStyleUrl('layout', 'ledenlijst'), true);
-$pagina->addScript($pagina->getCompressedScriptUrl('layout', 'ledenlijst'), true);
+$pagina->addCompressedResources('ledenlijst');
 $pagina->view();

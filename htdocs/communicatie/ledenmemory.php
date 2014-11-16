@@ -12,7 +12,7 @@ if (!LoginModel::mag('P_LEDEN_READ')) {
  * 
  * Het spelletje memory met pasfotos en namen van leden
  */
-class MemoryView extends HtmlPage {
+class MemoryView extends CompressedLayout {
 
 	private $lichting;
 	private $verticale;
@@ -142,8 +142,7 @@ HTML;
 }
 
 $memory = new MemoryView();
-$memory->addStylesheet($memory->getCompressedStyleUrl('layout', 'ledenmemory'), true);
-$memory->addScript($memory->getCompressedScriptUrl('layout', 'ledenmemory'), true);
+$memory->addCompressedResources('ledenmemory');
 
 $smarty = CsrSmarty::instance();
 $smarty->assign('titel', $memory->getTitel());

@@ -3480,6 +3480,7 @@ lib/MVC/model/maalcie/KwalificatiesModel.class.php -text
 lib/MVC/view/AgendaView.class.php -text
 lib/MVC/view/BijbelroosterView.class.php -text
 lib/MVC/view/CmsPaginaView.class.php -text
+lib/MVC/view/CompressedLayout.abstract.php -text
 lib/MVC/view/CsrBB.class.php -text
 lib/MVC/view/CsrLayout2Page.class.php -text
 lib/MVC/view/CsrLayout3Page.class.php -text

@@ -10,11 +10,12 @@
  */
 class DragObjectModel {
 
-	public static function getCoords($id, &$top, &$left) {
-		if (isset($_SESSION['dragobject']) && isset($_SESSION['dragobject'][$id])) {
+	public static function getCoords($id, $top, $left) {
+		if (isset($_SESSION['dragobject'][$id])) {
 			$top = (int) $_SESSION['dragobject'][$id]['top'];
 			$left = (int) $_SESSION['dragobject'][$id]['left'];
 		}
+		return array('top' => $top, 'left' => $left);
 	}
 
 }

@@ -69,5 +69,5 @@ if (!LoginModel::mag('P_LOGGED_IN') OR ! Peiling::magBewerken()) {
 }
 
 $pagina = new CsrLayoutPage($beheer);
-$pagina->addScript($pagina->getCompressedScriptUrl('layout', 'peilingbeheer'), true);
+$pagina->addCompressedResources('peilingbeheer');
 $pagina->view();

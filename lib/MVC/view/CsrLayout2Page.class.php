@@ -10,7 +10,7 @@ require_once 'MVC/view/LoginView.class.php';
  * 
  * De stek layout van 2013
  */
-class CsrLayout2Page extends HtmlPage {
+class CsrLayout2Page extends CompressedLayout {
 
 	/**
 	 * Content template
@@ -24,12 +24,10 @@ class CsrLayout2Page extends HtmlPage {
 	public $menutmpl;
 
 	function __construct(View $body, $template = 'content', $menu = '') {
-		parent::__construct($body, $body->getTitel());
+		parent::__construct('layout2', $body, $body->getTitel());
 		$this->tmpl = $template;
 		$this->menutmpl = $menu;
-
-		$this->addStylesheet($this->getCompressedStyleUrl('layout2', 'general'), true);
-		$this->addScript($this->getCompressedScriptUrl('layout2', 'general'), true);
+		$this->addCompressedResources('general');
 	}
 
 	public function getBreadcrumbs() {

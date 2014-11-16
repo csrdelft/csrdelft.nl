@@ -1,6 +1,6 @@
 <?php
 
-require_once 'MVC/view/HtmlPage.abstract.php';
+require_once 'MVC/view/CompressedLayout.abstract.php';
 require_once 'MVC/view/MenuView.class.php';
 require_once 'MVC/model/MenuModel.class.php';
 require_once 'MVC/model/DragObjectModel.class.php';
@@ -13,13 +13,11 @@ require_once 'MVC/model/DragObjectModel.class.php';
  * 
  * De stek layout uit 2014
  */
-class CsrLayout3Page extends HtmlPage {
+class CsrLayout3Page extends CompressedLayout {
 
 	public function __construct(View $body) {
-		parent::__construct($body, $body->getTitel());
-
-		$this->addStylesheet($this->getCompressedStyleUrl('layout3', 'general'), true);
-		$this->addScript($this->getCompressedScriptUrl('layout3', 'general'), true);
+		parent::__construct('layout3', $body, $body->getTitel());
+		$this->addCompressedResources('general');
 	}
 
 	public function getBreadcrumbs() {

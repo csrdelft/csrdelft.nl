@@ -44,8 +44,7 @@ class BeheerVrijstellingenController extends AclController {
 		$vrijstellingen = CorveeVrijstellingenModel::getAlleVrijstellingen();
 		$this->view = new BeheerVrijstellingenView($vrijstellingen);
 		$this->view = new CsrLayoutPage($this->getView());
-		$this->view->addStylesheet($this->view->getCompressedStyleUrl('layout', 'maalcie'), true);
-		$this->view->addScript($this->view->getCompressedScriptUrl('layout', 'maalcie'), true);
+		$this->view->addCompressedResources('maalcie');
 	}
 
 	public function nieuw() {

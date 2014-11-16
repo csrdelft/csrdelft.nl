@@ -22,6 +22,5 @@ $controller = new Groepcontroller($_GET['query']);
 $controller->performAction();
 
 $pagina = new CsrLayoutPage($controller->getView());
-
-$pagina->addStylesheet($pagina->getCompressedStyleUrl('layout', 'groepen'), true);
+$pagina->addCompressedResources('groepen');
 $pagina->view();

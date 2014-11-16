@@ -73,6 +73,5 @@ if (isset($_POST['actie'])) {
 }
 
 $pagina = new CsrLayoutPage(new RoodschopperContent($roodschopper));
-$pagina->addStylesheet($pagina->getCompressedStyleUrl('layout', 'roodschopper'), true);
-$pagina->addScript($pagina->getCompressedScriptUrl('layout', 'roodschopper'), true);
+$pagina->addCompressedResources('roodschopper');
 $pagina->view();

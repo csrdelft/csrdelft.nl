@@ -16,8 +16,5 @@ if (isset($_GET['querystring'])) {
 }
 
 $pagina = new CsrLayoutPage($docControl->getView());
-
-$pagina->addStylesheet($pagina->getCompressedStyleUrl('layout', 'documenten'), true);
-$pagina->addScript($pagina->getCompressedScriptUrl('layout', 'documenten'), true);
-
+$pagina->addCompressedResources('documenten');
 $pagina->view();

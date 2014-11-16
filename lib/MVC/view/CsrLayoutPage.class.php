@@ -1,7 +1,7 @@
 <?php
 
 require_once 'MVC/view/Zijbalk.static.php';
-require_once 'MVC/view/HtmlPage.abstract.php';
+require_once 'MVC/view/CompressedLayout.abstract.php';
 require_once 'MVC/view/MenuView.class.php';
 require_once 'MVC/model/MenuModel.class.php';
 require_once 'MVC/model/DragObjectModel.class.php';
@@ -14,7 +14,7 @@ require_once 'MVC/model/DragObjectModel.class.php';
  * 
  * De stek layout van 2006
  */
-class CsrLayoutPage extends HtmlPage {
+class CsrLayoutPage extends CompressedLayout {
 
 	/**
 	 * Zijbalk
@@ -28,53 +28,10 @@ class CsrLayoutPage extends HtmlPage {
 	public $modal;
 
 	public function __construct(View $body, array $zijbalk = array(), $modal = null) {
-		parent::__construct($body, $body->getTitel());
+		parent::__construct('layout', $body, $body->getTitel());
 		$this->zijbalk = $zijbalk;
 		$this->modal = $modal;
-
-//		$css = '/layout/css/';
-//		$js = '/layout/js/';
-//		$plugin = $js . 'jquery/plugins/';
-//
-//		$this->addStylesheet($css . 'reset');
-//		$this->addStylesheet($css . 'layout_pagina');
-//		$this->addStylesheet($css . 'bbcode');
-//		$this->addStylesheet($css . 'csrdelft');
-//		$layout = LidInstellingen::get('layout', 'opmaak');
-//		$this->addStylesheet($css . $layout);
-//		if (LidInstellingen::get('layout', 'toegankelijk') == 'bredere letters') {
-//			$this->addStylesheet($css . 'toegankelijk_bredere_letters');
-//		}
-//		if (LidInstellingen::get('layout', 'sneeuw') != 'nee') {
-//			if (LidInstellingen::get('layout', 'sneeuw') == 'ja') {
-//				$this->addStylesheet($css . 'snow.anim');
-//			} else {
-//				$this->addStylesheet($css . 'snow');
-//			}
-//		}
-//		$this->addScript($js . 'jquery/jquery');
-//		$this->addScript($js . 'jquery/jquery-ui');
-//		$this->addStylesheet($js . 'jquery/jquery-ui');
-//		$this->addScript($js . 'autocomplete/jquery.autocomplete');
-//		$this->addStylesheet($js . 'autocomplete/jquery.autocomplete');
-//		//$this->addScript($plugin . 'jquery.dataTables');
-//		//$this->addStylesheet($css . 'jquery.dataTables');
-//		$this->addScript($plugin . 'jquery.autosize');
-//		$this->addScript($plugin . 'jquery.hoverIntent');
-//		$this->addScript($plugin . 'jquery.scrollTo');
-//		$this->addScript($plugin . 'jquery.timeago');
-//		$this->addScript($js . 'csrdelft');
-//		//$this->addScript($js . 'csrdelft.dataTables');
-//		//$this->addStylesheet($css . 'csrdelft.dataTables');
-//		$this->addScript($js . 'dragobject');
-//		$this->addScript($js . 'main_menu');
-//		$this->addScript($js . 'groepen');
-//		if (LidInstellingen::get('algemeen', 'minion') == 'ja') {
-//			$this->addScript($js . 'minion');
-//			$this->addStylesheet($css . 'minion');
-//		}
-		$this->addStylesheet($this->getCompressedStyleUrl('layout', 'general'), true);
-		$this->addScript($this->getCompressedScriptUrl('layout', 'general'), true);
+		$this->addCompressedResources('general');
 	}
 
 	public function getBreadcrumbs() {
@@ -103,10 +60,7 @@ class CsrLayoutPage extends HtmlPage {
 			}
 			$this->zijbalk = Zijbalk::addStandaardZijbalk($this->zijbalk);
 			if (LidInstellingen::get('zijbalk', 'scrollen') != 'met pagina mee') {
-				$top = 0;
-				$left = 0;
-				DragObjectModel::getCoords('zijbalk', $top, $left);
-				$smarty->assign('scrollfix', $top);
+				$smarty->assign('scrollfix', DragObjectModel::getCoords('zijbalk', 0, 0)['top']);
 			}
 		}
 		$smarty->assign('zijbalk', $this->zijbalk);
@@ -121,18 +75,10 @@ class CsrLayoutPage extends HtmlPage {
 			));
 		}
 
-		$top = 175;
-		$left = 200;
-		DragObjectModel::getCoords('modal', $top, $left);
-		$smarty->assign('modaltop', $top);
-		$smarty->assign('modalleft', $left);
+		$smarty->assign('modalcoords', DragObjectModel::getCoords('modal', 175, 200));
 
 		if (LidInstellingen::get('algemeen', 'minion') == 'ja') {
-			$top = 40;
-			$left = 40;
-			DragObjectModel::getCoords('minion', $top, $left);
-			$smarty->assign('miniontop', $top);
-			$smarty->assign('minionleft', $left);
+			$smarty->assign('minioncoords', DragObjectModel::getCoords('minion', 40, 40));
 			$smarty->assign('minion', $smarty->fetch('minion.tpl'));
 		}
 

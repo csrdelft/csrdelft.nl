@@ -63,13 +63,11 @@ class FotoAlbumController extends AclController {
 		if (LoginModel::mag('P_LOGGED_IN')) {
 			$this->view = new CsrLayoutPage($body);
 			//$this->view->zijbalk = false;
-			$layoutfolder = 'layout';
-		} else { // uitgelogd heeft nieuwe layout
+		} else {
+			// uitgelogd heeft nieuwe layout
 			$this->view = new CsrLayout2Page($body);
-			$layoutfolder = 'layout2';
 		}
-		$this->view->addStylesheet($this->view->getCompressedStyleUrl($layoutfolder, 'fotoalbum'), true);
-		$this->view->addScript($this->view->getCompressedScriptUrl($layoutfolder, 'fotoalbum'), true);
+		$this->view->addCompressedResources('fotoalbum');
 	}
 
 	public function verwerken(FotoAlbum $album) {
@@ -143,8 +141,7 @@ class FotoAlbumController extends AclController {
 			return;
 		}
 		$this->view = new CsrLayoutPage($formulier);
-		$this->view->addStylesheet($this->view->getCompressedStyleUrl('layout', 'fotoalbum'), true);
-		$this->view->addScript($this->view->getCompressedScriptUrl('layout', 'fotoalbum'), true);
+		$this->view->addCompressedResources('fotoalbum');
 	}
 
 	public function bestaande(FotoAlbum $album) {

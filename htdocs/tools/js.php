@@ -48,7 +48,7 @@ function csr_js_out() {
 	$selectedmodule = trim(preg_replace('/[^\w-]+/', '', $INPUT->str('m')));
 
 	// The generated script depends on some dynamic options
-	list(/* $timestamp */, $cache_ok, $modules,	$files,	$cache,	/* $replacements */) = HtmlPage::checkCache($layout, $selectedmodule, 'js');
+	list(/* $timestamp */, $cache_ok, $modules,	$files,	$cache,	/* $replacements */) = CompressedLayout::checkCache($layout, $selectedmodule, 'js');
 
 	// handle conditional request, based on cache state
 	// This may exit if a cache can be used

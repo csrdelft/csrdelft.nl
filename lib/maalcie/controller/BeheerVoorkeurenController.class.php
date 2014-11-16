@@ -37,8 +37,7 @@ class BeheerVoorkeurenController extends AclController {
 		$matrix_repetities = CorveeVoorkeurenModel::getVoorkeurenMatrix();
 		$this->view = new BeheerVoorkeurenView($matrix_repetities[0], $matrix_repetities[1]);
 		$this->view = new CsrLayoutPage($this->getView());
-		$this->view->addStylesheet($this->view->getCompressedStyleUrl('layout', 'maalcie'), true);
-		$this->view->addScript($this->view->getCompressedScriptUrl('layout', 'maalcie'), true);
+		$this->view->addCompressedResources('maalcie');
 	}
 
 	public function inschakelen($crid, $uid) {

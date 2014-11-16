@@ -18,6 +18,5 @@ if (LoginModel::mag('P_LEDEN_READ')) {
 }
 
 $pagina = new CsrLayoutPage($midden);
-$pagina->addStylesheet($pagina->getCompressedStyleUrl('layout', 'verticalen'), true);
-$pagina->addScript($pagina->getCompressedScriptUrl('layout', 'verticalen'), true);
+$pagina->addCompressedResources('verticalen');
 $pagina->view();

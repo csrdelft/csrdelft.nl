@@ -59,5 +59,5 @@ if (isset($_GET['bewerken']) AND $groepen->isAdmin()) {
 }
 
 $pagina = new CsrLayoutPage($content);
-$pagina->addStylesheet($pagina->getCompressedStyleUrl('layout', 'groepen'), true);
+$pagina->addCompressedResources('groepen');
 $pagina->view();
