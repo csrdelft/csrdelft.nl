@@ -35,5 +35,15 @@ class Bestand extends PersistentEntity {
 	 * @var array
 	 */
 	protected static $persistent_attributes = array();
+	/**
+	 * Database primary key
+	 * @var array
+	 */
+	protected static $primary_key = array();
+	/**
+	 * Database table name
+	 * @var string
+	 */
+	protected static $table_name = '';
 
 }
