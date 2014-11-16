@@ -19,6 +19,7 @@ class LoginForm extends Formulier {
 		$fields['pass']->placeholder = 'Wachtwoord';
 
 		$fields['pauper'] = new VinkField('mobiel', LoginModel::instance()->isPauper(), null, 'Mobiel');
+		$fields['pauper']->onchange = 'this.form.submit();';
 
 		$fields['url'] = new UrlField('url', HTTP_REFERER);
 		$fields['url']->hidden = true;
