@@ -33,8 +33,9 @@ class LoginController extends AclController {
 		require_once 'MVC/view/LoginView.class.php';
 		$form = new LoginForm(); // fetches POST values itself
 		$values = $form->getValues();
-		$this->model->setPauper($values['mobiel']);
+		$this->model->setPauper($values['mobiel']); // voor login
 		if ($form->validate() AND $this->model->login($values['user'], $values['pass'])) {
+			$this->model->setPauper($values['mobiel']); // na login
 			if (strpos($values['url'], '/login') === false) {
 				redirect($values['url']);
 			}
@@ -43,7 +44,9 @@ class LoginController extends AclController {
 	}
 
 	public function logout() {
+		$wasPauper = $this->model->isPauper();
 		$this->model->logout();
+		$this->model->setPauper($wasPauper);
 		redirect(CSR_ROOT);
 	}
 
