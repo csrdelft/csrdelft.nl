@@ -108,30 +108,33 @@ class FotoAlbumController extends AclController {
 		} else {
 			$formulier = new FotosDropzone($album);
 		}
-		if ($this->isPosted()) {
-			if ($formulier->validate()) {
-				if ($album->dirname === 'Posters') {
-					$uploader = $formulier->findByName('afbeelding');
-					$filename = $formulier->findByName('posternaam')->getValue() . '.jpg';
-				} else {
-					$uploader = $formulier->getPostedUploader();
-					$filename = $uploader->getModel()->filename;
-				}
-				if ($uploader->opslaan($album->path, $filename)) {
-					$foto = new Foto($album, $filename);
+		if ($this->isPosted() AND $formulier->validate()) {
+			if ($album->dirname === 'Posters') {
+				$uploader = $formulier->findByName('afbeelding');
+				$filename = $formulier->findByName('posternaam')->getValue() . '.jpg';
+			} else {
+				$uploader = $formulier->getPostedUploader();
+				$filename = $uploader->getModel()->filename;
+			}
+			try {
+				$uploader->opslaan($album->path, $filename);
+				$foto = new Foto($album, $filename);
+				if ($foto->exists()) {
 					$this->model->verwerkFoto($foto);
 					if ($album->dirname === 'Posters') {
 						redirect($album->getUrl());
 					}
-					exit;
+				} else {
+					$this->view = new JsonResponse(array('error' => $uploader->getError()), 500);
 				}
-				$this->view = new JsonResponse(array('error' => $uploader->getError()), 500);
-				return;
+			} catch (Exception $e) {
+				$this->view = new JsonResponse(array('error' => $e->getMessage()), 500);
 			}
+		} else {
+			$this->view = new CsrLayoutPage($formulier);
+			$this->view->addStylesheet($this->view->getCompressedStyleUrl('layout', 'fotoalbum'), true);
+			$this->view->addScript($this->view->getCompressedScriptUrl('layout', 'fotoalbum'), true);
 		}
-		$this->view = new CsrLayoutPage($formulier);
-		$this->view->addStylesheet($this->view->getCompressedStyleUrl('layout', 'fotoalbum'), true);
-		$this->view->addScript($this->view->getCompressedScriptUrl('layout', 'fotoalbum'), true);
 	}
 
 	public function bestaande(FotoAlbum $album) {
