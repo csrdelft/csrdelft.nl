@@ -30,5 +30,10 @@ class Bestand extends PersistentEntity {
 	 * @var Map
 	 */
 	public $directory;
+	/**
+	 * Database table columns
+	 * @var array
+	 */
+	protected static $persistent_attributes = array();
 
 }

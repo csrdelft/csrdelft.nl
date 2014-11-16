@@ -18,5 +18,10 @@ class Map extends PersistentEntity {
 	 * @var string
 	 */
 	public $path;
+	/**
+	 * Database table columns
+	 * @var array
+	 */
+	protected static $persistent_attributes = array();
 
 }
