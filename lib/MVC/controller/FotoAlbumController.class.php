@@ -119,22 +119,32 @@ class FotoAlbumController extends AclController {
 			try {
 				$uploader->opslaan($album->path, $filename);
 				$foto = new Foto($album, $filename);
+				// opslaan gelukt?
 				if ($foto->exists()) {
-					$this->model->verwerkFoto($foto);
-					if ($album->dirname === 'Posters') {
-						redirect($album->getUrl());
+					FotoModel::instance()->verwerkFoto($foto);
+					// verwerken gelukt?
+					if ($foto->isComplete()) {
+						if ($album->dirname === 'Posters') {
+							redirect($album->getUrl());
+						} else {
+							$this->view = new JsonResponse(true);
+						}
+					} else {
+						throw new Exception('Verwerken mislukt');
 					}
 				} else {
-					$this->view = new JsonResponse(array('error' => $uploader->getError()), 500);
+					throw new Exception('Opslaan mislukt');
 				}
+				// error zonder excpetion
+				$this->view = new JsonResponse(array('error' => $uploader->getError()), 500);
 			} catch (Exception $e) {
 				$this->view = new JsonResponse(array('error' => $e->getMessage()), 500);
 			}
-		} else {
-			$this->view = new CsrLayoutPage($formulier);
-			$this->view->addStylesheet($this->view->getCompressedStyleUrl('layout', 'fotoalbum'), true);
-			$this->view->addScript($this->view->getCompressedScriptUrl('layout', 'fotoalbum'), true);
+			return;
 		}
+		$this->view = new CsrLayoutPage($formulier);
+		$this->view->addStylesheet($this->view->getCompressedStyleUrl('layout', 'fotoalbum'), true);
+		$this->view->addScript($this->view->getCompressedScriptUrl('layout', 'fotoalbum'), true);
 	}
 
 	public function bestaande(FotoAlbum $album) {

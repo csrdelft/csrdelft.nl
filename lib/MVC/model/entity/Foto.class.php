@@ -52,7 +52,7 @@ class Foto extends Afbeelding {
 	 * Bestaat er een bestand met de naam en het pad.
 	 */
 	public function exists() {
-		return @is_readable($this->directory->path . $this->filename) AND is_file($this->path . $this->filename);
+		return @is_readable($this->directory->path . $this->filename) AND is_file($this->directory->path . $this->filename);
 	}
 
 	/**
@@ -105,7 +105,9 @@ class Foto extends Afbeelding {
 	}
 
 	public function createThumb() {
-		if (!empty($this->rotation)) {
+		if (empty($this->rotation)) {
+			$rotate = '';
+		} else {
 			$rotate = '-rotate ' . $this->rotation . ' ';
 		}
 		set_time_limit(0);
@@ -118,7 +120,7 @@ class Foto extends Afbeelding {
 		if ($this->hasThumb()) {
 			chmod($this->getThumbPath(), 0644);
 		} else {
-			setMelding('Thumb maken mislukt voor: ' . $this->getThumbPath(), -1);
+			throw new Exception('Thumb maken mislukt');
 		}
 	}
 
@@ -138,7 +140,7 @@ class Foto extends Afbeelding {
 		if ($this->hasResized()) {
 			chmod($this->getResizedPath(), 0644);
 		} else {
-			setMelding('Resized maken mislukt voor: ' . $this->getResizedPath(), -1);
+			throw new Exception('Resized maken mislukt');
 		}
 	}
 
