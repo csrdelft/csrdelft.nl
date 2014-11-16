@@ -39,9 +39,7 @@ class LoginController extends AclController {
 				$this->pauper();
 				return;
 			}
-			if (!empty($values['url']) AND strpos($values['url'], '/login') === false) {
-				redirect($values['url']);
-			}
+			redirect($values['url'], false);
 		}
 		redirect(CSR_ROOT);
 	}
@@ -59,11 +57,7 @@ class LoginController extends AclController {
 	public function su($uid = null) {
 		$this->model->switchUser($uid);
 		setMelding('U bekijkt de webstek nu als ' . Lid::naamLink($uid, 'full', 'plain') . '!', 1);
-		if (!empty(HTTP_REFERER) AND strpos(HTTP_REFERER, '/su') === false) {
-			redirect(HTTP_REFERER);
-		} else {
-			redirect(CSR_ROOT);
-		}
+		redirect(HTTP_REFERER, false);
 	}
 
 	public function endsu() {
@@ -73,11 +67,7 @@ class LoginController extends AclController {
 			LoginModel::instance()->endSwitchUser();
 			setMelding('Switch-useractie is beëindigd.', 1);
 		}
-		if (!empty(HTTP_REFERER) AND strpos(HTTP_REFERER, '/endsu') === false) {
-			redirect(HTTP_REFERER);
-		} else {
-			redirect(CSR_ROOT);
-		}
+		redirect(HTTP_REFERER);
 	}
 
 	public function pauper($terug = null) {

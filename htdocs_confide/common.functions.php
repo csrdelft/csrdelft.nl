@@ -142,7 +142,7 @@ function array_get_keys(array $in, array $keys) {
  * 
  * @param string $url
  */
-function redirect($url = null) {
+function redirect($url = null, $refresh = true) {
 	if (empty($url)) {
 		$url = CSR_ROOT . REQUEST_URI;
 	} else if (!startsWith($url, CSR_ROOT)) {
@@ -150,6 +150,9 @@ function redirect($url = null) {
 			$url = '/' . $url;
 		}
 		$url = CSR_ROOT . $url;
+	}
+	if (!$refresh AND $url == CSR_ROOT . REQUEST_URI) {
+		$url = CSR_ROOT;
 	}
 	header('location: ' . $url);
 	exit;
