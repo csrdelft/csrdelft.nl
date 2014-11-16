@@ -67,7 +67,7 @@ class LoginController extends AclController {
 			LoginModel::instance()->endSwitchUser();
 			setMelding('Switch-useractie is beëindigd.', 1);
 		}
-		redirect(HTTP_REFERER);
+		redirect(HTTP_REFERER, false);
 	}
 
 	public function pauper($terug = null) {
