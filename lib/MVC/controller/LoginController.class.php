@@ -37,6 +37,7 @@ class LoginController extends AclController {
 		if ($form->validate() AND $this->model->login($values['user'], $values['pass'])) {
 			if ($values['mobiel']) {
 				$this->pauper();
+				return;
 			}
 			if (strpos($values['url'], '/login') === false) {
 				redirect($values['url']);
@@ -48,7 +49,10 @@ class LoginController extends AclController {
 	public function logout() {
 		$wasPauper = $this->model->isPauper();
 		$this->model->logout();
-		$this->model->setPauper($wasPauper);
+		if ($wasPauper) {
+			$this->pauper();
+			return;
+		}
 		redirect(CSR_ROOT);
 	}
 
