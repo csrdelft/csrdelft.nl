@@ -3,13 +3,15 @@
 require_once 'MVC/view/HtmlPage.abstract.php';
 
 /**
- * LayoutConfig.abstract.php
+ * CompressedLayout.abstract.php
  * 
  * @author Gerrit Uitslag <klapinklapin@gmail.com>
  * @author P.W.G. Brussee <brussee@live.nl>
  * 
  * Gebruikt .ini files voor stylesheets en scripts per module en layout.
  * 
+ * @see htdocs/tools/css.php
+ * @see htdocs/tools/js.php
  */
 abstract class CompressedLayout extends HtmlPage {
 
