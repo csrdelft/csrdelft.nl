@@ -101,44 +101,53 @@ class FotoAlbumController extends AclController {
 	}
 
 	public function uploaden(FotoAlbum $album) {
-		if ($album->dirname === 'Posters') {
+		$poster = $album->dirname === 'Posters';
+		if ($poster) {
 			$formulier = new PosterUploadForm($album);
+			$uploader = $formulier->findByName('afbeelding');
 		} else {
 			$formulier = new FotosDropzone($album);
+			$uploader = $formulier->getPostedUploader();
 		}
-		if ($this->isPosted() AND $formulier->validate()) {
-			if ($album->dirname === 'Posters') {
-				$uploader = $formulier->findByName('afbeelding');
-				$filename = $formulier->findByName('posternaam')->getValue() . '.jpg';
-			} else {
-				$uploader = $formulier->getPostedUploader();
-				$filename = $uploader->getModel()->filename;
-			}
-			try {
-				$uploader->opslaan($album->path, $filename);
-				$foto = new Foto($album, $filename);
-				// opslaan gelukt?
-				if ($foto->exists()) {
-					FotoModel::instance()->verwerkFoto($foto);
-					// verwerken gelukt?
-					if ($foto->isComplete()) {
-						if ($album->dirname === 'Posters') {
-							redirect($album->getUrl());
+		if ($this->isPosted()) {
+			if ($formulier->validate()) {
+				try {
+					if ($poster) {
+						$filename = $formulier->findByName('posternaam')->getValue() . '.jpg';
+					} else {
+						$filename = $uploader->getModel()->filename;
+					}
+					$uploader->opslaan($album->path, $filename);
+					$foto = new Foto($album, $filename);
+					// opslaan gelukt?
+					if ($foto->exists()) {
+						FotoModel::instance()->verwerkFoto($foto);
+						// verwerken gelukt?
+						if ($foto->isComplete()) {
+							if ($poster) {
+								redirect($album->getUrl());
+							} else {
+								$this->view = new JsonResponse(true);
+								return;
+							}
 						} else {
-							$this->view = new JsonResponse(true);
+							throw new Exception('Verwerken mislukt');
 						}
 					} else {
-						throw new Exception('Verwerken mislukt');
+						throw new Exception('Opslaan mislukt');
 					}
-				} else {
-					throw new Exception('Opslaan mislukt');
+				} catch (Exception $e) {
+					$this->view = new JsonResponse(array('error' => $e->getMessage()), 500);
+					return;
 				}
-				// error zonder excpetion
-				$this->view = new JsonResponse(array('error' => $uploader->getError()), 500);
-			} catch (Exception $e) {
-				$this->view = new JsonResponse(array('error' => $e->getMessage()), 500);
+			} else {
+				if ($poster) {
+					// fall through
+				} else {
+					$this->view = new JsonResponse(array('error' => $uploader->getError()), 500);
+					return;
+				}
 			}
-			return;
 		}
 		$this->view = new CsrLayoutPage($formulier);
 		$this->view->addCompressedResources('fotoalbum');
