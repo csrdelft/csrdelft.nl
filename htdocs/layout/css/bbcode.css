@@ -1,3 +1,21 @@
+.error {
+	color: red !important;
+	font-weight: bold !important;
+}
+.onzichtbaar { visibility: hidden; }
+.verborgen { display: none; }
+.block { display: block; }
+.recht { font-style: normal; }
+.cursief { font-style: italic; }
+.dikgedrukt { font-weight: bold; }
+.niet-dik { font-weight: normal; }
+.onderstreept { text-decoration: underline; }
+.doorgestreept { text-decoration: line-through; }
+.lichtgrijs { color: #aaa; }
+.small { font-size: smaller; }
+.round { border-radius: 50%; }
+.rounded { border-radius: 25%; }
+
 div.preview { display: none; margin: 7px; padding: 2px; background-color: #ffffc1; border: 1px solid #ccc; }
 div.preview-show { display: block; }
 div.preview.pagina { padding: 2px; width: 100%;}
