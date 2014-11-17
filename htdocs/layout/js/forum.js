@@ -6,7 +6,7 @@ function saveConceptForumBericht() {
 	if ($textarea.val() !== $textarea.attr('origvalue')) {
 		$.post($concept.attr('data-url'), {
 			forumBericht: $textarea.val(),
-			titel: ($titel.length === 1 ? $titel.val() : ''),
+			titel: ($titel.length === 1 ? $titel.val() : '')
 		}).done(function () {
 			$textarea.attr('origvalue', $textarea.val());
 		}).fail(alert);
@@ -19,26 +19,19 @@ $(document).ready(function ($) {
 	var $concept = $('#forumConcept');
 
 	if ($concept.length === 1) {
-		var toggleShowSaveConcept = function () {
-			if ($textarea.val() !== $textarea.attr('origvalue')) {
-				$concept.prop('disabled', false);
-			} else {
-				$concept.prop('disabled', true);
-			}
-		};
 		var updateReageren = function () {
 			$.post($concept.attr('data-url'), {
 				ping: ($textarea.val() !== $textarea.attr('origvalue'))
 			}).done(dom_update).fail(alert);
 		};
-		var ping = setInterval(updateReageren, 60000);
-		var autosave;
+		/*var ping = */setInterval(updateReageren, 60000);
+		/*var autosave;
 		$textarea.focusin(function () {
-			autosave = setInterval(toggleShowSaveConcept, 3000);
+			autosave = setInterval(saveConceptForumBericht, 3000);
 		});
 		$textarea.focusout(function () {
 			clearInterval(autosave);
-		});
+		});*/
 	}
 
 	// naar juiste forumreactie scrollen door hash toe te voegen

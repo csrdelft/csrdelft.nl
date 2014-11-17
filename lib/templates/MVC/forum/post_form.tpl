@@ -65,7 +65,7 @@
 				<input type="submit" name="submit" value="Opslaan" id="forumOpslaan" />
 				<input type="button" value="Voorbeeld" id="forumVoorbeeld" onclick="CsrBBPreview('forumBericht', 'berichtPreview');" />
 				{if LoginModel::mag('P_LOGGED_IN')}
-					<input type="button" value="Concept opslaan" id="forumConcept" onclick="saveConceptForumBericht();" data-url="/forum/concept/{$deel->forum_id}{if isset($draad)}/{$draad->draad_id}{/if}" disabled />
+					<input type="button" value="Concept opslaan" id="forumConcept" onclick="saveConceptForumBericht();" data-url="/forum/concept/{$deel->forum_id}{if isset($draad)}/{$draad->draad_id}{/if}" />
 				{/if}
 				<div class="float-right">
 					{if LoginModel::mag('P_LOGGED_IN')}
