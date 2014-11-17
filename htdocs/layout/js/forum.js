@@ -9,7 +9,7 @@ function saveConceptForumBericht() {
 			titel: ($titel.length === 1 ? $titel.val() : '')
 		}).done(function () {
 			$textarea.attr('origvalue', $textarea.val());
-			$concept.prop('disabled', false);
+			$concept.removeAttr('disabled');
 		}).fail(alert);
 	}
 }
