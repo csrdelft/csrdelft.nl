@@ -3,7 +3,7 @@
 class WikiHeader extends CompressedLayout {
 
 	public function __construct() {
-		parent::__construct(new MainMenuView(), null);
+		parent::__construct('layout', new MainMenuView(), null);
 		$this->addCompressedResources('wiki');
 	}
 

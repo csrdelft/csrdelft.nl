@@ -68,9 +68,11 @@
 					<input type="button" value="Concept opslaan" id="forumConcept" onclick="saveConceptForumBericht();" data-url="/forum/concept/{$deel->forum_id}{if isset($draad)}/{$draad->draad_id}{/if}" disabled />
 				{/if}
 				<div class="float-right">
-					<a href="/fotoalbum/uploaden/fotoalbum/{Lichting::getHuidigeJaargang()}/Posters" target="_blank">Poster opladen</a> &nbsp;
-					<a href="/actueel/groepen/Ketzers" target="_blank">Ketzer maken</a> &nbsp;
-					<a href="http://csrdelft.nl/wiki/cie:diensten:forum" target="_blank">Opmaakhulp</a> &nbsp;
+					{if LoginModel::mag('P_LOGGED_IN')}
+						<a href="/fotoalbum/uploaden/fotoalbum/{Lichting::getHuidigeJaargang()}/Posters" target="_blank">Poster opladen</a> &nbsp;
+						<a href="/actueel/groepen/Ketzers" target="_blank">Ketzer maken</a> &nbsp;
+						<a href="http://csrdelft.nl/wiki/cie:diensten:forum" target="_blank">Opmaakhulp</a> &nbsp;
+					{/if}
 					<a class="knop vergroot" data-vergroot="#forumBericht" title="Vergroot het invoerveld">&uarr;&darr;</a>
 				</div>
 			</div>
