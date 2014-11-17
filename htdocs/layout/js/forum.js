@@ -1,6 +1,6 @@
 function saveConceptForumBericht() {
+	toggleForumConceptBtn();
 	var $concept = $('#forumConcept');
-	$concept.prop('disabled', true);
 	var $textarea = $('#forumBericht');
 	var $titel = $('#nieuweTitel');
 	if ($textarea.val() !== $textarea.attr('origvalue')) {
@@ -11,7 +11,16 @@ function saveConceptForumBericht() {
 			$textarea.attr('origvalue', $textarea.val());
 		}).fail(alert);
 	}
-	$concept.removeAttr('disabled');
+	setTimeout(toggleForumConceptBtn, 3000);
+}
+
+function toggleForumConceptBtn() {
+	var $concept = $('#forumConcept');
+	if ($concept.prop('disabled')) {
+		$concept.removeAttr('disabled');
+	} else {
+		$concept.prop('disabled', true);
+	}
 }
 
 $(document).ready(function ($) {
