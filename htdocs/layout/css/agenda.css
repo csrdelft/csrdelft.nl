@@ -107,7 +107,7 @@ table#maand td ul li{
 	line-height: 1.4em;
 }
 table#maand td ul li:nth-child(even){
-	background-color: #eaeaea;
+	background-color: #efefef;
 }
 table#maand td ul li .tijd{
 	font-size: 11px;
