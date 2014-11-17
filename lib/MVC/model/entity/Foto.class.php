@@ -110,12 +110,11 @@ class Foto extends Afbeelding {
 		} else {
 			$rotate = '-rotate ' . $this->rotation . ' ';
 		}
-		set_time_limit(0);
 		$command = IMAGEMAGICK_PATH . 'convert ' . escapeshellarg($this->getFullPath()) . ' -thumbnail 150x150^^ -gravity center -extent 150x150 -format jpg -quality 80 ' . $rotate . escapeshellarg($this->getThumbPath());
-		$output = shell_exec($command) . '<hr />';
+		$output = shell_exec($command);
 		if (defined('RESIZE_OUTPUT')) {
 			echo $command . '<br />';
-			echo $output;
+			echo $output . '<hr />';
 		}
 		if ($this->hasThumb()) {
 			chmod($this->getThumbPath(), 0644);
@@ -130,12 +129,11 @@ class Foto extends Afbeelding {
 		} else {
 			$rotate = '-rotate ' . $this->rotation . ' ';
 		}
-		set_time_limit(0);
 		$command = IMAGEMAGICK_PATH . 'convert ' . escapeshellarg($this->getFullPath()) . ' -resize 1024x1024 -format jpg -quality 85 ' . $rotate . escapeshellarg($this->getResizedPath());
-		$output = shell_exec($command) . '<hr />';
+		$output = shell_exec($command);
 		if (defined('RESIZE_OUTPUT')) {
 			echo $command . '<br />';
-			echo $output;
+			echo $output . '<hr />';
 		}
 		if ($this->hasResized()) {
 			chmod($this->getResizedPath(), 0644);
