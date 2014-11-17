@@ -36,14 +36,14 @@ class FotoAlbum extends Map {
 	 * @var array
 	 */
 	protected static $persistent_attributes = array(
-		'directory'	 => array(T::String),
+		'dirname'	 => array(T::String),
 		'owner'		 => array(T::UID)
 	);
 	/**
 	 * Database primary key
 	 * @var array
 	 */
-	protected static $primary_key = array('directory');
+	protected static $primary_key = array('dirname');
 	/**
 	 * Database table name
 	 * @var string
