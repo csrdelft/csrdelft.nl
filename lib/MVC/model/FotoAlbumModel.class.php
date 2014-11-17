@@ -25,8 +25,11 @@ class FotoAlbumModel extends PersistenceModel {
 	}
 
 	public function create(PersistentEntity $album) {
-		mkdir($album->path);
-		chmod($album->path, 0755);
+		$path = $album->path;
+		if (!file_exists($path)) {
+			mkdir($path);
+			chmod($path, 0755);
+		}
 		$path = $album->path . '_thumbs';
 		if (!file_exists($path)) {
 			mkdir($path);
