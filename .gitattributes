@@ -170,8 +170,6 @@ htdocs/layout/js/datatables/Readme.md -text
 htdocs/layout/js/datatables/bower.json -text
 htdocs/layout/js/datatables/composer.json -text
 htdocs/layout/js/datatables/dataTables.jquery.json -text
-htdocs/layout/js/datatables/examples/example-data-2.json -text
-htdocs/layout/js/datatables/examples/example-data.json -text
 htdocs/layout/js/datatables/extensions/AutoFill/Readme.txt -text
 htdocs/layout/js/datatables/extensions/AutoFill/css/dataTables.autoFill.css -text
 htdocs/layout/js/datatables/extensions/AutoFill/css/dataTables.autoFill.min.css -text
