@@ -9,6 +9,7 @@ function saveConceptForumBericht() {
 			titel: ($titel.length === 1 ? $titel.val() : '')
 		}).done(function () {
 			$textarea.attr('origvalue', $textarea.val());
+			$concept.prop('disabled', false);
 		}).fail(alert);
 	}
 }
@@ -26,12 +27,12 @@ $(document).ready(function ($) {
 		};
 		/*var ping = */setInterval(updateReageren, 60000);
 		/*var autosave;
-		$textarea.focusin(function () {
-			autosave = setInterval(saveConceptForumBericht, 3000);
-		});
-		$textarea.focusout(function () {
-			clearInterval(autosave);
-		});*/
+		 $textarea.focusin(function () {
+		 autosave = setInterval(saveConceptForumBericht, 3000);
+		 });
+		 $textarea.focusout(function () {
+		 clearInterval(autosave);
+		 });*/
 	}
 
 	// naar juiste forumreactie scrollen door hash toe te voegen
