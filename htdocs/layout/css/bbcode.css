@@ -1,3 +1,4 @@
+.staatrood { color: red; }
 .error {
 	color: red !important;
 	font-weight: bold !important;
@@ -15,6 +16,12 @@
 .small { font-size: smaller; }
 .round { border-radius: 50%; }
 .rounded { border-radius: 25%; }
+
+img.neus2013 {
+	width: 16px;
+	height: 16px;
+	margin: -5px;
+}
 
 div.preview { display: none; margin: 7px; padding: 2px; background-color: #ffffc1; border: 1px solid #ccc; }
 div.preview-show { display: block; }
