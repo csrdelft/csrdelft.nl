@@ -21,7 +21,6 @@
 					{/if}
 					<td id="mainright">
 						<div id="page-top"><div class="breadcrumbs">{$breadcrumbs}</div></div>
-						{*$datatable->view()*}
 						{$body->view()}
 						{if $smarty.const.DEBUG AND (LoginModel::mag('P_ADMIN') OR LoginModel::instance()->isSued())}
 							<div><a id="mysql_debug_toggle" onclick="$(this).replaceWith($('#mysql_debug').toggle());">DEBUG</a></div>

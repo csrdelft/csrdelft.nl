@@ -82,10 +82,6 @@ class CsrLayoutPage extends CompressedLayout {
 			$smarty->assign('minion', $smarty->fetch('minion.tpl'));
 		}
 
-		//$dataTable = new DataTable('Example', 3, true);
-		//$dataTable->setDataSource('example-data-2.json');
-		//$smarty->assign('datatable', $dataTable)
-
 		if (LoginModel::instance()->isPauper()) {
 			$smarty->assign('menutree', MenuModel::instance()->getMenu('main'));
 			$smarty->assign('loginform', new LoginForm());
