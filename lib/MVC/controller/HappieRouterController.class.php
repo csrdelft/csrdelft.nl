@@ -55,7 +55,7 @@ class HappieRouterController extends Controller {
 	}
 
 	public function menugroep() {
-		require_once 'MVC/controller/groepen/MenukaartGroepenController.class.php';
+		require_once 'MVC/controller/happie/MenukaartGroepenController.class.php';
 		return new HappieMenukaartGroepenController($this->model);
 	}
 

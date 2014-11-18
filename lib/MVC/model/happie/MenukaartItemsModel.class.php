@@ -24,15 +24,19 @@ class HappieMenukaartItemsModel extends CachedPersistenceModel {
 		return $this->retrieveByPrimaryKey(array($id));
 	}
 
-	public function newItem($groep_id, $naam, $beschrijving, $allergie_info, $prijs, $aantal_beschikbaar) {
+	public function newItem() {
 		$item = new HappieMenuKaartItem();
-		$item->groep_id = $groep_id;
-		$item->naam = $naam;
-		$item->beschrijving = $beschrijving;
-		$item->allergie_info = $allergie_info;
-		$item->prijs = $prijs;
-		$item->aantal_beschikbaar = $aantal_beschikbaar;
-		$item->item_id = $this->create($item);
+		$item->groep_id = 0;
+		$item->naam = '';
+		$item->beschrijving = '';
+		$item->allergie_info = '';
+		$item->prijs = 0;
+		$item->aantal_beschikbaar = 0;
+		return $item;
+	}
+
+	public function create(PersistentEntity $item) {
+		$item->item_id = parent::create($item);
 		return $item;
 	}
 

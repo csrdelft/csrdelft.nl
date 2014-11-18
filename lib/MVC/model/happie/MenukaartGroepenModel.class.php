@@ -22,11 +22,15 @@ class HappieMenukaartGroepenModel extends CachedPersistenceModel {
 		return $this->retrieveByPrimaryKey(array($id));
 	}
 
-	public function newGroep($titel, $gang) {
+	public function newGroep() {
 		$groep = new HappieMenuKaartGroep();
-		$groep->titel = $titel;
-		$groep->gang = $gang;
-		$groep->groep_id = $this->create($groep);
+		$groep->titel = '';
+		$groep->gang = null;
+		return $groep;
+	}
+
+	public function create(PersistentEntity $groep) {
+		$groep->groep_id = parent::create($groep);
 		return $groep;
 	}
 

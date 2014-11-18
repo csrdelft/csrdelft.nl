@@ -82,45 +82,40 @@ class Formulier implements View, Validator {
 		$fields = array();
 		foreach ($this->model->getAttributes() as $fieldName) {
 			$definition = $this->model->getAttributeDefinition($fieldName);
-			if (isset($definition[1]) AND $definition[1] === true) {
-				$class = '';
-			} else {
+			if (isset($definition[1]) AND $definition[1] === false) {
 				$class = 'Required';
+			} else {
+				$class = '';
 			}
 			$desc = ucfirst(str_replace('_', ' ', $fieldName));
 			switch ($definition[0]) {
-				case T::String:
-					$class .= 'TextField';
+				case T::String: $class .= 'TextField';
 					break;
-				case T::Boolean:
-					$class .= 'VinkField';
+				case T::Boolean: $class .= 'VinkField';
 					break;
-				case T::Integer:
-					$class .= 'IntField';
+				case T::Integer: $class .= 'IntField';
 					break;
-				case T::Float:
-					$class .= 'DecimalField';
+				case T::Float: $class .= 'DecimalField';
 					break;
-				case T::DateTime:
-					$class .= 'DatumField';
+				case T::DateTime: $class .= 'DatumField';
 					break;
-				case T::Text:
-					$class .= 'TextareaField';
+				case T::Text: $class .= 'TextareaField';
 					break;
-				case T::LongText:
-					$class .= 'TextareaField';
+				case T::LongText: $class .= 'TextareaField';
 					break;
-				case T::Enumeration:
-					$class .= 'SelectField';
-					$fields[$fieldName] = $class($fieldName, $this->model->$fieldName, $desc, $definition[3]);
-					continue;
-				case T::UID:
-					$class .='LidField';
+				case T::Enumeration: $class .= 'SelectField';
+					break;
+				case T::UID: $class .='LidField';
 					break;
 			}
-			$fields[$fieldName] = new $class($fieldName, $this->model->$fieldName, $desc);
+			if ($definition[0] == T::Enumeration) {
+				$fields[$fieldName] = new $class($fieldName, $this->model->$fieldName, $desc, $definition[2]::getTypeOptions());
+			} else {
+				$fields[$fieldName] = new $class($fieldName, $this->model->$fieldName, $desc);
+			}
 		}
 		foreach ($this->model->getPrimaryKey() as $fieldName) {
+			$fields[$fieldName]->hidden = true;
 			$fields[$fieldName]->readonly = true;
 		}
 		$this->addFields($fields);

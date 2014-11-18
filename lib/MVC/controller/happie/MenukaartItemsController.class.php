@@ -47,10 +47,10 @@ class HappieMenukaartItemsController extends AclController {
 	}
 
 	public function nieuw() {
-		$form = new HappieMenukaartItemForm();
+		$item = $this->model->newItem();
+		$form = new HappieMenukaartItemForm($item);
 		if ($this->isPosted() AND $form->validate()) {
-			$values = $form->getValues();
-			$this->model->newItem($values['groep_id'], $values['naam'], $values['beschrijving'], $values['allergie_info'], $values['prijs'], $values['aantal_beschikbaar']);
+			$this->model->create($item);
 			setMelding('Menukaart-item succesvol toegevoegd', 1);
 			$this->overzicht();
 			return;

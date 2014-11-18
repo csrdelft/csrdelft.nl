@@ -893,17 +893,19 @@ JS;
 		} else {
 			$type = 'text';
 
-			$minus = CSR_PICS . '/famfamfam/delete.png';
-			$js = <<<JS
+			if (!$this->readonly) {
+				$minus = CSR_PICS . '/famfamfam/delete.png';
+				$js = <<<JS
 $('#{$this->getId()}').val(parseInt($('#{$this->getId()}').val()) - 1);
 $('#{$this->getId()}').trigger('onchange');
 JS;
-			echo <<<HTML
+				echo <<<HTML
 <span class="knop minus" onclick="{$js}"><img src="{$minus}" alt="-" class="icon" width="16" height="16" /></span>
 HTML;
+			}
 		}
 		echo ' <input type="' . $type . '"' . $this->getInputAttribute(array('id', 'name', 'class', 'value', 'origvalue', 'disabled', 'readonly', 'maxlength', 'placeholder', 'autocomplete', 'onchange', 'onclick', 'onkeyup')) . ' /> ';
-		if (!$this->hidden) {
+		if (!$this->hidden AND ! $this->readonly) {
 			$plus = CSR_PICS . '/famfamfam/add.png';
 			$js = <<<JS
 $('#{$this->getId()}').val(parseInt($('#{$this->getId()}').val()) + 1);

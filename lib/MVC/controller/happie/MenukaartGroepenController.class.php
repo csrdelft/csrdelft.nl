@@ -47,10 +47,10 @@ class HappieMenukaartGroepenController extends AclController {
 	}
 
 	public function nieuw() {
-		$form = new HappieMenukaartGroepForm();
+		$groep = $this->model->newGroep();
+		$form = new HappieMenukaartGroepForm($groep);
 		if ($this->isPosted() AND $form->validate()) {
-			$values = $form->getValues();
-			$this->model->newItem($values['groep_id'], $values['naam'], $values['beschrijving'], $values['allergie_info'], $values['prijs'], $values['aantal_beschikbaar']);
+			$this->model->create($groep);
 			setMelding('Menukaart-groep succesvol toegevoegd', 1);
 			$this->overzicht();
 			return;
