@@ -6,7 +6,15 @@
  * @author P.W.G. Brussee <brussee@live.nl>
  * 
  */
-class ForumModel extends PersistenceModel {
+abstract class AbstractForumModel extends PersistenceModel {
+
+	protected function __construct() {
+		parent::__construct('forum/');
+	}
+
+}
+
+class ForumModel extends AbstractForumModel {
 
 	const orm = 'ForumCategorie';
 
@@ -81,7 +89,7 @@ class ForumModel extends PersistenceModel {
 
 }
 
-class ForumDelenModel extends PersistenceModel {
+class ForumDelenModel extends AbstractForumModel {
 
 	const orm = 'ForumDeel';
 
@@ -297,7 +305,7 @@ class ForumDelenModel extends PersistenceModel {
 
 }
 
-class ForumDradenReagerenModel extends PersistenceModel {
+class ForumDradenReagerenModel extends AbstractForumModel {
 
 	const orm = 'ForumDraadReageren';
 
@@ -397,7 +405,7 @@ class ForumDradenReagerenModel extends PersistenceModel {
 
 }
 
-class ForumDradenGelezenModel extends PersistenceModel {
+class ForumDradenGelezenModel extends AbstractForumModel {
 
 	const orm = 'ForumDraadGelezen';
 
@@ -492,7 +500,7 @@ class ForumDradenGelezenModel extends PersistenceModel {
 
 }
 
-class ForumDradenVerbergenModel extends PersistenceModel {
+class ForumDradenVerbergenModel extends AbstractForumModel {
 
 	const orm = 'ForumDraadVerbergen';
 
@@ -542,7 +550,7 @@ class ForumDradenVerbergenModel extends PersistenceModel {
 
 }
 
-class ForumDradenVolgenModel extends PersistenceModel {
+class ForumDradenVolgenModel extends AbstractForumModel {
 
 	const orm = 'ForumDraadVolgen';
 
@@ -596,7 +604,7 @@ class ForumDradenVolgenModel extends PersistenceModel {
 
 }
 
-class ForumDradenModel extends PersistenceModel implements Paging {
+class ForumDradenModel extends AbstractForumModel implements Paging {
 
 	const orm = 'ForumDraad';
 
@@ -857,7 +865,7 @@ class ForumDradenModel extends PersistenceModel implements Paging {
 
 }
 
-class ForumPostsModel extends PersistenceModel implements Paging {
+class ForumPostsModel extends AbstractForumModel implements Paging {
 
 	const orm = 'ForumPost';
 
