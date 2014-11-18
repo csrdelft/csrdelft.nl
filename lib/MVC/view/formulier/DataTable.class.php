@@ -50,9 +50,9 @@ class DataTable extends TabsForm {
 		return null;
 	}
 
-	private function getColumnsDef() {
+	protected function getColumnsDef() {
 		$columns = array();
-		$columns[] = array(
+		$columns['details'] = array(
 			'name'			 => 'details',
 			'data'			 => null,
 			'title'			 => '',
@@ -76,7 +76,7 @@ class DataTable extends TabsForm {
 				default: $type = 'html';
 					break;
 			}
-			$columns[] = array(
+			$columns[$attribute] = array(
 				'name'	 => $attribute,
 				'data'	 => $attribute,
 				'title'	 => ucfirst(str_replace('_', ' ', $attribute)),
@@ -120,7 +120,7 @@ JSON;
 				var tableId = '<?= $this->tableId ?>';
 				var table = '#' + tableId;
 				var dataTable = $(table).DataTable({
-					"columns": <?= json_encode($this->getColumnsDef()) ?>,
+					"columns": <?= json_encode(array_values($this->getColumnsDef())) ?>,
 					"order": [[1, "asc"]],
 					"createdRow": function (row, data, index) {
 						$(row).attr('id', tableId + '_' + index); // data array index

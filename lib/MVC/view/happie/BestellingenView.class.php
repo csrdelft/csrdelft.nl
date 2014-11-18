@@ -13,7 +13,7 @@ require_once 'MVC/model/entity/happie/HappieGang.enum.php';
 class HappieBestellingenView extends DataTable {
 
 	public function __construct() {
-		parent::__construct(HappieBestellingenModel::orm, get_class($this), 2, false, 'Overzicht bestellingen');
+		parent::__construct(HappieBestellingenModel::orm, get_class($this), true, false, 'Overzicht bestellingen');
 
 		$toolbar = new DataTableToolbar();
 		$fields[] = $toolbar;
@@ -24,6 +24,12 @@ class HappieBestellingenView extends DataTable {
 		$toolbar->addKnop($knop);
 
 		$toolbar->addKnop(new DataTableToolbarKnop('>= 0', happieUrl . '/nieuw', '', 'Nieuw', 'Nieuwe bestelling', '/famfamfam/add.png'));
+	}
+
+	protected function getColumnsDef() {
+		$def = parent::getColumnsDef();
+		unset($def['wijzig_historie']);
+		return $def;
 	}
 
 }

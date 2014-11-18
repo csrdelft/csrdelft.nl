@@ -383,6 +383,7 @@ htdocs/layout/js/jquery/plugins/jquery.scrollTo.js -text
 htdocs/layout/js/jquery/plugins/jquery.scrollTo.min.js -text
 htdocs/layout/js/jquery/plugins/jquery.timeago.js -text
 htdocs/layout/js/jquery/plugins/jquery.timeago.min.js -text
+htdocs/layout/js/keypress.js -text
 htdocs/layout/js/ledenmemory.js -text
 htdocs/layout/js/lightbox.js -text
 htdocs/layout/js/maalcie.js -text
