@@ -14,7 +14,7 @@ require_once 'MVC/view/formulier/Formulier.class.php';
 class DataTable extends Formulier {
 
 	protected $orm;
-	private $tableId;
+	protected $tableId;
 	private $groupByColumn;
 	protected $css_classes = array();
 	protected $dataSource;
@@ -157,25 +157,25 @@ JSON;
 					$(table + ' thead tr th.details-control').removeClass('details-control');
 				}
 				// Toolbar update script
-				$(table + '_toolbar').insertBefore(table);
-				var updateToolbar = function () {
-					var aantal = $(table + ' tbody tr.selected').length;
-		<?= $this->getToolbarUpdateScript(); ?>;
-				};
+				var updateToolbar = <?= $this->getToolbarUpdateScript(); ?>;
 				$(table).on('draw.dt', updateToolbar);
+				$(table + '_toolbar').prependTo(table + '_wrapper');
 			});
 		</script>
 		<?php
 	}
 
 	private function getToolbarUpdateScript() {
-		$js = '';
+		$js = <<<JS
+function () {
+	var aantal = $(table + ' tbody tr.selected').length;
+JS;
 		foreach ($this->getFields() as $field) {
 			if ($field instanceof DataTableToolbar) {
-				$js .= $field->getUpdateScript();
+				$js .= $field->getUpdateScript() . "\n";
 			}
 		}
-		return $js;
+		return $js . '}';
 	}
 
 }

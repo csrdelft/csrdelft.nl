@@ -54,7 +54,7 @@ abstract class FormKnoppen implements FormElement {
 				$knop->view();
 			}
 		}
-		echo '</div>';
+		echo '</div></div>';
 	}
 
 	public function getJavascript() {
