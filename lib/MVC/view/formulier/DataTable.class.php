@@ -242,15 +242,21 @@ class DataTableResponse extends JsonResponse {
 	public function view() {
 		http_response_code($this->code);
 		header('Content-Type: application/json');
-		echo '{"data":';
+		echo '{"data":[';
 		if ($this->model instanceof PDOStatement AND $this->model->rowCount() == 0) {
-			echo '[]}';
+			echo ']}';
 			return;
 		}
+		$comma = false;
 		foreach ($this->model as $data) {
+			if ($comma) {
+				echo ',';
+			} else {
+				$comma = true;
+			}
 			echo $this->getJson($data);
 		}
-		echo '}';
+		echo ']}';
 	}
 
 }

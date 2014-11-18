@@ -11,7 +11,7 @@
 class HappieMenukaartItemsJson extends DataTableResponse {
 
 	public function getJson($data) {
-		$data->groep_id = $data->getGroep()->titel;
+		//FIXME: $data->groep_id = $data->getGroep()->titel;
 		return parent::getJson($data);
 	}
 

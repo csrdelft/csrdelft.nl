@@ -82,11 +82,11 @@ class Formulier implements View, Validator {
 		$fields = array();
 		foreach ($this->model->getAttributes() as $fieldName) {
 			$definition = $this->model->getAttributeDefinition($fieldName);
-			if (isset($definition[1]) AND $definition[1] === false) {
-				$class = 'Required';
-			} else {
-				$class = '';
-			}
+			//if (isset($definition[1]) AND $definition[1] === false) {
+			//	$class = 'Required';
+			//} else {
+			$class = '';
+			//}
 			$desc = ucfirst(str_replace('_', ' ', $fieldName));
 			switch ($definition[0]) {
 				case T::String: $class .= 'TextField';
@@ -115,8 +115,8 @@ class Formulier implements View, Validator {
 			}
 		}
 		foreach ($this->model->getPrimaryKey() as $fieldName) {
-			$fields[$fieldName]->hidden = true;
 			$fields[$fieldName]->readonly = true;
+			$fields[$fieldName]->hidden = true;
 		}
 		$this->addFields($fields);
 	}
