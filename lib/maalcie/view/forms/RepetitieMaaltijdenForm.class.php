@@ -17,7 +17,7 @@ class RepetitieMaaltijdenForm extends ModalForm {
 		$fields[] = new HtmlComment('<p>Aanmaken op de eerste ' . $repetitie->getDagVanDeWeekText() . ' en vervolgens ' . $repetitie->getPeriodeInDagenText() . ' in de periode:</p>');
 		$fields['begin'] = new DatumField('begindatum', $beginDatum, 'Vanaf', date('Y') + 1, date('Y'));
 		$fields['eind'] = new DatumField('einddatum', $eindDatum, 'Tot en met', date('Y') + 1, date('Y'));
-		$fields[] = new FormKnoppen();
+		$fields[] = new FormDefaultKnoppen();
 
 		$this->addFields($fields);
 	}

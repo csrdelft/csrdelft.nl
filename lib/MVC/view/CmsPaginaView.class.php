@@ -62,7 +62,7 @@ class CmsPaginaForm extends Formulier {
 					'</div><div class="clear-left"><label>Rechten bewerken</label>' . $pagina->rechten_bewerken . '</div>');
 		}
 		$fields[] = new CsrBBPreviewField('inhoud', $pagina->inhoud, 'Inhoud');
-		$fields['btn'] = new FormKnoppen('/pagina/' . $pagina->naam);
+		$fields['btn'] = new FormDefaultKnoppen('/pagina/' . $pagina->naam);
 		$delete = new DeleteKnop('/pagina/verwijderen/' . $pagina->naam);
 		$fields['btn']->addKnop($delete);
 

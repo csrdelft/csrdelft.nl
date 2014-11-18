@@ -139,7 +139,7 @@ class ForumDeelForm extends ModalForm {
 		$fields[] = new RechtenField('rechten_modereren', $deel->rechten_modereren, 'Mod-rechten');
 		$fields[] = new IntField('volgorde', $deel->volgorde, 'Volgorde');
 
-		$fields['btn'] = new FormKnoppen();
+		$fields['btn'] = new FormDefaultKnoppen();
 
 		$delete = new DeleteKnop('/forum/opheffen/' . $deel->forum_id);
 		$fields['btn']->addKnop($delete);

@@ -23,7 +23,7 @@ class Dropzone extends Formulier {
 		$fields[] = $this->dropzone;
 		$fields[] = new HtmlComment('<div class="fallback">');
 		$fields[] = $this->fallback;
-		$fields[] = new FormKnoppen(null, false);
+		$fields[] = new FormDefaultKnoppen(null, false);
 		$fields[] = new HtmlComment('</div>');
 
 		$this->addFields($fields);

@@ -168,7 +168,7 @@ class DocumentController extends Controller {
 		$fields['uploader'] = new RequiredFileField('document', $bestand, 'documenten/');
 		$fields['rechten'] = new RechtenField('leesrechten', $this->document->getLeesrechten(), 'Leesrechten');
 		$fields['rechten']->readonly = true;
-		$fields['btn'] = new FormKnoppen('/communicatie/documenten/');
+		$fields['btn'] = new FormDefaultKnoppen('/communicatie/documenten/');
 		$formulier = new Formulier(null, 'documentForm', '/communicatie/documenten/bewerken/' . $this->document->getId());
 		$formulier->addFields($fields);
 		if ($this->document->getID() == 0) {

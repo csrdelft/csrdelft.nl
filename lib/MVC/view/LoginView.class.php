@@ -35,7 +35,7 @@ class VerifyForm extends Formulier {
 		parent::__construct(null, 'verifyform', '/verify/' . $tokenValue, 'Verifieren');
 
 		$fields[] = new RequiredTextField('user', null, 'Lidnummer');
-		$fields[] = new FormKnoppen(CSR_ROOT, false, true, true, true);
+		$fields[] = new FormDefaultKnoppen(CSR_ROOT, false, true, true, true);
 
 		$this->addFields($fields);
 	}
@@ -49,7 +49,7 @@ class WachtwoordVergetenForm extends Formulier {
 
 		$fields[] = new RequiredTextField('user', null, 'Lidnummer');
 		$fields[] = new RequiredEmailField('mail', null, 'E-mail adres');
-		$fields[] = new FormKnoppen(CSR_ROOT, false, true, true, true);
+		$fields[] = new FormDefaultKnoppen(CSR_ROOT, false, true, true, true);
 
 		$this->addFields($fields);
 	}
@@ -62,7 +62,7 @@ class WachtwoordResetForm extends Formulier {
 		parent::__construct($lid, 'wwresetform', '/wachtwoord/reset', 'Wachtwoord instellen');
 
 		$fields[] = new WachtwoordWijzigenField('wwreset', $lid, true);
-		$fields[] = new FormKnoppen(CSR_ROOT, false, true, true, true);
+		$fields[] = new FormDefaultKnoppen(CSR_ROOT, false, true, true, true);
 
 		$this->addFields($fields);
 	}

@@ -19,8 +19,8 @@ class DataTable extends Formulier {
 	protected $css_classes = array();
 	protected $dataSource;
 
-	public function __construct($orm_class, $tableId, $groupByColumn = true, $groupByFixed = false) {
-		parent::__construct(null, $tableId . '_form', $action, $titel);
+	public function __construct($orm_class, $tableId, $groupByColumn = true, $groupByFixed = false, $title = false) {
+		parent::__construct(null, $tableId . '_form', $title);
 		$this->orm = new $orm_class();
 		$this->tableId = $tableId;
 		$this->css_classes[] = 'init display';
@@ -119,20 +119,9 @@ JSON;
 		return $json;
 	}
 
-	protected function getToolbarDiv() {
-		return <<<HTML
-<div id="{$this->tableId}_toolbar" class="dataTables_toolbar">
-	<button id="rowcount">Count selected rows</button>
-</div>
-HTML;
-	}
-
 	public function view() {
-		if ($this->getTitel()) {
-			echo '<h2>' . $this->getTitel() . '</h2>';
-		}
-		echo $this->getToolbarDiv();
 		?>
+		<div id="<?= $this->tableId ?>_toolbar" class="dataTables_toolbar"><?= parent::view() ?></div>
 		<table id="<?= $this->tableId ?>" class="<?= implode(' ', $this->css_classes) ?>" groupByColumn="<?= $this->groupByColumn ?>">
 			<?= $this->getTableHead() ?>
 			<?= $this->getTableBody() ?>
@@ -179,19 +168,62 @@ HTML;
 				if (!$(table).hasClass('groupByColumn') || !fnGetGroupByColumn($(table))) {
 					$(table + ' thead tr th.details-control').removeClass('details-control');
 				}
-				// Setup toolbar
+				// Toolbar update script
 				$(table + '_toolbar').insertBefore(table);
 				var updateToolbar = function () {
 					var aantal = $(table + ' tbody tr.selected').length;
-					$(table + '_toolbar #rowcount').attr('disabled', aantal < 1);
+		<?= $this->getToolbarUpdateScript(); ?>;
 				};
 				$(table).on('draw.dt', updateToolbar);
-				$(table + '_toolbar #rowcount').click(function () {
-					alert($(table + ' tbody tr.selected').length + ' row(s) selected');
-				});
 			});
 		</script>
 		<?php
+	}
+
+	private function getToolbarUpdateScript() {
+		$js = '';
+		foreach ($this->getFields() as $field) {
+			if ($field instanceof DataTableToolbar) {
+				$js .= $field->getUpdateScript();
+			}
+		}
+		return $js;
+	}
+
+}
+
+class DataTableToolbar extends FormKnoppen {
+
+	public function getUpdateScript() {
+		foreach ($this->knoppen as $knop) {
+			return $knop->getUpdateScript();
+		}
+	}
+
+}
+
+class DataTableToolbarKnop extends FormulierKnop {
+
+	public $onclick;
+	private $multiplicity;
+
+	public function __construct($multiplicity, $url, $action, $label, $title, $icon, $float_left = true) {
+		parent::__construct($url, $action, $label, $title, $icon, $float_left);
+		$this->multiplicity = $multiplicity;
+	}
+
+	public function getUpdateScript() {
+		return <<<JS
+$('#{$this->getId()}').attr('disabled', aantal {$this->multiplicity});
+JS;
+	}
+
+	public function getJavascript() {
+		return parent::getJavascript() . <<<JS
+$('#{$this->getId()}').click(function () {
+	{$this->onclick}
+});
+JS;
 	}
 
 }

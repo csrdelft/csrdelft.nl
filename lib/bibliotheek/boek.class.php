@@ -543,7 +543,7 @@ class NieuwBoek extends Boek {
 			if ($this->isBASFCie()) {
 				$nieuwboekformulier['biebboek'] = new SelectField('biebboek', $this->biebboek, 'Is een biebboek?', array('ja' => 'C.S.R. boek', 'nee' => 'Eigen boek'));
 			}
-			$nieuwboekformulier[] = new FormKnoppen('/communicatie/bibliotheek/');
+			$nieuwboekformulier[] = new FormDefaultKnoppen('/communicatie/bibliotheek/');
 
 			$this->formulier = new Formulier(null, 'boekaddForm', '/communicatie/bibliotheek/nieuwboek/0');
 			$this->formulier->addFields($nieuwboekformulier);
@@ -1003,7 +1003,7 @@ class BewerkBoek extends Boek {
 			$boekbeschrijvingform[] = new Subkopje($titeltekst);
 			$textfield = new RequiredCsrBBPreviewField('beschrijving', $this->getEditBeschrijving()->getTekst(), $schrijver, true, 255);
 			$boekbeschrijvingform[] = $textfield;
-			$boekbeschrijvingform[] = new FormKnoppen($annuleer);
+			$boekbeschrijvingform[] = new FormDefaultKnoppen($annuleer);
 
 			$this->formulier = new Formulier(null, 'Beschrijvingsformulier', $posturl);
 			$this->formulier->addFields($boekbeschrijvingform);

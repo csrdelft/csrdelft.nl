@@ -279,7 +279,7 @@ class InlineForm extends Formulier {
 
 		$fields = array();
 		$fields['input'] = $field;
-		$fields['btn'] = new FormKnoppen(null, false, true, $label, true);
+		$fields['btn'] = new FormDefaultKnoppen(null, false, true, $label, true);
 
 		$this->addFields($fields);
 	}

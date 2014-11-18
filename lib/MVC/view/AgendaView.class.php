@@ -176,7 +176,7 @@ function setTijd(a, b, c, d) {
 		$fields['b'] = new TextareaField('beschrijving', $item->beschrijving, 'Beschrijving');
 		$fields['b']->title = 'Extra info als de cursor boven de titel gehouden wordt';
 
-		$fields['btn'] = new FormKnoppen();
+		$fields['btn'] = new FormDefaultKnoppen();
 		if ($actie === 'toevoegen') {
 			$doorgaan = new FormulierKnop('/agenda/toevoegen/doorgaan', 'submit', 'Opslaan en doorgaan', 'Opslaan & nog een agenda item toevoegen', '/famfamfam/add.png');
 			$fields['btn']->addKnop($doorgaan, true);

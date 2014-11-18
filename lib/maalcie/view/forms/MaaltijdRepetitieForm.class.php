@@ -48,7 +48,7 @@ if (this.checked) {
 $('#extraButton').html(txt);
 JS;
 		}
-		$fields['btn'] = new FormKnoppen();
+		$fields['btn'] = new FormDefaultKnoppen();
 
 		$bijwerken = new FormulierKnop(maalcieUrl . '/bijwerken/' . $mrid, 'submit', 'Alles bijwerken', 'Opslaan & alle maaltijden bijwerken', '/famfamfam/disk_multiple.png');
 		$fields['btn']->addKnop($bijwerken, true);
