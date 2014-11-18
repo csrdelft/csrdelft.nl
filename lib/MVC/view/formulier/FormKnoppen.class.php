@@ -102,7 +102,7 @@ class FormKnoppen implements FormElement {
 
 	private $knoppen = array();
 
-	public function __construct($cancel_url = null, $icons = true, $label = true, $reset = true, $reset_cancel = false) {
+	public function __construct($cancel_url = null, $reset = true, $icons = true, $label = true, $reset_cancel = false) {
 		$this->knoppen['submit'] = new SubmitKnop();
 		if ($reset) {
 			$this->knoppen['reset'] = new ResetKnop();

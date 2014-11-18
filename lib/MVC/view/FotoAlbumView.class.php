@@ -85,7 +85,7 @@ class FotoAlbumToevoegenForm extends ModalForm {
 		$this->titel = 'Fotoalbum toevoegen in: ' . $album->dirname;
 		$this->css_classes[] = 'redirect';
 		$fields[] = new RequiredFileNameField('subalbum', null, 'Naam');
-		$fields[] = new FormKnoppen('/fotoalbum', true, true, false);
+		$fields[] = new FormKnoppen('/fotoalbum', false);
 		$this->addFields($fields);
 	}
 
@@ -99,7 +99,7 @@ class PosterUploadForm extends Formulier {
 		$fields[] = new HtmlComment('Alleen jpeg afbeeldingen.<br/><br/>');
 		$fields[] = new RequiredFileNameField('posternaam', null, 'Posternaam', 50, 5);
 		$fields[] = new RequiredImageField('afbeelding', null, null, array('image/jpeg'));
-		$fields[] = new FormKnoppen('/fotoalbum', true, true, false);
+		$fields[] = new FormKnoppen('/fotoalbum', false);
 		$fields[] = new HtmlComment('<br /><span class="cursief">Maak nooit inbreuk op de auteursrechten of het recht op privacy van anderen.</span>');
 		$this->addFields($fields);
 	}
@@ -111,7 +111,7 @@ class PosterUploadForm extends Formulier {
 
 }
 
-class FotosDropzone extends DropzoneForm {
+class FotosDropzone extends Dropzone {
 
 	public function __construct(FotoAlbum $album) {
 		parent::__construct($album, get_class(), '/fotoalbum/uploaden/' . $album->getSubDir(), new ImageField('afbeelding', null, null, array('image/jpeg'), false));

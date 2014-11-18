@@ -89,7 +89,6 @@ require_once 'MVC/model/Paging.interface.php';
 # View
 require_once 'MVC/view/JsonResponse.class.php';
 require_once 'MVC/view/SmartyTemplateView.abstract.php';
-require_once 'MVC/view/DataTable.class.php';
 require_once 'MVC/view/formulier/Formulier.class.php';
 require_once 'MVC/view/CsrBB.class.php';
 require_once 'MVC/view/CsrLayoutPage.class.php';

@@ -10,15 +10,17 @@
  * @see http://www.datatables.net/
  * 
  */
-class DataTable implements View {
+class DataTable extends Formulier {
 
+	protected $orm;
 	private $tableId;
 	private $groupByColumn;
 	protected $css_classes = array();
 	protected $dataSource;
-	protected $columns = array('name', 'position', 'salary', 'start_date', 'office', 'extn'); // TODO
 
-	public function __construct($tableId, $groupByColumn = true, $groupByFixed = false) {
+	public function __construct($orm_class, $tableId, $groupByColumn = true, $groupByFixed = false) {
+		parent::__construct(null, $tableId . '_form', $action, $titel);
+		$this->orm = new $orm_class();
 		$this->tableId = $tableId;
 		$this->css_classes[] = 'init display';
 		if ($groupByColumn === true) {
@@ -35,12 +37,8 @@ class DataTable implements View {
 		}
 	}
 
-	public function setDataSource($url) {
-		$this->dataSource = $url;
-	}
-
 	public function getModel() {
-		return null;
+		return $this->orm;
 	}
 
 	public function getBreadcrumbs() {
@@ -48,7 +46,7 @@ class DataTable implements View {
 	}
 
 	public function getTitel() {
-		return null;
+		return get_class($this->orm);
 	}
 
 	protected function getTableHead() {
@@ -61,6 +59,42 @@ class DataTable implements View {
 
 	protected function getTableFoot() {
 		return null;
+	}
+
+	private function getColumnsDef() {
+		$columns = array();
+		$columns[] = array(
+			'name'			 => 'details',
+			'data'			 => null,
+			'title'			 => '',
+			'type'			 => 'string',
+			'class'			 => 'details-control',
+			'orderable'		 => false,
+			'searchable'	 => false,
+			'defaultContent' => ''
+		);
+		foreach ($this->orm->getAttributes() as $attribute) {
+			$definition = $this->getAttributeDefinition($attribute);
+			switch ($definition[0]) {
+				case T::DateTime: $type = 'date';
+					break;
+				case T::Integer: $type = 'num';
+					break;
+				case T::Float: $type = 'num-fmt';
+					break;
+				case T::Char: $type = 'string';
+					break;
+				default: $type = 'html';
+					break;
+			}
+			$columns[] = array(
+				'name'	 => $attribute,
+				'data'	 => $attribute,
+				'title'	 => ucfirst($attribute),
+				'type'	 => $type
+			);
+		}
+		return $columns;
 	}
 
 	private function getConditionalProps() {
@@ -84,14 +118,20 @@ JSON;
 		return $json;
 	}
 
+	protected function getToolbarDiv() {
+		return <<<HTML
+<div id="{$this->tableId}_toolbar" class="dataTables_toolbar">
+	<button id="rowcount">Count selected rows</button>
+</div>
+HTML;
+	}
+
 	public function view() {
 		if ($this->getTitel()) {
 			echo '<h2>' . $this->getTitel() . '</h2>';
 		}
+		echo $this->getToolbarDiv();
 		?>
-		<div id="<?= $this->tableId ?>_toolbar" class="dataTables_toolbar">
-			<button id="rowcount">Count selected rows</button>
-		</div>
 		<table id="<?= $this->tableId ?>" class="<?= implode(' ', $this->css_classes) ?>" groupByColumn="<?= $this->groupByColumn ?>">
 			<?= $this->getTableHead() ?>
 			<?= $this->getTableBody() ?>
@@ -102,54 +142,7 @@ JSON;
 				var tableId = '<?= $this->tableId ?>';
 				var table = '#' + tableId;
 				var dataTable = $(table).DataTable({
-					"columns": [
-						{
-							"name": "details",
-							"data": null,
-							"title": "",
-							"type": "string",
-							"class": "details-control",
-							"orderable": false,
-							"searchable": false,
-							"defaultContent": ""
-						},
-						{
-							"name": "name",
-							"title": "Name",
-							"data": "name",
-							"type": "html"
-						},
-						{
-							"name": "position",
-							"title": "Position",
-							"data": "position",
-							"type": "string"
-						},
-						{
-							"name": "office",
-							"title": "Office",
-							"data": "office",
-							"type": "string"
-						},
-						{
-							"name": "salary",
-							"title": "Salary",
-							"data": "salary",
-							"type": "num-fmt"
-						},
-						{
-							"name": "start_date",
-							"title": "Start date",
-							"data": "start_date",
-							"type": "date"
-						},
-						{
-							"name": "extn",
-							"title": "Ext.no",
-							"data": "extn",
-							"type": "num"
-						}
-					],
+					"columns": <?= $this->getColumnsDef() ?>,
 					"order": [[1, "asc"]],
 					"createdRow": function (row, data, index) {
 						$(row).attr('id', tableId + '_' + index); // data array index

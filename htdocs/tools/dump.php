@@ -14,7 +14,7 @@ foreach ($results as $result) {
 	$tables[$result[0]] = $result[0];
 }
 $fields['tabel'] = new SelectField('tabel', null, 'Tabel', $tables);
-$fields['btn'] = new FormKnoppen(CSR_ROOT, true, true, false);
+$fields['btn'] = new FormKnoppen(CSR_ROOT, false);
 $form = new Formulier(null, 'form', null);
 $form->addFields($fields);
 $form->titel = 'Dump database table';
