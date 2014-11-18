@@ -45,6 +45,7 @@ class TabsForm extends Formulier {
 			echo '<h1 class="formTitle">' . $this->getTitel() . '</h1>';
 		}
 		echo $this->getFormTag();
+		echo $this->getScriptTag();
 		echo '<div id="tabs"><ul>';
 		foreach ($this->tabs as $tab => $fields) {
 			echo '<li><a href="#tabs-' . $tab . '">' . ucfirst($tab) . '</a></li>';
@@ -62,7 +63,6 @@ class TabsForm extends Formulier {
 		foreach ($this->getFields() as $field) {
 			$field->view();
 		}
-		echo $this->getScriptTag();
 		echo '</form>';
 	}
 
