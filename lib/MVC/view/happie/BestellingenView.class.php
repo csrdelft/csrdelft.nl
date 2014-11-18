@@ -29,13 +29,13 @@ class HappieBestellingenView extends DataTable {
 		$fields[] = $toolbar;
 		$this->addFields($fields);
 
-		$count = new DataTableToolbarKnop('>= 0', null, 'rowcount', 'Count', 'Count selected rows', null);
-		$count->onclick = "alert($('#" . $this->tableId . " tbody tr.selected').length + ' row(s) selected');";
-		$toolbar->addKnop($count);
-
 		$print = new DataTableToolbarKnop('== 1', null, 'debugprint', 'Print', 'Debugprint row', null);
 		$print->onclick = "console.log($('#" . $this->tableId . " tbody tr.selected'));";
 		$toolbar->addKnop($print);
+
+		$count = new DataTableToolbarKnop('>= 0', null, 'rowcount', 'Count', 'Count selected rows', null);
+		$count->onclick = "alert($('#" . $this->tableId . " tbody tr.selected').length + ' row(s) selected');";
+		$toolbar->addKnop($count);
 	}
 
 }

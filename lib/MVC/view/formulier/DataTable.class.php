@@ -123,6 +123,8 @@ class DataTable extends TabsForm {
 				$this->css_classes[] = 'groupByFixed';
 			}
 		}
+		// save before parent::view removes all fieds
+		$updateToolbar = $this->getToolbarUpdateScript();
 		?>
 		<div id="<?= $this->tableId ?>_toolbar" class="dataTables_toolbar"><?= parent::view() ?></div>
 		<table id="<?= $this->tableId ?>" class="<?= implode(' ', $this->css_classes) ?>" groupByColumn="<?= $this->groupByColumn ?>">
@@ -172,7 +174,7 @@ class DataTable extends TabsForm {
 					$(table + ' thead tr th.details-control').removeClass('details-control');
 				}
 				// Toolbar update script
-				var updateToolbar = <?= $this->getToolbarUpdateScript(); ?>;
+				var updateToolbar = <?= $updateToolbar ?>;
 				$(table).on('draw.dt', updateToolbar);
 				$(table + '_toolbar').prependTo(table + '_wrapper');
 			});
