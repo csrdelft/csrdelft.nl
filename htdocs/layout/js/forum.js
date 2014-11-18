@@ -16,7 +16,7 @@ function saveConceptForumBericht() {
 
 function toggleForumConceptBtn() {
 	var $concept = $('#forumConcept');
-	$concept.attr('disabled', $concept.prop('disabled'));
+	$concept.attr('disabled', !$concept.prop('disabled'));
 }
 
 $(document).ready(function ($) {
