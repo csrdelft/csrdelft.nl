@@ -39,8 +39,15 @@ class HappieBestellingenController extends AclController {
 		$this->view = new CsrLayout3Page($body);
 	}
 
-	public function nieuw() {
-		
+	public function nieuw($tafelNr) {
+		$form = new HappieBestelForm((int) $tafelNr);
+		if ($form->validate()) {
+			$this->model->opslaan();
+			$this->view = new JsonResponse(true);
+		}
+		else {
+			$this->view = $form;
+		}
 	}
 
 	public function wijzig() {

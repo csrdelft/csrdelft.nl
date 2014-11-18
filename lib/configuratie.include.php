@@ -20,10 +20,10 @@ function fatal_handler() {
 
 	$error = error_get_last();
 	if ($error !== null) {
-		/*/ exclude wiki
-		if (startsWith(str_replace('\\', '/', $error['file']), HTDOCS_PATH . 'wiki')) {
-			return;
-		}//*/
+		/* / exclude wiki
+		  if (startsWith(str_replace('\\', '/', $error['file']), HTDOCS_PATH . 'wiki')) {
+		  return;
+		  }// */
 		$debug['error'] = $error;
 		$debug['trace'] = debug_backtrace(false);
 		$debug['POST'] = $_POST;

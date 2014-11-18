@@ -864,6 +864,16 @@ class IntField extends TextField {
 		return $this->error === '';
 	}
 
+	/**
+	 * Misbruik preview div voor + en - knopjes.
+	 */
+	public function getPreviewDiv() {
+		return <<<HTML
+<div onclick="$('#{$this->getId()}').val($('#{$this->getId()}').val() + 1);">+</div>
+<div onclick="$('#{$this->getId()}').val($('#{$this->getId()}').val() - 1);">-</div>';
+HTML;
+	}
+
 }
 
 class RequiredIntField extends IntField {

@@ -8,7 +8,7 @@
  * Menukaart groepen CRUD.
  * 
  */
-class HappieMenukaartGroepenModel extends PersistenceModel {
+class HappieMenukaartGroepenModel extends CachedPersistenceModel {
 
 	const orm = 'HappieMenukaartGroep';
 

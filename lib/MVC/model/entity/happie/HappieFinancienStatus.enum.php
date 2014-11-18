@@ -10,9 +10,9 @@
  */
 abstract class HappieFinancienStatus implements PersistentEnum {
 
-	const Nieuw = 'n';
-	const Gewijzigd = 'g';
-	const Verwerkt = 'v';
+	const Nieuw = 'nieuw';
+	const Gewijzigd = 'gewijzigd';
+	const Verwerkt = 'verwerkt';
 
 	public static function getTypeOptions() {
 		return array(self::Nieuw, self::Gewijzigd, self::Verwerkt);

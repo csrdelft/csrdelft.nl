@@ -28,6 +28,11 @@ class HappieMenukaartGroep extends PersistentEntity {
 	 */
 	public $gang;
 	/**
+	 * Items
+	 * @var HappieMenukaartItem[]
+	 */
+	protected $items;
+	/**
 	 * Database table columns
 	 * @var array
 	 */
@@ -46,5 +51,21 @@ class HappieMenukaartGroep extends PersistentEntity {
 	 * @var string
 	 */
 	protected static $table_name = 'happie_menu_groep';
+
+	public function getItems() {
+		if (!isset($this->items)) {
+			$this->setItems(HappieMenukaartItemsModel::instance()->getGroepItems($this));
+		}
+		return $this->items;
+	}
+
+	public function hasItems() {
+		$this->getItems();
+		return !empty($this->items);
+	}
+
+	public function setItems(array $items) {
+		$this->items = $items;
+	}
 
 }

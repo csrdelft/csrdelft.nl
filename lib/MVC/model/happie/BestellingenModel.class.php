@@ -10,7 +10,7 @@ require_once 'MVC/model/happie/MenukaartItemsModel.class.php';
  * Bestellingen CRUD.
  * 
  */
-class HappieBestellingenModel extends PersistenceModel {
+class HappieBestellingenModel extends CachedPersistenceModel {
 
 	const orm = 'HappieBestelling';
 

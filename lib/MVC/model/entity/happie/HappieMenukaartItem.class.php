@@ -75,4 +75,12 @@ class HappieMenukaartItem extends PersistentEntity {
 	 */
 	protected static $table_name = 'happie_menu';
 
+	public function getGroep() {
+		return HappieMenukaartGroepenModel::instance()->getGroep($this->groep_id);
+	}
+
+	public function getGang() {
+		return $this->getGroep()->gang;
+	}
+
 }

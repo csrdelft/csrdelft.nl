@@ -1,5 +1,5 @@
 <?php
-require_once 'MVC/view/formulier/Formulier.class.php';
+require_once 'MVC/view/formulier/TabsForm.class.php';
 
 /**
  * DataTable.class.php
@@ -11,7 +11,7 @@ require_once 'MVC/view/formulier/Formulier.class.php';
  * @see http://www.datatables.net/
  * 
  */
-class DataTable extends Formulier {
+class DataTable extends TabsForm {
 
 	protected $orm;
 	protected $tableId;

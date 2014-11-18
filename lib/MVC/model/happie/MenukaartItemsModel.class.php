@@ -10,7 +10,7 @@ require_once 'MVC/model/happie/MenukaartGroepenModel.class.php';
  * Menukaart items CRUD.
  * 
  */
-class HappieMenukaartItemsModel extends PersistenceModel {
+class HappieMenukaartItemsModel extends CachedPersistenceModel {
 
 	const orm = 'HappieMenukaartItem';
 
@@ -35,6 +35,25 @@ class HappieMenukaartItemsModel extends PersistenceModel {
 		$item->alcohol_leeftijd = $alcohol_leeftijd;
 		$item->item_id = $this->create($item);
 		return $item;
+	}
+
+	public function getGroepItems(HappieMenukaartGroep $groep) {
+		return $this->prefetch('groep_id = ?', array($groep->groep_id));
+	}
+
+	public function getMenukaart() {
+		// prefetch groepen en items
+		$groepen = HappieMenukaartGroepenModel::instance()->prefetch();
+		$items = group_by('groep_id', HappieMenukaartItemsModel::instance()->prefetch());
+
+		foreach ($groepen as $groep) {
+			// set prefetched items
+			if (!isset($items[$groep->groep_id])) {
+				continue;
+			}
+			$groep->setItems($items[$groep->groep_id]);
+		}
+		return $groepen;
 	}
 
 }

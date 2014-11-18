@@ -10,11 +10,11 @@
  */
 abstract class HappieServeerStatus implements PersistentEnum {
 
-	const Nieuw = 'n';
-	const Gewijzigd = 'g';
-	const KeukenBezig = 'b';
-	const KeukenKlaar = 'k';
-	const Uitgeserveerd = 'u';
+	const Nieuw = 'nieuw';
+	const Gewijzigd = 'gewijzigd';
+	const KeukenBezig = 'keukenbezig';
+	const KeukenKlaar = 'keukenklaar';
+	const Uitgeserveerd = 'uitgeserveerd';
 
 	public static function getTypeOptions() {
 		return array(self::Nieuw, self::Gewijzigd, self::KeukenBezig, self::KeukenKlaar, self::Uitgeserveerd);

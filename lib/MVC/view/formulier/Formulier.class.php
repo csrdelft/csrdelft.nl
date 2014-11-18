@@ -80,13 +80,14 @@ class Formulier implements View, Validator {
 			return;
 		}
 		$fields = array();
-		foreach ($this->model->getFields() as $fieldName) {
-			$definition = $this->model->getFieldDefinition($fieldName);
+		foreach ($this->model->getAttributes() as $fieldName) {
+			$definition = $this->model->getAttributeDefinition($fieldName);
 			if (isset($definition[1]) AND $definition[1] === true) {
-				$class = 'Required';
-			} else {
 				$class = '';
+			} else {
+				$class = 'Required';
 			}
+			$desc = ucfirst(str_replace('_', ' ', $fieldName));
 			switch ($definition[0]) {
 				case T::String:
 					$class .= 'TextField';
@@ -111,13 +112,16 @@ class Formulier implements View, Validator {
 					break;
 				case T::Enumeration:
 					$class .= 'SelectField';
-					$fields[] = $class($fieldName, $this->model->$fieldName, $fieldName, $definition[3]);
+					$fields[$fieldName] = $class($fieldName, $this->model->$fieldName, $desc, $definition[3]);
 					continue;
 				case T::UID:
 					$class .='LidField';
 					break;
 			}
-			$fields[] = new $class($fieldName, $this->model->$fieldName, $fieldName);
+			$fields[$fieldName] = new $class($fieldName, $this->model->$fieldName, $desc);
+		}
+		foreach ($this->model->getPrimaryKey() as $fieldName) {
+			$fields[$fieldName]->readonly = true;
 		}
 		$this->addFields($fields);
 	}
@@ -245,7 +249,7 @@ JS;
 	}
 
 	/**
-	 * Toont het formulier en javascript van alle fields
+	 * Toont het formulier en javascript van alle fields.
 	 */
 	public function view() {
 		echo getMelding();
@@ -263,7 +267,7 @@ JS;
 }
 
 /**
- * Formulier as modal content
+ * Formulier as modal content.
  */
 class ModalForm extends Formulier {
 
@@ -277,7 +281,7 @@ class ModalForm extends Formulier {
 }
 
 /**
- * InlineForm with single InputField and SubmitResetCancel
+ * InlineForm with single InputField and SubmitResetCancel.
  */
 class InlineForm extends Formulier {
 
