@@ -46,11 +46,6 @@ class HappieMenukaartItem extends PersistentEntity {
 	 */
 	public $aantal_beschikbaar;
 	/**
-	 * Minimum leeftijd als product alcohol bevat
-	 * @var int
-	 */
-	public $alcohol_leeftijd;
-	/**
 	 * Database table columns
 	 * @var array
 	 */
@@ -61,8 +56,7 @@ class HappieMenukaartItem extends PersistentEntity {
 		'beschrijving'		 => array(T::Text),
 		'allergie_info'		 => array(T::Text),
 		'prijs'				 => array(T::Integer),
-		'aantal_beschikbaar' => array(T::Integer),
-		'alcohol_leeftijd'	 => array(T::Integer)
+		'aantal_beschikbaar' => array(T::Integer)
 	);
 	/**
 	 * Database primary key

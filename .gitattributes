@@ -3459,6 +3459,8 @@ lib/MVC/controller/groepen/SjaarciesController.class.php -text
 lib/MVC/controller/groepen/WerkgroepenController.class.php -text
 lib/MVC/controller/groepen/WoonoordenController.class.php -text
 lib/MVC/controller/happie/BestellingenController.class.php -text
+lib/MVC/controller/happie/MenukaartGroepenController.class.php -text
+lib/MVC/controller/happie/MenukaartItemsController.class.php -text
 lib/MVC/controller/maalcie/BeheerFunctiesController.class.php -text
 lib/MVC/model/AccessModel.class.php -text
 lib/MVC/model/AgendaModel.class.php -text
@@ -3600,6 +3602,7 @@ lib/MVC/view/groepen/SjaarciesView.class.php -text
 lib/MVC/view/groepen/WerkgroepenView.class.php -text
 lib/MVC/view/groepen/WoonoordenView.class.php -text
 lib/MVC/view/happie/BestellingenView.class.php -text
+lib/MVC/view/happie/MenukaartView.class.php -text
 lib/MVC/view/maalcie/BeheerFunctiesView.class.php -text
 lib/MijnSqli.class.php -text
 lib/Soccie[!!-~]ERD.png -text

@@ -35,8 +35,8 @@ class HappieRouterController extends Controller {
 	protected function mag($action, $resource) {
 		switch ($action) {
 			case 'bestel':
-			case 'kaartitem':
-			case 'kaartgroep':
+			case 'menukaart':
+			case 'menugroep':
 				return LoginModel::mag('groep:2014');
 
 			default:
@@ -49,12 +49,12 @@ class HappieRouterController extends Controller {
 		return new HappieBestellingenController($this->model);
 	}
 
-	public function kaartitem() {
+	public function menukaart() {
 		require_once 'MVC/controller/happie/MenukaartItemsController.class.php';
 		return new HappieMenukaartItemsController($this->model);
 	}
 
-	public function kaartgroep() {
+	public function menugroep() {
 		require_once 'MVC/controller/groepen/MenukaartGroepenController.class.php';
 		return new HappieMenukaartGroepenController($this->model);
 	}

@@ -76,19 +76,17 @@ class DataTable extends TabsForm {
 	private function getConditionalProps() {
 		$json = '';
 		if ($this->dataSource) {
-			$json .= <<<JSON
-	, "ajax": "{$this->dataSource}"
-JSON;
+			$json .= ', "ajax": "' . $this->dataSource . '"';
 		}
 		if ($this->groupByColumn) {
 			$json .= <<<JSON
-	, "columnDefs": [
-		{
-			"visible": false,
-			"targets": [{$this->groupByColumn}]
-		}
-	]
-	, "orderFixed": [[{$this->groupByColumn}, "asc"]]
+, "columnDefs": [
+	{
+		"visible": false,
+		"targets": [{$this->groupByColumn}]
+	}
+]
+, "orderFixed": [[{$this->groupByColumn}, "asc"]]
 JSON;
 		}
 		return $json;

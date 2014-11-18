@@ -14,7 +14,7 @@ class HappieBestellingenJson extends DataTableResponse {
 
 	public function getJson($data) {
 		$data->menu_item = $data->getItem()->naam;
-		parent::getJson($data);
+		return parent::getJson($data);
 	}
 
 }
@@ -29,13 +29,13 @@ class HappieBestellingenView extends DataTable {
 		$fields[] = $toolbar;
 		$this->addFields($fields);
 
-		$knop = new DataTableToolbarKnop('>= 0', null, 'rowcount', 'Count', 'Count selected rows', null);
-		$knop->onclick = "alert($('#" . $this->tableId . " tbody tr.selected').length + ' row(s) selected');";
-		$toolbar->addKnop($knop);
+		$count = new DataTableToolbarKnop('>= 0', null, 'rowcount', 'Count', 'Count selected rows', null);
+		$count->onclick = "alert($('#" . $this->tableId . " tbody tr.selected').length + ' row(s) selected');";
+		$toolbar->addKnop($count);
 
-		$knop = new DataTableToolbarKnop('== 1', null, 'debugprint', 'Print', 'Debugprint row', null);
-		$knop->onclick = "console.log($('#" . $this->tableId . " tbody tr.selected'));";
-		$toolbar->addKnop($knop);
+		$print = new DataTableToolbarKnop('== 1', null, 'debugprint', 'Print', 'Debugprint row', null);
+		$print->onclick = "console.log($('#" . $this->tableId . " tbody tr.selected'));";
+		$toolbar->addKnop($print);
 	}
 
 }
@@ -97,15 +97,6 @@ class HappieBarView extends DataTable {
 		$def = parent::getColumnsDef();
 		unset($def['bestelling_id'], $def['wijzig_historie']);
 		return $def;
-	}
-
-}
-
-class HappieBestellingWijzigenForm extends Formulier {
-
-	public function __construct(Bestelling $bestelling) {
-		parent::__construct($bestelling, get_class($this), happieUrl . '/wijzigen/' . $bestelling->bestelling_id, 'Bestelling wijzigen');
-		$this->generateFields();
 	}
 
 }
@@ -179,6 +170,15 @@ HTML
 			}
 		}
 		return $values;
+	}
+
+}
+
+class HappieBestellingWijzigenForm extends Formulier {
+
+	public function __construct(Bestelling $bestelling) {
+		parent::__construct($bestelling, get_class($this), happieUrl . '/wijzigen/' . $bestelling->bestelling_id, 'Bestelling wijzigen');
+		$this->generateFields();
 	}
 
 }

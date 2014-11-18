@@ -1,0 +1,77 @@
+<?php
+
+require_once 'MVC/view/happie/MenukaartView.class.php';
+
+/**
+ * MenukaartItemsController.class.php
+ * 
+ * @author P.W.G. Brussee <brussee@live.nl>
+ * 
+ * Controller van de Happietaria menukaart-items.
+ * 
+ */
+class HappieMenukaartItemsController extends AclController {
+
+	public function __construct($query) {
+		parent::__construct($query, HappieMenukaartItemsModel::instance());
+		if (!$this->isPosted()) {
+			$this->acl = array(
+				'overzicht'	 => 'groep:2014',
+				'data'		 => 'groep:2014',
+				'nieuw'		 => 'groep:2014'
+			);
+		} else {
+			$this->acl = array(
+				'nieuw'	 => 'groep:2014',
+				'wijzig' => 'groep:2014'
+			);
+		}
+	}
+
+	public function performAction(array $args = array()) {
+		$this->action = 'overzicht';
+		if ($this->hasParam(3)) {
+			$this->action = $this->getParam(3);
+		}
+		parent::performAction($this->getParams(4));
+	}
+
+	public function overzicht() {
+		$body = new HappieMenukaartItemsView();
+		$this->view = new CsrLayout3Page($body);
+	}
+
+	public function data() {
+		$data = $this->model->find();
+		$this->view = new HappieMenukaartItemsJson($data);
+	}
+
+	public function nieuw() {
+		$form = new HappieMenukaartItemForm();
+		if ($this->isPosted() AND $form->validate()) {
+			$values = $form->getValues();
+			$this->model->newItem($values['groep_id'], $values['naam'], $values['beschrijving'], $values['allergie_info'], $values['prijs'], $values['aantal_beschikbaar']);
+			setMelding('Menukaart-item succesvol toegevoegd', 1);
+			$this->overzicht();
+			return;
+		}
+		$this->view = new CsrLayout3Page($form);
+	}
+
+	public function wijzig($id) {
+		$item = $this->model->getItem((int) $id);
+		if (!$item) {
+			$this->overzicht();
+			return;
+		}
+		$form = new HappieMenukaartItemWijzigenForm($item);
+		if ($this->isPosted() AND $form->validate()) {
+			$this->model->update($item);
+			setMelding('Wijziging succesvol opgeslagen', 1);
+			$this->overzicht();
+			return;
+		}
+		$this->view = new CsrLayout3Page($form);
+	}
+
+}

@@ -7,7 +7,8 @@ require_once 'MVC/view/happie/BestellingenView.class.php';
  * 
  * @author P.W.G. Brussee <brussee@live.nl>
  * 
- * Controller van de agenda.
+ * Controller van de Happietaria bestellingen.
+ * 
  */
 class HappieBestellingenController extends AclController {
 
@@ -77,7 +78,8 @@ class HappieBestellingenController extends AclController {
 			foreach ($form->getValues() as $item_id => $attr) {
 				$this->newBestelling($attr['tafel'], $item_id, $attr['aantal'], $attr['klant_allergie']);
 			}
-			$this->view = new JsonResponse(true);
+			setMelding('Bestelling succesvol toegevoegd', 1);
+			$this->overzicht();
 			return;
 		}
 		$this->view = new CsrLayout3Page($form);
@@ -90,6 +92,12 @@ class HappieBestellingenController extends AclController {
 			return;
 		}
 		$form = new HappieBestellingWijzigenForm($bestelling);
+		if ($this->isPosted() AND $form->validate()) {
+			$this->model->update($bestelling);
+			setMelding('Wijziging succesvol opgeslagen', 1);
+			$this->overzicht();
+			return;
+		}
 		$this->view = new CsrLayout3Page($form);
 	}
 
