@@ -215,3 +215,16 @@ JS;
 	}
 
 }
+
+class DataTableResponse extends JsonResponse {
+
+	public function __construct(array $model, $code = 200) {
+		parent::__construct($model, $code);
+	}
+
+	public function view() {
+		$this->model = array('data' => $this->model);
+		parent::view();
+	}
+
+}
