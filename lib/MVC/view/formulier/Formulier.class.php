@@ -226,7 +226,7 @@ class Formulier implements View, Validator {
 			$js = $field->getJavascript();
 			$javascript[md5($js)] = $js;
 		}
-		return $javascript;
+		return implode("\n", $javascript);
 	}
 
 	public function getFormTag() {
@@ -234,7 +234,14 @@ class Formulier implements View, Validator {
 	}
 
 	public function getScriptTag() {
-		return '<script type="text/javascript">function form_ready_' . str_replace('-', '_', $this->formId) . "() {\n" . 'var form = document.getElementById("' . $this->formId . '");' . "\n" . implode("\n", $this->getJavascript()) . "\n" . '}</script>';
+		$id = str_replace('-', '_', $this->formId);
+		return <<<JS
+<script type="text/javascript">function form_ready_{$id}() {
+	var form = document.getElementById('{$this->formId}');
+	{$this->getJavascript()}
+}
+</script>
+JS;
 	}
 
 	/**

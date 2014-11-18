@@ -19,8 +19,8 @@ class DataTable extends Formulier {
 	protected $css_classes = array();
 	protected $dataSource;
 
-	public function __construct($orm_class, $tableId, $groupByColumn = true, $groupByFixed = false, $title = false) {
-		parent::__construct(null, $tableId . '_form', $title);
+	public function __construct($orm_class, $tableId, $groupByColumn = true, $groupByFixed = false, $titel = false) {
+		parent::__construct(null, $tableId . '_form', null, $titel);
 		$this->orm = new $orm_class();
 		$this->tableId = $tableId;
 		$this->css_classes[] = 'init display';
@@ -36,18 +36,6 @@ class DataTable extends Formulier {
 		} else {
 			$this->groupByColumn = null;
 		}
-	}
-
-	public function getModel() {
-		return $this->orm;
-	}
-
-	public function getBreadcrumbs() {
-		return null;
-	}
-
-	public function getTitel() {
-		return get_class($this->orm);
 	}
 
 	protected function getTableHead() {
@@ -75,7 +63,7 @@ class DataTable extends Formulier {
 			'defaultContent' => ''
 		);
 		foreach ($this->orm->getAttributes() as $attribute) {
-			$definition = $this->getAttributeDefinition($attribute);
+			$definition = $this->orm->getAttributeDefinition($attribute);
 			switch ($definition[0]) {
 				case T::DateTime: $type = 'date';
 					break;
@@ -91,7 +79,7 @@ class DataTable extends Formulier {
 			$columns[] = array(
 				'name'	 => $attribute,
 				'data'	 => $attribute,
-				'title'	 => ucfirst($attribute),
+				'title'	 => ucfirst(str_replace('_', ' ', $attribute)),
 				'type'	 => $type
 			);
 		}
@@ -132,7 +120,7 @@ JSON;
 				var tableId = '<?= $this->tableId ?>';
 				var table = '#' + tableId;
 				var dataTable = $(table).DataTable({
-					"columns": <?= $this->getColumnsDef() ?>,
+					"columns": <?= json_encode($this->getColumnsDef()) ?>,
 					"order": [[1, "asc"]],
 					"createdRow": function (row, data, index) {
 						$(row).attr('id', tableId + '_' + index); // data array index
