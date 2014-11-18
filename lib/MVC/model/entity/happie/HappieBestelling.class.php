@@ -91,4 +91,8 @@ class HappieBestelling extends PersistentEntity {
 	 */
 	protected static $table_name = 'happie_bestellingen';
 
+	public function getItem() {
+		return HappieMenukaartItemsModel::instance()->getItem($this->menukaart_item);
+	}
+
 }

@@ -16,6 +16,11 @@ class HappieBestellingView extends JsonResponse {
 		parent::__construct($bestelling);
 	}
 
+	public function view() {
+		$this->model->menu_item = $this->model->getItem()->naam;
+		parent::view();
+	}
+
 }
 
 class HappieBestellingenView extends DataTable {
