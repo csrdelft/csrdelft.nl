@@ -81,12 +81,13 @@ class HappieBestellingenController extends AclController {
 	public function nieuw() {
 		$form = new HappieBestelForm();
 		if ($this->isPosted() AND $form->validate()) {
+			$bestellingen = array();
 			foreach ($form->getValues() as $item_id => $attr) {
 				if ($attr['aantal'] > 0) {
-					$this->model->newBestelling($attr['tafel'], $item_id, $attr['aantal'], $attr['klant_allergie']);
+					$bestellingen[] = $this->model->newBestelling($attr['tafel'], $item_id, $attr['aantal'], $attr['klant_allergie']);
 				}
 			}
-			setMelding('Bestelling succesvol toegevoegd', 1);
+			setMelding(count($bestellingen) . ' dingen besteld', 1);
 			redirect(happieUrl . '/serveer');
 		}
 		$this->view = new CsrLayout3Page($form);
