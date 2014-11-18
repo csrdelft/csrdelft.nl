@@ -16,6 +16,10 @@ class HappieBestellingenController extends AclController {
 		if (!$this->isPosted()) {
 			$this->acl = array(
 				'overzicht'	 => 'groep:2014',
+				'keuken'	 => 'groep:2014',
+				'serveer'	 => 'groep:2014',
+				'bar'		 => 'groep:2014',
+				'data'		 => 'groep:2014',
 				'nieuw'		 => 'groep:2014'
 			);
 		} else {
@@ -34,17 +38,37 @@ class HappieBestellingenController extends AclController {
 		parent::performAction($this->getParams(4));
 	}
 
-	public function overzicht($data = null) {
-		if ($data === 'data') {
-			$bestellingen = array();
-			foreach ($this->model->find() as $bestelling) {
-				$bestellingen[] = new HappieBestellingView($bestelling);
-			}
-			$this->view = new DataTableResponse($bestellingen);
+	public function overzicht() {
+		$body = new HappieBestellingenView();
+		$this->view = new CsrLayout3Page($body);
+	}
+
+	public function keuken() {
+		$body = new HappieKeukenView();
+		$this->view = new CsrLayout3Page($body);
+	}
+
+	public function serveer() {
+		$body = new HappieServeerView();
+		$this->view = new CsrLayout3Page($body);
+	}
+
+	public function bar() {
+		$body = new HappieBarView();
+		$this->view = new CsrLayout3Page($body);
+	}
+
+	public function data($y = null, $m = null, $d = null) {
+		$y = (int) $y;
+		$m = (int) $m;
+		$d = (int) $d;
+		if (checkdate($m, $d, $y)) {
+			$date = $y . '-' . $m . '-' . $d;
 		} else {
-			$body = new HappieBestellingenView();
-			$this->view = new CsrLayout3Page($body);
+			$date = date('Y-m-d');
 		}
+		$data = $this->model->find('datum = ?', array($date));
+		$this->view = new HappieBestellingenJson($data);
 	}
 
 	public function nieuw() {

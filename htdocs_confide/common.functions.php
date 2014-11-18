@@ -239,6 +239,11 @@ function makepasswd($pass) {
 	return "{SSHA}" . base64_encode(mhash(MHASH_SHA1, $pass . $salt) . $salt);
 }
 
+function valid_date($date, $format = 'Y-m-d H:i:s') {
+	$d = DateTime::createFromFormat($format, $date);
+	return $d && $d->format($format) == $date;
+}
+
 function valid_filename($name) {
 	return preg_match('/^(?:[a-z0-9 \-_\(\)é]|\.(?!\.))+$/iD', $name);
 }

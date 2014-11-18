@@ -218,13 +218,22 @@ JS;
 
 class DataTableResponse extends JsonResponse {
 
-	public function __construct(array $model, $code = 200) {
-		parent::__construct($model, $code);
+	protected function getJson($data) {
+		return json_encode($data);
 	}
 
 	public function view() {
-		$this->model = array('data' => $this->model);
-		parent::view();
+		http_response_code($this->code);
+		header('Content-Type: application/json');
+		echo '{"data":';
+		if ($this->model instanceof PDOStatement AND $this->model->rowCount() == 0) {
+			echo '[]}';
+			return;
+		}
+		foreach ($this->model as $data) {
+			echo $this->getJson($data);
+		}
+		echo '}';
 	}
 
 }

@@ -10,15 +10,11 @@ require_once 'MVC/model/entity/happie/HappieGang.enum.php';
  * Tonen van alle bestellingen om te beheren.
  * 
  */
-class HappieBestellingView extends JsonResponse {
+class HappieBestellingenJson extends DataTableResponse {
 
-	public function __construct(HappieBestelling $bestelling) {
-		parent::__construct($bestelling);
-	}
-
-	public function view() {
-		$this->model->menu_item = $this->model->getItem()->naam;
-		parent::view();
+	public function getJson($data) {
+		$data->menu_item = $data->getItem()->naam;
+		parent::getJson($data);
 	}
 
 }
@@ -26,8 +22,8 @@ class HappieBestellingView extends JsonResponse {
 class HappieBestellingenView extends DataTable {
 
 	public function __construct() {
-		parent::__construct(HappieBestellingenModel::orm, get_class($this), 'Overzicht actueel', 'datum');
-		$this->dataSource = happieUrl . '/overzicht/data';
+		parent::__construct(HappieBestellingenModel::orm, get_class($this), 'Alle bestellingen', 'datum');
+		$this->dataSource = happieUrl . '/data';
 
 		$toolbar = new DataTableToolbar();
 		$fields[] = $toolbar;
@@ -48,7 +44,7 @@ class HappieKeukenView extends DataTable {
 
 	public function __construct() {
 		parent::__construct(HappieBestellingenModel::orm, get_class($this), 'Keuken actueel', 'tafel');
-		$this->dataSource = happieUrl . '/keuken/data';
+		$this->dataSource = happieUrl . '/data/' . date('Y/m/d');
 
 		$toolbar = new DataTableToolbar();
 		$fields[] = $toolbar;
@@ -57,7 +53,7 @@ class HappieKeukenView extends DataTable {
 
 	protected function getColumnsDef() {
 		$def = parent::getColumnsDef();
-		unset($def['bestelling_id'], $def['wijzig_historie']);
+		unset($def['bestelling_id'], $def['wijzig_historie'], $def['financien_status']);
 		return $def;
 	}
 
@@ -67,7 +63,7 @@ class HappieServeerView extends DataTable {
 
 	public function __construct() {
 		parent::__construct(HappieBestellingenModel::orm, get_class($this), 'Actuele bestellingen', 'tafel');
-		$this->dataSource = happieUrl . '/serveer/data';
+		$this->dataSource = happieUrl . '/data/' . date('Y/m/d');
 
 		$toolbar = new DataTableToolbar();
 		$fields[] = $toolbar;
@@ -78,7 +74,7 @@ class HappieServeerView extends DataTable {
 
 	protected function getColumnsDef() {
 		$def = parent::getColumnsDef();
-		unset($def['bestelling_id'], $def['wijzig_historie']);
+		unset($def['bestelling_id'], $def['wijzig_historie'], $def['financien_status']);
 		return $def;
 	}
 
@@ -88,7 +84,7 @@ class HappieBarView extends DataTable {
 
 	public function __construct() {
 		parent::__construct(HappieBestellingenModel::orm, get_class($this), 'Bar actueel', 'tafel');
-		$this->dataSource = happieUrl . '/bar/data';
+		$this->dataSource = happieUrl . '/data/' . date('Y/m/d');
 
 		$toolbar = new DataTableToolbar();
 		$fields[] = $toolbar;

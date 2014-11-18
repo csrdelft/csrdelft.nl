@@ -107,7 +107,7 @@ class FormulierKnop implements FormElement {
 	public $float_left;
 
 	public function __construct($url, $action, $label, $title, $icon, $float_left = false) {
-		$this->id = 'knop-' . crc32($url . $action);
+		$this->id = 'knop' . crc32($url . $action);
 		$this->url = $url;
 		$this->action = $action;
 		$this->label = $label;
