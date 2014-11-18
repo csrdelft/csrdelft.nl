@@ -13,7 +13,7 @@ class MaaltijdLijstView extends CompressedLayout {
 	private $fiscaal;
 
 	public function __construct(Maaltijd $maaltijd, $aanmeldingen, $corvee, $fiscaal = false) {
-		parent::__construct($this, $maaltijd->getTitel());
+		parent::__construct('layout', $this, $maaltijd->getTitel());
 		$this->fiscaal = $fiscaal;
 
 		$this->addCompressedResources('maalcielijst');
