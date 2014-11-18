@@ -14,12 +14,12 @@ function saveConceptForumBericht() {
 	setTimeout(toggleForumConceptBtn, 3000);
 }
 
-function toggleForumConceptBtn(val) {
+function toggleForumConceptBtn(enable) {
 	var $concept = $('#forumConcept');
-	if (typeof val === 'undefined') {
+	if (typeof enable === 'undefined') {
 		$concept.attr('disabled', !$concept.prop('disabled'));
 	} else {
-		$concept.attr('disabled', val);
+		$concept.attr('disabled', !enable);
 	}
 }
 
