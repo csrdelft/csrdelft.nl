@@ -19,7 +19,7 @@ class HappieMenukaartItem extends PersistentEntity {
 	 * MenukaartGroep
 	 * @var int
 	 */
-	public $groep_id;
+	public $menukaart_groep;
 	/**
 	 * Naam
 	 * @var string
@@ -46,17 +46,23 @@ class HappieMenukaartItem extends PersistentEntity {
 	 */
 	public $aantal_beschikbaar;
 	/**
+	 * Mogelijke variaties bij een gerecht
+	 * @var string
+	 */
+	public $variaties;
+	/**
 	 * Database table columns
 	 * @var array
 	 */
 	protected static $persistent_attributes = array(
 		'item_id'			 => array(T::Integer, false, 'auto_increment'),
-		'groep_id'			 => array(T::Integer),
+		'menukaart_groep'	 => array(T::Integer),
 		'naam'				 => array(T::String),
 		'beschrijving'		 => array(T::Text),
-		'allergie_info'		 => array(T::Text),
+		'allergie_info'		 => array(T::String),
 		'prijs'				 => array(T::Integer),
-		'aantal_beschikbaar' => array(T::Integer)
+		'aantal_beschikbaar' => array(T::Integer),
+		'variaties'			 => array(T::String, true)
 	);
 	/**
 	 * Database primary key
@@ -70,11 +76,7 @@ class HappieMenukaartItem extends PersistentEntity {
 	protected static $table_name = 'happie_menu';
 
 	public function getGroep() {
-		return HappieMenukaartGroepenModel::instance()->getGroep($this->groep_id);
-	}
-
-	public function getGang() {
-		return $this->getGroep()->gang;
+		return HappieMenukaartGroepenModel::instance()->getGroep($this->menukaart_groep);
 	}
 
 }

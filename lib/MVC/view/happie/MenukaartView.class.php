@@ -11,10 +11,11 @@
 class HappieMenukaartItemsJson extends DataTableResponse {
 
 	public function getJson($data) {
-		if ($data->getGroep()) {
-			$data->groep_id = $data->getGroep()->titel;
+		$groep = $data->getGroep();
+		if ($groep) {
+			$data->menukaart_groep = $groep->naam;
 		} else {
-			$data->groep_id = 'Geen groep';
+			$data->menukaart_groep = 'Geen groep';
 		}
 		return parent::getJson($data);
 	}
@@ -24,7 +25,7 @@ class HappieMenukaartItemsJson extends DataTableResponse {
 class HappieMenukaartItemsView extends DataTable {
 
 	public function __construct() {
-		parent::__construct(HappieMenukaartItemsModel::orm, get_class($this), 'Menukaart', 'groep_id');
+		parent::__construct(HappieMenukaartItemsModel::orm, get_class($this), 'Menukaart', 'menukaart_groep');
 		$this->dataSource = happieUrl . '/data';
 
 		$toolbar = new DataTableToolbar();
@@ -48,14 +49,16 @@ class HappieMenukaartItemForm extends Formulier {
 		$groepen = HappieMenukaartGroepenModel::instance()->prefetch();
 		$opties = array();
 		foreach ($groepen as $groep) {
-			$opties[$groep->groep_id] = $groep->titel;
+			$opties[$groep->groep_id] = $groep->naam;
 		}
-		$fields[] = new SelectField('groep_id', $item->groep_id, 'Menugroep', $opties);
+		$fields[] = new SelectField('menukaart_groep', $item->menukaart_groep, 'Menugroep', $opties);
 		$fields[] = new RequiredTextField('naam', $item->naam, 'Gerechtnaam');
 		$fields[] = new TextareaField('beschrijving', $item->beschrijving, 'Omschrijving');
 		$fields[] = new TextareaField('allergie_info', $item->allergie_info, 'Allergie-informatie');
 		$fields[] = new BedragField('prijs', $item->prijs, 'Prijs');
 		$fields[] = new RequiredIntField('aantal_beschikbaar', $item->aantal_beschikbaar, 'Beschikbaar #');
+		$fields['v'] = new TextareaField('variaties', $item->variaties, 'Variaties');
+		$fields['v']->empty_null = true;
 
 		$fields[] = new FormDefaultKnoppen(happieUrl . '/serveer');
 		$this->addFields($fields);
@@ -102,7 +105,13 @@ class HappieMenukaartGroepForm extends Formulier {
 
 	public function __construct(HappieMenukaartGroep $groep, $action = '/nieuw', $titel = 'Nieuwe menukaart-groep') {
 		parent::__construct($groep, get_class($this), happieUrl . $action, $titel);
-		$this->generateFields();
+
+		$opties = array();
+		foreach (HappieGang::getTypeOptions() as $gang) {
+			$opties[$gang] = $gang;
+		}
+		$fields[] = new SelectField('gang', $groep->gang, 'Gang', $opties);
+		$fields[] = new RequiredTextField('naam', $groep->naam, 'Groepnaam');
 
 		$fields[] = new FormDefaultKnoppen(happieUrl . '/serveer');
 		$this->addFields($fields);

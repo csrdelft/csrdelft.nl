@@ -18,10 +18,10 @@ class HappieMenukaartGroep extends PersistentEntity {
 	 */
 	public $groep_id;
 	/**
-	 * Titel
+	 * Naam
 	 * @var string
 	 */
-	public $titel;
+	public $naam;
 	/**
 	 * Gang van gerechtengroep
 	 * @var HappieGang
@@ -38,7 +38,7 @@ class HappieMenukaartGroep extends PersistentEntity {
 	 */
 	protected static $persistent_attributes = array(
 		'groep_id'	 => array(T::Integer, false, 'auto_increment'),
-		'titel'		 => array(T::String),
+		'naam'		 => array(T::String),
 		'gang'		 => array(T::Enumeration, false, 'HappieGang')
 	);
 	/**

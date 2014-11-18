@@ -4,7 +4,6 @@
 		{include file='html_head.tpl'}
 	</head>
 	<body role="document">
-
 		<!-- Fixed navbar -->
 		<div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
 			<div class="container">
@@ -38,6 +37,7 @@
 				</div><!--/.nav-collapse -->
 			</div>
 		</div>
+		<br />
 		<br />
 		<br />
 		{$body->view()}

@@ -26,12 +26,13 @@ class HappieMenukaartItemsModel extends CachedPersistenceModel {
 
 	public function newItem() {
 		$item = new HappieMenuKaartItem();
-		$item->groep_id = 0;
+		$item->menukaart_groep = 0;
 		$item->naam = '';
 		$item->beschrijving = '';
 		$item->allergie_info = '';
 		$item->prijs = 0;
 		$item->aantal_beschikbaar = 0;
+		$item->variaties = null;
 		return $item;
 	}
 
@@ -41,13 +42,13 @@ class HappieMenukaartItemsModel extends CachedPersistenceModel {
 	}
 
 	public function getGroepItems(HappieMenukaartGroep $groep) {
-		return $this->prefetch('groep_id = ?', array($groep->groep_id));
+		return $this->prefetch('menukaart_groep = ?', array($groep->groep_id));
 	}
 
 	public function getMenukaart() {
 		// prefetch groepen en items
 		$groepen = HappieMenukaartGroepenModel::instance()->prefetch();
-		$items = group_by('groep_id', HappieMenukaartItemsModel::instance()->prefetch());
+		$items = group_by('menukaart_groep', HappieMenukaartItemsModel::instance()->prefetch());
 
 		foreach ($groepen as $groep) {
 			// set prefetched items

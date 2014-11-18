@@ -18,6 +18,12 @@ class TabsForm extends Formulier {
 		return $this->tabs;
 	}
 
+	public function setTabs(array $tabs) {
+		foreach ($tabs as $tab) {
+			$this->addTab($tab);
+		}
+	}
+
 	public function hasTab($tab) {
 		return isset($this->tabs[$tab]);
 	}
@@ -45,6 +51,16 @@ class TabsForm extends Formulier {
 			echo '<h1 class="formTitle">' . $this->getTitel() . '</h1>';
 		}
 		echo $this->getFormTag();
+		if (isset($this->tabs['head'])) {
+			foreach ($this->tabs['head'] as $field) {
+				$field->view();
+			}
+			unset($this->tabs['head']);
+		}
+		if (isset($this->tabs['foot'])) {
+			$foot = $this->tabs['foot'];
+			unset($this->tabs['foot']);
+		}
 		echo '<div id="tabs"><ul>';
 		foreach ($this->tabs as $tab => $fields) {
 			echo '<li><a href="#tabs-' . $tab . '">' . ucfirst($tab) . '</a></li>';
@@ -58,6 +74,11 @@ class TabsForm extends Formulier {
 			echo '</div>';
 		}
 		echo '</div>';
+		if (isset($foot)) {
+			foreach ($foot as $field) {
+				$field->view();
+			}
+		}
 		echo $this->getScriptTag();
 		echo '</form>';
 	}

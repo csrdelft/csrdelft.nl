@@ -96,10 +96,11 @@ class HappieBestelForm extends TabsForm {
 
 	public function __construct() {
 		parent::__construct(null, get_class($this), happieUrl . '/nieuw', 'Nieuwe bestelling');
+		$this->setTabs(HappieGang::getTypeOptions());
 
 		// tafel invoer
 		$fields[] = new SelectField('tafel', null, 'Tafel', range(1, 100));
-		$this->addFields($fields);
+		$this->addFields($fields, 'head');
 
 		$groepen = HappieMenukaartItemsModel::instance()->getMenukaart();
 
@@ -108,7 +109,7 @@ class HappieBestelForm extends TabsForm {
 
 			// groepeer items
 			$fields = array();
-			$fields[] = new Subkopje($groep->titel);
+			$fields[] = new Subkopje($groep->naam);
 
 			foreach ($groep->getItems() as $item) {
 
@@ -123,8 +124,14 @@ class HappieBestelForm extends TabsForm {
 
 				$fields[] = new IntField('item' . $item->item_id, $aantal, $item->naam, 0, $item->aantal_beschikbaar);
 				$fields[] = new HtmlComment(<<<HTML
-<div onclick="$(this).slideUp();$('#expand_{$item->item_id}').slideDown();">beschrijving & klant allergie</div>
-<div id="expand_{$item->item_id}" class="hidden">
+<script type="text/javascript">
+$(document).ready(function () {
+	$("#tabs").tabs();
+});
+</script>
+<div onclick="$(this).slideUp();$('#expand_{$item->item_id}').slideDown();">omschrijving & klant allergie</div>
+<div id="expand_{$item->item_id}" style="display:none;">
+<div class="beschrijving">{$item->beschrijving}</div>
 HTML
 				);
 				$fields[] = new TextField('allergie' . $item->item_id, $allergie, 'Allergie');
@@ -137,7 +144,7 @@ HTML
 
 		$fields = array();
 		$fields[] = new FormDefaultKnoppen(happieUrl . '/serveer');
-		$this->addFields($fields);
+		$this->addFields($fields, 'foot');
 	}
 
 	/**
