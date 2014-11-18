@@ -1,5 +1,7 @@
 <?php
 
+require_once 'MVC/view/formulier/Dropzone.class.php';
+
 /**
  * FotoAlbumView.class.php
  * 

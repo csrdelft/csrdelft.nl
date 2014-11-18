@@ -7,8 +7,6 @@ require_once 'MVC/view/formulier/InvoerVelden.class.php';
 require_once 'MVC/view/formulier/KeuzeVelden.class.php';
 require_once 'MVC/view/formulier/UploadVelden.class.php';
 require_once 'MVC/view/formulier/FormKnoppen.class.php';
-require_once 'MVC/view/formulier/DataTable.class.php';
-require_once 'MVC/view/formulier/Dropzone.class.php';
 
 /**
  * Formulier.class.php

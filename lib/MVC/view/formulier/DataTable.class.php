@@ -1,4 +1,5 @@
 <?php
+require_once 'MVC/view/formulier/Formulier.class.php';
 
 /**
  * DataTable.class.php
