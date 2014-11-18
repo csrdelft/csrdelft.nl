@@ -1,6 +1,7 @@
 AddDefaultCharset utf-8
 RewriteEngine On
 
+RewriteRule ^happie				index.php?c=HappieRouter [L]
 RewriteRule ^facebook			https://www.facebook.com/delftcsr
 RewriteRule ^nieuws/?(.*)		/actueel/mededelingen/$1/ [R,L]
 RewriteRule ^forum/rss/([0-9a-zA-Z]*).xml		index.php?c=Forum&private_token=$1 [L]

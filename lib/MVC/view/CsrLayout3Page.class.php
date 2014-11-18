@@ -8,10 +8,10 @@ require_once 'MVC/model/DragObjectModel.class.php';
 /**
  * CsrLayout3Page.class.php
  * 
- * @author C.S.R. Delft <pubcie@csrdelft.nl>
  * @author P.W.G. Brussee <brussee@live.nl>
  * 
- * De stek layout uit 2014
+ * De stek layout voor Happietaria.
+ * 
  */
 class CsrLayout3Page extends CompressedLayout {
 
@@ -33,7 +33,7 @@ class CsrLayout3Page extends CompressedLayout {
 		$smarty->assign('titel', $this->getTitel());
 		$smarty->assign('body', $this->getBody());
 
-		$smarty->display('csrdelft3/pagina_layout.tpl');
+		$smarty->display('MVC/layout/happie.tpl');
 	}
 
 }

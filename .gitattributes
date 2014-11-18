@@ -3441,6 +3441,7 @@ lib/MVC/controller/Controller.abstract.php -text
 lib/MVC/controller/ForumController.class.php -text
 lib/MVC/controller/FotoAlbumController.class.php -text
 lib/MVC/controller/GroepenRouterController.class.php -text
+lib/MVC/controller/HappieRouterController.class.php -text
 lib/MVC/controller/InstellingenBeheerController.class.php -text
 lib/MVC/controller/LidInstellingenController.class.php -text
 lib/MVC/controller/LoginController.class.php -text
@@ -3456,6 +3457,7 @@ lib/MVC/controller/groepen/OnderverenigingenController.class.php -text
 lib/MVC/controller/groepen/SjaarciesController.class.php -text
 lib/MVC/controller/groepen/WerkgroepenController.class.php -text
 lib/MVC/controller/groepen/WoonoordenController.class.php -text
+lib/MVC/controller/happie/BestellingenController.class.php -text
 lib/MVC/controller/maalcie/BeheerFunctiesController.class.php -text
 lib/MVC/model/AccessModel.class.php -text
 lib/MVC/model/AgendaModel.class.php -text
@@ -3532,6 +3534,12 @@ lib/MVC/model/entity/groepen/Ondervereniging.class.php -text
 lib/MVC/model/entity/groepen/Sjaarcie.class.php -text
 lib/MVC/model/entity/groepen/Werkgroep.class.php -text
 lib/MVC/model/entity/groepen/Woonoord.class.php -text
+lib/MVC/model/entity/happie/HappieBestelling.class.php -text
+lib/MVC/model/entity/happie/HappieFinancienStatus.enum.php -text
+lib/MVC/model/entity/happie/HappieGang.enum.php -text
+lib/MVC/model/entity/happie/HappieMenukaartGroep.class.php -text
+lib/MVC/model/entity/happie/HappieMenukaartItem.class.php -text
+lib/MVC/model/entity/happie/HappieServeerStatus.enum.php -text
 lib/MVC/model/entity/maalcie/CorveeFunctie.class.php -text
 lib/MVC/model/entity/maalcie/CorveeKwalificatie.class.php -text
 lib/MVC/model/framework/CachedPersistenceModel.abstract.php -text
@@ -3540,6 +3548,9 @@ lib/MVC/model/framework/DatabaseAdmin.singleton.php -text
 lib/MVC/model/framework/DynamicEntityModel.class.php -text
 lib/MVC/model/framework/Persistence.interface.php -text
 lib/MVC/model/framework/PersistenceModel.abstract.php -text
+lib/MVC/model/happie/BestellingenModel.class.php -text
+lib/MVC/model/happie/MenukaartGroepenModel.class.php -text
+lib/MVC/model/happie/MenukaartItemsModel.class.php -text
 lib/MVC/model/maalcie/FunctiesModel.class.php -text
 lib/MVC/model/maalcie/KwalificatiesModel.class.php -text
 lib/MVC/view/AgendaView.class.php -text
@@ -3586,6 +3597,7 @@ lib/MVC/view/groepen/OnderverenigingenView.class.php -text
 lib/MVC/view/groepen/SjaarciesView.class.php -text
 lib/MVC/view/groepen/WerkgroepenView.class.php -text
 lib/MVC/view/groepen/WoonoordenView.class.php -text
+lib/MVC/view/happie/BestellingenView.class.php -text
 lib/MVC/view/maalcie/BeheerFunctiesView.class.php -text
 lib/MijnSqli.class.php -text
 lib/Soccie[!!-~]ERD.png -text
@@ -4313,6 +4325,7 @@ lib/templates/MVC/instellingen/beheer/instelling_row.tpl -text
 lib/templates/MVC/instellingen/beheer/instellingen_page.tpl -text
 lib/templates/MVC/instellingen/lidinstelling.tpl -text
 lib/templates/MVC/instellingen/lidinstellingen_page.tpl -text
+lib/templates/MVC/layout/happie.tpl -text
 lib/templates/MVC/layout/pagina.tpl -text
 lib/templates/MVC/layout/pagina_header.tpl -text
 lib/templates/MVC/layout/pauper.tpl -text
