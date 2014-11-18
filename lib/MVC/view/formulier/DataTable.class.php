@@ -219,7 +219,11 @@ class DataTableToolbarKnop extends FormulierKnop {
 
 	public function getUpdateScript() {
 		return <<<JS
-$('#{$this->getId()}').attr('disabled', !(aantal {$this->multiplicity}));
+var knop = $('#{$this->getId()}');
+var enable = aantal {$this->multiplicity};
+knop.attr('disabled', !enable);
+console.log(knop);
+alert(enable);
 JS;
 	}
 

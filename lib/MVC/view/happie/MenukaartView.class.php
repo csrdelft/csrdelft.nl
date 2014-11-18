@@ -60,7 +60,7 @@ class HappieMenukaartItemForm extends Formulier {
 		$fields['v'] = new TextareaField('variaties', $item->variaties, 'Variaties');
 		$fields['v']->empty_null = true;
 
-		$fields[] = new FormDefaultKnoppen(happieUrl . '/serveer');
+		$fields[] = new FormDefaultKnoppen(happieUrl . '/overzicht');
 		$this->addFields($fields);
 	}
 
@@ -113,7 +113,7 @@ class HappieMenukaartGroepForm extends Formulier {
 		$fields[] = new SelectField('gang', $groep->gang, 'Gang', $opties);
 		$fields[] = new RequiredTextField('naam', $groep->naam, 'Groepnaam');
 
-		$fields[] = new FormDefaultKnoppen(happieUrl . '/serveer');
+		$fields[] = new FormDefaultKnoppen(happieUrl . '/overzicht');
 		$this->addFields($fields);
 	}
 
