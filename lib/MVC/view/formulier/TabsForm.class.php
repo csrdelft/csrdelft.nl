@@ -18,10 +18,6 @@ class TabsForm extends Formulier {
 		return $this->tabs;
 	}
 
-	public function setTabs(array $tabs) {
-		$this->tabs = $tabs;
-	}
-
 	public function hasTab($tab) {
 		return isset($this->tabs[$tab]);
 	}
@@ -35,9 +31,8 @@ class TabsForm extends Formulier {
 	}
 
 	public function addFields(array $fields, $tab = null) {
-		if ($this->hasTab($tab)) {
-			$this->tabs[$tab] = array_merge($this->tabs[$tab], $fields);
-		}
+		$this->addTab($tab);
+		$this->tabs[$tab] = array_merge($this->tabs[$tab], $fields);
 		parent::addFields($fields);
 	}
 
@@ -51,24 +46,20 @@ class TabsForm extends Formulier {
 		}
 		echo $this->getFormTag();
 		echo '<div id="tabs"><ul>';
-		foreach ($this->tabs as $tab) {
+		foreach ($this->tabs as $tab => $fields) {
 			echo '<li><a href="#tabs-' . $tab . '">' . ucfirst($tab) . '</a></li>';
 		}
 		echo '</ul>';
-		$fields = $this->getFields();
-		foreach ($this->tabs as $tab) {
+		foreach ($this->tabs as $tab => $fields) {
 			echo '<div id="tabs-' . $tab . '">';
-			foreach ($tab as $field) {
+			foreach ($fields as $field) {
 				$field->view();
-				$todo = array_search($field, $fields, true);
-				if ($todo) {
-					unset($fields[$todo]);
-				}
+				$this->removeField($field);
 			}
 			echo '</div>';
 		}
 		echo '</div>';
-		foreach ($fields as $field) {
+		foreach ($this->getFields() as $field) {
 			$field->view();
 		}
 		echo $this->getScriptTag();

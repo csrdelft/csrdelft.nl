@@ -161,6 +161,11 @@ class Formulier implements View, Validator {
 		array_splice($this->fields, $pos, 0, array($field));
 	}
 
+	public function removeField(FormElement $field) {
+		$pos = array_search($field, $this->fields);
+		unset($this->fields[$pos]);
+	}
+
 	/**
 	 * Is het formulier *helemaal* gePOST?
 	 */
@@ -200,8 +205,7 @@ class Formulier implements View, Validator {
 		$values = array();
 		foreach ($this->fields as $field) {
 			if ($field instanceof InputField) {
-				$fieldName = $field->getName();
-				$values[$fieldName] = $field->getValue();
+				$values[$field->getName()] = $field->getValue();
 			}
 		}
 		return $values;

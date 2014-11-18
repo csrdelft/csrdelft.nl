@@ -15,23 +15,23 @@ class HappieBestellingenController extends AclController {
 		parent::__construct($query, HappieBestellingenModel::instance());
 		if (!$this->isPosted()) {
 			$this->acl = array(
-				'overzicht' => 'groep:2014'
+				'overzicht'	 => 'groep:2014',
+				'nieuw'		 => 'groep:2014'
 			);
 		} else {
 			$this->acl = array(
-				'nieuw'		 => 'groep:2014',
-				'wijzig'	 => 'groep:2014',
-				'verwijder'	 => 'groep:2014:HMT penningmeester'
+				'nieuw'	 => 'groep:2014',
+				'wijzig' => 'groep:2014'
 			);
 		}
 	}
 
 	public function performAction(array $args = array()) {
 		$this->action = 'overzicht';
-		if ($this->hasParam(2)) {
-			$this->action = $this->getParam(2);
+		if ($this->hasParam(3)) {
+			$this->action = $this->getParam(3);
 		}
-		parent::performAction($this->getParams(3));
+		parent::performAction($this->getParams(4));
 	}
 
 	public function overzicht() {
@@ -39,23 +39,26 @@ class HappieBestellingenController extends AclController {
 		$this->view = new CsrLayout3Page($body);
 	}
 
-	public function nieuw($tafelNr) {
-		$form = new HappieBestelForm((int) $tafelNr);
-		if ($form->validate()) {
-			$this->model->opslaan();
+	public function nieuw() {
+		$form = new HappieBestelForm();
+		if ($this->isPosted() AND $form->validate()) {
+			foreach ($form->getValues() as $item_id => $attr) {
+				$this->newBestelling($attr['tafel'], $item_id, $attr['aantal'], $attr['klant_allergie']);
+			}
 			$this->view = new JsonResponse(true);
+			return;
 		}
-		else {
-			$this->view = $form;
-		}
+		$this->view = new CsrLayout3Page($form);
 	}
 
-	public function wijzig() {
-		
-	}
-
-	public function verwijder() {
-		
+	public function wijzig($id) {
+		$bestelling = $this->model->getBestelling((int) $id);
+		if (!$bestelling) {
+			$this->overzicht();
+			return;
+		}
+		$form = new HappieBestellingWijzigenForm($bestelling);
+		$this->view = new CsrLayout3Page($form);
 	}
 
 }
