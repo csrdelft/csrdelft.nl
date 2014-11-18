@@ -15,44 +15,20 @@ class DataTable extends TabsForm {
 
 	protected $orm;
 	protected $tableId;
+	protected $columns = array();
 	private $groupByColumn;
+	private $groupByFixed;
 	protected $css_classes = array();
 	protected $dataSource;
 
-	public function __construct($orm_class, $tableId, $groupByColumn = true, $groupByFixed = false, $titel = false) {
+	public function __construct($orm_class, $tableId, $titel = false, $groupByColumn = true, $groupByFixed = false) {
 		parent::__construct(null, $tableId . '_form', null, $titel);
 		$this->orm = new $orm_class();
 		$this->tableId = $tableId;
 		$this->css_classes[] = 'init display';
-		if ($groupByColumn === true) {
-			$this->css_classes[] = 'groupByColumn';
-			$this->groupByColumn = null;
-		} elseif (is_int($groupByColumn)) {
-			$this->css_classes[] = 'groupByColumn';
-			if ($groupByFixed) {
-				$this->css_classes[] = 'groupByFixed';
-			}
-			$this->groupByColumn = $groupByColumn;
-		} else {
-			$this->groupByColumn = null;
-		}
-	}
-
-	protected function getTableHead() {
-		return null;
-	}
-
-	protected function getTableBody() {
-		return null;
-	}
-
-	protected function getTableFoot() {
-		return null;
-	}
-
-	protected function getColumnsDef() {
-		$columns = array();
-		$columns['details'] = array(
+		$this->groupByColumn = $groupByColumn;
+		$this->groupByFixed = $groupByFixed;
+		$this->columns['details'] = array(
 			'name'			 => 'details',
 			'data'			 => null,
 			'title'			 => '',
@@ -76,14 +52,25 @@ class DataTable extends TabsForm {
 				default: $type = 'html';
 					break;
 			}
-			$columns[$attribute] = array(
+			$this->columns[$attribute] = array(
 				'name'	 => $attribute,
 				'data'	 => $attribute,
 				'title'	 => ucfirst(str_replace('_', ' ', $attribute)),
 				'type'	 => $type
 			);
 		}
-		return $columns;
+	}
+
+	protected function getTableHead() {
+		return null;
+	}
+
+	protected function getTableBody() {
+		return null;
+	}
+
+	protected function getTableFoot() {
+		return null;
 	}
 
 	private function getConditionalProps() {
@@ -108,6 +95,19 @@ JSON;
 	}
 
 	public function view() {
+		if ($this->groupByColumn) {
+			$this->css_classes[] = 'groupByColumn';
+			if (is_string($this->groupByColumn)) {
+				$columns = array_keys($this->columns);
+				$this->groupByColumn = array_search($this->groupByColumn, $columns);
+			}
+			if (!is_int($this->groupByColumn)) {
+				$this->groupByColumn = null;
+			}
+			if ($this->groupByFixed) {
+				$this->css_classes[] = 'groupByFixed';
+			}
+		}
 		?>
 		<div id="<?= $this->tableId ?>_toolbar" class="dataTables_toolbar"><?= parent::view() ?></div>
 		<table id="<?= $this->tableId ?>" class="<?= implode(' ', $this->css_classes) ?>" groupByColumn="<?= $this->groupByColumn ?>">
@@ -120,7 +120,7 @@ JSON;
 				var tableId = '<?= $this->tableId ?>';
 				var table = '#' + tableId;
 				var dataTable = $(table).DataTable({
-					"columns": <?= json_encode(array_values($this->getColumnsDef())) ?>,
+					"columns": <?= json_encode(array_values($this->columns)) ?>,
 					"order": [[1, "asc"]],
 					"createdRow": function (row, data, index) {
 						$(row).attr('id', tableId + '_' + index); // data array index

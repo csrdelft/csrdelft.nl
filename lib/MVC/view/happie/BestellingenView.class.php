@@ -10,10 +10,19 @@ require_once 'MVC/model/entity/happie/HappieGang.enum.php';
  * Tonen van alle bestellingen om te beheren.
  * 
  */
+class HappieBestellingView extends JsonResponse {
+
+	public function __construct(HappieBestelling $bestelling) {
+		parent::__construct($bestelling);
+	}
+
+}
+
 class HappieBestellingenView extends DataTable {
 
 	public function __construct() {
-		parent::__construct(HappieBestellingenModel::orm, get_class($this), true, false, 'Overzicht bestellingen');
+		parent::__construct(HappieBestellingenModel::orm, get_class($this), 'Overzicht actueel', 'tafel');
+		$this->dataSource = happieUrl . '/overzicht/data';
 
 		$toolbar = new DataTableToolbar();
 		$fields[] = $toolbar;
@@ -23,12 +32,69 @@ class HappieBestellingenView extends DataTable {
 		$knop->onclick = "alert($('#" . $this->tableId . " tbody tr.selected').length + ' row(s) selected');";
 		$toolbar->addKnop($knop);
 
+		$knop = new DataTableToolbarKnop('== 1', null, 'debugprint', 'Print', 'Debugprint row', null);
+		$knop->onclick = "console.log($('#" . $this->tableId . " tbody tr.selected'));";
+		$toolbar->addKnop($knop);
+	}
+
+}
+
+class HappieKeukenView extends DataTable {
+
+	public function __construct() {
+		parent::__construct(HappieBestellingenModel::orm, get_class($this), 'Keuken actueel', 'tafel');
+		$this->dataSource = happieUrl . '/keuken/data';
+
+		$toolbar = new DataTableToolbar();
+		$fields[] = $toolbar;
+		$this->addFields($fields);
+	}
+
+	protected function getColumnsDef() {
+		$def = parent::getColumnsDef();
+		unset($def['bestelling_id'], $def['wijzig_historie']);
+		return $def;
+	}
+
+}
+
+class HappieServeerView extends DataTable {
+
+	public function __construct() {
+		parent::__construct(HappieBestellingenModel::orm, get_class($this), 'Actuele bestellingen', 'tafel');
+		$this->dataSource = happieUrl . '/serveer/data';
+
+		$toolbar = new DataTableToolbar();
+		$fields[] = $toolbar;
+		$this->addFields($fields);
+
 		$toolbar->addKnop(new DataTableToolbarKnop('>= 0', happieUrl . '/nieuw', '', 'Nieuw', 'Nieuwe bestelling', '/famfamfam/add.png'));
 	}
 
 	protected function getColumnsDef() {
 		$def = parent::getColumnsDef();
-		unset($def['wijzig_historie']);
+		unset($def['bestelling_id'], $def['wijzig_historie']);
+		return $def;
+	}
+
+}
+
+class HappieBarView extends DataTable {
+
+	public function __construct() {
+		parent::__construct(HappieBestellingenModel::orm, get_class($this), 'Bar actueel', 'tafel');
+		$this->dataSource = happieUrl . '/bar/data';
+
+		$toolbar = new DataTableToolbar();
+		$fields[] = $toolbar;
+		$this->addFields($fields);
+
+		$toolbar->addKnop(new DataTableToolbarKnop('>= 0', happieUrl . '/nieuw', '', 'Nieuw', 'Nieuwe bestelling', '/famfamfam/add.png'));
+	}
+
+	protected function getColumnsDef() {
+		$def = parent::getColumnsDef();
+		unset($def['bestelling_id'], $def['wijzig_historie']);
 		return $def;
 	}
 

@@ -34,9 +34,13 @@ class HappieBestellingenController extends AclController {
 		parent::performAction($this->getParams(4));
 	}
 
-	public function overzicht() {
-		$body = new HappieBestellingenView();
-		$this->view = new CsrLayout3Page($body);
+	public function overzicht($data = null) {
+		if ($data === 'data') {
+			$this->view = new JsonResponse($this->model->find());
+		} else {
+			$body = new HappieBestellingenView();
+			$this->view = new CsrLayout3Page($body);
+		}
 	}
 
 	public function nieuw() {
