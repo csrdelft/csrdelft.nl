@@ -52,8 +52,7 @@ class HappieMenukaartGroepenController extends AclController {
 		if ($this->isPosted() AND $form->validate()) {
 			$this->model->create($groep);
 			setMelding('Menukaart-groep succesvol toegevoegd', 1);
-			$this->overzicht();
-			return;
+			redirect(happieUrl . '/overzicht');
 		}
 		$this->view = new CsrLayout3Page($form);
 	}
@@ -61,15 +60,14 @@ class HappieMenukaartGroepenController extends AclController {
 	public function wijzig($id) {
 		$groep = $this->model->getGroep((int) $id);
 		if (!$groep) {
-			$this->overzicht();
-			return;
+			setMelding('Menukaart-groep bestaat niet', -1);
+			redirect(happieUrl . '/overzicht');
 		}
 		$form = new HappieMenukaartGroepWijzigenForm($groep);
 		if ($this->isPosted() AND $form->validate()) {
 			$this->model->update($groep);
 			setMelding('Wijziging succesvol opgeslagen', 1);
-			$this->overzicht();
-			return;
+			redirect(happieUrl . '/overzicht');
 		}
 		$this->view = new CsrLayout3Page($form);
 	}

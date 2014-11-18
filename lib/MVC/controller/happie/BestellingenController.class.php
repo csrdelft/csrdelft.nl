@@ -79,8 +79,7 @@ class HappieBestellingenController extends AclController {
 				$this->newBestelling($attr['tafel'], $item_id, $attr['aantal'], $attr['klant_allergie']);
 			}
 			setMelding('Bestelling succesvol toegevoegd', 1);
-			$this->overzicht();
-			return;
+			redirect(happieUrl . '/overzicht');
 		}
 		$this->view = new CsrLayout3Page($form);
 	}
@@ -88,15 +87,14 @@ class HappieBestellingenController extends AclController {
 	public function wijzig($id) {
 		$bestelling = $this->model->getBestelling((int) $id);
 		if (!$bestelling) {
-			$this->overzicht();
-			return;
+			setMelding('Bestelling bestaat niet', -1);
+			redirect(happieUrl . '/overzicht');
 		}
 		$form = new HappieBestellingWijzigenForm($bestelling);
 		if ($this->isPosted() AND $form->validate()) {
 			$this->model->update($bestelling);
 			setMelding('Wijziging succesvol opgeslagen', 1);
-			$this->overzicht();
-			return;
+			redirect(happieUrl . '/overzicht');
 		}
 		$this->view = new CsrLayout3Page($form);
 	}
