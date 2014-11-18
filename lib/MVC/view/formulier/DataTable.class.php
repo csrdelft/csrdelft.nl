@@ -16,6 +16,7 @@ class DataTable extends TabsForm {
 	protected $orm;
 	protected $tableId;
 	protected $columns = array();
+	protected $columnDefs = array();
 	private $groupByColumn;
 	private $groupByFixed;
 	protected $css_classes = array();
@@ -59,6 +60,14 @@ class DataTable extends TabsForm {
 				'type'	 => $type
 			);
 		}
+		$this->columnDefs['invisible'] = array(
+			'visible'	 => false,
+			'targets'	 => array()
+		);
+		$this->columnDefs['nosearch'] = array(
+			'searchable' => false,
+			'targets'	 => array()
+		);
 	}
 
 	protected function getTableHead() {
@@ -73,35 +82,43 @@ class DataTable extends TabsForm {
 		return null;
 	}
 
-	private function getConditionalProps() {
+	protected function getConditionalProps() {
 		$json = '';
 		if ($this->dataSource) {
 			$json .= ', "ajax": "' . $this->dataSource . '"';
 		}
 		if ($this->groupByColumn) {
-			$json .= <<<JSON
-, "columnDefs": [
-	{
-		"visible": false,
-		"targets": [{$this->groupByColumn}]
-	}
-]
-, "orderFixed": [[{$this->groupByColumn}, "asc"]]
-JSON;
+			$json .= ', "columnDefs": ' . json_encode(array_values($this->columnDefs));
+			$json .= ', "orderFixed": [[' . $this->groupByColumn . ', "asc"]]';
 		}
 		return $json;
 	}
 
 	public function view() {
+		// make primary key column(s) invisible and not searchable
+		$columns = array_keys($this->columns);
+		foreach ($this->orm->getPrimaryKey() as $key) {
+			$i = array_search($key, $columns);
+			$this->columnDefs['invisible']['targets'][] = $i;
+			$this->columnDefs['nosearch']['targets'][] = $i;
+		}
+		// group by column
 		if ($this->groupByColumn) {
 			$this->css_classes[] = 'groupByColumn';
+
+			// get column index
 			if (is_string($this->groupByColumn)) {
-				$columns = array_keys($this->columns);
 				$this->groupByColumn = array_search($this->groupByColumn, $columns);
 			}
-			if (!is_int($this->groupByColumn)) {
+
+			if (is_int($this->groupByColumn)) {
+				// make group by column invisible
+				$this->columnDefs['invisible']['targets'][] = $this->groupByColumn;
+			} else {
 				$this->groupByColumn = null;
 			}
+
+			// immutable group by column
 			if ($this->groupByFixed) {
 				$this->css_classes[] = 'groupByFixed';
 			}

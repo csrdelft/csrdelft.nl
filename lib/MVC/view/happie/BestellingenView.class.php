@@ -51,12 +51,6 @@ class HappieKeukenView extends DataTable {
 		$this->addFields($fields);
 	}
 
-	protected function getColumnsDef() {
-		$def = parent::getColumnsDef();
-		unset($def['bestelling_id'], $def['wijzig_historie'], $def['financien_status']);
-		return $def;
-	}
-
 }
 
 class HappieServeerView extends DataTable {
@@ -72,12 +66,6 @@ class HappieServeerView extends DataTable {
 		$toolbar->addKnop(new DataTableToolbarKnop('>= 0', happieUrl . '/nieuw', '', 'Nieuw', 'Nieuwe bestelling', '/famfamfam/add.png'));
 	}
 
-	protected function getColumnsDef() {
-		$def = parent::getColumnsDef();
-		unset($def['bestelling_id'], $def['wijzig_historie'], $def['financien_status']);
-		return $def;
-	}
-
 }
 
 class HappieBarView extends DataTable {
@@ -91,12 +79,6 @@ class HappieBarView extends DataTable {
 		$this->addFields($fields);
 
 		$toolbar->addKnop(new DataTableToolbarKnop('>= 0', happieUrl . '/nieuw', '', 'Nieuw', 'Nieuwe bestelling', '/famfamfam/add.png'));
-	}
-
-	protected function getColumnsDef() {
-		$def = parent::getColumnsDef();
-		unset($def['bestelling_id'], $def['wijzig_historie']);
-		return $def;
 	}
 
 }

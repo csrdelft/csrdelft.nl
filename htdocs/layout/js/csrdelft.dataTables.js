@@ -12,7 +12,7 @@
  */
 var bOrderDraw = false;
 
-$(document).ready(function() {
+$(document).ready(function () {
 	fnInitDataTables();
 });
 
@@ -134,7 +134,7 @@ function fnGroupByColumnDraw(e, settings) {
 		var dataTable = table.DataTable();
 		var rows = $(dataTable.rows({page: 'current'}).nodes());
 		var last = null;
-		dataTable.column(columnId, {page: 'current'}).data().each(function(group, i) {
+		dataTable.column(columnId, {page: 'current'}).data().each(function (group, i) {
 			if (last !== group) {
 				// Create group rows for collapsed groups
 				while (collapse.length > 0 && collapse[0].localeCompare(group) < 0) {
@@ -150,7 +150,7 @@ function fnGroupByColumnDraw(e, settings) {
 	}
 	// Create group rows for collapsed groups
 	var tbody = table.children('tbody:first');
-	collapse.forEach(function(group) {
+	collapse.forEach(function (group) {
 		groupRow = $('<tr class="group"><td class="details-control"></td><td colspan="' + colspan + '">' + group + '</td></tr>').data('groupData', group);
 		tbody.append(groupRow);
 	});
@@ -161,7 +161,7 @@ function fnGroupExpandCollapse(dataTable, table, tr) {
 	tr.toggleClass('expanded');
 	var group = tr.data('groupData');
 	if (tr.hasClass('expanded')) {
-		collapse = $.grep(collapse, function(value) {
+		collapse = $.grep(collapse, function (value) {
 			return value !== group;
 		});
 	}
@@ -182,7 +182,7 @@ function fnGroupExpandCollapseAll(dataTable, table, tr) {
 	var collapse = [];
 	if (!tr.hasClass('expanded')) {
 		var last = null;
-		dataTable.column(columnId).data().each(function(group, i) {
+		dataTable.column(columnId).data().each(function (group, i) {
 			if (last !== group) {
 				collapse.push(group);
 				last = group;
@@ -207,7 +207,7 @@ function fnGroupExpandCollapseDraw(settings, data, index) {
 	return true;
 }
 
-function fnChildRow(dataTable, td) {
+function fnChildRow(dataTable, td, column) {
 	var tr = td.closest('tr');
 	var row = dataTable.row(tr);
 	if (row.child.isShown()) {
@@ -217,10 +217,16 @@ function fnChildRow(dataTable, td) {
 		else {
 			tr.removeClass('expanded');
 			var innerDiv = tr.next().children(':first').children(':first');
-			innerDiv.slideUp(400, function() {
+			innerDiv.slideUp(400, function () {
 				row.child.hide();
 			});
 		}
+	}
+	else if (typeof column === 'string') {
+		row.child('<div class="innerDetails verborgen"></div>').show();
+		tr.addClass('expanded');
+		var innerDiv = tr.next().addClass('childrow').children(':first').children(':first');
+		innerDiv.html(data).slideDown();
 	}
 	else {
 		row.child('<div class="innerDetails verborgen"></div>').show();
@@ -228,7 +234,7 @@ function fnChildRow(dataTable, td) {
 		var innerDiv = tr.next().addClass('childrow').children(':first').children(':first');
 		$.ajax({
 			url: td.data('detailSource')
-		}).done(function(data) {
+		}).done(function (data) {
 			if (row.child.isShown()) {
 				tr.removeClass('loading');
 				innerDiv.html(data).slideDown();
