@@ -826,14 +826,28 @@ class IntField extends TextField {
 
 	public $min = null;
 	public $max = null;
+	public $min_alert = 'Waarde te laag!';
+	public $max_alert = 'Waarde te hoog!';
 
 	public function __construct($name, $value, $description, $min = null, $max = null) {
 		parent::__construct($name, $value, $description, 11);
 		if ($min !== null) {
 			$this->min = (int) $min;
+			$this->onchange .= <<<JS
+if (parseInt( $(this).val() ) < {$this->min}) {
+	alert('{$this->min_alert}');
+	$(this).val({$this->min});
+}
+JS;
 		}
 		if ($max !== null) {
 			$this->max = (int) $max;
+			$this->onchange .= <<<JS
+if (parseInt( $(this).val() ) > {$this->max}) {
+	alert('{$this->max_alert}');
+	$(this).val({$this->max});
+}
+JS;
 		}
 	}
 
@@ -880,15 +894,23 @@ class IntField extends TextField {
 			$type = 'text';
 
 			$minus = CSR_PICS . '/famfamfam/delete.png';
+			$js = <<<JS
+$('#{$this->getId()}').val(parseInt($('#{$this->getId()}').val()) - 1);
+$('#{$this->getId()}').trigger('onchange');
+JS;
 			echo <<<HTML
-<span class="knop minus" onclick="$('#{$this->getId()}').val(parseInt($('#{$this->getId()}').val()) - 1);"><img src="{$minus}" alt="-" class="icon" width="16" height="16" /></span>
+<span class="knop minus" onclick="{$js}"><img src="{$minus}" alt="-" class="icon" width="16" height="16" /></span>
 HTML;
 		}
 		echo ' <input type="' . $type . '"' . $this->getInputAttribute(array('id', 'name', 'class', 'value', 'origvalue', 'disabled', 'readonly', 'maxlength', 'placeholder', 'autocomplete', 'onchange', 'onclick', 'onkeyup')) . ' /> ';
 		if (!$this->hidden) {
 			$plus = CSR_PICS . '/famfamfam/add.png';
+			$js = <<<JS
+$('#{$this->getId()}').val(parseInt($('#{$this->getId()}').val()) + 1);
+$('#{$this->getId()}').trigger('onchange');
+JS;
 			echo <<<HTML
-<span class="knop plus" onclick="$('#{$this->getId()}').val(parseInt($('#{$this->getId()}').val()) + 1);"><img src="{$plus}" alt="+" class="icon" width="16" height="16" /></span>
+<span class="knop plus" onclick="{$js}"><img src="{$plus}" alt="+" class="icon" width="16" height="16" /></span>
 HTML;
 		}
 		echo '</div>';
