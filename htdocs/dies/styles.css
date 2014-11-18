@@ -48,7 +48,7 @@ select {
     width: 150px;
 }
 
-a.knop {
+.knop {
     color: #f1ddbc;
     background-color: #690f36;
     font-family: geosanslightregular;

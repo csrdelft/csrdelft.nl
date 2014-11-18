@@ -865,13 +865,33 @@ class IntField extends TextField {
 	}
 
 	/**
-	 * Misbruik preview div voor + en - knopjes.
+	 * view die zou moeten werken voor veel velden...
 	 */
-	public function getPreviewDiv() {
-		return <<<HTML
-<div onclick="$('#{$this->getId()}').val($('#{$this->getId()}').val() + 1);">+</div>
-<div onclick="$('#{$this->getId()}').val($('#{$this->getId()}').val() - 1);">-</div>';
+	public function view() {
+		echo $this->getDiv();
+		echo $this->getLabel();
+		echo $this->getErrorDiv();
+		if ($this->preview) {
+			echo $this->getPreviewDiv();
+		}
+		if ($this->hidden) {
+			$type = 'hidden';
+		} else {
+			$type = 'text';
+
+			$minus = CSR_PICS . '/famfamfam/delete.png';
+			echo <<<HTML
+<span class="knop minus" onclick="$('#{$this->getId()}').val(parseInt($('#{$this->getId()}').val()) - 1);"><img src="{$minus}" alt="-" class="icon" width="16" height="16" /></span>
 HTML;
+		}
+		echo ' <input type="' . $type . '"' . $this->getInputAttribute(array('id', 'name', 'class', 'value', 'origvalue', 'disabled', 'readonly', 'maxlength', 'placeholder', 'autocomplete', 'onchange', 'onclick', 'onkeyup')) . ' /> ';
+		if (!$this->hidden) {
+			$plus = CSR_PICS . '/famfamfam/add.png';
+			echo <<<HTML
+<span class="knop plus" onclick="$('#{$this->getId()}').val(parseInt($('#{$this->getId()}').val()) + 1);"><img src="{$plus}" alt="+" class="icon" width="16" height="16" /></span>
+HTML;
+		}
+		echo '</div>';
 	}
 
 }
