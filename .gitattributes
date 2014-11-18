@@ -447,8 +447,6 @@ htdocs/layout3/fonts/glyphicons-halflings-regular.ttf -text
 htdocs/layout3/fonts/glyphicons-halflings-regular.woff -text
 htdocs/layout3/js/bootstrap.js -text
 htdocs/layout3/js/bootstrap.min.js -text
-htdocs/layout3/js/jquery.js -text
-htdocs/layout3/js/jquery.min.js -text
 htdocs/layout3/js/typeahead.bundle.js -text
 htdocs/layout3/js/typeahead.bundle.min.js -text
 htdocs/layout3/script.ini -text
