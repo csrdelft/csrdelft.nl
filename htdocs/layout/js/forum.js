@@ -1,5 +1,5 @@
 function saveConceptForumBericht() {
-	toggleForumConceptBtn();
+	toggleForumConceptBtn(false);
 	var $concept = $('#forumConcept');
 	var $textarea = $('#forumBericht');
 	var $titel = $('#nieuweTitel');
@@ -14,9 +14,13 @@ function saveConceptForumBericht() {
 	setTimeout(toggleForumConceptBtn, 3000);
 }
 
-function toggleForumConceptBtn() {
+function toggleForumConceptBtn(val) {
 	var $concept = $('#forumConcept');
-	$concept.attr('disabled', !$concept.prop('disabled'));
+	if (typeof val === 'undefined') {
+		$concept.attr('disabled', !$concept.prop('disabled'));
+	} else {
+		$concept.attr('disabled', val);
+	}
 }
 
 $(document).ready(function ($) {
