@@ -36,7 +36,11 @@ class HappieBestellingenController extends AclController {
 
 	public function overzicht($data = null) {
 		if ($data === 'data') {
-			$this->view = new DataTableResponse($this->model->find()->fetchAll());
+			$bestellingen = array();
+			foreach ($this->model->find() as $bestelling) {
+				$bestellingen[] = new HappieBestellingView($bestelling);
+			}
+			$this->view = new DataTableResponse($bestellingen);
 		} else {
 			$body = new HappieBestellingenView();
 			$this->view = new CsrLayout3Page($body);

@@ -26,7 +26,7 @@ class HappieBestellingView extends JsonResponse {
 class HappieBestellingenView extends DataTable {
 
 	public function __construct() {
-		parent::__construct(HappieBestellingenModel::orm, get_class($this), 'Overzicht actueel', 'tafel');
+		parent::__construct(HappieBestellingenModel::orm, get_class($this), 'Overzicht actueel', 'datum');
 		$this->dataSource = happieUrl . '/overzicht/data';
 
 		$toolbar = new DataTableToolbar();

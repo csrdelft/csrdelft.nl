@@ -20,10 +20,10 @@ class HappieBestelling extends PersistentEntity {
 	 */
 	public $bestelling_id;
 	/**
-	 * Datum en tijd van bestelling
+	 * Datum van bestelling
 	 * @var string
 	 */
-	public $moment_nieuw;
+	public $datum;
 	/**
 	 * Datum en tijd van wijzigen
 	 * @var string
@@ -70,8 +70,8 @@ class HappieBestelling extends PersistentEntity {
 	 */
 	protected static $persistent_attributes = array(
 		'bestelling_id'		 => array(T::Integer, false, 'auto_increment'),
-		'moment_nieuw'		 => array(T::DateTime),
-		'laatst_gewijzigd'	 => array(T::DateTime, true),
+		'datum'				 => array(T::DateTime),
+		'laatst_gewijzigd'	 => array(T::DateTime),
 		'wijzig_historie'	 => array(T::Text),
 		'tafel'				 => array(T::Integer),
 		'menukaart_item'	 => array(T::Integer),
