@@ -61,7 +61,7 @@ class TabsForm extends Formulier {
 			$foot = $this->tabs['foot'];
 			unset($this->tabs['foot']);
 		}
-		echo '<div id="tabs"><ul>';
+		echo '<br /><div id="tabs"><ul>';
 		foreach ($this->tabs as $tab => $fields) {
 			echo '<li><a href="#tabs-' . $tab . '">' . ucfirst($tab) . '</a></li>';
 		}
@@ -73,7 +73,7 @@ class TabsForm extends Formulier {
 			}
 			echo '</div>';
 		}
-		echo '</div>';
+		echo '</div><br />';
 		if (isset($foot)) {
 			foreach ($foot as $field) {
 				$field->view();

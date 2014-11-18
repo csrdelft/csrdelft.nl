@@ -82,10 +82,12 @@ class HappieBestellingenController extends AclController {
 		$form = new HappieBestelForm();
 		if ($this->isPosted() AND $form->validate()) {
 			foreach ($form->getValues() as $item_id => $attr) {
-				$this->newBestelling($attr['tafel'], $item_id, $attr['aantal'], $attr['klant_allergie']);
+				if ($attr['aantal'] > 0) {
+					$this->model->newBestelling($attr['tafel'], $item_id, $attr['aantal'], $attr['klant_allergie']);
+				}
 			}
 			setMelding('Bestelling succesvol toegevoegd', 1);
-			redirect(happieUrl . '/overzicht');
+			redirect(happieUrl . '/serveer');
 		}
 		$this->view = new CsrLayout3Page($form);
 	}
@@ -94,13 +96,13 @@ class HappieBestellingenController extends AclController {
 		$bestelling = $this->model->getBestelling((int) $id);
 		if (!$bestelling) {
 			setMelding('Bestelling bestaat niet', -1);
-			redirect(happieUrl . '/overzicht');
+			redirect(happieUrl . '/serveer');
 		}
 		$form = new HappieBestellingWijzigenForm($bestelling);
 		if ($this->isPosted() AND $form->validate()) {
 			$this->model->update($bestelling);
 			setMelding('Wijziging succesvol opgeslagen', 1);
-			redirect(happieUrl . '/overzicht');
+			redirect(happieUrl . '/serveer');
 		}
 		$this->view = new CsrLayout3Page($form);
 	}
