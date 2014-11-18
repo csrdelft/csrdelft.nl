@@ -20,6 +20,7 @@ class HappieBestellingenController extends AclController {
 				'keuken'	 => 'groep:2014',
 				'serveer'	 => 'groep:2014',
 				'bar'		 => 'groep:2014',
+				'kassa'		 => 'groep:2014',
 				'data'		 => 'groep:2014',
 				'nieuw'		 => 'groep:2014'
 			);
@@ -56,6 +57,11 @@ class HappieBestellingenController extends AclController {
 
 	public function bar() {
 		$body = new HappieBarView();
+		$this->view = new CsrLayout3Page($body);
+	}
+
+	public function kassa() {
+		$body = new HappieKassaView();
 		$this->view = new CsrLayout3Page($body);
 	}
 

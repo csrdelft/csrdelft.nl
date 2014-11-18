@@ -62,8 +62,6 @@ class HappieServeerView extends DataTable {
 		$toolbar = new DataTableToolbar();
 		$fields[] = $toolbar;
 		$this->addFields($fields);
-
-		$toolbar->addKnop(new DataTableToolbarKnop('>= 0', happieUrl . '/nieuw', '', 'Nieuw', 'Nieuwe bestelling', '/famfamfam/add.png'));
 	}
 
 }
@@ -77,8 +75,19 @@ class HappieBarView extends DataTable {
 		$toolbar = new DataTableToolbar();
 		$fields[] = $toolbar;
 		$this->addFields($fields);
+	}
 
-		$toolbar->addKnop(new DataTableToolbarKnop('>= 0', happieUrl . '/nieuw', '', 'Nieuw', 'Nieuwe bestelling', '/famfamfam/add.png'));
+}
+
+class HappieKassaView extends DataTable {
+
+	public function __construct() {
+		parent::__construct(HappieBestellingenModel::orm, get_class($this), 'Kassa actueel', 'tafel');
+		$this->dataSource = happieUrl . '/data/' . date('Y/m/d');
+
+		$toolbar = new DataTableToolbar();
+		$fields[] = $toolbar;
+		$this->addFields($fields);
 	}
 
 }
@@ -127,7 +136,7 @@ HTML
 		}
 
 		$fields = array();
-		$fields[] = new FormDefaultKnoppen(happieUrl . '/bestel/nieuw');
+		$fields[] = new FormDefaultKnoppen(happieUrl . '/serveer');
 		$this->addFields($fields);
 	}
 
