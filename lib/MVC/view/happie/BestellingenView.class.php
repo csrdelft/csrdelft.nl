@@ -19,12 +19,14 @@ class HappieBestellingenView extends DataTable {
 		$this->dataSource = happieUrl . '/data/';
 		$this->defaultLength = 100;
 
-		$this->addColumnBefore('menukaart_item', 'menu_groep', 'html');
+		$this->addColumn('menu_groep', 'html', 'menukaart_item');
 
-		$this->invisible[] = 'wijzig_historie';
-
-		$this->nosearch[] = 'laatst_gewijzigd';
-		$this->nosearch[] = 'aantal';
+		$this->hideColumn('datum');
+		$this->hideColumn('wijzig_historie');
+		$this->searchColumn('tafel');
+		$this->searchColumn('financien_status');
+		$this->searchColumn('menu_groep');
+		$this->searchColumn('menukaart_item');
 
 		$this->toolbar = new DataTableToolbar();
 		$fields[] = $this->toolbar;
@@ -43,8 +45,9 @@ class HappieKeukenView extends HappieBestellingenView {
 		parent::__construct('Keuken actueel', 'tafel');
 		$this->dataSource .= date('Y/m/d');
 
-		$this->invisible[] = 'datum';
-		$this->invisible[] = 'financien_status';
+		$this->hideColumn('financien_status');
+		$this->searchColumn('financien_status', false);
+		$this->searchColumn('serveer_status');
 	}
 
 }
@@ -55,8 +58,9 @@ class HappieServeerView extends HappieBestellingenView {
 		parent::__construct('Serveer actueel', 'tafel');
 		$this->dataSource .= date('Y/m/d');
 
-		$this->invisible[] = 'datum';
-		$this->invisible[] = 'financien_status';
+		$this->hideColumn('financien_status');
+		$this->searchColumn('financien_status', false);
+		$this->searchColumn('serveer_status');
 	}
 
 }
@@ -67,7 +71,7 @@ class HappieBarView extends HappieBestellingenView {
 		parent::__construct('Bar actueel', 'tafel');
 		$this->dataSource .= date('Y/m/d');
 
-		$this->invisible[] = 'datum';
+		$this->hideColumn('serveer_status');
 	}
 
 }
@@ -77,8 +81,6 @@ class HappieKassaView extends HappieBestellingenView {
 	public function __construct() {
 		parent::__construct('Kassa actueel', 'tafel');
 		$this->dataSource .= date('Y/m/d');
-
-		$this->invisible[] = 'datum';
 	}
 
 }

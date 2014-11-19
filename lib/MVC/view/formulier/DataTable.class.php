@@ -21,8 +21,6 @@ class DataTable extends TabsForm {
 	private $groupByFixed;
 	protected $css_classes = array();
 	protected $dataSource;
-	protected $invisible;
-	protected $nosearch;
 	protected $defaultLength = 10;
 
 	public function __construct($orm_class, $tableId, $titel = false, $groupByColumn = true, $groupByFixed = false) {
@@ -43,11 +41,6 @@ class DataTable extends TabsForm {
 			'searchable'	 => false,
 			'defaultContent' => ''
 		);
-
-		// make primary key column(s) invisible and not searchable
-		$this->invisible = $this->orm->getPrimaryKey();
-		$this->nosearch = array();
-
 		foreach ($this->orm->getAttributes() as $attribute) {
 			$definition = $this->orm->getAttributeDefinition($attribute);
 			switch ($definition[0]) {
@@ -64,36 +57,36 @@ class DataTable extends TabsForm {
 			}
 			$this->addColumn($attribute, $type);
 		}
-
-		$this->columnDefs['invisible'] = array(
-			'visible'	 => false,
-			'targets'	 => array()
-		);
-		$this->columnDefs['nosearch'] = array(
-			'searchable' => false,
-			'targets'	 => array()
-		);
 	}
 
-	protected function addColumn($name, $type, $pos = null) {
-		$column = array(
-			'name'	 => $name,
-			'data'	 => $name,
-			'title'	 => ucfirst(str_replace('_', ' ', $name)),
-			'type'	 => $type
+	protected function addColumn($newName, $type = 'html', $before = null) {
+		$newColumn = array(
+			'name'		 => $newName,
+			'data'		 => $newName,
+			'title'		 => ucfirst(str_replace('_', ' ', $newName)),
+			'type'		 => $type,
+			'searchable' => false
 		);
-		if ($pos === null OR $pos < 0 OR $pos >= sizeof($this->columns)) {
-			$this->columns[$name] = $column;
+		if ($before === null) {
+			$this->columns[$newName] = $newColumn;
 		} else {
-			array_splice($this->columns, (int) $pos, 0, array($name => $column));
+			$array = array();
+			foreach ($this->columns as $name => $column) {
+				if ($name == $before) {
+					$array[$newName] = $newColumn;
+				}
+				$array[$name] = $column;
+			}
+			$this->columns = $array;
 		}
 	}
 
-	protected function addColumnBefore($before, $name, $type) {
-		$pos = array_search($before, array_keys($this->columns));
-		if ($pos) {
-			$this->addColumn($name, $type, $pos);
-		}
+	protected function hideColumn($name, $visible = false) {
+		$this->columns[$name]['visible'] = (bool) $visible;
+	}
+
+	protected function searchColumn($name, $searchable = true) {
+		$this->columns[$name]['searchable'] = (bool) $searchable;
 	}
 
 	protected function getTableHead() {
@@ -119,55 +112,40 @@ class DataTable extends TabsForm {
 
 	public function view() {
 		$conditionalProps = '';
-
-		// make columns invisible and not searchable
 		$columns = array_keys($this->columns);
-		unset($columns[0]); // ignore details column
-
-		foreach ($this->invisible as $key) {
-			$i = array_search($key, $columns);
-			$this->columnDefs['invisible']['targets'][] = $i;
-			$this->columnDefs['nosearch']['targets'][] = $i;
-		}
-		foreach ($this->nosearch as $key) {
-			$i = array_search($key, $columns);
-			$this->columnDefs['nosearch']['targets'][] = $i;
-		}
 
 		// group by column
+		if ($this->groupByFixed) {
+			$this->css_classes[] = 'groupByFixed';
+		}
+		// user may group by
 		if ($this->groupByColumn !== false) {
 			$this->css_classes[] = 'groupByColumn';
 
-			// not predetermined, user may group by
-			if ($this->groupByColumn !== null) {
+			// existing column?
+			if (isset($this->columns[$this->groupByColumn])) {
 
-				// get column index
-				if (is_string($this->groupByColumn)) {
-					$this->groupByColumn = array_search($this->groupByColumn, $columns);
-				}
+				// make group by column invisible
+				$this->hideColumn($this->groupByColumn);
+				$this->searchColumn($this->groupByColumn);
 
-				// existing column?
-				if (is_int($this->groupByColumn)) {
+				$idx = array_search($this->groupByColumn, $columns);
 
-					// make group by column invisible
-					$this->columnDefs['invisible']['targets'][] = $this->groupByColumn;
+				// order fixed for group by column
+				$conditionalProps .= ', "order": [[ ' . $idx . ', "asc"]]'; // FIXME: orderFixed faalt
 
-					// immutable group by column
-					if ($this->groupByFixed) {
-						$this->css_classes[] = 'groupByFixed';
-					}
-
-					// order fixed for group by column
-					$conditionalProps .= ', "order": [[ ' . $this->groupByColumn . ', "asc"]]';
-
-					$this->groupByColumn = ' groupbycolumn="' . $this->groupByColumn . '"';
+				$this->groupByColumn = ' groupbycolumn="' . $idx . '"';
+			}
+		} else {
+			// default order by first visible column
+			foreach ($this->columns as $column => $def) {
+				if (!isset($def['visible']) OR $def['visible'] === true) {
+					$conditionalProps .= ', "order": [[ ' . array_search($column, $columns) . ', "asc"]]';
+					break;
 				}
 			}
 		}
-		// default order by first visible column
-		//$visible = array_diff(array_keys($columns), $this->columnDefs['invisible']['targets']);
-		//$conditionalProps .= ', "order": [[ ' . reset($visible) . ', "asc"]]';
-		// FIXME: orderFixed faalt
+
 		// set column definitions
 		$conditionalProps .= ', "columnDefs": ' . json_encode(array_values($this->columnDefs));
 
