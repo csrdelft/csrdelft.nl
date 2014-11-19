@@ -19,7 +19,7 @@ class HappieBestellingenView extends DataTable {
 		$this->dataSource = happieUrl . '/data/';
 		$this->defaultLength = 100;
 
-		$this->addColumn('menu_groep', 'menu_groep', 'Menukaart groep', 'html');
+		$this->addColumnBefore('menukaart_item', 'menu_groep', 'html');
 
 		$this->toolbar = new DataTableToolbar();
 		$fields[] = $this->toolbar;

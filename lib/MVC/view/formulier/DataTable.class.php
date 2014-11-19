@@ -57,7 +57,7 @@ class DataTable extends TabsForm {
 				default: $type = 'html';
 					break;
 			}
-			$this->addColumn($attribute, $attribute, ucfirst(str_replace('_', ' ', $attribute)), $type);
+			$this->addColumn($attribute, $type);
 		}
 		$this->columnDefs['invisible'] = array(
 			'visible'	 => false,
@@ -69,13 +69,25 @@ class DataTable extends TabsForm {
 		);
 	}
 
-	protected function addColumn($name, $data, $title, $type) {
-		$this->columns[$name] = array(
+	protected function addColumn($name, $type, $pos = null) {
+		$column = array(
 			'name'	 => $name,
-			'data'	 => $data,
-			'title'	 => $title,
+			'data'	 => $name,
+			'title'	 => ucfirst(str_replace('_', ' ', $name)),
 			'type'	 => $type
 		);
+		if ($pos === null OR $pos < 0 OR $pos >= sizeof($this->columns)) {
+			$this->columns[$name] = $column;
+		} else {
+			array_splice($this->columns, (int) $pos, 0, array($name => $column));
+		}
+	}
+
+	protected function addColumnBefore($before, $name, $type) {
+		$pos = array_search($before, array_keys($this->columns));
+		if ($pos) {
+			$this->addColumn($name, $type, $pos);
+		}
 	}
 
 	protected function getTableHead() {

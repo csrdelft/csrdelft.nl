@@ -93,9 +93,9 @@ class HappieBestelling extends PersistentEntity {
 
 	public function jsonSerialize() {
 		$array = parent::jsonSerialize();
-		$item = $this->getItem();
+		$item = $this->getItem($this->menukaart_item);
 		if ($item) {
-			$array['menu_item'] = $item->naam;
+			$array['menukaart_item'] = $item->naam;
 			$groep = $item->getGroep();
 			if ($groep) {
 				$array['menu_groep'] = $groep->naam;
