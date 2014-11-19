@@ -109,8 +109,9 @@ class HappieBestelForm extends TabsForm {
 		// maak invoerveld voor elk item
 		foreach ($groepen as $groep) {
 
-			// groepeer items
 			$fields = array();
+
+			// groepeer items
 			$fields[] = new Subkopje($groep->naam);
 
 			foreach ($groep->getItems() as $item) {
@@ -163,7 +164,10 @@ JS;
 		}
 
 		$fields = array();
-		$fields[] = new FormDefaultKnoppen(happieUrl . '/serveer');
+
+		$fields['btn'] = new FormDefaultKnoppen(happieUrl . '/serveer');
+		$fields['btn']->confirmAll();
+
 		$this->addFields($fields, 'foot');
 	}
 

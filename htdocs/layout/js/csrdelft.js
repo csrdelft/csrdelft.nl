@@ -400,6 +400,10 @@ function form_esc(event) {
 }
 
 function form_submit(event) {
+	if ($(this).hasClass('confirm') && !confirm($(this).attr('title') + '.\n\nWeet u het zeker?')) {
+		event.preventDefault();
+		return false;
+	}
 	var form = $(this).closest('form');
 	if (form.hasClass('PreventUnchanged') && !form_ischanged(form)) {
 		event.preventDefault();
@@ -458,6 +462,10 @@ function form_reset(event, form) {
 }
 
 function form_cancel(event) {
+	if ($(this).hasClass('confirm') && !confirm($(this).attr('title') + '.\n\nWeet u het zeker?')) {
+		event.preventDefault();
+		return false;
+	}
 	var form = $(this).closest('form');
 	if (form.hasClass('InlineForm')) {
 		event.preventDefault();
