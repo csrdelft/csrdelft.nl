@@ -22,7 +22,7 @@ class DataTable extends TabsForm {
 	protected $css_classes = array();
 	protected $dataSource;
 	protected $hideColumns;
-	protected $defaultLength = 15;
+	protected $defaultLength = -1;
 
 	public function __construct($orm_class, $tableId, $titel = false, $groupByColumn = true, $groupByFixed = false) {
 		parent::__construct(null, $tableId . '_form', null, $titel);
