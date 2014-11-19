@@ -833,21 +833,9 @@ class IntField extends TextField {
 		parent::__construct($name, $value, $description, 11);
 		if ($min !== null) {
 			$this->min = (int) $min;
-			$this->onchange .= <<<JS
-if (parseInt( $(this).val() ) < {$this->min}) {
-	alert('{$this->min_alert}');
-	$(this).val({$this->min});
-}
-JS;
 		}
 		if ($max !== null) {
 			$this->max = (int) $max;
-			$this->onchange .= <<<JS
-if (parseInt( $(this).val() ) > {$this->max}) {
-	alert('{$this->max_alert}');
-	$(this).val({$this->max});
-}
-JS;
 		}
 	}
 
@@ -904,6 +892,24 @@ JS;
 HTML;
 			}
 		}
+
+		if ($this->min !== null) {
+			$this->onchange .= <<<JS
+if (parseInt( $(this).val() ) < {$this->min}) {
+	alert('{$this->min_alert}');
+	$(this).val({$this->min});
+}
+JS;
+		}
+		if ($this->max !== null) {
+			$this->onchange .= <<<JS
+if (parseInt( $(this).val() ) > {$this->max}) {
+	alert('{$this->max_alert}');
+	$(this).val({$this->max});
+}
+JS;
+		}
+
 		echo ' <input type="' . $type . '"' . $this->getInputAttribute(array('id', 'name', 'class', 'value', 'origvalue', 'disabled', 'readonly', 'maxlength', 'placeholder', 'autocomplete', 'onchange', 'onclick', 'onkeyup')) . ' /> ';
 
 		if (!$this->hidden AND ! $this->readonly) {
