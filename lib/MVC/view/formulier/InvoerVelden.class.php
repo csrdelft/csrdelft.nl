@@ -169,7 +169,7 @@ abstract class InputField implements FormElement, Validator {
 		if ($this->error !== '') {
 			$cssclass .= ' metFouten';
 		}
-		return '<div class="' . $cssclass . '" ' . $this->getInputAttribute('title') . '>';
+		return '<div id="wrapper_' . $this->getId() . '" class="' . $cssclass . '" ' . $this->getInputAttribute('title') . '>';
 	}
 
 	/**
@@ -894,25 +894,26 @@ JS;
 			$type = 'text';
 
 			if (!$this->readonly) {
-				$minus = CSR_PICS . '/famfamfam/delete.png';
+				$plus = CSR_PICS . '/famfamfam/add.png';
 				$js = <<<JS
-$('#{$this->getId()}').val(parseInt($('#{$this->getId()}').val()) - 1);
+$('#{$this->getId()}').val(parseInt($('#{$this->getId()}').val()) + 1);
 $('#{$this->getId()}').trigger('onchange');
 JS;
 				echo <<<HTML
-<span class="btn minus" onclick="{$js}"><img src="{$minus}" alt="-" class="icon" width="16" height="16" /></span>
+<span class="btn plus" onclick="{$js}"><img src="{$plus}" alt="+" class="icon" width="16" height="16" /></span>
 HTML;
 			}
 		}
 		echo ' <input type="' . $type . '"' . $this->getInputAttribute(array('id', 'name', 'class', 'value', 'origvalue', 'disabled', 'readonly', 'maxlength', 'placeholder', 'autocomplete', 'onchange', 'onclick', 'onkeyup')) . ' /> ';
+
 		if (!$this->hidden AND ! $this->readonly) {
-			$plus = CSR_PICS . '/famfamfam/add.png';
+			$minus = CSR_PICS . '/famfamfam/delete.png';
 			$js = <<<JS
-$('#{$this->getId()}').val(parseInt($('#{$this->getId()}').val()) + 1);
+$('#{$this->getId()}').val(parseInt($('#{$this->getId()}').val()) - 1);
 $('#{$this->getId()}').trigger('onchange');
 JS;
 			echo <<<HTML
-<span class="btn plus" onclick="{$js}"><img src="{$plus}" alt="+" class="icon" width="16" height="16" /></span>
+<span class="btn minus" onclick="{$js}"><img src="{$minus}" alt="-" class="icon" width="16" height="16" /></span>
 HTML;
 		}
 		echo '</div>';

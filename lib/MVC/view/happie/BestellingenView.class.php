@@ -122,15 +122,15 @@ class HappieBestelForm extends TabsForm {
 					$allergie = '';
 				}
 
-				$fields[] = new IntField('item' . $item->item_id, $aantal, $item->naam, 0, min($item->aantal_beschikbaar, $groep->aantal_beschikbaar));
+				$fields['int'] = new IntField('item' . $item->item_id, $aantal, $item->naam, 0, min($item->aantal_beschikbaar, $groep->aantal_beschikbaar));
 				$fields[] = new HtmlComment(<<<HTML
 <div class="beschrijving float-right">{$item->beschrijving}</div>
 <script type="text/javascript">
 $(document).ready(function () {
-	$("#tabs").tabs();
+	$('#toggle_{$item->item_id}').appendTo('#wrapper_{$fields['int']->getId()}');
 });
 </script>
-<div class="btn" onclick="$(this).toggle();$('#expand_{$item->item_id}').toggle();">Allergie / opmerking</div>
+<div id="toggle_{$item->item_id}" class="btn" style="margin-left:5px;" onclick="$(this).toggle();$('#expand_{$item->item_id}').toggle();">Allergie / Opm.</div>
 <div id="expand_{$item->item_id}" style="display:none;">
 HTML
 				);

@@ -61,13 +61,13 @@ class TabsForm extends Formulier {
 			$foot = $this->tabs['foot'];
 			unset($this->tabs['foot']);
 		}
-		echo '<br /><div id="tabs"><ul>';
+		echo '<br /><div id="' . $this->formId . '-tabs"><ul>';
 		foreach ($this->tabs as $tab => $fields) {
-			echo '<li><a href="#tabs-' . $tab . '">' . ucfirst($tab) . '</a></li>';
+			echo '<li><a href="#' . $this->formId . '-tab-' . $tab . '">' . ucfirst($tab) . '</a></li>';
 		}
 		echo '</ul>';
 		foreach ($this->tabs as $tab => $fields) {
-			echo '<div id="tabs-' . $tab . '">';
+			echo '<div id="' . $this->formId . '-tab-' . $tab . '">';
 			foreach ($fields as $field) {
 				$field->view();
 			}
@@ -81,6 +81,10 @@ class TabsForm extends Formulier {
 		}
 		echo $this->getScriptTag();
 		echo '</form>';
+	}
+
+	public function getJavascript() {
+		return "$('#{$this->formId}-tabs').tabs();" . parent::getJavascript();
 	}
 
 }
