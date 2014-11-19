@@ -129,11 +129,11 @@ class HappieBestelForm extends TabsForm {
 				$fields[] = $int;
 				$fields[] = new HtmlComment(<<<HTML
 <div id="toggle_{$item->item_id}" class="btn" style="margin-left:5px;" onclick="$(this).toggle();$('#expand_{$item->item_id}').toggle();">Allergie / Info</div>
-<div id="expand_{$item->item_id}" style="display:none;"><div class="float-right">{$item->beschrijving}</div>
+<div id="expand_{$item->item_id}" style="display:none;"><div>{$item->beschrijving}</div>
 HTML
 				);
 				$fields[] = new TextField('allergie' . $item->item_id, $allergie, 'Allergie/Opmerking');
-				$fields[] = new HtmlComment('<div>' . $item->allergie_info . '</div></div>');
+				$fields[] = new HtmlComment('<div style="margin-left:30%;">' . $item->allergie_info . '</div></div>');
 			}
 
 			// voeg groep toe aan tab en maak tab voor elke gang
