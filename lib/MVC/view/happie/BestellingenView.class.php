@@ -123,21 +123,27 @@ class HappieBestelForm extends TabsForm {
 					$aantal = 0;
 					$opmerking = '';
 				}
+				$beschikbaar = min($item->aantal_beschikbaar, $groep->aantal_beschikbaar);
 
 				$toggle = <<<JS
-$(this).replaceWith($('#allergie_{$item->item_id}'));$('#expand_{$item->item_id}').toggle().find('textarea:first').focus();
+$('#expand_{$item->item_id}').toggle().find('textarea:first').focus();
 JS;
-				$int = new IntField('item' . $item->item_id, $aantal, $item->naam, 0, min($item->aantal_beschikbaar, $groep->aantal_beschikbaar));
+				$int = new IntField('item' . $item->item_id, $aantal, $item->naam, 0, $beschikbaar);
+				$int->min_alert = 'Fout: minder dan 0';
+				$int->max_alert = 'Fout: te weinig beschikbaar';
 				$fields[] = $int;
-				$fields[] = new HtmlComment(<<<HTML
-<div id="toggle_{$item->item_id}" class="btn" style="margin-left:5px;" onclick="{$toggle}">Allergie / Info</div>
-<div id="expand_{$item->item_id}" style="display:none;">
-<div id="allergie_{$item->item_id}" class="inline alert alert-danger" style="margin-left:5px;padding:0 5px;"><strong>{$item->allergie_info}</strong></div>
-HTML
-				);
+
+				if ($beschikbaar > 0) {
+					$comment = '<div id="toggle_' . $item->item_id . '" class="btn" style="margin-left:5px;" onclick="' . $toggle . '">' . $item->allergie_info . '</div>';
+				} else {
+					$comment = '<div id="toggle_' . $item->item_id . '" class="inline alert alert-warning" style="margin-left:5px;padding:0 5px;">OP</div>';
+				}
+				$fields[] = new HtmlComment($comment . '<div id="expand_' . $item->item_id . '" style="display:none;">');
+
 				$opm = new TextareaField('opmerking' . $item->item_id, $opmerking);
 				$opm->placeholder = 'Allergie van klant of aanpassing op gerecht';
 				$fields[] = $opm;
+
 				$fields[] = new HtmlComment('<div style="font-style:italic;">' . $item->beschrijving . '</div></div>');
 
 				$this->js .= <<<JS
