@@ -1282,20 +1282,22 @@ class WachtwoordWijzigenField extends InputField {
 		$new = filter_input(INPUT_POST, $this->name . '_new', FILTER_SANITIZE_STRING);
 		$confirm = filter_input(INPUT_POST, $this->name . '_confirm', FILTER_SANITIZE_STRING);
 		$length = strlen(utf8_decode($new));
-		if (!$this->reset AND empty($current) AND ! empty($new)) {
+		if (!$this->reset AND ! empty($new) AND empty($current)) {
 			$this->error = 'U dient uw huidige wachtwoord ook in te voeren';
-		} elseif (!empty($new) AND empty($confirm)) {
-			$this->error = 'Vul uw nieuwe wachtwoord twee keer in';
-		} elseif (preg_match('/^[0-9]*$/', $new)) {
-			$this->error = 'Het nieuwe wachtwoord moet ook letters of leestekens bevatten';
-		} elseif (preg_match('/^[a-zA-Z]*$/', $new)) {
-			$this->error = 'Het nieuwe wachtwoord moet ook cijfers of leestekens bevatten';
-		} elseif ($length < 8 OR $length > 16) {
-			$this->error = 'Het wachtwoord moet minimaal 8 en maximaal 16 tekens lang zijn';
-		} elseif ($new != $confirm) {
-			$this->error = 'Nieuwe wachtwoorden komen niet overeen';
-		} elseif (!$this->reset AND ! checkpw($this->model, $current)) {
-			$this->error = 'Uw huidige wachtwoord is niet juist';
+		} elseif ($this->reset OR ! empty($new)) {
+			if (preg_match('/^[0-9]*$/', $new)) {
+				$this->error = 'Het nieuwe wachtwoord moet ook letters of leestekens bevatten';
+			} elseif (preg_match('/^[a-zA-Z]*$/', $new)) {
+				$this->error = 'Het nieuwe wachtwoord moet ook cijfers of leestekens bevatten';
+			} elseif ($length < 8 OR $length > 16) {
+				$this->error = 'Het wachtwoord moet minimaal 8 en maximaal 16 tekens lang zijn';
+			} elseif (empty($confirm)) {
+				$this->error = 'Vul uw nieuwe wachtwoord twee keer in';
+			} elseif ($new != $confirm) {
+				$this->error = 'Nieuwe wachtwoorden komen niet overeen';
+			} elseif (!$this->reset AND ! checkpw($this->model, $current)) {
+				$this->error = 'Uw huidige wachtwoord is niet juist';
+			}
 		}
 		return $this->error === '';
 	}
