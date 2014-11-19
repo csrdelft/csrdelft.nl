@@ -22,6 +22,7 @@ class DataTable extends TabsForm {
 	protected $css_classes = array();
 	protected $dataSource;
 	protected $hideColumns;
+	protected $defaultLength = 15;
 
 	public function __construct($orm_class, $tableId, $titel = false, $groupByColumn = true, $groupByFixed = false) {
 		parent::__construct(null, $tableId . '_form', null, $titel);
@@ -142,6 +143,7 @@ class DataTable extends TabsForm {
 				var tableId = '<?= $this->tableId ?>';
 				var table = '#' + tableId;
 				var dataTable = $(table).DataTable({
+					"iDisplayLength": <?= $this->defaultLength ?>,
 					"columns": <?= json_encode(array_values($this->columns)) ?>,
 					"order": [[1, "asc"]],
 					"createdRow": function (row, data, index) {

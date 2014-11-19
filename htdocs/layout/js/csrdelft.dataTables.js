@@ -20,7 +20,7 @@ function fnInitDataTables() {
 	// Default global settings
 	$.extend($.fn.dataTable.defaults, {
 		"dom": 'frtpli',
-		"lengthMenu": [[10, 15, 25, 50, 100, -1], [10, 15, 25, 50, 100, "Alles"]]
+		"lengthMenu": [[15, 25, 50, 100, 200, -1], [15, 25, 50, 100, 200, "Alles"]]
 	});
 	// Custom global filter
 	$.fn.dataTable.ext.search.push(fnGroupExpandCollapseDraw);
