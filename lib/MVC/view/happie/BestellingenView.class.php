@@ -133,7 +133,7 @@ class HappieBestelForm extends TabsForm {
 HTML
 				);
 				$fields[] = new TextField('allergie' . $item->item_id, $allergie, 'Allergie/Opmerking');
-				$fields[] = new HtmlComment('<div>' . $item->beschrijving . '</div></div>');
+				$fields[] = new HtmlComment('<div style="font-style:italic;">' . $item->beschrijving . '</div></div>');
 			}
 
 			// voeg groep toe aan tab en maak tab voor elke gang
