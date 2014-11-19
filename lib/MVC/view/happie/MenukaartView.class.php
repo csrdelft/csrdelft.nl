@@ -27,6 +27,8 @@ class HappieMenukaartItemsView extends DataTable {
 	public function __construct() {
 		parent::__construct(HappieMenukaartItemsModel::orm, get_class($this), 'Menukaart', 'menukaart_groep');
 		$this->dataSource = happieUrl . '/data';
+		$this->hideColumn('beschrijving');
+		$this->hideColumn('allergie_info');
 
 		$toolbar = new DataTableToolbar();
 		$fields[] = $toolbar;
@@ -56,7 +58,7 @@ class HappieMenukaartItemForm extends Formulier {
 		$fields[] = new RequiredTextField('naam', $item->naam, 'Gerechtnaam', 100, 3);
 		$fields[] = new TextareaField('beschrijving', $item->beschrijving, 'Omschrijving');
 		$fields[] = new TextField('allergie_info', $item->allergie_info, 'Allergie-informatie');
-		$fields[] = new BedragField('prijs', $item->prijs, 'Prijs', 0);
+		$fields[] = new BedragField('prijs', $item->prijs, 'Prijs', '€', 0);
 		$fields[] = new RequiredIntField('aantal_beschikbaar', $item->aantal_beschikbaar, 'Beschikbaar #', 0);
 
 		$fields[] = new FormDefaultKnoppen(happieUrl . '/overzicht');

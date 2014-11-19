@@ -36,7 +36,7 @@ class TabsForm extends Formulier {
 		return true;
 	}
 
-	public function addFields(array $fields, $tab = null) {
+	public function addFields(array $fields, $tab = 'head') {
 		$this->addTab($tab);
 		$this->tabs[$tab] = array_merge($this->tabs[$tab], $fields);
 		parent::addFields($fields);
@@ -51,29 +51,35 @@ class TabsForm extends Formulier {
 			echo '<h1 class="formTitle">' . $this->getTitel() . '</h1>';
 		}
 		echo $this->getFormTag();
+		// fields above tabs
 		if (isset($this->tabs['head'])) {
 			foreach ($this->tabs['head'] as $field) {
 				$field->view();
 			}
 			unset($this->tabs['head']);
 		}
+		// fields below tabs
 		if (isset($this->tabs['foot'])) {
 			$foot = $this->tabs['foot'];
 			unset($this->tabs['foot']);
 		}
-		echo '<br /><div id="' . $this->formId . '-tabs"><ul>';
-		foreach ($this->tabs as $tab => $fields) {
-			echo '<li><a href="#' . $this->formId . '-tab-' . $tab . '">' . ucfirst($tab) . '</a></li>';
-		}
-		echo '</ul>';
-		foreach ($this->tabs as $tab => $fields) {
-			echo '<div id="' . $this->formId . '-tab-' . $tab . '">';
-			foreach ($fields as $field) {
-				$field->view();
+		// tabs
+		if (sizeof($this->tabs) > 0) {
+			echo '<br /><div id="' . $this->formId . '-tabs"><ul>';
+			foreach ($this->tabs as $tab => $fields) {
+				echo '<li><a href="#' . $this->formId . '-tab-' . $tab . '">' . ucfirst($tab) . '</a></li>';
 			}
-			echo '</div>';
+			echo '</ul>';
+			foreach ($this->tabs as $tab => $fields) {
+				echo '<div id="' . $this->formId . '-tab-' . $tab . '">';
+				foreach ($fields as $field) {
+					$field->view();
+				}
+				echo '</div>';
+			}
+			echo '</div><br />';
 		}
-		echo '</div><br />';
+		// fields below tabs
 		if (isset($foot)) {
 			foreach ($foot as $field) {
 				$field->view();

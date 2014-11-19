@@ -21,6 +21,7 @@ class DataTable extends TabsForm {
 	private $groupByFixed;
 	protected $css_classes = array();
 	protected $dataSource;
+	protected $hideColumns;
 
 	public function __construct($orm_class, $tableId, $titel = false, $groupByColumn = true, $groupByFixed = false) {
 		parent::__construct(null, $tableId . '_form', null, $titel);
@@ -39,6 +40,8 @@ class DataTable extends TabsForm {
 			'searchable'	 => false,
 			'defaultContent' => ''
 		);
+		// make primary key column(s) invisible and not searchable
+		$this->hideColumns = $this->orm->getPrimaryKey();
 		foreach ($this->orm->getAttributes() as $attribute) {
 			$definition = $this->orm->getAttributeDefinition($attribute);
 			switch ($definition[0]) {
@@ -70,6 +73,10 @@ class DataTable extends TabsForm {
 		);
 	}
 
+	public function hideColumn($column) {
+		$this->hideColumns[] = $column;
+	}
+
 	protected function getTableHead() {
 		return null;
 	}
@@ -95,9 +102,9 @@ class DataTable extends TabsForm {
 	}
 
 	public function view() {
-		// make primary key column(s) invisible and not searchable
+		// make columns invisible and not searchable
 		$columns = array_keys($this->columns);
-		foreach ($this->orm->getPrimaryKey() as $key) {
+		foreach ($this->hideColumns as $key) {
 			$i = array_search($key, $columns);
 			$this->columnDefs['invisible']['targets'][] = $i;
 			$this->columnDefs['nosearch']['targets'][] = $i;
