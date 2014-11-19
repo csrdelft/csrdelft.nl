@@ -91,6 +91,8 @@ class HappieBestelForm extends TabsForm {
 
 	public function __construct() {
 		parent::__construct(null, get_class($this), happieUrl . '/nieuw', 'Nieuwe bestelling');
+		$this->css_classes[] = 'label-wide';
+
 		$this->setTabs(HappieGang::getTypeOptions());
 
 		// tafel invoer
@@ -131,7 +133,7 @@ class HappieBestelForm extends TabsForm {
 				if ($beschikbaar > 0 OR $aantal > 0) {
 					$comment = '<div id="toggle_' . $item->item_id . '" data-allergie="' . $item->allergie_info . '" class="btn toggle-opmerking" style="margin-left:5px;padding:0 0.5em;"><img src="' . CSR_PICS . '/famfamfam/information.png" class="icon" width="16" height="16"></div>';
 				} else {
-					$comment = '<div id="toggle_' . $item->item_id . '" class="inline alert alert-warning" style="margin-left:5px;padding:0 .5em;">OP</div>';
+					$comment = '<div id="toggle_' . $item->item_id . '" class="inline alert alert-warning" style="margin-left:5px;padding:0 .3em;">OP</div>';
 				}
 				$fields[] = new HtmlComment($comment . '<div id="expand_' . $item->item_id . '" style="display:none;"><div class="allergie-info">' . $item->allergie_info . '</div>');
 
