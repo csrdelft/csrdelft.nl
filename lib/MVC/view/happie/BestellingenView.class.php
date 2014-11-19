@@ -143,7 +143,7 @@ $('#toggle_{$item->item_id}').appendTo('#wrapper_{$int->getId()}').click(functio
 });
 JS;
 				} else {
-					$fields[] = new HtmlComment('<label>' . $item->naam . '</label><div id="toggle_' . $item->item_id . '" class="inline alert alert-warning" style="margin-left:-50px;padding:0 .5em;">OP</div>');
+					$fields[] = new HtmlComment('<div><label>' . $item->naam . '</label><div id="toggle_' . $item->item_id . '" class="inline alert alert-warning" style="margin-left:-50px;padding:0 .5em;">OP</div></div>');
 				}
 			}
 
