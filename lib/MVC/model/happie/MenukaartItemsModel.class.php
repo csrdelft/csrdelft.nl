@@ -44,17 +44,22 @@ class HappieMenukaartItemsModel extends CachedPersistenceModel {
 
 	public function getMenukaart() {
 		// prefetch groepen en items
-		$groepen = HappieMenukaartGroepenModel::instance()->prefetch();
-		$items = group_by('menukaart_groep', HappieMenukaartItemsModel::instance()->prefetch());
+		$menukaart = group_by('gang', HappieMenukaartGroepenModel::instance()->prefetch());
+		$groepen = group_by('menukaart_groep', HappieMenukaartItemsModel::instance()->prefetch());
 
-		foreach ($groepen as $groep) {
-			// set prefetched items
-			if (!isset($items[$groep->groep_id])) {
+		foreach (HappieGang::getTypeOptions() as $gang) {
+			if (!isset($menukaart[$gang])) {
 				continue;
 			}
-			$groep->setItems($items[$groep->groep_id]);
+			foreach ($menukaart[$gang] as $groep) {
+				// set prefetched items
+				if (!isset($groepen[$groep->groep_id])) {
+					continue;
+				}
+				$groep->setItems($groepen[$groep->groep_id]);
+			}
 		}
-		return $groepen;
+		return $menukaart;
 	}
 
 }

@@ -65,6 +65,7 @@ class Dropzone extends Formulier {
 		$existing = str_replace('uploaden', 'bestaande', $this->action);
 		$accept = implode(',', $this->dropzone->getFilter());
 		return parent::getJavascript() . <<<JS
+
 thisDropzone = new Dropzone('#{$this->formId}', {
 	paramName: "{$this->dropzone->getName()}",
 	url: "{$this->action}",

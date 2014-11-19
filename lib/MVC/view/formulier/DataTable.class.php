@@ -22,6 +22,7 @@ class DataTable extends TabsForm {
 	protected $css_classes = array();
 	protected $dataSource;
 	protected $defaultLength = 10;
+	protected $toolbar;
 
 	public function __construct($orm_class, $tableId, $titel = false, $groupByColumn = true, $groupByFixed = false) {
 		parent::__construct(null, $tableId . '_form', null, $titel);
@@ -60,6 +61,10 @@ class DataTable extends TabsForm {
 		foreach ($this->orm->getPrimaryKey() as $attribute) {
 			$this->hideColumn($attribute);
 		}
+
+		$this->toolbar = new DataTableToolbar();
+		$fields[] = $this->toolbar;
+		$this->addFields($fields);
 	}
 
 	protected function addColumn($newName, $type = 'html', $before = null) {

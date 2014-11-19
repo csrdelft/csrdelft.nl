@@ -12,38 +12,53 @@ require_once 'MVC/model/entity/happie/HappieGang.enum.php';
  */
 class HappieBestellingWijzigenForm extends Formulier {
 
-	public function __construct(Bestelling $bestelling) {
+	public function __construct(HappieBestelling $bestelling) {
 		parent::__construct($bestelling, get_class($this), happieUrl . '/wijzigen/' . $bestelling->bestelling_id, 'Bestelling wijzigen');
 
-		$fields['d'] = new DatumField('datum', $bestelling->datum, 'Datum');
+		$fields['d'] = new TextField('datum', $bestelling->datum, 'Datum');
 		$fields['d']->readonly = true;
-		$fields['l'] = new DatumField('laatst_gewijzigd', $bestelling->laatst_gewijzigd, 'Laatst gewijzigd');
+
+		$fields['l'] = new TextField('laatst_gewijzigd', $bestelling->laatst_gewijzigd, 'Laatst gewijzigd');
 		$fields['l']->readonly = true;
-		$fields['h'] = new TextareaField('wijzig_historie', $bestelling->wijzig_historie, 'Log');
-		$fields['h']->readonly = true;
 
 		$fields['t'] = new SelectField('tafel', null, 'Tafel', range(0, 99)); // array index starts from 0
 
+		$menukaart = HappieMenukaartItemsModel::instance()->getMenukaart();
+		$options = array();
 
-		$groepen = HappieMenukaartItemsModel::instance()->getMenukaart();
-		$menukaart = array();
-
-		// maak invoerveld voor elk item
-		foreach ($groepen as $groep) {
-
-			foreach ($groep->getItems() as $item) {
-				
+		// maak invoerveld voor elk item per groep
+		foreach ($menukaart as $gang) {
+			foreach ($gang as $groep) {
+				foreach ($groep->getItems() as $item) {
+					$options[$groep->naam][$item->item_id] = $item->naam;
+				}
 			}
 		}
+		$fields['m'] = new SelectField('menukaart_item', $bestelling->menukaart_item, 'Menukaart item', $options, true);
 
-		$fields['m'] = new SelectField('menukaart_item', $bestelling->menukaart_item, 'Menukaart item', $menukaart, true);
+		$fields[] = new IntField('aantal', $bestelling->aantal, 'Aantal');
+		$fields[] = new IntField('aantal_geserveerd', $bestelling->aantal_geserveerd, 'Aantal geserveerd');
 
-		$bestelling->aantal = $aantal;
-		$bestelling->aantal_geserveerd = 0;
-		$bestelling->serveer_status = HappieServeerStatus::Nieuw;
-		$bestelling->financien_status = HappieFinancienStatus::Nieuw;
-		$bestelling->opmerking = $opmerking;
-		$bestelling->bestelling_id = $this->create($bestelling);
+		$options = array();
+		foreach (HappieServeerStatus::getTypeOptions() as $option) {
+			$options[$option] = $option;
+		}
+		$fields[] = new SelectField('serveer_status', $bestelling->serveer_status, 'Serveer status', $options);
+
+		$options = array();
+		foreach (HappieFinancienStatus::getTypeOptions() as $option) {
+			$options[$option] = $option;
+		}
+		$fields[] = new SelectField('financien_status', $bestelling->financien_status, 'Financien status', $options);
+
+		$fields[] = new TextareaField('opmerking', $bestelling->opmerking, 'Allergie/Opmerking');
+
+		$fields[] = new FormDefaultKnoppen();
+
+		$fields['h'] = new TextareaField('wijzig_historie', $bestelling->wijzig_historie, 'Log');
+		$fields['h']->readonly = true;
+
+		$this->addFields($fields);
 	}
 
 }
@@ -54,7 +69,6 @@ class HappieBestelForm extends TabsForm {
 
 	public function __construct() {
 		parent::__construct(null, get_class($this), happieUrl . '/nieuw', 'Nieuwe bestelling');
-		$this->setTabs(HappieGang::getTypeOptions());
 
 		// tafel invoer
 		$table = new SelectField('tafel', null, 'Tafel', range(0, 99)); // array index starts from 0
@@ -65,57 +79,59 @@ class HappieBestelForm extends TabsForm {
 		$fields['k']->css_classes[] = 'float-right';
 		$this->addFields($fields, 'head');
 
-		$groepen = HappieMenukaartItemsModel::instance()->getMenukaart();
+
+		$menukaart = HappieMenukaartItemsModel::instance()->getMenukaart();
+		$this->setTabs(array_keys($menukaart));
 
 		// maak invoerveld voor elk item
-		foreach ($groepen as $groep) {
+		foreach ($menukaart as $gang) {
+			foreach ($gang as $groep) {
 
-			$fields = array();
+				// groepeer items
+				$fields = array();
+				$fields[] = new Subkopje($groep->naam);
 
-			// groepeer items
-			$fields[] = new Subkopje($groep->naam);
+				foreach ($groep->getItems() as $item) {
 
-			foreach ($groep->getItems() as $item) {
+					// preload bestelling aantal
+					if (isset($bestellingen[$item->item_id])) {
+						$aantal = $bestellingen[$item->item_id]->aantal;
+						$opmerking = $bestellingen[$item->item_id]->opmerking;
+					} else {
+						$aantal = 0;
+						$opmerking = '';
+					}
+					$beschikbaar = min($item->aantal_beschikbaar, $groep->aantal_beschikbaar);
 
-				// preload bestelling aantal
-				if (isset($bestellingen[$item->item_id])) {
-					$aantal = $bestellingen[$item->item_id]->aantal;
-					$opmerking = $bestellingen[$item->item_id]->opmerking;
-				} else {
-					$aantal = 0;
-					$opmerking = '';
-				}
-				$beschikbaar = min($item->aantal_beschikbaar, $groep->aantal_beschikbaar);
+					$int = new IntField('item' . $item->item_id, $aantal, $item->naam, 0, $beschikbaar);
+					$int->min_alert = 'Minder dan 0';
+					$int->max_alert = 'Te weinig beschikbaar';
+					$fields[] = $int;
 
+					if ($beschikbaar > 0 OR $aantal > 0) {
+						$comment = '<div id="toggle_' . $item->item_id . '" data-allergie="' . $item->allergie_info . '" class="btn toggle-opmerking" style="margin-left:5px;padding:0 0.5em;"><img src="' . CSR_PICS . '/famfamfam/information.png" class="icon" width="16" height="16"></div>';
+					} else {
+						$comment = '<div id="toggle_' . $item->item_id . '" class="inline alert alert-warning" style="margin-left:5px;padding:0 .3em;">OP</div>';
+					}
+					$fields[] = new HtmlComment($comment . '<div id="expand_' . $item->item_id . '" style="display:none;"><div class="allergie-info">' . $item->allergie_info . '</div>');
 
-				$int = new IntField('item' . $item->item_id, $aantal, $item->naam, 0, $beschikbaar);
-				$int->min_alert = 'Minder dan 0';
-				$int->max_alert = 'Te weinig beschikbaar';
-				$fields[] = $int;
+					$opm = new TextareaField('opmerking' . $item->item_id, $opmerking);
+					$opm->placeholder = 'Allergie van klant / opmerking';
+					$fields[] = $opm;
 
-				if ($beschikbaar > 0 OR $aantal > 0) {
-					$comment = '<div id="toggle_' . $item->item_id . '" data-allergie="' . $item->allergie_info . '" class="btn toggle-opmerking" style="margin-left:5px;padding:0 0.5em;"><img src="' . CSR_PICS . '/famfamfam/information.png" class="icon" width="16" height="16"></div>';
-				} else {
-					$comment = '<div id="toggle_' . $item->item_id . '" class="inline alert alert-warning" style="margin-left:5px;padding:0 .3em;">OP</div>';
-				}
-				$fields[] = new HtmlComment($comment . '<div id="expand_' . $item->item_id . '" style="display:none;"><div class="allergie-info">' . $item->allergie_info . '</div>');
+					$fields[] = new HtmlComment('</div>');
 
-				$opm = new TextareaField('opmerking' . $item->item_id, $opmerking);
-				$opm->placeholder = 'Allergie van klant / opmerking';
-				$fields[] = $opm;
-
-				$fields[] = new HtmlComment('</div>');
-
-				$this->js .= <<<JS
+					$this->js .= <<<JS
 $('#{$opm->getId()}').height('30px');
 $('#toggle_{$item->item_id}').appendTo('#wrapper_{$int->getId()}').click(function() {
 	$('#expand_{$item->item_id}').toggle().find('textarea:first').focus();
 });
 JS;
-			}
+				}
 
-			// voeg groep toe aan tab en maak tab voor elke gang
-			$this->addFields($fields, $groep->gang);
+				// voeg groep toe aan tab en maak tab voor elke gang
+				$this->addFields($fields, $groep->gang);
+			}
 		}
 
 		$fields = array();

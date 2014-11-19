@@ -37,7 +37,7 @@ class SelectField extends InputField {
 	public function __construct($name, $value, $description, array $options, $groups = false, $size = 1, $multiple = false) {
 		parent::__construct($name, $value, $description);
 		$this->options = $options;
-		$this->groups = $groups;
+		$this->groups = (bool) $groups;
 		$this->size = (int) $size;
 		$this->multiple = $multiple;
 	}
@@ -80,7 +80,6 @@ class SelectField extends InputField {
 		echo $this->getDiv();
 		echo $this->getLabel();
 		echo $this->getErrorDiv();
-
 		echo '<select name="' . $this->name;
 		if ($this->multiple) {
 			echo '[]" multiple';
@@ -91,7 +90,6 @@ class SelectField extends InputField {
 			echo ' size="' . $this->size . '"';
 		}
 		echo $this->getInputAttribute(array('id', 'origvalue', 'class', 'disabled', 'readonly', 'onchange', 'onclick', 'onkeyup')) . '>';
-
 		if ($this->groups) {
 			foreach ($this->options as $group => $options) {
 				echo '<optgroup label="' . htmlspecialchars($group) . '">';
@@ -102,7 +100,6 @@ class SelectField extends InputField {
 			$this->viewOptions($this->options);
 		}
 		echo '</select>';
-
 		echo '</div>';
 	}
 

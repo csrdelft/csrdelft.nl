@@ -10,8 +10,6 @@
  */
 class HappieBestellingenView extends DataTable {
 
-	protected $toolbar;
-
 	public function __construct($titel = 'Alle bestellingen', $groupByColumn = 'datum') {
 		parent::__construct(HappieBestellingenModel::orm, get_class($this), $titel, $groupByColumn, true);
 		$this->dataSource = happieUrl . '/data/';
@@ -26,9 +24,12 @@ class HappieBestellingenView extends DataTable {
 		$this->searchColumn('menu_groep');
 		$this->searchColumn('menukaart_item');
 
-		$this->toolbar = new DataTableToolbar();
-		$fields[] = $this->toolbar;
-		$this->addFields($fields);
+		$nieuw = new DataTableToolbarKnop('>= 0', happieUrl . '/nieuw', '', 'Nieuw', 'Nieuw menukaart-item', '/famfamfam/add.png');
+		$this->toolbar->addKnop($nieuw);
+
+		$wijzig = new DataTableToolbarKnop('== 1', happieUrl . '/wijzig/', '', 'Wijzig', 'Wijzig menukaart-item', '/famfamfam/pencil.png');
+		$wijzig->onclick = "this.href+=fnGetSelectedObjectId(tableId);";
+		$this->toolbar->addKnop($wijzig);
 
 		$count = new DataTableToolbarKnop('>= 0', null, 'rowcount', 'Count', 'Count selected rows', null);
 		$count->onclick = "alert(fnGetSelectionSize(tableId) + ' row(s) selected');";
