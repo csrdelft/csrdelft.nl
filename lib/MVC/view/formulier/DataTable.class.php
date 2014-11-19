@@ -44,8 +44,8 @@ class DataTable extends TabsForm {
 		foreach ($this->orm->getAttributes() as $attribute) {
 			$definition = $this->orm->getAttributeDefinition($attribute);
 			switch ($definition[0]) {
-				//case T::DateTime: $type = 'date';
-				//	break;
+				case T::DateTime: $type = 'date';
+					break;
 				case T::Integer: $type = 'num';
 					break;
 				case T::Float: $type = 'num-fmt';
@@ -132,14 +132,16 @@ class DataTable extends TabsForm {
 				$idx = array_search($this->groupByColumn, $columns);
 
 				// order fixed for group by column
-				$conditionalProps .= ', "order": [[ ' . $idx . ', "asc"]]'; // FIXME: orderFixed faalt
+				$conditionalProps .= ', "orderFixed": [[ ' . $idx . ', "asc"]]'; // FIXME: orderFixed faalt
 
 				$this->groupByColumn = ' groupbycolumn="' . $idx . '"';
 			}
-		} else {
-			// default order by first visible column
-			foreach ($this->columns as $column => $def) {
-				if (!isset($def['visible']) OR $def['visible'] === true) {
+		}
+
+		// default order by first visible column
+		foreach ($this->columns as $column => $def) {
+			if (!isset($def['visible']) OR $def['visible'] === true) {
+				if (isset($def['type']) AND $def['type'] === 'date') {
 					$conditionalProps .= ', "order": [[ ' . array_search($column, $columns) . ', "asc"]]';
 					break;
 				}
