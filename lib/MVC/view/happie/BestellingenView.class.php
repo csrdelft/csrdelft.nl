@@ -189,8 +189,8 @@ JS;
 				$values[$item_id]['tafel'] = $tafel;
 			}
 			// opmerking veld
-			elseif ($field instanceof TextField) {
-				$item_id = (int) substr($field->getName(), 8);
+			elseif ($field instanceof TextareaField) {
+				$item_id = (int) substr($field->getName(), 9);
 				$field->empty_null = true;
 				$values[$item_id]['opmerking'] = $field->getValue();
 			}
