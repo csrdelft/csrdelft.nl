@@ -19,6 +19,10 @@ class HappieBestellingenView extends DataTable {
 		$this->dataSource = happieUrl . '/data/';
 		$this->defaultLength = 100;
 
+		$this->invisible[] = 'wijzig_historie';
+
+		$this->nosearch[] = 'aantal';
+
 		$this->addColumnBefore('menukaart_item', 'menu_groep', 'html');
 
 		$this->toolbar = new DataTableToolbar();
@@ -37,6 +41,9 @@ class HappieKeukenView extends HappieBestellingenView {
 	public function __construct() {
 		parent::__construct('Keuken actueel', 'tafel');
 		$this->dataSource .= date('Y/m/d');
+
+		$this->invisible[] = 'datum';
+		$this->invisible[] = 'financien_status';
 	}
 
 }
@@ -46,6 +53,9 @@ class HappieServeerView extends HappieBestellingenView {
 	public function __construct() {
 		parent::__construct('Serveer actueel', 'tafel');
 		$this->dataSource .= date('Y/m/d');
+
+		$this->invisible[] = 'datum';
+		$this->invisible[] = 'financien_status';
 	}
 
 }
@@ -55,6 +65,8 @@ class HappieBarView extends HappieBestellingenView {
 	public function __construct() {
 		parent::__construct('Bar actueel', 'tafel');
 		$this->dataSource .= date('Y/m/d');
+
+		$this->invisible[] = 'datum';
 	}
 
 }
@@ -64,6 +76,8 @@ class HappieKassaView extends HappieBestellingenView {
 	public function __construct() {
 		parent::__construct('Kassa actueel', 'tafel');
 		$this->dataSource .= date('Y/m/d');
+
+		$this->invisible[] = 'datum';
 	}
 
 }

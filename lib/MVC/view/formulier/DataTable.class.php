@@ -21,11 +21,13 @@ class DataTable extends TabsForm {
 	private $groupByFixed;
 	protected $css_classes = array();
 	protected $dataSource;
-	protected $hideColumns;
+	protected $invisible;
+	protected $nosearch;
 	protected $defaultLength = 10;
 
 	public function __construct($orm_class, $tableId, $titel = false, $groupByColumn = true, $groupByFixed = false) {
 		parent::__construct(null, $tableId . '_form', null, $titel);
+
 		$this->orm = new $orm_class();
 		$this->tableId = $tableId;
 		$this->css_classes[] = 'init display';
@@ -41,8 +43,11 @@ class DataTable extends TabsForm {
 			'searchable'	 => false,
 			'defaultContent' => ''
 		);
+
 		// make primary key column(s) invisible and not searchable
-		$this->hideColumns = $this->orm->getPrimaryKey();
+		$this->invisible = $this->orm->getPrimaryKey();
+		$this->nosearch = array();
+
 		foreach ($this->orm->getAttributes() as $attribute) {
 			$definition = $this->orm->getAttributeDefinition($attribute);
 			switch ($definition[0]) {
@@ -59,6 +64,7 @@ class DataTable extends TabsForm {
 			}
 			$this->addColumn($attribute, $type);
 		}
+
 		$this->columnDefs['invisible'] = array(
 			'visible'	 => false,
 			'targets'	 => array()
@@ -117,9 +123,14 @@ class DataTable extends TabsForm {
 		// make columns invisible and not searchable
 		$columns = array_keys($this->columns);
 		unset($columns[0]); // ignore details column
-		foreach ($this->hideColumns as $key) {
+
+		foreach ($this->invisible as $key) {
 			$i = array_search($key, $columns);
 			$this->columnDefs['invisible']['targets'][] = $i;
+			$this->columnDefs['nosearch']['targets'][] = $i;
+		}
+		foreach ($this->nosearch as $key) {
+			$i = array_search($key, $columns);
 			$this->columnDefs['nosearch']['targets'][] = $i;
 		}
 
@@ -147,7 +158,7 @@ class DataTable extends TabsForm {
 					}
 
 					// order fixed for group by column
-					$conditionalProps .= ', "order": [[ ' . $this->groupByColumn . ', "asc"]]'; // FIXME: orderFixed faalt
+					$conditionalProps .= ', "orderFixed": [[ ' . $this->groupByColumn . ', "asc"]]';
 
 					$this->groupByColumn = ' groupbycolumn="' . $this->groupByColumn . '"';
 				}
