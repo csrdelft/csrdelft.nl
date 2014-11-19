@@ -95,7 +95,7 @@ class HappieMenukaartGroepenView extends DataTable {
 
 		$toolbar = new DataTableToolbar();
 		$fields[] = $toolbar;
-		$this->addFields($fields, 'Acties');
+		$this->addFields($fields);
 
 		$nieuw = new DataTableToolbarKnop('>= 0', happieUrl . '/nieuw', '', 'Nieuw', 'Nieuw menukaart-groep', '/famfamfam/add.png');
 		$toolbar->addKnop($nieuw);
