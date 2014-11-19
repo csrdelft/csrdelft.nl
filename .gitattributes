@@ -3609,6 +3609,8 @@ lib/MVC/view/groepen/WerkgroepenView.class.php -text
 lib/MVC/view/groepen/WoonoordenView.class.php -text
 lib/MVC/view/happie/BestellingenView.class.php -text
 lib/MVC/view/happie/MenukaartView.class.php -text
+lib/MVC/view/happie/forms/BestelForm.class.php -text
+lib/MVC/view/happie/forms/MenukaartForm.class.php -text
 lib/MVC/view/maalcie/BeheerFunctiesView.class.php -text
 lib/MijnSqli.class.php -text
 lib/Soccie[!!-~]ERD.png -text
