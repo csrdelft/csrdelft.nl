@@ -13,7 +13,15 @@ require_once 'MVC/model/entity/happie/HappieGang.enum.php';
 class HappieBestellingenJson extends DataTableResponse {
 
 	public function getJson($data) {
-		$data->menu_item = $data->getItem()->naam;
+		$item = $data->getItem();
+		if ($item) {
+			$data->menukaart_item = $item->naam;
+		} else {
+			$data->menukaart_item = 'Geen item';
+		}
+		$data->tafel = 'Tafel ' . $data->tafel;
+		$data->datum = reldate($data->datum);
+		$data->laatst_gewijzigd = reldate($data->laatst_gewijzigd);
 		return parent::getJson($data);
 	}
 
@@ -30,11 +38,11 @@ class HappieBestellingenView extends DataTable {
 		$this->addFields($fields);
 
 		$print = new DataTableToolbarKnop('== 1', null, 'debugprint', 'Print', 'Debugprint row', null);
-		$print->onclick = "console.log($('#" . $this->tableId . " tbody tr.selected'));";
+		$print->onclick = "console.log(fnGetSelectedObjectId(tableId));";
 		$toolbar->addKnop($print);
 
 		$count = new DataTableToolbarKnop('>= 0', null, 'rowcount', 'Count', 'Count selected rows', null);
-		$count->onclick = "alert($('#" . $this->tableId . " tbody tr.selected').length + ' row(s) selected');";
+		$count->onclick = "alert(fnGetSelectionSize(tableId) + ' row(s) selected');";
 		$toolbar->addKnop($count);
 	}
 
@@ -58,6 +66,7 @@ class HappieServeerView extends DataTable {
 	public function __construct() {
 		parent::__construct(HappieBestellingenModel::orm, get_class($this), 'Actuele bestellingen', 'tafel');
 		$this->dataSource = happieUrl . '/data/' . date('Y/m/d');
+		$this->hideColumns[] = 'datum';
 
 		$toolbar = new DataTableToolbar();
 		$fields[] = $toolbar;

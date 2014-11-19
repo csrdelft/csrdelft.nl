@@ -46,8 +46,8 @@ class DataTable extends TabsForm {
 		foreach ($this->orm->getAttributes() as $attribute) {
 			$definition = $this->orm->getAttributeDefinition($attribute);
 			switch ($definition[0]) {
-				case T::DateTime: $type = 'date';
-					break;
+				//case T::DateTime: $type = 'date';
+				//	break;
 				case T::Integer: $type = 'num';
 					break;
 				case T::Float: $type = 'num-fmt';
@@ -74,10 +74,6 @@ class DataTable extends TabsForm {
 		);
 	}
 
-	public function hideColumn($column) {
-		$this->hideColumns[] = $column;
-	}
-
 	protected function getTableHead() {
 		return null;
 	}
@@ -90,19 +86,9 @@ class DataTable extends TabsForm {
 		return null;
 	}
 
-	protected function getConditionalProps() {
-		$json = '';
-		if ($this->dataSource) {
-			$json .= ', "ajax": "' . $this->dataSource . '"';
-		}
-		if ($this->groupByColumn) {
-			$json .= ', "columnDefs": ' . json_encode(array_values($this->columnDefs));
-			$json .= ', "orderFixed": [[' . $this->groupByColumn . ', "asc"]]';
-		}
-		return $json;
-	}
-
 	public function view() {
+		$conditionalProps = '';
+
 		// make columns invisible and not searchable
 		$columns = array_keys($this->columns);
 		foreach ($this->hideColumns as $key) {
@@ -110,27 +96,55 @@ class DataTable extends TabsForm {
 			$this->columnDefs['invisible']['targets'][] = $i;
 			$this->columnDefs['nosearch']['targets'][] = $i;
 		}
+
 		// group by column
-		if ($this->groupByColumn) {
+		if ($this->groupByColumn !== false) {
 			$this->css_classes[] = 'groupByColumn';
 
-			// get column index
-			if (is_string($this->groupByColumn)) {
-				$this->groupByColumn = array_search($this->groupByColumn, $columns);
-			}
+			// not predetermined, user may group by
+			if ($this->groupByColumn !== null) {
 
-			if (is_int($this->groupByColumn)) {
-				// make group by column invisible
-				$this->columnDefs['invisible']['targets'][] = $this->groupByColumn;
-			} else {
-				$this->groupByColumn = null;
-			}
+				// get column index
+				if (is_string($this->groupByColumn)) {
+					$this->groupByColumn = array_search($this->groupByColumn, $columns);
+				}
 
-			// immutable group by column
-			if ($this->groupByFixed) {
-				$this->css_classes[] = 'groupByFixed';
+				// existing column?
+				if (is_int($this->groupByColumn)) {
+
+					// make group by column invisible
+					$this->columnDefs['invisible']['targets'][] = $this->groupByColumn;
+
+					// immutable group by column
+					if ($this->groupByFixed) {
+						$this->css_classes[] = 'groupByFixed';
+					}
+
+					// order fixed for group by column
+					$conditionalProps .= ', "orderFixed": [[' . $this->groupByColumn . ', "asc"]]';
+				}
 			}
 		}
+
+		// default order
+		$conditionalProps .= ', "order": [[1, "asc"]]';
+
+		// set column definitions
+		$conditionalProps .= ', "columnDefs": ' . json_encode(array_values($this->columnDefs));
+
+		// set ajax data source
+		$cols = json_encode(array_keys($this->columns)); // test
+		if ($this->dataSource) {
+			$conditionalProps .= <<<JSON
+, "ajax": {
+	"url": "{$this->dataSource}",
+	"type": "POST",
+	"data": {$cols}
+}
+JSON;
+		}
+
+		var_dump($conditionalProps); // DEBUG
 		?>
 		<div id="<?= $this->tableId ?>_toolbar" class="dataTables_toolbar"><?= parent::view() ?></div>
 		<table id="<?= $this->tableId ?>" class="<?= implode(' ', $this->css_classes) ?>" groupByColumn="<?= $this->groupByColumn ?>">
@@ -145,7 +159,6 @@ class DataTable extends TabsForm {
 				var dataTable = $(table).DataTable({
 					"iDisplayLength": <?= $this->defaultLength ?>,
 					"columns": <?= json_encode(array_values($this->columns)) ?>,
-					"order": [[1, "asc"]],
 					"createdRow": function (row, data, index) {
 						$(row).attr('id', tableId + '_' + index); // data array index
 						var primaryKey = ["<?= implode('", "', $this->orm->getPrimaryKey()) ?>"];
@@ -159,7 +172,7 @@ class DataTable extends TabsForm {
 						} else {
 							$(row).children('td.details-control:first').removeClass('details-control');
 						}
-					}<?= $this->getConditionalProps() ?>
+					}<?= $conditionalProps ?>
 				});
 				// Multiple selection of rows
 				$(table + ' tbody').on('click', 'tr', function (event) {
@@ -198,8 +211,8 @@ class DataTable extends TabsForm {
 	private function getToolbarUpdateFunction() {
 		$js = <<<JS
 function () {
-	var aantal = fnGetSelectionSize(tableId);
-	console.log(fnGetSelection(tableId));
+	var selectie = fnGetSelection(tableId);
+	var aantal = selectie.length;
 JS;
 		foreach ($this->getFields() as $field) {
 			if ($field instanceof DataTableToolbar) {
