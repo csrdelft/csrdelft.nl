@@ -91,7 +91,7 @@ class DataTable extends TabsForm {
 
 		// make columns invisible and not searchable
 		$columns = array_keys($this->columns);
-		// unset($columns[0]); // ignore details column // FIXME: orderFixed faalt
+		unset($columns[0]); // ignore details column
 		foreach ($this->hideColumns as $key) {
 			$i = array_search($key, $columns);
 			$this->columnDefs['invisible']['targets'][] = $i;
@@ -122,17 +122,16 @@ class DataTable extends TabsForm {
 					}
 
 					// order fixed for group by column
-					$conditionalProps .= ', "orderFixed": [[ ' . $this->groupByColumn . ', "asc"]]';
+					$conditionalProps .= ', "order": [[ ' . $this->groupByColumn . ', "asc"]]'; // FIXME: orderFixed faalt
 
 					$this->groupByColumn = ' groupbycolumn="' . $this->groupByColumn . '"';
 				}
 			}
 		}
-
 		// default order by first visible column
-		$visible = array_diff(array_keys($columns), $this->columnDefs['invisible']['targets']);
-		$conditionalProps .= ', "order": [[ ' . reset($visible) . ', "asc"]]';
-
+		//$visible = array_diff(array_keys($columns), $this->columnDefs['invisible']['targets']);
+		//$conditionalProps .= ', "order": [[ ' . reset($visible) . ', "asc"]]';
+		// FIXME: orderFixed faalt
 		// set column definitions
 		$conditionalProps .= ', "columnDefs": ' . json_encode(array_values($this->columnDefs));
 
