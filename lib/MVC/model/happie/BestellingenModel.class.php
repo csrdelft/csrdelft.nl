@@ -1,6 +1,6 @@
 <?php
 
-require_once 'MVC/model/happie/MenukaartItemsModel.class.php';
+require_once 'MVC/model/happie/StatistiekModel.class.php';
 
 /**
  * BestellingenModel.class.php

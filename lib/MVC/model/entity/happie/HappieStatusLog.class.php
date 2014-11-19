@@ -1,5 +1,7 @@
 <?php
 
+require_once 'MVC/model/entity/ChangeLogEntry.class.php';
+
 /**
  * HappieStatusLog.class.php
  * 

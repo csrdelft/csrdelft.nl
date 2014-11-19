@@ -1,5 +1,7 @@
 <?php
 
+require_once 'MVC/model/ChangeLogModel.class.php';
+
 /**
  * StatistiekModel.class.php
  * 
@@ -13,5 +15,9 @@ class HappieStatistiekModel extends ChangeLogModel {
 	const orm = 'HappieStatusLog';
 
 	protected static $instance;
+
+	protected function __construct() {
+		parent::__construct('happie/');
+	}
 
 }
