@@ -14,18 +14,12 @@ class HappieMenukaartGroepenController extends AclController {
 
 	public function __construct($query) {
 		parent::__construct($query, HappieMenukaartGroepenModel::instance());
-		if (!$this->isPosted()) {
-			$this->acl = array(
-				'overzicht'	 => 'groep:2014',
-				'data'		 => 'groep:2014',
-				'nieuw'		 => 'groep:2014'
-			);
-		} else {
-			$this->acl = array(
-				'nieuw'	 => 'groep:2014',
-				'wijzig' => 'groep:2014'
-			);
-		}
+		$this->acl = array(
+			'overzicht'	 => 'groep:2014',
+			'data'		 => 'groep:2014',
+			'nieuw'		 => 'groep:2014',
+			'wijzig'	 => 'groep:2014'
+		);
 	}
 
 	public function performAction(array $args = array()) {

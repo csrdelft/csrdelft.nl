@@ -35,7 +35,7 @@ class HappieMenukaartItemsView extends DataTable {
 		$nieuw = new DataTableToolbarKnop('>= 0', happieUrl . '/nieuw', '', 'Nieuw', 'Nieuw menukaart-item', '/famfamfam/add.png');
 		$toolbar->addKnop($nieuw);
 
-		$wijzig = new DataTableToolbarKnop('== 1', happieUrl . '/wijzig/', 'submit', 'Wijzig', 'Wijzig menukaart-item', '/famfamfam/pencil.png');
+		$wijzig = new DataTableToolbarKnop('== 1', happieUrl . '/wijzig/', '', 'Wijzig', 'Wijzig menukaart-item', '/famfamfam/pencil.png');
 		$wijzig->onclick = "this.href+=fnGetSelectedObjectId(tableId);";
 		$toolbar->addKnop($wijzig);
 	}
@@ -96,7 +96,7 @@ class HappieMenukaartGroepenView extends DataTable {
 		$nieuw = new DataTableToolbarKnop('>= 0', happieUrl . '/nieuw', '', 'Nieuw', 'Nieuw menukaart-groep', '/famfamfam/add.png');
 		$toolbar->addKnop($nieuw);
 
-		$wijzig = new DataTableToolbarKnop('== 1', happieUrl . '/wijzig/', 'submit', 'Wijzig', 'Wijzig menukaart-groep', '/famfamfam/pencil.png');
+		$wijzig = new DataTableToolbarKnop('== 1', happieUrl . '/wijzig/', '', 'Wijzig', 'Wijzig menukaart-groep', '/famfamfam/pencil.png');
 		$wijzig->onclick = "this.href+=fnGetSelectedObjectId(tableId);";
 		$toolbar->addKnop($wijzig);
 	}
