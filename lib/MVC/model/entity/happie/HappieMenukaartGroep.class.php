@@ -33,13 +33,19 @@ class HappieMenukaartGroep extends PersistentEntity {
 	 */
 	protected $items;
 	/**
+	 * Beschikbaar voor x aantal bestellingen
+	 * @var int
+	 */
+	public $aantal_beschikbaar;
+	/**
 	 * Database table columns
 	 * @var array
 	 */
 	protected static $persistent_attributes = array(
-		'groep_id'	 => array(T::Integer, false, 'auto_increment'),
-		'naam'		 => array(T::String),
-		'gang'		 => array(T::Enumeration, false, 'HappieGang')
+		'groep_id'			 => array(T::Integer, false, 'auto_increment'),
+		'naam'				 => array(T::String),
+		'gang'				 => array(T::Enumeration, false, 'HappieGang'),
+		'aantal_beschikbaar' => array(T::Integer)
 	);
 	/**
 	 * Database primary key

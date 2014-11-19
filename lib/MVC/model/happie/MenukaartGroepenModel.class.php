@@ -26,6 +26,7 @@ class HappieMenukaartGroepenModel extends CachedPersistenceModel {
 		$groep = new HappieMenuKaartGroep();
 		$groep->titel = '';
 		$groep->gang = null;
+		$groep->aantal_beschikbaar = 0;
 		return $groep;
 	}
 

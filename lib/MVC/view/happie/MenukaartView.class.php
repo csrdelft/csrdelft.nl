@@ -53,13 +53,11 @@ class HappieMenukaartItemForm extends Formulier {
 			$opties[$groep->groep_id] = $groep->naam;
 		}
 		$fields[] = new SelectField('menukaart_groep', $item->menukaart_groep, 'Menugroep', $opties);
-		$fields[] = new RequiredTextField('naam', $item->naam, 'Gerechtnaam');
+		$fields[] = new RequiredTextField('naam', $item->naam, 'Gerechtnaam', 100, 3);
 		$fields[] = new TextareaField('beschrijving', $item->beschrijving, 'Omschrijving');
 		$fields[] = new TextField('allergie_info', $item->allergie_info, 'Allergie-informatie');
-		$fields[] = new BedragField('prijs', $item->prijs, 'Prijs');
-		$fields[] = new RequiredIntField('aantal_beschikbaar', $item->aantal_beschikbaar, 'Beschikbaar #');
-		$fields['v'] = new TextareaField('variaties', $item->variaties, 'Variaties');
-		$fields['v']->empty_null = true;
+		$fields[] = new BedragField('prijs', $item->prijs, 'Prijs', 0);
+		$fields[] = new RequiredIntField('aantal_beschikbaar', $item->aantal_beschikbaar, 'Beschikbaar #', 0);
 
 		$fields[] = new FormDefaultKnoppen(happieUrl . '/overzicht');
 		$this->addFields($fields);
@@ -78,6 +76,10 @@ class HappieMenukaartItemWijzigenForm extends HappieMenukaartItemForm {
 class HappieMenukaartGroepenJson extends DataTableResponse {
 
 	public function getJson($data) {
+		if ($data->gang !== HappieGang::Drank) {
+			$data->gang .= 'gerecht';
+		}
+		$data->gang = ucfirst($data->gang);
 		return parent::getJson($data);
 	}
 
@@ -113,7 +115,8 @@ class HappieMenukaartGroepForm extends Formulier {
 			$opties[$gang] = $gang;
 		}
 		$fields[] = new SelectField('gang', $groep->gang, 'Gang', $opties);
-		$fields[] = new RequiredTextField('naam', $groep->naam, 'Groepnaam');
+		$fields[] = new TextField('naam', $groep->naam, 'Groepnaam', 100, 5);
+		$fields[] = new RequiredIntField('aantal_beschikbaar', $groep->aantal_beschikbaar, 'Beschikbaar #', 0);
 
 		$fields[] = new FormDefaultKnoppen(happieUrl . '/overzicht');
 		$this->addFields($fields);

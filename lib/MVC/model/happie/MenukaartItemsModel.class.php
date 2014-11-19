@@ -32,7 +32,6 @@ class HappieMenukaartItemsModel extends CachedPersistenceModel {
 		$item->allergie_info = '';
 		$item->prijs = 0;
 		$item->aantal_beschikbaar = 0;
-		$item->variaties = null;
 		return $item;
 	}
 

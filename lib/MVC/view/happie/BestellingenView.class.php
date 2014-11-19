@@ -122,7 +122,7 @@ class HappieBestelForm extends TabsForm {
 					$allergie = '';
 				}
 
-				$fields[] = new IntField('item' . $item->item_id, $aantal, $item->naam, 0, $item->aantal_beschikbaar);
+				$fields[] = new IntField('item' . $item->item_id, $aantal, $item->naam, 0, min($item->aantal_beschikbaar, $groep->aantal_beschikbaar));
 				$fields[] = new HtmlComment(<<<HTML
 <div class="beschrijving float-right">{$item->beschrijving}</div>
 <script type="text/javascript">

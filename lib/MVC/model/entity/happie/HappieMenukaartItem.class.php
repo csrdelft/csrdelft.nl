@@ -46,11 +46,6 @@ class HappieMenukaartItem extends PersistentEntity {
 	 */
 	public $aantal_beschikbaar;
 	/**
-	 * Mogelijke variaties bij een gerecht
-	 * @var string
-	 */
-	public $variaties;
-	/**
 	 * Database table columns
 	 * @var array
 	 */
@@ -61,8 +56,7 @@ class HappieMenukaartItem extends PersistentEntity {
 		'beschrijving'		 => array(T::Text),
 		'allergie_info'		 => array(T::String),
 		'prijs'				 => array(T::Integer),
-		'aantal_beschikbaar' => array(T::Integer),
-		'variaties'			 => array(T::String, true)
+		'aantal_beschikbaar' => array(T::Integer)
 	);
 	/**
 	 * Database primary key
