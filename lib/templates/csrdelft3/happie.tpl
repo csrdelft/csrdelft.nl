@@ -17,7 +17,7 @@
 					<a class="navbar-brand" href="/happie/bestel/nieuw">Nieuwe bestelling</a>
 					<a class="navbar-brand" href="/happie/bestel/serveer">Recent</a>
 				</div>
-				<div class="navbar-collapse collapse">
+				<div class="navbar-collapse collapse" style="max-height:none;">
 					<ul class="nav navbar-nav">
 						<li><a href="/happie/bestel/serveer">Serveren</a></li>
 						<li><a href="/happie/bestel/keuken">Keuken</a></li>

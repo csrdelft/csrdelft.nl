@@ -4332,7 +4332,6 @@ lib/templates/MVC/instellingen/beheer/instelling_row.tpl -text
 lib/templates/MVC/instellingen/beheer/instellingen_page.tpl -text
 lib/templates/MVC/instellingen/lidinstelling.tpl -text
 lib/templates/MVC/instellingen/lidinstellingen_page.tpl -text
-lib/templates/MVC/layout/happie.tpl -text
 lib/templates/MVC/layout/pagina.tpl -text
 lib/templates/MVC/layout/pagina_header.tpl -text
 lib/templates/MVC/layout/pauper.tpl -text
@@ -4369,6 +4368,7 @@ lib/templates/csrdelft2/partials/_homeContent.tpl -text
 lib/templates/csrdelft2/partials/_lidWordenContent.tpl -text
 lib/templates/csrdelft2/partials/_loginForm.tpl -text
 lib/templates/csrdelft2/partials/_menuVereniging.tpl -text
+lib/templates/csrdelft3/happie.tpl -text
 lib/templates/csrdelft3/pagina_layout.tpl -text
 lib/templates/documenten/document.bb.tpl -text
 lib/templates/documenten/documenten.tpl -text
