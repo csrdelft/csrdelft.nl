@@ -165,7 +165,7 @@ class SubmitKnop extends FormulierKnop {
 
 class ResetKnop extends FormulierKnop {
 
-	public function __construct($url = null, $action = 'reset', $label = 'Reset', $title = 'Reset naar opgeslagen gegevens', $icon = '/famfamfam/arrow_rotate_anticlockwise.png') {
+	public function __construct($url = null, $action = 'reset confirm', $label = 'Reset', $title = 'Reset naar opgeslagen gegevens', $icon = '/famfamfam/arrow_rotate_anticlockwise.png') {
 		parent::__construct($url, $action, $label, $title, $icon);
 	}
 

@@ -445,6 +445,9 @@ function form_reset(event, form) {
 		form = $(this).closest('form');
 		event.preventDefault();
 	}
+	if ($(this).hasClass('confirm') && !confirm($(this).attr('title') + '.\n\nWeet u het zeker?')) {
+		return false;
+	}
 	form.find('.FormElement').each(function () {
 		var orig = $(this).attr('origvalue');
 		if (typeof orig == 'string') {
