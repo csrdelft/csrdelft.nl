@@ -119,26 +119,17 @@ class HappieBestelForm extends TabsForm {
 				}
 				$beschikbaar = min($item->aantal_beschikbaar, $groep->aantal_beschikbaar);
 
-				$toggle = <<<JS
-$('#expand_{$item->item_id}').toggle().find('textarea:first').focus();
-JS;
 				$int = new IntField('item' . $item->item_id, $aantal, $item->naam, 0, $beschikbaar);
 				$int->min_alert = 'Fout: minder dan 0';
 				$int->max_alert = 'Fout: te weinig beschikbaar';
 				$fields[] = $int;
 
 				if ($beschikbaar > 0) {
-					$comment = '<div id="toggle_' . $item->item_id . '" class="btn" style="margin-left:5px;padding:0 0.5em;" onclick="' . $toggle . '">';
-					if (empty($item->allergie_info)) {
-						$comment .= 'Info';
-					} else {
-						$comment .= $item->allergie_info;
-					}
-					$comment .= '</div>';
+					$comment = '<div id="toggle_' . $item->item_id . '" data-allergie="' . $item->allergie_info . '" class="btn toggle-opmerking" style="margin-left:5px;padding:0 0.5em;"><img src="' . CSR_PICS . '/famfamfam/information.png" class="icon" width="16" height="16"></div>';
 				} else {
 					$comment = '<div id="toggle_' . $item->item_id . '" class="inline alert alert-warning" style="margin-left:5px;padding:0 .5em;">OP</div>';
 				}
-				$fields[] = new HtmlComment($comment . '<div id="expand_' . $item->item_id . '" style="display:none;"><div style="font-style:italic;">' . $item->beschrijving . '</div>');
+				$fields[] = new HtmlComment($comment . '<div id="expand_' . $item->item_id . '" style="display:none;"><div class="allergie-info">' . $item->allergie_info . '</div>');
 
 				$opm = new TextareaField('opmerking' . $item->item_id, $opmerking);
 				$opm->placeholder = 'Allergie van klant / opmerking';
@@ -147,8 +138,10 @@ JS;
 				$fields[] = new HtmlComment('</div>');
 
 				$this->js .= <<<JS
-$('#toggle_{$item->item_id}').appendTo('#wrapper_{$int->getId()}');
 $('#{$opm->getId()}').height('30px');
+$('#toggle_{$item->item_id}').appendTo('#wrapper_{$int->getId()}').click(function() {
+	$('#expand_{$item->item_id}').toggle().find('textarea:first').focus();
+});
 JS;
 			}
 
@@ -158,9 +151,32 @@ JS;
 
 		$fields = array();
 
-		$fields['btn'] = new FormDefaultKnoppen(happieUrl . '/serveer');
-		$fields['btn']->confirmAll();
+		$fields['k'] = new FormDefaultKnoppen(happieUrl . '/serveer');
+		$fields['k']->confirmAll();
+		$allergie = new FormulierKnop(null, 'toggle-allergie', 'Allergie-info', 'Toon allergie informatie', '/famfamfam/information.png', true);
+		$fields['k']->addKnop($allergie);
 
+		$this->js .= <<<JS
+var flipAllergie = function(flip) {
+	if (typeof flip !== 'boolean') {
+		flip = $(this).prop('flip');
+	}
+	if (flip) {
+		$('.toggle-opmerking').each(function() {
+			$(this).attr('data-allergie', $(this).html());
+			$(this).html($(this).attr('data-img'));
+		});
+	}
+	else {
+		$('.toggle-opmerking').each(function() {
+			$(this).attr('data-img', $(this).html());
+			$(this).html($(this).attr('data-allergie'));
+		});
+	}
+	$(this).prop('flip', !flip);
+};
+$('#{$allergie->getId()}').click(flipAllergie);
+JS;
 		$this->addFields($fields, 'foot');
 	}
 
