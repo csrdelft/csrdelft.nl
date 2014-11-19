@@ -134,7 +134,13 @@ JS;
 				$fields[] = $int;
 
 				if ($beschikbaar > 0) {
-					$comment = '<div id="toggle_' . $item->item_id . '" class="btn" style="margin-left:5px;" onclick="' . $toggle . '">' . $item->allergie_info . '</div>';
+					$comment = '<div id="toggle_' . $item->item_id . '" class="btn" style="margin-left:5px;padding:0 0.5em;" onclick="' . $toggle . '">';
+					if (empty($item->allergie_info)) {
+						$comment .= 'Info';
+					} else {
+						$comment .= $item->allergie_info;
+					}
+					$comment .= '</div>';
 				} else {
 					$comment = '<div id="toggle_' . $item->item_id . '" class="inline alert alert-warning" style="margin-left:5px;padding:0 5px;">OP</div>';
 				}
