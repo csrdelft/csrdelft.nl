@@ -15,29 +15,27 @@ class HappieBestellingWijzigenForm extends Formulier {
 	public function __construct(HappieBestelling $bestelling) {
 		parent::__construct($bestelling, get_class($this), happieUrl . '/wijzigen/' . $bestelling->bestelling_id, 'Bestelling wijzigen');
 
-		$fields['d'] = new TextField('datum', $bestelling->datum, 'Datum');
-		$fields['d']->readonly = true;
+		$fields[] = new DatumField('datum', $bestelling->datum, 'Datum');
 
-		$fields['l'] = new TextField('laatst_gewijzigd', $bestelling->laatst_gewijzigd, 'Laatst gewijzigd');
-		$fields['l']->readonly = true;
-
-		$fields['t'] = new SelectField('tafel', null, 'Tafel', range(0, 99)); // array index starts from 0
-
+		$fields[] = new SelectField('tafel', null, 'Tafel', range(0, 99)); // array index starts from 0
+		// maak invoerveld voor elk item per groep
 		$menukaart = HappieMenukaartItemsModel::instance()->getMenukaart();
 		$options = array();
-
-		// maak invoerveld voor elk item per groep
+		$beschikbaar = 0;
 		foreach ($menukaart as $gang) {
 			foreach ($gang as $groep) {
 				foreach ($groep->getItems() as $item) {
 					$options[$groep->naam][$item->item_id] = $item->naam;
+					if ($item->item_id == $bestelling->menukaart_item) {
+						$beschikbaar = min($item->aantal_beschikbaar, $groep->aantal_beschikbaar);
+					}
 				}
 			}
 		}
-		$fields['m'] = new SelectField('menukaart_item', $bestelling->menukaart_item, 'Menukaart item', $options, true);
+		$fields[] = new SelectField('menukaart_item', $bestelling->menukaart_item, 'Menukaart item', $options, true);
 
-		$fields[] = new IntField('aantal', $bestelling->aantal, 'Aantal');
-		$fields[] = new IntField('aantal_geserveerd', $bestelling->aantal_geserveerd, 'Aantal geserveerd');
+		$fields[] = new IntField('aantal', $bestelling->aantal, 'Aantal', 0, $beschikbaar);
+		$fields[] = new IntField('aantal_geserveerd', $bestelling->aantal_geserveerd, 'Aantal geserveerd', 0, $beschikbaar); // meer vrijheid dan $bestelling->aantal
 
 		$options = array();
 		foreach (HappieServeerStatus::getTypeOptions() as $option) {
@@ -54,6 +52,9 @@ class HappieBestellingWijzigenForm extends Formulier {
 		$fields[] = new TextareaField('opmerking', $bestelling->opmerking, 'Allergie/Opmerking');
 
 		$fields[] = new FormDefaultKnoppen();
+
+		$fields['l'] = new TextField('laatst_gewijzigd', $bestelling->laatst_gewijzigd, 'Laatst gewijzigd');
+		$fields['l']->readonly = true;
 
 		$fields['h'] = new TextareaField('wijzig_historie', $bestelling->wijzig_historie, 'Log');
 		$fields['h']->readonly = true;

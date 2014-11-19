@@ -55,9 +55,10 @@ abstract class InputField implements FormElement, Validator {
 	public $autocomplete = true; // browser laten autoaanvullen?
 	public $placeholder = null; // plaats een grijze placeholdertekst in leeg veld
 	public $error = ''; // foutmelding van dit veld
-	public $onchange = null; // javascript
-	public $onclick = null; // javascript
-	public $onkeyup = null; // javascript
+	public $onchange = null; // callback on change of value
+	public $onclick = null; // do on click
+	public $onkeydown = null; // prevent illegal character from being entered
+	public $onkeyup = null; // respond to keyboard strokes
 	public $max_len = 0; // maximale lengte van de invoer
 	public $min_len = 0; // minimale lengte van de invoer
 	public $rows = 0; // aantal rijen van textarea
@@ -298,6 +299,11 @@ abstract class InputField implements FormElement, Validator {
 					return 'onclick="' . $this->onclick . '"';
 				}
 				break;
+			case 'onkeydown':
+				if ($this->onkeydown != null) {
+					return 'onkeydown="' . $this->onkeydown . '"';
+				}
+				break;
 			case 'onkeyup':
 				if ($this->enter_submit) {
 					$this->onkeyup .= <<<JS
@@ -329,7 +335,7 @@ JS;
 		} else {
 			$type = 'text';
 		}
-		echo '<input type="' . $type . '"' . $this->getInputAttribute(array('id', 'name', 'class', 'value', 'origvalue', 'disabled', 'readonly', 'maxlength', 'placeholder', 'autocomplete', 'onchange', 'onclick', 'onkeyup')) . ' />';
+		echo '<input type="' . $type . '"' . $this->getInputAttribute(array('id', 'name', 'class', 'value', 'origvalue', 'disabled', 'readonly', 'maxlength', 'placeholder', 'autocomplete', 'onchange', 'onclick', 'onkeydown', 'onkeyup')) . ' />';
 		echo '</div>';
 	}
 
@@ -703,7 +709,7 @@ class EntityField extends InputField {
 		} else {
 			$show_value = $this->show_value;
 		}
-		echo '<input type="text" name="' . $this->name . '_show" id="' . $this->getId() . '" value="' . $show_value . '" origvalue="' . $this->show_value . '"' . $this->getInputAttribute(array('class', 'disabled', 'readonly', 'maxlength', 'placeholder', 'autocomplete', 'onchange', 'onclick', 'onkeyup')) . ' />';
+		echo '<input type="text" name="' . $this->name . '_show" id="' . $this->getId() . '" value="' . $show_value . '" origvalue="' . $this->show_value . '"' . $this->getInputAttribute(array('class', 'disabled', 'readonly', 'maxlength', 'placeholder', 'autocomplete', 'onchange', 'onclick', 'onkeydown', 'onkeyup')) . ' />';
 
 		// actual values
 		$class = $this->model->orm;
@@ -837,6 +843,21 @@ class IntField extends TextField {
 		if ($max !== null) {
 			$this->max = (int) $max;
 		}
+		$this->onkeydown = <<<JS
+
+if (event.keyCode == 107 || event.keyCode == 109) { // + -
+	event.preventDefault();
+	return false;
+}
+JS;
+		$this->onkeyup = <<<JS
+if (event.keyCode == 107) { // +
+	$('#add_{$this->getId()}').trigger('click');
+}
+else if (event.keyCode == 109) { // -
+	$('#substract_{$this->getId()}').trigger('click');
+}
+JS;
 	}
 
 	public function getValue() {
@@ -888,7 +909,7 @@ $('#{$this->getId()}').val(parseInt($('#{$this->getId()}').val()) - 1);
 $('#{$this->getId()}').trigger('onchange');
 JS;
 				echo <<<HTML
-<span class="btn minus" onclick="{$js}"><img src="{$minus}" alt="-" class="icon" width="16" height="16" /></span>
+<span id="substract_{$this->getId()}" class="btn substract" onclick="{$js}"><img src="{$minus}" alt="-" class="icon" width="16" height="16" /></span>
 HTML;
 			}
 		}
@@ -910,7 +931,7 @@ if (parseInt( $(this).val() ) > {$this->max}) {
 JS;
 		}
 
-		echo ' <input type="' . $type . '"' . $this->getInputAttribute(array('id', 'name', 'class', 'value', 'origvalue', 'disabled', 'readonly', 'maxlength', 'placeholder', 'autocomplete', 'onchange', 'onclick', 'onkeyup')) . ' /> ';
+		echo ' <input type="' . $type . '"' . $this->getInputAttribute(array('id', 'name', 'class', 'value', 'origvalue', 'disabled', 'readonly', 'maxlength', 'placeholder', 'autocomplete', 'onchange', 'onclick', 'onkeydown', 'onkeyup')) . ' /> ';
 
 		if (!$this->readonly AND ! $this->disabled AND ! $this->hidden) {
 			$plus = CSR_PICS . '/famfamfam/add.png';
@@ -919,7 +940,7 @@ $('#{$this->getId()}').val(parseInt($('#{$this->getId()}').val()) + 1);
 $('#{$this->getId()}').trigger('onchange');
 JS;
 			echo <<<HTML
-<span class="btn plus" onclick="{$js}"><img src="{$plus}" alt="+" class="icon" width="16" height="16" /></span>
+<span id="add_{$this->getId()}" class="btn add" onclick="{$js}"><img src="{$plus}" alt="+" class="icon" width="16" height="16" /></span>
 HTML;
 		}
 		echo '</div>';
@@ -1024,7 +1045,7 @@ class BedragField extends DecimalField {
 		} else {
 			$type = 'text';
 		}
-		echo $this->valuta . ' <input type="' . $type . '"' . $this->getInputAttribute(array('id', 'name', 'class', 'disabled', 'readonly', 'maxlength', 'placeholder', 'autocomplete', 'onchange', 'onclick', 'onkeyup'));
+		echo $this->valuta . ' <input type="' . $type . '"' . $this->getInputAttribute(array('id', 'name', 'class', 'disabled', 'readonly', 'maxlength', 'placeholder', 'autocomplete', 'onchange', 'onclick', 'onkeydown', 'onkeyup'));
 		echo ' value="' . number_format(str_replace(',', '.', $this->value), $this->precision, ',', '') . '" origvalue="';
 		// if an error occured do not re-format the original value
 		// prevent unchanged is not smart enough for rounding and such
@@ -1154,7 +1175,7 @@ class TextareaField extends TextField {
 		echo $this->getLabel();
 		echo $this->getErrorDiv();
 		echo $this->getPreviewDiv();
-		echo '<textarea' . $this->getInputAttribute(array('id', 'name', 'origvalue', 'class', 'disabled', 'readonly', 'placeholder', 'maxlength', 'rows', 'autocomplete', 'onchange', 'onclick', 'onkeyup')) . '>' . $this->value . '</textarea>';
+		echo '<textarea' . $this->getInputAttribute(array('id', 'name', 'origvalue', 'class', 'disabled', 'readonly', 'placeholder', 'maxlength', 'rows', 'autocomplete', 'onchange', 'onclick', 'onkeydown', 'onkeyup')) . '>' . $this->value . '</textarea>';
 		echo '</div>';
 	}
 
@@ -1227,7 +1248,7 @@ class WachtwoordField extends TextField {
 		echo $this->getDiv();
 		echo $this->getLabel();
 		echo $this->getErrorDiv();
-		echo '<input type="password"' . $this->getInputAttribute(array('id', 'name', 'class', 'value', 'origvalue', 'disabled', 'readonly', 'maxlength', 'placeholder', 'autocomplete', 'onchange', 'onclick', 'onkeyup')) . ' />';
+		echo '<input type="password"' . $this->getInputAttribute(array('id', 'name', 'class', 'value', 'origvalue', 'disabled', 'readonly', 'maxlength', 'placeholder', 'autocomplete', 'onchange', 'onclick', 'onkeydown', 'onkeyup')) . ' />';
 		echo '</div>';
 	}
 
