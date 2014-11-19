@@ -118,10 +118,10 @@ class HappieBestelForm extends TabsForm {
 				// preload bestelling aantal
 				if (isset($bestellingen[$item->item_id])) {
 					$aantal = $bestellingen[$item->item_id]->aantal;
-					$allergie = $bestellingen[$item->item_id]->klant_allergie;
+					$opmerking = $bestellingen[$item->item_id]->opmerking;
 				} else {
 					$aantal = 0;
-					$allergie = '';
+					$opmerking = '';
 				}
 
 				$int = new IntField('item' . $item->item_id, $aantal, $item->naam, 0, min($item->aantal_beschikbaar, $groep->aantal_beschikbaar));
@@ -129,10 +129,12 @@ class HappieBestelForm extends TabsForm {
 				$fields[] = $int;
 				$fields[] = new HtmlComment(<<<HTML
 <div id="toggle_{$item->item_id}" class="btn" style="margin-left:5px;" onclick="$(this).toggle();$('#expand_{$item->item_id}').toggle();">Allergie / Info</div>
-<div id="expand_{$item->item_id}" style="display:none;"><div style="margin-left:30%;">{$item->allergie_info}</div>
+<div id="expand_{$item->item_id}" style="display:none;"><div class="float-left alert alert-danger"><strong>{$item->allergie_info}</strong</div>
 HTML
 				);
-				$fields[] = new TextField('allergie' . $item->item_id, $allergie, 'Allergie/Opmerking');
+				$opm = new TextareaField('opmerking' . $item->item_id, $opmerking, 'Allergie/Opmerking');
+				$opm->placeholder = 'TEST';
+				$fields[] = $opm;
 				$fields[] = new HtmlComment('<div style="font-style:italic;">' . $item->beschrijving . '</div></div>');
 			}
 

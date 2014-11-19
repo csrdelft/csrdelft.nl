@@ -60,10 +60,10 @@ class HappieBestelling extends PersistentEntity {
 	 */
 	public $financien_status;
 	/**
-	 * Allergie informatie over klant
+	 * Allergie informatie over klant bijv.
 	 * @var string
 	 */
-	public $klant_allergie;
+	public $opmerking;
 	/**
 	 * Database table columns
 	 * @var array
@@ -78,7 +78,7 @@ class HappieBestelling extends PersistentEntity {
 		'aantal'			 => array(T::Integer),
 		'serveer_status'	 => array(T::Enumeration, false, 'HappieServeerStatus'),
 		'financien_status'	 => array(T::Enumeration, false, 'HappieFinancienStatus'),
-		'klant_allergie'	 => array(T::String, true)
+		'opmerking'			 => array(T::Text, true)
 	);
 	/**
 	 * Database primary key
