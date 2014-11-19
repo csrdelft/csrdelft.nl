@@ -437,10 +437,12 @@ htdocs/layout2/js/jquery.min.js -text
 htdocs/layout2/script.ini -text
 htdocs/layout2/style.ini -text
 htdocs/layout3/css/bootstrap-theme.css -text
+htdocs/layout3/css/bootstrap-theme.css.map -text
 htdocs/layout3/css/bootstrap-theme.min.css -text
 htdocs/layout3/css/bootstrap-typeahead.css -text
 htdocs/layout3/css/bootstrap-typeahead.min.css -text
 htdocs/layout3/css/bootstrap.css -text
+htdocs/layout3/css/bootstrap.css.map -text
 htdocs/layout3/css/bootstrap.min.css -text
 htdocs/layout3/fonts/glyphicons-halflings-regular.eot -text
 htdocs/layout3/fonts/glyphicons-halflings-regular.svg -text
