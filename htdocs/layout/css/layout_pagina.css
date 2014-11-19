@@ -83,6 +83,9 @@ Menu voor ingelogde gebruikers
 #cd-ingelogd-menu-trigger {
 	display: block;
 }
+#cd-ingelogd-menu-trigger.sued {
+    background-color: red;
+}
 #cd-ingelogd-menu-trigger .cd-ingelogd-menu-text {
 	padding: 0 1.25em;
 	color: #ffffff;

@@ -2,7 +2,7 @@
 	<nav id="cd-top-nav">
 		<ul>
 			{if LoginModel::mag('P_LOGGED_IN')}
-				<li id="cd-ingelogd-menu-trigger">
+				<li id="cd-ingelogd-menu-trigger"{if LoginModel::instance()->isSued()} class="sued"{/if}>
 					<span class="cd-ingelogd-menu-text">{LoginModel::instance()->getLid()->getNaamLink('civitas', 'plain')}</span>
 					<ul id="cd-ingelogd-menu">
 						{if LoginModel::instance()->isSued()}
