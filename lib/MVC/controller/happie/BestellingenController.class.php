@@ -76,12 +76,14 @@ class HappieBestellingenController extends AclController {
 		$form = new HappieBestelForm();
 		if ($this->isPosted() AND $form->validate()) {
 			$bestellingen = array();
+			$sum = 0;
 			foreach ($form->getValues() as $item_id => $value) {
 				if ($value['aantal'] > 0) {
 					$bestellingen[] = $this->model->newBestelling($value['tafel'], $item_id, $value['aantal'], $value['opmerking']);
+					$sum += $value['aanta'];
 				}
 			}
-			setMelding(count($bestellingen) . ' dingen besteld', 1);
+			setMelding('Totaal ' . $sum . ' dingen besteld voor tafel ' . $value['tafel'], 1);
 			redirect(happieUrl . '/serveer');
 		}
 		$this->view = new CsrLayout3Page($form);

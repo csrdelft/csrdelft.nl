@@ -158,7 +158,7 @@ class DataTable extends TabsForm {
 					}
 
 					// order fixed for group by column
-					$conditionalProps .= ', "orderFixed": [[ ' . $this->groupByColumn . ', "asc"]]';
+					$conditionalProps .= ', "order": [[ ' . $this->groupByColumn . ', "asc"]]';
 
 					$this->groupByColumn = ' groupbycolumn="' . $this->groupByColumn . '"';
 				}
