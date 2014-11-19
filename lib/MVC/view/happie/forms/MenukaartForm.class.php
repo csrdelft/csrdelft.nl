@@ -25,7 +25,7 @@ class HappieMenukaartItemForm extends Formulier {
 		$fields[] = new BedragField('prijs', $item->prijs, 'Prijs', '€', 0);
 		$fields[] = new RequiredIntField('aantal_beschikbaar', $item->aantal_beschikbaar, 'Beschikbaar #', 0);
 
-		$fields[] = new FormDefaultKnoppen(happieUrl . '/overzicht');
+		$fields[] = new FormDefaultKnoppen(happieUrl);
 		$this->addFields($fields);
 	}
 
@@ -52,7 +52,7 @@ class HappieMenukaartGroepForm extends Formulier {
 		$fields[] = new TextField('naam', $groep->naam, 'Groepnaam', 100, 3);
 		$fields[] = new RequiredIntField('aantal_beschikbaar', $groep->aantal_beschikbaar, 'Beschikbaar #', 0);
 
-		$fields[] = new FormDefaultKnoppen(happieUrl . '/overzicht');
+		$fields[] = new FormDefaultKnoppen(happieUrl);
 		$this->addFields($fields);
 	}
 

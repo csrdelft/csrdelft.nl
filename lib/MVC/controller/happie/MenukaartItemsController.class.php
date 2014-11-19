@@ -48,7 +48,7 @@ class HappieMenukaartItemsController extends AclController {
 		if ($this->isPosted() AND $form->validate()) {
 			$this->model->create($item);
 			setMelding('Menukaart-item succesvol toegevoegd', 1);
-			redirect(happieUrl . '/overzicht');
+			redirect(happieUrl);
 		}
 		$this->view = new CsrLayout3Page($form);
 	}
@@ -57,13 +57,13 @@ class HappieMenukaartItemsController extends AclController {
 		$item = $this->model->getItem((int) $id);
 		if (!$item) {
 			setMelding('Menukaart-item bestaat niet', -1);
-			redirect(happieUrl . '/overzicht');
+			redirect(happieUrl);
 		}
 		$form = new HappieMenukaartItemWijzigenForm($item);
 		if ($this->isPosted() AND $form->validate()) {
 			$this->model->update($item);
 			setMelding('Wijziging succesvol opgeslagen', 1);
-			redirect(happieUrl . '/overzicht');
+			redirect(happieUrl);
 		}
 		$this->view = new CsrLayout3Page($form);
 	}

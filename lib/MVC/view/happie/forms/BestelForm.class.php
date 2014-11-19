@@ -51,7 +51,7 @@ class HappieBestellingWijzigenForm extends Formulier {
 
 		$fields[] = new TextareaField('opmerking', $bestelling->opmerking, 'Allergie/Opmerking');
 
-		$fields[] = new FormDefaultKnoppen();
+		$fields[] = new FormDefaultKnoppen(happieUrl);
 
 		$fields['l'] = new TextField('laatst_gewijzigd', $bestelling->laatst_gewijzigd, 'Laatst gewijzigd');
 		$fields['l']->readonly = true;
@@ -137,7 +137,7 @@ JS;
 
 		$fields = array();
 
-		$fields['k'] = new FormDefaultKnoppen(happieUrl . '/serveer', false);
+		$fields['k'] = new FormDefaultKnoppen(happieUrl, false);
 		$fields['k']->confirmAll();
 		$this->addFields($fields, 'foot');
 

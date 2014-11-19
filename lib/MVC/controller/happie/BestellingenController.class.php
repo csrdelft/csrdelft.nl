@@ -29,7 +29,7 @@ class HappieBestellingenController extends AclController {
 	}
 
 	public function performAction(array $args = array()) {
-		$this->action = 'overzicht';
+		$this->action = 'nieuw';
 		if ($this->hasParam(3)) {
 			$this->action = $this->getParam(3);
 		}
@@ -86,7 +86,7 @@ class HappieBestellingenController extends AclController {
 				}
 			}
 			setMelding('Totaal ' . $sum . ' dingen besteld voor tafel ' . $value['tafel'], 1);
-			redirect(happieUrl . '/nieuw');
+			redirect(happieUrl);
 		}
 		$this->view = new CsrLayout3Page($form);
 	}
@@ -95,13 +95,13 @@ class HappieBestellingenController extends AclController {
 		$bestelling = $this->model->getBestelling((int) $id);
 		if (!$bestelling) {
 			setMelding('Bestelling bestaat niet', -1);
-			redirect(happieUrl . '/nieuw');
+			redirect(happieUrl);
 		}
 		$form = new HappieBestellingWijzigenForm($bestelling);
 		if ($this->isPosted() AND $form->validate()) {
 			$this->model->update($bestelling);
 			setMelding('Wijziging succesvol opgeslagen', 1);
-			redirect(happieUrl . '/nieuw');
+			redirect(happieUrl);
 		}
 		$this->view = new CsrLayout3Page($form);
 	}
