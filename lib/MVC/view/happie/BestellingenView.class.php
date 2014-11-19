@@ -91,12 +91,12 @@ class HappieBestelForm extends TabsForm {
 
 	public function __construct() {
 		parent::__construct(null, get_class($this), happieUrl . '/nieuw', 'Nieuwe bestelling');
-		$this->css_classes[] = 'label-wide';
-
 		$this->setTabs(HappieGang::getTypeOptions());
 
 		// tafel invoer
-		$fields[] = new SelectField('tafel', null, 'Tafel', range(0, 99)); // array index starts from 0
+		$table = new SelectField('tafel', null, 'Tafel', range(0, 99)); // array index starts from 0
+		$fields[] = $table;
+
 		$fields['k'] = new FormDefaultKnoppen(happieUrl . '/serveer', false);
 		$fields['k']->confirmAll();
 		$fields['k']->css_classes[] = 'float-right';
@@ -165,6 +165,8 @@ JS;
 		$fields['k']->addKnop($allergie);
 
 		$this->js .= <<<JS
+$('.Formulier label').css('width', '50%');
+$('#wrapper_{$table->getId()} label').css('width', '20%');
 $('.FormDefaultKnoppen:first').appendTo('#wrapper_field_tafel');
 var flipAllergie = function(flip) {
 	if (typeof flip !== 'boolean') {
