@@ -124,18 +124,26 @@ class HappieBestelForm extends TabsForm {
 					$opmerking = '';
 				}
 
+				$toggle = <<<JS
+$(this).replaceWith($('#allergie_{$item->item_id}'));$('#expand_{$item->item_id}').toggle().find('textarea:first').focus();
+JS;
 				$int = new IntField('item' . $item->item_id, $aantal, $item->naam, 0, min($item->aantal_beschikbaar, $groep->aantal_beschikbaar));
-				$this->js .= "\n$('#toggle_{$item->item_id}').appendTo('#wrapper_{$int->getId()}');";
 				$fields[] = $int;
 				$fields[] = new HtmlComment(<<<HTML
-<div id="toggle_{$item->item_id}" class="btn" style="margin-left:5px;" onclick="$(this).toggle();$('#expand_{$item->item_id}').toggle();">Allergie / Info</div>
-<div id="expand_{$item->item_id}" style="display:none;"><div class="float-left alert alert-danger"><strong>{$item->allergie_info}</strong</div>
+<div id="toggle_{$item->item_id}" class="btn" style="margin-left:5px;" onclick="{$toggle}">Allergie / Info</div>
+<div id="expand_{$item->item_id}" style="display:none;">
+<div id="allergie_{$item->item_id}" class="inline alert alert-danger" style="margin-left:5px;padding:0 5px;"><strong>{$item->allergie_info}</strong></div>
 HTML
 				);
-				$opm = new TextareaField('opmerking' . $item->item_id, $opmerking, 'Allergie/Opmerking');
-				$opm->placeholder = 'TEST';
+				$opm = new TextareaField('opmerking' . $item->item_id, $opmerking);
+				$opm->placeholder = 'Allergie van klant of aanpassing op gerecht';
 				$fields[] = $opm;
 				$fields[] = new HtmlComment('<div style="font-style:italic;">' . $item->beschrijving . '</div></div>');
+
+				$this->js .= <<<JS
+$('#toggle_{$item->item_id}').appendTo('#wrapper_{$int->getId()}');
+$('#{$opm->getId()}').height('30px');
+JS;
 			}
 
 			// voeg groep toe aan tab en maak tab voor elke gang
