@@ -26,7 +26,7 @@ class HappieBestellingenModel extends CachedPersistenceModel {
 
 	public function newBestelling($tafel, $item_id, $aantal, $opmerking = null) {
 		$bestelling = new HappieBestelling();
-		$bestelling->moment_nieuw = date('Y-m-d');
+		$bestelling->datum = date('Y-m-d');
 		$bestelling->laatst_gewijzigd = getDateTime();
 		$bestelling->wijzig_historie = '';
 		$bestelling->tafel = $tafel;

@@ -101,7 +101,7 @@ class HappieBestelForm extends TabsForm {
 		$this->setTabs(HappieGang::getTypeOptions());
 
 		// tafel invoer
-		$fields[] = new SelectField('tafel', null, 'Tafel', range(1, 100));
+		$fields[] = new SelectField('tafel', null, 'Tafel', range(0, 99)); // array index starts from 0
 		$this->addFields($fields, 'head');
 
 		$groepen = HappieMenukaartItemsModel::instance()->getMenukaart();
