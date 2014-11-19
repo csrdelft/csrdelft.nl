@@ -95,11 +95,11 @@ class HappieBestelling extends PersistentEntity {
 		$array = parent::jsonSerialize();
 		$item = $this->getItem();
 		if ($item) {
+			$array['menu_item'] = $item->naam;
 			$groep = $item->getGroep();
 			if ($groep) {
 				$array['menu_groep'] = $groep->naam;
 			}
-			$array['menu_item'] = $item->naam;
 		}
 		$array['tafel'] = 'Tafel ' . $this->tafel;
 		$array['datum'] = reldate($this->datum);
