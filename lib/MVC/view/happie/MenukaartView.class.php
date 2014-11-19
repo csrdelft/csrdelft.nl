@@ -8,19 +8,6 @@
  * Tonen van alle groepen en items op de menukaart om te beheren.
  * 
  */
-class HappieMenukaartItemsJson extends DataTableResponse {
-
-	public function getJson($data) {
-		$groep = $data->getGroep();
-		if ($groep) {
-			$data->menukaart_groep = $groep->naam;
-			$data->aantal_beschikbaar .= ' / ' . $groep->aantal_beschikbaar;
-		}
-		return parent::getJson($data);
-	}
-
-}
-
 class HappieMenukaartItemsView extends DataTable {
 
 	public function __construct() {
@@ -71,18 +58,6 @@ class HappieMenukaartItemWijzigenForm extends HappieMenukaartItemForm {
 
 	public function __construct(HappieMenukaartItem $item) {
 		parent::__construct($item, '/wijzig/' . $item->item_id, 'Menukaart-item wijzigen');
-	}
-
-}
-
-class HappieMenukaartGroepenJson extends DataTableResponse {
-
-	public function getJson($data) {
-		if ($data->gang !== HappieGang::Drank) {
-			$data->gang .= 'gerecht';
-		}
-		$data->gang = ucfirst($data->gang);
-		return parent::getJson($data);
 	}
 
 }

@@ -91,6 +91,18 @@ class HappieBestelling extends PersistentEntity {
 	 */
 	protected static $table_name = 'happie_bestellingen';
 
+	public function jsonSerialize() {
+		$array = parent::jsonSerialize();
+		$item = $this->getItem();
+		if ($item) {
+			$array['menukaart_item'] = $item->naam;
+		}
+		$array['tafel'] = 'Tafel ' . $this->tafel;
+		$array['datum'] = reldate($this->datum);
+		$array['laatst_gewijzigd'] = reldate($this->laatst_gewijzigd);
+		return $array;
+	}
+
 	public function getItem() {
 		return HappieMenukaartItemsModel::instance()->getItem($this->menukaart_item);
 	}

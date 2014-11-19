@@ -37,7 +37,7 @@ class HappieMenukaartGroepenController extends AclController {
 
 	public function data() {
 		$data = HappieMenukaartGroepenModel::instance()->find();
-		$this->view = new HappieMenukaartGroepenJson($data);
+		$this->view = new DataTableResponse($data);
 	}
 
 	public function nieuw() {

@@ -10,21 +10,6 @@ require_once 'MVC/model/entity/happie/HappieGang.enum.php';
  * Tonen van alle bestellingen om te beheren.
  * 
  */
-class HappieBestellingenJson extends DataTableResponse {
-
-	public function getJson($data) {
-		$item = $data->getItem();
-		if ($item) {
-			$data->menukaart_item = $item->naam;
-		}
-		$data->tafel = 'Tafel ' . $data->tafel;
-		$data->datum = reldate($data->datum);
-		$data->laatst_gewijzigd = reldate($data->laatst_gewijzigd);
-		return parent::getJson($data);
-	}
-
-}
-
 class HappieBestellingenView extends DataTable {
 
 	public function __construct() {

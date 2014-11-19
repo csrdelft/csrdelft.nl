@@ -266,10 +266,6 @@ class DataTableToolbarKnop extends FormulierKnop {
 
 class DataTableResponse extends JsonResponse {
 
-	protected function getJson($data) {
-		return json_encode($data);
-	}
-
 	public function view() {
 		http_response_code($this->code);
 		header('Content-Type: application/json');
@@ -284,7 +280,7 @@ class DataTableResponse extends JsonResponse {
 				} else {
 					$comma = true;
 				}
-				echo $this->getJson($data);
+				echo json_encode($data);
 			}
 		}
 		echo ']}';

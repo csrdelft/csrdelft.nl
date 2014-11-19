@@ -37,7 +37,7 @@ class HappieMenukaartItemsController extends AclController {
 
 	public function data() {
 		$data = $this->model->find();
-		$this->view = new HappieMenukaartItemsJson($data);
+		$this->view = new DataTableResponse($data);
 	}
 
 	public function nieuw() {

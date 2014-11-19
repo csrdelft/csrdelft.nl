@@ -69,7 +69,7 @@ class HappieBestellingenController extends AclController {
 			$date = date('Y-m-d');
 		}
 		$data = $this->model->find('datum = ?', array($date));
-		$this->view = new HappieBestellingenJson($data);
+		$this->view = new DataTableResponse($data);
 	}
 
 	public function nieuw() {
