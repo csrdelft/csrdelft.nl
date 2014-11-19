@@ -122,15 +122,16 @@ class DataTable extends TabsForm {
 					}
 
 					// order fixed for group by column
-					$conditionalProps .= ', "orderFixed": [[' . $this->groupByColumn . ', "asc"]]';
+					$conditionalProps .= ', "orderFixed": [[ ' . $this->groupByColumn . ', "asc"]]';
+
+					$this->groupByColumn = ' groupbycolumn="' . $this->groupByColumn . '"';
 				}
 			}
 		}
 
 		// default order by first visible column
 		$visible = array_diff(array_keys($columns), $this->columnDefs['invisible']['targets']);
-		$conditionalProps .= ', "order": [[ ' . reset($visible) . ', "asc"]]';
-
+		//$conditionalProps .= ', "order": [[ ' . reset($visible) . ', "asc"]]';
 		// set column definitions
 		$conditionalProps .= ', "columnDefs": ' . json_encode(array_values($this->columnDefs));
 
@@ -147,7 +148,7 @@ JSON;
 		}
 		?>
 		<div id="<?= $this->tableId ?>_toolbar" class="dataTables_toolbar"><?= parent::view() ?></div>
-		<table id="<?= $this->tableId ?>" class="<?= implode(' ', $this->css_classes) ?>" groupByColumn="<?= $this->groupByColumn ?>">
+		<table id="<?= $this->tableId ?>" class="<?= implode(' ', $this->css_classes) ?>"<?= $this->groupByColumn ?>>
 			<?= $this->getTableHead() ?>
 			<?= $this->getTableBody() ?>
 			<?= $this->getTableFoot() ?>

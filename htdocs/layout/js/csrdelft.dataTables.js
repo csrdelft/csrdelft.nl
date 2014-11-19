@@ -106,7 +106,7 @@ function fnMultiSelect(tr) {
 }
 
 function fnGetGroupByColumn(table) {
-	var columnId = parseInt(table.attr('groupByColumn'));
+	var columnId = parseInt(table.attr('groupbycolumn'));
 	if (isNaN(columnId)) {
 		return false;
 	}
@@ -124,7 +124,7 @@ function fnGroupByColumn(e, settings) {
 	dataTable.column(columnId).visible(true);
 	columnId = newOrder[0][0];
 	dataTable.column(columnId).visible(false);
-	table.attr('groupByColumn', columnId);
+	table.attr('groupbycolumn', columnId);
 	table.data('collapsedGroups', []);
 	table.find('thead tr:first').addClass('expanded').children(':first').addClass('details-control');
 	settings.aaSortingFixed = newOrder.slice(); // copy by value
