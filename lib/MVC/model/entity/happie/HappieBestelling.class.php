@@ -70,7 +70,7 @@ class HappieBestelling extends PersistentEntity {
 	 */
 	protected static $persistent_attributes = array(
 		'bestelling_id'		 => array(T::Integer, false, 'auto_increment'),
-		'datum'				 => array(T::DateTime),
+		'datum'				 => array(T::Date),
 		'laatst_gewijzigd'	 => array(T::DateTime),
 		'wijzig_historie'	 => array(T::Text),
 		'tafel'				 => array(T::Integer),
@@ -102,7 +102,6 @@ class HappieBestelling extends PersistentEntity {
 			}
 		}
 		$array['tafel'] = 'Tafel ' . $this->tafel;
-		$array['datum'] = reldate($this->datum);
 		$array['laatst_gewijzigd'] = reldate($this->laatst_gewijzigd);
 		return $array;
 	}

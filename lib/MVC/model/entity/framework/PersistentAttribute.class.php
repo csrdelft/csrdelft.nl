@@ -80,25 +80,9 @@ class PersistentAttribute {
 			$attribute->null = 'NO';
 		}
 		$attribute->extra = (isset($definition[2]) ? $definition[2] : '');
-		if ($attribute->type === T::Boolean) {
-			$attribute->type = 'tinyint(1)';
-		} elseif ($attribute->type === T::Integer) {
-			$attribute->type = 'int(11)';
-		} elseif ($attribute->type === T::DateTime) {
-			$attribute->type = 'datetime';
-		} elseif ($attribute->type === T::String) {
-			$attribute->type = 'varchar(255)';
-		} elseif ($attribute->type === T::UID) {
-			$attribute->type = 'varchar(4)';
-		} elseif ($attribute->type === T::Char) {
-			$attribute->type = 'char(1)';
-		} elseif ($attribute->type === T::Enumeration) {
-			$max = 0;
+		if ($attribute->type === T::Enumeration) {
 			$class = $attribute->extra;
-			foreach ($class::getTypeOptions() as $option) {
-				$max = max($max, strlen($option));
-			}
-			$attribute->type = 'varchar(' . $max . ')';
+			$attribute->type = 'enum("' . implode('", "', $class::getTypeOptions()) . '")';
 			$attribute->extra = '';
 		}
 		return $attribute;
@@ -114,17 +98,7 @@ class PersistentAttribute {
 	 */
 	public static function makeDefinition(PersistentAttribute $attribute) {
 		$definition = array();
-		if ($attribute->type === 'tinyint(1)') {
-			$definition[] = T::Boolean;
-		} elseif ($attribute->type === 'int(11)') {
-			$definition[] = T::Integer;
-		} elseif ($attribute->type === 'datetime' OR $attribute->type === 'timestamp') {
-			$definition[] = T::DateTime;
-		} elseif ($attribute->type === 'varchar(4)') {
-			$definition[] = T::UID;
-		} elseif ($attribute->type === 'char(1)') {
-			$definition[] = T::Char;
-		} elseif (startsWith($attribute->type, 'enum')) {
+		if (startsWith($attribute->type, 'enum')) {
 			$start = strpos($attribute->type, '(');
 			$length = strpos($attribute->type, ')') - $start;
 			$values = explode(',', substr($attribute->type, $start, $length));
@@ -134,7 +108,10 @@ class PersistentAttribute {
 			}
 			$definition[] = array(T::Enumeration, false, $values);
 		} else {
-			$definition[] = T::String;
+			if (DB_CHECK AND ! in_array($attribute->type, T::getTypeOptions())) {
+				throw new Exception('Unknown persistent attribute type: ' . $attribute->type);
+			}
+			$definition[] = $attribute->type;
 		}
 		if ($attribute->null === 'YES') {
 			$definition[] = true;
