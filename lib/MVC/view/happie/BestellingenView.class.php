@@ -12,74 +12,58 @@ require_once 'MVC/model/entity/happie/HappieGang.enum.php';
  */
 class HappieBestellingenView extends DataTable {
 
-	public function __construct() {
-		parent::__construct(HappieBestellingenModel::orm, get_class($this), 'Alle bestellingen', 'datum');
-		$this->dataSource = happieUrl . '/data';
+	protected $toolbar;
 
-		$toolbar = new DataTableToolbar();
-		$fields[] = $toolbar;
+	public function __construct($titel = 'Alle bestellingen', $groupByColumn = 'datum') {
+		parent::__construct(HappieBestellingenModel::orm, get_class($this), $titel, $groupByColumn, true);
+		$this->dataSource = happieUrl . '/data/';
+		$this->defaultLength = 100;
+
+		$this->addColumn('menu_groep', 'menu_groep', 'Menukaart groep', 'html');
+
+		$this->toolbar = new DataTableToolbar();
+		$fields[] = $this->toolbar;
 		$this->addFields($fields);
-
-		$print = new DataTableToolbarKnop('== 1', null, 'debugprint', 'Print', 'Debugprint row', null);
-		$print->onclick = "console.log(fnGetSelectedObjectId(tableId));";
-		$toolbar->addKnop($print);
 
 		$count = new DataTableToolbarKnop('>= 0', null, 'rowcount', 'Count', 'Count selected rows', null);
 		$count->onclick = "alert(fnGetSelectionSize(tableId) + ' row(s) selected');";
-		$toolbar->addKnop($count);
+		$this->toolbar->addKnop($count);
 	}
 
 }
 
-class HappieKeukenView extends DataTable {
+class HappieKeukenView extends HappieBestellingenView {
 
 	public function __construct() {
-		parent::__construct(HappieBestellingenModel::orm, get_class($this), 'Keuken actueel', 'tafel');
-		$this->dataSource = happieUrl . '/data/' . date('Y/m/d');
-
-		$toolbar = new DataTableToolbar();
-		$fields[] = $toolbar;
-		$this->addFields($fields);
+		parent::__construct('Keuken actueel', 'tafel');
+		$this->dataSource .= date('Y/m/d');
 	}
 
 }
 
-class HappieServeerView extends DataTable {
+class HappieServeerView extends HappieBestellingenView {
 
 	public function __construct() {
-		parent::__construct(HappieBestellingenModel::orm, get_class($this), 'Actuele bestellingen', 'tafel');
-		$this->dataSource = happieUrl . '/data/' . date('Y/m/d');
-		$this->hideColumns[] = 'datum';
-
-		$toolbar = new DataTableToolbar();
-		$fields[] = $toolbar;
-		$this->addFields($fields);
+		parent::__construct('Serveer actueel', 'tafel');
+		$this->dataSource .= date('Y/m/d');
 	}
 
 }
 
-class HappieBarView extends DataTable {
+class HappieBarView extends HappieBestellingenView {
 
 	public function __construct() {
-		parent::__construct(HappieBestellingenModel::orm, get_class($this), 'Bar actueel', 'tafel');
-		$this->dataSource = happieUrl . '/data/' . date('Y/m/d');
-
-		$toolbar = new DataTableToolbar();
-		$fields[] = $toolbar;
-		$this->addFields($fields);
+		parent::__construct('Bar actueel', 'tafel');
+		$this->dataSource .= date('Y/m/d');
 	}
 
 }
 
-class HappieKassaView extends DataTable {
+class HappieKassaView extends HappieBestellingenView {
 
 	public function __construct() {
-		parent::__construct(HappieBestellingenModel::orm, get_class($this), 'Kassa actueel', 'tafel');
-		$this->dataSource = happieUrl . '/data/' . date('Y/m/d');
-
-		$toolbar = new DataTableToolbar();
-		$fields[] = $toolbar;
-		$this->addFields($fields);
+		parent::__construct('Kassa actueel', 'tafel');
+		$this->dataSource .= date('Y/m/d');
 	}
 
 }

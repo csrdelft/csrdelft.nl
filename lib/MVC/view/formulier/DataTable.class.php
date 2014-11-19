@@ -57,12 +57,7 @@ class DataTable extends TabsForm {
 				default: $type = 'html';
 					break;
 			}
-			$this->columns[$attribute] = array(
-				'name'	 => $attribute,
-				'data'	 => $attribute,
-				'title'	 => ucfirst(str_replace('_', ' ', $attribute)),
-				'type'	 => $type
-			);
+			$this->addColumn($attribute, $attribute, ucfirst(str_replace('_', ' ', $attribute)), $type);
 		}
 		$this->columnDefs['invisible'] = array(
 			'visible'	 => false,
@@ -71,6 +66,15 @@ class DataTable extends TabsForm {
 		$this->columnDefs['nosearch'] = array(
 			'searchable' => false,
 			'targets'	 => array()
+		);
+	}
+
+	protected function addColumn($name, $data, $title, $type) {
+		$this->columns[$name] = array(
+			'name'	 => $name,
+			'data'	 => $data,
+			'title'	 => $title,
+			'type'	 => $type
 		);
 	}
 
@@ -84,6 +88,15 @@ class DataTable extends TabsForm {
 
 	protected function getTableFoot() {
 		return null;
+	}
+
+	/**
+	 * Server side processing query
+	 */
+	protected function getFindJson() {
+		$find = '';
+		// TODO
+		return json_encode($find);
 	}
 
 	public function view() {
@@ -136,13 +149,12 @@ class DataTable extends TabsForm {
 		$conditionalProps .= ', "columnDefs": ' . json_encode(array_values($this->columnDefs));
 
 		// set ajax data source
-		$cols = json_encode(array_keys($this->columns)); // test
 		if ($this->dataSource) {
 			$conditionalProps .= <<<JSON
 , "ajax": {
 	"url": "{$this->dataSource}",
 	"type": "POST",
-	"data": {$cols}
+	"data": {$this->getFindJson()}
 }
 JSON;
 		}
