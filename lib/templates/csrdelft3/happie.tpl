@@ -25,7 +25,7 @@
 						<li class="dropdown">
 							<a href="#" class="dropdown-toggle" data-toggle="dropdown">Administratie <span class="caret"></span></a>
 							<ul class="dropdown-menu" role="menu">
-								<li><a href="/happie/bestel/">Alle bestellingen</a></li>
+								<li><a href="/happie/bestel/overzicht">Alle bestellingen</a></li>
 								<li class="divider"></li>
 								<li class="dropdown-header">Menukaart aanpassen</li>
 								<li><a href="/happie/menukaart">Menukaart-items</a></li>

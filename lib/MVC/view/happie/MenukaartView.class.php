@@ -15,12 +15,6 @@ class HappieMenukaartItemsView extends DataTable {
 		$this->dataSource = happieUrl . '/data';
 		$this->defaultLength = 100;
 
-		$this->invisible[] = 'prijs';
-		$this->invisible[] = 'beschrijving';
-		$this->invisible[] = 'allergie_info';
-
-		$this->nosearch[] = 'aantal_beschikbaar';
-
 		$nieuw = new DataTableToolbarKnop('>= 0', happieUrl . '/nieuw', '', 'Nieuw', 'Nieuw menukaart-item', '/famfamfam/add.png');
 		$this->toolbar->addKnop($nieuw);
 
@@ -37,8 +31,6 @@ class HappieMenukaartGroepenView extends DataTable {
 		parent::__construct(HappieMenukaartGroepenModel::orm, get_class($this), 'Menukaart groepen', 'gang');
 		$this->dataSource = happieUrl . '/data';
 		$this->defaultLength = 100;
-
-		$this->nosearch[] = 'aantal_beschikbaar';
 
 		$nieuw = new DataTableToolbarKnop('>= 0', happieUrl . '/nieuw', '', 'Nieuw', 'Nieuw menukaart-groep', '/famfamfam/add.png');
 		$this->toolbar->addKnop($nieuw);
