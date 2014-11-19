@@ -16,7 +16,7 @@
 </ul>
 {if LoginModel::mag('P_BIEB_READ')}
 	<div class="controls">
-		<a class="knop" href="/communicatie/bibliotheek/nieuwboek" title="Nieuw boek toevoegen">{icon get="book_add"} Boek toevoegen</a>
+		<a class="btn" href="/communicatie/bibliotheek/nieuwboek" title="Nieuw boek toevoegen">{icon get="book_add"} Boek toevoegen</a>
 	</div>
 {/if}
 

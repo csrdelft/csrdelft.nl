@@ -147,7 +147,7 @@ class AgendaItemForm extends ModalForm {
 			$html .= '<a onclick="setTijd(\'' . $begin[0] . '\',\'' . $begin[1] . '\',\'' . $eind[0] . '\',\'' . $eind[1] . '\');">» ' . $naam . '</a> &nbsp;';
 		}
 		if (LoginModel::mag('P_AGENDA_MOD')) {
-			$html .= '<div class="float-right"><a class="knop round" title="Wijzig standaard tijden" href="/instellingenbeheer/module/agenda"><img width="16" height="16" class="icon" alt="edit" src="' . CSR_PICS . '/famfamfam/pencil.png"></a></div>';
+			$html .= '<div class="float-right"><a class="btn round" title="Wijzig standaard tijden" href="/instellingenbeheer/module/agenda"><img width="16" height="16" class="icon" alt="edit" src="' . CSR_PICS . '/famfamfam/pencil.png"></a></div>';
 		}
 		$html .= '
 <script type="text/javascript">

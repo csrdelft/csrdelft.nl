@@ -7,14 +7,14 @@
 				{if !$maaltijd->getIsGesloten() && LoginModel::mag('P_MAAL_IK')}
 
 					{if $aanmelding}
-						<a onclick="ketzer_ajax('/maaltijdenketzer/afmelden/{$maaltijd->getMaaltijdId()}', '#maaltijdketzer-{$maaltijd->getMaaltijdId()}');" class="knop maaltijd-aangemeld"><input type="checkbox" checked="checked" /> Ja</a>
+						<a onclick="ketzer_ajax('/maaltijdenketzer/afmelden/{$maaltijd->getMaaltijdId()}', '#maaltijdketzer-{$maaltijd->getMaaltijdId()}');" class="btn maaltijd-aangemeld"><input type="checkbox" checked="checked" /> Ja</a>
 
 					{elseif $maaltijd->getAantalAanmeldingen() >= $maaltijd->getAanmeldLimiet()}
 						{icon get="stop" title="Maaltijd is vol"}&nbsp;
 						<span class="maaltijd-afgemeld">Nee</span>
 
 					{else}
-						<a onclick="ketzer_ajax('/maaltijdenketzer/aanmelden/{$maaltijd->getMaaltijdId()}', '#maaltijdketzer-{$maaltijd->getMaaltijdId()}');" class="knop maaltijd-afgemeld"><input type="checkbox" /> Nee</a>
+						<a onclick="ketzer_ajax('/maaltijdenketzer/aanmelden/{$maaltijd->getMaaltijdId()}', '#maaltijdketzer-{$maaltijd->getMaaltijdId()}');" class="btn maaltijd-afgemeld"><input type="checkbox" /> Nee</a>
 
 					{/if}
 

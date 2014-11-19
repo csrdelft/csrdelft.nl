@@ -4,7 +4,7 @@
 {strip}
 <tr id="instelling-row-{$id}">
 	<td>
-		<a title="Instelling wijzigen" class="knop rounded wijzigknop" onclick="
+		<a title="Instelling wijzigen" class="btn rounded wijzigknop" onclick="
 			if (confirm($(this).attr('title') + '.\n\nWeet u het zeker?')) {
 				var form = $('#form-{$id}');
 				form_inline_toggle(form);
@@ -23,8 +23,8 @@
 			</div>
 			<div class="InstellingToggle verborgen"></div>
 			<div class="FormKnoppen">
-				<a class="knop submit" title="Wijzigingen opslaan">{icon get="accept"} Opslaan</a>
-				<a class="knop reset cancel" title="Annuleren" onclick="
+				<a class="btn submit" title="Wijzigingen opslaan">{icon get="accept"} Opslaan</a>
+				<a class="btn reset cancel" title="Annuleren" onclick="
 					$(this).parent().find('.InstellingToggle').toggle();
 					$(this).parent().parent().parent().find('.wijzigknop').toggle();
 				">{icon get="delete"} Annuleren</a>
@@ -32,7 +32,7 @@
 		</form>
 	</td>
 	<td class="col-del">
-		<a href="/instellingenbeheer/reset/{$module}/{$id}" title="Instelling resetten" class="knop rounded post confirm">{icon get="arrow_rotate_anticlockwise"}</a>
+		<a href="/instellingenbeheer/reset/{$module}/{$id}" title="Instelling resetten" class="btn rounded post confirm">{icon get="arrow_rotate_anticlockwise"}</a>
 	</td>
 </tr>
 {/strip}

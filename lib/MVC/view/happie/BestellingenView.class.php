@@ -130,7 +130,7 @@ $(document).ready(function () {
 	$("#tabs").tabs();
 });
 </script>
-<div class="knop float-right" onclick="$(this).slideUp();$('#expand_{$item->item_id}').slideDown();">Allergie invoeren</div>
+<div class="btn float-right" onclick="$(this).slideUp();$('#expand_{$item->item_id}').slideDown();">Allergie invoeren</div>
 <div id="expand_{$item->item_id}" style="display:none;">
 HTML
 				);

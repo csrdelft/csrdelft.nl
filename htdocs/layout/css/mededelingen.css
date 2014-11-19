@@ -127,7 +127,7 @@ label{ float: left; clear: left; width: 110px; }
 input.titel{ width: 635px; }
 .indent{ margin-left: 116px; width: 635px;}
 textarea.tekst{ width: 100%; }
-.knop#vergroot, .knop#opmaakhulp, .knop#voorbeeld{ float: right; }
+.btn#vergroot, .btn#opmaakhulp, .btn#voorbeeld{ float: right; }
 
 #instellingen{
 	height: 300px;

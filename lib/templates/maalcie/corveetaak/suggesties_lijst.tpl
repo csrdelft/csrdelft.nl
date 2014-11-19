@@ -33,7 +33,7 @@ mijn_rooster.tpl	|	P.W.G. Brussee (brussee@live.nl)
 							{if $jongsteLichting === LidCache::getLid($uid)->getLichting()} jongste{else} oudere{/if}
 							">
 							<td style="width: 15px;">
-								<a class="knop" style="padding: 0 2px;" onclick="$('#field_uid').val('{$uid}');
+								<a class="btn" style="padding: 0 2px;" onclick="$('#field_uid').val('{$uid}');
 										$('#maalcie-taak-toewijzen-form').submit();">
 									{if $suggestie.recent}
 										{icon get="time_delete" title="Recent gecorveed"}
@@ -117,7 +117,7 @@ mijn_rooster.tpl	|	P.W.G. Brussee (brussee@live.nl)
 			</td>
 			<td style="width: 25px;">
 				<br />
-				<a class="knop vergroot" data-vergroot="#suggesties-scrollpane" title="Vergroot de lijst met suggesties">&uarr;&darr;</a>
+				<a class="btn vergroot" data-vergroot="#suggesties-scrollpane" title="Vergroot de lijst met suggesties">&uarr;&darr;</a>
 			</td>
 		</tr>
 	</table>

@@ -123,8 +123,6 @@ class DataTable extends TabsForm {
 				$this->css_classes[] = 'groupByFixed';
 			}
 		}
-		// save before parent::view removes all fieds
-		$updateToolbar = $this->getToolbarUpdateScript();
 		?>
 		<div id="<?= $this->tableId ?>_toolbar" class="dataTables_toolbar"><?= parent::view() ?></div>
 		<table id="<?= $this->tableId ?>" class="<?= implode(' ', $this->css_classes) ?>" groupByColumn="<?= $this->groupByColumn ?>">
@@ -174,7 +172,7 @@ class DataTable extends TabsForm {
 					$(table + ' thead tr th.details-control').removeClass('details-control');
 				}
 				// Toolbar update script
-				var updateToolbar = <?= $updateToolbar ?>;
+				var updateToolbar = <?= $this->getToolbarUpdateScript() ?>;
 				$(table).on('draw.dt', updateToolbar);
 				$(table + '_toolbar').prependTo(table + '_wrapper');
 			});
@@ -200,9 +198,11 @@ JS;
 class DataTableToolbar extends FormKnoppen {
 
 	public function getUpdateScript() {
+		$js = '';
 		foreach ($this->knoppen as $knop) {
-			return $knop->getUpdateScript();
+			$js .= $knop->getUpdateScript();
 		}
+		return $js;
 	}
 
 }
@@ -222,8 +222,6 @@ class DataTableToolbarKnop extends FormulierKnop {
 var knop = $('#{$this->getId()}');
 var enable = aantal {$this->multiplicity};
 knop.attr('disabled', !enable);
-console.log(knop);
-alert(enable);
 JS;
 	}
 

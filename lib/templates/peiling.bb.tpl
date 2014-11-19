@@ -1,6 +1,6 @@
 <div class="bb-block bb-peiling" id="peiling{$peiling->getId()}">
 	{if $beheer AND $peiling->magBewerken()}
-		<a href="/tools/peilingbeheer.php?action=verwijder&amp;id={$peiling->getId()}" class="knop beheer" >Verwijder</a>
+		<a href="/tools/peilingbeheer.php?action=verwijder&amp;id={$peiling->getId()}" class="btn beheer" >Verwijder</a>
 	{/if}
 	{if $peiling->getStemmenAantal() > 0}
 		<div class="totaal">({$peiling->getStemmenAantal()} stem{if $peiling->getStemmenAantal()!=1}men{/if})</div>

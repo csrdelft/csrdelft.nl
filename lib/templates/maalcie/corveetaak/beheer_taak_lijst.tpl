@@ -7,17 +7,17 @@
 {if !isset($show) and !$prullenbak} verborgen{/if}">
 	<td>
 {if $taak->getIsVerwijderd()}
-		<a href="{$smarty.const.maalcieUrl}/herstel/{$taak->getTaakId()}" title="Corveetaak herstellen" class="knop rounded post">{icon get="arrow_undo"}</a>
+		<a href="{$smarty.const.maalcieUrl}/herstel/{$taak->getTaakId()}" title="Corveetaak herstellen" class="btn rounded post">{icon get="arrow_undo"}</a>
 {else}
-		<a href="{$smarty.const.maalcieUrl}/bewerk/{$taak->getTaakId()}" title="Taak wijzigen" class="knop rounded post modal">{icon get="pencil"}</a>
+		<a href="{$smarty.const.maalcieUrl}/bewerk/{$taak->getTaakId()}" title="Taak wijzigen" class="btn rounded post modal">{icon get="pencil"}</a>
 	{if $taak->getCorveeRepetitieId()}
-		<a href="/corveerepetities/beheer/{$taak->getCorveeRepetitieId()}" title="Wijzig gekoppelde corveerepetitie" class="knop rounded modal">{icon get="calendar_edit"}</a>
+		<a href="/corveerepetities/beheer/{$taak->getCorveeRepetitieId()}" title="Wijzig gekoppelde corveerepetitie" class="btn rounded modal">{icon get="calendar_edit"}</a>
 	{else}
 		<div class="inline" style="width: 28px;"></div>
 	{/if}
 {/if}
 {if !isset($maaltijd) and $taak->getMaaltijdId()}
-	<a href="/corveebeheer/maaltijd/{$taak->getMaaltijdId()}" title="Beheer maaltijdcorvee" class="knop rounded">{icon get="cup_link"}</a>
+	<a href="/corveebeheer/maaltijd/{$taak->getMaaltijdId()}" title="Beheer maaltijdcorvee" class="btn rounded">{icon get="cup_link"}</a>
 {/if}
 	</td>
 	<td class="text-center" style="width: 50px;">
@@ -29,7 +29,7 @@
 	{/if}
 	<div class="float-right">
 	{if $taak->getUid()}
-		<a href="{$smarty.const.maalcieUrl}/email/{$taak->getTaakId()}" title="Verstuur een (extra) herinnering voor deze taak" class="knop rounded post confirm">
+		<a href="{$smarty.const.maalcieUrl}/email/{$taak->getTaakId()}" title="Verstuur een (extra) herinnering voor deze taak" class="btn rounded post confirm">
 	{/if}
 {/if}
 {if $taak->getIsTelaatGemaild()}
@@ -54,7 +54,7 @@
 	<td style="width: 100px;">{$taak->getCorveeFunctie()->naam}</td>
 	<td class="niet-dik taak-{if $taak->getUid()}toegewezen{elseif  $taak->getBeginMoment() < strtotime(Instellingen::get('corvee', 'waarschuwing_taaktoewijzing_vooraf'))}warning{else}open{/if}">
 {if isset($wijzigbaar)}
-		<a href="{$smarty.const.maalcieUrl}/toewijzen/{$taak->getTaakId()}" title="Deze taak toewijzen aan een lid&#013;Sleep om te ruilen" class="knop rounded post modal dragobject static ruilen" id="taak-{$taak->getTaakId()}"{if $taak->getUid()} uid="{$taak->getUid()}">{icon get="user_green"}{else}>{icon get="user_red"}{/if}</a>
+		<a href="{$smarty.const.maalcieUrl}/toewijzen/{$taak->getTaakId()}" title="Deze taak toewijzen aan een lid&#013;Sleep om te ruilen" class="btn rounded post modal dragobject static ruilen" id="taak-{$taak->getTaakId()}"{if $taak->getUid()} uid="{$taak->getUid()}">{icon get="user_green"}{else}>{icon get="user_red"}{/if}</a>
 {/if}
 {if $taak->getUid()}
 		&nbsp;{Lid::naamLink($taak->getUid(), Instellingen::get('corvee', 'weergave_ledennamen_beheer'), Instellingen::get('corvee', 'weergave_link_ledennamen'))}
@@ -78,18 +78,18 @@
 {if isset($wijzigbaar) and $taak->getUid()}
 		<div class="float-right">
 	{if $taak->getWanneerToegekend()}
-		<a href="{$smarty.const.maalcieUrl}/puntenintrekken/{$taak->getTaakId()}" title="Punten intrekken" class="knop rounded post">{icon get="medal_silver_delete"}</a>
+		<a href="{$smarty.const.maalcieUrl}/puntenintrekken/{$taak->getTaakId()}" title="Punten intrekken" class="btn rounded post">{icon get="medal_silver_delete"}</a>
 	{else}
-		<a href="{$smarty.const.maalcieUrl}/puntentoekennen/{$taak->getTaakId()}" title="Punten toekennen" class="knop rounded post">{icon get="award_star_add"}</a>
+		<a href="{$smarty.const.maalcieUrl}/puntentoekennen/{$taak->getTaakId()}" title="Punten toekennen" class="btn rounded post">{icon get="award_star_add"}</a>
 	{/if}
 {/if}
 		</div>
 	</td>
 	<td class="col-del">
 {if $taak->getIsVerwijderd()}
-		<a href="{$smarty.const.maalcieUrl}/verwijder/{$taak->getTaakId()}" title="Corveetaak definitief verwijderen" class="knop post confirm range"><input type=checkbox id="box-{$taak->getTaakId()}" name="del-taak" />{icon get="cross"}</a>
+		<a href="{$smarty.const.maalcieUrl}/verwijder/{$taak->getTaakId()}" title="Corveetaak definitief verwijderen" class="btn post confirm range"><input type=checkbox id="box-{$taak->getTaakId()}" name="del-taak" />{icon get="cross"}</a>
 {else}
-		<a href="{$smarty.const.maalcieUrl}/verwijder/{$taak->getTaakId()}" title="Corveetaak naar de prullenbak verplaatsen" class="knop post range"><input type=checkbox id="box-{$taak->getTaakId()}" name="del-taak" />{icon get="bin_closed"}</a>
+		<a href="{$smarty.const.maalcieUrl}/verwijder/{$taak->getTaakId()}" title="Corveetaak naar de prullenbak verplaatsen" class="btn post range"><input type=checkbox id="box-{$taak->getTaakId()}" name="del-taak" />{icon get="bin_closed"}</a>
 {/if}
 	</td>
 </tr>

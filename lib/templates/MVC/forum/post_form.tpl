@@ -73,7 +73,7 @@
 						<a href="/actueel/groepen/Ketzers" target="_blank">Ketzer maken</a> &nbsp;
 						<a href="http://csrdelft.nl/wiki/cie:diensten:forum" target="_blank">Opmaakhulp</a> &nbsp;
 					{/if}
-					<a class="knop vergroot" data-vergroot="#forumBericht" title="Vergroot het invoerveld">&uarr;&darr;</a>
+					<a class="btn vergroot" data-vergroot="#forumBericht" title="Vergroot het invoerveld">&uarr;&darr;</a>
 				</div>
 			</div>
 

@@ -15,7 +15,7 @@
 			{elseif $maaltijd->getIsVerwijderd()}
 				{icon get="bin" title="Maaltijd is verwijderd"}
 			{else}
-				<a href="/maaltijdenbeheer/beheer/{$maaltijd->getMaaltijdId()}" title="Wijzig gekoppelde maaltijd" class="knop rounded modal">{icon get="cup_edit"}</a>
+				<a href="/maaltijdenbeheer/beheer/{$maaltijd->getMaaltijdId()}" title="Wijzig gekoppelde maaltijd" class="btn rounded modal">{icon get="cup_edit"}</a>
 			{/if}
 			<span class="dikgedrukt">{$maaltijd->getTitel()} op {$maaltijd->getDatum()|date_format:"%A %e %B"} om {$maaltijd->getTijd()|date_format:"%H:%M"}</span>
 		</p>
@@ -35,12 +35,12 @@
 
 <div class="float-right">
 	{*if !$prullenbak and !isset($maaltijd)}
-		<a href="/corveebeheer/indelen" title="Leden automatisch indelen voor taken" class="knop">{icon get="date"} Automatisch indelen</a>
-		<a href="/corveebeheer/herinneren" title="Verstuur herinneringen" class="knop">{icon get="clock"} Herinneringen versturen</a>
+		<a href="/corveebeheer/indelen" title="Leden automatisch indelen voor taken" class="btn">{icon get="date"} Automatisch indelen</a>
+		<a href="/corveebeheer/herinneren" title="Verstuur herinneringen" class="btn">{icon get="clock"} Herinneringen versturen</a>
 	{/if*}
 	{if !($prullenbak or (isset($maaltijd) and $maaltijd->getIsVerwijderd()))}
-		<a class="knop" onclick="$(this).hide(); taken_show_old();">{icon get="eye"} Toon verleden</a>
-		<a href="{$smarty.const.maalcieUrl}/nieuw{if isset($maaltijd)}/{$maaltijd->getMaaltijdId()}{/if}" title="Nieuwe taak" class="knop post modal">{icon get="add"} Nieuwe taak</a>
+		<a class="btn" onclick="$(this).hide(); taken_show_old();">{icon get="eye"} Toon verleden</a>
+		<a href="{$smarty.const.maalcieUrl}/nieuw{if isset($maaltijd)}/{$maaltijd->getMaaltijdId()}{/if}" title="Nieuwe taak" class="btn post modal">{icon get="add"} Nieuwe taak</a>
 	{/if}
 </div>
 

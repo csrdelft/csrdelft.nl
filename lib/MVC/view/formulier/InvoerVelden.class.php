@@ -900,7 +900,7 @@ $('#{$this->getId()}').val(parseInt($('#{$this->getId()}').val()) - 1);
 $('#{$this->getId()}').trigger('onchange');
 JS;
 				echo <<<HTML
-<span class="knop minus" onclick="{$js}"><img src="{$minus}" alt="-" class="icon" width="16" height="16" /></span>
+<span class="btn minus" onclick="{$js}"><img src="{$minus}" alt="-" class="icon" width="16" height="16" /></span>
 HTML;
 			}
 		}
@@ -912,7 +912,7 @@ $('#{$this->getId()}').val(parseInt($('#{$this->getId()}').val()) + 1);
 $('#{$this->getId()}').trigger('onchange');
 JS;
 			echo <<<HTML
-<span class="knop plus" onclick="{$js}"><img src="{$plus}" alt="+" class="icon" width="16" height="16" /></span>
+<span class="btn plus" onclick="{$js}"><img src="{$plus}" alt="+" class="icon" width="16" height="16" /></span>
 HTML;
 		}
 		echo '</div>';

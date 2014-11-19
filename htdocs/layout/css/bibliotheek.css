@@ -15,7 +15,7 @@ h1{
 }
 /*knoppen in zijbalk rechts*/
 .controls		{float: right;}
-.controls .knop {line-height: 2em; width: 125px;}
+.controls .btn {line-height: 2em; width: 125px;}
 
 /****************************
  *  cataloguspagina			*
@@ -253,7 +253,7 @@ li.ac_over a, li.ac_over a:hover {
 .exemplaar .regel.actieknoppen{
 	height: 20px;
 }
-.exemplaar .actieknoppen .knop{
+.exemplaar .actieknoppen .btn{
 	margin-left: 0;
 	margin-right: 4px;
 }

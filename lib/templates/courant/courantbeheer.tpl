@@ -19,11 +19,11 @@
 </p>
 <div id="knoppenContainer">
 	{if $courant->magVerzenden() AND sizeof($courant->getBerichten())>0}
-		<a href="/actueel/courant/verzenden.php" onclick="return confirm('Weet u het zeker dat u de C.S.R.-courant wilt versturen?')" class="knop">Verzenden</a>
+		<a href="/actueel/courant/verzenden.php" onclick="return confirm('Weet u het zeker dat u de C.S.R.-courant wilt versturen?')" class="btn">Verzenden</a>
 	{/if}
 	{* Volgens mij wordt deze nooit gebruikt...
 	{if $courant->magBeheren()}
-	<a href="/actueel/courant/leegmaken" class="knop" onclick="return confirm('Weet u zeker dat u de cache wilt leeggooien?')">Leegmaken</a>
+	<a href="/actueel/courant/leegmaken" class="btn" onclick="return confirm('Weet u zeker dat u de cache wilt leeggooien?')">Leegmaken</a>
 	{/if}
 	*}
 </div>
@@ -62,7 +62,7 @@
 		<div id="bewerkPreview" class="preview"></div>
 		<textarea name="bericht" id="courantBericht" cols="80" style="width: 100%;" rows="15" class="tekst">{$form.bericht|escape:'html'}</textarea>
 		<a href="http://csrdelft.nl/wiki/cie:diensten:forum" target="_blank">Opmaakhulp</a>
-		<a class="knop float-right vergroot" data-vergroot="#courantBericht" title="Vergroot het invoerveld">&uarr;&darr;</a>
+		<a class="btn float-right vergroot" data-vergroot="#courantBericht" title="Vergroot het invoerveld">&uarr;&darr;</a>
 		<input type="submit" name="verzenden" value="Opslaan" class="tekst" /> 
 		<input type="button" value="Voorbeeld" onclick="CsrBBPreview('courantBericht', 'bewerkPreview');" />
 		{if $courant->magBeheren()}

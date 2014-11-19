@@ -80,13 +80,13 @@ class LedenlijstContent implements View {
 			} else {
 				$url = REQUEST_URI . '?addToGoogle=true';
 			}
-			echo '<a href="' . $url . '" class="knop float-right" title="Huidige selectie exporteren naar Google Contacts" onclick="return confirm(\'Weet u zeker dat u deze ' . $this->lidzoeker->count() . ' leden wilt importeren in uw Google-contacts?\')"><img src="' . CSR_PICS . '/knopjes/google.ico" width="16" height="16" alt="tovoegen aan Google contacts" /></a>';
+			echo '<a href="' . $url . '" class="btn float-right" title="Huidige selectie exporteren naar Google Contacts" onclick="return confirm(\'Weet u zeker dat u deze ' . $this->lidzoeker->count() . ' leden wilt importeren in uw Google-contacts?\')"><img src="' . CSR_PICS . '/knopjes/google.ico" width="16" height="16" alt="tovoegen aan Google contacts" /></a>';
 		}
 		echo getMelding();
 		echo '<h1>' . (LoginModel::instance()->getLid()->isOudlid() ? 'Oud-leden en l' : 'L') . 'edenlijst </h1>';
 		echo '<form id="zoekform" method="get">';
 		echo '<label for="q"></label><input type="text" name="q" value="' . htmlspecialchars($this->lidzoeker->getQuery()) . '" /> ';
-		echo '<input type="submit" class="submit" value="zoeken" /> <a class="knop" id="toggleAdvanced" href="#geavanceerd">Geavanceerd</a>';
+		echo '<input type="submit" class="submit" value="zoeken" /> <a class="btn" id="toggleAdvanced" href="#geavanceerd">Geavanceerd</a>';
 
 		echo '<div id="advanced" class="verborgen">';
 		echo '<label for="status">Status:</label>';

@@ -189,7 +189,7 @@ class SavedQueryContent implements View {
 				}
 				$return .= '</tr>';
 			}
-			$return .= '</tbody></table><a class="knop clear-right vergroot" data-vergroot="#' . $id . ' tbody" title="Vergroot de lijst">&uarr;&darr;</a>';
+			$return .= '</tbody></table><a class="btn clear-right vergroot" data-vergroot="#' . $id . ' tbody" title="Vergroot de lijst">&uarr;&darr;</a>';
 		} else {
 			//foutmelding in geval van geen resultaat, dus of geen query die bestaat, of niet
 			//voldoende rechten.
@@ -202,7 +202,7 @@ class SavedQueryContent implements View {
 		//als er een query ingeladen is, die highlighten
 		$id = $this->sq instanceof SavedQuery ? $this->sq->getID() : 0;
 
-		$return = '<a class="knop" href="#" onclick="$(\'#sqSelector\').toggle();">Laat queryselector zien.</a>';
+		$return = '<a class="btn" href="#" onclick="$(\'#sqSelector\').toggle();">Laat queryselector zien.</a>';
 		$return .= '<div id="sqSelector" ';
 		if ($id != 0) {
 			$return .= 'class="verborgen"';

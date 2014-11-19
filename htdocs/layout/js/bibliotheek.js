@@ -215,7 +215,7 @@ jQuery(document).ready(function($) {
 	$('.blok .InputField input,.blok .InputField textarea,.blok .InputField select').each(function(index, input){
 		$(this).after('<div class="melding"></div>'
 		).after(
-			$('<a class="knop opslaan">Opslaan</a>').mousedown(function(){
+			$('<a class="btn opslaan">Opslaan</a>').mousedown(function(){
 				var fieldname = input.id.substring(6);
 				var waarde=$("#"+input.id).val();
 				var boekid=jQuery(".boek").attr('id');
@@ -265,7 +265,7 @@ jQuery(document).ready(function($) {
 
 //voeg 'genereer'-knop toe aan codefield, die een biebcode geneert met waardes uit andere velden
 function biebCodeVakvuller(){
-	var codeknop=$('<a class="knop genereer" title="Biebcode invullen">Genereer</a>').mousedown(function (event) {
+	var codeknop=$('<a class="btn genereer" title="Biebcode invullen">Genereer</a>').mousedown(function (event) {
 		event.preventDefault();
 		$("#field_code").val(
 			$("#field_rubriek").val() + '.' + $("#field_auteur").val().substring(0,3).toLowerCase()

@@ -45,7 +45,7 @@
 	<div id="submitContainer">
 		<label for="submit">&nbsp;</label>
 		<a href="http://csrdelft.nl/wiki/cie:diensten:forum" target="_blank">Opmaakhulp</a>
-		<a class="knop float-right vergroot" data-vergroot="#bericht" title="Vergroot het invoerveld">&uarr;&darr;</a>
+		<a class="btn float-right vergroot" data-vergroot="#bericht" title="Vergroot het invoerveld">&uarr;&darr;</a>
 		<input type="button" name="submit" id="submit" value="Verder gaan" onclick="roodschopper('simulate'); return false;" />
 		<input id="forumVoorbeeld" type="button" onclick="CsrBBPreview('berichtInvoer', 'berichtPreview')" value="Voorbeeld"/>
 	</div>

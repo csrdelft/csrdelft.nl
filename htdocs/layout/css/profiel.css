@@ -5,7 +5,7 @@
 #profiel{ margin: 20px 0 200px 0; }
 #profiel h1{ margin-bottom: 10px; }
 #profiel img.pasfoto{ border: 1px solid black; margin-left: 20px;}
-#profiel .knopjes{ margin-left: 20px; line-height: 2.5em;}
+#profiel .btnjes{ margin-left: 20px; line-height: 2.5em;}
 
 #profiel .profielregel{ margin-bottom: 20px; clear: left; }
 	#profiel .left{ display: none; float: left; width: 10px; text-align: right; font-style: italic; font-size: 0.9em; }
@@ -44,7 +44,7 @@
 	-o-text-overflow: ellipsis;
 	white-space: nowrap;
 }
-#profiel .boeken a.knop{margin-left: 75px;}
+#profiel .boeken a.btn{margin-left: 75px;}
 
 p.profielBewerken .pasfoto{ float: right; margin-left: 10px;}
 

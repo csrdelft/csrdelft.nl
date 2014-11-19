@@ -2,7 +2,7 @@
 
 <div id="controls">
 	{if LoginModel::mag('P_DOCS_MOD')}
-		<a class="knop" href="/communicatie/documenten/toevoegen/?catID={$categorie->getID()}">{icon get="toevoegen"} Toevoegen</a>
+		<a class="btn" href="/communicatie/documenten/toevoegen/?catID={$categorie->getID()}">{icon get="toevoegen"} Toevoegen</a>
 	{/if}
 </div>
 

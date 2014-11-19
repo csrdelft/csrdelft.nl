@@ -67,7 +67,7 @@
 					{$lidAdder}<input type="submit" value="toevoegen" />
 				</form>
 			{else}
-				<a class="knop" onclick="$('#lidAdder').toggle();
+				<a class="btn" onclick="$('#lidAdder').toggle();
 						this.parentNode.removeChild(this)">leden toevoegen</a>
 				<form action="/actueel/groepen/{$groep->getType()->getNaam()}/{$groep->getId()}/addLid" method="post" id="lidAdder" class="verborgen">
 					<h2>Leden toevoegen</h2>
@@ -115,18 +115,18 @@
 	{if $groep->isAdmin() OR $groep->magBewerken()}
 		<div id="groepAdmin">
 			{if ($groep->isAdmin() OR $groep->isEigenaar()) AND $groep->getStatus()=='ht'}
-				<a class="knop" href="/actueel/groepen/{$groep->getType()->getNaam()}/{$groep->getId()}/maakGroepOt" onclick="return confirm('Weet u zeker dat u deze groep o.t. wilt maken?');" title="Groep o.t. maken? Eindatum wordt indien niet ingevuld naar vandaag gezet.">
+				<a class="btn" href="/actueel/groepen/{$groep->getType()->getNaam()}/{$groep->getId()}/maakGroepOt" onclick="return confirm('Weet u zeker dat u deze groep o.t. wilt maken?');" title="Groep o.t. maken? Eindatum wordt indien niet ingevuld naar vandaag gezet.">
 					<strong>&raquo;</strong>
 				</a>
 			{/if}
 
 			{if $groep->magBewerken()}
-				<a class="knop" href="/actueel/groepen/{$groep->getType()->getNaam()}/{$groep->getId()}/bewerken#groepFormulier">
+				<a class="btn" href="/actueel/groepen/{$groep->getType()->getNaam()}/{$groep->getId()}/bewerken#groepFormulier">
 					<img src="{$CSR_PICS}/famfamfam/pencil.png" title="Bewerk groep" />
 				</a>
 			{/if}
 			{if $groep->isAdmin()}
-				<a class="knop" onclick="return confirm('Weet u zeker dat u deze groep wilt verwijderen?');" href="/actueel/groepen/{$groep->getType()->getNaam()}/{$groep->getId()}/verwijderen">
+				<a class="btn" onclick="return confirm('Weet u zeker dat u deze groep wilt verwijderen?');" href="/actueel/groepen/{$groep->getType()->getNaam()}/{$groep->getId()}/verwijderen">
 					<img src="{$CSR_PICS}/forum/verwijderen.png" title="Verwijder deze groep" />
 				</a>
 			{/if}

@@ -364,7 +364,7 @@ function form_ischanged(form) {
 
 function form_set_action(event) {
 	var form = $(event.target).closest('form');
-	var url = $(event.target).closest('a.knop').attr('href');
+	var url = $(event.target).closest('a.btn').attr('href');
 	form.attr('action', url);
 }
 

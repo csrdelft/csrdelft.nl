@@ -10,9 +10,9 @@
 	<div class="indent">
 		<div id="bewerkPreview" class="preview"></div>
 		<textarea id="tekst" name="tekst" rows="12" class="tekst">{$mededeling->getTekst()|escape:'html'}</textarea><br />
-		<a id="voorbeeld" class="knop" onclick="return CsrBBPreview('tekst', 'bewerkPreview')">Voorbeeld</a>
+		<a id="voorbeeld" class="btn" onclick="return CsrBBPreview('tekst', 'bewerkPreview')">Voorbeeld</a>
 		<a href="http://csrdelft.nl/wiki/cie:diensten:forum" target="_blank">Opmaakhulp</a>
-		<a id="vergroot" class="knop vergroot" data-vergroot="#tekst" title="Vergroot het invoerveld">&uarr;&darr;</a>
+		<a id="vergroot" class="btn vergroot" data-vergroot="#tekst" title="Vergroot het invoerveld">&uarr;&darr;</a>
 	</div>
 
 	<div id="instellingen">
@@ -64,6 +64,6 @@
 	<div class="clear">
 		{if $prullenbak}<input type="hidden" name="prullenbak" value="1" />{/if}
 		<label >&nbsp;</label><input type="submit" name="submit" value="Opslaan" />
-		<a href="{MededelingenContent::mededelingenRoot}{$mededeling->getId()}" class="knop">Annuleren</a>
+		<a href="{MededelingenContent::mededelingenRoot}{$mededeling->getId()}" class="btn">Annuleren</a>
 	</div>
 </form>

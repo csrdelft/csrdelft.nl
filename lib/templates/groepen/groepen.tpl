@@ -23,9 +23,9 @@
 			<div id="bewerkPreview" class="preview"></div>
 			<label for="beschrijving"><strong>Beschrijving:</strong><br /><br />bbcode mogelijk</label>
 			<textarea id="typeBeschrijving" name="beschrijving" style="width:444px;" rows="15">{$groepen->getBeschrijving()|escape:'html'}</textarea><br />
-			<label for="submit"></label><input type="submit" id="submit" value="Opslaan" /> <input type="button" value="Voorbeeld" onclick="return CsrBBPreview('typeBeschrijving', 'bewerkPreview')" /> <a href="/actueel/groepen/{$groepen->getNaam()}/" class="knop">Terug</a>
+			<label for="submit"></label><input type="submit" id="submit" value="Opslaan" /> <input type="button" value="Voorbeeld" onclick="return CsrBBPreview('typeBeschrijving', 'bewerkPreview')" /> <a href="/actueel/groepen/{$groepen->getNaam()}/" class="btn">Terug</a>
 			<a href="http://csrdelft.nl/wiki/cie:diensten:forum" target="_blank">Opmaakhulp</a> 
-			<a class="knop float-right vergroot" data-vergroot="#typeBeschrijving" title="Vergroot het invoerveld">&uarr;&darr;</a>
+			<a class="btn float-right vergroot" data-vergroot="#typeBeschrijving" title="Vergroot het invoerveld">&uarr;&darr;</a>
 			<hr />
 		</div>
 	</form>
@@ -34,16 +34,16 @@
 {/if}
 <div class="clear">
 	{if $groepen->isAdmin() OR $groepen->isGroepAanmaker()}
-		<a href="/actueel/groepen/{$groepen->getNaam()}/0/bewerken" class="knop">Nieuwe {$groepen->getNaamEnkelvoud()}</a>
+		<a href="/actueel/groepen/{$groepen->getNaam()}/0/bewerken" class="btn">Nieuwe {$groepen->getNaamEnkelvoud()}</a>
 	{/if}	
 	{if $groepen->isAdmin()}
-		<a href="/actueel/groepen/{$groepen->getNaam()}/?maakOt=true" class="knop" 
+		<a href="/actueel/groepen/{$groepen->getNaam()}/?maakOt=true" class="btn" 
 		   onclick="return confirm('Weet u zeker dat alle h.t. groepen in deze categorie o.t. moeten worden?')">
 			Maak h.t. groepen o.t.
 		</a>
 	{/if}
 	{if LoginModel::mag('P_ADMIN') AND $action!='edit'}
-		<a class="knop" href="/actueel/groepen/{$groepen->getNaam()}/?bewerken=true">
+		<a class="btn" href="/actueel/groepen/{$groepen->getNaam()}/?bewerken=true">
 			<img src="{$CSR_PICS}/famfamfam/pencil.png" title="Bewerk beschrijving" />
 		</a>
 	{/if}
@@ -66,5 +66,5 @@
 {/foreach}
 <hr class="clear" />
 {if $groepen->isAdmin() OR $groepen->isGroepAanmaker()}
-	<a href="/actueel/groepen/{$groepen->getNaam()}/0/bewerken" class="knop">Nieuwe {$groepen->getNaamEnkelvoud()}</a>
+	<a href="/actueel/groepen/{$groepen->getNaam()}/0/bewerken" class="btn">Nieuwe {$groepen->getNaamEnkelvoud()}</a>
 {/if}

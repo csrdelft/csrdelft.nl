@@ -1,9 +1,9 @@
 {getMelding()}
 {capture name='navlinks'}
 	<div class="maandnavigatie">
-		<a class="knop float-left" href="{$urlVorige}">&laquo; {$prevMaand}</a>
+		<a class="btn float-left" href="{$urlVorige}">&laquo; {$prevMaand}</a>
 		<h1>{$datum|date_format:"%B %Y"}</h1>
-		<a class="knop float-right" href="{$urlVolgende}">{$nextMaand} &raquo;</a>
+		<a class="btn float-right" href="{$urlVolgende}">{$nextMaand} &raquo;</a>
 	</div>
 {/capture}
 {$smarty.capture.navlinks}

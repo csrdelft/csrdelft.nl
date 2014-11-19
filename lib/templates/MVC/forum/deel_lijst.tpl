@@ -4,7 +4,7 @@
 		<br />{$deel->omschrijving}
 		{if LoginModel::mag('P_FORUM_ADMIN')}
 			<div class="hoverIntentContent">
-				<a href="/forum/hertellen/{$deel->forum_id}" class="knop post ReloadPage" title="Hertellen">{icon get="calculator"}</a>
+				<a href="/forum/hertellen/{$deel->forum_id}" class="btn post ReloadPage" title="Hertellen">{icon get="calculator"}</a>
 			</div>
 		{/if}
 	</td>

@@ -1,13 +1,13 @@
 <div class="float-right">
 	{if LoginModel::mag('P_ALBUM_ADD')}
-		<a class="knop" href="/fotoalbum/uploaden/{$album->getSubDir()}">{icon get="picture_add"} Toevoegen</a>
-		<a class="knop post modal" href="/fotoalbum/toevoegen/{$album->getSubDir()}">{icon get="folder_add"} Nieuw album</a>
+		<a class="btn" href="/fotoalbum/uploaden/{$album->getSubDir()}">{icon get="picture_add"} Toevoegen</a>
+		<a class="btn post modal" href="/fotoalbum/toevoegen/{$album->getSubDir()}">{icon get="folder_add"} Nieuw album</a>
 	{/if}
 	{if LoginModel::mag('P_LOGGED_IN') && $album->getFotos()!==false}
-		<a class="knop" href="/fotoalbum/downloaden/{$album->getSubDir()}" title="Download als TAR-bestand">{icon get="picture_save"} Download album</a>
+		<a class="btn" href="/fotoalbum/downloaden/{$album->getSubDir()}" title="Download als TAR-bestand">{icon get="picture_save"} Download album</a>
 	{/if}
 	{if LoginModel::mag('P_ALBUM_MOD')}
-		<a class="knop" href="/fotoalbum/verwerken/{$album->getSubDir()}">{icon get="application_view_gallery"} Verwerken</a>
+		<a class="btn" href="/fotoalbum/verwerken/{$album->getSubDir()}">{icon get="application_view_gallery"} Verwerken</a>
 	{/if}
 </div>
 
@@ -17,7 +17,7 @@
 	<div class="album hoverIntent">
 		{if LoginModel::mag('P_ALBUM_MOD')}
 			<div class="thumb-mod">
-				<a href="/fotoalbum/hernoemen/{$subalbum->getSubDir()}" class="knop post prompt ReloadPage hoverIntentContent top-right" title="Fotoalbum hernoemen" data="Nieuwe naam={$subalbum->dirname}">{icon get=pencil}</a>
+				<a href="/fotoalbum/hernoemen/{$subalbum->getSubDir()}" class="btn post prompt ReloadPage hoverIntentContent top-right" title="Fotoalbum hernoemen" data="Nieuwe naam={$subalbum->dirname}">{icon get=pencil}</a>
 			</div>
 		{/if}
 		<a href="{$subalbum->getUrl()}">
@@ -35,14 +35,14 @@
 			{if LoginModel::mag('P_ALBUM_ADD')}
 				{if LoginModel::mag('P_ALBUM_MOD')}
 					{if strpos($album->getSubDir(), 'Posters') === false}
-						<a href="/fotoalbum/albumcover/{$album->getSubDir()}" data="cover={$foto->filename}" class="knop post confirm ReloadPage hoverIntentContent top-left" title="Instellen als albumcover">{icon get=folder_picture}</a>
+						<a href="/fotoalbum/albumcover/{$album->getSubDir()}" data="cover={$foto->filename}" class="btn post confirm ReloadPage hoverIntentContent top-left" title="Instellen als albumcover">{icon get=folder_picture}</a>
 					{/if}
 					{if LoginModel::mag('P_ALBUM_DEL')}
-						<a href="/fotoalbum/verwijderen/{$album->getSubDir()}" data="foto={$foto->filename}" class="knop post confirm hoverIntentContent top-right" title="Definitief verwijderen van deze foto">{icon get=cross}</a>
+						<a href="/fotoalbum/verwijderen/{$album->getSubDir()}" data="foto={$foto->filename}" class="btn post confirm hoverIntentContent top-right" title="Definitief verwijderen van deze foto">{icon get=cross}</a>
 					{/if}
 				{/if}
-				<a href="/fotoalbum/roteren/{$album->getSubDir()}" data="foto={$foto->filename}&rotation=-90" class="knop post confirm ReloadPage hoverIntentContent bottom-left" title="Foto tegen de klok in draaien">{icon get=arrow_rotate_anticlockwise}</a>
-				<a href="/fotoalbum/roteren/{$album->getSubDir()}" data="foto={$foto->filename}&rotation=90" class="knop post confirm ReloadPage hoverIntentContent bottom-right" title="Foto met de klok mee draaien">{icon get=arrow_rotate_clockwise}</a>
+				<a href="/fotoalbum/roteren/{$album->getSubDir()}" data="foto={$foto->filename}&rotation=-90" class="btn post confirm ReloadPage hoverIntentContent bottom-left" title="Foto tegen de klok in draaien">{icon get=arrow_rotate_anticlockwise}</a>
+				<a href="/fotoalbum/roteren/{$album->getSubDir()}" data="foto={$foto->filename}&rotation=90" class="btn post confirm ReloadPage hoverIntentContent bottom-right" title="Foto met de klok mee draaien">{icon get=arrow_rotate_clockwise}</a>
 			{/if}
 			<a href="{$foto->getResizedURL()}" rel="prettyPhoto[album]">
 				<img src="{$foto->getThumbURL()}" />

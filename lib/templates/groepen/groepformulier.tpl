@@ -105,7 +105,7 @@
 		<label for="submit"></label>
 		<input type="button" class="voorbeeld" value="Voorbeeld" onclick="return CsrBBPreview('sbeschrijving', 'sbewerkPreview')" />
 		<a href="http://csrdelft.nl/wiki/cie:diensten:forum" target="_blank">Opmaakhulp</a>
-		<a class="knop extraknopjespreview vergroot" data-vergroot="#sbeschrijving" title="Vergroot het invoerveld">&uarr;&darr;</a><br />
+		<a class="btn extraknopjespreview vergroot" data-vergroot="#sbeschrijving" title="Vergroot het invoerveld">&uarr;&darr;</a><br />
 	{/if}
 
 	{* voor sjaarsactie geen lange beschrijving *}
@@ -118,14 +118,14 @@
 		<label for="submit"></label>
 		<input type="button" class="voorbeeld" value="Voorbeeld" onclick="return CsrBBPreview('beschrijving', 'bewerkPreview')" /> 
 		<a href="http://csrdelft.nl/wiki/cie:diensten:forum" target="_blank">Opmaakhulp</a> 
-		<a class="knop extraknopjespreview vergroot" data-vergroot="#beschrijving" title="Vergroot het invoerveld">&uarr;&darr;</a><br />
+		<a class="btn extraknopjespreview vergroot" data-vergroot="#beschrijving" title="Vergroot het invoerveld">&uarr;&darr;</a><br />
 	{/if}
 
 	<hr />
 
 	<label for="submit"></label>
 	<input type="submit" id="submit" value="Opslaan" />
-	<a href="/actueel/groepen/{$groep->getType()->getNaam()}{if $groep->getId()!=0}/{$groep->getId()}{/if}/" class="knop">Terug</a>
+	<a href="/actueel/groepen/{$groep->getType()->getNaam()}{if $groep->getId()!=0}/{$groep->getId()}{/if}/" class="btn">Terug</a>
 </div>
 </form>
 <script type="text/javascript">

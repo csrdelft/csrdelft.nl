@@ -4,7 +4,7 @@ body{
 }
 .verborgen{ display: none;}
 .handje{ cursor: pointer; }
-.knop{
+.btn{
 	background-color: #eee;
 	padding: 2px;
 	margin: 2px;

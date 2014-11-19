@@ -24,10 +24,10 @@
 		<div id="kolomlinks">
 			{* Knoppen bovenaan *}
 			{if !$prullenbak AND $geselecteerdeMededeling->magToevoegen()}
-				<a class="knop" href="{$pagina_root}toevoegen">{icon get="toevoegen"} Toevoegen</a>
+				<a class="btn" href="{$pagina_root}toevoegen">{icon get="toevoegen"} Toevoegen</a>
 			{/if}
 			{if $geselecteerdeMededeling->isModerator()}
-				<a class="knop" href="#" onclick="$('#legenda').toggle();">{icon get="legenda"} Legenda</a>
+				<a class="btn" href="#" onclick="$('#legenda').toggle();">{icon get="legenda"} Legenda</a>
 				<div id="legenda" class="dragobject verborgen">
 					<div class="float-right" onclick="$('#legenda').fadeOut();" title="Legenda verbergen">&times;</div>
 					<h2>Legenda Mededelingen</h2>

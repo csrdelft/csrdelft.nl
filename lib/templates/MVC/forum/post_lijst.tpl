@@ -37,18 +37,18 @@
 		{/if}
 		<br />
 		{if $post->wacht_goedkeuring}
-			<a href="/forum/goedkeuren/{$post->post_id}" class="knop post confirm" title="Bericht goedkeuren">goedkeuren</a>
+			<a href="/forum/goedkeuren/{$post->post_id}" class="btn post confirm" title="Bericht goedkeuren">goedkeuren</a>
 			<br /><br />
-			<a href="/tools/stats.php?ip={$post->auteur_ip}" class="knop" title="IP-log">IP-log</a>
-			<a href="/forum/verwijderen/{$post->post_id}" class="knop post confirm" title="Verwijder bericht of draad">{icon get="cross"}</a>
+			<a href="/tools/stats.php?ip={$post->auteur_ip}" class="btn" title="IP-log">IP-log</a>
+			<a href="/forum/verwijderen/{$post->post_id}" class="btn post confirm" title="Verwijder bericht of draad">{icon get="cross"}</a>
 		{else}
 			<div class="forumpostKnoppen">
 				{if $post->verwijderd}
 					<div class="post-verwijderd">Deze reactie is verwijderd.</div>
-					<a href="/forum/verwijderen/{$post->post_id}" class="knop post confirm" title="Bericht herstellen">{icon get="arrow_undo"}</a>
+					<a href="/forum/verwijderen/{$post->post_id}" class="btn post confirm" title="Bericht herstellen">{icon get="arrow_undo"}</a>
 				{/if}
 				{if LoginModel::mag('P_LOGGED_IN') AND ForumController::magPosten($draad, $deel)}
-					<a href="#reageren" class="knop citeren" data-citeren="{$post->post_id}" title="Citeer bericht">{icon get="comments"}</a>
+					<a href="#reageren" class="btn citeren" data-citeren="{$post->post_id}" title="Citeer bericht">{icon get="comments"}</a>
 				{/if}
 				{if ForumController::magForumPostBewerken($post, $draad, $deel)}
 					<a href="#{$post->post_id}" class="knop
@@ -56,11 +56,11 @@
 					   {/if}" onclick="forumBewerken({$post->post_id});" title="Bewerk bericht">{icon get="pencil"}</a>
 				{/if}
 				{if $deel->magModereren()}
-					<a href="/forum/offtopic/{$post->post_id}" class="knop post confirm{if !$post->wacht_goedkeuring} forummodknop{/if}" title="Offtopic markeren">{icon get="thumb_down"}</a>
+					<a href="/forum/offtopic/{$post->post_id}" class="btn post confirm{if !$post->wacht_goedkeuring} forummodknop{/if}" title="Offtopic markeren">{icon get="thumb_down"}</a>
 					{if !$post->verwijderd}
-						<a href="/forum/verwijderen/{$post->post_id}" class="knop post confirm{if !$post->wacht_goedkeuring} forummodknop{/if}" title="Verwijder bericht">{icon get="cross"}</a>
+						<a href="/forum/verwijderen/{$post->post_id}" class="btn post confirm{if !$post->wacht_goedkeuring} forummodknop{/if}" title="Verwijder bericht">{icon get="cross"}</a>
 					{/if}
-					<a href="/forum/verplaatsen/{$post->post_id}" class="knop post prompt{if !$post->wacht_goedkeuring} forummodknop{/if}" title="Verplaats bericht" data="Draad id={$post->draad_id}">{icon get=arrow_right}</a>
+					<a href="/forum/verplaatsen/{$post->post_id}" class="btn post prompt{if !$post->wacht_goedkeuring} forummodknop{/if}" title="Verplaats bericht" data="Draad id={$post->draad_id}">{icon get=arrow_right}</a>
 				{/if}
 			</div>
 		{/if}

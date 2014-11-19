@@ -170,7 +170,7 @@ while($row=$db->next($weekResult)){
 	$totaal=0;
 
 	echo '<td>';
-	echo '<a class="details handje knop" id="details-'.$week.'">&raquo; Toon details</a>';
+	echo '<a class="btn details" id="details-'.$week.'">&raquo; Toon details</a>';
 	echo '<table id="table-details-'.$week.'" class="artikelen verborgen"><tr><th>artikel</th><th>letter</th><th>#</th><th>omzet</th></tr>';
 	foreach($bestellingen as $letter => $aantal){
 		$artikelomzet=$artikelen[$letter]['prijs']*$aantal;

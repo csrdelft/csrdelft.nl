@@ -49,7 +49,7 @@ h1,h2,h3,h4,strong, #menu *, #submenu *{
 }
 #mainleft h1{ border: 1px solid #bbb !important; }
 .item a{color: #ebc474 !important; }
-a.knop, textarea, input, select, #filters span, #boekencatalogus_wrapper *, .mededeling-grotebalk, #maand *, .eetplantabel *{ background-color: black !important; color: white !important; }
+a.btn, textarea, input, select, #filters span, #boekencatalogus_wrapper *, .mededeling-grotebalk, #maand *, .eetplantabel *{ background-color: black !important; color: white !important; }
 
 #boekencatalogus thead tr th{ border-bottom: 1px solid #eee !important; }
 #boekencatalogus tfoot tr th{ border-top: 1px solid #eee !important; }

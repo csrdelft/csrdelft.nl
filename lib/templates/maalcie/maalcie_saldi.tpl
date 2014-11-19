@@ -6,4 +6,4 @@
 <br />
 <h2>Boekjaar sluiten</h2>
 <p>De maaltijden van het boekjaar zullen naar het archief worden verplaatst.</p>
-<a href="{$smarty.const.maalcieUrl}/sluitboekjaar" title="Boekjaar afsluiten" class="knop post modal">{icon get="door_in"} Sluit boekjaar</a>
+<a href="{$smarty.const.maalcieUrl}/sluitboekjaar" title="Boekjaar afsluiten" class="btn post modal">{icon get="door_in"} Sluit boekjaar</a>

@@ -105,6 +105,7 @@ class FormulierKnop implements FormElement {
 	public $label;
 	public $title;
 	public $float_left;
+	public $css_classes;
 
 	public function __construct($url, $action, $label, $title, $icon, $float_left = false) {
 		$this->id = 'knop' . crc32($url . $action);
@@ -114,6 +115,7 @@ class FormulierKnop implements FormElement {
 		$this->title = $title;
 		$this->icon = $icon;
 		$this->float_left = $float_left;
+		$this->css_classes = array();
 	}
 
 	public function getId() {
@@ -137,7 +139,7 @@ class FormulierKnop implements FormElement {
 	}
 
 	public function view() {
-		echo '<a id="' . $this->id . '"' . ($this->url ? ' href="' . $this->url . '"' : '') . ' class="knop ' . $this->action . '" title="' . htmlspecialchars($this->title) . '">';
+		echo '<a id="' . $this->id . '"' . ($this->url ? ' href="' . $this->url . '"' : '') . ' class="btn ' . $this->action . ' ' . implode(' ', $this->css_classes) . '" title="' . htmlspecialchars($this->title) . '">';
 		if ($this->icon) {
 			echo '<img src="' . CSR_PICS . $this->icon . '" class="icon" width="16" height="16" /> ';
 		}
