@@ -222,7 +222,7 @@ function fnChildRow(dataTable, td, column) {
 			});
 		}
 	}
-	else if (typeof column === 'string') {
+	else if (typeof column === 'string') { // TODO: preloaded expand
 		row.child('<div class="innerDetails verborgen"></div>').show();
 		tr.addClass('expanded');
 		var innerDiv = tr.next().addClass('childrow').children(':first').children(':first');

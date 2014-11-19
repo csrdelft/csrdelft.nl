@@ -15,7 +15,7 @@
 						<span class="icon-bar"></span>
 					</button>
 					<a class="navbar-brand" href="/happie/bestel/nieuw">Nieuwe bestelling</a>
-					<a class="navbar-brand" href="/happie/bestel/serveer">Wijzig vorige</a>
+					<a class="navbar-brand" href="/happie/bestel/serveer">Recent</a>
 				</div>
 				<div class="navbar-collapse collapse">
 					<ul class="nav navbar-nav">
@@ -29,7 +29,7 @@
 								<li><a href="/happie/bestel/">Alle bestellingen</a></li>
 								<li class="divider"></li>
 								<li class="dropdown-header">Menukaart aanpassen</li>
-								<li><a href="/happie/menukaart">Gerechten/dranken</a></li>
+								<li><a href="/happie/menukaart">Menukaart-items</a></li>
 								<li><a href="/happie/menugroep">Menukaart-groepen</a></li>
 							</ul>
 						</li>

@@ -139,6 +139,12 @@ class DataTable extends TabsForm {
 					"order": [[1, "asc"]],
 					"createdRow": function (row, data, index) {
 						$(row).attr('id', tableId + '_' + index); // data array index
+						var primaryKey = ["<?= implode('", "', $this->orm->getPrimaryKey()) ?>"];
+						var objectId = [];
+						for (var i = 0; i < primaryKey.length; i++) {
+							objectId.push(data[primaryKey[i]]);
+						}
+						$(row).attr('data-objectId', objectId);
 						if ('detailSource' in data) {
 							$(row).children('td.details-control:first').data('detailSource', data.detailSource);
 						} else {
@@ -219,9 +225,7 @@ class DataTableToolbarKnop extends FormulierKnop {
 
 	public function getUpdateScript() {
 		return <<<JS
-var knop = $('#{$this->getId()}');
-var enable = aantal {$this->multiplicity};
-knop.attr('disabled', !enable);
+$('#{$this->getId()}').attr('disabled', !(aantal {$this->multiplicity}));
 JS;
 	}
 
@@ -246,17 +250,17 @@ class DataTableResponse extends JsonResponse {
 		header('Content-Type: application/json');
 		echo '{"data":[';
 		if ($this->model instanceof PDOStatement AND $this->model->rowCount() == 0) {
-			echo ']}';
-			return;
-		}
-		$comma = false;
-		foreach ($this->model as $data) {
-			if ($comma) {
-				echo ',';
-			} else {
-				$comma = true;
+			// empty
+		} else {
+			$comma = false;
+			foreach ($this->model as $data) {
+				if ($comma) {
+					echo ',';
+				} else {
+					$comma = true;
+				}
+				echo $this->getJson($data);
 			}
-			echo $this->getJson($data);
 		}
 		echo ']}';
 	}
