@@ -15,8 +15,6 @@ class HappieMenukaartItemsJson extends DataTableResponse {
 		if ($groep) {
 			$data->menukaart_groep = $groep->naam;
 			$data->aantal_beschikbaar .= ' / ' . $groep->aantal_beschikbaar;
-		} else {
-			$data->menukaart_groep = 'Geen groep';
 		}
 		return parent::getJson($data);
 	}

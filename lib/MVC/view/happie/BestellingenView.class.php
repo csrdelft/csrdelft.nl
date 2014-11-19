@@ -16,8 +16,6 @@ class HappieBestellingenJson extends DataTableResponse {
 		$item = $data->getItem();
 		if ($item) {
 			$data->menukaart_item = $item->naam;
-		} else {
-			$data->menukaart_item = 'Geen item';
 		}
 		$data->tafel = 'Tafel ' . $data->tafel;
 		$data->datum = reldate($data->datum);
