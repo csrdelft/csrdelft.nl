@@ -55,7 +55,7 @@ class HappieMenukaartItemForm extends Formulier {
 		$fields[] = new SelectField('menukaart_groep', $item->menukaart_groep, 'Menugroep', $opties);
 		$fields[] = new RequiredTextField('naam', $item->naam, 'Gerechtnaam');
 		$fields[] = new TextareaField('beschrijving', $item->beschrijving, 'Omschrijving');
-		$fields[] = new TextareaField('allergie_info', $item->allergie_info, 'Allergie-informatie');
+		$fields[] = new TextField('allergie_info', $item->allergie_info, 'Allergie-informatie');
 		$fields[] = new BedragField('prijs', $item->prijs, 'Prijs');
 		$fields[] = new RequiredIntField('aantal_beschikbaar', $item->aantal_beschikbaar, 'Beschikbaar #');
 		$fields['v'] = new TextareaField('variaties', $item->variaties, 'Variaties');
