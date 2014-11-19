@@ -84,7 +84,7 @@ if ($barsysteem->isLoggedIn()){
 	
 	// Load orders
     if (isset($_POST["laadLaatste"])) {
-        echo json_encode($barsysteem->getBestellingLaatste($_POST["aantal"], $_POST["begin"], $_POST["eind"]));
+        echo json_encode($barsysteem->getBestellingLaatste($_POST["aantal"], $_POST["begin"], $_POST["eind"], isset($_POST['productType']) ? $_POST['productType'] : array()));
     }
 }
 ?>

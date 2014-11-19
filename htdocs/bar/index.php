@@ -191,10 +191,17 @@ if ($barsysteem->isLoggedIn()) {
                                                                          name="end"
                                                                          placeholder="nu" id="eindDatum"/> <span
                             class="clearKruisje glyphicon glyphicon glyphicon-remove-circle"></span>
+                        <span class="input-group-addon">naar</span>
 						<span class="input-group-btn">
+                            <button class="btn btn-default btn-primary" id="pSearch">alle</button>
 							<button class="btn btn-primary" id="krijgBestellingen"><span
                                     class="glyphicon glyphicon glyphicon-cloud-download"></span></button>
 						</span>
+
+                    </div>
+                    <div id="pSearchContent" class="hidden input-group input-group-lg">
+
+                        <?php // Space for checkboxes ?>
 
                     </div>
                     <div id="besteLijstBeheerContent">
@@ -372,7 +379,7 @@ if ($barsysteem->isLoggedIn()) {
     <script src="js/jquery.tablesorter.widgets.min.js"></script>
     <script src="js/bootstrapValidator.min.js"></script>
     <script src="js/nl_NL.js"></script>
-    <script src="js/myscript.js"></script>
+    <script src="js/main.js"></script>
 
     </body>
     </html>

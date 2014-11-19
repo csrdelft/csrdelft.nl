@@ -42,7 +42,7 @@ htdocs/bar/js/bootstrap.min.js -text
 htdocs/bar/js/bootstrapValidator.min.js -text
 htdocs/bar/js/jquery.tablesorter.min.js -text
 htdocs/bar/js/jquery.tablesorter.widgets.min.js -text
-htdocs/bar/js/myscript.js -text
+htdocs/bar/js/main.js -text
 htdocs/bar/js/nl_NL.js -text
 htdocs/communicatie/.htaccess -text
 htdocs/communicatie/bibliotheek.php -text

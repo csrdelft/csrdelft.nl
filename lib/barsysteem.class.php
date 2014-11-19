@@ -117,8 +117,13 @@ class Barsysteem
         return $this->verwerkBestellingResultaat($q->fetchAll(PDO::FETCH_ASSOC));
     }
 
-    function getBestellingLaatste($persoon, $begin, $eind)
+    function getBestellingLaatste($persoon, $begin, $eind, $productType)
     {
+        $productIDs = array();
+        foreach($productType as $product) {
+            $productIDs[] = $product['value'];
+        }
+
         if ($begin == "") {
             $begin = getDateTime(time() - 15 * 3600);
         } else {
@@ -136,7 +141,7 @@ class Barsysteem
         $q->bindValue(":begin", $begin);
         $q->bindValue(":eind", $eind);
         $q->execute();
-        return $this->verwerkBestellingResultaat($q->fetchAll(PDO::FETCH_ASSOC));
+        return $this->verwerkBestellingResultaat($q->fetchAll(PDO::FETCH_ASSOC), $productIDs);
     }
 
     function updateBestelling($data)
@@ -228,22 +233,37 @@ class Barsysteem
 
     }
 
-    private function verwerkBestellingResultaat($queryResult)
+    private function verwerkBestellingResultaat($queryResult, $productIDs)
     {
         $result = array();
         foreach ($queryResult as $row) {
             if (!array_key_exists($row["bestellingId"], $result)) {
-                $result[$row["bestellingId"]] = array();
-                $result[$row["bestellingId"]]["bestelLijst"] = array();
-                $result[$row["bestellingId"]]["bestelTotaal"] = $row["totaal"];
-                $result[$row["bestellingId"]]["persoon"] = $row["socCieId"];
-                $result[$row["bestellingId"]]["tijd"] = $row["tijd"];
-                $result[$row["bestellingId"]]["bestelId"] = $row["id"];
-                $result[$row["bestellingId"]]["deleted"] = $row["d"];
+                $result[ $row["bestellingId"] ] = array();
+                $result[ $row["bestellingId"] ]["bestelLijst"] = array();
+                $result[ $row["bestellingId"] ]["bestelTotaal"] = $row["totaal"];
+                $result[ $row["bestellingId"] ]["persoon"] = $row["socCieId"];
+                $result[ $row["bestellingId"] ]["tijd"] = $row["tijd"];
+                $result[ $row["bestellingId"] ]["bestelId"] = $row["id"];
+                $result[ $row["bestellingId"] ]["deleted"] = $row["d"];
 
             }
-            $result[$row["bestellingId"]]["bestelLijst"][$row["productId"]] = 1 * $row["aantal"];
+            $result[ $row["bestellingId"] ]["bestelLijst"][$row["productId"]] = 1 * $row["aantal"];
         }
+
+        foreach($result as $key => $bestelling) {
+
+            $keep = false;
+            foreach($productIDs as $id) {
+                if(in_array($id, array_keys($bestelling["bestelLijst"]))) {
+                    $keep = true;
+                }
+            }
+
+            if(!$keep)
+                unset($result[$key]);
+
+        }
+
         return $result;
     }
 

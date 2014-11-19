@@ -1209,3 +1209,23 @@ fieldset[disabled] .datepicker table tr td span.active.disabled:hover.active {
 .datepicker.datepicker-inline td {
   padding: 0px 5px;
 }
+#pSearch{
+    display: table-cell;
+    border-radius: 0;
+}
+.input-group{
+    z-index: 10;
+}
+#pSearchContent{
+    z-index: 9;
+    padding-top: 10px;
+    margin-top: -10px;
+    border-radius: 0 0 6px 6px;
+    border: 1px solid #ccc;
+    background: #eee;
+}
+#pSearchContent .checkbox{
+    float: left;
+    margin: 0;
+    padding: 10px;
+}

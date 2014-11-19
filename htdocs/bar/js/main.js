@@ -261,6 +261,13 @@ $(function () {
 					zetProductInLijst(this[0]);
 				});
                 setProductenBeheer();
+                // Zet producten in search pSearchContent
+                var html = '';
+                $.each(sorteerbaar, function() {
+                    html += '<div class="checkbox"><label><input type="checkbox" name="productType" value="'+this[0].productId+'">'+ this[0].beschrijving +'</label></div>';
+
+                });
+                $("#pSearchContent").html(html);
 			});
 	} laadProducten();
 
@@ -457,10 +464,11 @@ $(function () {
         if ($("#eenPersoon").hasClass("btn-primary")) {
             aantal = selectedPerson.socCieId;
         }
+        var productType = $("#pSearchContent").find("input").serializeArray();
         $.ajax({
             url: "ajax.php",
             method: "POST",
-            data: {"laadLaatste": "waar", "begin": $("#beginDatum").val(), "eind": $("#eindDatum").val(), "aantal": aantal },
+            data: {"laadLaatste": "waar", "begin": $("#beginDatum").val(), "eind": $("#eindDatum").val(), "aantal": aantal, "productType": productType },
 			dataType: "json"
         }).done(function (data) {
             zetOudeBestellingen(data);
@@ -866,5 +874,17 @@ $(function () {
 		});
 	
 	});
+
+    /**
+    /* Toggle search on selective products
+     */
+    $("#pSearch").click(function() {
+        if($(this).hasClass("btn-primary")) {
+            $("#pSearchContent").removeClass("hidden");
+        } else {
+            $("#pSearchContent").addClass("hidden").find("input").prop("checked", false);
+        }
+        $(this).toggleClass("btn-primary");
+    });
 
 });
