@@ -881,7 +881,7 @@ class IntField extends TextField {
 		} else {
 			$type = 'text';
 
-			if (!$this->readonly) {
+			if (!$this->readonly AND ! $this->disabled AND ! $this->hidden) {
 				$minus = CSR_PICS . '/famfamfam/delete.png';
 				$js = <<<JS
 $('#{$this->getId()}').val(parseInt($('#{$this->getId()}').val()) - 1);
@@ -912,7 +912,7 @@ JS;
 
 		echo ' <input type="' . $type . '"' . $this->getInputAttribute(array('id', 'name', 'class', 'value', 'origvalue', 'disabled', 'readonly', 'maxlength', 'placeholder', 'autocomplete', 'onchange', 'onclick', 'onkeyup')) . ' /> ';
 
-		if (!$this->hidden AND ! $this->readonly) {
+		if (!$this->readonly AND ! $this->disabled AND ! $this->hidden) {
 			$plus = CSR_PICS . '/famfamfam/add.png';
 			$js = <<<JS
 $('#{$this->getId()}').val(parseInt($('#{$this->getId()}').val()) + 1);

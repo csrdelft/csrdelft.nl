@@ -16,6 +16,7 @@
 abstract class FormKnoppen implements FormElement {
 
 	protected $knoppen = array();
+	public $css_classes = array();
 
 	public function getModel() {
 		return $this->knoppen;
@@ -42,7 +43,7 @@ abstract class FormKnoppen implements FormElement {
 	}
 
 	public function view() {
-		echo '<div class="' . $this->getType() . '"><div class="float-left">';
+		echo '<div class="' . $this->getType() . ' ' . implode(' ', $this->css_classes) . '"><div class="float-left">';
 		foreach ($this->knoppen as $knop) {
 			if ($knop->float_left) {
 				$knop->view();
