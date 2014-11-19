@@ -18,6 +18,7 @@ abstract class T implements PersistentEnum {
 	const Date = 'date';
 	const Time = 'time';
 	const DateTime = 'datetime';
+	const TimeStamp = 'timestamp';
 	const Text = 'text';
 	const LongText = 'longtext';
 	const Enumeration = 'enum';

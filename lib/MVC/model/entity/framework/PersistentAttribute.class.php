@@ -82,7 +82,7 @@ class PersistentAttribute {
 		$attribute->extra = (isset($definition[2]) ? $definition[2] : '');
 		if ($attribute->type === T::Enumeration) {
 			$class = $attribute->extra;
-			$attribute->type = 'enum("' . implode('", "', $class::getTypeOptions()) . '")';
+			$attribute->type = "enum('" . implode("','", $class::getTypeOptions()) . "')";
 			$attribute->extra = '';
 		}
 		return $attribute;

@@ -220,7 +220,10 @@ abstract class PersistentEntity implements Sparse, JsonSerializable {
 				// Check exisiting persistent attributes for differences
 				$diff = false;
 				if ($attributes[$name]->type !== $database_attributes[$name]->type) {
-					$diff = true;
+					$class = $definition[2];
+					if ($definition[0] !== T::Enumeration OR $database_attributes[$name]->type !== "enum('" . implode("','", $class::getTypeOptions()) . "')") {
+						$diff = true;
+					}
 				}
 				if ($attributes[$name]->null !== $database_attributes[$name]->null) {
 					$diff = true;
