@@ -57,6 +57,9 @@ class DataTable extends TabsForm {
 			}
 			$this->addColumn($attribute, $type);
 		}
+		foreach ($this->orm->getPrimaryKey() as $attribute) {
+			$this->hideColumn($attribute);
+		}
 	}
 
 	protected function addColumn($newName, $type = 'html', $before = null) {
