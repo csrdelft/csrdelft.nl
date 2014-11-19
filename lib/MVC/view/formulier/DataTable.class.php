@@ -208,6 +208,11 @@ JSON;
 						} else {
 							$(row).children('td.details-control:first').removeClass('details-control');
 						}
+						try {
+							$('abbr.timeago', row).timeago();
+						} catch ($e) {
+							// missing js
+						}
 					}<?= $conditionalProps ?>
 				});
 				// Multiple selection of rows
