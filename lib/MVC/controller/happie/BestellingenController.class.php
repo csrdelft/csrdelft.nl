@@ -78,7 +78,7 @@ class HappieBestellingenController extends AclController {
 			$bestellingen = array();
 			foreach ($form->getValues() as $item_id => $attr) {
 				if ($attr['aantal'] > 0) {
-					$bestellingen[] = $this->model->newBestelling($attr['tafel'], $item_id, $attr['aantal'], $attr['klant_allergie']);
+					$bestellingen[] = $this->model->newBestelling($attr['tafel'], $item_id, $attr['aantal'], $attr['opmerking']);
 				}
 			}
 			setMelding(count($bestellingen) . ' dingen besteld', 1);

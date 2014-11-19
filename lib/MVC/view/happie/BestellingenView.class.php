@@ -188,11 +188,11 @@ JS;
 				$values[$item_id]['aantal'] = $field->getValue();
 				$values[$item_id]['tafel'] = $tafel;
 			}
-			// allergie veld
+			// opmerking veld
 			elseif ($field instanceof TextField) {
 				$item_id = (int) substr($field->getName(), 8);
 				$field->empty_null = true;
-				$values[$item_id]['klant_allergie'] = $field->getValue();
+				$values[$item_id]['opmerking'] = $field->getValue();
 			}
 		}
 		return $values;

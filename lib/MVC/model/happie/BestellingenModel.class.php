@@ -24,7 +24,7 @@ class HappieBestellingenModel extends CachedPersistenceModel {
 		return $this->retrieveByPrimaryKey(array($id));
 	}
 
-	public function newBestelling($tafel, $item_id, $aantal, $klant_allergie = null) {
+	public function newBestelling($tafel, $item_id, $aantal, $opmerking = null) {
 		$bestelling = new HappieMenuKaartItem();
 		$bestelling->moment_nieuw = date('Y-m-d');
 		$bestelling->laatst_gewijzigd = getDateTime();
@@ -34,7 +34,7 @@ class HappieBestellingenModel extends CachedPersistenceModel {
 		$bestelling->aantal = $aantal;
 		$bestelling->serveer_status = HappieServeerStatus::Nieuw;
 		$bestelling->financien_status = HappieFinancienStatus::Nieuw;
-		$bestelling->klant_allergie = $klant_allergie;
+		$bestelling->opmerking = $opmerking;
 		$bestelling->bestelling_id = $this->create($bestelling);
 		return $bestelling;
 	}
