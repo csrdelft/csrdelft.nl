@@ -1,7 +1,5 @@
 <?php
 
-require_once 'MVC/view/happie/forms/MenukaartForm.class.php';
-
 /**
  * MenukaartView.class.php
  * 

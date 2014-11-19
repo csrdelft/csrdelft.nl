@@ -1,6 +1,7 @@
 <?php
 
 require_once 'MVC/model/entity/happie/HappieGang.enum.php';
+require_once 'MVC/model/happie/MenukaartItemsModel.class.php';
 
 /**
  * MenukaartGroep.class.php

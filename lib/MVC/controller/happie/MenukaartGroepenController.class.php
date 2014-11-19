@@ -1,6 +1,8 @@
 <?php
 
+require_once 'MVC/model/happie/MenukaartGroepenModel.class.php';
 require_once 'MVC/view/happie/MenukaartView.class.php';
+require_once 'MVC/view/happie/forms/MenukaartForm.class.php';
 
 /**
  * MenukaartGroepenController.class.php

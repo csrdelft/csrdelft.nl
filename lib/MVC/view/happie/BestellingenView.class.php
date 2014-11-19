@@ -1,8 +1,5 @@
 <?php
 
-require_once 'MVC/model/entity/happie/HappieGang.enum.php';
-require_once 'MVC/view/happie/forms/BestelForm.class.php';
-
 /**
  * BestellingenView.class.php
  * 

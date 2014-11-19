@@ -2,6 +2,7 @@
 
 require_once 'MVC/model/entity/happie/HappieServeerStatus.enum.php';
 require_once 'MVC/model/entity/happie/HappieFinancienStatus.enum.php';
+require_once 'MVC/model/happie/MenukaartItemsModel.class.php';
 
 /**
  * Bestelling.class.php

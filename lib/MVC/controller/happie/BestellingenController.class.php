@@ -1,6 +1,8 @@
 <?php
 
+require_once 'MVC/model/happie/BestellingenModel.class.php';
 require_once 'MVC/view/happie/BestellingenView.class.php';
+require_once 'MVC/view/happie/forms/BestelForm.class.php';
 
 /**
  * BestellingenController.class.php

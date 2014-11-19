@@ -1,6 +1,6 @@
 <?php
 
-require_once 'MVC/model/happie/MenukaartItemsModel.class.php';
+require_once 'MVC/model/entity/happie/HappieGang.enum.php';
 
 /**
  * BestelForm.class.php
