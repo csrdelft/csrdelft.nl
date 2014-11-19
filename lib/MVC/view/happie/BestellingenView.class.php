@@ -94,6 +94,8 @@ class HappieKassaView extends DataTable {
 
 class HappieBestelForm extends TabsForm {
 
+	private $js = '';
+
 	public function __construct() {
 		parent::__construct(null, get_class($this), happieUrl . '/nieuw', 'Nieuwe bestelling');
 		$this->setTabs(HappieGang::getTypeOptions());
@@ -122,20 +124,16 @@ class HappieBestelForm extends TabsForm {
 					$allergie = '';
 				}
 
-				$fields['int'] = new IntField('item' . $item->item_id, $aantal, $item->naam, 0, min($item->aantal_beschikbaar, $groep->aantal_beschikbaar));
+				$int = new IntField('item' . $item->item_id, $aantal, $item->naam, 0, min($item->aantal_beschikbaar, $groep->aantal_beschikbaar));
+				$this->js .= "\n$('#toggle_{$item->item_id}').appendTo('#wrapper_{$int->getId()}');";
+				$fields[] = $int;
 				$fields[] = new HtmlComment(<<<HTML
-<div class="beschrijving float-right">{$item->beschrijving}</div>
-<script type="text/javascript">
-$(document).ready(function () {
-	$('#toggle_{$item->item_id}').appendTo('#wrapper_{$fields['int']->getId()}');
-});
-</script>
-<div id="toggle_{$item->item_id}" class="btn" style="margin-left:5px;" onclick="$(this).toggle();$('#expand_{$item->item_id}').toggle();">Allergie / Opm.</div>
-<div id="expand_{$item->item_id}" style="display:none;">
+<div id="toggle_{$item->item_id}" class="btn" style="margin-left:5px;" onclick="$(this).toggle();$('#expand_{$item->item_id}').toggle();">Allergie / Info</div>
+<div id="expand_{$item->item_id}" style="display:none;"><div class="float-right">{$item->beschrijving}</div>
 HTML
 				);
 				$fields[] = new TextField('allergie' . $item->item_id, $allergie, 'Allergie/Opmerking');
-				$fields[] = new HtmlComment('</div>');
+				$fields[] = new HtmlComment('<div>' . $item->allergie_info . '</div></div>');
 			}
 
 			// voeg groep toe aan tab en maak tab voor elke gang
@@ -145,6 +143,10 @@ HTML
 		$fields = array();
 		$fields[] = new FormDefaultKnoppen(happieUrl . '/serveer');
 		$this->addFields($fields, 'foot');
+	}
+
+	public function getJavascript() {
+		return parent::getJavascript() . $this->js;
 	}
 
 	/**

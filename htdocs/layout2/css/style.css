@@ -270,43 +270,33 @@ div.rommel img { height: 77px; }
 .box.list a:hover { background: #d9d0c1; }
 
 /* messages with setMelding($msg, $lvl) */
-div.msgerror,
-div.msginfo,
-div.msgsuccess,
-div.msgnotify {
-    color: #000;
-    background-repeat: no-repeat;
-    background-position: 8px 50%;
-    border: 1px solid;
-    margin: 0 0 0.5em;
-    padding: 0.4em;
-    padding-left: 32px;
-    overflow: hidden;
-    border-radius: 5px;
+#melding {
+	margin: 10px; padding: 10px;
+	border: 1px solid black;
+	font-size: 1.3em;
+	background-color: #ffffff;
+	-moz-box-shadow: 0 0 20px #000000;
+	-webkit-box-shadow: 0 0 20px #000000;
+	box-shadow: 0 0 20px #000000;
 }
-
-div.msgerror {
-    background-color: #fcc;
-    background-image: url("http://plaetjes.csrdelft.nl/famfamfam/exclamation.png");
-    border-color: #ebb;
+.alert {
+	padding-left: 30px;
 }
-
-div.msginfo {
-    background-color: #ccf;
-    background-image: url("http://plaetjes.csrdelft.nl/famfamfam/information.png");
-    border-color: #bbe;
+.alert-danger {
+	color: red;
+	background: url(http://plaetjes.csrdelft.nl/famfamfam/exclamation.png) no-repeat;
 }
-
-div.msgsuccess {
-    background-color: #cfc;
-    background-image: url("http://plaetjes.csrdelft.nl/famfamfam/accept.png");
-    border-color: #beb;
+.alert-info {
+	color: #0A338D;
+	background: url(http://plaetjes.csrdelft.nl/famfamfam/information.png) no-repeat;
 }
-
-div.msgnotify {
-    background-color: #ffc;
-    background-image: url("http://plaetjes.csrdelft.nl/famfamfam/bell.png");
-    border-color: #eeb;
+.alert-success {
+	color: green;
+	background: url(http://plaetjes.csrdelft.nl/famfamfam/accept.png) no-repeat;
+}
+.alert-warning {
+	color: #DDAA00;
+	background: url(http://plaetjes.csrdelft.nl/famfamfam/bell.png) no-repeat;
 }
 
 /* image lazy loading */

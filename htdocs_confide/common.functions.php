@@ -671,19 +671,19 @@ function getDebug($sql = true, $get = true, $post = true, $files = true, $cookie
  *
  * Levels can be:
  *
- * -1 error
+ * -1 error / danger
  *  0 info
  *  1 success
- *  2 notify
+ *  2 warning / notify
  *
  * @see    getMelding()
  * gebaseerd op DokuWiki code
  */
 function setMelding($msg, $lvl) {
-	$errors[-1] = 'error';
+	$errors[-1] = 'danger';
 	$errors[0] = 'info';
 	$errors[1] = 'success';
-	$errors[2] = 'notify';
+	$errors[2] = 'warning';
 	$msg = trim($msg);
 	if (!empty($msg) AND ( $lvl === -1 OR $lvl === 0 OR $lvl === 1 OR $lvl === 2 )) {
 		if (!isset($_SESSION['melding'])) {
@@ -710,7 +710,7 @@ function getMelding() {
 			$hash = md5($msg['msg']);
 			//if (isset($shown[$hash]))
 			//	continue; // skip double messages
-			$sMelding .= '<div class="msg' . $msg['lvl'] . '">';
+			$sMelding .= '<div class="alert alert-' . $msg['lvl'] . '">';
 			$sMelding .= $msg['msg'];
 			$sMelding .= '</div>';
 			$shown[$hash] = 1;

@@ -243,7 +243,8 @@ class Formulier implements View, Validator {
 	public function getScriptTag() {
 		$id = str_replace('-', '_', $this->formId);
 		return <<<JS
-<script type="text/javascript">function form_ready_{$id}() {
+<script type="text/javascript">
+function form_ready_{$id}() {
 	var form = document.getElementById('{$this->formId}');
 	{$this->getJavascript()}
 }
