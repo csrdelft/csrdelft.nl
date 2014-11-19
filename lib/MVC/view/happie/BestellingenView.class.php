@@ -144,13 +144,13 @@ JS;
 				} else {
 					$comment = '<div id="toggle_' . $item->item_id . '" class="inline alert alert-warning" style="margin-left:5px;padding:0 5px;">OP</div>';
 				}
-				$fields[] = new HtmlComment($comment . '<div id="expand_' . $item->item_id . '" style="display:none;">');
+				$fields[] = new HtmlComment($comment . '<div id="expand_' . $item->item_id . '" style="display:none;"><div style="font-style:italic;">' . $item->beschrijving . '</div>');
 
 				$opm = new TextareaField('opmerking' . $item->item_id, $opmerking);
 				$opm->placeholder = 'Allergie van klant of aanpassing op gerecht';
 				$fields[] = $opm;
 
-				$fields[] = new HtmlComment('<div style="font-style:italic;">' . $item->beschrijving . '</div></div>');
+				$fields[] = new HtmlComment('</div>');
 
 				$this->js .= <<<JS
 $('#toggle_{$item->item_id}').appendTo('#wrapper_{$int->getId()}');
