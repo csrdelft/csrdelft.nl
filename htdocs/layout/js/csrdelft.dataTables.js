@@ -26,6 +26,22 @@ function fnInitDataTables() {
 	$.fn.dataTable.ext.search.push(fnGroupExpandCollapseDraw);
 }
 
+function fnGetSelectionSize(tableId) {
+	return $('#' + tableId + ' tbody tr.selected').length;
+}
+
+function fnGetSelection(tableId) {
+	var selection = [];
+	$('#' + tableId + ' tbody tr.selected').each(function () {
+		selection.push($(this).attr('data-objectid'));
+	});
+	return selection;
+}
+
+function fnGetSelectedObjectId(tableId) {
+	return $('#' + tableId + ' tbody tr.selected:first').attr('data-objectid');
+}
+
 function fnMultiSelect(tr) {
 	if (tr.children(':first').hasClass('dataTables_empty')) {
 		return;

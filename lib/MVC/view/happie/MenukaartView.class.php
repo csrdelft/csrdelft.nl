@@ -36,6 +36,7 @@ class HappieMenukaartItemsView extends DataTable {
 		$toolbar->addKnop($nieuw);
 
 		$wijzig = new DataTableToolbarKnop('== 1', happieUrl . '/wijzig/', 'submit', 'Wijzig', 'Wijzig menukaart-item', '/famfamfam/pencil.png');
+		$wijzig->onclick = "this.href+=fnGetSelectedObjectId(tableId);";
 		$toolbar->addKnop($wijzig);
 	}
 
@@ -96,6 +97,7 @@ class HappieMenukaartGroepenView extends DataTable {
 		$toolbar->addKnop($nieuw);
 
 		$wijzig = new DataTableToolbarKnop('== 1', happieUrl . '/wijzig/', 'submit', 'Wijzig', 'Wijzig menukaart-groep', '/famfamfam/pencil.png');
+		$wijzig->onclick = "this.href+=fnGetSelectedObjectId(tableId);";
 		$toolbar->addKnop($wijzig);
 	}
 

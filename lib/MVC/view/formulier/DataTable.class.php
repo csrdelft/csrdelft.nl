@@ -144,7 +144,7 @@ class DataTable extends TabsForm {
 						for (var i = 0; i < primaryKey.length; i++) {
 							objectId.push(data[primaryKey[i]]);
 						}
-						$(row).attr('data-objectId', objectId);
+						$(row).attr('data-objectid', objectId);
 						if ('detailSource' in data) {
 							$(row).children('td.details-control:first').data('detailSource', data.detailSource);
 						} else {
@@ -178,7 +178,7 @@ class DataTable extends TabsForm {
 					$(table + ' thead tr th.details-control').removeClass('details-control');
 				}
 				// Toolbar update script
-				var updateToolbar = <?= $this->getToolbarUpdateScript() ?>;
+				var updateToolbar = <?= $this->getToolbarUpdateFunction() ?>;
 				$(table).on('draw.dt', updateToolbar);
 				$(table + '_toolbar').prependTo(table + '_wrapper');
 			});
@@ -186,17 +186,23 @@ class DataTable extends TabsForm {
 		<?php
 	}
 
-	private function getToolbarUpdateScript() {
+	private function getToolbarUpdateFunction() {
 		$js = <<<JS
 function () {
-	var aantal = $(table + ' tbody tr.selected').length;
+	var aantal = fnGetSelectionSize(tableId);
+	console.log(fnGetSelection(tableId));
 JS;
 		foreach ($this->getFields() as $field) {
 			if ($field instanceof DataTableToolbar) {
-				$js .= $field->getUpdateScript() . "\n";
+				$js .= "\n" . $field->getUpdateScript() . "\n";
 			}
 		}
 		return $js . '}';
+	}
+
+	public function getJavascript() {
+		$js = "var tableId = '{$this->tableId}';\n";
+		return $js . parent::getJavascript();
 	}
 
 }
