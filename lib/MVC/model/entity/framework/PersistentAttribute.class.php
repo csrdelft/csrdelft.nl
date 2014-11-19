@@ -103,7 +103,6 @@ class PersistentAttribute {
 			$length = strpos($attribute->type, ')') - $start;
 			$values = explode(',', substr($attribute->type, $start, $length));
 			foreach ($values as $i => $value) {
-				$values[$i] = str_replace('"', "", $value);
 				$values[$i] = str_replace("'", "", $value);
 			}
 			$definition[] = array(T::Enumeration, false, $values);

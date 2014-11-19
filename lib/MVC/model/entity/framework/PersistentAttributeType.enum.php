@@ -18,14 +18,14 @@ abstract class T implements PersistentEnum {
 	const Date = 'date';
 	const Time = 'time';
 	const DateTime = 'datetime';
-	const TimeStamp = 'timestamp';
+	const Timestamp = 'timestamp';
 	const Text = 'text';
 	const LongText = 'longtext';
 	const Enumeration = 'enum';
 	const UID = 'varchar(4)';
 
 	public static function getTypeOptions() {
-		return array(self::String, self::Char, self::Boolean, self::Integer, self::Float, self::Date, self::Time, self::DateTime, self::Text, self::LongText, self::Enumeration, self::UID);
+		return array(self::String, self::Char, self::Boolean, self::Integer, self::Float, self::Date, self::Time, self::DateTime, self::Timestamp, self::Text, self::LongText, self::Enumeration, self::UID);
 	}
 
 }
