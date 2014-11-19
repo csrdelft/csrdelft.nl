@@ -7,29 +7,29 @@ class Barsysteem
 {
 
     var $db;
-	private $beheer;
+    private $beheer;
 
     function Barsysteem()
     {
         $this->db = Database::instance();
     }
-	
-	function isLoggedIn()
-	{
-		return isset($_COOKIE['barsysteem']) && md5('my_salt_is_strong' . $_COOKIE['barsysteem']) == '8f700ce34a77ef4ef9db9bbdde9e97d8';
-	}
-	
-	function isBeheer()
-	{
-		if(!$this->beheer)
-			$this->beheer = isset($_COOKIE['barsysteembeheer']) && md5('my_salt_is_strong' . $_COOKIE['barsysteembeheer']) == '5367b4668337c47a02cf87793a6a05d5';
-		
-		return $this->beheer;
-	}
+
+    function isLoggedIn()
+    {
+        return isset($_COOKIE['barsysteem']) && md5('my_salt_is_strong' . $_COOKIE['barsysteem']) == '8f700ce34a77ef4ef9db9bbdde9e97d8';
+    }
+
+    function isBeheer()
+    {
+        if (!$this->beheer)
+            $this->beheer = isset($_COOKIE['barsysteembeheer']) && md5('my_salt_is_strong' . $_COOKIE['barsysteembeheer']) == '5367b4668337c47a02cf87793a6a05d5';
+
+        return $this->beheer;
+    }
 
     function getPersonen()
     {
-		 
+
         $terug = $this->db->query("SELECT socCieKlanten.stekUID, socCieKlanten.socCieId, socCieKlanten.naam, socCieKlanten.saldo, COUNT(socCieBestelling.totaal) AS recent FROM socCieKlanten LEFT JOIN socCieBestelling ON (socCieKlanten.socCieId = socCieBestelling.socCieId AND DATEDIFF(NOW(), tijd) < 100 AND socCieBestelling.deleted = 0) WHERE socCieKlanten.deleted = 0 GROUP BY socCieKlanten.socCieId;");
         $result = array();
         foreach ($terug as $row) {
@@ -38,10 +38,10 @@ class Barsysteem
             if ($row["stekUID"]) {
                 $lid = LidCache::getLid($row["stekUID"]);
                 $persoon["naam"] = $lid->getNaam();
-				$persoon["status"] = $lid->getStatus()->__toString();
+                $persoon["status"] = $lid->getStatus()->__toString();
             } else {
-				$persoon["status"] = 'S_EXTERN';
-			}
+                $persoon["status"] = 'S_EXTERN';
+            }
             $persoon["socCieId"] = $row["socCieId"];
             $persoon["bijnaam"] = $row["naam"];
             $persoon["saldo"] = $row["saldo"];
@@ -54,9 +54,9 @@ class Barsysteem
     function getProducten()
     {
         $q = $this->db->prepare("SELECT id, beheer, prijs, beschrijving, prioriteit FROM socCieProduct as P JOIN socCiePrijs as R ON (P.id=R.productId AND (CURRENT_TIMESTAMP BETWEEN van AND tot)) WHERE status = 1 ORDER BY prioriteit DESC");
-		$q->execute();
-	
-		$result = array();
+        $q->execute();
+
+        $result = array();
         foreach ($q->fetchAll(PDO::FETCH_ASSOC) as $row) {
             $product = array();
             $product["productId"] = $row["id"];
@@ -69,7 +69,8 @@ class Barsysteem
         return $result;
     }
 
-    function getGrootboeken() {
+    function getGrootboeken()
+    {
 
         $q = $this->db->prepare("SELECT id, type FROM socCieGrootboekType");
         $q->execute();
@@ -120,7 +121,7 @@ class Barsysteem
     function getBestellingLaatste($persoon, $begin, $eind, $productType)
     {
         $productIDs = array();
-        foreach($productType as $product) {
+        foreach ($productType as $product) {
             $productIDs[] = $product['value'];
         }
 
@@ -146,21 +147,21 @@ class Barsysteem
 
     function updateBestelling($data)
     {
-	
+
         $this->db->beginTransaction();
 
-		// Add old order to saldo
+        // Add old order to saldo
         $q = $this->db->prepare("UPDATE socCieKlanten SET saldo = saldo + :bestelTotaal WHERE socCieId=:socCieId;");
         $q->bindValue(":bestelTotaal", $this->getBestellingTotaalTijd($data->oudeBestelling->bestelId, $data->oudeBestelling->tijd), PDO::PARAM_INT);
         $q->bindValue(":socCieId", $data->persoon->socCieId, PDO::PARAM_INT);
         $q->execute();
-		
-		// Remove old contents of the order
-		$q = $this->db->prepare("DELETE FROM socCieBestellingInhoud WHERE bestellingId = :bestelId");
+
+        // Remove old contents of the order
+        $q = $this->db->prepare("DELETE FROM socCieBestellingInhoud WHERE bestellingId = :bestelId");
         $q->bindValue(":bestelId", $data->oudeBestelling->bestelId, PDO::PARAM_INT);
-		$q->execute();		
-		
-		// Add contents of the order
+        $q->execute();
+
+        // Add contents of the order
         foreach ($data->bestelLijst as $productId => $aantal) {
             $q = $this->db->prepare("INSERT INTO socCieBestellingInhoud VALUES (:bestelId, :productId, :aantal);");
             $q->bindValue(":productId", $productId, PDO::PARAM_INT);
@@ -168,20 +169,20 @@ class Barsysteem
             $q->bindValue(":aantal", $aantal, PDO::PARAM_INT);
             $q->execute();
         }
-		
-		// Substract new order from saldo
+
+        // Substract new order from saldo
         $q = $this->db->prepare("UPDATE socCieKlanten SET saldo = saldo - :bestelTotaal WHERE socCieId=:socCieId;");
         $q->bindValue(":bestelTotaal", $this->getBestellingTotaalTijd($data->oudeBestelling->bestelId, $data->oudeBestelling->tijd), PDO::PARAM_INT);
         $q->bindValue(":socCieId", $data->persoon->socCieId, PDO::PARAM_INT);
         $q->execute();
-		
-		// Update old order
+
+        // Update old order
         $q = $this->db->prepare("UPDATE socCieBestelling SET totaal = :totaal  WHERE id = :bestelId");
-		$q->bindValue(":totaal", $this->getBestellingTotaalTijd($data->oudeBestelling->bestelId, $data->oudeBestelling->tijd), PDO::PARAM_INT);
+        $q->bindValue(":totaal", $this->getBestellingTotaalTijd($data->oudeBestelling->bestelId, $data->oudeBestelling->tijd), PDO::PARAM_INT);
         $q->bindValue(":bestelId", $data->oudeBestelling->bestelId, PDO::PARAM_INT);
         $q->execute();
-		
-		// Roll back if error
+
+        // Roll back if error
         if (!$this->db->commit()) {
             $this->db->rollBack();
             return false;
@@ -238,30 +239,32 @@ class Barsysteem
         $result = array();
         foreach ($queryResult as $row) {
             if (!array_key_exists($row["bestellingId"], $result)) {
-                $result[ $row["bestellingId"] ] = array();
-                $result[ $row["bestellingId"] ]["bestelLijst"] = array();
-                $result[ $row["bestellingId"] ]["bestelTotaal"] = $row["totaal"];
-                $result[ $row["bestellingId"] ]["persoon"] = $row["socCieId"];
-                $result[ $row["bestellingId"] ]["tijd"] = $row["tijd"];
-                $result[ $row["bestellingId"] ]["bestelId"] = $row["id"];
-                $result[ $row["bestellingId"] ]["deleted"] = $row["d"];
+                $result[$row["bestellingId"]] = array();
+                $result[$row["bestellingId"]]["bestelLijst"] = array();
+                $result[$row["bestellingId"]]["bestelTotaal"] = $row["totaal"];
+                $result[$row["bestellingId"]]["persoon"] = $row["socCieId"];
+                $result[$row["bestellingId"]]["tijd"] = $row["tijd"];
+                $result[$row["bestellingId"]]["bestelId"] = $row["id"];
+                $result[$row["bestellingId"]]["deleted"] = $row["d"];
 
             }
-            $result[ $row["bestellingId"] ]["bestelLijst"][$row["productId"]] = 1 * $row["aantal"];
+            $result[$row["bestellingId"]]["bestelLijst"][$row["productId"]] = 1 * $row["aantal"];
         }
 
-        foreach($result as $key => $bestelling) {
+        if (!empty($productIDs)) {
+            foreach ($result as $key => $bestelling) {
 
-            $keep = false;
-            foreach($productIDs as $id) {
-                if(in_array($id, array_keys($bestelling["bestelLijst"]))) {
-                    $keep = true;
+                $keep = false;
+                foreach ($productIDs as $id) {
+                    if (in_array($id, array_keys($bestelling["bestelLijst"]))) {
+                        $keep = true;
+                    }
                 }
+
+                if (!$keep)
+                    unset($result[$key]);
+
             }
-
-            if(!$keep)
-                unset($result[$key]);
-
         }
 
         return $result;
@@ -291,12 +294,13 @@ class Barsysteem
         $maanden = ["Januari" => "01", "Februari" => "02", "Maart" => "03", "April" => "04", "Mei" => "05", "Juni" => "06", "Juli" => "07", "Augustus" => "08", "September" => "09", "Oktober" => "10", "November" => "11", "December" => "12"];
         return ($elementen[2] . "-" . $maanden[$elementen[1]] . "-" . $datum);
     }
-	
-	// Beheer
-	public function getGrootboekInvoer() {
-	
-		// GROUP BY week 
-		$q = $this->db->prepare("
+
+    // Beheer
+    public function getGrootboekInvoer()
+    {
+
+        // GROUP BY week
+        $q = $this->db->prepare("
 SELECT G.type,
 	SUM(I.aantal * PR.prijs) AS total,
 	WEEK(B.tijd, 3) AS week,
@@ -318,73 +322,77 @@ GROUP BY
 	G.id
 ORDER BY yearweek DESC
 		");
-		$q->execute();
-		
-		$weeks = array();
-		
-		while($r = $q->fetch(PDO::FETCH_ASSOC)) {
-		
-			$exists = isset($weeks[$r['yearweek']]);
-			
-			$week = $exists ? $weeks[$r['yearweek']] : array();
-			
-			if($exists) {
-				$week['content'][] = array('type' => $r['type'], 'total' => $r['total']);
-			} else {
-				$week['content'] = array(array('type' => $r['type'], 'total' => $r['total']));
-				$week['title'] = 'Week ' . $r['week'];
-			}
-			
-			$weeks[$r['yearweek']] = $week;
-		
-		}
-		
-		return $weeks;
-	
-	}
-	
-	public function getToolData() {
-	
-		$data = array();
-		
-		$data['sum_saldi'] = $this->sumSaldi();
-		$data['sum_saldi_lid'] = $this->sumSaldi(true);
-		$data['red'] = $this->getRed();
-		
-		return $data;
-	
-	}
-	
-	private function sumSaldi($lidOnly = false) {
-	
-		$after = $lidOnly ? "AND stekUID IS NOT NULL" : "";
-		
-		return $this->db->query("SELECT SUM(saldo) AS sum FROM socCieKlanten WHERE deleted = 0 " . $after)->fetch(PDO::FETCH_ASSOC);
-	
-	}
-	
-	private function getRed() {
-		
-		$result = array();
-		
-		$q = $this->db->query("SELECT stekUID, saldo FROM socCieKlanten WHERE deleted = 0 AND saldo < 0 AND stekUID IS NOT NULL ORDER BY saldo");
-		while($r = $q->fetch(PDO::FETCH_ASSOC)) {
-		
-			$result[] = array(
-				'naam' => LidCache::getLid($r['stekUID'])->getNaam(),
-				'email' => LidCache::getLid($r['stekUID'])->getEmail(),
-				'saldo' => $r['saldo']
-			);
-		
-		}
-		
-		return $result;
-	
-	}
+        $q->execute();
 
-    public function addProduct($name, $price, $type) {
+        $weeks = array();
 
-        if($type < 1)
+        while ($r = $q->fetch(PDO::FETCH_ASSOC)) {
+
+            $exists = isset($weeks[$r['yearweek']]);
+
+            $week = $exists ? $weeks[$r['yearweek']] : array();
+
+            if ($exists) {
+                $week['content'][] = array('type' => $r['type'], 'total' => $r['total']);
+            } else {
+                $week['content'] = array(array('type' => $r['type'], 'total' => $r['total']));
+                $week['title'] = 'Week ' . $r['week'];
+            }
+
+            $weeks[$r['yearweek']] = $week;
+
+        }
+
+        return $weeks;
+
+    }
+
+    public function getToolData()
+    {
+
+        $data = array();
+
+        $data['sum_saldi'] = $this->sumSaldi();
+        $data['sum_saldi_lid'] = $this->sumSaldi(true);
+        $data['red'] = $this->getRed();
+
+        return $data;
+
+    }
+
+    private function sumSaldi($lidOnly = false)
+    {
+
+        $after = $lidOnly ? "AND stekUID IS NOT NULL" : "";
+
+        return $this->db->query("SELECT SUM(saldo) AS sum FROM socCieKlanten WHERE deleted = 0 " . $after)->fetch(PDO::FETCH_ASSOC);
+
+    }
+
+    private function getRed()
+    {
+
+        $result = array();
+
+        $q = $this->db->query("SELECT stekUID, saldo FROM socCieKlanten WHERE deleted = 0 AND saldo < 0 AND stekUID IS NOT NULL ORDER BY saldo");
+        while ($r = $q->fetch(PDO::FETCH_ASSOC)) {
+
+            $result[] = array(
+                'naam' => LidCache::getLid($r['stekUID'])->getNaam(),
+                'email' => LidCache::getLid($r['stekUID'])->getEmail(),
+                'saldo' => $r['saldo']
+            );
+
+        }
+
+        return $result;
+
+    }
+
+    public function addProduct($name, $price, $type)
+    {
+
+        if ($type < 1)
             return false;
 
         $this->db->beginTransaction();
@@ -407,76 +415,80 @@ ORDER BY yearweek DESC
         return true;
 
     }
-	
-	public function updatePerson($id, $name) {
-	
-		$q = $this->db->prepare("UPDATE socCieKlanten SET naam = :naam WHERE socCieId = :id");
-		$q->bindValue(':id', $id, PDO::PARAM_INT);
-		$q->bindValue(':naam', $name, PDO::PARAM_STR);
-		return $q->execute();
-	
-	}
-	
-	public function removePerson($id) {
-	
-		$q = $this->db->prepare("UPDATE socCieKlanten SET deleted = 1 WHERE socCieId = :id");
-		$q->bindValue(':id', $id, PDO::PARAM_INT);
-		return $q->execute();
-	
-	}
-	
-	public function addPerson($name, $saldo, $uid) {
-			
-		$q = $this->db->prepare("INSERT INTO socCieKlanten (naam, saldo, stekUID) VALUES (:naam, :saldo, :stekUID)");
-		$q->bindValue(':naam', $name, PDO::PARAM_STR);
-		$q->bindValue(':saldo', $saldo, PDO::PARAM_STR);
-		if(!empty($uid))
-			$q->bindValue(':stekUID', $uid, PDO::PARAM_STR);
-		else
-			$q->bindValue(':stekUID', null, PDO::PARAM_INT);
-			
-		return $q->execute();
-	
-	}
-	
-	public function updatePrice($productId, $price) {
-	
+
+    public function updatePerson($id, $name)
+    {
+
+        $q = $this->db->prepare("UPDATE socCieKlanten SET naam = :naam WHERE socCieId = :id");
+        $q->bindValue(':id', $id, PDO::PARAM_INT);
+        $q->bindValue(':naam', $name, PDO::PARAM_STR);
+        return $q->execute();
+
+    }
+
+    public function removePerson($id)
+    {
+
+        $q = $this->db->prepare("UPDATE socCieKlanten SET deleted = 1 WHERE socCieId = :id");
+        $q->bindValue(':id', $id, PDO::PARAM_INT);
+        return $q->execute();
+
+    }
+
+    public function addPerson($name, $saldo, $uid)
+    {
+
+        $q = $this->db->prepare("INSERT INTO socCieKlanten (naam, saldo, stekUID) VALUES (:naam, :saldo, :stekUID)");
+        $q->bindValue(':naam', $name, PDO::PARAM_STR);
+        $q->bindValue(':saldo', $saldo, PDO::PARAM_STR);
+        if (!empty($uid))
+            $q->bindValue(':stekUID', $uid, PDO::PARAM_STR);
+        else
+            $q->bindValue(':stekUID', null, PDO::PARAM_INT);
+
+        return $q->execute();
+
+    }
+
+    public function updatePrice($productId, $price)
+    {
+
         $this->db->beginTransaction();
-		
-		$q = $this->db->prepare("UPDATE socCiePrijs SET tot = CURRENT_TIMESTAMP WHERE productId = :productId ORDER BY tot DESC LIMIT 1");
-		$q->bindValue(':productId', $productId);
-		$q->execute();
-		
-		$q = $this->db->prepare("INSERT INTO socCiePrijs (productId, prijs) VALUES (:productId, :prijs)");
-		$q->bindValue(':productId', $productId);
-		$q->bindValue(':prijs', $price);
-		$q->execute();
-		
+
+        $q = $this->db->prepare("UPDATE socCiePrijs SET tot = CURRENT_TIMESTAMP WHERE productId = :productId ORDER BY tot DESC LIMIT 1");
+        $q->bindValue(':productId', $productId);
+        $q->execute();
+
+        $q = $this->db->prepare("INSERT INTO socCiePrijs (productId, prijs) VALUES (:productId, :prijs)");
+        $q->bindValue(':productId', $productId);
+        $q->bindValue(':prijs', $price);
+        $q->execute();
+
         if (!$this->db->commit()) {
             $this->db->rollBack();
             return false;
         }
 
-		return true;
-	
-	}
-	
-	// Log action by type
-	public function log($type, $data)
-	{
-		$value = array();
-		foreach($data as $key => $item) {
-		
-			$value[] = $key . ' = ' . $item;
-		
-		}
-		$value = implode("\r\n", $value);
-	
-		$q = $this->db->prepare("INSERT INTO socCieLog (ip, type, value) VALUES(:ip, :type, :value)");
-		$q->bindValue(':ip', $_SERVER['REMOTE_ADDR'], PDO::PARAM_STR);
-		$q->bindValue(':type', $type, PDO::PARAM_STR);
-		$q->bindValue(':value', $value, PDO::PARAM_STR);
-		$q->execute();
-	}
+        return true;
+
+    }
+
+    // Log action by type
+    public function log($type, $data)
+    {
+        $value = array();
+        foreach ($data as $key => $item) {
+
+            $value[] = $key . ' = ' . $item;
+
+        }
+        $value = implode("\r\n", $value);
+
+        $q = $this->db->prepare("INSERT INTO socCieLog (ip, type, value) VALUES(:ip, :type, :value)");
+        $q->bindValue(':ip', $_SERVER['REMOTE_ADDR'], PDO::PARAM_STR);
+        $q->bindValue(':type', $type, PDO::PARAM_STR);
+        $q->bindValue(':value', $value, PDO::PARAM_STR);
+        $q->execute();
+    }
 
 }
