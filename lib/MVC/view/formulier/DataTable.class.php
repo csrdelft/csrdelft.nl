@@ -91,6 +91,7 @@ class DataTable extends TabsForm {
 
 		// make columns invisible and not searchable
 		$columns = array_keys($this->columns);
+		unset($columns[0]); // ignore details column
 		foreach ($this->hideColumns as $key) {
 			$i = array_search($key, $columns);
 			$this->columnDefs['invisible']['targets'][] = $i;
@@ -126,8 +127,9 @@ class DataTable extends TabsForm {
 			}
 		}
 
-		// default order
-		$conditionalProps .= ', "order": [[1, "asc"]]';
+		// default order by first visible column
+		$visible = array_diff(array_keys($columns), $this->columnDefs['invisible']['targets']);
+		$conditionalProps .= ', "order": [[ ' . reset($visible) . ', "asc"]]';
 
 		// set column definitions
 		$conditionalProps .= ', "columnDefs": ' . json_encode(array_values($this->columnDefs));
@@ -143,8 +145,6 @@ class DataTable extends TabsForm {
 }
 JSON;
 		}
-
-		var_dump($conditionalProps); // DEBUG
 		?>
 		<div id="<?= $this->tableId ?>_toolbar" class="dataTables_toolbar"><?= parent::view() ?></div>
 		<table id="<?= $this->tableId ?>" class="<?= implode(' ', $this->css_classes) ?>" groupByColumn="<?= $this->groupByColumn ?>">
