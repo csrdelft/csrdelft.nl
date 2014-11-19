@@ -8,12 +8,11 @@
  */
 class DebugLogModel extends PersistenceModel {
 
-	const orm = 'LogEntry';
+	const orm = 'DebugLogEntry';
 
 	protected static $instance;
 
-	protected function __construct() {
-		parent::__construct();
+	public function opschonen() {
 		$entries = $this->find('moment < ?', array(strtotime('-2 months')));
 		foreach ($entries as $entry) {
 			$this->delete($entry);
@@ -21,7 +20,7 @@ class DebugLogModel extends PersistenceModel {
 	}
 
 	public function log($class, $function, array $args = array(), $dump = null) {
-		$entry = new LogEntry();
+		$entry = new DebugLogEntry();
 		$entry->class_function = $class . '->' . $function . '(' . implode(', ', $args) . ')';
 		$entry->dump = $dump;
 		$e = new Exception();
@@ -35,7 +34,7 @@ class DebugLogModel extends PersistenceModel {
 		$entry->request = REQUEST_URI;
 		$entry->referer = HTTP_REFERER;
 		$entry->user_agent = $_SERVER['HTTP_USER_AGENT'];
-		$this->create($entry);
+		$entry->id = $this->create($entry);
 		if (DEBUG AND Database::instance()->inTransaction()) {
 			setMelding('Debuglog may not be committed: database transaction', 2);
 		}

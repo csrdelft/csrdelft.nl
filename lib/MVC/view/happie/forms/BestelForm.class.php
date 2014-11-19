@@ -8,6 +8,46 @@
  * Bestelformulier voor complete menukaart.
  * 
  */
+class HappieBestellingWijzigenForm extends Formulier {
+
+	public function __construct(Bestelling $bestelling) {
+		parent::__construct($bestelling, get_class($this), happieUrl . '/wijzigen/' . $bestelling->bestelling_id, 'Bestelling wijzigen');
+		
+		$fields['d'] = new DatumField('datum', $bestelling->datum, 'Datum');
+		$fields['d']->readonly = true;
+		$fields['l'] = new DatumField('laatst_gewijzigd', $bestelling->laatst_gewijzigd, 'Laatst gewijzigd');
+		$fields['l']->readonly = true;
+		$fields['h'] = new TextareaField('wijzig_historie', $bestelling->wijzig_historie, 'Log');
+		$fields['h']->readonly = true;
+		
+		$fields['t'] = new SelectField('tafel', null, 'Tafel', range(0, 99)); // array index starts from 0
+		
+		
+		$groepen = HappieMenukaartItemsModel::instance()->getMenukaart();
+		$menukaart = array();
+		
+		// maak invoerveld voor elk item
+		foreach ($groepen as $groep) {
+			
+			foreach ($groep->getItems() as $item) {
+				
+			}
+		}
+		
+		$fields['m'] = new SelectField('menukaart_item', $bestelling->menukaart_item, 'Menukaart item', $menukaart, true);
+		 
+		$bestelling->aantal = $aantal;
+		$bestelling->aantal_geserveerd = 0;
+		$bestelling->serveer_status = HappieServeerStatus::Nieuw;
+		$bestelling->financien_status = HappieFinancienStatus::Nieuw;
+		$bestelling->opmerking = $opmerking;
+		$bestelling->bestelling_id = $this->create($bestelling);
+		
+		
+	}
+
+}
+
 class HappieBestelForm extends TabsForm {
 
 	private $js = '';

@@ -85,12 +85,3 @@ class HappieKassaView extends HappieBestellingenView {
 	}
 
 }
-
-class HappieBestellingWijzigenForm extends Formulier {
-
-	public function __construct(Bestelling $bestelling) {
-		parent::__construct($bestelling, get_class($this), happieUrl . '/wijzigen/' . $bestelling->bestelling_id, 'Bestelling wijzigen');
-		$this->generateFields();
-	}
-
-}

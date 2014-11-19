@@ -24,6 +24,13 @@ require_once 'configuratie.include.php';
 
 $start = microtime(true);
 
+// Debuglog
+try {
+	DebugLogModel::instance()->opschonen();
+} catch (Exception $ex) {
+	DebugLogModel::instance()->log('cron.php', 'DebugLogModel::opschonen()', array(), $e);
+}
+
 // Corvee herinneringen
 try {
 	require_once 'maalcie/model/CorveeHerinneringenModel.class.php';

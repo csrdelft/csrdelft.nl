@@ -45,10 +45,15 @@ class HappieBestelling extends PersistentEntity {
 	 */
 	public $menukaart_item;
 	/**
-	 * Aantal van dit product
+	 * Aantal van MenukaartItem
 	 * @var int
 	 */
 	public $aantal;
+	/**
+	 * Aantal geserveerd
+	 * @var int
+	 */
+	public $aantal_geserveerd;
 	/**
 	 * Serveer-status
 	 * @var HappieServeerStatus
@@ -76,6 +81,7 @@ class HappieBestelling extends PersistentEntity {
 		'tafel'				 => array(T::Integer),
 		'menukaart_item'	 => array(T::Integer),
 		'aantal'			 => array(T::Integer),
+		'aantal_geserveerd'	 => array(T::Integer),
 		'serveer_status'	 => array(T::Enumeration, false, 'HappieServeerStatus'),
 		'financien_status'	 => array(T::Enumeration, false, 'HappieFinancienStatus'),
 		'opmerking'			 => array(T::Text, true)

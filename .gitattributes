@@ -3472,6 +3472,7 @@ lib/MVC/model/AccessModel.class.php -text
 lib/MVC/model/AgendaModel.class.php -text
 lib/MVC/model/Agendeerbaar.interface.php -text
 lib/MVC/model/BijbelroosterModel.class.php -text
+lib/MVC/model/ChangeLogModel.class.php -text
 lib/MVC/model/CmsPaginaModel.class.php -text
 lib/MVC/model/CsrMemcache.singleton.php -text
 lib/MVC/model/DebugLogModel.class.php -text
@@ -3492,13 +3493,14 @@ lib/MVC/model/entity/Afbeelding.class.php -text
 lib/MVC/model/entity/AgendaItem.class.php -text
 lib/MVC/model/entity/Bestand.class.php -text
 lib/MVC/model/entity/Bijbelrooster.class.php -text
+lib/MVC/model/entity/ChangeLogEntry.class.php -text
 lib/MVC/model/entity/CmsPagina.class.php -text
+lib/MVC/model/entity/DebugLogEntry.class.php -text
 lib/MVC/model/entity/ExecutionTime.class.php -text
 lib/MVC/model/entity/Foto.class.php -text
 lib/MVC/model/entity/FotoAlbum.class.php -text
 lib/MVC/model/entity/Instelling.class.php -text
 lib/MVC/model/entity/LidInstelling.class.php -text
-lib/MVC/model/entity/LogEntry.class.php -text
 lib/MVC/model/entity/LoginSession.class.php -text
 lib/MVC/model/entity/Mail.class.php -text
 lib/MVC/model/entity/Map.class.php -text
@@ -3549,6 +3551,7 @@ lib/MVC/model/entity/happie/HappieGang.enum.php -text
 lib/MVC/model/entity/happie/HappieMenukaartGroep.class.php -text
 lib/MVC/model/entity/happie/HappieMenukaartItem.class.php -text
 lib/MVC/model/entity/happie/HappieServeerStatus.enum.php -text
+lib/MVC/model/entity/happie/HappieStatusLog.class.php -text
 lib/MVC/model/entity/maalcie/CorveeFunctie.class.php -text
 lib/MVC/model/entity/maalcie/CorveeKwalificatie.class.php -text
 lib/MVC/model/framework/CachedPersistenceModel.abstract.php -text
@@ -3560,6 +3563,7 @@ lib/MVC/model/framework/PersistenceModel.abstract.php -text
 lib/MVC/model/happie/BestellingenModel.class.php -text
 lib/MVC/model/happie/MenukaartGroepenModel.class.php -text
 lib/MVC/model/happie/MenukaartItemsModel.class.php -text
+lib/MVC/model/happie/StatistiekModel.class.php -text
 lib/MVC/model/maalcie/FunctiesModel.class.php -text
 lib/MVC/model/maalcie/KwalificatiesModel.class.php -text
 lib/MVC/view/AgendaView.class.php -text

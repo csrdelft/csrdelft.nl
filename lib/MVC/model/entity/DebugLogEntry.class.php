@@ -1,12 +1,12 @@
 <?php
 
 /**
- * LogEntry.class.php
+ * DebugLogEntry.class.php
  * 
  * @author P.W.G. Brussee <brussee@live.nl>
  * 
  */
-class LogEntry extends PersistentEntity {
+class DebugLogEntry extends PersistentEntity {
 
 	/**
 	 * Primary key

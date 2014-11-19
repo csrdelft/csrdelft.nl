@@ -30,12 +30,14 @@
 class SelectField extends InputField {
 
 	public $options;
+	public $groups;
 	public $size;
 	public $multiple;
 
-	public function __construct($name, $value, $description, array $options, $size = 1, $multiple = false) {
+	public function __construct($name, $value, $description, array $options, $groups = false, $size = 1, $multiple = false) {
 		parent::__construct($name, $value, $description);
 		$this->options = $options;
+		$this->groups = $groups;
 		$this->size = (int) $size;
 		$this->multiple = $multiple;
 	}
@@ -64,6 +66,16 @@ class SelectField extends InputField {
 		return $this->error === '';
 	}
 
+	private function viewOptions(array $options) {
+		foreach ($options as $value => $description) {
+			echo '<option value="' . $value . '"';
+			if ($value == $this->value) {
+				echo ' selected="selected"';
+			}
+			echo '>' . htmlspecialchars($description) . '</option>';
+		}
+	}
+
 	public function view() {
 		echo $this->getDiv();
 		echo $this->getLabel();
@@ -80,12 +92,14 @@ class SelectField extends InputField {
 		}
 		echo $this->getInputAttribute(array('id', 'origvalue', 'class', 'disabled', 'readonly', 'onchange', 'onclick', 'onkeyup')) . '>';
 
-		foreach ($this->options as $value => $description) {
-			echo '<option value="' . $value . '"';
-			if ($value == $this->value) {
-				echo ' selected="selected"';
+		if ($this->groups) {
+			foreach ($this->options as $group => $options) {
+				echo '<optgroup label="' . htmlspecialchars($group) . '">';
+				$this->viewOptions($options);
+				echo '</optgroup>';
 			}
-			echo '>' . htmlspecialchars($description) . '</option>';
+		} else {
+			$this->viewOptions($this->options);
 		}
 		echo '</select>';
 
