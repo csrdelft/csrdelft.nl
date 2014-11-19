@@ -35,22 +35,22 @@ class MaaltijdRepetitieForm extends ModalForm {
 		$fields[] = new BedragField('standaard_prijs', $prijs, 'Standaard prijs', '€', 0, 50);
 		$fields[] = new IntField('standaard_limiet', $limiet, 'Standaard limiet', 0, 200);
 		$fields[] = new RechtenField('abonnement_filter', $filter, 'Aanmeldrestrictie');
+
+		$bijwerken = new FormulierKnop(maalcieUrl . '/bijwerken/' . $mrid, 'submit', 'Alles bijwerken', 'Opslaan & alle maaltijden bijwerken', '/famfamfam/disk_multiple.png');
+
 		if ($mrid !== 0) {
 			$fields['ver'] = new VinkField('verplaats_dag', $verplaats, 'Verplaatsen');
 			$fields['ver']->title = 'Verplaats naar dag v/d week bij bijwerken';
 			$fields['ver']->onchange = <<<JS
-var txt = $('#extraButton').html();
+var btn = $('#{$bijwerken->getId()}');
 if (this.checked) {
-	txt = txt.replace('bijwerken', 'bijwerken en verplaatsen');
+	btn.html(btn.html().replace('bijwerken', 'bijwerken en verplaatsen'));
 } else {
-	txt = txt.replace(' en verplaatsen', '');
+	btn.html(btn.html().replace(' en verplaatsen', ''));
 }
-$('#extraButton').html(txt);
 JS;
 		}
 		$fields['btn'] = new FormDefaultKnoppen();
-
-		$bijwerken = new FormulierKnop(maalcieUrl . '/bijwerken/' . $mrid, 'submit', 'Alles bijwerken', 'Opslaan & alle maaltijden bijwerken', '/famfamfam/disk_multiple.png');
 		$fields['btn']->addKnop($bijwerken, true);
 
 		$this->addFields($fields);

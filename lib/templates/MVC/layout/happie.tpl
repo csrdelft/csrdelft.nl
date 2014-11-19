@@ -14,7 +14,7 @@
 						<span class="icon-bar"></span>
 						<span class="icon-bar"></span>
 					</button>
-					<a class="navbar-brand" href="/happie/bestel/nieuw">Nieuwe bestelling</a>
+					<a class="navbar-brand post" href="/happie/bestel/nieuw">Nieuwe bestelling</a>
 					<a class="navbar-brand" href="/happie/bestel/serveer">Recent</a>
 				</div>
 				<div class="navbar-collapse collapse">

@@ -17,8 +17,7 @@ class HappieMenukaartItemsController extends AclController {
 		if (!$this->isPosted()) {
 			$this->acl = array(
 				'overzicht'	 => 'groep:2014',
-				'data'		 => 'groep:2014',
-				'nieuw'		 => 'groep:2014'
+				'data'		 => 'groep:2014'
 			);
 		} else {
 			$this->acl = array(

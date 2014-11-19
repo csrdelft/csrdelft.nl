@@ -21,8 +21,7 @@ class HappieBestellingenController extends AclController {
 				'serveer'	 => 'groep:2014',
 				'bar'		 => 'groep:2014',
 				'kassa'		 => 'groep:2014',
-				'data'		 => 'groep:2014',
-				'nieuw'		 => 'groep:2014'
+				'data'		 => 'groep:2014'
 			);
 		} else {
 			$this->acl = array(

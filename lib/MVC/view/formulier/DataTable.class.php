@@ -224,17 +224,14 @@ class DataTableToolbarKnop extends FormulierKnop {
 	}
 
 	public function getUpdateScript() {
-		return <<<JS
-$('#{$this->getId()}').attr('disabled', !(aantal {$this->multiplicity}));
-JS;
+		return "$('#{$this->getId()}').attr('disabled', !(aantal {$this->multiplicity}));";
 	}
 
 	public function getJavascript() {
-		return parent::getJavascript() . <<<JS
-$('#{$this->getId()}').click(function () {
-	{$this->onclick}
-});
-JS;
+		if (isset($this->onclick)) {
+			return "$('#{$this->getId()}').unbind('click.onclick').bind('click.onclick', function() {{$this->onclick}});" . parent::getJavascript();
+		}
+		return parent::getJavascript();
 	}
 
 }

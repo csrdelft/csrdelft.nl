@@ -362,12 +362,6 @@ function form_ischanged(form) {
 	return changed;
 }
 
-function form_set_action(event) {
-	var form = $(event.target).closest('form');
-	var url = $(event.target).closest('a.btn').attr('href');
-	form.attr('action', url);
-}
-
 function toggle_vertical_align(elmnt) {
 	if ($(elmnt).css('vertical-align') !== 'top') {
 		$(elmnt).css('vertical-align', 'top');
@@ -436,6 +430,14 @@ function form_submit(event) {
 	form.unbind('submit');
 	form.submit();
 	return true;
+}
+
+function form_submit_url(event) {
+	event.preventDefault();
+	var form = $(event.target).closest('form');
+	var url = $(event.target).closest('a.btn').attr('href');
+	form.attr('action', url);
+	form_submit(event);
 }
 
 function form_reset(event, form) {

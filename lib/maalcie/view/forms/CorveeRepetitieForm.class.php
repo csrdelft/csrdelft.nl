@@ -52,22 +52,22 @@ class CorveeRepetitieForm extends ModalForm {
 		$fields['mrid']->empty_null = true;
 		$fields[] = new IntField('standaard_punten', $punten, 'Standaard punten', 0, 10);
 		$fields[] = new IntField('standaard_aantal', $aantal, 'Aantal corveeërs', 1, 10);
+
+		$bijwerken = new FormulierKnop(maalcieUrl . '/bijwerken/' . $crid, 'submit', 'Alles bijwerken', 'Opslaan & alle taken bijwerken', '/famfamfam/disk_multiple.png');
+
 		if ($crid !== 0) {
 			$fields['ver'] = new VinkField('verplaats_dag', $verplaats, 'Verplaatsen');
 			$fields['ver']->title = 'Verplaats naar dag v/d week bij bijwerken';
 			$fields['ver']->onchange = <<<JS
-var txt = $('#extraButton').html();
+var btn = $('#{$bijwerken->getId()}');
 if (this.checked) {
-	txt = txt.replace('bijwerken', 'bijwerken en verplaatsen');
+	btn.html(btn.html().replace('bijwerken', 'bijwerken en verplaatsen'));
 } else {
-	txt = txt.replace(' en verplaatsen', '');
+	btn.html(btn.html().replace(' en verplaatsen', ''));
 }
-$('#extraButton').html(txt);
 JS;
 		}
 		$fields['btn'] = new FormDefaultKnoppen();
-
-		$bijwerken = new FormulierKnop(maalcieUrl . '/bijwerken/' . $crid, 'submit', 'Alles bijwerken', 'Opslaan & alle taken bijwerken', '/famfamfam/disk_multiple.png');
 		$fields['btn']->addKnop($bijwerken, true);
 
 		$this->addFields($fields);

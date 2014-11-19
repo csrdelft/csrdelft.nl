@@ -139,7 +139,7 @@ class FormulierKnop implements FormElement {
 	}
 
 	public function view() {
-		echo '<a id="' . $this->id . '"' . ($this->url ? ' href="' . $this->url . '"' : '') . ' class="btn ' . $this->action . ' ' . implode(' ', $this->css_classes) . '" title="' . htmlspecialchars($this->title) . '">';
+		echo '<a id="' . $this->getId() . '"' . ($this->url ? ' href="' . $this->url . '"' : '') . ' class="btn ' . $this->action . ' ' . implode(' ', $this->css_classes) . '" title="' . htmlspecialchars($this->title) . '">';
 		if ($this->icon) {
 			echo '<img src="' . CSR_PICS . $this->icon . '" class="icon" width="16" height="16" /> ';
 		}
@@ -148,7 +148,7 @@ class FormulierKnop implements FormElement {
 
 	public function getJavascript() {
 		if (strpos($this->action, 'submit') !== false AND isset($this->url)) {
-			return "$('#" . $this->id . "').unbind('click.action').bind('click.action', form_set_action);";
+			return "$('#{$this->getId()}').unbind('click.action').bind('click.action', form_submit_url);";
 		}
 		return '';
 	}
