@@ -19,6 +19,7 @@
  * 	- VinkField						Keuzevakje
  * 	- DatumField					Datums (want data is zo ambigu)
  * 	- TijdField						Tijsstip
+ *  - KleurField					Kleurkiezer
  * 
  */
 
@@ -534,6 +535,29 @@ class VinkField extends InputField {
 }
 
 class RequiredVinkField extends VinkField {
+
+	public $required = true;
+
+}
+
+class KleurField extends InputField {
+
+	public function getJavascript() {
+		return parent::getJavascript() . <<<JS
+$('#{$this->getId()}', form).jPicker({
+	color: {
+		alphaSupport: true
+	},
+	images: {
+		clientPath: 'http://plaetjes.csrdelft.nl/jpicker/'
+	}
+});
+JS;
+	}
+
+}
+
+class RequiredKleurField extends KleurField {
 
 	public $required = true;
 

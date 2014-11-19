@@ -126,6 +126,8 @@ htdocs/layout/css/formulier.less -text
 htdocs/layout/css/forum.less -text
 htdocs/layout/css/fotoalbum.css -text
 htdocs/layout/css/groepen.css -text
+htdocs/layout/css/jPicker.css -text
+htdocs/layout/css/jPicker.min.css -text
 htdocs/layout/css/knoppen.less -text
 htdocs/layout/css/layout_pagina.css -text
 htdocs/layout/css/ledenlijst.css -text
@@ -375,6 +377,8 @@ htdocs/layout/js/jquery/plugins/jquery.autosize.js -text
 htdocs/layout/js/jquery/plugins/jquery.autosize.min.js -text
 htdocs/layout/js/jquery/plugins/jquery.hoverIntent.js -text
 htdocs/layout/js/jquery/plugins/jquery.hoverIntent.min.js -text
+htdocs/layout/js/jquery/plugins/jquery.jPicker.js -text
+htdocs/layout/js/jquery/plugins/jquery.jPicker.min.js -text
 htdocs/layout/js/jquery/plugins/jquery.prettyPhoto.css -text
 htdocs/layout/js/jquery/plugins/jquery.prettyPhoto.js -text
 htdocs/layout/js/jquery/plugins/jquery.prettyPhoto.min.css -text
