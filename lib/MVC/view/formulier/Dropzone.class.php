@@ -60,12 +60,11 @@ class Dropzone extends Formulier {
 	}
 
 	public function getJavascript() {
-		$js = parent::getJavascript();
 		$mag = (LoginModel::mag('P_ALBUM_DEL') ? 'true' : 'false');
 		$delete = str_replace('uploaden', 'verwijderen', $this->action);
 		$existing = str_replace('uploaden', 'bestaande', $this->action);
 		$accept = implode(',', $this->dropzone->getFilter());
-		$js[] = <<<JS
+		return parent::getJavascript() . <<<JS
 thisDropzone = new Dropzone('#{$this->formId}', {
 	paramName: "{$this->dropzone->getName()}",
 	url: "{$this->action}",
@@ -101,7 +100,6 @@ showExisting_{$this->dropzone->getName()} = function (){
 	});
 }
 JS;
-		return $js;
 	}
 
 }
