@@ -832,16 +832,18 @@ class IntField extends TextField {
 
 	public $min = null;
 	public $max = null;
-	public $min_alert = 'Waarde te laag!';
-	public $max_alert = 'Waarde te hoog!';
+	public $min_alert = null;
+	public $max_alert = null;
 
 	public function __construct($name, $value, $description, $min = null, $max = null) {
 		parent::__construct($name, $value, $description, 11);
 		if ($min !== null) {
 			$this->min = (int) $min;
+			$this->min_alert = 'Minimaal ' . $this->min;
 		}
 		if ($max !== null) {
 			$this->max = (int) $max;
+			$this->max_alert = 'Maximaal ' . $this->max;
 		}
 		$this->onkeydown = <<<JS
 
@@ -915,17 +917,27 @@ HTML;
 		}
 
 		if ($this->min !== null) {
+			if ($this->min_alert) {
+				$alert = "alert('{$this->min_alert}');";
+			} else {
+				$alert = '';
+			}
 			$this->onchange .= <<<JS
 if (parseInt( $(this).val() ) < {$this->min}) {
-	alert('{$this->min_alert}');
+	{$alert}
 	$(this).val({$this->min});
 }
 JS;
 		}
 		if ($this->max !== null) {
+			if ($this->max_alert) {
+				$alert = "alert('{$this->max_alert}');";
+			} else {
+				$alert = '';
+			}
 			$this->onchange .= <<<JS
 if (parseInt( $(this).val() ) > {$this->max}) {
-	alert('{$this->max_alert}');
+	{$alert}
 	$(this).val({$this->max});
 }
 JS;

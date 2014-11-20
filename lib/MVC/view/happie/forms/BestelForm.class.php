@@ -114,8 +114,8 @@ JS;
 					$beschikbaar = min($item->aantal_beschikbaar, $groep->aantal_beschikbaar);
 
 					$int = new IntField('item' . $item->item_id, $aantal, $item->naam, 0, $beschikbaar);
-					$int->min_alert = 'Minder dan 0';
-					$int->max_alert = 'Te weinig beschikbaar';
+					$int->min_alert = false;
+					$int->max_alert = 'Te weinig beschikbaar!';
 					$fields[] = $int;
 
 					if ($beschikbaar > 0 OR $aantal > 0) {
