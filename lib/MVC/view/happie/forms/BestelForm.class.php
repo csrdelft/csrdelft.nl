@@ -124,7 +124,7 @@ JS;
 						$comment = '<div id="toggle_' . $item->item_id . '" class="float-left alert alert-warning" style="margin-right:5px;padding:0 .3em;">OP</div>';
 					}
 					$fields[] = new HtmlComment($comment . <<<HTML
-<div id="info_{$item->item_id}" class="info-data" style="display:none;">
+<div id="info_{$item->item_id}" class="info-data clear-left" style="display:none;">
 	<div class="inline alert alert-info" style="margin-right:5px;padding:0 .3em;">{$item->allergie_info}</div>
 	<div class="inline float-right">{$item->getPrijsFormatted()}</div>
 </div>
