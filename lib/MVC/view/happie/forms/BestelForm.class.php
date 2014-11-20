@@ -96,14 +96,16 @@ class HappieBestelForm extends TabsForm {
 			foreach ($groepen as $groep_id => $groep) {
 				$fields = array();
 
-				$fields[] = new Subkopje('<div id="toggle_groep_' . $groep_id . '" class="toggle-groep" style="padding-left:10px;cursor:pointer;">' . $groep->naam . '</div>');
+				$fields[] = new Subkopje('<div id="toggle_groep_' . $groep_id . '" class="toggle-submenu' . ($drank ? '' : ' toggle-submenu-open') . '" style="padding-left:10px;cursor:pointer;position:relative;">' . $groep->naam . '</div>');
 				$fields[] = new HtmlComment('<div id="expand_groep_' . $groep_id . '" ' . $drank . '>');
 
 				$this->js .= <<<JS
 $('#toggle_groep_{$groep_id}').click(function() {
 	if ($('#expand_groep_{$groep_id}').is(':visible')) {
+		$(this).removeClass('toggle-submenu-open');
 		$('#expand_groep_{$groep_id}').slideUp(200);
 	} else {
+		$(this).addClass('toggle-submenu-open');
 		$('#expand_groep_{$groep_id}').slideDown(200);
 	}
 });

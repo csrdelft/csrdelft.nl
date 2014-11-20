@@ -82,7 +82,7 @@ jQuery(document).ready(function ($) {
 	$('.item-has-children').children('a').on('click', function (event) {
 		event.preventDefault();
 
-		$(this).toggleClass('sub-menu-open').next('.sub-menu').slideToggle(200).end().parent('.item-has-children').siblings('.item-has-children').children('a').removeClass('sub-menu-open').next('.sub-menu').slideUp(200);
+		$(this).toggleClass('toggle-submenu-open').next('.sub-menu').slideToggle(200).end().parent('.item-has-children').siblings('.item-has-children').children('a').removeClass('toggle-submenu-open').next('.sub-menu').slideUp(200);
 	});
 
 	// Catch keystrokes for instant search

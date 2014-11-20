@@ -297,37 +297,6 @@ Lateral navigation
 #cd-lateral-nav .item-has-children > a {
 	position: relative;
 	font-weight: bold;
-	/* this is the right arrow to show that the item has a submenu  */
-}
-#cd-lateral-nav .item-has-children > a::after {
-	content: '';
-	display: block;
-	height: 11px;
-	width: 8px;
-	position: absolute;
-	top: 50%;
-	bottom: auto;
-	-webkit-transform: translateY(-50%);
-	-moz-transform: translateY(-50%);
-	-ms-transform: translateY(-50%);
-	-o-transform: translateY(-50%);
-	transform: translateY(-50%);
-	right: 1em;
-	background: url("http://plaetjes.csrdelft.nl/knopjes/cd-arrow.svg") no-repeat center center;
-	background-size: 8px 11px;
-	-webkit-transition-property: -webkit-transform;
-	-moz-transition-property: -moz-transform;
-	transition-property: transform;
-	-webkit-transition-duration: 0.2s;
-	-moz-transition-duration: 0.2s;
-	transition-duration: 0.2s;
-}
-#cd-lateral-nav .item-has-children > a.sub-menu-open::after {
-	-webkit-transform: translateY(-50%) rotate(90deg);
-	-moz-transform: translateY(-50%) rotate(90deg);
-	-ms-transform: translateY(-50%) rotate(90deg);
-	-o-transform: translateY(-50%) rotate(90deg);
-	transform: translateY(-50%) rotate(90deg);
 }
 
 #cd-lateral-nav #cd-zoek-form{

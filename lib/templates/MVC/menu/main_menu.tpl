@@ -38,7 +38,7 @@
 		{foreach from=$root->children item=item}
 			{if $item->magBekijken()}
 				<li class="{if $item->hasChildren()}item-has-children{/if} {if $item->active}active{/if}">
-					<a href="{$item->link}" title="{$item->tekst}">{$item->tekst}</a>
+					<a class="{if $item->hasChildren()}toggle-submenu{/if}" href="{$item->link}" title="{$item->tekst}">{$item->tekst}</a>
 					{if $item->hasChildren()}
 						<ul class="sub-menu">
 							{foreach from=$item->children item=child}
