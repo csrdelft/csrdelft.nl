@@ -126,7 +126,7 @@ JS;
 					$fields[] = new HtmlComment($comment . <<<HTML
 <div id="info_{$item->item_id}" class="info-data" style="display:none;">
 	<div class="inline alert alert-info" style="margin-right:5px;padding:0 .3em;">{$item->allergie_info}</div>
-	<div class="inline">{$item->getPrijsFormatted()}</div>
+	<div class="inline float-right">{$item->getPrijsFormatted()}</div>
 </div>
 <div id="expand_{$item->item_id}" style="display:none;">
 HTML
