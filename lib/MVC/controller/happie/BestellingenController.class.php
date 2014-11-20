@@ -18,11 +18,10 @@ class HappieBestellingenController extends AclController {
 		parent::__construct($query, HappieBestellingenModel::instance());
 		$this->acl = array(
 			'overzicht'	 => 'groep:2014',
-			'keuken'	 => 'groep:2014',
 			'serveer'	 => 'groep:2014',
+			'keuken'	 => 'groep:2014',
 			'bar'		 => 'groep:2014',
 			'kassa'		 => 'groep:2014',
-			'data'		 => 'groep:2014',
 			'nieuw'		 => 'groep:2014',
 			'wijzig'	 => 'groep:2014'
 		);
@@ -36,42 +35,62 @@ class HappieBestellingenController extends AclController {
 		parent::performAction($this->getParams(4));
 	}
 
-	public function overzicht() {
-		$body = new HappieBestellingenView();
-		$this->view = new CsrLayout3Page($body);
-	}
-
-	public function keuken() {
-		$body = new HappieKeukenView();
-		$this->view = new CsrLayout3Page($body);
-	}
-
-	public function serveer() {
-		$body = new HappieServeerView();
-		$this->view = new CsrLayout3Page($body);
-	}
-
-	public function bar() {
-		$body = new HappieBarView();
-		$this->view = new CsrLayout3Page($body);
-	}
-
-	public function kassa() {
-		$body = new HappieKassaView();
-		$this->view = new CsrLayout3Page($body);
-	}
-
-	public function data($y = null, $m = null, $d = null) {
+	public function overzicht($y = null, $m = null, $d = null) {
 		$y = (int) $y;
 		$m = (int) $m;
 		$d = (int) $d;
 		if (checkdate($m, $d, $y)) {
-			$date = $y . '-' . $m . '-' . $d;
+			$datum = $y . '-' . $m . '-' . $d;
 		} else {
-			$date = date('Y-m-d');
+			$datum = date('Y-m-d');
 		}
-		$data = $this->model->find('datum = ?', array($date));
-		$this->view = new DataTableResponse($data);
+		if ($this->isPosted()) {
+			$data = $this->model->find('datum = ?', array($datum));
+			$this->view = new DataTableResponse($data);
+		} else {
+			$body = new HappieBestellingenView();
+			$this->view = new CsrLayout3Page($body);
+		}
+	}
+
+	public function serveer() {
+		if ($this->isPosted()) {
+			$data = $this->model->find('datum = ?', array(date('Y-m-d')));
+			$this->view = new DataTableResponse($data);
+		} else {
+			$body = new HappieServeerView();
+			$this->view = new CsrLayout3Page($body);
+		}
+	}
+
+	public function keuken() {
+		if ($this->isPosted()) {
+			$data = $this->model->find('datum = ?', array(date('Y-m-d')));
+			$this->view = new DataTableResponse($data);
+		} else {
+			$body = new HappieKeukenView();
+			$this->view = new CsrLayout3Page($body);
+		}
+	}
+
+	public function bar() {
+		if ($this->isPosted()) {
+			$data = $this->model->find('datum = ?', array(date('Y-m-d')));
+			$this->view = new DataTableResponse($data);
+		} else {
+			$body = new HappieBarView();
+			$this->view = new CsrLayout3Page($body);
+		}
+	}
+
+	public function kassa() {
+		if ($this->isPosted()) {
+			$data = $this->model->find('datum = ?', array(date('Y-m-d')));
+			$this->view = new DataTableResponse($data);
+		} else {
+			$body = new HappieKassaView();
+			$this->view = new CsrLayout3Page($body);
+		}
 	}
 
 	public function nieuw() {
@@ -86,7 +105,7 @@ class HappieBestellingenController extends AclController {
 				}
 			}
 			setMelding('Totaal ' . $sum . ' dingen besteld voor tafel ' . $value['tafel'], 1);
-			redirect(happieUrl);
+			redirect(happieUrl . '/serveer');
 		}
 		$this->view = new CsrLayout3Page($form);
 	}

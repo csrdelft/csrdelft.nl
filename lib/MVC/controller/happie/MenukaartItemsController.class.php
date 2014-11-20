@@ -18,7 +18,6 @@ class HappieMenukaartItemsController extends AclController {
 		parent::__construct($query, HappieMenukaartItemsModel::instance());
 		$this->acl = array(
 			'overzicht'	 => 'groep:2014',
-			'data'		 => 'groep:2014',
 			'nieuw'		 => 'groep:2014',
 			'wijzig'	 => 'groep:2014'
 		);
@@ -33,13 +32,13 @@ class HappieMenukaartItemsController extends AclController {
 	}
 
 	public function overzicht() {
-		$body = new HappieMenukaartItemsView();
-		$this->view = new CsrLayout3Page($body);
-	}
-
-	public function data() {
-		$data = $this->model->find();
-		$this->view = new DataTableResponse($data);
+		if ($this->isPosted()) {
+			$data = $this->model->find();
+			$this->view = new DataTableResponse($data);
+		} else {
+			$body = new HappieMenukaartItemsView();
+			$this->view = new CsrLayout3Page($body);
+		}
 	}
 
 	public function nieuw() {

@@ -10,9 +10,9 @@
  */
 class HappieBestellingenView extends DataTable {
 
-	public function __construct($titel = 'Alle bestellingen', $groupByColumn = 'datum') {
+	public function __construct($dataSource = '/overzicht', $titel = 'Alle bestellingen', $groupByColumn = 'datum') {
 		parent::__construct(HappieBestellingenModel::orm, get_class($this), $titel, $groupByColumn);
-		$this->dataSource = happieUrl . '/data/';
+		$this->dataSource = happieUrl . $dataSource;
 		$this->defaultLength = 100;
 
 		$this->addColumn('menu_groep', 'html', 'menukaart_item');
@@ -24,25 +24,17 @@ class HappieBestellingenView extends DataTable {
 		$this->searchColumn('menu_groep');
 		$this->searchColumn('menukaart_item');
 
-		$nieuw = new DataTableToolbarKnop('>= 0', happieUrl . '/nieuw', '', 'Nieuw', 'Nieuw menukaart-item', '/famfamfam/add.png');
-		$this->toolbar->addKnop($nieuw);
-
-		$wijzig = new DataTableToolbarKnop('== 1', happieUrl . '/wijzig/', '', 'Wijzig', 'Wijzig menukaart-item', '/famfamfam/pencil.png');
+		$wijzig = new DataTableToolbarKnop('== 1', happieUrl . '/wijzig/', '', 'Wijzig', 'Wijzig bestelling', '/famfamfam/pencil.png');
 		$wijzig->onclick = "this.href+=fnGetSelectedObjectId(tableId);";
 		$this->toolbar->addKnop($wijzig);
-
-		$count = new DataTableToolbarKnop('>= 0', null, 'rowcount', 'Count', 'Count selected rows', null);
-		$count->onclick = "alert(fnGetSelectionSize(tableId) + ' row(s) selected');";
-		$this->toolbar->addKnop($count);
 	}
 
 }
 
-class HappieKeukenView extends HappieBestellingenView {
+class HappieServeerView extends HappieBestellingenView {
 
 	public function __construct() {
-		parent::__construct('Keuken actueel', 'tafel');
-		$this->dataSource .= date('Y/m/d');
+		parent::__construct('/serveer', 'Serveer actueel', 'tafel');
 
 		$this->hideColumn('financien_status');
 		$this->searchColumn('financien_status', false);
@@ -51,11 +43,10 @@ class HappieKeukenView extends HappieBestellingenView {
 
 }
 
-class HappieServeerView extends HappieBestellingenView {
+class HappieKeukenView extends HappieBestellingenView {
 
 	public function __construct() {
-		parent::__construct('Serveer actueel', 'tafel');
-		$this->dataSource .= date('Y/m/d');
+		parent::__construct('/keuken', 'Keuken actueel', 'tafel');
 
 		$this->hideColumn('financien_status');
 		$this->searchColumn('financien_status', false);
@@ -67,10 +58,7 @@ class HappieServeerView extends HappieBestellingenView {
 class HappieBarView extends HappieBestellingenView {
 
 	public function __construct() {
-		parent::__construct('Bar actueel', 'tafel');
-		$this->dataSource .= date('Y/m/d');
-
-		$this->hideColumn('serveer_status');
+		parent::__construct('/bar', 'Bar actueel', 'tafel');
 	}
 
 }
@@ -78,8 +66,7 @@ class HappieBarView extends HappieBestellingenView {
 class HappieKassaView extends HappieBestellingenView {
 
 	public function __construct() {
-		parent::__construct('Kassa actueel', 'tafel');
-		$this->dataSource .= date('Y/m/d');
+		parent::__construct('/kassa', 'Kassa actueel', 'tafel');
 	}
 
 }
