@@ -137,11 +137,13 @@ class DataTable extends TabsForm {
 		// set ajax url
 		if ($this->dataSource) {
 			$this->settings['ajax'] = array(
-				'url'	 => $this->dataSource,
-				'type'	 => 'POST',
-				'data'	 => null
+				'url'		 => $this->dataSource,
+				'type'		 => 'POST',
+				'data'		 => 'lastUpdate',
+				'dataSrc'	 => 'fnAjaxUpdateCallback'
 			);
 		}
+		$this->settings['createdRow'] = 'fnCreatedRowCallback';
 
 		// get columns index
 		$columns = array_keys($this->columns);
@@ -174,17 +176,19 @@ class DataTable extends TabsForm {
 		}
 
 		$this->settings['columns'] = array_values($this->columns);
-		$this->settings['createdRow'] = 'fnCreatedRowCallback';
-
 		return $this->settings;
 	}
 
 	public function view() {
-		// encode and fix function call
+		// encode settings
 		$settingsJson = json_encode($this->getSettings());
+
+		// js function calls
+		$settingsJson = str_replace('"lastUpdate"', '{"lastUpdate":lastUpdate' . $this->tableId . '}', $settingsJson);
+		$settingsJson = str_replace('"fnAjaxUpdateCallback"', 'fnAjaxUpdateCallback', $settingsJson);
 		$settingsJson = str_replace('"fnCreatedRowCallback"', 'fnCreatedRowCallback', $settingsJson);
 
-		// pretty printing
+		//DEBUG pretty printing
 		$settingsJson = str_replace(':{', <<<JSON
 :
 {
@@ -208,26 +212,33 @@ JSON
 			<?= $this->getTableFoot() ?>
 		</table>
 		<script type="text/javascript">
-			var fnCreatedRowCallback = function (row, data, index) {
-				$(row).attr('id', '<?= $this->tableId; ?>_' + index); // data array index
-				var primaryKey = ["<?= implode('", "', $this->orm->getPrimaryKey()); ?>"];
-				var objectId = [];
-				for (var i = 0; i < primaryKey.length; i++) {
-					objectId.push(data[primaryKey[i]]);
-				}
-				$(row).attr('data-objectid', objectId);
-				if ('detailSource' in data) {
-					$(row).children('td.details-control:first').data('detailSource', data.detailSource);
-				} else {
-					$(row).children('td.details-control:first').removeClass('details-control');
-				}
-				try {
-					$('abbr.timeago', row).timeago();
-				} catch (e) {
-					// missing js
-				}
-			};
+			var lastUpdate<?= $this->tableId; ?>;
 			$(document).ready(function () {
+				var fnAjaxUpdateCallback = function (json) {
+					lastUpdate<?= $this->tableId; ?> = Math.round(new Date().getTime() / 1000);
+					console.log(json);
+					//alert(lastUpdate<?= $this->tableId; ?>);
+					return json.data;
+				};
+				var fnCreatedRowCallback = function (row, data, index) {
+					$(row).attr('id', '<?= $this->tableId; ?>_' + index); // data array index
+					var primaryKey = ["<?= implode('", "', $this->orm->getPrimaryKey()); ?>"];
+					var objectId = [];
+					for (var i = 0; i < primaryKey.length; i++) {
+						objectId.push(data[primaryKey[i]]);
+					}
+					$(row).attr('data-objectid', objectId);
+					if ('detailSource' in data) {
+						$(row).children('td.details-control:first').data('detailSource', data.detailSource);
+					} else {
+						$(row).children('td.details-control:first').removeClass('details-control');
+					}
+					try {
+						$('abbr.timeago', row).timeago();
+					} catch (e) {
+						// missing js
+					}
+				};
 				var tableId = '#<?= $this->tableId; ?>';
 				var dataTable = $(tableId).DataTable(<?= $settingsJson; ?>);
 				// Multiple selection of rows
