@@ -15,16 +15,15 @@ class DataTable extends TabsForm {
 
 	protected $orm;
 	protected $tableId;
-	protected $columns = array();
-	protected $columnDefs = array();
-	private $groupByColumn;
-	private $groupByFixed;
 	protected $css_classes = array();
 	protected $dataSource;
-	protected $defaultLength = 10;
 	protected $toolbar;
+	protected $columns = array();
+	protected $defaultLength = 10;
+	protected $groupByColumn;
+	protected $groupByFixed;
 
-	public function __construct($orm_class, $tableId, $titel = false, $groupByColumn = true, $groupByFixed = false) {
+	public function __construct($orm_class, $tableId, $titel = false, $groupByColumn = null, $groupByFixed = false) {
 		parent::__construct(null, $tableId . '_form', null, $titel);
 
 		$this->orm = new $orm_class();
@@ -32,6 +31,7 @@ class DataTable extends TabsForm {
 		$this->css_classes[] = 'init display';
 		$this->groupByColumn = $groupByColumn;
 		$this->groupByFixed = $groupByFixed;
+
 		$this->columns['details'] = array(
 			'name'			 => 'details',
 			'data'			 => null,
@@ -109,23 +109,35 @@ class DataTable extends TabsForm {
 		return null;
 	}
 
-	/**
-	 * Server side processing query
-	 */
-	protected function getFindJson() {
-		$find = '';
-		// TODO
-		return json_encode($find);
-	}
-
 	public function view() {
-		$conditionalProps = '';
-		$columns = array_keys($this->columns);
+		$settings = array(
+			'columns'	 => array_values($this->columns),
+			'createdRow' => 'fnCreatedRowCallback'
+		);
+		if ($this->dataSource) {
+			$settings['ajax'] = array(
+				'url'	 => $this->dataSource,
+				'type'	 => 'POST',
+				'data'	 => null
+			);
+		}
+
+		if ($this->defaultLength > 0) {
+			$settings['iDisplayLength'] = $this->defaultLength;
+			$settings['paging'] = true;
+		} else {
+			$settings['paging'] = false;
+			//$settings['scrollCollapse'] = true;
+			//$settings['scrollY'] = '50%';
+		}
 
 		// group by column
 		if ($this->groupByFixed) {
 			$this->css_classes[] = 'groupByFixed';
 		}
+
+		$columns = array_keys($this->columns);
+
 		// user may group by
 		if ($this->groupByColumn !== false) {
 			$this->css_classes[] = 'groupByColumn';
@@ -140,7 +152,7 @@ class DataTable extends TabsForm {
 				$idx = array_search($this->groupByColumn, $columns);
 
 				// order fixed for group by column
-				$conditionalProps .= ', "orderFixed": [[ ' . $idx . ', "asc"]]'; // FIXME: orderFixed faalt
+				$settings['orderFixed'] = '[[ ' . $idx . ', "asc"]]'; // FIXME: orderFixed faalt
 
 				$this->groupByColumn = ' groupbycolumn="' . $idx . '"';
 			}
@@ -153,25 +165,31 @@ class DataTable extends TabsForm {
 			}
 			if (!isset($def['visible']) OR $def['visible'] === true) {
 				if (isset($def['type']) AND $def['type'] === 'date') {
-					$conditionalProps .= ', "order": [[ ' . array_search($column, $columns) . ', "asc"]]';
+					$settings['order'] = '[[ ' . array_search($column, $columns) . ', "asc"]]';
 					break;
 				}
 			}
 		}
 
-		// set column definitions
-		$conditionalProps .= ', "columnDefs": ' . json_encode(array_values($this->columnDefs));
+		// pretty printing
+		$settings = json_encode($settings);
+		$settings = str_replace('"fnCreatedRowCallback"', 'fnCreatedRowCallback', $settings);
 
-		// set ajax data source
-		if ($this->dataSource) {
-			$conditionalProps .= <<<JSON
-, "ajax": {
-	"url": "{$this->dataSource}",
-	"type": "POST",
-	"data": {$this->getFindJson()}
-}
-JSON;
-		}
+		$settings = str_replace(':{', <<<JSON
+:
+{
+JSON
+				, $settings);
+		$settings = str_replace('},{', <<<JSON
+},
+{
+JSON
+				, $settings);
+		$settings = str_replace('","', <<<JSON
+",
+"
+JSON
+				, $settings);
 		?>
 		<div id="<?= $this->tableId ?>_toolbar" class="dataTables_toolbar"><?= parent::view() ?></div>
 		<table id="<?= $this->tableId ?>" class="<?= implode(' ', $this->css_classes) ?>"<?= $this->groupByColumn ?>>
@@ -180,61 +198,58 @@ JSON;
 			<?= $this->getTableFoot() ?>
 		</table>
 		<script type="text/javascript">
+			var fnCreatedRowCallback = function (row, data, index) {
+				$(row).attr('id', '<?= $this->tableId; ?>_' + index); // data array index
+				var primaryKey = ["<?= implode('", "', $this->orm->getPrimaryKey()); ?>"];
+				var objectId = [];
+				for (var i = 0; i < primaryKey.length; i++) {
+					objectId.push(data[primaryKey[i]]);
+				}
+				$(row).attr('data-objectid', objectId);
+				if ('detailSource' in data) {
+					$(row).children('td.details-control:first').data('detailSource', data.detailSource);
+				} else {
+					$(row).children('td.details-control:first').removeClass('details-control');
+				}
+				try {
+					$('abbr.timeago', row).timeago();
+				} catch (e) {
+					// missing js
+				}
+			};
 			$(document).ready(function () {
-				var tableId = '<?= $this->tableId ?>';
-				var table = '#' + tableId;
-				var dataTable = $(table).DataTable({
-					"iDisplayLength": <?= $this->defaultLength ?>,
-					"columns": <?= json_encode(array_values($this->columns)) ?>,
-					"createdRow": function (row, data, index) {
-						$(row).attr('id', tableId + '_' + index); // data array index
-						var primaryKey = ["<?= implode('", "', $this->orm->getPrimaryKey()) ?>"];
-						var objectId = [];
-						for (var i = 0; i < primaryKey.length; i++) {
-							objectId.push(data[primaryKey[i]]);
-						}
-						$(row).attr('data-objectid', objectId);
-						if ('detailSource' in data) {
-							$(row).children('td.details-control:first').data('detailSource', data.detailSource);
-						} else {
-							$(row).children('td.details-control:first').removeClass('details-control');
-						}
-						try {
-							$('abbr.timeago', row).timeago();
-						} catch ($e) {
-							// missing js
-						}
-					}<?= $conditionalProps ?>
-				});
+				var tableId = '#<?= $this->tableId; ?>';
+				var $table = $(tableId);
+				var $dataTable = $table.DataTable(<?= $settings; ?>);
 				// Multiple selection of rows
-				$(table + ' tbody').on('click', 'tr', function (event) {
+				$(tableId + ' tbody').on('click', 'tr', function (event) {
 					if (!$(event.target).hasClass('details-control')) {
 						fnMultiSelect($(this));
 					}
 					updateToolbar();
 				});
 				// Opening and closing details
-				$(table + ' tbody').on('click', 'tr:not(.group) td.details-control', function (event) {
-					fnChildRow(dataTable, $(this));
+				$(tableId + ' tbody').on('click', 'tr:not(.group) td.details-control', function (event) {
+					fnChildRow($dataTable, $(this));
 				});
 				// Group by column
-				$(table + '.groupByColumn tbody').on('click', 'tr.group td.details-control', function (event) {
-					fnGroupExpandCollapse(dataTable, $(table), $(this).parent());
+				$(tableId + '.groupByColumn tbody').on('click', 'tr.group td.details-control', function (event) {
+					fnGroupExpandCollapse($dataTable, $table, $(this).parent());
 				});
-				$(table + '.groupByColumn thead').on('click', 'th.details-control', function (event) {
-					fnGroupExpandCollapseAll(dataTable, $(table), $(this).parent());
+				$(tableId + '.groupByColumn thead').on('click', 'th.details-control', function (event) {
+					fnGroupExpandCollapseAll($dataTable, $table, $(this).parent());
 				});
-				$(table + '.groupByColumn:not(.groupByFixed)').on('order.dt', fnGroupByColumn);
-				$(table + '.groupByColumn').on('draw.dt', fnGroupByColumnDraw);
-				$(table + '.groupByColumn').data('collapsedGroups', []);
-				$(table + '.groupByColumn thead tr:first').addClass('expanded');
-				if (!$(table).hasClass('groupByColumn') || !fnGetGroupByColumn($(table))) {
-					$(table + ' thead tr th.details-control').removeClass('details-control');
+				$(tableId + '.groupByColumn:not(.groupByFixed)').on('order.dt', fnGroupByColumn);
+				$(tableId + '.groupByColumn').on('draw.dt', fnGroupByColumnDraw);
+				$(tableId + '.groupByColumn').data('collapsedGroups', []);
+				$(tableId + '.groupByColumn thead tr:first').addClass('expanded');
+				if (!$table.hasClass('groupByColumn') || !fnGetGroupByColumn($table)) {
+					$(tableId + ' thead tr th.details-control').removeClass('details-control');
 				}
 				// Toolbar update script
-				var updateToolbar = <?= $this->getToolbarUpdateFunction() ?>;
-				$(table).on('draw.dt', updateToolbar);
-				$(table + '_toolbar').prependTo(table + '_wrapper');
+				var updateToolbar = <?= $this->getToolbarUpdateFunction(); ?>;
+				$table.on('draw.dt', updateToolbar);
+				$(tableId + '_toolbar').prependTo(tableId + '_wrapper');
 			});
 		</script>
 		<?php

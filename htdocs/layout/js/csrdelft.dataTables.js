@@ -27,19 +27,19 @@ function fnInitDataTables() {
 }
 
 function fnGetSelectionSize(tableId) {
-	return $('#' + tableId + ' tbody tr.selected').length;
+	return $(tableId + ' tbody tr.selected').length;
 }
 
 function fnGetSelection(tableId) {
 	var selection = [];
-	$('#' + tableId + ' tbody tr.selected').each(function () {
+	$(tableId + ' tbody tr.selected').each(function () {
 		selection.push($(this).attr('data-objectid'));
 	});
 	return selection;
 }
 
 function fnGetSelectedObjectId(tableId) {
-	return $('#' + tableId + ' tbody tr.selected:first').attr('data-objectid');
+	return $(tableId + ' tbody tr.selected:first').attr('data-objectid');
 }
 
 function fnMultiSelect(tr) {

@@ -13,7 +13,6 @@ class HappieBestellingenView extends DataTable {
 	public function __construct($dataSource = '/overzicht', $titel = 'Alle bestellingen', $groupByColumn = 'datum') {
 		parent::__construct(HappieBestellingenModel::orm, get_class($this), $titel, $groupByColumn);
 		$this->dataSource = happieUrl . $dataSource;
-		$this->defaultLength = 100;
 
 		$this->addColumn('menu_groep', 'html', 'menukaart_item');
 

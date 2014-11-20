@@ -110,7 +110,7 @@ class HappieBestelling extends PersistentEntity {
 		}
 		$array['tafel'] = 'Tafel ' . $this->tafel;
 		$array['laatst_gewijzigd'] = reldate($this->laatst_gewijzigd);
-		$array['wijzig_historie'] = '';
+		$array['wijzig_historie'] = null;
 		$array['opmerking'] = nl2br($this->opmerking);
 		return $array;
 	}
