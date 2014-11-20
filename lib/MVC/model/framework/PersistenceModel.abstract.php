@@ -28,6 +28,11 @@ abstract class PersistenceModel implements Persistence {
 	 * @var PersistentEntity
 	 */
 	protected $orm;
+	/**
+	 * Default ORDER BY
+	 * @var string
+	 */
+	protected $default_order;
 
 	protected function __construct($subdir = '') {
 		$orm = static::orm;
@@ -53,6 +58,9 @@ abstract class PersistenceModel implements Persistence {
 	 * @return PDOStatement
 	 */
 	public function find($criteria = null, array $criteria_params = array(), $orderby = null, $groupby = null, $limit = null, $start = 0) {
+		if ($orderby == null) {
+			$orderby = $this->default_order;
+		}
 		$result = Database::sqlSelect(array('*'), $this->orm->getTableName(), $criteria, $criteria_params, $orderby, $groupby, $limit, $start);
 		$result->setFetchMode(PDO::FETCH_CLASS, static::orm, array($cast = true));
 		return $result;
@@ -72,6 +80,9 @@ abstract class PersistenceModel implements Persistence {
 	 * @return PDOStatement
 	 */
 	public function findSparse(array $attributes, $criteria = null, array $criteria_params = array(), $orderby = null, $groupby = null, $limit = null, $start = 0) {
+		if ($orderby == null) {
+			$orderby = $this->default_order;
+		}
 		$attributes = array_merge($this->orm->getPrimaryKey(), $attributes);
 		$result = Database::sqlSelect($attributes, $this->orm->getTableName(), $criteria, $criteria_params, $orderby, $groupby, $limit, $start);
 		$result->setFetchMode(PDO::FETCH_CLASS, static::orm, array($cast = true, $attributes));

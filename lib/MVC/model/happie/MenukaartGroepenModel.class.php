@@ -16,6 +16,7 @@ class HappieMenukaartGroepenModel extends CachedPersistenceModel {
 
 	protected function __construct() {
 		parent::__construct('happie/');
+		$this->default_order = 'gang ASC, naam ASC';
 	}
 
 	public function getGroep($id) {

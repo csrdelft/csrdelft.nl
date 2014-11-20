@@ -18,12 +18,6 @@ class TabsForm extends Formulier {
 		return $this->tabs;
 	}
 
-	public function setTabs(array $tabs) {
-		foreach ($tabs as $tab) {
-			$this->addTab($tab);
-		}
-	}
-
 	public function hasTab($tab) {
 		return isset($this->tabs[$tab]);
 	}

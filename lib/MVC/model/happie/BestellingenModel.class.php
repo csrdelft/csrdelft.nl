@@ -18,6 +18,7 @@ class HappieBestellingenModel extends CachedPersistenceModel {
 
 	protected function __construct() {
 		parent::__construct('happie/');
+		$this->default_order = 'bestelling_id ASC, menukaart_item ASC';
 	}
 
 	public function getBestelling($id) {

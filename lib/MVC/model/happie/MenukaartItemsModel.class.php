@@ -16,6 +16,7 @@ class HappieMenukaartItemsModel extends CachedPersistenceModel {
 
 	protected function __construct() {
 		parent::__construct('happie/');
+		$this->default_order = 'menukaart_groep ASC, naam ASC';
 	}
 
 	public function getItem($id) {
@@ -44,19 +45,20 @@ class HappieMenukaartItemsModel extends CachedPersistenceModel {
 
 	public function getMenukaart() {
 		// prefetch groepen en items
-		$menukaart = group_by('gang', HappieMenukaartGroepenModel::instance()->prefetch());
-		$groepen = group_by('menukaart_groep', HappieMenukaartItemsModel::instance()->prefetch());
+		$groepen = group_by('gang', HappieMenukaartGroepenModel::instance()->prefetch());
+		$items = group_by('menukaart_groep', HappieMenukaartItemsModel::instance()->prefetch());
 
+		$menukaart = array();
 		foreach (HappieGang::getTypeOptions() as $gang) {
-			if (!isset($menukaart[$gang])) {
+			if (!isset($groepen[$gang])) {
+				$menukaart[$gang] = array();
 				continue;
 			}
-			foreach ($menukaart[$gang] as $groep) {
-				// set prefetched items
-				if (!isset($groepen[$groep->groep_id])) {
-					continue;
+			foreach ($groepen[$gang] as $groep) {
+				$menukaart[$gang][$groep->groep_id] = $groep;
+				if (isset($items[$groep->groep_id])) {
+					$groep->setItems($items[$groep->groep_id]);
 				}
-				$groep->setItems($groepen[$groep->groep_id]);
 			}
 		}
 		return $menukaart;

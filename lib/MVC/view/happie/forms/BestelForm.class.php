@@ -80,18 +80,27 @@ class HappieBestelForm extends TabsForm {
 		$fields['k']->css_classes[] = 'float-right';
 		$this->addFields($fields, 'head');
 
-
+		// maak invoerveld voor elk menukaart-item
 		$menukaart = HappieMenukaartItemsModel::instance()->getMenukaart();
-		$this->setTabs(array_keys($menukaart));
+		foreach ($menukaart as $gang => $groepen) {
+			$this->addTab($gang);
 
-		// maak invoerveld voor elk item
-		foreach ($menukaart as $gang) {
-			foreach ($gang as $groep) {
-
-				// groepeer items
+			// groepeer items
+			foreach ($groepen as $groep_id => $groep) {
 				$fields = array();
-				$fields[] = new Subkopje($groep->naam);
 
+				$fields[] = new Subkopje('<div id="toggle_groep_' . $groep_id . '" class="toggle_groep">' . $groep->naam . '</div>');
+				$fields[] = new HtmlComment('<div id="expand_groep_' . $groep_id . '">');
+
+				$this->js .= <<<JS
+$('#toggle_groep_{$groep_id}').click(function() {
+	if ($('#expand_groep_{$groep_id}').is(":visible")) {
+		$('#expand_groep_{$groep_id}').slideUp(200);
+	} else {
+		$('#expand_groep_{$groep_id}').slideDown(200);
+	}
+});
+JS;
 				foreach ($groep->getItems() as $item) {
 
 					// preload bestelling aantal
@@ -120,7 +129,7 @@ class HappieBestelForm extends TabsForm {
 					$opm->placeholder = 'Allergie van klant / opmerking';
 					$fields[] = $opm;
 
-					$fields[] = new HtmlComment('</div>');
+					$fields[] = new HtmlComment('</div>'); // close expanded allergie
 
 					$this->js .= <<<JS
 $('#{$opm->getId()}').height('30px');
@@ -130,6 +139,7 @@ $('#toggle_{$item->item_id}').appendTo('#wrapper_{$int->getId()}').click(functio
 JS;
 				}
 
+				$fields[] = new HtmlComment('</div>'); // close expanded groep
 				// voeg groep toe aan tab en maak tab voor elke gang
 				$this->addFields($fields, $groep->gang);
 			}
