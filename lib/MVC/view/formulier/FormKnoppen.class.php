@@ -16,7 +16,7 @@
 abstract class FormKnoppen implements FormElement {
 
 	protected $knoppen = array();
-	public $css_classes = array();
+	public $css_classes = array('clear-left');
 
 	public function getModel() {
 		return $this->knoppen;

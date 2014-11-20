@@ -121,11 +121,11 @@ JS;
 					if ($beschikbaar > 0 OR $aantal > 0) {
 						$comment = '<div id="toggle_' . $item->item_id . '" data-allergie="&nbsp;' . $item->allergie_info . '&nbsp;" class="btn toggle-opmerking float-left" style="margin-right:5px;padding:0 0.5em;"><img src="' . CSR_PICS . '/famfamfam/information.png" class="icon" width="16" height="16"></div>';
 					} else {
-						$comment = '<div id="toggle_' . $item->item_id . '" class="inline alert alert-warning" style="margin-left:5px;padding:0 .3em;">OP</div>';
+						$comment = '<div id="toggle_' . $item->item_id . '" class="float-left alert alert-warning" style="margin-right:5px;padding:0 .3em;">OP</div>';
 					}
 					$fields[] = new HtmlComment($comment . <<<HTML
 <div id="expand_{$item->item_id}" style="display:none;">
-	<div class="inline allergie-info alert alert-info" style="margin:0 5px;padding:0 .3em;">{$item->allergie_info}</div>
+	<div class="inline allergie-info alert alert-info" style="margin-right:5px;padding:0 .3em;">{$item->allergie_info}</div>
 	<div class="inline prijs">{$item->getPrijsFormatted()}</div>
 HTML
 					);
@@ -170,12 +170,20 @@ var flipAllergie = function(flip) {
 		$('.toggle-opmerking').each(function() {
 			$(this).attr('data-allergie', $(this).html());
 			$(this).html($(this).attr('data-img'));
+			$(this).next('label').css({
+				"display": "",
+				"clear": ""
+			});
 		});
 	}
 	else {
 		$('.toggle-opmerking').each(function() {
 			$(this).attr('data-img', $(this).html());
 			$(this).html($(this).attr('data-allergie'));
+			$(this).next('label').css({
+				"display": "block",
+				"clear": "left"
+			});
 		});
 	}
 	$(this).prop('flip', !flip);
