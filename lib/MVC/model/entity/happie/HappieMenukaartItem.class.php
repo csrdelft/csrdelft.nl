@@ -79,6 +79,7 @@ class HappieMenukaartItem extends PersistentEntity {
 			$array['aantal_beschikbaar'] .= ' / ' . $groep->aantal_beschikbaar;
 		}
 		$array['prijs'] = $this->getPrijsFormatted();
+		$array['beschrijving'] = nl2br($this->beschrijving);
 		return $array;
 	}
 
