@@ -110,6 +110,7 @@ class DataTable extends TabsForm {
 	}
 
 	public function view() {
+		$columns = array_keys($this->columns);
 		$settings = array(
 			'columns'	 => array_values($this->columns),
 			'createdRow' => 'fnCreatedRowCallback'
@@ -135,8 +136,6 @@ class DataTable extends TabsForm {
 		if ($this->groupByFixed) {
 			$this->css_classes[] = 'groupByFixed';
 		}
-
-		$columns = array_keys($this->columns);
 
 		// user may group by
 		if ($this->groupByColumn !== false) {
@@ -171,25 +170,9 @@ class DataTable extends TabsForm {
 			}
 		}
 
-		// pretty printing
+		// encode and fix function call
 		$settings = json_encode($settings);
 		$settings = str_replace('"fnCreatedRowCallback"', 'fnCreatedRowCallback', $settings);
-
-		$settings = str_replace(':{', <<<JSON
-:
-{
-JSON
-				, $settings);
-		$settings = str_replace('},{', <<<JSON
-},
-{
-JSON
-				, $settings);
-		$settings = str_replace('","', <<<JSON
-",
-"
-JSON
-				, $settings);
 		?>
 		<div id="<?= $this->tableId ?>_toolbar" class="dataTables_toolbar"><?= parent::view() ?></div>
 		<table id="<?= $this->tableId ?>" class="<?= implode(' ', $this->css_classes) ?>"<?= $this->groupByColumn ?>>
