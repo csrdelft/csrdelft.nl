@@ -89,12 +89,12 @@ class HappieBestelForm extends TabsForm {
 			foreach ($groepen as $groep_id => $groep) {
 				$fields = array();
 
-				$fields[] = new Subkopje('<div id="toggle_groep_' . $groep_id . '" class="toggle_groep">' . $groep->naam . '</div>');
+				$fields[] = new Subkopje('<div id="toggle_groep_' . $groep_id . '" class="toggle-groep" style="padding-left:10px;">' . $groep->naam . '</div>');
 				$fields[] = new HtmlComment('<div id="expand_groep_' . $groep_id . '">');
 
 				$this->js .= <<<JS
 $('#toggle_groep_{$groep_id}').click(function() {
-	if ($('#expand_groep_{$groep_id}').is(":visible")) {
+	if ($('#expand_groep_{$groep_id}').is(':visible')) {
 		$('#expand_groep_{$groep_id}').slideUp(200);
 	} else {
 		$('#expand_groep_{$groep_id}').slideDown(200);
@@ -119,14 +119,16 @@ JS;
 					$fields[] = $int;
 
 					if ($beschikbaar > 0 OR $aantal > 0) {
-						$comment = '<div id="toggle_' . $item->item_id . '" data-allergie="&nbsp;' . $item->allergie_info . '&nbsp;" class="btn toggle-opmerking float-left" style="margin-right:5px;padding:0 0.5em;"><img src="' . CSR_PICS . '/famfamfam/information.png" class="icon" width="16" height="16"></div>';
+						$comment = '<div id="toggle_' . $item->item_id . '" class="btn toggle-info float-left" style="margin-right:5px;padding:0 0.5em;"><img src="' . CSR_PICS . '/famfamfam/information.png" class="icon" width="16" height="16"></div>';
 					} else {
 						$comment = '<div id="toggle_' . $item->item_id . '" class="float-left alert alert-warning" style="margin-right:5px;padding:0 .3em;">OP</div>';
 					}
 					$fields[] = new HtmlComment($comment . <<<HTML
+<div id="info_{$item->item_id}" class="info-data" style="display:none;">
+	<div class="inline alert alert-info" style="margin-right:5px;padding:0 .3em;">{$item->allergie_info}</div>
+	<div class="inline">{$item->getPrijsFormatted()}</div>
+</div>
 <div id="expand_{$item->item_id}" style="display:none;">
-	<div class="inline allergie-info alert alert-info" style="margin-right:5px;padding:0 .3em;">{$item->allergie_info}</div>
-	<div class="inline prijs">{$item->getPrijsFormatted()}</div>
 HTML
 					);
 					$opm = new TextareaField('opmerking' . $item->item_id, $opmerking);
@@ -139,6 +141,11 @@ HTML
 $('#{$opm->getId()}').height('30px');
 $('#toggle_{$item->item_id}').prependTo('#wrapper_{$int->getId()}').click(function() {
 	$('#expand_{$item->item_id}').toggle().find('textarea:first').focus();
+	var toggle = $('#expand_{$item->item_id}').is(':visible');
+	var show = $('.toggle-allergie:first').prop('data-show');
+	if (!show) {
+		$('#info_{$item->item_id}').toggle(toggle);
+	}
 });
 JS;
 				}
@@ -161,34 +168,18 @@ JS;
 		$this->js .= <<<JS
 $('.Formulier label').css('width', '50%');
 $('#wrapper_{$table->getId()} label').css('width', '20%');
-$('.FormDefaultKnoppen:first').appendTo('#wrapper_field_tafel');
-var flipAllergie = function(flip) {
-	if (typeof flip !== 'boolean') {
-		flip = $(this).prop('flip');
+
+$('.FormDefaultKnoppen:first').appendTo('#wrapper_field_tafel').removeClass('clear-left');
+
+$('.toggle-allergie:first').click(function() {
+	var show = $(this).prop('data-show');
+	if (!show) {
+		$('.info-data').show();
+	} else {
+		$('.info-data').hide();
 	}
-	if (flip) {
-		$('.toggle-opmerking').each(function() {
-			$(this).attr('data-allergie', $(this).html());
-			$(this).html($(this).attr('data-img'));
-			$(this).next('label').css({
-				"display": "",
-				"clear": ""
-			});
-		});
-	}
-	else {
-		$('.toggle-opmerking').each(function() {
-			$(this).attr('data-img', $(this).html());
-			$(this).html($(this).attr('data-allergie'));
-			$(this).next('label').css({
-				"display": "block",
-				"clear": "left"
-			});
-		});
-	}
-	$(this).prop('flip', !flip);
-};
-$('#{$allergie->getId()}').click(flipAllergie);
+	$(this).prop('data-show', !show);
+});
 JS;
 	}
 
