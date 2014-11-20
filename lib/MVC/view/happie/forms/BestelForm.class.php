@@ -87,7 +87,7 @@ class HappieBestelForm extends TabsForm {
 
 			// drank groepen standaard ingeklapt
 			if ($gang == HappieGang::Drank) {
-				$drank = ' style="display:none;"';
+				$drank = 'style="display:none;"';
 			} else {
 				$drank = null;
 			}
@@ -97,7 +97,7 @@ class HappieBestelForm extends TabsForm {
 				$fields = array();
 
 				$fields[] = new Subkopje('<div id="toggle_groep_' . $groep_id . '" class="toggle-groep" style="padding-left:10px;cursor:pointer;">' . $groep->naam . '</div>');
-				$fields[] = new HtmlComment('<div id="expand_groep_' . $groep_id . '"' . $drank . '>');
+				$fields[] = new HtmlComment('<div id="expand_groep_' . $groep_id . '" ' . $drank . '>');
 
 				$this->js .= <<<JS
 $('#toggle_groep_{$groep_id}').click(function() {
@@ -109,6 +109,8 @@ $('#toggle_groep_{$groep_id}').click(function() {
 });
 JS;
 				foreach ($groep->getItems() as $item) {
+
+					$fields[] = new HtmlComment('<div id="item_' . $item->item_id . '" class="alternate-bgcolor">');
 
 					// preload bestelling aantal
 					if (isset($bestellingen[$item->item_id])) {
@@ -142,7 +144,7 @@ HTML
 					$opm->placeholder = 'Allergie van klant / opmerking';
 					$fields[] = $opm;
 
-					$fields[] = new HtmlComment('<div class="beschrijving" style="font-style:italic;">' . $item->beschrijving . '</div></div>'); // close expanded allergie
+					$fields[] = new HtmlComment('<div class="beschrijving" style="font-style:italic;">' . $item->beschrijving . '</div></div></div>'); // close expanded item
 
 					$this->js .= <<<JS
 $('#{$opm->getId()}').height('30px');
