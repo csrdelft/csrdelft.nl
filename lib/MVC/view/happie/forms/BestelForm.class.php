@@ -85,12 +85,19 @@ class HappieBestelForm extends TabsForm {
 		foreach ($menukaart as $gang => $groepen) {
 			$this->addTab($gang);
 
+			// drank groepen standaard ingeklapt
+			if ($gang == HappieGang::Drank) {
+				$drank = ' style="display:none;"';
+			} else {
+				$drank = null;
+			}
+
 			// groepeer items
 			foreach ($groepen as $groep_id => $groep) {
 				$fields = array();
 
-				$fields[] = new Subkopje('<div id="toggle_groep_' . $groep_id . '" class="toggle-groep" style="padding-left:10px;">' . $groep->naam . '</div>');
-				$fields[] = new HtmlComment('<div id="expand_groep_' . $groep_id . '">');
+				$fields[] = new Subkopje('<div id="toggle_groep_' . $groep_id . '" class="toggle-groep" style="padding-left:10px;cursor:pointer;">' . $groep->naam . '</div>');
+				$fields[] = new HtmlComment('<div id="expand_groep_' . $groep_id . '"' . $drank . '>');
 
 				$this->js .= <<<JS
 $('#toggle_groep_{$groep_id}').click(function() {
