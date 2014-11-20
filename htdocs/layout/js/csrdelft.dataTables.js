@@ -17,11 +17,6 @@ $(document).ready(function () {
 });
 
 function fnInitDataTables() {
-	// Default global settings
-	$.extend($.fn.dataTable.defaults, {
-		"dom": 'frtpli',
-		"lengthMenu": [[10, 25, 50, 100, -1], [10, 25, 50, 100, "Alles"]]
-	});
 	// Custom global filter
 	$.fn.dataTable.ext.search.push(fnGroupExpandCollapseDraw);
 }

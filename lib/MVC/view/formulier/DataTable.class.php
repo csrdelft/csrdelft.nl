@@ -16,12 +16,19 @@ class DataTable extends TabsForm {
 	protected $orm;
 	protected $tableId;
 	protected $css_classes = array();
-	protected $dataSource;
-	protected $toolbar;
-	protected $columns = array();
-	protected $defaultLength = false;
 	protected $groupByColumn;
 	protected $groupByFixed;
+	protected $settings = array(
+		'dom'		 => 'frtpli',
+		'lengthMenu' => array(
+			array(10, 25, 50, 100, -1),
+			array(10, 25, 50, 100, 'Alles')
+		)
+	);
+	protected $columns = array();
+	protected $defaultLength = false;
+	protected $toolbar;
+	protected $dataSource;
 
 	public function __construct($orm_class, $tableId, $titel = false, $groupByColumn = null, $groupByFixed = false) {
 		parent::__construct(null, $tableId . '_form', null, $titel);
@@ -31,6 +38,15 @@ class DataTable extends TabsForm {
 		$this->css_classes[] = 'init display';
 		$this->groupByColumn = $groupByColumn;
 		$this->groupByFixed = $groupByFixed;
+
+		// group by column
+		if ($this->groupByFixed) {
+			$this->css_classes[] = 'groupByFixed';
+		}
+		// user may group by
+		if ($this->groupByColumn !== false) {
+			$this->css_classes[] = 'groupByColumn';
+		}
 
 		$this->columns['details'] = array(
 			'name'			 => 'details',
@@ -109,73 +125,88 @@ class DataTable extends TabsForm {
 		return null;
 	}
 
-	public function view() {
-		$columns = array_keys($this->columns);
-		$settings = array(
-			'columns'	 => array_values($this->columns),
-			'createdRow' => 'fnCreatedRowCallback'
-		);
+	protected function getSettings() {
+
+		if ($this->defaultLength > 0) {
+			$this->settings['iDisplayLength'] = $this->defaultLength;
+			$this->settings['paging'] = true;
+		} else {
+			$this->settings['paging'] = false;
+			//$settings['scrollX'] = '100%';
+			//$settings['scrollY'] = '100%';
+		}
+
 		if ($this->dataSource) {
-			$settings['ajax'] = array(
+			$this->settings['ajax'] = array(
 				'url'	 => $this->dataSource,
 				'type'	 => 'POST',
 				'data'	 => null
 			);
 		}
 
-		if ($this->defaultLength > 0) {
-			$settings['iDisplayLength'] = $this->defaultLength;
-			$settings['paging'] = true;
-		} else {
-			$settings['paging'] = false;
-			//$settings['scrollX'] = false;
-			//$settings['scrollY'] = '100%';
-		}
+		// get columns index
+		$columns = array_keys($this->columns);
 
 		// group by column
-		if ($this->groupByFixed) {
-			$this->css_classes[] = 'groupByFixed';
+		if (isset($this->columns[$this->groupByColumn])) {
+
+			// make group by column invisible
+			$this->hideColumn($this->groupByColumn);
+			$this->searchColumn($this->groupByColumn);
+
+			// order fixed for group by column
+			$index = array_search($this->groupByColumn, $columns);
+			$this->settings['orderFixed'] = array(
+				array($index, 'asc')
+			);
+
+			$this->groupByColumn = $index;
 		}
 
-		// user may group by
-		if ($this->groupByColumn !== false) {
-			$this->css_classes[] = 'groupByColumn';
-
-			// existing column?
-			if (isset($this->columns[$this->groupByColumn])) {
-
-				// make group by column invisible
-				$this->hideColumn($this->groupByColumn);
-				$this->searchColumn($this->groupByColumn);
-
-				$idx = array_search($this->groupByColumn, $columns);
-
-				// order fixed for group by column
-				$settings['orderFixed'] = '[[ ' . $idx . ', "asc"]]'; // FIXME: orderFixed faalt
-
-				$this->groupByColumn = ' groupbycolumn="' . $idx . '"';
-			}
-		}
-
-		// default order by first visible column
-		foreach ($this->columns as $column => $def) {
-			if ($column < 1) {
+		// default order
+		foreach ($this->columns as $name => $def) {
+			if ($name == 'details') {
 				continue;
 			}
 			if (!isset($def['visible']) OR $def['visible'] === true) {
-				if (isset($def['type']) AND $def['type'] === 'date') {
-					$settings['order'] = '[[ ' . array_search($column, $columns) . ', "asc"]]';
-					break;
-				}
+				$index = array_search($name, $columns);
+				$this->settings['order'] = array(
+					array($index, 'asc')
+				);
+				break;
 			}
 		}
 
+		$this->settings['columns'] = array_values($this->columns);
+		$this->settings['createdRow'] = 'fnCreatedRowCallback';
+
+		return $this->settings;
+	}
+
+	public function view() {
 		// encode and fix function call
-		$settings = json_encode($settings);
-		$settings = str_replace('"fnCreatedRowCallback"', 'fnCreatedRowCallback', $settings);
+		$settingsJson = json_encode($this->getSettings());
+		$settingsJson = str_replace('"fnCreatedRowCallback"', 'fnCreatedRowCallback', $settingsJson);
+
+		// pretty printing
+		$settingsJson = str_replace(':{', <<<JSON
+:
+{
+JSON
+				, $settingsJson);
+		$settingsJson = str_replace(',{', <<<JSON
+,
+{
+JSON
+				, $settingsJson);
+		$settingsJson = str_replace(',"', <<<JSON
+,
+"
+JSON
+				, $settingsJson);
 		?>
 		<div id="<?= $this->tableId ?>_toolbar" class="dataTables_toolbar"><?= parent::view() ?></div>
-		<table id="<?= $this->tableId ?>" class="<?= implode(' ', $this->css_classes) ?>"<?= $this->groupByColumn ?>>
+		<table id="<?= $this->tableId ?>" class="<?= implode(' ', $this->css_classes) ?>" groupbycolumn="<?= $this->groupByColumn ?>">
 			<?= $this->getTableHead() ?>
 			<?= $this->getTableBody() ?>
 			<?= $this->getTableFoot() ?>
@@ -202,8 +233,7 @@ class DataTable extends TabsForm {
 			};
 			$(document).ready(function () {
 				var tableId = '#<?= $this->tableId; ?>';
-				var $table = $(tableId);
-				var $dataTable = $table.DataTable(<?= $settings; ?>);
+				var dataTable = $(tableId).DataTable(<?= $settingsJson; ?>);
 				// Multiple selection of rows
 				$(tableId + ' tbody').on('click', 'tr', function (event) {
 					if (!$(event.target).hasClass('details-control')) {
@@ -213,25 +243,25 @@ class DataTable extends TabsForm {
 				});
 				// Opening and closing details
 				$(tableId + ' tbody').on('click', 'tr:not(.group) td.details-control', function (event) {
-					fnChildRow($dataTable, $(this));
+					fnChildRow(dataTable, $(this));
 				});
 				// Group by column
 				$(tableId + '.groupByColumn tbody').on('click', 'tr.group td.details-control', function (event) {
-					fnGroupExpandCollapse($dataTable, $table, $(this).parent());
+					fnGroupExpandCollapse(dataTable, $(tableId), $(this).parent());
 				});
 				$(tableId + '.groupByColumn thead').on('click', 'th.details-control', function (event) {
-					fnGroupExpandCollapseAll($dataTable, $table, $(this).parent());
+					fnGroupExpandCollapseAll(dataTable, $(tableId), $(this).parent());
 				});
 				$(tableId + '.groupByColumn:not(.groupByFixed)').on('order.dt', fnGroupByColumn);
 				$(tableId + '.groupByColumn').on('draw.dt', fnGroupByColumnDraw);
 				$(tableId + '.groupByColumn').data('collapsedGroups', []);
 				$(tableId + '.groupByColumn thead tr:first').addClass('expanded');
-				if (!$table.hasClass('groupByColumn') || !fnGetGroupByColumn($table)) {
+				if (!$(tableId).hasClass('groupByColumn') || !fnGetGroupByColumn($(tableId))) {
 					$(tableId + ' thead tr th.details-control').removeClass('details-control');
 				}
 				// Toolbar update script
 				var updateToolbar = <?= $this->getToolbarUpdateFunction(); ?>;
-				$table.on('draw.dt', updateToolbar);
+				$(tableId).on('draw.dt', updateToolbar);
 				$(tableId + '_toolbar').prependTo(tableId + '_wrapper');
 			});
 		</script>
