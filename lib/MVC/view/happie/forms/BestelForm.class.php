@@ -119,7 +119,7 @@ JS;
 					$fields[] = $int;
 
 					if ($beschikbaar > 0 OR $aantal > 0) {
-						$comment = '<div id="toggle_' . $item->item_id . '" data-allergie="&nbsp;' . $item->allergie_info . '&nbsp;" class="btn toggle-opmerking" style="margin-left:5px;padding:0 0.5em;"><img src="' . CSR_PICS . '/famfamfam/information.png" class="icon" width="16" height="16"></div>';
+						$comment = '<div id="toggle_' . $item->item_id . '" data-allergie="&nbsp;' . $item->allergie_info . '&nbsp;" class="btn toggle-opmerking float-left" style="margin-right:5px;padding:0 0.5em;"><img src="' . CSR_PICS . '/famfamfam/information.png" class="icon" width="16" height="16"></div>';
 					} else {
 						$comment = '<div id="toggle_' . $item->item_id . '" class="inline alert alert-warning" style="margin-left:5px;padding:0 .3em;">OP</div>';
 					}
@@ -137,7 +137,7 @@ HTML
 
 					$this->js .= <<<JS
 $('#{$opm->getId()}').height('30px');
-$('#toggle_{$item->item_id}').appendTo('#wrapper_{$int->getId()}').click(function() {
+$('#toggle_{$item->item_id}').prependTo('#wrapper_{$int->getId()}').click(function() {
 	$('#expand_{$item->item_id}').toggle().find('textarea:first').focus();
 });
 JS;
