@@ -16,8 +16,8 @@ class DataTable extends TabsForm {
 	protected $orm;
 	protected $tableId;
 	protected $css_classes = array();
-	protected $groupByColumn;
-	protected $groupByFixed;
+	private $groupByColumn;
+	private $groupByFixed;
 	protected $settings = array(
 		'dom'		 => 'frtpli',
 		'lengthMenu' => array(
@@ -48,6 +48,7 @@ class DataTable extends TabsForm {
 			$this->css_classes[] = 'groupByColumn';
 		}
 
+		// create group expand / collapse column
 		$this->columns['details'] = array(
 			'name'			 => 'details',
 			'data'			 => null,
@@ -58,32 +59,26 @@ class DataTable extends TabsForm {
 			'searchable'	 => false,
 			'defaultContent' => ''
 		);
+
+		// generate columns from entity attributes
 		foreach ($this->orm->getAttributes() as $attribute) {
-			$definition = $this->orm->getAttributeDefinition($attribute);
-			switch ($definition[0]) {
-				case T::DateTime: $type = 'date';
-					break;
-				case T::Integer: $type = 'num';
-					break;
-				case T::Float: $type = 'num-fmt';
-					break;
-				case T::Char: $type = 'string';
-					break;
-				default: $type = 'html';
-					break;
-			}
-			$this->addColumn($attribute, $type);
+			$this->addColumn($attribute, 'html');
 		}
+
+		// hide primary key columns
 		foreach ($this->orm->getPrimaryKey() as $attribute) {
 			$this->hideColumn($attribute);
 		}
 
+		// create toolbar
 		$this->toolbar = new DataTableToolbar();
 		$fields[] = $this->toolbar;
 		$this->addFields($fields);
 	}
 
 	protected function addColumn($newName, $type = 'html', $before = null) {
+
+		// column definition
 		$newColumn = array(
 			'name'		 => $newName,
 			'data'		 => $newName,
@@ -91,6 +86,8 @@ class DataTable extends TabsForm {
 			'type'		 => $type,
 			'searchable' => false
 		);
+
+		// append or insert at position
 		if ($before === null) {
 			$this->columns[$newName] = $newColumn;
 		} else {
@@ -127,6 +124,7 @@ class DataTable extends TabsForm {
 
 	protected function getSettings() {
 
+		// set view modus: paging or scrolling
 		if ($this->defaultLength > 0) {
 			$this->settings['iDisplayLength'] = $this->defaultLength;
 			$this->settings['paging'] = true;
@@ -136,6 +134,7 @@ class DataTable extends TabsForm {
 			//$settings['scrollY'] = '100%';
 		}
 
+		// set ajax url
 		if ($this->dataSource) {
 			$this->settings['ajax'] = array(
 				'url'	 => $this->dataSource,
@@ -150,20 +149,17 @@ class DataTable extends TabsForm {
 		// group by column
 		if (isset($this->columns[$this->groupByColumn])) {
 
-			// make group by column invisible
+			// make group by column invisible and searchable
 			$this->hideColumn($this->groupByColumn);
 			$this->searchColumn($this->groupByColumn);
 
-			// order fixed for group by column
-			$index = array_search($this->groupByColumn, $columns);
+			$this->groupByColumn = array_search($this->groupByColumn, $columns);
 			$this->settings['orderFixed'] = array(
-				array($index, 'asc')
+				array($this->groupByColumn, 'asc')
 			);
-
-			$this->groupByColumn = $index;
 		}
 
-		// default order
+		// default order by first visible column
 		foreach ($this->columns as $name => $def) {
 			if ($name == 'details') {
 				continue;
