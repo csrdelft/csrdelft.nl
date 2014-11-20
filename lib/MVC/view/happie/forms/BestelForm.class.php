@@ -123,13 +123,17 @@ JS;
 					} else {
 						$comment = '<div id="toggle_' . $item->item_id . '" class="inline alert alert-warning" style="margin-left:5px;padding:0 .3em;">OP</div>';
 					}
-					$fields[] = new HtmlComment($comment . '<div id="expand_' . $item->item_id . '" style="display:none;"><div class="allergie-info">' . $item->allergie_info . '</div>');
-
+					$fields[] = new HtmlComment($comment . <<<HTML
+<div id="expand_{$item->item_id}" style="display:none;">
+	<div class="inline allergie-info alert alert-info" style="margin:0 5px;padding:0 .3em;">{$item->allergie_info}</div>
+	<div class="inline prijs">{$item->getPrijsFormatted()}</div>
+HTML
+					);
 					$opm = new TextareaField('opmerking' . $item->item_id, $opmerking);
 					$opm->placeholder = 'Allergie van klant / opmerking';
 					$fields[] = $opm;
 
-					$fields[] = new HtmlComment('</div>'); // close expanded allergie
+					$fields[] = new HtmlComment('<div class="beschrijving" style="font-style:italic;">' . $item->beschrijving . '</div></div>'); // close expanded allergie
 
 					$this->js .= <<<JS
 $('#{$opm->getId()}').height('30px');
