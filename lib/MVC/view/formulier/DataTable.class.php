@@ -19,7 +19,7 @@ class DataTable extends TabsForm {
 	protected $dataSource;
 	protected $toolbar;
 	protected $columns = array();
-	protected $defaultLength = 10;
+	protected $defaultLength = false;
 	protected $groupByColumn;
 	protected $groupByFixed;
 
@@ -128,8 +128,8 @@ class DataTable extends TabsForm {
 			$settings['paging'] = true;
 		} else {
 			$settings['paging'] = false;
-			//$settings['scrollCollapse'] = true;
-			//$settings['scrollY'] = '50%';
+			//$settings['scrollX'] = false;
+			//$settings['scrollY'] = '100%';
 		}
 
 		// group by column
