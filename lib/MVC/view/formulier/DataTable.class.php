@@ -148,6 +148,9 @@ class DataTable extends TabsForm {
 
 		// default order by first visible column
 		foreach ($this->columns as $column => $def) {
+			if ($column < 1) {
+				continue;
+			}
 			if (!isset($def['visible']) OR $def['visible'] === true) {
 				if (isset($def['type']) AND $def['type'] === 'date') {
 					$conditionalProps .= ', "order": [[ ' . array_search($column, $columns) . ', "asc"]]';
