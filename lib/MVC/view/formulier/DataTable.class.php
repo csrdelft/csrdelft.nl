@@ -33,7 +33,7 @@ class DataTable extends TabsForm {
 
 		$this->orm = new $orm_class();
 		$this->tableId = $tableId;
-		$this->css_classes[] = 'init display inline';
+		$this->css_classes[] = 'init display';
 		if ($groupByColumn !== false) {
 			$this->css_classes[] = 'groupByColumn';
 		}
@@ -53,6 +53,38 @@ class DataTable extends TabsForm {
 
 		// generate columns from entity attributes
 		foreach ($this->orm->getAttributes() as $attribute) {
+			$def = $this->orm->getAttributeDefinition($attribute);
+			switch ($def[0]) {
+
+				case T::Boolean:
+				case T::Integer:
+				case T::Float:
+					$type = 'html-num-fmt';
+					break;
+
+				case T::Date:
+				case T::Time:
+				case T::DateTime:
+				case T::Timestamp:
+					$type = 'date';
+					break;
+
+				default:
+					$type = 'html';
+			}
+			//TODO
+			reldate(getDateTime());
+			// { "iDataSort": 1 },
+
+			/*
+			 *  // The `data` parameter refers to the data for the cell (defined by the
+			  // `data` option, which defaults to the column being worked with, in
+			  // this case `data: 0`.
+			  "render": function ( data, type, row ) {
+			  return data +' ('+ row[3]+')';
+			  },
+			  "targets": 0
+			 */
 			$this->addColumn($attribute, 'html');
 		}
 
@@ -66,7 +98,7 @@ class DataTable extends TabsForm {
 		$this->addFields(array($knop), $tab);
 	}
 
-	protected function addColumn($newName, $type = 'html', $before = null) {
+	protected function addColumn($newName, $type = 'string', $before = null) {
 
 		// column definition
 		$newColumn = array(
@@ -170,10 +202,6 @@ class DataTable extends TabsForm {
 	}
 
 	public function view() {
-		// filter placeholder in toolbar
-		$fields[] = new HtmlComment('<div id="' . $this->tableId . '_toolbar_filter"></div>');
-		$this->addFields($fields);
-
 		// encode settings
 		$settingsJson = json_encode($this->getSettings());
 
@@ -235,6 +263,13 @@ JSON
 				};
 				var tableId = '#<?= $this->tableId; ?>';
 				var dataTable = $(tableId).DataTable(<?= $settingsJson; ?>);
+				// Toolbar above table
+				var updateToolbar = <?= $this->getUpdateToolbar(); ?>;
+				$(tableId).on('draw.dt', updateToolbar);
+				$(tableId + '_toolbar').prependTo(tableId + '_wrapper');
+				// Toolbar table filter formatting
+				var filterInput = $(tableId + '_filter input').attr('placeholder', 'Zoeken').addClass('dataTables_filter');
+				$(tableId + '_filter').appendTo(tableId + '_toolbar').replaceWith(filterInput);
 				// Multiple selection of rows
 				$(tableId + ' tbody').on('click', 'tr', function (event) {
 					if (!$(event.target).hasClass('details-control')) {
@@ -262,9 +297,6 @@ JSON
 				if (!$(tableId).hasClass('groupByColumn') || !fnGetGroupByColumn($(tableId))) {
 					$(tableId + ' thead tr th.details-control').removeClass('details-control');
 				}
-				// Toolbar above table
-				$(tableId).on('draw.dt', <?= $this->getUpdateToolbar(); ?>);
-				$(tableId + '_wrapper').prepend($(tableId + '_toolbar'));
 			});
 		</script>
 		<?php

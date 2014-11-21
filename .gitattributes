@@ -379,6 +379,10 @@ htdocs/layout/js/jquery/plugins/jquery.hoverIntent.js -text
 htdocs/layout/js/jquery/plugins/jquery.hoverIntent.min.js -text
 htdocs/layout/js/jquery/plugins/jquery.jPicker.js -text
 htdocs/layout/js/jquery/plugins/jquery.jPicker.min.js -text
+htdocs/layout/js/jquery/plugins/jquery.jeditable.js -text
+htdocs/layout/js/jquery/plugins/jquery.jeditable.min.js -text
+htdocs/layout/js/jquery/plugins/jquery.maskedinput.js -text
+htdocs/layout/js/jquery/plugins/jquery.maskedinput.min.js -text
 htdocs/layout/js/jquery/plugins/jquery.prettyPhoto.css -text
 htdocs/layout/js/jquery/plugins/jquery.prettyPhoto.js -text
 htdocs/layout/js/jquery/plugins/jquery.prettyPhoto.min.css -text

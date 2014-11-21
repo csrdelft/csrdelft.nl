@@ -60,8 +60,7 @@ class HappieMenukaartGroep extends PersistentEntity {
 	protected static $table_name = 'happie_menu_groep';
 
 	public function getGangFormatted() {
-		// hidden sorting value
-		return '<!-- ' . array_search($this->gang, HappieGang::getTypeOptions()) . ' -->' . ucfirst($this->gang) . ($this->gang == HappieGang::Drank ? '' : 'gerecht');
+		return ucfirst($this->gang) . ($this->gang == HappieGang::Drank ? '' : 'gerecht');
 	}
 
 	public function getItems() {
