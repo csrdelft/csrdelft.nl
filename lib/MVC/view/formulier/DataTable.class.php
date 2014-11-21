@@ -15,7 +15,6 @@ class DataTable extends TabsForm {
 
 	protected $orm;
 	protected $tableId;
-	protected $css_classes = array();
 	private $groupByColumn;
 	private $groupByFixed;
 	protected $settings = array(
@@ -27,15 +26,14 @@ class DataTable extends TabsForm {
 	);
 	protected $columns = array();
 	protected $defaultLength = false;
-	protected $toolbar;
 	protected $dataSource;
 
 	public function __construct($orm_class, $tableId, $titel = false, $groupByColumn = null, $groupByFixed = false) {
-		parent::__construct(null, $tableId . '_form', null, $titel);
+		parent::__construct(null, $tableId . '_toolbar', null, $titel);
 
 		$this->orm = new $orm_class();
 		$this->tableId = $tableId;
-		$this->css_classes[] = 'init display';
+		$this->css_classes[] = 'init display inline';
 		$this->groupByColumn = $groupByColumn;
 		$this->groupByFixed = $groupByFixed;
 
@@ -69,11 +67,10 @@ class DataTable extends TabsForm {
 		foreach ($this->orm->getPrimaryKey() as $attribute) {
 			$this->hideColumn($attribute);
 		}
+	}
 
-		// create toolbar
-		$this->toolbar = new DataTableToolbar();
-		$fields[] = $this->toolbar;
-		$this->addFields($fields);
+	protected function addKnop(DataTableKnop $knop, $tab = 'head') {
+		$this->addFields(array($knop), $tab);
 	}
 
 	protected function addColumn($newName, $type = 'html', $before = null) {
@@ -180,6 +177,10 @@ class DataTable extends TabsForm {
 	}
 
 	public function view() {
+		// filter placeholder in toolbar
+		$fields[] = new HtmlComment('<div id="' . $this->tableId . '_toolbar_filter"></div>');
+		$this->addFields($fields);
+
 		// encode settings
 		$settingsJson = json_encode($this->getSettings());
 
@@ -205,7 +206,7 @@ JSON
 JSON
 				, $settingsJson);
 		?>
-		<div id="<?= $this->tableId ?>_toolbar" class="dataTables_toolbar"><?= parent::view() ?></div>
+		<?= parent::view(); ?>
 		<table id="<?= $this->tableId ?>" class="<?= implode(' ', $this->css_classes) ?>" groupbycolumn="<?= $this->groupByColumn ?>">
 			<?= $this->getTableHead() ?>
 			<?= $this->getTableBody() ?>
@@ -266,24 +267,29 @@ JSON
 				if (!$(tableId).hasClass('groupByColumn') || !fnGetGroupByColumn($(tableId))) {
 					$(tableId + ' thead tr th.details-control').removeClass('details-control');
 				}
-				// Toolbar update script
-				var updateToolbar = <?= $this->getToolbarUpdateFunction(); ?>;
-				$(tableId).on('draw.dt', updateToolbar);
-				$(tableId + '_toolbar').prependTo(tableId + '_wrapper');
+				// Toolbar above table
+				$(tableId).on('draw.dt', <?= $this->getUpdateToolbar(); ?>);
+				$(tableId + '_wrapper').prepend($(tableId + '_toolbar'));
+				//$(tableId + '_toolbar_filter').html($(tableId + '_filter'));
 			});
 		</script>
 		<?php
 	}
 
-	private function getToolbarUpdateFunction() {
+	/**
+	 * Update datatable knoppen based on selection (count).
+	 * 
+	 * @return javascript
+	 */
+	private function getUpdateToolbar() {
 		$js = <<<JS
 function () {
 	var selectie = fnGetSelection(tableId);
 	var aantal = selectie.length;
 JS;
 		foreach ($this->getFields() as $field) {
-			if ($field instanceof DataTableToolbar) {
-				$js .= "\n" . $field->getUpdateScript() . "\n";
+			if ($field instanceof DataTableKnop) {
+				$js .= "\n" . $field->getUpdateToolbar() . "\n";
 			}
 		}
 		return $js . '}';
@@ -296,19 +302,7 @@ JS;
 
 }
 
-class DataTableToolbar extends FormKnoppen {
-
-	public function getUpdateScript() {
-		$js = '';
-		foreach ($this->knoppen as $knop) {
-			$js .= $knop->getUpdateScript();
-		}
-		return $js;
-	}
-
-}
-
-class DataTableToolbarKnop extends FormulierKnop {
+class DataTableKnop extends FormulierKnop {
 
 	public $onclick;
 	private $multiplicity;
@@ -318,7 +312,7 @@ class DataTableToolbarKnop extends FormulierKnop {
 		$this->multiplicity = $multiplicity;
 	}
 
-	public function getUpdateScript() {
+	public function getUpdateToolbar() {
 		return "$('#{$this->getId()}').attr('disabled', !(aantal {$this->multiplicity}));";
 	}
 

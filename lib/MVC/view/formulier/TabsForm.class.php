@@ -59,13 +59,13 @@ class TabsForm extends Formulier {
 		}
 		// tabs
 		if (sizeof($this->tabs) > 0) {
-			echo '<br /><div id="' . $this->formId . '-tabs"><ul>';
+			echo '<br /><div id="' . $this->formId . '-tabs" class="tabs-list"><ul>';
 			foreach ($this->tabs as $tab => $fields) {
 				echo '<li><a href="#' . $this->formId . '-tab-' . $tab . '">' . ucfirst($tab) . '</a></li>';
 			}
 			echo '</ul>';
 			foreach ($this->tabs as $tab => $fields) {
-				echo '<div id="' . $this->formId . '-tab-' . $tab . '">';
+				echo '<div id="' . $this->formId . '-tab-' . $tab . '" class="tabs-content">';
 				foreach ($fields as $field) {
 					$field->view();
 				}
