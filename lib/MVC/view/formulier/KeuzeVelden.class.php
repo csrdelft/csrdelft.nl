@@ -54,12 +54,21 @@ class SelectField extends InputField {
 		if (!parent::validate()) {
 			return false;
 		}
+		if ($this->groups) {
+			// flatten array
+			$options = array();
+			foreach ($this->options as $group) {
+				$options += $group;
+			}
+		} else {
+			$options = $this->options;
+		}
 		if ($this->multiple) {
-			if (array_intersect($this->value, $this->options) !== $this->value) {
+			if (array_intersect($this->value, $options) !== $this->value) {
 				$this->error = 'Onbekende optie gekozen';
 			}
 		} else {
-			if (!array_key_exists($this->value, $this->options)) {
+			if (!array_key_exists($this->value, $options)) {
 				$this->error = 'Onbekende optie gekozen';
 			}
 		}

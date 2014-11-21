@@ -13,16 +13,16 @@ require_once 'MVC/model/entity/happie/HappieGang.enum.php';
 class HappieBestellingWijzigenForm extends Formulier {
 
 	public function __construct(HappieBestelling $bestelling) {
-		parent::__construct($bestelling, get_class($this), happieUrl . '/wijzigen/' . $bestelling->bestelling_id, 'Bestelling wijzigen');
+		parent::__construct($bestelling, get_class($this), happieUrl . '/wijzig/' . $bestelling->bestelling_id, 'Bestelling wijzigen');
 
-		$fields['d'] = new DatumField('datum', $bestelling->datum, 'Datum');
-		$fields['d']->readonly;
+		$fields[] = new HtmlComment('<div class="InputField"><label>Datum</label>' . $bestelling->datum . '</div>');
+		$fields[] = new HtmlComment('<div class="InputField"><label>Laatst gewijzigd</label>' . reldate($bestelling->laatst_gewijzigd) . '</div>');
 
 		$fields[] = new SelectField('tafel', null, 'Tafel', range(0, 99)); // array index starts from 0
 		// maak invoerveld voor elk item per groep
 		$menukaart = HappieMenukaartItemsModel::instance()->getMenukaart();
 		$options = array();
-		$beschikbaar = 0;
+		$beschikbaar = false;
 		foreach ($menukaart as $gang) {
 			foreach ($gang as $groep) {
 				foreach ($groep->getItems() as $item) {
@@ -33,10 +33,13 @@ class HappieBestellingWijzigenForm extends Formulier {
 				}
 			}
 		}
+		if ($beschikbaar === false) {
+			$options['VERWIJDERD'][$bestelling->menukaart_item] = $bestelling->menukaart_item;
+		}
 		$fields[] = new SelectField('menukaart_item', $bestelling->menukaart_item, 'Menukaart item', $options, true);
 
-		$fields[] = new IntField('aantal', $bestelling->aantal, 'Aantal', 0, $beschikbaar);
-		$fields[] = new IntField('aantal_geserveerd', $bestelling->aantal_geserveerd, 'Aantal geserveerd', 0, $beschikbaar); // meer vrijheid dan $bestelling->aantal
+		$fields[] = new IntField('aantal', $bestelling->aantal, 'Aantal', 0, $bestelling->aantal + $beschikbaar);
+		$fields[] = new IntField('aantal_geserveerd', $bestelling->aantal_geserveerd, 'Aantal geserveerd', 0, $bestelling->aantal_geserveerd + $beschikbaar); // meer vrijheid dan $bestelling->aantal
 
 		$options = array();
 		foreach (HappieServeerStatus::getTypeOptions() as $option) {
@@ -53,14 +56,7 @@ class HappieBestellingWijzigenForm extends Formulier {
 		$fields[] = new SelectField('financien_status', $bestelling->financien_status, 'Financien status', $options);
 
 		$fields[] = new TextareaField('opmerking', $bestelling->opmerking, 'Allergie/Opmerking');
-
 		$fields[] = new FormDefaultKnoppen(happieUrl);
-
-		$fields['l'] = new TextField('laatst_gewijzigd', $bestelling->laatst_gewijzigd, 'Laatst gewijzigd');
-		$fields['l']->readonly = true;
-
-		$fields['h'] = new TextareaField('wijzig_historie', $bestelling->wijzig_historie, 'Log');
-		$fields['h']->readonly = true;
 
 		$this->addFields($fields);
 	}
