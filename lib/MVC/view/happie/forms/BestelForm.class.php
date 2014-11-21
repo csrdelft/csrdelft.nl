@@ -94,7 +94,9 @@ class HappieBestelForm extends TabsForm {
 				foreach ($groep->getItems() as $item) {
 					$fields = array();
 
-					$fields[] = new HtmlComment('<div id="item_' . $item->item_id . '" class="alternate-bgcolor inline clear">'); // fix linebreak label
+					// werkomheen label line-wrap met css style
+					$fields[] = new HtmlComment('<div id="item_' . $item->item_id . '" class="alternate-bgcolor" style="width:100%;display:inline-block;">');
+
 					// preload bestelling aantal
 					if (isset($bestellingen[$item->item_id])) {
 						$aantal = $bestellingen[$item->item_id]->aantal;
@@ -111,9 +113,9 @@ class HappieBestelForm extends TabsForm {
 					$fields[] = $int;
 
 					if ($beschikbaar > 0 OR $aantal > 0) {
-						$comment = '<div id="toggle_' . $item->item_id . '" class="btn toggle-info float-left" style="margin-right:5px;padding:0 0.5em;"><img src="' . CSR_PICS . '/famfamfam/information.png" class="icon" width="16" height="16"></div>';
+						$comment = '<div id="toggle_' . $item->item_id . '" class="btn toggle-info float-left" style="margin-right:5px;width:32px;padding:0;"><img src="' . CSR_PICS . '/famfamfam/information.png" class="icon" width="16" height="16"></div>';
 					} else {
-						$comment = '<div id="toggle_' . $item->item_id . '" class="float-left alert alert-warning" style="margin-right:5px;padding:0 .3em;">OP</div>';
+						$comment = '<div id="toggle_' . $item->item_id . '" class="float-left alert alert-warning" style="margin-right:5px;width:32px;padding:0;text-align:center;">OP</div>';
 					}
 					$fields[] = new HtmlComment($comment . <<<HTML
 <div id="info_{$item->item_id}" class="info-data clear-left" style="display:none;">
