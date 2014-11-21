@@ -50,8 +50,8 @@ try {
 // FotoAlbum opschonen
 try {
 	require_once 'MVC/model/FotoAlbumModel.class.php';
-	FotoAlbumModel::instance()->cleanup();
 	FotoModel::instance()->cleanup();
+	FotoAlbumModel::instance()->cleanup();
 } catch (Exception $e) {
 	DebugLogModel::instance()->log('cron.php', 'FotoAlbumModel::instance()->cleanup()', array(), $e);
 }
