@@ -95,7 +95,7 @@ class HappieBestelForm extends TabsForm {
 					$fields = array();
 
 					// werkomheen label line-wrap met css style
-					$fields[] = new HtmlComment('<div id="item_' . $item->item_id . '" class="alternate-bgcolor" style="width:360px;display:inline-block;">');
+					$fields[] = new HtmlComment('<div id="item_' . $item->item_id . '" class="alternate-bgcolor" style="display:inline-block;width:360px;">');
 
 					// preload bestelling aantal
 					if (isset($bestellingen[$item->item_id])) {
@@ -164,6 +164,11 @@ JS
 		$this->addJavascript(<<<JS
 $('.Formulier label').css('width', '50%');
 $('#wrapper_{$table->getId()} label').css('width', '20%');
+$('.expanded-submenu').css({
+	"-webkit-column-width": "360px",
+	"-moz-column-width": "360px",
+	"column-width": "360px"
+});
 
 $('.FormDefaultKnoppen:first').appendTo('#wrapper_field_tafel').removeClass('clear-left');
 
