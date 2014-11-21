@@ -95,7 +95,7 @@ class HappieBestelForm extends TabsForm {
 					$fields = array();
 
 					// werkomheen label line-wrap met css style
-					$fields[] = new HtmlComment('<div id="item_' . $item->item_id . '" class="alternate-bgcolor" style="width:100%;display:inline-block;">');
+					$fields[] = new HtmlComment('<div id="item_' . $item->item_id . '" class="alternate-bgcolor" style="width:360px;display:inline-block;">');
 
 					// preload bestelling aantal
 					if (isset($bestellingen[$item->item_id])) {
