@@ -72,6 +72,8 @@ function fnMultiSelect(tr) {
 		else {
 			tr.addClass('selected');
 		}
+		// Prevent default select action
+		document.getSelection().removeAllRanges();
 	}
 	else if (bCtrlPressed) {
 		if (tr.hasClass('group')) {
