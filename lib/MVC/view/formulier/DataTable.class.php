@@ -273,7 +273,7 @@ JSON
 				// Multiple selection of rows
 				$(tableId + ' tbody').on('click', 'tr', function (event) {
 					if (!$(event.target).hasClass('details-control')) {
-						fnMultiSelect($(this));
+						fnMultiSelect(event, $(this));
 					}
 					updateToolbar();
 				});

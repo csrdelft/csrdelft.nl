@@ -37,7 +37,7 @@ function fnGetSelectedObjectId(tableId) {
 	return $(tableId + ' tbody tr.selected:first').attr('data-objectid');
 }
 
-function fnMultiSelect(tr) {
+function fnMultiSelect(event, tr) {
 	if (tr.children(':first').hasClass('dataTables_empty')) {
 		return;
 	}
@@ -72,8 +72,6 @@ function fnMultiSelect(tr) {
 		else {
 			tr.addClass('selected');
 		}
-		// Prevent default select action
-		document.getSelection().removeAllRanges();
 	}
 	else if (bCtrlPressed) {
 		if (tr.hasClass('group')) {
@@ -99,6 +97,8 @@ function fnMultiSelect(tr) {
 			tr.addClass('selected');
 		}
 	}
+	// Prevent default select action
+	document.getSelection().removeAllRanges();
 }
 
 function fnGetGroupByColumn(table) {
@@ -109,7 +109,7 @@ function fnGetGroupByColumn(table) {
 	return columnId;
 }
 
-function fnGroupByColumn(e, settings) {
+function fnGroupByColumn(event, settings) {
 	if (bOrderDraw || !bCtrlPressed) {
 		return;
 	}
@@ -128,7 +128,7 @@ function fnGroupByColumn(e, settings) {
 	dataTable.draw();
 }
 
-function fnGroupByColumnDraw(e, settings) {
+function fnGroupByColumnDraw(event, settings) {
 	if (bOrderDraw) {
 		bOrderDraw = false;
 		return;
