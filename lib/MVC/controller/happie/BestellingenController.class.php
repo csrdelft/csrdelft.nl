@@ -44,7 +44,7 @@ class HappieBestellingenController extends AclController {
 				$datum = $y . '-' . $m . '-' . $d;
 				$data = $this->model->find('datum = ?', array($datum));
 			} else {
-				$datum = $this->model->find();
+				$data = $this->model->find();
 			}
 			$this->view = new DataTableResponse($data);
 		} else {
