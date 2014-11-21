@@ -84,7 +84,9 @@ class TabsForm extends Formulier {
 	}
 
 	public function getJavascript() {
-		return "$('#{$this->formId}-tabs').tabs();\n" . parent::getJavascript();
+		return parent::getJavascript() . <<<JS
+$('#{$this->formId}-tabs').tabs();
+JS;
 	}
 
 }

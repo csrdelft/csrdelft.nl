@@ -354,7 +354,7 @@ JS;
 	 */
 	public function getJavascript() {
 		if ($this->readonly) {
-			return;
+			return '';
 		}
 		if (!empty($this->remotedatasource)) {
 			$autocomplete = json_encode($this->remotedatasource);
@@ -1194,9 +1194,14 @@ class TextareaField extends TextField {
 	/**
 	 * Maakt een verborgen div met dezelfde eigenschappen als de textarea en
 	 * gebruikt autoresize eigenschappen van de div om de hoogte te bepalen voor de textarea.
+	 * 
+	 * @override parent
+	 * @return string
 	 */
 	public function getJavascript() {
-		return "$('#" . $this->getId() . "').autosize();";
+		return <<<JS
+$('#{$this->getId()}', form).autosize();
+JS;
 	}
 
 }
@@ -1230,11 +1235,10 @@ HTML;
 	}
 
 	public function getJavascript() {
-		$js = parent::getJavascript();
 		if (!$this->previewOnEnter) {
-			return $js;
+			return parent::getJavascript();
 		}
-		return $js . <<<JS
+		return parent::getJavascript() . <<<JS
 $('#{$this->getId()}', form).unbind('keyup.preview');
 $('#{$this->getId()}', form).bind('keyup.preview', function(event) {
 	if(event.keyCode === 13) { // enter
@@ -1357,6 +1361,10 @@ class WachtwoordWijzigenField extends InputField {
 		echo '</div>';
 	}
 
+	/**
+	 * @override parent
+	 * @return string
+	 */
 	public function getJavascript() {
 		return '';
 	}

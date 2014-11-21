@@ -46,6 +46,7 @@ class Formulier implements View, Validator {
 	 */
 	private $fields = array();
 	protected $css_classes = array();
+	private $javascript = array();
 	public $titel;
 
 	public function __construct($model, $formId, $action, $titel = false) {
@@ -82,11 +83,11 @@ class Formulier implements View, Validator {
 		$fields = array();
 		foreach ($this->model->getAttributes() as $fieldName) {
 			$definition = $this->model->getAttributeDefinition($fieldName);
-			//if (isset($definition[1]) AND $definition[1] === false) {
-			//	$class = 'Required';
-			//} else {
-			$class = '';
-			//}
+			if (!isset($definition[1]) OR $definition[1] === false) {
+				$class = 'Required';
+			} else {
+				$class = '';
+			}
 			$desc = ucfirst(str_replace('_', ' ', $fieldName));
 			switch ($definition[0]) {
 				case T::String: $class .= 'TextField';
@@ -227,13 +228,15 @@ class Formulier implements View, Validator {
 		return $errors;
 	}
 
+	public function addJavascript($js) {
+		$this->javascript[md5($js)] = $js;
+	}
+
 	public function getJavascript() {
-		$javascript = array();
 		foreach ($this->fields as $field) {
-			$js = $field->getJavascript();
-			$javascript[md5($js)] = $js;
+			$this->addJavascript($field->getJavascript());
 		}
-		return implode("\n", $javascript);
+		return implode("\n", $this->javascript);
 	}
 
 	public function getFormTag() {

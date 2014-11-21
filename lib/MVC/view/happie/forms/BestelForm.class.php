@@ -65,8 +65,6 @@ class HappieBestellingWijzigenForm extends Formulier {
 
 class HappieBestelForm extends TabsForm {
 
-	private $js = '';
-
 	public function __construct() {
 		parent::__construct(null, get_class($this), happieUrl . '/nieuw', 'Nieuwe bestelling');
 
@@ -98,7 +96,7 @@ class HappieBestelForm extends TabsForm {
 				$fields[] = new Subkopje('<div id="toggle_groep_' . $groep_id . '" class="toggle-submenu' . ($drank ? '' : ' toggle-submenu-open') . '" style="padding-left:10px;">' . $groep->naam . '</div>');
 				$fields[] = new HtmlComment('<div id="expand_groep_' . $groep_id . '" ' . $drank . '>');
 
-				$this->js .= <<<JS
+				$this->addJavascript(<<<JS
 $('#toggle_groep_{$groep_id}').click(function() {
 	if ($('#expand_groep_{$groep_id}').is(':visible')) {
 		$(this).removeClass('toggle-submenu-open');
@@ -108,7 +106,8 @@ $('#toggle_groep_{$groep_id}').click(function() {
 		$('#expand_groep_{$groep_id}').slideDown(200);
 	}
 });
-JS;
+JS
+				);
 				foreach ($groep->getItems() as $item) {
 
 					$fields[] = new HtmlComment('<div id="item_' . $item->item_id . '" class="alternate-bgcolor">');
@@ -147,7 +146,7 @@ HTML
 
 					$fields[] = new HtmlComment('<div class="beschrijving" style="font-style:italic;">' . $item->beschrijving . '</div></div></div>'); // close expanded item
 
-					$this->js .= <<<JS
+					$this->addJavascript(<<<JS
 $('#{$opm->getId()}').height('30px');
 $('#toggle_{$item->item_id}').prependTo('#wrapper_{$int->getId()}').click(function() {
 	$('#expand_{$item->item_id}').toggle().find('textarea:first').focus();
@@ -157,7 +156,8 @@ $('#toggle_{$item->item_id}').prependTo('#wrapper_{$int->getId()}').click(functi
 		$('#info_{$item->item_id}').toggle(toggle);
 	}
 });
-JS;
+JS
+					);
 				}
 
 				$fields[] = new HtmlComment('</div>'); // close expanded groep
@@ -175,7 +175,7 @@ JS;
 		$allergie = new FormulierKnop(null, 'toggle-allergie', 'Allergie-info', 'Toon allergie informatie', '/famfamfam/information.png', true);
 		$fields['k']->addKnop($allergie);
 
-		$this->js .= <<<JS
+		$this->addJavascript(<<<JS
 $('.Formulier label').css('width', '50%');
 $('#wrapper_{$table->getId()} label').css('width', '20%');
 
@@ -190,11 +190,8 @@ $('.toggle-allergie:first').click(function() {
 	}
 	$(this).prop('data-show', !show);
 });
-JS;
-	}
-
-	public function getJavascript() {
-		return parent::getJavascript() . $this->js;
+JS
+		);
 	}
 
 	/**

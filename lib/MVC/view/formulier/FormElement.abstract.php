@@ -89,3 +89,15 @@ class Subkopje extends HtmlComment {
 	}
 
 }
+
+class CollapsableSubkopje extends Subkopje {
+
+	public function getJavascript() {
+		return parent::getJavascript();
+	}
+
+	public function view() {
+		
+	}
+
+}
