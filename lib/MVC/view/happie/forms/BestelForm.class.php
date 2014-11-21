@@ -169,7 +169,10 @@ $('#wrapper_{$table->getId()} label').css('width', '20%');
 $('.expanded-submenu').css({
 	"-webkit-column-width": "360px",
 	"-moz-column-width": "360px",
-	"column-width": "360px"
+	"column-width": "360px",
+	"-webkit-column-gap": 0,
+	"-moz-column-gap": 0,
+	"column-gap": 0
 });
 
 $('.FormDefaultKnoppen:first').appendTo('#wrapper_field_tafel').removeClass('clear-left');
