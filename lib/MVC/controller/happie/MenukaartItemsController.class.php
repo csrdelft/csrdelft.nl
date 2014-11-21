@@ -34,7 +34,7 @@ class HappieMenukaartItemsController extends AclController {
 	public function overzicht() {
 		if ($this->isPosted()) {
 			$data = $this->model->find();
-			$this->view = new DataTableResponse($data);
+			$this->view = new HappieMenukaartItemsData($data);
 		} else {
 			$body = new HappieMenukaartItemsView();
 			$this->view = new CsrLayout3Page($body);

@@ -24,6 +24,24 @@ class HappieMenukaartItemsView extends DataTable {
 
 }
 
+class HappieMenukaartItemsData extends DataTableResponse {
+
+	public function getJson($item) {
+		$array = $item->jsonSerialize();
+
+		$groep = $item->getGroep();
+		if ($groep) {
+			$array['menukaart_groep'] = $groep->naam;
+			$array['aantal_beschikbaar'] .= ' / ' . $groep->aantal_beschikbaar;
+		}
+		$array['prijs'] = $item->getPrijsFormatted();
+		$array['beschrijving'] = nl2br($item->beschrijving);
+
+		return parent::getJson($array);
+	}
+
+}
+
 class HappieMenukaartGroepenView extends DataTable {
 
 	public function __construct() {
@@ -36,6 +54,21 @@ class HappieMenukaartGroepenView extends DataTable {
 		$wijzig = new DataTableKnop('== 1', happieUrl . '/wijzig/', '', 'Wijzig', 'Wijzig menukaart-groep', '/famfamfam/pencil.png');
 		$wijzig->onclick = "this.href+=fnGetSelectedObjectId(tableId);";
 		$this->addKnop($wijzig);
+	}
+
+}
+
+class HappieMenukaartGroepenData extends DataTableResponse {
+
+	public function getJson($groep) {
+		$array = $groep->jsonSerialize();
+
+		$array['gang'] = ucfirst($groep->gang);
+		if ($groep->gang !== HappieGang::Drank) {
+			$array['gang'] .= 'gerecht';
+		}
+
+		return parent::getJson($array);
 	}
 
 }

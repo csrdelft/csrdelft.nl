@@ -8,12 +8,42 @@
  * Tonen van alle bestellingen om te beheren.
  * 
  */
+class HappieBestellingenData extends DataTableResponse {
+
+	public function getJson($bestelling) {
+		$array = $bestelling->jsonSerialize();
+
+		$item = $bestelling->getItem($bestelling->menukaart_item);
+		if ($item) {
+			$array['menukaart_item'] = $item->naam;
+			$groep = $item->getGroep();
+			if ($groep) {
+				$array['gang'] = ucfirst($groep->gang);
+				if ($groep->gang !== HappieGang::Drank) {
+					$array['gang'] .= 'gerecht';
+				}
+				$array['menu_groep'] = $groep->naam;
+			} else {
+				$array['menu_groep'] = 'Geen groep';
+			}
+		}
+		$array['tafel'] = 'Tafel ' . $bestelling->tafel;
+		$array['laatst_gewijzigd'] = reldate($bestelling->laatst_gewijzigd);
+		$array['wijzig_historie'] = null;
+		$array['opmerking'] = nl2br($bestelling->opmerking);
+
+		return parent::getJson($array);
+	}
+
+}
+
 class HappieBestellingenView extends DataTable {
 
 	public function __construct($dataSource = '/overzicht', $titel = 'Alle bestellingen', $groupByColumn = 'datum') {
 		parent::__construct(HappieBestellingenModel::orm, get_class($this), $titel, $groupByColumn);
 		$this->dataSource = happieUrl . $dataSource;
 
+		$this->addColumn('gang', 'html', 'menukaart_item');
 		$this->addColumn('menu_groep', 'html', 'menukaart_item');
 
 		$this->hideColumn('datum');

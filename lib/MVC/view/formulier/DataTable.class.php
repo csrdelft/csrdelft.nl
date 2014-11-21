@@ -322,24 +322,24 @@ class DataTableKnop extends FormulierKnop {
 
 class DataTableResponse extends JsonResponse {
 
+	public function getJson($data) {
+		return json_encode($data);
+	}
+
 	public function view() {
 		http_response_code($this->code);
 		header('Content-Type: application/json');
-		echo '{"data":[';
-		if ($this->model instanceof PDOStatement AND $this->model->rowCount() == 0) {
-			// empty
-		} else {
-			$comma = false;
-			foreach ($this->model as $data) {
-				if ($comma) {
-					echo ',';
-				} else {
-					$comma = true;
-				}
-				echo json_encode($data);
+		echo '{"data":[' . "\n";
+		$comma = false;
+		foreach ($this->model as $data) {
+			if ($comma) {
+				echo ",\n";
+			} else {
+				$comma = true;
 			}
+			echo $this->getJson($data);
 		}
-		echo ']}';
+		echo "\n]}";
 	}
 
 }

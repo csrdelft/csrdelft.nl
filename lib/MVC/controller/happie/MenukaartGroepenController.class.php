@@ -33,8 +33,8 @@ class HappieMenukaartGroepenController extends AclController {
 
 	public function overzicht() {
 		if ($this->isPosted()) {
-			$data = HappieMenukaartGroepenModel::instance()->find();
-			$this->view = new DataTableResponse($data);
+			$data = $this->model->find();
+			$this->view = new HappieMenukaartGroepenData($data);
 		} else {
 			$body = new HappieMenukaartGroepenView();
 			$this->view = new CsrLayout3Page($body);

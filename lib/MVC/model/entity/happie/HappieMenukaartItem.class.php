@@ -71,18 +71,6 @@ class HappieMenukaartItem extends PersistentEntity {
 	 */
 	protected static $table_name = 'happie_menu';
 
-	public function jsonSerialize() {
-		$array = parent::jsonSerialize();
-		$groep = $this->getGroep();
-		if ($groep) {
-			$array['menukaart_groep'] = $groep->naam;
-			$array['aantal_beschikbaar'] .= ' / ' . $groep->aantal_beschikbaar;
-		}
-		$array['prijs'] = $this->getPrijsFormatted();
-		$array['beschrijving'] = nl2br($this->beschrijving);
-		return $array;
-	}
-
 	public function getPrijsFloat() {
 		return (float) $this->prijs / 100.0;
 	}

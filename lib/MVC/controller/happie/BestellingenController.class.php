@@ -46,7 +46,7 @@ class HappieBestellingenController extends AclController {
 			} else {
 				$data = $this->model->find();
 			}
-			$this->view = new DataTableResponse($data);
+			$this->view = new HappieBestellingenData($data);
 		} else {
 			$body = new HappieBestellingenView();
 			$this->view = new CsrLayout3Page($body);
@@ -56,7 +56,7 @@ class HappieBestellingenController extends AclController {
 	public function serveer() {
 		if ($this->isPosted()) {
 			$data = $this->model->find('datum = ?', array(date('Y-m-d')));
-			$this->view = new DataTableResponse($data);
+			$this->view = new HappieBestellingenData($data);
 		} else {
 			$body = new HappieServeerView();
 			$this->view = new CsrLayout3Page($body);
@@ -66,7 +66,7 @@ class HappieBestellingenController extends AclController {
 	public function keuken() {
 		if ($this->isPosted()) {
 			$data = $this->model->find('datum = ?', array(date('Y-m-d')));
-			$this->view = new DataTableResponse($data);
+			$this->view = new HappieBestellingenData($data);
 		} else {
 			$body = new HappieKeukenView();
 			$this->view = new CsrLayout3Page($body);
@@ -76,7 +76,7 @@ class HappieBestellingenController extends AclController {
 	public function bar() {
 		if ($this->isPosted()) {
 			$data = $this->model->find('datum = ?', array(date('Y-m-d')));
-			$this->view = new DataTableResponse($data);
+			$this->view = new HappieBestellingenData($data);
 		} else {
 			$body = new HappieBarView();
 			$this->view = new CsrLayout3Page($body);
@@ -86,7 +86,7 @@ class HappieBestellingenController extends AclController {
 	public function kassa() {
 		if ($this->isPosted()) {
 			$data = $this->model->find('datum = ?', array(date('Y-m-d')));
-			$this->view = new DataTableResponse($data);
+			$this->view = new HappieBestellingenData($data);
 		} else {
 			$body = new HappieKassaView();
 			$this->view = new CsrLayout3Page($body);
