@@ -113,14 +113,16 @@ class HappieBestelForm extends TabsForm {
 					$fields[] = $int;
 
 					if ($beschikbaar > 0 OR $aantal > 0) {
-						$comment = '<div id="toggle_' . $item->item_id . '" class="btn toggle-info float-left" style="margin-right:5px;width:32px;padding:0;"><img src="' . CSR_PICS . '/famfamfam/information.png" class="icon" width="16" height="16"></div>';
+						$html = '<div id="toggle_' . $item->item_id . '" class="btn toggle-info float-left" style="margin-right:5px;width:32px;padding:0;"><img src="' . CSR_PICS . '/famfamfam/information.png" class="icon" width="16" height="16"></div>';
 					} else {
-						$comment = '<div id="toggle_' . $item->item_id . '" class="float-left alert alert-warning" style="margin-right:5px;width:32px;padding:0;text-align:center;">OP</div>';
+						$html = '<div id="toggle_' . $item->item_id . '" class="float-left alert alert-warning" style="margin-right:5px;width:32px;padding:0;text-align:center;">OP</div>';
 					}
-					$fields[] = new HtmlComment($comment . <<<HTML
-<div id="info_{$item->item_id}" class="info-data clear-left" style="display:none;">
-	<div class="inline alert alert-info" style="margin-right:5px;padding:0 .3em;">{$item->allergie_info}</div>
-	<div class="inline float-right">{$item->getPrijsFormatted()}</div>
+					$html .= '<div id="info_' . $item->item_id . '" class="info-data clear-left" style="display:none;">';
+					if (!empty($item->allergie_info)) {
+						$html .= '<div class="inline alert alert-info" style="margin-right:5px;padding:0 .3em;">' . $item->allergie_info . '</div>';
+					}
+					$fields[] = new HtmlComment($html . <<<HTML
+	<div class="inline float-right" style="margin-right:50px;">{$item->getPrijsFormatted()}</div>
 </div>
 <div id="expand_{$item->item_id}" style="display:none;">
 HTML
