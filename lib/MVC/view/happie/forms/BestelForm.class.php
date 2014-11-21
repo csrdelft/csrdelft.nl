@@ -80,35 +80,19 @@ class HappieBestelForm extends TabsForm {
 		// maak invoerveld voor elk menukaart-item
 		$menukaart = HappieMenukaartItemsModel::instance()->getMenukaart();
 		foreach ($menukaart as $gang => $groepen) {
-			$this->addTab($gang);
 
 			// drank groepen standaard ingeklapt
-			if ($gang == HappieGang::Drank) {
-				$drank = 'style="display:none;"';
-			} else {
-				$drank = null;
-			}
+			$drank = $gang == HappieGang::Drank;
 
 			// groepeer items
 			foreach ($groepen as $groep_id => $groep) {
-				$fields = array();
 
-				$fields[] = new Subkopje('<div id="toggle_groep_' . $groep_id . '" class="toggle-submenu' . ($drank ? '' : ' toggle-submenu-open') . '" style="padding-left:10px;">' . $groep->naam . '</div>');
-				$fields[] = new HtmlComment('<div id="expand_groep_' . $groep_id . '" ' . $drank . '>');
+				// voeg groep toe aan tab en maak tab voor elke gang
+				$kopje = new CollapsableSubkopje($groep_id, $groep->naam, $drank);
+				$this->addFields(array($kopje), $groep->gang);
 
-				$this->addJavascript(<<<JS
-$('#toggle_groep_{$groep_id}').click(function() {
-	if ($('#expand_groep_{$groep_id}').is(':visible')) {
-		$(this).removeClass('toggle-submenu-open');
-		$('#expand_groep_{$groep_id}').slideUp(200);
-	} else {
-		$(this).addClass('toggle-submenu-open');
-		$('#expand_groep_{$groep_id}').slideDown(200);
-	}
-});
-JS
-				);
 				foreach ($groep->getItems() as $item) {
+					$fields = array();
 
 					$fields[] = new HtmlComment('<div id="item_' . $item->item_id . '" class="alternate-bgcolor">');
 
@@ -158,11 +142,12 @@ $('#toggle_{$item->item_id}').prependTo('#wrapper_{$int->getId()}').click(functi
 });
 JS
 					);
+
+					$this->addFields($fields, $groep->gang);
 				}
 
-				$fields[] = new HtmlComment('</div>'); // close expanded groep
-				// voeg groep toe aan tab en maak tab voor elke gang
-				$this->addFields($fields, $groep->gang);
+				$kopje = new HtmlComment('</div>'); // close expanded groep
+				$this->addFields(array($kopje), $groep->gang);
 			}
 		}
 

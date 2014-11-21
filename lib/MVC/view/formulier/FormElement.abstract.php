@@ -90,14 +90,38 @@ class Subkopje extends HtmlComment {
 
 }
 
+/**
+ * Je moet zelf de DIV sluiten!
+ */
 class CollapsableSubkopje extends Subkopje {
 
+	private $id;
+	public $collapsed;
+
+	public function __construct($id, $titel, $collapsed = false) {
+		parent::__construct($titel);
+		$this->id = $id;
+		$this->collapsed = $collapsed;
+	}
+
 	public function getJavascript() {
-		return parent::getJavascript();
+		return parent::getJavascript() . <<<JS
+$('#toggle_kopje_{$this->id}').click(function() {
+	if ($('#expand_kopje_{$this->id}').is(':visible')) {
+		$(this).removeClass('toggle-submenu-open');
+		$('#expand_kopje_{$this->id}').slideUp(200);
+	} else {
+		$(this).addClass('toggle-submenu-open');
+		$('#expand_kopje_{$this->id}').slideDown(200);
+	}
+});
+JS;
 	}
 
 	public function view() {
-		
+		echo '<div id="toggle_kopje_' . $this->id . '" class="toggle-submenu ' . ($this->collapsed ? '' : 'toggle-submenu-open') . '">';
+		parent::view();
+		echo '</div><div id="expand_kopje_' . $this->id . '" ' . ($this->collapsed ? 'style="display:none;"' : '') . '>';
 	}
 
 }

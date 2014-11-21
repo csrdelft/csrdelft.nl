@@ -265,7 +265,6 @@ JSON
 				// Toolbar above table
 				$(tableId).on('draw.dt', <?= $this->getUpdateToolbar(); ?>);
 				$(tableId + '_wrapper').prepend($(tableId + '_toolbar'));
-				//$(tableId + '_toolbar_filter').html($(tableId + '_filter'));
 			});
 		</script>
 		<?php
