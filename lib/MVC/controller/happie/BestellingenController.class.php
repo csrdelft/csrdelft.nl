@@ -36,16 +36,16 @@ class HappieBestellingenController extends AclController {
 	}
 
 	public function overzicht($y = null, $m = null, $d = null) {
-		$y = (int) $y;
-		$m = (int) $m;
-		$d = (int) $d;
-		if (checkdate($m, $d, $y)) {
-			$datum = $y . '-' . $m . '-' . $d;
-		} else {
-			$datum = date('Y-m-d');
-		}
 		if ($this->isPosted()) {
-			$data = $this->model->find('datum = ?', array($datum));
+			$y = (int) $y;
+			$m = (int) $m;
+			$d = (int) $d;
+			if (checkdate($m, $d, $y)) {
+				$datum = $y . '-' . $m . '-' . $d;
+				$data = $this->model->find('datum = ?', array($datum));
+			} else {
+				$datum = $this->model->find();
+			}
 			$this->view = new DataTableResponse($data);
 		} else {
 			$body = new HappieBestellingenView();
