@@ -16,7 +16,8 @@ class DataTable extends TabsForm {
 	protected $orm;
 	protected $tableId;
 	private $groupByColumn;
-	private $groupByFixed;
+	private $groupByLocked = false;
+	protected $defaultLength = -1;
 	protected $settings = array(
 		'dom'		 => 'frtpli',
 		'lengthMenu' => array(
@@ -25,26 +26,18 @@ class DataTable extends TabsForm {
 		)
 	);
 	protected $columns = array();
-	protected $defaultLength = false;
 	protected $dataSource;
 
-	public function __construct($orm_class, $tableId, $titel = false, $groupByColumn = null, $groupByFixed = false) {
+	public function __construct($orm_class, $tableId, $titel = false, $groupByColumn = null) {
 		parent::__construct(null, $tableId . '_toolbar', null, $titel);
 
 		$this->orm = new $orm_class();
 		$this->tableId = $tableId;
 		$this->css_classes[] = 'init display inline';
-		$this->groupByColumn = $groupByColumn;
-		$this->groupByFixed = $groupByFixed;
-
-		// group by column
-		if ($this->groupByFixed) {
-			$this->css_classes[] = 'groupByFixed';
-		}
-		// user may group by
-		if ($this->groupByColumn !== false) {
+		if ($groupByColumn !== false) {
 			$this->css_classes[] = 'groupByColumn';
 		}
+		$this->groupByColumn = $groupByColumn;
 
 		// create group expand / collapse column
 		$this->columns['details'] = array(
@@ -260,7 +253,9 @@ JSON
 				$(tableId + '.groupByColumn thead').on('click', 'th.details-control', function (event) {
 					fnGroupExpandCollapseAll(dataTable, $(tableId), $(this).parent());
 				});
-				$(tableId + '.groupByColumn:not(.groupByFixed)').on('order.dt', fnGroupByColumn);
+		<?php if (!$this->groupByLocked) { ?>
+					$(tableId + '.groupByColumn').on('order.dt', fnGroupByColumn);
+		<?php } ?>
 				$(tableId + '.groupByColumn').on('draw.dt', fnGroupByColumnDraw);
 				$(tableId + '.groupByColumn').data('collapsedGroups', []);
 				$(tableId + '.groupByColumn thead tr:first').addClass('expanded');
