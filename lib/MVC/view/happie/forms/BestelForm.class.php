@@ -94,7 +94,7 @@ class HappieBestelForm extends TabsForm {
 				foreach ($groep->getItems() as $item) {
 					$fields = array();
 
-					$fields[] = new HtmlComment('<div id="item_' . $item->item_id . '" class="alternate-bgcolor">');
+					$fields[] = new HtmlComment('<div id="item_' . $item->item_id . '" class="alternate-bgcolor clear">');
 
 					// preload bestelling aantal
 					if (isset($bestellingen[$item->item_id])) {
