@@ -95,7 +95,7 @@ class HappieBestelForm extends TabsForm {
 					$fields = array();
 
 					// werkomheen label line-wrap met css style
-					$fields[] = new HtmlComment('<div id="item_' . $item->item_id . '" class="alternate-bgcolor" style="display:inline-block;width:360px;">');
+					$fields[] = new HtmlComment('<div id="item_' . $item->item_id . '" class="alternate-bgcolor" style="display:inline-block;width:330px;">');
 
 					// preload bestelling aantal
 					if (isset($bestellingen[$item->item_id])) {
@@ -164,12 +164,12 @@ JS
 		$fields['k']->addKnop($allergie);
 
 		$this->addJavascript(<<<JS
-$('.Formulier label').css('width', '50%');
+$('.Formulier label').css('width', '45%');
 $('#wrapper_{$table->getId()} label').css('width', '20%');
 $('.expanded-submenu').css({
-	"-webkit-column-width": "360px",
-	"-moz-column-width": "360px",
-	"column-width": "360px",
+	"-webkit-column-width": "330px",
+	"-moz-column-width": "330px",
+	"column-width": "330px",
 	"-webkit-column-gap": 0,
 	"-moz-column-gap": 0,
 	"column-gap": 0
