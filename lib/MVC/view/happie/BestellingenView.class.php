@@ -18,7 +18,7 @@ class HappieBestellingenData extends DataTableResponse {
 			$array['menukaart_item'] = $item->naam;
 			$groep = $item->getGroep();
 			if ($groep) {
-				$array['gang'] = $groep->getGangFormatted();
+				$array['gang'] = HappieGang::format($groep->gang);
 				$array['menu_groep'] = $groep->naam;
 			} else {
 				$array['menu_groep'] = 'Geen groep';

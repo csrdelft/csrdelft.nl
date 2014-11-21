@@ -63,7 +63,7 @@ class HappieMenukaartGroepenData extends DataTableResponse {
 	public function getJson($groep) {
 		$array = $groep->jsonSerialize();
 
-		$array['gang'] = $groep->getGangFormatted();
+		$array['gang'] = HappieGang::format($groep->gang);
 
 		return parent::getJson($array);
 	}

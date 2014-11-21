@@ -46,7 +46,7 @@ class HappieMenukaartGroepForm extends Formulier {
 
 		$opties = array();
 		foreach (HappieGang::getTypeOptions() as $gang) {
-			$opties[$gang] = $gang;
+			$opties[$gang] = HappieGang::format($gang);
 		}
 		$fields[] = new SelectField('gang', $groep->gang, 'Gang', $opties);
 		$fields[] = new TextField('naam', $groep->naam, 'Groepnaam', 100, 3);
