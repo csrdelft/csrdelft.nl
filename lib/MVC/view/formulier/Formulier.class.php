@@ -260,10 +260,10 @@ JS;
 	 */
 	public function view() {
 		echo getMelding();
-		if ($this->getTitel()) {
-			echo '<h1 class="formTitle">' . $this->getTitel() . '</h1>';
-		}
 		echo $this->getFormTag();
+		if ($this->getTitel()) {
+			echo '<h1 class="Titel">' . $this->getTitel() . '</h1>';
+		}
 		foreach ($this->fields as $field) {
 			$field->view();
 		}

@@ -41,10 +41,10 @@ class TabsForm extends Formulier {
 	 */
 	public function view() {
 		echo getMelding();
-		if ($this->getTitel()) {
-			echo '<h1 class="formTitle">' . $this->getTitel() . '</h1>';
-		}
 		echo $this->getFormTag();
+		if ($this->getTitel()) {
+			echo '<h1 class="Titel">' . $this->getTitel() . '</h1>';
+		}
 		// fields above tabs
 		if (isset($this->tabs['head'])) {
 			foreach ($this->tabs['head'] as $field) {

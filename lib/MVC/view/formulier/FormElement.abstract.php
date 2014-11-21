@@ -85,7 +85,7 @@ class BBComment extends HtmlComment {
 class Subkopje extends HtmlComment {
 
 	public function view() {
-		echo '<h3 class="formSubkopje">' . $this->comment . '</h3>';
+		echo '<h3 class="' . get_class($this) . '">' . $this->comment . '</h3>';
 	}
 
 }
