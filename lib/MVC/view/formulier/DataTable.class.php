@@ -290,7 +290,7 @@ JS;
 	}
 
 	public function getJavascript() {
-		$js = "var tableId = '{$this->tableId}';\n";
+		$js = "var tableId = '#{$this->tableId}';\n";
 		return $js . parent::getJavascript();
 	}
 

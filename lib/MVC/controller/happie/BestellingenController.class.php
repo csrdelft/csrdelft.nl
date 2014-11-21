@@ -120,7 +120,7 @@ class HappieBestellingenController extends AclController {
 		if ($this->isPosted() AND $form->validate()) {
 			$this->model->update($bestelling);
 			setMelding('Wijziging succesvol opgeslagen', 1);
-			redirect(happieUrl);
+			redirect(happieUrl . '/overzicht');
 		}
 		$this->view = new CsrLayout3Page($form);
 	}

@@ -15,7 +15,8 @@ class HappieBestellingWijzigenForm extends Formulier {
 	public function __construct(HappieBestelling $bestelling) {
 		parent::__construct($bestelling, get_class($this), happieUrl . '/wijzigen/' . $bestelling->bestelling_id, 'Bestelling wijzigen');
 
-		$fields[] = new DatumField('datum', $bestelling->datum, 'Datum');
+		$fields['d'] = new DatumField('datum', $bestelling->datum, 'Datum');
+		$fields['d']->readonly;
 
 		$fields[] = new SelectField('tafel', null, 'Tafel', range(0, 99)); // array index starts from 0
 		// maak invoerveld voor elk item per groep
@@ -41,12 +42,14 @@ class HappieBestellingWijzigenForm extends Formulier {
 		foreach (HappieServeerStatus::getTypeOptions() as $option) {
 			$options[$option] = $option;
 		}
+		unset($options[HappieServeerStatus::Nieuw]);
 		$fields[] = new SelectField('serveer_status', $bestelling->serveer_status, 'Serveer status', $options);
 
 		$options = array();
 		foreach (HappieFinancienStatus::getTypeOptions() as $option) {
 			$options[$option] = $option;
 		}
+		unset($options[HappieFinancienStatus::Nieuw]);
 		$fields[] = new SelectField('financien_status', $bestelling->financien_status, 'Financien status', $options);
 
 		$fields[] = new TextareaField('opmerking', $bestelling->opmerking, 'Allergie/Opmerking');
