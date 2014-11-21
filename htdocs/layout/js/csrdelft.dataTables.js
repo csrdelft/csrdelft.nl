@@ -97,7 +97,6 @@ function fnMultiSelect(tr) {
 			tr.addClass('selected');
 		}
 	}
-	document.getSelection().removeAllRanges();
 }
 
 function fnGetGroupByColumn(table) {
