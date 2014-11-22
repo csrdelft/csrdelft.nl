@@ -19,7 +19,39 @@ class DataTable extends TabsForm {
 	private $groupByLocked = false;
 	protected $defaultLength = -1;
 	protected $settings = array(
-		'dom'		 => 'frtpli',
+		'language'	 => array(
+			'sProcessing'		 => 'Bezig...',
+			'sLengthMenu'		 => '_MENU_ resultaten weergeven',
+			'sZeroRecords'		 => 'Geen resultaten gevonden',
+			'sInfo'				 => '_START_ tot _END_ van _TOTAL_ resultaten',
+			'sInfoEmpty'		 => 'Geen resultaten om weer te geven',
+			'sInfoFiltered'		 => ' (gefilterd uit _MAX_ resultaten)',
+			'sInfoPostFix'		 => '',
+			'sSearch'			 => 'Zoeken:',
+			'sEmptyTable'		 => 'Geen resultaten aanwezig in de tabel',
+			'sInfoThousands'	 => '.',
+			'sLoadingRecords'	 => 'Een moment geduld aub - bezig met laden...',
+			'oPaginate'			 => array(
+				'sFirst'	 => 'Eerste',
+				'sLast'		 => 'Laatste',
+				'sNext'		 => 'Volgende',
+				'sPrevious'	 => 'Vorige'
+			)
+		),
+		'dom'		 => 'Tfrtpli',
+		'tableTools' => array(
+			'sRowSelect' => 'os',
+			'aButtons'	 => array(
+				'select_all',
+				'select_none',
+				'copy',
+				'csv',
+				'xls',
+				'pdf',
+				'print'
+			),
+			'sSwfPath'	 => '/layout/js/datatables/extensions/TableTools/swf/copy_csv_xls_pdf.swf'
+		),
 		'lengthMenu' => array(
 			array(10, 25, 50, 100, -1),
 			array(10, 25, 50, 100, 'Alles')
@@ -131,18 +163,6 @@ class DataTable extends TabsForm {
 		$this->columns[$name]['searchable'] = (bool) $searchable;
 	}
 
-	protected function getTableHead() {
-		return null;
-	}
-
-	protected function getTableBody() {
-		return null;
-	}
-
-	protected function getTableFoot() {
-		return null;
-	}
-
 	protected function getSettings() {
 
 		// set view modus: paging or scrolling
@@ -227,18 +247,13 @@ JSON
 				, $settingsJson);
 		?>
 		<?= parent::view(); ?>
-		<table id="<?= $this->tableId ?>" class="<?= implode(' ', $this->css_classes) ?>" groupbycolumn="<?= $this->groupByColumn ?>">
-			<?= $this->getTableHead() ?>
-			<?= $this->getTableBody() ?>
-			<?= $this->getTableFoot() ?>
-		</table>
+		<table id="<?= $this->tableId ?>" class="<?= implode(' ', $this->css_classes) ?>" groupbycolumn="<?= $this->groupByColumn ?>"></table>
 		<script type="text/javascript">
 			var lastUpdate<?= $this->tableId; ?>;
 			$(document).ready(function () {
 				var fnAjaxUpdateCallback = function (json) {
 					lastUpdate<?= $this->tableId; ?> = Math.round(new Date().getTime() / 1000);
 					console.log(json);
-					//alert(lastUpdate<?= $this->tableId; ?>);
 					return json.data;
 				};
 				var fnCreatedRowCallback = function (row, data, index) {
@@ -259,32 +274,28 @@ JSON
 					}
 				};
 				var tableId = '#<?= $this->tableId; ?>';
-				var dataTable = $(tableId).DataTable(<?= $settingsJson; ?>);
-				// Toolbar above table
+				var table = $(tableId).DataTable(<?= $settingsJson; ?>);
+				new $.fn.dataTable.KeyTable($(tableId));
+				// Selection of rows
 				var updateToolbar = <?= $this->getUpdateToolbar(); ?>;
 				$(tableId).on('draw.dt', updateToolbar);
+				$(tableId + ' tbody').on('click', 'tr', updateToolbar);
+				// Toolbar above table
 				$(tableId + '_toolbar').prependTo(tableId + '_wrapper');
 				// Toolbar table filter formatting
 				var filterInput = $(tableId + '_filter input').attr('placeholder', 'Zoeken').addClass('dataTables_filter');
 				$(tableId + '_filter').appendTo(tableId + '_toolbar').replaceWith(filterInput);
-				// Multiple selection of rows
-				$(tableId + ' tbody').on('click', 'tr', function (event) {
-					if (!$(event.target).hasClass('toggle-group')) {
-						fnMultiSelect(event, $(this));
-					}
-					updateToolbar();
-				});
 				// Opening and closing details
 				$(tableId + ' tbody').on('click', 'tr td.details-control', function (event) {
-					fnChildRow(dataTable, $(this));
+					fnChildRow(table, $(this));
 				});
 				// Group by column
-				$(tableId + '.groupByColumn tbody').on('click', 'tr.group td.toggle-group', function (event) {
-					fnGroupExpandCollapse(dataTable, $(tableId), $(this).parent());
+				$(tableId + '.groupByColumn tbody').on('click', 'tr.group', function (event) {
+					fnGroupExpandCollapse(table, $(tableId), $(this));
 				});
 				$(tableId + '.groupByColumn thead').on('click', 'tr th.toggle-group', function (event) {
 					$(this).toggleClass('toggle-group-expanded');
-					fnGroupExpandCollapseAll(dataTable, $(tableId), $(this).parent());
+					fnGroupExpandCollapseAll(table, $(tableId), $(this).parent());
 				});
 		<?php if (!$this->groupByLocked) { ?>
 					$(tableId + '.groupByColumn').on('order.dt', fnGroupByColumn);
