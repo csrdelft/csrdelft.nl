@@ -217,7 +217,7 @@ class DataTable extends TabsForm {
 
 				// translate editable columns index
 				if (isset($this->editable[$name])) {
-					$this->editable[$visibleIndex] = $def;
+					$this->editable[$visibleIndex] = $this->editable[$name];
 					unset($this->editable[$name]);
 				}
 
@@ -272,7 +272,6 @@ JSON
 
 			$(document).ready(function () {
 				var editableColumns = <?= json_encode($this->editable); ?>;
-				console.log(editableColumns);
 
 				var fnAjaxUpdateCallback = function (json) {
 					lastUpdate<?= $this->tableId; ?> = Math.round(new Date().getTime() / 1000);
@@ -296,19 +295,19 @@ JSON
 					}
 		<?php if ($this->editable) { ?>
 						try {
+							// voor elke td check of deze editable moet zijn
 							$(tr).children().each(function (columnIndex, td) {
 								if (columnIndex in editableColumns) {
-									console.log(columnIndex);
-
-									$(td).editable(editableColumns.columnIndex, {
+									// zet submit url etc.
+									$(td).editable(editableColumns[columnIndex], {
 										event: 'dblclick',
 										tooltip: 'Dubbelklik om te bewerken',
 										type: 'textarea',
 										cssclass: 'InlineForm',
 										onblur: 'submit',
-										submit: '<img src="http://plaetjes.csrdelft.nl/famfamfam/accept.png" class="float-left">',
-										cancel: '<img src="http://plaetjes.csrdelft.nl/famfamfam/delete.png" class="float-right">',
-										indicator: '<img src="http://plaetjes.csrdelft.nl/layout/loading-arrows.gif">',
+										submit: '<a class="btn submit float-left" title="Invoer opslaan"><img src="<?= CSR_PICS; ?>/famfamfam/accept.png" class="icon" width="16" height="16" /></a>',
+										cancel: '<a class="btn submit float-right" title="Niet opslaan"><img src="<?= CSR_PICS; ?>/famfamfam/delete.png" class="icon" width="16" height="16" /></a>',
+										indicator: '<img src="<?= CSR_PICS; ?>/layout/loading-arrows.gif" class="icon" width="16" height="16" />',
 										submitdata: {
 											id: data.objectId,
 											lastUpdate: lastUpdate<?= $this->tableId; ?>
@@ -323,7 +322,6 @@ JSON
 							});
 						} catch (e) {
 							// missing js
-							console.log(e);
 						}
 		<?php } ?>
 				};

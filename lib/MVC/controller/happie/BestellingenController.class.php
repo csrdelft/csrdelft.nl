@@ -23,7 +23,8 @@ class HappieBestellingenController extends AclController {
 			'bar'		 => 'groep:2014',
 			'kassa'		 => 'groep:2014',
 			'nieuw'		 => 'groep:2014',
-			'wijzig'	 => 'groep:2014'
+			'wijzig'	 => 'groep:2014',
+			'aantal'	 => 'groep:2014'
 		);
 	}
 
@@ -134,8 +135,9 @@ class HappieBestellingenController extends AclController {
 	public function aantal() {
 		$bestelling = $this->model->getBestelling($this->getPostedId());
 		if (!$bestelling) {
-			setMelding('Bestelling bestaat niet', -1);
-			redirect(happieUrl);
+			$this->view = new JsonResponse('Bestelling bestaat niet', 404);
+		} else {
+			$this->view = new JsonResponse('TODO');
 		}
 	}
 
