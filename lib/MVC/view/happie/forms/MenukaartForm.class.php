@@ -44,11 +44,7 @@ class HappieMenukaartGroepForm extends Formulier {
 	public function __construct(HappieMenukaartGroep $groep, $action = '/nieuw', $titel = 'Nieuwe menukaart-groep') {
 		parent::__construct($groep, get_class($this), happieUrl . $action, $titel);
 
-		$opties = array();
-		foreach (HappieGang::getTypeOptions() as $gang) {
-			$opties[$gang] = HappieGang::format($gang);
-		}
-		$fields[] = new SelectField('gang', $groep->gang, 'Gang', $opties);
+		$fields[] = new SelectField('gang', $groep->gang, 'Gang', HappieGang::getSelectOptions());
 		$fields[] = new TextField('naam', $groep->naam, 'Groepnaam', 100, 3);
 		$fields[] = new RequiredIntField('aantal_beschikbaar', $groep->aantal_beschikbaar, 'Beschikbaar #', 0);
 

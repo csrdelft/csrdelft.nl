@@ -100,10 +100,10 @@ class DataTable extends TabsForm {
 					break;
 
 				default:
-					$type = 'html';
+					$type = $def[0];
 			}
 
-			$this->addColumn($attribute, 'html');
+			$this->addColumn($attribute, $type);
 		}
 
 		// hide primary key columns
@@ -162,9 +162,16 @@ class DataTable extends TabsForm {
 		$this->columns[$name]['searchable'] = (bool) $searchable;
 	}
 
-	protected function editableColumn($name, $url, $editable = true) {
+	protected function editableColumn($name, $url, array $options = null, $editable = true) {
 		if ($editable) {
-			$this->editable[$name] = $url;
+			$this->editable[$name]['url'] = $url;
+
+			if ($options === null) {
+				$this->editable[$name]['type'] = 'textarea';
+			} else {
+				$this->editable[$name]['type'] = 'select';
+				$this->editable[$name]['data'] = json_encode($options);
+			}
 		} else {
 			unset($this->editable[$name]);
 		}
@@ -293,16 +300,19 @@ JSON
 					} catch (e) {
 						// missing js
 					}
-		<?php if ($this->editable) { ?>
+		<?php
+		if ($this->editable) {
+			?>
 						try {
 							// voor elke td check of deze editable moet zijn
 							$(tr).children().each(function (columnIndex, td) {
 								if (columnIndex in editableColumns) {
 									// zet submit url etc.
-									$(td).editable(editableColumns[columnIndex], {
+									$(td).editable(editableColumns[columnIndex].url, {
+										type: editableColumns[columnIndex].type,
+										data: editableColumns[columnIndex].data,
 										event: 'dblclick',
 										tooltip: 'Dubbelklik om te bewerken',
-										type: 'textarea',
 										cssclass: 'InlineForm',
 										onblur: 'submit',
 										submit: '<a class="btn submit float-left" title="Invoer opslaan"><img src="<?= CSR_PICS; ?>/famfamfam/accept.png" class="icon" width="16" height="16" /></a>',
@@ -317,10 +327,6 @@ JSON
 											console.log(value);
 											console.log(settings);
 										}
-										//TODO: select
-										/*
-										 data: "{'':'Please select...', 'A':'A','B':'B','C':'C'}"
-										 */
 									});
 								}
 							});

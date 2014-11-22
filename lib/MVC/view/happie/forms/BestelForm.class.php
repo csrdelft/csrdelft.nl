@@ -41,19 +41,8 @@ class HappieBestellingWijzigenForm extends Formulier {
 		$fields[] = new IntField('aantal', $bestelling->aantal, 'Aantal', 0, $bestelling->aantal + $beschikbaar);
 		$fields[] = new IntField('aantal_geserveerd', $bestelling->aantal_geserveerd, 'Aantal geserveerd', 0, $bestelling->aantal_geserveerd + $beschikbaar); // meer vrijheid dan $bestelling->aantal
 
-		$options = array();
-		foreach (HappieServeerStatus::getTypeOptions() as $option) {
-			$options[$option] = $option;
-		}
-		unset($options[HappieServeerStatus::Nieuw]);
-		$fields[] = new SelectField('serveer_status', $bestelling->serveer_status, 'Serveer status', $options);
-
-		$options = array();
-		foreach (HappieFinancienStatus::getTypeOptions() as $option) {
-			$options[$option] = $option;
-		}
-		unset($options[HappieFinancienStatus::Nieuw]);
-		$fields[] = new SelectField('financien_status', $bestelling->financien_status, 'Financien status', $options);
+		$fields[] = new SelectField('serveer_status', $bestelling->serveer_status, 'Serveer status', HappieServeerStatus::getSelectOptions());
+		$fields[] = new SelectField('financien_status', $bestelling->financien_status, 'Financien status', HappieFinancienStatus::getSelectOptions());
 
 		$fields[] = new TextareaField('opmerking', $bestelling->opmerking, 'Allergie/Opmerking');
 		$fields[] = new FormDefaultKnoppen(happieUrl);

@@ -21,6 +21,14 @@ abstract class HappieGang implements PersistentEnum {
 		return array(self::Drank, self::Voorgerecht, self::Hoofdgerecht, self::Bijgerecht, self::Nagerecht);
 	}
 
+	public static function getSelectOptions() {
+		$options = array();
+		foreach (HappieGang::getTypeOptions() as $option) {
+			$options[$option] = self::format($option);
+		}
+		return $options;
+	}
+
 	public static function format($gang) {
 		return ucfirst($gang) . ($gang == self::Drank ? '' : 'gerecht');
 	}

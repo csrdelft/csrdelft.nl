@@ -17,14 +17,18 @@ class HappieBestellingenController extends AclController {
 	public function __construct($query) {
 		parent::__construct($query, HappieBestellingenModel::instance());
 		$this->acl = array(
-			'overzicht'	 => 'groep:2014',
-			'serveer'	 => 'groep:2014',
-			'keuken'	 => 'groep:2014',
-			'bar'		 => 'groep:2014',
-			'kassa'		 => 'groep:2014',
-			'nieuw'		 => 'groep:2014',
-			'wijzig'	 => 'groep:2014',
-			'aantal'	 => 'groep:2014'
+			'overzicht'			 => 'groep:2014',
+			'serveer'			 => 'groep:2014',
+			'keuken'			 => 'groep:2014',
+			'bar'				 => 'groep:2014',
+			'kassa'				 => 'groep:2014',
+			'nieuw'				 => 'groep:2014',
+			'wijzig'			 => 'groep:2014',
+			'aantal'			 => 'groep:2014',
+			'geserveerd'		 => 'groep:2014',
+			'serveerstatus'		 => 'groep:2014',
+			'financienstatus'	 => 'groep:2014',
+			'opmerking'			 => 'groep:2014',
 		);
 	}
 
@@ -32,6 +36,25 @@ class HappieBestellingenController extends AclController {
 		$this->action = 'nieuw';
 		if ($this->hasParam(3)) {
 			$this->action = $this->getParam(3);
+		}
+		switch ($this->action) {
+			case 'aantal':
+			case 'geserveerd':
+			case 'serveerstatus':
+			case 'financienstatus':
+			case 'opmerking':
+
+				if (!isset($_POST['id'][0])) {
+					$this->geentoegang();
+				}
+				$id = filter_var($_POST['id'][0], FILTER_SANITIZE_NUMBER_INT);
+				$bestelling = $this->model->getBestelling((int) $id);
+
+				if (!$bestelling) {
+					$this->geentoegang();
+				}
+				parent::performAction(array($bestelling));
+				return;
 		}
 		parent::performAction($this->getParams(4));
 	}
@@ -126,19 +149,24 @@ class HappieBestellingenController extends AclController {
 		$this->view = new CsrLayout3Page($form);
 	}
 
-	private function getPostedId() {
-		if (isset($_POST['id'][0])) {
-			return (int) filter_var($_POST['id'][0], FILTER_SANITIZE_NUMBER_INT);
-		}
+	public function aantal(HappieBestelling $bestelling) {
+		$this->view = new JsonResponse($bestelling); // TODO
 	}
 
-	public function aantal() {
-		$bestelling = $this->model->getBestelling($this->getPostedId());
-		if (!$bestelling) {
-			$this->view = new JsonResponse('Bestelling bestaat niet', 404);
-		} else {
-			$this->view = new JsonResponse('TODO');
-		}
+	public function geserveerd(HappieBestelling $bestelling) {
+		$this->view = new JsonResponse($bestelling); // TODO
+	}
+
+	public function serveerstatus(HappieBestelling $bestelling) {
+		$this->view = new JsonResponse($bestelling); // TODO
+	}
+
+	public function financienstatus(HappieBestelling $bestelling) {
+		$this->view = new JsonResponse($bestelling); // TODO
+	}
+
+	public function opmerking(HappieBestelling $bestelling) {
+		$this->view = new JsonResponse($bestelling); // TODO
 	}
 
 }

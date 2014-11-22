@@ -19,4 +19,13 @@ abstract class HappieFinancienStatus implements PersistentEnum {
 		return array(self::Nieuw, self::Gewijzigd, self::KassaIngevoerd, self::Voldaan);
 	}
 
+	public static function getSelectOptions() {
+		$options = array();
+		foreach (self::getTypeOptions() as $option) {
+			$options[$option] = $option;
+		}
+		unset($options[self::Nieuw]);
+		return $options;
+	}
+
 }

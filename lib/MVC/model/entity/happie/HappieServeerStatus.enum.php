@@ -22,4 +22,13 @@ abstract class HappieServeerStatus implements PersistentEnum {
 		return array(self::Nieuw, self::Gewijzigd, self::KeukenBezig, self::KeukenKlaar, self::Gedeeltelijk, self::Uitgeserveerd, self::Afgeruimd);
 	}
 
+	public static function getSelectOptions() {
+		$options = array();
+		foreach (self::getTypeOptions() as $option) {
+			$options[$option] = $option;
+		}
+		unset($options[self::Nieuw]);
+		return $options;
+	}
+
 }
