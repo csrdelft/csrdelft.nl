@@ -108,6 +108,12 @@ function fnGroupByColumnDraw(event, settings) {
 	});
 }
 
+function fnHideEmptyCollapsedAll(table) {
+	if ($('th', table).length - 2 == table.data('collapsedGroups').length) {
+		$('td.dataTables_empty', table).parent().remove();
+	}
+}
+
 function fnGroupExpandCollapse(dataTable, table, tr) {
 	var collapse = table.data('collapsedGroups');
 	tr.toggleClass('expanded');
@@ -123,6 +129,7 @@ function fnGroupExpandCollapse(dataTable, table, tr) {
 	table.data('collapsedGroups', collapse.sort());
 	bCtrlPressed = false; // prevent order callback weird effect
 	dataTable.draw();
+	fnHideEmptyCollapsedAll(table);
 }
 
 function fnGroupExpandCollapseAll(dataTable, table, tr) {
@@ -143,6 +150,7 @@ function fnGroupExpandCollapseAll(dataTable, table, tr) {
 	}
 	table.data('collapsedGroups', collapse);
 	dataTable.draw();
+	fnHideEmptyCollapsedAll(table);
 }
 
 function fnGroupExpandCollapseDraw(settings, data, index) {
