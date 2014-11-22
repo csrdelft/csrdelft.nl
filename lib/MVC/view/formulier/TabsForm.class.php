@@ -13,6 +13,7 @@ require_once 'MVC/view/formulier/Formulier.class.php';
 class TabsForm extends Formulier {
 
 	private $tabs = array();
+	public $onhoverintent = false;
 
 	public function getTabs() {
 		return $this->tabs;
@@ -61,7 +62,7 @@ class TabsForm extends Formulier {
 		if (sizeof($this->tabs) > 0) {
 			echo '<br /><div id="' . $this->formId . '-tabs" class="tabs-list"><ul>';
 			foreach ($this->tabs as $tab => $fields) {
-				echo '<li><a href="#' . $this->formId . '-tab-' . $tab . '">' . ucfirst($tab) . '</a></li>';
+				echo '<li><a href="#' . $this->formId . '-tab-' . $tab . '" class="tab-item">' . ucfirst($tab) . '</a></li>';
 			}
 			echo '</ul>';
 			foreach ($this->tabs as $tab => $fields) {
@@ -84,9 +85,19 @@ class TabsForm extends Formulier {
 	}
 
 	public function getJavascript() {
-		return parent::getJavascript() . <<<JS
-$('#{$this->formId}-tabs').tabs();
+		$js = "$('#{$this->formId}-tabs').tabs();";
+		if ($this->onhoverintent) {
+			$js .= <<<JS
+try {
+	$('#{$this->formId}-tabs .tab-item').hoverIntent(function() {
+		$(this).trigger('click');
+	});
+} catch(e) {
+	// missing js
+}
 JS;
+		}
+		return parent::getJavascript() . $js;
 	}
 
 }
