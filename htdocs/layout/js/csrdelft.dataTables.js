@@ -76,7 +76,7 @@ function fnGroupByColumnDraw(event, settings) {
 	}
 	var collapse = table.data('collapsedGroups').slice(); // copy by value
 	var colspan = '';
-	var j = $('th', table).length - 2;
+	var j = $('thead tr th', table).length - 2;
 	for (var i = 0; i < j; i++) {
 		colspan += '<td></td>';
 	}
@@ -109,7 +109,7 @@ function fnGroupByColumnDraw(event, settings) {
 }
 
 function fnHideEmptyCollapsedAll(table) {
-	if ($('th', table).length - 2 == table.data('collapsedGroups').length) {
+	if ($('tr.group', table).length == table.data('collapsedGroups').length) {
 		$('td.dataTables_empty', table).parent().remove();
 	}
 }
