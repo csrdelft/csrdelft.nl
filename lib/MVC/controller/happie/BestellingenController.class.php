@@ -54,9 +54,11 @@ class HappieBestellingenController extends AclController {
 					$this->geentoegang();
 				}
 				parent::performAction(array($bestelling));
-				return;
+				break;
+
+			default:
+				parent::performAction($this->getParams(4));
 		}
-		parent::performAction($this->getParams(4));
 	}
 
 	public function overzicht($y = null, $m = null, $d = null) {
@@ -150,23 +152,38 @@ class HappieBestellingenController extends AclController {
 	}
 
 	public function aantal(HappieBestelling $bestelling) {
-		$this->view = new JsonResponse($bestelling); // TODO
+		$aantal = filter_input(INPUT_POST, 'value', FILTER_SANITIZE_NUMBER_INT);
+		$bestelling->aantal = (int) $aantal;
+		$this->model->update($bestelling);
+		$this->view = new JsonResponse($bestelling->aantal);
 	}
 
 	public function geserveerd(HappieBestelling $bestelling) {
-		$this->view = new JsonResponse($bestelling); // TODO
+		$aantal = filter_input(INPUT_POST, 'value', FILTER_SANITIZE_NUMBER_INT);
+		$bestelling->aantal_geserveerd = (int) $aantal;
+		$this->model->update($bestelling);
+		$this->view = new JsonResponse($bestelling->aantal_geserveerd);
 	}
 
 	public function serveerstatus(HappieBestelling $bestelling) {
-		$this->view = new JsonResponse($bestelling); // TODO
+		$status = filter_input(INPUT_POST, 'value', FILTER_SANITIZE_STRING);
+		$bestelling->serveer_status = $status;
+		$this->model->update($bestelling);
+		$this->view = new JsonResponse($bestelling->serveer_status);
 	}
 
 	public function financienstatus(HappieBestelling $bestelling) {
-		$this->view = new JsonResponse($bestelling); // TODO
+		$status = filter_input(INPUT_POST, 'value', FILTER_SANITIZE_STRING);
+		$bestelling->financien_status = $status;
+		$this->model->update($bestelling);
+		$this->view = new JsonResponse($bestelling->financien_status);
 	}
 
 	public function opmerking(HappieBestelling $bestelling) {
-		$this->view = new JsonResponse($bestelling); // TODO
+		$opmerking = filter_input(INPUT_POST, 'value', FILTER_SANITIZE_STRING);
+		$bestelling->opmerking = $opmerking;
+		$this->model->update($bestelling);
+		$this->view = new JsonResponse($bestelling->opmerking);
 	}
 
 }

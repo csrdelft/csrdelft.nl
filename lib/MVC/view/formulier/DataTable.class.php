@@ -47,7 +47,7 @@ class DataTable extends TabsForm {
 			'sInfoEmpty'		 => 'Geen resultaten om weer te geven',
 			'sInfoFiltered'		 => ' (gefilterd uit _MAX_ resultaten)',
 			'sInfoPostFix'		 => '',
-			'sSearch'			 => 'Zoeken:',
+			'sSearch'			 => '',
 			'sEmptyTable'		 => 'Geen resultaten aanwezig in de tabel',
 			'sInfoThousands'	 => '.',
 			'sLoadingRecords'	 => 'Een moment geduld aub - bezig met laden...',
@@ -310,13 +310,19 @@ JSON
 									// zet submit url etc.
 									$(td).editable(editableColumns[columnIndex].url, {
 										type: editableColumns[columnIndex].type,
-										data: editableColumns[columnIndex].data,
-										event: 'dblclick',
-										tooltip: 'Dubbelklik om te bewerken',
+										data: function (value, settings) {
+											if ('data' in editableColumns[columnIndex]) {
+												return editableColumns[columnIndex].data;
+											}
+											/* Convert <br> to newline. */
+											return value.replace(/<br[\s\/]?>/gi, '\n');
+										},
+										placeholder: '',
+										tooltip: 'Klik om te bewerken',
 										cssclass: 'InlineForm',
-										onblur: 'submit',
-										submit: '<a class="btn submit float-left" title="Invoer opslaan"><img src="<?= CSR_PICS; ?>/famfamfam/accept.png" class="icon" width="16" height="16" /></a>',
-										cancel: '<a class="btn submit float-right" title="Niet opslaan"><img src="<?= CSR_PICS; ?>/famfamfam/delete.png" class="icon" width="16" height="16" /></a>',
+										onblur: 'submit', // gebruik knopjes bij onblur: 'cancel'
+										//submit: '<a class="btn submit float-left" title="Invoer opslaan"><img src="<?= CSR_PICS; ?>/famfamfam/accept.png" class="icon" width="16" height="16" /></a>',
+										//cancel: '<a class="btn submit float-right" title="Niet opslaan"><img src="<?= CSR_PICS; ?>/famfamfam/delete.png" class="icon" width="16" height="16" /></a>',
 										indicator: '<img src="<?= CSR_PICS; ?>/layout/loading-arrows.gif" class="icon" width="16" height="16" />',
 										submitdata: {
 											id: data.objectId,
@@ -328,6 +334,7 @@ JSON
 											console.log(settings);
 										}
 									});
+									$(td).addClass('editable');
 								}
 							});
 						} catch (e) {
@@ -347,8 +354,8 @@ JSON
 				$('.DTTT_container').children().appendTo(tableId + '_toolbar');
 				$('.DTTT_container').remove();
 				// Toolbar table filter formatting
-				var filterInput = $(tableId + '_filter input').attr('placeholder', 'Zoeken').addClass('dataTables_filter');
-				$(tableId + '_filter').appendTo(tableId + '_toolbar').replaceWith(filterInput);
+				$(tableId + '_filter input').attr('placeholder', 'Zoeken').unwrap();
+				$(tableId + '_filter').appendTo(tableId + '_toolbar');
 				// Opening and closing details
 				$(tableId + ' tbody').on('click', 'tr td.toggle-childrow', function (event) {
 					fnChildRow(table, $(this));

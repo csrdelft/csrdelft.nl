@@ -46,6 +46,7 @@ class HappieBestellingenModel extends CachedPersistenceModel {
 	public function update(PersistentEntity $bestelling) {
 		// backup oude gegevens
 		$backup = $this->getBestelling($bestelling->bestelling_id);
+		$backup->wijzig_historie = null;
 		$bestelling->wijzig_historie .= json_encode(array(getDateTime() => $backup)) . ",\n";
 
 		// markeer wijziging bestelling

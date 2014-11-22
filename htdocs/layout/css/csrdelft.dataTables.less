@@ -6,12 +6,6 @@
 
 .dataTables_wrapper {
 
-	input.dataTables_filter {
-		text-align: left;
-		float: right;
-		margin-top: 0;
-	}
-
 	.dataTables_info {
 		clear: none;
 		margin-left: 10%;
@@ -36,6 +30,13 @@
 
 		tr.childrow:hover * {
 			background-color: white;
+		}
+
+		tr td {
+			cursor: default;
+		}
+		tr td.editable {
+			cursor: cell;
 		}
 	}
 
