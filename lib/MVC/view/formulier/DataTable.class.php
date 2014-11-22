@@ -301,15 +301,13 @@ JSON
 					fnGroupExpandCollapse(table, $(tableId), $(this));
 				});
 				$(tableId + '.groupByColumn thead').on('click', 'tr th.toggle-group', function (event) {
-					$(this).toggleClass('toggle-group-expanded');
-					fnGroupExpandCollapseAll(table, $(tableId), $(this).parent());
+					fnGroupExpandCollapseAll(table, $(tableId), $(this));
 				});
 		<?php if (!$this->groupByLocked) { ?>
 					$(tableId + '.groupByColumn').on('order.dt', fnGroupByColumn);
 		<?php } ?>
 				$(tableId + '.groupByColumn').on('draw.dt', fnGroupByColumnDraw);
 				$(tableId + '.groupByColumn').data('collapsedGroups', []);
-				$(tableId + '.groupByColumn thead tr:first').addClass('expanded');
 				if ($(tableId).hasClass('groupByColumn') && fnGetGroupByColumn($(tableId))) {
 					$(tableId + ' thead tr th').first().addClass('toggle-group toggle-group-expanded');
 				}

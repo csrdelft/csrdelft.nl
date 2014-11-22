@@ -58,7 +58,7 @@ function fnGroupByColumn(event, settings) {
 	dataTable.column(columnId).visible(false);
 	table.attr('groupbycolumn', columnId);
 	table.data('collapsedGroups', []);
-	table.find('thead tr th').first().addClass('toggle-group  toggle-group-expanded');
+	$('thead tr th', table).first().addClass('toggle-group  toggle-group-expanded');
 	settings.aaSortingFixed = newOrder.slice(); // copy by value
 	bOrderDraw = true;
 	dataTable.draw();
@@ -108,17 +108,22 @@ function fnGroupByColumnDraw(event, settings) {
 	});
 }
 
-function fnHideEmptyCollapsedAll(table) {
+function fnHideEmptyCollapsedAll(table, th) {
 	if ($('tr.group', table).length == table.data('collapsedGroups').length) {
 		$('td.dataTables_empty', table).parent().remove();
+		th.removeClass('toggle-group-expanded');
+	}
+	else {
+		th.addClass('toggle-group-expanded');
 	}
 }
 
 function fnGroupExpandCollapse(dataTable, table, tr) {
 	var collapse = table.data('collapsedGroups');
-	tr.toggleClass('expanded');
+	var td = $('td:first', tr);
+	td.toggleClass('toggle-group-expanded');
 	var group = tr.data('groupData');
-	if (tr.hasClass('expanded')) {
+	if (td.hasClass('toggle-group-expanded')) {
 		collapse = $.grep(collapse, function (value) {
 			return value !== group;
 		});
@@ -129,17 +134,16 @@ function fnGroupExpandCollapse(dataTable, table, tr) {
 	table.data('collapsedGroups', collapse.sort());
 	bCtrlPressed = false; // prevent order callback weird effect
 	dataTable.draw();
-	fnHideEmptyCollapsedAll(table);
+	fnHideEmptyCollapsedAll(table, $('thead tr th', table).first());
 }
 
-function fnGroupExpandCollapseAll(dataTable, table, tr) {
+function fnGroupExpandCollapseAll(dataTable, table, th) {
 	var columnId = fnGetGroupByColumn(table);
 	if (columnId === false) {
 		return;
 	}
-	tr.toggleClass('expanded');
 	var collapse = [];
-	if (!tr.hasClass('expanded')) {
+	if (th.hasClass('toggle-group-expanded')) {
 		var last = null;
 		dataTable.column(columnId).data().each(function (group, i) {
 			if (last !== group) {
@@ -150,7 +154,7 @@ function fnGroupExpandCollapseAll(dataTable, table, tr) {
 	}
 	table.data('collapsedGroups', collapse);
 	dataTable.draw();
-	fnHideEmptyCollapsedAll(table);
+	fnHideEmptyCollapsedAll(table, th);
 }
 
 function fnGroupExpandCollapseDraw(settings, data, index) {
@@ -175,7 +179,6 @@ function fnChildRow(dataTable, td, column) {
 			// TODO: abort ajax
 		}
 		else {
-			tr.removeClass('expanded');
 			var innerDiv = tr.next().children(':first').children(':first');
 			innerDiv.slideUp(400, function () {
 				row.child.hide();
@@ -184,7 +187,6 @@ function fnChildRow(dataTable, td, column) {
 	}
 	else if (typeof column === 'string') { // TODO: preloaded expand
 		row.child('<div class="innerDetails verborgen"></div>').show();
-		tr.addClass('expanded');
 		var innerDiv = tr.next().addClass('childrow').children(':first').children(':first');
 		innerDiv.html(data).slideDown();
 	}
