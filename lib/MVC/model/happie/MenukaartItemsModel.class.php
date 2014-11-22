@@ -58,6 +58,8 @@ class HappieMenukaartItemsModel extends CachedPersistenceModel {
 				$menukaart[$gang][$groep->groep_id] = $groep;
 				if (isset($items[$groep->groep_id])) {
 					$groep->setItems($items[$groep->groep_id]);
+				} else {
+					$groep->setItems(array());
 				}
 			}
 		}
