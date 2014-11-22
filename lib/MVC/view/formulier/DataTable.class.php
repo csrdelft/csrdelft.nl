@@ -103,19 +103,7 @@ class DataTable extends TabsForm {
 				default:
 					$type = 'html';
 			}
-			//TODO
-			reldate(getDateTime());
-			// { "iDataSort": 1 },
 
-			/*
-			 *  // The `data` parameter refers to the data for the cell (defined by the
-			  // `data` option, which defaults to the column being worked with, in
-			  // this case `data: 0`.
-			  "render": function ( data, type, row ) {
-			  return data +' ('+ row[3]+')';
-			  },
-			  "targets": 0
-			 */
 			$this->addColumn($attribute, 'html');
 		}
 
@@ -137,6 +125,20 @@ class DataTable extends TabsForm {
 			'title'		 => ucfirst(str_replace('_', ' ', $newName)),
 			'type'		 => $type,
 			'searchable' => false
+				/*
+				  //TODO: sort by other column
+				  { "iDataSort": 1 },
+				  reldate(getDateTime());
+
+				  //TODO: custom rendering
+				  /*
+				  // The `data` parameter refers to the data for the cell (defined by the
+				  // `data` option, which defaults to the column being worked with, in
+				  // this case `data: 0`.
+				  "render": function ( data, type, row ) {
+				  return data +' ('+ row[3]+')';
+				  }
+				 */
 		);
 		// append or insert at position
 		if ($before === null) {
@@ -314,6 +316,36 @@ JSON
 			});
 		</script>
 		<?php
+		/*
+		  //TODO: make editable
+
+		  $('#example').dataTable()
+		  .makeEditable({
+		  sUpdateURL: "UpdateData.php",
+		  sAddURL: "AddData.php",
+		  sDeleteURL: "DeleteData.php",
+		  aoColumns: [
+		  null,
+		  {
+		  },
+		  {
+		  type: 'textarea'
+		  },
+		  {
+		  type: 'select',
+		  onblur: 'cancel',
+		  submit: 'Ok',
+		  loadurl: 'EngineVersionList.php',
+		  sUpdateURL: "CustomUpdateEngineVersion.php"
+		  },
+		  {
+		  type: 'select',
+		  onblur: 'submit',
+		  data: "{'':'Please select...', 'A':'A','B':'B','C':'C'}"
+		  }
+		  ]
+		  });
+		 */
 	}
 
 	/**
