@@ -14,6 +14,8 @@ class HappieMenukaartItemsView extends DataTable {
 		parent::__construct(HappieMenukaartItemsModel::orm, get_class($this), 'Menukaart items', 'menukaart_groep');
 		$this->dataSource = happieUrl . '/overzicht';
 
+		$this->addColumn('groep_beschikbaar', 'html-num-fmt');
+
 		$nieuw = new DataTableKnop('>= 0', happieUrl . '/nieuw', '', 'Nieuw', 'Nieuw menukaart-item', '/famfamfam/add.png');
 		$this->addKnop($nieuw);
 
@@ -32,7 +34,7 @@ class HappieMenukaartItemsData extends DataTableResponse {
 		$groep = $item->getGroep();
 		if ($groep) {
 			$array['menukaart_groep'] = $groep->naam;
-			$array['aantal_beschikbaar'] .= ' / ' . $groep->aantal_beschikbaar;
+			$array['groep_beschikbaar'] = $groep->aantal_beschikbaar;
 		}
 		$array['prijs'] = $item->getPrijsFormatted();
 		$array['beschrijving'] = nl2br($item->beschrijving);
