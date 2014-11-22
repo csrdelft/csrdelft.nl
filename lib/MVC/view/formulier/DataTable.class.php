@@ -286,7 +286,7 @@ JSON
 				var fnCreatedRowCallback = function (tr, data, index) {
 					$(tr).attr('data-objectid', data.objectId);
 					if ('detailSource' in data) {
-						$(tr).children('td:first').addClass('details-control').data('detailSource', data.detailSource);
+						$(tr).children('td:first').addClass('toggle-childrow').data('detailSource', data.detailSource);
 					}
 					try {
 						$('abbr.timeago', tr).timeago();
@@ -317,6 +317,10 @@ JSON
 											console.log(value);
 											console.log(settings);
 										}
+										//TODO: select
+										/*
+										 data: "{'':'Please select...', 'A':'A','B':'B','C':'C'}"
+										 */
 									});
 								}
 							});
@@ -340,7 +344,7 @@ JSON
 				var filterInput = $(tableId + '_filter input').attr('placeholder', 'Zoeken').addClass('dataTables_filter');
 				$(tableId + '_filter').appendTo(tableId + '_toolbar').replaceWith(filterInput);
 				// Opening and closing details
-				$(tableId + ' tbody').on('click', 'tr td.details-control', function (event) {
+				$(tableId + ' tbody').on('click', 'tr td.toggle-childrow', function (event) {
 					fnChildRow(table, $(this));
 				});
 				// Group by column
@@ -361,36 +365,6 @@ JSON
 			});
 		</script>
 		<?php
-		/*
-		  //TODO: make editable
-
-		  $('#example').dataTable()
-		  .makeEditable({
-		  sUpdateURL: "UpdateData.php",
-		  sAddURL: "AddData.php",
-		  sDeleteURL: "DeleteData.php",
-		  aoColumns: [
-		  null,
-		  {
-		  },
-		  {
-		  type: 'textarea'
-		  },
-		  {
-		  type: 'select',
-		  onblur: 'cancel',
-		  submit: 'Ok',
-		  loadurl: 'EngineVersionList.php',
-		  sUpdateURL: "CustomUpdateEngineVersion.php"
-		  },
-		  {
-		  type: 'select',
-		  onblur: 'submit',
-		  data: "{'':'Please select...', 'A':'A','B':'B','C':'C'}"
-		  }
-		  ]
-		  });
-		 */
 	}
 
 	/**

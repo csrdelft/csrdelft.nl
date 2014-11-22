@@ -94,7 +94,7 @@ function fnGroupByColumnDraw(event, settings) {
 					rows.eq(i).before(groupRow);
 					collapse.shift();
 				}
-				groupRow = $('<tr class="group expanded"><td class="toggle-group toggle-group-expanded"></td><td>' + group + '</td>' + colspan + '</tr>').data('groupData', group);
+				groupRow = $('<tr class="group"><td class="toggle-group toggle-group-expanded"></td><td>' + group + '</td>' + colspan + '</tr>').data('groupData', group);
 				rows.eq(i).before(groupRow);
 				last = group;
 			}

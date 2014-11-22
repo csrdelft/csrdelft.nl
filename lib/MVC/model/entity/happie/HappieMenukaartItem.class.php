@@ -76,7 +76,7 @@ class HappieMenukaartItem extends PersistentEntity {
 	}
 
 	public function getPrijsFormatted() {
-		return '€ ' . sprintf('%.2f', $this->getPrijsFloat());
+		return '<nobr>€ ' . sprintf('%.2f', $this->getPrijsFloat()) . '</nobr>';
 	}
 
 	public function getGroep() {
