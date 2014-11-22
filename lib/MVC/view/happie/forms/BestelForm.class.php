@@ -89,7 +89,7 @@ class HappieBestelForm extends TabsForm {
 			foreach ($groepen as $groep_id => $groep) {
 
 				// voeg groep toe aan tab en maak tab voor elke gang
-				$kopje = new CollapsableSubkopje($groep_id, $groep->naam, $drank, false);
+				$kopje = new CollapsableSubkopje($groep_id, $groep->naam, $drank);
 				$this->addFields(array($kopje), $groep->gang);
 
 				foreach ($groep->getItems() as $item) {
@@ -168,9 +168,6 @@ JS
 $('.Formulier label').css('width', '45%');
 $('#wrapper_{$table->getId()} label').css('width', '20%');
 $('.expanded-submenu').css({
-	"-webkit-column-width": "330px",
-	"-moz-column-width": "330px",
-	"column-width": "330px",
 	"-webkit-column-gap": 0,
 	"-moz-column-gap": 0,
 	"column-gap": 0
