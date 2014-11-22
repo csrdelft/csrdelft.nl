@@ -283,7 +283,7 @@ JSON
 					fnGroupExpandCollapse(dataTable, $(tableId), $(this).parent());
 				});
 				$(tableId + '.groupByColumn thead').on('click', 'tr th.toggle-group', function (event) {
-					$(this).toggleClass('toggle-group-open');
+					$(this).toggleClass('toggle-group-expanded');
 					fnGroupExpandCollapseAll(dataTable, $(tableId), $(this).parent());
 				});
 		<?php if (!$this->groupByLocked) { ?>
@@ -293,7 +293,7 @@ JSON
 				$(tableId + '.groupByColumn').data('collapsedGroups', []);
 				$(tableId + '.groupByColumn thead tr:first').addClass('expanded');
 				if ($(tableId).hasClass('groupByColumn') && fnGetGroupByColumn($(tableId))) {
-					$(tableId + ' thead tr th').first().addClass('toggle-group toggle-group-open');
+					$(tableId + ' thead tr th').first().addClass('toggle-group toggle-group-expanded');
 				}
 			});
 		</script>

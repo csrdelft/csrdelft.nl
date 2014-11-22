@@ -122,7 +122,7 @@ function fnGroupByColumn(event, settings) {
 	dataTable.column(columnId).visible(false);
 	table.attr('groupbycolumn', columnId);
 	table.data('collapsedGroups', []);
-	table.find('thead tr:first').addClass('expanded').children(':first').addClass('details-control');
+	table.find('thead tr th').first().addClass('toggle-group  toggle-group-expanded');
 	settings.aaSortingFixed = newOrder.slice(); // copy by value
 	bOrderDraw = true;
 	dataTable.draw();
@@ -154,7 +154,7 @@ function fnGroupByColumnDraw(event, settings) {
 					rows.eq(i).before(groupRow);
 					collapse.shift();
 				}
-				groupRow = $('<tr class="group expanded"><td class="toggle-group toggle-group-open"></td><td colspan="' + colspan + '">' + group + '</td></tr>').data('groupData', group);
+				groupRow = $('<tr class="group expanded"><td class="toggle-group toggle-group-expanded"></td><td colspan="' + colspan + '">' + group + '</td></tr>').data('groupData', group);
 				rows.eq(i).before(groupRow);
 				last = group;
 			}
