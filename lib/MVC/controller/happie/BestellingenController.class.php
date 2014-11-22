@@ -125,4 +125,18 @@ class HappieBestellingenController extends AclController {
 		$this->view = new CsrLayout3Page($form);
 	}
 
+	private function getPostedId() {
+		if (isset($_POST['id'][0])) {
+			return (int) filter_var($_POST['id'][0], FILTER_SANITIZE_NUMBER_INT);
+		}
+	}
+
+	public function aantal() {
+		$bestelling = $this->model->getBestelling($this->getPostedId());
+		if (!$bestelling) {
+			setMelding('Bestelling bestaat niet', -1);
+			redirect(happieUrl);
+		}
+	}
+
 }

@@ -36,9 +36,11 @@ class HappieBestellingenData extends DataTableResponse {
 
 class HappieBestellingenView extends DataTable {
 
-	public function __construct($dataSource = '/overzicht', $titel = 'Alle bestellingen', $groupByColumn = 'datum') {
+	public function __construct($dataUrl = '/overzicht', $titel = 'Alle bestellingen', $groupByColumn = 'datum') {
 		parent::__construct(HappieBestellingenModel::orm, get_class($this), $titel, $groupByColumn);
-		$this->dataSource = happieUrl . $dataSource;
+		$this->dataUrl = happieUrl . $dataUrl;
+
+		$this->editableColumn('aantal', happieUrl . '/aantal');
 
 		$this->addColumn('gang', 'html', 'menukaart_item');
 		$this->addColumn('menu_groep', 'html', 'menukaart_item');

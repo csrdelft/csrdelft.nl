@@ -13,11 +13,13 @@ require_once 'MVC/view/formulier/TabsForm.class.php';
  */
 class DataTable extends TabsForm {
 
-	protected $orm;
 	protected $tableId;
+	protected $dataUrl;
 	private $groupByColumn;
 	private $groupByLocked = false;
 	protected $defaultLength = -1;
+	protected $columns = array();
+	private $editable = array();
 	protected $settings = array(
 		'dom'		 => 'Tfrtpli',
 		'tableTools' => array(
@@ -57,13 +59,10 @@ class DataTable extends TabsForm {
 			)
 		)
 	);
-	protected $columns = array();
-	protected $dataSource;
 
-	public function __construct($orm_class, $tableId, $titel = false, $groupByColumn = null) {
-		parent::__construct(null, $tableId . '_toolbar', null, $titel);
+	public function __construct($class, $tableId, $titel = false, $groupByColumn = null) {
+		parent::__construct(new $class(), $tableId . '_toolbar', null, $titel);
 
-		$this->orm = new $orm_class();
 		$this->tableId = $tableId;
 		$this->css_classes[] = 'display initKeys';
 		if ($groupByColumn !== false) {
@@ -83,8 +82,8 @@ class DataTable extends TabsForm {
 		);
 
 		// generate columns from entity attributes
-		foreach ($this->orm->getAttributes() as $attribute) {
-			$def = $this->orm->getAttributeDefinition($attribute);
+		foreach ($this->model->getAttributes() as $attribute) {
+			$def = $this->model->getAttributeDefinition($attribute);
 			switch ($def[0]) {
 
 				case T::Boolean:
@@ -108,7 +107,7 @@ class DataTable extends TabsForm {
 		}
 
 		// hide primary key columns
-		foreach ($this->orm->getPrimaryKey() as $attribute) {
+		foreach ($this->model->getPrimaryKey() as $attribute) {
 			$this->hideColumn($attribute);
 		}
 	}
@@ -163,6 +162,14 @@ class DataTable extends TabsForm {
 		$this->columns[$name]['searchable'] = (bool) $searchable;
 	}
 
+	protected function editableColumn($name, $url, $editable = true) {
+		if ($editable) {
+			$this->editable[$name] = $url;
+		} else {
+			unset($this->editable[$name]);
+		}
+	}
+
 	protected function getSettings() {
 
 		// set view modus: paging or scrolling
@@ -176,9 +183,9 @@ class DataTable extends TabsForm {
 		}
 
 		// set ajax url
-		if ($this->dataSource) {
+		if ($this->dataUrl) {
 			$this->settings['ajax'] = array(
-				'url'		 => $this->dataSource,
+				'url'		 => $this->dataUrl,
 				'type'		 => 'POST',
 				'data'		 => 'lastUpdate',
 				'dataSrc'	 => 'fnAjaxUpdateCallback'
@@ -202,21 +209,33 @@ class DataTable extends TabsForm {
 			);
 		}
 
-		// default order by first visible column
+		// create visible columns index array and default order
+		$index = 0;
+		$visibleIndex = 0;
 		foreach ($this->columns as $name => $def) {
-			if ($name == 'details') {
-				continue;
-			}
 			if (!isset($def['visible']) OR $def['visible'] === true) {
-				$index = array_search($name, $columns);
-				$this->settings['order'] = array(
-					array($index, 'asc')
-				);
-				break;
+
+				// translate editable columns index
+				if (isset($this->editable[$name])) {
+					$this->editable[$visibleIndex] = $def;
+					unset($this->editable[$name]);
+				}
+
+				// default order by first visible orderable column
+				if (!isset($this->settings['order']) AND ! (isset($def['orderable']) AND $def['orderable'] === false)) {
+					$this->settings['order'] = array(
+						array($index, 'asc')
+					);
+				}
+
+				$visibleIndex++;
 			}
+			$index++;
 		}
 
+		// translate columns index
 		$this->settings['columns'] = array_values($this->columns);
+
 		return $this->settings;
 	}
 
@@ -250,7 +269,11 @@ JSON
 		<table id="<?= $this->tableId ?>" class="<?= implode(' ', $this->css_classes) ?>" groupbycolumn="<?= $this->groupByColumn ?>"></table>
 		<script type="text/javascript">
 			var lastUpdate<?= $this->tableId; ?>;
+
 			$(document).ready(function () {
+				var editableColumns = <?= json_encode($this->editable); ?>;
+				console.log(editableColumns);
+
 				var fnAjaxUpdateCallback = function (json) {
 					lastUpdate<?= $this->tableId; ?> = Math.round(new Date().getTime() / 1000);
 					var table = $('#<?= $this->tableId; ?>');
@@ -261,22 +284,48 @@ JSON
 					}
 					return json.data;
 				};
-				var fnCreatedRowCallback = function (row, data, index) {
-					$(row).attr('id', '<?= $this->tableId; ?>_' + index); // data array index
-					var primaryKey = ["<?= implode('", "', $this->orm->getPrimaryKey()); ?>"];
-					var objectId = [];
-					for (var i = 0; i < primaryKey.length; i++) {
-						objectId.push(data[primaryKey[i]]);
-					}
-					$(row).attr('data-objectid', objectId);
+				var fnCreatedRowCallback = function (tr, data, index) {
+					$(tr).attr('data-objectid', data.objectId);
 					if ('detailSource' in data) {
-						$(row).children('td:first').addClass('details-control').data('detailSource', data.detailSource);
+						$(tr).children('td:first').addClass('details-control').data('detailSource', data.detailSource);
 					}
 					try {
-						$('abbr.timeago', row).timeago();
+						$('abbr.timeago', tr).timeago();
 					} catch (e) {
 						// missing js
 					}
+		<?php if ($this->editable) { ?>
+						try {
+							$(tr).children().each(function (columnIndex, td) {
+								if (columnIndex in editableColumns) {
+									console.log(columnIndex);
+
+									$(td).editable(editableColumns.columnIndex, {
+										event: 'dblclick',
+										tooltip: 'Dubbelklik om te bewerken',
+										type: 'textarea',
+										cssclass: 'InlineForm',
+										onblur: 'submit',
+										submit: '<img src="http://plaetjes.csrdelft.nl/famfamfam/accept.png" class="float-left">',
+										cancel: '<img src="http://plaetjes.csrdelft.nl/famfamfam/delete.png" class="float-right">',
+										indicator: '<img src="http://plaetjes.csrdelft.nl/layout/loading-arrows.gif">',
+										submitdata: {
+											id: data.objectId,
+											lastUpdate: lastUpdate<?= $this->tableId; ?>
+										},
+										callback: function (value, settings) {
+											console.log(this);
+											console.log(value);
+											console.log(settings);
+										}
+									});
+								}
+							});
+						} catch (e) {
+							// missing js
+							console.log(e);
+						}
+		<?php } ?>
 				};
 				var tableId = '#<?= $this->tableId; ?>';
 				var table = $(tableId).DataTable(<?= $settingsJson; ?>);
