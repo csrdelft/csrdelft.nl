@@ -19,6 +19,24 @@ class DataTable extends TabsForm {
 	private $groupByLocked = false;
 	protected $defaultLength = -1;
 	protected $settings = array(
+		'dom'		 => 'Tfrtpli',
+		'tableTools' => array(
+			'sRowSelect' => 'os',
+			'aButtons'	 => array(
+				'select_all',
+				'select_none',
+				'copy',
+				'csv',
+				'xls',
+				'pdf',
+				'print'
+			),
+			'sSwfPath'	 => '/layout/js/datatables/extensions/TableTools/swf/copy_csv_xls_pdf.swf'
+		),
+		'lengthMenu' => array(
+			array(10, 25, 50, 100, -1),
+			array(10, 25, 50, 100, 'Alles')
+		),
 		'language'	 => array(
 			'sProcessing'		 => 'Bezig...',
 			'sLengthMenu'		 => '_MENU_ resultaten weergeven',
@@ -37,24 +55,6 @@ class DataTable extends TabsForm {
 				'sNext'		 => 'Volgende',
 				'sPrevious'	 => 'Vorige'
 			)
-		),
-		'dom'		 => 'Tfrtpli',
-		'tableTools' => array(
-			'sRowSelect' => 'os',
-			'aButtons'	 => array(
-				'select_all',
-				'select_none',
-				'copy',
-				'csv',
-				'xls',
-				'pdf',
-				'print'
-			),
-			'sSwfPath'	 => '/layout/js/datatables/extensions/TableTools/swf/copy_csv_xls_pdf.swf'
-		),
-		'lengthMenu' => array(
-			array(10, 25, 50, 100, -1),
-			array(10, 25, 50, 100, 'Alles')
 		)
 	);
 	protected $columns = array();
@@ -65,7 +65,7 @@ class DataTable extends TabsForm {
 
 		$this->orm = new $orm_class();
 		$this->tableId = $tableId;
-		$this->css_classes[] = 'init display';
+		$this->css_classes[] = 'display initKeys';
 		if ($groupByColumn !== false) {
 			$this->css_classes[] = 'groupByColumn';
 		}
@@ -130,7 +130,6 @@ class DataTable extends TabsForm {
 	}
 
 	protected function addColumn($newName, $type = 'string', $before = null) {
-
 		// column definition
 		$newColumn = array(
 			'name'		 => $newName,
@@ -139,7 +138,6 @@ class DataTable extends TabsForm {
 			'type'		 => $type,
 			'searchable' => false
 		);
-
 		// append or insert at position
 		if ($before === null) {
 			$this->columns[$newName] = $newColumn;
@@ -253,7 +251,12 @@ JSON
 			$(document).ready(function () {
 				var fnAjaxUpdateCallback = function (json) {
 					lastUpdate<?= $this->tableId; ?> = Math.round(new Date().getTime() / 1000);
+					var table = $('#<?= $this->tableId; ?>');
 					console.log(json);
+					if (table.hasClass('initKeys')) {
+						table.removeClass('initKeys');
+						new $.fn.dataTable.KeyTable(table);
+					}
 					return json.data;
 				};
 				var fnCreatedRowCallback = function (row, data, index) {
@@ -275,13 +278,15 @@ JSON
 				};
 				var tableId = '#<?= $this->tableId; ?>';
 				var table = $(tableId).DataTable(<?= $settingsJson; ?>);
-				new $.fn.dataTable.KeyTable($(tableId));
 				// Selection of rows
 				var updateToolbar = <?= $this->getUpdateToolbar(); ?>;
 				$(tableId).on('draw.dt', updateToolbar);
 				$(tableId + ' tbody').on('click', 'tr', updateToolbar);
+				$('.DTTT_button_text').on('click', updateToolbar);
 				// Toolbar above table
 				$(tableId + '_toolbar').prependTo(tableId + '_wrapper');
+				$('.DTTT_container').children().appendTo(tableId + '_toolbar');
+				$('.DTTT_container').remove();
 				// Toolbar table filter formatting
 				var filterInput = $(tableId + '_filter input').attr('placeholder', 'Zoeken').addClass('dataTables_filter');
 				$(tableId + '_filter').appendTo(tableId + '_toolbar').replaceWith(filterInput);
@@ -345,10 +350,14 @@ class DataTableKnop extends FormulierKnop {
 	public function __construct($multiplicity, $url, $action, $label, $title, $icon, $float_left = true) {
 		parent::__construct($url, $action, $label, $title, $icon, $float_left);
 		$this->multiplicity = $multiplicity;
+		$this->css_classes[] = 'DTTT_button';
 	}
 
 	public function getUpdateToolbar() {
-		return "$('#{$this->getId()}').attr('disabled', !(aantal {$this->multiplicity}));";
+		return <<<JS
+$('#{$this->getId()}').attr('disabled', !(aantal {$this->multiplicity}));
+$('#{$this->getId()}').toggleClass('DTTT_disabled', $('#{$this->getId()}').prop('disabled'));
+JS;
 	}
 
 	public function getJavascript() {
