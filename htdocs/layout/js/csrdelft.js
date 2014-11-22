@@ -100,7 +100,7 @@ function init_lazy_images() {
 }
 
 function init_sluit_meldingen() {
-	$('#mainright').on('click', '#melding', function () {
+	$('#melding').on('click', '.alert', function () {
 		$(this).fadeOut();
 	});
 }
