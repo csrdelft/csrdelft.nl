@@ -88,7 +88,7 @@ class HappieBestelForm extends TabsForm {
 			foreach ($groepen as $groep_id => $groep) {
 
 				// voeg groep toe aan tab en maak tab voor elke gang
-				$kopje = new CollapsableSubkopje($groep_id, $groep->naam, $drank);
+				$kopje = new CollapsableSubkopje($groep_id, $groep->naam, $drank, false);
 				$this->addFields(array($kopje), $groep->gang);
 
 				foreach ($groep->getItems() as $item) {

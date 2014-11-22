@@ -97,22 +97,29 @@ class CollapsableSubkopje extends Subkopje {
 
 	private $id;
 	public $collapsed;
+	private $slide;
 
-	public function __construct($id, $titel, $collapsed = false) {
+	public function __construct($id, $titel, $collapsed = false, $slide = true) {
 		parent::__construct($titel);
 		$this->id = $id;
 		$this->collapsed = $collapsed;
+		$this->slide = $slide;
 	}
 
 	public function getJavascript() {
+		if ($this->slide) {
+			$function = 'slideToggle(200,';
+		} else {
+			$function = 'toggle(';
+		}
 		return parent::getJavascript() . <<<JS
 $('#toggle_kopje_{$this->id}').click(function() {
 	if ($('#expand_kopje_{$this->id}').is(':visible')) {
 		$(this).removeClass('toggle-group-expanded');
-		$('#expand_kopje_{$this->id}').slideUp(200);
+		$('#expand_kopje_{$this->id}').{$function}false);
 	} else {
 		$(this).addClass('toggle-group-expanded');
-		$('#expand_kopje_{$this->id}').slideDown(200);
+		$('#expand_kopje_{$this->id}').{$function}true);
 	}
 });
 JS;
