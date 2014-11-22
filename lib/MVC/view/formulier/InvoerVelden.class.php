@@ -905,13 +905,14 @@ JS;
 			$type = 'text';
 
 			if (!$this->readonly AND ! $this->disabled AND ! $this->hidden) {
-				$minus = CSR_PICS . '/famfamfam/delete.png';
-				$js = <<<JS
-$('#{$this->getId()}').val(parseInt($('#{$this->getId()}').val()) - 1);
-$('#{$this->getId()}').trigger('onchange');
-JS;
+				if ($this->min !== null AND $this->getValue() === $this->min) {
+					$class = 'class="disabled"';
+				} else {
+					$class = '';
+				}
+				$minus = CSR_PICS . '/knopjes/min.png';
 				echo <<<HTML
-<span id="substract_{$this->getId()}" class="btn substract" onclick="{$js}"><img src="{$minus}" alt="-" class="icon" width="16" height="16" /></span>
+<span id="substract_{$this->getId()}" {$class} style="cursor:pointer;padding:7px;"><img src="{$minus}" alt="-" class="icon" width="20" height="20" /></span>
 HTML;
 			}
 		}
@@ -926,6 +927,9 @@ HTML;
 if (parseInt( $(this).val() ) < {$this->min}) {
 	{$alert}
 	$(this).val({$this->min});
+	$('#substract_{$this->getId()}').addClass('disabled');
+} else {
+	$('#substract_{$this->getId()}').removeClass('disabled');
 }
 JS;
 		}
@@ -939,6 +943,9 @@ JS;
 if (parseInt( $(this).val() ) > {$this->max}) {
 	{$alert}
 	$(this).val({$this->max});
+	$('#add_{$this->getId()}').addClass('disabled');
+} else {
+	$('#add_{$this->getId()}').removeClass('disabled');
 }
 JS;
 		}
@@ -946,16 +953,34 @@ JS;
 		echo ' <input type="' . $type . '"' . $this->getInputAttribute(array('id', 'name', 'class', 'value', 'origvalue', 'disabled', 'readonly', 'maxlength', 'placeholder', 'autocomplete', 'onchange', 'onclick', 'onkeydown', 'onkeyup')) . ' /> ';
 
 		if (!$this->readonly AND ! $this->disabled AND ! $this->hidden) {
-			$plus = CSR_PICS . '/famfamfam/add.png';
-			$js = <<<JS
-$('#{$this->getId()}').val(parseInt($('#{$this->getId()}').val()) + 1);
-$('#{$this->getId()}').trigger('onchange');
-JS;
+			if ($this->max !== null AND $this->getValue() === $this->max) {
+				$class = 'class="disabled"';
+			} else {
+				$class = '';
+			}
+			$plus = CSR_PICS . '/knopjes/plus.png';
 			echo <<<HTML
-<span id="add_{$this->getId()}" class="btn add" onclick="{$js}"><img src="{$plus}" alt="+" class="icon" width="16" height="16" /></span>
+<span id="add_{$this->getId()}" {$class} style="cursor:pointer;padding:7px;"><img src="{$plus}" alt="+" class="icon" width="20" height="20" /></span>
 HTML;
 		}
 		echo '</div>';
+	}
+
+	public function getJavascript() {
+		return parent::getJavascript() . <<<JS
+$('#add_{$this->getId()}').click(function() {
+	if ($(this).hasClass('disabled')) {
+		return;
+	}
+	$('#{$this->getId()}').val(parseInt($('#{$this->getId()}').val()) + 1).trigger('onchange');
+});
+$('#substract_{$this->getId()}').click(function() {
+	if ($(this).hasClass('disabled')) {
+		return;
+	}
+	$('#{$this->getId()}').val(parseInt($('#{$this->getId()}').val()) - 1).trigger('onchange');
+});
+JS;
 	}
 
 }
