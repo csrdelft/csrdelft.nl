@@ -45,7 +45,6 @@ class DataTable extends TabsForm {
 			'data'			 => null,
 			'title'			 => '',
 			'type'			 => 'string',
-			'class'			 => 'details-control',
 			'orderable'		 => false,
 			'searchable'	 => false,
 			'defaultContent' => ''
@@ -251,9 +250,7 @@ JSON
 					}
 					$(row).attr('data-objectid', objectId);
 					if ('detailSource' in data) {
-						$(row).children('td.details-control:first').data('detailSource', data.detailSource);
-					} else {
-						$(row).children('td.details-control:first').removeClass('details-control');
+						$(row).children('td:first').addClass('details-control').data('detailSource', data.detailSource);
 					}
 					try {
 						$('abbr.timeago', row).timeago();
@@ -272,20 +269,21 @@ JSON
 				$(tableId + '_filter').appendTo(tableId + '_toolbar').replaceWith(filterInput);
 				// Multiple selection of rows
 				$(tableId + ' tbody').on('click', 'tr', function (event) {
-					if (!$(event.target).hasClass('details-control')) {
+					if (!$(event.target).hasClass('toggle-group')) {
 						fnMultiSelect(event, $(this));
 					}
 					updateToolbar();
 				});
 				// Opening and closing details
-				$(tableId + ' tbody').on('click', 'tr:not(.group) td.details-control', function (event) {
+				$(tableId + ' tbody').on('click', 'tr td.details-control', function (event) {
 					fnChildRow(dataTable, $(this));
 				});
 				// Group by column
-				$(tableId + '.groupByColumn tbody').on('click', 'tr.group td.details-control', function (event) {
+				$(tableId + '.groupByColumn tbody').on('click', 'tr.group td.toggle-group', function (event) {
 					fnGroupExpandCollapse(dataTable, $(tableId), $(this).parent());
 				});
-				$(tableId + '.groupByColumn thead').on('click', 'th.details-control', function (event) {
+				$(tableId + '.groupByColumn thead').on('click', 'tr th.toggle-group', function (event) {
+					$(this).toggleClass('toggle-group-open');
 					fnGroupExpandCollapseAll(dataTable, $(tableId), $(this).parent());
 				});
 		<?php if (!$this->groupByLocked) { ?>
@@ -294,8 +292,8 @@ JSON
 				$(tableId + '.groupByColumn').on('draw.dt', fnGroupByColumnDraw);
 				$(tableId + '.groupByColumn').data('collapsedGroups', []);
 				$(tableId + '.groupByColumn thead tr:first').addClass('expanded');
-				if (!$(tableId).hasClass('groupByColumn') || !fnGetGroupByColumn($(tableId))) {
-					$(tableId + ' thead tr th.details-control').removeClass('details-control');
+				if ($(tableId).hasClass('groupByColumn') && fnGetGroupByColumn($(tableId))) {
+					$(tableId + ' thead tr th').first().addClass('toggle-group toggle-group-open');
 				}
 			});
 		</script>

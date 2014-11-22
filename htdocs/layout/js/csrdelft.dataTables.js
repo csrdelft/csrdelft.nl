@@ -150,11 +150,11 @@ function fnGroupByColumnDraw(event, settings) {
 			if (last !== group) {
 				// Create group rows for collapsed groups
 				while (collapse.length > 0 && collapse[0].localeCompare(group) < 0) {
-					groupRow = $('<tr class="group"><td class="details-control"></td><td colspan="' + colspan + '">' + collapse[0] + '</td></tr>').data('groupData', collapse[0]);
+					groupRow = $('<tr class="group"><td class="toggle-group"></td><td colspan="' + colspan + '">' + collapse[0] + '</td></tr>').data('groupData', collapse[0]);
 					rows.eq(i).before(groupRow);
 					collapse.shift();
 				}
-				groupRow = $('<tr class="group expanded"><td class="details-control"></td><td colspan="' + colspan + '">' + group + '</td></tr>').data('groupData', group);
+				groupRow = $('<tr class="group expanded"><td class="toggle-group toggle-group-open"></td><td colspan="' + colspan + '">' + group + '</td></tr>').data('groupData', group);
 				rows.eq(i).before(groupRow);
 				last = group;
 			}
@@ -163,7 +163,7 @@ function fnGroupByColumnDraw(event, settings) {
 	// Create group rows for collapsed groups
 	var tbody = table.children('tbody:first');
 	collapse.forEach(function (group) {
-		groupRow = $('<tr class="group"><td class="details-control"></td><td colspan="' + colspan + '">' + group + '</td></tr>').data('groupData', group);
+		groupRow = $('<tr class="group"><td class="toggle-group"></td><td colspan="' + colspan + '">' + group + '</td></tr>').data('groupData', group);
 		tbody.append(groupRow);
 	});
 }

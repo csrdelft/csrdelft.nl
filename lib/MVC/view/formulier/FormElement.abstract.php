@@ -108,10 +108,10 @@ class CollapsableSubkopje extends Subkopje {
 		return parent::getJavascript() . <<<JS
 $('#toggle_kopje_{$this->id}').click(function() {
 	if ($('#expand_kopje_{$this->id}').is(':visible')) {
-		$(this).removeClass('toggle-submenu-open');
+		$(this).removeClass('toggle-group-open');
 		$('#expand_kopje_{$this->id}').slideUp(200);
 	} else {
-		$(this).addClass('toggle-submenu-open');
+		$(this).addClass('toggle-group-open');
 		$('#expand_kopje_{$this->id}').slideDown(200);
 	}
 });
@@ -119,7 +119,7 @@ JS;
 	}
 
 	public function view() {
-		echo '<div id="toggle_kopje_' . $this->id . '" class="toggle-submenu ' . ($this->collapsed ? '' : 'toggle-submenu-open') . '">';
+		echo '<div id="toggle_kopje_' . $this->id . '" class="toggle-group ' . ($this->collapsed ? '' : 'toggle-group-open') . '">';
 		parent::view();
 		echo '</div><div id="expand_kopje_' . $this->id . '" class="expanded-submenu" ' . ($this->collapsed ? 'style="display:none;"' : '') . '>';
 	}
