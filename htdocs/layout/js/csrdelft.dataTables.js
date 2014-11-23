@@ -37,6 +37,74 @@ function fnGetSelectedObjectId(tableId) {
 	return $(tableId + ' tbody tr.selected:first').attr('data-objectid');
 }
 
+/**
+ * Used for keyboard multiselect.
+ * Behaves exactly the same as OS and TableTools.
+ */
+function fnMultiSelect(event, tr) {
+	if (tr.children(':first').hasClass('dataTables_empty')) {
+		return;
+	}
+	if (bShiftPressed) {
+		// Calculate closest selected row
+		var prevAll = tr.prevAll(':not(.group)');
+		var prevUntil = tr.prevUntil('.selected').not('.group');
+		var before = prevUntil.length;
+
+		var nextAll = tr.nextAll(':not(.group)');
+		var nextUntil = tr.nextUntil('.selected').not('.group');
+		var after = nextUntil.length;
+
+		// Check for no selected row
+		if (prevUntil.length === prevAll.length) {
+			after = -1;
+		}
+		if (nextUntil.length === nextAll.length) {
+			before = -1;
+		}
+		// Extend from closest selection
+		if (before < after) {
+			prevUntil.addClass('selected');
+		}
+		else if (before > after) {
+			nextUntil.addClass('selected');
+		}
+		// Also select clicked group/row
+		if (tr.hasClass('group')) {
+			tr.nextUntil('.group').addClass('selected');
+		}
+		else {
+			tr.addClass('selected');
+		}
+	}
+	else if (bCtrlPressed) {
+		if (tr.hasClass('group')) {
+			var nextUntil = tr.nextUntil('.group');
+			var selected = nextUntil.filter('.selected');
+			if (selected.length === nextUntil.length) {
+				nextUntil.removeClass('selected');
+			}
+			else {
+				nextUntil.addClass('selected');
+			}
+		}
+		else {
+			tr.toggleClass('selected');
+		}
+	}
+	else {
+		tr.siblings('.selected').removeClass('selected');
+		if (tr.hasClass('group')) {
+			tr.nextUntil('.group').addClass('selected');
+		}
+		else {
+			tr.addClass('selected');
+		}
+	}
+	// Prevent default select action
+	//document.getSelection().removeAllRanges();
+}
+
 function fnGetGroupByColumn(table) {
 	var columnId = parseInt(table.attr('groupbycolumn'));
 	if (isNaN(columnId)) {

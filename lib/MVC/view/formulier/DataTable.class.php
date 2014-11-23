@@ -168,7 +168,7 @@ class DataTable extends TabsForm {
 
 			if ($options === null) {
 				$this->editable[$name]['type'] = 'textarea';
-				$this->editable[$name]['onblur'] = 'submit';
+				$this->editable[$name]['onblur'] = 'cancel'; //submit
 			} else {
 				$this->editable[$name]['type'] = 'select';
 				$this->editable[$name]['data'] = json_encode($options);
@@ -250,29 +250,12 @@ class DataTable extends TabsForm {
 
 	public function view() {
 		// encode settings
-		$settingsJson = json_encode($this->getSettings());
+		$settingsJson = json_encode($this->getSettings(), DEBUG ? JSON_PRETTY_PRINT : 0);
 
 		// js function calls
 		$settingsJson = str_replace('"lastUpdate"', '{"lastUpdate":lastUpdate' . $this->tableId . '}', $settingsJson);
 		$settingsJson = str_replace('"fnAjaxUpdateCallback"', 'fnAjaxUpdateCallback', $settingsJson);
 		$settingsJson = str_replace('"fnCreatedRowCallback"', 'fnCreatedRowCallback', $settingsJson);
-
-		//DEBUG pretty printing
-		$settingsJson = str_replace(':{', <<<JSON
-:
-{
-JSON
-				, $settingsJson);
-		$settingsJson = str_replace(',{', <<<JSON
-,
-{
-JSON
-				, $settingsJson);
-		$settingsJson = str_replace(',"', <<<JSON
-,
-"
-JSON
-				, $settingsJson);
 		?>
 		<?= parent::view(); ?>
 		<table id="<?= $this->tableId ?>" class="<?= implode(' ', $this->css_classes) ?>" groupbycolumn="<?= $this->groupByColumn ?>"></table>
@@ -286,7 +269,6 @@ JSON
 					lastUpdate<?= $this->tableId; ?> = Math.round(new Date().getTime() / 1000);
 					var table = $('#<?= $this->tableId; ?>');
 					console.log(json);
-
 					// TODO: remember focus position on update
 					/*
 					 var oTable = $('#example').dataTable();
@@ -313,7 +295,7 @@ JSON
 								if (columnIndex in editableColumns) {
 
 									// gebruik geen knopjes bij onblur submit
-									//var onblur = ('submit' !== editableColumns[columnIndex].onblur);
+									var onblur = ('submit' !== editableColumns[columnIndex].onblur);
 
 									$(td).addClass('editable').editable(editableColumns[columnIndex].url, {
 										type: editableColumns[columnIndex].type,
@@ -322,8 +304,8 @@ JSON
 										placeholder: '',
 										tooltip: 'Klik om te bewerken',
 										cssclass: 'InlineForm',
-										//submit: (onblur ? '<a class="btn submit float-left" title="Invoer opslaan"><img src="<?= CSR_PICS; ?>/famfamfam/accept.png" class="icon" width="16" height="16" /></a>' : ''),
-										//cancel: (onblur ? '<a class="btn submit float-right" title="Niet opslaan"><img src="<?= CSR_PICS; ?>/famfamfam/delete.png" class="icon" width="16" height="16" /></a>' : ''),
+										submit: (onblur ? '<a class="btn submit float-left" title="Invoer opslaan"><img src="<?= CSR_PICS; ?>/famfamfam/accept.png" class="icon" width="16" height="16" /></a>' : ''),
+										cancel: (onblur ? '<a class="btn submit float-right" title="Niet opslaan"><img src="<?= CSR_PICS; ?>/famfamfam/delete.png" class="icon" width="16" height="16" /></a>' : ''),
 										indicator: '<img src="<?= CSR_PICS; ?>/layout/loading-arrows.gif" class="icon" width="16" height="16" />',
 										submitdata: {
 											id: data.objectId,
@@ -353,6 +335,17 @@ JSON
 
 				// Keyboard support
 				var keys = new $.fn.dataTable.KeyTable($(tableId));
+				$(document).keydown(function (event) {
+					if (event.keyCode === 32) { // space
+						event.preventDefault();
+					}
+				});
+				$(document).keyup(function (event) {
+					if (event.keyCode === 32) { // space
+						event.preventDefault();
+						fnMultiSelect(event, $(keys.fnGetCurrentTD()).parent());
+					}
+				});
 
 				// Toolbar update on row selection
 				var updateToolbar = <?= $this->getUpdateToolbar(); ?>;
