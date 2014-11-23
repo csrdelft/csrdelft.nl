@@ -4,7 +4,7 @@
 			<a href="/agenda/verwijderen/{$item->item_id}" class="post confirm" title="Dit agenda-item definitief verwijderen">
 				{icon get="verwijderen"}
 			</a>
-				<a href="/agenda/bewerken/{$item->item_id}" class="post modal" title="Dit agenda-item bewerken">
+				<a href="/agenda/bewerken/{$item->item_id}" class="post popup" title="Dit agenda-item bewerken">
 				{icon get="bewerken"}
 			</a>
 		</div>

@@ -3,7 +3,7 @@
 *}
 <tr id="vrijstelling-row-{$vrijstelling->getUid()}">
 	<td>
-		<a href="{$smarty.const.maalcieUrl}/bewerk/{$vrijstelling->getUid()}" title="Vrijstelling wijzigen" class="btn rounded post modal">{icon get="pencil"}</a>
+		<a href="{$smarty.const.maalcieUrl}/bewerk/{$vrijstelling->getUid()}" title="Vrijstelling wijzigen" class="btn rounded post popup">{icon get="pencil"}</a>
 	</td>
 	<td>{Lid::naamLink($vrijstelling->getUid(), Instellingen::get('corvee', 'weergave_ledennamen_beheer'), Instellingen::get('corvee', 'weergave_link_ledennamen'))}</td>
 	<td>{$vrijstelling->getBeginDatum()|date_format:"%e %b %Y"}</td>

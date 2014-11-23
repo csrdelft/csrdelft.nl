@@ -253,13 +253,17 @@ function knop_ajax(knop, type) {
 		}
 		data = encodeURIComponent(data[0]) + '=' + encodeURIComponent(val);
 	}
-	if (knop.hasClass('addfav')) {
-		var data = {
-			'tekst': document.title.replace('C.S.R. Delft - ', ''),
-			'link': this.location.href.replace('http://csrdelft.nl', '')
-		};
+	if (knop.hasClass('TableSelection')) {
+		data = data.split('=');
+		var val = fnGetSelection(data[1]);
+		if (!val) {
+			return false;
+		}
+		var key = data[0];
+		data = {};
+		data[key] = val;
 	}
-	if (knop.hasClass('modal')) {
+	if (knop.hasClass('popup')) {
 		source = false;
 		done = modal_open;
 	}
@@ -292,7 +296,7 @@ function knop_get(event) {
 
 function modal_open(htmlString) {
 	if (typeof htmlString == 'string' && htmlString != '') {
-		$('#modal').html(htmlString);
+		$('#modal').replaceWith(htmlString);
 		init();
 		$('#modal').show();
 		$('#modal-background').css('background-image', 'none');
@@ -410,7 +414,7 @@ function form_submit(event) {
 		alert('Geen wijzigingen');
 		return false;
 	}
-	if (form.hasClass('modal') || form.hasClass('InlineForm')) {
+	if (form.hasClass('ModalForm') || form.hasClass('InlineForm')) {
 		event.preventDefault();
 		var source = false;
 		if (form.hasClass('InlineForm')) {
@@ -477,7 +481,7 @@ function form_cancel(event) {
 		knop_post(event);
 		return false;
 	}
-	if (form.hasClass('modal')) {
+	if (form.hasClass('ModalForm')) {
 		event.preventDefault();
 		if (!form_ischanged(form) || confirm('Sluiten zonder wijzigingen op te slaan?')) {
 			modal_close();
@@ -496,7 +500,7 @@ function dom_update(htmlString) {
 	var html = $.parseHTML(htmlString);
 	$(html).each(function () {
 		var id = $(this).attr('id');
-		if (id === 'modal-content') {
+		if (id === 'modal') {
 			modal_open(htmlString);
 		}
 		else {

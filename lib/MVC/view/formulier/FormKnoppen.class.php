@@ -105,6 +105,7 @@ class FormulierKnop implements FormElement {
 	protected $id;
 	public $url;
 	public $action;
+	public $data;
 	public $icon;
 	public $label;
 	public $title;
@@ -143,7 +144,17 @@ class FormulierKnop implements FormElement {
 	}
 
 	public function view() {
-		echo '<a id="' . $this->getId() . '"' . ($this->url ? ' href="' . $this->url . '"' : '') . ' class="btn ' . $this->action . ' ' . implode(' ', $this->css_classes) . '" title="' . htmlspecialchars($this->title) . '">';
+		if (strpos($this->action, 'cancel') !== false) {
+			$modal = ' data-dismiss="modal"';
+		} else {
+			$modal = '';
+		}
+		if (isset($this->data)) {
+			$data = ' data="' . $this->data . '"';
+		} else {
+			$data = '';
+		}
+		echo '<a id="' . $this->getId() . '"' . ($this->url ? ' href="' . $this->url . '"' : '') . ' class="btn ' . $this->action . ' ' . implode(' ', $this->css_classes) . '" title="' . htmlspecialchars($this->title) . '"' . $data . $modal . '>';
 		if ($this->icon) {
 			echo '<img src="' . CSR_PICS . $this->icon . '" class="icon" width="16" height="16" /> ';
 		}

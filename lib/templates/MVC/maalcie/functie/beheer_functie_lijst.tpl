@@ -3,7 +3,7 @@
 *}
 <tr id="corveefunctie-row-{$functie->functie_id}">
 	<td>
-		<a href="{$smarty.const.maalcieUrl}/bewerken/{$functie->functie_id}" title="Functie wijzigen" class="btn rounded post modal">{icon get="pencil"}</a>
+		<a href="{$smarty.const.maalcieUrl}/bewerken/{$functie->functie_id}" title="Functie wijzigen" class="btn rounded post popup">{icon get="pencil"}</a>
 	</td>
 	<td>{$functie->afkorting}</td>
 	<td>{$functie->naam}</td>
@@ -11,7 +11,7 @@
 	<td title="{$functie->email_bericht}">{if strlen($functie->email_bericht) > 0}{icon get="email"}{/if}</td>
 	<td>
 		{if $functie->kwalificatie_benodigd}
-			<div class="float-left"><a href="{$smarty.const.maalcieUrl}/kwalificeer/{$functie->functie_id}" title="Kwalificatie toewijzen" class="btn post modal">{icon get="vcard_add"} Kwalificeer</a></div>
+			<div class="float-left"><a href="{$smarty.const.maalcieUrl}/kwalificeer/{$functie->functie_id}" title="Kwalificatie toewijzen" class="btn post popup">{icon get="vcard_add"} Kwalificeer</a></div>
 		{/if}
 		{if $functie->hasKwalificaties()}
 			<div class="kwali"><a title="Toon oudleden" class="btn" onclick="$('div.kwali').toggle();">{icon get="eye"} Toon oudleden</a></div>

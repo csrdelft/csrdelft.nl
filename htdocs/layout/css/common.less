@@ -53,6 +53,11 @@ a:hover { text-decoration: underline; }
 	font-size: 14px;
 }
 
+/* --------------------------------
+
+Group expand/collapse toggle
+
+-------------------------------- */
 .toggle-group {
 	position: relative;
 	cursor: pointer;
@@ -87,3 +92,81 @@ a:hover { text-decoration: underline; }
 	-o-transform: translateY(-50%) rotate(90deg);
 	transform: translateY(-50%) rotate(90deg);
 }
+
+/* --------------------------------
+
+Modal popup
+
+-------------------------------- */
+#modal{
+	display: none;
+	position: fixed;
+	top: 175px;
+	left: 200px;
+	min-width: 500px;
+	z-index: 1040;
+	padding: 50px;
+	font-size: 13px;
+	background-color: white;
+}/*
+#modal::after{
+	content: "";
+	background-image: url("http://plaetjes.csrdelft.nl/layout/beeldmerk.jpg");
+	background-position: top 10px right 15px;
+	background-repeat: no-repeat;
+	opacity: 0.1;
+	top: 0;
+	left: 0;
+	bottom: 0;
+	right: 0;
+	position: absolute;
+	z-index: -1;
+}*/
+#modal-background{
+	display: none;
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	z-index: 100;
+	opacity: 0.5;
+	background-color: black;/*
+	background-image: url("http://plaetjes.csrdelft.nl/layout/loading_bar_black.gif");*/
+	background-position: 50% 300px;
+	background-repeat: no-repeat;
+}
+
+/* -------------------------------- 
+
+Dragable objects
+
+-------------------------------- */
+
+.dragobject{
+	position: fixed;
+	z-index: 50;
+	-webkit-touch-callout: none;
+	-webkit-user-select: none;
+	-khtml-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+}
+
+.dragobject:active{
+	cursor: move;
+}
+.dragvertical{
+	overflow-y: hidden;
+}
+.dragvertical:active{
+	cursor: ns-resize;
+}
+.draghorizontal{
+	overflow-x: hidden;
+}
+.draghorizontal:active{
+	cursor: ew-resize;
+}
+

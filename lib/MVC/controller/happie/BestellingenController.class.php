@@ -38,22 +38,24 @@ class HappieBestellingenController extends AclController {
 			$this->action = $this->getParam(3);
 		}
 		switch ($this->action) {
+			case 'wijzig':
 			case 'aantal':
 			case 'geserveerd':
 			case 'serveerstatus':
 			case 'financienstatus':
 			case 'opmerking':
 
-				if (!isset($_POST['id'][0])) {
+				$field = new ObjectIdField(new HappieBestelling());
+				if ($field->validate()) {
+					$ids = $field->getValue();
+					$bestelling = $this->model->getBestelling((int) $ids[0]);
+					if (!$bestelling) {
+						$this->geentoegang();
+					}
+					parent::performAction(array($bestelling));
+				} else {
 					$this->geentoegang();
 				}
-				$id = filter_var($_POST['id'][0], FILTER_SANITIZE_NUMBER_INT);
-				$bestelling = $this->model->getBestelling((int) $id);
-
-				if (!$bestelling) {
-					$this->geentoegang();
-				}
-				parent::performAction(array($bestelling));
 				break;
 
 			default:
@@ -136,19 +138,14 @@ class HappieBestellingenController extends AclController {
 		$this->view = new CsrLayout3Page($form);
 	}
 
-	public function wijzig($id) {
-		$bestelling = $this->model->getBestelling((int) $id);
-		if (!$bestelling) {
-			setMelding('Bestelling bestaat niet', -1);
-			redirect(happieUrl);
-		}
+	public function wijzig(HappieBestelling $bestelling) {
 		$form = new HappieBestellingWijzigenForm($bestelling);
 		if ($this->isPosted() AND $form->validate()) {
 			$this->model->update($bestelling);
-			setMelding('Wijziging succesvol opgeslagen', 1);
-			redirect(happieUrl . '/overzicht');
+			$this->view = new JsonResponse($bestelling);
+			return;
 		}
-		$this->view = new CsrLayout3Page($form);
+		$this->view = $form;
 	}
 
 	public function aantal(HappieBestelling $bestelling) {

@@ -22,12 +22,12 @@ class CsrLayoutPage extends CompressedLayout {
 	 */
 	public $zijbalk;
 	/**
-	 * modal inhoud
-	 * @var View
+	 * Modal popup inhoud
+	 * @var ModalForm
 	 */
 	public $modal;
 
-	public function __construct(View $body, array $zijbalk = array(), $modal = null) {
+	public function __construct(View $body, array $zijbalk = array(), ModalForm $modal = null) {
 		parent::__construct('layout', $body, $body->getTitel());
 		$this->zijbalk = $zijbalk;
 		$this->modal = $modal;
@@ -74,8 +74,6 @@ class CsrLayoutPage extends CompressedLayout {
 				'mededelingen' => new SavedQuery(62)
 			));
 		}
-
-		$smarty->assign('modalcoords', DragObjectModel::getCoords('modal', 175, 200));
 
 		if (LidInstellingen::get('algemeen', 'minion') == 'ja') {
 			$smarty->assign('minioncoords', DragObjectModel::getCoords('minion', 40, 40));

@@ -233,7 +233,7 @@ class DataTable extends TabsForm {
 		$settingsJson = str_replace('"fnAjaxUpdateCallback"', 'fnAjaxUpdateCallback', $settingsJson);
 		$settingsJson = str_replace('"fnCreatedRowCallback"', 'fnCreatedRowCallback', $settingsJson);
 		?>
-		<?= parent::view(); ?>
+		<?php parent::view(); ?>
 		<table id="<?= $this->tableId ?>" class="<?= implode(' ', $this->css_classes) ?>" groupbycolumn="<?= $this->groupByColumn ?>"></table>
 		<script type="text/javascript">
 			var lastUpdate<?= $this->tableId; ?>;
@@ -252,7 +252,6 @@ class DataTable extends TabsForm {
 					 */
 					return json.data;
 				};
-
 				var fnCreatedRowCallback = function (tr, data, index) {
 					$(tr).attr('data-objectid', data.objectId);
 					if ('detailSource' in data) {
@@ -264,50 +263,12 @@ class DataTable extends TabsForm {
 						// missing js
 					}
 				};
-
 				var tableId = '#<?= $this->tableId; ?>';
 				var oTable = $(tableId).DataTable(<?= $settingsJson; ?>);
-
-				// Keyboard multiselect support with spacebar
-				var keyshortcuts = [<?php
-		$comma = false;
-		foreach ($this->getFields() as $field) {
-			if ($field instanceof DataTableKnop AND is_int($field->keyshortcut)) {
-				if ($comma) {
-					echo ',';
-				} else {
-					$comma = true;
-				}
-				echo $field->keyshortcut;
-			}
-		}
-		?>];
 				var keys = new $.fn.dataTable.KeyTable($(tableId));
-				$(document).keydown(function (event) {
-					if (event.keyCode === 32) { // space
-						event.preventDefault();
-					}
-					if (!bCtrlPressed) {
-						return;
-					}
-					if (event.keyCode in keyshortcuts) {
-						event.preventDefault();
-					}
-				});
-				$(document).keyup(function (event) {
-					if (event.keyCode === 32) { // space
-						fnMultiSelect(event, $(keys.fnGetCurrentTD()).parent());
-						updateToolbar();
-					}
-					if (!bCtrlPressed) {
-						return;
-					}
-					event.preventDefault();
-					if (event.keyCode === 13) { // enter
-						//$(keys.fnGetCurrentTD()).trigger('click');
-					}
-				});
 
+				// Toolbar update on row selection
+				var updateToolbar = <?= $this->getUpdateToolbar(); ?>;
 				// Multiple selection of group rows
 				$(tableId + ' tbody').on('click', 'tr', function (event) {
 					if (bShiftPressed || bCtrlPressed || !$(this).hasClass('group')) {
@@ -315,27 +276,20 @@ class DataTable extends TabsForm {
 					}
 					updateToolbar();
 				});
+				//$(tableId).on('draw.dt', updateToolbar);
 
-				// Toolbar update on row selection
-				var updateToolbar = <?= $this->getUpdateToolbar(); ?>;
-				$(tableId).on('draw.dt', updateToolbar);
-				$(tableId + ' tbody').on('click', 'tr', updateToolbar);
 				$('.DTTT_button_text').on('click', updateToolbar);
-
 				// Toolbar above table
 				$(tableId + '_toolbar').prependTo(tableId + '_wrapper');
 				$('.DTTT_container').children().appendTo(tableId + '_toolbar');
 				$('.DTTT_container').remove();
-
 				// Toolbar table filter formatting
 				$(tableId + '_filter input').attr('placeholder', 'Zoeken').unwrap();
 				$(tableId + '_filter').appendTo(tableId + '_toolbar');
-
 				// Opening and closing details
 				$(tableId + ' tbody').on('click', 'tr td.toggle-childrow', function (event) {
 					fnChildRow(oTable, $(this));
 				});
-
 				// Group by column
 				$(tableId + '.groupByColumn tbody').on('click', 'tr.group', function (event) {
 					if (!bShiftPressed && !bCtrlPressed) {
@@ -345,14 +299,49 @@ class DataTable extends TabsForm {
 				$(tableId + '.groupByColumn thead').on('click', 'th.toggle-group:first', function (event) {
 					fnGroupExpandCollapseAll(oTable, $(tableId), $(this));
 				});
-		<?php if (!$this->groupByLocked) { ?>
+		<?php if (!$this->groupByLocked): ?>
 					$(tableId + '.groupByColumn').on('order.dt', fnGroupByColumn);
-		<?php } ?>
+		<?php endif; ?>
 				$(tableId + '.groupByColumn').on('draw.dt', fnGroupByColumnDraw);
 				$(tableId + '.groupByColumn').data('collapsedGroups', []);
 				if ($(tableId).hasClass('groupByColumn') && fnGetGroupByColumn($(tableId))) {
 					$(tableId + ' thead tr th').first().addClass('toggle-group toggle-group-expanded');
 				}
+
+				// Keyboard multiselect support with spacebar
+				$(document).keyup(function (event) {
+					// Geen keyboard shortcuts als we in een input-element of text-area zitten.
+					var element = event.target.tagName.toUpperCase();
+					if (element == 'INPUT' || element == 'TEXTAREA' || element == 'SELECT') {
+						return;
+					}
+					if (keyshortcuts.indexOf(event.keyCode) >= 0) {
+						event.preventDefault();
+						var td = keys.fnGetCurrentTD();
+						if (td) {
+							fnMultiSelect(event, $(td).parent());
+							updateToolbar();
+						}
+					}
+		<?php
+		$keyshortcuts = '[32'; // space
+		foreach ($this->getFields() as $field) {
+			if ($field instanceof DataTableKnop AND is_int($field->keyshortcut)) {
+				$keyshortcuts .= ',' . $field->keyshortcut;
+				echo "if (event.keyCode === {$field->keyshortcut}) { return $('#{$field->getId()}').trigger('click'); }\n";
+			}
+		}
+		$keyshortcuts .= ']';
+		?>
+				});
+				var keyshortcuts = <?= $keyshortcuts; ?>;
+				$(document).keydown(function (event) {
+					// Geen keyboard shortcuts als we in een input-element of text-area zitten.
+					var element = event.target.tagName.toUpperCase();
+					if (element != 'INPUT' && element != 'TEXTAREA' && element != 'SELECT' && keyshortcuts.indexOf(event.keyCode) >= 0) {
+						event.preventDefault();
+					}
+				});
 			});
 		</script>
 		<?php
@@ -378,18 +367,10 @@ JS;
 		return $js . '}';
 	}
 
-	public function getJavascript() {
-		return <<<JS
-var tableId = '#{$this->tableId}';
-JS
-				. parent::getJavascript();
-	}
-
 }
 
 class DataTableKnop extends FormulierKnop {
 
-	public $onclick;
 	public $keyshortcut;
 	private $multiplicity;
 
@@ -406,16 +387,6 @@ class DataTableKnop extends FormulierKnop {
 $('#{$this->getId()}').attr('disabled', !(aantal {$this->multiplicity}));
 $('#{$this->getId()}').toggleClass('DTTT_disabled', $('#{$this->getId()}').prop('disabled'));
 JS;
-	}
-
-	public function getJavascript() {
-		if (isset($this->onclick)) {
-			return parent::getJavascript() . <<<JS
-
-$('#{$this->getId()}').unbind('click.onclick').bind('click.onclick', function() {{$this->onclick}});
-JS;
-		}
-		return parent::getJavascript();
 	}
 
 }

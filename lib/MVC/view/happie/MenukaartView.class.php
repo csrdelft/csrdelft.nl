@@ -20,7 +20,7 @@ class HappieMenukaartItemsView extends DataTable {
 		$this->addKnop($nieuw);
 
 		$wijzig = new DataTableKnop('== 1', happieUrl . '/wijzig/', null, 69, 'Wijzig', 'Wijzig menukaart-item', 'DTTT_button_edit');
-		$wijzig->onclick = "this.href+=fnGetSelectedObjectId(tableId);";
+		$wijzig->onclick = "location.href=this.href+fnGetSelectedObjectId(tableId);";
 		$this->addKnop($wijzig);
 	}
 
@@ -54,7 +54,7 @@ class HappieMenukaartGroepenView extends DataTable {
 		$this->addKnop($nieuw);
 
 		$wijzig = new DataTableKnop('== 1', happieUrl . '/wijzig/', null, 69, 'Wijzig', 'Wijzig menukaart-groep', 'DTTT_button_edit');
-		$wijzig->onclick = "this.href+=fnGetSelectedObjectId(tableId);";
+		$wijzig->onclick = "location.href=this.href+fnGetSelectedObjectId(tableId);";
 		$this->addKnop($wijzig);
 	}
 

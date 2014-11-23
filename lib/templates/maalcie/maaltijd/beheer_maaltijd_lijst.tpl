@@ -12,7 +12,7 @@
 {elseif $maaltijd->getIsVerwijderd()}
 		<a href="{$smarty.const.maalcieUrl}/herstel/{$maaltijd->getMaaltijdId()}" title="Maaltijd herstellen" class="btn rounded post">{icon get="arrow_undo"}</a>
 {else}
-		<a href="{$smarty.const.maalcieUrl}/bewerk/{$maaltijd->getMaaltijdId()}" title="Maaltijd wijzigen" class="btn rounded post modal">{icon get="pencil"}</a>
+		<a href="{$smarty.const.maalcieUrl}/bewerk/{$maaltijd->getMaaltijdId()}" title="Maaltijd wijzigen" class="btn rounded post popup">{icon get="pencil"}</a>
 	{if $maaltijd->getMaaltijdRepetitieId()}
 		<a href="/maaltijdenrepetities/beheer/{$maaltijd->getMaaltijdRepetitieId()}" title="Wijzig gekoppelde maaltijdrepetitie" class="btn rounded modal">{icon get="calendar_edit"}</a>
 	{else}
@@ -33,8 +33,8 @@
 	<td>
 {if !$maaltijd->getIsVerwijderd() and $maaltijd->getArchief() === null}
 		<div class="float-right">
-			<a href="{$smarty.const.maalcieUrl}/anderaanmelden/{$maaltijd->getMaaltijdId()}" title="Aanmelding toevoegen" class="btn rounded post modal">{icon get="user_add"}</a>
-			<a href="{$smarty.const.maalcieUrl}/anderafmelden/{$maaltijd->getMaaltijdId()}" title="Aanmelding verwijderen" class="btn rounded post modal">{icon get="user_delete"}</a>
+			<a href="{$smarty.const.maalcieUrl}/anderaanmelden/{$maaltijd->getMaaltijdId()}" title="Aanmelding toevoegen" class="btn rounded post popup">{icon get="user_add"}</a>
+			<a href="{$smarty.const.maalcieUrl}/anderafmelden/{$maaltijd->getMaaltijdId()}" title="Aanmelding verwijderen" class="btn rounded post popup">{icon get="user_delete"}</a>
 		</div>
 {/if}
 {if $maaltijd->getAanmeldFilter()}

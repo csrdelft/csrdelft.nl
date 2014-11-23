@@ -279,9 +279,9 @@ JS;
 class ModalForm extends Formulier {
 
 	public function view() {
-		$this->css_classes[] = 'modal';
-		echo '<div id="modal-content">';
-		echo parent::view();
+		$this->css_classes[] = 'ModalForm';
+		echo '<div id="modal" class="modal-content outer-shadow dragobject" tabindex="-1">';
+		parent::view();
 		echo '</div>';
 	}
 
@@ -292,12 +292,16 @@ class ModalForm extends Formulier {
  */
 class InlineForm extends Formulier {
 
-	public function __construct($model, $formId, $action, InputField $field, $label = false) {
+	public function __construct($model, $formId, $action, InputField $field, $buttons = false, $label = false) {
 		parent::__construct($model, $formId, $action);
 
 		$fields = array();
 		$fields['input'] = $field;
-		$fields['btn'] = new FormDefaultKnoppen(null, false, true, $label, true);
+		if ($buttons) {
+			$fields['btn'] = new FormDefaultKnoppen(null, false, true, $label, true);
+		} else {
+			$fields['input']->onchange_submit = true;
+		}
 
 		$this->addFields($fields);
 	}

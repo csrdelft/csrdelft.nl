@@ -144,7 +144,7 @@ class ForumDeelForm extends ModalForm {
 		$delete = new DeleteKnop('/forum/opheffen/' . $deel->forum_id);
 		$fields['btn']->addKnop($delete);
 
-		$recount = new FormulierKnop('/forum/hertellen/' . $deel->forum_id, 'post modal ReloadPage', 'Hertellen', 'Alle posts en draden hertellen', '/famfamfam/calculator.png', true);
+		$recount = new FormulierKnop('/forum/hertellen/' . $deel->forum_id, 'post popup ReloadPage', 'Hertellen', 'Alle posts en draden hertellen', '/famfamfam/calculator.png', true);
 		$fields['btn']->addKnop($recount);
 
 		$this->addFields($fields);

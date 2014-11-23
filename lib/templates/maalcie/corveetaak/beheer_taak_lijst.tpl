@@ -9,7 +9,7 @@
 {if $taak->getIsVerwijderd()}
 		<a href="{$smarty.const.maalcieUrl}/herstel/{$taak->getTaakId()}" title="Corveetaak herstellen" class="btn rounded post">{icon get="arrow_undo"}</a>
 {else}
-		<a href="{$smarty.const.maalcieUrl}/bewerk/{$taak->getTaakId()}" title="Taak wijzigen" class="btn rounded post modal">{icon get="pencil"}</a>
+		<a href="{$smarty.const.maalcieUrl}/bewerk/{$taak->getTaakId()}" title="Taak wijzigen" class="btn rounded post popup">{icon get="pencil"}</a>
 	{if $taak->getCorveeRepetitieId()}
 		<a href="/corveerepetities/beheer/{$taak->getCorveeRepetitieId()}" title="Wijzig gekoppelde corveerepetitie" class="btn rounded modal">{icon get="calendar_edit"}</a>
 	{else}
@@ -54,7 +54,7 @@
 	<td style="width: 100px;">{$taak->getCorveeFunctie()->naam}</td>
 	<td class="niet-dik taak-{if $taak->getUid()}toegewezen{elseif  $taak->getBeginMoment() < strtotime(Instellingen::get('corvee', 'waarschuwing_taaktoewijzing_vooraf'))}warning{else}open{/if}">
 {if isset($wijzigbaar)}
-		<a href="{$smarty.const.maalcieUrl}/toewijzen/{$taak->getTaakId()}" title="Deze taak toewijzen aan een lid&#013;Sleep om te ruilen" class="btn rounded post modal dragobject static ruilen" id="taak-{$taak->getTaakId()}"{if $taak->getUid()} uid="{$taak->getUid()}">{icon get="user_green"}{else}>{icon get="user_red"}{/if}</a>
+		<a href="{$smarty.const.maalcieUrl}/toewijzen/{$taak->getTaakId()}" title="Deze taak toewijzen aan een lid&#013;Sleep om te ruilen" class="btn rounded post popup dragobject static ruilen" id="taak-{$taak->getTaakId()}"{if $taak->getUid()} uid="{$taak->getUid()}">{icon get="user_green"}{else}>{icon get="user_red"}{/if}</a>
 {/if}
 {if $taak->getUid()}
 		&nbsp;{Lid::naamLink($taak->getUid(), Instellingen::get('corvee', 'weergave_ledennamen_beheer'), Instellingen::get('corvee', 'weergave_link_ledennamen'))}

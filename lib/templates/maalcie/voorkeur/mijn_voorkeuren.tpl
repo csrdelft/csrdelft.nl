@@ -14,7 +14,7 @@ Dit kunt u hieronder aangeven, de koks zullen er dan rekening mee houden.
 <p>
 N.B. Dit is niet de plek om aan te geven dat u iets niet lekker vindt!
 </p>
-<label>Allergie/diëet:</label>{$eetwens->view(true)}
+{$eetwens->view()}
 <br />
 <table id="maalcie-tabel" class="maalcie-tabel">
 	<thead>

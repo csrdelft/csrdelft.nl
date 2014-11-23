@@ -32,7 +32,7 @@
 							</ul>
 						</li>
 					</ul>
-				</div><!-- close navbar-collapse -->
+				</div><!-- /.navbar-collapse -->
 			</div>
 		</div>
 		{$body->view()}
@@ -40,5 +40,7 @@
 			<a id="mysql_debug_toggle" onclick="$(this).replaceWith($('#mysql_debug').toggle());">DEBUG</a>
 			<div id="mysql_debug" class="pre">{getDebug()}</div>
 		{/if}
+		<div id="modal-background"></div>
+		<div id="modal" class="modal-content outer-shadow dragobject" tabindex="-1"></div>
 	</body>
 </html>

@@ -3,7 +3,7 @@
 *}
 <tr id="repetitie-row-{$repetitie->getMaaltijdRepetitieId()}">
 	<td>{strip}
-		<a href="{$smarty.const.maalcieUrl}/bewerk/{$repetitie->getMaaltijdRepetitieId()}" title="Maaltijdrepetitie wijzigen" class="btn rounded post modal">{icon get="pencil"}</a>
+		<a href="{$smarty.const.maalcieUrl}/bewerk/{$repetitie->getMaaltijdRepetitieId()}" title="Maaltijdrepetitie wijzigen" class="btn rounded post popup">{icon get="pencil"}</a>
 		<a href="/corveerepetities/maaltijd/{$repetitie->getMaaltijdRepetitieId()}" title="Corveebeheer maaltijdrepetitie" class="btn rounded modal">{icon get="chart_organisation"}</a>
 	</td>{/strip}
 	<td>{$repetitie->getStandaardTitel()}</td>

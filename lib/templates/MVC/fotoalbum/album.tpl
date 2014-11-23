@@ -1,7 +1,7 @@
 <div class="float-right">
 	{if LoginModel::mag('P_ALBUM_ADD')}
 		<a class="btn" href="/fotoalbum/uploaden/{$album->getSubDir()}">{icon get="picture_add"} Toevoegen</a>
-		<a class="btn post modal" href="/fotoalbum/toevoegen/{$album->getSubDir()}">{icon get="folder_add"} Nieuw album</a>
+		<a class="btn post popup" href="/fotoalbum/toevoegen/{$album->getSubDir()}">{icon get="folder_add"} Nieuw album</a>
 	{/if}
 	{if LoginModel::mag('P_LOGGED_IN') && $album->getFotos()!==false}
 		<a class="btn" href="/fotoalbum/downloaden/{$album->getSubDir()}" title="Download als TAR-bestand">{icon get="picture_save"} Download album</a>

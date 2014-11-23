@@ -10,10 +10,12 @@ require_once 'MVC/model/entity/happie/HappieGang.enum.php';
  * Bestelformulier voor complete menukaart.
  * 
  */
-class HappieBestellingWijzigenForm extends Formulier {
+class HappieBestellingWijzigenForm extends ModalForm {
 
 	public function __construct(HappieBestelling $bestelling) {
-		parent::__construct($bestelling, get_class($this), happieUrl . '/wijzig/' . $bestelling->bestelling_id, 'Bestelling wijzigen');
+		parent::__construct($bestelling, get_class($this), happieUrl . '/wijzig', 'Bestelling wijzigen');
+
+		$fields[] = new ObjectIdField($bestelling);
 
 		$fields[] = new HtmlComment('<div class="InputField"><label>Datum</label>' . $bestelling->datum . '</div>');
 		$fields[] = new HtmlComment('<div class="InputField"><label>Laatst gewijzigd</label>' . reldate($bestelling->laatst_gewijzigd) . '</div>');

@@ -30,17 +30,17 @@
 			</table>
 		</main>
 		{$mainmenu->view()}
-		<div id="modal-background"{if isset($modal)} style="display: block;"{/if}></div>
-		<div id="modal" class="outer-shadow dragobject savepos" style="top: {$modalcoords.top}px; left: {$modalcoords.left}px;{if isset($modal)} display: block;{/if}">
-			{if isset($modal)}
-				{$modal->view()}
-			{/if}
-		</div>
 		{if isset($minion)}
 			{$minion}
 		{/if}
 		{if $smarty.const.DEBUG AND (LoginModel::mag('P_ADMIN') OR LoginModel::instance()->isSued())}
 			<div id="mysql_debug" class="pre">{getDebug()}</div>
+		{/if}
+		<div id="modal-background"{if isset($modal)} style="display: block;"{/if}></div>
+		{if isset($modal)}
+			{$modal->view()}
+		{else}
+			<div id="modal" class="modal-content outer-shadow dragobject" tabindex="-1"></div>
 		{/if}
 	</body>
 </html>

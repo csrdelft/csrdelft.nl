@@ -4,7 +4,7 @@
 
 {if isset($deel->forum_id) AND LoginModel::mag('P_ADMIN')}
 	<div class="forumheadbtn">
-		<a href="/forum/beheren/{$deel->forum_id}" class="btn post modal" title="Deelforum beheren">{icon get="wrench_orange"} Beheren</a>
+		<a href="/forum/beheren/{$deel->forum_id}" class="btn post popup" title="Deelforum beheren">{icon get="wrench_orange"} Beheren</a>
 	</div>
 {/if}
 

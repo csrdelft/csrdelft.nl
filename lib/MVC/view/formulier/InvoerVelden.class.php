@@ -26,6 +26,7 @@
  * 		* DecimalField				Kommagetallen
  * 			- BedragField			Bedragen met 2 cijfers achter de komma
  * 	- WachtwoordWijzigenField		Wachtwoorden (oude, nieuwe, nieuwe ter bevestiging)
+ *  - ObjectIdField					PersistentEntity primary key values array
  * 
  * 
  * Meer uitbreidingen van InputField @see KeuzeVelden.class.php
@@ -50,12 +51,14 @@ abstract class InputField implements FormElement, Validator {
 	public $required = false; // mag het veld leeg zijn?
 	public $empty_null = false; // lege waarden teruggeven als null
 	public $enter_submit = false; // bij op enter drukken form submitten
+	public $escape_reset = true; // bij op escape drukken veld resetten
 	public $preview = true; // preview tonen? (waar van toepassing)
 	public $leden_mod = false; // uitzondering leeg verplicht veld voor LEDEN_MOD
 	public $autocomplete = true; // browser laten autoaanvullen?
 	public $placeholder = null; // plaats een grijze placeholdertekst in leeg veld
 	public $error = ''; // foutmelding van dit veld
 	public $onchange = null; // callback on change of value
+	public $onchange_submit = false; // bij change of value form submitten
 	public $onclick = null; // do on click
 	public $onkeydown = null; // prevent illegal character from being entered
 	public $onkeyup = null; // respond to keyboard strokes
@@ -290,6 +293,11 @@ abstract class InputField implements FormElement, Validator {
 				}
 				break;
 			case 'onchange':
+				if ($this->enter_submit) {
+					$this->onchange .= <<<JS
+this.form.submit();
+JS;
+				}
 				if ($this->onchange != null) {
 					return 'onchange="' . $this->onchange . '"';
 				}
@@ -307,8 +315,14 @@ abstract class InputField implements FormElement, Validator {
 			case 'onkeyup':
 				if ($this->enter_submit) {
 					$this->onkeyup .= <<<JS
-if (event.keyCode == 13) { // enter
+if (event.keyCode === 13) { // enter
 	this.form.submit();
+}
+else if (event.keyCode === 27) { // escape
+	var orig = $(this).attr('origvalue');
+	if (typeof orig == 'string') {
+		$(this).val(orig);
+	}
 }
 JS;
 				}
@@ -1386,12 +1400,48 @@ class WachtwoordWijzigenField extends InputField {
 		echo '</div>';
 	}
 
-	/**
-	 * @override parent
-	 * @return string
-	 */
-	public function getJavascript() {
-		return '';
+}
+
+class ObjectIdField extends InputField {
+
+	public function __construct(PersistentEntity $entity) {
+		parent::__construct(get_class($entity), $entity->getValues(true), null, $entity);
 	}
+
+	public function getValue() {
+		if ($this->isPosted()) {
+			$this->value = filter_input(INPUT_POST, $this->name, FILTER_SANITIZE_STRING, FILTER_REQUIRE_ARRAY);
+		}
+		return $this->value;
+	}
+
+	public function validate() {
+		if (!parent::validate()) {
+			return false;
+		}
+		foreach ($this->model->getPrimaryKey() as $i => $key) {
+			if (!isset($this->value[$i])) {
+				$this->error = 'Missing part of objectId: ' . $key;
+			}
+		}
+		return $this->error === '';
+	}
+
+	public function view() {
+		echo $this->getDiv();
+		echo $this->getErrorDiv();
+		foreach ($this->value as $i => $value) {
+			echo '<input type="string" name="' . $this->name . '[]" value="' . $value . '" />';
+		}
+		echo '</div>';
+	}
+
+}
+
+class RequiredObjectIdField extends ObjectIdField {
+
+	public $required = true;
+	public $readonly = true;
+	public $hidden = true;
 
 }
