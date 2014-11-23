@@ -18,7 +18,7 @@ class DataTable extends TabsForm {
 	private $groupByColumn;
 	private $groupByLocked = false;
 	protected $defaultLength = -1;
-	protected $columns = array();
+	private $columns = array();
 	private $editable = array();
 	protected $settings = array(
 		'dom'		 => 'Tfrtpli',
@@ -87,7 +87,7 @@ class DataTable extends TabsForm {
 			switch ($def[0]) {
 
 				case T::Boolean:
-				case T::Integer:
+				//case T::Integer: // usually in unsupported format and breaks group by
 				case T::Float:
 					$type = 'html-num-fmt';
 					break;
@@ -100,7 +100,7 @@ class DataTable extends TabsForm {
 					break;
 
 				default:
-					$type = $def[0];
+					$type = 'html';
 			}
 
 			$this->addColumn($attribute, $type);
@@ -291,7 +291,6 @@ JSON
 					/*
 					 var oTable = $('#example').dataTable();
 					 var keys = new $.fn.dataTable.KeyTable( oTable );
-							 
 					 keys.fnSetPosition( 1, 1 );
 					 */
 					return json.data;
