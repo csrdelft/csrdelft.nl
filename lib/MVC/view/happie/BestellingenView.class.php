@@ -40,12 +40,6 @@ class HappieBestellingenView extends DataTable {
 		parent::__construct(HappieBestellingenModel::orm, get_class($this), $titel, $groupByColumn);
 		$this->dataUrl = happieUrl . $dataUrl;
 
-		$this->editableColumn('aantal', happieUrl . '/aantal');
-		$this->editableColumn('aantal_geserveerd', happieUrl . '/geserveerd');
-		$this->editableColumn('serveer_status', happieUrl . '/serveerstatus', HappieServeerStatus::getSelectOptions());
-		$this->editableColumn('financien_status', happieUrl . '/financienstatus', HappieFinancienStatus::getSelectOptions());
-		$this->editableColumn('opmerking', happieUrl . '/opmerking');
-
 		$this->addColumn('gang', 'html', 'menukaart_item');
 		$this->addColumn('menu_groep', 'html', 'menukaart_item');
 

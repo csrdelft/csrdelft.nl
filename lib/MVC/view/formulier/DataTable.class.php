@@ -19,7 +19,6 @@ class DataTable extends TabsForm {
 	private $groupByLocked = false;
 	protected $defaultLength = -1;
 	private $columns = array();
-	private $editable = array();
 	protected $settings = array(
 		'dom'		 => 'Tfrtpli',
 		'tableTools' => array(
@@ -162,23 +161,6 @@ class DataTable extends TabsForm {
 		$this->columns[$name]['searchable'] = (bool) $searchable;
 	}
 
-	protected function editableColumn($name, $url, array $options = null, $editable = true) {
-		if ($editable) {
-			$this->editable[$name]['url'] = $url;
-
-			if ($options === null) {
-				$this->editable[$name]['type'] = 'textarea';
-				$this->editable[$name]['onblur'] = 'submit';
-			} else {
-				$this->editable[$name]['type'] = 'select';
-				$this->editable[$name]['data'] = json_encode($options);
-				$this->editable[$name]['onblur'] = 'submit';
-			}
-		} else {
-			unset($this->editable[$name]);
-		}
-	}
-
 	protected function getSettings() {
 
 		// set view modus: paging or scrolling
@@ -224,12 +206,6 @@ class DataTable extends TabsForm {
 		foreach ($this->columns as $name => $def) {
 			if (!isset($def['visible']) OR $def['visible'] === true) {
 
-				// translate editable columns index
-				if (isset($this->editable[$name])) {
-					$this->editable[$visibleIndex] = $this->editable[$name];
-					unset($this->editable[$name]);
-				}
-
 				// default order by first visible orderable column
 				if (!isset($this->settings['order']) AND ! (isset($def['orderable']) AND $def['orderable'] === false)) {
 					$this->settings['order'] = array(
@@ -263,7 +239,6 @@ class DataTable extends TabsForm {
 			var lastUpdate<?= $this->tableId; ?>;
 
 			$(document).ready(function () {
-				var editableColumns = <?= json_encode($this->editable); ?>;
 
 				var fnAjaxUpdateCallback = function (json) {
 					lastUpdate<?= $this->tableId; ?> = Math.round(new Date().getTime() / 1000);
@@ -288,79 +263,49 @@ class DataTable extends TabsForm {
 					} catch (e) {
 						// missing js
 					}
-		<?php if ($this->editable) { ?>
-						try {
-							// voor elke td check of deze editable moet zijn
-							$(tr).children().each(function (columnIndex, td) {
-								if (columnIndex in editableColumns) {
+				};
 
-									// gebruik geen knopjes bij onblur submit
-									var onblur = ('submit' !== editableColumns[columnIndex].onblur);
-
-									$(td).addClass('editable').editable(editableColumns[columnIndex].url, {
-										type: editableColumns[columnIndex].type,
-										data: editableColumns[columnIndex].data,
-										onblur: editableColumns[columnIndex].onblur,
-										//event: 'mouseover',
-										placeholder: '',
-										tooltip: 'Klik om te bewerken',
-										cssclass: 'InlineForm',
-										submit: (onblur ? '<a class="btn submit float-left" title="Invoer opslaan"><img src="<?= CSR_PICS; ?>/famfamfam/accept.png" class="icon" width="16" height="16" /></a>' : ''),
-										cancel: (onblur ? '<a class="btn submit float-right" title="Niet opslaan"><img src="<?= CSR_PICS; ?>/famfamfam/delete.png" class="icon" width="16" height="16" /></a>' : ''),
-										indicator: '<img src="<?= CSR_PICS; ?>/layout/loading-arrows.gif" class="icon" width="16" height="16" />',
-										submitdata: {
-											id: data.objectId,
-											lastUpdate: lastUpdate<?= $this->tableId; ?>
-										},
-										onerror: function (settings, original, xhr) {
-											console.log(settings);
-											console.log(original);
-											console.log(xhr);
-											console.log(this);
-										},
-										callback: function (value, settings) {
-											console.log(value);
-											console.log(settings);
-											console.log(this);
-										}
-									});
-								}
-							});
-						} catch (e) {
-							// missing js
-						}
-		<?php } ?>
-				}; // end fnCreatedRowCallback
 				var tableId = '#<?= $this->tableId; ?>';
 				var oTable = $(tableId).DataTable(<?= $settingsJson; ?>);
 
 				// Keyboard multiselect support with spacebar
+				var keyshortcuts = [<?php
+		$comma = false;
+		foreach ($this->getFields() as $field) {
+			if ($field instanceof DataTableKnop AND is_int($field->keyshortcut)) {
+				if ($comma) {
+					echo ',';
+				} else {
+					$comma = true;
+				}
+				echo $field->keyshortcut;
+			}
+		}
+		?>];
 				var keys = new $.fn.dataTable.KeyTable($(tableId));
 				$(document).keydown(function (event) {
 					if (event.keyCode === 32) { // space
 						event.preventDefault();
 					}
+					if (!bCtrlPressed) {
+						return;
+					}
+					if (event.keyCode in keyshortcuts) {
+						event.preventDefault();
+					}
 				});
 				$(document).keyup(function (event) {
 					if (event.keyCode === 32) { // space
-						event.preventDefault();
 						fnMultiSelect(event, $(keys.fnGetCurrentTD()).parent());
 						updateToolbar();
 					}
-					else if (event.keyCode === 13) { // enter
-						$(keys.fnGetCurrentTD()).trigger('click');
+					if (!bCtrlPressed) {
+						return;
 					}
-				});
-				// Set keyboard focus to editable cell
-				$(tableId + ' tbody').on('click', 'td.editable', function (event) {
-					//TODO fix focus editable
-					/*
-					 var x = oTable.cell(this).index();
-					 console.log(x);
-					 var y = oTable.row($(this).parent()).index();
-					 console.log(y);
-					 keys.fnSetPosition(x, y);
-					 */
+					event.preventDefault();
+					if (event.keyCode === 13) { // enter
+						//$(keys.fnGetCurrentTD()).trigger('click');
+					}
 				});
 
 				// Multiple selection of group rows
@@ -434,26 +379,10 @@ JS;
 	}
 
 	public function getJavascript() {
-		$js = <<<JS
+		return <<<JS
 var tableId = '#{$this->tableId}';
-$(document).keydown(function (event) {
-	if (!bCtrlPressed) {
-		return;
-	}
-JS;
-		foreach ($this->getFields() as $field) {
-			if ($field instanceof DataTableKnop AND is_int($field->keyshortcut)) {
-				$js.= <<<JS
-	if (event.keyCode === {$field->keyshortcut}) {
-		$('#{$field->getId()}').trigger('click');
-	}
-JS;
-			}
-		}
-		$js .= <<<JS
-});
-JS;
-		return $js . parent::getJavascript();
+JS
+				. parent::getJavascript();
 	}
 
 }
