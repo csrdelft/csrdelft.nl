@@ -333,7 +333,7 @@ class DataTable extends TabsForm {
 				var tableId = '#<?= $this->tableId; ?>';
 				var oTable = $(tableId).DataTable(<?= $settingsJson; ?>);
 
-				// Keyboard support
+				// Keyboard multiselect support with spacebar
 				var keys = new $.fn.dataTable.KeyTable($(tableId));
 				$(document).keydown(function (event) {
 					if (event.keyCode === 32) { // space
@@ -344,7 +344,15 @@ class DataTable extends TabsForm {
 					if (event.keyCode === 32) { // space
 						event.preventDefault();
 						fnMultiSelect(event, $(keys.fnGetCurrentTD()).parent());
+						updateToolbar();
 					}
+				});
+				// Multiple selection of group rows
+				$(tableId + ' tbody').on('click', 'tr', function (event) {
+					if (bShiftPressed || bCtrlPressed || !$(this).hasClass('group')) {
+						fnMultiSelect(event, $(this));
+					}
+					updateToolbar();
 				});
 
 				// Toolbar update on row selection
@@ -369,9 +377,11 @@ class DataTable extends TabsForm {
 
 				// Group by column
 				$(tableId + '.groupByColumn tbody').on('click', 'tr.group', function (event) {
-					fnGroupExpandCollapse(oTable, $(tableId), $(this));
+					if (!bShiftPressed && !bCtrlPressed) {
+						fnGroupExpandCollapse(oTable, $(tableId), $(this));
+					}
 				});
-				$(tableId + '.groupByColumn thead').on('click', 'tr th.toggle-group', function (event) {
+				$(tableId + '.groupByColumn thead').on('click', 'th.toggle-group:first', function (event) {
 					fnGroupExpandCollapseAll(oTable, $(tableId), $(this));
 				});
 		<?php if (!$this->groupByLocked) { ?>
@@ -397,6 +407,7 @@ class DataTable extends TabsForm {
 function () {
 	var selectie = fnGetSelection(tableId);
 	var aantal = selectie.length;
+	console.log(selectie);
 JS;
 		foreach ($this->getFields() as $field) {
 			if ($field instanceof DataTableKnop) {

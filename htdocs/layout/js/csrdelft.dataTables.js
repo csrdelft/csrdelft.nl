@@ -38,13 +38,14 @@ function fnGetSelectedObjectId(tableId) {
 }
 
 /**
- * Used for keyboard multiselect.
- * Behaves exactly the same as OS and TableTools.
+ * Multiselection over groups and with keyboard (spacebar).
+ * Behaves exactly the same as OS and TableTools by mouse.
  */
 function fnMultiSelect(event, tr) {
 	if (tr.children(':first').hasClass('dataTables_empty')) {
 		return;
 	}
+	$('.DTTT_selected').removeClass('DTTT_selected');
 	if (bShiftPressed) {
 		// Calculate closest selected row
 		var prevAll = tr.prevAll(':not(.group)');
@@ -101,8 +102,6 @@ function fnMultiSelect(event, tr) {
 			tr.addClass('selected');
 		}
 	}
-	// Prevent default select action
-	//document.getSelection().removeAllRanges();
 }
 
 function fnGetGroupByColumn(table) {
@@ -126,7 +125,7 @@ function fnGroupByColumn(event, settings) {
 	dataTable.column(columnId).visible(false);
 	table.attr('groupbycolumn', columnId);
 	table.data('collapsedGroups', []);
-	$('thead tr th', table).first().addClass('toggle-group  toggle-group-expanded');
+	$('thead tr th:first', table).addClass('toggle-group  toggle-group-expanded');
 	settings.aaSortingFixed = newOrder.slice(); // copy by value
 	bOrderDraw = true;
 	dataTable.draw();
@@ -158,11 +157,11 @@ function fnGroupByColumnDraw(event, settings) {
 			if (last !== group) {
 				// Create group rows for collapsed groups
 				while (collapse.length > 0 && collapse[0].localeCompare(group) < 0) {
-					groupRow = $('<tr class="group"><td class="toggle-group"></td><td>' + collapse[0] + '</td>' + colspan + '</tr>').data('groupData', collapse[0]);
+					groupRow = $('<tr class="group"><td class="toggle-group"></td><td class="group-label">' + collapse[0] + '</td>' + colspan + '</tr>').data('groupData', collapse[0]);
 					rows.eq(i).before(groupRow);
 					collapse.shift();
 				}
-				groupRow = $('<tr class="group"><td class="toggle-group toggle-group-expanded"></td><td>' + group + '</td>' + colspan + '</tr>').data('groupData', group);
+				groupRow = $('<tr class="group"><td class="toggle-group toggle-group-expanded"></td><td class="group-label">' + group + '</td>' + colspan + '</tr>').data('groupData', group);
 				rows.eq(i).before(groupRow);
 				last = group;
 			}
@@ -171,7 +170,7 @@ function fnGroupByColumnDraw(event, settings) {
 	// Create group rows for collapsed groups
 	var tbody = table.children('tbody:first');
 	collapse.forEach(function (group) {
-		groupRow = $('<tr class="group"><td class="toggle-group"></td><td>' + group + '</td>' + colspan + '</tr>').data('groupData', group);
+		groupRow = $('<tr class="group"><td class="toggle-group"></td><td class="group-label">' + group + '</td>' + colspan + '</tr>').data('groupData', group);
 		tbody.append(groupRow);
 	});
 }
@@ -202,7 +201,7 @@ function fnGroupExpandCollapse(dataTable, table, tr) {
 	table.data('collapsedGroups', collapse.sort());
 	bCtrlPressed = false; // prevent order callback weird effect
 	dataTable.draw();
-	fnHideEmptyCollapsedAll(table, $('thead tr th', table).first());
+	fnHideEmptyCollapsedAll(table, $('thead tr th:first', table));
 }
 
 function fnGroupExpandCollapseAll(dataTable, table, th) {
