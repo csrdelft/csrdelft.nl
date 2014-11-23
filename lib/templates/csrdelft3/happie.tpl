@@ -4,8 +4,7 @@
 		{include file='html_head.tpl'}
 	</head>
 	<body role="document">
-		<!-- Fixed navbar -->
-		<div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+		<div class="navbar navbar-inverse" role="navigation"><!-- navbar-fixed-top -->
 			<div class="container">
 				<div class="navbar-header">
 					<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
@@ -33,12 +32,9 @@
 							</ul>
 						</li>
 					</ul>
-				</div><!--/.nav-collapse -->
+				</div><!-- close navbar-collapse -->
 			</div>
 		</div>
-		<br />
-		<br />
-		<br />
 		{$body->view()}
 		{if $smarty.const.DEBUG AND (LoginModel::mag('P_ADMIN') OR LoginModel::instance()->isSued())}
 			<a id="mysql_debug_toggle" onclick="$(this).replaceWith($('#mysql_debug').toggle());">DEBUG</a>

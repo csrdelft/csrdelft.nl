@@ -45,7 +45,7 @@ class HappieBestellingWijzigenForm extends Formulier {
 		$fields[] = new SelectField('financien_status', $bestelling->financien_status, 'Financien status', HappieFinancienStatus::getSelectOptions());
 
 		$fields[] = new TextareaField('opmerking', $bestelling->opmerking, 'Allergie/Opmerking');
-		$fields[] = new FormDefaultKnoppen(happieUrl);
+		$fields[] = new FormDefaultKnoppen(HTTP_REFERER);
 
 		$this->addFields($fields);
 	}

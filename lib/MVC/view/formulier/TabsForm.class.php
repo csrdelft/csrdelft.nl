@@ -85,7 +85,10 @@ class TabsForm extends Formulier {
 	}
 
 	public function getJavascript() {
-		$js = "$('#{$this->formId}-tabs').tabs();";
+		$js = <<<JS
+
+$('#{$this->formId}-tabs').tabs();
+JS;
 		if ($this->onhoverintent) {
 			$js .= <<<JS
 try {

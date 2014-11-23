@@ -346,6 +346,9 @@ class DataTable extends TabsForm {
 						fnMultiSelect(event, $(keys.fnGetCurrentTD()).parent());
 						updateToolbar();
 					}
+					else if (event.keyCode === 13) { // enter
+						$(keys.fnGetCurrentTD()).trigger('click');
+					}
 				});
 				// Multiple selection of group rows
 				$(tableId + ' tbody').on('click', 'tr', function (event) {
@@ -418,7 +421,25 @@ JS;
 	}
 
 	public function getJavascript() {
-		$js = "var tableId = '#{$this->tableId}';\n";
+		$js = <<<JS
+var tableId = '#{$this->tableId}';
+$(document).keydown(function (event) {
+	if (!bCtrlPressed) {
+		return;
+	}
+JS;
+		foreach ($this->getFields() as $field) {
+			if ($field instanceof DataTableKnop AND is_int($field->keyshortcut)) {
+				$js.= <<<JS
+	if (event.keyCode === {$field->keyshortcut}) {
+		$('#{$field->getId()}').trigger('click');
+	}
+JS;
+			}
+		}
+		$js .= <<<JS
+});
+JS;
 		return $js . parent::getJavascript();
 	}
 
@@ -427,12 +448,15 @@ JS;
 class DataTableKnop extends FormulierKnop {
 
 	public $onclick;
+	public $keyshortcut;
 	private $multiplicity;
 
-	public function __construct($multiplicity, $url, $action, $label, $title, $icon, $float_left = true) {
-		parent::__construct($url, $action, $label, $title, $icon, $float_left);
+	public function __construct($multiplicity, $url, $action, $key, $label, $title, $css_class, $float_left = true) {
+		parent::__construct($url, $action, $label, $title, null, $float_left);
 		$this->multiplicity = $multiplicity;
+		$this->keyshortcut = $key;
 		$this->css_classes[] = 'DTTT_button';
+		$this->css_classes[] = $css_class;
 	}
 
 	public function getUpdateToolbar() {
@@ -444,7 +468,10 @@ JS;
 
 	public function getJavascript() {
 		if (isset($this->onclick)) {
-			return "$('#{$this->getId()}').unbind('click.onclick').bind('click.onclick', function() {{$this->onclick}});" . parent::getJavascript();
+			return parent::getJavascript() . <<<JS
+
+$('#{$this->getId()}').unbind('click.onclick').bind('click.onclick', function() {{$this->onclick}});
+JS;
 		}
 		return parent::getJavascript();
 	}
