@@ -168,11 +168,11 @@ class DataTable extends TabsForm {
 
 			if ($options === null) {
 				$this->editable[$name]['type'] = 'textarea';
-				$this->editable[$name]['onblur'] = 'cancel'; //submit
+				$this->editable[$name]['onblur'] = 'submit';
 			} else {
 				$this->editable[$name]['type'] = 'select';
 				$this->editable[$name]['data'] = json_encode($options);
-				$this->editable[$name]['onblur'] = 'cancel';
+				$this->editable[$name]['onblur'] = 'submit';
 			}
 		} else {
 			unset($this->editable[$name]);
@@ -301,6 +301,7 @@ class DataTable extends TabsForm {
 										type: editableColumns[columnIndex].type,
 										data: editableColumns[columnIndex].data,
 										onblur: editableColumns[columnIndex].onblur,
+										//event: 'mouseover',
 										placeholder: '',
 										tooltip: 'Klik om te bewerken',
 										cssclass: 'InlineForm',
@@ -350,6 +351,18 @@ class DataTable extends TabsForm {
 						$(keys.fnGetCurrentTD()).trigger('click');
 					}
 				});
+				// Set keyboard focus to editable cell
+				$(tableId + ' tbody').on('click', 'td.editable', function (event) {
+					//TODO fix focus editable
+					/*
+					 var x = oTable.cell(this).index();
+					 console.log(x);
+					 var y = oTable.row($(this).parent()).index();
+					 console.log(y);
+					 keys.fnSetPosition(x, y);
+					 */
+				});
+
 				// Multiple selection of group rows
 				$(tableId + ' tbody').on('click', 'tr', function (event) {
 					if (bShiftPressed || bCtrlPressed || !$(this).hasClass('group')) {
