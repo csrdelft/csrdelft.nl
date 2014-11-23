@@ -42,7 +42,7 @@ class HappieBestellingenView extends DataTable {
 
 		$this->editableColumn('aantal', happieUrl . '/aantal');
 		$this->editableColumn('aantal_geserveerd', happieUrl . '/geserveerd');
-		$this->editableColumn('serveer_status', happieUrl . '/serveerstatus', HappieServeerStatus::getTypeOptions());
+		$this->editableColumn('serveer_status', happieUrl . '/serveerstatus', HappieServeerStatus::getSelectOptions());
 		$this->editableColumn('financien_status', happieUrl . '/financienstatus', HappieFinancienStatus::getSelectOptions());
 		$this->editableColumn('opmerking', happieUrl . '/opmerking');
 

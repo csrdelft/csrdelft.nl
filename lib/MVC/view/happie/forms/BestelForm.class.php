@@ -117,7 +117,7 @@ class HappieBestelForm extends TabsForm {
 <div id="expand_{$item->item_id}" style="display:none;">
 HTML
 					);
-					$opm = new TextareaField('opmerking' . $item->item_id, $opmerking);
+					$opm = new TextareaField('opmerking' . $item->item_id, $opmerking, null);
 					$opm->placeholder = 'Allergie van klant / opmerking';
 					$fields[] = $opm;
 

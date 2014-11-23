@@ -64,7 +64,7 @@ class DataTable extends TabsForm {
 		parent::__construct(new $class(), $tableId . '_toolbar', null, $titel);
 
 		$this->tableId = $tableId;
-		$this->css_classes[] = 'display initKeys';
+		$this->css_classes[] = 'display';
 		if ($groupByColumn !== false) {
 			$this->css_classes[] = 'groupByColumn';
 		}
@@ -168,9 +168,11 @@ class DataTable extends TabsForm {
 
 			if ($options === null) {
 				$this->editable[$name]['type'] = 'textarea';
+				$this->editable[$name]['onblur'] = 'submit';
 			} else {
 				$this->editable[$name]['type'] = 'select';
 				$this->editable[$name]['data'] = json_encode($options);
+				$this->editable[$name]['onblur'] = 'cancel';
 			}
 		} else {
 			unset($this->editable[$name]);
@@ -284,12 +286,17 @@ JSON
 					lastUpdate<?= $this->tableId; ?> = Math.round(new Date().getTime() / 1000);
 					var table = $('#<?= $this->tableId; ?>');
 					console.log(json);
-					if (table.hasClass('initKeys')) {
-						table.removeClass('initKeys');
-						new $.fn.dataTable.KeyTable(table);
-					}
+
+					// TODO: remember focus position on update
+					/*
+					 var oTable = $('#example').dataTable();
+					 var keys = new $.fn.dataTable.KeyTable( oTable );
+							 
+					 keys.fnSetPosition( 1, 1 );
+					 */
 					return json.data;
 				};
+
 				var fnCreatedRowCallback = function (tr, data, index) {
 					$(tr).attr('data-objectid', data.objectId);
 					if ('detailSource' in data) {
@@ -300,72 +307,80 @@ JSON
 					} catch (e) {
 						// missing js
 					}
-		<?php
-		if ($this->editable) {
-			?>
+		<?php if ($this->editable) { ?>
 						try {
 							// voor elke td check of deze editable moet zijn
 							$(tr).children().each(function (columnIndex, td) {
 								if (columnIndex in editableColumns) {
-									// zet submit url etc.
-									$(td).editable(editableColumns[columnIndex].url, {
+
+									// gebruik geen knopjes bij onblur submit
+									//var onblur = ('submit' !== editableColumns[columnIndex].onblur);
+
+									$(td).addClass('editable').editable(editableColumns[columnIndex].url, {
 										type: editableColumns[columnIndex].type,
-										data: function (value, settings) {
-											if ('data' in editableColumns[columnIndex]) {
-												return editableColumns[columnIndex].data;
-											}
-											/* Convert <br> to newline. */
-											return value.replace(/<br[\s\/]?>/gi, '\n');
-										},
+										data: editableColumns[columnIndex].data,
+										onblur: editableColumns[columnIndex].onblur,
 										placeholder: '',
 										tooltip: 'Klik om te bewerken',
 										cssclass: 'InlineForm',
-										onblur: 'submit', // gebruik knopjes bij onblur: 'cancel'
-										//submit: '<a class="btn submit float-left" title="Invoer opslaan"><img src="<?= CSR_PICS; ?>/famfamfam/accept.png" class="icon" width="16" height="16" /></a>',
-										//cancel: '<a class="btn submit float-right" title="Niet opslaan"><img src="<?= CSR_PICS; ?>/famfamfam/delete.png" class="icon" width="16" height="16" /></a>',
+										//submit: (onblur ? '<a class="btn submit float-left" title="Invoer opslaan"><img src="<?= CSR_PICS; ?>/famfamfam/accept.png" class="icon" width="16" height="16" /></a>' : ''),
+										//cancel: (onblur ? '<a class="btn submit float-right" title="Niet opslaan"><img src="<?= CSR_PICS; ?>/famfamfam/delete.png" class="icon" width="16" height="16" /></a>' : ''),
 										indicator: '<img src="<?= CSR_PICS; ?>/layout/loading-arrows.gif" class="icon" width="16" height="16" />',
 										submitdata: {
 											id: data.objectId,
 											lastUpdate: lastUpdate<?= $this->tableId; ?>
 										},
-										callback: function (value, settings) {
+										onerror: function (settings, original, xhr) {
+											console.log(settings);
+											console.log(original);
+											console.log(xhr);
 											console.log(this);
+										},
+										callback: function (value, settings) {
 											console.log(value);
 											console.log(settings);
+											console.log(this);
 										}
 									});
-									$(td).addClass('editable');
 								}
 							});
 						} catch (e) {
 							// missing js
 						}
 		<?php } ?>
-				};
+				}; // end fnCreatedRowCallback
 				var tableId = '#<?= $this->tableId; ?>';
-				var table = $(tableId).DataTable(<?= $settingsJson; ?>);
-				// Selection of rows
+				var oTable = $(tableId).DataTable(<?= $settingsJson; ?>);
+
+				// Keyboard support
+				var keys = new $.fn.dataTable.KeyTable($(tableId));
+
+				// Toolbar update on row selection
 				var updateToolbar = <?= $this->getUpdateToolbar(); ?>;
 				$(tableId).on('draw.dt', updateToolbar);
 				$(tableId + ' tbody').on('click', 'tr', updateToolbar);
 				$('.DTTT_button_text').on('click', updateToolbar);
+
 				// Toolbar above table
 				$(tableId + '_toolbar').prependTo(tableId + '_wrapper');
 				$('.DTTT_container').children().appendTo(tableId + '_toolbar');
 				$('.DTTT_container').remove();
+
 				// Toolbar table filter formatting
 				$(tableId + '_filter input').attr('placeholder', 'Zoeken').unwrap();
 				$(tableId + '_filter').appendTo(tableId + '_toolbar');
+
 				// Opening and closing details
 				$(tableId + ' tbody').on('click', 'tr td.toggle-childrow', function (event) {
-					fnChildRow(table, $(this));
+					fnChildRow(oTable, $(this));
 				});
+
 				// Group by column
 				$(tableId + '.groupByColumn tbody').on('click', 'tr.group', function (event) {
-					fnGroupExpandCollapse(table, $(tableId), $(this));
+					fnGroupExpandCollapse(oTable, $(tableId), $(this));
 				});
 				$(tableId + '.groupByColumn thead').on('click', 'tr th.toggle-group', function (event) {
-					fnGroupExpandCollapseAll(table, $(tableId), $(this));
+					fnGroupExpandCollapseAll(oTable, $(tableId), $(this));
 				});
 		<?php if (!$this->groupByLocked) { ?>
 					$(tableId + '.groupByColumn').on('order.dt', fnGroupByColumn);

@@ -160,7 +160,7 @@ class RequiredEntityDropDown extends EntityDropDown {
  */
 class GeslachtField extends SelectField {
 
-	public function __construct($name, $value, $description = null) {
+	public function __construct($name, $value, $description) {
 		parent::__construct($name, $value, $description, array('m' => 'Man', 'v' => 'Vrouw'));
 	}
 
@@ -171,7 +171,7 @@ class GeslachtField extends SelectField {
  */
 class JaNeeField extends SelectField {
 
-	public function __construct($name, $value, $description = null) {
+	public function __construct($name, $value, $description) {
 		parent::__construct($name, $value, $description, array('ja' => 'Ja', 'nee' => 'Nee'));
 	}
 
@@ -182,7 +182,7 @@ class JaNeeField extends SelectField {
  */
 class WeekdagField extends SelectField {
 
-	public function __construct($name, $value, $description = null) {
+	public function __construct($name, $value, $description) {
 		parent::__construct($name, $value, $description, array('0' => 'zondag', '1' => 'maandag', '2' => 'dinsdag', '3' => 'woensdag', '4' => 'donderdag', '5' => 'vrijdag', '6' => 'zaterdag'));
 	}
 
@@ -197,7 +197,7 @@ class WeekdagField extends SelectField {
  */
 class VerticaleField extends SelectField {
 
-	public function __construct($name, $value, $description = null) {
+	public function __construct($name, $value, $description) {
 		$verticalen = array();
 		foreach (VerticalenModel::instance()->find() as $v) {
 			$verticalen[$v->id] = $v->naam;
@@ -209,7 +209,7 @@ class VerticaleField extends SelectField {
 
 class KerkField extends SelectField {
 
-	public function __construct($name, $value, $description = null) {
+	public function __construct($name, $value, $description) {
 		$kerken = array(
 			'PKN', 'PKN Hervormd', 'PKN Gereformeerd', 'PKN Gereformeerde Bond', 'Hersteld Hervormd',
 			'Evangelisch', 'Volle Evangelie Gemeente', 'Gereformeerd Vrijgemaakt', 'Nederlands Gereformeerd',
@@ -494,7 +494,7 @@ class VinkField extends InputField {
 
 	public $label;
 
-	public function __construct($name, $value, $description = null, $label = null, $model = null) {
+	public function __construct($name, $value, $description, $label = null, $model = null) {
 		parent::__construct($name, $value, $description, $model);
 		$this->label = $label;
 	}

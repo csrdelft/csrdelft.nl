@@ -68,7 +68,7 @@ abstract class InputField implements FormElement, Validator {
 	public $blacklist = null; // array met niet tegestane waarden
 	public $whitelist = null; // array met exclusief toegestane waarden
 
-	public function __construct($name, $value, $description = null, $model = null) {
+	public function __construct($name, $value, $description, $model = null) {
 		$this->model = $model;
 		$this->name = $name;
 		$this->origvalue = $value;
@@ -397,7 +397,7 @@ JS;
  */
 class TextField extends InputField {
 
-	public function __construct($name, $value = null, $description = null, $max_len = 255, $min_len = 0, $model = null) {
+	public function __construct($name, $value, $description, $max_len = 255, $min_len = 0, $model = null) {
 		parent::__construct($name, htmlspecialchars_decode($value), $description, $model);
 		$this->max_len = (int) $max_len;
 		$this->min_len = (int) $min_len;
@@ -474,7 +474,7 @@ class RequiredLandField extends LandField {
 
 class RechtenField extends TextField {
 
-	public function __construct($name, $value = null, $description = null) {
+	public function __construct($name, $value, $description) {
 		parent::__construct($name, $value, $description);
 		$this->suggestions = AccessModel::instance()->getPermissionSuggestions();
 		$this->title = 'Met , en + voor respectievelijk OR en AND. Gebruik | voor OR binnen AND (alsof er haakjes omheen staan)';
@@ -582,7 +582,7 @@ class LidField extends TextField {
 	// geaccepteerde input: 'leden', 'oudleden', 'alleleden', 'allepersonen', 'nobodies'
 	private $zoekin;
 
-	public function __construct($name, $value, $description = null, $zoekin = 'leden') {
+	public function __construct($name, $value, $description, $zoekin = 'leden') {
 		$naam = Lid::naamLink($value, 'full', 'plain');
 		if ($naam !== false) {
 			$value = $naam;
@@ -1201,7 +1201,7 @@ class TelefoonField extends TextField {
  */
 class TextareaField extends TextField {
 
-	public function __construct($name, $value, $description = null, $rows = 3, $max_len = null, $min_len = null) {
+	public function __construct($name, $value, $description, $rows = 3, $max_len = null, $min_len = null) {
 		parent::__construct($name, $value, $description, $max_len, $min_len);
 		$this->rows = (int) $rows;
 		$this->css_classes[] = 'AutoSize textarea-transition';
@@ -1244,7 +1244,7 @@ class CsrBBPreviewField extends TextareaField {
 
 	public $previewOnEnter = false;
 
-	public function __construct($name, $value, $description = null, $rows = 5, $max_len = null, $min_len = null) {
+	public function __construct($name, $value, $description, $rows = 5, $max_len = null, $min_len = null) {
 		parent::__construct($name, $value, $description, $rows, $max_len, $min_len);
 	}
 

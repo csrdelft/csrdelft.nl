@@ -152,37 +152,47 @@ class HappieBestellingenController extends AclController {
 	}
 
 	public function aantal(HappieBestelling $bestelling) {
-		$aantal = filter_input(INPUT_POST, 'value', FILTER_SANITIZE_NUMBER_INT);
-		$bestelling->aantal = (int) $aantal;
-		$this->model->update($bestelling);
+		$field = new IntField('value', $bestelling->aantal, null);
+		if ($this->isPosted() AND $field->validate()) {
+			$bestelling->aantal = $field->getValue();
+			$this->model->update($bestelling);
+		}
 		$this->view = new JsonResponse($bestelling->aantal);
 	}
 
 	public function geserveerd(HappieBestelling $bestelling) {
-		$aantal = filter_input(INPUT_POST, 'value', FILTER_SANITIZE_NUMBER_INT);
-		$bestelling->aantal_geserveerd = (int) $aantal;
-		$this->model->update($bestelling);
+		$field = new IntField('value', $bestelling->aantal_geserveerd, null);
+		if ($this->isPosted() AND $field->validate()) {
+			$bestelling->aantal_geserveerd = $field->getValue();
+			$this->model->update($bestelling);
+		}
 		$this->view = new JsonResponse($bestelling->aantal_geserveerd);
 	}
 
 	public function serveerstatus(HappieBestelling $bestelling) {
-		$status = filter_input(INPUT_POST, 'value', FILTER_SANITIZE_STRING);
-		$bestelling->serveer_status = $status;
-		$this->model->update($bestelling);
+		$field = new SelectField('value', $bestelling->serveer_status, null, HappieServeerStatus::getSelectOptions());
+		if ($this->isPosted() AND $field->validate()) {
+			$bestelling->serveer_status = $field->getValue();
+			$this->model->update($bestelling);
+		}
 		$this->view = new JsonResponse($bestelling->serveer_status);
 	}
 
 	public function financienstatus(HappieBestelling $bestelling) {
-		$status = filter_input(INPUT_POST, 'value', FILTER_SANITIZE_STRING);
-		$bestelling->financien_status = $status;
-		$this->model->update($bestelling);
+		$field = new SelectField('value', $bestelling->financien_status, null, HappieFinancienStatus::getSelectOptions());
+		if ($this->isPosted() AND $field->validate()) {
+			$bestelling->financien_status = $field->getValue();
+			$this->model->update($bestelling);
+		}
 		$this->view = new JsonResponse($bestelling->financien_status);
 	}
 
 	public function opmerking(HappieBestelling $bestelling) {
-		$opmerking = filter_input(INPUT_POST, 'value', FILTER_SANITIZE_STRING);
-		$bestelling->opmerking = $opmerking;
-		$this->model->update($bestelling);
+		$field = new TextareaField('value', $bestelling->opmerking, null);
+		if ($this->isPosted() AND $field->validate()) {
+			$bestelling->opmerking = $field->getValue();
+			$this->model->update($bestelling);
+		}
 		$this->view = new JsonResponse($bestelling->opmerking);
 	}
 
