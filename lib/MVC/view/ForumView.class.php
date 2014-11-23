@@ -39,7 +39,7 @@ class ForumZoekenForm extends Formulier {
 		parent::__construct(null, 'forumZoekenForm', '/forum/zoeken');
 		$this->css_classes[] = 'hoverIntent';
 
-		$fields['z'] = new TextField('zoekopdracht');
+		$fields['z'] = new TextField('zoekopdracht', null, null);
 		$fields['z']->placeholder = 'Zoeken in forum';
 		$fields['z']->onkeyup = "if (event.keyCode == 13) { this.form.submit(); };";
 		$fields[] = new HtmlComment('<div class="forumZoekenGeavanceerd hoverIntentContent verborgen">');
