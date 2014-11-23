@@ -12,16 +12,16 @@ class LoginForm extends Formulier {
 	public function __construct() {
 		parent::__construct(null, 'loginform', '/login');
 
-		$fields['user'] = new TextField('user');
+		$fields['user'] = new TextField('user', null, null);
 		$fields['user']->placeholder = 'Bijnaam of lidnummer';
 
-		$fields['pass'] = new WachtwoordField('pass');
+		$fields['pass'] = new WachtwoordField('pass', null, null);
 		$fields['pass']->placeholder = 'Wachtwoord';
 
 		$fields['pauper'] = new VinkField('mobiel', LoginModel::instance()->isPauper(), null, 'Mobiel');
 		$fields['pauper']->onchange = 'this.form.submit();';
 
-		$fields['url'] = new UrlField('url', HTTP_REFERER);
+		$fields['url'] = new UrlField('url', HTTP_REFERER, null);
 		$fields['url']->hidden = true;
 
 		$this->addFields($fields);
