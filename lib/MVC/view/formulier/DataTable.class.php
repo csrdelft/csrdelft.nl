@@ -24,13 +24,12 @@ class DataTable extends TabsForm {
 		'tableTools' => array(
 			'sRowSelect' => 'os',
 			'aButtons'	 => array(
+				'print',
+				'pdf',
+				'xls',
 				'select_all',
 				'select_none',
-				'copy',
-				'csv',
-				'xls',
-				'pdf',
-				'print'
+				'copy'
 			),
 			'sSwfPath'	 => '/layout/js/datatables/extensions/TableTools/swf/copy_csv_xls_pdf.swf'
 		),
@@ -281,7 +280,8 @@ class DataTable extends TabsForm {
 				$('.DTTT_button_text').on('click', updateToolbar);
 				// Toolbar above table
 				$(tableId + '_toolbar').prependTo(tableId + '_wrapper');
-				$('.DTTT_container').children().appendTo(tableId + '_toolbar');
+				$(tableId + '_toolbar h1.Titel').prependTo(tableId + '_wrapper');
+				$('.DTTT_container').children().prependTo(tableId + '_toolbar');
 				$('.DTTT_container').remove();
 				// Toolbar table filter formatting
 				$(tableId + '_filter input').attr('placeholder', 'Zoeken').unwrap();
