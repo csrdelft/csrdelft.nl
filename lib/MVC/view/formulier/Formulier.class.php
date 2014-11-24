@@ -292,13 +292,16 @@ class ModalForm extends Formulier {
  */
 class InlineForm extends Formulier {
 
+	private $buttons;
+
 	public function __construct($model, $formId, $action, InputField $field, $buttons = false, $label = false) {
 		parent::__construct($model, $formId, $action);
+		$this->buttons = $buttons;
 		$this->css_classes[] = 'InlineForm';
 
 		$fields = array();
 		$fields['input'] = $field;
-		if ($buttons) {
+		if ($this->buttons) {
 			$fields['btn'] = new FormDefaultKnoppen(null, false, true, $label, true);
 		} else {
 			$fields['input']->onchange_submit = true;
@@ -310,21 +313,13 @@ class InlineForm extends Formulier {
 
 	public function getHtml() {
 		$fields = $this->getFields();
-		$html = '<div id="InlineForm-' . $this->formId . '">';
+		$html = '<div id="wrapper_' . $this->formId . '" class="InlineForm">';
+		$html .= '<div id="toggle_' . $this->formId . '" class="InlineFormToggle">' . $fields['input']->getValue() . '</div>';
 		$html .= $this->getFormTag();
-
-		$html .= $fields['input']->getDiv();
-		$html .= $fields['input']->getLabel();
-		$html .= $fields['input']->getErrorDiv();
-		if ($fields['input']->preview) {
-			$html .= $fields['input']->getPreviewDiv();
-		}
-		echo $this->getHtml();
 		$html .= $fields['input']->getHtml();
-		$html .= '</div>';
-
-		$html .= '<div class="InlineFormToggle">' . $fields['input']->getValue() . '</div>';
-		$html .= $fields['btn']->getHtml();
+		if ($this->buttons) {
+			$html .= $fields['btn']->getHtml();
+		}
 		$html .= $this->getScriptTag();
 		$html .= '</form></div>';
 		return $html;

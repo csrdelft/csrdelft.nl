@@ -208,14 +208,14 @@ abstract class InputField implements FormElement, Validator {
 	/**
 	 * Geef een div met de foutmelding voor dit veld terug.
 	 */
-	public function getErrorDiv() {
+	protected function getErrorDiv() {
 		if ($this->getError() != '') {
 			return '<div class="waarschuwing">' . $this->getError() . '</div>';
 		}
 		return '';
 	}
 
-	public function getPreviewDiv() {
+	protected function getPreviewDiv() {
 		return '';
 	}
 
@@ -308,6 +308,13 @@ JS;
 				}
 				break;
 			case 'onkeydown':
+				if ($this->enter_submit) {
+					$this->onkeydown .= <<<JS
+if (event.keyCode === 13) {
+	event.preventDefault();
+}
+JS;
+				}
 				if ($this->onkeydown != null) {
 					return 'onkeydown="' . $this->onkeydown . '"';
 				}
@@ -315,10 +322,10 @@ JS;
 			case 'onkeyup':
 				if ($this->enter_submit) {
 					$this->onkeyup .= <<<JS
-if (event.keyCode === 13) { // enter
+if (event.keyCode === 13) {
 	this.form.submit();
 }
-else if (event.keyCode === 27) { // escape
+else if (event.keyCode === 27) {
 	var orig = $(this).attr('origvalue');
 	if (typeof orig == 'string') {
 		$(this).val(orig);
@@ -565,7 +572,7 @@ class UidField extends TextField {
 		return $this->error === '';
 	}
 
-	public function getPreviewDiv() {
+	protected function getPreviewDiv() {
 		return '<div id="lidPreview_' . $this->getId() . '" class="previewDiv"></div>';
 	}
 
@@ -652,7 +659,7 @@ class LidField extends TextField {
 		return $this->error === '';
 	}
 
-	public function getPreviewDiv() {
+	protected function getPreviewDiv() {
 		return '<div id="lidPreview_' . $this->getId() . '" class="previewDiv"></div>';
 	}
 
@@ -860,16 +867,16 @@ class IntField extends TextField {
 		}
 		$this->onkeydown = <<<JS
 
-if (event.keyCode == 107 || event.keyCode == 109) { // + -
+if (event.keyCode == 107 || event.keyCode == 109) {
 	event.preventDefault();
 	return false;
 }
 JS;
 		$this->onkeyup = <<<JS
-if (event.keyCode == 107) { // +
+if (event.keyCode == 107) {
 	$('#add_{$this->getId()}').trigger('click');
 }
-else if (event.keyCode == 109) { // -
+else if (event.keyCode == 109) {
 	$('#substract_{$this->getId()}').trigger('click');
 }
 JS;
@@ -1242,7 +1249,7 @@ class CsrBBPreviewField extends TextareaField {
 		parent::__construct($name, $value, $description, $rows, $max_len, $min_len);
 	}
 
-	public function getPreviewDiv() {
+	protected function getPreviewDiv() {
 		return <<<HTML
 <div class="float-right">
 	<a href="http://csrdelft.nl/wiki/cie:diensten:forum" target="_blank">Opmaakhulp</a>
@@ -1260,7 +1267,7 @@ HTML;
 		return parent::getJavascript() . <<<JS
 $('#{$this->getId()}', form).unbind('keyup.preview');
 $('#{$this->getId()}', form).bind('keyup.preview', function(event) {
-	if(event.keyCode === 13) { // enter
+	if(event.keyCode === 13) {
 		CsrBBPreview('{$this->getId()}', '{$this->getName()}Preview');
 	}
 });

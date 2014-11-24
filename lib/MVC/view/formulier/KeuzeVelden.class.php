@@ -85,7 +85,7 @@ JS;
 		return $this->error === '';
 	}
 
-	public function getPreviewDiv() {
+	protected function getPreviewDiv() {
 		if ($this->groups) {
 			return '<div id="selectPreview_' . $this->getId() . '" class="previewDiv"></div>';
 		}
@@ -349,7 +349,7 @@ JS;
 		return $this->error === '';
 	}
 
-	public function getPreviewDiv() {
+	protected function getPreviewDiv() {
 		return '<div id="datumPreview_' . $this->getId() . '" class="previewDiv"></div>';
 	}
 

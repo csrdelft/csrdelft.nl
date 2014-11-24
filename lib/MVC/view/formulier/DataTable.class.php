@@ -141,12 +141,8 @@ class DataTable extends TabsForm {
 		$this->columns[$name]['searchable'] = (bool) $searchable;
 	}
 
-	protected function editableColumn($name, $url, $editable = true) {
-		if ($editable) {
-			$this->editable[$name] = $url;
-		} else {
-			unset($this->editable[$name]);
-		}
+	protected function editableColumn($name, $editable = true) {
+		$this->editable[$name] = (bool) $editable;
 	}
 
 	protected function getSettings() {
@@ -202,7 +198,9 @@ class DataTable extends TabsForm {
 				}
 				// translate editable columns index 
 				if (isset($this->editable[$name])) {
-					$this->editable[$visibleIndex] = $this->editable[$name];
+					if ($this->editable[$name] === true) {
+						$this->editable[] = $visibleIndex;
+					}
 					unset($this->editable[$name]);
 				}
 				$visibleIndex++;
@@ -256,21 +254,9 @@ class DataTable extends TabsForm {
 					} catch (e) {
 						// missing js
 					}
-		<?php if ($this->editable) { ?>
-						// voor elke td check of deze editable moet zijn 
-						$(tr).children().each(function (columnIndex, td) {
-							if (columnIndex in editableColumns) {
-								td.addClass('editable').click(alert);
-								
-								/*
-								 url: editableColumns[columnIndex],
-								 id: data.objectId, 
-								 lastUpdate: lastUpdate<?= $this->tableId; ?> 
-								 */
-							}
-						});
-		<?php } ?>
-				}; // end fnCreatedRowCallback 
+					// voor elke td check of deze editable moet zijn 
+					$(tr).find('.InlineFormToggle').unbind('click.toggle').bind('click.toggle', form_toggle);
+				};
 
 				var tableId = '#<?= $this->tableId; ?>';
 				var oTable = $(tableId).DataTable(<?= $settingsJson; ?>);

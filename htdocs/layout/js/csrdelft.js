@@ -381,24 +381,15 @@ function toggle_vertical_align(elmnt) {
 	}
 }
 
-function toggle_inline_none(elmnt) {
-	$(elmnt).css('display', $(elmnt).css('display') === 'none' ? 'inline' : 'none');
-}
-
 function form_inline_toggle(form) {
-	$(form).find('.InputField').each(function () {
-		toggle_inline_none($(this));
-	});
-	$(form).find('.FormKnoppen').each(function () {
-		toggle_inline_none($(this));
-	});
-	$(form).find('.InlineFormToggle').toggle();
-	$(form).find('.FormElement').focus();
+	form.prev('.InlineFormToggle').toggle();
+	form.toggle();
+	form.find('.FormElement').focus();
 }
 
 function form_toggle(event) {
-	var form = $(this).closest('form');
 	event.preventDefault();
+	var form = $(this).next('form');
 	form_inline_toggle(form);
 	return false;
 }

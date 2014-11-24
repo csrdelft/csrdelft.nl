@@ -27,17 +27,13 @@ class HappieBestellingenData extends DataTableResponse {
 		$array['tafel'] = 'Tafel ' . $bestelling->tafel;
 		$array['laatst_gewijzigd'] = reldate($bestelling->laatst_gewijzigd);
 		$array['wijzig_historie'] = null;
-		$array['opmerking'] = nl2br($bestelling->opmerking);
+
+
+
+		$form = new HappieBestellingOpmerkingForm($bestelling);
+		$array['opmerking'] = $form->getHtml();
 
 		return parent::getJson($array);
-	}
-
-}
-
-class HappieBestellingOpmerkingWijzigen extends InlineForm {
-
-	public function __construct(Bestelling $bestelling) {
-		parent::__construct($bestelling, 'opmerking' . $bestelling->bestelling_id, happieUrl . '/opmerking', new TextareaField('opmerking', $bestelling->opmerking, null));
 	}
 
 }
@@ -50,13 +46,13 @@ class HappieBestellingenView extends DataTable {
 
 		$this->addColumn('gang', 'menukaart_item');
 		$this->addColumn('menu_groep', 'menukaart_item');
-		/*
-		  $this->editableColumn('aantal', happieUrl . '/aantal');
-		  $this->editableColumn('aantal_geserveerd', happieUrl . '/geserveerd');
-		  $this->editableColumn('serveer_status', happieUrl . '/serveerstatus', HappieServeerStatus::getSelectOptions());
-		  $this->editableColumn('financien_status', happieUrl . '/financienstatus', HappieFinancienStatus::getSelectOptions());
-		  $this->editableColumn('opmerking', happieUrl . '/opmerking');
-		 */
+
+		$this->editableColumn('aantal');
+		$this->editableColumn('aantal_geserveerd');
+		$this->editableColumn('serveer_status');
+		$this->editableColumn('financien_status');
+		$this->editableColumn('opmerking');
+
 		$this->hideColumn('datum');
 		$this->hideColumn('wijzig_historie');
 		$this->searchColumn('tafel');
