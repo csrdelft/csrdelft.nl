@@ -32,6 +32,7 @@ function fnUpdateDataTable(data) {
 			table.row.add(row);
 		}
 	});
+	init(); // FIXME
 	//table.draw();
 }
 

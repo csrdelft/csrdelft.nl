@@ -233,6 +233,7 @@ class DataTable extends TabsForm {
 					 var keys = new $.fn.dataTable.KeyTable( oTable );
 					 keys.fnSetPosition( 1, 1 );
 					 */
+					init(); // FIXME
 					updateToolbar();
 					return json.data;
 				};
