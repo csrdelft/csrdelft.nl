@@ -249,6 +249,7 @@ class DataTable extends TabsForm {
 					 var keys = new $.fn.dataTable.KeyTable( oTable );
 					 keys.fnSetPosition( 1, 1 );
 					 */
+					updateToolbar();
 					return json.data;
 				};
 				var fnCreatedRowCallback = function (tr, data, index) {
@@ -383,10 +384,7 @@ class DataTableKnop extends FormulierKnop {
 	}
 
 	public function getUpdateToolbar() {
-		return <<<JS
-$('#{$this->getId()}').attr('disabled', !(aantal {$this->multiplicity}));
-$('#{$this->getId()}').toggleClass('DTTT_disabled', $('#{$this->getId()}').prop('disabled'));
-JS;
+		return "$('#{$this->getId()}').attr('disabled', !(aantal {$this->multiplicity})).toggleClass('DTTT_disabled', !(aantal {$this->multiplicity}));";
 	}
 
 }
