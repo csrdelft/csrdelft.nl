@@ -81,27 +81,7 @@ class DataTable extends TabsForm {
 
 		// generate columns from entity attributes
 		foreach ($this->model->getAttributes() as $attribute) {
-			$def = $this->model->getAttributeDefinition($attribute);
-			switch ($def[0]) {
-
-				case T::Boolean:
-				//case T::Integer: // usually in unsupported format and breaks group by
-				case T::Float:
-					$type = 'html-num-fmt';
-					break;
-
-				case T::Date:
-				case T::Time:
-				case T::DateTime:
-				case T::Timestamp:
-					$type = 'date';
-					break;
-
-				default:
-					$type = 'html';
-			}
-
-			$this->addColumn($attribute, $type);
+			$this->addColumn($attribute);
 		}
 
 		// hide primary key columns
@@ -114,13 +94,13 @@ class DataTable extends TabsForm {
 		$this->addFields(array($knop), $tab);
 	}
 
-	protected function addColumn($newName, $type = 'string', $before = null) {
+	protected function addColumn($newName, $before = null) {
 		// column definition
 		$newColumn = array(
 			'name'		 => $newName,
 			'data'		 => $newName,
 			'title'		 => ucfirst(str_replace('_', ' ', $newName)),
-			'type'		 => $type,
+			'type'		 => 'string',
 			'searchable' => false
 				/*
 				  //TODO: sort by other column

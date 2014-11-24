@@ -294,6 +294,7 @@ class InlineForm extends Formulier {
 
 	public function __construct($model, $formId, $action, InputField $field, $buttons = false, $label = false) {
 		parent::__construct($model, $formId, $action);
+		$this->css_classes[] = 'InlineForm';
 
 		$fields = array();
 		$fields['input'] = $field;
@@ -301,18 +302,19 @@ class InlineForm extends Formulier {
 			$fields['btn'] = new FormDefaultKnoppen(null, false, true, $label, true);
 		} else {
 			$fields['input']->onchange_submit = true;
+			$fields['input']->enter_submit = true;
 		}
 
 		$this->addFields($fields);
 	}
 
 	public function view() {
-		$this->css_classes[] = 'InlineForm';
 		$fields = $this->getFields();
 		echo '<div id="InlineForm-' . $this->formId . '">';
 		echo $this->getFormTag();
 		echo $fields['input']->view();
 		echo '<div class="InlineFormToggle">' . $fields['input']->getValue() . '</div>';
+
 		$fields['btn']->view();
 		echo $this->getScriptTag();
 		echo '</form></div>';

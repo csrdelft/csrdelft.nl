@@ -38,9 +38,13 @@ class HappieMenukaartGroepenController extends AclController {
 					if (!$groep) {
 						$this->geentoegang();
 					}
-					parent::performAction(array($groep));
+					parent::performAction(array($groep)); // set view form
 				} else {
 					$this->geentoegang();
+				}
+				if ($this->view->validate()) {
+					$this->model->update($groep);
+					$this->view = new HappieMenukaartGroepenData(array($groep));
 				}
 				break;
 
@@ -63,21 +67,15 @@ class HappieMenukaartGroepenController extends AclController {
 		$groep = $this->model->newGroep();
 		$form = new HappieMenukaartGroepForm($groep);
 		if ($this->isPosted() AND $form->validate()) {
-			$this->model->create($groep);
-			$this->view = new JsonResponse($groep);
+			$this->model->update($groep);
+			$this->view = new HappieMenukaartGroepenData(array($groep));
 			return;
 		}
 		$this->view = $form;
 	}
 
 	public function wijzig(HappieMenukaartGroep $groep) {
-		$form = new HappieMenukaartGroepWijzigenForm($groep);
-		if ($this->isPosted() AND $form->validate()) {
-			$this->model->update($groep);
-			$this->view = new JsonResponse($groep);
-			return;
-		}
-		$this->view = $form;
+		$this->view = new HappieMenukaartGroepWijzigenForm($groep);
 	}
 
 }

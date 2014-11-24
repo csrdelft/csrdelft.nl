@@ -14,7 +14,7 @@ class HappieMenukaartItemsView extends DataTable {
 		parent::__construct(HappieMenukaartItemsModel::orm, get_class($this), 'Menukaart items', 'menukaart_groep');
 		$this->dataUrl = happieUrl . '/overzicht';
 
-		$this->addColumn('groep_beschikbaar', 'html-num-fmt');
+		$this->addColumn('groep_beschikbaar');
 
 		$nieuw = new DataTableKnop('>= 0', happieUrl . '/nieuw', 'post popup', 78, 'Nieuw', 'Menukaart-item toevoegen (Sneltoets: N)', 'DTTT_button_new');
 		$this->addKnop($nieuw);

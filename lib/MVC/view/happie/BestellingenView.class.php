@@ -40,8 +40,8 @@ class HappieBestellingenView extends DataTable {
 		parent::__construct(HappieBestellingenModel::orm, get_class($this), $titel, $groupByColumn);
 		$this->dataUrl = happieUrl . $dataUrl;
 
-		$this->addColumn('gang', 'html', 'menukaart_item');
-		$this->addColumn('menu_groep', 'html', 'menukaart_item');
+		$this->addColumn('gang', 'menukaart_item');
+		$this->addColumn('menu_groep', 'menukaart_item');
 
 		$this->hideColumn('datum');
 		$this->hideColumn('wijzig_historie');

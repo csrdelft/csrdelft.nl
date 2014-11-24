@@ -38,6 +38,19 @@ class HappieBestellingenController extends AclController {
 			$this->action = $this->getParam(3);
 		}
 		switch ($this->action) {
+			case 'overzicht':
+			case 'serveer':
+			case 'keuken':
+			case 'bar':
+			case 'kassa':
+				parent::performAction($this->getParams(4)); // set view body
+				if ($this->isPosted()) {
+					$this->view = new HappieBestellingenData($this->view);
+				} else {
+					$this->view = new CsrLayout3Page($this->view);
+				}
+				break;
+
 			case 'wijzig':
 			case 'aantal':
 			case 'geserveerd':
@@ -52,9 +65,13 @@ class HappieBestellingenController extends AclController {
 					if (!$bestelling) {
 						$this->geentoegang();
 					}
-					parent::performAction(array($bestelling));
+					parent::performAction(array($bestelling)); // set view form
 				} else {
 					$this->geentoegang();
+				}
+				if ($this->view->validate()) {
+					$this->model->update($bestelling);
+					$this->view = new HappieBestellingenData(array($bestelling));
 				}
 				break;
 
@@ -70,54 +87,44 @@ class HappieBestellingenController extends AclController {
 			$d = (int) $d;
 			if (checkdate($m, $d, $y)) {
 				$datum = $y . '-' . $m . '-' . $d;
-				$data = $this->model->find('datum = ?', array($datum));
+				$this->view = $this->model->find('datum = ?', array($datum));
 			} else {
-				$data = $this->model->find();
+				$this->view = $this->model->find();
 			}
-			$this->view = new HappieBestellingenData($data);
 		} else {
-			$body = new HappieBestellingenView();
-			$this->view = new CsrLayout3Page($body);
+			$this->view = new HappieBestellingenView();
 		}
 	}
 
 	public function serveer() {
 		if ($this->isPosted()) {
-			$data = $this->model->find('datum = ?', array(date('Y-m-d')));
-			$this->view = new HappieBestellingenData($data);
+			$this->view = $this->model->find('datum = ?', array(date('Y-m-d')));
 		} else {
-			$body = new HappieServeerView();
-			$this->view = new CsrLayout3Page($body);
+			$this->view = new HappieServeerView();
 		}
 	}
 
 	public function keuken() {
 		if ($this->isPosted()) {
-			$data = $this->model->find('datum = ?', array(date('Y-m-d')));
-			$this->view = new HappieBestellingenData($data);
+			$this->view = $this->model->find('datum = ?', array(date('Y-m-d')));
 		} else {
-			$body = new HappieKeukenView();
-			$this->view = new CsrLayout3Page($body);
+			$this->view = new HappieKeukenView();
 		}
 	}
 
 	public function bar() {
 		if ($this->isPosted()) {
-			$data = $this->model->find('datum = ?', array(date('Y-m-d')));
-			$this->view = new HappieBestellingenData($data);
+			$this->view = $this->model->find('datum = ?', array(date('Y-m-d')));
 		} else {
-			$body = new HappieBarView();
-			$this->view = new CsrLayout3Page($body);
+			$this->view = new HappieBarView();
 		}
 	}
 
 	public function kassa() {
 		if ($this->isPosted()) {
-			$data = $this->model->find('datum = ?', array(date('Y-m-d')));
-			$this->view = new HappieBestellingenData($data);
+			$this->view = $this->model->find('datum = ?', array(date('Y-m-d')));
 		} else {
-			$body = new HappieKassaView();
-			$this->view = new CsrLayout3Page($body);
+			$this->view = new HappieKassaView();
 		}
 	}
 
@@ -139,58 +146,32 @@ class HappieBestellingenController extends AclController {
 	}
 
 	public function wijzig(HappieBestelling $bestelling) {
-		$form = new HappieBestellingWijzigenForm($bestelling);
-		if ($this->isPosted() AND $form->validate()) {
-			$this->model->update($bestelling);
-			$this->view = new JsonResponse($bestelling);
-			return;
-		}
-		$this->view = $form;
+		$this->view = new HappieBestellingWijzigenForm($bestelling);
 	}
 
 	public function aantal(HappieBestelling $bestelling) {
-		$field = new IntField('value', $bestelling->aantal, null);
-		if ($this->isPosted() AND $field->validate()) {
-			$bestelling->aantal = $field->getValue();
-			$this->model->update($bestelling);
-		}
-		$this->view = new JsonResponse($bestelling->aantal);
+		$field = new IntField('aantal', $bestelling->aantal, null);
+		$this->view = new InlineForm($bestelling, 'aantal' . $bestelling->bestelling_id, happieUrl . '/aantal', $field);
 	}
 
 	public function geserveerd(HappieBestelling $bestelling) {
-		$field = new IntField('value', $bestelling->aantal_geserveerd, null);
-		if ($this->isPosted() AND $field->validate()) {
-			$bestelling->aantal_geserveerd = $field->getValue();
-			$this->model->update($bestelling);
-		}
-		$this->view = new JsonResponse($bestelling->aantal_geserveerd);
+		$field = new IntField('aantal_geserveerd', $bestelling->aantal_geserveerd, null);
+		$this->view = new InlineForm($bestelling, 'geserveerd' . $bestelling->bestelling_id, happieUrl . '/geserveerd', $field);
 	}
 
 	public function serveerstatus(HappieBestelling $bestelling) {
-		$field = new SelectField('value', $bestelling->serveer_status, null, HappieServeerStatus::getSelectOptions());
-		if ($this->isPosted() AND $field->validate()) {
-			$bestelling->serveer_status = $field->getValue();
-			$this->model->update($bestelling);
-		}
-		$this->view = new JsonResponse($bestelling->serveer_status);
+		$field = new SelectField('serveer_status', $bestelling->serveer_status, null, HappieServeerStatus::getSelectOptions());
+		$this->view = new InlineForm($bestelling, 'serveerstatus' . $bestelling->bestelling_id, happieUrl . '/serveerstatus', $field);
 	}
 
 	public function financienstatus(HappieBestelling $bestelling) {
-		$field = new SelectField('value', $bestelling->financien_status, null, HappieFinancienStatus::getSelectOptions());
-		if ($this->isPosted() AND $field->validate()) {
-			$bestelling->financien_status = $field->getValue();
-			$this->model->update($bestelling);
-		}
-		$this->view = new JsonResponse($bestelling->financien_status);
+		$field = new SelectField('financien_status', $bestelling->financien_status, null, HappieFinancienStatus::getSelectOptions());
+		$this->view = new InlineForm($bestelling, 'financienstatus' . $bestelling->bestelling_id, happieUrl . '/financienstatus', $field);
 	}
 
 	public function opmerking(HappieBestelling $bestelling) {
-		$field = new TextareaField('value', $bestelling->opmerking, null);
-		if ($this->isPosted() AND $field->validate()) {
-			$bestelling->opmerking = $field->getValue();
-			$this->model->update($bestelling);
-		}
-		$this->view = new JsonResponse($bestelling->opmerking);
+		$field = new TextareaField('opmerking', $bestelling->opmerking, null);
+		$this->view = new InlineForm($bestelling, 'opmerking' . $bestelling->bestelling_id, happieUrl . '/opmerking', $field);
 	}
 
 }

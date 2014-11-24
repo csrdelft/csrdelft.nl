@@ -38,9 +38,13 @@ class HappieMenukaartItemsController extends AclController {
 					if (!$item) {
 						$this->geentoegang();
 					}
-					parent::performAction(array($item));
+					parent::performAction(array($item)); // set view form
 				} else {
 					$this->geentoegang();
+				}
+				if ($this->view->validate()) {
+					$this->model->update($item);
+					$this->view = new HappieMenukaartItemsData(array($item));
 				}
 				break;
 
@@ -64,20 +68,14 @@ class HappieMenukaartItemsController extends AclController {
 		$form = new HappieMenukaartItemForm($item);
 		if ($this->isPosted() AND $form->validate()) {
 			$this->model->create($item);
-			$this->view = new JsonResponse($item);
+			$this->view = new HappieMenukaartItemsData(array($item));
 			return;
 		}
 		$this->view = $form;
 	}
 
 	public function wijzig(HappieMenukaartItem $item) {
-		$form = new HappieMenukaartItemWijzigenForm($item);
-		if ($this->isPosted() AND $form->validate()) {
-			$this->model->update($item);
-			$this->view = new JsonResponse($item);
-			return;
-		}
-		$this->view = $form;
+		$this->view = new HappieMenukaartItemWijzigenForm($item);
 	}
 
 }

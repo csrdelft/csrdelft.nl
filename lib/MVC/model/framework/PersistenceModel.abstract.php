@@ -32,7 +32,7 @@ abstract class PersistenceModel implements Persistence {
 	 * Default ORDER BY
 	 * @var string
 	 */
-	protected $default_order;
+	protected $default_order = null;
 
 	protected function __construct($subdir = '') {
 		$orm = static::orm;
