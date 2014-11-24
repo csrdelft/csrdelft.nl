@@ -28,6 +28,10 @@ class HappieMenukaartItemsView extends DataTable {
 
 class HappieMenukaartItemsData extends DataTableResponse {
 
+	public function __construct($data) {
+		parent::__construct('HappieMenukaartItemsView', $data);
+	}
+
 	public function getJson($item) {
 		$array = $item->jsonSerialize();
 
@@ -61,6 +65,10 @@ class HappieMenukaartGroepenView extends DataTable {
 }
 
 class HappieMenukaartGroepenData extends DataTableResponse {
+
+	public function __construct($data) {
+		parent::__construct('HappieMenukaartGroepenView', $data);
+	}
 
 	public function getJson($groep) {
 		$array = $groep->jsonSerialize();

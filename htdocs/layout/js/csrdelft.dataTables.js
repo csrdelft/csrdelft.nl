@@ -21,6 +21,25 @@ function fnInitDataTables() {
 	$.fn.dataTable.ext.search.push(fnGroupExpandCollapseDraw);
 }
 
+function fnUpdateDataTable(data) {
+	var oTable = $(data.table).dataTable();
+	data.data.forEach(function (row) {
+		var tr = $("tr[data-objectid='" + row.objectId + "']");
+		if (tr.length > 0) {
+			console.log(row);
+			oTable.fnUpdate(row, tr);
+			try {
+				$('abbr.timeago', tr).timeago();
+			} catch (e) {
+				// missing js
+			}
+		}
+		else {
+			oTable.fnAddData(row);
+		}
+	});
+}
+
 function fnGetSelectionSize(tableId) {
 	return $(tableId + ' tbody tr.selected').length;
 }

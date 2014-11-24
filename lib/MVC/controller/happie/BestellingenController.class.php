@@ -63,11 +63,11 @@ class HappieBestellingenController extends AclController {
 					$ids = $field->getValue();
 					$bestelling = $this->model->getBestelling((int) $ids[0]);
 					if (!$bestelling) {
-						$this->geentoegang();
+						$this->geentoegang('bestelling bestaat niet');
 					}
 					parent::performAction(array($bestelling)); // set view form
 				} else {
-					$this->geentoegang();
+					$this->geentoegang('missing objectId');
 				}
 				if ($this->view->validate()) {
 					$this->model->update($bestelling);
@@ -170,7 +170,8 @@ class HappieBestellingenController extends AclController {
 	}
 
 	public function opmerking(HappieBestelling $bestelling) {
-		$this->view = new HappieOpmerkingWijzigenInlineForm($bestelling);
+		$field = new TextareaField('opmerking', $bestelling->opmerking, 'Allergie/Opmerking');
+		$this->view = new InlineForm($bestelling, 'opmerking' . $bestelling->bestelling_id, happieUrl . '/opmerking', $field);
 	}
 
 }

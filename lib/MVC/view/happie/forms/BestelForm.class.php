@@ -54,14 +54,6 @@ class HappieBestellingWijzigenForm extends ModalForm {
 
 }
 
-class HappieBestellingOpmerkingForm extends InlineForm {
-
-	public function __construct(HappieBestelling $bestelling) {
-		parent::__construct($bestelling, 'opmerking' . $bestelling->bestelling_id, happieUrl . '/opmerking', new TextareaField('opmerking', $bestelling->opmerking, null));
-	}
-
-}
-
 class HappieBestelForm extends TabsForm {
 
 	public function __construct() {

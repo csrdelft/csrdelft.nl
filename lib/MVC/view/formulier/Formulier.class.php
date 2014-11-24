@@ -45,7 +45,7 @@ class Formulier implements View, Validator {
 	 * @var FormElement[]
 	 */
 	private $fields = array();
-	protected $css_classes = array();
+	public $css_classes = array();
 	private $javascript = array();
 	public $titel;
 
@@ -292,20 +292,24 @@ class ModalForm extends Formulier {
  */
 class InlineForm extends Formulier {
 
-	private $buttons;
-
 	public function __construct($model, $formId, $action, InputField $field, $buttons = false, $label = false) {
 		parent::__construct($model, $formId, $action);
-		$this->buttons = $buttons;
 		$this->css_classes[] = 'InlineForm';
 
 		$fields = array();
+		if ($model instanceof PersistentEntity) {
+			$fields['id'] = new ObjectIdField($model);
+		}
+		if (!isset($field->title)) {
+			$field->title = $field->description;
+		}
 		$fields['input'] = $field;
-		if ($this->buttons) {
+		if ($buttons) {
 			$fields['btn'] = new FormDefaultKnoppen(null, false, true, $label, true);
 		} else {
 			$fields['input']->onchange_submit = true;
 			$fields['input']->enter_submit = true;
+			$fields['input']->escape_cancel = true;
 		}
 
 		$this->addFields($fields);
@@ -316,13 +320,15 @@ class InlineForm extends Formulier {
 		$html = '<div id="wrapper_' . $this->formId . '" class="InlineForm">';
 		$html .= '<div id="toggle_' . $this->formId . '" class="InlineFormToggle">' . $fields['input']->getValue() . '</div>';
 		$html .= $this->getFormTag();
+		if (isset($fields['id'])) {
+			$html .= $fields['id']->getHtml();
+		}
 		$html .= $fields['input']->getHtml();
-		if ($this->buttons) {
+		if (isset($fields['btn'])) {
 			$html .= $fields['btn']->getHtml();
 		}
 		$html .= $this->getScriptTag();
-		$html .= '</form></div>';
-		return $html;
+		return $html . '</form></div>';
 	}
 
 	public function view() {

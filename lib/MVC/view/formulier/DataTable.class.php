@@ -19,7 +19,6 @@ class DataTable extends TabsForm {
 	private $groupByLocked = false;
 	protected $defaultLength = -1;
 	private $columns = array();
-	private $editable = array();
 	protected $settings = array(
 		'dom'		 => 'Tfrtpli',
 		'tableTools' => array(
@@ -141,10 +140,6 @@ class DataTable extends TabsForm {
 		$this->columns[$name]['searchable'] = (bool) $searchable;
 	}
 
-	protected function editableColumn($name, $editable = true) {
-		$this->editable[$name] = (bool) $editable;
-	}
-
 	protected function getSettings() {
 
 		// set view modus: paging or scrolling
@@ -196,13 +191,7 @@ class DataTable extends TabsForm {
 						array($index, 'asc')
 					);
 				}
-				// translate editable columns index 
-				if (isset($this->editable[$name])) {
-					if ($this->editable[$name] === true) {
-						$this->editable[] = $visibleIndex;
-					}
-					unset($this->editable[$name]);
-				}
+
 				$visibleIndex++;
 			}
 			$index++;
@@ -229,12 +218,15 @@ class DataTable extends TabsForm {
 			var lastUpdate<?= $this->tableId; ?>;
 
 			$(document).ready(function () {
-				var editableColumns = <?= json_encode($this->editable); ?>;
+
+				var fnAutoUpdate = function () {
+					var oTable = $('#<?= $this->tableId; ?>').DataTable();
+					oTable.ajax.reload();
+				};
 
 				var fnAjaxUpdateCallback = function (json) {
-					lastUpdate<?= $this->tableId; ?> = Math.round(new Date().getTime() / 1000);
-					var table = $('#<?= $this->tableId; ?>');
-					console.log(json);
+					lastUpdate<?= $this->tableId; ?> = Math.round(new Date().getTime());
+					//setTimeout(fnAutoUpdate, 5000);
 					// TODO: remember focus position on update
 					/*
 					 var oTable = $('#example').dataTable();
@@ -244,6 +236,7 @@ class DataTable extends TabsForm {
 					updateToolbar();
 					return json.data;
 				};
+
 				var fnCreatedRowCallback = function (tr, data, index) {
 					$(tr).attr('data-objectid', data.objectId);
 					if ('detailSource' in data) {
@@ -255,7 +248,19 @@ class DataTable extends TabsForm {
 						// missing js
 					}
 					// voor elke td check of deze editable moet zijn 
-					$(tr).find('.InlineFormToggle').unbind('click.toggle').bind('click.toggle', form_toggle);
+					$(tr).children().each(function (columnIndex, td) {
+						if ($(td).children(':first').hasClass('InlineForm')) {
+							var edit = function (event) {
+								var form = $(td).find('form');
+								form.prev('.InlineFormToggle').hide();
+								form.show();
+								setTimeout(function () { // werkomheen focus keys plugin
+									form.find('.FormElement:first').focus();
+								}, 1);
+							};
+							$(td).addClass('editable').click(edit);
+						}
+					});
 				};
 
 				var tableId = '#<?= $this->tableId; ?>';
@@ -317,10 +322,13 @@ class DataTable extends TabsForm {
 						if (td) {
 							fnMultiSelect(event, $(td).parent());
 							updateToolbar();
+							if (event.keyCode === 13 || event.keyCode === 32) {
+								$(td).trigger('click');
+							}
 						}
 					}
 		<?php
-		$keyshortcuts = '[32,13'; // space, enter
+		$keyshortcuts = '[32,13'; // space
 		foreach ($this->getFields() as $field) {
 			if ($field instanceof DataTableKnop AND is_int($field->keyshortcut)) {
 				$keyshortcuts .= ',' . $field->keyshortcut;
@@ -386,6 +394,13 @@ class DataTableKnop extends FormulierKnop {
 
 class DataTableResponse extends JsonResponse {
 
+	private $table;
+
+	public function __construct($table, $data) {
+		parent::__construct($data);
+		$this->table = $table;
+	}
+
 	public function getJson($data) {
 		return json_encode($data);
 	}
@@ -393,7 +408,7 @@ class DataTableResponse extends JsonResponse {
 	public function view() {
 		http_response_code($this->code);
 		header('Content-Type: application/json');
-		echo '{"data":[' . "\n";
+		echo '{"table":"#' . $this->table . '", "data":[' . "\n";
 		$comma = false;
 		foreach ($this->model as $data) {
 			if ($comma) {

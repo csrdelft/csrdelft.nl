@@ -51,7 +51,7 @@ abstract class InputField implements FormElement, Validator {
 	public $required = false; // mag het veld leeg zijn?
 	public $empty_null = false; // lege waarden teruggeven als null
 	public $enter_submit = false; // bij op enter drukken form submitten
-	public $escape_reset = true; // bij op escape drukken veld resetten
+	public $escape_cancel = true; // bij op escape drukken form annuleren
 	public $preview = true; // preview tonen? (waar van toepassing)
 	public $leden_mod = false; // uitzondering leeg verplicht veld voor LEDEN_MOD
 	public $autocomplete = true; // browser laten autoaanvullen?
@@ -295,7 +295,7 @@ abstract class InputField implements FormElement, Validator {
 			case 'onchange':
 				if ($this->enter_submit) {
 					$this->onchange .= <<<JS
-this.form.submit();
+form_submit(event);
 JS;
 				}
 				if ($this->onchange != null) {
@@ -323,7 +323,7 @@ JS;
 				if ($this->enter_submit) {
 					$this->onkeyup .= <<<JS
 if (event.keyCode === 13) {
-	this.form.submit();
+	form_submit(event);
 }
 else if (event.keyCode === 27) {
 	var orig = $(this).attr('origvalue');
@@ -332,6 +332,13 @@ else if (event.keyCode === 27) {
 	}
 }
 JS;
+					if ($this->escape_cancel) {
+						$this->onkeydown .= <<<JS
+if (event.keyCode === 27) {
+	form_cancel(event);
+}
+JS;
+					}
 				}
 				if ($this->onkeyup != null) {
 					return 'onkeyup="' . $this->onkeyup . '"';

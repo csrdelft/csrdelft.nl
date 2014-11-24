@@ -332,10 +332,6 @@ function init_forms() {
 				window[init]();
 			}
 		}
-		$(this).unbind('submit.enter');
-		$(this).bind('submit.enter', form_submit);
-		$(this).unbind('keyup.esc');
-		$(this).bind('keyup.esc', form_esc);
 	});
 	$('.submit').unbind('click.submit');
 	$('.submit').bind('click.submit', form_submit);
@@ -384,7 +380,7 @@ function toggle_vertical_align(elmnt) {
 function form_inline_toggle(form) {
 	form.prev('.InlineFormToggle').toggle();
 	form.toggle();
-	form.find('.FormElement').focus();
+	form.find('.FormElement:first').focus();
 }
 
 function form_toggle(event) {
@@ -394,18 +390,20 @@ function form_toggle(event) {
 	return false;
 }
 
-function form_esc(event) {
-	if (event.keyCode === 27) {
-		form_cancel(event);
-	}
-}
-
 function form_submit(event) {
 	if ($(this).hasClass('confirm') && !confirm($(this).attr('title') + '.\n\nWeet u het zeker?')) {
 		event.preventDefault();
 		return false;
 	}
 	var form = $(this).closest('form');
+	if (!form.hasClass('Formulier')) {
+		if (event) {
+			form = $(event.target.form);
+		}
+		else {
+			return false;
+		}
+	}
 	if (form.hasClass('PreventUnchanged') && !form_ischanged(form)) {
 		event.preventDefault();
 		alert('Geen wijzigingen');
@@ -423,6 +421,9 @@ function form_submit(event) {
 		}
 		else if (form.hasClass('redirect')) {
 			done = page_redirect;
+		}
+		else if (form.hasClass('DataTableResponse')) {
+			done = fnUpdateDataTable;
 		}
 		var formData = new FormData(form.get(0));
 		ajax_request('POST', form.attr('action'), formData, source, done, alert, function () {
@@ -545,7 +546,6 @@ function ajax_request(type, url, data, source, onsuccess, onerror, onfinish) {
 	}
 	var jqXHR = $.ajax({
 		type: type,
-		dataType: false,
 		contentType: contentType,
 		processData: processData,
 		url: url,
