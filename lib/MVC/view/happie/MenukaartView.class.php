@@ -16,11 +16,11 @@ class HappieMenukaartItemsView extends DataTable {
 
 		$this->addColumn('groep_beschikbaar', 'html-num-fmt');
 
-		$nieuw = new DataTableKnop('>= 0', happieUrl . '/nieuw', null, 78, 'Nieuw', 'Menukaart-item toevoegen (Sneltoets: N)', 'DTTT_button_new');
+		$nieuw = new DataTableKnop('>= 0', happieUrl . '/nieuw', 'post popup', 78, 'Nieuw', 'Menukaart-item toevoegen (Sneltoets: N)', 'DTTT_button_new');
 		$this->addKnop($nieuw);
 
-		$wijzig = new DataTableKnop('== 1', happieUrl . '/wijzig/', null, 87, 'Wijzig', 'Menukaart-item wijzigen (Sneltoets: W)', 'DTTT_button_edit');
-		$wijzig->onclick = "location.href=this.href+fnGetSelectedObjectId(tableId);";
+		$wijzig = new DataTableKnop('== 1', happieUrl . '/wijzig', 'post popup TableSelection', 87, 'Wijzig', 'Menukaart-item wijzigen (Sneltoets: W)', 'DTTT_button_edit');
+		$wijzig->data = HappieMenukaartItemsModel::orm . '=#' . $this->tableId;
 		$this->addKnop($wijzig);
 	}
 
@@ -50,11 +50,11 @@ class HappieMenukaartGroepenView extends DataTable {
 		parent::__construct(HappieMenukaartGroepenModel::orm, get_class($this), 'Menukaart groepen', 'gang');
 		$this->dataUrl = happieUrl . '/overzicht';
 
-		$nieuw = new DataTableKnop('>= 0', happieUrl . '/nieuw', null, 78, 'Nieuw', 'Menukaart-groep toevoegen (Sneltoets: N)', 'DTTT_button_new');
+		$nieuw = new DataTableKnop('>= 0', happieUrl . '/nieuw', 'post popup', 78, 'Nieuw', 'Menukaart-groep toevoegen (Sneltoets: N)', 'DTTT_button_new');
 		$this->addKnop($nieuw);
 
-		$wijzig = new DataTableKnop('== 1', happieUrl . '/wijzig/', null, 87, 'Wijzig', 'Menukaart-groep wijzigen (Sneltoets: W)', 'DTTT_button_edit');
-		$wijzig->onclick = "location.href=this.href+fnGetSelectedObjectId(tableId);";
+		$wijzig = new DataTableKnop('== 1', happieUrl . '/wijzig', 'post popup TableSelection', 87, 'Wijzig', 'Menukaart-groep wijzigen (Sneltoets: W)', 'DTTT_button_edit');
+		$wijzig->data = HappieMenukaartGroepenModel::orm . '=#' . $this->tableId;
 		$this->addKnop($wijzig);
 	}
 

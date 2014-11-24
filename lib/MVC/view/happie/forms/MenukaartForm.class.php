@@ -8,10 +8,12 @@
  * Menukaart invoer / wijzigen formulieren.
  * 
  */
-class HappieMenukaartItemForm extends Formulier {
+class HappieMenukaartItemForm extends ModalForm {
 
 	public function __construct(HappieMenukaartItem $item, $action = '/nieuw', $titel = 'Nieuw menukaart-item') {
 		parent::__construct($item, get_class($this), happieUrl . $action, $titel);
+
+		$fields[] = new ObjectIdField($item);
 
 		$groepen = HappieMenukaartGroepenModel::instance()->prefetch();
 		$opties = array();
@@ -39,10 +41,12 @@ class HappieMenukaartItemWijzigenForm extends HappieMenukaartItemForm {
 
 }
 
-class HappieMenukaartGroepForm extends Formulier {
+class HappieMenukaartGroepForm extends ModalForm {
 
 	public function __construct(HappieMenukaartGroep $groep, $action = '/nieuw', $titel = 'Nieuwe menukaart-groep') {
 		parent::__construct($groep, get_class($this), happieUrl . $action, $titel);
+
+		$fields[] = new ObjectIdField($groep);
 
 		$fields[] = new SelectField('gang', $groep->gang, 'Gang', HappieGang::getSelectOptions());
 		$fields[] = new TextField('naam', $groep->naam, 'Groepnaam', 100, 3);

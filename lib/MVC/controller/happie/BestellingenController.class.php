@@ -46,7 +46,7 @@ class HappieBestellingenController extends AclController {
 			case 'opmerking':
 
 				$field = new ObjectIdField(new HappieBestelling());
-				if ($field->validate()) {
+				if ($this->isPosted() AND $field->validate()) {
 					$ids = $field->getValue();
 					$bestelling = $this->model->getBestelling((int) $ids[0]);
 					if (!$bestelling) {

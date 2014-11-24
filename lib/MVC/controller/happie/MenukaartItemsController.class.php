@@ -28,7 +28,25 @@ class HappieMenukaartItemsController extends AclController {
 		if ($this->hasParam(3)) {
 			$this->action = $this->getParam(3);
 		}
-		parent::performAction($this->getParams(4));
+		switch ($this->action) {
+			case 'wijzig':
+
+				$field = new ObjectIdField(new HappieMenukaartItem());
+				if ($this->isPosted() AND $field->validate()) {
+					$ids = $field->getValue();
+					$item = $this->model->getItem((int) $ids[0]);
+					if (!$item) {
+						$this->geentoegang();
+					}
+					parent::performAction(array($item));
+				} else {
+					$this->geentoegang();
+				}
+				break;
+
+			default:
+				parent::performAction($this->getParams(4));
+		}
 	}
 
 	public function overzicht() {
@@ -46,25 +64,20 @@ class HappieMenukaartItemsController extends AclController {
 		$form = new HappieMenukaartItemForm($item);
 		if ($this->isPosted() AND $form->validate()) {
 			$this->model->create($item);
-			setMelding('Menukaart-item succesvol toegevoegd', 1);
-			redirect(happieUrl);
+			$this->view = new JsonResponse($item);
+			return;
 		}
-		$this->view = new CsrLayout3Page($form);
+		$this->view = $form;
 	}
 
-	public function wijzig($id) {
-		$item = $this->model->getItem((int) $id);
-		if (!$item) {
-			setMelding('Menukaart-item bestaat niet', -1);
-			redirect(happieUrl);
-		}
+	public function wijzig(HappieMenukaartItem $item) {
 		$form = new HappieMenukaartItemWijzigenForm($item);
 		if ($this->isPosted() AND $form->validate()) {
 			$this->model->update($item);
-			setMelding('Wijziging succesvol opgeslagen', 1);
-			redirect(happieUrl);
+			$this->view = new JsonResponse($item);
+			return;
 		}
-		$this->view = new CsrLayout3Page($form);
+		$this->view = $form;
 	}
 
 }

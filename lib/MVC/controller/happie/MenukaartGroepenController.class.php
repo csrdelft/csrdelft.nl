@@ -28,7 +28,25 @@ class HappieMenukaartGroepenController extends AclController {
 		if ($this->hasParam(3)) {
 			$this->action = $this->getParam(3);
 		}
-		parent::performAction($this->getParams(4));
+		switch ($this->action) {
+			case 'wijzig':
+
+				$field = new ObjectIdField(new HappieMenukaartGroep());
+				if ($this->isPosted() AND $field->validate()) {
+					$ids = $field->getValue();
+					$groep = $this->model->getGroep((int) $ids[0]);
+					if (!$groep) {
+						$this->geentoegang();
+					}
+					parent::performAction(array($groep));
+				} else {
+					$this->geentoegang();
+				}
+				break;
+
+			default:
+				parent::performAction($this->getParams(4));
+		}
 	}
 
 	public function overzicht() {
@@ -46,25 +64,20 @@ class HappieMenukaartGroepenController extends AclController {
 		$form = new HappieMenukaartGroepForm($groep);
 		if ($this->isPosted() AND $form->validate()) {
 			$this->model->create($groep);
-			setMelding('Menukaart-groep succesvol toegevoegd', 1);
-			redirect(happieUrl);
+			$this->view = new JsonResponse($groep);
+			return;
 		}
-		$this->view = new CsrLayout3Page($form);
+		$this->view = $form;
 	}
 
-	public function wijzig($id) {
-		$groep = $this->model->getGroep((int) $id);
-		if (!$groep) {
-			setMelding('Menukaart-groep bestaat niet', -1);
-			redirect(happieUrl);
-		}
+	public function wijzig(HappieMenukaartGroep $groep) {
 		$form = new HappieMenukaartGroepWijzigenForm($groep);
 		if ($this->isPosted() AND $form->validate()) {
 			$this->model->update($groep);
-			setMelding('Wijziging succesvol opgeslagen', 1);
-			redirect(happieUrl);
+			$this->view = new JsonResponse($groep);
+			return;
 		}
-		$this->view = new CsrLayout3Page($form);
+		$this->view = $form;
 	}
 
 }
