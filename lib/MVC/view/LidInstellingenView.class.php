@@ -21,7 +21,7 @@ class LidInstellingenView extends SmartyTemplateView {
 		echo '</ul>';
 		$reset = LoginModel::mag('P_ADMIN');
 		foreach ($this->model->getInstellingen() as $module => $instellingen) {
-			echo '<div id="tabs-' . $module . '">';
+			echo '<div id="tabs-' . $module . '"><br />';
 			foreach ($instellingen as $id) {
 				$this->smarty->assign('module', $module);
 				$this->smarty->assign('id', $id);
@@ -36,7 +36,7 @@ class LidInstellingenView extends SmartyTemplateView {
 			echo '</div>';
 		}
 		echo '</div>';
-		$from = new UrlField('referer', HTTP_REFERER);
+		$from = new UrlField('referer', HTTP_REFERER, null);
 		$from->hidden = true;
 		$from->view();
 		$btns = new FormDefaultKnoppen('/');
