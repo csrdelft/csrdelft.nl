@@ -1406,6 +1406,7 @@ class ObjectIdField extends InputField {
 
 	public function __construct(PersistentEntity $entity) {
 		parent::__construct(get_class($entity), $entity->getValues(true), null, $entity);
+		$this->hidden = true;
 	}
 
 	public function getValue() {
@@ -1431,17 +1432,9 @@ class ObjectIdField extends InputField {
 		echo $this->getDiv();
 		echo $this->getErrorDiv();
 		foreach ($this->value as $i => $value) {
-			echo '<input type="string" name="' . $this->name . '[]" value="' . $value . '" />';
+			echo '<input type="hidden" name="' . $this->name . '[]" value="' . $value . '" />';
 		}
 		echo '</div>';
 	}
-
-}
-
-class RequiredObjectIdField extends ObjectIdField {
-
-	public $required = true;
-	public $readonly = true;
-	public $hidden = true;
 
 }
