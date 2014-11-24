@@ -50,7 +50,7 @@ class HappieBestellingenView extends DataTable {
 		$this->searchColumn('menu_groep');
 		$this->searchColumn('menukaart_item');
 
-		$wijzig = new DataTableKnop('== 1', $url = happieUrl . '/wijzig/', 'post popup TableSelection', 69, 'Wijzig', 'Wijzig bestelling', 'DTTT_button_edit');
+		$wijzig = new DataTableKnop('== 1', $url = happieUrl . '/wijzig', 'post popup TableSelection', 87, 'Wijzig', 'Bestelling wijzigen (Sneltoets: W)', 'DTTT_button_edit');
 		$wijzig->data = HappieBestellingenModel::orm . '=#' . $this->tableId;
 		$this->addKnop($wijzig);
 	}
