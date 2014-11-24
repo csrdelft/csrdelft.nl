@@ -276,7 +276,6 @@ class DataTable extends TabsForm {
 					}
 					updateToolbar();
 				});
-				//$(tableId).on('draw.dt', updateToolbar);
 
 				$('.DTTT_button_text').on('click', updateToolbar);
 				// Toolbar above table
@@ -394,11 +393,11 @@ class DataTableKnop extends FormulierKnop {
 
 class DataTableResponse extends JsonResponse {
 
-	private $table;
+	protected $tableId;
 
 	public function __construct($table, $data) {
 		parent::__construct($data);
-		$this->table = $table;
+		$this->tableId = $table;
 	}
 
 	public function getJson($data) {
@@ -408,7 +407,7 @@ class DataTableResponse extends JsonResponse {
 	public function view() {
 		http_response_code($this->code);
 		header('Content-Type: application/json');
-		echo '{"table":"#' . $this->table . '", "data":[' . "\n";
+		echo '{"table":"#' . $this->tableId . '", "data":[' . "\n";
 		$comma = false;
 		foreach ($this->model as $data) {
 			if ($comma) {

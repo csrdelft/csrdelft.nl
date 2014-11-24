@@ -11,7 +11,7 @@
 class HappieBestellingenData extends DataTableResponse {
 
 	public function __construct($data) {
-		parent::__construct('HappieBestellingenView', $data);
+		parent::__construct('HappieBestellingen', $data);
 	}
 
 	public function getJson($bestelling) {
@@ -33,19 +33,19 @@ class HappieBestellingenData extends DataTableResponse {
 		$array['tafel'] = 'Tafel ' . $bestelling->tafel;
 		$array['laatst_gewijzigd'] = reldate($bestelling->laatst_gewijzigd);
 		$array['wijzig_historie'] = null;
-		/*
-		  // editable aantal
-		  $field = new IntField('aantal', $bestelling->aantal, 'Aantal', 0, $bestelling->aantal + $beschikbaar);
-		  $form = new InlineForm($bestelling, 'aantal' . $bestelling->bestelling_id, happieUrl . '/aantal', $field);
-		  $form->css_classes[] = 'DataTableResponse';
-		  $array['aantal'] = $form->getHtml();
 
-		  // editable aantal geserveerd
-		  $field = new IntField('aantal_geserveerd', $bestelling->aantal_geserveerd, 'Aantal geserveerd', 0, $bestelling->aantal_geserveerd + $beschikbaar); // meer vrijheid dan $bestelling->aantal
-		  $form = new InlineForm($bestelling, 'geserveerd' . $bestelling->bestelling_id, happieUrl . '/geserveerd', $field);
-		  $form->css_classes[] = 'DataTableResponse';
-		  $array['aantal_geserveerd'] = $form->getHtml();
-		 */
+		// editable aantal
+		$field = new IntField('aantal', $bestelling->aantal, 'Aantal', 0, $bestelling->aantal + $beschikbaar);
+		$form = new InlineForm($bestelling, 'aantal' . $bestelling->bestelling_id, happieUrl . '/aantal', $field);
+		$form->css_classes[] = 'DataTableResponse';
+		$array['aantal'] = $form->getHtml();
+
+		// editable aantal geserveerd
+		$field = new IntField('aantal_geserveerd', $bestelling->aantal_geserveerd, 'Aantal geserveerd', 0, $bestelling->aantal_geserveerd + $beschikbaar); // meer vrijheid dan $bestelling->aantal
+		$form = new InlineForm($bestelling, 'geserveerd' . $bestelling->bestelling_id, happieUrl . '/geserveerd', $field);
+		$form->css_classes[] = 'DataTableResponse';
+		$array['aantal_geserveerd'] = $form->getHtml();
+
 		// editable serveer status
 		$field = new SelectField('serveer_status', $bestelling->serveer_status, 'Serveer status', HappieServeerStatus::getSelectOptions());
 		$form = new InlineForm($bestelling, 'serveerstatus' . $bestelling->bestelling_id, happieUrl . '/serveerstatus', $field);
@@ -72,7 +72,7 @@ class HappieBestellingenData extends DataTableResponse {
 class HappieBestellingenView extends DataTable {
 
 	public function __construct($dataUrl = '/overzicht', $titel = 'Alle bestellingen', $groupByColumn = 'datum') {
-		parent::__construct(HappieBestellingenModel::orm, get_class($this), $titel, $groupByColumn);
+		parent::__construct(HappieBestellingenModel::orm, 'HappieBestellingen', $titel, $groupByColumn);
 		$this->dataUrl = happieUrl . $dataUrl;
 
 		$this->addColumn('gang', 'menukaart_item');

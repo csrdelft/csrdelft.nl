@@ -11,7 +11,7 @@
 class HappieMenukaartItemsView extends DataTable {
 
 	public function __construct() {
-		parent::__construct(HappieMenukaartItemsModel::orm, get_class($this), 'Menukaart items', 'menukaart_groep');
+		parent::__construct(HappieMenukaartItemsModel::orm, 'HappieMenukaartItems', 'Menukaart items', 'menukaart_groep');
 		$this->dataUrl = happieUrl . '/overzicht';
 
 		$this->addColumn('groep_beschikbaar');
@@ -29,7 +29,7 @@ class HappieMenukaartItemsView extends DataTable {
 class HappieMenukaartItemsData extends DataTableResponse {
 
 	public function __construct($data) {
-		parent::__construct('HappieMenukaartItemsView', $data);
+		parent::__construct('HappieMenukaartItems', $data);
 	}
 
 	public function getJson($item) {
@@ -51,7 +51,7 @@ class HappieMenukaartItemsData extends DataTableResponse {
 class HappieMenukaartGroepenView extends DataTable {
 
 	public function __construct() {
-		parent::__construct(HappieMenukaartGroepenModel::orm, get_class($this), 'Menukaart groepen', 'gang');
+		parent::__construct(HappieMenukaartGroepenModel::orm, 'HappieMenukaartGroepen', 'Menukaart groepen', 'gang');
 		$this->dataUrl = happieUrl . '/overzicht';
 
 		$nieuw = new DataTableKnop('>= 0', happieUrl . '/nieuw', 'post popup', 78, 'Nieuw', 'Menukaart-groep toevoegen (Sneltoets: N)', 'DTTT_button_new');
@@ -67,7 +67,7 @@ class HappieMenukaartGroepenView extends DataTable {
 class HappieMenukaartGroepenData extends DataTableResponse {
 
 	public function __construct($data) {
-		parent::__construct('HappieMenukaartGroepenView', $data);
+		parent::__construct('HappieMenukaartGroepen', $data);
 	}
 
 	public function getJson($groep) {

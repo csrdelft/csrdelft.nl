@@ -22,22 +22,17 @@ function fnInitDataTables() {
 }
 
 function fnUpdateDataTable(data) {
-	var oTable = $(data.table).dataTable();
+	var table = $(data.table).DataTable();
 	data.data.forEach(function (row) {
 		var tr = $("tr[data-objectid='" + row.objectId + "']");
-		if (tr.length > 0) {
-			console.log(row);
-			oTable.fnUpdate(row, tr);
-			try {
-				$('abbr.timeago', tr).timeago();
-			} catch (e) {
-				// missing js
-			}
+		if (tr.length === 1) {
+			table.row(tr).data(row);
 		}
 		else {
-			oTable.fnAddData(row);
+			table.row.add(row);
 		}
 	});
+	//table.draw();
 }
 
 function fnGetSelectionSize(tableId) {
