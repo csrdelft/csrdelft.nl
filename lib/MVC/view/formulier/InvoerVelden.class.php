@@ -334,22 +334,26 @@ JS;
 		return '';
 	}
 
-	/**
-	 * view die zou moeten werken voor veel velden...
-	 */
-	public function view() {
-		echo $this->getDiv();
-		echo $this->getLabel();
-		echo $this->getErrorDiv();
-		if ($this->preview) {
-			echo $this->getPreviewDiv();
-		}
+	public function getHtml() {
 		if ($this->hidden) {
 			$type = 'hidden';
 		} else {
 			$type = 'text';
 		}
-		echo '<input type="' . $type . '"' . $this->getInputAttribute(array('id', 'name', 'class', 'value', 'origvalue', 'disabled', 'readonly', 'maxlength', 'placeholder', 'autocomplete', 'onchange', 'onclick', 'onkeydown', 'onkeyup')) . ' />';
+		return '<input type="' . $type . '"' . $this->getInputAttribute(array('id', 'name', 'class', 'value', 'origvalue', 'disabled', 'readonly', 'maxlength', 'placeholder', 'autocomplete', 'onchange', 'onclick', 'onkeydown', 'onkeyup')) . ' />';
+	}
+
+	/**
+	 * View die zou moeten werken voor veel velden.
+	 */
+	public function view() {
+		echo $this->getDiv();
+		echo $this->getLabel();
+		echo $this->getErrorDiv();
+		echo $this->getHtml();
+		if ($this->preview) {
+			echo $this->getPreviewDiv();
+		}
 		echo '</div>';
 	}
 
@@ -562,7 +566,7 @@ class UidField extends TextField {
 	}
 
 	public function getPreviewDiv() {
-		return '<div id="lidPreview_' . $this->getId() . '" class="lidPreview"></div>';
+		return '<div id="lidPreview_' . $this->getId() . '" class="previewDiv"></div>';
 	}
 
 	public function getJavascript() {
@@ -649,7 +653,7 @@ class LidField extends TextField {
 	}
 
 	public function getPreviewDiv() {
-		return '<div id="lidPreview_' . $this->getId() . '" class="lidPreview"></div>';
+		return '<div id="lidPreview_' . $this->getId() . '" class="previewDiv"></div>';
 	}
 
 	public function getJavascript() {
@@ -712,27 +716,22 @@ class EntityField extends InputField {
 		return $this->error === '';
 	}
 
-	public function view() {
-		echo $this->getDiv();
-		echo $this->getLabel();
-		echo $this->getErrorDiv();
-
+	public function getHtml() {
 		// value to show
 		if ($this->isPosted()) {
 			$show_value = filter_input(INPUT_POST, $this->name . '_show', FILTER_SANITIZE_STRING);
 		} else {
 			$show_value = $this->show_value;
 		}
-		echo '<input type="text" name="' . $this->name . '_show" id="' . $this->getId() . '" value="' . $show_value . '" origvalue="' . $this->show_value . '"' . $this->getInputAttribute(array('class', 'disabled', 'readonly', 'maxlength', 'placeholder', 'autocomplete', 'onchange', 'onclick', 'onkeydown', 'onkeyup')) . ' />';
+		$html = '<input type="text" name="' . $this->name . '_show" id="' . $this->getId() . '" value="' . $show_value . '" origvalue="' . $this->show_value . '"' . $this->getInputAttribute(array('class', 'disabled', 'readonly', 'maxlength', 'placeholder', 'autocomplete', 'onchange', 'onclick', 'onkeydown', 'onkeyup')) . ' />';
 
 		// actual values
 		$class = $this->model->orm;
 		$orm = new $class();
 		foreach ($orm->getPrimaryKey() as $i => $key) {
-			echo '<input type="hidden" name="' . $this->name . '[]" id="' . $this->getId() . '_' . $key . '" value="' . $this->value[$i] . '" origvalue="' . $this->origvalue[$i] . '" />';
+			$html .= '<input type="hidden" name="' . $this->name . '[]" id="' . $this->getId() . '_' . $key . '" value="' . $this->value[$i] . '" origvalue="' . $this->origvalue[$i] . '" />';
 		}
-
-		echo '</div>';
+		return $html;
 	}
 
 }
@@ -903,16 +902,8 @@ JS;
 		return $this->error === '';
 	}
 
-	/**
-	 * view die zou moeten werken voor veel velden...
-	 */
-	public function view() {
-		echo $this->getDiv();
-		echo $this->getLabel();
-		echo $this->getErrorDiv();
-		if ($this->preview) {
-			echo $this->getPreviewDiv();
-		}
+	public function getHtml() {
+		$html = '';
 		if ($this->hidden) {
 			$type = 'hidden';
 		} else {
@@ -925,7 +916,7 @@ JS;
 					$class = '';
 				}
 				$minus = CSR_PICS . '/knopjes/min.png';
-				echo <<<HTML
+				$html .= <<<HTML
 <span id="substract_{$this->getId()}" {$class} style="cursor:pointer;padding:7px;"><img src="{$minus}" alt="-" class="icon" width="20" height="20" /></span>
 HTML;
 			}
@@ -964,7 +955,7 @@ if (parseInt( $(this).val() ) > {$this->max}) {
 JS;
 		}
 
-		echo ' <input type="' . $type . '"' . $this->getInputAttribute(array('id', 'name', 'class', 'value', 'origvalue', 'disabled', 'readonly', 'maxlength', 'placeholder', 'autocomplete', 'onchange', 'onclick', 'onkeydown', 'onkeyup')) . ' /> ';
+		$html .= ' <input type="' . $type . '"' . $this->getInputAttribute(array('id', 'name', 'class', 'value', 'origvalue', 'disabled', 'readonly', 'maxlength', 'placeholder', 'autocomplete', 'onchange', 'onclick', 'onkeydown', 'onkeyup')) . ' /> ';
 
 		if (!$this->readonly AND ! $this->disabled AND ! $this->hidden) {
 			if ($this->max !== null AND $this->getValue() === $this->max) {
@@ -973,11 +964,11 @@ JS;
 				$class = '';
 			}
 			$plus = CSR_PICS . '/knopjes/plus.png';
-			echo <<<HTML
+			$html .= <<<HTML
 <span id="add_{$this->getId()}" {$class} style="cursor:pointer;padding:7px;"><img src="{$plus}" alt="+" class="icon" width="20" height="20" /></span>
 HTML;
 		}
-		echo '</div>';
+		return $html;
 	}
 
 	public function getJavascript() {
@@ -1084,28 +1075,22 @@ class BedragField extends DecimalField {
 		return (int) $value * 100;
 	}
 
-	public function view() {
-		echo $this->getDiv();
-		echo $this->getLabel();
-		echo $this->getErrorDiv();
-		if ($this->preview) {
-			echo $this->getPreviewDiv();
-		}
+	public function getHtml() {
 		if ($this->hidden) {
 			$type = 'hidden';
 		} else {
 			$type = 'text';
 		}
-		echo $this->valuta . ' <input type="' . $type . '"' . $this->getInputAttribute(array('id', 'name', 'class', 'disabled', 'readonly', 'maxlength', 'placeholder', 'autocomplete', 'onchange', 'onclick', 'onkeydown', 'onkeyup'));
+		$html .= $this->valuta . ' <input type="' . $type . '"' . $this->getInputAttribute(array('id', 'name', 'class', 'disabled', 'readonly', 'maxlength', 'placeholder', 'autocomplete', 'onchange', 'onclick', 'onkeydown', 'onkeyup'));
 		echo ' value="' . number_format(str_replace(',', '.', $this->value), $this->precision, ',', '') . '" origvalue="';
 		// if an error occured do not re-format the original value
 		// prevent unchanged is not smart enough for rounding and such
 		if ($this->getError() != '') {
-			echo $this->origvalue;
+			$html .= $this->origvalue;
 		} else {
-			echo number_format(str_replace(',', '.', $this->origvalue), $this->precision, ',', '');
+			$html .= number_format(str_replace(',', '.', $this->origvalue), $this->precision, ',', '');
 		}
-		echo '" /></div>';
+		return $html . '" />';
 	}
 
 }
@@ -1221,13 +1206,8 @@ class TextareaField extends TextField {
 		$this->css_classes[] = 'AutoSize textarea-transition';
 	}
 
-	public function view() {
-		echo $this->getDiv();
-		echo $this->getLabel();
-		echo $this->getErrorDiv();
-		echo $this->getPreviewDiv();
-		echo '<textarea' . $this->getInputAttribute(array('id', 'name', 'origvalue', 'class', 'disabled', 'readonly', 'placeholder', 'maxlength', 'rows', 'autocomplete', 'onchange', 'onclick', 'onkeydown', 'onkeyup')) . '>' . $this->value . '</textarea>';
-		echo '</div>';
+	public function getHtml() {
+		return '<textarea' . $this->getInputAttribute(array('id', 'name', 'origvalue', 'class', 'disabled', 'readonly', 'placeholder', 'maxlength', 'rows', 'autocomplete', 'onchange', 'onclick', 'onkeydown', 'onkeyup')) . '>' . $this->value . '</textarea>';
 	}
 
 	/**
@@ -1299,12 +1279,8 @@ class WachtwoordField extends TextField {
 
 	public $enter_submit = true;
 
-	public function view() {
-		echo $this->getDiv();
-		echo $this->getLabel();
-		echo $this->getErrorDiv();
-		echo '<input type="password"' . $this->getInputAttribute(array('id', 'name', 'class', 'value', 'origvalue', 'disabled', 'readonly', 'maxlength', 'placeholder', 'autocomplete', 'onchange', 'onclick', 'onkeydown', 'onkeyup')) . ' />';
-		echo '</div>';
+	public function getHtml() {
+		return '<input type="password"' . $this->getInputAttribute(array('id', 'name', 'class', 'value', 'origvalue', 'disabled', 'readonly', 'maxlength', 'placeholder', 'autocomplete', 'onchange', 'onclick', 'onkeydown', 'onkeyup')) . ' />';
 	}
 
 }
@@ -1385,19 +1361,17 @@ class WachtwoordWijzigenField extends InputField {
 		return $this->error === '';
 	}
 
-	public function view() {
-		echo $this->getDiv();
-		echo '<div class="password">';
-		echo $this->getErrorDiv();
+	public function getHtml() {
+		$html = '';
 		if (!$this->reset) {
-			echo '<label for="' . $this->name . '_current">Huidige wachtwoord</label>';
-			echo '<input type="password" autocomplete="off" id="' . $this->getId() . '_current" name="' . $this->name . '_current" /></div>';
+			$html .= '<label for="' . $this->name . '_current">Huidige wachtwoord</label>';
+			$html .= '<input type="password" autocomplete="off" id="' . $this->getId() . '_current" name="' . $this->name . '_current" /></div>';
 		}
-		echo '<div class="password"><label for="' . $this->name . '_new">Nieuw wachtwoord</label>';
-		echo '<input type="password" autocomplete="off" id="' . $this->getId() . '_new" name="' . $this->name . '_new" /></div>';
-		echo '<div class="password"><label for="' . $this->name . '_confirm">Nogmaals</label>';
-		echo '<input type="password" autocomplete="off" id="' . $this->getId() . '_confirm" name="' . $this->name . '_confirm" /></div>';
-		echo '</div>';
+		$html .= '<div class="password"><label for="' . $this->name . '_new">Nieuw wachtwoord</label>';
+		$html .= '<input type="password" autocomplete="off" id="' . $this->getId() . '_new" name="' . $this->name . '_new" /></div>';
+		$html .= '<div class="password"><label for="' . $this->name . '_confirm">Nogmaals</label>';
+		$html .= '<input type="password" autocomplete="off" id="' . $this->getId() . '_confirm" name="' . $this->name . '_confirm" /></div>';
+		return $html;
 	}
 
 }
@@ -1428,13 +1402,12 @@ class ObjectIdField extends InputField {
 		return $this->error === '';
 	}
 
-	public function view() {
-		echo $this->getDiv();
-		echo $this->getErrorDiv();
+	public function getHtml() {
+		$html = '';
 		foreach ($this->value as $i => $value) {
-			echo '<input type="hidden" name="' . $this->name . '[]" value="' . $value . '" />';
+			$html .= '<input type="hidden" name="' . $this->name . '[]" value="' . $value . '" />';
 		}
-		echo '</div>';
+		return $html;
 	}
 
 }

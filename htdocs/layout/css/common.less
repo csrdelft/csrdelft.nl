@@ -38,10 +38,20 @@ table.inline { display: inline-table; }
 	background-color: #EBEBEB;
 }
 
+/* --------------------------------
+
+Dynamic reldate
+
+-------------------------------- */
+
 abbr.timeago { border: none; }
 abbr.timeago:hover { border-bottom: 1px dotted grey; }
 
-a, a.btn { text-decoration: none; }
+/* --------------------------------
+
+Externe links & Knoppen
+
+-------------------------------- */
 a.external {
 	background-image: url('http://plaetjes.csrdelft.nl/layout/external-link-blue.png');
 	background-repeat: no-repeat;
@@ -49,6 +59,7 @@ a.external {
 	padding-right: 14px;
 }
 a:hover { text-decoration: underline; }
+a, a.btn, a.btn:hover { text-decoration: none; }
 .btn.vergroot {
 	font-size: 14px;
 }
@@ -101,9 +112,9 @@ Modal popup
 #modal{
 	display: none;
 	position: fixed;
-	top: 175px;
-	left: 200px;
-	min-width: 500px;
+	top: 10%;
+	left: 20%;
+	min-width: 600px;
 	z-index: 1040;
 	padding: 50px;
 	font-size: 13px;

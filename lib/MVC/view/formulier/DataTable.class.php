@@ -19,6 +19,7 @@ class DataTable extends TabsForm {
 	private $groupByLocked = false;
 	protected $defaultLength = -1;
 	private $columns = array();
+	private $editable = array();
 	protected $settings = array(
 		'dom'		 => 'Tfrtpli',
 		'tableTools' => array(
@@ -140,6 +141,14 @@ class DataTable extends TabsForm {
 		$this->columns[$name]['searchable'] = (bool) $searchable;
 	}
 
+	protected function editableColumn($name, $url, $editable = true) {
+		if ($editable) {
+			$this->editable[$name] = $url;
+		} else {
+			unset($this->editable[$name]);
+		}
+	}
+
 	protected function getSettings() {
 
 		// set view modus: paging or scrolling
@@ -191,7 +200,11 @@ class DataTable extends TabsForm {
 						array($index, 'asc')
 					);
 				}
-
+				// translate editable columns index 
+				if (isset($this->editable[$name])) {
+					$this->editable[$visibleIndex] = $this->editable[$name];
+					unset($this->editable[$name]);
+				}
 				$visibleIndex++;
 			}
 			$index++;
@@ -218,6 +231,7 @@ class DataTable extends TabsForm {
 			var lastUpdate<?= $this->tableId; ?>;
 
 			$(document).ready(function () {
+				var editableColumns = <?= json_encode($this->editable); ?>;
 
 				var fnAjaxUpdateCallback = function (json) {
 					lastUpdate<?= $this->tableId; ?> = Math.round(new Date().getTime() / 1000);
@@ -242,7 +256,22 @@ class DataTable extends TabsForm {
 					} catch (e) {
 						// missing js
 					}
-				};
+		<?php if ($this->editable) { ?>
+						// voor elke td check of deze editable moet zijn 
+						$(tr).children().each(function (columnIndex, td) {
+							if (columnIndex in editableColumns) {
+								td.addClass('editable').click(alert);
+								
+								/*
+								 url: editableColumns[columnIndex],
+								 id: data.objectId, 
+								 lastUpdate: lastUpdate<?= $this->tableId; ?> 
+								 */
+							}
+						});
+		<?php } ?>
+				}; // end fnCreatedRowCallback 
+
 				var tableId = '#<?= $this->tableId; ?>';
 				var oTable = $(tableId).DataTable(<?= $settingsJson; ?>);
 				var keys = new $.fn.dataTable.KeyTable($(tableId));
@@ -305,7 +334,7 @@ class DataTable extends TabsForm {
 						}
 					}
 		<?php
-		$keyshortcuts = '[32'; // space
+		$keyshortcuts = '[32,13'; // space, enter
 		foreach ($this->getFields() as $field) {
 			if ($field instanceof DataTableKnop AND is_int($field->keyshortcut)) {
 				$keyshortcuts .= ',' . $field->keyshortcut;

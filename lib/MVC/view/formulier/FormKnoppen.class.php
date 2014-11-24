@@ -42,20 +42,24 @@ abstract class FormKnoppen implements FormElement {
 		}
 	}
 
-	public function view() {
-		echo '<div class="' . $this->getType() . ' ' . implode(' ', $this->css_classes) . '"><div class="float-left">';
+	public function getHtml() {
+		$html = '<div class="' . $this->getType() . ' ' . implode(' ', $this->css_classes) . '"><div class="float-left">';
 		foreach ($this->knoppen as $knop) {
 			if ($knop->float_left) {
-				$knop->view();
+				$html .= $knop->getHtml();
 			}
 		}
-		echo '</div><div class="float-right">';
+		$html .= '</div><div class="float-right">';
 		foreach ($this->knoppen as $knop) {
 			if (!$knop->float_left) {
-				$knop->view();
+				$html .= $knop->getHtml();
 			}
 		}
-		echo '</div></div>';
+		return $html . '</div></div>';
+	}
+
+	public function view() {
+		echo $this->getHtml();
 	}
 
 	public function getJavascript() {
@@ -143,22 +147,24 @@ class FormulierKnop implements FormElement {
 		return get_class($this);
 	}
 
-	public function view() {
-		if (strpos($this->action, 'cancel') !== false) {
-			$modal = ' data-dismiss="modal"';
-		} else {
-			$modal = '';
-		}
+	public function getHtml() {
+		$html = '<a id="' . $this->getId() . '"' . ($this->url ? ' href="' . $this->url . '"' : '') . ' class="btn ' . $this->action . ' ' . implode(' ', $this->css_classes) . '" title="' . htmlspecialchars($this->title) . '"';
 		if (isset($this->data)) {
-			$data = ' data="' . $this->data . '"';
-		} else {
-			$data = '';
+			$html .= ' data="' . $this->data . '"';
 		}
-		echo '<a id="' . $this->getId() . '"' . ($this->url ? ' href="' . $this->url . '"' : '') . ' class="btn ' . $this->action . ' ' . implode(' ', $this->css_classes) . '" title="' . htmlspecialchars($this->title) . '"' . $data . $modal . '>';
+		if (strpos($this->action, 'cancel') !== false) {
+			$html .= ' data-dismiss="modal"';
+		}
+		$html .= '>';
 		if ($this->icon) {
-			echo '<img src="' . CSR_PICS . $this->icon . '" class="icon" width="16" height="16" /> ';
+			$html .= '<img src="' . CSR_PICS . $this->icon . '" class="icon" width="16" height="16" /> ';
 		}
-		echo $this->label . '</a> ';
+		$html .= $this->label;
+		return $html . '</a> ';
+	}
+
+	public function view() {
+		echo $this->getHtml();
 	}
 
 	public function getJavascript() {

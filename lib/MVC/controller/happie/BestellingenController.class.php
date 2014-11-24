@@ -170,8 +170,7 @@ class HappieBestellingenController extends AclController {
 	}
 
 	public function opmerking(HappieBestelling $bestelling) {
-		$field = new TextareaField('opmerking', $bestelling->opmerking, null);
-		$this->view = new InlineForm($bestelling, 'opmerking' . $bestelling->bestelling_id, happieUrl . '/opmerking', $field);
+		$this->view = new HappieOpmerkingWijzigenInlineForm($bestelling);
 	}
 
 }

@@ -40,6 +40,16 @@ class SelectField extends InputField {
 		$this->groups = (bool) $groups;
 		$this->size = (int) $size;
 		$this->multiple = $multiple;
+
+		if ($this->groups) {
+			$this->onchange .= <<<JS
+var selected = $(':selected', this);
+$('#selectPreview_{$this->getId()}').html(selected.parent().attr('label'));
+JS;
+		}
+		$this->onkeyup .= <<<JS
+$(this).trigger('onchange');
+JS;
 	}
 
 	public function getValue() {
@@ -75,41 +85,52 @@ class SelectField extends InputField {
 		return $this->error === '';
 	}
 
-	private function viewOptions(array $options) {
-		foreach ($options as $value => $description) {
-			echo '<option value="' . $value . '"';
-			if ($value == $this->value) {
-				echo ' selected="selected"';
-			}
-			echo '>' . htmlspecialchars($description) . '</option>';
+	public function getPreviewDiv() {
+		if ($this->groups) {
+			return '<div id="selectPreview_' . $this->getId() . '" class="previewDiv"></div>';
 		}
+		return '';
 	}
 
-	public function view() {
-		echo $this->getDiv();
-		echo $this->getLabel();
-		echo $this->getErrorDiv();
-		echo '<select name="' . $this->name;
+	public function getJavascript() {
+		return parent::getJavascript() . <<<JS
+$('#{$this->getId()}').trigger('onchange');
+JS;
+	}
+
+	public function getHtml() {
+		$html = '<select name="' . $this->name;
 		if ($this->multiple) {
-			echo '[]" multiple';
+			$html .= '[]" multiple';
 		} else {
-			echo '"';
+			$html .= '"';
 		}
 		if ($this->size > 1) {
-			echo ' size="' . $this->size . '"';
+			$html .= ' size="' . $this->size . '"';
 		}
-		echo $this->getInputAttribute(array('id', 'origvalue', 'class', 'disabled', 'readonly', 'onchange', 'onclick', 'onkeyup')) . '>';
+		$html .= $this->getInputAttribute(array('id', 'origvalue', 'class', 'disabled', 'readonly', 'onchange', 'onclick', 'onkeyup')) . '>';
 		if ($this->groups) {
 			foreach ($this->options as $group => $options) {
-				echo '<optgroup label="' . htmlspecialchars($group) . '">';
-				$this->viewOptions($options);
-				echo '</optgroup>';
+				$html .= '<optgroup label="' . htmlspecialchars($group) . '">'
+						. $this->getOptionsHtml($options) .
+						'</optgroup>';
 			}
 		} else {
-			$this->viewOptions($this->options);
+			$html .= $this->getOptionsHtml($this->options);
 		}
-		echo '</select>';
-		echo '</div>';
+		return $html . '</select>';
+	}
+
+	private function getOptionsHtml(array $options) {
+		$html = '';
+		foreach ($options as $value => $description) {
+			$html .= '<option value="' . $value . '"';
+			if ($value == $this->value) {
+				$html .= ' selected="selected"';
+			}
+			$html .= '>' . htmlspecialchars($description) . '</option>';
+		}
+		return $html;
 	}
 
 }
@@ -232,22 +253,16 @@ class KeuzeRondjeField extends SelectField {
 		parent::__construct($name, $value, $description, $options, array(), 1, false);
 	}
 
-	public function view() {
-		echo $this->getDiv();
-		echo $this->getLabel();
-		echo $this->getErrorDiv();
-
-		echo '<div class="KeuzeRondjeFieldOptions">';
+	public function getHtml() {
+		$html = '<div class="KeuzeRondjeFieldOptions">';
 		foreach ($this->options as $value => $description) {
-			echo '<input type="radio" id="field_' . $this->getName() . '_option_' . $value . '" value="' . $value . '"' . $this->getInputAttribute(array('name', 'origvalue', 'class', 'disabled', 'readonly', 'onchange', 'onclick', 'onkeyup'));
+			$html .= '<input type="radio" id="field_' . $this->getName() . '_option_' . $value . '" value="' . $value . '"' . $this->getInputAttribute(array('name', 'origvalue', 'class', 'disabled', 'readonly', 'onchange', 'onclick', 'onkeyup'));
 			if ($value == $this->value) {
-				echo ' checked="checked"';
+				$html .= ' checked="checked"';
 			}
-			echo '><label for="field_' . $this->getName() . '_option_' . $value . '" ' . $this->getInputAttribute('class') . '> ' . htmlspecialchars($description) . '</label><br />';
+			$html .= '><label for="field_' . $this->getName() . '_option_' . $value . '" ' . $this->getInputAttribute('class') . '> ' . htmlspecialchars($description) . '</label><br />';
 		}
-		echo '</div>';
-
-		echo '</div>';
+		return $html . '</div>';
 	}
 
 }
@@ -282,6 +297,14 @@ class DatumField extends InputField {
 		} else {
 			$this->minyear = (int) $minyear;
 		}
+		$this->onchange .= <<<JS
+var datum = new Date($('#field_{$this->name}_jaar').val(), $('#field_{$this->name}_maand').val() - 1, $('#field_{$this->name}_dag').val());
+var weekday = [ 'zondag', 'maandag', 'dinsdag', 'woensdag', 'donderdag', 'vrijdag', 'zaterdag' ];
+$('#datumPreview_{$this->getId()}').html(weekday[datum.getDay()]);
+JS;
+		$this->onkeyup .= <<<JS
+$(this).trigger('onchange');
+JS;
 	}
 
 	public function isPosted() {
@@ -327,26 +350,16 @@ class DatumField extends InputField {
 	}
 
 	public function getPreviewDiv() {
-		return '<div id="datumPreview_' . $this->getId() . '" class="datumPreview"></div>';
+		return '<div id="datumPreview_' . $this->getId() . '" class="previewDiv"></div>';
 	}
 
 	public function getJavascript() {
 		return parent::getJavascript() . <<<JS
-onChange_{$this->getId()} = function (){
-	var datum = new Date($('#field_{$this->name}_jaar').val(), $('#field_{$this->name}_maand').val() - 1, $('#field_{$this->name}_dag').val());
-	var weekday = [ 'zondag', 'maandag', 'dinsdag', 'woensdag', 'donderdag', 'vrijdag', 'zaterdag' ];
-	$('#datumPreview_{$this->getId()}').html(weekday[datum.getDay()]);
-}
-onChange_{$this->getId()}();
+$('#{$this->getId()}_dag').trigger('onchange');
 JS;
 	}
 
-	public function view() {
-		echo $this->getDiv();
-		echo $this->getLabel();
-		echo $this->getErrorDiv();
-
-		$onchange = ' onchange="onChange_' . $this->getId() . '()" onkeyup="onChange_' . $this->getId() . '()"';
+	public function getHtml() {
 		$years = range($this->minyear, $this->maxyear);
 		$months = range(1, 12);
 		$days = range(1, 31);
@@ -358,41 +371,38 @@ JS;
 			$days[] = 0;
 		}
 
-		echo '<select id="field_' . $this->name . '_dag" name="' . $this->name . '_dag" origvalue="' . substr($this->origvalue, 8, 2) . '" ' . $this->getInputAttribute('class') . $onchange . '>';
+		$html = '<select id="' . $this->getId() . '_dag" name="' . $this->name . '_dag" origvalue="' . substr($this->origvalue, 8, 2) . '" ' . $this->getInputAttribute(array('class', 'onchange', 'onkeyup')) . '>';
 		foreach ($days as $value) {
 			$value = sprintf('%02d', $value);
-			echo '<option value="' . $value . '"';
+			$html .= '<option value="' . $value . '"';
 			if ($value == substr($this->value, 8, 2)) {
-				echo ' selected="selected"';
+				$html .= ' selected="selected"';
 			}
-			echo '>' . $value . '</option>';
+			$html .= '>' . $value . '</option>';
 		}
-		echo '</select> ';
+		$html .= '</select> ';
 
-		echo '<select id="field_' . $this->name . '_maand" name="' . $this->name . '_maand" origvalue="' . substr($this->origvalue, 5, 2) . '" ' . $this->getInputAttribute('class') . $onchange . '>';
+		$html .= '<select id="' . $this->getId() . '_maand" name="' . $this->name . '_maand" origvalue="' . substr($this->origvalue, 5, 2) . '" ' . $this->getInputAttribute(array('class', 'onchange', 'onkeyup')) . '>';
 		foreach ($months as $value) {
 			$value = sprintf('%02d', $value);
-			echo '<option value="' . $value . '"';
+			$html .= '<option value="' . $value . '"';
 			if ($value == substr($this->value, 5, 2)) {
-				echo ' selected="selected"';
+				$html .= ' selected="selected"';
 			}
 
-			echo '>' . strftime('%B', mktime(0, 0, 0, $value, 1, 0)) . '</option>';
+			$html .= '>' . strftime('%B', mktime(0, 0, 0, $value, 1, 0)) . '</option>';
 		}
-		echo '</select> ';
+		$html .= '</select> ';
 
-		echo '<select id="field_' . $this->name . '_jaar" name="' . $this->name . '_jaar" origvalue="' . substr($this->origvalue, 0, 4) . '" ' . $this->getInputAttribute('class') . $onchange . '>';
+		$html .= '<select id="' . $this->getId() . '_jaar" name="' . $this->name . '_jaar" origvalue="' . substr($this->origvalue, 0, 4) . '" ' . $this->getInputAttribute(array('class', 'onchange', 'onkeyup')) . '>';
 		foreach ($years as $value) {
-			echo '<option value="' . $value . '"';
+			$html .= '<option value="' . $value . '"';
 			if ($value == substr($this->value, 0, 4)) {
-				echo ' selected="selected"';
+				$html .= ' selected="selected"';
 			}
-			echo '>' . $value . '</option>';
+			$html .= '>' . $value . '</option>';
 		}
-		echo '</select>';
-
-		echo $this->getPreviewDiv();
-		echo '</div>';
+		return $html . '</select>';
 	}
 
 }
@@ -448,38 +458,33 @@ class TijdField extends InputField {
 		return $this->error === '';
 	}
 
-	public function view() {
-		echo $this->getDiv();
-		echo $this->getLabel();
-		echo $this->getErrorDiv();
-
+	public function getHtml() {
 		$hours = range(0, 23);
 		$minutes = range(0, 59, $this->minutensteps);
 
-		echo '<select id="field_' . $this->name . '_uur" name="' . $this->name . '_uur" origvalue="' . substr($this->origvalue, 0, 2) . '" ' . $this->getInputAttribute('class') . '>';
+		$html = '<select id="field_' . $this->name . '_uur" name="' . $this->name . '_uur" origvalue="' . substr($this->origvalue, 0, 2) . '" ' . $this->getInputAttribute('class') . '>';
 		foreach ($hours as $value) {
 			$value = sprintf('%02d', $value);
-			echo '<option value="' . $value . '"';
+			$html .= '<option value="' . $value . '"';
 			if ($value == substr($this->value, 0, 2)) {
-				echo ' selected="selected"';
+				$html .= ' selected="selected"';
 			}
-			echo '>' . $value . '</option>';
+			$html .= '>' . $value . '</option>';
 		}
-		echo '</select> ';
+		$html .= '</select> ';
 
-		echo '<select id="field_' . $this->name . '_minuut" name="' . $this->name . '_minuut" origvalue="' . substr($this->origvalue, 3, 2) . '" ' . $this->getInputAttribute('class') . '>';
+		$html .= '<select id="field_' . $this->name . '_minuut" name="' . $this->name . '_minuut" origvalue="' . substr($this->origvalue, 3, 2) . '" ' . $this->getInputAttribute('class') . '>';
 		$previousvalue = 0;
 		foreach ($minutes as $value) {
 			$value = sprintf('%02d', $value);
-			echo '<option value="' . $value . '"';
+			$html .= '<option value="' . $value . '"';
 			if ($value > $previousvalue && $value <= substr($this->value, 3, 2)) {
-				echo ' selected="selected"';
+				$html .= ' selected="selected"';
 			}
-			echo '>' . $value . '</option>';
+			$html .= '>' . $value . '</option>';
 			$previousvalue = $value;
 		}
-		echo '</select>';
-		echo '</div>';
+		return $html . '</select>';
 	}
 
 }
@@ -534,22 +539,17 @@ class VinkField extends InputField {
 		return $this->error === '';
 	}
 
-	public function view() {
-		echo $this->getDiv();
-		echo $this->getLabel();
-		echo $this->getErrorDiv();
-
-		echo '<input type="checkbox"' . $this->getInputAttribute(array('id', 'name', 'value', 'origvalue', 'class', 'disabled', 'readonly', 'onchange', 'onclick', 'onkeyup'));
+	public function getHtml() {
+		$html = '<input type="checkbox"' . $this->getInputAttribute(array('id', 'name', 'value', 'origvalue', 'class', 'disabled', 'readonly', 'onchange', 'onclick', 'onkeyup'));
 		if ($this->value) {
-			echo ' checked="checked" ';
+			$html .= ' checked="checked" ';
 		}
-		echo '/>';
+		$html .= '/>';
 
 		if (!empty($this->label)) {
-			echo '<label for="field_' . $this->name . '" class="VinkFieldLabel">' . $this->label . '</label>';
+			$html .= '<label for="field_' . $this->name . '" class="VinkFieldLabel">' . $this->label . '</label>';
 		}
-
-		echo '</div>';
+		return $html;
 	}
 
 }

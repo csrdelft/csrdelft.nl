@@ -308,16 +308,30 @@ class InlineForm extends Formulier {
 		$this->addFields($fields);
 	}
 
-	public function view() {
+	public function getHtml() {
 		$fields = $this->getFields();
-		echo '<div id="InlineForm-' . $this->formId . '">';
-		echo $this->getFormTag();
-		echo $fields['input']->view();
-		echo '<div class="InlineFormToggle">' . $fields['input']->getValue() . '</div>';
+		$html = '<div id="InlineForm-' . $this->formId . '">';
+		$html .= $this->getFormTag();
 
-		$fields['btn']->view();
-		echo $this->getScriptTag();
-		echo '</form></div>';
+		$html .= $fields['input']->getDiv();
+		$html .= $fields['input']->getLabel();
+		$html .= $fields['input']->getErrorDiv();
+		if ($fields['input']->preview) {
+			$html .= $fields['input']->getPreviewDiv();
+		}
+		echo $this->getHtml();
+		$html .= $fields['input']->getHtml();
+		$html .= '</div>';
+
+		$html .= '<div class="InlineFormToggle">' . $fields['input']->getValue() . '</div>';
+		$html .= $fields['btn']->getHtml();
+		$html .= $this->getScriptTag();
+		$html .= '</form></div>';
+		return $html;
+	}
+
+	public function view() {
+		echo $this->getHtml();
 	}
 
 	public function getValue() {

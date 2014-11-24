@@ -34,6 +34,8 @@ interface FormElement extends View {
 
 	public function getType();
 
+	public function getHtml();
+
 	public function getJavascript();
 }
 
@@ -56,8 +58,12 @@ class HtmlComment implements FormElement {
 		return null;
 	}
 
+	public function getHtml() {
+		return $this->comment;
+	}
+
 	public function view() {
-		echo $this->comment;
+		echo $this->getHtml();
 	}
 
 	public function getJavascript() {
@@ -84,8 +90,8 @@ class BBComment extends HtmlComment {
 
 class Subkopje extends HtmlComment {
 
-	public function view() {
-		echo '<h3 class="' . get_class($this) . '">' . $this->comment . '</h3>';
+	public function getHtml() {
+		return '<h3 class="' . get_class($this) . '">' . $this->comment . '</h3>';
 	}
 
 }
@@ -127,10 +133,10 @@ $('#toggle_kopje_{$this->id}').click(function() {
 JS;
 	}
 
-	public function view() {
-		echo '<div id="toggle_kopje_' . $this->id . '" class="toggle-group ' . ($this->collapsed ? '' : 'toggle-group-expanded') . '">';
-		parent::view();
-		echo '</div><div id="expand_kopje_' . $this->id . '" class="expanded-submenu" ' . ($this->collapsed ? 'style="display:none;"' : '') . '>';
+	public function getHtml() {
+		return '<div id="toggle_kopje_' . $this->id . '" class="toggle-group ' . ($this->collapsed ? '' : 'toggle-group-expanded') . '">'
+				. parent::getHtml() .
+				'</div><div id="expand_kopje_' . $this->id . '" class="expanded-submenu" ' . ($this->collapsed ? 'style="display:none;"' : '') . '>';
 	}
 
 }
