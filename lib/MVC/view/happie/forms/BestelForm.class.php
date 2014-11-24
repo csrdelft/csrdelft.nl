@@ -167,7 +167,7 @@ $('.expanded-submenu').css({
 	"column-width": "330px"
 });
 
-$('.FormDefaultKnoppen:first').appendTo('#wrapper_field_tafel').removeClass('clear-left');
+$('.FormDefaultKnoppen:first').appendTo('.InputField:first').removeClass('clear-left');
 
 $('.toggle-allergie:first').click(function() {
 	var show = $(this).prop('data-show');
