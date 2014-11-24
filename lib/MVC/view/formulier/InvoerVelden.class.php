@@ -39,6 +39,7 @@
  */
 abstract class InputField implements FormElement, Validator {
 
+	private $id; // unique id
 	protected $model; // model voor remote data source en validatie
 	protected $name; // naam van het veld in POST
 	protected $value; // welke initiele waarde heeft het veld?
@@ -72,6 +73,7 @@ abstract class InputField implements FormElement, Validator {
 	public $whitelist = null; // array met exclusief toegestane waarden
 
 	public function __construct($name, $value, $description, $model = null) {
+		$this->id = uniqid('field_');
 		$this->model = $model;
 		$this->name = $name;
 		$this->origvalue = $value;
@@ -106,7 +108,7 @@ abstract class InputField implements FormElement, Validator {
 	}
 
 	public function getId() {
-		return 'field_' . $this->getName();
+		return $this->id;
 	}
 
 	public function isPosted() {

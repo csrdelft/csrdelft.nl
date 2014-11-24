@@ -66,7 +66,7 @@ class Dropzone extends Formulier {
 		$accept = implode(',', $this->dropzone->getFilter());
 		return parent::getJavascript() . <<<JS
 
-thisDropzone = new Dropzone('#{$this->formId}', {
+thisDropzone = new Dropzone('#{$this->getFormId()}', {
 	paramName: "{$this->dropzone->getName()}",
 	url: "{$this->action}",
 	acceptedFiles: "{$accept}",

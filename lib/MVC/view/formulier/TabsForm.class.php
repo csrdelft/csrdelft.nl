@@ -60,13 +60,13 @@ class TabsForm extends Formulier {
 		}
 		// tabs
 		if (sizeof($this->tabs) > 0) {
-			echo '<br /><div id="' . $this->formId . '-tabs" class="tabs-list"><ul>';
+			echo '<br /><div id="' . $this->getFormId() . '-tabs" class="tabs-list"><ul>';
 			foreach ($this->tabs as $tab => $fields) {
-				echo '<li><a href="#' . $this->formId . '-tab-' . $tab . '" class="tab-item">' . ucfirst($tab) . '</a></li>';
+				echo '<li><a href="#' . $this->getFormId() . '-tab-' . $tab . '" class="tab-item">' . ucfirst($tab) . '</a></li>';
 			}
 			echo '</ul>';
 			foreach ($this->tabs as $tab => $fields) {
-				echo '<div id="' . $this->formId . '-tab-' . $tab . '" class="tabs-content">';
+				echo '<div id="' . $this->getFormId() . '-tab-' . $tab . '" class="tabs-content">';
 				foreach ($fields as $field) {
 					$field->view();
 				}
@@ -87,12 +87,12 @@ class TabsForm extends Formulier {
 	public function getJavascript() {
 		$js = <<<JS
 
-$('#{$this->formId}-tabs').tabs();
+$('#{$this->getFormId()}-tabs').tabs();
 JS;
 		if ($this->onhoverintent) {
 			$js .= <<<JS
 try {
-	$('#{$this->formId}-tabs .tab-item').hoverIntent(function() {
+	$('#{$this->getFormId()}-tabs .tab-item').hoverIntent(function() {
 		$(this).trigger('click');
 	});
 } catch(e) {

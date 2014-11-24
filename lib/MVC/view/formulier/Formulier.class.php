@@ -34,7 +34,7 @@ require_once 'MVC/view/formulier/FormKnoppen.class.php';
 class Formulier implements View, Validator {
 
 	protected $model;
-	protected $formId;
+	private $formId;
 	protected $action = null;
 	private $enctype = 'multipart/form-data';
 	/**
@@ -55,6 +55,10 @@ class Formulier implements View, Validator {
 		$this->action = $action;
 		$this->titel = $titel;
 		$this->css_classes[] = 'Formulier';
+	}
+
+	public function getFormId() {
+		return $this->formId;
 	}
 
 	public function getTitel() {
@@ -240,15 +244,15 @@ class Formulier implements View, Validator {
 	}
 
 	public function getFormTag() {
-		return '<form enctype="' . $this->enctype . '" action="' . $this->action . '" id="' . $this->formId . '" class="' . implode(' ', $this->css_classes) . '" method="post">';
+		return '<form enctype="' . $this->enctype . '" action="' . $this->action . '" id="' . $this->getFormId() . '" class="' . implode(' ', $this->css_classes) . '" method="post">';
 	}
 
 	public function getScriptTag() {
-		$id = str_replace('-', '_', $this->formId);
+		$id = str_replace('-', '_', $this->getFormId());
 		return <<<JS
 <script type="text/javascript">
 function form_ready_{$id}() {
-	var form = document.getElementById('{$this->formId}');
+	var form = document.getElementById('{$this->getFormId()}');
 	{$this->getJavascript()}
 }
 </script>
@@ -293,7 +297,7 @@ class ModalForm extends Formulier {
 class InlineForm extends Formulier {
 
 	public function __construct($model, $formId, $action, InputField $field, $buttons = false, $label = false) {
-		parent::__construct($model, $formId, $action);
+		parent::__construct($model, uniqid($formId), $action);
 		$this->css_classes[] = 'InlineForm';
 
 		$fields = array();
@@ -317,8 +321,8 @@ class InlineForm extends Formulier {
 
 	public function getHtml() {
 		$fields = $this->getFields();
-		$html = '<div id="wrapper_' . $this->formId . '" class="InlineForm">';
-		$html .= '<div id="toggle_' . $this->formId . '" class="InlineFormToggle">' . $fields['input']->getValue() . '</div>';
+		$html = '<div id="wrapper_' . $this->getFormId() . '" class="InlineForm">';
+		$html .= '<div id="toggle_' . $this->getFormId() . '" class="InlineFormToggle">' . $fields['input']->getValue() . '</div>';
 		$html .= $this->getFormTag();
 		if (isset($fields['id'])) {
 			$html .= $fields['id']->getHtml();
