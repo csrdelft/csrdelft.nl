@@ -345,29 +345,29 @@ JS;
 		if ($this->onchange_submit) {
 			$this->onchange .= <<<JS
 
-form_submit(event);
+	form_submit(event);
 JS;
 		}
 		if ($this->enter_submit) {
 			$this->onkeydown .= <<<JS
 
-if (event.keyCode === 13) {
-	event.preventDefault();
-}
+	if (event.keyCode === 13) {
+		event.preventDefault();
+	}
 JS;
 			$this->onkeyup .= <<<JS
 
-if (event.keyCode === 13) {
-	form_submit(event);
-}
+	if (event.keyCode === 13) {
+		form_submit(event);
+	}
 JS;
 		}
 		if ($this->escape_cancel) {
 			$this->onkeydown .= <<<JS
 
-if (event.keyCode === 27) {
-	form_cancel(event);
-}
+	if (event.keyCode === 27) {
+		form_cancel(event);
+	}
 JS;
 		}
 		if ($this->onchange !== null) {
@@ -412,7 +412,7 @@ $('#{$this->getId()}').autocomplete({$autocomplete}, {
 	formatItem: function(row, i, n) { return row[0]; },
 	clickFire: true,
 	max: 20
-}).result(function(){
+}).result(function (){
 	$(this).keyup();
 });
 JS;
@@ -883,19 +883,19 @@ class IntField extends TextField {
 		}
 		$this->onkeydown .= <<<JS
 
-if (event.keyCode == 107 || event.keyCode == 109) {
-	event.preventDefault();
-	return false;
-}
+	if (event.keyCode == 107 || event.keyCode == 109) {
+		event.preventDefault();
+		return false;
+	}
 JS;
 		$this->onkeyup .= <<<JS
 
-if (event.keyCode == 107) {
-	$('#add_{$this->getId()}').trigger('click');
-}
-else if (event.keyCode == 109) {
-	$('#substract_{$this->getId()}').trigger('click');
-}
+	if (event.keyCode == 107) {
+		$('#add_{$this->getId()}').click();
+	}
+	else if (event.keyCode == 109) {
+		$('#substract_{$this->getId()}').click();
+	}
 JS;
 	}
 
@@ -946,7 +946,9 @@ HTML;
 			}
 		}
 
+		$min = '';
 		if ($this->min !== null) {
+			$min = ' data-min="' . $this->min . '"';
 			if ($this->min_alert) {
 				$alert = "alert('{$this->min_alert}');";
 			} else {
@@ -954,16 +956,16 @@ HTML;
 			}
 			$this->onchange .= <<<JS
 
-if (parseInt( $(this).val() ) < {$this->min}) {
-	{$alert}
-	$(this).val({$this->min});
-	$('#substract_{$this->getId()}').addClass('disabled');
-} else {
-	$('#substract_{$this->getId()}').removeClass('disabled');
-}
+	if (parseInt( $(this).val() ) < $(this).attr('data-min')) {
+		{$alert}
+		$(this).val( $(this).attr('data-min') );
+	}
+	$('#substract_{$this->getId()}').toggleClass('disabled', parseInt( $(this).val() ) <= $(this).attr('data-min'));
 JS;
 		}
+		$max = '';
 		if ($this->max !== null) {
+			$max = ' data-max="' . $this->max . '"';
 			if ($this->max_alert) {
 				$alert = "alert('{$this->max_alert}');";
 			} else {
@@ -971,17 +973,15 @@ JS;
 			}
 			$this->onchange .= <<<JS
 
-if (parseInt( $(this).val() ) > {$this->max}) {
-	{$alert}
-	$(this).val({$this->max});
-	$('#add_{$this->getId()}').addClass('disabled');
-} else {
-	$('#add_{$this->getId()}').removeClass('disabled');
-}
+	if (parseInt( $(this).val() ) >  $(this).attr('data-max')) {
+		{$alert}
+		$(this).val( $(this).attr('data-max') );
+	}
+	$('#add_{$this->getId()}').toggleClass('disabled', parseInt( $(this).val() ) >=  $(this).attr('data-max'));
 JS;
 		}
 
-		$html .= ' <input type="' . $type . '"' . $this->getInputAttribute(array('id', 'name', 'class', 'value', 'origvalue', 'disabled', 'readonly', 'maxlength', 'placeholder', 'autocomplete')) . ' /> ';
+		$html .= ' <input type="' . $type . '"' . $this->getInputAttribute(array('id', 'name', 'class', 'value', 'origvalue', 'disabled', 'readonly', 'maxlength', 'placeholder', 'autocomplete')) . $min . $max . ' /> ';
 
 		if (!$this->readonly AND ! $this->disabled AND ! $this->hidden) {
 			if ($this->max !== null AND $this->getValue() === $this->max) {
@@ -999,19 +999,20 @@ HTML;
 
 	public function getJavascript() {
 		return parent::getJavascript() . <<<JS
-$('#add_{$this->getId()}').click(function() {
+
+$('#add_{$this->getId()}').click(function () {
 	var val = parseInt($('#{$this->getId()}').val());
-	if (isNaN(val) || $(this).hasClass('disabled')) {
+	if ($(this).hasClass('disabled') || isNaN(val)) {
 		return;
 	}
-	$('#{$this->getId()}').val(val + 1).trigger('onchange');
+	$('#{$this->getId()}').val(val + 1).change();
 });
-$('#substract_{$this->getId()}').click(function() {
+$('#substract_{$this->getId()}').click(function () {
 	var val = parseInt($('#{$this->getId()}').val());
-	if (isNaN(val) || $(this).hasClass('disabled')) {
+	if ($(this).hasClass('disabled') || isNaN(val)) {
 		return;
 	}
-	$('#{$this->getId()}').val(val - 1).trigger('onchange');
+	$('#{$this->getId()}').val(val - 1).change();
 });
 JS;
 	}
@@ -1246,6 +1247,7 @@ class TextareaField extends TextField {
 	 */
 	public function getJavascript() {
 		return parent::getJavascript() . <<<JS
+
 $('#{$this->getId()}').autosize();
 JS;
 	}

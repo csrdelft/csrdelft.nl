@@ -304,7 +304,6 @@ class InlineForm extends Formulier {
 		if ($buttons) {
 			$fields['btn'] = new FormDefaultKnoppen(null, false, true, $label, true);
 		} else {
-			$fields['input']->onchange_submit = true;
 			$fields['input']->enter_submit = true;
 			$fields['input']->escape_cancel = true;
 		}

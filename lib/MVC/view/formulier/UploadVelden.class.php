@@ -131,6 +131,7 @@ class FileField implements FormElement, Validator {
 
 	public function getJavascript() {
 		return <<<JS
+
 /* {$this->name} */
 jQuery('input.UploadOptie').change(function() {
 	var optie = jQuery('input.UploadOptie:checked');

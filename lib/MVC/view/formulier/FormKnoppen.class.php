@@ -66,7 +66,6 @@ abstract class FormKnoppen implements FormElement {
 		$js = <<<JS
 
 /* {$this->getTitel()} */
-
 JS;
 		foreach ($this->knoppen as $knop) {
 			$js .= $knop->getJavascript();
@@ -173,6 +172,7 @@ class FormulierKnop implements FormElement {
 
 	public function getJavascript() {
 		return <<<JS
+
 /* {$this->getId()} */
 JS;
 	}

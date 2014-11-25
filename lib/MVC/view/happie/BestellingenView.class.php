@@ -32,12 +32,16 @@ class HappieBestellingenData extends DataTableResponse {
 
 		// editable aantal
 		$field = new IntField('aantal', $bestelling->aantal, 'Aantal', 0, $bestelling->aantal + $beschikbaar);
+		$field->min_alert = false;
+		$field->max_alert = 'Te weinig beschikbaar!';
 		$form = new InlineForm($bestelling, 'aantal' . $bestelling->bestelling_id, happieUrl . '/aantal', $field);
 		$form->css_classes[] = 'DataTableResponse';
 		$array['aantal'] = $form->getHtml();
 
 		// editable aantal geserveerd
 		$field = new IntField('aantal_geserveerd', $bestelling->aantal_geserveerd, 'Aantal geserveerd', 0, $bestelling->aantal_geserveerd + $beschikbaar); // meer vrijheid dan $bestelling->aantal
+		$field->min_alert = false;
+		$field->max_alert = 'Te weinig beschikbaar!';
 		$form = new InlineForm($bestelling, 'geserveerd' . $bestelling->bestelling_id, happieUrl . '/geserveerd', $field);
 		$form->css_classes[] = 'DataTableResponse';
 		$array['aantal_geserveerd'] = $form->getHtml();

@@ -24,17 +24,15 @@ function fnInitDataTables() {
 function fnUpdateDataTable(tableId, data) {
 	var table = $(tableId).DataTable();
 	data.data.forEach(function (row) {
-		var id = "tr[data-objectid='" + row.objectId + "']";
-		var tr = $();
+		var tr = $('tr[data-objectid="' + row.objectId + '"]');
 		if (tr.length === 1) {
 			table.row(tr).data(row);
+			init_context(tr);
 		}
 		else {
 			table.row.add(row);
 		}
-		init_context(id);
 	});
-	//table.draw();
 }
 
 function fnGetSelectionSize(tableId) {

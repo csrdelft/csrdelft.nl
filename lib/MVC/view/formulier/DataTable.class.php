@@ -231,19 +231,15 @@ class DataTable extends TabsForm {
 					 keys.fnSetPosition( 1, 1 );
 					 */
 					updateToolbar();
-					init_context('#<?= $this->tableId; ?>');
+					//init_context('#<?= $this->tableId; ?>');
 					return json.data;
 				};
 
 				var fnCreatedRowCallback = function (tr, data, index) {
 					$(tr).attr('data-objectid', data.objectId);
+					init_context(tr);
 					if ('detailSource' in data) {
 						$(tr).children('td:first').addClass('toggle-childrow').data('detailSource', data.detailSource);
-					}
-					try {
-						$('abbr.timeago', tr).timeago();
-					} catch (e) {
-						// missing js
 					}
 					// voor elke td check of deze editable moet zijn 
 					$(tr).children().each(function (columnIndex, td) {
