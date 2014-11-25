@@ -14,7 +14,6 @@ class HappieBestellingWijzigenForm extends ModalForm {
 
 	public function __construct(HappieBestelling $bestelling) {
 		parent::__construct($bestelling, get_class($this), happieUrl . '/wijzig', 'Bestelling wijzigen');
-
 		$fields[] = new ObjectIdField($bestelling);
 
 		$fields[] = new HtmlComment('<div class="InputField"><label>Datum</label>' . $bestelling->datum . '</div>');
@@ -125,7 +124,7 @@ HTML
 
 					$fields[] = new HtmlComment('<div class="beschrijving" style="font-style:italic;">' . $item->beschrijving . '</div></div></div>'); // close expanded item
 
-					$this->addJavascript(<<<JS
+					$this->javascript[] = <<<JS
 $('#{$opm->getId()}').height('30px');
 $('#toggle_{$item->item_id}').prependTo('#wrapper_{$int->getId()}').click(function() {
 	$('#expand_{$item->item_id}').toggle().find('textarea:first').focus();
@@ -135,9 +134,7 @@ $('#toggle_{$item->item_id}').prependTo('#wrapper_{$int->getId()}').click(functi
 		$('#info_{$item->item_id}').toggle(toggle);
 	}
 });
-JS
-					);
-
+JS;
 					$this->addFields($fields, $groep->gang);
 				}
 
@@ -155,7 +152,7 @@ JS
 		$allergie = new FormulierKnop(null, 'toggle-allergie', 'Allergie-info', 'Toon allergie informatie', '/famfamfam/information.png', true);
 		$fields['k']->addKnop($allergie);
 
-		$this->addJavascript(<<<JS
+		$this->javascript[] = <<<JS
 $('.Formulier label').css('width', '45%');
 $('#wrapper_{$table->getId()} label').css('width', '20%');
 $('.expanded-submenu').css({
@@ -166,9 +163,7 @@ $('.expanded-submenu').css({
 	"-moz-column-width": "330px",
 	"column-width": "330px"
 });
-
 $('.FormDefaultKnoppen:first').appendTo('.InputField:first').removeClass('clear-left');
-
 $('.toggle-allergie:first').click(function() {
 	var show = $(this).prop('data-show');
 	if (!show) {
@@ -178,8 +173,7 @@ $('.toggle-allergie:first').click(function() {
 	}
 	$(this).prop('data-show', !show);
 });
-JS
-		);
+JS;
 	}
 
 	/**

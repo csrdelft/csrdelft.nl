@@ -64,7 +64,7 @@ class FileField implements FormElement, Validator {
 	}
 
 	public function getTitel() {
-		return 'Bestand uploaden';
+		return $this->getType();
 	}
 
 	public function getName() {
@@ -131,6 +131,7 @@ class FileField implements FormElement, Validator {
 
 	public function getJavascript() {
 		return <<<JS
+/* {$this->name} */
 jQuery('input.UploadOptie').change(function() {
 	var optie = jQuery('input.UploadOptie:checked');
 	optie.addClass('verborgen');

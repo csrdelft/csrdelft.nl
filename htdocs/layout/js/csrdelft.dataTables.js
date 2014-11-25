@@ -21,18 +21,19 @@ function fnInitDataTables() {
 	$.fn.dataTable.ext.search.push(fnGroupExpandCollapseDraw);
 }
 
-function fnUpdateDataTable(data) {
-	var table = $(data.table).DataTable();
+function fnUpdateDataTable(tableId, data) {
+	var table = $(tableId).DataTable();
 	data.data.forEach(function (row) {
-		var tr = $("tr[data-objectid='" + row.objectId + "']");
+		var id = "tr[data-objectid='" + row.objectId + "']";
+		var tr = $();
 		if (tr.length === 1) {
 			table.row(tr).data(row);
 		}
 		else {
 			table.row.add(row);
 		}
+		init_context(id);
 	});
-	init(); // FIXME
 	//table.draw();
 }
 

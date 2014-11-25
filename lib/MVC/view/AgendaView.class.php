@@ -131,38 +131,11 @@ class AgendaItemForm extends ModalForm {
 		$fields['titel']->suggestions = array('Kring', 'Lezing', 'Werkgroep', 'Eetplan', 'Borrel', 'Alpha-avond');
 		$fields['datum'] = new DatumField('datum', date('Y-m-d', $item->getBeginMoment()), 'Datum', date('Y') + 5, date('Y') - 5);
 
-		$html = '<div id="tijden" class="InputField"><label>Standaard tijden</label>';
-		$tijden = explode(',', Instellingen::get('agenda', 'standaard_tijden'));
-		$aantal = count($tijden) / 2;
-		for ($i = 0; $i < $aantal; $i++) {
-			$naam = $tijden[$i * 2 + 1];
-			$standaard_tijd = 'standaard_tijd_' . ($i + 1);
-			if (!Instellingen::has('agenda', $standaard_tijd)) {
-				setMelding($standaard_tijd . ' "' . $naam . '" is niet gedefinieerd', -1);
-				continue;
-			}
-			$tijd = explode('-', Instellingen::get('agenda', $standaard_tijd));
-			$begin = explode(':', $tijd[0]);
-			$eind = explode(':', $tijd[1]);
-			$html .= '<a onclick="setTijd(\'' . $begin[0] . '\',\'' . $begin[1] . '\',\'' . $eind[0] . '\',\'' . $eind[1] . '\');">» ' . $naam . '</a> &nbsp;';
-		}
-		if (LoginModel::mag('P_AGENDA_MOD')) {
-			$html .= '<div class="float-right"><a class="btn round" title="Wijzig standaard tijden" href="/instellingenbeheer/module/agenda"><img width="16" height="16" class="icon" alt="edit" src="' . CSR_PICS . '/famfamfam/pencil.png"></a></div>';
-		}
-		$html .= '
-<script type="text/javascript">
-function setTijd(a, b, c, d) {
-	document.getElementById(\'field_begin_uur\').value = a;
-	document.getElementById(\'field_begin_minuut\').value = b;
-	document.getElementById(\'field_eind_uur\').value = c;
-	document.getElementById(\'field_eind_minuut\').value = d;
-}
-</script>
-</div>';
-		$fields[] = new HtmlComment($html);
-
-		$fields['begin'] = new TijdField('begin', date('H:i', $item->getBeginMoment()), 'Van');
-		$fields['eind'] = new TijdField('eind', date('H:i', $item->getEindMoment()), 'Tot');
+		$begin = new TijdField('begin', date('H:i', $item->getBeginMoment()), 'Van');
+		$eind = new TijdField('eind', date('H:i', $item->getEindMoment()), 'Tot');
+		$fields['tijden'] = new StandaardTijdenField('tijden', $begin, $eind);
+		$fields['begin'] = $begin;
+		$fields['eind'] = $eind;
 
 		$fields['r'] = new RechtenField('rechten_bekijken', $item->rechten_bekijken, 'Zichtbaar voor');
 		$fields['r']->readonly = !LoginModel::mag('P_AGENDA_MOD');
@@ -196,6 +169,46 @@ function setTijd(a, b, c, d) {
 			$valid = false;
 		}
 		return $valid;
+	}
+
+}
+
+class StandaardTijdenField extends HtmlComment {
+
+	private $id;
+
+	public function __construct($name, TijdField $begin, TijdField $eind) {
+		$this->id = uniqid($name);
+		$html = '<div id="' . $this->id . '" class="InputField"><label>Standaard tijden</label>';
+		$tijden = explode(',', Instellingen::get('agenda', 'standaard_tijden'));
+		$aantal = count($tijden) / 2;
+		for ($i = 0; $i < $aantal; $i++) {
+			$naam = $tijden[$i * 2 + 1];
+			$standaard_tijd = 'standaard_tijd_' . ($i + 1);
+			if (!Instellingen::has('agenda', $standaard_tijd)) {
+				setMelding($standaard_tijd . ' "' . $naam . '" is niet gedefinieerd', -1);
+				continue;
+			}
+			$html .= '<a onclick="set' . $this->id . '(this)" data-begin="' . $begin->getId() . '" data-eind="' . $eind->getId() . '" data-tijden="' . Instellingen::get('agenda', $standaard_tijd) . '">» ' . $naam . '</a> &nbsp;';
+		}
+		if (LoginModel::mag('P_AGENDA_MOD')) {
+			$html .= '<div class="float-right"><a class="btn round" title="Wijzig standaard tijden" href="/instellingenbeheer/module/agenda"><img width="16" height="16" class="icon" alt="edit" src="' . CSR_PICS . '/famfamfam/pencil.png"></a></div>';
+		}
+		parent::__construct($html . '</div>');
+	}
+
+	public function getJavascript() {
+		return parent::getJavascript() . <<<JS
+set{$this->id} = function (e) {
+	var tijden = $(e).attr('data-tijden').split('-');
+	var begin = tijden[0].split(':');
+	var eind = tijden[1].split(':');
+	document.getElementById($(e).attr('data-begin')+'_uur').value = begin[0];
+	document.getElementById($(e).attr('data-begin')+'_minuut').value = begin[1];
+	document.getElementById($(e).attr('data-eind')+'_uur').value = eind[0];
+	document.getElementById($(e).attr('data-eind')+'_minuut').value = eind[1];
+};
+JS;
 	}
 
 }

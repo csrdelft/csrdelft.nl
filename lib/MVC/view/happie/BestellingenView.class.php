@@ -10,10 +10,6 @@
  */
 class HappieBestellingenData extends DataTableResponse {
 
-	public function __construct($data) {
-		parent::__construct('HappieBestellingen', $data);
-	}
-
 	public function getJson($bestelling) {
 		$array = $bestelling->jsonSerialize();
 
@@ -72,7 +68,7 @@ class HappieBestellingenData extends DataTableResponse {
 class HappieBestellingenView extends DataTable {
 
 	public function __construct($dataUrl = '/overzicht', $titel = 'Alle bestellingen', $groupByColumn = 'datum') {
-		parent::__construct(HappieBestellingenModel::orm, 'HappieBestellingen', $titel, $groupByColumn);
+		parent::__construct(HappieBestellingenModel::orm, HappieBestellingenModel::orm, $titel, $groupByColumn);
 		$this->dataUrl = happieUrl . $dataUrl;
 
 		$this->addColumn('gang', 'menukaart_item');
@@ -85,8 +81,7 @@ class HappieBestellingenView extends DataTable {
 		$this->searchColumn('menu_groep');
 		$this->searchColumn('menukaart_item');
 
-		$wijzig = new DataTableKnop('== 1', $url = happieUrl . '/wijzig', 'post popup TableSelection', 87, 'Wijzig', 'Bestelling wijzigen (Sneltoets: W)', 'DTTT_button_edit');
-		$wijzig->data = HappieBestellingenModel::orm . '=#' . $this->tableId;
+		$wijzig = new DataTableKnop('== 1', $url = happieUrl . '/wijzig', 'submit popup', 87, 'Wijzig', 'Bestelling wijzigen (Sneltoets: W)', 'DTTT_button_edit');
 		$this->addKnop($wijzig);
 	}
 

@@ -93,7 +93,10 @@ JS;
 	}
 
 	public function getJavascript() {
-		return parent::getJavascript() . <<<JS
+		$js = parent::getJavascript();
+		return <<<JS
+/* {$this->getTitel()} */
+/* parent: */{$js}
 $('#{$this->getId()}').trigger('onchange');
 JS;
 	}
@@ -108,7 +111,7 @@ JS;
 		if ($this->size > 1) {
 			$html .= ' size="' . $this->size . '"';
 		}
-		$html .= $this->getInputAttribute(array('id', 'origvalue', 'class', 'disabled', 'readonly', 'onchange', 'onclick', 'onkeyup')) . '>';
+		$html .= $this->getInputAttribute(array('id', 'origvalue', 'class', 'disabled', 'readonly')) . '>';
 		if ($this->groups) {
 			foreach ($this->options as $group => $options) {
 				$html .= '<optgroup label="' . htmlspecialchars($group) . '">'
@@ -256,7 +259,7 @@ class KeuzeRondjeField extends SelectField {
 	public function getHtml() {
 		$html = '<div class="KeuzeRondjeFieldOptions">';
 		foreach ($this->options as $value => $description) {
-			$html .= '<input type="radio" id="field_' . $this->getName() . '_option_' . $value . '" value="' . $value . '"' . $this->getInputAttribute(array('name', 'origvalue', 'class', 'disabled', 'readonly', 'onchange', 'onclick', 'onkeyup'));
+			$html .= '<input type="radio" id="field_' . $this->getName() . '_option_' . $value . '" value="' . $value . '"' . $this->getInputAttribute(array('name', 'origvalue', 'class', 'disabled', 'readonly'));
 			if ($value == $this->value) {
 				$html .= ' checked="checked"';
 			}
@@ -297,14 +300,6 @@ class DatumField extends InputField {
 		} else {
 			$this->minyear = (int) $minyear;
 		}
-		$this->onchange .= <<<JS
-var datum = new Date($('#field_{$this->name}_jaar').val(), $('#field_{$this->name}_maand').val() - 1, $('#field_{$this->name}_dag').val());
-var weekday = [ 'zondag', 'maandag', 'dinsdag', 'woensdag', 'donderdag', 'vrijdag', 'zaterdag' ];
-$('#datumPreview_{$this->getId()}').html(weekday[datum.getDay()]);
-JS;
-		$this->onkeyup .= <<<JS
-$(this).trigger('onchange');
-JS;
 	}
 
 	public function isPosted() {
@@ -355,7 +350,18 @@ JS;
 
 	public function getJavascript() {
 		return parent::getJavascript() . <<<JS
-$('#{$this->getId()}_dag').trigger('onchange');
+var preview{$this->getId()} = function () {
+	var datum = new Date($('#{$this->getId()}_jaar').val(), $('#{$this->getId()}_maand').val() - 1, $('#{$this->getId()}_dag').val());
+	var weekday = [ 'zondag', 'maandag', 'dinsdag', 'woensdag', 'donderdag', 'vrijdag', 'zaterdag' ];
+	$('#datumPreview_{$this->getId()}').html(weekday[datum.getDay()]);
+}
+preview{$this->getId()}();
+$('#{$this->getId()}_dag').change(preview{$this->getId()});
+$('#{$this->getId()}_dag').keyup(preview{$this->getId()});
+$('#{$this->getId()}_maand').change(preview{$this->getId()});
+$('#{$this->getId()}_maand').keyup(preview{$this->getId()});
+$('#{$this->getId()}_jaar').change(preview{$this->getId()});
+$('#{$this->getId()}_jaar').keyup(preview{$this->getId()});
 JS;
 	}
 
@@ -371,7 +377,7 @@ JS;
 			$days[] = 0;
 		}
 
-		$html = '<select id="' . $this->getId() . '_dag" name="' . $this->name . '_dag" origvalue="' . substr($this->origvalue, 8, 2) . '" ' . $this->getInputAttribute(array('class', 'onchange', 'onkeyup')) . '>';
+		$html = '<select id="' . $this->getId() . '_dag" name="' . $this->name . '_dag" origvalue="' . substr($this->origvalue, 8, 2) . '" ' . $this->getInputAttribute('class') . '>';
 		foreach ($days as $value) {
 			$value = sprintf('%02d', $value);
 			$html .= '<option value="' . $value . '"';
@@ -382,7 +388,7 @@ JS;
 		}
 		$html .= '</select> ';
 
-		$html .= '<select id="' . $this->getId() . '_maand" name="' . $this->name . '_maand" origvalue="' . substr($this->origvalue, 5, 2) . '" ' . $this->getInputAttribute(array('class', 'onchange', 'onkeyup')) . '>';
+		$html .= '<select id="' . $this->getId() . '_maand" name="' . $this->name . '_maand" origvalue="' . substr($this->origvalue, 5, 2) . '" ' . $this->getInputAttribute('class') . '>';
 		foreach ($months as $value) {
 			$value = sprintf('%02d', $value);
 			$html .= '<option value="' . $value . '"';
@@ -394,7 +400,7 @@ JS;
 		}
 		$html .= '</select> ';
 
-		$html .= '<select id="' . $this->getId() . '_jaar" name="' . $this->name . '_jaar" origvalue="' . substr($this->origvalue, 0, 4) . '" ' . $this->getInputAttribute(array('class', 'onchange', 'onkeyup')) . '>';
+		$html .= '<select id="' . $this->getId() . '_jaar" name="' . $this->name . '_jaar" origvalue="' . substr($this->origvalue, 0, 4) . '" ' . $this->getInputAttribute('class') . '>';
 		foreach ($years as $value) {
 			$html .= '<option value="' . $value . '"';
 			if ($value == substr($this->value, 0, 4)) {
@@ -462,7 +468,7 @@ class TijdField extends InputField {
 		$hours = range(0, 23);
 		$minutes = range(0, 59, $this->minutensteps);
 
-		$html = '<select id="field_' . $this->name . '_uur" name="' . $this->name . '_uur" origvalue="' . substr($this->origvalue, 0, 2) . '" ' . $this->getInputAttribute('class') . '>';
+		$html = '<select id="' . $this->getId() . '_uur" name="' . $this->name . '_uur" origvalue="' . substr($this->origvalue, 0, 2) . '" ' . $this->getInputAttribute('class') . '>';
 		foreach ($hours as $value) {
 			$value = sprintf('%02d', $value);
 			$html .= '<option value="' . $value . '"';
@@ -473,7 +479,7 @@ class TijdField extends InputField {
 		}
 		$html .= '</select> ';
 
-		$html .= '<select id="field_' . $this->name . '_minuut" name="' . $this->name . '_minuut" origvalue="' . substr($this->origvalue, 3, 2) . '" ' . $this->getInputAttribute('class') . '>';
+		$html .= '<select id="' . $this->getId() . '_minuut" name="' . $this->name . '_minuut" origvalue="' . substr($this->origvalue, 3, 2) . '" ' . $this->getInputAttribute('class') . '>';
 		$previousvalue = 0;
 		foreach ($minutes as $value) {
 			$value = sprintf('%02d', $value);
@@ -540,14 +546,14 @@ class VinkField extends InputField {
 	}
 
 	public function getHtml() {
-		$html = '<input type="checkbox"' . $this->getInputAttribute(array('id', 'name', 'value', 'origvalue', 'class', 'disabled', 'readonly', 'onchange', 'onclick', 'onkeyup'));
+		$html = '<input type="checkbox"' . $this->getInputAttribute(array('id', 'name', 'value', 'origvalue', 'class', 'disabled', 'readonly'));
 		if ($this->value) {
 			$html .= ' checked="checked" ';
 		}
 		$html .= '/>';
 
 		if (!empty($this->label)) {
-			$html .= '<label for="field_' . $this->name . '" class="VinkFieldLabel">' . $this->label . '</label>';
+			$html .= '<label for="' . $this->getId() . '" class="VinkFieldLabel">' . $this->label . '</label>';
 		}
 		return $html;
 	}
@@ -564,7 +570,7 @@ class KleurField extends InputField {
 
 	public function getJavascript() {
 		return parent::getJavascript() . <<<JS
-$('#{$this->getId()}', form).jPicker({
+$('#{$this->getId()}').jPicker({
 	color: {
 		alphaSupport: true
 	},

@@ -58,17 +58,21 @@ class HappieBestellingenController extends AclController {
 			case 'financienstatus':
 			case 'opmerking':
 
+				if (!$this->isPosted()) {
+					$this->geentoegang();
+				}
 				$field = new ObjectIdField(new HappieBestelling());
-				if ($this->isPosted() AND $field->validate()) {
+				if ($field->validate()) {
 					$ids = $field->getValue();
 					$bestelling = $this->model->getBestelling((int) $ids[0]);
 					if (!$bestelling) {
-						$this->geentoegang('bestelling bestaat niet');
+						throw new Exception('Bestelling bestaat niet');
 					}
-					parent::performAction(array($bestelling)); // set view form
 				} else {
-					$this->geentoegang('missing objectId');
+					throw new Exception('Missing objectId');
 				}
+				parent::performAction(array($bestelling)); // set view form
+
 				if ($this->view->validate()) {
 					$this->model->update($bestelling);
 					$this->view = new HappieBestellingenData(array($bestelling));

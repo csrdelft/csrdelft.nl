@@ -63,9 +63,11 @@ abstract class FormKnoppen implements FormElement {
 	}
 
 	public function getJavascript() {
-		$js = '';
+		$js = <<<JS
+/* {$this->getTitel()} */
+JS;
 		foreach ($this->knoppen as $knop) {
-			$js .= $knop->getJavascript();
+			$js .= "\n" . $knop->getJavascript();
 		}
 		return $js;
 	}
@@ -168,10 +170,9 @@ class FormulierKnop implements FormElement {
 	}
 
 	public function getJavascript() {
-		if (strpos($this->action, 'submit') !== false AND isset($this->url)) {
-			return "$('#{$this->getId()}').unbind('click.action').bind('click.action', form_submit_url);";
-		}
-		return '';
+		return <<<JS
+/* {$this->getId()} */
+JS;
 	}
 
 }

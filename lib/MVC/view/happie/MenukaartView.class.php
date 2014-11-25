@@ -11,7 +11,7 @@
 class HappieMenukaartItemsView extends DataTable {
 
 	public function __construct() {
-		parent::__construct(HappieMenukaartItemsModel::orm, 'HappieMenukaartItems', 'Menukaart items', 'menukaart_groep');
+		parent::__construct(HappieMenukaartItemsModel::orm, 'MenukaartItems', 'Menukaart items', 'menukaart_groep');
 		$this->dataUrl = happieUrl . '/overzicht';
 
 		$this->addColumn('groep_beschikbaar');
@@ -19,7 +19,7 @@ class HappieMenukaartItemsView extends DataTable {
 		$nieuw = new DataTableKnop('>= 0', happieUrl . '/nieuw', 'post popup', 78, 'Nieuw', 'Menukaart-item toevoegen (Sneltoets: N)', 'DTTT_button_new');
 		$this->addKnop($nieuw);
 
-		$wijzig = new DataTableKnop('== 1', happieUrl . '/wijzig', 'post popup TableSelection', 87, 'Wijzig', 'Menukaart-item wijzigen (Sneltoets: W)', 'DTTT_button_edit');
+		$wijzig = new DataTableKnop('== 1', happieUrl . '/wijzig', 'post popup', 87, 'Wijzig', 'Menukaart-item wijzigen (Sneltoets: W)', 'DTTT_button_edit');
 		$wijzig->data = HappieMenukaartItemsModel::orm . '=#' . $this->tableId;
 		$this->addKnop($wijzig);
 	}
@@ -27,10 +27,6 @@ class HappieMenukaartItemsView extends DataTable {
 }
 
 class HappieMenukaartItemsData extends DataTableResponse {
-
-	public function __construct($data) {
-		parent::__construct('HappieMenukaartItems', $data);
-	}
 
 	public function getJson($item) {
 		$array = $item->jsonSerialize();
@@ -51,13 +47,13 @@ class HappieMenukaartItemsData extends DataTableResponse {
 class HappieMenukaartGroepenView extends DataTable {
 
 	public function __construct() {
-		parent::__construct(HappieMenukaartGroepenModel::orm, 'HappieMenukaartGroepen', 'Menukaart groepen', 'gang');
+		parent::__construct(HappieMenukaartGroepenModel::orm, 'MenukaartGroepen', 'Menukaart groepen', 'gang');
 		$this->dataUrl = happieUrl . '/overzicht';
 
 		$nieuw = new DataTableKnop('>= 0', happieUrl . '/nieuw', 'post popup', 78, 'Nieuw', 'Menukaart-groep toevoegen (Sneltoets: N)', 'DTTT_button_new');
 		$this->addKnop($nieuw);
 
-		$wijzig = new DataTableKnop('== 1', happieUrl . '/wijzig', 'post popup TableSelection', 87, 'Wijzig', 'Menukaart-groep wijzigen (Sneltoets: W)', 'DTTT_button_edit');
+		$wijzig = new DataTableKnop('== 1', happieUrl . '/wijzig', 'post popup', 87, 'Wijzig', 'Menukaart-groep wijzigen (Sneltoets: W)', 'DTTT_button_edit');
 		$wijzig->data = HappieMenukaartGroepenModel::orm . '=#' . $this->tableId;
 		$this->addKnop($wijzig);
 	}
@@ -65,10 +61,6 @@ class HappieMenukaartGroepenView extends DataTable {
 }
 
 class HappieMenukaartGroepenData extends DataTableResponse {
-
-	public function __construct($data) {
-		parent::__construct('HappieMenukaartGroepen', $data);
-	}
 
 	public function getJson($groep) {
 		$array = $groep->jsonSerialize();

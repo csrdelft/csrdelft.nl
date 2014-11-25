@@ -22,19 +22,24 @@ preload([
 ]);
 
 $(document).ready(function () {
+	init_page();
+});
+
+function init_page() {
 	//undo_inline_css();
 	zijbalk_scroll_fixed();
 	init_dropzone();
+	init_timeago_once();
 	init_sluit_meldingen();
-	init();
-});
+	init_context($('body'));
+}
 
-function init() {
-	init_buttons();
-	init_forms();
-	init_timeago();
-	init_hoverIntents();
-	init_lazy_images();
+function init_context(parent) {
+	init_buttons(parent);
+	init_forms(parent);
+	init_timeago(parent);
+	init_hoverIntents(parent);
+	init_lazy_images(parent);
 }
 
 function undo_inline_css() {
@@ -50,7 +55,7 @@ function init_dropzone() {
 	}
 }
 
-function init_timeago() {
+function init_timeago_once() {
 	try {
 		$.timeago.settings.strings = {
 			prefiprefixAgo: "",
@@ -71,15 +76,23 @@ function init_timeago() {
 			wordSeparator: " ",
 			numbers: []
 		};
-		$('abbr.timeago').timeago();
 	}
 	catch (err) {
 		// Missing js file
 	}
 }
 
-function init_lazy_images() {
-	$('div.bb-img-loading').each(function () {
+function init_timeago(parent) {
+	try {
+		$(parent).find('abbr.timeago').timeago();
+	}
+	catch (err) {
+		// Missing js file
+	}
+}
+
+function init_lazy_images(parent) {
+	$(parent).find('div.bb-img-loading').each(function () {
 		var content = $(document.createElement('IMG'));
 		content.error(function () {
 			$(this).attr('title', 'Afbeelding bestaat niet of is niet toegankelijk!');
@@ -187,9 +200,8 @@ function page_redirect(htmlString) {
 	window.location.href = htmlString;
 }
 
-function init_buttons() {
-	$('button.spoiler').unbind('click.spoiler');
-	$('button.spoiler').bind('click.spoiler', function (event) {
+function init_buttons(parent) {
+	$(parent).find('.spoiler').bind('click.spoiler', function (event) {
 		event.preventDefault();
 		var button = $(this);
 		var content = button.next('div.spoiler-content');
@@ -201,32 +213,20 @@ function init_buttons() {
 		}
 		content.toggle(800, 'easeInOutCubic');
 	});
-	$('button.modal').unbind('click.modal');
-	$('button.modal').bind('click.modal', function (event) {
-		modal_open();
-	});
-	$('button.post').unbind('click.post');
-	$('button.post').bind('click.post', knop_post);
-	$('button.get').unbind('click.get');
-	$('button.get').bind('click.get', knop_get);
-	$('a.vergroot').unbind('click.vergroot');
-	$('a.vergroot').bind('click.vergroot', function (event) {
+	$(parent).find('.modal').bind('click.modal', modal_open);
+	$(parent).find('.post').bind('click.post', knop_post);
+	$(parent).find('.get').bind('click.get', knop_get);
+	$(parent).find('.vergroot').bind('click.vergroot', function (event) {
 		var id = $(this).attr('data-vergroot');
 		var height = $(id).height();
 		$(id).animate({
 			'height': '+=' + height
 		}, 600);
 	});
-	$('a.modal').unbind('click.modal');
-	$('a.modal').bind('click.modal', modal_open);
-	$('a.post').unbind('click.post');
-	$('a.post').bind('click.post', knop_post);
-	$('a.get').unbind('click.get');
-	$('a.get').bind('click.get', knop_get);
 }
 
-function init_hoverIntents() {
-	$('.hoverIntent').hoverIntent({
+function init_hoverIntents(parent) {
+	$(parent).find('.hoverIntent').hoverIntent({
 		over: function () {
 			$(this).find('.hoverIntentContent').fadeIn();
 		},
@@ -245,6 +245,7 @@ function knop_ajax(knop, type) {
 	var source = knop;
 	var done = dom_update;
 	var data = knop.attr('data');
+
 	if (knop.hasClass('prompt')) {
 		data = data.split('=');
 		var val = prompt(data[0], data[1]);
@@ -252,16 +253,6 @@ function knop_ajax(knop, type) {
 			return false;
 		}
 		data = encodeURIComponent(data[0]) + '=' + encodeURIComponent(val);
-	}
-	if (knop.hasClass('TableSelection')) {
-		data = data.split('=');
-		var val = fnGetSelection(data[1]);
-		if (!val) {
-			return false;
-		}
-		var key = data[0];
-		data = {};
-		data[key] = val;
 	}
 	if (knop.hasClass('addfav')) {
 		var data = {
@@ -271,7 +262,6 @@ function knop_ajax(knop, type) {
 	}
 	if (knop.hasClass('popup')) {
 		source = false;
-		done = modal_open;
 	}
 	if (knop.hasClass('ReloadPage')) {
 		done = page_reload;
@@ -302,8 +292,7 @@ function knop_get(event) {
 
 function modal_open(htmlString) {
 	if (typeof htmlString == 'string' && htmlString != '') {
-		$('#modal').replaceWith(htmlString);
-		init();
+		$('#modal').html(htmlString);
 		$('#modal').show();
 		$('#modal-background').css('background-image', 'none');
 		$('#modal input:visible:first').focus();
@@ -322,27 +311,12 @@ function modal_close() {
 	$('#modal-background').fadeOut();
 }
 
-function init_forms() {
-	$('.Formulier').each(function () {
-		var formId = $(this).attr('id');
-		if (formId) {
-			var init = 'form_ready_' + formId;
-			init = init.split('-').join('_');
-			if (typeof window[init] === 'function') {
-				window[init]();
-			}
-		}
-	});
-	$('.submit').unbind('click.submit');
-	$('.submit').bind('click.submit', form_submit);
-	$('.reset').unbind('click.reset');
-	$('.reset').bind('click.reset', form_reset);
-	$('.cancel').unbind('click.cancel');
-	$('.cancel').bind('click.cancel', form_cancel);
-	$('.InlineFormToggle').unbind('click.toggle');
-	$('.InlineFormToggle').bind('click.toggle', form_toggle);
-	$('.SubmitChange').unbind('change.change');
-	$('.SubmitChange').bind('change.change', form_submit);
+function init_forms(parent) {
+	$(parent).find('.submit').bind('click.submit', form_submit);
+	$(parent).find('.reset').bind('click.reset', form_reset);
+	$(parent).find('.cancel').bind('click.cancel', form_cancel);
+	$(parent).find('.InlineFormToggle').bind('click.toggle', form_toggle);
+	$(parent).find('.SubmitChange').bind('change.change', form_submit);
 }
 
 function form_ischanged(form) {
@@ -395,6 +369,7 @@ function form_submit(event) {
 		event.preventDefault();
 		return false;
 	}
+
 	var form = $(this).closest('form');
 	if (!form.hasClass('Formulier')) {
 		if (event) {
@@ -404,46 +379,71 @@ function form_submit(event) {
 			return false;
 		}
 	}
+
 	if (form.hasClass('PreventUnchanged') && !form_ischanged(form)) {
 		event.preventDefault();
 		alert('Geen wijzigingen');
 		return false;
 	}
+
+	if ($(this).attr('href')) {
+		form.attr('action', $(this).attr('href'));
+	}
+
 	if (form.hasClass('ModalForm') || form.hasClass('InlineForm')) {
 		event.preventDefault();
+		var formData = new FormData(form.get(0));
+		var done = dom_update;
 		var source = false;
+
 		if (form.hasClass('InlineForm')) {
 			source = form;
 		}
-		var done = dom_update;
+
 		if (form.hasClass('ReloadPage')) {
 			done = page_reload;
 		}
 		else if (form.hasClass('redirect')) {
 			done = page_redirect;
 		}
-		else if (form.hasClass('DataTableResponse')) {
-			done = fnUpdateDataTable;
+
+		if (form.hasClass('DataTableResponse')) {
+
+			var table;
+			if (form.attr('id').indexOf('_toolbar') > 0) {
+				table = form.next('table').attr('id');
+			}
+			else {
+				table = form.closest('table').attr('id');
+			}
+
+			var selection = fnGetSelection('#' + table);
+			if (!selection) {
+				return false;
+			}
+			formData.append(table + '[]', selection);
+
+			done = function (response) {
+				if (typeof response === 'object') { // JSON
+					fnUpdateDataTable('#' + table, response);
+				}
+				else { // HTML
+					dom_update(response);
+				}
+			};
 		}
-		var formData = new FormData(form.get(0));
+
 		ajax_request('POST', form.attr('action'), formData, source, done, alert, function () {
 			if (form.hasClass('SubmitReset')) {
 				form_reset(event, form);
 			}
 		});
+
 		return false;
 	}
 	form.unbind('submit');
 	form.submit();
 	return true;
-}
-
-function form_submit_url(event) {
-	event.preventDefault();
-	var form = $(event.target).closest('form');
-	var url = $(event.target).closest('a.btn').attr('href');
-	form.attr('action', url);
-	form_submit(event);
 }
 
 function form_reset(event, form) {
@@ -495,11 +495,11 @@ function dom_update(htmlString) {
 		alert('response error');
 		document.write(htmlString);
 	}
-	var html = $.parseHTML(htmlString);
+	var html = $.parseHTML(htmlString, document, true);
 	$(html).each(function () {
 		var id = $(this).attr('id');
 		if (id === 'modal') {
-			modal_open(htmlString);
+			modal_open();
 		}
 		else {
 			modal_close();
@@ -522,7 +522,7 @@ function dom_update(htmlString) {
 				$(this).prependTo('#maalcie-tabel tbody:visible:first').show().effect('highlight'); //FIXME: make generic
 			}
 		}
-		init();
+		init_context($(this));
 	});
 }
 
@@ -683,7 +683,7 @@ function parseBBCode(string, div) {
 	});
 	jqXHR.done(function (data, textStatus, jqXHR) {
 		$(div).html(data);
-		init();
+		init_context($(div));
 	});
 }
 

@@ -52,7 +52,7 @@ abstract class InputField implements FormElement, Validator {
 	public $required = false; // mag het veld leeg zijn?
 	public $empty_null = false; // lege waarden teruggeven als null
 	public $enter_submit = false; // bij op enter drukken form submitten
-	public $escape_cancel = true; // bij op escape drukken form annuleren
+	public $escape_cancel = false; // bij op escape drukken form annuleren
 	public $preview = true; // preview tonen? (waar van toepassing)
 	public $leden_mod = false; // uitzondering leeg verplicht veld voor LEDEN_MOD
 	public $autocomplete = true; // browser laten autoaanvullen?
@@ -100,7 +100,7 @@ abstract class InputField implements FormElement, Validator {
 	}
 
 	public function getTitel() {
-		return $this->getName();
+		return $this->getType();
 	}
 
 	public function getName() {
@@ -195,7 +195,7 @@ abstract class InputField implements FormElement, Validator {
 			if ($this->title) {
 				$help = '<div class="help"><img width="16" height="16" class="icon hoverIntentContent" alt="?" src="' . CSR_PICS . '/famfamfam/help.png"></div>';
 			}
-			return '<label for="field_' . $this->name . '">' . $help . $this->description . $required . '</label>';
+			return '<label for="' . $this->getId() . '">' . $help . $this->description . $required . '</label>';
 		}
 		return '';
 	}
@@ -294,58 +294,6 @@ abstract class InputField implements FormElement, Validator {
 					return 'autocomplete="off"'; // browser autocompete
 				}
 				break;
-			case 'onchange':
-				if ($this->enter_submit) {
-					$this->onchange .= <<<JS
-form_submit(event);
-JS;
-				}
-				if ($this->onchange != null) {
-					return 'onchange="' . $this->onchange . '"';
-				}
-				break;
-			case 'onclick':
-				if ($this->onclick != null) {
-					return 'onclick="' . $this->onclick . '"';
-				}
-				break;
-			case 'onkeydown':
-				if ($this->enter_submit) {
-					$this->onkeydown .= <<<JS
-if (event.keyCode === 13) {
-	event.preventDefault();
-}
-JS;
-				}
-				if ($this->onkeydown != null) {
-					return 'onkeydown="' . $this->onkeydown . '"';
-				}
-				break;
-			case 'onkeyup':
-				if ($this->enter_submit) {
-					$this->onkeyup .= <<<JS
-if (event.keyCode === 13) {
-	form_submit(event);
-}
-else if (event.keyCode === 27) {
-	var orig = $(this).attr('origvalue');
-	if (typeof orig == 'string') {
-		$(this).val(orig);
-	}
-}
-JS;
-					if ($this->escape_cancel) {
-						$this->onkeydown .= <<<JS
-if (event.keyCode === 27) {
-	form_cancel(event);
-}
-JS;
-					}
-				}
-				if ($this->onkeyup != null) {
-					return 'onkeyup="' . $this->onkeyup . '"';
-				}
-				break;
 		}
 		return '';
 	}
@@ -356,7 +304,7 @@ JS;
 		} else {
 			$type = 'text';
 		}
-		return '<input type="' . $type . '"' . $this->getInputAttribute(array('id', 'name', 'class', 'value', 'origvalue', 'disabled', 'readonly', 'maxlength', 'placeholder', 'autocomplete', 'onchange', 'onclick', 'onkeydown', 'onkeyup')) . ' />';
+		return '<input type="' . $type . '"' . $this->getInputAttribute(array('id', 'name', 'class', 'value', 'origvalue', 'disabled', 'readonly', 'maxlength', 'placeholder', 'autocomplete')) . ' />';
 	}
 
 	/**
@@ -387,38 +335,97 @@ JS;
 	 * formatItem geneert html-items voor de suggestielijst, afstemmen op data-array
 	 */
 	public function getJavascript() {
+		$js = <<<JS
+/* {$this->name} */
+
+JS;
 		if ($this->readonly) {
-			return '';
+			return $js . '/* READONLY */';
+		}
+		if ($this->onchange_submit) {
+			$this->onchange .= <<<JS
+form_submit(event);
+JS;
+		}
+		if ($this->enter_submit) {
+			$this->onkeydown .= <<<JS
+if (event.keyCode === 13) {
+	event.preventDefault();
+}
+JS;
+			$this->onkeyup .= <<<JS
+if (event.keyCode === 13) {
+	form_submit(event);
+}
+JS;
+		}
+		if ($this->escape_cancel) {
+			$this->onkeydown .= <<<JS
+if (event.keyCode === 27) {
+	form_cancel(event);
+}
+JS;
+		}
+		if ($this->onchange !== null) {
+			$js .= <<<JS
+$('#{$this->getId()}').change(function(event) {
+	{$this->onchange}
+});
+JS;
+		} else {
+			$js .= '/* GEEN ONCHANGE */';
+		}
+		if ($this->onclick !== null) {
+			$js .= <<<JS
+$('#{$this->getId()}').click(function(event) {
+	{$this->onclick}
+});
+JS;
+		} else {
+			$js .= '/* GEEN ONCLICK */';
+		}
+		if ($this->onkeydown !== null) {
+			$js .= <<<JS
+$('#{$this->getId()}').keydown(function(event) {
+	{$this->onkeydown}
+});
+JS;
+		} else {
+			$js .= '/* GEEN ONKEYDOWN */';
+		}
+		if ($this->onkeyup !== null) {
+			$js .= <<<JS
+$('#{$this->getId()}').keyup(function(event) {
+	{$this->onkeyup}
+});
+JS;
+		} else {
+			$js .= '/* GEEN ONKEYUP */';
 		}
 		if (!empty($this->remotedatasource)) {
 			$autocomplete = json_encode($this->remotedatasource);
-			return <<<JS
-$('#{$this->getId()}', form).autocomplete(
-	{$autocomplete},
-	{
-		dataType: "json",
-		parse: function(result) { return result; },
-		formatItem: function(row, i, n) { return row[0]; },
-		clickFire: true,
-		max: 20
-	}
-).result(function(){
+			$js .= <<<JS
+$('#{$this->getId()}').autocomplete({$autocomplete}, {
+	dataType: "json",
+	parse: function(result) { return result; },
+	formatItem: function(row, i, n) { return row[0]; },
+	clickFire: true,
+	max: 20
+}).result(function(){
 	$(this).keyup();
 });
 JS;
 		} elseif (!empty($this->suggestions)) {
 			$autocomplete = json_encode($this->suggestions);
-			return <<<JS
-$('#{$this->getId()}', form).autocomplete(
-	{$autocomplete},
-	{
-		clickFire: true,
-		max: 20,
-		matchContains: true,
-		noRecord: ""
-	}
-);
+			$js .= <<<JS
+$('#{$this->getId()}').autocomplete({$autocomplete}, {
+	clickFire: true,
+	max: 20,
+	matchContains: true,
+	noRecord: ""
+});
 JS;
+			return $js;
 		}
 	}
 
@@ -587,8 +594,7 @@ class UidField extends TextField {
 
 	public function getJavascript() {
 		return parent::getJavascript() . <<<JS
-$('#{$this->getId()}', form).unbind('keyup.autocomplete');
-$('#{$this->getId()}', form).bind('keyup.autocomplete', function(event) {
+$('#{$this->getId()}').bind('keyup.autocomplete', function(event) {
 	if ($(this).val().length < 4) {
 		$('#lidPreview_{$this->getId()}').html('');
 		return;
@@ -674,8 +680,7 @@ class LidField extends TextField {
 
 	public function getJavascript() {
 		return parent::getJavascript() . <<<JS
-$('#{$this->getId()}', form).unbind('keyup.autocomplete');
-$('#{$this->getId()}', form).bind('keyup.autocomplete', function(event) {
+$('#{$this->getId()}').bind('keyup.autocomplete', function(event) {
 	if ($(this).val().length < 1) {
 		$('#lidPreview_{$this->getId()}').html('');
 		return;
@@ -739,7 +744,7 @@ class EntityField extends InputField {
 		} else {
 			$show_value = $this->show_value;
 		}
-		$html = '<input type="text" name="' . $this->name . '_show" id="' . $this->getId() . '" value="' . $show_value . '" origvalue="' . $this->show_value . '"' . $this->getInputAttribute(array('class', 'disabled', 'readonly', 'maxlength', 'placeholder', 'autocomplete', 'onchange', 'onclick', 'onkeydown', 'onkeyup')) . ' />';
+		$html = '<input type="text" name="' . $this->name . '_show" value="' . $show_value . '" origvalue="' . $this->show_value . '"' . $this->getInputAttribute(array('id', 'class', 'disabled', 'readonly', 'maxlength', 'placeholder', 'autocomplete')) . ' />';
 
 		// actual values
 		$class = $this->model->orm;
@@ -874,14 +879,13 @@ class IntField extends TextField {
 			$this->max = (int) $max;
 			$this->max_alert = 'Maximaal ' . $this->max;
 		}
-		$this->onkeydown = <<<JS
-
+		$this->onkeydown .= <<<JS
 if (event.keyCode == 107 || event.keyCode == 109) {
 	event.preventDefault();
 	return false;
 }
 JS;
-		$this->onkeyup = <<<JS
+		$this->onkeyup .= <<<JS
 if (event.keyCode == 107) {
 	$('#add_{$this->getId()}').trigger('click');
 }
@@ -971,7 +975,7 @@ if (parseInt( $(this).val() ) > {$this->max}) {
 JS;
 		}
 
-		$html .= ' <input type="' . $type . '"' . $this->getInputAttribute(array('id', 'name', 'class', 'value', 'origvalue', 'disabled', 'readonly', 'maxlength', 'placeholder', 'autocomplete', 'onchange', 'onclick', 'onkeydown', 'onkeyup')) . ' /> ';
+		$html .= ' <input type="' . $type . '"' . $this->getInputAttribute(array('id', 'name', 'class', 'value', 'origvalue', 'disabled', 'readonly', 'maxlength', 'placeholder', 'autocomplete')) . ' /> ';
 
 		if (!$this->readonly AND ! $this->disabled AND ! $this->hidden) {
 			if ($this->max !== null AND $this->getValue() === $this->max) {
@@ -990,16 +994,18 @@ HTML;
 	public function getJavascript() {
 		return parent::getJavascript() . <<<JS
 $('#add_{$this->getId()}').click(function() {
-	if ($(this).hasClass('disabled')) {
+	var val = parseInt($('#{$this->getId()}').val());
+	if (isNaN(val) || $(this).hasClass('disabled')) {
 		return;
 	}
-	$('#{$this->getId()}').val(parseInt($('#{$this->getId()}').val()) + 1).trigger('onchange');
+	$('#{$this->getId()}').val(val + 1).trigger('onchange');
 });
 $('#substract_{$this->getId()}').click(function() {
-	if ($(this).hasClass('disabled')) {
+	var val = parseInt($('#{$this->getId()}').val());
+	if (isNaN(val) || $(this).hasClass('disabled')) {
 		return;
 	}
-	$('#{$this->getId()}').val(parseInt($('#{$this->getId()}').val()) - 1).trigger('onchange');
+	$('#{$this->getId()}').val(val - 1).trigger('onchange');
 });
 JS;
 	}
@@ -1097,7 +1103,7 @@ class BedragField extends DecimalField {
 		} else {
 			$type = 'text';
 		}
-		$html .= $this->valuta . ' <input type="' . $type . '"' . $this->getInputAttribute(array('id', 'name', 'class', 'disabled', 'readonly', 'maxlength', 'placeholder', 'autocomplete', 'onchange', 'onclick', 'onkeydown', 'onkeyup'));
+		$html .= $this->valuta . ' <input type="' . $type . '"' . $this->getInputAttribute(array('id', 'name', 'class', 'disabled', 'readonly', 'maxlength', 'placeholder', 'autocomplete'));
 		echo ' value="' . number_format(str_replace(',', '.', $this->value), $this->precision, ',', '') . '" origvalue="';
 		// if an error occured do not re-format the original value
 		// prevent unchanged is not smart enough for rounding and such
@@ -1223,19 +1229,18 @@ class TextareaField extends TextField {
 	}
 
 	public function getHtml() {
-		return '<textarea' . $this->getInputAttribute(array('id', 'name', 'origvalue', 'class', 'disabled', 'readonly', 'placeholder', 'maxlength', 'rows', 'autocomplete', 'onchange', 'onclick', 'onkeydown', 'onkeyup')) . '>' . $this->value . '</textarea>';
+		return '<textarea' . $this->getInputAttribute(array('id', 'name', 'origvalue', 'class', 'disabled', 'readonly', 'placeholder', 'maxlength', 'rows', 'autocomplete')) . '>' . $this->value . '</textarea>';
 	}
 
 	/**
 	 * Maakt een verborgen div met dezelfde eigenschappen als de textarea en
 	 * gebruikt autoresize eigenschappen van de div om de hoogte te bepalen voor de textarea.
 	 * 
-	 * @override parent
 	 * @return string
 	 */
 	public function getJavascript() {
-		return <<<JS
-$('#{$this->getId()}', form).autosize();
+		return parent::getJavascript() . <<<JS
+$('#{$this->getId()}').autosize();
 JS;
 	}
 
@@ -1274,8 +1279,7 @@ HTML;
 			return parent::getJavascript();
 		}
 		return parent::getJavascript() . <<<JS
-$('#{$this->getId()}', form).unbind('keyup.preview');
-$('#{$this->getId()}', form).bind('keyup.preview', function(event) {
+$('#{$this->getId()}').bind('keyup.preview', function(event) {
 	if(event.keyCode === 13) {
 		CsrBBPreview('{$this->getId()}', '{$this->getName()}Preview');
 	}
@@ -1296,7 +1300,7 @@ class WachtwoordField extends TextField {
 	public $enter_submit = true;
 
 	public function getHtml() {
-		return '<input type="password"' . $this->getInputAttribute(array('id', 'name', 'class', 'value', 'origvalue', 'disabled', 'readonly', 'maxlength', 'placeholder', 'autocomplete', 'onchange', 'onclick', 'onkeydown', 'onkeyup')) . ' />';
+		return '<input type="password"' . $this->getInputAttribute(array('id', 'name', 'class', 'value', 'origvalue', 'disabled', 'readonly', 'maxlength', 'placeholder', 'autocomplete')) . ' />';
 	}
 
 }
@@ -1380,12 +1384,12 @@ class WachtwoordWijzigenField extends InputField {
 	public function getHtml() {
 		$html = '';
 		if (!$this->reset) {
-			$html .= '<label for="' . $this->name . '_current">Huidige wachtwoord</label>';
+			$html .= '<label for="' . $this->getId() . '_current">Huidige wachtwoord</label>';
 			$html .= '<input type="password" autocomplete="off" id="' . $this->getId() . '_current" name="' . $this->name . '_current" /></div>';
 		}
-		$html .= '<div class="password"><label for="' . $this->name . '_new">Nieuw wachtwoord</label>';
+		$html .= '<div class="password"><label for="' . $this->getId() . '_new">Nieuw wachtwoord</label>';
 		$html .= '<input type="password" autocomplete="off" id="' . $this->getId() . '_new" name="' . $this->name . '_new" /></div>';
-		$html .= '<div class="password"><label for="' . $this->name . '_confirm">Nogmaals</label>';
+		$html .= '<div class="password"><label for="' . $this->getId() . '_confirm">Nogmaals</label>';
 		$html .= '<input type="password" autocomplete="off" id="' . $this->getId() . '_confirm" name="' . $this->name . '_confirm" /></div>';
 		return $html;
 	}

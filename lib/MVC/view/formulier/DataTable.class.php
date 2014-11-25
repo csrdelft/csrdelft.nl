@@ -62,10 +62,7 @@ class DataTable extends TabsForm {
 		parent::__construct(new $class(), $tableId . '_toolbar', null, $titel);
 
 		$this->tableId = $tableId;
-		$this->css_classes[] = 'display';
-		if ($groupByColumn !== false) {
-			$this->css_classes[] = 'groupByColumn';
-		}
+		$this->css_classes[] = 'ModalForm DataTableResponse';
 		$this->groupByColumn = $groupByColumn;
 
 		// create group expand / collapse column
@@ -213,7 +210,7 @@ class DataTable extends TabsForm {
 		$settingsJson = str_replace('"fnCreatedRowCallback"', 'fnCreatedRowCallback', $settingsJson);
 		?>
 		<?php parent::view(); ?>
-		<table id="<?= $this->tableId ?>" class="<?= implode(' ', $this->css_classes) ?>" groupbycolumn="<?= $this->groupByColumn ?>"></table>
+		<table id="<?= $this->tableId; ?>" class="display <?= ($this->groupByColumn !== false ? 'groupByColumn' : ''); ?>" groupbycolumn="<?= $this->groupByColumn; ?>"></table>
 		<script type="text/javascript">
 			var lastUpdate<?= $this->tableId; ?>;
 
@@ -233,8 +230,8 @@ class DataTable extends TabsForm {
 					 var keys = new $.fn.dataTable.KeyTable( oTable );
 					 keys.fnSetPosition( 1, 1 );
 					 */
-					init(); // FIXME
 					updateToolbar();
+					init_context('#<?= $this->tableId; ?>');
 					return json.data;
 				};
 
@@ -394,13 +391,6 @@ class DataTableKnop extends FormulierKnop {
 
 class DataTableResponse extends JsonResponse {
 
-	protected $tableId;
-
-	public function __construct($table, $data) {
-		parent::__construct($data);
-		$this->tableId = $table;
-	}
-
 	public function getJson($data) {
 		return json_encode($data);
 	}
@@ -408,7 +398,7 @@ class DataTableResponse extends JsonResponse {
 	public function view() {
 		http_response_code($this->code);
 		header('Content-Type: application/json');
-		echo '{"table":"#' . $this->tableId . '", "data":[' . "\n";
+		echo '{"data":[' . "\n";
 		$comma = false;
 		foreach ($this->model as $data) {
 			if ($comma) {

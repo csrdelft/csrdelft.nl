@@ -53,7 +53,7 @@ class SuggestieLijst extends SmartyTemplateView implements FormElement {
 		}
 	}
 
-	public function view() {
+	public function getHtml() {
 		$this->smarty->assign('suggesties', $this->model);
 		$this->smarty->assign('jongsteLichting', Lichting::getJongsteLichting());
 		$this->smarty->assign('voorkeur', $this->voorkeur);
@@ -63,7 +63,15 @@ class SuggestieLijst extends SmartyTemplateView implements FormElement {
 		}
 		$this->smarty->assign('kwalificatie_benodigd', $this->taak->getCorveeFunctie()->kwalificatie_benodigd);
 
-		$this->smarty->display('maalcie/corveetaak/suggesties_lijst.tpl');
+		return $this->smarty->fetch('maalcie/corveetaak/suggesties_lijst.tpl');
+	}
+
+	public function view() {
+		echo $this->getHtml();
+	}
+
+	public function getTitel() {
+		return $this->getType();
 	}
 
 	public function getType() {
@@ -71,12 +79,16 @@ class SuggestieLijst extends SmartyTemplateView implements FormElement {
 	}
 
 	public function getJavascript() {
-		$js = '$("#suggesties-tabel").show(1, taken_color_suggesties); ';
+		$js = <<<JS
+/* {$this->getTitel()} */
+$('#suggesties-tabel').show(1, taken_color_suggesties);
+
+JS;
 		if (isset($this->voorkeurbaar) and $this->voorkeur) {
-			$js .= 'taken_toggle_suggestie("geenvoorkeur"); ';
+			$js .= "taken_toggle_suggestie('geenvoorkeur'');";
 		}
 		if ($this->recent) {
-			$js .= 'taken_toggle_suggestie("recent"); ';
+			$js .= "taken_toggle_suggestie('recent');";
 		}
 		return $js;
 	}

@@ -46,7 +46,7 @@ class Formulier implements View, Validator {
 	 */
 	private $fields = array();
 	public $css_classes = array();
-	private $javascript = array();
+	protected $javascript = array();
 	public $titel;
 
 	public function __construct($model, $formId, $action, $titel = false) {
@@ -232,13 +232,9 @@ class Formulier implements View, Validator {
 		return $errors;
 	}
 
-	public function addJavascript($js) {
-		$this->javascript[md5($js)] = $js;
-	}
-
 	public function getJavascript() {
 		foreach ($this->fields as $field) {
-			$this->addJavascript($field->getJavascript());
+			$this->javascript[] = $field->getJavascript();
 		}
 		return implode("\n", $this->javascript);
 	}
@@ -248,13 +244,12 @@ class Formulier implements View, Validator {
 	}
 
 	public function getScriptTag() {
-		$id = str_replace('-', '_', $this->getFormId());
 		return <<<JS
 <script type="text/javascript">
-function form_ready_{$id}() {
+$(document).ready(function () {
 	var form = document.getElementById('{$this->getFormId()}');
 	{$this->getJavascript()}
-}
+});
 </script>
 JS;
 	}
@@ -299,15 +294,13 @@ class InlineForm extends Formulier {
 	public function __construct($model, $formId, $action, InputField $field, $buttons = false, $label = false) {
 		parent::__construct($model, uniqid($formId), $action);
 		$this->css_classes[] = 'InlineForm';
-
 		$fields = array();
-		if ($model instanceof PersistentEntity) {
-			$fields['id'] = new ObjectIdField($model);
-		}
+
 		if (!isset($field->title)) {
 			$field->title = $field->description;
 		}
 		$fields['input'] = $field;
+
 		if ($buttons) {
 			$fields['btn'] = new FormDefaultKnoppen(null, false, true, $label, true);
 		} else {
@@ -324,9 +317,6 @@ class InlineForm extends Formulier {
 		$html = '<div id="wrapper_' . $this->getFormId() . '" class="InlineForm">';
 		$html .= '<div id="toggle_' . $this->getFormId() . '" class="InlineFormToggle">' . $fields['input']->getValue() . '</div>';
 		$html .= $this->getFormTag();
-		if (isset($fields['id'])) {
-			$html .= $fields['id']->getHtml();
-		}
 		$html .= $fields['input']->getHtml();
 		if (isset($fields['btn'])) {
 			$html .= $fields['btn']->getHtml();
