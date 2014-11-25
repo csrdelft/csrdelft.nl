@@ -40,16 +40,10 @@ class SelectField extends InputField {
 		$this->groups = (bool) $groups;
 		$this->size = (int) $size;
 		$this->multiple = $multiple;
-
 		if ($this->groups) {
-			$this->onchange .= <<<JS
-var selected = $(':selected', this);
-$('#selectPreview_{$this->getId()}').html(selected.parent().attr('label'));
-JS;
+			$this->onchange .= 'preview' . $this->getId() . '();';
+			$this->onkeyup .= 'preview' . $this->getId() . '();';
 		}
-		$this->onkeyup .= <<<JS
-$(this).trigger('onchange');
-JS;
 	}
 
 	public function getValue() {
@@ -93,11 +87,13 @@ JS;
 	}
 
 	public function getJavascript() {
-		$js = parent::getJavascript();
-		return <<<JS
-/* {$this->getTitel()} */
-/* parent: */{$js}
-$('#{$this->getId()}').trigger('onchange');
+		return parent::getJavascript() . <<<JS
+
+var preview{$this->getId()} = function () {
+	var selected = $(':selected', '#{$this->getId()}');
+	$('#selectPreview_{$this->getId()}').html(selected.parent().attr('label'));
+};
+preview{$this->getId()}();
 JS;
 	}
 
@@ -350,6 +346,7 @@ class DatumField extends InputField {
 
 	public function getJavascript() {
 		return parent::getJavascript() . <<<JS
+
 var preview{$this->getId()} = function () {
 	var datum = new Date($('#{$this->getId()}_jaar').val(), $('#{$this->getId()}_maand').val() - 1, $('#{$this->getId()}_dag').val());
 	var weekday = [ 'zondag', 'maandag', 'dinsdag', 'woensdag', 'donderdag', 'vrijdag', 'zaterdag' ];

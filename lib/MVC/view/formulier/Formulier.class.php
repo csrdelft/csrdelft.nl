@@ -46,7 +46,7 @@ class Formulier implements View, Validator {
 	 */
 	private $fields = array();
 	public $css_classes = array();
-	protected $javascript = array();
+	protected $javascript = '';
 	public $titel;
 
 	public function __construct($model, $formId, $action, $titel = false) {
@@ -234,9 +234,9 @@ class Formulier implements View, Validator {
 
 	public function getJavascript() {
 		foreach ($this->fields as $field) {
-			$this->javascript[] = $field->getJavascript();
+			$this->javascript .= $field->getJavascript();
 		}
-		return implode("\n", $this->javascript);
+		return $this->javascript;
 	}
 
 	public function getFormTag() {

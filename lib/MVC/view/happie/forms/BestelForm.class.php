@@ -124,7 +124,8 @@ HTML
 
 					$fields[] = new HtmlComment('<div class="beschrijving" style="font-style:italic;">' . $item->beschrijving . '</div></div></div>'); // close expanded item
 
-					$this->javascript[] = <<<JS
+					$this->javascript .= <<<JS
+
 $('#{$opm->getId()}').height('30px');
 $('#toggle_{$item->item_id}').prependTo('#wrapper_{$int->getId()}').click(function() {
 	$('#expand_{$item->item_id}').toggle().find('textarea:first').focus();
@@ -152,7 +153,8 @@ JS;
 		$allergie = new FormulierKnop(null, 'toggle-allergie', 'Allergie-info', 'Toon allergie informatie', '/famfamfam/information.png', true);
 		$fields['k']->addKnop($allergie);
 
-		$this->javascript[] = <<<JS
+		$this->javascript .= <<<JS
+
 $('.Formulier label').css('width', '45%');
 $('#wrapper_{$table->getId()} label').css('width', '20%');
 $('.expanded-submenu').css({

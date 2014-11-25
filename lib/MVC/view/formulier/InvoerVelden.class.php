@@ -336,24 +336,27 @@ abstract class InputField implements FormElement, Validator {
 	 */
 	public function getJavascript() {
 		$js = <<<JS
-/* {$this->name} */
 
+/* {$this->name} */
 JS;
 		if ($this->readonly) {
-			return $js . '/* READONLY */';
+			return $js;
 		}
 		if ($this->onchange_submit) {
 			$this->onchange .= <<<JS
+
 form_submit(event);
 JS;
 		}
 		if ($this->enter_submit) {
 			$this->onkeydown .= <<<JS
+
 if (event.keyCode === 13) {
 	event.preventDefault();
 }
 JS;
 			$this->onkeyup .= <<<JS
+
 if (event.keyCode === 13) {
 	form_submit(event);
 }
@@ -361,6 +364,7 @@ JS;
 		}
 		if ($this->escape_cancel) {
 			$this->onkeydown .= <<<JS
+
 if (event.keyCode === 27) {
 	form_cancel(event);
 }
@@ -368,43 +372,40 @@ JS;
 		}
 		if ($this->onchange !== null) {
 			$js .= <<<JS
+
 $('#{$this->getId()}').change(function(event) {
 	{$this->onchange}
 });
 JS;
-		} else {
-			$js .= '/* GEEN ONCHANGE */';
 		}
 		if ($this->onclick !== null) {
 			$js .= <<<JS
+
 $('#{$this->getId()}').click(function(event) {
 	{$this->onclick}
 });
 JS;
-		} else {
-			$js .= '/* GEEN ONCLICK */';
 		}
 		if ($this->onkeydown !== null) {
 			$js .= <<<JS
+
 $('#{$this->getId()}').keydown(function(event) {
 	{$this->onkeydown}
 });
 JS;
-		} else {
-			$js .= '/* GEEN ONKEYDOWN */';
 		}
 		if ($this->onkeyup !== null) {
 			$js .= <<<JS
+
 $('#{$this->getId()}').keyup(function(event) {
 	{$this->onkeyup}
 });
 JS;
-		} else {
-			$js .= '/* GEEN ONKEYUP */';
 		}
 		if (!empty($this->remotedatasource)) {
 			$autocomplete = json_encode($this->remotedatasource);
 			$js .= <<<JS
+
 $('#{$this->getId()}').autocomplete({$autocomplete}, {
 	dataType: "json",
 	parse: function(result) { return result; },
@@ -418,6 +419,7 @@ JS;
 		} elseif (!empty($this->suggestions)) {
 			$autocomplete = json_encode($this->suggestions);
 			$js .= <<<JS
+
 $('#{$this->getId()}').autocomplete({$autocomplete}, {
 	clickFire: true,
 	max: 20,
@@ -425,8 +427,8 @@ $('#{$this->getId()}').autocomplete({$autocomplete}, {
 	noRecord: ""
 });
 JS;
-			return $js;
 		}
+		return $js;
 	}
 
 }
@@ -880,12 +882,14 @@ class IntField extends TextField {
 			$this->max_alert = 'Maximaal ' . $this->max;
 		}
 		$this->onkeydown .= <<<JS
+
 if (event.keyCode == 107 || event.keyCode == 109) {
 	event.preventDefault();
 	return false;
 }
 JS;
 		$this->onkeyup .= <<<JS
+
 if (event.keyCode == 107) {
 	$('#add_{$this->getId()}').trigger('click');
 }
@@ -949,6 +953,7 @@ HTML;
 				$alert = '';
 			}
 			$this->onchange .= <<<JS
+
 if (parseInt( $(this).val() ) < {$this->min}) {
 	{$alert}
 	$(this).val({$this->min});
@@ -965,6 +970,7 @@ JS;
 				$alert = '';
 			}
 			$this->onchange .= <<<JS
+
 if (parseInt( $(this).val() ) > {$this->max}) {
 	{$alert}
 	$(this).val({$this->max});
