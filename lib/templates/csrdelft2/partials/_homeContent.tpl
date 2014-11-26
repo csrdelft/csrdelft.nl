@@ -113,11 +113,13 @@
 				<img src="{$CSR_PICS}/layout2/box-picture-1.jpg" class="rotate" alt="Foto">
 			</figure>
 		</div>
-		<div class="blue box pad-left link">
-			<a href="/english" title="English">
-				<h2 class="overlay">English</h2>
-				<img src="{$CSR_PICS}/layout2/icon-flag-english.png" alt="English" style="width: 120px; height: 67px; position: absolute; top: 60px; right: 40px;">
-			</a>
+		<div class="columns large-2 small-2">
+			<div class="blue box link">
+				<a href="/english" title="English">
+					<h2 class="overlay">English</h2>
+					<img src="{$CSR_PICS}/layout2/icon-flag-english.png" alt="English" style="width: 120px; height: 67px; position: absolute; top: 60px; right: 40px;">
+				</a>
+			</div>
 		</div>
 		{* <div class="columns large-2 small-2" style="width: auto; height: auto;">
 		<div class="box h2 link" style="width: auto; height: auto;">
