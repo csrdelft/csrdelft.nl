@@ -523,6 +523,10 @@ function dom_update(htmlString) {
 			}
 		}
 		init_context($(this));
+		if (id === 'modal') {
+			$('#modal-background').css('background-image', 'none');
+			$('#modal input:visible:first').focus();
+		}
 	});
 }
 
