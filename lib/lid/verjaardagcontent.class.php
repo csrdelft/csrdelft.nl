@@ -44,7 +44,7 @@ class VerjaardagContent implements View {
 						</li>
 					</ul>
 					<hr />';
-				echo '<h1>Verjaardagen</h1>';
+				echo '<h1>Verjaardagen</h1><div class="verjaardagen">';
 				# de verjaardagen die vandaag zijn krijgen een highlight
 				$nu = time();
 				$dezemaand = date('n', $nu);
@@ -67,7 +67,7 @@ class VerjaardagContent implements View {
 
 				for ($m = 0; $m < 12; $m++) {
 					$maand = ($dezemaand - 1 + $m) % 12 + 1;
-					echo '<table class="inline verjaardagen"><tr><th></th><th><h2>' . $maanden[$maand] . '</h2></th></tr>';
+					echo '<table class="inline"><tr><th></th><th><h2>' . $maanden[$maand] . '</h2></th></tr>';
 					$verjaardagen = Verjaardag::getVerjaardagen($maand);
 					foreach ($verjaardagen as $verjaardag) {
 						echo '<tr>';
@@ -90,6 +90,7 @@ class VerjaardagContent implements View {
 					}
 					echo '</table>';
 				}
+				echo '</div>';
 				break;
 			case 'komende':
 				if (LoginModel::mag('P_LEDEN_READ')) {
