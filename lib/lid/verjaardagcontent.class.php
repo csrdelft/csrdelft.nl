@@ -55,18 +55,18 @@ class VerjaardagContent implements View {
 				$kolommen = 4;
 
 				$maanden = array(
-					1	 => "Januari",
-					2	 => "Februari",
-					3	 => "Maart",
-					4	 => "April",
-					5	 => "Mei",
-					6	 => "Juni",
-					7	 => "Juli",
-					8	 => "Augustus",
-					9	 => "September",
-					10	 => "Oktober",
-					11	 => "November",
-					12	 => "December",
+					1	 => 'Januari',
+					2	 => 'Februari',
+					3	 => 'Maart',
+					4	 => 'April',
+					5	 => 'Mei',
+					6	 => 'Juni',
+					7	 => 'Juli',
+					8	 => 'Augustus',
+					9	 => 'September',
+					10	 => 'Oktober',
+					11	 => 'November',
+					12	 => 'December',
 				);
 
 				echo '<table style="width: 100%;">';
@@ -77,7 +77,7 @@ class VerjaardagContent implements View {
 						$tekst = ($maand <= 12) ? $maanden[$maand] : '&nbsp;';
 						echo '<th><h2>' . $tekst . '</h2></th>';
 					}
-					echo "</tr><tr>";
+					echo '</tr><tr>';
 					for ($k = 1; $k <= $kolommen; $k++) {
 						$maand = ($r * $kolommen + $k + $dezemaand - 2) % 12 + 1;
 						if ($maand <= 12) {
@@ -94,20 +94,20 @@ class VerjaardagContent implements View {
 								echo $verjaardag['gebdag'];
 								echo '</td>';
 								if ($verjaardag['gebdag'] == $dezedag and $maand == $dezemaand) {
-									echo '<td class="cursief">';
+									echo '<td class="cursief">&nbsp;';
 								} else {
-									echo '<td>';
+									echo '<td>&nbsp;';
 								}
 								echo $lid->getNaamLink('civitas', 'visitekaartje');
 								echo '</td>';
 								echo '</tr>';
 							}
-							echo "</table></td>";
+							echo '</table></td>';
 						} else {
-							echo "<td>&nbsp;</td>";
+							echo '<td>&nbsp;</td>';
 						}
 					}
-					echo "</tr>";
+					echo '</tr>';
 				}
 				echo '</table><br>';
 				break;
