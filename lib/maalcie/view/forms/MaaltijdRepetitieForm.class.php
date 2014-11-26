@@ -51,7 +51,7 @@ if (this.checked) {
 JS;
 		}
 		$fields['btn'] = new FormDefaultKnoppen();
-		$fields['btn']->addKnop($bijwerken, true);
+		$fields['btn']->addKnop($bijwerken, false, true);
 
 		$this->addFields($fields);
 	}

@@ -15,11 +15,12 @@
  */
 abstract class FormKnoppen implements FormElement {
 
-	protected $knoppen = array();
-	public $css_classes = array('clear-left');
+	protected $knoppen_left = array();
+	protected $knoppen_right = array();
+	public $css_classes = array('FormKnoppen', 'clear-left');
 
 	public function getModel() {
-		return $this->knoppen;
+		return array_merge($this->knoppen_left, $this->knoppen_right);
 	}
 
 	public function getBreadcrumbs() {
@@ -34,26 +35,30 @@ abstract class FormKnoppen implements FormElement {
 		return get_class($this);
 	}
 
-	public function addKnop(FormulierKnop $knop, $prepend = false) {
-		if ($prepend) {
-			array_unshift($this->knoppen, $knop);
+	public function addKnop(FormulierKnop $knop, $left = false, $prepend = false) {
+		if ($left) {
+			if ($prepend) {
+				$this->knoppen_left[] = $knop;
+			} else {
+				array_unshift($this->knoppen_left, $knop);
+			}
 		} else {
-			$this->knoppen[] = $knop;
+			if ($prepend) {
+				array_unshift($this->knoppen_right, $knop);
+			} else {
+				$this->knoppen_right[] = $knop;
+			}
 		}
 	}
 
 	public function getHtml() {
-		$html = '<div class="' . $this->getType() . ' ' . implode(' ', $this->css_classes) . '"><div class="float-left">';
-		foreach ($this->knoppen as $knop) {
-			if ($knop->float_left) {
-				$html .= $knop->getHtml();
-			}
+		$html = '<div class="' . implode(' ', $this->css_classes) . '"><div class="float-left">';
+		foreach ($this->knoppen_left as $knop) {
+			$html .= $knop->getHtml();
 		}
 		$html .= '</div><div class="float-right">';
-		foreach ($this->knoppen as $knop) {
-			if (!$knop->float_left) {
-				$html .= $knop->getHtml();
-			}
+		foreach ($this->knoppen_right as $knop) {
+			$html .= $knop->getHtml();
 		}
 		return $html . '</div></div>';
 	}
@@ -116,18 +121,16 @@ class FormulierKnop implements FormElement {
 	public $icon;
 	public $label;
 	public $title;
-	public $float_left;
-	public $css_classes;
+	public $css_classes = array('FormulierKnop');
 
-	public function __construct($url, $action, $label, $title, $icon, $float_left = false) {
+	public function __construct($url, $action, $label, $title, $icon) {
 		$this->id = uniqid('knop_');
 		$this->url = $url;
 		$this->action = $action;
 		$this->label = $label;
 		$this->title = $title;
 		$this->icon = $icon;
-		$this->float_left = $float_left;
-		$this->css_classes = array();
+		$this->css_classes[] = $this->getType();
 	}
 
 	public function getId() {
@@ -206,7 +209,7 @@ class CancelKnop extends FormulierKnop {
 class DeleteKnop extends FormulierKnop {
 
 	public function __construct($url, $action = 'post confirm ReloadPage', $label = 'Verwijderen', $title = 'Definitief verwijderen', $icon = '/famfamfam/cross.png') {
-		parent::__construct($url, $action, $label, $title, $icon, true);
+		parent::__construct($url, $action, $label, $title, $icon);
 	}
 
 }

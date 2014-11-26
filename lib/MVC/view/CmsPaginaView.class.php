@@ -64,7 +64,7 @@ class CmsPaginaForm extends Formulier {
 		$fields[] = new CsrBBPreviewField('inhoud', $pagina->inhoud, 'Inhoud');
 		$fields['btn'] = new FormDefaultKnoppen('/pagina/' . $pagina->naam);
 		$delete = new DeleteKnop('/pagina/verwijderen/' . $pagina->naam);
-		$fields['btn']->addKnop($delete);
+		$fields['btn']->addKnop($delete, true);
 
 		$this->addFields($fields);
 	}

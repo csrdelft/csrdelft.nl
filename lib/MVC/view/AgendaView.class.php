@@ -152,7 +152,7 @@ class AgendaItemForm extends ModalForm {
 		$fields['btn'] = new FormDefaultKnoppen();
 		if ($actie === 'toevoegen') {
 			$doorgaan = new FormulierKnop('/agenda/toevoegen/doorgaan', 'submit', 'Opslaan en doorgaan', 'Opslaan & nog een agenda item toevoegen', '/famfamfam/add.png');
-			$fields['btn']->addKnop($doorgaan, true);
+			$fields['btn']->addKnop($doorgaan, false, true);
 		}
 
 		$this->addFields($fields);

@@ -150,8 +150,8 @@ JS;
 		$fields['k']->confirmAll();
 		$this->addFields($fields, 'foot');
 
-		$allergie = new FormulierKnop(null, 'toggle-allergie', 'Allergie-info', 'Toon allergie informatie', '/famfamfam/information.png', true);
-		$fields['k']->addKnop($allergie);
+		$allergie = new FormulierKnop(null, 'toggle-allergie', 'Allergie-info', 'Toon allergie informatie', '/famfamfam/information.png');
+		$fields['k']->addKnop($allergie, true);
 
 		$this->javascript .= <<<JS
 
