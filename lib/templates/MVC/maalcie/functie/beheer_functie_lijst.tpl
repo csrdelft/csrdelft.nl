@@ -3,7 +3,7 @@
 *}
 <tr id="corveefunctie-row-{$functie->functie_id}">
 	<td>
-		<a href="{$smarty.const.maalcieUrl}/bewerken/{$functie->functie_id}" title="Functie wijzigen" class="btn rounded post popup">{icon get="pencil"}</a>
+		<a href="{$smarty.const.maalcieUrl}/bewerken/{$functie->functie_id}" title="Functie wijzigen" class="btn post popup">{icon get="pencil"}</a>
 	</td>
 	<td>{$functie->afkorting}</td>
 	<td>{$functie->naam}</td>
@@ -27,6 +27,6 @@
 	</td>
 	<td title="Mag maaltijden sluiten">{if $functie->maaltijden_sluiten}{icon get="lock_add"}{/if}</td>
 	<td class="col-del">
-		<a href="{$smarty.const.maalcieUrl}/verwijderen/{$functie->functie_id}" title="Functie definitief verwijderen" class="btn rounded post confirm">{icon get="cross"}</a>
+		<a href="{$smarty.const.maalcieUrl}/verwijderen/{$functie->functie_id}" title="Functie definitief verwijderen" class="btn post confirm">{icon get="cross"}</a>
 	</td>
 </tr>

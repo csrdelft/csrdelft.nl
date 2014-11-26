@@ -7,7 +7,7 @@
 	{foreach from=$repetities item=repetitie}
 		<th class="{cycle values="rowColor0,rowColor1"}" style="width: 30px;">{strip}
 			<div style="width: 28px;">
-				<a href="/maaltijdenrepetities/beheer/{$repetitie->getMaaltijdRepetitieId()}" title="Wijzig maaltijdrepetitie" class="btn rounded modal">
+				<a href="/maaltijdenrepetities/beheer/{$repetitie->getMaaltijdRepetitieId()}" title="Wijzig maaltijdrepetitie" class="btn modal">
 					{icon get="calendar_edit"}
 				</a>
 			</div>

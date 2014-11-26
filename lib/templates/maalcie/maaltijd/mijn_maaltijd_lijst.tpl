@@ -56,8 +56,8 @@
 							<input type="text" name="aantal_gasten" value="{$aanmelding->getAantalGasten()}" origvalue="{$aanmelding->getAantalGasten()}" class="FormElement" maxlength="4" size="4" />
 						</div>
 						<div class="FormKnoppen">
-							<a class="btn rounded submit" title="Wijzigingen opslaan">{icon get="accept"}</a>
-							<a class="btn rounded reset cancel" title="Annuleren">{icon get="delete"}</a>
+							<a class="btn submit" title="Wijzigingen opslaan">{icon get="accept"}</a>
+							<a class="btn reset cancel" title="Annuleren">{icon get="delete"}</a>
 						</div>
 					</form>
 				{/if}
@@ -81,8 +81,8 @@
 								<input type="text" name="gasten_eetwens" value="{$aanmelding->getGastenEetwens()}" origvalue="{$aanmelding->getGastenEetwens()}" class="FormElement" maxlength="255" size="20" />
 							</div>
 							<div class="FormKnoppen">
-								<a class="btn rounded submit" title="Wijzigingen opslaan">{icon get="accept"}</a>
-								<a class="btn rounded reset cancel" title="Annuleren">{icon get="delete"}</a>
+								<a class="btn submit" title="Wijzigingen opslaan">{icon get="accept"}</a>
+								<a class="btn reset cancel" title="Annuleren">{icon get="delete"}</a>
 							</div>
 						</form>
 					{/if}

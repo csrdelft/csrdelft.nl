@@ -3,8 +3,8 @@
 *}
 <tr id="repetitie-row-{$repetitie->getMaaltijdRepetitieId()}">
 	<td>{strip}
-		<a href="{$smarty.const.maalcieUrl}/bewerk/{$repetitie->getMaaltijdRepetitieId()}" title="Maaltijdrepetitie wijzigen" class="btn rounded post popup">{icon get="pencil"}</a>
-		<a href="/corveerepetities/maaltijd/{$repetitie->getMaaltijdRepetitieId()}" title="Corveebeheer maaltijdrepetitie" class="btn rounded modal">{icon get="chart_organisation"}</a>
+		<a href="{$smarty.const.maalcieUrl}/bewerk/{$repetitie->getMaaltijdRepetitieId()}" title="Maaltijdrepetitie wijzigen" class="btn post popup">{icon get="pencil"}</a>
+		<a href="/corveerepetities/maaltijd/{$repetitie->getMaaltijdRepetitieId()}" title="Corveebeheer maaltijdrepetitie" class="btn modal">{icon get="chart_organisation"}</a>
 	</td>{/strip}
 	<td>{$repetitie->getStandaardTitel()}</td>
 	<td>{$repetitie->getDagVanDeWeekText()}</td>
@@ -14,5 +14,5 @@
 	<td>{$repetitie->getStandaardLimiet()}</td>
 	<td>{if $repetitie->getIsAbonneerbaar()}{icon get="tick" title="Abonneerbaar"}{/if}</td>
 	<td>{$repetitie->getAbonnementFilter()}</td>
-	<td class="col-del"><a href="{$smarty.const.maalcieUrl}/verwijder/{$repetitie->getMaaltijdRepetitieId()}" title="Maaltijdrepetitie definitief verwijderen" class="btn rounded post confirm">{icon get="cross"}</a></td>
+	<td class="col-del"><a href="{$smarty.const.maalcieUrl}/verwijder/{$repetitie->getMaaltijdRepetitieId()}" title="Maaltijdrepetitie definitief verwijderen" class="btn post confirm">{icon get="cross"}</a></td>
 </tr>

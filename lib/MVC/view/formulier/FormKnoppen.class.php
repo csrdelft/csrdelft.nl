@@ -38,9 +38,9 @@ abstract class FormKnoppen implements FormElement {
 	public function addKnop(FormulierKnop $knop, $left = false, $prepend = false) {
 		if ($left) {
 			if ($prepend) {
-				$this->knoppen_left[] = $knop;
-			} else {
 				array_unshift($this->knoppen_left, $knop);
+			} else {
+				$this->knoppen_left[] = $knop;
 			}
 		} else {
 			if ($prepend) {
