@@ -381,7 +381,11 @@ JS;
 			if ($value == substr($this->value, 8, 2)) {
 				$html .= ' selected="selected"';
 			}
-			$html .= '>' . (int) $value . '</option>';
+			$label = (int) $value;
+			if ($label < 10) {
+				$label = '&nbsp;&nbsp;' . $label;
+			}
+			$html .= '>' . $label . '</option>';
 		}
 		$html .= '</select> ';
 
