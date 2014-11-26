@@ -72,7 +72,7 @@ abstract class FormKnoppen implements FormElement {
 
 /* {$this->getTitel()} */
 JS;
-		foreach ($this->knoppen as $knop) {
+		foreach ($this->getModel() as $knop) {
 			$js .= $knop->getJavascript();
 		}
 		return $js;
