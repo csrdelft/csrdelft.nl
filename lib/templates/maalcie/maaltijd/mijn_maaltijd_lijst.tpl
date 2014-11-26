@@ -50,15 +50,13 @@
 				{if $maaltijd->getIsGesloten()}
 					{$aanmelding->getAantalGasten()}
 				{else}
+					<div class="InlineFormToggle maaltijd-gasten">{$aanmelding->getAantalGasten()}</div>
 					<form action="{$smarty.const.maalcieUrl}/gasten/{$maaltijd->getMaaltijdId()}" method="post" class="Formulier InlineForm">
-						<div class="InlineFormToggle maaltijd-gasten">{$aanmelding->getAantalGasten()}</div>
 						<div class="InputField">
 							<input type="text" name="aantal_gasten" value="{$aanmelding->getAantalGasten()}" origvalue="{$aanmelding->getAantalGasten()}" class="FormElement" maxlength="4" size="4" />
 						</div>
-						<div class="FormKnoppen">
-							<a class="btn submit" title="Wijzigingen opslaan">{icon get="accept"}</a>
-							<a class="btn reset cancel" title="Annuleren">{icon get="delete"}</a>
-						</div>
+						<a class="btn submit" title="Wijzigingen opslaan">{icon get="accept"}</a>
+						<a class="btn reset cancel" title="Annuleren">{icon get="delete"}</a>
 					</form>
 				{/if}
 			</td>
