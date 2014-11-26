@@ -59,7 +59,7 @@ table.groepStats th {
     color: #fff;
 }
 table.groepStats td {
-    width: 90px;
+    width: 150px;
 }
 table.groepStats td, table.groepStats th {
     padding: 5px 10px;
@@ -96,15 +96,18 @@ ul.groepledenlijst{ width: 230px; float: right; padding: 10px 20px 20px 20px; ma
 	background-color:#0a338d; 
 
 }
-.groepleden{ 
-	clear: both; width: 285px; 
-	background-color: #f5f5f5; float: right; 
-	margin-left: 10px; 
-	padding: 1px 0; }
+.groepleden{
+	width: 300px;
+	clear: both;
+	float: right;
+	background-color: #f5f5f5;
+	margin-left: 10px;
+	padding: 1px 0;
+}
 .groepleden table.leden{ width: 100%; font-size: 11px;}
 .groepleden table.leden td{ padding: 0 5px; text-align: left;}
 .groepleden table.leden input.functie{ width: 80px; }
-.groepleden .toonmeer{ display: block; padding: 0 0 10px 15px;}
+.groepleden .toonmeer{ clear: left; display: block; padding: 0 0 10px 15px;}
 .groepleden .aanmelden { clear: left; padding: 5px 5px 4px; line-height: 1.6em;}
 .groepleden .aanmelden input.functie{ width: 160px; }
 .groepleden .aanmelden .pasfoto{ width: 50px; height: 67px; border: 1px solid grey; margin-left: 5px; }

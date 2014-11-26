@@ -98,7 +98,7 @@ a.maaltijd-afgemeld, span.maaltijd-afgemeld {
 }
 .bb-groep .groepleden table.leden { width: 100%; }
 .bb-groep .groepleden table.leden td { padding: 0 5px 0 0; text-align: left; }
-.bb-groep .groepleden a.toonmeer { float: left; }
+.bb-groep .groepleden a.toonmeer { clear: left; float: left; }
 .bb-groep .groepleden .editbox { display: none; background-color: #ffffcc; border: solid 1px #000; padding: 1px;}
 .bb-groep .groepleden .inline_edit {
 	background: url(http://plaetjes.csrdelft.nl/famfamfam/pencil.png) right no-repeat;
