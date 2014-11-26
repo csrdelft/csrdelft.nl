@@ -99,14 +99,17 @@ tr.taak-datum-head th, tr.taak-datum-summary th {
 .maaltijd-open, .maaltijd-aangemeld, .abonnement-ingeschakeld, .voorkeur-ingeschakeld, .functie-toegewezen, .taak-self { /* .taak-toegewezen */
 	background-color: #AAEEAA;
 	font-weight: bold;
-	color: green !important;
+	color: green;
 	text-align: center;
 }
 .maaltijd-gesloten, .maaltijd-afgemeld, .abonnement-uitgeschakeld, .voorkeur-uitgeschakeld, .functie-open { /* .taak-open */
 	background-color: #EEAAAA;
 	font-weight: bold;
-	color: red !important;
+	color: red;
 	text-align: center;
+}
+a.btn {
+	background-color: #f5f5f5 !important;
 }
 .taak-self {
 	text-align: left;
