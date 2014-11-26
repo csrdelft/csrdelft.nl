@@ -65,8 +65,9 @@ class VerjaardagContent implements View {
 					12	 => 'December',
 				);
 
-				for ($maand = 1; $maand <= 12; $maand++) {
-					echo '<table class="verjaardagen"><tr><th><h2>' . $maanden[$maand] . '</h2></th></tr>';
+				for ($m = 1; $m <= 12; $m++) {
+					$maand = ($dezemaand + $m) % 12;
+					echo '<table class="inline verjaardagen"><tr><th><h2>' . $maanden[$maand] . '</h2></th></tr>';
 					$verjaardagen = Verjaardag::getVerjaardagen($maand);
 					foreach ($verjaardagen as $verjaardag) {
 						echo '<tr>';
@@ -79,9 +80,9 @@ class VerjaardagContent implements View {
 						echo $verjaardag['gebdag'];
 						echo '</td>';
 						if ($verjaardag['gebdag'] == $dezedag and $maand == $dezemaand) {
-							echo '<td class="dikgedrukt cursief"> &nbsp;';
+							echo '<td class="dikgedrukt cursief">&nbsp; ';
 						} else {
-							echo '<td>&nbsp;';
+							echo '<td>&nbsp; ';
 						}
 						echo $lid->getNaamLink('civitas', 'visitekaartje');
 						echo '</td>';
