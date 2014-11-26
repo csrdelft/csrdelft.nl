@@ -50,10 +50,6 @@ class VerjaardagContent implements View {
 				$dezemaand = date('n', $nu);
 				$dezedag = date('j', $nu);
 
-				# afbeelden van alle verjaardagen in 3 rijen en 4 kolommen
-				$rijen = 3;
-				$kolommen = 4;
-
 				$maanden = array(
 					1	 => 'Januari',
 					2	 => 'Februari',
@@ -69,41 +65,30 @@ class VerjaardagContent implements View {
 					12	 => 'December',
 				);
 
-				echo '<div class="verjaardagen">';
-				for ($r = 0; $r < $rijen; $r++) {
-					for ($k = 1; $k <= $kolommen; $k++) {
-						$maand = ($r * $kolommen + $k + $dezemaand - 2) % 12 + 1;
-						$tekst = ($maand <= 12) ? $maanden[$maand] : '&nbsp;';
-						echo '<table><tr><th><h2>' . $tekst . '</h2></th></tr>';
-					}
-					for ($k = 1; $k <= $kolommen; $k++) {
-						$maand = ($r * $kolommen + $k + $dezemaand - 2) % 12 + 1;
-						if ($maand <= 12) {
-							$verjaardagen = Verjaardag::getVerjaardagen($maand);
-							foreach ($verjaardagen as $verjaardag) {
-								echo '<tr>';
-								$lid = LidCache::getLid($verjaardag['uid']);
-								if ($verjaardag['gebdag'] == $dezedag and $maand == $dezemaand) {
-									echo '<td class="text-right dikgedrukt cursief">';
-								} else {
-									echo '<td class="text-right">';
-								}
-								echo $verjaardag['gebdag'];
-								echo '</td>';
-								if ($verjaardag['gebdag'] == $dezedag and $maand == $dezemaand) {
-									echo '<td class="dikgedrukt cursief"> &nbsp;';
-								} else {
-									echo '<td>&nbsp;';
-								}
-								echo $lid->getNaamLink('civitas', 'visitekaartje');
-								echo '</td>';
-								echo '</tr>';
-							}
+				for ($maand = 1; $maand <= 12; $maand++) {
+					echo '<table class="verjaardagen"><tr><th><h2>' . $maanden[$maand] . '</h2></th></tr>';
+					$verjaardagen = Verjaardag::getVerjaardagen($maand);
+					foreach ($verjaardagen as $verjaardag) {
+						echo '<tr>';
+						$lid = LidCache::getLid($verjaardag['uid']);
+						if ($verjaardag['gebdag'] == $dezedag and $maand == $dezemaand) {
+							echo '<td class="text-right dikgedrukt cursief">';
+						} else {
+							echo '<td class="text-right">';
 						}
+						echo $verjaardag['gebdag'];
+						echo '</td>';
+						if ($verjaardag['gebdag'] == $dezedag and $maand == $dezemaand) {
+							echo '<td class="dikgedrukt cursief"> &nbsp;';
+						} else {
+							echo '<td>&nbsp;';
+						}
+						echo $lid->getNaamLink('civitas', 'visitekaartje');
+						echo '</td>';
+						echo '</tr>';
 					}
 					echo '</table>';
 				}
-				echo '</div>';
 				break;
 			case 'komende':
 				if (LoginModel::mag('P_LEDEN_READ')) {
