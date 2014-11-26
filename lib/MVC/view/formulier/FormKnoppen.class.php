@@ -15,8 +15,8 @@
  */
 abstract class FormKnoppen implements FormElement {
 
-	protected $knoppen_left = array();
-	protected $knoppen_right = array();
+	private $knoppen_left = array();
+	private $knoppen_right = array();
 	public $css_classes = array('FormKnoppen', 'clear-left');
 
 	public function getModel() {
@@ -83,29 +83,34 @@ JS;
 class FormDefaultKnoppen extends FormKnoppen {
 
 	public function __construct($cancel_url = null, $reset = true, $icons = true, $label = true, $reset_cancel = false) {
-		$this->knoppen['submit'] = new SubmitKnop();
-		if ($reset) {
-			$this->knoppen['reset'] = new ResetKnop();
-		}
-		$this->knoppen['cancel'] = new CancelKnop($cancel_url);
+		$submit = new SubmitKnop();
 		if ($reset_cancel) {
-			$this->knoppen['cancel']->action .= ' reset';
-			$this->knoppen['submit']->icon = '/famfamfam/accept.png';
+			$submit->icon = '/famfamfam/accept.png';
 		}
+		$this->addKnop($submit);
+		if ($reset) {
+			$reset = new ResetKnop();
+			$this->addKnop($reset);
+		}
+		$cancel = new CancelKnop($cancel_url);
+		if ($reset_cancel) {
+			$cancel->action .= ' reset';
+		}
+		$this->addKnop($cancel);
 		if (!$icons) {
-			foreach ($this->knoppen as $knop) {
+			foreach ($this->getModel() as $knop) {
 				$knop->icon = null;
 			}
 		}
 		if (!$label) {
-			foreach ($this->knoppen as $knop) {
+			foreach ($this->getModel() as $knop) {
 				$knop->label = null;
 			}
 		}
 	}
 
 	public function confirmAll() {
-		foreach ($this->knoppen as $knop) {
+		foreach ($this->getModel() as $knop) {
 			$knop->action .= ' confirm';
 		}
 	}
