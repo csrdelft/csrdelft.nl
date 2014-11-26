@@ -87,14 +87,14 @@ class VerjaardagContent implements View {
 								echo '<tr>';
 								$lid = LidCache::getLid($verjaardag['uid']);
 								if ($verjaardag['gebdag'] == $dezedag and $maand == $dezemaand) {
-									echo '<td class="text-right cursief">';
+									echo '<td class="text-right dikgedrukt cursief">';
 								} else {
 									echo '<td class="text-right">';
 								}
 								echo $verjaardag['gebdag'];
 								echo '</td>';
 								if ($verjaardag['gebdag'] == $dezedag and $maand == $dezemaand) {
-									echo '<td class="cursief">&nbsp;';
+									echo '<td class="dikgedrukt cursief"> &nbsp;';
 								} else {
 									echo '<td>&nbsp;';
 								}
