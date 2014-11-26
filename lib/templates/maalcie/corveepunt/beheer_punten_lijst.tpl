@@ -20,28 +20,24 @@
 	</td>{/strip}
 {/foreach}
 	<td>
-		<form action="{$smarty.const.maalcieUrl}/wijzigpunten/{$puntenlijst.lid->getUid()}" method="post" class="Formulier InlineForm">
+		<div class="InlineForm">
 			<div class="InlineFormToggle">{$puntenlijst.puntenTotaal}</div>
-			<div class="InputField">
+			<form action="{$smarty.const.maalcieUrl}/wijzigpunten/{$puntenlijst.lid->getUid()}" method="post" class="Formulier InlineForm">
 				<input type="text" name="totaal_punten" value="{$puntenlijst.puntenTotaal}" origvalue="{$puntenlijst.puntenTotaal}" class="FormElement" maxlength="4" size="4" />
-			</div>
-			<div class="FormKnoppen">
 				<a class="btn submit" title="Wijzigingen opslaan">{icon get="accept"}</a>
 				<a class="btn reset cancel" title="Annuleren" >{icon get="delete"}</a>
-			</div>
-		</form>
+			</form>
+		</div>
 	</td>
 	<td>
-		<form action="{$smarty.const.maalcieUrl}/wijzigbonus/{$puntenlijst.lid->getUid()}" method="post" class="Formulier InlineForm">
+		<div class="InlineForm">
 			<div class="InlineFormToggle">{$puntenlijst.bonusTotaal}</div>
-			<div class="InputField">
+			<form action="{$smarty.const.maalcieUrl}/wijzigbonus/{$puntenlijst.lid->getUid()}" method="post" class="Formulier InlineForm">
 				<input type="text" name="totaal_bonus" value="{$puntenlijst.bonusTotaal}" origvalue="{$puntenlijst.bonusTotaal}" class="FormElement" maxlength="4" size="4" />
-			</div>
-			<div class="FormKnoppen">
 				<a class="btn submit" title="Wijzigingen opslaan">{icon get="accept"}</a>
 				<a class="btn reset cancel" title="Annuleren">{icon get="delete"}</a>
-			</div>
-		</form>
+			</form>
+		</div>
 	</td>
 	<td style="text-align: right; background-color: #{$puntenlijst.prognoseColor};"{if $puntenlijst.vrijstelling} title="{$puntenlijst.vrijstelling->getPercentage()}% vrijstelling"{/if}>
 		{$puntenlijst.prognose}

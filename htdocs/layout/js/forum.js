@@ -130,7 +130,7 @@ function forumBewerken(postId) {
 			}
 			bewerkContainer = document.getElementById('post' + postId);
 			bewerkContainerInnerHTML = bewerkContainer.innerHTML;
-			bewerkForm = '<form id="forumEditForm" class="Formulier InlineForm" action="/forum/bewerken/' + postId + '" method="post">';
+			bewerkForm = '<form id="forumEditForm" class="Formulier" action="/forum/bewerken/' + postId + '" method="post">';
 			bewerkForm += '<div id="bewerkPreview" class="preview forumBericht"></div>';
 			bewerkForm += '<textarea name="forumBericht" id="forumBewerkBericht" class="tekst" rows="8"></textarea>';
 			bewerkForm += 'Reden van bewerking: <input type="text" name="reden" id="forumBewerkReden"/><br /><br />';

@@ -15,21 +15,17 @@
 	</td>
 	<td><nobr>{$id|replace:'_':' '}</nobr></td>
 	<td>
-		<form id="form-{$id}" method="post" action="/instellingenbeheer/opslaan/{$module}/{$id}" class="Formulier InlineForm">
+		<div class="InlineForm">
 			<div class="InstellingToggle">{$waarde}</div>
-			<div class="InstellingToggle verborgen">&nbsp;</div>
-			<div class="InputField">
+			<form id="form-{$id}" method="post" action="/instellingenbeheer/opslaan/{$module}/{$id}" class="Formulier InlineForm">
 				<textarea name="waarde" origvalue="{htmlspecialchars($waarde)}" class="FormElement" rows="1">{$waarde}</textarea>
-			</div>
-			<div class="InstellingToggle verborgen"></div>
-			<div class="FormKnoppen">
 				<a class="btn submit" title="Wijzigingen opslaan">{icon get="accept"} Opslaan</a>
 				<a class="btn reset cancel" title="Annuleren" onclick="
 					$(this).parent().find('.InstellingToggle').toggle();
 					$(this).parent().parent().parent().find('.wijzigknop').toggle();
 				">{icon get="delete"} Annuleren</a>
-			</div>
-		</form>
+			</form>
+		</div>
 	</td>
 	<td class="col-del">
 		<a href="/instellingenbeheer/reset/{$module}/{$id}" title="Instelling resetten" class="btn post confirm">{icon get="arrow_rotate_anticlockwise"}</a>
