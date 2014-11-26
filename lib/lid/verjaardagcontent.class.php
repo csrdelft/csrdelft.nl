@@ -65,8 +65,8 @@ class VerjaardagContent implements View {
 					12	 => 'December',
 				);
 
-				for ($m = 1; $m <= 12; $m++) {
-					$maand = ($dezemaand + $m) % 12;
+				for ($m = 0; $m < 12; $m++) {
+					$maand = ($dezemaand + $m) % 12 + 1;
 					echo '<table class="inline verjaardagen"><tr><th><h2>' . $maanden[$maand] . '</h2></th></tr>';
 					$verjaardagen = Verjaardag::getVerjaardagen($maand);
 					foreach ($verjaardagen as $verjaardag) {
