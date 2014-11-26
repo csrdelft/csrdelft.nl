@@ -69,19 +69,16 @@ class VerjaardagContent implements View {
 					12	 => 'December',
 				);
 
-				echo '<table style="width: 100%;">';
+				echo '<div class="verjaardagen">';
 				for ($r = 0; $r < $rijen; $r++) {
-					echo '<tr>';
 					for ($k = 1; $k <= $kolommen; $k++) {
 						$maand = ($r * $kolommen + $k + $dezemaand - 2) % 12 + 1;
 						$tekst = ($maand <= 12) ? $maanden[$maand] : '&nbsp;';
-						echo '<th><h2>' . $tekst . '</h2></th>';
+						echo '<table><tr><th><h2>' . $tekst . '</h2></th></tr>';
 					}
-					echo '</tr><tr>';
 					for ($k = 1; $k <= $kolommen; $k++) {
 						$maand = ($r * $kolommen + $k + $dezemaand - 2) % 12 + 1;
 						if ($maand <= 12) {
-							echo '<td><table>';
 							$verjaardagen = Verjaardag::getVerjaardagen($maand);
 							foreach ($verjaardagen as $verjaardag) {
 								echo '<tr>';
@@ -102,14 +99,11 @@ class VerjaardagContent implements View {
 								echo '</td>';
 								echo '</tr>';
 							}
-							echo '</table></td>';
-						} else {
-							echo '<td>&nbsp;</td>';
 						}
 					}
-					echo '</tr>';
+					echo '</table>';
 				}
-				echo '</table><br>';
+				echo '</div>';
 				break;
 			case 'komende':
 				if (LoginModel::mag('P_LEDEN_READ')) {
