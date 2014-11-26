@@ -61,17 +61,17 @@ span.offtopic img { opacity: 0.3; filter: alpha(opacity=30); }
 }
 div.maaltijd-aangemeld {
 	background-color: #AAEEAA;
-	color: green;
 }
 div.maaltijd-afgemeld {
 	background-color: #EEAAAA;
-	color: red;
 }
 a.maaltijd-aangemeld, span.maaltijd-aangemeld {
 	font-weight: bold;
+	color: green;
 }
 a.maaltijd-afgemeld, span.maaltijd-afgemeld {
 	font-weight: bold;
+	color: red;
 }
 
 .bb-gmap {
