@@ -75,31 +75,41 @@ class VerjaardagContent implements View {
 					for ($k = 1; $k <= $kolommen; $k++) {
 						$maand = ($r * $kolommen + $k + $dezemaand - 2) % 12 + 1;
 						$tekst = ($maand <= 12) ? $maanden[$maand] : '&nbsp;';
-						echo '<th>' . $tekst . '</th>' . "\n";
+						echo '<th><h2>' . $tekst . '</h2></th>';
 					}
-					echo "</tr><tr>\n";
+					echo "</tr><tr>";
 					for ($k = 1; $k <= $kolommen; $k++) {
 						$maand = ($r * $kolommen + $k + $dezemaand - 2) % 12 + 1;
 						if ($maand <= 12) {
-							echo '<td>' . "\n";
+							echo '<td><table>';
 							$verjaardagen = Verjaardag::getVerjaardagen($maand);
 							foreach ($verjaardagen as $verjaardag) {
+								echo '<tr>';
 								$lid = LidCache::getLid($verjaardag['uid']);
-								if ($verjaardag['gebdag'] == $dezedag and $maand == $dezemaand)
-									echo '<em>';
-								echo $verjaardag['gebdag'] . " ";
-								echo $lid->getNaamLink('civitas', 'visitekaartje') . "<br />\n";
-								if ($verjaardag['gebdag'] == $dezedag and $maand == $dezemaand)
-									echo "</em>";
+								if ($verjaardag['gebdag'] == $dezedag and $maand == $dezemaand) {
+									echo '<td class="text-right cursief">';
+								} else {
+									echo '<td class="text-right">';
+								}
+								echo $verjaardag['gebdag'];
+								echo '</td>';
+								if ($verjaardag['gebdag'] == $dezedag and $maand == $dezemaand) {
+									echo '<td class="cursief">';
+								} else {
+									echo '<td>';
+								}
+								echo $lid->getNaamLink('civitas', 'visitekaartje');
+								echo '</td>';
+								echo '</tr>';
 							}
-							echo "<br /></td>\n";
+							echo "</table></td>";
 						} else {
-							echo "<td><&nbsp;</td>\n";
+							echo "<td>&nbsp;</td>";
 						}
 					}
-					echo "</tr>\n";
+					echo "</tr>";
 				}
-				echo '</table><br>' . "\n";
+				echo '</table><br>';
 				break;
 			case 'komende':
 				if (LoginModel::mag('P_LEDEN_READ')) {
