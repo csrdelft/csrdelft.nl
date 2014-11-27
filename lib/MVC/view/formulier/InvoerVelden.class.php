@@ -1110,8 +1110,8 @@ class BedragField extends DecimalField {
 		} else {
 			$type = 'text';
 		}
-		$html .= $this->valuta . ' <input type="' . $type . '"' . $this->getInputAttribute(array('id', 'name', 'class', 'disabled', 'readonly', 'maxlength', 'placeholder', 'autocomplete'));
-		echo ' value="' . number_format(str_replace(',', '.', $this->value), $this->precision, ',', '') . '" origvalue="';
+		$html = $this->valuta . ' <input type="' . $type . '"' . $this->getInputAttribute(array('id', 'name', 'class', 'disabled', 'readonly', 'maxlength', 'placeholder', 'autocomplete'));
+		$html .= ' value="' . number_format(str_replace(',', '.', $this->value), $this->precision, ',', '') . '" origvalue="';
 		// if an error occured do not re-format the original value
 		// prevent unchanged is not smart enough for rounding and such
 		if ($this->getError() != '') {

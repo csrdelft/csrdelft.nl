@@ -4,7 +4,7 @@
 <p>
 Op deze pagina kunt u alle abonnementen beheren en zoeken.
 </p>
-<form action="{$smarty.const.maalcieUrl}/novieten" method="post" class="Formulier modal SubmitReset float-right">
+<form action="{$smarty.const.maalcieUrl}/novieten" method="post" class="Formulier ModalForm SubmitReset float-right">
 	Abonneer novieten op:
 	<select name="mrid" origvalue="kies" class="FormElement SubmitChange">
 		<option selected="selected">kies</option>
