@@ -1,8 +1,8 @@
 {strip}
 	<div id="zijbalk_agenda">
-		<h1>
+		<div class="zijbalk-kopje">
 			<a href="/agenda/" title="Agenda">Agenda</a>
-		</h1>
+		</div>
 		{foreach from=$items item=item}
 			{if $item instanceof Lid}
 				{* geen verjaardagen hier *}

@@ -70,9 +70,9 @@
 						<div class="InlineForm">
 							<div class="InlineFormToggle" title="{$aanmelding->getGastenEetwens()}">
 								{if $aanmelding->getGastenEetwens()}
-									<a class="btn rounded">{icon get="comment_edit" title=$aanmelding->getGastenEetwens()}</a>
+									<a class="btn">{icon get="comment_edit" title=$aanmelding->getGastenEetwens()}</a>
 								{else}
-									<a class="btn rounded">{icon get="comment_add" title="Gasten allergie/diëet"}</a>
+									<a class="btn">{icon get="comment_add" title="Gasten allergie/diëet"}</a>
 								{/if}
 							</div>
 							<form action="{$smarty.const.maalcieUrl}/opmerking/{$maaltijd->getMaaltijdId()}" method="post" class="Formulier InlineForm">

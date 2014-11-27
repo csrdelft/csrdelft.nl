@@ -6,7 +6,7 @@ Op deze pagina kunt u voorkeuren in- en uitschakelen voor periodieke maaltijden 
 Onderstaande tabel toont alle voorkeuren die u aan of uit kunt zetten.
 De kolom "Voorkeur" geeft aan of uw voorkeur is ingeschakeld met "Ja", of is uitgeschakeld met "Nee".
 </p>
-<h3>Allergie en diëet</h3>
+<h2>Allergie en diëet</h2>
 <p>
 Het is mogelijk dat u allergisch bent voor bepaalde ingredienten, of dat u uit bepaalde overwegingen geen vlees wilt eten.
 Dit kunt u hieronder aangeven, de koks zullen er dan rekening mee houden.

@@ -14,18 +14,18 @@
 {else}
 		<a href="{$smarty.const.maalcieUrl}/bewerk/{$maaltijd->getMaaltijdId()}" title="Maaltijd wijzigen" class="btn post popup">{icon get="pencil"}</a>
 	{if $maaltijd->getMaaltijdRepetitieId()}
-		<a href="/maaltijdenrepetities/beheer/{$maaltijd->getMaaltijdRepetitieId()}" title="Wijzig gekoppelde maaltijdrepetitie" class="btn modal">{icon get="calendar_edit"}</a>
+		<a href="/maaltijdenrepetities/beheer/{$maaltijd->getMaaltijdRepetitieId()}" title="Wijzig gekoppelde maaltijdrepetitie" class="btn popup">{icon get="calendar_edit"}</a>
 	{else}
 		<div class="inline" style="width: 28px;"></div>
 	{/if}
 {/if}
-		<a href="/corveebeheer/maaltijd/{$maaltijd->getMaaltijdId()}" title="Beheer maaltijdcorvee" class="btn rounded">{icon get="chart_organisation"}</a>
+		<a href="/corveebeheer/maaltijd/{$maaltijd->getMaaltijdId()}" title="Beheer maaltijdcorvee" class="btn">{icon get="chart_organisation"}</a>
 	</td>
 	<td>{$maaltijd->getDatum()|date_format:"%a %e %b"}</td>
 	<td>{$maaltijd->getTitel()}</td>
 	<td>
-		<a href="{$smarty.const.maalcieUrl}/fiscaal/{$maaltijd->getMaaltijdId()}" title="Toon fiscale maaltijdlijst&#013;Maaltijdprijs: &euro; {$maaltijd->getPrijsFloat()|string_format:"%.2f"}" class="btn rounded">{icon get="money_euro"}</a>
-		<a href="/maaltijdenlijst/{$maaltijd->getMaaltijdId()}" title="Toon maaltijdlijst" class="btn rounded" style="margin-right:10px;">{icon get="table"}</a>
+		<a href="{$smarty.const.maalcieUrl}/fiscaal/{$maaltijd->getMaaltijdId()}" title="Toon fiscale maaltijdlijst&#013;Maaltijdprijs: &euro; {$maaltijd->getPrijsFloat()|string_format:"%.2f"}" class="btn">{icon get="money_euro"}</a>
+		<a href="/maaltijdenlijst/{$maaltijd->getMaaltijdId()}" title="Toon maaltijdlijst" class="btn" style="margin-right:10px;">{icon get="table"}</a>
 	</td>
 	<td class="text-center">
 		{$maaltijd->getAantalAanmeldingen()} ({$maaltijd->getAanmeldLimiet()})

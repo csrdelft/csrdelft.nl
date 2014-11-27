@@ -5,7 +5,7 @@
 Op deze pagina kunt u de repetitiespatronen voor maaltijden aanmaken, wijzigen en verwijderen.
 Onderstaande tabel toont alle repetities.
 </p>
-<h3>Repetities verwijderen</h3>
+<h2>Repetities verwijderen</h2>
 <p>
 Voordat een maaltijdrepetitie verwijderd kan worden moeten eerst alle bijbehorende maaltijden definitief zijn verwijderd.
 Dit is dus inclusief alle maaltijdaanmeldingen (die mogelijk door een abonnement op deze maaltijdrepetitie zijn aangemaakt).

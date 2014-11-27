@@ -9,7 +9,7 @@ Als u een abonnement heeft dat u automatisch heeft aangemeld staat er "(abo)" ac
 Als u bent ingedeeld voor een corveetaak staat dat aangegeven door middel van dit icoon: {icon get="paintcan" title="Corvee"}
 Als u (kwali)kok bent heeft u tevens de mogelijkheid de maaltijdlijst te bekijken en de inschrijvingen te sluiten.
 </p>
-<h3>Gasten aanmelden</h3>
+<h2>Gasten aanmelden</h2>
 <p>
 Als u staat ingeschreven voor een maaltijd, kunt u op uw naam gasten aanmelden voor de maaltijd.
 Vul in het vak 'gasten' het aantal in door erop te klikken.

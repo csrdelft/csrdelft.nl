@@ -1,4 +1,4 @@
-<h1><a href="{MededelingenContent::mededelingenRoot}">Mededelingen</a></h1>
+<div class="zijbalk-kopje"><a href="{MededelingenContent::mededelingenRoot}">Mededelingen</a></div>
 {foreach from=$mededelingen item=mededeling}
 	<div class="item">
 		{$mededeling->getDatum()|date_format:"%d-%m"}

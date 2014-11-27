@@ -2,7 +2,7 @@
 	{if $root->link}
 		<a href="{$root->link}">
 	{/if}
-	<h1>{if $root->tekst == LoginModel::getUid()}Favorieten{else}{$root->tekst}{/if}</h1>
+	<div class="zijbalk-kopje">{if $root->tekst == LoginModel::getUid()}Favorieten{else}{$root->tekst}{/if}</div>
 	{if $root->link}
 		</a>
 	{/if}

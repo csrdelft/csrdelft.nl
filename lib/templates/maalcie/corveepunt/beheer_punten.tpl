@@ -11,7 +11,7 @@ De kolom punten is exclusief bonus/malus.
 De kolom prognose geeft aan hoeveel punten het lid naar verwachting totaal zal hebben aan het einde van het corveejaar.
 Een * geeft aan dat het lid een vrijstelling heeft.
 </p>
-<h3>Corveejaar resetten</h3>
+<h2>Corveejaar resetten</h2>
 <p>
 Controleer vooraf zelf of alle punten zijn toegekend naar wens.
 Niet toegewenzen punten voor taken in het verleden, waarvoor wel iemand is ingedeeld, worden geel gemarkeerd in het overzicht onder beheer taken.

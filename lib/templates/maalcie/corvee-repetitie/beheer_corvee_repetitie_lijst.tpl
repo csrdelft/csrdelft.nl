@@ -4,9 +4,9 @@
 <tr id="repetitie-row-{$repetitie->getCorveeRepetitieId()}">
 	<td>{strip}
 		<a href="{$smarty.const.maalcieUrl}/bewerk/{$repetitie->getCorveeRepetitieId()}" title="Corveerepetitie wijzigen" class="btn post popup">{icon get="pencil"}</a>
-		<a href="/corveefuncties/beheer/{$repetitie->getFunctieId()}" title="Wijzig onderliggende functie" class="btn modal">{icon get="cog_edit"}</a>
+		<a href="/corveefuncties/beheer/{$repetitie->getFunctieId()}" title="Wijzig onderliggende functie" class="btn popup">{icon get="cog_edit"}</a>
 {if !isset($maaltijdrepetitie) and $repetitie->getMaaltijdRepetitieId()}
-		<a href="{$smarty.const.maalcieUrl}/maaltijd/{$repetitie->getMaaltijdRepetitieId()}" title="Corveebeheer maaltijdrepetitie" class="btn rounded">{icon get="calendar_link"}</a>
+		<a href="{$smarty.const.maalcieUrl}/maaltijd/{$repetitie->getMaaltijdRepetitieId()}" title="Corveebeheer maaltijdrepetitie" class="btn">{icon get="calendar_link"}</a>
 {/if}
 	</td>{/strip}
 	<td>{$repetitie->getCorveeFunctie()->naam}</td>

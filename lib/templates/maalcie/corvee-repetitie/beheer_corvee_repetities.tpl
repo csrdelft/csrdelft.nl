@@ -4,13 +4,13 @@
 <p>
 Op deze pagina kunt u corveerepetities aanmaken, wijzigen en verwijderen{if isset($maaltijdrepetitie)} behorend bij de maaltijdrepetitie:<br />
 <span class="dikgedrukt">{$maaltijdrepetitie->getStandaardTitel()}</span>
-<a href="/maaltijdenrepetities/beheer/{$maaltijdrepetitie->getMaaltijdRepetitieId()}" title="Wijzig gekoppelde maaltijd" class="btn modal">{icon get="calendar_edit"}</a>
+<a href="/maaltijdenrepetities/beheer/{$maaltijdrepetitie->getMaaltijdRepetitieId()}" title="Wijzig gekoppelde maaltijd" class="btn popup">{icon get="calendar_edit"}</a>
 </p><p>
 {else}.
 {/if}
 Onderstaande tabel toont {if isset($maaltijdrepetitie)}<span class="cursief">alleen</span> de corveerepetities voor deze maaltijdrepetitie{else}alle repetities in het systeem{/if}.
 </p>
-<h3>Repetities verwijderen</h3>
+<h2>Repetities verwijderen</h2>
 <p>
 Voordat een corveerepetitie verwijderd kan worden moeten eerst alle bijbehorende corveetaken definitief zijn verwijderd.
 Dit is dus inclusief maaltijdcorveetaken (die door een gekoppelde maaltijdrepetitie zijn aangemaakt).

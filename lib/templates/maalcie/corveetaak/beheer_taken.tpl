@@ -15,7 +15,7 @@
 			{elseif $maaltijd->getIsVerwijderd()}
 				{icon get="bin" title="Maaltijd is verwijderd"}
 			{else}
-				<a href="/maaltijdenbeheer/beheer/{$maaltijd->getMaaltijdId()}" title="Wijzig gekoppelde maaltijd" class="btn modal">{icon get="cup_edit"}</a>
+				<a href="/maaltijdenbeheer/beheer/{$maaltijd->getMaaltijdId()}" title="Wijzig gekoppelde maaltijd" class="btn popup">{icon get="cup_edit"}</a>
 			{/if}
 			<span class="dikgedrukt">{$maaltijd->getTitel()} op {$maaltijd->getDatum()|date_format:"%A %e %B"} om {$maaltijd->getTijd()|date_format:"%H:%M"}</span>
 		</p>

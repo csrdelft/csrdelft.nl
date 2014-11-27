@@ -2,7 +2,7 @@
 {capture name='navlinks'}
 	<div class="maandnavigatie">
 		<a class="btn float-left" href="{$urlVorige}">&laquo; {$prevMaand}</a>
-		<h1>{$datum|date_format:"%B %Y"}</h1>
+		<div class="zijbalk-kopje">{$datum|date_format:"%B %Y"}</div>
 		<a class="btn float-right" href="{$urlVolgende}">{$nextMaand} &raquo;</a>
 	</div>
 {/capture}

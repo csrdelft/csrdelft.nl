@@ -11,13 +11,13 @@
 {else}
 		<a href="{$smarty.const.maalcieUrl}/bewerk/{$taak->getTaakId()}" title="Taak wijzigen" class="btn post popup">{icon get="pencil"}</a>
 	{if $taak->getCorveeRepetitieId()}
-		<a href="/corveerepetities/beheer/{$taak->getCorveeRepetitieId()}" title="Wijzig gekoppelde corveerepetitie" class="btn modal">{icon get="calendar_edit"}</a>
+		<a href="/corveerepetities/beheer/{$taak->getCorveeRepetitieId()}" title="Wijzig gekoppelde corveerepetitie" class="btn popup">{icon get="calendar_edit"}</a>
 	{else}
 		<div class="inline" style="width: 28px;"></div>
 	{/if}
 {/if}
 {if !isset($maaltijd) and $taak->getMaaltijdId()}
-	<a href="/corveebeheer/maaltijd/{$taak->getMaaltijdId()}" title="Beheer maaltijdcorvee" class="btn rounded">{icon get="cup_link"}</a>
+	<a href="/corveebeheer/maaltijd/{$taak->getMaaltijdId()}" title="Beheer maaltijdcorvee" class="btn">{icon get="cup_link"}</a>
 {/if}
 	</td>
 	<td class="text-center" style="width: 50px;">

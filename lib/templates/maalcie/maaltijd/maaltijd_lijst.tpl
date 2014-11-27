@@ -72,7 +72,7 @@
 	<table class="container">
 		<tr>
 			<td class="maaltijdgegevens">
-				<h3>Maaltijdgegevens</h3>
+				<h2>Maaltijdgegevens</h2>
 				<table>
 					<tr><td>Inschrijvingen:</td><td>{$maaltijd->getAantalAanmeldingen()}</td></tr>
 					<tr><td>Marge:</td><td>{$maaltijd->getMarge()}</td></tr>

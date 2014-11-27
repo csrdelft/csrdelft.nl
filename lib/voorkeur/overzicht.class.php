@@ -29,7 +29,7 @@ class CommissieOverzicht implements View {
 				$commissie = OldCommissie::getCommissie($this->id);
 				$res .= '<h1> Geinteresseerde voor ' . $commissie->getNaam() . ' </h1> 
 					<a href="/tools/voorkeuren/commissies.php">Terug naar overzicht</a>
-					<table><tr><td><h3>Lid</h3></td><td><h3>Interesse</h3></td></tr>';
+					<table><tr><td><h2>Lid</h2></td><td><h2>Interesse</h2></td></tr>';
 				$geinteresseerde = $commissie->getGeinteresseerde();
 				foreach ($geinteresseerde as $uid => $voorkeur) {
 					$res .= '<tr ' . ($voorkeur['gedaan'] ? 'style="opacity: .50"' : '') . '><td><a href="/tools/voorkeuren/lidpagina.php?lid=' . $uid . '">' . LidCache::getLid($uid)->getNaam() . '</a></td><td>' . $format[$voorkeur['voorkeur']] . '</td></tr>';

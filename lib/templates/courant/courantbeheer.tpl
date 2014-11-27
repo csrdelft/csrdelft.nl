@@ -30,7 +30,7 @@
 
 {* geen overzicht van berichten bij het bewerken... *}
 {if $form.ID==0 AND sizeof($courant->getBerichtenVoorGebruiker())>0}
-	<h3>Overzicht van berichten:</h3>
+	<h2>Overzicht van berichten:</h2>
 	<dl>
 		{foreach from=$courant->getBerichtenVoorGebruiker() item=bericht}
 			<dt>
@@ -48,7 +48,7 @@
 
 <form action="?ID={$form.ID}" method="post">
 	<div id="pubciemail_form">
-		<h3>{if $form.ID==0}Nieuw bericht invoeren{else}Bericht bewerken{/if}</h3><br />
+		<h2>{if $form.ID==0}Nieuw bericht invoeren{else}Bericht bewerken{/if}</h2>
 		<strong>Titel:</strong><br />
 		<input type="text" name="titel" value="{$form.titel|escape:'html'}" style="width: 100%;" class="tekst" />
 		<br /><br />

@@ -11,13 +11,13 @@ if (!LoginModel::mag('P_LOGGED_IN')) {
 } else {
 	$dies = new DiesAanmelding(LoginModel::getUid());
 	if ($dies->galaVol()) {
-		$bericht = '<h3>Gala is vol</h3><p>Helaas, er zijn inmiddels 100 inschrijvingen voor het gala, daarom is de inschrijving nu gesloten.</p>';
+		$bericht = '<h2>Gala is vol</h2><p>Helaas, er zijn inmiddels 100 inschrijvingen voor het gala, daarom is de inschrijving nu gesloten.</p>';
 		$ingelogd = false;
 	}
 	if ($_POST && false) {
 		$data = $_POST;
 		$dies->setData($data['naamDate'], $data['eetZelf'], $data['eetDate'], $data['allerZelf'], $data['allerDate'], $data['date18']);
-		$bericht = '<h3>Aanmelding succesvol opgeslagen</h3>';
+		$bericht = '<h2>Aanmelding succesvol opgeslagen</h2>';
 	}
 	if ($dies->filledInBefore()) {
 		$data = $dies->getData();

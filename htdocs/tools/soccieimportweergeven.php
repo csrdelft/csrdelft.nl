@@ -150,10 +150,10 @@ foreach ($sorteeropties as $optie) {
 	echo '<a href="/tools/soccieimportweergeven.php?sorteer=' . $optie . '">' . $optie . '</a> ';
 }
 
-echo '<h3>SocCieaccounts die niet gekoppeld zijn</h3>';
+echo '<h2>SocCieaccounts die niet gekoppeld zijn</h2>';
 viewTable($accounts['onbekend']);
 
-echo '<h3>SocCieaccounts die gekoppeld zijn aan profielen op de webstek</h3>';
+echo '<h2>SocCieaccounts die gekoppeld zijn aan profielen op de webstek</h2>';
 viewTable($accounts['inDb']);
 
 function viewTable($aAccounts) {
