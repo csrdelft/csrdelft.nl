@@ -60,6 +60,7 @@ class Dropzone extends Formulier {
 	}
 
 	public function getJavascript() {
+		$maxsize = getMaximumFileUploadSize() / 1024 / 1024; // MB
 		$mag = (LoginModel::mag('P_ALBUM_DEL') ? 'true' : 'false');
 		$delete = str_replace('uploaden', 'verwijderen', $this->action);
 		$existing = str_replace('uploaden', 'bestaande', $this->action);
@@ -72,14 +73,11 @@ thisDropzone = new Dropzone('#{$this->getFormId()}', {
 	acceptedFiles: "{$accept}",
 	addRemoveLinks: {$mag},
 	removedfile: function (file) {
-		if (!confirm('Foto definitief verwijderen?')) {
-			return;
-		}
 		var jqXHR = $.ajax({
 			type: "POST",
 			url: "{$delete}",
 			cache: false,
-			data: "foto=" + file.name
+			data: "foto=" + file.name // TODO generic
 		});
 		jqXHR.done(function (data, textStatus, jqXHR) {
 			$(file.previewElement).remove();
@@ -87,7 +85,20 @@ thisDropzone = new Dropzone('#{$this->getFormId()}', {
 		jqXHR.fail(function (jqXHR, textStatus, errorThrown) {
 			alert(textStatus);
 		});
-	}
+	},
+	maxFilesize: {$maxsize},
+	maxFiles: 30,
+	dictDefaultMessage: "Drop files here to upload",
+	dictFallbackMessage: "Your browser does not support drag'n'drop file uploads.",
+	dictFallbackText: "Please use the fallback form below to upload your files like in the olden days.",
+	dictFileTooBig: "Te groot bestand: ({{filesize}}MiB). Maximum: {{maxFilesize}}MiB.",
+	dictInvalidFileType: "Bestanden van dit type zijn niet toegestaan.",
+	dictResponseError: "Server responded with {{statusCode}} code.",
+	dictCancelUpload: "Annuleren",
+	dictCancelUploadConfirmation: "Toevoegen annuleren. Weet u het zeker?",
+	dictRemoveFile: "Verwijder",
+	dictRemoveFileConfirmation: "Bestand verwijderen. Weet u het zeker?",
+	dictMaxFilesExceeded: "You can not upload any more files.",
 });
 showExisting_{$this->dropzone->getName()} = function (){
 	$.post('{$existing}', function (data) {
