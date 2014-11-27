@@ -307,5 +307,6 @@ Lateral navigation
 	background-image: url('http://plaetjes.csrdelft.nl/search-bg.png');
 	background-position: 100% 50%;
 	background-repeat: no-repeat;
-	line-height: 1.5em;
+	font-size: 1em;
+	padding: 5px;
 }

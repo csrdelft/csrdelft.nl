@@ -62,10 +62,10 @@
 			<div id="berichtPreview" class="preview forumBericht"></div>
 			<textarea name="forumBericht" id="forumBericht" class="forumBericht" rows="12" origvalue="{$post_form_tekst}">{$post_form_tekst}</textarea>
 			<div class="butn">
-				<input type="submit" name="submit" value="Opslaan" id="forumOpslaan" />
-				<input type="button" value="Voorbeeld" id="forumVoorbeeld" onclick="CsrBBPreview('forumBericht', 'berichtPreview');" />
+				<input type="submit" name="submit" value="Opslaan" id="forumOpslaan" class="btn" />
+				<input type="button" value="Voorbeeld" id="forumVoorbeeld" class="btn" onclick="CsrBBPreview('forumBericht', 'berichtPreview');" />
 				{if LoginModel::mag('P_LOGGED_IN')}
-					<input type="button" value="Concept opslaan" id="forumConcept" onclick="saveConceptForumBericht();" data-url="/forum/concept/{$deel->forum_id}{if isset($draad)}/{$draad->draad_id}{/if}" />
+					<input type="button" value="Concept opslaan" id="forumConcept" class="btn" onclick="saveConceptForumBericht();" data-url="/forum/concept/{$deel->forum_id}{if isset($draad)}/{$draad->draad_id}{/if}" />
 				{/if}
 				<div class="float-right">
 					{if LoginModel::mag('P_LOGGED_IN')}

@@ -70,13 +70,13 @@ table.groepStats td, table.groepStats th {
 
 /* Groepenlijst */
 #groepLijst{ float: right; width: 200px; background-color: #EEE; }
-#groepLijst, #groepLijst li, #groepLijst ul{ text-align: right;}
+#groepLijst, #groepLijst li, #groepLijst ul{ text-align: right; }
 #groepLijst li{ list-style-type: none; }
 .groep{ border-top: 1px solid black; margin-top: 20px; }
-ul.groepledenlijst{ width: 230px; float: right; padding: 10px 20px 20px 20px; margin-left: 10px;}
+ul.groepledenlijst{ width: 230px; float: right; padding: 10px 20px 20px 20px; margin-left: 10px; }
 
 /* groep-view */
-#groepledenContainer{ float: right; margin-left: 10px;}
+#groepledenContainer{ float: right; margin-left: 10px; }
 #tabs li{ 
 	float: right; 
 	height: 18px; width: 20px; 
@@ -104,22 +104,22 @@ ul.groepledenlijst{ width: 230px; float: right; padding: 10px 20px 20px 20px; ma
 	margin-left: 10px;
 	padding: 1px 0;
 }
-.groepleden table.leden{ width: 100%; font-size: 11px;}
-.groepleden table.leden td{ padding: 0 5px; text-align: left;}
+.groepleden table.leden{ width: 100%; font-size: 11px; }
+.groepleden table.leden td{ padding: 0 5px; text-align: left; }
 .groepleden table.leden input.functie{ width: 80px; }
-.groepleden .toonmeer{ clear: left; display: block; padding: 0 0 10px 15px;}
-.groepleden .aanmelden { clear: left; padding: 5px 5px 4px; line-height: 1.6em;}
+.groepleden .toonmeer{ clear: left; display: block; padding: 0 0 10px 15px; }
+.groepleden .aanmelden { clear: left; padding: 5px 5px 4px; }
 .groepleden .aanmelden input.functie{ width: 160px; }
 .groepleden .aanmelden .pasfoto{ width: 50px; height: 67px; border: 1px solid grey; margin-left: 5px; }
-.groepleden .emails{ margin: 5px 10px;}
+.groepleden .emails{ margin: 5px 10px; }
 
 
-#voorgangerOpvolger{ margin: 10px 0; padding: 3px 20px; border-bottom: 1px solid black;}
+#voorgangerOpvolger{ margin: 10px 0; padding: 3px 20px; border-bottom: 1px solid black; }
 .vorigeGroep{ list-style-image: url(http://plaetjes.csrdelft.nl/groepen/up.png); }
 .volgendeGroep{ list-style-image: url(http://plaetjes.csrdelft.nl/groepen/down.png); }
 #groepAdmin{ float: right; margin: 10px ; }
-.groepFormulier{ width: 100%;}
-.groepFormulier label{ float: left; margin-right: 15px; width: 130px;}
+.groepFormulier{ width: 100%; }
+.groepFormulier label{ float: left; margin-right: 15px; width: 130px; }
 .groepFormulier input, .groepFormulier textarea, .groepFormulier select{ margin-top: 4px; margin-bottom: 4px; }
 .groepFormulier input[type=text]{ width: 144px; }
 .groepFormulier input[type=text]#groepNaam{ width: 604px; }

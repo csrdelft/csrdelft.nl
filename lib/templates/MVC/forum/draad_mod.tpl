@@ -51,7 +51,7 @@
 					<form action="/forum/wijzigen/{$draad->draad_id}/titel" method="post">
 						<label>Titel aanpassen &nbsp;</label>
 						<input type="text" name="titel" value="{$draad->titel}" />
-						<input type="submit" value="Opslaan" />
+						<input type="submit" value="Opslaan" class="btn" />
 					</form>
 					{if $gedeeld_met_opties}
 						<br />
@@ -63,7 +63,7 @@
 									<option value="{$gedeeld_deel->forum_id}"{if $draad->gedeeld_met === $gedeeld_deel->forum_id} selected="selected"{/if}>{$gedeeld_deel->titel}</option>
 								{/foreach}
 							</select>
-							<input type="submit" value="Opslaan" />
+							<input type="submit" value="Opslaan" class="btn" />
 						</form>
 					{/if}
 				</td>
