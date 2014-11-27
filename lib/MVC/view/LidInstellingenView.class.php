@@ -6,42 +6,42 @@
  * @author P.W.G. Brussee <brussee@live.nl>
  * 
  */
-class LidInstellingenView extends SmartyTemplateView {
+class LidInstellingenView extends TabsForm {
 
 	public function __construct(LidInstellingen $model) {
-		parent::__construct($model, 'Webstekinstellingen');
-	}
+		parent::__construct($model, 'lidinstellingenform', '/instellingen/opslaan', 'Webstekinstellingen');
+		$this->vertical = true;
+		$this->hoverintent = true;
 
-	public function view() {
-		$this->smarty->display('MVC/instellingen/lidinstellingen_page.tpl');
-		echo '<form id="lidinstellingenform" action="/instellingen/opslaan" method="post" class="Formulier"><div id="tabs"><ul>';
-		foreach ($this->model->getModules() as $module) {
-			echo '<li><a href="#tabs-' . $module . '">' . ucfirst($module) . '</a></li>';
-		}
-		echo '</ul>';
+		$fields[] = new HtmlComment('<p>Op deze pagina kunt u diverse instellingen voor de stek wijzigen. De waarden tussen haakjes zijn de standaardwaarden.</p>');
+		$this->addFields($fields, 'head');
+
+		$smarty = CsrSmarty::instance();
 		$reset = LoginModel::mag('P_ADMIN');
 		foreach ($this->model->getInstellingen() as $module => $instellingen) {
-			echo '<div id="tabs-' . $module . '"><br />';
+			$fields = array();
+
 			foreach ($instellingen as $id) {
-				$this->smarty->assign('module', $module);
-				$this->smarty->assign('id', $id);
-				$this->smarty->assign('type', $this->model->getType($module, $id));
-				$this->smarty->assign('opties', $this->model->getTypeOptions($module, $id));
-				$this->smarty->assign('label', $this->model->getDescription($module, $id));
-				$this->smarty->assign('waarde', $this->model->getValue($module, $id));
-				$this->smarty->assign('default', $this->model->getDefault($module, $id));
-				$this->smarty->assign('reset', $reset);
-				$this->smarty->display('MVC/instellingen/lidinstelling.tpl');
+				$smarty->assign('module', $module);
+				$smarty->assign('id', $id);
+				$smarty->assign('type', $this->model->getType($module, $id));
+				$smarty->assign('opties', $this->model->getTypeOptions($module, $id));
+				$smarty->assign('label', $this->model->getDescription($module, $id));
+				$smarty->assign('waarde', $this->model->getValue($module, $id));
+				$smarty->assign('default', $this->model->getDefault($module, $id));
+				$smarty->assign('reset', $reset);
+				$fields[] = new HtmlComment($smarty->fetch('MVC/instellingen/lidinstelling.tpl'));
 			}
-			echo '</div>';
+			$this->addFields($fields, ucfirst($module));
 		}
-		echo '</div>';
-		$from = new UrlField('referer', HTTP_REFERER, null);
-		$from->hidden = true;
-		$from->view();
-		$btns = new FormDefaultKnoppen('/');
-		$btns->view();
-		echo '</form>';
+		$fields = array();
+
+		$fields['r'] = new UrlField('referer', HTTP_REFERER, null);
+		$fields['r']->hidden = true;
+
+		$fields[] = new FormDefaultKnoppen('/');
+
+		$this->addFields($fields, 'foot');
 	}
 
 }

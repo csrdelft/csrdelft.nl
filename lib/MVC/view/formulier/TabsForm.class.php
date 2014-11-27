@@ -13,7 +13,8 @@ require_once 'MVC/view/formulier/Formulier.class.php';
 class TabsForm extends Formulier {
 
 	private $tabs = array();
-	public $onhoverintent = false;
+	public $vertical = false;
+	public $hoverintent = false;
 
 	public function getTabs() {
 		return $this->tabs;
@@ -45,6 +46,18 @@ class TabsForm extends Formulier {
 		echo $this->getFormTag();
 		if ($this->getTitel()) {
 			echo '<h1 class="Titel">' . $this->getTitel() . '</h1>';
+		}
+		if ($this->vertical) {
+			echo <<<HTML
+<style>
+	.ui-tabs-vertical { width: 55em; }
+	.ui-tabs-vertical .ui-tabs-nav { padding: .2em .1em .2em .2em; float: left; width: 12em; }
+	.ui-tabs-vertical .ui-tabs-nav li { clear: left; width: 100%; border-bottom-width: 1px !important; border-right-width: 0 !important; margin: 0 -1px .2em 0; }
+	.ui-tabs-vertical .ui-tabs-nav li a { display: block; width: 100%; }
+	.ui-tabs-vertical .ui-tabs-nav li.ui-tabs-active { padding-bottom: 0; padding-right: .1em; border-right-width: 1px; border-right-width: 1px; }
+	.ui-tabs-vertical .ui-tabs-panel { padding: 2em 1em !important; float: right; width: 40em; }
+</style>
+HTML;
 		}
 		// fields above tabs
 		if (isset($this->tabs['head'])) {
@@ -89,7 +102,14 @@ class TabsForm extends Formulier {
 
 $('#{$this->getFormId()}-tabs').tabs();
 JS;
-		if ($this->onhoverintent) {
+		if ($this->vertical) {
+			$js .= <<<JS
+
+$('#{$this->getFormId()}-tabs').tabs().addClass('ui-tabs-vertical ui-helper-clearfix');
+$('#{$this->getFormId()}-tabs li').removeClass('ui-corner-top').addClass('ui-corner-left');
+JS;
+		}
+		if ($this->hoverintent) {
 			$js .= <<<JS
 try {
 	$('#{$this->getFormId()}-tabs .tab-item').hoverIntent(function() {

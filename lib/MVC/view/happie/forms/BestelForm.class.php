@@ -57,7 +57,7 @@ class HappieBestelForm extends TabsForm {
 
 	public function __construct() {
 		parent::__construct(null, get_class($this), happieUrl . '/nieuw', 'Nieuwe bestelling');
-		$this->onhoverintent = true;
+		$this->hoverintent = true;
 
 		// tafel invoer
 		$table = new SelectField('tafel', null, 'Tafel', range(0, 99)); // array index starts from 0
