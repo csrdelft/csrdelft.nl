@@ -67,10 +67,12 @@ div.maaltijd-afgemeld {
 a.maaltijd-aangemeld, span.maaltijd-aangemeld {
 	font-weight: bold;
 	color: green;
+	background-color: #f5f5f5;
 }
 a.maaltijd-afgemeld, span.maaltijd-afgemeld {
 	font-weight: bold;
 	color: red;
+	background-color: #f5f5f5;
 }
 
 .bb-gmap {

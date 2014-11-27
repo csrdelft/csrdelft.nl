@@ -1,7 +1,9 @@
 /**
  * maalcie.css	| 	P.W.G. Brussee (brussee@live.nl)
  */
-
+.btn {
+	background-color: #f5f5f5;
+}
 .rowColor0 {
 	background-color: #EBEBEB;
 }
