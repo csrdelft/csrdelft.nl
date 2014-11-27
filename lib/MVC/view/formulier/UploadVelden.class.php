@@ -120,14 +120,7 @@ class FileField implements FormElement, Validator {
 	public function getHtml() {
 		$html = '';
 		foreach ($this->opties as $methode => $uploader) {
-			$html .= $uploader->getDiv();
-			$html .= $uploader->getLabel();
-			$html .= $uploader->getErrorDiv();
 			$html .= $uploader->getHtml();
-			if ($uploader->preview) {
-				$html .= $uploader->getPreviewDiv();
-			}
-			$html .= '</div>';
 		}
 		return $html;
 	}
@@ -298,12 +291,16 @@ class BestandBehouden extends BestandUploader {
 		chmod($destination . $filename, 0644);
 	}
 
-	public function getLabel() {
+	protected function getLabel() {
 		return '<label for="' . $this->name . 'Optie">Huidig bestand behouden</label>';
 	}
 
 	public function getHtml() {
-		$html = '<input type="radio" name="' . $this->groupName . '" id="' . $this->name . 'Optie" value="BestandBehouden" class="UploadOptie';
+		$html = $this->getDiv();
+		$html .= $this->getLabel();
+		$html .= $this->getErrorDiv();
+
+		$html .= '<input type="radio" name="' . $this->groupName . '" id="' . $this->name . 'Optie" value="BestandBehouden" class="UploadOptie';
 		if ($this->selected) {
 			$html .= ' verborgen" checked="checked';
 		}
@@ -315,7 +312,12 @@ class BestandBehouden extends BestandUploader {
 		$html .= '" id="' . $this->name . 'Keuze">';
 		$html .= '<div id="' . $this->name . '" class="BestandBehoudenNaam">';
 		$html .= $this->model->filename . ' (' . format_filesize($this->model->filesize) . ')';
-		return $html . '</div></div>';
+		$html .= '</div></div>';
+
+		if ($this->preview) {
+			$html .= $this->getPreviewDiv();
+		}
+		return $html . '</div>';
 	}
 
 }
@@ -375,12 +377,16 @@ class UploadHttp extends BestandUploader {
 		}
 	}
 
-	public function getLabel() {
+	protected function getLabel() {
 		return '<label for="' . $this->name . 'Optie"> Uploaden in browser</label>';
 	}
 
 	public function getHtml() {
-		$html = '<input type="radio" name="' . $this->groupName . '" id="' . $this->name . 'Optie" value="UploadHttp" class="UploadOptie';
+		$html = $this->getDiv();
+		$html .= $this->getLabel();
+		$html .= $this->getErrorDiv();
+
+		$html .= '<input type="radio" name="' . $this->groupName . '" id="' . $this->name . 'Optie" value="UploadHttp" class="UploadOptie';
 		if ($this->selected) {
 			$html .=' verborgen" checked="checked';
 		}
@@ -390,7 +396,12 @@ class UploadHttp extends BestandUploader {
 			$html .= ' verborgen';
 		}
 		$html .= '" id="' . $this->name . 'Keuze">';
-		return $html . '<input type="file" class="' . implode(' ', $this->css_classes) . '" id="' . $this->name . '" name="' . $this->name . '" accept="' . implode('|', $this->filterMime) . '"' . ($this->multiple ? ' multiple' : '') . ' /></div>';
+		$html .= '<input type="file" class="' . implode(' ', $this->css_classes) . '" id="' . $this->name . '" name="' . $this->name . '" accept="' . implode('|', $this->filterMime) . '"' . ($this->multiple ? ' multiple' : '') . ' /></div>';
+
+		if ($this->preview) {
+			$html .= $this->getPreviewDiv();
+		}
+		return $html . '</div>';
 	}
 
 }
@@ -494,12 +505,16 @@ class UploadFtp extends BestandUploader {
 		}
 	}
 
-	public function getLabel() {
+	protected function getLabel() {
 		return '<label for="' . $this->name . 'Optie"> Uit publieke FTP-map</label>';
 	}
 
 	public function getHtml() {
-		$html = '<input type="radio" name="' . $this->groupName . '" id="' . $this->name . 'Optie" value="UploadFtp" class="UploadOptie';
+		$html = $this->getDiv();
+		$html .= $this->getLabel();
+		$html .= $this->getErrorDiv();
+
+		$html .= '<input type="radio" name="' . $this->groupName . '" id="' . $this->name . 'Optie" value="UploadFtp" class="UploadOptie';
 		if ($this->selected) {
 			$html .= ' verborgen" checked="checked';
 		}
@@ -525,6 +540,11 @@ class UploadFtp extends BestandUploader {
 			$html .= ' /><label for="verwijderVanFtp" class="VinkFieldLabel"> Bestand verwijderen uit FTP-map</label>';
 		} else {
 			$html .= 'Geen bestanden gevonden in:<br />ftp://csrdelft.nl/incoming/csrdelft/' . $this->subdir;
+		}
+		$html .= '</div>';
+
+		if ($this->preview) {
+			$html .= $this->getPreviewDiv();
 		}
 		return $html . '</div>';
 	}
@@ -608,12 +628,16 @@ class UploadUrl extends BestandUploader {
 		chmod($destination . $filename, 0644);
 	}
 
-	public function getLabel() {
+	protected function getLabel() {
 		return '<label for="' . $this->name . 'Optie"> Downloaden van URL</label>';
 	}
 
 	public function getHtml() {
-		$html = '<input type="radio" name="' . $this->groupName . '" id="' . $this->name . 'Optie" value="UploadUrl" class="UploadOptie';
+		$html = $this->getDiv();
+		$html .= $this->getLabel();
+		$html .= $this->getErrorDiv();
+
+		$html .= '<input type="radio" name="' . $this->groupName . '" id="' . $this->name . 'Optie" value="UploadUrl" class="UploadOptie';
 		if ($this->selected) {
 			$html .= ' verborgen" checked="checked';
 		}
@@ -623,7 +647,12 @@ class UploadUrl extends BestandUploader {
 			$html .= ' verborgen';
 		}
 		$html .= '" id="' . $this->name . 'Keuze">';
-		return $html . '<input type="text" class="' . implode(' ', $this->css_classes) . '" id="' . $this->name . '" name="' . $this->name . '" value="' . $this->url . '" /></div>';
+		$html .= '<input type="text" class="' . implode(' ', $this->css_classes) . '" id="' . $this->name . '" name="' . $this->name . '" value="' . $this->url . '" /></div>';
+
+		if ($this->preview) {
+			$html .= $this->getPreviewDiv();
+		}
+		return $html . '</div>';
 	}
 
 }
