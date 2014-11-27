@@ -26,10 +26,8 @@ htdocs/android/login.php -text
 htdocs/bar/ajax.php -text
 htdocs/bar/css/bar.css -text
 htdocs/bar/css/bootstrap-theme.css -text
-htdocs/bar/css/bootstrap-theme.css.map -text
 htdocs/bar/css/bootstrap-theme.min.css -text
 htdocs/bar/css/bootstrap.css -text
-htdocs/bar/css/bootstrap.css.map -text
 htdocs/bar/css/bootstrap.min.css -text
 htdocs/bar/fonts/glyphicons-halflings-regular.eot -text
 htdocs/bar/fonts/glyphicons-halflings-regular.svg -text
@@ -114,6 +112,10 @@ htdocs/index.php -text
 htdocs/layout/css/agenda.css -text
 htdocs/layout/css/bbcode.css -text
 htdocs/layout/css/bibliotheek.css -text
+htdocs/layout/css/bootstrap-theme.css -text
+htdocs/layout/css/bootstrap-theme.min.css -text
+htdocs/layout/css/bootstrap.css -text
+htdocs/layout/css/bootstrap.min.css -text
 htdocs/layout/css/common.less -text
 htdocs/layout/css/common_wiki.less -text
 htdocs/layout/css/csrdelft.dataTables.less -text
@@ -154,6 +156,10 @@ htdocs/layout/css/stylus/dropzone.styl -text
 htdocs/layout/css/toegankelijk_bredere_letters.css -text
 htdocs/layout/css/verticalen.css -text
 htdocs/layout/css/zijbalk.less -text
+htdocs/layout/fonts/glyphicons-halflings-regular.eot -text
+htdocs/layout/fonts/glyphicons-halflings-regular.svg -text
+htdocs/layout/fonts/glyphicons-halflings-regular.ttf -text
+htdocs/layout/fonts/glyphicons-halflings-regular.woff -text
 htdocs/layout/js/autocomplete/README[!!-~]PubCie -text
 htdocs/layout/js/autocomplete/README.md -text
 htdocs/layout/js/autocomplete/changelog.txt -text
@@ -165,6 +171,8 @@ htdocs/layout/js/autocomplete/jquery.autocomplete.min.js -text
 htdocs/layout/js/bb-slideshow.js -text
 htdocs/layout/js/bbcode.js -text
 htdocs/layout/js/bibliotheek.js -text
+htdocs/layout/js/bootstrap.js -text
+htdocs/layout/js/bootstrap.min.js -text
 htdocs/layout/js/csrdelft.dataTables.js -text
 htdocs/layout/js/csrdelft.js -text
 htdocs/layout/js/datatables/Contributing.md -text
@@ -445,12 +453,10 @@ htdocs/layout2/js/jquery.min.js -text
 htdocs/layout2/script.ini -text
 htdocs/layout2/style.ini -text
 htdocs/layout3/css/bootstrap-theme.css -text
-htdocs/layout3/css/bootstrap-theme.css.map -text
 htdocs/layout3/css/bootstrap-theme.min.css -text
 htdocs/layout3/css/bootstrap-typeahead.css -text
 htdocs/layout3/css/bootstrap-typeahead.min.css -text
 htdocs/layout3/css/bootstrap.css -text
-htdocs/layout3/css/bootstrap.css.map -text
 htdocs/layout3/css/bootstrap.min.css -text
 htdocs/layout3/fonts/glyphicons-halflings-regular.eot -text
 htdocs/layout3/fonts/glyphicons-halflings-regular.svg -text
