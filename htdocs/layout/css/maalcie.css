@@ -2,8 +2,9 @@
  * maalcie.css	| 	P.W.G. Brussee (brussee@live.nl)
  */
 .btn {
+	color: #000000;
 	background-color: #f5f5f5;
-	border: 1px solid grey;
+	border: 1px solid #a9a9a9;
 	text-shadow: none;
 	background-image: none;
 }
