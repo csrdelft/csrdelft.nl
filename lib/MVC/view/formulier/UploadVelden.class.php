@@ -120,6 +120,7 @@ class FileField implements FormElement, Validator {
 	public function getHtml() {
 		$html = '';
 		foreach ($this->opties as $methode => $uploader) {
+			$html .= $uploader->getLabel();
 			$html .= $uploader->getHtml();
 		}
 		return $html;
