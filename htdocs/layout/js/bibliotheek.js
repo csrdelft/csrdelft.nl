@@ -39,7 +39,8 @@ jQuery(document).ready(function($) {
 			init_hoverIntents();
 			return sValue;
 		},
-		"fnStateLoadCallback": function ( oSettings, oData ) {
+		"fnStateLoadCallback": function ( oSettings ) {
+			var oData = oSettings.aoData;
 			var aEigenaarfilters = [ "alle", "csr", "leden", "eigen", "geleend"];
 			if($.inArray(oData.sEigenaarFilter, aEigenaarfilters) == -1) {
 				oData.sEigenaarFilter = 'csr';
