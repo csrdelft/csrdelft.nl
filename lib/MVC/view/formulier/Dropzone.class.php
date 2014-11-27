@@ -14,7 +14,7 @@ class Dropzone extends Formulier {
 	private $dropzone;
 	private $fallback;
 
-	public function __construct($model, $formId, $action, FileField $fallback, $titel = false) {
+	public function __construct($model, $formId, $action, FileField $fallback, $cancel_url, $titel = false) {
 		parent::__construct($model, $formId, $action, $titel);
 		$this->css_classes[] = 'dropzone';
 		$this->fallback = $fallback;
@@ -23,7 +23,7 @@ class Dropzone extends Formulier {
 		$fields[] = $this->dropzone;
 		$fields[] = new HtmlComment('<div class="fallback">');
 		$fields[] = $this->fallback;
-		$fields[] = new FormDefaultKnoppen(null, false);
+		$fields[] = new FormDefaultKnoppen($cancel_url, false);
 		$fields[] = new HtmlComment('</div>');
 
 		$this->addFields($fields);

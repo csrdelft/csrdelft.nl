@@ -157,9 +157,9 @@ class FotoAlbumController extends AclController {
 		$list = array();
 		$files = scandir($album->path . '_thumbs/');
 		if ($files !== false) {
-			foreach ($files as $$filename) {
-				if (endsWith($$filename, '.jpg')) {
-					$foto = new Foto($album, $$filename);
+			foreach ($files as $filename) {
+				if (endsWith($filename, '.jpg')) {
+					$foto = new Foto($album, $filename);
 					$foto->filesize = filesize($foto->getFullPath());
 					$obj['name'] = $foto->filename;
 					$obj['size'] = $foto->filesize;
