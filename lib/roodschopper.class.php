@@ -58,7 +58,7 @@ Bij voorbaat dank,
 h.t. Fiscus.';
 
 		$return = new Roodschopper($cie, -5.2, 'U staat rood', $bericht);
-		$return->setBcc(LoginModel::instance()->getLid()->getEmail());
+		$return->setBcc(array(LoginModel::instance()->getLid()->getNaam() => LoginModel::instance()->getLid()->getEmail()));
 		$return->setUitgesloten('x101');
 		return $return;
 	}
@@ -71,7 +71,7 @@ h.t. Fiscus.';
 		return $this->bcc;
 	}
 
-	public function setBcc($bcc) {
+	public function setBcc(array $bcc) {
 		$this->bcc = $bcc;
 	}
 

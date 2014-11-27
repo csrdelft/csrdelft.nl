@@ -695,7 +695,7 @@ class ProfielStatus extends Profiel {
 			'ADMIN'		 => LoginModel::instance()->getLid()->getNaam()
 		);
 		$mail = new Mail($to, 'Geleende boeken - Melding lid-af worden', $bericht);
-		$mail->addBcc("pubcie@csrdelft.nl");
+		$mail->addBcc(array('pubcie@csrdelft.nl' => 'PubCie C.S.R.'));
 		$mail->setPlaceholders($values);
 
 		return $mail->send();
