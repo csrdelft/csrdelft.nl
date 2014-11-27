@@ -45,7 +45,7 @@
 								</optgroup>
 							{/foreach}
 						</select>
-						<input type="submit" value="Opslaan" />
+						<input type="submit" value="Opslaan" class="btn" />
 					</form>
 					<br />
 					<form action="/forum/wijzigen/{$draad->draad_id}/titel" method="post">
