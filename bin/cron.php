@@ -27,8 +27,15 @@ $start = microtime(true);
 // Debuglog
 try {
 	DebugLogModel::instance()->opschonen();
-} catch (Exception $ex) {
+} catch (Exception $e) {
 	DebugLogModel::instance()->log('cron.php', 'DebugLogModel::opschonen()', array(), $e);
+}
+
+try {
+	Instellingen::instance()->opschonen();
+	LidInstellingen::instance()->opschonen();
+} catch (Exception $e) {
+	DebugLogModel::instance()->log('cron.php', '(Lid)Instellingen::instance()->opschonen()', array(), $e);
 }
 
 // Corvee herinneringen
@@ -53,7 +60,7 @@ try {
 	FotoModel::instance()->cleanup();
 	FotoAlbumModel::instance()->cleanup();
 } catch (Exception $e) {
-	DebugLogModel::instance()->log('cron.php', 'FotoAlbumModel::instance()->cleanup()', array(), $e);
+	DebugLogModel::instance()->log('cron.php', 'Foto(Album)Model::instance()->cleanup()', array(), $e);
 }
 
 $finish = microtime(true) - $start;

@@ -116,7 +116,11 @@ class LidInstellingen extends Instellingen {
 	}
 
 	public function getType($module, $id) {
-		return static::$defaults[$module][$id][1];
+		if (static::has($module, $id)) {
+			return static::$defaults[$module][$id][1];
+		} else {
+			return null;
+		}
 	}
 
 	public function getTypeOptions($module, $id) {

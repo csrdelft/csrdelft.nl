@@ -183,4 +183,12 @@ class Instellingen extends CachedPersistenceModel {
 		return $instelling;
 	}
 
+	public function opschonen() {
+		foreach ($this->find() as $instelling) {
+			if (!static::has($instelling->module, $instelling->instelling_id)) {
+				$this->delete($instelling);
+			}
+		}
+	}
+
 }
