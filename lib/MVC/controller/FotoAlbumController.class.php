@@ -143,7 +143,7 @@ class FotoAlbumController extends AclController {
 			} else {
 				if ($poster) {
 					// fall through
-				} else {
+				} elseif ($uploader !== null) {
 					$this->view = new JsonResponse(array('error' => $uploader->getError()), 500);
 					return;
 				}
