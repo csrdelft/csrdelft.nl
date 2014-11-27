@@ -616,7 +616,7 @@ class UploadUrl extends BestandUploader {
 			$html .= ' verborgen';
 		}
 		$html .= '" id="' . $this->name . 'Keuze">';
-		return $html . '<input type="text" class="' . implode(' ', $this->css_classes) . '" id="' . $this->name . '" name="' . $this->name . '" value="' . $this->url . '" /></div></div>';
+		return $html . '<input type="text" class="' . implode(' ', $this->css_classes) . '" id="' . $this->name . '" name="' . $this->name . '" value="' . $this->url . '" /></div>';
 	}
 
 }

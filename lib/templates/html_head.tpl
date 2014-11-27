@@ -15,16 +15,16 @@
 <link rel="shortcut icon" href="{$CSR_PICS}/layout/favicon.ico" />
 <link rel="alternate" title="C.S.R. Delft RSS" type="application/rss+xml" href="http://csrdelft.nl/forum/rss.xml" />
 {foreach from=$stylesheets item=sheet}
-	<link rel="stylesheet" href="{$sheet}" type="text/css" />
+<link rel="stylesheet" href="{$sheet}" type="text/css" />
 {/foreach}
 {foreach from=$scripts item=script}
-	<script type="text/javascript" src="{$script}"></script>
+<script type="text/javascript" src="{$script}"></script>
 {/foreach}
 <script type="text/javascript">
 	var _gaq = _gaq || [];
 	_gaq.push(['_setAccount', 'UA-19828019-4']);
 	_gaq.push(['_trackPageview']);
-	(function() {
+	(function () {
 		var ga = document.createElement('script');
 		ga.type = 'text/javascript';
 		ga.async = true;
