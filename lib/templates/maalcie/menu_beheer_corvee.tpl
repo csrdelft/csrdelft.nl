@@ -2,7 +2,7 @@
 	menu_beheer_corvee.tpl	|	P.W.G. Brussee (brussee@live.nl)
 *}
 <div id="beheer-corvee-zijbalk" class="maalcie-beheer-menu">
-	<h1>Corveebeheer</h1>
+	<div class="zijbalk-kopje">Corveebeheer</div>
 	{assign var="link" value="/corveebeheer"}
 	<div class="item{if (!isset($prullenbak) or !$prullenbak) and maalcieUrl === $link} active{/if}">»
 		<a href="{$link}" title="Beheer corveetaken">Taken</a>

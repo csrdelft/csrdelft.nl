@@ -172,7 +172,7 @@ class FotoAlbumZijbalkView extends FotoAlbumView {
 	public function view() {
 		$url = $this->model->getUrl();
 		echo '<div id="zijbalk_fotoalbum">';
-		echo '<h1><a href="/actueel/fotoalbum/">Laatste fotoalbum</a></h1>';
+		echo '<div class="zijbalk-kopje"><a href="/actueel/fotoalbum/">Laatste fotoalbum</a></div>';
 		echo '<div class="item">';
 		echo '<a href="' . $url . '">' . $this->model->dirname . '</a>';
 		echo '<div class="fotos">';

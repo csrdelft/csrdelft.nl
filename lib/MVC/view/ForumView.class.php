@@ -212,7 +212,7 @@ class ForumDraadZijbalkView extends ForumView {
 	}
 
 	public function view() {
-		echo '<div class="zijbalk_forum"><h1><a href="/forum/recent';
+		echo '<div class="zijbalk_forum"><div class="zijbalk-kopje"><a href="/forum/recent';
 		if ($this->belangrijk === true) {
 			echo '/1/belangrijk';
 		}
@@ -220,7 +220,7 @@ class ForumDraadZijbalkView extends ForumView {
 		if ($this->belangrijk === true) {
 			echo ' belangrijk';
 		}
-		echo '</a></h1>';
+		echo '</a></div>';
 		foreach ($this->model as $draad) {
 			$this->smarty->assign('draad', $draad);
 			$posts = $draad->getForumPosts();
@@ -246,7 +246,7 @@ class ForumPostZijbalkView extends ForumView {
 
 	public function view() {
 		$this->smarty->assign('draden', $this->draden);
-		echo '<div class="zijbalk_forum"><h1><a href="/communicatie/profiel/' . LoginModel::getUid() . '/#forum">Forum (zelf gepost)</a></h1>';
+		echo '<div class="zijbalk_forum"><div class="zijbalk-kopje"><a href="/communicatie/profiel/' . LoginModel::getUid() . '/#forum">Forum (zelf gepost)</a></div>';
 		foreach ($this->model as $post) {
 			$this->smarty->assign('post', $post);
 			$this->smarty->display('MVC/forum/post_zijbalk.tpl');
