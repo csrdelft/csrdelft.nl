@@ -99,13 +99,13 @@ class VerjaardagContent implements View {
 					$toonpasfotos = false;
 				}
 
-				echo '<div id="zijbalk_verjaardagen"><h1>';
+				echo '<div id="zijbalk_verjaardagen"><div class="zijbalk-kopje">';
 				if (LoginModel::mag('P_LEDEN_READ')) {
 					echo '<a href="/communicatie/verjaardagen">Verjaardagen</a>';
 				} else {
 					echo 'Verjaardagen';
 				}
-				echo '</h1>';
+				echo '</div>';
 
 				$aantal = LidInstellingen::get('zijbalk', 'verjaardagen');
 				if ($toonpasfotos) {
