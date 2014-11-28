@@ -2,7 +2,7 @@
 	<nav id="cd-top-nav">
 		<ul>
 			{if LoginModel::mag('P_LOGGED_IN')}
-				<li id="cd-ingelogd-menu-trigger"{if LoginModel::instance()->isSued()} class="sued"{/if}>
+				<li id="cd-ingelogd-menu-toggle"{if LoginModel::instance()->isSued()} class="sued"{/if}>
 					<span class="cd-ingelogd-menu-text">{LoginModel::instance()->getLid()->getNaamLink('civitas', 'plain')}</span>
 					<ul id="cd-ingelogd-menu">
 						{if LoginModel::instance()->isSued()}
@@ -39,7 +39,7 @@
 			{else}
 				<li><a href="/">Log in</a></li>
 			{/if}
-			<li id="cd-lateral-menu-trigger"><span class="cd-lateral-menu-text">Menu</span><span class="cd-lateral-menu-icon"></span></li>
+			<li id="cd-lateral-menu-toggle"><span class="cd-lateral-menu-text">Menu</span><span class="cd-lateral-menu-icon"></span></li>
 		</ul>
 	</nav>
 </header>{/strip}

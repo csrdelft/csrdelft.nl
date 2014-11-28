@@ -80,26 +80,26 @@ header.lateral-menu-is-open {
 Menu voor ingelogde gebruikers
 
 -------------------------------- */
-#cd-ingelogd-menu-trigger {
+#cd-ingelogd-menu-toggle {
 	display: block;
 }
-#cd-ingelogd-menu-trigger.sued {
+#cd-ingelogd-menu-toggle.sued {
     background-color: red;
 }
-#cd-ingelogd-menu-trigger .cd-ingelogd-menu-text {
+#cd-ingelogd-menu-toggle .cd-ingelogd-menu-text {
 	padding: 0 1.25em;
 	color: #ffffff;
 	font-weight: bold;
 	cursor: pointer;
 }
-#cd-ingelogd-menu-trigger.ingelogd-menu-is-open  .cd-ingelogd-menu-text {
+#cd-ingelogd-menu-toggle.ingelogd-menu-is-open  .cd-ingelogd-menu-text {
 	color: #333333;
 }
 #cd-ingelogd-menu {
 	display: none;
 	position: absolute;
 }
-#cd-ingelogd-menu-trigger.ingelogd-menu-is-open {
+#cd-ingelogd-menu-toggle.ingelogd-menu-is-open {
 	background-color: #E8CF2A;
 }
 #cd-ingelogd-menu li {
@@ -143,18 +143,18 @@ Top navigation
 	color: #333333;
 }
 
-#cd-top-nav #cd-lateral-menu-trigger {
+#cd-top-nav #cd-lateral-menu-toggle {
 	width: 110px;
 	padding-left: 1.25em;
 	background-color: #3262D7;
 	cursor: pointer;
 }
-#cd-lateral-menu-trigger .cd-lateral-menu-text, #cd-ingelogd-menu-trigger .cd-ingelogd-menu-text {
+#cd-lateral-menu-toggle .cd-lateral-menu-text, #cd-ingelogd-menu-toggle .cd-ingelogd-menu-text {
 	display: inline-block;
 	color: #ffffff;
 	font-weight: bold;
 }
-#cd-lateral-menu-trigger .cd-lateral-menu-icon {
+#cd-lateral-menu-toggle .cd-lateral-menu-icon {
 	/* this span is the central line in the menu menu */
 	display: inline-block;
 	position: absolute;
@@ -179,7 +179,7 @@ Top navigation
 	-o-transform: translateX(0);
 	transform: translateX(0);
 }
-#cd-lateral-menu-trigger .cd-lateral-menu-icon::before, #cd-lateral-menu-trigger .cd-lateral-menu-icon:after {
+#cd-lateral-menu-toggle .cd-lateral-menu-icon::before, #cd-lateral-menu-toggle .cd-lateral-menu-icon:after {
 	content: '';
 	width: 100%;
 	height: 100%;
@@ -190,19 +190,19 @@ Top navigation
 	-webkit-transform: translateZ(0);
 	-webkit-backface-visibility: hidden;
 }
-#cd-lateral-menu-trigger .cd-lateral-menu-icon::before {
+#cd-lateral-menu-toggle .cd-lateral-menu-icon::before {
 	bottom: 5px;
 }
-#cd-lateral-menu-trigger .cd-lateral-menu-icon::after {
+#cd-lateral-menu-toggle .cd-lateral-menu-icon::after {
 	top: 5px;
 }
-#cd-lateral-menu-trigger.is-clicked .cd-lateral-menu-icon {
+#cd-lateral-menu-toggle.is-clicked .cd-lateral-menu-icon {
 	background-color: rgba(255, 255, 255, 0);
 }
-#cd-lateral-menu-trigger.is-clicked .cd-lateral-menu-icon::before, #cd-lateral-menu-trigger.is-clicked .cd-lateral-menu-icon::after {
+#cd-lateral-menu-toggle.is-clicked .cd-lateral-menu-icon::before, #cd-lateral-menu-toggle.is-clicked .cd-lateral-menu-icon::after {
 	background-color: #ffffff;
 }
-#cd-lateral-menu-trigger.is-clicked .cd-lateral-menu-icon::before {
+#cd-lateral-menu-toggle.is-clicked .cd-lateral-menu-icon::before {
 	bottom: 0;
 	-webkit-transform: rotate(45deg);
 	-moz-transform: rotate(45deg);
@@ -210,7 +210,7 @@ Top navigation
 	-o-transform: rotate(45deg);
 	transform: rotate(45deg);
 }
-#cd-lateral-menu-trigger.is-clicked .cd-lateral-menu-icon::after {
+#cd-lateral-menu-toggle.is-clicked .cd-lateral-menu-icon::after {
 	top: 0;
 	-webkit-transform: rotate(-45deg);
 	-moz-transform: rotate(-45deg);

@@ -1,22 +1,22 @@
 
 jQuery(document).ready(function ($) {
 
-	var $ingelogd_menu_trigger = $('#cd-ingelogd-menu-trigger');
+	var $ingelogd_menu_toggle = $('#cd-ingelogd-menu-toggle');
 	var $ingelogd_menu = $('#cd-ingelogd-menu');
-	var $lateral_menu_trigger = $('#cd-lateral-menu-trigger');
+	var $lateral_menu_toggle = $('#cd-lateral-menu-toggle');
 	var $lateral_menu = $('#cd-lateral-nav');
 	var $content_wrapper = $('.cd-main-content');
 	var $header = $('header');
 
 	// Close ingelogd menu
 	var close_ingelogd_menu = function () {
-		$ingelogd_menu_trigger.removeClass('ingelogd-menu-is-open');
+		$ingelogd_menu_toggle.removeClass('ingelogd-menu-is-open');
 		$ingelogd_menu.slideUp(200);
 	};
 
 	// Close lateral menu
 	var close_lateral_menu = function () {
-		$lateral_menu_trigger.removeClass('is-clicked');
+		$lateral_menu_toggle.removeClass('is-clicked');
 		$header.removeClass('lateral-menu-is-open');
 		$content_wrapper.removeClass('lateral-menu-is-open');
 		$lateral_menu.removeClass('lateral-menu-is-open');
@@ -29,16 +29,15 @@ jQuery(document).ready(function ($) {
 	var open_ingelogd_menu = function () {
 		//close_lateral_menu();
 
-		$ingelogd_menu_trigger.addClass('ingelogd-menu-is-open');
+		$ingelogd_menu_toggle.addClass('ingelogd-menu-is-open');
 		$ingelogd_menu.slideDown(200);
 	};
-	//$ingelogd_menu_trigger.hoverIntent(open_ingelogd_menu, function () {});
 
 	// Open lateral menu on hover over trigger
 	var open_lateral_menu = function () {
 		//close_ingelogd_menu();
 
-		$lateral_menu_trigger.addClass('is-clicked');
+		$lateral_menu_toggle.addClass('is-clicked');
 		$header.addClass('lateral-menu-is-open');
 		$content_wrapper.addClass('lateral-menu-is-open');
 		$lateral_menu.addClass('lateral-menu-is-open');
@@ -46,11 +45,11 @@ jQuery(document).ready(function ($) {
 	//$lateral_menu_trigger.hoverIntent(open_lateral_menu, function () {});
 
 	// Toggle ingelogd menu clicking on the trigger
-	$ingelogd_menu_trigger.on('click', function (event) {
+	$ingelogd_menu_toggle.on('click', function (event) {
 		if (!$(event.target).is('#cd-ingelogd-menu a, #cd-ingelogd-menu a span')) {
 			event.preventDefault();
 
-			if ($ingelogd_menu_trigger.hasClass('ingelogd-menu-is-open')) {
+			if ($ingelogd_menu_toggle.hasClass('ingelogd-menu-is-open')) {
 				close_ingelogd_menu();
 			} else {
 				open_ingelogd_menu();
@@ -59,10 +58,10 @@ jQuery(document).ready(function ($) {
 	});
 
 	// Toggle lateral menu clicking on the trigger
-	$lateral_menu_trigger.on('click', function (event) {
+	$lateral_menu_toggle.on('click', function (event) {
 		event.preventDefault();
 
-		if ($lateral_menu_trigger.hasClass('is-clicked')) {
+		if ($lateral_menu_toggle.hasClass('is-clicked')) {
 			close_lateral_menu();
 		} else {
 			open_lateral_menu();
@@ -71,7 +70,7 @@ jQuery(document).ready(function ($) {
 
 	// Close all menus clicking outside the menu itself
 	$content_wrapper.on('click', function (event) {
-		if (!$(event.target).is('#cd-ingelogd-menu-trigger, #cd-ingelogd-menu-trigger span, #cd-lateral-menu-trigger, #cd-lateral-menu-trigger span')) {
+		if (!$(event.target).is('#cd-ingelogd-menu-toggle, #cd-ingelogd-menu-toggle span, #cd-lateral-menu-toggle, #cd-lateral-menu-toggle span')) {
 			// Close menus
 			close_ingelogd_menu();
 			close_lateral_menu();
@@ -83,6 +82,14 @@ jQuery(document).ready(function ($) {
 		event.preventDefault();
 
 		$(this).toggleClass('toggle-group-expanded').next('.sub-menu').slideToggle(200).end().parent('.item-has-children').siblings('.item-has-children').children('a').removeClass('toggle-group-expanded').next('.sub-menu').slideUp(200);
+	});
+	
+	// Open/close ingelogd menu on hoverIntent
+	$ingelogd_menu_toggle.hoverIntent(function () {
+		$content_wrapper.one('mouseenter', function () {
+			close_ingelogd_menu();
+		});
+		open_ingelogd_menu();
 	});
 
 	// Catch keystrokes for instant search
