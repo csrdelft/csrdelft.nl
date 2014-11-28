@@ -83,14 +83,6 @@ jQuery(document).ready(function ($) {
 
 		$(this).toggleClass('toggle-group-expanded').next('.sub-menu').slideToggle(200).end().parent('.item-has-children').siblings('.item-has-children').children('a').removeClass('toggle-group-expanded').next('.sub-menu').slideUp(200);
 	});
-	
-	// Open/close ingelogd menu on hoverIntent
-	$ingelogd_menu_toggle.hoverIntent(function () {
-		$content_wrapper.one('mouseenter', function () {
-			close_ingelogd_menu();
-		});
-		open_ingelogd_menu();
-	});
 
 	// Catch keystrokes for instant search
 	$(document).keydown(function (event) {
