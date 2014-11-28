@@ -164,6 +164,13 @@ abstract class CompressedLayout extends HtmlPage {
 						$modules[] = 'snow';
 					}
 				}
+				if (LidInstellingen::get('layout', 'space') != 'nee') {
+					if (LidInstellingen::get('layout', 'space') == 'ja') {
+						$modules[] = 'spaceanim';
+					} else {
+						$modules[] = 'space';
+					}
+				}
 			}
 
 			if (LidInstellingen::get('algemeen', 'minion') == 'ja') {

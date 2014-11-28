@@ -150,6 +150,8 @@ htdocs/layout/css/roze.css -text
 htdocs/layout/css/sineregno.css -text
 htdocs/layout/css/snow.anim.css -text
 htdocs/layout/css/snow.css -text
+htdocs/layout/css/space.anim.css -text
+htdocs/layout/css/space.css -text
 htdocs/layout/css/stamboom.css -text
 htdocs/layout/css/stylus/basic.styl -text
 htdocs/layout/css/stylus/dropzone.styl -text

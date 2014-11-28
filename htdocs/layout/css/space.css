@@ -1,0 +1,16 @@
+/* 
+    Document   : space
+    Created on : 21-dec-2013, 19:00:57
+    Author     : Paul Brussee
+    Description: based on snow.css
+*/
+
+#cd-lateral-nav, #cd-ingelogd-menu {
+    background-image:  url('http://plaetjes.csrdelft.nl/layout/bg/stars.jpg');
+	background-size: cover;
+}
+
+#cd-lateral-nav a:hover, #cd-lateral-nav a:active, #cd-lateral-nav a.active,
+#cd-ingelogd-menu a:hover, #cd-ingelogd-menu a:active, #cd-ingelogd-menu a.active{
+	text-shadow: 0 0 50px #FFF, 0 0 25px #FFF, 0 0 10px #FFF;
+}
