@@ -818,9 +818,6 @@ class EmailField extends TextField {
 				$this->error = 'Het domein is ongeldig:';
 			} elseif (!checkdnsrr($dom, 'A') and !checkdnsrr($dom, 'MX')) {
 				$this->error = 'Het domein bestaat niet (IPv4):';
-				# Een mailserver mag niet meer dan 1 MX record hebben, 0 mag wel.
-			} elseif (count(dns_check_record($dom, DNS_MX)) > 1) {
-				$this->error = 'Het domein is niet correct geconfigureerd:';
 			}
 		}
 		return $this->error === '';
