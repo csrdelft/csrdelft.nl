@@ -19,5 +19,6 @@ $pagina = new CsrLayoutPage($biebControl->getView());
 //if ($biebControl->getView() instanceof BibliotheekCatalogusContent) {
 //	$pagina->zijbalk = false;
 //}
+$pagina->addCompressedResources('datatable');
 $pagina->addCompressedResources('bibliotheek');
 $pagina->view();

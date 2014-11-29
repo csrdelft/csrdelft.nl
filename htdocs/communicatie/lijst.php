@@ -96,5 +96,6 @@ if ($message != '') {
 }
 
 $pagina = new CsrLayoutPage($ledenlijstcontent);
+$pagina->addCompressedResources('datatable');
 $pagina->addCompressedResources('ledenlijst');
 $pagina->view();

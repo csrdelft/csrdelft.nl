@@ -16,5 +16,6 @@ if (isset($_GET['querystring'])) {
 }
 
 $pagina = new CsrLayoutPage($docControl->getView());
+$pagina->addCompressedResources('datatable');
 $pagina->addCompressedResources('documenten');
 $pagina->view();

@@ -18,6 +18,7 @@ class CsrLayout3Page extends CompressedLayout {
 	public function __construct(View $body) {
 		parent::__construct('layout3', $body, $body->getTitel());
 		$this->addCompressedResources('general');
+		$this->addCompressedResources('datatable');
 	}
 
 	public function getBreadcrumbs() {
