@@ -1,5 +1,5 @@
 .floatR{ float: right; }
-.label{ float: left; width: 75px; font-size: 9px; color: #999; }
+.label{ text-align: left; font-weight: normal; font-size: 100%; float: left; width: 75px; font-size: 9px; color: #999; }
 .data{ margin-left: 75px; text-align: left;}
 .data li{ margin-left: 0; }
 #profiel{ margin: 20px 0 200px 0; }
