@@ -25,7 +25,7 @@ div.preview { display: none; margin: 7px; padding: 2px; background-color: #ffffc
 div.preview-show { display: block; }
 div.preview.pagina { padding: 2px; width: 100%;}
 
-span.offtopic { font-size: 9px; color: #bbb; }
+span.offtopic { font-size: 11px; color: #bbb; }
 span.offtopic a { color: #bbb; }
 span.offtopic hr { text-align: left; background-color: #bbb; }
 span.offtopic img { opacity: 0.3; filter: alpha(opacity=30); }
