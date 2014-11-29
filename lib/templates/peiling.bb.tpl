@@ -5,11 +5,11 @@
 	{if $peiling->getStemmenAantal() > 0}
 		<div class="totaal">({$peiling->getStemmenAantal()} stem{if $peiling->getStemmenAantal()!=1}men{/if})</div>
 	{/if}
-	<h2>
+	<h3>
 		{if $peiling->magBewerken()}<a href="/tools/peilingbeheer.php">#{$peiling->getId()} {/if}
 			{$peiling->getTitel()|escape:'html'}
 			{if $peiling->magBewerken()}</a>{/if}
-	</h2>
+	</h3>
 	<div class="vraag">{$peiling->getTekst()}</div>
 	{if $peiling->magStemmen()}
 		<form id="peilingForm{$peiling->getId()}" action="/tools/peilingbeheer.php?action=stem" method="post">

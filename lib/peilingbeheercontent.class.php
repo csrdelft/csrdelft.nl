@@ -23,7 +23,7 @@ class PeilingBeheerContent implements View {
 	}
 
 	public function getHtml() {
-		$lijst = '<h2>Peilingen:</h2>';
+		$lijst = '<h3>Peilingen:</h3>';
 		foreach ($this->pijlingen as $peiling) {
 			$pcontent = new PeilingContent(new Peiling($peiling['id']));
 			$lijst.=$pcontent->getHtml($beheer = true);

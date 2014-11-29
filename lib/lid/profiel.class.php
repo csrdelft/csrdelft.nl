@@ -346,8 +346,8 @@ class ProfielBewerken extends Profiel {
 			$form[] = new SelectField('ovkaart', $profiel['ovkaart'], 'OV-kaart', array('' => 'Kies...', 'geen' => '(Nog) geen OV-kaart', 'week' => 'Week', 'weekend' => 'Weekend', 'niet' => 'Niet geactiveerd'));
 			$form[] = new SelectField('zingen', $profiel['zingen'], 'Zingen', array('' => 'Kies...', 'ja' => 'Ja, ik zing in een band/koor', 'nee' => 'Nee, ik houd niet van zingen', 'soms' => 'Alleen onder de douche', 'anders' => 'Anders'));
 			$form[] = new TextareaField('novitiaat', $profiel['novitiaat'], 'Wat verwacht je van het novitiaat?');
-			$form[] = new HtmlComment('<br><h2>Einde vragenlijst</h2><br><br><br><br><br>');
-			$form[] = new HtmlComment('<div id="novcieKnopFormulier"><h2>In te vullen door NovCie: (klik hier)</h2></div><div id="novcieFormulier">');
+			$form[] = new HtmlComment('<br><h3>Einde vragenlijst</h3><br><br><br><br><br>');
+			$form[] = new HtmlComment('<div id="novcieKnopFormulier"><h3>In te vullen door NovCie: (klik hier)</h3></div><div id="novcieFormulier">');
 			$form[] = new SelectField('novietSoort', $profiel['novietSoort'], 'Soort Noviet', array('noviet', 'nanoviet'));
 			$form[] = new SelectField('matrixPlek', $profiel['matrixPlek'], 'Matrix plek', array('voor', 'midden', 'achter'));
 			$form[] = new SelectField('startkamp', $profiel['startkamp'], 'Startkamp', array('ja', 'nee'));

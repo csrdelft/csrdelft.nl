@@ -5,7 +5,7 @@
 
 		{* alleen Korte naam invullen bij een nieuwe groep als de korte naam niet bekend is. Admins mogen wel aanpassen.*}
 		{if $groep->getId()==0 AND ( !isset($oudegroep) OR $groep->isAdmin())}
-			<h2>Nieuwe groep toevoegen in context {$groep->getType()->getNaam()}</h2>
+			<h3>Nieuwe groep toevoegen in context {$groep->getType()->getNaam()}</h3>
 			<br />
 			<label for="groepSnaam"><strong>Korte naam:</strong></label>
 			<input type="text" maxlength="20" name="snaam" value="{$groep->getSnaam()|escape:'html'}" />

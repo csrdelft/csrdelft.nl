@@ -3,7 +3,7 @@
 *}
 <p>Deze pagina toont een overzicht van uw aankomende corveetaken, corveepunten en vrijstellingen.
 Voor vragen kunt u contact opnemen met de CorveeCaesar: <a href="mailto:corvee@csrdelft.nl">corvee@csrdelft.nl</a>.</p>
-<h2>Corveerooster</h2>
+<h3>Corveerooster</h3>
 {if empty($rooster)}
 <p>U bent nog niet ingedeeld.</p>
 {else}

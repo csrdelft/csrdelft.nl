@@ -61,7 +61,7 @@
 		{if $groep->magBewerken() AND $action!='edit'}
 			{if $action=='addLid' AND $lidAdder!=false}
 				<form action="/actueel/groepen/{$groep->getType()->getNaam()}/{$groep->getId()}/addLid" method="post" >
-					<h2>Leden toevoegen</h2>
+					<h3>Leden toevoegen</h3>
 					Hier kunt u eventueel een zinnige functie opgeven, laat het anders leeg!<br />(bij meerdere selectiemenu's opties scheiden met &&)<br />
 					<br />
 					{$lidAdder}<input type="submit" value="toevoegen" />
@@ -70,7 +70,7 @@
 				<a class="btn" onclick="$('#lidAdder').toggle();
 						this.parentNode.removeChild(this)">leden toevoegen</a>
 				<form action="/actueel/groepen/{$groep->getType()->getNaam()}/{$groep->getId()}/addLid" method="post" id="lidAdder" class="verborgen">
-					<h2>Leden toevoegen</h2>
+					<h3>Leden toevoegen</h3>
 					Voer hier door komma's gescheiden namen of uid's in:<br /><br />
 					Zoek ook in: <input type="checkbox" name="filterOud" id="filterOud" /> <label for="filterOud">oudleden</label>
 
@@ -85,7 +85,7 @@
 	</div>
 {/if}
 
-<h2>{$groep->getNaam()}</h2>
+<h3>{$groep->getNaam()}</h3>
 {if $groep->magBewerken() AND $action=='edit'}
 	{* groepformulier naar een apart bestand, is wat overzichtelijker. *}
 	{include file='groepen/groepformulier.tpl'}

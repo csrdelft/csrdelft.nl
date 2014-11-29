@@ -19,7 +19,7 @@ class EetplanContent extends SmartyTemplateView {
 		if ($aEetplan === false) {
 			echo '<h1>Ongeldig uid</h1>';
 		} else {
-			echo '<h2><a href="/actueel/eetplan/">Eetplan</a> &raquo; voor ' . Lid::naamLink($uid, 'full', 'plain') . '</h2>
+			echo '<h3><a href="/actueel/eetplan/">Eetplan</a> &raquo; voor ' . Lid::naamLink($uid, 'full', 'plain') . '</h3>
 				Profiel van ' . Lid::naamLink($uid, 'civitas', 'link') . '<br /><br />';
 			echo '<table class="eetplantabel">
 				<tr><th style="width: 150px">Avond</th><th style="width: 200px">Huis</th></tr>';
@@ -82,7 +82,7 @@ class EetplanContent extends SmartyTemplateView {
 					</tr>';
 			}
 			$sUitvoer .= '</table>';
-			echo '<h2><a href="/actueel/eetplan/">Eetplan</a> &raquo; voor ' . htmlspecialchars($aEetplanData['huisnaam']) . '</h2>
+			echo '<h3><a href="/actueel/eetplan/">Eetplan</a> &raquo; voor ' . htmlspecialchars($aEetplanData['huisnaam']) . '</h3>
 				' . htmlspecialchars($aEetplanData['huisadres']) . ' <br />';
 			if ($huis instanceof OldGroep AND $huis->getId() != 0) {
 				echo 'Huispagina: ' . $huis->getLink() . '<br /><br />';
@@ -96,7 +96,7 @@ class EetplanContent extends SmartyTemplateView {
 		//weergeven
 		echo '
 			<h1>Eetplan</h1>
-			<div class="geelblokje"><h2>LET OP: </h2>
+			<div class="geelblokje"><h3>LET OP: </h3>
 				Van eerstejaers die niet komen opdagen op het eetplan wordt verwacht dat zij minstens &eacute;&eacute;n keer komen koken op het huis waarbij zij gefaeld hebben.
 			</div>
 			<table class="eetplantabel">

@@ -21,7 +21,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 		if ($iBerichtID == 0) {
 			//nieuw bericht invoeren
 			if ($courant->addBericht($_POST['titel'], $_POST['categorie'], $_POST['bericht'])) {
-				setMelding('<h2>Dank u</h2>Uw bericht is opgenomen in ons databeest, en het zal in de komende C.S.R.-courant verschijnen.', 1);
+				setMelding('<h3>Dank u</h3>Uw bericht is opgenomen in ons databeest, en het zal in de komende C.S.R.-courant verschijnen.', 1);
 				if (isset($_SESSION['compose_snapshot'])) {
 					$_SESSION['compose_snapshot'] = null;
 				}
@@ -32,7 +32,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 		} else {
 			//bericht bewerken.
 			if ($courant->bewerkBericht($iBerichtID, $_POST['titel'], $_POST['categorie'], $_POST['bericht'])) {
-				setMelding('<h2>Dank u</h2>Uw bewerkte bericht is opgenomen in ons databeest, en het zal in de komende C.S.R.-courant verschijnen.', 1);
+				setMelding('<h3>Dank u</h3>Uw bewerkte bericht is opgenomen in ons databeest, en het zal in de komende C.S.R.-courant verschijnen.', 1);
 				if (isset($_SESSION['compose_snapshot'])) {
 					$_SESSION['compose_snapshot'] = null;
 				}
@@ -58,10 +58,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 		$iBerichtID = (int) $_GET['ID'];
 		if (isset($_GET['verwijder'])) {
 			if ($courant->verwijderBericht($iBerichtID)) {
-				setMelding('<h2>Uw bericht is verwijderd.</h2>', 1);
+				setMelding('<h3>Uw bericht is verwijderd.</h3>', 1);
 				redirect($courant_url);
 			} else {
-				setMelding('<h2>Er ging iets mis!</h2>Uw bericht is niet verwijderd. Probeer het a.u.b. nog eens.', -1);
+				setMelding('<h3>Er ging iets mis!</h3>Uw bericht is niet verwijderd. Probeer het a.u.b. nog eens.', -1);
 				redirect($courant_url);
 			}
 		}

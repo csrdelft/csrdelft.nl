@@ -25,7 +25,7 @@
  * Uitbreidingen van HtmlComment:
  * 		- HtmlComment				invoer wordt als html weergegeven
  * 		- BBComment					invoer wordt als bbcode geparsed
- * 		- Subkopje					invoer wordt als <h2> weergegeven
+ * 		- Subkopje					invoer wordt als <h3> weergegeven
  * 
  */
 interface FormElement extends View {
@@ -94,7 +94,7 @@ class BBComment extends HtmlComment {
 class Subkopje extends HtmlComment {
 
 	public function getHtml() {
-		return '<h2 class="' . get_class($this) . '">' . $this->comment . '</h2>';
+		return '<h3 class="' . get_class($this) . '">' . $this->comment . '</h3>';
 	}
 
 }

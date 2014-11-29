@@ -145,7 +145,7 @@ jQuery.fn.dataTableExt.oSort['currency-desc'] = function(a,b) {
 <a href="?start=24">2 jaar</a>
 
 
-<h2>Weekoverzichten</h2>
+<h3>Weekoverzichten</h3>
 Let op: cijfers kloppen na prijswijzigingen niet voor de weken v&oacute;&oacute;r de wijziging. Weeknummer zijn <a href="http://en.wikipedia.org/wiki/ISO_week_date">ISO-weken</a>: van maandag tot zondag dus...<br /><br />
 <table class="weken zebra" id="weken">
 	<thead>
@@ -196,7 +196,7 @@ while($row=$db->next($weekResult)){
 }
 ?>
 </table>
-<h2>Laatste bestellingen</h2>
+<h3>Laatste bestellingen</h3>
 Zoeken in de laatste bestellingen: <em>(Met een limiet van 3000 bestellingen)</em>
 <table class="bestellingen zebra" id="bestellingen">
 <thead>

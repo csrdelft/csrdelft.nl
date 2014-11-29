@@ -226,7 +226,7 @@ li.ac_over a, li.ac_over a:hover {
 
 /*  Exemplaren */
 .exemplaren{	margin-top:10px;}
-.exemplaren h2{	color: #999;/*margin-left: 77px;*/ margin-bottom: 20px;}
+.exemplaren h3{	color: #999;/*margin-left: 77px;*/ margin-bottom: 20px;}
 .exemplaren p{	margin-left: 77px;}
 
 .exemplaar{
@@ -344,11 +344,11 @@ div.beschrijvingen{ margin-top: 40px;}
 	word-wrap: break-word; 
 }
 
-.beschrijvingen h2.header, 
+.beschrijvingen h3.header, 
 .beschrijvingen p.header{
 	margin-left: 113px;
 }
-.beschrijvingen h2{
+.beschrijvingen h3{
 	margin-bottom: 5px;
 }
 #Beschrijvingsformulier textarea{

@@ -100,7 +100,7 @@
 
 		{assign var=total_exemplaren_bibliotheek value=0} {* teller nodig om in compacte weergave slechts 1 biebboek te laten zien. *}
 		<div class="blok gegevens exemplaren" id="exemplaren">
-			<h2>Exemplaren</h2>
+			<h3>Exemplaren</h3>
 			{foreach from=$boek->getExemplaren() item=exemplaar name=exemplaren}
 				<div class="exemplaar uitgebreid {if $smarty.foreach.exemplaren.total>4 AND !$boek->isEigenaar($exemplaar.id) AND ($exemplaar.eigenaar_uid!='x222' OR $total_exemplaren_bibliotheek>0 )}verborgen{/if}">
 					<div class="fotolabel">{$exemplaar.eigenaar_uid|pasfoto}</div>
@@ -200,7 +200,7 @@
 	{* beschrijvingen *}
 
 	<div class="beschrijvingen">
-		<h2 class="header">Recensies en beschrijvingen</h2>
+		<h3 class="header">Recensies en beschrijvingen</h3>
 		{if $boek->countBeschrijvingen()>0}
 			<table id="beschrijvingentabel">
 			{foreach from=$boek->getBeschrijvingen() item=beschr}

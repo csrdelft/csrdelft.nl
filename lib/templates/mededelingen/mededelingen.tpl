@@ -30,7 +30,7 @@
 				<a class="btn" href="#" onclick="$('#legenda').toggle();">{icon get="legenda"} Legenda</a>
 				<div id="legenda" class="dragobject verborgen">
 					<div class="float-right" onclick="$('#legenda').fadeOut();" title="Legenda verbergen">&times;</div>
-					<h2>Legenda Mededelingen</h2>
+					<h3>Legenda Mededelingen</h3>
 					<br />
 					Voor de moderators zijn mededelingen in de lijst gemarkeerd. Dit is de betekenis van de markering:<br />
 					<ul>
@@ -56,7 +56,7 @@
 			{* Lijst met (eigen) mededelingen die door de PubCie nog goedgekeurd moeten worden. *}
 			{if !$prullenbak AND !empty($wachtGoedkeuring)}
 				<div class="wachtgoedkeuring">
-					<h2>Wachtend op goedkeuring van de PubCie:</h2><br />
+					<h3>Wachtend op goedkeuring van de PubCie:</h3><br />
 					{foreach from=$wachtGoedkeuring key=groepering item=mededelingen}
 						<div class="mededelingenlijst-block">
 							<div class="mededelingenlijst-block-titel">{$groepering}</div>

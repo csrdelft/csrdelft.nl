@@ -29,7 +29,7 @@ class CommissieOverzicht implements View {
 				$commissie = OldCommissie::getCommissie($this->id);
 				$res .= '<h1> Geinteresseerde voor ' . $commissie->getNaam() . ' </h1> 
 					<a href="/tools/voorkeuren/commissies.php">Terug naar overzicht</a>
-					<table><tr><td><h2>Lid</h2></td><td><h2>Interesse</h2></td></tr>';
+					<table><tr><td><h3>Lid</h3></td><td><h3>Interesse</h3></td></tr>';
 				$geinteresseerde = $commissie->getGeinteresseerde();
 				foreach ($geinteresseerde as $uid => $voorkeur) {
 					$res .= '<tr ' . ($voorkeur['gedaan'] ? 'style="opacity: .50"' : '') . '><td><a href="/tools/voorkeuren/lidpagina.php?lid=' . $uid . '">' . LidCache::getLid($uid)->getNaam() . '</a></td><td>' . $format[$voorkeur['voorkeur']] . '</td></tr>';
@@ -100,7 +100,7 @@ class LidOverzicht implements View {
 			$res .= '<tr><td>' . $commissies[$cid] . '</td><td>' . $opties[$voork] . '</td></tr>';
 		}
 		$res .= '</table><br />';
-		$res .= '<h2>Lid opmerkingen</h2><p>' . $voorkeur->getLidOpmerking() . '</p>';
+		$res .= '<h3>Lid opmerkingen</h3><p>' . $voorkeur->getLidOpmerking() . '</p>';
 		$res .= '
 		<form name="opties" action="/tools/voorkeuren/lidpagina.php?lid=' . $this->id . '" method="POST">
 			<textarea name = "opmerkingen" cols=40 rows = 10 >' . $voorkeur->getPraesesOpmerking() . ' </textarea> <br />

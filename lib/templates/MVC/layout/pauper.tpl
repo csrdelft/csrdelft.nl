@@ -29,11 +29,11 @@
 				{foreach from=$menutree->children item=item}
 					{if $item->magBekijken()}
 						<li>
-							<h2>
+							<h3>
 								<a href="{$item->link}">
 									{$item->tekst}
 								</a>
-							</h2>
+							</h3>
 							<ul>
 								{foreach from=$item->children item=subitem}
 									{if $subitem->magBekijken()}

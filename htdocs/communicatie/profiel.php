@@ -84,7 +84,7 @@ if (!(LoginModel::mag('P_LEDEN_READ') or LoginModel::mag('P_OUDLEDEN_READ'))) {
 				}
 				redirect(CSR_ROOT . '/communicatie/profiel/' . $nieuwUid . '/' . $bewerkactie);
 			} catch (Exception $e) {
-				setMelding('<h2>Nieuw lidnummer aanmaken mislukt.</h2>' . $e->getMessage(), -1);
+				setMelding('<h3>Nieuw lidnummer aanmaken mislukt.</h3>' . $e->getMessage(), -1);
 				redirect(CSR_ROOT . '/communicatie/profiel/');
 			}
 			break;
@@ -131,7 +131,7 @@ if (!(LoginModel::mag('P_LEDEN_READ') or LoginModel::mag('P_OUDLEDEN_READ'))) {
 
 			$gSync = GoogleSync::instance();
 			$message = $gSync->syncLid($uid);
-			setMelding('<h2>Opgeslagen in Google Contacts:</h2>' . $message, 2);
+			setMelding('<h3>Opgeslagen in Google Contacts:</h3>' . $message, 2);
 			redirect(CSR_ROOT . '/communicatie/profiel/' . $uid);
 			break;
 
@@ -147,7 +147,7 @@ if (!(LoginModel::mag('P_LEDEN_READ') or LoginModel::mag('P_OUDLEDEN_READ'))) {
 		default;
 			$lid = LidCache::getLid($uid);
 			if (!$lid instanceof Lid) {
-				setMelding('<h2>Helaas</h2>Dit lid bestaat niet.<br /> U kunt verder zoeken in deze ledenlijst.', -1);
+				setMelding('<h3>Helaas</h3>Dit lid bestaat niet.<br /> U kunt verder zoeken in deze ledenlijst.', -1);
 				redirect(CSR_ROOT . '/communicatie/ledenlijst/');
 			}
 			$midden = new ProfielContent($lid);

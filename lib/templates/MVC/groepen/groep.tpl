@@ -1,10 +1,10 @@
 <div id="groep-{$groep->id}" class="groep">
 	<div class="float-left">
-		<h2>
+		<h3>
 			<a href="{groepenUrl}/{$groep->id}">
 				{$groep->naam}
 			</a>
-		</h2>
+		</h3>
 		{$groep->samenvatting|bbcode}
 		{if isset($generaties)}
 			<div class="generaties">

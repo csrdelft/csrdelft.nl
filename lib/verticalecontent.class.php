@@ -64,9 +64,9 @@ class VerticalenContent implements View {
 				echo '<div class="' . $kringstyle . '" id="kring' . $verticale->getLetter() . '.' . $kringnaam . '">';
 				echo '<div class="mailknopje" onclick="toggleEmails(\'' . $verticale->getLetter() . '.' . $kringnaam . '\')">@</div>';
 				if ($kringnaam == 0) {
-					echo '<h2>Geen kring</h2>';
+					echo '<h3>Geen kring</h3>';
 				} else {
-					echo '<h2>Kring ' . $kringnaam . '</h2>';
+					echo '<h3>Kring ' . $kringnaam . '</h3>';
 				}
 				echo '<div id="leden' . $verticale->getLetter() . '.' . $kringnaam . '" class="kringleden">';
 				foreach ($kring as $lid) {

@@ -1,7 +1,7 @@
 {*
 	mijn_punten.tpl	|	P.W.G. Brussee (brussee@live.nl)
 *}
-<h2>Corveepunten</h2>
+<h3>Corveepunten</h3>
 <p>
 In de onderstaande tabel is een overzicht te vinden van de punten die u per corveefunctie heeft verdiend met daarachter uw bonus/malus-punten indien van toepassing.
 Tussen haakjes staat het aantal keer dat u bent ingedeeld in deze functie.

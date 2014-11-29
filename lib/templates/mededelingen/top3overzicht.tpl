@@ -14,15 +14,15 @@
 Deze pagina laat zien hoe de Top 3 wordt weergegeven bij niet-leden, oudleden en leden.
 <div id="top3overzicht">
 	<div class="top3container">
-		<h2>Niet-leden</h2>
+		<h3>Niet-leden</h3>
 		{'[mededelingen=top3nietleden]'|bbcode}
 	</div>
 	<div class="top3container">
-		<h2>Oudleden</h2>
+		<h3>Oudleden</h3>
 		{'[mededelingen=top3oudleden]'|bbcode}
 	</div>
 	<div class="top3container">
-		<h2>Normale leden</h2>
+		<h3>Normale leden</h3>
 		{'[mededelingen=top3leden]'|bbcode}
 	</div>
 </div>

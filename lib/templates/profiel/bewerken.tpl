@@ -1,13 +1,13 @@
 {getMelding()}
 
 {if $actie=='novietBewerken'}
-	<h2>Noviet toevoegen</h2>
+	<h3>Noviet toevoegen</h3>
 	<p>
 		Welkom bij C.S.R.! Hieronder mag je gegevens invullen in het databeest van de Civitas. Zo kunnen we contact met je houden,
 		kunnen andere leden opzoeken waar je woont en kun je (na het novitiaat) op het forum berichten plaatsen.
 	</p>
 {else}
-	<h2>Profiel wijzigen</h2>
+	<h3>Profiel wijzigen</h3>
 	<p class="profielBewerken">
 		Hieronder kunt u uw eigen gegevens wijzigen. Voor enkele velden is het niet mogelijk zelf
 		wijzigingen door te voeren. Voor de meeste velden geldt daarnaast dat de ingevulde gegevens

@@ -1,7 +1,7 @@
 {*
 	mijn_vrijstelling.tpl	|	P.W.G. Brussee (brussee@live.nl)
 *}
-<h2>Corveevrijstelling</h2>
+<h3>Corveevrijstelling</h3>
 {if $vrijstelling === null}
 <p>U heeft geen vrijstelling.</p>
 {else}

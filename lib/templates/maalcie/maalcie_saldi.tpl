@@ -4,6 +4,6 @@
 	<input type="submit" name="submit" value="Uploaden" />
 </form>
 <br />
-<h2>Boekjaar sluiten</h2>
+<h3>Boekjaar sluiten</h3>
 <p>De maaltijden van het boekjaar zullen naar het archief worden verplaatst.</p>
 <a href="{$smarty.const.maalcieUrl}/sluitboekjaar" title="Boekjaar afsluiten" class="btn post popup">{icon get="door_in"} Sluit boekjaar</a>

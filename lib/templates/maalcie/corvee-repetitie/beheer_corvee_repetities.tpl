@@ -10,7 +10,7 @@ Op deze pagina kunt u corveerepetities aanmaken, wijzigen en verwijderen{if isse
 {/if}
 Onderstaande tabel toont {if isset($maaltijdrepetitie)}<span class="cursief">alleen</span> de corveerepetities voor deze maaltijdrepetitie{else}alle repetities in het systeem{/if}.
 </p>
-<h2>Repetities verwijderen</h2>
+<h3>Repetities verwijderen</h3>
 <p>
 Voordat een corveerepetitie verwijderd kan worden moeten eerst alle bijbehorende corveetaken definitief zijn verwijderd.
 Dit is dus inclusief maaltijdcorveetaken (die door een gekoppelde maaltijdrepetitie zijn aangemaakt).

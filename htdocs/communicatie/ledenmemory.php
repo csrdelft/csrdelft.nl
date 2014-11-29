@@ -101,7 +101,7 @@ HTML;
 <div uid="{$lid['uid']}" class="flip memorycard naam {$flipped}">
 	<div class="blue front">{$cheat}</div>
 	<div class="blue back">
-		<h2 title="{$title}">{$naam}</h2>
+		<h3 title="{$title}">{$naam}</h3>
 	</div>
 </div>
 HTML;

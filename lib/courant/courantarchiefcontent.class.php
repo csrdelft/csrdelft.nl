@@ -44,14 +44,14 @@ class CourantarchiefContent implements View {
 			foreach ($aMails as $aMail) {
 				if (isset($iLaatsteJaar)) {
 					if ($iLaatsteJaar != $aMail['jaar']) {
-						$sReturn .= '<div class="courantArchiefJaar"><h2>' . $iLaatsteJaar . '</h2>' . $sLijst . '</div>';
+						$sReturn .= '<div class="courantArchiefJaar"><h3>' . $iLaatsteJaar . '</h3>' . $sLijst . '</div>';
 						$sLijst = '';
 					}
 				}
 				$iLaatsteJaar = $aMail['jaar'];
 				$sLijst .= '<a href="/actueel/courant/archief/' . $aMail['ID'] . '">' . strftime('%d %B', strtotime($aMail['verzendMoment'])) . '</a><br />';
 			}
-			$sReturn .= '<div class="courantArchiefJaar"><h2>' . $iLaatsteJaar . '</h2>' . $sLijst . '</div>';
+			$sReturn .= '<div class="courantArchiefJaar"><h3>' . $iLaatsteJaar . '</h3>' . $sLijst . '</div>';
 		} else {
 			$sReturn .= 'Geen couranten in het archief aanwezig';
 		}
