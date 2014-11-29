@@ -55,7 +55,7 @@ class VerticalenContent implements View {
 		foreach ($verticalen as $verticale) {
 
 			echo '<div class="verticale">';
-			echo '<h1>Verticale ' . $verticale->getNaam() . '</h1>';
+			echo '<h2>Verticale ' . $verticale->getNaam() . '</h2>';
 			foreach ($verticale->getKringen() as $kringnaam => $kring) {
 				$kringstyle = 'kring';
 				if ($kringnaam == 0) {
@@ -64,9 +64,9 @@ class VerticalenContent implements View {
 				echo '<div class="' . $kringstyle . '" id="kring' . $verticale->getLetter() . '.' . $kringnaam . '">';
 				echo '<div class="mailknopje" onclick="toggleEmails(\'' . $verticale->getLetter() . '.' . $kringnaam . '\')">@</div>';
 				if ($kringnaam == 0) {
-					echo '<h3>Geen kring</h3>';
+					echo '<h5>Geen kring</h5>';
 				} else {
-					echo '<h3>Kring ' . $kringnaam . '</h3>';
+					echo '<h5>Kring ' . $kringnaam . '</h5>';
 				}
 				echo '<div id="leden' . $verticale->getLetter() . '.' . $kringnaam . '" class="kringleden">';
 				foreach ($kring as $lid) {
