@@ -54,7 +54,7 @@
 			<td colspan="4">
 				<div class="forumdeel-omschrijving">
 					<div class="float-right">{$breadcrumbs}</div>
-					<h1>{$deel->titel}</h1>
+					<h2>{$deel->titel}</h2>
 					{$deel->omschrijving}
 				</div>
 			</td>

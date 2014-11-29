@@ -166,7 +166,7 @@ pagecount=ForumPostsModel::instance()->getAantalPaginas($draad->draad_id) curpag
 		</tr>
 
 		<tr>
-			<td colspan="2" class="forumdraadtitelbottom">
+			<td colspan="2" class="forumfooter">
 				<div class="breadcrumbs">{$breadcrumbs}</div>
 				{$smarty.capture.kop}
 			</td>
