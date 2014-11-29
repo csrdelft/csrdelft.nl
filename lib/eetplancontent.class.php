@@ -17,7 +17,7 @@ class EetplanContent extends SmartyTemplateView {
 		//huizen voor een feut tonen
 		$aEetplan = $this->model->getEetplanVoorPheut($uid);
 		if ($aEetplan === false) {
-			echo '<h1>Ongeldig uid</h1>';
+			echo '<h3>Ongeldig uid</h3>';
 		} else {
 			echo '<h3><a href="/actueel/eetplan/">Eetplan</a> &raquo; voor ' . Lid::naamLink($uid, 'full', 'plain') . '</h3>
 				Profiel van ' . Lid::naamLink($uid, 'civitas', 'link') . '<br /><br />';
@@ -46,7 +46,7 @@ class EetplanContent extends SmartyTemplateView {
 
 
 		if ($aEetplan === false) {
-			echo '<h1>Ongeldig huisID</h1>';
+			echo '<h3>Ongeldig huisID</h3>';
 		} else {
 			try {
 				$huis = new OldGroep($aEetplan[0]['groepid']);
@@ -126,7 +126,7 @@ class EetplanContent extends SmartyTemplateView {
 		echo '</table>';
 		//nog even een huizentabel erachteraan
 
-		echo '<br /><h1>Huizen met hun nummers:</h1>
+		echo '<h3>Huizen met hun nummers:</h3>
 			<table class="eetplantabel">
 				<tr><th>Naam</th><th>Adres</th><th>Telefoon</th></tr>';
 

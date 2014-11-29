@@ -47,7 +47,7 @@ function wait_for_login(){
 			$_SESSION['authenticated']=true;
 		}else{
 			?>
-			<h1>SoccieStreeplijstrapportagegeneratortool login</h1>
+			<h3>SoccieStreeplijstrapportagegeneratortool login</h3>
 
 			<form method="post">
 				<input type="password" name="password" /><input type="submit" value="inloggen" />

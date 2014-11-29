@@ -69,7 +69,7 @@ if (isset($_GET['addToGoogle'])) {
 		$elapsed = microtime() - $start;
 
 		setMelding(
-				'<h1>Google-sync-resultaat:</h1>' . $message . '<br />' .
+				'<h3>Google-sync-resultaat:</h3>' . $message . '<br />' .
 				'<a href="/communicatie/lijst.php?q=' . htmlspecialchars($_GET['q']) . '">Terug naar de ledenlijst...</a>', 'Google-sync resultaat'
 				, 0);
 

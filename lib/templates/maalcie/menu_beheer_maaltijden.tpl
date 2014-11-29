@@ -2,7 +2,7 @@
 	menu_beheer_maaltijden.tpl	|	P.W.G. Brussee (brussee@live.nl)
 *}
 <div id="beheer-maaltijden-zijbalk" class="maalcie-beheer-menu">
-	<h1>Beheer</h1>
+	<div class="zijbalk-kopje">Beheer</div>
 	{assign var="link" value="/maaltijdenbeheer"}
 	<div class="item{if (!isset($prullenbak) or !$prullenbak) and (!isset($archief) or !$archief) and maalcieUrl === $link} active{/if}">»
 		<a href="{$link}" title="Beheer maaltijden">Maaltijden</a>

@@ -46,7 +46,7 @@ if (isset($_POST['actie'])) {
 	switch ($_POST['actie']) {
 		case 'simulate':
 			if (trim($roodschopper->getBericht()) === '' OR trim($roodschopper->getOnderwerp()) === '') {
-				echo '<h1>Formulier is niet compleet</h1>';
+				echo '<h3>Formulier is niet compleet</h3>';
 				echo '<input type="button" value="Ok, ik pas nog wat aan" onclick="restoreRoodschopper()" />';
 				break;
 			}
