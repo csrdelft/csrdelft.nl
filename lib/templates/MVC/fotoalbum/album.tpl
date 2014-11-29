@@ -17,7 +17,10 @@
 	<div class="album hoverIntent">
 		{if LoginModel::mag('P_ALBUM_MOD')}
 			<div class="thumb-mod">
-				<a href="/fotoalbum/hernoemen/{$subalbum->getSubDir()}" class="btn post prompt ReloadPage hoverIntentContent top-right" title="Fotoalbum hernoemen" data="Nieuwe naam={$subalbum->dirname}">{icon get=pencil}</a>
+				<a href="/fotoalbum/hernoemen/{$subalbum->getSubDir()}" class="btn post prompt ReloadPage hoverIntentContent top-left" title="Fotoalbum hernoemen" data="Nieuwe naam={$subalbum->dirname}">{icon get=pencil}</a>
+				{if $subalbum->isEmpty()}
+					<a href="/fotoalbum/verwijderen/{$subalbum->getSubDir()}" class="btn post ReloadPage hoverIntentContent top-right" title="Fotoalbum verwijderen (2x doen)">{icon get=cross}</a>
+				{/if}
 			</div>
 		{/if}
 		<a href="{$subalbum->getUrl()}">

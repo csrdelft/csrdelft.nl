@@ -168,6 +168,24 @@ function direncode($url) {
 	return str_replace('%2F', '/', rawurlencode($url));
 }
 
+/**
+ * @source http://stackoverflow.com/a/7497848
+ * @param string $dir
+ * @return boolean
+ */
+function is_dir_empty($dir) {
+	if (!is_readable($dir)) {
+		return null;
+	}
+	$handle = opendir($dir);
+	while (false !== ($entry = readdir($handle))) {
+		if ($entry != '.' && $entry != '..') {
+			return false;
+		}
+	}
+	return true;
+}
+
 function is_utf8($string) {
 	return checkEncoding($string, 'UTF-8');
 }

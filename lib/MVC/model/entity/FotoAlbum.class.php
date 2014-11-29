@@ -68,6 +68,26 @@ class FotoAlbum extends Map {
 	}
 
 	/**
+	 * Is dit album leeg?
+	 * @return boolean
+	 */
+	public function isEmpty() {
+		$handle = opendir($this->path);
+		while (false !== ($entry = readdir($handle))) {
+			if ($entry != '.' && $entry != '..') {
+				if ($entry == '_thumbs' || $entry == '_resized') {
+					if (!is_dir_empty($this->path . $entry)) {
+						return false;
+					}
+				} else {
+					return false;
+				}
+			}
+		}
+		return true;
+	}
+
+	/**
 	 * File modification time van het album.
 	 */
 	public function modified() {

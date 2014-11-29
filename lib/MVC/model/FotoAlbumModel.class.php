@@ -41,7 +41,23 @@ class FotoAlbumModel extends PersistenceModel {
 			chmod($path, 0755);
 		}
 		$album->owner = LoginModel::getUid();
-		parent::create($album);
+		return parent::create($album);
+	}
+
+	public function delete(PersistentEntity $album) {
+		$path = $album->path . '_resized';
+		if (file_exists($path)) {
+			rmdir($path);
+		}
+		$path = $album->path . '_thumbs';
+		if (file_exists($path)) {
+			rmdir($path);
+		}
+		$path = $album->path;
+		if (file_exists($path)) {
+			@rmdir($path);
+		}
+		return parent::delete($album);
 	}
 
 	public function getFotoAlbum($path) {

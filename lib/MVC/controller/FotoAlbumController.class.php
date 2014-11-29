@@ -216,6 +216,11 @@ class FotoAlbumController extends AclController {
 	}
 
 	public function verwijderen(FotoAlbum $album) {
+		if ($album->isEmpty()) {
+			FotoAlbumModel::instance()->delete($album);
+			$this->view = new JsonResponse(true);
+			return;
+		}
 		$naam = filter_input(INPUT_POST, 'foto', FILTER_SANITIZE_STRING);
 		$foto = new Foto($album, $naam);
 		if (!LoginModel::mag('P_ALBUM_DEL') AND ! $foto->isOwner()) {
