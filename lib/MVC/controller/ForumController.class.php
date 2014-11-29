@@ -149,6 +149,10 @@ class ForumController extends Controller {
 		} else {
 			$query = urldecode($query);
 			$query = filter_var($query, FILTER_SANITIZE_SPECIAL_CHARS);
+			$titel = false;
+			$datum = 'reactie';
+			$ouder = 'jonger';
+			$jaar = 1;
 		}
 		$draden_delen = ForumDelenModel::instance()->zoeken($query, $titel, $datum, $ouder, $jaar);
 		$this->view = new ForumResultatenView($draden_delen[0], $draden_delen[1], $query);

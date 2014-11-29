@@ -55,12 +55,12 @@
 			{/if}
 		</div>
 
-		<h2>
+		<h1>
 			{$draad->titel}
 			{if isset($statistiek)}
 				<span class="lichtgrijs small" title="Aantal lezers"> {$draad->getAantalLezers()}</span>
 			{/if}
-		</h2>
+		</h1>
 	{/capture}
 
 	{$smarty.capture.kop}

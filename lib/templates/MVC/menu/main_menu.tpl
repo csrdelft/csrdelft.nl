@@ -1,8 +1,20 @@
 <nav id="cd-lateral-nav">
 	<ul class="cd-navigation cd-single-item-wrapper">
 		<li>
-			<form id="cd-zoek-form" name="lidzoeker" method="get" action="/communicatie/lijst.php">
-				<input id="cd-zoek-veld" name="q" type="text" />
+			<form id="cd-zoek-form" action="/communicatie/lijst.php">
+				<div class="input-group">
+					<input type="text" id="cd-zoek-veld" name="q" class="form-control">
+					<div class="input-group-btn">
+						<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><img src="http://plaetjes.csrdelft.nl/knopjes/search-16.png"> <span class="caret"></span></button>
+						<ul class="dropdown-menu dropdown-menu-right" role="menu">
+							<li></li>
+							<li><a class="submit">Leden & Groepen</a></li>
+							<li class="divider"></li>
+							<li><a href="/forum/zoeken/" class="submit" onclick="this.href+=encodeURIComponent($('#cd-zoek-veld').val());">Forum</a></li>
+							<li><a href="/wiki/hoofdpagina?do=search&id=" class="submit" onclick="this.href+=encodeURIComponent($('#cd-zoek-veld').val());">Wiki</a></li>
+						</ul>
+					</div><!-- /btn-group -->
+				</div><!-- /input-group -->
 				<script type="text/javascript">
 					$(document).ready(function () {
 					{assign var=instantsearch value=$mainmenu->getInstantSearchSuggestions()}

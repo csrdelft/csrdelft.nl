@@ -86,7 +86,7 @@ class LedenlijstContent implements View {
 		echo '<h1>' . (LoginModel::instance()->getLid()->isOudlid() ? 'Oud-leden en l' : 'L') . 'edenlijst </h1>';
 		echo '<form id="zoekform" method="get">';
 		echo '<label for="q"></label><input type="text" name="q" value="' . htmlspecialchars($this->lidzoeker->getQuery()) . '" /> ';
-		echo '<input type="submit" class="submit" value="zoeken" /> <a class="btn" id="toggleAdvanced" href="#geavanceerd">Geavanceerd</a>';
+		echo '<button class="btn submit">Zoeken</button> <a class="btn" id="toggleAdvanced" href="#geavanceerd">Geavanceerd</a>';
 
 		echo '<div id="advanced" class="verborgen">';
 		echo '<label for="status">Status:</label>';
