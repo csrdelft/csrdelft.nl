@@ -187,7 +187,7 @@ class FotoModel extends PersistenceModel {
 	}
 
 	public function cleanup() {
-		foreach ($this->find() as $foto) {
+		foreach ($this->find() as $foto) { // FIXME: constructor casting
 			if (!$foto->exists()) {
 				$this->delete($foto);
 			}
