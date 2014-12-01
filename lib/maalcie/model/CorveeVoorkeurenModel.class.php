@@ -30,7 +30,7 @@ class CorveeVoorkeurenModel {
 	 * @param boolean $uitgeschakeld 
 	 * @return CorveeVoorkeur[]
 	 */
-	public static function getVoorkeurenVoorLid($uid, $uitgeschakeld = true) {
+	public static function getVoorkeurenVoorLid($uid, $uitgeschakeld = false) {
 		$repById = CorveeRepetitiesModel::getVoorkeurbareRepetities(true); // grouped by crid
 		$lijst = array();
 		$voorkeuren = self::loadVoorkeuren(null, $uid);
