@@ -413,7 +413,7 @@ var bloodhound{$this->getId()} = new Bloodhound({
 bloodhound{$this->getId()}.initialize();
 
 $('#{$this->getId()}').typeahead(null, {
-  name: "typeahead{$this->getId()}",
+  name: "{$this->getId()}",
   displayKey: "value",
   source: bloodhound{$this->getId()}.ttAdapter()
 });
@@ -422,13 +422,18 @@ JS;
 			$json = json_encode($this->suggestions);
 			$js .= <<<JS
 $('#{$this->getId()}').typeahead({
+	autoselect: true,
 	hint: true,
 	highlight: true,
 	minLength: 1
 }, {
-	name: "typeahead{$this->getId()}",
+	name: "{$this->getId()}",
 	displayKey: "value",
 	source: substringMatcher({$json})
+}).on('keyup', function (event) {
+	if (event.keyCode !== 38 && event.keyCode !== 40) { // arrow up & down
+		$('.tt-dataset-{$this->getId()} .tt-suggestion').first().addClass('tt-cursor');
+	}
 });
 JS;
 		}
