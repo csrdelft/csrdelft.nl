@@ -20,7 +20,7 @@
 		<div class="subalbum">
 			<a href="{$subalbum->getUrl()}" title="{$subalbum->getUrl()|replace:"%20":" "}">
 				<img src="{$subalbum->getThumbURL()}" alt="{$subalbum->dirname|ucfirst}" />
-				<div class="albumname">{$subalbum->dirname|ucfirst}</div>
+				<div class="subalbumname">{$subalbum->dirname|ucfirst}</div>
 			</a>
 		</div>
 	{/foreach}
