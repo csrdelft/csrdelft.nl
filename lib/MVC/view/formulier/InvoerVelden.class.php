@@ -401,33 +401,35 @@ $('#{$this->getId()}').keyup(function(event) {
 });
 JS;
 		}
-		if (!empty($this->remotedatasource)) {
+		if (!empty($this->suggestions) OR ! empty($this->remotedatasource)) {
+			$suggestions = json_encode($this->suggestions);
 			$js .= <<<JS
-
+var suggestions{$this->getId()} = {$suggestions};
 var bloodhound{$this->getId()} = new Bloodhound({
 	datumTokenizer: Bloodhound.tokenizers.obj.whitespace('value'),
 	queryTokenizer: Bloodhound.tokenizers.whitespace,
+JS;
+			if (!empty($this->suggestions)) {
+				$js .= <<<JS
+
+	local: $.map(suggestions{$this->getId()}, function(value) {
+		return { value: value };
+	})
+JS;
+				if (!empty($this->remotedatasource)) {
+					$js .= ',';
+				}
+			}
+			if (!empty($this->remotedatasource)) {
+				$js .= <<<JS
+
 	remote: "{$this->remotedatasource}?q=%QUERY"
+JS;
+			}
+			$js .= <<<JS
+
 });
 bloodhound{$this->getId()}.initialize();
-
-$('#{$this->getId()}').typeahead({
-	autoselect: true
-}, {
-	name: "{$this->getId()}",
-	displayKey: "value",
-	source: bloodhound{$this->getId()}.ttAdapter()
-}).on('typeahead:selected', function() {
-	$(this).trigger('change');
-}).on('keyup', function (event) {
-	if (event.keyCode !== 38 && event.keyCode !== 40) { // arrow up & down
-		$('.tt-dataset-{$this->getId()} .tt-suggestion').first().addClass('tt-cursor');
-	}
-});
-JS;
-		} elseif (!empty($this->suggestions)) {
-			$suggesties = json_encode($this->suggestions);
-			$js .= <<<JS
 
 $('#{$this->getId()}').typeahead({
 	autoselect: true,
@@ -437,7 +439,7 @@ $('#{$this->getId()}').typeahead({
 }, {
 	name: "{$this->getId()}",
 	displayKey: "value",
-	source: substringMatcher({$suggesties})
+	source: bloodhound{$this->getId()}.ttAdapter()
 }).on('typeahead:selected', function() {
 	$(this).trigger('change');
 }).on('keyup', function (event) {

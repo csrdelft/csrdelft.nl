@@ -730,38 +730,3 @@ function CsrBBPreview(source, dest) {
 		 }*/
 	}
 }
-
-/**
- * @source https://twitter.github.io/typeahead.js/examples/
- */
-var substringMatcher = function (inputlist, matchkey) {
-
-	return function findMatches(q, cb) {
-		var matches, substrRegex;
-
-		// an array that will be populated with substring matches
-		matches = [];
-
-		// regex used to determine if a string contains the substring `q`
-		substrRegex = new RegExp(q, 'i');
-
-		// iterate through the pool of strings and for any string that
-		// contains the substring `q`, add it to the `matches` array
-		$.each(inputlist, function (key, val) {
-			// the typeahead jQuery plugin expects suggestions to a
-			// JavaScript object, refer to typeahead docs for more info
-			if (matchkey) {
-				if (substrRegex.test(key)) {
-					matches.push({key: key, value: val});
-				}
-			}
-			else {
-				if (substrRegex.test(val)) {
-					matches.push({key: key, value: val});
-				}
-			}
-		});
-
-		cb(matches);
-	};
-};
