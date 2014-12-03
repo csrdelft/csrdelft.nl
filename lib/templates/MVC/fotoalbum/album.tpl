@@ -73,8 +73,8 @@
 						"tooltipSeeAllPhotos": "Grid",
 						"tooltipSeeOtherAlbums": "Toon sub-albums"
 					});
-					$('div.jgallery-thumbnails').css({
-						"max-height": "897px",
+					$('div.jgallery-thumbnails.full-screen').css({
+						"height": "897px",
 						"overflow-y": "auto"
 					});
 					$('div.title').off();
