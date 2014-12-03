@@ -1,19 +1,17 @@
-.album {
+.subalbum {
 	width: 150px;
 	height: 150px;
-	margin: 10px;
+	margin: 25px;
 	float: left;
 	text-align: center;
 	font-weight: bold;
-	overflow: hidden;
-	position: relative;
 	cursor: pointer;
 }
-.album:hover {
+.subalbum:hover {
 	text-decoration: none;
 	border-color: #aaaaaa;
 }
-.album .albumname {
+.subalbum .subalbumname {
 	position: absolute;
 	top: 90px;
 	width: 150px;
@@ -23,7 +21,7 @@
 	background-color: white;
 	opacity: 0.8;
 }
-.album:hover .albumname {
+.subalbum:hover .subalbumname {
 	opacity: 0.9;
 }
 

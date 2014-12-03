@@ -14,9 +14,10 @@
 		<a class="btn" href="/fotoalbum/downloaden/{$album->getSubDir()}" title="Download als TAR-bestand">{icon get="picture_save"} Download album</a>
 	{/if}
 </div>
+<h1 class="inline">{$album->dirname|ucfirst}</h1>
 <div class="subalbums">
 	{foreach from=$album->getSubAlbums() item=subalbum}
-		<div class="album">
+		<div class="subalbum">
 			<a href="{$subalbum->getUrl()}" title="{$subalbum->getUrl()|replace:"%20":" "}">
 				<img src="{$subalbum->getThumbURL()}" alt="{$subalbum->dirname|ucfirst}" />
 				<div class="albumname">{$subalbum->dirname|ucfirst}</div>
@@ -24,7 +25,6 @@
 		</div>
 	{/foreach}
 </div>
-<h1 class="inline">{$album->dirname|ucfirst}</h1>
 <div id="gallery">
 	{if $album->hasFotos()}
 		<div class="album" data-jgallery-album-title="{$album->dirname|ucfirst}">
