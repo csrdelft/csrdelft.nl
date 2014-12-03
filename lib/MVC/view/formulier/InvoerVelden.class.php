@@ -59,9 +59,10 @@ abstract class InputField implements FormElement, Validator {
 	public $error = ''; // foutmelding van dit veld
 	public $onchange = null; // callback on change of value
 	public $onchange_submit = false; // bij change of value form submitten
-	public $onclick = null; // do on click
+	public $onclick = null; // callback on click
 	public $onkeydown = null; // prevent illegal character from being entered
 	public $onkeyup = null; // respond to keyboard strokes
+	public $typeahead_selected = null; // callback gekozen suggestie
 	public $max_len = 0; // maximale lengte van de invoer
 	public $min_len = 0; // minimale lengte van de invoer
 	public $rows = 0; // aantal rijen van textarea
@@ -462,6 +463,13 @@ JS;
 	if (event.keyCode !== 38 && event.keyCode !== 40) { // arrow up & down
 		$('.tt-dataset-{$this->getId()} .tt-suggestion').first().addClass('tt-cursor');
 	}
+});
+JS;
+		}
+		if ($this->typeahead_selected !== null) {
+			$js .= <<<JS
+$('#{$this->getId()}').on('typeahead:selected', function (event, suggestion, dataset) {
+	{$this->typeahead_selected}
 });
 JS;
 		}

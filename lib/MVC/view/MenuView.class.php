@@ -34,39 +34,39 @@ class MainMenuView extends MenuView {
 		$fields[] = new HtmlComment('<div class="input-group"><div class="input-group-btn">');
 
 		$field = new LidField('q', null, null);
+		$fields[] = $field;
+
 		$field->css_classes[] = 'menuzoekveld form-control';
 		foreach (MenuModel::instance()->find('link != ""') as $item) {
 			if ($item->magBekijken()) {
 				$field->suggestions[$item->tekst] = $item->link;
 			}
 		}
+
 		require_once 'MVC/model/ForumModel.class.php';
 		foreach (ForumDelenModel::instance()->getForumDelenVoorLid(false) as $deel) {
 			if (!array_key_exists($deel->titel, $field->suggestions)) {
 				$field->suggestions[$deel->titel] = '/forum/deel/' . $deel->forum_id;
 			}
 		}
+
 		$json = json_encode($field->suggestions);
 		$field->suggestions = array_keys($field->suggestions);
-		$field->onkeydown = <<<JS
-if (event.keyCode === 13) { // enter
-	var shortcuts = {$json};
-	if (typeof shortcuts[this.value] === 'string') { // known shortcut
-		window.location.href = shortcuts[this.value]; // goto url
-	}
-	else if (this.value.indexOf('su ') == 0) {
-		window.location.href = '/su/' + this.value.substring(3);
-	}
-	else if (this.value == 'endsu') {
-		window.location = '/endsu';
-	}
-	else {
-		form_submit(event);
-	}
+		$field->typeahead_selected = <<<JS
+var shortcuts = {$json};
+if (typeof shortcuts[this.value] === 'string') { // known shortcut
+	window.location.href = shortcuts[this.value]; // goto url
+}
+else if (this.value.indexOf('su ') == 0) {
+	window.location.href = '/su/' + this.value.substring(3);
+}
+else if (this.value == 'endsu') {
+	window.location = '/endsu';
+}
+else {
+	form_submit();
 }
 JS;
-		$fields[] = $field;
-
 		$fields[] = new HtmlComment(<<<HTML
 <button id="cd-zoek-engines" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><img src="http://plaetjes.csrdelft.nl/knopjes/search-16.png"> <span class="caret"></span></button>
 <ul class="dropdown-menu dropdown-menu-right" role="menu">
