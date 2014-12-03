@@ -1,4 +1,3 @@
-<h1 class="inline">{$album->dirname|ucfirst}</h1>
 <div class="float-right" style="margin-top: 30px;">
 	{if LoginModel::mag('P_ALBUM_ADD')}
 		<a class="btn" href="/fotoalbum/uploaden/{$album->getSubDir()}">{icon get="picture_add"} Toevoegen</a>
@@ -25,6 +24,7 @@
 		</div>
 	{/foreach}
 </div>
+<h1 class="inline">{$album->dirname|ucfirst}</h1>
 <div id="gallery">
 	{if $album->hasFotos()}
 		<div class="album" data-jgallery-album-title="{$album->dirname|ucfirst}">
@@ -54,8 +54,8 @@
 						"mode": "standard",
 						"canChangeMode": false,
 						"canZoom": false,
-						"backgroundColor": "FFFFFF",
-						"textColor": "000000",
+						"backgroundColor": "fff",
+						"textColor": "193b61",
 						"thumbType": "image",
 						"thumbWidth": 150,
 						"thumbHeight": 150,
