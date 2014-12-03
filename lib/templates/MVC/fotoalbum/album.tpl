@@ -75,7 +75,7 @@
 					});
 					$('div.jgallery-container-inner').css({
 						"height": "897px",
-						"overflow-y": "scroll"
+						"overflow": "auto"
 					});
 					$('div.title').off();
 					$('div.title').on('click', function (event) {
