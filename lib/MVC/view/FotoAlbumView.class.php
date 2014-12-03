@@ -143,7 +143,7 @@ class FotoBBView extends SmartyTemplateView {
 	}
 
 	public function getHtml() {
-		$html = '<a href="' . $this->model->getAlbumUrl() . '#' . str_replace($this->model->getResizedUrl(), '%20', ' ') . '"';
+		$html = '<a href="' . $this->model->getAlbumUrl() . '#' . $this->model->getResizedUrl() . '"';
 		if (!$this->groot AND LidInstellingen::get('forum', 'fotoWeergave') == 'boven bericht') {
 			$html .= ' class="hoverIntent"><div class="hoverIntentContent"><div class="bb-img-loading" src="' . $this->model->getResizedUrl() . '"></div></div';
 		}
@@ -183,7 +183,7 @@ class FotoAlbumZijbalkView extends FotoAlbumView {
 		for ($i = 0; $i < $limit; $i++) {
 			$foto = $fotos[$i];
 			if ($foto instanceof Foto) {
-				echo '<a href="' . $this->model->getUrl() . '#' . str_replace($foto->getResizedUrl(), '%20', ' ') . '">';
+				echo '<a href="' . $this->model->getUrl() . '#' . $foto->getResizedUrl() . '">';
 				echo '<img src="' . $foto->getThumbUrl() . '">';
 				echo '</a>' . "\n";
 			}
@@ -335,7 +335,7 @@ class FotoAlbumBBView extends FotoAlbumView {
 		foreach ($grid as $row => $rowcontents) {
 			foreach ($rowcontents as $col => $foto) {
 				if (is_array($foto)) {
-					$ret .= '<a href="' . $url . '#' . str_replace($foto['foto']->getResizedUrl(), '%20', ' ') . '"';
+					$ret .= '<a href="' . $url . '#' . $foto['foto']->getResizedUrl() . '"';
 					$ret.=in_array($foto['index'], $this->big) ? 'class="big"' : 'class="sml"';
 					$ret .= 'style=" left: ' . ($delta * $col) . 'px; top: ' . ($delta * $row) . 'px;">';
 					$ret .= '<img src="' . $foto['foto']->getThumbUrl() . '">';
