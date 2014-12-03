@@ -304,7 +304,11 @@ Lateral navigation
 	width: 200px;
 
 	#cd-zoek-veld {
-		height: 33px;
+		border-top-left-radius: 4px;
+		border-bottom-left-radius: 4px;
+	}
+	#cd-zoek-engines {
+		height: 34px;
 	}
 	a, a:hover {
 		color: #000;

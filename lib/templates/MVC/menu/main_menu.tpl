@@ -5,9 +5,8 @@
 				<div class="input-group">
 					<input type="text" id="cd-zoek-veld" name="q" class="form-control">
 					<div class="input-group-btn">
-						<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><img src="http://plaetjes.csrdelft.nl/knopjes/search-16.png"> <span class="caret"></span></button>
+						<button id="cd-zoek-engines" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><img src="http://plaetjes.csrdelft.nl/knopjes/search-16.png"> <span class="caret"></span></button>
 						<ul class="dropdown-menu dropdown-menu-right" role="menu">
-							<li></li>
 							<li><a class="submit">Leden & Groepen</a></li>
 							<li class="divider"></li>
 							<li><a href="/forum/zoeken/" class="submit" onclick="this.href += encodeURIComponent($('#cd-zoek-veld').val());">Forum</a></li>
@@ -20,13 +19,14 @@
 						try {
 							var instantsearch = {json_encode($mainmenu->getInstantSearchSuggestions())};
 							$('#cd-zoek-veld').typeahead({
+								autoselect: true,
 								hint: true,
 								highlight: true,
 								minLength: 1
 							}, {
 								name: "instantsearch",
 								displayKey: "key",
-								source: substringMatcher(instantsearch)
+								source: substringMatcher(instantsearch, true)
 							});
 							$('#cd-zoek-veld').click(function (event) {
 								this.setSelectionRange(0, this.value.length);
