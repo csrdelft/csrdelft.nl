@@ -27,6 +27,9 @@
 	cursor: pointer;
 }
 
+.jgallery .zoom-container .jgallery-container {
+	background-color: #fff !important;
+}
 .jgallery .jgallery-thumbnails .jgallery-container {
 	overflow-x: auto;
 	overflow-y: hidden;
