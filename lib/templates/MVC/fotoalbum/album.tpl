@@ -15,17 +15,9 @@
 		<a class="btn" href="/fotoalbum/downloaden/{$album->getSubDir()}" title="Download als TAR-bestand">{icon get="picture_save"} Download album</a>
 	{/if}
 </div>
-<div id="gallery">
-	{if !$album->hasFotos()}
-		{foreach from=$album->getSubAlbums() item=subalbum}
-			<div class="album">
-				<a href="{$subalbum->getUrl()}" title="{$subalbum->getUrl()|replace:"%20":" "}">
-					<img src="{$subalbum->getThumbURL()}" alt="{$subalbum->dirname}" />
-					<div class="albumname">{$subalbum->dirname}</div>
-				</a>
-			</div>
-		{/foreach}
-	{else}
+
+{if $album->hasFotos()}
+	<div id="gallery">
 		<div class="album" data-jgallery-album-title="{$album->dirname|ucfirst}">
 			{foreach from=$album->getFotos() item=foto}
 				<a href="{$foto->getResizedUrl()}">
@@ -34,13 +26,15 @@
 			{/foreach}
 		</div>
 		{foreach from=$album->getSubAlbums() item=subalbum}
-			<div class="album" data-jgallery-album-title="{$subalbum->dirname|ucfirst}">
-				{foreach from=$subalbum->getFotos() item=foto}
-					<a href="{$foto->getResizedUrl()}">
-						<img src="{$foto->getThumbUrl()}" alt="{$foto->getFullUrl()|replace:"%20":" "}" class="photoTag" data-fotoalbum="{$album->getSubDir()}" />
-					</a>
-				{/foreach}
-			</div>
+			{if $subalbum->hasFotos()}
+				<div class="album" data-jgallery-album-title="{$subalbum->dirname|ucfirst}">
+					{foreach from=$subalbum->getFotos() item=foto}
+						<a href="{$foto->getResizedUrl()}">
+							<img src="{$foto->getThumbUrl()}" alt="{$foto->getFullUrl()|replace:"%20":" "}" class="photoTag" data-fotoalbum="{$album->getSubDir()}" />
+						</a>
+					{/foreach}
+				</div>
+			{/if}
 		{/foreach}
 		<script type="text/javascript" src="/layout/js/jquery/plugins/jgallery.js?v=1.4.1"></script>
 		<script type="text/javascript">
@@ -97,5 +91,15 @@
 				// Missing js file
 			}
 		</script>
+	</div>
+{/if}
+{foreach from=$album->getSubAlbums() item=subalbum}
+	{if !$subalbum->hasFotos()}
+		<div class="album">
+			<a href="{$subalbum->getUrl()}" title="{$subalbum->getUrl()|replace:"%20":" "}">
+				<img src="{$subalbum->getThumbURL()}" alt="{$subalbum->dirname}" />
+				<div class="albumname">{$subalbum->dirname}</div>
+			</a>
+		</div>
 	{/if}
-</div>
+{/foreach}
