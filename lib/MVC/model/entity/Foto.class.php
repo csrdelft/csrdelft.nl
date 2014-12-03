@@ -87,7 +87,7 @@ class Foto extends Afbeelding {
 	}
 
 	public function getAlbumUrl() {
-		return CSR_PICS . '/' . direncode($this->directory->getSubDir());
+		return CSR_ROOT . '/' . direncode($this->directory->getSubDir());
 	}
 
 	public function getFullUrl() {
