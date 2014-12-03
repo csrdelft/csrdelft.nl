@@ -127,7 +127,7 @@ function groepTabShow(groepid, tabid) {
 			init_hoverIntents();
 			init_groepen();
 			if (tabid == 'emails') {
-				selectText('ledenvangroep' + groepid);
+				selectText(document.getElementById('ledenvangroep' + groepid));
 			}
 		}
 	};

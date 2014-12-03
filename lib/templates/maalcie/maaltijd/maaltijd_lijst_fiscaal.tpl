@@ -9,7 +9,7 @@
 			<script type="text/javascript" src="{$script}"></script>
 		{/foreach}
 	</head>
-	<body style="font-family: verdana; font-size: 11px; margin-left: 250px;" onload="selectText('lijst');">
+	<body style="font-family: verdana; font-size: 11px; margin-left: 250px;" onload="selectText(document.getElementById('lijst'));">
 		<a href="/"><img alt="Beeldmerk van de Vereniging" src="{$CSR_PICS}/layout/beeldmerk.jpg" style="position: absolute; left: 50px;" /></a>
 		<h1>{$titel} {$maaltijd->getDatum()|date_format:"%Y-%m-%d"} {$maaltijd->getTijd()|date_format:"%H:%M"}</h1>
 		<h3>Maaltijdprijs: &euro; {$maaltijd->getPrijsFloat()|string_format:"%.2f"}</h3>

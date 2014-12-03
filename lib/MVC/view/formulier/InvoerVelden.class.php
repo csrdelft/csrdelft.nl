@@ -403,28 +403,32 @@ $('#{$this->getId()}').keyup(function(event) {
 JS;
 		}
 		if (!empty($this->remotedatasource)) {
-			$autocomplete = json_encode($this->remotedatasource);
+			$json = $this->remotedatasource;
 			$js .= <<<JS
+var bloodhound{$this->getId()} = new Bloodhound({
+  datumTokenizer: Bloodhound.tokenizers.obj.whitespace('value'),
+  queryTokenizer: Bloodhound.tokenizers.whitespace,
+  remote: {$json}
+});
+bloodhound{$this->getId()}.initialize();
 
-$('#{$this->getId()}').autocomplete({$autocomplete}, {
-	dataType: "json",
-	parse: function(result) { return result; },
-	formatItem: function(row, i, n) { return row[0]; },
-	clickFire: true,
-	max: 20
-}).result(function (){
-	$(this).keyup();
+$('#{$this->getId()}').typeahead(null, {
+  name: "typeahead{$this->getId()}",
+  displayKey: "value",
+  source: bloodhound{$this->getId()}.ttAdapter()
 });
 JS;
 		} elseif (!empty($this->suggestions)) {
-			$autocomplete = json_encode($this->suggestions);
+			$json = json_encode($this->suggestions);
 			$js .= <<<JS
-
-$('#{$this->getId()}').autocomplete({$autocomplete}, {
-	clickFire: true,
-	max: 20,
-	matchContains: true,
-	noRecord: ""
+$('#{$this->getId()}').typeahead({
+	hint: true,
+	highlight: true,
+	minLength: 1
+}, {
+	name: "typeahead{$this->getId()}",
+	displayKey: "key",
+	source: substringMatcher({$json})
 });
 JS;
 		}
@@ -816,7 +820,7 @@ class EmailField extends TextField {
 				$this->error = 'Het adres bevat ongeldige karakters voor de @:';
 			} elseif (!preg_match('/^[a-z0-9]+([-.][a-z0-9]+)*\\.[a-z]{2,4}$/i', $dom)) {
 				$this->error = 'Het domein is ongeldig:';
-			} elseif (!checkdnsrr($dom, 'A') and !checkdnsrr($dom, 'MX')) {
+			} elseif (!checkdnsrr($dom, 'A') and ! checkdnsrr($dom, 'MX')) {
 				$this->error = 'Het domein bestaat niet (IPv4):';
 			}
 		}

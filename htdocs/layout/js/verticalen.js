@@ -9,7 +9,7 @@ function toggleEmails(vertkring) {
 			if (http.readyState == 4) {
 				kringen[vertkring] = document.getElementById('leden' + vertkring).innerHTML;
 				document.getElementById('leden' + vertkring).innerHTML = http.responseText;
-				selectText('leden' + vertkring);
+				selectText(document.getElementById('leden' + vertkring));
 			}
 		};
 		http.send(null);

@@ -10,21 +10,23 @@
 							<li></li>
 							<li><a class="submit">Leden & Groepen</a></li>
 							<li class="divider"></li>
-							<li><a href="/forum/zoeken/" class="submit" onclick="this.href+=encodeURIComponent($('#cd-zoek-veld').val());">Forum</a></li>
-							<li><a href="/wiki/hoofdpagina?do=search&id=" class="submit" onclick="this.href+=encodeURIComponent($('#cd-zoek-veld').val());">Wiki</a></li>
+							<li><a href="/forum/zoeken/" class="submit" onclick="this.href += encodeURIComponent($('#cd-zoek-veld').val());">Forum</a></li>
+							<li><a href="/wiki/hoofdpagina?do=search&id=" class="submit" onclick="this.href += encodeURIComponent($('#cd-zoek-veld').val());">Wiki</a></li>
 						</ul>
 					</div><!-- /btn-group -->
 				</div><!-- /input-group -->
 				<script type="text/javascript">
 					$(document).ready(function () {
-					{assign var=instantsearch value=$mainmenu->getInstantSearchSuggestions()}
-						$('#cd-zoek-veld').autocomplete({json_encode(array_keys($instantsearch))}, {
-							clickFire: true,
-							max: 20,
-							matchContains: true,
-							noRecord: ""
+						var instantsearch = {json_encode($mainmenu->getInstantSearchSuggestions())};
+						$('#cd-zoek-veld').typeahead({
+							hint: true,
+							highlight: true,
+							minLength: 1
+						}, {
+							name: "instantsearch",
+							displayKey: "key",
+							source: substringMatcher(instantsearch)
 						});
-						var instantsearch = {json_encode($instantsearch)};
 						$('#cd-zoek-veld').click(function (event) {
 							this.setSelectionRange(0, this.value.length);
 						});

@@ -625,21 +625,19 @@ function getSelectedText() {
  * Selecteer de tekst van een DOM-element.
  * @source http://stackoverflow.com/questions/985272/jquery-selecting-text-in-an-element-akin-to-highlighting-with-your-mouse/987376#987376
  * 
- * @param id DOM-object
+ * @param elmnt DOM-object
  */
-function selectText(id) {
-	var doc = document;
-	var text = doc.getElementById(id);
+function selectText(elmnt) {
 	var range;
 	var selection;
-	if (doc.body.createTextRange) { //ms
-		range = doc.body.createTextRange();
-		range.moveToElementText(text);
+	if (document.body.createTextRange) { //ms
+		range = document.body.createTextRange();
+		range.moveToElementText(elmnt);
 		range.select();
 	} else if (window.getSelection) { //all others
 		selection = window.getSelection();
-		range = doc.createRange();
-		range.selectNodeContents(text);
+		range = document.createRange();
+		range.selectNodeContents(elmnt);
 		selection.removeAllRanges();
 		selection.addRange(range);
 	}
@@ -732,3 +730,31 @@ function CsrBBPreview(source, dest) {
 		 }*/
 	}
 }
+
+/**
+ * @source https://twitter.github.io/typeahead.js/examples/
+ */
+var substringMatcher = function (strs) {
+
+	return function findMatches(q, cb) {
+		var matches, substrRegex;
+
+		// an array that will be populated with substring matches
+		matches = [];
+
+		// regex used to determine if a string contains the substring `q`
+		substrRegex = new RegExp(q, 'i');
+
+		// iterate through the pool of strings and for any string that
+		// contains the substring `q`, add it to the `matches` array
+		$.each(strs, function (i, str) {
+			if (substrRegex.test(str)) {
+				// the typeahead jQuery plugin expects suggestions to a
+				// JavaScript object, refer to typeahead docs for more info
+				matches.push({key: i, value: str});
+			}
+		});
+
+		cb(matches);
+	};
+};

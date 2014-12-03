@@ -102,6 +102,10 @@ class FotoAlbum extends Map {
 		return CSR_ROOT . '/' . direncode($this->getSubDir());
 	}
 
+	public function hasFotos() {
+		return !empty($this->getFotos());
+	}
+
 	public function getFotos($incompleet = false) {
 		if (isset($this->fotos)) {
 			return $this->fotos;
