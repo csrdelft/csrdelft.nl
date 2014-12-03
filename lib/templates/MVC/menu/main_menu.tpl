@@ -40,6 +40,10 @@
 								form_submit(event);
 							}
 						}
+					}).on('keyup', function (event) {
+						if (event.keyCode !== 38 && event.keyCode !== 40) { // arrow up & down
+							$('.tt-dataset-instantsearch .tt-suggestion').first().addClass('tt-cursor');
+						}
 					}).on('focus', function (event) {
 						this.setSelectionRange(0, this.value.length);
 					});
