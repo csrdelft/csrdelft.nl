@@ -1207,7 +1207,7 @@ class ForumPostsModel extends AbstractForumModel implements Paging {
 	}
 
 	public function citeerForumPost(ForumPost $post) {
-		$tekst = CsrBB::filterPrive($post->tekst);
+		$tekst = CsrBB::filterCommentaar(CsrBB::filterPrive($post->tekst));
 		return '[citaat=' . $post->uid . ']' . CsrBB::sluitTags($tekst) . '[/citaat]';
 	}
 

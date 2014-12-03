@@ -65,6 +65,19 @@ class CsrBB extends eamBBParser {
 	}
 
 	/**
+	 * Omdat we niet willen dat dingen die in commentaar staan alsnog gezien kunnen worden 
+	 * bij het citeren, slopen we hier alles wat in commentaar-tags staat weg.
+	 */
+	public static function filterCommentaar($bbcode) {
+		// .* is greedy by default, dat wil zeggen, matched zoveel mogelijk.
+		// door er .*? van te maken matched het zo weinig mogelijk, dat is precies
+		// wat we hier willen, omdat anders [commentaar]foo[/commentaar]bar[commentaar]foo[/commentaar]
+		// niets zou opleveren.
+		// de /s modifier zorgt ervoor dat een . ook alle newlines matched.
+		return preg_replace('/\[commentaar=?.*?\].*?\[\/commentaar\]/s', '', $bbcode);
+	}
+
+	/**
 	 * Dit laad de twitter account van het hidden cash spel.
 	 */
 	function bb_hidden($arguments = array()) {
