@@ -42,37 +42,43 @@
 				{/foreach}
 			</div>
 		{/foreach}
+		<script type="text/javascript" src="/layout/js/jquery/plugins/jgallery.js?v=1.4.1"></script>
 		<script type="text/javascript">
-			$(document).ready(function () {
-				$('#gallery').jGallery({
-					"height": "897px",
-					"mode": "standard",
-					"canChangeMode": false,
-					"canZoom": false,
-					"backgroundColor": "FFFFFF",
-					"textColor": "000000",
-					"thumbType": "image",
-					"thumbWidth": 150,
-					"thumbHeight": 150,
-					"thumbWidthOnFullScreen": 150,
-					"thumbHeightOnFullScreen": 150,
-					"thumbnailsPosition": "bottom",
-					"hideThumbnailsOnInit": false,
-					"canMinimalizeThumbnails": false,
-					"transition": "moveToLeft_moveFromRight",
-					"transitionBackward": "moveToRight_moveFromLeft",
-					"transitionCols": "1",
-					"transitionRows": "1",
-					"title": true,
-					"titleExpanded": false,
-					"tooltipSeeAllPhotos": "Grid",
-					"tooltipSeeOtherAlbums": "Toon sub-albums"
+			try {
+				$(function () {
+					$('#gallery').jGallery({
+						"height": "897px",
+						"mode": "standard",
+						"canChangeMode": false,
+						"canZoom": false,
+						"backgroundColor": "FFFFFF",
+						"textColor": "000000",
+						"thumbType": "image",
+						"thumbWidth": 150,
+						"thumbHeight": 150,
+						"thumbWidthOnFullScreen": 150,
+						"thumbHeightOnFullScreen": 150,
+						"thumbnailsPosition": "bottom",
+						"hideThumbnailsOnInit": false,
+						"canMinimalizeThumbnails": false,
+						"transition": "moveToLeft_moveFromRight",
+						"transitionBackward": "moveToRight_moveFromLeft",
+						"transitionCols": "1",
+						"transitionRows": "1",
+						"title": true,
+						"titleExpanded": false,
+						"tooltipSeeAllPhotos": "Grid",
+						"tooltipSeeOtherAlbums": "Toon sub-albums"
+					});
+					$('div.title').off();
+					$('div.title').on('click', function (event) {
+						selectText(this);
+					});
 				});
-				$('div.title').off();
-				$('div.title').on('click', function (event) {
-					selectText(this);
-				});
-			});
+			}
+			catch (err) {
+				// Missing js file
+			}
 		</script>
 	{/if}
 </div>

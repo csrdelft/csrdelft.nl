@@ -17,19 +17,24 @@
 				</div><!-- /input-group -->
 				<script type="text/javascript">
 					$(document).ready(function () {
-						var instantsearch = {json_encode($mainmenu->getInstantSearchSuggestions())};
-						$('#cd-zoek-veld').typeahead({
-							hint: true,
-							highlight: true,
-							minLength: 1
-						}, {
-							name: "instantsearch",
-							displayKey: "key",
-							source: substringMatcher(instantsearch)
-						});
-						$('#cd-zoek-veld').click(function (event) {
-							this.setSelectionRange(0, this.value.length);
-						});
+						try {
+							var instantsearch = {json_encode($mainmenu->getInstantSearchSuggestions())};
+							$('#cd-zoek-veld').typeahead({
+								hint: true,
+								highlight: true,
+								minLength: 1
+							}, {
+								name: "instantsearch",
+								displayKey: "key",
+								source: substringMatcher(instantsearch)
+							});
+							$('#cd-zoek-veld').click(function (event) {
+								this.setSelectionRange(0, this.value.length);
+							});
+						}
+						catch (err) {
+							// Missing js file
+						}
 						$('#cd-zoek-veld').keyup(function (event) {
 							if (event.keyCode === 13) { // enter
 								if (typeof instantsearch[this.value] !== 'undefined') { // known shortcut
