@@ -94,7 +94,7 @@
 	</div>
 {/if}
 {foreach from=$album->getSubAlbums() item=subalbum}
-	{if !$subalbum->hasFotos()}
+	{if !$album->hasFotos() OR !$subalbum->hasFotos()}
 		<div class="album">
 			<a href="{$subalbum->getUrl()}" title="{$subalbum->getUrl()|replace:"%20":" "}">
 				<img src="{$subalbum->getThumbURL()}" alt="{$subalbum->dirname}" />
