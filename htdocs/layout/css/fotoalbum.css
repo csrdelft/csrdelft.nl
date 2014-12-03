@@ -1,4 +1,4 @@
-.subalbum {
+.subalbums .subalbum {
 	width: 150px;
 	height: 150px;
 	margin: 25px;
@@ -6,12 +6,13 @@
 	text-align: center;
 	font-weight: bold;
 	cursor: pointer;
+	position: relative;
 }
-.subalbum:hover {
+.subalbums .subalbum:hover {
 	text-decoration: none;
 	border-color: #aaaaaa;
 }
-.subalbum .subalbumname {
+.subalbums .subalbum .subalbumname {
 	position: absolute;
 	top: 90px;
 	width: 150px;
@@ -21,7 +22,7 @@
 	background-color: white;
 	opacity: 0.8;
 }
-.subalbum:hover .subalbumname {
+.subalbums .subalbum:hover .subalbumname {
 	opacity: 0.9;
 }
 
