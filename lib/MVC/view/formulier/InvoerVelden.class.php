@@ -465,6 +465,10 @@ JS;
 	}
 });
 JS;
+			$this->typeahead_selected .= <<<JS
+
+form_submit();
+JS;
 		}
 		if ($this->typeahead_selected !== null) {
 			$js .= <<<JS
