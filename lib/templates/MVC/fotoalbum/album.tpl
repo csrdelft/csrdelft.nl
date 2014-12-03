@@ -15,9 +15,8 @@
 		<a class="btn" href="/fotoalbum/downloaden/{$album->getSubDir()}" title="Download als TAR-bestand">{icon get="picture_save"} Download album</a>
 	{/if}
 </div>
-
-{if $album->hasFotos()}
-	<div id="gallery">
+<div id="gallery">
+	{if $album->hasFotos()}
 		<div class="album" data-jgallery-album-title="{$album->dirname|ucfirst}">
 			{foreach from=$album->getFotos() item=foto}
 				<a href="{$foto->getResizedUrl()}">
@@ -91,15 +90,15 @@
 				// Missing js file
 			}
 		</script>
-	</div>
-{/if}
-{foreach from=$album->getSubAlbums() item=subalbum}
-	{if !$album->hasFotos() OR !$subalbum->hasFotos()}
-		<div class="album">
-			<a href="{$subalbum->getUrl()}" title="{$subalbum->getUrl()|replace:"%20":" "}">
-				<img src="{$subalbum->getThumbURL()}" alt="{$subalbum->dirname}" />
-				<div class="albumname">{$subalbum->dirname}</div>
-			</a>
-		</div>
 	{/if}
-{/foreach}
+	{foreach from=$album->getSubAlbums() item=subalbum}
+		{if !$album->hasFotos() OR !$subalbum->hasFotos()}
+			<div class="album">
+				<a href="{$subalbum->getUrl()}" title="{$subalbum->getUrl()|replace:"%20":" "}">
+					<img src="{$subalbum->getThumbURL()}" alt="{$subalbum->dirname}" />
+					<div class="albumname">{$subalbum->dirname}</div>
+				</a>
+			</div>
+		{/if}
+	{/foreach}
+</div>
