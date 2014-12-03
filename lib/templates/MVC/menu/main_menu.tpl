@@ -35,7 +35,7 @@
 						catch (err) {
 							// Missing js file
 						}
-						$('#cd-zoek-veld').keyup(function (event) {
+						$('#cd-zoek-veld').keydown(function (event) {
 							if (event.keyCode === 13) { // enter
 								if (typeof instantsearch[this.value] !== 'undefined') { // known shortcut
 									window.location.href = instantsearch[this.value]; // goto url
