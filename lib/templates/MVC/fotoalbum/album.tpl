@@ -73,6 +73,10 @@
 						"tooltipSeeAllPhotos": "Grid",
 						"tooltipSeeOtherAlbums": "Toon sub-albums"
 					});
+					$('div.jgallery-container-inner').css({
+						"height": "897px",
+						"overflow-y": "scroll"
+					});
 					$('div.title').off();
 					$('div.title').on('click', function (event) {
 						selectText(this);
