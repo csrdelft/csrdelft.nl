@@ -147,10 +147,10 @@ class FotoAlbum extends Map {
 		return $this->subalbums;
 	}
 
-	public function getCoverUrl($fallback = false) {
+	public function getCoverUrl($thumb = true) {
 		foreach ($this->getFotos() as $foto) {
 			if (strpos($foto->filename, 'folder') !== false) {
-				if ($fallback) {
+				if ($thumb) {
 					return $foto->getThumbUrl();
 				} else {
 					return $foto->getResizedUrl();
@@ -159,7 +159,7 @@ class FotoAlbum extends Map {
 		}
 		// Anders gewoon de eerste:
 		if (isset($this->fotos[0])) {
-			if ($fallback) {
+			if ($thumb) {
 				return $this->fotos[0]->getThumbUrl();
 			} else {
 				return $this->fotos[0]->getResizedUrl();
