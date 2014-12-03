@@ -28,11 +28,17 @@
 }
 
 .jgallery .jgallery-thumbnails .jgallery-container {
-	overflow: auto;
+	overflow-x: auto;
+	overflow-y: hidden;
+}
+.jgallery .jgallery-thumbnails .jgallery-container-inner {
+	height: 150px;
+	padding: 0;
 }
 .jgallery .jgallery-thumbnails.full-screen {
 	height: 100%;
 }
-.jgallery .jgallery-thumbnails.full-screen .jgallery-container-inner {
-	padding: 0;
+.jgallery .jgallery-thumbnails.full-screen .jgallery-container {
+	overflow-x: hidden;
+	overflow-y: auto;
 }
