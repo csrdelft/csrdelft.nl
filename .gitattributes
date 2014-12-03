@@ -411,6 +411,7 @@ htdocs/layout/js/jquery/plugins/jquery.jPicker.js -text
 htdocs/layout/js/jquery/plugins/jquery.jPicker.min.js -text
 htdocs/layout/js/jquery/plugins/jquery.maskedinput.js -text
 htdocs/layout/js/jquery/plugins/jquery.maskedinput.min.js -text
+htdocs/layout/js/jquery/plugins/jquery.phototag.js -text
 htdocs/layout/js/jquery/plugins/jquery.scrollTo.js -text
 htdocs/layout/js/jquery/plugins/jquery.scrollTo.min.js -text
 htdocs/layout/js/jquery/plugins/jquery.timeago.js -text

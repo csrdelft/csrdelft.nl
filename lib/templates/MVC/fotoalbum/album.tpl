@@ -29,7 +29,7 @@
 		<div class="album" data-jgallery-album-title="{$album->dirname|ucfirst}">
 			{foreach from=$album->getFotos() item=foto}
 				<a href="{$foto->getResizedUrl()}">
-					<img src="{$foto->getThumbUrl()}" alt="{$foto->getFullUrl()|replace:"%20":" "}" />
+					<img src="{$foto->getThumbUrl()}" alt="{$foto->getFullUrl()|replace:"%20":" "}" class="photoTag" data-fotoalbum="{$album->getSubDir()}" />
 				</a>
 			{/foreach}
 		</div>
@@ -37,7 +37,7 @@
 			<div class="album" data-jgallery-album-title="{$subalbum->dirname|ucfirst}">
 				{foreach from=$subalbum->getFotos() item=foto}
 					<a href="{$foto->getResizedUrl()}">
-						<img src="{$foto->getThumbUrl()}" alt="{$foto->getFullUrl()|replace:"%20":" "}" />
+						<img src="{$foto->getThumbUrl()}" alt="{$foto->getFullUrl()|replace:"%20":" "}" class="photoTag" data-fotoalbum="{$album->getSubDir()}" />
 					</a>
 				{/foreach}
 			</div>
@@ -75,6 +75,23 @@
 						selectText(this);
 					});
 				});
+				/*
+				 $(document).ready(function () {
+				 $('.photoTag').photoTag({
+				 requesTagstUrl: "/fotoalbum/gettags/" + $(this).attr('data-fotoalbum'),
+				 deleteTagsUrl: "/fotoalbum/deltag/" + $(this).attr('data-fotoalbum'),
+				 addTagUrl: "/fotoalbum/addtag/" + $(this).attr('data-fotoalbum'),
+				 parametersForNewTag: {
+				 name: {
+				 parameterKey: 'name',
+				 isAutocomplete: true,
+				 autocompleteUrl: "/tools/naamlink.php?naam=" + $(this).val() + "&zoekin=leden",
+				 label: 'Naam of lidnummer'
+				 }
+				 }
+				 });
+				 });
+				 */
 			}
 			catch (err) {
 				// Missing js file
