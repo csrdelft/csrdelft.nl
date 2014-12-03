@@ -79,7 +79,7 @@
 					});
 					// grid scrollbar
 					$('#gallery').find('span.full-screen').on('click', function () {
-						if ($('div.jgallery-thumbnails').hassClass('full-screen')) {
+						if ($('#gallery').find('div.jgallery-thumbnails').hasClass('full-screen')) {
 							$('#gallery').find('div.jgallery-container-inner').css({
 								"max-height": "897px",
 								"overflow-y": "auto"
