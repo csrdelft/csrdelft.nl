@@ -20,7 +20,6 @@
  * 			- CsrBBPreviewField		Textarea met bbcode voorbeeld
  *  	* NickField					Nicknames
  *  	* DuckField					Ducknames
- *  	* UidField					Uid's  met preview
  * 		* LidField					Leden selecteren
  * 		* IntField					Integers 
  * 		* DecimalField				Kommagetallen
@@ -403,24 +402,33 @@ $('#{$this->getId()}').keyup(function(event) {
 JS;
 		}
 		if (!empty($this->remotedatasource)) {
-			$json = $this->remotedatasource;
 			$js .= <<<JS
+
 var bloodhound{$this->getId()} = new Bloodhound({
-  datumTokenizer: Bloodhound.tokenizers.obj.whitespace('value'),
-  queryTokenizer: Bloodhound.tokenizers.whitespace,
-  remote: {$json}
+	datumTokenizer: Bloodhound.tokenizers.obj.whitespace('value'),
+	queryTokenizer: Bloodhound.tokenizers.whitespace,
+	remote: "{$this->remotedatasource}?q=%QUERY"
 });
 bloodhound{$this->getId()}.initialize();
 
-$('#{$this->getId()}').typeahead(null, {
-  name: "{$this->getId()}",
-  displayKey: "value",
-  source: bloodhound{$this->getId()}.ttAdapter()
+$('#{$this->getId()}').typeahead({
+	autoselect: true
+}, {
+	name: "{$this->getId()}",
+	displayKey: "value",
+	source: bloodhound{$this->getId()}.ttAdapter()
+}).on('typeahead:selected', function() {
+	$(this).trigger('change');
+}).on('keyup', function (event) {
+	if (event.keyCode !== 38 && event.keyCode !== 40) { // arrow up & down
+		$('.tt-dataset-{$this->getId()} .tt-suggestion').first().addClass('tt-cursor');
+	}
 });
 JS;
 		} elseif (!empty($this->suggestions)) {
-			$json = json_encode($this->suggestions);
+			$suggesties = json_encode($this->suggestions);
 			$js .= <<<JS
+
 $('#{$this->getId()}').typeahead({
 	autoselect: true,
 	hint: true,
@@ -429,7 +437,9 @@ $('#{$this->getId()}').typeahead({
 }, {
 	name: "{$this->getId()}",
 	displayKey: "value",
-	source: substringMatcher({$json})
+	source: substringMatcher({$suggesties})
+}).on('typeahead:selected', function() {
+	$(this).trigger('change');
 }).on('keyup', function (event) {
 	if (event.keyCode !== 38 && event.keyCode !== 40) { // arrow up & down
 		$('.tt-dataset-{$this->getId()} .tt-suggestion').first().addClass('tt-cursor');
@@ -574,55 +584,6 @@ class RequiredRechtenField extends RechtenField {
 }
 
 /**
- * In een UidField kunnen we een uid invullen.
- * Erachter zal dan de naam komen te staan. Het veld valideert als
- *  - het leeg is.
- *  - het een geldig uid bevat.
- */
-class UidField extends TextField {
-
-	public function __construct($name, $value, $description) {
-		parent::__construct($name, $value, $description, 4, 4);
-	}
-
-	public function validate() {
-		if (!parent::validate()) {
-			return false;
-		}
-		// parent checks not null
-		if ($this->value == '') {
-			return true;
-		}
-		if (!Lid::exists($this->value)) {
-			$this->error = 'Geen geldig uid opgegeven.';
-		}
-		return $this->error === '';
-	}
-
-	protected function getPreviewDiv() {
-		return '<div id="lidPreview_' . $this->getId() . '" class="previewDiv"></div>';
-	}
-
-	public function getJavascript() {
-		return parent::getJavascript() . <<<JS
-$('#{$this->getId()}').bind('keyup.autocomplete', function(event) {
-	if ($(this).val().length < 4) {
-		$('#lidPreview_{$this->getId()}').html('');
-		return;
-	}
-	$.ajax({
-		url: "/tools/naamlink.php?uid="+$(this).val(),
-	}).done(function(response) {
-		$('#lidPreview_{$this->getId()}').html(response);
-		init_hoverIntents();
-	});
-});
-JS;
-	}
-
-}
-
-/**
  * LidField
  * één lid selecteren zonder een uid te hoeven typen.
  *
@@ -691,18 +652,21 @@ class LidField extends TextField {
 
 	public function getJavascript() {
 		return parent::getJavascript() . <<<JS
-$('#{$this->getId()}').bind('keyup.autocomplete', function(event) {
-	if ($(this).val().length < 1) {
+
+var preview{$this->getId()} = function() {
+	var val = $('#{$this->getId()}').val();
+	if (val.length < 1) {
 		$('#lidPreview_{$this->getId()}').html('');
 		return;
 	}
 	$.ajax({
-		url: "/tools/naamlink.php?naam="+$(this).val()+"&zoekin={$this->zoekin}",
+		url: "/tools/naamlink.php?zoekin={$this->zoekin}&naam=" + val,
 	}).done(function(response) {
 		$('#lidPreview_{$this->getId()}').html(response);
 		init_hoverIntents();
 	});
-});
+};
+$('#{$this->getId()}').change(preview{$this->getId()});
 JS;
 	}
 
@@ -1294,6 +1258,7 @@ HTML;
 			return parent::getJavascript();
 		}
 		return parent::getJavascript() . <<<JS
+
 $('#{$this->getId()}').bind('keyup.preview', function(event) {
 	if(event.keyCode === 13) {
 		CsrBBPreview('{$this->getId()}', '{$this->getName()}Preview');

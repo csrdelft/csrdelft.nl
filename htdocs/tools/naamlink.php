@@ -1,13 +1,12 @@
 <?php
 
-/*
+require_once 'configuratie.include.php';
+
+/**
  * naamlink.php	| 	Jan Pieter Waagmeester (jieter@jpwaag.com)
  *
  * geeft een naamlink voor een gegeven uid.
  */
-
-require_once 'configuratie.include.php';
-
 if (!LoginModel::mag('P_LEDEN_READ')) {
 	echo 'Niet voldoende rechten';
 	exit;
@@ -76,4 +75,3 @@ if ($given == 'uid') {
 } elseif ($given == 'naam') {
 	echo naam2naam($string, $zoekin);
 }
-?>

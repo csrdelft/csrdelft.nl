@@ -86,7 +86,7 @@ taken_color_suggesties();
 
 JS;
 		if (isset($this->voorkeurbaar) and $this->voorkeur) {
-			$js .= "taken_toggle_suggestie('geenvoorkeur'');";
+			$js .= "taken_toggle_suggestie('geenvoorkeur');";
 		}
 		if ($this->recent) {
 			$js .= "taken_toggle_suggestie('recent');";
