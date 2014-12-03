@@ -91,14 +91,14 @@
 			}
 		</script>
 	{/if}
-	{foreach from=$album->getSubAlbums() item=subalbum}
-		{if !$album->hasFotos() OR !$subalbum->hasFotos()}
-			<div class="album">
-				<a href="{$subalbum->getUrl()}" title="{$subalbum->getUrl()|replace:"%20":" "}">
-					<img src="{$subalbum->getThumbURL()}" alt="{$subalbum->dirname}" />
-					<div class="albumname">{$subalbum->dirname}</div>
-				</a>
-			</div>
-		{/if}
-	{/foreach}
 </div>
+{foreach from=$album->getSubAlbums() item=subalbum}
+	{if !$album->hasFotos() OR !$subalbum->hasFotos()}
+		<div class="album">
+			<a href="{$subalbum->getUrl()}" title="{$subalbum->getUrl()|replace:"%20":" "}">
+				<img src="{$subalbum->getThumbURL()}" alt="{$subalbum->dirname}" />
+				<div class="albumname">{$subalbum->dirname}</div>
+			</a>
+		</div>
+	{/if}
+{/foreach}
