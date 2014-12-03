@@ -79,18 +79,17 @@
 					});
 					// grid scrollbar
 					$('#gallery').find('span.full-screen').on('click', function () {
-						if ($('#gallery').find('div.jgallery-thumbnails').hasClass('full-screen')) {
+						$('#gallery').find('div.jgallery-container-inner').css({
+							"height": $(this).parent().height() + 'px',
+							"overflow-y": "auto"
+						});
+
+						$('#gallery').find('span.jgallery-close').one('click', function () {
 							$('#gallery').find('div.jgallery-container-inner').css({
-								"max-height": "897px",
-								"overflow-y": "auto"
-							});
-						}
-						else {
-							$('#gallery').find('div.jgallery-container-inner').css({
-								"max-height": "",
+								"height": "",
 								"overflow-y": ""
 							});
-						}
+						});
 					});
 				});
 				/* img class="photoTag" data-fotoalbum="$album->getSubDir()"
