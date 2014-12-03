@@ -427,7 +427,7 @@ $('#{$this->getId()}').typeahead({
 	minLength: 1
 }, {
 	name: "typeahead{$this->getId()}",
-	displayKey: "key",
+	displayKey: "value",
 	source: substringMatcher({$json})
 });
 JS;
