@@ -83,8 +83,7 @@ tr.taak-datum-head th, tr.taak-datum-summary th {
 	padding: 7px;
 }
 #suggesties-controls label {
-	float: none;
-	padding: 7px;
+	margin-right: 10px;
 }
 .maalcie-rooster tr {
 	background-color: transparent !important;

@@ -24,7 +24,7 @@ mijn_rooster.tpl	|	P.W.G. Brussee (brussee@live.nl)
 			</thead>
 		</table>
 		<div class="scrollpane" id="suggesties-scrollpane" style="height: 250px;">
-			<table id="suggesties-tabel" class="maalcie-tabel verborgen">
+			<table id="suggesties-tabel" class="maalcie-tabel">
 				<tbody>
 					{foreach name="tabel" from=$suggesties key=uid item=suggestie}
 						<tr class="
@@ -85,14 +85,14 @@ mijn_rooster.tpl	|	P.W.G. Brussee (brussee@live.nl)
 						   onchange="taken_toggle_suggestie('geenvoorkeur');" 
 					   {/if}
 					   />
-				<label for="voorkeur">Met voorkeur</label>
+				<label for="voorkeur" class="VinkFieldLabel">Met voorkeur</label>
 				<br />
 				<input type="checkbox" id="recent" onchange="taken_toggle_suggestie('recent');" 
 					   {if $recent}
 						   checked="checked" 
 					   {/if}
 					   />
-				<label for="recent">Niet recent gecorveed</label>
+				<label for="recent" class="VinkFieldLabel">Niet recent gecorveed</label>
 			</td>
 			<td>
 				<p>Toon novieten/sjaars</p>
@@ -101,19 +101,19 @@ mijn_rooster.tpl	|	P.W.G. Brussee (brussee@live.nl)
 						taken_toggle_suggestie('oudere', 'alleen' !== $('#jongste_alleen:checked').val());
 						taken_toggle_suggestie('jongste', 'nee' !== $('#jongste_nee:checked').val());
 					   " checked="checked" />
-				<label for="jongste_ja">Ja</label>
+				<label for="jongste_ja" class="VinkFieldLabel">Ja</label>
 
 				<input type="radio" id="jongste_nee" name="jongste" value="nee" onchange="
 						taken_toggle_suggestie('oudere', 'alleen' !== $('#jongste_alleen:checked').val());
 						taken_toggle_suggestie('jongste', 'nee' !== $('#jongste_nee:checked').val());
 					   " />
-				<label for="jongste_nee">Nee</label>
+				<label for="jongste_nee" class="VinkFieldLabel">Nee</label>
 
 				<input type="radio" id="jongste_alleen" name="jongste" value="alleen" onchange="
 						taken_toggle_suggestie('oudere', 'alleen' !== $('#jongste_alleen:checked').val());
 						taken_toggle_suggestie('jongste', 'nee' !== $('#jongste_nee:checked').val());
 					   " />
-				<label for="jongste_alleen">Alleen</label>
+				<label for="jongste_alleen" class="VinkFieldLabel">Alleen</label>
 			</td>
 			<td style="width: 25px;">
 				<br />

@@ -82,7 +82,7 @@ class SuggestieLijst extends SmartyTemplateView implements FormElement {
 		$js = <<<JS
 
 /* {$this->getTitel()} */
-$('#suggesties-tabel').show(1, taken_color_suggesties);
+taken_color_suggesties();
 
 JS;
 		if (isset($this->voorkeurbaar) and $this->voorkeur) {
