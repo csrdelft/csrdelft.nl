@@ -22,7 +22,7 @@ jQuery(document).ready(function ($) {
 		$lateral_menu.removeClass('lateral-menu-is-open');
 
 		// Clear value and de-focus instant search field
-		$('#cd-zoek-veld').val('').blur();
+		$('#cd-zoek-form').find('.menuzoekveld').val('').blur();
 	};
 
 	// Open ingelogd menu on hover over trigger
@@ -88,7 +88,7 @@ jQuery(document).ready(function ($) {
 	$(document).keydown(function (event) {
 
 		// Geen instantsearch met modifiers
-		if (bShiftPressed || bCtrlPressed || bAltPressed || bMetaPressed) {
+		if (bCtrlPressed || bAltPressed || bMetaPressed) {
 			return;
 		}
 
@@ -100,14 +100,16 @@ jQuery(document).ready(function ($) {
 
 		// a-z en 0-9 incl. numpad
 		if ((event.keyCode > 64 && event.keyCode < 91) || (event.keyCode > 47 && event.keyCode < 58) || (event.keyCode > 95 && event.keyCode < 106)) {
-			$('#cd-zoek-veld').focus();
+			$('#cd-zoek-form').find('.menuzoekveld').focus();
 			open_lateral_menu();
 		}
 	});
 
-	$('#cd-zoek-veld').keyup(function (event) {
+	$('#cd-zoek-form').find('.menuzoekveld').keyup(function (event) {
 		if (event.keyCode === 27) { // esc
 			close_lateral_menu();
 		}
+	}).on('focus', function (event) {
+		this.setSelectionRange(0, this.value.length);
 	});
 });

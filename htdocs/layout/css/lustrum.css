@@ -44,9 +44,6 @@ h1,h2,h3,h4,strong, #menu *, #submenu *{
 
 /* zooitje extra uitzonderingen */
 
-#cd-zoek-veld{
-	color: white;
-}
 #mainleft h1{ border: 1px solid #bbb !important; }
 .item a{color: #ebc474 !important; }
 a.btn, textarea, input, select, #filters span, #boekencatalogus_wrapper *, .mededeling-grotebalk, #maand *, .eetplantabel *{ background-color: black !important; color: white !important; }

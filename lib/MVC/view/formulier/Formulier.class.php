@@ -36,6 +36,7 @@ class Formulier implements View, Validator {
 	protected $model;
 	private $formId;
 	protected $action = null;
+	public $post = true;
 	private $enctype = 'multipart/form-data';
 	/**
 	 * Fields must be added via addFields()
@@ -240,7 +241,7 @@ class Formulier implements View, Validator {
 	}
 
 	public function getFormTag() {
-		return '<form enctype="' . $this->enctype . '" action="' . $this->action . '" id="' . $this->getFormId() . '" class="' . implode(' ', $this->css_classes) . '" method="post">';
+		return '<form enctype="' . $this->enctype . '" action="' . $this->action . '" id="' . $this->getFormId() . '" class="' . implode(' ', $this->css_classes) . '" method="' . ($this->post ? 'post' : 'get') . '">';
 	}
 
 	public function getScriptTag() {

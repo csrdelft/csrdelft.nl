@@ -402,45 +402,61 @@ $('#{$this->getId()}').keyup(function(event) {
 JS;
 		}
 		if (!empty($this->suggestions) OR ! empty($this->remotedatasource)) {
-			$suggestions = json_encode($this->suggestions);
-			$js .= <<<JS
-var suggestions{$this->getId()} = {$suggestions};
-var bloodhound{$this->getId()} = new Bloodhound({
-	datumTokenizer: Bloodhound.tokenizers.obj.whitespace('value'),
-	queryTokenizer: Bloodhound.tokenizers.whitespace,
-JS;
+
 			if (!empty($this->suggestions)) {
+				$json = json_encode($this->suggestions);
 				$js .= <<<JS
 
-	local: $.map(suggestions{$this->getId()}, function(value) {
+var local{$this->getId()} = new Bloodhound({
+	datumTokenizer: Bloodhound.tokenizers.obj.whitespace('value'),
+	queryTokenizer: Bloodhound.tokenizers.whitespace,
+	local: $.map({$json}, function(value) {
 		return { value: value };
 	})
+});
+local{$this->getId()}.initialize();
 JS;
-				if (!empty($this->remotedatasource)) {
-					$js .= ',';
-				}
 			}
 			if (!empty($this->remotedatasource)) {
 				$js .= <<<JS
 
+var remote{$this->getId()} = new Bloodhound({
+	datumTokenizer: Bloodhound.tokenizers.obj.whitespace('value'),
+	queryTokenizer: Bloodhound.tokenizers.whitespace,
 	remote: "{$this->remotedatasource}?q=%QUERY"
+});
+remote{$this->getId()}.initialize();
 JS;
 			}
 			$js .= <<<JS
-
-});
-bloodhound{$this->getId()}.initialize();
 
 $('#{$this->getId()}').typeahead({
 	autoselect: true,
 	hint: true,
 	highlight: true,
 	minLength: 1
-}, {
+}
+JS;
+			if (!empty($this->suggestions)) {
+				$js .= <<<JS
+, {
 	name: "{$this->getId()}",
 	displayKey: "value",
-	source: bloodhound{$this->getId()}.ttAdapter()
-}).on('typeahead:selected', function() {
+	source: local{$this->getId()}.ttAdapter()
+}
+JS;
+			}
+			if (!empty($this->remotedatasource)) {
+				$js .= <<<JS
+, {
+	name: "{$this->getId()}",
+	displayKey: "value",
+	source: remote{$this->getId()}.ttAdapter()
+}
+JS;
+			}
+			$js .= <<<JS
+).on('typeahead:selected', function() {
 	$(this).trigger('change');
 }).on('keyup', function (event) {
 	if (event.keyCode !== 38 && event.keyCode !== 40) { // arrow up & down
@@ -597,9 +613,9 @@ class LidField extends TextField {
 	private $zoekin;
 
 	public function __construct($name, $value, $description, $zoekin = 'leden') {
-		$naam = Lid::naamLink($value, 'full', 'plain');
-		if ($naam !== false) {
-			$value = $naam;
+		$lidnaam = Lid::naamLink($value, 'full', 'plain');
+		if ($lidnaam !== false) {
+			$value = $lidnaam;
 		}
 		parent::__construct($name, $value, $description);
 		if (!in_array($zoekin, array('leden', 'oudleden', 'alleleden', 'allepersonen', 'nobodies'))) {
