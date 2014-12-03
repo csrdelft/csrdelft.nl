@@ -46,6 +46,9 @@
 								else if (this.value == 'endsu') {
 									window.location = '/endsu';
 								}
+								else {
+									this.form.submit();
+								}
 							}
 						});
 					});
