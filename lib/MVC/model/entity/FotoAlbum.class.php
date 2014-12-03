@@ -103,7 +103,8 @@ class FotoAlbum extends Map {
 	}
 
 	public function hasFotos() {
-		return !empty($this->getFotos());
+		$this->getFotos();
+		return !empty($this->fotos);
 	}
 
 	public function getFotos($incompleet = false) {
