@@ -143,7 +143,7 @@ class FotoBBView extends SmartyTemplateView {
 	}
 
 	public function getHtml() {
-		$html = '<a href="' . $this->model->getFullUrl() . '" title="Klik voor origineel formaat"';
+		$html = '<a href="' . $this->model->getAlbumUrl() . '#' . $this->model->getResizedUrl() . '"';
 		if (!$this->groot AND LidInstellingen::get('forum', 'fotoWeergave') == 'boven bericht') {
 			$html .= ' class="hoverIntent"><div class="hoverIntentContent"><div class="bb-img-loading" src="' . $this->model->getResizedUrl() . '"></div></div';
 		}
@@ -170,11 +170,10 @@ class FotoAlbumZijbalkView extends FotoAlbumView {
 	}
 
 	public function view() {
-		$url = $this->model->getUrl();
 		echo '<div id="zijbalk_fotoalbum">';
 		echo '<div class="zijbalk-kopje"><a href="/actueel/fotoalbum/">Laatste fotoalbum</a></div>';
 		echo '<div class="item">';
-		echo '<a href="' . $url . '">' . $this->model->dirname . '</a>';
+		echo '<a href="' . $this->model->getUrl() . '">' . $this->model->dirname . '</a>';
 		echo '<div class="fotos">';
 		$fotos = $this->model->getFotos();
 		$limit = sizeof($fotos);
@@ -184,7 +183,7 @@ class FotoAlbumZijbalkView extends FotoAlbumView {
 		for ($i = 0; $i < $limit; $i++) {
 			$foto = $fotos[$i];
 			if ($foto instanceof Foto) {
-				echo '<a href="' . $url . '#' . $foto->getResizedUrl() . '">';
+				echo '<a href="' . $this->model->getUrl() . '#' . $foto->getResizedUrl() . '">';
 				echo '<img src="' . $foto->getThumbUrl() . '">';
 				echo '</a>' . "\n";
 			}

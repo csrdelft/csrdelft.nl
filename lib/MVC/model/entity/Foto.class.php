@@ -70,6 +70,10 @@ class Foto extends Afbeelding {
 		return $values;
 	}
 
+	public function getAlbumPath() {
+		return $this->directory->path;
+	}
+
 	public function getFullPath() {
 		return $this->directory->path . $this->filename;
 	}
@@ -80,6 +84,10 @@ class Foto extends Afbeelding {
 
 	public function getResizedPath() {
 		return $this->directory->path . '_resized/' . $this->filename;
+	}
+
+	public function getAlbumUrl() {
+		return CSR_PICS . '/' . direncode($this->directory->getSubDir());
 	}
 
 	public function getFullUrl() {
