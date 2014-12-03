@@ -184,7 +184,7 @@ class FotoAlbumZijbalkView extends FotoAlbumView {
 		for ($i = 0; $i < $limit; $i++) {
 			$foto = $fotos[$i];
 			if ($foto instanceof Foto) {
-				echo '<a href="' . $url . '#' . direncode($foto->filename) . '">';
+				echo '<a href="' . $url . '#' . $foto->getResizedUrl() . '">';
 				echo '<img src="' . $foto->getThumbUrl() . '">';
 				echo '</a>' . "\n";
 			}
@@ -336,7 +336,7 @@ class FotoAlbumBBView extends FotoAlbumView {
 		foreach ($grid as $row => $rowcontents) {
 			foreach ($rowcontents as $col => $foto) {
 				if (is_array($foto)) {
-					$ret .= '<a href="' . $url . '#' . direncode($foto['foto']->filename) . '"';
+					$ret .= '<a href="' . $url . '#' . $foto['foto']->getResizedUrl() . '"';
 					$ret.=in_array($foto['index'], $this->big) ? 'class="big"' : 'class="sml"';
 					$ret .= 'style=" left: ' . ($delta * $col) . 'px; top: ' . ($delta * $row) . 'px;">';
 					$ret .= '<img src="' . $foto['foto']->getThumbUrl() . '">';

@@ -20,7 +20,7 @@
 		<div class="album" data-jgallery-album-title="{$album->dirname|ucfirst}">
 			{foreach from=$album->getFotos() item=foto}
 				<a href="{$foto->getResizedUrl()}">
-					<img src="{$foto->getThumbUrl()}" alt="{$foto->getFullUrl()|replace:"%20":" "}" class="photoTag" data-fotoalbum="{$album->getSubDir()}" />
+					<img src="{$foto->getThumbUrl()}" alt="{$foto->getFullUrl()|replace:"%20":" "}" />
 				</a>
 			{/foreach}
 		</div>
@@ -29,7 +29,7 @@
 				<div class="album" data-jgallery-album-title="{$subalbum->dirname|ucfirst}">
 					{foreach from=$subalbum->getFotos() item=foto}
 						<a href="{$foto->getResizedUrl()}">
-							<img src="{$foto->getThumbUrl()}" alt="{$foto->getFullUrl()|replace:"%20":" "}" class="photoTag" data-fotoalbum="{$album->getSubDir()}" />
+							<img src="{$foto->getThumbUrl()}" alt="{$foto->getFullUrl()|replace:"%20":" "}" />
 						</a>
 					{/foreach}
 				</div>
@@ -68,7 +68,7 @@
 						selectText(this);
 					});
 				});
-				/*
+				/* img class="photoTag" data-fotoalbum="$album->getSubDir()"
 				 $(document).ready(function () {
 				 $('.photoTag').photoTag({
 				 requesTagstUrl: "/fotoalbum/gettags/" + $(this).attr('data-fotoalbum'),
