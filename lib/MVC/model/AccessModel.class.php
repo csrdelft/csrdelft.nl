@@ -457,7 +457,7 @@ class AccessModel extends CachedPersistenceModel {
 
 				if (!$verticale) {
 					return false;
-				} elseif ($gevraagd == $verticale->id OR $gevraagd == strtoupper($verticale->letter) OR $gevraagd == strtoupper($verticale->naam)) {
+				} elseif ($gevraagd == (string) $verticale->id OR $gevraagd == strtoupper($verticale->letter) OR $gevraagd == strtoupper($verticale->naam)) {
 
 					// wordt er een role gevraagd?
 					if (!$role) {
