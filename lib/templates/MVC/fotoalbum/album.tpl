@@ -77,20 +77,6 @@
 					$('div.title').on('click', function (event) {
 						selectText(this);
 					});
-					// grid scrollbar
-					$('#gallery').find('span.full-screen').on('click', function () {
-						$('#gallery').find('div.jgallery-container-inner').css({
-							"height": $(this).parent().height() + 'px',
-							"overflow-y": "auto"
-						});
-
-						$('#gallery').find('span.jgallery-close').one('click', function () {
-							$('#gallery').find('div.jgallery-container-inner').css({
-								"height": "",
-								"overflow-y": ""
-							});
-						});
-					});
 				});
 				/* img class="photoTag" data-fotoalbum="$album->getSubDir()"
 				 $(document).ready(function () {

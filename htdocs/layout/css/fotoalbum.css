@@ -26,3 +26,8 @@
 .album:hover .albumname {
 	opacity: 0.9;
 }
+.jgallery .jgallery-thumbnails.full-screen .jgallery-container-inner {
+	padding: 0;
+	height: 100%;
+	overflow-y: auto;
+}
