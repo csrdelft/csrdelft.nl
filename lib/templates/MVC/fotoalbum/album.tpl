@@ -73,13 +73,24 @@
 						"tooltipSeeAllPhotos": "Grid",
 						"tooltipSeeOtherAlbums": "Toon sub-albums"
 					});
-					$('div.jgallery-thumbnails.full-screen').css({
-						"height": "897px",
-						"overflow-y": "auto"
-					});
 					$('div.title').off();
 					$('div.title').on('click', function (event) {
 						selectText(this);
+					});
+					// grid scrollbar
+					$('#gallery').find('span.full-screen').on('click', function () {
+						if ($('div.jgallery-thumbnails').hassClass('full-screen')) {
+							$('#gallery').find('div.jgallery-container-inner').css({
+								"max-height": "897px",
+								"overflow-y": "auto"
+							});
+						}
+						else {
+							$('#gallery').find('div.jgallery-container-inner').css({
+								"max-height": "",
+								"overflow-y": ""
+							});
+						}
 					});
 				});
 				/* img class="photoTag" data-fotoalbum="$album->getSubDir()"
