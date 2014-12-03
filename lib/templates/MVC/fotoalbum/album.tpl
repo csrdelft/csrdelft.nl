@@ -19,7 +19,7 @@
 	{foreach from=$album->getSubAlbums() item=subalbum}
 		<div class="subalbum">
 			<a href="{$subalbum->getUrl()}" title="{$subalbum->getUrl()|replace:"%20":" "}">
-				<img src="{$subalbum->getCoverUrl()}" alt="{$subalbum->dirname|ucfirst}" width="300" />
+				<img src="{$subalbum->getCoverUrl()}" alt="{$subalbum->dirname|ucfirst}" />
 				<div class="subalbumname">{$subalbum->dirname|ucfirst}</div>
 			</a>
 		</div>
