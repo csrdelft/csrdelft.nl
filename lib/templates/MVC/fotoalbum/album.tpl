@@ -5,7 +5,7 @@
 		<a class="btn post popup" href="/fotoalbum/toevoegen/{$album->getSubDir()}">{icon get="folder_add"} Nieuw album</a>
 	{/if}
 	{if LoginModel::mag('P_ALBUM_MOD')}
-		<a href="/fotoalbum/hernoemen/{$album->getSubDir()}" class="btn post prompt ReloadPage" title="Fotoalbum hernoemen" data="Nieuwe naam={$album->dirname}">{icon get=pencil} Naam wijzigen</a>
+		<a href="/fotoalbum/hernoemen/{$album->getSubDir()}" class="btn post prompt ReloadPage" title="Fotoalbum hernoemen" data="Nieuwe naam={$album->dirname|ucfirst}">{icon get=pencil} Naam wijzigen</a>
 		{if $album->isEmpty()}
 			<a href="/fotoalbum/verwijderen/{$album->getSubDir()}" class="btn post confirm ReloadPage" title="Fotoalbum verwijderen">{icon get=cross}</a>
 		{/if}
@@ -15,15 +15,17 @@
 		<a class="btn" href="/fotoalbum/downloaden/{$album->getSubDir()}" title="Download als TAR-bestand">{icon get="picture_save"} Download album</a>
 	{/if}
 </div>
-<div id="gallery">
+<div class="subalbums">
 	{foreach from=$album->getSubAlbums() item=subalbum}
 		<div class="album">
 			<a href="{$subalbum->getUrl()}" title="{$subalbum->getUrl()|replace:"%20":" "}">
-				<img src="{$subalbum->getThumbURL()}" alt="{$subalbum->dirname}" />
-				<div class="albumname">{$subalbum->dirname}</div>
+				<img src="{$subalbum->getThumbURL()}" alt="{$subalbum->dirname|ucfirst}" />
+				<div class="albumname">{$subalbum->dirname|ucfirst}</div>
 			</a>
 		</div>
 	{/foreach}
+</div>
+<div id="gallery">
 	{if $album->hasFotos()}
 		<div class="album" data-jgallery-album-title="{$album->dirname|ucfirst}">
 			{foreach from=$album->getFotos() item=foto}
