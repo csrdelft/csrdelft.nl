@@ -118,6 +118,7 @@ htdocs/layout/css/bootstrap.css -text
 htdocs/layout/css/bootstrap.min.css -text
 htdocs/layout/css/common.less -text
 htdocs/layout/css/common_wiki.less -text
+htdocs/layout/css/coverflow.css -text
 htdocs/layout/css/csrdelft.dataTables.less -text
 htdocs/layout/css/csrdelft.less -text
 htdocs/layout/css/documenten.css -text
@@ -399,6 +400,8 @@ htdocs/layout/js/jquery/jquery.js -text
 htdocs/layout/js/jquery/jquery.min.js -text
 htdocs/layout/js/jquery/plugins/bloodhound.js -text
 htdocs/layout/js/jquery/plugins/bloodhound.min.js -text
+htdocs/layout/js/jquery/plugins/coverflow.standalone.js -text
+htdocs/layout/js/jquery/plugins/coverflow.standalone.min.js -text
 htdocs/layout/js/jquery/plugins/jgallery.js -text
 htdocs/layout/js/jquery/plugins/jgallery.min.js -text
 htdocs/layout/js/jquery/plugins/jquery.autosize.js -text

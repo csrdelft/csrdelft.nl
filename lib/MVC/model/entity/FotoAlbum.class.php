@@ -147,19 +147,27 @@ class FotoAlbum extends Map {
 		return $this->subalbums;
 	}
 
-	public function getThumbURL() {
+	public function getCoverUrl($fallback = false) {
 		foreach ($this->getFotos() as $foto) {
 			if (strpos($foto->filename, 'folder') !== false) {
-				return $foto->getThumbUrl();
+				if ($fallback) {
+					return $foto->getThumbUrl();
+				} else {
+					return $foto->getResizedUrl();
+				}
 			}
 		}
 		// Anders gewoon de eerste:
 		if (isset($this->fotos[0])) {
-			return $this->fotos[0]->getThumbUrl();
+			if ($fallback) {
+				return $this->fotos[0]->getThumbUrl();
+			} else {
+				return $this->fotos[0]->getResizedUrl();
+			}
 		}
 		// Foto uit subalbum:
 		foreach ($this->getSubAlbums() as $album) {
-			return $album->getThumbURL();
+			return $album->getCoverUrl();
 		}
 		// If all else fails:
 		return CSR_PICS . '/_geen_thumb.jpg';

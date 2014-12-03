@@ -15,18 +15,38 @@
 	{/if}
 </div>
 <h1 class="inline">{$album->dirname|ucfirst}</h1>
-<div class="subalbums">
+<div id="coverflow">
 	{foreach from=$album->getSubAlbums() item=subalbum}
 		<div class="subalbum">
 			<a href="{$subalbum->getUrl()}" title="{$subalbum->getUrl()|replace:"%20":" "}">
-				<img src="{$subalbum->getThumbURL()}" alt="{$subalbum->dirname|ucfirst}" />
+				<img src="{$subalbum->getCoverUrl()}" alt="{$subalbum->dirname|ucfirst}" width="300" />
 				<div class="subalbumname">{$subalbum->dirname|ucfirst}</div>
 			</a>
 		</div>
 	{/foreach}
 </div>
-<div id="gallery">
-	{if $album->hasFotos()}
+<script type="text/javascript">
+	try {
+		$(function () {
+			$('#coverflow').coverflow({
+				active: 1
+			});
+			$(document).on('keydown', function (event) {
+				if (event.keyCode === 39) {
+					$('#coverflow').coverflow('next');
+				}
+				else if (event.keyCode === 37) {
+					$('#coverflow').coverflow('prev');
+				}
+			});
+		});
+	}
+	catch (err) {
+		// Missing js file
+	}
+</script>
+{if $album->hasFotos()}
+	<div id="gallery">
 		<div class="album" data-jgallery-album-title="{$album->dirname|ucfirst}">
 			{foreach from=$album->getFotos() item=foto}
 				<a href="{$foto->getResizedUrl()}">
@@ -100,5 +120,5 @@
 				// Missing js file
 			}
 		</script>
-	{/if}
-</div>
+	</div>
+{/if}

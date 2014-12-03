@@ -1,29 +1,30 @@
+.subalbum {
+	position: relative;
+}
+.subalbum:hover {
+	text-decoration: none;
+}
+.subalbum .subalbumname {
+	position: absolute;
+	top: 60%;
+	width: 100%;
+	padding: 5px 2px 5px 2px;
+	text-align: center;
+	font-weight: bold;
+	color: black;
+	background-color: white;
+	opacity: 0.8;
+}
+.subalbum:hover .subalbumname {
+	opacity: 0.9;
+}
+
 .subalbums .subalbum {
 	width: 150px;
 	height: 150px;
 	margin: 25px;
 	float: left;
-	text-align: center;
-	font-weight: bold;
 	cursor: pointer;
-	position: relative;
-}
-.subalbums .subalbum:hover {
-	text-decoration: none;
-	border-color: #aaaaaa;
-}
-.subalbums .subalbum .subalbumname {
-	position: absolute;
-	top: 90px;
-	width: 150px;
-	padding: 5px 2px 5px 2px;
-	text-align: center;
-	color: black;
-	background-color: white;
-	opacity: 0.8;
-}
-.subalbums .subalbum:hover .subalbumname {
-	opacity: 0.9;
 }
 
 .jgallery .jgallery-thumbnails .jgallery-container {
