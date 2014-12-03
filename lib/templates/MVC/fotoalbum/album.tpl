@@ -24,17 +24,17 @@
 				</a>
 			{/foreach}
 		</div>
-		{foreach from=$album->getSubAlbums() item=subalbum}
-			{if $subalbum->hasFotos()}
-				<div class="album" data-jgallery-album-title="{$subalbum->dirname|ucfirst}">
-					{foreach from=$subalbum->getFotos() item=foto}
-						<a href="{$foto->getResizedUrl()}">
-							<img src="{$foto->getThumbUrl()}" alt="{$foto->getFullUrl()|replace:"%20":" "}" />
-						</a>
-					{/foreach}
-				</div>
-			{/if}
+		{*foreach from=$album->getSubAlbums() item=subalbum}
+		{if $subalbum->hasFotos()}
+		<div class="album" data-jgallery-album-title="{$subalbum->dirname|ucfirst}">
+		{foreach from=$subalbum->getFotos() item=foto}
+		<a href="{$foto->getResizedUrl()}">
+		<img src="{$foto->getThumbUrl()}" alt="{$foto->getFullUrl()|replace:"%20":" "}" />
+		</a>
 		{/foreach}
+		</div>
+		{/if}
+		{/foreach*}
 		<script type="text/javascript" src="/layout/js/jquery/plugins/jgallery.js?v=1.4.1"></script>
 		<script type="text/javascript">
 			try {
@@ -93,12 +93,10 @@
 	{/if}
 </div>
 {foreach from=$album->getSubAlbums() item=subalbum}
-	{if !$album->hasFotos() OR !$subalbum->hasFotos()}
-		<div class="album">
-			<a href="{$subalbum->getUrl()}" title="{$subalbum->getUrl()|replace:"%20":" "}">
-				<img src="{$subalbum->getThumbURL()}" alt="{$subalbum->dirname}" />
-				<div class="albumname">{$subalbum->dirname}</div>
-			</a>
-		</div>
-	{/if}
+	<div class="album">
+		<a href="{$subalbum->getUrl()}" title="{$subalbum->getUrl()|replace:"%20":" "}">
+			<img src="{$subalbum->getThumbURL()}" alt="{$subalbum->dirname}" />
+			<div class="albumname">{$subalbum->dirname}</div>
+		</a>
+	</div>
 {/foreach}
