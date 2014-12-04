@@ -40,6 +40,7 @@
 }
 .jgallery .jgallery-thumbnails.full-screen {
 	height: 100%;
+	padding: 0;
 }
 .jgallery .jgallery-thumbnails.full-screen .jgallery-container {
 	overflow-x: hidden;
