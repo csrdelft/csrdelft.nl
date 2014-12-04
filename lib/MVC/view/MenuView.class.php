@@ -36,7 +36,7 @@ class MainMenuView extends MenuView {
 		$field = new LidField('q', null, null);
 		$fields[] = $field;
 		$field->css_classes[] = 'menuzoekveld form-control';
-		$field->onkeyup = <<<JS
+		$field->onkeydown = <<<JS
 if (event.keyCode === 13) { // enter
 	$(this).trigger('typeahead:selected');
 }
