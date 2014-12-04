@@ -74,9 +74,6 @@
 						selectText(this);
 					});
 					$('span.resize.jgallery-btn').on('click', function (event) {
-						if (!$(this).hasClass('fa-search-minus')) {
-							return;
-						}
 						var foto = $('div.zoom-container').find('img.active');
 						var href = $('#gallery').find('a[href="' + foto.attr('src') + '"]').attr('data-href');
 						if (typeof href === 'string') {
