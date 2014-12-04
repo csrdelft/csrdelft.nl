@@ -9,6 +9,9 @@
 	text-shadow: none;
 	background-image: none;
 }
+.btn:focus {
+	padding: 3px 5px;
+}
 .rowColor0 {
 	background-color: #EBEBEB;
 }
