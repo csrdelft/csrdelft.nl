@@ -206,7 +206,7 @@ class FotoAlbumController extends AclController {
 		if (!LoginModel::mag('P_ALBUM_MOD') AND ! $album->isOwner()) {
 			$this->geentoegang();
 		}
-		$naam = filter_input(INPUT_POST, 'cover', FILTER_SANITIZE_STRING);
+		$naam = filter_input(INPUT_POST, 'foto', FILTER_SANITIZE_STRING);
 		if ($this->model->setAlbumCover($album, new Foto($album, $naam))) {
 			$this->view = new JsonResponse(true);
 		} else {
