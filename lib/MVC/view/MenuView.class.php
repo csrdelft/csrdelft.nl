@@ -56,16 +56,15 @@ class MainMenuView extends MenuView {
 var shortcuts = {$json};
 if (typeof shortcuts[this.value] === 'string') { // known shortcut
 	window.location.href = shortcuts[this.value]; // goto url
+	return;
 }
 else if (this.value.indexOf('su ') == 0) {
 	window.location.href = '/su/' + this.value.substring(3);
+	return;
 }
 else if (this.value == 'endsu') {
 	window.location = '/endsu';
-}
-else {
-	console.log(event);
-	form_submit(event);
+	return;
 }
 JS;
 		$fields[] = new HtmlComment(<<<HTML
