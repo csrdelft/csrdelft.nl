@@ -79,7 +79,6 @@
 						if (typeof href === 'string') {
 							container.find('div.overlay, div.imageLoaderPositionAbsolute').fadeIn();
 							foto.attr('src', href).one('load', function () {
-								console.log(this.naturalWidth);
 								foto.css({
 									"width": this.naturalWidth,
 									"height": this.naturalHeight,
@@ -87,6 +86,16 @@
 									"margin-top": -this.naturalHeight / 2
 								});
 								container.find('div.overlay, div.imageLoaderPositionAbsolute').fadeOut();
+							});
+						}
+						else if (!$(this).hasClass('fa-search-minus')) {
+							foto.css({
+								"max-width": "",
+								"max-height": "",
+								"width": foto[0].naturalWidth,
+								"height": foto[0].naturalHeight,
+								"margin-left": -foto[0].naturalWidth / 2,
+								"margin-top": -foto[0].naturalHeight / 2
 							});
 						}
 					});
