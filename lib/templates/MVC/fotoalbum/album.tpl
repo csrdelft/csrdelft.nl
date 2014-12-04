@@ -74,7 +74,15 @@
 						selectText(this);
 					});
 					$('span.resize.jgallery-btn').on('click', function (event) {
-						var foto = $('div.zoom-container').find('img.active');
+						var zoom = container.find('div.zoom-container');
+						if (zoom.attr('data-size') === 'fill') {
+							$(this).removeClass('fa-search-minus').addClass('fa-search-plus');
+							return;
+						}
+						else if (zoom.attr('data-size') !== 'original') {
+							return;
+						}
+						var foto = zoom.find('img.active');
 						var href = $('#gallery').find('a[href="' + foto.attr('src') + '"]').attr('data-href');
 						if (typeof href === 'string') {
 							container.find('div.overlay, div.imageLoaderPositionAbsolute').fadeIn();
@@ -88,7 +96,7 @@
 								container.find('div.overlay, div.imageLoaderPositionAbsolute').fadeOut();
 							});
 						}
-						else if (!$(this).hasClass('fa-search-minus')) {
+						else {
 							foto.css({
 								"max-width": "",
 								"max-height": "",
