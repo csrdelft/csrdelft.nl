@@ -75,15 +75,15 @@
 						"tooltipSeeOtherAlbums": "Toon sub-albums",
 						"slideshowInterval": "4s"
 					});
-					$('div.title').off();
-					$('div.title').on('click', function (event) {
+					var container = $('div.jgallery');
+					container.find('div.title').off();
+					container.find('div.title').on('click', function (event) {
 						selectText(this);
 					});
 					$('span.resize.jgallery-btn').on('click', function (event) {
 						if (!$(this).hasClass('fa-search-minus')) {
 							return;
 						}
-						var container = $('div.jgallery');
 						var foto = $('div.zoom-container').find('img.active');
 						var href = $('#gallery').find('a[href="' + foto.attr('src') + '"]').attr('data-href');
 						if (typeof href === 'string') {
@@ -100,22 +100,28 @@
 							});
 						}
 					});
-					$(document).on('keydown', function (event) {
-						if (event.keyCode === 39 || event.keyCode === 37) {
-							var container = $('div.jgallery');
-							container.find('div.overlay').css('display', 'none');
-							var preload = container.find('a.active')
-							if (event.keyCode === 39) {
-								preload = preload.next('a');
-							}
-							else if (event.keyCode === 37) {
-								preload = preload.prev('a');
-							}
-							if (preload.length === 1) {
-								preloadImg(preload.attr('href'));
-							}
+					container.find('span.next.jgallery-btn').on('click', function (event) {
+						container.find('div.overlay').css('display', 'none');
+						var preload = container.find('a.active').next('a');
+						if (preload.length === 1) {
+							preloadImg(preload.attr('href'));
 						}
-						else if (event.keyCode === 27) {
+					});
+					container.find('span.prev.jgallery-btn').on('click', function (event) {
+						container.find('div.overlay').css('display', 'none');
+						var preload = container.find('a.active').prev('a');
+						if (preload.length === 1) {
+							preloadImg(preload.attr('href'));
+						}
+					});
+					$(document).on('keydown', function (event) {
+						if (event.keyCode === 39) {
+							container.find('span.next.jgallery-btn').click();
+						}
+						else if (event.keyCode === 37) {
+							container.find('span.prev.jgallery-btn').click();
+						}
+						else if (event.keyCode === 27 && container.hasClass('jgallery-full-screen')) {
 							$('span.change-mode.jgallery-btn').click();
 						}
 					});
