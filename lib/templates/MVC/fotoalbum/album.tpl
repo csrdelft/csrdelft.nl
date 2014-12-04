@@ -15,16 +15,6 @@
 	{/if}
 </div>
 <h1 class="inline">{$album->dirname|ucfirst}</h1>
-<div class="subalbums">
-	{foreach from=$album->getSubAlbums() item=subalbum}
-		<div class="subalbum">
-			<a href="{$subalbum->getUrl()}" title="{$subalbum->getUrl()|replace:"%20":" "}">
-				<img src="{$subalbum->getCoverUrl()}" alt="{$subalbum->dirname|ucfirst}" />
-				<div class="subalbumname">{$subalbum->dirname|ucfirst}</div>
-			</a>
-		</div>
-	{/foreach}
-</div>
 {if $album->hasFotos()}
 	<div id="gallery">
 		<div class="album" data-jgallery-album-title="{$album->dirname|ucfirst}">
@@ -162,3 +152,13 @@
 		</script>
 	</div>
 {/if}
+<div class="subalbums">
+	{foreach from=$album->getSubAlbums() item=subalbum}
+		<div class="subalbum">
+			<a href="{$subalbum->getUrl()}" title="{$subalbum->getUrl()|replace:"%20":" "}">
+				<img src="{$subalbum->getCoverUrl()}" alt="{$subalbum->dirname|ucfirst}" />
+				<div class="subalbumname">{$subalbum->dirname|ucfirst}</div>
+			</a>
+		</div>
+	{/foreach}
+</div>
