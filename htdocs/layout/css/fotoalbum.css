@@ -18,13 +18,18 @@
 .subalbum:hover .subalbumname {
 	opacity: 0.9;
 }
-
 .subalbums .subalbum {
 	width: 150px;
 	height: 150px;
-	margin: 25px;
+	margin: 1px;
 	float: left;
 	cursor: pointer;
+}
+.subalbums:hover .subalbum {
+	opacity: 0.5;
+}
+.subalbums:hover .subalbum:hover {
+	opacity: 1;
 }
 
 .jgallery.jgallery-full-screen .zoom-container .nav {
