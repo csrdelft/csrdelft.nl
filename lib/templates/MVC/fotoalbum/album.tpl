@@ -90,26 +90,28 @@
 							});
 						}
 					});
-					container.find('span.next.jgallery-btn').on('click', function (event) {
+					var next = function (event) {
 						container.find('div.overlay').css('display', 'none');
 						var preload = container.find('a.active').next('a');
 						if (preload.length === 1) {
 							preloadImg(preload.attr('href'));
 						}
-					});
-					container.find('span.prev.jgallery-btn').on('click', function (event) {
+					};
+					var prev = function (event) {
 						container.find('div.overlay').css('display', 'none');
 						var preload = container.find('a.active').prev('a');
 						if (preload.length === 1) {
 							preloadImg(preload.attr('href'));
 						}
-					});
+					};
+					container.find('span.next.jgallery-btn').on('click', next);
+					container.find('span.prev.jgallery-btn').on('click', prev);
 					$(document).on('keydown', function (event) {
 						if (event.keyCode === 39) {
-							container.find('span.next.jgallery-btn').click();
+							next();
 						}
 						else if (event.keyCode === 37) {
-							container.find('span.prev.jgallery-btn').click();
+							prev();
 						}
 						else if (event.keyCode === 27 && container.hasClass('jgallery-full-screen')) {
 							$('span.change-mode.jgallery-btn').click();
