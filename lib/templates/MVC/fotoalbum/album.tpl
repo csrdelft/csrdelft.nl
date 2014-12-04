@@ -128,7 +128,7 @@
 						if (btn.hasClass('inactive')) {
 							btn.click();
 						}
-						container.find('div.zoom-container').css({
+						container.find('div.pt-part').css({
 							"max-height": window.innerHeight - 214
 						});
 					});
