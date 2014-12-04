@@ -131,6 +131,12 @@
 							btn.click();
 						}
 					});
+					container.find('span.full-screen.jgallery-btn').on('click', function (event) {
+						var btn = container.find('.minimalize-thumbnails.jgallery-btn');
+						if (btn.hasClass('inactive')) {
+							btn.click();
+						}
+					});
 				});
 				/* img class="photoTag" data-fotoalbum="$album->getSubDir()"
 				 $(document).ready(function () {

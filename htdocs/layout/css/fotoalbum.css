@@ -48,3 +48,6 @@
 	overflow-x: hidden;
 	overflow-y: auto;
 }
+.jgallery .jgallery-close {
+	display: none;
+}
