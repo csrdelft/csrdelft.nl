@@ -442,14 +442,18 @@ $('#{$this->getId()}').typeahead({
 JS;
 		}
 		foreach ($this->suggestions as $name => $source) {
-			$header = ucfirst(str_replace('_', ' ', $name));
+			if (is_int($name)) {
+				$header = '';
+			} else {
+				$header = 'header: "<h4>' . ucfirst(str_replace('_', ' ', $name)) . '</h4>"';
+			}
 			$js .= <<<JS
 , {
 	name: "{$this->getId()}{$name}",
 	displayKey: "value",
 	source: {$this->getId()}{$name}.ttAdapter(),
 	templates: {
-		header: "<h4>{$header}</h4>"
+		{$header}
 	}
 }
 JS;
@@ -713,10 +717,10 @@ class EntityField extends InputField {
 
 	private $show_value;
 
-	public function __construct($name, array $primary_key_values, $description, PersistenceModel $model, $show_value, $remotedatasource = null) {
+	public function __construct($name, array $primary_key_values, $description, PersistenceModel $model, $show_value, $find_url = null) {
 		parent::__construct($name, $primary_key_values, $description, $model);
 		$this->show_value = $show_value;
-		$this->remotedatasource = $remotedatasource;
+		$this->suggestions[] = $find_url;
 	}
 
 	public function validate() {

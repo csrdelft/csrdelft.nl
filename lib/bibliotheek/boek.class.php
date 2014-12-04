@@ -411,15 +411,15 @@ class Boek {
 	protected function getCommonFields($naamtitelveld = 'Titel') {
 		$fields['titel'] = new TitelField('titel', $this->getTitel(), $naamtitelveld, 200);
 		$fields['auteur'] = new TextField('auteur', $this->getAuteur(), 'Auteur', 100);
-		$fields['auteur']->remotedatasource = '/communicatie/bibliotheek/autocomplete/auteur';
+		$fields['auteur']->suggestions[] = '/communicatie/bibliotheek/autocomplete/auteur';
 		$fields['auteur']->placeholder = 'Achternaam, Voornaam V.L. van de';
 		$fields['paginas'] = new IntField('paginas', $this->getPaginas(), "Pagina's", 0, 10000);
 		$fields['taal'] = new TextField('taal', $this->getTaal(), 'Taal', 25);
-		$fields['taal']->remotedatasource = '/communicatie/bibliotheek/autocomplete/taal';
+		$fields['taal']->suggestions[] = '/communicatie/bibliotheek/autocomplete/taal';
 		$fields['isbn'] = new TextField('isbn', $this->getISBN(), 'ISBN', 15);
 		$fields['isbn']->placeholder = 'Uniek nummer';
 		$fields['uitgeverij'] = new TextField('uitgeverij', $this->getUitgeverij(), 'Uitgeverij', 100);
-		$fields['uitgeverij']->remotedatasource = '/communicatie/bibliotheek/autocomplete/uitgeverij';
+		$fields['uitgeverij']->suggestions[] = '/communicatie/bibliotheek/autocomplete/uitgeverij';
 		$fields['uitgavejaar'] = new IntField('uitgavejaar', $this->getUitgavejaar(), 'Uitgavejaar', 0, 2100);
 		$fields['rubriek'] = new SelectField('rubriek', $this->getRubriek()->getId(), 'Rubriek', Rubriek::getAllRubrieken($samenvoegen = true, $short = true));
 		$fields['code'] = new TextField('code', $this->getCode(), 'Biebcode', 7);
