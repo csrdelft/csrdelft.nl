@@ -152,10 +152,13 @@
 							btn.click();
 						}
 						// page scroll thumbnails
-						console.log(container.height());
 						if (container.height() === 897) {
-							container.css({
-								"height": container.find('div.jgallery-container').get(0).scrollHeight
+							var pane = container.find('div.jgallery-container');
+							pane.on('load', 'div.jgallery-container a img', function () {
+								container.css({
+									"height": pane[0].scrollHeight
+								});
+								console.log(container.height());
 							});
 						}
 						else {
