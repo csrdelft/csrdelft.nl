@@ -35,14 +35,14 @@ class MainMenuView extends MenuView {
 
 		$field = new LidField('q', null, null);
 		$fields[] = $field;
-
 		$field->css_classes[] = 'menuzoekveld form-control';
+		$field->enter_submit = true;
+
 		foreach (MenuModel::instance()->find('link != ""') as $item) {
 			if ($item->magBekijken()) {
 				$field->suggestions[$item->tekst] = $item->link;
 			}
 		}
-
 		require_once 'MVC/model/ForumModel.class.php';
 		foreach (ForumDelenModel::instance()->getForumDelenVoorLid(false) as $deel) {
 			if (!array_key_exists($deel->titel, $field->suggestions)) {
