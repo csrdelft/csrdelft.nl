@@ -304,6 +304,15 @@ Lateral navigation
 	margin-left: 32px;
 	width: 200px;
 
+	ul.dropdown-menu li {
+		position: relative;
+	}
+	li span.glyphicon {
+		position: absolute;
+		top: 5px;
+		left: 10px;
+	}
+
 	.InputField, .InputField:hover {
 		border: none;
 		background: none;

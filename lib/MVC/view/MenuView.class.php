@@ -75,10 +75,10 @@ JS;
 		$fields[] = new HtmlComment(<<<HTML
 <button id="cd-zoek-engines" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><img src="http://plaetjes.csrdelft.nl/knopjes/search-16.png"> <span class="caret"></span></button>
 <ul class="dropdown-menu dropdown-menu-right" role="menu">
-	<li><span class="glyphicon glyphicon-ok" style="position:absolute;top:10px;left:10px;"></span><a class="submit">Leden</a></li>
-	<li><span class="glyphicon glyphicon-ok" style="position:absolute;top:10px;left:10px;"></span><a class="submit">Groepen</a></li>
-	<li><a href="/forum/zoeken/" onclick="window.location.href = this.href + encodeURIComponent($('#cd-zoek-form').find('.menuzoekveld').val());">Forum</a></li>
-	<li><a href="/wiki/hoofdpagina?do=search&id=" onclick="window.location.href = this.href + encodeURIComponent($('#cd-zoek-form').find('.menuzoekveld').val());">Wiki</a></li>
+	<li><span class="glyphicon glyphicon-ok"></span><a class="submit">Leden</a></li>
+	<li><span class="glyphicon glyphicon-ok"></span><a class="submit">Groepen</a></li>
+	<li><a onclick="window.location.href='/forum/zoeken/'+encodeURIComponent($('#{$field->getId()}').val());">Forum</a></li>
+	<li><a onclick="window.location.href='/wiki/hoofdpagina?do=search&id='+encodeURIComponent($('#{$field->getId()}').val());">Wiki</a></li>
 </ul>
 </div></div>
 HTML
