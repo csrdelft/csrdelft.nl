@@ -195,7 +195,8 @@ class FotoAlbumController extends AclController {
 		}
 		$naam = filter_input(INPUT_POST, 'Nieuwe_naam', FILTER_SANITIZE_STRING);
 		if ($album !== null AND $this->model->hernoemAlbum($album, $naam)) {
-			$this->view = new JsonResponse($album->getUrl());
+			echo $album->getUrl();
+			exit;
 		} else {
 			$this->view = new JsonResponse('Fotoalbum hernoemen mislukt', 503);
 		}
@@ -207,7 +208,7 @@ class FotoAlbumController extends AclController {
 		}
 		$naam = filter_input(INPUT_POST, 'cover', FILTER_SANITIZE_STRING);
 		if ($this->model->setAlbumCover($album, new Foto($album, $naam))) {
-			$this->view = new JsonResponse('Fotoalbum-cover succesvol ingesteld');
+			$this->view = new JsonResponse(true);
 		} else {
 			$this->view = new JsonResponse('Fotoalbum-cover instellen mislukt', 503);
 		}
@@ -226,6 +227,7 @@ class FotoAlbumController extends AclController {
 		}
 		if (FotoModel::instance()->verwijderFoto($foto)) {
 			echo '<div id="' . md5($naam) . '" class="remove"></div>';
+			exit;
 		} else {
 			$this->view = new JsonResponse('Foto verwijderen mislukt', 503);
 		}
