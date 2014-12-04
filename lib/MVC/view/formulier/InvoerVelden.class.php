@@ -67,8 +67,7 @@ abstract class InputField implements FormElement, Validator {
 	public $min_len = 0; // minimale lengte van de invoer
 	public $rows = 0; // aantal rijen van textarea
 	public $css_classes = array('FormElement'); // array met classnames die later in de class-tag komen
-	public $suggestions = array(); // array met suggesties die de javascript-autocomplete aan gaat bieden
-	public $remotedatasource = ''; // een remotedatasource overruled suggestions
+	public $suggestions = array(); // lijst van search providers
 	public $blacklist = null; // array met niet tegestane waarden
 	public $whitelist = null; // array met exclusief toegestane waarden
 
@@ -290,7 +289,7 @@ abstract class InputField implements FormElement, Validator {
 				}
 				break;
 			case 'autocomplete':
-				if (!$this->autocomplete OR ! empty($this->suggestions) OR ! empty($this->remotedatasource)) {
+				if (!$this->autocomplete OR ! empty($this->suggestions)) {
 					return 'autocomplete="off"'; // browser autocompete
 				}
 				break;
@@ -402,33 +401,36 @@ $('#{$this->getId()}').keyup(function(event) {
 });
 JS;
 		}
-		if (!empty($this->suggestions) OR ! empty($this->remotedatasource)) {
+		foreach ($this->suggestions as $name => $source) {
 
-			if (!empty($this->suggestions)) {
-				$json = json_encode($this->suggestions);
-				$js .= <<<JS
+			$js .= <<<JS
 
-var local{$this->getId()} = new Bloodhound({
+var {$this->getId()}{$name} = new Bloodhound({
 	datumTokenizer: Bloodhound.tokenizers.obj.whitespace('value'),
 	queryTokenizer: Bloodhound.tokenizers.whitespace,
+JS;
+			if (is_array($source)) {
+				$json = json_encode(array_values($source));
+				$js .= <<<JS
+
 	local: $.map({$json}, function(value) {
 		return { value: value };
 	})
-});
-local{$this->getId()}.initialize();
+
 JS;
-			}
-			if (!empty($this->remotedatasource)) {
+			} else {
 				$js .= <<<JS
 
-var remote{$this->getId()} = new Bloodhound({
-	datumTokenizer: Bloodhound.tokenizers.obj.whitespace('value'),
-	queryTokenizer: Bloodhound.tokenizers.whitespace,
-	remote: "{$this->remotedatasource}?q=%QUERY"
-});
-remote{$this->getId()}.initialize();
+	remote: "{$source}%QUERY"
+
 JS;
 			}
+			$js .= <<<JS
+});
+{$this->getId()}{$name}.initialize();
+JS;
+		}
+		if (!empty($this->suggestions)) {
 			$js .= <<<JS
 
 $('#{$this->getId()}').typeahead({
@@ -438,40 +440,36 @@ $('#{$this->getId()}').typeahead({
 	minLength: 1
 }
 JS;
-			if (!empty($this->suggestions)) {
-				$js .= <<<JS
-, {
-	name: "{$this->getId()}",
-	displayKey: "value",
-	source: local{$this->getId()}.ttAdapter()
-}
-JS;
-			}
-			if (!empty($this->remotedatasource)) {
-				$js .= <<<JS
-, {
-	name: "{$this->getId()}",
-	displayKey: "value",
-	source: remote{$this->getId()}.ttAdapter()
-}
-JS;
-			}
+		}
+		foreach ($this->suggestions as $name => $source) {
+			$header = ucfirst(str_replace('_', ' ', $name));
 			$js .= <<<JS
-).on('typeahead:selected', function() {
-	$(this).trigger('change');
-}).on('keyup', function (event) {
+, {
+	name: "{$this->getId()}{$name}",
+	displayKey: "value",
+	source: {$this->getId()}{$name}.ttAdapter(),
+	templates: {
+		header: "<h4>{$header}</h4>"
+	}
+}
+JS;
+		}
+		if (!empty($this->suggestions)) {
+			$js .= <<<JS
+).on('keyup', function (event) {
 	if (event.keyCode !== 38 && event.keyCode !== 40) { // arrow up & down
-		$('.tt-dataset-{$this->getId()} .tt-suggestion').first().addClass('tt-cursor');
+		$('.tt-dataset-{$this->getId()}{$name} .tt-suggestion').first().addClass('tt-cursor');
 	}
 });
 JS;
 			$this->typeahead_selected .= <<<JS
 
-form_submit(event);
+$(this).trigger('change');
 JS;
 		}
 		if ($this->typeahead_selected !== null) {
 			$js .= <<<JS
+
 $('#{$this->getId()}').on('typeahead:selected', function (event, suggestion, dataset) {
 	{$this->typeahead_selected}
 });
@@ -553,7 +551,7 @@ class LandField extends TextField {
 
 	public function __construct($name, $value, $description) {
 		parent::__construct($name, $value, $description);
-		$this->suggestions = array('Nederland', 'België', 'Duitsland', 'Frankrijk', 'Verenigd Koninkrijk', 'Verenigde Staten');
+		$this->suggestions[] = array('Nederland', 'België', 'Duitsland', 'Frankrijk', 'Verenigd Koninkrijk', 'Verenigde Staten');
 	}
 
 }
@@ -568,7 +566,7 @@ class RechtenField extends TextField {
 
 	public function __construct($name, $value, $description) {
 		parent::__construct($name, $value, $description);
-		$this->suggestions = AccessModel::instance()->getPermissionSuggestions();
+		$this->suggestions[] = AccessModel::instance()->getPermissionSuggestions();
 		$this->title = 'Met , en + voor respectievelijk OR en AND. Gebruik | voor OR binnen AND (alsof er haakjes omheen staan)';
 		// Gebruik van ! voor negatie en extra : voor functie binnen groep niet vermelden.
 	}
@@ -634,7 +632,7 @@ class LidField extends TextField {
 			$zoekin = 'leden';
 		}
 		$this->zoekin = $zoekin;
-		$this->remotedatasource = '/tools/naamsuggesties/' . $this->zoekin;
+		$this->suggestions[$this->zoekin] = '/tools/naamsuggesties/' . $this->zoekin . '?q=';
 	}
 
 	/**
@@ -777,14 +775,10 @@ class StudieField extends TextField {
 
 	public function __construct($name, $value, $description) {
 		parent::__construct($name, $value, $description, 100);
-
-		// de studies aan de TU, even prefixen met 'TU Delft - '
 		$tustudies = array('BK', 'CT', 'ET', 'IO', 'LST', 'LR', 'MT', 'MST', 'TA', 'TB', 'TI', 'TN', 'TW', 'WB');
-		$tustudies = array_map(create_function('$value', 'return "TU Delft - ".$value;'), $tustudies);
-
-		$andere = array('INHolland', 'Haagse Hogeschool', 'EURotterdam', 'ULeiden');
-
-		$this->suggestions = array_merge($tustudies, $andere);
+		// de studies aan de TU, even prefixen met 'TU Delft - '
+		$this->suggestions['TU_Delft'] = array_map(create_function('$value', 'return "TU Delft - ".$value;'), $tustudies);
+		$this->suggestions[] = array('INHolland', 'Haagse Hogeschool', 'EURotterdam', 'ULeiden');
 	}
 
 }

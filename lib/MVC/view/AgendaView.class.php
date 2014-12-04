@@ -128,7 +128,7 @@ class AgendaItemForm extends ModalForm {
 		}
 
 		$fields['titel'] = new RequiredTextField('titel', $item->titel, 'Titel');
-		$fields['titel']->suggestions = array('Kring', 'Lezing', 'Werkgroep', 'Eetplan', 'Borrel', 'Alpha-avond');
+		$fields['titel']->suggestions[] = array('Kring', 'Lezing', 'Werkgroep', 'Eetplan', 'Borrel', 'Alpha-avond');
 		$fields['datum'] = new DatumField('datum', date('Y-m-d', $item->getBeginMoment()), 'Datum', date('Y') + 5, date('Y') - 5);
 
 		$begin = new TijdField('begin', date('H:i', $item->getBeginMoment()), 'Van');

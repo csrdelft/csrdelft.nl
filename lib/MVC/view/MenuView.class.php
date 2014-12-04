@@ -41,35 +41,32 @@ if (event.keyCode === 13) { // enter
 	$(this).trigger('typeahead:selected');
 }
 JS;
+		$shortcuts = array();
 		foreach (MenuModel::instance()->find('link != ""') as $item) {
 			if ($item->magBekijken()) {
 				if ($item->tekst == LoginModel::getUid()) {
-					$field->suggestions['Favorieten'] = $item->link;
+					$shortcuts['Favorieten'] = $item->link;
 				} else {
-					$field->suggestions[$item->tekst] = $item->link;
+					$shortcuts[$item->tekst] = $item->link;
 				}
 			}
 		}
+		$field->suggestions['menu'] = array_keys($shortcuts);
+
 		require_once 'MVC/model/ForumModel.class.php';
 		foreach (ForumDelenModel::instance()->getForumDelenVoorLid(false) as $deel) {
-			$field->suggestions[$deel->titel] = '/forum/deel/' . $deel->forum_id;
+			$field->suggestions['forum'][] = $deel->titel;
+			$shortcuts[$deel->titel] = '/forum/deel/' . $deel->forum_id;
 		}
 
-		$json = json_encode($field->suggestions);
-		$field->suggestions = array_keys($field->suggestions);
+		$json = json_encode($shortcuts);
 		$field->typeahead_selected = <<<JS
 var shortcuts = {$json};
-if (typeof shortcuts[this.value] === 'string') { // known shortcut
-	window.location.href = shortcuts[this.value]; // goto url
-	return;
+if (typeof shortcuts[this.value] === 'string') {
+	window.location.href = shortcuts[this.value];
 }
-else if (this.value.indexOf('su ') == 0) {
-	window.location.href = '/su/' + this.value.substring(3);
-	return;
-}
-else if (this.value == 'endsu') {
-	window.location = '/endsu';
-	return;
+else {
+	form_submit(event);
 }
 JS;
 		$fields[] = new HtmlComment(<<<HTML
