@@ -69,10 +69,12 @@
 					});
 					$('#gallery').css('max-height', 0);
 					var container = $('div.jgallery');
+					// foto url
 					container.find('div.title').off();
 					container.find('div.title').on('click', function (event) {
 						selectText(this);
 					});
+					// zoom full resolution
 					$('span.resize.jgallery-btn').on('click', function (event) {
 						var zoom = container.find('div.zoom-container');
 						if (zoom.attr('data-size') === 'fill') {
@@ -107,6 +109,7 @@
 							});
 						}
 					});
+					// preload next/prev
 					var next = function (event) {
 						container.find('div.overlay').css('display', 'none');
 						var preload = container.find('a.active').next('a');
@@ -123,8 +126,8 @@
 					};
 					container.find('div.right').on('click', next);
 					container.find('div.left').on('click', prev);
-					container.find('span.next.jgallery-btn').on('click', next);
-					container.find('span.prev.jgallery-btn').on('click', prev);
+					container.find('span.next').on('click', next);
+					container.find('span.prev').on('click', prev);
 					$(document).on('keydown', function (event) {
 						if (event.keyCode === 39) {
 							next();
@@ -136,16 +139,29 @@
 							$('span.change-mode.jgallery-btn').click();
 						}
 					});
-					container.find('span.change-mode.jgallery-btn').on('click', function (event) {
-						var btn = container.find('.minimalize-thumbnails.jgallery-btn');
+					// toggle thumbs fullscreen
+					container.find('span.change-mode').on('click', function (event) {
+						var btn = container.find('.minimalize-thumbnails');
 						if (btn.hasClass('inactive') !== container.hasClass('jgallery-full-screen')) {
 							btn.click();
 						}
 					});
-					container.find('span.full-screen.jgallery-btn').on('click', function (event) {
-						var btn = container.find('.minimalize-thumbnails.jgallery-btn');
+					container.find('span.full-screen').on('click', function (event) {
+						var btn = container.find('.minimalize-thumbnails');
 						if (btn.hasClass('inactive')) {
 							btn.click();
+						}
+						// page scroll thumbnails
+						console.log(container.height());
+						if (container.height() === 897) {
+							container.css({
+								"height": container.find('div.jgallery-container').get(0).scrollHeight
+							});
+						}
+						else {
+							container.css({
+								"height": 897
+							});
 						}
 					});
 				});
