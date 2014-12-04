@@ -195,7 +195,7 @@ class FotoAlbumController extends AclController {
 		}
 		$naam = filter_input(INPUT_POST, 'Nieuwe_naam', FILTER_SANITIZE_STRING);
 		if ($album !== null AND $this->model->hernoemAlbum($album, $naam)) {
-			$this->view = new JsonResponse('Fotoalbum succesvol hernoemd');
+			$this->view = new JsonResponse($album->getUrl());
 		} else {
 			$this->view = new JsonResponse('Fotoalbum hernoemen mislukt', 503);
 		}
