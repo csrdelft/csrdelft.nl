@@ -18,23 +18,25 @@
 {if $album->hasFotos()}
 	<div id="gallery">
 		<div class="album" data-jgallery-album-title="{$album->dirname|ucfirst}">
+			<h2>{$album->dirname|ucfirst}</h2>
 			{foreach from=$album->getFotos() item=foto}
 				<a class="foto" href="{$foto->getResizedUrl()}" data-href="{$foto->getFullUrl()}">
 					<img src="{$foto->getThumbUrl()}" alt="{$foto->getFullUrl()|replace:"%20":" "}" />
 				</a>
 			{/foreach}
 		</div>
-		{*foreach from=$album->getSubAlbums() item=subalbum}
-		{if $subalbum->hasFotos()}
-		<div class="album" data-jgallery-album-title="{$subalbum->dirname|ucfirst}">
-		{foreach from=$subalbum->getFotos() item=foto}
-		<a href="{$foto->getResizedUrl()}">
-		<img src="{$foto->getThumbUrl()}" alt="{$foto->getFullUrl()|replace:"%20":" "}" />
-		</a>
+		{foreach from=$album->getSubAlbums() item=subalbum}
+			{if $subalbum->hasFotos()}
+				<div class="album" data-jgallery-album-title="{$subalbum->dirname|ucfirst}">
+					<h2>{$album->dirname|ucfirst}</h2>
+					{foreach from=$subalbum->getFotos() item=foto}
+						<a class="foto" href="{$foto->getResizedUrl()}">
+							<img src="{$foto->getThumbUrl()}" alt="{$foto->getFullUrl()|replace:"%20":" "}" />
+						</a>
+					{/foreach}
+				</div>
+			{/if}
 		{/foreach}
-		</div>
-		{/if}
-		{/foreach*}
 		<script type="text/javascript" src="/layout/js/jquery/plugins/jgallery.js?v=1.4.1"></script>
 		<script type="text/javascript">
 			try {
@@ -153,14 +155,15 @@
 			}
 		</script>
 	</div>
+{else}
+	<div class="subalbums">
+		{foreach from=$album->getSubAlbums() item=subalbum}
+			<div class="subalbum">
+				<a href="{$subalbum->getUrl()}" title="{$subalbum->getUrl()|replace:"%20":" "}">
+					<img src="{$subalbum->getCoverUrl()}" alt="{$subalbum->dirname|ucfirst}" />
+					<div class="subalbumname">{$subalbum->dirname|ucfirst}</div>
+				</a>
+			</div>
+		{/foreach}
+	</div>
 {/if}
-<div class="subalbums">
-	{foreach from=$album->getSubAlbums() item=subalbum}
-		<div class="subalbum">
-			<a href="{$subalbum->getUrl()}" title="{$subalbum->getUrl()|replace:"%20":" "}">
-				<img src="{$subalbum->getCoverUrl()}" alt="{$subalbum->dirname|ucfirst}" />
-				<div class="subalbumname">{$subalbum->dirname|ucfirst}</div>
-			</a>
-		</div>
-	{/foreach}
-</div>
