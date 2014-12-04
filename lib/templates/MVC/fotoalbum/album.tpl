@@ -79,12 +79,18 @@
 						selectText(this);
 					});
 					$(document).on('keydown', function (event) {
-						if (event.keyCode === 39) {
+						if (event.keyCode === 39 || event.keyCode === 37) {
 							var container = $('div.jgallery');
 							container.find('div.overlay').css('display', 'none');
-							var next = container.find('a.active').next('a');
-							if (next.length === 1) {
-								preloadImg(next.attr('href'));
+							var preload = container.find('a.active')
+							if (event.keyCode === 39) {
+								preload = preload.next('a');
+							}
+							else if (event.keyCode === 37) {
+								preload = preload.prev('a');
+							}
+							if (preload.length === 1) {
+								preloadImg(preload.attr('href'));
 							}
 						}
 					});
