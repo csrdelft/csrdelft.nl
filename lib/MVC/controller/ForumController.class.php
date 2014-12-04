@@ -94,10 +94,10 @@ class ForumController extends Controller {
 		}
 		if ((!$this->isPosted() OR $this->action == 'zoeken') AND $this->action != 'rss') {
 			if (LoginModel::mag('P_LOGGED_IN')) {
-				$this->view = new CsrLayoutPage($this->getView());
+				$this->view = new CsrLayoutPage($this->view);
 				$layoutmap = 'layout';
 			} else { // uitgelogd heeft nieuwe layout
-				$this->view = new CsrLayout2Page($this->getView());
+				$this->view = new CsrLayout2Page($this->view);
 				$layoutmap = 'layout2';
 			}
 			$this->view->addCompressedResources('forum');

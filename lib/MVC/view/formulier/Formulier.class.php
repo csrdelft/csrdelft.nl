@@ -280,7 +280,7 @@ class ModalForm extends Formulier {
 
 	public function view() {
 		$this->css_classes[] = 'ModalForm';
-		echo '<div id="modal" class="modal-content outer-shadow dragobject" tabindex="-1">';
+		echo '<div id="modal" class="modal-content outer-shadow dragobject" tabindex="-1" style="display: block;">';
 		parent::view();
 		echo '</div>';
 	}

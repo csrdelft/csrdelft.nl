@@ -43,7 +43,7 @@ class BeheerPuntenController extends AclController {
 		$functies = FunctiesModel::instance()->getAlleFuncties(); // grouped by functie_id
 		$matrix = CorveePuntenModel::loadPuntenVoorAlleLeden($functies);
 		$this->view = new BeheerPuntenView($matrix, $functies);
-		$this->view = new CsrLayoutPage($this->getView());
+		$this->view = new CsrLayoutPage($this->view);
 		$this->view->addCompressedResources('maalcie');
 	}
 

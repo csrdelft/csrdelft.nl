@@ -48,7 +48,7 @@ class CorveeRepetitiesController extends AclController {
 		$maaltijdrepetitie = null;
 		if (is_int($crid) && $crid > 0) {
 			$this->bewerk($crid);
-			$modal = $this->getView();
+			$modal = $this->view;
 			$repetities = CorveeRepetitiesModel::getAlleRepetities();
 		} elseif (is_int($mrid) && $mrid > 0) {
 			$repetities = CorveeRepetitiesModel::getRepetitiesVoorMaaltijdRepetitie($mrid);
@@ -57,7 +57,7 @@ class CorveeRepetitiesController extends AclController {
 			$repetities = CorveeRepetitiesModel::getAlleRepetities();
 		}
 		$this->view = new CorveeRepetitiesView($repetities, $maaltijdrepetitie);
-		$this->view = new CsrLayoutPage($this->getView());
+		$this->view = new CsrLayoutPage($this->view);
 		$this->view->addCompressedResources('maalcie');
 		$this->view->modal = $modal;
 	}

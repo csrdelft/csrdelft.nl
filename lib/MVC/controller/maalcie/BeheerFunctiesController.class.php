@@ -41,11 +41,11 @@ class BeheerFunctiesController extends AclController {
 		$modal = null;
 		if ($fid > 0) {
 			$this->bewerken($fid);
-			$modal = $this->getView();
+			$modal = $this->view;
 		}
 		$functies = $this->model->getAlleFuncties(); // grouped by functie_id
 		$this->view = new BeheerFunctiesView($functies);
-		$this->view = new CsrLayoutPage($this->getView(), array(), $modal);
+		$this->view = new CsrLayoutPage($this->view, array(), $modal);
 		$this->view->addCompressedResources('maalcie');
 	}
 

@@ -36,7 +36,7 @@ class MaalCieSaldiController extends AclController {
 
 	public function beheer() {
 		$this->view = new MaalCieSaldiView();
-		$this->view = new CsrLayoutPage($this->getView());
+		$this->view = new CsrLayoutPage($this->view);
 		$this->view->addCompressedResources('maalcie');
 	}
 

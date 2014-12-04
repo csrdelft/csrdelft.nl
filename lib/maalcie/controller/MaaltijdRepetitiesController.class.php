@@ -45,10 +45,10 @@ class MaaltijdRepetitiesController extends AclController {
 		$modal = null;
 		if (is_int($mrid) && $mrid > 0) {
 			$this->bewerk($mrid);
-			$modal = $this->getView();
+			$modal = $this->view;
 		}
 		$this->view = new MaaltijdRepetitiesView(MaaltijdRepetitiesModel::getAlleRepetities());
-		$this->view = new CsrLayoutPage($this->getView());
+		$this->view = new CsrLayoutPage($this->view);
 		$this->view->addCompressedResources('maalcie');
 		$this->view->modal = $modal;
 	}

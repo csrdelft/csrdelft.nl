@@ -69,12 +69,12 @@ class GroepenController extends Controller {
 		$class = str_replace('Model', '', get_class($this->model));
 		$view = $class . 'View';
 		$this->view = new $view($groepen, $class, $class . ' (h.t.)');
-		$this->view = new CsrLayoutPage($this->getView());
+		$this->view = new CsrLayoutPage($this->view);
 	}
 
 	public function tonen($id) {
 		$this->lijst($id);
-		$this->view = new CsrLayoutPage($this->getView());
+		$this->view = new CsrLayoutPage($this->view);
 	}
 
 	public function lijst($id) {

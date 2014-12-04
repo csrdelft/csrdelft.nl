@@ -58,7 +58,7 @@ class BeheerMaaltijdenController extends AclController {
 		$modal = null;
 		if (is_int($mid) && $mid > 0) {
 			$this->bewerk($mid);
-			$modal = $this->getView();
+			$modal = $this->view;
 		}
 		$body = new BeheerMaaltijdenView(MaaltijdenModel::getAlleMaaltijden(), false, false, MaaltijdRepetitiesModel::getAlleRepetities());
 		$this->view = new CsrLayoutPage($body, array(), $modal);

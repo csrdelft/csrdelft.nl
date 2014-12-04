@@ -42,7 +42,7 @@ class MijnVoorkeurenController extends AclController {
 	public function mijn() {
 		$voorkeuren = CorveeVoorkeurenModel::getVoorkeurenVoorLid(LoginModel::getUid(), true);
 		$this->view = new MijnVoorkeurenView($voorkeuren);
-		$this->view = new CsrLayoutPage($this->getView());
+		$this->view = new CsrLayoutPage($this->view);
 		$this->view->addCompressedResources('maalcie');
 	}
 

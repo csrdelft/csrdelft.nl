@@ -56,7 +56,7 @@ class BeheerTakenController extends AclController {
 		$modal = null;
 		if (is_int($tid) && $tid > 0) {
 			$this->bewerk($tid);
-			$modal = $this->getView();
+			$modal = $this->view;
 		} elseif (is_int($mid) && $mid > 0) {
 			$maaltijd = MaaltijdenModel::getMaaltijd($mid, true);
 			$taken = CorveeTakenModel::getTakenVoorMaaltijd($mid, true);
@@ -65,7 +65,7 @@ class BeheerTakenController extends AclController {
 			$maaltijd = null;
 		}
 		$this->view = new BeheerTakenView($taken, $maaltijd, false, CorveeRepetitiesModel::getAlleRepetities());
-		$this->view = new CsrLayoutPage($this->getView());
+		$this->view = new CsrLayoutPage($this->view);
 		$this->view->addCompressedResources('maalcie');
 		$this->view->modal = $modal;
 	}
@@ -76,7 +76,7 @@ class BeheerTakenController extends AclController {
 
 	public function prullenbak() {
 		$this->view = new BeheerTakenView(CorveeTakenModel::getVerwijderdeTaken(), null, true);
-		$this->view = new CsrLayoutPage($this->getView());
+		$this->view = new CsrLayoutPage($this->view);
 		$this->view->addCompressedResources('maalcie');
 	}
 
