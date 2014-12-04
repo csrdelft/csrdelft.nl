@@ -154,7 +154,8 @@
 						// page scroll thumbnails
 						if (container.height() === 897) {
 							var pane = container.find('div.jgallery-container');
-							pane.on('load', 'a img', function () {
+							var content = pane.find('div.album.active');
+							content.on('load', 'a img', function () {
 								container.css({
 									"height": pane[0].scrollHeight
 								});
