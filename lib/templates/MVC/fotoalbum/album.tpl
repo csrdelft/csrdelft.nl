@@ -128,8 +128,9 @@
 						if (btn.hasClass('inactive')) {
 							btn.click();
 						}
-						window.scroll(0, 0);
-						container.find('div.zoom-container').css('max-height', window.innerHeight - 214);
+						container.find('div.zoom-container').css({
+							"max-height": window.innerHeight - 214
+						});
 					});
 				});
 				/* img class="photoTag" data-fotoalbum="$album->getSubDir()"
