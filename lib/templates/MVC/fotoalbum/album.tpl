@@ -128,9 +128,6 @@
 						if (btn.hasClass('inactive')) {
 							btn.click();
 						}
-						container.find('div.pt-part').css({
-							"max-height": window.innerHeight - 214
-						});
 					});
 				});
 				/* img class="photoTag" data-fotoalbum="$album->getSubDir()"
