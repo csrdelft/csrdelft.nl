@@ -61,9 +61,9 @@ class Dropzone extends Formulier {
 
 	public function getJavascript() {
 		$maxsize = getMaximumFileUploadSize() / 1024 / 1024; // MB
-		$mag = (LoginModel::mag('P_ALBUM_DEL') ? 'true' : 'false');
 		$delete = str_replace('uploaden', 'verwijderen', $this->action);
 		$existing = str_replace('uploaden', 'bestaande', $this->action);
+		$cover = str_replace('uploaden', 'albumcover', $this->action);
 		$accept = implode(',', $this->dropzone->getFilter());
 		return parent::getJavascript() . <<<JS
 
@@ -71,7 +71,7 @@ thisDropzone = new Dropzone('#{$this->getFormId()}', {
 	paramName: "{$this->dropzone->getName()}",
 	url: "{$this->action}",
 	acceptedFiles: "{$accept}",
-	addRemoveLinks: {$mag},
+	addRemoveLinks: true,
 	removedfile: function (file) {
 		var jqXHR = $.ajax({
 			type: "POST",
@@ -99,6 +99,27 @@ thisDropzone = new Dropzone('#{$this->getFormId()}', {
 	dictRemoveFile: "Verwijder",
 	dictRemoveFileConfirmation: "Bestand verwijderen. Weet u het zeker?",
 	dictMaxFilesExceeded: "You can not upload any more files.",
+	init: function() {
+		this.on('addedfile', function(file) {
+			var dropzone = this;
+			var coverBtn = Dropzone.createElement("<button>Omslag</button>");
+			coverBtn.addEventListener('click', function(e) {
+				// Make sure the button click doesn't submit the form
+				e.preventDefault();
+				e.stopPropagation();
+				var jqXHR = $.ajax({
+					type: "POST",
+					url: "{$cover}",
+					cache: false,
+					data: "foto=" + file.name
+				});
+				jqXHR.fail(function (jqXHR, textStatus, errorThrown) {
+					alert(textStatus);
+				});
+			});
+			file.previewElement.appendChild(coverBtn);
+		});
+	}
 });
 showExisting_{$this->dropzone->getName()} = function (){
 	$.post('{$existing}', function (data) {

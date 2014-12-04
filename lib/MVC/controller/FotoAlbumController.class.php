@@ -195,11 +195,10 @@ class FotoAlbumController extends AclController {
 		}
 		$naam = filter_input(INPUT_POST, 'Nieuwe_naam', FILTER_SANITIZE_STRING);
 		if ($album !== null AND $this->model->hernoemAlbum($album, $naam)) {
-			setMelding('Fotoalbum succesvol hernoemd', 1);
+			$this->view = new JsonResponse('Fotoalbum succesvol hernoemd');
 		} else {
-			setMelding('Fotoalbum hernoemen mislukt', -1);
+			$this->view = new JsonResponse('Fotoalbum hernoemen mislukt', 503);
 		}
-		$this->view = new JsonResponse(true);
 	}
 
 	public function albumcover(FotoAlbum $album) {
@@ -208,11 +207,10 @@ class FotoAlbumController extends AclController {
 		}
 		$naam = filter_input(INPUT_POST, 'cover', FILTER_SANITIZE_STRING);
 		if ($this->model->setAlbumCover($album, new Foto($album, $naam))) {
-			setMelding('Fotoalbum-cover succesvol ingesteld', 1);
+			$this->view = new JsonResponse('Fotoalbum-cover succesvol ingesteld');
 		} else {
-			setMelding('Fotoalbum-cover instellen mislukt', -1);
+			$this->view = new JsonResponse('Fotoalbum-cover instellen mislukt', 503);
 		}
-		$this->view = new JsonResponse(true);
 	}
 
 	public function verwijderen(FotoAlbum $album) {
