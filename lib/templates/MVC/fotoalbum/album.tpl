@@ -29,7 +29,7 @@
 	<div id="gallery">
 		<div class="album" data-jgallery-album-title="{$album->dirname|ucfirst}">
 			{foreach from=$album->getFotos() item=foto}
-				<a href="{$foto->getResizedUrl()}">
+				<a class="foto" href="{$foto->getResizedUrl()}" data-href="{$foto->getFullUrl()}">
 					<img src="{$foto->getThumbUrl()}" alt="{$foto->getFullUrl()|replace:"%20":" "}" />
 				</a>
 			{/foreach}
@@ -53,7 +53,8 @@
 						"height": "897px",
 						"mode": "standard",
 						"canChangeMode": false,
-						"canZoom": false,
+						"canZoom": true,
+						"zoomSize:": "original",
 						"backgroundColor": "fff",
 						"textColor": "193b61",
 						"thumbType": "image",
@@ -77,6 +78,24 @@
 					$('div.title').off();
 					$('div.title').on('click', function (event) {
 						selectText(this);
+					});
+					$('span.resize.jgallery-btn').on('click', function (event) {
+						var container = $('div.jgallery');
+						var foto = $('div.zoom-container').find('img.active');
+						var href = $('#gallery').find('a[href="' + foto.attr('src') + '"]').attr('data-href');
+						if (typeof href === 'string') {
+							container.find('div.overlay, div.imageLoaderPositionAbsolute').fadeIn();
+							foto.attr('src', href).one('load', function () {
+								console.log(this.naturalWidth);
+								foto.css({
+									"width": this.naturalWidth,
+									"height": this.naturalHeight,
+									"margin-left": -this.naturalWidth / 2,
+									"margin-top": -this.naturalHeight / 2
+								});
+								container.find('div.overlay, div.imageLoaderPositionAbsolute').fadeOut();
+							});
+						}
 					});
 					$(document).on('keydown', function (event) {
 						if (event.keyCode === 39 || event.keyCode === 37) {
