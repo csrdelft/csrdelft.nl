@@ -1,6 +1,6 @@
 .dropzone {
 	border: none !important;
-	background: none;
+	background: none !important;
 }
 .dropzone button {
 	background-image: -webkit-linear-gradient(top, #fafafa, #eee);
