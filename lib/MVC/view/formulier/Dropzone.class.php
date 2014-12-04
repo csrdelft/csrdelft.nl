@@ -113,6 +113,9 @@ thisDropzone = new Dropzone('#{$this->getFormId()}', {
 					cache: false,
 					data: "foto=" + file.name
 				});
+				jqXHR.done(function (data, textStatus, jqXHR) {
+					coverBtn.replaceWith('<span class="glyphicon glyphicon-ok"></span>Omslag');
+				});
 				jqXHR.fail(function (jqXHR, textStatus, errorThrown) {
 					alert(textStatus);
 				});
