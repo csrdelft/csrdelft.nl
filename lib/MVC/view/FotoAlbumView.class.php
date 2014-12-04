@@ -171,7 +171,7 @@ class FotoAlbumZijbalkView extends FotoAlbumView {
 
 	public function view() {
 		echo '<div id="zijbalk_fotoalbum">';
-		echo '<div class="zijbalk-kopje"><a href="/actueel/fotoalbum/">Laatste fotoalbum</a></div>';
+		echo '<div class="zijbalk-kopje"><a href="/actueel/fotoalbum/' . Lichting::getHuidigeJaargang() . '">Fotoalbum</a></div>';
 		echo '<div class="item">';
 		echo '<a href="' . $this->model->getUrl() . '">' . $this->model->dirname . '</a>';
 		echo '<div class="fotos">';
