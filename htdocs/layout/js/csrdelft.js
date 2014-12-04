@@ -262,6 +262,9 @@ function knop_ajax(knop, type) {
 	if (knop.hasClass('ReloadPage')) {
 		done = page_reload;
 	}
+	else if (knop.hasClass('redirect')) {
+		done = page_redirect;
+	}
 	ajax_request(type, knop.attr('href'), data, source, done, alert);
 }
 
