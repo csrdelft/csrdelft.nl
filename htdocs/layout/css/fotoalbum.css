@@ -48,6 +48,6 @@
 	overflow-x: hidden;
 	overflow-y: auto;
 }
-.jgallery .jgallery-close {
+.jgallery .jgallery-thumbnails.full-screen .jgallery-close {
 	display: none;
 }
