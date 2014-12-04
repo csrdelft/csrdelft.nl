@@ -139,6 +139,14 @@
 							$('span.change-mode.jgallery-btn').click();
 						}
 					});
+					// page scroll thumbnails
+					var resize = function () {
+						container.css({
+							"min-height": container.find('div.jgallery-container')[0].scrollHeight
+						});
+						console.log(container.height());
+					};
+					container.find('div.jgallery-container').find('div.album.active').on('load', 'a img', resize);
 					// toggle thumbs fullscreen
 					container.find('span.change-mode').on('click', function (event) {
 						var btn = container.find('.minimalize-thumbnails');
@@ -151,22 +159,7 @@
 						if (btn.hasClass('inactive')) {
 							btn.click();
 						}
-						// page scroll thumbnails
-						if (container.height() === 897) {
-							var pane = container.find('div.jgallery-container');
-							var content = pane.find('div.album.active');
-							content.on('load', 'a img', function () {
-								container.css({
-									"height": pane[0].scrollHeight
-								});
-								console.log(container.height());
-							});
-						}
-						else {
-							container.css({
-								"height": 897
-							});
-						}
+						resize();
 					});
 				});
 				/* img class="photoTag" data-fotoalbum="$album->getSubDir()"
