@@ -67,6 +67,7 @@
 						"tooltipSeeOtherAlbums": "Toon sub-albums",
 						"slideshowInterval": "4s"
 					});
+					$('#gallery').css('max-height', 0);
 					var container = $('div.jgallery');
 					container.find('div.title').off();
 					container.find('div.title').on('click', function (event) {
