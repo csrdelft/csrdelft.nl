@@ -101,7 +101,7 @@ thisDropzone = new Dropzone('#{$this->getFormId()}', {
 	dictMaxFilesExceeded: "You can not upload any more files.",
 	init: function() {
 		this.on('addedfile', function(file) {
-			var coverBtn = Dropzone.createElement("<button>Omslag</button>");
+			var coverBtn = Dropzone.createElement("<button title="Stel deze foto in als omslag voor het album">Omslag</button>");
 			file.previewElement.appendChild(coverBtn);
 			coverBtn.addEventListener('click', function(e) {
 				var coverBtn = $(this);

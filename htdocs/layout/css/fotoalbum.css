@@ -20,6 +20,7 @@
 }
 .dropzone button:hover, .dropzone a.dz-remove:hover {
 	color: #333 !important;
+	cursor: pointer !important;
 }
 
 .subalbum {
