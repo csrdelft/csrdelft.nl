@@ -78,6 +78,16 @@
 					$('div.title').on('click', function (event) {
 						selectText(this);
 					});
+					$(document).on('keydown', function (event) {
+						if (event.keyCode === 39) {
+							var container = $('div.jgallery');
+							container.find('div.overlay').css('display', 'none');
+							var next = container.find('a.active').next('a');
+							if (next.length === 1) {
+								preloadImg(next.attr('href'));
+							}
+						}
+					});
 				});
 				/* img class="photoTag" data-fotoalbum="$album->getSubDir()"
 				 $(document).ready(function () {

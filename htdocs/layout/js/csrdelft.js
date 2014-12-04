@@ -9,17 +9,13 @@
  */
 var http = new XMLHttpRequest();
 
-function preload(arrayOfImages) {
-	$(arrayOfImages).each(function () {
-		$('<img/>')[0].src = this;
-	});
+function preloadImg(href) {
+	$('<img/>')[0].src = href;
 }
 
-preload([
-	'http://plaetjes.csrdelft.nl/layout/loading-fb.gif',
-	'http://plaetjes.csrdelft.nl/layout/loading-arrows.gif',
-	'http://plaetjes.csrdelft.nl/layout/loading_bar_black.gif'
-]);
+preloadImg('http://plaetjes.csrdelft.nl/layout/loading-fb.gif');
+preloadImg('http://plaetjes.csrdelft.nl/layout/loading-arrows.gif');
+preloadImg('http://plaetjes.csrdelft.nl/layout/loading_bar_black.gif');
 
 $(document).ready(function () {
 	init_page();
