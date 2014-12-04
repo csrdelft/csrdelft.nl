@@ -81,3 +81,6 @@
 .jgallery .jgallery-thumbnails.full-screen .jgallery-close {
 	display: none;
 }
+.jgallery .jgallery-thumbnails.full-screen .change-album {
+	display: none;
+}
