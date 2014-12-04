@@ -36,8 +36,11 @@ class MainMenuView extends MenuView {
 		$field = new LidField('q', null, null);
 		$fields[] = $field;
 		$field->css_classes[] = 'menuzoekveld form-control';
-		$field->enter_submit = true;
-
+		$field->onkeyup = <<<JS
+if (event.keyCode === 13) { // enter
+	$(this).trigger('typeahead:selected');
+}
+JS;
 		foreach (MenuModel::instance()->find('link != ""') as $item) {
 			if ($item->magBekijken()) {
 				$field->suggestions[$item->tekst] = $item->link;
