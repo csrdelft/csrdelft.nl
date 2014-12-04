@@ -125,6 +125,12 @@
 							$('span.change-mode.jgallery-btn').click();
 						}
 					});
+					container.find('span.change-mode.jgallery-btn').on('click', function (event) {
+						var btn = container.find('.minimalize-thumbnails.jgallery-btn');
+						if (btn.hasClass('inactive') !== container.hasClass('jgallery-full-screen')) {
+							btn.click();
+						}
+					});
 				});
 				/* img class="photoTag" data-fotoalbum="$album->getSubDir()"
 				 $(document).ready(function () {
