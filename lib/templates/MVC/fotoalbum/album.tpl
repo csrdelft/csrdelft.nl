@@ -121,6 +121,8 @@
 							preloadImg(preload.attr('href'));
 						}
 					};
+					container.find('div.right').on('click', next);
+					container.find('div.left').on('click', prev);
 					container.find('span.next.jgallery-btn').on('click', next);
 					container.find('span.prev.jgallery-btn').on('click', prev);
 					$(document).on('keydown', function (event) {
