@@ -101,9 +101,10 @@ thisDropzone = new Dropzone('#{$this->getFormId()}', {
 	dictMaxFilesExceeded: "You can not upload any more files.",
 	init: function() {
 		this.on('addedfile', function(file) {
-			var dropzone = this;
 			var coverBtn = Dropzone.createElement("<button>Omslag</button>");
+			file.previewElement.appendChild(coverBtn);
 			coverBtn.addEventListener('click', function(e) {
+				var coverBtn = $(this);
 				// Make sure the button click doesn't submit the form
 				e.preventDefault();
 				e.stopPropagation();
@@ -114,13 +115,12 @@ thisDropzone = new Dropzone('#{$this->getFormId()}', {
 					data: "foto=" + file.name
 				});
 				jqXHR.done(function (data, textStatus, jqXHR) {
-					coverBtn.replaceWith('<span class="glyphicon glyphicon-ok"></span>Omslag');
+					coverBtn.replaceWith('<span class="glyphicon glyphicon-ok"></span> Omslag');
 				});
 				jqXHR.fail(function (jqXHR, textStatus, errorThrown) {
 					alert(textStatus);
 				});
 			});
-			file.previewElement.appendChild(coverBtn);
 		});
 	}
 });
