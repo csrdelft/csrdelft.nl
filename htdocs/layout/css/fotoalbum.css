@@ -21,8 +21,7 @@
 .subalbums .subalbum {
 	width: 150px;
 	height: 150px;
-	padding-right: 1px;
-	padding-bottom: 1px;
+	margin: 0 1px 1px 0;
 	float: left;
 	cursor: pointer;
 }
