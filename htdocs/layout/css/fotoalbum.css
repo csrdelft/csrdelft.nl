@@ -27,6 +27,9 @@
 	cursor: pointer;
 }
 
+.jgallery.jgallery-full-screen .zoom-container .nav {
+	top: 50px;
+}
 .jgallery .zoom-container .jgallery-container {
 	background-color: #fff !important;
 }
