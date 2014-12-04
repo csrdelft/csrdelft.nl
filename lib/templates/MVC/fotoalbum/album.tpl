@@ -71,7 +71,8 @@
 						"title": true,
 						"titleExpanded": false,
 						"tooltipSeeAllPhotos": "Grid",
-						"tooltipSeeOtherAlbums": "Toon sub-albums"
+						"tooltipSeeOtherAlbums": "Toon sub-albums",
+						"slideshowInterval": "4s"
 					});
 					$('div.title').off();
 					$('div.title').on('click', function (event) {
