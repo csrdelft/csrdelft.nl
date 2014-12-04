@@ -43,14 +43,16 @@ if (event.keyCode === 13) { // enter
 JS;
 		foreach (MenuModel::instance()->find('link != ""') as $item) {
 			if ($item->magBekijken()) {
-				$field->suggestions[$item->tekst] = $item->link;
+				if ($item->tekst == LoginModel::getUid()) {
+					$field->suggestions['Favorieten'] = $item->link;
+				} else {
+					$field->suggestions[$item->tekst] = $item->link;
+				}
 			}
 		}
 		require_once 'MVC/model/ForumModel.class.php';
 		foreach (ForumDelenModel::instance()->getForumDelenVoorLid(false) as $deel) {
-			if (!array_key_exists($deel->titel, $field->suggestions)) {
-				$field->suggestions[$deel->titel] = '/forum/deel/' . $deel->forum_id;
-			}
+			$field->suggestions[$deel->titel] = '/forum/deel/' . $deel->forum_id;
 		}
 
 		$json = json_encode($field->suggestions);
