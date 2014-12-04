@@ -96,7 +96,9 @@ class FotoAlbumModel extends PersistenceModel {
 		if (!valid_filename($nieuwenaam)) {
 			throw new Exception('Ongeldige naam');
 		}
-		return rename($album->path, str_replace($album->dirname, $nieuwenaam, $album->path));
+		$oldpath = $album->path;
+		$album->path = str_replace($album->dirname, $nieuwenaam, $album->path);
+		return rename($oldpath, $album->path);
 	}
 
 	public function setAlbumCover(FotoAlbum $album, Foto $cover) {
