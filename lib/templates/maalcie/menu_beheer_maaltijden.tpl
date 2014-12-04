@@ -3,8 +3,7 @@ menu_beheer_maaltijden.tpl	|	P.W.G. Brussee (brussee@live.nl)
 *}
 <div id="beheer-maaltijden-zijbalk" class="maalcie-beheer-menu">
 	{assign var="link" value="/maaltijdenbeheer"}
-	<div class="zijbalk-kopje item{if (!isset($prullenbak) or !$prullenbak) and (!isset($archief) or !$archief) and maalcieUrl === $link} active{/if}">»
-		<a href="{$link}" title="Beheer maaltijden">Beheer maaltijden</a>
+	<div class="zijbalk-kopje{if (!isset($prullenbak) or !$prullenbak) and (!isset($archief) or !$archief) and maalcieUrl === $link} active{/if}"><a href="{$link}" title="Beheer maaltijden">Beheer maaltijden</a>
 	</div>
 	<div class="item{if isset($prullenbak) and $prullenbak and maalcieUrl === $link} active{/if}">»
 		<a href="{$link}/prullenbak" title="Open prullenbak">Prullenbak</a>

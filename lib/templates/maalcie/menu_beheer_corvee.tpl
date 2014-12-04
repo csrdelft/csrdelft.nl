@@ -3,8 +3,7 @@
 *}
 <div id="beheer-corvee-zijbalk" class="maalcie-beheer-menu">
 	{assign var="link" value="/corveebeheer"}
-	<div class="zijbalk-kopje item{if (!isset($prullenbak) or !$prullenbak) and maalcieUrl === $link} active{/if}">»
-		<a href="{$link}" title="Beheer corveetaken">Corveebeheer</a>
+	<div class="zijbalk-kopje{if (!isset($prullenbak) or !$prullenbak) and maalcieUrl === $link} active{/if}"><a href="{$link}" title="Beheer corveetaken">Corveebeheer</a>
 	</div>
 	<div class="item{if isset($prullenbak) and $prullenbak and maalcieUrl === $link} active{/if}">»
 		<a href="{$link}/prullenbak" title="Open prullenbak">Prullenbak</a>
