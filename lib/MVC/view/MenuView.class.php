@@ -64,7 +64,8 @@ else if (this.value == 'endsu') {
 	window.location = '/endsu';
 }
 else {
-	form_submit();
+	console.log(event);
+	form_submit(event);
 }
 JS;
 		$fields[] = new HtmlComment(<<<HTML

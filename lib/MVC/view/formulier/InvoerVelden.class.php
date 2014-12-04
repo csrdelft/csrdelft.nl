@@ -467,7 +467,7 @@ JS;
 JS;
 			$this->typeahead_selected .= <<<JS
 
-form_submit();
+form_submit(event);
 JS;
 		}
 		if ($this->typeahead_selected !== null) {
