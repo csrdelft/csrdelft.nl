@@ -93,9 +93,9 @@ class Icon {
 	public static function getTag($key, $title = null, $class = 'icon') {
 		$icon = self::get($key);
 		if ($title !== null) {
-			$title = 'title="' . htmlspecialchars($title) . '" ';
+			$title = 'title="' . str_replace('&amp;', '&', htmlspecialchars($title)) . '" ';
 		}
-		return '<img src="' . $icon . '" width="16" height="16" alt="' . $key . '" ' . htmlspecialchars($title) . 'class="' . htmlspecialchars($class) . '" />';
+		return '<img src="' . $icon . '" width="16" height="16" alt="' . $key . '" ' . $title . 'class="' . htmlspecialchars($class) . '" />';
 	}
 
 	/*
