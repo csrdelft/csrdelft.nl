@@ -346,7 +346,7 @@ class CsrBB extends eamBBParser {
 			$this->bb_mode = false;
 			$forbidden = array('prive');
 		}
-		$content = $this->parseArray(array('[/prive]'), $forbidden);
+		$content = '<span class="bb-prive">' . $this->parseArray(array('[/prive]'), $forbidden) . '</span>';
 		if (!LoginModel::mag($permissie)) {
 			$content = '';
 			$this->bb_mode = true;

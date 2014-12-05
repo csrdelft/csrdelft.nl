@@ -39,6 +39,10 @@ span.offtopic img { opacity: 0.3; filter: alpha(opacity=30); }
 
 #forumtabel td .bb-block { margin: 2px 0; }
 
+.bb-prive {
+	background-color: #faebfa;
+}
+
 .bb-maaltijd {
 	width: 329px;
 	overflow: auto;
