@@ -20,7 +20,8 @@ class FotoAlbumController extends AclController {
 				'bekijken'	 => 'P_ALBUM_READ',
 				'downloaden' => 'P_ALBUM_DOWN',
 				'verwerken'	 => 'P_ALBUM_MOD',
-				'uploaden'	 => 'P_ALBUM_ADD'
+				'uploaden'	 => 'P_ALBUM_ADD',
+				'zoeken'	 => 'P_ALBUM_READ'
 			);
 		} else {
 			$this->acl = array(
@@ -42,6 +43,9 @@ class FotoAlbumController extends AclController {
 		if (!array_key_exists($this->action, $this->acl)) {
 			$this->action = 'bekijken';
 			$path = $this->getParams(1);
+		} elseif ($this->action === 'zoeken') {
+			parent::performAction($this->getParams(3));
+			return;
 		} else {
 			$path = $this->getParams(3);
 		}
@@ -242,6 +246,29 @@ class FotoAlbumController extends AclController {
 		$degrees = (int) filter_input(INPUT_POST, 'rotation', FILTER_SANITIZE_NUMBER_INT);
 		$foto->rotate($degrees);
 		$this->view = new JsonResponse(true);
+	}
+
+	public function zoeken($query = null) {
+		if ($query === null) {
+			$this->geentoegang();
+		}
+		$result = array();
+		$albums = new RecursiveIteratorIterator(new RecursiveDirectoryIterator(PICS_PATH . 'fotoalbum', RecursiveDirectoryIterator::SKIP_DOTS | RecursiveDirectoryIterator::UNIX_PATHS), RecursiveIteratorIterator::SELF_FIRST);
+
+		foreach ($albums as $path => $object) {
+
+			if (!$object->isDir() OR strpos($path, '/_') !== false OR stripos($path, $query) === false) {
+				continue;
+			}
+			$album = $this->model->getFotoAlbum($path);
+			if ($album) {
+				$result[] = array(
+					'url'	 => $album->getUrl(),
+					'value'	 => ucfirst($album->dirname) . '<span class="lichtgrijs"> - ' . ucfirst(basename(dirname($album->getSubdir()))) . '</span>'
+				);
+			}
+		}
+		$this->view = new JsonResponse($result);
 	}
 
 }
