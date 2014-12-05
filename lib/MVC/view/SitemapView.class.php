@@ -8,6 +8,7 @@
  */
 class SitemapView implements View {
 
+	public $levels = 2;
 	private $javascript;
 
 	public function getModel() {
@@ -31,7 +32,7 @@ class SitemapView implements View {
 
 	private function viewTree(MenuItem $item, $level = 0) {
 		if ($item->magBekijken()) {
-			if ($item->hasChildren()) {
+			if ($item->hasChildren() AND $level < $this->levels) {
 				$kopje = new CollapsableSubkopje($item->item_id, $item->tekst, true);
 				$kopje->h += $level;
 				$kopje->view();
