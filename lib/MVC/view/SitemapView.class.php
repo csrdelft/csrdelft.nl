@@ -25,7 +25,7 @@ class SitemapView implements View {
 
 	public function view() {
 		foreach ($this->getModel()->getChildren() as $parent) {
-			echo $this->viewTree($parent, 0);
+			echo $this->viewTree($parent, 1);
 		}
 		echo $this->getScriptTag();
 	}
@@ -34,11 +34,11 @@ class SitemapView implements View {
 		if ($item->magBekijken()) {
 			if ($item->hasChildren() AND $level < $this->levels) {
 				$kopje = new CollapsableSubkopje($item->item_id, $item->tekst, true, true);
-				$kopje->h += $level;
+				$kopje->h += $level - 1;
 				$kopje->view();
 				$this->javascript .= $kopje->getJavascript();
 				foreach ($item->getChildren() as $child) {
-					echo $this->viewTree($child, $level + 1);
+					echo $this->viewTree($child, $level++);
 				}
 				echo '</div>';
 			} else {
