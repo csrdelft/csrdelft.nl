@@ -33,7 +33,7 @@ class MainMenuView extends MenuView {
 
 		$fields[] = new HtmlComment('<div class="input-group"><div class="input-group-btn">');
 
-		$field = new LidField('q', null, null);
+		$field = new TextField('q', null, null);
 		$fields[] = $field;
 		$field->css_classes[] = 'menuzoekveld form-control';
 		$field->onkeydown = <<<JS
@@ -51,10 +51,14 @@ JS;
 			}
 		}
 
+		$field->suggestions['leden'] = '/tools/naamsuggesties/leden?q=';
+
 		require_once 'MVC/model/ForumModel.class.php';
 		foreach (ForumDelenModel::instance()->getForumDelenVoorLid(false) as $deel) {
 			$field->suggestions['forum'][] = array('url' => '/forum/deel/' . $deel->forum_id, 'value' => $deel->titel);
 		}
+
+		$field->suggestions['draadjes'] = '/forum/titelzoeken/';
 
 		$field->typeahead_selected = <<<JS
 
