@@ -215,9 +215,7 @@ Lateral navigation
 #cd-lateral-nav {
 	width: 260px;
 	line-height: 50px;
-	padding: 25px 0 0 32px;
 	background-color: #0a338d;
-
 	position: fixed;
 	top: 0;
 	right: 0;
@@ -240,6 +238,9 @@ Lateral navigation
 	-ms-transform: translateX(80px);
 	-o-transform: translateX(80px);
 	transform: translateX(80px);
+}
+#mainmenu {
+	margin: 25px 0 0 32px;
 }
 #cd-lateral-nav .expanded-submenu {
 	display: none;
@@ -279,6 +280,7 @@ Lateral navigation
 }
 
 #cd-zoek-form {
+	margin: 25px 0 0 32px;
 
 	.InputField, .InputField:hover {
 		border: none;
