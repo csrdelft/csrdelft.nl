@@ -37,12 +37,8 @@ $result = array();
 foreach ($namen as $naam) {
 	$tussenvoegsel = ($naam['tussenvoegsel'] != '') ? $naam['tussenvoegsel'] . ' ' : '';
 	$fullname = $naam['voornaam'] . ' ' . $tussenvoegsel . $naam['achternaam'];
-	if (isset($_GET['result']) AND $_GET['result'] == 'uid') {
-		$resultstr = $naam['uid'];
-	} else {
-		$resultstr = $fullname;
-	}
-	$result[] = array('key' => $naam['uid'], 'value' => $resultstr);
+
+	$result[] = array('url' => '/communicatie/profiel/' . $naam['uid'], 'uid' => $naam['uid'], 'value' => $fullname);
 }
 echo json_encode($result);
 exit;

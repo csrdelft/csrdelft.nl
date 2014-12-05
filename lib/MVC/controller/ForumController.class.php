@@ -28,6 +28,7 @@ class ForumController extends Controller {
 				return true;
 
 			// Forum
+			case 'titelzoeken':
 			case 'rss':
 			case 'recent':
 			case 'belangrijk':
@@ -92,7 +93,7 @@ class ForumController extends Controller {
 			$this->action = 'forum';
 			parent::performAction(array());
 		}
-		if ((!$this->isPosted() OR $this->action == 'zoeken') AND $this->action != 'rss') {
+		if ((!$this->isPosted() OR $this->action == 'zoeken') AND $this->action != 'titelzoeken' AND $this->action != 'rss') {
 			if (LoginModel::mag('P_LOGGED_IN')) {
 				$this->view = new CsrLayoutPage($this->view);
 				$layoutmap = 'layout';
@@ -156,6 +157,28 @@ class ForumController extends Controller {
 		}
 		$draden_delen = ForumDelenModel::instance()->zoeken($query, $titel, $datum, $ouder, $jaar);
 		$this->view = new ForumResultatenView($draden_delen[0], $draden_delen[1], $query);
+	}
+
+	/**
+	 * Draden zoeken op titel voor auto-aanvullen.
+	 * 
+	 * @param string $query
+	 */
+	public function titelzoeken($query = null) {
+		$draden = array();
+		if ($query !== null) {
+			$query = urldecode($query);
+			$query = filter_var($query, FILTER_SANITIZE_SPECIAL_CHARS);
+			$titel = true;
+			$datum = 'reactie';
+			$ouder = 'jonger';
+			$jaar = 1;
+			$draden_delen = ForumDelenModel::instance()->zoeken($query, $titel, $datum, $ouder, $jaar);
+			foreach ($draden_delen[0] as $draad) {
+				$draden[] = array('url' => '/forum/onderwerp/' . $draad->draad_id, 'value' => $draad->titel);
+			}
+		}
+		$this->view = new JsonResponse($draden);
 	}
 
 	/**

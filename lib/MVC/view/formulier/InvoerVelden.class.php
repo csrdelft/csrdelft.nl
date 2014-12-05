@@ -410,12 +410,16 @@ var {$this->getId()}{$name} = new Bloodhound({
 	queryTokenizer: Bloodhound.tokenizers.whitespace,
 JS;
 			if (is_array($source)) {
-				$json = json_encode(array_values($source));
+				$suggestions = array_values($source);
+				foreach($suggestions as $i => $suggestion) {
+					if (!is_array($suggestion)) {
+						$suggestions[$i] = array('value' => $suggestion);
+					}
+				}
+				$json = json_encode($suggestions);
 				$js .= <<<JS
 
-	local: $.map({$json}, function(value) {
-		return { value: value };
-	})
+	local: {$json}
 
 JS;
 			} else {

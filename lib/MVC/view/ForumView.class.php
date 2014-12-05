@@ -39,9 +39,6 @@ class ForumZoekenForm extends Formulier {
 		parent::__construct(null, 'forumZoekenForm', '/forum/zoeken');
 		$this->css_classes[] = 'hoverIntent';
 
-		$fields['z'] = new TextField('zoekopdracht', null, null);
-		$fields['z']->placeholder = 'Zoeken in forum';
-		$fields['z']->onkeyup .= "if (event.keyCode == 13) { this.form.submit(); };";
 		$fields[] = new HtmlComment('<div class="forumZoekenGeavanceerd hoverIntentContent verborgen">');
 		$fields[] = new VinkField('alleentitel', false, null, 'Alleen op titel zoeken');
 		$fields[] = new HtmlComment('<div class="inline">');
@@ -53,6 +50,19 @@ class ForumZoekenForm extends Formulier {
 		  $fields['l'] = new LidField('auteur', null, 'Auteur');
 		  $fields['l']->no_preview = true; */
 		$fields[] = new HtmlComment('</div>');
+
+		$fields['z'] = new TextField('zoekopdracht', null, null);
+		$fields['z']->suggestions[] = '/forum/titelzoeken/';
+		$fields['z']->typeahead_selected = <<<JS
+
+if (suggestion) {
+	window.location.href = suggestion.url;
+}
+else {
+	form_submit(event);
+}
+JS;
+		$fields['z']->placeholder = 'Zoeken in forum';
 
 		$this->addFields($fields);
 	}

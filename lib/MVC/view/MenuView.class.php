@@ -41,29 +41,25 @@ if (event.keyCode === 13) { // enter
 	$(this).trigger('typeahead:selected');
 }
 JS;
-		$shortcuts = array();
 		foreach (MenuModel::instance()->find('link != ""') as $item) {
 			if ($item->magBekijken()) {
 				if ($item->tekst == LoginModel::getUid()) {
-					$shortcuts['Favorieten'] = $item->link;
+					$field->suggestions['menu'][] = array('url' => $item->link, 'value' => 'Favorieten');
 				} else {
-					$shortcuts[$item->tekst] = $item->link;
+					$field->suggestions['menu'][] = array('url' => $item->link, 'value' => $item->tekst);
 				}
 			}
 		}
-		$field->suggestions['menu'] = array_keys($shortcuts);
 
 		require_once 'MVC/model/ForumModel.class.php';
 		foreach (ForumDelenModel::instance()->getForumDelenVoorLid(false) as $deel) {
-			$field->suggestions['forum'][] = $deel->titel;
-			$shortcuts[$deel->titel] = '/forum/deel/' . $deel->forum_id;
+			$field->suggestions['forum'][] = array('url' => '/forum/deel/' . $deel->forum_id, 'value' => $deel->titel);
 		}
 
-		$json = json_encode($shortcuts);
 		$field->typeahead_selected = <<<JS
-var shortcuts = {$json};
-if (typeof shortcuts[this.value] === 'string') {
-	window.location.href = shortcuts[this.value];
+
+if (suggestion) {
+	window.location.href = suggestion.url;
 }
 else {
 	form_submit(event);
