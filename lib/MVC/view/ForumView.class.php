@@ -40,7 +40,6 @@ class ForumZoekenForm extends Formulier {
 		$this->css_classes[] = 'hoverIntent';
 
 		$fields[] = new HtmlComment('<div class="forumZoekenGeavanceerd hoverIntentContent verborgen">');
-		$fields[] = new VinkField('alleentitel', false, null, 'Alleen op titel zoeken');
 		$fields[] = new HtmlComment('<div class="inline">');
 		$fields[] = new KeuzeRondjeField('datumsoort', 'reactie', null, array('reactie' => 'Laatste reactie', 'gemaakt' => 'Aanmaak-datum'));
 		$fields[] = new SelectField('ouderjonger', 'jonger', null, array('jonger' => 'Niet', 'ouder' => 'Wel'));

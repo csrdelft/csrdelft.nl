@@ -411,7 +411,7 @@ var {$this->getId()}{$name} = new Bloodhound({
 JS;
 			if (is_array($source)) {
 				$suggestions = array_values($source);
-				foreach($suggestions as $i => $suggestion) {
+				foreach ($suggestions as $i => $suggestion) {
 					if (!is_array($suggestion)) {
 						$suggestions[$i] = array('value' => $suggestion);
 					}

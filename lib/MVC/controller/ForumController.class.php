@@ -143,19 +143,17 @@ class ForumController extends Controller {
 			$zoekform = new ForumZoekenForm();
 			$values = $zoekform->getValues();
 			$query = $values['zoekopdracht'];
-			$titel = $values['alleentitel'];
 			$datum = $values['datumsoort'];
 			$ouder = $values['ouderjonger'];
 			$jaar = $values['jaaroud'];
 		} else {
 			$query = urldecode($query);
 			$query = filter_var($query, FILTER_SANITIZE_SPECIAL_CHARS);
-			$titel = false;
 			$datum = 'reactie';
 			$ouder = 'jonger';
 			$jaar = 1;
 		}
-		$draden_delen = ForumDelenModel::instance()->zoeken($query, $titel, $datum, $ouder, $jaar);
+		$draden_delen = ForumDelenModel::instance()->zoeken($query, false, $datum, $ouder, $jaar);
 		$this->view = new ForumResultatenView($draden_delen[0], $draden_delen[1], $query);
 	}
 
@@ -169,11 +167,10 @@ class ForumController extends Controller {
 		if ($query !== null) {
 			$query = urldecode($query);
 			$query = filter_var($query, FILTER_SANITIZE_SPECIAL_CHARS);
-			$titel = true;
 			$datum = 'reactie';
 			$ouder = 'jonger';
 			$jaar = 1;
-			$draden_delen = ForumDelenModel::instance()->zoeken($query, $titel, $datum, $ouder, $jaar);
+			$draden_delen = ForumDelenModel::instance()->zoeken($query, true, $datum, $ouder, $jaar);
 			foreach ($draden_delen[0] as $draad) {
 				$draden[] = array('url' => '/forum/onderwerp/' . $draad->draad_id, 'value' => $draad->titel);
 			}

@@ -257,21 +257,22 @@ class ForumDelenModel extends AbstractForumModel {
 		} else {
 			$gevonden_posts = group_by('draad_id', ForumPostsModel::instance()->zoeken($query, $datum, $ouder, $jaar)); // zoek op tekst in posts
 			$gevonden_draden += ForumDradenModel::instance()->getForumDradenById(array_keys($gevonden_posts)); // laad draden bij posts
-		}
-		foreach ($gevonden_draden as $draad) { // laad posts bij draden
-			if (property_exists($draad, 'score')) { // gevonden op draad titel
-				$draad->score = (float) 50;
-			} else { // gevonden op post tekst
-				$draad->score = (float) 0;
-			}
-			if (array_key_exists($draad->draad_id, $gevonden_posts)) { // posts al gevonden
-				$draad->setForumPosts($gevonden_posts[$draad->draad_id]);
-				foreach ($draad->getForumPosts() as $post) {
-					$draad->score += (float) $post->score;
+			// laad posts bij draden
+			foreach ($gevonden_draden as $draad) {
+				if (property_exists($draad, 'score')) { // gevonden op draad titel
+					$draad->score = (float) 50;
+				} else { // gevonden op post tekst
+					$draad->score = (float) 0;
 				}
-			} else { // laad eerste post
-				$array_first_post = ForumPostsModel::instance()->find('draad_id = ? AND wacht_goedkeuring = FALSE AND verwijderd = FALSE', array($draad->draad_id), 'post_id ASC', null, 1)->fetchAll();
-				$draad->setForumPosts($array_first_post);
+				if (array_key_exists($draad->draad_id, $gevonden_posts)) { // posts al gevonden
+					$draad->setForumPosts($gevonden_posts[$draad->draad_id]);
+					foreach ($draad->getForumPosts() as $post) {
+						$draad->score += (float) $post->score;
+					}
+				} else { // laad eerste post
+					$array_first_post = ForumPostsModel::instance()->find('draad_id = ? AND wacht_goedkeuring = FALSE AND verwijderd = FALSE', array($draad->draad_id), 'post_id ASC', null, 1)->fetchAll();
+					$draad->setForumPosts($array_first_post);
+				}
 			}
 		}
 		// check permissies op delen

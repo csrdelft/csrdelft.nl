@@ -259,7 +259,7 @@ class KeuzeRondjeField extends SelectField {
 			if ($value == $this->value) {
 				$html .= ' checked="checked"';
 			}
-			$html .= '><label for="field_' . $this->getName() . '_option_' . $value . '" ' . $this->getInputAttribute('class') . '> ' . htmlspecialchars($description) . '</label><br />';
+			$html .= '><label for="field_' . $this->getName() . '_option_' . $value . '" class="KeuzeRondjeLabel"> ' . htmlspecialchars($description) . '</label><br />';
 		}
 		return $html . '</div>';
 	}
