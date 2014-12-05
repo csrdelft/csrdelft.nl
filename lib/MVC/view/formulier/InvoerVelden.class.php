@@ -699,7 +699,7 @@ var preview{$this->getId()} = function() {
 		url: "/tools/naamlink.php?zoekin={$this->zoekin}&naam=" + val,
 	}).done(function(response) {
 		$('#lidPreview_{$this->getId()}').html(response);
-		init_hoverIntents();
+		init_context('#lidPreview_{$this->getId()}');
 	});
 };
 preview{$this->getId()}();

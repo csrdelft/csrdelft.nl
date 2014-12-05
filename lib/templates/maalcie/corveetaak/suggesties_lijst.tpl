@@ -95,7 +95,7 @@ mijn_rooster.tpl	|	P.W.G. Brussee (brussee@live.nl)
 				<label for="recent" class="VinkFieldLabel">Niet recent gecorveed</label>
 			</td>
 			<td>
-				<p>Toon novieten/sjaars</p>
+				Toon novieten/sjaars<br />
 
 				<input type="radio" id="jongste_ja" name="jongste" value="ja" onchange="
 						taken_toggle_suggestie('oudere', 'alleen' !== $('#jongste_alleen:checked').val());
