@@ -41,6 +41,11 @@
 			<br /><br />
 			<a href="/tools/stats.php?ip={$post->auteur_ip}" class="btn" title="IP-log">IP-log</a>
 			<a href="/forum/verwijderen/{$post->post_id}" class="btn post confirm" title="Verwijder bericht of draad">{icon get="cross"}</a>
+			{if ForumController::magForumPostBewerken($post, $draad, $deel)}
+				<a href="#{$post->post_id}" class="knop
+				   {if $deel->magModereren() AND $post->uid !== LoginModel::getUid() AND !$post->wacht_goedkeuring} forummodknop
+				   {/if}" onclick="forumBewerken({$post->post_id});" title="Bewerk bericht">{icon get="pencil"}</a>
+			{/if}
 		{else}
 			<div class="forumpostKnoppen">
 				{if $post->verwijderd}
