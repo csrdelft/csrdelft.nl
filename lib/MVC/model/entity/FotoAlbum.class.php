@@ -63,8 +63,9 @@ class FotoAlbum extends Map {
 			$this->path = $locatie;
 			$this->subdir = $this->getSubDir();
 		}
-		$this->dirname = basename($this->path);
-		if (!$this->exists()) {
+		if ($this->exists()) {
+			$this->dirname = basename($this->path);
+		} else {
 			$this->fotos = array();
 			$this->subalbums = array();
 		}

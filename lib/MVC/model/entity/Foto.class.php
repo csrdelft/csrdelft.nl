@@ -50,9 +50,11 @@ class Foto extends Afbeelding {
 	public function __construct(FotoAlbum $album = null, $bestandsnaam = null) {
 		// werkomheen traag fotoalbum: niet onnodig parsen
 		//parent::__construct($album->path . $bestandsnaam, false);
-		$this->filename = $bestandsnaam;
-		$this->directory = $album;
-		$this->subdir = $album->getSubDir();
+		if ($this->exists()) {
+			$this->filename = $bestandsnaam;
+			$this->directory = $album;
+			$this->subdir = $album->getSubDir();
+		}
 	}
 
 	/**
