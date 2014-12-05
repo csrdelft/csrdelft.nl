@@ -449,7 +449,7 @@ JS;
 			if (is_int($name)) {
 				$header = '';
 			} else {
-				$header = 'header: "<h4>' . ucfirst(str_replace('_', ' ', $name)) . '</h4>"';
+				$header = 'header: "<h3>' . ucfirst(str_replace('_', ' ', $name)) . '</h3>"';
 			}
 			$js .= <<<JS
 , {
