@@ -280,15 +280,11 @@ Lateral navigation
 }
 
 #cd-zoek-form {
-	margin: 25px 0 0 32px;
-
-	.InputField, .InputField:hover {
-		border: none;
-		background: none;
-	}
+	margin-top: 25px;
 
 	.menuzoekveld {
-		max-width: 150px;
+		margin-left: 32px;
+		width: 150px;
 		border-top-left-radius: 4px;
 		border-bottom-left-radius: 4px;
 	}
