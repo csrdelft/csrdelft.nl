@@ -38,6 +38,9 @@ class ZoekInputGroup extends TextField {
 if (event.keyCode === 13) { // enter
 	$(this).trigger('typeahead:selected');
 }
+else if (event.keyCode === 191 || event.keyCode === 220) { // forward and backward slash
+	event.preventDefault();
+}
 JS;
 		$this->typeahead_selected = <<<JS
 
