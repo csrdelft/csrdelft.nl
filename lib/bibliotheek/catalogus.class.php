@@ -31,13 +31,13 @@ class Catalogus {
 		 */
 
 
-		// kolommen van de tabel. De laatste velden die niet in tabel staan worden gebruik om op te filteren.
+// kolommen van de tabel. De laatste velden die niet in tabel staan worden gebruik om op te filteren.
 		if (LoginModel::mag('P_BIEB_READ')) {
-			//boekstatus
+//boekstatus
 			$this->aKolommen = array('titel', 'auteur', 'categorie', 'bsaantal', 'eigenaar', 'lener', 'uitleendatum', 'status', 'code', 'isbn', 'auteur', 'categorie');
 			$this->iKolommenZichtbaar = 7;
 		} else {
-			//catalogus
+//catalogus
 			$this->aKolommen = array('titel', 'auteur', 'categorie', 'code', 'isbn');
 			$this->iKolommenZichtbaar = 3;
 		}
@@ -58,18 +58,18 @@ class Catalogus {
 		 * Ordering
 		 */
 
-		//sorteerkeys voor mysql
+//sorteerkeys voor mysql
 		$aSortColumns = array('titel'			 => "titel", 'auteur'		 => "auteur", 'categorie'		 => "categorie",
 			'code'			 => "code", 'isbn'			 => "isbn", 'bsaantal'		 => "bsaantal",
 			'status'		 => "status", 'leningen'		 => "leningen", 'eigenaar'		 => "eigenaar",
 			'lener'			 => "lener", 'uitleendatum'	 => "uitleendatum");
 
-		//is er een kolom gegeven om op te sorteren?
+//is er een kolom gegeven om op te sorteren?
 		if (isset($_GET['iSortCol_0'])) {
 			$sOrder = "ORDER BY ";
-			//loop als er op meer kolommen tegelijk gesorteerd moet worden
+//loop als er op meer kolommen tegelijk gesorteerd moet worden
 			for ($i = 0; $i < intval($_GET['iSortingCols']); $i++) {
-				//mag kolom gesorteerd worden?
+//mag kolom gesorteerd worden?
 				if ($_GET['bSortable_' . intval($_GET['iSortCol_' . $i])] == "true") {
 					$sOrder .= $aSortColumns[$this->aKolommen[intval($_GET['iSortCol_' . $i])]] . " " . $db->escape($_GET['sSortDir_' . $i]) . ", ";
 				}
@@ -88,7 +88,7 @@ class Catalogus {
 		 * word by word on any field. It's possible to do here, but concerned about efficiency
 		 * on very large tables, and MySQL's regex functionality is very limited
 		 */
-		//sorteer key voor mysql
+//sorteer key voor mysql
 		$aFilterColumns = array('titel'			 => "titel", 'auteur'		 => "auteur", 'categorie'		 => "CONCAT(c1.categorie, ' - ', c2.categorie )",
 			'code'			 => "code", 'isbn'			 => "isbn", 'bsaantal'		 => "bsaantal", 'status'		 => "e.status", 'leningen'		 => "leningen",
 			'eigenaar'		 => "CONCAT(l1.voornaam, ' ', l1.tussenvoegsel,IFNULL(l1.tussenvoegsel, ' '),l1.achternaam)",
@@ -99,7 +99,7 @@ class Catalogus {
 		if ($_GET['sSearch'] != "") {
 			$sWhere = "WHERE (";
 			for ($i = 0; $i < count($this->aKolommen); $i++) {
-				//beschrijvingenaantal skippen, die heeft een subquery nodig
+//beschrijvingenaantal skippen, die heeft een subquery nodig
 				if ($this->aKolommen[$i] != 'bsaantal') {
 					$sWhere .= $aFilterColumns[$this->aKolommen[$i]] . " LIKE '%" . $db->escape($_GET['sSearch']) . "%' OR ";
 				}
@@ -112,7 +112,7 @@ class Catalogus {
 		 * filter op eigenaar
 		 */
 
-		//filter bepalen
+//filter bepalen
 		$allow = array('alle', 'csr', 'leden', 'eigen', 'geleend');
 		if (LoginModel::mag('P_BIEB_READ') AND in_array($_GET['sEigenaarFilter'], $allow)) {
 			$filter = $_GET['sEigenaarFilter'];
@@ -145,7 +145,7 @@ class Catalogus {
 		 * Get data to display
 		 */
 		if (LoginModel::mag('P_BIEB_READ')) {
-			//ingelogden
+//ingelogden
 			$sSelect = "
 				, GROUP_CONCAT(e.eigenaar_uid SEPARATOR ', ') AS eigenaar, GROUP_CONCAT(e.uitgeleend_uid SEPARATOR ', ') AS lener, 
 				GROUP_CONCAT(e.status SEPARATOR ', ') AS status, GROUP_CONCAT(e.uitleendatum SEPARATOR ', ') AS uitleendatum, GROUP_CONCAT(e.leningen SEPARATOR ', ') AS leningen,
@@ -156,7 +156,7 @@ class Catalogus {
 				LEFT JOIN lid l2 ON(l2.uid=e.uitgeleend_uid)";
 			$sGroupby = "GROUP BY b.id";
 		} else {
-			//uitgelogden
+//uitgelogden
 			$sSelect = "";
 			$sLeftjoin = "";
 			$sGroupby = "";
@@ -198,7 +198,7 @@ class Catalogus {
 		$this->iTotaal = $aResultTotal[0];
 	}
 
-	//get info van object Catalogus
+//get info van object Catalogus
 	public function getTotaal() {
 		return $this->iTotaal;
 	}
@@ -262,6 +262,10 @@ class Catalogus {
 	 * met formatItem (optie voor jquery.autocomplete) kan uit data-array inhoud worden gegenereerd voor in de li-elementen van de suggestielijst
 	 */
 	public static function getAutocompleteSuggesties($sKey) {
+		$limiet = 0;
+		if (isset($_GET['limit'])) {
+			$limiet = (int) $_GET['limit'];
+		}
 		$properties = array();
 		$allowedkeys = array('id', 'titel', 'uitgavejaar', 'uitgeverij', 'paginas', 'taal', 'isbn', 'code', 'auteur', 'biebboek');
 		if (in_array($sKey, $allowedkeys)) {
@@ -272,7 +276,11 @@ class Catalogus {
 					FROM biebboek
 					WHERE titel LIKE  '%" . $db->escape($_GET['q']) . "%' OR auteur LIKE  '%" . $db->escape($_GET['q']) . "%' OR id = " . (int) $_GET['q'] . "
 					ORDER BY titel
-					LIMIT 0, " . (int) $_GET['limit'] . " ;";
+					";
+				if ($limiet > 0) {
+					$query .= "LIMIT 0, " . $limiet;
+				}
+				$query .= ";";
 			} else {
 				$query = "
 					SELECT " . $db->escape($sKey) . ", id
@@ -280,7 +288,11 @@ class Catalogus {
 					WHERE " . $db->escape($sKey) . " LIKE  '%" . $db->escape($_GET['q']) . "%'
 					GROUP BY " . $db->escape($sKey) . "
 					ORDER BY " . $db->escape($sKey) . "
-					LIMIT 0, " . (int) $_GET['limit'] . " ;";
+					";
+				if ($limiet > 0) {
+					$query .= "LIMIT 0, " . $limiet;
+				}
+				$query .= ";";
 			}
 			$result = $db->query($query);
 			echo $db->error();
@@ -288,7 +300,7 @@ class Catalogus {
 				while ($prop = $db->next($result)) {
 					if ($sKey == 'biebboek') {
 						//input for UI autocomplete
-						$properties[] = array('titel' => $prop['titel'], 'auteur' => $prop['auteur'], 'id' => $prop['id']);
+						$properties[] = array('url' => '/communicatie/bibliotheek/boek/' . $prop['id'], 'value' => $prop['titel'], 'titel' => $prop['titel'], 'auteur' => $prop['auteur'], 'id' => $prop['id']);
 					} else {
 						if ($sKey == 'titel') {
 							$data = array('titel' => $prop['titel'], 'id' => $prop['id']);
@@ -319,10 +331,11 @@ class Catalogus {
 		if (in_array($key, $allowedkeys)) {
 			$db = MijnSqli::instance();
 			$query = "
-				SELECT  " . $db->escape($key) . "
-				FROM  `biebboek` 
-				WHERE  `" . $db->escape($key) . "` LIKE  '" . $db->escape($value) . "'
-				LIMIT 0 , 1;";
+SELECT " . $db->escape($key) . "
+FROM `biebboek`
+WHERE `" . $db->escape($key) . "` LIKE '" . $db->escape($value) . "'
+LIMIT 0, 1;
+";
 			$result = $db->query($query);
 			return $db->numRows($result) > 0;
 		} elseif ($key == 'rubriek') {
@@ -346,20 +359,20 @@ class Catalogus {
 
 		//bepaalt de status voor het boek, is samenvoeging van de statussen van de exemplaren
 		$statusboek = ", IF(
-					(SELECT count( * )
-					FROM biebexemplaar e2
-					WHERE e2.boek_id = b.id AND e2.status='beschikbaar'
-					) > 0,
-					'beschikbaar',
-					IF(
-						(SELECT count( * )
-						FROM biebexemplaar e2
-						WHERE e2.boek_id = b.id AND e2.status='teruggegeven'
-						) > 0,
-					'teruggegeven',
-					'geen'
-					)
-				) AS status";
+(SELECT count( * )
+FROM biebexemplaar e2
+WHERE e2.boek_id = b.id AND e2.status = 'beschikbaar'
+) > 0,
+ 'beschikbaar',
+ IF(
+(SELECT count( * )
+FROM biebexemplaar e2
+WHERE e2.boek_id = b.id AND e2.status = 'teruggegeven'
+) > 0,
+ 'teruggegeven',
+ 'geen'
+)
+) AS status";
 
 		switch ($filter) {
 			case 'eigendom':
@@ -378,21 +391,22 @@ class Catalogus {
 				//zoekt boeken geleend door $uid
 				$select = ", e.status AS status, e.eigenaar_uid";
 				$join = "biebexemplaar e ON(b.id = e.boek_id)";
-				$where = "(e.status =  'uitgeleend' OR e.status =  'teruggegeven') " .
-						"AND e.uitgeleend_uid =  '" . $db->escape($uid) . "'";
+				$where = "(e.status = 'uitgeleend' OR e.status = 'teruggegeven') " .
+						"AND e.uitgeleend_uid = '" . $db->escape($uid) . "'";
 				break;
 			default:
 				return false;
 		}
 
 		$query = "
-			SELECT DISTINCT 
-				b.id, b.titel, b.auteur $select
-			FROM biebboek b
-			LEFT JOIN $join
-			WHERE  $where
-			" . ($filter == 'geleend' ? "" : "GROUP BY b.id") . "
-			ORDER BY titel;";
+SELECT DISTINCT
+b.id, b.titel, b.auteur $select
+FROM biebboek b
+LEFT JOIN $join
+WHERE $where
+" . ($filter == 'geleend' ? "" : "GROUP BY b.id") . "
+ORDER BY titel;
+";
 		$result = $db->query($query);
 
 		if ($db->numRows($result) > 0) {

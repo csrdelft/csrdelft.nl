@@ -1,4 +1,5 @@
 <?php
+
 /*
  * class.groepen.php	| 	Jan Pieter Waagmeester (jieter@jpwaag.com)
  *
@@ -15,11 +16,10 @@
  */
 require_once 'groep.class.php';
 
-class Groepen{
+class Groepen {
 
 	private $type;
-
-	private $groepen=null;
+	private $groepen = null;
 
 	/*
 	 * Constructor voor Groepen.
@@ -27,26 +27,27 @@ class Groepen{
 	 * @param	$groeptype		Welke groepen moeten geladen worden?
 	 * @return 	void
 	 */
-	public function __construct($groeptype){
-		$db=MijnSqli::instance();
 
-		if(is_int($groeptype)){
-			$where="groeptype.id=".(int)$groeptype;
-		}else{
-			$where="groeptype.naam='".$db->escape($groeptype)."'";
+	public function __construct($groeptype) {
+		$db = MijnSqli::instance();
+
+		if (is_int($groeptype)) {
+			$where = "groeptype.id=" . (int) $groeptype;
+		} else {
+			$where = "groeptype.naam='" . $db->escape($groeptype) . "'";
 		}
 
 		//we laden eerst de gegevens over de groep op
-		$query="
+		$query = "
 			SELECT id, naam, beschrijving, toonHistorie, groepenAanmaakbaar, syncWithLDAP FROM groeptype
-			WHERE ".$where." LIMIT 1;";
-		$categorie=$db->getRow($query);
-		if(is_array($categorie)){
-			$this->type=$categorie;
-		}else{
-			$message='Groeptype ('.$groeptype.') bestaat niet! Groepen::__construct()';
-			if(LoginModel::mag('P_ADMIN')){
-				$message.="\n".$db->error();
+			WHERE " . $where . " LIMIT 1;";
+		$categorie = $db->getRow($query);
+		if (is_array($categorie)) {
+			$this->type = $categorie;
+		} else {
+			$message = 'Groeptype (' . $groeptype . ') bestaat niet! Groepen::__construct()';
+			if (LoginModel::mag('P_ADMIN')) {
+				$message.="\n" . $db->error();
 			}
 			throw new Exception($message);
 		}
@@ -56,19 +57,20 @@ class Groepen{
 	 * De gevens van het groeptype ophalen, met de bekende groepen voor
 	 * het type.
 	 */
-	private function loadGroepen(){
-		$db=MijnSqli::instance();
+
+	private function loadGroepen() {
+		$db = MijnSqli::instance();
 
 		//Afhankelijk van de instelling voor het groeptype halen we alleen de
 		//h.t.-groepen op, of ook de o.t.-groepen.
-		$htotFilter="groep.status='ht'";
-		$sort='';
-		if($this->getToonHistorie()){
+		$htotFilter = "groep.status='ht'";
+		$sort = '';
+		if ($this->getToonHistorie()) {
 			$htotFilter.=" OR groep.status='ot'";
-			$sort="groep.begin DESC, groep.id ASC, ";
+			$sort = "groep.begin DESC, groep.id ASC, ";
 		}
 
-		$qGroepen="
+		$qGroepen = "
 			SELECT
 				groep.id AS groepId, groep.gtype AS gtypeId, groep.snaam AS snaam, groep.naam AS naam,
 				groep.sbeschrijving AS sbeschrijving, groep.beschrijving AS beschrijving, groep.zichtbaar AS zichtbaar,
@@ -92,117 +94,140 @@ class Groepen{
 			FROM groep
 			LEFT JOIN groeplid ON(groep.id=groeplid.groepid)
 			LEFT JOIN lid ON(groeplid.uid=lid.uid)
-			WHERE groep.gtype=".$this->getId()."
+			WHERE groep.gtype=" . $this->getId() . "
 			  AND groep.zichtbaar='zichtbaar'
-			  AND (".$htotFilter.")
-			ORDER BY ".$sort." vol ASC, groep.snaam ASC, groeplid.prioriteit ASC, lid.achternaam ASC, lid.voornaam;";
-		$rGroepen=$db->query($qGroepen);
+			  AND (" . $htotFilter . ")
+			ORDER BY " . $sort . " vol ASC, groep.snaam ASC, groeplid.prioriteit ASC, lid.achternaam ASC, lid.voornaam;";
+		$rGroepen = $db->query($qGroepen);
 		//nu een beetje magic om een stapeltje groepobjecten te genereren:
-		$currentGroepId=null;
-		$aGroep=array();
-		while($aGroepraw=$db->next($rGroepen)){
+		$currentGroepId = null;
+		$aGroep = array();
+		while ($aGroepraw = $db->next($rGroepen)) {
 			//eerste groepid in de huidige groep stoppen
-			if($currentGroepId==null){ $currentGroepId=$aGroepraw['groepId']; }
+			if ($currentGroepId == null) {
+				$currentGroepId = $aGroepraw['groepId'];
+			}
 
 			//zijn we bij een volgende groep aangekomen?
-			if($currentGroepId!=$aGroepraw['groepId']){
+			if ($currentGroepId != $aGroepraw['groepId']) {
 				//groepobject maken en aan de array toevoegen
 
-				$this->groepen[$aGroep[0]['groepId']]=new OldGroep($aGroep);
+				$this->groepen[$aGroep[0]['groepId']] = new OldGroep($aGroep);
 
 				//tenslotte nieuwe groep als huidige kiezen en groeparray leegmikken
-				$currentGroepId=$aGroepraw['groepId'];
-				$aGroep=array();
-
+				$currentGroepId = $aGroepraw['groepId'];
+				$aGroep = array();
 			}
-			$aGroep[]=$aGroepraw;
+			$aGroep[] = $aGroepraw;
 		}
 
-		if(isset($aGroep[0])){
+		if (isset($aGroep[0])) {
 			//tot slot de laatste groep ook toevoegen
-			$this->groepen[$aGroep[0]['groepId']]=new OldGroep($aGroep);
+			$this->groepen[$aGroep[0]['groepId']] = new OldGroep($aGroep);
 		}
 	}
+
 	/*
 	 * Sla de huidige toestand van het groeptype op in de database.
 	 * LET OP: deze methode doet niets met de ingeladen groepen.
 	 */
-	public function save(){
-		$db=MijnSqli::instance();
-		$qSave="
+
+	public function save() {
+		$db = MijnSqli::instance();
+		$qSave = "
 			UPDATE groeptype
-			SET beschrijving='".$db->escape($this->getBeschrijving())."'
-			WHERE id=".$this->getId()."
+			SET beschrijving='" . $db->escape($this->getBeschrijving()) . "'
+			WHERE id=" . $this->getId() . "
 			LIMIT 1;";
 		return $db->query($qSave);
 	}
 
-	public function getGroepen(){
-		if($this->groepen===null){
+	public function getGroepen() {
+		if ($this->groepen === null) {
 			$this->loadGroepen();
 		}
 		return $this->groepen;
 	}
-	public function getId(){			return $this->type['id']; }
-	public function getNaam(){ 			return $this->type['naam']; }
-	public function getNaamEnkelvoud($lcfirst=false){
+
+	public function getId() {
+		return $this->type['id'];
+	}
+
+	public function getNaam() {
+		return $this->type['naam'];
+	}
+
+	public function getNaamEnkelvoud($lcfirst = false) {
 		//genereer enkelvoud
-		if($this->type['naam']=='Besturen'){
+		if ($this->type['naam'] == 'Besturen') {
 			$naam = 'Bestuur';
-		}elseif(substr($this->type['naam'],-2)=='en'){
-			$naam = substr($this->type['naam'],0,-2);
-		}elseif(substr($this->type['naam'],-1)=='s' AND $this->type['naam']!='Dies'){
-			$naam = substr($this->type['naam'],0,-1);
-		}else{
-			$naam = $this->type['naam'].'-ketzer';
+		} elseif (substr($this->type['naam'], -2) == 'en') {
+			$naam = substr($this->type['naam'], 0, -2);
+		} elseif (substr($this->type['naam'], -1) == 's' AND $this->type['naam'] != 'Dies') {
+			$naam = substr($this->type['naam'], 0, -1);
+		} else {
+			$naam = $this->type['naam'] . '-ketzer';
 		}
 		//Eerste letter geen hoofdletter
-		if($lcfirst){
+		if ($lcfirst) {
 			$naam = lcfirst($naam);
 		}
 		return $naam;
 	}
-	public function getBeschrijving(){	return $this->type['beschrijving']; }
-	public function setBeschrijving($beschrijving){ $this->type['beschrijving']=trim($beschrijving); }
-	public function getToonHistorie(){	return $this->type['toonHistorie']==1; }
-	public function getSyncWithLDAP(){	return $this->type['syncWithLDAP']==1; }
 
-	public function getGroepAanmaakbaarPermissies(){
+	public function getBeschrijving() {
+		return $this->type['beschrijving'];
+	}
+
+	public function setBeschrijving($beschrijving) {
+		$this->type['beschrijving'] = trim($beschrijving);
+	}
+
+	public function getToonHistorie() {
+		return $this->type['toonHistorie'] == 1;
+	}
+
+	public function getSyncWithLDAP() {
+		return $this->type['syncWithLDAP'] == 1;
+	}
+
+	public function getGroepAanmaakbaarPermissies() {
 		return $this->type['groepenAanmaakbaar'];
 	}
-	public function isGroepAanmaker(){
+
+	public function isGroepAanmaker() {
 		return LoginModel::mag($this->getGroepAanmaakbaarPermissies());
 	}
 
-	public static function isAdmin(){
+	public static function isAdmin() {
 		return LoginModel::mag('P_LEDEN_MOD');
 	}
 
-	public function getGroep($groepId){
-		if($this->groepen===null){
+	public function getGroep($groepId) {
+		if ($this->groepen === null) {
 			$this->loadGroepen();
 		}
-		if(isset($this->groepen[$groepId])){
+		if (isset($this->groepen[$groepId])) {
 			return $this->groepen[$groepId];
 		}
 		return false;
 	}
 
 	//Alle h.t. groepen in een categorie o.t. maken.
-	public function maakGroepenOt(){
-		$error='';
-		if($this->groepen===null){
+	public function maakGroepenOt() {
+		$error = '';
+		if ($this->groepen === null) {
 			$this->loadGroepen();
 		}
-		if(count($this->groepen)==0){
+		if (count($this->groepen) == 0) {
 			return true;
 		}
-		foreach($this->groepen as $groep){
-			if(!$groep->maakOt()){
+		foreach ($this->groepen as $groep) {
+			if (!$groep->maakOt()) {
 				$error .= '';
 			}
 		}
-		return $error=='';
+		return $error == '';
 	}
 
 	/*
@@ -211,31 +236,33 @@ class Groepen{
 	 * @param	$uid	Gebruiker waarvoor groepen moeten worden opgezocht
 	 * @return			Array met Groep-objectjes
 	 */
-	public static function getByUid($uid){
-		$db=MijnSqli::instance();
 
-		$groepen=array();
-		if(Lid::isValidUid($uid)){
-			$qGroepen="
+	public static function getByUid($uid) {
+		$db = MijnSqli::instance();
+
+		$groepen = array();
+		if (Lid::isValidUid($uid)) {
+			$qGroepen = "
 				SELECT
 					groep.id AS id
 				FROM groep
 				INNER JOIN groeptype ON(groep.gtype=groeptype.id)
 				WHERE groeptype.toonProfiel=1
 				  AND groep.id IN (
-					SELECT groepid FROM groeplid WHERE uid = '".$uid."'
+					SELECT groepid FROM groeplid WHERE uid = '" . $uid . "'
 				)
 				ORDER BY groep.status, groeptype.prioriteit, groep.naam;";
 
-			$rGroepen=$db->query($qGroepen);
-			if ($rGroepen !== false and $db->numRows($rGroepen) > 0){
-				while($row=$db->next($rGroepen)){
-					$groepen[]=new OldGroep($row['id']);
+			$rGroepen = $db->query($qGroepen);
+			if ($rGroepen !== false and $db->numRows($rGroepen) > 0) {
+				while ($row = $db->next($rGroepen)) {
+					$groepen[] = new OldGroep($row['id']);
 				}
 			}
 		}
 		return $groepen;
 	}
+
 	/*
 	 * statische functie om de groepen bij een gebruiker te zoeken 
 	 * waarvan ie in de wiki pagina's mag wijzigen
@@ -243,12 +270,13 @@ class Groepen{
 	 * @param	$uid	Gebruiker waarvoor groepen moeten worden opgezocht
 	 * @return			Array met de kortenamen van de groepen
 	 */
-	public static function getWikigroupsByUid($uid){
-		$db=MijnSqli::instance();
 
-		$groepen=array();
-		if(Lid::isValidUid($uid)){
-			$qGroepen="
+	public static function getWikigroupsByUid($uid) {
+		$db = MijnSqli::instance();
+
+		$groepen = array();
+		if (Lid::isValidUid($uid)) {
+			$qGroepen = "
 				SELECT
 					DISTINCT g.snaam as kortenaam
 				FROM 
@@ -258,7 +286,7 @@ class Groepen{
 				WHERE 
 					groeptype.syncWithLDAP=1
 					AND g.id IN (
-						SELECT groepid FROM groeplid WHERE uid = '".$uid."'
+						SELECT groepid FROM groeplid WHERE uid = '" . $uid . "'
 					)
 					AND (
 						g.status IN ('ft', 'ht')
@@ -270,18 +298,18 @@ class Groepen{
 							LIMIT 1
 						)
 					);";
-			$rGroepen=$db->query($qGroepen);
-			if ($rGroepen !== false and $db->numRows($rGroepen) > 0){
-				while($row=$db->next($rGroepen)){
-					$groepen[]=$row['kortenaam'];
+			$rGroepen = $db->query($qGroepen);
+			if ($rGroepen !== false and $db->numRows($rGroepen) > 0) {
+				while ($row = $db->next($rGroepen)) {
+					$groepen[] = $row['kortenaam'];
 				}
 			}
 			//leden en oudleden krijgen een extra groep 'htleden'
-			$lid=LidCache::getLid($uid);
+			$lid = LidCache::getLid($uid);
 			//S_CIEs die wel als normaal lid mogen inloggen
 			$magLidtoegang = array('x271', 'x030'); //oudledenbestuur & stichting CC
-			if ($lid->isLid() OR $lid->isOudlid() OR in_array($lid->getUid(), $magLidtoegang)){
-				$groepen[]='htleden-oudleden';
+			if ($lid->isLid() OR $lid->isOudlid() OR in_array($lid->getUid(), $magLidtoegang)) {
+				$groepen[] = 'htleden-oudleden';
 			}
 		}
 		return $groepen;
@@ -290,31 +318,32 @@ class Groepen{
 	/*
 	 * Haal de huidige groepen van een bebaald type voor een bepaald lid.
 	 */
-	public static function getByTypeAndUid($type, $uid, $status='ht'){
-		$db=MijnSqli::instance();
 
-		$groepen=array();
-		if(Lid::isValidUid($uid)){
-			if($status!=null AND in_array($status, array('ht', 'ft', 'ot'))){
-				$statusfilter=" AND status='".$status."' ";
-			}else{
-				$statusfilter='';
+	public static function getByTypeAndUid($type, $uid, $status = 'ht') {
+		$db = MijnSqli::instance();
+
+		$groepen = array();
+		if (Lid::isValidUid($uid)) {
+			if ($status != null AND in_array($status, array('ht', 'ft', 'ot'))) {
+				$statusfilter = " AND status='" . $status . "' ";
+			} else {
+				$statusfilter = '';
 			}
-			$qGroepen="
+			$qGroepen = "
 				SELECT id
 				FROM groep
 				WHERE gtype IN (
 					SELECT id
 					FROM groeptype
-					WHERE id=".(int)$type."
-					".$statusfilter."
+					WHERE id=" . (int) $type . "
+					" . $statusfilter . "
 				) AND id IN (
-					SELECT groepid FROM groeplid WHERE uid = '".$uid."'
+					SELECT groepid FROM groeplid WHERE uid = '" . $uid . "'
 				);";
-			$rGroepen=$db->query($qGroepen);
-			if ($rGroepen !== false and $db->numRows($rGroepen) > 0){
-				while($row=$db->next($rGroepen)){
-					$groepen[]=new OldGroep($row['id']);
+			$rGroepen = $db->query($qGroepen);
+			if ($rGroepen !== false and $db->numRows($rGroepen) > 0) {
+				while ($row = $db->next($rGroepen)) {
+					$groepen[] = new OldGroep($row['id']);
 				}
 			}
 		}
@@ -325,6 +354,7 @@ class Groepen{
 	 * Is lid in gevraagde groep
 	 *
 	 */
+
 	/**
 	 * Is lid van gevraagde groep
 	 * @static
@@ -333,16 +363,16 @@ class Groepen{
 	 * @param array|komma|string $status komma gescheiden lijst van gewenste groepstati
 	 * @return bool wel/niet lid
 	 */
-    public static function isUidLidofGroup($uid,$groep,$status=array('ft','ht','ot')){
-		$db=MijnSqli::instance();
-		$qLookup="
+	public static function isUidLidofGroup($uid, $groep, $status = array('ft', 'ht', 'ot')) {
+		$db = MijnSqli::instance();
+		$qLookup = "
 			SELECT uid
 			FROM groeplid gl
 			LEFT JOIN groep g ON(g.id=gl.groepid)
-			WHERE g.snaam='".$db->escape($groep)."'
-						AND gl.uid='".$db->escape($uid)."'
-							AND g.status IN('".implode("','",$status)."');";
-		$rLookup=$db->query($qLookup);
+			WHERE g.snaam='" . $db->escape($groep) . "'
+						AND gl.uid='" . $db->escape($uid) . "'
+							AND g.status IN('" . implode("','", $status) . "');";
+		$rLookup = $db->query($qLookup);
 		return $rLookup !== false AND $db->numRows($rLookup) > 0;
 	}
 
@@ -351,21 +381,24 @@ class Groepen{
 	 *
 	 * @return		Array met groeptypes
 	 */
-	public static function getGroeptypes($alleenZichtbaar=true){
-		$db=MijnSqli::instance();
-		$qGroeptypen="
+
+	public static function getGroeptypes($alleenZichtbaar = true) {
+		$db = MijnSqli::instance();
+		$qGroeptypen = "
 			SELECT id, naam
 			FROM groeptype ";
-		if($alleenZichtbaar===true){ $qGroeptypen.="WHERE zichtbaar=1 "; }
+		if ($alleenZichtbaar === true) {
+			$qGroeptypen.="WHERE zichtbaar=1 ";
+		}
 		$qGroeptypen.="ORDER BY prioriteit ASC, naam ASC;";
-		$rGroeptypen=$db->query($qGroeptypen);
+		$rGroeptypen = $db->query($qGroeptypen);
 		return $db->result2array($rGroeptypen);
 	}
 
-	public static function isValidGtype($gtypetotest){
-		$db=MijnSqli::instance();
-		$qGroep="SELECT id FROM groeptype WHERE naam='".$db->escape($gtypetotest)."'";
-		return $db->numRows($db->query($qGroep))==1;
+	public static function isValidGtype($gtypetotest) {
+		$db = MijnSqli::instance();
+		$qGroep = "SELECT id FROM groeptype WHERE naam='" . $db->escape($gtypetotest) . "'";
+		return $db->numRows($db->query($qGroep)) == 1;
 	}
 
 	/*
@@ -373,8 +406,9 @@ class Groepen{
 	 *
 	 * @return		Array met uid van werkgroepleiders
 	 */
-	public static function getWerkgroepLeiders(){
-		$db=MijnSqli::instance();
+
+	public static function getWerkgroepLeiders() {
+		$db = MijnSqli::instance();
 		$Werkgroepleiders = "
 			SELECT uid
 			FROM groeplid
@@ -385,8 +419,8 @@ class Groepen{
 				WHERE groeptype.naam='Werkgroepen' AND groep.status='ht')";
 		$result = $db->result2array($db->query($Werkgroepleiders));
 		$leiders = array();
-		if(is_array($result)){
-			foreach($result as $leider) {
+		if (is_array($result)) {
+			foreach ($result as $leider) {
 				array_push($leiders, $leider['uid']);
 			}
 		}
@@ -402,27 +436,28 @@ class Groepen{
 	 * @param int $limiet
 	 * @return array
 	 */
-	public static function zoekGroepen($zoekterm, $type = 0, $limiet = 20){
-		$db=MijnSqli::instance();
+	public static function zoekGroepen($zoekterm, $type = 0, $limiet = 20) {
+		$db = MijnSqli::instance();
 
 		$groepen = array();
 		$wheretype = "";
-		if($type!=0){
-			$wheretype = "AND gtype = ".(int)$type;
+		if ($type != 0) {
+			$wheretype = "AND gtype = " . (int) $type;
 		}
 		$qLookup = "
 			SELECT g.id AS id, gt.naam AS type, snaam, g.naam AS naam, status
 			FROM groep g
 			LEFT JOIN groeptype gt ON(gt.id=g.gtype)
-			WHERE g.zichtbaar='zichtbaar' ".$wheretype." AND
-				( g.id = ".(int)$zoekterm." OR g.snaam LIKE '%".$db->escape($zoekterm)."%' OR g.naam LIKE '%".$db->escape($zoekterm)."%' )
-			LIMIT ".(int)$limiet;
-		$rGroepen=$db->query($qLookup);
-		if ($rGroepen !== false and $db->numRows($rGroepen) > 0){
-			while($row=$db->next($rGroepen)){
-				$groepen[] = $row;
+			WHERE g.zichtbaar='zichtbaar' " . $wheretype . " AND
+				( g.id = " . (int) $zoekterm . " OR g.snaam LIKE '%" . $db->escape($zoekterm) . "%' OR g.naam LIKE '%" . $db->escape($zoekterm) . "%' )
+			LIMIT " . (int) $limiet;
+		$rGroepen = $db->query($qLookup);
+		if ($rGroepen !== false and $db->numRows($rGroepen) > 0) {
+			while ($prop = $db->next($rGroepen)) {
+				$groepen[] = array('url' => '/actueel/groepen/' . $prop['type'] . '/' . $prop['id'], 'value' => $prop['naam'], 'id' => $prop['id'], 'snaam' => $prop['snaam'], 'naam' => $prop['naam'], 'status' => $prop['status']);
 			}
 		}
 		return $groepen;
 	}
+
 }

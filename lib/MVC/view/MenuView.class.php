@@ -51,14 +51,20 @@ JS;
 			}
 		}
 
-		$field->suggestions['leden'] = '/tools/naamsuggesties/leden?q=';
+		if (LoginModel::mag('P_LEDEN_READ')) {
 
-		require_once 'MVC/model/ForumModel.class.php';
-		foreach (ForumDelenModel::instance()->getForumDelenVoorLid(false) as $deel) {
-			$field->suggestions['forum'][] = array('url' => '/forum/deel/' . $deel->forum_id, 'value' => $deel->titel);
+			$field->suggestions['leden'] = '/tools/naamsuggesties/leden?q=';
+			$field->suggestions['groepen'] = '/tools/suggesties/groep?q=';
+
+			require_once 'MVC/model/ForumModel.class.php';
+			foreach (ForumDelenModel::instance()->getForumDelenVoorLid(false) as $deel) {
+				$field->suggestions['forum'][] = array('url' => '/forum/deel/' . $deel->forum_id, 'value' => $deel->titel);
+			}
+
+			$field->suggestions['draadjes'] = '/forum/titelzoeken/';
+			$field->suggestions['documenten'] = '/tools/suggesties/document?q=';
+			$field->suggestions['boeken'] = '/tools/suggesties/boek?q=';
 		}
-
-		$field->suggestions['draadjes'] = '/forum/titelzoeken/';
 
 		$field->typeahead_selected = <<<JS
 

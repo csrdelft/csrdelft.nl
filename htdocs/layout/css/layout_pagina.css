@@ -302,7 +302,6 @@ Lateral navigation
 #cd-lateral-nav #cd-zoek-form {
 	margin-top: 25px;
 	margin-left: 32px;
-	width: 200px;
 
 	ul.dropdown-menu li {
 		position: relative;
@@ -318,6 +317,7 @@ Lateral navigation
 		background: none;
 	}
 	.menuzoekveld {
+		width: 180px;
 		border-top-left-radius: 4px;
 		border-bottom-left-radius: 4px;
 	}
