@@ -101,19 +101,19 @@ mijn_rooster.tpl	|	P.W.G. Brussee (brussee@live.nl)
 						taken_toggle_suggestie('oudere', 'alleen' !== $('#jongste_alleen:checked').val());
 						taken_toggle_suggestie('jongste', 'nee' !== $('#jongste_nee:checked').val());
 					   " checked="checked" />
-				<label for="jongste_ja" class="VinkFieldLabel">Ja</label>
+				<label for="jongste_ja" class="KeuzeRondjeLabel">Ja</label>
 
 				<input type="radio" id="jongste_nee" name="jongste" value="nee" onchange="
 						taken_toggle_suggestie('oudere', 'alleen' !== $('#jongste_alleen:checked').val());
 						taken_toggle_suggestie('jongste', 'nee' !== $('#jongste_nee:checked').val());
 					   " />
-				<label for="jongste_nee" class="VinkFieldLabel">Nee</label>
+				<label for="jongste_nee" class="KeuzeRondjeLabel">Nee</label>
 
 				<input type="radio" id="jongste_alleen" name="jongste" value="alleen" onchange="
 						taken_toggle_suggestie('oudere', 'alleen' !== $('#jongste_alleen:checked').val());
 						taken_toggle_suggestie('jongste', 'nee' !== $('#jongste_nee:checked').val());
 					   " />
-				<label for="jongste_alleen" class="VinkFieldLabel">Alleen</label>
+				<label for="jongste_alleen" class="KeuzeRondjeLabel">Alleen</label>
 			</td>
 			<td style="width: 25px;">
 				<br />

@@ -702,6 +702,7 @@ var preview{$this->getId()} = function() {
 		init_hoverIntents();
 	});
 };
+preview{$this->getId()}();
 $('#{$this->getId()}').change(preview{$this->getId()});
 JS;
 	}
