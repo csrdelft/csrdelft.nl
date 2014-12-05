@@ -103,6 +103,9 @@ jQuery(document).ready(function ($) {
 			close_lateral_menu();
 		}
 	}).on('focus', function (event) {
+		$('#mainmenu').fadeOut();
 		this.setSelectionRange(0, this.value.length);
+	}).on('blur', function (event) {
+		$('#mainmenu').fadeIn();
 	});
 });

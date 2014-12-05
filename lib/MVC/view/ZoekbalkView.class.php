@@ -20,11 +20,10 @@ class ZoekbalkView extends Formulier {
 	public function view() {
 		echo '<nav id="cd-lateral-nav">';
 		parent::view();
-
+		echo '<div id="mainmenu">';
 		$sitemap = new SitemapView();
 		$sitemap->view();
-
-		echo '</nav>';
+		echo '</div></nav>';
 	}
 
 }
