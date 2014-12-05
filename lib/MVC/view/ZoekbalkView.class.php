@@ -48,25 +48,30 @@ else {
 	form_submit(event);
 }
 JS;
-		$list = MenuModel::instance()->getList(MenuModel::instance()->getMenu('main'));
-		foreach ($list as $item) {
-			if ($item->magBekijken()) {
-				$label = $item->tekst;
-				if ($item->tekst == LoginModel::getUid()) {
-					$label = 'Favorieten';
-				}
-				$parent = $item->getParent();
-				if ($parent AND $parent->tekst != 'main') {
-					$label .= '<span class="lichtgrijs"> - ' . $parent->tekst;
-				}
-				$this->suggestions['Menu'][] = array(
-					'url'	 => $item->link,
-					'value'	 => $label
-				);
-			}
-		}
 		if (LoginModel::mag('P_LEDEN_READ')) {
 
+			$favs = MenuModel::instance()->getMenu(LoginModel::getUid());
+			foreach ($favs->getChildren() as $item) {
+				$this->suggestions['Favorieten'][] = array(
+					'url'	 => $item->link,
+					'value'	 => $item->tekst
+				);
+			}
+
+			$list = MenuModel::instance()->getList(MenuModel::instance()->getMenu('main'));
+			foreach ($list as $item) {
+				if ($item->magBekijken()) {
+					$label = $item->tekst;
+					$parent = $item->getParent();
+					if ($parent AND $parent->tekst != 'main') {
+						$label .= '<span class="lichtgrijs"> - ' . $parent->tekst;
+					}
+					$this->suggestions['Menu'][] = array(
+						'url'	 => $item->link,
+						'value'	 => $label
+					);
+				}
+			}
 			require_once 'MVC/model/ForumModel.class.php';
 			foreach (ForumModel::instance()->getForumIndeling() as $categorie) {
 				foreach ($categorie->getForumDelen() as $deel) {
