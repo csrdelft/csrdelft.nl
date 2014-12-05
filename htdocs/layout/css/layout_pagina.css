@@ -80,20 +80,11 @@ header.lateral-menu-is-open {
 Menu voor ingelogde gebruikers
 
 -------------------------------- */
-#cd-ingelogd-menu-toggle {
-	display: block;
-}
 #cd-ingelogd-menu-toggle.sued {
     background-color: red;
 }
 #cd-ingelogd-menu-toggle .cd-ingelogd-menu-text {
-	padding: 0 1.25em;
-	color: #ffffff;
-	font-weight: bold;
 	cursor: pointer;
-}
-#cd-ingelogd-menu-toggle.ingelogd-menu-is-open  .cd-ingelogd-menu-text {
-	color: #333333;
 }
 #cd-ingelogd-menu {
 	display: none;
@@ -118,14 +109,14 @@ Top navigation
 }
 #cd-top-nav ul {
 	background-color: #0A3292;
+	line-height: 50px;
+	margin: 0;
 }
 #cd-top-nav li {
 	display: inline-block;
-	height: 50px;
-	line-height: 50px;
 	font-size: 16px;
 }
-#cd-top-nav a {
+#cd-top-nav a, #cd-ingelogd-menu-toggle .cd-ingelogd-menu-text {
 	display: block;
 	padding: 0 1.25em;
 	font-weight: bold;
@@ -142,25 +133,21 @@ Top navigation
 	background-color: #E8CF2A;
 	color: #333333;
 }
-
-#cd-top-nav #cd-lateral-menu-toggle {
-	width: 110px;
-	padding-left: 1.25em;
+#cd-lateral-menu-toggle {
 	background-color: #3262D7;
+	position: relative;
 	cursor: pointer;
 }
-
-#cd-lateral-menu-toggle .cd-lateral-menu-text, #cd-ingelogd-menu-toggle .cd-ingelogd-menu-text {
-	display: inline-block;
-	color: #ffffff;
-	font-weight: bold;
+#cd-lateral-menu-toggle .cd-lateral-menu-text {
+	display: block;
+	width: 60px;
 }
 #cd-lateral-menu-toggle .cd-lateral-menu-icon {
 	/* this span is the central line in the menu menu */
-	display: inline-block;
+	display: block;
 	position: absolute;
 	left: 50%;
-	top: 42%;
+	top: 50%;
 	bottom: auto;
 	right: auto;
 	-webkit-transform: translateX(-50%) translateY(-50%);
@@ -251,23 +238,15 @@ Lateral navigation
 	-o-transform: translateX(80px);
 	transform: translateX(80px);
 }
-#cd-lateral-nav a {
-	height: 50px;
-	line-height: 3em;
-	font-size: 16px;
-}
-#cd-lateral-nav .toggle-group {
-	font-weight: bold;
-}
-#cd-lateral-nav .sub-menu {
+#cd-lateral-nav .expanded-submenu {
 	padding: 0 0 20px 0;
 	display: none;
 }
-#cd-lateral-nav .sub-menu a {
-	padding: 0 26px 0 47px;
-}
-#cd-lateral-nav a, #cd-lateral-nav .toggle-group {
+#cd-lateral-nav a, #cd-lateral-nav .toggle-group{
 	display: block;
+	height: 2em;
+	line-height: 2em;
+	font-size: 16px;
 	line-height: 2em;
 	padding: 0 16px 0 32px;
 	color: #ffffff;

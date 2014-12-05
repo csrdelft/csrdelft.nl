@@ -77,13 +77,6 @@ jQuery(document).ready(function ($) {
 		}
 	});
 
-	// Open or close submenu items in the lateral menu and close all the other open submenu items
-	$('.item-has-children').children('a').on('click', function (event) {
-		event.preventDefault();
-
-		$(this).toggleClass('toggle-group-expanded').next('.sub-menu').slideToggle(200).end().parent('.item-has-children').siblings('.item-has-children').children('a').removeClass('toggle-group-expanded').next('.sub-menu').slideUp(200);
-	});
-
 	// Catch keystrokes for instant search
 	$(document).keydown(function (event) {
 

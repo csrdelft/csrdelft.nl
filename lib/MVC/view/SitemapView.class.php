@@ -33,14 +33,14 @@ class SitemapView implements View {
 	private function viewTree(MenuItem $item, $level) {
 		if ($item->magBekijken()) {
 			if ($item->hasChildren() AND $level < $this->levels) {
-				$kopje = new CollapsableSubkopje($item->item_id, $item->tekst, true);
+				$kopje = new CollapsableSubkopje($item->item_id, $item->tekst, true, true);
 				$kopje->h += $level;
 				$kopje->view();
 				$this->javascript .= $kopje->getJavascript();
 				foreach ($item->getChildren() as $child) {
 					echo $this->viewTree($child, $level + 1);
 				}
-				echo '<br /></div>';
+				echo '</div>';
 			} else {
 				echo '<a href="' . $item->link . '">' . $item->tekst . '</a>';
 			}

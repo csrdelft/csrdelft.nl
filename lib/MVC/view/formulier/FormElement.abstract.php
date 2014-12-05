@@ -108,31 +108,42 @@ class CollapsableSubkopje extends Subkopje {
 
 	private $id;
 	public $collapsed;
-	private $slide;
+	public $single;
+	private $expand;
+	private $collapse;
 
-	public function __construct($id, $titel, $collapsed = false, $slide = true) {
+	public function __construct($id, $titel, $collapsed = false, $single = false, $animate = true) {
 		parent::__construct($titel);
 		$this->id = $id;
 		$this->collapsed = $collapsed;
-		$this->slide = $slide;
+		$this->single = $single;
+		if ($animate) {
+			$this->expand = 'slideDown(200)';
+			$this->collapse = 'slideUp(200)';
+		} else {
+			$this->expand = 'show()';
+			$this->collapse = 'hide()';
+		}
 	}
 
 	public function getJavascript() {
-		if ($this->slide) {
-			$expand = 'slideDown(200)';
-			$collapse = 'slideUp(200)';
-		} else {
-			$expand = 'show()';
-			$collapse = 'hide()';
-		}
-		return parent::getJavascript() . <<<JS
+		$js = parent::getJavascript() . <<<JS
 $('#toggle_kopje_{$this->id}').click(function() {
 	if ($('#expand_kopje_{$this->id}').is(':visible')) {
+		$('#expand_kopje_{$this->id}').{$this->collapse};
 		$(this).removeClass('toggle-group-expanded');
-		$('#expand_kopje_{$this->id}').{$collapse};
 	} else {
+JS;
+		if ($this->single) {
+			$js .= <<<JS
+
+$(this).siblings('.expanded-submenu').{$this->collapse};
+$(this).siblings('.toggle-group').removeClass('toggle-group-expanded');
+JS;
+		}
+		return $js . <<<JS
+		$('#expand_kopje_{$this->id}').{$this->expand};
 		$(this).addClass('toggle-group-expanded');
-		$('#expand_kopje_{$this->id}').{$expand};
 	}
 });
 JS;
