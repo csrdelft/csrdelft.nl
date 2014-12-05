@@ -25,7 +25,7 @@ class SitemapView implements View {
 
 	public function view() {
 		foreach ($this->getModel()->getChildren() as $parent) {
-			echo $this->viewTree($parent, 1);
+			echo $this->viewTree($parent, 0);
 		}
 		echo $this->getScriptTag();
 	}

@@ -239,17 +239,20 @@ Lateral navigation
 	transform: translateX(80px);
 }
 #cd-lateral-nav .expanded-submenu {
-	padding: 0 0 20px 0;
 	display: none;
+	padding: 0 0 20px 20px;
 }
-#cd-lateral-nav a, #cd-lateral-nav .toggle-group{
+#cd-lateral-nav a, #cd-lateral-nav .toggle-group {
 	display: block;
-	height: 2em;
-	line-height: 2em;
-	font-size: 16px;
-	line-height: 2em;
-	padding: 0 16px 0 32px;
+	line-height: 50px;
 	color: #ffffff;
+	padding: 0 0 0 32px;
+}
+#cd-lateral-nav .toggle-group {
+	font-weight: bold;
+}
+#cd-lateral-nav a {
+	font-size: 16px;
 }
 #cd-lateral-nav a:hover {
 	color: #E8CF2A;
