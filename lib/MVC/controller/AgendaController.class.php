@@ -18,7 +18,8 @@ class AgendaController extends AclController {
 		if (!$this->isPosted()) {
 			$this->acl = array(
 				'maand'	 => 'P_AGENDA_READ',
-				'ical'	 => 'P_AGENDA_READ'
+				'ical'	 => 'P_AGENDA_READ',
+				'zoeken' => 'P_AGENDA_READ'
 			);
 		} else {
 			$this->acl = array(
@@ -63,6 +64,33 @@ class AgendaController extends AclController {
 		header('Content-Type: text/calendar; charset=UTF-8');
 		header('Content-Disposition: attachment; filename="calendar.ics"');
 		$this->view = new AgendaICalendarView($this->model);
+	}
+
+	public function zoeken($query = null) {
+		if ($query === null) {
+			$this->geentoegang();
+		}
+		$query = '%' . $query . '%';
+		$van = date('Y-m-d');
+		$tot = date('Y-m-d', strtotime('+6 months'));
+		$items = $this->model->find('eind_moment >= ? AND begin_moment <= ? AND (titel LIKE ? OR beschrijving LIKE ? OR locatie LIKE ?)', array($van, $tot, $query, $query, $query), 'begin_moment ASC, titel ASC');
+		$result = array();
+		foreach ($items as $item) {
+			if (empty($item->getLink())) {
+				$begin = $item->getBeginMoment();
+				$d = date('d', $begin);
+				$m = date('m', $begin);
+				$y = date('Y', $begin);
+				$url = '/agenda/maand/' . $y . '/' . $m . '/' . $d . '#dag-' . $y . '-' . $m . '-' . $d;
+			} else {
+				$url = $item->getLink();
+			}
+			$result[] = array(
+				'url'	 => $url,
+				'value'	 => $item->getTitel() . '<span class="lichtgrijs"> - ' . $d . '/' . $m . '/' . $y . '</span>'
+			);
+		}
+		$this->view = new JsonResponse($result);
 	}
 
 	public function courant() {

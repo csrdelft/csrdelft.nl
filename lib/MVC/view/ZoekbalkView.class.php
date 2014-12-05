@@ -93,6 +93,7 @@ JS;
 				}
 			}
 			$this->suggestions['Leden'] = '/tools/naamsuggesties/leden/?q=';
+			$this->suggestions['Agenda'] = '/agenda/zoeken/';
 			$this->suggestions['Draadjes'] = '/forum/titelzoeken/';
 			$this->suggestions['Groepen'] = '/tools/groepsuggesties/?q=';
 			$this->suggestions['Documenten'] = '/tools/documentsuggesties/?q=';
