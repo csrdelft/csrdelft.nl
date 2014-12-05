@@ -60,8 +60,8 @@ JS;
 			}
 
 			$field->suggestions['leden'] = '/tools/naamsuggesties/leden?q=';
-			$field->suggestions['groepen'] = '/tools/suggesties/groep?q=';
 			$field->suggestions['draadjes'] = '/forum/titelzoeken/';
+			$field->suggestions['groepen'] = '/tools/suggesties/groep?q=';
 			$field->suggestions['documenten'] = '/tools/suggesties/document?q=';
 			$field->suggestions['boeken'] = '/tools/suggesties/boek?q=';
 		}
