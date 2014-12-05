@@ -258,10 +258,6 @@ class LoginModel extends PersistenceModel implements Validator {
 		if (!($lid instanceof Lid)) {
 			$lid = Lid::loadByNickname($user);
 		}
-		// als er geen lid-object terugkomt, proberen we het met de duckname:
-		if (!($lid instanceof Lid)) {
-			$lid = Lid::loadByDuckname($user);
-		}
 
 		// check timeout
 		if ($lid instanceof Lid) {
