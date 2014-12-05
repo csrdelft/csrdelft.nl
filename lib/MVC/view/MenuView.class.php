@@ -37,6 +37,7 @@ class MainMenuView extends MenuView {
 		$fields[] = $field;
 		$field->css_classes[] = 'menuzoekveld form-control';
 		$field->onkeydown = <<<JS
+
 if (event.keyCode === 13) { // enter
 	$(this).trigger('typeahead:selected');
 }
@@ -53,14 +54,13 @@ JS;
 
 		if (LoginModel::mag('P_LEDEN_READ')) {
 
-			$field->suggestions['leden'] = '/tools/naamsuggesties/leden?q=';
-			$field->suggestions['groepen'] = '/tools/suggesties/groep?q=';
-
 			require_once 'MVC/model/ForumModel.class.php';
 			foreach (ForumDelenModel::instance()->getForumDelenVoorLid(false) as $deel) {
 				$field->suggestions['forum'][] = array('url' => '/forum/deel/' . $deel->forum_id, 'value' => $deel->titel);
 			}
 
+			$field->suggestions['leden'] = '/tools/naamsuggesties/leden?q=';
+			$field->suggestions['groepen'] = '/tools/suggesties/groep?q=';
 			$field->suggestions['draadjes'] = '/forum/titelzoeken/';
 			$field->suggestions['documenten'] = '/tools/suggesties/document?q=';
 			$field->suggestions['boeken'] = '/tools/suggesties/boek?q=';
