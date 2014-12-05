@@ -74,7 +74,7 @@ class Formulier implements View, Validator {
 		return null;
 	}
 
-	public function loadProperty(InputField $field) {
+	private function loadProperty(InputField $field) {
 		$fieldName = $field->getName();
 		if ($this->model instanceof PersistentEntity AND property_exists($this->model, $fieldName)) {
 			$this->model->$fieldName = $field->getValue();
@@ -233,18 +233,18 @@ class Formulier implements View, Validator {
 		return $errors;
 	}
 
-	public function getJavascript() {
+	protected function getJavascript() {
 		foreach ($this->fields as $field) {
 			$this->javascript .= $field->getJavascript();
 		}
 		return $this->javascript;
 	}
 
-	public function getFormTag() {
+	protected function getFormTag() {
 		return '<form enctype="' . $this->enctype . '" action="' . $this->action . '" id="' . $this->getFormId() . '" class="' . implode(' ', $this->css_classes) . '" method="' . ($this->post ? 'post' : 'get') . '">';
 	}
 
-	public function getScriptTag() {
+	protected function getScriptTag() {
 		return <<<JS
 <script type="text/javascript">
 $(document).ready(function () {

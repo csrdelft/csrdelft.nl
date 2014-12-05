@@ -3613,10 +3613,12 @@ lib/MVC/view/LoginView.class.php -text
 lib/MVC/view/MailTemplateView.class.php -text
 lib/MVC/view/MenuBeheerView.class.php -text
 lib/MVC/view/MenuView.class.php -text
+lib/MVC/view/SitemapView.class.php -text
 lib/MVC/view/SmartyTemplateView.abstract.php -text
 lib/MVC/view/Validator.interface.php -text
 lib/MVC/view/View.interface.php -text
 lib/MVC/view/Zijbalk.static.php -text
+lib/MVC/view/ZoekbalkView.class.php -text
 lib/MVC/view/formulier/DataTable.class.php -text
 lib/MVC/view/formulier/Dropzone.class.php -text
 lib/MVC/view/formulier/FormElement.abstract.php -text
@@ -4382,7 +4384,6 @@ lib/templates/MVC/menu/beheer/menu_item.tpl -text
 lib/templates/MVC/menu/beheer/menu_root.tpl -text
 lib/templates/MVC/menu/beheer/menu_tree.tpl -text
 lib/templates/MVC/menu/block.tpl -text
-lib/templates/MVC/menu/main_menu.tpl -text
 lib/templates/MVC/menu/page.tpl -text
 lib/templates/bibliotheek/boek.bb.tpl -text
 lib/templates/bibliotheek/boek.tpl -text

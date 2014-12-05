@@ -93,8 +93,10 @@ class BBComment extends HtmlComment {
 
 class Subkopje extends HtmlComment {
 
+	public $h = 3;
+
 	public function getHtml() {
-		return '<h3 class="' . get_class($this) . '">' . $this->comment . '</h3>';
+		return '<h' . $this->h . ' class="' . get_class($this) . '">' . $this->comment . '</h' . $this->h . '>';
 	}
 
 }

@@ -1,0 +1,59 @@
+<?php
+
+/**
+ * SitemapView.class.php
+ * 
+ * @author P.W.G. Brussee <brussee@live.nl>
+ * 
+ */
+class SitemapView implements View {
+
+	private $javascript;
+
+	public function getModel() {
+		return MenuModel::instance()->getMenu('main');
+	}
+
+	public function getTitel() {
+		return null;
+	}
+
+	public function getBreadcrumbs() {
+		return null;
+	}
+
+	public function view() {
+		foreach ($this->getModel()->getChildren() as $parent) {
+			echo $this->viewTree($parent);
+		}
+		echo $this->getScriptTag();
+	}
+
+	private function viewTree(MenuItem $item, $level = 0) {
+		if ($item->magBekijken()) {
+			if ($item->hasChildren()) {
+				$kopje = new CollapsableSubkopje($item->item_id, $item->tekst, true);
+				$kopje->h += $level;
+				$kopje->view();
+				$this->javascript .= $kopje->getJavascript();
+				foreach ($item->getChildren() as $child) {
+					echo $this->viewTree($child, $level + 1);
+				}
+				echo '<br /></div>';
+			} else {
+				echo '<a href="' . $item->link . '">' . $item->tekst . '</a>';
+			}
+		}
+	}
+
+	private function getScriptTag() {
+		return <<<JS
+<script type="text/javascript">
+$(document).ready(function () {
+	{$this->javascript}
+});
+</script>
+JS;
+	}
+
+}

@@ -1,6 +1,8 @@
 <?php
 
 require_once 'MVC/view/Zijbalk.static.php';
+require_once 'MVC/view/SitemapView.class.php';
+require_once 'MVC/view/ZoekbalkView.class.php';
 require_once 'MVC/view/CompressedLayout.abstract.php';
 require_once 'MVC/view/MenuView.class.php';
 require_once 'MVC/model/MenuModel.class.php';
@@ -85,7 +87,7 @@ class CsrLayoutPage extends CompressedLayout {
 			$smarty->assign('loginform', new LoginForm());
 			$smarty->display('MVC/layout/pauper.tpl');
 		} else {
-			$smarty->assign('mainmenu', new MainMenuView());
+			$smarty->assign('mainmenu', new ZoekbalkView());
 			// uitzondering voor wiki (geen main table)
 			if ($this->body instanceof WikiView) {
 				$smarty->display('MVC/layout/wiki.tpl');
