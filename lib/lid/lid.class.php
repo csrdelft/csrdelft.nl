@@ -1184,16 +1184,14 @@ class Zoeker {
 				if ($iZoekdelen == 2) {
 					$zoekfilter = "( voornaam LIKE '%" . $zoekdelen[0] . "%' AND achternaam LIKE '%" . $zoekdelen[1] . "%' ) OR";
 					$zoekfilter.="( voornaam LIKE '%{$zoekterm}%' OR achternaam LIKE '%{$zoekterm}%' OR
-                                    nickname LIKE '%{$zoekterm}%' OR duckname LIKE '%{$zoekterm}%' OR
-									uid LIKE '%{$zoekterm}%' )";
+                                    nickname LIKE '%{$zoekterm}%' OR uid LIKE '%{$zoekterm}%' )";
 				} else {
 					$zoekfilter = "( voornaam LIKE '%" . $zoekdelen[0] . "%' AND achternaam LIKE '%" . $zoekdelen[$iZoekdelen - 1] . "%' )";
 				}
 			} else {
 				$zoekfilter = "
 					voornaam LIKE '%{$zoekterm}%' OR achternaam LIKE '%{$zoekterm}%' OR
-					nickname LIKE '%{$zoekterm}%' OR duckname LIKE '%{$zoekterm}%' OR
-					uid LIKE '%{$zoekterm}%'";
+					nickname LIKE '%{$zoekterm}%' OR uid LIKE '%{$zoekterm}%'";
 			}
 		} elseif ($zoekveld == 'adres') {
 			$zoekfilter = "adres LIKE '%{$zoekterm}%' OR woonplaats LIKE '%{$zoekterm}%' OR
