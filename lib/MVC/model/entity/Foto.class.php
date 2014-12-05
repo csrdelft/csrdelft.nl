@@ -12,6 +12,11 @@ require_once 'MVC/model/entity/FotoAlbum.class.php';
 class Foto extends Afbeelding {
 
 	/**
+	 * Relatief pad in fotoalbum
+	 * @var string 
+	 */
+	public $subdir;
+	/**
 	 * Degrees of rotation
 	 * @var int
 	 */
@@ -26,7 +31,7 @@ class Foto extends Afbeelding {
 	 * @var array
 	 */
 	protected static $persistent_attributes = array(
-		'directory'	 => array(T::String),
+		'subdir'	 => array(T::String),
 		'filename'	 => array(T::String),
 		'rotation'	 => array(T::Integer),
 		'owner'		 => array(T::UID)
@@ -35,7 +40,7 @@ class Foto extends Afbeelding {
 	 * Database primary key
 	 * @var array
 	 */
-	protected static $primary_key = array('directory', 'filename');
+	protected static $primary_key = array('subdir', 'filename');
 	/**
 	 * Database table name
 	 * @var string
@@ -43,9 +48,11 @@ class Foto extends Afbeelding {
 	protected static $table_name = 'fotos';
 
 	public function __construct(FotoAlbum $album = null, $bestandsnaam = null) {
-		//parent::__construct($album->path . $bestandsnaam, false); // werkomheen traag fotoalbum: niet onnodig parsen
+		// werkomheen traag fotoalbum: niet onnodig parsen
+		//parent::__construct($album->path . $bestandsnaam, false);
 		$this->filename = $bestandsnaam;
 		$this->directory = $album;
+		$this->subdir = $album->getSubDir();
 	}
 
 	/**
@@ -53,21 +60,6 @@ class Foto extends Afbeelding {
 	 */
 	public function exists() {
 		return @is_readable($this->directory->path . $this->filename) AND is_file($this->directory->path . $this->filename);
-	}
-
-	/**
-	 * Return path of FotoAlbum instead of 
-	 * 
-	 * @param boolean $primary_key_only
-	 * @return array
-	 */
-	public function getValues($primary_key_only = false) {
-		if ($primary_key_only) {
-			return array($this->directory->path, $this->filename);
-		}
-		$values = parent::getValues($primary_key_only);
-		$values['directory'] = $this->directory->path;
-		return $values;
 	}
 
 	public function getAlbumPath() {

@@ -99,7 +99,7 @@ JS;
 			$this->suggestions['Agenda'] = '/agenda/zoeken/';
 			$this->suggestions['Draadjes'] = '/forum/titelzoeken/';
 			$this->suggestions['Groepen'] = '/tools/groepsuggesties/?q=';
-			//$this->suggestions['Fotoalbum'] = '/fotoalbum/zoeken/'; // traag!
+			$this->suggestions['Fotoalbum'] = '/fotoalbum/zoeken/';
 			$this->suggestions['Documenten'] = '/tools/documentsuggesties/?q=';
 			$this->suggestions['Boeken'] = '/communicatie/bibliotheek/zoeken/';
 		}

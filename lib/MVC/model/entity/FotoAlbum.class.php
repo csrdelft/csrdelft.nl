@@ -17,6 +17,11 @@ class FotoAlbum extends Map {
 	 */
 	private static $alleenLeden = '/(intern|novitiaat|ontvoering|feuten|slachten|zuipen|prive|privé|Posters)/i';
 	/**
+	 * Relatief pad in fotoalbum
+	 * @var string 
+	 */
+	public $subdir;
+	/**
 	 * Fotos in dit album
 	 * @var Foto[]
 	 */
@@ -36,24 +41,29 @@ class FotoAlbum extends Map {
 	 * @var array
 	 */
 	protected static $persistent_attributes = array(
-		'dirname'	 => array(T::String),
-		'owner'		 => array(T::UID)
+		'subdir' => array(T::String),
+		'owner'	 => array(T::UID)
 	);
 	/**
 	 * Database primary key
 	 * @var array
 	 */
-	protected static $primary_key = array('dirname');
+	protected static $primary_key = array('subdir');
 	/**
 	 * Database table name
 	 * @var string
 	 */
 	protected static $table_name = 'fotoalbums';
 
-	public function __construct($locatie = null) {
-		parent::__construct();
-		$this->path = $locatie;
-		$this->dirname = basename($locatie);
+	public function __construct($cast = false, $locatie = null) {
+		parent::__construct($cast);
+		if ($locatie === null) {
+			$this->path = PICS_PATH . $this->subdir;
+		} else {
+			$this->path = $locatie;
+			$this->subdir = $this->getSubDir();
+		}
+		$this->dirname = basename($this->path);
 		if (!$this->exists()) {
 			$this->fotos = array();
 			$this->subalbums = array();

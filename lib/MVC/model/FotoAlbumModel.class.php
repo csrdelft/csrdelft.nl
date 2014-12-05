@@ -12,18 +12,6 @@ class FotoAlbumModel extends PersistenceModel {
 
 	protected static $instance;
 
-	/**
-	 * Create database entry if fotoalbum does not exist.
-	 * 
-	 * @param PersistentEntity $album
-	 * @param array $attributes
-	 * @return mixed false on failure
-	 */
-	public function retrieveAttributes(PersistentEntity $album, array $attributes) {
-		$this->verwerkFotos($album);
-		return parent::retrieveAttributes($album, $attributes);
-	}
-
 	public function create(PersistentEntity $album) {
 		$path = $album->path;
 		if (!file_exists($path)) {
@@ -64,7 +52,7 @@ class FotoAlbumModel extends PersistenceModel {
 		if (!endsWith($path, '/')) {
 			$path .= '/';
 		}
-		$album = new FotoAlbum($path);
+		$album = new FotoAlbum(false, $path);
 		if (!$album->magBekijken()) {
 			return false;
 		}
@@ -75,12 +63,20 @@ class FotoAlbumModel extends PersistenceModel {
 	}
 
 	public function verwerkFotos(FotoAlbum $album) {
-		if (!$this->exists($album)) {
-			$album->owner = LoginModel::getUid();
-			$this->create($album);
-		}
-		foreach ($album->getFotos(true) as $foto) {
-			FotoModel::instance()->verwerkFoto($foto);
+		$albums = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($album->path, RecursiveDirectoryIterator::SKIP_DOTS | RecursiveDirectoryIterator::UNIX_PATHS), RecursiveIteratorIterator::SELF_FIRST);
+		foreach ($albums as $path => $object) {
+			if (strpos($path, '/_') !== false) {
+				continue;
+			}
+			if ($object->isDir()) {
+				$album = $this->getFotoAlbum($path);
+				if (!$this->exists($album)) {
+					$this->create($album);
+				}
+			} else {
+				$foto = new Foto($album, $object->getFilename());
+				FotoModel::instance()->verwerkFoto($foto);
+			}
 		}
 	}
 

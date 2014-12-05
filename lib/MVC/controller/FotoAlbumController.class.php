@@ -43,7 +43,7 @@ class FotoAlbumController extends AclController {
 		if (!array_key_exists($this->action, $this->acl)) {
 			$this->action = 'bekijken';
 			$path = $this->getParams(1);
-		} elseif ($this->action === 'zoeken') {
+		} elseif ($this->action === 'zoeken' OR $this->action === 'index') {
 			parent::performAction($this->getParams(3));
 			return;
 		} else {
@@ -253,15 +253,8 @@ class FotoAlbumController extends AclController {
 			$this->geentoegang();
 		}
 		$result = array();
-		$albums = new RecursiveIteratorIterator(new RecursiveDirectoryIterator(PICS_PATH . 'fotoalbum', RecursiveDirectoryIterator::SKIP_DOTS | RecursiveDirectoryIterator::UNIX_PATHS), RecursiveIteratorIterator::SELF_FIRST);
-
-		foreach ($albums as $path => $object) {
-
-			if (!$object->isDir() OR strpos($path, '/_') !== false OR stripos($path, $query) === false) {
-				continue;
-			}
-			$album = $this->model->getFotoAlbum($path);
-			if ($album) {
+		foreach ($this->model->find('subdir LIKE ?', array('%' . $query . '%')) as $album) {
+			if ($album->magBekijken()) {
 				$result[] = array(
 					'url'	 => $album->getUrl(),
 					'value'	 => ucfirst($album->dirname) . '<span class="lichtgrijs"> - ' . ucfirst(basename(dirname($album->getSubdir()))) . '</span>'
