@@ -64,12 +64,23 @@ JS;
 					$label = $item->tekst;
 					$parent = $item->getParent();
 					if ($parent AND $parent->tekst != 'main') {
-						$label .= '<span class="lichtgrijs"> - ' . $parent->tekst;
+						$label .= '<span class="lichtgrijs"> - ' . $parent->tekst . '</span>';
 					}
 					$this->suggestions['Menu'][] = array(
 						'url'	 => $item->link,
 						'value'	 => $label
 					);
+					if ($item->tekst === 'Documenten') {
+						require_once 'documenten/categorie.class.php';
+						foreach (DocumentenCategorie::getAll() as $cat) {
+							if ($cat->magBekijken()) {
+								$this->suggestions['Menu'][] = array(
+									'url'	 => '/communicatie/documenten/categorie/' . $cat->getID(),
+									'value'	 => $cat->getNaam() . '<span class="lichtgrijs"> - Documenten</span>'
+								);
+							}
+						}
+					}
 				}
 			}
 			require_once 'MVC/model/ForumModel.class.php';
