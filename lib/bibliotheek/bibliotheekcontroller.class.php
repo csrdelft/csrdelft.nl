@@ -38,7 +38,7 @@ class BibliotheekController extends Controller {
 		 * netjes gewoon de catalogus getoond wordt. 
 		 */
 		//iedereen(ook uitgelogd) mag catalogus bekijken.
-		$allow = array('default', 'catalogusdata');
+		$allow = array('default', 'catalogusdata', 'zoeken');
 		//met biebrechten mag je meer
 		if (LoginModel::mag('P_BIEB_READ')) {
 			$allow = array_merge($allow, array('default', 'boek', 'nieuwboek', 'bewerkboek', 'verwijderboek',
@@ -75,6 +75,28 @@ class BibliotheekController extends Controller {
 	protected function catalogusdata() {
 		$catalogus = new Catalogus();
 		$this->view = new BibliotheekCatalogusDatatableContent($catalogus);
+		$this->view->view();
+		exit;
+	}
+
+	protected function zoeken() {
+		if ($this->hasParam(2)) {
+			$categorie = $this->getParam(1);
+			$zoekterm = $this->getParam(2);
+		} elseif ($this->hasParam(1)) {
+			$categorie = 0;
+			$zoekterm = $this->getParam(1);
+		} else {
+			$this->geentoegang();
+		}
+		$result = array();
+		foreach (Catalogus::getAutocompleteSuggesties('biebboek', $zoekterm, $categorie) as $prop) {
+			$result[] = array(
+				'url'	 => '/communicatie/bibliotheek/boek/' . $prop['id'],
+				'value'	 => $prop['titel'] . '<span class="lichtgrijs"> - ' . $prop['auteur'] . '</span>'
+			);
+		}
+		$this->view = new JsonResponse($result);
 		$this->view->view();
 		exit;
 	}
@@ -395,10 +417,19 @@ class BibliotheekController extends Controller {
 	 * @return json
 	 */
 	protected function autocomplete() {
-		if ($this->hasParam(1)) {
-			echo json_encode(Catalogus::getAutocompleteSuggesties($this->getParam(1)));
+		if ($this->hasParam(1) AND isset($_GET['q'])) {
+
+			$zoekterm = filter_input(INPUT_GET, 'q', FILTER_SANITIZE_STRING);
+
+			$categorie = 0;
+			if ($this->hasParam(2)) {
+				$categorie = (int) $this->getParam(2);
+			}
+
+			$this->view = new JsonResponse(Catalogus::getAutocompleteSuggesties($this->getParam(1), $zoekterm, $categorie));
+		} else {
+			$this->geentoegang();
 		}
-		exit;
 	}
 
 }

@@ -401,11 +401,13 @@ $('#{$this->getId()}').keyup(function(event) {
 });
 JS;
 		}
+		$dataset = array();
 		foreach ($this->suggestions as $name => $source) {
+			$dataset[$name] = uniqid($this->name);
 
 			$js .= <<<JS
 
-var {$this->getId()}{$name} = new Bloodhound({
+var {$dataset[$name]} = new Bloodhound({
 	datumTokenizer: Bloodhound.tokenizers.obj.whitespace('value'),
 	queryTokenizer: Bloodhound.tokenizers.whitespace,
 JS;
@@ -431,7 +433,7 @@ JS;
 			}
 			$js .= <<<JS
 });
-{$this->getId()}{$name}.initialize();
+{$dataset[$name]}.initialize();
 JS;
 		}
 		if (!empty($this->suggestions)) {
@@ -449,13 +451,13 @@ JS;
 			if (is_int($name)) {
 				$header = '';
 			} else {
-				$header = 'header: "<h3>' . ucfirst(str_replace('_', ' ', $name)) . '</h3>"';
+				$header = 'header: "<h3>' . $name . '</h3>"';
 			}
 			$js .= <<<JS
 , {
-	name: "{$this->getId()}{$name}",
+	name: "{$dataset[$name]}",
 	displayKey: "value",
-	source: {$this->getId()}{$name}.ttAdapter(),
+	source: {$dataset[$name]}.ttAdapter(),
 	templates: {
 		{$header}
 	}
@@ -466,7 +468,7 @@ JS;
 			$js .= <<<JS
 ).on('keyup', function (event) {
 	if (event.keyCode !== 38 && event.keyCode !== 40) { // arrow up & down
-		$('.tt-dataset-{$this->getId()}{$name} .tt-suggestion').first().addClass('tt-cursor');
+		$('.tt-dataset-{$dataset[$name]} .tt-suggestion').first().addClass('tt-cursor');
 	}
 });
 JS;
@@ -640,7 +642,7 @@ class LidField extends TextField {
 			$zoekin = 'leden';
 		}
 		$this->zoekin = $zoekin;
-		$this->suggestions[$this->zoekin] = '/tools/naamsuggesties/' . $this->zoekin . '?q=';
+		$this->suggestions[ucfirst($this->zoekin)] = '/tools/naamsuggesties/' . $this->zoekin . '?q=';
 	}
 
 	/**
@@ -786,7 +788,7 @@ class StudieField extends TextField {
 		parent::__construct($name, $value, $description, 100);
 		$tustudies = array('BK', 'CT', 'ET', 'IO', 'LST', 'LR', 'MT', 'MST', 'TA', 'TB', 'TI', 'TN', 'TW', 'WB');
 		// de studies aan de TU, even prefixen met 'TU Delft - '
-		$this->suggestions['TU_Delft'] = array_map(create_function('$value', 'return "TU Delft - ".$value;'), $tustudies);
+		$this->suggestions['TU Delft'] = array_map(create_function('$value', 'return "TU Delft - ".$value;'), $tustudies);
 		$this->suggestions[] = array('INHolland', 'Haagse Hogeschool', 'EURotterdam', 'ULeiden');
 	}
 

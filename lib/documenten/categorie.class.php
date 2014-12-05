@@ -193,15 +193,15 @@ class DocumentenCategorie {
 	public static function zoekDocumenten($zoekterm, $categorie = 0, $limiet = 0) {
 		$documenten = array();
 		$wherecat = "";
-		if ($categorie != 0) {
-			$wherecat = "AND catID=" . (int) $categorie;
+		if ($categorie > 0) {
+			$wherecat = "catID = " . (int) $categorie . " AND ";
 		}
 		$db = MijnSqli::instance();
 		$zoekterm = $db->escape($zoekterm);
 		$query = "
 			SELECT ID, naam, catID, filename, filesize, mimetype, toegevoegd, eigenaar, leesrechten
 			FROM document
-			WHERE (naam LIKE '%" . $zoekterm . "%' OR filename LIKE '%" . $zoekterm . "%' OR ID = " . (int) $zoekterm . ") " . $wherecat . "
+			WHERE " . $wherecat . "(naam LIKE '%" . $zoekterm . "%' OR filename LIKE '%" . $zoekterm . "%')
 			ORDER BY toegevoegd DESC
 			";
 		if ($limiet > 0) {
@@ -212,12 +212,7 @@ class DocumentenCategorie {
 		echo $db->error();
 		if ($db->numRows($result) > 0) {
 			while ($prop = $db->next($result)) {
-				$document = new Document($prop);
-				$naam = $document->getNaam();
-				$bestandsnaam = $document->getFileName();
-				$id = $document->getID();
-
-				$documenten[] = array('url' => '/communicatie/documenten/bekijken/' . $id . '/' . $bestandsnaam, 'value' => $naam, 'naam' => $naam, 'bestandsnaam' => $bestandsnaam, 'id' => $id);
+				$documenten[] = new Document($prop);
 			}
 		}
 		return $documenten;

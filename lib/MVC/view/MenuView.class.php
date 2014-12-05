@@ -44,26 +44,38 @@ if (event.keyCode === 13) { // enter
 JS;
 		foreach (MenuModel::instance()->find('link != ""') as $item) {
 			if ($item->magBekijken()) {
+				$label = $item->tekst;
 				if ($item->tekst == LoginModel::getUid()) {
-					$field->suggestions['menu'][] = array('url' => $item->link, 'value' => 'Favorieten');
-				} else {
-					$field->suggestions['menu'][] = array('url' => $item->link, 'value' => $item->tekst);
+					$label = 'Favorieten';
 				}
+				$parent = $item->getParent();
+				if ($parent AND $parent->tekst != 'main') {
+					$label .= '<span class="lichtgrijs"> - ' . $parent->tekst;
+				}
+				$field->suggestions['Menu'][] = array(
+					'url'	 => $item->link,
+					'value'	 => $label
+				);
 			}
 		}
 
 		if (LoginModel::mag('P_LEDEN_READ')) {
 
 			require_once 'MVC/model/ForumModel.class.php';
-			foreach (ForumDelenModel::instance()->getForumDelenVoorLid(false) as $deel) {
-				$field->suggestions['forum'][] = array('url' => '/forum/deel/' . $deel->forum_id, 'value' => $deel->titel);
+			foreach (ForumModel::instance()->getForumIndeling() as $categorie) {
+				foreach ($categorie->getForumDelen() as $deel) {
+					$field->suggestions['Forum'][] = array(
+						'url'	 => '/forum/deel/' . $deel->forum_id,
+						'value'	 => $deel->titel . '<span class="lichtgrijs"> - ' . $categorie->titel . '</span>'
+					);
+				}
 			}
 
-			$field->suggestions['leden'] = '/tools/naamsuggesties/leden?q=';
-			$field->suggestions['draadjes'] = '/forum/titelzoeken/';
-			$field->suggestions['groepen'] = '/tools/suggesties/groep?q=';
-			$field->suggestions['documenten'] = '/tools/suggesties/document?q=';
-			$field->suggestions['boeken'] = '/tools/suggesties/boek?q=';
+			$field->suggestions['Leden'] = '/tools/naamsuggesties/leden/?q=';
+			$field->suggestions['Draajes'] = '/forum/titelzoeken/';
+			$field->suggestions['Groepen'] = '/tools/groepsuggesties/?q=';
+			$field->suggestions['Documenten'] = '/tools/documentsuggesties/?q=';
+			$field->suggestions['Boeken'] = '/communicatie/bibliotheek/zoeken/';
 		}
 
 		$field->typeahead_selected = <<<JS
@@ -92,7 +104,8 @@ HTML
 		$this->form->addFields($fields);
 	}
 
-	public function view() {
+	public
+			function view() {
 		parent::view();
 		$this->smarty->assign('menuzoekform', $this->form);
 		$this->smarty->display('MVC/menu/main_menu.tpl');

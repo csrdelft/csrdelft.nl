@@ -510,10 +510,12 @@ htdocs/tools/alphabanner/tegel_start.jpg -text
 htdocs/tools/bbcode.php -text
 htdocs/tools/bbcodeparser.php -text
 htdocs/tools/css.php -text
+htdocs/tools/documentsuggesties.php -text
 htdocs/tools/dragobject.php -text
 htdocs/tools/dump.php -text
 htdocs/tools/eetplan.php -text
 htdocs/tools/flushcache.php -text
+htdocs/tools/groepsuggesties.php -text
 htdocs/tools/index.php -text
 htdocs/tools/js.php -text
 htdocs/tools/leden-csv.php -text
@@ -533,7 +535,6 @@ htdocs/tools/soccie.php -text
 htdocs/tools/soccieimportweergeven.php -text
 htdocs/tools/stats.php -text
 htdocs/tools/streeplijst.php -text
-htdocs/tools/suggesties.php -text
 htdocs/tools/verticalelijsten.php -text
 htdocs/tools/voorkeuren/commissies.php -text
 htdocs/tools/voorkeuren/lidpagina.php -text

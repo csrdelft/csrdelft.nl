@@ -125,8 +125,9 @@ class Document extends Bestand {
 
 	public function getCategorie($force = false) {
 		if ($force OR $this->categorie == null) {
-			$this->categerie = new DocumentCategorie($this->getCatID());
+			$this->categorie = new DocumentenCategorie($this->catID);
 		}
+		return $this->categorie;
 	}
 
 	public function getBestand() {

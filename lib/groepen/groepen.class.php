@@ -441,14 +441,14 @@ class Groepen {
 		$groepen = array();
 		$wheretype = "";
 		if ($type != 0) {
-			$wheretype = "AND gtype = " . (int) $type;
+			$wheretype = " AND gtype = " . (int) $type;
 		}
 		$query = "
 			SELECT g.id AS id, gt.naam AS type, snaam, g.naam AS naam, status
 			FROM groep g
-			LEFT JOIN groeptype gt ON(gt.id=g.gtype)
-			WHERE g.zichtbaar='zichtbaar' " . $wheretype . " AND
-				( g.id = " . (int) $zoekterm . " OR g.snaam LIKE '%" . $db->escape($zoekterm) . "%' OR g.naam LIKE '%" . $db->escape($zoekterm) . "%' )
+			LEFT JOIN groeptype gt ON (gt.id = g.gtype)
+			WHERE g.zichtbaar = 'zichtbaar' " . $wheretype . " AND
+				(g.snaam LIKE '%" . $db->escape($zoekterm) . "%' OR g.naam LIKE '%" . $db->escape($zoekterm) . "%')
 			";
 		if ($limiet > 0) {
 			$query .= "LIMIT 0, " . (int) $limiet;
@@ -457,7 +457,15 @@ class Groepen {
 		$result = $db->query($query);
 		if ($db->numRows($result) > 0) {
 			while ($prop = $db->next($result)) {
-				$groepen[] = array('url' => '/actueel/groepen/' . $prop['type'] . '/' . $prop['id'], 'value' => $prop['naam'], 'id' => $prop['id'], 'snaam' => $prop['snaam'], 'naam' => $prop['naam'], 'status' => $prop['status']);
+				$type = new Groepen((int) $prop['type']);
+				$groepen[] = array(
+					'url'	 => '/actueel/groepen/' . $type->getNaam() . '/' . $prop['id'],
+					'value'	 => $prop['naam'] . '<span class="lichtgrijs"> - ' . $type->getNaam() . '</span>',
+					'id'	 => $prop['id'],
+					'snaam'	 => $prop['snaam'],
+					'naam'	 => $prop['naam'],
+					'status' => $prop['status']
+				);
 			}
 		}
 		return $groepen;

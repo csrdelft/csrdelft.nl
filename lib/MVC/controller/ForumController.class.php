@@ -172,7 +172,11 @@ class ForumController extends Controller {
 			$jaar = 1;
 			$draden_delen = ForumDelenModel::instance()->zoeken($query, true, $datum, $ouder, $jaar);
 			foreach ($draden_delen[0] as $draad) {
-				$draden[] = array('url' => '/forum/onderwerp/' . $draad->draad_id, 'value' => $draad->titel);
+				$deel = $draden_delen[1][$draad->forum_id];
+				$draden[] = array(
+					'url'	 => '/forum/onderwerp/' . $draad->draad_id,
+					'value'	 => $draad->titel . '<span class="lichtgrijs"> - ' . $deel->titel . '</span>'
+				);
 			}
 		}
 		$this->view = new JsonResponse($draden);
