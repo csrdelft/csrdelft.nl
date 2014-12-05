@@ -72,7 +72,7 @@ JS;
 			}
 
 			$field->suggestions['Leden'] = '/tools/naamsuggesties/leden/?q=';
-			$field->suggestions['Draajes'] = '/forum/titelzoeken/';
+			$field->suggestions['Draadjes'] = '/forum/titelzoeken/';
 			$field->suggestions['Groepen'] = '/tools/groepsuggesties/?q=';
 			$field->suggestions['Documenten'] = '/tools/documentsuggesties/?q=';
 			$field->suggestions['Boeken'] = '/communicatie/bibliotheek/zoeken/';
@@ -104,8 +104,7 @@ HTML
 		$this->form->addFields($fields);
 	}
 
-	public
-			function view() {
+	public function view() {
 		parent::view();
 		$this->smarty->assign('menuzoekform', $this->form);
 		$this->smarty->display('MVC/menu/main_menu.tpl');
