@@ -187,10 +187,10 @@ class DocumentenCategorie {
 	 * @static
 	 * @param $zoekterm
 	 * @param int $categorie
-	 * @param int $limit
+	 * @param int $limiet
 	 * @return array|bool
 	 */
-	public static function zoekDocumenten($zoekterm, $categorie = 0, $limit = 30) {
+	public static function zoekDocumenten($zoekterm, $categorie = 0, $limiet = 0) {
 		$documenten = array();
 		$wherecat = "";
 		if ($categorie != 0) {
@@ -203,7 +203,11 @@ class DocumentenCategorie {
 			FROM document
 			WHERE (naam LIKE '%" . $zoekterm . "%' OR filename LIKE '%" . $zoekterm . "%' OR ID = " . (int) $zoekterm . ") " . $wherecat . "
 			ORDER BY toegevoegd DESC
-			LIMIT " . (int) $limit;
+			";
+		if ($limiet > 0) {
+			$query .= "LIMIT 0, " . (int) $limiet;
+		}
+		$query .= ";";
 		$result = $db->query($query);
 		echo $db->error();
 		if ($db->numRows($result) > 0) {

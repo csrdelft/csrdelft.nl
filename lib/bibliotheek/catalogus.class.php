@@ -278,7 +278,7 @@ class Catalogus {
 					ORDER BY titel
 					";
 				if ($limiet > 0) {
-					$query .= "LIMIT 0, " . $limiet;
+					$query .= "LIMIT 0, " . (int) $limiet;
 				}
 				$query .= ";";
 			} else {
@@ -290,7 +290,7 @@ class Catalogus {
 					ORDER BY " . $db->escape($sKey) . "
 					";
 				if ($limiet > 0) {
-					$query .= "LIMIT 0, " . $limiet;
+					$query .= "LIMIT 0, " . (int) $limiet;
 				}
 				$query .= ";";
 			}

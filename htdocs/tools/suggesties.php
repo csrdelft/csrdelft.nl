@@ -28,7 +28,7 @@ switch ($_GET['datatype']) {
 			$categorie = (int) $_GET['categorie'];
 		}
 
-		$documenten = DocumentenCategorie::zoekDocumenten($_GET['q'], $categorie, $limiet);
+		$result = DocumentenCategorie::zoekDocumenten($_GET['q'], $categorie, $limiet);
 		break;
 
 	case 'boek':

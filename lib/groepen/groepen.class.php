@@ -436,24 +436,27 @@ class Groepen {
 	 * @param int $limiet
 	 * @return array
 	 */
-	public static function zoekGroepen($zoekterm, $type = 0, $limiet = 20) {
+	public static function zoekGroepen($zoekterm, $type = 0, $limiet = 0) {
 		$db = MijnSqli::instance();
-
 		$groepen = array();
 		$wheretype = "";
 		if ($type != 0) {
 			$wheretype = "AND gtype = " . (int) $type;
 		}
-		$qLookup = "
+		$query = "
 			SELECT g.id AS id, gt.naam AS type, snaam, g.naam AS naam, status
 			FROM groep g
 			LEFT JOIN groeptype gt ON(gt.id=g.gtype)
 			WHERE g.zichtbaar='zichtbaar' " . $wheretype . " AND
 				( g.id = " . (int) $zoekterm . " OR g.snaam LIKE '%" . $db->escape($zoekterm) . "%' OR g.naam LIKE '%" . $db->escape($zoekterm) . "%' )
-			LIMIT " . (int) $limiet;
-		$rGroepen = $db->query($qLookup);
-		if ($rGroepen !== false and $db->numRows($rGroepen) > 0) {
-			while ($prop = $db->next($rGroepen)) {
+			";
+		if ($limiet > 0) {
+			$query .= "LIMIT 0, " . (int) $limiet;
+		}
+		$query .= ";";
+		$result = $db->query($query);
+		if ($db->numRows($result) > 0) {
+			while ($prop = $db->next($result)) {
 				$groepen[] = array('url' => '/actueel/groepen/' . $prop['type'] . '/' . $prop['id'], 'value' => $prop['naam'], 'id' => $prop['id'], 'snaam' => $prop['snaam'], 'naam' => $prop['naam'], 'status' => $prop['status']);
 			}
 		}
