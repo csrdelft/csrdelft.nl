@@ -265,6 +265,26 @@ function knop_ajax(knop, type) {
 	else if (knop.hasClass('redirect')) {
 		done = page_redirect;
 	}
+	else if (knop.hasClass('DataTableResponse')) {
+
+		var table = knop.closest('table').attr('id');
+		/*
+		 var selection = fnGetSelection('#' + table);
+		 if (!selection) {
+		 return false;
+		 }
+		 data[table + '[]'] = selection;
+		 */
+		done = function (response) {
+			if (typeof response === 'object') { // JSON
+				fnUpdateDataTable('#' + table, response);
+			}
+			else { // HTML
+				dom_update(response);
+			}
+		};
+	}
+
 	ajax_request(type, knop.attr('href'), data, source, done, alert);
 }
 

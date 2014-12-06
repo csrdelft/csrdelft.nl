@@ -66,7 +66,7 @@ class LoginController extends AclController {
 		if (!$this->model->isSued()) {
 			setMelding('Niet gesued!', -1);
 		} else {
-			LoginModel::instance()->endSwitchUser();
+			$this->model->endSwitchUser();
 			setMelding('Switch-useractie is beëindigd.', 1);
 		}
 		redirect(HTTP_REFERER, false);
@@ -183,8 +183,12 @@ class LoginController extends AclController {
 		$this->view = new SessionsData(LoginModel::getUid());
 	}
 
-	public function endsession() {
-		// TODO
+	public function endsession($sessionid) {
+		$session = $this->model->find('session_id = ? AND uid = ?', array($sessionid, LoginModel::getUid()), null, null, 1)->fetch();
+		if ($session) {
+			$this->model->delete($session);
+		}
+		$this->sessions();
 	}
 
 }

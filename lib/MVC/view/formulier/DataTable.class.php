@@ -70,7 +70,7 @@ class DataTable extends TabsForm {
 		// create group expand / collapse column
 		$this->columns['details'] = array(
 			'name'			 => 'details',
-			'data'			 => null,
+			'data'			 => 'details',
 			'title'			 => '',
 			'type'			 => 'string',
 			'orderable'		 => false,
