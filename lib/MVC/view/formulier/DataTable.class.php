@@ -13,6 +13,7 @@ require_once 'MVC/view/formulier/TabsForm.class.php';
  */
 class DataTable extends TabsForm {
 
+	public $noForm = false;
 	protected $tableId;
 	protected $dataUrl;
 	private $groupByColumn;
@@ -21,6 +22,7 @@ class DataTable extends TabsForm {
 	private $columns = array();
 	protected $settings = array(
 		'dom'		 => 'Tfrtpli',
+		'responsive' => true,
 		'tableTools' => array(
 			'sRowSelect' => 'os',
 			'aButtons'	 => array(
@@ -208,8 +210,11 @@ class DataTable extends TabsForm {
 		$settingsJson = str_replace('"lastUpdate"', '{"lastUpdate":lastUpdate' . $this->tableId . '}', $settingsJson);
 		$settingsJson = str_replace('"fnAjaxUpdateCallback"', 'fnAjaxUpdateCallback', $settingsJson);
 		$settingsJson = str_replace('"fnCreatedRowCallback"', 'fnCreatedRowCallback', $settingsJson);
+
+		if (!$this->noForm) {
+			parent::view();
+		}
 		?>
-		<?php parent::view(); ?>
 		<table id="<?= $this->tableId; ?>" class="display <?= ($this->groupByColumn !== false ? 'groupByColumn' : ''); ?>" groupbycolumn="<?= $this->groupByColumn; ?>"></table>
 		<script type="text/javascript">
 			var lastUpdate<?= $this->tableId; ?>;

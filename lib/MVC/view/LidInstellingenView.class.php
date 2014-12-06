@@ -34,6 +34,9 @@ class LidInstellingenView extends TabsForm {
 			}
 			$this->addFields($fields, ucfirst($module));
 		}
+
+		$this->addFields(array(new SessionsView()), 'Beveiliging');
+
 		$fields = array();
 
 		$fields['r'] = new UrlField('referer', HTTP_REFERER, null);

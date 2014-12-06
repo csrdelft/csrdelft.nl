@@ -50,12 +50,12 @@ class TabsForm extends Formulier {
 		if ($this->vertical) {
 			echo <<<HTML
 <style>
-	.ui-tabs-vertical { width: 55em; }
-	.ui-tabs-vertical .ui-tabs-nav { padding: .2em .1em .2em .2em; float: left; width: 12em; }
-	.ui-tabs-vertical .ui-tabs-nav li { clear: left; width: 100%; border-bottom-width: 1px !important; border-right-width: 0 !important; margin: 0 -1px .2em 0; }
+	.ui-tabs-vertical { padding: 0; }
+	.ui-tabs-vertical .ui-tabs-nav { float: left; width: 20%; padding: 2px 0 4px 3px; }
+	.ui-tabs-vertical .ui-tabs-nav li { clear: left; width: 100%;  }
 	.ui-tabs-vertical .ui-tabs-nav li a { display: block; width: 100%; }
-	.ui-tabs-vertical .ui-tabs-nav li.ui-tabs-active { padding-bottom: 0; padding-right: .1em; border-right-width: 1px; border-right-width: 1px; }
-	.ui-tabs-vertical .ui-tabs-panel { padding: 2em 1em !important; float: right; width: 40em; }
+	.ui-tabs-vertical .ui-tabs-nav li.ui-tabs-active { }
+	.ui-tabs-vertical .ui-tabs-panel { float: right; width: 80%; padding: 2em !important; }
 </style>
 HTML;
 		}

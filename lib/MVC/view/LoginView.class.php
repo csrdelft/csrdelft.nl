@@ -5,8 +5,34 @@
  * 
  * @author P.W.G. Brussee <brussee@live.nl>
  * 
- * Tonen van het login formulier.
+ * Tonen van login sessies en diverse formulieren.
  */
+class SessionsView extends DataTable implements FormElement {
+
+	public function __construct() {
+		parent::__construct(LoginModel::orm, LoginModel::orm, 'Sessiebeheer', 'uid');
+		$this->noForm = true;
+		$this->dataUrl = '/sessions';
+	}
+
+	public function getHtml() {
+		throw new Exception('unsupported');
+	}
+
+	public function getType() {
+		return get_class($this);
+	}
+
+}
+
+class SessionsData extends DataTableResponse {
+
+	public function __construct($uid) {
+		parent::__construct(LoginModel::instance()->find('uid = ?', array($uid)));
+	}
+
+}
+
 class LoginForm extends Formulier {
 
 	public function __construct() {

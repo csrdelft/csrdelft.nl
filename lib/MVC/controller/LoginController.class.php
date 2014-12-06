@@ -18,7 +18,9 @@ class LoginController extends AclController {
 			'endsu'		 => 'P_LOGGED_IN',
 			'pauper'	 => 'P_PUBLIC',
 			'wachtwoord' => 'P_PUBLIC',
-			'verify'	 => 'P_PUBLIC'
+			'verify'	 => 'P_PUBLIC',
+			'sessions'	 => 'P_LOGGED_IN',
+			'endsession' => 'P_LOGGED_IN'
 		);
 	}
 
@@ -163,7 +165,7 @@ class LoginController extends AclController {
 		$this->view = new CsrLayoutPage($this->view);
 	}
 
-	function verify() {
+	public function verify() {
 		$tokenValue = urldecode(filter_input(INPUT_GET, 'onetime_token', FILTER_SANITIZE_STRING));
 		$this->view = new VerifyForm($tokenValue);
 		if ($this->view->validate()) {
@@ -175,6 +177,14 @@ class LoginController extends AclController {
 			setMelding(VerifyModel::instance()->getError(), -1);
 		}
 		$this->view = new CsrLayoutPage($this->view);
+	}
+
+	public function sessions() {
+		$this->view = new SessionsData(LoginModel::getUid());
+	}
+
+	public function endsession() {
+		// TODO
 	}
 
 }

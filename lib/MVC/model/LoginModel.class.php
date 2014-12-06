@@ -287,19 +287,20 @@ class LoginModel extends PersistenceModel implements Validator {
 		// Subject Assignment:
 		$this->setLid($lid);
 
-		// Login sessie aanmaken
-		$session = new LoginSession();
-		$session->session_id = session_id();
-		$session->uid = $lid->getUid();
-		$session->login_moment = getDateTime();
-		$session->user_agent = filter_var($_SERVER['HTTP_USER_AGENT'], FILTER_SANITIZE_STRING);
-		$session->ip = $checkip ? filter_var($_SERVER['REMOTE_ADDR'], FILTER_SANITIZE_STRING) : null; // sessie koppelen aan ip?
-		if ($this->exists($session)) {
-			$this->update($session);
-		} else {
-			$this->create($session);
+		if ($uid != 'x999') {
+			// Login sessie aanmaken in database
+			$session = new LoginSession();
+			$session->session_id = session_id();
+			$session->uid = $lid->getUid();
+			$session->login_moment = getDateTime();
+			$session->user_agent = filter_var($_SERVER['HTTP_USER_AGENT'], FILTER_SANITIZE_STRING);
+			$session->ip = $checkip ? filter_var($_SERVER['REMOTE_ADDR'], FILTER_SANITIZE_STRING) : null; // sessie koppelen aan ip?
+			if ($this->exists($session)) {
+				$this->update($session);
+			} else {
+				$this->create($session);
+			}
 		}
-
 		return true;
 	}
 
