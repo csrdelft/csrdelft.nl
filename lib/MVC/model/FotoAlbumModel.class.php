@@ -82,6 +82,9 @@ class FotoAlbumModel extends PersistenceModel {
 					// tmp files opruimen
 					try {
 						$handle = opendir('/tmp');
+						if ($handle === false) {
+							continue;
+						}
 						while (false !== ($entry = readdir($handle))) {
 							if (startsWith($entry, 'magick-')) {
 								unlink($entry);
