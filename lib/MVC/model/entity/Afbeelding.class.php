@@ -29,8 +29,9 @@ class Afbeelding extends Bestand {
 	public function __construct($path, $parse = true) {
 		parent::__construct();
 		if ($parse) {
+			$this->filesize = @filesize($path);
 			$image = @getimagesize($path);
-			if ($image) {
+			if ($image AND $this->filesize !== false) {
 				$this->width = $image[0];
 				$this->height = $image[1];
 				$this->mimetype = $image['mime'];

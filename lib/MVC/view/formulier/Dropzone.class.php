@@ -129,8 +129,8 @@ showExisting_{$this->dropzone->getName()} = function (){
 		$.each(data, function (key, value) {
 			mockFile = { name: value.name, size: value.size, type: value.type };
 			thisDropzone.emit('addedfile', mockFile);
-			if (typeof value.thumb !== 'undefined') {
-				thisDropzone.emit('thumbnail', mockFile, value.thumb);
+			if (typeof value.thumbnail !== 'undefined') {
+				thisDropzone.emit('thumbnail', mockFile, value.thumbnail);
 			}
 		});
 	});

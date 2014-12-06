@@ -160,16 +160,15 @@ class FotoAlbumController extends AclController {
 
 	public function bestaande(FotoAlbum $album) {
 		$list = array();
-		$files = scandir($album->path . '_thumbs/');
+		$files = @scandir($album->path . '_thumbs/');
 		if ($files !== false) {
 			foreach ($files as $filename) {
 				if (endsWith($filename, '.jpg')) {
-					$foto = new Foto($filename, $album);
-					$foto->filesize = filesize($foto->getFullPath());
+					$foto = new Foto($filename, $album, true);
 					$obj['name'] = $foto->filename;
 					$obj['size'] = $foto->filesize;
-					$obj['type'] = 'image/jpeg';
-					$obj['thumb'] = $foto->getThumbUrl();
+					$obj['type'] = $foto->mimetype;
+					$obj['thumbnail'] = $foto->getThumbUrl();
 					$list[] = $obj;
 				}
 			}
@@ -220,7 +219,7 @@ class FotoAlbumController extends AclController {
 	}
 
 	public function verwijderen(FotoAlbum $album) {
-		if (!$album->hasFotos()) {
+		if ($album->isEmpty()) {
 			FotoAlbumModel::instance()->delete($album);
 			$this->view = new JsonResponse(true);
 			return;
