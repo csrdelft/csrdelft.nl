@@ -300,6 +300,9 @@ Lateral navigation
 		line-height: 30px;
 	}
 
+	.tt-suggestion {
+		cursor: pointer;
+	}
 	.tt-dropdown-menu h3 {
 		margin: 15px 15px 10px 10px;
 	}
