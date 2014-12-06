@@ -21,7 +21,7 @@ if (isset($_GET['cat'])) {
 	$categorie = (int) $_GET['cat'];
 }
 
-$limiet = 0;
+$limiet = 5;
 if (isset($_GET['limit'])) {
 	$limiet = (int) $_GET['limit'];
 }

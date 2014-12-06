@@ -21,7 +21,7 @@ if (isset($_GET['gtype'])) {
 	$gtype = (int) $_GET['gtype'];
 }
 
-$limiet = 0;
+$limiet = 5;
 if (isset($_GET['limit'])) {
 	$limiet = (int) $_GET['limit'];
 }

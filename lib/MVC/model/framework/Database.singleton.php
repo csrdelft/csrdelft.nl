@@ -107,7 +107,7 @@ class Database extends PDO {
 		if ($groupby !== null) {
 			$sql .= ' GROUP BY ' . $groupby;
 		}
-		if ($limit !== null) {
+		if ((int) $limit > 0) {
 			$sql .= ' LIMIT ' . (int) $start . ', ' . (int) $limit;
 		}
 		$query = self::instance()->prepare($sql);
@@ -234,7 +234,7 @@ class Database extends PDO {
 		}
 		$sql .= implode(', ', $attributes);
 		$sql .= ' WHERE ' . $where;
-		if ($limit !== null) {
+		if ((int) $limit > 0) {
 			$sql .= ' LIMIT ' . (int) $limit;
 		}
 		$query = self::instance()->prepare($sql);
@@ -255,7 +255,7 @@ class Database extends PDO {
 	public static function sqlDelete($from, $where, array $where_params, $limit = null) {
 		$sql = 'DELETE FROM ' . $from;
 		$sql .= ' WHERE ' . $where;
-		if ($limit !== null) {
+		if ((int) $limit > 0) {
 			$sql .= ' LIMIT ' . (int) $limit;
 		}
 		$query = self::instance()->prepare($sql);

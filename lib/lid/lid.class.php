@@ -1163,7 +1163,7 @@ class Lid implements Serializable, Agendeerbaar {
  */
 class Zoeker {
 
-	static function zoekLeden($zoekterm, $zoekveld, $verticale, $sort, $zoekstatus = '', $velden = array(), $aantalresultaten = null) {
+	static function zoekLeden($zoekterm, $zoekveld, $verticale, $sort, $zoekstatus = '', $velden = array(), $limiet = 0) {
 		$db = MijnSqli::instance();
 		$leden = array();
 		$zoekfilter = '';
@@ -1260,7 +1260,7 @@ class Zoeker {
 		# als er een specifieke moot is opgegeven, gaan we alleen in die moot zoeken
 		$mootfilter = ($verticale != 'alle') ? 'AND verticale=\'' . $verticale . '\' ' : '';
 		# is er een maximum aantal resultaten gewenst
-		$limiet = ($aantalresultaten === null) ? '' : 'LIMIT ' . (int) $aantalresultaten;
+		$limit = ($limiet > 0) ? '' : 'LIMIT ' . (int) $limiet;
 
 		# controleer of we ueberhaupt wel wat te zoeken hebben hier
 		if ($statusfilter != '') {
@@ -1288,7 +1288,8 @@ class Zoeker {
 				{$mootfilter}
 				ORDER BY
 					{$sort}
-				{$limiet}";
+				{$limit}
+			";
 			$result = $db->select($sZoeken);
 			if ($result !== false and $db->numRows($result) > 0) {
 				while ($lid = $db->next($result))

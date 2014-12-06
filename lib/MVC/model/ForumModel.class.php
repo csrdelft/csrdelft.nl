@@ -250,12 +250,12 @@ class ForumDelenModel extends AbstractForumModel {
 	 * 
 	 * @return array( ForumDraden[], ForumDelen[] )
 	 */
-	public function zoeken($query, $titel, $datum, $ouder, $jaar) {
-		$gevonden_draden = group_by_distinct('draad_id', ForumDradenModel::instance()->zoeken($query, $datum, $ouder, $jaar)); // zoek op titel in draden
+	public function zoeken($query, $titel, $datum, $ouder, $jaar, $limit) {
+		$gevonden_draden = group_by_distinct('draad_id', ForumDradenModel::instance()->zoeken($query, $datum, $ouder, $jaar, $limit)); // zoek op titel in draden
 		if ($titel === true) {
 			$gevonden_posts = array();
 		} else {
-			$gevonden_posts = group_by('draad_id', ForumPostsModel::instance()->zoeken($query, $datum, $ouder, $jaar)); // zoek op tekst in posts
+			$gevonden_posts = group_by('draad_id', ForumPostsModel::instance()->zoeken($query, $datum, $ouder, $jaar, $limit)); // zoek op tekst in posts
 			$gevonden_draden += ForumDradenModel::instance()->getForumDradenById(array_keys($gevonden_posts)); // laad draden bij posts
 			// laad posts bij draden
 			foreach ($gevonden_draden as $draad) {
@@ -697,8 +697,8 @@ class ForumDradenModel extends AbstractForumModel implements Paging {
 		ForumDelenModel::instance()->update($deel);
 	}
 
-	public function zoeken($query, $datum, $ouder, $jaar) {
-		$this->per_pagina = (int) LidInstellingen::get('forum', 'zoekresultaten');
+	public function zoeken($query, $datum, $ouder, $jaar, $limit) {
+		$this->per_pagina = (int) $limit;
 		$attributes = array('*', 'MATCH(titel) AGAINST (? IN BOOLEAN MODE) AS score');
 		$where = 'wacht_goedkeuring = FALSE AND verwijderd = FALSE AND ';
 		if ($datum === 'gemaakt') {
@@ -968,8 +968,8 @@ class ForumPostsModel extends AbstractForumModel implements Paging {
 		ForumDradenModel::instance()->hertellenVoorDeel($deel);
 	}
 
-	public function zoeken($query, $datum, $ouder, $jaar) {
-		$this->per_pagina = (int) LidInstellingen::get('forum', 'zoekresultaten');
+	public function zoeken($query, $datum, $ouder, $jaar, $limit) {
+		$this->per_pagina = (int) $limit;
 		$attributes = array('*', 'MATCH(tekst) AGAINST (? IN NATURAL LANGUAGE MODE) AS score');
 		$where = 'wacht_goedkeuring = FALSE AND verwijderd = FALSE AND ';
 		if ($datum === 'gemaakt') {

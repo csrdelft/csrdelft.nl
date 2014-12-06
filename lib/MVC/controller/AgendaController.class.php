@@ -71,9 +71,13 @@ class AgendaController extends AclController {
 			$this->geentoegang();
 		}
 		$query = '%' . $query . '%';
+		$limit = 5;
+		if (isset($_GET['limit'])) {
+			$limit = (int) filter_input(INPUT_GET, 'limit');
+		}
 		$van = date('Y-m-d');
 		$tot = date('Y-m-d', strtotime('+6 months'));
-		$items = $this->model->find('eind_moment >= ? AND begin_moment <= ? AND (titel LIKE ? OR beschrijving LIKE ? OR locatie LIKE ?)', array($van, $tot, $query, $query, $query), 'begin_moment ASC, titel ASC');
+		$items = $this->model->find('eind_moment >= ? AND begin_moment <= ? AND (titel LIKE ? OR beschrijving LIKE ? OR locatie LIKE ?)', array($van, $tot, $query, $query, $query), 'begin_moment ASC, titel ASC', null, $limit);
 		$result = array();
 		foreach ($items as $item) {
 			if ($item->getLink()) {

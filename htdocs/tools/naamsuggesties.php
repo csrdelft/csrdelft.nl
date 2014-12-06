@@ -25,7 +25,7 @@ if (isset($_GET['q'])) {
 	$zoekterm = $_GET['q'];
 }
 $velden = array('uid', 'voornaam', 'tussenvoegsel', 'achternaam');
-$limiet = null;
+$limiet = 5;
 if (isset($_GET['limit'])) {
 	$limiet = (int) $_GET['limit'];
 }

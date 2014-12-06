@@ -256,8 +256,12 @@ class FotoAlbumController extends AclController {
 		if ($query === null) {
 			$this->geentoegang();
 		}
+		$limit = 5;
+		if (isset($_GET['limit'])) {
+			$limit = (int) filter_input(INPUT_GET, 'limit');
+		}
 		$result = array();
-		foreach ($this->model->find('subdir LIKE ?', array('%' . $query . '%')) as $album) {
+		foreach ($this->model->find('subdir LIKE ?', array('%' . $query . '%'), 'subdir DESC', null, $limit) as $album) {
 			if (stripos($album->dirname, $query) !== false AND $album->magBekijken()) {
 				$result[] = array(
 					'url'	 => $album->getUrl(),

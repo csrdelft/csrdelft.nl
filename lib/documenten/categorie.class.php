@@ -203,7 +203,7 @@ class DocumentenCategorie {
 			FROM document
 			WHERE " . $wherecat . "(naam LIKE '%" . $zoekterm . "%' OR filename LIKE '%" . $zoekterm . "%')
 			ORDER BY toegevoegd DESC
-			";
+		";
 		if ($limiet > 0) {
 			$query .= "LIMIT 0, " . (int) $limiet;
 		}

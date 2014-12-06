@@ -265,9 +265,13 @@ class Catalogus {
 		$db = MijnSqli::instance();
 		$zoek = $db->escape($zoek);
 		$zoekterm = $db->escape($zoekterm);
-		$wherelimit = "";
+		$limiet = 5;
 		if (isset($_GET['limit'])) {
-			$wherelimit = "LIMIT 0, " . (int) $_GET['limit'];
+			$limiet = (int) $_GET['limit'];
+		}
+		$wherelimit = "";
+		if ($limiet > 0) {
+			$wherelimit = "LIMIT 0, " . (int) $limiet;
 		}
 		$properties = array();
 		$allowedkeys = array('id', 'titel', 'uitgavejaar', 'uitgeverij', 'paginas', 'taal', 'isbn', 'code', 'auteur', 'biebboek');

@@ -153,7 +153,8 @@ class ForumController extends Controller {
 			$ouder = 'jonger';
 			$jaar = 1;
 		}
-		$draden_delen = ForumDelenModel::instance()->zoeken($query, false, $datum, $ouder, $jaar);
+		$limit = (int) LidInstellingen::get('forum', 'zoekresultaten');
+		$draden_delen = ForumDelenModel::instance()->zoeken($query, false, $datum, $ouder, $jaar, $limit);
 		$this->view = new ForumResultatenView($draden_delen[0], $draden_delen[1], $query);
 	}
 
@@ -170,7 +171,11 @@ class ForumController extends Controller {
 			$datum = 'reactie';
 			$ouder = 'jonger';
 			$jaar = 1;
-			$draden_delen = ForumDelenModel::instance()->zoeken($query, true, $datum, $ouder, $jaar);
+			$limit = 5;
+			if (isset($_GET['limit'])) {
+				$limit = (int) filter_input(INPUT_GET, 'limit');
+			}
+			$draden_delen = ForumDelenModel::instance()->zoeken($query, true, $datum, $ouder, $jaar, $limit);
 			foreach ($draden_delen[0] as $draad) {
 				$deel = $draden_delen[1][$draad->forum_id];
 				$draden[] = array(
