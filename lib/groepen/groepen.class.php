@@ -449,7 +449,8 @@ class Groepen {
 			LEFT JOIN groeptype gt ON (gt.id = g.gtype)
 			WHERE g.zichtbaar = 'zichtbaar' " . $wheretype . " AND
 				(g.snaam LIKE '%" . $db->escape($zoekterm) . "%' OR g.naam LIKE '%" . $db->escape($zoekterm) . "%')
-			";
+			ORDER BY g.begin DESC
+		";
 		if ($limiet > 0) {
 			$query .= "LIMIT 0, " . (int) $limiet;
 		}
