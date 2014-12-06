@@ -121,7 +121,7 @@ class Foto extends Afbeelding {
 		if ($this->hasThumb()) {
 			chmod($this->getThumbPath(), 0644);
 		} else {
-			throw new Exception('Thumb maken mislukt');
+			throw new Exception('Thumb maken mislukt: ' . $command . '<br />' . $output);
 		}
 	}
 
@@ -140,7 +140,7 @@ class Foto extends Afbeelding {
 		if ($this->hasResized()) {
 			chmod($this->getResizedPath(), 0644);
 		} else {
-			throw new Exception('Resized maken mislukt');
+			throw new Exception('Resized maken mislukt: ' . $command . '<br />' . $output);
 		}
 	}
 
