@@ -457,18 +457,9 @@ class Groepen {
 		$result = $db->query($query);
 		if ($db->numRows($result) > 0) {
 			while ($prop = $db->next($result)) {
-				try {
-					$gtype = new Groepen((int) $prop['gtype']);
-				} catch (Exception $e) {
-					continue;
-				}
 				$groepen[] = array(
-					'url'	 => '/actueel/groepen/' . $gtype->getNaam() . '/' . $prop['id'],
-					'value'	 => $prop['naam'] . '<span class="lichtgrijs"> - ' . $gtype->getNaam() . '</span>',
-					'id'	 => $prop['id'],
-					'snaam'	 => $prop['snaam'],
-					'naam'	 => $prop['naam'],
-					'status' => $prop['status']
+					'url'	 => '/actueel/groepen/' . $prop['type'] . '/' . $prop['id'],
+					'value'	 => $prop['naam'] . '<span class="lichtgrijs"> - ' . $prop['type'] . '</span>',
 				);
 			}
 		}
