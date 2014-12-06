@@ -61,12 +61,10 @@ try {
 
 	$controller->getView()->view();
 } catch (Exception $e) {
-	$protocol = (isset($_SERVER['SERVER_PROTOCOL']) ? $_SERVER['SERVER_PROTOCOL'] : 'HTTP/1.0');
-	$code = ($e->getCode() >= 100 ? $e->getCode() : 500);
-	header($protocol . ' ' . $code . ' ' . $e->getMessage());
+	http_response_code($e->getCode() >= 100 ? $e->getCode() : 500);
 	try {
 		if (LoginModel::mag('P_ADMIN') OR LoginModel::instance()->isSued()) {
-			echo str_replace('#', '<br />#', $e); // stacktrace 
+			echo str_replace('#', '<br />#', $e); // stacktrace
 			echo '<br />DatabaseAdmin queries:<br /><pre>';
 			require_once 'MVC/model/framework/DatabaseAdmin.singleton.php';
 			debugprint(DatabaseAdmin::getQueries());
@@ -74,8 +72,6 @@ try {
 		}
 		DebugLogModel::instance()->log('index.php', 'new ' . $class, array(REQUEST_URI), $e);
 	} catch (Exception $e) {
-		if (DEBUG) {
-			print_r($e);
-		}
+		echo $e->getMessage();
 	}
 }
