@@ -429,10 +429,10 @@ class ForumDradenGelezenModel extends AbstractForumModel {
 		if (!LoginModel::mag('P_LOGGED_IN')) {
 			return;
 		}
-		$create = false;
-		// Haal nieuw object op omdat de view de ongewijzigde nodig heeft
 		$gelezen = $this->getWanneerGelezenDoorLid($draad);
-		if (!$gelezen) {
+		if ($gelezen) {
+			$create = false;
+		} else {
 			$gelezen = new ForumDraadGelezen();
 			$gelezen->draad_id = $draad->draad_id;
 			$gelezen->uid = LoginModel::getUid();
@@ -624,7 +624,7 @@ class ForumDradenModel extends AbstractForumModel implements Paging {
 	protected function __construct() {
 		parent::__construct();
 		$this->pagina = 1;
-		$this->per_pagina = LidInstellingen::get('forum', 'draden_per_pagina');
+		$this->per_pagina = (int) LidInstellingen::get('forum', 'draden_per_pagina');
 		$this->aantal_paginas = array();
 		$this->aantal_plakkerig = null;
 	}
@@ -880,7 +880,7 @@ class ForumPostsModel extends AbstractForumModel implements Paging {
 	protected function __construct() {
 		parent::__construct();
 		$this->pagina = 1;
-		$this->per_pagina = LidInstellingen::get('forum', 'posts_per_pagina');
+		$this->per_pagina = (int) LidInstellingen::get('forum', 'posts_per_pagina');
 		$this->aantal_paginas = array();
 	}
 

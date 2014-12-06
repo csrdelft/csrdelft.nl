@@ -258,7 +258,7 @@ class ForumController extends Controller {
 				$this->geentoegang();
 			}
 		}
-		$gelezen = $draad->getWanneerGelezen(); // laad gelezen voordat database geupdate wordt
+		$gelezen = $draad->getWanneerGelezen();
 		if ($pagina === null) {
 			$pagina = LidInstellingen::get('forum', 'open_draad_op_pagina');
 		}
@@ -276,7 +276,6 @@ class ForumController extends Controller {
 		} else {
 			ForumPostsModel::instance()->setHuidigePagina((int) $pagina, $draad->draad_id);
 		}
-		ForumDradenGelezenModel::instance()->setWanneerGelezenDoorLid($draad);
 		if ($statistiek === 'statistiek' AND $deel->magModereren()) {
 			$statistiek = true;
 		} else {

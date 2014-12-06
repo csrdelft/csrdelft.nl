@@ -184,6 +184,8 @@ class ForumDraadView extends ForumView {
 			$this->smarty->assign('gelezen_moment', strtotime($this->model->getWanneerGelezen()->datum_tijd));
 		}
 		$this->smarty->display('MVC/forum/draad.tpl');
+		// vanwege caching pas opslaan na de view
+		ForumDradenGelezenModel::instance()->setWanneerGelezenDoorLid($this->model);
 	}
 
 }
