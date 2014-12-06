@@ -63,7 +63,6 @@ try {
 } catch (Exception $e) {
 	$code = ($e->getCode() >= 100 ? $e->getCode() : 500);
 	http_response_code($code);
-
 	try {
 		if (LoginModel::mag('P_ADMIN') OR LoginModel::instance()->isSued()) {
 			echo str_replace('#', '<br />#', $e); // stacktrace 
@@ -72,9 +71,8 @@ try {
 			debugprint(DatabaseAdmin::getQueries());
 			echo '</pre>';
 		}
+		DebugLogModel::instance()->log('index.php', 'new ' . $class, array(REQUEST_URI), $e);
 	} catch (Exception $e) {
 		echo $e->getMessage();
 	}
-
-	DebugLogModel::instance()->log('index.php', 'new ' . $class, array(REQUEST_URI), $e);
 }
