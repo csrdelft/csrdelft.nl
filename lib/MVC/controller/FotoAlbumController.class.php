@@ -258,7 +258,7 @@ class FotoAlbumController extends AclController {
 		}
 		$result = array();
 		foreach ($this->model->find('subdir LIKE ?', array('%' . $query . '%')) as $album) {
-			if ($album->magBekijken()) {
+			if (stripos($album->dirname, $query) !== false AND $album->magBekijken()) {
 				$result[] = array(
 					'url'	 => $album->getUrl(),
 					'value'	 => ucfirst($album->dirname) . '<span class="lichtgrijs"> - ' . $album->getParentName() . '</span>'
