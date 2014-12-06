@@ -55,9 +55,7 @@ class Foto extends Afbeelding {
 			$this->directory = $album->path;
 			$this->subdir = $album->subdir;
 		}
-		if ($parse AND $this->exists()) {
-			parent::__construct($this->getFullPath(), $parse);
-		}
+		parent::__construct($this->getFullPath(), $parse);
 	}
 
 	public function getAlbumPath() {

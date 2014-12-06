@@ -81,10 +81,10 @@ class FotoAlbumModel extends PersistenceModel {
 			} else {
 				try {
 					$foto = new Foto($object->getFilename(), $album, true);
-					if ($foto->exists()) {
+					if ($foto->mimetype === 'image/jpeg') {
 						FotoModel::instance()->verwerkFoto($foto);
 					} else {
-						setMelding('Foto onleesbaar: ' . $foto->getFullPath(), -1);
+						setMelding('Geen foto: ' . $foto->getFullPath(), -1);
 					}
 				} catch (Exception $e) {
 					setMelding($e->getMessage(), -1);

@@ -29,11 +29,13 @@ class Afbeelding extends Bestand {
 	public function __construct($path, $parse = true) {
 		parent::__construct();
 		if ($parse) {
-			$image = getimagesize($path);
+			$image = @getimagesize($path);
 			if ($image) {
 				$this->width = $image[0];
 				$this->height = $image[1];
 				$this->mimetype = $image['mime'];
+			} else {
+				throw new Exception('Afbeelding parsen mislukt: ' . $path);
 			}
 		}
 	}
