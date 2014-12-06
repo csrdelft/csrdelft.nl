@@ -1,4 +1,7 @@
 AddDefaultCharset utf-8
+
+ErrorDocument 500 onderhoud.html
+
 RewriteEngine On
 
 RewriteRule ^happie				index.php?c=HappieRouter [L]
@@ -26,4 +29,4 @@ RewriteRule ^bijbelrooster		index.php?c=Bijbelrooster [L]
 
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
-RewriteRule ^					index.php [L]
+RewriteRule ^					index.php
