@@ -86,7 +86,7 @@ class FotoAlbumController extends AclController {
 			exit;
 		} else {
 			setMelding($album->dirname . ' succesvol verwerkt', 1);
-			redirect($album->Url());
+			redirect($album->getUrl());
 		}
 	}
 
