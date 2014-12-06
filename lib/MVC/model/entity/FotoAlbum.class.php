@@ -75,7 +75,7 @@ class FotoAlbum extends Map {
 	 * Bestaat er een map met de naam van het pad.
 	 */
 	public function exists() {
-		if (!startsWith($this->path, PICS_PATH . 'fotoalbum/') OR strpos($this->path, '/_')) {
+		if (!startsWith($this->path, PICS_PATH . 'fotoalbum/')) {
 			return false;
 		}
 		return @is_readable($this->path) AND is_dir($this->path);

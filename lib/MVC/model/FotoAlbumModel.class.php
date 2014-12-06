@@ -49,6 +49,9 @@ class FotoAlbumModel extends PersistenceModel {
 	}
 
 	public function getFotoAlbum($path) {
+		if (strpos($path, '/_') !== false) {
+			return null;
+		}
 		if (!endsWith($path, '/')) {
 			$path .= '/';
 		}
