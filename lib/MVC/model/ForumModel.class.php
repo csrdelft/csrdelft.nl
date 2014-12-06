@@ -439,14 +439,8 @@ class ForumDradenGelezenModel extends AbstractForumModel {
 			$create = true;
 		}
 		foreach ($draad->getForumPosts() as $post) {
-			if ($post->laatst_gewijzigd) {
-				if ($post->laatst_gewijzigd > $gelezen->datum_tijd) {
-					$gelezen->datum_tijd = $post->laatst_gewijzigd;
-				}
-			} else {
-				if ($post->datum_tijd > $gelezen->datum_tijd) {
-					$gelezen->datum_tijd = $post->datum_tijd;
-				}
+			if (strtotime($post->laatst_gewijzigd) > strtotime($gelezen->datum_tijd)) {
+				$gelezen->datum_tijd = $post->laatst_gewijzigd;
 			}
 		}
 		if ($create) {
@@ -469,10 +463,6 @@ class ForumDradenGelezenModel extends AbstractForumModel {
 		foreach ($lezers as $gelezen) {
 			if ($post->laatst_gewijzigd) {
 				if ($post->laatst_gewijzigd <= $gelezen->datum_tijd) {
-					$counter++;
-				}
-			} else {
-				if ($post->datum_tijd <= $gelezen->datum_tijd) {
 					$counter++;
 				}
 			}
