@@ -61,8 +61,9 @@ try {
 
 	$controller->getView()->view();
 } catch (Exception $e) {
+	$protocol = (isset($_SERVER['SERVER_PROTOCOL']) ? $_SERVER['SERVER_PROTOCOL'] : 'HTTP/1.0');
 	$code = ($e->getCode() >= 100 ? $e->getCode() : 500);
-	http_response_code($code);
+	header($protocol . ' ' . $code . ' ' . $e->getMessage());
 	try {
 		if (LoginModel::mag('P_ADMIN') OR LoginModel::instance()->isSued()) {
 			echo str_replace('#', '<br />#', $e); // stacktrace 
@@ -73,6 +74,8 @@ try {
 		}
 		DebugLogModel::instance()->log('index.php', 'new ' . $class, array(REQUEST_URI), $e);
 	} catch (Exception $e) {
-		echo $e->getMessage();
+		if (DEBUG) {
+			print_r($e);
+		}
 	}
 }
