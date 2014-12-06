@@ -62,16 +62,19 @@ try {
 	$controller->getView()->view();
 }
 catch (Exception $e) {
-	$protocol = (isset($_SERVER['SERVER_PROTOCOL']) ? $_SERVER['SERVER_PROTOCOL'] : 'HTTP/1.0');
 	$code = ($e->getCode() >= 100 ? $e->getCode() : 500);
-	header($protocol . ' ' . $code . ' ' . $e->getMessage());
 
 	if (LoginModel::mag('P_ADMIN') OR LoginModel::instance()->isSued()) {
+		http_status($code, $e->getMessage());
+
 		echo str_replace('#', '<br />#', $e); // stacktrace 
 		echo '<br />DatabaseAdmin queries:<br /><pre>';
 		require_once 'MVC/model/framework/DatabaseAdmin.singleton.php';
 		debugprint(DatabaseAdmin::getQueries());
 		echo '</pre>';
+	} else {
+		http_status($code);
 	}
+
 	DebugLogModel::instance()->log('index.php', 'new ' . $class, array(REQUEST_URI), $e);
 }
