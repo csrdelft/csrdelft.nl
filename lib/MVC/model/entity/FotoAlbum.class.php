@@ -22,15 +22,20 @@ class FotoAlbum extends Map {
 	 */
 	public $subdir;
 	/**
+	 * Subalbums in dit album
+	 * @var FotoAlbum[]
+	 */
+	private $subalbums;
+	/**
 	 * Fotos in dit album
 	 * @var Foto[]
 	 */
 	private $fotos;
 	/**
-	 * Subalbums in dit album
-	 * @var FotoAlbum[]
+	 * Fotos zonder thumb of resized
+	 * @var Foto[]
 	 */
-	private $subalbums;
+	private $fotos_incompleet;
 	/**
 	 * Creator
 	 * @var Lid
@@ -63,42 +68,12 @@ class FotoAlbum extends Map {
 			$this->path = $path;
 			$this->subdir = str_replace(PICS_PATH, '', $this->path);
 		}
-		if ($this->exists()) {
-			$this->dirname = basename($this->path);
-		} else {
-			$this->fotos = array();
+		$this->dirname = basename($this->path);
+		if (!$this->exists()) {
 			$this->subalbums = array();
+			$this->fotos = array();
+			$this->fotos_incompleet = array();
 		}
-	}
-
-	/**
-	 * Bestaat er een map met de naam van het pad.
-	 */
-	public function exists() {
-		if (!startsWith($this->path, PICS_PATH . 'fotoalbum/')) {
-			return false;
-		}
-		return @is_readable($this->path) AND is_dir($this->path);
-	}
-
-	/**
-	 * Is dit album leeg?
-	 * @return boolean
-	 */
-	public function isEmpty() {
-		$handle = opendir($this->path);
-		while (false !== ($entry = readdir($handle))) {
-			if ($entry != '.' && $entry != '..') {
-				if ($entry == '_thumbs' || $entry == '_resized') {
-					if (!is_dir_empty($this->path . $entry)) {
-						return false;
-					}
-				} else {
-					return false;
-				}
-			}
-		}
-		return true;
 	}
 
 	/**
@@ -116,30 +91,37 @@ class FotoAlbum extends Map {
 		return CSR_ROOT . '/' . direncode($this->subdir);
 	}
 
-	public function hasFotos() {
-		$this->getFotos();
-		return !empty($this->fotos);
+	public function hasFotos($incompleet = false) {
+		$fotos = $this->getFotos($incompleet);
+		return !empty($fotos);
 	}
 
 	public function getFotos($incompleet = false) {
-		if (isset($this->fotos)) {
-			return $this->fotos;
-		}
-		$this->fotos = array();
-		$glob = glob($this->path . '*');
-		if (!is_array($glob)) {
-			return array();
-		}
-		foreach ($glob as $path) {
-			if (is_file($path)) {
-				$filename = basename($path);
-				$foto = new Foto($filename, $this);
-				if ($incompleet OR $foto->isComplete()) {
-					$this->fotos[] = $foto;
+		if (!isset($this->fotos)) {
+
+			$this->fotos = array();
+			$this->fotos_incompleet = array();
+
+			$handle = opendir($this->path);
+			if (!$handle) {
+				return false;
+			}
+			while (false !== ($entry = readdir($handle))) {
+				if (is_file($this->path . $entry)) {
+					$foto = new Foto($entry, $this);
+					if ($foto->isComplete()) {
+						$this->fotos[] = $foto;
+					} else {
+						$this->fotos_incompleet[] = $foto;
+					}
 				}
 			}
 		}
-		return $this->fotos;
+		if ($incompleet) {
+			return array_merge($this->fotos, $this->fotos_incompleet);
+		} else {
+			return $this->fotos;
+		}
 	}
 
 	public function getSubAlbums() {
@@ -198,7 +180,7 @@ class FotoAlbum extends Map {
 	}
 
 	public function magBekijken() {
-		if (!$this->exists()) {
+		if (!startsWith($this->path, PICS_PATH . 'fotoalbum/')) {
 			return false;
 		}
 		if (LoginModel::mag('P_LEDEN_READ')) {

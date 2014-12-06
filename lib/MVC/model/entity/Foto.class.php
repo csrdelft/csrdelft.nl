@@ -55,14 +55,9 @@ class Foto extends Afbeelding {
 			$this->directory = $album->path;
 			$this->subdir = $album->subdir;
 		}
-		parent::__construct($this->getFullPath(), $parse);
-	}
-
-	/**
-	 * Bestaat er een bestand met de naam en het pad.
-	 */
-	public function exists() {
-		return @is_readable(PICS_PATH . $this->subdir . $this->filename) AND is_file(PICS_PATH . $this->subdir . $this->filename);
+		if ($parse AND $this->exists()) {
+			parent::__construct($this->getFullPath(), $parse);
+		}
 	}
 
 	public function getAlbumPath() {

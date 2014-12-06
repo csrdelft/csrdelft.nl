@@ -34,4 +34,11 @@ class Map extends PersistentEntity {
 	 */
 	protected static $table_name = '';
 
+	/**
+	 * Bestaat er een map met het pad.
+	 */
+	public function exists() {
+		return @is_readable($this->path) AND is_dir($this->path);
+	}
+
 }

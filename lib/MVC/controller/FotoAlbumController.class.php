@@ -52,10 +52,7 @@ class FotoAlbumController extends AclController {
 		$path = PICS_PATH . urldecode(implode('/', $path));
 		$album = $this->model->getFotoAlbum($path);
 		if (!$album) {
-			setMelding('Fotoalbum bestaat niet!', -1);
-			if (DEBUG) {
-				setMelding($path, 0);
-			}
+			setMelding('Fotoalbum bestaat niet' . (DEBUG ? ': ' . $path : ''), -1);
 			redirect(CSR_ROOT . '/fotoalbum');
 		}
 		$args[] = $album;
@@ -223,7 +220,7 @@ class FotoAlbumController extends AclController {
 	}
 
 	public function verwijderen(FotoAlbum $album) {
-		if ($album->isEmpty()) {
+		if (!$album->hasFotos()) {
 			FotoAlbumModel::instance()->delete($album);
 			$this->view = new JsonResponse(true);
 			return;

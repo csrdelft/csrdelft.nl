@@ -56,6 +56,9 @@ class FotoAlbumModel extends PersistenceModel {
 			$path .= '/';
 		}
 		$album = new FotoAlbum($path);
+		if (!$album->exists()) {
+			return null;
+		}
 		if (!$album->magBekijken()) {
 			return false;
 		}
@@ -78,7 +81,11 @@ class FotoAlbumModel extends PersistenceModel {
 			} else {
 				try {
 					$foto = new Foto($object->getFilename(), $album, true);
-					FotoModel::instance()->verwerkFoto($foto);
+					if ($foto->exists()) {
+						FotoModel::instance()->verwerkFoto($foto);
+					} else {
+						setMelding('Foto onleesbaar: ' . $foto->getFullPath(), -1);
+					}
 				} catch (Exception $e) {
 					setMelding($e->getMessage(), -1);
 				}

@@ -145,8 +145,8 @@
 	{/if}
 	{if LoginModel::mag('P_ALBUM_MOD')}
 		<a href="/fotoalbum/hernoemen/{$album->subdir}" class="btn post prompt redirect" title="Fotoalbum hernoemen" data="Nieuwe naam={$album->dirname|ucfirst}">{icon get=pencil} Naam wijzigen</a>
-		{if $album->isEmpty()}
-			<a href="/fotoalbum/verwijderen/{$album->subdir}" class="btn post confirm ReloadPage" title="Fotoalbum verwijderen">{icon get=cross}</a>
+		{if !$album->hasFotos()}
+			<a href="/fotoalbum/verwijderen/{$album->subdir}" class="btn post confirm ReloadPage" title="Fotoalbum verwijderen">{icon get=cross} Verwijderen</a>
 		{/if}
 		<a class="btn" href="/fotoalbum/verwerken/{$album->subdir}">{icon get="application_view_gallery"} Verwerken</a>
 	{/if}

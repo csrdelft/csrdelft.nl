@@ -29,10 +29,12 @@ class Afbeelding extends Bestand {
 	public function __construct($path, $parse = true) {
 		parent::__construct();
 		if ($parse) {
-			$image = getimagesize($path); // suppress warnings
-			$this->width = $image[0];
-			$this->height = $image[1];
-			$this->mimetype = $image['mime'];
+			$image = getimagesize($path);
+			if ($image) {
+				$this->width = $image[0];
+				$this->height = $image[1];
+				$this->mimetype = $image['mime'];
+			}
 		}
 	}
 
