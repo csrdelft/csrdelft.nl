@@ -267,17 +267,23 @@ function knop_ajax(knop, type) {
 	}
 	else if (knop.hasClass('DataTableResponse')) {
 
-		var table = knop.closest('table').attr('id');
-		/*
-		 var selection = fnGetSelection('#' + table);
-		 if (!selection) {
-		 return false;
-		 }
-		 data[table + '[]'] = selection;
-		 */
+		var tableId = '#' + knop.closest('table').attr('id');
+		var table = $(tableId).DataTable();
+
+		var tr = false;
+		if (knop.hasClass('remove')) {
+			tr = knop.closest('tr');
+		}
+
 		done = function (response) {
+
+			if (tr) {
+				table.row(tr).remove();
+				tr.effect('puff', {}, 400, remove);
+			}
+
 			if (typeof response === 'object') { // JSON
-				fnUpdateDataTable('#' + table, response);
+				fnUpdateDataTable(table, response);
 			}
 			else { // HTML
 				dom_update(response);
@@ -428,23 +434,23 @@ function form_submit(event) {
 
 		if (form.hasClass('DataTableResponse')) {
 
-			var table;
+			var tableId;
 			if (form.attr('id').indexOf('_toolbar') > 0) {
-				table = form.next('table').attr('id');
+				tableId = form.next('table').attr('id');
 			}
 			else {
-				table = form.closest('table').attr('id');
+				tableId = form.closest('table').attr('id');
 			}
 
-			var selection = fnGetSelection('#' + table);
+			var selection = fnGetSelection('#' + tableId);
 			if (!selection) {
 				return false;
 			}
-			formData.append(table + '[]', selection);
+			formData.append(tableId + '[]', selection);
 
 			done = function (response) {
 				if (typeof response === 'object') { // JSON
-					fnUpdateDataTable('#' + table, response);
+					fnUpdateDataTable($(tableId).DataTable(), response);
 				}
 				else { // HTML
 					dom_update(response);

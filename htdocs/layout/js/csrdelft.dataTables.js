@@ -21,8 +21,8 @@ function fnInitDataTables() {
 	$.fn.dataTable.ext.search.push(fnGroupExpandCollapseDraw);
 }
 
-function fnUpdateDataTable(tableId, data) {
-	var table = $(tableId).DataTable();
+function fnUpdateDataTable(table, data) {
+	// update existing or add new rows
 	data.data.forEach(function (row) {
 		var tr = $('tr[data-objectid="' + row.objectId + '"]');
 		if (tr.length === 1) {

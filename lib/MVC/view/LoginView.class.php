@@ -35,7 +35,7 @@ class SessionsData extends DataTableResponse {
 	public function getJson($sessie) {
 		$array = $sessie->jsonSerialize();
 
-		$array['details'] = '<a href="/endsession/' . $array['session_id'] . '" class="post DataTableResponse" title="Log uit"><img width="16" height="16" class="icon" src="http://plaetjes.csrdelft.nl/famfamfam/door_in.png"></a>';
+		$array['details'] = '<a href="/endsession/' . $array['session_id'] . '" class="post DataTableResponse remove" title="Log uit"><img width="16" height="16" class="icon" src="http://plaetjes.csrdelft.nl/famfamfam/door_in.png"></a>';
 
 		return parent::getJson($array);
 	}
