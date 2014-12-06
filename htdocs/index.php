@@ -62,7 +62,7 @@ try {
 	$controller->getView()->view();
 } catch (Exception $e) {
 	$code = ($e->getCode() >= 100 ? $e->getCode() : 500);
-	http_status($code, $e->getMessage());
+	http_response_code($code);
 
 	try {
 		if (LoginModel::mag('P_ADMIN') OR LoginModel::instance()->isSued()) {
@@ -73,7 +73,7 @@ try {
 			echo '</pre>';
 		}
 	} catch (Exception $e) {
-		http_status($code, $e->getMessage());
+		echo $e->getMessage();
 	}
 
 	DebugLogModel::instance()->log('index.php', 'new ' . $class, array(REQUEST_URI), $e);
