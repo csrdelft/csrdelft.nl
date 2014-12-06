@@ -73,8 +73,5 @@ catch (Exception $e) {
 		debugprint(DatabaseAdmin::getQueries());
 		echo '</pre>';
 	}
-	else {
-		DebugLogModel::instance()->log('index.php', 'new ' . $class, array(REQUEST_URI), $e);
-		redirect(CSR_ROOT . '/onderhoud.html');
-	}
+	DebugLogModel::instance()->log('index.php', 'new ' . $class, array(REQUEST_URI), $e);
 }
