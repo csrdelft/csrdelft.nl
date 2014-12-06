@@ -457,7 +457,11 @@ class Groepen {
 		$result = $db->query($query);
 		if ($db->numRows($result) > 0) {
 			while ($prop = $db->next($result)) {
-				$type = new Groepen((int) $prop['type']);
+				try {
+					$type = new Groepen((int) $prop['type']);
+				} catch (Exception $e) {
+					continue;
+				}
 				$groepen[] = array(
 					'url'	 => '/actueel/groepen/' . $type->getNaam() . '/' . $prop['id'],
 					'value'	 => $prop['naam'] . '<span class="lichtgrijs"> - ' . $type->getNaam() . '</span>',
