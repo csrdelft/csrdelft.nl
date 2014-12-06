@@ -101,11 +101,6 @@ class ForumDraad extends PersistentEntity {
 	 */
 	private $forum_posts;
 	/**
-	 * Moment gelezen door gebruiker
-	 * @var ForumDraadGelezen
-	 */
-	private $wanneer_gelezen;
-	/**
 	 * Lijst van lezers (wanneer)
 	 * @var ForumDraadGelezen[]
 	 */
@@ -213,24 +208,17 @@ class ForumDraad extends PersistentEntity {
 	 * @return ForumDraadGelezen|boolean $gelezen
 	 */
 	public function getWanneerGelezen() {
-		if (!isset($this->wanneer_gelezen)) {
-			$this->setWanneerGelezen(ForumDradenGelezenModel::instance()->getWanneerGelezenDoorLid($this));
-		}
-		return $this->wanneer_gelezen;
+		return ForumDradenGelezenModel::instance()->getWanneerGelezenDoorLid($this);
 	}
 
 	public function onGelezen() {
 		if ($this->getWanneerGelezen()) {
-			if (strtotime($this->laatst_gewijzigd) > strtotime($this->wanneer_gelezen->datum_tijd)) {
+			if (strtotime($this->laatst_gewijzigd) > strtotime($this->getWanneerGelezen()->datum_tijd)) {
 				return true;
 			}
 			return false;
 		}
 		return true;
-	}
-
-	private function setWanneerGelezen($gelezen) {
-		$this->wanneer_gelezen = $gelezen;
 	}
 
 	/**

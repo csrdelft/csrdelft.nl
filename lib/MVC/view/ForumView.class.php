@@ -222,8 +222,6 @@ class ForumDraadZijbalkView extends ForumView {
 		echo '</a></div>';
 		foreach ($this->model as $draad) {
 			$this->smarty->assign('draad', $draad);
-			$posts = $draad->getForumPosts();
-			$this->smarty->assign('post', reset($posts));
 			$this->smarty->display('MVC/forum/draad_zijbalk.tpl');
 		}
 		echo '</div>';

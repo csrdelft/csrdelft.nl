@@ -6,7 +6,7 @@
  * @author P.W.G. Brussee <brussee@live.nl>
  * 
  */
-abstract class AbstractForumModel extends PersistenceModel {
+abstract class AbstractForumModel extends CachedPersistenceModel {
 
 	protected function __construct() {
 		parent::__construct('forum/');
@@ -278,7 +278,7 @@ class ForumDelenModel extends AbstractForumModel {
 		// check permissies op delen
 		$delen_ids = array_keys(group_by_distinct('forum_id', $gevonden_draden, false));
 		$gevonden_delen = group_by_distinct('forum_id', ForumDelenModel::instance()->getForumDelenById($delen_ids));
-		$gedeeld_ids = array_keys(group_by_distinct('gedeeld_met', $gevonden_draden, false));
+		$gedeeld_ids = array_filter(array_keys(group_by_distinct('gedeeld_met', $gevonden_draden, false)));
 		$gedeeld_delen = group_by_distinct('forum_id', ForumDelenModel::instance()->getForumDelenById($gedeeld_ids));
 		foreach ($gevonden_delen as $forum_id => $deel) {
 			foreach ($gevonden_draden as $draad_id => $draad) {
@@ -783,19 +783,14 @@ class ForumDradenModel extends AbstractForumModel implements Paging {
 		} else {
 			$belangrijk = '';
 		}
-		$draden = $this->find('(forum_id IN (' . $forum_ids_stub . ') OR gedeeld_met IN (' . $forum_ids_stub . '))' . $verborgen . ' AND wacht_goedkeuring = FALSE AND verwijderd = FALSE' . $belangrijk, $params, 'laatst_gewijzigd DESC', null, $aantal, ($pagina - 1) * $aantal)->fetchAll();
-		$posts_ids = array_keys(group_by_distinct('laatste_post_id', $draden, false));
-		$posts = ForumPostsModel::instance()->getForumPostsById($posts_ids, ' AND wacht_goedkeuring = FALSE AND verwijderd = FALSE');
-		foreach ($draden as $i => $draad) {
-			if (array_key_exists($draad->laatste_post_id, $posts)) {
-				$draad->setForumPosts(array($posts[$draad->laatste_post_id]));
-			} else {
-				unset($draden[$i]);
-			}
-		}
+		$draden = group_by_distinct('draad_id', $this->find('(forum_id IN (' . $forum_ids_stub . ') OR gedeeld_met IN (' . $forum_ids_stub . '))' . $verborgen . ' AND wacht_goedkeuring = FALSE AND verwijderd = FALSE' . $belangrijk, $params, 'laatst_gewijzigd DESC', null, $aantal, ($pagina - 1) * $aantal));
 		if ($rss) {
 			return array($draden, $delen);
 		}
+		$count = count($draden);
+		$draden_ids = array_keys($draden);
+		array_unshift($draden_ids, LoginModel::getUid());
+		ForumDradenGelezenModel::instance()->prefetch('uid = ? AND draad_id IN (' . implode(', ', array_fill(0, $count, '?')) . ')', $draden_ids);
 		return $draden;
 	}
 
@@ -1055,12 +1050,12 @@ class ForumPostsModel extends AbstractForumModel implements Paging {
 		$draden = ForumDradenModel::instance()->getForumDradenById($draden_ids);
 		$delen_ids = array_keys(group_by_distinct('forum_id', $draden, false));
 		$delen = ForumDelenModel::instance()->getForumDelenById($delen_ids);
-		$gedeeld_ids = array_keys(group_by_distinct('gedeeld_met', $draden, false));
+		$gedeeld_ids = array_filter(array_keys(group_by_distinct('gedeeld_met', $draden, false)));
 		$gedeeld = group_by_distinct('forum_id', ForumDelenModel::instance()->getForumDelenById($gedeeld_ids));
 		foreach ($delen as $forum_id => $deel) {
 			foreach ($draden as $draad_id => $draad) {
 				// if binnen foreach draad vanwege check op draad gedeeld met
-				if (!$deel->magLezen() AND ! ($draad->gedeeld_met AND $gedeeld[$draad->gedeeld_met]->magLezen())) {
+				if ($deel->magLezen() AND ! ($draad->gedeeld_met AND $gedeeld[$draad->gedeeld_met]->magLezen())) {
 					if ($draad->forum_id === $forum_id) {
 						foreach ($posts as $i => $post) {
 							if ($post->draad_id === $draad_id) {
@@ -1072,6 +1067,9 @@ class ForumPostsModel extends AbstractForumModel implements Paging {
 				}
 			}
 		}
+		$count = count($draden_ids);
+		array_unshift($draden_ids, LoginModel::getUid());
+		ForumDradenGelezenModel::instance()->prefetch('uid = ? AND draad_id IN (' . implode(', ', array_fill(0, $count, '?')) . ')', $draden_ids);
 		return array($posts, $draden);
 	}
 

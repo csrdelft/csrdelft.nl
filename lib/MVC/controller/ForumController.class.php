@@ -302,7 +302,7 @@ class ForumController extends Controller {
 	}
 
 	/**
-	 * Forum deel wijzigen.
+	 * Forum deel bewerken.
 	 * 
 	 * @param int $forum_id
 	 */
