@@ -1,7 +1,7 @@
 <?php
 
 /*
- * class.groepen.php	| 	Jan Pieter Waagmeester (jieter@jpwaag.com)
+ * groepen.class.php	| 	Jan Pieter Waagmeester (jieter@jpwaag.com)
  *
  * Groepen zijn als volgt in de db opgeslagen:
  * groeptype:	Verschillende 'soorten' groepen: commissies, woonoorden, etc.

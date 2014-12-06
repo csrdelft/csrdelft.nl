@@ -10,7 +10,7 @@ require_once 'documenten/categorie.class.php';
  *
  * request url: /tools/documentsuggesties/{categorie}?q=zoeknaam&limit=20&timestamp=1336432238620
  */
-if (!LoginModel::mag('P_LEDEN_READ') OR ! isset($_GET['q'])) {
+if (!LoginModel::mag('P_DOCS_READ') OR ! isset($_GET['q'])) {
 	exit;
 } else {
 	$zoekterm = filter_input(INPUT_GET, 'q', FILTER_SANITIZE_STRING);
@@ -34,5 +34,6 @@ foreach (DocumentenCategorie::zoekDocumenten($zoekterm, $categorie, $limiet) as 
 	);
 }
 
+header('Content-Type: application/json');
 echo json_encode($result);
 exit;

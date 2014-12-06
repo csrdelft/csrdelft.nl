@@ -26,5 +26,6 @@ if (isset($_GET['limit'])) {
 	$limiet = (int) $_GET['limit'];
 }
 
+header('Content-Type: application/json');
 echo json_encode(Groepen::zoekGroepen($zoekterm, $gtype, $limiet));
 exit;

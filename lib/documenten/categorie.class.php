@@ -212,7 +212,10 @@ class DocumentenCategorie {
 		echo $db->error();
 		if ($db->numRows($result) > 0) {
 			while ($prop = $db->next($result)) {
-				$documenten[] = new Document($prop);
+				$doc = new Document($prop);
+				if ($doc->magBekijken()) {
+					$documenten[] = $doc;
+				}
 			}
 		}
 		return $documenten;

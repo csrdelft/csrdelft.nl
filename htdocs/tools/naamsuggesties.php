@@ -9,8 +9,8 @@ require_once 'configuratie.include.php';
  * 
  * request url: /tools/naamsuggesties/{$zoekin}?q=zoeknaam&limit=20&timestamp=1336432238620
  */
-if (!LoginModel::mag('P_LEDEN_READ')) {
-	echo json_encode(array('key' => 0, 'value' => 'Niet voldoende rechten'));
+if (!LoginModel::mag('P_OUDLEDEN_READ')) {
+	echo 'Niet voldoende rechten';
 	exit;
 }
 
@@ -39,5 +39,7 @@ foreach ($namen as $naam) {
 
 	$result[] = array('url' => '/communicatie/profiel/' . $naam['uid'], 'value' => $fullname);
 }
+
+header('Content-Type: application/json');
 echo json_encode($result);
 exit;
