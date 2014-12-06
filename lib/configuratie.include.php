@@ -20,10 +20,6 @@ function fatal_handler() {
 
 	$error = error_get_last();
 	if ($error !== null) {
-		/* / exclude wiki
-		  if (startsWith(str_replace('\\', '/', $error['file']), HTDOCS_PATH . 'wiki')) {
-		  return;
-		  }// */
 		$debug['error'] = $error;
 		$debug['trace'] = debug_backtrace(false);
 		$debug['POST'] = $_POST;
@@ -37,7 +33,7 @@ function fatal_handler() {
 			if (isset($_SERVER['SCRIPT_URL'])) {
 				$subject .= filter_var($_SERVER['SCRIPT_URL'], FILTER_SANITIZE_URL);
 			}
-			//mail('pubcie@csrdelft.nl', $subject, print_r($debug, true), implode("\r\n", $headers));
+			mail('pubcie@csrdelft.nl', $subject, print_r($debug, true), implode("\r\n", $headers));
 		} elseif (DEBUG) {
 			DebugLogModel::instance()->log(__FILE__, 'fatal_handler', func_get_args(), print_r($debug, true));
 		}
