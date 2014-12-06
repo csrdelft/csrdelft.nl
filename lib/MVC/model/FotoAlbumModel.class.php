@@ -79,23 +79,10 @@ class FotoAlbumModel extends PersistenceModel {
 					FotoModel::instance()->verwerkFoto($foto);
 				} catch (Exception $e) {
 					setMelding($e->getMessage(), -1);
-					// tmp files opruimen
-					try {
-						$handle = opendir('/tmp');
-						if ($handle === false) {
-							continue;
-						}
-						while (false !== ($entry = readdir($handle))) {
-							if (startsWith($entry, 'magick-')) {
-								unlink($entry);
-							}
-						}
-					} catch (Exception $e) {
-						setMelding($e->getMessage(), -1);
-					}
 				}
 			}
 		}
+		setMelding('Verwijder de magick-* files in /tmp handmatig!', 2);
 	}
 
 	public function getMostRecentFotoAlbum() {
