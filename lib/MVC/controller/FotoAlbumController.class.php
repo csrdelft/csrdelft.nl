@@ -122,7 +122,7 @@ class FotoAlbumController extends AclController {
 						$filename = $uploader->getModel()->filename;
 					}
 					$uploader->opslaan($album->path, $filename);
-					$foto = new Foto($album, $filename);
+					$foto = new Foto($filename, $album);
 					// opslaan gelukt?
 					if ($foto->exists()) {
 						FotoModel::instance()->verwerkFoto($foto);
@@ -163,7 +163,7 @@ class FotoAlbumController extends AclController {
 		if ($files !== false) {
 			foreach ($files as $filename) {
 				if (endsWith($filename, '.jpg')) {
-					$foto = new Foto($album, $filename);
+					$foto = new Foto($filename, $album);
 					$foto->filesize = filesize($foto->getFullPath());
 					$obj['name'] = $foto->filename;
 					$obj['size'] = $foto->filesize;
@@ -211,7 +211,7 @@ class FotoAlbumController extends AclController {
 			$this->geentoegang();
 		}
 		$filename = filter_input(INPUT_POST, 'foto', FILTER_SANITIZE_STRING);
-		if ($this->model->setAlbumCover($album, new Foto($album, $filename))) {
+		if ($this->model->setAlbumCover($album, new Foto($filename, $album))) {
 			$this->view = new JsonResponse(true);
 		} else {
 			$this->view = new JsonResponse('Fotoalbum-cover instellen mislukt', 503);
@@ -225,7 +225,7 @@ class FotoAlbumController extends AclController {
 			return;
 		}
 		$filename = filter_input(INPUT_POST, 'foto', FILTER_SANITIZE_STRING);
-		$foto = new Foto($album, $filename);
+		$foto = new Foto($filename, $album);
 		if (!LoginModel::mag('P_ALBUM_DEL') AND ! $foto->isOwner()) {
 			$this->geentoegang();
 		}
@@ -239,7 +239,7 @@ class FotoAlbumController extends AclController {
 
 	public function roteren(FotoAlbum $album) {
 		$filename = filter_input(INPUT_POST, 'foto', FILTER_SANITIZE_STRING);
-		$foto = new Foto($album, $filename);
+		$foto = new Foto($filename, $album);
 		if (!LoginModel::mag('P_ALBUM_MOD') AND ! $foto->isOwner()) {
 			$this->geentoegang();
 		}

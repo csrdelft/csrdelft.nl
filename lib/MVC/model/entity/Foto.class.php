@@ -47,10 +47,12 @@ class Foto extends Afbeelding {
 	 */
 	protected static $table_name = 'fotos';
 
-	public function __construct(FotoAlbum $album = null, $filename = null) {
+	public function __construct($filename = null, FotoAlbum $album = null) {
 		// werkomheen traag fotoalbum: niet onnodig parsen
 		//parent::__construct($album->path . $bestandsnaam, false);
-		if ($album !== null) {
+		if ($filename === true) { // called from PersistenceModel
+			$this->directory = PICS_PATH . $this->subdir;
+		} elseif ($album !== null) {
 			$this->filename = $filename;
 			$this->directory = $album->path;
 			$this->subdir = $album->subdir;

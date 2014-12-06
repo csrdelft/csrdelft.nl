@@ -133,7 +133,7 @@ class FotoAlbum extends Map {
 		foreach ($glob as $path) {
 			if (is_file($path)) {
 				$filename = basename($path);
-				$foto = new Foto($this, $filename);
+				$foto = new Foto($filename, $this);
 				if ($incompleet OR $foto->isComplete()) {
 					$this->fotos[] = $foto;
 				}
