@@ -31,6 +31,7 @@ try {
 	DebugLogModel::instance()->log('cron.php', 'DebugLogModel::opschonen()', array(), $e);
 }
 
+// Instellingen
 try {
 	Instellingen::instance()->opschonen();
 	LidInstellingen::instance()->opschonen();
@@ -57,8 +58,8 @@ try {
 // FotoAlbum opschonen
 try {
 	require_once 'MVC/model/FotoAlbumModel.class.php';
-	FotoModel::instance()->cleanup();
 	FotoAlbumModel::instance()->cleanup();
+	FotoModel::instance()->cleanup();
 } catch (Exception $e) {
 	DebugLogModel::instance()->log('cron.php', 'Foto(Album)Model::instance()->cleanup()', array(), $e);
 }

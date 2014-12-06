@@ -43,7 +43,7 @@ class FotoAlbumModel extends PersistenceModel {
 		}
 		$path = $album->path;
 		if (file_exists($path)) {
-			@rmdir($path);
+			rmdir($path);
 		}
 		return parent::delete($album);
 	}
@@ -130,6 +130,9 @@ class FotoAlbumModel extends PersistenceModel {
 	public function cleanup() {
 		foreach ($this->find() as $album) {
 			if (!$album->exists()) {
+				foreach (FotoModel::instance()->find('subdir = ?', array($album->subdir)) as $foto) {
+					FotoModel::instance()->delete($foto);
+				}
 				$this->delete($album);
 			}
 		}
@@ -189,7 +192,7 @@ class FotoModel extends PersistenceModel {
 	}
 
 	public function cleanup() {
-		foreach ($this->find() as $foto) { // FIXME: constructor casting
+		foreach ($this->find() as $foto) {
 			if (!$foto->exists()) {
 				$this->delete($foto);
 			}
