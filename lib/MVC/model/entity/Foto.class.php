@@ -47,9 +47,7 @@ class Foto extends Afbeelding {
 	 */
 	protected static $table_name = 'fotos';
 
-	public function __construct($filename = null, FotoAlbum $album = null) {
-		// werkomheen traag fotoalbum: niet onnodig parsen
-		//parent::__construct($album->path . $bestandsnaam, false);
+	public function __construct($filename = null, FotoAlbum $album = null, $parse = false) {
 		if ($filename === true) { // called from PersistenceModel
 			$this->directory = PICS_PATH . $this->subdir;
 		} elseif ($album !== null) {
@@ -57,6 +55,7 @@ class Foto extends Afbeelding {
 			$this->directory = $album->path;
 			$this->subdir = $album->subdir;
 		}
+		parent::__construct($this->getFullPath(), $parse);
 	}
 
 	/**

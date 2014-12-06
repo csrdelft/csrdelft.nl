@@ -26,7 +26,7 @@ class Afbeelding extends Bestand {
 	 */
 	public static $mimeTypes = array('image/png', 'image/jpeg', 'image/gif');
 
-	public function __construct($path = '', $parse = true) {
+	public function __construct($path, $parse = true) {
 		parent::__construct();
 		if ($parse) {
 			$image = getimagesize($path); // suppress warnings
