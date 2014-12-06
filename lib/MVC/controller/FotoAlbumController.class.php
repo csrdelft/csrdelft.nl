@@ -75,6 +75,10 @@ class FotoAlbumController extends AclController {
 	}
 
 	public function verwerken(FotoAlbum $album) {
+		if ($album->dirname === 'fotoalbum') {
+			setMelding('Niet het complete fotoalbum verwerken', -1);
+			redirect($album->getUrl());
+		}
 		//define('RESIZE_OUTPUT', null);
 		if (defined('RESIZE_OUTPUT')) {
 			echo '<h1>Fotoalbum verwerken: ' . $album->dirname . '</h1>';
