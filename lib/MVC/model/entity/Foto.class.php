@@ -47,13 +47,13 @@ class Foto extends Afbeelding {
 	 */
 	protected static $table_name = 'fotos';
 
-	public function __construct(FotoAlbum $album = null, $bestandsnaam = null) {
+	public function __construct(FotoAlbum $album = null, $filename = null) {
 		// werkomheen traag fotoalbum: niet onnodig parsen
 		//parent::__construct($album->path . $bestandsnaam, false);
 		if ($this->exists()) {
-			$this->filename = $bestandsnaam;
-			$this->directory = $album;
-			$this->subdir = $album->getSubDir();
+			$this->filename = $filename;
+			$this->directory = $album->path;
+			$this->subdir = $album->subdir;
 		}
 	}
 
@@ -61,39 +61,39 @@ class Foto extends Afbeelding {
 	 * Bestaat er een bestand met de naam en het pad.
 	 */
 	public function exists() {
-		return @is_readable($this->directory->path . $this->filename) AND is_file($this->directory->path . $this->filename);
+		return @is_readable(PICS_PATH . $this->subdir . $this->filename) AND is_file(PICS_PATH . $this->subdir . $this->filename);
 	}
 
 	public function getAlbumPath() {
-		return $this->directory->path;
+		return $this->directory;
 	}
 
 	public function getFullPath() {
-		return $this->directory->path . $this->filename;
+		return $this->directory . $this->filename;
 	}
 
 	public function getThumbPath() {
-		return $this->directory->path . '_thumbs/' . $this->filename;
+		return $this->directory . '_thumbs/' . $this->filename;
 	}
 
 	public function getResizedPath() {
-		return $this->directory->path . '_resized/' . $this->filename;
+		return $this->directory . '_resized/' . $this->filename;
 	}
 
 	public function getAlbumUrl() {
-		return CSR_ROOT . '/' . direncode($this->directory->getSubDir());
+		return CSR_ROOT . '/' . direncode($this->subdir);
 	}
 
 	public function getFullUrl() {
-		return CSR_PICS . '/' . direncode($this->directory->getSubDir() . $this->filename);
+		return CSR_PICS . '/' . direncode($this->subdir . $this->filename);
 	}
 
 	public function getThumbUrl() {
-		return CSR_PICS . '/' . direncode($this->directory->getSubDir() . '_thumbs/' . $this->filename);
+		return CSR_PICS . '/' . direncode($this->subdir . '_thumbs/' . $this->filename);
 	}
 
 	public function getResizedUrl() {
-		return CSR_PICS . '/' . direncode($this->directory->getSubDir() . '_resized/' . $this->filename);
+		return CSR_PICS . '/' . direncode($this->subdir . '_resized/' . $this->filename);
 	}
 
 	public function hasThumb() {

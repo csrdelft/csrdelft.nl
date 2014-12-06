@@ -115,7 +115,7 @@
 					}
 				});
 			});
-			/* img class="photoTag" data-fotoalbum="$album->getSubDir()"
+			/* img class="photoTag" data-fotoalbum="$album->subdir"
 			 $(document).ready(function () {
 			 $('.photoTag').photoTag({
 			 requesTagstUrl: "/fotoalbum/gettags/" + $(this).attr('data-fotoalbum'),
@@ -140,18 +140,18 @@
 {/if}
 <div class="float-right" style="margin-top: 30px;">
 	{if LoginModel::mag('P_ALBUM_ADD')}
-		<a class="btn" href="/fotoalbum/uploaden/{$album->getSubDir()}">{icon get="picture_add"} Toevoegen</a>
-		<a class="btn post popup" href="/fotoalbum/toevoegen/{$album->getSubDir()}">{icon get="folder_add"} Nieuw album</a>
+		<a class="btn" href="/fotoalbum/uploaden/{$album->subdir}">{icon get="picture_add"} Toevoegen</a>
+		<a class="btn post popup" href="/fotoalbum/toevoegen/{$album->subdir}">{icon get="folder_add"} Nieuw album</a>
 	{/if}
 	{if LoginModel::mag('P_ALBUM_MOD')}
-		<a href="/fotoalbum/hernoemen/{$album->getSubDir()}" class="btn post prompt redirect" title="Fotoalbum hernoemen" data="Nieuwe naam={$album->dirname|ucfirst}">{icon get=pencil} Naam wijzigen</a>
+		<a href="/fotoalbum/hernoemen/{$album->subdir}" class="btn post prompt redirect" title="Fotoalbum hernoemen" data="Nieuwe naam={$album->dirname|ucfirst}">{icon get=pencil} Naam wijzigen</a>
 		{if $album->isEmpty()}
-			<a href="/fotoalbum/verwijderen/{$album->getSubDir()}" class="btn post confirm ReloadPage" title="Fotoalbum verwijderen">{icon get=cross}</a>
+			<a href="/fotoalbum/verwijderen/{$album->subdir}" class="btn post confirm ReloadPage" title="Fotoalbum verwijderen">{icon get=cross}</a>
 		{/if}
-		<a class="btn" href="/fotoalbum/verwerken/{$album->getSubDir()}">{icon get="application_view_gallery"} Verwerken</a>
+		<a class="btn" href="/fotoalbum/verwerken/{$album->subdir}">{icon get="application_view_gallery"} Verwerken</a>
 	{/if}
 	{if LoginModel::mag('P_LOGGED_IN') && $album->getFotos()!==false}
-		<a class="btn" href="/fotoalbum/downloaden/{$album->getSubDir()}" title="Download als TAR-bestand">{icon get="picture_save"} Download album</a>
+		<a class="btn" href="/fotoalbum/downloaden/{$album->subdir}" title="Download als TAR-bestand">{icon get="picture_save"} Download album</a>
 	{/if}
 </div>
 <h1 class="inline">{$album->dirname|ucfirst}</h1>

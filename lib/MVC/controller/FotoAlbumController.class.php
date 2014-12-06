@@ -85,8 +85,8 @@ class FotoAlbumController extends AclController {
 		if (defined('RESIZE_OUTPUT')) {
 			exit;
 		} else {
-			setMelding('Fotoalbum ' . $album->dirname . ' succesvol verwerkt', 1);
-			redirect(CSR_ROOT . '/' . $album->getSubDir());
+			setMelding($album->dirname . ' succesvol verwerkt', 1);
+			redirect($album->Url());
 		}
 	}
 
@@ -210,8 +210,8 @@ class FotoAlbumController extends AclController {
 		if (!LoginModel::mag('P_ALBUM_MOD') AND ! $album->isOwner()) {
 			$this->geentoegang();
 		}
-		$naam = filter_input(INPUT_POST, 'foto', FILTER_SANITIZE_STRING);
-		if ($this->model->setAlbumCover($album, new Foto($album, $naam))) {
+		$filename = filter_input(INPUT_POST, 'foto', FILTER_SANITIZE_STRING);
+		if ($this->model->setAlbumCover($album, new Foto($album, $filename))) {
 			$this->view = new JsonResponse(true);
 		} else {
 			$this->view = new JsonResponse('Fotoalbum-cover instellen mislukt', 503);
@@ -224,13 +224,13 @@ class FotoAlbumController extends AclController {
 			$this->view = new JsonResponse(true);
 			return;
 		}
-		$naam = filter_input(INPUT_POST, 'foto', FILTER_SANITIZE_STRING);
-		$foto = new Foto($album, $naam);
+		$filename = filter_input(INPUT_POST, 'foto', FILTER_SANITIZE_STRING);
+		$foto = new Foto($album, $filename);
 		if (!LoginModel::mag('P_ALBUM_DEL') AND ! $foto->isOwner()) {
 			$this->geentoegang();
 		}
 		if (FotoModel::instance()->verwijderFoto($foto)) {
-			echo '<div id="' . md5($naam) . '" class="remove"></div>';
+			echo '<div id="' . md5($filename) . '" class="remove"></div>';
 			exit;
 		} else {
 			$this->view = new JsonResponse('Foto verwijderen mislukt', 503);
@@ -238,8 +238,8 @@ class FotoAlbumController extends AclController {
 	}
 
 	public function roteren(FotoAlbum $album) {
-		$naam = filter_input(INPUT_POST, 'foto', FILTER_SANITIZE_STRING);
-		$foto = new Foto($album, $naam);
+		$filename = filter_input(INPUT_POST, 'foto', FILTER_SANITIZE_STRING);
+		$foto = new Foto($album, $filename);
 		if (!LoginModel::mag('P_ALBUM_MOD') AND ! $foto->isOwner()) {
 			$this->geentoegang();
 		}
@@ -257,7 +257,7 @@ class FotoAlbumController extends AclController {
 			if ($album->magBekijken()) {
 				$result[] = array(
 					'url'	 => $album->getUrl(),
-					'value'	 => ucfirst($album->dirname) . '<span class="lichtgrijs"> - ' . ucfirst(basename(dirname($album->getSubdir()))) . '</span>'
+					'value'	 => ucfirst($album->dirname) . '<span class="lichtgrijs"> - ' . $album->getParentName() . '</span>'
 				);
 			}
 		}

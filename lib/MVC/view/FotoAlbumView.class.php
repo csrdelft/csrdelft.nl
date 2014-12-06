@@ -32,7 +32,7 @@ class FotoAlbumView extends SmartyTemplateView {
 
 	private function getBreadcrumbsDropdown($dropdown = false, $self = true) {
 		$breadcrumbs = '<a href="/fotoalbum" title="Fotoalbum"><img src="' . CSR_PICS . '/knopjes/camera-16.png" class="module-icon"></a>';
-		$mappen = explode('/', $this->model->getSubDir());
+		$mappen = explode('/', $this->model->subdir);
 		$subdir = 'fotoalbum/';
 		$first = true;
 		foreach ($mappen as $albumnaam) {
@@ -83,7 +83,7 @@ class FotoAlbumView extends SmartyTemplateView {
 class FotoAlbumToevoegenForm extends ModalForm {
 
 	public function __construct(FotoAlbum $album) {
-		parent::__construct($album, get_class(), '/fotoalbum/toevoegen/' . $album->getSubDir());
+		parent::__construct($album, get_class(), '/fotoalbum/toevoegen/' . $album->subdir);
 		$this->titel = 'Fotoalbum toevoegen in: ' . $album->dirname;
 		$this->css_classes[] = 'redirect';
 		$fields[] = new RequiredFileNameField('subalbum', null, 'Naam');
@@ -96,8 +96,8 @@ class FotoAlbumToevoegenForm extends ModalForm {
 class PosterUploadForm extends Formulier {
 
 	public function __construct(FotoAlbum $album) {
-		parent::__construct($album, get_class(), '/fotoalbum/uploaden/' . $album->getSubDir());
-		$this->titel = 'Poster toevoegen in: ' . basename(dirname($album->getSubDir()));
+		parent::__construct($album, get_class(), '/fotoalbum/uploaden/' . $album->subdir);
+		$this->titel = 'Poster toevoegen in: ' . $album->getParentName();
 		$fields[] = new HtmlComment('Alleen jpeg afbeeldingen.<br/><br/>');
 		$fields[] = new RequiredFileNameField('posternaam', null, 'Posternaam', 50, 5);
 		$fields[] = new RequiredImageField('afbeelding', null, null, array('image/jpeg'));
@@ -116,8 +116,8 @@ class PosterUploadForm extends Formulier {
 class FotosDropzone extends Dropzone {
 
 	public function __construct(FotoAlbum $album) {
-		parent::__construct($album, get_class(), '/fotoalbum/uploaden/' . $album->getSubDir(), new ImageField('afbeelding', null, null, array('image/jpeg'), false), '/fotoalbum');
-		$this->titel = 'Fotos toevoegen aan album: ' . $album->dirname;
+		parent::__construct($album, get_class(), '/fotoalbum/uploaden/' . $album->subdir, new ImageField('afbeelding', null, null, array('image/jpeg'), false), '/fotoalbum');
+		$this->titel = 'Fotos toevoegen aan: ' . ucfirst($album->dirname);
 	}
 
 	public function getBreadcrumbs() {

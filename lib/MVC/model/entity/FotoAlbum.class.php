@@ -55,13 +55,13 @@ class FotoAlbum extends Map {
 	 */
 	protected static $table_name = 'fotoalbums';
 
-	public function __construct($cast = false, $locatie = null) {
-		parent::__construct($cast);
-		if ($locatie === null) {
+	public function __construct($path = null) {
+		parent::__construct();
+		if ($path === true) { // called from PersistenceModel
 			$this->path = PICS_PATH . $this->subdir;
 		} else {
-			$this->path = $locatie;
-			$this->subdir = $this->getSubDir();
+			$this->path = $path;
+			$this->subdir = str_replace(PICS_PATH, '', $this->path);
 		}
 		if ($this->exists()) {
 			$this->dirname = basename($this->path);
@@ -75,6 +75,9 @@ class FotoAlbum extends Map {
 	 * Bestaat er een map met de naam van het pad.
 	 */
 	public function exists() {
+		if (!startsWith($this->path, PICS_PATH . 'fotoalbum/') OR strpos($this->path, '/_')) {
+			return false;
+		}
 		return @is_readable($this->path) AND is_dir($this->path);
 	}
 
@@ -105,12 +108,12 @@ class FotoAlbum extends Map {
 		return filemtime($this->path);
 	}
 
-	public function getSubDir() {
-		return str_replace(PICS_PATH, '', $this->path);
+	public function getParentName() {
+		return ucfirst(basename(dirname($this->subdir)));
 	}
 
 	public function getUrl() {
-		return CSR_ROOT . '/' . direncode($this->getSubDir());
+		return CSR_ROOT . '/' . direncode($this->subdir);
 	}
 
 	public function hasFotos() {
@@ -195,7 +198,7 @@ class FotoAlbum extends Map {
 	}
 
 	public function magBekijken() {
-		if (startsWith($this->dirname, '_') OR ! startsWith($this->path, PICS_PATH . 'fotoalbum/')) {
+		if (!$this->exists()) {
 			return false;
 		}
 		if (LoginModel::mag('P_LEDEN_READ')) {

@@ -52,12 +52,9 @@ class FotoAlbumModel extends PersistenceModel {
 		if (!endsWith($path, '/')) {
 			$path .= '/';
 		}
-		$album = new FotoAlbum(false, $path);
+		$album = new FotoAlbum($path);
 		if (!$album->magBekijken()) {
 			return false;
-		}
-		if (!$album->exists()) {
-			return null;
 		}
 		return $album;
 	}

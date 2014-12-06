@@ -952,13 +952,13 @@ HTML;
 				} else {
 					$groot = false;
 				}
-				$naam = str_replace('#', '', array_pop($parts)); // replace # (foolproof)
+				$filename = str_replace('#', '', array_pop($parts)); // replace # (foolproof)
 				$path = PICS_PATH . 'fotoalbum' . implode('/', $parts);
 				$album = FotoAlbumModel::instance()->getFotoAlbum($path);
 				if (!$album) {
 					return '<div class="bb-block">Fotoalbum niet gevonden: ' . $url . '</div>';
 				}
-				$foto = new Foto($album, $naam);
+				$foto = new Foto($album, $filename);
 				$fototag = new FotoBBView($foto, $groot);
 				return $fototag->getHtml();
 		}
