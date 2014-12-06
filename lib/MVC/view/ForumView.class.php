@@ -180,6 +180,10 @@ class ForumDraadView extends ForumView {
 		if ($this->statistiek) {
 			$this->smarty->assign('statistiek', true);
 		}
+		// als posts gewijzigd zijn zonder draad gewijzigd te triggeren voorkomt $draad->onGelezen() dat de gele lijn wordt getoond
+		if ($this->model->onGelezen() AND $this->model->getWanneerGelezen()) {
+			$this->smarty->assign('gelezen_moment', strtotime($this->model->getWanneerGelezen()->datum_tijd));
+		}
 		$this->smarty->display('MVC/forum/draad.tpl');
 	}
 
