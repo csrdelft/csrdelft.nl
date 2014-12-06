@@ -16,9 +16,9 @@ if (!LoginModel::mag('P_LEDEN_READ') OR ! isset($_GET['q'])) {
 	$zoekterm = filter_input(INPUT_GET, 'q', FILTER_SANITIZE_STRING);
 }
 
-$type = 0;
-if (isset($_GET['type'])) {
-	$type = (int) $_GET['type'];
+$gtype = 0;
+if (isset($_GET['gtype'])) {
+	$gtype = (int) $_GET['gtype'];
 }
 
 $limiet = 0;
@@ -26,5 +26,5 @@ if (isset($_GET['limit'])) {
 	$limiet = (int) $_GET['limit'];
 }
 
-echo json_encode(Groepen::zoekGroepen($zoekterm, $type, $limiet));
+echo json_encode(Groepen::zoekGroepen($zoekterm, $gtype, $limiet));
 exit;

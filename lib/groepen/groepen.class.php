@@ -432,16 +432,16 @@ class Groepen {
 	 *
 	 * @static
 	 * @param string $zoekterm
-	 * @param int $type
+	 * @param int $gtype
 	 * @param int $limiet
 	 * @return array
 	 */
-	public static function zoekGroepen($zoekterm, $type = 0, $limiet = 0) {
+	public static function zoekGroepen($zoekterm, $gtype = 0, $limiet = 0) {
 		$db = MijnSqli::instance();
 		$groepen = array();
 		$wheretype = "";
-		if ($type != 0) {
-			$wheretype = " AND gtype = " . (int) $type;
+		if ($gtype != 0) {
+			$wheretype = " AND gtype = " . (int) $gtype;
 		}
 		$query = "
 			SELECT g.id AS id, gt.naam AS type, snaam, g.naam AS naam, status
@@ -458,13 +458,13 @@ class Groepen {
 		if ($db->numRows($result) > 0) {
 			while ($prop = $db->next($result)) {
 				try {
-					$type = new Groepen((int) $prop['type']);
+					$gtype = new Groepen((int) $prop['gtype']);
 				} catch (Exception $e) {
 					continue;
 				}
 				$groepen[] = array(
-					'url'	 => '/actueel/groepen/' . $type->getNaam() . '/' . $prop['id'],
-					'value'	 => $prop['naam'] . '<span class="lichtgrijs"> - ' . $type->getNaam() . '</span>',
+					'url'	 => '/actueel/groepen/' . $gtype->getNaam() . '/' . $prop['id'],
+					'value'	 => $prop['naam'] . '<span class="lichtgrijs"> - ' . $gtype->getNaam() . '</span>',
 					'id'	 => $prop['id'],
 					'snaam'	 => $prop['snaam'],
 					'naam'	 => $prop['naam'],
