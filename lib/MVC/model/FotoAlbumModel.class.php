@@ -79,6 +79,17 @@ class FotoAlbumModel extends PersistenceModel {
 					FotoModel::instance()->verwerkFoto($foto);
 				} catch (Exception $e) {
 					setMelding($e->getMessage(), -1);
+					// tmp files opruimen
+					try {
+						$handle = opendir('/tmp');
+						while (false !== ($entry = readdir($handle))) {
+							if (startsWith($entry, 'magick-')) {
+								unlink($entry);
+							}
+						}
+					} catch (Exception $e) {
+						setMelding($e->getMessage(), -1);
+					}
 				}
 			}
 		}
