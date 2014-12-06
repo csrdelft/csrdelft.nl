@@ -1,7 +1,4 @@
 AddDefaultCharset utf-8
-
-ErrorDocument 500 /onderhoud.html
-
 RewriteEngine On
 
 RewriteRule ^happie				index.php?c=HappieRouter [L]
