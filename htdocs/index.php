@@ -60,20 +60,20 @@ try {
 	}
 
 	$controller->getView()->view();
-}
-catch (Exception $e) {
+} catch (Exception $e) {
 	$code = ($e->getCode() >= 100 ? $e->getCode() : 500);
+	http_status($code, $e->getMessage());
 
-	if (LoginModel::mag('P_ADMIN') OR LoginModel::instance()->isSued()) {
+	try {
+		if (LoginModel::mag('P_ADMIN') OR LoginModel::instance()->isSued()) {
+			echo str_replace('#', '<br />#', $e); // stacktrace 
+			echo '<br />DatabaseAdmin queries:<br /><pre>';
+			require_once 'MVC/model/framework/DatabaseAdmin.singleton.php';
+			debugprint(DatabaseAdmin::getQueries());
+			echo '</pre>';
+		}
+	} catch (Exception $e) {
 		http_status($code, $e->getMessage());
-
-		echo str_replace('#', '<br />#', $e); // stacktrace 
-		echo '<br />DatabaseAdmin queries:<br /><pre>';
-		require_once 'MVC/model/framework/DatabaseAdmin.singleton.php';
-		debugprint(DatabaseAdmin::getQueries());
-		echo '</pre>';
-	} else {
-		http_status($code);
 	}
 
 	DebugLogModel::instance()->log('index.php', 'new ' . $class, array(REQUEST_URI), $e);
