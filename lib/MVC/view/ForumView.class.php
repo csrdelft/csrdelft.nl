@@ -165,7 +165,9 @@ class ForumDraadView extends ForumView {
 		$this->statistiek = $statistiek;
 		// cache old value for ongelezen streep
 		if ($draad->getWanneerGelezen()) {
-			$this->gelezen_moment = $draad->getWanneerGelezen()->datum_tijd;
+			$this->gelezen_moment = strtotime($draad->getWanneerGelezen()->datum_tijd);
+		} else {
+			$this->gelezen_moment = false;
 		}
 		ForumDradenGelezenModel::instance()->setWanneerGelezenDoorLid($this->model);
 	}
@@ -186,9 +188,7 @@ class ForumDraadView extends ForumView {
 		if ($this->statistiek) {
 			$this->smarty->assign('statistiek', true);
 		}
-		if ($this->gelezen_moment) {
-			$this->smarty->assign('gelezen_moment', strtotime($this->gelezen_moment));
-		}
+		$this->smarty->assign('gelezen_moment', $this->gelezen_moment);
 		$this->smarty->display('MVC/forum/draad.tpl');
 	}
 

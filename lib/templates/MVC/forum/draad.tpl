@@ -118,7 +118,7 @@ pagecount=ForumPostsModel::instance()->getAantalPaginas($draad->draad_id) curpag
 		{foreach from=$draad->getForumPosts() item=post name=posts}
 
 			{* als posts gewijzigd zijn zonder draad gewijzigd te triggeren voorkomt $draad->onGelezen() dat de gele lijn wordt getoond *}
-			{if !$vanaf AND $draad->onGelezen() AND (!isset($gelezen_moment) OR strtotime($post->laatst_gewijzigd) > $gelezen_moment)}
+			{if !$vanaf AND $draad->onGelezen() AND (!$gelezen_moment OR strtotime($post->laatst_gewijzigd) > $gelezen_moment)}
 				{assign var=vanaf value=true}
 				<tr class="tussenschot ongelezenvanaf" title="Ongelezen reacties vanaf hier">
 					<td colspan="2">
