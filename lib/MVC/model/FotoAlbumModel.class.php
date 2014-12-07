@@ -72,7 +72,7 @@ class FotoAlbumModel extends PersistenceModel {
 				continue;
 			}
 			if ($object->isDir()) {
-				chmod($object->getPathname(), 0755);
+				chmod($path, 0755);
 				$album = $this->getFotoAlbum($path);
 				if (!$this->exists($album)) {
 					$this->create($album);
