@@ -156,6 +156,7 @@ class ForumDraadView extends ForumView {
 	private $deel;
 	private $paging;
 	private $statistiek;
+	private $ongelezen;
 	private $gelezen_moment;
 
 	public function __construct(ForumDraad $draad, ForumDeel $deel, $paging = true, $statistiek = false) {
@@ -164,6 +165,7 @@ class ForumDraadView extends ForumView {
 		$this->paging = ($paging AND ForumPostsModel::instance()->getAantalPaginas($draad->draad_id) > 1);
 		$this->statistiek = $statistiek;
 		// cache old value for ongelezen streep
+		$this->ongelezen = $draad->onGelezen();
 		if ($draad->getWanneerGelezen()) {
 			$this->gelezen_moment = strtotime($draad->getWanneerGelezen()->datum_tijd);
 		} else {
@@ -188,6 +190,7 @@ class ForumDraadView extends ForumView {
 		if ($this->statistiek) {
 			$this->smarty->assign('statistiek', true);
 		}
+		$this->smarty->assign('draad_ongelezen', $this->ongelezen);
 		$this->smarty->assign('gelezen_moment', $this->gelezen_moment);
 		$this->smarty->display('MVC/forum/draad.tpl');
 	}
