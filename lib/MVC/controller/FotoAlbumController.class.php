@@ -79,7 +79,7 @@ class FotoAlbumController extends AclController {
 		ob_start();
 		echo '<h1>Fotoalbum verwerken: ' . $album->dirname . '</h1>';
 		echo 'Dit kan even duren...<br />';
-		ob_flush();
+		ob_end_flush();
 		$this->model->verwerkFotos($album);
 		echo '<br />Klaar!';
 		exit;

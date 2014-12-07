@@ -73,9 +73,7 @@ class FotoAlbumModel extends PersistenceModel {
 			}
 			if ($object->isDir()) {
 				if (false === @chmod($path, 0755)) {
-					ob_start();
 					debugprint('Geen eigenaar van: ' . $path);
-					ob_flush();
 				}
 				$album = $this->getFotoAlbum($path);
 				if (!$this->exists($album)) {
@@ -84,9 +82,7 @@ class FotoAlbumModel extends PersistenceModel {
 			} else {
 				try {
 					if (false === @chmod($object->getPathname(), 0644)) {
-						ob_start();
 						debugprint('Geen eigenaar van: ' . $path);
-						ob_flush();
 					}
 					$filename = $object->getFilename();
 					if ($filename === 'Thumbs.db') {
@@ -95,9 +91,7 @@ class FotoAlbumModel extends PersistenceModel {
 					$foto = new Foto($filename, $album, true);
 					FotoModel::instance()->verwerkFoto($foto);
 				} catch (Exception $e) {
-					ob_start();
 					debugprint($e->getMessage());
-					ob_flush();
 				}
 			}
 		}
