@@ -47,7 +47,7 @@ span.offtopic img { opacity: 0.3; filter: alpha(opacity=30); }
 }
 
 .bb-maaltijd {
-	width: 329px;
+	width: 355px;
 	overflow: auto;
 }
 .bb-maaltijd .titel {
@@ -331,5 +331,5 @@ div.citaatContainer div.citaat div.citaatContainer div.citaat img.bb-img {
 	margin-bottom: 0;
 }
 #mededelingen-top3block {
-	width: 360px;
+	width: 370px;
 }
