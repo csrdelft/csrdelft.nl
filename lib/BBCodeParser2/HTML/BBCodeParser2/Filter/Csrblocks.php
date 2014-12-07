@@ -1,11 +1,11 @@
 <?php
+
 /* vim: set expandtab tabstop=4 shiftwidth=4: */
 
 /**
  * @package  HTML_BBCodeParser2
  * @author   Gerrit Uitslag <klapinklapin@gmail.com>
  */
-
 
 /**
  * Filter for tag to switch off bbcode
@@ -18,117 +18,114 @@ class HTML_BBCodeParser2_Filter_Csrblocks extends HTML_BBCodeParser2_Filter {
 	 * @var      array
 	 */
 	protected $_definedTags = array(
-		'groep' => array(
-					'allowed'    => 'none',
-					'attributes' => array('groep' => ''),
-					'plugin'     => 'Csrblocks'),
-		'lid' => array(
-					'allowed'    => 'none',
-					'attributes' => array('lid' => ''),
-					'plugin'     => 'Csrblocks'),
-		'boek' => array(
-					'allowed'    => 'none',
-					'attributes' => array('boek' => ''),
-					'plugin'     => 'Csrblocks'),
-		'document' => array(
-					'allowed'    => 'none',
-					'attributes' => array('document' => ''),
-					'plugin'     => 'Csrblocks'),
-
-		'locatie' => array(
-					'allowed'    => 'none',
-					'attributes' => array(
-						'locatie' => '',
-						'w'       => '',
-						'h'       => '',
-						'static'  => ''),
-					'plugin'     => 'Csrblocks'),
-		'map' => array(
-					'allowed'    => 'none',
-					'attributes' => array(
-						'map'    => '',
-						'w'      => '',
-						'h'      => '',
-						'static' => ''),
-					'plugin'     => 'Csrblocks'),
-		'kaart' => array(
-					'allowed'    => 'none',
-					'attributes' => array(
-						'kaart'  => '',
-						'w'      => '',
-						'h'      => '',
-						'static' => ''),
-					'plugin'     => 'Csrblocks'),
-
-		'peiling' => array(
-					'allowed'    => 'none',
-					'attributes' => array('peiling' => ''),
-					'plugin'     => 'Csrblocks'),
-		'slideshow' => array(
-					'allowed'    => 'none',
-					'attributes' => array('slideshow' => ''),
-					'plugin'     => 'Csrblocks'),
-		'bijbelrooster' => array(
-					'allowed'    => 'none',
-					'attributes' => array(
-						'bijbelrooster' => '',
-						'vertaling'     => ''),
-					'plugin'     => 'Csrblocks'),
-		'bijbel' => array(
-					'allowed'    => 'none',
-					'attributes' => array('bijbel' => ''),
-					'plugin'     => 'Csrblocks'),
-		'mededelingen' => array(
-					'allowed'    => 'none',
-					'attributes' => array('mededelingen' => ''),
-					'plugin'     => 'Csrblocks'),
-		'maaltijd' => array(
-					'allowed'    => 'none',
-					'attributes' => array('maaltijd' => ''),
-					'plugin'     => 'Csrblocks'),
-		'query' => array(
-					'allowed'    => 'none',
-					'attributes' => array('query' => ''),
-					'plugin'     => 'Csrblocks'),
-		'youtube' => array(
-					'allowed'    => 'none',
-					'attributes' => array('youtube' => ''),
-					'plugin'     => 'Csrblocks'),
-		'video' => array(
-					'allowed'    => 'none',
-					'attributes' => array('video' => ''),
-					'plugin'     => 'Csrblocks'),
-		'twitter' => array(
-					'allowed'    => 'none',
-					'attributes' => array(
-						'twitter' => '',
-						'lines'   => '',
-						'width'   => '',
-						'height'  => ''),
-					'plugin'     => 'Csrblocks'),
-		'foto' => array(
-					'allowed'    => 'none',
-					'attributes' => array('foto' => ''),
-					'plugin'     => 'Csrblocks'),
-		'fotoalbum' => array(
-					'allowed'    => 'none',
-					'attributes' => array(
-						'fotoalbum' => '',
-						'rows'      => '',
-						'big'       => '',
-						'bigfirst'  => '',
-						'compact'   => ''),
-					'plugin'     => 'Csrblocks'),
-		'citaat' => array(
-					'allowed'    => 'all',
-					'attributes' => array('citaat' => ''),
-					'plugin'     => 'Csrblocks'),
-		'quote' => array(
-					'allowed'    => 'all',
-					'attributes' => array('quote' => ''),
-					'plugin'     => 'Csrblocks'),
+		'groep'		 => array(
+			'allowed'	 => 'none',
+			'attributes' => array('groep' => ''),
+			'plugin'	 => 'Csrblocks'),
+		'lid'		 => array(
+			'allowed'	 => 'none',
+			'attributes' => array('lid' => ''),
+			'plugin'	 => 'Csrblocks'),
+		'boek'		 => array(
+			'allowed'	 => 'none',
+			'attributes' => array('boek' => ''),
+			'plugin'	 => 'Csrblocks'),
+		'document'	 => array(
+			'allowed'	 => 'none',
+			'attributes' => array('document' => ''),
+			'plugin'	 => 'Csrblocks'),
+		'locatie'	 => array(
+			'allowed'	 => 'none',
+			'attributes' => array(
+				'locatie'	 => '',
+				'w'			 => '',
+				'h'			 => '',
+				'static'	 => ''),
+			'plugin'	 => 'Csrblocks'),
+		'map'		 => array(
+			'allowed'	 => 'none',
+			'attributes' => array(
+				'map'	 => '',
+				'w'		 => '',
+				'h'		 => '',
+				'static' => ''),
+			'plugin'	 => 'Csrblocks'),
+		'kaart'		 => array(
+			'allowed'	 => 'none',
+			'attributes' => array(
+				'kaart'	 => '',
+				'w'		 => '',
+				'h'		 => '',
+				'static' => ''),
+			'plugin'	 => 'Csrblocks'),
+		'peiling'		 => array(
+			'allowed'	 => 'none',
+			'attributes' => array('peiling' => ''),
+			'plugin'	 => 'Csrblocks'),
+		'slideshow'		 => array(
+			'allowed'	 => 'none',
+			'attributes' => array('slideshow' => ''),
+			'plugin'	 => 'Csrblocks'),
+		'bijbelrooster'	 => array(
+			'allowed'	 => 'none',
+			'attributes' => array(
+				'bijbelrooster'	 => '',
+				'vertaling'		 => ''),
+			'plugin'	 => 'Csrblocks'),
+		'bijbel'		 => array(
+			'allowed'	 => 'none',
+			'attributes' => array('bijbel' => ''),
+			'plugin'	 => 'Csrblocks'),
+		'mededelingen'	 => array(
+			'allowed'	 => 'none',
+			'attributes' => array('mededelingen' => ''),
+			'plugin'	 => 'Csrblocks'),
+		'maaltijd'		 => array(
+			'allowed'	 => 'none',
+			'attributes' => array('maaltijd' => ''),
+			'plugin'	 => 'Csrblocks'),
+		'query'			 => array(
+			'allowed'	 => 'none',
+			'attributes' => array('query' => ''),
+			'plugin'	 => 'Csrblocks'),
+		'youtube'		 => array(
+			'allowed'	 => 'none',
+			'attributes' => array('youtube' => ''),
+			'plugin'	 => 'Csrblocks'),
+		'video'			 => array(
+			'allowed'	 => 'none',
+			'attributes' => array('video' => ''),
+			'plugin'	 => 'Csrblocks'),
+		'twitter'		 => array(
+			'allowed'	 => 'none',
+			'attributes' => array(
+				'twitter'	 => '',
+				'lines'		 => '',
+				'width'		 => '',
+				'height'	 => ''),
+			'plugin'	 => 'Csrblocks'),
+		'foto'			 => array(
+			'allowed'	 => 'none',
+			'attributes' => array('foto' => ''),
+			'plugin'	 => 'Csrblocks'),
+		'fotoalbum'		 => array(
+			'allowed'	 => 'none',
+			'attributes' => array(
+				'fotoalbum'	 => '',
+				'rows'		 => '',
+				'big'		 => '',
+				'bigfirst'	 => '',
+				'compact'	 => ''),
+			'plugin'	 => 'Csrblocks'),
+		'citaat'		 => array(
+			'allowed'	 => 'all',
+			'attributes' => array('citaat' => ''),
+			'plugin'	 => 'Csrblocks'),
+		'quote'			 => array(
+			'allowed'	 => 'all',
+			'attributes' => array('quote' => ''),
+			'plugin'	 => 'Csrblocks'),
 	);
-
 	/**
 	 * Number of nested quotes
 	 *
@@ -167,10 +164,10 @@ class HTML_BBCodeParser2_Filter_Csrblocks extends HTML_BBCodeParser2_Filter {
 		$pattern = array();
 		$replace = array();
 		foreach ($tags as $tag) {
-			$pattern[] = "#".$oe.$tag."=([^".$ce."]*?)".$ce."(?!".$oe."/".$tag.$ce.")#Ui"; // [groep=.*] zonder [/groep] erachter
-			$pattern[] = "#".$oe.$tag."(?!=)(\s?.*)".$ce."(.+?)".$oe."/".$tag.$ce."#Ui";   // [groep .*].+[/groep]
-			$replace[] = $o.$tag."=\$1".    $c.$o."/".$tag.$c;                             // [groep=.*][/groep]
-			$replace[] = $o.$tag."=\$2 \$1".$c.$o."/".$tag.$c;                              // [groep=.+ .*][/groep]
+			$pattern[] = "#" . $oe . $tag . "=([^" . $ce . "]*?)" . $ce . "(?!" . $oe . "/" . $tag . $ce . ")#Ui"; // [groep=.*] zonder [/groep] erachter
+			$pattern[] = "#" . $oe . $tag . "(?!=)(\s?.*)" . $ce . "(.+?)" . $oe . "/" . $tag . $ce . "#Ui";   // [groep .*].+[/groep]
+			$replace[] = $o . $tag . "=\$1" . $c . $o . "/" . $tag . $c;							 // [groep=.*][/groep]
+			$replace[] = $o . $tag . "=\$2 \$1" . $c . $o . "/" . $tag . $c;							  // [groep=.+ .*][/groep]
 		}
 
 		$this->_preparsed = preg_replace($pattern, $replace, $this->_text);
@@ -263,11 +260,11 @@ class HTML_BBCodeParser2_Filter_Csrblocks extends HTML_BBCodeParser2_Filter {
 				require_once 'bibliotheek/boek.class.php';
 				require_once 'bibliotheek/bibliotheekcontent.class.php';
 				try {
-					$boek = new Boek((int)$boekid);
+					$boek = new Boek((int) $boekid);
 					$content = new BoekBBContent($boek);
 					return $content->view();
 				} catch (Exception $e) {
-					return '[boek] Boek [boekid:' . (int)$boekid . '] bestaat niet.';
+					return '[boek] Boek [boekid:' . (int) $boekid . '] bestaat niet.';
 				}
 				break;
 		}
@@ -296,7 +293,7 @@ class HTML_BBCodeParser2_Filter_Csrblocks extends HTML_BBCodeParser2_Filter {
 
 				require_once 'documenten/documentcontent.class.php';
 				try {
-					$document = new Document((int)$id);
+					$document = new Document((int) $id);
 					$content = new DocumentBBContent($document);
 					return $content->getHtml();
 				} catch (Exception $e) {
@@ -329,12 +326,12 @@ class HTML_BBCodeParser2_Filter_Csrblocks extends HTML_BBCodeParser2_Filter {
 				$map = $this->maps(htmlspecialchars($address), $tag['attributes']);
 
 				return
-					'<span class="hoverIntent">'
-					. '<a href="http://maps.google.nl/maps?q=' . htmlspecialchars($address) . '">'
-					. $address . ' <img src="' . CSR_PICS . '/famfamfam/map.png" alt="map" title="Kaart" />'
-					. '</a>'
-					. '<div class="hoverIntentContent">' . $map . '</div>'
-					. '</span>';
+						'<span class="hoverIntent">'
+						. '<a href="http://maps.google.nl/maps?q=' . htmlspecialchars($address) . '">'
+						. $address . ' <img src="' . CSR_PICS . '/famfamfam/map.png" alt="map" title="Kaart" />'
+						. '</a>'
+						. '<div class="hoverIntentContent">' . $map . '</div>'
+						. '</span>';
 		}
 		return false;
 	}
@@ -381,12 +378,12 @@ class HTML_BBCodeParser2_Filter_Csrblocks extends HTML_BBCodeParser2_Filter {
 			return 'Geen adres opgegeven';
 		}
 		if (isset($arguments['w']) AND $arguments['w'] < 800) {
-			$width = (int)$arguments['w'];
+			$width = (int) $arguments['w'];
 		} else {
 			$width = 400;
 		}
 		if (isset($arguments['h']) AND $arguments['h'] < 600) {
-			$height = (int)$arguments['h'];
+			$height = (int) $arguments['h'];
 		} else {
 			$height = 300;
 		}
@@ -430,16 +427,15 @@ class HTML_BBCodeParser2_Filter_Csrblocks extends HTML_BBCodeParser2_Filter {
 
 				require_once 'peilingcontent.class.php';
 				try {
-					$peiling = new Peiling((int)$peilingid);
+					$peiling = new Peiling((int) $peilingid);
 					$peilingcontent = new PeilingContent($peiling);
 					return $peilingcontent->getHtml();
 				} catch (Exception $e) {
-					return '[peiling] Er bestaat geen peiling met (id:' . (int)$peilingid . ')';
+					return '[peiling] Er bestaat geen peiling met (id:' . (int) $peilingid . ')';
 				}
 		}
 		return false;
 	}
-
 
 	private $slideshowJsIncluded = false;
 
@@ -652,7 +648,7 @@ class HTML_BBCodeParser2_Filter_Csrblocks extends HTML_BBCodeParser2_Filter {
 							$maaltijd2 = reset($maaltijden);
 						}
 					} elseif (preg_match('/\d+/', $mid)) {
-						$maaltijd = MaaltijdenModel::getMaaltijdVoorKetzer((int)$mid); // met filter
+						$maaltijd = MaaltijdenModel::getMaaltijdVoorKetzer((int) $mid); // met filter
 						if (!$maaltijd) {
 							return '';
 						}
@@ -690,7 +686,6 @@ class HTML_BBCodeParser2_Filter_Csrblocks extends HTML_BBCodeParser2_Filter {
 		return false;
 	}
 
-
 	/**
 	 * Deze methode kan resultaten van query's die in de database staan printen in een
 	 * tabelletje.
@@ -710,7 +705,7 @@ class HTML_BBCodeParser2_Filter_Csrblocks extends HTML_BBCodeParser2_Filter {
 					$queryID = 0;
 				}
 
-				$queryID = (int)$queryID;
+				$queryID = (int) $queryID;
 
 				if ($queryID != 0) {
 					require_once 'savedquery.class.php';
@@ -880,14 +875,14 @@ HTML;
 				$lines = 4;
 				$width = 355;
 				$height = 300;
-				if (isset($arguments['lines']) AND (int)$arguments['lines'] > 0) {
-					$lines = (int)$arguments['lines'];
+				if (isset($arguments['lines']) AND (int) $arguments['lines'] > 0) {
+					$lines = (int) $arguments['lines'];
 				}
-				if (isset($arguments['width']) AND (int)$arguments['width'] > 100) {
-					$width = (int)$arguments['width'];
+				if (isset($arguments['width']) AND (int) $arguments['width'] > 100) {
+					$width = (int) $arguments['width'];
 				}
-				if (isset($arguments['height']) AND (int)$arguments['height'] > 100) {
-					$height = (int)$arguments['height'];
+				if (isset($arguments['height']) AND (int) $arguments['height'] > 100) {
+					$height = (int) $arguments['height'];
 				}
 
 				$html = <<<HTML
@@ -924,7 +919,6 @@ HTML;
 		}
 		return false;
 	}
-
 
 	/**
 	 * [foto]/pad/naar/foto[/foto]
@@ -998,8 +992,10 @@ HTML;
 				}
 
 				if ($url === 'laatste') {
+					$laatste = true;
 					$album = FotoAlbumModel::instance()->getMostRecentFotoAlbum();
 				} else {
+					$laatste = false;
 					//vervang url met pad
 					$url = str_ireplace(CSR_ROOT, '', $url);
 					$path = PICS_PATH;
@@ -1024,7 +1020,9 @@ HTML;
 					$fotoalbumtag->makeCompact();
 				}
 				if (isset($arguments['rows'])) {
-					$fotoalbumtag->setRows((int)$arguments['rows']);
+					$fotoalbumtag->setRows((int) $arguments['rows']);
+				} elseif ($laatste) {
+					$fotoalbumtag->setPerRow(4);
 				}
 				if (isset($arguments['bigfirst'])) {
 					$fotoalbumtag->setBig(0);
@@ -1077,15 +1075,15 @@ HTML;
 				$html .= '<div class="citaat">';
 				if ($this->quote_level > 1) {
 					$html .= '<div onclick="$(this).children(\'.citaatpuntjes\').slideUp();$(this).children(\'.meercitaat\').slideDown();">'
-						   . '<div class="meercitaat verborgen">';
+							. '<div class="meercitaat verborgen">';
 				}
 				return $html;
 			case 2:
 				$html = '';
 				if ($this->quote_level > 1) {
 					$html .= '</div>'
-						   . '<div class="citaatpuntjes" title="Toon citaat">...</div>'
-						   . '</div>';
+							. '<div class="citaatpuntjes" title="Toon citaat">...</div>'
+							. '</div>';
 				}
 				$html .= '</div></div>';
 
@@ -1101,4 +1099,5 @@ HTML;
 	protected function html_quote(array $tag, &$enabled) {
 		$this->html_citaat($tag, $enabled);
 	}
+
 }

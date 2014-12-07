@@ -168,8 +168,10 @@ class CsrBB extends eamBBParser {
 		require_once 'MVC/controller/FotoAlbumController.class.php';
 		$url = urldecode($this->parseArray(array('[/fotoalbum]'), array()));
 		if ($url === 'laatste') {
+			$laatste = true;
 			$album = FotoAlbumModel::instance()->getMostRecentFotoAlbum();
 		} else {
+			$laatste = false;
 			//vervang url met pad
 			$url = str_ireplace(CSR_ROOT, '', $url);
 			$path = PICS_PATH;
@@ -195,6 +197,11 @@ class CsrBB extends eamBBParser {
 		}
 		if (isset($arguments['rows'])) {
 			$fotoalbumtag->setRows((int) $arguments['rows']);
+		}
+		if (isset($arguments['perrow'])) {
+			$fotoalbumtag->setPerRow((int) $arguments['perrow']);
+		} elseif ($laatste) {
+			$fotoalbumtag->setPerRow(4);
 		}
 		if (isset($arguments['bigfirst'])) {
 			$fotoalbumtag->setBig(0);

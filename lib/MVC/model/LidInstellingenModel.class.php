@@ -58,9 +58,10 @@ class LidInstellingen extends Instellingen {
 			'verjaardagen_pasfotos'	 => array('Pasfoto\'s bij verjaardagen', T::Enumeration, array('ja', 'nee'), 'ja')
 		),
 		'voorpagina'	 => array(
+			'bijbelroosterblokje'	 => array('Bijbelrooster weergeven', T::Enumeration, array('ja', 'nee'), 'ja'),
 			'maaltijdblokje'		 => array('Eerstvolgende maaltijd weergeven', T::Enumeration, array('ja', 'nee'), 'ja'),
-			'twitterblokje'			 => array('Twitter-blokje weergeven', T::Enumeration, array('ja', 'nee'), 'nee'),
-			'bijbelroosterblokje'	 => array('Bijbelroosterblokje weergeven', T::Enumeration, array('ja', 'nee'), 'ja')
+			'laatstefotoalbum'		 => array('Laatste fotoalbum weergeven', T::Enumeration, array('ja', 'nee'), 'ja'),
+			'twitterblokje'			 => array('Twitter-feed weergeven', T::Enumeration, array('ja', 'nee'), 'nee')
 		),
 		'agenda'		 => array(
 			'toonBijbelrooster'	 => array('Bijbelrooster weergeven', T::Enumeration, array('ja', 'nee'), 'ja'),

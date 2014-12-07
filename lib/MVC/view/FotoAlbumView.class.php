@@ -203,7 +203,7 @@ class FotoAlbumBBView extends FotoAlbumView {
 	private $per_row = 7;  //images per row
 	private $big = array(); //array with index of the ones to enlarge
 	private $picsize = 75;  //size of an image
-	private $rowmargin = 2; //margin between the images
+	private $rowmargin = 0.5; //margin between the images
 
 	public function view() {
 		echo $this->getHtml();
@@ -215,6 +215,10 @@ class FotoAlbumBBView extends FotoAlbumView {
 
 	public function setRows($rows) {
 		$this->rows = $rows;
+	}
+
+	public function setPerRow($per_row) {
+		$this->per_row = $per_row;
 	}
 
 	/**
