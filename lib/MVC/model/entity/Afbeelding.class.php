@@ -32,20 +32,21 @@ class Afbeelding extends Bestand {
 			$this->directory = dirname($path) . '/';
 			$this->filename = basename($path);
 		}
+		if (!$this->exists()) {
+			throw new Exception('Afbeelding niet leesbaar: ' . $this->directory . $this->filename);
+		}
 		if ($parse) {
-			if ($this->exists()) {
-				$this->filesize = @filesize($this->directory . $this->filename);
-				$image = @getimagesize($this->directory . $this->filename);
-				if ($image AND $this->filesize !== false) {
-					$this->width = $image[0];
-					$this->height = $image[1];
-					$this->mimetype = $image['mime'];
-				} else {
-					throw new Exception('Afbeelding parsen mislukt: ' . $this->directory . $this->filename);
-				}
-			} else {
-				throw new Exception('Afbeelding niet leesbaar: ' . $this->directory . $this->filename);
+			$this->filesize = @filesize($this->directory . $this->filename);
+			if (!$this->filesize) {
+				throw new Exception('Afbeelding is leeg: ' . $this->directory . $this->filename);
 			}
+			$image = @getimagesize($this->directory . $this->filename);
+			if (!$image) {
+				throw new Exception('Afbeelding parsen mislukt: ' . $this->directory . $this->filename);
+			}
+			$this->width = $image[0];
+			$this->height = $image[1];
+			$this->mimetype = $image['mime'];
 		}
 	}
 
