@@ -50,10 +50,10 @@ class FotoAlbumModel extends PersistenceModel {
 		return $album;
 	}
 
-	public function verwerkFotos(FotoAlbum $album) {
+	public function verwerkFotos(FotoAlbum $fotoalbum) {
 		//define('RESIZE_OUTPUT', null);
 		//echo '<h1>Fotoalbum verwerken: ' . $album->dirname . '</h1>Dit kan even duren...<br />';
-		$iterator = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($album->path, RecursiveDirectoryIterator::SKIP_DOTS | RecursiveDirectoryIterator::UNIX_PATHS), RecursiveIteratorIterator::SELF_FIRST);
+		$iterator = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($fotoalbum->path, RecursiveDirectoryIterator::SKIP_DOTS | RecursiveDirectoryIterator::UNIX_PATHS), RecursiveIteratorIterator::SELF_FIRST);
 		$albums = 0;
 		$fotos = 0;
 		$errors = 0;
@@ -101,6 +101,8 @@ class FotoAlbumModel extends PersistenceModel {
 				}
 			}
 		}
+		// instellen als laatste
+		touch($fotoalbum->path);
 		$msg = <<<HTML
 <br />Voltooid met:
 <br />{$albums} albums

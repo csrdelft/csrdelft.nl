@@ -177,14 +177,16 @@
 		<a class="btn" href="/fotoalbum/uploaden/{$album->subdir}">{icon get="picture_add"} Toevoegen</a>
 		<a class="btn post popup" href="/fotoalbum/toevoegen/{$album->subdir}">{icon get="folder_add"} Nieuw album</a>
 	{/if}
-	{if LoginModel::mag('P_ALBUM_MOD')}
+	{if LoginModel::mag('P_ALBUM_MOD') OR $album->isOwner()}
 		<a href="/fotoalbum/hernoemen/{$album->subdir}" class="btn post prompt redirect" title="Fotoalbum hernoemen" data="Nieuwe naam={$album->dirname|ucfirst}">{icon get=pencil} Naam wijzigen</a>
 		{if $album->isEmpty()}
 			<a href="/fotoalbum/verwijderen/{$album->subdir}" class="btn post confirm redirect" title="Fotoalbum verwijderen">{icon get=cross} Verwijderen</a>
 		{/if}
-		<a class="btn confirm" href="/fotoalbum/verwerken/{$album->subdir}" title="Verwijder magick-* files in /tmp handmatig bij timeout!">{icon get="application_view_gallery"} Verwerken</a>
+		{if LoginModel::mag('P_ALBUM_MOD')}
+			<a class="btn" href="/fotoalbum/verwerken/{$album->subdir}" onclick="return confirm(this.title);" title="Fotoalbum verwerken en instellen als laatste fotoalbum.&#13;&#13;Verwijder magick-* files in /tmp handmatig bij timeout!">{icon get="application_view_gallery"} Verwerken</a>
+		{/if}
 	{/if}
-	{if LoginModel::mag('P_LOGGED_IN') && $album->getFotos()!==false}
+	{if LoginModel::mag('P_LOGGED_IN') AND $album->hasFotos()}
 		<a class="btn" href="/fotoalbum/downloaden/{$album->subdir}" title="Download als TAR-bestand">{icon get="picture_save"} Download album</a>
 	{/if}
 </div>
