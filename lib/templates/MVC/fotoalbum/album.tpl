@@ -102,18 +102,53 @@
 					}
 				});
 				// toggle thumbs fullscreen
+				var btn = container.find('.minimalize-thumbnails');
 				container.find('span.change-mode').on('click', function (event) {
-					var btn = container.find('.minimalize-thumbnails');
 					if (btn.hasClass('inactive') !== container.hasClass('jgallery-full-screen')) {
 						btn.click();
 					}
 				});
 				container.find('span.full-screen').on('click', function (event) {
-					var btn = container.find('.minimalize-thumbnails');
 					if (btn.hasClass('inactive')) {
 						btn.click();
 					}
 				});
+				// knopje subalbums
+				container.find('.fa-th-list').removeClass('fa-th-list').addClass('fa-folder-open-o');
+				// knopje verwijderen
+				$('<span class="fa fa-times jgallery-btn jgallery-btn-small" tooltip="Foto definitief verwijderen"></span>').click(function () {
+					var url = container.find('div.title').val();
+					$.post('/fotoalbum/verwijderen' + dirname(url), {
+						foto: basename(url)
+					}, page_reload);
+				}).insertAfter(btn);
+				// knopje albumcover
+				$('<span class="fa fa-folder jgallery-btn jgallery-btn-small" tooltip="Foto instellen als albumcover"></span>').click(function () {
+					var url = container.find('div.title').val();
+					$.post('/fotoalbum/albumcover' + dirname(url), {
+						foto: basename(url),
+						rotation: -90
+					}, page_reload);
+				}).insertAfter(btn);
+				// knopje linksom draaien
+				$('<span class="fa fa-undo jgallery-btn jgallery-btn-small" tooltip="Foto tegen de klok in draaien"></span>').click(function () {
+					var url = container.find('div.title').val();
+					$.post('/fotoalbum/roteren' + dirname(url), {
+						foto: basename(url),
+						rotation: -90
+					}, page_reload);
+				}).insertAfter(btn);
+				// knopje rechtsom draaien
+				$('<span class="fa fa-repeat jgallery-btn jgallery-btn-small" tooltip="Foto met de klok mee draaien"></span>').click(function () {
+					var url = container.find('div.nav-bottom div.title').html().replace('{$CSR_PICS}', '');
+					console.log(url);
+					console.log(dirname(url));
+					console.log(basename(url));
+					$.post('/fotoalbum/roteren' + dirname(url), {
+						foto: basename(url),
+						rotation: 90
+					}, page_reload);
+				}).insertAfter(btn);
 			});
 			/* img class="photoTag" data-fotoalbum="$album->subdir"
 			 $(document).ready(function () {

@@ -170,14 +170,14 @@ class Foto extends Afbeelding {
 		$this->rotation += $degrees;
 		$this->rotation %= 360;
 		FotoModel::instance()->update($this);
-		if ($this->hasResized()) {
-			unlink($this->getResizedPath());
-		}
-		$this->createResized();
 		if ($this->hasThumb()) {
 			unlink($this->getThumbPath());
 		}
 		$this->createThumb();
+		if ($this->hasResized()) {
+			unlink($this->getResizedPath());
+		}
+		$this->createResized();
 	}
 
 	public function isOwner() {

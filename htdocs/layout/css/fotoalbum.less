@@ -1,0 +1,107 @@
+.dropzone {
+	border: none !important;
+	background: none !important;
+
+	button {
+		background-image: -webkit-linear-gradient(top, #fafafa, #eee);
+		background-image: -moz-linear-gradient(top, #fafafa, #eee);
+		background-image: -o-linear-gradient(top, #fafafa, #eee);
+		background-image: -ms-linear-gradient(top, #fafafa, #eee);
+		background-image: linear-gradient(to bottom, #fafafa, #eee);
+		-webkit-border-radius: 2px;
+		border-radius: 2px;
+		border: 1px solid #eee;
+		text-decoration: none;
+		display: block;
+		padding: 4px 5px;
+		text-align: center;
+		color: #aaa;
+		width: 100%;
+	}
+}
+.dropzone button:hover, .dropzone a.dz-remove:hover {
+	color: #333 !important;
+	cursor: pointer !important;
+}
+
+.subalbums {
+	position: absolute;
+
+	.subalbum {
+		position: relative;
+		width: 150px;
+		height: 150px;
+		margin: 0 1px 1px 0;
+		float: left;
+		cursor: pointer;
+
+		.subalbumname {
+			position: absolute;
+			top: 60%;
+			width: 100%;
+			padding: 5px 2px 5px 2px;
+			text-align: center;
+			font-weight: bold;
+			color: black;
+			background-color: white;
+			opacity: 0.8;
+		}
+	}
+	.subalbum:hover {
+		text-decoration: none;
+
+		.subalbumname {
+			opacity: 0.9;
+		}
+	}
+}
+
+.subalbums .subalbum, .jgallery-container-inner a {
+	-webkit-transition: opacity .4s ease-out;
+	-moz-transition: opacity .4s ease-out;
+	-o-transition: opacity .4s ease-out;
+	transition: opacity .4s ease-out;
+}
+.subalbums:hover .subalbum, .jgallery-container-inner:hover a {
+	opacity: 0.8;
+}
+.subalbums:hover .subalbum:hover, .jgallery-container-inner:hover a:hover {
+	opacity: 1;
+}
+
+.jgallery {
+
+	.zoom-container {
+		.jgallery-container {
+			background-color: #fff !important;
+		}
+	}
+
+	.jgallery-thumbnails {
+
+		.jgallery-container {
+			overflow-x: auto;
+		}
+		.jgallery-container-inner {
+			height: 150px;
+			padding: 0 !important;
+		}
+	}
+	.jgallery-thumbnails.full-screen {
+		.jgallery-container {
+			overflow-y: auto;
+		}
+		.jgallery-close, .change-album {
+			display: none;
+		}
+	}
+}
+.jgallery.jgallery-full-screen {
+
+	.zoom-container {
+
+		.nav {
+			top: 50px;
+		}
+	}
+}

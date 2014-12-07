@@ -127,7 +127,7 @@ htdocs/layout/css/flip.less -text
 htdocs/layout/css/font-awesome.min.css -text
 htdocs/layout/css/formulier.less -text
 htdocs/layout/css/forum.less -text
-htdocs/layout/css/fotoalbum.css -text
+htdocs/layout/css/fotoalbum.less -text
 htdocs/layout/css/groepen.css -text
 htdocs/layout/css/jPicker.css -text
 htdocs/layout/css/jPicker.min.css -text
