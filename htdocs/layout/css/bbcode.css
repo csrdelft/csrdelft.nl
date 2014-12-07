@@ -51,19 +51,18 @@ span.offtopic img { opacity: 0.3; filter: alpha(opacity=30); }
 	overflow: auto;
 }
 .bb-maaltijd .titel {
-	white-space: nowrap;
-	overflow: hidden;
+	font-weight: bold;
 }
 .bb-maaltijd {
-	line-height: 1.7em;
+	line-height: 2em;
 }
 .bb-maaltijd .aanmelddata {
 	text-align: center;
 	float: right;
-	width: 80px;
-	height: 45px;
-	padding: 4px;
-	border: 1px solid #B8B8B8;
+	width: 90px;
+	height: 50px;
+	padding: 5px;
+	margin-top: 5px;
 }
 div.maaltijd-aangemeld {
 	background-color: #AAEEAA;

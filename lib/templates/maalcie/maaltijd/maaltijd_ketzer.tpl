@@ -44,8 +44,8 @@
 			</div>
 		{/if}
 		<div class="maaltijdgegevens">
-			<div class="titel"><a href="/maaltijdenketzer">Maaltijd</a> van {$maaltijd->getDatum()|date_format:"%A %e %b"} {$maaltijd->getTijd()|date_format:"%H:%M"}</div>
-			{$maaltijd->getTitel()}
+			<div class="titel"><a href="/maaltijdenketzer">{$maaltijd->getTitel()}</a></div>
+			 van {$maaltijd->getDatum()|date_format:"%A %e %B"} {$maaltijd->getTijd()|date_format:"%H:%M"}
 			{if $maaltijd->getPrijs() !== $standaardprijs}
 				&nbsp; (&euro; {$maaltijd->getPrijsFloat()|string_format:"%.2f"})
 			{/if}
