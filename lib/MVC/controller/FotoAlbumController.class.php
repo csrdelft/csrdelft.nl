@@ -92,10 +92,10 @@ class FotoAlbumController extends AclController {
 		if ($this->isPosted() AND $formulier->validate()) {
 			$subalbum = $formulier->findByName('subalbum')->getValue();
 			$album->path .= $subalbum . '/';
+			$album->subdir .= $subalbum . '/';
 			if (!$album->exists()) {
 				$this->model->create($album);
 			}
-			$this->model->verwerkFotos($album);
 			$this->view = new JsonResponse($album->getUrl());
 			return;
 		}
@@ -196,8 +196,7 @@ class FotoAlbumController extends AclController {
 		}
 		$naam = filter_input(INPUT_POST, 'Nieuwe_naam', FILTER_SANITIZE_STRING);
 		if ($album !== null AND $this->model->hernoemAlbum($album, $naam)) {
-			echo $album->getUrl();
-			exit;
+			$this->view = new JsonResponse($album->getUrl());
 		} else {
 			$this->view = new JsonResponse('Fotoalbum hernoemen mislukt', 503);
 		}
@@ -217,8 +216,13 @@ class FotoAlbumController extends AclController {
 
 	public function verwijderen(FotoAlbum $album) {
 		if ($album->isEmpty()) {
-			FotoAlbumModel::instance()->delete($album);
-			$this->view = new JsonResponse(true);
+			if (1 === FotoAlbumModel::instance()->delete($album)) {
+				setMelding('Fotoalbum verwijderen geslaagd', 1);
+				$this->view = new JsonResponse(dirname($album->getUrl()));
+			} else {
+				setMelding('Fotoalbum verwijderen mislukt', -1);
+				$this->view = new JsonResponse($album->getUrl());
+			}
 			return;
 		}
 		$filename = filter_input(INPUT_POST, 'foto', FILTER_SANITIZE_STRING);

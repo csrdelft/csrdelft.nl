@@ -101,6 +101,11 @@ class Foto extends Afbeelding {
 	}
 
 	public function createThumb() {
+		$path = $this->directory . '_thumbs';
+		if (!file_exists($path)) {
+			mkdir($path);
+			chmod($path, 0755);
+		}
 		if (empty($this->rotation)) {
 			$rotate = '';
 		} else {
@@ -122,6 +127,11 @@ class Foto extends Afbeelding {
 	}
 
 	public function createResized() {
+		$path = $this->directory . '_resized';
+		if (!file_exists($path)) {
+			mkdir($path);
+			chmod($path, 0755);
+		}
 		if (empty($this->rotation)) {
 			$rotate = '';
 		} else {

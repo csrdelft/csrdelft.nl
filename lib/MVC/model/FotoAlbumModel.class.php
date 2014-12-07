@@ -13,8 +13,20 @@ class FotoAlbumModel extends PersistenceModel {
 	protected static $instance;
 
 	public function create(PersistentEntity $album) {
-		if (!file_exists($album->path)) {
-			mkdir($album->path);
+		$path = $album->path;
+		if (!file_exists($path)) {
+			mkdir($path);
+			chmod($path, 0755);
+		}
+		$path = $album->path . '_thumbs';
+		if (!file_exists($path)) {
+			mkdir($path);
+			chmod($path, 0755);
+		}
+		$path = $album->path . '_resized';
+		if (!file_exists($path)) {
+			mkdir($path);
+			chmod($path, 0755);
 		}
 		$album->owner = LoginModel::getUid();
 		return parent::create($album);
@@ -63,16 +75,6 @@ class FotoAlbumModel extends PersistenceModel {
 				$album = new FotoAlbum($path);
 				if (!$this->exists($album)) {
 					$this->create($album);
-				}
-				$path = $album->path . '_thumbs';
-				if (!file_exists($path)) {
-					mkdir($path);
-					chmod($path, 0755);
-				}
-				$path = $album->path . '_resized';
-				if (!file_exists($path)) {
-					mkdir($path);
-					chmod($path, 0755);
 				}
 			} else {
 				try {
