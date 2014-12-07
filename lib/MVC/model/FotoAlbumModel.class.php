@@ -104,10 +104,8 @@ class FotoAlbumModel extends PersistenceModel {
 		// instellen als laatste
 		touch($fotoalbum->path);
 		$msg = <<<HTML
-<br />Voltooid met:
-<br />{$albums} albums
-<br />{$fotos} fotos
-<br />{$errors} errors
+<br />Voltooid met {$errors} errors.
+<br />Dit album bevat {$albums} sub-albums en in totaal {$fotos} foto's.
 HTML;
 		if (defined('RESIZE_OUTPUT')) {
 			echo $msg;
