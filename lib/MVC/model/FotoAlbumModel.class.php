@@ -78,7 +78,12 @@ class FotoAlbumModel extends PersistenceModel {
 				}
 			} else {
 				try {
-					$foto = new Foto($object->getFilename(), $album, true);
+					$filename = $object->getFilename();
+					if ($filename === 'Thumbs.db') {
+						unlink($object->getPathname());
+						continue;
+					}
+					$foto = new Foto($filename, $album, true);
 					FotoModel::instance()->verwerkFoto($foto);
 				} catch (Exception $e) {
 					if (defined('RESIZE_OUTPUT')) {
