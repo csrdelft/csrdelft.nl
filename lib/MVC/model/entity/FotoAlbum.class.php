@@ -114,7 +114,8 @@ class FotoAlbum extends Map {
 			while (false !== ($entry = readdir($handle))) {
 				if (is_file($this->path . $entry)) {
 					if ($entry === 'Thumbs.db') {
-						unlink($this->path . $entry);
+						echo unlink($this->path . $entry) ? 'Verwijderd ' : 'Faal ';
+						echo $this->path . $entry . '<br />';
 						continue;
 					}
 					$foto = new Foto($entry, $this);
