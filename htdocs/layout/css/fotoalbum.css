@@ -70,16 +70,9 @@
 .jgallery .zoom-container .jgallery-container {
 	background-color: #fff !important;
 }
-.jgallery .jgallery-thumbnails .jgallery-container {
-	overflow-x: auto;
-	overflow-y: hidden;
-}
 .jgallery .jgallery-thumbnails .jgallery-container-inner {
 	height: 150px;
 	padding: 0 !important;
-}
-.jgallery .jgallery-thumbnails.full-screen {
-	height: 100%;
 }
 .jgallery .jgallery-thumbnails.full-screen .jgallery-container {
 	overflow-x: hidden;
