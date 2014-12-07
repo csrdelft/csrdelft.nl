@@ -114,7 +114,7 @@
 					}
 				});
 				// knopje subalbums
-				container.find('.fa-th-list').removeClass('fa-th-list').addClass('fa-folder-open-o');
+				container.find('.fa-list-ul').removeClass('fa-list-ul').addClass('fa-folder-open-o');
 				// knopje verwijderen
 				$('<span class="fa fa-times jgallery-btn jgallery-btn-small" tooltip="Foto verwijderen"></span>').click(function () {
 					if (!confirm('Foto definitief verwijderen. Weet u het zeker?')) {
