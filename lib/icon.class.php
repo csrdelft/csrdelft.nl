@@ -98,19 +98,21 @@ class Icon {
 		return '<img src="' . $icon . '" width="16" height="16" alt="' . $key . '" ' . $title . 'class="' . htmlspecialchars($class) . '" />';
 	}
 
-	/*
+	/**
 	 * Bouw de index op in een bestand in de image-map.
 	 */
-
 	public static function generateIndex() {
-		$handler = opendir(ICON_PATH);
-		while ($file = readdir($handler)) {
+		$handle = opendir(ICON_PATH);
+		if (!$handle) {
+			return;
+		}
+		while ($file = readdir($handle)) {
 			//we willen geen directories en geen verborgen bestanden.
 			if (!is_dir(ICON_PATH . $file) AND substr($file, 0, 1) != '.' AND substr($file, -3) == 'png') {
 				$icons[] = substr($file, 0, (strlen($file) - 4));
 			}
 		}
-		closedir($handler);
+		closedir($handle);
 		file_put_contents(ICON_PATH . '.index', implode($icons, ','));
 	}
 

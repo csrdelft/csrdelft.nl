@@ -113,14 +113,13 @@ class FotoAlbum extends Map {
 				if (is_file($this->path . $entry)) {
 					$foto = new Foto($entry, $this);
 					if ($foto->isComplete()) {
-						$this->fotos[filemtime($foto->getFullPath())] = $foto;
+						$this->fotos[] = $foto;
 					} else {
-						$this->fotos_incompleet[filemtime($foto->getFullPath())] = $foto;
+						$this->fotos_incompleet[] = $foto;
 					}
 				}
 			}
-			ksort($this->fotos);
-			ksort($this->fotos_incompleet);
+			closedir($handle);
 		}
 		if ($incompleet) {
 			return array_merge($this->fotos, $this->fotos_incompleet);

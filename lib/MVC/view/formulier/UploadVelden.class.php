@@ -467,14 +467,17 @@ class UploadFtp extends BestandUploader {
 	public function getFileList() {
 		if (!$this->file_list) {
 			$this->file_list = array();
-			$handler = opendir($this->path);
-			while ($file = readdir($handler)) {
+			$handle = opendir($this->path);
+			if (!$handle) {
+				return $this->file_list;
+			}
+			while ($file = readdir($handle)) {
 				// We willen geen directories en geen verborgen bestanden.
 				if (substr($file, 0, 1) !== '.' AND ! is_dir($this->path . $file)) {
 					$this->file_list[] = $file;
 				}
 			}
-			closedir($handler);
+			closedir($handle);
 		}
 		return $this->file_list;
 	}
