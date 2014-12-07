@@ -113,12 +113,14 @@ class FotoAlbum extends Map {
 				if (is_file($this->path . $entry)) {
 					$foto = new Foto($entry, $this);
 					if ($foto->isComplete()) {
-						$this->fotos[] = $foto;
+						$this->fotos[filemtime($foto->getFullPath())] = $foto;
 					} else {
-						$this->fotos_incompleet[] = $foto;
+						$this->fotos_incompleet[filemtime($foto->getFullPath())] = $foto;
 					}
 				}
 			}
+			ksort($this->fotos);
+			ksort($this->fotos_incompleet);
 		}
 		if ($incompleet) {
 			return array_merge($this->fotos, $this->fotos_incompleet);
@@ -132,11 +134,11 @@ class FotoAlbum extends Map {
 
 			$this->subalbums = array();
 
-			$handle = opendir($this->path);
-			if (!$handle) {
+			$scan = scandir($this->path, SCANDIR_SORT_DESCENDING);
+			if (empty($scan)) {
 				return false;
 			}
-			while (false !== ($entry = readdir($handle))) {
+			foreach ($scan as $entry) {
 				if ($entry !== '.' AND $entry != '..' AND is_dir($this->path . $entry)) {
 					$subalbum = FotoAlbumModel::instance()->getFotoAlbum($this->path . $entry);
 					if ($subalbum) {
@@ -144,8 +146,6 @@ class FotoAlbum extends Map {
 					}
 				}
 			}
-
-			$this->subalbums = array_reverse($this->subalbums);
 		}
 		return $this->subalbums;
 	}
