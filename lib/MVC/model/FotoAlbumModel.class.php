@@ -72,16 +72,17 @@ class FotoAlbumModel extends PersistenceModel {
 				continue;
 			}
 			if ($object->isDir()) {
+				chmod($object->getPathname(), 0755);
 				$album = $this->getFotoAlbum($path);
 				if (!$this->exists($album)) {
 					$this->create($album);
 				}
 			} else {
 				try {
+					chmod($object->getPathname(), 0644);
 					$filename = $object->getFilename();
 					if ($filename === 'Thumbs.db') {
 						unlink($object->getPathname());
-						continue;
 					}
 					$foto = new Foto($filename, $album, true);
 					FotoModel::instance()->verwerkFoto($foto);
@@ -179,6 +180,7 @@ class FotoModel extends PersistenceModel {
 	public function verwerkFoto(Foto $foto) {
 		if (!$this->exists($foto)) {
 			$this->create($foto);
+			chmod($foto->getFullPath(), 0644);
 		}
 		if (!$foto->hasThumb()) {
 			$foto->createThumb();
