@@ -113,6 +113,10 @@ class FotoAlbum extends Map {
 			}
 			while (false !== ($entry = readdir($handle))) {
 				if (is_file($this->path . $entry)) {
+					if ($entry === 'Thumbs.db') {
+						unlink($this->path . $entry);
+						continue;
+					}
 					$foto = new Foto($entry, $this);
 					if ($foto->isComplete()) {
 						$this->fotos[] = $foto;

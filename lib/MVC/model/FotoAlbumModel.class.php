@@ -66,8 +66,6 @@ class FotoAlbumModel extends PersistenceModel {
 	}
 
 	public function verwerkFotos(FotoAlbum $album) {
-		setMelding('Verwijder de magick-* files in /tmp handmatig bij problemen!', 2);
-
 		$albums = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($album->path, RecursiveDirectoryIterator::SKIP_DOTS | RecursiveDirectoryIterator::UNIX_PATHS), RecursiveIteratorIterator::SELF_FIRST);
 		foreach ($albums as $path => $object) {
 			if (strpos($path, '/_') !== false) {
