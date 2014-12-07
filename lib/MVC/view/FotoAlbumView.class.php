@@ -163,11 +163,10 @@ class FotoBBView extends SmartyTemplateView {
 
 }
 
-class FotoAlbumLaatsteView extends FotoAlbumView {
+class FotoAlbumRandomView extends FotoAlbumView {
 
 	public function view() {
-		echo '<p><a href="' . $this->model->getUrl() . '">' . $this->model->dirname . '</a></p>';
-		echo '<div class="fotos">';
+		echo '<p><a href="' . $this->model->getUrl() . '">' . $this->model->dirname . '</a></p><div class="fotos">';
 		$fotos = $this->model->getFotos();
 		$count = count($fotos);
 		if ($count > LidInstellingen::get('zijbalk', 'fotos')) {
@@ -185,26 +184,19 @@ class FotoAlbumLaatsteView extends FotoAlbumView {
 			}
 			$got[] = $idx;
 			$foto = $fotos[$idx];
-			if ($foto instanceof Foto) {
-				echo '<a href="' . $this->model->getUrl() . '#' . $foto->getResizedUrl() . '">';
-				echo '<img src="' . $foto->getThumbUrl() . '">';
-				echo '</a>' . "\n";
-			}
+			echo '<a href="' . $this->model->getUrl() . '#' . $foto->getResizedUrl() . '"><img src="' . $foto->getThumbUrl() . '"></a>';
 		}
 		echo '</div>';
 	}
 
 }
 
-class FotoAlbumZijbalkView extends FotoAlbumLaatsteView {
+class FotoAlbumZijbalkView extends FotoAlbumRandomView {
 
 	public function view() {
-		echo '<div id="zijbalk_fotoalbum">';
-		echo '<div class="zijbalk-kopje"><a href="/actueel/fotoalbum/' . Lichting::getHuidigeJaargang() . '">Fotoalbum</a></div>';
-		echo '<div class="item">';
+		echo '<div id="zijbalk_fotoalbum"><div class="zijbalk-kopje"><a href="/actueel/fotoalbum/' . Lichting::getHuidigeJaargang() . '">Fotoalbum</a></div><div class="item">';
 		parent::view();
-		echo '</div>';
-		echo '</div>';
+		echo '</div></div>';
 	}
 
 }
@@ -301,6 +293,8 @@ class FotoAlbumBBView extends FotoAlbumView {
 					$grid[$row + 1][$col] = $grid[$row][$col + 1] = $grid[$row + 1][$col + 1] = 'USED';
 				}
 			}
+		} else {
+			shuffle($fotos);
 		}
 		// put small images on grid.
 		$row = $col = 0;
