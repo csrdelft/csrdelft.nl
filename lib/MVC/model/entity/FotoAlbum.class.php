@@ -158,12 +158,14 @@ class FotoAlbum extends Map {
 				}
 			}
 		}
-		// Anders gewoon de eerste:
-		if (isset($this->fotos[0])) {
+		// Anders een willekeurige foto:
+		$size = sizeof($this->fotos);
+		if ($size > 0) {
+			$idx = rand(0, $size - 1);
 			if ($thumb) {
-				return $this->fotos[0]->getThumbUrl();
+				return $this->fotos[$idx]->getThumbUrl();
 			} else {
-				return $this->fotos[0]->getResizedUrl();
+				return $this->fotos[$idx]->getResizedUrl();
 			}
 		}
 		// Foto uit subalbum:

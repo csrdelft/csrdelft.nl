@@ -163,34 +163,48 @@ class FotoBBView extends SmartyTemplateView {
 
 }
 
-class FotoAlbumZijbalkView extends FotoAlbumView {
-
-	public function __construct(FotoAlbum $album) {
-		parent::__construct($album);
-	}
+class FotoAlbumLaatsteView extends FotoAlbumView {
 
 	public function view() {
-		echo '<div id="zijbalk_fotoalbum">';
-		echo '<div class="zijbalk-kopje"><a href="/actueel/fotoalbum/' . Lichting::getHuidigeJaargang() . '">Fotoalbum</a></div>';
-		echo '<div class="item">';
-		echo '<a href="' . $this->model->getUrl() . '">' . $this->model->dirname . '</a>';
+		echo '<p><a href="' . $this->model->getUrl() . '">' . $this->model->dirname . '</a></p>';
 		echo '<div class="fotos">';
 		$fotos = $this->model->getFotos();
-		$limit = sizeof($fotos);
-		if ($limit > LidInstellingen::get('zijbalk', 'fotos')) {
+		$size = sizeof($fotos);
+		if ($size > LidInstellingen::get('zijbalk', 'fotos')) {
 			$limit = LidInstellingen::get('zijbalk', 'fotos');
+		} else {
+			$limit = $size;
 		}
+		$got = array();
 		for ($i = 0; $i < $limit; $i++) {
-			$foto = $fotos[$i];
+			for ($p = 0; $p < 3; $p++) {
+				$idx = rand(0, $size - 1);
+				if (!in_array($idx, $got)) {
+					break;
+				}
+			}
+			$got[] = $idx;
+			$foto = $fotos[$idx];
 			if ($foto instanceof Foto) {
 				echo '<a href="' . $this->model->getUrl() . '#' . $foto->getResizedUrl() . '">';
 				echo '<img src="' . $foto->getThumbUrl() . '">';
 				echo '</a>' . "\n";
 			}
 		}
-		echo '</div>'; // class="fotos"
-		echo '</div>'; // class="item"
-		echo '</div>'; // id="zijbalk_fotoalbum"
+		echo '</div>';
+	}
+
+}
+
+class FotoAlbumZijbalkView extends FotoAlbumLaatsteView {
+
+	public function view() {
+		echo '<div id="zijbalk_fotoalbum">';
+		echo '<div class="zijbalk-kopje"><a href="/actueel/fotoalbum/' . Lichting::getHuidigeJaargang() . '">Fotoalbum</a></div>';
+		echo '<div class="item">';
+		parent::view();
+		echo '</div>';
+		echo '</div>';
 	}
 
 }
@@ -203,10 +217,6 @@ class FotoAlbumBBView extends FotoAlbumView {
 	private $big = array(); //array with index of the ones to enlarge
 	private $picsize = 75;  //size of an image
 	private $rowmargin = 2; //margin between the images
-
-	public function __construct(FotoAlbum $album) {
-		parent::__construct($album);
-	}
 
 	public function view() {
 		echo $this->getHtml();
