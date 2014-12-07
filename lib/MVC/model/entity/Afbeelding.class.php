@@ -26,16 +26,13 @@ class Afbeelding extends Bestand {
 	 */
 	public $height;
 
-	public function __construct($path = null, $parse = true) {
+	public function __construct($path, $parse = true) {
 		parent::__construct();
 		if ($path !== null) {
 			$this->directory = dirname($path) . '/';
 			$this->filename = basename($path);
 		}
-		if (!$this->exists()) {
-			throw new Exception('Afbeelding niet leesbaar: ' . $this->directory . $this->filename);
-		}
-		if ($parse) {
+		if ($parse AND $this->exists()) {
 			$this->filesize = @filesize($this->directory . $this->filename);
 			if (!$this->filesize) {
 				throw new Exception('Afbeelding is leeg: ' . $this->directory . $this->filename);
