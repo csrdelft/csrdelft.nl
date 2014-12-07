@@ -82,7 +82,7 @@ class FotoAlbumModel extends PersistenceModel {
 				if (!$this->exists($album)) {
 					$this->create($album);
 				}
-			} else {
+			} elseif ($object->isFile()) {
 				try {
 					if (false === @chmod($object->getPathname(), 0644)) {
 						debugprint('Geen eigenaar van: ' . $path);
