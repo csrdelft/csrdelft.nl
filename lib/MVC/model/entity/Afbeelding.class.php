@@ -14,7 +14,7 @@ class Afbeelding extends Bestand {
 	 * Geaccepteerde afbeelding types
 	 * @var array
 	 */
-	public static $mimeTypes = array('image/jpeg', 'image/png', 'image/gif', 'image/tiff');
+	public static $mimeTypes = array('image/jpeg', 'image/png', 'image/gif', 'image/tiff', 'image/x-ms-bmp');
 	/**
 	 * Breedte in pixels
 	 * @var int
