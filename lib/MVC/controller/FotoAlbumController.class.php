@@ -76,15 +76,8 @@ class FotoAlbumController extends AclController {
 			setMelding('Niet het complete fotoalbum verwerken', -1);
 			redirect($album->getUrl());
 		}
-		define('RESIZE_OUTPUT', null);
-		echo '
-			<h1>Fotoalbum verwerken: ' . $album->dirname . '</h1>
-			<p>Dit kan even duren...</p>
-			<p>Verwijder eventuele magick-* files in /tmp handmatig bij problemen!</p>
-		';
 		$this->model->verwerkFotos($album);
-		echo '<br />Klaar!';
-		exit;
+		redirect($album->getUrl());
 	}
 
 	public function toevoegen(FotoAlbum $album) {

@@ -148,7 +148,7 @@
 		{if $album->isEmpty()}
 			<a href="/fotoalbum/verwijderen/{$album->subdir}" class="btn post confirm redirect" title="Fotoalbum verwijderen">{icon get=cross} Verwijderen</a>
 		{/if}
-		<a class="btn" href="/fotoalbum/verwerken/{$album->subdir}">{icon get="application_view_gallery"} Verwerken</a>
+		<a class="btn confirm" href="/fotoalbum/verwerken/{$album->subdir}" title="Verwijder magick-* files in /tmp handmatig bij timeout!">{icon get="application_view_gallery"} Verwerken</a>
 	{/if}
 	{if LoginModel::mag('P_LOGGED_IN') && $album->getFotos()!==false}
 		<a class="btn" href="/fotoalbum/downloaden/{$album->subdir}" title="Download als TAR-bestand">{icon get="picture_save"} Download album</a>

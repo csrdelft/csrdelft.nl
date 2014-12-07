@@ -156,12 +156,18 @@ class ForumDraadView extends ForumView {
 	private $deel;
 	private $paging;
 	private $statistiek;
+	private $gelezen_moment;
 
 	public function __construct(ForumDraad $draad, ForumDeel $deel, $paging = true, $statistiek = false) {
 		parent::__construct($draad, $draad->titel);
 		$this->deel = $deel;
 		$this->paging = ($paging AND ForumPostsModel::instance()->getAantalPaginas($draad->draad_id) > 1);
 		$this->statistiek = $statistiek;
+		// cache old value for ongelezen streep
+		if ($draad->getWanneerGelezen()) {
+			$this->gelezen_moment = $draad->getWanneerGelezen()->datum_tijd;
+		}
+		ForumDradenGelezenModel::instance()->setWanneerGelezenDoorLid($this->model);
 	}
 
 	public function getBreadcrumbs() {
@@ -180,12 +186,10 @@ class ForumDraadView extends ForumView {
 		if ($this->statistiek) {
 			$this->smarty->assign('statistiek', true);
 		}
-		if ($this->model->getWanneerGelezen()) {
-			$this->smarty->assign('gelezen_moment', strtotime($this->model->getWanneerGelezen()->datum_tijd));
+		if ($this->gelezen_moment) {
+			$this->smarty->assign('gelezen_moment', strtotime($this->gelezen_moment));
 		}
 		$this->smarty->display('MVC/forum/draad.tpl');
-		// vanwege caching pas opslaan na de view
-		ForumDradenGelezenModel::instance()->setWanneerGelezenDoorLid($this->model);
 	}
 
 }

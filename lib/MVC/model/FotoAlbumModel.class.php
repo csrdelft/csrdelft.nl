@@ -51,39 +51,67 @@ class FotoAlbumModel extends PersistenceModel {
 	}
 
 	public function verwerkFotos(FotoAlbum $album) {
-		$albums = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($album->path, RecursiveDirectoryIterator::SKIP_DOTS | RecursiveDirectoryIterator::UNIX_PATHS), RecursiveIteratorIterator::SELF_FIRST);
-		foreach ($albums as $path => $object) {
+		//define('RESIZE_OUTPUT', null);
+		//echo '<h1>Fotoalbum verwerken: ' . $album->dirname . '</h1>Dit kan even duren...<br />';
+		$iterator = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($album->path, RecursiveDirectoryIterator::SKIP_DOTS | RecursiveDirectoryIterator::UNIX_PATHS), RecursiveIteratorIterator::SELF_FIRST);
+		$albums = 0;
+		$fotos = 0;
+		$errors = 0;
+		foreach ($iterator as $path => $object) {
 			// skip _thumbs & _resized
 			if (strpos($path, '/_') !== false) {
 				continue;
 			}
-			if ($object->isDir()) {
-				if (false === @chmod($path, 0755)) {
-					debugprint('Geen eigenaar van: ' . $path);
-				}
-				$album = new FotoAlbum($path);
-				if (!$this->exists($album)) {
-					$this->create($album);
-				}
-			} else {
-				try {
-					if (false === @chmod($path, 0644)) {
-						debugprint('Geen eigenaar van: ' . $path);
+			try {
+				// FotoAlbum
+				if ($object->isDir()) {
+					$albums++;
+					$album = new FotoAlbum($path);
+					if (!$this->exists($album)) {
+						$this->create($album);
 					}
-					$album = new FotoAlbum(dirname($path));
+					if (false === @chmod($path, 0755)) {
+						throw new Exception('Geen eigenaar van: ' . $path);
+					}
+				}
+				// Foto
+				else {
 					$filename = basename($path);
 					if ($filename === 'Thumbs.db') {
 						unlink($path);
+						continue;
 					}
+					$fotos++;
+					$album = new FotoAlbum(dirname($path));
 					$foto = new Foto($filename, $album, true);
 					if (!$foto->exists()) {
 						throw new Exception('Foto bestaat niet: ' . $foto->directory . $foto->filename);
 					}
 					FotoModel::instance()->verwerkFoto($foto);
-				} catch (Exception $e) {
+					if (false === @chmod($path, 0644)) {
+						throw new Exception('Geen eigenaar van: ' . $path);
+					}
+				}
+			} catch (Exception $e) {
+				$errors++;
+				if (defined('RESIZE_OUTPUT')) {
 					debugprint($e->getMessage());
+				} else {
+					setMelding($e->getMessage(), -1);
 				}
 			}
+		}
+		$msg = <<<HTML
+<br />Voltooid met:
+<br />{$albums} albums
+<br />{$fotos} fotos
+<br />{$errors} errors
+HTML;
+		if (defined('RESIZE_OUTPUT')) {
+			echo $msg;
+			exit;
+		} else {
+			setMelding($msg, 1);
 		}
 	}
 
