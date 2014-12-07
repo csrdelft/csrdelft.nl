@@ -95,6 +95,7 @@ class FotoAlbumController extends AclController {
 			if (!$album->exists()) {
 				$this->model->create($album);
 			}
+			$this->model->verwerkFotos($album);
 			$this->view = new JsonResponse($album->getUrl());
 			return;
 		}
