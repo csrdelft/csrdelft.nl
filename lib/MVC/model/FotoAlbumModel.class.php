@@ -132,29 +132,33 @@ HTML;
 	}
 
 	public function setAlbumCover(FotoAlbum $album, Foto $cover) {
-		$ret = true;
+		$success = true;
+		$toggle = false;
 		// find old cover
 		foreach ($album->getFotos() as $foto) {
 			if (strpos($foto->filename, 'folder') !== false) {
 				if ($foto->getFullPath() === $cover->getFullPath()) {
-					return $ret;
+					$toggle = true;
 				}
-				$old = $foto->getFullPath();
-				$ret &= rename($old, str_replace('folder', '', $old));
-				$old = $foto->getResizedPath();
-				$ret &= rename($old, str_replace('folder', '', $old));
-				$old = $foto->getThumbPath();
-				$ret &= rename($old, str_replace('folder', '', $old));
+				$path = $foto->getThumbPath();
+				$success &= rename($path, str_replace('folder', '', $path));
+				$path = $foto->getResizedPath();
+				$success &= rename($path, str_replace('folder', '', $path));
+				$path = $foto->getFullPath();
+				$success &= rename($path, str_replace('folder', '', $path));
+				if ($toggle) {
+					return $success;
+				}
 			}
 		}
 		// set new cover
-		$old = $cover->getFullPath();
-		$ret &= rename($old, substr_replace($old, 'folder', strrpos($old, '.'), 0));
-		$old = $cover->getResizedPath();
-		$ret &= rename($old, substr_replace($old, 'folder', strrpos($old, '.'), 0));
-		$old = $cover->getThumbPath();
-		$ret &= rename($old, substr_replace($old, 'folder', strrpos($old, '.'), 0));
-		return $ret;
+		$path = $cover->getThumbPath();
+		$success &= rename($path, substr_replace($path, 'folder', strrpos($path, '.'), 0));
+		$path = $cover->getResizedPath();
+		$success &= rename($path, substr_replace($path, 'folder', strrpos($path, '.'), 0));
+		$path = $cover->getFullPath();
+		$success &= rename($path, substr_replace($path, 'folder', strrpos($path, '.'), 0));
+		return $success;
 	}
 
 	public function cleanup() {
