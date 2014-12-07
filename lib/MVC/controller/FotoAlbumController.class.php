@@ -76,7 +76,7 @@ class FotoAlbumController extends AclController {
 			setMelding('Niet het complete fotoalbum verwerken', -1);
 			redirect($album->getUrl());
 		}
-		//define('RESIZE_OUTPUT', null);
+		define('RESIZE_OUTPUT', null);
 		if (defined('RESIZE_OUTPUT')) {
 			echo '<h1>Fotoalbum verwerken: ' . $album->dirname . '</h1>';
 			echo 'Dit kan even duren<br />';
@@ -86,7 +86,6 @@ class FotoAlbumController extends AclController {
 		if (defined('RESIZE_OUTPUT')) {
 			exit;
 		} else {
-			setMelding($album->dirname . ' succesvol verwerkt', 1);
 			redirect($album->getUrl());
 		}
 	}

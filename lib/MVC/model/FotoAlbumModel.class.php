@@ -81,7 +81,11 @@ class FotoAlbumModel extends PersistenceModel {
 					$foto = new Foto($object->getFilename(), $album, true);
 					FotoModel::instance()->verwerkFoto($foto);
 				} catch (Exception $e) {
-					setMelding($e->getMessage(), -1);
+					if (defined('RESIZE_OUTPUT')) {
+						debugprint($e->getMessage());
+					} else {
+						setMelding($e->getMessage(), -1);
+					}
 				}
 			}
 		}
