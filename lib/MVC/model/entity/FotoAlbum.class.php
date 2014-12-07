@@ -159,18 +159,20 @@ class FotoAlbum extends Map {
 			}
 		}
 		// Anders een willekeurige foto:
-		$size = sizeof($this->fotos);
-		if ($size > 0) {
-			$idx = rand(0, $size - 1);
+		$count = count($this->fotos);
+		if ($count > 0) {
+			$idx = rand(0, $count - 1);
 			if ($thumb) {
 				return $this->fotos[$idx]->getThumbUrl();
 			} else {
 				return $this->fotos[$idx]->getResizedUrl();
 			}
 		}
-		// Foto uit subalbum:
-		foreach ($this->getSubAlbums() as $album) {
-			return $album->getCoverUrl();
+		// Foto uit willekeurig subalbum:
+		$count = count($this->getSubAlbums());
+		if ($count > 0) {
+			$idx = rand(0, $count - 1);
+			return $this->subalbums[$idx]->getCoverUrl();
 		}
 		// If all else fails:
 		return CSR_PICS . '/_geen_thumb.jpg';

@@ -169,16 +169,16 @@ class FotoAlbumLaatsteView extends FotoAlbumView {
 		echo '<p><a href="' . $this->model->getUrl() . '">' . $this->model->dirname . '</a></p>';
 		echo '<div class="fotos">';
 		$fotos = $this->model->getFotos();
-		$size = sizeof($fotos);
-		if ($size > LidInstellingen::get('zijbalk', 'fotos')) {
+		$count = count($fotos);
+		if ($count > LidInstellingen::get('zijbalk', 'fotos')) {
 			$limit = LidInstellingen::get('zijbalk', 'fotos');
 		} else {
-			$limit = $size;
+			$limit = $count;
 		}
 		$got = array();
 		for ($i = 0; $i < $limit; $i++) {
 			for ($p = 0; $p < 3; $p++) {
-				$idx = rand(0, $size - 1);
+				$idx = rand(0, $count - 1);
 				if (!in_array($idx, $got)) {
 					break;
 				}
