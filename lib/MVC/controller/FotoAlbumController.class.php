@@ -78,12 +78,13 @@ class FotoAlbumController extends AclController {
 		}
 		define('RESIZE_OUTPUT', null);
 		if (defined('RESIZE_OUTPUT')) {
+			ob_start();
 			echo '<h1>Fotoalbum verwerken: ' . $album->dirname . '</h1>';
-			echo 'Dit kan even duren<br />';
-			flush();
+			echo 'Dit kan even duren...<br />';
 		}
 		$this->model->verwerkFotos($album);
 		if (defined('RESIZE_OUTPUT')) {
+			echo '<br />Klaar!';
 			exit;
 		} else {
 			redirect($album->getUrl());
