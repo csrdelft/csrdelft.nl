@@ -116,7 +116,10 @@
 				// knopje subalbums
 				container.find('.fa-th-list').removeClass('fa-th-list').addClass('fa-folder-open-o');
 				// knopje verwijderen
-				$('<span class="fa fa-times jgallery-btn jgallery-btn-small" tooltip="Foto definitief verwijderen"></span>').click(function () {
+				$('<span class="fa fa-times jgallery-btn jgallery-btn-small" tooltip="Foto verwijderen"></span>').click(function () {
+					if (!confirm('Foto definitief verwijderen. Weet u het zeker?')) {
+						return false;
+					}
 					var url = container.find('div.nav-bottom div.title').html().replace('{$CSR_PICS}', '');
 					$.post('/fotoalbum/verwijderen' + dirname(url), {
 						foto: basename(url)
@@ -127,7 +130,6 @@
 					var url = container.find('div.nav-bottom div.title').html().replace('{$CSR_PICS}', '');
 					$.post('/fotoalbum/albumcover' + dirname(url), {
 						foto: basename(url),
-						rotation: -90
 					}, page_reload);
 				}).insertAfter(btn);
 				// knopje linksom draaien
