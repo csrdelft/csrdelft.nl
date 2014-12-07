@@ -89,7 +89,6 @@ class FotoAlbumModel extends PersistenceModel {
 				} catch (Exception $e) {
 					if (defined('RESIZE_OUTPUT')) {
 						debugprint($e->getMessage());
-						ob_flush();
 						flush();
 					} else {
 						setMelding($e->getMessage(), -1);
