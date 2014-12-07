@@ -87,6 +87,9 @@ class FotoAlbumModel extends PersistenceModel {
 						unlink($path);
 					}
 					$foto = new Foto($filename, $album, true);
+					if (!in_array($foto->mimetype, Afbeelding::$mimeTypes)) {
+						throw new Exception('Geen afbeelding: [' . $this->mimetype . '] ' . $foto->directory . $foto->filename);
+					}
 					FotoModel::instance()->verwerkFoto($foto);
 				} catch (Exception $e) {
 					debugprint($e->getMessage());
