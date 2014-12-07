@@ -60,6 +60,9 @@
 	-o-transition: opacity .4s ease-out;
 	transition: opacity .4s ease-out;
 }
+.jgallery-container-inner:hover a {
+	opacity: 0.8;
+}
 .subalbums:hover .subalbum:hover, .jgallery-container-inner:hover a:hover {
 	opacity: 1;
 }
