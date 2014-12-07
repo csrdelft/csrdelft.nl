@@ -72,14 +72,20 @@ class FotoAlbumModel extends PersistenceModel {
 				continue;
 			}
 			if ($object->isDir()) {
-				chmod($path, 0755);
+				if (false === @chmod($path, 0755)) {
+					debugprint('Geen eigenaar van: ' . $path);
+					flush();
+				}
 				$album = $this->getFotoAlbum($path);
 				if (!$this->exists($album)) {
 					$this->create($album);
 				}
 			} else {
 				try {
-					chmod($object->getPathname(), 0644);
+					if (false === @chmod($object->getPathname(), 0644)) {
+						debugprint('Geen eigenaar van: ' . $path);
+						flush();
+					}
 					$filename = $object->getFilename();
 					if ($filename === 'Thumbs.db') {
 						unlink($object->getPathname());
@@ -87,12 +93,8 @@ class FotoAlbumModel extends PersistenceModel {
 					$foto = new Foto($filename, $album, true);
 					FotoModel::instance()->verwerkFoto($foto);
 				} catch (Exception $e) {
-					if (defined('RESIZE_OUTPUT')) {
-						debugprint($e->getMessage());
-						flush();
-					} else {
-						setMelding($e->getMessage(), -1);
-					}
+					debugprint($e->getMessage());
+					flush();
 				}
 			}
 		}
