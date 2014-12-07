@@ -53,14 +53,14 @@
 	float: left;
 	cursor: pointer;
 }
-.subalbums:hover .subalbum {
+.subalbums:hover .subalbum, .jgallery-container-inner:hover a {
 	opacity: 0.5;
 	-webkit-transition: opacity .4s ease-out;
 	-moz-transition: opacity .4s ease-out;
 	-o-transition: opacity .4s ease-out;
 	transition: opacity .4s ease-out;
 }
-.subalbums:hover .subalbum:hover {
+.subalbums:hover .subalbum:hover, .jgallery-container-inner:hover a:hover {
 	opacity: 1;
 }
 
