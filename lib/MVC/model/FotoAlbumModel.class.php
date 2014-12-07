@@ -67,15 +67,18 @@ class FotoAlbumModel extends PersistenceModel {
 
 	public function verwerkFotos(FotoAlbum $album) {
 		$albums = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($album->path, RecursiveDirectoryIterator::SKIP_DOTS | RecursiveDirectoryIterator::UNIX_PATHS), RecursiveIteratorIterator::SELF_FIRST);
+		$prev = null;
 		foreach ($albums as $path => $object) {
 			if (strpos($path, '/_') !== false) {
 				continue;
+			}
+			if ($path !== $prev) {
+				$album = $this->getFotoAlbum($path);
 			}
 			if ($object->isDir()) {
 				if (false === @chmod($path, 0755)) {
 					debugprint('Geen eigenaar van: ' . $path);
 				}
-				$album = $this->getFotoAlbum($path);
 				if (!$this->exists($album)) {
 					$this->create($album);
 				}
