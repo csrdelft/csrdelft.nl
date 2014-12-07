@@ -105,11 +105,11 @@ class FotoAlbum extends Map {
 			$this->fotos = array();
 			$this->fotos_incompleet = array();
 
-			$handle = opendir($this->path);
-			if (!$handle) {
+			$scan = scandir($this->path, SCANDIR_SORT_ASCENDING);
+			if (empty($scan)) {
 				return false;
 			}
-			while (false !== ($entry = readdir($handle))) {
+			foreach ($scan as $entry) {
 				if (is_file($this->path . $entry)) {
 					$foto = new Foto($entry, $this);
 					if ($foto->isComplete()) {
@@ -119,7 +119,6 @@ class FotoAlbum extends Map {
 					}
 				}
 			}
-			closedir($handle);
 		}
 		if ($incompleet) {
 			return array_merge($this->fotos, $this->fotos_incompleet);
