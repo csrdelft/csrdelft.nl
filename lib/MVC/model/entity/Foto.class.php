@@ -108,16 +108,16 @@ class Foto extends Afbeelding {
 		}
 		$command = IMAGEMAGICK_PATH . 'convert ' . escapeshellarg($this->getFullPath()) . ' -thumbnail 150x150 -gravity center -format jpg -quality 80 ' . $rotate . escapeshellarg($this->getThumbPath());
 		if (defined('RESIZE_OUTPUT')) {
-			echo $command . '<br />';
+			debugprint($command);
 		}
 		$output = shell_exec($command);
 		if (defined('RESIZE_OUTPUT')) {
-			echo $output . '<hr />';
+			debugprint($output);
 		}
 		if ($this->hasThumb()) {
 			chmod($this->getThumbPath(), 0644);
 		} else {
-			throw new Exception('Thumb maken mislukt: verwijder eventuele magick-* files in /tmp handmatig!<br />' . $command . '<br />' . $output);
+			throw new Exception('Thumb maken mislukt: verwijder eventuele magick-* files in /tmp handmatig!');
 		}
 	}
 
@@ -129,16 +129,16 @@ class Foto extends Afbeelding {
 		}
 		$command = IMAGEMAGICK_PATH . 'convert ' . escapeshellarg($this->getFullPath()) . ' -resize 1024x1024 -format jpg -quality 85 ' . $rotate . escapeshellarg($this->getResizedPath());
 		if (defined('RESIZE_OUTPUT')) {
-			echo $command . '<br />';
+			debugprint($command);
 		}
 		$output = shell_exec($command);
 		if (defined('RESIZE_OUTPUT')) {
-			echo $output . '<hr />';
+			debugprint($output);
 		}
 		if ($this->hasResized()) {
 			chmod($this->getResizedPath(), 0644);
 		} else {
-			throw new Exception('Resized maken mislukt: verwijder eventuele magick-* files in /tmp handmatig!<br />' . $command . '<br />' . $output);
+			throw new Exception('Resized maken mislukt: verwijder eventuele magick-* files in /tmp handmatig!');
 		}
 	}
 
