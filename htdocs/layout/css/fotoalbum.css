@@ -51,7 +51,11 @@
 	cursor: pointer;
 }
 .subalbums:hover .subalbum {
-	opacity: 0.5;
+	opacity: .5;
+	-webkit-transition: opacity .5s ease-out;
+	-moz-transition: opacity .5s ease-out;
+	-o-transition: opacity .5s ease-out;
+	transition: opacity .5s ease-out;
 }
 .subalbums:hover .subalbum:hover {
 	opacity: 1;
