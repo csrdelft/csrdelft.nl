@@ -65,6 +65,9 @@ class FotoAlbum extends Map {
 		if ($path === true) { // called from PersistenceModel
 			$this->path = PICS_PATH . $this->subdir;
 		} else {
+			if (!endsWith($path, '/')) {
+				$path .= '/';
+			}
 			$this->path = $path;
 			$this->subdir = str_replace(PICS_PATH, '', $this->path);
 		}

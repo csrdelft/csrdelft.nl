@@ -55,7 +55,7 @@ class Foto extends Afbeelding {
 			$this->directory = $album->path;
 			$this->subdir = $album->subdir;
 		}
-		parent::__construct($this->getFullPath(), $parse);
+		parent::__construct(null, $parse);
 	}
 
 	public function getAlbumPath() {

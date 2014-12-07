@@ -52,9 +52,6 @@ class FotoAlbumModel extends PersistenceModel {
 		if (strpos($path, '/_') !== false) {
 			return null;
 		}
-		if (!endsWith($path, '/')) {
-			$path .= '/';
-		}
 		$album = new FotoAlbum($path);
 		if (!$album->exists()) {
 			return null;
@@ -67,29 +64,27 @@ class FotoAlbumModel extends PersistenceModel {
 
 	public function verwerkFotos(FotoAlbum $album) {
 		$albums = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($album->path, RecursiveDirectoryIterator::SKIP_DOTS | RecursiveDirectoryIterator::UNIX_PATHS), RecursiveIteratorIterator::SELF_FIRST);
-		$prev = null;
 		foreach ($albums as $path => $object) {
+			// skip _thumbs & _resized
 			if (strpos($path, '/_') !== false) {
 				continue;
-			}
-			if ($path !== $prev) {
-				$album = $this->getFotoAlbum($path);
 			}
 			if ($object->isDir()) {
 				if (false === @chmod($path, 0755)) {
 					debugprint('Geen eigenaar van: ' . $path);
 				}
+				$album = new FotoAlbum($path);
 				if (!$this->exists($album)) {
 					$this->create($album);
 				}
-			} elseif ($object->isFile()) {
+			} else {
 				try {
-					if (false === @chmod($object->getPathname(), 0644)) {
+					if (false === @chmod($path, 0644)) {
 						debugprint('Geen eigenaar van: ' . $path);
 					}
-					$filename = $object->getFilename();
+					$filename = basename($path);
 					if ($filename === 'Thumbs.db') {
-						unlink($object->getPathname());
+						unlink($path);
 					}
 					$foto = new Foto($filename, $album, true);
 					FotoModel::instance()->verwerkFoto($foto);
@@ -195,7 +190,7 @@ class FotoModel extends PersistenceModel {
 
 	public function verwijderFoto(Foto $foto) {
 		$ret = true;
-		$ret &= unlink($foto->directory->path . $foto->filename);
+		$ret &= unlink($foto->directory . $foto->filename);
 		if ($foto->hasResized()) {
 			$ret &= unlink($foto->getResizedPath());
 		}

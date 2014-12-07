@@ -26,21 +26,25 @@ class Afbeelding extends Bestand {
 	 */
 	public $height;
 
-	public function __construct($path, $parse = true) {
+	public function __construct($path = null, $parse = true) {
 		parent::__construct();
+		if ($path !== null) {
+			$this->directory = dirname($path) . '/';
+			$this->filename = basename($path);
+		}
 		if ($parse) {
 			if ($this->exists()) {
-				$this->filesize = @filesize($path);
-				$image = @getimagesize($path);
+				$this->filesize = @filesize($this->directory . $this->filename);
+				$image = @getimagesize($this->directory . $this->filename);
 				if ($image AND $this->filesize !== false) {
 					$this->width = $image[0];
 					$this->height = $image[1];
 					$this->mimetype = $image['mime'];
 				} else {
-					throw new Exception('Afbeelding parsen mislukt: ' . $path);
+					throw new Exception('Afbeelding parsen mislukt: ' . $this->directory . $this->filename);
 				}
 			} else {
-				throw new Exception('Afbeelding niet leesbaar: ' . $path);
+				throw new Exception('Afbeelding niet leesbaar: ' . $this->directory . $this->filename);
 			}
 		}
 	}
