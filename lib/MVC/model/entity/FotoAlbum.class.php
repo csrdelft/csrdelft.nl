@@ -72,11 +72,6 @@ class FotoAlbum extends Map {
 			$this->subdir = str_replace(PICS_PATH, '', $this->path);
 		}
 		$this->dirname = basename($this->path);
-		if (!$this->exists()) {
-			$this->subalbums = array();
-			$this->fotos = array();
-			$this->fotos_incompleet = array();
-		}
 	}
 
 	/**
@@ -133,21 +128,25 @@ class FotoAlbum extends Map {
 	}
 
 	public function getSubAlbums() {
-		if (isset($this->subalbums)) {
-			return $this->subalbums;
-		}
-		$this->subalbums = array();
-		$glob = glob($this->path . '*', GLOB_ONLYDIR);
-		if (!is_array($glob)) {
-			return array();
-		}
-		foreach ($glob as $path) {
-			$subalbum = FotoAlbumModel::instance()->getFotoAlbum($path);
-			if ($subalbum) {
-				$this->subalbums[] = $subalbum;
+		if (!isset($this->subalbums)) {
+
+			$this->subalbums = array();
+
+			$handle = opendir($this->path);
+			if (!$handle) {
+				return false;
 			}
+			while (false !== ($entry = readdir($handle))) {
+				if ($entry !== '.' AND $entry != '..' AND is_dir($this->path . $entry)) {
+					$subalbum = FotoAlbumModel::instance()->getFotoAlbum($this->path . $entry);
+					if ($subalbum) {
+						$this->subalbums[] = $subalbum;
+					}
+				}
+			}
+
+			$this->subalbums = array_reverse($this->subalbums);
 		}
-		$this->subalbums = array_reverse($this->subalbums);
 		return $this->subalbums;
 	}
 
