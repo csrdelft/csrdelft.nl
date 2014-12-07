@@ -163,40 +163,35 @@ class FotoBBView extends SmartyTemplateView {
 
 }
 
-class FotoAlbumRandomView extends FotoAlbumView {
+class FotoAlbumZijbalkView extends FotoAlbumView {
 
 	public function view() {
-		echo '<p><a href="' . $this->model->getUrl() . '">' . $this->model->dirname . '</a></p><div class="fotos">';
+		echo '<div id="zijbalk_fotoalbum">';
+		echo '<div class="zijbalk-kopje"><a href="/actueel/fotoalbum/' . Lichting::getHuidigeJaargang() . '">Fotoalbum</a></div>';
+		echo '<div class="item">';
+		echo '<p><a href="' . $this->model->getUrl() . '">' . $this->model->dirname . '</a></p>';
+		echo '<div class="fotos">';
 		$fotos = $this->model->getFotos();
-		$count = count($fotos);
-		if ($count > LidInstellingen::get('zijbalk', 'fotos')) {
-			$limit = LidInstellingen::get('zijbalk', 'fotos');
-		} else {
-			$limit = $count;
-		}
-		$got = array();
-		for ($i = 0; $i < $limit; $i++) {
-			for ($p = 0; $p < 3; $p++) {
+		$limit = count($fotos);
+		// als het album alleen subalbums bevat kies een willkeurige daarvan om fotos van te tonen
+		if ($limit === 0) {
+			$subalbums = $this->model->getSubAlbums();
+			$count = count($subalbums);
+			if ($count > 0) {
 				$idx = rand(0, $count - 1);
-				if (!in_array($idx, $got)) {
-					break;
-				}
+				$this->model = $subalbums[$idx];
+				$fotos = $this->model->getFotos();
+				$limit = count($fotos);
 			}
-			$got[] = $idx;
-			$foto = $fotos[$idx];
-			echo '<a href="' . $this->model->getUrl() . '#' . $foto->getResizedUrl() . '"><img src="' . $foto->getThumbUrl() . '"></a>';
 		}
-		echo '</div>';
-	}
-
-}
-
-class FotoAlbumZijbalkView extends FotoAlbumRandomView {
-
-	public function view() {
-		echo '<div id="zijbalk_fotoalbum"><div class="zijbalk-kopje"><a href="/actueel/fotoalbum/' . Lichting::getHuidigeJaargang() . '">Fotoalbum</a></div><div class="item">';
-		parent::view();
-		echo '</div></div>';
+		if ($limit > LidInstellingen::get('zijbalk', 'fotos')) {
+			$limit = LidInstellingen::get('zijbalk', 'fotos');
+		}
+		shuffle($fotos);
+		for ($i = 0; $i < $limit; $i++) {
+			echo '<a href="' . $this->model->getUrl() . '#' . $fotos[$i]->getResizedUrl() . '"><img src="' . $fotos[$i]->getThumbUrl() . '"></a>';
+		}
+		echo '</div></div></div>';
 	}
 
 }
