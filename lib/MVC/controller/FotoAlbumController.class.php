@@ -77,8 +77,11 @@ class FotoAlbumController extends AclController {
 			redirect($album->getUrl());
 		}
 		//define('RESIZE_OUTPUT', null);
-		echo '<h1>Fotoalbum verwerken: ' . $album->dirname . '</h1>';
-		echo 'Dit kan even duren...<br />';
+		echo '
+			<h1>Fotoalbum verwerken: ' . $album->dirname . '</h1>
+			<p>Dit kan even duren...</p>
+			<p>Verwijder eventuele magick-* files in /tmp handmatig bij problemen!</p>
+		';
 		$this->model->verwerkFotos($album);
 		echo '<br />Klaar!';
 		exit;

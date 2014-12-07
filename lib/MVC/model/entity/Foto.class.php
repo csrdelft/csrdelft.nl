@@ -117,7 +117,7 @@ class Foto extends Afbeelding {
 		if ($this->hasThumb()) {
 			chmod($this->getThumbPath(), 0644);
 		} else {
-			throw new Exception('Thumb maken mislukt: verwijder eventuele magick-* files in /tmp handmatig!');
+			throw new Exception('Thumb maken mislukt: ' . $this->getFullPath());
 		}
 	}
 
@@ -138,7 +138,7 @@ class Foto extends Afbeelding {
 		if ($this->hasResized()) {
 			chmod($this->getResizedPath(), 0644);
 		} else {
-			throw new Exception('Resized maken mislukt: verwijder eventuele magick-* files in /tmp handmatig!');
+			throw new Exception('Resized maken mislukt: ' . $this->getFullPath());
 		}
 	}
 
