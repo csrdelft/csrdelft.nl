@@ -69,11 +69,11 @@ class FotoAlbumModel extends PersistenceModel {
 			if (strpos($path, '/_') !== false) {
 				continue;
 			}
-			$album = new FotoAlbum($path);
 			if ($object->isDir()) {
 				if (false === @chmod($path, 0755)) {
 					debugprint('Geen eigenaar van: ' . $path);
 				}
+				$album = new FotoAlbum($path);
 				if (!$this->exists($album)) {
 					$this->create($album);
 				}
@@ -82,6 +82,7 @@ class FotoAlbumModel extends PersistenceModel {
 					if (false === @chmod($path, 0644)) {
 						debugprint('Geen eigenaar van: ' . $path);
 					}
+					$album = new FotoAlbum(dirname($path));
 					$filename = basename($path);
 					if ($filename === 'Thumbs.db') {
 						unlink($path);
