@@ -115,6 +115,7 @@
 				});
 				// knopje subalbums
 				container.find('.fa-list-ul').removeClass('fa-list-ul').addClass('fa-folder-open-o');
+		{if LoginModel::mag('P_ALBUM_MOD') OR $album->isOwner()}
 				// knopje verwijderen
 				$('<span class="fa fa-times jgallery-btn jgallery-btn-small" tooltip="Foto verwijderen"></span>').click(function () {
 					if (!confirm('Foto definitief verwijderen. Weet u het zeker?')) {
@@ -148,6 +149,7 @@
 						rotation: 90
 					}, page_reload);
 				}).insertAfter(btn);
+		{/if}
 			});
 			/* img class="photoTag" data-fotoalbum="$album->subdir"
 			 $(document).ready(function () {
