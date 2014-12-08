@@ -120,7 +120,7 @@ function zijbalk_scroll_fixed() {
 		return;
 	}
 
-	if (elmnt.hasClass('desktop-only') && (window.innerWidth < 900 || window.innerHeight < 900)) {
+	if (elmnt.hasClass('desktop-only') && /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
 		elmnt.removeClass('desktop-only scroll-fixed dragobject dragvertical scroll-hover');
 		return;
 	}
