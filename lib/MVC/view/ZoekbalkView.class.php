@@ -55,10 +55,12 @@ JS;
 
 			$favs = MenuModel::instance()->getMenu(LoginModel::getUid());
 			foreach ($favs->getChildren() as $item) {
-				$this->suggestions['Favorieten'][] = array(
-					'url'	 => $item->link,
-					'value'	 => $item->tekst
-				);
+				if ($item->magBekijken()) {
+					$this->suggestions['Favorieten'][] = array(
+						'url'	 => $item->link,
+						'value'	 => $item->tekst
+					);
+				}
 			}
 
 			$list = MenuModel::instance()->getList(MenuModel::instance()->getMenu('main'));
