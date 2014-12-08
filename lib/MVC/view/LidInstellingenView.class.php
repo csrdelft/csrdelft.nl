@@ -35,7 +35,9 @@ class LidInstellingenView extends TabsForm {
 			$this->addFields($fields, ucfirst($module));
 		}
 
-		$this->addFields(array(new SessionsView()), 'Beveiliging');
+		$field = new SessionsView();
+		$field->nestedForm = true;
+		$this->addFields(array($field), 'Beveiliging');
 
 		$fields = array();
 

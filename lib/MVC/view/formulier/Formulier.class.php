@@ -135,6 +135,10 @@ class Formulier implements View, Validator {
 		return $this->fields;
 	}
 
+	public function hasFields() {
+		return !empty($this->fields);
+	}
+
 	/**
 	 * Zoekt een InputField met exact de gegeven naam.
 	 *

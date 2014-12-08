@@ -15,9 +15,14 @@ class TabsForm extends Formulier {
 	private $tabs = array();
 	public $vertical = false;
 	public $hoverintent = false;
+	public $nestedForm = false;
 
 	public function getTabs() {
 		return $this->tabs;
+	}
+
+	public function hasTabs() {
+		return !empty($this->tabs);
 	}
 
 	public function hasTab($tab) {
@@ -43,21 +48,11 @@ class TabsForm extends Formulier {
 	 */
 	public function view() {
 		echo getMelding();
-		echo $this->getFormTag();
+		if (!$this->nestedForm) {
+			echo $this->getFormTag();
+		}
 		if ($this->getTitel()) {
 			echo '<h1 class="Titel">' . $this->getTitel() . '</h1>';
-		}
-		if ($this->vertical) {
-			echo <<<HTML
-<style>
-	.ui-tabs-vertical { padding: 0; }
-	.ui-tabs-vertical .ui-tabs-nav { float: left; width: 20%; padding: 2px 0 4px 3px; }
-	.ui-tabs-vertical .ui-tabs-nav li { clear: left; width: 100%;  }
-	.ui-tabs-vertical .ui-tabs-nav li a { display: block; width: 100%; }
-	.ui-tabs-vertical .ui-tabs-nav li.ui-tabs-active { }
-	.ui-tabs-vertical .ui-tabs-panel { float: right; width: 80%; padding: 2em !important; }
-</style>
-HTML;
 		}
 		// fields above tabs
 		if (isset($this->tabs['head'])) {
@@ -94,7 +89,9 @@ HTML;
 			}
 		}
 		echo $this->getScriptTag();
-		echo '</form>';
+		if (!$this->nestedForm) {
+			echo '</form>';
+		}
 	}
 
 	public function getJavascript() {
