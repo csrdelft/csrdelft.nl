@@ -204,7 +204,9 @@ class FotoAlbum extends Map {
 
 	public function isOwner() {
 		if (!isset($this->owner)) {
-			$this->owner = FotoAlbumModel::instance()->retrieveAttributes($this, array('owner'));
+			$attr = array('owner');
+			FotoAlbumModel::instance()->retrieveAttributes($this, $attr);
+			$this->castValues($attr);
 		}
 		return LoginModel::mag($this->owner);
 	}
