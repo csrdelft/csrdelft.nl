@@ -47,8 +47,8 @@ class Saldi {
 				$model = DynamicEntityModel::makeModel('socCieBestelling');
 				$bestellingen = $model->findSparse(array('tijd', 'totaal'), 'socCieId = ? AND deleted = FALSE AND tijd>(NOW() - INTERVAL ? DAY)', array($klant->socCieId, $timespan), 'tijd DESC');
 				foreach ($bestellingen as $bestelling) {
-					$saldo += $bestelling->totaal;
 					$data[] = array('moment' => $bestelling->tijd, 'saldo' => round($saldo / 100, 2));
+					$saldo += $bestelling->totaal;
 				}
 				$this->data = array_merge($this->data, array_reverse($data));
 			}
