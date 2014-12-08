@@ -11,7 +11,7 @@
 			monthNames: ["jan", "feb", "mrt", "apr", "mei", "jun", "jul", "aug", "sep", "okt", "nov", "dec"],
 			xaxis: {
 				mode: "time",
-				timeformat: "%d-%b"
+				timeformat: "%d %b %y"
 			},
 			yaxis: {
 				tickFormatter: function (v, axis) {
@@ -20,7 +20,10 @@
 			},
 			tooltip: true,
 			tooltipOpts: {
-				content: "%s: %y<br/>%x"
+				content: "%s %y<br/>%x",
+				lines: {
+					track: true
+				}
 			}
 		};
 		var plot = jQuery.plot('#saldografiek', [], options);
