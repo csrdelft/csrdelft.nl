@@ -14,16 +14,16 @@
 				monthNames: ["jan", "feb", "mrt", "apr", "mei", "jun", "jul", "aug", "sep", "okt", "nov", "dec"],
 			},
 			yaxis: {
+				tickDecimals: 2,
 				tickFormatter: function (v, axis) {
 					return '€ ' + v.toFixed(axis.tickDecimals);
 				}
 			},
 			tooltip: true,
 			tooltipOpts: {
-				content: "%s: %y.2<br/>%x",
+				content: "%s: %y<br/>%x",
 				lines: {
-					track: true,
-					threshold: 0.5
+					track: true
 				}
 			}
 		};
