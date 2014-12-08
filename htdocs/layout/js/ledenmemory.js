@@ -187,11 +187,11 @@ $(document).ready(function() {
 		var content = '<div class="box"><table><tbody><tr><td>';
 		if (flip1.hasClass('pasfoto')) {
 			content += flip1.find('img').parent().html();
-			content += '</td><td><h2>' + flip2.find('h2').attr('title') + '</h2>';
+			content += '</td><td><h3>' + flip2.find('h3').attr('title') + '</h3>';
 		}
 		else if (flip2.hasClass('pasfoto')) {
 			content += flip2.find('img').parent().html();
-			content += '</td><td><h2>' + flip1.find('h2').attr('title') + '</h2>';
+			content += '</td><td><h3>' + flip1.find('h3').attr('title') + '</h3>';
 		}
 		else {
 			alert('error');
