@@ -52,6 +52,7 @@ class ForumZoekenForm extends Formulier {
 
 		$fields['z'] = new TextField('zoekopdracht', null, null);
 		$fields['z']->placeholder = 'Zoeken in forum';
+		$fields['z']->enter_submit = true;
 
 		$this->addFields($fields);
 	}
