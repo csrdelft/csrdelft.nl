@@ -363,7 +363,7 @@ class FotoAlbumBBView extends FotoAlbumZijbalkView {
 		} else {
 			$content = $this->getGridHtml();
 		}
-		return '<div class="bb-block bb-fotoalbum">' . $this->getBreadcrumbs(false, true) . '</a>' . $content . '</div>';
+		return '<div class="bb-block bb-fotoalbum"><div class="breadcrumbs">' . $this->getBreadcrumbs(false, true) . '</div>' . $content . '</div>';
 	}
 
 }
