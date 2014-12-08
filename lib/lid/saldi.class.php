@@ -43,6 +43,7 @@ class Saldi {
 			$klant = $model->findSparse(array('socCieId', 'saldo'), 'stekUID = ?', array($this->uid), null, null, 1)->fetch();
 			if ($klant) {
 				$saldo = $klant->saldo;
+				$data = array(array('moment' => getDateTime(), 'saldo' => round($saldo / 100, 2)));
 				$model = DynamicEntityModel::makeModel('socCieBestelling');
 				$bestellingen = $model->findSparse(array('tijd', 'totaal'), 'socCieId = ? AND deleted = FALSE AND tijd>(NOW() - INTERVAL ? DAY)', array($klant->socCieId, $timespan), 'tijd DESC');
 				foreach ($bestellingen as $bestelling) {
