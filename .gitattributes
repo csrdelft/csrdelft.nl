@@ -124,6 +124,7 @@ htdocs/layout/css/documenten.css -text
 htdocs/layout/css/dropzone.basic.css -text
 htdocs/layout/css/dropzone.css -text
 htdocs/layout/css/flip.less -text
+htdocs/layout/css/font-awesome.css -text
 htdocs/layout/css/font-awesome.min.css -text
 htdocs/layout/css/formulier.less -text
 htdocs/layout/css/forum.less -text
