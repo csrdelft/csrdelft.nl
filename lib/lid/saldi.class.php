@@ -17,7 +17,6 @@ class Saldi {
 	}
 
 	private function load($timespan) {
-		$timespan = (int) $timespan;
 		if ($this->uid == '0000') {
 			$sQuery = "
 				SELECT LEFT(moment, 16) AS moment, SUM(saldo) AS saldo
@@ -53,11 +52,12 @@ class Saldi {
 				$this->data = array_merge($this->data, array_reverse($data));
 			}
 		}
-		//if (sizeof($this->data) > 0) {
-		// herhaal eerste datapunt om grafiek te tekenen vanaf begin timespan
-		//	$row = reset($this->data);
-		//	array_unshift($this->data, array('moment' => getDateTime($date_back + 3600), 'saldo' => $row['saldo']));
-		//}
+		if (sizeof($this->data) > 0) {
+			// herhaal eerste datapunt om grafiek te tekenen vanaf begin timespan
+			$row = reset($this->data);
+			$time = strtotime('-' . $timespan . ' days');
+			array_unshift($this->data, array('moment' => getDateTime($time + 3600), 'saldo' => $row['saldo']));
+		}
 	}
 
 	public function getNaam() {
