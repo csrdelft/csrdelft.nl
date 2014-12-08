@@ -188,18 +188,26 @@ pre.bbcode {
 .bb-table tr { margin: 0; padding: 0; }
 .bb-table td, .bb-table th { margin: 0; padding: 2px; }
 
-.bb-fotoalbum {
-
+.bb-fotoalbum img.compact {
+	float: right;
+	width: 50px;
+	margin-top: -1em;
 }
 .bb-fotoalbum .images { margin-top: 6px; position: relative;}
 .bb-fotoalbum .images a { position: absolute;}
 .bb-fotoalbum .images a.sml img { width: 75px; height: 75px; }
 .bb-fotoalbum .images a.big img { width: 154px; height: 154px;}
-
-.bb-fotoalbum img.compact {
-	float: right;
-	width: 50px;
-	margin-top: -1em;
+.bb-fotoalbum .images a {
+	-webkit-transition: opacity .4s ease-out;
+	-moz-transition: opacity .4s ease-out;
+	-o-transition: opacity .4s ease-out;
+	transition: opacity .4s ease-out;
+}
+.bb-fotoalbum .images:hover a {
+	opacity: 0.8;
+}
+.bb-fotoalbum .images:hover a:hover {
+	opacity: 1;
 }
 
 /* Slider voorpagina */
