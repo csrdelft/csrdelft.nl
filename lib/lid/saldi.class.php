@@ -10,7 +10,7 @@ class Saldi {
 	public $cie;
 	private $data;
 
-	public function __construct($uid, $cie = 'soccie', $timespan = 11) {
+	public function __construct($uid, $cie = 'soccie', $timespan = 9) {
 		$this->uid = $uid;
 		$this->cie = $cie;
 		$this->load((int) $timespan);

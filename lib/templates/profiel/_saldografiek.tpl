@@ -2,7 +2,7 @@
 <script type="text/javascript">
 	function makePlot() {
 
-		var timespan = 11;
+		var timespan = 9;
 		var options = {
 			grid: {
 				hoverable: true,
