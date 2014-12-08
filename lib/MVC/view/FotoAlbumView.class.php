@@ -208,6 +208,9 @@ class FotoAlbumBBView extends FotoAlbumZijbalkView {
 	private $rowmargin = 0.5; //margin between the images
 
 	public function view() {
+		if (count($this->model->getFotos()) < 1) {
+			return '<div class="bb-block">Fotoalbum bevat geen foto\'s: /' . $this->model->dirname . '</div>';
+		}
 		echo $this->getHtml();
 	}
 
