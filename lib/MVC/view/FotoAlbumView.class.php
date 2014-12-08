@@ -165,6 +165,19 @@ class FotoBBView extends SmartyTemplateView {
 
 class FotoAlbumZijbalkView extends FotoAlbumView {
 
+	public function __construct(FotoAlbum $fotoalbum) {
+		// als het album alleen subalbums bevat kies een willkeurige daarvan om fotos van te tonen
+		if (count($fotoalbum->getFotos()) === 0) {
+			$subalbums = $fotoalbum->getSubAlbums();
+			$count = count($subalbums);
+			if ($count > 0) {
+				$idx = rand(0, $count - 1);
+				$fotoalbum = $subalbums[$idx];
+			}
+		}
+		parent::__construct($fotoalbum);
+	}
+
 	public function view() {
 		echo '<div id="zijbalk_fotoalbum">';
 		echo '<div class="zijbalk-kopje"><a href="/actueel/fotoalbum/' . Lichting::getHuidigeJaargang() . '">Fotoalbum</a></div>';
@@ -173,17 +186,6 @@ class FotoAlbumZijbalkView extends FotoAlbumView {
 		echo '<div class="fotos">';
 		$fotos = $this->model->getFotos();
 		$limit = count($fotos);
-		// als het album alleen subalbums bevat kies een willkeurige daarvan om fotos van te tonen
-		if ($limit === 0) {
-			$subalbums = $this->model->getSubAlbums();
-			$count = count($subalbums);
-			if ($count > 0) {
-				$idx = rand(0, $count - 1);
-				$this->model = $subalbums[$idx];
-				$fotos = $this->model->getFotos();
-				$limit = count($fotos);
-			}
-		}
 		if ($limit > LidInstellingen::get('zijbalk', 'fotos')) {
 			$limit = LidInstellingen::get('zijbalk', 'fotos');
 		}
@@ -196,7 +198,7 @@ class FotoAlbumZijbalkView extends FotoAlbumView {
 
 }
 
-class FotoAlbumBBView extends FotoAlbumView {
+class FotoAlbumBBView extends FotoAlbumZijbalkView {
 
 	private $compact = false; //compact or expanded tag.
 	private $rows = 2;  //number of rows
