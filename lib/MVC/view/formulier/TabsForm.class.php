@@ -43,14 +43,19 @@ class TabsForm extends Formulier {
 		parent::addFields($fields);
 	}
 
+	protected function getFormTag() {
+		if ($this->nestedForm) {
+			return '<div id="' . $this->getFormId() . '" class="' . implode(' ', $this->css_classes) . '">';
+		}
+		return parent::getFormTag();
+	}
+
 	/**
 	 * Toont het formulier en javascript van alle fields.
 	 */
 	public function view() {
 		echo getMelding();
-		if (!$this->nestedForm) {
-			echo $this->getFormTag();
-		}
+		echo $this->getFormTag();
 		if ($this->getTitel()) {
 			echo '<h1 class="Titel">' . $this->getTitel() . '</h1>';
 		}
@@ -89,7 +94,9 @@ class TabsForm extends Formulier {
 			}
 		}
 		echo $this->getScriptTag();
-		if (!$this->nestedForm) {
+		if ($this->nestedForm) {
+			echo '</div>';
+		} else {
 			echo '</form>';
 		}
 	}
