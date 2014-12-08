@@ -24,7 +24,7 @@ if (isset($_GET['maalcie'])) {
 	$cie = 'maalcie';
 }
 
-$timespan = 7;
+$timespan = 14;
 if (isset($_GET['timespan']) AND $_GET['timespan'] == (int) $_GET['timespan']) {
 	$timespan = $_GET['timespan'];
 }
