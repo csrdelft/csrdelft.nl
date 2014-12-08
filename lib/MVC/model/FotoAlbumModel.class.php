@@ -130,7 +130,7 @@ HTML;
 		}
 		$oldpath = $album->path;
 		$album->path = str_replace($album->dirname, $nieuwenaam, $album->path);
-		$album->subdir = str_replace($album->subdir, $nieuwenaam, $album->path);
+		$album->subdir = str_replace($album->dirname, $nieuwenaam, $album->subdir);
 		return rename($oldpath, $album->path);
 	}
 
