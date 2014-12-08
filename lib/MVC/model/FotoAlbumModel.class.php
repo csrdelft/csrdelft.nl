@@ -131,7 +131,11 @@ HTML;
 		$oldpath = $album->path;
 		$album->path = str_replace($album->dirname, $nieuwenaam, $album->path);
 		$album->subdir = str_replace($album->dirname, $nieuwenaam, $album->subdir);
-		return rename($oldpath, $album->path);
+		if (rename($oldpath, $album->path)) {
+			$this->verwerkFotos($album);
+			return true;
+		}
+		return false;
 	}
 
 	public function setAlbumCover(FotoAlbum $album, Foto $cover) {
