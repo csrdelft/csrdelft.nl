@@ -8,10 +8,10 @@
 				hoverable: true,
 				clickable: true
 			},
-			monthNames: ["jan", "feb", "mrt", "apr", "mei", "jun", "jul", "aug", "sep", "okt", "nov", "dec"],
 			xaxis: {
 				mode: "time",
-				timeformat: "%d %b %y"
+				timeformat: "%d %b %y",
+				monthNames: ["jan", "feb", "mrt", "apr", "mei", "jun", "jul", "aug", "sep", "okt", "nov", "dec"],
 			},
 			yaxis: {
 				tickFormatter: function (v, axis) {
@@ -22,7 +22,8 @@
 			tooltipOpts: {
 				content: "%s %y<br/>%x",
 				lines: {
-					track: true
+					track: true,
+					threshold: 1
 				}
 			}
 		};
