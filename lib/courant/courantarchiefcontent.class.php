@@ -26,7 +26,7 @@ class CourantarchiefContent implements View {
 	}
 
 	public function getBreadcrumbs() {
-		return '<a href="/actueel/courant" title="Courant"><img src="' . CSR_PICS . '/knopjes/email-16.png" class="module-icon"></a> » ' . $this->getTitel();
+		return '<a href="/actueel/courant" title="Courant"><img src="' . CSR_PICS . '/knopjes/email-16.png" class="module-icon"></a> » <span class="active">' . $this->getTitel() . '</span>';
 	}
 
 	function getTitel() {

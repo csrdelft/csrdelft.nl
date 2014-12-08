@@ -47,7 +47,7 @@ class GroepContent extends OldGroepView {
 	}
 
 	public function getBreadcrumbs() {
-		return parent::getBreadcrumbs() . ' » <a href="/actueel/groepen/' . $this->groeptype . '">' . $this->groeptype . '</a> » ' . $this->model->getNaam();
+		return parent::getBreadcrumbs() . ' » <a href="/actueel/groepen/' . $this->groeptype . '">' . $this->groeptype . '</a> » <span class="active">' . $this->model->getNaam() . '</span>';
 	}
 
 	/**

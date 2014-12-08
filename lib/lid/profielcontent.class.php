@@ -17,7 +17,7 @@ class ProfielContent extends SmartyTemplateView {
 	}
 
 	public function getBreadcrumbs() {
-		return '<a href="/communicatie/ledenlijst" title="Ledenlijst"><img src="' . CSR_PICS . '/knopjes/people-16.png" class="module-icon"></a> » ' . $this->model->getNaam();
+		return '<a href="/communicatie/ledenlijst" title="Ledenlijst"><img src="' . CSR_PICS . '/knopjes/people-16.png" class="module-icon"></a> » <span class="active">' . $this->model->getNaam() . '</span>';
 	}
 
 	function view() {

@@ -166,10 +166,6 @@ class BibliotheekBoekContent extends BibliotheekView {
 		return 'Bibliotheek - Boek: ' . $this->model->getTitel();
 	}
 
-	public function getBreadcrumbs() {
-		return parent::getBreadcrumbs() . ' » ' . $this->model->getTitel();
-	}
-
 	public function view() {
 		$this->smarty->assign('boek', $this->model);
 		$this->smarty->display('bibliotheek/boek.tpl');

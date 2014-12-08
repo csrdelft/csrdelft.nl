@@ -39,7 +39,7 @@ class DocumentCategorieContent extends DocumentenView {
 	}
 
 	public function getBreadcrumbs() {
-		return parent::getBreadcrumbs() . ' » ' . $this->model->getNaam();
+		return parent::getBreadcrumbs() . ' » <span class="active">' . $this->model->getNaam() . '</span>';
 	}
 
 	public function view() {
