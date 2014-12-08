@@ -330,6 +330,8 @@ htdocs/layout/js/flot/jquery.flot.threshold.js -text
 htdocs/layout/js/flot/jquery.flot.threshold.min.js -text
 htdocs/layout/js/flot/jquery.flot.time.js -text
 htdocs/layout/js/flot/jquery.flot.time.min.js -text
+htdocs/layout/js/flot/jquery.flot.tooltip.js -text
+htdocs/layout/js/flot/jquery.flot.tooltip.min.js -text
 htdocs/layout/js/flot/jquery.js -text
 htdocs/layout/js/flot/jquery.min.js -text
 htdocs/layout/js/forum.js -text
