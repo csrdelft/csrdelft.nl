@@ -2,7 +2,7 @@
 <script type="text/javascript">
 	function makePlot() {
 
-		var timespan = 10;
+		var timespan = 11;
 		var options = {
 			grid: {
 				hoverable: true,
@@ -10,7 +10,7 @@
 			},
 			xaxis: {
 				mode: "time",
-				timeformat: "%d %b %y",
+				timeformat: "%d %b 20%y",
 				monthNames: ["jan", "feb", "mrt", "apr", "mei", "jun", "jul", "aug", "sep", "okt", "nov", "dec"],
 			},
 			yaxis: {
