@@ -18,23 +18,23 @@ class HTML_BBCodeParser2_Filter_Csrblocks extends HTML_BBCodeParser2_Filter {
 	 * @var      array
 	 */
 	protected $_definedTags = array(
-		'groep'		 => array(
+		'groep'			 => array(
 			'allowed'	 => 'none',
 			'attributes' => array('groep' => ''),
 			'plugin'	 => 'Csrblocks'),
-		'lid'		 => array(
+		'lid'			 => array(
 			'allowed'	 => 'none',
 			'attributes' => array('lid' => ''),
 			'plugin'	 => 'Csrblocks'),
-		'boek'		 => array(
+		'boek'			 => array(
 			'allowed'	 => 'none',
 			'attributes' => array('boek' => ''),
 			'plugin'	 => 'Csrblocks'),
-		'document'	 => array(
+		'document'		 => array(
 			'allowed'	 => 'none',
 			'attributes' => array('document' => ''),
 			'plugin'	 => 'Csrblocks'),
-		'locatie'	 => array(
+		'locatie'		 => array(
 			'allowed'	 => 'none',
 			'attributes' => array(
 				'locatie'	 => '',
@@ -42,7 +42,7 @@ class HTML_BBCodeParser2_Filter_Csrblocks extends HTML_BBCodeParser2_Filter {
 				'h'			 => '',
 				'static'	 => ''),
 			'plugin'	 => 'Csrblocks'),
-		'map'		 => array(
+		'map'			 => array(
 			'allowed'	 => 'none',
 			'attributes' => array(
 				'map'	 => '',
@@ -50,7 +50,7 @@ class HTML_BBCodeParser2_Filter_Csrblocks extends HTML_BBCodeParser2_Filter {
 				'h'		 => '',
 				'static' => ''),
 			'plugin'	 => 'Csrblocks'),
-		'kaart'		 => array(
+		'kaart'			 => array(
 			'allowed'	 => 'none',
 			'attributes' => array(
 				'kaart'	 => '',
@@ -166,8 +166,8 @@ class HTML_BBCodeParser2_Filter_Csrblocks extends HTML_BBCodeParser2_Filter {
 		foreach ($tags as $tag) {
 			$pattern[] = "#" . $oe . $tag . "=([^" . $ce . "]*?)" . $ce . "(?!" . $oe . "/" . $tag . $ce . ")#Ui"; // [groep=.*] zonder [/groep] erachter
 			$pattern[] = "#" . $oe . $tag . "(?!=)(\s?.*)" . $ce . "(.+?)" . $oe . "/" . $tag . $ce . "#Ui";   // [groep .*].+[/groep]
-			$replace[] = $o . $tag . "=\$1" . $c . $o . "/" . $tag . $c;							 // [groep=.*][/groep]
-			$replace[] = $o . $tag . "=\$2 \$1" . $c . $o . "/" . $tag . $c;							  // [groep=.+ .*][/groep]
+			$replace[] = $o . $tag . "=\$1" . $c . $o . "/" . $tag . $c;		// [groep=.*][/groep]
+			$replace[] = $o . $tag . "=\$2 \$1" . $c . $o . "/" . $tag . $c;		 // [groep=.+ .*][/groep]
 		}
 
 		$this->_preparsed = preg_replace($pattern, $replace, $this->_text);
@@ -992,10 +992,8 @@ HTML;
 				}
 
 				if ($url === 'laatste') {
-					$laatste = true;
 					$album = FotoAlbumModel::instance()->getMostRecentFotoAlbum();
 				} else {
-					$laatste = false;
 					//vervang url met pad
 					$url = str_ireplace(CSR_ROOT, '', $url);
 					$path = PICS_PATH;
@@ -1021,8 +1019,9 @@ HTML;
 				}
 				if (isset($arguments['rows'])) {
 					$fotoalbumtag->setRows((int) $arguments['rows']);
-				} elseif ($laatste) {
-					$fotoalbumtag->setPerRow(4);
+				}
+				if (isset($arguments['perrow'])) {
+					$fotoalbumtag->setPerRow((int) $arguments['perrow']);
 				}
 				if (isset($arguments['bigfirst'])) {
 					$fotoalbumtag->setBig(0);
