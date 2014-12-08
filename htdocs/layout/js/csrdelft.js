@@ -110,7 +110,7 @@ function init_lazy_images(parent) {
 
 function init_sluit_meldingen() {
 	$('#melding').on('click', '.alert', function () {
-		$(this).fadeOut();
+		$(this).slideUp(400, remove);
 	});
 }
 
