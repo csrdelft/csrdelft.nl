@@ -425,7 +425,7 @@ class ForumDradenGelezenModel extends AbstractForumModel {
 	 * @param ForumDraadGelezen $gelezen
 	 * @param ForumDraad $draad
 	 */
-	public function setWanneerGelezenDoorLid(ForumDraad $draad) {
+	public function setWanneerGelezenDoorLid(ForumDraad $draad, ForumPost $post = null) {
 		if (!LoginModel::mag('P_LOGGED_IN')) {
 			return;
 		}
@@ -438,10 +438,14 @@ class ForumDradenGelezenModel extends AbstractForumModel {
 			$gelezen->uid = LoginModel::getUid();
 			$create = true;
 		}
-		foreach ($draad->getForumPosts() as $post) {
-			if (strtotime($post->laatst_gewijzigd) > strtotime($gelezen->datum_tijd)) {
-				$gelezen->datum_tijd = $post->laatst_gewijzigd;
+		if ($post === null) {
+			foreach ($draad->getForumPosts() as $post) {
+				if (strtotime($post->laatst_gewijzigd) > strtotime($gelezen->datum_tijd)) {
+					$gelezen->datum_tijd = $post->laatst_gewijzigd;
+				}
 			}
+		} else {
+			$gelezen->datum_tijd = $post->laatst_gewijzigd;
 		}
 		if ($create) {
 			$this->create($gelezen);
