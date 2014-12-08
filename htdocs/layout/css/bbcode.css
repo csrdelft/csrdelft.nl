@@ -51,6 +51,7 @@ span.offtopic img { opacity: 0.3; filter: alpha(opacity=30); }
 	overflow: auto;
 }
 .bb-maaltijd .titel {
+	font-size: 1.1em;
 	font-weight: bold;
 }
 .bb-maaltijd {
