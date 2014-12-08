@@ -323,6 +323,7 @@ div.citaatContainer div.citaat div.citaatContainer div.citaat img.bb-img {
 }
 .mededeling-grotebalk .bericht {
 	text-align: justify;
+	line-height: 1.4375em;
 }
 .mededeling-grotebalk .half {
 	width: 49%;
