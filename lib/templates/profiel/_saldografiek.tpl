@@ -20,10 +20,10 @@
 			},
 			tooltip: true,
 			tooltipOpts: {
-				content: "%s %y<br/>%x",
+				content: "%s: %y.2<br/>%x",
 				lines: {
 					track: true,
-					threshold: 1
+					threshold: 0.5
 				}
 			}
 		};
