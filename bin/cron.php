@@ -55,15 +55,6 @@ try {
 	DebugLogModel::instance()->log('cron.php', 'ForumModel::instance()->opschonen()', array(), $e);
 }
 
-// FotoAlbum opschonen
-try {
-	require_once 'MVC/model/FotoAlbumModel.class.php';
-	FotoAlbumModel::instance()->cleanup();
-	FotoModel::instance()->cleanup();
-} catch (Exception $e) {
-	DebugLogModel::instance()->log('cron.php', 'Foto(Album)Model::instance()->cleanup()', array(), $e);
-}
-
 $finish = microtime(true) - $start;
 if (DEBUG) {
 	echo getDateTime() . ' Finished in ' . (int) $finish . " seconds.\r\n";

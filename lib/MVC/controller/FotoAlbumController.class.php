@@ -191,7 +191,7 @@ class FotoAlbumController extends AclController {
 		if ($album !== null AND $this->model->hernoemAlbum($album, $naam)) {
 			$this->view = new JsonResponse($album->getUrl());
 		} else {
-			$this->view = new JsonResponse('Fotoalbum hernoemen mislukt', 503);
+			$this->view = new JsonResponse('Fotoalbum hernoemen mislukt', 500);
 		}
 	}
 
@@ -203,7 +203,7 @@ class FotoAlbumController extends AclController {
 		if ($this->model->setAlbumCover($album, new Foto($filename, $album))) {
 			$this->view = new JsonResponse(true);
 		} else {
-			$this->view = new JsonResponse('Fotoalbum-cover instellen mislukt', 503);
+			$this->view = new JsonResponse('Fotoalbum-cover instellen mislukt', 500);
 		}
 	}
 
@@ -227,7 +227,7 @@ class FotoAlbumController extends AclController {
 			echo '<div id="' . md5($filename) . '" class="remove"></div>';
 			exit;
 		} else {
-			$this->view = new JsonResponse('Foto verwijderen mislukt', 503);
+			$this->view = new JsonResponse('Foto verwijderen mislukt', 500);
 		}
 	}
 

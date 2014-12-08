@@ -51,6 +51,8 @@ class FotoAlbumModel extends PersistenceModel {
 	}
 
 	public function verwerkFotos(FotoAlbum $fotoalbum) {
+		// verwijder niet bestaande subalbums en fotos uit de database
+		$this->cleanup($fotoalbum);
 		//define('RESIZE_OUTPUT', null);
 		//echo '<h1>Fotoalbum verwerken: ' . $album->dirname . '</h1>Dit kan even duren...<br />';
 		$iterator = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($fotoalbum->path, RecursiveDirectoryIterator::SKIP_DOTS | RecursiveDirectoryIterator::UNIX_PATHS), RecursiveIteratorIterator::SELF_FIRST);
@@ -128,6 +130,7 @@ HTML;
 		}
 		$oldpath = $album->path;
 		$album->path = str_replace($album->dirname, $nieuwenaam, $album->path);
+		$album->subdir = str_replace($album->subdir, $nieuwenaam, $album->path);
 		return rename($oldpath, $album->path);
 	}
 
@@ -161,10 +164,10 @@ HTML;
 		return $success;
 	}
 
-	public function cleanup() {
-		foreach ($this->find() as $album) {
+	public function cleanup(FotoAlbum $fotoalbum) {
+		foreach ($this->find('subdir LIKE ?', array($fotoalbum->subdir . '%')) as $album) {
 			if (!$album->exists()) {
-				foreach (FotoModel::instance()->find('subdir = ?', array($album->subdir)) as $foto) {
+				foreach (FotoModel::instance()->find('subdir LIKE ?', array($album->subdir . '%')) as $foto) {
 					FotoModel::instance()->delete($foto);
 				}
 				$this->delete($album);
@@ -224,14 +227,6 @@ class FotoModel extends PersistenceModel {
 			$this->delete($foto);
 		}
 		return $ret;
-	}
-
-	public function cleanup() {
-		foreach ($this->find() as $foto) {
-			if (!$foto->exists()) {
-				$this->delete($foto);
-			}
-		}
 	}
 
 }
