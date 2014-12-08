@@ -44,11 +44,13 @@
 			</div>
 		{/if}
 		<div class="maaltijdgegevens">
-			<div class="titel"><a href="/maaltijdenketzer">{$maaltijd->getTitel()}</a></div>
-			 van {$maaltijd->getDatum()|date_format:"%A %e %B"} {$maaltijd->getTijd()|date_format:"%H:%M"}
-			{if $maaltijd->getPrijs() !== $standaardprijs}
-				&nbsp; (&euro; {$maaltijd->getPrijsFloat()|string_format:"%.2f"})
-			{/if}
+			<div class="titel">
+				<a href="/maaltijdenketzer">{$maaltijd->getTitel()}</a>
+				{if $maaltijd->getPrijs() !== $standaardprijs}
+					&nbsp; (&euro; {$maaltijd->getPrijsFloat()|string_format:"%.2f"})
+				{/if}
+			</div>
+			van {$maaltijd->getDatum()|date_format:"%A %e %B"} {$maaltijd->getTijd()|date_format:"%H:%M"}
 			{if $maaltijd->magBekijken(LoginModel::getUid())}
 				<div class="float-right">
 					{icon get="paintcan" title=$maaltijd->maaltijdcorvee->getCorveeFunctie()->naam}
