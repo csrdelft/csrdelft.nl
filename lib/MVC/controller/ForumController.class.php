@@ -562,13 +562,6 @@ class ForumController extends Controller {
 			ForumDradenReagerenModel::instance()->setConcept($deel, $draad->draad_id, $tekst);
 		}
 
-		// voorkom ongesloten tags
-		$aantal = CsrBB::aantalOngeslotenTags($tekst);
-		if ($aantal > 0) {
-			setMelding('Uw bericht bevat een fout in de bbcode: ' . $aantal . ' ongesloten tags', -1);
-			redirect($url);
-		}
-
 		// externen checks
 		$mailadres = null;
 		$wacht_goedkeuring = false;
@@ -679,15 +672,7 @@ class ForumController extends Controller {
 			$this->geentoegang();
 		}
 		$tekst = trim(filter_input(INPUT_POST, 'forumBericht', FILTER_UNSAFE_RAW));
-
-		// voorkom ongesloten tags
-		$aantal = CsrBB::aantalOngeslotenTags($tekst);
-		if ($aantal > 0) {
-			$this->view = new JsonResponse('Uw bericht bevat een fout in de bbcode: ' . $aantal . ' ongesloten tags', 400);
-			return;
-		}
 		$reden = trim(filter_input(INPUT_POST, 'reden', FILTER_SANITIZE_STRING));
-
 		ForumPostsModel::instance()->bewerkForumPost($tekst, $reden, $post, $draad, $deel);
 		ForumDradenGelezenModel::instance()->setWanneerGelezenDoorLid($draad);
 		$this->view = new ForumPostView($post, $draad, $deel);
