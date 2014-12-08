@@ -178,8 +178,14 @@ class ForumController extends Controller {
 			$draden_delen = ForumDelenModel::instance()->zoeken($query, true, $datum, $ouder, $jaar, $limit);
 			foreach ($draden_delen[0] as $draad) {
 				$deel = $draden_delen[1][$draad->forum_id];
+				$url = '/forum/onderwerp/' . $draad->draad_id;
+				if (LidInstellingen::get('forum', 'open_draad_op_pagina') == 'ongelezen') {
+					$url .= '#ongelezen';
+				} elseif (LidInstellingen::get('forum', 'open_draad_op_pagina') == 'laatste') {
+					$url .= '#reageren';
+				}
 				$draden[] = array(
-					'url'	 => '/forum/onderwerp/' . $draad->draad_id,
+					'url'	 => $url,
 					'value'	 => $draad->titel . '<span class="lichtgrijs"> - ' . $deel->titel . '</span>'
 				);
 			}
