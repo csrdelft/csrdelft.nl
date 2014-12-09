@@ -120,7 +120,7 @@ JS;
 		return $html . '</select>';
 	}
 
-	private function getOptionsHtml(array $options) {
+	protected function getOptionsHtml(array $options) {
 		$html = '';
 		foreach ($options as $value => $description) {
 			$html .= '<option value="' . $value . '"';
@@ -248,20 +248,26 @@ class KerkField extends SelectField {
  */
 class KeuzeRondjeField extends SelectField {
 
+	public $type = 'radio';
+
 	public function __construct($name, $value, $description, array $options) {
 		parent::__construct($name, $value, $description, $options, array(), 1, false);
 	}
 
 	public function getHtml() {
-		$html = '<div class="KeuzeRondjeFieldOptions">';
-		foreach ($this->options as $value => $description) {
-			$html .= '<input type="radio" id="field_' . $this->getName() . '_option_' . $value . '" value="' . $value . '"' . $this->getInputAttribute(array('name', 'origvalue', 'class', 'disabled', 'readonly'));
+		return '<div class="KeuzeRondjeFieldOptions">' . $this->getOptionsHtml($this->options) . '</div>';
+	}
+
+	protected function getOptionsHtml(array $options) {
+		$html = '';
+		foreach ($options as $value => $description) {
+			$html .= '<input id="field_' . $this->getName() . '_option_' . $value . '" value="' . $value . '"' . $this->getInputAttribute(array('type', 'name', 'origvalue', 'class', 'disabled', 'readonly'));
 			if ($value == $this->value) {
 				$html .= ' checked="checked"';
 			}
 			$html .= '><label for="field_' . $this->getName() . '_option_' . $value . '" class="KeuzeRondjeLabel"> ' . htmlspecialchars($description) . '</label><br />';
 		}
-		return $html . '</div>';
+		return $html;
 	}
 
 }
@@ -504,6 +510,7 @@ class RequiredTijdField extends TijdField {
 
 class VinkField extends InputField {
 
+	public $type = 'checkbox';
 	public $label;
 
 	public function __construct($name, $value, $description, $label = null, $model = null) {
@@ -547,7 +554,7 @@ class VinkField extends InputField {
 	}
 
 	public function getHtml() {
-		$html = '<input type="checkbox"' . $this->getInputAttribute(array('id', 'name', 'value', 'origvalue', 'class', 'disabled', 'readonly'));
+		$html = '<input ' . $this->getInputAttribute(array('type', 'id', 'name', 'value', 'origvalue', 'class', 'disabled', 'readonly'));
 		if ($this->value) {
 			$html .= ' checked="checked" ';
 		}

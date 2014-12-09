@@ -43,6 +43,7 @@ abstract class InputField implements FormElement, Validator {
 	protected $name; // naam van het veld in POST
 	protected $value; // welke initiele waarde heeft het veld?
 	protected $origvalue; // welke originele waarde had het veld?
+	public $type = 'text'; // input type
 	public $title; // omschrijving bij mouseover title
 	public $description; // omschrijving in label
 	public $disabled = false; // veld uitgeschakeld?
@@ -83,11 +84,11 @@ abstract class InputField implements FormElement, Validator {
 		}
 		$this->description = $description;
 		// add *Field classname to css_classes
-		$this->css_classes[] = $this->getType();
+		$this->css_classes[] = get_class($this);
 	}
 
 	public function getType() {
-		return get_class($this);
+		return $this->type;
 	}
 
 	public function getModel() {
@@ -99,7 +100,7 @@ abstract class InputField implements FormElement, Validator {
 	}
 
 	public function getTitel() {
-		return $this->getType();
+		return $this->description;
 	}
 
 	public function getName() {
@@ -258,6 +259,13 @@ abstract class InputField implements FormElement, Validator {
 			case 'value': return 'value="' . htmlspecialchars($this->value) . '"';
 			case 'origvalue': return 'origvalue="' . htmlspecialchars($this->origvalue) . '"';
 			case 'name': return 'name="' . $this->name . '"';
+			case 'type':
+				if ($this->hidden) {
+					return 'hidden';
+				} else {
+					return $this->type;
+				}
+				break;
 			case 'title':
 				if ($this->title) {
 					return 'title="' . htmlspecialchars($this->title) . '"';
@@ -298,12 +306,7 @@ abstract class InputField implements FormElement, Validator {
 	}
 
 	public function getHtml() {
-		if ($this->hidden) {
-			$type = 'hidden';
-		} else {
-			$type = 'text';
-		}
-		return '<input type="' . $type . '"' . $this->getInputAttribute(array('id', 'name', 'class', 'value', 'origvalue', 'disabled', 'readonly', 'maxlength', 'placeholder', 'autocomplete')) . ' />';
+		return '<input ' . $this->getInputAttribute(array('type', 'id', 'name', 'class', 'value', 'origvalue', 'disabled', 'readonly', 'maxlength', 'placeholder', 'autocomplete')) . ' />';
 	}
 
 	/**
@@ -758,7 +761,7 @@ class EntityField extends InputField {
 		} else {
 			$show_value = $this->show_value;
 		}
-		$html = '<input type="text" name="' . $this->name . '_show" value="' . $show_value . '" origvalue="' . $this->show_value . '"' . $this->getInputAttribute(array('id', 'class', 'disabled', 'readonly', 'maxlength', 'placeholder', 'autocomplete')) . ' />';
+		$html = '<input name="' . $this->name . '_show" value="' . $show_value . '" origvalue="' . $this->show_value . '"' . $this->getInputAttribute(array('type', 'id', 'class', 'disabled', 'readonly', 'maxlength', 'placeholder', 'autocomplete')) . ' />';
 
 		// actual values
 		$class = $this->model->orm;
@@ -934,22 +937,16 @@ JS;
 
 	public function getHtml() {
 		$html = '';
-		if ($this->hidden) {
-			$type = 'hidden';
-		} else {
-			$type = 'text';
-
-			if (!$this->readonly AND ! $this->disabled AND ! $this->hidden) {
-				if ($this->min !== null AND $this->getValue() === $this->min) {
-					$class = 'class="disabled"';
-				} else {
-					$class = '';
-				}
-				$minus = CSR_PICS . '/knopjes/min.png';
-				$html .= <<<HTML
+		if (!$this->readonly AND ! $this->disabled AND ! $this->hidden) {
+			if ($this->min !== null AND $this->getValue() === $this->min) {
+				$class = 'class="disabled"';
+			} else {
+				$class = '';
+			}
+			$minus = CSR_PICS . '/knopjes/min.png';
+			$html .= <<<HTML
 <span id="substract_{$this->getId()}" {$class} style="cursor:pointer;padding:7px;"><img src="{$minus}" alt="-" class="icon" width="20" height="20" /></span>
 HTML;
-			}
 		}
 
 		$min = '';
@@ -987,7 +984,7 @@ JS;
 JS;
 		}
 
-		$html .= ' <input type="' . $type . '"' . $this->getInputAttribute(array('id', 'name', 'class', 'value', 'origvalue', 'disabled', 'readonly', 'maxlength', 'placeholder', 'autocomplete')) . $min . $max . ' /> ';
+		$html .= ' <input ' . $this->getInputAttribute(array('type', 'id', 'name', 'class', 'value', 'origvalue', 'disabled', 'readonly', 'maxlength', 'placeholder', 'autocomplete')) . $min . $max . ' /> ';
 
 		if (!$this->readonly AND ! $this->disabled AND ! $this->hidden) {
 			if ($this->max !== null AND $this->getValue() === $this->max) {
@@ -1111,12 +1108,7 @@ class BedragField extends DecimalField {
 	}
 
 	public function getHtml() {
-		if ($this->hidden) {
-			$type = 'hidden';
-		} else {
-			$type = 'text';
-		}
-		$html = $this->valuta . ' <input type="' . $type . '"' . $this->getInputAttribute(array('id', 'name', 'class', 'disabled', 'readonly', 'maxlength', 'placeholder', 'autocomplete'));
+		$html = $this->valuta . ' <input ' . $this->getInputAttribute(array('type', 'id', 'name', 'class', 'disabled', 'readonly', 'maxlength', 'placeholder', 'autocomplete'));
 		$html .= ' value="' . number_format(str_replace(',', '.', $this->value), $this->precision, ',', '') . '" origvalue="';
 		// if an error occured do not re-format the original value
 		// prevent unchanged is not smart enough for rounding and such
@@ -1150,9 +1142,6 @@ class NickField extends TextField {
 	}
 
 	public function validate() {
-		if (!$this->model instanceof Lid) {
-			throw new Exception($this->getType() . ' moet een Lid-object meekrijgen');
-		}
 		if (!parent::validate()) {
 			return false;
 		}
@@ -1186,9 +1175,6 @@ class DuckField extends TextField {
 	}
 
 	public function validate() {
-		if (!$this->model instanceof Lid) {
-			throw new Exception($this->getType() . ' moet een Lid-object meekrijgen');
-		}
 		if (!parent::validate()) {
 			return false;
 		}
@@ -1312,10 +1298,11 @@ class RequiredCsrBBPreviewField extends CsrBBPreviewField {
 
 class WachtwoordField extends TextField {
 
+	public $type = 'password';
 	public $enter_submit = true;
 
 	public function getHtml() {
-		return '<input type="password"' . $this->getInputAttribute(array('id', 'name', 'class', 'value', 'origvalue', 'disabled', 'readonly', 'maxlength', 'placeholder', 'autocomplete')) . ' />';
+		return '<input ' . $this->getInputAttribute(array('type', 'id', 'name', 'class', 'value', 'origvalue', 'disabled', 'readonly', 'maxlength', 'placeholder', 'autocomplete')) . ' />';
 	}
 
 }
@@ -1364,9 +1351,6 @@ class WachtwoordWijzigenField extends InputField {
 	}
 
 	public function validate() {
-		if (!$this->model instanceof Lid) {
-			throw new Exception($this->getType() . ' moet een Lid-object meekrijgen');
-		}
 		if (!parent::validate()) {
 			return false;
 		}

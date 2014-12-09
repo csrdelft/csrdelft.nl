@@ -152,6 +152,8 @@ class DocumentController extends Controller {
 			//maak een nieuw, leeg document aan.
 			$this->document = new Document(0);
 		}
+		$formulier = new Formulier(null, 'documentForm', '/communicatie/documenten/bewerken/' . $this->document->getId());
+		$this->view = $formulier;
 		if (isset($_GET['catID']) AND DocumentenCategorie::exists($_GET['catID'])) {
 			$this->document->setCatID($_GET['catID']);
 		}
@@ -163,13 +165,15 @@ class DocumentController extends Controller {
 		if (!file_exists($bestand->directory . $bestand->filename)) {
 			$bestand = null;
 		}
+		$map = new Map();
+		$map->path = PUBLIC_FTP . 'documenten/';
+		$map->dirname = basename($map->path);
 		$fields['catID'] = new SelectField('catID', $this->document->getCatID(), 'Categorie', $namen);
 		$fields['naam'] = new RequiredTextField('naam', $this->document->getNaam(), 'Documentnaam');
-		$fields['uploader'] = new RequiredFileField('document', $bestand, 'documenten/');
+		$fields['uploader'] = new RequiredFileField('document', $bestand, $map);
 		$fields['rechten'] = new RechtenField('leesrechten', $this->document->getLeesrechten(), 'Leesrechten');
 		$fields['rechten']->readonly = true;
 		$fields['btn'] = new FormDefaultKnoppen('/communicatie/documenten/');
-		$formulier = new Formulier(null, 'documentForm', '/communicatie/documenten/bewerken/' . $this->document->getId());
 		$formulier->addFields($fields);
 		if ($this->document->getID() == 0) {
 			$formulier->titel = 'Document toevoegen';
@@ -182,13 +186,13 @@ class DocumentController extends Controller {
 			$this->document->setNaam($fields['naam']->getValue());
 			$this->document->setCatID($fields['catID']->getValue());
 			// Als we al een bestand hebben voor dit document, moet die natuurlijk eerst hdb.
-			if ($fields['uploader']->getType() !== 'BestandBehouden') {
+			if (get_class($fields['uploader']) !== 'BestandBehouden') {
 				if ($this->document->hasFile()) {
 					try {
 						$this->document->deleteFile();
 					} catch (Exception $e) {
 						setMelding($e->getMessage(), -1);
-						redirect($this->baseurl);
+						return;
 					}
 				}
 				$bestand = $fields['uploader']->getModel();
@@ -210,10 +214,9 @@ class DocumentController extends Controller {
 			} else {
 				setMelding('Fout bij toevoegen van document Document::save()', -1);
 			}
-			redirect($this->baseurl);
+			return;
 		}
 		setMelding($this->errors, -1);
-		$this->view = $formulier;
 	}
 
 }
