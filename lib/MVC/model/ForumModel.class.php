@@ -691,32 +691,30 @@ class ForumDradenModel extends AbstractForumModel implements Paging {
 		ForumDelenModel::instance()->update($deel);
 	}
 
-	public function zoeken($query, $datum, $ouder, $jaar, $limit) {
+	public function zoeken($query, $datumsoort, $ouder, $jaar, $limit) {
 		$this->per_pagina = (int) $limit;
 		$attributes = array('*', 'MATCH(titel) AGAINST (? IN BOOLEAN MODE) AS score');
-		$where = 'wacht_goedkeuring = FALSE AND verwijderd = FALSE AND ';
-		if ($datum === 'gemaakt') {
-			$order = 'datum_tijd';
-		} else {
-			$order = 'laatst_gewijzigd';
-		}
-		$where .= $order;
-		$order .= ' DESC, score DESC';
-		if ($ouder === 'ouder') {
-			$where .= ' < ?';
-		} else {
-			$where .= ' > ?';
-		}
-		$where .= 'HAVING score > 0';
-		$datum = getDateTime(strtotime('-' . $jaar . ' year'));
 		$terms = explode(' ', $query);
 		foreach ($terms as $i => $term) {
 			if (!endsWith($term, '*')) {
-				$terms[$i] .= '*'; // append wildcard
+				$terms[$i] = ' +' . $term . '*'; // set terms to AND & append wildcard
 			}
 		}
-		$query = implode(' +', $terms); // set terms to AND
-		$results = Database::sqlSelect($attributes, $this->orm->getTableName(), $where, array($query, $datum), $order, null, $this->per_pagina, ($this->pagina - 1) * $this->per_pagina);
+		$where_params = array($terms);
+		$where = 'wacht_goedkeuring = FALSE AND verwijderd = FALSE';
+		$order = 'score DESC';
+		if (is_int($jaar) AND in_array($datumsoort, array('datum_tijd', 'laatst_gewijzigd'))) {
+			$order .=', ' . $datumsoort . ' DESC';
+			$where .= ' AND ' . $datumsoort;
+			if ($ouder === 'ouder') {
+				$where .= ' < ?';
+			} else {
+				$where .= ' > ?';
+			}
+			$where_params[] = getDateTime(strtotime('-' . $jaar . ' year'));
+		}
+		$where .= ' HAVING score > 0';
+		$results = Database::sqlSelect($attributes, $this->orm->getTableName(), $where, $where_params, $order, null, $this->per_pagina, ($this->pagina - 1) * $this->per_pagina);
 		$results->setFetchMode(PDO::FETCH_CLASS, self::orm, array($cast = true));
 		return $results;
 	}
@@ -962,23 +960,24 @@ class ForumPostsModel extends AbstractForumModel implements Paging {
 		ForumDradenModel::instance()->hertellenVoorDeel($deel);
 	}
 
-	public function zoeken($query, $datum, $ouder, $jaar, $limit) {
+	public function zoeken($query, $datumsoort, $ouder, $jaar, $limit) {
 		$this->per_pagina = (int) $limit;
 		$attributes = array('*', 'MATCH(tekst) AGAINST (? IN NATURAL LANGUAGE MODE) AS score');
-		$where = 'wacht_goedkeuring = FALSE AND verwijderd = FALSE AND ';
-		if ($datum === 'gemaakt') {
-			$where .= 'datum_tijd';
-		} else {
-			$where .= 'laatst_gewijzigd';
+		$where = 'wacht_goedkeuring = FALSE AND verwijderd = FALSE';
+		$where_params = array($query);
+		$order = 'score DESC';
+		if (is_int($jaar) AND in_array($datumsoort, array('datum_tijd', 'laatst_gewijzigd'))) {
+			$order .= ', ' . $datumsoort . ' DESC';
+			$where .= ' AND ' . $datumsoort;
+			if ($ouder === 'ouder') {
+				$where .= $datumsoort . ' < ?';
+			} else {
+				$where .= $datumsoort . ' > ?';
+			}
+			$where_params[] = getDateTime(strtotime('-' . $jaar . ' year'));
 		}
-		if ($ouder === 'ouder') {
-			$where .= ' < ?';
-		} else {
-			$where .= ' > ?';
-		}
-		$datum = getDateTime(strtotime('-' . $jaar . ' year'));
 		$where .= ' HAVING score > 0';
-		$results = Database::sqlSelect($attributes, $this->orm->getTableName(), $where, array($query, $datum), 'score DESC', null, $this->per_pagina, ($this->pagina - 1) * $this->per_pagina);
+		$results = Database::sqlSelect($attributes, $this->orm->getTableName(), $where, $where_params, $order, null, $this->per_pagina, ($this->pagina - 1) * $this->per_pagina);
 		$results->setFetchMode(PDO::FETCH_CLASS, self::orm, array($cast = true));
 		return $results;
 	}

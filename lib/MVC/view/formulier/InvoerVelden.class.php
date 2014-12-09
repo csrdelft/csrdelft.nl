@@ -261,11 +261,11 @@ abstract class InputField implements FormElement, Validator {
 			case 'name': return 'name="' . $this->name . '"';
 			case 'type':
 				if ($this->hidden) {
-					return 'hidden';
+					$type = 'hidden';
 				} else {
-					return $this->type;
+					$type = $this->type;
 				}
-				break;
+				return 'type="' . $type . '"';
 			case 'title':
 				if ($this->title) {
 					return 'title="' . htmlspecialchars($this->title) . '"';
@@ -1386,9 +1386,9 @@ class WachtwoordWijzigenField extends InputField {
 			$html .= '<label for="' . $this->getId() . '_current">Huidige wachtwoord</label>';
 			$html .= '<input type="password" autocomplete="off" id="' . $this->getId() . '_current" name="' . $this->name . '_current" /></div>';
 		}
-		$html .= '<div class="password"><label for="' . $this->getId() . '_new">Nieuw wachtwoord</label>';
+		$html .= '<div class="WachtwoordField"><label for="' . $this->getId() . '_new">Nieuw wachtwoord</label>';
 		$html .= '<input type="password" autocomplete="off" id="' . $this->getId() . '_new" name="' . $this->name . '_new" /></div>';
-		$html .= '<div class="password"><label for="' . $this->getId() . '_confirm">Nogmaals</label>';
+		$html .= '<div class="WachtwoordField"><label for="' . $this->getId() . '_confirm">Nogmaals</label>';
 		$html .= '<input type="password" autocomplete="off" id="' . $this->getId() . '_confirm" name="' . $this->name . '_confirm" /></div>';
 		return $html;
 	}
@@ -1424,7 +1424,7 @@ class ObjectIdField extends InputField {
 	public function getHtml() {
 		$html = '';
 		foreach ($this->value as $i => $value) {
-			$html .= '<input type="hidden" name="' . $this->name . '[]" value="' . $value . '" />';
+			$html .= '<input name="' . $this->name . '[]" ' . $this->getInputAttribute(array('type', 'value')) . ' />';
 		}
 		return $html;
 	}

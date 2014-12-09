@@ -32,7 +32,7 @@ class FileField extends KeuzeRondjeField {
 	 */
 	private $filterMime;
 
-	public function __construct($name, Bestand $bestand = null, Map $dir = null, array $filterMime = array(), $multiple = false) {
+	public function __construct($name, $description, Bestand $bestand = null, Map $dir = null, array $filterMime = array(), $multiple = false) {
 		$this->filterMime = $filterMime;
 		$behouden = new BestandBehouden($name . 'b', $this->filterMime, $bestand);
 		$http = new UploadHttp($name . 'h', $this->filterMime, $multiple);
@@ -44,12 +44,13 @@ class FileField extends KeuzeRondjeField {
 			get_class($existing) => $existing,
 			get_class($url)		 => $url
 		);
-		$default = null;
+		$selected = null;
 		$opties = array();
 		foreach ($this->uploaders as $methode => $uploader) {
 			if ($uploader->isAvailable()) {
-				if (!isset($default)) {
-					$default = $methode;
+				if (!isset($selected)) {
+					$selected = $methode;
+					$uploader->selected = true;
 				}
 				$opties[$methode] = $uploader->getTitel();
 				$this->uploaders[$methode]->required = $this->required; // FIXME: not all required at the same time...
@@ -57,7 +58,7 @@ class FileField extends KeuzeRondjeField {
 				unset($this->uploaders[$methode]);
 			}
 		}
-		parent::__construct($name, $default, null, $opties);
+		parent::__construct($name, $selected, $description, $opties);
 	}
 
 	public function isPosted() {
@@ -147,33 +148,9 @@ class FileField extends KeuzeRondjeField {
 		$this->uploaders[$this->value]->opslaan($destination, $filename, $overwrite);
 	}
 
-	public function getBreadcrumbs() {
-		return null;
-	}
-
-	public function getHtml() {
-		$html = '';
-		foreach ($this->uploaders as $methode => $uploader) {
-			$html .= $uploader->getDiv();
-			$html .= $uploader->getLabel();
-			$html .= $uploader->getErrorDiv();
-			$html .= $uploader->getHtml();
-			if ($uploader->preview) {
-				$html .= $uploader->getPreviewDiv();
-			}
-			$html .= '</div>';
-		}
-		return $html;
-	}
-
-	public function view() {
-		echo $this->getHtml();
-	}
-
 	public function getJavascript() {
-		return <<<JS
+		return parent::getJavascript() . <<<JS
 
-/* {$this->name} */
 jQuery('input.UploadOptie').change(function() {
 	var optie = jQuery('input.UploadOptie:checked');
 	optie.addClass('verborgen');
@@ -183,7 +160,7 @@ jQuery('input.UploadOptie').change(function() {
 	keuze.slideDown(250);
 });
 jQuery('.btn.reset').click(function() {
-	jQuery('#{$this->name}BestandBehoudenOptie').click();
+	jQuery('#{$this->getId()}').click();
 });
 JS;
 	}
@@ -203,8 +180,8 @@ class ImageField extends FileField {
 	protected $maxWidth;
 	protected $maxHeight;
 
-	public function __construct($name, Afbeelding $behouden = null, $ftpSubDir = null, array $filterMime = null, $multiple = false, $minWidth = null, $minHeight = null, $maxWidth = null, $maxHeight = null) {
-		parent::__construct($name, $behouden, $ftpSubDir, ($filterMime === null ? Afbeelding::$mimeTypes : $filterMime), $multiple);
+	public function __construct($name, $description, Afbeelding $behouden = null, $ftpSubDir = null, array $filterMime = null, $multiple = false, $minWidth = null, $minHeight = null, $maxWidth = null, $maxHeight = null) {
+		parent::__construct($name, $description, $behouden, $ftpSubDir, ($filterMime === null ? Afbeelding::$mimeTypes : $filterMime), $multiple);
 		$this->minWidth = $minWidth;
 		$this->minHeight = $minHeight;
 		$this->maxWidth = $maxWidth;
@@ -284,13 +261,7 @@ class BestandBehouden extends InputField {
 	}
 
 	public function getHtml() {
-		$html = '<div class="UploadKeuze';
-		if (!$this->selected) {
-			$html .= ' verborgen';
-		}
-		$html .= '" id="' . $this->getId() . 'Keuze">';
-		$html .= '<div id="' . $this->getId() . '" class="BestandBehoudenNaam">' . $this->model->filename . ' (' . format_filesize($this->model->filesize) . ')</div>';
-		return $html . '</div>';
+		return '<div id="' . $this->getId() . '" class="BestandBehouden">' . $this->model->filename . ' (' . format_filesize($this->model->filesize) . ')</div>';
 	}
 
 }
@@ -362,19 +333,14 @@ class UploadHttp extends InputField {
 	}
 
 	public function getHtml() {
-		$html = '<div class="UploadKeuze';
-		if (!$this->selected) {
-			$html .= ' verborgen';
-		}
-		$html .= '" id="' . $this->getId() . 'Keuze">';
-		$html .= '<input ' . $this->getInputAttribute(array('type', 'id', 'name', 'class', 'value', 'origvalue', 'disabled', 'readonly')) . ' accept="' . implode('|', $this->filterMime) . '"' . ($this->multiple ? ' multiple' : '') . ' />';
-		return $html . '</div>';
+		return '<input ' . $this->getInputAttribute(array('type', 'id', 'name', 'class', 'value', 'origvalue', 'disabled', 'readonly')) . ' accept="' . implode('|', $this->filterMime) . '"' . ($this->multiple ? ' multiple' : '') . ' />';
 	}
 
 	public function getJavascript() {
 		$max = getMaximumFileUploadSize();
 		$format = format_filesize($max);
 		return parent::getJavascript() . <<<JS
+
 if (typeof FileReader !== 'undefined') {
 	if (document.getElementById('{$this->getId()}').files[0].size > {$max}) {
 		alert('Bestand is te groot: Maximaal {$format}');
@@ -475,19 +441,11 @@ class UploadExisting extends SelectField {
 	}
 
 	public function getHtml() {
-		$html = '<div class="UploadKeuze';
-		if (!$this->selected) {
-			$html .= ' verborgen';
-		}
-		$html .= '" id="' . $this->getId() . 'Keuze">';
 		if (sizeof($this->options) > 0) {
-			$html .= parent::getHtml();
-			$html .= '<br />';
-			$html .= $this->verplaats->getHtml();
+			return parent::getHtml() . '<br />' . $this->verplaats->getHtml();
 		} else {
-			$html .= 'Geen bestanden gevonden in:<br />' . str_replace(PUBLIC_FTP, 'ftp://csrdelft.nl/incoming/csrdelft/', $this->dir->path);
+			return 'Geen bestanden gevonden in:<br />' . str_replace(PUBLIC_FTP, 'ftp://csrdelft.nl/incoming/csrdelft/', $this->dir->path);
 		}
-		return $html . '</div>';
 	}
 
 }
@@ -578,13 +536,7 @@ class UploadUrl extends TextField {
 	}
 
 	public function getHtml() {
-		$html = '<div class="UploadKeuze';
-		if (!$this->selected) {
-			$html .= ' verborgen';
-		}
-		$html .= '" id="' . $this->getId() . 'Keuze">';
-		$html .= '<input ' . $this->getInputAttribute(array('type', 'id', 'name', 'class', 'value', 'origvalue', 'disabled', 'readonly')) . '/>';
-		return $html . '</div>';
+		return '<input ' . $this->getInputAttribute(array('type', 'id', 'name', 'class', 'value', 'origvalue', 'disabled', 'readonly')) . '/>';
 	}
 
 }

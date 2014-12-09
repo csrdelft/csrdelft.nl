@@ -255,7 +255,7 @@ class KeuzeRondjeField extends SelectField {
 	}
 
 	public function getHtml() {
-		return '<div class="KeuzeRondjeFieldOptions">' . $this->getOptionsHtml($this->options) . '</div>';
+		return '<div class="KeuzeRondjeOptions">' . $this->getOptionsHtml($this->options) . '</div>';
 	}
 
 	protected function getOptionsHtml(array $options) {

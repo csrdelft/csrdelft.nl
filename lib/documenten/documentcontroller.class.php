@@ -170,7 +170,7 @@ class DocumentController extends Controller {
 		$map->dirname = basename($map->path);
 		$fields['catID'] = new SelectField('catID', $this->document->getCatID(), 'Categorie', $namen);
 		$fields['naam'] = new RequiredTextField('naam', $this->document->getNaam(), 'Documentnaam');
-		$fields['uploader'] = new RequiredFileField('document', $bestand, $map);
+		$fields['uploader'] = new RequiredFileField('document', 'Document', $bestand, $map);
 		$fields['rechten'] = new RechtenField('leesrechten', $this->document->getLeesrechten(), 'Leesrechten');
 		$fields['rechten']->readonly = true;
 		$fields['btn'] = new FormDefaultKnoppen('/communicatie/documenten/');

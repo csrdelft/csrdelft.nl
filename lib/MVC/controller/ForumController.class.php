@@ -149,7 +149,7 @@ class ForumController extends Controller {
 		} else {
 			$query = urldecode($query);
 			$query = filter_var($query, FILTER_SANITIZE_SPECIAL_CHARS);
-			$datum = 'reactie';
+			$datum = 'laatst_gewijzigd';
 			$ouder = 'jonger';
 			$jaar = 1;
 		}
@@ -168,9 +168,9 @@ class ForumController extends Controller {
 		if ($query !== null) {
 			$query = urldecode($query);
 			$query = filter_var($query, FILTER_SANITIZE_SPECIAL_CHARS);
-			$datum = 'reactie';
-			$ouder = 'jonger';
-			$jaar = 1;
+			$datum = 'laatst_gewijzigd';
+			$ouder = 'ouder';
+			$jaar = 0;
 			$limit = 5;
 			if (isset($_GET['limit'])) {
 				$limit = (int) filter_input(INPUT_GET, 'limit');
