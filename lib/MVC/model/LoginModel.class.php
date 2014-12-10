@@ -285,6 +285,7 @@ class LoginModel extends PersistenceModel implements Validator {
 
 		// Subject Assignment:
 		$this->setLid($lid);
+		LidInstellingen::instance()->prefetch('uid = ?', array($lid->getUid()));
 
 		if ($uid != 'x999') {
 			// Login sessie aanmaken in database
@@ -300,9 +301,6 @@ class LoginModel extends PersistenceModel implements Validator {
 				$this->create($session);
 			}
 		}
-
-		LidInstellingen::instance()->prefetch('uid = ?', array($uid));
-
 		return true;
 	}
 
