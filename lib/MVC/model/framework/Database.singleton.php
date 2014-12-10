@@ -68,7 +68,7 @@ class Database extends PDO {
 		$q = self::interpolateQuery($query, $params);
 		self::$queries[] = $q;
 
-		$trace = $q . "\n";
+		$trace = $q . "\n\n";
 		foreach (debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS) as $i => $t) {
 			$trace .= '#' . $i . ' ';
 			if (isset($t['file'])) {
