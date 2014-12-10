@@ -8,7 +8,7 @@ require_once 'configuratie.include.php';
  * googlemaps-probeerseltje.
  * 
  */
-if (!LoginModel::mag('P_LEDEN_READ')) {
+if (!LoginModel::mag('P_LEDEN_READ') OR ! LoginModel::mag('P_OUDLEDEN_READ')) {
 	redirect(CSR_ROOT);
 }
 
@@ -83,7 +83,7 @@ if (isset($_GET['xml'])) {
 					map.addControl(new GMapTypeControl());
 					var geocoder = new GClientGeocoder();
 					var randomnumber = Math.floor(Math.random() * 11111)
-					GDownloadUrl("/tools/ledenkaart.php?xml=true&random=" + randomnumber, function(data, responseCode) {
+					GDownloadUrl("/tools/ledenkaart.php?xml=true&random=" + randomnumber, function (data, responseCode) {
 						var xml = GXml.parse(data);
 
 						//store markers in markers array
@@ -114,7 +114,7 @@ if (isset($_GET['xml'])) {
 			//Create marker and set up event window
 			function createMarker(point, html, label) {
 				var marker = new GMarker(point);
-				GEvent.addListener(marker, "click", function() {
+				GEvent.addListener(marker, "click", function () {
 					marker.openInfoWindowHtml(html);
 				});
 				// save the info we need to use later for the side_bar
@@ -132,7 +132,7 @@ if (isset($_GET['xml'])) {
 			function showAddress(map, geocoder, address, html, label) {
 				geocoder.getLatLng(
 						address,
-						function(point) {
+						function (point) {
 							if (!point) {
 								//  alert(address + " niet gevonden");
 							} else {

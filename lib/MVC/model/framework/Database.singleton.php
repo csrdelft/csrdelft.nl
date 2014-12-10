@@ -64,6 +64,8 @@ class Database extends PDO {
 		foreach (debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS) as $i => $t) {
 			if (isset($t['file'], $t['line'], $t['class'], $t['function'])) {
 				$trace .= '#' . $i . ' ' . $t['file'] . '(' . $t['line'] . '): ' . $t['class'] . '->' . $t['function'] . "\n";
+			} else {
+				$trace .= $t;
 			}
 		}
 		self::$queries[] = array(

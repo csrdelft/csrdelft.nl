@@ -2,13 +2,13 @@
 require_once('BBCodeParser2/HTML/BBCodeParser2.php');
 require_once 'configuratie.include.php';
 
-if (!LoginModel::mag('P_LEDEN_READ')) {
+if (!LoginModel::mag('P_LEDEN_READ') OR ! LoginModel::mag('P_OUDLEDEN_READ')) {
 	echo 'Niet voldoende rechten';
 	exit;
 }
 
 /* get options from the ini file */
-$config = parse_ini_file(LIB_PATH.'BBCodeParser2/HTML/CSRBBCodeSettings.ini', true);
+$config = parse_ini_file(LIB_PATH . 'BBCodeParser2/HTML/CSRBBCodeSettings.ini', true);
 $options = $config['toolsbbcodeparser'];
 
 /* do yer stuff! */
@@ -16,33 +16,32 @@ $parser = new HTML_BBCodeParser2($options);
 $parser->setText($_GET['string']);
 $parser->parse();
 $parsed = $parser->getParsed();
-
 ?>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
-<head>
-<title>HTML_BBCodeParser2 (by Stijn de Reede)</title>
-</head>
-<body>
-<form method='get' action='bbcodeparser.php'>
-<table border='1' cellpadding='5' cellspacing='0'>
-<tr><td valign='top'>
-input:<br/>
-<textarea cols='70' rows='20' name='string'><?php echo @$_GET['string']?></textarea><br/>
-<td valign='top'>
-ouput:<br/>
-<textarea cols='70' rows='20'><?php echo htmlentities($parsed, ENT_QUOTES)?></textarea><br/>
-</tr>
-<tr><td valign='top' colspan='2' align='center'>
-<input type='submit' value='          parse          '><br/>
-</tr>
-<tr><td valign='top' colspan='2'>
-<?php echo $parsed?>
-</tr>
-<tr>
-<td colspan='2'>
-possible codes:
-<pre>
+	<head>
+		<title>HTML_BBCodeParser2 (by Stijn de Reede)</title>
+	</head>
+	<body>
+		<form method='get' action='bbcodeparser.php'>
+			<table border='1' cellpadding='5' cellspacing='0'>
+				<tr><td valign='top'>
+						input:<br/>
+						<textarea cols='70' rows='20' name='string'><?php echo @$_GET['string'] ?></textarea><br/>
+					<td valign='top'>
+						ouput:<br/>
+						<textarea cols='70' rows='20'><?php echo htmlentities($parsed, ENT_QUOTES) ?></textarea><br/>
+				</tr>
+				<tr><td valign='top' colspan='2' align='center'>
+						<input type='submit' value='          parse          '><br/>
+				</tr>
+				<tr><td valign='top' colspan='2'>
+						<?php echo $parsed ?>
+				</tr>
+				<tr>
+					<td colspan='2'>
+						possible codes:
+						<pre>
 [b]bold[/b]
 [i]italic[/i]
 [u]underline[/u]
@@ -106,8 +105,8 @@ guest@anonymous.org
     [/list][/li]
 [li]ordered item 2[/li]
 [/list]
-</pre>
-</tr>
-</table>
-</form>
+						</pre>
+				</tr>
+			</table>
+		</form>
 </html>

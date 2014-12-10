@@ -8,7 +8,7 @@ require_once 'configuratie.include.php';
 # -------------------------------------------------------------------
 # Geeft de leden, gastleden, kringels en novieten terug in een csv-bestand.
 
-if (!LoginModel::mag('P_LEDEN_READ')) {
+if (!LoginModel::mag('P_LEDEN_READ') OR ! LoginModel::mag('P_OUDLEDEN_READ')) {
 	redirect(CSR_ROOT);
 }
 

@@ -4,7 +4,7 @@ require_once 'configuratie.include.php';
 require_once 'lid/ledenlijstcontent.class.php';
 require_once 'groepen/groep.class.php';
 
-if (!(LoginModel::mag('P_LOGGED_IN') AND LoginModel::mag('P_LEDEN_READ') AND LoginModel::mag('P_OUDLEDEN_READ'))) {
+if (!LoginModel::mag('P_LOGGED_IN') OR ! LoginModel::mag('P_LEDEN_READ') OR ! LoginModel::mag('P_OUDLEDEN_READ')) {
 	# geen rechten
 	echo 'false';
 	exit;

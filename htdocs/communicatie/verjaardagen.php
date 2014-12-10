@@ -3,16 +3,15 @@
 require_once 'configuratie.include.php';
 require_once 'lid/verjaardag.class.php';
 
-if (LoginModel::mag('P_LEDEN_READ')) {
-	# Het middenstuk
-	require_once 'lid/verjaardagcontent.class.php';
-	$midden = new VerjaardagContent('alleverjaardagen');
-} else {
+if (!LoginModel::mag('P_LEDEN_READ') OR ! LoginModel::mag('P_OUDLEDEN_READ')) {
 	# geen rechten
 	require_once 'MVC/model/CmsPaginaModel.class.php';
 	require_once 'MVC/view/CmsPaginaView.class.php';
-	$midden = new CmsPaginaView(CmsPaginaModel::instance()->getPagina('geentoegang'));
+	$body = new CmsPaginaView(CmsPaginaModel::instance()->getPagina('geentoegang'));
+} else {
+	require_once 'lid/verjaardagcontent.class.php';
+	$body = new VerjaardagContent('alleverjaardagen');
 }
 
-$pagina = new CsrLayoutPage($midden);
+$pagina = new CsrLayoutPage($body);
 $pagina->view();
