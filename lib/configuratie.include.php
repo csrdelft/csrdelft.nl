@@ -23,13 +23,6 @@ function fatal_handler(Exception $ex = null) {
 			if (LoginModel::mag('P_LOGGED_IN')) {
 				echo str_replace('#', '<br />#', $ex); // stacktrace
 			}
-			if (LoginModel::mag('P_ADMIN') OR LoginModel::instance()->isSued()) {
-				debugprint(Database::getQueries());
-				debugprint(Database::getTrace());
-				require_once 'MVC/model/framework/DatabaseAdmin.singleton.php';
-				echo '<p>DatabaseAdmin queries:</p>';
-				debugprint(DatabaseAdmin::getQueries());
-			}
 		} catch (Exception $e) {
 			echo $e->getMessage();
 		}

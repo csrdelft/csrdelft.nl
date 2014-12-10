@@ -22,8 +22,8 @@
 					<td id="mainright">
 						<div id="page-top"><div class="breadcrumbs">{$breadcrumbs}</div></div>
 						{$body->view()}
-						{if $smarty.const.DEBUG AND (LoginModel::mag('P_ADMIN') OR LoginModel::instance()->isSued())}
-							<div><a id="mysql_debug_toggle" onclick="$(this).replaceWith($('#mysql_debug').toggle());">DEBUG</a></div>
+						{if LoginModel::mag('P_ADMIN') OR LoginModel::instance()->isSued()}
+							<div class="clear"><a id="mysql_debug_toggle" onclick="$(this).replaceWith($('#mysql_debug').toggle());">DEBUG</a></div>
 						{/if}
 					</td>
 				</tr>
@@ -33,7 +33,7 @@
 		{if isset($minion)}
 			{$minion}
 		{/if}
-		{if $smarty.const.DEBUG AND (LoginModel::mag('P_ADMIN') OR LoginModel::instance()->isSued())}
+		{if LoginModel::mag('P_ADMIN') OR LoginModel::instance()->isSued()}
 			<div id="mysql_debug" class="pre">{getDebug()}</div>
 		{/if}
 		<div id="modal-background"{if isset($modal)} style="display: block;"{/if}></div>
