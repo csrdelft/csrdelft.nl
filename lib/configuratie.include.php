@@ -111,9 +111,6 @@ require_once 'icon.class.php';
 # Controller
 require_once 'MVC/controller/AclController.abstract.php';
 
-# Prefetch
-Instellingen::instance()->prefetch();
-
 # Router
 switch (constant('MODE')) {
 	case 'CLI':
@@ -141,6 +138,8 @@ switch (constant('MODE')) {
 		if (session_id() == 'deleted') {
 			session_regenerate_id();
 		}
+		# Prefetch
+		Instellingen::instance()->prefetch();
 		LidInstellingen::instance()->prefetch('uid = ?', array(LoginModel::getUid()));
 
 		# database modus meldingen
