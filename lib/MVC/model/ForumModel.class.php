@@ -183,17 +183,13 @@ class ForumDelenModel extends AbstractForumModel {
 		}
 	}
 
-	public function getForumDelenById(array $ids) {
+	public function getForumDelenById(array $ids, $where = '', array $where_params = array()) {
 		$count = count($ids);
 		if ($count < 1) {
 			return array();
 		}
 		$in = implode(', ', array_fill(0, $count, '?'));
-
-		debugprint($in);
-		debugprint($ids);
-
-		return group_by_distinct('forum_id', $this->find('forum_id IN (' . $in . ')', $ids));
+		return group_by_distinct('forum_id', $this->find('forum_id IN (' . $in . ')' . $where, array_merge($ids, $where_params)));
 	}
 
 	public function getRecent($belangrijk = null) {
