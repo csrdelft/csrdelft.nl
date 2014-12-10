@@ -39,7 +39,8 @@ class MenuModel extends CachedPersistenceModel {
 			$result = $this->getCached($key, true);
 			// inladen van memcache in runtime cache
 			if (!$this->isCached($key, false)) {
-				$this->cacheResult($this->getList($result), false);
+				$cached = $this->cacheResult($this->getList($result), false);
+				var_dump($cached);
 			}
 			return $result;
 		}
