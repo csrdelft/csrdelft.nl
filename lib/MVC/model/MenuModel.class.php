@@ -87,7 +87,6 @@ class MenuModel extends CachedPersistenceModel {
 		foreach ($list as $child) {
 			$list = array_merge($list, $this->getList($child));
 		}
-		$list[] = $parent;
 		return $list;
 	}
 
