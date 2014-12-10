@@ -70,7 +70,6 @@ class MenuModel extends CachedPersistenceModel {
 	 */
 	public function getTree(MenuItem $parent) {
 		foreach ($parent->getChildren() as $child) {
-			var_dump($child);
 			$this->getTree($child);
 		}
 		return $parent;
@@ -79,14 +78,15 @@ class MenuModel extends CachedPersistenceModel {
 	/**
 	 * Flatten tree structure.
 	 * 
-	 * @param MenuItem $root
+	 * @param MenuItem $parent
 	 * @return MenuItem[]
 	 */
-	public function getList(MenuItem $root) {
-		$list = $root->getChildren();
+	public function getList(MenuItem $parent) {
+		$list = $parent->getChildren();
 		foreach ($list as $child) {
 			$list = array_merge($list, $this->getList($child));
 		}
+		$list[] = $parent;
 		return $list;
 	}
 
