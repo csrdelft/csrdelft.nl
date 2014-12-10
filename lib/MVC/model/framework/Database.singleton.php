@@ -65,14 +65,15 @@ class Database extends PDO {
 	 * @param array $params
 	 */
 	private static function addQuery($query, array $params) {
+		$trace = '';
 		foreach (debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS) as $backtrace) {
 			if (strpos($backtrace['file'], 'PersistenceModel') OR strpos($backtrace['file'], 'Database')) {
 				continue;
 			}
-			$trace = $backtrace['file'] . ':' . $backtrace['line'];
-			self::$queries[$trace][self::$counter] = self::interpolateQuery($query, $params);
-			return self::$counter++;
+			$trace = basename($backtrace['file']) . '(' . $backtrace['line'] . '): ' . $trace;
 		}
+		self::$queries[$trace][self::$counter] = self::interpolateQuery($query, $params);
+		return self::$counter++;
 	}
 
 	/**
