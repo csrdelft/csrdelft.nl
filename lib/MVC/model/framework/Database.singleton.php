@@ -45,6 +45,7 @@ class Database extends PDO {
 	 * @var array
 	 */
 	private static $queries = array();
+	private static $trace = array();
 
 	/**
 	 * Get array of SQL statements for debug
@@ -52,6 +53,10 @@ class Database extends PDO {
 	 */
 	public static function getQueries() {
 		return self::$queries;
+	}
+
+	public static function getTrace() {
+		return self::$trace;
 	}
 
 	/**
@@ -78,10 +83,8 @@ class Database extends PDO {
 			}
 			$trace .= "\n";
 		}
-		self::$queries[] = array(
-			'SQL'	 => self::interpolateQuery($query, $params),
-			'trace'	 => $trace
-		);
+		self::$queries[] = self::interpolateQuery($query, $params);
+		self::$trace[] = $trace;
 	}
 
 	/**
