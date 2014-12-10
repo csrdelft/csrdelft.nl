@@ -82,8 +82,6 @@ class LoginModel extends PersistenceModel implements Validator {
 			}
 		}
 		$this->logBezoek();
-
-		LidInstellingen::instance()->prefetch('uid = ?', array($uid));
 	}
 
 	/**
@@ -128,7 +126,6 @@ class LoginModel extends PersistenceModel implements Validator {
 			if (isset($_SESSION['_suedFrom'])) {
 				$this->suedFrom = LidCache::getLid($_SESSION['_suedFrom']);
 			}
-
 			return true;
 		}
 		return false;
@@ -303,6 +300,9 @@ class LoginModel extends PersistenceModel implements Validator {
 				$this->create($session);
 			}
 		}
+
+		LidInstellingen::instance()->prefetch('uid = ?', array($uid));
+
 		return true;
 	}
 
