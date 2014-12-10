@@ -51,14 +51,6 @@ class LoginModel extends PersistenceModel implements Validator {
 	protected function __construct() {
 		parent::__construct();
 
-		/**
-		 * Werkomheen
-		 * @source www.nabble.com/problem-with-sessions-in-1.4.8-t2550641.html
-		 */
-		if (session_id() == 'deleted') {
-			session_regenerate_id();
-		}
-
 		// Staat er een gebruiker in de sessie?
 		if (!$this->validate()) {
 			// zo nee, dan nobody user er in gooien...

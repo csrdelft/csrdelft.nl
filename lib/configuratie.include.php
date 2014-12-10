@@ -134,6 +134,14 @@ switch (constant('MODE')) {
 		session_name('PHPSESSID');
 		session_set_cookie_params(1036800, '/', '', false, false);
 		session_start();
+		/**
+		 * Werkomheen
+		 * @source www.nabble.com/problem-with-sessions-in-1.4.8-t2550641.html
+		 */
+		if (session_id() == 'deleted') {
+			session_regenerate_id();
+		}
+		LoginModel::instance();
 
 		# database modus meldingen
 		if (DB_MODIFY OR DB_DROP) {
