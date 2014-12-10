@@ -65,7 +65,10 @@ class Database extends PDO {
 	 * @param array $params
 	 */
 	private static function addQuery($query, array $params) {
-		$trace = "\n";
+		$q = self::interpolateQuery($query, $params);
+		self::$queries[] = $q;
+
+		$trace = $q . "\n";
 		foreach (debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS) as $i => $t) {
 			$trace .= '#' . $i . ' ';
 			if (isset($t['file'])) {
@@ -83,7 +86,6 @@ class Database extends PDO {
 			}
 			$trace .= "\n";
 		}
-		self::$queries[] = self::interpolateQuery($query, $params);
 		self::$trace[] = $trace;
 	}
 
