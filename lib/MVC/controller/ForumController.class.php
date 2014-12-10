@@ -169,8 +169,8 @@ class ForumController extends Controller {
 			$query = urldecode($query);
 			$query = filter_var($query, FILTER_SANITIZE_SPECIAL_CHARS);
 			$datum = 'laatst_gewijzigd';
-			$ouder = 'ouder';
-			$jaar = 0;
+			$ouder = 'jonger';
+			$jaar = null;
 			$limit = 5;
 			if (isset($_GET['limit'])) {
 				$limit = (int) filter_input(INPUT_GET, 'limit');
@@ -184,9 +184,18 @@ class ForumController extends Controller {
 				} elseif (LidInstellingen::get('forum', 'open_draad_op_pagina') == 'laatste') {
 					$url .= '#reageren';
 				}
+				if ($draad->gesloten) {
+					$icon = '<img src="http://plaetjes.csrdelft.nl/famfamfam/lock.png" width="16" height="16" alt="slotje" title="Dit onderwerp is gesloten, u kunt niet meer reageren" class="icon"> ';
+				} elseif ($draad->belangrijk) {
+					$icon = '<img src="http://plaetjes.csrdelft.nl/famfamfam/asterisk_orange.png" width="16" height="16" alt="belangrijk" title="Dit onderwerp is door het bestuur aangemerkt als belangrijk." class="icon"> ';
+				} elseif ($draad->plakkerig) {
+					$icon = '<img src="http://plaetjes.csrdelft.nl/famfamfam/note.png" width="16" height="16" alt="plakkerig" title="Dit onderwerp is plakkerig, het blijft bovenaan." class="icon"> ';
+				} else {
+					$icon = '';
+				}
 				$draden[] = array(
 					'url'	 => $url,
-					'value'	 => $draad->titel . '<span class="lichtgrijs"> - ' . $deel->titel . '</span>'
+					'value'	 => $icon . $draad->titel . '<span class="lichtgrijs"> - ' . $deel->titel . '</span>'
 				);
 			}
 		}

@@ -713,6 +713,7 @@ class ForumDradenModel extends AbstractForumModel implements Paging {
 			}
 			$where_params[] = getDateTime(strtotime('-' . $jaar . ' year'));
 		}
+		$order .= ', plakkerig DESC, belangrijk DESC';
 		$where .= ' HAVING score > 0';
 		$results = Database::sqlSelect($attributes, $this->orm->getTableName(), $where, $where_params, $order, null, $this->per_pagina, ($this->pagina - 1) * $this->per_pagina);
 		$results->setFetchMode(PDO::FETCH_CLASS, self::orm, array($cast = true));
