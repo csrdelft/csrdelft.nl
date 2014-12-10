@@ -65,7 +65,7 @@ class Database extends PDO {
 			if (isset($t['file'], $t['line'], $t['class'], $t['function'])) {
 				$trace .= '#' . $i . ' ' . $t['file'] . '(' . $t['line'] . '): ' . $t['class'] . '->' . $t['function'] . "\n";
 			} else {
-				$trace .= $t;
+				$trace .= print_r($t, true);
 			}
 		}
 		self::$queries[] = array(
