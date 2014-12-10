@@ -54,6 +54,12 @@ class Database extends PDO {
 		return self::$queries;
 	}
 
+	private static function addQuery($query, $params) {
+		$backtrace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 2);
+		$trace = $backtrace[1]['file'] . ':' . $backtrace[1]['line'];
+		self::$queries[$trace][] = self::interpolateQuery($query->queryString, $params);
+	}
+
 	/**
 	 * @source http://stackoverflow.com/a/1376838
 	 * 
@@ -114,7 +120,7 @@ class Database extends PDO {
 		}
 		$query = self::instance()->prepare($sql);
 		$query->execute($params);
-		self::$queries[] = self::interpolateQuery($query->queryString, $params);
+		self::addQuery($query->queryString, $params);
 		return $query;
 	}
 
@@ -134,7 +140,7 @@ class Database extends PDO {
 		$sql .= ')';
 		$query = self::instance()->prepare($sql);
 		$query->execute($params);
-		self::$queries[] = self::interpolateQuery($query->queryString, $params);
+		self::addQuery($query->queryString, $params);
 		return (boolean) $query->fetchColumn();
 	}
 
@@ -163,7 +169,7 @@ class Database extends PDO {
 		$sql .= ' VALUES (' . implode(', ', array_keys($insert_params)) . ')'; // named params
 		$query = self::instance()->prepare($sql);
 		$query->execute($insert_params);
-		self::$queries[] = self::interpolateQuery($query->queryString, $insert_params);
+		self::addQuery($query->queryString, $insert_params);
 		if ($query->rowCount() !== 1) {
 			throw new Exception('sqlInsert rowCount=' . $query->rowCount());
 		}
@@ -209,7 +215,7 @@ class Database extends PDO {
 		}
 		$query = self::instance()->prepare($sql);
 		$query->execute($insert_values);
-		self::$queries[] = self::interpolateQuery($query->queryString, $insert_values);
+		self::addQuery($query->queryString, $insert_values);
 		return $query->rowCount();
 	}
 
@@ -241,7 +247,7 @@ class Database extends PDO {
 		}
 		$query = self::instance()->prepare($sql);
 		$query->execute($where_params);
-		self::$queries[] = self::interpolateQuery($query->queryString, $where_params);
+		self::addQuery($query->queryString, $where_params);
 		return $query->rowCount();
 	}
 
@@ -262,7 +268,7 @@ class Database extends PDO {
 		}
 		$query = self::instance()->prepare($sql);
 		$query->execute($where_params);
-		self::$queries[] = self::interpolateQuery($query->queryString, $where_params);
+		self::addQuery($query->queryString, $where_params);
 		return $query->rowCount();
 	}
 
