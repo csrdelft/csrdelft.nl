@@ -82,6 +82,8 @@ class LoginModel extends PersistenceModel implements Validator {
 			}
 		}
 		$this->logBezoek();
+
+		LidInstellingen::instance()->prefetch('uid = ?', array($uid));
 	}
 
 	/**
@@ -361,7 +363,6 @@ class LoginModel extends PersistenceModel implements Validator {
 		$this->loggedinLid = $lid;
 		$uid = $lid->getUid();
 		$_SESSION['_uid'] = $uid;
-		LidInstellingen::instance()->prefetch('uid = ?', array($uid));
 	}
 
 	public function isAuthenticatedByToken() {
