@@ -653,17 +653,8 @@ function getMaximumFileUploadSize() {
 	return min(convertPHPSizeToBytes(ini_get('post_max_size')), convertPHPSizeToBytes(ini_get('upload_max_filesize')));
 }
 
-function getDebug($sql = true, $sqltrace = true, $get = true, $post = true, $files = true, $cookie = true, $session = true) {
+function getDebug($get = true, $post = true, $files = true, $cookie = true, $session = true, $sql = true, $sqltrace = true) {
 	$debug = '';
-	if ($sql) {
-		$debug .= '<hr />SQL<hr />';
-		require_once 'MVC/model/framework/DatabaseAdmin.singleton.php';
-		$debug .= htmlspecialchars(print_r(array("Admin" => DatabaseAdmin::getQueries(), "PDO" => Database::getQueries(), "MySql" => MijnSqli::instance()->getQueries()), true));
-	}
-	if ($sqltrace) {
-		$debug .= '<hr />SQL-backtrace<hr />';
-		$debug .= htmlspecialchars(print_r(Database::getTrace(), true));
-	}
 	if ($get) {
 		$debug .= '<hr />GET<hr />';
 		if (count($_GET) > 0) {
@@ -693,6 +684,15 @@ function getDebug($sql = true, $sqltrace = true, $get = true, $post = true, $fil
 		if (count($_SESSION) > 0) {
 			$debug .= htmlspecialchars(print_r($_SESSION, true));
 		}
+	}
+	if ($sql) {
+		$debug .= '<hr />SQL<hr />';
+		require_once 'MVC/model/framework/DatabaseAdmin.singleton.php';
+		$debug .= htmlspecialchars(print_r(array("Admin" => DatabaseAdmin::getQueries(), "PDO" => Database::getQueries(), "MySql" => MijnSqli::instance()->getQueries()), true));
+	}
+	if ($sqltrace) {
+		$debug .= '<hr />SQL-backtrace<hr />';
+		$debug .= htmlspecialchars(print_r(Database::getTrace(), true));
 	}
 	return $debug;
 }
