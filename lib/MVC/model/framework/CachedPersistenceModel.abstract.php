@@ -111,7 +111,7 @@ abstract class CachedPersistenceModel extends PersistenceModel {
 	/**
 	 * Find and cache existing entities with optional search criteria.
 	 * Retrieves all attributes.
-	 * Cache prefetch resultset in memcache.
+	 * Cache prefetch zonder criteria in memcache.
 	 * 
 	 * @param string $criteria WHERE
 	 * @param array $criteria_params optional named parameters
@@ -122,16 +122,17 @@ abstract class CachedPersistenceModel extends PersistenceModel {
 	 * @return array
 	 */
 	public function prefetch($criteria = null, array $criteria_params = array(), $orderby = null, $groupby = null, $limit = null, $start = 0) {
+		$memcache = empty($criteria) AND empty($criteria_params) AND empty($orderby) AND empty($groupby) AND empty($limit) AND empty($start);
 		$key = $this->prefetchKey($criteria, $criteria_params, $orderby, $groupby, $limit, $start);
-		if ($this->isCached($key, true)) {
-			$result = $this->getCached($key, true);
+		if ($this->isCached($key, $memcache)) {
+			$result = $this->getCached($key, $memcache);
 		} else {
 			$result = $this->find($criteria, $criteria_params, $orderby, $groupby, $limit, $start);
 		}
 		// inladen van memcache in runtime cache
 		$cached = $this->cacheResult($result, false);
 		if ($result instanceof PDOStatement) {
-			$this->setCache($key, $cached, true);
+			$this->setCache($key, $cached, $memcache);
 		}
 		return $cached;
 	}
