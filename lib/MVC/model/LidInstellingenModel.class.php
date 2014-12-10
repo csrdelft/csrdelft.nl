@@ -95,7 +95,7 @@ class LidInstellingen extends Instellingen {
 	}
 
 	protected function cacheKey(array $primary_key_values) {
-		return parent::cacheKey($primary_key_values) . '-' . LoginModel::getUid();
+		return parent::cacheKey($primary_key_values) . LoginModel::getUid();
 	}
 
 	protected function retrieveByPrimaryKey(array $primary_key_values) {
