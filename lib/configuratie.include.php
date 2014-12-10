@@ -26,6 +26,7 @@ function fatal_handler() {
 		$debug['GET'] = $_GET;
 		$debug['SERVER'] = $_SERVER;
 		if ($error['type'] === E_CORE_ERROR OR $error['type'] === E_ERROR) {
+
 			if (DEBUG) {
 				DebugLogModel::instance()->log(__FILE__, 'fatal_handler', func_get_args(), print_r($debug, true));
 			} else {
@@ -37,6 +38,18 @@ function fatal_handler() {
 					$subject .= filter_var($_SERVER['SCRIPT_URL'], FILTER_SANITIZE_URL);
 				}
 				mail('pubcie@csrdelft.nl', $subject, print_r($debug, true), implode("\r\n", $headers));
+			}
+
+			try {
+				if (LoginModel::mag('P_ADMIN') OR LoginModel::instance()->isSued()) {
+					echo str_replace('#', '<br />#', $e); // stacktrace
+					debugprint(Database::getQueries());
+					require_once 'MVC/model/framework/DatabaseAdmin.singleton.php';
+					echo '<p>DatabaseAdmin queries:</p>';
+					debugprint(DatabaseAdmin::getQueries());
+				}
+			} catch (Exception $e) {
+				echo $e->getMessage();
 			}
 		}
 	}

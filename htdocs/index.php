@@ -63,16 +63,5 @@ try {
 	// einde MVC
 } catch (Exception $e) {
 	http_response_code($e->getCode() >= 400 ? $e->getCode() : 500);
-	try {
-		if (LoginModel::mag('P_ADMIN') OR LoginModel::instance()->isSued()) {
-			echo str_replace('#', '<br />#', $e); // stacktrace
-
-			require_once 'MVC/model/framework/DatabaseAdmin.singleton.php';
-			echo '<p>DatabaseAdmin queries:</p>';
-			debugprint(DatabaseAdmin::getQueries());
-		}
-		DebugLogModel::instance()->log('index.php', 'new ' . $class, array(REQUEST_URI), $e);
-	} catch (Exception $e) {
-		echo $e->getMessage();
-	}
+	fatal_handler();
 }
