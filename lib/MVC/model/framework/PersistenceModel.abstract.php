@@ -64,11 +64,10 @@ abstract class PersistenceModel implements Persistence {
 		try {
 			$result = Database::sqlSelect(array('*'), $this->orm->getTableName(), $criteria, $criteria_params, $orderby, $groupby, $limit, $start);
 			$result->setFetchMode(PDO::FETCH_CLASS, static::orm, array($cast = true));
+			return $result;
 		} catch (PDOException $ex) {
 			fatal_handler($ex);
-			$result = array();
 		}
-		return $result;
 	}
 
 	/**
