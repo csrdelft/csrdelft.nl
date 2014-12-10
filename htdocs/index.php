@@ -63,5 +63,5 @@ try {
 	// einde MVC
 } catch (Exception $e) {
 	http_response_code($e->getCode() >= 400 ? $e->getCode() : 500);
-	fatal_handler();
+	fatal_handler($e);
 }

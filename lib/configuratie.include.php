@@ -12,10 +12,24 @@
 
 register_shutdown_function('fatal_handler');
 
-function fatal_handler() {
+function fatal_handler(Exception $ex = null) {
 
 	if (TIME_MEASURE) {
 		TimerModel::instance()->log();
+	}
+
+	if ($ex instanceof Exception) {
+		try {
+			if (LoginModel::mag('P_ADMIN') OR LoginModel::instance()->isSued()) {
+				echo str_replace('#', '<br />#', $e); // stacktrace
+				debugprint(Database::getQueries());
+				require_once 'MVC/model/framework/DatabaseAdmin.singleton.php';
+				echo '<p>DatabaseAdmin queries:</p>';
+				debugprint(DatabaseAdmin::getQueries());
+			}
+		} catch (Exception $e) {
+			echo $e->getMessage();
+		}
 	}
 
 	$error = error_get_last();
@@ -38,18 +52,6 @@ function fatal_handler() {
 					$subject .= filter_var($_SERVER['SCRIPT_URL'], FILTER_SANITIZE_URL);
 				}
 				mail('pubcie@csrdelft.nl', $subject, print_r($debug, true), implode("\r\n", $headers));
-			}
-
-			try {
-				if (LoginModel::mag('P_ADMIN') OR LoginModel::instance()->isSued()) {
-					echo str_replace('#', '<br />#', $e); // stacktrace
-					debugprint(Database::getQueries());
-					require_once 'MVC/model/framework/DatabaseAdmin.singleton.php';
-					echo '<p>DatabaseAdmin queries:</p>';
-					debugprint(DatabaseAdmin::getQueries());
-				}
-			} catch (Exception $e) {
-				echo $e->getMessage();
 			}
 		}
 	}
