@@ -97,12 +97,6 @@ class LoginModel extends PersistenceModel implements Validator {
 		$lid = LidCache::getLid($_SESSION['_uid']);
 		if ($lid instanceof Lid) {
 
-			// Subject Assignment:
-			$this->setLid($lid);
-			if (isset($_SESSION['_suedFrom'])) {
-				$this->suedFrom = LidCache::getLid($_SESSION['_suedFrom']);
-			}
-
 			// Check login session
 			$session = $this->retrieveByPrimaryKey(array(session_id()));
 			if (!$session) {
@@ -125,6 +119,12 @@ class LoginModel extends PersistenceModel implements Validator {
 			// Controleer consistentie van ingelogd lid:
 			elseif ($session->uid != $lid->getUid()) {
 				return false;
+			}
+
+			// Subject Assignment:
+			$this->setLid($lid);
+			if (isset($_SESSION['_suedFrom'])) {
+				$this->suedFrom = LidCache::getLid($_SESSION['_suedFrom']);
 			}
 
 			return true;
