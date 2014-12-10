@@ -60,9 +60,13 @@ class Database extends PDO {
 	 * @param array $params
 	 */
 	private static function addQuery($query, array $params) {
+		// nice formatting
+		ob_start();
+		debug_print_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS);
+		$trace = ob_get_clean();
 		self::$queries[] = array(
 			'SQL'	 => self::interpolateQuery($query, $params),
-			'trace'	 => debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS)
+			'trace'	 => $trace
 		);
 	}
 
