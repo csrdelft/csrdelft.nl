@@ -17,6 +17,11 @@ require_once 'MVC/model/CsrMemcache.singleton.php';
 abstract class CachedPersistenceModel extends PersistenceModel {
 
 	private $runtime_cache = array();
+	/**
+	 * Store prefetch resultset as a whole in memcache
+	 * @var boolean
+	 */
+	protected $memcache_prefetch = false;
 
 	/**
 	 * Calculate key for caching.
@@ -111,7 +116,7 @@ abstract class CachedPersistenceModel extends PersistenceModel {
 	/**
 	 * Find and cache existing entities with optional search criteria.
 	 * Retrieves all attributes.
-	 * Cache prefetch zonder criteria in memcache.
+	 * Optional: store resultset as a whole in memcache.
 	 * 
 	 * @param string $criteria WHERE
 	 * @param array $criteria_params optional named parameters
@@ -122,17 +127,15 @@ abstract class CachedPersistenceModel extends PersistenceModel {
 	 * @return array
 	 */
 	public function prefetch($criteria = null, array $criteria_params = array(), $orderby = null, $groupby = null, $limit = null, $start = 0) {
-		$memcache = empty($criteria) AND empty($criteria_params) AND empty($orderby) AND empty($groupby) AND empty($limit) AND empty($start);
 		$key = $this->prefetchKey($criteria, $criteria_params, $orderby, $groupby, $limit, $start);
-		if ($this->isCached($key, $memcache)) {
-			$result = $this->getCached($key, $memcache);
+		if ($this->isCached($key, $this->memcache_prefetch)) {
+			$result = $this->getCached($key, $this->memcache_prefetch);
 		} else {
 			$result = $this->find($criteria, $criteria_params, $orderby, $groupby, $limit, $start);
 		}
-		// inladen van memcache in runtime cache
 		$cached = $this->cacheResult($result, false);
 		if ($result instanceof PDOStatement) {
-			$this->setCache($key, $cached, $memcache);
+			$this->setCache($key, $cached, $this->memcache_prefetch);
 		}
 		return $cached;
 	}
@@ -163,7 +166,7 @@ abstract class CachedPersistenceModel extends PersistenceModel {
 	 */
 	public function prefetchSparse(array $attributes, $criteria = null, array $criteria_params = array(), $orderby = null, $groupby = null, $limit = null, $start = 0) {
 		$result = $this->findSparse($attributes, $criteria, $criteria_params, $orderby, $groupby, $limit, $start);
-		return $this->cacheResult($result);
+		return $this->cacheResult($result, false);
 	}
 
 	/**

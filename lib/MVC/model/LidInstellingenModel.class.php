@@ -91,6 +91,16 @@ class LidInstellingen extends Instellingen {
 	);
 
 	/**
+	 * Override key for caching prefetch resultset.
+	 * 
+	 * @param array $params
+	 * @return string
+	 */
+	private function prefetchKey($criteria, array $criteria_params, $orderby, $groupby, $limit, $start) {
+		return LoginModel::getUid() . parent::prefetchKey($criteria, $criteria_params, $orderby, $groupby, $limit, $start);
+	}
+
+	/**
 	 * Functie getInstelling aanvullen met uid.
 	 * 
 	 * @param array $primary_key_values

@@ -11,6 +11,11 @@ class Instellingen extends CachedPersistenceModel {
 	const orm = 'Instelling';
 
 	protected static $instance;
+	/**
+	 * Store instellingen array as a whole in memcache
+	 * @var boolean
+	 */
+	protected $memcache_prefetch = true;
 
 	public static function has($module, $id) {
 		return isset(static::$defaults[$module][$id]);
