@@ -91,15 +91,6 @@ class LidInstellingen extends Instellingen {
 	);
 
 	/**
-	 * Cache instellingen in memcache.
-	 * 
-	 * @return string
-	 */
-	protected function prefetchKey() {
-		return parent::prefetchKey() . LoginModel::getUid();
-	}
-
-	/**
 	 * Functie getInstelling aanvullen met uid.
 	 * 
 	 * @param array $primary_key_values

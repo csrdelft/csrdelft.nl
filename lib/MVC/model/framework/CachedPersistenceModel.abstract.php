@@ -22,7 +22,7 @@ abstract class CachedPersistenceModel extends PersistenceModel {
 	 * Calculate key for caching.
 	 * 
 	 * @param array $primary_key_values
-	 * @return int
+	 * @return string
 	 */
 	private function cacheKey(array $primary_key_values) {
 		return static::orm . crc32(implode('-', $primary_key_values));
@@ -111,6 +111,7 @@ abstract class CachedPersistenceModel extends PersistenceModel {
 	/**
 	 * Find and cache existing entities with optional search criteria.
 	 * Retrieves all attributes.
+	 * Cache prefetch resultset in memcache.
 	 * 
 	 * @param string $criteria WHERE
 	 * @param array $criteria_params optional named parameters
@@ -121,8 +122,29 @@ abstract class CachedPersistenceModel extends PersistenceModel {
 	 * @return array
 	 */
 	public function prefetch($criteria = null, array $criteria_params = array(), $orderby = null, $groupby = null, $limit = null, $start = 0) {
-		$result = $this->find($criteria, $criteria_params, $orderby, $groupby, $limit, $start);
-		return $this->cacheResult($result);
+		$key = $this->prefetchKey($criteria, $criteria_params, $orderby, $groupby, $limit, $start);
+		if ($this->isCached($key, true)) {
+			$result = $this->getCached($key, true);
+		} else {
+			$result = $this->find($criteria, $criteria_params, $orderby, $groupby, $limit, $start);
+		}
+		// inladen van memcache in runtime cache
+		$cached = $this->cacheResult($result, false);
+		if ($result instanceof PDOStatement) {
+			$this->setCache($key, $cached, true);
+		}
+		return $cached;
+	}
+
+	/**
+	 * Calculate key for caching prefetch resultset.
+	 * 
+	 * @param array $params
+	 * @return string
+	 */
+	private function prefetchKey($criteria, array $criteria_params, $orderby, $groupby, $limit, $start) {
+		$params = array($criteria, implode('+', $criteria_params), $orderby, $groupby, $limit, $start);
+		return get_class($this) . crc32(implode('-', $params));
 	}
 
 	/**
