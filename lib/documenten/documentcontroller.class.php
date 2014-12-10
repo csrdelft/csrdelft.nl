@@ -85,16 +85,14 @@ class DocumentController extends Controller {
 		$this->loadDocument();
 		try {
 			if ($this->document->delete()) {
-				setMelding('Document is met succes verwijderd.', 1);
-				redirect($this->baseurl);
+				setMelding('Document is met succes verwijderd', 1);
 			} else {
 				setMelding('Document is niet verwijderd. Gaat mis in (Document::delete())', -1);
-				redirect($this->baseurl);
 			}
 		} catch (Exception $e) {
 			setMelding('Document is niet verwijderd: ' . $e->getMessage(), -1);
-			redirect($this->baseurl);
 		}
+		redirect('/communicatie/documenten/' . $this->document->getCatID());
 	}
 
 	public function bekijken() {

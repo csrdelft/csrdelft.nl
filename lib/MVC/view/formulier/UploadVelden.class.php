@@ -330,6 +330,9 @@ $('#{$this->getId()}').change(function() {
 	for (i = 0; i < this.files.length; i++) { 
 		if (this.files[i].size > {$max}) {
 			alert(this.files[i].name + ' is te groot: Maximaal {$format}');
+			if (this.files.length <= 1) {
+				$(this).val('');
+			}
 		}
 	}
 });
@@ -383,7 +386,7 @@ class ExistingFileField extends SelectField {
 				}
 			}
 		}
-		$this->verplaats = new VinkField($name . 'verplaats', false, null, 'Bestand verplaatsen');
+		$this->verplaats = new VinkField($this->name . '_BV', false, null, 'Bestand verplaatsen');
 		if ($this->isPosted()) {
 			$finfo = finfo_open(FILEINFO_MIME_TYPE);
 			$mimetype = finfo_file($finfo, $this->dir->path . $this->value);
@@ -432,9 +435,11 @@ class ExistingFileField extends SelectField {
 		if (false === @chmod($destination . $filename, 0644)) {
 			throw new Exception('Geen eigenaar van bestand: ' . htmlspecialchars($destination . $filename));
 		}
-		// Moeten we het bestand ook verwijderen uit de publieke ftp?
-		if (isset($_POST[$this->name . 'VerwijderVanFtp'])) {
-			unlink($this->dir->path . $this->model->filename);
+		if ($this->verplaats->getValue()) {
+			$moved = unlink($this->dir->path . $this->model->filename);
+			if (!$moved) {
+				throw new Exception('Verplaatsen mislukt: ' . htmlspecialchars($this->dir->path . $this->model->filename));
+			}
 		}
 	}
 
