@@ -66,24 +66,24 @@ class MenuModel extends CachedPersistenceModel {
 	/**
 	 * Build tree structure.
 	 * 
-	 * @param MenuItem $parent
-	 * @return MenuItem $parent
+	 * @param MenuItem $root
+	 * @return MenuItem $root
 	 */
-	public function getTree(MenuItem $parent) {
-		foreach ($parent->getChildren() as $child) {
+	public function getTree(MenuItem $root) {
+		foreach ($root->getChildren() as $child) {
 			$this->getTree($child);
 		}
-		return $parent;
+		return $root;
 	}
 
 	/**
 	 * Flatten tree structure.
 	 * 
-	 * @param MenuItem $parent
+	 * @param MenuItem $root
 	 * @return MenuItem[]
 	 */
-	public function getList(MenuItem $parent) {
-		$list = $parent->getChildren();
+	public function getList(MenuItem $root) {
+		$list = $root->getChildren();
 		foreach ($list as $child) {
 			$list = array_merge($list, $this->getList($child));
 		}

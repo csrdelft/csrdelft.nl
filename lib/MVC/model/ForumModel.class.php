@@ -20,6 +20,11 @@ class ForumModel extends AbstractForumModel {
 
 	protected static $instance;
 	protected $default_order = 'volgorde ASC';
+	/**
+	 * Store categorien array as a whole in memcache
+	 * @var boolean
+	 */
+	protected $memcache_prefetch = true;
 
 	/**
 	 * Eager loading of ForumDeel[].
