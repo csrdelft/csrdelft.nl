@@ -123,7 +123,7 @@ thisDropzone = new Dropzone('#{$this->getFormId()}', {
 		});
 	}
 });
-showExisting_{$this->dropzone->getName()} = function (){
+showExisting_{$this->getFormId()} = function (){
 	$.post('{$existing}', function (data) {
 		$.each(data, function (key, value) {
 			mockFile = { name: value.name, size: value.size, type: value.type };
