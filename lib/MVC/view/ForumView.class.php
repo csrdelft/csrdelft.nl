@@ -123,7 +123,7 @@ class ForumDeelForm extends ModalForm {
 		$this->titel = 'Deelforum beheren';
 		$this->css_classes[] = 'ReloadPage PreventUnchanged';
 
-		$categorien = ForumModel::instance()->find(null, array(), 'volgorde ASC');
+		$categorien = ForumModel::instance()->prefetch();
 		$lijst = array();
 		foreach ($categorien as $cat) {
 			$lijst[$cat->categorie_id] = $cat->titel;

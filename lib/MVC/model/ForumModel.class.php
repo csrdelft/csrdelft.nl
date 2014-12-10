@@ -19,6 +19,7 @@ class ForumModel extends AbstractForumModel {
 	const orm = 'ForumCategorie';
 
 	protected static $instance;
+	protected $default_order = 'volgorde ASC';
 
 	/**
 	 * Eager loading of ForumDeel[].
@@ -27,7 +28,7 @@ class ForumModel extends AbstractForumModel {
 	 */
 	public function getForumIndeling() {
 		$delen = ForumDelenModel::instance()->getAlleForumDelenPerCategorie();
-		$categorien = $this->find(null, array(), 'volgorde ASC');
+		$categorien = $this->prefetch();
 		$result = array();
 		foreach ($categorien as $cat) {
 			if ($cat->magLezen()) {
@@ -94,9 +95,10 @@ class ForumDelenModel extends AbstractForumModel {
 	const orm = 'ForumDeel';
 
 	protected static $instance;
+	protected $default_order = 'volgorde ASC';
 
 	public function getAlleForumDelenPerCategorie() {
-		$delen = $this->find(null, array(), 'volgorde ASC');
+		$delen = $this->prefetch();
 		$result = array();
 		foreach ($delen as $deel) {
 			if ($deel->magLezen()) {
@@ -107,7 +109,7 @@ class ForumDelenModel extends AbstractForumModel {
 	}
 
 	public function getForumDelenVoorCategorie(ForumCategorie $cat) {
-		return $this->find('categorie_id = ?', array($cat->categorie_id), 'volgorde ASC');
+		return $this->prefetch('categorie_id = ?', array($cat->categorie_id));
 	}
 
 	public function getForumDelenVoorLid($rss) {
