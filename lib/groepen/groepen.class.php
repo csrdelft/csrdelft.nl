@@ -458,6 +458,8 @@ class Groepen {
 		$result = $db->query($query);
 		if ($db->numRows($result) > 0) {
 			while ($prop = $db->next($result)) {
+				//$status = str_split($prop['status']);
+				//$status = '<span class="lichtgrijs">' . $status[0] . '.' . $status[1] . '. </span>';
 				$groepen[] = array(
 					'url'	 => '/actueel/groepen/' . $prop['type'] . '/' . $prop['id'],
 					'value'	 => $prop['naam'] . '<span class="lichtgrijs"> - ' . $prop['type'] . '</span>',
