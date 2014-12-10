@@ -21,7 +21,7 @@ function fatal_handler(Exception $ex = null) {
 	if ($ex instanceof Exception) {
 		try {
 			if (LoginModel::mag('P_ADMIN') OR LoginModel::instance()->isSued()) {
-				echo str_replace('#', '<br />#', $e); // stacktrace
+				echo str_replace('#', '<br />#', $ex); // stacktrace
 				debugprint(Database::getQueries());
 				require_once 'MVC/model/framework/DatabaseAdmin.singleton.php';
 				echo '<p>DatabaseAdmin queries:</p>';
