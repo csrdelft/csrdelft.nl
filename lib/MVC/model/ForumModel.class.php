@@ -764,7 +764,7 @@ class ForumDradenModel extends AbstractForumModel implements Paging {
 		$forum_ids_stub = implode(', ', array_fill(0, $count, '?'));
 		$forum_ids = array_keys($delen);
 		$params = array_merge($forum_ids, $forum_ids);
-		$verbergen = ForumDradenVerbergenModel::instance()->find('uid = ?', array(LoginModel::getUid()));
+		$verbergen = ForumDradenVerbergenModel::instance()->prefetch('uid = ?', array(LoginModel::getUid()));
 		$draden_ids = array_keys(group_by_distinct('draad_id', $verbergen));
 		$count = count($draden_ids);
 		if ($count > 0) {
