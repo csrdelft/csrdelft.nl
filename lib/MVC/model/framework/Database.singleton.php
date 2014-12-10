@@ -61,8 +61,10 @@ class Database extends PDO {
 	 */
 	private static function addQuery($query, array $params) {
 		$trace = "\n";
-		foreach (debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS) as $i => $backtrace) {
-			$trace .= '#' . $i . ' ' . $backtrace['file'] . '(' . $backtrace['line'] . '): ' . $backtrace['class'] . '->' . $backtrace['function'] . "\n";
+		foreach (debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS) as $i => $t) {
+			if (isset($t['file'], $t['line'], $t['class'], $t['function'])) {
+				$trace .= '#' . $i . ' ' . $t['file'] . '(' . $t['line'] . '): ' . $t['class'] . '->' . $t['function'] . "\n";
+			}
 		}
 		self::$queries[] = array(
 			'SQL'	 => self::interpolateQuery($query, $params),
