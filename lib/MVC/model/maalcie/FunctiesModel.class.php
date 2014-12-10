@@ -8,7 +8,7 @@ require_once 'MVC/model/maalcie/KwalificatiesModel.class.php';
  * @author P.W.G. Brussee <brussee@live.nl>
  * 
  */
-class FunctiesModel extends PersistenceModel {
+class FunctiesModel extends CachedPersistenceModel {
 
 	const orm = 'CorveeFunctie';
 
@@ -25,7 +25,7 @@ class FunctiesModel extends PersistenceModel {
 	 * @return CorveeFunctie[]
 	 */
 	public function getAlleFuncties() {
-		return group_by_distinct('functie_id', $this->find());
+		return group_by_distinct('functie_id', $this->prefetch());
 	}
 
 	/**

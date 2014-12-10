@@ -136,7 +136,7 @@ class GroepContent extends OldGroepView {
 			'geslacht:v'	 => 'Alleen vrouwen');
 
 		//verticalen.
-		foreach (VerticalenModel::instance()->find() as $verticale) {
+		foreach (VerticalenModel::instance()->prefetch() as $verticale) {
 			if ($verticale->id == 0) {
 				continue;
 			}

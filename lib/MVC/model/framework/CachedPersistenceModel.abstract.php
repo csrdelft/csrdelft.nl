@@ -205,7 +205,7 @@ abstract class CachedPersistenceModel extends PersistenceModel {
 	 * @return boolean rows affected
 	 */
 	protected function deleteByPrimaryKey(array $primary_key_values) {
-		$this->unsetCache($this->cacheKey($primary_key_values));
+		$this->unsetCache($this->cacheKey($primary_key_values), true);
 		return parent::deleteByPrimaryKey($primary_key_values);
 	}
 

@@ -219,7 +219,7 @@ class VerticaleField extends SelectField {
 
 	public function __construct($name, $value, $description) {
 		$verticalen = array();
-		foreach (VerticalenModel::instance()->find() as $v) {
+		foreach (VerticalenModel::instance()->prefetch() as $v) {
 			$verticalen[$v->id] = $v->naam;
 		}
 		parent::__construct($name, $value, $description, $verticalen);

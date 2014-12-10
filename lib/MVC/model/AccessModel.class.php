@@ -110,7 +110,7 @@ class AccessModel extends CachedPersistenceModel {
 		$valid[] = 'geslacht:v';
 		$valid[] = 'ouderjaars';
 		$valid[] = 'eerstejaars';
-		foreach (VerticalenModel::instance()->find() as $verticale) {
+		foreach (VerticalenModel::instance()->prefetch() as $verticale) {
 			$valid[] = 'verticale:' . $verticale->naam;
 		}
 		$jong = Lichting::getJongsteLichting();

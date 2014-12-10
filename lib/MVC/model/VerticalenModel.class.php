@@ -6,7 +6,7 @@
  * @author P.W.G. Brussee <brussee@live.nl>
  * 
  */
-class VerticalenModel extends PersistenceModel {
+class VerticalenModel extends CachedPersistenceModel {
 
 	const orm = 'Verticale';
 

@@ -6,7 +6,7 @@
  * @author P.W.G. Brussee <brussee@live.nl>
  * 
  */
-class KwalificatiesModel extends PersistenceModel {
+class KwalificatiesModel extends CachedPersistenceModel {
 
 	const orm = 'CorveeKwalificatie';
 
@@ -22,7 +22,7 @@ class KwalificatiesModel extends PersistenceModel {
 	 * @return CorveeKwalificatie[]
 	 */
 	public function getAlleKwalificaties() {
-		return group_by('functie_id', $this->find());
+		return group_by('functie_id', $this->prefetch());
 	}
 
 	public function getKwalificatiesVoorFunctie($fid) {
