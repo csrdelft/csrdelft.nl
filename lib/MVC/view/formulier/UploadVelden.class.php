@@ -156,9 +156,9 @@ class ImageField extends FileField {
 	protected $maxHeight;
 	private $filterMime;
 
-	public function __construct($name, $description, Afbeelding $behouden = null, $ftpSubDir = null, array $filterMime = null, $multiple = false, $minWidth = null, $minHeight = null, $maxWidth = null, $maxHeight = null) {
+	public function __construct($name, $description, Afbeelding $behouden = null, Map $dir = null, array $filterMime = null, $multiple = false, $minWidth = null, $minHeight = null, $maxWidth = null, $maxHeight = null) {
 		$this->filterMime = $filterMime === null ? Afbeelding::$mimeTypes : array_intersect(Afbeelding::$mimeTypes, $filterMime);
-		parent::__construct($name, $description, $behouden, $ftpSubDir, $this->filterMime, $multiple);
+		parent::__construct($name, $description, $behouden, $dir, $this->filterMime, $multiple);
 		$this->minWidth = $minWidth;
 		$this->minHeight = $minHeight;
 		$this->maxWidth = $maxWidth;
@@ -187,10 +187,6 @@ class ImageField extends FileField {
 			}
 		}
 		return $this->getUploader()->error === '';
-	}
-
-	public function getPreviewDiv() {
-		return '<div id="imagePreview_' . $this->getId() . '" class="previewDiv"><img src="" /></div>'; //TODO
 	}
 
 }
@@ -240,6 +236,14 @@ class BestandBehouden extends InputField {
 
 	public function getHtml() {
 		return '<div ' . $this->getInputAttribute(array('id', 'name', 'class')) . '>' . $this->model->filename . ' (' . format_filesize($this->model->filesize) . ')</div>';
+	}
+
+	public function getPreviewDiv() {
+		if ($this->getModel() instanceof Afbeelding) {
+			$img = $this->getModel();
+			return '<div id="imagePreview_' . $this->getId() . '" class="previewDiv"><img src="' . str_replace(PICS_PATH, CSR_PICS . '/', $img->directory) . $img->filename . '" width="' . $img->width . '" height="' . $img->height . '" /></div>';
+		}
+		return '';
 	}
 
 }

@@ -100,7 +100,7 @@ thisDropzone = new Dropzone('#{$this->getFormId()}', {
 	dictMaxFilesExceeded: "You can not upload any more files.",
 	init: function() {
 		this.on('addedfile', function(file) {
-			var coverBtn = Dropzone.createElement('<button title="Stel deze foto in als omslag voor het album">Omslag</button>');
+			var coverBtn = Dropzone.createElement('<a class="btn" title="Stel deze foto in als omslag voor het album">Omslag</a>');
 			file.previewElement.appendChild(coverBtn);
 			coverBtn.addEventListener('click', function(e) {
 				var coverBtn = $(this);
@@ -120,6 +120,7 @@ thisDropzone = new Dropzone('#{$this->getFormId()}', {
 					alert(textStatus);
 				});
 			});
+			$('.dz-remove').removeAttr('class').addClass('btn');
 		});
 	}
 });
