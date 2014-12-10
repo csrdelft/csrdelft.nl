@@ -333,7 +333,7 @@ class UploadFileField extends InputField {
 $('#{$this->getId()}').change(function() {
 	for (i = 0; i < this.files.length; i++) { 
 		if (this.files[i].size > {$max}) {
-			alert(this.files[i].name + ' is te groot: Maximaal {$format}');
+			alert(this.files[i].name + ' is te groot: Maximaal {$format}\n\nSplits het bestand op of gebruik een andere upload-methode.');
 			if (this.files.length <= 1) {
 				$(this).val('');
 			}
