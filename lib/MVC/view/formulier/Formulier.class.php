@@ -228,7 +228,9 @@ class Formulier implements View, Validator {
 		foreach ($this->fields as $field) {
 			if ($field instanceof Validator) {
 				$fieldName = $field->getName();
-				$errors[$fieldName] = $field->getError();
+				if ($field->getError() != '') {
+					$errors[$fieldName] = $field->getError();
+				}
 			}
 		}
 		if (empty($errors)) {

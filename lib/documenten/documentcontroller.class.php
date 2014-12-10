@@ -191,7 +191,7 @@ class DocumentController extends Controller {
 					try {
 						$this->document->deleteFile();
 					} catch (Exception $e) {
-						setMelding($e->getMessage(), -1);
+						setMelding('Bestaand document verwijderen mislukt: ' . $e->getMessage(), -1);
 						return;
 					}
 				}
@@ -214,7 +214,8 @@ class DocumentController extends Controller {
 			} else {
 				setMelding('Fout bij toevoegen van document Document::save()', -1);
 			}
-			return;
+		} else {
+			setMelding(print_r($formulier->getError(), true), -1);
 		}
 		setMelding($this->errors, -1);
 	}

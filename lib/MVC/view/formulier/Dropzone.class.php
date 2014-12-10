@@ -139,3 +139,15 @@ JS;
 	}
 
 }
+
+class DropzoneUploader extends UploadFileField {
+
+	public function isPosted() {
+		return isset($_FILES[$this->name]);
+	}
+
+	public function view() {
+		parent::getErrorDiv();
+	}
+
+}

@@ -255,19 +255,19 @@ class KeuzeRondjeField extends SelectField {
 	}
 
 	public function getHtml() {
-		return '<div class="KeuzeRondjeOptions">' . $this->getOptionsHtml($this->options) . '</div>';
+		$html = '<div class="KeuzeRondjeOptions">';
+		foreach ($this->options as $value => $description) {
+			$html .= $this->getOptionHtml($value, $description);
+		}
+		return $html . '</div>';
 	}
 
-	protected function getOptionsHtml(array $options) {
-		$html = '';
-		foreach ($options as $value => $description) {
-			$html .= '<input id="field_' . $this->getName() . '_option_' . $value . '" value="' . $value . '"' . $this->getInputAttribute(array('type', 'name', 'origvalue', 'class', 'disabled', 'readonly'));
-			if ($value == $this->value) {
-				$html .= ' checked="checked"';
-			}
-			$html .= '><label for="field_' . $this->getName() . '_option_' . $value . '" class="KeuzeRondjeLabel"> ' . htmlspecialchars($description) . '</label><br />';
+	protected function getOptionHtml($value, $description) {
+		$html = '<input id="' . $this->getId() . 'Option_' . $value . '" ' . $this->getInputAttribute(array('type', 'name', 'value', 'class', 'disabled', 'readonly'));
+		if ($value === $this->value) {
+			$html .= ' checked="checked"';
 		}
-		return $html;
+		return $html . '><label for="' . $this->getId() . 'Option_' . $value . '" class="KeuzeRondjeLabel"> ' . htmlspecialchars($description) . '</label>';
 	}
 
 }
