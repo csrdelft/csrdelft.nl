@@ -697,10 +697,10 @@ class ForumDradenModel extends AbstractForumModel implements Paging {
 		$terms = explode(' ', $query);
 		foreach ($terms as $i => $term) {
 			if (!endsWith($term, '*')) {
-				$terms[$i] = ' +' . $term . '*'; // set terms to AND & append wildcard
+				$terms[$i] .= '*'; // append wildcard
 			}
 		}
-		$where_params = array($terms);
+		$where_params = array(implode(' +', $terms)); // set terms to AND
 		$where = 'wacht_goedkeuring = FALSE AND verwijderd = FALSE';
 		$order = 'score DESC';
 		if (is_int($jaar) AND in_array($datumsoort, array('datum_tijd', 'laatst_gewijzigd'))) {

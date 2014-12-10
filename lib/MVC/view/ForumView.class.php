@@ -41,7 +41,7 @@ class ForumZoekenForm extends Formulier {
 
 		$fields[] = new HtmlComment('<div class="forumZoekenGeavanceerd hoverIntentContent verborgen">');
 		$fields[] = new HtmlComment('<div class="inline">');
-		$fields[] = new KeuzeRondjeField('datumsoort', 'reactie', null, array('laatst_gewijzigd' => 'Laatste reactie', 'datum_tijd' => 'Aanmaak-datum'));
+		$fields[] = new KeuzeRondjeField('datumsoort', 'laatst_gewijzigd', null, array('laatst_gewijzigd' => 'Laatste reactie', 'datum_tijd' => 'Aanmaak-datum'));
 		$fields[] = new SelectField('ouderjonger', 'jonger', null, array('jonger' => 'Niet', 'ouder' => 'Wel'));
 		$fields[] = new HtmlComment(' ouder dan ');
 		$fields[] = new IntField('jaaroud', 1, null, 0, 99);
