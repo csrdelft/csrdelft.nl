@@ -18,9 +18,8 @@ class Dropzone extends Formulier {
 		parent::__construct($model, $formId, $action, $titel);
 		$this->css_classes[] = 'dropzone';
 		$this->fallback = $fallback;
+		$this->dropzone = $fallback->getUploader();
 
-		$this->dropzone = new DropzoneUploader($this->fallback->getName(), $this->fallback->getFilter(), false);
-		$fields[] = $this->dropzone;
 		$fields[] = new HtmlComment('<div class="fallback">');
 		$fields[] = $this->fallback;
 		$fields[] = new FormDefaultKnoppen($cancel_url, false);
@@ -136,18 +135,6 @@ showExisting_{$this->dropzone->getName()} = function (){
 	});
 }
 JS;
-	}
-
-}
-
-class DropzoneUploader extends UploadFileField {
-
-	public function isPosted() {
-		return isset($_FILES[$this->name]);
-	}
-
-	public function view() {
-		parent::getErrorDiv();
 	}
 
 }

@@ -162,9 +162,47 @@ abstract class InputField implements FormElement, Validator {
 	}
 
 	/**
+	 * Bestand opslaan op de juiste plek.
+	 * 
+	 * @param string $destination fully qualified path with trailing slash
+	 * @param string $filename filename with extension
+	 * @param boolean $overwrite allowed to overwrite existing file
+	 * @throws Exception Ongeldige bestandsnaam, doelmap niet schrijfbaar of naam ingebruik
+	 */
+	protected function opslaan($destination, $filename, $overwrite = false) {
+		if (!$this->isAvailable()) {
+			throw new Exception('Uploadmethode niet beschikbaar: ' . get_class($this));
+		}
+		if (!$this->validate()) {
+			throw new Exception($this->getError());
+		}
+		if (!valid_filename($filename)) {
+			throw new Exception('Ongeldige bestandsnaam: ' . htmlspecialchars($filename));
+		}
+		if (!file_exists($destination)) {
+			mkdir($destination);
+		}
+		if (false === @chmod($destination, 0755)) {
+			throw new Exception('Geen eigenaar van map: ' . htmlspecialchars($destination));
+		}
+		if (!is_writable($destination)) {
+			throw new Exception('Doelmap is niet beschrijfbaar: ' . htmlspecialchars($destination));
+		}
+		if (file_exists($destination . $filename)) {
+			if ($overwrite) {
+				if (!unlink($destination . $filename)) {
+					throw new Exception('Overschrijven mislukt: ' . htmlspecialchars($destination . $filename));
+				}
+			} else {
+				throw new Exception('Bestandsnaam al in gebruik: ' . htmlspecialchars($destination . $filename));
+			}
+		}
+	}
+
+	/**
 	 * Elk veld staat in een div, geef de html terug voor de openingstag van die div.
 	 */
-	protected function getDiv() {
+	public function getDiv() {
 		$cssclass = 'InputField';
 		if ($this->hidden) {
 			$cssclass .= ' verborgen';
@@ -172,7 +210,7 @@ abstract class InputField implements FormElement, Validator {
 		if ($this->title) {
 			$cssclass .= ' hoverIntent';
 		}
-		if ($this->error !== '') {
+		if ($this->getError() !== '') {
 			$cssclass .= ' metFouten';
 		}
 		return '<div id="wrapper_' . $this->getId() . '" class="' . $cssclass . '" ' . $this->getInputAttribute('title') . '>';
@@ -181,7 +219,7 @@ abstract class InputField implements FormElement, Validator {
 	/**
 	 * Elk veld heeft een label, geef de html voor het label
 	 */
-	protected function getLabel() {
+	public function getLabel() {
 		if (!empty($this->description)) {
 			$required = '';
 			if ($this->required) {
@@ -210,14 +248,14 @@ abstract class InputField implements FormElement, Validator {
 	/**
 	 * Geef een div met de foutmelding voor dit veld terug.
 	 */
-	protected function getErrorDiv() {
+	public function getErrorDiv() {
 		if ($this->getError() != '') {
 			return '<div class="waarschuwing">' . $this->getError() . '</div>';
 		}
 		return '';
 	}
 
-	protected function getPreviewDiv() {
+	public function getPreviewDiv() {
 		return '';
 	}
 
@@ -687,7 +725,7 @@ class LidField extends TextField {
 		return $this->error === '';
 	}
 
-	protected function getPreviewDiv() {
+	public function getPreviewDiv() {
 		return '<div id="lidPreview_' . $this->getId() . '" class="previewDiv"></div>';
 	}
 
@@ -1263,7 +1301,7 @@ class CsrBBPreviewField extends TextareaField {
 		parent::__construct($name, $value, $description, $rows, $max_len, $min_len);
 	}
 
-	protected function getPreviewDiv() {
+	public function getPreviewDiv() {
 		return <<<HTML
 <div class="float-right">
 	<a href="http://csrdelft.nl/wiki/cie:diensten:forum" target="_blank">Opmaakhulp</a>

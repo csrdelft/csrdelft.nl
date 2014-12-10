@@ -15,7 +15,9 @@ class FotoAlbumModel extends PersistenceModel {
 	public function create(PersistentEntity $album) {
 		if (!file_exists($album->path)) {
 			mkdir($album->path);
-			chmod($album->path, 0755);
+			if (false === @chmod($album->path, 0755)) {
+				throw new Exception('Geen eigenaar van album: ' . htmlspecialchars($foto->getFullPath()));
+			}
 		}
 		$album->owner = LoginModel::getUid();
 		return parent::create($album);
@@ -73,7 +75,7 @@ class FotoAlbumModel extends PersistenceModel {
 						$this->create($album);
 					}
 					if (false === @chmod($path, 0755)) {
-						throw new Exception('Geen eigenaar van: ' . $path);
+						throw new Exception('Geen eigenaar van album: ' . $path);
 					}
 				}
 				// Foto
@@ -91,7 +93,7 @@ class FotoAlbumModel extends PersistenceModel {
 					}
 					FotoModel::instance()->verwerkFoto($foto);
 					if (false === @chmod($path, 0644)) {
-						throw new Exception('Geen eigenaar van: ' . $path);
+						throw new Exception('Geen eigenaar van foto: ' . $path);
 					}
 				}
 			} catch (Exception $e) {
@@ -208,7 +210,9 @@ class FotoModel extends PersistenceModel {
 	public function verwerkFoto(Foto $foto) {
 		if (!$this->exists($foto)) {
 			$this->create($foto);
-			chmod($foto->getFullPath(), 0644);
+			if (false === @chmod($foto->getFullPath(), 0644)) {
+				throw new Exception('Geen eigenaar van foto: ' . htmlspecialchars($foto->getFullPath()));
+			}
 		}
 		if (!$foto->hasThumb()) {
 			$foto->createThumb();

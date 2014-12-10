@@ -186,7 +186,7 @@ class DocumentController extends Controller {
 			$this->document->setNaam($fields['naam']->getValue());
 			$this->document->setCatID($fields['catID']->getValue());
 			// Als we al een bestand hebben voor dit document, moet die natuurlijk eerst hdb.
-			if (get_class($fields['uploader']) !== 'BestandBehouden') {
+			if (get_class($fields['uploader']->getUploader()) !== 'BestandBehouden') {
 				if ($this->document->hasFile()) {
 					try {
 						$this->document->deleteFile();
@@ -203,11 +203,9 @@ class DocumentController extends Controller {
 			}
 			if ($this->document->save()) {
 				try {
-					if ($fields['uploader']->opslaan($this->document->getPath(), $this->document->getFullFileName())) {
-						setMelding('Document met succes opgeslagen.', 1);
-					} else {
-						setMelding('Fout bij het opslaan van het bestand in het bestandsysteem. Bewerk het document om het bestand alsnog toe te voegen.', -1);
-					}
+					$fields['uploader']->opslaan($this->document->getPath(), $this->document->getFullFileName());
+					setMelding('Document met succes opgeslagen.', 1);
+					redirect('/communicatie/documenten/categorie/' . $this->document->getCatID());
 				} catch (Exception $e) {
 					setMelding('Bestand van document opslaan mislukt: ' . $e->getMessage(), -1);
 				}
@@ -215,7 +213,7 @@ class DocumentController extends Controller {
 				setMelding('Fout bij toevoegen van document Document::save()', -1);
 			}
 		} else {
-			setMelding(print_r($formulier->getError(), true), -1);
+			//setMelding(print_r($formulier->getError(), true), -1);
 		}
 		setMelding($this->errors, -1);
 	}

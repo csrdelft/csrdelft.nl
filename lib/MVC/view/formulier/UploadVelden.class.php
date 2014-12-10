@@ -29,23 +29,13 @@ class FileField extends KeuzeRondjeField {
 	private $uploadField;
 	private $existingField;
 	private $urlField;
-	/**
-	 * Beschikbare upload methoden
-	 * @var array
-	 */
 	protected $uploaders;
-	/**
-	 * Toegestane mime-types
-	 * @var array
-	 */
-	private $filterMime;
 
 	public function __construct($name, $description, Bestand $bestand = null, Map $dir = null, array $filterMime = array(), $multiple = false) {
-		$this->filterMime = $filterMime;
-		$this->behoudenField = new BestandBehouden($name . '_BB', $this->filterMime, $bestand);
-		$this->uploadField = new UploadFileField($name . '_HF', $this->filterMime, $multiple);
-		$this->existingField = new ExistingFileField($name . '_EF', $this->filterMime, $dir);
-		$this->urlField = new DownloadUrlField($name . '_DU', $this->filterMime);
+		$this->behoudenField = new BestandBehouden($name . '_BB', $filterMime, $bestand);
+		$this->uploadField = new UploadFileField($name . '_HF', $filterMime, $multiple);
+		$this->existingField = new ExistingFileField($name . '_EF', $filterMime, $dir);
+		$this->urlField = new DownloadUrlField($name . '_DU', $filterMime);
 		$this->uploaders = array(
 			$this->behoudenField->name	 => $this->behoudenField,
 			$this->uploadField->name	 => $this->uploadField,
@@ -76,66 +66,38 @@ class FileField extends KeuzeRondjeField {
 		return $this->uploaders[$methode]->isPosted();
 	}
 
-	public function getFilter() {
-		return $this->filterMime;
-	}
-
 	public function getType() {
 		return $this->value;
 	}
 
+	public function getUploader() {
+		if (!isset($this->uploaders[$this->value])) {
+			throw new Exception('Upload method not available: ' . htmlspecialchars($this->value));
+		}
+		return $this->uploaders[$this->value];
+	}
+
+	public function getFilter() {
+		return $this->getUploader()->getFilter();
+	}
+
 	public function getModel() {
-		return $this->uploaders[$this->value]->getModel();
+		return $this->getUploader()->getModel();
 	}
 
 	public function getError() {
-		return $this->uploaders[$this->value]->getError();
+		return $this->getUploader()->getError();
 	}
 
 	public function validate() {
-		if (!$this->uploaders[$this->value]->validate()) {
+		if (!parent::validate()) {
 			return false;
 		}
-		return true;
+		return $this->getUploader()->validate();
 	}
 
-	/**
-	 * Bestand opslaan op de juiste plek.
-	 *
-	 * @param string $destination fully qualified path with trailing slash
-	 * @param string $filename filename with extension
-	 * @param boolean $overwrite allowed to overwrite existing file
-	 * @throws Exception Ongeldige bestandsnaam, doelmap niet schrijfbaar of naam ingebruik
-	 */
 	public function opslaan($destination, $filename, $overwrite = false) {
-		if (!$this->isAvailable()) {
-			throw new Exception('Uploadmethode niet beschikbaar: ' . get_class($this));
-		}
-		if (!$this->validate()) {
-			throw new Exception($this->getError());
-		}
-		if (!valid_filename($filename)) {
-			throw new Exception('Ongeldige bestandsnaam: ' . htmlspecialchars($filename));
-		}
-		if (!file_exists($destination)) {
-			mkdir($destination);
-		}
-		if (false === @chmod($path, 0755)) {
-			throw new Exception('Geen eigenaar van: ' . htmlspecialchars($destination));
-		}
-		if (!is_writable($destination)) {
-			throw new Exception('Doelmap is niet beschrijfbaar: ' . htmlspecialchars($destination));
-		}
-		if (file_exists($destination . $filename)) {
-			if ($overwrite) {
-				if (!unlink($destination . $filename)) {
-					throw new Exception('Overschrijven mislukt: ' . htmlspecialchars($destination . $filename));
-				}
-			} else {
-				throw new Exception('Bestandsnaam al in gebruik: ' . htmlspecialchars($destination . $filename));
-			}
-		}
-		$this->uploaders[$this->value]->opslaan($destination, $filename, $overwrite);
+		$this->getUploader()->opslaan($destination, $filename, $overwrite);
 	}
 
 	public function getOptionHtml($methode, $description) {
@@ -150,14 +112,13 @@ class FileField extends KeuzeRondjeField {
 			$html .= ' verborgen';
 		}
 		$html .= '">';
-		$html .= $this->uploaders[$methode]->getErrorDiv();
 		$html .= $this->uploaders[$methode]->getHtml();
 		$html .= $this->uploaders[$methode]->getPreviewDiv();
 		return $html . '</div>';
 	}
 
 	public function getJavascript() {
-		return parent::getJavascript() . <<<JS
+		$js = parent::getJavascript() . <<<JS
 
 $('input[name="{$this->name}"]').change(function (event) {
 	var aan = $('input[name="{$this->name}"]:checked').parent();
@@ -173,6 +134,10 @@ if ($('#{$this->behoudenField->getId()}')) {
 	});
 }
 JS;
+		foreach ($this->uploaders as $methode => $uploader) {
+			$js .= $uploader->getJavascript();
+		}
+		return $js;
 	}
 
 }
@@ -208,20 +173,20 @@ class ImageField extends FileField {
 			$width = $this->getModel()->width;
 			$height = $this->getModel()->height;
 			if ($this->minWidth !== null AND $width < $this->minWidth) {
-				$this->uploaders[$this->value]->error = 'Afbeelding is niet breed genoeg.';
+				$this->getUploader()->error = 'Afbeelding is niet breed genoeg.';
 			} elseif ($this->minHeight !== null AND $height < $this->minHeight) {
-				$this->uploaders[$this->value]->error = 'Afbeelding is niet hoog genoeg.';
+				$this->getUploader()->error = 'Afbeelding is niet hoog genoeg.';
 			} elseif ($this->maxWidth !== null AND $width > $this->maxWidth) {
-				$this->uploaders[$this->value]->error = 'Afbeelding is te breed.';
+				$this->getUploader()->error = 'Afbeelding is te breed.';
 			} elseif ($this->maxHeight !== null AND $height > $this->maxHeight) {
-				$this->uploaders[$this->value]->error = 'Afbeelding is te hoog.';
+				$this->getUploader()->error = 'Afbeelding is te hoog.';
 			}
 		} else {
 			if ($this->required) {
-				$this->uploaders[$this->value]->error = 'Afbeelding is verplicht';
+				$this->getUploader()->error = 'Afbeelding is verplicht';
 			}
 		}
-		return $this->uploaders[$this->value]->error === '';
+		return $this->getUploader()->error === '';
 	}
 
 	public function getPreviewDiv() {
@@ -269,20 +234,12 @@ class BestandBehouden extends InputField {
 			throw new Exception('Bestand bestaat niet (meer): ' . htmlspecialchars($destination . $filename));
 		}
 		if (false === @chmod($destination . $filename, 0644)) {
-			throw new Exception('Geen eigenaar van: ' . htmlspecialchars($destination . $filename));
+			throw new Exception('Geen eigenaar van bestand: ' . htmlspecialchars($destination . $filename));
 		}
 	}
 
 	public function getHtml() {
 		return '<div ' . $this->getInputAttribute(array('id', 'name', 'class')) . '>' . $this->model->filename . ' (' . format_filesize($this->model->filesize) . ')</div>';
-	}
-
-	public function getErrorDiv() {
-		return parent::getErrorDiv();
-	}
-
-	public function getPreviewDiv() {
-		return parent::getPreviewDiv();
 	}
 
 }
@@ -316,8 +273,16 @@ class UploadFileField extends InputField {
 		}
 	}
 
+	public function isPosted() {
+		return isset($_FILES[$this->name]);
+	}
+
 	public function isAvailable() {
 		return true;
+	}
+
+	public function getFilter() {
+		return $this->filterMime;
 	}
 
 	public function validate() {
@@ -333,7 +298,6 @@ class UploadFileField extends InputField {
 			$this->error = 'Bestand is te groot: Maximaal ' . format_filesize(getMaximumFileUploadSize());
 		} elseif ($this->value['error'] != UPLOAD_ERR_OK) {
 			$this->error = 'Upload-error: code ' . $this->value['error'];
-			DebugLogModel::instance()->log(get_class($this), 'validate', array(), $this->error);
 		}
 		return $this->error === '';
 	}
@@ -349,12 +313,12 @@ class UploadFileField extends InputField {
 			throw new Exception('Bestand bestaat niet (meer): ' . htmlspecialchars($destination . $filename));
 		}
 		if (false === @chmod($destination . $filename, 0644)) {
-			throw new Exception('Geen eigenaar van: ' . htmlspecialchars($destination . $filename));
+			throw new Exception('Geen eigenaar van bestand: ' . htmlspecialchars($destination . $filename));
 		}
 	}
 
 	public function getHtml() {
-		return '<input ' . $this->getInputAttribute(array('type', 'id', 'name', 'class', 'value', 'origvalue', 'disabled', 'readonly')) . ' accept="' . implode('|', $this->filterMime) . '"' . ($this->multiple ? ' multiple' : '') . ' />';
+		return '<input ' . $this->getInputAttribute(array('type', 'id', 'name', 'class', 'disabled', 'readonly')) . ' accept="' . implode('|', $this->filterMime) . '"' . ($this->multiple ? ' multiple' : '') . ' data-max-size="' . getMaximumFileUploadSize() . '" />';
 	}
 
 	public function getJavascript() {
@@ -362,24 +326,14 @@ class UploadFileField extends InputField {
 		$format = format_filesize($max);
 		return parent::getJavascript() . <<<JS
 
-if (typeof FileReader !== 'undefined') {
-	$('#{$this->getId()}').change(function (event) {
-		console.log(this);
-		console.log({$max});
-		if (this.files[0].size > {$max}) {
-			alert('Bestand is te groot: Maximaal {$format}');
+$('#{$this->getId()}').change(function() {
+	for (i = 0; i < this.files.length; i++) { 
+		if (this.files[i].size > {$max}) {
+			alert(this.files[i].name + ' is te groot: Maximaal {$format}');
 		}
-	});
-}
+	}
+});
 JS;
-	}
-
-	public function getErrorDiv() {
-		return parent::getErrorDiv();
-	}
-
-	public function getPreviewDiv() {
-		return parent::getPreviewDiv();
 	}
 
 }
@@ -416,28 +370,42 @@ class ExistingFileField extends SelectField {
 			foreach ($scan as $entry) {
 				if (is_file($this->dir->path . $entry)) {
 					$name = htmlspecialchars($entry);
-					$this->options[$name] = $name;
+					if (!empty($this->filterMime)) {
+						$finfo = finfo_open(FILEINFO_MIME_TYPE);
+						$mimetype = finfo_file($finfo, $this->dir->path . $entry);
+						finfo_close($finfo);
+						if (in_array($mimetype, $this->filterMime)) {
+							$this->options[$name] = $name;
+						}
+					} else {
+						$this->options[$name] = $name;
+					}
 				}
 			}
 		}
 		$this->verplaats = new VinkField($name . 'verplaats', false, null, 'Bestand verplaatsen');
 		if ($this->isPosted()) {
 			$finfo = finfo_open(FILEINFO_MIME_TYPE);
-			$mime = finfo_file($finfo, $this->dir->path . $this->value);
+			$mimetype = finfo_file($finfo, $this->dir->path . $this->value);
 			finfo_close($finfo);
-			if (in_array($mime, Afbeelding::$mimeTypes)) {
-				$this->model = new Afbeelding($this->dir->path . $this->value);
+			if (in_array($mimetype, Afbeelding::$mimeTypes)) {
+				$this->model = new Afbeelding($this->dir->path . $this->value, true);
 			} else {
 				$this->model = new Bestand();
+				$this->model->filename = $this->value;
+				$this->model->filesize = filesize($this->dir->path . $this->value);
+				$this->model->mimetype = $mimetype;
+				$this->model->directory = $this->dir->path;
 			}
-			$this->model->filename = $this->value;
-			$this->model->filesize = filesize($this->dir->path . $this->value);
-			$this->model->mimetype = $mime;
 		}
 	}
 
 	public function isAvailable() {
 		return $this->dir instanceof Map AND $this->dir->exists();
+	}
+
+	public function getFilter() {
+		return $this->filterMime;
 	}
 
 	public function validate() {
@@ -462,7 +430,7 @@ class ExistingFileField extends SelectField {
 			throw new Exception('Bestand bestaat niet (meer): ' . htmlspecialchars($this->dir->path . $this->model->filename));
 		}
 		if (false === @chmod($destination . $filename, 0644)) {
-			throw new Exception('Geen eigenaar van: ' . htmlspecialchars($destination . $filename));
+			throw new Exception('Geen eigenaar van bestand: ' . htmlspecialchars($destination . $filename));
 		}
 		// Moeten we het bestand ook verwijderen uit de publieke ftp?
 		if (isset($_POST[$this->name . 'VerwijderVanFtp'])) {
@@ -478,14 +446,6 @@ class ExistingFileField extends SelectField {
 		}
 	}
 
-	public function getErrorDiv() {
-		return parent::getErrorDiv();
-	}
-
-	public function getPreviewDiv() {
-		return parent::getPreviewDiv();
-	}
-
 }
 
 /**
@@ -496,7 +456,7 @@ class ExistingFileField extends SelectField {
  * @author C.S.R. Delft <pubcie@csrdelft.nl>
  * @author P.W.G. Brussee <brussee@live.nl>
  */
-class DownloadUrlField extends TextField {
+class DownloadUrlField extends UrlField {
 
 	public $filterMime;
 	private $downloader;
@@ -507,7 +467,6 @@ class DownloadUrlField extends TextField {
 		$this->filterMime = $filterMime;
 		$this->downloader = new UrlDownloader();
 		if ($this->isPosted()) {
-			$this->value = filter_input(INPUT_POST, $this->name, FILTER_SANITIZE_URL);
 			if (!url_like($this->value)) {
 				return;
 			}
@@ -546,6 +505,10 @@ class DownloadUrlField extends TextField {
 		return $this->downloader->file_get_contents($url);
 	}
 
+	public function getFilter() {
+		return $this->filterMime;
+	}
+
 	public function validate() {
 		parent::validate();
 		if (!empty($this->filterMime) AND ! in_array($this->getModel()->mimetype, $this->filterMime)) {
@@ -564,26 +527,19 @@ class DownloadUrlField extends TextField {
 	}
 
 	public function opslaan($destination, $filename, $overwrite = false) {
+		$filename .= '.html';
 		parent::opslaan($destination, $filename, $overwrite);
 		$put = file_put_contents($destination . $filename, $this->contents);
 		if ($put === false) {
 			throw new Exception('Bestand schrijven mislukt: ' . htmlspecialchars($destination . $filename));
 		}
 		if (false === @chmod($destination . $filename, 0644)) {
-			throw new Exception('Geen eigenaar van: ' . htmlspecialchars($destination . $filename));
+			throw new Exception('Geen eigenaar van bestand: ' . htmlspecialchars($destination . $filename));
 		}
 	}
 
 	public function getHtml() {
 		return '<input ' . $this->getInputAttribute(array('type', 'id', 'name', 'class', 'value', 'origvalue', 'disabled', 'readonly')) . '/>';
-	}
-
-	public function getErrorDiv() {
-		return parent::getErrorDiv();
-	}
-
-	public function getPreviewDiv() {
-		return parent::getPreviewDiv();
 	}
 
 }

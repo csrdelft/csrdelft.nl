@@ -79,7 +79,7 @@ class SelectField extends InputField {
 		return $this->error === '';
 	}
 
-	protected function getPreviewDiv() {
+	public function getPreviewDiv() {
 		if ($this->groups) {
 			return '<div id="selectPreview_' . $this->getId() . '" class="previewDiv"></div>';
 		}
@@ -263,10 +263,7 @@ class KeuzeRondjeField extends SelectField {
 	}
 
 	protected function getOptionHtml($value, $description) {
-		$html = '<input id="' . $this->getId() . 'Option_' . $value . '" ' . $this->getInputAttribute(array('type', 'name', 'value', 'class', 'disabled', 'readonly'));
-		if ($value === $this->value) {
-			$html .= ' checked="checked"';
-		}
+		$html = '<input id="' . $this->getId() . 'Option_' . $value . '" value="' . $value . '" ' . $this->getInputAttribute(array('type', 'name', 'class', 'disabled', 'readonly'));
 		return $html . '><label for="' . $this->getId() . 'Option_' . $value . '" class="KeuzeRondjeLabel"> ' . htmlspecialchars($description) . '</label>';
 	}
 
@@ -346,7 +343,7 @@ class DatumField extends InputField {
 		return $this->error === '';
 	}
 
-	protected function getPreviewDiv() {
+	public function getPreviewDiv() {
 		return '<div id="datumPreview_' . $this->getId() . '" class="previewDiv"></div>';
 	}
 
