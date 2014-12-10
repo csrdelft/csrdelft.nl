@@ -26,16 +26,18 @@ function fatal_handler() {
 		$debug['GET'] = $_GET;
 		$debug['SERVER'] = $_SERVER;
 		if ($error['type'] === E_CORE_ERROR OR $error['type'] === E_ERROR) {
-			$headers[] = 'From: Fatal error handler <pubcie@csrdelft.nl>';
-			$headers[] = 'Content-Type: text/plain; charset=UTF-8';
-			$headers[] = 'X-Mailer: nl.csrdelft.lib.Mail';
-			$subject = 'Fatal error on request ';
-			if (isset($_SERVER['SCRIPT_URL'])) {
-				$subject .= filter_var($_SERVER['SCRIPT_URL'], FILTER_SANITIZE_URL);
+			if (DEBUG) {
+				DebugLogModel::instance()->log(__FILE__, 'fatal_handler', func_get_args(), print_r($debug, true));
+			} else {
+				$headers[] = 'From: Fatal error handler <pubcie@csrdelft.nl>';
+				$headers[] = 'Content-Type: text/plain; charset=UTF-8';
+				$headers[] = 'X-Mailer: nl.csrdelft.lib.Mail';
+				$subject = 'Fatal error on request ';
+				if (isset($_SERVER['SCRIPT_URL'])) {
+					$subject .= filter_var($_SERVER['SCRIPT_URL'], FILTER_SANITIZE_URL);
+				}
+				mail('pubcie@csrdelft.nl', $subject, print_r($debug, true), implode("\r\n", $headers));
 			}
-			mail('pubcie@csrdelft.nl', $subject, print_r($debug, true), implode("\r\n", $headers));
-		} elseif (DEBUG) {
-			DebugLogModel::instance()->log(__FILE__, 'fatal_handler', func_get_args(), print_r($debug, true));
 		}
 	}
 }
@@ -119,9 +121,18 @@ switch (constant('MODE')) {
 		session_set_cookie_params(1036800, '/', '', false, false);
 		session_start();
 
+		# database modus meldingen
 		if (DB_MODIFY OR DB_DROP) {
-			if (!LoginModel::mag('P_ADMIN')) {
+			if (DEBUG) {
+				if (DB_DROP) {
+					setMelding('DB_DROP enabled', 2);
+				}
+			} elseif (!LoginModel::mag('P_ADMIN')) {
 				redirect(CSR_ROOT . '/onderhoud.html');
+			} elseif (DB_DROP) {
+				setMelding('DB_DROP enabled', 2);
+			} elseif (DB_MODIFY) {
+				setMelding('DB_MODIFY enabled', 2);
 			}
 		}
 		break;

@@ -61,7 +61,16 @@ abstract class PersistenceModel implements Persistence {
 		if ($orderby == null) {
 			$orderby = $this->default_order;
 		}
-		$result = Database::sqlSelect(array('*'), $this->orm->getTableName(), $criteria, $criteria_params, $orderby, $groupby, $limit, $start);
+		try {
+			$result = Database::sqlSelect(array('*'), $this->orm->getTableName(), $criteria, $criteria_params, $orderby, $groupby, $limit, $start);
+		} catch (PDOException $e) {
+			if (LoginModel::mag('P_ADMIN') OR LoginModel::instance()->isSued()) {
+				echo str_replace('#', '<br />#', $e); // stacktrace
+
+				echo '<p>Database queries:</p>';
+				debugprint(Database::getQueries());
+			}
+		}
 		$result->setFetchMode(PDO::FETCH_CLASS, static::orm, array($cast = true));
 		return $result;
 	}
