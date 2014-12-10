@@ -184,13 +184,15 @@ class ForumDelenModel extends AbstractForumModel {
 	}
 
 	public function getForumDelenById(array $ids) {
-		var_dump($ids);
-
 		$count = count($ids);
 		if ($count < 1) {
 			return array();
 		}
 		$in = implode(', ', array_fill(0, $count, '?'));
+
+		debugprint($in);
+		debugprint($ids);
+
 		return group_by_distinct('forum_id', $this->find('forum_id IN (' . $in . ')', $ids));
 	}
 
