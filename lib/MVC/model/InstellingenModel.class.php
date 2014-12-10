@@ -110,7 +110,8 @@ class Instellingen extends CachedPersistenceModel {
 		// use memcache
 		$key = $this->memcacheKey();
 		if ($this->isCached($key, true)) {
-			return $this->getCached($key, true);
+			$result = $this->getCached($key, true);
+			return $this->cacheResult($result);
 		}
 		$result = parent::prefetch($criteria, $criteria_params, $orderby, $groupby, $limit, $start);
 		if ($result) {
