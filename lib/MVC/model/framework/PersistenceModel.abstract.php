@@ -66,6 +66,7 @@ abstract class PersistenceModel implements Persistence {
 			$result->setFetchMode(PDO::FETCH_CLASS, static::orm, array($cast = true));
 		} catch (PDOException $ex) {
 			fatal_handler($ex);
+			$result = array();
 		}
 		return $result;
 	}
