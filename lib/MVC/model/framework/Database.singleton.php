@@ -57,7 +57,7 @@ class Database extends PDO {
 	private static function addQuery($query, $params) {
 		$backtrace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 2);
 		$trace = $backtrace[1]['file'] . ':' . $backtrace[1]['line'];
-		self::$queries[$trace][] = self::interpolateQuery($query->queryString, $params);
+		self::$queries[$trace][] = self::interpolateQuery($query, $params);
 	}
 
 	/**
