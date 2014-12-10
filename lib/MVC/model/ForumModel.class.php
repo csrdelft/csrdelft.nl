@@ -970,9 +970,9 @@ class ForumPostsModel extends AbstractForumModel implements Paging {
 			$order .= ', ' . $datumsoort . ' DESC';
 			$where .= ' AND ' . $datumsoort;
 			if ($ouder === 'ouder') {
-				$where .= $datumsoort . ' < ?';
+				$where .= ' < ?';
 			} else {
-				$where .= $datumsoort . ' > ?';
+				$where .= ' > ?';
 			}
 			$where_params[] = getDateTime(strtotime('-' . $jaar . ' year'));
 		}
