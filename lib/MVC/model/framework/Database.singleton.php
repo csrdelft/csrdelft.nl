@@ -76,8 +76,8 @@ class Database extends PDO {
 			}
 			if (is_string($value)) {
 				$params[$attribute] = '"' . $value . '"'; // quotes
-			} elseif (is_bool($value)) {
-				$params[$attribute] = $value ? 1 : 0;
+			} elseif (is_bool($value) AND ( $value === true OR $value === false )) {
+				$params[$attribute] = $value ? 'TRUE' : 'FALSE';
 			} else {
 				$params[$attribute] = $value;
 			}
