@@ -102,9 +102,13 @@ class Instellingen extends CachedPersistenceModel {
 		$this->flushCache(false);
 	}
 
+	protected function memcacheKey() {
+		return get_class($this);
+	}
+
 	public function prefetch($criteria = null, array $criteria_params = array(), $orderby = null, $groupby = null, $limit = null, $start = 0) {
 		// use memcache
-		$key = get_class($this);
+		$key = $this->memcacheKey();
 		if ($this->isCached($key, true)) {
 			return $this->getCached($key, true);
 		}
