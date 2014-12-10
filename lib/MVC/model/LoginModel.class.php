@@ -73,8 +73,6 @@ class LoginModel extends PersistenceModel implements Validator {
 				}
 			}
 		}
-
-		LidInstellingen::instance()->prefetch('uid = ?', array($this->getLid()->getUid()));
 		$this->logBezoek();
 	}
 

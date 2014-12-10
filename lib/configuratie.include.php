@@ -141,7 +141,7 @@ switch (constant('MODE')) {
 		if (session_id() == 'deleted') {
 			session_regenerate_id();
 		}
-		LoginModel::instance();
+		LidInstellingen::instance()->prefetch('uid = ?', array(LoginModel::getUid()));
 
 		# database modus meldingen
 		if (DB_MODIFY OR DB_DROP) {
