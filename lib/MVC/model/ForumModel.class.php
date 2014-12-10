@@ -184,6 +184,8 @@ class ForumDelenModel extends AbstractForumModel {
 	}
 
 	public function getForumDelenById(array $ids) {
+		var_dump($ids);
+
 		$count = count($ids);
 		if ($count < 1) {
 			return array();
@@ -1055,11 +1057,11 @@ class ForumPostsModel extends AbstractForumModel implements Paging {
 		$delen_ids = array_keys(group_by_distinct('forum_id', $draden, false));
 		$delen = ForumDelenModel::instance()->getForumDelenById($delen_ids);
 		$gedeeld_ids = array_filter(array_keys(group_by_distinct('gedeeld_met', $draden, false)));
-		$gedeeld = group_by_distinct('forum_id', ForumDelenModel::instance()->getForumDelenById($gedeeld_ids));
+		$gedeeld_delen = group_by_distinct('forum_id', ForumDelenModel::instance()->getForumDelenById($gedeeld_ids));
 		foreach ($delen as $forum_id => $deel) {
 			foreach ($draden as $draad_id => $draad) {
 				// if binnen foreach draad vanwege check op draad gedeeld met
-				if (!$deel->magLezen() AND ! ($draad->gedeeld_met AND $gedeeld[$draad->gedeeld_met]->magLezen())) {
+				if (!$deel->magLezen() AND ! ($draad->gedeeld_met AND $gedeeld_delen[$draad->gedeeld_met]->magLezen())) {
 					if ($draad->forum_id === $forum_id) {
 						foreach ($posts as $i => $post) {
 							if ($post->draad_id === $draad_id) {
