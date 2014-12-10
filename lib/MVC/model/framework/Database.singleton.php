@@ -41,6 +41,11 @@ class Database extends PDO {
 	}
 
 	/**
+	 * Count sequence of SQL statements for debug
+	 * @var int 
+	 */
+	private static $counter = 0;
+	/**
 	 * Array of SQL statements for debug
 	 * @var array
 	 */
@@ -65,8 +70,8 @@ class Database extends PDO {
 				continue;
 			}
 			$trace = $backtrace['file'] . ':' . $backtrace['line'];
-			self::$queries[$trace][] = self::interpolateQuery($query, $params);
-			return;
+			self::$queries[$trace][self::$counter] = self::interpolateQuery($query, $params);
+			return self::$counter++;
 		}
 	}
 
