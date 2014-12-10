@@ -90,8 +90,8 @@ class LidInstellingen extends Instellingen {
 		)
 	);
 
-	protected function memcacheKey() {
-		return parent::memcacheKey() . LoginModel::getUid();
+	protected function prefetchKey() {
+		return parent::prefetchKey() . LoginModel::getUid();
 	}
 
 	protected function retrieveByPrimaryKey(array $primary_key_values) {

@@ -89,23 +89,23 @@ abstract class CachedPersistenceModel extends PersistenceModel {
 	 * Cache entire resultset from a PDOStatement.
 	 * Optional: put in memcache.
 	 * 
-	 * @param PDOStatement $result
+	 * @param PDOStatement|array $resultset
 	 * @param boolean $memcache
 	 * @return array resultset of PDOStatement
 	 */
-	protected function cacheResult(PDOStatement $result, $memcache = false) {
-		$cache = array();
-		foreach ($result as $item) {
+	protected function cacheResult($resultset, $memcache = false) {
+		$cached = array();
+		foreach ($resultset as $item) {
 			$key = $this->cacheKey($item->getValues(true));
 			// do NOT update (requires explicit unsetCache)
 			if ($this->isCached($key, $memcache)) {
-				$cache[] = $this->getCached($key, $memcache);
+				$cached[] = $this->getCached($key, $memcache);
 			} else {
 				$this->setCache($key, $item, $memcache);
-				$cache[] = $item;
+				$cached[] = $item;
 			}
 		}
-		return $cache;
+		return $cached;
 	}
 
 	/**

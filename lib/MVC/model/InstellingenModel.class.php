@@ -102,16 +102,16 @@ class Instellingen extends CachedPersistenceModel {
 		$this->flushCache(false);
 	}
 
-	protected function memcacheKey() {
+	protected function prefetchKey() {
 		return get_class($this);
 	}
 
 	public function prefetch($criteria = null, array $criteria_params = array(), $orderby = null, $groupby = null, $limit = null, $start = 0) {
-		// use memcache
-		$key = $this->memcacheKey();
+		// cache instellingen in memcache als array
+		$key = $this->prefetchKey();
 		if ($this->isCached($key, true)) {
-			$result = $this->getCached($key, true);
-			return $this->cacheResult($result);
+			// inladen van memcache array in runtime cache
+			return $this->cacheResult($this->getCached($key, true), false);
 		}
 		$result = parent::prefetch($criteria, $criteria_params, $orderby, $groupby, $limit, $start);
 		if ($result) {
