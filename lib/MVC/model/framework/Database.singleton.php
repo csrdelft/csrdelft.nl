@@ -62,11 +62,21 @@ class Database extends PDO {
 	private static function addQuery($query, array $params) {
 		$trace = "\n";
 		foreach (debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS) as $i => $t) {
-			if (isset($t['file'], $t['line'], $t['class'], $t['function'])) {
-				$trace .= '#' . $i . ' ' . $t['file'] . '(' . $t['line'] . '): ' . $t['class'] . '->' . $t['function'] . "\n";
-			} else {
-				$trace .= print_r($t, true);
+			$trace .= '#' . $i . ' ';
+			if (isset($t['file'])) {
+				$trace .= $t['file'];
 			}
+			if (isset($t['line'])) {
+				$trace .= '(' . $t['line'] . ')';
+			}
+			$trace .= ': ';
+			if (isset($t['class'])) {
+				$trace .= $t['class'];
+			}
+			if (isset($t['function'])) {
+				$trace .= '->' . $t['function'];
+			}
+			$trace .= "\n";
 		}
 		self::$queries[] = array(
 			'SQL'	 => self::interpolateQuery($query, $params),
