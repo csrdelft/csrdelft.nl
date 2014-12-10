@@ -36,7 +36,12 @@ class MenuModel extends CachedPersistenceModel {
 		}
 		$key = $naam . '-menu';
 		if ($this->isCached($key, true)) {
-			return $this->getCached($key, true);
+			$result = $this->getCached($key, true);
+			// inladen van memcache in runtime cache
+			if (!$this->isCached($key, false)) {
+				$this->cacheResult($this->getList($result), false);
+			}
+			return $result;
 		}
 		// not cached
 		$root = $this->getMenuRoot($naam);
