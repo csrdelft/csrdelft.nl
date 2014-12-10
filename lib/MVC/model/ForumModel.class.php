@@ -703,15 +703,17 @@ class ForumDradenModel extends AbstractForumModel implements Paging {
 		$where_params = array(implode(' +', $terms)); // set terms to AND
 		$where = 'wacht_goedkeuring = FALSE AND verwijderd = FALSE';
 		$order = 'score DESC, plakkerig DESC';
-		if (is_int($jaar) AND in_array($datumsoort, array('datum_tijd', 'laatst_gewijzigd'))) {
+		if (in_array($datumsoort, array('datum_tijd', 'laatst_gewijzigd'))) {
 			$order .=', ' . $datumsoort . ' DESC';
-			$where .= ' AND ' . $datumsoort;
-			if ($ouder === 'ouder') {
-				$where .= ' < ?';
-			} else {
-				$where .= ' > ?';
+			if (is_int($jaar)) {
+				$where .= ' AND ' . $datumsoort;
+				if ($ouder === 'ouder') {
+					$where .= ' < ?';
+				} else {
+					$where .= ' > ?';
+				}
+				$where_params[] = getDateTime(strtotime('-' . $jaar . ' year'));
 			}
-			$where_params[] = getDateTime(strtotime('-' . $jaar . ' year'));
 		}
 		$where .= ' HAVING score > 0';
 		$results = Database::sqlSelect($attributes, $this->orm->getTableName(), $where, $where_params, $order, null, $this->per_pagina, ($this->pagina - 1) * $this->per_pagina);
@@ -966,15 +968,17 @@ class ForumPostsModel extends AbstractForumModel implements Paging {
 		$where = 'wacht_goedkeuring = FALSE AND verwijderd = FALSE';
 		$where_params = array($query);
 		$order = 'score DESC';
-		if (is_int($jaar) AND in_array($datumsoort, array('datum_tijd', 'laatst_gewijzigd'))) {
+		if (in_array($datumsoort, array('datum_tijd', 'laatst_gewijzigd'))) {
 			$order .= ', ' . $datumsoort . ' DESC';
-			$where .= ' AND ' . $datumsoort;
-			if ($ouder === 'ouder') {
-				$where .= ' < ?';
-			} else {
-				$where .= ' > ?';
+			if (is_int($jaar)) {
+				$where .= ' AND ' . $datumsoort;
+				if ($ouder === 'ouder') {
+					$where .= ' < ?';
+				} else {
+					$where .= ' > ?';
+				}
+				$where_params[] = getDateTime(strtotime('-' . $jaar . ' year'));
 			}
-			$where_params[] = getDateTime(strtotime('-' . $jaar . ' year'));
 		}
 		$where .= ' HAVING score > 0';
 		$results = Database::sqlSelect($attributes, $this->orm->getTableName(), $where, $where_params, $order, null, $this->per_pagina, ($this->pagina - 1) * $this->per_pagina);
