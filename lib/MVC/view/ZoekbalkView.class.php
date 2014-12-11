@@ -75,7 +75,20 @@ JS;
 						'url'	 => $item->link,
 						'value'	 => $label
 					);
-					if ($item->tekst === 'Documenten') {
+					// Forum delen invoegen
+					if ($item->tekst === 'Forum') {
+						require_once 'MVC/model/ForumModel.class.php';
+						foreach (ForumModel::instance()->getForumIndeling() as $categorie) {
+							foreach ($categorie->getForumDelen() as $deel) {
+								$this->suggestions['Menu'][] = array(
+									'url'	 => '/forum/deel/' . $deel->forum_id,
+									'value'	 => $deel->titel . '<span class="lichtgrijs"> - ' . $categorie->titel . '</span>'
+								);
+							}
+						}
+					}
+					// Document categorien invoegen
+					elseif ($item->tekst === 'Documenten') {
 						require_once 'documenten/categorie.class.php';
 						foreach (DocumentenCategorie::getAll() as $cat) {
 							if ($cat->magBekijken()) {
@@ -88,18 +101,9 @@ JS;
 					}
 				}
 			}
-			require_once 'MVC/model/ForumModel.class.php';
-			foreach (ForumModel::instance()->getForumIndeling() as $categorie) {
-				foreach ($categorie->getForumDelen() as $deel) {
-					$this->suggestions['Forum'][] = array(
-						'url'	 => '/forum/deel/' . $deel->forum_id,
-						'value'	 => $deel->titel . '<span class="lichtgrijs"> - ' . $categorie->titel . '</span>'
-					);
-				}
-			}
 			$this->suggestions['Leden'] = '/tools/naamsuggesties/leden/?q=';
 			$this->suggestions['Agenda'] = '/agenda/zoeken/';
-			$this->suggestions['Draadjes'] = '/forum/titelzoeken/';
+			$this->suggestions['Forum'] = '/forum/titelzoeken/';
 			$this->suggestions['Wiki'] = '/tools/wikisuggesties/?q=';
 			$this->suggestions['Groepen'] = '/tools/groepsuggesties/?q=';
 			$this->suggestions['Fotoalbum'] = '/fotoalbum/zoeken/';
