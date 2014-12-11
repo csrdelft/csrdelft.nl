@@ -6,9 +6,9 @@
 				$("#gallery").jGallery({
 					"mode": "slider",
 					"width": "750px",
-					"slideshowInterval": "4s",
+					"slideshowInterval": "6s",
 					"autostartAtImage": randomIntFromInterval(0, $('#gallery img').length - 1),
-					"slideshowRandom": true,
+					//"slideshowRandom": true,
 					"hideThumbnailsOnInit": true,
 					"transition": "random",
 					"transitionBackward": "random",
