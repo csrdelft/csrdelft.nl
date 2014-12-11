@@ -322,7 +322,13 @@ class UploadFileField extends InputField {
 	}
 
 	public function getHtml() {
-		return '<input ' . $this->getInputAttribute(array('type', 'id', 'name', 'class', 'disabled', 'readonly')) . ' accept="' . implode('|', $this->filterMime) . '"' . ($this->multiple ? ' multiple' : '') . ' data-max-size="' . getMaximumFileUploadSize() . '" />';
+		// werkomheen onbekende mime-types voor client
+		if ($this->filterMime == Afbeelding::$mimeTypes) {
+			$accept = 'image/*';
+		} else {
+			$accept = implode('|', $this->filterMime);
+		}
+		return '<input ' . $this->getInputAttribute(array('type', 'id', 'name', 'class', 'disabled', 'readonly')) . ' accept="' . $accept . '"' . ($this->multiple ? ' multiple' : '') . ' data-max-size="' . getMaximumFileUploadSize() . '" />';
 	}
 
 	public function getJavascript() {
