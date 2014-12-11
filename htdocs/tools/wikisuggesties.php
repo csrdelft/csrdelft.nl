@@ -29,44 +29,43 @@ require_once(DOKU_INC . 'lib/exe/ajax.php');
  * @author P.W.G. Brussee <brussee@live.nl>
  */
 function ajax_ttypeahead() {
-	if (!LoginModel::mag('P_DOCS_READ') OR ! isset($_GET['q'])) {
+	if (!LoginModel::mag('P_LEDEN_READ') OR ! isset($_GET['q'])) {
 		exit;
 	} else {
-		$zoekterm = filter_input(INPUT_GET, 'q', FILTER_SANITIZE_STRING);
+		$query = filter_input(INPUT_GET, 'q', FILTER_SANITIZE_STRING);
 	}
-
-	var_dump($zoekterm); //DEBUG
-
-	$data = ft_pageLookup($zoekterm);
-
-	var_dump($data); //DEBUG
-
-	if (!count($data)) {
-		return;
-	}
-	$data = array_keys($data);
 
 	$limit = 5;
 	if (isset($_GET['limit'])) {
 		$limit = (int) $_GET['limit'];
 	}
-	$data = array_slice($data, 0, $limit);
-	$data = array_map('trim', $data);
-	$data = array_map('noNS', $data);
-	$data = array_unique($data);
-	sort($data);
 
-	var_dump($data); //DEBUG
+	$data = ft_pageLookup($query, true, useHeading('navigation'));
 
 	$result = array();
-	foreach ($data as $item) {
+	$counter = 0;
+	foreach ($data as $id => $title) {
+		$label = '';
+		if (useHeading('navigation')) {
+			$name = $title;
+		} else {
+			$ns = getNS($id);
+			if ($ns) {
+				$name = noNS($id) . ' (' . $ns . ')';
+				$label = '<span class="lichtgrijs"> - ' . $ns . '</span>';
+			} else {
+				$name = $id;
+			}
+		}
 		$result[] = array(
-			'url'	 => '/wiki/' . $item->getUrl(),
-			'value'	 => $item->getNaam() . '<span class="lichtgrijs"> - ' . $item->getCategorie()->getNaam() . '</span>'
+			'url'	 => html_wikilink(':' . $id, $name),
+			'value'	 => $name . $label
 		);
+		if ($counter++ > $limit) {
+			break;
+		}
 	}
 
 	header('Content-Type: application/json');
 	echo json_encode($result);
-	exit;
 }
