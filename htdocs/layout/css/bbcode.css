@@ -196,7 +196,7 @@ pre.bbcode {
 .bb-fotoalbum .images { margin-top: 6px; position: relative;}
 .bb-fotoalbum .images a { position: absolute;}
 .bb-fotoalbum .images a.sml img { width: 75px; height: 75px; }
-.bb-fotoalbum .images a.big img { width: 152px; height: 152px;}
+.bb-fotoalbum .images a.big img { width: 151px; height: 151px;}
 .bb-fotoalbum .images a {
 	-webkit-transition: opacity .4s ease-out;
 	-moz-transition: opacity .4s ease-out;
