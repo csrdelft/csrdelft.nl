@@ -29,19 +29,17 @@ require_once(DOKU_INC . 'lib/exe/ajax.php');
  * @author P.W.G. Brussee <brussee@live.nl>
  */
 function ajax_ttypeahead() {
-	global $INPUT;
-
-	$query = cleanID($INPUT->post->str('q'));
-	if (empty($query)) {
-		$query = cleanID($INPUT->get->str('q'));
-	}
-	if (empty($query)) {
-		return;
+	if (!LoginModel::mag('P_DOCS_READ') OR ! isset($_GET['q'])) {
+		exit;
+	} else {
+		$zoekterm = filter_input(INPUT_GET, 'q', FILTER_SANITIZE_STRING);
 	}
 
-	$data = ft_pageLookup($query);
+	var_dump($zoekterm); //DEBUG
 
-	var_dump($data);
+	$data = ft_pageLookup($zoekterm);
+
+	var_dump($data); //DEBUG
 
 	if (!count($data)) {
 		return;
@@ -58,11 +56,13 @@ function ajax_ttypeahead() {
 	$data = array_unique($data);
 	sort($data);
 
+	var_dump($data); //DEBUG
+
 	$result = array();
-	foreach (DocumentenCategorie::zoekDocumenten($zoekterm, $categorie, $limiet) as $doc) {
+	foreach ($data as $item) {
 		$result[] = array(
-			'url'	 => '/communicatie/documenten/bekijken/' . $doc->getID() . '/' . $doc->getFileName(),
-			'value'	 => $doc->getNaam() . '<span class="lichtgrijs"> - ' . $doc->getCategorie()->getNaam() . '</span>'
+			'url'	 => '/wiki/' . $item->getUrl(),
+			'value'	 => $item->getNaam() . '<span class="lichtgrijs"> - ' . $item->getCategorie()->getNaam() . '</span>'
 		);
 	}
 
