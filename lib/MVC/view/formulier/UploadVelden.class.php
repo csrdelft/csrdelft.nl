@@ -291,7 +291,7 @@ class UploadFileField extends InputField {
 
 	public function validate() {
 		parent::validate();
-		if (!empty($this->filterMime) AND ! in_array($this->getModel()->mimetype, $this->filterMime)) {
+		if (!empty($this->filterMime) AND ! empty($this->getModel()->mimetype) AND ! in_array($this->getModel()->mimetype, $this->filterMime)) {
 			$this->error = 'Bestandstype niet toegestaan: ' . $this->getModel()->mimetype;
 		}
 		if ($this->value['error'] == UPLOAD_ERR_NO_FILE) {

@@ -220,7 +220,6 @@ class ProfielBewerken extends Profiel {
 				$form[] = new DuckField('duckname', $profiel['duckname'], 'Duckstad-naam', $this->lid);
 			}
 			if ($hasLedenMod OR LoginModel::getUid() === '1207') {
-				$form[] = new Subkopje('Duck-pasfoto:');
 				$path = PICS_PATH . $this->lid->getDuckfotoPath();
 				if (strpos($path, '/duck') !== false AND ! endsWith($path, 'eend.jpg')) {
 					$duckfoto = new Afbeelding($path);
@@ -230,7 +229,7 @@ class ProfielBewerken extends Profiel {
 				} else {
 					$duckfoto = null;
 				}
-				$form[] = new ImageField('duckfoto', 'Duckstad-foto', $duckfoto, null, null, false, null, null, 250);
+				$form[] = new ImageField('duckfoto', 'Duck-pasfoto', $duckfoto, null, null, false, null, null, 250);
 			}
 			$form[] = new WachtwoordWijzigenField('password', $this->lid);
 		}
