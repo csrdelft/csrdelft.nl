@@ -19,12 +19,21 @@ class ForumModel extends AbstractForumModel {
 	const orm = 'ForumCategorie';
 
 	protected static $instance;
+	/**
+	 * Default ORDER BY
+	 * @var string
+	 */
 	protected $default_order = 'volgorde ASC';
 	/**
 	 * Store categorien array as a whole in memcache
 	 * @var boolean
 	 */
 	protected $memcache_prefetch = true;
+	/**
+	 * Lazy loading
+	 * @var array
+	 */
+	private $indeling;
 
 	/**
 	 * Eager loading of ForumDeel[].
@@ -32,21 +41,23 @@ class ForumModel extends AbstractForumModel {
 	 * @return ForumCategorie[]
 	 */
 	public function getForumIndeling() {
-		$delen = ForumDelenModel::instance()->getAlleForumDelenPerCategorie();
-		$categorien = $this->prefetch();
-		$result = array();
-		foreach ($categorien as $cat) {
-			if ($cat->magLezen()) {
-				$result[] = $cat;
-				if (array_key_exists($cat->categorie_id, $delen)) {
-					$cat->setForumDelen($delen[$cat->categorie_id]);
-					unset($delen[$cat->categorie_id]);
-				} else {
-					$cat->setForumDelen(array());
+		if (!isset($this->indeling)) {
+			$delen = ForumDelenModel::instance()->getAlleForumDelenPerCategorie();
+			$categorien = $this->prefetch();
+			$this->indeling = array();
+			foreach ($categorien as $cat) {
+				if ($cat->magLezen()) {
+					$this->indeling[] = $cat;
+					if (array_key_exists($cat->categorie_id, $delen)) {
+						$cat->setForumDelen($delen[$cat->categorie_id]);
+						unset($delen[$cat->categorie_id]);
+					} else {
+						$cat->setForumDelen(array());
+					}
 				}
 			}
 		}
-		return $result;
+		return $this->indeling;
 	}
 
 	public function opschonen() {
@@ -100,6 +111,10 @@ class ForumDelenModel extends AbstractForumModel {
 	const orm = 'ForumDeel';
 
 	protected static $instance;
+	/**
+	 * Default ORDER BY
+	 * @var string
+	 */
 	protected $default_order = 'volgorde ASC';
 
 	public function getAlleForumDelenPerCategorie() {

@@ -17,7 +17,7 @@
 		<thead>
 			<tr>
 				<th>
-					{$cat->titel}
+					<a name="{$cat->categorie_id}">{$cat->titel}</a>
 					<span class="forumcategorie-omschrijving">{$cat->omschrijving}</span>
 				</th>
 				<th>Onderwerpen</th>

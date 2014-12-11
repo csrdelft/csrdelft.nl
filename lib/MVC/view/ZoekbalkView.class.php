@@ -75,14 +75,23 @@ JS;
 						'url'	 => $item->link,
 						'value'	 => $label
 					);
-					// Forum delen invoegen
 					if ($item->tekst === 'Forum') {
 						require_once 'MVC/model/ForumModel.class.php';
-						foreach (ForumDelenModel::instance()->getForumDelenVoorLid() as $deel) {
+						// Forum categorien invoegen
+						foreach (ForumModel::instance()->getForumIndeling() as $categorie) {
 							$this->suggestions['Menu'][] = array(
-								'url'	 => '/forum/deel/' . $deel->forum_id,
-								'value'	 => $deel->titel . '<span class="lichtgrijs"> - Forum</span>'
+								'url'	 => '/forum#' . $categorie->categorie_id,
+								'value'	 => $categorie->titel . '<span class="lichtgrijs"> - Forum</span>'
 							);
+						}
+						// Forum delen invoegen
+						foreach (ForumModel::instance()->getForumIndeling() as $categorie) {
+							foreach ($categorie->getForumDelen() as $deel) {
+								$this->suggestions['Menu'][] = array(
+									'url'	 => '/forum/deel/' . $deel->forum_id,
+									'value'	 => $deel->titel . '<span class="lichtgrijs"> - ' . $categorie->titel . '</span>'
+								);
+							}
 						}
 					}
 					// Document categorien invoegen
