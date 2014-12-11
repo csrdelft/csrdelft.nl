@@ -55,7 +55,7 @@ class VerticalenContent implements View {
 		foreach ($verticalen as $verticale) {
 
 			echo '<div class="verticale">';
-			echo '<h2>Verticale ' . $verticale->getNaam() . '</h2>';
+			echo '<h2><a name="' . $verticale->getLetter() . '">Verticale ' . $verticale->getNaam() . '</a></h2>';
 			foreach ($verticale->getKringen() as $kringnaam => $kring) {
 				$kringstyle = 'kring';
 				if ($kringnaam == 0) {

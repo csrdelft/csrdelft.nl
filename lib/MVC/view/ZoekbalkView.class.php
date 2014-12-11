@@ -52,59 +52,64 @@ else {
 }
 JS;
 		if (LoginModel::mag('P_LEDEN_READ')) {
-
+			// Favorieten suggesties
 			$favs = MenuModel::instance()->getMenu(LoginModel::getUid());
-			foreach ($favs->getChildren() as $item) {
-				if ($item->magBekijken()) {
+			foreach ($favs->getChildren() as $verticale) {
+				if ($verticale->magBekijken()) {
 					$this->suggestions['Favorieten'][] = array(
-						'url'	 => $item->link,
-						'value'	 => $item->tekst
+						'url'	 => $verticale->link,
+						'value'	 => $verticale->tekst
 					);
 				}
 			}
-
+			// Menu suggesties
 			$list = MenuModel::instance()->getList(MenuModel::instance()->getMenu('main'));
-			foreach ($list as $item) {
-				if ($item->magBekijken()) {
-					$label = $item->tekst;
-					$parent = $item->getParent();
+			foreach ($list as $verticale) {
+				if ($verticale->magBekijken()) {
+					$label = $verticale->tekst;
+					$parent = $verticale->getParent();
 					if ($parent AND $parent->tekst != 'main') {
 						$label .= '<span class="lichtgrijs"> - ' . $parent->tekst . '</span>';
 					}
 					$this->suggestions['Menu'][] = array(
-						'url'	 => $item->link,
+						'url'	 => $verticale->link,
 						'value'	 => $label
 					);
-					if ($item->tekst === 'Forum') {
-						require_once 'MVC/model/ForumModel.class.php';
-						// Forum categorien invoegen
-						foreach (ForumModel::instance()->getForumIndeling() as $categorie) {
-							$this->suggestions['Menu'][] = array(
-								'url'	 => '/forum#' . $categorie->categorie_id,
-								'value'	 => $categorie->titel . '<span class="lichtgrijs"> - Forum</span>'
-							);
-							// Forum delen invoegen
-							foreach ($categorie->getForumDelen() as $deel) {
-								$this->suggestions['Menu'][] = array(
-									'url'	 => '/forum/deel/' . $deel->forum_id,
-									'value'	 => $deel->titel . '<span class="lichtgrijs"> - ' . $categorie->titel . '</span>'
-								);
-							}
-						}
-					} elseif ($item->tekst === 'Documenten') {
-						require_once 'documenten/categorie.class.php';
-						// Document categorien invoegen
-						foreach (DocumentenCategorie::getAll() as $cat) {
-							if ($cat->magBekijken()) {
-								$this->suggestions['Menu'][] = array(
-									'url'	 => '/communicatie/documenten/categorie/' . $cat->getID(),
-									'value'	 => $cat->getNaam() . '<span class="lichtgrijs"> - Documenten</span>'
-								);
-							}
-						}
-					}
 				}
 			}
+			// Verticalen suggesties
+			foreach (VerticalenModel::instance()->prefetch() as $verticale) {
+				$this->suggestions['Menu'][] = array(
+					'url'	 => '/communicatie/verticalen#' . $verticale->letter,
+					'value'	 => $verticale->naam . '<span class="lichtgrijs"> - Verticalen</span>'
+				);
+			}
+			// Forum categorien suggesties
+			require_once 'MVC/model/ForumModel.class.php';
+			foreach (ForumModel::instance()->getForumIndeling() as $categorie) {
+				$this->suggestions['Menu'][] = array(
+					'url'	 => '/forum#' . $categorie->categorie_id,
+					'value'	 => $categorie->titel . '<span class="lichtgrijs"> - Forum</span>'
+				);
+				// Forum delen suggesties
+				foreach ($categorie->getForumDelen() as $deel) {
+					$this->suggestions['Menu'][] = array(
+						'url'	 => '/forum/deel/' . $deel->forum_id,
+						'value'	 => $deel->titel . '<span class="lichtgrijs"> - ' . $categorie->titel . '</span>'
+					);
+				}
+			}
+			// Document categorien suggesties
+			require_once 'documenten/categorie.class.php';
+			foreach (DocumentenCategorie::getAll() as $cat) {
+				if ($cat->magBekijken()) {
+					$this->suggestions['Menu'][] = array(
+						'url'	 => '/communicatie/documenten/categorie/' . $cat->getID(),
+						'value'	 => $cat->getNaam() . '<span class="lichtgrijs"> - Documenten</span>'
+					);
+				}
+			}
+			// Nog meer suggesties
 			$this->suggestions['Leden'] = '/tools/naamsuggesties/leden/?q=';
 			$this->suggestions['Agenda'] = '/agenda/zoeken/';
 			$this->suggestions['Forum'] = '/forum/titelzoeken/';
@@ -120,7 +125,7 @@ JS;
 		?>
 		<div class="input-group">
 			<div class="input-group-btn">
-		<?= parent::getHtml() ?>
+				<?= parent::getHtml() ?>
 				<button id="cd-zoek-engines" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
 					<img src="http://plaetjes.csrdelft.nl/knopjes/search-16.png">
 					<span class="caret"></span>
