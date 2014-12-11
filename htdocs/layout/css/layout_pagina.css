@@ -220,8 +220,6 @@ Lateral navigation
 	top: 0;
 	right: 0;
 	height: 100%;
-	/* ensures that the menu is invisible if main content breaks out */
-	display: none;
 	/* the secondary navigation is covered by the main element */
 	z-index: 1;
 	overflow-y: auto;
@@ -242,7 +240,6 @@ Lateral navigation
 	transform: translateX(80px);
 }
 #cd-lateral-nav.lateral-menu-is-open {
-	display: block;
 	-webkit-transform: translateX(0);
 	-moz-transform: translateX(0);
 	-ms-transform: translateX(0);
