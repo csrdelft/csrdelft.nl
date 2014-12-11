@@ -21,11 +21,9 @@
 			// Missing js file
 		}
 	</script>
-	<div class="bb-block" style="padding:0;">
-		<div id="gallery">
-			{foreach from=$album->getFotos() item=foto}
-				<img src="{$foto->getResizedUrl()}" />
-			{/foreach}
-		</div>
+	<div id="gallery">
+		{foreach from=$album->getFotos() item=foto}
+			<img src="{$foto->getResizedUrl()}" />
+		{/foreach}
 	</div>
 {/if}
