@@ -1116,7 +1116,7 @@ class Lid implements Serializable, Agendeerbaar {
 		$van = date('Y-m-d', $van);
 		$tot = date('Y-m-d', $tot);
 
-		if ($limiet > 0) {
+		if ((int) $limiet > 0) {
 			$limitclause = "LIMIT " . (int) $limiet;
 		} else {
 			$limitclause = '';
@@ -1260,10 +1260,11 @@ class Zoeker {
 		# als er een specifieke moot is opgegeven, gaan we alleen in die moot zoeken
 		$mootfilter = ($verticale != 'alle') ? 'AND verticale=\'' . $verticale . '\' ' : '';
 		# is er een maximum aantal resultaten gewenst
-		$limit = ($limiet > 0) ? '' : 'LIMIT ' . (int) $limiet;
+		$limit = (int) $limiet > 0 ? 'LIMIT ' . (int) $limiet : '';
 
 		# controleer of we ueberhaupt wel wat te zoeken hebben hier
 		if ($statusfilter != '') {
+
 			# standaardvelden
 			if (empty($velden)) {
 				$velden = array('uid', 'nickname', 'duckname', 'voornaam', 'tussenvoegsel', 'achternaam', 'postfix', 'adres', 'postcode', 'woonplaats', 'land', 'telefoon',
@@ -1291,9 +1292,11 @@ class Zoeker {
 				{$limit}
 			";
 			$result = $db->select($sZoeken);
+
 			if ($result !== false and $db->numRows($result) > 0) {
-				while ($lid = $db->next($result))
+				while ($lid = $db->next($result)) {
 					$leden[] = $lid;
+				}
 			}
 		}
 

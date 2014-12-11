@@ -451,7 +451,7 @@ class Groepen {
 				(g.snaam LIKE '%" . $db->escape($zoekterm) . "%' OR g.naam LIKE '%" . $db->escape($zoekterm) . "%')
 			ORDER BY g.begin DESC
 		";
-		if ($limiet > 0) {
+		if ((int) $limiet > 0) {
 			$query .= "LIMIT 0, " . (int) $limiet;
 		}
 		$query .= ";";

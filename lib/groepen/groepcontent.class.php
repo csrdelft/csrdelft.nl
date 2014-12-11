@@ -71,7 +71,6 @@ class GroepContent extends OldGroepView {
 				$zoekin[] = 'S_OVERLEDEN';
 				$zoekin[] = 'S_CIE';
 			}
-
 			$leden = namen2uid($_POST['rawNamen'], $zoekin);
 
 			if (is_array($leden) AND count($leden) != 0) {

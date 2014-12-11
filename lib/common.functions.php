@@ -402,7 +402,7 @@ function namen2uid($sNamen, $filter = 'leden') {
 	$return = false;
 	foreach ($aNamen as $sNaam) {
 		$aNaamOpties = array();
-		$aZoekNamen = Zoeker::zoekLeden($sNaam, 'naam', 'alle', 'achternaam', $filter);
+		$aZoekNamen = Zoeker::zoekLeden($sNaam, 'naam', 'alle', 'achternaam', $filter, array('uid', 'voornaam', 'tussenvoegsel', 'achternaam'));
 		if (count($aZoekNamen) == 1) {
 			$naam = $aZoekNamen[0]['voornaam'] . ' ';
 			if (trim($aZoekNamen[0]['tussenvoegsel']) != '') {

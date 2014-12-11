@@ -270,7 +270,7 @@ class Catalogus {
 			$limiet = (int) $_GET['limit'];
 		}
 		$wherelimit = "";
-		if ($limiet > 0) {
+		if ((int) $limiet > 0) {
 			$wherelimit = "LIMIT 0, " . (int) $limiet;
 		}
 		$properties = array();
