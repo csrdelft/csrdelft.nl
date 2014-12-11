@@ -100,6 +100,7 @@ JS;
 			$this->suggestions['Leden'] = '/tools/naamsuggesties/leden/?q=';
 			$this->suggestions['Agenda'] = '/agenda/zoeken/';
 			$this->suggestions['Draadjes'] = '/forum/titelzoeken/';
+			$this->suggestions['Wiki'] = '/tools/wikisuggesties/?call=ttypeahead&q=';
 			$this->suggestions['Groepen'] = '/tools/groepsuggesties/?q=';
 			$this->suggestions['Fotoalbum'] = '/fotoalbum/zoeken/';
 			$this->suggestions['Documenten'] = '/tools/documentsuggesties/?q=';

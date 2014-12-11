@@ -542,6 +542,7 @@ htdocs/tools/verticalelijsten.php -text
 htdocs/tools/voorkeuren/commissies.php -text
 htdocs/tools/voorkeuren/lidpagina.php -text
 htdocs/tools/voorkeuren/voorkeuren.php -text
+htdocs/tools/wikisuggesties.php -text
 htdocs/wiki/.htaccess -text
 htdocs/wiki/.htaccess.dist -text
 htdocs/wiki/COPYING -text
