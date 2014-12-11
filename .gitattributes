@@ -4368,6 +4368,7 @@ lib/templates/MVC/forum/resultaten.tpl -text
 lib/templates/MVC/forum/rss.tpl -text
 lib/templates/MVC/forum/rss_link.tpl -text
 lib/templates/MVC/fotoalbum/album.tpl -text
+lib/templates/MVC/fotoalbum/slider.tpl -text
 lib/templates/MVC/groepen/groep.tpl -text
 lib/templates/MVC/groepen/inhoudsopgave.tpl -text
 lib/templates/MVC/groepen/menu_pagina.tpl -text

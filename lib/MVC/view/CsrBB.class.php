@@ -186,27 +186,32 @@ class CsrBB extends eamBBParser {
 		if (!$album) {
 			return '<div class="bb-block">Fotoalbum niet gevonden: /' . $url . '</div>';
 		}
-		$fotoalbumtag = new FotoAlbumBBView($album);
-		if ($this->quote_level > 0 || isset($arguments['compact'])) {
-			$fotoalbumtag->makeCompact();
-		}
-		if (isset($arguments['rows'])) {
-			$fotoalbumtag->setRows((int) $arguments['rows']);
-		}
-		if (isset($arguments['perrow'])) {
-			$fotoalbumtag->setPerRow((int) $arguments['perrow']);
-		}
-		if (isset($arguments['bigfirst'])) {
-			$fotoalbumtag->setBig(0);
-		}
-		if (isset($arguments['big'])) {
-			if ($arguments['big'] == 'first') {
-				$fotoalbumtag->setBig(0);
-			} else {
-				$fotoalbumtag->setBig($arguments['big']);
+		if (isset($arguments['slider']) AND $arguments['slider'] === 'homepage') {
+			$view = new FotoAlbumSliderView($album);
+		} else {
+			$view = new FotoAlbumBBView($album);
+
+			if ($this->quote_level > 0 || isset($arguments['compact'])) {
+				$view->makeCompact();
+			}
+			if (isset($arguments['rows'])) {
+				$view->setRows((int) $arguments['rows']);
+			}
+			if (isset($arguments['perrow'])) {
+				$view->setPerRow((int) $arguments['perrow']);
+			}
+			if (isset($arguments['bigfirst'])) {
+				$view->setBig(0);
+			}
+			if (isset($arguments['big'])) {
+				if ($arguments['big'] == 'first') {
+					$view->setBig(0);
+				} else {
+					$view->setBig($arguments['big']);
+				}
 			}
 		}
-		return $fotoalbumtag->getHtml();
+		return $view->getHtml();
 	}
 
 	/**

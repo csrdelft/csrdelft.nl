@@ -71,6 +71,9 @@ class CmsPaginaController extends Controller {
 			$this->view = new CsrLayout2Page($body, $tmpl, $menu);
 		} else {
 			$this->view = new CsrLayoutPage($body, $this->zijbalk);
+			if ($pagina->naam === 'thuis') {
+				$this->view->addCompressedResources('fotoalbum');
+			}
 		}
 	}
 

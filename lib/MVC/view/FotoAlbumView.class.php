@@ -198,6 +198,19 @@ class FotoAlbumZijbalkView extends FotoAlbumView {
 
 }
 
+class FotoAlbumSliderView extends FotoAlbumZijbalkView {
+
+	public function getHtml() {
+		$this->smarty->assign('album', $this->model);
+		return $this->smarty->fetch('MVC/fotoalbum/slider.tpl');
+	}
+
+	public function view() {
+		echo $this->getHtml();
+	}
+
+}
+
 class FotoAlbumBBView extends FotoAlbumZijbalkView {
 
 	private $compact = false; //compact or expanded tag.

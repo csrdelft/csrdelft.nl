@@ -166,8 +166,8 @@ class HTML_BBCodeParser2_Filter_Csrblocks extends HTML_BBCodeParser2_Filter {
 		foreach ($tags as $tag) {
 			$pattern[] = "#" . $oe . $tag . "=([^" . $ce . "]*?)" . $ce . "(?!" . $oe . "/" . $tag . $ce . ")#Ui"; // [groep=.*] zonder [/groep] erachter
 			$pattern[] = "#" . $oe . $tag . "(?!=)(\s?.*)" . $ce . "(.+?)" . $oe . "/" . $tag . $ce . "#Ui";   // [groep .*].+[/groep]
-			$replace[] = $o . $tag . "=\$1" . $c . $o . "/" . $tag . $c;		// [groep=.*][/groep]
-			$replace[] = $o . $tag . "=\$2 \$1" . $c . $o . "/" . $tag . $c;		 // [groep=.+ .*][/groep]
+			$replace[] = $o . $tag . "=\$1" . $c . $o . "/" . $tag . $c;  // [groep=.*][/groep]
+			$replace[] = $o . $tag . "=\$2 \$1" . $c . $o . "/" . $tag . $c;   // [groep=.+ .*][/groep]
 		}
 
 		$this->_preparsed = preg_replace($pattern, $replace, $this->_text);
@@ -1010,27 +1010,29 @@ HTML;
 				if (!$album) {
 					return '<div class="bb-block">Fotoalbum niet gevonden: /' . $url . '</div>';
 				}
-				if (count($album->getFotos()) < 1) {
-					return '<div class="bb-block">Fotoalbum bevat geen foto\'s: /' . $url . '</div>';
-				}
-				$fotoalbumtag = new FotoAlbumBBView($album);
-				if ($this->quote_level > 0 || isset($arguments['compact'])) {
-					$fotoalbumtag->makeCompact();
-				}
-				if (isset($arguments['rows'])) {
-					$fotoalbumtag->setRows((int) $arguments['rows']);
-				}
-				if (isset($arguments['perrow'])) {
-					$fotoalbumtag->setPerRow((int) $arguments['perrow']);
-				}
-				if (isset($arguments['bigfirst'])) {
-					$fotoalbumtag->setBig(0);
-				}
-				if (isset($arguments['big'])) {
-					if ($arguments['big'] == 'first') {
-						$fotoalbumtag->setBig(0);
-					} else {
-						$fotoalbumtag->setBig($arguments['big']);
+				if (isset($arguments['slider']) AND $arguments['slider'] === 'homepage') {
+					$view = new FotoAlbumSliderView($album);
+				} else {
+					$view = new FotoAlbumBBView($album);
+
+					if ($this->quote_level > 0 || isset($arguments['compact'])) {
+						$view->makeCompact();
+					}
+					if (isset($arguments['rows'])) {
+						$view->setRows((int) $arguments['rows']);
+					}
+					if (isset($arguments['perrow'])) {
+						$view->setPerRow((int) $arguments['perrow']);
+					}
+					if (isset($arguments['bigfirst'])) {
+						$view->setBig(0);
+					}
+					if (isset($arguments['big'])) {
+						if ($arguments['big'] == 'first') {
+							$view->setBig(0);
+						} else {
+							$view->setBig($arguments['big']);
+						}
 					}
 				}
 				return $fotoalbumtag->getHtml();
