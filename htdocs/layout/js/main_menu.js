@@ -98,7 +98,11 @@ jQuery(document).ready(function ($) {
 		}
 	});
 
-	$('#cd-zoek-form').find('.menuzoekveld').on('focus', function (event) {
+	$('#cd-zoek-form').find('.menuzoekveld').keyup(function (event) {
+		if (event.keyCode === 27) { // esc
+			$(this).typeahead('val', '');
+		}
+	}).on('focus', function (event) {
 		$('#mainmenu').fadeOut();
 		this.setSelectionRange(0, this.value.length);
 	}).on('blur', function (event) {
