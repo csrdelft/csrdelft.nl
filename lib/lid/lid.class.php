@@ -1260,7 +1260,11 @@ class Zoeker {
 		# als er een specifieke moot is opgegeven, gaan we alleen in die moot zoeken
 		$mootfilter = ($verticale != 'alle') ? 'AND verticale=\'' . $verticale . '\' ' : '';
 		# is er een maximum aantal resultaten gewenst
-		$limit = (int) $limiet > 0 ? 'LIMIT ' . (int) $limiet : '';
+		if ((int) $limiet > 0) {
+			$limit = 'LIMIT ' . (int) $limiet;
+		} else {
+			$limit = '';
+		}
 
 		# controleer of we ueberhaupt wel wat te zoeken hebben hier
 		if ($statusfilter != '') {
