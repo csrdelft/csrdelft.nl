@@ -1681,6 +1681,7 @@ htdocs/wiki/lib/plugins/csrgroepgeschiedenis/lang/nl/settings.php -text
 htdocs/wiki/lib/plugins/csrgroepgeschiedenis/plugin.info.txt -text
 htdocs/wiki/lib/plugins/csrgroepgeschiedenis/syntax.php -text
 htdocs/wiki/lib/plugins/csrlink/README -text
+htdocs/wiki/lib/plugins/csrlink/action.php -text
 htdocs/wiki/lib/plugins/csrlink/book.png -text
 htdocs/wiki/lib/plugins/csrlink/conf/default.php -text
 htdocs/wiki/lib/plugins/csrlink/conf/metadata.php -text
