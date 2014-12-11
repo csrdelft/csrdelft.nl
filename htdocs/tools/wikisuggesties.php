@@ -40,7 +40,11 @@ function ajax_ttypeahead() {
 		$limit = (int) $_GET['limit'];
 	}
 
+	var_dump($query); //DEBUG
+
 	$data = ft_pageLookup($query, true, useHeading('navigation'));
+
+	var_dump($data); //DEBUG
 
 	$result = array();
 	$counter = 0;
@@ -49,10 +53,10 @@ function ajax_ttypeahead() {
 		if (useHeading('navigation')) {
 			$name = $title;
 		} else {
-			$ns = getNS($id);
-			if ($ns) {
-				$name = noNS($id) . ' (' . $ns . ')';
-				$label = '<span class="lichtgrijs"> - ' . $ns . '</span>';
+			$namespace = getNS($id);
+			if ($namespace) {
+				$name = noNS($id);
+				$label = '<span class="lichtgrijs"> - ' . $namespace . '</span>';
 			} else {
 				$name = $id;
 			}
