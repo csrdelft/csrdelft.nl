@@ -67,7 +67,7 @@ class BijbelroosterBBView extends BijbelroosterView {
 	}
 
 	public function getHtml() {
-		$html = '<div class="mededeling-grotebalk">';
+		$html = '<div class="bb-block mededeling-grotebalk">';
 		$html .= parent::getHtml();
 		$html .= '<div class="titel" style="float:right;position:relative;bottom:1.5em;right:10px"><a href="/actueel/bijbelrooster/">Bijbelleesrooster</a></div></div>';
 		return $html;

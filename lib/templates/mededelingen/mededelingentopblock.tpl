@@ -1,7 +1,7 @@
 {* Het Topmost block *}
 <div id="mededelingen-top3block">
 	{foreach from=$topmost item=mededeling}
-		<div class="mededeling-grotebalk">
+		<div class="bb-block mededeling-grotebalk">
 			<div class="titel">
 				<a href="{MededelingenContent::mededelingenRoot}{$mededeling->getId()}">
 					{$mededeling->getTitel()|bbcode|html_substr:"90":"…"}

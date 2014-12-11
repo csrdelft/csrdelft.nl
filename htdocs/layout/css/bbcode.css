@@ -30,7 +30,7 @@ span.offtopic a { color: #bbb; }
 span.offtopic hr { text-align: left; background-color: #bbb; }
 span.offtopic img { opacity: 0.3; filter: alpha(opacity=30); }
 
-.bb-block, .mededeling-grotebalk {
+.bb-block {
 	padding: 8px 12px;
 	margin: 10px 0;
 	background-color: #f5f5f5;
@@ -42,7 +42,7 @@ span.offtopic img { opacity: 0.3; filter: alpha(opacity=30); }
 	-o-transition: box-shadow .4s ease-out;
 	transition: box-shadow .4s ease-out;
 }
-.bb-block:hover, .mededeling-grotebalk:hover {
+.bb-block:hover {
 	-webkit-box-shadow: 0 0 10px #999;
 	-moz-box-shadow: 0 0 10px #999;
 	box-shadow: 0 0 10px #999;
