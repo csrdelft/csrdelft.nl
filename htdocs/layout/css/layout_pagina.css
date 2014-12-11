@@ -220,6 +220,8 @@ Lateral navigation
 	top: 0;
 	right: 0;
 	height: 100%;
+	/* ensures that the menu is invisible if main content breaks out */
+	display: none;
 	/* the secondary navigation is covered by the main element */
 	z-index: 1;
 	overflow-y: auto;
@@ -239,8 +241,15 @@ Lateral navigation
 	-o-transform: translateX(80px);
 	transform: translateX(80px);
 }
-#mainmenu {
-	margin: 25px 0 0 32px;
+#cd-lateral-nav.lateral-menu-is-open {
+	display: block;
+	-webkit-transform: translateX(0);
+	-moz-transform: translateX(0);
+	-ms-transform: translateX(0);
+	-o-transform: translateX(0);
+	transform: translateX(0);
+	/* smooth the scrolling on touch devices - webkit browsers */
+	-webkit-overflow-scrolling: touch;
 }
 #cd-lateral-nav .expanded-submenu {
 	display: none;
@@ -248,7 +257,6 @@ Lateral navigation
 }
 #cd-lateral-nav a, #cd-lateral-nav .toggle-group {
 	display: block;
-
 	color: #ffffff;
 }
 #cd-lateral-nav .toggle-group {
@@ -268,17 +276,9 @@ Lateral navigation
 	background-color: #E8CF2A;
 	color: #333333;
 }
-
-#cd-lateral-nav.lateral-menu-is-open {
-	-webkit-transform: translateX(0);
-	-moz-transform: translateX(0);
-	-ms-transform: translateX(0);
-	-o-transform: translateX(0);
-	transform: translateX(0);
-	/* smooth the scrolling on touch devices - webkit browsers */
-	-webkit-overflow-scrolling: touch;
+#mainmenu {
+	margin: 25px 0 0 32px;
 }
-
 #cd-zoek-form {
 	margin-top: 25px;
 
