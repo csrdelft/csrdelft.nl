@@ -668,6 +668,16 @@ function selectText(elmnt) {
 	}
 }
 
+/**
+ * @source http://stackoverflow.com/a/7228322
+ * @param {Number} min
+ * @param {Number} max
+ * @returns {Number}
+ */
+function randomIntFromInterval(min, max) {
+	return Math.floor(Math.random() * (max - min + 1) + min);
+}
+
 function dirname(path) {
 	//  discuss at: http://phpjs.org/functions/dirname/
 	// original by: Ozh
