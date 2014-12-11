@@ -39,8 +39,6 @@ class action_plugin_csrlink extends DokuWiki_Action_Plugin {
 
 		global $INPUT;
 
-		$maxnumbersuggestions = 5;
-
 		$query = $INPUT->post->str('q');
 		if (empty($query)) {
 			$query = $INPUT->get->str('q');
@@ -50,17 +48,13 @@ class action_plugin_csrlink extends DokuWiki_Action_Plugin {
 		}
 
 		$query = urldecode($query);
-
 		$data = ft_pageLookup($query, false, useHeading('navigation'));
 
 		if (!count($data)) {
 			return;
 		}
 
-		var_dump($data);
-
 		$result = array();
-		$counter = 0;
 		foreach ($data as $id => $title) {
 			$label = '';
 			if (useHeading('navigation')) {
@@ -78,9 +72,6 @@ class action_plugin_csrlink extends DokuWiki_Action_Plugin {
 				'url'	 => html_wikilink(':' . $id, $name),
 				'value'	 => ucfirst($name) . $label
 			);
-			if ($counter++ > $maxnumbersuggestions) {
-				break;
-			}
 		}
 
 		header('Content-Type: application/json');
