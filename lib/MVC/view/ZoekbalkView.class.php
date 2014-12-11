@@ -83,9 +83,7 @@ JS;
 								'url'	 => '/forum#' . $categorie->categorie_id,
 								'value'	 => $categorie->titel . '<span class="lichtgrijs"> - Forum</span>'
 							);
-						}
-						// Forum delen invoegen
-						foreach (ForumModel::instance()->getForumIndeling() as $categorie) {
+							// Forum delen invoegen
 							foreach ($categorie->getForumDelen() as $deel) {
 								$this->suggestions['Menu'][] = array(
 									'url'	 => '/forum/deel/' . $deel->forum_id,
@@ -93,10 +91,9 @@ JS;
 								);
 							}
 						}
-					}
-					// Document categorien invoegen
-					elseif ($item->tekst === 'Documenten') {
+					} elseif ($item->tekst === 'Documenten') {
 						require_once 'documenten/categorie.class.php';
+						// Document categorien invoegen
 						foreach (DocumentenCategorie::getAll() as $cat) {
 							if ($cat->magBekijken()) {
 								$this->suggestions['Menu'][] = array(
@@ -123,7 +120,7 @@ JS;
 		?>
 		<div class="input-group">
 			<div class="input-group-btn">
-				<?= parent::getHtml() ?>
+		<?= parent::getHtml() ?>
 				<button id="cd-zoek-engines" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
 					<img src="http://plaetjes.csrdelft.nl/knopjes/search-16.png">
 					<span class="caret"></span>
