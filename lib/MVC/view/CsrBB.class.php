@@ -600,6 +600,28 @@ HTML;
 	}
 
 	/**
+	 * Geeft een link naar de verticale.
+	 * 
+	 * [verticale]A[/verticale]
+	 * of
+	 * [verticale=A]
+	 */
+	protected function bb_verticale($arguments = array()) {
+		if (isset($arguments['verticale'])) {
+			$letter = $arguments['verticale'];
+		} else {
+			$letter = $this->parseArray(array('[/groep]'), array());
+		}
+
+		try {
+			$verticale = VerticalenModel::instance()->getVerticaleByLetter($letter);
+			return '<a href="/communicatie/verticalen#' . $verticale->letter . '">' . $verticale->naam . '</a>';
+		} catch (Exception $e) {
+			return '[verticale] Geen geldige verticale-letter (' . htmlspecialchars($letter) . ')';
+		}
+	}
+
+	/**
 	 * Geeft titel en auteur van een boek.
 	 * Een kleine indicator geeft met kleuren beschikbaarheid aan
 	 * 
