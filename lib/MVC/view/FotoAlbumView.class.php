@@ -357,7 +357,7 @@ class FotoAlbumBBView extends FotoAlbumZijbalkView {
 			foreach ($rowcontents as $col => $foto) {
 				if (is_array($foto)) {
 					$ret .= '<a href="' . $url . '#' . $foto['foto']->getResizedUrl() . '"';
-					$ret.=in_array($foto['index'], $this->big) ? 'class="big"' : 'class="sml"';
+					$ret .= in_array($foto['index'], $this->big) ? 'class="big"' : 'class="sml"';
 					$ret .= 'style=" left: ' . ($delta * $col) . 'px; top: ' . ($delta * $row) . 'px;">';
 					$ret .= '<img src="' . $foto['foto']->getThumbUrl() . '">';
 					$ret .= '</a>' . "\n";
