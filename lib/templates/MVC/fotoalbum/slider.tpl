@@ -5,6 +5,7 @@
 			$(function () {
 				$("#gallery").jGallery({
 					"width": "750px",
+					"slideshowRandom": true,
 					"transition": "random",
 					"transitionBackward": "random",
 					"transitionCols": "1",
