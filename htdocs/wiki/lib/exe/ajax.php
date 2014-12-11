@@ -81,58 +81,6 @@ function ajax_qsearch(){
     print '</ul>';
 }
 
-
-/**
- * Support Twitter Typeahead suggestions
- *
- * @link   https://twitter.github.io/typeahead.js/
- * @author Mike Frysinger <vapier@gentoo.org>
- * @author P.W.G. Brussee <brussee@live.nl>
- */
-function ajax_ttypeahead(){
-    global $lang;
-    global $INPUT;
-
-    $maxnumbersuggestions = 5;
-
-    $query = $INPUT->post->str('q');
-    if(empty($query)) $query = $INPUT->get->str('q');
-    if(empty($query)) return;
-
-    $query = urldecode($query);
-
-    $data = ft_pageLookup($query, true, useHeading('navigation'));
-
-    if(!count($data)) return;
-
-	$result = array();
-	$counter = 0;
-	foreach ($data as $id => $title) {
-		$label = '';
-		if (useHeading('navigation')) {
-			$name = $title;
-		} else {
-			$namespace = getNS($id);
-			if ($namespace) {
-				$name = noNS($id);
-				$label = '<span class="lichtgrijs"> - ' . ucfirst($namespace) . '</span>';
-			} else {
-				$name = $id;
-			}
-		}
-		$result[] = array(
-			'url'	 => html_wikilink(':' . $id, $name),
-			'value'	 => ucfirst($name) . $label
-		);
-		if ($counter++ > $maxnumbersuggestions) {
-			break;
-		}
-	}
-
-	header('Content-Type: application/json');
-	print json_encode($result);
-}
-
 /**
  * Support OpenSearch suggestions
  *
