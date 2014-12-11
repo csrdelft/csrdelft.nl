@@ -4,7 +4,9 @@
 		try {
 			$(function () {
 				$("#gallery").jGallery({
+					"mode": "slider",
 					"width": "750px",
+					"slideshowInterval": "4s",
 					"autostartAtImage": randomIntFromInterval(0, $('#gallery img').length - 1),
 					"slideshowRandom": true,
 					"hideThumbnailsOnInit": true,
@@ -12,11 +14,8 @@
 					"transitionBackward": "random",
 					"transitionCols": "1",
 					"transitionRows": "1",
-					"thumbnailsPosition": "bottom",
-					"thumbType": "image",
 					"backgroundColor": "FFFFFF",
-					"textColor": "000000",
-					"mode": "slider"
+					"textColor": "000000"
 				});
 			});
 		}
