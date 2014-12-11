@@ -75,7 +75,7 @@ class action_plugin_csrlink extends DokuWiki_Action_Plugin {
 		}
 
 		header('Content-Type: application/json');
-		echo $json->encode($result);
+		echo json_encode($result);
 	}
 
 }
