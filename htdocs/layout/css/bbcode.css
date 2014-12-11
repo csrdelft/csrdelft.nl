@@ -305,6 +305,7 @@ div.citaatContainer div.citaat div.citaatContainer div.citaat img.bb-img {
 }
 
 .bb-video-preview {
+	padding: 0;
 	display: inline-block;
 	position: relative;
 	cursor: pointer;
