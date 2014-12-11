@@ -10,7 +10,7 @@
  * @author     P.W.G. Brussee <brussee@live.nl>
  */
 if (!defined('DOKU_INC'))
-	define('DOKU_INC', dirname(__FILE__) . '/../../');
+	define('DOKU_INC', HTDOCS_PATH . 'wiki/');
 if (!defined('NOSESSION'))
 	define('NOSESSION', true); // we do not use a session or authentication here (better caching)
 if (!defined('NL'))
