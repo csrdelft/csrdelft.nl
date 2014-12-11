@@ -100,7 +100,7 @@ jQuery(document).ready(function ($) {
 
 	$('#cd-zoek-form').find('.menuzoekveld').keyup(function (event) {
 		if (event.keyCode === 27) { // esc
-			$(this).typeahead('val', '');
+			$('#cd-zoek-engines').click();
 		}
 	}).on('focus', function (event) {
 		$('#mainmenu').fadeOut();
