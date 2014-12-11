@@ -1,5 +1,7 @@
 <?php
 
+require_once 'configuratie.include.php';
+
 /**
  * DokuWiki Twitter Typeahead creator
  *
