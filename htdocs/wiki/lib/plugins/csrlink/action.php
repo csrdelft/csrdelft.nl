@@ -69,7 +69,7 @@ class action_plugin_csrlink extends DokuWiki_Action_Plugin {
 				}
 			}
 			$result[] = array(
-				'url'	 => html_wikilink(':' . $id, $name),
+				'url'	 => wl($id),
 				'value'	 => ucfirst($name) . $label
 			);
 		}
