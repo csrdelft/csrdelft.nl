@@ -117,7 +117,7 @@ class ForumDelenModel extends AbstractForumModel {
 		return $this->prefetch('categorie_id = ?', array($cat->categorie_id));
 	}
 
-	public function getForumDelenVoorLid($rss) {
+	public function getForumDelenVoorLid($rss = false) {
 		$delen = group_by_distinct('forum_id', $this->prefetch());
 		foreach ($delen as $forum_id => $deel) {
 			if (!$deel->magLezen($rss)) {
