@@ -115,14 +115,14 @@ function ajax_ttypeahead(){
 			$namespace = getNS($id);
 			if ($namespace) {
 				$name = noNS($id);
-				$label = '<span class="lichtgrijs"> - ' . $namespace . '</span>';
+				$label = '<span class="lichtgrijs"> - ' . ucfirst($namespace) . '</span>';
 			} else {
 				$name = $id;
 			}
 		}
 		$result[] = array(
 			'url'	 => html_wikilink(':' . $id, $name),
-			'value'	 => $name . $label
+			'value'	 => ucfirst($name) . $label
 		);
 		if ($counter++ > $maxnumbersuggestions) {
 			break;
