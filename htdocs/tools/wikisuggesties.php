@@ -42,7 +42,7 @@ function ajax_ttypeahead() {
 
 	var_dump($query); //DEBUG
 
-	$data = ft_pageLookup($query, true, useHeading('navigation'));
+	$data = ft_pageLookup($query);
 
 	var_dump($data); //DEBUG
 
