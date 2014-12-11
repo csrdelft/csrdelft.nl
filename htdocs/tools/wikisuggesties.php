@@ -40,11 +40,7 @@ function ajax_ttypeahead() {
 		$limit = (int) $_GET['limit'];
 	}
 
-	var_dump($query); //DEBUG
-
-	$data = ft_pageLookup($query, false, useHeading('navigation'));
-
-	var_dump($data); //DEBUG
+	$data = ft_pageLookup($query, true, useHeading('navigation'));
 
 	$result = array();
 	$counter = 0;

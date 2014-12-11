@@ -5,4 +5,4 @@ RewriteRule ^pasfoto/([0-9a-z]+).png$		pasfotos.php?uid=$1&image
 RewriteRule ^naamsuggesties/([a-z]+)/?$		naamsuggesties.php?zoekin=$1	[QSA]
 RewriteRule ^documentsuggesties/([0-9]*)/?$	documentsuggesties.php?cat=$1	[QSA]
 RewriteRule ^groepsuggesties/([0-9]*)/?$	groepsuggesties.php?gtype=$1	[QSA]
-RewriteRule ^wikisuggesties/?$				wikisuggesties.php?call=ttypeahead	[QSA]
+RewriteRule ^wikisuggesties/?$				../wiki/lib/exe/ajax.php?call=ttypeahead	[QSA]
