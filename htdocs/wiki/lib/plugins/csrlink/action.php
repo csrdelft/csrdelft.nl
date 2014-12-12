@@ -73,7 +73,7 @@ class action_plugin_csrlink extends DokuWiki_Action_Plugin {
 		if (empty($result)) {
 			$result[] = array(
 				'url'	 => '/wiki/hoofdpagina?do=search&id=' . urlencode($query),
-				'value'	 => htmlspecialchars($query) . '<span class="lichtgrijs"> - Zoeken in <span class="dikgedrukt">pagina inhoud</span></span>'
+				'value'	 => htmlspecialchars($query) . '<span class="lichtgrijs"> - Zoeken in <span class="dikgedrukt">paginainhoud</span></span>'
 			);
 		}
 
