@@ -34,7 +34,7 @@ try {
 	}
 	$class .= 'Controller';
 
-	require_once 'MVC/controller/' . $class . '.class.php';
+	require_once 'controller/' . $class . '.class.php';
 	$controller = new $class(REQUEST_URI);
 	$controller->performAction();
 

@@ -60,7 +60,7 @@ class ProfielContent extends SmartyTemplateView {
 		$this->smarty->assign('corveevrijstelling', $this->model->getCorveeVrijstelling());
 		$this->smarty->assign('corveekwalificaties', $this->model->getCorveeKwalificaties());
 
-		require_once 'MVC/model/bibliotheek/BiebCatalogus.class.php';
+		require_once 'model/bibliotheek/BiebCatalogus.class.php';
 		$this->smarty->assign('boeken', BiebCatalogus::getBoekenByUid($this->model->getUid(), 'eigendom'));
 		$this->smarty->assign('gerecenseerdeboeken', BiebCatalogus::getBoekenByUid($this->model->getUid(), 'gerecenseerd'));
 

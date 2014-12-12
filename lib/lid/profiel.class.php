@@ -8,7 +8,7 @@
 # -------------------------------------------------------------------
 
 
-require_once 'MVC/model/entity/Mail.class.php';
+require_once 'model/entity/Mail.class.php';
 
 /**
  * Profiel defenieert een stel functies om het aanpassen en weergeven
@@ -554,7 +554,7 @@ class ProfielStatus extends Profiel {
 	 * @return string changelogregel
 	 */
 	private function disableMaaltijdabos() {
-		require_once 'maalcie/model/MaaltijdAbonnementenModel.class.php';
+		require_once 'model/maalcie/MaaltijdAbonnementenModel.class.php';
 		$aantal = MaaltijdAbonnementenModel::verwijderAbonnementenVoorLid($this->lid->getUid());
 		return 'Afmelden abo\'s: ' . $aantal . ' uitgezet. ';
 	}
@@ -579,7 +579,7 @@ class ProfielStatus extends Profiel {
 				$changelog .= '[br]' . strftime('%a %e-%m-%Y', $taak->getBeginMoment()) . ' ' . $taak->getCorveeFunctie()->naam;
 			}
 			//corveeceasar mailen over vrijvallende corveetaken.
-			$bericht = file_get_contents(SMARTY_TEMPLATE_DIR . 'MVC/mail/toekomstigcorveeverwijderd.mail');
+			$bericht = file_get_contents(SMARTY_TEMPLATE_DIR . 'mail/toekomstigcorveeverwijderd.mail');
 			$values = array(
 				'AANTAL' => $aantal,
 				'NAAM'	 => Lid::naamLink($uid, 'full', 'plain'),
@@ -610,7 +610,7 @@ class ProfielStatus extends Profiel {
 		$saldi .= 'SocCie: ' . $this->bewerktLid->getSoccieSaldo() . "\n";
 		$saldi .= 'MaalCie: ' . $this->bewerktLid->getMaalCieSaldo() . "\n";
 
-		$bericht = file_get_contents(SMARTY_TEMPLATE_DIR . 'MVC/mail/lidafmeldingfisci.mail');
+		$bericht = file_get_contents(SMARTY_TEMPLATE_DIR . 'mail/lidafmeldingfisci.mail');
 		$uid = $this->bewerktLid->getUid();
 		$values = array(
 			'NAAM'	 => Lid::naamLink($uid, 'full', 'plain'),
@@ -682,7 +682,7 @@ class ProfielStatus extends Profiel {
 			'bibliothecaris@csrdelft.nl'	 => 'Bibliothecaris C.S.R.',
 			$this->bewerktLid->getEmail()	 => $this->bewerktLid->getNaamLink('civitas', 'plain')
 		);
-		$bericht = file_get_contents(SMARTY_TEMPLATE_DIR . 'MVC/mail/lidafgeleendebiebboeken.mail');
+		$bericht = file_get_contents(SMARTY_TEMPLATE_DIR . 'mail/lidafgeleendebiebboeken.mail');
 		$uid = $this->bewerktLid->getUid();
 		$values = array(
 			'NAAM'		 => Lid::naamLink($uid, 'full', 'plain'),

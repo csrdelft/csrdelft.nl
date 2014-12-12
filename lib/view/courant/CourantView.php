@@ -1,0 +1,65 @@
+<?php
+
+/**
+ * CourantView.class.php
+ * 
+ * @author C.S.R. Delft <pubcie@csrdelft.nl>
+ * 
+ * 
+ * Verzorgt het in elkaar zetten van de c.s.r.-courant
+ * 
+ */
+class CourantView extends SmartyTemplateView {
+
+	private $instellingen;
+
+	public function __construct(CourantModel $courant) {
+		parent::__construct($courant);
+		setlocale(LC_ALL, 'nl_NL@euro');
+		$this->instellingen = parse_ini_file(ETC_PATH . 'csrmail.ini');
+	}
+
+	public function verzenden($sEmailAan) {
+		$sMail = $this->getMail(true);
+
+		$smtp = fsockopen('localhost', 25, $feut, $fout);
+		echo 'Zo, mail verzenden naar ' . $sEmailAan . '.<pre>';
+		echo fread($smtp, 1024);
+		fwrite($smtp, "HELO localhost\r\n");
+		echo "HELO localhost\r\n";
+		echo fread($smtp, 1024);
+		fwrite($smtp, "MAIL FROM:<pubcie@csrdelft.nl>\r\n");
+		echo htmlspecialchars("MAIL FROM:<pubcie@csrdelft.nl>\r\n");
+		echo fread($smtp, 1024);
+		fwrite($smtp, "RCPT TO:<" . $sEmailAan . ">\r\n");
+		echo htmlspecialchars("RCPT TO:<" . $sEmailAan . ">\r\n");
+		echo fread($smtp, 1024);
+		fwrite($smtp, "DATA\r\n");
+		echo htmlspecialchars("DATA\r\n");
+		echo fread($smtp, 1024);
+		// de mail...
+		fwrite($smtp, $sMail . "\r\n");
+		echo htmlspecialchars("[mail hier]\r\n");
+		fwrite($smtp, "\r\n.\r\n");
+		echo htmlspecialchars("\r\n.\r\n");
+		echo fread($smtp, 1024);
+		echo '</pre>';
+	}
+
+	public function getMail($headers = false) {
+		$this->smarty->assign('instellingen', $this->instellingen);
+		$this->smarty->assignByRef('courant', $this->model);
+
+		$this->smarty->assign('indexCats', $this->model->getCats());
+		$this->smarty->assign('catNames', $this->model->getCats(true));
+
+		$this->smarty->assign('headers', $headers);
+
+		return $this->smarty->fetch($this->model->getTemplatePath());
+	}
+
+	public function view() {
+		echo $this->getMail();
+	}
+
+}

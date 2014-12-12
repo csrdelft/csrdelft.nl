@@ -9,7 +9,7 @@
  * van overblijven. Wellicht kan er later nog een html-optie ingeklust worden.
  */
 require_once 'configuratie.include.php';
-require_once 'MVC/model/entity/Mail.class.php';
+require_once 'model/entity/Mail.class.php';
 
 class Roodschopper {
 

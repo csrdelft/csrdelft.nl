@@ -6,8 +6,8 @@ require_once 'groepen/groep.class.php';
 
 if (!(LoginModel::mag('P_LOGGED_IN') AND LoginModel::mag('P_OUDLEDEN_READ'))) {
 	# geen rechten
-	require_once 'MVC/model/CmsPaginaModel.class.php';
-	require_once 'MVC/view/CmsPaginaView.class.php';
+	require_once 'model/CmsPaginaModel.class.php';
+	require_once 'view/CmsPaginaView.class.php';
 	$body = new CmsPaginaView(CmsPaginaModel::instance()->getPagina('geentoegang'));
 	$pagina = new CsrLayoutPage($body);
 	$pagina->view();

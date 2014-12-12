@@ -4,9 +4,9 @@ require_once 'ldap.class.php';
 require_once 'status.class.php';
 require_once 'lichting.class.php';
 require_once 'verticale.class.php';
-require_once 'MVC/model/VerticalenModel.class.php';
+require_once 'model/VerticalenModel.class.php';
 require_once 'groepen/groep.class.php';
-require_once 'MVC/model/Agendeerbaar.interface.php';
+require_once 'model/Agendeerbaar.interface.php';
 
 /**
  * lid.class.php
@@ -568,7 +568,7 @@ class Lid implements Serializable, Agendeerbaar {
 	 * MaaltijdAanmeldingen opzoeken en teruggeven van dit lid
 	 */
 	public function getRecenteAanmeldingen() {
-		require_once 'maalcie/model/MaaltijdAanmeldingenModel.class.php';
+		require_once 'model/maalcie/MaaltijdAanmeldingenModel.class.php';
 		return MaaltijdAanmeldingenModel::getRecenteAanmeldingenVoorLid($this->getUid());
 	}
 
@@ -576,7 +576,7 @@ class Lid implements Serializable, Agendeerbaar {
 	 * MaaltijdAbonnementen opzoeken en teruggeven van dit lid
 	 */
 	public function getMaaltijdAbonnementen() {
-		require_once 'maalcie/model/MaaltijdAbonnementenModel.class.php';
+		require_once 'model/maalcie/MaaltijdAbonnementenModel.class.php';
 		return MaaltijdAbonnementenModel::getAbonnementenVoorLid($this->getUid());
 	}
 
@@ -584,7 +584,7 @@ class Lid implements Serializable, Agendeerbaar {
 	 * CorveeKwalificaties opzoeken en teruggeven van dit lid
 	 */
 	public function getCorveeKwalificaties() {
-		require_once 'MVC/model/maalcie/KwalificatiesModel.class.php';
+		require_once 'model/maalcie/KwalificatiesModel.class.php';
 		return KwalificatiesModel::instance()->getKwalificatiesVanLid($this->getUid());
 	}
 
@@ -592,7 +592,7 @@ class Lid implements Serializable, Agendeerbaar {
 	 * CorveeVrijstelling opzoeken en teruggeven van dit lid
 	 */
 	public function getCorveeVrijstelling() {
-		require_once 'maalcie/model/CorveeVrijstellingenModel.class.php';
+		require_once 'model/maalcie/CorveeVrijstellingenModel.class.php';
 		return \CorveeVrijstellingenModel::getVrijstelling($this->getUid());
 	}
 
@@ -600,7 +600,7 @@ class Lid implements Serializable, Agendeerbaar {
 	 * CorveeVoorkeuren opzoeken en teruggeven van dit lid
 	 */
 	public function getCorveeVoorkeuren() {
-		require_once 'maalcie/model/CorveeVoorkeurenModel.class.php';
+		require_once 'model/maalcie/CorveeVoorkeurenModel.class.php';
 		return \CorveeVoorkeurenModel::getVoorkeurenVoorLid($this->getUid());
 	}
 
@@ -608,7 +608,7 @@ class Lid implements Serializable, Agendeerbaar {
 	 * CorveeTaken opzoeken en teruggeven van dit lid
 	 */
 	public function getCorveeTaken() {
-		require_once 'maalcie/model/CorveeTakenModel.class.php';
+		require_once 'model/maalcie/CorveeTakenModel.class.php';
 		return \CorveeTakenModel::getTakenVoorLid($this->getUid());
 	}
 
@@ -631,7 +631,7 @@ class Lid implements Serializable, Agendeerbaar {
 
 	public function getForumPostCount() {
 		if ($this->forumpostcount == -1) {
-			require_once 'MVC/model/ForumModel.class.php';
+			require_once 'model/ForumModel.class.php';
 			$this->forumpostcount = ForumPostsModel::instance()->getAantalForumPostsVoorLid($this->getUid());
 		}
 		return $this->forumpostcount;

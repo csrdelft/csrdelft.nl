@@ -90,26 +90,26 @@ define('HTTP_REFERER', $ref);
 require_once 'defines.include.php';
 require_once 'common.functions.php';
 require_once 'MijnSqli.class.php'; # DEPRECATED
-require_once 'MVC/model/framework/DynamicEntityModel.class.php';
-require_once 'MVC/model/framework/CachedPersistenceModel.abstract.php';
-require_once 'MVC/model/DebugLogModel.class.php';
-require_once 'MVC/model/TimerModel.class.php';
-require_once 'MVC/model/AccessModel.class.php';
-require_once 'MVC/model/LidInstellingenModel.class.php';
-require_once 'MVC/model/Paging.interface.php';
+require_once 'model/framework/DynamicEntityModel.class.php';
+require_once 'model/framework/CachedPersistenceModel.abstract.php';
+require_once 'model/DebugLogModel.class.php';
+require_once 'model/TimerModel.class.php';
+require_once 'model/AccessModel.class.php';
+require_once 'model/LidInstellingenModel.class.php';
+require_once 'model/Paging.interface.php';
 
 # View
-require_once 'MVC/view/JsonResponse.class.php';
-require_once 'MVC/view/SmartyTemplateView.abstract.php';
-require_once 'MVC/view/formulier/DataTable.class.php';
-require_once 'MVC/view/CsrBB.class.php';
-require_once 'MVC/view/CsrLayoutPage.class.php';
-require_once 'MVC/view/CsrLayout2Page.class.php';
-require_once 'MVC/view/CsrLayout3Page.class.php';
+require_once 'view/JsonResponse.class.php';
+require_once 'view/SmartyTemplateView.abstract.php';
+require_once 'view/formulier/DataTable.class.php';
+require_once 'view/CsrBB.class.php';
+require_once 'view/CsrLayoutPage.class.php';
+require_once 'view/CsrLayout2Page.class.php';
+require_once 'view/CsrLayout3Page.class.php';
 require_once 'icon.class.php';
 
 # Controller
-require_once 'MVC/controller/AclController.abstract.php';
+require_once 'controller/AclController.abstract.php';
 
 # Router
 switch (constant('MODE')) {

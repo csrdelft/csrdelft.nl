@@ -1,6 +1,6 @@
 <?php
 
-require_once 'MVC/model/CsrMemcache.singleton.php';
+require_once 'model/CsrMemcache.singleton.php';
 require_once 'lid/lid.class.php';
 
 /**

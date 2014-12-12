@@ -80,7 +80,7 @@ class IsHetAlContent implements View {
 				$this->ja = null;
 				break;
 			default:
-				require_once 'MVC/model/AgendaModel.class.php';
+				require_once 'model/AgendaModel.class.php';
 				$vandaag = AgendaModel::instance()->zoekWoordAgenda($this->model);
 				if ($vandaag instanceof AgendaItem) {
 					$this->ja = true;

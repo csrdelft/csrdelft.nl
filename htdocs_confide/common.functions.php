@@ -687,7 +687,7 @@ function getDebug($get = true, $post = true, $files = true, $cookie = true, $ses
 	}
 	if ($sql) {
 		$debug .= '<hr />SQL<hr />';
-		require_once 'MVC/model/framework/DatabaseAdmin.singleton.php';
+		require_once 'model/framework/DatabaseAdmin.singleton.php';
 		$debug .= htmlspecialchars(print_r(array("Admin" => DatabaseAdmin::getQueries(), "PDO" => Database::getQueries(), "MySql" => MijnSqli::instance()->getQueries()), true));
 	}
 	if ($sqltrace) {

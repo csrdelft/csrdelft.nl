@@ -41,7 +41,7 @@ try {
 
 // Corvee herinneringen
 try {
-	require_once 'maalcie/model/CorveeHerinneringenModel.class.php';
+	require_once 'model/maalcie/CorveeHerinneringenModel.class.php';
 	CorveeHerinneringenModel::stuurHerinneringen();
 } catch (Exception $e) {
 	DebugLogModel::instance()->log('cron.php', 'CorveeHerinneringenModel::stuurHerinneringen()', array(), $e);
@@ -49,7 +49,7 @@ try {
 
 // Forum opschonen
 try {
-	require_once 'MVC/model/ForumModel.class.php';
+	require_once 'model/ForumModel.class.php';
 	ForumModel::instance()->opschonen();
 } catch (Exception $e) {
 	DebugLogModel::instance()->log('cron.php', 'ForumModel::instance()->opschonen()', array(), $e);

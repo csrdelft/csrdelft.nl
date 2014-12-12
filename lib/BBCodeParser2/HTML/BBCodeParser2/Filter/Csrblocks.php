@@ -510,7 +510,7 @@ class HTML_BBCodeParser2_Filter_Csrblocks extends HTML_BBCodeParser2_Filter {
 					$dagen = '';
 				}
 
-				require_once 'MVC/view/BijbelroosterView.class.php';
+				require_once 'view/BijbelroosterView.class.php';
 				$view = new BijbelroosterBBView($dagen);
 				return $view->getHtml();
 		}
@@ -632,9 +632,9 @@ class HTML_BBCodeParser2_Filter_Csrblocks extends HTML_BBCodeParser2_Filter {
 				$mid = trim($mid);
 				$maaltijd2 = null;
 
-				require_once 'maalcie/model/MaaltijdenModel.class.php';
-				require_once 'maalcie/model/MaaltijdAanmeldingenModel.class.php';
-				require_once 'maalcie/view/MaaltijdKetzerView.class.php';
+				require_once 'model/maalcie/MaaltijdenModel.class.php';
+				require_once 'model/maalcie/MaaltijdAanmeldingenModel.class.php';
+				require_once 'view/maalcie/MaaltijdKetzerView.class.php';
 				try {
 					if ($mid === 'next' || $mid === 'eerstvolgende' || $mid === 'next2' || $mid === 'eerstvolgende2') {
 						$maaltijden = MaaltijdenModel::getKomendeMaaltijdenVoorLid(\LoginModel::getUid()); // met filter
@@ -932,7 +932,7 @@ HTML;
 	protected function html_foto(array $tag, &$enabled) {
 		switch ($tag['type']) {
 			case 1:
-				require_once 'MVC/controller/FotoAlbumController.class.php';
+				require_once 'controller/FotoAlbumController.class.php';
 
 				if (isset($tag['attributes']['foto'])) {
 					$url = urldecode(trim($tag['attributes']['foto']));
@@ -982,7 +982,7 @@ HTML;
 	protected function html_fotoalbum(array $tag, &$enabled) {
 		switch ($tag['type']) {
 			case 1:
-				require_once 'MVC/controller/FotoAlbumController.class.php';
+				require_once 'controller/FotoAlbumController.class.php';
 
 				$arguments = $tag['attributes'];
 				if (isset($arguments['fotoalbum'])) {
