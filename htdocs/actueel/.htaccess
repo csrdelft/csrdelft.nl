@@ -1,7 +1,8 @@
 RewriteEngine On
 
 # Backwards compatibility
-RewriteRule ^owee/?$	/csrindeowee [R,L]
+RewriteRule ^groepen/?(.*)$		/groepen/$1		[QSA,R=301,L]
+RewriteRule ^owee/?$			/csrindeowee	[R,L]
 
 # Als we naar /actueel/ gaan worden we doorgestuurd naar de mededelingen
 RewriteRule ^/?$		/mededelingen [R,L]
