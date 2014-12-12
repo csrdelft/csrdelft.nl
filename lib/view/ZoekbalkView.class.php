@@ -54,25 +54,25 @@ JS;
 		if (LoginModel::mag('P_LEDEN_READ')) {
 			// Favorieten suggesties
 			$favs = MenuModel::instance()->getMenu(LoginModel::getUid());
-			foreach ($favs->getChildren() as $verticale) {
-				if ($verticale->magBekijken()) {
-					$this->suggestions['Favorieten'][] = array(
-						'url'	 => $verticale->link,
-						'value'	 => $verticale->tekst
+			foreach ($favs->getChildren() as $item) {
+				if ($item->magBekijken()) {
+					$this->suggestions['Menu'][] = array(
+						'url'	 => $item->link,
+						'value'	 => $item->tekst . '<span class="lichtgrijs"> - Favorieten</span>'
 					);
 				}
 			}
 			// Menu suggesties
 			$list = MenuModel::instance()->getList(MenuModel::instance()->getMenu('main'));
-			foreach ($list as $verticale) {
-				if ($verticale->magBekijken()) {
-					$label = $verticale->tekst;
-					$parent = $verticale->getParent();
+			foreach ($list as $item) {
+				if ($item->magBekijken()) {
+					$label = $item->tekst;
+					$parent = $item->getParent();
 					if ($parent AND $parent->tekst != 'main') {
 						$label .= '<span class="lichtgrijs"> - ' . $parent->tekst . '</span>';
 					}
 					$this->suggestions['Menu'][] = array(
-						'url'	 => $verticale->link,
+						'url'	 => $item->link,
 						'value'	 => $label
 					);
 				}
