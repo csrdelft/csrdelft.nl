@@ -18,35 +18,32 @@
 	De PubCie streeft ernaar de courant rond 23:00/24:00 bij u in uw postvak te krijgen.
 </p>
 <div id="knoppenContainer">
-	{if $courant->magVerzenden() AND sizeof($courant->getBerichten())>0}
-		<a href="/courant/verzenden.php" onclick="return confirm('Weet u het zeker dat u de C.S.R.-courant wilt versturen?')" class="btn">Verzenden</a>
+	{if $courant->magVerzenden()}
+		<a href="/courant/verzenden" onclick="return confirm('Weet u het zeker dat u de C.S.R.-courant wilt versturen?')" class="btn">Verzenden</a>
 	{/if}
-	{* Volgens mij wordt deze nooit gebruikt...
-	{if $courant->magBeheren()}
-	<a href="/courant/leegmaken" class="btn" onclick="return confirm('Weet u zeker dat u de cache wilt leeggooien?')">Leegmaken</a>
-	{/if}
-	*}
 </div>
 
 {* geen overzicht van berichten bij het bewerken... *}
-{if $form.ID==0 AND sizeof($courant->getBerichtenVoorGebruiker())>0}
+{if $form.ID==0 AND sizeof($courant->getBerichtenVoorGebruiker()) > 0}
 	<h3>Overzicht van berichten:</h3>
 	<dl>
 		{foreach from=$courant->getBerichtenVoorGebruiker() item=bericht}
 			<dt>
 			<span class="onderstreept">{$bericht.categorie|replace:'csr':'C.S.R.'}</span>
-			{if $courant->magBeheren()}({$bericht.uid|csrnaam:'full'}){/if}
+			{if $courant->magBeheren()}({$bericht.uid|csrnaam}){/if}
 			<span class="dikgedrukt">{$bericht.titel}</span>
-			[ <a href="/courant/bewerken/{$bericht.ID}">bewerken</a> | 
-			<a href="/courant/verwijder/{$bericht.ID}" onclick="return confirm('Weet u zeker dat u dit bericht wilt verwijderen?')" >verwijderen</a> ]
+			{if $courant->magBeheren($bericht.uid)}
+				<a class="btn" href="/courant/bewerken/{$bericht.ID}">bewerken</a>
+				<a class="btn" href="/courant/verwijderen/{$bericht.ID}" onclick="return confirm('Weet u zeker dat u dit bericht wilt verwijderen?')" >verwijderen</a>
+			{/if}
 			</dt>
 			<dd id="courantbericht{$bericht.ID}"></dd>
-			{if !$courant->magBeheren()}<dd>{$bericht.bericht|bbcode}</dd>{/if}
+			{if !$courant->magBeheren($bericht.uid)}<dd>{$bericht.bericht|bbcode}</dd>{/if}
 		{/foreach}
 	</dl>
 {/if}
 
-<form action="?ID={$form.ID}" method="post">
+<form action="/courant/{if $form.ID==0}toevoegen{else}bewerken/{$form.ID}{/if}" method="post">
 	<div id="pubciemail_form">
 		<h3>{if $form.ID==0}Nieuw bericht invoeren{else}Bericht bewerken{/if}</h3>
 		<strong>Titel:</strong><br />
@@ -71,13 +68,5 @@
 	</div>
 </form>
 {if $courant->magBeheren() AND $courant->getBerichtenCount()>0}<br />
-	<h3 id="voorbeeld">Voorbeeld van de C.S.R.-courant.</h3>
-	<script type="text/javascript">//<![CDATA[{literal}
-		function showIframe() {
-			target = document.getElementById('courant_voorbeeld');
-			target.innerHTML = "<iframe src=\"/courant/courant.php\" style=\"width: 100%; height: 600px;\"></iframe>";
-		}
-		//]]></script>{/literal}
-	<a href="#voorbeeld" onclick="showIframe()">Laat voorbeeld zien...</a>
-	<div id="courant_voorbeeld"></div>
+	<a href="/courant/voorbeeld">Laat voorbeeld zien</a>
 {/if}

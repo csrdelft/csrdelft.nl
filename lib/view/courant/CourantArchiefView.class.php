@@ -7,24 +7,17 @@ require_once 'view/courant/CourantView.class.php';
  * 
  * @author C.S.R. Delft <pubcie@csrdelft.nl>
  * 
- * 
- * Verzorgt het weergeven van het archief van de c.s.r.-courant
- * 
  */
 class CourantArchiefView implements View {
 
-	private $courant;
+	private $model;
 
-	public function __construct(&$courant) {
-		$this->courant = $courant;
-		//opgevraagde mail inladen
-		if (isset($_GET['ID'])) {
-			$this->courant->load((int) $_GET['ID']);
-		}
+	public function __construct(CourantModel $model) {
+		$this->model = $model;
 	}
 
 	function getModel() {
-		return $this->courant;
+		return $this->model;
 	}
 
 	public function getBreadcrumbs() {
@@ -32,14 +25,20 @@ class CourantArchiefView implements View {
 	}
 
 	function getTitel() {
-		if ($this->courant->getID() == 0) {
-			return 'Archief';
-		}
-		return 'C.S.R.-courant van ' . $this->getVerzendMoment();
+		return 'Archief';
 	}
 
-	private function getArchiefmails() {
-		$aMails = $this->courant->getArchiefmails();
+	function view() {
+		echo '<ul class="horizontal nobullets">
+			<li>
+				<a href="/courant/" title="Courantinzendingen">Courantinzendingen</a>
+			</li>
+			<li class="active">
+				<a href="/courant/archief/" title="Archief">Archief</a>
+			</li>
+		</ul>
+		<hr />';
+		$aMails = $this->model->getArchiefmails();
 		$sReturn = '<h1>Archief C.S.R.-courant</h1>';
 		if (is_array($aMails)) {
 			$sLijst = '';
@@ -58,29 +57,6 @@ class CourantArchiefView implements View {
 			$sReturn .= 'Geen couranten in het archief aanwezig';
 		}
 		return $sReturn;
-	}
-
-	function getVerzendMoment() {
-		return strftime('%d %B %Y', strtotime($this->courant->getVerzendmoment()));
-	}
-
-	function view() {
-		echo '<ul class="horizontal nobullets">
-			<li>
-				<a href="/courant/" title="Courantinzendingen">Courantinzendingen</a>
-			</li>
-			<li class="active">
-				<a href="/courant/archief/" title="Archief">Archief</a>
-			</li>
-		</ul>
-		<hr />';
-		if ($this->courant->getID() == 0) {
-			//overzicht
-			echo $this->getArchiefmails();
-		} else {
-			echo '<h1>C.S.R.-courant ' . $this->getVerzendMoment() . '</h1>';
-			echo '<iframe src="/courant/archief/iframe/' . $this->courant->getID() . '" id="courantIframe"></iframe>';
-		}
 	}
 
 }

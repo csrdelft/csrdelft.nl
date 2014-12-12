@@ -15,7 +15,7 @@ abstract class SmartyTemplateView implements View {
 
 	/**
 	 * Data model
-	 * @var PersistentEntity
+	 * @var mixed
 	 */
 	protected $model;
 	/**

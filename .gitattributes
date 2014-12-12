@@ -30,11 +30,6 @@ htdocs/bar/js/jquery.tablesorter.widgets.min.js -text
 htdocs/bar/js/main.js -text
 htdocs/bar/js/nl_NL.js -text
 htdocs/communicatie/.htaccess -text
-htdocs/courant/.htaccess -text
-htdocs/courant/archief.php -text
-htdocs/courant/courant.php -text
-htdocs/courant/index.php -text
-htdocs/courant/verzenden.php -text
 htdocs/dies/2014/Afbeeldingen/aanmelding_knopaanmeldingslijst.jpg -text
 htdocs/dies/2014/Afbeeldingen/aanmelding_konijn.png -text
 htdocs/dies/2014/Afbeeldingen/aanmelding_submit.png -text
@@ -3880,6 +3875,7 @@ lib/controller/BijbelroosterController.class.php -text
 lib/controller/CmsPaginaController.class.php -text
 lib/controller/CommissieVoorkeurenController.class.php -text
 lib/controller/Controller.abstract.php -text
+lib/controller/CourantController.class.php -text
 lib/controller/DocumentenController.class.php -text
 lib/controller/EetplanController.class.php -text
 lib/controller/ForumController.class.php -text
