@@ -201,8 +201,8 @@ class ForumController extends Controller {
 		}
 		if (empty($result)) {
 			$result[] = array(
-				'url'	 => '/forum/zoeken/' . $query,
-				'value'	 => $query . '<span class="lichtgrijs"> - Zoeken in <span class="dikgedrukt">reacties</span></span>'
+				'url'	 => '/forum/zoeken/' . urlencode($query),
+				'value'	 => htmlspecialchars($query) . '<span class="lichtgrijs"> - Zoeken in <span class="dikgedrukt">reacties</span></span>'
 			);
 		}
 		$this->view = new JsonResponse($result);

@@ -45,8 +45,8 @@ foreach ($namen as $naam) {
 /*
 if (empty($result)) {
 	$result[] = array(
-		'url'	 => '/ledenlijst?status=LEDEN|OUDLEDEN&q=' . $query,
-		'value'	 => $query . '<span class="lichtgrijs"> - Zoeken in <span class="dikgedrukt">leden & oudleden</span></span>'
+		'url'	 => '/ledenlijst?status=LEDEN|OUDLEDEN&q=' . urlencode($query),
+		'value'	 => htmlspecialchars($query) . '<span class="lichtgrijs"> - Zoeken in <span class="dikgedrukt">leden & oudleden</span></span>'
 	);
 }
 */

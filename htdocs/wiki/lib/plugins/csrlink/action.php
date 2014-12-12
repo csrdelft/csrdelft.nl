@@ -50,10 +50,6 @@ class action_plugin_csrlink extends DokuWiki_Action_Plugin {
 		$query = urldecode($query);
 		$data = ft_pageLookup($query, false, useHeading('navigation'));
 
-		if (!count($data)) {
-			return;
-		}
-
 		$result = array();
 		foreach ($data as $id => $title) {
 			$label = '';
