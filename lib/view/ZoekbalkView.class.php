@@ -33,6 +33,7 @@ class ZoekInputGroup extends TextField {
 	public function __construct($name) {
 		parent::__construct($name, null, null);
 		$this->css_classes[] = 'menuzoekveld form-control';
+		$this]->placeholder = 'Zoek op titel';
 		$this->onkeydown = <<<JS
 
 if (event.keyCode === 13) { // enter
@@ -56,7 +57,7 @@ JS;
 			$favs = MenuModel::instance()->getMenu(LoginModel::getUid());
 			foreach ($favs->getChildren() as $item) {
 				if ($item->magBekijken()) {
-					$this->suggestions['Menu'][] = array(
+					$this->suggestions[''][] = array(
 						'url'	 => $item->link,
 						'value'	 => $item->tekst . '<span class="lichtgrijs"> - Favorieten</span>'
 					);
@@ -71,7 +72,7 @@ JS;
 					if ($parent AND $parent->tekst != 'main') {
 						$label .= '<span class="lichtgrijs"> - ' . $parent->tekst . '</span>';
 					}
-					$this->suggestions['Menu'][] = array(
+					$this->suggestions[''][] = array(
 						'url'	 => $item->link,
 						'value'	 => $label
 					);
@@ -79,7 +80,7 @@ JS;
 			}
 			// Verticalen suggesties
 			foreach (VerticalenModel::instance()->prefetch() as $verticale) {
-				$this->suggestions['Menu'][] = array(
+				$this->suggestions[''][] = array(
 					'url'	 => '/verticalen#' . $verticale->letter,
 					'value'	 => $verticale->naam . '<span class="lichtgrijs"> - Verticalen</span>'
 				);
@@ -87,13 +88,13 @@ JS;
 			// Forum categorien suggesties
 			require_once 'model/ForumModel.class.php';
 			foreach (ForumModel::instance()->getForumIndeling() as $categorie) {
-				$this->suggestions['Menu'][] = array(
+				$this->suggestions[''][] = array(
 					'url'	 => '/forum#' . $categorie->categorie_id,
 					'value'	 => $categorie->titel . '<span class="lichtgrijs"> - Forum</span>'
 				);
 				// Forum delen suggesties
 				foreach ($categorie->getForumDelen() as $deel) {
-					$this->suggestions['Menu'][] = array(
+					$this->suggestions[''][] = array(
 						'url'	 => '/forum/deel/' . $deel->forum_id,
 						'value'	 => $deel->titel . '<span class="lichtgrijs"> - ' . $categorie->titel . '</span>'
 					);
@@ -103,7 +104,7 @@ JS;
 			require_once 'model/documenten/DocCategorie.class.php';
 			foreach (DocCategorie::getAll() as $cat) {
 				if ($cat->magBekijken()) {
-					$this->suggestions['Menu'][] = array(
+					$this->suggestions[''][] = array(
 						'url'	 => '/documenten/categorie/' . $cat->getID(),
 						'value'	 => $cat->getNaam() . '<span class="lichtgrijs"> - Documenten</span>'
 					);
