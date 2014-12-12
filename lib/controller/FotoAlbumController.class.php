@@ -120,7 +120,7 @@ class FotoAlbumController extends AclController {
 						// verwerken gelukt?
 						if ($foto->isComplete()) {
 							if ($poster) {
-								redirect($album->getUrl());
+								redirect($album->getUrl() . '#' . $foto->getResizedUrl());
 							} else {
 								$this->view = new JsonResponse(true);
 								return;
