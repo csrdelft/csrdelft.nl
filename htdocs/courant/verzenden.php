@@ -1,9 +1,9 @@
 <?php
 require_once 'configuratie.include.php';
 
-require_once 'courant/courant.class.php';
-require_once 'courant/courantcontent.class.php';
-$courant = new Courant();
+require_once 'model/CourantModel.class.php';
+require_once 'view/courant/CourantView.class.php';
+$courant = new CourantModel();
 
 //niet verzenden bij geen rechten, en niet bij een lege courant.
 if (!$courant->magVerzenden()) {
@@ -16,7 +16,7 @@ if (!$courant->magVerzenden()) {
 	exit;
 }
 
-$mail = new CourantContent($courant);
+$mail = new CourantView($courant);
 
 if (isset($_GET['iedereen'])) {
 	$mail->zend('csrmail@lists.knorrie.org');

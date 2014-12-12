@@ -11,15 +11,15 @@ require_once 'configuratie.include.php';
 
 if (!LoginModel::mag('P_LEDEN_READ') OR ! LoginModel::mag('P_OUDLEDEN_READ')) {
 	# geen rechten
-	require_once 'MVC/model/CmsPaginaModel.class.php';
-	require_once 'MVC/view/CmsPaginaView.class.php';
+	require_once 'model/CmsPaginaModel.class.php';
+	require_once 'view/CmsPaginaView.class.php';
 	$body = new CmsPaginaView(CmsPaginaModel::instance()->getPagina('geentoegang'));
 } else {
-	require_once 'courant/courant.class.php';
-	$courant = new Courant();
+	require_once 'model/CourantModel.class.php';
+	$courant = new CourantModel();
 
-	require_once 'courant/courantarchiefcontent.class.php';
-	$body = new CourantArchiefContent($courant);
+	require_once 'view/courant/CourantArchiefView.class.php';
+	$body = new CourantArchiefView($courant);
 }
 
 

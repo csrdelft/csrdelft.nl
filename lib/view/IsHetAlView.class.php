@@ -1,6 +1,6 @@
 <?php
 
-class IsHetAlContent implements View {
+class IsHetAlView implements View {
 
 	/**
 	 * Type of IsHetAlContent

@@ -2,14 +2,14 @@
 
 require_once 'configuratie.include.php';
 
-require_once 'courant/courant.class.php';
-$courant = new Courant();
+require_once 'model/CourantModel.class.php';
+$courant = new CourantModel();
 if (!$courant->magToevoegen()) {
 	redirect(CSR_ROOT);
 }
 
-require_once 'courant/courantbeheercontent.class.php';
-$body = new CourantBeheerContent($courant);
+require_once 'view/courant/CourantBeheerView.class.php';
+$body = new CourantBeheerView($courant);
 
 //url waarheen standaard gerefreshed wordt
 $courant_url = CSR_ROOT . '/courant';

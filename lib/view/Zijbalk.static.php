@@ -15,8 +15,8 @@ abstract class Zijbalk {
 		}
 		// Is het al...
 		if (LidInstellingen::get('zijbalk', 'ishetal') != 'niet weergeven') {
-			require_once 'ishetalcontent.class.php';
-			array_unshift($zijbalk, new IsHetAlContent(LidInstellingen::get('zijbalk', 'ishetal')));
+			require_once 'view/IsHetAlView.class.php';
+			array_unshift($zijbalk, new IsHetAlView(LidInstellingen::get('zijbalk', 'ishetal')));
 		}
 		// Agenda
 		if (LoginModel::mag('P_AGENDA_READ') && LidInstellingen::get('zijbalk', 'agendaweken') > 0 && LidInstellingen::get('zijbalk', 'agenda_max') > 0) {

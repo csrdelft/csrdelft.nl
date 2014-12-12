@@ -176,7 +176,7 @@ class BibliotheekBoekContent extends BibliotheekView {
 /**
  * Contentclasse voor de boek-bbcode-tag
  */
-class BoekBBContent extends BibliotheekView {
+class BoekBBView extends BibliotheekView {
 
 	public function __construct(BiebBoek $boek) {
 		parent::__construct($boek);

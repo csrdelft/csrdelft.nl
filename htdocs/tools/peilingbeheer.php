@@ -1,16 +1,16 @@
 <?php
 
-/* Peiling beheerpagina */
-
 require_once 'configuratie.include.php';
-require_once 'peilingcontent.class.php';
-require_once 'peiling.class.php';
+require_once 'view/PeilingenView.class.php';
 
+/**
+ *  Peiling beheerpagina
+ */
 $error = '';
 if (isset($_GET['action'])) {
 	switch ($_GET['action']) {
 		case 'toevoegen':
-			if (isset($_POST['titel'], $_POST['opties']) AND Peiling::magBewerken()) {
+			if (isset($_POST['titel'], $_POST['opties']) AND PeilingenModel::magBewerken()) {
 				$properties['titel'] = $_POST['titel'];
 				$properties['verhaal'] = $_POST['verhaal'];
 				$properties['opties'] = array();
@@ -19,7 +19,7 @@ if (isset($_GET['action'])) {
 						$properties['opties'][] = trim($optie);
 					}
 				}
-				$peiling = Peiling::maakPeiling($properties);
+				$peiling = PeilingenModel::maakPeiling($properties);
 				setMelding('De nieuwe peiling heeft id ' . $peiling->getId() . '.', 1);
 				redirect(CSR_ROOT . '/tools/peilingbeheer.php');
 				exit;
@@ -28,7 +28,7 @@ if (isset($_GET['action'])) {
 		case 'stem':
 			if (isset($_POST['id'])) {
 				try {
-					$peiling = new Peiling((int) $_POST['id']);
+					$peiling = new PeilingenModel((int) $_POST['id']);
 				} catch (Exception $e) {
 					$error = $e->getMessage();
 				}
@@ -40,9 +40,9 @@ if (isset($_GET['action'])) {
 			}
 			break;
 		case 'verwijder':
-			if (isset($_GET['id']) AND Peiling::magBewerken()) {
+			if (isset($_GET['id']) AND PeilingenModel::magBewerken()) {
 				try {
-					$peiling = new Peiling((int) $_GET['id']);
+					$peiling = new PeilingenModel((int) $_GET['id']);
 					$peiling->deletePeiling();
 					redirect(HTTP_REFERER);
 				} catch (Exception $e) {
@@ -53,15 +53,13 @@ if (isset($_GET['action'])) {
 	}
 }
 
-
-require_once 'peilingbeheercontent.class.php';
-$beheer = new PeilingBeheerContent(Peiling::getLijst());
+$beheer = new PeilingenBeheerView(PeilingenModel::getLijst());
 
 if ($error != '') {
 	setMelding($error, -1);
 }
 
-if (!LoginModel::mag('P_LOGGED_IN') OR ! Peiling::magBewerken()) {
+if (!LoginModel::mag('P_LOGGED_IN') OR ! PeilingenModel::magBewerken()) {
 	# geen rechten
 	require_once 'model/CmsPaginaModel.class.php';
 	require_once 'view/CmsPaginaView.class.php';

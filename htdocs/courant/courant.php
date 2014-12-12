@@ -1,7 +1,7 @@
 <?php
 
 require_once 'configuratie.include.php';
-require_once 'courant/courant.class.php';
+require_once 'model/CourantModel.class.php';
 
 # C.S.R. Delft | pubcie@csrdelft.nl
 # -------------------------------------------------------------------
@@ -11,7 +11,7 @@ require_once 'courant/courant.class.php';
 # archief
 # -------------------------------------------------------------------
 
-$courant = new Courant();
+$courant = new CourantModel();
 
 # als er genoeg rechten zijn een preview van de courant laten zien.
 if (!$courant->magToevoegen()) {
@@ -23,7 +23,7 @@ if (isset($_GET['ID']) AND $_GET['ID'] != 0) {
 	$courant->load((int) $_GET['ID']);
 }
 
-require_once 'courant/courantcontent.class.php';
-$pagina = new CourantContent($courant);
+require_once 'view/courant/CourantView.class.php';
+$pagina = new CourantView($courant);
 
 $pagina->view();

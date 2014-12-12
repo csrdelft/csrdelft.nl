@@ -3,7 +3,7 @@
 require_once 'model/documenten/Document.class.php';
 
 /**
- * documentcontent.class.php	| 	Jan Pieter Waagmeester (jieter@jpwaag.com)
+ * DocumentenView.class.php	| 	Jan Pieter Waagmeester (jieter@jpwaag.com)
  *
  * Overzicht van alle categorieën met een bepaald aantal documenten per
  * categorie, zeg maar de standaarpagina voor de documentenketzer.

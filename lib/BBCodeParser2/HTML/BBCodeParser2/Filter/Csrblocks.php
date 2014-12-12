@@ -257,11 +257,11 @@ class HTML_BBCodeParser2_Filter_Csrblocks extends HTML_BBCodeParser2_Filter {
 					$boekid = '';
 				}
 
-				require_once 'bibliotheek/boek.class.php';
-				require_once 'bibliotheek/bibliotheekcontent.class.php';
+				require_once 'model/bibliotheek/BiebBoek.class.php';
+				require_once 'view/BibliotheekView.class.php';
 				try {
 					$boek = new BiebBoek((int) $boekid);
-					$content = new BoekBBContent($boek);
+					$content = new BoekBBView($boek);
 					return $content->view();
 				} catch (Exception $e) {
 					return '[boek] Boek [boekid:' . (int) $boekid . '] bestaat niet.';
@@ -290,8 +290,7 @@ class HTML_BBCodeParser2_Filter_Csrblocks extends HTML_BBCodeParser2_Filter {
 				} else {
 					$id = '';
 				}
-
-				require_once 'documenten/documentcontent.class.php';
+				require_once 'view/DocumentenView.class.php';
 				try {
 					$document = new Document((int) $id);
 					$content = new DocumentBBContent($document);
@@ -424,11 +423,10 @@ class HTML_BBCodeParser2_Filter_Csrblocks extends HTML_BBCodeParser2_Filter {
 				} else {
 					$peilingid = '';
 				}
-
-				require_once 'peilingcontent.class.php';
+				require_once 'view/PeilingenView.class.php';
 				try {
-					$peiling = new Peiling((int) $peilingid);
-					$peilingcontent = new PeilingContent($peiling);
+					$peiling = new PeilingenModel((int) $peilingid);
+					$peilingcontent = new PeilingView($peiling);
 					return $peilingcontent->getHtml();
 				} catch (Exception $e) {
 					return '[peiling] Er bestaat geen peiling met (id:' . (int) $peilingid . ')';

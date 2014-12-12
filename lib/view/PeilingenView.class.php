@@ -1,8 +1,26 @@
 <?php
 
-require_once 'peiling.class.php';
+require_once 'model/PeilingenModel.class.php';
 
-class PeilingBeheerContent implements View {
+class PeilingView extends SmartyTemplateView {
+
+	function PeilingView(PeilingenModel $peiling) {
+		parent::__construct($peiling);
+	}
+
+	public function getHtml($beheer = false) {
+		$this->smarty->assign('peiling', $this->model);
+		$this->smarty->assign('beheer', $beheer);
+		return $this->smarty->fetch('peiling.bb.tpl');
+	}
+
+	public function view() {
+		echo $this->getHtml();
+	}
+
+}
+
+class PeilingenBeheerView implements View {
 
 	private $pijlingen;
 
@@ -25,7 +43,7 @@ class PeilingBeheerContent implements View {
 	public function getHtml() {
 		$lijst = '<h3>Peilingen:</h3>';
 		foreach ($this->pijlingen as $peiling) {
-			$pcontent = new PeilingContent(new Peiling($peiling['id']));
+			$pcontent = new PeilingView(new PeilingenModel($peiling['id']));
 			$lijst.=$pcontent->getHtml($beheer = true);
 		}
 		$html = '
