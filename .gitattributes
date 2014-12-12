@@ -513,7 +513,6 @@ htdocs/tools/index.php -text
 htdocs/tools/js.php -text
 htdocs/tools/leden-csv.php -text
 htdocs/tools/ledenkaart.php -text
-htdocs/tools/ledenmemory.php -text
 htdocs/tools/lijst.php -text
 htdocs/tools/memcachestats.php -text
 htdocs/tools/naamlink.php -text
@@ -3622,6 +3621,7 @@ lib/MVC/view/FotoAlbumView.class.php -text
 lib/MVC/view/HtmlPage.abstract.php -text
 lib/MVC/view/InstellingenBeheerView.class.php -text
 lib/MVC/view/JsonResponse.class.php -text
+lib/MVC/view/LedenMemoryView.class.php -text
 lib/MVC/view/LidInstellingenView.class.php -text
 lib/MVC/view/LoginView.class.php -text
 lib/MVC/view/MailTemplateView.class.php -text

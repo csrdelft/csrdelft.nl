@@ -1,18 +1,13 @@
 <?php
-require_once 'configuratie.include.php';
-
-if (!LoginModel::mag('P_LEDEN_READ') OR ! LoginModel::mag('P_OUDLEDEN_READ')) {
-	redirect(CSR_ROOT);
-}
 
 /**
- * ledenmemory.php
+ * LedenMemoryView.class.php
  *
  * @author P.W.G. Brussee <brussee@live.nl>
  * 
  * Het spelletje memory met pasfotos en namen van leden
  */
-class MemoryView extends CompressedLayout {
+class LedenMemoryView extends CompressedLayout {
 
 	private $lichting;
 	private $verticale;
@@ -108,52 +103,46 @@ HTML;
 	}
 
 	public function view() {
-		?>
-		<table>
-			<tbody>
-				<tr>
-					<td class="pasfotos">
-						<?php
-						$leden = $this->leden;
-						if (!$this->cheat) {
-							shuffle($leden);
-						}
-						foreach ($leden as $lid) {
-							echo $this->getPasfotoMemorycard($lid);
-						}
-						?>
-					</td>
-					<td class="namen">
-						<?php
-						if (!$this->cheat AND ! $this->learnmode) {
-							shuffle($this->leden);
-						}
-						foreach ($this->leden as $lid) {
-							echo $this->getNaamMemorycard($lid);
-						}
-						?>
-					</td>
-				</tr>
-			</tbody>
-		</table>
+		$smarty = CsrSmarty::instance();
+		$smarty->assign('titel', $this->getTitel());
+		$smarty->assign('stylesheets', $this->getStylesheets());
+		$smarty->assign('scripts', $this->getScripts());
+		?><!DOCTYPE html>
+		<html>
+			<head>
+				<?= $smarty->fetch('html_head.tpl') ?>
+			</head>
+			<body>
+				<table>
+					<tbody>
+						<tr>
+							<td class="pasfotos">
+								<?php
+								$leden = $this->leden;
+								if (!$this->cheat) {
+									shuffle($leden);
+								}
+								foreach ($leden as $lid) {
+									echo $this->getPasfotoMemorycard($lid);
+								}
+								?>
+							</td>
+							<td class="namen">
+								<?php
+								if (!$this->cheat AND ! $this->learnmode) {
+									shuffle($this->leden);
+								}
+								foreach ($this->leden as $lid) {
+									echo $this->getNaamMemorycard($lid);
+								}
+								?>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</body>
+		</html>
 		<?php
 	}
 
 }
-
-$memory = new MemoryView();
-$memory->addCompressedResources('ledenmemory');
-
-$smarty = CsrSmarty::instance();
-$smarty->assign('titel', $memory->getTitel());
-$smarty->assign('stylesheets', $memory->getStylesheets());
-$smarty->assign('scripts', $memory->getScripts());
-?><!DOCTYPE html>
-<html>
-	<head>
-		<?= $smarty->fetch('html_head.tpl') ?>
-	</head>
-	<body>
-		<?= $memory->view() ?>
-	</body>
-</html>

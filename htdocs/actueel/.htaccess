@@ -7,11 +7,7 @@ RewriteRule ^fotoalbum/?(.*)$		/fotoalbum/$1		[QSA,R=301,L]
 RewriteRule ^bijbelrooster/?(.*)$	/bijbelrooster/$1	[QSA,R=301,L]
 
 # Oude owee redirected
-RewriteRule ^owee/?$	/csrindeowee/ [R,L]
+RewriteRule ^owee/?$	/csrindeowee [R,L]
 
 # Als we naar /actueel/ gaan worden we doorgestuurd naar de mededelingen
 RewriteRule ^/?$		/mededelingen [R,L]
-
-# Eetplan
-RewriteRule ^eetplan/noviet/([0-9]*)	/eetplan?pheutID=$1	[QSA]
-RewriteRule ^eetplan/huis/([0-9]*)		/eetplan?huisID=$1	[QSA]

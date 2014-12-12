@@ -7,9 +7,3 @@ RewriteRule ^forum/?(.*)$				/forum/$1		[QSA,R=301,L]
 
 # Als we naar /communicatie/ gaan worden we doorgestuurd naar het forum
 RewriteRule ^/?$			/forum [R,L]
-
-# Pagina's met tekst
-RewriteRule ^boeken		../index.php [L]
-RewriteRule ^bedrijven	../index.php [L]
-RewriteRule ^irc		../index.php [L]
-RewriteRule ^orientatie	../index.php [L]

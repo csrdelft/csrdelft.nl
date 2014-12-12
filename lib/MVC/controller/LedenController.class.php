@@ -15,7 +15,8 @@ class LedenController extends AclController {
 			$this->acl = array(
 				'lijst'			 => 'P_OUDLEDEN_READ',
 				'stamboom'		 => 'P_OUDLEDEN_READ',
-				'verjaardagen'	 => 'P_LEDEN_READ'
+				'verjaardagen'	 => 'P_LEDEN_READ',
+				'memory'		 => 'P_OUDLEDEN_READ'
 			);
 		} else {
 			$this->acl = array();
@@ -45,6 +46,12 @@ class LedenController extends AclController {
 		require_once 'MVC/view/VerjaardagenView.class.php';
 		$body = new VerjaardagenView('alleverjaardagen');
 		$this->view = new CsrLayoutPage($body);
+	}
+
+	public function memory() {
+		require_once 'MVC/view/LedenMemoryView.class.php';
+		$this->view = new LedenMemoryView();
+		$this->view->addCompressedResources('ledenmemory');
 	}
 
 }
