@@ -247,10 +247,7 @@ class ProfielBewerken extends Profiel {
 				$form[] = new DuckField('duckname', $profiel['duckname'], 'Duckstad-naam', $this->lid);
 				$path = PICS_PATH . $this->lid->getDuckfotoPath();
 				if (strpos($path, '/duck') !== false AND ! endsWith($path, 'eend.jpg')) {
-					$duckfoto = new Afbeelding($path);
-					$duckfoto->directory = pathinfo($path, PATHINFO_DIRNAME) . '/';
-					$duckfoto->filename = pathinfo($path, PATHINFO_BASENAME);
-					$duckfoto->filesize = filesize($path);
+					$duckfoto = new Afbeelding($path, true);
 				} else {
 					$duckfoto = null;
 				}
