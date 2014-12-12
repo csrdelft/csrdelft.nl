@@ -216,21 +216,6 @@ class ProfielBewerken extends Profiel {
 			//we voeren nog geen wachtwoord of bijnaam in bij novieten, die krijgen ze pas na het novitiaat
 			$form[] = new Subkopje('Inloggen:');
 			$form[] = new NickField('nickname', $profiel['nickname'], 'Bijnaam', $this->lid);
-			if ($hasLedenMod) {
-				$form[] = new DuckField('duckname', $profiel['duckname'], 'Duckstad-naam', $this->lid);
-			}
-			if ($hasLedenMod OR LoginModel::getUid() === '1207') {
-				$path = PICS_PATH . $this->lid->getDuckfotoPath();
-				if (strpos($path, '/duck') !== false AND ! endsWith($path, 'eend.jpg')) {
-					$duckfoto = new Afbeelding($path);
-					$duckfoto->directory = pathinfo($path, PATHINFO_DIRNAME) . '/';
-					$duckfoto->filename = pathinfo($path, PATHINFO_BASENAME);
-					$duckfoto->filesize = filesize($path);
-				} else {
-					$duckfoto = null;
-				}
-				$form[] = new ImageField('duckfoto', 'Duck-pasfoto', $duckfoto, null, null, false, null, null, 250);
-			}
 			$form[] = new WachtwoordWijzigenField('password', $this->lid);
 		}
 
@@ -257,6 +242,19 @@ class ProfielBewerken extends Profiel {
 				$form[] = new Subkopje('Oudledenpost:');
 				$form[] = new TextField('adresseringechtpaar', $profiel['adresseringechtpaar'], 'Tenaamstelling post echtpaar:', 250);
 				$form[] = new SelectField('ontvangtcontactueel', $profiel['ontvangtcontactueel'], 'Ontvangt Contactueel?', array('ja' => 'ja', 'digitaal' => 'ja, digitaal', 'nee' => 'nee'));
+			}
+			if ($hasLedenMod) {
+				$form[] = new DuckField('duckname', $profiel['duckname'], 'Duckstad-naam', $this->lid);
+				$path = PICS_PATH . $this->lid->getDuckfotoPath();
+				if (strpos($path, '/duck') !== false AND ! endsWith($path, 'eend.jpg')) {
+					$duckfoto = new Afbeelding($path);
+					$duckfoto->directory = pathinfo($path, PATHINFO_DIRNAME) . '/';
+					$duckfoto->filename = pathinfo($path, PATHINFO_BASENAME);
+					$duckfoto->filesize = filesize($path);
+				} else {
+					$duckfoto = null;
+				}
+				$form[] = new ImageField('duckfoto', 'Duck-pasfoto', $duckfoto, null, null, false, null, null, 250);
 			}
 		}
 
