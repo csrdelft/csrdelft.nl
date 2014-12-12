@@ -24,7 +24,7 @@
 		</div>
 	</div>
 
-	<div class="blue box link"><a href="/vereniging/vragen/">
+	<div class="blue box link"><a href="/vereniging/vragen">
 		<h2 class="overlay">Veelgestelde vragen</h2>
 		<div class="sign rotate">?</div>
 	</a></div>
@@ -49,16 +49,16 @@
 		</div>
 	</div>
 
-	<div class="box w2 h2 link"><a href="/csrindeowee/">
+	<div class="box w2 h2 link"><a href="/csrindeowee">
 		<img src="{$CSR_PICS}/owee/2014/owee-thema.jpg" class="border">
 	</a></div>
 
-	<div class="box w2 link"><a href="/vereniging/filmpjes/">
+	<div class="box w2 link"><a href="/vereniging/filmpjes">
 		<img src="{$CSR_PICS}/layout2/box-groep.jpg">
 		<h2 class="overlay">7 filmpjes over C.S.R.</h2>
 	</a></div>
 
-	<div class="blue box pad-left link"><a href="/fotoalbum/">
+	<div class="blue box pad-left link"><a href="/fotoalbum">
 		<img src="{$CSR_PICS}/layout2/box-icon-fotos.png">
 		<h2 class="overlay">Foto's</h2>
 	</a></div>

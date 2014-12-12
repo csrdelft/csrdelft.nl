@@ -164,7 +164,7 @@ class SavedQueryContent implements View {
 			require_once 'groepen/groep.class.php';
 			return OldGroep::ids2links($contents, '<br />');
 		} elseif ($name == 'med_link') { //link naar een mededeling.
-			return '<a href="/actueel/mededelingen/' . $contents . '">' . $contents . '</a>';
+			return '<a href="/mededelingen/' . $contents . '">' . $contents . '</a>';
 		}
 
 		return htmlspecialchars($contents);

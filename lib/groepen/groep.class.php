@@ -687,7 +687,7 @@ class OldGroep {
 	}
 
 	public function getUrl() {
-		return CSR_ROOT . '/actueel/groepen/' . $this->getType()->getNaam() . '/' . $this->getId();
+		return CSR_ROOT . '/groepen/' . $this->getType()->getNaam() . '/' . $this->getId();
 	}
 
 	public function getLink($class = '') {

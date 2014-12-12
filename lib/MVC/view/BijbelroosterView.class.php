@@ -50,7 +50,7 @@ class BijbelroosterView implements View {
 	}
 
 	public function view() {
-		echo '<h1>Bijbelrooster</h1><p>Hier vindt u het bijbelrooster der C.S.R.. Uw favoriete bijbelvertaling kunt u instellen bij uw <a href="/instellingen/">instellingen</a>.</p>';
+		echo '<h1>Bijbelrooster</h1><p>Hier vindt u het bijbelrooster der C.S.R.. Uw favoriete bijbelvertaling kunt u instellen bij uw <a href="/instellingen">instellingen</a>.</p>';
 		echo $this->getHtml();
 	}
 
@@ -69,7 +69,7 @@ class BijbelroosterBBView extends BijbelroosterView {
 	public function getHtml() {
 		$html = '<div class="bb-block mededeling-grotebalk">';
 		$html .= parent::getHtml();
-		$html .= '<div class="titel" style="float:right;position:relative;bottom:1.5em;right:10px"><a href="/actueel/bijbelrooster/">Bijbelleesrooster</a></div></div>';
+		$html .= '<div class="titel" style="float:right;position:relative;bottom:1.5em;right:10px"><a href="/bijbelrooster">Bijbelleesrooster</a></div></div>';
 		return $html;
 	}
 

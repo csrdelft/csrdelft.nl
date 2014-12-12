@@ -50,7 +50,7 @@ if (auth_quickaclcheck('hoofdpagina') >= AUTH_READ) {
 
         // tip for first-time users
         if($rsstoken == ''){
-            $rsstoken = 'Maak_EERST_een_sleutel_aan_met_knop_[Nieuwe_aanvragen]_op:_http://csrdelft.nl/communicatie/profiel/'.LoginModel::getUid().'#forum_gegevens';
+            $rsstoken = 'Maak_EERST_een_sleutel_aan_met_knop_[Nieuwe_aanvragen]_op:_http://csrdelft.nl/profiel/'.LoginModel::getUid().'#forum_gegevens';
         }
     }else{
         $rsstoken = 'C.S.R. backend niet beschikbaar';

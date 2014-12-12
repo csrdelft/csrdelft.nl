@@ -5,4 +5,4 @@
  * @author Gerrit Uitslag <klapinklapin@gmail.com>
  */
 
-$conf['groepenurl']    = 'http://csrdelft.nl/actueel/groepen/';
+$conf['groepenurl']    = 'http://csrdelft.nl/groepen/';

@@ -30,7 +30,7 @@ class LedenlijstContent implements View {
 	}
 
 	public function getBreadcrumbs() {
-		return '<a href="/communicatie/ledenlijst" title="Ledenlijst"><img src="' . CSR_PICS . '/knopjes/people-16.png" class="module-icon"></a> » <span class="active">' . $this->getTitel() . '</span>';
+		return '<a href="/ledenlijst" title="Ledenlijst"><img src="' . CSR_PICS . '/knopjes/people-16.png" class="module-icon"></a> » <span class="active">' . $this->getTitel() . '</span>';
 	}
 
 	public function getTitel() {
@@ -68,9 +68,9 @@ class LedenlijstContent implements View {
 
 	public function view() {
 		echo '<ul class="horizontal nobullets">
-	<li class="active"><a href="/communicatie/ledenlijst/">Ledenlijst</a></li>
-	<li><a href="/communicatie/verjaardagen" title="Overzicht verjaardagen">Verjaardagen</a></li>
-	<li><a href="/communicatie/verticalen/">Kringen</a></li>
+	<li class="active"><a href="/ledenlijst">Ledenlijst</a></li>
+	<li><a href="/leden/verjaardagen" title="Overzicht verjaardagen">Verjaardagen</a></li>
+	<li><a href="/verticalen">Kringen</a></li>
 </ul>';
 		echo '<hr />';
 

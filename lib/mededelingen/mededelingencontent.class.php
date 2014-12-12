@@ -8,7 +8,7 @@ class MededelingenContent extends SmartyTemplateView {
 	private $prullenbak;
 
 	const aantalTopMostBlock = 3;
-	const mededelingenRoot = '/actueel/mededelingen/';
+	const mededelingenRoot = '/mededelingen/';
 
 	public function __construct($mededelingId, $prullenbak = false) {
 		parent::__construct(null, 'Mededelingen overzicht');

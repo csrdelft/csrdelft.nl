@@ -85,14 +85,14 @@ class CsrLayoutPage extends CompressedLayout {
 		if (LoginModel::instance()->isPauper()) {
 			$smarty->assign('menutree', MenuModel::instance()->getMenu('main'));
 			$smarty->assign('loginform', new LoginForm());
-			$smarty->display('MVC/layout/pauper.tpl');
+			$smarty->display('layout/pauper.tpl');
 		} else {
 			$smarty->assign('mainmenu', new ZoekbalkView());
 			// uitzondering voor wiki (geen main table)
 			if ($this->body instanceof WikiView) {
-				$smarty->display('MVC/layout/wiki.tpl');
+				$smarty->display('layout/wiki.tpl');
 			} else {
-				$smarty->display('MVC/layout/pagina.tpl');
+				$smarty->display('layout/pagina.tpl');
 			}
 		}
 	}

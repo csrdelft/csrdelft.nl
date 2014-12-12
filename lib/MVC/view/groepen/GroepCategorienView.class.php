@@ -16,7 +16,7 @@ class GroepCategorienView extends SmartyTemplateView {
 	}
 
 	public function view() {
-		$this->smarty->display('MVC/groepen/menu_pagina.tpl');
+		$this->smarty->display('groepen/menu_pagina.tpl');
 		foreach ($this->model as $categorieView) {
 			$categorieView->view();
 		}
@@ -32,7 +32,7 @@ class GroepCategorieView extends SmartyTemplateView {
 
 	public function view() {
 		$this->smarty->assign('categorie', $this->model);
-		$this->smarty->display('MVC/groepen/categorie.tpl');
+		$this->smarty->display('groepen/categorie.tpl');
 	}
 
 }

@@ -2,7 +2,7 @@
 
 <div id="controls">
 	{if LoginModel::mag('P_DOCS_MOD')}
-		<a class="btn" href="/communicatie/documenten/toevoegen/">{icon get="toevoegen"} Toevoegen</a>
+		<a class="btn" href="/documenten/toevoegen">{icon get="toevoegen"} Toevoegen</a>
 	{/if}
 </div>
 
@@ -22,11 +22,11 @@
 		<tbody>
 			<tr>
 				<th colspan="5">
-					<a href="/communicatie/documenten/categorie/{$categorie->getID()}/" title="Alle documenten in {$categorie->getNaam()|escape:'html'}">
+					<a href="/documenten/categorie/{$categorie->getID()}/" title="Alle documenten in {$categorie->getNaam()|escape:'html'}">
 						{$categorie->getNaam()|escape:'html'}
 					</a>
 					{if LoginModel::mag('P_DOCS_MOD')}
-						<a class="toevoegen" href="/communicatie/documenten/toevoegen/?catID={$categorie->getID()}"
+						<a class="toevoegen" href="/documenten/toevoegen/?catID={$categorie->getID()}"
 						   title="Document toevoegen in categorie: {$categorie->getNaam()|escape:'html'}">
 							{icon get="toevoegen"}
 						</a>
@@ -45,10 +45,10 @@
 							</a>
 
 							{if $document->magVerwijderen()}
-								<a class="verwijderen" href="/communicatie/documenten/verwijderen/{$document->getID()}" title="Document verwijderen" onclick="return confirm('Weet u zeker dat u dit document wilt verwijderen')">{icon get="verwijderen"}</a>
+								<a class="verwijderen" href="/documenten/verwijderen/{$document->getID()}" title="Document verwijderen" onclick="return confirm('Weet u zeker dat u dit document wilt verwijderen')">{icon get="verwijderen"}</a>
 							{/if}
 							{if $document->magBewerken()}
-								<a class="bewerken" href="/communicatie/documenten/bewerken/{$document->getID()}" title="Document bewerken">{icon get="bewerken"}</a>
+								<a class="bewerken" href="/documenten/bewerken/{$document->getID()}" title="Document bewerken">{icon get="bewerken"}</a>
 							{/if}
 					</td>
 					<td class="size">{$document->getFileSize()|filesize}</td>

@@ -166,7 +166,7 @@ function viewTable($aAccounts) {
 		echo '<td>' . $account->saldo . '</td>';
 		echo '<td style="border-right-color: black;">' . $account->createTerm . '</td>';
 		echo '<td>' . $account->naam . '</td>';
-		echo '<td><a href="' . CSR_ROOT . '/communicatie/profiel/' . $account->uid . '">' . $account->uid . '</a></td>';
+		echo '<td><a href="' . CSR_ROOT . '/profiel/' . $account->uid . '">' . $account->uid . '</a></td>';
 		echo '<td>' . $account->saldostek . '</td>';
 		echo '</tr>';
 	}

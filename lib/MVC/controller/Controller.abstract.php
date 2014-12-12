@@ -29,44 +29,36 @@ abstract class Controller {
 	 */
 	protected $action;
 	/**
-	 * Broken down query to positional (REST) or named (KVP) parameters
+	 * Broken down query to positional (REST) and named (KVP) parameters
 	 * @var array
 	 */
 	private $queryparts;
-	/**
-	 * Is this controller called with a server request query containing
-	 * key-value-pair (KVP) or only representational state transfer (REST)
-	 * @var boolean
-	 */
-	private $kvp;
 
 	public function __construct($query, $model) {
 		$this->model = $model;
-		// split at ?-mark
-		$mark = strpos($query, '?');
-		if ($mark !== false) {
-			$this->kvp = true;
-			// parse REST query
-			$this->queryparts = explode('/', substr($query, 0, $mark));
-			// parse KVP query
-			$parts = explode('&', substr($query, $mark));
-			foreach ($parts as $key => $value) {
-				$this->queryparts[$key] = explode('=', $value);
-			}
-		} else {
-			$this->kvp = false;
-			// parse REST query
-			$this->queryparts = explode('/', $query);
-		}
-	}
 
-	/**
-	 * Is this controller called with a server request query containing
-	 * key-value-pair (KVP) or only representational state transfer (REST)
-	 * @return boolean
-	 */
-	public function hasKvp() {
-		return $this->kvp;
+		// split into REST and KVP query part
+		$queryparts = explode('?', $query, 2);
+
+		// parse REST query
+		$this->queryparts = explode('/', $queryparts[0]);
+
+		// parse KVP query
+		if (count($queryparts) > 1) {
+
+			// split into key-value-pairs
+			$parts = explode('&', $queryparts[1]);
+			foreach ($parts as $part) {
+
+				// split key-value-pair
+				$kvp = explode('=', $part, 2);
+				if (count($kvp) > 1) {
+					$this->queryparts[$kvp[0]] = $kvp[1];
+				} else {
+					$this->queryparts[$kvp[0]] = $kvp[0];
+				}
+			}
+		}
 	}
 
 	/**

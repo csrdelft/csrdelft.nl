@@ -1,12 +1,21 @@
 AddDefaultCharset utf-8
 RewriteEngine On
 
-RewriteRule ^happie				index.php?c=HappieRouter [L]
 RewriteRule ^facebook			https://www.facebook.com/delftcsr
-RewriteRule ^nieuws/?(.*)		/actueel/mededelingen/$1/ [R,L]
+
+RewriteRule ^nieuws/?(.*)		/mededelingen/$1/ [R,L]
+
+RewriteRule ^(leden)?lijst/?(.*)$	tools/lijst.php [QSA,L]
+
+RewriteRule ^profiel/([0-9a-z]+)/([a-zA-Z]+)/([a-zA-Z]+)/?$	tools/profiel.php?uid=$1&a=$2&s=$3 [QSA,L]
+RewriteRule ^profiel/([0-9a-z]+)/([a-zA-Z]+)/?$				tools/profiel.php?uid=$1&a=$2 [QSA,L]
+RewriteRule ^profiel/([0-9a-z]+)/?$							tools/profiel.php?uid=$1 [QSA,L]
+RewriteRule ^profiel/?$										tools/profiel.php [QSA,L]
+
 RewriteRule ^forum/rss/([0-9a-zA-Z]*).xml		index.php?c=Forum&private_token=$1 [L]
 RewriteRule ^agenda/ical/([0-9a-zA-Z]*).ics		index.php?c=Agenda&private_token=$1 [L]
 RewriteRule ^verify/([0-9a-zA-Z]*)				index.php?c=Login&onetime_token=$1 [L]
+
 RewriteRule ^login				index.php?c=Login [L]
 RewriteRule ^logout				index.php?c=Login [L]
 RewriteRule ^su					index.php?c=Login [L]
@@ -15,16 +24,23 @@ RewriteRule ^pauper				index.php?c=Login [L]
 RewriteRule ^wachtwoord			index.php?c=Login [L]
 RewriteRule ^sessions			index.php?c=Login [L]
 RewriteRule ^endsession			index.php?c=Login [L]
+
+RewriteRule ^eetplan/?(.*)		index.php?c=Eetplan		[QSA,L]
+RewriteRule ^documenten/?(.*)	index.php?c=Documenten	[QSA,L]
+RewriteRule ^bibliotheek/?(.*)	index.php?c=Bibliotheek [QSA,L]
+RewriteRule ^groepen/?(.*)		index.php?c=Groepen		[QSA,L]
+#RewriteRule ^groepen			index.php?c=GroepenRouter [L]
+RewriteRule ^leden				index.php?c=Leden [L]
 RewriteRule ^forum				index.php?c=Forum [L]
-RewriteRule ^fotoalbum			index.php?c=FotoAlbum [L]
-RewriteRule ^agenda				index.php?c=Agenda [L]
-RewriteRule ^groepen			index.php?c=GroepenRouter [L]
 RewriteRule ^maaltijden			index.php?c=MaalcieRouter [L]
 RewriteRule ^corvee				index.php?c=MaalcieRouter [L]
+RewriteRule ^agenda				index.php?c=Agenda [L]
+RewriteRule ^fotoalbum			index.php?c=FotoAlbum [L]
+RewriteRule ^bijbelrooster		index.php?c=Bijbelrooster [L]
 RewriteRule ^instellingenbeheer	index.php?c=InstellingenBeheer [L]
 RewriteRule ^instellingen		index.php?c=LidInstellingen [L]
 RewriteRule ^menubeheer			index.php?c=MenuBeheer [L]
-RewriteRule ^bijbelrooster		index.php?c=Bijbelrooster [L]
+RewriteRule ^happie				index.php?c=HappieRouter [L]
 
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d

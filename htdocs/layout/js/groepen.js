@@ -26,7 +26,7 @@ function init_groepen() {
 
 		$.ajax({
 			type: 'POST',
-			url: '/actueel/groepen/XHR/' + gid + '/bewerkfunctieLid/' + uid,
+			url: '/groepen/XHR/' + gid + '/bewerkfunctieLid/' + uid,
 			data: data,
 			cache: false,
 			success: function(response) {
@@ -120,7 +120,7 @@ function groepTabShow(groepid, tabid) {
 
 	//request doen voor de tab-inhoud
 	http.abort();
-	http.open('GET', '/actueel/groepen/XHR/' + groepid + '/' + tabid, true);
+	http.open('GET', '/groepen/XHR/' + groepid + '/' + tabid, true);
 	http.onreadystatechange = function() {
 		if (http.readyState == 4) {
 			document.getElementById('ledenvangroep' + groepid).innerHTML = http.responseText;

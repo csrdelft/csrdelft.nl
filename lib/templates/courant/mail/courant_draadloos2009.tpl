@@ -79,7 +79,7 @@ li{
 </head>
 <body>
 <table>
-<tr><td><a href="http://csrdelft.nl/dies/"><img src="{$CSR_PICS}/csrmail/draadloos-header.png" /></a></td>
+<tr><td><a href="http://csrdelft.nl/dies"><img src="{$CSR_PICS}/csrmail/draadloos-header.png" /></a></td>
 <tr>
 <td class="hoofdKolom">
 <font size="-1" face="verdana"><h4>Inhoud</h4></font>

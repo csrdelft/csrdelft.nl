@@ -26,7 +26,7 @@ class InstellingenBeheerView extends SmartyTemplateView {
 		}
 		$this->smarty->assign('module', $this->module);
 		$this->smarty->assign('modules', $this->model->getModules());
-		$this->smarty->display('MVC/instellingen/beheer/instellingen_page.tpl');
+		$this->smarty->display('instellingen/beheer/instellingen_page.tpl');
 	}
 
 }
@@ -41,7 +41,7 @@ class InstellingBeheerView extends SmartyTemplateView {
 		$this->smarty->assign('module', $this->model->module);
 		$this->smarty->assign('id', $this->model->instelling_id);
 		$this->smarty->assign('waarde', $this->model->waarde);
-		$this->smarty->display('MVC/instellingen/beheer/instelling_row.tpl');
+		$this->smarty->display('instellingen/beheer/instelling_row.tpl');
 	}
 
 }

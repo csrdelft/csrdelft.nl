@@ -28,7 +28,7 @@ class ForumOverzichtView extends ForumView {
 	public function view() {
 		$this->smarty->assign('zoekform', new ForumZoekenForm());
 		$this->smarty->assign('categorien', $this->model);
-		$this->smarty->display('MVC/forum/forum.tpl');
+		$this->smarty->display('forum/forum.tpl');
 	}
 
 }
@@ -70,7 +70,7 @@ class ForumRssView extends ForumView {
 		$this->smarty->assign('draden', $this->model);
 		$this->smarty->assign('delen', $this->delen);
 		$this->smarty->assign('privatelink', LoginModel::instance()->getLid()->getRssLink());
-		$this->smarty->display('MVC/forum/rss.tpl');
+		$this->smarty->display('forum/rss.tpl');
 	}
 
 }
@@ -111,7 +111,7 @@ class ForumDeelView extends ForumView {
 		$this->smarty->assign('post_form_titel', ForumDradenReagerenModel::instance()->getConceptTitel($this->model));
 		$this->smarty->assign('post_form_tekst', ForumDradenReagerenModel::instance()->getConcept($this->model));
 		$this->smarty->assign('reageren', ForumDradenReagerenModel::instance()->getReagerenVoorDeel($this->model));
-		$this->smarty->display('MVC/forum/deel.tpl');
+		$this->smarty->display('forum/deel.tpl');
 	}
 
 }
@@ -191,7 +191,7 @@ class ForumDraadView extends ForumView {
 		}
 		$this->smarty->assign('draad_ongelezen', $this->ongelezen);
 		$this->smarty->assign('gelezen_moment', $this->gelezen_moment);
-		$this->smarty->display('MVC/forum/draad.tpl');
+		$this->smarty->display('forum/draad.tpl');
 	}
 
 }
@@ -204,7 +204,7 @@ class ForumDraadReagerenView extends ForumView {
 
 	public function view() {
 		$this->smarty->assign('reageren', $this->model);
-		$this->smarty->display('MVC/forum/draad_reageren.tpl');
+		$this->smarty->display('forum/draad_reageren.tpl');
 	}
 
 }
@@ -233,7 +233,7 @@ class ForumDraadZijbalkView extends ForumView {
 		echo '</a></div>';
 		foreach ($this->model as $draad) {
 			$this->smarty->assign('draad', $draad);
-			$this->smarty->display('MVC/forum/draad_zijbalk.tpl');
+			$this->smarty->display('forum/draad_zijbalk.tpl');
 		}
 		echo '</div>';
 	}
@@ -254,10 +254,10 @@ class ForumPostZijbalkView extends ForumView {
 
 	public function view() {
 		$this->smarty->assign('draden', $this->draden);
-		echo '<div class="zijbalk_forum"><div class="zijbalk-kopje"><a href="/communicatie/profiel/' . LoginModel::getUid() . '/#forum">Forum (zelf gepost)</a></div>';
+		echo '<div class="zijbalk_forum"><div class="zijbalk-kopje"><a href="/profiel/' . LoginModel::getUid() . '/#forum">Forum (zelf gepost)</a></div>';
 		foreach ($this->model as $post) {
 			$this->smarty->assign('post', $post);
-			$this->smarty->display('MVC/forum/post_zijbalk.tpl');
+			$this->smarty->display('forum/post_zijbalk.tpl');
 		}
 		echo '</div>';
 	}
@@ -279,7 +279,7 @@ class ForumPostView extends ForumView {
 		$this->smarty->assign('post', $this->model);
 		$this->smarty->assign('draad', $this->draad);
 		$this->smarty->assign('deel', $this->deel);
-		$this->smarty->display('MVC/forum/post_lijst.tpl');
+		$this->smarty->display('forum/post_lijst.tpl');
 	}
 
 }
@@ -313,7 +313,7 @@ class ForumResultatenView extends ForumView {
 	public function view() {
 		$this->smarty->assign('resultaten', $this->model);
 		$this->smarty->assign('delen', $this->delen);
-		$this->smarty->display('MVC/forum/resultaten.tpl');
+		$this->smarty->display('forum/resultaten.tpl');
 	}
 
 }

@@ -17,7 +17,7 @@ class ProfielContent extends SmartyTemplateView {
 	}
 
 	public function getBreadcrumbs() {
-		return '<a href="/communicatie/ledenlijst" title="Ledenlijst"><img src="' . CSR_PICS . '/knopjes/people-16.png" class="module-icon"></a> » <span class="active">' . $this->model->getNaam() . '</span>';
+		return '<a href="/ledenlijst" title="Ledenlijst"><img src="' . CSR_PICS . '/knopjes/people-16.png" class="module-icon"></a> » <span class="active">' . $this->model->getNaam() . '</span>';
 	}
 
 	function view() {
@@ -60,9 +60,9 @@ class ProfielContent extends SmartyTemplateView {
 		$this->smarty->assign('corveevrijstelling', $this->model->getCorveeVrijstelling());
 		$this->smarty->assign('corveekwalificaties', $this->model->getCorveeKwalificaties());
 
-		require_once 'bibliotheek/catalogus.class.php';
-		$this->smarty->assign('boeken', Catalogus::getBoekenByUid($this->model->getUid(), 'eigendom'));
-		$this->smarty->assign('gerecenseerdeboeken', Catalogus::getBoekenByUid($this->model->getUid(), 'gerecenseerd'));
+		require_once 'MVC/model/bibliotheek/BiebCatalogus.class.php';
+		$this->smarty->assign('boeken', BiebCatalogus::getBoekenByUid($this->model->getUid(), 'eigendom'));
+		$this->smarty->assign('gerecenseerdeboeken', BiebCatalogus::getBoekenByUid($this->model->getUid(), 'gerecenseerd'));
 
 		$this->smarty->assign('isAdmin', LoginModel::mag('P_ADMIN'));
 		//TODO check role vs permission R_BESTUUR

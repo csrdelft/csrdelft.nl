@@ -30,7 +30,7 @@ form label{ width: 150px; float: left; text-align: right; padding-right: 10px;}
 .selectVeld input{ height: 10px; width: 10px; padding:  0; }
 
 
-/* intern/lijst.php */
+/* ledenlijst */
 table.zoekResultaat{ width: 100%; border-collapse: collapse; clear: both; }
 table.zoekResultaat thead tr th{ border-bottom: 1px solid black; }
 table.zoekResultaat tfoot tr th{ border-top: 1px solid black; }

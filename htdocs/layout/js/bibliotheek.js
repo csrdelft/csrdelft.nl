@@ -23,7 +23,7 @@ jQuery(document).ready(function ($) {
 		},
 		//"bProcessing": true,
 		"bServerSide": true,
-		"sAjaxSource": "/communicatie/bibliotheek/catalogusdata",
+		"sAjaxSource": "/bibliotheek/catalogusdata",
 		"fnServerParams": function (aoData) {
 			aoData.push({"name": "sEigenaarFilter", "value": $('span.filter.actief').attr('id')});
 			aoData.push({"name": "sView", "value": $('input[name=boekstatus]').is(':checked')});
@@ -207,7 +207,7 @@ jQuery(document).ready(function ($) {
 			return result;
 		},
 		formatItem: function (row, i, n) {
-			return 'Ga naar: <a href="/communicatie/bibliotheek/boek/' + row.id + '" target="_blank">' + row.titel + '</a>';
+			return 'Ga naar: <a href="/bibliotheek/boek/' + row.id + '" target="_blank">' + row.titel + '</a>';
 		},
 		clickFire: true,
 		cacheLength: 0,
@@ -216,8 +216,8 @@ jQuery(document).ready(function ($) {
 	};
 
 	try {
-		$("#field_titel").autocomplete("/communicatie/bibliotheek/autocomplete/titel", options).result(function (event, row) {
-			window.open('/communicatie/bibliotheek/boek/' + row.id)
+		$("#field_titel").autocomplete("/bibliotheek/autocomplete/titel", options).result(function (event, row) {
+			window.open('/bibliotheek/boek/' + row.id)
 		});
 	} catch (err) {
 		// Missing js file
@@ -235,7 +235,7 @@ jQuery(document).ready(function ($) {
 			var dataString = 'id=' + fieldname + '&' + fieldname + '=' + waarde;
 			jQuery.ajax({
 				type: "POST",
-				url: '/communicatie/bibliotheek/bewerkboek/' + boekid,
+				url: '/bibliotheek/bewerkboek/' + boekid,
 				data: dataString,
 				cache: false,
 				dataType: "json",

@@ -63,8 +63,8 @@ abstract class Zijbalk {
 		}
 		// Komende verjaardagen
 		if (LidInstellingen::get('zijbalk', 'verjaardagen') > 0) {
-			require_once 'lid/verjaardagcontent.class.php';
-			$zijbalk[] = new VerjaardagContent('komende');
+			require_once 'MVC/view/VerjaardagenView.class.php';
+			$zijbalk[] = new VerjaardagenView('komende');
 		}
 		return $zijbalk;
 	}

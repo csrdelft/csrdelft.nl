@@ -1,18 +1,17 @@
 RewriteEngine On
 
-# Fotoalbum backwards compatibility
-RewriteRule ^fotoalbum/?(.*)$	/fotoalbum/$1 [QSA,R=301,L]
+# Backwards compatibility
+RewriteRule ^eetplan/?(.*)$			/eetplan/$1			[QSA,R=301,L]
+RewriteRule ^groepen/?(.*)$			/groepen/$1			[QSA,R=301,L]
+RewriteRule ^fotoalbum/?(.*)$		/fotoalbum/$1		[QSA,R=301,L]
+RewriteRule ^bijbelrooster/?(.*)$	/bijbelrooster/$1	[QSA,R=301,L]
 
 # Oude owee redirected
-RewriteRule ^owee/?$	/csrindeowee/
+RewriteRule ^owee/?$	/csrindeowee/ [R,L]
 
 # Als we naar /actueel/ gaan worden we doorgestuurd naar de mededelingen
-RewriteRule ^/?$	/actueel/mededelingen/
-
-# Bijbelleesrooster backwards compatibility
-RewriteRule ^bijbelrooster/?	/bijbelrooster [QSA,R=301,L]
+RewriteRule ^/?$		/mededelingen [R,L]
 
 # Eetplan
-RewriteRule ^eetplan/$	eetplan.php
-RewriteRule ^eetplan/sjaars/([0-9]*)	eetplan.php?pheutID=$1
-RewriteRule ^eetplan/huis/([0-9]*)	eetplan.php?huisID=$1
+RewriteRule ^eetplan/noviet/([0-9]*)	/eetplan?pheutID=$1	[QSA]
+RewriteRule ^eetplan/huis/([0-9]*)		/eetplan?huisID=$1	[QSA]

@@ -1,45 +1,15 @@
 RewriteEngine On
 
-# Forum backwards compatibility
-RewriteRule ^forum/categorie/laatste/?	/forum/recent [QSA,R=301,L]
-RewriteRule ^forum/categorie/?(.*)$		/forum/deel/$1 [QSA,R=301,L]
-RewriteRule ^forum/?(.*)$				/forum/$1 [QSA,R=301,L]
+# Backwards compatibility
+RewriteRule ^forum/categorie/laatste/?	/forum/recent	[QSA,R=301,L]
+RewriteRule ^forum/categorie/?(.*)$		/forum/deel/$1	[QSA,R=301,L]
+RewriteRule ^forum/?(.*)$				/forum/$1		[QSA,R=301,L]
+
 # Als we naar /communicatie/ gaan worden we doorgestuurd naar het forum
-RewriteRule ^/?$	/forum/ [R,L]
-
-# Ledenlijst
-RewriteRule ^(leden)?lijst/$ lijst.php
-RewriteRule ^(leden)?lijst/?(.*)$ lijst.php [QSA]
-
-
-# Verjaardagen
-RewriteRule ^verjaardagen/? verjaardagen.php
-
-# Moten redirecten naar verticalen
-RewriteRule ^moten/? verticalen/ [R=301]
-
-# Verticalen
-RewriteRule ^verticalen/? verticalen.php
-
-# Profielen
-RewriteRule ^profiel/?$ profiel.php
-RewriteRule ^profiel/([0-9a-z]+)/?$ profiel.php?uid=$1
-RewriteRule ^profiel/([0-9a-z]+)/([a-zA-Z]+)/?$ profiel.php?uid=$1&a=$2 [QSA]
-RewriteRule ^profiel/([0-9a-z]+)/([a-zA-Z]+)/([a-zA-Z]+)/?$ profiel.php?uid=$1&a=$2&s=$3 [QSA]
-
-# Oude documentlinks voorlopig doorverwijzen naar de oude ketzer.
-RewriteRule ^documenten/neerladen/([0-9]+)/?$ documenten_old/neerladen/$1
-
-# Documentenketzer
-RewriteRule ^documenten$ documenten.php?querystring=
-RewriteRule ^documenten/(.*)$ documenten.php?querystring=$1 [QSA]
+RewriteRule ^/?$			/forum [R,L]
 
 # Pagina's met tekst
-RewriteRule ^irc/? ../index.php
-RewriteRule ^orientatie/? ../index.php
-RewriteRule ^boeken/? ../index.php
-RewriteRule ^bedrijven/? ../index.php
-
-# Bibliotheek
-RewriteRule ^bibliotheek$ bibliotheek.php?querystring=
-RewriteRule ^bibliotheek/(.*)$ bibliotheek.php?querystring=$1 [QSA]
+RewriteRule ^boeken		../index.php [L]
+RewriteRule ^bedrijven	../index.php [L]
+RewriteRule ^irc		../index.php [L]
+RewriteRule ^orientatie	../index.php [L]

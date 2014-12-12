@@ -3,7 +3,7 @@
  *}
 <ul class="horizontal">
 	<li class="active">
-		<a href="/communicatie/bibliotheek/" title="Naar de catalogus">Catalogus</a>
+		<a href="/bibliotheek/" title="Naar de catalogus">Catalogus</a>
 	</li>
 	<li>
 		<a href="/bibliotheek/wenslijst" title="Wenslijst van bibliothecaris">Wenslijst</a>
@@ -16,7 +16,7 @@
 </ul>
 {if LoginModel::mag('P_BIEB_READ')}
 	<div class="controls">
-		<a class="btn" href="/communicatie/bibliotheek/nieuwboek" title="Nieuw boek toevoegen">{icon get="book_add"} Boek toevoegen</a>
+		<a class="btn" href="/bibliotheek/nieuwboek" title="Nieuw boek toevoegen">{icon get="book_add"} Boek toevoegen</a>
 	</div>
 {/if}
 

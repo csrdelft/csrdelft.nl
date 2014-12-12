@@ -17,7 +17,7 @@ class MenuBeheerView extends SmartyTemplateView {
 	public function view() {
 		$this->smarty->assign('root', $this->model);
 		$this->smarty->assign('menus', MenuModel::instance()->getMenuBeheerLijst());
-		$this->smarty->display('MVC/menu/beheer/menu_tree.tpl');
+		$this->smarty->display('menu/beheer/menu_tree.tpl');
 	}
 
 }
@@ -30,7 +30,7 @@ class MenuItemView extends SmartyTemplateView {
 
 	public function view() {
 		$this->smarty->assign('item', $this->model);
-		$this->smarty->display('MVC/menu/beheer/menu_item.tpl');
+		$this->smarty->display('menu/beheer/menu_item.tpl');
 	}
 
 }

@@ -33,14 +33,14 @@ class Groepcontroller extends Controller {
 				$this->groep = new OldGroep($this->getParam(0));
 			} catch (Exception $e) {
 				setMelding($e->getMessage(), -1);
-				redirect(CSR_ROOT . '/actueel/groepen/');
+				redirect(CSR_ROOT . '/groepen/');
 			}
 			if ($this->groep->getId() == 0 AND isset($_GET['gtype'])) {
 				try {
 					$groepen = new Groepen($_GET['gtype']);
 				} catch (Exception $e) {
 					setMelding($e->getMessage(), -1);
-					redirect(CSR_ROOT . '/actueel/groepen/');
+					redirect(CSR_ROOT . '/groepen/');
 				}
 				$this->groep->setGtype($groepen);
 				if (!($this->groep->getType() instanceof Groepen)) {
@@ -60,7 +60,7 @@ class Groepcontroller extends Controller {
 		//controleer dat we geen lege groep weergeven.
 		if ($this->action == 'standaard' AND $this->groep->getId() == 0) {
 			setMelding('We geven geen 0-groepen weer! (Groepcontroller::__construct())', -1);
-			redirect(CSR_ROOT . '/actueel/groepen/');
+			redirect(CSR_ROOT . '/groepen/');
 		}
 	}
 
@@ -81,7 +81,7 @@ class Groepcontroller extends Controller {
 	}
 
 	public function getUrl($action = null) {
-		$url = CSR_ROOT . '/actueel/groepen/' . $this->groep->getType()->getNaam() . '/' . $this->groep->getId() . '/';
+		$url = CSR_ROOT . '/groepen/' . $this->groep->getType()->getNaam() . '/' . $this->groep->getId() . '/';
 		if ($action != null AND $this->hasAction($action)) {
 			if ($action != 'standaard') {
 				$url.=$action;
@@ -341,7 +341,7 @@ class Groepcontroller extends Controller {
 		} else {
 			setMelding('Niet voldoende rechten voor deze actie', -1);
 		}
-		redirect(CSR_ROOT . '/actueel/groepen/' . $groeptypenaam);
+		redirect(CSR_ROOT . '/groepen/' . $groeptypenaam);
 	}
 
 	/**

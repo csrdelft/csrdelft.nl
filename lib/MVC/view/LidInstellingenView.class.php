@@ -30,7 +30,7 @@ class LidInstellingenView extends TabsForm {
 				$smarty->assign('waarde', $this->model->getValue($module, $id));
 				$smarty->assign('default', $this->model->getDefault($module, $id));
 				$smarty->assign('reset', $reset);
-				$fields[] = new HtmlComment($smarty->fetch('MVC/instellingen/lidinstelling.tpl'));
+				$fields[] = new HtmlComment($smarty->fetch('instellingen/lidinstelling.tpl'));
 			}
 			$this->addFields($fields, ucfirst($module));
 		}

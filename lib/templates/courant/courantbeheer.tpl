@@ -1,9 +1,9 @@
 <ul class="horizontal nobullets">
 	<li class="active">
-		<a href="/actueel/courant/" title="Courantinzendingen">Courantinzendingen</a>
+		<a href="/courant/" title="Courantinzendingen">Courantinzendingen</a>
 	</li>
 	<li>
-		<a href="/actueel/courant/archief/" title="Archief">Archief</a>
+		<a href="/courant/archief/" title="Archief">Archief</a>
 	</li>
 </ul>
 <hr />
@@ -19,11 +19,11 @@
 </p>
 <div id="knoppenContainer">
 	{if $courant->magVerzenden() AND sizeof($courant->getBerichten())>0}
-		<a href="/actueel/courant/verzenden.php" onclick="return confirm('Weet u het zeker dat u de C.S.R.-courant wilt versturen?')" class="btn">Verzenden</a>
+		<a href="/courant/verzenden.php" onclick="return confirm('Weet u het zeker dat u de C.S.R.-courant wilt versturen?')" class="btn">Verzenden</a>
 	{/if}
 	{* Volgens mij wordt deze nooit gebruikt...
 	{if $courant->magBeheren()}
-	<a href="/actueel/courant/leegmaken" class="btn" onclick="return confirm('Weet u zeker dat u de cache wilt leeggooien?')">Leegmaken</a>
+	<a href="/courant/leegmaken" class="btn" onclick="return confirm('Weet u zeker dat u de cache wilt leeggooien?')">Leegmaken</a>
 	{/if}
 	*}
 </div>
@@ -37,8 +37,8 @@
 			<span class="onderstreept">{$bericht.categorie|replace:'csr':'C.S.R.'}</span>
 			{if $courant->magBeheren()}({$bericht.uid|csrnaam:'full'}){/if}
 			<span class="dikgedrukt">{$bericht.titel}</span>
-			[ <a href="/actueel/courant/bewerken/{$bericht.ID}">bewerken</a> | 
-			<a href="/actueel/courant/verwijder/{$bericht.ID}" onclick="return confirm('Weet u zeker dat u dit bericht wilt verwijderen?')" >verwijderen</a> ]
+			[ <a href="/courant/bewerken/{$bericht.ID}">bewerken</a> | 
+			<a href="/courant/verwijder/{$bericht.ID}" onclick="return confirm('Weet u zeker dat u dit bericht wilt verwijderen?')" >verwijderen</a> ]
 			</dt>
 			<dd id="courantbericht{$bericht.ID}"></dd>
 			{if !$courant->magBeheren()}<dd>{$bericht.bericht|bbcode}</dd>{/if}
@@ -75,7 +75,7 @@
 	<script type="text/javascript">//<![CDATA[{literal}
 		function showIframe() {
 			target = document.getElementById('courant_voorbeeld');
-			target.innerHTML = "<iframe src=\"/actueel/courant/courant.php\" style=\"width: 100%; height: 600px;\"></iframe>";
+			target.innerHTML = "<iframe src=\"/courant/courant.php\" style=\"width: 100%; height: 600px;\"></iframe>";
 		}
 		//]]></script>{/literal}
 	<a href="#voorbeeld" onclick="showIframe()">Laat voorbeeld zien...</a>

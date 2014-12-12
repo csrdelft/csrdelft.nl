@@ -461,7 +461,7 @@ class Groepen {
 				//$status = str_split($prop['status']);
 				//$status = '<span class="lichtgrijs">' . $status[0] . '.' . $status[1] . '. </span>';
 				$groepen[] = array(
-					'url'	 => '/actueel/groepen/' . $prop['type'] . '/' . $prop['id'],
+					'url'	 => '/groepen/' . $prop['type'] . '/' . $prop['id'],
 					'value'	 => $prop['naam'] . '<span class="lichtgrijs"> - ' . $prop['type'] . '</span>'
 				);
 			}

@@ -2,7 +2,7 @@
 
 <div id="controls">
 	{if LoginModel::mag('P_DOCS_MOD')}
-		<a class="btn" href="/communicatie/documenten/toevoegen/?catID={$categorie->getID()}">{icon get="toevoegen"} Toevoegen</a>
+		<a class="btn" href="/documenten/toevoegen/?catID={$categorie->getID()}">{icon get="toevoegen"} Toevoegen</a>
 	{/if}
 </div>
 
@@ -29,10 +29,10 @@
 				{$document->getNaam()|escape:'html'|wordwrap:70:'<br />'}
 				</a>
 				{if $document->magVerwijderen()}
-					<a class="verwijderen" href="/communicatie/documenten/verwijderen/{$document->getID()}" title="Document verwijderen" onclick="return confirm('Weet u zeker dat u dit document wilt verwijderen')">{icon get="verwijderen"}</a>
+					<a class="verwijderen" href="/documenten/verwijderen/{$document->getID()}" title="Document verwijderen" onclick="return confirm('Weet u zeker dat u dit document wilt verwijderen')">{icon get="verwijderen"}</a>
 				{/if}
 				{if $document->magBewerken()}
-					<a class="bewerken" href="/communicatie/documenten/bewerken/{$document->getID()}" title="Document bewerken">{icon get="bewerken"}</a>
+					<a class="bewerken" href="/documenten/bewerken/{$document->getID()}" title="Document bewerken">{icon get="bewerken"}</a>
 				{/if}
 			</td>
 			<td class="size">{$document->getFileSize()|filesize}</td>

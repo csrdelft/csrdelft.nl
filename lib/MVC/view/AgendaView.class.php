@@ -89,7 +89,7 @@ class AgendaMaandView extends AgendaView {
 		$this->smarty->assign('urlVolgende', $urlVolgende);
 		$this->smarty->assign('nextMaand', strftime('%B', strtotime('+1 Month', $cur)));
 
-		$this->smarty->display('MVC/agenda/maand.tpl');
+		$this->smarty->display('agenda/maand.tpl');
 	}
 
 }
@@ -102,7 +102,7 @@ class AgendaItemMaandView extends AgendaView {
 
 	public function view() {
 		$this->smarty->assign('item', $this->model);
-		$this->smarty->display('MVC/agenda/maand_item.tpl');
+		$this->smarty->display('agenda/maand_item.tpl');
 	}
 
 }
@@ -234,7 +234,7 @@ class AgendaZijbalkView extends AgendaItemsView {
 			$this->items = array_slice($this->items, 0, LidInstellingen::get('zijbalk', 'agenda_max'));
 		}
 		$this->smarty->assign('items', $this->items);
-		$this->smarty->display('MVC/agenda/zijbalk.tpl');
+		$this->smarty->display('agenda/zijbalk.tpl');
 	}
 
 }
@@ -243,7 +243,7 @@ class AgendaCourantView extends AgendaItemsView {
 
 	public function view() {
 		$this->smarty->assign('items', $this->items);
-		$this->smarty->display('MVC/agenda/courant.tpl');
+		$this->smarty->display('agenda/courant.tpl');
 	}
 
 }
@@ -256,7 +256,7 @@ class AgendaICalendarView extends AgendaView {
 
 	public function view() {
 		$this->smarty->assign('items', $this->model->getICalendarItems());
-		$this->smarty->display('MVC/agenda/icalendar.tpl');
+		$this->smarty->display('agenda/icalendar.tpl');
 	}
 
 }

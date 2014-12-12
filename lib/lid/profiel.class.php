@@ -355,13 +355,13 @@ class ProfielBewerken extends Profiel {
 			$form[] = new TextareaField('kgb', $profiel['kgb'], 'Overige NovCie-opmerking');
 			$form[] = new HtmlComment('</div>');
 		}
-		$form[] = new FormDefaultKnoppen('/communicatie/profiel/' . $this->getUid());
+		$form[] = new FormDefaultKnoppen('/profiel/' . $this->getUid());
 
 		if ($this->editNoviet) {
-			$this->form = new Formulier(null, 'profielForm', '/communicatie/profiel/' . $this->getUid() . '/novietBewerken');
+			$this->form = new Formulier(null, 'profielForm', '/profiel/' . $this->getUid() . '/novietBewerken');
 			$this->form->addFields($form);
 		} else {
-			$this->form = new Formulier(null, 'profielForm', '/communicatie/profiel/' . $this->getUid() . '/bewerken');
+			$this->form = new Formulier(null, 'profielForm', '/profiel/' . $this->getUid() . '/bewerken');
 			$this->form->addFields($form);
 		}
 	}
@@ -449,7 +449,7 @@ class ProfielStatus extends Profiel {
 		$form[] = new DatumField('sterfdatum', $profiel['sterfdatum'], 'Overleden op:');
 		$form[] = new FormDefaultKnoppen();
 
-		$this->form = new Formulier(null, 'statusForm', '/communicatie/profiel/' . $this->getUid() . '/wijzigstatus/');
+		$this->form = new Formulier(null, 'statusForm', '/profiel/' . $this->getUid() . '/wijzigstatus/');
 		$this->form->addFields($form);
 	}
 
@@ -642,7 +642,7 @@ class ProfielStatus extends Profiel {
 	 */
 	private function notifyBibliothecaris($oudestatus, $nieuwestatus) {
 		require_once 'bibliotheek/catalogus.class.php';
-		$boeken = Catalogus::getBoekenByUid($this->bewerktLid->getUid(), 'geleend');
+		$boeken = BiebCatalogus::getBoekenByUid($this->bewerktLid->getUid(), 'geleend');
 		if (!is_array($boeken)) {
 			$boeken = array();
 		}
@@ -656,11 +656,11 @@ class ProfielStatus extends Profiel {
 			if ($boek['eigenaar_uid'] == 'x222') {
 				$bkncsr['aantal'] ++;
 				$bkncsr['lijst'] .= "{$boek['titel']} door {$boek['auteur']}\n";
-				$bkncsr['lijst'] .= " - http://csrdelft.nl/communicatie/bibliotheek/boek/{$boek['id']}\n";
+				$bkncsr['lijst'] .= " - http://csrdelft.nl/bibliotheek/boek/{$boek['id']}\n";
 			} else {
 				$bknleden['aantal'] ++;
 				$bknleden['lijst'] .= "{$boek['titel']} door {$boek['auteur']}\n";
-				$bknleden['lijst'] .= " - http://csrdelft.nl/communicatie/bibliotheek/boek/{$boek['id']}\n";
+				$bknleden['lijst'] .= " - http://csrdelft.nl/bibliotheek/boek/{$boek['id']}\n";
 				$naam = Lid::naamLink($boek['eigenaar_uid'], 'full', 'plain');
 				$bknleden['lijst'] .= " - boek is geleend van: $naam\n";
 			}
@@ -772,9 +772,9 @@ class ProfielVoorkeur extends Profiel {
 		}
 
 		$form[] = new TextareaField('lidOpmerking', $lidvoorkeur->getLidOpmerking(), 'Vul hier je eventuele voorkeur voor functie in, of andere opmerkingen');
-		$form[] = new FormDefaultKnoppen('/communicatie/profiel/' . $this->getUid());
+		$form[] = new FormDefaultKnoppen('/profiel/' . $this->getUid());
 
-		$this->form = new Formulier(null, 'profielForm', '/communicatie/profiel/' . $this->getUid() . '/voorkeuren');
+		$this->form = new Formulier(null, 'profielForm', '/profiel/' . $this->getUid() . '/voorkeuren');
 		$this->form->addFields($form);
 	}
 

@@ -26,7 +26,7 @@ class CourantarchiefContent implements View {
 	}
 
 	public function getBreadcrumbs() {
-		return '<a href="/actueel/courant" title="Courant"><img src="' . CSR_PICS . '/knopjes/email-16.png" class="module-icon"></a> » <span class="active">' . $this->getTitel() . '</span>';
+		return '<a href="/courant" title="Courant"><img src="' . CSR_PICS . '/knopjes/email-16.png" class="module-icon"></a> » <span class="active">' . $this->getTitel() . '</span>';
 	}
 
 	function getTitel() {
@@ -49,7 +49,7 @@ class CourantarchiefContent implements View {
 					}
 				}
 				$iLaatsteJaar = $aMail['jaar'];
-				$sLijst .= '<a href="/actueel/courant/archief/' . $aMail['ID'] . '">' . strftime('%d %B', strtotime($aMail['verzendMoment'])) . '</a><br />';
+				$sLijst .= '<a href="/courant/archief/' . $aMail['ID'] . '">' . strftime('%d %B', strtotime($aMail['verzendMoment'])) . '</a><br />';
 			}
 			$sReturn .= '<div class="courantArchiefJaar"><h3>' . $iLaatsteJaar . '</h3>' . $sLijst . '</div>';
 		} else {
@@ -65,10 +65,10 @@ class CourantarchiefContent implements View {
 	function view() {
 		echo '<ul class="horizontal nobullets">
 			<li>
-				<a href="/actueel/courant/" title="Courantinzendingen">Courantinzendingen</a>
+				<a href="/courant/" title="Courantinzendingen">Courantinzendingen</a>
 			</li>
 			<li class="active">
-				<a href="/actueel/courant/archief/" title="Archief">Archief</a>
+				<a href="/courant/archief/" title="Archief">Archief</a>
 			</li>
 		</ul>
 		<hr />';
@@ -77,7 +77,7 @@ class CourantarchiefContent implements View {
 			echo $this->getArchiefmails();
 		} else {
 			echo '<h1>C.S.R.-courant ' . $this->getVerzendMoment() . '</h1>';
-			echo '<iframe src="/actueel/courant/archief/iframe/' . $this->courant->getID() . '" id="courantIframe"></iframe>';
+			echo '<iframe src="/courant/archief/iframe/' . $this->courant->getID() . '" id="courantIframe"></iframe>';
 		}
 	}
 

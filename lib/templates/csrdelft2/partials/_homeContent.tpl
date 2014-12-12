@@ -9,7 +9,7 @@
 		</div>
 		<div class="columns large-2 small-2">
 			<div class="columns large-2 hide-for-small">
-				<a href="/csrindeowee/">
+				<a href="/csrindeowee">
 					<figure class="box">
 						<img src="{$CSR_PICS}/owee/2014/owee-thema.jpg" class="rotate" alt="C.S.R. in de Owee">
 					</figure>

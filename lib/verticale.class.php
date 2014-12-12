@@ -1,5 +1,10 @@
 <?php
 
+/**
+ * verticale.class.php
+ * 
+ * @author C.S.R. Delft <pubcie@csrdelft.nl>
+ */
 class OldVerticale {
 
 	public $nummer;

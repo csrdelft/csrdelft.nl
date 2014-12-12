@@ -17,7 +17,7 @@ require_once 'groepen/groep.class.php';
 abstract class OldGroepView extends SmartyTemplateView {
 
 	public function getBreadcrumbs() {
-		return '<a href="/actueel/groepen" title="Groepen"><img src="' . CSR_PICS . '/knopjes/group-16.png" class="module-icon"></a>';
+		return '<a href="/groepen" title="Groepen"><img src="' . CSR_PICS . '/knopjes/group-16.png" class="module-icon"></a>';
 	}
 
 }
@@ -47,7 +47,7 @@ class GroepContent extends OldGroepView {
 	}
 
 	public function getBreadcrumbs() {
-		return parent::getBreadcrumbs() . ' » <a href="/actueel/groepen/' . $this->groeptype . '">' . $this->groeptype . '</a> » <span class="active">' . $this->model->getNaam() . '</span>';
+		return parent::getBreadcrumbs() . ' » <a href="/groepen/' . $this->groeptype . '">' . $this->groeptype . '</a> » <span class="active">' . $this->model->getNaam() . '</span>';
 	}
 
 	/**
@@ -244,7 +244,7 @@ class Groepgeschiedeniscontent extends OldGroepView {
 					$duration = 12;
 				}
 				echo '<td colspan="' . $duration . '" style="font-size: 8px; border: 1px solid black; padding: 2px; width: 150px; text-align: left;">';
-				echo '<a href="/actueel/groepen/' . $this->model->getNaam() . '/' . $grp['id'] . '">' . $grp['naam'] . '</a>';
+				echo '<a href="/groepen/' . $this->model->getNaam() . '/' . $grp['id'] . '">' . $grp['naam'] . '</a>';
 
 				echo '</td>';
 			}

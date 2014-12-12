@@ -9,7 +9,7 @@
 class ZoekbalkView extends Formulier {
 
 	public function __construct() {
-		parent::__construct(null, 'cd-zoek-form', '/communicatie/lijst.php');
+		parent::__construct(null, 'cd-zoek-form', '/ledenlijst');
 		$this->post = false;
 
 		$fields[] = new ZoekInputGroup('q');
@@ -80,7 +80,7 @@ JS;
 			// Verticalen suggesties
 			foreach (VerticalenModel::instance()->prefetch() as $verticale) {
 				$this->suggestions['Menu'][] = array(
-					'url'	 => '/communicatie/verticalen#' . $verticale->letter,
+					'url'	 => '/verticalen#' . $verticale->letter,
 					'value'	 => $verticale->naam . '<span class="lichtgrijs"> - Verticalen</span>'
 				);
 			}
@@ -100,11 +100,11 @@ JS;
 				}
 			}
 			// Document categorien suggesties
-			require_once 'documenten/categorie.class.php';
-			foreach (DocumentenCategorie::getAll() as $cat) {
+			require_once 'MVC/model/documenten/DocCategorie.class.php';
+			foreach (DocCategorie::getAll() as $cat) {
 				if ($cat->magBekijken()) {
 					$this->suggestions['Menu'][] = array(
-						'url'	 => '/communicatie/documenten/categorie/' . $cat->getID(),
+						'url'	 => '/documenten/categorie/' . $cat->getID(),
 						'value'	 => $cat->getNaam() . '<span class="lichtgrijs"> - Documenten</span>'
 					);
 				}
@@ -116,8 +116,8 @@ JS;
 			$this->suggestions['Wiki'] = '/tools/wikisuggesties/?q=';
 			$this->suggestions['Groepen'] = '/tools/groepsuggesties/?q=';
 			$this->suggestions['Fotoalbum'] = '/fotoalbum/zoeken/';
-			$this->suggestions['Documenten'] = '/tools/documentsuggesties/?q=';
-			$this->suggestions['Boeken'] = '/communicatie/bibliotheek/zoeken/';
+			$this->suggestions['Documenten'] = '/documenten/zoeken/';
+			$this->suggestions['Boeken'] = '/bibliotheek/zoeken/';
 		}
 	}
 
@@ -133,7 +133,7 @@ JS;
 				<ul class="dropdown-menu dropdown-menu-right" role="menu">
 					<li><a onclick="window.location.href = '/forum/zoeken/' + encodeURIComponent($('#<?= $this->getId() ?>').val());">Forum</a></li>
 					<li><a class="submit">Leden</a></li>
-					<li><a onclick="window.location.href = '/communicatie/ledenlijst?status=OUDLEDEN&q=' + encodeURIComponent($('#<?= $this->getId() ?>').val());">Oudleden</a></li>
+					<li><a onclick="window.location.href = '/ledenlijst?status=OUDLEDEN&q=' + encodeURIComponent($('#<?= $this->getId() ?>').val());">Oudleden</a></li>
 					<li><a onclick="window.location.href = '/wiki/hoofdpagina?do=search&id=' + encodeURIComponent($('#<?= $this->getId() ?>').val());">Wiki</a></li>
 				</ul>
 			</div>

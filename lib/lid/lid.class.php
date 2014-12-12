@@ -457,7 +457,7 @@ class Lid implements Serializable, Agendeerbaar {
 			$postfix = '';
 		}
 		if ($link) {
-			return '<a href="/communicatie/verticalen#kring' . $vertkring . '" title="Verticale ' . htmlspecialchars($this->getVerticale()->naam) . ' (' . $this->getVerticale()->letter . ') - kring ' . $this->profiel['kring'] . '">' . $this->getVerticale()->naam . ' ' . $vertkring . '</a> ' . $postfix;
+			return '<a href="/verticalen#kring' . $vertkring . '" title="Verticale ' . htmlspecialchars($this->getVerticale()->naam) . ' (' . $this->getVerticale()->letter . ') - kring ' . $this->profiel['kring'] . '">' . $this->getVerticale()->naam . ' ' . $vertkring . '</a> ' . $postfix;
 		} else {
 			return $vertkring . ' ' . $postfix;
 		}
@@ -905,7 +905,7 @@ class Lid implements Serializable, Agendeerbaar {
 				$naam = CsrBB::parse('[neuzen]' . $naam . '[/neuzen]');
 			}
 			$k = '';
-			$l = '<a href="' . CSR_ROOT . '/communicatie/profiel/' . $this->getUid() . '" title="' . htmlspecialchars($sVolledigeNaam) . '" class="lidLink ' . htmlspecialchars($this->profiel['status']) . '">';
+			$l = '<a href="' . CSR_ROOT . '/profiel/' . $this->getUid() . '" title="' . htmlspecialchars($sVolledigeNaam) . '" class="lidLink ' . htmlspecialchars($this->profiel['status']) . '">';
 
 			if (($vorm === 'leeg' || $mode === 'visitekaartje') && LidInstellingen::get('algemeen', 'visitekaartjes') == 'ja') {
 				$k = '<span';

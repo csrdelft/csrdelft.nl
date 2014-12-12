@@ -48,8 +48,8 @@ class GroepenView implements View {
 	public function view() {
 		$smarty = CsrSmarty::instance();
 		$smarty->assign('groepen', $this->groepen);
-		$smarty->display('MVC/groepen/menu_pagina.tpl');
-		//$this->smarty->display('MVC/groepen/inhoudsopgave.tpl'); //FIXME: cannot iterate more than once over PDO statement of groepen
+		$smarty->display('groepen/menu_pagina.tpl');
+		//$this->smarty->display('groepen/inhoudsopgave.tpl'); //FIXME: cannot iterate more than once over PDO statement of groepen
 		if ($this->pagina) {
 			$pagina = new CmsPaginaView($this->pagina);
 			$pagina->view();
@@ -106,7 +106,7 @@ class GroepView implements View {
 		$smarty->assign('groep', $this->groep);
 		$smarty->assign('tab', $this->tab);
 		$smarty->assign('tabContent', $this->tabContent);
-		$smarty->display('MVC/groepen/groep.tpl'); //TODO: get_class($this->groep)
+		$smarty->display('groepen/groep.tpl'); //TODO: get_class($this->groep)
 	}
 
 }

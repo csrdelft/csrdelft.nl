@@ -56,13 +56,13 @@
 					{if $groep->magBewerken() OR LoginModel::getUid()==$groeplid.uid}
 					<td>
 						{if in_array($groep->getTypeId(), array(2, 3)) AND $groep->getStatus()=='ht'}{* maak lid ot voor huizen/onderverenigingen. Dit kunnen leden ook bij zichzelf doen. *}
-								<a href="/actueel/groepen/{$groep->getType()->getNaam()}/{$groep->getId()}/maakLidOt/{$groeplid.uid}" title="Verplaats lid naar o.t.-groep" 
+								<a href="/groepen/{$groep->getType()->getNaam()}/{$groep->getId()}/maakLidOt/{$groeplid.uid}" title="Verplaats lid naar o.t.-groep" 
 								   {if !$groep->isAdmin()}onclick="return confirm('Weet u zeker dat u deze bewoner naar de oudbewonersgroep wilt verplaatsen?');"{/if}>
 									&raquo;
 								</a>
 							{/if}
 							{if $groep->isAdmin() OR $groep->isEigenaar() OR $groeplid.uid!=LoginModel::getUid()} {* We kunnen onzelf niet uit een groep gooien gooien *}
-									<a href="/actueel/groepen/{$groep->getType()->getNaam()}/{$groep->getId()}/verwijderLid/{$groeplid.uid}" title="Verwijder lid uit groep" onclick="return confirm('Weet u zeker dat u dit groeplid wilt verwijderen?');">X</a>
+									<a href="/groepen/{$groep->getType()->getNaam()}/{$groep->getId()}/verwijderLid/{$groeplid.uid}" title="Verwijder lid uit groep" onclick="return confirm('Weet u zeker dat u dit groeplid wilt verwijderen?');">X</a>
 								{/if}
 							</td>
 						{/if}
@@ -75,7 +75,7 @@
 							<div class="aanmelden">
 								{if $groep->magAanmelden()}
 									{if $groep->getToonFuncties()=='niet' OR $groep->getToonFuncties()=='tonenzonderinvoer'}
-										<a  {if !isset($actie) or $actie!='pasfotos'}class="btn"{/if} href="/actueel/groepen/{$groep->getType()->getNaam()}/{$groep->getId()}/aanmelden" onclick="if(confirm('Weet u zeker dat u zich wilt aanmelden?')) { return true; } else { event.preventDefault(); } ;">
+										<a  {if !isset($actie) or $actie!='pasfotos'}class="btn"{/if} href="/groepen/{$groep->getType()->getNaam()}/{$groep->getId()}/aanmelden" onclick="if(confirm('Weet u zeker dat u zich wilt aanmelden?')) { return true; } else { event.preventDefault(); } ;">
 											{if isset($actie) and $actie=='pasfotos'}
 												<img class="pasfoto" style="width: auto; height: 100px;" src="{$CSR_PICS}/groepen/aanmelden.jpg" title="Aanmelden voor deze groep"
 													 onmouseover="this.src = '/tools/pasfotos.php?image';" onmouseout="this.src = '{$CSR_PICS}/groepen/aanmelden.jpg';" />
@@ -85,7 +85,7 @@
 										</a>
 									{if $groep->getVrijeplaatsen()!=0}<br />{/if}{* nog-vrije-plaatsen-melding *}
 								{else}
-									<form action="/actueel/groepen/{$groep->getType()->getNaam()}/{$groep->getId()}/aanmelden" method="post" id="aanmeldForm" class="clear">
+									<form action="/groepen/{$groep->getType()->getNaam()}/{$groep->getId()}/aanmelden" method="post" id="aanmeldForm" class="clear">
 										<strong>Aanmelden</strong><br />
 										{if $groep->hasFunctiefilter()}
 											{foreach from=$groep->getFunctiefilters() item=filter}

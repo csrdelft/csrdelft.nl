@@ -615,7 +615,7 @@ HTML;
 
 		try {
 			$verticale = VerticalenModel::instance()->getVerticaleByLetter($letter);
-			return '<a href="/communicatie/verticalen#' . $verticale->letter . '">' . $verticale->naam . '</a>';
+			return '<a href="/verticalen#' . $verticale->letter . '">' . $verticale->naam . '</a>';
 		} catch (Exception $e) {
 			return '[verticale] Geen geldige verticale-letter (' . htmlspecialchars($letter) . ')';
 		}
@@ -639,7 +639,7 @@ HTML;
 		require_once 'bibliotheek/boek.class.php';
 		require_once 'bibliotheek/bibliotheekcontent.class.php';
 		try {
-			$boek = new Boek((int) $boekid);
+			$boek = new BiebBoek((int) $boekid);
 			$content = new BoekBBContent($boek);
 			return $content->view();
 		} catch (Exception $e) {

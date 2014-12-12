@@ -37,7 +37,7 @@ foreach ($namen as $naam) {
 	$tussenvoegsel = ($naam['tussenvoegsel'] != '') ? $naam['tussenvoegsel'] . ' ' : '';
 	$fullname = $naam['voornaam'] . ' ' . $tussenvoegsel . $naam['achternaam'];
 
-	$result[] = array('url' => '/communicatie/profiel/' . $naam['uid'], 'value' => $fullname);
+	$result[] = array('url' => '/profiel/' . $naam['uid'], 'value' => $fullname);
 }
 
 header('Content-Type: application/json');

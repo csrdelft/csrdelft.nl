@@ -31,7 +31,7 @@ function smarty_modifier_pasfoto($uid, $cssclass = 'pasfoto', $link = true) {
 		$lid = LidCache::getLid($uid);
 		if ($lid instanceof Lid) {
 			if ($link) {
-				$return.='<a href="/communicatie/profiel/' . $uid . '" title="' . htmlspecialchars($lid->getNaamLink('full', 'plain')) . '">';
+				$return.='<a href="/profiel/' . $uid . '" title="' . htmlspecialchars($lid->getNaamLink('full', 'plain')) . '">';
 			}
 			if (LidInstellingen::get('forum', 'naamWeergave') === 'Duckstad') {
 				$return.=$lid->getDuckfoto(true, $cssclass);

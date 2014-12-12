@@ -70,7 +70,7 @@ class syntax_plugin_csrlink_bieblink extends DokuWiki_Syntax_Plugin {
 
         require_once 'bibliotheek/boek.class.php';
         try{
-            $boek =    new Boek($boekid);
+            $boek =    new BiebBoek($boekid);
         }catch(Exception $e){
             // nothing found? render as text
             $R->doc .='<span class="csrlink invalid" title="[[boek>]] Geen geldig boek-id ('.hsc($boekid).')">'.hsc($title?$title:$boekid).'</span>';

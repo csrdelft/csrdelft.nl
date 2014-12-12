@@ -260,7 +260,7 @@ class HTML_BBCodeParser2_Filter_Csrblocks extends HTML_BBCodeParser2_Filter {
 				require_once 'bibliotheek/boek.class.php';
 				require_once 'bibliotheek/bibliotheekcontent.class.php';
 				try {
-					$boek = new Boek((int) $boekid);
+					$boek = new BiebBoek((int) $boekid);
 					$content = new BoekBBContent($boek);
 					return $content->view();
 				} catch (Exception $e) {

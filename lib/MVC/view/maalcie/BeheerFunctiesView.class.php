@@ -17,7 +17,7 @@ class BeheerFunctiesView extends SmartyTemplateView {
 	public function view() {
 		$this->smarty->assign('functies', $this->model);
 		$this->smarty->display('maalcie/menu_pagina.tpl');
-		$this->smarty->display('MVC/maalcie/functie/beheer_functies.tpl');
+		$this->smarty->display('maalcie/functie/beheer_functies.tpl');
 	}
 
 }
@@ -30,7 +30,7 @@ class FunctieView extends SmartyTemplateView {
 
 	public function view() {
 		$this->smarty->assign('functie', $this->model);
-		$this->smarty->display('MVC/maalcie/functie/beheer_functie_lijst.tpl');
+		$this->smarty->display('maalcie/functie/beheer_functie_lijst.tpl');
 		echo '<tr id="maalcie-melding"><td>' . getMelding() . '</td></tr>';
 	}
 

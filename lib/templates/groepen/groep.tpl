@@ -2,7 +2,7 @@
 <ul class="horizontal nobullets">
 	{foreach from=$groeptypes item=groeptype}
 		<li{if $groeptype.id==$groep->getTypeId()} class="active"{/if}>
-			<a href="/actueel/groepen/{$groeptype.naam}/">{$groeptype.naam}</a>
+			<a href="/groepen/{$groeptype.naam}">{$groeptype.naam}</a>
 		</li>
 	{/foreach}
 </ul>
@@ -60,7 +60,7 @@
 		<div class="clear"></div>
 		{if $groep->magBewerken() AND $action!='edit'}
 			{if $action=='addLid' AND $lidAdder!=false}
-				<form action="/actueel/groepen/{$groep->getType()->getNaam()}/{$groep->getId()}/addLid" method="post" >
+				<form action="/groepen/{$groep->getType()->getNaam()}/{$groep->getId()}/addLid" method="post" >
 					<h3>Leden toevoegen</h3>
 					Hier kunt u eventueel een zinnige functie opgeven, laat het anders leeg!<br />(bij meerdere selectiemenu's opties scheiden met &&)<br />
 					<br />
@@ -69,7 +69,7 @@
 			{else}
 				<a class="btn" onclick="$('#lidAdder').toggle();
 						this.parentNode.removeChild(this)">leden toevoegen</a>
-				<form action="/actueel/groepen/{$groep->getType()->getNaam()}/{$groep->getId()}/addLid" method="post" id="lidAdder" class="verborgen">
+				<form action="/groepen/{$groep->getType()->getNaam()}/{$groep->getId()}/addLid" method="post" id="lidAdder" class="verborgen">
 					<h3>Leden toevoegen</h3>
 					Voer hier door komma's gescheiden namen of uid's in:<br /><br />
 					Zoek ook in: <input type="checkbox" name="filterOud" id="filterOud" /> <label for="filterOud">oudleden</label>
@@ -96,18 +96,18 @@
 		<ul class="nobullets">
 			{if is_array($opvolgerVoorganger)}
 				{if isset($opvolgerVoorganger.opvolger)}
-					<li class="vorigeGroep"><a href="/actueel/groepen/{$groep->getType()->getNaam()}/{$opvolgerVoorganger.opvolger->getId()}/">{$opvolgerVoorganger.opvolger->getNaam()}</a></li>
+					<li class="vorigeGroep"><a href="/groepen/{$groep->getType()->getNaam()}/{$opvolgerVoorganger.opvolger->getId()}">{$opvolgerVoorganger.opvolger->getNaam()}</a></li>
 					{/if}
 					{if isset($opvolgerVoorganger.voorganger) OR isset($opvolgerVoorganger.opvolger)}
 					<li>{$groep->getNaam()}</li>
 					{/if}
 					{if isset($opvolgerVoorganger.voorganger)}
-					<li class="volgendeGroep"><a href="/actueel/groepen/{$groep->getType()->getNaam()}/{$opvolgerVoorganger.voorganger->getId()}/">{$opvolgerVoorganger.voorganger->getNaam()}</a></li>
+					<li class="volgendeGroep"><a href="/groepen/{$groep->getType()->getNaam()}/{$opvolgerVoorganger.voorganger->getId()}">{$opvolgerVoorganger.voorganger->getNaam()}</a></li>
 					{/if}
 				{/if}
 				{if $groep->isAdmin() OR $groep->isEigenaar()}
 				<li style="margin-top: 20px;">
-					<a href="/actueel/groepen/{$groep->getType()->getNaam()}/0/bewerken/{$groep->getId()}">Opvolger toevoegen</a>
+					<a href="/groepen/{$groep->getType()->getNaam()}/0/bewerken/{$groep->getId()}">Opvolger toevoegen</a>
 				</li>
 			{/if}
 		</ul>
@@ -115,18 +115,18 @@
 	{if $groep->isAdmin() OR $groep->magBewerken()}
 		<div id="groepAdmin">
 			{if ($groep->isAdmin() OR $groep->isEigenaar()) AND $groep->getStatus()=='ht'}
-				<a class="btn" href="/actueel/groepen/{$groep->getType()->getNaam()}/{$groep->getId()}/maakGroepOt" onclick="return confirm('Weet u zeker dat u deze groep o.t. wilt maken?');" title="Groep o.t. maken? Eindatum wordt indien niet ingevuld naar vandaag gezet.">
+				<a class="btn" href="/groepen/{$groep->getType()->getNaam()}/{$groep->getId()}/maakGroepOt" onclick="return confirm('Weet u zeker dat u deze groep o.t. wilt maken?');" title="Groep o.t. maken? Eindatum wordt indien niet ingevuld naar vandaag gezet.">
 					<strong>&raquo;</strong>
 				</a>
 			{/if}
 
 			{if $groep->magBewerken()}
-				<a class="btn" href="/actueel/groepen/{$groep->getType()->getNaam()}/{$groep->getId()}/bewerken#groepFormulier">
+				<a class="btn" href="/groepen/{$groep->getType()->getNaam()}/{$groep->getId()}/bewerken#groepFormulier">
 					<img src="{$CSR_PICS}/famfamfam/pencil.png" title="Bewerk groep" />
 				</a>
 			{/if}
 			{if $groep->isAdmin()}
-				<a class="btn" onclick="return confirm('Weet u zeker dat u deze groep wilt verwijderen?');" href="/actueel/groepen/{$groep->getType()->getNaam()}/{$groep->getId()}/verwijderen">
+				<a class="btn" onclick="return confirm('Weet u zeker dat u deze groep wilt verwijderen?');" href="/groepen/{$groep->getType()->getNaam()}/{$groep->getId()}/verwijderen">
 					<img src="{$CSR_PICS}/forum/verwijderen.png" title="Verwijder deze groep" />
 				</a>
 			{/if}

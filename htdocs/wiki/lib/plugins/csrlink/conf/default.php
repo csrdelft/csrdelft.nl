@@ -6,5 +6,5 @@
  * @author Gerrit Uitslag
  */
 
-$conf['profileurl'] = 'http://csrdelft.nl/communicatie/profiel/';
+$conf['profileurl'] = 'http://csrdelft.nl/profiel/';
 $conf['usefullname'] = 1;

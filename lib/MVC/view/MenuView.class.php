@@ -25,7 +25,7 @@ class BlockMenuView extends MenuView {
 
 	public function view() {
 		parent::view();
-		$this->smarty->display('MVC/menu/block.tpl');
+		$this->smarty->display('menu/block.tpl');
 	}
 
 }
@@ -34,7 +34,7 @@ class PageMenuView extends MenuView {
 
 	public function view() {
 		parent::view();
-		$this->smarty->display('MVC/menu/page.tpl');
+		$this->smarty->display('menu/page.tpl');
 	}
 
 }

@@ -1,4 +1,4 @@
-<form action="/actueel/groepen/{$groep->getType()->getNaam()}/{$groep->getId()}/bewerken" method="post">
+<form action="/groepen/{$groep->getType()->getNaam()}/{$groep->getId()}/bewerken" method="post">
 <div id="groepFormulier" class="groepFormulier clear">
 	{if $groep->isAdmin() OR $groep->isEigenaar()}
 
@@ -125,7 +125,7 @@
 
 	<label for="submit"></label>
 	<input type="submit" id="submit" value="Opslaan" />
-	<a href="/actueel/groepen/{$groep->getType()->getNaam()}{if $groep->getId()!=0}/{$groep->getId()}{/if}/" class="btn">Terug</a>
+	<a href="/groepen/{$groep->getType()->getNaam()}{if $groep->getId()!=0}/{$groep->getId()}{/if}/" class="btn">Terug</a>
 </div>
 </form>
 <script type="text/javascript">

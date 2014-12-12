@@ -23,7 +23,7 @@ class FotoAlbumView extends SmartyTemplateView {
 	function view() {
 		echo getMelding();
 		$this->smarty->assign('album', $this->model);
-		$this->smarty->display('MVC/fotoalbum/album.tpl');
+		$this->smarty->display('fotoalbum/album.tpl');
 	}
 
 	public function getBreadcrumbs($dropdown = true, $self = false) {
@@ -180,7 +180,7 @@ class FotoAlbumZijbalkView extends FotoAlbumView {
 
 	public function view() {
 		echo '<div id="zijbalk_fotoalbum">';
-		echo '<div class="zijbalk-kopje"><a href="/actueel/fotoalbum/' . Lichting::getHuidigeJaargang() . '">Fotoalbum</a></div>';
+		echo '<div class="zijbalk-kopje"><a href="/fotoalbum/' . Lichting::getHuidigeJaargang() . '">Fotoalbum</a></div>';
 		echo '<div class="item">';
 		echo '<p><a href="' . $this->model->getUrl() . '">' . $this->model->dirname . '</a></p>';
 		echo '<div class="fotos">';
@@ -202,7 +202,7 @@ class FotoAlbumSliderView extends FotoAlbumZijbalkView {
 
 	public function getHtml() {
 		$this->smarty->assign('album', $this->model);
-		return $this->smarty->fetch('MVC/fotoalbum/slider.tpl');
+		return $this->smarty->fetch('fotoalbum/slider.tpl');
 	}
 
 	public function view() {
