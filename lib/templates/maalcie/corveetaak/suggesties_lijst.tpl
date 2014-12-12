@@ -1,5 +1,5 @@
 {*
-mijn_rooster.tpl	|	P.W.G. Brussee (brussee@live.nl)
+	suggesties_lijst.tpl	|	P.W.G. Brussee (brussee@live.nl)
 *}
 {strip}
 	<br />
@@ -33,8 +33,7 @@ mijn_rooster.tpl	|	P.W.G. Brussee (brussee@live.nl)
 							{if $jongsteLichting === LidCache::getLid($uid)->getLichting()} jongste{else} oudere{/if}
 							">
 							<td style="width: 15px;">
-								<a class="btn" style="padding: 0 2px;" onclick="$('#field_uid').val('{$uid}');
-										$('#maalcie-taak-toewijzen-form').submit();">
+								<a class="btn submit" style="padding: 0 2px;" onclick="$(this).closest('form').find('.LidField').val('{$uid}');">
 									{if $suggestie.recent}
 										{icon get="time_delete" title="Recent gecorveed"}
 									{elseif $suggestie.voorkeur}
@@ -70,55 +69,55 @@ mijn_rooster.tpl	|	P.W.G. Brussee (brussee@live.nl)
 	<table id="suggesties-controls">
 		<tr>
 			<td {if isset($voorkeurbaar) AND !$voorkeurbaar}
-					title="Deze corveerepetitie is niet voorkeurbaar." 
+				title="Deze corveerepetitie is niet voorkeurbaar." 
 				{elseif !isset($voorkeurbaar)}
 					title="Dit is geen periodieke taak dus zijn er geen voorkeuren." 
-				{/if}
-			>
-				<input type="checkbox" id="voorkeur" 
-					   {if !isset($voorkeurbaar) OR !$voorkeurbaar}
-						   disabled 
-					   {else}
-						   {if $voorkeur}
-							   checked="checked" 
-						   {/if}
-						   onchange="taken_toggle_suggestie('geenvoorkeur');" 
-					   {/if}
-					   />
-				<label for="voorkeur" class="VinkFieldLabel">Met voorkeur</label>
-				<br />
-				<input type="checkbox" id="recent" onchange="taken_toggle_suggestie('recent');" 
-					   {if $recent}
-						   checked="checked" 
-					   {/if}
-					   />
-				<label for="recent" class="VinkFieldLabel">Niet recent gecorveed</label>
-			</td>
-			<td>
-				Toon novieten/sjaars<br />
+					{/if}
+						>
+						<input type="checkbox" id="voorkeur" 
+							   {if !isset($voorkeurbaar) OR !$voorkeurbaar}
+								   disabled 
+							   {else}
+								   {if $voorkeur}
+									   checked="checked" 
+								   {/if}
+								   onchange="taken_toggle_suggestie('geenvoorkeur');" 
+							   {/if}
+							   />
+						<label for="voorkeur" class="VinkFieldLabel">Met voorkeur</label>
+						<br />
+						<input type="checkbox" id="recent" onchange="taken_toggle_suggestie('recent');" 
+							   {if $recent}
+								   checked="checked" 
+							   {/if}
+							   />
+						<label for="recent" class="VinkFieldLabel">Niet recent gecorveed</label>
+					</td>
+					<td>
+						Toon novieten/sjaars<br />
 
-				<input type="radio" id="jongste_ja" name="jongste" value="ja" onchange="
+						<input type="radio" id="jongste_ja" name="jongste" value="ja" onchange="
 						taken_toggle_suggestie('oudere', 'alleen' !== $('#jongste_alleen:checked').val());
 						taken_toggle_suggestie('jongste', 'nee' !== $('#jongste_nee:checked').val());
-					   " checked="checked" />
-				<label for="jongste_ja" class="KeuzeRondjeLabel">Ja</label>
+							   " checked="checked" />
+						<label for="jongste_ja" class="KeuzeRondjeLabel">Ja</label>
 
-				<input type="radio" id="jongste_nee" name="jongste" value="nee" onchange="
+						<input type="radio" id="jongste_nee" name="jongste" value="nee" onchange="
 						taken_toggle_suggestie('oudere', 'alleen' !== $('#jongste_alleen:checked').val());
 						taken_toggle_suggestie('jongste', 'nee' !== $('#jongste_nee:checked').val());
-					   " />
-				<label for="jongste_nee" class="KeuzeRondjeLabel">Nee</label>
+							   " />
+						<label for="jongste_nee" class="KeuzeRondjeLabel">Nee</label>
 
-				<input type="radio" id="jongste_alleen" name="jongste" value="alleen" onchange="
+						<input type="radio" id="jongste_alleen" name="jongste" value="alleen" onchange="
 						taken_toggle_suggestie('oudere', 'alleen' !== $('#jongste_alleen:checked').val());
 						taken_toggle_suggestie('jongste', 'nee' !== $('#jongste_nee:checked').val());
-					   " />
-				<label for="jongste_alleen" class="KeuzeRondjeLabel">Alleen</label>
-			</td>
-			<td style="width: 25px;">
-				<br />
-				<a class="btn vergroot" data-vergroot="#suggesties-scrollpane" title="Vergroot de lijst met suggesties">&uarr;&darr;</a>
-			</td>
-		</tr>
-	</table>
-{/strip}
+							   " />
+						<label for="jongste_alleen" class="KeuzeRondjeLabel">Alleen</label>
+					</td>
+					<td style="width: 25px;">
+						<br />
+						<a class="btn vergroot" data-vergroot="#suggesties-scrollpane" title="Vergroot de lijst met suggesties">&uarr;&darr;</a>
+					</td>
+				</tr>
+			</table>
+			{/strip}

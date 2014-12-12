@@ -218,7 +218,7 @@ class BeheerTakenController extends AclController {
 		$form = new RepetitieCorveeForm($repetitie); // fetches POST values itself
 		if ($form->validate()) {
 			$values = $form->getValues();
-			$mid = ($values['maaltijd_id'] === '' ? null : intval($values['maaltijd_id']));
+			$mid = (empty($values['maaltijd_id']) ? null : (int) $values['maaltijd_id']);
 			$taken = CorveeTakenModel::maakRepetitieTaken($repetitie, $values['begindatum'], $values['einddatum'], $mid);
 			if (empty($taken)) {
 				throw new Exception('Geen nieuwe taken aangemaakt');
