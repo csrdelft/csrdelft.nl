@@ -47,7 +47,7 @@
 {if isset($repetities) and (!isset($maaltijd) or !$maaltijd->getIsVerwijderd())}
 	<form action="{$smarty.const.maalcieUrl}/nieuw{if isset($maaltijd)}/{$maaltijd->getMaaltijdId()}{/if}" method="post" class="Formulier ModalForm SubmitReset">
 		<label for="crid" style="width: auto;">{icon get="calendar_add"} Periodieke taken aanmaken:</label>&nbsp;
-		<select name="crid" value="kies" origvalue="kies" class="FormElement SubmitChange">
+		<select id="crid" name="crv_repetitie_id" value="kies" origvalue="kies" class="FormElement SubmitChange">
 			<option selected="selected">kies</option>
 			{foreach from=$repetities item=repetitie}
 				<option value="{$repetitie->getCorveeRepetitieId()}">{$repetitie->getCorveeFunctie()->naam} op {$repetitie->getDagVanDeWeekText()}</option>
