@@ -1,12 +1,6 @@
 RewriteEngine On
 
 # Backwards compatibility
-RewriteRule ^eetplan/?(.*)$			/eetplan/$1			[QSA,R=301,L]
-RewriteRule ^groepen/?(.*)$			/groepen/$1			[QSA,R=301,L]
-RewriteRule ^fotoalbum/?(.*)$		/fotoalbum/$1		[QSA,R=301,L]
-RewriteRule ^bijbelrooster/?(.*)$	/bijbelrooster/$1	[QSA,R=301,L]
-
-# Oude owee redirected
 RewriteRule ^owee/?$	/csrindeowee [R,L]
 
 # Als we naar /actueel/ gaan worden we doorgestuurd naar de mededelingen

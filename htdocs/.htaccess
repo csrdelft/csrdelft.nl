@@ -1,10 +1,6 @@
 AddDefaultCharset utf-8
 RewriteEngine On
 
-RewriteRule ^facebook			https://www.facebook.com/delftcsr
-
-RewriteRule ^nieuws/?(.*)		/mededelingen/$1/ [R,L]
-
 RewriteRule ^(leden)?lijst/?(.*)$	tools/lijst.php [QSA,L]
 
 RewriteRule ^profiel/([0-9a-z]+)/([a-zA-Z]+)/([a-zA-Z]+)/?$	tools/profiel.php?uid=$1&a=$2&s=$3 [QSA,L]
@@ -42,6 +38,10 @@ RewriteRule ^instellingenbeheer	index.php?c=InstellingenBeheer [L]
 RewriteRule ^instellingen		index.php?c=LidInstellingen [L]
 RewriteRule ^menubeheer			index.php?c=MenuBeheer [L]
 RewriteRule ^happie				index.php?c=HappieRouter [L]
+
+RewriteRule ^facebook			https://www.facebook.com/delftcsr [R,L]
+RewriteRule ^owee/?$			/csrindeowee
+RewriteRule ^nieuws/?(.*)		/mededelingen/$1/
 
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
