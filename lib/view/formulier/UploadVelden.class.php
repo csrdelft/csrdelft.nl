@@ -169,7 +169,7 @@ class ImageField extends FileField {
 		if (!parent::validate()) {
 			return false;
 		}
-		if ($this->getModel() instanceof Afbeelding AND in_array($this->model->mimetype, $this->filterMime)) {
+		if ($this->getModel() instanceof Afbeelding AND in_array($this->getModel()->mimetype, $this->filterMime)) {
 			$width = $this->getModel()->width;
 			$height = $this->getModel()->height;
 			if ($this->minWidth !== null AND $width < $this->minWidth) {
