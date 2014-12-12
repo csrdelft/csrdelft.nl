@@ -20,9 +20,9 @@ $toegestanezoekfilters = array('leden', 'oudleden', 'alleleden', 'allepersonen',
 if (isset($_GET['zoekin']) AND in_array($_GET['zoekin'], $toegestanezoekfilters)) {
 	$zoekin = $_GET['zoekin'];
 }
-$zoekterm = '';
+$query = '';
 if (isset($_GET['q'])) {
-	$zoekterm = $_GET['q'];
+	$query = $_GET['q'];
 }
 $velden = array('uid', 'voornaam', 'tussenvoegsel', 'achternaam');
 $limiet = 5;
@@ -30,14 +30,24 @@ if (isset($_GET['limit'])) {
 	$limiet = (int) $_GET['limit'];
 }
 
-$namen = Zoeker::zoekLeden($zoekterm, 'naam', 'alle', 'achternaam', $zoekin, $velden, $limiet);
+$namen = Zoeker::zoekLeden($query, 'naam', 'alle', 'achternaam', $zoekin, $velden, $limiet);
 
 $result = array();
 foreach ($namen as $naam) {
 	$tussenvoegsel = ($naam['tussenvoegsel'] != '') ? $naam['tussenvoegsel'] . ' ' : '';
 	$fullname = $naam['voornaam'] . ' ' . $tussenvoegsel . $naam['achternaam'];
 
-	$result[] = array('url' => '/profiel/' . $naam['uid'], 'value' => $fullname);
+	$result[] = array(
+		'url'	 => '/profiel/' . $naam['uid'],
+		'value'	 => $fullname
+	);
+}
+
+if (empty($result)) {
+	$result[] = array(
+		'url'	 => '/ledenlijst?status=LEDEN|OUDLEDEN&q=' . $query,
+		'value'	 => $query . '<span class="lichtgrijs"> - Zoeken in <span class="dikgedrukt">leden & oudleden</span></span>'
+	);
 }
 
 header('Content-Type: application/json');

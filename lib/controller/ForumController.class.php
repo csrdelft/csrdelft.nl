@@ -164,7 +164,7 @@ class ForumController extends Controller {
 	 * @param string $query
 	 */
 	public function titelzoeken($query = null) {
-		$draden = array();
+		$result = array();
 		if ($query !== null) {
 			$query = urldecode($query);
 			$query = filter_var($query, FILTER_SANITIZE_SPECIAL_CHARS);
@@ -193,13 +193,19 @@ class ForumController extends Controller {
 				} else {
 					$icon = '';
 				}
-				$draden[] = array(
+				$result[] = array(
 					'url'	 => $url,
 					'value'	 => $icon . $draad->titel . '<span class="lichtgrijs"> - ' . $deel->titel . '</span>'
 				);
 			}
 		}
-		$this->view = new JsonResponse($draden);
+		if (empty($result)) {
+			$result[] = array(
+				'url'	 => '/forum/zoeken/' . $query,
+				'value'	 => $query . '<span class="lichtgrijs"> - Zoeken in <span class="dikgedrukt">reacties</span></span>'
+			);
+		}
+		$this->view = new JsonResponse($result);
 	}
 
 	/**
