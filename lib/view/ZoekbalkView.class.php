@@ -33,7 +33,7 @@ class ZoekInputGroup extends TextField {
 	public function __construct($name) {
 		parent::__construct($name, null, null);
 		$this->css_classes[] = 'menuzoekveld form-control';
-		$this]->placeholder = 'Zoek op titel';
+		$this->placeholder = 'Zoek op titel';
 		$this->onkeydown = <<<JS
 
 if (event.keyCode === 13) { // enter
