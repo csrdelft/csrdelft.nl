@@ -243,16 +243,17 @@ class ProfielBewerken extends Profiel {
 				$form[] = new TextField('adresseringechtpaar', $profiel['adresseringechtpaar'], 'Tenaamstelling post echtpaar:', 250);
 				$form[] = new SelectField('ontvangtcontactueel', $profiel['ontvangtcontactueel'], 'Ontvangt Contactueel?', array('ja' => 'ja', 'digitaal' => 'ja, digitaal', 'nee' => 'nee'));
 			}
-			if ($hasLedenMod) {
-				$form[] = new DuckField('duckname', $profiel['duckname'], 'Duckstad-naam', $this->lid);
-				$path = PICS_PATH . $this->lid->getDuckfotoPath();
-				if (strpos($path, '/duck') !== false AND ! endsWith($path, 'eend.jpg')) {
-					$duckfoto = new Afbeelding($path, true);
-				} else {
-					$duckfoto = null;
-				}
-				$form[] = new ImageField('duckfoto', 'Duck-pasfoto', $duckfoto, null, null, false, null, null, 250);
+		}
+		if ($hasLedenMod) {
+			$form[] = new Subkopje('Duckstad:');
+			$form[] = new DuckField('duckname', $profiel['duckname'], 'Duckstad-naam', $this->lid);
+			$path = PICS_PATH . $this->lid->getDuckfotoPath();
+			if (strpos($path, '/duck') !== false AND ! endsWith($path, 'eend.jpg')) {
+				$duckfoto = new Afbeelding($path, true);
+			} else {
+				$duckfoto = null;
 			}
+			$form[] = new ImageField('duckfoto', 'Duck-pasfoto', $duckfoto, null, null, false, null, null, 250);
 		}
 
 		$form[] = new Subkopje('Adres:');
@@ -376,9 +377,11 @@ class ProfielBewerken extends Profiel {
 		foreach ($this->form->getFields() as $field) {
 			//duck-pasfoto opslaan
 			if ($field instanceof FileField) {
-				$path = $field->getModel()->filename;
-				$ext = '.' . pathinfo($path, PATHINFO_EXTENSION);
-				$field->opslaan(PICS_PATH . 'pasfoto/duck/', $this->getUid() . $ext, true);
+				if ($field->getModel() instanceof Afbeelding) {
+					$path = $field->getModel()->filename;
+					$ext = '.' . pathinfo($path, PATHINFO_EXTENSION);
+					$field->opslaan(PICS_PATH . 'pasfoto/duck/', $this->getUid() . $ext, true);
+				}
 				continue;
 			}
 			if ($field instanceof InputField) {
