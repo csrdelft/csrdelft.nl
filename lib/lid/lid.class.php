@@ -3,9 +3,9 @@
 require_once 'ldap.class.php';
 require_once 'status.class.php';
 require_once 'lichting.class.php';
-require_once 'verticale.class.php';
+require_once 'model/VerticaleOldModel.class.php';
 require_once 'model/VerticalenModel.class.php';
-require_once 'groepen/groep.class.php';
+require_once 'model/entity/groepen/OldGroep.class.php';
 require_once 'model/Agendeerbaar.interface.php';
 
 /**
@@ -641,7 +641,7 @@ class Lid implements Serializable, Agendeerbaar {
 	 * Als het lid in een h.t. Woonwoord zit, geef dat woonoord terug.
 	 */
 	public function getWoonoord() {
-		$groepen = Groepen::getByTypeAndUid(2, $this->getUid());
+		$groepen = GroepenOldModel::getByTypeAndUid(2, $this->getUid());
 		if (is_array($groepen) AND isset($groepen[0]) AND $groepen[0] instanceof OldGroep) {
 			return $groepen[0];
 		}

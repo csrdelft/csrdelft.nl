@@ -1,9 +1,9 @@
 <?php
 
-require_once 'groepen/groep.class.php';
+require_once 'model/entity/groepen/OldGroep.class.php';
 
 /**
- * GroepContent.class.php	| 	Jan Pieter Waagmeester (jieter@jpwaag.com)
+ * OldGroepView.class.php	| 	Jan Pieter Waagmeester (jieter@jpwaag.com)
  *
  *
  * Een verzameling contentclassen voor de groepenketzer.
@@ -30,7 +30,7 @@ class GroepContent extends OldGroepView {
 
 	public function __construct(OldGroep $groep, $titel = false) {
 		parent::__construct($groep, $titel);
-		$this->groeptypes = Groepen::getGroeptypes();
+		$this->groeptypes = GroepenOldModel::getGroeptypes();
 		foreach ($this->groeptypes as $type) {
 			if ($type['id'] == $groep->getTypeId()) {
 				$this->groeptype = $type['naam'];
@@ -190,7 +190,7 @@ class Groepencontent extends OldGroepView {
 	public function view() {
 		$this->smarty->assign('groepen', $this->model);
 		$this->smarty->assign('gtype', $this->model->getNaam());
-		$this->smarty->assign('groeptypes', Groepen::getGroeptypes());
+		$this->smarty->assign('groeptypes', GroepenOldModel::getGroeptypes());
 		$this->smarty->assign('action', $this->action);
 		$this->smarty->display('groepen/groepen.tpl');
 	}
@@ -270,7 +270,7 @@ class GroepenProfielContent extends OldGroepView {
 	public function getHtml() {
 		//per status in een array rammen
 		$groepenPerStatus = array();
-		foreach (Groepen::getByUid($this->model) as $groep) {
+		foreach (GroepenOldModel::getByUid($this->model) as $groep) {
 			$groepenPerStatus[$groep->getStatus()][] = $groep;
 		}
 

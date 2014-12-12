@@ -37,6 +37,7 @@ RewriteRule ^bijbelrooster		index.php?c=Bijbelrooster [L]
 RewriteRule ^instellingenbeheer	index.php?c=InstellingenBeheer [L]
 RewriteRule ^instellingen		index.php?c=LidInstellingen [L]
 RewriteRule ^menubeheer			index.php?c=MenuBeheer [L]
+RewriteRule ^commissievoorkeuren index.php?c=CommissieVoorkeuren [L]
 RewriteRule ^happie				index.php?c=HappieRouter [L]
 
 RewriteRule ^facebook			https://www.facebook.com/delftcsr [R,L]

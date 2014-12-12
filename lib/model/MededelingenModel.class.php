@@ -1,14 +1,13 @@
 <?php
 
-/*
- * class.mededeling.php	|  Maarten Somhorst
+require_once 'model/MededelingCategorieModel.class.php';
+
+/**
+ * MededelingenModel.class.php	|  Maarten Somhorst
  *
  *
  */
-
-require_once 'mededelingcategorie.class.php';
-
-class Mededeling {
+class MededelingenModel {
 
 	private $id = 0;
 	private $datum;
@@ -161,7 +160,7 @@ class Mededeling {
 		$this->doelgroep = $array['doelgroep'];
 		// Om zichtbaarheid te veranderen moet je moderator zijn en als deze mededeling op goedkeuring wachtte
 		// of al verwijderd was, verandert hier niets aan.
-		if ($this->getZichtbaarheid() === null OR ( Mededeling::isModerator() AND $this->getZichtbaarheid() != 'wacht_goedkeuring' AND $this->getZichtbaarheid() != 'verwijderd')) {
+		if ($this->getZichtbaarheid() === null OR ( MededelingenModel::isModerator() AND $this->getZichtbaarheid() != 'wacht_goedkeuring' AND $this->getZichtbaarheid() != 'verwijderd')) {
 			$this->zichtbaarheid = $array['zichtbaarheid'];
 		}
 		$this->plaatje = $array['plaatje'];
@@ -241,7 +240,7 @@ class Mededeling {
 
 	public function getCategorie($force = false) {
 		if ($force OR $this->categorie === null) {
-			$this->categorie = new MededelingCategorie($this->getCategorieId());
+			$this->categorie = new MededelingCategorieModel($this->getCategorieId());
 		}
 		return $this->categorie;
 	}
@@ -295,21 +294,21 @@ class Mededeling {
 			LIMIT " . $aantal;
 		$resource = $db->select($topmostQuery);
 		while ($mededeling = $db->next($resource)) {
-			$topmost[] = new Mededeling($mededeling);
+			$topmost[] = new MededelingenModel($mededeling);
 		}
 		return $topmost;
 	}
 
 	public static function getLijstVanPagina($pagina = 1, $aantal, $prullenbak = false) {
 		// Prullenbak checken.
-		if ($prullenbak AND ! Mededeling::isModerator()) {
+		if ($prullenbak AND ! MededelingenModel::isModerator()) {
 			$prullenbak = false;
 		}
 
 		// Initialisaties.
 		$mededelingen = array();
 		$db = MijnSqli::instance();
-		list($vervalClause, $operator, $verborgenClause, $doelgroepClause) = Mededeling::getClauses($prullenbak);
+		list($vervalClause, $operator, $verborgenClause, $doelgroepClause) = MededelingenModel::getClauses($prullenbak);
 
 		$paginaQuery = "
 			SELECT id, datum
@@ -323,7 +322,7 @@ class Mededeling {
 			$groepeerstring = strftime('%B %Y', strtotime($mededeling['datum'])); // Maand voluit en jaar.
 			if (!isset($mededelingen[$groepeerstring]))
 				$mededelingen[$groepeerstring] = array();
-			$mededelingen[$groepeerstring][] = new Mededeling($mededeling['id']);
+			$mededelingen[$groepeerstring][] = new MededelingenModel($mededeling['id']);
 		}
 		return $mededelingen;
 	}
@@ -331,7 +330,7 @@ class Mededeling {
 	public static function getLijstWachtGoedkeuring() {
 		$mededelingen = array();
 		// Moderators of niet-ingelogden hebben geen berichten die wachten op goedkeuring.
-		if (Mededeling::isModerator() OR ! LoginModel::mag('P_LEDEN_READ'))
+		if (MededelingenModel::isModerator() OR ! LoginModel::mag('P_LEDEN_READ'))
 			return $mededelingen;
 
 		$db = MijnSqli::instance();
@@ -347,14 +346,14 @@ class Mededeling {
 			$groepeerstring = $datum->format('F Y'); // Maand voluit en jaar.
 			if (!isset($mededelingen[$groepeerstring]))
 				$mededelingen[$groepeerstring] = array();
-			$mededelingen[$groepeerstring][] = new Mededeling($mededeling['id']);
+			$mededelingen[$groepeerstring][] = new MededelingenModel($mededeling['id']);
 		}
 		return $mededelingen;
 	}
 
 	public static function getAantal($prullenbak) {
 		$db = MijnSqli::instance();
-		list($vervalClause, $operator, $verborgenClause, $doelgroepClause) = Mededeling::getClauses($prullenbak);
+		list($vervalClause, $operator, $verborgenClause, $doelgroepClause) = MededelingenModel::getClauses($prullenbak);
 
 		$aantalQuery = "
 			SELECT COUNT(*) as aantal
@@ -368,7 +367,7 @@ class Mededeling {
 
 	public function getPaginaNummer($prullenbak) {
 		$db = MijnSqli::instance();
-		list($vervalClause, $operator, $verborgenClause, $doelgroepClause) = Mededeling::getClauses($prullenbak);
+		list($vervalClause, $operator, $verborgenClause, $doelgroepClause) = MededelingenModel::getClauses($prullenbak);
 
 		$positieQuery = "
 			SELECT COUNT(*) as positie
@@ -401,7 +400,7 @@ class Mededeling {
 		$resource = $db->select($laatstenQuery);
 
 		while ($mededelingRecord = $db->next($resource)) {
-			$resultaat[] = new Mededeling($mededelingRecord);
+			$resultaat[] = new MededelingenModel($mededelingRecord);
 		}
 		return $resultaat;
 	}
@@ -409,7 +408,7 @@ class Mededeling {
 	public function resetPrioriteit() {
 		$updatePrioriteit = "
 			UPDATE mededeling
-			SET	prioriteit='" . Mededeling::defaultPrioriteit . "'
+			SET	prioriteit='" . MededelingenModel::defaultPrioriteit . "'
 			WHERE prioriteit='" . $this->getPrioriteit() . "';";
 		return MijnSqli::instance()->query($updatePrioriteit);
 	}
@@ -432,7 +431,7 @@ class Mededeling {
 	public function magBewerken() {
 		// het huidige lid mag dit bericht alleen bewerken als hij moderator is of als dit zijn eigen bericht
 		// is (en hij dus het toevoeg-recht heeft).
-		return Mededeling::isModerator() OR ( Mededeling::magToevoegen() AND $this->getUid() == LoginModel::getUid());
+		return MededelingenModel::isModerator() OR ( MededelingenModel::magToevoegen() AND $this->getUid() == LoginModel::getUid());
 	}
 
 	public static function isModerator() {
@@ -567,7 +566,7 @@ class Mededeling {
 		$verborgenClause = "zichtbaarheid='zichtbaar'";
 		if ($prullenbak) {
 			$verborgenClause = "(zichtbaarheid='verwijderd' OR zichtbaarheid='onzichtbaar')";
-		} elseif (Mededeling::isModerator()) { // Als de gebruiker moderator is, mag hij ook wacht_goedkeuring-berichten zien.
+		} elseif (MededelingenModel::isModerator()) { // Als de gebruiker moderator is, mag hij ook wacht_goedkeuring-berichten zien.
 			$verborgenClause = "(zichtbaarheid='zichtbaar' OR zichtbaarheid='wacht_goedkeuring')";
 		}
 		// Doelgroep clause.
@@ -582,5 +581,3 @@ class Mededeling {
 	}
 
 }
-
-?>

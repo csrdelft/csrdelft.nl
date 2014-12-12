@@ -1,13 +1,11 @@
 /* nieuws */
 .nieuwsbericht, .nieuwsbericht-vast{
 	float: left;
-	margin: 0 10px 5px 0;
-	padding: 8px 8px 8px 8px;
-	min-height: 200px; _height: 200px;
-	border-top: 1px solid black;
-	border-left: 1px solid black;
+	margin: 10px 0;
+	padding: 10px;
+	min-height: 200px;
 	background-color: #ffef7d;
-	width: 378px;
+	width: 370px;
 }
 .nieuwsbericht .informatie{
 	font-size: 90%;

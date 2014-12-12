@@ -1,9 +1,8 @@
 <?php
 
 require_once 'configuratie.include.php';
-require_once 'mededelingen/mededeling.class.php';
-require_once 'mededelingen/mededelingcontent.class.php';
-require_once 'mededelingen/mededelingencontent.class.php';
+require_once 'model/MededelingenModel.class.php';
+require_once 'view/MededelingenView.class.php';
 
 $mededelingId = 0;
 if (isset($_GET['mededelingId'])) {
@@ -20,18 +19,18 @@ if (isset($_GET['pagina'])) {
 }
 
 $prullenbak = false;
-if (isset($_REQUEST['prullenbak']) AND $_REQUEST['prullenbak'] == '1' AND Mededeling::isModerator()) {
+if (isset($_REQUEST['prullenbak']) AND $_REQUEST['prullenbak'] == '1' AND MededelingenModel::isModerator()) {
 	$prullenbak = true;
 }
 
 switch ($actie) {
 	case 'verwijderen':
-		if (!Mededeling::magToevoegen()) {
+		if (!MededelingenModel::magToevoegen()) {
 			redirect(CSR_ROOT);
 		}
 		if ($mededelingId > 0) {
-			$mededeling = new Mededeling($mededelingId);
-			if (Mededeling::isModerator() OR $mededeling->getUid() == LoginModel::getUid()) {
+			$mededeling = new MededelingenModel($mededelingId);
+			if (MededelingenModel::isModerator() OR $mededeling->getUid() == LoginModel::getUid()) {
 				$verwijderd = $mededeling->delete();
 				if ($verwijderd === false) {
 					setMelding('Het verwijderen is mislukt.', -1);
@@ -42,13 +41,13 @@ switch ($actie) {
 				redirect(CSR_ROOT);
 			}
 		}
-		$content = new MededelingenContent(0, $prullenbak);
+		$content = new MededelingenView(0, $prullenbak);
 		// De eerste pagina laden.
 		$content->setPaginaNummer(1);
 		break;
 
 	case 'bewerken':
-		if (!Mededeling::magToevoegen()) {
+		if (!MededelingenModel::magToevoegen()) {
 			redirect(CSR_ROOT);
 		}
 
@@ -68,7 +67,7 @@ switch ($actie) {
 				$mededelingProperties['prioriteit'] = (int) $_POST['prioriteit'];
 			}
 			$mededelingProperties['doelgroep'] = $_POST['doelgroep'];
-			if (!Mededeling::isModerator()) {
+			if (!MededelingenModel::isModerator()) {
 				$mededelingProperties['zichtbaarheid'] = 'wacht_goedkeuring';
 			} else {
 				$mededelingProperties['zichtbaarheid'] = isset($_POST['verborgen']) ? 'onzichtbaar' : 'zichtbaar';
@@ -105,7 +104,7 @@ switch ($actie) {
 			}
 
 			// Check if all values appear to be OK.
-			$tijdelijkeMededeling = $mededelingId > 0 ? new Mededeling($mededelingId) : null;
+			$tijdelijkeMededeling = $mededelingId > 0 ? new MededelingenModel($mededelingId) : null;
 			if (strlen($mededelingProperties['titel']) < 2) {
 				setMelding('Het veld <span class="dikgedrukt">Titel</span> moet minstens 2 tekens bevatten.', -1);
 				$allOK = false;
@@ -136,26 +135,26 @@ switch ($actie) {
 			// Check prioriteit.
 			$prioriteitIsOngeldig = true;
 			if (isset($mededelingProperties['prioriteit'])) {
-				$prioriteitIsOngeldig = (array_search($mededelingProperties['prioriteit'], array_keys(Mededeling::getPrioriteiten())) === false);
+				$prioriteitIsOngeldig = (array_search($mededelingProperties['prioriteit'], array_keys(MededelingenModel::getPrioriteiten())) === false);
 			}
 			// Indien de gebruiker geen moderator is OF de prioriteit ongeldig is.
-			if (!Mededeling::isModerator() OR $prioriteitIsOngeldig) {
+			if (!MededelingenModel::isModerator() OR $prioriteitIsOngeldig) {
 				if ($tijdelijkeMededeling !== null) { // We bewerken, dus huidige prioriteit behouden.
 					$mededelingProperties['prioriteit'] = $tijdelijkeMededeling->getPrioriteit();
 				} else { // We voegen toe, dus default prioriteit gebruiken.
-					$mededelingProperties['prioriteit'] = Mededeling::defaultPrioriteit;
+					$mededelingProperties['prioriteit'] = MededelingenModel::defaultPrioriteit;
 				}
 			}
 
 			// Check doelgroep.
-			if (array_search($mededelingProperties['doelgroep'], Mededeling::getDoelgroepen()) === false) {
+			if (array_search($mededelingProperties['doelgroep'], MededelingenModel::getDoelgroepen()) === false) {
 				setMelding('De doelgroep is ongeldig.', -1);
 				$allOK = false;
 			}
 
 			// Check categorie.
 			$categorieValid = false;
-			foreach (MededelingCategorie::getCategorieen() as $categorie) {
+			foreach (MededelingCategorieModel::getCategorieen() as $categorie) {
 				$hetIsDeze = ($mededelingProperties['categorie'] == $categorie->getId());
 				$categorieOnveranderd = ($tijdelijkeMededeling !== null AND $tijdelijkeMededeling->getCategorieId() == $mededelingProperties['categorie']);
 				if ($hetIsDeze AND ( $categorie->magUitbreiden() OR $categorieOnveranderd)) {
@@ -181,7 +180,7 @@ switch ($actie) {
 				// is being moved.
 			}
 
-			$mededeling = new Mededeling($mededelingProperties);
+			$mededeling = new MededelingenModel($mededelingProperties);
 			if ($allOK) {
 				// Save the mededeling to the database. (Either via UPDATE or INSERT).
 				$realId = $mededeling->save();
@@ -189,7 +188,7 @@ switch ($actie) {
 					$realId = '';
 				}
 				//TODO: Melding weergeven dat er iets toegevoegd is (?)
-				$nieuweLocatie = MededelingenContent::mededelingenRoot;
+				$nieuweLocatie = MededelingenView::mededelingenRoot;
 				if ($prullenbak) {
 					$nieuweLocatie .= '/prullenbak';
 				}
@@ -197,18 +196,18 @@ switch ($actie) {
 				redirect($nieuweLocatie);
 			}
 		} else { // User is going to edit an existing Mededeling or fill in an empty form.
-			$mededeling = new Mededeling($mededelingId);
+			$mededeling = new MededelingenModel($mededelingId);
 		}
 
 		// Controleren of de gebruiker deze mededeling wel mag bewerken.
 		if ($mededelingId > 0 AND ! $mededeling->magBewerken()) { // Moet dit niet eerder gebeuren?
 			redirect(CSR_ROOT); // Misschien melding weergeven en terug gaan naar de mededelingenpagina? 
 		}
-		$content = new MededelingContent($mededeling, $prullenbak);
+		$content = new MededelingView($mededeling, $prullenbak);
 		break;
 
 	default:
-		$content = new MededelingenContent($mededelingId, $prullenbak);
+		$content = new MededelingenView($mededelingId, $prullenbak);
 		if (isset($pagina)) { // Als de gebruiker een pagina opvraagt.
 			$content->setPaginaNummer($pagina);
 		} elseif ($mededelingId == 0) { // Als de gebruiker GEEN pagina opvraagt en ook geen mededeling.

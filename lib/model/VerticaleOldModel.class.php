@@ -1,11 +1,11 @@
 <?php
 
 /**
- * verticale.class.php
+ * VerticaleOldModel.class.php
  * 
  * @author C.S.R. Delft <pubcie@csrdelft.nl>
  */
-class OldVerticale {
+class VerticaleOldModel {
 
 	public $nummer;
 	public $naam;
@@ -13,14 +13,14 @@ class OldVerticale {
 
 	public function __construct($nummer, $kringen = array()) {
 		if (preg_match('/^[A-Z]{1}$/', $nummer)) {
-			$nummer = array_search($nummer, OldVerticale::getLetters());
+			$nummer = array_search($nummer, VerticaleOldModel::getLetters());
 		}
 
-		if (!array_key_exists($nummer, OldVerticale::getNamen())) {
+		if (!array_key_exists($nummer, VerticaleOldModel::getNamen())) {
 			throw new Exception('Verticale bestaat niet');
 		}
 		$this->nummer = $nummer;
-		$this->naam = OldVerticale::getNaamById($nummer);
+		$this->naam = VerticaleOldModel::getNaamById($nummer);
 	}
 
 	public function loadKringen() {
@@ -123,7 +123,7 @@ class OldVerticale {
 					$verticalen[] = $verticale;
 				}
 				$vID = $row['verticale'];
-				$verticale = new OldVerticale($vID);
+				$verticale = new VerticaleOldModel($vID);
 			}
 			$verticale->addKring($row['kring'], $row['kringleden']);
 		}

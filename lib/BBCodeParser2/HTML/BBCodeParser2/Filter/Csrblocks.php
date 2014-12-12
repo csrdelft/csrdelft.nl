@@ -190,8 +190,8 @@ class HTML_BBCodeParser2_Filter_Csrblocks extends HTML_BBCodeParser2_Filter {
 					$groepid = '';
 				}
 
-				require_once 'groepen/groep.class.php';
-				require_once 'groepen/groepcontent.class.php';
+				require_once 'model/entity/groepen/OldGroep.class.php';
+				require_once 'view/groepen/OldGroepView.class.php';
 				try {
 					$groep = new OldGroep($groepid);
 					$groeptag = new GroepBBContent($groep);
@@ -590,17 +590,17 @@ class HTML_BBCodeParser2_Filter_Csrblocks extends HTML_BBCodeParser2_Filter {
 					return '[mededelingen] Geen geldig mededelingenblok.';
 				}
 
-				require_once 'mededelingen/mededeling.class.php';
-				require_once 'mededelingen/mededelingencontent.class.php';
+				require_once 'model/MededelingenModel.class.php';
+				require_once 'view/MededelingenView.class.php';
 
-				$mededelingenContent = new MededelingenContent(0);
+				$MededelingenView = new MededelingenView(0);
 				switch ($type) {
 					case 'top3nietleden': //lekker handig om dit intern dan weer anders te noemen...
-						return $mededelingenContent->getTopBlock('nietleden');
+						return $MededelingenView->getTopBlock('nietleden');
 					case 'top3leden':
-						return $mededelingenContent->getTopBlock('leden');
+						return $MededelingenView->getTopBlock('leden');
 					case 'top3oudleden':
-						return $mededelingenContent->getTopBlock('oudleden');
+						return $MededelingenView->getTopBlock('oudleden');
 				}
 				return '[mededelingen] Geen geldig type (' . htmlspecialchars($type) . ').';
 		}

@@ -25,9 +25,9 @@ abstract class Zijbalk {
 		}
 		// Laatste mededelingen
 		if (LidInstellingen::get('zijbalk', 'mededelingen') > 0) {
-			require_once 'mededelingen/mededeling.class.php';
-			require_once 'mededelingen/mededelingencontent.class.php';
-			$zijbalk[] = new MededelingenZijbalkContent((int) LidInstellingen::get('zijbalk', 'mededelingen'));
+			require_once 'model/MededelingenModel.class.php';
+			require_once 'view/MededelingenView.class.php';
+			$zijbalk[] = new MededelingenZijbalkView((int) LidInstellingen::get('zijbalk', 'mededelingen'));
 		}
 		// Nieuwste belangrijke forumberichten
 		if (LidInstellingen::get('zijbalk', 'forum_belangrijk') > 0) {

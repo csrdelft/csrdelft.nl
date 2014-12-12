@@ -100,13 +100,13 @@ class auth_plugin_authcsr extends DokuWiki_Auth_Plugin {
 		) {
 
 			// okay we're logged in - set the globals
-			require_once 'groepen/groep.class.php';
+			require_once 'model/entity/groepen/OldGroep.class.php';
 			/** @var Lid $lid */
 			$lid = LoginModel::instance()->getLid();
 			$USERINFO['name'] = $lid->getNaam();
 			$USERINFO['mail'] = $lid->getEmail();
 			$USERINFO['pasfoto'] = $lid->getPasfoto($imgTag = false);
-			$USERINFO['grps'] = Groepen::getWikigroupsByUid($lid->getUid());
+			$USERINFO['grps'] = GroepenOldModel::getWikigroupsByUid($lid->getUid());
 			// always add the default group to the list of groups
 			if (!in_array($conf['defaultgroup'], $USERINFO['grps'])) {
 				$USERINFO['grps'][] = $conf['defaultgroup'];
@@ -171,8 +171,8 @@ class auth_plugin_authcsr extends DokuWiki_Auth_Plugin {
 				$info['name'] = $lid->getNaam();
 				$info['mail'] = $lid->getEmail();
 				$info['pasfoto'] = $lid->getPasfoto($imgTag = false);
-				require_once 'groepen/groep.class.php';
-				$info['grps'] = Groepen::getWikigroupsByUid($useruid);
+				require_once 'model/entity/groepen/OldGroep.class.php';
+				$info['grps'] = GroepenOldModel::getWikigroupsByUid($useruid);
 				// always add the default group to the list of groups
 				if (!in_array($conf['defaultgroup'], $info['grps']) AND $useruid != 'x999') {
 					$info['grps'][] = $conf['defaultgroup'];

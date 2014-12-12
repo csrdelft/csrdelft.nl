@@ -1,5 +1,5 @@
 <h1>Mededeling {if $mededeling->getId()==0}toevoegen{else}bewerken{/if}</h1>
-<form action="{MededelingenContent::mededelingenRoot}bewerken/{$mededeling->getId()}" method="post" enctype="multipart/form-data">
+<form action="{MededelingenView::mededelingenRoot}bewerken/{$mededeling->getId()}" method="post" enctype="multipart/form-data">
 	{getMelding()}
 	{if !$mededeling->isModerator()}
 		Hier kunt u een mededeling toevoegen. Het zal echter niet direct zichtbaar worden, maar &eacute;&eacute;rst door de PubCie worden goedgekeurd.<br /><br />
@@ -31,7 +31,7 @@
 			{/foreach}
 		</select><br />
 		{if $mededeling->isModerator()}
-			<label for="prioriteit">Prioriteit: <a title="Hoe belangrijk is deze mededeling? De mededelingen met de hoogste prioriteit komt bovenaan in de top {MededelingenContent::aantalTopMostBlock} op de voorpagina van de stek.">{icon get="vraagteken"}</a></label>
+			<label for="prioriteit">Prioriteit: <a title="Hoe belangrijk is deze mededeling? De mededelingen met de hoogste prioriteit komt bovenaan in de top {MededelingenView::aantalTopMostBlock} op de voorpagina van de stek.">{icon get="vraagteken"}</a></label>
 			<select name="prioriteit">
 				{foreach from=$prioriteiten key=prioriteitId item=prioriteit}
 					<option value="{$prioriteitId}"{if $mededeling->getPrioriteit()==$prioriteitId} selected="selected"{/if}>{$prioriteit|escape:'html'}</option>
@@ -64,6 +64,6 @@
 	<div class="clear">
 		{if $prullenbak}<input type="hidden" name="prullenbak" value="1" />{/if}
 		<label >&nbsp;</label><input type="submit" name="submit" value="Opslaan" />
-		<a href="{MededelingenContent::mededelingenRoot}{$mededeling->getId()}" class="btn">Annuleren</a>
+		<a href="{MededelingenView::mededelingenRoot}{$mededeling->getId()}" class="btn">Annuleren</a>
 	</div>
 </form>

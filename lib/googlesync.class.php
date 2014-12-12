@@ -8,7 +8,7 @@ Zend_Loader::loadClass('Zend_Uri_Http');
 Zend_Loader::loadClass('Zend_Gdata_Query');
 Zend_Loader::loadClass('Zend_Gdata_Feed');
 
-require_once 'groepen/groep.class.php';
+require_once 'model/entity/groepen/OldGroep.class.php';
 
 define('GOOGLE_CONTACTS_URL', 'https://www.google.com/m8/feeds/contacts/default/full');
 define('GOOGLE_GROUP_CONTACTS_URL', 'https://www.google.com/m8/feeds/contacts/default/base/');

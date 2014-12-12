@@ -1,7 +1,9 @@
 <?php
 
-/*
- * groepen.class.php	| 	Jan Pieter Waagmeester (jieter@jpwaag.com)
+require_once 'model/entity/groepen/OldGroep.class.php';
+
+/**
+ * OldGroepModel.class.php	| 	Jan Pieter Waagmeester (jieter@jpwaag.com)
  *
  * Groepen zijn als volgt in de db opgeslagen:
  * groeptype:	Verschillende 'soorten' groepen: commissies, woonoorden, etc.
@@ -14,9 +16,7 @@
  * Deze klasse is een verzameling van groepobjecten van een bepaald type. Standaard
  * worden alleen de h.t.-groepen opgehaald.
  */
-require_once 'groep.class.php';
-
-class Groepen {
+class GroepenOldModel {
 
 	private $type;
 	private $groepen = null;

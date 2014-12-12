@@ -12,9 +12,9 @@ if (!LoginModel::mag('P_LOGGED_IN')) { // nieuwe layout altijd voor uitgelogde b
 	redirect(CSR_ROOT . '/vereniging');
 }
 
-require_once 'groepen/groep.class.php';
-require_once 'groepen/groepcontent.class.php';
-require_once 'groepen/groepcontroller.class.php';
+require_once 'model/entity/groepen/OldGroep.class.php';
+require_once 'view/groepen/OldGroepView.class.php';
+require_once 'controller/GroepenController.class.php';
 
 
 if (isset($_GET['gtype'])) {
@@ -24,7 +24,7 @@ if (isset($_GET['gtype'])) {
 }
 
 try {
-	$groepen = new Groepen($gtype);
+	$groepen = new GroepenOldModel($gtype);
 
 	$content = new Groepencontent($groepen);
 } catch (Exception $e) {

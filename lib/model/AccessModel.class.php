@@ -417,7 +417,7 @@ class AccessModel extends CachedPersistenceModel {
 			case 'GROEP':
 
 				try {
-					require_once 'groepen/groep.class.php';
+					require_once 'model/entity/groepen/OldGroep.class.php';
 
 					$groep = new OldGroep($gevraagd); // zoek groep
 					if (!$groep->isLid()) {

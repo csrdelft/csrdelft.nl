@@ -762,8 +762,8 @@ class ProfielVoorkeur extends Profiel {
 		LidCache::updateLid($this->lid->getUid());
 		//permissies
 		$opties = array(1 => 'nee', 2 => 'misschien', 3 => 'ja');
-		require_once 'voorkeur/lidvoorkeur.class.php';
-		$lidvoorkeur = new Lidvoorkeur($this->lid->getUid());
+		require_once 'model/CommissieVoorkeurenModel.class.php';
+		$lidvoorkeur = new CommissieVoorkeurenModel($this->lid->getUid());
 		$commissies = $lidvoorkeur->getCommissies();
 		$voorkeuren = $lidvoorkeur->getVoorkeur();
 		//status-select is eerste veld omdat die bij opslaan als eerste uitgelezen moet worden.
@@ -785,7 +785,7 @@ class ProfielVoorkeur extends Profiel {
 	 */
 	public function save() {
 		//relevante gegevens uit velden verwerken
-		$lidvoorkeur = new Lidvoorkeur($this->lid->getUid());
+		$lidvoorkeur = new CommissieVoorkeurenModel($this->lid->getUid());
 		if ($this->form->validate()) {
 			foreach ($this->form->getValues() as $fieldname => $value) {
 				//aan de hand van status bepalen welke POSTed velden worden opgeslagen van het formulier

@@ -63,7 +63,7 @@ class syntax_plugin_csrgroepgeschiedenis extends DokuWiki_Syntax_Plugin {
         list($flags, $snaam) = explode('>', $match, 2);
         $flags = explode('&', substr($flags, 1));
 
-        require_once 'groepen/groep.class.php';
+        require_once 'model/entity/groepen/OldGroep.class.php';
         $geschiedenis = OldGroep::getGroepgeschiedenis($snaam, 70);
 
         $data = array($flags,$geschiedenis);

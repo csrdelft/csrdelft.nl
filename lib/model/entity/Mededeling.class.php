@@ -1,12 +1,12 @@
 <?php
 
 /**
- * Mededeling.class.php
+ * MededelingenModel.class.php
  * 
  * @author P.W.G. Brussee <brussee@live.nl>
  * 
  */
-class Mededeling extends PersistentEntity {
+class MededelingenModel extends PersistentEntity {
 
 	/**
 	 * Primary key

@@ -37,7 +37,7 @@ class ProfielContent extends SmartyTemplateView {
 			$profhtml['woonoord'] = '';
 		}
 
-		require_once 'groepen/groepcontent.class.php';
+		require_once 'view/groepen/OldGroepView.class.php';
 		$profhtml['groepen'] = new GroepenProfielContent($this->model->getUid());
 
 		if (LoginModel::getUid() == $this->model->getUid() || LoginModel::mag('P_MAAL_MOD')) {

@@ -1,10 +1,10 @@
 <?php
 
-require_once 'groepen.class.php';
 require_once 'controller/Controller.abstract.php';
+require_once 'model/GroepenOldModel.class.php';
 
 /**
- * class.groepcontroller.php	| 	Jan Pieter Waagmeester (jieter@jpwaag.com)
+ * GroepController.class.php	| 	Jan Pieter Waagmeester (jieter@jpwaag.com)
  *
  * Groepcontroller wordt ge__construct() met één argument, een querystring.
  * Die bestaat uit door slashes gescheiden waarden in de volgende volgorde:
@@ -18,7 +18,7 @@ require_once 'controller/Controller.abstract.php';
  * Het gaat hierbij om GET-parameters, POST-dingen worden gewoon in de
  * controller uit de POST-array getrokken...
  */
-class Groepcontroller extends Controller {
+class GroepController extends Controller {
 
 	private $groep;
 	protected $valid = true;
@@ -37,13 +37,13 @@ class Groepcontroller extends Controller {
 			}
 			if ($this->groep->getId() == 0 AND isset($_GET['gtype'])) {
 				try {
-					$groepen = new Groepen($_GET['gtype']);
+					$groepen = new GroepenOldModel($_GET['gtype']);
 				} catch (Exception $e) {
 					setMelding($e->getMessage(), -1);
 					redirect(CSR_ROOT . '/groepen/');
 				}
 				$this->groep->setGtype($groepen);
-				if (!($this->groep->getType() instanceof Groepen)) {
+				if (!($this->groep->getType() instanceof GroepenOldModel)) {
 					setMelding('Groeptype bestaat niet', -1);
 					redirect($this->getUrl());
 				}
@@ -512,7 +512,7 @@ class Groepcontroller extends Controller {
 	}
 
 	public function geschiedenis() {
-		$this->view = new Groepgeschiedeniscontent(new Groepen($_GET['gtype']));
+		$this->view = new Groepgeschiedeniscontent(new GroepenOldModel($_GET['gtype']));
 	}
 
 	//we willen de volgende acties met javascript initieren, dus niet de hele site-structuur eromheen

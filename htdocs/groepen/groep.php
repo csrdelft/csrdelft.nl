@@ -10,15 +10,15 @@ if (!LoginModel::mag('P_LOGGED_IN')) { // nieuwe layout altijd voor uitgelogde b
 	redirect(CSR_ROOT . '/vereniging');
 }
 
-require_once 'groepen/groep.class.php';
-require_once 'groepen/groepcontent.class.php';
-require_once 'groepen/groepcontroller.class.php';
+require_once 'model/entity/groepen/OldGroep.class.php';
+require_once 'view/groepen/OldGroepView.class.php';
+require_once 'controller/GroepenController.class.php';
 
 if (!isset($_GET['query'])) {
 	echo 'querystring niet aanwezig, dat gaat hiet werken (htdocs/groep.php)';
 	exit;
 }
-$controller = new Groepcontroller($_GET['query']);
+$controller = new GroepController($_GET['query']);
 $controller->performAction();
 
 $pagina = new CsrLayoutPage($controller->getView());

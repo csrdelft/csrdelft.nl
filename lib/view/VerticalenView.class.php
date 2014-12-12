@@ -13,7 +13,7 @@ class VerticalenView implements View {
 	private $verticalen;
 
 	public function __construct() {
-		$this->verticalen = OldVerticale::getAll();
+		$this->verticalen = VerticaleOldModel::getAll();
 	}
 
 	public function getModel() {
@@ -99,7 +99,7 @@ class VerticaleEmailsView implements View {
 
 	public function __construct($vertkring) {
 		try {
-			$this->verticale = new OldVerticale(substr($vertkring, 0, 1));
+			$this->verticale = new VerticaleOldModel(substr($vertkring, 0, 1));
 			$this->kring = $this->verticale->getKring((int) substr($vertkring, 2, 1));
 		} catch (Exception $e) {
 			setMelding($e->getMessage(), -1);

@@ -1,12 +1,12 @@
 <?php
 
-/*
- * class.groep.php	| 	Jan Pieter Waagmeester (jieter@jpwaag.com)
+require_once 'model/GroepenOldModel.class.php';
+
+/**
+ * OldGroep.class.php	| 	Jan Pieter Waagmeester (jieter@jpwaag.com)
  *
  * een Groep-object bevat een groep met wat eigenschappen en een array met leden en eventueel functies.
  */
-require_once 'groepen.class.php';
-
 class OldGroep {
 
 	//deze array wordt in deze klasse twee keer gebruikt: in __construct() en load()
@@ -31,7 +31,7 @@ class OldGroep {
 				$eigenaar = LoginModel::getUid();
 				if (isset($_GET['gtype'])) {
 					try {
-						$groepen = new Groepen($_GET['gtype']);
+						$groepen = new GroepenOldModel($_GET['gtype']);
 						if (in_array($groepen->getId(), array(1, 2, 3, 4, 5, 6, 10))) {
 							//cies, woonoorden, onderver, werkgrpn, overig, bestrn, sjaarscies mogen aangemaakt worden als admin, niet als individu.
 							$eigenaar = '';
@@ -195,7 +195,7 @@ class OldGroep {
 
 	public function getType() {
 		if ($this->gtype === null) {
-			$this->gtype = new Groepen((int) $this->getTypeId());
+			$this->gtype = new GroepenOldModel((int) $this->getTypeId());
 		}
 		return $this->gtype;
 	}
@@ -300,7 +300,7 @@ class OldGroep {
 
 	//zet get groeptype, oftewel, groepcategorie.
 	public function setGtype($groepen) {
-		if ($groepen instanceof Groepen) {
+		if ($groepen instanceof GroepenOldModel) {
 			$this->gtype = $groepen;
 			$this->groep['gtypeId'] = $groepen->getId();
 			return true;

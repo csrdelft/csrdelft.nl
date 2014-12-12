@@ -1,6 +1,32 @@
 <?php
 
-class MededelingenContent extends SmartyTemplateView {
+class MededelingView extends SmartyTemplateView {
+
+	private $prullenbak;
+
+	public function __construct(MededelingenModel $mededeling, $prullenbak = false) {
+		parent::__construct($mededeling, 'Mededelingen');
+		$this->prullenbak = $prullenbak;
+
+		$this->smarty->assign('prullenbak', $this->prullenbak);
+	}
+
+	public function view() {
+		$this->smarty->assign('mededeling', $this->model);
+		$this->smarty->assign('prioriteiten', MededelingenModel::getPrioriteiten());
+		$this->smarty->assign('datumtijdFormaat', '%Y-%m-%d %H:%M');
+		// Een standaard vervaltijd verzinnen indien nodig.
+		if ($this->model->getVervaltijd() === null) {
+			$standaardVervaltijd = new DateTime(getDateTime());
+			$standaardVervaltijd = $standaardVervaltijd->format('Y-m-d 23:59');
+			$this->smarty->assign('standaardVervaltijd', $standaardVervaltijd);
+		}
+		$this->smarty->display('mededelingen/mededeling.tpl');
+	}
+
+}
+
+class MededelingenView extends SmartyTemplateView {
 
 	private $geselecteerdeMededeling;
 	private $paginaNummer;
@@ -20,8 +46,8 @@ class MededelingenContent extends SmartyTemplateView {
 
 		if ($mededelingId != 0) {
 			try {
-				$this->geselecteerdeMededeling = new Mededeling($mededelingId);
-				if (!$this->prullenbak OR ! Mededeling::isModerator()) {
+				$this->geselecteerdeMededeling = new MededelingenModel($mededelingId);
+				if (!$this->prullenbak OR ! MededelingenModel::isModerator()) {
 					// In de volgende gevallen heeft de gebruiker geen rechten om deze mededeling te bekijken:
 					// 1. Indien deze mededeling reeds verwijderd is.
 					// 2. Indien deze mededeling niet bestemd is voor iedereen en de gebruiker geen leden-lees rechten heeft.
@@ -29,7 +55,7 @@ class MededelingenContent extends SmartyTemplateView {
 					// 4. Indien deze mededeling verborgen is en de gebruiker geen moderator is.
 					// 5. Indien deze mededeling wacht op goedkeuring en de gebruiker geen moderator is EN deze mededeling niet van hem is. 
 					if (
-							($this->geselecteerdeMededeling->getZichtbaarheid() == 'verwijderd') OR ( $this->geselecteerdeMededeling->isPrive() AND ! LoginModel::mag('P_LEDEN_READ')) OR ( $this->geselecteerdeMededeling->getDoelgroep() == 'leden' AND Mededeling::isOudlid()) OR ( $this->geselecteerdeMededeling->getZichtbaarheid() == 'onzichtbaar' AND ! Mededeling::isModerator()) OR ( $this->geselecteerdeMededeling->getZichtbaarheid() == 'wacht_goedkeuring' AND ( (LoginModel::getUid() != $this->geselecteerdeMededeling->getUid()) AND ! Mededeling::isModerator() )
+							($this->geselecteerdeMededeling->getZichtbaarheid() == 'verwijderd') OR ( $this->geselecteerdeMededeling->isPrive() AND ! LoginModel::mag('P_LEDEN_READ')) OR ( $this->geselecteerdeMededeling->getDoelgroep() == 'leden' AND MededelingenModel::isOudlid()) OR ( $this->geselecteerdeMededeling->getZichtbaarheid() == 'onzichtbaar' AND ! MededelingenModel::isModerator()) OR ( $this->geselecteerdeMededeling->getZichtbaarheid() == 'wacht_goedkeuring' AND ( (LoginModel::getUid() != $this->geselecteerdeMededeling->getUid()) AND ! MededelingenModel::isModerator() )
 							)
 					) {
 						// De gebruiker heeft geen rechten om deze mededeling te bekijken, dus we resetten het weer.
@@ -43,7 +69,7 @@ class MededelingenContent extends SmartyTemplateView {
 		if ($this->geselecteerdeMededeling === null) {
 			// Als er minstens één 'topmost' mededeling is, maak dat de geselecteerde.
 			// Anders, hou $this->geselecteerdeMededeling gelijk aan null.
-			$topMost = Mededeling::getTopmost(self::aantalTopMostBlock); // Haal de n belangrijkste mededelingen op.
+			$topMost = MededelingenModel::getTopmost(self::aantalTopMostBlock); // Haal de n belangrijkste mededelingen op.
 			if (isset($topMost[0])) {
 				$this->geselecteerdeMededeling = $topMost[0];
 			}
@@ -72,17 +98,17 @@ class MededelingenContent extends SmartyTemplateView {
 		} else {
 			$this->smarty->assign('pagina_root', self::mededelingenRoot . 'prullenbak/');
 		}
-		$this->smarty->assign('lijst', Mededeling::getLijstVanPagina($this->paginaNummer, LidInstellingen::get('mededelingen', 'aantalPerPagina'), $this->prullenbak));
+		$this->smarty->assign('lijst', MededelingenModel::getLijstVanPagina($this->paginaNummer, LidInstellingen::get('mededelingen', 'aantalPerPagina'), $this->prullenbak));
 		$this->smarty->assign('geselecteerdeMededeling', $this->geselecteerdeMededeling);
-		$this->smarty->assign('wachtGoedkeuring', Mededeling::getLijstWachtGoedkeuring());
+		$this->smarty->assign('wachtGoedkeuring', MededelingenModel::getLijstWachtGoedkeuring());
 		$this->smarty->assign('huidigePagina', $this->paginaNummer);
-		$this->smarty->assign('totaalAantalPaginas', (ceil(Mededeling::getAantal($this->prullenbak) / LidInstellingen::get('mededelingen', 'aantalPerPagina'))));
+		$this->smarty->assign('totaalAantalPaginas', (ceil(MededelingenModel::getAantal($this->prullenbak) / LidInstellingen::get('mededelingen', 'aantalPerPagina'))));
 		$this->smarty->assign('datumtijdFormaat', '%d-%m-%Y %H:%M');
 		$this->smarty->display('mededelingen/mededelingen.tpl');
 	}
 
 	public function getTopBlock($doelgroep) {
-		$topMost = Mededeling::getTopmost(self::aantalTopMostBlock, $doelgroep);
+		$topMost = MededelingenModel::getTopmost(self::aantalTopMostBlock, $doelgroep);
 		$this->smarty->assign('topmost', $topMost);
 
 		return $this->smarty->fetch('mededelingen/mededelingentopblock.tpl');
@@ -90,14 +116,26 @@ class MededelingenContent extends SmartyTemplateView {
 
 }
 
-class MededelingenZijbalkContent extends SmartyTemplateView {
+class MededelingenZijbalkView extends SmartyTemplateView {
 
 	public function view() {
 		// De laatste n mededelingen ophalen en meegeven aan $this.
-		$mededelingen = Mededeling::getLaatsteMededelingen($this->model);
+		$mededelingen = MededelingenModel::getLaatsteMededelingen($this->model);
 		$this->smarty->assign('mededelingen', $mededelingen);
 
 		$this->smarty->display('mededelingen/mededelingenzijbalk.tpl');
+	}
+
+}
+
+class MededelingenOverzichtView extends SmartyTemplateView {
+
+	public function __construct() {
+		parent::__construct(null, 'Top 3 mededelingenoverzicht');
+	}
+
+	public function view() {
+		$this->smarty->display('mededelingen/top3overzicht.tpl');
 	}
 
 }
