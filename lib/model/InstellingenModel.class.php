@@ -102,7 +102,7 @@ class Instellingen extends CachedPersistenceModel {
 	 * Remove cached instellingen from memcache and clear runtime cache.
 	 */
 	protected function clearCache() {
-		$key = get_class($this);
+		$key = $this->prefetchKey();
 		$this->unsetCache($key, true);
 		$this->flushCache(false);
 	}
