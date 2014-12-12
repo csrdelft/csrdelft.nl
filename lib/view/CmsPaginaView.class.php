@@ -100,7 +100,7 @@ class CmsPaginaZijbalkView implements View {
 	}
 
 	public function view() {
-		echo '<h1>' . $this->getTitel() . '</h1>';
+		echo '<div class="zijbalk-kopje"><a href="/pagina/bewerken">' . $this->getTitel() . '</a></div>';
 		foreach ($this->paginas as $pagina) {
 			echo '<div class="item">';
 			echo '<a href="/pagina/' . $pagina->naam . '" title="' . htmlspecialchars($pagina->naam) . '" >' . $pagina->titel . '</a><br />';

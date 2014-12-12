@@ -111,6 +111,16 @@ class PosterUploadForm extends Formulier {
 		return $view->getBreadcrumbs(false, true);
 	}
 
+	public function view() {
+		parent::view();
+		// Uitleg foto's toevoegen
+		require_once 'controller/CmsPaginaController.class.php';
+		$c = new CmsPaginaController('');
+		$pagina = $c->getModel()->getPagina('fotostoevoegen');
+		$view = new CmsPaginaView($pagina);
+		$view->view();
+	}
+
 }
 
 class FotosDropzone extends Dropzone {
@@ -129,6 +139,12 @@ class FotosDropzone extends Dropzone {
 		echo parent::view();
 		echo '<br /><span class="cursief">Maak nooit inbreuk op de auteursrechten of het recht op privacy van anderen.</span>';
 		echo '<div class="float-right"><a class="btn" onclick="showExisting_' . $this->getFormId() . '();$(this).remove();"><img src="http://plaetjes.csrdelft.nl/famfamfam/photos.png" width="16" height="16" alt="photos" class="icon"> Toon bestaande foto\'s in dit album</a></div>';
+		// Uitleg foto's toevoegen
+		require_once 'controller/CmsPaginaController.class.php';
+		$c = new CmsPaginaController('');
+		$pagina = $c->getModel()->getPagina('fotostoevoegen');
+		$view = new CmsPaginaView($pagina);
+		$view->view();
 	}
 
 }
