@@ -76,13 +76,13 @@ class action_plugin_csrlink extends DokuWiki_Action_Plugin {
 
 		if (empty($result)) {
 			$result[] = array(
-				'url'	 => '/wiki/hoofdpagina?do=search&id=' . $query,
-				'value'	 => $query . '<span class="lichtgrijs"> - Zoeken in <span class="dikgedrukt">pagina inhoud</span></span>'
+				'url'	 => '/wiki/hoofdpagina?do=search&id=' . urlencode($query),
+				'value'	 => htmlspecialchars($query) . '<span class="lichtgrijs"> - Zoeken in <span class="dikgedrukt">pagina inhoud</span></span>'
 			);
 		}
 
-		header('Content-Type: application/json');
-		echo json_encode($result);
+		$view = new JsonResponse($result);
+		$view->view();
 	}
 
 }
