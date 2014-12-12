@@ -132,6 +132,8 @@ HTML;
 		}
 		$oldpath = $album->path;
 		$album->path = str_replace($album->dirname, $nieuwenaam, $album->path);
+		// verwijder niet bestaande subalbums en fotos uit de database
+		$this->cleanup($album);
 		$album->subdir = str_replace($album->dirname, $nieuwenaam, $album->subdir);
 		if (rename($oldpath, $album->path)) {
 			$this->verwerkFotos($album);
