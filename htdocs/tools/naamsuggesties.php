@@ -42,14 +42,14 @@ foreach ($namen as $naam) {
 		'value'	 => $fullname
 	);
 }
-
+/*
 if (empty($result)) {
 	$result[] = array(
 		'url'	 => '/ledenlijst?status=LEDEN|OUDLEDEN&q=' . $query,
 		'value'	 => $query . '<span class="lichtgrijs"> - Zoeken in <span class="dikgedrukt">leden & oudleden</span></span>'
 	);
 }
-
+*/
 header('Content-Type: application/json');
 echo json_encode($result);
 exit;
