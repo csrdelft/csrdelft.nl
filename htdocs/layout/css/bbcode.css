@@ -137,7 +137,7 @@ a.maaltijd-afgemeld, span.maaltijd-afgemeld {
 .bb-groep .aanmelden { clear: left; padding-top: 6px; }
 .bb-groep .aanmelden .pasfoto { margin-right: 10px; }
 
-div.pasfoto img.lidfoto {
+div.pasfoto img.pasfoto {
 	float: left;
 	width: 50px;
 	height: 67px;

@@ -268,53 +268,60 @@ class LLLijst extends LLweergave {
 		foreach ($this->velden as $veld) {
 			echo '<td class="' . $veld . '">';
 			switch ($veld) {
+
 				case 'adres':
 					echo htmlspecialchars($lid->getAdres());
 					break;
+
 				case 'kring':
 					echo $lid->getKring(true);
 					break;
+
 				case 'naam':
 					//we stoppen er een verborgen <span> bij waar op gesorteerd wordt door datatables.
 					echo '<span class="verborgen">' . $lid->getNaamLink('streeplijst', 'plain') . '</span>';
-					echo $lid->getNaamLink('full', 'link');
+					echo $lid->getNaamLink('volledig', 'link');
 					break;
+
 				case 'pasfoto':
-					if (LidInstellingen::get('forum', 'naamWeergave') === 'Duckstad') {
-						echo $lid->getDuckfoto();
-					} else {
-						echo $lid->getPasfoto();
-					}
+					echo $lid->getPasfoto();
 					break;
+
 				case 'patroon':
 					$patroon = $lid->getPatroon();
 					if ($patroon instanceof Lid) {
-						echo $patroon->getNaamLink('full', 'link');
+						echo $patroon->getNaamLink('volledig', 'link');
 					} else {
 						echo '-';
 					}
 					break;
+
 				case 'echtgenoot':
 					$echtgenoot = $lid->getEchtgenoot();
 					if ($echtgenoot instanceof Lid) {
-						echo $echtgenoot->getNaamLink('full', 'link');
+						echo $echtgenoot->getNaamLink('volledig', 'link');
 					} else {
 						echo '-';
 					}
 					break;
+
 				case 'status':
 					echo $lid->getStatus()->getDescription();
 					break;
+
 				case 'verticale':
 					echo htmlspecialchars($lid->getVerticale()->naam);
 					break;
+
 				case 'woonoord':
 					echo $lid->getWoonoord();
 					break;
+
 				case 'linkedin':
 				case 'website':
 					echo '<a href="' . htmlspecialchars($lid->getProperty($veld)) . '" class="linkExt">' . htmlspecialchars($lid->getProperty($veld)) . '</a>';
 					break;
+
 				default:
 					try {
 						echo htmlspecialchars($lid->getProperty($veld));
@@ -368,56 +375,62 @@ class LLCSV extends LLweergave {
 		foreach ($this->velden as $veld) {
 			$return = '';
 			switch ($veld) {
+
 				case 'adres':
-					$return.=$lid->getProperty('adres') . ';';
-					$return.=$lid->getProperty('postcode') . ';';
-					$return.=$lid->getProperty('woonplaats');
+					$return .= $lid->getProperty('adres') . ';';
+					$return .= $lid->getProperty('postcode') . ';';
+					$return .= $lid->getProperty('woonplaats');
 					break;
+
 				case 'naam':
-					$return.=$lid->getProperty('voornaam') . ';';
-					$return.=$lid->getProperty('tussenvoegsel') . ';';
-					$return.=$lid->getProperty('achternaam');
+					$return .= $lid->getProperty('voornaam') . ';';
+					$return .= $lid->getProperty('tussenvoegsel') . ';';
+					$return .= $lid->getProperty('achternaam');
 					break;
+
 				case 'kring':
-					$return.=$lid->getKring(false);
+					$return .= $lid->getKring(false);
 					break;
+
 				case 'pasfoto':
-					if (LidInstellingen::get('forum', 'naamWeergave') === 'Duckstad') {
-						$return.=$this->getDuckfoto(false);
-					} else {
-						$return.=$lid->getPasfoto(false);
-					}
+					$return .= $lid->getPasfoto(false);
 					break;
+
 				case 'patroon':
 					$patroon = $lid->getPatroon();
 					if ($patroon instanceof Lid) {
-						$return.=$patroon->getNaamLink('full', 'plain');
+						$return .= $patroon->getNaamLink('volledig', 'plain');
 					}
 					break;
+
 				case 'echtgenoot':
 					$echtgenoot = $lid->getEchtgenoot();
 					if ($echtgenoot instanceof Lid) {
-						$return.=$echtgenoot->getNaamLink('full', 'plain');
+						$return .= $echtgenoot->getNaamLink('volledig', 'plain');
 					}
 					break;
+
 				case 'adresseringechtpaar':
-					$return.=$lid->getAdresseringechtpaar();
+					$return .= $lid->getAdresseringechtpaar();
 					break;
+
 				case 'verticale':
-					$return.=$lid->getVerticale()->naam;
+					$return .= $lid->getVerticale()->naam;
 					break;
+
 				case 'woonoord':
 					$woonoord = $lid->getWoonoord();
 					if ($woonoord instanceof OldGroep) {
-						$return.=$woonoord->getNaam();
+						$return .= $woonoord->getNaam();
 					}
+					break;
+
 				default:
 					try {
-						$return.=$lid->getProperty($veld);
+						$return .= $lid->getProperty($veld);
 					} catch (Exception $e) {
 						//omit non-existant fields
 					}
-					break;
 			}
 			echo htmlspecialchars($return) . ';';
 		}

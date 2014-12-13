@@ -4,7 +4,7 @@
 			{getMelding()}
 			<h1>Voorkeuren Opgeven</h1>
 			<div class="lidgegevens">
-				<label for="">Naam:</label>{$profiel->getUid()|csrnaam:'full'}<br />
+				<label for="">Naam:</label>{$profiel->getUid()|csrnaam:'volledig'}<br />
 			</div>
 		</div>
 	</div>

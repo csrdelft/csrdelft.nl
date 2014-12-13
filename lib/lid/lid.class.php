@@ -298,7 +298,7 @@ class Lid implements Serializable, Agendeerbaar {
 	}
 
 	public function getNaam() {
-		return $this->getNaamLink('full', 'plain');
+		return $this->getNaamLink('volledig', 'plain');
 	}
 
 	public function getNickname() {
@@ -671,33 +671,6 @@ class Lid implements Serializable, Agendeerbaar {
 	}
 
 	/**
-	 * getDuckfoto()
-	 *
-	 * Kijkt of er een duckfoto voor het gegeven uid is, en geef die terug.
-	 * Geef anders een standaard-plaatje weer.
-	 *
-	 * bool $square		Geef een pad naar een vierkante (150x150px) versie terug. (voor google contacts sync)
-	 */
-	function getDuckfotoPath($vierkant = false) {
-		$pasfoto = 'pasfoto/duck/eend.jpg';
-		foreach (array('png', 'jpeg', 'jpg', 'gif') as $validExtension) {
-			if (file_exists(PICS_PATH . 'pasfoto/duck/' . $this->getUid() . '.' . $validExtension)) {
-				$pasfoto = 'pasfoto/duck/' . $this->getUid() . '.' . $validExtension;
-				break;
-			}
-		}
-		//als het vierkant moet, kijken of de vierkante bestaat, en anders maken.
-		if ($vierkant) {
-			$vierkant = PICS_PATH . 'pasfoto/duck/' . $this->getUid() . '.vierkant.png';
-			if (!file_exists($vierkant)) {
-				square_crop(PICS_PATH . $pasfoto, $vierkant, 150);
-			}
-			return 'pasfoto/duck/' . $this->getUid() . '.vierkant.png';
-		}
-		return $pasfoto;
-	}
-
-	/**
 	 * getPasfoto()
 	 *
 	 * Kijkt of er een pasfoto voor het gegeven uid is, en geef die terug.
@@ -705,66 +678,68 @@ class Lid implements Serializable, Agendeerbaar {
 	 *
 	 * bool $square		Geef een pad naar een vierkante (150x150px) versie terug. (voor google contacts sync)
 	 */
-	function getPasfotoPath($vierkant = false) {
-		$pasfoto = 'pasfoto/geen-foto.jpg';
-		foreach (array('png', 'jpeg', 'jpg', 'gif') as $validExtension) {
-			if (file_exists(PICS_PATH . 'pasfoto/' . $this->getUid() . '.' . $validExtension)) {
-				$pasfoto = 'pasfoto/' . $this->getUid() . '.' . $validExtension;
+	function getPasfotoPath($vierkant = false, $vorm = 'user') {
+
+		if ($vorm === 'user') {
+			$vorm = LidInstellingen::get('forum', 'naamWeergave');
+		}
+		if (!LoginModel::mag('P_LOGGED_IN')) {
+			$vorm = 'civitas';
+		}
+		$path = null;
+		// loop de volgende folders af op zoek naar de gevraagde pasfoto vorm
+		foreach (array($vorm . '/', '') as $subfolder) {
+			if ($path) {
 				break;
 			}
+			foreach (array('png', 'jpeg', 'jpg', 'gif') as $validExtension) {
+				if (file_exists(PICS_PATH . 'pasfoto/' . $subfolder . $this->getUid() . '.' . $validExtension)) {
+					$path = 'pasfoto/' . $subfolder . $this->getUid() . '.' . $validExtension;
+					break;
+				}
+			}
 		}
-		//als het vierkant moet, kijken of de vierkante bestaat, en anders maken.
+		if (!$path) {
+			if ($vorm === 'Duckstad') {
+				$path = 'pasfoto/duck/eend.jpg';
+			} else {
+				$path = 'pasfoto/geen-foto.jpg';
+			}
+		}
+		// als het vierkant moet, kijken of de vierkante bestaat, en anders maken
 		if ($vierkant) {
-			$vierkant = PICS_PATH . 'pasfoto/' . $this->getUid() . '.vierkant.png';
-			if (!file_exists($vierkant)) {
-				square_crop(PICS_PATH . $pasfoto, $vierkant, 150);
+			$crop = str_replace(array('.png', '.jpeg', '.jpg', '.gif'), array('.vierkant.png', '.vierkant.jpeg', '.vierkant.jpg', '.vierkant.gif'), $path);
+			if (!file_exists($crop)) {
+				square_crop(PICS_PATH . $path, PICS_PATH . $crop, 150);
 			}
-			return 'pasfoto/' . $this->getUid() . '.vierkant.png';
+			return $crop;
 		}
-		return $pasfoto;
-	}
-
-	/**
-	 * Geef een url naar een duckfoto terug, of een <img>-tag met die url.
-	 */
-	function getDuckfoto($imgTag = true, $cssClass = 'pasfoto', $vierkant = false) {
-		$pasfoto = CSR_PICS . '/' . $this->getDuckfotoPath($vierkant);
-		if ($imgTag === true OR $imgTag === 'small') {
-			$html = '<img class="' . htmlspecialchars($cssClass) . '" src="' . $pasfoto . '" ';
-			if ($imgTag === 'small') {
-				$html .= 'style="width: 100px;" ';
-			}
-			$html .= 'alt="pasfoto van ' . $this->getNaamLink('Duckstad', 'plain') . '" />';
-			return $html;
-		} else {
-			return $pasfoto;
-		}
+		return $path;
 	}
 
 	/**
 	 * Geef een url naar een pasfoto terug, of een <img>-tag met die url.
 	 */
-	function getPasfoto($imgTag = true, $cssClass = 'pasfoto', $vierkant = false) {
-		$pasfoto = CSR_PICS . '/' . $this->getPasfotoPath($vierkant);
+	function getPasfoto($imgTag = true, $cssClass = 'pasfoto', $vierkant = false, $vorm = 'user') {
+		$path = CSR_PICS . '/' . $this->getPasfotoPath($vierkant, $vorm);
 		if ($imgTag === true OR $imgTag === 'small') {
-			$html = '<img class="' . htmlspecialchars($cssClass) . '" src="' . $pasfoto . '" ';
+			$html = '<img class="' . htmlspecialchars($cssClass) . '" src="' . $path . '" ';
 			if ($imgTag === 'small') {
 				$html .= 'style="width: 100px;" ';
 			}
-			$html .= 'alt="pasfoto van ' . $this->getNaamLink('full', 'plain') . '" />';
+			$html .= 'alt="Pasfoto van ' . $this->getNaamLink('volledig', 'plain') . '" />';
 			return $html;
 		} else {
-			return $pasfoto;
+			return $path;
 		}
 	}
 
-	/*
+	/**
 	 * Maak een link met de naam van het huidige lid naar zijn profiel.
 	 *
-	 * @vorm:	user, nick, bijnaam, streeplijst, full/volledig, civitas, aaidrom, Duckstad
+	 * @vorm:	user, nick, bijnaam, streeplijst, volledig, civitas, aaidrom, Duckstad
 	 * @mode:	visitekaartje, link, plain
 	 */
-
 	public function getNaamLink($vorm, $mode) {
 		if ($this->profiel['voornaam'] != '') {
 			$sVolledigeNaam = $this->profiel['voornaam'] . ' ';
@@ -776,50 +751,34 @@ class Lid implements Serializable, Agendeerbaar {
 		}
 		$sVolledigeNaam .= $this->profiel['achternaam'];
 
-		//als $vorm==='user', de instelling uit het profiel gebruiken voor vorm
 		if ($vorm === 'user') {
 			$vorm = LidInstellingen::get('forum', 'naamWeergave');
 		}
-		if ($vorm === 'Duckstad') {
-			if (!LoginModel::mag('P_LOGGED_IN')) {
-				$vorm = 'civitas';
-			} elseif ($this->profiel['duckname'] == '') {
-				$vorm = 'volledig';
-			}
-		}
-		if ($vorm === 'bijnaam' AND $this->profiel['nickname'] == '') {
+		if (!LoginModel::mag('P_LOGGED_IN')) {
 			$vorm = 'civitas';
 		}
 		switch ($vorm) {
-			case 'bijnaam':
-				if ($this->profiel['nickname'] != '') {
-					$naam = $this->profiel['nickname'];
-				} else {
-					$naam = $sVolledigeNaam;
-				}
+
+			case 'leeg':
+				$naam = '';
 				break;
-			case 'Duckstad':
-				if ($this->profiel['duckname'] != '') {
-					$naam = $this->profiel['duckname'];
-				} else {
-					$naam = $sVolledigeNaam;
-				}
+
+			case 'volledig':
+				$naam = $sVolledigeNaam;
 				break;
-			//achternaam, voornaam [tussenvoegsel] voor de streeplijst
-			case 'streeplijst':
+
+			case 'full_uid':
+				$naam = $sVolledigeNaam . ' (' . $this->getUid() . ')';
+				break;
+
+			case 'streeplijst': // achternaam, voornaam [tussenvoegsel] voor de streeplijst
 				$naam = $this->profiel['achternaam'] . ', ';
 				if ($this->profiel['tussenvoegsel'] != '') {
 					$naam .= $this->profiel['tussenvoegsel'] . ', ';
 				}
 				$naam .= $this->profiel['voornaam'];
 				break;
-			case 'full':
-			case 'volledig':
-				$naam = $sVolledigeNaam;
-				break;
-			case 'full_uid':
-				$naam = $sVolledigeNaam . ' (' . $this->getUid() . ')';
-				break;
+
 			case 'voorletters':
 				$naam = $this->profiel['voorletters'] . ' ';
 				if ($this->profiel['tussenvoegsel'] != '') {
@@ -827,6 +786,29 @@ class Lid implements Serializable, Agendeerbaar {
 				}
 				$naam.=$this->profiel['achternaam'];
 				break;
+
+			case 'pasfoto':
+				if ($mode == 'link') {
+					$naam = $this->getPasfoto(true);
+				} else {
+					$naam = '$vorm [pasfoto] alleen toegestaan in linkmodus';
+				}
+				break;
+
+			case 'bijnaam':
+				if ($this->profiel['nickname'] != '') {
+					$naam = $this->profiel['nickname'];
+					break;
+				}
+			// fall through
+
+			case 'Duckstad':
+				if ($this->profiel['duckname'] != '') {
+					$naam = $this->profiel['duckname'];
+					break;
+				}
+			// fall through
+
 			case 'civitas':
 				if ($this->profiel['status'] == 'S_NOVIET') {
 					$naam = 'Noviet ' . $this->profiel['voornaam'];
@@ -844,7 +826,7 @@ class Lid implements Serializable, Agendeerbaar {
 					}
 					$naam .= $this->profiel['achternaam'];
 				} else {
-					//voor novieten is het Dhr./ Mevr.
+					// voor novieten is het Dhr./ Mevr.
 					if (LoginModel::instance()->getLid()->getStatus() == 'S_NOVIET') {
 						$naam = ($this->getGeslacht() == 'v') ? 'Mevr. ' : 'Dhr. ';
 					} else {
@@ -857,13 +839,14 @@ class Lid implements Serializable, Agendeerbaar {
 					if ($this->profiel['postfix'] != '') {
 						$naam .= ' ' . $this->profiel['postfix'];
 					}
-					//Statuschar weergeven bij oudleden, ereleden en kringels.
+					// status char weergeven bij oudleden, ereleden en kringels
 					if (in_array($this->profiel['status'], array('S_OUDLID', 'S_ERELID', 'S_KRINGEL'))) {
 						$naam .= ' ' . $this->getStatus()->getChar();
 					}
 				}
 				break;
-			case 'aaidrom': //Voor een 1 aprilgrap ooit.
+
+			case 'aaidrom': // voor een 1 aprilgrap ooit
 				$voornaam = strtolower($this->profiel['voornaam']);
 				$achternaam = strtolower($this->profiel['achternaam']);
 
@@ -877,24 +860,11 @@ class Lid implements Serializable, Agendeerbaar {
 
 				$naam = sprintf("%s %s%s", $nwvoor, ($this->profiel['tussenvoegsel'] != '') ? $this->profiel['tussenvoegsel'] . ' ' : '', $nwachter);
 				break;
-			case 'pasfoto':
-				if ($mode == 'link') {
-					if (LidInstellingen::get('forum', 'naamWeergave') === 'Duckstad') {
-						$naam = $this->getDuckfoto(true, 'lidfoto');
-					} else {
-						$naam = $this->getPasfoto(true, 'lidfoto');
-					}
-				} else {
-					$naam = '$vorm [pasfoto] alleen toegestaan in linkmodus';
-				}
-				break;
-			case 'leeg':
-				$naam = '';
-				break;
+
 			default:
-				$naam = 'Formaat in $vorm is onbekend.';
+				$naam = 'Onbekend formaat $vorm: ' . htmlspecialchars($vorm);
 		}
-		//Niet ingelogged nooit een link laten zijn.
+		// niet ingelogged nooit een link laten zijn
 		$nolinks = array('x999', 'x101', 'x027', 'x222', '4444');
 		if (in_array($this->getUid(), $nolinks) || !LoginModel::mag('P_LEDEN_READ')) {
 			$mode = 'plain';
@@ -926,11 +896,7 @@ class Lid implements Serializable, Agendeerbaar {
 					$k.= ' init';
 				}
 				$k.= '">';
-				if (LidInstellingen::get('forum', 'naamWeergave') === 'Duckstad') {
-					$k.= $this->getDuckfoto('small', 'lidfoto');
-				} else {
-					$k.= $this->getPasfoto('small', 'lidfoto');
-				}
+				$k.= $this->getPasfoto('small');
 				$k.= '<div class="uid uitgebreid">(';
 				if (LoginModel::instance()->maySuTo($this)) {
 					$k.= '<a href="/su/' . $this->getUid() . '" title="Su naar dit lid">' . $this->getUid() . '</a>';
@@ -974,7 +940,7 @@ class Lid implements Serializable, Agendeerbaar {
 		return $sync->existsInGoogleContacts($this->getNaam());
 	}
 
-	/*
+	/**
 	 * We kunnen het lid-object type-casten naar string, dan wordt de
 	 * naam weeergegeven. We kunnen aangeven op wat voor manier dat moet,
 	 * pasfotos kunnen dus ook.
@@ -982,17 +948,12 @@ class Lid implements Serializable, Agendeerbaar {
 	 * Gevolg hiervan is dat we in Smarty ook {$lid} kunnen doen en in
 	 * PHP gewoon echo $lid;
 	 */
-
-	public $tsVorm = 'full'; //kan zijn full, user, nick, streeplijst
-	public $tsMode = 'plain'; //kan zijn pasfoto, link, html, plain;
+	public $tsVorm = 'volledig'; // kan zijn: volledig, user, nick, streeplijst
+	public $tsMode = 'plain'; // kan zijn: pasfoto, link, html, plain
 
 	public function __toString() {
 		if ($this->tsMode == 'pasfoto') {
-			if (LidInstellingen::get('forum', 'naamWeergave') === 'Duckstad') {
-				$this->getDuckfoto(true);
-			} else {
-				$this->getPasfoto(true);
-			}
+			$this->getPasfoto(true);
 		} else {
 			return $this->getNaamLink($this->tsVorm, $this->tsMode);
 		}

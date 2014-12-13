@@ -28,7 +28,7 @@
 			{getMelding()}
 			<h1 title="Lid-status: {$profiel->getStatus()->getDescription()}">
 				<div class="status">{if !$profiel->isLid()}{$profiel->getStatus()->getChar()}{/if}&nbsp;</div>
-				{$profiel->getNaam('full', 'plain')}
+				{$profiel->getNaam('volledig', 'plain')}
 			</h1>
 		</div>
 	</div>

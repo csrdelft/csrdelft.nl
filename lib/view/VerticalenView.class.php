@@ -61,7 +61,7 @@ class VerticalenView implements View {
 				foreach ($kring as $lid) {
 					if ($lid->isKringleider())
 						echo '<em>';
-					echo $lid->getNaamLink('full', 'visitekaartje');
+					echo $lid->getNaamLink('volledig', 'visitekaartje');
 					if ($lid->getStatus() == 'S_KRINGEL')
 						echo '&nbsp;~';
 					if ($lid->isVerticaan())

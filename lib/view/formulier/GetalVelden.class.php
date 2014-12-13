@@ -76,7 +76,7 @@ JS;
 		// parent checks not null
 		if ($this->value == '') {
 			return true;
-		} elseif (!($this instanceof DecimalField) AND ! preg_match('/^' . $this->pattern . '$/', $this->value)) {
+		} elseif (!preg_match('/^' . $this->pattern . '$/', $this->value)) {
 			$this->error = 'Alleen gehele getallen toegestaan';
 		} elseif ($this->max !== null AND $this->value > $this->max) {
 			$this->error = 'Maximale waarde is ' . $this->max . ' ';
@@ -111,11 +111,11 @@ HTML;
 			}
 			$this->onchange .= <<<JS
 
-	if (parseFloat( $(this).val() ) < $(this).attr('min')) {
+	if (parseInt( $(this).val() ) < $(this).attr('min')) {
 		{$alert}
 		$(this).val( $(this).attr('min') );
 	}
-	$('#substract_{$this->getId()}').toggleClass('disabled', parseFloat( $(this).val() ) <= $(this).attr('min'));
+	$('#substract_{$this->getId()}').toggleClass('disabled', parseInt( $(this).val() ) <= $(this).attr('min'));
 JS;
 		}
 		if ($this->max !== null) {
@@ -126,11 +126,11 @@ JS;
 			}
 			$this->onchange .= <<<JS
 
-	if (parseFloat( $(this).val() ) >  $(this).attr('max')) {
+	if (parseInt( $(this).val() ) >  $(this).attr('max')) {
 		{$alert}
 		$(this).val( $(this).attr('max') );
 	}
-	$('#add_{$this->getId()}').toggleClass('disabled', parseFloat( $(this).val() ) >=  $(this).attr('max'));
+	$('#add_{$this->getId()}').toggleClass('disabled', parseInt( $(this).val() ) >=  $(this).attr('max'));
 JS;
 		}
 
@@ -154,14 +154,14 @@ HTML;
 		return parent::getJavascript() . <<<JS
 
 $('#add_{$this->getId()}').click(function () {
-	var val = parseFloat($('#{$this->getId()}').val());
+	var val = parseInt($('#{$this->getId()}').val());
 	if ($(this).hasClass('disabled') || isNaN(val)) {
 		return;
 	}
 	$('#{$this->getId()}').val(val + {$this->step}).change();
 });
 $('#substract_{$this->getId()}').click(function () {
-	var val = parseFloat($('#{$this->getId()}').val());
+	var val = parseInt($('#{$this->getId()}').val());
 	if ($(this).hasClass('disabled') || isNaN(val)) {
 		return;
 	}
@@ -173,58 +173,6 @@ JS;
 }
 
 class RequiredIntField extends IntField {
-
-	public $required = true;
-
-}
-
-/**
- * Invoeren van een decimaal getal. Eventueel met minima/maxima. Leeg evt. toegestaan.
- */
-class DecimalField extends IntField {
-
-	public $precision;
-
-	public function __construct($name, $value, $description, $precision, $min = null, $max = null, $step = null) {
-		parent::__construct($name, $value, $description, $min, $max);
-		$this->precision = (int) $precision;
-		$this->pattern = '[0-9]*([\.|,][0-9]{' . $this->precision . '})?';
-		if (is_float($step)) {
-			$this->step = $step;
-		} else {
-			$this->step = 1.0 / (float) pow(10, $this->precision);
-		}
-		$this->step = str_replace(',', '.', $this->step); // werkomheen
-	}
-
-	public function getValue() {
-		if ($this->isPosted()) {
-			$this->value = filter_input(INPUT_POST, $this->name, FILTER_SANITIZE_NUMBER_FLOAT);
-		}
-		if ($this->empty_null AND $this->value === '') {
-			$this->value = null;
-		} else {
-			$this->value = (float) $this->value;
-		}
-		return $this->value;
-	}
-
-	public function validate() {
-		if (!parent::validate()) {
-			return false;
-		}
-		// parent checks not null
-		if ($this->value == '') {
-			return true;
-		} elseif (!preg_match('/^' . $this->pattern . '$/', $this->getValue())) {
-			$this->error = 'Voer precies ' . $this->precision . ' decimalen in';
-		}
-		return $this->error === '';
-	}
-
-}
-
-class RequiredDecimalField extends DecimalField {
 
 	public $required = true;
 
@@ -281,6 +229,70 @@ class TelefoonField extends TextField {
 }
 
 class RequiredTelefoonField extends TelefoonField {
+
+	public $required = true;
+
+}
+
+/**
+ * Invoeren van een decimaal getal. Eventueel met minima/maxima. Leeg evt. toegestaan.
+ */
+class DecimalField extends TextField {
+
+	public $precision;
+	public $min = null;
+	public $max = null;
+
+	public function __construct($name, $value, $description, $precision, $min = null, $max = null, $step = null) {
+		parent::__construct($name, $value, $description, $min, $max);
+		$this->precision = (int) $precision;
+		$this->pattern = '[0-9]*([\.|,][0-9]{' . $this->precision . '})?';
+		if ($min !== null) {
+			$this->min = (float) $min;
+		}
+		if ($max !== null) {
+			$this->max = (float) $max;
+		}
+		if (is_float($step)) {
+			$this->step = $step;
+		} else {
+			$this->step = 1.0 / (float) pow(10, $this->precision);
+		}
+		$this->step = str_replace(',', '.', $this->step); // werkomheen
+	}
+
+	public function getValue() {
+		if ($this->isPosted()) {
+			$this->value = filter_input(INPUT_POST, $this->name, FILTER_SANITIZE_NUMBER_FLOAT);
+		}
+		if ($this->empty_null AND $this->value === '') {
+			$this->value = null;
+		} else {
+			$this->value = (float) $this->value;
+		}
+		return $this->value;
+	}
+
+	public function validate() {
+		if (!parent::validate()) {
+			return false;
+		}
+		// parent checks not null
+		if ($this->value == '') {
+			return true;
+		} elseif (!preg_match('/^' . $this->pattern . '$/', $this->getValue())) {
+			$this->error = 'Voer maximaal ' . $this->precision . ' decimalen in';
+		} elseif ($this->max !== null AND $this->value > $this->max) {
+			$this->error = 'Maximale waarde is ' . $this->max . ' ';
+		} elseif ($this->min !== null AND $this->value < $this->min) {
+			$this->error = 'Minimale waarde is ' . $this->min . ' ';
+		}
+		return $this->error === '';
+	}
+
+}
+
+class RequiredDecimalField extends DecimalField {
 
 	public $required = true;
 

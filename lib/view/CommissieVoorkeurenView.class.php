@@ -66,7 +66,7 @@ class LidOverzicht implements View {
 
 	public function view() {
 		echo '<h1>' . $this->getTitel() . ' </h1>';
-		echo '<p>Naam: ' . Lid::naamLink($this->id, 'full', 'link') . '</p>';
+		echo '<p>Naam: ' . Lid::naamLink($this->id, 'volledig', 'link') . '</p>';
 		$voorkeur = new CommissieVoorkeurenModel($this->id);
 		$voorkeuren = $voorkeur->getVoorkeur();
 		$commissies = $voorkeur->getCommissies();

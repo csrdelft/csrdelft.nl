@@ -36,7 +36,7 @@ div.groepTabContent {
 table.groepLeden td {
     width: 150px;
 }
-div.pasfoto img.lidfoto {
+div.pasfoto img.pasfoto {
     float: left;
     width: 50px;
     height: 67px;

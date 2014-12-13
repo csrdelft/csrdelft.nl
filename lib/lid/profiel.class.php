@@ -247,7 +247,7 @@ class ProfielBewerken extends Profiel {
 
 		$form[] = new Subkopje('Duckstad:');
 		$form[] = new DuckField('duckname', $profiel['duckname'], 'Duckstad-naam', $this->lid);
-		$path = PICS_PATH . $this->lid->getDuckfotoPath();
+		$path = PICS_PATH . $this->lid->getPasfotoPath();
 		if (strpos($path, '/duck') !== false AND ! endsWith($path, 'eend.jpg')) {
 			$duckfoto = new Afbeelding($path, true);
 		} else {
@@ -292,7 +292,7 @@ class ProfielBewerken extends Profiel {
 			$form[] = new JaNeeField('machtiging', $profiel['machtiging'], 'Machtiging getekend?');
 		}
 		if (LoginModel::mag('P_ADMIN')) {
-			$form[] = new IntField('soccieID', $profiel['soccieID'], 'SoccieID (uniek icm. bar)', 0, 10000);
+			$form[] = new IntField('soccieID', (int) $profiel['soccieID'], 'SoccieID (uniek icm. bar)', 0, 10000);
 			$form[] = new SelectField('createTerm', $profiel['createTerm'], 'Aangemaakt bij', array('barvoor' => 'barvoor', 'barmidden' => 'barmidden', 'barachter' => 'barachter', 'soccie' => 'soccie'));
 		}
 
@@ -579,7 +579,7 @@ class ProfielStatus extends Profiel {
 			$bericht = file_get_contents(SMARTY_TEMPLATE_DIR . 'mail/toekomstigcorveeverwijderd.mail');
 			$values = array(
 				'AANTAL' => $aantal,
-				'NAAM'	 => Lid::naamLink($uid, 'full', 'plain'),
+				'NAAM'	 => Lid::naamLink($uid, 'volledig', 'plain'),
 				'UID'	 => $uid,
 				'OUD'	 => $oudestatus,
 				'NIEUW'	 => $nieuwestatus,
@@ -610,7 +610,7 @@ class ProfielStatus extends Profiel {
 		$bericht = file_get_contents(SMARTY_TEMPLATE_DIR . 'mail/lidafmeldingfisci.mail');
 		$uid = $this->bewerktLid->getUid();
 		$values = array(
-			'NAAM'	 => Lid::naamLink($uid, 'full', 'plain'),
+			'NAAM'	 => Lid::naamLink($uid, 'volledig', 'plain'),
 			'UID'	 => $uid,
 			'OUD'	 => $oudestatus,
 			'NIEUW'	 => $nieuwestatus,
@@ -658,7 +658,7 @@ class ProfielStatus extends Profiel {
 				$bknleden['aantal'] ++;
 				$bknleden['lijst'] .= "{$boek['titel']} door {$boek['auteur']}\n";
 				$bknleden['lijst'] .= " - http://csrdelft.nl/bibliotheek/boek/{$boek['id']}\n";
-				$naam = Lid::naamLink($boek['eigenaar_uid'], 'full', 'plain');
+				$naam = Lid::naamLink($boek['eigenaar_uid'], 'volledig', 'plain');
 				$bknleden['lijst'] .= " - boek is geleend van: $naam\n";
 			}
 		}
@@ -682,7 +682,7 @@ class ProfielStatus extends Profiel {
 		$bericht = file_get_contents(SMARTY_TEMPLATE_DIR . 'mail/lidafgeleendebiebboeken.mail');
 		$uid = $this->bewerktLid->getUid();
 		$values = array(
-			'NAAM'		 => Lid::naamLink($uid, 'full', 'plain'),
+			'NAAM'		 => Lid::naamLink($uid, 'volledig', 'plain'),
 			'UID'		 => $uid,
 			'OUD'		 => substr($oudestatus, 2),
 			'NIEUW'		 => ($nieuwestatus == 'S_NOBODY' ? 'GEEN LID' : substr($nieuwestatus, 2)),

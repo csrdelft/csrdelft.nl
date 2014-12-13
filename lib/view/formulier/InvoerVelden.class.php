@@ -692,7 +692,7 @@ class LidField extends TextField {
 	private $zoekin;
 
 	public function __construct($name, $value, $description, $zoekin = 'leden') {
-		$lidnaam = Lid::naamLink($value, 'full', 'plain');
+		$lidnaam = Lid::naamLink($value, 'volledig', 'plain');
 		if ($lidnaam !== false) {
 			$value = $lidnaam;
 		}

@@ -58,7 +58,7 @@ class LoginController extends AclController {
 
 	public function su($uid = null) {
 		$this->model->switchUser($uid);
-		setMelding('U bekijkt de webstek nu als ' . Lid::naamLink($uid, 'full', 'plain') . '!', 1);
+		setMelding('U bekijkt de webstek nu als ' . Lid::naamLink($uid, 'volledig', 'plain') . '!', 1);
 		redirect(HTTP_REFERER, false);
 	}
 

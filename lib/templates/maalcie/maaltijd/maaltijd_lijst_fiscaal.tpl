@@ -17,8 +17,8 @@
 		<br />
 		{if $maaltijd->getAantalAanmeldingen() > 0}
 <pre id="lijst">{foreach from=$aanmeldingen item=aanmelding}
-{if $aanmelding->getUid()}{$aanmelding->getUid()},{Lid::naamLink($aanmelding->getUid(), 'full', 'plain')}
-{else}{$aanmelding->getDoorUid()},Gast van {Lid::naamLink($aanmelding->getDoorUid(), 'full', 'plain')}
+{if $aanmelding->getUid()}{$aanmelding->getUid()},{Lid::naamLink($aanmelding->getUid(), 'volledig', 'plain')}
+{else}{$aanmelding->getDoorUid()},Gast van {Lid::naamLink($aanmelding->getDoorUid(), 'volledig', 'plain')}
 {/if}
 {/foreach}</pre>
 		{else}
