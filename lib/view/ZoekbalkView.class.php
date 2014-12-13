@@ -114,9 +114,9 @@ JS;
 			$this->suggestions['Leden'] = '/tools/naamsuggesties/leden/?q=';
 			$this->suggestions['Agenda'] = '/agenda/zoeken/';
 			$this->suggestions['Forum'] = '/forum/titelzoeken/';
-			$this->suggestions['Wiki'] = '/tools/wikisuggesties/?q=';
 			$this->suggestions['Groepen'] = '/tools/groepsuggesties/?q=';
 			$this->suggestions['Fotoalbum'] = '/fotoalbum/zoeken/';
+			$this->suggestions['Wiki'] = '/tools/wikisuggesties/?q=';
 			$this->suggestions['Documenten'] = '/documenten/zoeken/';
 			$this->suggestions['Boeken'] = '/bibliotheek/zoeken/';
 		}

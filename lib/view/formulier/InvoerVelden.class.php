@@ -483,7 +483,7 @@ JS;
 
 $('#{$this->getId()}').typeahead({
 	autoselect: true,
-	hint: false,
+	hint: true,
 	highlight: true,
 	minLength: 1
 }
