@@ -106,10 +106,14 @@
 					}
 				};
 				var next = function () {
-					onNextPrev(container.find('a.active').next('a'));
+					setTimeout(function () {
+						onNextPrev(container.find('a.active').next('a'));
+					}, 1);
 				};
 				var prev = function () {
-					onNextPrev(container.find('a.active').prev('a'));
+					setTimeout(function () {
+						onNextPrev(container.find('a.active').prev('a'));
+					}, 1);
 				};
 				container.find('div.right').on('click', next);
 				container.find('div.left').on('click', prev);
