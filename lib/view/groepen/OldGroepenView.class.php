@@ -171,7 +171,7 @@ class GroepContent extends OldGroepView {
 
 }
 
-class Groepencontent extends OldGroepView {
+class OldGroepenView extends OldGroepView {
 
 	private $action = 'view';
 

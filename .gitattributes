@@ -4434,7 +4434,7 @@ lib/view/groepen/GroepCategorienView.class.php -text
 lib/view/groepen/GroepTabsView.class.php -text
 lib/view/groepen/GroepenView.class.php -text
 lib/view/groepen/KetzersView.class.php -text
-lib/view/groepen/OldGroepView.class.php -text
+lib/view/groepen/OldGroepenView.class.php -text
 lib/view/groepen/OnderverenigingenView.class.php -text
 lib/view/groepen/SjaarciesView.class.php -text
 lib/view/groepen/WerkgroepenView.class.php -text

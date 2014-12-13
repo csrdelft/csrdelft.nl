@@ -451,6 +451,7 @@ JS;
 var {$dataset[$name]} = new Bloodhound({
 	datumTokenizer: Bloodhound.tokenizers.obj.whitespace('value'),
 	queryTokenizer: Bloodhound.tokenizers.whitespace,
+	limit: 5,
 JS;
 			if (is_array($source)) {
 				$suggestions = array_values($source);
@@ -482,7 +483,7 @@ JS;
 
 $('#{$this->getId()}').typeahead({
 	autoselect: true,
-	hint: true,
+	hint: false,
 	highlight: true,
 	minLength: 1
 }
@@ -507,11 +508,7 @@ JS;
 		}
 		if (!empty($this->suggestions)) {
 			$js .= <<<JS
-).on('keyup', function (event) {
-	if (event.keyCode !== 38 && event.keyCode !== 40) { // arrow up & down
-		$('.tt-dataset-{$dataset[$name]} .tt-suggestion').first().addClass('tt-cursor');
-	}
-});
+);
 JS;
 			$this->typeahead_selected .= <<<JS
 

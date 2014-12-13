@@ -1,7 +1,7 @@
 <?php
 
 require_once 'configuratie.include.php';
-require_once 'groepen/groepen.class.php';
+require_once 'model/GroepenOldModel.class.php';
 
 /**
  * groepsuggesties.php    |     Gerrit Uitslag (klapinklapin@gmail.com)

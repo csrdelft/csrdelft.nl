@@ -54,7 +54,7 @@ class syntax_plugin_csrlink_groeplink extends DokuWiki_Syntax_Plugin {
             return true;
         }
 
-        require_once 'groepen/groepen.class.php';
+        require_once 'model/entity/groepen/OldGroep.class.php';
         try{
             $groep =    new OldGroep($groepid);
             if($groep->getId()===0) {

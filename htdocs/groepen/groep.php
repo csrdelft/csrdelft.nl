@@ -11,7 +11,7 @@ if (!LoginModel::mag('P_LOGGED_IN')) { // nieuwe layout altijd voor uitgelogde b
 }
 
 require_once 'model/entity/groepen/OldGroep.class.php';
-require_once 'view/groepen/OldGroepView.class.php';
+require_once 'view/groepen/OldGroepenView.class.php';
 require_once 'controller/GroepenController.class.php';
 
 if (!isset($_GET['query'])) {

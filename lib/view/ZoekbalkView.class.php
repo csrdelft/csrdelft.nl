@@ -9,7 +9,7 @@
 class ZoekbalkView extends Formulier {
 
 	public function __construct() {
-		parent::__construct(null, 'cd-zoek-form', '/ledenlijst');
+		parent::__construct(null, 'cd-zoek-form', null);
 		$this->post = false;
 
 		$fields[] = new ZoekInputGroup('q');
