@@ -86,14 +86,12 @@
 				});
 				// preload next/prev
 				var onNextPrev = function (anchor) {
+					container.find('div.overlay').css('display', 'none');
 					if (anchor.length === 1) {
 						preloadImg(anchor.attr('href'));
 					}
 					var zoom = container.find('div.zoom-container');
-					if (zoom.attr('data-type') === 'fit') {
-						container.find('div.overlay').css('display', 'none');
-					}
-					else {
+					if (zoom.attr('data-type') !== 'fit') {
 						showHiRes();
 						if (zoom.attr('data-size') === 'fill') {
 							$('span.resize.jgallery-btn').removeClass('fa-search-minus').addClass('fa-search-plus');
