@@ -25,8 +25,8 @@
  * 
  * 
  * Meer uitbreidingen van InputField:
- * @see KeuzeVelden.class.php
  * @see GetalVelden.class.php
+ * @see KeuzeVelden.class.php
  * 
  */
 
@@ -41,6 +41,7 @@ abstract class InputField implements FormElement, Validator {
 	protected $name; // naam van het veld in POST
 	protected $value; // welke initiele waarde heeft het veld?
 	protected $origvalue; // welke originele waarde had het veld?
+	protected $empty_null = false; // lege waarden teruggeven als null (SET BEFORE getValue() call in constructor!)
 	public $type = 'text'; // input type
 	public $title; // omschrijving bij mouseover title
 	public $description; // omschrijving in label
@@ -48,7 +49,6 @@ abstract class InputField implements FormElement, Validator {
 	public $hidden = false; // veld onzichtbaar voor gebruiker?
 	public $readonly = false; // veld mag niet worden aangepast door client?
 	public $required = false; // mag het veld leeg zijn?
-	public $empty_null = false; // lege waarden teruggeven als null
 	public $enter_submit = false; // bij op enter drukken form submitten
 	public $escape_cancel = false; // bij op escape drukken form annuleren
 	public $preview = true; // preview tonen? (waar van toepassing)
@@ -686,6 +686,7 @@ class RequiredRechtenField extends RechtenField {
  */
 class LidField extends TextField {
 
+	protected $empty_null = true;
 	// zoekfilter voor door namen2uid gebruikte Zoeker::zoekLeden. 
 	// geaccepteerde input: 'leden', 'oudleden', 'alleleden', 'allepersonen', 'nobodies'
 	private $zoekin;

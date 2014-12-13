@@ -62,12 +62,12 @@ class MenuItem extends PersistentEntity {
 	 */
 	protected static $persistent_attributes = array(
 		'item_id'			 => array(T::Integer, false, 'auto_increment'),
-		'parent_id'			 => array(T::Integer, false),
-		'prioriteit'		 => array(T::Integer, false),
+		'parent_id'			 => array(T::Integer),
+		'prioriteit'		 => array(T::Integer),
 		'tekst'				 => array(T::String),
 		'link'				 => array(T::String),
-		'rechten_bekijken'	 => array(T::String, false),
-		'zichtbaar'			 => array(T::Boolean, false)
+		'rechten_bekijken'	 => array(T::String),
+		'zichtbaar'			 => array(T::Boolean)
 	);
 	/**
 	 * Database primary key

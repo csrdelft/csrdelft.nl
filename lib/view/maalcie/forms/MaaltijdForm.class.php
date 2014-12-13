@@ -24,10 +24,9 @@ class MaaltijdForm extends ModalForm {
 		}
 
 		$fields['mrid'] = new IntField('mlt_repetitie_id', $mrid, null);
-		$fields['mrid']->empty_null = true;
 		$fields['mrid']->readonly = true;
 		$fields['mrid']->hidden = true;
-		$fields[] = new TextField('titel', $titel, 'Titel', 255);
+		$fields[] = new TextField('titel', $titel, 'Titel', 255, 5);
 		$fields[] = new DatumField('datum', $datum, 'Datum', date('Y') + 2, date('Y') - 2);
 		$fields[] = new TijdField('tijd', $tijd, 'Tijd', 15);
 		$fields[] = new BedragField('prijs', $prijs, 'Prijs', '€', 0, 50, 0.50);

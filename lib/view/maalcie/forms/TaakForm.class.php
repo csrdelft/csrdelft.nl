@@ -38,17 +38,14 @@ class TaakForm extends ModalForm {
 		$fields['fid'] = new SelectField('functie_id', $fid, 'Functie', $functieNamen);
 		$fields['fid']->onchange = $functiePunten . "$('#field_punten').val(punten[this.value]);";
 		$fields['lid'] = new LidField('uid', $uid, 'Naam of lidnummer');
-		$fields['lid']->empty_null = true;
 		$fields['lid']->title = 'Bij het wijzigen van het toegewezen lid worden ook de corveepunten aan het nieuwe lid gegeven.';
 		$fields[] = new DatumField('datum', $datum, 'Datum', date('Y') + 2, date('Y') - 2);
 		$fields[] = new IntField('punten', $punten, 'Punten', 0, 10);
 		$fields[] = new IntField('bonus_malus', $bonus_malus, 'Bonus/malus', -10, 10);
 		$fields['crid'] = new IntField('crv_repetitie_id', $crid, null);
-		$fields['crid']->empty_null = true;
 		$fields['crid']->readonly = true;
 		$fields['crid']->hidden = true;
 		$fields['mid'] = new IntField('maaltijd_id', $mid, 'Gekoppelde maaltijd', 0);
-		$fields['mid']->empty_null = true;
 		$fields['mid']->title = 'Het ID van de maaltijd waar deze taak bij hoort.';
 		$fields[] = new FormDefaultKnoppen();
 

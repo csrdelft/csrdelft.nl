@@ -194,7 +194,6 @@ JS;
 			// opmerking veld
 			elseif ($field instanceof TextareaField) {
 				$item_id = (int) substr($field->getName(), 9);
-				$field->empty_null = true;
 				$values[$item_id]['opmerking'] = $field->getValue();
 			}
 		}

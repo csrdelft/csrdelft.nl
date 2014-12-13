@@ -18,8 +18,9 @@
 /**
  * Invoeren van een integer. Eventueel met minima/maxima. Leeg evt. toegestaan.
  */
-class IntField extends TextField {
+class IntField extends InputField {
 
+	protected $empty_null = true;
 	public $type = 'number';
 	public $pattern = '[0-9]+';
 	public $step = 1;
@@ -29,6 +30,9 @@ class IntField extends TextField {
 	public $max_alert = null;
 
 	public function __construct($name, $value, $description, $min = null, $max = null) {
+		if (!is_int($value) AND $value !== null) {
+			throw new Exception('Geen int');
+		}
 		parent::__construct($name, $value, $description, 11);
 		if ($min !== null) {
 			$this->min = (int) $min;
@@ -57,7 +61,7 @@ JS;
 		if ($this->isPosted()) {
 			$this->value = filter_input(INPUT_POST, $this->name, FILTER_SANITIZE_NUMBER_INT);
 		}
-		if ($this->value == '') {
+		if ($this->empty_null AND $this->value === '') {
 			$this->value = null;
 		} else {
 			$this->value = (int) $this->value;
@@ -197,7 +201,7 @@ class DecimalField extends IntField {
 		if ($this->isPosted()) {
 			$this->value = filter_input(INPUT_POST, $this->name, FILTER_SANITIZE_NUMBER_FLOAT);
 		}
-		if ($this->value == '') {
+		if ($this->empty_null AND $this->value === '') {
 			$this->value = null;
 		} else {
 			$this->value = (float) $this->value;
