@@ -36,10 +36,7 @@
 			</div>
 		</div>
 		{$body->view()}
-		{if $smarty.const.DEBUG AND (LoginModel::mag('P_ADMIN') OR LoginModel::instance()->isSued())}
-			<a id="mysql_debug_toggle" onclick="$(this).replaceWith($('#mysql_debug').toggle());">DEBUG</a>
-			<div id="mysql_debug" class="pre">{getDebug()}</div>
-		{/if}
+		{printDebug()}
 		<div id="modal-background"></div>
 		<div id="modal" class="modal-content outer-shadow dragobject" tabindex="-1"></div>
 	</body>

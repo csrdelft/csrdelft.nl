@@ -289,10 +289,7 @@ class ModalForm extends Formulier {
 		$this->css_classes[] = 'ModalForm';
 		echo '<div id="modal" class="modal-content outer-shadow dragobject" tabindex="-1" style="display: block;">';
 		parent::view();
-		if (DEBUG AND ( LoginModel::mag('P_ADMIN') OR LoginModel::instance()->isSued() )) {
-			echo '<a id="mysql_debug_toggle" onclick="$(this).replaceWith($(\'#mysql_debug\').toggle());">DEBUG</a>';
-			echo '<div id="mysql_debug" class="pre">' . print_r($this->getError(), true) . getDebug() . '</div>';
-		}
+		printDebug();
 		echo '</div>';
 	}
 

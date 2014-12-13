@@ -653,6 +653,13 @@ function getMaximumFileUploadSize() {
 	return min(convertPHPSizeToBytes(ini_get('post_max_size')), convertPHPSizeToBytes(ini_get('upload_max_filesize')));
 }
 
+function printDebug() {
+	if (DEBUG AND ( LoginModel::mag('P_ADMIN') OR LoginModel::instance()->isSued() )) {
+		echo '<a id="mysql_debug_toggle" onclick="$(this).replaceWith($(\'#mysql_debug\').toggle());">DEBUG</a>';
+		echo '<div id="mysql_debug" class="pre">' . getDebug() . '</div>';
+	}
+}
+
 function getDebug($get = true, $post = true, $files = true, $cookie = true, $session = true, $sql = true, $sqltrace = true) {
 	$debug = '';
 	if ($get) {

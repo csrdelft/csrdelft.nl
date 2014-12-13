@@ -33,14 +33,14 @@
 		{if isset($minion)}
 			{$minion}
 		{/if}
-		{if LoginModel::mag('P_ADMIN') OR LoginModel::instance()->isSued()}
-			<div id="mysql_debug" class="pre">{getDebug()}</div>
-		{/if}
 		<div id="modal-background"{if isset($modal)} style="display: block;"{/if}></div>
 		{if isset($modal)}
 			{$modal->view()}
 		{else}
 			<div id="modal" class="modal-content outer-shadow dragobject" tabindex="-1"></div>
+		{/if}
+		{if LoginModel::mag('P_ADMIN') OR LoginModel::instance()->isSued()}
+			<div id="mysql_debug" class="pre">{getDebug()}</div>
 		{/if}
 	</body>
 </html>
