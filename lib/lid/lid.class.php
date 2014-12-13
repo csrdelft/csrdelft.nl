@@ -688,16 +688,15 @@ class Lid implements Serializable, Agendeerbaar {
 		$path = null;
 		// loop de volgende folders af op zoek naar de gevraagde pasfoto vorm
 		foreach (array($vorm . '/', '') as $subfolder) {
-			if ($path) {
-				break;
-			}
 			foreach (array('png', 'jpeg', 'jpg', 'gif') as $validExtension) {
 				if (file_exists(PICS_PATH . 'pasfoto/' . $subfolder . $this->getUid() . '.' . $validExtension)) {
 					$path = 'pasfoto/' . $subfolder . $this->getUid() . '.' . $validExtension;
 					break;
 				}
 			}
-			if ($vorm === 'Duckstad') {
+			if ($path) {
+				break;
+			} elseif ($vorm === 'Duckstad') {
 				$path = 'pasfoto/' . $vorm . '/eend.jpg';
 			}
 		}
