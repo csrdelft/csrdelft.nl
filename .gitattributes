@@ -382,8 +382,6 @@ htdocs/layout/js/jquery/jquery-ui.theme.css -text
 htdocs/layout/js/jquery/jquery-ui.theme.min.css -text
 htdocs/layout/js/jquery/jquery.js -text
 htdocs/layout/js/jquery/jquery.min.js -text
-htdocs/layout/js/jquery/plugins/bloodhound.js -text
-htdocs/layout/js/jquery/plugins/bloodhound.min.js -text
 htdocs/layout/js/jquery/plugins/jgallery.js -text
 htdocs/layout/js/jquery/plugins/jgallery.min.js -text
 htdocs/layout/js/jquery/plugins/jquery.autosize.js -text
@@ -402,8 +400,8 @@ htdocs/layout/js/jquery/plugins/jquery.scrollTo.min.js -text
 htdocs/layout/js/jquery/plugins/jquery.timeago.js -text
 htdocs/layout/js/jquery/plugins/jquery.timeago.min.js -text
 htdocs/layout/js/jquery/plugins/tinycolor.min.js -text
-htdocs/layout/js/jquery/plugins/typeahead.jquery.js -text
-htdocs/layout/js/jquery/plugins/typeahead.jquery.min.js -text
+htdocs/layout/js/jquery/plugins/typeahead.bundle.js -text
+htdocs/layout/js/jquery/plugins/typeahead.bundle.min.js -text
 htdocs/layout/js/keypress.js -text
 htdocs/layout/js/ledenmemory.js -text
 htdocs/layout/js/lightbox.js -text
