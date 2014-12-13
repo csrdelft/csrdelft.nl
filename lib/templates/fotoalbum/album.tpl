@@ -91,8 +91,8 @@
 						preloadImg(anchor.attr('href'));
 					}
 					var zoom = container.find('div.zoom-container');
-					if (zoom.attr('data-type') !== 'fit') {
-						showHiRes();
+					if (zoom.attr('data-size') !== 'fit') {
+						setTimeout(showHiRes, 1);
 						if (zoom.attr('data-size') === 'fill') {
 							$('span.resize.jgallery-btn').removeClass('fa-search-minus').addClass('fa-search-plus');
 						}
@@ -102,18 +102,13 @@
 								preloadImg(href);
 							}
 						}
-
 					}
 				};
 				var next = function () {
-					setTimeout(function () {
-						onNextPrev(container.find('a.active').next('a'));
-					}, 1);
+					onNextPrev(container.find('a.active').next('a'));
 				};
 				var prev = function () {
-					setTimeout(function () {
-						onNextPrev(container.find('a.active').prev('a'));
-					}, 1);
+					onNextPrev(container.find('a.active').prev('a'));
 				};
 				container.find('div.right').on('click', next);
 				container.find('div.left').on('click', prev);
