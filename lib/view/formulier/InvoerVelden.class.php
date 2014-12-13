@@ -15,20 +15,18 @@
  * 		* StudieField				Opleidingen
  * 		* EmailField				Email adressen
  * 		* UrlField					Url's
- * 		* TelefoonField				Telefoonnummers
  * 		* TextareaField				Textarea die automagisch uitbreidt bij typen
  * 			- CsrBBPreviewField		Textarea met bbcode voorbeeld
  *  	* NickField					Nicknames
  *  	* DuckField					Ducknames
  * 		* LidField					Leden selecteren
- * 		* IntField					Integers 
- * 		* DecimalField				Kommagetallen
- * 			- BedragField			Bedragen met 2 cijfers achter de komma
  * 	- WachtwoordWijzigenField		Wachtwoorden (oude, nieuwe, nieuwe ter bevestiging)
  *  - ObjectIdField					PersistentEntity primary key values array
  * 
  * 
- * Meer uitbreidingen van InputField @see KeuzeVelden.class.php
+ * Meer uitbreidingen van InputField:
+ * @see KeuzeVelden.class.php
+ * @see GetalVelden.class.php
  * 
  */
 
@@ -334,9 +332,34 @@ abstract class InputField implements FormElement, Validator {
 					return 'rows="' . $this->rows . '"';
 				}
 				break;
+
 			case 'autocomplete':
 				if (!$this->autocomplete OR ! empty($this->suggestions)) {
 					return 'autocomplete="off"'; // browser autocompete
+				}
+				break;
+			case 'step':
+				if ($this->step > 0) {
+					return 'step="' . $this->step . '"';
+				}
+				break;
+			case 'min':
+				if ($this->min !== null) {
+					return 'min="' . $this->min . '"';
+				}
+				break;
+			case 'max':
+				if ($this->max !== null) {
+					return 'max="' . $this->max . '"';
+				}
+				break;
+			case 'pattern':
+				if ($this instanceof BedragField) {
+					return 'pattern="[0-9]*([\.|,][0-9][0-9])?"';
+				} elseif ($this instanceof DecimalField) {
+					return 'pattern="[0-9]+([\.|,][0-9]+)?"';
+				} elseif ($this instanceof IntField) {
+					return 'pattern="[0-9]+"';
 				}
 				break;
 		}
@@ -906,264 +929,6 @@ class RequiredUrlField extends UrlField {
 }
 
 /**
- * Invoeren van een integer. Eventueel met minima/maxima. Leeg evt. toegestaan.
- */
-class IntField extends TextField {
-
-	public $min = null;
-	public $max = null;
-	public $min_alert = null;
-	public $max_alert = null;
-
-	public function __construct($name, $value, $description, $min = null, $max = null) {
-		parent::__construct($name, $value, $description, 11);
-		if ($min !== null) {
-			$this->min = (int) $min;
-			$this->min_alert = 'Minimaal ' . $this->min;
-		}
-		if ($max !== null) {
-			$this->max = (int) $max;
-			$this->max_alert = 'Maximaal ' . $this->max;
-		}
-		$this->onkeydown .= <<<JS
-
-	if (event.keyCode == 107 || event.keyCode == 109) {
-		event.preventDefault();
-		return false;
-	}
-JS;
-		$this->onkeyup .= <<<JS
-
-	if (event.keyCode == 107) {
-		$('#add_{$this->getId()}').click();
-	}
-	else if (event.keyCode == 109) {
-		$('#substract_{$this->getId()}').click();
-	}
-JS;
-	}
-
-	public function getValue() {
-		$value = parent::getValue();
-		if ($value == '') {
-			return null;
-		}
-		return (int) $value;
-	}
-
-	public function validate() {
-		if (!parent::validate()) {
-			return false;
-		}
-		// parent checks not null
-		if ($this->value == '') {
-			return true;
-		} elseif (!preg_match('/\d+/', $this->value)) {
-			$this->error = 'Alleen gehele getallen toegestaan';
-		} elseif ($this->max !== null AND $this->value > $this->max) {
-			$this->error = 'Maximale waarde is ' . $this->max . ' ';
-		} elseif ($this->leden_mod AND LoginModel::mag('P_LEDEN_MOD')) {
-			// exception for leden mod
-		} elseif ($this->min !== null AND $this->value < $this->min) {
-			$this->error = 'Minimale waarde is ' . $this->min . ' ';
-		}
-		return $this->error === '';
-	}
-
-	public function getHtml() {
-		$html = '';
-		if (!$this->readonly AND ! $this->disabled AND ! $this->hidden) {
-			if ($this->min !== null AND $this->getValue() === $this->min) {
-				$class = 'class="disabled"';
-			} else {
-				$class = '';
-			}
-			$minus = CSR_PICS . '/knopjes/min.png';
-			$html .= <<<HTML
-<span id="substract_{$this->getId()}" {$class} style="cursor:pointer;padding:7px;"><img src="{$minus}" alt="-" class="icon" width="20" height="20" /></span>
-HTML;
-		}
-
-		$min = '';
-		if ($this->min !== null) {
-			$min = ' data-min="' . $this->min . '"';
-			if ($this->min_alert) {
-				$alert = "alert('{$this->min_alert}');";
-			} else {
-				$alert = '';
-			}
-			$this->onchange .= <<<JS
-
-	if (parseInt( $(this).val() ) < $(this).attr('data-min')) {
-		{$alert}
-		$(this).val( $(this).attr('data-min') );
-	}
-	$('#substract_{$this->getId()}').toggleClass('disabled', parseInt( $(this).val() ) <= $(this).attr('data-min'));
-JS;
-		}
-		$max = '';
-		if ($this->max !== null) {
-			$max = ' data-max="' . $this->max . '"';
-			if ($this->max_alert) {
-				$alert = "alert('{$this->max_alert}');";
-			} else {
-				$alert = '';
-			}
-			$this->onchange .= <<<JS
-
-	if (parseInt( $(this).val() ) >  $(this).attr('data-max')) {
-		{$alert}
-		$(this).val( $(this).attr('data-max') );
-	}
-	$('#add_{$this->getId()}').toggleClass('disabled', parseInt( $(this).val() ) >=  $(this).attr('data-max'));
-JS;
-		}
-
-		$html .= ' <input ' . $this->getInputAttribute(array('type', 'id', 'name', 'class', 'value', 'origvalue', 'disabled', 'readonly', 'maxlength', 'placeholder', 'autocomplete')) . $min . $max . ' /> ';
-
-		if (!$this->readonly AND ! $this->disabled AND ! $this->hidden) {
-			if ($this->max !== null AND $this->getValue() === $this->max) {
-				$class = 'class="disabled"';
-			} else {
-				$class = '';
-			}
-			$plus = CSR_PICS . '/knopjes/plus.png';
-			$html .= <<<HTML
-<span id="add_{$this->getId()}" {$class} style="cursor:pointer;padding:7px;"><img src="{$plus}" alt="+" class="icon" width="20" height="20" /></span>
-HTML;
-		}
-		return $html;
-	}
-
-	public function getJavascript() {
-		return parent::getJavascript() . <<<JS
-
-$('#add_{$this->getId()}').click(function () {
-	var val = parseInt($('#{$this->getId()}').val());
-	if ($(this).hasClass('disabled') || isNaN(val)) {
-		return;
-	}
-	$('#{$this->getId()}').val(val + 1).change();
-});
-$('#substract_{$this->getId()}').click(function () {
-	var val = parseInt($('#{$this->getId()}').val());
-	if ($(this).hasClass('disabled') || isNaN(val)) {
-		return;
-	}
-	$('#{$this->getId()}').val(val - 1).change();
-});
-JS;
-	}
-
-}
-
-class RequiredIntField extends IntField {
-
-	public $required = true;
-
-}
-
-/**
- * Invoeren van een decimaal getal. Eventueel met minima/maxima. Leeg evt. toegestaan.
- */
-class DecimalField extends TextField {
-
-	public $precision;
-	public $min = null;
-	public $max = null;
-
-	public function __construct($name, $value, $description, $precision, $min = null, $max = null) {
-		parent::__construct($name, $value, $description, 11);
-		$this->precision = $precision;
-		if ($min !== null) {
-			$this->min = (float) $min;
-		}
-		if ($max !== null) {
-			$this->max = (float) $max;
-		}
-	}
-
-	public function getValue() {
-		$value = parent::getValue();
-		if ($value == '') {
-			return null;
-		}
-		return round((float) str_replace(',', '.', $value), $this->precision);
-	}
-
-	/**
-	 * Some tricky typecasting is going on.
-	 * 
-	 * @return boolean
-	 */
-	public function validate() {
-		if (!parent::validate()) {
-			return false;
-		}
-		// parent checks not null
-		if ($this->value == '') {
-			return true;
-		} elseif (!preg_match('/^(\d+.\d{' . $this->precision . '})$/', parent::getValue())) {
-			$this->error = 'Voer precies ' . $this->precision . ' decimalen in';
-		} elseif ($this->max !== null AND $this->value > $this->max) {
-			$this->error = 'Maximale waarde is ' . $this->max . ' ';
-		} elseif ($this->min !== null AND $this->value < $this->min) {
-			$this->error = 'Minimale waarde is ' . $this->min . ' ';
-		}
-		return $this->error === '';
-	}
-
-}
-
-class RequiredDecimalField extends DecimalField {
-
-	public $required = true;
-
-}
-
-/**
- * Invoeren van een bedrag in centen, dus precisie van 2 cijfers achter de komma.
- * 
- */
-class BedragField extends DecimalField {
-
-	public $valuta;
-
-	public function __construct($name, $value, $description, $valuta = '€', $min = null, $max = null) {
-		parent::__construct($name, $value / 100, $description, 2, $min, $max);
-		$this->valuta = $valuta;
-	}
-
-	public function getValue() {
-		$value = parent::getValue();
-		if ($this->empty_null AND empty($value)) {
-			return null;
-		}
-		return (int) $value * 100;
-	}
-
-	public function getHtml() {
-		$html = $this->valuta . ' <input ' . $this->getInputAttribute(array('type', 'id', 'name', 'class', 'disabled', 'readonly', 'maxlength', 'placeholder', 'autocomplete'));
-		$html .= ' value="' . number_format(str_replace(',', '.', $this->value), $this->precision, ',', '') . '" origvalue="';
-		// if an error occured do not re-format the original value
-		// prevent unchanged is not smart enough for rounding and such
-		if ($this->getError() != '') {
-			$html .= $this->origvalue;
-		} else {
-			$html .= number_format(str_replace(',', '.', $this->origvalue), $this->precision, ',', '');
-		}
-		return $html . '" />';
-	}
-
-}
-
-class RequiredBedragField extends DecimalField {
-
-	public $required = true;
-
-}
-
-/**
  * NickField
  *
  * is pas valid als dit lid de enige is met deze nick.
@@ -1221,30 +986,6 @@ class DuckField extends TextField {
 		// omdat this->nickExists in mysql case-insensitive zoek
 		if (Lid::duckExists($this->value) AND strtolower($this->model->getDuckname()) != strtolower($this->value)) {
 			$this->error = 'Deze Duckstad-naam is al in gebruik.';
-		}
-		return $this->error === '';
-	}
-
-}
-
-/**
- * TelefoonField
- *
- * is valid als er een enigszins op een telefoonnummer lijkende string wordt
- * ingegeven.
- */
-class TelefoonField extends TextField {
-
-	public function validate() {
-		if (!parent::validate()) {
-			return false;
-		}
-		// parent checks not null
-		if ($this->value == '') {
-			return true;
-		}
-		if (!preg_match('/^([\d\+\-]{10,20})$/', $this->value)) {
-			$this->error = 'Geen geldig telefoonnummer.';
 		}
 		return $this->error === '';
 	}

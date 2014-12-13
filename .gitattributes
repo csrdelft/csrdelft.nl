@@ -4419,6 +4419,7 @@ lib/view/formulier/Dropzone.class.php -text
 lib/view/formulier/FormElement.abstract.php -text
 lib/view/formulier/FormKnoppen.class.php -text
 lib/view/formulier/Formulier.class.php -text
+lib/view/formulier/GetalVelden.class.php -text
 lib/view/formulier/InvoerVelden.class.php -text
 lib/view/formulier/KeuzeVelden.class.php -text
 lib/view/formulier/TabsForm.class.php -text
