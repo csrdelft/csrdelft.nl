@@ -98,15 +98,6 @@ class Instellingen extends CachedPersistenceModel {
 		)
 	);
 
-	/**
-	 * Remove cached instellingen from memcache and clear runtime cache.
-	 */
-	protected function clearCache() {
-		$key = $this->prefetchKey();
-		$this->unsetCache($key, true);
-		$this->flushCache(false);
-	}
-
 	public function getModules() {
 		return array_keys(static::$defaults);
 	}
@@ -163,7 +154,7 @@ class Instellingen extends CachedPersistenceModel {
 		$instelling->instelling_id = $id;
 		$instelling->waarde = $this->getDefault($module, $id);
 		$this->create($instelling);
-		$this->clearCache();
+		$this->flushCache(true);
 		return $instelling;
 	}
 
@@ -171,7 +162,7 @@ class Instellingen extends CachedPersistenceModel {
 		$instelling = $this->getInstelling($module, $id);
 		$instelling->waarde = $waarde;
 		$this->update($instelling);
-		$this->clearCache();
+		$this->flushCache(true);
 		return $instelling;
 	}
 

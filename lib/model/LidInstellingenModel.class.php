@@ -118,7 +118,7 @@ class LidInstellingen extends Instellingen {
 		$instelling->waarde = $this->getDefault($module, $id);
 		$instelling->uid = LoginModel::getUid();
 		$this->create($instelling);
-		$this->clearCache();
+		$this->flushCache(true);
 		return $instelling;
 	}
 
@@ -194,12 +194,13 @@ class LidInstellingen extends Instellingen {
 			}
 		}
 		Database::sqlInsertMultiple($this->orm->getTableName(), $properties, true);
-		$this->clearCache();
+		$this->flushCache(true);
 	}
 
 	public function resetForAll($module, $id) {
 		Database::sqlDelete($this->orm->getTableName(), 'module = ? AND instelling_id = ?', array($module, $id));
-		$this->clearCache();
+		$this->flushCache(false);
+		CsrMemcache::instance()->flush();
 	}
 
 }

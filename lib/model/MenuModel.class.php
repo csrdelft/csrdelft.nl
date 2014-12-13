@@ -13,17 +13,6 @@ class MenuModel extends CachedPersistenceModel {
 	protected static $instance;
 
 	/**
-	 * Remove cached menu from memcache and clear runtime cache.
-	 * 
-	 * @param MenuItem $item
-	 */
-	protected function clearCache(MenuItem $item) {
-		$key = $this->getRoot($item)->tekst . '-menu';
-		$this->unsetCache($key, true);
-		$this->flushCache(false);
-	}
-
-	/**
 	 * Get menu for viewing.
 	 * Use 2 levels of caching.
 	 * 
@@ -36,11 +25,10 @@ class MenuModel extends CachedPersistenceModel {
 		}
 		$key = $naam . '-menu';
 		if ($this->isCached($key, true)) {
-			// inladen van memcache in runtime cache
-			$loaded = $this->isCached($key, false);
-			$result = $this->getCached($key, true);
+			$loaded = $this->isCached($key, false); // is the tree root present in runtime cache?
+			$result = $this->getCached($key, true); // this only puts the tree root in runtime cache
 			if (!$loaded) {
-				$this->cacheResult($this->getList($result), false);
+				$this->cacheResult($this->getList($result), false); // put tree children in runtime cache as well
 			}
 			return $result;
 		}
@@ -149,12 +137,12 @@ class MenuModel extends CachedPersistenceModel {
 
 	public function create(PersistentEntity $entity) {
 		$entity->item_id = (int) parent::create($entity);
-		$this->clearCache($entity);
+		$this->flushCache(true);
 	}
 
 	public function update(PersistentEntity $entity) {
 		$rowcount = parent::update($entity);
-		$this->clearCache($entity);
+		$this->flushCache(true);
 		return $rowcount;
 	}
 
@@ -168,7 +156,7 @@ class MenuModel extends CachedPersistenceModel {
 			$rowcount = Database::sqlUpdate($this->orm->getTableName(), $update, $where, array(':oldid' => $item->item_id));
 			$this->delete($item);
 			$db->commit();
-			$this->clearCache($item);
+			$this->flushCache(true);
 			return $rowcount;
 		} catch (Exception $e) {
 			$db->rollback();
