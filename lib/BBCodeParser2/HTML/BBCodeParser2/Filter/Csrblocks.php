@@ -191,7 +191,7 @@ class HTML_BBCodeParser2_Filter_Csrblocks extends HTML_BBCodeParser2_Filter {
 				}
 
 				require_once 'model/entity/groepen/OldGroep.class.php';
-				require_once 'view/groepen/OldGroepView.class.php';
+				require_once 'view/groepen/OldGroepenView.class.php';
 				try {
 					$groep = new OldGroep($groepid);
 					$groeptag = new GroepBBContent($groep);
