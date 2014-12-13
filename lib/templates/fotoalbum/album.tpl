@@ -39,13 +39,10 @@
 				// zoom full resolution
 				$('span.resize.jgallery-btn').on('click', function (event) {
 					var zoom = container.find('div.zoom-container');
-					if (zoom.attr('data-size') === 'fill') {
-						$(this).removeClass('fa-search-minus').addClass('fa-search-plus');
+					if (zoom.attr('data-size') !== 'fill') {
 						return;
 					}
-					else if (zoom.attr('data-size') !== 'original') {
-						return;
-					}
+					zoom.attr('data-size', 'original');
 					var foto = zoom.find('img.active');
 					var href = $('#gallery').find('a[href="' + foto.attr('src') + '"]').attr('data-href');
 					if (typeof href === 'string') {
