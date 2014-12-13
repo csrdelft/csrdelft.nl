@@ -498,7 +498,6 @@ htdocs/tools/alphabanner/tegel_start.jpg -text
 htdocs/tools/bbcode.php -text
 htdocs/tools/bbcodeparser.php -text
 htdocs/tools/css.php -text
-htdocs/tools/documentsuggesties.php -text
 htdocs/tools/dragobject.php -text
 htdocs/tools/dump.php -text
 htdocs/tools/eetplan.php -text

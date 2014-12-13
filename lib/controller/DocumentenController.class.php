@@ -36,7 +36,7 @@ class DocumentenController extends Controller {
 			//niet alle acties mag iedereen doen, hier whitelisten voor de gebruikers
 			//zonder P_DOCS_MOD, en gebruikers met, zodat bij niet bestaande acties
 			//netjes gewoon het documentoverzicht getoond wordt.
-			$allow = array('recenttonen', 'bekijken', 'download', 'categorie');
+			$allow = array('recenttonen', 'bekijken', 'download', 'categorie', 'zoeken');
 			if (LoginModel::mag('P_DOCS_MOD')) {
 				$allow = array_merge($allow, array('bewerken', 'toevoegen', 'verwijderen'));
 			}
@@ -221,6 +221,32 @@ class DocumentenController extends Controller {
 			//setMelding(print_r($formulier->getError(), true), -1);
 		}
 		setMelding($this->errors, -1);
+	}
+
+	public function zoeken() {
+		if ($this->hasParam(3)) {
+			$zoekterm = $this->getParam(3);
+		} else {
+			exit;
+		}
+		$categorie = 0;
+		if ($this->hasParam('cat')) {
+			$categorie = (int) filter_input(INPUT_GET, 'cat', FILTER_SANITIZE_NUMBER_INT);
+		}
+		$limiet = 5;
+		if ($this->hasParam('limit')) {
+			$categorie = (int) filter_input(INPUT_GET, 'limit', FILTER_SANITIZE_NUMBER_INT);
+		}
+		$result = array();
+		foreach (DocCategorie::zoekDocumenten($zoekterm, $categorie, $limiet) as $doc) {
+			$result[] = array(
+				'url'	 => '/communicatie/documenten/bekijken/' . $doc->getID() . '/' . $doc->getFileName(),
+				'value'	 => $doc->getNaam() . '<span class="lichtgrijs"> - ' . $doc->getCategorie()->getNaam() . '</span>'
+			);
+		}
+		$this->view = new JsonResponse($result);
+		$this->view->view();
+		exit;
 	}
 
 }
