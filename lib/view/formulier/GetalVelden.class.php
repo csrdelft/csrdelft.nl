@@ -21,12 +21,12 @@
 class IntField extends TextField {
 
 	public $type = 'number';
+	public $pattern = '[0-9]+';
 	public $step = 1;
 	public $min = null;
 	public $max = null;
 	public $min_alert = null;
 	public $max_alert = null;
-	public $valuta = false;
 
 	public function __construct($name, $value, $description, $min = null, $max = null) {
 		parent::__construct($name, $value, $description, 11);
@@ -54,11 +54,15 @@ JS;
 	}
 
 	public function getValue() {
-		$value = parent::getValue();
-		if ($value == '') {
-			return null;
+		if ($this->isPosted()) {
+			$this->value = filter_input(INPUT_POST, $this->name, FILTER_SANITIZE_NUMBER_INT);
 		}
-		return (int) $value;
+		if ($this->empty_null AND empty($this->value)) {
+			$this->value = null;
+		} else {
+			$this->value = (int) $this->value;
+		}
+		return $this->value;
 	}
 
 	public function validate() {
@@ -68,7 +72,7 @@ JS;
 		// parent checks not null
 		if ($this->value == '') {
 			return true;
-		} elseif (!($this instanceof DecimalField) AND ! preg_match('/\d+/', $this->value)) {
+		} elseif (!($this instanceof DecimalField) AND ! preg_match('/^' . $this->pattern . '$/', $this->value)) {
 			$this->error = 'Alleen gehele getallen toegestaan';
 		} elseif ($this->max !== null AND $this->value > $this->max) {
 			$this->error = 'Maximale waarde is ' . $this->max . ' ';
@@ -80,7 +84,7 @@ JS;
 		return $this->error === '';
 	}
 
-	public function getHtml() {
+	public function getHtml($showButtons = true) {
 		$html = '';
 		if (!$this->readonly AND ! $this->disabled AND ! $this->hidden) {
 			if ($this->min !== null AND $this->getValue() === $this->min) {
@@ -88,9 +92,10 @@ JS;
 			} else {
 				$class = '';
 			}
-			$minus = CSR_PICS . '/knopjes/min.png';
+			$style = $showButtons ? 'cursor:pointer;padding:7px;' : 'display:none;';
+			$icon = CSR_PICS . '/knopjes/min.png';
 			$html .= <<<HTML
-<span id="substract_{$this->getId()}" {$class} style="cursor:pointer;padding:7px;"><img src="{$minus}" alt="-" class="icon" width="20" height="20" /></span>
+<span id="substract_{$this->getId()}" {$class} style="{$style}"><img src="{$icon}" alt="-" class="icon" width="20" height="20" /></span>
 HTML;
 		}
 
@@ -125,7 +130,7 @@ JS;
 JS;
 		}
 
-		$html .= $this->valuta . ' <input ' . $this->getInputAttribute(array('type', 'id', 'name', 'class', 'value', 'origvalue', 'disabled', 'readonly', 'maxlength', 'placeholder', 'autocomplete', 'min', 'max', 'step', 'pattern')) . ' /> ';
+		$html .= ' <input ' . $this->getInputAttribute(array('type', 'id', 'name', 'class', 'value', 'origvalue', 'pattern', 'disabled', 'readonly', 'maxlength', 'placeholder', 'autocomplete', 'min', 'max', 'step')) . ' /> ';
 
 		if (!$this->readonly AND ! $this->disabled AND ! $this->hidden) {
 			if ($this->max !== null AND $this->getValue() === $this->max) {
@@ -133,9 +138,9 @@ JS;
 			} else {
 				$class = '';
 			}
-			$plus = CSR_PICS . '/knopjes/plus.png';
+			$icon = CSR_PICS . '/knopjes/plus.png';
 			$html .= <<<HTML
-<span id="add_{$this->getId()}" {$class} style="cursor:pointer;padding:7px;"><img src="{$plus}" alt="+" class="icon" width="20" height="20" /></span>
+<span id="add_{$this->getId()}" {$class} style="{$style}"><img src="{$icon}" alt="+" class="icon" width="20" height="20" /></span>
 HTML;
 		}
 		return $html;
@@ -179,6 +184,7 @@ class DecimalField extends IntField {
 	public function __construct($name, $value, $description, $precision, $min = null, $max = null, $step = null) {
 		parent::__construct($name, $value, $description, $min, $max);
 		$this->precision = (int) $precision;
+		$this->pattern = '[0-9]*([\.|,][0-9]{' . $this->precision . '})?';
 		if (is_float($step)) {
 			$this->step = $step;
 		} else {
@@ -188,11 +194,15 @@ class DecimalField extends IntField {
 	}
 
 	public function getValue() {
-		$value = parent::getValue();
-		if ($value == '') {
-			return null;
+		if ($this->isPosted()) {
+			$this->value = filter_input(INPUT_POST, $this->name, FILTER_SANITIZE_NUMBER_FLOAT);
 		}
-		return (float) $value;
+		if ($this->empty_null AND empty($this->value)) {
+			$this->value = null;
+		} else {
+			$this->value = (float) $this->value;
+		}
+		return $this->value;
 	}
 
 	public function validate() {
@@ -202,7 +212,7 @@ class DecimalField extends IntField {
 		// parent checks not null
 		if ($this->value == '') {
 			return true;
-		} elseif (!preg_match('/^(\d+.\d{' . $this->precision . '})$/', $this->getValue())) {
+		} elseif (!preg_match('/^' . $this->pattern . '$/', $this->getValue())) {
 			$this->error = 'Voer precies ' . $this->precision . ' decimalen in';
 		}
 		return $this->error === '';
@@ -220,24 +230,23 @@ class RequiredDecimalField extends DecimalField {
  * Invoeren van een bedrag in centen, dus precisie van 2 cijfers achter de komma.
  * 
  */
-class BedragField extends DecimalField {
+class BedragField extends IntField {
 
-	public function __construct($name, $value, $description, $valuta = '€', $min = null, $max = null, $step = null) {
-		parent::__construct($name, ((float) $value) / 100.0, $description, 2, $min, $max, $step);
+	public $valuta;
+
+	public function __construct($name, $value, $description, $valuta = '€', $min = null, $max = null, $step = .01) {
+		parent::__construct($name, $value, $description, $min * 100, $max * 100);
+		$this->step = $step * 100;
 		$this->valuta = $valuta;
 	}
 
-	public function getValue() {
-		$value = parent::getValue();
-		if ($this->empty_null AND empty($value)) {
-			return null;
-		}
-		return (int) ($value * 100.0);
+	public function getHtml() {
+		return $this->valuta . parent::getHtml(false) . '<span class="lichtgrijs">(in centen)</span>';
 	}
 
 }
 
-class RequiredBedragField extends DecimalField {
+class RequiredBedragField extends BedragField {
 
 	public $required = true;
 

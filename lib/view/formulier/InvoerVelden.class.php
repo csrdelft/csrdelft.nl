@@ -69,6 +69,7 @@ abstract class InputField implements FormElement, Validator {
 	public $suggestions = array(); // lijst van search providers
 	public $blacklist = null; // array met niet tegestane waarden
 	public $whitelist = null; // array met exclusief toegestane waarden
+	public $pattern = null; // html5 input validation pattern
 
 	public function __construct($name, $value, $description, $model = null) {
 		$this->id = uniqid('field_');
@@ -338,6 +339,11 @@ abstract class InputField implements FormElement, Validator {
 					return 'autocomplete="off"'; // browser autocompete
 				}
 				break;
+			case 'pattern':
+				if ($this->pattern) {
+					return 'pattern="' . $this->pattern . '"';
+				}
+				break;
 			case 'step':
 				if ($this->step > 0) {
 					return 'step="' . $this->step . '"';
@@ -351,15 +357,6 @@ abstract class InputField implements FormElement, Validator {
 			case 'max':
 				if ($this->max !== null) {
 					return 'max="' . $this->max . '"';
-				}
-				break;
-			case 'pattern':
-				if ($this instanceof BedragField) {
-					return 'pattern="[0-9]*([\.|,][0-9][0-9])?"';
-				} elseif ($this instanceof DecimalField) {
-					return 'pattern="[0-9]+([\.|,][0-9]+)?"';
-				} elseif ($this instanceof IntField) {
-					return 'pattern="[0-9]+"';
 				}
 				break;
 		}
