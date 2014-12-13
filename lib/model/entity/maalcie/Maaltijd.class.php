@@ -80,7 +80,7 @@ class Maaltijd implements Agendeerbaar {
 	}
 
 	public function getMaaltijdRepetitieId() {
-		if ($this->mlt_repetitie_id === null) {
+		if (empty($this->mlt_repetitie_id)) {
 			return null;
 		}
 		return (int) $this->mlt_repetitie_id;

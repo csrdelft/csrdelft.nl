@@ -24,6 +24,7 @@ class MaaltijdForm extends ModalForm {
 		}
 
 		$fields['mrid'] = new IntField('mlt_repetitie_id', $mrid, null);
+		$fields['mrid']->empty_null = true;
 		$fields['mrid']->readonly = true;
 		$fields['mrid']->hidden = true;
 		$fields[] = new TextField('titel', $titel, 'Titel', 255);

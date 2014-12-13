@@ -142,13 +142,10 @@ class BeheerTakenController extends AclController {
 		}
 		if ($this->view->validate()) {
 			$values = $this->view->getValues();
-			$uid = ($values['uid'] === '' ? null : $values['uid']);
-			$mid = ($values['maaltijd_id'] === 0 ? null : $values['maaltijd_id']);
-			$crid = ($values['crv_repetitie_id'] === 0 ? null : $values['crv_repetitie_id']);
-			$taak = CorveeTakenModel::saveTaak($tid, intval($values['functie_id']), $uid, $crid, $mid, $values['datum'], intval($values['punten']), intval($values['bonus_malus']));
+			$taak = CorveeTakenModel::saveTaak($tid, (int) $values['functie_id'], $values['uid'], $values['crv_repetitie_id'], $values['maaltijd_id'], $values['datum'], $values['punten'], $values['bonus_malus']);
 			$maaltijd = null;
 			if (endsWith($_SERVER['HTTP_REFERER'], maalcieUrl . '/maaltijd/' . $values['maaltijd_id'])) { // state of gui
-				$maaltijd = MaaltijdenModel::getMaaltijd($mid);
+				$maaltijd = MaaltijdenModel::getMaaltijd($values['maaltijd_id']);
 			}
 			$this->view = new BeheerTaakView($taak, $maaltijd);
 		}

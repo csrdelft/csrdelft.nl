@@ -74,14 +74,14 @@ class CorveeTaak implements Agendeerbaar {
 	}
 
 	public function getCorveeRepetitieId() {
-		if ($this->crv_repetitie_id === null) {
+		if (empty($this->crv_repetitie_id)) {
 			return null;
 		}
 		return (int) $this->crv_repetitie_id;
 	}
 
 	public function getMaaltijdId() {
-		if ($this->maaltijd_id === null) {
+		if (empty($this->maaltijd_id)) {
 			return null;
 		}
 		return (int) $this->maaltijd_id;

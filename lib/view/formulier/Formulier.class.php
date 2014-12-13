@@ -291,7 +291,7 @@ class ModalForm extends Formulier {
 		parent::view();
 		if (DEBUG AND ( LoginModel::mag('P_ADMIN') OR LoginModel::instance()->isSued() )) {
 			echo '<a id="mysql_debug_toggle" onclick="$(this).replaceWith($(\'#mysql_debug\').toggle());">DEBUG</a>';
-			echo '<div id="mysql_debug" class="pre">' . getDebug() . '</div>';
+			echo '<div id="mysql_debug" class="pre">' . print_r($this->getError(), true) . getDebug() . '</div>';
 		}
 		echo '</div>';
 	}

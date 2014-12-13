@@ -57,7 +57,7 @@ JS;
 		if ($this->isPosted()) {
 			$this->value = filter_input(INPUT_POST, $this->name, FILTER_SANITIZE_NUMBER_INT);
 		}
-		if ($this->empty_null AND empty($this->value)) {
+		if ($this->value == '') {
 			$this->value = null;
 		} else {
 			$this->value = (int) $this->value;
@@ -197,7 +197,7 @@ class DecimalField extends IntField {
 		if ($this->isPosted()) {
 			$this->value = filter_input(INPUT_POST, $this->name, FILTER_SANITIZE_NUMBER_FLOAT);
 		}
-		if ($this->empty_null AND empty($this->value)) {
+		if ($this->value == '') {
 			$this->value = null;
 		} else {
 			$this->value = (float) $this->value;

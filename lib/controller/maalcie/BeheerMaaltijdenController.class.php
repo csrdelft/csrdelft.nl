@@ -120,19 +120,11 @@ class BeheerMaaltijdenController extends AclController {
 		if ($mid > 0) {
 			$this->bewerk($mid);
 		} else {
-			//FIXME: lost original value of mrid
-			if (isset($_POST['mlt_repetitie_id'])) {
-				$mrid = (int) filter_input(INPUT_POST, 'mlt_repetitie_id', FILTER_SANITIZE_NUMBER_INT);
-			}
-			if (empty($mrid)) {
-				$mrid = null;
-			}
-			$this->view = new MaaltijdForm($mid, $mrid); // fetches POST values itself
+			$this->view = new MaaltijdForm($mid); // fetches POST values itself
 		}
 		if ($this->view->validate()) {
 			$values = $this->view->getValues();
-			$mrid = empty($values['mlt_repetitie_id']) ? null : (int) $values['mlt_repetitie_id'];
-			$maaltijd_aanmeldingen = MaaltijdenModel::saveMaaltijd($mid, $mrid, $values['titel'], $values['aanmeld_limiet'], $values['datum'], $values['tijd'], $values['prijs'], $values['aanmeld_filter']);
+			$maaltijd_aanmeldingen = MaaltijdenModel::saveMaaltijd($mid, $values['mlt_repetitie_id'], $values['titel'], $values['aanmeld_limiet'], $values['datum'], $values['tijd'], $values['prijs'], $values['aanmeld_filter']);
 			$this->view = new BeheerMaaltijdView($maaltijd_aanmeldingen[0]);
 			if ($maaltijd_aanmeldingen[1] > 0) {
 				setMelding($maaltijd_aanmeldingen[1] . ' aanmelding' . ($maaltijd_aanmeldingen[1] !== 1 ? 'en' : '') . ' verwijderd vanwege aanmeldrestrictie: ' . $maaltijd_aanmeldingen[0]->getAanmeldFilter(), 2);
