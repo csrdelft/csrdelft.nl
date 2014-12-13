@@ -679,7 +679,6 @@ class Lid implements Serializable, Agendeerbaar {
 	 * bool $square		Geef een pad naar een vierkante (150x150px) versie terug. (voor google contacts sync)
 	 */
 	function getPasfotoPath($vierkant = false, $vorm = 'user') {
-
 		if ($vorm === 'user') {
 			$vorm = LidInstellingen::get('forum', 'naamWeergave');
 		}
