@@ -69,10 +69,7 @@ function mouseMoveHandler(e) {
 	e = e || window.event;
 	var newX = mouseX(e);
 	var newY = mouseY(e);
-	dragged = dragobject.hasClass('savepos') && (newX !== oldX || newY !== oldY);
-	if (!dragged) {
-		return;
-	}
+	dragged = dragobject.hasClass('savepos');
 	if (dragobject.hasClass('dragvertical')) {
 		dragobject.scrollTop(dragobject.scrollTop() + oldY - newY);
 	}

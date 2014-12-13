@@ -234,7 +234,7 @@ class BedragField extends IntField {
 
 	public $valuta;
 
-	public function __construct($name, $value, $description, $valuta = '€', $min = null, $max = null, $step = .01) {
+	public function __construct($name, $value, $description, $valuta = '€', $min = null, $max = null, $step = 0.01) {
 		parent::__construct($name, $value, $description, $min * 100, $max * 100);
 		$this->step = $step * 100;
 		$this->valuta = $valuta;
