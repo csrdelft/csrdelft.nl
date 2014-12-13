@@ -698,6 +698,7 @@ class Lid implements Serializable, Agendeerbaar {
 				break;
 			} elseif ($vorm === 'Duckstad') {
 				$path = 'pasfoto/' . $vorm . '/eend.jpg';
+				break;
 			}
 		}
 		if (!$path) {
