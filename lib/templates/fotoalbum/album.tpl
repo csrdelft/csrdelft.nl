@@ -128,6 +128,23 @@
 						$('span.change-mode.jgallery-btn').click();
 					}
 				});
+				// toggle fullscreen F11
+				$(window).keydown(function (event) {
+					if (event.keyCode === 122) {
+						var btn = container.find('span.change-mode');
+						// is browser full screen?
+						if ((screen.availHeight || screen.height - 30) <= window.innerHeight) {
+							if (btn.hasClass('fa-compress')) {
+								btn.click();
+							}
+						}
+						else {
+							if (btn.hasClass('fa-expand')) {
+								btn.click();
+							}
+						}
+					}
+				});
 				// toggle thumbs fullscreen
 				var btn = container.find('.minimalize-thumbnails');
 				container.find('span.change-mode').on('click', function (event) {
