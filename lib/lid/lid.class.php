@@ -697,13 +697,12 @@ class Lid implements Serializable, Agendeerbaar {
 					break;
 				}
 			}
-		}
-		if (!$path) {
 			if ($vorm === 'Duckstad') {
 				$path = 'pasfoto/' . $vorm . '/eend.jpg';
-			} else {
-				$path = 'pasfoto/geen-foto.jpg';
 			}
+		}
+		if (!$path) {
+			$path = 'pasfoto/geen-foto.jpg';
 		}
 		// als het vierkant moet, kijken of de vierkante bestaat, en anders maken
 		if ($vierkant) {
