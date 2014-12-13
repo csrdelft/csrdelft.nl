@@ -43,7 +43,9 @@
 					var href = $('#gallery').find('a[href="' + foto.attr('src') + '"]').attr('data-href');
 					if (typeof href === 'string' && foto.attr('src') !== href) {
 						var timer = setTimeout(function () {
-							container.find('div.overlay, div.imageLoaderPositionAbsolute').fadeIn();
+							if (zoom.attr('data-size') === 'original') {
+								container.find('div.overlay, div.imageLoaderPositionAbsolute').fadeIn();
+							}
 						}, 400);
 						foto.attr('src', href).one('load', function () {
 							clearTimeout(timer);
