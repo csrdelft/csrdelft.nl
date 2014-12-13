@@ -375,11 +375,11 @@ class ProfielBewerken extends Profiel {
 
 		foreach ($this->form->getFields() as $field) {
 			//duck-pasfoto opslaan
-			if ($field instanceof FileField) {
+			if ($field->getName() === 'duckfoto') {
 				if ($field->getModel() instanceof Afbeelding) {
 					$path = $field->getModel()->filename;
 					$ext = '.' . pathinfo($path, PATHINFO_EXTENSION);
-					$field->opslaan(PICS_PATH . 'pasfoto/duck/', $this->getUid() . $ext, true);
+					$field->opslaan(PICS_PATH . 'pasfoto/Duckstad/', $this->getUid() . $ext, true);
 				}
 				continue;
 			}
