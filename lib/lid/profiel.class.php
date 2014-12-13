@@ -298,7 +298,7 @@ class ProfielBewerken extends Profiel {
 
 		$form[] = new Subkopje('Studie:');
 		$form[] = new StudieField('studie', $profiel['studie'], 'Studie');
-		$form['studiejaar'] = new IntField('studiejaar', $profiel['studiejaar'], 'Beginjaar studie', 1950, date('Y'));
+		$form['studiejaar'] = new IntField('studiejaar', (int) $profiel['studiejaar'], 'Beginjaar studie', 1950, date('Y'));
 		$form['studiejaar']->leden_mod = $hasLedenMod;
 
 		if (!in_array($profiel['status'], array('S_OUDLID', 'S_ERELID'))) {
@@ -307,7 +307,7 @@ class ProfielBewerken extends Profiel {
 
 		if (!$this->editNoviet AND ( in_array($profiel['status'], array('S_OUDLID', 'S_ERELID')) OR $hasLedenMod)) {
 			$form[] = new TextField('beroep', $profiel['beroep'], 'Beroep/werk', 4096);
-			$form[] = new IntField('lidjaar', $profiel['lidjaar'], 'Lid sinds', 1950, date('Y'));
+			$form[] = new IntField('lidjaar', (int) $profiel['lidjaar'], 'Lid sinds', 1950, date('Y'));
 		}
 
 		if (in_array($profiel['status'], array('S_OUDLID', 'S_ERELID', 'S_NOBODY', 'S_EXLID'))) {
@@ -329,7 +329,7 @@ class ProfielBewerken extends Profiel {
 			$form[] = new TextField('eetwens', $profiel['eetwens'], 'Dieet/allergie', 200);
 			//wellicht binnenkort voor iedereen beschikbaar?
 			$form[] = new TextField('kerk', $profiel['kerk'], 'Kerk', 50);
-			$form['lengte'] = new IntField('lengte', $profiel['lengte'], 'Lengte (cm)', 50, 250);
+			$form['lengte'] = new IntField('lengte', (int) $profiel['lengte'], 'Lengte (cm)', 50, 250);
 			$form['lengte']->leden_mod = true;
 			$form[] = new TextField('vrienden', $profiel['vrienden'], 'Vrienden binnnen C.S.R./lichting', 300);
 			$form[] = new TextField('middelbareSchool', $profiel['middelbareSchool'], 'Middelbare school', 200);
