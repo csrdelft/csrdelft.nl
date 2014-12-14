@@ -262,13 +262,13 @@ class BestandBehouden extends InputField {
 	}
 
 	public function isAvailable() {
-		return $this->model instanceof Bestand;
+		return $this->model instanceof Bestand AND $this->model->exists();
 	}
 
 	public function validate() {
 		parent::validate();
-		if (!$this->isAvailable()OR empty($this->model->filesize)) {
-			$this->error = 'Er is geen bestand om te behouden.';
+		if (!$this->isAvailable() OR empty($this->model->filesize)) {
+			$this->error = 'Bestand bestaat niet (meer): ' . htmlspecialchars($this->model->directory . $this->model->filename);
 		} elseif (!empty($this->filterMime) AND ! in_array($this->model->mimetype, $this->filterMime)) {
 			$this->error = 'Bestandstype niet toegestaan: ' . htmlspecialchars($this->model->mimetype);
 		}
@@ -277,9 +277,6 @@ class BestandBehouden extends InputField {
 
 	public function opslaan($directory, $filename, $overwrite = false) {
 		parent::opslaan($directory, $filename, false);
-		if (!file_exists($this->model->directory . $this->model->filename)) {
-			throw new Exception('Bestand bestaat niet (meer): ' . htmlspecialchars($this->model->directory . $this->model->filename));
-		}
 		if (false === @chmod($this->model->directory . $this->model->filename, 0644)) {
 			throw new Exception('Geen eigenaar van bestand: ' . htmlspecialchars($this->model->directory . $this->model->filename));
 		}
@@ -473,7 +470,7 @@ class ExistingFileField extends SelectField {
 
 	public function validate() {
 		parent::validate();
-		if (!$this->model->exists()OR empty($this->model->filesize)) {
+		if (!$this->isAvailable() OR ! ($this->model instanceof Bestand) OR ! $this->model->exists()OR empty($this->model->filesize)) {
 			$this->error = 'Bestand is niet (meer) aanwezig';
 		} elseif (!empty($this->filterMime) AND ! in_array($this->model->mimetype, $this->filterMime)) {
 			$this->error = 'Bestandstype niet toegestaan: ' . $this->model->mimetype;
@@ -572,7 +569,7 @@ class DownloadUrlField extends UrlField {
 			$this->error = 'PHP.ini configuratie: fsocked, cURL of allow_url_fopen moet aan staan.';
 		} elseif (!url_like($this->value)) {
 			$this->error = 'Ongeldige url';
-		} elseif (!$this->model->exists() OR empty($this->model->filesize)) {
+		} elseif (!($this->model instanceof Bestand) OR ! $this->model->exists() OR empty($this->model->filesize)) {
 			$error = error_get_last();
 			$this->error = $error['message'];
 		} elseif (!empty($this->filterMime) AND ! in_array($this->model->mimetype, $this->filterMime)) {
