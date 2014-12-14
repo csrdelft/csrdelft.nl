@@ -682,7 +682,8 @@ class Lid implements Serializable, Agendeerbaar {
 		if ($vierkant OR ! LoginModel::mag('P_LOGGED_IN')) {
 			$folders = array('');
 		} elseif ($vorm === 'user') {
-			$folders = array(LidInstellingen::get('forum', 'naamWeergave') . '/', '');
+			$vorm = LidInstellingen::get('forum', 'naamWeergave');
+			$folders = array($vorm . '/', '');
 		}
 		$path = null;
 		// loop de volgende folders af op zoek naar de gevraagde pasfoto vorm
