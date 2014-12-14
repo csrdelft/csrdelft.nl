@@ -210,18 +210,17 @@ class ImageField extends FileField {
 				$filename = $this->getModel()->filename;
 				$resized = $directory . $percent . $filename;
 				$command = IMAGEMAGICK_PATH . 'convert ' . escapeshellarg($directory . $filename) . ' -resize ' . $percent . '% -format jpg -quality 85 ' . escapeshellarg($resized);
-				setMelding($command, 0);
-				if (defined('RESIZE_OUTPUT')) {
-					debugprint($command);
-				}
+				//if (defined('RESIZE_OUTPUT')) {
+				debugprint($command);
+				//}
 				$output = shell_exec($command);
-				if (defined('RESIZE_OUTPUT')) {
-					debugprint($output);
-				}
+				//if (defined('RESIZE_OUTPUT')) {
+				debugprint($output);
+				//}
 				if (false === @chmod($resized, 0644)) {
 					$this->getUploader()->error = $resize;
 				} else {
-					$this->model->filename = $percent . $filename;
+					$this->getModel()->filename = $percent . $filename;
 					if (false === unlink($directory . $filename)) {
 						$this->getUploader()->error = 'Origineel verwijderen na resizen mislukt!';
 					}
