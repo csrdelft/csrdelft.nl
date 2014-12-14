@@ -708,15 +708,16 @@ class LidField extends TextField {
 	 * LidField::getValue() levert altijd een uid of '' op.
 	 */
 	public function getValue() {
-		// leeg veld direct teruggeven
-		if (parent::getValue() == '') {
-			return '';
+		$this->value = parent::getValue();
+		if ($this->empty_null AND empty($this->value)) {
+			$this->value = null;
+		} else {
+			$uid = namen2uid(parent::getValue(), $this->zoekin);
+			if (isset($uid[0]['uid'])) {
+				$this->value = $uid[0]['uid'];
+			}
 		}
-		// uid opzoeken
-		if ($uid = namen2uid(parent::getValue(), $this->zoekin) AND isset($uid[0]['uid'])) {
-			return $uid[0]['uid'];
-		}
-		return '';
+		return $this->value;
 	}
 
 	/**
