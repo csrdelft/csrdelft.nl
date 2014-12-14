@@ -169,6 +169,9 @@ HTML;
 		$success &= rename($path, substr_replace($path, 'folder', strrpos($path, '.'), 0));
 		$path = $cover->getFullPath();
 		$success &= rename($path, substr_replace($path, 'folder', strrpos($path, '.'), 0));
+		// verwijder niet bestaande fotos uit de database
+		$this->cleanup($album);
+		$this->verwerkFotos($album);
 		return $success;
 	}
 
