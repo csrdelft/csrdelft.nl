@@ -19,7 +19,7 @@ class CourantController extends AclController {
 			$this->acl = array(
 				'archief'		 => 'P_LEDEN_READ',
 				'toevoegen'		 => 'P_MAIL_POST',
-				'bewerken'		 => 'P_MAIL_COMPOSE',
+				'bewerken'		 => 'P_MAIL_POST',
 				'verwijderen'	 => 'P_MAIL_COMPOSE',
 				'voorbeeld'		 => 'P_MAIL_SEND',
 				'verzenden'		 => 'P_MAIL_SEND'
@@ -82,6 +82,10 @@ class CourantController extends AclController {
 	}
 
 	public function bewerken($iBerichtID) {
+		$bericht = $this->model->getBericht($iBerichtID);
+		if (!$bericht OR ! isset($bericht['uid']) OR ! $this->model->magBeheren($bericht['uid'])) {
+			$this->geentoegang();
+		}
 		if ($this->isPosted()) {
 			$success = $this->model->bewerkBericht($iBerichtID, $_POST['titel'], $_POST['categorie'], $_POST['bericht']);
 			if ($success) {
