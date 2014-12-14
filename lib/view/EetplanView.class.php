@@ -42,7 +42,7 @@ class EetplanView extends AbstractEetplanView {
 	}
 
 	function view() {
-		$aToonAvonden = array(1, 2, 3, 4);
+		$aToonAvonden = array(1, 2, 3);
 		$aHuizenArray = $this->model->getHuizen();
 		echo '
 			<h1>Eetplan</h1>
