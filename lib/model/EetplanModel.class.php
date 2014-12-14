@@ -15,7 +15,7 @@ class EetplanModel {
 			'25-11-2014',
 			'23-12-2014',
 			'07-01-2014');
-		if ($iAvond < sizeof($aAvonden)) {
+		if ($iAvond - 1 < sizeof($aAvonden)) {
 			return $aAvonden[$iAvond - 1];
 		}
 	}
