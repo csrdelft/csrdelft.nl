@@ -105,8 +105,6 @@ class FotoAlbumModel extends PersistenceModel {
 				}
 			}
 		}
-		// instellen als laatste
-		touch($fotoalbum->path);
 		$msg = <<<HTML
 Voltooid met {$errors} errors. Dit album bevat {$albums} sub-albums en in totaal {$fotos} foto's.
 HTML;
@@ -126,20 +124,33 @@ HTML;
 		return $album->getMostRecentSubAlbum();
 	}
 
-	public function hernoemAlbum(FotoAlbum $album, $nieuwenaam) {
-		if (!valid_filename($nieuwenaam)) {
+	public function hernoemAlbum(FotoAlbum $album, $newName) {
+		if (!valid_filename($newName)) {
 			throw new Exception('Ongeldige naam');
 		}
-		$oldpath = $album->path;
-		$album->path = str_replace($album->dirname, $nieuwenaam, $album->path);
-		// verwijder niet bestaande subalbums en fotos uit de database
-		$this->cleanup($album);
-		$album->subdir = str_replace($album->dirname, $nieuwenaam, $album->subdir);
-		if (rename($oldpath, $album->path)) {
-			$this->verwerkFotos($album);
-			return true;
+		$oldDir = $album->subdir;
+		$newDir = dirname($oldDir) . '/' . $newName . '/';
+		$success = rename($album->path, PICS_PATH . $newDir);
+		if ($success) {
+			// database in sync houden
+			$album->dirname = basename($newDir);
+			$album->subdir = $newDir;
+			$album->path = PICS_PATH . $newDir;
+
+			foreach ($this->find('subdir LIKE ?', array($oldDir . '%')) as $subdir) {
+				// updaten gaat niet vanwege primary key
+				$this->delete($subdir);
+				$subdir->subdir = str_replace($oldDir, $newDir, $album->subdir);
+				$this->create($subdir);
+			}
+			foreach (FotoModel::instance()->find('subdir LIKE ?', array($oldDir . '%')) as $foto) {
+				// updaten gaat niet vanwege primary key
+				FotoModel::instance()->delete($foto);
+				$foto->subdir = str_replace($oldDir, $newDir, $album->subdir);
+				FotoModel::instance()->create($foto);
+			}
 		}
-		return false;
+		return $success;
 	}
 
 	public function setAlbumCover(FotoAlbum $album, Foto $cover) {
@@ -157,6 +168,13 @@ HTML;
 				$success &= rename($path, str_replace('folder', '', $path));
 				$path = $foto->getFullPath();
 				$success &= rename($path, str_replace('folder', '', $path));
+				if ($success) {
+					// database in sync houden
+					// updaten gaat niet vanwege primary key
+					FotoModel::instance()->delete($foto);
+					$foto->filename = rename($path, str_replace('folder', '', $this->filename));
+					FotoModel::instance()->create($foto);
+				}
 				if ($toggle) {
 					return $success;
 				}
@@ -169,9 +187,13 @@ HTML;
 		$success &= rename($path, substr_replace($path, 'folder', strrpos($path, '.'), 0));
 		$path = $cover->getFullPath();
 		$success &= rename($path, substr_replace($path, 'folder', strrpos($path, '.'), 0));
-		// verwijder niet bestaande fotos uit de database
-		$this->cleanup($album);
-		$this->verwerkFotos($album);
+		if ($success) {
+			// database in sync houden
+			// updaten gaat niet vanwege primary key
+			FotoModel::instance()->delete($foto);
+			$foto->filename = substr_replace($path, 'folder', strrpos($foto->filename, '.'), 0);
+			FotoModel::instance()->create($foto);
+		}
 		return $success;
 	}
 

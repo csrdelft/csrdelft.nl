@@ -229,7 +229,7 @@
 			<a href="/fotoalbum/verwijderen/{$album->subdir}" class="btn post confirm redirect" title="Fotoalbum verwijderen">{icon get=cross} Verwijderen</a>
 		{/if}
 		{if LoginModel::mag('P_ALBUM_MOD')}
-			<a class="btn popup" href="/fotoalbum/verwerken/{$album->subdir}" onclick="return confirm(this.title);" title="Fotoalbum verwerken en instellen als laatste fotoalbum.&#13;&#13;Verwijder magick-* files in /tmp handmatig bij timeout!">{icon get="application_view_gallery"} Verwerken</a>
+			<a class="btn popup confirm" href="/fotoalbum/verwerken/{$album->subdir}" title="Fotoalbum verwerken.&#13;&#13;Verwijder magick-* files in /tmp handmatig bij timeout!">{icon get="application_view_gallery"} Verwerken</a>
 		{/if}
 	{/if}
 	{if LoginModel::mag('P_LOGGED_IN') AND $album->hasFotos()}
