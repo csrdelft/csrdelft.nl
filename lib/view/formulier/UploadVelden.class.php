@@ -229,7 +229,7 @@ class BestandBehouden extends InputField {
 	}
 
 	public function opslaan($destination, $filename, $overwrite = false) {
-		parent::opslaan($destination, $filename, $overwrite);
+		parent::opslaan($destination, $filename, false);
 		if (!file_exists($destination . $filename)) {
 			throw new Exception('Bestand bestaat niet (meer): ' . htmlspecialchars($destination . $filename));
 		}
