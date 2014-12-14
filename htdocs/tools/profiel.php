@@ -37,8 +37,8 @@ if (isset($_GET['a'])) {
 	$actie = 'view';
 }
 
-
 if (!LoginModel::mag('P_LEDEN_READ') OR ! LoginModel::mag('P_OUDLEDEN_READ')) {
+
 	require_once 'model/CmsPaginaModel.class.php';
 	require_once 'view/CmsPaginaView.class.php';
 	$midden = new CmsPaginaView(CmsPaginaModel::instance()->getPagina('geentoegang'));
@@ -47,20 +47,27 @@ if (!LoginModel::mag('P_LEDEN_READ') OR ! LoginModel::mag('P_OUDLEDEN_READ')) {
 	require_once 'lid/profiel.class.php';
 
 	switch ($actie) {
+
 		case 'novietBewerken':
 		case 'bewerken':
 			$profiel = new ProfielBewerken($uid, $actie);
 
 			if ($profiel->magBewerken()) {
-				if ($profiel->validate() AND $profiel->save()) {
-					redirect(CSR_ROOT . '/profiel/' . $uid);
+				if ($profiel->validate()) {
+					if ($profiel->save()) {
+						setMelding('Opslaan geslaagd', 1);
+						redirect(CSR_ROOT . '/profiel/' . $uid);
+					}
+					setMelding('Opslaan mislukt', -1);
 				} else {
-					$midden = new ProfielEditContent($profiel, $actie);
+					setMelding('Invoer is niet volledig correct', -1);
 				}
-			} else {
-				$midden = new ProfielContent(LidCache::getLid($uid));
+				$midden = new ProfielEditContent($profiel, $actie);
+				break;
 			}
+			$midden = new ProfielContent(LidCache::getLid($uid));
 			break;
+
 		case 'nieuw':
 			//maak van een standaard statusstring van de input
 			$status = 'S_' . strtoupper($status);
@@ -88,6 +95,7 @@ if (!LoginModel::mag('P_LEDEN_READ') OR ! LoginModel::mag('P_OUDLEDEN_READ')) {
 				redirect(CSR_ROOT . '/profiel/');
 			}
 			break;
+
 		case 'wijzigstatus':
 			if (!LoginModel::mag('P_ADMIN,P_LEDEN_MOD')) {
 				setMelding('U mag lidstatus niet aanpassen', -1);
@@ -101,6 +109,7 @@ if (!LoginModel::mag('P_LEDEN_READ') OR ! LoginModel::mag('P_OUDLEDEN_READ')) {
 				$midden = new ProfielStatusContent($profiel, $actie);
 			}
 			break;
+
 		case 'voorkeuren':
 			//TODO Rechten goed zetten!
 			$voorkeur = new ProfielVoorkeur($uid, $actie);
@@ -114,6 +123,7 @@ if (!LoginModel::mag('P_LEDEN_READ') OR ! LoginModel::mag('P_OUDLEDEN_READ')) {
 				$midden = new ProfielContent(LidCache::getLid($uid));
 			}
 			break;
+
 		case 'wachtwoord':
 			if (LoginModel::mag('P_ADMIN')) {
 				$lid = LidCache::getLid($uid);
@@ -125,6 +135,7 @@ if (!LoginModel::mag('P_LEDEN_READ') OR ! LoginModel::mag('P_OUDLEDEN_READ')) {
 			}
 			redirect(CSR_ROOT . '/profiel/' . $uid);
 			break;
+
 		case 'addToGoogleContacts';
 			require_once 'googlesync.class.php';
 			GoogleSync::doRequestToken(CSR_ROOT . '/profiel/' . $uid . '/addToGoogleContacts');
@@ -151,7 +162,6 @@ if (!LoginModel::mag('P_LEDEN_READ') OR ! LoginModel::mag('P_OUDLEDEN_READ')) {
 				redirect(CSR_ROOT . '/ledenlijst/');
 			}
 			$midden = new ProfielContent($lid);
-			break;
 	}
 }
 

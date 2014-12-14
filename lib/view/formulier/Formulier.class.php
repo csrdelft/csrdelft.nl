@@ -229,7 +229,7 @@ class Formulier implements View, Validator {
 		foreach ($this->fields as $field) {
 			if ($field instanceof Validator) {
 				$fieldName = $field->getName();
-				if ($field->getError() != '') {
+				if ($field->getError() !== '') {
 					$errors[$fieldName] = $field->getError();
 				}
 			}
@@ -271,6 +271,7 @@ JS;
 		if ($this->getTitel()) {
 			echo '<h1 class="Titel">' . $this->getTitel() . '</h1>';
 		}
+		debugprint($this->getError());
 		foreach ($this->fields as $field) {
 			$field->view();
 		}
