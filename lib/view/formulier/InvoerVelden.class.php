@@ -704,14 +704,11 @@ class LidField extends TextField {
 		$this->suggestions[ucfirst($this->zoekin)] = '/tools/naamsuggesties/' . $this->zoekin . '?q=';
 	}
 
-	/**
-	 * LidField::getValue() levert altijd een uid of '' op.
-	 */
 	public function getValue() {
 		$this->value = parent::getValue();
 		if ($this->empty_null AND empty($this->value)) {
 			$this->value = null;
-		} else {
+		} elseif (!Lid::isValidUid($this->value)) {
 			$uid = namen2uid(parent::getValue(), $this->zoekin);
 			if (isset($uid[0]['uid'])) {
 				$this->value = $uid[0]['uid'];
