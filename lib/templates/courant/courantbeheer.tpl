@@ -47,7 +47,7 @@
 	<div id="pubciemail_form">
 		<h3>{if $form.ID==0}Nieuw bericht invoeren{else}Bericht bewerken{/if}</h3>
 		<strong>Titel:</strong><br />
-		<input type="text" name="titel" value="{$form.titel|escape:'html'}" style="width: 100%;" class="tekst" />
+		<input type="text" name="titel" value="{$form.titel|escape:'html'}" class="breed" />
 		<br /><br />
 		<strong>Categorie:</strong><br />
 		Selecteer hier een categorie. Uw invoer is enkel een voorstel.
@@ -57,9 +57,9 @@
 		<br /><br />
 		<strong>Bericht:</strong><br />
 		<div id="bewerkPreview" class="bbcodePreview"></div>
-		<textarea id="courantBericht" name="bericht" class="tekst" rows="15">{$form.bericht|escape:'html'}</textarea>
+		<textarea id="courantBericht" name="bericht" class="breed" rows="15">{$form.bericht|escape:'html'}</textarea>
 		<a class="btn float-right vergroot" data-vergroot="#courantBericht" title="Vergroot het invoerveld">&uarr;&darr;</a><br />
-		<input type="submit" name="verzenden" value="Opslaan" class="tekst" /> 
+		<input type="submit" name="verzenden" value="Opslaan" /> 
 		<input type="button" value="Voorbeeld" onclick="CsrBBPreview('courantBericht', 'bewerkPreview');" />
 		{if $courant->magBeheren()}
 			<input type="button" value="Importeer agenda" onclick="importAgenda('courantBericht');" />

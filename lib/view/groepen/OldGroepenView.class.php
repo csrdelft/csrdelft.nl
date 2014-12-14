@@ -84,7 +84,7 @@ class GroepContent extends OldGroepView {
 					} else {
 						//naam is niet duidelijk, geef ook een selectievakje met de mogelijke opties
 						if (count($aGroepUid['naamOpties']) > 0) {
-							$return .= '<tr><td><select name="naam[]" class="tekst">';
+							$return .= '<tr><td><select name="naam[]" class="breed">';
 							foreach ($aGroepUid['naamOpties'] as $aNaamOptie) {
 								$return .= '<option value="' . $aNaamOptie['uid'] . '">' . $aNaamOptie['naam'] . '</option>';
 							}
@@ -115,7 +115,7 @@ class GroepContent extends OldGroepView {
 			'Lichttechnicus', 'Geluidstechnicus', 'Adviseur', 'Internetman', 'Posterman',
 			'Corveemanager', 'Provisor', 'HO', 'HJ', 'Onderhuurder');
 		sort($aFuncties);
-		$return .= '<select name="functie[]" class="tekst">';
+		$return .= '<select name="functie[]" class="breed">';
 		foreach ($aFuncties as $sFunctie) {
 			$return .= '<option value="' . $sFunctie . '"';
 			if ($sFunctie == $this->model->getFunctie($uid)) {
