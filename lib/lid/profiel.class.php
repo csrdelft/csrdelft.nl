@@ -472,6 +472,8 @@ class ProfielStatus extends Profiel {
 		//relevante gegevens uit velden verwerken
 		foreach ($this->form->getFields() as $field) {
 			if ($field instanceof InputField) {
+				var_dump($field->getName());
+				var_dump($fieldsToSave[$field->getName()]['save']);
 				//mag het opgeslagen worden en is het wel een wijziging?
 				if ($fieldsToSave[$field->getName()]['save'] == true) {
 					if ($field->getValue() != $this->lid->getProperty($field->getName())) {
