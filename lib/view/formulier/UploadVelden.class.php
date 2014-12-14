@@ -175,17 +175,17 @@ class ImageField extends FileField {
 			$resize = false;
 			if ($this->maxWidth !== null AND $width > $this->maxWidth) {
 				$resize = 'Afbeelding is te breed. Maximaal ' . $this->maxWidth . ' pixels.';
-				$smallerW = floor((float) $this->maxWidth / (float) $width);
+				$smallerW = floor((float) $this->maxWidth * 100 / (float) $width);
 			} elseif ($this->minWidth !== null AND $width < $this->minWidth) {
 				$resize = 'Afbeelding is niet breed genoeg. Minimaal ' . $this->minWidth . ' pixels.';
-				$biggerW = ceil((float) $this->minWidth / (float) $width);
+				$biggerW = ceil((float) $this->minWidth * 100 / (float) $width);
 			}
 			if ($this->maxHeight !== null AND $height > $this->maxHeight) {
 				$resize = 'Afbeelding is te hoog. Maximaal ' . $this->maxHeight . ' pixels.';
-				$smallerH = floor((float) $this->maxHeight / (float) $height);
+				$smallerH = floor((float) $this->maxHeight * 100 / (float) $height);
 			} elseif ($this->minHeight !== null AND $height < $this->minHeight) {
 				$resize = 'Afbeelding is niet hoog genoeg. Minimaal ' . $this->minHeight . ' pixels.';
-				$biggerH = ceil((float) $this->minHeight / (float) $height);
+				$biggerH = ceil((float) $this->minHeight * 100 / (float) $height);
 			}
 			if ($resize) {
 				if (isset($biggerW, $smallerH) OR isset($biggerH, $smallerW)) {
@@ -210,6 +210,7 @@ class ImageField extends FileField {
 				$filename = $this->getModel()->filename;
 				$resized = $directory . $percent . $filename;
 				$command = IMAGEMAGICK_PATH . 'convert ' . escapeshellarg($directory . $filename) . ' -resize ' . $percent . '% -format jpg -quality 85 ' . escapeshellarg($resized);
+				setMelding($command);
 				if (defined('RESIZE_OUTPUT')) {
 					debugprint($command);
 				}
