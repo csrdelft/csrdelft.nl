@@ -572,17 +572,17 @@ class DownloadUrlField extends UrlField {
 
 	public function opslaan($destination, $filename, $overwrite = false) {
 		parent::opslaan($destination, $filename, $overwrite);
-		if (file_exists($this->dir->path . $this->model->filename)) {
-			$copied = copy($this->dir->path . $this->model->filename, $destination . $filename);
+		if (file_exists($this->model->directory . $this->model->filename)) {
+			$copied = copy($this->model->directory . $this->model->filename, $destination . $filename);
 			if (!$copied) {
-				throw new Exception('Bestand kopieren mislukt: ' . htmlspecialchars($this->dir->path . $this->model->filename));
+				throw new Exception('Bestand kopieren mislukt: ' . htmlspecialchars($this->model->directory . $this->model->filename));
 			}
 		} else {
-			throw new Exception('Bestand bestaat niet (meer): ' . htmlspecialchars($this->dir->path . $this->model->filename));
+			throw new Exception('Bestand bestaat niet (meer): ' . htmlspecialchars($this->model->directory . $this->model->filename));
 		}
-		$moved = unlink($this->dir->path . $this->model->filename);
+		$moved = unlink($this->model->directory . $this->model->filename);
 		if (!$moved) {
-			throw new Exception('Verplaatsen mislukt: ' . htmlspecialchars($this->dir->path . $this->model->filename));
+			throw new Exception('Verplaatsen mislukt: ' . htmlspecialchars($this->model->directory . $this->model->filename));
 		}
 		if (false === @chmod($destination . $filename, 0644)) {
 			throw new Exception('Geen eigenaar van bestand: ' . htmlspecialchars($destination . $filename));
