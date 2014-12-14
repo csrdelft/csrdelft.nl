@@ -115,12 +115,13 @@ JS;
 		}
 		if ($this->hoverintent) {
 			$js .= <<<JS
+
 try {
 	$('#{$this->getFormId()}-tabs .tab-item').hoverIntent(function() {
 		$(this).trigger('click');
 	});
 } catch(e) {
-	// missing js
+	// Missing js file
 }
 JS;
 		}
