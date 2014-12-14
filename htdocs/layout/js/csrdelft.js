@@ -209,7 +209,7 @@ function init_buttons(parent) {
 		}
 		content.toggle(800, 'easeInOutCubic');
 	});
-	$(parent).find('.modal').bind('click.modal', modal_open);
+	$(parent).find('.popup').bind('click.popup', modal_open);
 	$(parent).find('.post').bind('click.post', knop_post);
 	$(parent).find('.get').bind('click.get', knop_get);
 	$(parent).find('.vergroot').bind('click.vergroot', function (event) {
