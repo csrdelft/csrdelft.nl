@@ -4,14 +4,6 @@
 
 		var d = data;
 
-		// first correct the timestamps - they are recorded as the daily 
-		// midnights in UTC+0100, but Flot always displays dates in UTC 
-		// so we have to add one hour to hit the midnights in the plot 
-
-		for (var i = 0; i < d.length; ++i) {
-			d[i][0] += 60 * 60 / 1000;
-		}
-
 		// helper for returning the weekends in a period
 
 		function weekendAreas(axes) {

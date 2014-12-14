@@ -1230,7 +1230,7 @@ class ForumPostsModel extends AbstractForumModel implements Paging {
 	}
 
 	public function getStats($terug) {
-		$fields = array('UNIX_TIMESTAMP(DATE(datum_tijd)) AS datum', 'COUNT(*)');
+		$fields = array('(UNIX_TIMESTAMP(DATE(datum_tijd)) * 1000) AS datum', 'COUNT(*)');
 		return Database::sqlSelect($fields, $this->orm->getTableName(), 'datum_tijd > ?', array(getDateTime(strtotime($terug))), null, 'datum');
 	}
 
