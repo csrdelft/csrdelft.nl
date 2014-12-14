@@ -791,20 +791,20 @@ HTML;
 		if ($this->nobold === true AND $this->quote_level == 0) {
 			return $this->parseArray(array('[/b]'), array('b'));
 		} else {
-			return '<span class="dikgedrukt">' . $this->parseArray(array('[/b]'), array('b')) . '</span>';
+			return '<span class="dikgedrukt"><strong>' . $this->parseArray(array('[/b]'), array('b')) . '</strong></span>';
 		}
 	}
 
 	function bb_i() {
-		return '<span class="cursief">' . $this->parseArray(array('[/i]'), array('i')) . '</span>';
+		return '<span class="cursief"><em>' . $this->parseArray(array('[/i]'), array('i')) . '</em></span>';
 	}
 
 	function bb_s() {
-		return '<span class="doorgestreept">' . $this->parseArray(array('[/s]'), array('s')) . '</span>';
+		return '<span class="doorgestreept"><del>' . $this->parseArray(array('[/s]'), array('s')) . '</del></span>';
 	}
 
 	function bb_u() {
-		return '<span class="onderstreept">' . $this->parseArray(array('[/u]'), array('u')) . '</span>';
+		return '<span class="onderstreept"><ins>' . $this->parseArray(array('[/u]'), array('u')) . '</ins></span>';
 	}
 
 	function bb_clear($arguments = array()) {
