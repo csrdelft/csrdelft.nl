@@ -173,8 +173,6 @@ class ImageField extends FileField {
 			$width = $this->getModel()->width;
 			$height = $this->getModel()->height;
 			$resize = false;
-			$smallerW = null;
-			$bigger = null;
 			if ($this->maxWidth !== null AND $width > $this->maxWidth) {
 				$resize = 'Afbeelding is te breed. Maximaal ' . $this->maxWidth . ' pixels.';
 				$smallerW = floor((float) $this->maxWidth / (float) $width);
@@ -190,15 +188,21 @@ class ImageField extends FileField {
 				$biggerH = ceil((float) $this->minHeight / (float) $height);
 			}
 			if ($resize) {
-				if (($biggerW AND $smallerH) OR ( $biggerH AND $smallerW)) {
+				if (isset($biggerW, $smallerH) OR isset($biggerH, $smallerW)) {
 					$this->getUploader()->error = 'Geen resize verhouding';
 					return false;
-				} elseif ($smallerW AND $smallerH) {
+				} elseif (isset($smallerW, $smallerH)) {
 					$percent = min(array($smallerW, $smallerH));
-				} elseif ($biggerW AND $biggerH) {
+				} elseif (isset($biggerW, $biggerH)) {
 					$percent = max(array($biggerW, $biggerH));
-				} else {
-					$percent = $smallerW + $biggerW + $smallerH + $biggerH;
+				} elseif (isset($smallerW)) {
+					$percent = $smallerW;
+				} elseif (isset($biggerW)) {
+					$percent = $biggerW;
+				} elseif (isset($smallerH)) {
+					$percent = $smallerH;
+				} elseif (isset($biggerH)) {
+					$percent = $biggerH;
 				}
 				$directory = $this->getModel()->directory;
 				$filename = $this->getModel()->filename;
