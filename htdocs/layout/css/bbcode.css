@@ -29,7 +29,9 @@ div.bbcodePreview {
 	background-color: #ffffc1;
 	border: 1px solid #ccc;
 }
-
+div.bbcodePreview, div.bbcodePreview div {
+	line-height: inherit;
+}
 span.offtopic { font-size: 11px; color: #bbb; }
 span.offtopic a { color: #bbb; }
 span.offtopic hr { text-align: left; background-color: #bbb; }
