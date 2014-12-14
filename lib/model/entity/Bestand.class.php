@@ -50,7 +50,7 @@ class Bestand extends PersistentEntity {
 	 * Bestaat er een bestand met de naam in de map.
 	 */
 	public function exists() {
-		return @is_readable($this->directory . $this->filename) AND is_file($this->directory . $this->filename);
+		return is_readable($this->directory . $this->filename) AND is_file($this->directory . $this->filename);
 	}
 
 }

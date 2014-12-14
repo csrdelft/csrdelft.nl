@@ -38,7 +38,7 @@ class Map extends PersistentEntity {
 	 * Bestaat er een map met het pad.
 	 */
 	public function exists() {
-		return @is_readable($this->path) AND is_dir($this->path);
+		return is_readable($this->path) AND is_dir($this->path);
 	}
 
 }

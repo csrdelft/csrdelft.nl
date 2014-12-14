@@ -208,7 +208,7 @@ class ImageField extends FileField {
 				}
 				$directory = $this->getModel()->directory;
 				$filename = $this->getModel()->filename;
-				$resized = $directory . 'resized' . $filename;
+				$resized = $directory . $percent . $filename;
 				$command = IMAGEMAGICK_PATH . 'convert ' . escapeshellarg($directory . $filename) . ' -resize ' . $percent . '% -format jpg -quality 85 ' . escapeshellarg($resized);
 				setMelding($command, 0);
 				if (defined('RESIZE_OUTPUT')) {
@@ -221,7 +221,7 @@ class ImageField extends FileField {
 				if (false === @chmod($resized, 0644)) {
 					$this->getUploader()->error = $resize;
 				} else {
-					$this->getModel()->filename = $percent . $filename;
+					$this->model->filename = $percent . $filename;
 					if (false === unlink($directory . $filename)) {
 						$this->getUploader()->error = 'Origineel verwijderen na resizen mislukt!';
 					}
@@ -270,7 +270,7 @@ class BestandBehouden extends InputField {
 		parent::validate();
 		if (!$this->isAvailable()OR empty($this->model->filesize)) {
 			$this->error = 'Er is geen bestand om te behouden.';
-		} elseif (!empty($this->filterMime) AND ! empty($this->model->mimetype) AND ! in_array($this->model->mimetype, $this->filterMime)) {
+		} elseif (!empty($this->filterMime) AND ! in_array($this->model->mimetype, $this->filterMime)) {
 			$this->error = 'Bestandstype niet toegestaan: ' . htmlspecialchars($this->model->mimetype);
 		}
 		return $this->error === '';
@@ -291,9 +291,8 @@ class BestandBehouden extends InputField {
 	}
 
 	public function getPreviewDiv() {
-		if ($this->getModel() instanceof Afbeelding) {
-			$img = $this->getModel();
-			return '<div id="imagePreview_' . $this->getId() . '" class="previewDiv"><img src="' . str_replace(PICS_PATH, CSR_PICS . '/', $img->directory) . $img->filename . '" width="' . $img->width . '" height="' . $img->height . '" /></div>';
+		if ($this->model instanceof Afbeelding) {
+			return '<div id="imagePreview_' . $this->getId() . '" class="previewDiv"><img src="' . str_replace(PICS_PATH, CSR_PICS . '/', $this->model->directory) . $this->model->filename . '" width="' . $this->model->width . '" height="' . $this->model->height . '" /></div>';
 		}
 		return '';
 	}
@@ -354,7 +353,7 @@ class UploadFileField extends InputField {
 			$this->error = 'Upload-error: code ' . $this->value['error'];
 		} elseif (!is_uploaded_file($this->value['tmp_name'])OR empty($this->model->filesize)) {
 			$this->error = 'Bestand bestaat niet (meer): ' . htmlspecialchars($this->value['tmp_name']);
-		} elseif (!empty($this->filterMime) AND ! empty($this->model->mimetype) AND ! in_array($this->model->mimetype, $this->filterMime)) {
+		} elseif (!empty($this->filterMime) AND ! in_array($this->model->mimetype, $this->filterMime)) {
 			$this->error = 'Bestandstype niet toegestaan: ' . htmlspecialchars($this->model->mimetype);
 		}
 		return $this->error === '';
@@ -477,8 +476,8 @@ class ExistingFileField extends SelectField {
 		parent::validate();
 		if (!$this->model->exists()OR empty($this->model->filesize)) {
 			$this->error = 'Bestand is niet (meer) aanwezig';
-		} elseif (!empty($this->filterMime) AND ! in_array($this->getModel()->mimetype, $this->filterMime)) {
-			$this->error = 'Bestandstype niet toegestaan: ' . $this->getModel()->mimetype;
+		} elseif (!empty($this->filterMime) AND ! in_array($this->model->mimetype, $this->filterMime)) {
+			$this->error = 'Bestandstype niet toegestaan: ' . $this->model->mimetype;
 		}
 		return $this->error === '';
 	}
@@ -577,8 +576,8 @@ class DownloadUrlField extends UrlField {
 		} elseif (!$this->model->exists() OR empty($this->model->filesize)) {
 			$error = error_get_last();
 			$this->error = $error['message'];
-		} elseif (!empty($this->filterMime) AND ! in_array($this->getModel()->mimetype, $this->filterMime)) {
-			$this->error = 'Bestandstype niet toegestaan: ' . $this->getModel()->mimetype;
+		} elseif (!empty($this->filterMime) AND ! in_array($this->model->mimetype, $this->filterMime)) {
+			$this->error = 'Bestandstype niet toegestaan: ' . $this->model->mimetype;
 		}
 		return $this->error === '';
 	}
