@@ -57,7 +57,7 @@
 		<br /><br />
 		<strong>Bericht:</strong><br />
 		<div id="bewerkPreview" class="bbcodePreview"></div>
-		<textarea name="bericht" id="courantBericht" cols="80" style="width: 100%;" rows="15" class="tekst">{$form.bericht|escape:'html'}</textarea>
+		<textarea id="courantBericht" name="bericht" class="tekst" rows="15">{$form.bericht|escape:'html'}</textarea>
 		<a href="http://csrdelft.nl/wiki/cie:diensten:forum" target="_blank">Opmaakhulp</a>
 		<a class="btn float-right vergroot" data-vergroot="#courantBericht" title="Vergroot het invoerveld">&uarr;&darr;</a>
 		<input type="submit" name="verzenden" value="Opslaan" class="tekst" /> 

@@ -59,7 +59,7 @@
 				<input type="text" id="nieuweTitel" name="titel" value="{$post_form_titel}" origvalue="{$post_form_titel}" class="FormElement TextField" placeholder="Onderwerp titel" />
 				<br /><br />
 			{/if}
-			<div id="berichtPreview" class="preview forumBericht"></div>
+			<div id="berichtPreview" class="bbcodePreview forumBericht"></div>
 			<textarea name="forumBericht" id="forumBericht" class="FormElement CsrBBPreviewField forumBericht" rows="12" origvalue="{$post_form_tekst}">{$post_form_tekst}</textarea>
 			<div class="butn">
 				<input type="submit" name="submit" value="Opslaan" id="forumOpslaan" class="btn" />
