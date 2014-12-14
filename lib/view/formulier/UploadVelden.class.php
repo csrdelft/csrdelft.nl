@@ -173,26 +173,36 @@ class ImageField extends FileField {
 			$width = $this->getModel()->width;
 			$height = $this->getModel()->height;
 			$resize = false;
-			if ($this->minWidth !== null AND $width < $this->minWidth) {
+			$smallerW = null;
+			$bigger = null;
+			if ($this->maxWidth !== null AND $width > $this->maxWidth) {
+				$resize = 'Afbeelding is te breed. Maximaal ' . $this->maxWidth . ' pixels.';
+				$smallerW = floor((float) $this->maxWidth / (float) $width);
+			} elseif ($this->minWidth !== null AND $width < $this->minWidth) {
 				$resize = 'Afbeelding is niet breed genoeg. Minimaal ' . $this->minWidth . ' pixels.';
+				$biggerW = ceil((float) $this->minWidth / (float) $width);
+			}
+			if ($this->maxHeight !== null AND $height > $this->maxHeight) {
+				$resize = 'Afbeelding is te hoog. Maximaal ' . $this->maxHeight . ' pixels.';
+				$smallerH = floor((float) $this->maxHeight / (float) $height);
 			} elseif ($this->minHeight !== null AND $height < $this->minHeight) {
 				$resize = 'Afbeelding is niet hoog genoeg. Minimaal ' . $this->minHeight . ' pixels.';
-			} elseif ($this->maxWidth !== null AND $width > $this->maxWidth) {
-				$resize = 'Afbeelding is te breed. Maximaal ' . $this->maxWidth . ' pixels.';
-			} elseif ($this->maxHeight !== null AND $height > $this->maxHeight) {
-				$resize = 'Afbeelding is te hoog. Maximaal ' . $this->maxHeight . ' pixels.';
+				$biggerH = ceil((float) $this->minHeight / (float) $height);
 			}
 			if ($resize) {
-				$percentWidth = floor((float) $this->maxWidth / (float) $width);
-				$percentHeight = floor((float) $this->maxHeight / (float) $height);
-				if ($percentWidth < $percentHeight) {
-					$percent = max(1, $percentWidth);
+				if (($biggerW AND $smallerH) OR ( $biggerH AND $smallerW)) {
+					$this->getUploader()->error = 'Geen resize verhouding';
+					return false;
+				} elseif ($smallerW AND $smallerH) {
+					$percent = min(array($smallerW, $smallerH));
+				} elseif ($biggerW AND $biggerH) {
+					$percent = max(array($biggerW, $biggerH));
 				} else {
-					$percent = max(1, $percentHeight);
+					$percent = $smallerW + $biggerW + $smallerH + $biggerH;
 				}
 				$directory = $this->getModel()->directory;
 				$filename = $this->getModel()->filename;
-				$resized = $directory . $percent . $filename;
+				$resized = $directory . $filename;
 				$command = IMAGEMAGICK_PATH . 'convert ' . escapeshellarg($directory . $filename) . ' -resize ' . $percent . '% -format jpg -quality 85 ' . escapeshellarg($resized);
 				setMelding($command, 0);
 				if (defined('RESIZE_OUTPUT')) {
