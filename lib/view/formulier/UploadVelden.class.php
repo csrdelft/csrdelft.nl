@@ -172,14 +172,43 @@ class ImageField extends FileField {
 		if ($this->getModel() instanceof Afbeelding AND in_array($this->getModel()->mimetype, $this->filterMime)) {
 			$width = $this->getModel()->width;
 			$height = $this->getModel()->height;
+			$resize = false;
 			if ($this->minWidth !== null AND $width < $this->minWidth) {
-				$this->getUploader()->error = 'Afbeelding is niet breed genoeg.';
+				$resize = 'Afbeelding is niet breed genoeg. Minimaal ' . $this->minWidth . ' pixels.';
 			} elseif ($this->minHeight !== null AND $height < $this->minHeight) {
-				$this->getUploader()->error = 'Afbeelding is niet hoog genoeg.';
+				$resize = 'Afbeelding is niet hoog genoeg. Minimaal ' . $this->minHeight . ' pixels.';
 			} elseif ($this->maxWidth !== null AND $width > $this->maxWidth) {
-				$this->getUploader()->error = 'Afbeelding is te breed.';
+				$resize = 'Afbeelding is te breed. Maximaal ' . $this->maxWidth . ' pixels.';
 			} elseif ($this->maxHeight !== null AND $height > $this->maxHeight) {
-				$this->getUploader()->error = 'Afbeelding is te hoog.';
+				$resize = 'Afbeelding is te hoog. Maximaal ' . $this->maxHeight . ' pixels.';
+			}
+			if ($resize) {
+				$percentWidth = floor($this->maxWidth / $width);
+				$percentHeight = floor($this->maxHeight / $height);
+				if ($percentWidth < $percentHeight) {
+					$percent = $percentWidth;
+				} else {
+					$percent = $percentHeight;
+				}
+				$directory = $this->getModel()->directory;
+				$filename = $this->getModel()->filename;
+				$resized = $directory . $percent . $filename;
+				$command = IMAGEMAGICK_PATH . 'convert ' . escapeshellarg($directory . $filename) . ' -resize ' . $percent . '% -format jpg -quality 85 ' . escapeshellarg($resized);
+				if (defined('RESIZE_OUTPUT')) {
+					debugprint($command);
+				}
+				$output = shell_exec($command);
+				if (defined('RESIZE_OUTPUT')) {
+					debugprint($output);
+				}
+				if (false === @chmod($resized, 0644)) {
+					$this->getUploader()->error = $resize;
+				} else {
+					$this->getModel()->filename = $percent . $filename;
+					if (false === unlink($directory . $filename)) {
+						$this->getUploader()->error = 'Origineel verwijderen na resizen mislukt!';
+					}
+				}
 			}
 		} else {
 			if ($this->required) {
