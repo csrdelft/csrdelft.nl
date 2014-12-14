@@ -210,7 +210,9 @@ class ImageField extends FileField {
 				$filename = $this->getModel()->filename;
 				$resized = $directory . $percent . $filename;
 				$command = IMAGEMAGICK_PATH . 'convert ' . escapeshellarg($directory . $filename) . ' -resize ' . $percent . '% -format jpg -quality 85 ' . escapeshellarg($resized);
-				setMelding($command);
+
+				setMelding($command, 0); //DEBUG
+
 				if (defined('RESIZE_OUTPUT')) {
 					debugprint($command);
 				}
