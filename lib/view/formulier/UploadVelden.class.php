@@ -203,10 +203,12 @@ class ImageField extends FileField {
 					$percent = $smallerH;
 				} elseif (isset($biggerH)) {
 					$percent = $biggerH;
+				} else {
+					$percent = 100;
 				}
 				$directory = $this->getModel()->directory;
 				$filename = $this->getModel()->filename;
-				$resized = $directory . $filename;
+				$resized = $directory . 'resized' . $filename;
 				$command = IMAGEMAGICK_PATH . 'convert ' . escapeshellarg($directory . $filename) . ' -resize ' . $percent . '% -format jpg -quality 85 ' . escapeshellarg($resized);
 				setMelding($command, 0);
 				if (defined('RESIZE_OUTPUT')) {
@@ -578,8 +580,6 @@ class DownloadUrlField extends UrlField {
 			$this->error = 'Ongeldige url';
 		} elseif (!$this->model->exists() OR empty($this->model->filesize)) {
 			$error = error_get_last();
-			//$pos = strrpos($error['message'], ': ') + 2;
-			//$this->error = substr($error['message'], $pos);
 			$this->error = $error['message'];
 		}
 		return $this->error === '';
