@@ -20,7 +20,7 @@ class CourantController extends AclController {
 				'archief'		 => 'P_LEDEN_READ',
 				'toevoegen'		 => 'P_MAIL_POST',
 				'bewerken'		 => 'P_MAIL_POST',
-				'verwijderen'	 => 'P_MAIL_COMPOSE',
+				'verwijderen'	 => 'P_MAIL_POST',
 				'voorbeeld'		 => 'P_MAIL_SEND',
 				'verzenden'		 => 'P_MAIL_SEND'
 			);
@@ -103,6 +103,10 @@ class CourantController extends AclController {
 	}
 
 	public function verwijderen($iBerichtID) {
+		$bericht = $this->model->getBericht($iBerichtID);
+		if (!$bericht OR ! isset($bericht['uid']) OR ! $this->model->magBeheren($bericht['uid'])) {
+			$this->geentoegang();
+		}
 		if ($this->model->verwijderBericht($iBerichtID)) {
 			setMelding('Uw bericht is verwijderd.', 1);
 		} else {
