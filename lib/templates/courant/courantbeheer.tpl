@@ -58,13 +58,15 @@
 		<strong>Bericht:</strong><br />
 		<div id="bewerkPreview" class="bbcodePreview"></div>
 		<textarea id="courantBericht" name="bericht" class="tekst" rows="15">{$form.bericht|escape:'html'}</textarea>
-		<a href="http://csrdelft.nl/wiki/cie:diensten:forum" target="_blank">Opmaakhulp</a>
-		<a class="btn float-right vergroot" data-vergroot="#courantBericht" title="Vergroot het invoerveld">&uarr;&darr;</a>
+		<a class="btn float-right vergroot" data-vergroot="#courantBericht" title="Vergroot het invoerveld">&uarr;&darr;</a><br />
 		<input type="submit" name="verzenden" value="Opslaan" class="tekst" /> 
 		<input type="button" value="Voorbeeld" onclick="CsrBBPreview('courantBericht', 'bewerkPreview');" />
 		{if $courant->magBeheren()}
 			<input type="button" value="Importeer agenda" onclick="importAgenda('courantBericht');" />
 		{/if}
+		<div class="float-right">
+			<a href="http://csrdelft.nl/wiki/cie:diensten:forum" target="_blank">Opmaakhulp</a>
+		</div>
 	</div>
 </form>
 {if $courant->magBeheren() AND $courant->getBerichtenCount()>0}<br />
