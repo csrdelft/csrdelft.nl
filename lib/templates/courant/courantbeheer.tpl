@@ -64,9 +64,6 @@
 		{if $courant->magBeheren()}
 			<input type="button" value="Importeer agenda" onclick="importAgenda('courantBericht');" />
 		{/if}
-		<div class="float-right">
-			<a href="http://csrdelft.nl/wiki/cie:diensten:forum" target="_blank">Opmaakhulp</a>
-		</div>
 	</div>
 </form>
 {if $courant->magBeheren() AND $courant->getBerichtenCount()>0}<br />
