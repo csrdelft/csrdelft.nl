@@ -46,6 +46,8 @@
 		var options = {
 			xaxis: {
 				mode: "time",
+				timeformat: "%d %b 20%y",
+				monthNames: ["jan", "feb", "mrt", "apr", "mei", "jun", "jul", "aug", "sep", "okt", "nov", "dec"],
 				tickLength: 5
 			},
 			selection: {
