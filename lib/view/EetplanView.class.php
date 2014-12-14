@@ -42,23 +42,24 @@ class EetplanView extends AbstractEetplanView {
 	}
 
 	function view() {
+		$aToonAvonden(1, 2, 3, 4);
 		$aHuizenArray = $this->model->getHuizen();
 		echo '
 			<h1>Eetplan</h1>
 			<div class="geelblokje"><h3>LET OP: </h3>
-				Van eerstejaers die niet komen opdagen op het eetplan wordt verwacht dat zij minstens &eacute;&eacute;n keer komen koken op het huis waarbij zij gefaeld hebben.
+				Van novieten die niet komen opdagen op het eetplan wordt verwacht dat zij minstens &eacute;&eacute;n keer komen koken op het huis waarbij zij gefaeld hebben.
 			</div>
 			<table class="eetplantabel">
-			<tr><th style="width: 200px;">&Uuml;bersjaarsch/Avond</td>';
+			<tr><th style="width: 200px;">Noviet/Avond</td>';
 		//kopjes voor tabel
-		for ($iTeller = 5; $iTeller <= 8; $iTeller++) {
+		foreach ($aToonAvonden as $iTeller) {
 			echo '<th class="huis">' . $this->model->getDatum($iTeller) . '</th>';
 		}
 		echo '</tr>';
 		$row = 0;
 		foreach ($this->aEetplan as $aEetplanVoorPheut) {
 			echo '<tr class="kleur' . ($row % 2) . '"><td><a href="/eetplan/noviet/' . $aEetplanVoorPheut[0]['uid'] . '">' . $aEetplanVoorPheut[0]['naam'] . '</a></td>';
-			for ($iTeller = 1; $iTeller <= 3; $iTeller++) {
+			foreach ($aToonAvonden as $iTeller) {
 				$huisnaam = $aHuizenArray[$aEetplanVoorPheut[$iTeller] - 1]['huisNaam'];
 				$huisnaam = str_replace(array('Huize ', 'De ', 'Villa '), '', $huisnaam);
 				$huisnaam = substr($huisnaam, 0, 18);
