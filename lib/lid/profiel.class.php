@@ -247,7 +247,7 @@ class ProfielBewerken extends Profiel {
 
 		$fields[] = new Subkopje('Duckstad:');
 		$fields[] = new DuckField('duckname', $profiel['duckname'], 'Duckstad-naam', $this->lid);
-		$duckfoto = new Afbeelding(PICS_PATH . $this->lid->getPasfotoPath(false, 'Duckstad'), true);
+		$duckfoto = new Afbeelding(PICS_PATH . $this->lid->getPasfotoPath(false, 'Duckstad'));
 		if (!$duckfoto->exists() OR strpos($duckfoto->directory, '/Duckstad/') === false) {
 			$duckfoto = null;
 		}

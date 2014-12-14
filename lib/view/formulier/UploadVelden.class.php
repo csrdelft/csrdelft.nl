@@ -314,7 +314,7 @@ class UploadFileField extends InputField {
 		if ($this->isPosted()) {
 			$this->value = $_FILES[$this->name];
 			if (in_array($this->value['type'], Afbeelding::$mimeTypes)) {
-				$this->model = new Afbeelding($this->value['tmp_name'], true);
+				$this->model = new Afbeelding($this->value['tmp_name']);
 			} else {
 				$this->model = new Bestand();
 			}
@@ -449,7 +449,7 @@ class ExistingFileField extends SelectField {
 			$mimetype = finfo_file($finfo, $this->dir->path . $this->value);
 			finfo_close($finfo);
 			if (in_array($mimetype, Afbeelding::$mimeTypes)) {
-				$this->model = new Afbeelding($this->dir->path . $this->value, true);
+				$this->model = new Afbeelding($this->dir->path . $this->value);
 			} else {
 				$this->model = new Bestand();
 				$this->model->filename = $this->value;
@@ -544,7 +544,7 @@ class DownloadUrlField extends UrlField {
 			$mimetype = finfo_file($finfo, $this->tmp_file);
 			finfo_close($finfo);
 			if (in_array($mimetype, Afbeelding::$mimeTypes)) {
-				$this->model = new Afbeelding($this->tmp_file, true);
+				$this->model = new Afbeelding($this->tmp_file);
 			} else {
 				$this->model = new Bestand();
 				$this->model->filename = $clean_name;
