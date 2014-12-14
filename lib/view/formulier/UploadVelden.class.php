@@ -96,8 +96,8 @@ class FileField extends KeuzeRondjeField {
 		return $this->getUploader()->validate();
 	}
 
-	public function opslaan($destination, $filename, $overwrite = false) {
-		$this->getUploader()->opslaan($destination, $filename, $overwrite);
+	public function opslaan($directory, $filename, $overwrite = false) {
+		$this->getUploader()->opslaan($directory, $filename, $overwrite);
 	}
 
 	public function getOptionHtml($methode, $description) {
@@ -268,19 +268,21 @@ class BestandBehouden extends InputField {
 
 	public function validate() {
 		parent::validate();
-		if (!$this->isAvailable()) {
+		if (!$this->isAvailable()OR empty($this->model->filesize)) {
 			$this->error = 'Er is geen bestand om te behouden.';
+		} elseif (!empty($this->filterMime) AND ! empty($this->model->mimetype) AND ! in_array($this->model->mimetype, $this->filterMime)) {
+			$this->error = 'Bestandstype niet toegestaan: ' . htmlspecialchars($this->model->mimetype);
 		}
 		return $this->error === '';
 	}
 
-	public function opslaan($destination, $filename, $overwrite = false) {
-		parent::opslaan($destination, $filename, false);
-		if (!file_exists($destination . $filename)) {
-			throw new Exception('Bestand bestaat niet (meer): ' . htmlspecialchars($destination . $filename));
+	public function opslaan($directory, $filename, $overwrite = false) {
+		parent::opslaan($directory, $filename, false);
+		if (!file_exists($this->model->directory . $this->model->filename)) {
+			throw new Exception('Bestand bestaat niet (meer): ' . htmlspecialchars($this->model->directory . $this->model->filename));
 		}
-		if (false === @chmod($destination . $filename, 0644)) {
-			throw new Exception('Geen eigenaar van bestand: ' . htmlspecialchars($destination . $filename));
+		if (false === @chmod($this->model->directory . $this->model->filename, 0644)) {
+			throw new Exception('Geen eigenaar van bestand: ' . htmlspecialchars($this->model->directory . $this->model->filename));
 		}
 	}
 
@@ -324,6 +326,7 @@ class UploadFileField extends InputField {
 			$this->model->filename = $this->value['name'];
 			$this->model->filesize = $this->value['size'];
 			$this->model->mimetype = $this->value['type'];
+			$this->model->directory = dirname($this->value['tmp_name']);
 		}
 	}
 
@@ -341,9 +344,6 @@ class UploadFileField extends InputField {
 
 	public function validate() {
 		parent::validate();
-		if (!empty($this->filterMime) AND ! empty($this->getModel()->mimetype) AND ! in_array($this->getModel()->mimetype, $this->filterMime)) {
-			$this->error = 'Bestandstype niet toegestaan: ' . $this->getModel()->mimetype;
-		}
 		if ($this->value['error'] == UPLOAD_ERR_NO_FILE) {
 			if ($this->required) {
 				$this->error = 'Selecteer een bestand';
@@ -352,23 +352,25 @@ class UploadFileField extends InputField {
 			$this->error = 'Bestand is te groot: Maximaal ' . format_filesize(getMaximumFileUploadSize());
 		} elseif ($this->value['error'] != UPLOAD_ERR_OK) {
 			$this->error = 'Upload-error: code ' . $this->value['error'];
+		} elseif (!is_uploaded_file($this->value['tmp_name'])OR empty($this->model->filesize)) {
+			$this->error = 'Bestand bestaat niet (meer): ' . htmlspecialchars($this->value['tmp_name']);
+		} elseif (!empty($this->filterMime) AND ! empty($this->model->mimetype) AND ! in_array($this->model->mimetype, $this->filterMime)) {
+			$this->error = 'Bestandstype niet toegestaan: ' . htmlspecialchars($this->model->mimetype);
 		}
 		return $this->error === '';
 	}
 
-	public function opslaan($destination, $filename, $overwrite = false) {
-		parent::opslaan($destination, $filename, $overwrite);
-		if (is_uploaded_file($this->value['tmp_name'])) {
-			$moved = @move_uploaded_file($this->value['tmp_name'], $destination . $filename);
-			if (!$moved) {
-				throw new Exception('Verplaatsen mislukt: ' . htmlspecialchars($this->value['tmp_name']));
-			}
-		} else {
-			throw new Exception('Bestand bestaat niet (meer): ' . htmlspecialchars($destination . $filename));
+	public function opslaan($directory, $filename, $overwrite = false) {
+		parent::opslaan($directory, $filename, $overwrite);
+		$moved = @move_uploaded_file($this->value['tmp_name'], $directory . $filename);
+		if (!$moved) {
+			throw new Exception('Verplaatsen mislukt: ' . htmlspecialchars($this->value['tmp_name']));
 		}
-		if (false === @chmod($destination . $filename, 0644)) {
-			throw new Exception('Geen eigenaar van bestand: ' . htmlspecialchars($destination . $filename));
+		if (false === @chmod($directory . $filename, 0644)) {
+			throw new Exception('Geen eigenaar van bestand: ' . htmlspecialchars($directory . $filename));
 		}
+		$this->model->directory = $directory;
+		$this->model->filename = $filename;
 	}
 
 	public function getHtml() {
@@ -473,34 +475,31 @@ class ExistingFileField extends SelectField {
 
 	public function validate() {
 		parent::validate();
-		if (!empty($this->filterMime) AND ! in_array($this->getModel()->mimetype, $this->filterMime)) {
-			$this->error = 'Bestandstype niet toegestaan: ' . $this->getModel()->mimetype;
-		}
-		if (!$this->model->exists()) {
+		if (!$this->model->exists()OR empty($this->model->filesize)) {
 			$this->error = 'Bestand is niet (meer) aanwezig';
+		} elseif (!empty($this->filterMime) AND ! in_array($this->getModel()->mimetype, $this->filterMime)) {
+			$this->error = 'Bestandstype niet toegestaan: ' . $this->getModel()->mimetype;
 		}
 		return $this->error === '';
 	}
 
-	public function opslaan($destination, $filename, $overwrite = false) {
-		parent::opslaan($destination, $filename, $overwrite);
-		if (file_exists($this->dir->path . $this->model->filename)) {
-			$copied = copy($this->dir->path . $this->model->filename, $destination . $filename);
-			if (!$copied) {
-				throw new Exception('Bestand kopieren mislukt: ' . htmlspecialchars($this->dir->path . $this->model->filename));
-			}
-		} else {
-			throw new Exception('Bestand bestaat niet (meer): ' . htmlspecialchars($this->dir->path . $this->model->filename));
+	public function opslaan($directory, $filename, $overwrite = false) {
+		parent::opslaan($directory, $filename, $overwrite);
+		$copied = copy($this->model->directory . $this->model->filename, $directory . $filename);
+		if (!$copied) {
+			throw new Exception('Bestand kopieren mislukt: ' . htmlspecialchars($this->model->directory . $this->model->filename));
 		}
-		if (false === @chmod($destination . $filename, 0644)) {
-			throw new Exception('Geen eigenaar van bestand: ' . htmlspecialchars($destination . $filename));
+		if (false === @chmod($directory . $filename, 0644)) {
+			throw new Exception('Geen eigenaar van bestand: ' . htmlspecialchars($directory . $filename));
 		}
 		if ($this->verplaats->getValue()) {
-			$moved = unlink($this->dir->path . $this->model->filename);
+			$moved = unlink($this->model->directory . $this->model->filename);
 			if (!$moved) {
-				throw new Exception('Verplaatsen mislukt: ' . htmlspecialchars($this->dir->path . $this->model->filename));
+				throw new Exception('Verplaatsen mislukt: ' . htmlspecialchars($this->model->directory . $this->model->filename));
 			}
 		}
+		$this->model->directory = $directory;
+		$this->model->filename = $filename;
 	}
 
 	public function getHtml() {
@@ -571,9 +570,6 @@ class DownloadUrlField extends UrlField {
 
 	public function validate() {
 		parent::validate();
-		if (!empty($this->filterMime) AND ! in_array($this->getModel()->mimetype, $this->filterMime)) {
-			$this->error = 'Bestandstype niet toegestaan: ' . $this->getModel()->mimetype;
-		}
 		if (!$this->isAvailable()) {
 			$this->error = 'PHP.ini configuratie: fsocked, cURL of allow_url_fopen moet aan staan.';
 		} elseif (!url_like($this->value)) {
@@ -581,27 +577,27 @@ class DownloadUrlField extends UrlField {
 		} elseif (!$this->model->exists() OR empty($this->model->filesize)) {
 			$error = error_get_last();
 			$this->error = $error['message'];
+		} elseif (!empty($this->filterMime) AND ! in_array($this->getModel()->mimetype, $this->filterMime)) {
+			$this->error = 'Bestandstype niet toegestaan: ' . $this->getModel()->mimetype;
 		}
 		return $this->error === '';
 	}
 
-	public function opslaan($destination, $filename, $overwrite = false) {
-		parent::opslaan($destination, $filename, $overwrite);
-		if (file_exists($this->model->directory . $this->model->filename)) {
-			$copied = copy($this->model->directory . $this->model->filename, $destination . $filename);
-			if (!$copied) {
-				throw new Exception('Bestand kopieren mislukt: ' . htmlspecialchars($this->model->directory . $this->model->filename));
-			}
-		} else {
-			throw new Exception('Bestand bestaat niet (meer): ' . htmlspecialchars($this->model->directory . $this->model->filename));
+	public function opslaan($directory, $filename, $overwrite = false) {
+		parent::opslaan($directory, $filename, $overwrite);
+		$copied = copy($this->model->directory . $this->model->filename, $directory . $filename);
+		if (!$copied) {
+			throw new Exception('Bestand kopieren mislukt: ' . htmlspecialchars($this->model->directory . $this->model->filename));
 		}
 		$moved = unlink($this->model->directory . $this->model->filename);
 		if (!$moved) {
 			throw new Exception('Verplaatsen mislukt: ' . htmlspecialchars($this->model->directory . $this->model->filename));
 		}
-		if (false === @chmod($destination . $filename, 0644)) {
-			throw new Exception('Geen eigenaar van bestand: ' . htmlspecialchars($destination . $filename));
+		if (false === @chmod($directory . $filename, 0644)) {
+			throw new Exception('Geen eigenaar van bestand: ' . htmlspecialchars($directory . $filename));
 		}
+		$this->model->directory = $directory;
+		$this->model->filename = $filename;
 	}
 
 	public function getHtml() {

@@ -163,12 +163,12 @@ abstract class InputField implements FormElement, Validator {
 	/**
 	 * Bestand opslaan op de juiste plek.
 	 * 
-	 * @param string $destination fully qualified path with trailing slash
+	 * @param string $directory fully qualified path with trailing slash
 	 * @param string $filename filename with extension
 	 * @param boolean $overwrite allowed to overwrite existing file
 	 * @throws Exception Ongeldige bestandsnaam, doelmap niet schrijfbaar of naam ingebruik
 	 */
-	protected function opslaan($destination, $filename, $overwrite = false) {
+	protected function opslaan($directory, $filename, $overwrite = false) {
 		if (!$this->isAvailable()) {
 			throw new Exception('Uploadmethode niet beschikbaar: ' . get_class($this));
 		}
@@ -178,22 +178,22 @@ abstract class InputField implements FormElement, Validator {
 		if (!valid_filename($filename)) {
 			throw new Exception('Ongeldige bestandsnaam: ' . htmlspecialchars($filename));
 		}
-		if (!file_exists($destination)) {
-			mkdir($destination);
+		if (!file_exists($directory)) {
+			mkdir($directory);
 		}
-		if (false === @chmod($destination, 0755)) {
-			throw new Exception('Geen eigenaar van map: ' . htmlspecialchars($destination));
+		if (false === @chmod($directory, 0755)) {
+			throw new Exception('Geen eigenaar van map: ' . htmlspecialchars($directory));
 		}
-		if (!is_writable($destination)) {
-			throw new Exception('Doelmap is niet beschrijfbaar: ' . htmlspecialchars($destination));
+		if (!is_writable($directory)) {
+			throw new Exception('Doelmap is niet beschrijfbaar: ' . htmlspecialchars($directory));
 		}
-		if (file_exists($destination . $filename)) {
+		if (file_exists($directory . $filename)) {
 			if ($overwrite) {
-				if (!unlink($destination . $filename)) {
-					throw new Exception('Overschrijven mislukt: ' . htmlspecialchars($destination . $filename));
+				if (!unlink($directory . $filename)) {
+					throw new Exception('Overschrijven mislukt: ' . htmlspecialchars($directory . $filename));
 				}
 			} elseif (!($this instanceof BestandBehouden)) {
-				throw new Exception('Bestandsnaam al in gebruik: ' . htmlspecialchars($destination . $filename));
+				throw new Exception('Bestandsnaam al in gebruik: ' . htmlspecialchars($directory . $filename));
 			}
 		}
 	}
