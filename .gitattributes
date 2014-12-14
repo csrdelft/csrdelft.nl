@@ -4415,6 +4415,7 @@ lib/view/ZoekbalkView.class.php -text
 lib/view/courant/CourantArchiefView.class.php -text
 lib/view/courant/CourantBeheerView.class.php -text
 lib/view/courant/CourantView.class.php -text
+lib/view/formulier/BBCodeVelden.class.php -text
 lib/view/formulier/DataTable.class.php -text
 lib/view/formulier/Dropzone.class.php -text
 lib/view/formulier/FormElement.abstract.php -text

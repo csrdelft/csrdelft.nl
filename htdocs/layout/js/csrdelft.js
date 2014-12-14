@@ -758,19 +758,6 @@ function getScrollBarWidth() {
 	return (w1 - w2);
 }
 
-function parseBBCode(string, div) {
-	var jqXHR = $.ajax({
-		type: 'POST',
-		cache: false,
-		url: '/tools/bbcode.php',
-		data: 'data=' + encodeURIComponent(string)
-	});
-	jqXHR.done(function (data, textStatus, jqXHR) {
-		$(div).html(data);
-		init_context($(div));
-	});
-}
-
 function readableFileSize(size) {
 	var units = ['B', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
 	var i = 0;
@@ -794,21 +781,22 @@ function importAgenda(id) {
 	});
 }
 
-function CsrBBPreview(source, dest) {
-	var code = document.getElementById(source).value;
-	if (code.length !== '') {
-		var previewDiv = document.getElementById(dest);
-		parseBBCode(code, previewDiv);
-		$(previewDiv).addClass('preview-show');
-		/*try {
-		 $(window).scrollTo('#' + source, 1, {
-		 offset: {
-		 top: 0,
-		 left: 0
-		 }
-		 });
-		 } catch (e) {
-		 // missing scrollTo
-		 }*/
+function CsrBBPreview(sourceId, targetId) {
+	if (sourceId.charAt(0) !== '#') {
+		sourceId = '#' + sourceId;
 	}
+	var bbcode = $(sourceId).val();
+	if (typeof bbcode !== 'string' || bbcode.trim() === '') {
+		return;
+	}
+	$.post('/tools/bbcode.php', {
+		data: encodeURIComponent(bbcode)
+	}).done(function (data, textStatus, jqXHR) {
+		if (targetId.charAt(0) !== '#') {
+			targetId = '#' + targetId;
+		}
+		$(targetId).html(data);
+		init_context($(targetId));
+		$(targetId).show();
+	}).fail(alert);
 }

@@ -8,7 +8,7 @@
 	<input type="text" name="titel" value="{$mededeling->getTitel()|escape:'html'}" class="titel" /><br />
 	<label>Tekst:</label>
 	<div class="indent">
-		<div id="bewerkPreview" class="preview"></div>
+		<div id="bewerkPreview" class="bbcodePreview"></div>
 		<textarea id="tekst" name="tekst" rows="12" class="tekst">{$mededeling->getTekst()|escape:'html'}</textarea><br />
 		<a id="voorbeeld" class="btn" onclick="return CsrBBPreview('tekst', 'bewerkPreview')">Voorbeeld</a>
 		<a href="http://csrdelft.nl/wiki/cie:diensten:forum" target="_blank">Opmaakhulp</a>

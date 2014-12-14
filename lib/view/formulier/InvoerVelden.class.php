@@ -1024,50 +1024,6 @@ class RequiredTextareaField extends TextareaField {
 
 }
 
-/**
- * Textarea met een bbcode-preview erbij.
- */
-class CsrBBPreviewField extends TextareaField {
-
-	public $previewOnEnter = false;
-
-	public function __construct($name, $value, $description, $rows = 5, $max_len = null, $min_len = null) {
-		parent::__construct($name, $value, $description, $rows, $max_len, $min_len);
-	}
-
-	public function getPreviewDiv() {
-		return <<<HTML
-<div class="float-right">
-	<a href="http://csrdelft.nl/wiki/cie:diensten:forum" target="_blank">Opmaakhulp</a>
-	<input type="button" value="Voorbeeld" onclick="CsrBBPreview('{$this->getId()}', '{$this->getName()}Preview');"/>
-</div>
-<br />
-<div id="{$this->getName()}Preview" class="preview"></div>
-HTML;
-	}
-
-	public function getJavascript() {
-		if (!$this->previewOnEnter) {
-			return parent::getJavascript();
-		}
-		return parent::getJavascript() . <<<JS
-
-$('#{$this->getId()}').bind('keyup.preview', function(event) {
-	if(event.keyCode === 13) {
-		CsrBBPreview('{$this->getId()}', '{$this->getName()}Preview');
-	}
-});
-JS;
-	}
-
-}
-
-class RequiredCsrBBPreviewField extends CsrBBPreviewField {
-
-	public $required = true;
-
-}
-
 class WachtwoordField extends TextField {
 
 	public $type = 'password';

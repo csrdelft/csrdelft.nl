@@ -21,9 +21,7 @@ img.neus2013 {
 	margin: -5px;
 }
 
-div.preview { display: none; margin: 7px; padding: 2px; background-color: #ffffc1; border: 1px solid #ccc; }
-div.preview-show { display: block; }
-div.preview.pagina { padding: 2px; width: 100%;}
+div.bbcodePreview { display: none; margin: 7px; padding: 2px; background-color: #ffffc1; border: 1px solid #ccc; }
 
 span.offtopic { font-size: 11px; color: #bbb; }
 span.offtopic a { color: #bbb; }

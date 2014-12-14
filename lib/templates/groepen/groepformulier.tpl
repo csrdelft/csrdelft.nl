@@ -98,7 +98,7 @@
 				<br />
 			</div>
 		{/if}
-		<div id="sbewerkPreview" class="preview"></div>
+		<div id="sbewerkPreview" class="bbcodePreview"></div>
 		<label for="sbeschrijving"><strong>Korte beschrijving:</strong><br /><br />bbcode mogelijk</label>
 		<textarea id="sbeschrijving" name="sbeschrijving" rows="7">{$groep->getSbeschrijving()|escape:'html'}</textarea>
 		<br />
@@ -112,7 +112,7 @@
 	{if $groep->getType()->getId()==11 AND ($groep->getId()==0 OR !$groep->isAdmin())}
 		<input type="hidden" id="beschrijving" name="beschrijving" value="" />
 	{else}
-		<div id="bewerkPreview" class="preview"></div>
+		<div id="bewerkPreview" class="bbcodePreview"></div>
 		<label for="beschrijving"><strong>Lange beschrijving:</strong><br /><br />bbcode mogelijk</label>
 		<textarea id="beschrijving" name="beschrijving" rows="15">{$groep->getBeschrijving()|escape:'html'}</textarea><br />
 		<label for="submit"></label>

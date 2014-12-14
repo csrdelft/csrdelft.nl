@@ -129,7 +129,7 @@ ul.groepledenlijst{ width: 230px; float: right; padding: 10px 20px 20px 20px; ma
 .groepFormulier div.opmerking#periode{ width: 280px; }
 .groepFormulier .extraknopjespreview { float: right; }
 .groepFormulier input.voorbeeld{ margin-top: 0; }
-.groepFormulier div.preview{ width: 748px; }
+.groepFormulier div.bbcodePreview{ width: 748px; }
 
 #groepenFormulier{ width: 600px; }
 

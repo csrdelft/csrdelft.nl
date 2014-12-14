@@ -34,7 +34,7 @@
 	<input type="text" id="onderwerp" name="onderwerp" value="{$roodschopper->getOnderwerp()}" /><br />
 	
 	<div id="berichtContainer">
-		<div id="berichtPreview" class="preview"></div>
+		<div id="berichtPreview" class="bbcodePreview"></div>
 	</div>
 	<label for="berichtInvoer">Mailbericht:<br /><br />
 	<em class="small">Variabelen:<br />

@@ -56,7 +56,7 @@
 			{html_options name=categorie values=$courant->getCats() output=$courant->getCats(true) selected=$form.categorie}
 		<br /><br />
 		<strong>Bericht:</strong><br />
-		<div id="bewerkPreview" class="preview"></div>
+		<div id="bewerkPreview" class="bbcodePreview"></div>
 		<textarea name="bericht" id="courantBericht" cols="80" style="width: 100%;" rows="15" class="tekst">{$form.bericht|escape:'html'}</textarea>
 		<a href="http://csrdelft.nl/wiki/cie:diensten:forum" target="_blank">Opmaakhulp</a>
 		<a class="btn float-right vergroot" data-vergroot="#courantBericht" title="Vergroot het invoerveld">&uarr;&darr;</a>
