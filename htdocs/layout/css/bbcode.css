@@ -29,7 +29,7 @@ div.bbcodePreview {
 	background-color: #ffffc1;
 	border: 1px solid #ccc;
 }
-div.bbcodePreview, div.bbcodePreview div {
+div.bbcodePreview, div.bbcodePreview div, .Formulier div.bbcodePreview {
 	line-height: inherit;
 }
 span.offtopic { font-size: 11px; color: #bbb; }
