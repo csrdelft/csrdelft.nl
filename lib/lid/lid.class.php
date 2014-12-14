@@ -705,9 +705,9 @@ class Lid implements Serializable, Agendeerbaar {
 		}
 		// als het vierkant moet, kijken of de vierkante bestaat, en anders maken
 		if ($vierkant) {
-			$crop = PICS_PATH . $this->getUid() . 'vierkant.png';
-			if (!file_exists($crop)) {
-				square_crop(PICS_PATH . $path, $crop, 150);
+			$crop = 'pasfoto/' . $this->getUid() . '.vierkant.png';
+			if (!file_exists(PICS_PATH . $crop)) {
+				square_crop(PICS_PATH . $path, PICS_PATH . $crop, 150);
 			}
 			return $crop;
 		}
