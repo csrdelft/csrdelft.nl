@@ -183,12 +183,12 @@ class ImageField extends FileField {
 				$resize = 'Afbeelding is te hoog. Maximaal ' . $this->maxHeight . ' pixels.';
 			}
 			if ($resize) {
-				$percentWidth = floor($this->maxWidth / $width);
-				$percentHeight = floor($this->maxHeight / $height);
+				$percentWidth = floor((float) $this->maxWidth / (float) $width);
+				$percentHeight = floor((float) $this->maxHeight / (float) $height);
 				if ($percentWidth < $percentHeight) {
-					$percent = $percentWidth;
+					$percent = max(1, $percentWidth);
 				} else {
-					$percent = $percentHeight;
+					$percent = max(1, $percentHeight);
 				}
 				$directory = $this->getModel()->directory;
 				$filename = $this->getModel()->filename;
