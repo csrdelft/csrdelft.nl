@@ -60,7 +60,7 @@ class EetplanView extends AbstractEetplanView {
 		foreach ($this->aEetplan as $aEetplanVoorPheut) {
 			echo '<tr class="kleur' . ($row % 2) . '"><td><a href="/eetplan/noviet/' . $aEetplanVoorPheut[0]['uid'] . '">' . $aEetplanVoorPheut[0]['naam'] . '</a></td>';
 			foreach ($aToonAvonden as $iTeller) {
-				$huisnaam = $aHuizenArray[$aEetplanVoorPheut[$iTeller] - 1]['huisNaam'];
+				$huisnaam = $aHuizenArray[$aEetplanVoorPheut[$iTeller]]['huisNaam'];
 				$huisnaam = str_replace(array('Huize ', 'De ', 'Villa '), '', $huisnaam);
 				$huisnaam = substr($huisnaam, 0, 18);
 
