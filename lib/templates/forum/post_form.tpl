@@ -42,7 +42,7 @@
 	</td>
 	<td class="bericht0">
 
-		<form id="forumForm" action="/forum/posten/{$deel->forum_id}{if isset($draad)}/{$draad->draad_id}{/if}" method="post">
+		<form id="forumForm" class="Formulier" action="/forum/posten/{$deel->forum_id}{if isset($draad)}/{$draad->draad_id}{/if}" method="post">
 
 			{if !LoginModel::mag('P_LOGGED_IN')}
 				<div class="bericht">
@@ -51,16 +51,16 @@
 					forumdeel op in hun zoekresultaten.<br />
 					Het vermelden van <span class="cursief">uw naam en email-adres</span> is verplicht.
 				</div>
-				<input type="text" name="email" class="forumEmail" placeholder="Email-adres" />
-				<input type="text" name="firstname" value="" class="verborgen" />{* spam trap, must be kept empty! *}
+				<input type="text" name="email" class="FormElement TextField forumEmail" placeholder="Email-adres" />
+				<input type="text" name="firstname" value="" class="FormElement TextField verborgen" />{* spam trap, must be kept empty! *}
 				<br /><br />
 			{/if}
 			{if $draad === null}
-				<input type="text" id="nieuweTitel" name="titel" value="{$post_form_titel}" origvalue="{$post_form_titel}" class="tekst" placeholder="Onderwerp titel" />
+				<input type="text" id="nieuweTitel" name="titel" value="{$post_form_titel}" origvalue="{$post_form_titel}" class="FormElement TextField" placeholder="Onderwerp titel" />
 				<br /><br />
 			{/if}
 			<div id="berichtPreview" class="preview forumBericht"></div>
-			<textarea name="forumBericht" id="forumBericht" class="forumBericht" rows="12" origvalue="{$post_form_tekst}">{$post_form_tekst}</textarea>
+			<textarea name="forumBericht" id="forumBericht" class="FormElement CsrBBPreviewField forumBericht" rows="12" origvalue="{$post_form_tekst}">{$post_form_tekst}</textarea>
 			<div class="butn">
 				<input type="submit" name="submit" value="Opslaan" id="forumOpslaan" class="btn" />
 				<input type="button" value="Voorbeeld" id="forumVoorbeeld" class="btn" onclick="CsrBBPreview('forumBericht', 'berichtPreview');" />
@@ -73,7 +73,6 @@
 						<a href="/groepen/Ketzers" target="_blank">Ketzer maken</a> &nbsp;
 						<a href="http://csrdelft.nl/wiki/cie:diensten:forum" target="_blank">Opmaakhulp</a> &nbsp;
 					{/if}
-					<a class="btn vergroot" data-vergroot="#forumBericht" title="Vergroot het invoerveld">&uarr;&darr;</a>
 				</div>
 			</div>
 

@@ -9,7 +9,7 @@
 // ----------------------------------------------------------------------------
 // Feel free to add more tags
 // ----------------------------------------------------------------------------
-mySettings = {
+CsrBBcodeMarkItUpSet = {
 	nameSpace: 'CsrBB',
 	previewParserPath: '/tools/bbcode.php', // path to your BBCode parser
 	markupSet: [

@@ -34,6 +34,7 @@ function init_context(parent) {
 	init_buttons(parent);
 	init_forms(parent);
 	init_timeago(parent);
+	init_markitup(parent);
 	init_hoverIntents(parent);
 	init_lazy_images(parent);
 }
@@ -85,6 +86,10 @@ function init_timeago(parent) {
 	catch (err) {
 		// Missing js file
 	}
+}
+
+function init_markitup(parent) {
+	$(parent).find('textarea.CsrBBPreviewField').markItUp(CsrBBcodeMarkItUpSet); // CsrBBcodeMarkItUpSet is located in: /layout/js/markitup/sets/bbcode/set.js
 }
 
 function init_lazy_images(parent) {

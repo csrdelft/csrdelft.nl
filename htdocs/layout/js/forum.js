@@ -50,8 +50,6 @@ $(document).ready(function ($) {
 		window.location.hash = '#' + reactieid;
 	}
 
-	$textarea.markItUp(mySettings); // mySettings located in set.js
-
 	$textarea.keyup(function (event) {
 		if (event.keyCode == 13) { // enter
 			CsrBBPreview('forumBericht', 'berichtPreview');
@@ -134,13 +132,13 @@ function forumBewerken(postId) {
 			bewerkForm += '<div id="bewerkPreview" class="preview forumBericht"></div>';
 			bewerkForm += '<textarea name="forumBericht" id="forumBewerkBericht" class="tekst" rows="8"></textarea>';
 			bewerkForm += 'Reden van bewerking: <input type="text" name="reden" id="forumBewerkReden"/><br /><br />';
-			bewerkForm += '<div class="float-right"><a href="http://csrdelft.nl/wiki/cie:diensten:forum" target="_blank">Opmaakhulp</a> <a class="btn vergroot" data-vergroot="#forumBewerkBericht" title="Vergroot het invoerveld">&uarr;&darr;</a></div>';
+			bewerkForm += '<div class="float-right"><a href="http://csrdelft.nl/wiki/cie:diensten:forum" target="_blank">Opmaakhulp</a></div>';
 			bewerkForm += '<input type="button" value="Opslaan" onclick="submitPost();" /> <input type="button" value="Voorbeeld" onclick="CsrBBPreview(\'forumBewerkBericht\', \'bewerkPreview\');" /> <input type="button" value="Annuleren" onclick="restorePost();" />';
 			bewerkForm += '</form>';
 			bewerkContainer.innerHTML = bewerkForm;
 			document.getElementById('forumBewerkBericht').value = http.responseText;
 			$('#forumBewerkBericht').autosize();
-			$('#forumBewerkBericht').markItUp(mySettings); // mySettings located in set.js
+			$('#forumBewerkBericht').markItUp(CsrBBcodeMarkItUpSet); // CsrBBcodeMarkItUpSet is located in: /layout/js/markitup/sets/bbcode/set.js
 			$(bewerkContainer).parent().children('td.auteur:first').append('<div id="bewerk-melding">Als u dingen aanpast zet er dan even bij w&aacute;t u aanpast! Gebruik bijvoorbeeld [s]...[/s]</div>');
 			$('#bewerk-melding').slideDown(200);
 			$('#forumPosten').css('visibility', 'hidden');

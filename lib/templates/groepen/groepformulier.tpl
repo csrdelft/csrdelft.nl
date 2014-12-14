@@ -117,7 +117,7 @@
 		<textarea id="beschrijving" name="beschrijving" rows="15">{$groep->getBeschrijving()|escape:'html'}</textarea><br />
 		<label for="submit"></label>
 		<input type="button" class="voorbeeld" value="Voorbeeld" onclick="return CsrBBPreview('beschrijving', 'bewerkPreview')" /> 
-		<a href="http://csrdelft.nl/wiki/cie:diensten:forum" target="_blank">Opmaakhulp</a> 
+		<a href="http://csrdelft.nl/wiki/cie:diensten:forum" target="_blank">Opmaakhulp</a>
 		<a class="btn extraknopjespreview vergroot" data-vergroot="#beschrijving" title="Vergroot het invoerveld">&uarr;&darr;</a><br />
 	{/if}
 
