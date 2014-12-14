@@ -509,7 +509,7 @@ class DownloadUrlField extends UrlField {
 
 	public $filterMime;
 	private $downloader;
-	private $contents;
+	private $tmp_file;
 
 	public function __construct($name, array $filterMime) {
 		parent::__construct($name, 'http://', 'Downloaden van URL');
@@ -519,39 +519,34 @@ class DownloadUrlField extends UrlField {
 			if (!url_like($this->value)) {
 				return;
 			}
-			$this->contents = $this->file_get_contents($this->value);
-			if (empty($this->contents)) {
+			$data = $this->downloader->file_get_contents($this->value);
+			if (empty($data)) {
 				return;
 			}
 			$url_name = substr(trim($this->value), strrpos($this->value, '/') + 1);
 			$clean_name = preg_replace('/[^a-zA-Z0-9\s\.\-\_]/', '', $url_name);
-			// Bestand tijdelijk omslaan om mime-type te bepalen
-			$tmp_bestand = TMP_PATH . LoginModel::getUid() . '_' . time();
+			$this->tmp_file = TMP_PATH . $clean_name;
 			if (!is_writable(TMP_PATH)) {
 				throw new Exception('TMP_PATH is niet beschrijfbaar');
 			}
-			$filesize = file_put_contents($tmp_bestand, $this->contents);
+			$filesize = file_put_contents($this->tmp_file, $data);
 			$finfo = finfo_open(FILEINFO_MIME_TYPE);
-			$mime = finfo_file($finfo, $tmp_bestand);
+			$mimetype = finfo_file($finfo, $this->tmp_file);
 			finfo_close($finfo);
-			if (in_array($mime, Afbeelding::$mimeTypes)) {
-				$this->model = new Afbeelding($tmp_bestand);
+			if (in_array($mimetype, Afbeelding::$mimeTypes)) {
+				$this->model = new Afbeelding($this->tmp_file, true);
 			} else {
 				$this->model = new Bestand();
+				$this->model->filename = $clean_name;
+				$this->model->filesize = $filesize;
+				$this->model->mimetype = $mimetype;
+				$this->model->directory = TMP_PATH;
 			}
-			$this->model->filename = $clean_name;
-			$this->model->filesize = $filesize;
-			$this->model->mimetype = $mime;
-			unlink($tmp_bestand);
 		}
 	}
 
 	public function isAvailable() {
 		return $this->downloader->isAvailable();
-	}
-
-	protected function file_get_contents($url) {
-		return $this->downloader->file_get_contents($url);
 	}
 
 	public function getFilter() {
@@ -567,7 +562,7 @@ class DownloadUrlField extends UrlField {
 			$this->error = 'PHP.ini configuratie: fsocked, cURL of allow_url_fopen moet aan staan.';
 		} elseif (!url_like($this->value)) {
 			$this->error = 'Ongeldige url';
-		} elseif (empty($this->contents)) {
+		} elseif (!$this->model->exists() OR empty($this->model->filesize)) {
 			$error = error_get_last();
 			$pos = strrpos($error['message'], ': ') + 2;
 			$this->error = substr($error['message'], $pos);
@@ -576,11 +571,18 @@ class DownloadUrlField extends UrlField {
 	}
 
 	public function opslaan($destination, $filename, $overwrite = false) {
-		$filename .= '.html';
 		parent::opslaan($destination, $filename, $overwrite);
-		$put = file_put_contents($destination . $filename, $this->contents);
-		if ($put === false) {
-			throw new Exception('Bestand schrijven mislukt: ' . htmlspecialchars($destination . $filename));
+		if (file_exists($this->dir->path . $this->model->filename)) {
+			$copied = copy($this->dir->path . $this->model->filename, $destination . $filename);
+			if (!$copied) {
+				throw new Exception('Bestand kopieren mislukt: ' . htmlspecialchars($this->dir->path . $this->model->filename));
+			}
+		} else {
+			throw new Exception('Bestand bestaat niet (meer): ' . htmlspecialchars($this->dir->path . $this->model->filename));
+		}
+		$moved = unlink($this->dir->path . $this->model->filename);
+		if (!$moved) {
+			throw new Exception('Verplaatsen mislukt: ' . htmlspecialchars($this->dir->path . $this->model->filename));
 		}
 		if (false === @chmod($destination . $filename, 0644)) {
 			throw new Exception('Geen eigenaar van bestand: ' . htmlspecialchars($destination . $filename));
