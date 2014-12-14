@@ -679,15 +679,14 @@ class Lid implements Serializable, Agendeerbaar {
 	 * bool $square		Geef een pad naar een vierkante (150x150px) versie terug. (voor google contacts sync)
 	 */
 	function getPasfotoPath($vierkant = false, $vorm = 'user') {
-		if ($vorm === 'user') {
-			$vorm = LidInstellingen::get('forum', 'naamWeergave');
-		}
-		if (!LoginModel::mag('P_LOGGED_IN')) {
-			$vorm = 'civitas';
+		if ($vierkant OR ! LoginModel::mag('P_LOGGED_IN')) {
+			$folders = array('');
+		} elseif ($vorm === 'user') {
+			$folders = array(LidInstellingen::get('forum', 'naamWeergave') . '/', '');
 		}
 		$path = null;
 		// loop de volgende folders af op zoek naar de gevraagde pasfoto vorm
-		foreach (array($vorm . '/', '') as $subfolder) {
+		foreach ($folders as $subfolder) {
 			foreach (array('png', 'jpeg', 'jpg', 'gif') as $validExtension) {
 				if (file_exists(PICS_PATH . 'pasfoto/' . $subfolder . $this->getUid() . '.' . $validExtension)) {
 					$path = 'pasfoto/' . $subfolder . $this->getUid() . '.' . $validExtension;
@@ -706,9 +705,9 @@ class Lid implements Serializable, Agendeerbaar {
 		}
 		// als het vierkant moet, kijken of de vierkante bestaat, en anders maken
 		if ($vierkant) {
-			$crop = str_replace(array('.png', '.jpeg', '.jpg', '.gif'), array('.vierkant.png', '.vierkant.jpeg', '.vierkant.jpg', '.vierkant.gif'), $path);
+			$crop = PICS_PATH . $this->getUid() . 'vierkant.png';
 			if (!file_exists($crop)) {
-				square_crop(PICS_PATH . $path, PICS_PATH . $crop, 150);
+				square_crop(PICS_PATH . $path, $crop, 150);
 			}
 			return $crop;
 		}
