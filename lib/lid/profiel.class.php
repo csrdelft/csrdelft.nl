@@ -251,7 +251,7 @@ class ProfielBewerken extends Profiel {
 		if (!$duckfoto->exists() OR strpos($duckfoto->directory, '/Duckstad/') === false) {
 			$duckfoto = null;
 		}
-		$fields[] = new ImageField('duckfoto', 'Duck-pasfoto', $duckfoto, null, null, false, 50, 50, 175, 230);
+		$fields[] = new ImageField('duckfoto', 'Duck-pasfoto', $duckfoto, null, null, false, 100, 100, 175, 230);
 
 		$fields[] = new Subkopje('Adres:');
 		$fields[] = new RequiredTextField('adres', $profiel['adres'], 'Straatnaam + Huisnummer', 100);
