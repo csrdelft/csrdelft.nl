@@ -19,34 +19,34 @@ for ($es = 1; $es <= 47; $es++) {
 	}
 }
 
-
+# datums staan in /lib/model/EetplanModel.class.php
 # koppel de huizennummers aan huizen
 $kh = array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23);
 $khd = array(
-	0 => array('', '', ''),
-	1 => array('Huize Ihnshthabhielh', 1438, ''),
-	2 => array("Huize Den Hertog", 52, ''),
-	3 => array("De Molshoop", 34, ''),
-	4 => array("Sonnenvanck", 36, ''),
-	5 => array("De Gouden Leeuw", 8, ''),
-	6 => array("C.C.V.", 1303, ''),
-	7 => array("H.U.P.", 2116, ''),
-	8 => array("Theloneum", 1441, ''),
-	9 => array("Huize A.D.A.M. & Villa E.V.A.", 554, ''),
-	10 => array("De Preekstoel", 62, ''),
-	11 => array("Lachai-Roi", 57, ''),
-	12 => array("De Koornmarkt", 33, ''),
-	13 => array('t Internaat', 9, ''),
-	14 => array("Verdieping 1", 1683, ''),
-	15 => array('De Zilveren Hinde', 1017, ''),
-	16 => array('Oranje Boven', 1016, ''),
-	17 => array("Huize Van Speijk", 39, ''),
-	18 => array("Hotel Vlaams Gaius", 32, ''),
-	19 => array("De Zuidpool", 2120, ''),
-	20 => array("Villa Delphia", 37, ''),
-	21 => array('Huize * Asterix', 46, ''),
-	22 => array("OD11", 14, ''),
-	23 => array("De Balpolgroep", 13, '')
+	0	 => array('', '', ''),
+	1	 => array('Huize Ihnshthabhielh', 1438),
+	2	 => array("Huize Den Hertog", 52),
+	3	 => array("De Molshoop", 34),
+	4	 => array("Sonnenvanck", 36),
+	5	 => array("De Gouden Leeuw", 8),
+	6	 => array("C.C.V.", 1303),
+	7	 => array("H.U.P.", 2116),
+	8	 => array("Theloneum", 1441),
+	9	 => array("Huize A.D.A.M. & Villa E.V.A.", 554),
+	10	 => array("De Preekstoel", 62),
+	11	 => array("Lachai-Roi", 57),
+	12	 => array("De Koornmarkt", 33),
+	13	 => array('t Internaat', 9),
+	14	 => array("Verdieping 1", 1683),
+	15	 => array('De Zilveren Hinde', 1017),
+	16	 => array('Oranje Boven', 1016),
+	17	 => array("Huize Van Speijk", 39),
+	18	 => array("Hotel Vlaams Gaius", 32),
+	19	 => array("De Zuidpool", 2120),
+	20	 => array("Villa Delphia", 37),
+	21	 => array('Huize * Asterix', 46),
+	22	 => array("OD11", 14),
+	23	 => array("De Balpolgroep", 13)
 );
 
 # namen opzoeken in de database
@@ -76,8 +76,6 @@ $visited_sh = array(); # $visited_sh[sjaars][huis] = true
 $seen = array(); # $seen[sjaars][] = sjaars
 # sjaars die elkaar gezien hebben
 $seen[1411][1445] = true; // Annemijn, Henria (Huisgenoten)
-
-
 # sjaars die al in huizen wonen alvast rekening mee houden
 # voorbeeld: $visited_sh[$sjaarsuid][$huisuid]=true;
 $visited_sh[1401][1] = true; // Rico, Instabiel
@@ -94,7 +92,6 @@ $visited_sh[1417][12] = true; // Paul, Koornmarkt
 $visited_sh[1441][11] = true; // Thirza, Lachai-Roi
 $visited_sh[1427][5] = true; // Wessel, DGL
 $visited_sh[1445][16] = true; // Henria, Oranje Boven
-
 # het uiteindelijke rooster
 # $sah[sjaars][avond] = huis.. etc...
 $sah = array();
@@ -104,24 +101,24 @@ $ahs = array();
 //$sql='DELETE FROM `eetplan` WHERE `avond` > 4';
 //$result=$db->query($sql);
 # data die al in de tabel zit om later feuten toe te kunnen voegen
-/*$sql = 'SELECT avond, huis, GROUP_CONCAT(uid) AS uids FROM `eetplan` GROUP BY avond, huis';
-$db = MijnSqli::instance();
-$result = $db->query($sql);
-while ($rij = $db->next($result)) {
-	$sjaarsen = explode(',', $rij['uids']);
+/* $sql = 'SELECT avond, huis, GROUP_CONCAT(uid) AS uids FROM `eetplan` GROUP BY avond, huis';
+  $db = MijnSqli::instance();
+  $result = $db->query($sql);
+  while ($rij = $db->next($result)) {
+  $sjaarsen = explode(',', $rij['uids']);
 
-	foreach ($sjaarsen as $foo => $sjaars) {
-		$visited[$rij['huis']][] = $sjaars;
-		$visited_sh[$sjaars][$rij['huis']] = true;
-		$visited_ah[$rij['avond']][$rij['huis']][] = $sjaars;
-		$sah[$sjaars][$rij['avond']] = $rij['huis'];
-		$sah[$rij['avond']][$rij['huis']] = $sjaars;
+  foreach ($sjaarsen as $foo => $sjaars) {
+  $visited[$rij['huis']][] = $sjaars;
+  $visited_sh[$sjaars][$rij['huis']] = true;
+  $visited_ah[$rij['avond']][$rij['huis']][] = $sjaars;
+  $sah[$sjaars][$rij['avond']] = $rij['huis'];
+  $sah[$rij['avond']][$rij['huis']] = $sjaars;
 
-		foreach ($sjaarsen as $subsjaars) {
-			$seen[$sjaars][$subsjaars] = true;
-		}
-	}
-}*/
+  foreach ($sjaarsen as $subsjaars) {
+  $seen[$sjaars][$subsjaars] = true;
+  }
+  }
+  } */
 
 # huizen laten rondtellen
 if ($r == 0)
@@ -212,7 +209,6 @@ for ($ih = 1; $ih <= $h; $ih++) {
 	echo str_pad($ih, 10);
 	echo str_pad($khd[$kh[$ih]][0], 28);
 	echo str_pad($khd[$kh[$ih]][1], 40);
-	echo str_pad($khd[$kh[$ih]][2], 20);
 	echo "\n";
 }
 
@@ -263,7 +259,7 @@ foreach ($ks as $is) {
 
 echo "\n# <b>De Woonoorden</b>\n\n";
 for ($ih = 1; $ih <= $h; $ih++) {
-	echo "INSERT INTO `eetplanhuis` (`id`,`naam`, groepid,`telefoon`) VALUES ({$ih},'{$khd[$kh[$ih]][0]}',{$khd[$kh[$ih]][1]}, '{$khd[$kh[$ih]][2]}');\n";
+	echo "INSERT INTO `eetplanhuis` (`id`,`naam`, `groepid`) VALUES ({$ih},'{$khd[$kh[$ih]][0]}',{$khd[$kh[$ih]][1]});\n";
 }
 ?>
 </pre>

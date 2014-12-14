@@ -9,6 +9,17 @@
  */
 class EetplanModel {
 
+	function getDatum($iAvond) {
+		$aAvonden = array(
+			'28-10-2014',
+			'25-11-2014',
+			'23-12-2014',
+			'07-01-2014');
+		if ($iAvond < sizeof($aAvonden)) {
+			return $aAvonden[$iAvond - 1];
+		}
+	}
+
 	function getEetplan() {
 		//huizen laden
 		$rEetplan = MijnSqli::instance()->select("
@@ -107,17 +118,6 @@ class EetplanModel {
 				$aEetplan[] = $aEetplanData;
 			}
 			return $aEetplan;
-		}
-	}
-
-	function getDatum($iAvond) {
-		$aAvonden = array(
-			'28-10-2014',
-			'25-11-2014',
-			'23-12-2014',
-			'07-01-2014');
-		if ($iAvond < sizeof($aAvonden)) {
-			return $aAvonden[$iAvond - 1];
 		}
 	}
 
