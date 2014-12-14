@@ -32,8 +32,8 @@ class EetplanModel {
 				eetplan
 			INNER JOIN lid ON(eetplan.uid=lid.uid)
 			ORDER BY
- 				lid.achternaam, uid, avond;"
-		);
+ 				lid.achternaam, uid, avond;
+		");
 		$aEetplan = array();
 		$aEetplanRegel = array();
 		while ($aEetplanData = MijnSqli::instance()->next($rEetplan)) {
@@ -65,16 +65,15 @@ class EetplanModel {
 				eetplan.avond AS avond,
 				eetplanhuis.id AS huisID,
 				eetplanhuis.naam AS huisnaam,
-				eetplanhuis.adres AS huisadres,
-				eetplanhuis.groepid AS groepid,
-				eetplanhuis.telefoon AS telefoon
+				eetplanhuis.groepid AS groepid
 			FROM
 				eetplanhuis, eetplan
 			WHERE
 				eetplan.huis=eetplanhuis.id AND
 				eetplan.uid='" . MijnSqli::instance()->escape($iPheutID) . "'
 			ORDER BY
-				eetplan.avond;";
+				eetplan.avond;
+		";
 		$rEetplanVoorPheut = MijnSqli::instance()->select($sEetplanQuery);
 		if (MijnSqli::instance()->numRows($rEetplanVoorPheut) == 0) {
 			//deze feut bestaat niet
@@ -89,13 +88,10 @@ class EetplanModel {
 	}
 
 	function getEetplanVoorHuis($iHuisID) {
-		$db = MijnSqli::instance();
 		$sEetplanQuery = "
 			SELECT DISTINCT
 				eetplan.avond AS avond,
 				eetplanhuis.naam AS huisnaam,
-				eetplanhuis.adres AS huisadres,
-				eetplanhuis.telefoon AS huistelefoon,
 				eetplanhuis.groepid AS groepid,
 				eetplan.uid AS pheut,
 				lid.eetwens AS eetwens,
@@ -108,7 +104,8 @@ class EetplanModel {
 				eetplan.huis=eetplanhuis.id AND
 				eetplanhuis.id=" . $iHuisID . "
 			ORDER BY
-				eetplan.avond;";
+				eetplan.avond;
+		";
 		$rEetplanVoorHuis = MijnSqli::instance()->select($sEetplanQuery);
 		if (MijnSqli::instance()->numRows($rEetplanVoorHuis) == 0) {
 			//geen huis met dit ID
@@ -131,7 +128,8 @@ class EetplanModel {
 			FROM
 				eetplanhuis
 			ORDER BY
-				id;";
+				id;
+		";
 		$rHuizen = MijnSqli::instance()->select($sHuizenQuery);
 		while ($aHuizenData = MijnSqli::instance()->next($rHuizen)) {
 			$aHuizen[] = $aHuizenData;
