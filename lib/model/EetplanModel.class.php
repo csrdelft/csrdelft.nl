@@ -13,7 +13,10 @@ class EetplanModel {
 		$aAvonden = array(
 			'28-10-2014',
 			'25-11-2014',
-			'07-01-2014'
+			'20-01-2015',
+			'17-03-2015',
+			'12-05-2015',
+			'09-06-2015'
 		);
 		if ($iAvond > 0 AND $iAvond <= sizeof($aAvonden)) {
 			return $aAvonden[$iAvond - 1];
