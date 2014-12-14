@@ -175,7 +175,7 @@
 					var url = container.find('div.nav-bottom div.title').html().replace('{$CSR_PICS}', '');
 					$.post('/fotoalbum/albumcover' + dirname(url), {
 						foto: basename(url),
-					}, page_reload);
+					}, page_redirect);
 				}).insertAfter(btn);
 				// knopje linksom draaien
 				$('<span class="fa fa-undo jgallery-btn jgallery-btn-small" tooltip="Foto tegen de klok in draaien"></span>').click(function () {
