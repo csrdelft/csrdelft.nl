@@ -75,7 +75,7 @@ class EetplanView extends AbstractEetplanView {
 		//nog even een huizentabel erachteraan
 		echo '<h2>Huizen</h2>
 			<table class="eetplantabel">
-				<tr><th>Naam</th><th>Huispagina</th><th>Telefoon</th></tr>';
+				<tr><th>Naam</th><th>Huispagina</th></tr>';
 		foreach ($aHuizenArray as $aHuis) {
 			try {
 				$huis = new OldGroep($aHuis['groepid']);
@@ -87,7 +87,7 @@ class EetplanView extends AbstractEetplanView {
 			if ($huis instanceof OldGroep AND $huis->getId() != 0) {
 				echo $huis->getLink();
 			}
-			echo '</td><td>' . $aHuis['telefoon'] . '</td></tr>';
+			echo '</td></tr>';
 			$row++;
 		}
 		echo '</table>';
