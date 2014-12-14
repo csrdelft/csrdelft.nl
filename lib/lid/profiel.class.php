@@ -713,17 +713,17 @@ class ProfielStatus extends Profiel {
 	 */
 	private function getFieldsToSave($nieuwestatus) {
 		//per status: wel/niet bewaren van gePOSTe veldwaarde
-		//Veldnamen:				status,	perm,	lidaf,	postfx,	ontvCntl,adr,	echtg,	strfd,	kring
-		$bool['S_LID'] = array(true, true, false, true, false, false, false, false, true);
+		//Veldnamen:				status,	perm,	lidaf,	postfx,	ontvCntl,adr,	echtg,	strfd,	kring,	patroon
+		$bool['S_LID'] = array(true, true, false, true, false, false, false, false, true, true);
 		$bool['S_NOVIET'] = $bool['S_LID'];
 		$bool['S_GASTLID'] = $bool['S_LID'];
-		$bool['S_OUDLID'] = array(true, true, true, false, true, true, true, false, true);
+		$bool['S_OUDLID'] = array(true, true, true, false, true, true, true, false, true, false);
 		$bool['S_ERELID'] = $bool['S_OUDLID'];
-		$bool['S_KRINGEL'] = array(true, true, false, false, false, false, false, false, true);
-		$bool['S_OVERLEDEN'] = array(true, true, true, false, false, false, false, true, false);
-		$bool['S_NOBODY'] = array(true, true, true, false, false, false, false, false, true);
+		$bool['S_KRINGEL'] = array(true, true, false, false, false, false, false, false, true, false);
+		$bool['S_OVERLEDEN'] = array(true, true, true, false, false, false, false, true, false, false);
+		$bool['S_NOBODY'] = array(true, true, true, false, false, false, false, false, true, false);
 		$bool['S_EXLID'] = $bool['S_NOBODY'];
-		$bool['S_CIE'] = array(true, true, false, false, false, false, false, false, false);
+		$bool['S_CIE'] = array(true, true, false, false, false, false, false, false, false, false);
 
 		$bools = $bool[$nieuwestatus];
 		//'save' wordt gevuld met bovenstaande waardes
@@ -737,6 +737,7 @@ class ProfielStatus extends Profiel {
 		$return['echtgenoot'] = array('save' => $bools[6], 'reset' => null);
 		$return['sterfdatum'] = array('save' => $bools[7], 'reset' => null);
 		$return['kring'] = array('save' => $bools[8], 'reset' => 0);
+		$return['patroon'] = array('save' => $bools[9], 'reset' => null);
 
 		return $return;
 	}
