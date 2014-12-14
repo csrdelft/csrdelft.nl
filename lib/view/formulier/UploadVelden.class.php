@@ -210,13 +210,13 @@ class ImageField extends FileField {
 				$filename = $this->getModel()->filename;
 				$resized = $directory . $percent . $filename;
 				$command = IMAGEMAGICK_PATH . 'convert ' . escapeshellarg($directory . $filename) . ' -resize ' . $percent . '% -format jpg -quality 85 ' . escapeshellarg($resized);
-				//if (defined('RESIZE_OUTPUT')) {
-				debugprint($command);
-				//}
+				if (defined('RESIZE_OUTPUT')) {
+					debugprint($command);
+				}
 				$output = shell_exec($command);
-				//if (defined('RESIZE_OUTPUT')) {
-				debugprint($output);
-				//}
+				if (defined('RESIZE_OUTPUT')) {
+					debugprint($output);
+				}
 				if (false === @chmod($resized, 0644)) {
 					$this->getUploader()->error = $resize;
 				} else {
@@ -314,7 +314,7 @@ class UploadFileField extends InputField {
 		if ($this->isPosted()) {
 			$this->value = $_FILES[$this->name];
 			if (in_array($this->value['type'], Afbeelding::$mimeTypes)) {
-				$this->model = new Afbeelding($this->value['tmp_name']);
+				$this->model = new Afbeelding($this->value['tmp_name'], true);
 			} else {
 				$this->model = new Bestand();
 			}
