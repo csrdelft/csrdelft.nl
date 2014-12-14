@@ -126,9 +126,7 @@ class EetplanModel {
 			SELECT DISTINCT
 				id AS huisID,
 				naam AS huisNaam,
-				groepid,
-				adres,
-				telefoon
+				groepid
 			FROM
 				eetplanhuis
 			ORDER BY
