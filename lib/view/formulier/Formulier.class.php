@@ -272,7 +272,7 @@ JS;
 		if ($this->getTitel()) {
 			echo '<h1 class="Titel">' . $this->getTitel() . '</h1>';
 		}
-		debugprint($this->getError());
+		//debugprint($this->getError()); //DEBUG
 		foreach ($this->fields as $field) {
 			$field->view();
 		}

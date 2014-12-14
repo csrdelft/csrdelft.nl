@@ -53,14 +53,16 @@ if (!LoginModel::mag('P_LEDEN_READ') OR ! LoginModel::mag('P_OUDLEDEN_READ')) {
 			$profiel = new ProfielBewerken($uid, $actie);
 
 			if ($profiel->magBewerken()) {
-				if ($profiel->validate()) {
-					if ($profiel->save()) {
-						setMelding('Opslaan geslaagd', 1);
-						redirect(CSR_ROOT . '/profiel/' . $uid);
+				if ($profiel->isPosted()) {
+					if ($profiel->validate()) {
+						if ($profiel->save()) {
+							setMelding('Opslaan geslaagd', 1);
+							redirect(CSR_ROOT . '/profiel/' . $uid);
+						}
+						setMelding('Opslaan mislukt', -1);
+					} else {
+						setMelding('Invoer is niet volledig correct', -1);
 					}
-					setMelding('Opslaan mislukt', -1);
-				} else {
-					setMelding('Invoer is niet volledig correct', -1);
 				}
 				$midden = new ProfielEditContent($profiel, $actie);
 				break;
