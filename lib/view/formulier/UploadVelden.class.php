@@ -212,6 +212,10 @@ class BestandBehouden extends InputField {
 		$this->filterMime = $filterMime;
 	}
 
+	public function isPosted() {
+		return $this->isAvailable();
+	}
+
 	public function isAvailable() {
 		return $this->model instanceof Bestand;
 	}

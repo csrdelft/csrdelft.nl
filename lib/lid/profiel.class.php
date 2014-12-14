@@ -376,9 +376,11 @@ class ProfielBewerken extends Profiel {
 				//duck-pasfoto opslaan
 				if ($field->getName() === 'duckfoto') {
 					if ($field->getModel() instanceof Afbeelding) {
-						$path = $field->getModel()->filename;
-						$ext = '.' . pathinfo($path, PATHINFO_EXTENSION);
-						$field->opslaan(PICS_PATH . 'pasfoto/Duckstad/', $this->getUid() . $ext, true);
+						$filename = $field->getModel()->filename;
+						if ($filename !== 'eend.jpg') {
+							$ext = '.' . pathinfo($filename, PATHINFO_EXTENSION);
+							$field->opslaan(PICS_PATH . 'pasfoto/Duckstad/', $this->getUid() . $ext, true);
+						}
 					}
 					continue;
 				}
@@ -472,8 +474,6 @@ class ProfielStatus extends Profiel {
 		//relevante gegevens uit velden verwerken
 		foreach ($this->form->getFields() as $field) {
 			if ($field instanceof InputField) {
-				var_dump($field->getName());
-				var_dump($fieldsToSave[$field->getName()]['save']);
 				//mag het opgeslagen worden en is het wel een wijziging?
 				if ($fieldsToSave[$field->getName()]['save'] == true) {
 					if ($field->getValue() != $this->lid->getProperty($field->getName())) {

@@ -181,7 +181,8 @@ class Formulier implements View, Validator {
 	 */
 	public function isPosted() {
 		foreach ($this->fields as $field) {
-			if (($field instanceof InputField OR $field instanceof FileField) AND ! $field->isPosted()) {
+			if ($field instanceof InputField AND ! $field->isPosted()) {
+				//setMelding($field->getName() . ' is niet gepost', 2); //DEBUG
 				return false;
 			}
 		}
