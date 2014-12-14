@@ -37,3 +37,33 @@ class JsonResponse implements View {
 	}
 
 }
+
+class FlotDataResponse extends JsonResponse {
+
+	public function getJson($data) {
+		$array = array();
+		foreach ($data as $key => $entry) {
+			if (is_int($key)) {
+				$array[$key] = (int) $entry;
+			}
+		}
+		return json_encode($array);
+	}
+
+	public function view() {
+		http_response_code($this->code);
+		header('Content-Type: application/json');
+		echo '[' . "\n";
+		$comma = false;
+		foreach ($this->model as $data) {
+			if ($comma) {
+				echo ",\n";
+			} else {
+				$comma = true;
+			}
+			echo $this->getJson($data);
+		}
+		echo "\n]";
+	}
+
+}

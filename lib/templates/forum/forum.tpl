@@ -37,3 +37,8 @@
 		</tbody>
 	{/foreach}
 </table>
+
+<h2>Berichten per dag</h2>
+{if LoginModel::mag('P_LOGGED_IN')}
+	{include file='forum/stats_grafiek.tpl'}
+{/if}

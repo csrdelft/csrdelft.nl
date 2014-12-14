@@ -49,6 +49,7 @@ class ForumController extends Controller {
 
 			// ForumPost
 			case 'citeren':
+			case 'grafiekdata':
 				if (!LoginModel::mag('P_LOGGED_IN')) {
 					return false;
 				}
@@ -93,13 +94,14 @@ class ForumController extends Controller {
 			$this->action = 'forum';
 			parent::performAction(array());
 		}
-		if ((!$this->isPosted() OR $this->action == 'zoeken') AND $this->action != 'titelzoeken' AND $this->action != 'rss') {
+		if ((!$this->isPosted() OR $this->action == 'zoeken') AND ! in_array($this->action, array('titelzoeken', 'grafiekdata', 'rss'))) {
 			if (LoginModel::mag('P_LOGGED_IN')) {
 				$this->view = new CsrLayoutPage($this->view);
-				$layoutmap = 'layout';
+				if ($this->action === 'forum') {
+					$this->view->addCompressedResources('grafiek');
+				}
 			} else { // uitgelogd heeft nieuwe layout
 				$this->view = new CsrLayout2Page($this->view);
-				$layoutmap = 'layout2';
 			}
 			$this->view->addCompressedResources('forum');
 		}
@@ -110,6 +112,10 @@ class ForumController extends Controller {
 	 */
 	public function forum() {
 		$this->view = new ForumOverzichtView();
+	}
+
+	public function grafiekdata() {
+		$this->view = new FlotDataResponse(ForumPostsModel::instance()->getStats(Instellingen::get('forum', 'grafiek_periode')));
 	}
 
 	/**

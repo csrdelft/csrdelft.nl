@@ -55,8 +55,6 @@ if ($form->validate()) {
 }
 
 $pagina = new CsrLayoutPage($form);
-//$pagina->zijbalk = false; //geen zijbalk, overzichterlijker debuggen
-//$pagina->addCompressedResources('profiel');
 $pagina->view();
 
 /* end controller */
