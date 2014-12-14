@@ -790,7 +790,7 @@ function CsrBBPreview(sourceId, targetId) {
 	}
 	var bbcode = $(sourceId).val();
 	if (typeof bbcode !== 'string' || bbcode.trim() === '') {
-		$(targetId).html('');
+		$(targetId).html('').hide();
 		return;
 	}
 	$.post('/tools/bbcode.php', {
