@@ -89,7 +89,12 @@ function init_timeago(parent) {
 }
 
 function init_markitup(parent) {
-	$(parent).find('textarea.CsrBBPreviewField').markItUp(CsrBBcodeMarkItUpSet); // CsrBBcodeMarkItUpSet is located in: /layout/js/markitup/sets/bbcode/set.js
+	try {
+		$(parent).find('textarea.CsrBBPreviewField').markItUp(CsrBBcodeMarkItUpSet); // CsrBBcodeMarkItUpSet is located in: /layout/js/markitup/sets/bbcode/set.js
+	}
+	catch (err) {
+		// Missing js file
+	}
 }
 
 function init_lazy_images(parent) {
