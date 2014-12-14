@@ -372,16 +372,16 @@ class ProfielBewerken extends Profiel {
 		$this->changelog[] = 'Bewerking van [lid=' . LoginModel::getUid() . '] op [reldate]' . getDatetime() . '[/reldate]';
 
 		foreach ($this->form->getFields() as $field) {
-			//duck-pasfoto opslaan
-			if ($field->getName() === 'duckfoto') {
-				if ($field->getModel() instanceof Afbeelding) {
-					$path = $field->getModel()->filename;
-					$ext = '.' . pathinfo($path, PATHINFO_EXTENSION);
-					$field->opslaan(PICS_PATH . 'pasfoto/Duckstad/', $this->getUid() . $ext, true);
-				}
-				continue;
-			}
 			if ($field instanceof InputField) {
+				//duck-pasfoto opslaan
+				if ($field->getName() === 'duckfoto') {
+					if ($field->getModel() instanceof Afbeelding) {
+						$path = $field->getModel()->filename;
+						$ext = '.' . pathinfo($path, PATHINFO_EXTENSION);
+						$field->opslaan(PICS_PATH . 'pasfoto/Duckstad/', $this->getUid() . $ext, true);
+					}
+					continue;
+				}
 				//als een wachtwoordveld leeg is doen we er niets mee
 				if ($field instanceof WachtwoordWijzigenField AND $field->getValue() == '') {
 					continue;
