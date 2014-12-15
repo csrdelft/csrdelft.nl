@@ -3429,8 +3429,6 @@ htdocs_confide/default.css -text
 htdocs_confide/index.php -text
 htdocs_confide/mysql.ini.sample -text
 htdocs_confide/streeplijstrapportage.php -text
-images/famfamfam/.index -text
-images/robots.txt -text
 lib/BBCodeParser2/HTML/BBCodeParser2.php -text
 lib/BBCodeParser2/HTML/BBCodeParser2/Filter.php -text
 lib/BBCodeParser2/HTML/BBCodeParser2/Filter/Basic.php -text

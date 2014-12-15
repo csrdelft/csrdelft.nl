@@ -25,6 +25,7 @@ htdocs/handelingen
 htdocs/happening
 htdocs/layout/js/flot/examples
 htdocs/owee
+htdocs/plaetjes/*
 htdocs/tools/alphabanner/alphabanner.cache.*
 htdocs/wiki/*.iml
 htdocs/wiki/.idea
@@ -397,8 +398,6 @@ htdocs/wiki/lib/plugins/usermanager/lang/uk
 htdocs/wiki/lib/plugins/usermanager/lang/vi
 htdocs/wiki/lib/plugins/usermanager/lang/zh
 htdocs/wiki/lib/plugins/usermanager/lang/zh-tw
-images/*
-images/famfamfam/*.png
 lib/defines.include.php
 sessie/*
 /tmp
