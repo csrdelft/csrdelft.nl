@@ -271,7 +271,7 @@ class FotoAlbumController extends AclController {
 		if (!$this->hasParam('q')) {
 			$this->geentoegang();
 		}
-		$query = $this->getParam('q');
+		$query = iconv('utf-8', 'ascii//TRANSLIT', $this->getParam('q')); // convert accented characters to regular 
 		$limit = 5;
 		if ($this->hasParam('limit')) {
 			$limit = (int) $this->getParam('limit');
