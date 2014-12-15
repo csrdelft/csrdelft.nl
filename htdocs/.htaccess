@@ -1,7 +1,7 @@
 AddDefaultCharset utf-8
 RewriteEngine On
 
-RewriteRule ^plaetjes/(.*)$		tools/plaetjes.php?img=$1 [QSA,L]
+RewriteRule ^plaetjes/pasfoto/(.*)$		tools/plaetjes.php?img=pasfoto/$1 [QSA,L]
 
 RewriteRule ^(leden)?lijst/?(.*)$	tools/lijst.php [QSA,L]
 
