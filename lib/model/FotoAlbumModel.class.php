@@ -191,7 +191,7 @@ HTML;
 			// database in sync houden
 			// updaten gaat niet vanwege primary key
 			FotoModel::instance()->delete($cover);
-			$cover->filename = str_replace('folder', '', $cover->filename);
+			$cover->filename = substr_replace($cover->filename, 'folder', strrpos($cover->filename, '.'), 0);
 			FotoModel::instance()->create($cover);
 		}
 		return $success;
