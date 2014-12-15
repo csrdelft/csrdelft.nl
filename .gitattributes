@@ -512,6 +512,7 @@ htdocs/tools/naamsuggesties.php -text
 htdocs/tools/pasfotos.php -text
 htdocs/tools/peilingbeheer.php -text
 htdocs/tools/phpinfo.php -text
+htdocs/tools/plaetjes.php -text
 htdocs/tools/profiel.php -text
 htdocs/tools/query.php -text
 htdocs/tools/roodschopper.php -text
