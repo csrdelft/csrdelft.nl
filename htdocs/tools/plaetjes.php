@@ -2,7 +2,7 @@
 
 require_once 'configuratie.include.php';
 
-$img = PICS_PATH . filter_input(INPUT_GET, 'img', FILTER_SANITIZE_URL);
+$img = PICS_PATH . filter_input(INPUT_GET, 'img', FILTER_SANITIZE_ENCODED);
 
 // voorkom path traversal
 if (strpos($img, '..') !== false) {
@@ -16,8 +16,6 @@ if (preg_match($alleenLeden, $img) AND ! LoginModel::mag('P_LEDEN_READ')) {
 	http_response_code(401);
 	exit;
 }
-
-debugprint($img);
 
 if (file_exists($img) AND is_readable($img)) {
 
