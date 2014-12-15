@@ -146,7 +146,7 @@ HTML;
 			foreach (FotoModel::instance()->find('subdir LIKE ?', array($oldDir . '%')) as $foto) {
 				// updaten gaat niet vanwege primary key
 				FotoModel::instance()->delete($foto);
-				$foto->subdir = str_replace($oldDir, $newDir, $album->subdir);
+				$foto->subdir = str_replace($oldDir, $newDir, $foto->subdir);
 				FotoModel::instance()->create($foto);
 			}
 		}
