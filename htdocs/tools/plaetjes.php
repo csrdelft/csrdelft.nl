@@ -19,7 +19,7 @@ if (preg_match($alleenLeden, $img) AND ! LoginModel::mag('P_LEDEN_READ')) {
 
 if (file_exists($img) AND is_readable($img)) {
 
-	switch (substr($img, -4)) {
+	switch (strtolower(substr($img, -4))) {
 		case 'jpeg':
 		case '.jpg':
 			$mime = 'image/jpeg';
