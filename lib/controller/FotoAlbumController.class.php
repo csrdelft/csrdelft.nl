@@ -22,7 +22,7 @@ class FotoAlbumController extends AclController {
 				'downloaden' => 'P_ALBUM_DOWN',
 				'verwerken'	 => 'P_ALBUM_MOD',
 				'uploaden'	 => 'P_ALBUM_ADD',
-				'zoeken'	 => 'P_ALBUM_READ'
+				'zoeken'	 => 'P_LEDEN_READ'
 			);
 		} else {
 			$this->acl = array(
@@ -270,22 +270,18 @@ class FotoAlbumController extends AclController {
 	public function zoeken() {
 		if (!$this->hasParam('q')) {
 			$this->geentoegang();
-		} else {
-			$query = iconv('utf-8', 'ascii//TRANSLIT', $this->getParam('q')); // convert accented characters to regular
 		}
+		$query = $this->getParam('q');
 		$limit = 5;
 		if ($this->hasParam('limit')) {
 			$limit = (int) $this->getParam('limit');
 		}
 		$result = array();
-		foreach ($this->model->find('subdir LIKE ?', array('%' . $query . '%'), 'subdir DESC', null, $limit) as $album) {
-			// check album name in case of subalbum hits and convert accented characters to regular
-			if (stripos(iconv('utf-8', 'ascii//TRANSLIT', $album->dirname), $query) !== false AND $album->magBekijken()) {
-				$result[] = array(
-					'url'	 => $album->getUrl(),
-					'value'	 => ucfirst($album->dirname) . '<span class="lichtgrijs"> - ' . $album->getParentName() . '</span>'
-				);
-			}
+		foreach ($this->model->find('subdir REGEXP ?', array($query . '[^/]*[/]{1}$'), 'subdir DESC', null, $limit) as $album) {
+			$result[] = array(
+				'url'	 => $album->getUrl(),
+				'value'	 => ucfirst($album->dirname) . '<span class="lichtgrijs"> - ' . $album->getParentName() . '</span>'
+			);
 		}
 		$this->view = new JsonResponse($result);
 	}

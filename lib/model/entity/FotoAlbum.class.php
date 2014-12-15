@@ -194,12 +194,11 @@ class FotoAlbum extends Map {
 		}
 		if (LoginModel::mag('P_LEDEN_READ')) {
 			return true;
-		} else {
-			if (preg_match(self::$alleenLeden, $this->path)) {
-				return false; // Deze foto's alleen voor leden
-			}
-			return true;
 		}
+		if (preg_match(self::$alleenLeden, $this->path)) {
+			return false;
+		}
+		return true;
 	}
 
 	public function isOwner() {
