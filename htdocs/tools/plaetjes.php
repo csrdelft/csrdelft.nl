@@ -17,6 +17,8 @@ if (preg_match($alleenLeden, $img) AND ! LoginModel::mag('P_LEDEN_READ')) {
 	exit;
 }
 
+debugprint($img);
+
 if (file_exists($img) AND is_readable($img)) {
 
 	switch (substr($img, -4)) {
@@ -36,8 +38,8 @@ if (file_exists($img) AND is_readable($img)) {
 	}
 
 	header('Content-type: ' . $mime);
-	header('Content-length: ' . filesize(PICS_PATH . $img));
-	readfile(PICS_PATH . $img);
+	header('Content-length: ' . filesize($img));
+	readfile($img);
 } else {
 	http_response_code(404);
 }
