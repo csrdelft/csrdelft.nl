@@ -2,7 +2,12 @@
 
 require_once 'configuratie.include.php';
 
-$img = filter_input(INPUT_GET, 'img', FILTER_SANITIZE_URL);
+$img = realpath(PICS_PATH . filter_input(INPUT_GET, 'img', FILTER_SANITIZE_URL));
+
+if (!$img OR ! startsWith($img, PICS_PATH)) {
+	http_response_code(403);
+	exit;
+}
 
 $alleenLeden = '/(pasfoto|intern|novitiaat|ontvoering|feuten|slachten|zuipen|prive|privé|Posters)/i';
 
@@ -11,7 +16,7 @@ if (preg_match($alleenLeden, $img) AND ! LoginModel::mag('P_LEDEN_READ')) {
 	exit;
 }
 
-if (strpos($img, '/../') !== false AND file_exists(PICS_PATH . $img) AND is_readable(PICS_PATH . $img)) {
+if (file_exists($img) AND is_readable($img)) {
 
 	switch (substr($img, -4)) {
 		case 'jpeg':
