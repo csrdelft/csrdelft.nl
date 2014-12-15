@@ -4,14 +4,16 @@ $file = filter_input(INPUT_GET, 'img', FILTER_SANITIZE_URL);
 
 $alleenLeden = '/(pasfoto|intern|novitiaat|ontvoering|feuten|slachten|zuipen|prive|privé|Posters)/i';
 
-debugprint(PICS_PATH . $file);
+echo PICS_PATH . $file;
 
 if (preg_match($alleenLeden, $file) AND ! LoginModel::mag('P_LEDEN_READ')) {
-	http_response_code(403);
+	http_response_code(401);
+	echo 'Unauthorized';
 	exit;
 }
 
 if (valid_filename($file) AND file_exists(PICS_PATH . $file)) {
+	echo 'OK';
 	/*
 	  header('Content-Description: File Transfer');
 	  header('Content-Type: application/octet-stream');
@@ -27,4 +29,5 @@ if (valid_filename($file) AND file_exists(PICS_PATH . $file)) {
 	readfile(PICS_PATH . $file);
 } else {
 	http_response_code(404);
+	echo 'Not Found';
 }
