@@ -190,11 +190,11 @@ class ForumController extends Controller {
 					$url .= '#reageren';
 				}
 				if ($draad->gesloten) {
-					$icon = '<img src="http://plaetjes.csrdelft.nl/famfamfam/lock.png" width="16" height="16" alt="slotje" title="Dit onderwerp is gesloten, u kunt niet meer reageren" class="icon"> ';
+					$icon = '<img src="//csrdelft.nl/plaetjes/famfamfam/lock.png" width="16" height="16" alt="slotje" title="Dit onderwerp is gesloten, u kunt niet meer reageren" class="icon"> ';
 				} elseif ($draad->belangrijk) {
-					$icon = '<img src="http://plaetjes.csrdelft.nl/famfamfam/asterisk_orange.png" width="16" height="16" alt="belangrijk" title="Dit onderwerp is door het bestuur aangemerkt als belangrijk." class="icon"> ';
+					$icon = '<img src="//csrdelft.nl/plaetjes/famfamfam/asterisk_orange.png" width="16" height="16" alt="belangrijk" title="Dit onderwerp is door het bestuur aangemerkt als belangrijk." class="icon"> ';
 				} elseif ($draad->plakkerig) {
-					$icon = '<img src="http://plaetjes.csrdelft.nl/famfamfam/note.png" width="16" height="16" alt="plakkerig" title="Dit onderwerp is plakkerig, het blijft bovenaan." class="icon"> ';
+					$icon = '<img src="//csrdelft.nl/plaetjes/famfamfam/note.png" width="16" height="16" alt="plakkerig" title="Dit onderwerp is plakkerig, het blijft bovenaan." class="icon"> ';
 				} else {
 					$icon = '';
 				}

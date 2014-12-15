@@ -16,10 +16,10 @@ h1 a, h2 a, h3 a, h4 a, h5 a, h6 a{ color: #ebc474 !important; }
 a, #footer a{ color: white; }
 a:hover{ color: #ebc474 !important; }
 #beeldmerk{
-	background-image: url('http://plaetjes.csrdelft.nl/lustrum/logo.png');
+	background-image: url('//csrdelft.nl/plaetjes/lustrum/logo.png');
 }
 #submenuitems span.separator{
-	background-image: url('http://plaetjes.csrdelft.nl/lustrum/spacer.png');
+	background-image: url('//csrdelft.nl/plaetjes/lustrum/spacer.png');
 }
 #container{
 	border: none;
@@ -73,7 +73,7 @@ a.btn, textarea, input, select, #filters span, #boekencatalogus_wrapper *, .mede
 /* Lustrum style, later te veranderen in aparte stylesheet */
 /* Temp quick fix */
 body{
-	background: #000 url('http://plaetjes.csrdelft.nl/lustrum/body.png') repeat-x !important;
+	background: #000 url('//csrdelft.nl/plaetjes/lustrum/body.png') repeat-x !important;
 }
 
 #menubanner{
@@ -94,13 +94,13 @@ body{
 	float: left;
 	color: #000 !important;
 	height: 31px !important;
-	background: url('http://plaetjes.csrdelft.nl/lustrum/nav.png') no-repeat;
+	background: url('//csrdelft.nl/plaetjes/lustrum/nav.png') no-repeat;
 }
 
 #mainmenu a:hover, #mainmenu a:active, #mainmenu a.active {
 	padding: 10px 0 0 6px;
 	margin: -10px 0 0 -6px;
-	background: url('http://plaetjes.csrdelft.nl/lustrum/nav_active.png') no-repeat;
+	background: url('//csrdelft.nl/plaetjes/lustrum/nav_active.png') no-repeat;
 }
 
 #beeldmerk{

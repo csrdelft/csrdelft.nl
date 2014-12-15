@@ -3,7 +3,7 @@
 /**
  * Icon dingetje voor csrdelft.nl.
  *
- * Icon::get('bewerken'); geeft bijvoorbeeld http://plaetjes.csrdelft.nl/famfamfam/pencil.png
+ * Icon::get('bewerken'); geeft bijvoorbeeld //csrdelft.nl/plaetjes/famfamfam/pencil.png
  */
 class Icon {
 

@@ -583,7 +583,7 @@ $('#{$this->getId()}').jPicker({
 		alphaSupport: true
 	},
 	images: {
-		clientPath: 'http://plaetjes.csrdelft.nl/jpicker/'
+		clientPath: '//csrdelft.nl/plaetjes/jpicker/'
 	}
 });
 JS;

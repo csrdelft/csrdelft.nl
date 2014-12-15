@@ -13,9 +13,9 @@ function preloadImg(href) {
 	$('<img/>')[0].src = href;
 }
 
-preloadImg('http://plaetjes.csrdelft.nl/layout/loading-fb.gif');
-preloadImg('http://plaetjes.csrdelft.nl/layout/loading-arrows.gif');
-preloadImg('http://plaetjes.csrdelft.nl/layout/loading_bar_black.gif');
+preloadImg('//csrdelft.nl/plaetjes/layout/loading-fb.gif');
+preloadImg('//csrdelft.nl/plaetjes/layout/loading-arrows.gif');
+preloadImg('//csrdelft.nl/plaetjes/layout/loading_bar_black.gif');
 
 $(document).ready(function () {
 	init_page();
@@ -102,7 +102,7 @@ function init_lazy_images(parent) {
 		var content = $(document.createElement('IMG'));
 		content.error(function () {
 			$(this).attr('title', 'Afbeelding bestaat niet of is niet toegankelijk!');
-			$(this).attr('src', 'http://plaetjes.csrdelft.nl/famfamfam/picture_error.png');
+			$(this).attr('src', '//csrdelft.nl/plaetjes/famfamfam/picture_error.png');
 			$(this).css('width', '16px');
 			$(this).css('height', '16px');
 			$(this).removeClass('bb-img-loading').addClass('bb-img');
@@ -337,7 +337,7 @@ function modal_open(htmlString) {
 		$('#modal input:visible:first').focus();
 	}
 	else {
-		$('#modal-background').css('background-image', 'url("http://plaetjes.csrdelft.nl/layout/loading_bar_black.gif")');
+		$('#modal-background').css('background-image', 'url("//csrdelft.nl/plaetjes/layout/loading_bar_black.gif")');
 		$('#modal').hide();
 		$('#modal').html('');
 	}
@@ -575,7 +575,7 @@ function remove() {
 
 function ajax_request(type, url, data, source, onsuccess, onerror, onfinish) {
 	if (source) {
-		$(source).replaceWith('<img title="' + url + '" src="http://plaetjes.csrdelft.nl/layout/loading-arrows.gif" />');
+		$(source).replaceWith('<img title="' + url + '" src="//csrdelft.nl/plaetjes/layout/loading-arrows.gif" />');
 		source = 'img[title="' + url + '"]';
 	}
 	else {
@@ -603,7 +603,7 @@ function ajax_request(type, url, data, source, onsuccess, onerror, onfinish) {
 			errorThrown = 'Nog bezig met laden!';
 		}
 		if (source) {
-			$(source).replaceWith('<img title="' + errorThrown + '" src="http://plaetjes.csrdelft.nl/famfamfam/cancel.png" />');
+			$(source).replaceWith('<img title="' + errorThrown + '" src="//csrdelft.nl/plaetjes/famfamfam/cancel.png" />');
 		}
 		else {
 			modal_close();
@@ -620,7 +620,7 @@ function ajax_request(type, url, data, source, onsuccess, onerror, onfinish) {
 }
 
 function ketzer_ajax(url, ketzer) {
-	$(ketzer + ' .aanmelddata').html('Aangemeld:<br /><img src="http://plaetjes.csrdelft.nl/layout/loading-arrows.gif" />');
+	$(ketzer + ' .aanmelddata').html('Aangemeld:<br /><img src="//csrdelft.nl/plaetjes/layout/loading-arrows.gif" />');
 	var jqXHR = $.ajax({
 		type: 'GET',
 		cache: false,

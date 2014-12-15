@@ -16,7 +16,7 @@ $(function () {
 
 
 	// Background image
-	$.backstretch('http://plaetjes.csrdelft.nl/layout2/bg-image-16.jpg');
+	$.backstretch('//csrdelft.nl/plaetjes/layout2/bg-image-16.jpg');
 
 
 	// Login form enhancing

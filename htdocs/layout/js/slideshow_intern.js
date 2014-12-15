@@ -37,9 +37,9 @@ for(e = 0; e < aantal_per_serie; e++) {
 	if(thefile<10){
 		thefile="0"+thefile;
 	}
-	document.write('<div id="'+theid+'"><img src="http://plaetjes.csrdelft.nl/owee/2009/slides_intern/foto'+thefile+'.jpg" /></div>');
+	document.write('<div id="'+theid+'"><img src="//csrdelft.nl/plaetjes/owee/2009/slides_intern/foto'+thefile+'.jpg" /></div>');
 }
-document.write('<img src="http://plaetjes.csrdelft.nl/layout/pauze.gif" onclick="if(paused==0){paused=1;this.src=\'http://plaetjes.csrdelft.nl/layout/speel.gif\';pause();}else{paused=0;this.src=\'http://plaetjes.csrdelft.nl/layout/pauze.gif\';resume(true);}" style="display: block; position: absolute; left: 310px; top: 193px; z-index: 3; opacity: .4; filter: alpha(opacity=40);cursor: pointer;" />');
+document.write('<img src="//csrdelft.nl/plaetjes/layout/pauze.gif" onclick="if(paused==0){paused=1;this.src=\'//csrdelft.nl/plaetjes/layout/speel.gif\';pause();}else{paused=0;this.src=\'//csrdelft.nl/plaetjes/layout/pauze.gif\';resume(true);}" style="display: block; position: absolute; left: 310px; top: 193px; z-index: 3; opacity: .4; filter: alpha(opacity=40);cursor: pointer;" />');
 //document.write('<a href="#" onclick="next();" style="display: block; position: absolute; left: 150px; top: 200px; z-index: 3; opacity: .4; filter: alpha(opacity=40);"><img src="pauze.gif" /></a>');
 //document.write('<a href="#" onclick="previous();" style="display: block; position: absolute; left: 50px; top: 200px; z-index: 3; opacity: .4; filter: alpha(opacity=40);"><img src="pauze.gif" /></a>');
 

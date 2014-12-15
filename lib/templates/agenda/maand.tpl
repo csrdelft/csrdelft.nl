@@ -40,7 +40,7 @@
 								</li>
 							{elseif $item instanceof Maaltijd}
 								<li>
-									<img src="http://plaetjes.csrdelft.nl/maalcie/cutlery.png" width="16" height="16" alt="cutlery" class="icon" />
+									<img src="//csrdelft.nl/plaetjes/maalcie/cutlery.png" width="16" height="16" alt="cutlery" class="icon" />
 									<div class="tijd">{$item->getBeginMoment()|date_format:"%R"}</div>
 									<a href="{$item->getLink()}" title="{$item->getBeschrijving()}">
 										{$item->getTitel()}
@@ -49,7 +49,7 @@
 							{elseif $item instanceof CorveeTaak}
 								<li>
 									{if $item->getCorveeFunctie()->naam|stristr:"klus"}
-										<img src="http://plaetjes.csrdelft.nl/maalcie/drill.png" width="16" height="16" alt="drill" class="icon" />
+										<img src="//csrdelft.nl/plaetjes/maalcie/drill.png" width="16" height="16" alt="drill" class="icon" />
 									{else}
 										{icon get="paintcan"}
 									{/if}

@@ -3,73 +3,73 @@
 // By Jay Salvat - http://markitup.jaysalvat.com/
 // ------------------------------------------------------------------*/
 .markItUp .btn-b a	{
-	background-image:url(http://plaetjes.csrdelft.nl/famfamfam/text_bold.png);
+	background-image:url(//csrdelft.nl/plaetjes/famfamfam/text_bold.png);
 }
 .markItUp .btn-i a	{
-	background-image:url(http://plaetjes.csrdelft.nl/famfamfam/text_italic.png);
+	background-image:url(//csrdelft.nl/plaetjes/famfamfam/text_italic.png);
 }
 .markItUp .btn-u a	{
-	background-image:url(http://plaetjes.csrdelft.nl/famfamfam/text_underline.png);
+	background-image:url(//csrdelft.nl/plaetjes/famfamfam/text_underline.png);
 }
 .markItUp .btn-s a	{
-	background-image:url(http://plaetjes.csrdelft.nl/famfamfam/text_strikethrough.png);
+	background-image:url(//csrdelft.nl/plaetjes/famfamfam/text_strikethrough.png);
 }
 .markItUp .btn-ot a	{
-	background-image:url(http://plaetjes.csrdelft.nl/famfamfam/text_smallcaps.png);
+	background-image:url(//csrdelft.nl/plaetjes/famfamfam/text_smallcaps.png);
 }
 .markItUp .btn-quote a	{
-	background-image:url(http://plaetjes.csrdelft.nl/famfamfam/comments.png);
+	background-image:url(//csrdelft.nl/plaetjes/famfamfam/comments.png);
 }
 /*
 .markItUp .btn-kop a	{
-	background-image:url(http://plaetjes.csrdelft.nl/famfamfam/style.png);
+	background-image:url(//csrdelft.nl/plaetjes/famfamfam/style.png);
 }
 .markItUp .btn-h1 a	{
-	background-image:url(http://plaetjes.csrdelft.nl/famfamfam/text_heading_1.png);
+	background-image:url(//csrdelft.nl/plaetjes/famfamfam/text_heading_1.png);
 }
 .markItUp .btn-lijst-1 a	{
-	background-image:url(http://plaetjes.csrdelft.nl/famfamfam/text_list_numbers.png);
+	background-image:url(//csrdelft.nl/plaetjes/famfamfam/text_list_numbers.png);
 }
 .markItUp .btn-lijst-a a	{
-	background-image:url(http://plaetjes.csrdelft.nl/famfamfam/text_list_bullets.png);
+	background-image:url(//csrdelft.nl/plaetjes/famfamfam/text_list_bullets.png);
 }
 .markItUp .btn-lijst-punt a	{
 	background-image:url(images/list-item.png);
 }
 */
 .markItUp .btn-link a	{
-	background-image:url(http://plaetjes.csrdelft.nl/famfamfam/link.png);
+	background-image:url(//csrdelft.nl/plaetjes/famfamfam/link.png);
 }
 .markItUp .btn-mail a	{
-	background-image:url(http://plaetjes.csrdelft.nl/famfamfam/email_link.png);
+	background-image:url(//csrdelft.nl/plaetjes/famfamfam/email_link.png);
 }
 
 .markItUp .btn-album a	{
-	background-image:url(http://plaetjes.csrdelft.nl/famfamfam/photos.png);
+	background-image:url(//csrdelft.nl/plaetjes/famfamfam/photos.png);
 }
 .markItUp .btn-foto a	{
-	background-image:url(http://plaetjes.csrdelft.nl/famfamfam/photo.png);
+	background-image:url(//csrdelft.nl/plaetjes/famfamfam/photo.png);
 }
 .markItUp .btn-img a	{
-	background-image:url(http://plaetjes.csrdelft.nl/famfamfam/picture.png);
+	background-image:url(//csrdelft.nl/plaetjes/famfamfam/picture.png);
 }
 .markItUp .btn-vid a	{
-	background-image:url(http://plaetjes.csrdelft.nl/famfamfam/film.png);
+	background-image:url(//csrdelft.nl/plaetjes/famfamfam/film.png);
 }
 .markItUp .btn-map a	{
-	background-image:url(http://plaetjes.csrdelft.nl/famfamfam/map.png);
+	background-image:url(//csrdelft.nl/plaetjes/famfamfam/map.png);
 }
 .markItUp .btn-spoiler a	{
-	background-image:url(http://plaetjes.csrdelft.nl/famfamfam/sound_mute.png);
+	background-image:url(//csrdelft.nl/plaetjes/famfamfam/sound_mute.png);
 }
 .markItUp .btn-prive a	{
-	background-image:url(http://plaetjes.csrdelft.nl/famfamfam/shield.png);
+	background-image:url(//csrdelft.nl/plaetjes/famfamfam/shield.png);
 }
 .markItUp .btn-code a	{
-	background-image:url(http://plaetjes.csrdelft.nl/famfamfam/script_code_red.png);
+	background-image:url(//csrdelft.nl/plaetjes/famfamfam/script_code_red.png);
 }
 .markItUp .btn-off a	{
-	background-image:url(http://plaetjes.csrdelft.nl/famfamfam/tag.png);
+	background-image:url(//csrdelft.nl/plaetjes/famfamfam/tag.png);
 }
 .markItUp .btn-clean a {
 	background-image:url(images/clean.png);
