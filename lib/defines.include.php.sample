@@ -25,7 +25,7 @@ define('TIME_MEASURE', false);
 define('CONFIDE_IP', '80.112.180.123');
 
 # urls ZONDER trailing slash
-define('CSR_PICS', 'http://plaetjes.csrdelft.nl');
+define('CSR_PICS', 'http://csrdelft.nl/plaetjes');
 define('CSR_ROOT', 'http://csrdelft.nl');
 
 # paden MET trailing slash

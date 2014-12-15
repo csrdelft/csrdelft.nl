@@ -1,6 +1,8 @@
 AddDefaultCharset utf-8
 RewriteEngine On
 
+RewriteRule ^plaetjes/		../images/ [L]
+
 RewriteRule ^(leden)?lijst/?(.*)$	tools/lijst.php [QSA,L]
 
 RewriteRule ^profiel/([0-9a-z]+)/([a-zA-Z]+)/([a-zA-Z]+)/?$	tools/profiel.php?uid=$1&a=$2&s=$3 [QSA,L]
