@@ -473,6 +473,7 @@ htdocs/mededelingen/goedkeuren.php -text
 htdocs/mededelingen/index.php -text
 htdocs/mededelingen/top3overzicht.php -text
 htdocs/onderhoud.html -text
+htdocs/plaetjes/robots.txt -text
 htdocs/robots.txt -text
 htdocs/tools/.htaccess -text
 htdocs/tools/alphabanner/alphabanner.php -text
