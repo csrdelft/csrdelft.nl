@@ -128,29 +128,45 @@ HTML;
 		if (!valid_filename($newName)) {
 			throw new Exception('Ongeldige naam');
 		}
+		// controleer rechten
 		$oldDir = $album->subdir;
-		$newDir = dirname($oldDir) . '/' . $newName . '/';
-		$success = rename($album->path, PICS_PATH . $newDir);
-		if ($success) {
-			// database in sync houden
-			$album->dirname = basename($newDir);
-			$album->subdir = $newDir;
-			$album->path = PICS_PATH . $newDir;
-
-			foreach ($this->find('subdir LIKE ?', array($oldDir . '%')) as $subdir) {
-				// updaten gaat niet vanwege primary key
-				$this->delete($subdir);
-				$subdir->subdir = str_replace($oldDir, $newDir, $album->subdir);
-				$this->create($subdir);
-			}
-			foreach (FotoModel::instance()->find('subdir LIKE ?', array($oldDir . '%')) as $foto) {
-				// updaten gaat niet vanwege primary key
-				FotoModel::instance()->delete($foto);
-				$foto->subdir = str_replace($oldDir, $newDir, $foto->subdir);
-				FotoModel::instance()->create($foto);
-			}
+		if (false === @chmod(PICS_PATH . $oldDir, 0755)) {
+			throw new Exception('Geen eigenaar van album: ' . htmlspecialchars(PICS_PATH . $oldDir));
 		}
-		return $success;
+
+		// nieuwe subdir op basis van path
+		$newDir = dirname($oldDir) . '/' . $newName . '/';
+		if (false === @rename($album->path, PICS_PATH . $newDir)) {
+			$error = error_get_last();
+			throw new Exception($error['message']);
+		}
+		// controleer rechten
+		if (false === @chmod(PICS_PATH . $newDir, 0755)) {
+			throw new Exception('Geen eigenaar van album: ' . htmlspecialchars(PICS_PATH . $newDir));
+		}
+
+		// database in sync houden
+		$album->dirname = basename($newDir);
+		$album->subdir = $newDir;
+		$album->path = PICS_PATH . $newDir;
+
+		foreach ($this->find('subdir LIKE ?', array($oldDir . '%')) as $subdir) {
+			// updaten gaat niet vanwege primary key
+			$this->delete($subdir);
+			$subdir->subdir = str_replace($oldDir, $newDir, $album->subdir);
+			$this->create($subdir);
+		}
+		foreach (FotoModel::instance()->find('subdir LIKE ?', array($oldDir . '%')) as $foto) {
+			// updaten gaat niet vanwege primary key
+			FotoModel::instance()->delete($foto);
+			$foto->subdir = str_replace($oldDir, $newDir, $foto->subdir);
+			FotoModel::instance()->create($foto);
+		}
+		if (false === @unlink(PICS_PATH . $oldDir)) {
+			$error = error_get_last();
+			setMelding($error['message'], -1);
+		}
+		return true;
 	}
 
 	public function setAlbumCover(FotoAlbum $album, Foto $cover) {
