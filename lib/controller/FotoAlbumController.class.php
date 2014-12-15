@@ -270,6 +270,8 @@ class FotoAlbumController extends AclController {
 	public function zoeken($query = null) {
 		if ($query === null) {
 			$this->geentoegang();
+		} else {
+			$query = iconv('utf-8', 'ascii//TRANSLIT', $query); // convert accented characters to regular
 		}
 		$limit = 5;
 		if (isset($_GET['limit'])) {
@@ -277,7 +279,7 @@ class FotoAlbumController extends AclController {
 		}
 		$result = array();
 		foreach ($this->model->find('subdir LIKE ?', array('%' . $query . '%'), 'subdir DESC', null, $limit) as $album) {
-			// check album name in case of subalbum hits and convert accented characters to normal ones
+			// check album name in case of subalbum hits and convert accented characters to regular
 			if (stripos(iconv('utf-8', 'ascii//TRANSLIT', $album->dirname), $query) !== false AND $album->magBekijken()) {
 				$result[] = array(
 					'url'	 => $album->getUrl(),
