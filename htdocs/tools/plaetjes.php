@@ -9,9 +9,9 @@ if (preg_match($alleenLeden, $file) AND ! LoginModel::mag('P_LEDEN_READ')) {
 	exit;
 }
 
-if (valid_filename($file) AND file_exists(PICS_PATH . $file) AND is_readable($file)) {
+if (valid_filename($file) AND file_exists(PICS_PATH . $file) AND is_readable(PICS_PATH . $file)) {
 
-	switch (substr($pic, -4)) {
+	switch (substr($file, -4)) {
 		case 'jpeg':
 		case '.jpg':
 			$mime = 'image/jpeg';
@@ -23,11 +23,12 @@ if (valid_filename($file) AND file_exists(PICS_PATH . $file) AND is_readable($fi
 			$mime = 'image/png';
 			break;
 		default:
+			http_response_code(415);
 			exit;
 	}
 
 	header('Content-type: ' . $mime);
-	header('Content-length: ' . filesize($pic));
+	header('Content-length: ' . filesize(PICS_PATH . $file));
 	readfile(PICS_PATH . $file);
 } else {
 	http_response_code(404);
