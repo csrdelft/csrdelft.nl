@@ -11,7 +11,7 @@ if (preg_match($alleenLeden, $img) AND ! LoginModel::mag('P_LEDEN_READ')) {
 	exit;
 }
 
-if (valid_filename($img) AND file_exists(PICS_PATH . $img) AND is_readable(PICS_PATH . $img)) {
+if (strpos($img, '/../') !== false AND file_exists(PICS_PATH . $img) AND is_readable(PICS_PATH . $img)) {
 
 	switch (substr($img, -4)) {
 		case 'jpeg':
@@ -34,5 +34,4 @@ if (valid_filename($img) AND file_exists(PICS_PATH . $img) AND is_readable(PICS_
 	readfile(PICS_PATH . $img);
 } else {
 	http_response_code(404);
-	debugprint(PICS_PATH . $img);
 }
