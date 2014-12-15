@@ -162,7 +162,7 @@ HTML;
 			$foto->subdir = str_replace($oldDir, $newDir, $foto->subdir);
 			FotoModel::instance()->create($foto);
 		}
-		if (false === @unlink(PICS_PATH . $oldDir)) {
+		if (false === @rmdir(PICS_PATH . $oldDir)) {
 			$error = error_get_last();
 			setMelding($error['message'], -1);
 		}
