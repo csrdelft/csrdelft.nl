@@ -174,7 +174,7 @@
 				$('<span class="fa fa-folder jgallery-btn jgallery-btn-small" tooltip="Foto instellen als albumcover"></span>').click(function () {
 					var url = container.find('div.nav-bottom div.title').html().replace('{$CSR_PICS}', '');
 					$.post('/fotoalbum/albumcover' + dirname(url), {
-						foto: basename(url),
+						foto: basename(url)
 					}, page_redirect);
 				}).insertAfter(btn);
 				// knopje linksom draaien
