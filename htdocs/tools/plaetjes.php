@@ -2,18 +2,18 @@
 
 require_once 'configuratie.include.php';
 
-$file = filter_input(INPUT_GET, 'img', FILTER_SANITIZE_URL);
+$img = filter_input(INPUT_GET, 'img', FILTER_SANITIZE_URL);
 
 $alleenLeden = '/(pasfoto|intern|novitiaat|ontvoering|feuten|slachten|zuipen|prive|privé|Posters)/i';
 
-if (preg_match($alleenLeden, $file) AND ! LoginModel::mag('P_LEDEN_READ')) {
+if (preg_match($alleenLeden, $img) AND ! LoginModel::mag('P_LEDEN_READ')) {
 	http_response_code(401);
 	exit;
 }
 
-if (valid_filename($file) AND file_exists(PICS_PATH . $file) AND is_readable(PICS_PATH . $file)) {
+if (valid_filename($img) AND file_exists(PICS_PATH . $img) AND is_readable(PICS_PATH . $img)) {
 
-	switch (substr($file, -4)) {
+	switch (substr($img, -4)) {
 		case 'jpeg':
 		case '.jpg':
 			$mime = 'image/jpeg';
@@ -30,8 +30,9 @@ if (valid_filename($file) AND file_exists(PICS_PATH . $file) AND is_readable(PIC
 	}
 
 	header('Content-type: ' . $mime);
-	header('Content-length: ' . filesize(PICS_PATH . $file));
-	readfile(PICS_PATH . $file);
+	header('Content-length: ' . filesize(PICS_PATH . $img));
+	readfile(PICS_PATH . $img);
 } else {
 	http_response_code(404);
+	debugprint(PICS_PATH . $img);
 }
