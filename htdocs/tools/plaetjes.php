@@ -8,7 +8,7 @@ if (preg_match($alleenLeden, $file) AND ! LoginModel::mag('P_LEDEN_READ')) {
 	exit;
 }
 
-if (valid_filename($file) AND file_exists($file)) {
+if (valid_filename($file) AND file_exists(PICS_PATH . $file)) {
 	/*
 	  header('Content-Description: File Transfer');
 	  header('Content-Type: application/octet-stream');
@@ -21,5 +21,5 @@ if (valid_filename($file) AND file_exists($file)) {
 	  ob_clean();
 	  flush();
 	 */
-	readfile($file);
+	readfile(PICS_PATH . $file);
 }
