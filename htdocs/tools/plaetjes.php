@@ -10,9 +10,8 @@ if (strpos($img, '..') !== false) {
 	exit;
 }
 
-$alleenLeden = '/(pasfoto|intern|novitiaat|ontvoering|feuten|slachten|zuipen|prive|privé|Posters)/i';
-
-if (preg_match($alleenLeden, $img) AND ! LoginModel::mag('P_LEDEN_READ')) {
+// afschermen voor externen
+if (!LoginModel::mag('P_LOGGED_IN')) {
 	http_response_code(401);
 	exit;
 }
