@@ -169,17 +169,16 @@ class ForumController extends Controller {
 	 * 
 	 * @param string $query
 	 */
-	public function titelzoeken($query = null) {
+	public function titelzoeken() {
 		$result = array();
-		if ($query !== null) {
-			$query = urldecode($query);
-			$query = filter_var($query, FILTER_SANITIZE_SPECIAL_CHARS);
+		if ($this->hasParam('q')) {
+			$query = $this->getParam('q');
 			$datum = 'laatst_gewijzigd';
 			$ouder = 'jonger';
 			$jaar = null;
 			$limit = 5;
-			if (isset($_GET['limit'])) {
-				$limit = (int) filter_input(INPUT_GET, 'limit');
+			if ($this->hasParam('limit')) {
+				$limit = (int) $this->getParam('limit');
 			}
 			$draden_delen = ForumDelenModel::instance()->zoeken($query, true, $datum, $ouder, $jaar, $limit);
 			foreach ($draden_delen[0] as $draad) {

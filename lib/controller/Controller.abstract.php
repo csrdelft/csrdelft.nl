@@ -52,10 +52,11 @@ abstract class Controller {
 
 				// split key-value-pair
 				$kvp = explode('=', $part, 2);
+				$key = urldecode($kvp[0]);
 				if (count($kvp) > 1) {
-					$this->queryparts[$kvp[0]] = $kvp[1];
+					$this->queryparts[$key] = urldecode($kvp[1]);
 				} else {
-					$this->queryparts[$kvp[0]] = $kvp[0];
+					$this->queryparts[$key] = $key;
 				}
 			}
 		}

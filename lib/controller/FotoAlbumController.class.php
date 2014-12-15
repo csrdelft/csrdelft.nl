@@ -267,15 +267,15 @@ class FotoAlbumController extends AclController {
 		$this->view = new JsonResponse(true);
 	}
 
-	public function zoeken($query = null) {
-		if ($query === null) {
+	public function zoeken() {
+		if (!$this->hasParam('q')) {
 			$this->geentoegang();
 		} else {
-			$query = iconv('utf-8', 'ascii//TRANSLIT', filter_var($query, FILTER_SANITIZE_STRING)); // convert accented characters to regular
+			$query = iconv('utf-8', 'ascii//TRANSLIT', $this->getParam('q')); // convert accented characters to regular
 		}
 		$limit = 5;
-		if (isset($_GET['limit'])) {
-			$limit = (int) filter_input(INPUT_GET, 'limit');
+		if ($this->hasParam('limit')) {
+			$limit = (int) $this->getParam('limit');
 		}
 		$result = array();
 		foreach ($this->model->find('subdir LIKE ?', array('%' . $query . '%'), 'subdir DESC', null, $limit) as $album) {

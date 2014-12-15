@@ -224,21 +224,20 @@ class DocumentenController extends Controller {
 	}
 
 	public function zoeken() {
-		if ($this->hasParam(3)) {
-			$zoekterm = $this->getParam(3);
-		} else {
-			exit;
+		if (!$this->hasParam('q')) {
+			$this->geentoegang();
 		}
+		$zoekterm = $this->getParam('q');
 		$categorie = 0;
 		if ($this->hasParam('cat')) {
-			$categorie = (int) filter_input(INPUT_GET, 'cat', FILTER_SANITIZE_NUMBER_INT);
+			$categorie = (int) $this->getParam('cat');
 		}
-		$limiet = 5;
+		$limit = 5;
 		if ($this->hasParam('limit')) {
-			$categorie = (int) filter_input(INPUT_GET, 'limit', FILTER_SANITIZE_NUMBER_INT);
+			$limit = (int) $this->getParam('limit');
 		}
 		$result = array();
-		foreach (DocCategorie::zoekDocumenten($zoekterm, $categorie, $limiet) as $doc) {
+		foreach (DocCategorie::zoekDocumenten($zoekterm, $categorie, $limit) as $doc) {
 			$result[] = array(
 				'url'	 => '/communicatie/documenten/bekijken/' . $doc->getID() . '/' . $doc->getFileName(),
 				'value'	 => $doc->getNaam() . '<span class="lichtgrijs"> - ' . $doc->getCategorie()->getNaam() . '</span>'

@@ -66,14 +66,14 @@ class AgendaController extends AclController {
 		$this->view = new AgendaICalendarView($this->model);
 	}
 
-	public function zoeken($query = null) {
-		if ($query === null) {
+	public function zoeken() {
+		if (!$this->hasParam('q')) {
 			$this->geentoegang();
 		}
-		$query = '%' . filter_var($query, FILTER_SANITIZE_STRING) . '%';
+		$query = '%' . $this->getParam('q') . '%';
 		$limit = 5;
-		if (isset($_GET['limit'])) {
-			$limit = (int) filter_input(INPUT_GET, 'limit');
+		if ($this->hasParam('limit')) {
+			$limit = (int) $this->getParam('limit');
 		}
 		$van = date('Y-m-d');
 		$tot = date('Y-m-d', strtotime('+6 months'));

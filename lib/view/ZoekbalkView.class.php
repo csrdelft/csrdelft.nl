@@ -112,13 +112,13 @@ JS;
 			}
 			// Nog meer suggesties
 			$this->suggestions['Leden'] = '/tools/naamsuggesties/leden/?q=';
-			$this->suggestions['Agenda'] = '/agenda/zoeken/';
-			$this->suggestions['Forum'] = '/forum/titelzoeken/';
+			$this->suggestions['Agenda'] = '/agenda/zoeken/?q=';
+			$this->suggestions['Forum'] = '/forum/titelzoeken/?q=';
 			$this->suggestions['Groepen'] = '/tools/groepsuggesties/?q=';
-			$this->suggestions['Fotoalbum'] = '/fotoalbum/zoeken/';
+			$this->suggestions['Fotoalbum'] = '/fotoalbum/zoeken/?q=';
 			$this->suggestions['Wiki'] = '/tools/wikisuggesties/?q=';
-			$this->suggestions['Documenten'] = '/documenten/zoeken/';
-			$this->suggestions['Boeken'] = '/bibliotheek/zoeken/';
+			$this->suggestions['Documenten'] = '/documenten/zoeken/?q=';
+			$this->suggestions['Boeken'] = '/bibliotheek/zoeken/?q=';
 		}
 	}
 

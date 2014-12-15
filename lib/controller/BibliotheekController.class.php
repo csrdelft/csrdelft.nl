@@ -88,28 +88,6 @@ class BibliotheekController extends Controller {
 		exit;
 	}
 
-	protected function zoeken() {
-		if ($this->hasParam(4)) {
-			$categorie = $this->getParam(3);
-			$zoekterm = $this->getParam(4);
-		} elseif ($this->hasParam(3)) {
-			$categorie = 0;
-			$zoekterm = $this->getParam(3);
-		} else {
-			$this->geentoegang();
-		}
-		$result = array();
-		foreach (BiebCatalogus::getAutocompleteSuggesties('biebboek', $zoekterm, $categorie) as $prop) {
-			$result[] = array(
-				'url'	 => '/bibliotheek/boek/' . $prop['id'],
-				'value'	 => $prop['titel'] . '<span class="lichtgrijs"> - ' . $prop['auteur'] . '</span>'
-			);
-		}
-		$this->view = new JsonResponse($result);
-		$this->view->view();
-		exit;
-	}
-
 	/**
 	 * Laad een boek object
 	 * 
@@ -439,6 +417,31 @@ class BibliotheekController extends Controller {
 		} else {
 			$this->geentoegang();
 		}
+	}
+
+	protected function zoeken() {
+		if (!$this->hasParam('q')) {
+			$this->geentoegang();
+		}
+		$zoekterm = $this->getParam('q');
+		$categorie = 0;
+		if ($this->hasParam('cat')) {
+			$categorie = (int) $this->getParam('cat');
+		}
+		$limit = 5;
+		if ($this->hasParam('limit')) {
+			$limit = (int) $this->getParam('limit');
+		}
+		$result = array();
+		foreach (BiebCatalogus::getAutocompleteSuggesties('biebboek', $zoekterm, $categorie) as $prop) {
+			$result[] = array(
+				'url'	 => '/bibliotheek/boek/' . $prop['id'],
+				'value'	 => $prop['titel'] . '<span class="lichtgrijs"> - ' . $prop['auteur'] . '</span>'
+			);
+		}
+		$this->view = new JsonResponse($result);
+		$this->view->view();
+		exit;
 	}
 
 }
