@@ -2,7 +2,7 @@
 
 require_once 'configuratie.include.php';
 
-$img = PICS_PATH . filter_input(INPUT_GET, 'img', FILTER_SANITIZE_ENCODED);
+$img = PICS_PATH . filter_input(INPUT_GET, 'img', FILTER_SANITIZE_STRING);
 
 // voorkom path traversal
 if (strpos($img, '..') !== false) {
