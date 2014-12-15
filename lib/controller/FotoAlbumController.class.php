@@ -200,9 +200,9 @@ class FotoAlbumController extends AclController {
 			$this->geentoegang();
 		}
 		$filename = filter_input(INPUT_POST, 'foto', FILTER_SANITIZE_STRING);
-		$foto = new Foto($filename, $album);
-		if ($this->model->setAlbumCover($album, $foto)) {
-			$this->view = new JsonResponse($album->getUrl() . '#' . $foto->getResizedUrl());
+		$cover = new Foto($filename, $album);
+		if ($this->model->setAlbumCover($album, $cover)) {
+			$this->view = new JsonResponse($album->getUrl() . '#' . $cover->getResizedUrl());
 		} else {
 			$this->view = new JsonResponse('Fotoalbum-cover instellen mislukt', 500);
 		}

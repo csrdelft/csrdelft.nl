@@ -160,7 +160,7 @@ HTML;
 		foreach ($album->getFotos() as $foto) {
 			if (strpos($foto->filename, 'folder') !== false) {
 				if ($foto->getFullPath() === $cover->getFullPath()) {
-					$toggle = true;
+					$foto = $cover;
 				}
 				$path = $foto->getThumbPath();
 				$success &= rename($path, str_replace('folder', '', $path));
@@ -175,7 +175,7 @@ HTML;
 					$foto->filename = str_replace('folder', '', $foto->filename);
 					FotoModel::instance()->create($foto);
 				}
-				if ($toggle) {
+				if ($foto === $cover) {
 					return $success;
 				}
 			}
