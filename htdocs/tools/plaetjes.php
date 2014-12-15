@@ -24,11 +24,21 @@ if (file_exists($img) AND is_readable($img)) {
 		case '.jpg':
 			$mime = 'image/jpeg';
 			break;
+		case '.png':
+			$mime = 'image/png';
+			break;
 		case '.gif':
 			$mime = 'image/gif';
 			break;
-		case '.png':
-			$mime = 'image/png';
+		case '.svg':
+			$mime = 'image/svg+xml';
+			break;
+		case '.bmp':
+			$mime = 'image/bmp';
+			break;
+		case 'tiff':
+		case '.tif':
+			$mime = 'image/tiff';
 			break;
 		default:
 			http_response_code(415);
