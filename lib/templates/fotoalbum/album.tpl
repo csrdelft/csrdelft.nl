@@ -1,5 +1,4 @@
 {if $album->hasFotos()}
-	<script type="text/javascript" src="/layout/js/jquery/plugins/jgallery.js?v=1.4.1"></script>
 	<script type="text/javascript">
 		try {
 			$(function () {
