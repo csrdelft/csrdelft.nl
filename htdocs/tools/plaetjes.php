@@ -23,3 +23,5 @@ if (valid_filename($file) AND file_exists(PICS_PATH . $file)) {
 	 */
 	readfile(PICS_PATH . $file);
 }
+
+debugprint(PICS_PATH . $file);
