@@ -1,5 +1,7 @@
 <?php
 
+require_once 'configuratie.include.php';
+
 $file = filter_input(INPUT_GET, 'img', FILTER_SANITIZE_URL);
 
 $alleenLeden = '/(pasfoto|intern|novitiaat|ontvoering|feuten|slachten|zuipen|prive|privé|Posters)/i';
