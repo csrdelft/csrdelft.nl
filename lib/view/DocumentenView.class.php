@@ -85,15 +85,13 @@ class DocumentDownloadContent extends DocumentenView {
 	}
 
 	public function view() {
-		$mime = $this->model->getMimetype();
+		header('Content-Description: File Transfer');
+		header('Content-Type: ' . $this->model->getMimetype());
+		header('Content-Disposition: attachment; filename="' . $this->model->getFileName() . '"');
+		header('Expires: 0');
+		header('Cache-Control: must-revalidate');
 		header('Pragma: public');
-		header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
-		header('Cache-Control: private', false);
-		header('Content-Type: ' . $mime);
-		if (!strstr($mime, 'image') AND ! strstr($mime, 'text')) {
-			header('Content-Disposition: attachment; filename="' . $this->model->getFileName() . '";');
-			header('Content-Lenght: ' . $this->model->getFileSize() . ';');
-		}
+		header('Content-Length: ' . $this->model->getFileSize());
 		readfile($this->model->getFullPath());
 	}
 

@@ -193,6 +193,11 @@
 						rotation: 90
 					}, page_reload);
 				}).insertAfter(btn);
+				// knopje downloaden
+				$('<span class="fa fa-download jgallery-btn jgallery-btn-small" tooltip="Foto in origineel formaat downloaden"></span>').click(function () {
+					var url = container.find('div.nav-bottom div.title').html().replace('{$CSR_PICS}', '');
+					window.location.href = '/fotoalbum/download' + url;
+				}).insertAfter(btn);
 		{/if}
 			});
 			/* img class="photoTag" data-fotoalbum="$album->subdir"

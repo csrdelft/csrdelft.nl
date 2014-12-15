@@ -18,6 +18,7 @@ class FotoAlbumController extends AclController {
 		if (!$this->isPosted()) {
 			$this->acl = array(
 				'bekijken'	 => 'P_ALBUM_READ',
+				'download'	 => 'P_ALBUM_READ',
 				'downloaden' => 'P_ALBUM_DOWN',
 				'verwerken'	 => 'P_ALBUM_MOD',
 				'uploaden'	 => 'P_ALBUM_ADD',
@@ -43,13 +44,17 @@ class FotoAlbumController extends AclController {
 		if (!array_key_exists($this->action, $this->acl)) {
 			$this->action = 'bekijken';
 			$path = $this->getParams(1);
-		} elseif ($this->action === 'zoeken' OR $this->action === 'index') {
+		} elseif ($this->action === 'zoeken') {
 			parent::performAction($this->getParams(3));
 			return;
 		} else {
 			$path = $this->getParams(3);
 		}
 		$path = PICS_PATH . urldecode(implode('/', $path));
+		if ($this->action === 'download') {
+			parent::performAction(array($path));
+			return;
+		}
 		$album = $this->model->getFotoAlbum($path);
 		if (!$album) {
 			setMelding('Fotoalbum bestaat niet' . (DEBUG ? ': ' . $path : ''), -1);
@@ -166,9 +171,28 @@ class FotoAlbumController extends AclController {
 		$this->view = new JsonResponse($list);
 	}
 
+	public function download($path) {
+		$foto = new Afbeelding($path);
+		if ($foto->exists()) {
+			header('Content-Description: File Transfer');
+			header('Content-Type: ' . $foto->mimetype);
+			header('Content-Disposition: attachment; filename="' . $foto->filename . '"');
+			header('Expires: 0');
+			header('Cache-Control: must-revalidate');
+			header('Pragma: public');
+			header('Content-Length: ' . $foto->filesize);
+			readfile($foto->directory . $foto->filename);
+		}
+		exit;
+	}
+
 	public function downloaden(FotoAlbum $album) {
+		header('Content-Description: File Transfer');
 		header('Content-Type: application/x-tar');
 		header('Content-Disposition: attachment; filename="' . $album->dirname . '.tar"');
+		header('Expires: 0');
+		header('Cache-Control: must-revalidate');
+		header('Pragma: public');
 		$fotos = $album->getFotos();
 		set_time_limit(0);
 		$cmd = "tar cC " . escapeshellarg($album->path);
@@ -201,7 +225,7 @@ class FotoAlbumController extends AclController {
 		}
 		$filename = filter_input(INPUT_POST, 'foto', FILTER_SANITIZE_STRING);
 		$cover = new Foto($filename, $album);
-		if ($this->model->setAlbumCover($album, $cover)) {
+		if ($cover->exists() AND $this->model->setAlbumCover($album, $cover)) {
 			$this->view = new JsonResponse($album->getUrl() . '#' . $cover->getResizedUrl());
 		} else {
 			$this->view = new JsonResponse('Fotoalbum-cover instellen mislukt', 500);
@@ -221,7 +245,7 @@ class FotoAlbumController extends AclController {
 		}
 		$filename = filter_input(INPUT_POST, 'foto', FILTER_SANITIZE_STRING);
 		$foto = new Foto($filename, $album);
-		if (!LoginModel::mag('P_ALBUM_DEL') AND ! $foto->isOwner()) {
+		if (!$foto->exists() OR ! LoginModel::mag('P_ALBUM_DEL') AND ! $foto->isOwner()) {
 			$this->geentoegang();
 		}
 		if (FotoModel::instance()->verwijderFoto($foto)) {
@@ -235,7 +259,7 @@ class FotoAlbumController extends AclController {
 	public function roteren(FotoAlbum $album) {
 		$filename = filter_input(INPUT_POST, 'foto', FILTER_SANITIZE_STRING);
 		$foto = new Foto($filename, $album);
-		if (!LoginModel::mag('P_ALBUM_MOD') AND ! $foto->isOwner()) {
+		if (!$foto->exists() OR ! LoginModel::mag('P_ALBUM_MOD') AND ! $foto->isOwner()) {
 			$this->geentoegang();
 		}
 		$degrees = (int) filter_input(INPUT_POST, 'rotation', FILTER_SANITIZE_NUMBER_INT);
