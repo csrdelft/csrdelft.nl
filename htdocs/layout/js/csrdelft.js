@@ -326,6 +326,10 @@ function knop_get(event) {
 }
 
 function modal_open(htmlString) {
+	if ($(this).hasClass('confirm') && !confirm($(this).attr('title') + '.\n\nWeet u het zeker?')) {
+		event.preventDefault();
+		return false;
+	}
 	if (typeof htmlString == 'string' && htmlString != '') {
 		$('#modal').html(htmlString);
 		$('#modal').show();
