@@ -275,19 +275,19 @@ div.rommel img { height: 77px; }
 }
 .alert-danger {
 	color: red;
-	background: url(//csrdelft.nl/plaetjes/famfamfam/exclamation.png) no-repeat;
+	background: url("//csrdelft.nl/plaetjes/famfamfam/exclamation.png") no-repeat;
 }
 .alert-info {
 	color: #0A338D;
-	background: url(//csrdelft.nl/plaetjes/famfamfam/information.png) no-repeat;
+	background: url("//csrdelft.nl/plaetjes/famfamfam/information.png") no-repeat;
 }
 .alert-success {
 	color: green;
-	background: url(//csrdelft.nl/plaetjes/famfamfam/accept.png) no-repeat;
+	background: url("//csrdelft.nl/plaetjes/famfamfam/accept.png") no-repeat;
 }
 .alert-warning {
 	color: #DDAA00;
-	background: url(//csrdelft.nl/plaetjes/famfamfam/bell.png) no-repeat;
+	background: url("//csrdelft.nl/plaetjes/famfamfam/bell.png") no-repeat;
 }
 
 /* image lazy loading */
