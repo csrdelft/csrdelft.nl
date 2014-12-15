@@ -190,9 +190,9 @@ HTML;
 		if ($success) {
 			// database in sync houden
 			// updaten gaat niet vanwege primary key
-			FotoModel::instance()->delete($foto);
-			$foto->filename = str_replace('folder', '', $foto->filename);
-			FotoModel::instance()->create($foto);
+			FotoModel::instance()->delete($cover);
+			$cover->filename = str_replace('folder', '', $cover->filename);
+			FotoModel::instance()->create($cover);
 		}
 		return $success;
 	}

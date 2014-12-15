@@ -203,7 +203,7 @@ function page_redirect(htmlString) {
 		modal_open(htmlString);
 		return;
 	}
-	window.location.href = decodeURI(htmlString);
+	window.location.href = htmlString;
 }
 
 function init_buttons(parent) {
