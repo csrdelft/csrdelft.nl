@@ -327,7 +327,7 @@ function knop_get(event) {
 
 function modal_open(htmlString) {
 	if ($(this).hasClass('confirm') && !confirm($(this).attr('title') + '.\n\nWeet u het zeker?')) {
-		event.preventDefault();
+		htmlString.preventDefault();
 		return false;
 	}
 	if (typeof htmlString == 'string' && htmlString != '') {
