@@ -385,10 +385,9 @@ class FotoAlbumBBView extends FotoAlbumZijbalkView {
 	}
 
 	public function getHtml() {
-		$url = $this->model->getUrl();
 		if ($this->compact) {
 			// compacte versie van de tag is alleen een thumbnail.
-			$content = '<a href="' . $url . '"><img src="' . $this->model->getCoverUrl() . '" class="compact" /></a><div class="clear"></div>';
+			$content = '<a href="' . $this->model->getUrl() . '"><img src="' . $this->model->getCoverUrl() . '" class="compact" /></a><div class="clear"></div>';
 		} else {
 			$content = $this->getGridHtml();
 		}

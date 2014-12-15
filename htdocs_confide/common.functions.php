@@ -245,7 +245,7 @@ function valid_date($date, $format = 'Y-m-d H:i:s') {
 }
 
 function valid_filename($name) {
-	return preg_match('/^(?:[a-z0-9 !\-_\(\)é]|\.(?!\.))+$/iD', $name);
+	return preg_match('/^(?:[a-z0-9 \-_\(\)é]|\.(?!\.))+$/iD', $name);
 }
 
 function email_like($email) {
