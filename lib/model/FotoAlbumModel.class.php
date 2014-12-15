@@ -172,7 +172,7 @@ HTML;
 					// database in sync houden
 					// updaten gaat niet vanwege primary key
 					FotoModel::instance()->delete($foto);
-					$foto->filename = str_replace('folder', '', $this->filename);
+					$foto->filename = str_replace('folder', '', $foto->filename);
 					FotoModel::instance()->create($foto);
 				}
 				if ($toggle) {
