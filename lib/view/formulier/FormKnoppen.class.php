@@ -168,7 +168,7 @@ class FormulierKnop implements FormElement {
 		}
 		$html .= '>';
 		if ($this->icon) {
-			$html .= '<img src="' . CSR_PICS . $this->icon . '" class="icon" width="16" height="16" /> ';
+			$html .= '<img src="//csrdelft.nl/plaetjes' . $this->icon . '" class="icon" width="16" height="16" /> ';
 		}
 		$html .= $this->label;
 		return $html . '</a> ';

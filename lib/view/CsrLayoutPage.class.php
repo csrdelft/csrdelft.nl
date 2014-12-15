@@ -37,7 +37,7 @@ class CsrLayoutPage extends CompressedLayout {
 	}
 
 	public function getBreadcrumbs() {
-		return '<a href="/" title="Startpagina"><img src="' . CSR_PICS . '/knopjes/home-16.png" class="module-icon"></a> » <span class="active">' . $this->getTitel() . '</span>';
+		return '<a href="/" title="Startpagina"><img src="//csrdelft.nl/plaetjes/knopjes/home-16.png" class="module-icon"></a> » <span class="active">' . $this->getTitel() . '</span>';
 	}
 
 	public function view() {

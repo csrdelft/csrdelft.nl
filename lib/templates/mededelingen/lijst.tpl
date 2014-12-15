@@ -7,7 +7,7 @@
 					{if $mededeling->getCategorie()->getPlaatje() !=''}
 						<div class="mededelingenlijst-plaatje">
 							<a href="{$pagina_root}{$mededeling->getId()}">
-								<img src="{$CSR_PICS}/nieuws/{$mededeling->getCategorie()->getPlaatje()}" width="10px" height="10px" />
+								<img src="//csrdelft.nl/plaetjes/nieuws/{$mededeling->getCategorie()->getPlaatje()}" width="10px" height="10px" />
 							</a>
 						</div>
 					{/if}

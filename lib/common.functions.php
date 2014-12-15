@@ -275,7 +275,7 @@ function internal_url($url, $label) {
 		$extern = '';
 	} elseif (!startsWith($href, 'http://') AND ! startsWith($href, 'https://')) { // http(s) vergeten?
 		$href = 'http://' . $href;
-	} elseif (startsWith($href, CSR_ROOT) OR startsWith($href, CSR_PICS)) {
+	} elseif (startsWith($href, CSR_ROOT)) {
 		$extern = '';
 	}
 	if (filter_var($href, FILTER_VALIDATE_URL)) {

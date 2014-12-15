@@ -79,5 +79,5 @@
 	{else}
 		<a name="ICAL" href="/profiel/{LoginModel::getUid()}#tokenaanvragen" title="Persoonlijke ICalender feed aanvragen">
 	{/if}
-	<img src="{$CSR_PICS}/knopjes/ical.gif" alt="ICAL" /></a>
+	<img src="//csrdelft.nl/plaetjes/knopjes/ical.gif" alt="ICAL" /></a>
 </div>

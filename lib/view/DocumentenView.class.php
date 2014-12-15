@@ -11,7 +11,7 @@ require_once 'model/documenten/Document.class.php';
 abstract class DocumentenView extends SmartyTemplateView {
 
 	public function getBreadcrumbs() {
-		return '<a href="/documenten" title="Documenten"><img src="' . CSR_PICS . '/knopjes/document-16.png" class="module-icon"></a>';
+		return '<a href="/documenten" title="Documenten"><img src="//csrdelft.nl/plaetjes/knopjes/document-16.png" class="module-icon"></a>';
 	}
 
 }

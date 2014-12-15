@@ -13,7 +13,7 @@ class CommissieVoorkeurenView implements View {
 	}
 
 	public function getBreadcrumbs() {
-		return '<a href="/ledenlijst" title="Ledenlijst"><img src="' . CSR_PICS . '/knopjes/people-16.png" class="module-icon"></a> » <a href="/commissievoorkeuren">' . $this->getTitel() . '</a>';
+		return '<a href="/ledenlijst" title="Ledenlijst"><img src="//csrdelft.nl/plaetjes/knopjes/people-16.png" class="module-icon"></a> » <a href="/commissievoorkeuren">' . $this->getTitel() . '</a>';
 	}
 
 	public function getTitel() {
@@ -57,7 +57,7 @@ class LidOverzicht implements View {
 	}
 
 	public function getBreadcrumbs() {
-		return '<a href="/ledenlijst" title="Ledenlijst"><img src="' . CSR_PICS . '/knopjes/people-16.png" class="module-icon"></a> » <a href="/commissievoorkeuren">Voorkeuren voor commissies</a> » <span class="active">' . $this->getTitel() . '</span>';
+		return '<a href="/ledenlijst" title="Ledenlijst"><img src="//csrdelft.nl/plaetjes/knopjes/people-16.png" class="module-icon"></a> » <a href="/commissievoorkeuren">Voorkeuren voor commissies</a> » <span class="active">' . $this->getTitel() . '</span>';
 	}
 
 	public function getTitel() {

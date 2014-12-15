@@ -175,7 +175,7 @@ class FotoAlbum extends Map {
 			return $this->subalbums[$idx]->getCoverUrl();
 		}
 		// If all else fails:
-		return CSR_PICS . '/_geen_thumb.jpg';
+		return CSR_ROOT . '/plaetjes/_geen_thumb.jpg';
 	}
 
 	public function getMostRecentSubAlbum() {

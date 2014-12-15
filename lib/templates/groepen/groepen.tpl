@@ -44,7 +44,7 @@
 	{/if}
 	{if LoginModel::mag('P_ADMIN') AND $action!='edit'}
 		<a class="btn" href="/groepen/{$groepen->getNaam()}/?bewerken=true">
-			<img src="{$CSR_PICS}/famfamfam/pencil.png" title="Bewerk beschrijving" />
+			<img src="//csrdelft.nl/plaetjes/famfamfam/pencil.png" title="Bewerk beschrijving" />
 		</a>
 	{/if}
 </div>

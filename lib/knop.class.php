@@ -59,7 +59,7 @@ class Knop {
 	}
 
 	private function getImgTag() {
-		$img = '<img src="' . CSR_PICS . '/knopjes/' . $this->type . '.png"';
+		$img = '<img src="//csrdelft.nl/plaetjes/knopjes/' . $this->type . '.png"';
 		if ($this->title === null) {
 			$img .= ' title="' . ucfirst($this->type) . '"';
 		}

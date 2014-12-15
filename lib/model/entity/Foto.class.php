@@ -79,15 +79,15 @@ class Foto extends Afbeelding {
 	}
 
 	public function getFullUrl() {
-		return CSR_PICS . '/' . direncode($this->subdir . $this->filename);
+		return CSR_ROOT . '/plaetjes/' . direncode($this->subdir . $this->filename);
 	}
 
 	public function getThumbUrl() {
-		return CSR_PICS . '/' . direncode($this->subdir . '_thumbs/' . $this->filename);
+		return CSR_ROOT . '/plaetjes/' . direncode($this->subdir . '_thumbs/' . $this->filename);
 	}
 
 	public function getResizedUrl() {
-		return CSR_PICS . '/' . direncode($this->subdir . '_resized/' . $this->filename);
+		return CSR_ROOT . '/plaetjes/' . direncode($this->subdir . '_resized/' . $this->filename);
 	}
 
 	public function hasThumb() {

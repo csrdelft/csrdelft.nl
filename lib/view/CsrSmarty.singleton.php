@@ -31,7 +31,6 @@ class CsrSmarty extends Smarty {
 			self::$instance->caching = false;
 
 			// frequently used things
-			self::$instance->assign('CSR_PICS', CSR_PICS);
 			self::$instance->assign('REQUEST_URI', REQUEST_URI);
 		}
 		return self::$instance;

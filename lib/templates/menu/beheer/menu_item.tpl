@@ -7,7 +7,7 @@
 	{if LoginModel::mag('P_ADMIN')}
 		<a href="/menubeheer/toevoegen/{$item->item_id}" class="btn post popup" title="Sub-menu-item toevoegen">{icon get="add"}</a>
 	{/if}
-	<a href="/menubeheer/zichtbaar/{$item->item_id}" class="btn post ReloadPage" title="Menu-item is nu {if !$item->zichtbaar}on{/if}zichtbaar"><img src="{$CSR_PICS}/famfamfam/{if $item->zichtbaar}eye{else}shading{/if}.png" /></a>
+	<a href="/menubeheer/zichtbaar/{$item->item_id}" class="btn post ReloadPage" title="Menu-item is nu {if !$item->zichtbaar}on{/if}zichtbaar"><img src="//csrdelft.nl/plaetjes/famfamfam/{if $item->zichtbaar}eye{else}shading{/if}.png" /></a>
 	<span>{$item->tekst}</span>
 	{if LoginModel::mag('P_ADMIN')}
 		<span class="lichtgrijs">{$item->item_id}</span>

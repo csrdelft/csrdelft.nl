@@ -7,38 +7,38 @@
 		<div class="forumheadbtn">
 			{if $draad->isVerborgen()}
 				<a href="/forum/tonen/{$draad->draad_id}" class="btn round post ReloadPage" title="Onderwerp tonen in zijbalk"
-				   onmouseover="$(this).children('img').attr('src', '{$CSR_PICS}/famfamfam/layout_add.png');"
-				   onmouseout="$(this).children('img').attr('src', '{$CSR_PICS}/famfamfam/layout.png');"
+				   onmouseover="$(this).children('img').attr('src', '//csrdelft.nl/famfamfam/layout_add.png');"
+				   onmouseout="$(this).children('img').attr('src', '//csrdelft.nl/famfamfam/layout.png');"
 				   >{icon get="layout"}</a>
 			{elseif $draad->magVerbergen()}
 				<a href="/forum/verbergen/{$draad->draad_id}" class="btn round post ReloadPage" title="Onderwerp verbergen in zijbalk"
-				   onmouseover="$(this).children('img').attr('src', '{$CSR_PICS}/famfamfam/layout_delete.png');"
-				   onmouseout="$(this).children('img').attr('src', '{$CSR_PICS}/famfamfam/layout_sidebar.png');"
+				   onmouseover="$(this).children('img').attr('src', '//csrdelft.nl/famfamfam/layout_delete.png');"
+				   onmouseout="$(this).children('img').attr('src', '//csrdelft.nl/famfamfam/layout_sidebar.png');"
 				   >{icon get="layout_sidebar"}</a>
 			{/if}
 			&nbsp;&nbsp;&nbsp;
 			{if $draad->isGevolgd()}
 				<a href="/forum/volgenuit/{$draad->draad_id}" class="btn round post ReloadPage" title="Onderwerp niet meer volgen per email"
-				   onmouseover="$(this).children('img').attr('src', '{$CSR_PICS}/famfamfam/email_delete.png');"
-				   onmouseout="$(this).children('img').attr('src', '{$CSR_PICS}/famfamfam/email_go.png');"
+				   onmouseover="$(this).children('img').attr('src', '//csrdelft.nl/famfamfam/email_delete.png');"
+				   onmouseout="$(this).children('img').attr('src', '//csrdelft.nl/famfamfam/email_go.png');"
 				   >{icon get="email_go"}</a>
 			{elseif $draad->magVolgen()}
 				<a href="/forum/volgenaan/{$draad->draad_id}" class="btn round post ReloadPage" title="Onderwerp volgen per email"
-				   onmouseover="$(this).children('img').attr('src', '{$CSR_PICS}/famfamfam/email_add.png');"
-				   onmouseout="$(this).children('img').attr('src', '{$CSR_PICS}/famfamfam/email.png');"
+				   onmouseover="$(this).children('img').attr('src', '//csrdelft.nl/famfamfam/email_add.png');"
+				   onmouseout="$(this).children('img').attr('src', '//csrdelft.nl/famfamfam/email.png');"
 				   >{icon get="email"}</a>
 			{/if}
 			&nbsp;&nbsp;&nbsp;
 			{if $deel->magModereren()}
 				{if $draad->gesloten}
 					<a href="/forum/wijzigen/{$draad->draad_id}/gesloten" class="btn round post ReloadPage" title="Openen (reactie mogelijk)"
-					   onmouseover="$(this).children('img').attr('src', '{$CSR_PICS}/famfamfam/lock_break.png');"
-					   onmouseout="$(this).children('img').attr('src', '{$CSR_PICS}/famfamfam/lock.png');"
+					   onmouseover="$(this).children('img').attr('src', '//csrdelft.nl/famfamfam/lock_break.png');"
+					   onmouseout="$(this).children('img').attr('src', '//csrdelft.nl/famfamfam/lock.png');"
 					   >{icon get="lock"}</a>
 				{else}
 					<a href="/forum/wijzigen/{$draad->draad_id}/gesloten" class="btn round post ReloadPage" title="Sluiten (geen reactie mogelijk)"
-					   onmouseover="$(this).children('img').attr('src', '{$CSR_PICS}/famfamfam/lock.png');"
-					   onmouseout="$(this).children('img').attr('src', '{$CSR_PICS}/famfamfam/lock_open.png');"
+					   onmouseover="$(this).children('img').attr('src', '//csrdelft.nl/famfamfam/lock.png');"
+					   onmouseout="$(this).children('img').attr('src', '//csrdelft.nl/famfamfam/lock_open.png');"
 					   >{icon get="lock_open"}</a>
 				{/if}
 				&nbsp;&nbsp;&nbsp;

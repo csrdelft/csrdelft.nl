@@ -118,7 +118,7 @@ class CsrBB extends eamBBParser {
 			$content = htmlspecialchars($content);
 		}
 		// lazy loading van externe images bijv. op het forum
-		if (!startsWith($content, CSR_PICS) OR startsWith($content, CSR_PICS . '/fotoalbum/')) {
+		if (!startsWith($content, CSR_ROOT) OR startsWith($content, CSR_ROOT . '/plaetjes/fotoalbum/')) {
 			return '<div class="bb-img-loading" src="' . $content . '" title="' . htmlspecialchars($content) . '" style="' . $style . '"></div>';
 		}
 		return '<img class="bb-img ' . $class . '" src="' . $content . '" alt="' . $content . '" style="' . $style . '" />';
@@ -267,7 +267,7 @@ class CsrBB extends eamBBParser {
 			$content = $arguments;
 		}
 		if (LidInstellingen::get('layout', 'neuzen') != 'nee') {
-			$neus = '<img src="' . CSR_PICS . '/famfamfam/bullet_red.png" alt="o" class="neus2013">';
+			$neus = '<img src="//csrdelft.nl/plaetjes/famfamfam/bullet_red.png" alt="o" class="neus2013">';
 			$content = str_replace('o', $neus, $content);
 		}
 		return $content;
@@ -637,7 +637,7 @@ HTML;
 		}
 
 		require_once 'model/bibliotheek/BiebBoek.class.php';
-				require_once 'view/BibliotheekView.class.php';
+		require_once 'view/BibliotheekView.class.php';
 		try {
 			$boek = new BiebBoek((int) $boekid);
 			$content = new BoekBBView($boek);
@@ -863,7 +863,7 @@ HTML;
 	function bb_locatie($arguments = array()) {
 		$address = $this->parseArray(array('[/locatie]'), array());
 		$map = $this->maps(htmlspecialchars($address), $arguments);
-		return '<span class="hoverIntent"><a href="http://maps.google.nl/maps?q=' . htmlspecialchars($address) . '">' . $address . ' <img src="' . CSR_PICS . '/famfamfam/map.png" alt="map" title="Kaart" /></a><div class="hoverIntentContent">' . $map . '</div></span>';
+		return '<span class="hoverIntent"><a href="http://maps.google.nl/maps?q=' . htmlspecialchars($address) . '">' . $address . ' <img src="//csrdelft.nl/plaetjes/famfamfam/map.png" alt="map" title="Kaart" /></a><div class="hoverIntentContent">' . $map . '</div></span>';
 	}
 
 	/**

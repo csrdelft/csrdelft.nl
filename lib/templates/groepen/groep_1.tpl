@@ -20,12 +20,12 @@
 		<ul class="tabs nobullets">
 			<li>
 				<a class="btn get{if $tab === GroepTab::Lijst} active{/if}" href="{groepenUrl}/{$groep->id}/{GroepTab::Lijst}" title="Lijst en opmerking tonen">
-					<img src="{$CSR_PICS}/knopjes/lijst.png" width="20" height="20" />
+					<img src="//csrdelft.nl/plaetjes/knopjes/lijst.png" width="20" height="20" />
 				</a>
 			</li>
 			<li>
 				<a class="btn get{if $tab === GroepTab::Pasfotos} active{/if}" href="{groepenUrl}/{$groep->id}/{GroepTab::Pasfotos}" title="Pasfoto's tonen">
-					<img src="{$CSR_PICS}/knopjes/pasfoto.png" width="18" height="18" />
+					<img src="//csrdelft.nl/plaetjes/knopjes/pasfoto.png" width="18" height="18" />
 				</a>
 			</li>
 			<li>

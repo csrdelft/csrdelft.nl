@@ -77,8 +77,8 @@
 									{if $groep->getToonFuncties()=='niet' OR $groep->getToonFuncties()=='tonenzonderinvoer'}
 										<a  {if !isset($actie) or $actie!='pasfotos'}class="btn"{/if} href="/groepen/{$groep->getType()->getNaam()}/{$groep->getId()}/aanmelden" onclick="if(confirm('Weet u zeker dat u zich wilt aanmelden?')) { return true; } else { event.preventDefault(); } ;">
 											{if isset($actie) and $actie=='pasfotos'}
-												<img class="pasfoto" style="width: auto; height: 100px;" src="{$CSR_PICS}/groepen/aanmelden.jpg" title="Aanmelden voor deze groep"
-													 onmouseover="this.src = '/tools/pasfotos.php?image';" onmouseout="this.src = '{$CSR_PICS}/groepen/aanmelden.jpg';" />
+												<img class="pasfoto" style="width: auto; height: 100px;" src="//csrdelft.nl/plaetjes/groepen/aanmelden.jpg" title="Aanmelden voor deze groep"
+													 onmouseover="this.src = '/tools/pasfotos.php?image';" onmouseout="this.src = '//csrdelft.nl/groepen/aanmelden.jpg';" />
 											{else}
 												Aanmelden voor deze groep
 											{/if}

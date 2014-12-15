@@ -721,7 +721,7 @@ class Lid implements Serializable, Agendeerbaar {
 	 * Geef een url naar een pasfoto terug, of een <img>-tag met die url.
 	 */
 	function getPasfoto($imgTag = true, $cssClass = 'pasfoto', $vierkant = false, $vorm = 'user') {
-		$path = CSR_PICS . '/' . $this->getPasfotoPath($vierkant, $vorm);
+		$path = CSR_ROOT . '/plaetjes/' . $this->getPasfotoPath($vierkant, $vorm);
 		if ($imgTag === true OR $imgTag === 'small') {
 			$html = '<img class="' . htmlspecialchars($cssClass) . '" src="' . $path . '" ';
 			if ($imgTag === 'small') {

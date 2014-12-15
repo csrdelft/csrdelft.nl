@@ -69,7 +69,7 @@ class LedenMemoryView extends CompressedLayout {
 		if (!file_exists($vierkant)) {
 			square_crop(PICS_PATH . $pasfoto, $vierkant, 150);
 		}
-		return CSR_PICS . '/pasfoto/' . $uid . '.vierkant.png';
+		return CSR_ROOT . '/plaetjes/pasfoto/' . $uid . '.vierkant.png';
 	}
 
 	private function getPasfotoMemorycard($lid) {

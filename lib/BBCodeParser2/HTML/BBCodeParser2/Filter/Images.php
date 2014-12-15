@@ -1,4 +1,5 @@
 <?php
+
 /* vim: set expandtab tabstop=4 shiftwidth=4: */
 // +----------------------------------------------------------------------+
 // | PHP Version 5                                                        |
@@ -38,16 +39,16 @@ class HTML_BBCodeParser2_Filter_Images extends HTML_BBCodeParser2_Filter {
 		'img' => array(
 //			'htmlopen'   => 'img',
 //			'htmlclose'  => '',
-			'allowed'    => 'none',
+			'allowed'	 => 'none',
 			'attributes' => array(
-				'img'   => ' src=%2$s%1$s%2$s',
-				'w'     => ' width=%2$s%1$d%2$s',
-				'h'     => ' height=%2$s%1$d%2$s',
-				'alt'   => ' alt=%2$s%1$s%2$s',
-				'class' => '',
-				'float' => ''
+				'img'	 => ' src=%2$s%1$s%2$s',
+				'w'		 => ' width=%2$s%1$d%2$s',
+				'h'		 => ' height=%2$s%1$d%2$s',
+				'alt'	 => ' alt=%2$s%1$s%2$s',
+				'class'	 => '',
+				'float'	 => ''
 			),
-			'plugin'     => 'Images'
+			'plugin'	 => 'Images'
 		)
 	);
 
@@ -67,13 +68,13 @@ class HTML_BBCodeParser2_Filter_Images extends HTML_BBCodeParser2_Filter {
 	 */
 	protected function _preparse() {
 		$options = $this->_options;
-		$o  = $options['open'];
-		$c  = $options['close'];
+		$o = $options['open'];
+		$c = $options['close'];
 		$oe = $options['open_esc'];
 		$ce = $options['close_esc'];
 
-		$pattern = "!".$oe."img(\s?.*)".$ce."(.*)".$oe."/img".$ce."!Ui";
-		$replace = $o."img=\"\$2\" alt=\"\"\$1".$c.$o."/img".$c;
+		$pattern = "!" . $oe . "img(\s?.*)" . $ce . "(.*)" . $oe . "/img" . $ce . "!Ui";
+		$replace = $o . "img=\"\$2\" alt=\"\"\$1" . $c . $o . "/img" . $c;
 		$this->_preparsed = preg_replace($pattern, $replace, $this->_text);
 	}
 
@@ -110,10 +111,10 @@ class HTML_BBCodeParser2_Filter_Images extends HTML_BBCodeParser2_Filter {
 					}
 				}
 				if (isset($arguments['w']) AND $arguments['w'] > 10) {
-					$style .= 'width: ' . ((int)$arguments['w']) . 'px; ';
+					$style .= 'width: ' . ((int) $arguments['w']) . 'px; ';
 				}
 				if (isset($arguments['h']) AND $arguments['h'] > 10) {
-					$style .= 'height: ' . ((int)$arguments['h']) . 'px;';
+					$style .= 'height: ' . ((int) $arguments['h']) . 'px;';
 				}
 
 				// only valid patterns & prevent CSRF
@@ -125,11 +126,12 @@ class HTML_BBCodeParser2_Filter_Images extends HTML_BBCodeParser2_Filter {
 					$url = htmlspecialchars($url);
 				}
 				// lazy loading van externe images bijv. op het forum
-				if (!startsWith($url, CSR_PICS) OR startsWith($url, CSR_PICS . '/fotoalbum/')) {
+				if (!startsWith($url, CSR_ROOT) OR startsWith($url, CSR_ROOT . '/plaetjes/fotoalbum/')) {
 					return '<div class="bb-img-loading" src="' . $url . '" title="' . htmlspecialchars($url) . '" style="' . $style . '"></div>';
 				}
 				return '<img class="bb-img ' . $class . '" src="' . $url . '" alt="' . $url . '" style="' . $style . '" />';
 		}
 		return false;
 	}
+
 }
