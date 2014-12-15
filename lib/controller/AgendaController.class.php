@@ -70,7 +70,7 @@ class AgendaController extends AclController {
 		if ($query === null) {
 			$this->geentoegang();
 		}
-		$query = '%' . $query . '%';
+		$query = '%' . filter_var($query, FILTER_SANITIZE_STRING) . '%';
 		$limit = 5;
 		if (isset($_GET['limit'])) {
 			$limit = (int) filter_input(INPUT_GET, 'limit');

@@ -271,7 +271,7 @@ class FotoAlbumController extends AclController {
 		if ($query === null) {
 			$this->geentoegang();
 		} else {
-			$query = iconv('utf-8', 'ascii//TRANSLIT', $query); // convert accented characters to regular
+			$query = iconv('utf-8', 'ascii//TRANSLIT', filter_var($query, FILTER_SANITIZE_STRING)); // convert accented characters to regular
 		}
 		$limit = 5;
 		if (isset($_GET['limit'])) {
