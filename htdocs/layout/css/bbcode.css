@@ -342,6 +342,9 @@ div.citaatContainer div.citaat div.citaatContainer div.citaat img.bb-img {
 	float: left;
 	overflow: hidden;
 }
+.mededeling-grotebalk img {
+	max-width: 350px;
+}
 .mededeling-grotebalk .titel {
 	font-weight: bold;
 	font-size: 1.1em;
