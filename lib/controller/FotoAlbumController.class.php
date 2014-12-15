@@ -277,7 +277,8 @@ class FotoAlbumController extends AclController {
 		}
 		$result = array();
 		foreach ($this->model->find('subdir LIKE ?', array('%' . $query . '%'), 'subdir DESC', null, $limit) as $album) {
-			if (stripos($album->dirname, $query) !== false AND $album->magBekijken()) {
+			// check album name in case of subalbum hits and convert accented characters to normal ones
+			if (stripos(iconv('utf-8', 'ascii//TRANSLIT', $album->dirname), $query) !== false AND $album->magBekijken()) {
 				$result[] = array(
 					'url'	 => $album->getUrl(),
 					'value'	 => ucfirst($album->dirname) . '<span class="lichtgrijs"> - ' . $album->getParentName() . '</span>'
