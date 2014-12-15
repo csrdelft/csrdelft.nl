@@ -82,10 +82,7 @@ abstract class CachedPersistenceModel extends PersistenceModel {
 	 */
 	protected function flushCache($memcache = false) {
 		if ($memcache AND CsrMemcache::isAvailable()) {
-			// this is obviously not complete at all
-			foreach ($this->runtime_cache as $key => $value) {
-				CsrMemcache::instance()->delete($key);
-			}
+			CsrMemcache::instance()->flush();
 		}
 		$this->runtime_cache = array();
 	}

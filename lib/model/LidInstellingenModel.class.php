@@ -199,8 +199,7 @@ class LidInstellingen extends Instellingen {
 
 	public function resetForAll($module, $id) {
 		Database::sqlDelete($this->orm->getTableName(), 'module = ? AND instelling_id = ?', array($module, $id));
-		$this->flushCache(false);
-		CsrMemcache::instance()->flush();
+		$this->flushCache(true);
 	}
 
 }
