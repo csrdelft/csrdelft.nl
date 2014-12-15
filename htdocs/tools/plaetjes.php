@@ -2,9 +2,10 @@
 
 require_once 'configuratie.include.php';
 
-$img = realpath(PICS_PATH . filter_input(INPUT_GET, 'img', FILTER_SANITIZE_URL));
+$img = PICS_PATH . filter_input(INPUT_GET, 'img', FILTER_SANITIZE_URL);
 
-if (!$img OR ! startsWith($img, PICS_PATH)) {
+// voorkom path traversal
+if (strpos($img, '..') !== false) {
 	http_response_code(403);
 	exit;
 }
