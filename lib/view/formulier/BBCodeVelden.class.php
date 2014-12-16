@@ -28,7 +28,7 @@ class CsrBBPreviewField extends TextareaField {
 		return parent::getHtml() . <<<HTML
 
 <div class="float-right">
-	<a href="http://csrdelft.nl/wiki/cie:diensten:forum" target="_blank" title="Ga naar het overzicht van alle opmaak codes">Opmaakhulp</a>
+	<a href="/wiki/cie:diensten:forum" target="_blank" title="Ga naar het overzicht van alle opmaak codes">Opmaakhulp</a>
 	<a class="btn" onclick="preview{$this->getId()}();" title="Toon voorbeeld met opmaak">Voorbeeld</a>
 </div>
 HTML;

@@ -132,7 +132,7 @@ function forumBewerken(postId) {
 			bewerkForm += '<div id="bewerkPreview" class="preview forumBericht"></div>';
 			bewerkForm += '<textarea name="forumBericht" id="forumBewerkBericht" class="FormElement CsrBBPreviewField" rows="8"></textarea>';
 			bewerkForm += 'Reden van bewerking: <input type="text" name="reden" id="forumBewerkReden"/><br /><br />';
-			bewerkForm += '<div class="float-right"><a href="http://csrdelft.nl/wiki/cie:diensten:forum" target="_blank">Opmaakhulp</a></div>';
+			bewerkForm += '<div class="float-right"><a href="/wiki/cie:diensten:forum" target="_blank">Opmaakhulp</a></div>';
 			bewerkForm += '<input type="button" value="Opslaan" onclick="submitPost();" /> <input type="button" value="Voorbeeld" onclick="CsrBBPreview(\'forumBewerkBericht\', \'bewerkPreview\');" /> <input type="button" value="Annuleren" onclick="restorePost();" />';
 			bewerkForm += '</form>';
 			bewerkContainer.innerHTML = bewerkForm;

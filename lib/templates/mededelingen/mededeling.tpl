@@ -11,7 +11,7 @@
 		<div id="bewerkPreview" class="bbcodePreview"></div>
 		<textarea id="tekst" name="tekst" class="CsrBBPreviewField breed" rows="12">{$mededeling->getTekst()|escape:'html'}</textarea><br />
 		<a id="voorbeeld" class="btn" onclick="return CsrBBPreview('tekst', 'bewerkPreview')">Voorbeeld</a>
-		<a href="http://csrdelft.nl/wiki/cie:diensten:forum" target="_blank">Opmaakhulp</a>
+		<a href="/wiki/cie:diensten:forum" target="_blank">Opmaakhulp</a>
 		<a id="vergroot" class="btn vergroot" data-vergroot="#tekst" title="Vergroot het invoerveld">&uarr;&darr;</a>
 	</div>
 

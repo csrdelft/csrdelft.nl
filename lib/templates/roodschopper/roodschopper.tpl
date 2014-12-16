@@ -44,7 +44,7 @@
 	
 	<div id="submitContainer">
 		<label for="submit">&nbsp;</label>
-		<a href="http://csrdelft.nl/wiki/cie:diensten:forum" target="_blank">Opmaakhulp</a>
+		<a href="/wiki/cie:diensten:forum" target="_blank">Opmaakhulp</a>
 		<a class="btn float-right vergroot" data-vergroot="#bericht" title="Vergroot het invoerveld">&uarr;&darr;</a>
 		<input type="button" name="submit" id="submit" value="Verder gaan" onclick="roodschopper('simulate'); return false;" />
 		<input id="forumVoorbeeld" type="button" onclick="CsrBBPreview('berichtInvoer', 'berichtPreview')" value="Voorbeeld"/>
@@ -57,4 +57,4 @@
 <br />
 {* TODO: dit ding met javascript mee laten veranderen met het kiezen van een commissie *}
 <p>Kijk aan, hier doen we het voor!</p>
-<img src="http://csrdelft.nl/tools/saldografiek.php?uid=000&timespan=100&{$roodschopper->getCommissie()}" />
+<img src="/tools/saldografiek.php?uid=000&timespan=100&{$roodschopper->getCommissie()}" />

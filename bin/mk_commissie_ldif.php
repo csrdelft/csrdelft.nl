@@ -30,7 +30,7 @@ mozillaHomeStreet: Oude Delft 9
 mozillaHomeLocalityName: Delft
 mozillaHomePostalCode: 2611 BA
 mozillaHomeCountryName: Nederland
-homeurl: http://csrdelft.nl/
+homeurl: http://csrdelft.nl
 description: Adreslijst C.S.R. Delft
 
 

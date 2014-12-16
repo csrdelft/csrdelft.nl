@@ -102,7 +102,7 @@
 			<div id="sbewerkPreview" class="bbcodePreview"></div>
 			<textarea id="sbeschrijving" name="sbeschrijving" class="CsrBBPreviewField" rows="7">{$groep->getSbeschrijving()|escape:'html'}</textarea>
 			<input type="button" class="voorbeeld" value="Voorbeeld" onclick="return CsrBBPreview('sbeschrijving', 'sbewerkPreview')" />
-			<a href="http://csrdelft.nl/wiki/cie:diensten:forum" target="_blank">Opmaakhulp</a>
+			<a href="/wiki/cie:diensten:forum" target="_blank">Opmaakhulp</a>
 			<a class="btn extraknopjespreview vergroot" data-vergroot="#sbeschrijving" title="Vergroot het invoerveld">&uarr;&darr;</a><br />
 		{/if}
 
@@ -115,7 +115,7 @@
 			<div id="bewerkPreview" class="bbcodePreview"></div>
 			<textarea id="beschrijving" name="beschrijving" class="CsrBBPreviewField" rows="15">{$groep->getBeschrijving()|escape:'html'}</textarea>
 			<input type="button" class="voorbeeld" value="Voorbeeld" onclick="return CsrBBPreview('beschrijving', 'bewerkPreview')" /> 
-			<a href="http://csrdelft.nl/wiki/cie:diensten:forum" target="_blank">Opmaakhulp</a>
+			<a href="/wiki/cie:diensten:forum" target="_blank">Opmaakhulp</a>
 			<a class="btn extraknopjespreview vergroot" data-vergroot="#beschrijving" title="Vergroot het invoerveld">&uarr;&darr;</a><br />
 		{/if}
 

@@ -71,7 +71,7 @@
 					{if LoginModel::mag('P_LOGGED_IN')}
 						<a href="/fotoalbum/uploaden/fotoalbum/{Lichting::getHuidigeJaargang()}/Posters" target="_blank">Poster opladen</a> &nbsp;
 						<a href="/groepen/Ketzers" target="_blank">Ketzer maken</a> &nbsp;
-						<a href="http://csrdelft.nl/wiki/cie:diensten:forum" target="_blank">Opmaakhulp</a> &nbsp;
+						<a href="/wiki/cie:diensten:forum" target="_blank">Opmaakhulp</a> &nbsp;
 					{/if}
 				</div>
 			</div>

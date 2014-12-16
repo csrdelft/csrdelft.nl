@@ -11,19 +11,19 @@
 		<copyright>Copyright 2006 C.S.R. Delft</copyright>
 		<pubDate>{$smarty.now|rfc2822}</pubDate>
 		<lastBuildDate>{$smarty.now|rfc2822}</lastBuildDate>
-		<docs>http://csrdelft.nl/</docs>
+		<docs>http://csrdelft.nl</docs>
 		<description>C.S.R. Delft: Vereniging van Christen-studenten te Delft.</description>
 		<image>
-		<link>http://csrdelft.nl/</link>
-		<title>C.S.R. Delft</title>
-		<url>//csrdelft.nl/layout/beeldmerk.jpg</url>
-		<height>150</height>
-		<width>118</width>
-		<description>Beeldmerk der C.S.R. Delft</description>
+			<link>http://csrdelft.nl</link>
+			<title>C.S.R. Delft</title>
+			<url>//csrdelft.nl/layout/beeldmerk.jpg</url>
+			<height>150</height>
+			<width>118</width>
+			<description>Beeldmerk der C.S.R. Delft</description>
 		</image>
 		<language>nl-nl</language>
 		<atom:link href="{$privatelink}" rel="self" type="application/rss+xml" />
-		<link>http://csrdelft.nl/forum/</link>
+		<link>http://csrdelft.nl/forum</link>
 		<title>C.S.R. Delft forum recent</title>
 		<managingEditor>PubCie@csrdelft.nl (Publiciteitscommissie der C.S.R.)</managingEditor>
 		<webMaster>pubcie@csrdelft.nl (Publiciteitscommissie der C.S.R.)</webMaster>
