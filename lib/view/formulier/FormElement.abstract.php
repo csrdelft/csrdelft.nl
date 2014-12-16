@@ -133,10 +133,19 @@ class CollapsableSubkopje extends Subkopje {
 
 $('#toggle_kopje_{$this->id}').click(function() {
 	if ($('#expand_kopje_{$this->id}').is(':visible')) {
+JS;
+		// niet inklappen?
+		if (!$this->single) {
+			$js .= <<<JS
+
 		$('#expand_kopje_{$this->id}').{$this->collapse};
 		$(this).removeClass('toggle-group-expanded');
+JS;
+		}
+		$js .= <<<JS
 	} else {
 JS;
+		// de rest inklappen?
 		if ($this->single) {
 			$js .= <<<JS
 
@@ -144,6 +153,7 @@ $(this).siblings('.expanded-submenu').{$this->collapse};
 $(this).siblings('.toggle-group').removeClass('toggle-group-expanded');
 JS;
 		}
+		// uitklappen:
 		$js .= <<<JS
 
 		$('#expand_kopje_{$this->id}').{$this->expand};
@@ -151,6 +161,7 @@ JS;
 	}
 });
 JS;
+		// uitklappen bij hover?
 		if ($this->hover_click) {
 			$js .= <<<JS
 
