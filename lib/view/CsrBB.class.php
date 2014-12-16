@@ -109,8 +109,8 @@ class CsrBB extends eamBBParser {
 			$style .= 'height: ' . ((int) $arguments['h']) . 'px;';
 		}
 		$content = $this->parseArray(array('[/img]', '[/IMG]'), array());
-		// only valid patterns & prevent CSRF
-		if (!url_like(urldecode($content)) OR startsWith($content, CSR_ROOT)) {
+		// only valid patterns
+		if (!url_like(urldecode($content))) {
 			return '[img: Ongeldige URL, tip: gebruik tinyurl.com]';
 		}
 		// als de html toegestaan is hebben we genoeg vertrouwen om sommige karakters niet te encoderen
