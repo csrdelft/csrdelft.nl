@@ -151,7 +151,7 @@ class CourantModel {
 	public function addBericht($titel, $categorie, $bericht) {
 		//berichten invoeren mag enkel in de cache
 		if (!$this->isCache()) {
-			$this->sError = 'Berichten mogen enkel in de cache worden ingevoerd. (Courant::addBericht())';
+			$this->sError = 'Berichten mogen enkel in de cache worden ingevoerd. (CourantModel::addBericht())';
 			return false;
 		}
 
@@ -248,14 +248,14 @@ class CourantModel {
 			$first = current($this->berichten);
 			return $first['verzendMoment'];
 		} else {
-			$this->sError = 'De cache is nog niet verzonden, dus heeft geen verzendmoment (Courant::getVerzendMoment())';
+			$this->sError = 'De cache is nog niet verzonden, dus heeft geen verzendmoment (CourantModel::getVerzendMoment())';
 			return false;
 		}
 	}
 
 	public function getBerichten() {
 		if (!is_array($this->berichten)) {
-			$this->sError = 'Er zijn geen berichten ingeladen (Courant::getBerichten())';
+			$this->sError = 'Er zijn geen berichten ingeladen (CourantModel::getBerichten())';
 			return false;
 		}
 		return $this->berichten;
@@ -284,7 +284,7 @@ class CourantModel {
 				return $userCache;
 			}
 		} else {
-			$this->sError = 'Buiten de cache kan niets bewerkt worden (Courant::getBerichtenVoorGebruiker()).';
+			$this->sError = 'Buiten de cache kan niets bewerkt worden (CourantModel::getBerichtenVoorGebruiker()).';
 			return false;
 		}
 	}
@@ -319,7 +319,7 @@ class CourantModel {
 	 */
 	public function leegCache() {
 		if (count($this->getBerichten()) == 0) {
-			$this->sError = 'Courant bevat helemaal geen berichten (Courant::leegCache())';
+			$this->sError = 'Courant bevat helemaal geen berichten (CourantModel::leegCache())';
 			return false;
 		}
 		$db = MijnSqli::instance();

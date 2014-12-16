@@ -102,7 +102,7 @@ class CmsPaginaController extends Controller {
 
 	public function verwijderen($naam) {
 		$pagina = $this->model->getPagina($naam);
-		if (!$pagina->magVerwijderen()) {
+		if (!$pagina OR ! $pagina->magVerwijderen()) {
 			$this->geentoegang();
 		}
 		if ($this->model->delete($pagina)) {

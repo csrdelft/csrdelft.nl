@@ -123,7 +123,7 @@ class CourantController extends AclController {
 		$courant = new CourantView($this->model);
 		if ($iedereen === 'iedereen') {
 			$courant->verzenden('csrmail@lists.knorrie.org');
-			$courant->leegCache();
+			$this->model->leegCache();
 			echo 'aan iedereen verzonden';
 		} else {
 			$courant->verzenden('pubcie@csrdelft.nl');
