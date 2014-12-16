@@ -146,7 +146,7 @@ Top navigation
 	/* this span is the central line in the menu menu */
 	display: block;
 	position: absolute;
-	left: 50%;
+	left: 33%;
 	top: 50%;
 	bottom: auto;
 	right: auto;
@@ -159,8 +159,6 @@ Top navigation
 	height: 2px;
 	background-color: #fff;
 	/* these are the upper and lower lines in the menu menu */
-	left: auto;
-	right: 1.25em;
 	-webkit-transform: translateX(0);
 	-moz-transform: translateX(0);
 	-ms-transform: translateX(0);
