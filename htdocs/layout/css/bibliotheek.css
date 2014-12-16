@@ -163,7 +163,7 @@ select{
 
 .InputField label{	width:71px;}
 .boek .InputField:hover{
-	background: url("//csrdelft.nl/plaetjes/famfamfam/pencil.png") no-repeat 488px #f3f3f3;
+	background: url("/plaetjes/famfamfam/pencil.png") no-repeat 488px #f3f3f3;
 }
 .InputField:hover input,
 .InputField:hover textarea,

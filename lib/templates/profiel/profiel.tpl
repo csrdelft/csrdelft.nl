@@ -14,14 +14,14 @@
 					{if $isBestuur}
 						<a href="/profiel/{$profiel->getUid()}/dd" class="btn round" title="Wijzig de lidstatus">{icon get="group_edit"}</a>
 					{/if}
-					<a href="/profiel/{$profiel->getUid()}/addToGoogleContacts/" class="btn round" title="{*if $profiel->isInGoogleContacts()}Er bestaat al een contact met deze naam in je Google-contacts. Klik om te updaten.{else*}Voeg dit profiel toe aan mijn google adresboek{*/if*}"><img src="//csrdelft.nl/plaetjes/knopjes/google.ico" width="16" height="16" alt="tovoegen aan Google contacts"/></a>
+					<a href="/profiel/{$profiel->getUid()}/addToGoogleContacts/" class="btn round" title="{*if $profiel->isInGoogleContacts()}Er bestaat al een contact met deze naam in je Google-contacts. Klik om te updaten.{else*}Voeg dit profiel toe aan mijn google adresboek{*/if*}"><img src="/plaetjes/knopjes/google.ico" width="16" height="16" alt="tovoegen aan Google contacts"/></a>
 						{if $isAdmin}
 						<br />
 						<a href="/tools/stats.php?uid={$profiel->getUid()}" class="btn round" title="Toon bezoeklog">{icon get="server_chart"}</a>
 						<a href="/profiel/{$profiel->getUid()}/wachtwoord" class="btn round" title="Reset wachtwoord voor {$profiel->getNaam()}" onclick="return confirm('Weet u zeker dat u het wachtwoord van deze gebruiker wilt resetten?')">{icon get="resetpassword"}</a>
 					{/if}
 					{if $profiel->getStatus()=='S_NOVIET' AND LoginModel::mag('groep:novcie')}
-						<a href="/profiel/{$profiel->getUid()}/novietBewerken" class="btn round"><img src="//csrdelft.nl/plaetjes/forum/bewerken.png" title="Bewerk dit profiel" alt="bewerken" />Noviet bewerken</a><br />
+						<a href="/profiel/{$profiel->getUid()}/novietBewerken" class="btn round"><img src="/plaetjes/forum/bewerken.png" title="Bewerk dit profiel" alt="bewerken" />Noviet bewerken</a><br />
 						{/if}
 				</div>
 			</div>
@@ -61,7 +61,7 @@
 					<div class="label">
 						{if $profhtml.adres!=''}
 							<a href="http://maps.google.nl/maps?q={$profhtml.adres|urlencode}+{$profhtml.woonplaats|urlencode}+{$profhtml.land|urlencode} ({if $profhtml.woonoord!=''}{$profiel->getWoonoord()->getNaam()}{else}{$profiel->getNaamLink('civitas', 'plain')}{/if})">
-								<img src="//csrdelft.nl/plaetjes/layout/googlemaps.gif" width="35px" alt="googlemap voor dit adres" />
+								<img src="/plaetjes/layout/googlemaps.gif" width="35px" alt="googlemap voor dit adres" />
 							</a>
 						{/if}
 					</div>
@@ -79,7 +79,7 @@
 						{if $profhtml.o_adres!=''}
 							<div class="label">
 								<a href="http://maps.google.nl/maps?q={$profhtml.o_adres|urlencode}+{$profhtml.o_woonplaats|urlencode}+{$profhtml.o_land|urlencode} (ouders van {$profiel->getNaamLink('civitas', 'plain')})">
-									<img src="//csrdelft.nl/plaetjes/layout/googlemaps.gif" width="35px" alt="googlemap voor dit adres" />
+									<img src="/plaetjes/layout/googlemaps.gif" width="35px" alt="googlemap voor dit adres" />
 								</a>
 							</div>
 						{/if}
@@ -159,7 +159,7 @@
 			<div class="familie">
 				{if $profiel->getPatroon() instanceof Lid OR $profiel->getKinderen()|@count > 0}
 					<a class="stamboom" href="/leden/stamboom/{$profiel->getUid()}" title="Stamboom van {$profiel->getNaam()}">
-						<img src="//csrdelft.nl/plaetjes/knopjes/stamboom.jpg" alt="Stamboom van {$profiel->getNaam()}" />
+						<img src="/plaetjes/knopjes/stamboom.jpg" alt="Stamboom van {$profiel->getNaam()}" />
 					</a>
 				{/if}
 				{if $profiel->getPatroon() instanceof Lid}
@@ -270,7 +270,7 @@
 				<div class="data">
 					{if $profhtml.rssToken!=''}
 						<a href="{$profiel->getICalLink()}">
-							<img src="//csrdelft.nl/plaetjes/knopjes/ical.gif" /> Persoonlijke ICal-feed agenda
+							<img src="/plaetjes/knopjes/ical.gif" /> Persoonlijke ICal-feed agenda
 						</a>
 					{/if}
 					<small>Gebruikt dezelfde private token als het forum (zie hieronder)</small>

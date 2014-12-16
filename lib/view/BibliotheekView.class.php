@@ -11,7 +11,7 @@ require_once 'model/bibliotheek/BiebCatalogus.class.php';
 abstract class BibliotheekView extends SmartyTemplateView {
 
 	public function getBreadcrumbs() {
-		return '<a href="/bibliotheek" title="Bibliotheek"><img src="//csrdelft.nl/plaetjes/knopjes/book-16.png" class="module-icon"></a>';
+		return '<a href="/bibliotheek" title="Bibliotheek"><img src="/plaetjes/knopjes/book-16.png" class="module-icon"></a>';
 	}
 
 }

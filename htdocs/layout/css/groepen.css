@@ -24,10 +24,10 @@ div.generaties {
     padding: 3px 20px;
 }
 div.vorigeGroep {
-    list-style-image: url("//csrdelft.nl/plaetjes/groepen/up.png");
+    list-style-image: url("/plaetjes/groepen/up.png");
 }
 div.volgendeGroep {
-    list-style-image: url("//csrdelft.nl/plaetjes/groepen/down.png");
+    list-style-image: url("/plaetjes/groepen/down.png");
 }
 div.groepTabContent {
     clear: both;
@@ -115,8 +115,8 @@ ul.groepledenlijst { width: 230px; float: right; padding: 10px 20px 20px 20px; m
 
 
 #voorgangerOpvolger { margin: 10px 0; padding: 3px 20px; border-bottom: 1px solid black; }
-.vorigeGroep { list-style-image: url("//csrdelft.nl/plaetjes/groepen/up.png"); }
-.volgendeGroep { list-style-image: url("//csrdelft.nl/plaetjes/groepen/down.png"); }
+.vorigeGroep { list-style-image: url("/plaetjes/groepen/up.png"); }
+.volgendeGroep { list-style-image: url("/plaetjes/groepen/down.png"); }
 #groepAdmin { float: right; margin: 10px ; }
 .groepFormulier { width: 100%; }
 .groepFormulier label { float: left; margin-right: 15px; width: 130px; }
@@ -142,11 +142,11 @@ ul.groepledenlijst { width: 230px; float: right; padding: 10px 20px 20px 20px; m
 	padding:1px;
 }
 .inline_edit {
-	background:url("//csrdelft.nl/plaetjes/famfamfam/pencil.png") right no-repeat;
+	background:url("/plaetjes/famfamfam/pencil.png") right no-repeat;
 	padding-right:18px!important;
 }
 .inline_edit:hover {
-	background:url("//csrdelft.nl/plaetjes/famfamfam/pencil.png") right no-repeat #f5f5f5;
+	background:url("/plaetjes/famfamfam/pencil.png") right no-repeat #f5f5f5;
 	cursor:pointer;
 }
 .inline_edit input {

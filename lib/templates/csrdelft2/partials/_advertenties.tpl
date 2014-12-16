@@ -1,2 +1,2 @@
-<a href="http://www.dosign.nl"><img src="//csrdelft.nl/plaetjes/banners/dosign_staticbutton_298x77.jpg" alt="Dosign advertentie"></a>
-<a href="http://www.mechdes.nl"><img src="//csrdelft.nl/plaetjes/banners/mechdes.gif" alt="Mechdes advertentie"></a>
+<a href="http://www.dosign.nl"><img src="/plaetjes/banners/dosign_staticbutton_298x77.jpg" alt="Dosign advertentie"></a>
+<a href="http://www.mechdes.nl"><img src="/plaetjes/banners/mechdes.gif" alt="Mechdes advertentie"></a>

@@ -327,7 +327,7 @@ class HTML_BBCodeParser2_Filter_Csrblocks extends HTML_BBCodeParser2_Filter {
 				return
 						'<span class="hoverIntent">'
 						. '<a href="http://maps.google.nl/maps?q=' . htmlspecialchars($address) . '">'
-						. $address . ' <img src="//csrdelft.nl/plaetjes/famfamfam/map.png" alt="map" title="Kaart" />'
+						. $address . ' <img src="/plaetjes/famfamfam/map.png" alt="map" title="Kaart" />'
 						. '</a>'
 						. '<div class="hoverIntentContent">' . $map . '</div>'
 						. '</span>';

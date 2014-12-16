@@ -88,7 +88,7 @@ main.cd-main-content {
 #dokuwiki__aside .content h4 {
     font-weight: normal;
     padding: 2px 0 5px 0;
-    background: transparent url("//csrdelft.nl/plaetjes/layout/portal-break.png") no-repeat bottom left;
+    background: transparent url("/plaetjes/layout/portal-break.png") no-repeat bottom left;
 }
 
 

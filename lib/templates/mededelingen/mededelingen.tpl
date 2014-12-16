@@ -65,7 +65,7 @@
 									{if $mededeling->getCategorie()->getPlaatje() !=''}
 										<div class="mededelingenlijst-plaatje">
 											<a href="{$pagina_root}{$mededeling->getId()}">
-												<img src="//csrdelft.nl/plaetjes/nieuws/{$mededeling->getCategorie()->getPlaatje()}" width="10px" height="10px" />
+												<img src="/plaetjes/nieuws/{$mededeling->getCategorie()->getPlaatje()}" width="10px" height="10px" />
 											</a>
 										</div>
 									{/if}
@@ -86,7 +86,7 @@
 			<div class="nieuwsbericht">
 				<div class="nieuwsbody">
 					<div class="nieuwstitel">{$geselecteerdeMededeling->getTitel()|escape:'html'}</div>
-					<img class="nieuwsplaatje" src="//csrdelft.nl/plaetjes/nieuws/{$geselecteerdeMededeling->getPlaatje()}" width="200px" height="200px" alt="{$geselecteerdeMededeling->getPlaatje()}" />
+					<img class="nieuwsplaatje" src="/plaetjes/nieuws/{$geselecteerdeMededeling->getPlaatje()}" width="200px" height="200px" alt="{$geselecteerdeMededeling->getPlaatje()}" />
 					{$geselecteerdeMededeling->getTekst()|bbcode}<br />
 				</div>
 				<div class="informatie">

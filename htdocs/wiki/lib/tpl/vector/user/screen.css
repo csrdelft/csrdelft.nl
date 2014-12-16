@@ -157,7 +157,7 @@ div.catlinks span.bchead {
 }
 #page-base {
     height: 176px !important;
-    background: url('//csrdelft.nl/plaetjes/layout/body.png') repeat-x;
+    background: url('/plaetjes/layout/body.png') repeat-x;
 }
 #head a, #head a span, #head a:visited {
     color: #fff !important;
@@ -192,7 +192,7 @@ div.catlinks span.bchead {
     height: 32px !important;
     width: 122px !important;
     margin-left: 15px !important;
-    background: url('//csrdelft.nl/plaetjes/layout/menubutton.png') no-repeat;
+    background: url('/plaetjes/layout/menubutton.png') no-repeat;
 }
 #right-navigation {
     float: left !important;
@@ -209,7 +209,7 @@ div.catlinks span.bchead {
 }
 #p-logo a {
     margin: 14px 0 0 30px !important;
-    background: url('//csrdelft.nl/plaetjes/layout/logo.gif') no-repeat !important;
+    background: url('/plaetjes/layout/logo.gif') no-repeat !important;
 }
 #p-namespaces, #p-namespaces a span, #p-views a span {
     padding: 3px !important;
@@ -219,7 +219,7 @@ div.catlinks span.bchead {
 }
 #p-namespaces li.selected, #p-namespaces li:hover,
 #p-views li.selected, #p-views li:hover {
-    background: url('//csrdelft.nl/plaetjes/layout/menubutton_hover.png') no-repeat;
+    background: url('/plaetjes/layout/menubutton_hover.png') no-repeat;
 }
 #pt-userpage {
     background: none;

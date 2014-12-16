@@ -9,7 +9,7 @@
 			</div>
 			<div class="plaatje">
 				<a href="{MededelingenView::mededelingenRoot}{$mededeling->getId()}">
-					<img src="//csrdelft.nl/plaetjes/nieuws/{$mededeling->getPlaatje()}" width="70px" height="70px" alt="{$mededeling->getPlaatje()|escape:'html'}" />
+					<img src="/plaetjes/nieuws/{$mededeling->getPlaatje()}" width="70px" height="70px" alt="{$mededeling->getPlaatje()|escape:'html'}" />
 				</a>
 			</div>
 			<div class="bericht">

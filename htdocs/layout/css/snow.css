@@ -7,7 +7,7 @@
 */
 
 #cd-lateral-nav, #cd-ingelogd-menu {
-    background-image:  url('//csrdelft.nl/plaetjes/layout/snow/snowh.png'), url('//csrdelft.nl/plaetjes/layout/snow/snow3q.png'), url('//csrdelft.nl/plaetjes/layout/snow/snow2l.png') !important;
+    background-image:  url('/plaetjes/layout/snow/snowh.png'), url('/plaetjes/layout/snow/snow3q.png'), url('/plaetjes/layout/snow/snow2l.png') !important;
 }
 
 #cd-lateral-nav a:hover, #cd-lateral-nav a:active, #cd-lateral-nav a.active,

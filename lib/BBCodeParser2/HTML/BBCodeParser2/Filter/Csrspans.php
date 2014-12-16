@@ -203,7 +203,7 @@ class HTML_BBCodeParser2_Filter_Csrspans extends HTML_BBCodeParser2_Filter {
 				$content = $tag['text'];
 
 				if (LidInstellingen::get('layout', 'neuzen') != 'nee') {
-					$neus = '<img src="//csrdelft.nl/plaetjes/famfamfam/bullet_red.png" alt="o" class="neus2013" />';
+					$neus = '<img src="/plaetjes/famfamfam/bullet_red.png" alt="o" class="neus2013" />';
 					$content = str_replace('o', $neus, $content);
 				}
 				return $content;

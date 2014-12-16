@@ -14,28 +14,28 @@ h1, h2, h3, h4 {
 	color: #555555;
 }
 body{
-	background: url('//csrdelft.nl/plaetjes/layout/sineregno/2014/body.png') repeat-x;
+	background: url('/plaetjes/layout/sineregno/2014/body.png') repeat-x;
 }
 
 /**** MENU ********************************************************************/
 #menubanners,#banner1,#banner2,#banner3,#banner4{
-	background-image: url('//csrdelft.nl/plaetjes/layout/sineregno/2014/puinhopen.png');
+	background-image: url('/plaetjes/layout/sineregno/2014/puinhopen.png');
 }
 
 #beeldmerk{
-	background-image: url('//csrdelft.nl/plaetjes/layout/logo.gif');
+	background-image: url('/plaetjes/layout/logo.gif');
 }
 
 /**** MAIN MENU ***************************************************************/
 
 #mainmenu a {
-	background: url('//csrdelft.nl/plaetjes/layout/sineregno/2014/menubutton.png') no-repeat;
+	background: url('/plaetjes/layout/sineregno/2014/menubutton.png') no-repeat;
 }	
 #mainmenu a:link, #mainmenu a:visited {
 	color: #fff;
 }
 #mainmenu a:hover, #mainmenu a:active, #mainmenu a.active {
-	background: url('//csrdelft.nl/plaetjes/layout/sineregno/2014/menubutton_hover.png') no-repeat;
+	background: url('/plaetjes/layout/sineregno/2014/menubutton_hover.png') no-repeat;
 }
 
 /**** SUBMENU *****************************************************************/
@@ -74,5 +74,5 @@ body{
 }
 
 #footer {
-	background: url('//csrdelft.nl/plaetjes/owee/2010/footerbg.png') no-repeat;
+	background: url('/plaetjes/owee/2010/footerbg.png') no-repeat;
 }

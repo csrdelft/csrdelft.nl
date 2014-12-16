@@ -267,7 +267,7 @@ class CsrBB extends eamBBParser {
 			$content = $arguments;
 		}
 		if (LidInstellingen::get('layout', 'neuzen') != 'nee') {
-			$neus = '<img src="//csrdelft.nl/plaetjes/famfamfam/bullet_red.png" alt="o" class="neus2013">';
+			$neus = '<img src="/plaetjes/famfamfam/bullet_red.png" alt="o" class="neus2013">';
 			$content = str_replace('o', $neus, $content);
 		}
 		return $content;
@@ -863,7 +863,7 @@ HTML;
 	function bb_locatie($arguments = array()) {
 		$address = $this->parseArray(array('[/locatie]'), array());
 		$map = $this->maps(htmlspecialchars($address), $arguments);
-		return '<span class="hoverIntent"><a href="http://maps.google.nl/maps?q=' . htmlspecialchars($address) . '">' . $address . ' <img src="//csrdelft.nl/plaetjes/famfamfam/map.png" alt="map" title="Kaart" /></a><div class="hoverIntentContent">' . $map . '</div></span>';
+		return '<span class="hoverIntent"><a href="http://maps.google.nl/maps?q=' . htmlspecialchars($address) . '">' . $address . ' <img src="/plaetjes/famfamfam/map.png" alt="map" title="Kaart" /></a><div class="hoverIntentContent">' . $map . '</div></span>';
 	}
 
 	/**

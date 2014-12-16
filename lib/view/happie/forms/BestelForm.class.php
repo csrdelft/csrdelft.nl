@@ -104,7 +104,7 @@ class HappieBestelForm extends TabsForm {
 					$fields[] = $int;
 
 					if ($beschikbaar > 0 OR $aantal > 0) {
-						$html = '<div id="toggle_' . $item->item_id . '" class="btn toggle-info float-left" style="margin-right:5px;width:32px;padding:0;"><img src="//csrdelft.nl/plaetjes/famfamfam/information.png" class="icon" width="16" height="16"></div>';
+						$html = '<div id="toggle_' . $item->item_id . '" class="btn toggle-info float-left" style="margin-right:5px;width:32px;padding:0;"><img src="/plaetjes/famfamfam/information.png" class="icon" width="16" height="16"></div>';
 					} else {
 						$html = '<div id="toggle_' . $item->item_id . '" class="float-left alert alert-warning" style="margin-right:5px;width:32px;padding:0;text-align:center;">OP</div>';
 					}

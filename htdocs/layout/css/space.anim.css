@@ -30,7 +30,7 @@
 }
 
 #cd-lateral-nav, #cd-ingelogd-menu {
-    background-image:  url('//csrdelft.nl/plaetjes/layout/bg/stars.jpg');
+    background-image:  url('/plaetjes/layout/bg/stars.jpg');
 	background-size: cover;
     -webkit-animation: space 360s linear infinite;
     -moz-animation: space 360s linear infinite;

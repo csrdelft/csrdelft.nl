@@ -9,5 +9,5 @@ body, body * {
 }
 
 #beeldmerk{
-	background-image: url('//csrdelft.nl/plaetjes/owee/2010/logo.png') !important;
+	background-image: url('/plaetjes/owee/2010/logo.png') !important;
 }

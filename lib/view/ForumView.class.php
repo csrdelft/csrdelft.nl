@@ -10,7 +10,7 @@
 abstract class ForumView extends SmartyTemplateView {
 
 	public function getBreadcrumbs() {
-		return '<a href="/forum" title="Forum"><img src="//csrdelft.nl/plaetjes/knopjes/chat-16.png" class="module-icon"></a>';
+		return '<a href="/forum" title="Forum"><img src="/plaetjes/knopjes/chat-16.png" class="module-icon"></a>';
 	}
 
 }

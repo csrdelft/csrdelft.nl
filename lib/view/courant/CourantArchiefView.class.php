@@ -21,7 +21,7 @@ class CourantArchiefView implements View {
 	}
 
 	public function getBreadcrumbs() {
-		return '<a href="/courant" title="Courant"><img src="//csrdelft.nl/plaetjes/knopjes/email-16.png" class="module-icon"></a> » <span class="active">' . $this->getTitel() . '</span>';
+		return '<a href="/courant" title="Courant"><img src="/plaetjes/knopjes/email-16.png" class="module-icon"></a> » <span class="active">' . $this->getTitel() . '</span>';
 	}
 
 	function getTitel() {

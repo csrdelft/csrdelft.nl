@@ -404,7 +404,6 @@ htdocs/layout/js/jquery/plugins/typeahead.bundle.js -text
 htdocs/layout/js/jquery/plugins/typeahead.bundle.min.js -text
 htdocs/layout/js/keypress.js -text
 htdocs/layout/js/ledenmemory.js -text
-htdocs/layout/js/lightbox.js -text
 htdocs/layout/js/maalcie.js -text
 htdocs/layout/js/main_menu.js -text
 htdocs/layout/js/markitup/jquery.markitup.js -text
@@ -435,8 +434,6 @@ htdocs/layout/js/minion.js -text
 htdocs/layout/js/peilingbeheer.js -text
 htdocs/layout/js/profiel.js -text
 htdocs/layout/js/roodschopper.js -text
-htdocs/layout/js/slideshow.js -text
-htdocs/layout/js/slideshow_intern.js -text
 htdocs/layout/js/verticalen.js -text
 htdocs/layout/script.ini -text
 htdocs/layout/style.ini -text

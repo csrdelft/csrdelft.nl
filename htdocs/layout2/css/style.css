@@ -107,18 +107,18 @@ textarea.forumBericht, #forumBewerkBericht {
 .box.pad-left { margin-left: 254px; }
 
 .blue.h2 {
-    background-image: url("//csrdelft.nl/plaetjes/layout2/blue-box-h2.png");
+    background-image: url("/plaetjes/layout2/blue-box-h2.png");
 }
 .blue.h2.w2 {
-    background-image: url("//csrdelft.nl/plaetjes/layout2/blue-box-h2-w2.png");
+    background-image: url("/plaetjes/layout2/blue-box-h2-w2.png");
 }
 .blue.h4 {
-    background-image: url("//csrdelft.nl/plaetjes/layout2/blue-box-h4.png");
+    background-image: url("/plaetjes/layout2/blue-box-h4.png");
 }
 
 .blue {
     background: #1255a3;
-    background-image: url("//csrdelft.nl/plaetjes/layout2/blue-box.png");
+    background-image: url("/plaetjes/layout2/blue-box.png");
     background: -webkit-linear-gradient(#1255a3 0%, #063379 100%);
     background: linear-gradient(#1255a3 0%, #063379 100%);
     background: -moz-linear-gradient(#1255a3 0%, #063379 100%);
@@ -156,9 +156,9 @@ img.border { width: 224px; border: 6px solid #fff; }
 
 /* Popup */
 #pageover { position: absolute; z-index: 101; left: 50%; width: 851px; margin: 56px 0 0 -425px; }
-#pageover .pg-top { position: relative; z-index: 103; height: 85px; background: url("//csrdelft.nl/plaetjes/layout2/page-top.png") no-repeat; }
-#pageover .pg-mid { position: relative; float: left; clear: both; width: 791px; background: url("//csrdelft.nl/plaetjes/layout2/page-mid.png") repeat-y; padding: 0 30px; }
-#pageover .pg-btm { clear: both; height: 113px; background: url("//csrdelft.nl/plaetjes/layout2/page-btm.png") no-repeat; padding: 0 0 30px; }
+#pageover .pg-top { position: relative; z-index: 103; height: 85px; background: url("/plaetjes/layout2/page-top.png") no-repeat; }
+#pageover .pg-mid { position: relative; float: left; clear: both; width: 791px; background: url("/plaetjes/layout2/page-mid.png") repeat-y; padding: 0 30px; }
+#pageover .pg-btm { clear: both; height: 113px; background: url("/plaetjes/layout2/page-btm.png") no-repeat; padding: 0 0 30px; }
 #pageover .close { display: block; position: absolute; right: 35px; top: 30px; font-size: 26px; color: #666; z-index:110; }
 #pageover .close:hover { color: #333; }
 
@@ -177,7 +177,7 @@ img.border { width: 224px; border: 6px solid #fff; }
 #pageover figure.rotate-right { float: right; right: -45px; }
 #pageover figure.rotate-left { float: left; left: -45px; }
 #pageover figure.rotate-left img, #pageover figure.rotate-right img { display: block; }
-#pageover figure.rotate-left .clip, #pageover figure.rotate-right .clip { position: absolute; top: -7px; width: 18px; height: 46px; background: url("//csrdelft.nl/plaetjes/layout2/paperclip.png") no-repeat; }
+#pageover figure.rotate-left .clip, #pageover figure.rotate-right .clip { position: absolute; top: -7px; width: 18px; height: 46px; background: url("/plaetjes/layout2/paperclip.png") no-repeat; }
 #pageover figure.rotate-right .clip { right: 13px; }
 #pageover figure.rotate-left .clip { left: 8px; }
 
@@ -275,19 +275,19 @@ div.rommel img { height: 77px; }
 }
 .alert-danger {
 	color: red;
-	background: url("//csrdelft.nl/plaetjes/famfamfam/exclamation.png") no-repeat;
+	background: url("/plaetjes/famfamfam/exclamation.png") no-repeat;
 }
 .alert-info {
 	color: #0A338D;
-	background: url("//csrdelft.nl/plaetjes/famfamfam/information.png") no-repeat;
+	background: url("/plaetjes/famfamfam/information.png") no-repeat;
 }
 .alert-success {
 	color: green;
-	background: url("//csrdelft.nl/plaetjes/famfamfam/accept.png") no-repeat;
+	background: url("/plaetjes/famfamfam/accept.png") no-repeat;
 }
 .alert-warning {
 	color: #DDAA00;
-	background: url("//csrdelft.nl/plaetjes/famfamfam/bell.png") no-repeat;
+	background: url("/plaetjes/famfamfam/bell.png") no-repeat;
 }
 
 /* image lazy loading */
@@ -297,7 +297,7 @@ img.bb-img{
 div.bb-img-loading{
 	min-width: 16px;
 	min-height: 11px;
-	background-image: url("//csrdelft.nl/plaetjes/layout/loading-fb.gif");
+	background-image: url("/plaetjes/layout/loading-fb.gif");
 	background-repeat: no-repeat;
 	background-position: bottom left;
 }

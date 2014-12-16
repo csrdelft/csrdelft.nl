@@ -3,7 +3,7 @@
 		<div class="columns large-2 small-2">
 			<header class="blue box h2">
 				<a href="/" alt="Thuis">
-					<img src="//csrdelft.nl/plaetjes/layout2/box-logo.png" alt="C.S.R. Delft">
+					<img src="/plaetjes/layout2/box-logo.png" alt="C.S.R. Delft">
 				</a>
 			</header>
 		</div>
@@ -11,13 +11,13 @@
 			<div class="columns large-2 hide-for-small">
 				<a href="/csrindeowee">
 					<figure class="box">
-						<img src="//csrdelft.nl/plaetjes/owee/2014/owee-thema.jpg" class="rotate" alt="C.S.R. in de Owee">
+						<img src="/plaetjes/owee/2014/owee-thema.jpg" class="rotate" alt="C.S.R. in de Owee">
 					</figure>
 				</a>
 			</div>
 			<div class="columns large-2">
 				<figure class="box">
-					<img src="//csrdelft.nl/plaetjes/layout2/box-picture-3.jpg" class="rotate" alt="Foto">
+					<img src="/plaetjes/layout2/box-picture-3.jpg" class="rotate" alt="Foto">
 				</figure>
 			</div>
 		</div>
@@ -26,7 +26,7 @@
 				<div class="box flip fliphover">
 					<div class="blue front">
 						<h2 class="overlay">Lid worden?</h2>
-						<img src="//csrdelft.nl/plaetjes/layout2/box-icon-lid.png" alt="Lid worden">
+						<img src="/plaetjes/layout2/box-icon-lid.png" alt="Lid worden">
 					</div>
 					<div class="blue back">
 						<p>Ga je studeren in Delft? Word lid bij een vereniging!</p>
@@ -38,21 +38,21 @@
 			</div>
 			<div class="columns large-2">
 				<figure class="box">
-					<img src="//csrdelft.nl/plaetjes/layout2/box-picture-4.jpg" class="rotate" alt="Foto">
+					<img src="/plaetjes/layout2/box-picture-4.jpg" class="rotate" alt="Foto">
 				</figure>
 			</div>
 		</div>
 		<div class="columns large-2 small-2">
 			<div class="columns large-2">
 				<figure class="box">
-					<img src="//csrdelft.nl/plaetjes/layout2/box-picture-2.jpg" class="rotate" alt="Foto">
+					<img src="/plaetjes/layout2/box-picture-2.jpg" class="rotate" alt="Foto">
 				</figure>
 			</div>
 			<div class="columns large-2">
 				<div class="box flip fliphover">
 					<div class="blue front">
 						<h2 class="overlay">Bedrijven</h2>
-						<img src="//csrdelft.nl/plaetjes/layout2/box-icon-bedrijven.png" alt="Bedrijven">
+						<img src="/plaetjes/layout2/box-icon-bedrijven.png" alt="Bedrijven">
 					</div>
 					<div class="blue back">
 						<p>Trek de aandacht van ruim 270 technisch ge&ouml;rienteerde studenten!</p>
@@ -68,7 +68,7 @@
 				<div class="box flip fliphover">
 					<div class="blue front">
 						<h2 class="overlay">(Oud)leden</h2>
-						<img src="//csrdelft.nl/plaetjes/layout2/box-icon-oudleden.png" alt="(Oud)leden">
+						<img src="/plaetjes/layout2/box-icon-oudleden.png" alt="(Oud)leden">
 					</div>
 					<div class="blue back login-form">{include file='csrdelft2/partials/_loginForm.tpl'}</div>
 				</div>
@@ -80,7 +80,7 @@
 		</div>
 		<div class="columns large-2 small-2 hide-for-small">
 			<figure class="box pad-top">
-				<img src="//csrdelft.nl/plaetjes/layout2/box-picture-5.jpg" class="rotate" alt="Foto">
+				<img src="/plaetjes/layout2/box-picture-5.jpg" class="rotate" alt="Foto">
 			</figure>
 		</div>
 
@@ -110,28 +110,28 @@
 		</div>
 		<div class="columns large-2 small-2">
 			<figure class="box">
-				<img src="//csrdelft.nl/plaetjes/layout2/box-picture-1.jpg" class="rotate" alt="Foto">
+				<img src="/plaetjes/layout2/box-picture-1.jpg" class="rotate" alt="Foto">
 			</figure>
 		</div>
 		<div class="columns large-2 small-2">
 			<div class="blue box link">
 				<a href="/english" title="English">
 					<h2 class="overlay">English</h2>
-					<img src="//csrdelft.nl/plaetjes/layout2/icon-flag-english.png" alt="English" style="width: 120px; height: 67px; position: absolute; top: 60px; right: 40px;">
+					<img src="/plaetjes/layout2/icon-flag-english.png" alt="English" style="width: 120px; height: 67px; position: absolute; top: 60px; right: 40px;">
 				</a>
 			</div>
 		</div>
 		{* <div class="columns large-2 small-2" style="width: auto; height: auto;">
 		<div class="box h2 link" style="width: auto; height: auto;">
 		<a href="https://ddb.tudelft.nl/" style="width: auto; height: auto;">
-		<img class="float-left" width="120" src="//csrdelft.nl/plaetjes/ddb.gif" class="border">
+		<img class="float-left" width="120" src="/plaetjes/ddb.gif" class="border">
 		</a>
 		</div>
 		</div> *}
 		{* <div class="columns large-2 small-2">
 		<div class="box h2 link">
 		<a href="/lidworden">
-		<img src="//csrdelft.nl/plaetjes/owee/owee-thema.jpg" class="border">
+		<img src="/plaetjes/owee/owee-thema.jpg" class="border">
 		<h2 class="overlay">OWee pagina!</h2>
 		</a>
 		</div>

@@ -31,7 +31,7 @@ class FotoAlbumView extends SmartyTemplateView {
 	}
 
 	private function getBreadcrumbsDropdown($dropdown = false, $self = true) {
-		$breadcrumbs = '<a href="/fotoalbum" title="Fotoalbum"><img src="//csrdelft.nl/plaetjes/knopjes/camera-16.png" class="module-icon"></a>';
+		$breadcrumbs = '<a href="/fotoalbum" title="Fotoalbum"><img src="/plaetjes/knopjes/camera-16.png" class="module-icon"></a>';
 		$mappen = explode('/', $this->model->subdir);
 		$subdir = 'fotoalbum/';
 		$first = true;
@@ -138,7 +138,7 @@ class FotosDropzone extends Dropzone {
 	public function view() {
 		echo parent::view();
 		echo '<br /><span class="cursief">Maak nooit inbreuk op de auteursrechten of het recht op privacy van anderen.</span>';
-		echo '<div class="float-right"><a class="btn" onclick="showExisting_' . $this->getFormId() . '();$(this).remove();"><img src="//csrdelft.nl/plaetjes/famfamfam/photos.png" width="16" height="16" alt="photos" class="icon"> Toon bestaande foto\'s in dit album</a></div>';
+		echo '<div class="float-right"><a class="btn" onclick="showExisting_' . $this->getFormId() . '();$(this).remove();"><img src="/plaetjes/famfamfam/photos.png" width="16" height="16" alt="photos" class="icon"> Toon bestaande foto\'s in dit album</a></div>';
 		// Uitleg foto's toevoegen
 		require_once 'controller/CmsPaginaController.class.php';
 		$c = new CmsPaginaController('');

@@ -19,7 +19,7 @@ if (window.toolbar != undefined) {
 jQuery(function(){
     //geef een module icoontje weer ipv de tekst 'Je bent hier:'
     jQuery('span.bchead:first')
-        .after('<a href="/wiki/" title="Wiki"><img src="//csrdelft.nl/plaetjes/knopjes/wiki.png" class="module-icon"></a> » ')
+        .after('<a href="/wiki/" title="Wiki"><img src="/plaetjes/knopjes/wiki.png" class="module-icon"></a> » ')
         .hide();
 
     //vervang url in de wikiheader
