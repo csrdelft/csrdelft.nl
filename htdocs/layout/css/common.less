@@ -55,12 +55,12 @@ a.external {
 	background-image: url('//csrdelft.nl/plaetjes/layout/external-link-blue.png');
 	background-repeat: no-repeat;
 	background-position: center right;
-	padding-right: 14px;
+	padding-right: 1em;
 }
 a:hover { text-decoration: underline; }
 a, a.btn, a.btn:hover { text-decoration: none; }
 .btn.vergroot {
-	font-size: 14px;
+	font-size: 12pt;
 }
 
 /* --------------------------------
@@ -108,7 +108,7 @@ Group expand/collapse toggle
 Modal popup
 
 -------------------------------- */
-#modal{
+#modal {
 	display: none;
 	position: fixed;
 	top: 10%;
@@ -116,10 +116,9 @@ Modal popup
 	min-width: 600px;
 	z-index: 1040;
 	padding: 50px;
-	font-size: 13px;
-	background-color: white;
+	background-color: #fff;
 }/*
-#modal::after{
+#modal::after {
 	content: "";
 	background-image: url("//csrdelft.nl/plaetjes/layout/beeldmerk.jpg");
 	background-position: top 10px right 15px;
@@ -132,7 +131,7 @@ Modal popup
 	position: absolute;
 	z-index: -1;
 }*/
-#modal-background{
+#modal-background {
 	display: none;
 	position: fixed;
 	top: 0;
@@ -152,7 +151,7 @@ Modal popup
 Dragable objects
 
 -------------------------------- */
-.dragobject{
+.dragobject {
 	position: fixed;
 	z-index: 50;
 	-webkit-touch-callout: none;
@@ -163,18 +162,18 @@ Dragable objects
 	user-select: none;
 }
 
-.dragobject:active{
+.dragobject:active {
 	cursor: move;
 }
-.dragvertical{
+.dragvertical {
 	overflow-y: hidden;
 }
-.dragvertical:active{
+.dragvertical:active {
 	cursor: ns-resize;
 }
-.draghorizontal{
+.draghorizontal {
 	overflow-x: hidden;
 }
-.draghorizontal:active{
+.draghorizontal:active {
 	cursor: ew-resize;
 }

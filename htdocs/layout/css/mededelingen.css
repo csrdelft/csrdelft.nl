@@ -1,5 +1,5 @@
 /* nieuws */
-.nieuwsbericht, .nieuwsbericht-vast{
+.nieuwsbericht, .nieuwsbericht-vast {
 	float: left;
 	margin: 10px 0;
 	padding: 10px;
@@ -7,75 +7,71 @@
 	background-color: #ffef7d;
 	width: 370px;
 }
-.nieuwsbericht .informatie{
+.nieuwsbericht .informatie {
 	font-size: 90%;
 	color: gray;
 	text-align: left;
 }
-.nieuwsbericht .informatie img{
+.nieuwsbericht .informatie img {
 	margin-top: 3px;
 }
-.nieuwsplaatje{	margin: 0 0 0 8px; float: right; border: 1px solid black;}
-.nieuwsbody{	margin: 0 0 0 0; padding: 0 3px 5px 0;}	
-.nieuwstitel{	font-size: 1.3em; font-weight: bold; margin-bottom: 5px; text-align: left;}
-.nieuwstitel a{ color:  black;}
-.nieuwsbericht-vast{ height: 100px;	}
+.nieuwsplaatje {	margin: 0 0 0 8px; float: right; border: 1px solid black;}
+.nieuwsbody {	margin: 0 0 0 0; padding: 0 3px 5px 0;}	
+.nieuwstitel {	font-weight: bold; margin-bottom: 5px; text-align: left;}
+.nieuwstitel a { color:  black;}
+.nieuwsbericht-vast { height: 100px;	}
 
-#mededelingenketser{
+#mededelingenketser {
 	float:left;
 }
-#mededelingenketser #kolomlinks{
+#mededelingenketser #kolomlinks {
 	width: 320px;
 	float: left;
 	margin-bottom: 30px;
 }
-#mededelingenketser #kolomrechts{
+#mededelingenketser #kolomrechts {
 	width: 400px;
 	float: left;
 }
-#mededelingen-titel{
+#mededelingen-titel {
 	height: 20px;
 	width: 70%;
 	margin: 0 0 10px 0;
 }
-.mededelingen-beheerlink{
+.mededelingen-beheerlink {
 	width: 20%;
 	float: right;
 	text-align: right;
 }
-.mededelingenlijst-block{
+.mededelingenlijst-block {
 	margin: 0 10px 10px 0;
 	width: 300px;
 }
-.mededelingenlijst-block-titel{
-	height: 16px;
-	padding-top: 2px;
-	padding-left: 7px;
+.mededelingenlijst-block-titel {
+	padding: .5em 1em;
 	border: 1px solid #B4B4B4;
 	background-color: #f5f5f5;
 	color: #000000;
-	font-size: 11px;
 	font-weight: bold;
 }
-.mededelingenlijst-item{
-	padding: 3px 2px 3px 7px;
-	font-size: 11px;
+.mededelingenlijst-item {
+	padding: .5em;
 	border-bottom: 1px solid #B8B8B8;
 }
-.mededelingenlijst-item .itemtitel{
+.mededelingenlijst-item .itemtitel {
 	text-align: left;
 }
-.mededelingenlijst-item#actief{
+.mededelingenlijst-item#actief {
 	background-color: #ffef7d;
 }
-.mededelingenlijst-block a{	color: black; }
-.mededelingenlijst-plaatje{ margin: 0 5px 0 0; float: left; }
+.mededelingenlijst-block a {	color: black; }
+.mededelingenlijst-plaatje { margin: 0 5px 0 0; float: left; }
 
-.wachtgoedkeuring{
+.wachtgoedkeuring {
 	margin-top: 30px;
 }
 
-#legenda{
+#legenda {
 	left: 50px;
 	top: 50px;
 	width: 330px; 
@@ -85,13 +81,12 @@
 	text-align: left;
 }
 
-#top1mededeling{
+#top1mededeling {
 	height: 200px; width: 200px;
 }
-#top1mededeling #titel{
+#top1mededeling #titel {
 	height: 30px; width: 190px;
 	padding: 5px;
-	font-size: 12px;
 	/*font-weight: bold;*/
 	color: white;
 	text-align: left;
@@ -102,31 +97,31 @@
 	-moz-opacity:.65;
 	opacity:.65;
 }
-.mededelingenlijst-block .verborgen-item, .mededelingenlijst-block .verborgen-item a{
+.mededelingenlijst-block .verborgen-item, .mededelingenlijst-block .verborgen-item a {
 	color: grey;
 }
-.mededelingenlijst-block .verborgen-item, .mededelingenlijst-block .verwijderd-item a{
+.mededelingenlijst-block .verborgen-item, .mededelingenlijst-block .verwijderd-item a {
 	color: #CC0000;
 }
-.mededelingen_paginering{
+.mededelingen_paginering {
 	margin-right: 15px;
 	text-align: right;
 }
-.mededelingen_paginering a{
+.mededelingen_paginering a {
 	padding: 0 5px 0 5px;
 }
-.mededelingen_paginering span.curpage{
+.mededelingen_paginering span.curpage {
 	font-weight: bold;
 	padding: 0 5px 0 5px;
 }
 
 /* Mededelingen bewerken: */
-label{ float: left; clear: left; width: 110px; }
-input.titel{ width: 635px; }
-.indent{ margin-left: 116px; width: 635px;}
-.btn#vergroot, .btn#opmaakhulp, .btn#voorbeeld{ float: right; }
+label { float: left; clear: left; width: 110px; }
+input.titel { width: 635px; }
+.indent { margin-left: 116px; width: 635px;}
+.btn#vergroot, .btn#opmaakhulp, .btn#voorbeeld { float: right; }
 
-#instellingen{
+#instellingen {
 	height: 300px;
 	clear: both;
 	width: 300px;
@@ -135,21 +130,21 @@ input.titel{ width: 635px; }
 	text-align: left;
 	overflow: auto;
 }
-#instellingen .vervalt label input{ float: right; }
-#instellingen img{ float: right; }
+#instellingen .vervalt label input { float: right; }
+#instellingen img { float: right; }
 
-div#plaatje{
+div#plaatje {
 	height: 300px;
 	float: right;
 	margin-top: 10px;
 }
 
 /* Mededelingen Top 3 Overzicht*/
-div#top3overzicht{
+div#top3overzicht {
 	width:700px;
 	/*margin-top:18px;*/
 }
-div#top3overzicht div.top3container{
+div#top3overzicht div.top3container {
 	float: left;
 	margin-top: 15px;
 }

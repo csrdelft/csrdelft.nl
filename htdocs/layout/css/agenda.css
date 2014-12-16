@@ -21,98 +21,93 @@ table.agenda th {
 table.agenda th.weeknr {
 	width: 25px;
 }
-#tijden{
-	line-height: 2em;
-}
-#tijden a{
+#tijden a {
 	cursor: pointer;
 }
 
 /*** MAAND ***************************/
-div#ical{
+div#ical {
 	width: 100%;
 	text-align: center;
 }
-div.maandnavigatie{
+div.maandnavigatie {
 	padding: 15px 0;
 	text-align: center;
 }
-div.maandnavigatie h1{
+div.maandnavigatie h1 {
 	display: inline;
 }
-table#maand{
+table#maand {
 	clear: both;
 }
-table#maand tr th{ 
+table#maand tr th { 
 	background-color: #eee;
 	border: 1px solid #ccc;
 }
-table#maand tr td{
+table#maand tr td {
 	height: 100px;
 	border: 1px solid #ddd;
 }
-table#maand tr td.dag{
+table#maand tr td.dag {
 	padding: 0;
 	text-align: left;
 	position: relative;
 }
-table#maand tr td.dag a.toevoegen{
+table#maand tr td.dag a.toevoegen {
 	display: none;
 }
-table#maand tr td.dag div.beheren{
+table#maand tr td.dag div.beheren {
 	display: none;
 	position: absolute;
 	right: 0;
 }
-table#maand td div a.toevoegen{
+table#maand td div a.toevoegen {
 	float: right; 
 }
-table#maand tr td.dag:hover a.toevoegen{
+table#maand tr td.dag:hover a.toevoegen {
 	display: inline;
 }
-table#maand tr td.dag:hover div.beheren{
+table#maand tr td.dag:hover div.beheren {
 	display: block;
 }
-table#maand td div.meta{
+table#maand td div.meta {
 	padding: 3px 4px;
 	border-bottom: 1px solid #eee;
 	background-color: #f9f9f9;
 	line-height: 1.4em;
 }
-table#maand td.anderemaand { /* De dagen die van andere maanden in de maand-tabel vallen doorzichtig maken */
+table#maand td.anderemaand {
+	/* De dagen die van andere maanden in de maand-tabel vallen doorzichtig maken */
 	opacity: 0.4;
 	filter: alpha(opacity=40);
 }
-table#maand tr#dezeweek td.dag{
+table#maand tr#dezeweek td.dag {
 	background-color: #fffff0;
 }
-table#maand tr td.vandaag{
+table#maand tr td.vandaag {
 	background-color: #ffffd0 !important;
 }
-table#maand tr td:hover{
+table#maand tr td:hover {
 	background-color: #fafafa ;
 }
-table#maand tr td#vandaag div.meta{ 
+table#maand tr td#vandaag div.meta { 
 	font-weight: bold;
 }
-table#maand td ul{
+table#maand td ul {
 	clear: both;
 	list-style-type: none;
 	margin: 0; padding: 0;
 }
-table#maand td ul li{
+table#maand td ul li {
 	margin: 0;
 	padding: 4px 4px;
-	font-size: 11px;
-	line-height: 1.4em;
 }
-table#maand td ul li:nth-child(even){
+table#maand td ul li:nth-child(even) {
 	background-color: #efefef;
 }
-table#maand td ul li .tijd{
-	font-size: 11px;
+table#maand td ul li .tijd {
 	color: #777;
 }
-table#maand td ul li  img.icon{
+table#maand td ul li  img.icon {
 	float: right;
 }

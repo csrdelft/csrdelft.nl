@@ -32,7 +32,7 @@ body{
 	background: url('//csrdelft.nl/plaetjes/layout/sineregno/2014/menubutton.png') no-repeat;
 }	
 #mainmenu a:link, #mainmenu a:visited {
-	color: #ffffff;
+	color: #fff;
 }
 #mainmenu a:hover, #mainmenu a:active, #mainmenu a.active {
 	background: url('//csrdelft.nl/plaetjes/layout/sineregno/2014/menubutton_hover.png') no-repeat;
@@ -40,7 +40,7 @@ body{
 
 /**** SUBMENU *****************************************************************/
 #submenu a.active  {
-	color: #ffffff;
+	color: #fff;
 	font-weight: bold;
 }
 #submenu a:hover, #submenu a:active {
@@ -60,7 +60,7 @@ body{
 /**** INLOGKNOP ***************************************************************/
 #login input.submit {
 	background-color: #C744FF;
-	color: #FFF; 
+	color: #fff; 
 }
 
 #adminding{

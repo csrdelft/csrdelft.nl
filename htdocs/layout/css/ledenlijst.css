@@ -24,7 +24,6 @@ form label{ width: 150px; float: left; text-align: right; padding-right: 10px;}
 	float: none;
 	text-align: left;
 	width: auto;
-	font-size: 10px;
 	padding-right: 10px;
 }
 .selectVeld input{ height: 10px; width: 10px; padding:  0; }

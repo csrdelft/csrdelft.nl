@@ -104,7 +104,7 @@ ul.groepledenlijst { width: 230px; float: right; padding: 10px 20px 20px 20px; m
 	margin-left: 10px;
 	padding: 1px 0;
 }
-.groepleden table.leden { width: 100%; font-size: 11px; }
+.groepleden table.leden { width: 100%; }
 .groepleden table.leden td { padding: 0 5px; text-align: left; }
 .groepleden table.leden input.functie { width: 80px; }
 .groepleden .toonmeer { clear: left; display: block; padding: 0 0 10px 15px; }

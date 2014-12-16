@@ -3,10 +3,12 @@
  * maaltijdlijst.css	|	P.W.G. Brussee (brussee@live.nl)
  * 
  */
-
+html {
+	font-size: 10px;
+}
 body {
 	font-family: verdana;
-	font-size: 11px;
+	font-size: 1.1em;
 	width: 920px;
 	margin: 0;
 }
@@ -99,9 +101,9 @@ div.visitekaartje {
 	display: none;
 	position: absolute;
 	width: 330px;
-	font-size: 11px !important;
+	font-size: 1em !important;
 	border: 1px solid #000;
-	background-color: #FFF;
+	background-color: #fff;
 	-moz-box-shadow: 0 0 11px #000000;
 	-webkit-box-shadow: 0 0 11px #000000;
 	box-shadow: 0 0 11px #000000;

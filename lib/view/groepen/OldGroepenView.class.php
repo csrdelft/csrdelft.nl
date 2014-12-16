@@ -219,10 +219,10 @@ class Groepgeschiedeniscontent extends OldGroepView {
 	public function view() {
 		$jaren = 5;
 		$maanden = $jaren * 12;
-		echo '<table style="border-collapse: collapse;">';
+		echo '<table>';
 		echo '<tr>';
 		for ($i = 2008; $i >= (2008 - $jaren); $i--) {
-			echo '<td style="font-size: 8px; width: 10px;" colspan="12">' . $i . '</td>';
+			echo '<td colspan="12">' . $i . '</td>';
 		}
 		echo '</tr>';
 		echo '<tr>';
@@ -234,7 +234,7 @@ class Groepgeschiedeniscontent extends OldGroepView {
 			echo '<tr>';
 			$startspacer = 12 - substr($groep->getBegin(), 5, 2);
 			if ($startspacer != 0) {
-				echo '<td colspan="' . $startspacer . '" class="lichtgrijs" style="font-size: 8px;">(' . $startspacer . ')</td>';
+				echo '<td colspan="' . $startspacer . '" class="lichtgrijs">(' . $startspacer . ')</td>';
 			}
 
 			$oudeGr = OldGroep::getGroepgeschiedenis($groep->getSnaam(), $jaren);
@@ -243,7 +243,7 @@ class Groepgeschiedeniscontent extends OldGroepView {
 				if ($duration <= 0) {
 					$duration = 12;
 				}
-				echo '<td colspan="' . $duration . '" style="font-size: 8px; border: 1px solid black; padding: 2px; width: 150px; text-align: left;">';
+				echo '<td colspan="' . $duration . '" style="border: 1px solid black; padding: 2px; width: 150px; text-align: left;">';
 				echo '<a href="/groepen/' . $this->model->getNaam() . '/' . $grp['id'] . '">' . $grp['naam'] . '</a>';
 
 				echo '</td>';

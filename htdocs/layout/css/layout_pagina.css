@@ -16,7 +16,7 @@ main.cd-main-content {
 	position: relative;
 	z-index: 2;
 	/* hide lateral navigation */
-	background-color: #ffffff;
+	background-color: #fff;
 	/* Force Hardware Acceleration in WebKit */
 	-webkit-transform: translateZ(0);
 	-webkit-backface-visibility: hidden;
@@ -114,13 +114,13 @@ Top navigation
 }
 #cd-top-nav li {
 	display: inline-block;
-	font-size: 16px;
 }
 #cd-top-nav a, #cd-ingelogd-menu-toggle .cd-ingelogd-menu-text {
 	display: block;
+	font-size: 1.4em;
 	padding: 0 1.25em;
 	font-weight: bold;
-	color: #ffffff;
+	color: #fff;
 }
 #cd-top-nav a:hover {
 	color: #E8CF2A;
@@ -140,7 +140,7 @@ Top navigation
 }
 #cd-lateral-menu-toggle .cd-lateral-menu-text {
 	display: block;
-	width: 60px;
+	width: 50px;
 }
 #cd-lateral-menu-toggle .cd-lateral-menu-icon {
 	/* this span is the central line in the menu menu */
@@ -157,7 +157,7 @@ Top navigation
 	transform: translateX(-50%) translateY(-50%);
 	width: 18px;
 	height: 2px;
-	background-color: #ffffff;
+	background-color: #fff;
 	/* these are the upper and lower lines in the menu menu */
 	left: auto;
 	right: 1.25em;
@@ -188,7 +188,7 @@ Top navigation
 	background-color: rgba(255, 255, 255, 0);
 }
 #cd-lateral-menu-toggle.is-clicked .cd-lateral-menu-icon::before, #cd-lateral-menu-toggle.is-clicked .cd-lateral-menu-icon::after {
-	background-color: #ffffff;
+	background-color: #fff;
 }
 #cd-lateral-menu-toggle.is-clicked .cd-lateral-menu-icon::before {
 	bottom: 0;
@@ -254,13 +254,13 @@ Lateral navigation
 }
 #cd-lateral-nav a, #cd-lateral-nav .toggle-group {
 	display: block;
-	color: #ffffff;
+	color: #fff;
 }
 #cd-lateral-nav .toggle-group {
 	font-weight: bold;
 }
 #cd-lateral-nav a {
-	font-size: 16px;
+	font-size: 1.4em;
 }
 #cd-lateral-nav a:hover {
 	color: #E8CF2A;

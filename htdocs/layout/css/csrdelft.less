@@ -8,28 +8,30 @@
 		url('../fonts/SourceSansPro-Light.ttf') format('truetype');
 }
 
+html {
+	font-family: Helvetica,Arial;
+}
+
 h1,h2,h3,h4,h5,h6 {
 	font-family: "Source Sans Pro Light",Helvetica,Arial,sans-serif;
 }
 
 /**** GENERAL *****************************************************************/
-
-body, textarea, input[type="text"], select {
-	font-family: Helvetica,Arial;
-	color: #000000;
-	background-color: #ffffff;
-	line-height: 1.1em;
+body {
+	font-size: 1.2em;
+	line-height: 1.3em;
+	color: #000;
+	background-color: #fff;
 }
 
 #maintable {
+
 	width: 100%;
 	border-collapse: collapse;
-	font-size: 12px;
 }
 #mainright {
 	width: 100%;
 	padding: 50px;
-	background-color: #ffffff;
 	vertical-align: top;
 }
 #page-top {
@@ -38,28 +40,28 @@ body, textarea, input[type="text"], select {
 }
 
 h1 {
-    font-size: 36px;
-	margin: 30px 0 20px 0;
+    font-size: 3em;
+	margin: 1em 0;
 }
 h2 {
-	font-size: 28px;
-	margin: 30px 0 15px 0;
+	font-size: 2.5em;
+	margin: 1em 0;
 }
 h3 {
-    font-size: 24px;
-	margin: 30px 0 15px 0;
+    font-size: 2em;
+	margin: 1em 0 .5em 0;
 }
 h4 {
-	font-size: 20px;
-	margin: 20px 0 15px 0;
+	font-size: 1.8em;
+	margin: 1em 0 .5em 0;
 }
 h5 {
-	font-size: 16px;
-	margin: 20px 0 15px 0;
+	font-size: 1.6em;
+	margin: 1em 0 .5em 0;
 }
 h6 {
-	font-size: 14px;
-	margin: 10px 0 5px 0;
+	font-size: 1.4em;
+	margin: 1em 0 .5em 0;
 }
 
 span.twitter-typeahead {
@@ -262,23 +264,24 @@ form#streeplijst input, form#streeplijst label { text-align: left; margin: 3px; 
 
 /* Eetplan */
 #eetplanLETOP {
+	display: block;
 	color: darkred;
 	font-size: 1.8em;
-	padding: 10px; font-weight: bold;
-	text-align: justify; display: block;
-	border: 1px solid #000; background-color: lightgrey;
+	font-weight: bold;
+	padding: 10px;
+	text-align: justify;
+	border: 1px solid #000;
+	background-color: lightgrey;
 }
 .eetplantabel {
-	width: 100%; border-collapse: collapse;
+	width: 100%;
+	border-collapse: collapse;
 }
-.eetplantabel tr { margin: 0; padding: 0; }
-.eetplantabel tr td { margin: 0; padding: 0; text-align: left; }
+.eetplantabel tr td { text-align: left; }
 .eetplantabel tr th { border-bottom: 1px solid black; }
 .eetplantabel tr.kleur0 td { background-color: #fff; }
 .eetplantabel tr.kleur1 td { background-color: #f5f5f5; }
-.eetplantabel tr .huis { border-left: 1px solid #000; padding:3px 4px; margin: 0; font-size: 10px; }
-
-
+.eetplantabel tr .huis { border-left: 1px solid #000; padding:3px 4px; }
 
 
 /** Peilingbeheer */
@@ -298,10 +301,10 @@ HoverIntent visitekaartjes
 }
 div.hoverIntentContent {
 	border: 1px solid #000;
-	background-color: #FFF;
-	-moz-box-shadow: 0 0 11px #000000;
-	-webkit-box-shadow: 0 0 11px #000000;
-	box-shadow: 0 0 11px #000000;
+	background-color: #fff;
+	-moz-box-shadow: 0 0 11px #000;
+	-webkit-box-shadow: 0 0 11px #000;
+	box-shadow: 0 0 11px #000;
 	z-index: 250;
 	font-weight: normal !important;
 	font-style: normal !important;
@@ -311,7 +314,6 @@ div.hoverIntentContent {
 }
 div.visitekaartje {
 	width: 330px;
-	font-size: 11px !important;
 }
 div.visitekaartje img {
 	float: right;
