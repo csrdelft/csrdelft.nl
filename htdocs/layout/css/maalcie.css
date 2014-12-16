@@ -57,6 +57,9 @@
 .maalcie-tabel td {
 	vertical-align: middle;
 }
+.maalcie-tabel .col-del { 
+	text-align: center;
+}
 tr.taak-datum-head th, tr.taak-datum-summary th {
 	cursor: pointer;
 	border-top: 5px solid #FFFFFF;
