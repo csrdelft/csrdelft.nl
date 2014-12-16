@@ -32,9 +32,9 @@ div.bbcodePreview {
 div.bbcodePreview, div.bbcodePreview div, .Formulier div.bbcodePreview {
 	line-height: inherit;
 }
-span.offtopic { font-size: 1em; line-height: 1.1em; color: #ccc; }
-span.offtopic a { color: #ccc; }
-span.offtopic hr { text-align: left; background-color: #ccc; }
+span.offtopic { font-size: .9em; line-height: 1em; color: #aaa; }
+span.offtopic a { color: #aaa; }
+span.offtopic hr { text-align: left; background-color: #aaa; }
 span.offtopic img { opacity: 0.3; filter: alpha(opacity=30); }
 
 .bb-block {
