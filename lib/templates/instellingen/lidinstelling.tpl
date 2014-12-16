@@ -13,7 +13,7 @@
 			{/foreach}
 		</select>
 	{else}
-		<input type="text" id="inst_{$module}_{$id}" name="{$module}_{$id}" class="FormElement {if $type === T::String}InputField{elseif $type === T::Integer}IntField{/if}" value="{$waarde}" origvalue="{$waarde}"{if $type === T::String} maxlength="{$opties[1]}"{/if} />
+		<input type="{if $type === T::String}text{elseif $type === T::Integer}number{/if}" id="inst_{$module}_{$id}" name="{$module}_{$id}" class="FormElement {if $type === T::String}InputField{elseif $type === T::Integer}IntField{/if}" value="{$waarde}" origvalue="{$waarde}"{if $type === T::String} maxlength="{$opties[1]}"{/if} />
 	{/if}
 	&nbsp;({ucfirst($default)})
 </p>
