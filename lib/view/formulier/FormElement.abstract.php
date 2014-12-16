@@ -135,7 +135,7 @@ $('#toggle_kopje_{$this->id}').click(function() {
 	if ($('#expand_kopje_{$this->id}').is(':visible')) {
 JS;
 		// niet inklappen?
-		if (!$this->single) {
+		if (!$this->hover_click) {
 			$js .= <<<JS
 
 		$('#expand_kopje_{$this->id}').{$this->collapse};
@@ -167,9 +167,7 @@ JS;
 
 try {
 	$('#toggle_kopje_{$this->id}').hoverIntent(function() {
-		if (!$(this).hasClass('toggle-group-expanded')) {
-			$(this).trigger('click');
-		}
+		$(this).trigger('click');
 	});
 } catch(e) {
 	// Missing js file
