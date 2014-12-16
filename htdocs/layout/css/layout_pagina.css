@@ -254,8 +254,8 @@ Lateral navigation
 	display: block;
 	color: #fff;
 }
-#cd-lateral-nav .toggle-group {
-	font-weight: bold;
+#cd-lateral-nav h3 {
+	margin: 1.7em 1em .5em 0;
 }
 #cd-lateral-nav a {
 	font-size: 1.4em;
@@ -299,6 +299,7 @@ Lateral navigation
 		cursor: pointer;
 	}
 	.tt-dropdown-menu h3 {
+		font-size: 1.6em;
 		margin: 15px 15px 10px 10px;
 	}
 
