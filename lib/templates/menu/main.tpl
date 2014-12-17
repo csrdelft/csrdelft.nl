@@ -45,7 +45,7 @@
 			</ul>
 		</li>
 	{else}
-		<li><a href="#0">Log in</a></li>
+		<li><a href="/">Log in</a></li>
 	{/if}
 	</ul>
 </nav>
