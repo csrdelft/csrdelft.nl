@@ -83,9 +83,9 @@ JS;
 					<span class="caret"></span>
 				</button>
 				<ul class="dropdown-menu dropdown-menu-right" role="menu">
-					<li><a onclick="window.location.href = '/forum/zoeken/' + encodeURIComponent($('#<?= $this->getId() ?>').val());">Forum</a></li>
-					<li><a class="submit">Leden</a></li>
+					<li><a onclick="window.location.href = '/ledenlijst?status=LEDEN&q=' + encodeURIComponent($('#<?= $this->getId() ?>').val());">Leden</a></li>
 					<li><a onclick="window.location.href = '/ledenlijst?status=OUDLEDEN&q=' + encodeURIComponent($('#<?= $this->getId() ?>').val());">Oudleden</a></li>
+					<li><a onclick="window.location.href = '/forum/zoeken/' + encodeURIComponent($('#<?= $this->getId() ?>').val());">Forum</a></li>
 					<li><a onclick="window.location.href = '/wiki/hoofdpagina?do=search&id=' + encodeURIComponent($('#<?= $this->getId() ?>').val());">Wiki</a></li>
 				</ul>
 			</div>
