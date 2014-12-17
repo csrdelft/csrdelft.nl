@@ -671,6 +671,8 @@ Main components
 }
 .has-children > a, .go-back a {
 	position: relative;
+}
+.go-back a {
 	font-weight: bold;
 }
 .has-children > a::before, .has-children > a::after, .go-back a::before, .go-back a::after {
