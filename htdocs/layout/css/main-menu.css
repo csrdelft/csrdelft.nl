@@ -458,7 +458,8 @@ Main components
 		width: auto;
 		float: right;
 		overflow: visible;
-		background: rgba(255, 255, 255, 0.5);
+		background: none;
+		background-color: rgba(255, 255, 255, 0.5);
 	}
 	.cd-primary-nav:after {
 		content: "";
@@ -827,6 +828,7 @@ Main components
 	top: 0;
 	left: 0;
 	cursor: pointer;
+	background: none;
 	background-color: rgba(255, 255, 255, 0.5);
 	visibility: hidden;
 	opacity: 0;
