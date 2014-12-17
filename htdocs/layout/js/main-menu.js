@@ -7,6 +7,8 @@ jQuery(document).ready(function ($) {
 		(!window.requestAnimationFrame) ? setTimeout(moveNavigation, 300) : window.requestAnimationFrame(moveNavigation);
 	});
 
+	var $maintrigger = $('#cd-main-trigger');
+
 	//mobile - open lateral menu clicking on the menu icon
 	$('.cd-nav-trigger').on('click', function (event) {
 		event.preventDefault();
@@ -22,8 +24,11 @@ jQuery(document).ready(function ($) {
 			});
 			toggleSearch('close');
 			$('.cd-main-overlay').addClass('is-visible');
+
 			//open main menu
-			$('#cd-main-trigger').click();
+			if (!$maintrigger.hasClass('selected')) {
+				$('#cd-main-trigger').click();
+			}
 		}
 	});
 
