@@ -33,19 +33,19 @@
 					</td>
 				</tr>
 			</table>
-			{if isset($minion)}
-				{$minion}
-			{/if}
-			{if isset($modal)}
-				{$modal->view()}
-			{else}
-				<div id="modal" class="modal-content outer-shadow dragobject" tabindex="-1"></div>
-			{/if}
 		</main>
 		{$mainmenu->view()}
 		<div id="cd-search" class="cd-search">
 			{$zoekbalk->view()}
 		</div>
 		<div id="modal-background" {if isset($modal)} style="display: block;"{/if}></div>
+		{if isset($minion)}
+			{$minion}
+		{/if}
+		{if isset($modal)}
+			{$modal->view()}
+		{else}
+			<div id="modal" class="modal-content outer-shadow dragobject" tabindex="-1"></div>
+		{/if}
 	</body>
 </html>
