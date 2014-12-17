@@ -157,24 +157,20 @@ abstract class CompressedLayout extends HtmlPage {
 				if (LidInstellingen::get('layout', 'toegankelijk') == 'bredere letters') {
 					$modules[] = 'bredeletters';
 				}
-				switch (LidInstellingen::get('layout', 'sfx')) {
-					case 'sneeuw':
-						$modules[] = 'sfxsnow';
-						break;
+				if (LidInstellingen::get('layout', 'sfx') == 'sneeuw') {
+					$modules[] = 'sfxsnow';
+				} elseif (LidInstellingen::get('layout', 'sfx') == 'space') {
+					$modules[] = 'sfxspace';
+				}
+			} elseif ($extension == 'js') {
 
-					case 'space':
-						$modules[] = 'sfxspace';
-						break;
-
-					case 'wolken':
-						$modules[] = 'sfxclouds';
-						break;
+				if (LidInstellingen::get('layout', 'sfx') == 'wolken') {
+					$modules[] = 'sfxclouds';
 				}
 			}
 
 			if (LidInstellingen::get('algemeen', 'minion') == 'ja') {
 				$modules[] = 'minion';
-				return $modules;
 			}
 			return $modules;
 		} else {

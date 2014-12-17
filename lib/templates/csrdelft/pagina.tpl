@@ -33,16 +33,20 @@
 					</td>
 				</tr>
 			</table>
+			<div id="cd-main-overlay" class="cd-main-overlay"></div>
 		</main>
 		{$mainmenu->view()}
 		<div id="modal-background" {if isset($modal)} style="display: block;"{/if}></div>
-		{if isset($minion)}
-			{$minion}
-		{/if}
 		{if isset($modal)}
 			{$modal->view()}
 		{else}
 			<div id="modal" class="modal-content outer-shadow dragobject" tabindex="-1"></div>
+		{/if}
+		{if isset($minion)}
+			{$minion}
+		{/if}
+		{if LidInstellingen::get('layout', 'sfx') == 'wolken'}
+			{include file='csrdelft/sfx-clouds.tpl'}
 		{/if}
 	</body>
 </html>

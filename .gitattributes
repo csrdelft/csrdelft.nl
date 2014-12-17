@@ -133,7 +133,6 @@ htdocs/layout/css/reset.less -text
 htdocs/layout/css/reset_wiki.less -text
 htdocs/layout/css/roodschopper.css -text
 htdocs/layout/css/roze.css -text
-htdocs/layout/css/sfx-clouds.css -text
 htdocs/layout/css/sfx-snow.css -text
 htdocs/layout/css/sfx-space.css -text
 htdocs/layout/css/sineregno.css -text
@@ -166,6 +165,7 @@ htdocs/layout/fonts/glyphicons-halflings-regular.eot -text
 htdocs/layout/fonts/glyphicons-halflings-regular.svg -text
 htdocs/layout/fonts/glyphicons-halflings-regular.ttf -text
 htdocs/layout/fonts/glyphicons-halflings-regular.woff -text
+htdocs/layout/js/Detector.js -text
 htdocs/layout/js/bb-slideshow.js -text
 htdocs/layout/js/bbcode.js -text
 htdocs/layout/js/bibliotheek.js -text
@@ -436,6 +436,7 @@ htdocs/layout/js/modernizr.js -text
 htdocs/layout/js/peilingbeheer.js -text
 htdocs/layout/js/profiel.js -text
 htdocs/layout/js/roodschopper.js -text
+htdocs/layout/js/three.min.js -text
 htdocs/layout/js/verticalen.js -text
 htdocs/layout/script.ini -text
 htdocs/layout/style.ini -text
@@ -4259,6 +4260,7 @@ lib/templates/courant/mail/courant_triomphedor2011.tpl -text
 lib/templates/courant/mail/csrmail_owee.tpl -text
 lib/templates/csrdelft/pagina.tpl -text
 lib/templates/csrdelft/pauper.tpl -text
+lib/templates/csrdelft/sfx-clouds.tpl -text
 lib/templates/csrdelft2/content.tpl -text
 lib/templates/csrdelft2/index.tpl -text
 lib/templates/csrdelft2/lidworden.tpl -text
