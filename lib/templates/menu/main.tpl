@@ -4,9 +4,6 @@
 		<li class="has-children">
 			<a id="cd-main-trigger" href="#0">{if LoginModel::mag('P_LOGGED_IN')}{LoginModel::getUid()|csrnaam:"civitas":"plain"}{else}Log in{/if}</a>
 			<ul class="cd-secondary-nav is-hidden">
-
-				{include file='menu/main_tree.tpl' parent=$root}
-
 		{if LoginModel::mag('P_LOGGED_IN')}
 				<li class="has-children{if LoginModel::instance()->isSued()} sued{/if}">
 					<a href="#0">{LoginModel::getUid()|csrnaam:"civitas":"plain"}</a>
@@ -44,6 +41,7 @@
 					</ul>
 				</li>
 		{/if}
+				{include file='menu/main_tree.tpl' parent=$root}
 			</ul>
 		</li>
 
