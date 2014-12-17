@@ -155,6 +155,7 @@ jQuery(document).ready(function ($) {
 			$('.cd-search-trigger').toggleClass('search-is-visible');
 			if ($('.cd-search').hasClass('is-visible')) {
 				$searchfield.focus();
+				$('.cd-main-overlay').removeClass('is-visible');
 				$maintrigger.fadeOut();
 			} else {
 				$maintrigger.fadeIn();
