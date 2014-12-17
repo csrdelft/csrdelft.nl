@@ -46,6 +46,6 @@
 		<div id="cd-search" class="cd-search">
 			{$zoekbalk->view()}
 		</div>
-		<div id="modal-background" class="cd-main-overlay"{if isset($modal)} style="display: block;"{/if}></div>
+		<div id="modal-background" {if isset($modal)} style="display: block;"{/if}></div>
 	</body>
 </html>
