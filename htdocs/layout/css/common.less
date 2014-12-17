@@ -42,13 +42,18 @@ img {
 
 #mainright {
 	width: 100%;
-	padding: 50px;
+	min-width: 730px;
+	padding: 50px 0 0 5px;
 	vertical-align: top;
 }
-@media (max-width: 960px) {
+@media only screen and (min-width: 960px) {
 	#mainright {
-		min-width: 730px;
-        padding: 50px 0 0 5px;
+        padding: 50px 0 0 20px;
+    }
+}
+@media only screen and (min-width: 1170px) {
+	#mainright {
+        padding: 50px;
     }
 }
 #page-top {
