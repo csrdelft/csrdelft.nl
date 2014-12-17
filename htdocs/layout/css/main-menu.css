@@ -415,29 +415,6 @@ Main components
 	color: #fff;
 }
 
-.cd-primary-nav .cd-nav-icons .cd-nav-item {
-	padding-left: 75px;
-}
-.cd-primary-nav .cd-nav-icons .cd-nav-item p {
-	color: #000;
-	font-size: 1.3rem;
-	/* hide description on small devices */
-	display: none;
-}
-.cd-primary-nav .cd-nav-icons .cd-nav-item::before {
-	/* item icon */
-	content: '';
-	display: block;
-	position: absolute;
-	left: 20px;
-	top: 50%;
-	margin-top: -20px;
-	width: 50px;
-	height: 50px;
-	background-repeat: no-repeat;
-	background-position: center center;
-	background-size: 50px 50px;
-}
 @media only screen and (max-width: 959px) {
 	.cd-primary-nav {
 		/* by default .cd-primary-nav is hidden - trick for iOS devices where you can see the navigation if you pull down */
@@ -536,7 +513,7 @@ Main components
 		top: 50px;
 		width: 100vw;
 		background: #ffffff;
-		padding: 50px 0 50px 75px;
+		padding: 50px 0 50px 65px;
 		box-shadow: inset 0 1px 0 #e2e3df, 0 3px 6px rgba(0, 0, 0, 0.05);
 		-webkit-transform: translateX(0);
 		-moz-transform: translateX(0);
@@ -801,7 +778,7 @@ Main components
 	top: 5px;
 	max-width: 300px;
 	width: 80%;
-	right: 20%;
+	right: 15%;
 	z-index: 3;
 	opacity: 0;
 	visibility: hidden;
