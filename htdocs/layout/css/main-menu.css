@@ -458,7 +458,7 @@ Main components
 		width: auto;
 		float: right;
 		overflow: visible;
-		background: #ffffff;
+		background: rgba(255, 255, 255, 0.5);
 	}
 	.cd-primary-nav:after {
 		content: "";
