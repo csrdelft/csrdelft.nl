@@ -831,6 +831,11 @@ Main components
 	-moz-transition: opacity .3s 0s, visibility 0s 0s;
 	transition: opacity .3s 0s, visibility 0s 0s;
 }
+.cd-main-overlay div {
+	position: fixed;
+	top: 0;
+	left: 0;
+}
 
 /* -------------------------------- 
 

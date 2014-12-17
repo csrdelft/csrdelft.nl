@@ -34,8 +34,9 @@
 
 <script type="text/javascript">
 
-	if (!Detector.webgl)
+	if (!Detector.webgl) {
 		Detector.addGetWebGLMessage();
+	}
 
 	var container;
 	var camera, scene, renderer;
@@ -47,9 +48,9 @@
 	var windowHalfX = window.innerWidth / 2;
 	var windowHalfY = window.innerHeight / 2;
 
-	init();
+	initClouds();
 
-	function init() {
+	function initClouds() {
 
 		container = document.createElement('div');
 		document.getElementById('cd-main-overlay').appendChild(container);
@@ -81,7 +82,7 @@
 
 		geometry = new THREE.Geometry();
 
-		var texture = THREE.ImageUtils.loadTexture('/plaetjes/layout/bg/cloud10.png', null, animate);
+		var texture = THREE.ImageUtils.loadTexture('/plaetjes/layout/bg/cloud10.png', null, animateClouds);
 		texture.magFilter = THREE.LinearMipMapLinearFilter;
 		texture.minFilter = THREE.LinearMipMapLinearFilter;
 
@@ -141,19 +142,19 @@
 		renderer.setSize(window.innerWidth, window.innerHeight);
 		container.appendChild(renderer.domElement);
 
-		document.addEventListener('mousemove', onDocumentMouseMove, false);
-		window.addEventListener('resize', onWindowResize, false);
+		document.addEventListener('mousemove', onDocumentMouseMoveClouds, false);
+		window.addEventListener('resize', onWindowResizeClouds, false);
 
 	}
 
-	function onDocumentMouseMove(event) {
+	function onDocumentMouseMoveClouds(event) {
 
 		mouseX = (event.clientX - windowHalfX) * 0.25;
 		mouseY = (event.clientY - windowHalfY) * 0.15;
 
 	}
 
-	function onWindowResize(event) {
+	function onWindowResizeClouds(event) {
 
 		camera.aspect = window.innerWidth / window.innerHeight;
 		camera.updateProjectionMatrix();
@@ -162,9 +163,11 @@
 
 	}
 
-	function animate() {
+	var sfxclouds;
 
-		requestAnimationFrame(animate);
+	function animateClouds() {
+
+		sfxclouds = requestAnimationFrame(animateClouds);
 
 		position = ((Date.now() - start_time) * 0.03) % 8000;
 
@@ -174,6 +177,10 @@
 
 		renderer.render(scene, camera);
 
+	}
+
+	function stopClouds() {
+		cancelAnimationFrame(sfxclouds);
 	}
 
 </script>

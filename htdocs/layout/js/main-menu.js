@@ -4,7 +4,11 @@ jQuery(document).ready(function ($) {
 	//move nav element position according to window width
 	moveNavigation();
 	$(window).on('resize', function () {
-		(!window.requestAnimationFrame) ? setTimeout(moveNavigation, 300) : window.requestAnimationFrame(moveNavigation);
+		if (!window.requestAnimationFrame) {
+			setTimeout(moveNavigation, 300);
+		} else {
+			window.requestAnimationFrame(moveNavigation);
+		}
 	});
 
 	var $maintrigger = $('#cd-main-trigger');
@@ -28,6 +32,12 @@ jQuery(document).ready(function ($) {
 			//open main menu
 			if (!$maintrigger.hasClass('selected')) {
 				$maintrigger.click();
+			}
+			try {
+				animateClouds();
+			}
+			catch (err) {
+				// Missing js file
 			}
 		}
 	});
@@ -95,6 +105,12 @@ jQuery(document).ready(function ($) {
 		$('.cd-main-content').removeClass('nav-is-visible').one('webkitTransitionEnd otransitionend oTransitionEnd msTransitionEnd transitionend', function () {
 			$('body').removeClass('overflow-hidden');
 		});
+		try {
+			stopClouds();
+		}
+		catch (err) {
+			// Missing js file
+		}
 	}
 
 	function checkWindowWidth() {
