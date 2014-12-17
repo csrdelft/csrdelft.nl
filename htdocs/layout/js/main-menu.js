@@ -27,7 +27,7 @@ jQuery(document).ready(function ($) {
 
 			//open main menu
 			if (!$maintrigger.hasClass('selected')) {
-				$('#cd-main-trigger').click();
+				$maintrigger.click();
 			}
 		}
 	});

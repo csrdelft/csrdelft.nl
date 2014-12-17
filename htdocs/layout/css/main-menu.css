@@ -362,6 +362,7 @@ Main components
 	transition: transform 0.3s;
 }
 .cd-primary-nav a, .cd-primary-nav ul a {
+	font-family: "Source Sans Pro Light",Helvetica,Arial,sans-serif;
 	display: block;
 	height: 50px;
 	line-height: 50px;
@@ -372,7 +373,6 @@ Main components
 	overflow: hidden;
 	text-overflow: ellipsis;
 	white-space: nowrap;
-	border-bottom: 1px solid #fff;
 	-webkit-transform: translateZ(0);
 	-moz-transform: translateZ(0);
 	-ms-transform: translateZ(0);
@@ -409,7 +409,7 @@ Main components
 }
 .cd-primary-nav .see-all a {
 	/* different style for the See all button on mobile and tablet */
-	color: #0a338d;
+	color: #fff;
 }
 .cd-primary-nav .cd-nav-gallery .cd-nav-item, .cd-primary-nav .cd-nav-icons .cd-nav-item {
 	/* items with picture (or icon) and title */
@@ -531,7 +531,7 @@ Main components
 		height: 50px;
 		line-height: 50px;
 		padding: 0 10px;
-		color: #0a338d;
+		color: #000;
 		overflow: visible;
 		border-bottom: none;
 		-webkit-transition: color 0.3s, box-shadow 0.3s;
@@ -611,7 +611,6 @@ Main components
 	}
 	.cd-primary-nav .cd-secondary-nav > .see-all a:hover, .cd-primary-nav .cd-nav-gallery > .see-all a:hover, .cd-primary-nav .cd-nav-icons > .see-all a:hover {
 		background: #0a338d;
-		border-color: #0a338d;
 		color: #ffffff;
 	}
 	.cd-primary-nav .cd-secondary-nav > li {
@@ -755,7 +754,7 @@ Main components
 	display: inline-block;
 	height: 2px;
 	width: 10px;
-	background: #464c4e;
+	background: #ccc;
 	-webkit-backface-visibility: hidden;
 	backface-visibility: hidden;
 }
