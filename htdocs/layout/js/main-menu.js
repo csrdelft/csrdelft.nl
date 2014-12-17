@@ -162,6 +162,7 @@ jQuery(document).ready(function ($) {
 		if ((event.keyCode > 64 && event.keyCode < 91) || (event.keyCode > 47 && event.keyCode < 58) || (event.keyCode > 95 && event.keyCode < 106)) {
 			$searchfield.focus();
 			if (!$('.cd-search').hasClass('is-visible')) {
+				closeNav();
 				toggleSearch();
 			}
 		}
