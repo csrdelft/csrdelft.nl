@@ -175,13 +175,13 @@ Main components
 	width: 18px;
 	height: 18px;
 	border-radius: 50%;
-	border: 3px solid #2e3233;
+	border: 3px solid #0a338d;
 }
 .cd-search-trigger::after {
 	/* handle */
 	height: 3px;
 	width: 8px;
-	background: #2e3233;
+	background: #0a338d;
 	bottom: 14px;
 	right: 11px;
 	-webkit-transform: rotate(45deg);
@@ -209,7 +209,7 @@ Main components
 	margin-top: -2px;
 	left: 50%;
 	margin-left: -11px;
-	background: #2e3233;
+	background: #0a338d;
 	opacity: 0;
 	/* Force Hardware Acceleration in WebKit */
 	-webkit-transform: translateZ(0);
@@ -266,7 +266,7 @@ Main components
 	display: inline-block;
 	height: 3px;
 	width: 24px;
-	background: #2e3233;
+	background: #0a338d;
 }
 .cd-nav-trigger span {
 	/* line in the center */
@@ -313,7 +313,7 @@ Main components
 }
 .cd-nav-trigger.nav-is-visible span::before, .cd-nav-trigger.nav-is-visible span::after {
 	/* keep visible other 2 lines */
-	background: #2e3233;
+	background: #0a338d;
 }
 .cd-nav-trigger.nav-is-visible span::before {
 	-webkit-transform: translateX(4px) translateY(-3px) rotate(45deg);
@@ -330,9 +330,9 @@ Main components
 	transform: translateX(4px) translateY(2px) rotate(-45deg);
 }
 @media only screen and (min-width: 1170px) {
-  .cd-nav-trigger {
-    display: none;
-  }
+	.cd-nav-trigger {
+		display: none;
+	}
 }
 
 .cd-primary-nav, .cd-primary-nav ul {
@@ -341,8 +341,9 @@ Main components
 	right: 0;
 	height: 100%;
 	width: 260px;
-	background: #2e3233;
-	overflow: auto;
+	background: #0a338d;
+	overflow-y: auto;
+	overflow-x: hidden;
 	-webkit-overflow-scrolling: touch;
 	z-index: 1;
 	/* Force Hardware Acceleration in WebKit */
@@ -371,7 +372,7 @@ Main components
 	overflow: hidden;
 	text-overflow: ellipsis;
 	white-space: nowrap;
-	border-bottom: 1px solid #3a3f40;
+	border-bottom: 1px solid #fff;
 	-webkit-transform: translateZ(0);
 	-moz-transform: translateZ(0);
 	-ms-transform: translateZ(0);
@@ -435,7 +436,7 @@ Main components
 	padding-left: 75px;
 }
 .cd-primary-nav .cd-nav-icons .cd-nav-item p {
-	color: #2e3233;
+	color: #0a338d;
 	font-size: 1.3rem;
 	/* hide description on small devices */
 	display: none;
@@ -530,7 +531,7 @@ Main components
 		height: 50px;
 		line-height: 50px;
 		padding: 0 10px;
-		color: #2e3233;
+		color: #0a338d;
 		overflow: visible;
 		border-bottom: none;
 		-webkit-transition: color 0.3s, box-shadow 0.3s;
@@ -609,8 +610,8 @@ Main components
 		transition: color 0.2s, background 0.2s, border 0.2s;
 	}
 	.cd-primary-nav .cd-secondary-nav > .see-all a:hover, .cd-primary-nav .cd-nav-gallery > .see-all a:hover, .cd-primary-nav .cd-nav-icons > .see-all a:hover {
-		background: #2e3233;
-		border-color: #2e3233;
+		background: #0a338d;
+		border-color: #0a338d;
 		color: #ffffff;
 	}
 	.cd-primary-nav .cd-secondary-nav > li {
@@ -637,7 +638,7 @@ Main components
 		height: 30px;
 		line-height: 30px;
 		padding: 0 18% 0 0;
-		color: #2e3233;
+		color: #0a338d;
 		border-bottom: none;
 		font-size: 1.4rem;
 	}
