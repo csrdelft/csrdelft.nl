@@ -55,6 +55,14 @@
 		container = document.createElement('div');
 		document.getElementById('cd-main-overlay').appendChild(container);
 
+		// fix position on screen
+		$(window).on('scroll', function (event) {
+			$(container).css({
+				'margin-top': $(window).scrollTop()
+			});
+		}).trigger('scroll');
+
+
 		// Bg gradient
 
 		var canvas = document.createElement('canvas');
@@ -163,24 +171,30 @@
 
 	}
 
-	var sfxclouds;
+	var sfxclouds = false;
 
 	function animateClouds() {
 
-		sfxclouds = requestAnimationFrame(animateClouds);
+		requestAnimationFrame(animateClouds);
 
-		position = ((Date.now() - start_time) * 0.03) % 8000;
+		if (sfxclouds) {
 
-		camera.position.x += (mouseX - camera.position.x) * 0.01;
-		camera.position.y += (-mouseY - camera.position.y) * 0.01;
-		camera.position.z = -position + 8000;
+			position = ((Date.now() - start_time) * 0.03) % 8000;
 
-		renderer.render(scene, camera);
+			camera.position.x += (mouseX - camera.position.x) * 0.01;
+			camera.position.y += (-mouseY - camera.position.y) * 0.01;
+			camera.position.z = -position + 8000;
 
+			renderer.render(scene, camera);
+		}
+	}
+
+	function startClouds() {
+		sfxclouds = true;
 	}
 
 	function stopClouds() {
-		cancelAnimationFrame(sfxclouds);
+		sfxclouds = false;
 	}
 
 </script>

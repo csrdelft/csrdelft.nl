@@ -11,7 +11,14 @@ jQuery(document).ready(function ($) {
 		}
 	});
 
-	var $maintrigger = $('#cd-main-trigger');
+	var $maintrigger = $('#cd-main-trigger').on('click', function (event) {
+		try {
+			startClouds();
+		}
+		catch (err) {
+			// Missing js file
+		}
+	});
 
 	//mobile - open lateral menu clicking on the menu icon
 	$('.cd-nav-trigger').on('click', function (event) {
@@ -32,12 +39,6 @@ jQuery(document).ready(function ($) {
 			//open main menu
 			if (!$maintrigger.hasClass('selected')) {
 				$maintrigger.click();
-			}
-			try {
-				animateClouds();
-			}
-			catch (err) {
-				// Missing js file
 			}
 		}
 	});
