@@ -334,9 +334,6 @@ Main components
 	}
 }
 
-.cd-primary-nav {
-	opacity: 0.8;
-}
 .cd-primary-nav, .cd-primary-nav ul {
 	position: fixed;
 	top: 0;
