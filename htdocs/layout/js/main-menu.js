@@ -131,6 +131,7 @@ jQuery(document).ready(function ($) {
 			//close serach 
 			$('.cd-search').removeClass('is-visible');
 			$('.cd-search-trigger').removeClass('search-is-visible');
+			$maintrigger.fadeIn();
 		} else {
 			//toggle search visibility
 			$('.cd-search').toggleClass('is-visible');
