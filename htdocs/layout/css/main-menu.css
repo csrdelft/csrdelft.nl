@@ -76,8 +76,7 @@ Main components
 	/* add .nav-is-fixed class to body if you want a fixed navigation on > 960px */
 	position: fixed;
 	top: 0;
-	left: 0;
-	width: 100%;
+	right: 0;
 }
 @media only screen and (min-width: 960px) {
 	.cd-main-header {
