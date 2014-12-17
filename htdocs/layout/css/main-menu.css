@@ -382,6 +382,11 @@ Main components
 	-moz-transition: -moz-transform 0.3s, opacity 0.3s;
 	transition: transform 0.3s, opacity 0.3s;
 }
+@media only screen and (max-width: 959px) {
+	.cd-primary-nav a, .cd-primary-nav ul a {
+		font-size: 1.4em;
+	}
+}
 .cd-primary-nav.is-hidden, .cd-primary-nav ul.is-hidden {
 	/* secondary navigations hidden by default */
 	-webkit-transform: translateX(100%);
