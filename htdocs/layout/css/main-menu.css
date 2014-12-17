@@ -796,8 +796,9 @@ Main components
 .cd-search {
 	position: absolute;
 	height: 50px;
-	width: 100%;
 	top: 5px;
+	max-width: 300px;
+	width: 80%;
 	right: 20%;
 	z-index: 3;
 	opacity: 0;
