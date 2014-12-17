@@ -329,7 +329,7 @@ Main components
 	-o-transform: translateX(4px) translateY(2px) rotate(-45deg);
 	transform: translateX(4px) translateY(2px) rotate(-45deg);
 }
-@media only screen and (min-width: 1170px) {
+@media only screen and (min-width: 960px) {
 	.cd-nav-trigger {
 		display: none;
 	}
