@@ -27,7 +27,7 @@
 						</li>
 						<li><a href="/instellingen" title="Webstekinstellingen aanpassen">Instellingen</a></li>
 				{if LidInstellingen::get('zijbalk', 'favorieten') == 'ja'}
-						<li><a href="/menubeheer/toevoegen/favoriet" class="post popup addfav" title="Huidige pagina toevoegen aan favorieten">Favoriet toevoegen</a></li>
+						<li><a href="/menubeheer/toevoegen/favoriet" class="post popup addfav" onclick="$('.cd-nav-trigger').click();" title="Huidige pagina toevoegen aan favorieten">Favoriet toevoegen</a></li>
 				{/if}
 				{if LoginModel::mag('P_LEDEN_MOD')}
 					{if isset($forumcount)}
