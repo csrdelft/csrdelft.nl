@@ -38,3 +38,16 @@ class PageMenuView extends MenuView {
 	}
 
 }
+
+class MainMenuView extends MenuView {
+
+	public function __construct() {
+		parent::__construct(MenuModel::instance()->getMenu('main'));
+	}
+
+	public function view() {
+		parent::view();
+		$this->smarty->display('menu/main.tpl');
+	}
+
+}

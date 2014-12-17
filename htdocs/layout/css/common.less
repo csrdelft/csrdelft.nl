@@ -1,12 +1,89 @@
+/* -------------------------------- 
 
-/* LET op volgorde: na layout_pagina.css */
+Fonts
 
-#mysql_debug_toggle {
-	cursor: pointer;
+-------------------------------- */
+
+@font-face {
+	font-family: "Source Sans Pro Light";
+	font-weight: 300;
+	font-style: normal;
+	src: local("Source Sans Pro Light"),
+		url('../fonts/SourceSansPro-Light.ttf') format('truetype');
 }
-#mysql_debug {
-	display: none;
+
+/* -------------------------------- 
+
+Primary style
+
+-------------------------------- */
+html * {
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
 }
+html {
+	font-family: Helvetica,Arial;
+}
+body {
+	font-size: 1.2em;
+	line-height: 1.3em;
+	color: #000;
+	background-color: #fff;
+}
+img {
+	/* make images responsive */
+	max-width: 100%;
+}
+
+#maintable {
+	width: 100%;
+	border-collapse: collapse;
+}
+
+#mainright {
+	width: 100%;
+	padding: 50px;
+	vertical-align: top;
+}
+@media (max-width: 960px) {
+	#mainright {
+		min-width: 730px;
+        padding: 50px 0 0 5px;
+    }
+}
+#page-top {
+	position: relative;
+	top: -25px;
+}
+
+h1,h2,h3,h4,h5,h6 {
+	font-family: "Source Sans Pro Light",Helvetica,Arial,sans-serif;
+}
+h1 {
+    font-size: 3em;
+	margin: 1em 0;
+}
+h2 {
+	font-size: 2.5em;
+	margin: 1em 0;
+}
+h3 {
+    font-size: 2em;
+	margin: 1em 0 .5em 0;
+}
+h4 {
+	font-size: 1.8em;
+	margin: 1em 0 .5em 0;
+}
+h5 {
+	font-size: 1.6em;
+	margin: 1em 0 .5em 0;
+}
+h6 {
+	font-size: 1.4em;
+	margin: 1em 0 .5em 0;
+}
+
 .pre {
     display: block;
     unicode-bidi: embed;
@@ -20,22 +97,65 @@
 .clear { clear: both; }
 .clear-left { clear: left; }
 .clear-right { clear: right; }
+.block { display: block; }
 .inline { display: inline; }
 div.inline, form.inline, h1.inline, h2.inline, h3.inline, h4.inline, h5.inline, h6.inline { display: inline-block; }
 table.inline { display: inline-table; }
+.small { font-size: smaller; }
 .text-right { text-align: right; }
 .text-center { text-align: center; }
 .text-bottom { vertical-align: bottom; }
-/* don't forget to use these within a relative component */
+
+/* --------------------------------
+
+Easy positioning: use these within a
+position: relative element
+-------------------------------- */
 .top-left { position: absolute; top: 0; left: 0; }
 .top-right { position: absolute; top: 0; right: 0; }
 .bottom-left { position: absolute; bottom: 0; left: 0; }
 .bottom-right { position: absolute; bottom: 0; right: 0; }
-.alternate-bgcolor {
-	background-color: #FAFAFA;
+
+.onzichtbaar { visibility: hidden; }
+.verborgen { display: none; }
+.recht { font-style: normal; }
+.cursief { font-style: italic; }
+.dikgedrukt { font-weight: bold; }
+.niet-dik { font-weight: normal; }
+.onderstreept { text-decoration: underline; }
+.doorgestreept { text-decoration: line-through; }
+.lichtgrijs { color: #bbb; }
+.staatrood { color: red; }
+.error { color: red !important; font-weight: bold !important; }
+img.neus2013 {
+	width: 16px;
+	height: 16px;
+	margin: -5px;
 }
-.alternate-bgcolor:nth-child(even) {
-	background-color: #EBEBEB;
+
+/* --------------------------------
+
+Algemeen hokje voor (fout)meldingen
+
+-------------------------------- */
+.alert {
+	padding-left: 30px;
+}
+.alert-danger {
+	color: red;
+	background: url("/plaetjes/famfamfam/exclamation.png") no-repeat;
+}
+.alert-info {
+	color: #0A338D;
+	background: url("/plaetjes/famfamfam/information.png") no-repeat;
+}
+.alert-success {
+	color: green;
+	background: url("/plaetjes/famfamfam/accept.png") no-repeat;
+}
+.alert-warning {
+	color: #DDAA00;
+	background: url("/plaetjes/famfamfam/bell.png") no-repeat;
 }
 
 /* --------------------------------
@@ -45,20 +165,6 @@ Dynamic reldate
 -------------------------------- */
 abbr.timeago { border: none; }
 abbr.timeago:hover { border-bottom: 1px dotted grey; }
-
-/* --------------------------------
-
-Externe links & Knoppen
-
--------------------------------- */
-a.external {
-	background-image: url('/plaetjes/layout/external-link-blue.png');
-	background-repeat: no-repeat;
-	background-position: center right;
-	padding-right: 1em;
-}
-a:hover { text-decoration: underline; }
-a, a.btn, a.btn:hover { text-decoration: none; }
 
 /* --------------------------------
 
@@ -173,4 +279,56 @@ Dragable objects
 }
 .draghorizontal:active {
 	cursor: ew-resize;
+}
+
+/* --------------------------------
+
+HoverIntent visitekaartjes
+
+-------------------------------- */
+.hoverIntentContent {
+	display: none;
+	position: absolute;
+}
+.hoverIntentContent {
+	border: 1px solid #000;
+	background-color: #fff;
+	-moz-box-shadow: 0 0 11px #000;
+	-webkit-box-shadow: 0 0 11px #000;
+	box-shadow: 0 0 11px #000;
+	z-index: 250;
+	font-size: 1em;
+	font-weight: normal !important;
+	font-style: normal !important;
+	float: none !important;
+	overflow: visible;
+	padding: 5px;
+}
+.visitekaartje {
+	width: 330px;
+
+	img {
+		float: right;
+		height: auto !important;
+	}
+
+	p {
+		margin: 8px 0 0 10px;
+		color: #000 !important;
+
+		a {
+			color: #0a338d !important;
+		}
+	}
+	p.naam a {
+		font-weight: bold;
+		color: #000 !important;
+	}
+
+	.uid {
+		float: right;
+		padding-right: 5px;
+		margin-top: 8px;
+		color: #999;
+	}
 }

@@ -1,5 +1,5 @@
 /* 
-    Document   : snow
+    Document   : sfx-snow.css
     Created on : 21-dec-2013, 19:00:57
     Author     : Paul Brussee
     Description:
@@ -30,7 +30,7 @@
     100% { background-position: 500px 1000px, 400px 400px, 300px 300px }
 }
 
-#cd-lateral-nav, #cd-ingelogd-menu {
+.cd-main-overlay {
     background-image:  url('/plaetjes/layout/snow/snowh.png'), url('/plaetjes/layout/snow/snow3q.png'), url('/plaetjes/layout/snow/snow2l.png') !important;
     -webkit-animation: snow 20s linear infinite;
     -moz-animation: snow 20s linear infinite;
@@ -38,7 +38,6 @@
     animation: snow 20s linear infinite;
 }
 
-#cd-lateral-nav a:hover, #cd-lateral-nav a:active, #cd-lateral-nav a.active,
-#cd-ingelogd-menu a:hover, #cd-ingelogd-menu a:active, #cd-ingelogd-menu a.active{
+.cd-main-overlay a:hover, .cd-main-overlay a:active, .cd-main-overlay a.active {
 	text-shadow: 0 0 50px #FFF, 0 0 25px #FFF, 0 0 10px #FFF;
 }

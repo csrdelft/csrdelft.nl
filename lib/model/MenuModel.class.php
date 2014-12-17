@@ -11,6 +11,11 @@ class MenuModel extends CachedPersistenceModel {
 	const orm = 'MenuItem';
 
 	protected static $instance;
+	/**
+	 * Default ORDER BY
+	 * @var string
+	 */
+	protected $default_order = 'prioriteit ASC, tekst ASC';
 
 	/**
 	 * Get menu for viewing.
@@ -26,21 +31,24 @@ class MenuModel extends CachedPersistenceModel {
 		$key = $naam . '-menu';
 		if ($this->isCached($key, true)) {
 			$loaded = $this->isCached($key, false); // is the tree root present in runtime cache?
-			$result = $this->getCached($key, true); // this only puts the tree root in runtime cache
+			$root = $this->getCached($key, true); // this only puts the tree root in runtime cache
 			if (!$loaded) {
-				$this->cacheResult($this->getList($result), false); // put tree children in runtime cache as well
+				if ($naam === 'main') {
+					$this->insertFavorieten($root);
+				}
+				$this->cacheResult($this->getList($root), false); // put tree children in runtime cache as well
 			}
-			return $result;
+			return $root;
 		}
 		// not cached
 		$root = $this->getMenuRoot($naam);
 		if ($root) {
-			$this->getTree($root);
+			$this->getExtendedTree($root);
 		} else {
 			// niet bestaand menu?
 			$root = $this->newMenuItem(0);
 			$root->tekst = $naam;
-			if ($naam == LoginModel::getUid()) {
+			if ($naam === LoginModel::getUid()) {
 				// maak favorieten menu 
 				$root->link = '/menubeheer/beheer/' . $naam;
 			}
@@ -48,20 +56,92 @@ class MenuModel extends CachedPersistenceModel {
 			$this->create($root);
 		}
 		$this->setCache($key, $root, true);
+		if ($naam === 'main') {
+			$this->insertFavorieten($root); // do not put in memcache
+		}
 		return $root;
+	}
+
+	/**
+	 * Voeg favorieten toe aan menu.
+	 * 
+	 * @param MenuItem $parent
+	 * @return MenuItem $parent
+	 */
+	public function insertFavorieten(MenuItem $parent) {
+		$favs = MenuModel::instance()->getMenu(LoginModel::getUid());
+		$favs->tekst = 'Favorieten';
+		array_unshift($parent->children, $favs);
+	}
+
+	/**
+	 * Voeg forum-categorien, forum-delen, documenten-categorien en verticalen toe aan menu.
+	 * 
+	 * @param MenuItem $parent
+	 * @return MenuItem $parent
+	 */
+	public function getExtendedTree(MenuItem $parent) {
+		foreach ($parent->getChildren() as $child) {
+			$this->getExtendedTree($child);
+		}
+		switch ($parent->tekst) {
+
+			case 'Forum':
+				require_once 'model/ForumModel.class.php';
+				foreach (ForumModel::instance()->getForumIndeling() as $categorie) {
+					$item = $this->newMenuItem($parent->item_id);
+					$item->rechten_bekijken = $parent->rechten_bekijken;
+					$item->link = '/forum#' . $categorie->categorie_id;
+					$item->tekst = $categorie->titel;
+					$parent->children[] = $item;
+
+					foreach ($categorie->getForumDelen() as $deel) {
+						$subitem = $this->newMenuItem($item->item_id);
+						$subitem->rechten_bekijken = $item->rechten_bekijken;
+						$subitem->link = '/forum/deel/' . $deel->forum_id;
+						$subitem->tekst = $deel->titel;
+						$item->children[] = $subitem;
+					}
+				}
+				break;
+
+			case 'Documenten':
+				require_once 'model/documenten/DocCategorie.class.php';
+				foreach (DocCategorie::getAll() as $cat) {
+					if ($cat->magBekijken()) {
+						$item = $this->newMenuItem($parent->item_id);
+						$item->rechten_bekijken = $parent->rechten_bekijken;
+						$item->link = '/documenten/categorie/' . $cat->getID();
+						$item->tekst = $cat->getNaam();
+						$parent->children[] = $item;
+					}
+				}
+				break;
+
+			case 'Verticalen':
+				foreach (VerticalenModel::instance()->prefetch() as $verticale) {
+					$item = $this->newMenuItem($parent->item_id);
+					$item->rechten_bekijken = $parent->rechten_bekijken;
+					$item->link = '/verticalen#' . $verticale->letter;
+					$item->tekst = $verticale->naam;
+					$parent->children[] = $item;
+				}
+				break;
+		}
+		return $parent;
 	}
 
 	/**
 	 * Build tree structure.
 	 * 
-	 * @param MenuItem $root
-	 * @return MenuItem $root
+	 * @param MenuItem $parent
+	 * @return MenuItem $parent
 	 */
-	public function getTree(MenuItem $root) {
-		foreach ($root->getChildren() as $child) {
+	public function getTree(MenuItem $parent) {
+		foreach ($parent->getChildren() as $child) {
 			$this->getTree($child);
 		}
-		return $root;
+		return $parent;
 	}
 
 	/**
@@ -83,7 +163,7 @@ class MenuModel extends CachedPersistenceModel {
 	}
 
 	public function getChildren(MenuItem $parent) {
-		return $this->prefetch('parent_id = ?', array($parent->item_id), 'prioriteit ASC, tekst ASC'); // cache for getParent()
+		return $this->prefetch('parent_id = ?', array($parent->item_id)); // cache for getParent()
 	}
 
 	/**
@@ -93,7 +173,7 @@ class MenuModel extends CachedPersistenceModel {
 	 */
 	public function getMenuBeheerLijst() {
 		if (LoginModel::mag('P_ADMIN')) {
-			return $this->find('parent_id = ?', array(0), 'tekst DESC');
+			return $this->find('parent_id = ?', array(0));
 		} else {
 			return false;
 		}

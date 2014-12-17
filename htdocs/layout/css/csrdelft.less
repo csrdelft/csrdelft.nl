@@ -1,74 +1,51 @@
-/**** FONTS *****************************************************************/
-
-@font-face {
-	font-family: "Source Sans Pro Light";
-	font-weight: 300;
-	font-style: normal;
-	src: local("Source Sans Pro Light"),
-		url('../fonts/SourceSansPro-Light.ttf') format('truetype');
+/* Standaard Kleuren */
+.alternate-bgcolor {
+	background-color: #FAFAFA;
+}
+.alternate-bgcolor:nth-child(even) {
+	background-color: #EBEBEB;
 }
 
-html {
-	font-family: Helvetica,Arial;
+/* Typeahead suggestions */
+.tt-suggestion {
+	cursor: pointer;
 }
-
-h1,h2,h3,h4,h5,h6 {
-	font-family: "Source Sans Pro Light",Helvetica,Arial,sans-serif;
-}
-
-/**** GENERAL *****************************************************************/
-body {
-	font-size: 1.2em;
-	line-height: 1.3em;
-	color: #000;
-	background-color: #fff;
-}
-
-#maintable {
-	width: 100%;
-	border-collapse: collapse;
-}
-#mainright {
-	width: 100%;
-	padding: 50px;
-	vertical-align: top;
-}
-#page-top {
-	position: relative;
-	top: -25px;
-}
-
-h1 {
-    font-size: 3em;
-	margin: 1em 0;
-}
-h2 {
-	font-size: 2.5em;
-	margin: 1em 0;
-}
-h3 {
-    font-size: 2em;
-	margin: 1em 0 .5em 0;
-}
-h4 {
-	font-size: 1.8em;
-	margin: 1em 0 .5em 0;
-}
-h5 {
+.tt-dropdown-menu h3 {
 	font-size: 1.6em;
-	margin: 1em 0 .5em 0;
-}
-h6 {
-	font-size: 1.4em;
-	margin: 1em 0 .5em 0;
+	margin: 15px 15px 10px 10px;
 }
 
-span.twitter-typeahead {
-	width: auto;
+/* ZoekbalkView Form */
+.cd-search .input-group {
+	float: right;
+	width: 300px;
+
+	input.form-control {
+		border-top-left-radius: 4px !important;
+		border-bottom-left-radius: 4px !important;
+	}
+
+	#cd-zoek-engines {
+		border-top-right-radius: 4px;
+		border-bottom-right-radius: 4px;
+		height: 34px;
+		padding: 7px;
+		color: #000;
+		background-color: #f5f5f5;
+		border: 1px solid #a9a9a9;
+		text-shadow: none;
+		background-image: none;
+	}
+}
+
+/* Login Form */
+.login-form .InputField, .login-form .InputField:hover {
+	border: none;
+	width: 100px;
 }
 
 /* Verjaardagen */
-div.verjaardagen {
+.verjaardagen {
 	-webkit-column-gap: 25px;
 	-moz-column-gap: 25px;
 	column-gap: 25px;
@@ -78,17 +55,11 @@ div.verjaardagen {
 }
 
 /* Bijbelrooster */
-div.bijbelrooster {
+.bijbelrooster {
 	-webkit-columns: 200px auto;
 	-moz-columns: 200px auto;
 	columns: 200px auto;
 	line-height: 2em;
-}
-
-/* Login Form */
-.login-form .InputField, .login-form .InputField:hover {
-	border: none;
-	width: 100px;
 }
 
 /* lidinstellingen */
@@ -155,6 +126,12 @@ ul.nobullets li { list-style-type: none; }
 
 /**** OVERIG ******************************************************************/
 
+#mysql_debug_toggle {
+	cursor: pointer;
+}
+#mysql_debug {
+	display: none;
+}
 .pubcie_debug {
 	margin: 10px;
 	overflow: auto;
@@ -223,27 +200,6 @@ table.query_table tbody tr td {
 div.geelblokje { background-color: #ffffc1; margin: 10px 0; padding: 0; }
 
 
-/* algemeen hokje voor (fout)meldingen */
-.alert {
-	padding-left: 30px;
-}
-.alert-danger {
-	color: red;
-	background: url("/plaetjes/famfamfam/exclamation.png") no-repeat;
-}
-.alert-info {
-	color: #0A338D;
-	background: url("/plaetjes/famfamfam/information.png") no-repeat;
-}
-.alert-success {
-	color: green;
-	background: url("/plaetjes/famfamfam/accept.png") no-repeat;
-}
-.alert-warning {
-	color: #DDAA00;
-	background: url("/plaetjes/famfamfam/bell.png") no-repeat;
-}
-
 /* csrmail */
 div#pubciemail_form { background-color: #f5f5f5; border: 1px solid lightgray; padding: 10px; }
 
@@ -288,63 +244,3 @@ form#streeplijst input, form#streeplijst label { text-align: left; margin: 3px; 
 #nieuwePeiling input, #nieuwePeiling textarea { margin-bottom: 4px; }
 #nieuwePeiling textarea { width: 400px; }
 #peilingOpties input { width: 400px; }
-
-/* --------------------------------
-
-HoverIntent visitekaartjes
-
--------------------------------- */
-.hoverIntentContent {
-	display: none;
-	position: absolute;
-}
-div.hoverIntentContent {
-	border: 1px solid #000;
-	background-color: #fff;
-	-moz-box-shadow: 0 0 11px #000;
-	-webkit-box-shadow: 0 0 11px #000;
-	box-shadow: 0 0 11px #000;
-	z-index: 250;
-	font-size: 1em;
-	font-weight: normal !important;
-	font-style: normal !important;
-	float: none !important;
-	overflow: visible;
-	padding: 5px;
-}
-div.visitekaartje {
-	width: 330px;
-}
-div.visitekaartje img {
-	float: right;
-	height: auto !important;
-}
-div.visitekaartje p {
-	margin: 8px 0 0 10px;
-	color: #000 !important;
-}
-div.visitekaartje p a {
-	color: #0a338d !important;
-}
-div.visitekaartje p.naam a {
-	font-weight: bold;
-	color: #000 !important;
-}
-div.visitekaartje div.uid {
-	float: right;
-	padding-right: 5px;
-	margin-top: 8px;
-	color: #999;
-}
-
-/* -------------------------------- 
-
-Overrides voor smalle schermen
-
--------------------------------- */
-@media (max-width: 1004px) {
-	#mainright {
-		min-width: 730px;
-        padding: 50px 0 0 5px;
-    }
-}

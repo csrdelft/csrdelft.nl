@@ -54,7 +54,7 @@ a.btn, textarea, input, select, #filters span, #boekencatalogus_wrapper *, .mede
 #forumtabel th td{ color: #222;}
 #forumtabel tbody tr.tussenschot td{ background-color: #555; }
 .auteur{ background-color: black !important; }
-.bericht1, .forumtekst{ background-color: #333 !important; }
+.bericht1{ background-color: #333 !important; }
 .citaat{ background-color: #444 !important; }
 
 .bb-block, .bb-block .groepleden{

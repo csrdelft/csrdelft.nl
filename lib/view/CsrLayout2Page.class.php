@@ -55,8 +55,8 @@ class CsrLayout2Page extends CompressedLayout {
 		$smarty->assign('breadcrumbs', $breadcrumbs);
 
 		if (LoginModel::instance()->isPauper()) {
-			$smarty->assign('menutree', MenuModel::instance()->getMenu('main'));
-			$smarty->display('layout/pauper.tpl');
+			$smarty->assign('mainmenu', new MainMenuView());
+			$smarty->display('csrdelft/pauper.tpl');
 		} else {
 			$smarty->display('csrdelft2/' . $this->tmpl . '.tpl');
 		}

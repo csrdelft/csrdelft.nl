@@ -1,8 +1,8 @@
 /* 
-    Document   : space
+    Document   : sfx-space.css
     Created on : 21-dec-2013, 19:00:57
     Author     : Paul Brussee
-    Description: based on snow.anim.css
+    Description: based on sfx-snow.css
 */
 
 @keyframes space { 
@@ -29,7 +29,7 @@
     100% { background-position: 0 0 }
 }
 
-#cd-lateral-nav, #cd-ingelogd-menu {
+.cd-main-overlay {
     background-image:  url('/plaetjes/layout/bg/stars.jpg');
 	background-size: cover;
     -webkit-animation: space 360s linear infinite;
@@ -38,7 +38,6 @@
     animation: space 360s linear infinite;
 }
 
-#cd-lateral-nav a:hover, #cd-lateral-nav a:active, #cd-lateral-nav a.active,
-#cd-ingelogd-menu a:hover, #cd-ingelogd-menu a:active, #cd-ingelogd-menu a.active{
+.cd-main-overlay a:hover, .cd-main-overlay a:active, .cd-main-overlay a.active {
 	text-shadow: 0 0 50px #FFF, 0 0 25px #FFF, 0 0 10px #FFF;
 }

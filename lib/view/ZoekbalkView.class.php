@@ -11,28 +11,19 @@ class ZoekbalkView extends Formulier {
 	public function __construct() {
 		parent::__construct(null, 'cd-zoek-form', null);
 		$this->post = false;
-
 		$fields[] = new ZoekInputGroup('q');
-
 		$this->addFields($fields);
-	}
-
-	public function view() {
-		echo '<nav id="cd-lateral-nav">';
-		parent::view();
-		echo '<div id="mainmenu">';
-		$sitemap = new SitemapView();
-		$sitemap->view();
-		echo '</div></nav>';
 	}
 
 }
 
 class ZoekInputGroup extends TextField {
 
+	public $type = 'search';
+
 	public function __construct($name) {
 		parent::__construct($name, null, null);
-		$this->css_classes[] = 'menuzoekveld form-control';
+		$this->css_classes[] = 'form-control';
 		$this->placeholder = 'Zoek op titel';
 		$this->onkeydown = <<<JS
 
@@ -53,16 +44,7 @@ else {
 }
 JS;
 		if (LoginModel::mag('P_LEDEN_READ')) {
-			// Favorieten suggesties
-			$favs = MenuModel::instance()->getMenu(LoginModel::getUid());
-			foreach ($favs->getChildren() as $item) {
-				if ($item->magBekijken()) {
-					$this->suggestions[''][] = array(
-						'url'	 => $item->link,
-						'value'	 => $item->tekst . '<span class="lichtgrijs"> - Favorieten</span>'
-					);
-				}
-			}
+
 			// Menu suggesties
 			$list = MenuModel::instance()->getList(MenuModel::instance()->getMenu('main'));
 			foreach ($list as $item) {
@@ -78,38 +60,7 @@ JS;
 					);
 				}
 			}
-			// Verticalen suggesties
-			foreach (VerticalenModel::instance()->prefetch() as $verticale) {
-				$this->suggestions[''][] = array(
-					'url'	 => '/verticalen#' . $verticale->letter,
-					'value'	 => $verticale->naam . '<span class="lichtgrijs"> - Verticalen</span>'
-				);
-			}
-			// Forum categorien suggesties
-			require_once 'model/ForumModel.class.php';
-			foreach (ForumModel::instance()->getForumIndeling() as $categorie) {
-				$this->suggestions[''][] = array(
-					'url'	 => '/forum#' . $categorie->categorie_id,
-					'value'	 => $categorie->titel . '<span class="lichtgrijs"> - Forum</span>'
-				);
-				// Forum delen suggesties
-				foreach ($categorie->getForumDelen() as $deel) {
-					$this->suggestions[''][] = array(
-						'url'	 => '/forum/deel/' . $deel->forum_id,
-						'value'	 => $deel->titel . '<span class="lichtgrijs"> - ' . $categorie->titel . '</span>'
-					);
-				}
-			}
-			// Document categorien suggesties
-			require_once 'model/documenten/DocCategorie.class.php';
-			foreach (DocCategorie::getAll() as $cat) {
-				if ($cat->magBekijken()) {
-					$this->suggestions[''][] = array(
-						'url'	 => '/documenten/categorie/' . $cat->getID(),
-						'value'	 => $cat->getNaam() . '<span class="lichtgrijs"> - Documenten</span>'
-					);
-				}
-			}
+
 			// Nog meer suggesties
 			$this->suggestions['Leden'] = '/tools/naamsuggesties/leden/?q=';
 			$this->suggestions['Agenda'] = '/agenda/zoeken/?q=';

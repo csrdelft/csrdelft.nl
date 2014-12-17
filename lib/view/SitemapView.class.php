@@ -8,11 +8,17 @@
  */
 class SitemapView implements View {
 
-	public $levels = 2;
+	private $model;
+	private $levels;
 	private $javascript;
 
+	public function __construct($levels = 3) {
+		$this->model = MenuModel::instance()->getMenu('main');
+		$this->levels = $levels;
+	}
+
 	public function getModel() {
-		return MenuModel::instance()->getMenu('main');
+		return $this->model;
 	}
 
 	public function getTitel() {
@@ -24,7 +30,7 @@ class SitemapView implements View {
 	}
 
 	public function view() {
-		foreach ($this->getModel()->getChildren() as $parent) {
+		foreach ($this->model->getChildren() as $parent) {
 			echo $this->viewTree($parent, 1);
 		}
 		echo $this->getScriptTag();

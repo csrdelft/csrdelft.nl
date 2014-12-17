@@ -160,7 +160,7 @@ pagecount=ForumPostsModel::instance()->getAantalPaginas($draad->draad_id) curpag
 
 		<tr>
 			<td>&nbsp;</td>
-			<td class="forumtekst magreageren">
+			<td class="magreageren">
 				{$smarty.capture.magreageren}
 			</td>
 		</tr>

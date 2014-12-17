@@ -117,12 +117,12 @@ htdocs/layout/css/jPicker.min.css -text
 htdocs/layout/css/jgallery.css -text
 htdocs/layout/css/jgallery.min.css -text
 htdocs/layout/css/knoppen.less -text
-htdocs/layout/css/layout_pagina.css -text
 htdocs/layout/css/ledenlijst.css -text
 htdocs/layout/css/ledenmemory.css -text
 htdocs/layout/css/lustrum.css -text
 htdocs/layout/css/maalcie.css -text
 htdocs/layout/css/maaltijdlijst.css -text
+htdocs/layout/css/main-menu.css -text
 htdocs/layout/css/mededelingen.css -text
 htdocs/layout/css/menubeheer.css -text
 htdocs/layout/css/minion.css -text
@@ -133,11 +133,10 @@ htdocs/layout/css/reset.less -text
 htdocs/layout/css/reset_wiki.less -text
 htdocs/layout/css/roodschopper.css -text
 htdocs/layout/css/roze.css -text
+htdocs/layout/css/sfx-clouds.css -text
+htdocs/layout/css/sfx-snow.css -text
+htdocs/layout/css/sfx-space.css -text
 htdocs/layout/css/sineregno.css -text
-htdocs/layout/css/snow.anim.css -text
-htdocs/layout/css/snow.css -text
-htdocs/layout/css/space.anim.css -text
-htdocs/layout/css/space.css -text
 htdocs/layout/css/stamboom.css -text
 htdocs/layout/css/stylus/basic.styl -text
 htdocs/layout/css/stylus/dropzone.styl -text
@@ -319,6 +318,7 @@ htdocs/layout/js/flot/jquery.min.js -text
 htdocs/layout/js/forum.js -text
 htdocs/layout/js/gmaps.js -text
 htdocs/layout/js/groepen.js -text
+htdocs/layout/js/jquery.mobile.custom.min.js -text
 htdocs/layout/js/jquery/images/animated-overlay.gif -text
 htdocs/layout/js/jquery/images/prettyPhoto/dark_rounded/btnNext.png -text
 htdocs/layout/js/jquery/images/prettyPhoto/dark_rounded/btnPrevious.png -text
@@ -382,6 +382,7 @@ htdocs/layout/js/jquery/jquery-ui.theme.css -text
 htdocs/layout/js/jquery/jquery-ui.theme.min.css -text
 htdocs/layout/js/jquery/jquery.js -text
 htdocs/layout/js/jquery/jquery.min.js -text
+htdocs/layout/js/jquery/jquery.mobile.custom.min.js -text
 htdocs/layout/js/jquery/plugins/jgallery.js -text
 htdocs/layout/js/jquery/plugins/jgallery.min.js -text
 htdocs/layout/js/jquery/plugins/jquery.autosize.js -text
@@ -405,7 +406,7 @@ htdocs/layout/js/jquery/plugins/typeahead.bundle.min.js -text
 htdocs/layout/js/keypress.js -text
 htdocs/layout/js/ledenmemory.js -text
 htdocs/layout/js/maalcie.js -text
-htdocs/layout/js/main_menu.js -text
+htdocs/layout/js/main-menu.js -text
 htdocs/layout/js/markitup/jquery.markitup.js -text
 htdocs/layout/js/markitup/sets/bbcode/images/bold.png -text
 htdocs/layout/js/markitup/sets/bbcode/images/clean.png -text
@@ -431,6 +432,7 @@ htdocs/layout/js/markitup/skins/simple/style.css -text
 htdocs/layout/js/markitup/templates/preview.css -text
 htdocs/layout/js/markitup/templates/preview.html -text
 htdocs/layout/js/minion.js -text
+htdocs/layout/js/modernizr.js -text
 htdocs/layout/js/peilingbeheer.js -text
 htdocs/layout/js/profiel.js -text
 htdocs/layout/js/roodschopper.js -text
@@ -4255,6 +4257,8 @@ lib/templates/courant/mail/courant_delphiadaily2011.tpl -text
 lib/templates/courant/mail/courant_draadloos2009.tpl -text
 lib/templates/courant/mail/courant_triomphedor2011.tpl -text
 lib/templates/courant/mail/csrmail_owee.tpl -text
+lib/templates/csrdelft/pagina.tpl -text
+lib/templates/csrdelft/pauper.tpl -text
 lib/templates/csrdelft2/content.tpl -text
 lib/templates/csrdelft2/index.tpl -text
 lib/templates/csrdelft2/lidworden.tpl -text
@@ -4300,9 +4304,6 @@ lib/templates/html_head.tpl -text
 lib/templates/instellingen/beheer/instelling_row.tpl -text
 lib/templates/instellingen/beheer/instellingen_page.tpl -text
 lib/templates/instellingen/lidinstelling.tpl -text
-lib/templates/layout/pagina.tpl -text
-lib/templates/layout/pagina_header.tpl -text
-lib/templates/layout/pauper.tpl -text
 lib/templates/maalcie/abonnement/beheer_abonnement_head.tpl -text
 lib/templates/maalcie/abonnement/beheer_abonnement_lijst.tpl -text
 lib/templates/maalcie/abonnement/beheer_abonnement_veld.tpl -text
@@ -4363,6 +4364,8 @@ lib/templates/menu/beheer/menu_item.tpl -text
 lib/templates/menu/beheer/menu_root.tpl -text
 lib/templates/menu/beheer/menu_tree.tpl -text
 lib/templates/menu/block.tpl -text
+lib/templates/menu/main.tpl -text
+lib/templates/menu/main_tree.tpl -text
 lib/templates/menu/page.tpl -text
 lib/templates/minion.tpl -text
 lib/templates/peiling.bb.tpl -text

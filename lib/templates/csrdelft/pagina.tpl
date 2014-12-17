@@ -1,10 +1,15 @@
 <!DOCTYPE html>
-<html>
+<html class="no-js">
 	<head>
 		{include file='html_head.tpl'}
 	</head>
-	<body>
-		{include file='layout/pagina_header.tpl'}
+	<body class="nav-is-fixed">
+		<header class="cd-main-header">
+			<ul class="cd-header-buttons">
+				<li><a class="cd-search-trigger" href="#cd-search">Zoeken<span></span></a></li>
+				<li><a class="cd-nav-trigger" href="#cd-primary-nav">Menu<span></span></a></li>
+			</ul>
+		</header>
 		<main class="cd-main-content">
 			<table id="maintable">
 				<tr>
@@ -12,7 +17,7 @@
 						<td id="mainleft">
 							<div id="zijbalk"{if LidInstellingen::get('zijbalk', 'scrollen') != 'met pagina mee'} class="{if LidInstellingen::get('zijbalk', 'scrollen') == 'pauper/desktop'}desktop-only {/if}{if LidInstellingen::get('zijbalk', 'scrollbalk') == 'ja'}scroll-hover {/if}scroll-fixed dragobject dragvertical" data-scrollfix="{$scrollfix}"{/if}>
 								<a id="cd-logo" href="/"><div id="beeldmerk"></div></a>
-								{foreach from=$zijbalk item=block}
+									{foreach from=$zijbalk item=block}
 									<div class="block">{$block->view()}</div>
 								{/foreach}
 								{if LidInstellingen::get('zijbalk', 'scrollen') == 'met pagina mee'}<br /><br /><br />{/if}
@@ -20,27 +25,27 @@
 						</td>
 					{/if}
 					<td id="mainright">
-						<div id="page-top"><div class="breadcrumbs">{$breadcrumbs}</div></div>
+						<div id="page-top">
+							<div class="breadcrumbs">{$breadcrumbs}</div>
+						</div>
 						{$body->view()}
-						{if LoginModel::mag('P_ADMIN') OR LoginModel::instance()->isSued()}
-							<div class="clear"><a id="mysql_debug_toggle" onclick="$(this).replaceWith($('#mysql_debug').toggle());">DEBUG</a></div>
-						{/if}
+						{printDebug()}
 					</td>
 				</tr>
 			</table>
+			{if isset($minion)}
+				{$minion}
+			{/if}
+			{if isset($modal)}
+				{$modal->view()}
+			{else}
+				<div id="modal" class="modal-content outer-shadow dragobject" tabindex="-1"></div>
+			{/if}
 		</main>
 		{$mainmenu->view()}
-		{if isset($minion)}
-			{$minion}
-		{/if}
-		<div id="modal-background"{if isset($modal)} style="display: block;"{/if}></div>
-		{if isset($modal)}
-			{$modal->view()}
-		{else}
-			<div id="modal" class="modal-content outer-shadow dragobject" tabindex="-1"></div>
-		{/if}
-		{if LoginModel::mag('P_ADMIN') OR LoginModel::instance()->isSued()}
-			<div id="mysql_debug" class="pre">{getDebug()}</div>
-		{/if}
+		<div id="cd-search" class="cd-search">
+			{$zoekbalk->view()}
+		</div>
+		<div id="modal-background" class="cd-main-overlay"{if isset($modal)} style="display: block;"{/if}></div>
 	</body>
 </html>

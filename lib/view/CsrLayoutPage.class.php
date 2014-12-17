@@ -49,6 +49,8 @@ class CsrLayoutPage extends CompressedLayout {
 		$smarty->assign('titel', $this->getTitel());
 		$smarty->assign('modal', $this->modal);
 		$smarty->assign('body', $this->getBody());
+		$smarty->assign('mainmenu', new MainMenuView());
+		$smarty->assign('zoekbalk', new ZoekbalkView());
 
 		$breadcrumbs = $this->getBody()->getBreadcrumbs();
 		if (!$breadcrumbs) {
@@ -83,17 +85,10 @@ class CsrLayoutPage extends CompressedLayout {
 		}
 
 		if (LoginModel::instance()->isPauper()) {
-			$smarty->assign('menutree', MenuModel::instance()->getMenu('main'));
 			$smarty->assign('loginform', new LoginForm());
-			$smarty->display('layout/pauper.tpl');
+			$smarty->display('csrdelft/pauper.tpl');
 		} else {
-			$smarty->assign('mainmenu', new ZoekbalkView());
-			// uitzondering voor wiki (geen main table)
-			if ($this->body instanceof WikiView) {
-				$smarty->display('layout/wiki.tpl');
-			} else {
-				$smarty->display('layout/pagina.tpl');
-			}
+			$smarty->display('csrdelft/pagina.tpl');
 		}
 	}
 

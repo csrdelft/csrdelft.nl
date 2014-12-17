@@ -26,7 +26,7 @@
 			<br />
 			<a name="mainmenu"><h1>Menu</h1></a>
 			<ul>
-				{foreach from=$menutree->children item=item}
+				{foreach from=$mainmenu->children item=item}
 					{if $item->magBekijken()}
 						<li>
 							<h3>
