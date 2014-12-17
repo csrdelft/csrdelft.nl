@@ -513,7 +513,7 @@ Main components
 		top: 50px;
 		width: 100vw;
 		background: #ffffff;
-		padding: 50px 0 50px 65px;
+		padding: 50px 0 100px 65px;
 		box-shadow: inset 0 1px 0 #e2e3df, 0 3px 6px rgba(0, 0, 0, 0.05);
 		-webkit-transform: translateX(0);
 		-moz-transform: translateX(0);
