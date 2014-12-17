@@ -49,7 +49,7 @@ jQuery(document).ready(function ($) {
 	});
 	$('.cd-main-overlay').on('click', function () {
 		closeNav();
-		toggleSearch('close')
+		toggleSearch('close');
 		$('.cd-main-overlay').removeClass('is-visible');
 	});
 
@@ -94,8 +94,8 @@ jQuery(document).ready(function ($) {
 
 	function checkWindowWidth() {
 		//check window width (scrollbar included)
-		var e = window,
-				a = 'inner';
+		var e = window;
+		var a = 'inner';
 		if (!('innerWidth' in window)) {
 			a = 'client';
 			e = document.documentElement || document.body;
