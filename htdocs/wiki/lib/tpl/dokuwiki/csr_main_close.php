@@ -1,7 +1,6 @@
+</main>
+
 <?php
-
-echo '</main>';
-
 $wiki->getBody()->view();
 
 if (isset($modal)) {

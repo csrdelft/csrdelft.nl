@@ -35,9 +35,6 @@
 			</table>
 		</main>
 		{$mainmenu->view()}
-		<div id="cd-search" class="cd-search">
-			{$zoekbalk->view()}
-		</div>
 		<div id="modal-background" {if isset($modal)} style="display: block;"{/if}></div>
 		{if isset($minion)}
 			{$minion}

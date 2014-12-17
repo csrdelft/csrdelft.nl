@@ -49,3 +49,6 @@
 	{/if}
 	</ul>
 </nav>
+<div id="cd-search" class="cd-search">
+	{$zoekbalk->view()}
+</div>

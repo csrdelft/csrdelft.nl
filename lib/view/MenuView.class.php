@@ -47,6 +47,7 @@ class MainMenuView extends MenuView {
 
 	public function view() {
 		parent::view();
+		$this->smarty->assign('zoekbalk', new ZoekbalkView());
 		$this->smarty->display('menu/main.tpl');
 	}
 

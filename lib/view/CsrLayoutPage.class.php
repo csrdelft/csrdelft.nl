@@ -50,7 +50,6 @@ class CsrLayoutPage extends CompressedLayout {
 		$smarty->assign('modal', $this->modal);
 		$smarty->assign('body', $this->getBody());
 		$smarty->assign('mainmenu', new MainMenuView());
-		$smarty->assign('zoekbalk', new ZoekbalkView());
 
 		$breadcrumbs = $this->getBody()->getBreadcrumbs();
 		if (!$breadcrumbs) {
