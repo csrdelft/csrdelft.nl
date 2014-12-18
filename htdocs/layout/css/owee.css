@@ -12,7 +12,7 @@ body {
 	background-image: url("/plaetjes/owee/2014/banner.png");
 	background-repeat: no-repeat;
 	background-position-x: 33%;
-	background-position-y: 50px;
+	background-position-y: 33px;
 }
 h1,h2,h3,h4,h5,h6 {
 	color: #231f20;
@@ -33,7 +33,7 @@ a[href^="mailto:"] {
 }
 
 #zijbalk {
-	border-color: #231f20;
+	border-color: #fcb040;
 }
 #zijbalk .block .zijbalk-kopje a {
 	color: #ed1c24;
