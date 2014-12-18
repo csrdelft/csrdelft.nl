@@ -1,5 +1,6 @@
 <nav class="cd-nav">
 	<ul id="cd-primary-nav" class="cd-primary-nav is-fixed"{if (LidInstellingen::get('layout', 'sfx') != 'nee')} style="opacity:0.8;"{/if}>
+		{include file='menu/main_tree.tpl' parent=$root}
 	{if LoginModel::mag('P_LOGGED_IN')}
 		<li class="has-children">
 			<a id="cd-main-trigger" href="#0">{LoginModel::getUid()|csrnaam:"civitas":"plain"}</a>
@@ -46,7 +47,6 @@
 					</ul>
 				</li>
 		{/if}
-				{include file='menu/main_tree.tpl' parent=$root}
 			</ul>
 		</li>
 	{else}
