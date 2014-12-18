@@ -108,20 +108,21 @@ class CsrBB extends eamBBParser {
 		if (isset($arguments['h']) AND $arguments['h'] > 10) {
 			$style .= 'height: ' . ((int) $arguments['h']) . 'px;';
 		}
-		$content = $this->parseArray(array('[/img]', '[/IMG]'), array());
+		$url = $this->parseArray(array('[/img]', '[/IMG]'), array());
+		$url = filter_var($url, FILTER_SANITIZE_URL);
 		// als de html toegestaan is hebben we genoeg vertrouwen om sommige karakters niet te encoderen
 		if (!$this->allow_html) {
-			$content = htmlspecialchars($content);
+			$url = htmlspecialchars($url);
 		}
 		// only valid patterns
-		if (!url_like($content)) {
-			return '[img: Ongeldige URL, tip: gebruik tinyurl.com][prive=P_ADMIN]' . $content . '[/prive]';
+		if (!$url OR ! url_like($url)) {
+			return '[img: Ongeldige URL, tip: gebruik tinyurl.com]';
 		}
 		// lazy loading van externe images bijv. op het forum
-		if (!startsWith($content, CSR_ROOT) OR startsWith($content, CSR_ROOT . '/plaetjes/fotoalbum/')) {
-			return '<div class="bb-img-loading" src="' . $content . '" title="' . htmlspecialchars($content) . '" style="' . $style . '"></div>';
+		if (!startsWith($url, CSR_ROOT) OR startsWith($url, CSR_ROOT . '/plaetjes/fotoalbum/')) {
+			return '<div class="bb-img-loading" src="' . $url . '" title="' . htmlspecialchars($url) . '" style="' . $style . '"></div>';
 		}
-		return '<img class="bb-img ' . $class . '" src="' . $content . '" alt="' . htmlspecialchars($content) . '" style="' . $style . '" />';
+		return '<img class="bb-img ' . $class . '" src="' . $url . '" alt="' . htmlspecialchars($url) . '" style="' . $style . '" />';
 	}
 
 	/**
