@@ -36,13 +36,6 @@ div.groepTabContent {
 table.groepLeden td {
     width: 150px;
 }
-div.pasfoto img.pasfoto {
-    float: left;
-    width: 50px;
-    height: 67px;
-    border: 1px solid grey;
-    margin: 3px 0 0 3px;
-}
 table.groepStats {
     border-spacing: 0;
     border: 1px solid #000;

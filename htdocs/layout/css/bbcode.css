@@ -123,10 +123,9 @@ a.maaltijd-afgemeld, span.maaltijd-afgemeld {
 
 div.pasfoto img.pasfoto {
 	float: left;
-	width: 50px;
-	height: 67px;
-	border: 1px solid grey;
-	margin: 3px 0 0 3px;
+	margin: 0 1px 1px 0;
+	width: 55px;
+	height: 74px;
 }
 
 .bb-document { width: 450px; padding: 4px 6px; display: block; text-align: left; }
