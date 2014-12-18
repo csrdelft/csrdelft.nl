@@ -190,7 +190,7 @@ function zijbalk_scroll_fixed() {
 
 function page_reload(htmlString) {
 	// prevent hidden errors
-	if (typeof htmlString == 'string' && htmlString.substring(0, 24) == '<div id="modal-content">') {
+	if (typeof htmlString == 'string' && htmlString.substring(0, 16) == '<div id="modal" ') {
 		modal_open(htmlString);
 		return;
 	}
@@ -199,7 +199,7 @@ function page_reload(htmlString) {
 
 function page_redirect(htmlString) {
 	// prevent hidden errors
-	if (typeof htmlString == 'string' && htmlString.substring(0, 24) == '<div id="modal-content">') {
+	if (typeof htmlString == 'string' && htmlString.substring(0, 16) == '<div id="modal" ') {
 		modal_open(htmlString);
 		return;
 	}
