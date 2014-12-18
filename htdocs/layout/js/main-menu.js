@@ -12,12 +12,7 @@ jQuery(document).ready(function ($) {
 	});
 
 	var $maintrigger = $('#cd-main-trigger').on('click', function (event) {
-		try {
-			startClouds();
-		}
-		catch (err) {
-			// Missing js file
-		}
+		fxclouds = true;
 	});
 
 	//mobile - open lateral menu clicking on the menu icon
@@ -106,12 +101,7 @@ jQuery(document).ready(function ($) {
 		$('.cd-main-content').removeClass('nav-is-visible').one('webkitTransitionEnd otransitionend oTransitionEnd msTransitionEnd transitionend', function () {
 			$('body').removeClass('overflow-hidden');
 		});
-		try {
-			stopClouds();
-		}
-		catch (err) {
-			// Missing js file
-		}
+		fxclouds = false;
 	}
 
 	function checkWindowWidth() {

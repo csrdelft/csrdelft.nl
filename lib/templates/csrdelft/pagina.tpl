@@ -45,8 +45,8 @@
 		{if isset($minion)}
 			{$minion}
 		{/if}
-		{if LidInstellingen::get('layout', 'sfx') == 'wolken'}
-			{include file='csrdelft/sfx-clouds.tpl'}
+		{if LidInstellingen::get('layout', 'fx') == 'wolken'}
+			{include file='csrdelft/fx-clouds.tpl'}
 		{/if}
 	</body>
 </html>

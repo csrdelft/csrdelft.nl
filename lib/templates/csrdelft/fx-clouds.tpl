@@ -50,6 +50,8 @@
 
 	initClouds();
 
+	var fxclouds = false;
+
 	function initClouds() {
 
 		container = document.createElement('div');
@@ -84,7 +86,7 @@
 		//
 
 		camera = new THREE.PerspectiveCamera(30, window.innerWidth / window.innerHeight, 1, 3000);
-		camera.position.z = 6000;
+		camera.position.z = 3000;
 
 		scene = new THREE.Scene();
 
@@ -171,30 +173,20 @@
 
 	}
 
-	var sfxclouds = false;
-
 	function animateClouds() {
 
 		requestAnimationFrame(animateClouds);
 
-		if (sfxclouds) {
+		if (fxclouds) {
 
 			position = ((Date.now() - start_time) * 0.03) % 8000;
 
 			camera.position.x += (mouseX - camera.position.x) * 0.01;
-			camera.position.y += (-mouseY - camera.position.y) * 0.01;
+			camera.position.y += (-mouseY - 70 - camera.position.y) * 0.01;
 			camera.position.z = -position + 8000;
 
 			renderer.render(scene, camera);
 		}
-	}
-
-	function startClouds() {
-		sfxclouds = true;
-	}
-
-	function stopClouds() {
-		sfxclouds = false;
 	}
 
 </script>
