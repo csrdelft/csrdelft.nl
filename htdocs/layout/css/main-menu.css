@@ -573,7 +573,7 @@ Main components
 	}
 	.cd-primary-nav .cd-secondary-nav > li {
 		/* change the height according to your needs - you can even set height: auto */
-		height: 330px;
+		height: 400px;
 		/* here you set the number of columns - use width percentage */
 		width: 17%;
 		float: left;
