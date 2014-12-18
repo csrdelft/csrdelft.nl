@@ -41,8 +41,8 @@ jQuery(document).ready(function ($) {
 	//open search form
 	$('.cd-search-trigger').on('click', function (event) {
 		event.preventDefault();
-		toggleSearch();
 		closeNav();
+		toggleSearch();
 	});
 
 	//close lateral menu on mobile 
@@ -145,10 +145,13 @@ jQuery(document).ready(function ($) {
 			$('.cd-search-trigger').toggleClass('search-is-visible');
 			if ($('.cd-search').hasClass('is-visible')) {
 				$searchfield.focus();
-				$('.cd-main-overlay').removeClass('is-visible');
+				$('.cd-main-overlay').addClass('is-visible');
 				$maintrigger.fadeOut();
+				fxclouds = true;
 			} else {
+				$('.cd-main-overlay').removeClass('is-visible');
 				$maintrigger.fadeIn();
+				fxclouds = false;
 			}
 		}
 	}
