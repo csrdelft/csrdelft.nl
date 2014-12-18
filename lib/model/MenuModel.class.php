@@ -33,6 +33,9 @@ class MenuModel extends CachedPersistenceModel {
 			$loaded = $this->isCached($key, false); // is the tree root present in runtime cache?
 			$root = $this->getCached($key, true); // this only puts the tree root in runtime cache
 			if (!$loaded) {
+				if ($naam == LoginModel::getUid()) {
+					$root->tekst = 'Favorieten';
+				}
 				$this->cacheResult($this->getList($root), false); // put tree children in runtime cache as well
 			}
 			return $root;
@@ -90,12 +93,12 @@ class MenuModel extends CachedPersistenceModel {
 
 			case 'Documenten':
 				require_once 'model/documenten/DocCategorie.class.php';
-				foreach (DocCategorie::getAll() as $cat) {
-					if ($cat->magBekijken()) {
+				foreach (DocCategorie::getAll() as $categorie) {
+					if ($categorie->magBekijken()) {
 						$item = $this->newMenuItem($parent->item_id);
 						$item->rechten_bekijken = $parent->rechten_bekijken;
-						$item->link = '/documenten/categorie/' . $cat->getID();
-						$item->tekst = $cat->getNaam();
+						$item->link = '/documenten/categorie/' . $categorie->getID();
+						$item->tekst = $categorie->getNaam();
 						$parent->children[] = $item;
 					}
 				}
@@ -103,14 +106,13 @@ class MenuModel extends CachedPersistenceModel {
 
 			case 'Verticalen':
 				foreach (VerticalenModel::instance()->prefetch() as $verticale) {
-					if ($verticale->letter == '_') {
-						continue;
+					if ($verticale->letter != '_') {
+						$item = $this->newMenuItem($parent->item_id);
+						$item->rechten_bekijken = $parent->rechten_bekijken;
+						$item->link = '/verticalen#' . $verticale->letter;
+						$item->tekst = $verticale->naam;
+						$parent->children[] = $item;
 					}
-					$item = $this->newMenuItem($parent->item_id);
-					$item->rechten_bekijken = $parent->rechten_bekijken;
-					$item->link = '/verticalen#' . $verticale->letter;
-					$item->tekst = $verticale->naam;
-					$parent->children[] = $item;
 				}
 				break;
 		}

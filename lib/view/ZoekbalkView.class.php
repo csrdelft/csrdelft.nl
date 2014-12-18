@@ -45,25 +45,9 @@ else {
 JS;
 		if (LoginModel::mag('P_LEDEN_READ')) {
 
-			// Menu suggesties
-			$favs = MenuModel::instance()->getMenu(LoginModel::getUid());
-			$favs->tekst = 'Favorieten';
-			$list = array_merge($favs->getChildren(), MenuModel::instance()->getList(MenuModel::instance()->getMenu('main')));
-			foreach ($list as $item) {
-				if ($item->magBekijken()) {
-					$label = $item->tekst;
-					$parent = $item->getParent();
-					if ($parent AND $parent->tekst != 'main') {
-						$label .= '<span class="lichtgrijs"> - ' . $parent->tekst . '</span>';
-					}
-					$this->suggestions[''][] = array(
-						'url'	 => $item->link,
-						'value'	 => $label
-					);
-				}
-			}
+			$this->createSuggestions(MenuModel::instance()->getMenu(LoginModel::getUid())->getChildren());
+			$this->createSuggestions(MenuModel::instance()->getList(MenuModel::instance()->getMenu('main')));
 
-			// Nog meer suggesties
 			$this->suggestions['Leden'] = '/tools/naamsuggesties/leden/?q=';
 			$this->suggestions['Agenda'] = '/agenda/zoeken/?q=';
 			$this->suggestions['Forum'] = '/forum/titelzoeken/?q=';
@@ -72,6 +56,22 @@ JS;
 			$this->suggestions['Wiki'] = '/tools/wikisuggesties/?q=';
 			$this->suggestions['Documenten'] = '/documenten/zoeken/?q=';
 			$this->suggestions['Boeken'] = '/bibliotheek/zoeken/?q=';
+		}
+	}
+
+	private function createSuggestions(array $list) {
+		foreach ($list as $item) {
+			if ($item->magBekijken()) {
+				$label = $item->tekst;
+				$parent = $item->getParent();
+				if ($parent AND $parent->tekst != 'main') {
+					$label .= '<span class="lichtgrijs"> - ' . $parent->tekst . '</span>';
+				}
+				$this->suggestions[''][] = array(
+					'url'	 => $item->link,
+					'value'	 => $label
+				);
+			}
 		}
 	}
 
