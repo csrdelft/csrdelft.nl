@@ -33,9 +33,6 @@ class MenuModel extends CachedPersistenceModel {
 			$loaded = $this->isCached($key, false); // is the tree root present in runtime cache?
 			$root = $this->getCached($key, true); // this only puts the tree root in runtime cache
 			if (!$loaded) {
-				if ($naam == LoginModel::getUid()) {
-					$root->tekst = 'Favorieten';
-				}
 				$this->cacheResult($this->getList($root), false); // put tree children in runtime cache as well
 			}
 			return $root;
@@ -71,6 +68,10 @@ class MenuModel extends CachedPersistenceModel {
 			$this->getExtendedTree($child);
 		}
 		switch ($parent->tekst) {
+
+			case LoginModel::getUid():
+				$parent->tekst = 'Favorieten';
+				break;
 
 			case 'Forum':
 				require_once 'model/ForumModel.class.php';
