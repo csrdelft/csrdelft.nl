@@ -91,7 +91,7 @@ class AgendaController extends AclController {
 			}
 			$result[] = array(
 				'url'	 => $url,
-				'value'	 => $item->getTitel() . '<span class="lichtgrijs"> - ' . $d . '/' . $m . '/' . $y . '</span>'
+				'value'	 => $item->getTitel() . '<span class="lichtgrijs"> - ' . $d . ' ' . strftime('%b', $begin) . ' ' . $y . '</span>'
 			);
 		}
 		$this->view = new JsonResponse($result);
