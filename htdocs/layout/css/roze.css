@@ -6,7 +6,6 @@
 }
 #beeldmerk{
 	background-image: url('/plaetjes/owee/2010/logo.png') !important;
-	background-size: contain;
-	-webkit-filter: invert(100%); 
-	filter: invert(100%);
+	background-size: contain !important;
+	background-position-y: center;
 }
