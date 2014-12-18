@@ -6,10 +6,14 @@
  */
 
 body {
-	background-image: url('/plaetjes/layout/sineregno/2014/body.png') repeat-x;
+	background-image: url("/plaetjes/layout/sineregno/2014/body.png");
+	background-repeat: repeat-x;
 }
 #mainright {
-	background-image: url('/plaetjes/layout/sineregno/2014/puinhopen.png') no-repeat;
+	background-image: url("/plaetjes/layout/sineregno/2014/puinhopen.png");
+	background-repeat: no-repeat;
+	background-position-x: 33%;
+	background-position-y: 50px;
 }
 h1,h2,h3,h4,h5,h6 {
 	color: #fbea14;
@@ -17,9 +21,9 @@ h1,h2,h3,h4,h5,h6 {
 a, a:hover {
 	color: #C744FF;
 }
-#zijbalk .zijbalk-kopje a {
+#zijbalk .block .zijbalk-kopje a {
 	color: #166F11;
 }
-#zijbalk a {
-	color: #C744FF;
+#zijbalk .block .item a {
+	color: #1470b8;
 }
