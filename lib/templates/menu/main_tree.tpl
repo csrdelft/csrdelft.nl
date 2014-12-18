@@ -1,5 +1,7 @@
 {foreach from=$parent->getChildren() item=item}
-	{if $item->magBekijken()}
+	{if $item->tekst == 'Personal'}
+		{include file='menu/personal.tpl' parent=$item}
+	{elseif $item->magBekijken()}
 		{if $item->hasChildren()}
 			<li class="has-children">
 				<a href="#0">{$item->tekst}</a>

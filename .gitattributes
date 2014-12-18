@@ -4368,6 +4368,7 @@ lib/templates/menu/block.tpl -text
 lib/templates/menu/main.tpl -text
 lib/templates/menu/main_tree.tpl -text
 lib/templates/menu/page.tpl -text
+lib/templates/menu/personal.tpl -text
 lib/templates/minion.tpl -text
 lib/templates/peiling.bb.tpl -text
 lib/templates/profiel/_saldografiek.tpl -text
