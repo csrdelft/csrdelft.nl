@@ -721,7 +721,7 @@ class Lid implements Serializable, Agendeerbaar {
 	 * Geef een url naar een pasfoto terug, of een <img>-tag met die url.
 	 */
 	function getPasfoto($imgTag = true, $cssClass = 'pasfoto', $vierkant = false, $vorm = 'user') {
-		$path = CSR_ROOT . '/plaetjes/' . $this->getPasfotoPath($vierkant, $vorm);
+		$path = '/plaetjes/' . $this->getPasfotoPath($vierkant, $vorm);
 		if ($imgTag === true OR $imgTag === 'small') {
 			$html = '<img class="' . htmlspecialchars($cssClass) . '" src="' . $path . '" ';
 			if ($imgTag === 'small') {
@@ -875,7 +875,7 @@ class Lid implements Serializable, Agendeerbaar {
 				$naam = CsrBB::parse('[neuzen]' . $naam . '[/neuzen]');
 			}
 			$k = '';
-			$l = '<a href="' . CSR_ROOT . '/profiel/' . $this->getUid() . '" title="' . htmlspecialchars($sVolledigeNaam) . '" class="lidLink ' . htmlspecialchars($this->profiel['status']) . '">';
+			$l = '<a href="/profiel/' . $this->getUid() . '" title="' . htmlspecialchars($sVolledigeNaam) . '" class="lidLink ' . htmlspecialchars($this->profiel['status']) . '">';
 
 			if (($vorm === 'leeg' || $mode === 'visitekaartje') && LidInstellingen::get('algemeen', 'visitekaartjes') == 'ja') {
 				$k = '<span';
