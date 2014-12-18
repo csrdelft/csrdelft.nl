@@ -231,9 +231,6 @@ class CsrBB extends eamBBParser {
 		} else { // [url][/url]
 			$url = $content;
 		}
-		if (startsWith($url, '/')) {
-			$url = CSR_ROOT . $url;
-		}
 		return external_url($url, $content);
 	}
 
