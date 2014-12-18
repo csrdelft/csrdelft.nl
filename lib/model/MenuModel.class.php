@@ -205,7 +205,6 @@ class MenuModel extends CachedPersistenceModel {
 	}
 
 	public function create(PersistentEntity $entity) {
-		$entity->link = str_replace(CSR_ROOT, '', $entity->link);
 		$entity->item_id = (int) parent::create($entity);
 		$this->flushCache(true);
 	}
