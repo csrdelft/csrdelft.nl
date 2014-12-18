@@ -1062,7 +1062,7 @@ HTML;
 					$spreker = ' van ' . $lid;
 				} elseif ($van !== '') {
 					if (isset($arguments['url']) AND url_like($arguments['url'])) {
-						$spreker = ' van ' . internal_url($arguments['url'], $van);
+						$spreker = ' van ' . external_url($arguments['url'], $van);
 					} else {
 						$spreker = ' van ' . $van;
 					}

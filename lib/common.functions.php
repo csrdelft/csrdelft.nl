@@ -267,19 +267,15 @@ function url_like($url) {
 			'(/~)?[-\w./]*([-@()\#?/&;:+,._\w= ]+)?$#', $url);
 }
 
-function internal_url($url, $label) {
-	$href = filter_var($url, FILTER_SANITIZE_URL);
-	$extern = ' target="_blank" class="external"'; // externe link
-	if (startsWith($href, '/')) { // locale paden
-		$href = CSR_ROOT . $href;
-		$extern = '';
-	} elseif (!startsWith($href, 'http://') AND ! startsWith($href, 'https://')) { // http(s) vergeten?
-		$href = 'http://' . $href;
-	} elseif (startsWith($href, CSR_ROOT)) {
-		$extern = '';
-	}
-	if (filter_var($href, FILTER_VALIDATE_URL)) {
-		$result = '<a href="' . $href . '" title="' . htmlspecialchars($href) . '"' . $extern . '>' . $label . '</a>';
+function external_url($url, $label) {
+	$url = filter_var($url, FILTER_SANITIZE_URL);
+	if ($url AND url_like($url)) {
+		if (startsWith($url, 'http://') OR startsWith($url, 'https://')) {
+			$extern = ' target="_blank"';
+		} else {
+			$extern = '';
+		}
+		$result = '<a href="' . $url . '" title="' . htmlspecialchars($url) . '"' . $extern . '>' . $label . '</a>';
 	} else {
 		$result = '[Ongeldige URL, tip: gebruik tinyurl.com]';
 	}

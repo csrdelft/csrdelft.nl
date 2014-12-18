@@ -230,7 +230,7 @@ class CsrBB extends eamBBParser {
 		} else { // [url][/url]
 			$href = $content;
 		}
-		return internal_url($href, $content);
+		return external_url($href, $content);
 	}
 
 	/* todo
@@ -294,7 +294,7 @@ class CsrBB extends eamBBParser {
 			$text .= ' van ' . $lid;
 		} elseif ($van !== '') {
 			if (isset($arguments['url']) AND url_like($arguments['url'])) {
-				$text .= ' van ' . internal_url($arguments['url'], $van);
+				$text .= ' van ' . external_url($arguments['url'], $van);
 			} else {
 				$text .= ' van ' . $van;
 			}
