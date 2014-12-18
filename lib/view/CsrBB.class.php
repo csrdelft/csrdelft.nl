@@ -115,7 +115,7 @@ class CsrBB extends eamBBParser {
 		}
 		// only valid patterns
 		if (!url_like($content)) {
-			return '[img: Ongeldige URL, tip: gebruik tinyurl.com]';
+			return '[img: Ongeldige URL, tip: gebruik tinyurl.com][prive=P_ADMIN]' . $content . '[/prive]';
 		}
 		// lazy loading van externe images bijv. op het forum
 		if (!startsWith($content, CSR_ROOT) OR startsWith($content, CSR_ROOT . '/plaetjes/fotoalbum/')) {
