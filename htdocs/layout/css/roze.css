@@ -1,9 +1,10 @@
 * {
-	background-image: none !important;
 	background-color: #ff33ff !important;
-	color: #ffffff !important;
+	border-color: #fff !important;
+	color: #fff !important;
 	font-family: "Comic Sans MS", Arial, sans-serif !important;
 }
 #beeldmerk{
-	background-image: url('/plaetjes/owee/2010/logo.png') !important;
+	-webkit-filter: invert(100%); 
+	filter: invert(100%);
 }
