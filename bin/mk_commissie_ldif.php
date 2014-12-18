@@ -8,7 +8,7 @@ while ($xaccount = fgetcsv(STDIN, 1024, ";")) {
 	if (substr(trim($xaccount[0]),0,1) == '#' or trim($xaccount[0]) == '') continue;
 	if ($xaccount[3] == '') $xaccount[3] = $xaccount[2];
 	if (substr($xaccount[4], -1, 1) == '@') $xaccount[4] .= 'csrdelft.nl';
-		
+		$home = CSR_ROOT;
 		printf(<<<EOT
 dn: uid=%s,ou=leden,dc=csrdelft,dc=nl
 objectClass: top
@@ -30,7 +30,7 @@ mozillaHomeStreet: Oude Delft 9
 mozillaHomeLocalityName: Delft
 mozillaHomePostalCode: 2611 BA
 mozillaHomeCountryName: Nederland
-homeurl: http://csrdelft.nl
+homeurl: {$home}
 description: Adreslijst C.S.R. Delft
 
 

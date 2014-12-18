@@ -66,7 +66,7 @@ class stats implements View {
 			} elseif (preg_match('/zoeken/', $aLogRegel['url'])) {
 				echo 'style="background-color: #33FF99;"';
 			}
-			echo '><a href="http://csrdelft.nl' . $aLogRegel['url'] . '" target="_blank">' . $aLogRegel['url'] . '</a></td>';
+			echo '><a href="' . CSR_ROOT . $aLogRegel['url'] . '" target="_blank">' . $aLogRegel['url'] . '</a></td>';
 			echo '<td class="forumtitel">' . $aLogRegel['useragent'] . '</td>';
 			if ($aLogRegel['referer'] == '') {
 				echo '<td class="forumtitel">-</td>';
@@ -117,7 +117,7 @@ class stats implements View {
 			echo '<tr><td class="forumtitel">' . date('D H:i', strtotime($aLogRegel['moment'])) . '</td>';
 			echo '<td class="forumtitel"><a href="?ip=' . htmlspecialchars($aLogRegel['ip']) . '">+</a> ';
 			echo gethostbyaddr($aLogRegel['ip']) . ' <strong>(' . $aLogRegel['locatie'] . ')</strong></td>';
-			echo '<td class="forumtitel"><a href="http://csrdelft.nl' . $aLogRegel['url'] . '" target="_blank">' . $aLogRegel['url'] . '</a></td>';
+			echo '<td class="forumtitel"><a href="' . CSR_ROOT . $aLogRegel['url'] . '" target="_blank">' . $aLogRegel['url'] . '</a></td>';
 			echo '<td class="forumtitel">' . $aLogRegel['useragent'] . '</td>';
 			if ($aLogRegel['referer'] == '') {
 				echo '<td class="forumtitel">-</td>';
@@ -165,7 +165,7 @@ class stats implements View {
 			echo '<tr>';
 			echo '<td class="forumtitel">' . date('D H:i', strtotime($aLogRegel['moment'])) . '</td>';
 			echo '<td class="forumtitel"><a href="?uid=' . htmlspecialchars($aLogRegel['uid']) . '">+</a> ' . (string) $lid . '</td>';
-			echo '<td class="forumtitel"><a href="http://csrdelft.nl' . $aLogRegel['url'] . '" target="_blank">' . $aLogRegel['url'] . '</a></td>';
+			echo '<td class="forumtitel"><a href="' . CSR_ROOT . $aLogRegel['url'] . '" target="_blank">' . $aLogRegel['url'] . '</a></td>';
 			echo '<td class="forumtitel">' . $aLogRegel['useragent'] . '</td>';
 			if ($aLogRegel['referer'] == '') {
 				echo '<td class="forumtitel">-</td>';

@@ -88,7 +88,7 @@ $ingelogd = false;
 			<div id="homeknop"><a href="index.html">
 					<img src="./Afbeeldingen/knop2_home.png" alt="Home" width="100" height="50"></a>
 			</div>
-			<div id="stekknop"><a href="http://csrdelft.nl">
+			<div id="stekknop"><a href="/">
 					<img src="./Afbeeldingen/knop3_csrstek.png" alt="C.S.R Stek" width="100" height="50"></a>
 			</div>
 			<img src="./Afbeeldingen/toplogo.jpg" alt="" style="position:absolute;left:50%; top:12px; margin-left:-170px" width="340" height="100">

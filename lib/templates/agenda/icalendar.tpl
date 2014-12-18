@@ -2,7 +2,7 @@ BEGIN:VCALENDAR
 VERSION:2.0
 PRODID:-//C.S.R. Delft/Webstek C.S.R. Delft//NL
 X-WR-CALNAME:C.S.R. Agenda
-X-ORIGINAL-URL:http://csrdelft.nl/agenda/
+X-ORIGINAL-URL:{$smarty.const.CSR_ROOT}/agenda/
 BEGIN:VTIMEZONE
 TZID:Europe/Amsterdam
 X-LIC-LOCATION:Europe/Amsterdam
@@ -31,7 +31,7 @@ UID:{$item->getUUID()}
 {else}DTEND;TZID=Europe/Amsterdam:{$item->getEindMoment()|date_format:'%Y%m%dT%H%M%S'}
 {/if}
 SUMMARY:{str_replace(';','\;',str_replace(',','\,',$item->getTitel()))|html_substr:"60":"…"}
-{if $item->getLink()}URL:{if startsWith($item->getLink(), '/')}http://csrdelft.nl{/if}{str_replace(';','\;',str_replace(',','\,',$item->getLink()))}
+{if $item->getLink()}URL:{if startsWith($item->getLink(), '/')}{$smarty.const.CSR_ROOT}{/if}{str_replace(';','\;',str_replace(',','\,',$item->getLink()))}
 {/if}
 {if $item->getLocatie()}LOCATION:{str_replace(';','\;',str_replace(',','\,',$item->getLocatie()))}
 {/if}

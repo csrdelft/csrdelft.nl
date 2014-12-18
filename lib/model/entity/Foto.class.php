@@ -75,19 +75,19 @@ class Foto extends Afbeelding {
 	}
 
 	public function getAlbumUrl() {
-		return CSR_ROOT . '/' . direncode($this->subdir);
+		return '/' . direncode($this->subdir);
 	}
 
 	public function getFullUrl() {
-		return CSR_ROOT . '/plaetjes/' . direncode($this->subdir . $this->filename);
+		return '/plaetjes/' . direncode($this->subdir . $this->filename);
 	}
 
 	public function getThumbUrl() {
-		return CSR_ROOT . '/plaetjes/' . direncode($this->subdir . '_thumbs/' . $this->filename);
+		return '/plaetjes/' . direncode($this->subdir . '_thumbs/' . $this->filename);
 	}
 
 	public function getResizedUrl() {
-		return CSR_ROOT . '/plaetjes/' . direncode($this->subdir . '_resized/' . $this->filename);
+		return '/plaetjes/' . direncode($this->subdir . '_resized/' . $this->filename);
 	}
 
 	public function hasThumb() {

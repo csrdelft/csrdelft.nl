@@ -89,7 +89,7 @@ div.citaatContainer{
 <tr><td>
 <br />
 <br />
-<img src="http://csrdelft.nl/bestuur/delphiadaily/delphia-daily.png" alt="delphia-daily" width="654" height="142" /></td>
+<img src="{$smarty.const.CSR_ROOT}/bestuur/delphiadaily/delphia-daily.png" alt="delphia-daily" width="654" height="142" /></td>
 <tr>
 <td class="hoofdKolom">
 <font size="2" face="garamond"><h4>Inhoud</h4></font>

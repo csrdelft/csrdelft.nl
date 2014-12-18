@@ -654,11 +654,11 @@ class ProfielStatus extends Profiel {
 			if ($boek['eigenaar_uid'] == 'x222') {
 				$bkncsr['aantal'] ++;
 				$bkncsr['lijst'] .= "{$boek['titel']} door {$boek['auteur']}\n";
-				$bkncsr['lijst'] .= " - http://csrdelft.nl/bibliotheek/boek/{$boek['id']}\n";
+				$bkncsr['lijst'] .= " - " . CSR_ROOT . "/bibliotheek/boek/{$boek['id']}\n";
 			} else {
 				$bknleden['aantal'] ++;
 				$bknleden['lijst'] .= "{$boek['titel']} door {$boek['auteur']}\n";
-				$bknleden['lijst'] .= " - http://csrdelft.nl/bibliotheek/boek/{$boek['id']}\n";
+				$bknleden['lijst'] .= " - " . CSR_ROOT . "/bibliotheek/boek/{$boek['id']}\n";
 				$naam = Lid::naamLink($boek['eigenaar_uid'], 'volledig', 'plain');
 				$bknleden['lijst'] .= " - boek is geleend van: $naam\n";
 			}

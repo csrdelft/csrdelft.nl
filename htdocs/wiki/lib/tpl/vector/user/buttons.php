@@ -20,11 +20,9 @@
  * @link http://www.dokuwiki.org/template:vector
  * @link http://www.dokuwiki.org/devel:configuration
  */
-
-
 //check if we are running within the DokuWiki environment
-if (!defined("DOKU_INC")){
-    die();
+if (!defined("DOKU_INC")) {
+	die();
 }
 
 
@@ -37,30 +35,30 @@ unset($_vector_btns["vecfdw"]);
 
 
 //RSS recent changes button
-$rss["rss"]["img"]      = DOKU_TPL."user/button-rss-algemeen.png";
-$rss["rss"]["href"]     = DOKU_BASE."feed.php";
-$rss["rss"]["width"]    = 80;
-$rss["rss"]["height"]   = 15;
-$rss["rss"]["title"]    = "De laatste wikiwijzigingen (alleen van publieke pagina's).";
+$rss["rss"]["img"] = DOKU_TPL . "user/button-rss-algemeen.png";
+$rss["rss"]["href"] = DOKU_BASE . "feed.php";
+$rss["rss"]["width"] = 80;
+$rss["rss"]["height"] = 15;
+$rss["rss"]["title"] = "De laatste wikiwijzigingen (alleen van publieke pagina's).";
 $rss["rss"]["nofollow"] = true;
 
 if (auth_quickaclcheck('hoofdpagina') >= AUTH_READ) {
-    if(LoginModel::instance()) {
-        $rsstoken = LoginModel::instance()->getLid()->getProperty('rssToken');
+	if (LoginModel::instance()) {
+		$rsstoken = LoginModel::instance()->getLid()->getProperty('rssToken');
 
-        // tip for first-time users
-        if($rsstoken == ''){
-            $rsstoken = 'Maak_EERST_een_sleutel_aan_met_knop_[Nieuwe_aanvragen]_op:_http://csrdelft.nl/profiel/'.LoginModel::getUid().'#forum_gegevens';
-        }
-    }else{
-        $rsstoken = 'C.S.R. backend niet beschikbaar';
-    }
+		// tip for first-time users
+		if ($rsstoken == '') {
+			$rsstoken = 'Maak_EERST_een_sleutel_aan_met_knop_[Nieuwe_aanvragen]_op:_' . CSR_ROOT . '/profiel/' . LoginModel::getUid() . '#forum_gegevens';
+		}
+	} else {
+		$rsstoken = 'C.S.R. backend niet beschikbaar';
+	}
 	//RSS recent changes button
-	$rss["rss_prive"]["img"]      = DOKU_TPL."user/button-rss-prive.png";
-	$rss["rss_prive"]["href"]     = DOKU_BASE."feed.php?private_token=".$rsstoken;
-	$rss["rss_prive"]["width"]    = 80;
-	$rss["rss_prive"]["height"]   = 15;
-	$rss["rss_prive"]["title"]    = "De laatste wikiwijzigingen, dit is een link met priv�-sleutel om al jouw pagina's te zien. Sleutel kun je (opnieuw) aanmaken in profiel met de knop 'Nieuwe aanvragen'";
+	$rss["rss_prive"]["img"] = DOKU_TPL . "user/button-rss-prive.png";
+	$rss["rss_prive"]["href"] = DOKU_BASE . "feed.php?private_token=" . $rsstoken;
+	$rss["rss_prive"]["width"] = 80;
+	$rss["rss_prive"]["height"] = 15;
+	$rss["rss_prive"]["title"] = "De laatste wikiwijzigingen, dit is een link met priv�-sleutel om al jouw pagina's te zien. Sleutel kun je (opnieuw) aanmaken in profiel met de knop 'Nieuwe aanvragen'";
 	$rss["rss_prive"]["nofollow"] = true;
 }
 
