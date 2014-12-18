@@ -11,7 +11,9 @@ jQuery(document).ready(function ($) {
 		}
 	});
 
-	var $maintrigger = $('#cd-main-trigger');
+	var $maintrigger = $('#cd-main-trigger').click(function () {
+		fxclouds = !fxclouds;
+	});
 
 	//mobile - open lateral menu clicking on the menu icon
 	$('.cd-nav-trigger').on('click', function (event) {
@@ -20,7 +22,6 @@ jQuery(document).ready(function ($) {
 			closeNav();
 			$('.cd-main-overlay').removeClass('is-visible');
 		} else {
-			fxclouds = true;
 			$(this).addClass('nav-is-visible');
 			$('.cd-primary-nav').addClass('nav-is-visible');
 			$('.cd-main-header').addClass('nav-is-visible');
