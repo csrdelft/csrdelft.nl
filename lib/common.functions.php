@@ -249,22 +249,20 @@ function valid_filename($name) {
 }
 
 function email_like($email) {
-	if ($email == '') {
+	if (empty($email)) {
 		return false;
 	}
 	return preg_match("/^[a-z0-9]+([_\\.-][a-z0-9]+)*@([a-z0-9]+([\.-][a-z0-9]+)*)+\\.[a-z]{2,}$/i", $email);
 }
 
+/**
+ * @source https://mathiasbynens.be/demo/url-regex
+ */
 function url_like($url) {
-	if ($url == '') {
+	if (empty($url)) {
 		return false;
 	}
-	#					  http://		  user:pass@
-	return preg_match('#^(([a-zA-z]{1,6}\://)(\w+:\w+@)?' .
-			#	f			oo.bar.   org	   :80
-			'([a-zA-Z0-9]([-\w]+\.)+(\w{2,5}))(:\d{1,5})?)?' .
-			#	/path	   ?file=http://foo:bar@w00t.l33t.h4x0rz/
-			'(/~)?[-\w./]*([-@()\#?/&;:+,._\w= ]+)?$#', $url);
+	return preg_match('_^(?:(?:https?|ftp)://)(?:\S+(?::\S*)?@)?(?:(?!10(?:\.\d{1,3}){3})(?!127(?:\.\d{1,3}){3})(?!169\.254(?:\.\d{1,3}){2})(?!192\.168(?:\.\d{1,3}){2})(?!172\.(?:1[6-9]|2\d|3[0-1])(?:\.\d{1,3}){2})(?:[1-9]\d?|1\d\d|2[01]\d|22[0-3])(?:\.(?:1?\d{1,2}|2[0-4]\d|25[0-5])){2}(?:\.(?:[1-9]\d?|1\d\d|2[0-4]\d|25[0-4]))|(?:(?:[a-z\x{00a1}-\x{ffff}0-9]+-?)*[a-z\x{00a1}-\x{ffff}0-9]+)(?:\.(?:[a-z\x{00a1}-\x{ffff}0-9]+-?)*[a-z\x{00a1}-\x{ffff}0-9]+)*(?:\.(?:[a-z\x{00a1}-\x{ffff}]{2,})))(?::\d{2,5})?(?:/[^\s]*)?$_iuS', $url);
 }
 
 function external_url($url, $label) {
