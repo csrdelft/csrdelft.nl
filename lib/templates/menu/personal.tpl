@@ -5,7 +5,6 @@
 {if LoginModel::instance()->isSued()}
 		<li><a href="/endsu/" class="error" title="Switch user actie beeindingen">SU {LoginModel::instance()->getSuedFrom()->getNaamLink('civitas', 'plain')}</a></li>
 {/if}
-		<li><a href="/profiel/{LoginModel::getUid()}" title="Ga naar mijn profiel">Profiel</a></li>
 		<li>
 			<a href="/profiel/{LoginModel::getUid()}#SocCieSaldo" title="Bekijk SocCie saldo historie">
 				{assign var=saldo value=LoginModel::instance()->getLid()->getSoccieSaldo()}
