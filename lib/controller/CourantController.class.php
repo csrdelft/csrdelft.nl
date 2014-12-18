@@ -18,10 +18,10 @@ class CourantController extends AclController {
 		if (!$this->isPosted()) {
 			$this->acl = array(
 				'archief'		 => 'P_LEDEN_READ',
+				'bekijken'		 => 'P_LEDEN_READ',
 				'toevoegen'		 => 'P_MAIL_POST',
 				'bewerken'		 => 'P_MAIL_POST',
 				'verwijderen'	 => 'P_MAIL_POST',
-				'voorbeeld'		 => 'P_MAIL_SEND',
 				'verzenden'		 => 'P_MAIL_SEND'
 			);
 		} else {
@@ -45,7 +45,7 @@ class CourantController extends AclController {
 			}
 			$success = $this->model->load((int) $id);
 			if ($success) {
-				$this->action = 'voorbeeld';
+				$this->action = 'bekijken';
 			} else {
 				$this->geentoegang();
 			}
@@ -59,7 +59,7 @@ class CourantController extends AclController {
 		$this->view = new CsrLayoutPage($body);
 	}
 
-	public function voorbeeld() {
+	public function bekijken() {
 		$this->view = new CourantView($this->model);
 	}
 
