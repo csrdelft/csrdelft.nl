@@ -1,63 +1,43 @@
 /* owee 2014
- * oranje (submenulinks): #fcb040
- * rood (linkjes): #ed1c24
- * donkergrijs (tabbladen): #231f20
+ * rood: #ed1c24
+ * oranje: #fcb040
+ * donkergrijs: #231f20
  */
 
-
-/**** GENERAL *****************************************************************/
-a, a:hover{
+body {
+	background-image: url("/plaetjes/owee/2014/body.png");
+	background-repeat: repeat-x;
+}
+#mainright {
+	background-image: url("/plaetjes/owee/2014/banner.png");
+	background-repeat: no-repeat;
+	background-position-x: 33%;
+	background-position-y: 50px;
+}
+h1,h2,h3,h4,h5,h6 {
+	color: #231f20;
+}
+a, a:hover {
 	color: #ed1c24;
 }
-a.external {
-	background-image: url('/plaetjes/layout/external-link-red.png');
+a[href^="http://"], a[href^="https://"] {
+	background: url("/plaetjes/layout/external-link-red.png") no-repeat center right;
 }
-h1, h2, h3, h4 {
-	color: #555555;
-}
-body{
-	background: url('/plaetjes/owee/2014/body.png') repeat-x;
+a[href^="mailto:"] {
+	background: url("/plaetjes/layout/email-link-blue.png") no-repeat center right;
 }
 
-/**** MENU ********************************************************************/
-#menubanners,#banner1,#banner2,#banner3,#banner4{
-	background-image: url('/plaetjes/owee/2014/banner.png');
-}
-
-#beeldmerk{
-	background-image: url('/plaetjes/owee/2010/logo.png');
-}
-
-/**** MAIN MENU ***************************************************************/
-
-#mainmenu a {
-	background: url('/plaetjes/owee/2014/menubutton_2014.png') no-repeat;
-}	
-#mainmenu a:link, #mainmenu a:visited {
-	color: #fff;
-}
-#mainmenu a:hover, #mainmenu a:active, #mainmenu a.active {
-	background: url('/plaetjes/owee/2014/menubutton_hover_2014.png') no-repeat;
-}
-
-/**** SUBMENU *****************************************************************/
-#submenu a.active  {
-	color: #fff;
-	font-weight: bold;
-}
-#submenu a:hover, #submenu a:active {
+.cd-primary-nav > li > a:hover, .cd-primary-nav > li > a.selected {
 	color: #fcb040;
-}
-#submenuitems span.separator{
-	background-image: url('/plaetjes/owee/2014/submenuseperator_2014.png');
+	box-shadow: inset 0 -2px 0 #fcb040;
 }
 
-/**** MAIN ********************************************************************/
-
-#mainleft .block h1 {
+#zijbalk {
+	border-color: #231f20;
+}
+#zijbalk .block .zijbalk-kopje a {
 	color: #ed1c24;
 }
-
-#mainleft .block h1 a {
-	color: #ed1c24;
+#zijbalk .block .item a {
+	color: #231f20;
 }
