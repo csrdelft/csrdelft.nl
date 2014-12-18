@@ -189,7 +189,7 @@ class StandaardTijdenField extends HtmlComment {
 				setMelding($standaard_tijd . ' "' . $naam . '" is niet gedefinieerd', -1);
 				continue;
 			}
-			$html .= '<a onclick="set' . $this->id . '(this)" data-begin="' . $begin->getId() . '" data-eind="' . $eind->getId() . '" data-tijden="' . Instellingen::get('agenda', $standaard_tijd) . '">» ' . $naam . '</a> &nbsp;';
+			$html .= '<a onclick="set' . $this->id . '(this);" data-begin="' . $begin->getId() . '" data-eind="' . $eind->getId() . '" data-tijden="' . Instellingen::get('agenda', $standaard_tijd) . '" style="cursor:pointer;">» ' . $naam . '</a> &nbsp;';
 		}
 		if (LoginModel::mag('P_AGENDA_MOD')) {
 			$html .= '<div class="float-right"><a class="btn round" title="Wijzig standaard tijden" href="/instellingenbeheer/module/agenda"><img width="16" height="16" class="icon" alt="edit" src="/plaetjes/famfamfam/pencil.png"></a></div>';
