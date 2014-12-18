@@ -225,13 +225,16 @@ class CsrBB extends eamBBParser {
 	function bb_url($arguments = array()) {
 		$content = $this->parseArray(array('[/url]', '[/rul]'), array());
 		if (isset($arguments['url'])) { // [url=
-			$href = $arguments['url'];
+			$url = $arguments['url'];
 		} elseif (isset($arguments['rul'])) { // [rul=
-			$href = $arguments['rul'];
+			$url = $arguments['rul'];
 		} else { // [url][/url]
-			$href = $content;
+			$url = $content;
 		}
-		return external_url($href, $content);
+		if (startsWith($url, '/')) {
+			$url = CSR_ROOT . $url;
+		}
+		return external_url($url, $content);
 	}
 
 	/* todo
