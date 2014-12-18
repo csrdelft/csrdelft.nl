@@ -34,6 +34,7 @@ jQuery(document).ready(function ($) {
 			//open main menu
 			if (!$maintrigger.hasClass('selected')) {
 				$maintrigger.click();
+				fxclouds = true;
 			}
 		}
 	});
