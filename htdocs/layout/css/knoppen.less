@@ -3,12 +3,16 @@
 Externe links & Knoppen
 
 -------------------------------- */
-a.external {
-	background-image: url('/plaetjes/layout/external-link-blue.png');
-	background-repeat: no-repeat;
-	background-position: center right;
-	padding-right: 1em;
+
+a[href^="http://"], a[href^="https://"] {
+	padding-right: 16px;
+	background: url("/plaetjes/layout/external-link-blue.png") no-repeat center right;
 }
+a[href^="mailto:"] {
+	padding-right: 16px;
+	background: url("/plaetjes/layout/email-link-blue.png") no-repeat center right;
+}
+
 a:hover { text-decoration: underline; }
 a, a.btn, a.btn:hover { text-decoration: none; }
 
