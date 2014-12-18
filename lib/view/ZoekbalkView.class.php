@@ -46,7 +46,9 @@ JS;
 		if (LoginModel::mag('P_LEDEN_READ')) {
 
 			// Menu suggesties
-			$list = MenuModel::instance()->getList(MenuModel::instance()->getMenu('main'));
+			$favs = MenuModel::instance()->getMenu(LoginModel::getUid());
+			$favs->tekst = 'Favorieten';
+			$list = array_merge($favs->getChildren(), MenuModel::instance()->getList(MenuModel::instance()->getMenu('main')));
 			foreach ($list as $item) {
 				if ($item->magBekijken()) {
 					$label = $item->tekst;

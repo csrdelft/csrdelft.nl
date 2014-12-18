@@ -26,9 +26,14 @@
 							</a>
 						</li>
 						<li><a href="/instellingen" title="Webstekinstellingen aanpassen">Instellingen</a></li>
-				{if LidInstellingen::get('zijbalk', 'favorieten') == 'ja'}
+						<li class="has-children">
+							<a href="#0">{$favorieten->tekst}</a>
+							<ul class="is-hidden">
+								<li class="go-back"><a href="#0">{$favorieten->tekst}</a></li>
+								{include file='menu/main_tree.tpl' parent=$favorieten}
+							</ul>
+						</li>
 						<li><a href="/menubeheer/toevoegen/favoriet" class="post popup addfav" onclick="$('.cd-nav-trigger').click();" title="Huidige pagina toevoegen aan favorieten">Favoriet toevoegen</a></li>
-				{/if}
 				{if LoginModel::mag('P_LEDEN_MOD')}
 					{if isset($forumcount)}
 						<li><a href="/forum/wacht" title="Aantal forumberichten dat wacht op goedkeuring">Forum: {$forumcount}</a></li>

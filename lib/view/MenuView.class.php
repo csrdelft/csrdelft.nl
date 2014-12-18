@@ -48,6 +48,7 @@ class MainMenuView extends MenuView {
 	public function view() {
 		parent::view();
 		$this->smarty->assign('zoekbalk', new ZoekbalkView());
+		$this->smarty->assign('favorieten', MenuModel::instance()->getMenu(LoginModel::getUid()));
 		$this->smarty->display('menu/main.tpl');
 	}
 

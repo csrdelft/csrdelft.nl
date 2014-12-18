@@ -33,9 +33,6 @@ class MenuModel extends CachedPersistenceModel {
 			$loaded = $this->isCached($key, false); // is the tree root present in runtime cache?
 			$root = $this->getCached($key, true); // this only puts the tree root in runtime cache
 			if (!$loaded) {
-				if ($naam === 'main') {
-					$this->insertFavorieten($root);
-				}
 				$this->cacheResult($this->getList($root), false); // put tree children in runtime cache as well
 			}
 			return $root;
@@ -56,26 +53,12 @@ class MenuModel extends CachedPersistenceModel {
 			$this->create($root);
 		}
 		$this->setCache($key, $root, true);
-		if ($naam === 'main') {
-			$this->insertFavorieten($root); // do not put in memcache
-		}
 		return $root;
 	}
 
 	/**
-	 * Voeg favorieten toe aan menu.
-	 * 
-	 * @param MenuItem $parent
-	 * @return MenuItem $parent
-	 */
-	public function insertFavorieten(MenuItem $parent) {
-		$favs = MenuModel::instance()->getMenu(LoginModel::getUid());
-		$favs->tekst = 'Favorieten';
-		array_unshift($parent->children, $favs);
-	}
-
-	/**
 	 * Voeg forum-categorien, forum-delen, documenten-categorien en verticalen toe aan menu.
+	 * Deze komen in memcache terecht.
 	 * 
 	 * @param MenuItem $parent
 	 * @return MenuItem $parent
