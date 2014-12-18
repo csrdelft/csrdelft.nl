@@ -77,14 +77,14 @@ class MenuModel extends CachedPersistenceModel {
 				require_once 'model/ForumModel.class.php';
 				foreach (ForumModel::instance()->getForumIndeling(true) as $categorie) {
 					$item = $this->newMenuItem($parent->item_id);
-					$item->rechten_bekijken = $parent->rechten_bekijken;
+					$item->rechten_bekijken = $categorie->rechten_lezen;
 					$item->link = '/forum#' . $categorie->categorie_id;
 					$item->tekst = $categorie->titel;
 					$parent->children[] = $item;
 
 					foreach ($categorie->getForumDelen() as $deel) {
 						$subitem = $this->newMenuItem($item->item_id);
-						$subitem->rechten_bekijken = $item->rechten_bekijken;
+						$subitem->rechten_bekijken = $deel->rechten_lezen;
 						$subitem->link = '/forum/deel/' . $deel->forum_id;
 						$subitem->tekst = $deel->titel;
 						$item->children[] = $subitem;
@@ -95,13 +95,11 @@ class MenuModel extends CachedPersistenceModel {
 			case 'Documenten':
 				require_once 'model/documenten/DocCategorie.class.php';
 				foreach (DocCategorie::getAll() as $categorie) {
-					if ($categorie->magBekijken()) {
-						$item = $this->newMenuItem($parent->item_id);
-						$item->rechten_bekijken = $parent->rechten_bekijken;
-						$item->link = '/documenten/categorie/' . $categorie->getID();
-						$item->tekst = $categorie->getNaam();
-						$parent->children[] = $item;
-					}
+					$item = $this->newMenuItem($parent->item_id);
+					$item->rechten_bekijken = $categorie->getLeesrechten();
+					$item->link = '/documenten/categorie/' . $categorie->getID();
+					$item->tekst = $categorie->getNaam();
+					$parent->children[] = $item;
 				}
 				break;
 
