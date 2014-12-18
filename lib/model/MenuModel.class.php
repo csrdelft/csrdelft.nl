@@ -103,7 +103,7 @@ class MenuModel extends CachedPersistenceModel {
 
 			case 'Verticalen':
 				foreach (VerticalenModel::instance()->prefetch() as $verticale) {
-					if ($item->letter == '_') {
+					if ($verticale->letter == '_') {
 						continue;
 					}
 					$item = $this->newMenuItem($parent->item_id);
