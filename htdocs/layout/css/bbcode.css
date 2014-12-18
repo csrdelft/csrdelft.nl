@@ -91,7 +91,7 @@ a.maaltijd-afgemeld, span.maaltijd-afgemeld {
 }
 
 .bb-groep {
-	padding: 5px 10px 5px 10px;
+	padding: 0 10px;
 }
 .bb-groep .titel {
 	margin: 1em 0;
@@ -100,9 +100,9 @@ a.maaltijd-afgemeld, span.maaltijd-afgemeld {
 	line-height: 1.5em;
 }
 .bb-groep .groepleden {
-	width: 275px;
+	width: 280px;
 	float: right;
-	margin-left: 10px;
+	margin: 10px 0 0 10px;
 }
 .bb-groep .groepleden table.leden { width: 100%; }
 .bb-groep .groepleden table.leden td { padding: 0 5px 0 0; text-align: left; }
