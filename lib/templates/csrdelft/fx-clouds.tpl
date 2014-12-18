@@ -50,8 +50,6 @@
 
 	initClouds();
 
-	var fxclouds = false;
-
 	function initClouds() {
 
 		container = document.createElement('div');
