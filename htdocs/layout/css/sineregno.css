@@ -5,74 +5,19 @@
  * blauw: #1470b8
  */
 
-
-/**** GENERAL *****************************************************************/
-a, a:HOVER{
-	color: #C744FF;
-}
-h1, h2, h3, h4 {
-	color: #555555;
-}
-body{
-	background: url('/plaetjes/layout/sineregno/2014/body.png') repeat-x;
+html {
+	background-image: url('/plaetjes/layout/sineregno/2014/body.png') repeat-x;
 }
 
-/**** MENU ********************************************************************/
-#menubanners,#banner1,#banner2,#banner3,#banner4{
+body {
 	background-image: url('/plaetjes/layout/sineregno/2014/puinhopen.png');
 }
-
-#beeldmerk{
-	background-image: url('/plaetjes/layout/logo.gif');
-}
-
-/**** MAIN MENU ***************************************************************/
-
-#mainmenu a {
-	background: url('/plaetjes/layout/sineregno/2014/menubutton.png') no-repeat;
-}	
-#mainmenu a:link, #mainmenu a:visited {
+h1,h2,h3,h4,h5,h6 {
 	color: #fff;
 }
-#mainmenu a:hover, #mainmenu a:active, #mainmenu a.active {
-	background: url('/plaetjes/layout/sineregno/2014/menubutton_hover.png') no-repeat;
-}
-
-/**** SUBMENU *****************************************************************/
-#submenu a.active  {
-	color: #fff;
-	font-weight: bold;
-}
-#submenu a:hover, #submenu a:active {
-	color: #fbea14;
-}
-
-/**** MAIN ********************************************************************/
-
-#mainleft .block h1 {
+a, a:hover {
 	color: #C744FF;
 }
-
-#mainleft .block h1 a {
+#zijbalk a {
 	color: #C744FF;
-}
-
-/**** INLOGKNOP ***************************************************************/
-#login input.submit {
-	background-color: #C744FF;
-	color: #fff; 
-}
-
-#adminding{
-	border: 1px solid white;
-	background-color: #C744FF;
-}
-
-#adminding div{
-	border: 1px solid white; 
-	background-color: #C744FF;
-}
-
-#footer {
-	background: url('/plaetjes/owee/2010/footerbg.png') no-repeat;
 }
