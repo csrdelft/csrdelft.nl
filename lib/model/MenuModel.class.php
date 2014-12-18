@@ -75,7 +75,7 @@ class MenuModel extends CachedPersistenceModel {
 
 			case 'Forum':
 				require_once 'model/ForumModel.class.php';
-				foreach (ForumModel::instance()->getForumIndeling() as $categorie) {
+				foreach (ForumModel::instance()->getForumIndeling(true) as $categorie) {
 					$item = $this->newMenuItem($parent->item_id);
 					$item->rechten_bekijken = $parent->rechten_bekijken;
 					$item->link = '/forum#' . $categorie->categorie_id;

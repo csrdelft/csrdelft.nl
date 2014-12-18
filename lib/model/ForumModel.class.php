@@ -40,9 +40,9 @@ class ForumModel extends AbstractForumModel {
 	 * 
 	 * @return ForumCategorie[]
 	 */
-	public function getForumIndeling() {
+	public function getForumIndeling($alles = false) {
 		if (!isset($this->indeling)) {
-			$delen = ForumDelenModel::instance()->getAlleForumDelenPerCategorie();
+			$delen = ForumDelenModel::instance()->getForumDelenPerCategorie($alles);
 			$categorien = $this->prefetch();
 			$this->indeling = array();
 			foreach ($categorien as $cat) {
@@ -117,11 +117,11 @@ class ForumDelenModel extends AbstractForumModel {
 	 */
 	protected $default_order = 'volgorde ASC';
 
-	public function getAlleForumDelenPerCategorie() {
+	public function getForumDelenPerCategorie($alles = false) {
 		$delen = $this->prefetch();
 		$result = array();
 		foreach ($delen as $deel) {
-			if ($deel->magLezen()) {
+			if ($alles OR $deel->magLezen()) {
 				$result[$deel->categorie_id][$deel->forum_id] = $deel;
 			}
 		}
