@@ -319,7 +319,7 @@ class LLLijst extends LLweergave {
 
 				case 'linkedin':
 				case 'website':
-					echo '<a href="' . htmlspecialchars($lid->getProperty($veld)) . '" class="linkExt">' . htmlspecialchars($lid->getProperty($veld)) . '</a>';
+					echo '<a target="_blank" href="' . htmlspecialchars($lid->getProperty($veld)) . '">' . htmlspecialchars($lid->getProperty($veld)) . '</a>';
 					break;
 
 				default:

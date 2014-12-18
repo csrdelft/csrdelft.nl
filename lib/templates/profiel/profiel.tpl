@@ -60,7 +60,7 @@
 				<div class="gegevenszelf">
 					<div class="label">
 						{if $profhtml.adres!=''}
-							<a href="http://maps.google.nl/maps?q={$profhtml.adres|urlencode}+{$profhtml.woonplaats|urlencode}+{$profhtml.land|urlencode} ({if $profhtml.woonoord!=''}{$profiel->getWoonoord()->getNaam()}{else}{$profiel->getNaamLink('civitas', 'plain')}{/if})">
+							<a target="_blank" href="http://maps.google.nl/maps?q={$profhtml.adres|urlencode}+{$profhtml.woonplaats|urlencode}+{$profhtml.land|urlencode} ({if $profhtml.woonoord!=''}{$profiel->getWoonoord()->getNaam()}{else}{$profiel->getNaamLink('civitas', 'plain')}{/if})">
 								<img src="/plaetjes/layout/googlemaps.gif" width="35px" alt="googlemap voor dit adres" />
 							</a>
 						{/if}
@@ -78,7 +78,7 @@
 					<div class="gegevensouders">
 						{if $profhtml.o_adres!=''}
 							<div class="label">
-								<a href="http://maps.google.nl/maps?q={$profhtml.o_adres|urlencode}+{$profhtml.o_woonplaats|urlencode}+{$profhtml.o_land|urlencode} (ouders van {$profiel->getNaamLink('civitas', 'plain')})">
+								<a target="_blank" href="http://maps.google.nl/maps?q={$profhtml.o_adres|urlencode}+{$profhtml.o_woonplaats|urlencode}+{$profhtml.o_land|urlencode} (ouders van {$profiel->getNaamLink('civitas', 'plain')})">
 									<img src="/plaetjes/layout/googlemaps.gif" width="35px" alt="googlemap voor dit adres" />
 								</a>
 							</div>
@@ -104,7 +104,7 @@
 				{foreach from=$profiel->getContactgegevens() key="key" item="contact"}
 					{if in_array($key, array('website', 'linkedin'))}
 						<div class="label">{$key|ucfirst}:</div>
-						<a href="{$contact|escape:'html'}" class="linkExt">{$contact|truncate:60|escape:'htmlall'}</a>
+						<a target="_blank" href="{$contact|escape:'html'}">{$contact|truncate:60|escape:'htmlall'}</a>
 					{elseif $key=='email'}
 						<div class="label">Email:</div>
 						<a href="mailto:{$contact|escape:'html'}">{$contact|escape:'htmlall'}</a>
