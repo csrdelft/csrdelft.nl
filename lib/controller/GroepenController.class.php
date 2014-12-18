@@ -81,13 +81,13 @@ class GroepController extends Controller {
 	}
 
 	public function getUrl($action = null) {
-		$url = CSR_ROOT . '/groepen/' . $this->groep->getType()->getNaam() . '/' . $this->groep->getId() . '/';
+		$url = '/groepen/' . $this->groep->getType()->getNaam() . '/' . $this->groep->getId() . '/';
 		if ($action != null AND $this->hasAction($action)) {
 			if ($action != 'standaard') {
-				$url.=$action;
+				$url .= $action;
 			}
 		} elseif ($this->action != 'standaard') {
-			$url.=$this->action;
+			$url .= $this->action;
 		}
 		return $url;
 	}
