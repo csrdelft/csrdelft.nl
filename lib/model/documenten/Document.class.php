@@ -271,11 +271,11 @@ class Document extends Bestand {
 	}
 
 	public function getUrl() {
-		return CSR_ROOT . '/documenten/bekijken/' . $this->getID() . '/' . $this->getFullFileName();
+		return '/documenten/bekijken/' . $this->getID() . '/' . $this->getFullFileName();
 	}
 
 	public function getDownloadUrl() {
-		return CSR_ROOT . '/documenten/download/' . $this->getID() . '/' . $this->getFullFileName();
+		return '/documenten/download/' . $this->getID() . '/' . $this->getFullFileName();
 	}
 
 	/**
