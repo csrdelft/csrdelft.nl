@@ -86,7 +86,7 @@ class FotoAlbum extends Map {
 	}
 
 	public function getUrl() {
-		return CSR_ROOT . '/' . direncode($this->subdir);
+		return '/' . direncode($this->subdir);
 	}
 
 	public function isEmpty() {
@@ -175,7 +175,7 @@ class FotoAlbum extends Map {
 			return $this->subalbums[$idx]->getCoverUrl();
 		}
 		// If all else fails:
-		return CSR_ROOT . '/plaetjes/_geen_thumb.jpg';
+		return '/plaetjes/_geen_thumb.jpg';
 	}
 
 	public function getMostRecentSubAlbum() {
