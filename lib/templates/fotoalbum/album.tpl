@@ -247,7 +247,7 @@
 			<h2>{$album->dirname|ucfirst}</h2>
 			{foreach from=$album->getFotos() item=foto}
 				<a class="foto" href="{$foto->getResizedUrl()}" data-href="{$foto->getFullUrl()}">
-					<img src="{$foto->getThumbUrl()}" alt="{$foto->getFullUrl()|replace:"%20":" "}" />
+					<img src="{$foto->getThumbUrl()}" alt="{$smarty.const.CSR_ROOT}{$foto->getFullUrl()|replace:"%20":" "}" />
 				</a>
 			{/foreach}
 		</div>
