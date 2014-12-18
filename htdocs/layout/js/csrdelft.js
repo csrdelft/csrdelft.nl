@@ -263,7 +263,7 @@ function knop_ajax(knop, type) {
 	if (knop.hasClass('addfav')) {
 		var data = {
 			'tekst': document.title.replace('C.S.R. Delft - ', ''),
-			'link': this.location.href.replace('http://csrdelft.nl', '').replace('https://csrdelft.nl', '')
+			'link': this.location.href
 		};
 	}
 	if (knop.hasClass('popup')) {
