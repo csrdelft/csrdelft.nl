@@ -1,5 +1,4 @@
 <?php
-
 require_once 'view/courant/CourantView.class.php';
 
 /**
@@ -13,10 +12,10 @@ class CourantArchiefView implements View {
 	private $model;
 
 	public function __construct(CourantModel $model) {
-		$this->model = $model;
+		$this->model = $model->getArchiefmails();
 	}
 
-	function getModel() {
+	public function getModel() {
 		return $this->model;
 	}
 
@@ -24,12 +23,13 @@ class CourantArchiefView implements View {
 		return '<a href="/courant" title="Courant"><img src="/plaetjes/knopjes/email-16.png" class="module-icon"></a> » <span class="active">' . $this->getTitel() . '</span>';
 	}
 
-	function getTitel() {
-		return 'Archief';
+	public function getTitel() {
+		return 'Archief C.S.R.-courant';
 	}
 
-	function view() {
-		echo '<ul class="horizontal nobullets">
+	public function view() {
+		?>
+		<ul class="horizontal nobullets">
 			<li>
 				<a href="/courant/" title="Courantinzendingen">Courantinzendingen</a>
 			</li>
@@ -37,26 +37,21 @@ class CourantArchiefView implements View {
 				<a href="/courant/archief/" title="Archief">Archief</a>
 			</li>
 		</ul>
-		<hr />';
-		$aMails = $this->model->getArchiefmails();
-		$sReturn = '<h1>Archief C.S.R.-courant</h1>';
-		if (is_array($aMails)) {
-			$sLijst = '';
-			foreach ($aMails as $aMail) {
-				if (isset($iLaatsteJaar)) {
-					if ($iLaatsteJaar != $aMail['jaar']) {
-						$sReturn .= '<div class="courantArchiefJaar"><h3>' . $iLaatsteJaar . '</h3>' . $sLijst . '</div>';
-						$sLijst = '';
-					}
+		<hr />
+		<?php
+		echo '<h1>' . $this->getTitel() . '</h1>';
+		$jaar = 0;
+		foreach ($this->model as $courant) {
+			if ($jaar != $courant['jaar']) {
+				if ($jaar > 0) {
+					echo '</div>';
 				}
-				$iLaatsteJaar = $aMail['jaar'];
-				$sLijst .= '<a href="/courant/archief/' . $aMail['ID'] . '">' . strftime('%d %B', strtotime($aMail['verzendMoment'])) . '</a><br />';
+				$jaar = $courant['jaar'];
+				echo '<div class="CourantArchiefJaar"><h3>' . $jaar . '</h3>';
 			}
-			$sReturn .= '<div class="courantArchiefJaar"><h3>' . $iLaatsteJaar . '</h3>' . $sLijst . '</div>';
-		} else {
-			$sReturn .= 'Geen couranten in het archief aanwezig';
+			echo '<a href="/courant/archief/' . $courant['ID'] . '">' . strftime('%d %B', strtotime($courant['verzendMoment'])) . '</a><br />';
 		}
-		return $sReturn;
+		echo '</div>';
 	}
 
 }

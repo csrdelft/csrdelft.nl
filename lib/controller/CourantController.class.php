@@ -44,7 +44,9 @@ class CourantController extends AclController {
 				$id = 0;
 			}
 			$success = $this->model->load((int) $id);
-			if (!$success) {
+			if ($success) {
+				$this->action = 'voorbeeld';
+			} else {
 				$this->geentoegang();
 			}
 		}

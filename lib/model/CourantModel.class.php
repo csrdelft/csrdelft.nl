@@ -119,9 +119,9 @@ class CourantModel {
 		$return = SMARTY_TEMPLATE_DIR . 'courant/mail/';
 		$firstbericht = array_slice($this->berichten, 0, 1);
 		if (isset($firstbericht[0]['template']) AND file_exists($return . $firstbericht[0]['template'])) {
-			$return.=$firstbericht[0]['template'];
+			$return .= $firstbericht[0]['template'];
 		} else {
-			$return.='courant.tpl';
+			$return .= 'courant.tpl';
 		}
 		return $return;
 	}

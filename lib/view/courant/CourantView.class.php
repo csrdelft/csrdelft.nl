@@ -16,17 +16,17 @@ class CourantView extends SmartyTemplateView {
 		$this->instellingen = parse_ini_file(ETC_PATH . 'csrmail.ini');
 	}
 
-	function getTitel() {
+	public function getTitel() {
 		return 'C.S.R.-courant van ' . $this->getVerzendMoment();
 	}
 
-	function getVerzendMoment() {
+	public function getVerzendMoment() {
 		return strftime('%d %B %Y', strtotime($this->model->getVerzendmoment()));
 	}
 
 	public function getHtml($headers = false) {
 		$this->smarty->assign('instellingen', $this->instellingen);
-		$this->smarty->assignByRef('courant', $this->model);
+		$this->smarty->assign('courant', $this->model);
 
 		$this->smarty->assign('indexCats', $this->model->getCats());
 		$this->smarty->assign('catNames', $this->model->getCats(true));
