@@ -164,21 +164,21 @@
 					if (!confirm('Foto definitief verwijderen. Weet u het zeker?')) {
 						return false;
 					}
-					var url = container.find('div.nav-bottom div.title').html().replace('/plaetjes', '');
+					var url = container.find('div.nav-bottom div.title').html().replace('{CSR_ROOT}/plaetjes', '');
 					$.post('/fotoalbum/verwijderen' + dirname(url), {
 						foto: basename(url)
 					}, page_reload);
 				}).insertAfter(btn);
 				// knopje albumcover
 				$('<span class="fa fa-folder jgallery-btn jgallery-btn-small" tooltip="Foto instellen als albumcover"></span>').click(function () {
-					var url = container.find('div.nav-bottom div.title').html().replace('/plaetjes', '');
+					var url = container.find('div.nav-bottom div.title').html().replace('{CSR_ROOT}/plaetjes', '');
 					$.post('/fotoalbum/albumcover' + dirname(url), {
 						foto: basename(url)
 					}, page_redirect);
 				}).insertAfter(btn);
 				// knopje linksom draaien
 				$('<span class="fa fa-undo jgallery-btn jgallery-btn-small" tooltip="Foto tegen de klok in draaien"></span>').click(function () {
-					var url = container.find('div.nav-bottom div.title').html().replace('/plaetjes', '');
+					var url = container.find('div.nav-bottom div.title').html().replace('{CSR_ROOT}/plaetjes', '');
 					$.post('/fotoalbum/roteren' + dirname(url), {
 						foto: basename(url),
 						rotation: -90
@@ -186,7 +186,7 @@
 				}).insertAfter(btn);
 				// knopje rechtsom draaien
 				$('<span class="fa fa-repeat jgallery-btn jgallery-btn-small" tooltip="Foto met de klok mee draaien"></span>').click(function () {
-					var url = container.find('div.nav-bottom div.title').html().replace('/plaetjes', '');
+					var url = container.find('div.nav-bottom div.title').html().replace('{CSR_ROOT}/plaetjes', '');
 					$.post('/fotoalbum/roteren' + dirname(url), {
 						foto: basename(url),
 						rotation: 90
@@ -194,7 +194,7 @@
 				}).insertAfter(btn);
 				// knopje downloaden
 				$('<span class="fa fa-download jgallery-btn jgallery-btn-small" tooltip="Foto in origineel formaat downloaden"></span>').click(function () {
-					var url = container.find('div.nav-bottom div.title').html().replace('/plaetjes', '');
+					var url = container.find('div.nav-bottom div.title').html().replace('{CSR_ROOT}/plaetjes', '');
 					window.location.href = '/fotoalbum/download' + url;
 				}).insertAfter(btn);
 		{/if}
