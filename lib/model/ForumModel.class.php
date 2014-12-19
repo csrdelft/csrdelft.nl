@@ -1033,9 +1033,13 @@ class ForumPostsModel extends AbstractForumModel implements Paging {
 		$posts = array();
 		$draden_ids = array();
 		foreach ($this->find($where, array($uid), null, null, $aantal) as $post) {
-			if ($post->getForumDraad()->magLezen()) {
+			$draad = $post->getForumDraad();
+			if ($draad->magLezen()) {
 				$posts[] = $post;
 				$draden_ids[] = $post->draad_id;
+				if ($draad_uniek) {
+					$draad->setForumPosts(array($post));
+				}
 			}
 		}
 		$count = count($draden_ids);
