@@ -94,7 +94,7 @@ require_once 'model/DebugLogModel.class.php';
 require_once 'model/TimerModel.class.php';
 require_once 'model/AccessModel.class.php';
 require_once 'model/LidInstellingenModel.class.php';
-require_once 'model/Paging.interface.php';
+require_once 'model/ForumModel.class.php';
 
 # View
 require_once 'view/JsonResponse.class.php';

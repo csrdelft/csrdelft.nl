@@ -1,5 +1,7 @@
 <?php
 
+require_once 'model/Paging.interface.php';
+
 /**
  * ForumModel.class.php
  * 
