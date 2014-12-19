@@ -554,7 +554,7 @@ class ForumDradenVolgenModel extends AbstractForumModel {
 	}
 
 	public function getVolgersVanDraad(ForumDraad $draad) {
-		return $this->prefetch('draad_id = ?', array($draad->draad_id))->fetchAll(PDO::FETCH_COLUMN, 1);
+		return $this->find('draad_id = ?', array($draad->draad_id))->fetchAll(PDO::FETCH_COLUMN, 1);
 	}
 
 	public function getVolgenVoorLid(ForumDraad $draad) {

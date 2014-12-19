@@ -14,7 +14,7 @@
 		<li>
 			<a href="/profiel/{LoginModel::getUid()}#MaalCieSaldo" title="Bekijk MaalCie saldo historie">
 				{assign var=saldo value=LoginModel::instance()->getLid()->getMaalcieSaldo()}
-				MaalCie: <span{if $saldo < 0} class="error"{/if}>&euro; {$saldo|number_format:2:",":"."}</span>
+				MaalCie: <span{if $saldo < 0} class="staatrood"{/if}>&euro; {$saldo|number_format:2:",":"."}</span>
 			</a>
 		</li>
 		<li class="has-children">
