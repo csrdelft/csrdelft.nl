@@ -13,7 +13,7 @@ class ChangeLogModel extends PersistenceModel {
 	protected static $instance;
 
 	public function log($subject, $property, $old, $new) {
-		$last = $this->find('subject = ? AND property = ?', array($subject, $property), 'id DESC', null, 1)->fetch();
+		$last = $this->find('subject = ? AND property = ?', array($subject, $property), null, 'id DESC', 1)->fetch();
 		$log = new HappieStatusLog();
 		$log->moment = getDateTime();
 		if ($last) {

@@ -31,13 +31,13 @@ class LedenMemoryView extends CompressedLayout {
 					$this->verticale = $verticale;
 				}
 			}
-			$this->leden = Database::instance()->sqlSelect(array('uid', 'geslacht', 'voorletters', 'voornaam', 'tussenvoegsel', 'achternaam', 'postfix'), 'lid', 'verticale = ? AND status IN ("S_GASTLID","S_LID","S_NOVIET","S_KRINGEL")', array($this->verticale->id), 'achternaam, tussenvoegsel, voornaam, voorletters')->fetchAll(PDO::FETCH_ASSOC);
+			$this->leden = Database::instance()->sqlSelect(array('uid', 'geslacht', 'voorletters', 'voornaam', 'tussenvoegsel', 'achternaam', 'postfix'), 'lid', 'verticale = ? AND status IN ("S_GASTLID","S_LID","S_NOVIET","S_KRINGEL")', array($this->verticale->id), null, 'achternaam, tussenvoegsel, voornaam, voorletters')->fetchAll(PDO::FETCH_ASSOC);
 		} else {
 			$this->lichting = (int) filter_input(INPUT_GET, 'lichting', FILTER_SANITIZE_NUMBER_INT);
 			if ($this->lichting < 1950) {
 				$this->lichting = Lichting::getJongsteLichting();
 			}
-			$this->leden = Database::instance()->sqlSelect(array('uid', 'geslacht', 'voorletters', 'voornaam', 'tussenvoegsel', 'achternaam', 'postfix'), 'lid', 'lidjaar = ? AND status IN ("S_GASTLID","S_LID","S_NOVIET","S_OUDLID","S_ERELID","S_OVERLEDEN")', array($this->lichting), 'achternaam, tussenvoegsel, voornaam, voorletters')->fetchAll(PDO::FETCH_ASSOC);
+			$this->leden = Database::instance()->sqlSelect(array('uid', 'geslacht', 'voorletters', 'voornaam', 'tussenvoegsel', 'achternaam', 'postfix'), 'lid', 'lidjaar = ? AND status IN ("S_GASTLID","S_LID","S_NOVIET","S_OUDLID","S_ERELID","S_OVERLEDEN")', array($this->lichting), null, 'achternaam, tussenvoegsel, voornaam, voorletters')->fetchAll(PDO::FETCH_ASSOC);
 		}
 	}
 

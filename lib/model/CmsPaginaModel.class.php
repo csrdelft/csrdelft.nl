@@ -15,7 +15,7 @@ class CmsPaginaModel extends PersistenceModel {
 	protected static $instance;
 
 	public function getAllePaginas() {
-		$paginas = $this->find(null, array(), 'titel ASC');
+		$paginas = $this->find(null, array(), null, 'titel ASC');
 		$result = array();
 		foreach ($paginas as $pagina) {
 			if ($pagina->magBekijken()) {

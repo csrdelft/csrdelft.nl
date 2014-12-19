@@ -120,18 +120,18 @@ abstract class CachedPersistenceModel extends PersistenceModel {
 	 * 
 	 * @param string $criteria WHERE
 	 * @param array $criteria_params optional named parameters
-	 * @param string $orderby ORDER BY
 	 * @param string $groupby GROUP BY
+	 * @param string $orderby ORDER BY
 	 * @param int $limit max amount of results
 	 * @param int $start results from index
 	 * @return array
 	 */
-	public function prefetch($criteria = null, array $criteria_params = array(), $orderby = null, $groupby = null, $limit = null, $start = 0) {
-		$key = $this->prefetchKey($criteria, $criteria_params, $orderby, $groupby, $limit, $start);
+	public function prefetch($criteria = null, array $criteria_params = array(), $groupby = null, $orderby = null, $limit = null, $start = 0) {
+		$key = $this->prefetchKey($criteria, $criteria_params, $groupby, $orderby, $limit, $start);
 		if ($this->isCached($key, $this->memcache_prefetch)) {
 			$result = $this->getCached($key, $this->memcache_prefetch);
 		} else {
-			$result = $this->find($criteria, $criteria_params, $orderby, $groupby, $limit, $start);
+			$result = $this->find($criteria, $criteria_params, $groupby, $orderby, $limit, $start);
 		}
 		$cached = $this->cacheResult($result, false);
 		if ($result instanceof PDOStatement) {
@@ -146,8 +146,8 @@ abstract class CachedPersistenceModel extends PersistenceModel {
 	 * @param array $params
 	 * @return string
 	 */
-	private function prefetchKey($criteria, array $criteria_params, $orderby, $groupby, $limit, $start) {
-		$params = array($criteria, implode('+', $criteria_params), $orderby, $groupby, $limit, $start);
+	private function prefetchKey($criteria, array $criteria_params, $groupby, $orderby, $limit, $start) {
+		$params = array($criteria, implode('+', $criteria_params), $groupby, $orderby, $limit, $start);
 		return get_class($this) . crc32(implode('-', $params));
 	}
 
@@ -158,14 +158,14 @@ abstract class CachedPersistenceModel extends PersistenceModel {
 	 * @param array $attributes to retrieve
 	 * @param string $criteria WHERE
 	 * @param array $criteria_params optional named parameters
-	 * @param string $orderby ORDER BY
 	 * @param string $groupby GROUP BY
+	 * @param string $orderby ORDER BY
 	 * @param int $limit max amount of results
 	 * @param int $start results from index
 	 * @return array
 	 */
-	public function prefetchSparse(array $attributes, $criteria = null, array $criteria_params = array(), $orderby = null, $groupby = null, $limit = null, $start = 0) {
-		$result = $this->findSparse($attributes, $criteria, $criteria_params, $orderby, $groupby, $limit, $start);
+	public function prefetchSparse(array $attributes, $criteria = null, array $criteria_params = array(), $groupby = null, $orderby = null, $limit = null, $start = 0) {
+		$result = $this->findSparse($attributes, $criteria, $criteria_params, $groupby, $orderby, $limit, $start);
 		return $this->cacheResult($result, false);
 	}
 

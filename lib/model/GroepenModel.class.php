@@ -34,7 +34,7 @@ class GroepLedenModel extends GroepenModel {
 	protected static $instance;
 
 	public function getLedenVoorGroep(Groep $groep) {
-		return $this->find('groep_type = ? AND groep_id = ?', array(get_class($groep), $groep->id), 'lid_sinds ASC')->fetchAll();
+		return $this->find('groep_type = ? AND groep_id = ?', array(get_class($groep), $groep->id), null, 'lid_sinds ASC')->fetchAll();
 	}
 
 	public function getStatistieken(Groep $groep) {
@@ -45,10 +45,10 @@ class GroepLedenModel extends GroepenModel {
 		}
 		$in = implode(', ', array_fill(0, $count, '?'));
 		$stats['Totaal'] = $count;
-		$stats['Verticale'] = Database::instance()->sqlSelect(array('verticale.naam', 'count(*)'), 'lid LEFT JOIN verticale ON(lid.verticale = verticale.id)', 'uid IN (' . $in . ')', $uids, null, 'verticale.naam')->fetchAll();
-		$stats['Geslacht'] = Database::instance()->sqlSelect(array('geslacht', 'count(*)'), 'lid', 'uid IN (' . $in . ')', $uids, null, 'geslacht')->fetchAll();
-		$stats['Lidjaar'] = Database::instance()->sqlSelect(array('lidjaar', 'count(*)'), 'lid', 'uid IN (' . $in . ')', $uids, null, 'lidjaar')->fetchAll();
-		$stats['Opmerking'] = Database::instance()->sqlSelect(array('opmerking', 'count(*)'), GroepLid::getTableName(), 'groep_type = ? AND groep_id = ?', array(get_class($groep), $groep->id), null, 'opmerking')->fetchAll();
+		$stats['Verticale'] = Database::instance()->sqlSelect(array('verticale.naam', 'count(*)'), 'lid LEFT JOIN verticale ON(lid.verticale = verticale.id)', 'uid IN (' . $in . ')', $uids, 'verticale.naam', null)->fetchAll();
+		$stats['Geslacht'] = Database::instance()->sqlSelect(array('geslacht', 'count(*)'), 'lid', 'uid IN (' . $in . ')', $uids, 'geslacht', null)->fetchAll();
+		$stats['Lidjaar'] = Database::instance()->sqlSelect(array('lidjaar', 'count(*)'), 'lid', 'uid IN (' . $in . ')', $uids, 'lidjaar', null)->fetchAll();
+		$stats['Opmerking'] = Database::instance()->sqlSelect(array('opmerking', 'count(*)'), GroepLid::getTableName(), 'groep_type = ? AND groep_id = ?', array(get_class($groep), $groep->id), 'opmerking', null)->fetchAll();
 		return $stats;
 	}
 

@@ -277,7 +277,7 @@ class FotoAlbumController extends AclController {
 			$limit = (int) $this->getParam('limit');
 		}
 		$result = array();
-		foreach ($this->model->find('replace(subdir, "é", "e") REGEXP ?', array($query . '[^/]*[/]{1}$'), 'subdir DESC', null, $limit) as $album) {
+		foreach ($this->model->find('replace(subdir, "é", "e") REGEXP ?', array($query . '[^/]*[/]{1}$'), null, 'subdir DESC', $limit) as $album) {
 			$result[] = array(
 				'url'	 => $album->getUrl(),
 				'value'	 => ucfirst($album->dirname) . '<span class="lichtgrijs"> - ' . $album->getParentName() . '</span>'

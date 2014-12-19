@@ -51,18 +51,18 @@ abstract class PersistenceModel implements Persistence {
 	 * 
 	 * @param string $criteria WHERE
 	 * @param array $criteria_params optional named parameters
-	 * @param string $orderby ORDER BY
 	 * @param string $groupby GROUP BY
+	 * @param string $orderby ORDER BY
 	 * @param int $limit max amount of results
 	 * @param int $start results from index
 	 * @return PDOStatement
 	 */
-	public function find($criteria = null, array $criteria_params = array(), $orderby = null, $groupby = null, $limit = null, $start = 0) {
+	public function find($criteria = null, array $criteria_params = array(), $groupby = null, $orderby = null, $limit = null, $start = 0) {
 		if ($orderby == null) {
 			$orderby = $this->default_order;
 		}
 		try {
-			$result = Database::sqlSelect(array('*'), $this->orm->getTableName(), $criteria, $criteria_params, $orderby, $groupby, $limit, $start);
+			$result = Database::sqlSelect(array('*'), $this->orm->getTableName(), $criteria, $criteria_params, $groupby, $orderby, $limit, $start);
 			$result->setFetchMode(PDO::FETCH_CLASS, static::orm, array($cast = true));
 			return $result;
 		} catch (PDOException $ex) {
@@ -77,18 +77,18 @@ abstract class PersistenceModel implements Persistence {
 	 * @param array $attributes to retrieve
 	 * @param string $criteria WHERE
 	 * @param array $criteria_params optional named parameters
-	 * @param string $orderby ORDER BY
 	 * @param string $groupby GROUP BY
+	 * @param string $orderby ORDER BY
 	 * @param int $limit max amount of results
 	 * @param int $start results from index
 	 * @return PDOStatement
 	 */
-	public function findSparse(array $attributes, $criteria = null, array $criteria_params = array(), $orderby = null, $groupby = null, $limit = null, $start = 0) {
+	public function findSparse(array $attributes, $criteria = null, array $criteria_params = array(), $groupby = null, $orderby = null, $limit = null, $start = 0) {
 		if ($orderby == null) {
 			$orderby = $this->default_order;
 		}
 		$attributes = array_merge($this->orm->getPrimaryKey(), $attributes);
-		$result = Database::sqlSelect($attributes, $this->orm->getTableName(), $criteria, $criteria_params, $orderby, $groupby, $limit, $start);
+		$result = Database::sqlSelect($attributes, $this->orm->getTableName(), $criteria, $criteria_params, $groupby, $orderby, $limit, $start);
 		$result->setFetchMode(PDO::FETCH_CLASS, static::orm, array($cast = true, $attributes));
 		return $result;
 	}

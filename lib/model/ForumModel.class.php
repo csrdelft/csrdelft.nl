@@ -151,15 +151,15 @@ class ForumDelenModel extends AbstractForumModel {
 	 */
 	public function getForumDelenOptiesOmTeDelen(ForumDeel $deel) {
 		if (strpos($deel->rechten_posten, 'verticale:') !== false) {
-			$type = '%verticale:%';
-			$sort = 'titel ASC';
+			$query = '%verticale:%';
+			$orderby = 'titel ASC';
 		} elseif (strpos($deel->rechten_posten, 'lidjaar:') !== false) {
-			$type = '%lidjaar:%';
-			$sort = 'titel DESC';
+			$query = '%lidjaar:%';
+			$orderby = 'titel DESC';
 		} else {
 			return array();
 		}
-		return $this->prefetch('rechten_posten != ? AND rechten_posten LIKE ?', array($deel->rechten_posten, $type), $sort);
+		return $this->prefetch('rechten_posten != ? AND rechten_posten LIKE ?', array($deel->rechten_posten, $query), null, $orderby);
 	}
 
 	public function bestaatForumDeel($id) {
@@ -277,7 +277,7 @@ class ForumDelenModel extends AbstractForumModel {
 						$draad->score += (float) $post->score;
 					}
 				} else { // laad eerste post
-					$array_first_post = ForumPostsModel::instance()->prefetch('draad_id = ? AND wacht_goedkeuring = FALSE AND verwijderd = FALSE', array($draad->draad_id), 'post_id ASC', null, 1);
+					$array_first_post = ForumPostsModel::instance()->prefetch('draad_id = ? AND wacht_goedkeuring = FALSE AND verwijderd = FALSE', array($draad->draad_id), null, null, 1);
 					$draad->setForumPosts($array_first_post);
 				}
 			}
@@ -603,6 +603,11 @@ class ForumDradenModel extends AbstractForumModel implements Paging {
 
 	protected static $instance;
 	/**
+	 * Default ORDER BY
+	 * @var string
+	 */
+	protected $default_order = 'plakkerig DESC, laatst_gewijzigd DESC';
+	/**
 	 * Huidige pagina
 	 * @var int
 	 */
@@ -682,7 +687,7 @@ class ForumDradenModel extends AbstractForumModel implements Paging {
 		$deel->aantal_posts = (int) $result->fetchColumn();
 		$deel->aantal_draden = $this->count('forum_id = ? AND wacht_goedkeuring = FALSE AND verwijderd = FALSE', array($deel->forum_id));
 		// reset laatst gewijzigd
-		$last_draad = $this->find('forum_id = ? AND wacht_goedkeuring = FALSE AND verwijderd = FALSE', array($deel->forum_id), 'laatst_gewijzigd DESC', null, 1)->fetch();
+		$last_draad = $this->find('forum_id = ? AND wacht_goedkeuring = FALSE AND verwijderd = FALSE', array($deel->forum_id), null, null, 1)->fetch();
 		$deel->laatste_post_id = $last_draad->laatste_post_id;
 		$deel->laatste_wijziging_uid = $last_draad->laatste_wijziging_uid;
 		$deel->laatst_gewijzigd = $last_draad->laatst_gewijzigd;
@@ -714,21 +719,21 @@ class ForumDradenModel extends AbstractForumModel implements Paging {
 			}
 		}
 		$where .= ' HAVING score > 0';
-		$results = Database::sqlSelect($attributes, $this->orm->getTableName(), $where, $where_params, $order, null, $this->per_pagina, ($this->pagina - 1) * $this->per_pagina);
+		$results = Database::sqlSelect($attributes, $this->orm->getTableName(), $where, $where_params, null, $order, $this->per_pagina, ($this->pagina - 1) * $this->per_pagina);
 		$results->setFetchMode(PDO::FETCH_CLASS, self::orm, array($cast = true));
 		return $results;
 	}
 
 	public function getPrullenbakVoorDeel(ForumDeel $deel) {
-		return $this->prefetch('forum_id = ? AND verwijderd = TRUE', array($deel->forum_id), 'wacht_goedkeuring DESC, laatst_gewijzigd DESC');
+		return $this->prefetch('forum_id = ? AND verwijderd = TRUE', array($deel->forum_id));
 	}
 
 	public function getBelangrijkeForumDradenVoorDeel(ForumDeel $deel) {
-		return $this->prefetch('forum_id = ? AND wacht_goedkeuring = FALSE AND verwijderd = FALSE AND belangrijk = TRUE', array($deel->forum_id), 'plakkerig DESC, laatst_gewijzigd DESC');
+		return $this->prefetch('forum_id = ? AND wacht_goedkeuring = FALSE AND verwijderd = FALSE AND belangrijk = TRUE', array($deel->forum_id));
 	}
 
 	public function getForumDradenVoorDeel(ForumDeel $deel) {
-		return $this->prefetch('(forum_id = ? OR gedeeld_met = ?) AND wacht_goedkeuring = FALSE AND verwijderd = FALSE', array($deel->forum_id, $deel->forum_id), 'plakkerig DESC, laatst_gewijzigd DESC', null, $this->per_pagina, ($this->pagina - 1) * $this->per_pagina);
+		return $this->prefetch('(forum_id = ? OR gedeeld_met = ?) AND wacht_goedkeuring = FALSE AND verwijderd = FALSE', array($deel->forum_id, $deel->forum_id), null, null, $this->per_pagina, ($this->pagina - 1) * $this->per_pagina);
 	}
 
 	/**
@@ -772,7 +777,7 @@ class ForumDradenModel extends AbstractForumModel implements Paging {
 		} else {
 			$belangrijk = '';
 		}
-		$dradenById = group_by_distinct('draad_id', $this->find('(forum_id IN (' . $forum_ids_stub . ') OR gedeeld_met IN (' . $forum_ids_stub . '))' . $verborgen . ' AND wacht_goedkeuring = FALSE AND verwijderd = FALSE' . $belangrijk, $params, 'laatst_gewijzigd DESC', null, $aantal, ($pagina - 1) * $aantal));
+		$dradenById = group_by_distinct('draad_id', $this->find('(forum_id IN (' . $forum_ids_stub . ') OR gedeeld_met IN (' . $forum_ids_stub . '))' . $verborgen . ' AND wacht_goedkeuring = FALSE AND verwijderd = FALSE' . $belangrijk, $params, null, null, $aantal, ($pagina - 1) * $aantal));
 		$count = count($dradenById);
 		$draden_ids = array_keys($dradenById);
 		array_unshift($draden_ids, LoginModel::getUid());
@@ -848,6 +853,11 @@ class ForumPostsModel extends AbstractForumModel implements Paging {
 	const orm = 'ForumPost';
 
 	protected static $instance;
+	/**
+	 * Default ORDER BY
+	 * @var string
+	 */
+	protected $default_order = 'post_id ASC';
 	/**
 	 * Huidige pagina
 	 * @var int
@@ -937,7 +947,7 @@ class ForumPostsModel extends AbstractForumModel implements Paging {
 			ForumDradenVolgenModel::instance()->stopVolgenVoorIedereen($draad);
 			ForumDradenReagerenModel::instance()->verwijderReagerenVoorDraad($draad);
 		} else { // reset last post
-			$last_post = $this->find('draad_id = ? AND wacht_goedkeuring = FALSE AND verwijderd = FALSE', array($draad->draad_id), 'laatst_gewijzigd DESC', null, 1)->fetch();
+			$last_post = $this->find('draad_id = ? AND wacht_goedkeuring = FALSE AND verwijderd = FALSE', array($draad->draad_id), null, 'laatst_gewijzigd DESC', 1)->fetch();
 			$draad->laatste_post_id = $last_post->post_id;
 			$draad->laatste_wijziging_uid = $last_post->uid;
 			$draad->laatst_gewijzigd = $last_post->laatst_gewijzigd;
@@ -969,7 +979,7 @@ class ForumPostsModel extends AbstractForumModel implements Paging {
 			}
 		}
 		$where .= ' HAVING score > 0';
-		$results = Database::sqlSelect($attributes, $this->orm->getTableName(), $where, $where_params, $order, null, $this->per_pagina, ($this->pagina - 1) * $this->per_pagina);
+		$results = Database::sqlSelect($attributes, $this->orm->getTableName(), $where, $where_params, null, $order, $this->per_pagina, ($this->pagina - 1) * $this->per_pagina);
 		$results->setFetchMode(PDO::FETCH_CLASS, self::orm, array($cast = true));
 		return $results;
 	}
@@ -986,7 +996,7 @@ class ForumPostsModel extends AbstractForumModel implements Paging {
 	}
 
 	public function getPrullenbakVoorDraad(ForumDraad $draad) {
-		return $this->prefetch('draad_id = ? AND verwijderd = TRUE', array($draad->draad_id), 'post_id ASC');
+		return $this->prefetch('draad_id = ? AND verwijderd = TRUE', array($draad->draad_id));
 	}
 
 	public function getForumPostsVoorDraad(ForumDraad $draad) {
@@ -995,9 +1005,9 @@ class ForumPostsModel extends AbstractForumModel implements Paging {
 		} else {
 			$goedkeuring = ' AND wacht_goedkeuring = FALSE';
 		}
-		$posts = $this->prefetch('draad_id = ?' . $goedkeuring . ' AND verwijderd = FALSE', array($draad->draad_id), 'post_id ASC', null, $this->per_pagina, ($this->pagina - 1) * $this->per_pagina);
+		$posts = $this->prefetch('draad_id = ?' . $goedkeuring . ' AND verwijderd = FALSE', array($draad->draad_id), null, null, $this->per_pagina, ($this->pagina - 1) * $this->per_pagina);
 		if ($draad->eerste_post_plakkerig AND $this->pagina !== 1) {
-			$first_post = $this->find('draad_id = ? AND wacht_goedkeuring = FALSE AND verwijderd = FALSE', array($draad->draad_id), 'post_id ASC', null, 1)->fetch();
+			$first_post = $this->find('draad_id = ? AND wacht_goedkeuring = FALSE AND verwijderd = FALSE', array($draad->draad_id), null, null, 1)->fetch();
 			array_unshift($posts, $first_post);
 		}
 		// 2008-filter
@@ -1022,30 +1032,18 @@ class ForumPostsModel extends AbstractForumModel implements Paging {
 	 */
 	public function getRecenteForumPostsVanLid($uid, $aantal, $draad_uniek = false) {
 		$where = 'uid = ? AND wacht_goedkeuring = FALSE AND verwijderd = FALSE';
-		if ($draad_uniek) {
-			$where = 'post_id = (
-	SELECT MAX(post_id)
-	FROM ' . $this->orm->getTableName() . ' AS zelfde_draad
-	WHERE ' . $this->orm->getTableName() . '.draad_id = zelfde_draad.draad_id
-	AND ' . $where . '
-)';
-		}
 		$posts = array();
 		$draden_ids = array();
-		foreach ($this->find($where, array($uid), null, null, $aantal) as $post) {
-			$draad = $post->getForumDraad();
-			if ($draad->magLezen()) {
+		foreach ($this->find($where, array($uid), $draad_uniek ? 'draad_id' : null, 'laatst_gewijzigd DESC', $aantal) as $post) {
+			if ($post->getForumDraad()->magLezen()) {
 				$posts[] = $post;
 				$draden_ids[] = $post->draad_id;
-				if ($draad_uniek) {
-					$draad->setForumPosts(array($post));
-				}
 			}
 		}
 		$count = count($draden_ids);
 		array_unshift($draden_ids, LoginModel::getUid());
 		ForumDradenGelezenModel::instance()->prefetch('uid = ? AND draad_id IN (' . implode(', ', array_fill(0, $count, '?')) . ')', $draden_ids);
-		return $posts;
+		return array_reverse($posts);
 	}
 
 	public function getForumPost($id) {
@@ -1178,7 +1176,7 @@ class ForumPostsModel extends AbstractForumModel implements Paging {
 
 	public function getStats($terug) {
 		$fields = array('(UNIX_TIMESTAMP(DATE(datum_tijd)) * 1000) AS datum', 'COUNT(*)');
-		return Database::sqlSelect($fields, $this->orm->getTableName(), 'datum_tijd > ?', array(getDateTime(strtotime($terug))), null, 'datum');
+		return Database::sqlSelect($fields, $this->orm->getTableName(), 'datum_tijd > ?', array(getDateTime(strtotime($terug))), 'datum');
 	}
 
 }

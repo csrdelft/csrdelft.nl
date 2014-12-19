@@ -123,26 +123,27 @@ class Database extends PDO {
 	/**
 	 * Optional named parameters.
 	 * 
+	 * 
 	 * @param array $attributes
 	 * @param string $from
 	 * @param string $where
 	 * @param array $params
-	 * @param string $orderby
 	 * @param string $groupby
+	 * @param string $orderby
 	 * @param int $limit
 	 * @param int $start
 	 * @return PDOStatement
 	 */
-	public static function sqlSelect(array $attributes, $from, $where = null, array $params = array(), $orderby = null, $groupby = null, $limit = null, $start = 0) {
+	public static function sqlSelect(array $attributes, $from, $where = null, array $params = array(), $groupby = null, $orderby = null, $limit = null, $start = 0) {
 		$sql = 'SELECT ' . implode(', ', $attributes) . ' FROM ' . $from;
 		if ($where !== null) {
 			$sql .= ' WHERE ' . $where;
 		}
-		if ($orderby !== null) {
-			$sql .= ' ORDER BY ' . $orderby;
-		}
 		if ($groupby !== null) {
 			$sql .= ' GROUP BY ' . $groupby;
+		}
+		if ($orderby !== null) {
+			$sql .= ' ORDER BY ' . $orderby;
 		}
 		if ((int) $limit > 0) {
 			$sql .= ' LIMIT ' . (int) $start . ', ' . (int) $limit;

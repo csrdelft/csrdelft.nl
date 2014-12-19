@@ -30,7 +30,7 @@ class AgendaModel extends PersistenceModel {
 		}
 
 		// AgendaItems
-		$items = $this->find('eind_moment >= ? AND begin_moment <= ?', array(date('Y-m-d', $van), date('Y-m-d', $tot)), 'begin_moment ASC, titel ASC');
+		$items = $this->find('eind_moment >= ? AND begin_moment <= ?', array(date('Y-m-d', $van), date('Y-m-d', $tot)), null, 'begin_moment ASC, titel ASC');
 		foreach ($items as $item) {
 			if ($item->magBekijken($ical)) {
 				$result[] = $item;

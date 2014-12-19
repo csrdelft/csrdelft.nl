@@ -95,8 +95,8 @@ class LidInstellingen extends Instellingen {
 	 * @param array $params
 	 * @return string
 	 */
-	protected function prefetchKey($criteria, array $criteria_params, $orderby, $groupby, $limit, $start) {
-		return LoginModel::getUid() . parent::prefetchKey($criteria, $criteria_params, $orderby, $groupby, $limit, $start);
+	protected function prefetchKey($criteria, array $criteria_params, $groupby, $orderby, $limit, $start) {
+		return LoginModel::getUid() . parent::prefetchKey($criteria, $criteria_params, $groupby, $orderby, $limit, $start);
 	}
 
 	/**
