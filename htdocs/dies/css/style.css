@@ -1,0 +1,75 @@
+body {
+    font-family: 'Montserrat', sans-serif;
+    color: white;
+    background: black;
+    -webkit-font-smoothing: antialiased;
+    padding: 0;
+    margin: 0;
+}
+h1 {
+    text-transform: uppercase;
+    font-size: 3em;
+}
+.script {
+    font-family: 'Great Vibes', cursive;
+}
+header {
+    position: fixed;
+    bottom: 0;
+    padding: 30px 0;
+    width: 100vw;
+    background: rgba(0,0,0,0.2);
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+}
+header nav ul {
+    margin: 0 auto;
+    padding: 0;
+    text-align: center;
+}
+header nav ul li {
+    display: inline;
+    padding: 0 15px;
+    margin: 0;
+    list-style: none;
+    text-transform: uppercase;
+}
+header a {
+    color: white;
+    text-decoration: none;
+}
+header a:hover {
+    color: #D6960F;
+}
+section, #spark, #logo {
+    height: 100vh;
+}
+#afteller {
+    height: 80px;
+}
+#welkom {
+    background: url(../img/spark1.jpg) no-repeat;
+}
+#spark {
+    background: url(../img/spark2.png) no-repeat;
+}
+#logo {
+    background: url(../img/logo.png) no-repeat;
+}
+#afteller {
+    background: #333;
+}
+@media screen and (max-width: 1280px) {
+    #welkom {
+        background-size: 826px;
+    }
+    #spark {
+        background-size: 960px;
+    }
+    #logo {
+        background-size: 600px;
+    }
+}
+#video {
+    height: 100vh;
+}
