@@ -38,7 +38,7 @@ class CourantController extends AclController {
 			$this->action = $this->getParam(2);
 		}
 		if ($this->hasParam(3)) {
-			if ($this->action === 'archief') {
+			if ($this->action === 'archief' OR $this->action === 'bekijken') {
 				$id = (int) $this->getParam(3);
 			} else {
 				$id = 0;
