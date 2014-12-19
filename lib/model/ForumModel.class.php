@@ -42,14 +42,13 @@ class ForumModel extends AbstractForumModel {
 	 */
 	public function getForumIndelingVoorLid() {
 		if (!isset($this->indeling)) {
-			$delenByCatId = group_by('forum_id', ForumDelenModel::instance()->getForumDelenVoorLid());
+			$delenByCatId = group_by('categorie_id', ForumDelenModel::instance()->getForumDelenVoorLid());
 			$this->indeling = array();
 			foreach ($this->prefetch() as $cat) {
 				if ($cat->magLezen()) {
 					$this->indeling[] = $cat;
-					if (array_key_exists($cat->categorie_id, $delenByCatId)) {
+					if (isset($delenByCatId[$cat->categorie_id])) {
 						$cat->setForumDelen($delenByCatId[$cat->categorie_id]);
-						unset($delenByCatId[$cat->categorie_id]);
 					} else {
 						$cat->setForumDelen(array());
 					}
@@ -754,13 +753,13 @@ class ForumDradenModel extends AbstractForumModel implements Paging {
 		} else {
 			$pagina = 1;
 		}
-		$delen = ForumDelenModel::instance()->getForumDelenVoorLid($rss);
-		$count = count($delen);
+		$delenById = ForumDelenModel::instance()->getForumDelenVoorLid($rss);
+		$count = count($delenById);
 		if ($count < 1) {
 			return array();
 		}
 		$forum_ids_stub = implode(', ', array_fill(0, $count, '?'));
-		$forum_ids = array_keys($delen);
+		$forum_ids = array_keys($delenById);
 		$params = array_merge($forum_ids, $forum_ids);
 		$verbergen = ForumDradenVerbergenModel::instance()->prefetch('uid = ?', array(LoginModel::getUid()));
 		$draden_ids = array_keys(group_by_distinct('draad_id', $verbergen));
