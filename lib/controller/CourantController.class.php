@@ -44,10 +44,12 @@ class CourantController extends AclController {
 				$id = 0;
 			}
 			$success = $this->model->load((int) $id);
-			if ($success) {
-				$this->action = 'bekijken';
-			} else {
-				$this->geentoegang();
+			if ($this->action === 'archief') {
+				if ($success) {
+					$this->action = 'bekijken';
+				} else {
+					$this->geentoegang();
+				}
 			}
 		}
 		parent::performAction($this->getParams(3));
