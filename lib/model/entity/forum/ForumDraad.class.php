@@ -254,7 +254,8 @@ class ForumDraad extends PersistentEntity {
 	}
 
 	public function hasForumPosts() {
-		return !empty($this->getForumPosts());
+		$this->getForumPosts();
+		return !empty($this->forum_posts);
 	}
 
 	/**
@@ -263,8 +264,6 @@ class ForumDraad extends PersistentEntity {
 	 * @param array $forum_posts
 	 */
 	public function setForumPosts(array $forum_posts) {
-		debug_backtrace();
-
 		$this->forum_posts = $forum_posts;
 	}
 

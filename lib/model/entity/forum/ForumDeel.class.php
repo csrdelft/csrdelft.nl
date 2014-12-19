@@ -143,7 +143,8 @@ class ForumDeel extends PersistentEntity {
 	}
 
 	public function hasForumDraden() {
-		return !empty($this->getForumDraden());
+		$this->getForumDraden();
+		return !empty($this->forum_draden);
 	}
 
 	/**
@@ -152,8 +153,6 @@ class ForumDeel extends PersistentEntity {
 	 * @param array $forum_draden
 	 */
 	public function setForumDraden(array $forum_draden) {
-		debug_backtrace();
-
 		$this->forum_draden = $forum_draden;
 	}
 
