@@ -1,4 +1,4 @@
-var fxclouds = false;
+var menuFX = false;
 
 jQuery(document).ready(function ($) {
 	//if you change this breakpoint in the style.css file (or _layout.scss if you use SASS), don't forget to update this value as well
@@ -14,7 +14,7 @@ jQuery(document).ready(function ($) {
 	});
 
 	var $maintrigger = $('#cd-main-trigger').click(function () {
-		fxclouds = !fxclouds;
+		menuFX = !menuFX;
 	});
 
 	//mobile - open lateral menu clicking on the menu icon
@@ -36,7 +36,7 @@ jQuery(document).ready(function ($) {
 			//open main menu
 			if (!$maintrigger.hasClass('selected')) {
 				$maintrigger.click();
-				fxclouds = true;
+				menuFX = true;
 			}
 		}
 	});
@@ -104,7 +104,7 @@ jQuery(document).ready(function ($) {
 		$('.cd-main-content').removeClass('nav-is-visible').one('webkitTransitionEnd otransitionend oTransitionEnd msTransitionEnd transitionend', function () {
 			$('body').removeClass('overflow-hidden');
 		});
-		fxclouds = false;
+		menuFX = false;
 	}
 
 	function checkWindowWidth() {
@@ -150,11 +150,11 @@ jQuery(document).ready(function ($) {
 				$searchfield.focus();
 				$('.cd-main-overlay').addClass('is-visible');
 				$maintrigger.fadeOut();
-				fxclouds = true;
+				menuFX = true;
 			} else {
 				$('.cd-main-overlay').removeClass('is-visible');
 				$maintrigger.fadeIn();
-				fxclouds = false;
+				menuFX = false;
 			}
 		}
 	}

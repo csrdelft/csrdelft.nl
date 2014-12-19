@@ -175,7 +175,7 @@
 
 		requestAnimationFrame(animateClouds);
 
-		if (fxclouds) {
+		if (menuFX) {
 
 			position = ((Date.now() - start_time) * 0.03) % 8000;
 
