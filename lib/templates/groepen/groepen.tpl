@@ -22,7 +22,7 @@
 		<div id="groepenFormulier" class="groepFormulier">
 			<div id="bewerkPreview" class="bbcodePreview"></div>
 			<label for="beschrijving"><strong>Beschrijving:</strong></label><br />
-			<textarea id="typeBeschrijving" name="beschrijving" class="CsrBBPreviewField" rows="15" style="width:444px;">{$groepen->getBeschrijving()|escape:'html'}</textarea><br />
+			<textarea id="typeBeschrijving" name="beschrijving" class="CsrBBPreviewField" rows="15">{$groepen->getBeschrijving()|escape:'html'}</textarea><br />
 			<label for="submit"></label><input type="submit" id="submit" value="Opslaan" /> <input type="button" value="Voorbeeld" onclick="return CsrBBPreview('typeBeschrijving', 'bewerkPreview')" /> <a href="/groepen/{$groepen->getNaam()}/" class="btn">Terug</a>
 			<a href="/wiki/cie:diensten:forum" target="_blank">Opmaakhulp</a>
 			<a class="btn float-right vergroot" data-vergroot="#typeBeschrijving" title="Vergroot het invoerveld">&uarr;&darr;</a>
