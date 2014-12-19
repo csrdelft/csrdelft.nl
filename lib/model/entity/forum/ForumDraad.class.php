@@ -167,16 +167,20 @@ class ForumDraad extends PersistentEntity {
 		return ForumDelenModel::instance()->getForumDeel($this->gedeeld_met);
 	}
 
+	public function isGedeeld() {
+		return !empty($this->gedeeld_met);
+	}
+
 	public function magLezen() {
-		return $this->getForumDeel()->magLezen() OR $this->getGedeeldMet()->magLezen();
+		return $this->getForumDeel()->magLezen() OR ( $this->isGedeeld() AND $this->getGedeeldMet()->magLezen() );
 	}
 
 	public function magPosten() {
-		return $this->getForumDeel()->magPosten() OR $this->getGedeeldMet()->magPosten();
+		return $this->getForumDeel()->magPosten() OR ( $this->isGedeeld() AND $this->getGedeeldMet()->magPosten() );
 	}
 
 	public function magModereren() {
-		return $this->getForumDeel()->magModereren() OR $this->getGedeeldMet()->magModereren();
+		return $this->getForumDeel()->magModereren() OR ( $this->isGedeeld() AND $this->getGedeeldMet()->magModereren() );
 	}
 
 	public function magVerbergen() {
