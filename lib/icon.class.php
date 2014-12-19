@@ -84,9 +84,9 @@ class Icon {
 			throw new Exception('Icon (' . $key . ') bestaat niet in ' . ICON_PATH);
 		}
 		if (in_array($key, self::$index)) {
-			return CSR_ROOT . '/plaetjes/famfamfam/' . $key . '.png';
+			return '/plaetjes/famfamfam/' . $key . '.png';
 		} else {
-			return CSR_ROOT . '/plaetjes/famfamfam/' . self::$alias[$key] . '.png';
+			return '/plaetjes/famfamfam/' . self::$alias[$key] . '.png';
 		}
 	}
 

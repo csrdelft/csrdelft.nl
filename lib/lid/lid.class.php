@@ -621,7 +621,7 @@ class Lid implements Serializable, Agendeerbaar {
 	 * Recente forumberichten
 	 */
 	public function getRecenteForumberichten() {
-		return ForumPostsModel::instance()->getRecenteForumPostsVanLid($this->getUid(), 15);
+		return ForumPostsModel::instance()->getRecenteForumPostsVanLid($this->getUid(), (int) LidInstellingen::get('forum', 'draden_per_pagina'));
 	}
 
 	/**
