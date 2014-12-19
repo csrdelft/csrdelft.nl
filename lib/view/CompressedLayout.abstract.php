@@ -165,7 +165,7 @@ abstract class CompressedLayout extends HtmlPage {
 			} elseif ($extension == 'js') {
 
 				if (LidInstellingen::get('layout', 'fx') == 'wolken') {
-					$modules[] = 'menuFX';
+					$modules[] = 'fxclouds';
 				}
 			}
 
