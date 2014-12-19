@@ -1043,7 +1043,7 @@ class ForumPostsModel extends AbstractForumModel implements Paging {
 		$count = count($draden_ids);
 		array_unshift($draden_ids, LoginModel::getUid());
 		ForumDradenGelezenModel::instance()->prefetch('uid = ? AND draad_id IN (' . implode(', ', array_fill(0, $count, '?')) . ')', $draden_ids);
-		return array_reverse($posts);
+		return $posts;
 	}
 
 	public function getForumPost($id) {
