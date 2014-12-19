@@ -48,13 +48,13 @@ section, #spark, #logo {
     height: 80px;
 }
 #welkom {
-    background: url(../img/spark1.jpg) no-repeat;
+    background: url("/plaetjes/layout/dies/2015/spark1.jpg") no-repeat;
 }
 #spark {
-    background: url(../img/spark2.png) no-repeat;
+    background: url("/plaetjes/layout/dies/2015/spark2.png") no-repeat;
 }
 #logo {
-    background: url(../img/logo.png) no-repeat;
+    background: url("/plaetjes/layout/dies/2015/logo.png") no-repeat;
 }
 #afteller {
     background: #333;

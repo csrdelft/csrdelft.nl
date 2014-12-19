@@ -87,10 +87,7 @@ htdocs/dies/2014/programma.html -text
 htdocs/dies/2014/styles.css -text
 htdocs/dies/2014/themafilmpje.html -text
 htdocs/dies/2014/thumbnailviewer.js -text
-htdocs/dies/css/style.css -text
 htdocs/dies/index.html -text
-htdocs/dies/js/app.js -text
-htdocs/dies/js/jquery-2.1.1.min.js -text
 htdocs/groepen/.htaccess -text
 htdocs/groepen/groep.php -text
 htdocs/groepen/groepen.php -text
@@ -106,6 +103,7 @@ htdocs/layout/css/common.less -text
 htdocs/layout/css/common_wiki.less -text
 htdocs/layout/css/csrdelft.dataTables.less -text
 htdocs/layout/css/csrdelft.less -text
+htdocs/layout/css/dies2015.css -text
 htdocs/layout/css/documenten.css -text
 htdocs/layout/css/dropzone.basic.css -text
 htdocs/layout/css/dropzone.css -text
@@ -269,6 +267,7 @@ htdocs/layout/js/datatables/media/images/sort_desc_disabled.png -text
 htdocs/layout/js/datatables/media/js/jquery.dataTables.js -text
 htdocs/layout/js/datatables/media/js/jquery.dataTables.min.js -text
 htdocs/layout/js/datatables/package.json -text
+htdocs/layout/js/dies2015.js -text
 htdocs/layout/js/documenten.js -text
 htdocs/layout/js/dragobject.js -text
 htdocs/layout/js/dropzone.js -text
