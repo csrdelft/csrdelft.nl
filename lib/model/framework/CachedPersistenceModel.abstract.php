@@ -13,6 +13,9 @@ require_once 'model/CsrMemcache.singleton.php';
  * 
  * N.B. modifying objects in the cache affects every reference to it!
  * 
+ * Note: cache on create is not possible due to cache key being based on PK
+ *       and PK may be set after create by child class.
+ * 
  */
 abstract class CachedPersistenceModel extends PersistenceModel {
 

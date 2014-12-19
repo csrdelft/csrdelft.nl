@@ -18,7 +18,7 @@ abstract class ForumView extends SmartyTemplateView {
 class ForumOverzichtView extends ForumView {
 
 	public function __construct() {
-		parent::__construct(ForumModel::instance()->getForumIndeling(), 'Forum');
+		parent::__construct(ForumModel::instance()->getForumIndelingVoorLid(), 'Forum');
 	}
 
 	public function getBreadcrumbs() {
@@ -59,16 +59,12 @@ class ForumZoekenForm extends Formulier {
 
 class ForumRssView extends ForumView {
 
-	private $delen;
-
-	public function __construct(array $draden, array $delen) {
+	public function __construct(array $draden) {
 		parent::__construct($draden);
-		$this->delen = $delen;
 	}
 
 	public function view() {
 		$this->smarty->assign('draden', $this->model);
-		$this->smarty->assign('delen', $this->delen);
 		$this->smarty->assign('privatelink', LoginModel::instance()->getLid()->getRssLink());
 		$this->smarty->display('forum/rss.tpl');
 	}
@@ -88,7 +84,7 @@ class ForumDeelView extends ForumView {
 
 	public function getBreadcrumbs() {
 		$dropdown = parent::getBreadcrumbs() . ' » <select name="forum_id" onchange="document.location.href=this.value;"><option value="/forum/recent">Recent gewijzigd</option>';
-		foreach (ForumModel::instance()->getForumIndeling() as $cat) {
+		foreach (ForumModel::instance()->getForumIndelingVoorLid() as $cat) {
 			$dropdown .= '<optgroup label="' . $cat->titel . '">';
 			foreach ($cat->getForumDelen() as $newDeel) {
 				$dropdown .= '<option value="/forum/deel/' . $newDeel->forum_id . '"';
@@ -123,9 +119,8 @@ class ForumDeelForm extends ModalForm {
 		$this->titel = 'Deelforum beheren';
 		$this->css_classes[] = 'ReloadPage PreventUnchanged';
 
-		$categorien = ForumModel::instance()->prefetch();
 		$lijst = array();
-		foreach ($categorien as $cat) {
+		foreach (ForumModel::instance()->prefetch() as $cat) {
 			$lijst[$cat->categorie_id] = $cat->titel;
 		}
 
@@ -184,7 +179,7 @@ class ForumDraadView extends ForumView {
 		$this->smarty->assign('paging', $this->paging);
 		$this->smarty->assign('post_form_tekst', ForumDradenReagerenModel::instance()->getConcept($this->deel, $this->model->draad_id));
 		$this->smarty->assign('reageren', ForumDradenReagerenModel::instance()->getReagerenVoorDraad($this->model));
-		$this->smarty->assign('categorien', ForumModel::instance()->getForumIndeling());
+		$this->smarty->assign('categorien', ForumModel::instance()->getForumIndelingVoorLid());
 		$this->smarty->assign('gedeeld_met_opties', ForumDelenModel::instance()->getForumDelenOptiesOmTeDelen($this->deel));
 		if ($this->statistiek) {
 			$this->smarty->assign('statistiek', true);
@@ -245,18 +240,15 @@ class ForumDraadZijbalkView extends ForumView {
  */
 class ForumPostZijbalkView extends ForumView {
 
-	private $draden;
-
-	public function __construct(array $posts, array $draden) {
+	public function __construct(array $posts) {
 		parent::__construct($posts);
-		$this->draden = $draden;
 	}
 
 	public function view() {
-		$this->smarty->assign('draden', $this->draden);
 		echo '<div class="zijbalk_forum"><div class="zijbalk-kopje"><a href="/profiel/' . LoginModel::getUid() . '/#forum">Forum (zelf gepost)</a></div>';
 		foreach ($this->model as $post) {
 			$this->smarty->assign('post', $post);
+			$this->smarty->assign('draad', $post->getForumDraad());
 			$this->smarty->display('forum/post_zijbalk.tpl');
 		}
 		echo '</div>';
@@ -297,11 +289,8 @@ class ForumPostDeleteView extends ForumView {
 
 class ForumResultatenView extends ForumView {
 
-	private $delen;
-
-	public function __construct(array $draden, array $delen, $query = null) {
+	public function __construct(array $draden, $query = null) {
 		parent::__construct($draden);
-		$this->delen = $delen;
 		if ($query !== null) {
 			//FIXME: verder zoeken $this->smarty->assign('query', $query);
 			$this->titel = 'Zoekresultaten voor: "' . $query . '"';
@@ -312,7 +301,6 @@ class ForumResultatenView extends ForumView {
 
 	public function view() {
 		$this->smarty->assign('resultaten', $this->model);
-		$this->smarty->assign('delen', $this->delen);
 		$this->smarty->display('forum/resultaten.tpl');
 	}
 

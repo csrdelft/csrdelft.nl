@@ -92,4 +92,8 @@ class ForumPost extends PersistentEntity {
 	 */
 	protected static $table_name = 'forum_posts';
 
+	public function getForumDraad() {
+		return ForumDradenModel::instance()->getForumDraad($this->draad_id);
+	}
+
 }

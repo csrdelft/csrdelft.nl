@@ -171,6 +171,7 @@ class Instellingen extends CachedPersistenceModel {
 		foreach ($this->find() as $instelling) {
 			if (!static::has($instelling->module, $instelling->instelling_id)) {
 				$this->delete($instelling);
+				$this->flushCache(true);
 			}
 		}
 	}

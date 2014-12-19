@@ -16,14 +16,14 @@
 					</th>
 					<th>
 						{if $draad->wacht_goedkeuring}
-							<span title="Nieuw onderwerp in {$delen[$draad->forum_id]->titel}">
-								<small class="niet-dik">[{$delen[$draad->forum_id]->titel}]</small>
+							<span title="Nieuw onderwerp in {$draad->getForumDeel()->titel}">
+								<small class="niet-dik">[{$draad->getForumDeel()->titel}]</small>
 								{$draad->titel}
 								{icon get="new"}
 							</span>
 						{else}
 							<a id="{$draad->draad_id}" href="/forum/onderwerp/{$draad->draad_id}"{if $draad->onGelezen()} class="{LidInstellingen::get('forum', 'ongelezenWeergave')}"{/if}>
-								<small class="niet-dik">[{$delen[$draad->forum_id]->titel}]</small>
+								<small class="niet-dik">[{$draad->getForumDeel()->titel}]</small>
 								{$draad->titel}
 								{if $draad->gesloten}
 									{icon get="slotje" title="Dit onderwerp is gesloten, u kunt niet meer reageren"}
@@ -37,7 +37,7 @@
 			</thead>
 			<tbody>
 				{foreach from=$draad->getForumPosts() item=post}
-					{include file='forum/post_lijst.tpl' deel=$delen[$draad->forum_id]}
+					{include file='forum/post_lijst.tpl' deel=$draad->getForumDeel()}
 					<tr class="tussenschot">
 						<td colspan="2"></td>
 					</tr>

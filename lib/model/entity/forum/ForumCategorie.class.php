@@ -79,7 +79,7 @@ class ForumCategorie extends PersistentEntity {
 	}
 
 	public function hasForumDelen() {
-		return sizeof($this->getForumDelen()) > 0;
+		return !empty($this->getForumDelen());
 	}
 
 	/**
@@ -88,6 +88,8 @@ class ForumCategorie extends PersistentEntity {
 	 * @param array $forum_delen
 	 */
 	public function setForumDelen(array $forum_delen) {
+		debug_backtrace();
+
 		$this->forum_delen = $forum_delen;
 	}
 

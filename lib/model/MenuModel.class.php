@@ -45,7 +45,7 @@ class MenuModel extends CachedPersistenceModel {
 			// niet bestaand menu?
 			$root = $this->newMenuItem(0);
 			$root->tekst = $naam;
-			if ($naam === LoginModel::getUid()) {
+			if ($naam == LoginModel::getUid()) {
 				// maak favorieten menu 
 				$root->link = '/menubeheer/beheer/' . $naam;
 			}
@@ -75,7 +75,7 @@ class MenuModel extends CachedPersistenceModel {
 
 			case 'Forum':
 				require_once 'model/ForumModel.class.php';
-				foreach (ForumModel::instance()->getForumIndeling(true) as $categorie) {
+				foreach (ForumModel::instance()->prefetch() as $categorie) {
 					$item = $this->newMenuItem($parent->item_id);
 					$item->rechten_bekijken = $categorie->rechten_lezen;
 					$item->link = '/forum#' . $categorie->categorie_id;

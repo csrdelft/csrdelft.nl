@@ -124,16 +124,16 @@ class ForumController extends Controller {
 	public function rss() {
 		header('Content-Type: application/rss+xml; charset=UTF-8');
 		header('Content-Disposition: attachment; filename="rss.xml"');
-		$draden_delen = ForumDradenModel::instance()->getRssForumDradenEnDelen();
-		$this->view = new ForumRssView($draden_delen[0], $draden_delen[1]);
+		$draden = ForumDradenModel::instance()->getRecenteForumDraden(null, null, true);
+		$this->view = new ForumRssView($draden);
 	}
 
 	/**
 	 * Tonen van alle posts die wachten op goedkeuring.
 	 */
 	public function wacht() {
-		$draden_delen = ForumDelenModel::instance()->getWachtOpGoedkeuring();
-		$this->view = new ForumResultatenView($draden_delen[0], $draden_delen[1]);
+		$draden = ForumDelenModel::instance()->getWachtOpGoedkeuring();
+		$this->view = new ForumResultatenView($draden);
 	}
 
 	/**
@@ -160,8 +160,8 @@ class ForumController extends Controller {
 			$jaar = 1;
 		}
 		$limit = (int) LidInstellingen::get('forum', 'zoekresultaten');
-		$draden_delen = ForumDelenModel::instance()->zoeken($query, false, $datum, $ouder, $jaar, $limit);
-		$this->view = new ForumResultatenView($draden_delen[0], $draden_delen[1], $query);
+		$draden = ForumDelenModel::instance()->zoeken($query, false, $datum, $ouder, $jaar, $limit);
+		$this->view = new ForumResultatenView($draden, $query);
 	}
 
 	/**
@@ -180,9 +180,8 @@ class ForumController extends Controller {
 			if ($this->hasParam('limit')) {
 				$limit = (int) $this->getParam('limit');
 			}
-			$draden_delen = ForumDelenModel::instance()->zoeken($query, true, $datum, $ouder, $jaar, $limit);
-			foreach ($draden_delen[0] as $draad) {
-				$deel = $draden_delen[1][$draad->forum_id];
+			$draden = ForumDelenModel::instance()->zoeken($query, true, $datum, $ouder, $jaar, $limit);
+			foreach ($draden as $draad) {
 				$url = '/forum/onderwerp/' . $draad->draad_id;
 				if (LidInstellingen::get('forum', 'open_draad_op_pagina') == 'ongelezen') {
 					$url .= '#ongelezen';
@@ -200,7 +199,7 @@ class ForumController extends Controller {
 				}
 				$result[] = array(
 					'url'	 => $url,
-					'value'	 => $icon . $draad->titel . '<span class="lichtgrijs"> - ' . $deel->titel . '</span>'
+					'value'	 => $icon . $draad->titel . '<span class="lichtgrijs"> - ' . $draad->getForumDeel()->titel . '</span>'
 				);
 			}
 		}

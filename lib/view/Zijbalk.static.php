@@ -50,8 +50,8 @@ abstract class Zijbalk {
 		if (LidInstellingen::get('zijbalk', 'forum_zelf') > 0) {
 			require_once 'model/ForumModel.class.php';
 			require_once 'view/ForumView.class.php';
-			$posts_draden = ForumPostsModel::instance()->getRecenteForumPostsVanLid(LoginModel::getUid(), LidInstellingen::get('zijbalk', 'forum_zelf'), true);
-			$zijbalk[] = new ForumPostZijbalkView($posts_draden[0], $posts_draden[1]);
+			//$posts = ForumPostsModel::instance()->getRecenteForumPostsVanLid(LoginModel::getUid(), (int) LidInstellingen::get('zijbalk', 'forum_zelf'), true);
+			$zijbalk[] = new ForumPostZijbalkView(array()); //DEBUG
 		}
 		// Nieuwste fotoalbum
 		if (LidInstellingen::get('zijbalk', 'fotoalbum') == 'ja') {

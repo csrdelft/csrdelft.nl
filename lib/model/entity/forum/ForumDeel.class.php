@@ -110,8 +110,12 @@ class ForumDeel extends PersistentEntity {
 	 */
 	protected static $table_name = 'forum_delen';
 
+	public function getForumCategorie() {
+		return ForumModel::instance()->getForumCategorie($this->categorie_id);
+	}
+
 	public function magLezen($rss = false) {
-		return LoginModel::mag('P_FORUM_READ', $rss) AND LoginModel::mag($this->rechten_lezen, $rss);
+		return LoginModel::mag('P_FORUM_READ', $rss) AND LoginModel::mag($this->rechten_lezen, $rss) AND $this->getForumCategorie()->magLezen();
 	}
 
 	public function magPosten() {
@@ -139,7 +143,7 @@ class ForumDeel extends PersistentEntity {
 	}
 
 	public function hasForumDraden() {
-		return sizeof($this->getForumDraden()) > 0;
+		return !empty($this->getForumDraden());
 	}
 
 	/**
@@ -148,6 +152,8 @@ class ForumDeel extends PersistentEntity {
 	 * @param array $forum_draden
 	 */
 	public function setForumDraden(array $forum_draden) {
+		debug_backtrace();
+
 		$this->forum_draden = $forum_draden;
 	}
 

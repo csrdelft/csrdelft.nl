@@ -25,7 +25,7 @@ class ForumModel extends AbstractForumModel {
 	 */
 	protected $default_order = 'volgorde ASC';
 	/**
-	 * Store categorien array as a whole in memcache
+	 * Store forum categorien array as a whole in memcache
 	 * @var boolean
 	 */
 	protected $memcache_prefetch = true;
@@ -40,17 +40,16 @@ class ForumModel extends AbstractForumModel {
 	 * 
 	 * @return ForumCategorie[]
 	 */
-	public function getForumIndeling($alles = false) {
+	public function getForumIndelingVoorLid() {
 		if (!isset($this->indeling)) {
-			$delen = ForumDelenModel::instance()->getForumDelenPerCategorie($alles);
-			$categorien = $this->prefetch();
+			$delenByCatId = group_by('forum_id', ForumDelenModel::instance()->getForumDelenVoorLid());
 			$this->indeling = array();
-			foreach ($categorien as $cat) {
+			foreach ($this->prefetch() as $cat) {
 				if ($cat->magLezen()) {
 					$this->indeling[] = $cat;
-					if (array_key_exists($cat->categorie_id, $delen)) {
-						$cat->setForumDelen($delen[$cat->categorie_id]);
-						unset($delen[$cat->categorie_id]);
+					if (array_key_exists($cat->categorie_id, $delenByCatId)) {
+						$cat->setForumDelen($delenByCatId[$cat->categorie_id]);
+						unset($delenByCatId[$cat->categorie_id]);
 					} else {
 						$cat->setForumDelen(array());
 					}
@@ -58,6 +57,14 @@ class ForumModel extends AbstractForumModel {
 			}
 		}
 		return $this->indeling;
+	}
+
+	public function getForumCategorie($id) {
+		$cat = $this->retrieveByPrimaryKey(array($id));
+		if (!$cat) {
+			throw new Exception('Forum-categorie bestaat niet!');
+		}
+		return $cat;
 	}
 
 	public function opschonen() {
@@ -116,17 +123,11 @@ class ForumDelenModel extends AbstractForumModel {
 	 * @var string
 	 */
 	protected $default_order = 'volgorde ASC';
-
-	public function getForumDelenPerCategorie($alles = false) {
-		$delen = $this->prefetch();
-		$result = array();
-		foreach ($delen as $deel) {
-			if ($alles OR $deel->magLezen()) {
-				$result[$deel->categorie_id][$deel->forum_id] = $deel;
-			}
-		}
-		return $result;
-	}
+	/**
+	 * Store forum delen array as a whole in memcache
+	 * @var boolean
+	 */
+	protected $memcache_prefetch = true;
 
 	public function getForumDelenVoorCategorie(ForumCategorie $cat) {
 		return $this->prefetch('categorie_id = ?', array($cat->categorie_id));
@@ -158,7 +159,7 @@ class ForumDelenModel extends AbstractForumModel {
 		} else {
 			return array();
 		}
-		return $this->find('rechten_posten != ? AND rechten_posten LIKE ?', array($deel->rechten_posten, $type), $sort)->fetchAll();
+		return $this->prefetch('rechten_posten != ? AND rechten_posten LIKE ?', array($deel->rechten_posten, $type), $sort);
 	}
 
 	public function bestaatForumDeel($id) {
@@ -188,23 +189,16 @@ class ForumDelenModel extends AbstractForumModel {
 		$deel->rechten_modereren = 'P_FORUM_MOD';
 		$deel->volgorde = 0;
 		$deel->forum_id = $this->create($deel);
+		$this->flushCache(true);
 		return $deel;
 	}
 
 	public function verwijderForumDeel($id) {
 		$rowcount = $this->deleteByPrimaryKey(array($id));
+		$this->flushCache(true);
 		if ($rowcount !== 1) {
 			throw new Exception('Deelforum verwijderen mislukt');
 		}
-	}
-
-	public function getForumDelenById(array $ids, $where = '', array $where_params = array()) {
-		$count = count($ids);
-		if ($count < 1) {
-			return array();
-		}
-		$in = implode(', ', array_fill(0, $count, '?'));
-		return group_by_distinct('forum_id', $this->find('forum_id IN (' . $in . ')' . $where, array_merge($ids, $where_params)));
 	}
 
 	public function getRecent($belangrijk = null) {
@@ -222,15 +216,15 @@ class ForumDelenModel extends AbstractForumModel {
 	 * Laadt de posts die wachten op goedkeuring en de draadjes en forumdelen die erbij horen.
 	 * Check modrechten van gebruiker.
 	 * 
-	 * @return array( ForumDraden[], ForumDelen[] )
+	 * @return ForumDraden[]
 	 */
 	public function getWachtOpGoedkeuring() {
-		$gevonden_posts = group_by('draad_id', ForumPostsModel::instance()->find('wacht_goedkeuring = TRUE AND verwijderd = FALSE'));
-		$gevonden_draden = group_by_distinct('draad_id', ForumDradenModel::instance()->find('wacht_goedkeuring = TRUE AND verwijderd = FALSE'));
-		$gevonden_draden += ForumDradenModel::instance()->getForumDradenById(array_keys($gevonden_posts)); // laad draden bij posts
-		foreach ($gevonden_draden as $draad) { // laad posts bij draden
-			if (array_key_exists($draad->draad_id, $gevonden_posts)) { // post is al gevonden
-				$draad->setForumPosts($gevonden_posts[$draad->draad_id]);
+		$postsByDraadId = group_by('draad_id', ForumPostsModel::instance()->find('wacht_goedkeuring = TRUE AND verwijderd = FALSE'));
+		$dradenById = group_by_distinct('draad_id', ForumDradenModel::instance()->find('wacht_goedkeuring = TRUE AND verwijderd = FALSE'));
+		$dradenById += ForumDradenModel::instance()->getForumDradenById(array_keys($postsByDraadId)); // laad draden bij posts
+		foreach ($dradenById as $draad) { // laad posts bij draden
+			if (array_key_exists($draad->draad_id, $postsByDraadId)) { // post is al gevonden
+				$draad->setForumPosts($postsByDraadId[$draad->draad_id]);
 			} else {
 				$melding = 'Draad ' . $draad->draad_id . ' niet goedgekeurd, maar alle posts wel. Automatische actie: ';
 				$draad->wacht_goedkeuring = false;
@@ -245,32 +239,23 @@ class ForumDelenModel extends AbstractForumModel {
 				ForumDradenModel::instance()->update($draad);
 			}
 		}
-		// check permissies op delen
-		$delen_ids = array_keys(group_by_distinct('forum_id', $gevonden_draden, false));
-		$gevonden_delen = group_by_distinct('forum_id', ForumDelenModel::instance()->getForumDelenById($delen_ids));
-		foreach ($gevonden_delen as $forum_id => $deel) {
-			if (!$deel->magModereren()) {
-				foreach ($gevonden_draden as $draad_id => $draad) {
-					if ($draad->forum_id === $deel->forum_id) {
-						unset($gevonden_draden[$draad_id]);
-					}
-				}
-				unset($gevonden_delen[$forum_id]);
+		// check permissies
+		foreach ($dradenById as $draad_id => $draad) {
+			if (!$draad->magModereren()) {
+				unset($dradenById[$draad_id]);
 			}
 		}
-		if (empty($gevonden_delen) OR empty($gevonden_draden)) {
-			if (ForumPostsModel::instance()->getAantalWachtOpGoedkeuring() > 0) {
-				setMelding('U heeft onvoldoende rechten om de berichten goed te keuren', 0);
-			}
+		if (empty($dradenById) AND ForumPostsModel::instance()->getAantalWachtOpGoedkeuring() > 0) {
+			setMelding('U heeft onvoldoende rechten om de berichten goed te keuren', 0);
 		}
-		return array($gevonden_draden, $gevonden_delen);
+		return $dradenById;
 	}
 
 	/**
 	 * Zoek op titel van draadjes en tekst van posts en laad forumdelen die erbij horen.
 	 * Check leesrechten van gebruiker.
 	 * 
-	 * @return array( ForumDraden[], ForumDelen[] )
+	 * @return ForumDraden[]
 	 */
 	public function zoeken($query, $titel, $datum, $ouder, $jaar, $limit) {
 		$gevonden_draden = group_by_distinct('draad_id', ForumDradenModel::instance()->zoeken($query, $datum, $ouder, $jaar, $limit)); // zoek op titel in draden
@@ -292,30 +277,21 @@ class ForumDelenModel extends AbstractForumModel {
 						$draad->score += (float) $post->score;
 					}
 				} else { // laad eerste post
-					$array_first_post = ForumPostsModel::instance()->find('draad_id = ? AND wacht_goedkeuring = FALSE AND verwijderd = FALSE', array($draad->draad_id), 'post_id ASC', null, 1)->fetchAll();
+					$array_first_post = ForumPostsModel::instance()->prefetch('draad_id = ? AND wacht_goedkeuring = FALSE AND verwijderd = FALSE', array($draad->draad_id), 'post_id ASC', null, 1);
 					$draad->setForumPosts($array_first_post);
 				}
 			}
 		}
-		// check permissies op delen
-		$delen_ids = array_keys(group_by_distinct('forum_id', $gevonden_draden, false));
-		$gevonden_delen = group_by_distinct('forum_id', ForumDelenModel::instance()->getForumDelenById($delen_ids));
-		$gedeeld_ids = array_filter(array_keys(group_by_distinct('gedeeld_met', $gevonden_draden, false)));
-		$gedeeld_delen = group_by_distinct('forum_id', ForumDelenModel::instance()->getForumDelenById($gedeeld_ids));
-		foreach ($gevonden_delen as $forum_id => $deel) {
-			foreach ($gevonden_draden as $draad_id => $draad) {
-				// if binnen foreach draad vanwege check op draad gedeeld met
-				if (!$deel->magLezen() AND ! ($draad->gedeeld_met AND $gedeeld_delen[$draad->gedeeld_met]->magLezen())) {
-					if ($draad->forum_id === $deel->forum_id) {
-						unset($gevonden_draden[$draad_id]);
-					}
-				}
+		// check permissies
+		foreach ($gevonden_draden as $draad_id => $draad) {
+			if (!$draad->magLezen()) {
+				unset($gevonden_draden[$draad_id]);
 			}
 		}
 		if ($titel !== true) {
 			usort($gevonden_draden, array($this, 'sorteren'));
 		}
-		return array($gevonden_draden, $gevonden_delen + $gedeeld_delen);
+		return $gevonden_draden;
 	}
 
 	function sorteren($a, $b) {
@@ -358,11 +334,11 @@ class ForumDradenReagerenModel extends AbstractForumModel {
 	}
 
 	public function getReagerenVoorDraad(ForumDraad $draad) {
-		return $this->find('draad_id = ? AND uid != ? AND datum_tijd > ?', array($draad->draad_id, LoginModel::getUid(), getDateTime(strtotime(Instellingen::get('forum', 'reageren_tijd')))));
+		return $this->prefetch('draad_id = ? AND uid != ? AND datum_tijd > ?', array($draad->draad_id, LoginModel::getUid(), getDateTime(strtotime(Instellingen::get('forum', 'reageren_tijd')))));
 	}
 
 	public function getReagerenVoorDeel(ForumDeel $deel) {
-		return $this->find('forum_id = ? AND draad_id = 0 AND uid != ? AND datum_tijd > ?', array($deel->forum_id, LoginModel::getUid(), getDateTime(strtotime(Instellingen::get('forum', 'reageren_tijd')))));
+		return $this->prefetch('forum_id = ? AND draad_id = 0 AND uid != ? AND datum_tijd > ?', array($deel->forum_id, LoginModel::getUid(), getDateTime(strtotime(Instellingen::get('forum', 'reageren_tijd')))));
 	}
 
 	public function verwijderLegeConcepten() {
@@ -497,7 +473,7 @@ class ForumDradenGelezenModel extends AbstractForumModel {
 	}
 
 	public function getLezersVanDraad(ForumDraad $draad) {
-		return $this->find('draad_id = ?', array($draad->draad_id))->fetchAll();
+		return $this->prefetch('draad_id = ?', array($draad->draad_id));
 	}
 
 	public function verwijderDraadGelezen(ForumDraad $draad) {
@@ -578,7 +554,7 @@ class ForumDradenVolgenModel extends AbstractForumModel {
 	}
 
 	public function getVolgersVanDraad(ForumDraad $draad) {
-		return $this->find('draad_id = ?', array($draad->draad_id))->fetchAll(PDO::FETCH_COLUMN, 1);
+		return $this->prefetch('draad_id = ?', array($draad->draad_id))->fetchAll(PDO::FETCH_COLUMN, 1);
 	}
 
 	public function getVolgenVoorLid(ForumDraad $draad) {
@@ -744,15 +720,15 @@ class ForumDradenModel extends AbstractForumModel implements Paging {
 	}
 
 	public function getPrullenbakVoorDeel(ForumDeel $deel) {
-		return $this->find('forum_id = ? AND verwijderd = TRUE', array($deel->forum_id), 'wacht_goedkeuring DESC, laatst_gewijzigd DESC')->fetchAll();
+		return $this->prefetch('forum_id = ? AND verwijderd = TRUE', array($deel->forum_id), 'wacht_goedkeuring DESC, laatst_gewijzigd DESC');
 	}
 
 	public function getBelangrijkeForumDradenVoorDeel(ForumDeel $deel) {
-		return $this->find('forum_id = ? AND wacht_goedkeuring = FALSE AND verwijderd = FALSE AND belangrijk = TRUE', array($deel->forum_id), 'plakkerig DESC, laatst_gewijzigd DESC')->fetchAll();
+		return $this->prefetch('forum_id = ? AND wacht_goedkeuring = FALSE AND verwijderd = FALSE AND belangrijk = TRUE', array($deel->forum_id), 'plakkerig DESC, laatst_gewijzigd DESC');
 	}
 
 	public function getForumDradenVoorDeel(ForumDeel $deel) {
-		return $this->find('(forum_id = ? OR gedeeld_met = ?) AND wacht_goedkeuring = FALSE AND verwijderd = FALSE', array($deel->forum_id, $deel->forum_id), 'plakkerig DESC, laatst_gewijzigd DESC', null, $this->per_pagina, ($this->pagina - 1) * $this->per_pagina)->fetchAll();
+		return $this->prefetch('(forum_id = ? OR gedeeld_met = ?) AND wacht_goedkeuring = FALSE AND verwijderd = FALSE', array($deel->forum_id, $deel->forum_id), 'plakkerig DESC, laatst_gewijzigd DESC', null, $this->per_pagina, ($this->pagina - 1) * $this->per_pagina);
 	}
 
 	/**
@@ -764,7 +740,7 @@ class ForumDradenModel extends AbstractForumModel implements Paging {
 	 * @param int $aantal
 	 * @param boolean $belangrijk
 	 * @param boolean $rss
-	 * @return ForumDraad[] of voor rss: array( ForumDraad[], ForumDeel[] )
+	 * @return ForumDraad[]
 	 */
 	public function getRecenteForumDraden($aantal, $belangrijk, $rss = false) {
 		if (!is_int($aantal)) {
@@ -776,9 +752,6 @@ class ForumDradenModel extends AbstractForumModel implements Paging {
 		$delen = ForumDelenModel::instance()->getForumDelenVoorLid($rss);
 		$count = count($delen);
 		if ($count < 1) {
-			if ($rss) {
-				return array(array(), array());
-			}
 			return array();
 		}
 		$forum_ids_stub = implode(', ', array_fill(0, $count, '?'));
@@ -799,19 +772,12 @@ class ForumDradenModel extends AbstractForumModel implements Paging {
 		} else {
 			$belangrijk = '';
 		}
-		$draden = group_by_distinct('draad_id', $this->find('(forum_id IN (' . $forum_ids_stub . ') OR gedeeld_met IN (' . $forum_ids_stub . '))' . $verborgen . ' AND wacht_goedkeuring = FALSE AND verwijderd = FALSE' . $belangrijk, $params, 'laatst_gewijzigd DESC', null, $aantal, ($pagina - 1) * $aantal));
-		if ($rss) {
-			return array($draden, $delen);
-		}
-		$count = count($draden);
-		$draden_ids = array_keys($draden);
+		$dradenById = group_by_distinct('draad_id', $this->find('(forum_id IN (' . $forum_ids_stub . ') OR gedeeld_met IN (' . $forum_ids_stub . '))' . $verborgen . ' AND wacht_goedkeuring = FALSE AND verwijderd = FALSE' . $belangrijk, $params, 'laatst_gewijzigd DESC', null, $aantal, ($pagina - 1) * $aantal));
+		$count = count($dradenById);
+		$draden_ids = array_keys($dradenById);
 		array_unshift($draden_ids, LoginModel::getUid());
 		ForumDradenGelezenModel::instance()->prefetch('uid = ? AND draad_id IN (' . implode(', ', array_fill(0, $count, '?')) . ')', $draden_ids);
-		return $draden;
-	}
-
-	public function getRssForumDradenEnDelen() {
-		return $this->getRecenteForumDraden(null, null, true);
+		return $dradenById;
 	}
 
 	public function getForumDraad($id) {
@@ -1020,7 +986,7 @@ class ForumPostsModel extends AbstractForumModel implements Paging {
 	}
 
 	public function getPrullenbakVoorDraad(ForumDraad $draad) {
-		return $this->find('draad_id = ? AND verwijderd = TRUE', array($draad->draad_id), 'post_id ASC')->fetchAll();
+		return $this->prefetch('draad_id = ? AND verwijderd = TRUE', array($draad->draad_id), 'post_id ASC');
 	}
 
 	public function getForumPostsVoorDraad(ForumDraad $draad) {
@@ -1029,7 +995,7 @@ class ForumPostsModel extends AbstractForumModel implements Paging {
 		} else {
 			$goedkeuring = ' AND wacht_goedkeuring = FALSE';
 		}
-		$posts = $this->find('draad_id = ?' . $goedkeuring . ' AND verwijderd = FALSE', array($draad->draad_id), 'post_id ASC', null, $this->per_pagina, ($this->pagina - 1) * $this->per_pagina)->fetchAll();
+		$posts = $this->prefetch('draad_id = ?' . $goedkeuring . ' AND verwijderd = FALSE', array($draad->draad_id), 'post_id ASC', null, $this->per_pagina, ($this->pagina - 1) * $this->per_pagina);
 		if ($draad->eerste_post_plakkerig AND $this->pagina !== 1) {
 			$first_post = $this->find('draad_id = ? AND wacht_goedkeuring = FALSE AND verwijderd = FALSE', array($draad->draad_id), 'post_id ASC', null, 1)->fetch();
 			array_unshift($posts, $first_post);
@@ -1052,7 +1018,7 @@ class ForumPostsModel extends AbstractForumModel implements Paging {
 	 * @param string $uid
 	 * @param int $aantal
 	 * @param int $draad_uniek
-	 * @return array( ForumPost[], ForumDraad[] )
+	 * @return ForumPost[]
 	 */
 	public function getRecenteForumPostsVanLid($uid, $aantal, $draad_uniek = false) {
 		$where = 'uid = ? AND wacht_goedkeuring = FALSE AND verwijderd = FALSE';
@@ -1064,32 +1030,18 @@ class ForumPostsModel extends AbstractForumModel implements Paging {
 	AND ' . $where . '
 )';
 		}
-		$posts = $this->find($where, array($uid), 'post_id DESC', null, $aantal)->fetchAll();
-		$draden_ids = array_keys(group_by_distinct('draad_id', $posts, false));
-		$draden = ForumDradenModel::instance()->getForumDradenById($draden_ids);
-		$delen_ids = array_keys(group_by_distinct('forum_id', $draden, false));
-		$delen = ForumDelenModel::instance()->getForumDelenById($delen_ids);
-		$gedeeld_ids = array_filter(array_keys(group_by_distinct('gedeeld_met', $draden, false)));
-		$gedeeld_delen = group_by_distinct('forum_id', ForumDelenModel::instance()->getForumDelenById($gedeeld_ids));
-		foreach ($delen as $forum_id => $deel) {
-			foreach ($draden as $draad_id => $draad) {
-				// if binnen foreach draad vanwege check op draad gedeeld met
-				if (!$deel->magLezen() AND ! ($draad->gedeeld_met AND $gedeeld_delen[$draad->gedeeld_met]->magLezen())) {
-					if ($draad->forum_id === $forum_id) {
-						foreach ($posts as $i => $post) {
-							if ($post->draad_id === $draad_id) {
-								unset($posts[$i]);
-							}
-						}
-						unset($draden[$draad_id]);
-					}
-				}
+		$posts = array();
+		$draden_ids = array();
+		foreach ($this->find($where, array($uid), null, null, $aantal) as $post) {
+			if ($post->getForumDraad()->magLezen()) {
+				$posts[] = $post;
+				$draden_ids[] = $post->draad_id;
 			}
 		}
 		$count = count($draden_ids);
 		array_unshift($draden_ids, LoginModel::getUid());
 		ForumDradenGelezenModel::instance()->prefetch('uid = ? AND draad_id IN (' . implode(', ', array_fill(0, $count, '?')) . ')', $draden_ids);
-		return array($posts, $draden);
+		return $posts;
 	}
 
 	public function getForumPost($id) {
@@ -1098,15 +1050,6 @@ class ForumPostsModel extends AbstractForumModel implements Paging {
 			throw new Exception('Forum-reactie bestaat niet!');
 		}
 		return $post;
-	}
-
-	public function getForumPostsById(array $ids, $where = '', array $where_params = array()) {
-		$count = count($ids);
-		if ($count < 1) {
-			return array();
-		}
-		$in = implode(', ', array_fill(0, $count, '?'));
-		return group_by_distinct('post_id', $this->find('post_id IN (' . $in . ')' . $where, array_merge($ids, $where_params)));
 	}
 
 	public function maakForumPost($draad_id, $tekst, $ip, $wacht_goedkeuring, $email) {

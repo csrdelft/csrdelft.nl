@@ -159,6 +159,26 @@ class ForumDraad extends PersistentEntity {
 	 */
 	protected static $table_name = 'forum_draden';
 
+	public function getForumDeel() {
+		return ForumDelenModel::instance()->getForumDeel($this->forum_id);
+	}
+
+	public function getGedeeldMet() {
+		return ForumDelenModel::instance()->getForumDeel($this->gedeeld_met);
+	}
+
+	public function magLezen() {
+		return $this->getForumDeel()->magLezen() OR $this->getGedeeldMet()->magLezen();
+	}
+
+	public function magPosten() {
+		return $this->getForumDeel()->magPosten() OR $this->getGedeeldMet()->magPosten();
+	}
+
+	public function magModereren() {
+		return $this->getForumDeel()->magModereren() OR $this->getGedeeldMet()->magModereren();
+	}
+
 	public function magVerbergen() {
 		return !$this->belangrijk AND LoginModel::mag('P_LOGGED_IN');
 	}
@@ -234,7 +254,7 @@ class ForumDraad extends PersistentEntity {
 	}
 
 	public function hasForumPosts() {
-		return sizeof($this->getForumPosts()) > 0;
+		return !empty($this->getForumPosts());
 	}
 
 	/**
@@ -243,6 +263,8 @@ class ForumDraad extends PersistentEntity {
 	 * @param array $forum_posts
 	 */
 	public function setForumPosts(array $forum_posts) {
+		debug_backtrace();
+
 		$this->forum_posts = $forum_posts;
 	}
 

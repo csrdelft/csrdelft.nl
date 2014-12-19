@@ -153,7 +153,7 @@ abstract class PersistenceModel implements Persistence {
 	/**
 	 * Load saved enitity data and replace entity object.
 	 * 
-	 * WARNING: returns new object!
+	 * @WARNING: returns new object!
 	 * @see retrieveAttributes
 	 * 
 	 * Todo: something clever with references
