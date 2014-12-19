@@ -185,6 +185,19 @@ abstract class CachedPersistenceModel extends PersistenceModel {
 	}
 
 	/**
+	 * Save new entity.
+	 * 
+	 * @param PersistentEntity $entity
+	 * @return string last insert id
+	 */
+	public function create(PersistentEntity $entity) {
+		if ($this->memcache_prefetch) {
+			$this->flushCache(true);
+		}
+		return parent::create($entity);
+	}
+
+	/**
 	 * Load and cache saved entity data and create new object.
 	 * 
 	 * @param array $primary_key_values
@@ -209,8 +222,26 @@ abstract class CachedPersistenceModel extends PersistenceModel {
 	 * @return boolean rows affected
 	 */
 	protected function deleteByPrimaryKey(array $primary_key_values) {
-		$this->unsetCache($this->cacheKey($primary_key_values), true);
+		if ($this->memcache_prefetch) {
+			$this->flushCache(true);
+		} else {
+			$this->unsetCache($this->cacheKey($primary_key_values), true);
+		}
 		return parent::deleteByPrimaryKey($primary_key_values);
+	}
+
+	/**
+	 * Save existing entity.
+	 * Sparse attributes that have not been retrieved are excluded.
+	 *
+	 * @param PersistentEntity $entity
+	 * @return int rows affected
+	 */
+	public function update(PersistentEntity $entity) {
+		if ($this->memcache_prefetch) {
+			$this->flushCache(true);
+		}
+		return parent::update($entity);
 	}
 
 }

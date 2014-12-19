@@ -155,7 +155,6 @@ class Instellingen extends CachedPersistenceModel {
 		$instelling->instelling_id = $id;
 		$instelling->waarde = $this->getDefault($module, $id);
 		$this->create($instelling);
-		$this->flushCache(true);
 		return $instelling;
 	}
 
@@ -163,7 +162,6 @@ class Instellingen extends CachedPersistenceModel {
 		$instelling = $this->getInstelling($module, $id);
 		$instelling->waarde = $waarde;
 		$this->update($instelling);
-		$this->flushCache(true);
 		return $instelling;
 	}
 
@@ -171,7 +169,6 @@ class Instellingen extends CachedPersistenceModel {
 		foreach ($this->find() as $instelling) {
 			if (!static::has($instelling->module, $instelling->instelling_id)) {
 				$this->delete($instelling);
-				$this->flushCache(true);
 			}
 		}
 	}

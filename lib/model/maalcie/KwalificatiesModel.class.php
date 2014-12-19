@@ -58,8 +58,8 @@ class KwalificatiesModel extends CachedPersistenceModel {
 	}
 
 	public function kwalificatieTerugtrekken($uid, $fid) {
-		$rowcount = $this->deleteByPrimaryKey(array($uid, $fid));
-		if ($rowcount !== 1) {
+		$rowCount = $this->deleteByPrimaryKey(array($uid, $fid));
+		if ($rowCount !== 1) {
 			throw new Exception('Is niet gekwalificeerd!');
 		}
 	}

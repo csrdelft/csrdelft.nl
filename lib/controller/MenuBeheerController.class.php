@@ -82,8 +82,8 @@ class MenuBeheerController extends AclController {
 		}
 		$this->view = new MenuItemForm($item, $this->action, $item->item_id); // fetches POST values itself
 		if ($this->view->validate()) { // form checks if hidden fields are modified
-			$rowcount = $this->model->update($item);
-			if ($rowcount > 0) {
+			$rowCount = $this->model->update($item);
+			if ($rowCount > 0) {
 				setMelding($item->tekst . ' bijgewerkt', 1);
 			} else {
 				setMelding($item->tekst . ' ongewijzigd', -1);
@@ -97,10 +97,10 @@ class MenuBeheerController extends AclController {
 		if (!$item OR ! $item->magBeheren()) {
 			$this->geentoegang();
 		}
-		$rowcount = $this->model->removeMenuItem($item);
+		$rowCount = $this->model->removeMenuItem($item);
 		setMelding($item->tekst . ' verwijderd', 1);
-		if ($rowcount > 0) {
-			setMelding($rowcount . ' menu-items niveau omhoog verplaatst.', 2);
+		if ($rowCount > 0) {
+			setMelding($rowCount . ' menu-items niveau omhoog verplaatst.', 2);
 		}
 		$this->view = new JsonResponse(true);
 	}
@@ -111,8 +111,8 @@ class MenuBeheerController extends AclController {
 			$this->geentoegang();
 		}
 		$item->zichtbaar = !$item->zichtbaar;
-		$rowcount = $this->model->update($item);
-		if ($rowcount > 0) {
+		$rowCount = $this->model->update($item);
+		if ($rowCount > 0) {
 			setMelding($item->tekst . ($item->zichtbaar ? ' ' : ' on') . 'zichtbaar gemaakt', 1);
 		} else {
 			setMelding($item->tekst . ' ongewijzigd', -1);

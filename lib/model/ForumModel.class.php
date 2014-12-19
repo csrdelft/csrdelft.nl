@@ -188,14 +188,12 @@ class ForumDelenModel extends AbstractForumModel {
 		$deel->rechten_modereren = 'P_FORUM_MOD';
 		$deel->volgorde = 0;
 		$deel->forum_id = $this->create($deel);
-		$this->flushCache(true);
 		return $deel;
 	}
 
 	public function verwijderForumDeel($id) {
-		$rowcount = $this->deleteByPrimaryKey(array($id));
-		$this->flushCache(true);
-		if ($rowcount !== 1) {
+		$rowCount = $this->deleteByPrimaryKey(array($id));
+		if ($rowCount !== 1) {
 			throw new Exception('Deelforum verwijderen mislukt');
 		}
 	}
@@ -517,8 +515,8 @@ class ForumDradenVerbergenModel extends AbstractForumModel {
 			}
 		} else {
 			if ($verborgen) {
-				$rowcount = $this->deleteByPrimaryKey(array($draad->draad_id, LoginModel::getUid()));
-				if ($rowcount !== 1) {
+				$rowCount = $this->deleteByPrimaryKey(array($draad->draad_id, LoginModel::getUid()));
+				if ($rowCount !== 1) {
 					throw new Exception('Weer tonen mislukt');
 				}
 			}
@@ -571,8 +569,8 @@ class ForumDradenVolgenModel extends AbstractForumModel {
 			}
 		} else {
 			if ($gevolgd) {
-				$rowcount = $this->deleteByPrimaryKey(array($draad->draad_id, LoginModel::getUid()));
-				if ($rowcount !== 1) {
+				$rowCount = $this->deleteByPrimaryKey(array($draad->draad_id, LoginModel::getUid()));
+				if ($rowCount !== 1) {
 					throw new Exception('Volgen stoppen mislukt');
 				}
 			}
@@ -828,8 +826,8 @@ class ForumDradenModel extends AbstractForumModel implements Paging {
 			throw new Exception('Property undefined: ' . $property);
 		}
 		$draad->$property = $value;
-		$rowcount = $this->update($draad);
-		if ($rowcount !== 1) {
+		$rowCount = $this->update($draad);
+		if ($rowCount !== 1) {
 			throw new Exception('Wijzigen van ' . $property . ' mislukt');
 		}
 		if ($property === 'belangrijk') {
@@ -1073,8 +1071,8 @@ class ForumPostsModel extends AbstractForumModel implements Paging {
 
 	public function verwijderForumPost(ForumPost $post, ForumDraad $draad, ForumDeel $deel) {
 		$post->verwijderd = !$post->verwijderd;
-		$rowcount = $this->update($post);
-		if ($rowcount !== 1) {
+		$rowCount = $this->update($post);
+		if ($rowCount !== 1) {
 			throw new Exception('Verwijderen mislukt');
 		}
 		$this->hertellenVoorDraadEnDeel($draad, $deel);
@@ -1094,23 +1092,23 @@ class ForumPostsModel extends AbstractForumModel implements Paging {
 		}
 		$bewerkt .= "\n";
 		$post->bewerkt_tekst .= $bewerkt;
-		$rowcount = $this->update($post);
-		if ($rowcount !== 1) {
+		$rowCount = $this->update($post);
+		if ($rowCount !== 1) {
 			throw new Exception('Bewerken mislukt');
 		}
 		if ($verschil > 3) {
 			$draad->laatst_gewijzigd = $post->laatst_gewijzigd;
 			$draad->laatste_post_id = $post->post_id;
 			$draad->laatste_wijziging_uid = $post->uid;
-			$rowcount = ForumDradenModel::instance()->update($draad);
-			if ($rowcount !== 1) {
+			$rowCount = ForumDradenModel::instance()->update($draad);
+			if ($rowCount !== 1) {
 				throw new Exception('Bewerken mislukt');
 			}
 			$deel->laatst_gewijzigd = $post->laatst_gewijzigd;
 			$deel->laatste_post_id = $post->post_id;
 			$deel->laatste_wijziging_uid = $post->uid;
-			$rowcount = ForumDelenModel::instance()->update($deel);
-			if ($rowcount !== 1) {
+			$rowCount = ForumDelenModel::instance()->update($deel);
+			if ($rowCount !== 1) {
 				throw new Exception('Bewerken mislukt');
 			}
 		}
@@ -1120,8 +1118,8 @@ class ForumPostsModel extends AbstractForumModel implements Paging {
 		$post->draad_id = $nieuwDraad->draad_id;
 		$post->laatst_gewijzigd = getDateTime();
 		$post->bewerkt_tekst .= 'verplaatst door [lid=' . LoginModel::getUid() . '] [reldate]' . $post->laatst_gewijzigd . '[/reldate]' . "\n";
-		$rowcount = $this->update($post);
-		if ($rowcount !== 1) {
+		$rowCount = $this->update($post);
+		if ($rowCount !== 1) {
 			throw new Exception('Verplaatsen mislukt');
 		}
 	}
@@ -1130,8 +1128,8 @@ class ForumPostsModel extends AbstractForumModel implements Paging {
 		$post->tekst = '[offtopic]' . $post->tekst . '[/offtopic]';
 		$post->laatst_gewijzigd = getDateTime();
 		$post->bewerkt_tekst .= 'offtopic door [lid=' . LoginModel::getUid() . '] [reldate]' . $post->laatst_gewijzigd . '[/reldate]' . "\n";
-		$rowcount = $this->update($post);
-		if ($rowcount !== 1) {
+		$rowCount = $this->update($post);
+		if ($rowCount !== 1) {
 			throw new Exception('Offtopic mislukt');
 		}
 	}
@@ -1141,8 +1139,8 @@ class ForumPostsModel extends AbstractForumModel implements Paging {
 			$post->wacht_goedkeuring = false;
 			$post->laatst_gewijzigd = getDateTime();
 			$post->bewerkt_tekst .= '[prive=P_FORUM_MOD]Goedgekeurd door [lid=' . LoginModel::getUid() . '] [reldate]' . $post->laatst_gewijzigd . '[/reldate][/prive]' . "\n";
-			$rowcount = $this->update($post);
-			if ($rowcount !== 1) {
+			$rowCount = $this->update($post);
+			if ($rowCount !== 1) {
 				throw new Exception('Goedkeuren mislukt');
 			}
 		}
@@ -1154,16 +1152,16 @@ class ForumPostsModel extends AbstractForumModel implements Paging {
 			$draad->wacht_goedkeuring = false;
 			$deel->aantal_draden++;
 		}
-		$rowcount = ForumDradenModel::instance()->update($draad);
-		if ($rowcount !== 1) {
+		$rowCount = ForumDradenModel::instance()->update($draad);
+		if ($rowCount !== 1) {
 			throw new Exception('Goedkeuren mislukt');
 		}
 		$deel->aantal_posts++;
 		$deel->laatst_gewijzigd = $post->laatst_gewijzigd;
 		$deel->laatste_post_id = $post->post_id;
 		$deel->laatste_wijziging_uid = $post->uid;
-		$rowcount = ForumDelenModel::instance()->update($deel);
-		if ($rowcount !== 1) {
+		$rowCount = ForumDelenModel::instance()->update($deel);
+		if ($rowCount !== 1) {
 			throw new Exception('Goedkeuren mislukt');
 		}
 	}

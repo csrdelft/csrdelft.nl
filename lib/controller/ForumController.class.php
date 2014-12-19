@@ -339,8 +339,8 @@ class ForumController extends Controller {
 		$deel = ForumDelenModel::instance()->getForumDeel((int) $forum_id);
 		$this->view = new ForumDeelForm($deel); // fetches POST values itself
 		if ($this->view->validate()) {
-			$rowcount = ForumDelenModel::instance()->update($deel);
-			if ($rowcount !== 1) {
+			$rowCount = ForumDelenModel::instance()->update($deel);
+			if ($rowCount !== 1) {
 				throw new Exception('Forum beheren mislukt!');
 			}
 			$this->view = new JsonResponse(true);

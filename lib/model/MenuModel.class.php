@@ -204,13 +204,6 @@ class MenuModel extends CachedPersistenceModel {
 
 	public function create(PersistentEntity $entity) {
 		$entity->item_id = (int) parent::create($entity);
-		$this->flushCache(true);
-	}
-
-	public function update(PersistentEntity $entity) {
-		$rowcount = parent::update($entity);
-		$this->flushCache(true);
-		return $rowcount;
 	}
 
 	public function removeMenuItem(MenuItem $item) {
@@ -220,11 +213,10 @@ class MenuModel extends CachedPersistenceModel {
 			// give new parent to otherwise future orphans
 			$update = array('parent_id' => $item->parent_id);
 			$where = 'parent_id = :oldid';
-			$rowcount = Database::sqlUpdate($this->orm->getTableName(), $update, $where, array(':oldid' => $item->item_id));
+			$rowCount = Database::sqlUpdate($this->orm->getTableName(), $update, $where, array(':oldid' => $item->item_id));
 			$this->delete($item);
 			$db->commit();
-			$this->flushCache(true);
-			return $rowcount;
+			return $rowCount;
 		} catch (Exception $e) {
 			$db->rollback();
 			throw $e; // rethrow to controller

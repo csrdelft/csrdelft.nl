@@ -125,8 +125,8 @@ class AgendaController extends AclController {
 		}
 		$this->view = new AgendaItemForm($item, $this->action); // fetches POST values itself
 		if ($this->view->validate()) {
-			$rowcount = $this->model->update($item);
-			if ($rowcount > 0) {
+			$rowCount = $this->model->update($item);
+			if ($rowCount > 0) {
 				//setMelding('Bijgewerkt', 1);
 			} else {
 				//setMelding('Geen wijzigingen', 0);

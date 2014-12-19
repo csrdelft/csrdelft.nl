@@ -64,8 +64,8 @@ class BeheerFunctiesController extends AclController {
 		$functie = $this->model->getFunctie((int) $fid);
 		$this->view = new FunctieForm($functie, $this->action); // fetches POST values itself
 		if ($this->view->validate()) {
-			$rowcount = $this->model->update($functie);
-			if ($rowcount > 0) {
+			$rowCount = $this->model->update($functie);
+			if ($rowCount > 0) {
 				setMelding('Bijgewerkt', 1);
 			} else {
 				setMelding('Geen wijzigingen', 0);

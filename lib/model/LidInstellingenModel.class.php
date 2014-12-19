@@ -117,7 +117,6 @@ class LidInstellingen extends Instellingen {
 		$instelling->waarde = $this->getDefault($module, $id);
 		$instelling->uid = LoginModel::getUid();
 		$this->create($instelling);
-		$this->flushCache(true);
 		return $instelling;
 	}
 
