@@ -140,6 +140,7 @@ switch (constant('MODE')) {
 		Instellingen::instance()->prefetch();
 		LidInstellingen::instance()->prefetch('uid = ?', array(LoginModel::getUid()));
 		VerticalenModel::instance()->prefetch();
+		ForumModel::instance()->prefetch();
 
 		# database modus meldingen
 		if (DB_MODIFY OR DB_DROP) {
