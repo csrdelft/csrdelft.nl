@@ -34,7 +34,7 @@ class CsrLayout3Page extends CompressedLayout {
 		$smarty->assign('titel', $this->getTitel());
 		$smarty->assign('body', $this->getBody());
 
-		$smarty->display('csrdelft3/happie.tpl');
+		$smarty->display('layout3/happie.tpl');
 	}
 
 }

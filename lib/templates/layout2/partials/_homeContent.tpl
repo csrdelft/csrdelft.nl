@@ -70,7 +70,7 @@
 						<h2 class="overlay">(Oud)leden</h2>
 						<img src="/plaetjes/layout2/box-icon-oudleden.png" alt="(Oud)leden">
 					</div>
-					<div class="blue back login-form">{include file='csrdelft2/partials/_loginForm.tpl'}</div>
+					<div class="blue back login-form">{include file='layout2/partials/_loginForm.tpl'}</div>
 				</div>
 
 			</div>
@@ -139,4 +139,4 @@
 	</div>
 	<div class="push"></div>
 </div>
-<div class="rommel">{include file='csrdelft2/partials/_advertenties.tpl'}</div>
+<div class="rommel">{include file='layout2/partials/_advertenties.tpl'}</div>

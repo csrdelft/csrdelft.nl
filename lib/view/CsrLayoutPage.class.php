@@ -85,9 +85,9 @@ class CsrLayoutPage extends CompressedLayout {
 
 		if (LoginModel::instance()->isPauper()) {
 			$smarty->assign('loginform', new LoginForm());
-			$smarty->display('csrdelft/pauper.tpl');
+			$smarty->display('layout/pauper.tpl');
 		} else {
-			$smarty->display('csrdelft/pagina.tpl');
+			$smarty->display('layout/pagina.tpl');
 		}
 	}
 
