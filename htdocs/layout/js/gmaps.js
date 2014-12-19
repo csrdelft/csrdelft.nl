@@ -34,14 +34,14 @@ function writeStaticGmap(div_id, address,width,height) {
 				div.innerHTML=address + " niet gevonden";
 			} else {
 				var coordinates = adr_latlng.lat()+','+adr_latlng.lng(); 
-				var imgtag = '<img src="http://maps.google.com/staticmap?\
+				var imgtag = '<img src="https://maps.google.com/staticmap?\
 					size='+width+'x'+height+'&\
 					maptype=roadmap&\
 					markers='+coordinates+',red&\
 					key=ABQIAAAATQu5ACWkfGjbh95oIqCLYxRY812Ew6qILNIUSbDumxwZYKk2hBShiPLD96Ep_T-MwdtX--5T5PYf1A&\
 					sensor=false\
 					"></img>';
-				div.innerHTML='<a href="http://maps.google.nl/maps?q='+address+'">'+imgtag+'</a>';
+				div.innerHTML='<a href="https://maps.google.nl/maps?q='+address+'">'+imgtag+'</a>';
 			}	    
 		}
 	);		
