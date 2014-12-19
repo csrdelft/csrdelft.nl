@@ -97,7 +97,7 @@ JS;
 				$class = '';
 			}
 			$style = $showButtons ? 'cursor:pointer;padding:7px;' : 'display:none;';
-			$icon = CSR_ROOT . '/plaetjes/knopjes/min.png';
+			$icon = '/plaetjes/knopjes/min.png';
 			$html .= <<<HTML
 <span id="substract_{$this->getId()}" {$class} style="{$style}"><img src="{$icon}" alt="-" class="icon" width="20" height="20" /></span>
 HTML;
@@ -142,7 +142,7 @@ JS;
 			} else {
 				$class = '';
 			}
-			$icon = CSR_ROOT . '/plaetjes/knopjes/plus.png';
+			$icon = '/plaetjes/knopjes/plus.png';
 			$html .= <<<HTML
 <span id="add_{$this->getId()}" {$class} style="{$style}"><img src="{$icon}" alt="+" class="icon" width="20" height="20" /></span>
 HTML;
