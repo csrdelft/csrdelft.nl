@@ -777,7 +777,7 @@ class ForumDradenModel extends AbstractForumModel implements Paging {
 		} else {
 			$belangrijk = '';
 		}
-		$dradenById = group_by_distinct('draad_id', $this->find('(forum_id IN (' . $forum_ids_stub . ') OR gedeeld_met IN (' . $forum_ids_stub . '))' . $verborgen . ' AND wacht_goedkeuring = FALSE AND verwijderd = FALSE' . $belangrijk, $params, null, null, $aantal, ($pagina - 1) * $aantal));
+		$dradenById = group_by_distinct('draad_id', $this->find('(forum_id IN (' . $forum_ids_stub . ') OR gedeeld_met IN (' . $forum_ids_stub . '))' . $verborgen . ' AND wacht_goedkeuring = FALSE AND verwijderd = FALSE' . $belangrijk, $params, null, 'laatst_gewijzigd DESC', $aantal, ($pagina - 1) * $aantal));
 		$count = count($dradenById);
 		$draden_ids = array_keys($dradenById);
 		array_unshift($draden_ids, LoginModel::getUid());
