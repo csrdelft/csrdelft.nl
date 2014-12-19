@@ -103,6 +103,7 @@ htdocs/layout/css/common.less -text
 htdocs/layout/css/common_wiki.less -text
 htdocs/layout/css/csrdelft.dataTables.less -text
 htdocs/layout/css/csrdelft.less -text
+htdocs/layout/css/dies.css -text
 htdocs/layout/css/dies2015.css -text
 htdocs/layout/css/documenten.css -text
 htdocs/layout/css/dropzone.basic.css -text
@@ -123,7 +124,6 @@ htdocs/layout/css/jgallery.min.css -text
 htdocs/layout/css/knoppen.less -text
 htdocs/layout/css/ledenlijst.css -text
 htdocs/layout/css/ledenmemory.css -text
-htdocs/layout/css/lustrum.css -text
 htdocs/layout/css/maalcie.css -text
 htdocs/layout/css/maaltijdlijst.css -text
 htdocs/layout/css/main-menu.css -text
