@@ -22,10 +22,9 @@ class IsHetAlView implements View {
 	 * @var array
 	 */
 	public static $wistudat = array(
-		'u deze zijbalk geheel naar wens kan ingerichten?'	 => '/instellingen#tabs-zijbalk',
-		'u ongelezen draadjes als gelezen kan weergeven?'	 => '/instellingen#tabs-forum',
-		'u een eigen minion op de stek kan krijgen?'		 => '/instellingen#tabs-layout',
-		'u de C.S.R.-agenda kan importeren met ICAL?'		 => '/agenda#ICAL'
+		'u de webstek geheel naar wens kan instellen?'	 => '/instellingen',
+		'u de C.S.R.-agenda kan importeren met ICAL?'	 => '/agenda#ICAL',
+		'u het forum kan volgen met RSS?'				 => '/profiel#forum'
 	);
 
 	public function __construct($ishetal) {

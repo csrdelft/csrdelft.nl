@@ -78,7 +78,7 @@ class CsrLayoutPage extends CompressedLayout {
 			));
 		}
 
-		if (LidInstellingen::get('algemeen', 'minion') == 'ja') {
+		if (LidInstellingen::get('layout', 'minion') == 'ja') {
 			$smarty->assign('minioncoords', DragObjectModel::getCoords('minion', 40, 40));
 			$smarty->assign('minion', $smarty->fetch('minion.tpl'));
 		}

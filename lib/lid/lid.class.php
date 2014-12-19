@@ -877,7 +877,7 @@ class Lid implements Serializable, Agendeerbaar {
 			$k = '';
 			$l = '<a href="/profiel/' . $this->getUid() . '" title="' . htmlspecialchars($sVolledigeNaam) . '" class="lidLink ' . htmlspecialchars($this->profiel['status']) . '">';
 
-			if (($vorm === 'leeg' || $mode === 'visitekaartje') && LidInstellingen::get('algemeen', 'visitekaartjes') == 'ja') {
+			if (($vorm === 'leeg' || $mode === 'visitekaartje') && LidInstellingen::get('layout', 'visitekaartjes') == 'ja') {
 				$k = '<span';
 				if ($vorm !== 'leeg') {
 					$k .=' class="hoverIntent"';
