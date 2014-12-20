@@ -475,6 +475,7 @@ htdocs/mededelingen/goedkeuren.php -text
 htdocs/mededelingen/index.php -text
 htdocs/mededelingen/top3overzicht.php -text
 htdocs/onderhoud.html -text
+htdocs/owee/.htaccess -text
 htdocs/owee/2006/default.css -text
 htdocs/owee/2006/index.php -text
 htdocs/owee/2006/lib/class.imagemap.php -text
