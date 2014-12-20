@@ -14,6 +14,8 @@ data/smarty/cache/*
 data/smarty/compiled/*
 etc/bot.htpasswd
 etc/cron.ini
+etc/csrdelft.nl.csr
+etc/csrdelft.nl.key
 etc/csrmail.ini
 etc/gozerbot.ini
 etc/ldap.ini
