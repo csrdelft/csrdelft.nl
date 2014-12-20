@@ -148,11 +148,11 @@ class MenuModel extends CachedPersistenceModel {
 	}
 
 	public function getMenuRoot($naam) {
-		$root = $this->prefetch('parent_id = ? AND tekst = ? ', array(0, $naam), null, null, 1);
-		if (empty($root)) {
-			return false;
+		$root = $this->find('parent_id = ? AND tekst = ? ', array(0, $naam), null, null, 1)->fetch();
+		if ($root) {
+			return $this->cache($root, false);
 		}
-		return reset($root);
+		return false;
 	}
 
 	public function getChildren(MenuItem $parent) {
@@ -210,6 +210,7 @@ class MenuModel extends CachedPersistenceModel {
 
 	public function create(PersistentEntity $entity) {
 		$entity->item_id = (int) parent::create($entity);
+		$this->flushCache(true);
 	}
 
 	public function removeMenuItem(MenuItem $item) {
@@ -222,6 +223,7 @@ class MenuModel extends CachedPersistenceModel {
 			$rowCount = Database::sqlUpdate($this->orm->getTableName(), $update, $where, array(':oldid' => $item->item_id));
 			$this->delete($item);
 			$db->commit();
+			$this->flushCache(true);
 			return $rowCount;
 		} catch (Exception $e) {
 			$db->rollback();
