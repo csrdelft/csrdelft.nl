@@ -5,6 +5,7 @@
 /.project
 /.settings
 /C.S.R.[!!-~]Delft.phpproj
+bin/ldap/bla
 bin/ldap/settings.py
 data/*
 data/documenten/*
@@ -23,6 +24,7 @@ etc/mysql.ini
 etc/soccie.ini
 htdocs/download
 htdocs/enquete
+htdocs/google*.html
 htdocs/handelingen
 htdocs/happening
 htdocs/layout/js/flot/examples
@@ -36,6 +38,7 @@ htdocs/wiki/.idea
 htdocs/wiki/conf/acl.auth.php
 htdocs/wiki/conf/local.php
 htdocs/wiki/conf/local.php.bak
+htdocs/wiki/conf/local.php.save
 htdocs/wiki/conf/local.protected.php
 htdocs/wiki/conf/plugins.local.php
 htdocs/wiki/conf/plugins.local.php.bak
