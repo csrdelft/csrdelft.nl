@@ -49,6 +49,8 @@ RewriteRule ^facebook			https://www.facebook.com/delftcsr [R,L]
 RewriteRule ^owee/?$			/csrindeowee
 RewriteRule ^nieuws/?(.*)		/mededelingen/$1/
 
+RewriteRule ^feuten/?$ https://trac.knorrie.org/csrdelft.nl/report/1 [R=301,L]
+
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteRule ^					index.php
