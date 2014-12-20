@@ -1453,6 +1453,8 @@ htdocs/wiki/lib/plugins/authad/adLDAP/collections/adLDAPUserCollection.php -text
 htdocs/wiki/lib/plugins/authad/auth.php -text
 htdocs/wiki/lib/plugins/authad/conf/default.php -text
 htdocs/wiki/lib/plugins/authad/conf/metadata.php -text
+htdocs/wiki/lib/plugins/authad/lang/nl/lang.php -text
+htdocs/wiki/lib/plugins/authad/lang/nl/settings.php -text
 htdocs/wiki/lib/plugins/authad/plugin.info.txt -text
 htdocs/wiki/lib/plugins/authcsr/README -text
 htdocs/wiki/lib/plugins/authcsr/auth.php -text
