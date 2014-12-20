@@ -7,11 +7,14 @@
 // must be run within Dokuwiki
 if (!defined('DOKU_INC')) die();
 
-if (!defined('DOKU_LF')) define('DOKU_LF', "\n");
-if (!defined('DOKU_TAB')) define('DOKU_TAB', "\t");
-
+/**
+ * Class helper_plugin_discussion
+ */
 class helper_plugin_discussion extends DokuWiki_Plugin {
 
+    /**
+     * @return array
+     */
     function getMethods() {
         $result = array();
         $result[] = array(
@@ -48,6 +51,8 @@ class helper_plugin_discussion extends DokuWiki_Plugin {
 
     /**
      * Returns the column header for the Pagelist Plugin
+     *
+     * @return string
      */
     function th() {
         return $this->getLang('discussion');
@@ -55,8 +60,12 @@ class helper_plugin_discussion extends DokuWiki_Plugin {
 
     /**
      * Returns the link to the discussion section of a page
+     *
+     * @param string $id
+     * @param null|int $num
+     * @return string
      */
-    function td($id, $num = NULL) {
+    function td($id, $num = null) {
         $section = '#discussion__section';
 
         if (!isset($num)) {
@@ -67,9 +76,13 @@ class helper_plugin_discussion extends DokuWiki_Plugin {
             if ((!$comments['status']) || (($comments['status'] == 2) && (!$num))) return '';
         }
 
-        if ($num == 0) $comment = '0&nbsp;'.$this->getLang('nocomments');
-        elseif ($num == 1) $comment = '1&nbsp;'.$this->getLang('comment');
-        else $comment = $num.'&nbsp;'.$this->getLang('comments');
+        if ($num == 0) {
+            $comment = '0&nbsp;'.$this->getLang('nocomments');
+        } elseif ($num == 1) {
+            $comment = '1&nbsp;'.$this->getLang('comment');
+        } else {
+            $comment = $num.'&nbsp;'.$this->getLang('comments');
+        }
 
         return '<a href="'.wl($id).$section.'" class="wikilink1" title="'.$id.$section.'">'.
             $comment.'</a>';
@@ -77,13 +90,19 @@ class helper_plugin_discussion extends DokuWiki_Plugin {
 
     /**
      * Returns an array of pages with discussion sections, sorted by recent comments
+     * Note: also used for content by Feed Plugin
+     *
+     * @param string $ns
+     * @param null|int $num
+     * @param string|bool $skipEmpty
+     * @return array
      */
-    function getThreads($ns, $num = NULL, $skipEmpty = false) {
+    function getThreads($ns, $num = null, $skipEmpty = false) {
         global $conf;
 
         require_once(DOKU_INC.'inc/search.php');
 
-        $dir = $conf['datadir'].($ns ? '/'.str_replace(':', '/', $ns): '');
+        $dir = utf8_encodeFN($conf['datadir'].($ns ? '/'.str_replace(':', '/', $ns): ''));
 
         // returns the list of pages in the given namespace and it's subspaces
         $items = array();
@@ -134,6 +153,11 @@ class helper_plugin_discussion extends DokuWiki_Plugin {
 
     /**
      * Returns an array of recently added comments to a given page or namespace
+     * Note: also used for content by Feed Plugin
+     *
+     * @param string $ns
+     * @param int|null $num
+     * @return array
      */
     function getComments($ns, $num = NULL) {
         global $conf;
@@ -182,6 +206,11 @@ class helper_plugin_discussion extends DokuWiki_Plugin {
      * @author Andreas Gohr <andi@splitbrain.org>
      * @author Ben Coburn <btcoburn@silicodon.net>
      * @author Esther Brunner <wikidesign@gmail.com>
+     *
+     * @param string $line
+     * @param string $ns
+     * @param array  $seen
+     * @return array|bool
      */
     function _handleRecentComment($line, $ns, &$seen) {
         if (empty($line)) return false;  //skip empty lines
@@ -229,15 +258,20 @@ class helper_plugin_discussion extends DokuWiki_Plugin {
         if (!isset($data['comments'][$cid])) return false;
 
         // okay, then add some additional info
-        if (is_array($data['comments'][$cid]['user']))
+        if (is_array($data['comments'][$cid]['user'])) {
             $recent['name'] = $data['comments'][$cid]['user']['name'];
-        else $recent['name'] = $data['comments'][$cid]['name'];
+        } else {
+            $recent['name'] = $data['comments'][$cid]['name'];
+        }
         $recent['desc'] = strip_tags($data['comments'][$cid]['xhtml']);
         $recent['anchor'] = 'comment_'.$cid;
 
         return $recent;
     }
 
+    /**
+     * @return bool
+     */
     function isDiscussionMod() {
         global $USERINFO;
         $groups = trim($this->getConf('moderatorgroups'));

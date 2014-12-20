@@ -1,6 +1,7 @@
 <?php
 
 $lang['e_unknowntype']   = 'Unknown type "%s"';
+$lang['e_unknownaction'] = 'Unknown action "%s"';
 $lang['e_missingargs']   = 'Not enough arguments for %s %s';
 $lang['e_noaction']      = 'No action defined - where should the data be sent to?';
 $lang['e_mail']          = 'Something went wrong with sending that data';
@@ -12,6 +13,7 @@ $lang['e_match']         = '"%s" wasn\'t filled in correctly. (Checked against /
 $lang['e_email']         = '"%s" needs to be a valid email address.';
 $lang['e_numeric']       = '"%s" needs to be a number.';
 $lang['e_date']          = '"%s" needs to be a valid date in the format yyyy-mm-dd.';
+$lang['e_time']          = '"%s" needs to be a valid time in the format (h)h:mm(:ss).';
 $lang['e_user']          = '"%s" needs to be the name of an existing user.';
 $lang['e_users']         = '"%s" needs to be a comma-separated list of names of existing users.';
 $lang['e_min']           = '"%s" needs to be greater than %s.';
@@ -29,5 +31,8 @@ $lang['mail_thanks']     = 'Your data was sent successfully. Thank you.';
 $lang['template_thanks'] = 'The page has been created, follow the link to open it.';
 
 $lang['summary']         = 'Created from the form at %s';
+
+$lang['attachmentMailEmpty']   = '(file not submitted)';
+$lang['attachmentMailToLarge'] = '(file too large for mail attachment)';
 
 $lang['submit']         = 'Submit';

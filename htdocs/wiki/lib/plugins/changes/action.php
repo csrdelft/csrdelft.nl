@@ -9,29 +9,22 @@
 // must be run within Dokuwiki
 if(!defined('DOKU_INC')) die();
 
-if(!defined('DOKU_PLUGIN')) define('DOKU_PLUGIN',DOKU_INC.'lib/plugins/');
-require_once(DOKU_PLUGIN.'action.php');
-
+/**
+ * Class action_plugin_changes
+ */
 class action_plugin_changes extends DokuWiki_Action_Plugin {
-
-    /**
-     * Return some info
-     */
-    function getInfo() {
-        return confToHash(dirname(__FILE__).'/plugin.info.txt');
-    }
 
     /**
      * Register callbacks
      */
-    function register($controller) {
+    public function register($controller) {
       $controller->register_hook('PARSER_CACHE_USE', 'BEFORE', $this, 'beforeParserCacheUse');
     }
 
     /**
      * Handle PARSER_CACHE_USE:BEFORE event
      */
-    function beforeParserCacheUse($event, $param) {
+    public function beforeParserCacheUse($event, $param) {
         global $ID;
         $cache = $event->data;
         if(isset($cache->mode) && ($cache->mode == 'xhtml')){
@@ -45,7 +38,7 @@ class action_plugin_changes extends DokuWiki_Action_Plugin {
     /**
      * Add extra dependencies to the cache
      */
-    function addDependencies($cache, $depends) {
+    protected function addDependencies($cache, $depends) {
         foreach($depends as $file){
             if(!in_array($file, $cache->depends['files']) && @file_exists($file)){
                 $cache->depends['files'][] = $file;

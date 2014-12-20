@@ -58,23 +58,30 @@ class syntax_plugin_bureaucracy_action_template_test extends DokuWikiTest {
 
     public function testProcessFields() {
         $data = array();
-        $data[] = new syntax_plugin_bureaucracy_field_static(array('text', 'text1'));
+        /** @var helper_plugin_bureaucracy_fieldstatic $staticfield */
+        $staticfield = plugin_load('helper', 'bureaucracy_fieldstatic');
+        $staticfield->initialize(array('text', 'text1'));
+        $data[] = $staticfield;
 
         $action = $this->getTemplateClass();
-        $action->processFields($data, '_', '');
+        $action->prepareFieldReplacements($data, '_', '');
 
         $this->assertEquals('/(@@|##)text1(?:\|(.*?))\1/si', $action->patterns['text1']);
         $this->assertEquals('$2', $action->values['text1']);
-        $this->assertEmpty($action->templates);
+        $this->assertEmpty($action->targetpages);
     }
 
+    /**
+     * @return helper_plugin_bureaucracy_actiontemplate
+     */
     private function getTemplateClass() {
-        $class = new syntax_plugin_bureaucracy_action_template();
-        $class->patterns = array();
-        $class->values = array();
-        $class->templates = array();
-        $class->pagename = array();
-        return $class;
+        /** @var helper_plugin_bureaucracy_actiontemplate $templateaction */
+        $templateaction = plugin_load('helper', 'bureaucracy_actiontemplate');
+        $templateaction->patterns = array();
+        $templateaction->values = array();
+        $templateaction->targetpages = array();
+        $templateaction->pagename = array();
+        return $templateaction;
     }
 
 
