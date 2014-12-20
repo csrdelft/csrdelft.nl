@@ -1960,12 +1960,14 @@ htdocs/wiki/lib/plugins/discussion/style.css -text
 htdocs/wiki/lib/plugins/discussion/syntax/comments.php -text
 htdocs/wiki/lib/plugins/discussion/syntax/threads.php -text
 htdocs/wiki/lib/plugins/docnavigation/README -text
+htdocs/wiki/lib/plugins/docnavigation/README.md -text
 htdocs/wiki/lib/plugins/docnavigation/action.php -text
 htdocs/wiki/lib/plugins/docnavigation/conf/default.php -text
 htdocs/wiki/lib/plugins/docnavigation/conf/metadata.php -text
 htdocs/wiki/lib/plugins/docnavigation/helper.php -text
 htdocs/wiki/lib/plugins/docnavigation/lang/en/lang.php -text
 htdocs/wiki/lib/plugins/docnavigation/lang/en/settings.php -text
+htdocs/wiki/lib/plugins/docnavigation/manager.dat -text
 htdocs/wiki/lib/plugins/docnavigation/plugin.info.txt -text
 htdocs/wiki/lib/plugins/docnavigation/style.css -text
 htdocs/wiki/lib/plugins/docnavigation/syntax/chapnav.php -text
