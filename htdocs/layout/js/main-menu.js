@@ -138,24 +138,21 @@ jQuery(document).ready(function ($) {
 
 	function toggleSearch(type) {
 		if (type === 'close') {
-			//close serach 
 			$('.cd-search').removeClass('is-visible');
 			$('.cd-search-trigger').removeClass('search-is-visible');
-			$maintrigger.fadeIn();
 		} else {
-			//toggle search visibility
 			$('.cd-search').toggleClass('is-visible');
 			$('.cd-search-trigger').toggleClass('search-is-visible');
-			if ($('.cd-search').hasClass('is-visible')) {
-				$searchfield.focus();
-				$('.cd-main-overlay').addClass('is-visible');
-				$maintrigger.fadeOut();
-				menuFX = true;
-			} else {
-				$('.cd-main-overlay').removeClass('is-visible');
-				$maintrigger.fadeIn();
-				menuFX = false;
-			}
+		}
+		if ($('.cd-search').hasClass('is-visible')) {
+			$searchfield.focus();
+			$('.cd-main-overlay').addClass('is-visible');
+			$maintrigger.fadeOut();
+			menuFX = true;
+		} else {
+			$('.cd-main-overlay').removeClass('is-visible');
+			$maintrigger.fadeIn();
+			menuFX = false;
 		}
 	}
 

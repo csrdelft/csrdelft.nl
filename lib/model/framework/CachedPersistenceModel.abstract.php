@@ -91,6 +91,24 @@ abstract class CachedPersistenceModel extends PersistenceModel {
 	}
 
 	/**
+	 * Cache entity without persistent storage.
+	 * Optional: put in memcache.
+	 * 
+	 * @param PersistentEntity $entity
+	 * @param boolean $memcache
+	 */
+	protected function cache(PersistentEntity $entity, $memcache = false) {
+		$key = $this->cacheKey($entity->getValues(true));
+		// do NOT update (requires explicit unsetCache)
+		if ($this->isCached($key, $memcache)) {
+			$entity = $this->getCached($key, $memcache);
+		} else {
+			$this->setCache($key, $entity, $memcache);
+		}
+		return $entity;
+	}
+
+	/**
 	 * Cache entire resultset from a PDOStatement.
 	 * Optional: put in memcache.
 	 * 
@@ -100,15 +118,8 @@ abstract class CachedPersistenceModel extends PersistenceModel {
 	 */
 	protected function cacheResult($resultset, $memcache = false) {
 		$cached = array();
-		foreach ($resultset as $item) {
-			$key = $this->cacheKey($item->getValues(true));
-			// do NOT update (requires explicit unsetCache)
-			if ($this->isCached($key, $memcache)) {
-				$cached[] = $this->getCached($key, $memcache);
-			} else {
-				$this->setCache($key, $item, $memcache);
-				$cached[] = $item;
-			}
+		foreach ($resultset as $entity) {
+			$cached[] = $this->cache($entity, $memcache);
 		}
 		return $cached;
 	}

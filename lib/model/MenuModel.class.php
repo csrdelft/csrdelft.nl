@@ -77,10 +77,12 @@ class MenuModel extends CachedPersistenceModel {
 				require_once 'model/ForumModel.class.php';
 				foreach (ForumModel::instance()->prefetch() as $categorie) {
 					$item = $this->newMenuItem($parent->item_id);
+					$item->item_id = - $categorie->categorie_id; // nodig voor getParent()
 					$item->rechten_bekijken = $categorie->rechten_lezen;
 					$item->link = '/forum#' . $categorie->categorie_id;
 					$item->tekst = $categorie->titel;
 					$parent->children[] = $item;
+					$this->cache($item);
 
 					foreach ($categorie->getForumDelen() as $deel) {
 						$subitem = $this->newMenuItem($item->item_id);
@@ -146,7 +148,11 @@ class MenuModel extends CachedPersistenceModel {
 	}
 
 	public function getMenuRoot($naam) {
-		return $this->find('parent_id = ? AND tekst = ? ', array(0, $naam), null, null, 1)->fetch(); // is cached at higher level
+		$root = $this->prefetch('parent_id = ? AND tekst = ? ', array(0, $naam), null, null, 1);
+		if (empty($root)) {
+			return false;
+		}
+		return reset($root);
 	}
 
 	public function getChildren(MenuItem $parent) {

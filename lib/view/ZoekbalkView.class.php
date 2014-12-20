@@ -45,8 +45,8 @@ else {
 JS;
 		if (LoginModel::mag('P_LEDEN_READ')) {
 
-			$this->createSuggestions(MenuModel::instance()->getMenu(LoginModel::getUid())->getChildren());
-			$this->createSuggestions(MenuModel::instance()->getList(MenuModel::instance()->getMenu('main')));
+			$this->addSuggestions(MenuModel::instance()->getMenu(LoginModel::getUid())->getChildren());
+			$this->addSuggestions(MenuModel::instance()->getList(MenuModel::instance()->getMenu('main')));
 
 			$this->suggestions['Leden'] = '/tools/naamsuggesties/leden/?q=';
 			$this->suggestions['Agenda'] = '/agenda/zoeken/?q=';
@@ -59,7 +59,7 @@ JS;
 		}
 	}
 
-	private function createSuggestions(array $list) {
+	private function addSuggestions(array $list) {
 		foreach ($list as $item) {
 			if ($item->magBekijken()) {
 				$label = $item->tekst;

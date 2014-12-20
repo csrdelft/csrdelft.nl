@@ -485,7 +485,6 @@ htdocs/owee/2006/lib/overlib/Mini/overlib_centerpopup_mini.js -text
 htdocs/owee/2006/lib/overlib/Mini/overlib_crossframe_mini.js -text
 htdocs/owee/2006/lib/overlib/Mini/overlib_csstyle_mini.js -text
 htdocs/owee/2006/lib/overlib/Mini/overlib_debug_mini.js -text
-htdocs/owee/2006/lib/overlib/Mini/overlib_exclusive_mini.js -text
 htdocs/owee/2006/lib/overlib/Mini/overlib_followscroll_mini.js -text
 htdocs/owee/2006/lib/overlib/Mini/overlib_hideform_mini.js -text
 htdocs/owee/2006/lib/overlib/Mini/overlib_mini.js -text
@@ -517,7 +516,6 @@ htdocs/owee/2007/lib/overlib/Mini/overlib_centerpopup_mini.js -text
 htdocs/owee/2007/lib/overlib/Mini/overlib_crossframe_mini.js -text
 htdocs/owee/2007/lib/overlib/Mini/overlib_csstyle_mini.js -text
 htdocs/owee/2007/lib/overlib/Mini/overlib_debug_mini.js -text
-htdocs/owee/2007/lib/overlib/Mini/overlib_exclusive_mini.js -text
 htdocs/owee/2007/lib/overlib/Mini/overlib_followscroll_mini.js -text
 htdocs/owee/2007/lib/overlib/Mini/overlib_hideform_mini.js -text
 htdocs/owee/2007/lib/overlib/Mini/overlib_mini.js -text
