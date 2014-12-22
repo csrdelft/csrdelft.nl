@@ -125,6 +125,7 @@ class CsrBB extends eamBBParser {
 	function bb_foto($arguments = array()) {
 		require_once 'controller/FotoAlbumController.class.php';
 		$url = urldecode($this->parseArray(array('[/foto]'), array()));
+		$url = htmlspecialchars(filter_var($url, FILTER_SANITIZE_URL));
 		$parts = explode('/', $url);
 		if (in_array('Posters', $parts)) {
 			$groot = true;
@@ -160,6 +161,7 @@ class CsrBB extends eamBBParser {
 	protected function bb_fotoalbum($arguments = array()) {
 		require_once 'controller/FotoAlbumController.class.php';
 		$url = urldecode($this->parseArray(array('[/fotoalbum]'), array()));
+		$url = htmlspecialchars(filter_var($url, FILTER_SANITIZE_URL));
 		if ($url === 'laatste') {
 			$album = FotoAlbumModel::instance()->getMostRecentFotoAlbum();
 		} else {
