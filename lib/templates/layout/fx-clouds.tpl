@@ -52,8 +52,7 @@
 
 	function initClouds() {
 
-		container = document.createElement('div');
-		document.getElementById('cd-main-overlay').appendChild(container);
+		container = $('.cd-main-overlay');
 
 		// Bg gradient
 
@@ -70,8 +69,7 @@
 		context.fillStyle = gradient;
 		context.fillRect(0, 0, canvas.width, canvas.height);
 
-		container.style.background = 'url(' + canvas.toDataURL('image/png') + ')';
-		container.style.backgroundSize = '32px 100%';
+		container.css('background', 'url("' + canvas.toDataURL('image/png') + '")');
 
 		//
 
@@ -140,7 +138,7 @@
 			antialias: false
 		});
 		renderer.setSize(window.innerWidth, window.innerHeight);
-		container.appendChild(renderer.domElement);
+		container.append(renderer.domElement);
 
 		document.addEventListener('mousemove', onDocumentMouseMoveClouds, false);
 		window.addEventListener('resize', onWindowResizeClouds, false);
@@ -167,7 +165,7 @@
 
 		requestAnimationFrame(animateClouds);
 
-		if (#('.cd-main-overlay').hasClass('.is-visible')) {
+		if (container.hasClass('is-visible')) {
 
 			position = ((Date.now() - start_time) * 0.03) % 8000;
 
