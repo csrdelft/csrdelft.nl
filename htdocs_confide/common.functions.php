@@ -273,7 +273,7 @@ function external_url($url, $label) {
 		} else {
 			$extern = '';
 		}
-		$result = '<a href="' . $url . '" title="' . htmlspecialchars($url) . '"' . $extern . '>' . $label . '</a>';
+		$result = '<a href="' . htmlspecialchars($url) . '" title="' . htmlspecialchars($url) . '"' . $extern . '>' . htmlspecialchars($label) . '</a>';
 	} else {
 		$result = '[Ongeldige URL, tip: gebruik tinyurl.com]';
 	}

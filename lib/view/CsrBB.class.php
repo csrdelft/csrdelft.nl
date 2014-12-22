@@ -113,7 +113,7 @@ class CsrBB extends eamBBParser {
 		if (!$url OR ( !url_like($url) AND ! startsWith($url, '/plaetjes/') )) {
 			return '[img: Ongeldige URL] Gebruik [foto] voor het fotoalbum.';
 		}
-		return '<div class="bb-img-loading" src="' . $url . '" title="' . htmlspecialchars($url) . '" style="' . $style . '"></div>';
+		return '<div class="bb-img-loading" src="' . htmlspecialchars($url) . '" title="' . htmlspecialchars($url) . '" style="' . $style . '"></div>';
 		//return '<img class="bb-img ' . $class . '" src="' . $url . '" alt="' . htmlspecialchars($url) . '" style="' . $style . '" />';
 	}
 
