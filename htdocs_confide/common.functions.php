@@ -266,14 +266,14 @@ function url_like($url) {
 }
 
 function external_url($url, $label) {
-	$url = filter_var($url, FILTER_SANITIZE_URL);
+	$url = htmlspecialchars(filter_var($url, FILTER_SANITIZE_URL));
 	if ($url AND ( url_like($url) OR url_like(CSR_ROOT . $url) )) {
 		if (startsWith($url, 'http://') OR startsWith($url, 'https://')) {
 			$extern = ' target="_blank"';
 		} else {
 			$extern = '';
 		}
-		$result = '<a href="' . htmlspecialchars($url) . '" title="' . htmlspecialchars($url) . '"' . $extern . '>' . htmlspecialchars($label) . '</a>';
+		$result = '<a href="' . $url . '" title="' . $url . '"' . $extern . '>' . htmlspecialchars($url, ENT_HTML5, 'UTF-8', false) . '</a>';
 	} else {
 		$result = '[Ongeldige URL, tip: gebruik tinyurl.com]';
 	}
