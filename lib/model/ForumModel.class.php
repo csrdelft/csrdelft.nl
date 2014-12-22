@@ -911,13 +911,13 @@ class ForumPostsModel extends AbstractForumModel implements Paging {
 	}
 
 	public function getAantalPaginas($draad_id) {
-		$draad = ForumDradenModel::instance()->getForumDraad($draad_id);
-		if ($draad->pagina_per_post) {
-			$this->per_pagina = 1;
-		} else {
-			$this->per_pagina = (int) LidInstellingen::get('forum', 'posts_per_pagina');
-		}
 		if (!array_key_exists($draad_id, $this->aantal_paginas)) {
+			$draad = ForumDradenModel::instance()->getForumDraad($draad_id);
+			if ($draad->pagina_per_post) {
+				$this->per_pagina = 1;
+			} else {
+				$this->per_pagina = (int) LidInstellingen::get('forum', 'posts_per_pagina');
+			}
 			$this->aantal_paginas[$draad_id] = (int) ceil($this->count('draad_id = ? AND wacht_goedkeuring = FALSE AND verwijderd = FALSE', array($draad_id)) / $this->per_pagina);
 		}
 		return max(1, $this->aantal_paginas[$draad_id]);
