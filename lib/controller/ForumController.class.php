@@ -287,9 +287,6 @@ class ForumController extends Controller {
 		if ($pagina === null) {
 			$pagina = LidInstellingen::get('forum', 'open_draad_op_pagina');
 		}
-		if ($draad->pagina_per_post) {
-			ForumPostsModel::instance()->setAantalPerPagina(1);
-		}
 		$paging = true;
 		if ($pagina === 'ongelezen' AND $gelezen) {
 			ForumPostsModel::instance()->setPaginaVoorLaatstGelezen($gelezen);
