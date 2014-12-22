@@ -160,6 +160,13 @@ jQuery(document).ready(function ($) {
 		}
 	}
 
+	// fix position on screen
+	$(window).on('scroll', function (event) {
+		$('.cd-main-overlay').css({
+			'margin-top': $(window).scrollTop()
+		});
+	}).trigger('scroll');
+
 	// Catch keystrokes for instant search
 	$(document).keydown(function (event) {
 

@@ -55,14 +55,6 @@
 		container = document.createElement('div');
 		document.getElementById('cd-main-overlay').appendChild(container);
 
-		// fix position on screen
-		$(window).on('scroll', function (event) {
-			$(container).css({
-				'margin-top': $(window).scrollTop()
-			});
-		}).trigger('scroll');
-
-
 		// Bg gradient
 
 		var canvas = document.createElement('canvas');

@@ -9,29 +9,29 @@
 @keyframes snow { 
     0% { background-position: 0 0, 0 0, 0 0 }
 
-    100% { background-position: 500px 1000px, 400px 400px, 300px 300px }
+    100% { background-position: 500px 1000px, 400px 400px, 300px 300px, 0 0 }
 }
 
 @-moz-keyframes snow { 
     0% { background-position: 0 0, 0 0, 0 0 }
 
-    100% { background-position: 500px 1000px, 400px 400px, 300px 300px }
+    100% { background-position: 500px 1000px, 400px 400px, 300px 300px, 0 0 }
 }
 
 @-webkit-keyframes snow { 
-    0% { background-position: 0 0, 0 0, 0 0 }
+    0% { background-position: 0 0, 0 0, 0 0, 0 0 }
 
-    100% { background-position: 500px 1000px, 400px 400px, 300px 300px }
+    100% { background-position: 500px 1000px, 400px 400px, 300px 300px, 0 0 }
 }
 
 @-ms-keyframes snow { 
-    0% { background-position: 0 0, 0 0, 0 0 }
+    0% { background-position: 0 0, 0 0, 0 0, 0 0 }
 
-    100% { background-position: 500px 1000px, 400px 400px, 300px 300px }
+    100% { background-position: 500px 1000px, 400px 400px, 300px 300px, 0 0 }
 }
 
-#zijbalk, .cd-main-overlay {
-    background-image:  url('/plaetjes/layout/snow/snowh.png'), url('/plaetjes/layout/snow/snow3q.png'), url('/plaetjes/layout/snow/snow2l.png');
+#mainleft, .cd-main-overlay {
+    background-image:  url('/plaetjes/layout/snow/snowh.png'), url('/plaetjes/layout/snow/snow3q.png'), url('/plaetjes/layout/snow/snow2l.png'), url('/plaetjes/layout/bg/kristallen.jpg');
     -webkit-animation: snow 20s linear infinite;
     -moz-animation: snow 20s linear infinite;
     -ms-animation: snow 20s linear infinite;
