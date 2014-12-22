@@ -30,7 +30,7 @@
     100% { background-position: 500px 1000px, 400px 400px, 300px 300px, 0 0 }
 }
 
-#mainleft, .cd-main-overlay {
+.cd-main-overlay {
     background-image:  url('/plaetjes/layout/snow/snowh.png'), url('/plaetjes/layout/snow/snow3q.png'), url('/plaetjes/layout/snow/snow2l.png'), url('/plaetjes/layout/bg/kristallen.jpg');
     -webkit-animation: snow 20s linear infinite;
     -moz-animation: snow 20s linear infinite;
