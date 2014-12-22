@@ -110,20 +110,11 @@ class CsrBB extends eamBBParser {
 		}
 		$url = $this->parseArray(array('[/img]', '[/IMG]'), array());
 		$url = filter_var($url, FILTER_SANITIZE_URL);
-		if ($this->allow_html) {
-			// als de html toegestaan is hebben we genoeg vertrouwen om sommige karakters niet te encoderen
-			if (!$url OR ( !url_like($url) AND ! file_exists(PICS_PATH . $url) )) {
-				return '[img: Ongeldige URL]';
-			}
-			// we maken geen gebruik van lazy loading als html is toegestaan
-		} else {
-			$url = htmlspecialchars($url);
-			if (!$url OR ! url_like($url)) {
-				return '[img: Ongeldige URL] Gebruik [foto] voor het fotoalbum en anders tinyurl.com';
-			}
-			return '<div class="bb-img-loading" src="' . $url . '" title="' . htmlspecialchars($url) . '" style="' . $style . '"></div>';
+		if (!$url OR ( !url_like($url) AND ! file_exists(PICS_PATH . $url) )) {
+			return '[img: Ongeldige URL] Gebruik [foto] voor het fotoalbum.';
 		}
-		return '<img class="bb-img ' . $class . '" src="' . $url . '" alt="' . htmlspecialchars($url) . '" style="' . $style . '" />';
+		return '<div class="bb-img-loading" src="' . $url . '" title="' . htmlspecialchars($url) . '" style="' . $style . '"></div>';
+		//return '<img class="bb-img ' . $class . '" src="' . $url . '" alt="' . htmlspecialchars($url) . '" style="' . $style . '" />';
 	}
 
 	/**
