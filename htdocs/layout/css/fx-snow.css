@@ -30,9 +30,8 @@
     100% { background-position: 500px 1000px, 400px 400px, 300px 300px }
 }
 
-.cd-main-overlay {
-	background: #0a338d;
-    background-image:  url('/plaetjes/layout/snow/snowh.png'), url('/plaetjes/layout/snow/snow3q.png'), url('/plaetjes/layout/snow/snow2l.png') !important;
+#zijbalk, .cd-main-overlay {
+    background-image:  url('/plaetjes/layout/snow/snowh.png'), url('/plaetjes/layout/snow/snow3q.png'), url('/plaetjes/layout/snow/snow2l.png');
     -webkit-animation: snow 20s linear infinite;
     -moz-animation: snow 20s linear infinite;
     -ms-animation: snow 20s linear infinite;

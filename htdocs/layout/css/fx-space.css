@@ -30,7 +30,6 @@
 }
 
 .cd-main-overlay {
-	background: #000;
     background-image:  url('/plaetjes/layout/bg/stars.jpg');
 	background-size: cover;
     -webkit-animation: space 360s linear infinite;
