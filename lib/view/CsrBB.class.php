@@ -125,7 +125,6 @@ class CsrBB extends eamBBParser {
 	function bb_foto($arguments = array()) {
 		require_once 'controller/FotoAlbumController.class.php';
 		$url = urldecode($this->parseArray(array('[/foto]'), array()));
-		$url = htmlspecialchars(filter_var($url, FILTER_SANITIZE_URL));
 		$parts = explode('/', $url);
 		if (in_array('Posters', $parts)) {
 			$groot = true;
@@ -136,7 +135,7 @@ class CsrBB extends eamBBParser {
 		$path = PICS_PATH . 'fotoalbum' . implode('/', $parts);
 		$album = FotoAlbumModel::instance()->getFotoAlbum($path);
 		if (!$album) {
-			return '<div class="bb-block">Fotoalbum niet gevonden: ' . $url . '</div>';
+			return '<div class="bb-block">Fotoalbum niet gevonden: ' . htmlspecialchars($url) . '</div>';
 		}
 		$foto = new Foto($filename, $album);
 		$fototag = new FotoBBView($foto, $groot);
@@ -161,7 +160,6 @@ class CsrBB extends eamBBParser {
 	protected function bb_fotoalbum($arguments = array()) {
 		require_once 'controller/FotoAlbumController.class.php';
 		$url = urldecode($this->parseArray(array('[/fotoalbum]'), array()));
-		$url = htmlspecialchars(filter_var($url, FILTER_SANITIZE_URL));
 		if ($url === 'laatste') {
 			$album = FotoAlbumModel::instance()->getMostRecentFotoAlbum();
 		} else {
@@ -179,7 +177,7 @@ class CsrBB extends eamBBParser {
 			$album = FotoAlbumModel::instance()->getFotoAlbum($path);
 		}
 		if (!$album) {
-			return '<div class="bb-block">Fotoalbum niet gevonden: /' . $url . '</div>';
+			return '<div class="bb-block">Fotoalbum niet gevonden: ' . htmlspecialchars($url) . '</div>';
 		}
 		if (isset($arguments['slider']) AND $arguments['slider'] === 'homepage') {
 			$view = new FotoAlbumSliderView($album);
