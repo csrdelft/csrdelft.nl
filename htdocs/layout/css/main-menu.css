@@ -514,7 +514,7 @@ Main components
 		width: 100vw;
 		background: #ffffff;
 		padding: 50px 0 100px 65px;
-		box-shadow: inset 0 1px 0 #e2e3df, 0 3px 6px rgba(0, 0, 0, 0.05);
+		box-shadow: inset 0 1px 0 #ccc, 0 3px 6px #ccc;
 		-webkit-transform: translateX(0);
 		-moz-transform: translateX(0);
 		-ms-transform: translateX(0);
