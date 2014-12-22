@@ -113,13 +113,13 @@ class CsrBB extends eamBBParser {
 		if ($this->allow_html) {
 			// als de html toegestaan is hebben we genoeg vertrouwen om sommige karakters niet te encoderen
 			if (!$url OR ( !url_like($url) AND ! file_exists(PICS_PATH . $url) )) {
-				return '[img: Ongeldige URL, tip: gebruik tinyurl.com]';
+				return '[img: Ongeldige URL]';
 			}
 			// we maken geen gebruik van lazy loading als html is toegestaan
 		} else {
 			$url = htmlspecialchars($url);
 			if (!$url OR ! url_like($url)) {
-				return '[img: Ongeldige URL, tip: gebruik tinyurl.com]';
+				return '[img: Ongeldige URL] Gebruik [foto] voor het fotoalbum en anders tinyurl.com';
 			}
 			return '<div class="bb-img-loading" src="' . $url . '" title="' . htmlspecialchars($url) . '" style="' . $style . '"></div>';
 		}
