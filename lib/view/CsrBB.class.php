@@ -110,16 +110,17 @@ class CsrBB extends eamBBParser {
 		}
 		$url = $this->parseArray(array('[/img]', '[/IMG]'), array());
 		$url = filter_var($url, FILTER_SANITIZE_URL);
-		// als de html toegestaan is hebben we genoeg vertrouwen om sommige karakters niet te encoderen
-		if (!$this->allow_html) {
+		if ($this->allow_html) {
+			// als de html toegestaan is hebben we genoeg vertrouwen om sommige karakters niet te encoderen
+			if (!$url OR ( !url_like($url) AND ! file_exists(PICS_PATH . $url) )) {
+				return '[img: Ongeldige URL, tip: gebruik tinyurl.com]';
+			}
+			// we maken geen gebruik van lazy loading als html is toegestaan
+		} else {
 			$url = htmlspecialchars($url);
-		}
-		// only valid patterns
-		if (!$url OR ! url_like($url)) {
-			return '[img: Ongeldige URL, tip: gebruik tinyurl.com]';
-		}
-		// lazy loading van externe images bijv. op het forum
-		if (!startsWith($url, CSR_ROOT) OR startsWith($url, CSR_ROOT . '/plaetjes/fotoalbum/')) {
+			if (!$url OR ! url_like($url)) {
+				return '[img: Ongeldige URL, tip: gebruik tinyurl.com]';
+			}
 			return '<div class="bb-img-loading" src="' . $url . '" title="' . htmlspecialchars($url) . '" style="' . $style . '"></div>';
 		}
 		return '<img class="bb-img ' . $class . '" src="' . $url . '" alt="' . htmlspecialchars($url) . '" style="' . $style . '" />';
