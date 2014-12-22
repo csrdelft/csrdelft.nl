@@ -167,7 +167,7 @@
 
 		requestAnimationFrame(animateClouds);
 
-		if (menuFX) {
+		if (#('.cd-main-overlay').hasClass('.is-visible')) {
 
 			position = ((Date.now() - start_time) * 0.03) % 8000;
 

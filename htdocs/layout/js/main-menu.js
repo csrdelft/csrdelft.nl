@@ -1,5 +1,3 @@
-var menuFX = false;
-
 jQuery(document).ready(function ($) {
 	//if you change this breakpoint in the style.css file (or _layout.scss if you use SASS), don't forget to update this value as well
 	var MqL = 960;
@@ -14,9 +12,15 @@ jQuery(document).ready(function ($) {
 	});
 
 	var $maintrigger = $('#cd-main-trigger').click(function () {
-		menuFX = !menuFX;
-		if (menuFX) {
+		if ($maintrigger.hasClass('selected')) {
+			$(this).addClass('nav-is-visible');
 			$('.cd-primary-nav').addClass('nav-is-visible');
+			$('.cd-main-header').addClass('nav-is-visible');
+			$('.cd-main-content').addClass('nav-is-visible').one('webkitTransitionEnd otransitionend oTransitionEnd msTransitionEnd transitionend', function () {
+				$('body').addClass('overflow-hidden');
+			});
+			toggleSearch('close');
+			$('.cd-main-overlay').addClass('is-visible');
 		}
 	});
 
@@ -27,18 +31,10 @@ jQuery(document).ready(function ($) {
 			closeNav();
 			$('.cd-main-overlay').removeClass('is-visible');
 		} else {
-			$(this).addClass('nav-is-visible');
-			$('.cd-primary-nav').addClass('nav-is-visible');
-			$('.cd-main-header').addClass('nav-is-visible');
-			$('.cd-main-content').addClass('nav-is-visible').one('webkitTransitionEnd otransitionend oTransitionEnd msTransitionEnd transitionend', function () {
-				$('body').addClass('overflow-hidden');
-			});
-			toggleSearch('close');
-			$('.cd-main-overlay').addClass('is-visible');
 			//open main menu
 			if (!$maintrigger.hasClass('selected')) {
+				$maintrigger.addClass('selected');
 				$maintrigger.click();
-				menuFX = true;
 			}
 		}
 	});
@@ -106,7 +102,6 @@ jQuery(document).ready(function ($) {
 		$('.cd-main-content').removeClass('nav-is-visible').one('webkitTransitionEnd otransitionend oTransitionEnd msTransitionEnd transitionend', function () {
 			$('body').removeClass('overflow-hidden');
 		});
-		menuFX = false;
 	}
 
 	function checkWindowWidth() {
@@ -150,12 +145,10 @@ jQuery(document).ready(function ($) {
 			$searchfield.focus();
 			$maintrigger.fadeOut();
 			$('.cd-main-overlay').addClass('is-visible');
-			menuFX = true;
 		} else {
 			$maintrigger.fadeIn();
-			if (!$('.cd-primary-nav').hasClass('nav-is-visible')) {
+			if (!$maintrigger.hasClass('selected')) {
 				$('.cd-main-overlay').removeClass('is-visible');
-				menuFX = false;
 			}
 		}
 	}

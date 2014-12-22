@@ -6,34 +6,36 @@
 */
 
 @keyframes space { 
-    0% { background-position: 5000px 3000px }
+	0% { background-position: 5000px 3000px }
 
-    100% { background-position: 0 0 }
+	100% { background-position: 0 0 }
 }
 
 @-moz-keyframes space { 
-    0% { background-position: 5000px 3000px }
+	0% { background-position: 5000px 3000px }
 
-    100% { background-position: 0 0 }
+	100% { background-position: 0 0 }
 }
 
 @-webkit-keyframes space { 
-    0% { background-position: 5000px 3000px }
+	0% { background-position: 5000px 3000px }
 
-    100% { background-position: 0 0 }
+	100% { background-position: 0 0 }
 }
 
 @-ms-keyframes space { 
-    0% { background-position: 5000px 3000px }
+	0% { background-position: 5000px 3000px }
 
-    100% { background-position: 0 0 }
+	100% { background-position: 0 0 }
 }
 
 .cd-main-overlay {
-    background-image:  url('/plaetjes/layout/bg/stars.jpg');
+	background-image:  url('/plaetjes/layout/bg/stars.jpg');
 	background-size: cover;
-    -webkit-animation: space 360s linear infinite;
-    -moz-animation: space 360s linear infinite;
-    -ms-animation: space 360s linear infinite;
-    animation: space 360s linear infinite;
+}
+.cd-main-overlay.is-visible {
+	-webkit-animation: space 360s linear infinite;
+	-moz-animation: space 360s linear infinite;
+	-ms-animation: space 360s linear infinite;
+	animation: space 360s linear infinite;
 }
