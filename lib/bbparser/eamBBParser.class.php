@@ -754,7 +754,7 @@ class eamBBParser {
 			array_unshift($this->parseArray, $endtag);
 			array_unshift($this->parseArray, $mailto);
 		}
-		if ($email != '') {
+		if (!empty($email)) {
 			$html = '<a href="mailto:' . $email . '">' . $text . '</a>';
 
 			//spamprotectie: rot13 de email-tags, en voeg javascript toe om dat weer terug te rot13-en.

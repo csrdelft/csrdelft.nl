@@ -61,7 +61,7 @@ class CmsPagina extends PersistentEntity {
 	 * Database table name
 	 * @var string
 	 */
-	protected static $table_name = 'pagina';
+	protected static $table_name = 'cms_paginas';
 
 	public function magBekijken() {
 		return LoginModel::mag($this->rechten_bekijken);
