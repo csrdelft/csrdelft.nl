@@ -826,6 +826,7 @@ class ForumDradenModel extends AbstractForumModel implements Paging {
 			ForumDradenReagerenModel::instance()->verwijderReagerenVoorDraad($draad);
 			ForumPostsModel::instance()->verwijderForumPostsVoorDraad($draad);
 		}
+		ForumPostsModel::instance()->hertellenVoorDraad($draad);
 	}
 
 }
@@ -916,7 +917,7 @@ class ForumPostsModel extends AbstractForumModel implements Paging {
 		$this->setHuidigePagina((int) ceil($count / $this->per_pagina), $gelezen->draad_id);
 	}
 
-	public function hertellenVoorDraadEnDeel(ForumDraad $draad, ForumDeel $deel) {
+	public function hertellenVoorDraad(ForumDraad $draad) {
 		$draad->aantal_posts = $this->count('draad_id = ? AND wacht_goedkeuring = FALSE AND verwijderd = FALSE', array($draad->draad_id));
 		if ($draad->verwijderd OR $draad->aantal_posts < 1) {
 			if (!$draad->verwijderd) {
@@ -1059,13 +1060,13 @@ class ForumPostsModel extends AbstractForumModel implements Paging {
 		return $post;
 	}
 
-	public function verwijderForumPost(ForumPost $post, ForumDraad $draad, ForumDeel $deel) {
+	public function verwijderForumPost(ForumPost $post, ForumDraad $draad) {
 		$post->verwijderd = !$post->verwijderd;
 		$rowCount = $this->update($post);
 		if ($rowCount !== 1) {
 			throw new Exception('Verwijderen mislukt');
 		}
-		$this->hertellenVoorDraadEnDeel($draad, $deel);
+		$this->hertellenVoorDraad($draad);
 	}
 
 	public function verwijderForumPostsVoorDraad(ForumDraad $draad) {
@@ -1117,7 +1118,7 @@ class ForumPostsModel extends AbstractForumModel implements Paging {
 		}
 	}
 
-	public function tellenEnGoedkeurenForumPost(ForumPost $post, ForumDraad $draad, ForumDeel $deel) {
+	public function tellenEnGoedkeurenForumPost(ForumPost $post, ForumDraad $draad) {
 		if ($post->wacht_goedkeuring) {
 			$post->wacht_goedkeuring = false;
 			$post->laatst_gewijzigd = getDateTime();

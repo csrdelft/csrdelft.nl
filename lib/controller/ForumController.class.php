@@ -367,7 +367,7 @@ class ForumController extends Controller {
 		$deel = ForumDelenModel::instance()->getForumDeel((int) $forum_id);
 		$draden = ForumDradenModel::instance()->find('forum_id = ?', array($deel->forum_id));
 		foreach ($draden as $draad) {
-			ForumPostsModel::instance()->hertellenVoorDraadEnDeel($draad, $deel);
+			ForumPostsModel::instance()->hertellenVoorDraad($draad);
 		}
 		$this->view = new JsonResponse(true);
 	}
@@ -489,7 +489,6 @@ class ForumController extends Controller {
 			$this->geentoegang();
 		}
 		ForumDradenModel::instance()->wijzigForumDraad($draad, $property, $value);
-		ForumPostsModel::instance()->hertellenVoorDraadEnDeel($draad, $deel);
 		if (is_bool($value)) {
 			$wijziging = ($value ? 'wel ' : 'niet ') . $property;
 		} else {
@@ -708,8 +707,8 @@ class ForumController extends Controller {
 			$this->geentoegang();
 		}
 		ForumPostsModel::instance()->verplaatsForumPost($nieuwDraad, $post);
-		ForumPostsModel::instance()->tellenEnGoedkeurenForumPost($post, $nieuwDraad, $nieuwDeel);
-		ForumPostsModel::instance()->hertellenVoorDraadEnDeel($draad, $deel);
+		ForumPostsModel::instance()->hertellenVoorDraad($draad);
+		ForumPostsModel::instance()->tellenEnGoedkeurenForumPost($post, $nieuwDraad);
 		$this->view = new ForumPostDeleteView($post->post_id);
 	}
 
@@ -720,7 +719,7 @@ class ForumController extends Controller {
 		if (!$deel->magModereren()) {
 			$this->geentoegang();
 		}
-		ForumPostsModel::instance()->verwijderForumPost($post, $draad, $deel);
+		ForumPostsModel::instance()->verwijderForumPost($post, $draad);
 		$this->view = new ForumPostDeleteView($post->post_id);
 	}
 
