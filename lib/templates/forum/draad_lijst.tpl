@@ -18,7 +18,7 @@
 			txt_pre="&nbsp;[ " txt_post=" ]" link_current=true}
 	</td>
 	<td class="reacties">{$draad->aantal_posts}</td>
-	<td class="reacties">{$draad->uid|csrnaam:'user'}</td>
+	<td>{$draad->uid|csrnaam:'user'}</td>
 	<td class="reactiemoment">
 		{if LidInstellingen::get('forum', 'datumWeergave') === 'relatief'}
 			{$draad->laatst_gewijzigd|reldate}
