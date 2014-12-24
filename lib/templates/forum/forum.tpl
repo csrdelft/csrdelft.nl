@@ -15,10 +15,9 @@
 {foreach from=$categorien item=cat}
 	<div class="forumcategorie">
 		<h3><a name="{$cat->categorie_id}">{$cat->titel}</a></h3>
-		<p class="forumcategorie-omschrijving">{$cat->omschrijving}</p>
 		<div class="forumdelen">
 			{foreach from=$cat->getForumDelen() item=deel}
-				<div class="forumdeel col-md-2">
+				<div class="forumdeel bb-block col-md-2">
 					<h4><a href="/forum/deel/{$deel->forum_id}">{$deel->titel}</a></h4>
 					<p class="forumdeel-omschrijving">{$deel->omschrijving}</p>
 				</div>

@@ -21,11 +21,6 @@ class ForumCategorie extends PersistentEntity {
 	 */
 	public $titel;
 	/**
-	 * Omschrijving
-	 * @var string
-	 */
-	public $omschrijving;
-	/**
 	 * Rechten benodigd voor bekijken
 	 * @var string
 	 */
@@ -47,7 +42,6 @@ class ForumCategorie extends PersistentEntity {
 	protected static $persistent_attributes = array(
 		'categorie_id'	 => array(T::Integer, false, 'auto_increment'),
 		'titel'			 => array(T::String),
-		'omschrijving'	 => array(T::Text),
 		'rechten_lezen'	 => array(T::String),
 		'volgorde'		 => array(T::Integer)
 	);
