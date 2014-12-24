@@ -16,9 +16,9 @@
 	<thead>
 		<tr>
 			<th>Titel</th>
-			<th>Reacties</th>
+			<th class="reacties">Reacties</th>
 			<th>Auteur</th>
-			<th>Recente wijziging</th>
+			<th class="reactiemoment">Recente wijziging</th>
 		</tr>
 	</thead>
 	<tbody>

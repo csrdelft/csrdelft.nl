@@ -20,9 +20,9 @@
 					<a name="{$cat->categorie_id}">{$cat->titel}</a>
 					<span class="forumcategorie-omschrijving">{$cat->omschrijving}</span>
 				</th>
-				<th>Onderwerpen</th>
-				<th>Berichten</th>
-				<th>Recente wijziging</th>
+				<th class="reacties">Onderwerpen</th>
+				<th class="reacties">Berichten</th>
+				<th class="reactiemoment">Recente wijziging</th>
 			</tr>
 		</thead>
 		<tbody>
