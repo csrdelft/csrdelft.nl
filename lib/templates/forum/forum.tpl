@@ -12,33 +12,24 @@
 
 <h1>Forum{include file='forum/rss_link.tpl'}</h1>
 
-<table id="forumtabel">
-	{foreach from=$categorien item=cat}
-		<thead>
-			<tr>
-				<th>
-					<a name="{$cat->categorie_id}">{$cat->titel}</a>
-					<span class="forumcategorie-omschrijving">{$cat->omschrijving}</span>
-				</th>
-				<th class="reacties">Onderwerpen</th>
-				<th class="reacties">Berichten</th>
-				<th class="reactiemoment">Recente wijziging</th>
-			</tr>
-		</thead>
-		<tbody>
-			{if !$cat->hasForumDelen()}
-				<tr>
-					<td colspan="4">Deze categorie is leeg.</td>
-				</tr>
-			{/if}
+{foreach from=$categorien item=cat}
+	<div class="forumcategorie">
+		<h3><a name="{$cat->categorie_id}">{$cat->titel}</a></h3>
+		<p class="forumcategorie-omschrijving">{$cat->omschrijving}</p>
+		<div class="forumdelen">
 			{foreach from=$cat->getForumDelen() item=deel}
-				{include file='forum/deel_lijst.tpl'}
+				<div class="forumdeel col-md-2">
+					<h4><a href="/forum/deel/{$deel->forum_id}">{$deel->titel}</a></h4>
+					<p class="forumdeel-omschrijving">{$deel->omschrijving}</p>
+				</div>
 			{/foreach}
-		</tbody>
-	{/foreach}
-</table>
+		</div>
+	</div>
+{/foreach}
 
-<h2>Berichten per dag</h2>
-{if LoginModel::mag('P_LOGGED_IN')}
-	{include file='forum/stats_grafiek.tpl'}
-{/if}
+<div class="grafiek">
+	<h2>Berichten per dag</h2>
+	{if LoginModel::mag('P_LOGGED_IN')}
+		{include file='forum/stats_grafiek.tpl'}
+	{/if}
+</div>

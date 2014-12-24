@@ -31,31 +31,6 @@ class ForumDeel extends PersistentEntity {
 	 */
 	public $omschrijving;
 	/**
-	 * Datum en tijd van laatst geplaatste of gewijzigde post
-	 * @var string
-	 */
-	public $laatst_gewijzigd;
-	/**
-	 * Id van de laatst geplaatste of gewijzigde post
-	 * @var int
-	 */
-	public $laatste_post_id;
-	/**
-	 * Uid van de auteur van de laatst geplaatste of gewijzigde post
-	 * @var string
-	 */
-	public $laatste_wijziging_uid;
-	/**
-	 * Aantal draden in dit forum
-	 * @var int
-	 */
-	public $aantal_draden;
-	/**
-	 * Aantal zichtbare posts in dit forum
-	 * @var int
-	 */
-	public $aantal_posts;
-	/**
 	 * Rechten benodigd voor lezen
 	 * @var string
 	 */
@@ -85,19 +60,14 @@ class ForumDeel extends PersistentEntity {
 	 * @var array
 	 */
 	protected static $persistent_attributes = array(
-		'forum_id'				 => array(T::Integer, false, 'auto_increment'),
-		'categorie_id'			 => array(T::Integer),
-		'titel'					 => array(T::String),
-		'omschrijving'			 => array(T::Text),
-		'laatst_gewijzigd'		 => array(T::DateTime, true),
-		'laatste_post_id'		 => array(T::Integer, true),
-		'laatste_wijziging_uid'	 => array(T::UID, true),
-		'aantal_draden'			 => array(T::Integer),
-		'aantal_posts'			 => array(T::Integer),
-		'rechten_lezen'			 => array(T::String),
-		'rechten_posten'		 => array(T::String),
-		'rechten_modereren'		 => array(T::String),
-		'volgorde'				 => array(T::Integer)
+		'forum_id'			 => array(T::Integer, false, 'auto_increment'),
+		'categorie_id'		 => array(T::Integer),
+		'titel'				 => array(T::String),
+		'omschrijving'		 => array(T::Text),
+		'rechten_lezen'		 => array(T::String),
+		'rechten_posten'	 => array(T::String),
+		'rechten_modereren'	 => array(T::String),
+		'volgorde'			 => array(T::Integer)
 	);
 	/**
 	 * Database primary key

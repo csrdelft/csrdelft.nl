@@ -4378,7 +4378,6 @@ lib/templates/documenten/document.bb.tpl -text
 lib/templates/documenten/documenten.tpl -text
 lib/templates/documenten/documentencategorie.tpl -text
 lib/templates/forum/deel.tpl -text
-lib/templates/forum/deel_lijst.tpl -text
 lib/templates/forum/draad.tpl -text
 lib/templates/forum/draad_lijst.tpl -text
 lib/templates/forum/draad_mod.tpl -text

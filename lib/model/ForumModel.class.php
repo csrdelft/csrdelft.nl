@@ -180,11 +180,6 @@ class ForumDelenModel extends AbstractForumModel {
 		$deel->categorie_id = 0;
 		$deel->titel = '';
 		$deel->omschrijving = '';
-		$deel->laatst_gewijzigd = null;
-		$deel->laatste_post_id = null;
-		$deel->laatste_wijziging_uid = null;
-		$deel->aantal_draden = 0;
-		$deel->aantal_posts = 0;
 		$deel->rechten_lezen = 'P_FORUM_READ';
 		$deel->rechten_posten = 'P_FORUM_POST';
 		$deel->rechten_modereren = 'P_FORUM_MOD';
@@ -681,18 +676,6 @@ class ForumDradenModel extends AbstractForumModel implements Paging {
 		return (int) ceil($count / $this->per_pagina);
 	}
 
-	public function hertellenVoorDeel(ForumDeel $deel) {
-		$result = Database::sqlSelect(array('SUM(aantal_posts)'), $this->orm->getTableName(), 'forum_id = ?', array($deel->forum_id));
-		$deel->aantal_posts = (int) $result->fetchColumn();
-		$deel->aantal_draden = $this->count('forum_id = ? AND wacht_goedkeuring = FALSE AND verwijderd = FALSE', array($deel->forum_id));
-		// reset laatst gewijzigd
-		$last_draad = $this->find('forum_id = ? AND wacht_goedkeuring = FALSE AND verwijderd = FALSE', array($deel->forum_id), null, null, 1)->fetch();
-		$deel->laatste_post_id = $last_draad->laatste_post_id;
-		$deel->laatste_wijziging_uid = $last_draad->laatste_wijziging_uid;
-		$deel->laatst_gewijzigd = $last_draad->laatst_gewijzigd;
-		ForumDelenModel::instance()->update($deel);
-	}
-
 	public function zoeken($query, $datumsoort, $ouder, $jaar, $limit) {
 		$this->per_pagina = (int) $limit;
 		$attributes = array('*', 'MATCH(titel) AGAINST (? IN BOOLEAN MODE) AS score');
@@ -962,7 +945,6 @@ class ForumPostsModel extends AbstractForumModel implements Paging {
 			}
 		}
 		ForumDradenModel::instance()->update($draad);
-		ForumDradenModel::instance()->hertellenVoorDeel($deel);
 	}
 
 	public function zoeken($query, $datumsoort, $ouder, $jaar, $limit) {
@@ -1112,13 +1094,6 @@ class ForumPostsModel extends AbstractForumModel implements Paging {
 			if ($rowCount !== 1) {
 				throw new Exception('Bewerken mislukt');
 			}
-			$deel->laatst_gewijzigd = $post->laatst_gewijzigd;
-			$deel->laatste_post_id = $post->post_id;
-			$deel->laatste_wijziging_uid = $post->uid;
-			$rowCount = ForumDelenModel::instance()->update($deel);
-			if ($rowCount !== 1) {
-				throw new Exception('Bewerken mislukt');
-			}
 		}
 	}
 
@@ -1158,17 +1133,8 @@ class ForumPostsModel extends AbstractForumModel implements Paging {
 		$draad->laatste_wijziging_uid = $post->uid;
 		if ($draad->wacht_goedkeuring) {
 			$draad->wacht_goedkeuring = false;
-			$deel->aantal_draden++;
 		}
 		$rowCount = ForumDradenModel::instance()->update($draad);
-		if ($rowCount !== 1) {
-			throw new Exception('Goedkeuren mislukt');
-		}
-		$deel->aantal_posts++;
-		$deel->laatst_gewijzigd = $post->laatst_gewijzigd;
-		$deel->laatste_post_id = $post->post_id;
-		$deel->laatste_wijziging_uid = $post->uid;
-		$rowCount = ForumDelenModel::instance()->update($deel);
 		if ($rowCount !== 1) {
 			throw new Exception('Goedkeuren mislukt');
 		}
