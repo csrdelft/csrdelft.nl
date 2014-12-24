@@ -2,14 +2,15 @@
 	<td class="titel hoverIntent">
 		<h5><a href="/forum/deel/{$deel->forum_id}">{$deel->titel}</a></h5>
 		<p class="forumdeel-omschrijving">{$deel->omschrijving}</p>
+	</td>
+	<td class="reacties">{$deel->aantal_draden}</td>
+	<td class="reacties">{$deel->aantal_posts}
 		{if LoginModel::mag('P_FORUM_ADMIN')}
 			<div class="hoverIntentContent">
 				<a href="/forum/hertellen/{$deel->forum_id}" class="btn post ReloadPage" title="Hertellen">{icon get="calculator"}</a>
 			</div>
 		{/if}
 	</td>
-	<td class="reacties">{$deel->aantal_draden}</td>
-	<td class="reacties">{$deel->aantal_posts}</td>
 	<td class="reactiemoment">
 		{if $deel->laatst_gewijzigd}
 			{if LidInstellingen::get('forum', 'datumWeergave') === 'relatief'}
