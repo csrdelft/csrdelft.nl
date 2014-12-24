@@ -1,6 +1,6 @@
 <tr class="forumdeel kleur{cycle values="0,1"}">
 	<td class="titel hoverIntent">
-		<a href="/forum/deel/{$deel->forum_id}">{$deel->titel}</a>
+		<h5><a href="/forum/deel/{$deel->forum_id}">{$deel->titel}</a></h5>
 		<p class="forumdeel-omschrijving">{$deel->omschrijving}</p>
 		{if LoginModel::mag('P_FORUM_ADMIN')}
 			<div class="hoverIntentContent">
