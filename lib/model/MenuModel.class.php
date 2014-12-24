@@ -213,6 +213,11 @@ class MenuModel extends CachedPersistenceModel {
 		$this->flushCache(true);
 	}
 
+	public function update(PersistentEntity $entity) {
+		$this->flushCache(true);
+		return parent::update($entity);
+	}
+
 	public function removeMenuItem(MenuItem $item) {
 		$db = Database::instance();
 		try {
