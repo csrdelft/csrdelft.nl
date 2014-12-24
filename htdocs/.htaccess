@@ -4,6 +4,11 @@ RewriteEngine On
 # afbeeldingen afschermen voor externen kan hier:
 #RewriteRule ^plaetjes/pasfoto/(.*)$		tools/plaetjes.php?img=pasfoto/$1 [QSA,L] # todo: caching headers fixen
 
+RewriteRule ^nieuws/?(.*)		/mededelingen/$1/ [L]
+RewriteRule ^owee/?$			/csrindeowee [L]
+RewriteRule ^facebook			https://www.facebook.com/delftcsr [R,L]
+RewriteRule ^feuten				https://trac.knorrie.org/csrdelft.nl/report/1 [R,L]
+
 RewriteRule ^(leden)?lijst/?(.*)$	tools/lijst.php [QSA,L]
 
 RewriteRule ^profiel/([0-9a-z]+)/([a-zA-Z]+)/([a-zA-Z]+)/?$	tools/profiel.php?uid=$1&a=$2&s=$3 [QSA,L]
@@ -27,7 +32,7 @@ RewriteRule ^endsession			index.php?c=Login [L]
 RewriteRule ^eetplan			index.php?c=Eetplan		[QSA,L]
 RewriteRule ^documenten			index.php?c=Documenten	[QSA,L]
 RewriteRule ^bibliotheek		index.php?c=Bibliotheek [QSA,L]
-#RewriteRule ^groepen			index.php?c=GroepenRouter [L]
+
 RewriteRule ^leden				index.php?c=Leden [QSA,L]
 RewriteRule ^verticalen			index.php?c=Verticalen [L]
 RewriteRule ^kringen			index.php?c=Verticalen [L]
@@ -41,15 +46,9 @@ RewriteRule ^bijbelrooster		index.php?c=Bijbelrooster [L]
 RewriteRule ^instellingenbeheer	index.php?c=InstellingenBeheer [L]
 RewriteRule ^instellingen		index.php?c=LidInstellingen [L]
 RewriteRule ^menubeheer			index.php?c=MenuBeheer [L]
-RewriteRule ^sitemap			index.php?c=MenuBeheer [L]
+#RewriteRule ^sitemap			index.php?c=MenuBeheer [L]
+#RewriteRule ^groepen			index.php?c=GroepenRouter [L]
 RewriteRule ^commissievoorkeuren index.php?c=CommissieVoorkeuren [L]
-RewriteRule ^happie				index.php?c=HappieRouter [L]
-
-RewriteRule ^facebook			https://www.facebook.com/delftcsr [R,L]
-RewriteRule ^owee/?$			/csrindeowee
-RewriteRule ^nieuws/?(.*)		/mededelingen/$1/
-
-RewriteRule ^feuten/?$ https://trac.knorrie.org/csrdelft.nl/report/1 [R=301,L]
 
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d

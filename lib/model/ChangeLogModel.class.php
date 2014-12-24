@@ -14,7 +14,7 @@ class ChangeLogModel extends PersistenceModel {
 
 	public function log($subject, $property, $old, $new) {
 		$last = $this->find('subject = ? AND property = ?', array($subject, $property), null, 'id DESC', 1)->fetch();
-		$log = new HappieStatusLog();
+		$log = new ChangeLogEntry();
 		$log->moment = getDateTime();
 		if ($last) {
 			$log->elapsed = strtotime($log->moment) - strtotime($last->moment);
