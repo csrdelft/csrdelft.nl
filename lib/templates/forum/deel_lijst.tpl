@@ -1,12 +1,13 @@
 <tr class="forumdeel kleur{cycle values="0,1"}">
 	<td class="titel hoverIntent">
 		<a href="/forum/deel/{$deel->forum_id}">{$deel->titel}</a>
-		<br />{$deel->omschrijving}
+		<div class="forumdeel-omschrijving">{$deel->omschrijving}
 		{if LoginModel::mag('P_FORUM_ADMIN')}
 			<div class="hoverIntentContent">
 				<a href="/forum/hertellen/{$deel->forum_id}" class="btn post ReloadPage" title="Hertellen">{icon get="calculator"}</a>
 			</div>
 		{/if}
+		</div>
 	</td>
 	<td class="reacties">{$deel->aantal_draden}</td>
 	<td class="reacties">{$deel->aantal_posts}</td>
