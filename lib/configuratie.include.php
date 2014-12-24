@@ -103,7 +103,6 @@ require_once 'view/formulier/DataTable.class.php';
 require_once 'view/CsrBB.class.php';
 require_once 'view/CsrLayoutPage.class.php';
 require_once 'view/CsrLayout2Page.class.php';
-require_once 'view/CsrLayout3Page.class.php';
 require_once 'icon.class.php';
 
 # Controller
