@@ -83,6 +83,10 @@ class LoginModel extends PersistenceModel implements Validator {
 		$lid = LidCache::getLid($_SESSION['_uid']);
 		if ($lid instanceof Lid) {
 
+			if (!AccessModel::mag($lid, 'P_LOGGED_IN', true)) {
+				return false;
+			}
+
 			// Check login session
 			$session = $this->retrieveByPrimaryKey(array(session_id()));
 			if (!$session) {
@@ -280,7 +284,7 @@ class LoginModel extends PersistenceModel implements Validator {
 				$this->create($session);
 			}
 		}
-		return AccessModel::mag($lid, 'P_LOGGED_IN', $tokenOK);
+		return true;
 	}
 
 	public function logout() {
