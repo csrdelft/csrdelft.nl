@@ -287,7 +287,6 @@ class LoginModel extends PersistenceModel implements Validator {
 		$this->deleteByPrimaryKey(array(session_id()));
 		session_unset();
 		session_destroy();
-		$this->login('x999', 'x999');
 	}
 
 	public function switchUser($uid) {

@@ -37,8 +37,9 @@ class VerifyModel extends PersistenceModel {
 		} else {
 			$token->verified = true;
 			$this->update($token);
-			LoginModel::instance()->login($token->uid, null, true);
-			redirect($token->url);
+			if (LoginModel::instance()->login($token->uid, null, true)) {
+				redirect($token->url);
+			}
 		}
 		TimeoutModel::instance()->fout($uid);
 		return false;
