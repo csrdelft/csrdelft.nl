@@ -113,7 +113,12 @@ class Lid implements Serializable, Agendeerbaar {
 		$passwordhash = makepasswd($password);
 		$sNieuwWachtwoord = "UPDATE lid SET password='" . $passwordhash . "' WHERE uid='" . $this->getUid() . "' LIMIT 1;";
 
-		return MijnSqli::instance()->query($sNieuwWachtwoord) AND LidCache::flushLid($this->getUid()) AND $this->save_ldap();
+		$success = MijnSqli::instance()->query($sNieuwWachtwoord);
+		LidCache::flushLid($this->getUid());
+		if (!$this->save_ldap()) {
+			setMelding('LDAP is niet bijgewerkt!', -1);
+		}
+		return $success;
 	}
 
 	// sla huidige objectstatus op in db, en update het huidige lid in de LidCache

@@ -98,23 +98,17 @@ class LoginController extends AclController {
 			$this->view = new WachtwoordResetForm($lid);
 			if ($this->view->validate()) {
 				$pw = $this->view->findByName('wwreset')->getValue();
-
 				// wachtwoord opslaan
-				if ($lid->resetWachtwoord($pw)) {
-					// token verbruikt
-					VerifyModel::instance()->discardToken($uid, '/wachtwoord/reset');
-
-					if ($this->model->login($uid, $pw)) {
-						setMelding('Wachtwoord instellen geslaagd', 1);
-						redirect(CSR_ROOT);
-					}
+				if (!$lid->resetWachtwoord($pw)) {
+					setMelding('Wachtwoord instellen faalt', -1);
+					redirect();
 				}
-				setMelding('Wachtwoord instellen faalt', -1);
-				redirect();
-			} else {
-				$this->view = new CsrLayoutPage($this->view);
-				return;
+				// token verbruikt
+				VerifyModel::instance()->discardToken($uid, '/wachtwoord/reset');
+				setMelding('Wachtwoord instellen geslaagd', 1);
 			}
+			$this->view = new CsrLayoutPage($this->view);
+			return;
 		}
 		// wachtwoord vergeten
 		$this->view = new WachtwoordVergetenForm();
