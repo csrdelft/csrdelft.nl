@@ -301,20 +301,18 @@ class LoginModel extends PersistenceModel implements Validator {
 		if ($this->isSued()) {
 			throw new Exception('Geneste su niet mogelijk!');
 		}
-		if ($uid == 'x999') {
-			throw new Exception('Ja, log dan maar lekker uit!');
-		}
 		if ($this->getUid() === $uid) {
 			throw new Exception('Dit ben je zelf!');
 		}
 		$suNaar = LidCache::getLid($uid);
-		if (in_array($suNaar->getStatus(), array('S_NOBODY', 'S_EXLID'))) {
-			throw new Exception('Kan niet su-en naar S_NOBODY of S_EXLID');
+		if ($suNaar instanceof Lid AND AccessModel::mag($suNaar, 'P_LOGGED_IN')) {
+			$this->suedFrom = $this->getLid();
+			$_SESSION['_suedFrom'] = $this->suedFrom->getUid();
+			// Subject Assignment:
+			$this->setLid($suNaar);
+		} else {
+			throw new Exception('Kan niet switchen naar gebruiker: ' . htmlspecialchars($uid) . '');
 		}
-		$this->suedFrom = $this->getLid();
-		$_SESSION['_suedFrom'] = $this->suedFrom->getUid();
-		// Subject Assignment:
-		$this->setLid($suNaar);
 	}
 
 	public function endSwitchUser() {
