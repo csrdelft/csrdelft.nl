@@ -129,7 +129,12 @@ if (!LoginModel::mag('P_LEDEN_READ') OR ! LoginModel::mag('P_OUDLEDEN_READ')) {
 		case 'wachtwoord':
 			if (LoginModel::mag('P_ADMIN')) {
 				$lid = LidCache::getLid($uid);
-				if ($lid instanceof Lid AND $lid->resetWachtwoord()) {
+				if (isset($_POST[$actie]) AND ! empty($_POST[$actie])) {
+					$wachtwoord = filter_input(INPUT_POST, $actie, FILTER_SANITIZE_STRING);
+				} else {
+					$wachtwoord = null;
+				}
+				if ($lid instanceof Lid AND $lid->resetWachtwoord($wachtwoord)) {
 					setMelding('Wachtwoord succesvol gereset.', 1);
 				} else {
 					setMelding('Wachtwoord resetten mislukt.', -1);
