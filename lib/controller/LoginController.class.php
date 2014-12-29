@@ -106,6 +106,7 @@ class LoginController extends AclController {
 				// token verbruikt
 				VerifyModel::instance()->discardToken($uid, '/wachtwoord/reset');
 				setMelding('Wachtwoord instellen geslaagd', 1);
+				$this->model->login($uid, $pw);
 			}
 			$this->view = new CsrLayoutPage($this->view);
 			return;
