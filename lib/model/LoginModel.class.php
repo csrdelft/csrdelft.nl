@@ -250,9 +250,9 @@ class LoginModel extends PersistenceModel implements Validator {
 		}
 
 		// als we een gebruiker hebben gevonden controleren we
-		// of deze gebruiker mag inloggen en of het wachtwoord klopt
-		// of dat er eerder een token is gecontroleerd.
-		if ($lid instanceof Lid AND AccessModel::mag($lid, 'P_LOGGED_IN', $tokenOK) AND ( $tokenOK OR checkpw($lid, $pass) )) {
+		// of het wachtwoord klopt
+		// of dat er eerder een token is gecontroleerd
+		if ($lid instanceof Lid AND ( $tokenOK OR checkpw($lid, $pass) )) {
 			TimeoutModel::instance()->goed($lid->getUid());
 		} else {
 			$_SESSION['auth_error'] = 'Inloggen niet geslaagd<br><a href="/wachtwoord/vergeten">Wachtwoord vergeten?</a>';
