@@ -132,8 +132,7 @@ class LoginController extends AclController {
 				setMelding('Wacht ' . $timeout . ' seconden', -1);
 			}
 			// mag wachtwoord resetten?
-			elseif ($lid instanceof Lid AND AccessModel::mag($lid, 'P_LOGGED_IN') AND $lid->getEmail() == $values['mail']) {
-				TimeoutModel::instance()->goed($uid);
+			elseif ($lid instanceof Lid AND AccessModel::mag($lid, 'P_PROFIEL_EDIT') AND $lid->getEmail() === $values['mail']) {
 				$token = VerifyModel::instance()->createToken($uid, '/wachtwoord/reset');
 
 				require_once 'model/entity/Mail.class.php';
@@ -142,14 +141,14 @@ class LoginController extends AclController {
 						".\n\n[url=" . CSR_ROOT . "/verify/" . $token->token .
 						"]Wachtwoord instellen[/url].\n\nAls dit niet uw eigen verzoek is kunt u dit bericht negeren.\n\nMet amicale groet,\nUw PubCie";
 				$mail = new Mail(array($uid . '@csrdelft.nl' => Lid::naamLink($uid, 'civitas', 'plain')), 'C.S.R. webstek: nieuw wachtwoord instellen', $bericht);
-				$mail->setReplyTo('no-reply@csrdelft.nl');
 				$mail->send();
 
 				setMelding('Wachtwoord reset email verzonden', 1);
 				redirect();
-			} else {
-				TimeoutModel::instance()->fout($uid);
 			}
+			// sowieso timeout geven zodat je geen bruteforce kan doen als je uid en email weet.
+			// (wachtwoord proberen, bij timeout vergeten mail sturen en dan weer wachtworod proberen, etc.)
+			TimeoutModel::instance()->fout($uid);
 		}
 		$this->view = new CsrLayoutPage($this->view);
 	}
