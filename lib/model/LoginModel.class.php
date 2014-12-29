@@ -56,7 +56,7 @@ class LoginModel extends PersistenceModel implements Validator {
 		// of er is net uitgelogd waardoor de gegevens zijn leeggegooid
 		if (!$this->validate() AND ! $this->login('x999', 'x999')) {
 			// public gebruiker is stuk
-			throw new Exception('Not accessible');
+			die('Not accessible');
 		}
 		if ($this->getLid()->getUid() === 'x999') {
 			// Als we x999 zijn checken we of er misschien een validatietoken in de $_GET staat
