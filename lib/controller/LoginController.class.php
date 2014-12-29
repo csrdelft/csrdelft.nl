@@ -101,12 +101,11 @@ class LoginController extends AclController {
 
 				// wachtwoord opslaan
 				if ($lid->resetWachtwoord($pw)) {
-					setMelding('Wachtwoord instellen geslaagd', 1);
-
 					// token verbruikt
 					VerifyModel::instance()->discardToken($uid, '/wachtwoord/reset');
 
 					if ($this->model->login($uid, $pw)) {
+						setMelding('Wachtwoord instellen geslaagd', 1);
 						redirect(CSR_ROOT);
 					}
 				}
@@ -142,14 +141,11 @@ class LoginController extends AclController {
 						"]Wachtwoord instellen[/url].\n\nAls dit niet uw eigen verzoek is kunt u dit bericht negeren.\n\nMet amicale groet,\nUw PubCie";
 				$mail = new Mail(array($uid . '@csrdelft.nl' => Lid::naamLink($uid, 'civitas', 'plain')), 'C.S.R. webstek: nieuw wachtwoord instellen', $bericht);
 				$mail->send();
-
 				setMelding('Wachtwoord reset email verzonden', 1);
 
 				// sowieso timeout geven zodat je geen bruteforce kan doen als je uid en email weet.
 				// (wachtwoord proberen, bij timeout vergeten mail sturen en dan weer wachtworod proberen, etc.)
 				TimeoutModel::instance()->fout($uid);
-
-				redirect();
 			} else {
 				TimeoutModel::instance()->fout($uid);
 			}
