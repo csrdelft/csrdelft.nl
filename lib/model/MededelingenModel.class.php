@@ -549,7 +549,7 @@ class MededelingenModel {
 		return $sResultaat;
 	}
 
-	// static function getClauses(bool)
+	// static function getClauses(boolean)
 	// Geeft een array met clause terug, rekening houdend met of we op de prullenbak-pagina zijn of niet.
 	public static function getClauses($prullenbak) {
 		// Verval clause.

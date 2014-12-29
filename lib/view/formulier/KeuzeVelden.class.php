@@ -37,7 +37,7 @@ class SelectField extends InputField {
 	public function __construct($name, $value, $description, array $options, $groups = false, $size = 1, $multiple = false) {
 		parent::__construct($name, $value, $description);
 		$this->options = $options;
-		$this->groups = (bool) $groups;
+		$this->groups = (boolean) $groups;
 		$this->size = (int) $size;
 		$this->multiple = $multiple;
 		if ($this->groups) {

@@ -61,9 +61,11 @@ class AccessModel extends CachedPersistenceModel {
 	 */
 	public static function mag(Lid $subject, $permission, $token_authorizable = false) {
 
-		// Als het gaat om het ingelogde lid doe extra check op token.
-		// Alleen als $token_authorizable toegestaan is testen we met
-		// de permissies van het ingelogde lid, anders met niet-ingelogd.
+		// Als voor het ingelogde lid een permissie gevraagd wordt
+		// en deze sessie is ingelogd per token: doe extra check of dat mag.
+		// Alleen als inloggen per token ($token_authorizable) toegestaan is
+		// testen we met de permissies van het per token ingelogde lid,
+		// anders met niet-ingelogd.
 		if (LoginModel::instance()->isAuthenticatedByToken() AND $subject->getUid() == LoginModel::getUid() AND ! $token_authorizable) {
 			$subject = LidCache::getLid('x999');
 		}

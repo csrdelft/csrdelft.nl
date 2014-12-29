@@ -84,7 +84,7 @@ class auth_plugin_authcsr extends DokuWiki_Auth_Plugin {
 			//      * cookie available
 			//      * private_token was added to url (checking the permissions by LoginModel::hasPermission, needs setting token_authorizable to true)
 
-			if (LoginModel::instance()->login(strval($user), strval($pass)) AND LoginModel::getUid() != 'x999') {
+			if (LoginModel::instance()->login(strval($user), strval($pass))) {
 				//success
 			} else {
 				//invalid credentials - log off

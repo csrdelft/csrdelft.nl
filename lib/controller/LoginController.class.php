@@ -88,44 +88,33 @@ class LoginController extends AclController {
 	}
 
 	public function wachtwoord($action = null) {
+		$lid = $this->model->getLid();
+		$uid = $lid->getUid();
 		// resetten
-		if ($action === 'reset') {
+		if ($action === 'reset' AND
+				LoginModel::mag('P_PROFIEL_EDIT', true) AND
+				VerifyModel::instance()->isVerified($uid, '/wachtwoord/reset')
+		) {
+			$this->view = new WachtwoordResetForm($lid);
+			if ($this->view->validate()) {
+				$pw = $this->view->findByName('wwreset')->getValue();
 
-			// is in deze sessie geverifieerd?
-			if (isset($_SESSION['_verifiedUid'])) {
+				// wachtwoord opslaan
+				if ($lid->resetWachtwoord($pw)) {
+					setMelding('Wachtwoord instellen geslaagd', 1);
 
-				$lid = LidCache::getLid($_SESSION['_verifiedUid']);
-				if ($lid instanceof Lid) {
-					$uid = $lid->getUid();
-				} else {
-					$uid = 'x999';
-				}
+					// token verbruikt
+					VerifyModel::instance()->discardToken($uid, '/wachtwoord/reset');
 
-				// mag wachtwoord resetten?
-				if ($lid instanceof Lid AND AccessModel::mag($lid, 'P_LOGGED_IN') AND VerifyModel::instance()->isVerified($uid, '/wachtwoord/reset')) {
-
-					$this->view = new WachtwoordResetForm($lid);
-					if ($this->view->validate()) {
-						$pw = $this->view->findByName('wwreset')->getValue();
-
-						// wachtwoord opslaan
-						if ($lid->resetWachtwoord($pw)) {
-							setMelding('Wachtwoord instellen geslaagd', 1);
-
-							// token verbruikt
-							VerifyModel::instance()->discardToken($uid, '/wachtwoord/reset');
-
-							if ($this->model->login($uid, $pw)) {
-								redirect(CSR_ROOT);
-							}
-						}
-						setMelding('Wachtwoord instellen faalt', -1);
-						redirect();
-					} else {
-						$this->view = new CsrLayoutPage($this->view);
-						return;
+					if ($this->model->login($uid, $pw)) {
+						redirect(CSR_ROOT);
 					}
 				}
+				setMelding('Wachtwoord instellen faalt', -1);
+				redirect();
+			} else {
+				$this->view = new CsrLayoutPage($this->view);
+				return;
 			}
 		}
 		// wachtwoord vergeten
@@ -166,7 +155,7 @@ class LoginController extends AclController {
 	}
 
 	public function verify() {
-		$tokenValue = urldecode(filter_input(INPUT_GET, 'onetime_token', FILTER_SANITIZE_STRING));
+		$tokenValue = filter_input(INPUT_GET, 'onetime_token', FILTER_SANITIZE_STRING);
 		$this->view = new VerifyForm($tokenValue);
 		if ($this->view->validate()) {
 			$uid = $this->view->findByName('user')->getValue();

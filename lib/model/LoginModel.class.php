@@ -56,21 +56,19 @@ class LoginModel extends PersistenceModel implements Validator {
 			// zo nee, dan nobody user er in gooien...
 			// in dit geval is het de eerste keer dat we een pagina opvragen
 			// of er is net uitgelogd waardoor de gegevens zijn leeggegooid
-			$this->login('x999', 'x999', false);
+			$this->login('x999', 'x999');
 		}
 
 		// Als we x999 zijn checken we of er misschien een validatietoken in de $_GET staat
 		// om zonder sessie bepaalde rechten te krijgen.
 		if ($this->getLid()->getUid() === 'x999') {
+
+
+
 			$token = filter_input(INPUT_GET, 'private_token', FILTER_SANITIZE_STRING);
 			if (preg_match('/^[a-zA-Z0-9]{150}$/', $token)) {
 				$uid = Database::instance()->sqlSelect(array('uid'), 'lid', 'rssToken = ?', array($token), null, null, 1)->fetchColumn();
-				$lid = LidCache::getLid($uid);
-				if ($lid instanceof Lid) {
-					$this->authenticatedByToken = true;
-					// Subject Assignment:
-					$this->setLid($lid);
-				}
+				$this->login($uid, null, true);
 			}
 		}
 		$this->logBezoek();
@@ -192,29 +190,32 @@ class LoginModel extends PersistenceModel implements Validator {
 	/**
 	 * Dispatch the login proces to a separate function based on MODE.
 	 * 
-	 * @param type $user
-	 * @param type $pass
-	 * @param type $checkip
+	 * Als een gebruiker wordt ingelogd met tokenOK==true, dan wordt het wachtwoord
+	 * van de gebruiker NIET gecontroleerd, en wordt er vanuit gegaan dat een VOORAF
+	 * gecontroleerd token voldoende is voor authenticatie.
+	 * 
+	 * Als een gebruiker wordt ingelogd met lockIP==true, dan wordt het IP-adres
+	 * van de gebruiker opgeslagen in de sessie, en het sessie-cookie zal ALLEEN
+	 * vanaf dat adres toegang geven tot de website.
+	 * 
+	 * @param string $uid
+	 * @param string $pass
+	 * @param boolean $tokenOK
+	 * @param boolean $lockIP
 	 * @return boolean
 	 */
-	public function login($user, $pass = '', $checkip = false) {
-		$user = filter_var($user, FILTER_SANITIZE_STRING);
+	public function login($uid, $pass, $tokenOK = false, $lockIP = false) {
+		$uid = filter_var($uid, FILTER_SANITIZE_STRING);
 		$pass = filter_var($pass, FILTER_SANITIZE_STRING);
 		switch (constant('MODE')) {
 			case 'CLI':
 				return $this->loginCli();
 			case 'WEB':
 			default:
-				return $this->loginWeb($user, $pass, (boolean) $checkip);
+				return $this->loginWeb($uid, $pass, (boolean) $tokenOK, (boolean) $lockIP);
 		}
 	}
 
-	/**
-	 * Grant cli access for cron.
-	 * 
-	 * @param type $user
-	 * @return boolean
-	 */
 	private function loginCli() {
 		if (defined('ETC_PATH')) {
 			$cred = parse_ini_file(ETC_PATH . 'cron.ini');
@@ -225,29 +226,19 @@ class LoginModel extends PersistenceModel implements Validator {
 			);
 		}
 		$_SERVER['HTTP_USER_AGENT'] = 'CLI';
-		return $this->loginWeb($cred['user'], $cred['pass'], false);
+		return $this->loginWeb($cred['user'], $cred['pass'], false, false);
 	}
 
-	/**
-	 * Als een gebruiker wordt ingelogd met ipcheck==true, dan wordt het IP-adres
-	 * van de gebruiker opgeslagen in de sessie, en het sessie-cookie zal alleen
-	 * vanaf dat adres toegang geven tot de website.
-	 * 
-	 * @param string $user
-	 * @param string $pass
-	 * @param boolean $checkip
-	 * @return boolean
-	 */
-	private function loginWeb($user, $pass, $checkip) {
+	private function loginWeb($uid, $pass, $tokenOK = false, $lockIP = false) {
 		$lid = false;
 
 		// eerst met uid proberen, komt daar een zinnige gebruiker uit, die gebruiken.
-		if (Lid::isValidUid($user)) {
-			$lid = LidCache::getLid($user);
+		if (Lid::isValidUid($uid)) {
+			$lid = LidCache::getLid($uid);
 		}
 		// als er geen lid-object terugkomt, proberen we het met de nickname:
 		if (!($lid instanceof Lid)) {
-			$lid = Lid::loadByNickname($user);
+			$lid = Lid::loadByNickname($uid);
 		}
 
 		// check timeout
@@ -263,20 +254,21 @@ class LoginModel extends PersistenceModel implements Validator {
 		}
 
 		// als we een gebruiker hebben gevonden controleren we het wachtwoord
-		if (!($lid instanceof Lid) OR ! checkpw($lid, $pass)) {
+		if ($lid instanceof Lid AND ( $tokenOK OR checkpw($lid, $pass) )) {
+			// als het wachtwoord klopt laden we het profiel en richten de sessie in
+			TimeoutModel::instance()->goed($lid->getUid());
+		} else {
 			$_SESSION['auth_error'] = 'Inloggen niet geslaagd<br><a href="/wachtwoord/vergeten">Wachtwoord vergeten?</a>';
 			TimeoutModel::instance()->fout($uid);
 			return false;
 		}
-
-		// als het wachtwoord klopt laden we het profiel en richten de sessie in
-		TimeoutModel::instance()->goed($lid->getUid());
 
 		// clear session
 		session_unset();
 
 		// Subject Assignment:
 		$this->setLid($lid);
+		$this->authenticatedByToken = (boolean) $tokenOK;
 
 		if ($uid != 'x999') {
 			// Login sessie aanmaken in database
@@ -285,21 +277,21 @@ class LoginModel extends PersistenceModel implements Validator {
 			$session->uid = $lid->getUid();
 			$session->login_moment = getDateTime();
 			$session->user_agent = filter_var($_SERVER['HTTP_USER_AGENT'], FILTER_SANITIZE_STRING);
-			$session->ip = $checkip ? filter_var($_SERVER['REMOTE_ADDR'], FILTER_SANITIZE_STRING) : null; // sessie koppelen aan ip?
+			$session->ip = $lockIP ? filter_var($_SERVER['REMOTE_ADDR'], FILTER_SANITIZE_STRING) : null; // sessie koppelen aan ip?
 			if ($this->exists($session)) {
 				$this->update($session);
 			} else {
 				$this->create($session);
 			}
 		}
-		return true;
+		return self::mag('P_LOGGED_IN', $tokenOK);
 	}
 
 	public function logout() {
 		$this->deleteByPrimaryKey(array(session_id()));
 		session_unset();
 		session_destroy();
-		$this->login('x999', 'x999', true);
+		$this->login('x999', 'x999');
 	}
 
 	public function switchUser($uid) {

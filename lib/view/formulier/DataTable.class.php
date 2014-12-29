@@ -131,11 +131,11 @@ class DataTable extends TabsForm {
 	}
 
 	protected function hideColumn($name, $visible = false) {
-		$this->columns[$name]['visible'] = (bool) $visible;
+		$this->columns[$name]['visible'] = (boolean) $visible;
 	}
 
 	protected function searchColumn($name, $searchable = true) {
-		$this->columns[$name]['searchable'] = (bool) $searchable;
+		$this->columns[$name]['searchable'] = (boolean) $searchable;
 	}
 
 	protected function getSettings() {

@@ -28,22 +28,18 @@ class VerifyModel extends PersistenceModel {
 		}
 		// check token
 		$token = $this->find('uid = ? AND token = ?', array($uid, $tokenValue), null, null, 1)->fetch();
-		if ($token) {
-			// expired?
-			if (time() < strtotime($token->expire)) {
-				$token->verified = true;
-				$_SESSION['_verifiedUid'] = $token->uid;
-				$this->update($token);
-				TimeoutModel::instance()->goed($token->uid);
-				redirect($token->url);
-			} else {
-				$this->error = 'Token expired';
+		// already used or expired?
+		if (!$token OR $token->verified OR time() >= strtotime($token->expire)) {
+			$this->error = 'Token invalid';
+			if ($token) {
 				$this->delete($token);
 			}
 		} else {
-			$this->error = 'Token invalid';
+			$token->verified = true;
+			$this->update($token);
+			LoginModel::instance()->login($token->uid, null, true);
+			redirect($token->url);
 		}
-		unset($_SESSION['_verifiedUid']);
 		TimeoutModel::instance()->fout($uid);
 		return false;
 	}
@@ -52,19 +48,24 @@ class VerifyModel extends PersistenceModel {
 		return $this->error;
 	}
 
+	/**
+	 * Is current session verified by onetime token to execute a certain url on behalf of the user given uid?
+	 * 
+	 * @param string $uid
+	 * @param string $url
+	 * @return boolean
+	 */
 	public function isVerified($uid, $url) {
 		$token = $this->retrieveByPrimaryKey(array($uid, $url));
-		if ($token) {
-			if (time() < strtotime($token->expire)) {
-				return $token->verified;
-			}
+		if ($token AND LoginModel::getUid() === $token->uid AND time() < strtotime($token->expire)) {
+			return $token->verified;
 		}
 		return false;
 	}
 
 	public function discardToken($uid, $url) {
-		unset($_SESSION['_verifiedUid']);
 		$this->deleteByPrimaryKey(array($uid, $url));
+		LoginModel::instance()->logout();
 	}
 
 	public function createToken($uid, $url, $expire = '+1 hour') {
