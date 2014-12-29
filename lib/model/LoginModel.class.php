@@ -83,10 +83,6 @@ class LoginModel extends PersistenceModel implements Validator {
 		$lid = LidCache::getLid($_SESSION['_uid']);
 		if ($lid instanceof Lid) {
 
-			if (!AccessModel::mag($lid, 'P_LOGGED_IN', true)) {
-				return false;
-			}
-
 			// Check login session
 			$session = $this->retrieveByPrimaryKey(array(session_id()));
 			if (!$session) {
@@ -253,9 +249,10 @@ class LoginModel extends PersistenceModel implements Validator {
 			return false;
 		}
 
-		// als we een gebruiker hebben gevonden controleren we het wachtwoord
-		if ($lid instanceof Lid AND ( $tokenOK OR checkpw($lid, $pass) )) {
-			// als het wachtwoord klopt laden we het profiel en richten de sessie in
+		// als we een gebruiker hebben gevonden controleren we
+		// of deze gebruiker mag inloggen en of het wachtwoord klopt
+		// of dat er eerder een token is gecontroleerd.
+		if ($lid instanceof Lid AND AccessModel::mag($lid, 'P_LOGGED_IN', $tokenOK) AND ( $tokenOK OR checkpw($lid, $pass) )) {
 			TimeoutModel::instance()->goed($lid->getUid());
 		} else {
 			$_SESSION['auth_error'] = 'Inloggen niet geslaagd<br><a href="/wachtwoord/vergeten">Wachtwoord vergeten?</a>';
