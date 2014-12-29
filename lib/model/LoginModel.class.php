@@ -280,7 +280,7 @@ class LoginModel extends PersistenceModel implements Validator {
 				$this->create($session);
 			}
 		}
-		return AccessModel::mag($lid, 'P_LOGGED_IN', $tokenOK);
+		return true;
 	}
 
 	public function logout() {
