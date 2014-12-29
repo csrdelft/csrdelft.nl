@@ -11,7 +11,7 @@
 			</div>
 			<a href="/pauper/terug">Naar normale webstek</a>
 			<div class="float-right">
-				<span class="waarschuwing">{LoginModel::instance()->getError()}</span>
+				<span class="error">{LoginModel::instance()->getError()}</span>
 				{if LoginModel::mag('P_LOGGED_IN')}
 					<a href="/logout">Uitloggen</a>
 				{else}

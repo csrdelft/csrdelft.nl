@@ -260,6 +260,8 @@ class LoginModel extends PersistenceModel implements Validator {
 			return false;
 		}
 
+		// fetch auth_error
+		$this->getError();
 		// clear session
 		session_unset();
 
