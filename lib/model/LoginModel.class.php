@@ -50,21 +50,17 @@ class LoginModel extends PersistenceModel implements Validator {
 
 	protected function __construct() {
 		parent::__construct();
-
 		// Staat er een gebruiker in de sessie?
-		if (!$this->validate()) {
-			// zo nee, dan nobody user er in gooien...
-			// in dit geval is het de eerste keer dat we een pagina opvragen
-			// of er is net uitgelogd waardoor de gegevens zijn leeggegooid
-			$this->login('x999', 'x999');
+		// zo nee, dan nobody user er in gooien...
+		// in dit geval is het de eerste keer dat we een pagina opvragen
+		// of er is net uitgelogd waardoor de gegevens zijn leeggegooid
+		if (!$this->validate() AND ! $this->login('x999', 'x999')) {
+			// public gebruiker is stuk
+			throw new Exception('Not accessible');
 		}
-
-		// Als we x999 zijn checken we of er misschien een validatietoken in de $_GET staat
-		// om zonder sessie bepaalde rechten te krijgen.
 		if ($this->getLid()->getUid() === 'x999') {
-
-
-
+			// Als we x999 zijn checken we of er misschien een validatietoken in de $_GET staat
+			// om zonder sessie bepaalde rechten te krijgen.
 			$token = filter_input(INPUT_GET, 'private_token', FILTER_SANITIZE_STRING);
 			if (preg_match('/^[a-zA-Z0-9]{150}$/', $token)) {
 				$uid = Database::instance()->sqlSelect(array('uid'), 'lid', 'rssToken = ?', array($token), null, null, 1)->fetchColumn();
