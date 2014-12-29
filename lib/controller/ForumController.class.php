@@ -619,10 +619,13 @@ class ForumController extends Controller {
 				redirect(CSR_ROOT . '/forum/deel/' . $deel->forum_id);
 			}
 		} else {
-
 			// direct goedkeuren voor ingelogd
 			ForumPostsModel::instance()->tellenEnGoedkeurenForumPost($post, $draad, $deel);
+			$self = LoginModel::getUid();
 			foreach ($draad->getVolgers() as $uid) {
+				if ($uid === $self) {
+					continue;
+				}
 				require_once 'model/entity/Mail.class.php';
 				$bericht = "[url]" . CSR_ROOT . "/forum/reactie/" . $post->post_id . "#" . $post->post_id . "[/url]\r\n" . "\r\nDe inhoud van het bericht is als volgt: \r\n\r\n" . str_replace('\r\n', "\n", $tekst) . "\r\n\r\nEINDE BERICHT";
 				$mail = new Mail(array($uid . '@csrdelft.nl' => Lid::naamLink($uid, 'civitas', 'plain')), 'C.S.R. Forum: nieuwe reactie op ' . $draad->titel, $bericht);
