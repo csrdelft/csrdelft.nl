@@ -107,6 +107,12 @@ class LoginController extends AclController {
 				VerifyModel::instance()->discardToken($uid, '/wachtwoord/reset');
 				setMelding('Wachtwoord instellen geslaagd', 1);
 				$this->model->login($uid, $pw);
+
+				require_once 'model/entity/Mail.class.php';
+				$bericht = 'Geachte ' . $lid->getNaamLink('civitas', 'plain') .
+						",\n\nU heeft recent uw wachtwoord opnieuw ingesteld. Als u dit niet zelf gedaan heeft dan moet u nu direct uw wachtwoord wijzigen en de PubCie op de hoogte stellen.\n\nMet amicale groet,\nUw PubCie";
+				$mail = new Mail(array($uid . '@csrdelft.nl' => Lid::naamLink($uid, 'civitas', 'plain')), 'C.S.R. webstek: nieuw wachtwoord ingesteld', $bericht);
+				$mail->send();
 			}
 			$this->view = new CsrLayoutPage($this->view);
 			return;
