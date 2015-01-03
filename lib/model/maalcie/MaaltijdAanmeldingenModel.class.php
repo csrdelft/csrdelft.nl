@@ -344,7 +344,7 @@ class MaaltijdAanmeldingenModel {
 
 	public static function checkAanmeldFilter($uid, $filter) {
 		$lid = LidCache::getLid($uid); // false if lid does not exist
-		if (!($lid instanceof Lid)) {
+		if (!$lid instanceof Lid) {
 			throw new Exception('Lid bestaat niet: $uid =' . $uid);
 		}
 		if ($filter === '') {

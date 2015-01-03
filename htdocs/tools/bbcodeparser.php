@@ -2,7 +2,7 @@
 require_once('BBCodeParser2/HTML/BBCodeParser2.php');
 require_once 'configuratie.include.php';
 
-if (!LoginModel::mag('P_LEDEN_READ') OR ! LoginModel::mag('P_OUDLEDEN_READ')) {
+if (!LoginModel::mag('P_OUDLEDEN_READ')) {
 	echo 'Niet voldoende rechten';
 	exit;
 }

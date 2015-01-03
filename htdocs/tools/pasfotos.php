@@ -10,7 +10,7 @@
 require_once 'configuratie.include.php';
 
 if (isset($_GET['string'])) {
-	if (!LoginModel::mag('P_LEDEN_READ') OR ! LoginModel::mag('P_OUDLEDEN_READ')) {
+	if (!LoginModel::mag('P_OUDLEDEN_READ')) {
 		echo 'niet voldoende rechten';
 	} else {
 		$string = trim(urldecode($_GET['string']));
@@ -32,7 +32,7 @@ if (isset($_GET['string'])) {
 	header('Expires: ' . gmdate('D, d M Y H:i:s', (time() + 21000)) . ' GMT');
 
 	//we geven de pasfoto voor het gegeven uid direct aan de browser, als we lid-leesrechten hebben
-	if (!LoginModel::mag('P_LEDEN_READ') OR ! LoginModel::mag('P_OUDLEDEN_READ') OR ! Lid::isValidUid($uid)) {
+	if (!LoginModel::mag('P_OUDLEDEN_READ') OR ! Lid::isValidUid($uid)) {
 		header('Content-Type: image/jpeg');
 		echo file_get_contents(PICS_PATH . 'pasfoto/geen-foto.jpg');
 	} else {

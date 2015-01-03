@@ -569,7 +569,7 @@ class DownloadUrlField extends UrlField {
 			$this->error = 'PHP.ini configuratie: fsocked, cURL of allow_url_fopen moet aan staan.';
 		} elseif (!url_like($this->value)) {
 			$this->error = 'Ongeldige url';
-		} elseif (!($this->model instanceof Bestand) OR ! $this->model->exists() OR empty($this->model->filesize)) {
+		} elseif (!$this->model instanceof Bestand OR ! $this->model->exists() OR empty($this->model->filesize)) {
 			$error = error_get_last();
 			$this->error = $error['message'];
 		} elseif (!empty($this->filterMime) AND ! in_array($this->model->mimetype, $this->filterMime)) {

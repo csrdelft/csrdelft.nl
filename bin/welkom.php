@@ -18,7 +18,7 @@ $result = $db->select("SELECT * FROM `lid` WHERE status = 'S_NOVIET'");
 if ($result !== false and $db->numRows($result) > 0) {
 	while ($sjaars = $db->next($result)) {
 		$nanonovieten = array();
-		if (!(in_array($sjaars['uid'], $nanonovieten))) {
+		if (!in_array($sjaars['uid'], $nanonovieten)) {
 			$url = CSR_ROOT . '/wachtwoord/vergeten';
 			$tekst = <<<EOD
 Beste noviet {$sjaars['voornaam']},

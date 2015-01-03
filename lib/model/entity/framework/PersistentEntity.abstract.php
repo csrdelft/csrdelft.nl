@@ -214,7 +214,7 @@ abstract class PersistentEntity implements Sparse, JsonSerializable {
 		foreach (static::$persistent_attributes as $name => $definition) {
 			// Add missing persistent attributes
 			if (!isset($database_attributes[$name])) {
-				if (!(isset($rename[$name]))) {
+				if (!isset($rename[$name])) {
 					DatabaseAdmin::instance()->sqlAddAttribute(static::$table_name, $attributes[$name], $previous_attribute);
 				}
 			} else {

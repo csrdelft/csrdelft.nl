@@ -192,7 +192,7 @@ abstract class InputField implements FormElement, Validator {
 				if (!unlink($directory . $filename)) {
 					throw new Exception('Overschrijven mislukt: ' . htmlspecialchars($directory . $filename));
 				}
-			} elseif (!($this instanceof BestandBehouden)) {
+			} elseif (!$this instanceof BestandBehouden) {
 				throw new Exception('Bestandsnaam al in gebruik: ' . htmlspecialchars($directory . $filename));
 			}
 		}

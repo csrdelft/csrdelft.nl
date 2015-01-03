@@ -37,7 +37,7 @@ if (isset($_GET['a'])) {
 	$actie = 'view';
 }
 
-if (!LoginModel::mag('P_LEDEN_READ') OR ! LoginModel::mag('P_OUDLEDEN_READ')) {
+if (!LoginModel::mag('P_OUDLEDEN_READ')) {
 
 	require_once 'model/CmsPaginaModel.class.php';
 	require_once 'view/CmsPaginaView.class.php';

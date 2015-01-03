@@ -97,8 +97,9 @@ class LoginModel extends PersistenceModel implements Validator {
 				return false;
 			}
 			// Controleer switch user status:
-			elseif (isset($this->suedFrom)) {
-				if ($session->uid != $this->suedFrom->getUid()) {
+			elseif (isset($_SESSION['_suedFrom'])) {
+				$this->suedFrom = LidCache::getLid($_SESSION['_suedFrom']);
+				if (!$this->suedFrom instanceof Lid OR $session->uid != $this->suedFrom->getUid()) {
 					return false;
 				}
 			}
@@ -109,9 +110,6 @@ class LoginModel extends PersistenceModel implements Validator {
 
 			// Subject Assignment:
 			$this->setLid($lid);
-			if (isset($_SESSION['_suedFrom'])) {
-				$this->suedFrom = LidCache::getLid($_SESSION['_suedFrom']);
-			}
 			return true;
 		}
 		return false;
@@ -233,7 +231,7 @@ class LoginModel extends PersistenceModel implements Validator {
 			$lid = LidCache::getLid($uid);
 		}
 		// als er geen lid-object terugkomt, proberen we het met de nickname:
-		if (!($lid instanceof Lid)) {
+		if (!$lid instanceof Lid) {
 			$lid = Lid::loadByNickname($uid);
 		}
 
@@ -338,8 +336,7 @@ class LoginModel extends PersistenceModel implements Validator {
 
 	private function setLid(Lid $lid) {
 		$this->loggedinLid = $lid;
-		$uid = $lid->getUid();
-		$_SESSION['_uid'] = $uid;
+		$_SESSION['_uid'] = $lid->getUid();
 	}
 
 	public function isAuthenticatedByToken() {

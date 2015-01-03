@@ -43,7 +43,7 @@ class GroepController extends Controller {
 					redirect(CSR_ROOT . '/groepen/');
 				}
 				$this->groep->setGtype($groepen);
-				if (!($this->groep->getType() instanceof GroepenOldModel)) {
+				if (!$this->groep->getType() instanceof GroepenOldModel) {
 					setMelding('Groeptype bestaat niet', -1);
 					redirect($this->getUrl());
 				}
