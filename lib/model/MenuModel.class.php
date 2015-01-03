@@ -33,7 +33,7 @@ class MenuModel extends CachedPersistenceModel {
 			$loaded = $this->isCached($key, false); // is the tree root present in runtime cache?
 			$root = $this->getCached($key, true); // this only puts the tree root in runtime cache
 			if (!$loaded) {
-				$this->cacheResult($this->getList($root), false); // put tree children in runtime cache as well
+				$this->cacheResult($this->flattenMenu($root), false); // put tree children in runtime cache as well
 			}
 			return $root;
 		}
@@ -48,8 +48,9 @@ class MenuModel extends CachedPersistenceModel {
 			if ($naam == LoginModel::getUid()) {
 				// maak favorieten menu 
 				$root->link = '/menubeheer/beheer/' . $naam;
+			} else {
+				$root->link = '';
 			}
-			$root->link = '';
 			$this->create($root);
 		}
 		$this->setCache($key, $root, true);
@@ -139,10 +140,10 @@ class MenuModel extends CachedPersistenceModel {
 	 * @param MenuItem $root
 	 * @return MenuItem[]
 	 */
-	public function getList(MenuItem $root) {
+	public function flattenMenu(MenuItem $root) {
 		$list = $root->getChildren();
 		foreach ($list as $child) {
-			$list = array_merge($list, $this->getList($child));
+			$list = array_merge($list, $this->flattenMenu($child));
 		}
 		return $list;
 	}
