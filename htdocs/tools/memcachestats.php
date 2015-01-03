@@ -1,12 +1,15 @@
 <?php
 
 /**
- * memcachestats.php	| 	Jan Pieter Waagmeester (jieter@jpwaag.com)
- *
+ * memcachestats.php
+ * 
+ * @author Jan Pieter Waagmeester <jieter@jpwaag.com>
+ * @author P.W.G. Brussee <brussee@live.nl>
+ * 
  */
 require_once 'configuratie.include.php';
 
-if (LoginModel::mag('P_ADMIN')) {
+if (DEBUG OR LoginModel::mag('P_ADMIN') OR LoginModel::instance()->isSued()) {
 
 	echo getMelding();
 
