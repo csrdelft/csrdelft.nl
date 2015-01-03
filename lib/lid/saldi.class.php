@@ -51,12 +51,13 @@ class Saldi {
 				}
 				$this->data = array_merge($this->data, array_reverse($data));
 			}
-		} elseif ($this->cie = 'maalcie') {
-			//herhaal laatste datapunt om grafiek te tekenen tot aan vandaag
-			$row = end($this->data);
-			array_push($this->data, array('moment' => getDateTime(), 'saldo' => $row['saldo']));
 		}
-		if (sizeof($this->data) > 0) {
+		if (!empty($this->data)) {
+			if ($this->cie = 'maalcie') {
+				//herhaal laatste datapunt om grafiek te tekenen tot aan vandaag
+				$row = end($this->data);
+				array_push($this->data, array('moment' => getDateTime(), 'saldo' => $row['saldo']));
+			}
 			// herhaal eerste datapunt om grafiek te tekenen vanaf begin timespan
 			$row = reset($this->data);
 			$time = strtotime('-' . $timespan . ' days');

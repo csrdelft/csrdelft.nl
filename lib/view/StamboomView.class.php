@@ -70,9 +70,8 @@ class StamboomView implements View {
 	}
 
 	public function view() {
-		$this->viewNode($this->root, true);
-
 		echo '<h3>Omvang van het nageslacht van ' . $this->root->getNaam() . ': ' . $this->kinderen . '</h3>';
+		$this->viewNode($this->root, true);
 	}
 
 }
