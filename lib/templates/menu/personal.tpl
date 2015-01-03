@@ -18,9 +18,9 @@
 			</a>
 		</li>
 		<li class="has-children">
-			<a href="#0">Favorieten</a>
+			<a href="#0">{$favorieten->tekst}</a>
 			<ul class="is-hidden">
-				<li class="go-back"><a href="#0">Favorieten</a></li>
+				<li class="go-back"><a href="#0">{$favorieten->tekst}</a></li>
 				{include file='menu/main_tree.tpl' parent=$favorieten}
 			</ul>
 		</li>
