@@ -106,7 +106,7 @@ require_once 'view/CsrLayout2Page.class.php';
 require_once 'icon.class.php';
 
 # Controller
-require_once 'controller/framework/CrudController.abstract.php';
+require_once 'controller/framework/AclController.abstract.php';
 
 # Router
 switch (constant('MODE')) {
