@@ -127,10 +127,6 @@
 						$('span.change-mode').click();
 					}
 				});
-				// fullscreen GET param
-				if (window.location.href.indexOf('?fullscreen') > 0 && !container.hasClass('jgallery-full-screen')) {
-					$('span.change-mode').click();
-				}
 				// toggle fullscreen F11
 				$(window).keydown(function (event) {
 					if (event.keyCode === 122) {
@@ -160,6 +156,10 @@
 						btn.click();
 					}
 				});
+				// fullscreen GET param
+				if (window.location.href.indexOf('?fullscreen') > 0 && !container.hasClass('jgallery-full-screen')) {
+					$('span.change-mode').click();
+				}
 				// knopje subalbums
 				container.find('.fa-list-ul').removeClass('fa-list-ul').addClass('fa-folder-open-o');
 		{if LoginModel::mag('P_ALBUM_MOD') OR $album->isOwner()}
