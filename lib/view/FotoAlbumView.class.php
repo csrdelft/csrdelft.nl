@@ -14,6 +14,9 @@ class FotoAlbumView extends SmartyTemplateView {
 
 	public function __construct(FotoAlbum $fotoalbum) {
 		parent::__construct($fotoalbum);
+		if ($fotoalbum->dirname === 'Posters') {
+			$fotoalbum->orderByDateModified();
+		}
 	}
 
 	function getTitel() {

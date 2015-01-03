@@ -127,6 +127,19 @@ class FotoAlbum extends Map {
 		}
 	}
 
+	public function orderByDateModified() {
+		$order = array();
+		foreach ($this->getFotos() as $i => $foto) {
+			$order[$i] = filemtime($foto->getFullPath());
+		}
+		arsort($order);
+		$result = array();
+		foreach ($order as $i => $mtime) {
+			$result[] = $this->fotos[$i];
+		}
+		$this->fotos = $result;
+	}
+
 	public function getSubAlbums($recursive = false) {
 		if (!isset($this->subalbums)) {
 
@@ -151,24 +164,20 @@ class FotoAlbum extends Map {
 		return $this->subalbums;
 	}
 
-	public function getCoverUrl($thumb = true) {
-		foreach ($this->getFotos() as $foto) {
-			if (strpos($foto->filename, 'folder') !== false) {
-				if ($thumb) {
-					return $foto->getThumbUrl();
-				} else {
-					return $foto->getResizedUrl();
+	public function getCoverUrl() {
+		if ($this->hasFotos()) {
+			if ($this->dirname !== 'Posters') {
+				foreach ($this->getFotos() as $foto) {
+					if (strpos($foto->filename, 'folder') !== false) {
+						return $foto->getThumbUrl();
+					}
 				}
 			}
-		}
-		// Anders een willekeurige foto:
-		$count = count($this->fotos);
-		if ($count > 0) {
-			$idx = rand(0, $count - 1);
-			if ($thumb) {
+			// Anders een willekeurige foto:
+			$count = count($this->fotos);
+			if ($count > 0) {
+				$idx = rand(0, $count - 1);
 				return $this->fotos[$idx]->getThumbUrl();
-			} else {
-				return $this->fotos[$idx]->getResizedUrl();
 			}
 		}
 		// Foto uit willekeurig subalbum:
