@@ -11,7 +11,9 @@ abstract class Zijbalk {
 	public static function addStandaardZijbalk(array $zijbalk) {
 		// Favorieten menu
 		if (LidInstellingen::get('zijbalk', 'favorieten') == 'ja') {
-			array_unshift($zijbalk, new BlockMenuView(MenuModel::instance()->getMenu(LoginModel::getUid())));
+			$menu = MenuModel::instance()->getMenu(LoginModel::getUid());
+			$menu->tekst = 'Favorieten';
+			array_unshift($zijbalk, new BlockMenuView($menu));
 		}
 		// Is het al...
 		if (LidInstellingen::get('zijbalk', 'ishetal') != 'niet weergeven') {
