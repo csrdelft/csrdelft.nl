@@ -65,9 +65,6 @@ class MenuModel extends CachedPersistenceModel {
 	 * @return MenuItem $parent
 	 */
 	public function getExtendedTree(MenuItem $parent) {
-		foreach ($parent->getChildren() as $child) {
-			$this->getExtendedTree($child);
-		}
 		switch ($parent->tekst) {
 
 			case LoginModel::getUid():
@@ -117,6 +114,9 @@ class MenuModel extends CachedPersistenceModel {
 					}
 				}
 				break;
+		}
+		foreach ($parent->getChildren() as $child) {
+			$this->getExtendedTree($child);
 		}
 		return $parent;
 	}
