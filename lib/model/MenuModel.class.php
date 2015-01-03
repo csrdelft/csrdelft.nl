@@ -66,6 +66,10 @@ class MenuModel extends CachedPersistenceModel {
 	 * @return MenuItem $parent
 	 */
 	public function getExtendedTree(MenuItem $parent) {
+		foreach ($parent->getChildren() as $child) {
+			$this->getExtendedTree($child);
+		}
+		// append additional children
 		switch ($parent->tekst) {
 
 			case 'Forum':
@@ -111,9 +115,6 @@ class MenuModel extends CachedPersistenceModel {
 					}
 				}
 				break;
-		}
-		foreach ($parent->getChildren() as $child) {
-			$this->getExtendedTree($child);
 		}
 		return $parent;
 	}
