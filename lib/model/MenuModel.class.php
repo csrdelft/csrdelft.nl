@@ -68,10 +68,6 @@ class MenuModel extends CachedPersistenceModel {
 	public function getExtendedTree(MenuItem $parent) {
 		switch ($parent->tekst) {
 
-			case LoginModel::getUid():
-				$parent->tekst = 'Favorieten';
-				break;
-
 			case 'Forum':
 				require_once 'model/ForumModel.class.php';
 				foreach (ForumModel::instance()->prefetch() as $categorie) {
@@ -152,6 +148,9 @@ class MenuModel extends CachedPersistenceModel {
 	public function getMenuRoot($naam) {
 		$root = $this->find('parent_id = ? AND tekst = ? ', array(0, $naam), null, null, 1)->fetch();
 		if ($root) {
+			if ($root->tekst == LoginModel::getUid()) {
+				$root->tekst = 'Favorieten';
+			}
 			return $this->cache($root, false);
 		}
 		return false;

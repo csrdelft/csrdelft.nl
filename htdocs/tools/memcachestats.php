@@ -10,8 +10,5 @@ if (LoginModel::mag('P_ADMIN')) {
 
 	echo '<h1>MemCache statistieken</h1>';
 
-	$stats = CsrMemcache::instance()->getStats();
-
-	echo '<pre>' . print_r($stats, true) . '</pre>';
-	echo 'Dat is dus ' . ($stats['cmd_get'] / $stats['uptime']) . ' aanroepen van Lid::getNaamLink() per seconde.';
+	debugprint(CsrMemcache::instance()->getStats());
 }

@@ -8,7 +8,7 @@ require_once 'configuratie.include.php';
 
 if (LoginModel::mag('P_ADMIN')) {
 
-	echo '<h1>MemCache flushen</h1>';
-
 	CsrMemcache::instance()->flush();
+
+	redirect(CSR_ROOT . '/tools/memcachestats.php');
 }
