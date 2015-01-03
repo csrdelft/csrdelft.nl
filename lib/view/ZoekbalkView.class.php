@@ -65,6 +65,9 @@ JS;
 				$label = $item->tekst;
 				$parent = $item->getParent();
 				if ($parent AND $parent->tekst != 'main') {
+					if ($parent->tekst == LoginModel::getUid()) { // werkomheen
+						$parent->tekst = 'Favorieten';
+					}
 					$label .= '<span class="lichtgrijs"> - ' . $parent->tekst . '</span>';
 				}
 				$this->suggestions[''][] = array(
