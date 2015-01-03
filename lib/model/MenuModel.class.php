@@ -53,6 +53,7 @@ class MenuModel extends CachedPersistenceModel {
 			}
 			$this->create($root);
 		}
+		$this->cache($root); // cache for getParent()
 		$this->setCache($key, $root, true);
 		return $root;
 	}
