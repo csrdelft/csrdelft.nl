@@ -117,6 +117,9 @@ class FotoAlbumController extends AclController {
 				try {
 					if ($poster) {
 						$filename = $formulier->findByName('posternaam')->getValue() . '.jpg';
+						if (strpos($filename, 'folder') !== false) {
+							throw new Exception('Albumcover niet toegestaan');
+						}
 					} else {
 						$filename = $uploader->getModel()->filename;
 					}
