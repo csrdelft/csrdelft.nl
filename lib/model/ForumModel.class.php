@@ -439,10 +439,12 @@ class ForumDradenGelezenModel extends AbstractForumModel {
 		} else {
 			$gelezen->datum_tijd = $post->laatst_gewijzigd;
 		}
-		if ($create) {
-			$this->create($gelezen);
-		} else {
-			$this->update($gelezen);
+		if ($gelezen->datum_tijd) { // > 0 posts?
+			if ($create) {
+				$this->create($gelezen);
+			} else {
+				$this->update($gelezen);
+			}
 		}
 	}
 
