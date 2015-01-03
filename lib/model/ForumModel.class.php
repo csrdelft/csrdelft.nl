@@ -1076,7 +1076,7 @@ class ForumPostsModel extends AbstractForumModel implements Paging {
 		Database::sqlUpdate($this->orm->getTableName(), array('verwijderd' => $draad->verwijderd), 'draad_id = :id', array(':id' => $draad->draad_id));
 	}
 
-	public function bewerkForumPost($nieuwe_tekst, $reden, ForumPost $post, ForumDraad $draad, ForumDeel $deel) {
+	public function bewerkForumPost($nieuwe_tekst, $reden, ForumPost $post) {
 		$verschil = levenshtein($post->tekst, $nieuwe_tekst);
 		$post->tekst = $nieuwe_tekst;
 		$post->laatst_gewijzigd = getDateTime();
@@ -1091,6 +1091,7 @@ class ForumPostsModel extends AbstractForumModel implements Paging {
 			throw new Exception('Bewerken mislukt');
 		}
 		if ($verschil > 3) {
+			$draad = $post->getForumDraad();
 			$draad->laatst_gewijzigd = $post->laatst_gewijzigd;
 			$draad->laatste_post_id = $post->post_id;
 			$draad->laatste_wijziging_uid = $post->uid;
