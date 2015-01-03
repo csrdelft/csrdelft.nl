@@ -96,4 +96,19 @@ class ForumPost extends PersistentEntity {
 		return ForumDradenModel::instance()->getForumDraad($this->draad_id);
 	}
 
+	public function magCiteren() {
+		return LoginModel::mag('P_LOGGED_IN') AND $this->getForumDraad()->magPosten();
+	}
+
+	public function magBewerken() {
+		$draad = $this->getForumDraad();
+		if ($draad->magModereren()) {
+			return true;
+		}
+		if (!$draad->magPosten()) {
+			return false;
+		}
+		return $this->uid === LoginModel::getUid() AND LoginModel::mag('P_LOGGED_IN');
+	}
+
 }

@@ -147,15 +147,13 @@ class ForumDeelForm extends ModalForm {
 
 class ForumDraadView extends ForumView {
 
-	private $deel;
 	private $paging;
 	private $statistiek;
 	private $ongelezen;
 	private $gelezen_moment;
 
-	public function __construct(ForumDraad $draad, ForumDeel $deel, $paging = true, $statistiek = false) {
+	public function __construct(ForumDraad $draad, $paging = true, $statistiek = false) {
 		parent::__construct($draad, $draad->titel);
-		$this->deel = $deel;
 		$this->paging = ($paging AND ForumPostsModel::instance()->getAantalPaginas($draad->draad_id) > 1);
 		$this->statistiek = $statistiek;
 		// cache old value for ongelezen streep
@@ -169,18 +167,18 @@ class ForumDraadView extends ForumView {
 	}
 
 	public function getBreadcrumbs() {
-		return parent::getBreadcrumbs() . ' » <a href="/forum/deel/' . $this->deel->forum_id . '/' . ForumDradenModel::instance()->getPaginaVoorDraad($this->model) . '#' . $this->model->draad_id . '">' . $this->deel->titel . '</a>';
+		$deel = $this->model->getForumDeel();
+		return parent::getBreadcrumbs() . ' » <a href="/forum/deel/' . $deel->forum_id . '/' . ForumDradenModel::instance()->getPaginaVoorDraad($this->model) . '#' . $this->model->draad_id . '">' . $deel->titel . '</a>';
 	}
 
 	public function view() {
 		$this->smarty->assign('zoekform', new ForumZoekenForm());
 		$this->smarty->assign('draad', $this->model);
-		$this->smarty->assign('deel', $this->deel);
 		$this->smarty->assign('paging', $this->paging);
-		$this->smarty->assign('post_form_tekst', ForumDradenReagerenModel::instance()->getConcept($this->deel, $this->model->draad_id));
+		$this->smarty->assign('post_form_tekst', ForumDradenReagerenModel::instance()->getConcept($this->model->getForumDeel(), $this->model->draad_id));
 		$this->smarty->assign('reageren', ForumDradenReagerenModel::instance()->getReagerenVoorDraad($this->model));
 		$this->smarty->assign('categorien', ForumModel::instance()->getForumIndelingVoorLid());
-		$this->smarty->assign('gedeeld_met_opties', ForumDelenModel::instance()->getForumDelenOptiesOmTeDelen($this->deel));
+		$this->smarty->assign('gedeeld_met_opties', ForumDelenModel::instance()->getForumDelenOptiesOmTeDelen($this->model->getForumDeel()));
 		if ($this->statistiek) {
 			$this->smarty->assign('statistiek', true);
 		}
@@ -248,7 +246,6 @@ class ForumPostZijbalkView extends ForumView {
 		echo '<div class="zijbalk_forum"><div class="zijbalk-kopje"><a href="/profiel/' . LoginModel::getUid() . '/#forum">Forum (zelf gepost)</a></div>';
 		foreach ($this->model as $post) {
 			$this->smarty->assign('post', $post);
-			$this->smarty->assign('draad', $post->getForumDraad());
 			$this->smarty->display('forum/post_zijbalk.tpl');
 		}
 		echo '</div>';
@@ -258,19 +255,12 @@ class ForumPostZijbalkView extends ForumView {
 
 class ForumPostView extends ForumView {
 
-	private $draad;
-	private $deel;
-
-	public function __construct(ForumPost $post, ForumDraad $draad, ForumDeel $deel) {
+	public function __construct(ForumPost $post) {
 		parent::__construct($post);
-		$this->draad = $draad;
-		$this->deel = $deel;
 	}
 
 	public function view() {
 		$this->smarty->assign('post', $this->model);
-		$this->smarty->assign('draad', $this->draad);
-		$this->smarty->assign('deel', $this->deel);
 		$this->smarty->display('forum/post_lijst.tpl');
 	}
 

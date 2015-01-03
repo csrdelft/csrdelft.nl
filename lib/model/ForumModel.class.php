@@ -455,8 +455,8 @@ class ForumDradenGelezenModel extends AbstractForumModel {
 	 * @param array $draad
 	 * @return int percentage
 	 */
-	public function getGelezenPercentage(Forumpost $post, ForumDraad $draad) {
-		$lezers = $draad->getLezers();
+	public function getGelezenPercentage(Forumpost $post) {
+		$lezers = $post->getForumDraad()->getLezers();
 		$counter = 0;
 		foreach ($lezers as $gelezen) {
 			if ($post->laatst_gewijzigd) {
@@ -465,7 +465,7 @@ class ForumDradenGelezenModel extends AbstractForumModel {
 				}
 			}
 		}
-		return (int) ($counter * 100 / $draad->getAantalLezers());
+		return (int) ($counter * 100 / $post->getForumDraad()->getAantalLezers());
 	}
 
 	public function getLezersVanDraad(ForumDraad $draad) {
@@ -1063,13 +1063,13 @@ class ForumPostsModel extends AbstractForumModel implements Paging {
 		return $post;
 	}
 
-	public function verwijderForumPost(ForumPost $post, ForumDraad $draad) {
+	public function verwijderForumPost(ForumPost $post) {
 		$post->verwijderd = !$post->verwijderd;
 		$rowCount = $this->update($post);
 		if ($rowCount !== 1) {
 			throw new Exception('Verwijderen mislukt');
 		}
-		$this->hertellenVoorDraad($draad);
+		$this->hertellenVoorDraad($post->getForumDraad());
 	}
 
 	public function verwijderForumPostsVoorDraad(ForumDraad $draad) {
@@ -1121,7 +1121,7 @@ class ForumPostsModel extends AbstractForumModel implements Paging {
 		}
 	}
 
-	public function tellenEnGoedkeurenForumPost(ForumPost $post, ForumDraad $draad) {
+	public function goedkeurenOptellenForumPost(ForumPost $post) {
 		if ($post->wacht_goedkeuring) {
 			$post->wacht_goedkeuring = false;
 			$post->laatst_gewijzigd = getDateTime();
@@ -1131,6 +1131,7 @@ class ForumPostsModel extends AbstractForumModel implements Paging {
 				throw new Exception('Goedkeuren mislukt');
 			}
 		}
+		$draad = $post->getForumDraad();
 		$draad->aantal_posts++;
 		$draad->laatst_gewijzigd = $post->laatst_gewijzigd;
 		$draad->laatste_post_id = $post->post_id;

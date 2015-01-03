@@ -29,7 +29,7 @@
 				   >{icon get="email"}</a>
 			{/if}
 			&nbsp;&nbsp;&nbsp;
-			{if $deel->magModereren()}
+			{if $draad->magModereren()}
 				{if $draad->gesloten}
 					<a href="/forum/wijzigen/{$draad->draad_id}/gesloten" class="btn round post ReloadPage" title="Openen (reactie mogelijk)"
 					   onmouseover="$(this).children('img').attr('src', '/plaetjes/famfamfam/lock_break.png');"
@@ -65,7 +65,7 @@
 
 	{$smarty.capture.kop}
 
-	{if $deel->magModereren()}
+	{if $draad->magModereren()}
 		{include file='forum/draad_mod.tpl'}
 	{/if}
 
@@ -74,7 +74,7 @@
 			<span class="draad-verwijderd">Dit onderwerp is verwijderd.</span>
 		{elseif $draad->gesloten}
 			<span class="draad-gesloten">U kunt hier niet meer reageren omdat dit onderwerp gesloten is.</span>
-		{elseif !ForumController::magPosten($draad, $deel)}
+		{elseif !$draad->magPosten()}
 			<span class="draad-readonly">U mag in dit deel van het forum niet reageren.</span>
 		{/if}
 	{/capture}
@@ -172,8 +172,8 @@ pagecount=ForumPostsModel::instance()->getAantalPaginas($draad->draad_id) curpag
 			</td>
 		</tr>
 
-		{if ForumController::magPosten($draad, $deel)}
-			{include file='forum/post_form.tpl'}
+		{if $draad->magPosten()}
+			{include file='forum/post_form.tpl' deel=$draad->getForumDeel()}
 		{/if}
 
 	</tbody>

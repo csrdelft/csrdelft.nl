@@ -172,10 +172,19 @@ class ForumDraad extends PersistentEntity {
 	}
 
 	public function magLezen() {
+		if ($this->magModereren()) {
+			return true;
+		}
+		if ($this->verwijderd) {
+			return false;
+		}
 		return $this->getForumDeel()->magLezen() OR ( $this->isGedeeld() AND $this->getGedeeldMet()->magLezen() );
 	}
 
 	public function magPosten() {
+		if ($this->verwijderd OR $this->gesloten) {
+			return false;
+		}
 		return $this->getForumDeel()->magPosten() OR ( $this->isGedeeld() AND $this->getGedeeldMet()->magPosten() );
 	}
 
