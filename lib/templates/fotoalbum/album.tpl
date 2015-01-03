@@ -117,16 +117,20 @@
 				container.find('span.next').on('click', next);
 				container.find('span.prev').on('click', prev);
 				$(document).on('keydown', function (event) {
-					if (event.keyCode === 39) {
+					if (event.keyCode === 39) { // arrow right
 						next();
 					}
-					else if (event.keyCode === 37) {
+					else if (event.keyCode === 37) { // arrow left
 						prev();
 					}
-					else if (event.keyCode === 27 && container.hasClass('jgallery-full-screen')) {
-						$('span.change-mode.jgallery-btn').click();
+					else if (event.keyCode === 27 && container.hasClass('jgallery-full-screen')) { // esc
+						$('span.change-mode').click();
 					}
 				});
+				// fullscreen GET param
+				if (window.location.href.indexOf('?fullscreen') > 0 && !container.hasClass('jgallery-full-screen')) {
+					$('span.change-mode').click();
+				}
 				// toggle fullscreen F11
 				$(window).keydown(function (event) {
 					if (event.keyCode === 122) {

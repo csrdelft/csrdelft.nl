@@ -159,7 +159,7 @@ class FotoBBView extends SmartyTemplateView {
 	}
 
 	public function getHtml() {
-		$html = '<a href="' . $this->model->getAlbumUrl() . '#' . $this->model->getResizedUrl() . '"';
+		$html = '<a href="' . $this->model->getAlbumUrl() . '?fullscreen#' . $this->model->getResizedUrl() . '"';
 		if (!$this->groot AND LidInstellingen::get('forum', 'fotoWeergave') == 'boven bericht') {
 			$html .= ' class="hoverIntent"><div class="hoverIntentContent"><div class="bb-img-loading" src="' . $this->model->getResizedUrl() . '"></div></div';
 		}

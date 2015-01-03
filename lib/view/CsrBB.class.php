@@ -111,7 +111,7 @@ class CsrBB extends eamBBParser {
 		$url = $this->parseArray(array('[/img]', '[/IMG]'), array());
 		$url = filter_var($url, FILTER_SANITIZE_URL);
 		if (!$url OR ( !url_like($url) AND ! startsWith($url, '/plaetjes/') )) {
-			return '[img: Ongeldige URL] Gebruik [foto] voor het fotoalbum.';
+			return '[img: Ongeldige URL]';
 		}
 		return '<div class="bb-img-loading" src="' . htmlspecialchars($url) . '" title="' . htmlspecialchars($url) . '" style="' . $style . '"></div>';
 		//return '<img class="bb-img ' . $class . '" src="' . $url . '" alt="' . htmlspecialchars($url) . '" style="' . $style . '" />';

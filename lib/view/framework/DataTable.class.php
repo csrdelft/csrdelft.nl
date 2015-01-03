@@ -321,13 +321,13 @@ class DataTable extends TabsForm {
 						if (td) {
 							fnMultiSelect(event, $(td).parent());
 							fnUpdateToolbar();
-							if (event.keyCode === 13 || event.keyCode === 32) { // space, enter
+							if (event.keyCode === 13 || event.keyCode === 32) { // enter, space
 								$(td).trigger('click');
 							}
 						}
 					}
 		<?php
-		$keyshortcuts = '[13,32'; // space, enter
+		$keyshortcuts = '[13,32'; // enter, space
 		foreach ($this->getFields() as $field) {
 			if ($field instanceof DataTableKnop AND is_int($field->keyshortcut)) {
 				$keyshortcuts .= ',' . $field->keyshortcut;

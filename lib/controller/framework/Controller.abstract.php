@@ -29,10 +29,15 @@ abstract class Controller {
 	 */
 	protected $action;
 	/**
-	 * Broken down query to positional (REST) and named (KVP) parameters
+	 * Query broken down to positional (REST) parameters
 	 * @var array
 	 */
 	private $queryparts;
+	/**
+	 * Query broken down to named (KVP) parameters
+	 * @var array
+	 */
+	private $kvp = array();
 
 	public function __construct($query, $model) {
 		$this->model = $model;
@@ -54,38 +59,47 @@ abstract class Controller {
 				$kvp = explode('=', $part, 2);
 				$key = urldecode($kvp[0]);
 				if (count($kvp) > 1) {
-					$this->queryparts[$key] = urldecode($kvp[1]);
+					$this->kvp[$key] = urldecode($kvp[1]);
 				} else {
-					$this->queryparts[$key] = $key;
+					$this->kvp[$key] = $key;
 				}
 			}
 		}
 	}
 
 	/**
-	 * KVP: named parameters
 	 * REST: positional parameters
+	 * KVP: named parameters
 	 * 
 	 * @param string $key
 	 * @return boolean
 	 */
 	protected function hasParam($key) {
-		return array_key_exists($key, $this->queryparts) AND isset($this->queryparts[$key]) AND $this->queryparts[$key] !== ''; // don't use empty() because 0 is allowed
+		// don't use empty() because 0 is allowed
+		if (isset($this->queryparts[$key]) AND $this->queryparts[$key] !== '') {
+			return true;
+		} elseif (isset($this->kvp[$key]) AND $this->kvp[$key] !== '') {
+			return true;
+		}
+		return false;
 	}
 
 	/**
-	 * KVP: named parameters
 	 * REST: positional parameters
+	 * KVP: named parameters
 	 * 
 	 * @param string $key
 	 * @return boolean
 	 */
 	protected function getParam($key) {
+		if (array_key_exists($key, $this->kvp)) {
+			return $this->kvp[$key];
+		}
 		return $this->queryparts[$key];
 	}
 
 	/**
-	 * Return query paramter values from $num onwards.
+	 * Return REST query paramter values from $num onwards.
 	 * 
 	 * @param int $num skip params before this
 	 * @return array
