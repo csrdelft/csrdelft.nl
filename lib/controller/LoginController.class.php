@@ -107,11 +107,10 @@ class LoginController extends AclController {
 				VerifyModel::instance()->discardToken($uid, '/wachtwoord/reset');
 				setMelding('Wachtwoord instellen geslaagd', 1);
 				$this->model->login($uid, $pw);
-
+				$lidnaam = $lid->getNaamLink('civitas', 'plain');
 				require_once 'model/entity/Mail.class.php';
-				$bericht = 'Geachte ' . $lid->getNaamLink('civitas', 'plain') .
-						",\n\nU heeft recent uw wachtwoord opnieuw ingesteld. Als u dit niet zelf gedaan heeft dan moet u nu direct uw wachtwoord wijzigen en de PubCie op de hoogte stellen.\n\nMet amicale groet,\nUw PubCie";
-				$mail = new Mail(array($uid . '@csrdelft.nl' => Lid::naamLink($uid, 'civitas', 'plain')), 'C.S.R. webstek: nieuw wachtwoord ingesteld', $bericht);
+				$bericht = "Geachte " . $lidnaam . ",\n\nU heeft recent uw wachtwoord opnieuw ingesteld. Als u dit niet zelf gedaan heeft dan moet u nu direct uw wachtwoord wijzigen en de PubCie op de hoogte stellen.\n\nMet amicale groet,\nUw PubCie";
+				$mail = new Mail(array($lid->getEmail() => $lidnaam), 'C.S.R. webstek: nieuw wachtwoord ingesteld', $bericht);
 				$mail->send();
 			}
 			$this->view = new CsrLayoutPage($this->view);
@@ -134,13 +133,13 @@ class LoginController extends AclController {
 			// mag wachtwoord resetten?
 			elseif ($lid instanceof Lid AND AccessModel::mag($lid, 'P_PROFIEL_EDIT') AND $lid->getEmail() === $values['mail']) {
 				$token = VerifyModel::instance()->createToken($uid, '/wachtwoord/reset');
-
+				$lidnaam = $lid->getNaamLink('civitas', 'plain');
 				require_once 'model/entity/Mail.class.php';
-				$bericht = 'Geachte ' . $lid->getNaamLink('civitas', 'plain') .
+				$bericht = "Geachte " . $lidnaam .
 						",\n\nU heeft verzocht om uw wachtwoord opnieuw in te stellen. Dit is mogelijk met de onderstaande link tot " . $token->expire .
 						".\n\n[url=" . CSR_ROOT . "/verify/" . $token->token .
 						"]Wachtwoord instellen[/url].\n\nAls dit niet uw eigen verzoek is kunt u dit bericht negeren.\n\nMet amicale groet,\nUw PubCie";
-				$mail = new Mail(array($uid . '@csrdelft.nl' => Lid::naamLink($uid, 'civitas', 'plain')), 'C.S.R. webstek: nieuw wachtwoord instellen', $bericht);
+				$mail = new Mail(array($lid->getEmail() => $lidnaam), 'C.S.R. webstek: nieuw wachtwoord instellen', $bericht);
 				$mail->send();
 				setMelding('Wachtwoord reset email verzonden', 1);
 

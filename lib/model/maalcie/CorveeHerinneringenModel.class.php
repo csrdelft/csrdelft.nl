@@ -14,15 +14,15 @@ class CorveeHerinneringenModel {
 	public static function stuurHerinnering(CorveeTaak $taak) {
 		$datum = date('d-m-Y', strtotime($taak->getDatum()));
 		$uid = $taak->getUid();
-		if (!Lid::exists($uid)) {
+		$lid = LidCache::getLid($uid);
+		if (!$lid instanceof Lid) {
 			throw new Exception($datum . ' ' . $taak->getCorveeFunctie()->naam . ' niet toegewezen!' . (!empty($uid) ? ' ($uid =' . $uid . ')' : ''));
 		}
-		//$to = $lid->getEmail();
-		$to = array($uid . '@csrdelft.nl' => Lid::naamLink($uid, 'civitas', 'plain'));
+		$lidnaam = Lid::naamLink($uid, 'civitas', 'plain');
+		$to = array($lid->getEmail() => $lidnaam);
 		$from = 'corvee@csrdelft.nl';
 		$onderwerp = 'C.S.R. Delft corvee ' . $datum;
 		$bericht = $taak->getCorveeFunctie()->email_bericht;
-		$lidnaam = Lid::naamLink($uid, 'civitas', 'plain');
 		$eten = '';
 		if ($taak->getMaaltijdId() !== null) {
 			$aangemeld = MaaltijdAanmeldingenModel::getIsAangemeld($taak->getMaaltijdId(), $uid);

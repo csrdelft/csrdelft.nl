@@ -590,7 +590,7 @@ class ForumController extends Controller {
 		if ($wacht_goedkeuring) {
 			setMelding('Uw bericht is opgeslagen en zal als het goedgekeurd is geplaatst worden.', 1);
 
-			mail('pubcie@csrdelft.nl', 'Nieuw bericht wacht op goedkeuring', CSR_ROOT . "/forum/onderwerp/" . $draad->draad_id . "/wacht#" . $post->post_id . "\r\n" . "\r\nDe inhoud van het bericht is als volgt: \r\n\r\n" . str_replace('\r\n', "\n", $tekst) . "\r\n\r\nEINDE BERICHT", "From: pubcie@csrdelft.nl\nReply-To: " . $mailadres);
+			mail('pubcie@csrdelft.nl', 'Nieuw bericht wacht op goedkeuring', CSR_ROOT . "/forum/onderwerp/" . $draad->draad_id . "/wacht#" . $post->post_id . "\n\nDe inhoud van het bericht is als volgt: \n\n" . str_replace('\r\n', "\n", $tekst) . "\n\nEINDE BERICHT", "From: pubcie@csrdelft.nl\r\nReply-To: " . $mailadres);
 
 			if ($nieuw) {
 				redirect(CSR_ROOT . '/forum/deel/' . $deel->forum_id);
@@ -600,13 +600,14 @@ class ForumController extends Controller {
 			ForumPostsModel::instance()->goedkeurenOptellenForumPost($post);
 			$self = LoginModel::getUid();
 			foreach ($draad->getVolgers() as $uid) {
-				if ($uid === $self) {
+				$lid = LidCache::getLid($uid);
+				if ($uid === $self OR ! $lid instanceof Lid) {
 					continue;
 				}
+				$lidnaam = $lid->getNaamLink('civitas', 'plain');
 				require_once 'model/entity/Mail.class.php';
-				$bericht = "[url]" . CSR_ROOT . "/forum/reactie/" . $post->post_id . "#" . $post->post_id . "[/url]\r\n" . "\r\nDe inhoud van het bericht is als volgt: \r\n\r\n" . str_replace('\r\n', "\n", $tekst) . "\r\n\r\nEINDE BERICHT";
-				$mail = new Mail(array($uid . '@csrdelft.nl' => Lid::naamLink($uid, 'civitas', 'plain')), 'C.S.R. Forum: nieuwe reactie op ' . $draad->titel, $bericht);
-				$mail->setReplyTo('no-reply@csrdelft.nl');
+				$bericht = "Geachte " . $lidnaam . ",\n\nEr is een nieuwe reactie geplaatst in een draad dat u volgt: [url=" . CSR_ROOT . "/forum/reactie/" . $post->post_id . "#" . $post->post_id . "]" . $draad->titel . "[/url]\n\nDe inhoud van het bericht is als volgt: \n\n" . str_replace('\r\n', "\n", $tekst) . "\n\nEINDE BERICHT";
+				$mail = new Mail(array($lid->getEmail() => $lidnaam), 'C.S.R. Forum: nieuwe reactie op ' . $draad->titel, $bericht);
 				$mail->send();
 			}
 

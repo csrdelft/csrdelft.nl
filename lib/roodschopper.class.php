@@ -202,13 +202,11 @@ h.t. Fiscus.';
 		}
 
 		foreach ($this->teschoppen as $uid => $bericht) {
-			if ($this->doelgroep == 'oudleden') {
-				$lid = LidCache::getLid($uid);
-				$to = $lid->getEmail();
-			} else {
-				$to = $uid . '@csrdelft.nl';
+			$lid = LidCache::getLid($uid);
+			if (!$lid instanceof Lid) {
+				continue;
 			}
-			$mail = new Mail(array($to => null), $this->getOnderwerp(), $bericht['bericht']);
+			$mail = new Mail(array($lid->getEmail() => $lid->getNaamLink($uid, 'civitas', 'plain')), $this->getOnderwerp(), $bericht['bericht']);
 			$mail->setFrom($this->getFrom());
 			$mail->addBcc($this->getBcc());
 			$mail->send();
