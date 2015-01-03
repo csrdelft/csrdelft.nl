@@ -127,7 +127,7 @@ class FotoAlbum extends Map {
 		}
 	}
 
-	public function getSubAlbums() {
+	public function getSubAlbums($recursive = false) {
 		if (!isset($this->subalbums)) {
 
 			$this->subalbums = array();
@@ -141,6 +141,9 @@ class FotoAlbum extends Map {
 					$subalbum = FotoAlbumModel::instance()->getFotoAlbum($this->path . $entry);
 					if ($subalbum) {
 						$this->subalbums[] = $subalbum;
+						if ($recursive) {
+							$subalbum->getSubalbums(true);
+						}
 					}
 				}
 			}

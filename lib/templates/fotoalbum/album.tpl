@@ -255,7 +255,7 @@
 				</a>
 			{/foreach}
 		</div>
-		{foreach from=$album->getSubAlbums() item=subalbum}
+		{foreach from=$album->getSubAlbums(true) item=subalbum}
 			{if $subalbum->hasFotos()}
 				<div class="album" data-jgallery-album-title="{$subalbum->dirname|ucfirst}">
 					<h2>{$album->dirname|ucfirst}</h2>
