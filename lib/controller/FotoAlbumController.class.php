@@ -65,6 +65,9 @@ class FotoAlbumController extends AclController {
 	}
 
 	public function bekijken(FotoAlbum $album) {
+		if ($album->dirname === 'Posters') {
+			$album->orderByDateModified();
+		}
 		$body = new FotoAlbumView($album);
 		if (LoginModel::mag('P_LOGGED_IN')) {
 			$this->view = new CsrLayoutPage($body);
