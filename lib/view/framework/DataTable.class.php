@@ -1,13 +1,12 @@
 <?php
-require_once 'view/formulier/TabsForm.class.php';
+require_once 'view/framework/TabsForm.class.php';
 
 /**
  * DataTable.class.php
  * 
  * @author P.W.G. Brussee <brussee@live.nl>
  * 
- * DataTables plug-in for jQuery
- * 
+ * Uses DataTables plug-in for jQuery.
  * @see http://www.datatables.net/
  * 
  */
@@ -15,6 +14,7 @@ class DataTable extends TabsForm {
 
 	protected $tableId;
 	protected $dataUrl;
+	protected $autoUpdate = false;
 	private $groupByColumn;
 	private $groupByLocked = false;
 	protected $defaultLength = -1;
@@ -59,10 +59,10 @@ class DataTable extends TabsForm {
 		)
 	);
 
-	public function __construct($class, $tableId, $titel = false, $groupByColumn = null) {
-		parent::__construct(new $class(), $tableId . '_toolbar', null, $titel);
+	public function __construct($orm, $titel = false, $groupByColumn = null) {
+		$this->tableId = uniqid($orm);
+		parent::__construct(new $orm(), $this->tableId . '_toolbar', null, $titel);
 
-		$this->tableId = $tableId;
 		$this->css_classes[] = 'ModalForm DataTableResponse';
 		$this->groupByColumn = $groupByColumn;
 
@@ -226,15 +226,17 @@ class DataTable extends TabsForm {
 
 				var fnAjaxUpdateCallback = function (json) {
 					lastUpdate<?= $this->tableId; ?> = Math.round(new Date().getTime());
-					//setTimeout(fnAutoUpdate, 5000);
-					// TODO: remember focus position on update
-					/*
+		<?php
+		if ($this->autoUpdate > 0) {
+			echo "setTimeout(fnAutoUpdate, {$this->autoUpdate});";
+		}
+		?>
+					/* TODO: remember focus position on update
 					 var oTable = $('#example').dataTable();
 					 var keys = new $.fn.dataTable.KeyTable( oTable );
 					 keys.fnSetPosition( 1, 1 );
 					 */
-					updateToolbar();
-					//init_context('#<?= $this->tableId; ?>');
+					fnUpdateToolbar();
 					return json.data;
 				};
 
@@ -249,6 +251,7 @@ class DataTable extends TabsForm {
 						if ($(td).children(':first').hasClass('InlineForm')) {
 							var edit = function (event) {
 								var form = $(td).find('form');
+								// show form
 								form.prev('.InlineFormToggle').hide();
 								form.show();
 								setTimeout(function () { // werkomheen focus keys plugin
@@ -261,20 +264,20 @@ class DataTable extends TabsForm {
 				};
 
 				var tableId = '#<?= $this->tableId; ?>';
-				var oTable = $(tableId).DataTable(<?= $settingsJson; ?>);
+				var table = $(tableId).DataTable(<?= $settingsJson; ?>);
 				var keys = new $.fn.dataTable.KeyTable($(tableId));
 
 				// Toolbar update on row selection
-				var updateToolbar = <?= $this->getUpdateToolbar(); ?>;
+				var fnUpdateToolbar = <?= $this->getUpdateToolbarFunction(); ?>;
 				// Multiple selection of group rows
 				$(tableId + ' tbody').on('click', 'tr', function (event) {
 					if (bShiftPressed || bCtrlPressed || !$(this).hasClass('group')) {
 						fnMultiSelect(event, $(this));
 					}
-					updateToolbar();
+					fnUpdateToolbar();
 				});
 
-				$('.DTTT_button_text').on('click', updateToolbar);
+				$('.DTTT_button_text').on('click', fnUpdateToolbar);
 				// Toolbar above table
 				$(tableId + '_toolbar').prependTo(tableId + '_wrapper');
 				$(tableId + '_toolbar h1.Titel').prependTo(tableId + '_wrapper');
@@ -285,16 +288,16 @@ class DataTable extends TabsForm {
 				$(tableId + '_filter').appendTo(tableId + '_toolbar');
 				// Opening and closing details
 				$(tableId + ' tbody').on('click', 'tr td.toggle-childrow', function (event) {
-					fnChildRow(oTable, $(this));
+					fnChildRow(table, $(this));
 				});
 				// Group by column
 				$(tableId + '.groupByColumn tbody').on('click', 'tr.group', function (event) {
 					if (!bShiftPressed && !bCtrlPressed) {
-						fnGroupExpandCollapse(oTable, $(tableId), $(this));
+						fnGroupExpandCollapse(table, $(tableId), $(this));
 					}
 				});
 				$(tableId + '.groupByColumn thead').on('click', 'th.toggle-group:first', function (event) {
-					fnGroupExpandCollapseAll(oTable, $(tableId), $(this));
+					fnGroupExpandCollapseAll(table, $(tableId), $(this));
 				});
 		<?php if (!$this->groupByLocked): ?>
 					$(tableId + '.groupByColumn').on('order.dt', fnGroupByColumn);
@@ -317,14 +320,14 @@ class DataTable extends TabsForm {
 						var td = keys.fnGetCurrentTD();
 						if (td) {
 							fnMultiSelect(event, $(td).parent());
-							updateToolbar();
-							if (event.keyCode === 13 || event.keyCode === 32) {
+							fnUpdateToolbar();
+							if (event.keyCode === 13 || event.keyCode === 32) { // space, enter
 								$(td).trigger('click');
 							}
 						}
 					}
 		<?php
-		$keyshortcuts = '[32,13'; // space
+		$keyshortcuts = '[13,32'; // space, enter
 		foreach ($this->getFields() as $field) {
 			if ($field instanceof DataTableKnop AND is_int($field->keyshortcut)) {
 				$keyshortcuts .= ',' . $field->keyshortcut;
@@ -352,12 +355,11 @@ class DataTable extends TabsForm {
 	 * 
 	 * @return javascript
 	 */
-	private function getUpdateToolbar() {
+	private function getUpdateToolbarFunction() {
 		$js = <<<JS
 function () {
 	var selectie = fnGetSelection(tableId);
 	var aantal = selectie.length;
-	console.log(selectie);
 JS;
 		foreach ($this->getFields() as $field) {
 			if ($field instanceof DataTableKnop) {
@@ -390,8 +392,8 @@ class DataTableKnop extends FormulierKnop {
 
 class DataTableResponse extends JsonResponse {
 
-	public function getJson($data) {
-		return json_encode($data);
+	public function getJson($entity) {
+		return json_encode($entity);
 	}
 
 	public function view() {
@@ -399,15 +401,26 @@ class DataTableResponse extends JsonResponse {
 		header('Content-Type: application/json');
 		echo '{"data":[' . "\n";
 		$comma = false;
-		foreach ($this->model as $data) {
+		foreach ($this->model as $entity) {
 			if ($comma) {
 				echo ",\n";
 			} else {
 				$comma = true;
 			}
-			echo $this->getJson($data);
+			echo $this->getJson($entity);
 		}
 		echo "\n]}";
+	}
+
+}
+
+class RemoveRowsResponse extends DataTableResponse {
+
+	public function getJson($entity) {
+		return parent::getJson(array(
+					'objectId'	 => $entity->getValues(true),
+					'remove'	 => true
+		));
 	}
 
 }

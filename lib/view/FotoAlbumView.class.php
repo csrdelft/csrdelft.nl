@@ -1,6 +1,6 @@
 <?php
 
-require_once 'view/formulier/Dropzone.class.php';
+require_once 'view/framework/Dropzone.class.php';
 
 /**
  * FotoAlbumView.class.php

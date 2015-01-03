@@ -22,17 +22,23 @@ function fnInitDataTables() {
 }
 
 function fnUpdateDataTable(table, data) {
-	// update existing or add new rows
+	// update or remove existing rows or add new rows
 	data.data.forEach(function (row) {
-		var tr = $('tr[data-objectid="' + row.objectId + '"]');
-		if (tr.length === 1) {
-			table.row(tr).data(row);
-			init_context(tr);
+		var $tr = $('tr[data-objectid="' + row.objectId + '"]');
+		if ($tr.length === 1) {
+			if ('remove'in row) {
+				table.row($tr).remove();
+			}
+			else {
+				table.row($tr).data(row);
+				init_context($tr);
+			}
 		}
 		else {
 			table.row.add(row);
 		}
 	});
+	table.draw(false);
 }
 
 function fnGetSelectionSize(tableId) {
@@ -118,8 +124,8 @@ function fnMultiSelect(event, tr) {
 	}
 }
 
-function fnGetGroupByColumn(table) {
-	var columnId = parseInt(table.attr('groupbycolumn'));
+function fnGetGroupByColumn($table) {
+	var columnId = parseInt($table.attr('groupbycolumn'));
 	if (isNaN(columnId)) {
 		return false;
 	}
@@ -130,19 +136,19 @@ function fnGroupByColumn(event, settings) {
 	if (bOrderDraw || !bCtrlPressed) {
 		return;
 	}
-	var table = $(settings.nTable);
-	var dataTable = table.DataTable();
-	var columnId = fnGetGroupByColumn(table);
-	var newOrder = dataTable.order();
-	dataTable.column(columnId).visible(true);
+	var $table = $(settings.nTable);
+	var table = $table.DataTable();
+	var columnId = fnGetGroupByColumn($table);
+	var newOrder = table.order();
+	table.column(columnId).visible(true);
 	columnId = newOrder[0][0];
-	dataTable.column(columnId).visible(false);
-	table.attr('groupbycolumn', columnId);
-	table.data('collapsedGroups', []);
-	$('thead tr th:first', table).addClass('toggle-group  toggle-group-expanded');
+	table.column(columnId).visible(false);
+	$table.attr('groupbycolumn', columnId);
+	$table.data('collapsedGroups', []);
+	$('thead tr th:first', $table).addClass('toggle-group  toggle-group-expanded');
 	settings.aaSortingFixed = newOrder.slice(); // copy by value
 	bOrderDraw = true;
-	dataTable.draw();
+	table.draw(false);
 }
 
 function fnGroupByColumnDraw(event, settings) {
@@ -150,24 +156,24 @@ function fnGroupByColumnDraw(event, settings) {
 		bOrderDraw = false;
 		return;
 	}
-	var table = $(settings.nTable);
-	var columnId = fnGetGroupByColumn(table);
+	var $table = $(settings.nTable);
+	var columnId = fnGetGroupByColumn($table);
 	if (columnId === false) {
 		return;
 	}
-	var collapse = table.data('collapsedGroups').slice(); // copy by value
+	var collapse = $table.data('collapsedGroups').slice(); // copy by value
 	var colspan = '';
-	var j = $('thead tr th', table).length - 2;
+	var j = $('thead tr th', $table).length - 2;
 	for (var i = 0; i < j; i++) {
 		colspan += '<td></td>';
 	}
 	var groupRow;
 	if (settings.aiDisplay.length > 0) {
 		// Create group rows for visible rows
-		var dataTable = table.DataTable();
-		var rows = $(dataTable.rows({page: 'current'}).nodes());
+		var table = $table.DataTable();
+		var rows = $(table.rows({page: 'current'}).nodes());
 		var last = null;
-		dataTable.column(columnId, {page: 'current'}).data().each(function (group, i) {
+		table.column(columnId, {page: 'current'}).data().each(function (group, i) {
 			if (last !== group) {
 				// Create group rows for collapsed groups
 				while (collapse.length > 0 && collapse[0].localeCompare(group) < 0) {
@@ -182,28 +188,28 @@ function fnGroupByColumnDraw(event, settings) {
 		});
 	}
 	// Create group rows for collapsed groups
-	var tbody = table.children('tbody:first');
+	var tbody = $table.children('tbody:first');
 	collapse.forEach(function (group) {
 		groupRow = $('<tr class="group"><td class="toggle-group"></td><td class="group-label">' + group + '</td>' + colspan + '</tr>').data('groupData', group);
 		tbody.append(groupRow);
 	});
 }
 
-function fnHideEmptyCollapsedAll(table, th) {
-	if ($('tr.group', table).length == table.data('collapsedGroups').length) {
-		$('td.dataTables_empty', table).parent().remove();
-		th.removeClass('toggle-group-expanded');
+function fnHideEmptyCollapsedAll($table, $th) {
+	if ($('tr.group', $table).length == $table.data('collapsedGroups').length) {
+		$('td.dataTables_empty', $table).parent().remove();
+		$th.removeClass('toggle-group-expanded');
 	}
 	else {
-		th.addClass('toggle-group-expanded');
+		$th.addClass('toggle-group-expanded');
 	}
 }
 
-function fnGroupExpandCollapse(dataTable, table, tr) {
-	var collapse = table.data('collapsedGroups');
-	var td = $('td:first', tr);
+function fnGroupExpandCollapse(table, $table, $tr) {
+	var collapse = $table.data('collapsedGroups');
+	var td = $('td:first', $tr);
 	td.toggleClass('toggle-group-expanded');
-	var group = tr.data('groupData');
+	var group = $tr.data('groupData');
 	if (td.hasClass('toggle-group-expanded')) {
 		collapse = $.grep(collapse, function (value) {
 			return value !== group;
@@ -212,30 +218,30 @@ function fnGroupExpandCollapse(dataTable, table, tr) {
 	else {
 		collapse.push(group);
 	}
-	table.data('collapsedGroups', collapse.sort());
+	$table.data('collapsedGroups', collapse.sort());
 	bCtrlPressed = false; // prevent order callback weird effect
-	dataTable.draw();
-	fnHideEmptyCollapsedAll(table, $('thead tr th:first', table));
+	table.draw(false);
+	fnHideEmptyCollapsedAll($table, $('thead tr th:first', $table));
 }
 
-function fnGroupExpandCollapseAll(dataTable, table, th) {
-	var columnId = fnGetGroupByColumn(table);
+function fnGroupExpandCollapseAll(table, $table, $th) {
+	var columnId = fnGetGroupByColumn($table);
 	if (columnId === false) {
 		return;
 	}
 	var collapse = [];
-	if (th.hasClass('toggle-group-expanded')) {
+	if ($th.hasClass('toggle-group-expanded')) {
 		var last = null;
-		dataTable.column(columnId).data().each(function (group, i) {
+		table.column(columnId).data().each(function (group, i) {
 			if (last !== group) {
 				collapse.push(group);
 				last = group;
 			}
 		});
 	}
-	table.data('collapsedGroups', collapse);
-	dataTable.draw();
-	fnHideEmptyCollapsedAll(table, th);
+	$table.data('collapsedGroups', collapse);
+	table.draw(false);
+	fnHideEmptyCollapsedAll($table, $th);
 }
 
 function fnGroupExpandCollapseDraw(settings, data, index) {
@@ -252,9 +258,9 @@ function fnGroupExpandCollapseDraw(settings, data, index) {
 	return true;
 }
 
-function fnChildRow(dataTable, td, column) {
-	var tr = td.closest('tr');
-	var row = dataTable.row(tr);
+function fnChildRow(table, $td, column) {
+	var tr = $td.closest('tr');
+	var row = table.row(tr);
 	if (row.child.isShown()) {
 		if (tr.hasClass('loading')) {
 			// TODO: abort ajax
@@ -276,7 +282,7 @@ function fnChildRow(dataTable, td, column) {
 		tr.addClass('expanded loading');
 		var innerDiv = tr.next().addClass('childrow').children(':first').children(':first');
 		$.ajax({
-			url: td.data('detailSource')
+			url: $td.data('detailSource')
 		}).done(function (data) {
 			if (row.child.isShown()) {
 				tr.removeClass('loading');

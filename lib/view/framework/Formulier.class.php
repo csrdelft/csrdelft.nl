@@ -2,13 +2,13 @@
 
 require_once 'view/View.interface.php';
 require_once 'view/Validator.interface.php';
-require_once 'view/formulier/FormElement.abstract.php';
-require_once 'view/formulier/InvoerVelden.class.php';
-require_once 'view/formulier/GetalVelden.class.php';
-require_once 'view/formulier/KeuzeVelden.class.php';
-require_once 'view/formulier/BBCodeVelden.class.php';
-require_once 'view/formulier/UploadVelden.class.php';
-require_once 'view/formulier/FormKnoppen.class.php';
+require_once 'view/framework/FormElement.abstract.php';
+require_once 'view/framework/InvoerVelden.class.php';
+require_once 'view/framework/GetalVelden.class.php';
+require_once 'view/framework/KeuzeVelden.class.php';
+require_once 'view/framework/BBCodeVelden.class.php';
+require_once 'view/framework/UploadVelden.class.php';
+require_once 'view/framework/FormKnoppen.class.php';
 
 /**
  * Formulier.class.php

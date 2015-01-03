@@ -10,7 +10,7 @@
 class SessionsView extends DataTable implements FormElement {
 
 	public function __construct() {
-		parent::__construct(LoginModel::orm, LoginModel::orm, 'Sessiebeheer');
+		parent::__construct(LoginModel::orm, 'Sessiebeheer');
 		$this->dataUrl = '/sessions';
 		$this->hideColumn('uid');
 		$this->hideColumn('ip');
@@ -37,7 +37,7 @@ class SessionsData extends DataTableResponse {
 	public function getJson($sessie) {
 		$array = $sessie->jsonSerialize();
 
-		$array['details'] = '<a href="/endsession/' . $array['session_id'] . '" class="post DataTableResponse remove" title="Log uit"><img width="16" height="16" class="icon" src="/plaetjes/famfamfam/door_in.png"></a>';
+		$array['details'] = '<a href="/endsession/' . $array['session_id'] . '" class="post DataTableResponse" title="Log uit"><img width="16" height="16" class="icon" src="/plaetjes/famfamfam/door_in.png"></a>';
 
 		return parent::getJson($array);
 	}

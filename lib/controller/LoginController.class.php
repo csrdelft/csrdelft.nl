@@ -174,10 +174,11 @@ class LoginController extends AclController {
 
 	public function endsession($sessionid) {
 		$session = $this->model->find('session_id = ? AND uid = ?', array($sessionid, LoginModel::getUid()), null, null, 1)->fetch();
+		$deleted = 0;
 		if ($session) {
-			$this->model->delete($session);
+			$deleted = $this->model->delete($session);
 		}
-		$this->sessions();
+		$this->view = new RemoveRowsResponse(array($session), $deleted === 1 ? 200 : 404);
 	}
 
 }

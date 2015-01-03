@@ -99,14 +99,14 @@ require_once 'model/ForumModel.class.php';
 # View
 require_once 'view/JsonResponse.class.php';
 require_once 'view/SmartyTemplateView.abstract.php';
-require_once 'view/formulier/DataTable.class.php';
+require_once 'view/framework/DataTable.class.php';
 require_once 'view/CsrBB.class.php';
 require_once 'view/CsrLayoutPage.class.php';
 require_once 'view/CsrLayout2Page.class.php';
 require_once 'icon.class.php';
 
 # Controller
-require_once 'controller/AclController.abstract.php';
+require_once 'controller/framework/CrudController.abstract.php';
 
 # Router
 switch (constant('MODE')) {

@@ -101,12 +101,11 @@ abstract class Controller {
 	}
 
 	/**
-	 * If request method is POST.
-	 * 
+	 * Is the current request posted?
 	 * @return boolean
 	 */
 	public function isPosted() {
-		return isPosted();
+		return $_SERVER['REQUEST_METHOD'] === 'POST';
 	}
 
 	public function getModel() {

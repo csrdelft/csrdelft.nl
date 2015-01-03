@@ -1,13 +1,14 @@
 <?php
 
-require_once 'controller/Controller.abstract.php';
+require_once 'controller/framework/Controller.abstract.php';
 
 /**
  * AclController.abstract.php
  * 
  * @author P.W.G. Brussee <brussee@live.nl>
- *
- * Voor het uitvoeren van de actie wordt gecheckt of het ingelogde lid wel de juiste permissies heeft
+ * 
+ * Voor het uitvoeren van de actie wordt gecheckt of
+ * het ingelogde lid wel de juiste permissies heeft
  * door middel van een access control list.
  * 
  */

@@ -280,18 +280,7 @@ function knop_ajax(knop, type) {
 		var tableId = '#' + knop.closest('table').attr('id');
 		var table = $(tableId).DataTable();
 
-		var tr = false;
-		if (knop.hasClass('remove')) {
-			tr = knop.closest('tr');
-		}
-
 		done = function (response) {
-
-			if (tr) {
-				table.row(tr).remove();
-				tr.effect('puff', {}, 400, remove);
-			}
-
 			if (typeof response === 'object') { // JSON
 				fnUpdateDataTable(table, response);
 			}

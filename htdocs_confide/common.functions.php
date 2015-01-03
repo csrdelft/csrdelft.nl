@@ -16,14 +16,6 @@ function werkomheen_pdo_bool($value) {
 }
 
 /**
- * Is the current request posted?
- * @return boolean
- */
-function isPosted() {
-	return $_SERVER['REQUEST_METHOD'] === 'POST';
-}
-
-/**
  * @source http://stackoverflow.com/questions/834303/php-startswith-and-endswith-functions
  * @param string $haystack
  * @param string $needle
