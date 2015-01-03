@@ -239,7 +239,7 @@ class DocumentenController extends Controller {
 		$result = array();
 		foreach (DocCategorie::zoekDocumenten($zoekterm, $categorie, $limit) as $doc) {
 			$result[] = array(
-				'url'	 => '/communicatie/documenten/bekijken/' . $doc->getID() . '/' . $doc->getFileName(),
+				'url'	 => '/documenten/bekijken/' . $doc->getID() . '/' . $doc->getFileName(),
 				'value'	 => $doc->getNaam() . '<span class="lichtgrijs"> - ' . $doc->getCategorie()->getNaam() . '</span>'
 			);
 		}
