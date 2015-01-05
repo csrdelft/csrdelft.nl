@@ -68,8 +68,7 @@ class BeheerVrijstellingenController extends AclController {
 		}
 		if ($this->view->validate()) {
 			$values = $this->view->getValues();
-			$uid = ($values['uid'] === '' ? null : $values['uid']);
-			$vrijstelling = CorveeVrijstellingenModel::saveVrijstelling($uid, $values['begin_datum'], $values['eind_datum'], $values['percentage']);
+			$vrijstelling = CorveeVrijstellingenModel::saveVrijstelling($values['uid'], $values['begin_datum'], $values['eind_datum'], $values['percentage']);
 			$this->view = new BeheerVrijstellingView($vrijstelling);
 		}
 	}

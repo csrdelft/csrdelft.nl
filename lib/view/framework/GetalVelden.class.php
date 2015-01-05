@@ -61,7 +61,7 @@ JS;
 		if ($this->isPosted()) {
 			$this->value = filter_input(INPUT_POST, $this->name, FILTER_SANITIZE_NUMBER_INT);
 		}
-		if ($this->empty_null AND $this->value === '') {
+		if ($this->empty_null AND ( $this->value === '' OR $this->value === null )) { // empty except 0
 			$this->value = null;
 		} else {
 			$this->value = (int) $this->value;
@@ -265,7 +265,7 @@ class DecimalField extends TextField {
 		if ($this->isPosted()) {
 			$this->value = filter_input(INPUT_POST, $this->name, FILTER_SANITIZE_NUMBER_FLOAT);
 		}
-		if ($this->empty_null AND $this->value === '') {
+		if ($this->empty_null AND ( $this->value === '' OR $this->value === null )) { // empty except 0
 			$this->value = null;
 		} else {
 			$this->value = (float) $this->value;

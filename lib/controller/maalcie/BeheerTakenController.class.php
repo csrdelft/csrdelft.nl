@@ -165,14 +165,10 @@ class BeheerTakenController extends AclController {
 
 	public function toewijzen($tid) {
 		$taak = CorveeTakenModel::getTaak($tid);
-		$InputField = new LidField('uid', null, null, 'leden'); // fetches POST values itself
-		if ($InputField->validate()) {
-			$uid = $InputField->getValue();
-			if ($uid === '') {
-				$uid = null;
-			}
+		$uidField = new LidField('uid', null, null, 'leden'); // fetches POST values itself
+		if ($uidField->validate()) {
 			$taak = CorveeTakenModel::getTaak($tid);
-			CorveeTakenModel::taakToewijzenAanLid($taak, $uid);
+			CorveeTakenModel::taakToewijzenAanLid($taak, $uidField->getValue());
 			$this->view = new BeheerTaakView($taak);
 		} else {
 			require_once 'model/maalcie/CorveeToewijzenModel.class.php';
