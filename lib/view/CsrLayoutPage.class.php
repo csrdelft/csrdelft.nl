@@ -68,13 +68,6 @@ class CsrLayoutPage extends CompressedLayout {
 		}
 		$smarty->assign('zijbalk', $this->zijbalk);
 
-		if (LoginModel::mag('P_LEDEN_MOD')) {
-			require_once 'savedquery.class.php';
-			$smarty->assign('queues', array(
-				'mededelingen' => new SavedQuery(62)
-			));
-		}
-
 		if (LidInstellingen::get('layout', 'minion') == 'ja') {
 			$smarty->assign('minioncoords', DragObjectModel::getCoords('minion', 40, 40));
 			$smarty->assign('minion', $smarty->fetch('minion.tpl'));

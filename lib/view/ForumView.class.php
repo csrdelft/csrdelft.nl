@@ -208,28 +208,30 @@ class ForumDraadReagerenView extends ForumView {
 class ForumDraadZijbalkView extends ForumView {
 
 	private $belangrijk;
+	private $ongelezen = 0;
 
 	public function __construct(array $draden, $belangrijk) {
 		parent::__construct($draden);
 		$this->belangrijk = $belangrijk;
+		foreach ($this->model as $draad) {
+			if ($draad->onGelezen()) {
+				$this->ongelezen++;
+			}
+		}
 	}
 
 	public function view() {
 		$aantal = ForumPostsModel::instance()->getAantalWachtOpGoedkeuring();
-		echo '<div class="zijbalk_forum"><div class="zijbalk-kopje"><a href="/forum';
-		if ($aantal > 0) {
-			echo '/wacht" title="' . $aantal . ' forumbericht' . ($aantal === 1 ? '' : 'en') . ' wacht op goedkeuring';
-		} elseif ($this->belangrijk === true) {
-			echo '/recent/1/belangrijk';
-		} else {
-			echo '/recent';
+		echo '<div class="zijbalk_forum"><div class="zijbalk-kopje"><a href="/forum/recent';
+		if ($this->belangrijk === true) {
+			echo '/1/belangrijk';
 		}
 		echo '">Forum';
 		if ($this->belangrijk === true) {
 			echo ' belangrijk';
 		}
-		if ($aantal > 0) {
-			echo ' &nbsp;<span class="badge">' . $aantal . '</span>';
+		if ($this->ongelezen > 0) {
+			echo ' &nbsp;<span class="badge">' . $this->ongelezen . '</span>';
 		}
 		echo '</a></div>';
 		foreach ($this->model as $draad) {
