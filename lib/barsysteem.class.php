@@ -33,7 +33,7 @@ class Barsysteem {
 			if ($row["stekUID"]) {
 				$lid = LidCache::getLid($row["stekUID"]);
 				if ($lid instanceof Lid) {
-					$persoon["naam"] = $lid->getNaamLink('full_uid', 'plain');
+					$persoon["naam"] = $lid->getNaam();
 					$persoon["status"] = $lid->getStatus()->__toString();
 				}
 			}
