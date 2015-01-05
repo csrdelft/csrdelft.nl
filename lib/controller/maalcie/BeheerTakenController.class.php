@@ -110,7 +110,7 @@ class BeheerTakenController extends AclController {
 			$beginDatum = $maaltijd->getDatum();
 		}
 		$crid = filter_input(INPUT_POST, 'crv_repetitie_id', FILTER_SANITIZE_NUMBER_INT);
-		if ($crid !== null) {
+		if (!empty($crid)) {
 			$repetitie = CorveeRepetitiesModel::getRepetitie((int) $crid);
 			if ($mid === null) {
 				$beginDatum = CorveeRepetitiesModel::getFirstOccurrence($repetitie);
