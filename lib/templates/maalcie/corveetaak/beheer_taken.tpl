@@ -53,6 +53,7 @@
 				<option value="{$repetitie->getCorveeRepetitieId()}">{$repetitie->getCorveeFunctie()->naam} op {$repetitie->getDagVanDeWeekText()}</option>
 			{/foreach}
 		</select>
+		<a href="/corveerepetities" class="btn" title="Periodiek corvee beheren">{icon get="calendar_edit"}</a>
 	</form>
 {/if}
 <br />

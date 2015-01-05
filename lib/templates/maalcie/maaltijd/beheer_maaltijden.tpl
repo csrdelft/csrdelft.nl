@@ -35,6 +35,7 @@ Onderstaande tabel toont alle maaltijden die niet verwijderd zijn.
 		<option value="{$repetitie->getMaaltijdRepetitieId()}">{$repetitie->getStandaardTitel()}</option>
 	{/foreach}
 	</select>
+	<a href="/maaltijdenrepetities" class="btn" title="Periodieke maaltijden beheren">{icon get="calendar_edit"}</a>
 </form>
 {/if}
 <br />
