@@ -100,6 +100,9 @@ class MenuModel extends CachedPersistenceModel {
 					$item->rechten_bekijken = $categorie->getLeesrechten();
 					$item->link = '/documenten/categorie/' . $categorie->getID();
 					$item->tekst = $categorie->getNaam();
+					if ($item->tekst == 'Overig') {
+						$item->prioriteit = 1;
+					}
 					$parent->children[] = $item;
 				}
 				break;
