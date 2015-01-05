@@ -69,9 +69,6 @@ class CsrLayoutPage extends CompressedLayout {
 		$smarty->assign('zijbalk', $this->zijbalk);
 
 		if (LoginModel::mag('P_LEDEN_MOD')) {
-			require_once 'model/ForumModel.class.php';
-			$smarty->assign('forumcount', ForumPostsModel::instance()->getAantalWachtOpGoedkeuring());
-
 			require_once 'savedquery.class.php';
 			$smarty->assign('queues', array(
 				'mededelingen' => new SavedQuery(62)

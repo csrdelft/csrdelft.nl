@@ -215,13 +215,21 @@ class ForumDraadZijbalkView extends ForumView {
 	}
 
 	public function view() {
-		echo '<div class="zijbalk_forum"><div class="zijbalk-kopje"><a href="/forum/recent';
-		if ($this->belangrijk === true) {
-			echo '/1/belangrijk';
+		$aantal = ForumPostsModel::instance()->getAantalWachtOpGoedkeuring();
+		echo '<div class="zijbalk_forum"><div class="zijbalk-kopje"><a href="/forum';
+		if ($aantal > 0) {
+			echo '/wacht" title="' . $aantal . ' forumbericht' . ($aantal === 1 ? '' : 'en') . ' wacht op goedkeuring';
+		} elseif ($this->belangrijk === true) {
+			echo '/recent/1/belangrijk';
+		} else {
+			echo '/recent';
 		}
 		echo '">Forum';
 		if ($this->belangrijk === true) {
 			echo ' belangrijk';
+		}
+		if ($aantal > 0) {
+			echo ' &nbsp;<span class="badge">' . $aantal . '</span>';
 		}
 		echo '</a></div>';
 		foreach ($this->model as $draad) {
