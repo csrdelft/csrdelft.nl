@@ -51,14 +51,6 @@ class MaalcieRouterController extends AclController {
 		if ($controller !== null) {
 			$controller->performAction();
 			$this->view = $controller->getView();
-			if ($this->view instanceof CsrLayoutPage) {
-				require_once 'view/maalcie/MaalCieBeheerMenuView.class.php';
-				if (startsWith($this->action, 'maaltijden')) {
-					$this->view->zijbalk[] = new MaalCieBeheerMenuView('maaltijden');
-				} elseif (startsWith($this->action, 'corvee')) {
-					$this->view->zijbalk[] = new MaalCieBeheerMenuView('corvee');
-				}
-			}
 		}
 	}
 

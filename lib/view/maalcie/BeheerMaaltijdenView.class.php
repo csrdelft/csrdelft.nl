@@ -24,7 +24,7 @@ class BeheerMaaltijdenView extends SmartyTemplateView {
 		} elseif ($archief) {
 			$this->titel = 'Maaltijdenarchief';
 		} else {
-			$this->titel = 'Beheer maaltijden';
+			$this->titel = 'Maaltijdenbeheer';
 		}
 
 		$this->smarty->assign('prullenbak', $this->prullenbak);

@@ -22,8 +22,11 @@ Op deze pagina kunt u de maaltijden aanmaken, wijzigen en verwijderen.
 Onderstaande tabel toont alle maaltijden die niet verwijderd zijn.
 </p>
 <div class="float-right">
-	<a class="btn" onclick="$(this).hide();$('tr.taak-maaltijd-oud').show();">{icon get="eye"} Toon verleden</a>
-	<a href="{$smarty.const.maalcieUrl}/nieuw" title="Nieuwe maaltijd" class="btn post popup">{icon get="add"} Nieuwe maaltijd</a>
+	{if !$prullenbak}
+		<a class="btn" onclick="$(this).hide();$('tr.taak-maaltijd-oud').show();">{icon get="eye"} Toon verleden</a>
+		<a href="{$smarty.const.maalcieUrl}/prullenbak" class="btn" title="Open de prullenbak">{icon get="bin_closed"} Prullenbak</a>
+		<a href="{$smarty.const.maalcieUrl}/nieuw" title="Nieuwe maaltijd" class="btn post popup">{icon get="add"} Nieuwe maaltijd</a>
+	{/if}
 </div>
 <form action="{$smarty.const.maalcieUrl}/nieuw" method="post" class="Formulier ModalForm SubmitReset">
 	<label for="mrid" style="width: auto;">{icon get="calendar_add"} Periodieke maaltijden aanmaken:</label>&nbsp;
