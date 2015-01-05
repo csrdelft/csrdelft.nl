@@ -31,6 +31,11 @@ class CsrBB extends eamBBParser {
 		return $parser->getHtml($bbcode);
 	}
 
+	public static function parseHtml($bbcode) {
+		$parser = new CsrBB(true);
+		return $parser->getHtml($bbcode);
+	}
+
 	public static function parseMail($bbcode) {
 		$parser = new CsrBB();
 		$parser->email_mode = true;

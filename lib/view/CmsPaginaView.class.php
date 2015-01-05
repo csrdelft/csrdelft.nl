@@ -33,7 +33,7 @@ class CmsPaginaView implements View {
 		if ($this->pagina->magBewerken()) {
 			echo '<a href="/pagina/bewerken/' . $this->pagina->naam . '" class="btn round float-right"title="Bewerk pagina&#013;' . $this->pagina->laatst_gewijzigd . '">' . Icon::getTag('bewerken') . '</a>';
 		}
-		echo CsrBBHtml::parse(htmlspecialchars_decode($this->pagina->inhoud));
+		echo CsrBB::parseHtml(htmlspecialchars_decode($this->pagina->inhoud));
 	}
 
 }
