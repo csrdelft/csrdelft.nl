@@ -72,7 +72,7 @@ class CorveeVrijstelling {
 	}
 
 	public function setPercentage($int) {
-		if (!is_int($int) || $int < intval(Instellingen::get('corvee', 'vrijstelling_percentage_min')) || $int > intval(Instellingen::get('corvee', 'vrijstelling_percentage_max'))) {
+		if (!is_int($int) || $int < 0 || $int > 100) {
 			throw new Exception('Geen integer: percentage');
 		}
 		$this->percentage = $int;

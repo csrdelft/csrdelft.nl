@@ -60,8 +60,6 @@ class Instellingen extends CachedPersistenceModel {
 			'standaard_kwalificatie'				 => '0',
 			'standaard_aantal_corveers'				 => '1',
 			'standaard_vrijstelling_percentage'		 => '100',
-			'vrijstelling_percentage_max'			 => '100',
-			'vrijstelling_percentage_min'			 => '0',
 			'weergave_link_ledennamen'				 => 'visitekaartje',
 			'weergave_ledennamen_beheer'			 => 'volledig',
 			'weergave_ledennamen_corveerooster'		 => 'civitas',
