@@ -251,16 +251,6 @@ class eamBBParser {
 						$html = true;
 					}
 					break;
-				case '[php]': // always allow html, otherwise php code will be wrecked. This will be un-html'd anyway by the beautifier.
-					$html = true;
-					$newParseArray[] = $tag;
-					break;
-
-				case '[/php]':
-					$html = false;
-					$newParseArray[] = $tag;
-					break;
-
 
 				default :
 
@@ -652,17 +642,6 @@ class eamBBParser {
 		} else {
 			$text = '<br /><sub>code:</sub><pre class="bbcode">' . $content . '</pre>';
 		}
-
-		return $text;
-	}
-
-	function bb_php() {
-
-		$content = $this->parseArray(array('[/php]'), array('all' => 'all'));
-		$content_nice = highlight_string(trim(str_replace('[br]', "\n", $content)), true);
-
-		$text = '<br /><sub>php:</sub><hr style="border : 1px solid black;" /><div style="margin : 0px; padding-left : 8px;">' . $content_nice . '</div><hr style="border : 1px solid black;" />';
-
 
 		return $text;
 	}

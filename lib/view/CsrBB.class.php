@@ -9,13 +9,31 @@ require_once 'bbparser/eamBBParser.class.php';
  */
 class CsrBB extends eamBBParser {
 
-	public function __construct() {
+	/**
+	 * BBcode within email is limited.
+	 * 
+	 * @var boolean 
+	 */
+	protected $email_mode = false;
+
+	public function __construct($allow_html = false) {
 		$this->eamBBParser();
 		$this->paragraph_mode = false;
+		if (LoginModel::mag('P_ADMIN')) {
+			$allow_html = true;
+		}
+		$this->allow_html = $allow_html;
+		$this->standard_html = $allow_html;
 	}
 
 	public static function parse($bbcode) {
 		$parser = new CsrBB();
+		return $parser->getHtml($bbcode);
+	}
+
+	public static function parseMail($bbcode) {
+		$parser = new CsrBB();
+		$parser->email_mode = true;
 		return $parser->getHtml($bbcode);
 	}
 
@@ -113,8 +131,10 @@ class CsrBB extends eamBBParser {
 		if (!$url OR ( !url_like($url) AND ! startsWith($url, '/plaetjes/') )) {
 			return '[img: Ongeldige URL]';
 		}
+		if ($this->email_mode) {
+			return '<img class="bb-img ' . $class . '" src="' . htmlspecialchars($url) . '" alt="' . htmlspecialchars($url) . '" style="' . $style . '" />';
+		}
 		return '<div class="bb-img-loading" src="' . htmlspecialchars($url) . '" title="' . htmlspecialchars($url) . '" style="' . $style . '"></div>';
-		//return '<img class="bb-img ' . $class . '" src="' . $url . '" alt="' . htmlspecialchars($url) . '" style="' . $style . '" />';
 	}
 
 	/**
@@ -1019,23 +1039,6 @@ HTML;
 		} else {
 			return $link;
 		}
-	}
-
-}
-
-/**
- * We staan normaal geen HTML toe, maar met deze mag het wel.
- */
-class CsrBBHtml extends CsrBB {
-
-	public function __construct($arguments = array()) {
-		parent::__construct();
-		$this->allow_html = true;
-	}
-
-	public static function parse($bbcode) {
-		$parser = new CsrBBHtml();
-		return $parser->getHtml($bbcode);
 	}
 
 }

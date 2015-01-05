@@ -258,7 +258,7 @@ function url_like($url) {
 }
 
 function external_url($url, $label) {
-	$url = htmlspecialchars(filter_var($url, FILTER_SANITIZE_URL));
+	$url = filter_var($url, FILTER_SANITIZE_URL);
 	if ($url AND ( url_like($url) OR url_like(CSR_ROOT . $url) )) {
 		if (startsWith($url, 'http://') OR startsWith($url, 'https://')) {
 			$extern = ' target="_blank"';
