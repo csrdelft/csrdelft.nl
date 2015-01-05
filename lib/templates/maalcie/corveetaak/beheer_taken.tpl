@@ -30,20 +30,19 @@
 		Taken in het verleden waarvoor wel iemand is ingedeeld maar geen punten zijn toegekend worden geel gemarkeerd.
 	</p>
 	<p>N.B. U kunt ingedeelde corveeërs eenvoudig ruilen door het icoontje voor de naam te verslepen.</p>
-{/if}
-<br />
-
-<div class="float-right">
-	{*if !$prullenbak and !isset($maaltijd)}
-		<a href="/corveebeheer/indelen" title="Leden automatisch indelen voor taken" class="btn">{icon get="date"} Automatisch indelen</a>
-		<a href="/corveebeheer/herinneren" title="Verstuur herinneringen" class="btn">{icon get="clock"} Herinneringen versturen</a>
-	{/if*}
-	{if !($prullenbak or (isset($maaltijd) and $maaltijd->getIsVerwijderd()))}
+	{*
+	<a href="/corveebeheer/indelen" title="Leden automatisch indelen voor taken" class="btn">{icon get="date"} Automatisch indelen</a>
+	<a href="/corveebeheer/herinneren" title="Verstuur herinneringen" class="btn">{icon get="clock"} Herinneringen versturen</a>
+	*}
+	<div class="float-right">
+	{if !isset($maaltijd) OR !$maaltijd->getIsVerwijderd()}
 		<a class="btn" onclick="$(this).hide(); taken_show_old();">{icon get="eye"} Toon verleden</a>
 		<a href="{$smarty.const.maalcieUrl}/prullenbak" class="btn" title="Open de prullenbak">{icon get="bin_closed"} Prullenbak</a>
 		<a href="{$smarty.const.maalcieUrl}/nieuw{if isset($maaltijd)}/{$maaltijd->getMaaltijdId()}{/if}" title="Nieuwe taak" class="btn post popup">{icon get="add"} Nieuwe taak</a>
 	{/if}
 </div>
+{/if}
+<br />
 
 {if isset($repetities) and (!isset($maaltijd) or !$maaltijd->getIsVerwijderd())}
 	<form action="{$smarty.const.maalcieUrl}/nieuw{if isset($maaltijd)}/{$maaltijd->getMaaltijdId()}{/if}" method="post" class="Formulier ModalForm SubmitReset">
