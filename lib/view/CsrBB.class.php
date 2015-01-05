@@ -132,9 +132,9 @@ class CsrBB extends eamBBParser {
 			return '[img: Ongeldige URL]';
 		}
 		if ($this->email_mode) {
-			return '<img class="bb-img ' . $class . '" src="' . htmlspecialchars($url) . '" alt="' . htmlspecialchars($url) . '" style="' . $style . '" />';
+			return '<img class="bb-img ' . $class . '" src="' . $url . '" alt="' . htmlspecialchars($url) . '" style="' . $style . '" />';
 		}
-		return '<div class="bb-img-loading" src="' . htmlspecialchars($url) . '" title="' . htmlspecialchars($url) . '" style="' . $style . '"></div>';
+		return '<div class="bb-img-loading" src="' . $url . '" title="' . htmlspecialchars($url) . '" style="' . $style . '"></div>';
 	}
 
 	/**

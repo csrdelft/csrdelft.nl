@@ -55,7 +55,7 @@
 			activiteiten van C.S.R.-commissies en andere verenigingsactiviteiten.</em><br />
 			{html_options name=categorie values=$courant->getCats() output=$courant->getCats(true) selected=$form.categorie}
 		<br /><br />
-		<strong>Bericht:</strong><br />
+		<strong>Bericht:</strong> <em>(alleen [url] en [img] werken in de email)</em><br />
 		<div id="bewerkPreview" class="bbcodePreview"></div>
 		<textarea id="courantBericht" name="bericht" class="breed" rows="15">{$form.bericht|escape:'html'}</textarea>
 		<a class="btn float-right vergroot" data-vergroot="#courantBericht" title="Vergroot het invoerveld">&uarr;&darr;</a><br />
