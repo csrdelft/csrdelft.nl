@@ -30,10 +30,14 @@ class IntField extends InputField {
 	public $max_alert = null;
 
 	public function __construct($name, $value, $description, $min = null, $max = null) {
-		if (!is_int($value) AND $value !== null) {
-			throw new Exception('Geen int');
-		}
+
 		parent::__construct($name, $value, $description, 11);
+		if (!is_int($this->value) AND $this->value !== null) {
+			throw new Exception('value geen int');
+		}
+		if (!is_int($this->origvalue) AND $this->origvalue !== null) {
+			throw new Exception('origvalue geen int');
+		}
 		if ($min !== null) {
 			$this->min = (int) $min;
 			$this->min_alert = 'Minimaal ' . $this->min;
@@ -61,7 +65,7 @@ JS;
 		if ($this->isPosted()) {
 			$this->value = filter_input(INPUT_POST, $this->name, FILTER_SANITIZE_NUMBER_INT);
 		}
-		if ($this->empty_null AND ( $this->value === '' OR $this->value === null )) { // empty except 0
+		if ($this->empty_null AND $this->value !== 0 AND $this->value == '') { // empty except 0
 			$this->value = null;
 		} else {
 			$this->value = (int) $this->value;
@@ -265,7 +269,7 @@ class DecimalField extends TextField {
 		if ($this->isPosted()) {
 			$this->value = filter_input(INPUT_POST, $this->name, FILTER_SANITIZE_NUMBER_FLOAT);
 		}
-		if ($this->empty_null AND ( $this->value === '' OR $this->value === null )) { // empty except 0
+		if ($this->empty_null AND $this->value !== 0. AND $this->value == '') { // empty except 0
 			$this->value = null;
 		} else {
 			$this->value = (float) $this->value;

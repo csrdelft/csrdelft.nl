@@ -67,7 +67,7 @@ class MaaltijdRepetitiesController extends AclController {
 		if ($mrid > 0) {
 			$this->bewerk($mrid);
 		} else {
-			$this->view = new MaaltijdRepetitieForm($mrid); // fetches POST values itself
+			$this->nieuw();
 		}
 		if ($this->view->validate()) {
 			$values = $this->view->getValues();

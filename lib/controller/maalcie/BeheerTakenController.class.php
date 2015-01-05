@@ -138,7 +138,7 @@ class BeheerTakenController extends AclController {
 		if ($tid > 0) {
 			$this->bewerk($tid);
 		} else {
-			$this->view = new TaakForm($tid); // fetches POST values itself
+			$this->nieuw();
 		}
 		if ($this->view->validate()) {
 			$values = $this->view->getValues();

@@ -80,7 +80,7 @@ class CorveeRepetitiesController extends AclController {
 		if ($crid > 0) {
 			$this->bewerk($crid);
 		} else {
-			$this->view = new CorveeRepetitieForm($crid); // fetches POST values itself
+			$this->nieuw();
 		}
 		if ($this->view->validate()) {
 			$values = $this->view->getValues();

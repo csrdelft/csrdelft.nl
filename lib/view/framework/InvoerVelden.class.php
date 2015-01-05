@@ -1135,6 +1135,7 @@ class ObjectIdField extends InputField {
 
 	public function __construct(PersistentEntity $entity) {
 		parent::__construct(get_class($entity), $entity->getValues(true), null, $entity);
+		$this->readonly = true;
 		$this->hidden = true;
 	}
 

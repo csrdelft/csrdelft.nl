@@ -64,7 +64,7 @@ class BeheerVrijstellingenController extends AclController {
 		if ($uid !== null) {
 			$this->bewerk($uid);
 		} else {
-			$this->view = new VrijstellingForm(); // fetches POST values itself
+			$this->nieuw();
 		}
 		if ($this->view->validate()) {
 			$values = $this->view->getValues();
