@@ -21,6 +21,7 @@ N.B. Het archief is alleen-lezen.
 Op deze pagina kunt u de maaltijden aanmaken, wijzigen en verwijderen.
 Onderstaande tabel toont alle maaltijden die niet verwijderd zijn.
 </p>
+<br />
 <div class="float-right">
 	<a class="btn" onclick="$(this).hide();$('tr.taak-maaltijd-oud').show();">{icon get="eye"} Toon verleden</a>
 	<a href="{$smarty.const.maalcieUrl}/prullenbak" class="btn" title="Open de prullenbak">{icon get="bin_closed"} Prullenbak</a>
@@ -36,6 +37,7 @@ Onderstaande tabel toont alle maaltijden die niet verwijderd zijn.
 	</select>
 </form>
 {/if}
+<br />
 <table id="maalcie-tabel" class="maalcie-tabel">
 {foreach name=tabel from=$maaltijden item=maaltijd}
 	{if $smarty.foreach.tabel.index % 25 === 0}
