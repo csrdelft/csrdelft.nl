@@ -95,15 +95,20 @@ class MenuModel extends CachedPersistenceModel {
 
 			case 'Documenten':
 				require_once 'model/documenten/DocCategorie.class.php';
+				$overig = false;
 				foreach (DocCategorie::getAll() as $categorie) {
 					$item = $this->newMenuItem($parent->item_id);
 					$item->rechten_bekijken = $categorie->getLeesrechten();
 					$item->link = '/documenten/categorie/' . $categorie->getID();
 					$item->tekst = $categorie->getNaam();
-					if ($item->tekst == 'Overig') {
-						$item->prioriteit = 1;
+					if (!$overig AND $item->tekst == 'Overig') {
+						$overig = $item;
+					} else {
+						$parent->children[] = $item;
 					}
-					$parent->children[] = $item;
+				}
+				if ($overig) {
+					$parent->children[] = $overig;
 				}
 				break;
 
