@@ -23,7 +23,7 @@ class CsrBB extends eamBBParser {
 			$allow_html = true;
 		}
 		$this->allow_html = $allow_html;
-		$this->standard_html = $allow_html;
+		//$this->standard_html = $allow_html; // stuk
 	}
 
 	public static function parse($bbcode) {
