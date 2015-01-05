@@ -126,7 +126,7 @@ class PosterUploadForm extends Formulier {
 class FotosDropzone extends Dropzone {
 
 	public function __construct(FotoAlbum $album) {
-		parent::__construct($album, get_class(), '/fotoalbum/uploaden/' . $album->subdir, new ImageField('afbeelding', 'Foto', null, null, array('image/jpeg'), false), '/fotoalbum');
+		parent::__construct($album, get_class(), '/fotoalbum/uploaden/' . $album->subdir, new ImageField('afbeelding', 'Foto', null, null, array('image/jpeg')), '/fotoalbum');
 		$this->titel = 'Fotos toevoegen aan: ' . ucfirst($album->dirname);
 	}
 

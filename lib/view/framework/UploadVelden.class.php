@@ -31,9 +31,9 @@ class FileField extends KeuzeRondjeField {
 	private $urlField;
 	protected $uploaders;
 
-	public function __construct($name, $description, Bestand $bestand = null, Map $dir = null, array $filterMime = array(), $multiple = false) {
+	public function __construct($name, $description, Bestand $bestand = null, Map $dir = null, array $filterMime = array()) {
 		$this->behoudenField = new BestandBehouden($name . '_BB', $filterMime, $bestand);
-		$this->uploadField = new UploadFileField($name . '_HF', $filterMime, $multiple);
+		$this->uploadField = new UploadFileField($name . '_HF', $filterMime);
 		$this->existingField = new ExistingFileField($name . '_EF', $filterMime, $dir);
 		$this->urlField = new DownloadUrlField($name . '_DU', $filterMime);
 		$this->uploaders = array(
@@ -150,15 +150,17 @@ class RequiredFileField extends FileField {
 
 class ImageField extends FileField {
 
+	protected $vierkant;
 	protected $minWidth;
 	protected $minHeight;
 	protected $maxWidth;
 	protected $maxHeight;
 	private $filterMime;
 
-	public function __construct($name, $description, Afbeelding $behouden = null, Map $dir = null, array $filterMime = null, $multiple = false, $minWidth = null, $minHeight = null, $maxWidth = null, $maxHeight = null) {
+	public function __construct($name, $description, Afbeelding $behouden = null, Map $dir = null, array $filterMime = null, $vierkant = false, $minWidth = null, $minHeight = null, $maxWidth = null, $maxHeight = null) {
 		$this->filterMime = $filterMime === null ? Afbeelding::$mimeTypes : array_intersect(Afbeelding::$mimeTypes, $filterMime);
-		parent::__construct($name, $description, $behouden, $dir, $this->filterMime, $multiple);
+		parent::__construct($name, $description, $behouden, $dir, $this->filterMime);
+		$this->vierkant = $vierkant;
 		$this->minWidth = $minWidth;
 		$this->minHeight = $minHeight;
 		$this->maxWidth = $maxWidth;
@@ -173,22 +175,28 @@ class ImageField extends FileField {
 			$width = $this->getModel()->width;
 			$height = $this->getModel()->height;
 			$resize = false;
-			if ($this->maxWidth !== null AND $width > $this->maxWidth) {
-				$resize = 'Afbeelding is te breed. Maximaal ' . $this->maxWidth . ' pixels.';
-				$smallerW = floor((float) $this->maxWidth * 100 / (float) $width);
-			} elseif ($this->minWidth !== null AND $width < $this->minWidth) {
-				$resize = 'Afbeelding is niet breed genoeg. Minimaal ' . $this->minWidth . ' pixels.';
-				$biggerW = ceil((float) $this->minWidth * 100 / (float) $width);
-			}
-			if ($this->maxHeight !== null AND $height > $this->maxHeight) {
-				$resize = 'Afbeelding is te hoog. Maximaal ' . $this->maxHeight . ' pixels.';
-				$smallerH = floor((float) $this->maxHeight * 100 / (float) $height);
-			} elseif ($this->minHeight !== null AND $height < $this->minHeight) {
-				$resize = 'Afbeelding is niet hoog genoeg. Minimaal ' . $this->minHeight . ' pixels.';
-				$biggerH = ceil((float) $this->minHeight * 100 / (float) $height);
+			if ($this->vierkant AND $width !== $height) {
+				$resize = 'Afbeelding is niet vierkant.';
+			} else {
+				if ($this->maxWidth !== null AND $width > $this->maxWidth) {
+					$resize = 'Afbeelding is te breed. Maximaal ' . $this->maxWidth . ' pixels.';
+					$smallerW = floor((float) $this->maxWidth * 100 / (float) $width);
+				} elseif ($this->minWidth !== null AND $width < $this->minWidth) {
+					$resize = 'Afbeelding is niet breed genoeg. Minimaal ' . $this->minWidth . ' pixels.';
+					$biggerW = ceil((float) $this->minWidth * 100 / (float) $width);
+				}
+				if ($this->maxHeight !== null AND $height > $this->maxHeight) {
+					$resize = 'Afbeelding is te hoog. Maximaal ' . $this->maxHeight . ' pixels.';
+					$smallerH = floor((float) $this->maxHeight * 100 / (float) $height);
+				} elseif ($this->minHeight !== null AND $height < $this->minHeight) {
+					$resize = 'Afbeelding is niet hoog genoeg. Minimaal ' . $this->minHeight . ' pixels.';
+					$biggerH = ceil((float) $this->minHeight * 100 / (float) $height);
+				}
 			}
 			if ($resize) {
-				if (isset($biggerW, $smallerH) OR isset($biggerH, $smallerW)) {
+				if ($this->vierkant) {
+					$percent = 'vierkant';
+				} elseif (isset($biggerW, $smallerH) OR isset($biggerH, $smallerW)) {
 					$this->getUploader()->error = 'Geen resize verhouding';
 					return false;
 				} elseif (isset($smallerW, $smallerH)) {
@@ -209,7 +217,11 @@ class ImageField extends FileField {
 				$directory = $this->getModel()->directory;
 				$filename = $this->getModel()->filename;
 				$resized = $directory . $percent . $filename;
-				$command = IMAGEMAGICK_PATH . 'convert ' . escapeshellarg($directory . $filename) . ' -resize ' . $percent . '% -format jpg -quality 85 ' . escapeshellarg($resized);
+				if ($this->vierkant) {
+					$command = IMAGEMAGICK_PATH . 'convert ' . escapeshellarg($directory . $filename) . ' -thumbnail 150x150^ -gravity center -extent 150x150 -format jpg -quality 80 ' . escapeshellarg($resized);
+				} else {
+					$command = IMAGEMAGICK_PATH . 'convert ' . escapeshellarg($directory . $filename) . ' -resize ' . $percent . '% -format jpg -quality 85 ' . escapeshellarg($resized);
+				}
 				if (defined('RESIZE_OUTPUT')) {
 					debugprint($command);
 				}
@@ -305,12 +317,10 @@ class UploadFileField extends InputField {
 
 	public $filterMime;
 	public $type = 'file';
-	protected $multiple;
 
-	public function __construct($name, array $filterMime, $multiple = false) {
+	public function __construct($name, array $filterMime) {
 		parent::__construct($name, null, 'Uploaden in browser');
 		$this->filterMime = $filterMime;
-		$this->multiple = $multiple;
 		if ($this->isPosted()) {
 			$this->value = $_FILES[$this->name];
 			if (in_array($this->value['type'], Afbeelding::$mimeTypes)) {
@@ -375,7 +385,7 @@ class UploadFileField extends InputField {
 		} else {
 			$accept = implode('|', $this->filterMime);
 		}
-		return '<input ' . $this->getInputAttribute(array('type', 'id', 'name', 'class', 'disabled', 'readonly')) . ' accept="' . $accept . '"' . ($this->multiple ? ' multiple' : '') . ' data-max-size="' . getMaximumFileUploadSize() . '" />';
+		return '<input ' . $this->getInputAttribute(array('type', 'id', 'name', 'class', 'disabled', 'readonly')) . ' accept="' . $accept . '" data-max-size="' . getMaximumFileUploadSize() . '" />';
 	}
 
 	public function getJavascript() {
