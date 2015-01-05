@@ -28,13 +28,14 @@ class Barsysteem {
 		$result = array();
 		foreach ($terug as $row) {
 			$persoon = array();
+			$persoon["naam"] = $row["naam"];
+			$persoon["status"] = 'S_EXTERN';
 			if ($row["stekUID"]) {
 				$lid = LidCache::getLid($row["stekUID"]);
-				$persoon["naam"] = $lid->getNaamLink('volledig', 'plain');
-				$persoon["status"] = $lid->getStatus()->__toString();
-			} else {
-				$persoon["naam"] = $row["naam"];
-				$persoon["status"] = 'S_EXTERN';
+				if ($lid instanceof Lid) {
+					$persoon["naam"] = $lid->getNaamLink('full_uid', 'plain');
+					$persoon["status"] = $lid->getStatus()->__toString();
+				}
 			}
 			$persoon["socCieId"] = $row["socCieId"];
 			$persoon["bijnaam"] = $row["naam"];
