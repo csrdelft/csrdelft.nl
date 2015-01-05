@@ -901,6 +901,14 @@ class RequiredEmailField extends EmailField {
  */
 class UrlField extends TextField {
 
+	public function getValue() {
+		$value = parent::getValue();
+		if (startsWith($value, CSR_ROOT)) {
+			return str_replace(CSR_ROOT, '', $value);
+		}
+		return $value;
+	}
+
 	public function validate() {
 		if (!parent::validate()) {
 			return false;
