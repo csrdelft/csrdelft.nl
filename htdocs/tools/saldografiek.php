@@ -49,3 +49,9 @@ if (LoginModel::mag('P_LEDEN_MOD,groep:' . $cie) OR LoginModel::getUid() === $ui
 	$chart->set_labels(false, 'Saldo [euro]');
 	$chart->stroke();
 }
+
+?>
+<br>Opties:
+<br>- commissiesaldi van: maalcie of soccie
+<br>- periode: in dagen
+<br>- uid: 0000=iedereen, anders het lidnummer van een lid

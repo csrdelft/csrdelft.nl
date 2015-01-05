@@ -49,6 +49,7 @@ class stats implements View {
 			LIMIT
 				0, 30;";
 		$rLog = $db->query($sLogQuery);
+		echo 'Opties:<br>- stats.php?ip=192.168.1.33<br>- stats.php?uid=x101';
 		echo '<table class="forumtable"><tr><td class="forumhoofd">tijd</td><td class="forumhoofd">Naam</td><td class="forumhoofd">hostnaam</td><td class="forumhoofd">url</td>';
 		echo '<td class="forumhoofd">useragent</td><td class="forumhoofd">referer</td></tr>';
 		while ($aLogRegel = $db->next($rLog)) {
