@@ -19,7 +19,13 @@ abstract class DocumentenView extends SmartyTemplateView {
 class DocumentenContent extends DocumentenView {
 
 	public function __construct() {
-		parent::__construct(DocCategorie::getAll(), 'Documentenketzer');
+		$cats = array();
+		foreach (DocCategorie::getAll() as $cat) {
+			if ($cat->magBekijken()) {
+				$cats[] = $cat;
+			}
+		}
+		parent::__construct($cats, 'Documentenketzer');
 	}
 
 	public function view() {

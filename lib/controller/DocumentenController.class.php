@@ -164,7 +164,9 @@ class DocumentenController extends Controller {
 		}
 		$namen = array();
 		foreach (DocCategorie::getAll() as $cat) {
-			$namen[$cat->getID()] = $cat->getNaam();
+			if ($cat->magBekijken()) {
+				$namen[$cat->getID()] = $cat->getNaam();
+			}
 		}
 		$bestand = $this->document->getBestand();
 		if (!file_exists($bestand->directory . $bestand->filename)) {

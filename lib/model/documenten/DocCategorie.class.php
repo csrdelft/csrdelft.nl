@@ -1,4 +1,5 @@
 <?php
+
 require_once 'model/documenten/Document.class.php';
 
 /**
@@ -169,14 +170,11 @@ class DocCategorie {
 		if ($db->numRows($result) <= 0) {
 			return false;
 		}
-		$return = array();
+		$cats = array();
 		while ($categorie = $db->next($result)) {
-			$categorie = new DocCategorie($categorie);
-			if ($categorie->magBekijken()) {
-				$return[] = $categorie;
-			}
+			$cats[] = new DocCategorie($categorie);
 		}
-		return $return;
+		return $cats;
 	}
 
 	/**
