@@ -88,7 +88,7 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 define('HTTP_REFERER', $ref);
 
 # Use HTTP Strict Transport Security to force client to use secure connections only
-if (HSTS_ENABLED && isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off') {
+if (HSTS_ENABLED && isset($_SERVER['HTTP_X_FORWARDED_SCHEME']) && $_SERVER['HTTP_X_FORWARDED_SCHEME'] === 'https') {
 	header('Strict-Transport-Security: max-age=31536000');
 } elseif (HSTS_ENABLED) {
 	header('Location: ' . CSR_ROOT . REQUEST_URI, true, 301);
