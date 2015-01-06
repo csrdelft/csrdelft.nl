@@ -52,22 +52,14 @@ class Saldi {
 				$this->data = array_merge($this->data, array_reverse($data));
 			}
 		} elseif ($this->cie == 'maalcie') {
-			if (empty($this->data)) {
-				if ($this->uid == '0000') {
-					$sQuery = "
-						SELECT LEFT(moment, 16) AS moment, SUM(saldo) AS saldo
-						FROM saldolog
-						WHERE cie='" . $this->cie . "'
-						GROUP BY LEFT(moment, 16)
-						LIMIT 1;";
-				} else {
-					$sQuery = "
-						SELECT moment, saldo
-						FROM saldolog
-						WHERE uid='" . $this->uid . "'
-						  AND cie='" . $this->cie . "'
-						LIMIT 1;";
-				}
+			if (empty($this->data) AND $this->uid != '0000') {
+				$sQuery = "
+					SELECT moment, saldo
+					FROM saldolog
+					WHERE uid='" . $this->uid . "'
+					  AND cie='" . $this->cie . "'
+					ORDER BY moment DESC
+					LIMIT 1;";
 				$this->data = MijnSqli::instance()->query2array($sQuery);
 			}
 		}
