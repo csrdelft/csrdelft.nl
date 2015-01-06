@@ -90,10 +90,11 @@ class LoginController extends AclController {
 	public function wachtwoord($action = null) {
 		$lid = $this->model->getLid();
 		$uid = $lid->getUid();
-		if ($action === 'verlopen' AND LoginModel::mag('P_PROFIEL_EDIT')) {
-			$this->view = new WachtwoordVerlopenForm($lid);
-			if ($this->view->validate()) {
-				$pw = $this->view->findByName('wwreset')->getValue();
+		// wijzigen
+		if (LoginModel::mag('P_PROFIEL_EDIT')) {
+			$form = new WachtwoordWijzigenForm($lid, $action);
+			if ($form->validate()) {
+				$pw = $form->findByName('wwreset')->getValue();
 				// wachtwoord opslaan
 				if (!$lid->resetWachtwoord($pw)) {
 					setMelding('Wachtwoord instellen faalt', -1);
@@ -101,82 +102,82 @@ class LoginController extends AclController {
 				}
 				setMelding('Wachtwoord instellen geslaagd', 1);
 			}
-			$this->view = new CsrLayoutPage($this->view);
-			return;
 		}
 		// resetten
-		if ($action === 'reset' AND LoginModel::mag('P_PROFIEL_EDIT', true) AND VerifyModel::instance()->isVerified($uid, '/wachtwoord/reset')
-		) {
-			$this->view = new WachtwoordResetForm($lid);
-			if ($this->view->validate()) {
-				$pw = $this->view->findByName('wwreset')->getValue();
+		elseif ($action === 'reset' AND LoginModel::mag('P_PROFIEL_EDIT', true) AND VerifyModel::instance()->isVerified($uid, '/wachtwoord/reset')) {
+			$form = new WachtwoordWijzigenForm($lid, $action, false);
+			if ($form->validate()) {
+				$pw = $form->findByName('wwreset')->getValue();
 				// wachtwoord opslaan
 				if (!$lid->resetWachtwoord($pw)) {
 					setMelding('Wachtwoord instellen faalt', -1);
 					redirect();
 				}
+				setMelding('Wachtwoord instellen geslaagd', 1);
 				// token verbruikt
 				VerifyModel::instance()->discardToken($uid, '/wachtwoord/reset');
-				setMelding('Wachtwoord instellen geslaagd', 1);
 				$this->model->login($uid, $pw);
 				$lidnaam = $lid->getNaamLink('civitas', 'plain');
+				// stuur bevestigingsmail
 				require_once 'model/entity/Mail.class.php';
 				$bericht = "Geachte " . $lidnaam . ",\n\nU heeft recent uw wachtwoord opnieuw ingesteld. Als u dit niet zelf gedaan heeft dan moet u nu direct uw wachtwoord wijzigen en de PubCie op de hoogte stellen.\n\nMet amicale groet,\nUw PubCie";
 				$mail = new Mail(array($lid->getEmail() => $lidnaam), 'C.S.R. webstek: nieuw wachtwoord ingesteld', $bericht);
 				$mail->send();
 			}
-			$this->view = new CsrLayoutPage($this->view);
-			return;
 		}
-		// wachtwoord vergeten
-		$this->view = new WachtwoordVergetenForm();
-		if ($this->view->validate()) {
-			$values = $this->view->getValues();
-			$lid = LidCache::getLid($values['user']);
-			if ($lid instanceof Lid) {
-				$uid = $lid->getUid();
-			} else {
-				$uid = 'x999';
-			}
-			$timeout = TimeoutModel::instance()->moetWachten($uid);
-			if ($timeout > 0) {
-				setMelding('Wacht ' . $timeout . ' seconden', -1);
-			}
-			// mag wachtwoord resetten?
-			elseif ($lid instanceof Lid AND AccessModel::mag($lid, 'P_PROFIEL_EDIT') AND $lid->getEmail() === $values['mail']) {
-				$token = VerifyModel::instance()->createToken($uid, '/wachtwoord/reset');
-				$lidnaam = $lid->getNaamLink('civitas', 'plain');
-				require_once 'model/entity/Mail.class.php';
-				$bericht = "Geachte " . $lidnaam .
-						",\n\nU heeft verzocht om uw wachtwoord opnieuw in te stellen. Dit is mogelijk met de onderstaande link tot " . $token->expire .
-						".\n\n[url=" . CSR_ROOT . "/verify/" . $token->token .
-						"]Wachtwoord instellen[/url].\n\nAls dit niet uw eigen verzoek is kunt u dit bericht negeren.\n\nMet amicale groet,\nUw PubCie";
-				$mail = new Mail(array($lid->getEmail() => $lidnaam), 'C.S.R. webstek: nieuw wachtwoord instellen', $bericht);
-				$mail->send();
-				setMelding('Wachtwoord reset email verzonden', 1);
-
-				// sowieso timeout geven zodat je geen bruteforce kan doen als je uid en email weet.
-				// (wachtwoord proberen, bij timeout vergeten mail sturen en dan weer wachtworod proberen, etc.)
-				TimeoutModel::instance()->fout($uid);
-			} else {
-				TimeoutModel::instance()->fout($uid);
+		// vergeten
+		else {
+			$form = new WachtwoordVergetenForm();
+			if ($form->validate()) {
+				$values = $form->getValues();
+				$lid = LidCache::getLid($values['user']);
+				if ($lid instanceof Lid) {
+					$uid = $lid->getUid();
+				} else {
+					$uid = 'x999';
+				}
+				$timeout = TimeoutModel::instance()->moetWachten($uid);
+				if ($timeout > 0) {
+					setMelding('Wacht ' . $timeout . ' seconden', -1);
+				}
+				// mag wachtwoord resetten?
+				elseif ($lid instanceof Lid AND AccessModel::mag($lid, 'P_PROFIEL_EDIT') AND $lid->getEmail() === $values['mail']) {
+					$token = VerifyModel::instance()->createToken($uid, '/wachtwoord/reset');
+					$lidnaam = $lid->getNaamLink('civitas', 'plain');
+					// stuure resetmail
+					require_once 'model/entity/Mail.class.php';
+					$bericht = "Geachte " . $lidnaam .
+							",\n\nU heeft verzocht om uw wachtwoord opnieuw in te stellen. Dit is mogelijk met de onderstaande link tot " . $token->expire .
+							".\n\n[url=" . CSR_ROOT . "/verify/" . $token->token .
+							"]Wachtwoord instellen[/url].\n\nAls dit niet uw eigen verzoek is kunt u dit bericht negeren.\n\nMet amicale groet,\nUw PubCie";
+					$mail = new Mail(array($lid->getEmail() => $lidnaam), 'C.S.R. webstek: nieuw wachtwoord instellen', $bericht);
+					$mail->send();
+					setMelding('Wachtwoord reset email verzonden', 1);
+					/**
+					 * Sowieso timeout geven zodat je geen bruteforce kan doen als je uid en email weet.
+					 * (wachtwoord proberen, bij timeout vergeten mail sturen en dan weer wachtworod proberen, etc.)
+					 */
+					TimeoutModel::instance()->fout($uid);
+				} else {
+					TimeoutModel::instance()->fout($uid);
+				}
 			}
 		}
-		$this->view = new CsrLayoutPage($this->view);
+		$this->view = new CsrLayoutPage($form);
 	}
 
 	public function verify() {
 		$tokenValue = filter_input(INPUT_GET, 'onetime_token', FILTER_SANITIZE_STRING);
-		$this->view = new VerifyForm($tokenValue);
-		if ($this->view->validate()) {
-			$uid = $this->view->findByName('user')->getValue();
+		$form = new VerifyForm($tokenValue);
+		if ($form->validate()) {
+			$uid = $form->findByName('user')->getValue();
 			$lid = LidCache::getLid($uid);
 			if ($lid instanceof Lid AND AccessModel::mag($lid, 'P_LOGGED_IN') AND VerifyModel::instance()->verifyToken($lid->getUid(), $tokenValue)) {
 				// redirect by verifyToken
 			}
 			setMelding(VerifyModel::instance()->getError(), -1);
 		}
-		$this->view = new CsrLayoutPage($this->view);
+		$this->view = new CsrLayoutPage($form);
 	}
 
 	public function sessions() {

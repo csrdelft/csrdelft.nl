@@ -1059,16 +1059,16 @@ class RequiredWachtwoordField extends WachtwoordField {
  */
 class WachtwoordWijzigenField extends InputField {
 
-	private $reset;
+	private $require_current;
 
-	public function __construct($name, Lid $lid, $reset = false) {
+	public function __construct($name, Lid $lid, $require_current = true) {
 		parent::__construct($name, $name, null, $lid);
-		$this->reset = $reset;
+		$this->require_current = $require_current;
 	}
 
 	public function isPosted() {
 		$return = true;
-		if (!$this->reset) {
+		if ($this->require_current) {
 			$return = isset($_POST[$this->name . '_current']);
 		}
 		return $return AND isset($_POST[$this->name . '_new'], $_POST[$this->name . '_confirm']);
@@ -1090,16 +1090,16 @@ class WachtwoordWijzigenField extends InputField {
 		if (!parent::validate()) {
 			return false;
 		}
-		if (!$this->reset) {
+		if ($this->require_current) {
 			$current = filter_input(INPUT_POST, $this->name . '_current', FILTER_SANITIZE_STRING);
 		}
 		$new = filter_input(INPUT_POST, $this->name . '_new', FILTER_SANITIZE_STRING);
 		$confirm = filter_input(INPUT_POST, $this->name . '_confirm', FILTER_SANITIZE_STRING);
 		$length = strlen(utf8_decode($new));
-		if (!$this->reset AND ! empty($new) AND empty($current)) {
+		if ($this->require_current AND ! empty($new) AND empty($current)) {
 			$this->error = 'U dient uw huidige wachtwoord ook in te voeren';
-		} elseif ($this->reset OR ! empty($new)) {
-			if ($current == $new) {
+		} elseif (!$this->require_current OR ! empty($new)) {
+			if ($this->require_current AND $current == $new) {
 				$this->error = 'Het nieuwe wachtwoord is hetzelfde als huidige wachtwoord';
 			} elseif (preg_match('/^[0-9]*$/', $new)) {
 				$this->error = 'Het nieuwe wachtwoord moet ook letters en speciale tekens bevatten';
@@ -1119,7 +1119,7 @@ class WachtwoordWijzigenField extends InputField {
 				$this->error = 'Vul uw nieuwe wachtwoord twee keer in';
 			} elseif ($new != $confirm) {
 				$this->error = 'Nieuwe wachtwoorden komen niet overeen';
-			} elseif (!$this->reset AND ! PasswordModel::instance()->controleerWachtwoord($this->model, $current)) {
+			} elseif ($this->require_current AND ! PasswordModel::instance()->controleerWachtwoord($this->model, $current)) {
 				$this->error = 'Uw huidige wachtwoord is niet juist';
 			}
 		}
@@ -1128,7 +1128,7 @@ class WachtwoordWijzigenField extends InputField {
 
 	public function getHtml() {
 		$html = '';
-		if (!$this->reset) {
+		if ($this->require_current) {
 			$html .= '<label for="' . $this->getId() . '_current">Huidig wachtwoord</label>';
 			$html .= '<input type="password" autocomplete="off" id="' . $this->getId() . '_current" name="' . $this->name . '_current" /></div>';
 		}
