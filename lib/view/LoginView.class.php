@@ -100,6 +100,7 @@ class WachtwoordWijzigenForm extends Formulier {
 
 		$fields[] = new WachtwoordWijzigenField('wwreset', $lid, $require_current);
 		$fields[] = new FormDefaultKnoppen('/', false, true, true, true);
+		$fields[] = new HtmlComment('<p>&nbsp;</p><img src="http://imgs.xkcd.com/comics/password_strength.png" title="http://xkcd.com/936/" />');
 
 		$this->addFields($fields);
 	}
