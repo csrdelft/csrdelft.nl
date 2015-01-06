@@ -20,6 +20,9 @@ define('DEBUG', false);
 # 
 # measure time
 define('TIME_MEASURE', false);
+# 
+# Use HTTP Strict Transport Security to force client to use secure connections only
+define('HSTS_ENABLED', true);
 
 # wordt gebruikt om pagina's alleen op Confide te laten zien
 define('CONFIDE_IP', '80.112.180.123');
