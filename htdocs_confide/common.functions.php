@@ -667,7 +667,7 @@ function getDebug($get = true, $post = true, $files = true, $cookie = true, $ses
 		$debug .= '<hr />SESSION<hr />' . htmlspecialchars(print_r($_SESSION, true));
 	}
 	if ($server) {
-		$debug .= '<hr />SERVER<hr />' . htmlspecialchars(print_r($_SESSION, true));
+		$debug .= '<hr />SERVER<hr />' . htmlspecialchars(print_r($_SERVER, true));
 	}
 	if ($sql) {
 		require_once 'model/framework/DatabaseAdmin.singleton.php';
