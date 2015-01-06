@@ -32,7 +32,7 @@ class LedenController extends AclController {
 	}
 
 	public function lijst() {
-		redirect(CSR_ROOT . '/ledenlijst');
+		redirect('/ledenlijst');
 	}
 
 	public function stamboom($uid = null) {

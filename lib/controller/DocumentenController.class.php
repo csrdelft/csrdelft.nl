@@ -24,7 +24,7 @@ class DocumentenController extends Controller {
 	 */
 	public function __construct($query) {
 		parent::__construct($query, null);
-		$this->baseurl = CSR_ROOT . '/documenten/';
+		$this->baseurl = '/documenten/';
 		//wat zullen we eens gaan doen? Hier bepalen we welke actie we gaan uitvoeren
 		//en of de ingelogde persoon dat mag.
 		if (LoginModel::mag('P_DOCS_READ')) {

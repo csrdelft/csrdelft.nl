@@ -9,7 +9,7 @@
 require_once 'configuratie.include.php';
 
 if (!LoginModel::mag('P_LOGGED_IN')) { // nieuwe layout altijd voor uitgelogde bezoekers
-	redirect(CSR_ROOT . '/vereniging');
+	redirect('/vereniging');
 }
 
 require_once 'model/GroepenOldModel.class.php';
@@ -29,16 +29,16 @@ try {
 	$content = new OldGroepenView($groepen);
 } catch (Exception $e) {
 	setMelding('Groeptype (' . htmlspecialchars($gtype) . ') bestaat niet', -1);
-	redirect(CSR_ROOT . '/groepen/');
+	redirect('/groepen/');
 }
 
 if (isset($_GET['maakOt']) AND $groepen->isAdmin()) {
 	if ($groepen->maakGroepenOt()) {
 		setMelding('De h.t. groepen in deze categorie zijn met succes o.t. gemaakt.', 1);
-		redirect(CSR_ROOT . '/groepen/' . $groepen->getNaam());
+		redirect('/groepen/' . $groepen->getNaam());
 	} else {
 		setMelding('De h.t. groepen zijn niet allemaal met succes o.t. gemaakt.', -1);
-		redirect(CSR_ROOT . '/groepen/' . $groepen->getNaam());
+		redirect('/groepen/' . $groepen->getNaam());
 	}
 }
 if (isset($_GET['bewerken']) AND $groepen->isAdmin()) {
@@ -48,7 +48,7 @@ if (isset($_GET['bewerken']) AND $groepen->isAdmin()) {
 			$groepen->setBeschrijving($_POST['beschrijving']);
 			if ($groepen->save()) {
 				setMelding('Beschrijving van groepstype met succes opgeslagen.', 1);
-				redirect(CSR_ROOT . '/groepen/' . $groepen->getNaam());
+				redirect('/groepen/' . $groepen->getNaam());
 			} else {
 				setMelding('Opslaan mislukt.', -1);
 			}

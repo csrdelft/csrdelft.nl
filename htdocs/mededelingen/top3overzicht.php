@@ -6,7 +6,7 @@ require_once 'view/MededelingenView.class.php';
 
 if (!MededelingenModel::isModerator()) {
 	setMelding('U heeft daar niets te zoeken.', -1);
-	redirect(CSR_ROOT . MededelingenView::mededelingenRoot);
+	redirect(MededelingenView::mededelingenRoot);
 }
 
 $top3overzicht = new MededelingenOverzichtView();

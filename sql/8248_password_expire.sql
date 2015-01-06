@@ -1,0 +1,1 @@
+CREATE TABLE password_expire (uid varchar(4) NOT NULL, expire datetime NOT NULL, PRIMARY KEY (uid)) ENGINE=InnoDB DEFAULT CHARSET=utf8 auto_increment=1;

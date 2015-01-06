@@ -21,7 +21,7 @@ if (isset($_GET['action'])) {
 				}
 				$peiling = PeilingenModel::maakPeiling($properties);
 				setMelding('De nieuwe peiling heeft id ' . $peiling->getId() . '.', 1);
-				redirect(CSR_ROOT . '/tools/peilingbeheer.php');
+				redirect('/tools/peilingbeheer.php');
 				exit;
 			}
 			break;

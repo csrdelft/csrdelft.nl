@@ -73,7 +73,7 @@ if (isset($_GET['addToGoogle'])) {
 	if ($zoeker->count() == 1) {
 		$leden = $zoeker->getLeden();
 		$lid = $leden[0];
-		redirect(CSR_ROOT . '/profiel/' . $lid->getUid());
+		redirect('/profiel/' . $lid->getUid());
 	}
 }
 

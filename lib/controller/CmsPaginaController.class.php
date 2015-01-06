@@ -94,7 +94,7 @@ class CmsPaginaController extends Controller {
 			} else {
 				setMelding('Geen wijzigingen', 0);
 			}
-			redirect(CSR_ROOT . '/pagina/' . $pagina->naam);
+			redirect('/pagina/' . $pagina->naam);
 		} else {
 			$this->view = new CsrLayoutPage($form, $this->zijbalk);
 		}

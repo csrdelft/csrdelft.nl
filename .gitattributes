@@ -4079,6 +4079,7 @@ lib/model/MededelingCategorieModel.class.php -text
 lib/model/MededelingenModel.class.php -text
 lib/model/MenuModel.class.php -text
 lib/model/Paging.interface.php -text
+lib/model/PasswordModel.class.php -text
 lib/model/PeilingenModel.class.php -text
 lib/model/TimerModel.class.php -text
 lib/model/VerifyModel.class.php -text
@@ -4110,6 +4111,7 @@ lib/model/entity/Map.class.php -text
 lib/model/entity/Mededeling.class.php -text
 lib/model/entity/MenuItem.class.php -text
 lib/model/entity/OneTimeToken.class.php -text
+lib/model/entity/PasswordExpire.class.php -text
 lib/model/entity/VerifyTimeout.class.php -text
 lib/model/entity/Verticale.class.php -text
 lib/model/entity/forum/ForumCategorie.class.php -text
@@ -4687,3 +4689,4 @@ sql/6789_pagina_per_post.sql -text
 sql/6868_fotoalbum_owner.sql -text
 sql/6888_verify_timeout.sql -text
 sql/6901_login_sessions.sql -text
+sql/8248_password_expire.sql -text

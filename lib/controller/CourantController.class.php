@@ -122,7 +122,7 @@ class CourantController extends AclController {
 	public function verzenden($iedereen = null) {
 		if ($this->model->getBerichtenCount() < 1) {
 			setMelding('Lege courant kan niet worden verzonden', 0);
-			redirect(CSR_ROOT . '/courant');
+			redirect('/courant');
 		}
 		$courant = new CourantView($this->model);
 		if ($iedereen === 'iedereen') {

@@ -110,7 +110,7 @@ class Lid implements Serializable, Agendeerbaar {
 		if (empty($password)) {
 			$password = crypto_rand_token(16);
 		}
-		$passwordhash = makepasswd($password);
+		$passwordhash = PasswordModel::instance()->maakWachtwoord($this, $password);
 		$sNieuwWachtwoord = "UPDATE lid SET password='" . $passwordhash . "' WHERE uid='" . $this->getUid() . "' LIMIT 1;";
 
 		$success = MijnSqli::instance()->query($sNieuwWachtwoord);
@@ -270,7 +270,7 @@ class Lid implements Serializable, Agendeerbaar {
 		}
 		switch ($property) {
 			case 'password':
-				$this->profiel[$property] = makepasswd($contents);
+				$this->profiel[$property] = PasswordModel::instance()->maakWachtwoord($this, $contents);
 				break;
 			case 'status':
 				//TODO wat als een niet-bestaand?

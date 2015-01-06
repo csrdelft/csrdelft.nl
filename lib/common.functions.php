@@ -136,15 +136,13 @@ function array_get_keys(array $in, array $keys) {
  */
 function redirect($url = null, $refresh = true) {
 	if (empty($url)) {
-		$url = CSR_ROOT . REQUEST_URI;
-	} else if (!startsWith($url, CSR_ROOT)) {
-		if (!startsWith($url, '/')) {
-			$url = '/' . $url;
-		}
-		$url = CSR_ROOT . $url;
+		$url = REQUEST_URI;
 	}
-	if (!$refresh AND $url == CSR_ROOT . REQUEST_URI) {
+	if (!$refresh AND $url == REQUEST_URI) {
 		$url = CSR_ROOT;
+	}
+	if (!startsWith($url, CSR_ROOT)) {
+		$url = CSR_ROOT . $url;
 	}
 	header('location: ' . $url);
 	exit;
@@ -211,24 +209,6 @@ function crypto_rand_secure($min, $max) {
 		$rnd = $rnd & $filter; // discard irrelevant bits
 	} while ($rnd >= $range);
 	return $min + $rnd;
-}
-
-function checkpw(Lid $lid, $pass) {
-	// Verify SSHA hash
-	$ohash = base64_decode(substr($lid->getPassword(), 6));
-	$osalt = substr($ohash, 20);
-	$ohash = substr($ohash, 0, 20);
-	$nhash = pack("H*", sha1($pass . $osalt));
-	#echo "ohash: {$ohash}, nhash: {$nhash}";
-	if ($ohash === $nhash) {
-		return true;
-	}
-	return false;
-}
-
-function makepasswd($pass) {
-	$salt = mhash_keygen_s2k(MHASH_SHA1, $pass, substr(pack('h*', md5(mt_rand())), 0, 8), 4);
-	return "{SSHA}" . base64_encode(mhash(MHASH_SHA1, $pass . $salt) . $salt);
 }
 
 function valid_date($date, $format = 'Y-m-d H:i:s') {

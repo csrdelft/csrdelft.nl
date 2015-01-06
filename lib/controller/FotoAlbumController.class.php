@@ -58,7 +58,7 @@ class FotoAlbumController extends AclController {
 		$album = $this->model->getFotoAlbum($path);
 		if (!$album) {
 			setMelding('Fotoalbum bestaat niet' . (DEBUG ? ': ' . $path : ''), -1);
-			redirect(CSR_ROOT . '/fotoalbum');
+			redirect('/fotoalbum');
 		}
 		$args[] = $album;
 		parent::performAction($args);

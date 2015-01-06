@@ -7,7 +7,7 @@
 require_once 'configuratie.include.php';
 
 if (!LoginModel::mag('P_LOGGED_IN')) { // nieuwe layout altijd voor uitgelogde bezoekers
-	redirect(CSR_ROOT . '/vereniging');
+	redirect('/vereniging');
 }
 
 require_once 'model/entity/groepen/OldGroep.class.php';

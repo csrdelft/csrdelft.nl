@@ -17,5 +17,5 @@ if (DEBUG OR LoginModel::mag('P_ADMIN') OR LoginModel::instance()->isSued()) {
 		setMelding('Memcache flushen mislukt', -1);
 	}
 
-	redirect(CSR_ROOT . '/tools/memcachestats.php');
+	redirect('/tools/memcachestats.php');
 }

@@ -90,10 +90,22 @@ class LoginController extends AclController {
 	public function wachtwoord($action = null) {
 		$lid = $this->model->getLid();
 		$uid = $lid->getUid();
+		if ($action == 'verlopen' AND LoginModel::mag('P_PROFIEL_EDIT', true)) {
+			$this->view = new WachtwoordVerlopenForm($lid);
+			if ($this->view->validate()) {
+				$pw = $this->view->findByName('wwreset')->getValue();
+				// wachtwoord opslaan
+				if (!$lid->resetWachtwoord($pw)) {
+					setMelding('Wachtwoord instellen faalt', -1);
+					redirect();
+				}
+				setMelding('Wachtwoord instellen geslaagd', 1);
+			}
+			$this->view = new CsrLayoutPage($this->view);
+			return;
+		}
 		// resetten
-		if ($action === 'reset' AND
-				LoginModel::mag('P_PROFIEL_EDIT', true) AND
-				VerifyModel::instance()->isVerified($uid, '/wachtwoord/reset')
+		if ($action === 'reset' AND LoginModel::mag('P_PROFIEL_EDIT', true) AND VerifyModel::instance()->isVerified($uid, '/wachtwoord/reset')
 		) {
 			$this->view = new WachtwoordResetForm($lid);
 			if ($this->view->validate()) {

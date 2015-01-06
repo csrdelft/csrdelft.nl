@@ -57,7 +57,7 @@ if (!LoginModel::mag('P_OUDLEDEN_READ')) {
 					if ($profiel->validate()) {
 						if ($profiel->save()) {
 							setMelding('Opslaan geslaagd', 1);
-							redirect(CSR_ROOT . '/profiel/' . $uid);
+							redirect('/profiel/' . $uid);
 						}
 						setMelding('Opslaan mislukt', -1);
 					} else {
@@ -80,7 +80,7 @@ if (!LoginModel::mag('P_OUDLEDEN_READ')) {
 				// nieuwe leden mogen worden aangemaakt door P_ADMIN,P_LEDEN_MOD,
 				// novieten ook door de novcie.
 				setMelding('U mag geen nieuwe leden aanmaken', -1);
-				redirect(CSR_ROOT . '/profiel/');
+				redirect('/profiel/');
 			}
 			try {
 				//maak het nieuwe uid aan.
@@ -91,22 +91,22 @@ if (!LoginModel::mag('P_OUDLEDEN_READ')) {
 				} else {
 					$bewerkactie = 'bewerken';
 				}
-				redirect(CSR_ROOT . '/profiel/' . $nieuwUid . '/' . $bewerkactie);
+				redirect('/profiel/' . $nieuwUid . '/' . $bewerkactie);
 			} catch (Exception $e) {
 				setMelding('<h3>Nieuw lidnummer aanmaken mislukt.</h3>' . $e->getMessage(), -1);
-				redirect(CSR_ROOT . '/profiel/');
+				redirect('/profiel/');
 			}
 			break;
 
 		case 'wijzigstatus':
 			if (!LoginModel::mag('P_ADMIN,P_LEDEN_MOD')) {
 				setMelding('U mag lidstatus niet aanpassen', -1);
-				redirect(CSR_ROOT . '/profiel/');
+				redirect('/profiel/');
 			}
 			$profiel = new ProfielStatus($uid, $actie);
 
 			if ($profiel->validate() AND $profiel->save()) {
-				redirect(CSR_ROOT . '/profiel/' . $uid);
+				redirect('/profiel/' . $uid);
 			} else {
 				$midden = new ProfielStatusContent($profiel, $actie);
 			}
@@ -140,7 +140,7 @@ if (!LoginModel::mag('P_OUDLEDEN_READ')) {
 					setMelding('Wachtwoord resetten mislukt.', -1);
 				}
 			}
-			redirect(CSR_ROOT . '/profiel/' . $uid);
+			redirect('/profiel/' . $uid);
 			break;
 
 		case 'addToGoogleContacts';
@@ -150,14 +150,14 @@ if (!LoginModel::mag('P_OUDLEDEN_READ')) {
 			$gSync = GoogleSync::instance();
 			$message = $gSync->syncLid($uid);
 			setMelding('<h3>Opgeslagen in Google Contacts:</h3>' . $message, 2);
-			redirect(CSR_ROOT . '/profiel/' . $uid);
+			redirect('/profiel/' . $uid);
 			break;
 
 		/** @noinspection PhpMissingBreakStatementInspection */
 		case 'rssToken':
 			if ($uid == LoginModel::getUid()) {
 				LoginModel::instance()->getLid()->generateRssToken();
-				redirect(CSR_ROOT . '/profiel/' . $uid . '#forum');
+				redirect('/profiel/' . $uid . '#forum');
 			}
 		//geen break hier, want als de bovenstaande actie aangevraagd werd voor de
 		//niet-huidige gebruiker, doen we gewoon een normale view.
@@ -166,7 +166,7 @@ if (!LoginModel::mag('P_OUDLEDEN_READ')) {
 			$lid = LidCache::getLid($uid);
 			if (!$lid instanceof Lid) {
 				setMelding('<h3>Helaas</h3>Dit lid bestaat niet.<br /> U kunt verder zoeken in deze ledenlijst.', -1);
-				redirect(CSR_ROOT . '/ledenlijst/');
+				redirect('/ledenlijst/');
 			}
 			$midden = new ProfielContent($lid);
 	}

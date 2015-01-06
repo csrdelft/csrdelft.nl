@@ -488,7 +488,7 @@ class ForumController extends Controller {
 		}
 		setMelding('Wijziging geslaagd: ' . $wijziging, 1);
 		if ($property === 'forum_id' OR $property === 'titel' OR $property === 'gedeeld_met') {
-			redirect(CSR_ROOT . '/forum/onderwerp/' . $draad_id);
+			redirect('/forum/onderwerp/' . $draad_id);
 		} else {
 			$this->view = new JsonResponse(true);
 		}
@@ -511,13 +511,13 @@ class ForumController extends Controller {
 			if (!$draad OR $draad->forum_id !== $deel->forum_id OR ! $draad->magPosten()) {
 				$this->geentoegang();
 			}
-			$url = CSR_ROOT . '/forum/onderwerp/' . $draad->draad_id;
+			$url = '/forum/onderwerp/' . $draad->draad_id;
 			$nieuw = false;
 		} else {
 			if (!$deel->magPosten()) {
 				$this->geentoegang();
 			}
-			$url = CSR_ROOT . '/forum/deel/' . $deel->forum_id;
+			$url = '/forum/deel/' . $deel->forum_id;
 			$nieuw = true;
 
 			$titel = trim(filter_input(INPUT_POST, 'titel', FILTER_SANITIZE_STRING));
@@ -530,7 +530,7 @@ class ForumController extends Controller {
 		$spamtrap = filter_input(INPUT_POST, 'firstname', FILTER_UNSAFE_RAW);
 		if (!empty($spamtrap) OR $filter->isSpam($tekst) OR ( isset($titel) AND $filter->isSpam($titel) )) { //TODO: logging
 			setMelding('SPAM', -1);
-			redirect(CSR_ROOT . '/forum');
+			redirect('/forum');
 		}
 
 		// voorkom dubbelposts
@@ -593,7 +593,7 @@ class ForumController extends Controller {
 			mail('pubcie@csrdelft.nl', 'Nieuw bericht wacht op goedkeuring', CSR_ROOT . "/forum/onderwerp/" . $draad->draad_id . "/wacht#" . $post->post_id . "\n\nDe inhoud van het bericht is als volgt: \n\n" . str_replace('\r\n', "\n", $tekst) . "\n\nEINDE BERICHT", "From: pubcie@csrdelft.nl\r\nReply-To: " . $mailadres);
 
 			if ($nieuw) {
-				redirect(CSR_ROOT . '/forum/deel/' . $deel->forum_id);
+				redirect('/forum/deel/' . $deel->forum_id);
 			}
 		} else {
 			// direct goedkeuren voor ingelogd
@@ -613,7 +613,7 @@ class ForumController extends Controller {
 
 			setMelding(($nieuw ? 'Draad' : 'Post') . ' succesvol toegevoegd', 1);
 
-			$url = CSR_ROOT . '/forum/reactie/' . $post->post_id . '#' . $post->post_id;
+			$url = '/forum/reactie/' . $post->post_id . '#' . $post->post_id;
 		}
 
 		// concept wissen

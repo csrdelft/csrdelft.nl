@@ -2,6 +2,7 @@
 
 require_once 'view/Validator.interface.php';
 require_once 'model/VerifyModel.class.php';
+require_once 'model/PasswordModel.class.php';
 require_once 'lid/lidcache.class.php';
 
 /**
@@ -58,7 +59,7 @@ class LoginModel extends PersistenceModel implements Validator {
 			// public gebruiker is stuk
 			die('Not accessible');
 		}
-		if ($this->getLid()->getUid() === 'x999') {
+		if ($this->loggedinLid->getUid() == 'x999') {
 			/**
 			 * Als we x999 zijn checken we of er misschien een validatietoken in de $_GET staat.
 			 * Een token staat toe zonder wachtwoord gelimiteerde rechten te krijgen op iemands naam.
@@ -67,6 +68,13 @@ class LoginModel extends PersistenceModel implements Validator {
 			if (preg_match('/^[a-zA-Z0-9]{150}$/', $token)) {
 				$uid = Database::instance()->sqlSelect(array('uid'), 'lid', 'rssToken = ?', array($token), null, null, 1)->fetchColumn();
 				$this->login($uid, null, true);
+			}
+		}
+		// Controleer of het wachtwoord is verlopen:
+		elseif (PasswordModel::instance()->isVerlopen($this->loggedinLid)) {
+			if (!startsWith(REQUEST_URI, '/wachtwoord') AND ! startsWith(REQUEST_URI, '/tools/css.php') AND ! startsWith(REQUEST_URI, '/tools/js.php')) {
+				setMelding('Uw wachtwoord is verlopen', 2);
+				redirect('/wachtwoord/verlopen');
 			}
 		}
 		$this->logBezoek();
@@ -147,7 +155,7 @@ class LoginModel extends PersistenceModel implements Validator {
 	 */
 	private function logBezoek() {
 		$db = MijnSqli::instance();
-		$uid = $this->getLid()->getUid();
+		$uid = $this->loggedinLid->getUid();
 		$datumtijd = getDateTime();
 		$locatie = '';
 		if (isset($_SERVER['REMOTE_ADDR'])) {
@@ -252,7 +260,7 @@ class LoginModel extends PersistenceModel implements Validator {
 		// als we een gebruiker hebben gevonden controleren we
 		// of het wachtwoord klopt
 		// of dat er eerder een token is gecontroleerd
-		if ($lid instanceof Lid AND ( $tokenOK OR checkpw($lid, $pass) )) {
+		if ($lid instanceof Lid AND ( $tokenOK OR PasswordModel::instance()->controleerWachtwoord($lid, $pass) )) {
 			TimeoutModel::instance()->goed($lid->getUid());
 		} else {
 			$_SESSION['auth_error'] = 'Inloggen niet geslaagd<br><a href="/wachtwoord/vergeten">Wachtwoord vergeten?</a>';
@@ -296,7 +304,7 @@ class LoginModel extends PersistenceModel implements Validator {
 		if ($this->isSued()) {
 			throw new Exception('Geneste su niet mogelijk!');
 		}
-		if ($this->getUid() === $uid) {
+		if ($this->getUid() == $uid) {
 			throw new Exception('Dit ben je zelf!');
 		}
 		$suNaar = LidCache::getLid($uid);
@@ -304,7 +312,7 @@ class LoginModel extends PersistenceModel implements Validator {
 			// Clear session
 			session_unset();
 
-			$this->suedFrom = $this->getLid();
+			$this->suedFrom = $this->loggedinLid;
 			// Subject Assignment:
 			$this->setLid($suNaar);
 

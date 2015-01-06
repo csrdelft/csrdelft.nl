@@ -26,15 +26,7 @@ class Instellingen extends CachedPersistenceModel {
 	}
 
 	protected static $defaults = array(
-		'stek'		 => array(
-			'homepage'		 => 'thuis',
-			'beschrijving'	 => 'De Civitas Studiosorum Reformatorum is een bruisende, actieve, christelijke studentenvereniging in Delft, rijk aan tradities die zijn ontstaan in haar 50-jarig bestaan. Het is een breed gezelschap van zo&lsquo;n 270 leden met een zeer gevarieerde (kerkelijke) achtergrond, maar met een duidelijke eenheid door het christelijk geloof. C.S.R. is de plek waar al tientallen jaren studenten goede vrienden van elkaar worden, op intellectueel en geestelijk gebied groeien en goede studentengrappen uithalen.'
-		),
-		'forum'		 => array(
-			'reageren_tijd'		 => '-2 minutes',
-			'grafiek_periode'	 => '-2 months'
-		),
-		'agenda'	 => array(
+		'agenda'		 => array(
 			'standaard_zichtbaar_rechten'	 => 'P_LEDEN_READ',
 			'standaard_tijden'				 => '1,Hele dag,2,Kring,3,Lezing,4,Borrel',
 			'standaard_tijd_1'				 => '00:00-23:59',
@@ -42,7 +34,10 @@ class Instellingen extends CachedPersistenceModel {
 			'standaard_tijd_3'				 => '20:00-22:00',
 			'standaard_tijd_4'				 => '20:00-23:59'
 		),
-		'corvee'	 => array(
+		'beveiliging'	 => array(
+			'wachtwoord_verlopen_termijn' => '+1 year'
+		),
+		'corvee'		 => array(
 			'punten_per_jaar'						 => '11',
 			'herinnering_aantal_mails'				 => '2',
 			'herinnering_1e_mail'					 => '-4 weeks',
@@ -68,7 +63,11 @@ class Instellingen extends CachedPersistenceModel {
 			'mail_wel_meeeten'						 => 'P.S.: U eet WEL mee met de maaltijd.',
 			'mail_niet_meeeten'						 => 'P.S.: U eet NIET mee met de maaltijd.'
 		),
-		'maaltijden' => array(
+		'forum'			 => array(
+			'reageren_tijd'		 => '-2 minutes',
+			'grafiek_periode'	 => '-2 months'
+		),
+		'maaltijden'	 => array(
 			'budget_maalcie'					 => '100',
 			'toon_ketzer_vooraf'				 => '+1 month',
 			'recent_lidprofiel'					 => '-2 months',
@@ -93,7 +92,10 @@ class Instellingen extends CachedPersistenceModel {
 <li>Schrijf duidelijk in het hokje hoeveel je in de helm hebt gegooid.</li>
 <li>Bevat derde kolom "ok"? Dan heeft u nog voldoende tegoed voor deze maaltijd.</li>
 <li>Als u onvoldoende saldo hebt bij de MaalCie en u betaalt niet voor deze maaltijd dan krijgt u een boete van 20 cent, 1 euro of 2 euro, afhankelijk van hoe negatief uw saldo is!</li>
-</ul>'
+</ul>'),
+		'stek'			 => array(
+			'homepage'		 => 'thuis',
+			'beschrijving'	 => 'De Civitas Studiosorum Reformatorum is een bruisende, actieve, christelijke studentenvereniging in Delft, rijk aan tradities die zijn ontstaan in haar 50-jarig bestaan. Het is een breed gezelschap van zo&lsquo;n 270 leden met een zeer gevarieerde (kerkelijke) achtergrond, maar met een duidelijke eenheid door het christelijk geloof. C.S.R. is de plek waar al tientallen jaren studenten goede vrienden van elkaar worden, op intellectueel en geestelijk gebied groeien en goede studentengrappen uithalen.'
 		)
 	);
 

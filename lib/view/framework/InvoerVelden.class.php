@@ -1099,7 +1099,9 @@ class WachtwoordWijzigenField extends InputField {
 		if (!$this->reset AND ! empty($new) AND empty($current)) {
 			$this->error = 'U dient uw huidige wachtwoord ook in te voeren';
 		} elseif ($this->reset OR ! empty($new)) {
-			if (preg_match('/^[0-9]*$/', $new)) {
+			if ($current == $new) {
+				$this->error = 'Het nieuwe wachtwoord is hetzelfde als huidige wachtwoord';
+			} elseif (preg_match('/^[0-9]*$/', $new)) {
 				$this->error = 'Het nieuwe wachtwoord moet ook letters en speciale tekens bevatten';
 			} elseif (preg_match('/^[a-zA-Z]*$/', $new)) {
 				$this->error = 'Het nieuwe wachtwoord moet ook cijfers en speciale tekens bevatten';
@@ -1117,7 +1119,7 @@ class WachtwoordWijzigenField extends InputField {
 				$this->error = 'Vul uw nieuwe wachtwoord twee keer in';
 			} elseif ($new != $confirm) {
 				$this->error = 'Nieuwe wachtwoorden komen niet overeen';
-			} elseif (!$this->reset AND ! checkpw($this->model, $current)) {
+			} elseif (!$this->reset AND ! PasswordModel::instance()->controleerWachtwoord($this->model, $current)) {
 				$this->error = 'Uw huidige wachtwoord is niet juist';
 			}
 		}
