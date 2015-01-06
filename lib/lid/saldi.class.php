@@ -51,7 +51,7 @@ class Saldi {
 				}
 				$this->data = array_merge($this->data, array_reverse($data));
 			}
-		} elseif ($this->cie = 'maalcie') {
+		} elseif ($this->cie == 'maalcie') {
 			if (empty($this->data)) {
 				if ($this->uid == '0000') {
 					$sQuery = "
@@ -72,7 +72,7 @@ class Saldi {
 			}
 		}
 		if (!empty($this->data)) {
-			if ($this->cie = 'maalcie') {
+			if ($this->cie == 'maalcie') {
 				//herhaal laatste datapunt om grafiek te tekenen tot aan vandaag
 				$row = end($this->data);
 				array_push($this->data, array('moment' => getDateTime(), 'saldo' => $row['saldo']));
