@@ -264,9 +264,6 @@ function external_url($url, $label) {
 			$extern = ' target="_blank"';
 		} else {
 			$extern = '';
-			if (startsWith($url, '/')) {
-				$url = CSR_ROOT . $url;
-			}
 		}
 		$result = '<a href="' . $url . '" title="' . $url . '"' . $extern . '>' . $label . '</a>';
 	} else {
