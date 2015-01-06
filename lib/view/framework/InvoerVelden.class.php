@@ -1100,11 +1100,17 @@ class WachtwoordWijzigenField extends InputField {
 			$this->error = 'U dient uw huidige wachtwoord ook in te voeren';
 		} elseif ($this->reset OR ! empty($new)) {
 			if (preg_match('/^[0-9]*$/', $new)) {
-				$this->error = 'Het nieuwe wachtwoord moet ook letters of leestekens bevatten';
+				$this->error = 'Het nieuwe wachtwoord moet ook letters of speciale tekens bevatten';
 			} elseif (preg_match('/^[a-zA-Z]*$/', $new)) {
-				$this->error = 'Het nieuwe wachtwoord moet ook cijfers of leestekens bevatten';
-			} elseif ($length < 8 OR $length > 16) {
-				$this->error = 'Het wachtwoord moet minimaal 8 en maximaal 16 tekens lang zijn';
+				$this->error = 'Het nieuwe wachtwoord moet ook cijfers of speciale tekens bevatten';
+			} elseif (preg_match('/^[0-9a-z]*$/', $new)) {
+				$this->error = 'Het nieuwe wachtwoord moet ook hoofdletters of speciale tekens bevatten';
+			} elseif (preg_match('/^[0-9A-Z]*$/', $new)) {
+				$this->error = 'Het nieuwe wachtwoord moet ook kleine letters of speciale tekens bevatten';
+			} elseif (preg_match('/^[0-9a-zA-Z]*$/', $new)) {
+				$this->error = 'Het nieuwe wachtwoord moet ook speciale tekens bevatten';
+			} elseif ($length < 10 OR $length > 16) {
+				$this->error = 'Het wachtwoord moet minimaal 10 en maximaal 16 tekens lang zijn';
 			} elseif (empty($confirm)) {
 				$this->error = 'Vul uw nieuwe wachtwoord twee keer in';
 			} elseif ($new != $confirm) {
