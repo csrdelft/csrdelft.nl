@@ -95,10 +95,8 @@ class AgendaModel extends PersistenceModel {
 	}
 
 	public function getItemsByDay($jaar, $maand, $dag) {
-		$van = mktime(0, 0, 0, $maand, $dag, $jaar);
-		$tot = mktime(0, 0, 0, $maand, $dag + 1, $jaar);
-
-		return $this->getAllAgendeerbaar($van, $tot);
+		$time = mktime(0, 0, 0, $maand, $dag, $jaar);
+		return $this->getAllAgendeerbaar($time, $time);
 	}
 
 	public function getItemsByMaand($jaar, $maand) {
