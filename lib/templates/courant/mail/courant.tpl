@@ -88,8 +88,8 @@ li{
 <table>
 <tr>
 <td class="Zijbalk" valign="top">
-<img src="http:/plaetjes/csrmail/logo.jpg" width="150px" height="197px" alt="Logo van C.S.R." />
-<img src="http:/plaetjes/csrmail/balk.gif" width="150px" height="100%" />
+<img src="{$smarty.const.CSR_ROOT}/plaetjes/courant/logo.jpg" width="150px" height="197px" alt="Logo van C.S.R." />
+<img src="{$smarty.const.CSR_ROOT}/plaetjes/courant/balk.gif" width="150px" height="100%" />
 </td>
 <td class="hoofdKolom">
 <h4><font size="-3" face="verdana">Inhoud</font></h4>
