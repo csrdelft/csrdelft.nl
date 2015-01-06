@@ -649,46 +649,32 @@ function printDebug() {
 	}
 }
 
-function getDebug($get = true, $post = true, $files = true, $cookie = true, $session = true, $sql = true, $sqltrace = true) {
+function getDebug($get = true, $post = true, $files = true, $cookie = true, $session = true, $server = true, $sql = true, $sqltrace = true) {
 	$debug = '';
 	if ($get) {
-		$debug .= '<hr />GET<hr />';
-		if (count($_GET) > 0) {
-			$debug .= htmlspecialchars(print_r($_GET, true));
-		}
+		$debug .= '<hr />GET<hr />' . htmlspecialchars(print_r($_GET, true));
 	}
 	if ($post) {
-		$debug .= '<hr />POST<hr />';
-		if (count($_POST) > 0) {
-			$debug .= htmlspecialchars(print_r($_POST, true));
-		}
+		$debug .= '<hr />POST<hr />' . htmlspecialchars(print_r($_POST, true));
 	}
 	if ($files) {
-		$debug .= '<hr />FILES<hr />';
-		if (count($_FILES) > 0) {
-			$debug .= htmlspecialchars(print_r($_FILES, true));
-		}
+		$debug .= '<hr />FILES<hr />' . htmlspecialchars(print_r($_FILES, true));
 	}
 	if ($cookie) {
-		$debug .= '<hr />COOKIE<hr />';
-		if (count($_COOKIE) > 0) {
-			$debug .= htmlspecialchars(print_r($_COOKIE, true));
-		}
+		$debug .= '<hr />COOKIE<hr />' . htmlspecialchars(print_r($_COOKIE, true));
 	}
 	if ($session) {
-		$debug .= '<hr />SESSION<hr />';
-		if (count($_SESSION) > 0) {
-			$debug .= htmlspecialchars(print_r($_SESSION, true));
-		}
+		$debug .= '<hr />SESSION<hr />' . htmlspecialchars(print_r($_SESSION, true));
+	}
+	if ($server) {
+		$debug .= '<hr />SERVER<hr />' . htmlspecialchars(print_r($_SESSION, true));
 	}
 	if ($sql) {
-		$debug .= '<hr />SQL<hr />';
 		require_once 'model/framework/DatabaseAdmin.singleton.php';
-		$debug .= htmlspecialchars(print_r(array("Admin" => DatabaseAdmin::getQueries(), "PDO" => Database::getQueries(), "MySql" => MijnSqli::instance()->getQueries()), true));
+		$debug .= '<hr />SQL<hr />' . htmlspecialchars(print_r(array("Admin" => DatabaseAdmin::getQueries(), "PDO" => Database::getQueries(), "MySql" => MijnSqli::instance()->getQueries()), true));
 	}
 	if ($sqltrace) {
-		$debug .= '<hr />SQL-backtrace<hr />';
-		$debug .= htmlspecialchars(print_r(Database::getTrace(), true));
+		$debug .= '<hr />SQL-backtrace<hr />' . htmlspecialchars(print_r(Database::getTrace(), true));
 	}
 	return $debug;
 }
