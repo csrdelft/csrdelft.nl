@@ -90,7 +90,7 @@ class LoginController extends AclController {
 	public function wachtwoord($action = null) {
 		$lid = $this->model->getLid();
 		$uid = $lid->getUid();
-		if ($action == 'verlopen' AND LoginModel::mag('P_PROFIEL_EDIT', true)) {
+		if ($action === 'verlopen' AND LoginModel::mag('P_PROFIEL_EDIT')) {
 			$this->view = new WachtwoordVerlopenForm($lid);
 			if ($this->view->validate()) {
 				$pw = $this->view->findByName('wwreset')->getValue();
