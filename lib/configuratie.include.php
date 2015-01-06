@@ -26,7 +26,7 @@ function fatal_handler(Exception $ex = null) {
 	if ($ex instanceof Exception) {
 		try {
 			if (LoginModel::mag('P_LOGGED_IN')) {
-				echo str_replace('//', '<br />//', $ex); // stacktrace
+				echo str_replace('#', '<br />#', $ex); // stacktrace 
 			}
 			printDebug();
 		} catch (Exception $e) {
