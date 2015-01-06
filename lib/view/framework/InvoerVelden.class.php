@@ -1106,21 +1106,13 @@ class WachtwoordWijzigenField extends InputField {
 		}
 		if (!$this->require_current OR ! empty($new)) {
 			if ($this->require_current AND $current == $new) {
-				$this->error = 'Het nieuwe wachtwoord is hetzelfde als huidige wachtwoord';
-			} elseif (preg_match('/^[0-9]*$/', $new)) {
-				$this->error = 'Het nieuwe wachtwoord moet ook letters en speciale tekens bevatten';
-			} elseif (preg_match('/^[a-zA-Z]*$/', $new)) {
-				$this->error = 'Het nieuwe wachtwoord moet ook cijfers en speciale tekens bevatten';
-			} elseif (preg_match('/^[0-9a-z]*$/', $new)) {
-				$this->error = 'Het nieuwe wachtwoord moet ook hoofdletters en speciale tekens bevatten';
-			} elseif (preg_match('/^[0-9A-Z]*$/', $new)) {
-				$this->error = 'Het nieuwe wachtwoord moet ook kleine letters en speciale tekens bevatten';
-			} elseif (preg_match('/^[0-9a-zA-Z]*$/', $new)) {
-				$this->error = 'Het nieuwe wachtwoord moet ook speciale tekens bevatten';
-			} elseif ($length < 10) {
-				$this->error = 'Het wachtwoord moet minimaal 10 tekens lang zijn';
-			} elseif ($length > 64) {
-				$this->error = 'Het wachtwoord mag maximaal 64 tekens lang zijn';
+				$this->error = 'Het nieuwe wachtwoord is hetzelfde als het huidige wachtwoord';
+			} elseif (!preg_match('/^[0-9a-zA-Z ]{25,}$/', $new)) {
+				$this->error = 'Minimaal 25 tekens, oftewel 4+ woorden van elk 5+ letters';
+			} elseif (preg_match('/^(\w)\1+$/', $new)) {
+				$this->error = 'Het nieuwe wachtwoord bevat 2x hetzelfde woord';
+			} elseif ($length > 100) {
+				$this->error = 'Maximaal 100 tekens';
 			} elseif (empty($confirm)) {
 				$this->error = 'Vul uw nieuwe wachtwoord twee keer in';
 			} elseif ($new != $confirm) {
@@ -1136,13 +1128,13 @@ class WachtwoordWijzigenField extends InputField {
 		$html = '';
 		if ($this->require_current) {
 			$html .= '<label for="' . $this->getId() . '_current">Huidig wachtwoord</label>';
-			$html .= '<input type="password" autocomplete="off" id="' . $this->getId() . '_current" name="' . $this->name . '_current" /></div>';
+			$html .= '<input type="password" autocomplete="off" id="' . $this->getId() . '_current" name="' . $this->name . '_current" />';
 		}
 		$html .= '<div class="WachtwoordField"><label for="' . $this->getId() . '_new">Nieuw wachtwoord</label>';
 		$html .= '<input type="password" autocomplete="off" id="' . $this->getId() . '_new" name="' . $this->name . '_new" /></div>';
 		$html .= '<div class="WachtwoordField"><label for="' . $this->getId() . '_confirm">Herhaal nieuw wachtwoord</label>';
 		$html .= '<input type="password" autocomplete="off" id="' . $this->getId() . '_confirm" name="' . $this->name . '_confirm" /></div>';
-		return $html;
+		return $html . '</div>';
 	}
 
 }
