@@ -70,6 +70,9 @@ if (php_sapi_name() === 'cli') {
 }
 
 # Defines
+require_once 'defines.include.php';
+require_once 'common.functions.php';
+
 if (isset($_SERVER['REQUEST_URI'])) {
 	$req = filter_var($_SERVER['REQUEST_URI'], FILTER_SANITIZE_URL);
 } else {
@@ -94,8 +97,6 @@ if (HSTS_ENABLED && isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off') {
 }
 
 # Model
-require_once 'defines.include.php';
-require_once 'common.functions.php';
 require_once 'MijnSqli.class.php'; # DEPRECATED
 require_once 'model/framework/DynamicEntityModel.class.php';
 require_once 'model/framework/CachedPersistenceModel.abstract.php';
