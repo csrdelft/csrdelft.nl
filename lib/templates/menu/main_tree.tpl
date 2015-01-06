@@ -4,7 +4,7 @@
 	{elseif $item->magBekijken()}
 		{if $item->hasChildren()}
 			<li class="has-children">
-				<a href="#0">{$item->tekst}{if $item->tekst == 'Forum' AND isset($fcount) AND $fcount > 0} &nbsp;<span class="badge badge-alert">{$fcount}</span>{/if}</a>
+				<a href="#0">{$item->tekst}{if $item->tekst == 'Forum' AND isset($fcount) AND $fcount > 0}</a> &nbsp;<a href="/forum/wacht" class="badge badge-alert">{$fcount}</a>{/if}
 				<ul class="is-hidden">
 					<li class="go-back"><a href="#0">{$item->tekst}</a></li>
 					{include file='menu/main_tree.tpl' parent=$item}
