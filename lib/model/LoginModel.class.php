@@ -50,17 +50,19 @@ class LoginModel extends PersistenceModel implements Validator {
 
 	protected function __construct() {
 		parent::__construct();
-		// Staat er een gebruiker in de sessie?
-		// zo nee, dan nobody user er in gooien...
-		// in dit geval is het de eerste keer dat we een pagina opvragen
-		// of er is net uitgelogd waardoor de gegevens zijn leeggegooid
+		/**
+		 * Sessie valideren: is er iemand ingelogd en zo ja, is alles ok?
+		 * Zo nee, dan public gebruiker er in gooien.
+		 */
 		if (!$this->validate() AND ! $this->login('x999', 'x999')) {
 			// public gebruiker is stuk
 			die('Not accessible');
 		}
 		if ($this->getLid()->getUid() === 'x999') {
-			// Als we x999 zijn checken we of er misschien een validatietoken in de $_GET staat
-			// om zonder sessie bepaalde rechten te krijgen.
+			/**
+			 * Als we x999 zijn checken we of er misschien een validatietoken in de $_GET staat.
+			 * Een token staat toe zonder wachtwoord gelimiteerde rechten te krijgen op iemands naam.
+			 */
 			$token = filter_input(INPUT_GET, 'private_token', FILTER_SANITIZE_STRING);
 			if (preg_match('/^[a-zA-Z0-9]{150}$/', $token)) {
 				$uid = Database::instance()->sqlSelect(array('uid'), 'lid', 'rssToken = ?', array($token), null, null, 1)->fetchColumn();
@@ -258,16 +260,14 @@ class LoginModel extends PersistenceModel implements Validator {
 			return false;
 		}
 
-		// fetch auth_error
-		$this->getError();
-		// clear session
-		session_unset();
-
 		// Subject Assignment:
 		$this->setLid($lid);
 		$this->authenticatedByToken = (boolean) $tokenOK;
 
 		if ($uid != 'x999') {
+			// Permissions change: delete old session
+			session_regenerate_id(true);
+
 			// Login sessie aanmaken in database
 			$session = new LoginSession();
 			$session->session_id = session_id();
@@ -286,7 +286,6 @@ class LoginModel extends PersistenceModel implements Validator {
 
 	public function logout() {
 		$this->deleteByPrimaryKey(array(session_id()));
-		session_unset();
 		session_destroy();
 	}
 
@@ -302,20 +301,27 @@ class LoginModel extends PersistenceModel implements Validator {
 		}
 		$suNaar = LidCache::getLid($uid);
 		if ($suNaar instanceof Lid AND AccessModel::mag($suNaar, 'P_LOGGED_IN')) {
+			// Clear session
+			session_unset();
+
 			$this->suedFrom = $this->getLid();
-			$_SESSION['_suedFrom'] = $this->suedFrom->getUid();
 			// Subject Assignment:
 			$this->setLid($suNaar);
+
+			// Configure session
+			$_SESSION['_suedFrom'] = $this->suedFrom->getUid();
 		} else {
 			throw new Exception('Kan niet switchen naar gebruiker: ' . htmlspecialchars($uid) . '');
 		}
 	}
 
 	public function endSwitchUser() {
+		// Clear session
+		session_unset();
+
 		// Subject Assignment:
 		$this->setLid($this->suedFrom);
 		$this->suedFrom = null;
-		unset($_SESSION['_suedFrom']);
 	}
 
 	public function isSued() {
@@ -336,6 +342,8 @@ class LoginModel extends PersistenceModel implements Validator {
 
 	private function setLid(Lid $lid) {
 		$this->loggedinLid = $lid;
+
+		// Configure session
 		$_SESSION['_uid'] = $lid->getUid();
 	}
 

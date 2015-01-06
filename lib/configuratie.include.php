@@ -57,10 +57,12 @@ function fatal_handler(Exception $ex = null) {
 # alle meldingen tonen
 error_reporting(E_ALL);
 
+
 # datum weergave enzo
 setlocale(LC_ALL, 'nl_NL.utf8');
 setlocale(LC_ALL, 'nld_nld');
 date_default_timezone_set('Europe/Amsterdam');
+
 
 # default is website mode
 if (php_sapi_name() === 'cli') {
@@ -68,6 +70,7 @@ if (php_sapi_name() === 'cli') {
 } else {
 	define('MODE', 'WEB');
 }
+
 
 # Defines
 require_once 'defines.include.php';
@@ -87,6 +90,7 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 }
 define('HTTP_REFERER', $ref);
 
+
 # Use HTTP Strict Transport Security to force client to use secure connections only
 if (HSTS_ENABLED) {
 	if (isset($_SERVER['HTTP_X_FORWARDED_SCHEME']) && $_SERVER['HTTP_X_FORWARDED_SCHEME'] === 'https') {
@@ -97,6 +101,7 @@ if (HSTS_ENABLED) {
 		die();
 	}
 }
+
 
 # Model
 require_once 'MijnSqli.class.php'; # DEPRECATED
@@ -129,31 +134,38 @@ switch (constant('MODE')) {
 		break;
 
 	case 'WEB':
-		# terugvinden van temp upload files
+		# Terugvinden van temp upload files
 		ini_set('upload_tmp_dir', TMP_PATH);
 
-		# geen sessie-id in de url
-		ini_set('session.use_only_cookies', 1);
-		session_save_path(SESSION_PATH);
+		# Sessie configureren
+		ini_set('session.use_strict_mode', true);
+		ini_set('session.cookie_httponly', true);
+		ini_set('session.cookie_secure', HSTS_ENABLED);
+		ini_set('session.hash_function', 'sha256');
+		ini_set('session.cache_limiter', 'nocache');
+		ini_set('session.use_trans_sid', 'Off');
+		ini_set('session.use_cookies', true);
+		ini_set('session.use_only_cookies', true);
+		# ini_set('session.cookie_lifetime', 0);
+		# ini_set('session.gc_maxlifetime', 0);
 
-		# sessie starten
-		session_name('PHPSESSID');
-		session_set_cookie_params(1036800, '/', '', false, false);
+		session_save_path(SESSION_PATH);
+		session_name('CSRSESSID');
+		session_set_cookie_params(1036800, '/', 'csrdelft.nl', HSTS_ENABLED, true);
+
 		session_start();
-		/**
-		 * Werkomheen
-		 * @source www.nabble.com/problem-with-sessions-in-1.4.8-t2550641.html
-		 */
 		if (session_id() == 'deleted') {
-			session_regenerate_id();
+			// Deletes old session
+			session_regenerate_id(true);
 		}
+
 		# Prefetch
 		Instellingen::instance()->prefetch();
 		LidInstellingen::instance()->prefetch('uid = ?', array(LoginModel::getUid()));
 		VerticalenModel::instance()->prefetch();
 		ForumModel::instance()->prefetch();
 
-		# database modus meldingen
+		# Database modus meldingen
 		if (DB_MODIFY OR DB_DROP) {
 			if (DEBUG) {
 				if (DB_DROP) {
