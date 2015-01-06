@@ -103,7 +103,7 @@ class syntax_plugin_csrlink_documentlink extends DokuWiki_Syntax_Plugin {
             return true;
         }
 
-        require_once 'documenten/document.class.php';
+        require_once 'model/documenten/Document.class.php';
         try{
             $document=new Document((int)$documentid);
             if($document->getID()===0) {

@@ -68,7 +68,7 @@ class syntax_plugin_csrlink_bieblink extends DokuWiki_Syntax_Plugin {
             $showauteur = false;
         }
 
-        require_once 'bibliotheek/boek.class.php';
+        require_once 'model/bibliotheek/BiebBoek.class.php';
         try{
             $boek =    new BiebBoek($boekid);
         }catch(Exception $e){
