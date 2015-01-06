@@ -84,6 +84,12 @@ class VerifyModel extends PersistenceModel {
 		return $token;
 	}
 
+	public function opschonen() {
+		foreach ($this->find('NOW() >= expire') as $token) {
+			$this->delete($token);
+		}
+	}
+
 }
 
 class TimeoutModel extends PersistenceModel {
