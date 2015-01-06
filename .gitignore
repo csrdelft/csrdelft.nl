@@ -13,6 +13,7 @@ data/log/*
 data/smarty/*
 data/smarty/cache/*
 data/smarty/compiled/*
+etc/*.crt
 etc/bot.htpasswd
 etc/cron.ini
 etc/csrdelft.nl.csr
