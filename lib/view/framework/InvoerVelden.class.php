@@ -1064,6 +1064,7 @@ class WachtwoordWijzigenField extends InputField {
 	public function __construct($name, Lid $lid, $require_current = true) {
 		parent::__construct($name, $name, null, $lid);
 		$this->require_current = $require_current;
+		$this->leden_mod = (LoginModel::getUid() !== $this->model->getUid());
 	}
 
 	public function isPosted() {
@@ -1096,9 +1097,14 @@ class WachtwoordWijzigenField extends InputField {
 		$new = filter_input(INPUT_POST, $this->name . '_new', FILTER_SANITIZE_STRING);
 		$confirm = filter_input(INPUT_POST, $this->name . '_confirm', FILTER_SANITIZE_STRING);
 		$length = strlen(utf8_decode($new));
-		if ($this->require_current AND ! empty($new) AND empty($current)) {
-			$this->error = 'U dient uw huidige wachtwoord ook in te voeren';
-		} elseif (!$this->require_current OR ! empty($new)) {
+		if ($this->require_current AND empty($current)) {
+			if ($this->leden_mod AND LoginModel::mag('P_LEDEN_MOD')) {
+				// exception for leden mod
+			} else {
+				$this->error = 'U dient uw huidige wachtwoord ook in te voeren';
+			}
+		}
+		if (!$this->require_current OR ! empty($new)) {
 			if ($this->require_current AND $current == $new) {
 				$this->error = 'Het nieuwe wachtwoord is hetzelfde als huidige wachtwoord';
 			} elseif (preg_match('/^[0-9]*$/', $new)) {
