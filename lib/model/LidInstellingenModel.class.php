@@ -32,6 +32,12 @@ class LidInstellingen extends Instellingen {
 		'algemeen'		 => array(
 			'bijbel' => array('Bijbelvertaling', T::Enumeration, array('De Nieuwe Bijbelvertaling' => 'NBV', 'Bijbel in Gewone Taal' => 'BGT', 'Groot Nieuws Bijbel' => 'GNB96', 'Nije Fryske Bibeloersetting' => 'NFB', 'NBG-vertaling 1951' => 'NBG51', 'Statenvertaling (Jongbloed-editie)' => 'SVJ', 'Herziene Statenvertaling' => 'HSVI', 'Contemporary English Version' => 'CEVD', 'Good News Translation' => 'GNTD'), 'NBV')
 		),
+		'agenda'		 => array(
+			'toonBijbelrooster'	 => array('Bijbelrooster weergeven', T::Enumeration, array('ja', 'nee'), 'ja'),
+			'toonVerjaardagen'	 => array('Verjaardagen weergeven', T::Enumeration, array('ja', 'nee'), 'ja'),
+			'toonMaaltijden'	 => array('Maaltijden weergeven', T::Enumeration, array('ja', 'nee'), 'ja'),
+			'toonCorvee'		 => array('Corvee weergeven', T::Enumeration, array('iedereen', 'eigen', 'nee'), 'eigen')
+		),
 		'layout'		 => array(
 			'toegankelijk'	 => array('Leesbaarheid', T::Enumeration, array('standaard', 'bredere letters'), 'standaard'),
 			'opmaak'		 => array('Opmaak', T::Enumeration, array('normaal', 'owee', 'dies', 'sineregno', 'roze'), 'normaal'),
@@ -39,6 +45,31 @@ class LidInstellingen extends Instellingen {
 			'visitekaartjes' => array('Visitekaartjes', T::Enumeration, array('ja', 'nee'), 'nee'),
 			'neuzen'		 => array('Neuzen', T::Enumeration, array('2013', 'nee'), '2013'),
 			'minion'		 => array('Minion', T::Enumeration, array('ja', 'nee'), 'nee'),
+		),
+		'forum'			 => array(
+			'draden_per_pagina'		 => array('Draadjes per pagina', T::Integer, array(5, 100), 20),
+			'posts_per_pagina'		 => array('Berichten per pagina', T::Integer, array(5, 100), 20),
+			'zoekresultaten'		 => array('Zoekresultaten per pagina', T::Integer, array(10, 50), 20),
+			'naamWeergave'			 => array('Naamweergave', T::Enumeration, array('civitas', 'volledig', 'bijnaam', 'aaidrom', 'Duckstad'), 'civitas'),
+			'datumWeergave'			 => array('Datumweergave', T::Enumeration, array('relatief', 'vast'), 'relatief'),
+			'ongelezenWeergave'		 => array('Ongelezenweergave', T::Enumeration, array('cursief', 'dikgedrukt', 'onderstreept', 'alsof-gelezen'), 'cursief'),
+			'open_draad_op_pagina'	 => array('Open onderwerp op pagina', T::Enumeration, array('1', 'ongelezen', 'laatste'), 'ongelezen'),
+			'toonpasfotos'			 => array('Pasfoto\'s standaard weergeven', T::Enumeration, array('ja', 'nee'), 'ja'),
+			'fotoWeergave'			 => array('Toon groter formaat foto\'s', T::Enumeration, array('nee', 'boven bericht', 'in bericht'), 'boven bericht'),
+			'filter2008'			 => array('Berichten van 2008 eerst verbergen', T::Enumeration, array('ja', 'nee'), 'nee')
+		),
+		'googleContacts' => array(
+			'groepnaam'	 => array('Naam van groep voor contacten in Google contacts', T::String, array(1, 100), 'C.S.R.-leden'),
+			'extended'	 => array('Uitgebreide export (nickname, duckname, voorletters, adres/tel ouders, website, chataccounts, eetwens) ', T::Enumeration, array('ja', 'nee'), 'ja')
+		),
+		'mededelingen'	 => array(
+			'aantalPerPagina' => array('Aantal mededeling per pagina', T::Integer, array(5, 50), 10)
+		),
+		'voorpagina'	 => array(
+			'bijbelroosterblokje'	 => array('Bijbelrooster weergeven', T::Enumeration, array('ja', 'nee'), 'ja'),
+			'maaltijdblokje'		 => array('Eerstvolgende maaltijd weergeven', T::Enumeration, array('ja', 'nee'), 'ja'),
+			'laatstefotoalbum'		 => array('Laatste fotoalbum weergeven', T::Enumeration, array('ja', 'nee'), 'ja'),
+			'twitterblokje'			 => array('Twitter-feed weergeven', T::Enumeration, array('ja', 'nee'), 'nee')
 		),
 		'zijbalk'		 => array(
 			'scrollen'				 => array('Scrollen', T::Enumeration, array('met pagina mee', 'apart scrollen', 'pauper/desktop'), 'met pagina mee'),
@@ -55,37 +86,6 @@ class LidInstellingen extends Instellingen {
 			'fotos'					 => array('Aantal foto\'s weergeven', T::Integer, array(0, 50), 6),
 			'verjaardagen'			 => array('Aantal verjaardagen weergeven', T::Integer, array(0, 50), 9),
 			'verjaardagen_pasfotos'	 => array('Pasfoto\'s bij verjaardagen', T::Enumeration, array('ja', 'nee'), 'ja')
-		),
-		'voorpagina'	 => array(
-			'bijbelroosterblokje'	 => array('Bijbelrooster weergeven', T::Enumeration, array('ja', 'nee'), 'ja'),
-			'maaltijdblokje'		 => array('Eerstvolgende maaltijd weergeven', T::Enumeration, array('ja', 'nee'), 'ja'),
-			'laatstefotoalbum'		 => array('Laatste fotoalbum weergeven', T::Enumeration, array('ja', 'nee'), 'ja'),
-			'twitterblokje'			 => array('Twitter-feed weergeven', T::Enumeration, array('ja', 'nee'), 'nee')
-		),
-		'agenda'		 => array(
-			'toonBijbelrooster'	 => array('Bijbelrooster weergeven', T::Enumeration, array('ja', 'nee'), 'ja'),
-			'toonVerjaardagen'	 => array('Verjaardagen weergeven', T::Enumeration, array('ja', 'nee'), 'ja'),
-			'toonMaaltijden'	 => array('Maaltijden weergeven', T::Enumeration, array('ja', 'nee'), 'ja'),
-			'toonCorvee'		 => array('Corvee weergeven', T::Enumeration, array('iedereen', 'eigen', 'nee'), 'eigen')
-		),
-		'forum'			 => array(
-			'draden_per_pagina'		 => array('Draadjes per pagina', T::Integer, array(5, 100), 20),
-			'posts_per_pagina'		 => array('Berichten per pagina', T::Integer, array(5, 100), 20),
-			'zoekresultaten'		 => array('Zoekresultaten per pagina', T::Integer, array(10, 50), 20),
-			'naamWeergave'			 => array('Naamweergave', T::Enumeration, array('civitas', 'volledig', 'bijnaam', 'aaidrom', 'Duckstad'), 'civitas'),
-			'datumWeergave'			 => array('Datumweergave', T::Enumeration, array('relatief', 'vast'), 'relatief'),
-			'ongelezenWeergave'		 => array('Ongelezenweergave', T::Enumeration, array('cursief', 'dikgedrukt', 'onderstreept', 'alsof-gelezen'), 'cursief'),
-			'open_draad_op_pagina'	 => array('Open onderwerp op pagina', T::Enumeration, array('1', 'ongelezen', 'laatste'), 'ongelezen'),
-			'toonpasfotos'			 => array('Pasfoto\'s standaard weergeven', T::Enumeration, array('ja', 'nee'), 'ja'),
-			'fotoWeergave'			 => array('Toon groter formaat foto\'s', T::Enumeration, array('nee', 'boven bericht', 'in bericht'), 'boven bericht'),
-			'filter2008'			 => array('Berichten van 2008 eerst verbergen', T::Enumeration, array('ja', 'nee'), 'nee')
-		),
-		'mededelingen'	 => array(
-			'aantalPerPagina' => array('Aantal mededeling per pagina', T::Integer, array(5, 50), 10)
-		),
-		'googleContacts' => array(
-			'groepnaam'	 => array('Naam van groep voor contacten in Google contacts', T::String, array(1, 100), 'C.S.R.-leden'),
-			'extended'	 => array('Uitgebreide export (nickname, duckname, voorletters, adres/tel ouders, website, chataccounts, eetwens) ', T::Enumeration, array('ja', 'nee'), 'ja')
 		)
 	);
 
