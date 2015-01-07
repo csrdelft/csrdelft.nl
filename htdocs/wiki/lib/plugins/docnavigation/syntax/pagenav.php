@@ -81,33 +81,49 @@ class syntax_plugin_docnavigation_pagenav extends DokuWiki_Syntax_Plugin {
         global $conf, $ID;
 
         // links are: 0=previous, 1=toc, 2=next
-        $links = explode("^", substr($match, 2, -2), 3);
-        foreach($links as &$link) {
+        $linkstrs = explode("^", substr($match, 2, -2), 3);
+        $links = array();
+        foreach($linkstrs as $index => $link) {
             // Split title from URL
             $link = explode('|',$link,2);
             if ( !isset($link[1]) ) {
-                $link[1] = NULL;
-            } else if ( preg_match('/^\{\{[^\}]+\}\}$/',$link[1]) ) {
+                $link[1] = null;
+            } else if (preg_match('/^\{\{[^\}]+\}\}$/',$link[1]) ) {
                 // If the title is an image, convert it to an array containing the image details
                 $link[1] = Doku_Handler_Parse_Media($link[1]);
             }
+
             $link[0] = trim($link[0]);
+
+            //look for an existing headpage when toc is empty
+            if($index == 1 && empty($link[0])) {
+                $ns = getNS($ID);
+                if(page_exists($ns.':'.$conf['start'])) {
+                    // start page inside namespace
+                    $link[0] = $ns.':'.$conf['start'];
+                }elseif(page_exists($ns.':'.noNS($ns))) {
+                    // page named like the NS inside the NS
+                    $link[0] = $ns.':'.noNS($ns);
+                }elseif(page_exists($ns)) {
+                    // page like namespace exists
+                    $link[0] = (!getNS($ns) ? ':':'').$ns;
+                }
+            }
+            //store original link with special chars and upper cases
+            $link[2] = $link[0];
+
+            // resolve and clean up the $id
+            resolve_pageid(getNS($ID), $link[0], $exists);
+            @list($link[0]) = explode('#', $link[0], 2);
+
+            //previous or next should not point to itself
+            if($index !== 1 && $link[0] == $ID) {
+                $link[0] = '';
+            }
+
+            $links[] = $link;
         }
 
-        //look for an existing headpage when toc is empty
-        if(!$links[1][0]) {
-            $ns = getNS($ID);
-            if(page_exists($ns.':'.$conf['start'])) {
-                // start page inside namespace
-                $links[1][0] = $ns.':'.$conf['start'];
-            }elseif(page_exists($ns.':'.noNS($ns))) {
-                // page named like the NS inside the NS
-                $links[1][0] = $ns.':'.noNS($ns);
-            }elseif(page_exists($ns)) {
-                // page like namespace exists
-                $links[1][0] = (!getNS($ns) ? ':':'').$ns;
-            }
-        }
         $data = array(
             'previous' => $links[0],
             'toc'      => $links[1],
@@ -136,6 +152,10 @@ class syntax_plugin_docnavigation_pagenav extends DokuWiki_Syntax_Plugin {
 
             foreach($data as $url) {
                 if($url) {
+                    if($url[1] === null) {
+                        $defaulttitle = $renderer->_simpleTitle($url[2]);
+                        $url[1] = $renderer->_getLinkTitle(null, $defaulttitle, $url[0]);
+                    }
                     $renderer->internallink($url[0], $url[1]);
                 }
             }

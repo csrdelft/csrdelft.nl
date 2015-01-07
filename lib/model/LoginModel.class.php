@@ -55,8 +55,9 @@ class LoginModel extends PersistenceModel implements Validator {
 		 * Sessie valideren: is er iemand ingelogd en zo ja, is alles ok?
 		 * Zo nee, dan public gebruiker er in gooien.
 		 */
-		if (!$this->validate() AND ! $this->login('x999', 'x999')) {
-			// auth_error of moet wachten
+		if (!$this->validate()) { // auth_error of moet wachten
+			// Subject Assignment:
+			$this->setLid(LidCache::getLid('x999'), false);
 		}
 		if ($this->loggedinLid->getUid() == 'x999') {
 			/**
@@ -85,7 +86,7 @@ class LoginModel extends PersistenceModel implements Validator {
 	public function validate() {
 
 		// Er is geen _uid gezet in _SESSION dus er is nog niemand ingelogged.
-		if (!isset($_SESSION['_uid'])) {
+		if (!isset($_SESSION['_uid']) OR $_SESSION['_uid'] == 'x999') {
 			return false;
 		}
 
@@ -118,7 +119,7 @@ class LoginModel extends PersistenceModel implements Validator {
 			}
 
 			// Subject Assignment:
-			$this->setLid($lid);
+			$this->setLid($lid, isset($_SESSION['_authByToken']));
 			return true;
 		}
 		return false;
@@ -268,8 +269,7 @@ class LoginModel extends PersistenceModel implements Validator {
 		}
 
 		// Subject Assignment:
-		$this->setLid($lid);
-		$this->authenticatedByToken = (boolean) $tokenOK;
+		$this->setLid($lid, (boolean) $tokenOK);
 
 		if ($uid != 'x999') {
 			// Permissions change: delete old session
@@ -313,7 +313,7 @@ class LoginModel extends PersistenceModel implements Validator {
 
 			$this->suedFrom = $this->loggedinLid;
 			// Subject Assignment:
-			$this->setLid($suNaar);
+			$this->setLid($suNaar, false);
 
 			// Configure session
 			$_SESSION['_suedFrom'] = $this->suedFrom->getUid();
@@ -327,7 +327,7 @@ class LoginModel extends PersistenceModel implements Validator {
 		session_unset();
 
 		// Subject Assignment:
-		$this->setLid($this->suedFrom);
+		$this->setLid($this->suedFrom, false);
 		$this->suedFrom = null;
 	}
 
@@ -347,11 +347,17 @@ class LoginModel extends PersistenceModel implements Validator {
 		return $this->loggedinLid;
 	}
 
-	private function setLid(Lid $lid) {
+	private function setLid(Lid $lid, $authByToken) {
 		$this->loggedinLid = $lid;
+		$this->authenticatedByToken = $authByToken;
 
 		// Configure session
 		$_SESSION['_uid'] = $lid->getUid();
+		if ($this->authenticatedByToken) {
+			$_SESSION['_authByToken'] = true;
+		} else {
+			unset($_SESSION['_authByToken']);
+		}
 	}
 
 	public function isAuthenticatedByToken() {

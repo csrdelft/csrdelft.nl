@@ -1953,7 +1953,10 @@ htdocs/wiki/lib/plugins/discussion/lang/hr/confirmsubscribe.txt -text
 htdocs/wiki/lib/plugins/discussion/lang/hr/lang.php -text
 htdocs/wiki/lib/plugins/discussion/lang/hr/settings.php -text
 htdocs/wiki/lib/plugins/discussion/lang/hr/subscribermail.txt -text
+htdocs/wiki/lib/plugins/discussion/lang/hu/confirmsubscribe.txt -text
+htdocs/wiki/lib/plugins/discussion/lang/hu/lang.php -text
 htdocs/wiki/lib/plugins/discussion/lang/hu/settings.php -text
+htdocs/wiki/lib/plugins/discussion/lang/hu/subscribermail.txt -text
 htdocs/wiki/lib/plugins/discussion/lang/it/lang.php -text
 htdocs/wiki/lib/plugins/discussion/lang/it/settings.php -text
 htdocs/wiki/lib/plugins/discussion/lang/it/subscribermail.txt -text

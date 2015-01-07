@@ -7,543 +7,277 @@
  */
 
 // must be run within Dokuwiki
-if (!defined('DOKU_INC')) die();
+if(!defined('DOKU_INC')) die();
 
+/**
+ * Syntax for including a table of content of bundle of pages linked by docnavigation
+ */
+class syntax_plugin_docnavigation_toc extends DokuWiki_Syntax_Plugin {
 
-class syntax_plugin_docnav_toc extends DokuWiki_Syntax_Plugin {
-
+    /**
+     * Syntax Type
+     *
+     * Needs to return one of the mode types defined in $PARSER_MODES in parser.php
+     *
+     * @return string
+     */
     public function getType() {
         return 'substition';
     }
 
+    /**
+     * Paragraph Type
+     *
+     * Defines how this syntax is handled regarding paragraphs. This is important
+     * for correct XHTML nesting. Should return one of the following:
+     *
+     * 'normal' - The plugin can be used inside paragraphs
+     * 'block'  - Open paragraphs need to be closed before plugin output
+     * 'stack'  - Special case. Plugin wraps other paragraphs.
+     *
+     * @see Doku_Handler_Block
+     *
+     * @return string
+     */
     public function getPType() {
         return 'block';
     }
 
+    /**
+     * Sort for applying this mode
+     *
+     * @return int
+     */
     public function getSort() {
         return 150;
     }
 
-
+    /**
+     * @param string $mode
+     */
     public function connectTo($mode) {
-        $this->Lexer->addSpecialPattern('<doctoc>',$mode,'plugin_docnav_toc');
+        $this->Lexer->addSpecialPattern('<doctoc\b.*?>', $mode, 'plugin_docnavigation_toc');
     }
 
-    public function handle($match, $state, $pos, &$handler){
-        $data = array();
-        global $ID, $conf;
+    /**
+     * Handler to prepare matched data for the rendering process
+     *
+     * @param   string       $match   The text matched by the patterns
+     * @param   int          $state   The lexer state for the match
+     * @param   int          $pos     The character position of the matched text
+     * @param   Doku_Handler $handler The Doku_Handler object
+     * @return  bool|array Return an array with all data you want to use in render, false don't add an instruction
+     */
+    public function handle($match, $state, $pos, Doku_Handler $handler) {
+        global $ID;
 
-        $pages = array();
-        $ns = str_replace(':', '/', getNS($ID));
-        search($pages,$conf['datadir'],'search_list',array(),$ns);
-
-        /*
-         * pages inclusief pages in namespaces
-         */
-        //$pages2 = array();
-        //$dir = $conf['datadir'].($ns ? '/'.$ns : '');
-
-        // returns the list of pages in the given namespace and it's subspaces
-        //$items = array();
-        //search($pages2, $dir, 'search_allpages', array());
-
-        //list of namespaces (in id entry)
-        //search($pages3, $conf['datadir'], 'search_namespaces', array());
-        //dbg($pages2);
-        //dbg($pages3);/*
-
-        dbg($pages);
-        $metadata = array();
-        $firstpid = $pages[0]['id']; //default first page of namespace
-        foreach($pages as $page) {
-
-            $pmeta = p_get_metadata($page['id'], 'docnav');
-            if($pmeta === null) continue;
-
-            //page without previous page is the first of sequence
-            if(!$pmeta['previous']) $firstpid = $page['id'];
-            foreach($pmeta as &$url) {
-                //$url = array(pageid, title)
-                if($url[0]) {
-                    $url[0] = $this->getFullPageid($url[0], 2);
-                }
-            }
-            $metadata[$page['id']] = new ListNode($page['id'], $pmeta);
+        $optstrs = substr($match, 7, -1); // remove "<doctoc"  and ">"
+        $optstrs = explode(',', $optstrs);
+        $options = array();
+        foreach($optstrs as $optstr) {
+            list($key, $value) = explode('=', $optstr, 2);
+            $options[trim($key)] = trim($value);
         }
 
-        dbg($metadata);
-
-        $sorted = new DoublyLinkedList();
-        $sorted->insertFirst($metadata[$firstpid]);
-
-        $current = $sorted->getLast();
-        $nextid = $current->getNextId();
-        //dbg($nextid);
-        while($nextid && isset($metadata[$nextid])) {
-            $exist = $sorted->search($nextid);
-            if($exist === null) {
-                $previd = $metadata[$nextid]->getPrevId();
-                if($previd == $current->id || !$node = $this->searchprevious($metadata, $current->id)) {
-                    $sorted->insertLast($metadata[$nextid]);
-                } else {
-                    $sorted->insertLast($node);
-                }
-                $current = $sorted->getLast();
-            } else {
-                //ready?
-                break;
-            }
+        //option: start
+        if(isset($options['start'])) {
+            $options['start'] = $this->getFullPageid($options['start']);
+            $options['previous'] = $ID; //workaround for Include plugin: gets only correct ID in handler
+        } else {
+            $options['start'] = $ID;
+            $options['previous'] = null;
         }
-       //dbg($sorted);
 
-        return array($metadata,$sorted);
+        //option: includeheadings
+        if(isset($options['includeheadings'])) {
+            $levels = explode('-', $options['includeheadings']);
+            if(empty($levels[0])) {
+                $levels[0] = 2;
+            }
+            $levels[0] = (int)$levels[0];
+            if(empty($levels[1])) {
+                $levels[1] = $levels[0];
+            }
+            $levels[1] = (int)$levels[1];
+
+
+            //order from low to high
+            if($levels[0] > $levels[1]) {
+                $level = $levels[1];
+                $levels[1] = $levels[0];
+                $levels[0] = $level;
+            }
+            $options['includeheadings'] = array($levels[0], $levels[1]);
+        }
+
+        //option: numbers (=use ordered list?)
+        $options['numbers'] = !empty($options['numbers']);
+
+        //option: useheading
+        $useheading = useHeading('navigation');
+        if(isset($options['useheading'])) {
+            $useheading = !empty($options['useheading']);
+        }
+        $options['useheading'] = $useheading;
+
+        return $options;
     }
 
-    public function render($mode, &$renderer, $data) {
+    /**
+     * Handles the actual output creation.
+     *
+     * @param string        $mode     output format being rendered
+     * @param Doku_Renderer $renderer the current renderer object
+     * @param array         $options  data created by handler()
+     * @return  boolean                 rendered correctly? (however, returned value is not used at the moment)
+     */
+    public function render($mode, Doku_Renderer $renderer, $options) {
+        global $ID;
+        global $ACT;
 
         if($mode != 'xhtml') return false;
+        /** @var Doku_Renderer_xhtml $renderer */
 
-        /**
-         * @var array            $metadata
-         * @var DoublyLinkedList $sorted
-         */
-        list($metadata, $sorted) = $data;
+        $renderer->info['cache'] = false;
 
-        $sorted->displayForward();
+        $list = array();
+        $pageid       = $options['start'];
+        $previouspage = $options['previous'];
+        while($pageid !== null) {
+            $item = array();
+            $item['id'] = $pageid;
+            $item['ns'] = getNS($item['id']);
+            $item['type'] = isset($options['includeheadings']) ? 'pagewithheadings' : 'pageonly'; //page or heading
+            $item['level'] = 1;
+            $item['ordered'] = $options['numbers'];
+
+            if($options['useheading']) {
+                $item['title'] = p_get_first_heading($item['id'], METADATA_DONT_RENDER);
+            } else {
+                $item['title'] = null;
+            }
+            $item['perm'] = auth_quickaclcheck($item['id']);
+
+            if($item['perm'] >= AUTH_READ) {
+                $list[$pageid] = $item;
+
+                if(isset($options['includeheadings'])) {
+                    $toc = p_get_metadata($pageid, 'description tableofcontents', METADATA_RENDER_USING_CACHE);
+
+                    if(is_array($toc)) foreach($toc as $tocitem) {
+                        if($tocitem['level'] < $options['includeheadings'][0] || $tocitem['level'] > $options['includeheadings'][1]) {
+                            continue;
+                        }
+                        $item = array();
+                        $item['id'] = $pageid . '#' . $tocitem['hid'];
+                        $item['ns'] = getNS($item['id']);
+                        $item['type'] = 'heading';
+                        $item['level'] = 2 + $tocitem['level'] - $options['includeheadings'][0];
+                        $item['title'] = $tocitem['title'];
+
+                        $list[$item['id']] = $item;
+                    }
+                }
+            }
+
+            if($ACT == 'preview' && $pageid === $ID) {
+                // the RENDERER_CONTENT_POSTPROCESS event is triggered just after rendering the instruction,
+                // so syntax instance will exists
+                /** @var syntax_plugin_docnavigation_pagenav $pagenav */
+                $pagenav = plugin_load('syntax', 'docnavigation_pagenav');
+                if($pagenav) {
+                    $pagedata = $pagenav->data[$pageid];
+                } else {
+                    $pagedata = array();
+                }
+            } else {
+                $pagedata = p_get_metadata($pageid, 'docnavigation');
+            }
+
+            //check referer
+            if(empty($pagedata['previous'][0]) || $pagedata['previous'][0] != $previouspage) {
+
+                // is not first page or non-existing page (so without syntax)?
+                if($previouspage !== null && page_exists($pageid)) {
+                    msg(sprintf($this->getLang('dontlinkback'), $pageid, $previouspage), -1);
+                }
+            }
+
+            $previouspage = $pageid;
+            if(empty($pagedata['next'][0])) {
+                $pageid = null;
+            } elseif(isset($list[$pagedata['next'][0]])) {
+                msg(sprintf($this->getLang('recursionprevented'), $pageid, $pagedata['next'][0]), -1);
+                $pageid = null;
+            } else {
+                $pageid = $pagedata['next'][0];
+            }
+        }
+
+        $renderer->doc .= html_buildlist($list, 'pagnavtoc', array($this, 'list_item_navtoc'));
 
         return true;
     }
 
+    /**
+     * Index item formatter
+     *
+     * User function for html_buildlist()
+     *
+     * @author Andreas Gohr <andi@splitbrain.org>
+     *
+     * @param array $item
+     * @return string
+     */
+    public function list_item_navtoc($item) {
+        // default is noNSorNS($id), but we want noNS($id) when useheading is off FS#2605
+        if($item['title'] === null) {
+            $name = noNS($item['id']);
+        } else {
+            $name = $item['title'];
+        }
+
+        $ret = '';
+        $link = html_wikilink(':' . $item['id'], $name);
+        if($item['type'] == 'pagewithheadings') {
+            $ret .= '<strong>';
+            $ret .= $link;
+            $ret .= '</strong>';
+        } else {
+            $ret .= $link;
+        }
+        return $ret;
+    }
+
+    /**
+     * Callback for html_buildlist
+     *
+     * @param array $item
+     * @return string html
+     */
+    function html_list_toc($item) {
+        if(isset($item['hid'])) {
+            $link = '#' . $item['hid'];
+        } else {
+            $link = $item['link'];
+        }
+
+        return '<a href="' . $link . '">' . hsc($item['title']) . '</a>';
+    }
+
+    /**
+     * Resolves given id against current page to full pageid, removes hash
+     *
+     * @param string $pageid
+     * @return mixed
+     */
     public function getFullPageid($pageid) {
         global $ID;
-        resolve_pageid(getNS($ID), $pageid, $exists);   //TODO relative to page
-        list($page, $hash) = explode('#', $pageid, 2);
+        resolve_pageid(getNS($ID), $pageid, $exists);
+        list($page, /* $hash */) = explode('#', $pageid, 2);
         return $page;
     }
 
-    public function searchprevious(&$metadata, $previd) {
-        foreach($metadata as $node) {
-            if($node->getValue('previous') == $previd) {
-                return $node;
-            }
-        }
-        return false;
-    }
-
 }
-
-/**
- * doublelist.class.php
- * http://www.codediesel.com/algorithms/doubly-linked-list-in-php/
- */
-
-class ListNode {
-
-    public $data;
-    public $next;
-    public $previous;
-    public $id;
-
-    function __construct($id, $data) {
-        $this->id = $id;
-        $this->data = $data;
-    }
-
-    public function getId() {
-        return $this->id;
-    }
-    public function getNextId() { return $this->data['next'][0]; }
-    public function getPrevId() { return $this->data['previous'][0]; }
-
-}
-
-
-class DoublyLinkedList {
-    /** @var ListNode $_firstNode  */
-    private $_firstNode;
-    /** @var ListNode $_lastNode */
-    private $_lastNode;
-    /** @var int $_count */
-    private $_count;
-
-    function __construct() {
-        $this->_firstNode = NULL;
-        $this->_lastNode = NULL;
-        $this->_count = 0;
-    }
-
-    public function isEmpty() {
-        return ($this->_firstNode == NULL);
-    }
-
-    public function insertFirst($node) {
-        $newLink = $node;
-
-        if($this->isEmpty()) {
-            $this->_lastNode = $newLink;
-        } else {
-            $this->_firstNode->previous = $newLink;
-        }
-
-        $newLink->next = $this->_firstNode;
-        $this->_firstNode = $newLink;
-        $this->_count++;
-    }
-
-
-    public function insertLast($node) {
-        $newLink = $node;
-
-        if($this->isEmpty()) {
-            $this->_firstNode = $newLink;
-        } else {
-            $this->_lastNode->next = $newLink;
-        }
-
-        $newLink->previous = $this->_lastNode;
-        $this->_lastNode = $newLink;
-        $this->_count++;
-    }
-
-
-    public function insertAfter($key, $node) {
-
-        $current = $this->search($key);
-        if($current === null) return false;
-
-        $newLink = $node;
-
-        if($current == $this->_lastNode) {
-            $newLink->next = NULL;
-            $this->_lastNode = $newLink;
-        } else {
-            $newLink->next = $current->next;
-            $current->next->previous = $newLink;
-        }
-
-        $newLink->previous = $current;
-        $current->next = $newLink;
-        $this->_count++;
-
-        return true;
-    }
-
-
-    public function deleteFirstNode() {
-
-        $temp = $this->_firstNode;
-
-        if($this->_firstNode->next == NULL) {
-            $this->_lastNode = NULL;
-        } else {
-            $this->_firstNode->next->previous = NULL;
-        }
-
-        $this->_firstNode = $this->_firstNode->next;
-        $this->_count--;
-        return $temp;
-    }
-
-
-    public function deleteLastNode() {
-
-        $temp = $this->_lastNode;
-
-        if($this->_firstNode->next == NULL) {
-            $this->_firstNode = NULL;
-        } else {
-            $this->_lastNode->previous->next = NULL;
-        }
-
-        $this->_lastNode = $this->_lastNode->previous;
-        $this->_count--;
-        return $temp;
-    }
-
-
-    public function deleteNode($key) {
-
-        $current = $this->search($key);
-        if($current === null) return null;
-
-        if($current == $this->_firstNode) {
-            $this->_firstNode = $current->next;
-        } else {
-            $current->previous->next = $current->next;
-        }
-
-        if($current == $this->_lastNode) {
-            $this->_lastNode = $current->previous;
-        } else {
-            $current->next->previous = $current->previous;
-        }
-
-        $this->_count--;
-        return $current;
-    }
-
-    public function getFirst() {
-        return $this->_firstNode;
-    }
-
-    public function getLast() {
-        return $this->_lastNode;
-    }
-
-    public function search($id) {
-        $current = $this->_firstNode;
-
-        while($current->getId() != $id) {
-            $current = $current->next;
-            if($current == NULL)
-                return null;
-        }
-        return $current;
-    }
-
-    public function displayForward() {
-
-        $current = $this->_firstNode;
-
-        while($current != NULL) {
-            echo $current->getId() . " \n";
-            $current = $current->next;
-        }
-    }
-
-    public function displayBackward() {
-
-        $current = $this->_lastNode;
-
-        while($current != NULL) {
-            echo $current->getId() . " \n";
-            $current = $current->previous;
-        }
-    }
-
-    public function totalNodes() {
-        return $this->_count;
-    }
-
-}
-
-
-/**
- * Page node of ToC
- */
-/*
-class Node {
-    private $data;
-    public
-        $next = null,
-        $prev = null;
-
-
-    public function __construct($data) {
-        $this->data = $data; //contains id
-    }
-
-    /**
-     * Get value $key from inner data
-     *
-     * @param $key
-     * @return mixed
-     */      /*
-    public function get($key) {
-        return $this->data[$key]; //TODO key not exist - default value/return false
-    }
-
-    /**
-     * Check if the node for page $id already exists
-     * @param $id
-     * @return bool
-     */       /*
-    public function exist($id) {
-        if($id == $this->data['id']) {
-            return true;
-        } else {
-            if($this->next !== null) {
-                return $this->next->exist($id);
-            } else {
-                return false;
-            }
-        }
-    }
-}
-
-/**
- * Page tree of ToC
- */      /*
-class Tree {
-    /** @var Node $first */  /*
-    private $first;
-    private $pages; //array(array('prev'=>'', 'next'=>'', 'toc'=>''))
-    //private $sorted;
-
-    public function populate() {
-        $this->first = new Node($this->getFirstpage());
-
-        $current = $this->first;
-        while(true) {
-            $nextid = $current->get('next');
-
-            if($nextid) {
-                if($this->exist($nextid)) {
-
-                } else {
-                    $current->next = new Node($this->pages[$nextid]);
-                    $current = $current->next;
-                }
-            } else {
-                break;
-            }
-        }
-    }
-
-    /**
-     * Search node without predecessor, otherwise random node.
-     */                 /*
-    public function getFirstpage() {
-        //First page has no predecessor
-        foreach($this->pages as $page) {
-            if(empty($page['previous'])) {
-                return $page;
-            }
-        }
-        //return random first TODO empty pageMetadata
-        return $this->pages[0];
-    }
-
-    /**
-     * Do a node exist for page $id
-     *
-     * @param string $id pageid
-     */         /*
-    public function exist($id) {
-        $this->first->exist($id);
-    }
-}
-
-/*
-class nodeElement {
-    public
-        $data,
-        $prev=false,
-        $next=false;
-
-    public function __construct($data) {
-        $this->data=$data;
-    }
-
-    public function show() {
-        if ($this->prev) $this->prev->show();
-        echo $this->data,'<br />';
-        if ($this->next) $this->next->show();
-    }
-}
-
-class nodeTree {
-    public
-        $first=false;
-
-    public function add($data) {
-        if ($this->first) {
-            $current=$this->first;
-            while (true) {
-                if (strnatcasecmp($current->data,$data)<0) {
-                    if ($current->next) {
-                        $current=$current->next;
-                    } else {
-                        $current->next=new nodeElement($data);
-                        break;
-                    }
-                } else {
-                    if ($current->prev) {
-                        $current=$current->prev;
-                    } else {
-                        $current->prev=new nodeElement($data);
-                        break;
-                    }
-                }
-            }
-        } else {
-            $this->first=new nodeElement($data);
-        }
-    }
-
-    public function show() {
-        if ($this->first) {
-            $this->first->show();
-        }
-    }
-
-}  */
-
-/*
-class Node {
-    var $left;
-    var $right;
-    var $data;
-
-    function BinaryTree() {
-        $this->left  = null;
-        $this->right = null;
-    }
-
-    function search($key) {
-        if($this->data == $key)
-            return true;
-        if($this->left != null && $this->data < $key)
-            return $this->left->search($key);
-        if($this->right != null && $this->data > $key)
-            return $this->right->search($key);
-        return false;
-    }
-
-    function addItem($key) {
-        if($this->data == $key) {
-            return false; //already got it
-        }
-        if($this->left != null && $key < $this->data)
-            return $this->left->addItem($key);
-        if($this->right != null && $key > $this->data)
-            return $this->right->addItem($key);
-        if($this->left == null && $key < $this->data) {
-            $this->left       = new Node();
-            $this->left->data = $item;
-            return true;
-        }
-        if($right == null && $key > $this->data) {
-            $this->right       = new Node();
-            $this->right->data = $item;
-            return true;
-        }
-    }
-}
-
-class BinaryTree {
-    var $root;
-
-    function BinaryTree() {
-        $this->root = null;
-    }
-
-    function search($key) {
-        if($this->root == null)
-            return false;
-        return $this->root->search($key);
-    }
-
-    function addItem($item) {
-        if($this->root == null) {
-            $this->root       = new Node();
-            $this->root->data = $item;
-            return true;
-        }
-        return $this->root->addItem($item);
-    }
-}
-*/
-
 
 // vim:ts=4:sw=4:et:

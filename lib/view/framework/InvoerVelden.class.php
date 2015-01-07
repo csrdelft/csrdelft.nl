@@ -1062,17 +1062,16 @@ class WachtwoordWijzigenField extends InputField {
 	private $require_current;
 
 	public function __construct($name, Lid $lid, $require_current = true) {
-		parent::__construct($name, $name, null, $lid);
 		$this->require_current = $require_current;
+		parent::__construct($name, $name, null, $lid);
 		$this->leden_mod = (LoginModel::getUid() !== $this->model->getUid());
 	}
 
 	public function isPosted() {
-		$return = true;
-		if ($this->require_current) {
-			$return = isset($_POST[$this->name . '_current']);
+		if ($this->require_current AND ! isset($_POST[$this->name . '_current'])) {
+			return false;
 		}
-		return $return AND isset($_POST[$this->name . '_new'], $_POST[$this->name . '_confirm']);
+		return isset($_POST[$this->name . '_new']) AND isset($_POST[$this->name . '_confirm']);
 	}
 
 	public function getValue() {
