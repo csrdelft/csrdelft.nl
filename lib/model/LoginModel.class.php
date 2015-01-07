@@ -56,8 +56,7 @@ class LoginModel extends PersistenceModel implements Validator {
 		 * Zo nee, dan public gebruiker er in gooien.
 		 */
 		if (!$this->validate() AND ! $this->login('x999', 'x999')) {
-			// public gebruiker is stuk
-			die('Not accessible');
+			// auth_error of moet wachten
 		}
 		if ($this->loggedinLid->getUid() == 'x999') {
 			/**
