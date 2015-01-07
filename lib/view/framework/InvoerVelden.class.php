@@ -1111,6 +1111,8 @@ class WachtwoordWijzigenField extends InputField {
 				$this->error = 'Minimaal 25 tekens, oftewel 4+ woorden van elk 5+ letters';
 			} elseif (preg_match('/^(\w)\1+$/', $new)) {
 				$this->error = 'Het nieuwe wachtwoord bevat 2x hetzelfde woord';
+			} elseif (preg_match('/^(.)\1{3,}$/', $new)) {
+				$this->error = 'Het nieuwe wachtwoord bevat teveel dezelfde tekens';
 			} elseif ($length > 100) {
 				$this->error = 'Maximaal 100 tekens';
 			} elseif (empty($confirm)) {
