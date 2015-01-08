@@ -1104,9 +1104,11 @@ class WachtwoordWijzigenField extends InputField {
 		}
 		if (!$this->require_current OR ! empty($new)) {
 			if ($this->require_current AND $current == $new) {
-				$this->error = 'Het nieuwe wachtwoord is hetzelfde als het huidige wachtwoord';
-			} elseif (!preg_match('/^[0-9a-zA-Z ]{23,100}$/', $new)) {
-				$this->error = 'Minimaal 23 tekens, oftewel 4+ woorden van elk 5+ letters,<br />geen speciale tekens en maximaal 100 tekens';
+                $this->error = 'Het nieuwe wachtwoord is hetzelfde als het huidige wachtwoord';
+            } elseif (!preg_match('/^.{8,}$/', $new)) {
+                $this->error = 'Het nieuwe wachtwoord moet minimaal 8 tekens bevatten.';
+			#} elseif (!preg_match('/^[0-9a-zA-Z ]{23,100}$/', $new)) {
+			#	$this->error = 'Minimaal 23 tekens, oftewel 4+ woorden van elk 5+ letters,<br />geen speciale tekens en maximaal 100 tekens';
 			} elseif (preg_match('/(.)\1\1+/', $new) OR preg_match('/(.{4,}).*\1+/', $new)) {
 				$this->error = 'Het nieuwe wachtwoord bevat teveel herhaling';
 			} elseif (empty($confirm)) {
