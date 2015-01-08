@@ -72,7 +72,7 @@ class LoginModel extends PersistenceModel implements Validator {
 		}
 		// Controleer of het wachtwoord is verlopen:
 		elseif (PasswordModel::instance()->isVerlopen($this->loggedinLid)) {
-			if (!startsWith(REQUEST_URI, '/wachtwoord') AND ! startsWith(REQUEST_URI, '/tools/css.php') AND ! startsWith(REQUEST_URI, '/tools/js.php')) {
+			if (!startsWith(REQUEST_URI, '/wachtwoord') AND REQUEST_URI !== '/endsu' AND ! startsWith(REQUEST_URI, '/tools/css.php') AND ! startsWith(REQUEST_URI, '/tools/js.php')) {
 				setMelding('Uw wachtwoord is verlopen', 2);
 				redirect('/wachtwoord/verlopen');
 			}
