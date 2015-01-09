@@ -1146,7 +1146,7 @@ class WachtwoordWijzigenField extends InputField {
 				$this->error = 'Het nieuwe wachtwoord moet ook speciale tekens bevatten<br />of langer zijn dan 23 tekens';
 			} elseif (!preg_match('/^.{23,}$/', $new) AND $length > 10) {
 				$this->error = 'Minimaal 23 tekens, bijv. 4+ woorden van elk 5+ letters<br />zonder teveel herhaling';
-			} elseif (preg_match('/(.{3,})\1+/', $new) OR preg_match('/(.{4,}).*\1+/', $new)) {
+			} elseif (preg_match('/(.)\1\1+/', $new) OR preg_match('/(.{3,})\1+/', $new) OR preg_match('/(.{4,}).*\1+/', $new)) {
 				$this->error = 'Het nieuwe wachtwoord bevat teveel herhaling';
 			} elseif (empty($confirm)) {
 				$this->error = 'Vul uw nieuwe wachtwoord twee keer in';
