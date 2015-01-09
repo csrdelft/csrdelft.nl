@@ -54,6 +54,19 @@ function betweenString($string, $start, $end) {
 }
 
 /**
+ * @source http://stackoverflow.com/a/3654335
+ * @param type $array
+ * @return type
+ */
+function array_filter_empty($array) {
+	return array_filter($array, 'not_empty');
+}
+
+function not_empty($value) {
+	return $value != '';
+}
+
+/**
  * Case insensitive in_array
  * 
  * @source http://stackoverflow.com/a/2166524

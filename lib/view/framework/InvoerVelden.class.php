@@ -151,7 +151,7 @@ abstract class InputField implements FormElement, Validator {
 		}
 		// als blacklist is gezet dan controleren
 		if (is_array($this->blacklist) AND in_array_i($this->value, $this->blacklist)) {
-			$this->error = 'Deze waarde is niet toegestaan: ' . htmlspecialchars($this->value) . print_r($this->blacklist);
+			$this->error = 'Deze waarde is niet toegestaan: ' . htmlspecialchars($this->value);
 		}
 		// als whitelist is gezet dan controleren
 		if (is_array($this->whitelist) AND ! in_array_i($this->value, $this->whitelist)) {
@@ -1072,7 +1072,7 @@ class WachtwoordWijzigenField extends InputField {
 		$this->blacklist[] = $lid->getProperty('postcode');
 		$this->blacklist[] = $lid->getProperty('telefoon');
 		$this->blacklist[] = $lid->getProperty('mobiel');
-		array_filter($this->blacklist); // wis lege waarden
+		$this->blacklist = array_filter_empty($this->blacklist);
 		$this->blacklist[] = '1234';
 		$this->blacklist[] = 'abcd';
 		$this->blacklist[] = 'qwerty';
