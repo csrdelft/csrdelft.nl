@@ -153,11 +153,6 @@ class LoginController extends AclController {
 					$mail = new Mail(array($lid->getEmail() => $lidnaam), 'C.S.R. webstek: nieuw wachtwoord instellen', $bericht);
 					$mail->send();
 					setMelding('Wachtwoord reset email verzonden', 1);
-					/**
-					 * Sowieso timeout geven zodat je geen bruteforce kan doen als je uid en email weet.
-					 * (wachtwoord proberen, bij timeout vergeten mail sturen en dan weer wachtworod proberen, etc.)
-					 */
-					TimeoutModel::instance()->fout($uid);
 				} else {
 					TimeoutModel::instance()->fout($uid);
 				}
