@@ -1102,7 +1102,7 @@ class WachtwoordWijzigenField extends InputField {
 	public function checkZwarteLijst($pass_plain) {
 		foreach ($this->blacklist as $disallowed) {
 			if (stripos($pass_plain, $disallowed) !== false) {
-				$this->error = $disallowed;
+				$this->error = htmlspecialchars($disallowed);
 				return true;
 			}
 		}
