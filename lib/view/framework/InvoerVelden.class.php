@@ -1072,6 +1072,11 @@ class WachtwoordWijzigenField extends InputField {
 		$this->blacklist[] = $lid->getProperty('postcode');
 		$this->blacklist[] = $lid->getProperty('telefoon');
 		$this->blacklist[] = $lid->getProperty('mobiel');
+		$this->blacklist[] = '1234';
+		$this->blacklist[] = 'abcd';
+		$this->blacklist[] = 'qwerty';
+		$this->blacklist[] = 'password';
+		$this->blacklist[] = 'wachtwoord';
 	}
 
 	public function isPosted() {
