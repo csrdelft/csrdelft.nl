@@ -1135,19 +1135,19 @@ class WachtwoordWijzigenField extends InputField {
 			} elseif ($length > 100) {
 				$this->error = 'Het nieuwe wachtwoord mag maximaal 100 tekens lang zijn';
 			} elseif ($this->checkZwarteLijst($new)) {
-				$this->error = 'Het nieuwe wachtwoord of een deel ervan staat op de zwarte lijst: ' . $this->error;
+				$this->error = 'Het nieuwe wachtwoord of een deel ervan staat op de zwarte lijst: "' . $this->error . '"';
 			} elseif (preg_match('/^[0-9]*$/', $new)) {
-				$this->error = 'Het nieuwe wachtwoord moet ook letters en speciale tekens bevatten<br />of langer zijn dan 23 tekens';
-			} elseif (preg_match('/^[a-zA-Z]*$/', $new) AND $length <= 10) {
-				$this->error = 'Het nieuwe wachtwoord moet ook cijfers en speciale tekens bevatten<br />of langer zijn dan 23 tekens';
-			} elseif (preg_match('/^[0-9a-z]*$/', $new) AND $length <= 10) {
-				$this->error = 'Het nieuwe wachtwoord moet ook hoofdletters en speciale tekens bevatten<br />of langer zijn dan 23 tekens';
-			} elseif (preg_match('/^[0-9A-Z]*$/', $new) AND $length <= 10) {
-				$this->error = 'Het nieuwe wachtwoord moet ook kleine letters en speciale tekens bevatten<br />of langer zijn dan 23 tekens';
-			} elseif (preg_match('/^[0-9a-zA-Z]*$/', $new) AND $length <= 10) {
-				$this->error = 'Het nieuwe wachtwoord moet ook speciale tekens bevatten<br />of langer zijn dan 23 tekens';
-			} elseif (!preg_match('/^.{23,}$/', $new) AND $length > 10) {
-				$this->error = 'Minimaal 23 tekens, bijv. 4+ woorden van elk 5+ letters<br />zonder teveel herhaling';
+				$this->error = 'Het nieuwe wachtwoord mag niet uit alleen getallen bestaan';
+			} elseif ($length < 23) {
+				if (preg_match('/^[a-zA-Z]*$/', $new)) {
+					$this->error = 'Het nieuwe wachtwoord moet ook cijfers en speciale tekens bevatten<br />of langer zijn dan 23 tekens';
+				} elseif (preg_match('/^[0-9a-z]*$/', $new)) {
+					$this->error = 'Het nieuwe wachtwoord moet ook hoofdletters en speciale tekens bevatten<br />of langer zijn dan 23 tekens';
+				} elseif (preg_match('/^[0-9A-Z]*$/', $new)) {
+					$this->error = 'Het nieuwe wachtwoord moet ook kleine letters en speciale tekens bevatten<br />of langer zijn dan 23 tekens';
+				} elseif (preg_match('/^[0-9a-zA-Z]*$/', $new)) {
+					$this->error = 'Het nieuwe wachtwoord moet ook speciale tekens bevatten<br />of langer zijn dan 23 tekens';
+				}
 			} elseif (preg_match('/(.)\1\1+/', $new) OR preg_match('/(.{3,})\1+/', $new) OR preg_match('/(.{4,}).*\1+/', $new)) {
 				$this->error = 'Het nieuwe wachtwoord bevat teveel herhaling';
 			} elseif (empty($confirm)) {
