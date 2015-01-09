@@ -294,7 +294,7 @@ class LoginModel extends PersistenceModel implements Validator {
 			$field = new WachtwoordWijzigenField('checkpw', $lid, false); // fetches POST values itself
 			if (!$field->validate()) {
 				if (!startsWith(REQUEST_URI, '/wachtwoord') AND REQUEST_URI !== '/endsu' AND ! startsWith(REQUEST_URI, '/tools/css.php') AND ! startsWith(REQUEST_URI, '/tools/js.php')) {
-					setMelding('Uw wachtwoord is onveilig', 2);
+					setMelding('Uw wachtwoord is onveilig: ' . str_replace('nieuwe', 'huidige', $field->getError()), 2);
 					redirect('/wachtwoord/wijzigen');
 				}
 			}
