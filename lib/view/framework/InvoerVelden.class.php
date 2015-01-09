@@ -1065,6 +1065,13 @@ class WachtwoordWijzigenField extends InputField {
 		$this->require_current = $require_current;
 		parent::__construct($name, $name, null, $lid);
 		$this->leden_mod = (LoginModel::getUid() !== $this->model->getUid());
+		$this->blacklist = explode('@', $lid->getProperty('email'));
+		$this->blacklist[] = $lid->getProperty('uid');
+		$this->blacklist[] = $lid->getProperty('voornaam');
+		$this->blacklist[] = $lid->getProperty('achternaam');
+		$this->blacklist[] = $lid->getProperty('postcode');
+		$this->blacklist[] = $lid->getProperty('telefoon');
+		$this->blacklist[] = $lid->getProperty('mobiel');
 	}
 
 	public function isPosted() {
@@ -1084,6 +1091,16 @@ class WachtwoordWijzigenField extends InputField {
 			return null;
 		}
 		return $value;
+	}
+
+	public function checkZwarteLijst($pass_plain) {
+		foreach ($this->blacklist as $disallowed) {
+			if (stripos($pass_plain, $disallowed) !== false) {
+				$this->error = $disallowed;
+				return true;
+			}
+		}
+		return false;
 	}
 
 	public function validate() {
@@ -1110,19 +1127,21 @@ class WachtwoordWijzigenField extends InputField {
 				$this->error = 'Het nieuwe wachtwoord moet minimaal 10 tekens lang zijn';
 			} elseif ($length > 100) {
 				$this->error = 'Het nieuwe wachtwoord mag maximaal 100 tekens lang zijn';
+			} elseif ($this->checkZwarteLijst($new)) {
+				$this->error = 'Het nieuwe wachtwoord of een deel ervan staat op de zwarte lijst: ' . $this->error;
 			} elseif (preg_match('/^[0-9]*$/', $new)) {
 				$this->error = 'Het nieuwe wachtwoord moet ook letters en speciale tekens bevatten<br />of langer zijn dan 23 tekens';
-			} elseif (preg_match('/^[a-zA-Z]*$/', $new) AND $length < 10) {
+			} elseif (preg_match('/^[a-zA-Z]*$/', $new) AND $length <= 10) {
 				$this->error = 'Het nieuwe wachtwoord moet ook cijfers en speciale tekens bevatten<br />of langer zijn dan 23 tekens';
-			} elseif (preg_match('/^[0-9a-z]*$/', $new) AND $length < 10) {
+			} elseif (preg_match('/^[0-9a-z]*$/', $new) AND $length <= 10) {
 				$this->error = 'Het nieuwe wachtwoord moet ook hoofdletters en speciale tekens bevatten<br />of langer zijn dan 23 tekens';
-			} elseif (preg_match('/^[0-9A-Z]*$/', $new) AND $length < 10) {
+			} elseif (preg_match('/^[0-9A-Z]*$/', $new) AND $length <= 10) {
 				$this->error = 'Het nieuwe wachtwoord moet ook kleine letters en speciale tekens bevatten<br />of langer zijn dan 23 tekens';
-			} elseif (preg_match('/^[0-9a-zA-Z]*$/', $new) AND $length < 10) {
+			} elseif (preg_match('/^[0-9a-zA-Z]*$/', $new) AND $length <= 10) {
 				$this->error = 'Het nieuwe wachtwoord moet ook speciale tekens bevatten<br />of langer zijn dan 23 tekens';
-			} elseif (!preg_match('/^.{23,}$/', $new) AND $length >= 10) {
+			} elseif (!preg_match('/^.{23,}$/', $new) AND $length > 10) {
 				$this->error = 'Minimaal 23 tekens, bijv. 4+ woorden van elk 5+ letters<br />zonder teveel herhaling';
-			} elseif (preg_match('/(.)\1\1+/', $new) OR preg_match('/(.{4,}).*\1+/', $new)) {
+			} elseif (preg_match('/(.{3,})\1+/', $new) OR preg_match('/(.{4,}).*\1+/', $new)) {
 				$this->error = 'Het nieuwe wachtwoord bevat teveel herhaling';
 			} elseif (empty($confirm)) {
 				$this->error = 'Vul uw nieuwe wachtwoord twee keer in';
