@@ -151,11 +151,11 @@ abstract class InputField implements FormElement, Validator {
 		}
 		// als blacklist is gezet dan controleren
 		if (is_array($this->blacklist) AND in_array($this->value, $this->blacklist)) {
-			$this->error = 'Deze waarde is niet toegestaan';
+			$this->error = 'Deze waarde is niet toegestaan: ' . htmlspecialchars($this->value);
 		}
 		// als whitelist is gezet dan controleren
 		if (is_array($this->whitelist) AND ! in_array($this->value, $this->whitelist)) {
-			$this->error = 'Deze waarde is niet toegestaan';
+			$this->error = 'Deze waarde is niet toegestaan: ' . htmlspecialchars($this->value);
 		}
 		return $this->error === '';
 	}
