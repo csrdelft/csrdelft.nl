@@ -290,11 +290,10 @@ class LoginModel extends PersistenceModel implements Validator {
 
 			// Controleer actief wachtwoordbeleid
 			$_POST['checkpw_new'] = $pass;
-			$_POST['checkpw_confirm'] = $pass;
 			$field = new WachtwoordWijzigenField('checkpw', $lid, false); // fetches POST values itself
-			if (!$field->validate()) {
+			if (!$field->validate(false)) {
 				if (!startsWith(REQUEST_URI, '/wachtwoord') AND REQUEST_URI !== '/endsu' AND ! startsWith(REQUEST_URI, '/tools/css.php') AND ! startsWith(REQUEST_URI, '/tools/js.php')) {
-					setMelding('Uw wachtwoord ' . $field->getName() . '_new' . '[' . filter_input(INPUT_POST, $field->getName() . '_new', FILTER_SANITIZE_STRING) . ']is onveilig: ' . str_replace('nieuwe', 'huidige', $field->getError()), 2);
+					setMelding('Uw wachtwoord is onveilig: ' . str_replace('nieuwe', 'huidige', $field->getError()), 2);
 					redirect('/wachtwoord/wijzigen');
 				}
 			}

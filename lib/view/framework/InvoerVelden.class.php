@@ -1108,14 +1108,14 @@ class WachtwoordWijzigenField extends InputField {
 		return false;
 	}
 
-	public function validate() {
+	public function validate($require_confirm = true) {
 		if (!parent::validate()) {
 			return false;
 		}
 		if ($this->require_current) {
 			$current = filter_input(INPUT_POST, $this->name . '_current', FILTER_SANITIZE_STRING);
 		}
-		$new = filter_input(INPUT_POST, $this->name . '_new', FILTER_SANITIZE_STRING);
+		$new = filter_var($_POST[$this->name . '_new'], FILTER_SANITIZE_STRING); // filter_input does not use current value in $_POST
 		$confirm = filter_input(INPUT_POST, $this->name . '_confirm', FILTER_SANITIZE_STRING);
 		$length = strlen(utf8_decode($new));
 		if ($this->require_current AND empty($current)) {
@@ -1148,9 +1148,9 @@ class WachtwoordWijzigenField extends InputField {
 				$this->error = 'Minimaal 23 tekens, bijv. 4+ woorden van elk 5+ letters<br />zonder teveel herhaling';
 			} elseif (preg_match('/(.)\1\1+/', $new) OR preg_match('/(.{3,})\1+/', $new) OR preg_match('/(.{4,}).*\1+/', $new)) {
 				$this->error = 'Het nieuwe wachtwoord bevat teveel herhaling';
-			} elseif (empty($confirm)) {
+			} elseif ($require_confirm AND empty($confirm)) {
 				$this->error = 'Vul uw nieuwe wachtwoord twee keer in';
-			} elseif ($new != $confirm) {
+			} elseif ($require_confirm AND $new != $confirm) {
 				$this->error = 'Nieuwe wachtwoorden komen niet overeen';
 			} elseif ($this->require_current AND ! PasswordModel::instance()->controleerWachtwoord($this->model, $current)) {
 				$this->error = 'Uw huidige wachtwoord is niet juist';
