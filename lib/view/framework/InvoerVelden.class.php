@@ -1063,7 +1063,7 @@ class WachtwoordWijzigenField extends InputField {
 
 	public function __construct($name, Lid $lid, $require_current = true) {
 		$this->require_current = $require_current;
-		parent::__construct($name, $name, null, $lid);
+		parent::__construct($name, null, null, $lid);
 		$this->leden_mod = (LoginModel::getUid() !== $this->model->getUid());
 		$this->blacklist = explode('@', $lid->getProperty('email'));
 		$this->blacklist[] = $lid->getProperty('uid');
