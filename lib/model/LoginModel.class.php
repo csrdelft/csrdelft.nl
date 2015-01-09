@@ -288,7 +288,7 @@ class LoginModel extends PersistenceModel implements Validator {
 				$this->create($session);
 			}
 
-			// Controleer eigen aan wachtwoord
+			// Controleer actief wachtwoordbeleid
 			$_POST['checkpw_new'] = $pass;
 			$_POST['checkpw_confirm'] = $pass;
 			$field = new WachtwoordWijzigenField('checkpw', $lid, false); // fetches POST values itself
