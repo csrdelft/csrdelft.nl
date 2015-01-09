@@ -54,6 +54,18 @@ function betweenString($string, $start, $end) {
 }
 
 /**
+ * Case insensitive in_array
+ * 
+ * @source http://stackoverflow.com/a/2166524
+ * @param string $needle
+ * @param array $haystack
+ * @return boolean
+ */
+function in_array_i($needle, array $haystack) {
+	return in_array(strtolower($needle), array_map('strtolower', $haystack));
+}
+
+/**
  * Group by object property
  * 
  * @param string $prop

@@ -150,11 +150,11 @@ abstract class InputField implements FormElement, Validator {
 			$this->error = 'Dit veld moet minimaal ' . $this->min_len . ' tekens lang zijn';
 		}
 		// als blacklist is gezet dan controleren
-		if (is_array($this->blacklist) AND in_array($this->value, $this->blacklist)) {
+		if (is_array($this->blacklist) AND in_array_i($this->value, $this->blacklist)) {
 			$this->error = 'Deze waarde is niet toegestaan: ' . htmlspecialchars($this->value);
 		}
 		// als whitelist is gezet dan controleren
-		if (is_array($this->whitelist) AND ! in_array($this->value, $this->whitelist)) {
+		if (is_array($this->whitelist) AND ! in_array_i($this->value, $this->whitelist)) {
 			$this->error = 'Deze waarde is niet toegestaan: ' . htmlspecialchars($this->value);
 		}
 		return $this->error === '';
