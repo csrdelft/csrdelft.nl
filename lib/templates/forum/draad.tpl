@@ -6,9 +6,9 @@
 	{capture name='kop'}
 		<div class="forumheadbtn">
 			{if $draad->isVerborgen()}
-				<a href="/forum/tonen/{$draad->draad_id}" class="btn round post ReloadPage tonenUit" title="Onderwerp tonen in zijbalk"></a>
+				<a href="/forum/tonen/{$draad->draad_id}" class="btn round post ReloadPage tonenAan" title="Onderwerp tonen in zijbalk"></a>
 			{elseif $draad->magVerbergen()}
-				<a href="/forum/verbergen/{$draad->draad_id}" class="btn round post ReloadPage tonenAan" title="Onderwerp verbergen in zijbalk"></a>
+				<a href="/forum/verbergen/{$draad->draad_id}" class="btn round post ReloadPage tonenUit" title="Onderwerp verbergen in zijbalk"></a>
 			{/if}
 			&nbsp;&nbsp;&nbsp;
 			{if $draad->isGevolgd()}

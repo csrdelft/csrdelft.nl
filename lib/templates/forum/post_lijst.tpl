@@ -52,11 +52,13 @@
 				{/if}
 				{if $post->magCiteren()}
 					<a href="#reageren" class="btn citeren" data-citeren="{$post->post_id}" title="Citeer bericht">{icon get="comments"}</a>
-					{assign var=timestamp value=strtotime($post->datum_tijd)}
-					<a id="timestamp{$timestamp}" href="/forum/bladwijzer/{$post->draad_id}" class="btn post forummodknop bladwijzer" data="timestamp={$timestamp}" title="Bladwijzer bij dit bericht leggen"></a>
 				{/if}
 				{if $post->magBewerken()}
 					<a href="#{$post->post_id}" class="knop{if $post->uid !== LoginModel::getUid() AND !$post->wacht_goedkeuring} forummodknop{/if}" onclick="forumBewerken({$post->post_id});" title="Bewerk bericht">{icon get="pencil"}</a>
+				{/if}
+				{if $post->magCiteren()}
+					{assign var=timestamp value=strtotime($post->datum_tijd)}
+					<a id="timestamp{$timestamp}" href="/forum/bladwijzer/{$post->draad_id}" class="btn post forummodknop bladwijzer" data="timestamp={$timestamp}" title="Bladwijzer bij dit bericht leggen"></a>
 				{/if}
 				{if $post->getForumDraad()->magModereren()}
 					<a href="/forum/offtopic/{$post->post_id}" class="btn post confirm{if !$post->wacht_goedkeuring} forummodknop{/if}" title="Offtopic markeren">{icon get="thumb_down"}</a>
