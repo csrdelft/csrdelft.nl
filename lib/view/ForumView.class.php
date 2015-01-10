@@ -225,8 +225,8 @@ class ForumDraadZijbalkView extends ForumView {
 		}
 		echo '</a>';
 		$aantal = ForumPostsModel::instance()->getAantalWachtOpGoedkeuring();
-		if (LoginModel::mag('P_FORUM_MOD')) {
-			echo ' &nbsp;<a href="/forum/wacht" class="badge" title="' . $aantal . ' forumbericht(en) wachten op goedkeuring">' . $aantal . '</a>';
+		if ($aantal > 0 AND LoginModel::mag('P_FORUM_MOD')) {
+			echo ' &nbsp;<a href="/forum/wacht" class="badge" title="' . $aantal . ' forumbericht' . ($aantal === 1 ? '' : 'en') . ' wacht' . ($aantal === 1 ? '' : 'en') . ' op goedkeuring">' . $aantal . '</a>';
 		}
 		echo '</div>';
 		foreach ($this->model as $draad) {
