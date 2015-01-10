@@ -56,7 +56,7 @@
 				{if $post->magBewerken()}
 					<a href="#{$post->post_id}" class="knop{if $post->uid !== LoginModel::getUid() AND !$post->wacht_goedkeuring} forummodknop{/if}" onclick="forumBewerken({$post->post_id});" title="Bewerk bericht">{icon get="pencil"}</a>
 				{/if}
-				{if $post->magCiteren()}
+				{if LoginModel::mag('P_LOGGED_IN') AND $post->magCiteren()}
 					{assign var=timestamp value=strtotime($post->datum_tijd)}
 					<a id="timestamp{$timestamp}" href="/forum/bladwijzer/{$post->draad_id}" class="btn post forummodknop bladwijzer" data="timestamp={$timestamp}" title="Bladwijzer bij dit bericht leggen"></a>
 				{/if}
