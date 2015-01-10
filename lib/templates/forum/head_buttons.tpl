@@ -7,7 +7,7 @@
 	</div>
 	{if !isset($deel->forum_id) OR (isset($deel->forum_id) AND $deel->magModereren())}
 		<div class="forumheadbtn">
-			<a href="/forum/wacht" class="btn{if ForumPostsModel::instance()->getAantalWachtOpGoedkeuring() > 0} badge-alert{/if}" title="Reacties die wachten op goedkeuring">{icon get="hourglass"} {ForumPostsModel::instance()->getAantalWachtOpGoedkeuring()}</a>
+			<a href="/forum/wacht" class="btn" title="Reacties die wachten op goedkeuring">{icon get="hourglass"} {ForumPostsModel::instance()->getAantalWachtOpGoedkeuring()}</a>
 		</div>
 	{/if}
 {/if}

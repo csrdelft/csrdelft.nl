@@ -1,4 +1,4 @@
-<div class="zijbalk-kopje"><a href="{MededelingenView::mededelingenRoot}">Mededelingen</a></div>
+<div class="zijbalk-kopje"><a href="{MededelingenView::mededelingenRoot}">Mededelingen{if isset($mcount) AND $mcount > 0} &nbsp;<span class="badge" title="{$mcount} mededeling(en) wachten op goedkeuring">{$mcount}</span>{/if}</a></div>
 {foreach from=$mededelingen item=mededeling}
 	<div class="item">
 		{$mededeling->getDatum()|date_format:"%d-%m"}
