@@ -564,7 +564,7 @@ function remove() {
 
 function ajax_request(type, url, data, source, onsuccess, onerror, onfinish) {
 	if (source) {
-		$(source).replaceWith('<img title="' + url + '" src="/plaetjes/layout/loading-arrows.gif" />');
+		$(source).replaceWith('<img id="' + source.attr('id') + '" title="' + url + '" src="/plaetjes/layout/loading-arrows.gif" />');
 		source = 'img[title="' + url + '"]';
 	}
 	else {

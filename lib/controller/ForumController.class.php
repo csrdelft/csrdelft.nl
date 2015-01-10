@@ -455,13 +455,10 @@ class ForumController extends Controller {
 	public function bladwijzer($draad_id) {
 		$draad = ForumDradenModel::instance()->getForumDraad((int) $draad_id);
 		$timestamp = (int) filter_input(INPUT_POST, 'timestamp', FILTER_SANITIZE_NUMBER_INT);
-		$success = ForumDradenGelezenModel::instance()->setWanneerGelezenDoorLid($draad, $timestamp);
-		if ($success) {
-			setMelding('Bladwijzer succesvol geplaatst', 1);
-		} else {
-			setMelding('Bladwijzer plaatsen mislukt', -1);
+		if (ForumDradenGelezenModel::instance()->setWanneerGelezenDoorLid($draad, $timestamp - 1)) {
+			echo '<img id="timestamp' . $timestamp . '" src="/plaetjes/famfamfam/tick.png" class="icon" title="Bladwijzer succesvol geplaatst">';
 		}
-		$this->view = new JsonResponse('/forum/deel/' . $draad->forum_id);
+		exit; //TODO: JsonResponse
 	}
 
 	/**
