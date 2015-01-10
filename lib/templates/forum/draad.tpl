@@ -6,40 +6,22 @@
 	{capture name='kop'}
 		<div class="forumheadbtn">
 			{if $draad->isVerborgen()}
-				<a href="/forum/tonen/{$draad->draad_id}" class="btn round post ReloadPage" title="Onderwerp tonen in zijbalk"
-				   onmouseover="$(this).children('img').attr('src', '/plaetjes/famfamfam/layout_add.png');"
-				   onmouseout="$(this).children('img').attr('src', '/plaetjes/famfamfam/layout.png');"
-				   >{icon get="layout"}</a>
+				<a href="/forum/tonen/{$draad->draad_id}" class="btn round post ReloadPage tonenUit" title="Onderwerp tonen in zijbalk"></a>
 			{elseif $draad->magVerbergen()}
-				<a href="/forum/verbergen/{$draad->draad_id}" class="btn round post ReloadPage" title="Onderwerp verbergen in zijbalk"
-				   onmouseover="$(this).children('img').attr('src', '/plaetjes/famfamfam/layout_delete.png');"
-				   onmouseout="$(this).children('img').attr('src', '/plaetjes/famfamfam/layout_sidebar.png');"
-				   >{icon get="layout_sidebar"}</a>
+				<a href="/forum/verbergen/{$draad->draad_id}" class="btn round post ReloadPage tonenAan" title="Onderwerp verbergen in zijbalk"></a>
 			{/if}
 			&nbsp;&nbsp;&nbsp;
 			{if $draad->isGevolgd()}
-				<a href="/forum/volgenuit/{$draad->draad_id}" class="btn round post ReloadPage" title="Onderwerp niet meer volgen per email"
-				   onmouseover="$(this).children('img').attr('src', '/plaetjes/famfamfam/email_delete.png');"
-				   onmouseout="$(this).children('img').attr('src', '/plaetjes/famfamfam/email_go.png');"
-				   >{icon get="email_go"}</a>
+				<a href="/forum/volgenuit/{$draad->draad_id}" class="btn round post ReloadPage volgenUit" title="Onderwerp niet meer volgen per email"></a>
 			{elseif $draad->magVolgen()}
-				<a href="/forum/volgenaan/{$draad->draad_id}" class="btn round post ReloadPage" title="Onderwerp volgen per email"
-				   onmouseover="$(this).children('img').attr('src', '/plaetjes/famfamfam/email_add.png');"
-				   onmouseout="$(this).children('img').attr('src', '/plaetjes/famfamfam/email.png');"
-				   >{icon get="email"}</a>
+				<a href="/forum/volgenaan/{$draad->draad_id}" class="btn round post ReloadPage volgenAan" title="Onderwerp volgen per email"></a>
 			{/if}
 			&nbsp;&nbsp;&nbsp;
 			{if $draad->magModereren()}
 				{if $draad->gesloten}
-					<a href="/forum/wijzigen/{$draad->draad_id}/gesloten" class="btn round post ReloadPage" title="Openen (reactie mogelijk)"
-					   onmouseover="$(this).children('img').attr('src', '/plaetjes/famfamfam/lock_break.png');"
-					   onmouseout="$(this).children('img').attr('src', '/plaetjes/famfamfam/lock.png');"
-					   >{icon get="lock"}</a>
+					<a href="/forum/wijzigen/{$draad->draad_id}/gesloten" class="btn round post ReloadPage slotjeUit" title="Openen (reactie mogelijk)"></a>
 				{else}
-					<a href="/forum/wijzigen/{$draad->draad_id}/gesloten" class="btn round post ReloadPage" title="Sluiten (geen reactie mogelijk)"
-					   onmouseover="$(this).children('img').attr('src', '/plaetjes/famfamfam/lock.png');"
-					   onmouseout="$(this).children('img').attr('src', '/plaetjes/famfamfam/lock_open.png');"
-					   >{icon get="lock_open"}</a>
+					<a href="/forum/wijzigen/{$draad->draad_id}/gesloten" class="btn round post ReloadPage slotjeAan" title="Sluiten (geen reactie mogelijk)"></a>
 				{/if}
 				&nbsp;&nbsp;&nbsp;
 				<a class="btn" title="Moderatie-functies weergeven" onclick="$('#forumtabel a.forummodknop').fadeIn();

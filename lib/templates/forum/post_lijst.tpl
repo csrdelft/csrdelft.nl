@@ -49,6 +49,8 @@
 				{if $post->verwijderd}
 					<div class="post-verwijderd">Deze reactie is verwijderd.</div>
 					<a href="/forum/verwijderen/{$post->post_id}" class="btn post confirm" title="Bericht herstellen">{icon get="arrow_undo"}</a>
+				{else}
+					<a href="/forum/bladwijzer/{$post->draad_id}" class="btn post redirect forummodknop bladwijzer" data="timestamp={strtotime($post->datum_tijd)}" title="Bladwijzer bij dit bericht leggen"></a>
 				{/if}
 				{if $post->magCiteren()}
 					<a href="#reageren" class="btn citeren" data-citeren="{$post->post_id}" title="Citeer bericht">{icon get="comments"}</a>

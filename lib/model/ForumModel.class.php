@@ -414,12 +414,12 @@ class ForumDradenGelezenModel extends AbstractForumModel {
 	/**
 	 * Ga na welke posts op de huidige pagina het laatst is geplaatst of gewijzigd.
 	 * 
-	 * @param ForumDraadGelezen $gelezen
 	 * @param ForumDraad $draad
+	 * @param int $timestamp
 	 */
-	public function setWanneerGelezenDoorLid(ForumDraad $draad, ForumPost $post = null) {
+	public function setWanneerGelezenDoorLid(ForumDraad $draad, $timestamp = null) {
 		if (!LoginModel::mag('P_LOGGED_IN')) {
-			return;
+			return false;
 		}
 		$gelezen = $this->getWanneerGelezenDoorLid($draad);
 		if ($gelezen) {
@@ -430,14 +430,18 @@ class ForumDradenGelezenModel extends AbstractForumModel {
 			$gelezen->uid = LoginModel::getUid();
 			$create = true;
 		}
-		if ($post === null) {
+		if ($timestamp === null) {
 			foreach ($draad->getForumPosts() as $post) {
 				if (strtotime($post->laatst_gewijzigd) > strtotime($gelezen->datum_tijd)) {
 					$gelezen->datum_tijd = $post->laatst_gewijzigd;
 				}
 			}
 		} else {
-			$gelezen->datum_tijd = $post->laatst_gewijzigd;
+			if (is_int($timestamp)) {
+				$gelezen->datum_tijd = getDateTime($timestamp);
+			} else {
+				throw new Exception('Geen int: $timestamp');
+			}
 		}
 		if ($gelezen->datum_tijd) { // > 0 posts?
 			if ($create) {
@@ -446,6 +450,7 @@ class ForumDradenGelezenModel extends AbstractForumModel {
 				$this->update($gelezen);
 			}
 		}
+		return true;
 	}
 
 	/**

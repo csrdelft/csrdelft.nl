@@ -49,6 +49,7 @@ class ForumController extends Controller {
 
 			// ForumPost
 			case 'citeren':
+			case 'bladwijzer':
 			case 'concept':
 			case 'grafiekdata':
 				if (!LoginModel::mag('P_LOGGED_IN')) {
@@ -447,6 +448,23 @@ class ForumController extends Controller {
 	}
 
 	/**
+	 * Leg bladwijzer
+	 * 
+	 * @param int $draad_id
+	 */
+	public function bladwijzer($draad_id) {
+		$draad = ForumDradenModel::instance()->getForumDraad((int) $draad_id);
+		$timestamp = (int) filter_input(INPUT_POST, 'timestamp', FILTER_SANITIZE_NUMBER_INT);
+		$success = ForumDradenGelezenModel::instance()->setWanneerGelezenDoorLid($draad, $timestamp);
+		if ($success) {
+			setMelding('Bladwijzer succesvol geplaatst', 1);
+		} else {
+			setMelding('Bladwijzer plaatsen mislukt', -1);
+		}
+		$this->view = new JsonResponse('/forum/deel/' . $draad->forum_id);
+	}
+
+	/**
 	 * Wijzig een eigenschap van een draadje.
 	 * 
 	 * @param int $draad_id
@@ -659,7 +677,7 @@ class ForumController extends Controller {
 		$tekst = trim(filter_input(INPUT_POST, 'forumBericht', FILTER_UNSAFE_RAW));
 		$reden = trim(filter_input(INPUT_POST, 'reden', FILTER_SANITIZE_STRING));
 		ForumPostsModel::instance()->bewerkForumPost($tekst, $reden, $post);
-		ForumDradenGelezenModel::instance()->setWanneerGelezenDoorLid($post->getForumDraad(), $post);
+		ForumDradenGelezenModel::instance()->setWanneerGelezenDoorLid($post->getForumDraad(), $post->laatst_gewijzigd);
 		$this->view = new ForumPostView($post);
 	}
 
