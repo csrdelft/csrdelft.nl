@@ -299,7 +299,7 @@ class LoginModel extends PersistenceModel implements Validator {
 				}
 
 				// Welcome message
-				setMelding('Welkom ' . ProfielModel::getNaam($lid->getUid(), 'civitas') . '! U bent momenteel <a href="/instellingen#lidinstellingenform-tab-Beveiliging">' . $this->count('uid = ?', array($lid->getUid())) . 'x ingelogd</a>.', 0);
+				setMelding('Welkom ' . $lid->getNaamLink('civitas', 'plain') . '! U bent momenteel <a href="/instellingen#lidinstellingenform-tab-Beveiliging">' . $this->count('uid = ?', array($lid->getUid())) . 'x ingelogd</a>.', 0);
 			}
 		}
 		return true;
