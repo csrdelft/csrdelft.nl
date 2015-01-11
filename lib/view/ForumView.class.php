@@ -83,7 +83,7 @@ class ForumDeelView extends ForumView {
 	}
 
 	public function getBreadcrumbs() {
-		$dropdown = parent::getBreadcrumbs() . ' » <select name="forum_id" onchange="document.location.href=this.value;"><option value="/forum/recent">Recent gewijzigd</option>';
+		$dropdown = parent::getBreadcrumbs() . ' » ' . $this->model->getForumCategorie()->titel . ' » <select name="forum_id" onchange="document.location.href=this.value;"><option value="/forum/recent">Recent gewijzigd</option>';
 		foreach (ForumModel::instance()->getForumIndelingVoorLid() as $cat) {
 			$dropdown .= '<optgroup label="' . $cat->titel . '">';
 			foreach ($cat->getForumDelen() as $newDeel) {
@@ -168,7 +168,7 @@ class ForumDraadView extends ForumView {
 
 	public function getBreadcrumbs() {
 		$deel = $this->model->getForumDeel();
-		return parent::getBreadcrumbs() . ' » <a href="/forum/deel/' . $deel->forum_id . '/' . ForumDradenModel::instance()->getPaginaVoorDraad($this->model) . '#' . $this->model->draad_id . '">' . $deel->titel . '</a>';
+		return parent::getBreadcrumbs() . ' » ' . $deel->getForumCategorie()->titel . ' » <a href="/forum/deel/' . $deel->forum_id . '/' . ForumDradenModel::instance()->getPaginaVoorDraad($this->model) . '#' . $this->model->draad_id . '">' . $deel->titel . '</a>';
 	}
 
 	public function view() {
