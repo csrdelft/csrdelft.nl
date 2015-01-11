@@ -674,7 +674,7 @@ class ForumController extends Controller {
 		$tekst = trim(filter_input(INPUT_POST, 'forumBericht', FILTER_UNSAFE_RAW));
 		$reden = trim(filter_input(INPUT_POST, 'reden', FILTER_SANITIZE_STRING));
 		ForumPostsModel::instance()->bewerkForumPost($tekst, $reden, $post);
-		ForumDradenGelezenModel::instance()->setWanneerGelezenDoorLid($post->getForumDraad(), $post->laatst_gewijzigd);
+		ForumDradenGelezenModel::instance()->setWanneerGelezenDoorLid($post->getForumDraad(), strtotime($post->laatst_gewijzigd));
 		$this->view = new ForumPostView($post);
 	}
 
