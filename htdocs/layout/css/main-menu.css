@@ -7,6 +7,14 @@ Primary style
 	body.nav-on-left.overflow-hidden {
 		overflow: hidden;
 	}
+
+	#user-avatar {
+		display: none;
+	}
+}
+
+#user-avatar {
+	border-radius: 4px;
 }
 
 input[type="search"]::-ms-clear {
