@@ -95,7 +95,7 @@ htdocs/groepen/groep.php -text
 htdocs/groepen/groepen.php -text
 htdocs/index.php -text
 htdocs/layout/css/agenda.css -text
-htdocs/layout/css/bbcode.css -text
+htdocs/layout/css/bbcode.less -text
 htdocs/layout/css/bibliotheek.css -text
 htdocs/layout/css/bootstrap-theme.css -text
 htdocs/layout/css/bootstrap-theme.min.css -text
