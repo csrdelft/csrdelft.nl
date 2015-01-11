@@ -297,6 +297,8 @@ class LoginModel extends PersistenceModel implements Validator {
 					setMelding('Uw wachtwoord is onveilig: ' . str_replace('nieuwe', 'huidige', $field->getError()), 2);
 					redirect('/wachtwoord/wijzigen');
 				}
+			} else {
+				setMelding('Welkom ' . ProfielModel::getNaam($lid->getUid(), 'civitas') . '! U bent momenteel <a href="/instellingen#lidinstellingenform-tab-Beveiliging">' . $this->count('uid = ?', array($lid->getUid())) . 'x ingelogd</a>.', 0);
 			}
 		}
 		return true;
