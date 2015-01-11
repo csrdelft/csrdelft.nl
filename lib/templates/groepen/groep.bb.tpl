@@ -7,5 +7,5 @@
 	</div>
 	<div class="titel"><h3>{$groep->getLink()}</h3></div>
 	<div class="beschrijving">{$groep->getSbeschrijving()|bbcode}</div>
-	<div class="clear">&nbsp;</div>
+	<div class="clear">{if $groep->getEigenaar()==1025}<img src="/plaetjes/nieuws/m.png" width="70" height="70" alt="M">{/if}&nbsp;</div>
 </div>
