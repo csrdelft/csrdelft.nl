@@ -80,12 +80,11 @@ class ProfielForm extends Formulier {
 	public function __construct(Profiel $profiel) {
 		parent::__construct($profiel, 'profielForm', '/profiel/' . $profiel->uid . '/bewerken');
 
-		$isMod = LoginModel::mag('P_LEDEN_MOD');
-		$editNoviet = $profiel->status === LidStatus::Noviet;
+		$admin = LoginModel::mag('P_LEDEN_MOD');
+		$inschrijven = !$profiel->getAccount();
 
-		if ($editNoviet) {
+		if ($inschrijven) {
 			$this->titel = 'Welkom bij C.S.R.!';
-
 			$fields[] = new HtmlComment('<p>
 				Hieronder mag je gegevens invullen in het databeest van de Civitas. Zo kunnen we contact met je houden,
 				kunnen andere leden opzoeken waar je woont en kun je (na het novitiaat) op het forum berichten plaatsen.
@@ -101,11 +100,11 @@ class ProfielForm extends Formulier {
 		}
 		$fields[] = new HtmlComment('<p>
 			Als er <span class="waarschuwing">tekst in rode letters</span> wordt afgebeeld bij een veld, dan
-			betekent dat dat de invoer niet geaccepteerd is, en dat u die zult moeten moeten aanpassen aan het
+			betekent dat dat de invoer niet geaccepteerd is, en dat u die zult moeten aanpassen aan het
 			gevraagde formaat. Een aantal velden kan leeg gelaten worden als er geen zinvolle informatie voor is.
 		</p>');
 
-		if ($isMod) {
+		if ($admin) {
 			$statussen = array();
 			foreach (LidStatus::getTypeOptions() as $optie) {
 				$statussen[$optie] = LidStatus::getDescription($optie);
@@ -142,25 +141,25 @@ class ProfielForm extends Formulier {
 			$fields[] = new HtmlComment($html);
 		}
 
-		if ($isMod OR $editNoviet OR $profiel->isOudlid()) {
+		if ($admin OR $inschrijven OR $profiel->isOudlid()) {
 			$fields[] = new Subkopje('Identiteit');
 			$fields[] = new RequiredTextField('voornaam', $profiel->voornaam, 'Voornaam', 50);
 			$fields[] = new RequiredTextField('voorletters', $profiel->voorletters, 'Voorletters', 10);
 			$fields[] = new TextField('tussenvoegsel', $profiel->tussenvoegsel, 'Tussenvoegsel', 15);
 			$fields[] = new RequiredTextField('achternaam', $profiel->achternaam, 'Achternaam', 50);
-			if ($isMod OR $editNoviet) {
+			if ($admin OR $inschrijven) {
 				$fields[] = new GeslachtField('geslacht', $profiel->geslacht, 'Geslacht');
 				$fields[] = new TextField('voornamen', $profiel->voornamen, 'Voornamen', 100);
-				if (!$editNoviet) {
+				if (!$inschrijven) {
 					$fields[] = new TextField('postfix', $profiel->postfix, 'Postfix', 7);
 					$fields[] = new NickField('nickname', $profiel->nickname, 'Bijnaam', $profiel);
 				}
 			}
 			$fields[] = new DatumField('gebdatum', $profiel->gebdatum, 'Geboortedatum', date('Y') - 15);
-			if ($isMod AND ! $profiel->isLid() AND ! $profiel->isOudlid()) {
+			if ($admin AND ! $profiel->isLid() AND ! $profiel->isOudlid()) {
 				$fields[] = new DatumField('sterfdatum', $profiel->sterfdatum, 'Overleden op');
 			}
-			if ($isMod OR $profiel->isOudlid() OR $profiel->status === LidStatus::Overleden) {
+			if ($admin OR $profiel->isOudlid() OR $profiel->status === LidStatus::Overleden) {
 				$fields[] = new LidField('echtgenoot', $profiel->echtgenoot, 'Echtgenoot', 'allepersonen');
 				$fields[] = new Subkopje('Oudledenpost');
 				$fields[] = new TextField('adresseringechtpaar', $profiel->adresseringechtpaar, 'Tenaamstelling post echtpaar', 250);
@@ -197,7 +196,7 @@ class ProfielForm extends Formulier {
 
 		$fields[] = new Subkopje('Boekhouding');
 		$fields[] = new TextField('bankrekening', $profiel->bankrekening, 'Bankrekening', 18);
-		if ($isMod) {
+		if ($admin) {
 			$fields[] = new VinkField('machtiging', $profiel->machtiging, 'Machtiging getekend?');
 		}
 		if (LoginModel::mag('P_ADMIN')) {
@@ -208,22 +207,22 @@ class ProfielForm extends Formulier {
 		$fields[] = new Subkopje('Studie');
 		$fields[] = new StudieField('studie', $profiel->studie, 'Studie');
 		$fields['studiejaar'] = new IntField('studiejaar', (int) $profiel->studiejaar, 'Beginjaar studie', 1950, date('Y'));
-		$fields['studiejaar']->leden_mod = $isMod;
+		$fields['studiejaar']->leden_mod = $admin;
 
 		if (!$profiel->isOudlid()) {
 			$fields[] = new TextField('studienr', $profiel->studienr, 'Studienummer (TU)', 20);
 		}
 
-		if (!$editNoviet AND ( $isMod OR $profiel->isOudlid() )) {
+		if (!$inschrijven AND ( $admin OR $profiel->isOudlid() )) {
 			$fields[] = new TextField('beroep', $profiel->beroep, 'Beroep/werk', 4096);
 			$fields[] = new IntField('lidjaar', (int) $profiel->lidjaar, 'Lid sinds', 1950, date('Y'));
 		}
 
-		if ($isMod) {
+		if ($admin) {
 			$fields[] = new DatumField('lidafdatum', $profiel->lidafdatum, 'Lid-af sinds');
 		}
 
-		if ($isMod AND ! $editNoviet) {
+		if ($admin AND ! $inschrijven) {
 			$fields[] = new VerticaleField('verticale', $profiel->verticale, 'Verticale');
 			$fields[] = new SelectField('kring', $profiel->kring, 'Kring', range(0, 9));
 			if ($profiel->isLid()) {
@@ -238,7 +237,7 @@ class ProfielForm extends Formulier {
 			$fields[] = new LidField('patroon', $profiel->patroon, 'Patroon', 'allepersonen');
 		}
 
-		if (!$editNoviet) {
+		if (!$inschrijven) {
 			$fields[] = new Subkopje('Duckstad');
 			$fields[] = new DuckField('duckname', $profiel->duckname, 'Duckstad-naam', $profiel);
 			$duckfoto = new Afbeelding(PICS_PATH . $profiel->getPasfotoPath(false, 'Duckstad'));
@@ -256,12 +255,12 @@ class ProfielForm extends Formulier {
 		$fields[] = new TextField('muziek', $profiel->muziek, 'Muziekinstrument', 50);
 		$fields[] = new SelectField('zingen', $profiel->zingen, 'Zingen', array('' => 'Kies...', 'ja' => 'Ja, ik zing in een band/koor', 'nee' => 'Nee, ik houd niet van zingen', 'soms' => 'Alleen onder de douche', 'anders' => 'Anders'));
 
-		if ($isMod OR $editNoviet) {
+		if ($admin OR $inschrijven) {
 			$fields[] = new TextField('vrienden', $profiel->vrienden, 'Vrienden binnnen C.S.R.', 300);
 			$fields[] = new TextField('middelbareSchool', $profiel->middelbareSchool, 'Middelbare school', 200);
 		}
 
-		if (LoginModel::mag('P_ADMIN,groep:bestuur,groep:novcie')) {
+		if ($admin OR LoginModel::mag('groep:NovCie')) {
 			$fields[] = new TextareaField('novitiaat', $profiel->novitiaat, 'Wat verwacht je van het novitiaat?');
 			$fields[] = new Subkopje('<b>Einde vragenlijst</b><br /><br /><br /><br /><br />');
 			$fields[] = new CollapsableSubkopje('novcieForm', 'In te vullen door NovCie', true);
