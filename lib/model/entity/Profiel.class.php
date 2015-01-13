@@ -269,7 +269,7 @@ class Profiel extends PersistentEntity implements Agendeerbaar {
 	}
 
 	public function getJarigOver() {
-		$verjaardag = strtotime(date('Y') . '-' . date('m-d', strtotime($this->getGeboortedatum())));
+		$verjaardag = strtotime(date('Y') . '-' . date('m-d', strtotime($this->gebdatum)));
 		$nu = strtotime(date('Y-m-d'));
 		if ($verjaardag < $nu) {
 			$verjaardag = strtotime('+1 year', $verjaardag);

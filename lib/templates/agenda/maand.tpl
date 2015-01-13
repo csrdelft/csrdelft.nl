@@ -74,7 +74,7 @@
 </table>
 {$smarty.capture.navlinks}
 <div id="ical">
-	{if LoginModel::getProfiel()->hasPrivateToken()}
+	{if LoginModel::getAccount()->hasPrivateToken()}
 		<a name="ICAL" href="{LoginModel::getAccount()->getICalLink()}"{if LoginModel::mag('P_LOGGED_IN')} title="Persoonlijke ICalender feed&#013;Nieuwe aanvragen kan op je profiel"{/if}>
 	{else}
 		<a name="ICAL" href="/profiel/{LoginModel::getUid()}#tokenaanvragen" title="Persoonlijke ICalender feed aanvragen">
