@@ -278,18 +278,14 @@ class ForumDraad extends PersistentEntity {
 
 	public function getAantalOngelezenPosts() {
 		if (!isset($this->aantal_ongelezen_posts)) {
-			$this->aantal_ongelezen_posts = 0;
+			$where = 'draad_id = ? AND verwijderd = FALSE AND wacht_goedkeuring = FALSE';
+			$params = array($this->draad_id);
 			$wanneer = $this->getWanneerGelezen();
-			if (!$wanneer) {
-				$wanneer = 0;
-			} else {
-				$wanneer = strtotime($wanneer->datum_tijd);
+			if ($wanneer) {
+				$where .= ' AND laatst_gewijzigd > ?';
+				$params[] = $wanneer->datum_tijd;
 			}
-			foreach ($this->getForumPosts() as $post) {
-				if (strtotime($post->laatst_gewijzigd) > $wanneer) {
-					$this->aantal_ongelezen_posts++;
-				}
-			}
+			$this->aantal_ongelezen_posts = ForumPostsModel::instance()->count($where, $params);
 		}
 		return $this->aantal_ongelezen_posts;
 	}
