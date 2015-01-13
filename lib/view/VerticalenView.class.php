@@ -47,8 +47,8 @@ class VerticalenView implements View {
 			if ($verticale->letter == '') {
 				continue;
 			}
-			echo '<div class="verticale">';
-			echo '<h2><a name="' . $verticale->letter . '">Verticale ' . $verticale->naam . '</a></h2>';
+			echo '<div class="verticale"><a name="' . $verticale->letter . '">&nbsp;</a>';
+			echo '<h2>Verticale ' . $verticale->naam . '</h2>';
 
 			foreach ($verticale->getKringen() as $kringnaam => $kring) {
 				$kringstyle = 'kring';
