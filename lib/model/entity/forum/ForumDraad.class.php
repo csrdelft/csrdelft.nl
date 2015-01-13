@@ -14,7 +14,7 @@ class ForumDraad extends PersistentEntity {
 	 * Primary key
 	 * @var int
 	 */
-	public $draad_id;
+	public $this_id;
 	/**
 	 * Forum waaronder dit topic valt
 	 * @var int
@@ -125,6 +125,11 @@ class ForumDraad extends PersistentEntity {
 	 * @var array
 	 */
 	private $volgers;
+	/**
+	 * Aantal ongelezen posts
+	 * @var int
+	 */
+	private $aantal_ongelezen_posts;
 	/**
 	 * Database table columns
 	 * @var array
@@ -275,6 +280,24 @@ class ForumDraad extends PersistentEntity {
 	 */
 	public function setForumPosts(array $forum_posts) {
 		$this->forum_posts = $forum_posts;
+	}
+
+	public function getAantalOngelezenPosts() {
+		if (!isset($this->aantal_ongelezen_posts)) {
+			$this->aantal_ongelezen_posts = 0;
+			$wanneer = $this->getWanneerGelezen();
+			if (!$wanneer) {
+				$wanneer = 0;
+			} else {
+				$wanneer = strtotime($wanneer->datum_tijd);
+			}
+			foreach ($this->getForumPosts() as $post) {
+				if (strtotime($post->laatst_gewijzigd) > $wanneer) {
+					$this->aantal_ongelezen_posts++;
+				}
+			}
+		}
+		return $this->aantal_ongelezen_posts;
 	}
 
 }
