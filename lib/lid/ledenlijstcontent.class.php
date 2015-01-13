@@ -269,6 +269,13 @@ class LLLijst extends LLweergave {
 			echo '<td class="' . $veld . '">';
 			switch ($veld) {
 
+				case 'email':
+					$email = $profiel->getPrimaryEmail();
+					if ($email) {
+						echo '<a href="mailto:' . $email . '">' . $email . '</a>';
+					}
+					break;
+
 				case 'adres':
 					echo htmlspecialchars($profiel->getAdres());
 					break;
