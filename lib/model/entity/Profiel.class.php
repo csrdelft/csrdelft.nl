@@ -365,7 +365,7 @@ class Profiel extends PersistentEntity implements Agendeerbaar {
 				$k.= ' init';
 			}
 			$k.= '">';
-			$k.= $this->getPasfotoTag();
+			$k.= $this->getPasfotoTag(false);
 			$k.= '<div class="uid uitgebreid">(';
 			if (LoginModel::instance()->maySuTo($this->getAccount())) {
 				$k.= '<a href="/su/' . $this->uid . '" title="Su naar dit lid">' . $this->uid . '</a>';

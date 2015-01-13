@@ -49,8 +49,8 @@ div.visitekaartje{
 	box-shadow: none;
 	margin: 5px;
 }
-div.visitekaartje img.pasfoto{
-	width: 70px !important;
+div.visitekaartje img{
+	max-width: 70px !important;
 }
 div.visitekaartje .uitgebreid{
 	display: none;
