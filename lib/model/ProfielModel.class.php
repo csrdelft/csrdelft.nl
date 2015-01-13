@@ -337,13 +337,13 @@ class ProfielModel extends CachedPersistenceModel {
 		);
 		$bericht = file_get_contents(SMARTY_TEMPLATE_DIR . 'mail/lidafgeleendebiebboeken.mail');
 		$values = array(
-			'NAAM'			 => ProfielModel::getNaam($profiel->uid, 'volledig'),
-			'UID'			 => $profiel->uid,
-			'OUD'			 => substr($oudestatus, 2),
-			'NIEUW'			 => ($profiel->status === LidStatus::Nobody ? 'GEEN LID' : substr($profiel->status, 2)),
-			'CSRLIHTMLT'	 => $bkncsr['kopje'] . "\n" . $bkncsr['lijst'],
-			'LEDENLIHTMLT'	 => ($bkncsr['aantal'] > 0 ? "Verder ter informatie: " . $bknleden['kopje'] . "\n" . $bknleden['lijst'] : ''),
-			'ADMIN'			 => LoginModel::getProfiel()->getNaam()
+			'NAAM'		 => ProfielModel::getNaam($profiel->uid, 'volledig'),
+			'UID'		 => $profiel->uid,
+			'OUD'		 => substr($oudestatus, 2),
+			'NIEUW'		 => ($profiel->status === LidStatus::Nobody ? 'GEEN LID' : substr($profiel->status, 2)),
+			'CSRLIJST'	 => $bkncsr['kopje'] . "\n" . $bkncsr['lijst'],
+			'LEDENLIJST' => ($bkncsr['aantal'] > 0 ? "Verder ter informatie: " . $bknleden['kopje'] . "\n" . $bknleden['lijst'] : ''),
+			'ADMIN'		 => LoginModel::getProfiel()->getNaam()
 		);
 		$mail = new Mail($to, 'Geleende boeken - Melding lid-af worden', $bericht);
 		$mail->addBcc(array('pubcie@csrdelft.nl' => 'PubCie C.S.R.'));
