@@ -64,7 +64,7 @@ class VerticaleOldModel {
 		$leden = explode(',', $kringleden);
 		$this->kringen[$kring] = array();
 		foreach ($leden as $uid) {
-			$this->kringen[$kring][] = LidCache::getLid($uid);
+			$this->kringen[$kring][] = ProfielModel::get($uid);
 		}
 	}
 

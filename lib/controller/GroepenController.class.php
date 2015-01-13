@@ -145,8 +145,8 @@ class GroepController extends Controller {
 						if (strlen(trim($_POST['eigenaar'])) > 255) {
 							$this->addError("Eigenaar mag maximaal 255 tekens zijn.");
 						}
-						if (Lid::isValidUid($_POST['eigenaar'])) {
-							if (!Lid::exists($_POST['eigenaar'])) {
+						if (AccountModel::isValidUid($_POST['eigenaar'])) {
+							if (!ProfielModel::existsUid($_POST['eigenaar'])) {
 								$this->addError("Niet bestaande uid voor eigenaar opgegeven.");
 							}
 						}
@@ -216,7 +216,7 @@ class GroepController extends Controller {
 				$this->groep->setValue('toonPasfotos', $oudeGroep->getToonPasfotos());
 				$this->groep->setValue('lidIsMod', $oudeGroep->getLidIsMod());
 				$this->groep->setFunctiefilter($oudeGroep->getFunctiefilter());
-				if (LoginModel::getUid() == $oudeGroep->getEigenaar() OR ! Lid::isValidUid($oudeGroep->getEigenaar())) {
+				if (LoginModel::getUid() == $oudeGroep->getEigenaar() OR ! AccountModel::isValidUid($oudeGroep->getEigenaar())) {
 					$this->groep->setValue('eigenaar', $oudeGroep->getEigenaar());
 					$_SESSION['oudegroep']['eigenaar'] = $oudeGroep->getEigenaar();
 				}
@@ -391,7 +391,7 @@ class GroepController extends Controller {
 			$success = true;
 			$aantal = 0;
 			for ($i = 0; $i < count($_POST['naam']); $i++) {
-				if (Lid::isValidUid($_POST['naam'][$i])) {
+				if (AccountModel::isValidUid($_POST['naam'][$i])) {
 					if (!$this->groep->addLid($_POST['naam'][$i], $_POST['functie'][$i])) {
 						//er gaat iets mis, zet $success op false;
 						$success = false;
@@ -419,7 +419,7 @@ class GroepController extends Controller {
 	 * Leden verwijderen uit een groep
 	 */
 	public function verwijderLid() {
-		if ($this->hasParam(2) AND Lid::isValidUid($this->getParam(2)) AND $this->groep->magBewerken()) {
+		if ($this->hasParam(2) AND AccountModel::isValidUid($this->getParam(2)) AND $this->groep->magBewerken()) {
 			if ($this->groep->verwijderLid($this->getParam(2))) {
 				setMelding('Lid is met succes verwijderd uit de groep.', 1);
 				try {
@@ -444,7 +444,7 @@ class GroepController extends Controller {
 			exit;
 		}
 		if ($this->hasParam(2) AND isset($_POST['functie'])) {
-			if (Lid::isValidUid($this->getParam(2)) AND $this->groep->isLid($this->getParam(2))) {
+			if (AccountModel::isValidUid($this->getParam(2)) AND $this->groep->isLid($this->getParam(2))) {
 				$functie = $_POST['functie'];
 				if (is_array($functie)) {
 					$functie = implode('&&', $functie);
@@ -471,7 +471,7 @@ class GroepController extends Controller {
 	 * Een lid naar de eerstvolgende o.t. groep verplaatsen.
 	 */
 	public function maakLidOt() {
-		if ($this->hasParam(2) AND Lid::isValidUid($this->getParam(2)) AND $this->groep->magBewerken()) {
+		if ($this->hasParam(2) AND AccountModel::isValidUid($this->getParam(2)) AND $this->groep->magBewerken()) {
 			if ($this->groep->maakLidOt($this->getParam(2))) {
 				setMelding('Lid naar o.t.-groep verplaatsen gelukt.', 1);
 				try {

@@ -220,7 +220,7 @@ class VerticaleField extends SelectField {
 	public function __construct($name, $value, $description) {
 		$verticalen = array();
 		foreach (VerticalenModel::instance()->prefetch() as $v) {
-			$verticalen[$v->id] = $v->naam;
+			$verticalen[$v->letter] = $v->naam;
 		}
 		parent::__construct($name, $value, $description, $verticalen);
 	}

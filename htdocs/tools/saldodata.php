@@ -12,7 +12,7 @@ if(!isset($_GET['uid'])){
 	echo 'no valid uid';
 	exit;
 }else{
-	if(Lid::isValidUid($_GET['uid'])){
+	if(AccountModel::isValidUid($_GET['uid'])){
 		$uid=$_GET['uid'];
 	}else{
 		echo 'no valid uid';

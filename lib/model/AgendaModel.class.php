@@ -2,6 +2,7 @@
 
 require_once 'controller/AgendaController.class.php';
 require_once 'model/BijbelroosterModel.class.php';
+require_once 'model/VerjaardagenModel.class.php';
 require_once 'model/maalcie/MaaltijdenModel.class.php';
 require_once 'model/maalcie/CorveeTakenModel.class.php';
 
@@ -62,7 +63,7 @@ class AgendaModel extends PersistenceModel {
 			$GLOBALS['agenda_jaar'] = date('Y', $van);
 			$GLOBALS['agenda_maand'] = date('m', ($van + $tot) / 2);
 
-			$result = array_merge($result, Lid::getVerjaardagen($van, $tot, 0, $ical));
+			$result = array_merge($result, VerjaardagenModel::getTussen($van, $tot, 0, $ical));
 		}
 
 		// Sorteren
@@ -159,7 +160,7 @@ class AgendaModel extends PersistenceModel {
 		if (LoginModel::mag('P_AGENDA_MOD')) {
 			$item->rechten_bekijken = Instellingen::get('agenda', 'standaard_zichtbaar_rechten');
 		} else {
-			$item->rechten_bekijken = 'verticale:' . LoginModel::instance()->getLid()->getVerticale()->letter;
+			$item->rechten_bekijken = 'verticale:' . LoginModel::getProfiel()->verticale;
 		}
 		return $item;
 	}

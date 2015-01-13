@@ -9,15 +9,15 @@ if (!LoginModel::mag('P_OUDLEDEN_READ')) {
 	exit;
 }
 
-$lid = LidCache::getLid($_GET['id']);
+$profiel = ProfielModel::get($_GET['id']);
 
 echo '{
     "user": ' . json_encode(array(
-	"id"		 => $lid->getUid(),
-	"name"		 => $lid->getNaam(),
-	"email"		 => $lid->getEmail(),
-	"mobile"	 => $lid->getProperty('mobiel'),
-	"phone"		 => $lid->getProperty('telefoon'),
-	"address"	 => $lid->getProperty('adres') . "\n" . $lid->getProperty('postcode') . " " . $lid->getProperty('woonplaats')
+	"id"		 => $profiel->uid,
+	"name"		 => $profiel->getNaam(),
+	"email"		 => $profiel->getPrimaryEmail(),
+	"mobile"	 => $profiel->mobiel,
+	"phone"		 => $profiel->telefoon,
+	"address"	 => $profiel->getFormattedAddress()
 )) . '
 }';

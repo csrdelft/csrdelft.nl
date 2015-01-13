@@ -33,8 +33,8 @@
 				{*foreach from=$draad->getForumPosts() item=post}<description><![CDATA[ {$post->tekst|bbcode} ]]></description>
 					<pubDate>{$post->datum_tijd|rfc2822}</pubDate>
 				{/foreach*}
-				<dc:creator>{$draad->laatste_wijziging_uid|csrnaam:'user':'link'|escape:'html'}</dc:creator>
-				<category>forum/{$draad->getForumDeel()->titel|escape:'html'}</category>
+				<dc:creator>{ProfielModel::getNaam($draad->laatste_wijziging_uid, 'user')}</dc:creator>
+				<category>{$draad->getForumDeel()->getForumCategorie()->titel} &raquo; {$draad->getForumDeel()->titel}</category>
 				<comments>{$smarty.const.CSR_ROOT}/forum/onderwerp/{$draad->draad_id}</comments>
 				<guid isPermaLink="true">{$smarty.const.CSR_ROOT}/forum/reactie/{$draad->laatste_post_id}#{$draad->laatste_post_id}</guid>
 			</item>

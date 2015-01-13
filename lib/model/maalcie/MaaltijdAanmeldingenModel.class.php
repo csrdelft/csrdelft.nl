@@ -168,7 +168,7 @@ class MaaltijdAanmeldingenModel {
 		$lijst = array();
 		foreach ($aanmeldingen as $aanmelding) {
 			$aanmelding->setMaaltijd($maaltijd);
-			$naam = Lid::naamLink($aanmelding->getUid(), 'streeplijst', 'plain');
+			$naam = ProfielModel::getNaam($aanmelding->getUid(), 'streeplijst');
 			$lijst[$naam] = $aanmelding;
 			for ($i = $aanmelding->getAantalGasten(); $i > 0; $i--) {
 				$gast = new MaaltijdAanmelding();
@@ -343,8 +343,8 @@ class MaaltijdAanmeldingenModel {
 	}
 
 	public static function checkAanmeldFilter($uid, $filter) {
-		$lid = LidCache::getLid($uid); // false if lid does not exist
-		if (!$lid instanceof Lid) {
+		$lid = ProfielModel::get($uid); // false if lid does not exist
+		if (!$lid instanceof Profiel) {
 			throw new Exception('Lid bestaat niet: $uid =' . $uid);
 		}
 		if ($filter === '') {

@@ -114,6 +114,10 @@ abstract class InputField implements FormElement, Validator {
 		return isset($_POST[$this->name]);
 	}
 
+	public function getOrigValue() {
+		return $this->origvalue;
+	}
+
 	public function getValue() {
 		if ($this->isPosted()) {
 			$this->value = filter_input(INPUT_POST, $this->name, FILTER_UNSAFE_RAW);
@@ -556,7 +560,7 @@ JS;
 class TextField extends InputField {
 
 	public function __construct($name, $value, $description, $max_len = 255, $min_len = 0, $model = null) {
-		parent::__construct($name, htmlspecialchars_decode($value), $description, $model);
+		parent::__construct($name, $value === null ? $value : htmlspecialchars_decode($value), $description, $model);
 		$this->max_len = (int) $max_len;
 		$this->min_len = (int) $min_len;
 		if ($this->isPosted()) {
@@ -569,8 +573,8 @@ class TextField extends InputField {
 		if (!parent::validate()) {
 			return false;
 		}
-		if (!is_utf8($this->value)) {
-			$this->error = 'Ongeldige karakters, gebruik reguliere tekst.';
+		if ($this->value !== null AND ! is_utf8($this->value)) {
+			$this->error = 'Ongeldige karakters, gebruik reguliere tekst';
 		}
 		return $this->error === '';
 	}
@@ -598,7 +602,7 @@ class FileNameField extends TextField {
 			return false;
 		}
 		if ($this->value !== '' AND ! valid_filename($this->value)) {
-			$this->error = 'Ongeldige bestandsnaam.';
+			$this->error = 'Ongeldige bestandsnaam';
 		}
 		return $this->error === '';
 	}
@@ -679,24 +683,21 @@ class RequiredRechtenField extends RechtenField {
 
 }
 
-/**
- * LidField
- * één lid selecteren zonder een uid te hoeven typen.
- *
- */
 class LidField extends TextField {
 
 	protected $empty_null = true;
-	// zoekfilter voor door namen2uid gebruikte Zoeker::zoekLeden. 
+	// zoekfilter voor door namen2uid gebruikte LidZoeker::zoekLeden. 
 	// geaccepteerde input: 'leden', 'oudleden', 'alleleden', 'allepersonen', 'nobodies'
 	private $zoekin;
 
 	public function __construct($name, $value, $description, $zoekin = 'leden') {
-		$lidnaam = Lid::naamLink($value, 'volledig', 'plain');
-		if ($lidnaam !== false) {
-			$value = $lidnaam;
-		}
+
+		var_dump($value);
+
 		parent::__construct($name, $value, $description);
+
+		var_dump($this->origvalue);
+
 		if (!in_array($zoekin, array('leden', 'oudleden', 'alleleden', 'allepersonen', 'nobodies'))) {
 			$zoekin = 'leden';
 		}
@@ -708,7 +709,7 @@ class LidField extends TextField {
 		$this->value = parent::getValue();
 		if ($this->empty_null AND empty($this->value)) {
 			$this->value = null;
-		} elseif (!Lid::isValidUid($this->value)) {
+		} elseif (!AccountModel::isValidUid($this->value)) {
 			$uid = namen2uid(parent::getValue(), $this->zoekin);
 			if (isset($uid[0]['uid'])) {
 				$this->value = $uid[0]['uid'];
@@ -717,9 +718,6 @@ class LidField extends TextField {
 		return $this->value;
 	}
 
-	/**
-	 * checkt of er een uniek lid wordt gevonden
-	 */
 	public function validate() {
 		if (!parent::validate()) {
 			return false;
@@ -728,11 +726,19 @@ class LidField extends TextField {
 		if ($this->value == '') {
 			return true;
 		}
-		$uid = namen2uid(parent::getValue(), $this->zoekin);
+		$value = parent::getValue();
+		// geldig uid?
+		if (AccountModel::isValidUid($value) AND ProfielModel::existsUid($value)) {
+			return true;
+		}
+		$uid = namen2uid($value, $this->zoekin);
 		if ($uid) {
-			if (isset($uid[0]['uid']) AND Lid::exists($uid[0]['uid'])) {
+			// uniek bestaand lid?
+			if (isset($uid[0]['uid']) AND ProfielModel::existsUid($uid[0]['uid'])) {
 				return true;
-			} elseif (count($uid[0]['naamOpties']) > 0) { // meerdere naamopties?
+			}
+			// meerdere naamopties?
+			elseif (count($uid[0]['naamOpties']) > 0) {
 				$this->error = 'Meerdere leden mogelijk';
 				return false;
 			}
@@ -871,18 +877,18 @@ class EmailField extends TextField {
 			# anders gaan we m ontleden en controleren
 			list ($usr, $dom) = explode('@', $this->value);
 			if (mb_strlen($usr) > 50) {
-				$this->error = 'Gebruik max. 50 karakters voor de @:';
+				$this->error = 'Gebruik max. 50 karakters voor de @';
 			} elseif (mb_strlen($dom) > 50) {
-				$this->error = 'Gebruik max. 50 karakters na de @:';
+				$this->error = 'Gebruik max. 50 karakters na de @';
 				# RFC 821 <- voorlopig voor JabberID even zelfde regels aanhouden
 				# http:// www.lookuptables.com/
 				# Hmmmz, \x2E er uit gehaald ( . )
 			} elseif (preg_match('/[^\x21-\x7E]/', $usr) OR preg_match('/[\x3C\x3E\x28\x29\x5B\x5D\x5C\x2C\x3B\x40\x22]/', $usr)) {
-				$this->error = 'Het adres bevat ongeldige karakters voor de @:';
+				$this->error = 'Het adres bevat ongeldige karakters voor de @';
 			} elseif (!preg_match('/^[a-z0-9]+([-.][a-z0-9]+)*\\.[a-z]{2,4}$/i', $dom)) {
-				$this->error = 'Het domein is ongeldig:';
+				$this->error = 'Het domein is ongeldig';
 			} elseif (!checkdnsrr($dom, 'A') and ! checkdnsrr($dom, 'MX')) {
-				$this->error = 'Het domein bestaat niet (IPv4):';
+				$this->error = 'Het domein bestaat niet (IPv4)';
 			}
 		}
 		return $this->error === '';
@@ -941,8 +947,8 @@ class NickField extends TextField {
 
 	public $max_len = 20;
 
-	public function __construct($name, $value, $description, Lid $lid) {
-		parent::__construct($name, $value, $description, 255, 0, $lid);
+	public function __construct($name, $value, $description) {
+		parent::__construct($name, $value, $description, 255, 0);
 	}
 
 	public function validate() {
@@ -954,9 +960,9 @@ class NickField extends TextField {
 			return true;
 		}
 		// check met strtolower is toegevoegd omdat je anders je eigen nick niet van case kan veranderen
-		// omdat this->nickExists in mysql case-insensitive zoek
-		if (Lid::nickExists($this->value) AND strtolower($this->model->getNickname()) != strtolower($this->value)) {
-			$this->error = 'Deze bijnaam is al in gebruik.';
+		// doordat nickExists case-insensitive zoekt
+		if (ProfielModel::existsNick($this->value) AND strtolower($this->value) !== strtolower($this->origvalue)) {
+			$this->error = 'Deze bijnaam is al in gebruik';
 		}
 		return $this->error === '';
 	}
@@ -974,8 +980,8 @@ class DuckField extends TextField {
 
 	public $max_len = 20;
 
-	public function __construct($name, $value, $description, Lid $lid) {
-		parent::__construct($name, $value, $description, 255, 0, $lid);
+	public function __construct($name, $value, $description) {
+		parent::__construct($name, $value, $description, 255, 0);
 	}
 
 	public function validate() {
@@ -987,9 +993,9 @@ class DuckField extends TextField {
 			return true;
 		}
 		// check met strtolower is toegevoegd omdat je anders je eigen nick niet van case kan veranderen
-		// omdat this->nickExists in mysql case-insensitive zoek
-		if (Lid::duckExists($this->value) AND strtolower($this->model->getDuckname()) != strtolower($this->value)) {
-			$this->error = 'Deze Duckstad-naam is al in gebruik.';
+		// doordat duckExists case-insensitive zoekt
+		if (ProfielModel::existsDuck($this->value) AND strtolower($this->value) !== strtolower($this->origvalue)) {
+			$this->error = 'Deze Duckstad-naam is al in gebruik';
 		}
 		return $this->error === '';
 	}
@@ -1061,10 +1067,42 @@ class WachtwoordWijzigenField extends InputField {
 
 	private $require_current;
 
-	public function __construct($name, Lid $lid, $require_current = true) {
+	public function __construct($name, Account $account, $require_current = true) {
 		$this->require_current = $require_current;
-		parent::__construct($name, null, null, $lid);
-		$this->leden_mod = (LoginModel::getUid() !== $this->model->getUid());
+		parent::__construct($name, null, null, $account);
+		$this->leden_mod = (LoginModel::getUid() !== $account->uid);
+
+		// blacklist gegevens van profiel
+		$profiel = $account->getProfiel();
+		$this->blacklist[] = $profiel->uid;
+		$this->blacklist[] = $profiel->voornaam;
+		foreach (explode(' ', $profiel->achternaam) as $part) {
+			if (strlen($part) >= 4) {
+				$this->blacklist[] = $part;
+			}
+		}
+		foreach (explode('@', $profiel->email) as $email) {
+			foreach (explode('.', $email) as $part) {
+				if (strlen($part) >= 5) {
+					$this->blacklist[] = $part;
+				}
+			}
+		}
+		$this->blacklist[] = $profiel->postcode;
+		$this->blacklist[] = str_replace(' ', '', $profiel->postcode);
+		$this->blacklist[] = $profiel->telefoon;
+		$this->blacklist[] = $profiel->mobiel;
+		$this->blacklist = array_filter_empty($this->blacklist);
+
+		// algemene blacklist
+		$this->blacklist[] = '1234';
+		$this->blacklist[] = 'abcd';
+		$this->blacklist[] = 'qwerty';
+		$this->blacklist[] = 'azerty';
+		$this->blacklist[] = 'asdf';
+		$this->blacklist[] = 'jkl;';
+		$this->blacklist[] = 'password';
+		$this->blacklist[] = 'wachtwoord';
 
 		// blacklist gegevens van profiel
 		$this->blacklist[] = $lid->getProperty('uid');
@@ -1134,7 +1172,7 @@ class WachtwoordWijzigenField extends InputField {
 		if ($this->require_current) {
 			$current = filter_input(INPUT_POST, $this->name . '_current', FILTER_SANITIZE_STRING);
 		}
-		// filter_input does not use current value in $_POST
+		// filter_input does not use current value in $_POST 
 		$new = filter_var($_POST[$this->name . '_new'], FILTER_SANITIZE_STRING);
 		$confirm = filter_var($_POST[$this->name . '_confirm'], FILTER_SANITIZE_STRING);
 		$length = strlen(utf8_decode($new));
@@ -1172,7 +1210,7 @@ class WachtwoordWijzigenField extends InputField {
 				$this->error = 'Vul uw nieuwe wachtwoord twee keer in';
 			} elseif ($new != $confirm) {
 				$this->error = 'Nieuwe wachtwoorden komen niet overeen';
-			} elseif ($this->require_current AND ! PasswordModel::instance()->controleerWachtwoord($this->model, $current)) {
+			} elseif ($this->require_current AND ! AccountModel::instance()->controleerWachtwoord($this->model, $current)) {
 				$this->error = 'Uw huidige wachtwoord is niet juist';
 			}
 		}

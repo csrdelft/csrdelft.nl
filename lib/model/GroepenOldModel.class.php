@@ -241,7 +241,7 @@ class GroepenOldModel {
 		$db = MijnSqli::instance();
 
 		$groepen = array();
-		if (Lid::isValidUid($uid)) {
+		if (AccountModel::isValidUid($uid)) {
 			$qGroepen = "
 				SELECT
 					groep.id AS id
@@ -275,7 +275,7 @@ class GroepenOldModel {
 		$db = MijnSqli::instance();
 
 		$groepen = array();
-		if (Lid::isValidUid($uid)) {
+		if (AccountModel::isValidUid($uid)) {
 			$qGroepen = "
 				SELECT
 					DISTINCT g.snaam as kortenaam
@@ -305,10 +305,10 @@ class GroepenOldModel {
 				}
 			}
 			//leden en oudleden krijgen een extra groep 'htleden'
-			$lid = LidCache::getLid($uid);
+			$profiel = ProfielModel::get($uid);
 			//S_CIEs die wel als normaal lid mogen inloggen
 			$magLidtoegang = array('x271', 'x030'); //oudledenbestuur & stichting CC
-			if ($lid->isLid() OR $lid->isOudlid() OR in_array($lid->getUid(), $magLidtoegang)) {
+			if ($profiel->isLid() OR $profiel->isOudlid() OR in_array($profiel->uid, $magLidtoegang)) {
 				$groepen[] = 'htleden-oudleden';
 			}
 		}
@@ -323,7 +323,7 @@ class GroepenOldModel {
 		$db = MijnSqli::instance();
 
 		$groepen = array();
-		if (Lid::isValidUid($uid)) {
+		if (AccountModel::isValidUid($uid)) {
 			if ($status != null AND in_array($status, array('ht', 'ft', 'ot'))) {
 				$statusfilter = " AND status='" . $status . "' ";
 			} else {

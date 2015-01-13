@@ -206,7 +206,7 @@ class CorveeTaak implements Agendeerbaar {
 	}
 
 	public function setUid($uid) {
-		if ($uid !== null && !\Lid::exists($uid)) {
+		if ($uid !== null && !ProfielModel::existsUid($uid)) {
 			throw new Exception('Geen lid: set lid id');
 		}
 		$this->uid = $uid;
@@ -309,7 +309,7 @@ class CorveeTaak implements Agendeerbaar {
 
 	public function getTitel() {
 		if ($this->getUid()) {
-			return $this->getCorveeFunctie()->naam . ' ' . Lid::naamLink($this->getUid(), 'civitas', 'plain');
+			return $this->getCorveeFunctie()->naam . ' ' . ProfielModel::getNaam($this->getUid(), 'civitas');
 		}
 		return 'Corvee vacature (' . $this->getCorveeFunctie()->naam . ')';
 	}

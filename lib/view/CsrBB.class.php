@@ -307,7 +307,7 @@ class CsrBB extends eamBBParser {
 		if (isset($arguments['citaat'])) {
 			$van = trim(str_replace('_', ' ', $arguments['citaat']));
 		}
-		$lid = Lid::naamLink($van, 'user', 'visitekaartje');
+		$lid = ProfielModel::getLink($van, 'user');
 		if ($lid !== false) {
 			$text .= ' van ' . $lid;
 		} elseif ($van !== '') {
@@ -344,12 +344,11 @@ class CsrBB extends eamBBParser {
 			$uid = $this->parseArray(array('[/lid]'), array());
 		}
 		$uid = trim($uid);
-		$naam = Lid::naamLink($uid, 'user', 'visitekaartje');
-		if ($naam !== false) {
-			return $naam;
-		} else {
+		$link = ProfielModel::getLink($uid, 'user');
+		if (!$link) {
 			return '[lid] ' . htmlspecialchars($uid) . '] &notin; db.';
 		}
+		return $link;
 	}
 
 	/**
@@ -632,7 +631,7 @@ HTML;
 		}
 
 		try {
-			$verticale = VerticalenModel::instance()->getVerticaleByLetter($letter);
+			$verticale = VerticalenModel::get($letter);
 			return '<a href="/verticalen#' . $verticale->letter . '">' . $verticale->naam . '</a>';
 		} catch (Exception $e) {
 			return '[verticale] Geen geldige verticale-letter (' . htmlspecialchars($letter) . ')';

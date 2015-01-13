@@ -28,7 +28,7 @@ class CommissieVoorkeurenView implements View {
 			echo '<table><tr><td><h4>Lid</h4></td><td><h4>Interesse</h4></td></tr>';
 			$geinteresseerde = $commissie->getGeinteresseerde();
 			foreach ($geinteresseerde as $uid => $voorkeur) {
-				echo '<tr ' . ($voorkeur['gedaan'] ? 'style="opacity: .50"' : '') . '><td><a href="/commissievoorkeuren/lidpagina/' . $uid . '">' . LidCache::getLid($uid)->getNaam() . '</a></td><td>' . $format[$voorkeur['voorkeur']] . '</td></tr>';
+				echo '<tr ' . ($voorkeur['gedaan'] ? 'style="opacity: .50"' : '') . '><td><a href="/commissievoorkeuren/lidpagina/' . $uid . '">' . ProfielModel::get($uid)->getNaam() . '</a></td><td>' . $format[$voorkeur['voorkeur']] . '</td></tr>';
 			}
 			echo '</table>';
 		} else {
@@ -44,7 +44,7 @@ class CommissieVoorkeurenView implements View {
 
 }
 
-class LidOverzicht implements View {
+class CommissieVoorkeurenProfiel implements View {
 
 	private $id;
 
@@ -66,7 +66,7 @@ class LidOverzicht implements View {
 
 	public function view() {
 		echo '<h1>' . $this->getTitel() . ' </h1>';
-		echo '<p>Naam: ' . Lid::naamLink($this->id, 'volledig', 'link') . '</p>';
+		echo '<p>Naam: ' . ProfielModel::getLink($this->id, 'volledig') . '</p>';
 		$voorkeur = new CommissieVoorkeurenModel($this->id);
 		$voorkeuren = $voorkeur->getVoorkeur();
 		$commissies = $voorkeur->getCommissies();
@@ -83,6 +83,42 @@ class LidOverzicht implements View {
 			<input type="submit" value="Opslaan" />
 		</form>
 		';
+	}
+
+}
+
+class CommissieVoorkeurenForm extends Formulier {
+
+	public function getBreadcrumbs() {
+		return '<a href="/ledenlijst" title="Ledenlijst"><img src="/plaetjes/knopjes/people-16.png" class="module-icon"></a> » ' . $this->model->getLink('civitas') . ' » <span class="active">' . $this->titel . '</span>';
+	}
+
+	public function __construct(Profiel $profiel) {
+		parent::__construct($profiel, 'profielForm', '/profiel/' . $profiel->uid . '/voorkeuren', 'Commissie-voorkeuren');
+
+		//permissies
+		$opties = array(1 => 'nee', 2 => 'misschien', 3 => 'ja');
+
+		require_once 'model/CommissieVoorkeurenModel.class.php';
+		$model = new CommissieVoorkeurenModel($profiel->uid);
+		$commissies = $model->getCommissies();
+		$voorkeuren = $model->getVoorkeur();
+
+		$fields[] = new HtmlComment('<p>Hier kunt u per commissie opgeven of u daar interesse in heeft!</p>');
+		foreach ($commissies as $id => $comm) {
+			$fields[] = new SelectField('comm' . $id, $this->getVoorkeur($voorkeuren, $id), $comm, $opties);
+		}
+		$fields[] = new TextareaField('lidOpmerking', $model->getLidOpmerking(), 'Vul hier je eventuele voorkeur voor functie in, of andere opmerkingen');
+		$fields[] = new FormDefaultKnoppen('/profiel/' . $profiel->uid);
+
+		$this->addFields($fields);
+	}
+
+	private function getVoorkeur($voorkeur, $id) {
+		if (array_key_exists($id, $voorkeur)) {
+			return $voorkeur[$id];
+		}
+		return 0;
 	}
 
 }

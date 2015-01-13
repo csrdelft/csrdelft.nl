@@ -4,7 +4,7 @@
 <tr id="abonnement-row-{$vanuid}">
 	{foreach name=loop from=$abonnementen item=abonnement}
 		{if $smarty.foreach.loop.first}
-			<td>{Lid::naamLink($vanuid, Instellingen::get('maaltijden', 'weergave_ledennamen_beheer'), Instellingen::get('maaltijden', 'weergave_link_ledennamen'))}</td>
+			<td>{ProfielModel::getLink($vanuid, Instellingen::get('maaltijden', 'weergave_ledennamen_beheer'))}</td>
 		{/if}
 		{if $abonnement->getMaaltijdRepetitieId() and $abonnement->getMaaltijdRepetitie()->getIsAbonneerbaar()}
 			{include file='maalcie/abonnement/beheer_abonnement_veld.tpl' uid=$abonnement->getUid()}

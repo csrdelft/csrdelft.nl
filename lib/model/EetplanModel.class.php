@@ -43,11 +43,10 @@ class EetplanModel {
 			if ($aEetplanData['avond'] == 1) {
 				$aEetplan[] = $aEetplanRegel;
 				$aEetplanRegel = array();
-				$lid = LidCache::getLid($aEetplanData['uid']);
 				//eerste element van de regel is het uid
 				$aEetplanRegel[] = array(
 					'uid'	 => $aEetplanData['uid'],
-					'naam'	 => (string) $lid);
+					'naam'	 => ProfielModel::getNaam($aEetplanData['uid'], 'volledig'));
 			}
 			$aEetplanRegel[] = $aEetplanData['huis'];
 		}
@@ -59,7 +58,7 @@ class EetplanModel {
 	}
 
 	function getEetplanVoorPheut($iPheutID) {
-		if (!Lid::isValidUid($iPheutID)) {
+		if (!AccountModel::isValidUid($iPheutID)) {
 			return false;
 		}
 		$sEetplanQuery = "

@@ -194,7 +194,7 @@ class Document extends Bestand {
 	}
 
 	public function setEigenaar($uid) {
-		if (!Lid::isValidUID($uid)) {
+		if (!AccountModel::isValidUid($uid)) {
 			throw new Exception('Geen geldig uid opgegeven');
 		}
 		$this->eigenaar = $uid;

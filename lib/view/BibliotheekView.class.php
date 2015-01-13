@@ -106,7 +106,7 @@ Rubriek: ' . htmlspecialchars($aBoek['categorie']) . '"';
 			if ($uid == 'x222') {
 				$sNaamlijst .= 'C.S.R.-bibliotheek';
 			} else {
-				$naam = Lid::naamLink($uid, 'civitas', 'visitekaartje');
+				$naam = ProfielModel::getLink($uid, 'civitas');
 				if ($naam) {
 					$sNaamlijst .= $naam;
 				} else {

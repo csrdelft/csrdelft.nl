@@ -146,7 +146,7 @@ class DocCategorie {
 		return $this->documenten;
 	}
 
-	public static function exists($catID) {
+	public static function existsCategorie($catID) {
 		$cat = new DocCategorie((int) $catID);
 		return $cat->getID() != 0;
 	}

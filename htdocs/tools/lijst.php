@@ -72,8 +72,8 @@ if (isset($_GET['addToGoogle'])) {
 	//redirect to profile if only one result.
 	if ($zoeker->count() == 1) {
 		$leden = $zoeker->getLeden();
-		$lid = $leden[0];
-		redirect('/profiel/' . $lid->getUid());
+		$profiel = $leden[0];
+		redirect('/profiel/' . $profiel->uid);
 	}
 }
 

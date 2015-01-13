@@ -21,7 +21,7 @@ DTSTART:19701025T030000
 RRULE:FREQ=YEARLY;INTERVAL=1;BYDAY=-1SU;BYMONTH=10
 END:STANDARD
 END:VTIMEZONE
-{foreach from=$items item=item}{if $item instanceof Lid}{* geen verjaardagen hier *}{else}
+{foreach from=$items item=item}{if $item instanceof Profiel}{* geen verjaardagen hier *}{else}
 BEGIN:VEVENT
 UID:{$item->getUUID()}
 {if $item->isHeledag()}DTSTART;VALUE=DATE:{$item->getBeginMoment()|date_format:'%Y%m%d'}

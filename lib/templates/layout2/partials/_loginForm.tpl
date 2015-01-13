@@ -1,6 +1,6 @@
 {if !LoginModel::mag('P_LOGGED_IN') }
 	{$loginform->view()}
-	{if LoginModel::instance()->getError()}
+	{if LoginModel::instance()->hasError()}
 		<p class="error">{LoginModel::instance()->getError()}</p>
 	{else}
 		<ul>

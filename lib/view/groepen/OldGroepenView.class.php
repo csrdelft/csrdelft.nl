@@ -62,14 +62,14 @@ class GroepContent extends OldGroepView {
 			//ook in oudleden en nobodies
 			$zoekin = array('S_LID', 'S_NOVIET', 'S_GASTLID', 'S_KRINGEL');
 			if (isset($_POST['filterOud'])) {
-				$zoekin[] = 'S_OUDLID';
-				$zoekin[] = 'S_ERELID';
+				$zoekin[] = LidStatus::Oudlid;
+				$zoekin[] = LidStatus::Erelid;
 			}
 			if (isset($_POST['filterNobody']) AND $this->model->isAdmin()) {
-				$zoekin[] = 'S_NOBODY';
-				$zoekin[] = 'S_EXLID';
-				$zoekin[] = 'S_OVERLEDEN';
-				$zoekin[] = 'S_CIE';
+				$zoekin[] = LidStatus::Nobody;
+				$zoekin[] = LidStatus::Exlid;
+				$zoekin[] = LidStatus::Overleden;
+				$zoekin[] = LidStatus::Commissie;
 			}
 			$leden = namen2uid($_POST['rawNamen'], $zoekin);
 
@@ -136,7 +136,7 @@ class GroepContent extends OldGroepView {
 
 		//verticalen.
 		foreach (VerticalenModel::instance()->prefetch() as $verticale) {
-			if ($verticale->id == 0) {
+			if ($verticale->letter == '_') {
 				continue;
 			}
 			$filter = 'verticale:' . $verticale->letter;
@@ -365,9 +365,9 @@ class GroepEmailContent extends OldGroepView {
 		$groepleden = $this->model->getLeden();
 		if (is_array($groepleden)) {
 			foreach ($groepleden as $groeplid) {
-				$lid = LidCache::getLid($groeplid['uid']);
-				if ($lid instanceof Lid AND $lid->getEmail() != '') {
-					$emails[] = $lid->getEmail();
+				$profiel = ProfielModel::get($groeplid['uid']);
+				if ($profiel instanceof Profiel AND $profiel->getPrimaryEmail() != '') {
+					$emails[] = $profiel->getPrimaryEmail();
 				}
 			}
 		}

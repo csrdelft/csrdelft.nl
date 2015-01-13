@@ -20,7 +20,7 @@ class GroepLijstView extends SmartyTemplateView {
 	public function view() {
 		echo '<table class="groepLeden"><tbody>';
 		foreach ($this->forms as $form) {
-			echo '<tr><td>' . Lid::naamLink($form->getModel()->uid, 'civitas', 'visitekaartje') . '</td>';
+			echo '<tr><td>' . ProfielModel::getLink($form->getModel()->uid, 'civitas') . '</td>';
 			echo '<td>';
 			$form->view();
 			echo '</td></tr>';
@@ -38,7 +38,7 @@ class GroepPasfotosView extends SmartyTemplateView {
 
 	public function view() {
 		foreach ($this->model->getGroepLeden() as $groeplid) {
-			echo '<div class="pasfoto">' . Lid::naamLink($groeplid->uid, 'pasfoto', 'link') . '</div>';
+			echo '<div class="pasfoto">' . ProfielModel::getLink($groeplid->uid, 'pasfoto') . '</div>';
 		}
 	}
 
@@ -74,9 +74,9 @@ class GroepEmailsView extends SmartyTemplateView {
 	public function __construct(Groep $groep) {
 		parent::__construct($groep);
 		foreach ($this->model->getGroepLeden() as $groeplid) {
-			$lid = LidCache::getLid($groeplid->uid);
-			if ($lid instanceof Lid AND $lid->getEmail() != '') {
-				$this->emails[] = $lid->getEmail();
+			$profiel = ProfielModel::get($groeplid->uid);
+			if ($profiel instanceof Profiel AND $profiel->getPrimaryEmail() != '') {
+				$this->emails[] = $profiel->getPrimaryEmail();
 			}
 		}
 	}

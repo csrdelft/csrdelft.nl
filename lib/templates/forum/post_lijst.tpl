@@ -13,7 +13,7 @@
 		<table>
 			<tr>
 				<td>
-					{$post->uid|csrnaam:'user'}
+					{ProfielModel::getLink($post->uid, 'user')}
 					{if LidInstellingen::get('forum', 'toonpasfotos') == 'nee'}
 						<span id="t{$post->uid}-{$post->post_id}" class="togglePasfoto" title="Toon pasfoto">&raquo;</span>
 					{/if}
@@ -29,7 +29,7 @@
 			{/if}
 		</span>
 		{if LoginModel::mag('P_LEDEN_READ')}
-			<div id="p{$post->post_id}" class="forumpasfoto{if LidInstellingen::get('forum', 'toonpasfotos') == 'nee'} verborgen">{elseif LoginModel::mag('P_LEDEN_READ')}">{$post->uid|csrnaam:'pasfoto':'link'}{/if}</div>
+			<div id="p{$post->post_id}" class="forumpasfoto{if LidInstellingen::get('forum', 'toonpasfotos') == 'nee'} verborgen">{elseif LoginModel::mag('P_LEDEN_READ')}">{ProfielModel::getLink($post->uid, 'pasfoto')}{/if}</div>
 		{/if}
 		<br />
 		{if isset($statistiek)}

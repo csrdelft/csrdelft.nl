@@ -27,7 +27,7 @@ class ChangeLogModel extends PersistenceModel {
 		$log->new_value = $new;
 		$log->uid = LoginModel::getUid();
 		if (LoginModel::instance()->isSued()) {
-			$log->su_uid = LoginModel::instance()->getSuedFrom()->getUid();
+			$log->su_uid = LoginModel::getSuedFrom()->uid;
 		}
 		$log->id = $this->create($log);
 		return $log;

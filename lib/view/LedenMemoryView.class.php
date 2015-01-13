@@ -21,13 +21,13 @@ class LedenMemoryView extends CompressedLayout {
 		if (isset($_GET['verticale'])) {
 			$v = filter_input(INPUT_GET, 'verticale', FILTER_SANITIZE_STRING);
 			if (strlen($v) > 1) {
-				$result = VerticalenModel::instance()->findVerticaleByName($v);
+				$result = VerticalenModel::instance()->find('naam LIKE ?', array('%' . $v . '%'));
 				if ($result->rowCount() === 1) {
 					$this->verticale = $result->fetch();
 				}
 			} else {
-				$verticale = VerticalenModel::instance()->getVerticaleByLetter($v);
-				if ($verticale instanceof Verticale) {
+				$verticale = VerticalenModel::get($v);
+				if ($verticale) {
 					$this->verticale = $verticale;
 				}
 			}
@@ -81,7 +81,7 @@ class LedenMemoryView extends CompressedLayout {
 <div uid="{$lid['uid']}" class="flip memorycard pasfoto {$flipped}">
 	<div class="blue front">{$cheat}</div>
 	<div class="blue back">
-		<img src="{$src}" title="{$title}" />
+		<img src="/plaetjes/{$src}" title="{$title}" />
 	</div>
 </div>
 HTML;
@@ -91,7 +91,7 @@ HTML;
 		$cheat = ($this->cheat ? $lid['uid'] : '');
 		$title = htmlspecialchars($lid['voornaam'] . ' ' . $lid['tussenvoegsel'] . ' ' . $lid['achternaam']);
 		$flipped = ($this->learnmode ? 'flipped' : '');
-		$naam = Lid::naamLink($lid['uid'], 'civitas', 'plain');
+		$naam = ProfielModel::getNaam($lid['uid'], 'civitas');
 		return <<<HTML
 <div uid="{$lid['uid']}" class="flip memorycard naam {$flipped}">
 	<div class="blue front">{$cheat}</div>

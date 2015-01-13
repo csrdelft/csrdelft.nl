@@ -23,7 +23,7 @@ class Foto extends Afbeelding {
 	public $rotation;
 	/**
 	 * Uploader
-	 * @var Lid
+	 * @var Profiel
 	 */
 	public $owner;
 	/**

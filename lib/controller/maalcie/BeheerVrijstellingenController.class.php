@@ -53,7 +53,7 @@ class BeheerVrijstellingenController extends AclController {
 	}
 
 	public function bewerk($uid) {
-		if (!Lid::exists($uid)) {
+		if (!ProfielModel::existsUid($uid)) {
 			throw new Exception('Lid bestaat niet: $uid =' . $uid);
 		}
 		$vrijstelling = CorveeVrijstellingenModel::getVrijstelling($uid);
@@ -74,7 +74,7 @@ class BeheerVrijstellingenController extends AclController {
 	}
 
 	public function verwijder($uid) {
-		if (!Lid::exists($uid)) {
+		if (!ProfielModel::existsUid($uid)) {
 			throw new Exception('Lid bestaat niet: $uid =' . $uid);
 		}
 		CorveeVrijstellingenModel::verwijderVrijstelling($uid);

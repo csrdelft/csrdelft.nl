@@ -339,7 +339,7 @@ $(function () {
 			else
 				toRed = selectedPerson.saldo - bestelTotaal() < 0;
 				
-			if(bestelTotaal() < 0 || selectedPerson.status == 'S_EXTERN' || beheer)
+			if(bestelTotaal() < 0 || selectedPerson.status == 'S_NOBODY' || beheer)
 				toRed = false;
 			
 			// Hack

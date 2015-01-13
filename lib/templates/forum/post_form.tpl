@@ -10,7 +10,7 @@
 			<tr>
 				{* todo: invoerveld voor naam niet-ingelogd*}
 				<td>
-					{LoginModel::getUid()|csrnaam:'user'}
+					{ProfielModel::getNaam(LoginModel::getUid(), 'user')}
 					{if LidInstellingen::get('forum', 'toonpasfotos') == 'nee'}
 						<span id="t{LoginModel::getUid()}-reageren" class="togglePasfoto" title="Toon pasfoto">&raquo;</span>
 					{/if}
@@ -20,7 +20,7 @@
 		</table>
 
 		{if LoginModel::mag('P_LEDEN_READ')}
-			<div id="preageren" class="forumpasfoto{if LidInstellingen::get('forum', 'toonpasfotos') == 'nee'} verborgen">{elseif LoginModel::mag('P_LEDEN_READ')}">{LoginModel::getUid()|csrnaam:'pasfoto':'link'}{/if}</div>
+			<div id="preageren" class="forumpasfoto{if LidInstellingen::get('forum', 'toonpasfotos') == 'nee'} verborgen">{elseif LoginModel::mag('P_LEDEN_READ')}">{ProfielModel::getLink(LoginModel::getUid(), 'pasfoto')}{/if}</div>
 		{/if}
 
 		<div id="forummeldingen">

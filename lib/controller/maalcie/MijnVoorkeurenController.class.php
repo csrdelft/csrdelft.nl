@@ -59,7 +59,7 @@ class MijnVoorkeurenController extends AclController {
 	public function eetwens() {
 		$form = new EetwensForm();
 		if ($form->validate()) {
-			CorveeVoorkeurenModel::setEetwens(LoginModel::instance()->getLid(), $form->getValue());
+			CorveeVoorkeurenModel::setEetwens(LoginModel::getProfiel(), $form->getValue());
 		}
 		$this->view = $form;
 	}

@@ -1,5 +1,4 @@
 <?php
-
 require_once 'configuratie.include.php';
 require_once 'chart/chart.php';
 require_once 'lid/saldi.class.php';
@@ -10,13 +9,13 @@ require_once 'lid/saldi.class.php';
  * @author Jan Pieter Waagmeester <jieter@jpwaag.com>
  *
  */
-if (isset($_GET['uid']) AND ( Lid::isValidUid($_GET['uid']) OR $_GET['uid'] == '0000')) {
+if (isset($_GET['uid']) AND ( AccountModel::isValidUid($_GET['uid']) OR $_GET['uid'] == '0000')) {
 	$uid = $_GET['uid'];
 	if ($uid != '0000') {
-		$lid = LidCache::getLid($uid);
+		$profiel = ProfielModel::get($uid);
 	}
 } else {
-	$lid = LoginModel::instance()->getLid();
+	$profiel = ProfielModel::get(LoginModel::getUid());
 }
 
 $cie = 'soccie';
@@ -37,7 +36,7 @@ if (LoginModel::mag('P_LEDEN_MOD,groep:' . $cie) OR LoginModel::getUid() === $ui
 	if ($uid == '0000') {
 		$chart->set_title('Som van de saldi');
 	} else {
-		$chart->set_title('Saldo voor ' . $lid->getNaam());
+		$chart->set_title('Saldo voor ' . $profiel->getNaam());
 	}
 
 	$chart->set_x_ticks($saldi->getKeys(), 'date');
@@ -49,7 +48,6 @@ if (LoginModel::mag('P_LEDEN_MOD,groep:' . $cie) OR LoginModel::getUid() === $ui
 	$chart->set_labels(false, 'Saldo [euro]');
 	$chart->stroke();
 }
-
 ?>
 <br>Opties:
 <br>- commissiesaldi van: maalcie of soccie

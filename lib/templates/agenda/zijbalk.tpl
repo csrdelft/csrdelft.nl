@@ -4,7 +4,7 @@
 			<a href="/agenda/" title="Agenda">Agenda</a>
 		</div>
 		{foreach from=$items item=item}
-			{if $item instanceof Lid}
+			{if $item instanceof Profiel}
 				{* geen verjaardagen hier *}
 			{else}
 				<div class="item">

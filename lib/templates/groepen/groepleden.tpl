@@ -11,7 +11,7 @@
 				{assign var='meerisopen' value='true'}
 			{/if}
 
-			<div class="pasfoto">{$groeplid->getNaamLink('pasfoto', 'link')}</div>
+			<div class="pasfoto">{$groeplid->getLink('pasfoto')}</div>
 
 		{/foreach}
 		{if $meerisopen === 'true'}
@@ -22,7 +22,7 @@
 	<table class="leden">
 		{foreach from=$groep->getLeden() item=groeplid}
 			<tr>
-				<td>{$groeplid.uid|csrnaam}</td>
+				<td>{ProfielModel::getLink($groeplid.uid, 'civitas')}</td>
 				{if $groep->magBewerken() OR (LoginModel::getUid()==$groeplid.uid AND ($groep->getToonFuncties()=='tonen' OR $groep->getToonFuncties()=='verbergen'))}
 					<td id="bewerk_{$groep->getId()}_{$groeplid.uid}" class="inline_edit">
 						<span class="text">
@@ -96,7 +96,7 @@
 												</select>
 											{/foreach}
 										{else}
-											<input type="text" name="functie" maxlength="60" class="functie" placeholder="opmerking" />
+											<input type="text" name="functie" maxlength="60" class="functie" placeholder="Opmerking" />
 										{/if}&nbsp;<input type="submit" value="aanmelden" onclick="event.preventDefault(); this.form.submit(); return false;" />
 									</form>
 

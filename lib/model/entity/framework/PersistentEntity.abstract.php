@@ -52,7 +52,7 @@ abstract class PersistentEntity implements Sparse, JsonSerializable {
 	 * @param array $attr_retrieved Names of attributes that are set before construction in case of sparse retrieval
 	 */
 	public function __construct($cast = false, array $attr_retrieved = null) {
-		if (is_array($attr_retrieved)) {
+		if ($attr_retrieved !== null) {
 			// Bookkeeping only if not all attributes are set before construction
 			$this->attr_retrieved = $attr_retrieved;
 		} else {
@@ -86,7 +86,7 @@ abstract class PersistentEntity implements Sparse, JsonSerializable {
 	}
 
 	public function getUUID() {
-		return implode('.', $this->getValues(true)) . '@' . get_class($this) . '.csrdelft.nl';
+		return strtolower(implode('.', $this->getValues(true)) . '@' . get_class($this) . '.csrdelft.nl');
 	}
 
 	public function jsonSerialize() {
@@ -168,7 +168,8 @@ abstract class PersistentEntity implements Sparse, JsonSerializable {
 				$this->$attribute = (string) $this->$attribute;
 			}
 			if (DB_CHECK AND $definition[0] === T::Enumeration AND ! in_array($this->$attribute, $definition[2]::getTypeOptions())) {
-				debugprint(static::$table_name . '.' . $attribute . ' invalid ' . $definition[2] . ' value: ' . $this->$attribute);
+				$msg = static::$table_name . '.' . $attribute . ' invalid ' . $definition[2] . '.enum value: "' . $this->$attribute . '"';
+				debugprint($msg);
 			}
 		}
 	}
@@ -221,8 +222,12 @@ abstract class PersistentEntity implements Sparse, JsonSerializable {
 				// Check exisiting persistent attributes for differences
 				$diff = false;
 				if ($attributes[$name]->type !== $database_attributes[$name]->type) {
-					$class = $definition[2];
-					if ($definition[0] !== T::Enumeration OR $database_attributes[$name]->type !== "enum('" . implode("','", $class::getTypeOptions()) . "')") {
+					if ($definition[0] === T::Enumeration) {
+						$class = $definition[2];
+						if ($database_attributes[$name]->type !== "enum('" . implode("','", $class::getTypeOptions()) . "')") {
+							$diff = true;
+						}
+					} else {
 						$diff = true;
 					}
 				}

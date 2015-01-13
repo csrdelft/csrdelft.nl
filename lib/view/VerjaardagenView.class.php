@@ -70,10 +70,10 @@ class VerjaardagenView implements View {
 					for ($m = 0; $m < 12; $m++) {
 						$maand = ($dezemaand - 1 + $m) % 12 + 1;
 						echo '<table class="inline"><tr><th></th><th><h3>' . $maanden[$maand] . '</h3></th></tr>';
-						$verjaardagen = VerjaardagenModel::getVerjaardagen($maand);
+						$verjaardagen = VerjaardagenModel::get($maand);
 						foreach ($verjaardagen as $verjaardag) {
 							echo '<tr>';
-							$lid = LidCache::getLid($verjaardag['uid']);
+							$profiel = ProfielModel::get($verjaardag['uid']);
 							if ($verjaardag['gebdag'] == $dezedag and $maand == $dezemaand) {
 								echo '<td class="text-right dikgedrukt cursief">';
 							} else {
@@ -86,7 +86,7 @@ class VerjaardagenView implements View {
 							} else {
 								echo '<td>&nbsp; ';
 							}
-							echo $lid->getNaamLink('civitas', 'visitekaartje');
+							echo $profiel->getLink('civitas');
 							echo '</td>';
 							echo '</tr>';
 						}
@@ -109,39 +109,29 @@ class VerjaardagenView implements View {
 					}
 					echo '</div>';
 
-					$aantal = LidInstellingen::get('zijbalk', 'verjaardagen');
-					if ($toonpasfotos) {
-						//veelvouden van 3 overhouden
-						$aantal = $aantal - ($aantal % 3);
-						if ($aantal < 3) {
-							$aantal = 3;
-						}
-					}
-					//verjaardagen opvragen voor 30 dagen vooruit, met een limiet als hierboven 
-					//gedefenieerd.
-					$aVerjaardagen = Lid::getVerjaardagen(time(), time() + 3600 * 24 * 30, $aantal);
+					$aVerjaardagen = VerjaardagenModel::getKomende((int) LidInstellingen::get('zijbalk', 'verjaardagen'));
 
 					if ($toonpasfotos) {
 						echo '<div class="item" id="komende_pasfotos">';
-						foreach ($aVerjaardagen as $lid) {
+						foreach ($aVerjaardagen as $profiel) {
 							echo '<div class="verjaardag';
-							if ($lid->isJarig()) {
+							if ($profiel->isJarig()) {
 								echo ' cursief';
 							}
 							echo '">';
-							echo $lid->getNaamLink('pasfoto', 'link');
-							echo '<span class="datum">' . date('d-m', strtotime($lid->getGeboortedatum())) . '</span>';
+							echo $profiel->getLink('pasfoto');
+							echo '<span class="datum">' . date('d-m', strtotime($profiel->gebdatum)) . '</span>';
 							echo '</div>';
 						}
 						echo '<div class="clear"></div></div>';
 					} else {
-						foreach ($aVerjaardagen as $lid) {
-							echo '<div class="item">' . date('d-m', strtotime($lid->getGeboortedatum())) . ' ';
-							if ($lid->isJarig()) {
+						foreach ($aVerjaardagen as $profiel) {
+							echo '<div class="item">' . date('d-m', strtotime($profiel->gebdatum)) . ' ';
+							if ($profiel->isJarig()) {
 								echo '<span class="cursief">';
 							}
-							echo $lid->getNaamLink('civitas', 'visitekaartje');
-							if ($lid->isJarig()) {
+							echo $profiel->getLink('civitas');
+							if ($profiel->isJarig()) {
 								echo '</span>';
 							}
 							echo '</div>';

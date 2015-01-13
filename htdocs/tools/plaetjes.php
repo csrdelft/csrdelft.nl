@@ -7,13 +7,13 @@ $img = PICS_PATH . filter_input(INPUT_GET, 'img', FILTER_SANITIZE_STRING);
 // voorkom path traversal
 if (strpos($img, '..') !== false) {
 	http_response_code(403);
-	exit;
+	die('<h1>403 Forbidden</h1>');
 }
 
 // afschermen voor externen
 if (!LoginModel::mag('P_LOGGED_IN')) {
 	http_response_code(401);
-	exit;
+	die('<h1>401 Unauthorized</h1>');
 }
 
 if (file_exists($img) AND is_readable($img)) {
@@ -41,7 +41,7 @@ if (file_exists($img) AND is_readable($img)) {
 			break;
 		default:
 			http_response_code(415);
-			exit;
+			die('<h1>415 Unsupported Media Type</h1>');
 	}
 
 	header('Content-type: ' . $mime);
@@ -49,4 +49,5 @@ if (file_exists($img) AND is_readable($img)) {
 	readfile($img);
 } else {
 	http_response_code(404);
+	die('<h1>404 Not Found</h1>');
 }

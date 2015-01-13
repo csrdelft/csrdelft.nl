@@ -17,7 +17,7 @@ class EetwensForm extends InlineForm {
 			maalcieUrl . '/eetwens',
 			new TextareaField(
 				'eetwens',
-				CorveeVoorkeurenModel::getEetwens(LoginModel::instance()->getLid()),
+				CorveeVoorkeurenModel::getEetwens(LoginModel::getProfiel()),
 				'Allergie/diëet:'
 			),
 			true,

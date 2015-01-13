@@ -1,7 +1,5 @@
 <?php
 
-require_once 'model/Agendeerbaar.interface.php';
-
 /**
  * AgendaItem.class.php
  * 
@@ -117,7 +115,7 @@ class AgendaItem extends PersistentEntity implements Agendeerbaar {
 		if (LoginModel::mag('P_AGENDA_MOD', $ical)) {
 			return true;
 		}
-		$verticale = 'verticale:' . LoginModel::instance()->getLid()->getVerticale()->letter;
+		$verticale = 'verticale:' . LoginModel::getProfiel()->verticale;
 		if ($this->rechten_bekijken == $verticale AND LoginModel::mag('verticaleleider')) {
 			return true;
 		}

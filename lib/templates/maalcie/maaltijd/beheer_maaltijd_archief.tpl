@@ -16,13 +16,13 @@
 		{foreach from=$maaltijd->getAanmeldingenArray() item=aanmelding}
 			<li>
 				{if $aanmelding[0] === 'gast'}Gast van
-				{else}{$aanmelding[0]|csrnaam:Instellingen::get('corvee', 'weergave_ledennamen_beheer'):Instellingen::get('corvee', 'weergave_link_ledennamen')}
+				{else}{ProfielModel::getLink($aanmelding[0], Instellingen::get('corvee', 'weergave_ledennamen_beheer'))}
 				{/if}
 				{if $aanmelding[1] === 'abo'} (abo)
 				{elseif $aanmelding[0] !== $aanmelding[1]}
 					{if $aanmelding[0] !== 'gast'} door
 					{/if}
-					&nbsp;{$aanmelding[1]|csrnaam:Instellingen::get('corvee', 'weergave_ledennamen_beheer'):Instellingen::get('corvee', 'weergave_link_ledennamen')}
+					&nbsp;{ProfielModel::getNaam($aanmelding[1], Instellingen::get('corvee', 'weergave_ledennamen_beheer'))}
 				{/if}
 			</li>
 		{/foreach}

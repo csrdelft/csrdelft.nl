@@ -225,7 +225,7 @@ class HTML_BBCodeParser2_Filter_Csrblocks extends HTML_BBCodeParser2_Filter {
 					$uid = '';
 				}
 
-				$naam = Lid::naamLink($uid, 'user', 'visitekaartje');
+				$naam = ProfielModel::getLink($uid, 'user');
 				if ($naam !== false) {
 					return $naam;
 				} else {
@@ -1057,7 +1057,7 @@ HTML;
 				}
 
 				$spreker = '';
-				$lid = Lid::naamLink($van, 'user', 'visitekaartje');
+				$lid = ProfielModel::getLink($van, 'user');
 				if ($lid !== false) {
 					$spreker = ' van ' . $lid;
 				} elseif ($van !== '') {

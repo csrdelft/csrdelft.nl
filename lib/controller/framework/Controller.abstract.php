@@ -160,7 +160,7 @@ abstract class Controller {
 	protected function geentoegang() {
 		http_response_code(403);
 		if ($this->isPosted()) {
-			echo 'Access denied';
+			die('403 Forbidden');
 		} else {
 			require_once 'model/CmsPaginaModel.class.php';
 			require_once 'view/CmsPaginaView.class.php';

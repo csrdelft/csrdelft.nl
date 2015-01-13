@@ -1,5 +1,7 @@
 <?php
 
+require_once 'model/Agendeerbaar.interface.php';
+
 /**
  * Maaltijd.class.php	| 	P.W.G. Brussee (brussee@live.nl)
  * 

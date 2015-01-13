@@ -13,16 +13,16 @@ class StamboomView implements View {
 
 	/**
 	 * Root-lid
-	 * @var Lid
+	 * @var Profiel
 	 */
 	private $root;
 	private $kinderen = 0;
 
 	public function __construct($uid, $levels = 3) {
-		if (!Lid::isValidUid($uid)) {
+		if (!AccountModel::isValidUid($uid)) {
 			$uid = LoginModel::getUid();
 		}
-		$this->root = LidCache::getLid($uid);
+		$this->root = ProfielModel::get($uid);
 	}
 
 	public function getModel() {
@@ -37,28 +37,29 @@ class StamboomView implements View {
 		return 'Stamboom voor het geslacht van ' . $this->root->getNaam();
 	}
 
-	private function viewNode(Lid $lid, $viewPatroon = false) {
+	private function viewNode(Profiel $profiel, $viewPatroon = false) {
 		echo '<div class="node">';
 		echo '<div class="lid">';
-		echo $lid->getNaamLink('pasfoto', 'link');
-		echo $lid->getNaamLink('civitas', 'link');
-		if ($lid->getAantalKinderen() == 1) {
+		echo $profiel->getLink('pasfoto');
+		echo $profiel->getLink('civitas');
+		$aantalKinderen = count($profiel->getKinderen());
+		if ($aantalKinderen == 1) {
 			echo '<span class="small"> (1 kind)</span>';
-		} elseif ($lid->getAantalKinderen() > 1) {
-			echo '<span class="small"> (' . $lid->getAantalKinderen() . ' kinderen)</span>';
+		} elseif ($aantalKinderen > 1) {
+			echo '<span class="small"> (' . $aantalKinderen . ' kinderen)</span>';
 		}
 
 		if ($viewPatroon) {
-			$patroon = $lid->getPatroon();
-			if ($patroon instanceof Lid) {
-				echo '<br /><a href="/leden/stamboom/' . $patroon->getUid() . '" title="Stamboom van ' . htmlspecialchars($patroon->getNaam()) . '"> &uArr; ' . $patroon->getNaam('civitas') . '</a>';
+			$patroon = ProfielModel::get($profiel->patroon);
+			if ($patroon) {
+				echo '<br /><a href="/leden/stamboom/' . $patroon->uid . '" title="Stamboom van ' . htmlspecialchars($patroon->getNaam()) . '"> &uArr; ' . $patroon->getNaam('civitas') . '</a>';
 			}
 		}
 		echo '</div>';
 
-		if (count($lid->getKinderen()) > 0) {
+		if ($profiel->hasKinderen()) {
 			echo '<div class="kinderen">';
-			foreach ($lid->getKinderen() as $kind) {
+			foreach ($profiel->getKinderen() as $kind) {
 				$this->kinderen++;
 				$this->viewNode($kind);
 			}

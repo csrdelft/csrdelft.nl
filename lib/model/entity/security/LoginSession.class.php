@@ -34,6 +34,11 @@ class LoginSession extends PersistentEntity {
 	 */
 	public $ip;
 	/**
+	 * Sessie koppelen aan ip
+	 * @var boolean
+	 */
+	public $lock_ip;
+	/**
 	 * Database table columns
 	 * @var array
 	 */
@@ -42,7 +47,8 @@ class LoginSession extends PersistentEntity {
 		'uid'			 => array(T::UID),
 		'login_moment'	 => array(T::DateTime),
 		'user_agent'	 => array(T::String, true),
-		'ip'			 => array(T::String, true)
+		'ip'			 => array(T::String, true),
+		'lock_ip'		 => array(T::Boolean)
 	);
 	/**
 	 * Database primary key

@@ -157,7 +157,7 @@ class SavedQueryContent implements View {
 
 	public static function render_field($name, $contents) {
 		if ($name == 'uid_naam') {
-			return Lid::naamLink($contents, 'volledig', 'link');
+			return ProfielModel::getLink($contents, 'volledig');
 		} elseif ($name == 'onderwerp_link') { //link naar het forum.
 			return '<a href="/forum/onderwerp/' . $contents . '">' . $contents . '</a>';
 		} elseif (substr($name, 0, 10) == 'groep_naam' AND $contents != '') {

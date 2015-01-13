@@ -29,12 +29,12 @@ class Barsysteem {
 		foreach ($terug as $row) {
 			$persoon = array();
 			$persoon["naam"] = $row["naam"];
-			$persoon["status"] = 'S_EXTERN';
+			$persoon["status"] = LidStatus::Nobody;
 			if ($row["stekUID"]) {
-				$lid = LidCache::getLid($row["stekUID"]);
-				if ($lid instanceof Lid) {
-					$persoon["naam"] = $lid->getNaam();
-					$persoon["status"] = $lid->getStatus()->__toString();
+				$profiel = ProfielModel::get($row["stekUID"]);
+				if ($profiel instanceof Profiel) {
+					$persoon["naam"] = $profiel->getNaam();
+					$persoon["status"] = LidStatus::getDescription($profiel->status);
 				}
 			}
 			$persoon["socCieId"] = $row["socCieId"];
@@ -334,9 +334,9 @@ ORDER BY yearweek DESC
 		return $data;
 	}
 
-	private function sumSaldi($lidOnly = false) {
+	private function sumSaldi($profielOnly = false) {
 
-		$after = $lidOnly ? "AND stekUID IS NOT NULL" : "";
+		$after = $profielOnly ? "AND stekUID IS NOT NULL" : "";
 
 		return $this->db->query("SELECT SUM(saldo) AS sum FROM socCieKlanten WHERE deleted = 0 " . $after)->fetch(PDO::FETCH_ASSOC);
 	}
@@ -349,8 +349,8 @@ ORDER BY yearweek DESC
 		while ($r = $q->fetch(PDO::FETCH_ASSOC)) {
 
 			$result[] = array(
-				'naam'	 => LidCache::getLid($r['stekUID'])->getNaam(),
-				'email'	 => LidCache::getLid($r['stekUID'])->getEmail(),
+				'naam'	 => ProfielModel::get($r['stekUID'])->getNaam(),
+				'email'	 => ProfielModel::get($r['stekUID'])->getPrimaryEmail(),
 				'saldo'	 => $r['saldo']
 			);
 		}

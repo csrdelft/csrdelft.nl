@@ -31,16 +31,13 @@ if (isset($_GET['xml'])) {
 		$adres = $aLid['adres'] . ', ' . $aLid['woonplaats'];
 
 		if ($adres != $current) {
-			if ($current != '')
-				;
-
 			$current = $address;
 		}
 
 		if ($aLid['adres'] != '') {
-			echo '<marker address="' . $adres . '" label="' . Lid::naamLink($aLid['uid'], 'civitas', 'plain') . '">';
+			echo '<marker address="' . $adres . '" label="' . ProfielModel::getNaam($aLid['uid'], 'civitas') . '">';
 			echo '<infowindow><![CDATA[';
-			echo Lid::naamLink($aLid['uid'], 'civitas', 'link') . '';
+			echo ProfielModel::getLink($aLid['uid'], 'civitas') . '';
 			echo ']]></infowindow></marker>' . "\n";
 		}
 	}

@@ -58,16 +58,20 @@ class VerticalenView implements View {
 					echo '<h5>Kring ' . $kringnaam . '</h5>';
 				}
 				echo '<div id="leden' . $verticale->getLetter() . '.' . $kringnaam . '" class="kringleden">';
-				foreach ($kring as $lid) {
-					if ($lid->isKringleider())
+				foreach ($kring as $profiel) {
+					if ($profiel->kringleider !== Kringleider::Nee) {
 						echo '<em>';
-					echo $lid->getNaamLink('volledig', 'visitekaartje');
-					if ($lid->getStatus() == 'S_KRINGEL')
+					}
+					echo $profiel->getLink('volledig');
+					if ($profiel->status === LidStatus::Kringel) {
 						echo '&nbsp;~';
-					if ($lid->isVerticaan())
+					}
+					if ($profiel->motebal) {
 						echo '&nbsp;L';
-					if ($lid->isKringleider())
+					}
+					if ($profiel->kringleider !== Kringleider::Nee) {
 						echo '</em>';
+					}
 					echo '<br />';
 				}
 				echo '</div>';
@@ -110,7 +114,7 @@ class VerticaleEmailsView implements View {
 	public function view() {
 		$leden = array();
 		foreach ($this->kring as $kringlid) {
-			$leden[] = $kringlid->getEmail();
+			$leden[] = $kringlid->getPrimaryEmail();
 		}
 		echo implode(', ', $leden);
 	}

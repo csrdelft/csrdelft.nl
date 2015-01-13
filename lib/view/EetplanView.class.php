@@ -106,7 +106,7 @@ class EetplanNovietView extends AbstractEetplanView {
 	}
 
 	public function getBreadcrumbs() {
-		return parent::getBreadcrumbs() . ' » ' . Lid::naamLink($this->uid, 'civitas', 'link');
+		return parent::getBreadcrumbs() . ' » ' . ProfielModel::getLink($this->uid, 'civitas');
 	}
 
 	function view() {
@@ -175,7 +175,7 @@ class EetplanHuisView extends AbstractEetplanView {
 					$row++;
 				}
 				echo '<tr class="kleur' . ($row % 2) . '"><td>' . $ertussen . '</td>
-					<td>' . Lid::naamLink($aEetplanData['pheut'], 'civitas', 'visitekaartje') . '</td>
+					<td>' . ProfielModel::getLink($aEetplanData['pheut'], 'civitas') . '</td>
 					<td>' . htmlspecialchars($aEetplanData['mobiel']) . '</td>
 					<td>' . htmlspecialchars($aEetplanData['email']) . '</td>
 					<td>' . htmlspecialchars($aEetplanData['eetwens']) . '</td>

@@ -68,7 +68,7 @@ class BeheerAbonnementenController extends AclController {
 	}
 
 	public function inschakelen($mrid, $uid) {
-		if (!Lid::exists($uid)) {
+		if (!ProfielModel::existsUid($uid)) {
 			throw new Exception('Lid bestaat niet: $uid =' . $uid);
 		}
 		$abo_aantal = MaaltijdAbonnementenModel::inschakelenAbonnement((int) $mrid, $uid);
@@ -80,7 +80,7 @@ class BeheerAbonnementenController extends AclController {
 	}
 
 	public function uitschakelen($mrid, $uid) {
-		if (!Lid::exists($uid)) {
+		if (!ProfielModel::existsUid($uid)) {
 			throw new Exception('Lid bestaat niet: $uid =' . $uid);
 		}
 		$abo_aantal = MaaltijdAbonnementenModel::uitschakelenAbonnement((int) $mrid, $uid);

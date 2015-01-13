@@ -82,7 +82,7 @@ class auth_plugin_authcsr extends DokuWiki_Auth_Plugin {
 			// - x999
 			// - or as lid when:
 			//      * cookie available
-			//      * private_token was added to url (checking the permissions by LoginModel::hasPermission, needs setting token_authorizable to true)
+			//      * private_token was added to url (checking the permissions by LoginModel::hasPermission, needs setting allowAuthByToken to true)
 
 			if (LoginModel::instance()->login(strval($user), strval($pass))) {
 				//success
@@ -101,19 +101,18 @@ class auth_plugin_authcsr extends DokuWiki_Auth_Plugin {
 
 			// okay we're logged in - set the globals
 			require_once 'model/entity/groepen/OldGroep.class.php';
-			/** @var Lid $lid */
-			$lid = LoginModel::instance()->getLid();
-			$USERINFO['name'] = $lid->getNaam();
-			$USERINFO['mail'] = $lid->getEmail();
-			$USERINFO['pasfoto'] = $lid->getPasfoto($imgTag = false);
-			$USERINFO['grps'] = GroepenOldModel::getWikigroupsByUid($lid->getUid());
+			/** @var Lid $profiel */
+			$profiel = LoginModel::getAccount();
+			$USERINFO['name'] = $profiel->getNaam();
+			$USERINFO['mail'] = $profiel->getPrimaryEmail();
+			$USERINFO['grps'] = GroepenOldModel::getWikigroupsByUid($profiel->uid);
 			// always add the default group to the list of groups
 			if (!in_array($conf['defaultgroup'], $USERINFO['grps'])) {
 				$USERINFO['grps'][] = $conf['defaultgroup'];
 			}
 
-			$_SERVER['REMOTE_USER'] = $lid->getUid();
-			$_SESSION[DOKU_COOKIE]['auth']['user'] = $lid->getUid();
+			$_SERVER['REMOTE_USER'] = $profiel->uid;
+			$_SESSION[DOKU_COOKIE]['auth']['user'] = $profiel->uid;
 			$_SESSION[DOKU_COOKIE]['auth']['info'] = $USERINFO;
 			return true;
 
@@ -165,12 +164,11 @@ class auth_plugin_authcsr extends DokuWiki_Auth_Plugin {
 	function getUserData($useruid) {
 		global $conf;
 
-		if (Lid::isValidUid($useruid)) {
-			$lid = LidCache::getLid($useruid);
-			if ($lid instanceof Lid) {
-				$info['name'] = $lid->getNaam();
-				$info['mail'] = $lid->getEmail();
-				$info['pasfoto'] = $lid->getPasfoto($imgTag = false);
+		if (AccountModel::isValidUid($useruid)) {
+			$profiel = ProfielModel::get($useruid);
+			if ($profiel instanceof Profiel) {
+				$info['name'] = $profiel->getNaam();
+				$info['mail'] = $profiel->getPrimaryEmail();
 				require_once 'model/entity/groepen/OldGroep.class.php';
 				$info['grps'] = GroepenOldModel::getWikigroupsByUid($useruid);
 				// always add the default group to the list of groups

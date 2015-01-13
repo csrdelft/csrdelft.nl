@@ -363,7 +363,7 @@ class BiebBoek {
 	 * 					$eigenaar is ongeldig uid
 	 */
 	public function addExemplaar($eigenaar) {
-		if (!Lid::isValidUid($eigenaar)) {
+		if (!AccountModel::isValidUid($eigenaar)) {
 			return false;
 		}
 		$db = MijnSqli::instance();
@@ -813,7 +813,7 @@ class BewerkBoek extends BiebBoek {
 				break;
 			case 'lener':
 				$uid = $this->exemplaren[$exemplaarid]['uitgeleend_uid'];
-				$naam = Lid::naamLink($uid, 'volledig', 'plain');
+				$naam = ProfielModel::getNaam($uid, 'volledig');
 				if ($naam !== false) {
 					$return = $naam;
 				} else {
@@ -993,7 +993,7 @@ class BewerkBoek extends BiebBoek {
 			} else {
 				$titeltekst = 'Bewerk uw beschrijving of recensie van het boek:';
 				$uid = $this->getEditBeschrijving()->getSchrijver();
-				$naam = Lid::naamLink($uid, 'volledig', 'plain');
+				$naam = ProfielModel::getNaam($uid, 'volledig');
 				if ($naam !== false) {
 					$schrijver = $naam . ':';
 				}

@@ -1,5 +1,7 @@
 <?php
 
+require_once 'model/security/OneTimeTokensModel.class.php';
+
 /**
  * LoginController.class.php
  * 
@@ -58,7 +60,7 @@ class LoginController extends AclController {
 
 	public function su($uid = null) {
 		$this->model->switchUser($uid);
-		setMelding('U bekijkt de webstek nu als ' . Lid::naamLink($uid, 'volledig', 'plain') . '!', 1);
+		setMelding('U bekijkt de webstek nu als ' . ProfielModel::getNaam($uid, 'volledig') . '!', 1);
 		redirect(HTTP_REFERER, false);
 	}
 
@@ -88,40 +90,34 @@ class LoginController extends AclController {
 	}
 
 	public function wachtwoord($action = null) {
-		$lid = $this->model->getLid();
-		$uid = $lid->getUid();
+		$account = LoginModel::getAccount();
 		// wijzigen
 		if (LoginModel::mag('P_PROFIEL_EDIT')) {
-			$form = new WachtwoordWijzigenForm($lid, $action);
+			$form = new WachtwoordWijzigenForm($account, $action);
 			if ($form->validate()) {
-				$pw = $form->findByName('wwreset')->getValue();
 				// wachtwoord opslaan
-				if (!$lid->resetWachtwoord($pw)) {
-					setMelding('Wachtwoord instellen faalt', -1);
-					redirect();
-				}
+				$pass_plain = $form->findByName('wwreset')->getValue();
+				AccountModel::instance()->resetWachtwoord($account, $pass_plain);
 				setMelding('Wachtwoord instellen geslaagd', 1);
 			}
 		}
 		// resetten
-		elseif ($action === 'reset' AND LoginModel::mag('P_PROFIEL_EDIT', true) AND VerifyModel::instance()->isVerified($uid, '/wachtwoord/reset')) {
-			$form = new WachtwoordWijzigenForm($lid, $action, false);
+		elseif ($action === 'reset' AND LoginModel::mag('P_PROFIEL_EDIT', true) AND OneTimeTokensModel::instance()->isVerified($account->uid, '/wachtwoord/reset')) {
+			$form = new WachtwoordWijzigenForm($account, $action, false);
 			if ($form->validate()) {
-				$pw = $form->findByName('wwreset')->getValue();
 				// wachtwoord opslaan
-				if (!$lid->resetWachtwoord($pw)) {
-					setMelding('Wachtwoord instellen faalt', -1);
-					redirect();
-				}
+				$pass_plain = $form->findByName('wwreset')->getValue();
+				AccountModel::instance()->resetWachtwoord($account, $pass_plain);
 				setMelding('Wachtwoord instellen geslaagd', 1);
 				// token verbruikt
-				VerifyModel::instance()->discardToken($uid, '/wachtwoord/reset');
-				$this->model->login($uid, $pw);
-				$lidnaam = $lid->getNaamLink('civitas', 'plain');
+				OneTimeTokensModel::instance()->discardToken($account->uid, '/wachtwoord/reset');
+				// inloggen zonder $authByToken
+				$this->model->login($account->uid, $pass_plain);
 				// stuur bevestigingsmail
+				$lidnaam = $account->getProfiel()->getNaam('civitas');
 				require_once 'model/entity/Mail.class.php';
 				$bericht = "Geachte " . $lidnaam . ",\n\nU heeft recent uw wachtwoord opnieuw ingesteld. Als u dit niet zelf gedaan heeft dan moet u nu direct uw wachtwoord wijzigen en de PubCie op de hoogte stellen.\n\nMet amicale groet,\nUw PubCie";
-				$mail = new Mail(array($lid->getEmail() => $lidnaam), 'C.S.R. webstek: nieuw wachtwoord ingesteld', $bericht);
+				$mail = new Mail(array($account->email => $lidnaam), 'C.S.R. webstek: nieuw wachtwoord ingesteld', $bericht);
 				$mail->send();
 			}
 		}
@@ -130,31 +126,29 @@ class LoginController extends AclController {
 			$form = new WachtwoordVergetenForm();
 			if ($form->validate()) {
 				$values = $form->getValues();
-				$lid = LidCache::getLid($values['user']);
-				if ($lid instanceof Lid) {
-					$uid = $lid->getUid();
-				} else {
-					$uid = 'x999';
+				$account = AccountModel::get($values['user']);
+				if (!$account) {
+					$account = AccountModel::get('x999');
 				}
-				$timeout = TimeoutModel::instance()->moetWachten($uid);
+				$timeout = AccountModel::instance()->moetWachten($account);
 				if ($timeout > 0) {
 					setMelding('Wacht ' . $timeout . ' seconden', -1);
 				}
 				// mag wachtwoord resetten?
-				elseif ($lid instanceof Lid AND AccessModel::mag($lid, 'P_PROFIEL_EDIT') AND $lid->getEmail() === $values['mail']) {
-					$token = VerifyModel::instance()->createToken($uid, '/wachtwoord/reset');
-					$lidnaam = $lid->getNaamLink('civitas', 'plain');
-					// stuure resetmail
+				elseif (AccessModel::mag($account, 'P_PROFIEL_EDIT') AND $account->email === $values['mail']) {
+					$token = OneTimeTokensModel::instance()->createToken($account->uid, '/wachtwoord/reset');
+					// stuur resetmail
+					$lidnaam = $account->getProfiel()->getNaam('civitas');
 					require_once 'model/entity/Mail.class.php';
 					$bericht = "Geachte " . $lidnaam .
 							",\n\nU heeft verzocht om uw wachtwoord opnieuw in te stellen. Dit is mogelijk met de onderstaande link tot " . $token->expire .
 							".\n\n[url=" . CSR_ROOT . "/verify/" . $token->token .
 							"]Wachtwoord instellen[/url].\n\nAls dit niet uw eigen verzoek is kunt u dit bericht negeren.\n\nMet amicale groet,\nUw PubCie";
-					$mail = new Mail(array($lid->getEmail() => $lidnaam), 'C.S.R. webstek: nieuw wachtwoord instellen', $bericht);
+					$mail = new Mail(array($account->email => $lidnaam), 'C.S.R. webstek: nieuw wachtwoord instellen', $bericht);
 					$mail->send();
 					setMelding('Wachtwoord reset email verzonden', 1);
 				} else {
-					TimeoutModel::instance()->fout($uid);
+					AccountModel::instance()->failedLoginAttempt($account);
 				}
 			}
 		}
@@ -166,11 +160,11 @@ class LoginController extends AclController {
 		$form = new VerifyForm($tokenValue);
 		if ($form->validate()) {
 			$uid = $form->findByName('user')->getValue();
-			$lid = LidCache::getLid($uid);
-			if ($lid instanceof Lid AND AccessModel::mag($lid, 'P_LOGGED_IN') AND VerifyModel::instance()->verifyToken($lid->getUid(), $tokenValue)) {
+			$account = AccountModel::get($uid);
+			if ($account AND AccessModel::mag($account, 'P_LOGGED_IN') AND OneTimeTokensModel::instance()->verifyToken($account->uid, $tokenValue)) {
 				// redirect by verifyToken
 			}
-			setMelding(VerifyModel::instance()->getError(), -1);
+			setMelding(OneTimeTokensModel::instance()->getError(), -1);
 		}
 		$this->view = new CsrLayoutPage($form);
 	}

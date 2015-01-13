@@ -7,7 +7,7 @@
  */
 class VerjaardagenModel {
 
-	static function getVerjaardagen($maand, $dag = 0) {
+	public static function get($maand, $dag = 0) {
 		$db = MijnSqli::instance();
 		$maand = (int) $maand;
 		$dag = (int) $dag;
@@ -35,8 +35,7 @@ class VerjaardagenModel {
 		return $verjaardagen;
 	}
 
-	static function getKomendeVerjaardagen($aantal = 10) {
-		$aantal = (int) $aantal;
+	public static function getKomende($aantal = 10) {
 		$db = MijnSqli::instance();
 		$query = "
 			SELECT
@@ -56,18 +55,63 @@ class VerjaardagenModel {
 			AND
 				NOT gebdatum = '0000-00-00'
 			ORDER BY verjaardag ASC, lidjaar, gebdatum, achternaam
-			LIMIT " . $aantal;
+			LIMIT " . (int) $aantal;
 
-		$result = $db->select($query);
+		$leden = MijnSqli::instance()->query2array($query);
 
-		if ($result !== false and $db->numRows($result) > 0) {
-			while ($aVerjaardag = $db->next($result)) {
-				$aVerjaardag['jarig_over'] = (int) ceil((strtotime($aVerjaardag['verjaardag']) - time()) / 86400);
-				$aVerjaardag['leeftijd'] = round((strtotime($aVerjaardag['verjaardag']) - strtotime($aVerjaardag['gebdatum'])) / 31536000);
-				$aVerjaardagen[] = $aVerjaardag;
+		$return = array();
+		if (is_array($leden)) {
+			foreach ($leden as $uid) {
+				$return[] = ProfielModel::get($uid['uid']);
 			}
 		}
-		return $aVerjaardagen;
+		return $return;
+	}
+
+	public static function getTussen($van, $tot, $limiet = 0, $ical = false) {
+		if (!LoginModel::mag('P_VERJAARDAGEN', $ical)) {
+			return array();
+		}
+
+		$vanjaar = date('Y', $van);
+		$totjaar = date('Y', $tot);
+		$van = date('Y-m-d', $van);
+		$tot = date('Y-m-d', $tot);
+
+		if ((int) $limiet > 0) {
+			$limitclause = "LIMIT " . (int) $limiet;
+		} else {
+			$limitclause = '';
+		}
+		$query = "
+			SELECT uid, ADDDATE(
+					gebdatum,
+					INTERVAL TIMESTAMPDIFF(
+						year,
+						ADDDATE(gebdatum, INTERVAL 1 DAY),
+						CURRENT_DATE
+					)+1 YEAR
+				) as verjaardag
+			FROM lid
+			WHERE (
+				(CONCAT('" . $vanjaar . "', SUBSTRING(gebdatum, 5))>='" . $van . "' AND CONCAT('" . $vanjaar . "', SUBSTRING(gebdatum, 5))<'" . $tot . "')
+			OR
+				(CONCAT('" . $totjaar . "', SUBSTRING(gebdatum, 5))>='" . $van . "' AND CONCAT('" . $totjaar . "', SUBSTRING(gebdatum, 5))<'" . $tot . "')
+			) AND
+			(status='S_NOVIET' OR status='S_GASTLID' OR status='S_LID' OR status='S_KRINGEL') AND
+			NOT gebdatum = '0000-00-00'
+			ORDER BY verjaardag ASC, lidjaar, gebdatum, achternaam
+			" . $limitclause . ";";
+
+		$leden = MijnSqli::instance()->query2array($query);
+
+		$return = array();
+		if (is_array($leden)) {
+			foreach ($leden as $uid) {
+				$return[] = ProfielModel::get($uid['uid']);
+			}
+		}
+		return $return;
 	}
 
 }

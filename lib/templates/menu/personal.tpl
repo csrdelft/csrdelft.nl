@@ -1,19 +1,19 @@
 <li class="has-children{if LoginModel::instance()->isSued()} sued{/if}">
-	<a href="#0">{LoginModel::getUid()|csrnaam:"civitas":"plain"}</a>
+	<a href="#0">{LoginModel::getProfiel()->getNaam('volledig')}</a>
 	<ul class="is-hidden">
-		<li class="go-back"><a href="#0">{LoginModel::getUid()|csrnaam:"civitas":"plain"}</a></li>
-{if LoginModel::instance()->isSued()}
-		<li><a href="/endsu" class="error" title="Switch user actie beeindingen">SU {LoginModel::instance()->getSuedFrom()->getNaamLink('civitas', 'plain')}</a></li>
-{/if}
+		<li class="go-back"><a href="#0">{LoginModel::getProfiel()->getNaam('volledig')}</a></li>
+	{if LoginModel::instance()->isSued()}
+		<li><a href="/endsu" class="error" title="Switch user actie beeindingen">SU {LoginModel::getSuedFrom()->getNaam('civitas')}</a></li>
+	{/if}
 		<li>
 			<a href="/profiel/{LoginModel::getUid()}#SocCieSaldo" title="Bekijk SocCie saldo historie">
-				{assign var=saldo value=LoginModel::instance()->getLid()->getSoccieSaldo()}
+				{assign var=saldo value=LoginModel::getProfiel()->getSoccieSaldo()}
 				SocCie: <span{if $saldo < 0} class="staatrood"{/if}>&euro; {$saldo|number_format:2:",":"."}</span>
 			</a>
 		</li>
 		<li>
 			<a href="/profiel/{LoginModel::getUid()}#MaalCieSaldo" title="Bekijk MaalCie saldo historie">
-				{assign var=saldo value=LoginModel::instance()->getLid()->getMaalcieSaldo()}
+				{assign var=saldo value=LoginModel::getProfiel()->getMaalcieSaldo()}
 				MaalCie: <span{if $saldo < 0} class="staatrood"{/if}>&euro; {$saldo|number_format:2:",":"."}</span>
 			</a>
 		</li>

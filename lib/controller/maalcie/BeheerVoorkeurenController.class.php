@@ -41,7 +41,7 @@ class BeheerVoorkeurenController extends AclController {
 	}
 
 	public function inschakelen($crid, $uid) {
-		if (!Lid::exists($uid)) {
+		if (!ProfielModel::existsUid($uid)) {
 			throw new Exception('Lid bestaat niet: $uid =' . $uid);
 		}
 		$voorkeur = CorveeVoorkeurenModel::inschakelenVoorkeur((int) $crid, $uid);
@@ -50,7 +50,7 @@ class BeheerVoorkeurenController extends AclController {
 	}
 
 	public function uitschakelen($crid, $uid) {
-		if (!Lid::exists($uid)) {
+		if (!ProfielModel::existsUid($uid)) {
 			throw new Exception('Lid bestaat niet: $uid =' . $uid);
 		}
 		CorveeVoorkeurenModel::uitschakelenVoorkeur((int) $crid, $uid);

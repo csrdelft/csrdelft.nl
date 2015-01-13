@@ -16,8 +16,6 @@
  * 
  * @see http://www.cronjob.nl/
  */
-session_id('cron-cli');
-
 chdir(dirname(__FILE__) . '/../lib/');
 
 require_once 'configuratie.include.php';
@@ -33,7 +31,7 @@ try {
 
 // VerifyModel
 try {
-	VerifyModel::instance()->opschonen();
+	OneTimeTokensModel::instance()->opschonen();
 } catch (Exception $e) {
 	DebugLogModel::instance()->log('cron.php', 'VerifyModel::opschonen()', array(), $e);
 }

@@ -28,7 +28,7 @@ class DebugLogModel extends PersistenceModel {
 		$entry->moment = getDateTime();
 		$entry->uid = LoginModel::getUid();
 		if (LoginModel::instance()->isSued()) {
-			$entry->su_uid = LoginModel::instance()->getSuedFrom()->getUid();
+			$entry->su_uid = LoginModel::getSuedFrom()->uid;
 		}
 		$entry->ip = $_SERVER['REMOTE_ADDR'];
 		$entry->request = REQUEST_URI;

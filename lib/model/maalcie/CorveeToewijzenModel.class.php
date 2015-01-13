@@ -27,11 +27,11 @@ class CorveeToewijzenModel {
 			$avg = 0;
 			foreach ($functie->getKwalificaties() as $kwali) {
 				$uid = $kwali->uid;
-				$lid = \LidCache::getLid($uid); // false if lid does not exist
-				if (!$lid instanceof \Lid) {
+				$profiel = ProfielModel::get($uid); // false if lid does not exist
+				if (!$profiel instanceof Profiel) {
 					throw new Exception('Lid bestaat niet: $uid =' . $uid);
 				}
-				if (!$lid->isLid()) {
+				if (!$profiel->isLid()) {
 					continue; // geen oud-lid of overleden lid
 				}
 				if (array_key_exists($uid, $vrijstellingen)) {
@@ -41,7 +41,7 @@ class CorveeToewijzenModel {
 						continue; // taak valt binnen vrijstelling-periode: suggestie niet weergeven
 					}
 				}
-				$lijst[$uid] = CorveePuntenModel::loadPuntenVoorLid($lid, array($functie->functie_id => $functie));
+				$lijst[$uid] = CorveePuntenModel::loadPuntenVoorLid($profiel, array($functie->functie_id => $functie));
 				$lijst[$uid]['aantal'] = $lijst[$uid]['aantal'][$functie->functie_id];
 				$avg += $lijst[$uid]['aantal'];
 			}

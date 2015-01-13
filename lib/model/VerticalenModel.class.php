@@ -17,16 +17,8 @@ class VerticalenModel extends CachedPersistenceModel {
 	 */
 	protected $memcache_prefetch = true;
 
-	public function getVerticaleById($id) {
-		return $this->retrieveByPrimaryKey(array((int) $id));
-	}
-
-	public function getVerticaleByLetter($letter) {
-		return $this->find('letter = ?', array($letter))->fetch();
-	}
-
-	public function findVerticaleByName($naam) {
-		return $this->find('naam LIKE ?', array('%' . $naam . '%'));
+	public static function get($letter) {
+		return static::instance()->retrieveByPrimaryKey(array($letter));
 	}
 
 	/**
@@ -36,7 +28,7 @@ class VerticalenModel extends CachedPersistenceModel {
 	 * @return string
 	 */
 	public function getVerticaleLeider(Verticale $verticale) {
-		return Database::instance()->sqlSelect(array('uid'), 'lid', 'verticale = ? AND motebal = 1', array($verticale->id), null, null, 1)->fetchColumn();
+		return Database::instance()->sqlSelect(array('uid'), 'lid', 'verticale = ? AND motebal = 1', array($verticale->letter), null, null, 1)->fetchColumn();
 	}
 
 }

@@ -29,8 +29,8 @@
 								{foreach from=$tabel item="aanmelding"}
 									<tr>
 										{if $aanmelding->getUid()}
-											<td>{Lid::naamLink($aanmelding->getUid(), Instellingen::get('maaltijden', 'weergave_ledennamen_maaltijdlijst'), Instellingen::get('maaltijden', 'weergave_link_ledennamen'))}<br />
-												{assign var=eetwens value=LidCache::getLid($aanmelding->getUid())->getProperty('eetwens')}
+											<td>{ProfielModel::getLink($aanmelding->getUid(), Instellingen::get('maaltijden', 'weergave_ledennamen_maaltijdlijst'))}<br />
+												{assign var=eetwens value=ProfielModel::get($aanmelding->getUid())->getProperty('eetwens')}
 												{if $eetwens !== ''}
 													<span class="eetwens">
 														{$eetwens}
@@ -48,7 +48,7 @@
 											</td>
 											<td class="saldo">{$aanmelding->getSaldoMelding()}</td>
 										{elseif $aanmelding->getDoorUid()}
-											<td>Gast van {Lid::naamLink($aanmelding->getDoorUid(), Instellingen::get('maaltijden', 'weergave_ledennamen_maaltijdlijst'), 'plain')}</td>
+											<td>Gast van {ProfielModel::getNaam($aanmelding->getDoorUid(), Instellingen::get('maaltijden', 'weergave_ledennamen_maaltijdlijst'))}</td>
 											<td class="saldo">-</td>
 										{else}
 											<td style="line-height: 2.2em;">&nbsp;</td>
@@ -87,7 +87,7 @@
 					{table_foreach from=$corveetaken inner=rows item=taak table_attr='class="corveetaken"' cols=2 name=corveetaken}
 						&bullet;&nbsp;
 						{if $taak->getUid()}
-							{Lid::naamLink($taak->getUid(), Instellingen::get('maaltijden', 'weergave_ledennamen_maaltijdlijst'), Instellingen::get('maaltijden', 'weergave_link_ledennamen'))}
+							{ProfielModel::getLink($taak->getUid(), Instellingen::get('maaltijden', 'weergave_ledennamen_maaltijdlijst'))}
 						{else}
 							<span class="cursief">vacature</i>
 						{/if}

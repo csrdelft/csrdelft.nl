@@ -65,7 +65,7 @@ class ForumRssView extends ForumView {
 
 	public function view() {
 		$this->smarty->assign('draden', $this->model);
-		$this->smarty->assign('privatelink', LoginModel::instance()->getLid()->getRssLink());
+		$this->smarty->assign('privatelink', LoginModel::getAccount()->getRssLink());
 		$this->smarty->display('forum/rss.tpl');
 	}
 

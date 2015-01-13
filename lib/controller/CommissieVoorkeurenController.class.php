@@ -41,14 +41,14 @@ class CommissieVoorkeurenController extends AclController {
 	}
 
 	public function lidpagina($uid = -1) {
-		if (!Lid::exists($uid)) {
+		if (!ProfielModel::existsUid($uid)) {
 			$this->geentoegang();
 		}
 		if (isset($_POST['opmerkingen'])) {
 			$voorkeur = new CommissieVoorkeurenModel($uid);
 			$voorkeur->setPraesesOpmerking(filter_input(INPUT_POST, 'opmerkingen', FILTER_SANITIZE_STRING));
 		}
-		$body = new LidOverzicht($uid);
+		$body = new CommissieVoorkeurenProfiel($uid);
 		$this->view = new CsrLayoutPage($body);
 	}
 

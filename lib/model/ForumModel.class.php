@@ -79,7 +79,7 @@ class ForumModel extends AbstractForumModel {
 		}
 
 		// Voor alle ex-leden settings opschonen
-		$uids = Database::instance()->sqlSelect(array('uid'), 'lid', "status IN ('S_CIE','S_NOBODY','S_EXLID','S_OVERLEDEN')");
+		$uids = Database::instance()->sqlSelect(array('uid'), 'lid', 'status IN (?,?,?,?)', array(LidStatus::Commissie, LidStatus::Nobody, LidStatus::Exlid, LidStatus::Overleden));
 		$uids->setFetchMode(PDO::FETCH_COLUMN, 0);
 		foreach ($uids as $uid) {
 			ForumDradenGelezenModel::instance()->verwijderDraadGelezenVoorLid($uid);
@@ -484,7 +484,7 @@ class ForumDradenGelezenModel extends AbstractForumModel {
 	}
 
 	public function verwijderDraadGelezenVoorLid($uid) {
-		if (!Lid::isValidUid($uid)) {
+		if (!AccountModel::isValidUid($uid)) {
 			throw new Exception('invalid lid id');
 		}
 		foreach ($this->find('uid = ?', array($uid)) as $gelezen) {
@@ -528,7 +528,7 @@ class ForumDradenVerbergenModel extends AbstractForumModel {
 	}
 
 	public function toonAllesVoorLid($uid) {
-		if (!Lid::isValidUid($uid)) {
+		if (!AccountModel::isValidUid($uid)) {
 			throw new Exception('invalid lid id');
 		}
 		foreach ($this->find('uid = ?', array($uid)) as $verborgen) {
@@ -582,7 +582,7 @@ class ForumDradenVolgenModel extends AbstractForumModel {
 	}
 
 	public function volgNietsVoorLid($uid) {
-		if (!Lid::isValidUid($uid)) {
+		if (!AccountModel::isValidUid($uid)) {
 			throw new Exception('invalid lid id');
 		}
 		foreach ($this->find('uid = ?', array($uid)) as $volgen) {

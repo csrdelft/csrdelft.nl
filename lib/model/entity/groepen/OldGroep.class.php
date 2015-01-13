@@ -368,8 +368,8 @@ class OldGroep {
 		$leden = array();
 		if (is_array($this->getLeden())) {
 			foreach ($this->getLeden() as $lid) {
-				if (Lid::Exists($lid['uid'])) {
-					$leden[] = LidCache::getLid($lid['uid']);
+				if (ProfielModel::existsUid($lid['uid'])) {
+					$leden[] = ProfielModel::get($lid['uid']);
 				}
 			}
 		}
@@ -496,7 +496,7 @@ class OldGroep {
 	}
 
 	public function verwijderLid($uid) {
-		if (Lid::isValidUid($uid) AND $this->isLid($uid)) {
+		if (AccountModel::isValidUid($uid) AND $this->isLid($uid)) {
 			$qVerwijderen = "
 				DELETE FROM groeplid
 				WHERE groepid=" . $this->getId() . "
@@ -523,7 +523,7 @@ class OldGroep {
 	 */
 
 	public function maakLidOt($uid) {
-		if (!Lid::isValidUid($uid) OR ! $this->isLid($uid)) {
+		if (!AccountModel::isValidUid($uid) OR ! $this->isLid($uid)) {
 			$this->error .= 'Gegeven uid zit niet in groep of is geen geldig uid. (OldGroep::maakLidOt())';
 			return false;
 		}

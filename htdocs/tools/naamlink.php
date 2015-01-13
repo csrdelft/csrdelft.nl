@@ -40,7 +40,7 @@ if (isset($_GET['zoekin']) AND in_array($_GET['zoekin'], $toegestanezoekfilters)
 }
 
 function uid2naam($uid) {
-	$naam = Lid::naamLink($uid, 'civitas', 'visitekaartje');
+	$naam = ProfielModel::getLink($uid, 'civitas');
 	if ($naam !== false) {
 		return $naam;
 	} else {
@@ -64,7 +64,7 @@ function naam2naam($naam, $zoekin) {
 }
 
 if ($given == 'uid') {
-	if (Lid::isValidUid($string)) {
+	if (AccountModel::isValidUid($string)) {
 		echo uid2naam($string);
 	} else {
 		$uids = explode(',', $string);

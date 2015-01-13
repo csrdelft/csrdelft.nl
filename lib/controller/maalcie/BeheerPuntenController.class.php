@@ -48,8 +48,8 @@ class BeheerPuntenController extends AclController {
 	}
 
 	public function wijzigpunten($uid) {
-		$lid = LidCache::getLid($uid); // false if lid does not exist
-		if (!$lid instanceof Lid) {
+		$lid = ProfielModel::get($uid); // false if lid does not exist
+		if (!$lid instanceof Profiel) {
 			throw new Exception('Lid bestaat niet: $uid =' . $uid);
 		}
 		$punten = (int) filter_input(INPUT_POST, 'totaal_punten', FILTER_SANITIZE_NUMBER_INT);
@@ -60,8 +60,8 @@ class BeheerPuntenController extends AclController {
 	}
 
 	public function wijzigbonus($uid) {
-		$lid = LidCache::getLid($uid); // false if lid does not exist
-		if (!$lid instanceof Lid) {
+		$lid = ProfielModel::get($uid); // false if lid does not exist
+		if (!$lid instanceof Profiel) {
 			throw new Exception('Lid bestaat niet: $uid =' . $uid);
 		}
 		$bonus = (int) filter_input(INPUT_POST, 'totaal_bonus', FILTER_SANITIZE_NUMBER_INT);

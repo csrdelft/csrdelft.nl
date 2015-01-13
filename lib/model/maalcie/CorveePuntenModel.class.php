@@ -16,8 +16,8 @@ class CorveePuntenModel {
 		$matrix = self::loadPuntenTotaalVoorAlleLeden();
 		foreach ($matrix as $uid => $totalen) {
 			try {
-				$lid = \LidCache::getLid($uid); // false if lid does not exist
-				if (!$lid instanceof \Lid) {
+				$profiel = ProfielModel::get($uid); // false if lid does not exist
+				if (!$profiel instanceof Profiel) {
 					throw new Exception('Lid bestaat niet: $uid =' . $uid);
 				}
 				$punten = $totalen['puntenTotaal'];
@@ -35,7 +35,7 @@ class CorveePuntenModel {
 					}
 				}
 				$punten -= intval(Instellingen::get('corvee', 'punten_per_jaar'));
-				self::savePuntenVoorLid($lid, $punten, 0);
+				self::savePuntenVoorLid($profiel, $punten, 0);
 			} catch (\Exception $e) {
 				$errors[] = $e;
 			}
@@ -48,35 +48,35 @@ class CorveePuntenModel {
 		if (!is_int($punten) || !is_int($bonus_malus)) {
 			throw new Exception('Punten toekennen faalt: geen integer');
 		}
-		$lid = \LidCache::getLid($uid); // false if lid does not exist
-		if (!$lid instanceof \Lid) {
+		$profiel = ProfielModel::get($uid); // false if lid does not exist
+		if (!$profiel instanceof Profiel) {
 			throw new Exception('Lid bestaat niet: $uid =' . $uid);
 		}
-		self::savePuntenVoorLid($lid, (int) $lid->getProperty('corvee_punten') + $punten, (int) $lid->getProperty('corvee_punten_bonus') + $bonus_malus);
+		self::savePuntenVoorLid($profiel, (int) $profiel->corvee_punten + $punten, (int) $profiel->corvee_punten_bonus + $bonus_malus);
 	}
 
 	public static function puntenIntrekken($uid, $punten, $bonus_malus) {
 		if (!is_int($punten) || !is_int($bonus_malus)) {
 			throw new Exception('Punten intrekken faalt: geen integer');
 		}
-		$lid = \LidCache::getLid($uid); // false if lid does not exist
-		if (!$lid instanceof \Lid) {
+		$profiel = ProfielModel::get($uid); // false if lid does not exist
+		if (!$profiel instanceof Profiel) {
 			throw new Exception('Lid bestaat niet: $uid =' . $uid);
 		}
-		self::savePuntenVoorLid($lid, (int) $lid->getProperty('corvee_punten') - $punten, (int) $lid->getProperty('corvee_punten_bonus') - $bonus_malus);
+		self::savePuntenVoorLid($profiel, (int) $profiel->corvee_punten - $punten, (int) $profiel->corvee_punten_bonus - $bonus_malus);
 	}
 
-	public static function savePuntenVoorLid(\Lid $lid, $punten = null, $bonus_malus = null) {
+	public static function savePuntenVoorLid(Profiel $profiel, $punten = null, $bonus_malus = null) {
 		if (!is_int($punten) && !is_int($bonus_malus)) {
 			throw new Exception('Save punten voor lid faalt: geen integer');
 		}
 		if (is_int($punten)) {
-			$lid->setProperty('corvee_punten', $punten);
+			$profiel->corvee_punten = $punten;
 		}
 		if (is_int($bonus_malus)) {
-			$lid->setProperty('corvee_punten_bonus', $bonus_malus);
+			$profiel->corvee_punten_bonus = $bonus_malus;
 		}
-		if (!$lid->save()) {
+		if (ProfielModel::instance()->update($profiel) !== 1) {
 			throw new Exception('Save punten voor lid faalt: opslaan mislukt');
 		}
 	}
@@ -114,8 +114,8 @@ class CorveePuntenModel {
 		$vrijstellingen = CorveeVrijstellingenModel::getAlleVrijstellingen(true); // grouped by uid
 		$matrix = self::loadPuntenTotaalVoorAlleLeden();
 		foreach ($matrix as $uid => $totalen) {
-			$lid = \LidCache::getLid($uid); // false if lid does not exist
-			if (!$lid instanceof \Lid) {
+			$profiel = ProfielModel::get($uid); // false if lid does not exist
+			if (!$profiel instanceof Profiel) {
 				throw new Exception('Lid bestaat niet: $uid =' . $uid);
 			}
 			$lidtaken = array();
@@ -126,15 +126,15 @@ class CorveePuntenModel {
 			if (array_key_exists($uid, $vrijstellingen)) {
 				$vrijstelling = $vrijstellingen[$uid];
 			}
-			$matrix[$uid] = self::loadPuntenVoorLid($lid, $functies, $lidtaken, $vrijstelling);
+			$matrix[$uid] = self::loadPuntenVoorLid($profiel, $functies, $lidtaken, $vrijstelling);
 		}
 		return $matrix;
 	}
 
-	public static function loadPuntenVoorLid(\Lid $lid, $functies = null, $lidtaken = null, $vrijstelling = null) {
+	public static function loadPuntenVoorLid(Profiel $profiel, $functies = null, $lidtaken = null, $vrijstelling = null) {
 		if ($lidtaken === null) {
-			$lidtaken = CorveeTakenModel::getTakenVoorLid($lid->getUid());
-			$vrijstelling = CorveeVrijstellingenModel::getVrijstelling($lid->getUid());
+			$lidtaken = CorveeTakenModel::getTakenVoorLid($profiel->uid);
+			$vrijstelling = CorveeVrijstellingenModel::getVrijstelling($profiel->uid);
 		}
 		if ($functies === null) { // niet per functie sommeren
 			$lijst = array();
@@ -152,12 +152,12 @@ class CorveePuntenModel {
 			$lijst['prognose'] += $vrijstelling->getPunten();
 		}
 
-		$lijst['lid'] = $lid;
-		$lijst['puntenTotaal'] = (int) $lid->getProperty('corvee_punten');
-		$lijst['bonusTotaal'] = (int) $lid->getProperty('corvee_punten_bonus');
+		$lijst['lid'] = $profiel;
+		$lijst['puntenTotaal'] = (int) $profiel->corvee_punten;
+		$lijst['bonusTotaal'] = (int) $profiel->corvee_punten_bonus;
 		$lijst['prognose'] += $lijst['puntenTotaal'] + $lijst['bonusTotaal'];
 		$lijst['prognoseColor'] = self::rgbCalculate($lijst['prognose']);
-		if ($lid->isLid()) {
+		if ($profiel->isLid()) {
 			$lijst['tekort'] = Instellingen::get('corvee', 'punten_per_jaar') - $lijst['prognose'];
 		} else {
 			$lijst['tekort'] = 0 - $lijst['prognose'];

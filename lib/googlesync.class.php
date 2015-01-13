@@ -120,10 +120,10 @@ class GoogleSync {
 
 				$etag = substr($contact->getEtag(), 1, strlen($contact->getEtag()) - 2);
 				$this->contactData[] = array(
-					'name' => (string) $contact->title,
-					'etag' => $etag,
-					'id' => (string) $contact->id,
-					'self' => $contact->getLink('self')->href,
+					'name'	 => (string) $contact->title,
+					'etag'	 => $etag,
+					'id'	 => (string) $contact->id,
+					'self'	 => $contact->getLink('self')->href,
 					'csruid' => $uid
 						//, 'xml'=>htmlspecialchars(str_replace('><', ">\n<", $contact->getXML()))
 				);
@@ -146,16 +146,16 @@ class GoogleSync {
 	/**
 	 * Check of een Lid al voorkomt in de lijst met contacten zoals ingeladen van google.
 	 *
-	 * @param $lid Lid waarvan de aanwezigheid gechecked moet worden.
+	 * @param $profiel Lid waarvan de aanwezigheid gechecked moet worden.
 	 *
 	 * @return string met het google-id in het geval van voorkomen, anders null.
 	 */
-	public function existsInGoogleContacts(Lid $lid) {
-		$name = strtolower($lid->getNaam());
+	public function existsInGoogleContacts(Profiel $profiel) {
+		$name = strtolower($profiel->getNaam());
 		foreach ($this->getGoogleContacts() as $contact) {
 
 			if (
-					$contact['csruid'] == $lid->getUid() OR
+					$contact['csruid'] == $profiel->uid OR
 					strtolower($contact['name']) == $name OR
 					str_replace(' ', '', strtolower($contact['name'])) == str_replace(' ', '', $name)
 			) {
@@ -216,9 +216,9 @@ class GoogleSync {
 			}
 
 			$return[] = array(
-				'id' => $group->id->getText(),
-				'name' => $title,
-				'systemgroup' => $systemgroup
+				'id'			 => $group->id->getText(),
+				'name'			 => $title,
+				'systemgroup'	 => $systemgroup
 			);
 		}
 		return $return;
@@ -286,13 +286,13 @@ class GoogleSync {
 		//kan veel tijd kosten, dus time_limit naar 0 zodat het oneindig door kan gaan.
 		set_time_limit(0);
 
-		$lidBatch = array();
-		foreach ($leden as $lid) {
-			if ($lid instanceof Lid) {
-				$lidBatch[] = $lid;
+		$profielBatch = array();
+		foreach ($leden as $profiel) {
+			if ($profiel instanceof Profiel) {
+				$profielBatch[] = $profiel;
 			} else {
 				try {
-					$lidBatch[] = LidCache::getLid($lid);
+					$profielBatch[] = ProfielModel::get($profiel);
 				} catch (Exception $e) {
 					// omit faulty/non-existant uid's
 				}
@@ -304,8 +304,8 @@ class GoogleSync {
 		//keer te posten, maar daar heb ik nu even geen zin in.
 		//btw: google heeft een batch-limit van 100 acties.
 		//zie ook: http://code.google.com/apis/gdata/docs/batch.html
-		foreach ($lidBatch as $lid) {
-			$message.=$this->syncLid($lid) . ', ';
+		foreach ($profielBatch as $profiel) {
+			$message.=$this->syncLid($profiel) . ', ';
 		}
 		return $message;
 	}
@@ -313,21 +313,21 @@ class GoogleSync {
 	/**
 	 * Een enkel lid syncen naar Google contacts.
 	 *
-	 * @param $lid uid of Lid-object
+	 * @param $profiel uid of Lid-object
 	 *
 	 * @return string met foutmelding of naam van lid bij succes.
 	 */
-	public function syncLid($lid) {
-		if (!$lid instanceof Lid) {
-			$lid = LidCache::getLid($lid);
+	public function syncLid($profiel) {
+		if (!$profiel instanceof Profiel) {
+			$profiel = ProfielModel::get($profiel);
 		}
 		//kijk of het lid al bestaat in de googlecontacs-feed.
-		$googleid = $this->existsInGoogleContacts($lid);
+		$googleid = $this->existsInGoogleContacts($profiel);
 
 		$error_message = '<div>Fout in Google-sync#%s: <br />' .
 				'Lid: %s<br />Foutmelding: %s</div>';
 
-		$doc = $this->createXML($lid);
+		$doc = $this->createXML($profiel);
 
 		if ($googleid != '') {
 			try {
@@ -336,11 +336,11 @@ class GoogleSync {
 				$entryResult = $this->gdata->updateEntry($doc->saveXML(), $this->getLinkSelf($googleid), null, $header);
 
 				$photolink = $entryResult->getLink('http://schemas.google.com/contacts/2008/rel#photo')->getHref();
-				$this->putPhoto($photolink, PICS_PATH . $lid->getPasfotoPath($square = true));
+				$this->putPhoto($photolink, PICS_PATH . $profiel->getPasfotoPath(true));
 
-				return 'Update: ' . $lid->getNaam() . ' ';
+				return 'Update: ' . $profiel->getNaam() . ' ';
 			} catch (Exception $e) {
-				return sprintf($error_message, 'update', $lid->getNaam(), $e->getMessage());
+				return sprintf($error_message, 'update', $profiel->getNaam(), $e->getMessage());
 			}
 		} else {
 			try {
@@ -356,20 +356,20 @@ class GoogleSync {
 
 				$entryResult = $this->gdata->insertEntry($doc->saveXML(), GOOGLE_CONTACTS_URL);
 				$photolink = $entryResult->getLink('http://schemas.google.com/contacts/2008/rel#photo')->getHref();
-				$this->putPhoto($photolink, PICS_PATH . $lid->getPasfotoPath($square = true));
+				$this->putPhoto($photolink, PICS_PATH . $profiel->getPasfotoPath(true));
 
-				return 'Ingevoegd: ' . $lid->getNaam() . ' ';
+				return 'Ingevoegd: ' . $profiel->getNaam() . ' ';
 			} catch (Exception $e) {
-				return sprintf($error_message, 'insert', $lid->getNaam(), $e->getMessage());
+				return sprintf($error_message, 'insert', $profiel->getNaam(), $e->getMessage());
 			}
 		}
 	}
 
 	/**
 	 * Create a XML document for this Lid.
-	 * @param $lid Lid object to create XML feed for.
+	 * @param $profiel create XML feed for this object
 	 */
-	private function createXML(Lid $lid) {
+	private function createXML(Profiel $profiel) {
 
 		$doc = new DOMDocument();
 		$doc->formatOutput = true;
@@ -382,81 +382,81 @@ class GoogleSync {
 		// add name element
 		$name = $doc->createElement('gd:name');
 		$entry->appendChild($name);
-		$fullName = $doc->createElement('gd:fullName', $lid->getNaam());
+		$fullName = $doc->createElement('gd:fullName', $profiel->getNaam());
 		$name->appendChild($fullName);
 
 
 		if ($this->extendedExport) {
 			//nickname
-			if ($lid->getNickname() != '') {
-				$nick = $doc->createElement('gContact:nickname', $lid->getNickname());
+			if ($profiel->getNickname() != '') {
+				$nick = $doc->createElement('gContact:nickname', $profiel->getNickname());
 				$entry->appendChild($nick);
 			}
 			//duckname
-			if ($lid->getDuckname() != '') {
-				$duck = $doc->createElement('gContact:duckname', $lid->getDuckname());
+			if ($profiel->getDuckname() != '') {
+				$duck = $doc->createElement('gContact:duckname', $profiel->getDuckname());
 				$entry->appendChild($duck);
 			}
 			//initialen
-			if ($lid->getProperty('voorletters') != '') {
-				$entry->appendChild($doc->createElement('gContact:initials', $lid->getProperty('voorletters')));
+			if ($profiel->voorletters != '') {
+				$entry->appendChild($doc->createElement('gContact:initials', $profiel->voorletters));
 			}
 			//geslacht?
 			$gender = $doc->createElement('gContact:gender');
-			$gender->setAttribute('value', $lid->getGeslacht() == 'm' ? 'male' : 'female');
+			$gender->setAttribute('value', $profiel->geslacht == Geslacht::Man ? 'male' : 'female');
 			//$entry->appendChild($gender);
 		}
 
 		//add home address
-		if ($lid->getProperty('adres') != '') {
+		if ($profiel->adres != '') {
 			$address = $doc->createElement('gd:structuredPostalAddress');
 			$address->setAttribute('primary', 'true');
 
 			//only rel OR label (XOR) can (and must) be set
-			if ($lid->getWoonoord() instanceof OldGroep) {
+			if ($profiel->getWoonoord() instanceof OldGroep) {
 				$woonoord = $doc->createElement('gd:housename');
-				$woonoord->appendChild(new DOMText($lid->getWoonoord()->getNaam()));
+				$woonoord->appendChild(new DOMText($profiel->getWoonoord()->getNaam()));
 				$address->appendChild($woonoord);
-				$address->setAttribute('label', $lid->getWoonoord()->getNaam());
+				$address->setAttribute('label', $profiel->getWoonoord()->getNaam());
 			} else {
 				$address->setAttribute('rel', 'http://schemas.google.com/g/2005#home');
 			}
 
-			$address->appendChild($doc->createElement('gd:street', $lid->getProperty('adres')));
-			if ($lid->getProperty('postcode') != '') {
-				$address->appendChild($doc->createElement('gd:postcode', $lid->getProperty('postcode')));
+			$address->appendChild($doc->createElement('gd:street', $profiel->adres));
+			if ($profiel->postcode != '') {
+				$address->appendChild($doc->createElement('gd:postcode', $profiel->postcode));
 			}
-			$address->appendChild($doc->createElement('gd:city', $lid->getProperty('woonplaats')));
-			if ($lid->getProperty('land') != '') {
-				$address->appendChild($doc->createElement('gd:country', $lid->getProperty('land')));
+			$address->appendChild($doc->createElement('gd:city', $profiel->woonplaats));
+			if ($profiel->land != '') {
+				$address->appendChild($doc->createElement('gd:country', $profiel->land));
 			}
-			$address->appendChild($doc->createElement('gd:formattedAddress', $lid->getFormattedAddress()));
+			$address->appendChild($doc->createElement('gd:formattedAddress', $profiel->getFormattedAddress()));
 			$entry->appendChild($address);
 		}
 
 		if ($this->extendedExport) {
 			//adres ouders toevoegen, alleen bij leden...
-			if ($lid->isLid() AND $lid->getProperty('o_adres') != '' AND $lid->getProperty('adres') != $lid->getProperty('o_adres')) {
+			if ($profiel->isLid() AND $profiel->o_adres != '' AND $profiel->adres != $profiel->o_adres) {
 				$address = $doc->createElement('gd:structuredPostalAddress');
 				//$address->setAttribute('rel', 'http://schemas.google.com/g/2005#other');
 				$address->setAttribute('label', 'Ouders');
 
-				$address->appendChild($doc->createElement('gd:street', $lid->getProperty('o_adres')));
-				if ($lid->getProperty('o_postcode') != '') {
-					$address->appendChild($doc->createElement('gd:postcode', $lid->getProperty('o_postcode')));
+				$address->appendChild($doc->createElement('gd:street', $profiel->o_adres));
+				if ($profiel->o_postcode != '') {
+					$address->appendChild($doc->createElement('gd:postcode', $profiel->o_postcode));
 				}
-				$address->appendChild($doc->createElement('gd:city', $lid->getProperty('o_woonplaats')));
-				if ($lid->getProperty('o_land') != '') {
-					$address->appendChild($doc->createElement('gd:country', $lid->getProperty('o_land')));
+				$address->appendChild($doc->createElement('gd:city', $profiel->o_woonplaats));
+				if ($profiel->o_land != '') {
+					$address->appendChild($doc->createElement('gd:country', $profiel->o_land));
 				}
-				$address->appendChild($doc->createElement('gd:formattedAddress', $lid->getFormattedAddress($ouders = true)));
+				$address->appendChild($doc->createElement('gd:formattedAddress', $profiel->getFormattedAddressOuders()));
 				$entry->appendChild($address);
 			}
 		}
 
 		// add email element
 		$email = $doc->createElement('gd:email');
-		$email->setAttribute('address', $lid->getEmail());
+		$email->setAttribute('address', $profiel->getPrimaryEmail());
 		$email->setAttribute('rel', 'http://schemas.google.com/g/2005#home');
 		$email->setAttribute('primary', 'true');
 		$entry->appendChild($email);
@@ -470,9 +470,9 @@ class GoogleSync {
 				array('jid', 'http://schemas.google.com/g/2005#JABBER')
 			);
 			foreach ($ims as $im) {
-				if ($lid->getProperty($im[0]) != '') {
+				if ($profiel->$im[0] != '') {
 					$imEntry = $doc->createElement('gd:im');
-					$imEntry->setAttribute('address', $lid->getProperty($im[0]));
+					$imEntry->setAttribute('address', $profiel->$im[0]);
 					$imEntry->setAttribute('protocol', $im[1]);
 					$imEntry->setAttribute('rel', 'http://schemas.google.com/g/2005#home');
 					$entry->appendChild($imEntry);
@@ -484,15 +484,15 @@ class GoogleSync {
 		$telefoons = array();
 
 		//ouders nummer...
-		if ($this->extendedExport && $lid->isLid()) {
+		if ($this->extendedExport && $profiel->isLid()) {
 			$telefoons[] = array('o_telefoon', 'http://schemas.google.com/g/2005#other');
 		}
 		$telefoons[] = array('telefoon', 'http://schemas.google.com/g/2005#home');
 		$telefoons[] = array('mobiel', 'http://schemas.google.com/g/2005#mobile');
 
 		foreach ($telefoons as $telefoon) {
-			if ($lid->getProperty($telefoon[0]) != '') {
-				$number = $doc->createElement('gd:phoneNumber', internationalizePhonenumber($lid->getProperty($telefoon[0])));
+			if ($profiel->$telefoon[0] != '') {
+				$number = $doc->createElement('gd:phoneNumber', internationalizePhonenumber($profiel->$telefoon[0]));
 				if ($telefoon[0] == 'mobiel') {
 					$number->setAttribute('primary', 'true');
 				}
@@ -505,25 +505,25 @@ class GoogleSync {
 			}
 		}
 
-		if ($lid->getGeboortedatum() != '' AND $lid->getGeboortedatum() != '0000-00-00') {
+		if ($profiel->getGeboortedatum() != '' AND $profiel->getGeboortedatum() != '0000-00-00') {
 			$geboortedatum = $doc->createElement('gContact:birthday');
-			$geboortedatum->setAttribute('when', $lid->getGeboortedatum());
+			$geboortedatum->setAttribute('when', $profiel->getGeboortedatum());
 			$entry->appendChild($geboortedatum);
 		}
 
 		if ($this->extendedExport) {
-			if ($lid->getProperty('website') != '') {
+			if ($profiel->website != '') {
 				$website = $doc->createElement('gContact:website');
 
-				$website->setAttribute('href', $lid->getProperty('website'));
+				$website->setAttribute('href', $profiel->website);
 				$website->setAttribute('rel', 'home');
 				$entry->appendChild($website);
 			}
 
-			if ($lid->getProperty('eetwens') != '') {
+			if ($profiel->eetwens != '') {
 				$eetwens = $doc->createElement('gContact:userDefinedField');
 				$eetwens->setAttribute('key', 'Eetwens');
-				$eetwens->setAttribute('value', $lid->getProperty('eetwens'));
+				$eetwens->setAttribute('value', $profiel->eetwens);
 				$entry->appendChild($eetwens);
 			}
 		}
@@ -552,7 +552,7 @@ class GoogleSync {
 		//csr uid
 		$uid = $doc->createElement('gContact:userDefinedField');
 		$uid->setAttribute('key', 'csruid');
-		$uid->setAttribute('value', $lid->getUid());
+		$uid->setAttribute('value', $profiel->uid);
 		$entry->appendChild($uid);
 
 		return $doc;

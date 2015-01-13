@@ -85,7 +85,7 @@ class MaaltijdAanmelding {
 	 * @return float if lid exists, false otherwise
 	 */
 	public function getSaldo() {
-		return LidCache::getLid($this->getUid())->getProperty('maalcieSaldo');
+		return ProfielModel::get($this->getUid())->getProperty('maalcieSaldo');
 	}
 
 	/**

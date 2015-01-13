@@ -35,7 +35,8 @@ class Instellingen extends CachedPersistenceModel {
 			'standaard_tijd_4'				 => '20:00-23:59'
 		),
 		'beveiliging'	 => array(
-			'wachtwoord_verlopen_termijn' => '+1 year'
+			'one_time_token_expire_after'		 => '+1 hour',
+			'wachtwoorden_verlopen_ouder_dan'	 => '-1 year'
 		),
 		'corvee'		 => array(
 			'punten_per_jaar'						 => '11',
@@ -55,7 +56,6 @@ class Instellingen extends CachedPersistenceModel {
 			'standaard_kwalificatie'				 => '0',
 			'standaard_aantal_corveers'				 => '1',
 			'standaard_vrijstelling_percentage'		 => '100',
-			'weergave_link_ledennamen'				 => 'visitekaartje',
 			'weergave_ledennamen_beheer'			 => 'volledig',
 			'weergave_ledennamen_corveerooster'		 => 'civitas',
 			'waarschuwing_taaktoewijzing_vooraf'	 => '+14 days',
@@ -80,9 +80,8 @@ class Instellingen extends CachedPersistenceModel {
 			'marge_gasten_verhouding'			 => '10',
 			'marge_gasten_min'					 => '3',
 			'marge_gasten_max'					 => '6',
-			'weergave_link_ledennamen'			 => 'visitekaartje',
 			'weergave_ledennamen_beheer'		 => 'volledig',
-			'weergave_ledennamen_maaltijdlijst'	 => 'streeplijst',
+			'weergave_ledennamen_maaltijdlijst'	 => 'volledig',
 			'maaltijdlijst_tekst'				 => '<p>Regels omtrent het betalen van de maaltijden op Confide:</p>
 <ul>
 <li>Maaltijdprijs: &euro; MAALTIJDPRIJS</li>

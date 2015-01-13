@@ -615,14 +615,14 @@ class ForumController extends Controller {
 			ForumPostsModel::instance()->goedkeurenOptellenForumPost($post);
 			$self = LoginModel::getUid();
 			foreach ($draad->getVolgers() as $uid) {
-				$lid = LidCache::getLid($uid);
-				if ($uid === $self OR ! $lid instanceof Lid) {
+				$profiel = ProfielModel::get($uid);
+				if ($uid === $self OR ! $profiel instanceof Profiel) {
 					continue;
 				}
-				$lidnaam = $lid->getNaamLink('civitas', 'plain');
+				$lidnaam = $profiel->getNaam('civitas');
 				require_once 'model/entity/Mail.class.php';
 				$bericht = "Geachte " . $lidnaam . ",\n\nEr is een nieuwe reactie geplaatst in een draad dat u volgt: [url=" . CSR_ROOT . "/forum/reactie/" . $post->post_id . "#" . $post->post_id . "]" . $draad->titel . "[/url]\n\nDe inhoud van het bericht is als volgt: \n\n" . str_replace('\r\n', "\n", $tekst) . "\n\nEINDE BERICHT";
-				$mail = new Mail(array($lid->getEmail() => $lidnaam), 'C.S.R. Forum: nieuwe reactie op ' . $draad->titel, $bericht);
+				$mail = new Mail(array($profiel->getPrimaryEmail() => $lidnaam), 'C.S.R. Forum: nieuwe reactie op ' . $draad->titel, $bericht);
 				$mail->send();
 			}
 

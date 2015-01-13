@@ -50,7 +50,7 @@ class IsHetAlView implements View {
 				}
 				break;
 
-			case 'jarig': $this->ja = LoginModel::instance()->getLid()->getJarigOver();
+			case 'jarig': $this->ja = LoginModel::getProfiel()->getJarigOver();
 				break;
 
 			case 'lunch': $this->ja = (date('Hi') > '1230' AND date('Hi') < '1330');

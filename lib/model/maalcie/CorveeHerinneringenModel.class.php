@@ -14,12 +14,12 @@ class CorveeHerinneringenModel {
 	public static function stuurHerinnering(CorveeTaak $taak) {
 		$datum = date('d-m-Y', strtotime($taak->getDatum()));
 		$uid = $taak->getUid();
-		$lid = LidCache::getLid($uid);
-		if (!$lid instanceof Lid) {
+		$profiel = ProfielModel::get($uid);
+		if (!$profiel instanceof Profiel) {
 			throw new Exception($datum . ' ' . $taak->getCorveeFunctie()->naam . ' niet toegewezen!' . (!empty($uid) ? ' ($uid =' . $uid . ')' : ''));
 		}
-		$lidnaam = Lid::naamLink($uid, 'civitas', 'plain');
-		$to = array($lid->getEmail() => $lidnaam);
+		$lidnaam = ProfielModel::getNaam($uid, 'civitas');
+		$to = array($profiel->getPrimaryEmail() => $lidnaam);
 		$from = 'corvee@csrdelft.nl';
 		$onderwerp = 'C.S.R. Delft corvee ' . $datum;
 		$bericht = $taak->getCorveeFunctie()->email_bericht;

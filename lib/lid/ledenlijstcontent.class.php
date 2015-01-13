@@ -83,7 +83,7 @@ class LedenlijstContent implements View {
 			echo '<a href="' . $url . '" class="btn float-right" title="Huidige selectie exporteren naar Google Contacts" onclick="return confirm(\'Weet u zeker dat u deze ' . $this->lidzoeker->count() . ' leden wilt importeren in uw Google-contacts?\')"><img src="/plaetjes/knopjes/google.ico" width="16" height="16" alt="tovoegen aan Google contacts" /></a>';
 		}
 		echo getMelding();
-		echo '<h1>' . (LoginModel::instance()->getLid()->isOudlid() ? 'Oud-leden en l' : 'L') . 'edenlijst </h1>';
+		echo '<h1>' . (LoginModel::getProfiel()->isOudlid() ? 'Oud-leden en l' : 'L') . 'edenlijst </h1>';
 		echo '<form id="zoekform" method="get">';
 		echo '<label for="q"></label><input type="text" name="q" value="' . htmlspecialchars($this->lidzoeker->getQuery()) . '" /> ';
 		echo '<button class="btn submit">Zoeken</button> <a class="btn" id="toggleAdvanced" href="#geavanceerd">Geavanceerd</a>';
@@ -187,7 +187,7 @@ abstract class LLWeergave {
 	public abstract function viewFooter();
 
 	//viewLid print één regel of vakje ofzo.
-	public abstract function viewLid(Lid $lid);
+	public abstract function viewLid(Profiel $profiel);
 
 	public function view() {
 		$this->viewHeader();
@@ -263,68 +263,68 @@ class LLLijst extends LLweergave {
 		</script><?php
 	}
 
-	public function viewLid(Lid $lid) {
-		echo '<tr id="lid' . $lid->getUid() . '">';
+	public function viewLid(Profiel $profiel) {
+		echo '<tr id="lid' . $profiel->uid . '">';
 		foreach ($this->velden as $veld) {
 			echo '<td class="' . $veld . '">';
 			switch ($veld) {
 
 				case 'adres':
-					echo htmlspecialchars($lid->getAdres());
+					echo htmlspecialchars($profiel->getAdres());
 					break;
 
 				case 'kring':
-					echo $lid->getKring(true);
+					echo $profiel->getKringLink();
 					break;
 
 				case 'naam':
 					//we stoppen er een verborgen <span> bij waar op gesorteerd wordt door datatables.
-					echo '<span class="verborgen">' . $lid->getNaamLink('streeplijst', 'plain') . '</span>';
-					echo $lid->getNaamLink('volledig', 'link');
+					echo '<span class="verborgen">' . $profiel->getNaam('streeplijst') . '</span>';
+					echo $profiel->getLink('volledig');
 					break;
 
 				case 'pasfoto':
-					echo $lid->getPasfoto();
+					echo $profiel->getPasfotoTag();
 					break;
 
 				case 'patroon':
-					$patroon = $lid->getPatroon();
-					if ($patroon instanceof Lid) {
-						echo $patroon->getNaamLink('volledig', 'link');
+					$patroon = ProfielModel::get($profiel->patroon);
+					if ($patroon) {
+						echo $patroon->getLink('volledig');
 					} else {
 						echo '-';
 					}
 					break;
 
 				case 'echtgenoot':
-					$echtgenoot = $lid->getEchtgenoot();
-					if ($echtgenoot instanceof Lid) {
-						echo $echtgenoot->getNaamLink('volledig', 'link');
+					$echtgenoot = ProfielModel::get($profiel->echtgenoot);
+					if ($echtgenoot) {
+						echo $echtgenoot->getLink('volledig');
 					} else {
 						echo '-';
 					}
 					break;
 
 				case 'status':
-					echo $lid->getStatus()->getDescription();
+					echo LidStatus::getDescription($profiel->status);
 					break;
 
 				case 'verticale':
-					echo htmlspecialchars($lid->getVerticale()->naam);
+					echo htmlspecialchars($profiel->getVerticale()->naam);
 					break;
 
 				case 'woonoord':
-					echo $lid->getWoonoord();
+					echo $profiel->getWoonoord();
 					break;
 
 				case 'linkedin':
 				case 'website':
-					echo '<a target="_blank" href="' . htmlspecialchars($lid->getProperty($veld)) . '">' . htmlspecialchars($lid->getProperty($veld)) . '</a>';
+					echo '<a target="_blank" href="' . htmlspecialchars($profiel->$veld) . '">' . htmlspecialchars($profiel->$veld) . '</a>';
 					break;
 
 				default:
 					try {
-						echo htmlspecialchars($lid->getProperty($veld));
+						echo htmlspecialchars($profiel->$veld);
 					} catch (Exception $e) {
 						echo ' - ';
 					}
@@ -350,8 +350,8 @@ class LLKaartje extends LLweergave {
 		
 	}
 
-	public function viewLid(Lid $lid) {
-		echo $lid->getNaamLink('leeg', 'visitekaartje');
+	public function viewLid(Profiel $profiel) {
+		echo $profiel->getLink('leeg');
 	}
 
 }
@@ -370,56 +370,60 @@ class LLCSV extends LLweergave {
 		echo '</textarea>';
 	}
 
-	public function viewLid(Lid $lid) {
+	public function viewLid(Profiel $profiel) {
 
 		foreach ($this->velden as $veld) {
 			$return = '';
 			switch ($veld) {
 
 				case 'adres':
-					$return .= $lid->getProperty('adres') . ';';
-					$return .= $lid->getProperty('postcode') . ';';
-					$return .= $lid->getProperty('woonplaats');
+					$return .= $profiel->adres . ';';
+					$return .= $profiel->postcode . ';';
+					$return .= $profiel->woonplaats;
 					break;
 
 				case 'naam':
-					$return .= $lid->getProperty('voornaam') . ';';
-					$return .= $lid->getProperty('tussenvoegsel') . ';';
-					$return .= $lid->getProperty('achternaam');
+					$return .= $profiel->voornaam . ';';
+					$return .= $profiel->tussenvoegsel . ';';
+					$return .= $profiel->achternaam;
 					break;
 
 				case 'kring':
-					$return .= $lid->getKring(false);
+					$return .= $profiel->getKring();
 					break;
 
 				case 'pasfoto':
-					$return .= $lid->getPasfoto(false);
+					$return .= $profiel->getPasfotoTag();
 					break;
 
 				case 'patroon':
-					$patroon = $lid->getPatroon();
-					if ($patroon instanceof Lid) {
-						$return .= $patroon->getNaamLink('volledig', 'plain');
+					$patroon = ProfielModel::get($profiel->patroon);
+					if ($patroon) {
+						$return .= $patroon->getNaam('volledig');
 					}
 					break;
 
 				case 'echtgenoot':
-					$echtgenoot = $lid->getEchtgenoot();
-					if ($echtgenoot instanceof Lid) {
-						$return .= $echtgenoot->getNaamLink('volledig', 'plain');
+					$echtgenoot = ProfielModel::get($profiel->echtgenoot);
+					if ($echtgenoot) {
+						$return .= $echtgenoot->getNaam('volledig');
 					}
 					break;
 
 				case 'adresseringechtpaar':
-					$return .= $lid->getAdresseringechtpaar();
+					if (empty($profiel->adresseringechtpaar)) {
+						$return .= $profiel->getNaam('voorletters');
+					} else {
+						$return .= $profiel->adresseringechtpaar;
+					}
 					break;
 
 				case 'verticale':
-					$return .= $lid->getVerticale()->naam;
+					$return .= $profiel->getVerticale()->naam;
 					break;
 
 				case 'woonoord':
-					$woonoord = $lid->getWoonoord();
+					$woonoord = $profiel->getWoonoord();
 					if ($woonoord instanceof OldGroep) {
 						$return .= $woonoord->getNaam();
 					}
@@ -427,7 +431,7 @@ class LLCSV extends LLweergave {
 
 				default:
 					try {
-						$return .= $lid->getProperty($veld);
+						$return .= $profiel->$veld;
 					} catch (Exception $e) {
 						//omit non-existant fields
 					}

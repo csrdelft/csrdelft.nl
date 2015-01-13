@@ -16,12 +16,12 @@
 		{sliding_pager baseurl="/forum/onderwerp/"|cat:$draad->draad_id|cat:"/"
 			pagecount=ForumPostsModel::instance()->getAantalPaginas($draad->draad_id) curpage=0
 			txt_pre="&nbsp;[ " txt_post=" ]" link_current=true}
-		{if !isset($deel->forum_id)}
-			<span class="lichtgrijs">[{$draad->getForumDeel()->titel}]</span>
+		{if !isset($deel->forum_id)} 
+			<span class="lichtgrijs">[{$draad->getForumDeel()->titel}]</span> 
 		{/if}
 	</td>
 	<td class="reacties">{$draad->aantal_posts}</td>
-	<td>{$draad->uid|csrnaam:'user'}</td>
+	<td>{ProfielModel::getNaam($draad->uid, 'user')}</td>
 	<td class="reactiemoment">
 		{if LidInstellingen::get('forum', 'datumWeergave') === 'relatief'}
 			{$draad->laatst_gewijzigd|reldate}
@@ -29,6 +29,6 @@
 			{$draad->laatst_gewijzigd}
 		{/if}
 		<br /><a href="/forum/reactie/{$draad->laatste_post_id}#{$draad->laatste_post_id}">bericht</a>
-		door {$draad->laatste_wijziging_uid|csrnaam:'user'}
+		door {ProfielModel::getNaam($draad->laatste_wijziging_uid, 'user')}
 	</td>
 </tr>

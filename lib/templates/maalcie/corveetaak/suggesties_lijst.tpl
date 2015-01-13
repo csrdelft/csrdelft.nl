@@ -30,7 +30,7 @@
 						<tr class="
 							{if !$suggestie.voorkeur} geenvoorkeur{/if}
 							{if $suggestie.recent} recent{/if}
-							{if $jongsteLichting === LidCache::getLid($uid)->getLichting()} jongste{else} oudere{/if}
+							{if $jongsteLichting === ProfielModel::get($uid)->lidjaar} jongste{else} oudere{/if}
 							">
 							<td style="width: 15px;">
 								<a class="btn submit" style="padding: 0 2px;" onclick="$(this).closest('form').find('.LidField').val('{$uid}');">
@@ -52,7 +52,7 @@
 								{/if}
 							</td>
 							<td style="width: 140px;">
-								{LidCache::getLid($uid)->getNaamLink(Instellingen::get('corvee', 'weergave_ledennamen_beheer'), Instellingen::get('corvee', 'weergave_link_ledennamen'))}
+								{ProfielModel::get($uid)->getNaam(Instellingen::get('corvee', 'weergave_ledennamen_beheer'))}
 							</td>
 							{if $suggestie.laatste}
 								<td>{$suggestie.laatste->getBeginMoment()|date_format:"%d %b %Y"}</td>

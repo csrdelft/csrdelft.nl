@@ -45,7 +45,7 @@ class Streeplijstcontent implements View {
 			$this->lichting = $_GET['lichting'];
 		}
 		//leden welke in de lijst moeten laden.
-		$this->aLeden = Zoeker::zoekLeden($this->lichting, 'uid', $this->verticale, 'achternaam', 'leden');
+		$this->aLeden = LidZoeker::zoekLeden($this->lichting, 'uid', $this->verticale, 'achternaam', 'leden');
 	}
 
 	function parseGoederen($sGoederen) {
@@ -121,7 +121,7 @@ class Streeplijstcontent implements View {
 				$sReturn .= '<span class="breekpunt"></span>';
 				$sReturn .= '<table><tr>' . $sKop;
 			}
-			$sReturn .= '<tr><td class="naam">' . Lid::naamLink($aLid['uid'], 'streeplijst', 'plain') . '</td>';
+			$sReturn .= '<tr><td class="naam">' . ProfielModel::getNaam($aLid['uid'], 'streeplijst') . '</td>';
 			for ($i = 1; $i <= $this->goederenCount(); $i++) {
 				$sReturn .= '<td class="cell' . ($i % 2) . '">&nbsp;</td>';
 			}
@@ -165,17 +165,17 @@ class Streeplijstcontent implements View {
 				<legend>Ledenselectie</legend><br />';
 		//verticaleselectie
 		echo '<strong>Verticale:</strong><br />';
-		$verticalen = array_merge(array('alle'), range(1, 8));
-		foreach ($verticalen as $v) {
-			echo '<input type="radio" name="moot" id="m' . $v . '" value="' . $v . '" ';
-			if ($v == $this->verticale) {
+		$verticalen = array('alle', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I');
+		foreach ($verticalen as $letter) {
+			echo '<input type="radio" name="moot" id="m' . $letter . '" value="' . $letter . '" ';
+			if ($letter == $this->verticale) {
 				echo 'checked="checked" ';
 			}
-			echo '/> <label for="m' . $v . '">';
-			if ($v == 'alle') {
-				echo $v;
+			echo '/> <label for="m' . $letter . '">';
+			if ($letter == 'alle') {
+				echo $letter;
 			} else {
-				echo VerticalenModel::instance()->getVerticaleById($v)->naam;
+				echo VerticalenModel::get($letter)->naam;
 			}
 			echo '</label>';
 		}

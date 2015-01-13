@@ -33,7 +33,7 @@
 					</div>
 					<ul id="items-{$dag.datum|date_format:"%Y-%m-%d"}" class="items">
 						{foreach from=$dag.items item=item}
-							{if $item instanceof Lid}
+							{if $item instanceof Profiel}
 								<li>
 									{icon get="verjaardag"}
 									{$item->getLink()}
@@ -74,8 +74,8 @@
 </table>
 {$smarty.capture.navlinks}
 <div id="ical">
-	{if LoginModel::instance()->getLid()->hasPrivateToken()}
-		<a name="ICAL" href="{LoginModel::instance()->getLid()->getICalLink()}" title="{if LoginModel::mag('P_LOGGED_IN')}Persoonlijke {/if}ICalender feed&#013;Nieuwe aanvragen kan op je profiel">
+	{if LoginModel::getProfiel()->hasPrivateToken()}
+		<a name="ICAL" href="{LoginModel::getAccount()->getICalLink()}"{if LoginModel::mag('P_LOGGED_IN')} title="Persoonlijke ICalender feed&#013;Nieuwe aanvragen kan op je profiel"{/if}>
 	{else}
 		<a name="ICAL" href="/profiel/{LoginModel::getUid()}#tokenaanvragen" title="Persoonlijke ICalender feed aanvragen">
 	{/if}

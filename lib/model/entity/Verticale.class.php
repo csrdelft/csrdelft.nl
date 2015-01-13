@@ -10,11 +10,6 @@ class Verticale extends PersistentEntity {
 
 	/**
 	 * Primary key
-	 * @var int
-	 */
-	public $id;
-	/**
-	 * Letter
 	 * @var string
 	 */
 	public $letter;
@@ -24,7 +19,12 @@ class Verticale extends PersistentEntity {
 	 */
 	public $naam;
 	/**
-	 * Uid of verticale-leider
+	 * Uid van kring-coach
+	 * @var string
+	 */
+	public $kringcoach;
+	/**
+	 * Uid van verticale-leider
 	 * @var string
 	 */
 	private $leider;
@@ -33,15 +33,15 @@ class Verticale extends PersistentEntity {
 	 * @var array
 	 */
 	protected static $persistent_attributes = array(
-		'id'	 => array(T::Integer),
-		'letter' => array(T::Char),
-		'naam'	 => array(T::String)
+		'letter'	 => array(T::Char),
+		'naam'		 => array(T::String),
+		'kringcoach' => array(T::UID)
 	);
 	/**
 	 * Database primary key
 	 * @var array
 	 */
-	protected static $primary_key = array('id');
+	protected static $primary_key = array('letter');
 	/**
 	 * Database table name
 	 * @var string
@@ -50,7 +50,7 @@ class Verticale extends PersistentEntity {
 
 	public function getLeider() {
 		if (!isset($this->leider)) {
-			$this->leider = VerticalenModel::instance()->getVerticaleLeider($this);
+			$this->leider = VerticalenModel::getLeider($this);
 		}
 		return $this->leider;
 	}

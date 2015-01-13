@@ -5,7 +5,7 @@
  * 
  * @author P.W.G. Brussee <brussee@live.nl>
  * 
- * One time token for two-step verification.
+ * One time token for two-step authentication.
  * 
  */
 class OneTimeToken extends PersistentEntity {

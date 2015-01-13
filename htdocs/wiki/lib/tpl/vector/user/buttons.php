@@ -44,18 +44,18 @@ $rss["rss"]["nofollow"] = true;
 
 if (auth_quickaclcheck('hoofdpagina') >= AUTH_READ) {
 	if (LoginModel::instance()) {
-		$rsstoken = LoginModel::instance()->getLid()->getProperty('rssToken');
+		$privateToken = LoginModel::getAccount()->private_token;
 
 		// tip for first-time users
-		if ($rsstoken == '') {
-			$rsstoken = 'Maak_EERST_een_sleutel_aan_met_knop_[Nieuwe_aanvragen]_op:_' . CSR_ROOT . '/profiel/' . LoginModel::getUid() . '#forum_gegevens';
+		if ($privateToken == '') {
+			$privateToken = 'Maak_EERST_een_sleutel_aan_met_knop_[Nieuwe_aanvragen]_op:_' . CSR_ROOT . '/profiel/' . LoginModel::getUid() . '#forum_gegevens';
 		}
 	} else {
-		$rsstoken = 'C.S.R. backend niet beschikbaar';
+		$privateToken = 'C.S.R. backend niet beschikbaar';
 	}
 	//RSS recent changes button
 	$rss["rss_prive"]["img"] = DOKU_TPL . "user/button-rss-prive.png";
-	$rss["rss_prive"]["href"] = DOKU_BASE . "feed.php?private_token=" . $rsstoken;
+	$rss["rss_prive"]["href"] = DOKU_BASE . "feed.php?private_token=" . $privateToken;
 	$rss["rss_prive"]["width"] = 80;
 	$rss["rss_prive"]["height"] = 15;
 	$rss["rss_prive"]["title"] = "De laatste wikiwijzigingen, dit is een link met priv�-sleutel om al jouw pagina's te zien. Sleutel kun je (opnieuw) aanmaken in profiel met de knop 'Nieuwe aanvragen'";

@@ -1,7 +1,7 @@
 <?php
+
 # draaien met:
 #!/usr/bin/php5 -c /etc/php5/vhosts/csrdelft/
-
 # instellingen & rommeltjes
 require_once('/srv/www/www.csrdelft.nl/lib/configuratie.include.php');
 require_once('configuratie.include.php');
@@ -47,15 +47,15 @@ if ($result !== false and $db->numRows($result) > 0) {
 			WHERE
 				woonoord.id=bewoner.woonoordid
 			AND
-				bewoner.uid='".$lid['uid']."'
+				bewoner.uid='" . $lid['uid'] . "'
 			LIMIT 1;
 		");
 		if ($wores !== false and $db->numRows($wores) == 1) {
 			$record = $db->next($wores);
 			$lid['woonoord'] = $record['naam'];
-		}
-		else $lid['woonoord'] = '';
-		
+		} else
+			$lid['woonoord'] = '';
+
 		$ldif = sprintf(<<<EOT
 dn: uid=%s,ou=leden,dc=csrdelft,dc=nl
 objectClass: top
@@ -85,33 +85,12 @@ userPassword: %s
 
 
 EOT
-			,
-			$lid['uid'],
-			$lid['uid'],
-			str_replace('  ', ' ',implode(' ',array($lid['voornaam'],$lid['tussenvoegsel']))),
-			$lid['achternaam'],
-			str_replace('  ', ' ',implode(' ',array($lid['voornaam'],$lid['tussenvoegsel'],$lid['achternaam']))),
-			$lid['email'],
-			$lid['telefoon'],
-			$lid['mobiel'],
-			($lid['woonoord'] !== false) ? $lid['woonoord'] : '',
-			implode('$',array($lid['adres'],$lid['postcode'],$lid['woonplaats'])),
-			$lid['nickname'],
-			$lid['adres'],
-			$lid['woonplaats'],
-			$lid['postcode'],
-			$lid['land'],
-			$lid['website'],
-			$lid['password']
+				, $lid['uid'], $lid['uid'], str_replace('  ', ' ', implode(' ', array($lid['voornaam'], $lid['tussenvoegsel']))), $lid['achternaam'], str_replace('  ', ' ', implode(' ', array($lid['voornaam'], $lid['tussenvoegsel'], $lid['achternaam']))), $lid['email'], $lid['telefoon'], $lid['mobiel'], ($lid['woonoord'] !== false) ? $lid['woonoord'] : '', implode('$', array($lid['adres'], $lid['postcode'], $lid['woonplaats'])), $lid['nickname'], $lid['adres'], $lid['woonplaats'], $lid['postcode'], $lid['land'], $lid['website'], $lid['password']
 		);
 
-		$ldif=(preg_replace('/\w+: \n/','',$ldif));
+		$ldif = (preg_replace('/\w+: \n/', '', $ldif));
 		# geen idee waarom zonder volgende regel borkt met ou: lege regels
 		#$ldif=(preg_replace('/ou: \n/','',$ldif));
 		print($ldif);
 	}
-
 }
-
-exit;
-?>

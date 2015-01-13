@@ -3,6 +3,8 @@
 		<tbody>
 			<tr>
 				<td>
+					<a href="/forum/onderwerp/{$draad->draad_id}/{ForumPostsModel::instance()->getHuidigePagina()}/statistiek" class="btn" title="Bekijk statistieken gelezen door">{icon get="chart_line"} gelezen statistiek</a>
+					<br /><br />
 					{if LoginModel::mag('P_FORUM_BELANGRIJK')}
 						<a href="/forum/wijzigen/{$draad->draad_id}/belangrijk" class="btn post ReloadPage" title="Verander belangrijkheid">
 							{icon get="asterisk_orange"} maak {if $draad->belangrijk}<span class="dikgedrukt">niet</span> {/if}belangrijk
@@ -13,25 +15,23 @@
 						{icon get="note"} maak {if $draad->plakkerig}<span class="dikgedrukt">niet</span> {/if}plakkerig
 					</a>
 					<br /><br />
-					<a href="/forum/onderwerp/{$draad->draad_id}/{ForumPostsModel::instance()->getHuidigePagina()}/statistiek" class="btn" title="Bekijk statistieken gelezen door">{icon get="chart_line"} gelezen statistiek</a>
+					<a href="/forum/wijzigen/{$draad->draad_id}/eerste_post_plakkerig" class="btn post ReloadPage" title="Verander plakkerigheid van eerste post">
+						<input type="checkbox" {if $draad->eerste_post_plakkerig}checked="checked"{/if}/> 1e post plakkerig
+					</a>
 					<br /><br />
+					<a href="/forum/wijzigen/{$draad->draad_id}/pagina_per_post" class="btn post ReloadPage" title="Verander 1 pagina per post">
+						<input type="checkbox" {if $draad->pagina_per_post}checked="checked"{/if}/> 1 pagina per post
+					</a>
+				</td>
+				<td>
 					<a href="/forum/onderwerp/{$draad->draad_id}/prullenbak" class="btn" title="Bekijk de reacties die zijn verwijderd">{icon get="bin_closed"} verwijderde reacties</a>
-					<br /><br />
+					&nbsp;
 					<a href="/forum/wijzigen/{$draad->draad_id}/verwijderd" class="btn post confirm ReloadPage" title="Verander status verwijderd (incl. alle reacties)">
 						{if $draad->verwijderd}
 							{icon get="arrow_undo"} draad herstellen
 						{else}
 							{icon get="cross"} draad verwijderen
 						{/if}
-					</a>
-				</td>
-				<td>
-					<a href="/forum/wijzigen/{$draad->draad_id}/eerste_post_plakkerig" class="btn post ReloadPage" title="Verander plakkerigheid van eerste post">
-						<input type="checkbox" {if $draad->eerste_post_plakkerig}checked="checked"{/if}/> 1e post plakkerig
-					</a>
-					&nbsp;
-					<a href="/forum/wijzigen/{$draad->draad_id}/pagina_per_post" class="btn post ReloadPage" title="Verander 1 pagina per post">
-						<input type="checkbox" {if $draad->pagina_per_post}checked="checked"{/if}/> 1 pagina per post
 					</a>
 					<br /><br />
 					<form action="/forum/wijzigen/{$draad->draad_id}/forum_id" method="post">
@@ -40,7 +40,7 @@
 							{foreach from=$categorien item=cat}
 								<optgroup label="{$cat->titel}">
 									{foreach from=$cat->getForumDelen() item=newDeel}
-										<option value="{$newDeel->forum_id}"{if $newDeel->forum_id === $deel->forum_id} selected="selected"{/if}>{$newDeel->titel}</option>
+										<option value="{$newDeel->forum_id}"{if $newDeel->forum_id === $draad->getForumDeel()->forum_id} selected="selected"{/if}>{$newDeel->titel}</option>
 									{/foreach}
 								</optgroup>
 							{/foreach}

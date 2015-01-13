@@ -97,10 +97,16 @@ define('HTTP_REFERER', $ref);
 
 
 // Use HTTP Strict Transport Security to force client to use secure connections only
-if (HSTS_ENABLED) {
+if (FORCE_HTTPS) {
 	if (isset($_SERVER['HTTP_X_FORWARDED_SCHEME']) && $_SERVER['HTTP_X_FORWARDED_SCHEME'] === 'https') {
 		header('Strict-Transport-Security: max-age=31536000');
 	} else {
+		// check if the private token has been send over HTTP
+		$token = filter_input(INPUT_GET, 'private_token', FILTER_SANITIZE_STRING);
+		if (preg_match('/^[a-zA-Z0-9]{150}$/', $token)) {
+			//TODO: invalidate compromised token
+		}
+		// redirect to https
 		header('Location: ' . CSR_ROOT . REQUEST_URI, true, 301);
 		// we are in cleartext at the moment, prevent further execution and output
 		die();
@@ -114,7 +120,7 @@ require_once 'model/framework/DynamicEntityModel.class.php';
 require_once 'model/framework/CachedPersistenceModel.abstract.php';
 require_once 'model/DebugLogModel.class.php';
 require_once 'model/TimerModel.class.php';
-require_once 'model/AccessModel.class.php';
+require_once 'model/security/AccessModel.class.php';
 require_once 'model/LidInstellingenModel.class.php';
 require_once 'model/ForumModel.class.php';
 
@@ -145,7 +151,7 @@ switch (constant('MODE')) {
 		// Sessie configureren
 		ini_set('session.use_strict_mode', true);
 		ini_set('session.cookie_httponly', true);
-		ini_set('session.cookie_secure', HSTS_ENABLED);
+		ini_set('session.cookie_secure', FORCE_HTTPS);
 		ini_set('session.hash_function', 'sha256');
 		ini_set('session.cache_limiter', 'nocache');
 		ini_set('session.use_trans_sid', 'Off');
@@ -156,13 +162,14 @@ switch (constant('MODE')) {
 
 		session_save_path(SESSION_PATH);
 		session_name('CSRSESSID');
-		session_set_cookie_params(1036800, '/', 'csrdelft.nl', HSTS_ENABLED, true);
+		session_set_cookie_params(1036800, '/', 'csrdelft.nl', FORCE_HTTPS, true);
 
 		session_start();
 		if (session_id() == 'deleted') {
 			// Deletes old session
 			session_regenerate_id(true);
 		}
+		LoginModel::instance()->logBezoek();
 
 		// Prefetch
 		Instellingen::instance()->prefetch();

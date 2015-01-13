@@ -95,12 +95,12 @@ class WachtwoordVergetenForm extends Formulier {
 
 class WachtwoordWijzigenForm extends Formulier {
 
-	public function __construct(Lid $lid, $action, $require_current = true) {
-		parent::__construct($lid, 'wwwijzigenform', '/wachtwoord/' . $action, 'Wachtwoord instellen');
+	public function __construct(Account $account, $action, $require_current = true) {
+		parent::__construct($account, 'wwwijzigenform', '/wachtwoord/' . $action, 'Wachtwoord instellen');
 
-		$fields[] = new WachtwoordWijzigenField('wwreset', $lid, $require_current);
+		$fields[] = new WachtwoordWijzigenField('wwreset', $account, $require_current);
 		$fields[] = new FormDefaultKnoppen('/', false, true, true, true);
-		$fields[] = new HtmlComment('<br /><br /><br /><img src="http://imgs.xkcd.com/comics/password_strength.png" title="http://xkcd.com/936/" />');
+		$fields[] = new HtmlComment('<img src="http://imgs.xkcd.com/comics/password_strength.png" title="http://xkcd.com/936/" style="margin-top: 50px;" />');
 
 		$this->addFields($fields);
 	}

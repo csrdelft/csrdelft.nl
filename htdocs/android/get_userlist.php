@@ -16,10 +16,8 @@ $zoeker->parseQuery($_GET);
 $leden = array();
 $json = '';
 
-foreach ($zoeker->getLeden() as $lid) {
-
-	$leden[] = array("id" => $lid->getUid(), "name" => $lid->getNaam());
-	//print_r($lid->getUid(). " " . $lid->getNaam());
+foreach ($zoeker->getLeden() as $profiel) {
+	$leden[] = array("id" => $profiel->uid, "name" => $profiel->getNaam());
 }
 
 echo '{

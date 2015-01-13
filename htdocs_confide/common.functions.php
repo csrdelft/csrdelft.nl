@@ -359,7 +359,7 @@ function debugprint($sString, $cssID = 'pubcie_debug') {
  * Probeert uit invoer van uids of namen per zoekterm een unieke uid te bepalen, zoniet een lijstje suggesties en anders false.
  *
  * @param 	string $sNamen string met namen en/of uids op nieuwe regels en/of gescheiden door komma's
- * @param   array|string $filter zoekfilter voor Zoeker::zoekLeden, toegestane input: '', 'leden', 'oudleden' of array met stati
+ * @param   array|string $filter zoekfilter voor LidZoeker::zoekLeden, toegestane input: '', 'leden', 'oudleden' of array met stati
  * @return 	bool false bij geen matches
  * 			of een array met per zoekterm een entry met een unieke uid en naam òf een array met naamopties.
  * Voorbeeld:
@@ -393,7 +393,8 @@ function namen2uid($sNamen, $filter = 'leden') {
 	$return = false;
 	foreach ($aNamen as $sNaam) {
 		$aNaamOpties = array();
-		$aZoekNamen = Zoeker::zoekLeden($sNaam, 'naam', 'alle', 'achternaam', $filter, array('uid', 'voornaam', 'tussenvoegsel', 'achternaam'));
+		require_once 'lid/lidzoeker.class.php';
+		$aZoekNamen = LidZoeker::zoekLeden($sNaam, 'naam', 'alle', 'achternaam', $filter, array('uid', 'voornaam', 'tussenvoegsel', 'achternaam'));
 		if (count($aZoekNamen) == 1) {
 			$naam = $aZoekNamen[0]['voornaam'] . ' ';
 			if (trim($aZoekNamen[0]['tussenvoegsel']) != '') {
@@ -406,10 +407,10 @@ function namen2uid($sNamen, $filter = 'leden') {
 		} else {
 			//geen enkelvoudige match, dan een array teruggeven
 			foreach ($aZoekNamen as $aZoekNaam) {
-				$lid = LidCache::getLid($aZoekNaam['uid']);
+				$profiel = ProfielModel::get($aZoekNaam['uid']);
 				$aNaamOpties[] = array(
 					'uid'	 => $aZoekNaam['uid'],
-					'naam'	 => $lid->getNaam());
+					'naam'	 => $profiel->getNaam());
 			}
 			$return[]['naamOpties'] = $aNaamOpties;
 		}

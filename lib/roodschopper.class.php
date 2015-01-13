@@ -58,7 +58,7 @@ Bij voorbaat dank,
 h.t. Fiscus.';
 
 		$return = new Roodschopper($cie, -5.2, 'U staat rood', $bericht);
-		$return->setBcc(array(LoginModel::instance()->getLid()->getNaam() => LoginModel::instance()->getLid()->getEmail()));
+		$return->setBcc(array(LoginModel::getProfiel()->getNaam() => LoginModel::getProfiel()->getPrimaryEmail()));
 		$return->setUitgesloten('x101');
 		return $return;
 	}
@@ -94,7 +94,7 @@ h.t. Fiscus.';
 	public function setUitgesloten($uids) {
 		if (is_array($uids)) {
 			$this->uitsluiten = $uids;
-		} elseif (Lid::isValidUid($uids)) {
+		} elseif (AccountModel::isValidUid($uids)) {
 			$this->uitsluiten[] = $uids;
 		} else {
 			$this->uitsluiten = explode(',', $uids);
@@ -140,14 +140,14 @@ h.t. Fiscus.';
 
 		$this->teschoppen = array();
 		if (is_array($data)) {
-			foreach ($data as $lidsaldo) {
+			foreach ($data as $profielsaldo) {
 				//als het uid in $this->uitsluiten staat sturen we geen mails.
-				if (in_array($lidsaldo['uid'], $this->uitsluiten)) {
+				if (in_array($profielsaldo['uid'], $this->uitsluiten)) {
 					continue;
 				}
-				$this->teschoppen[$lidsaldo['uid']] = array(
-					'onderwerp'	 => $this->replace($this->onderwerp, $lidsaldo['uid'], $lidsaldo['saldo']),
-					'bericht'	 => $this->replace($this->bericht, $lidsaldo['uid'], $lidsaldo['saldo']));
+				$this->teschoppen[$profielsaldo['uid']] = array(
+					'onderwerp'	 => $this->replace($this->onderwerp, $profielsaldo['uid'], $profielsaldo['saldo']),
+					'bericht'	 => $this->replace($this->bericht, $profielsaldo['uid'], $profielsaldo['saldo']));
 			}
 		}
 
@@ -156,9 +156,9 @@ h.t. Fiscus.';
 
 	//'compile' template.
 	public function replace($invoer, $uid, $saldo) {
-		$lid = LidCache::getLid($uid);
+		$profiel = ProfielModel::get($uid);
 		$saldo = number_format($saldo, 2, '.', '');
-		return str_replace(array('LID', 'SALDO'), array($lid->getNaam(), $saldo), $invoer);
+		return str_replace(array('LID', 'SALDO'), array($profiel->getNaam(), $saldo), $invoer);
 	}
 
 	/**
@@ -172,9 +172,7 @@ h.t. Fiscus.';
 		$leden = array();
 		if (is_array($this->teschoppen)) {
 			foreach ($this->teschoppen as $uid => $bericht) {
-				$lid = LidCache::getLid($uid);
-				$lid->tsVorm = 'full_uid';
-				$leden[] = $lid;
+				$leden[] = ProfielModel::get($uid);
 			}
 		}
 		return $leden;
@@ -202,11 +200,11 @@ h.t. Fiscus.';
 		}
 
 		foreach ($this->teschoppen as $uid => $bericht) {
-			$lid = LidCache::getLid($uid);
-			if (!$lid instanceof Lid) {
+			$profiel = ProfielModel::get($uid);
+			if (!$profiel instanceof Profiel) {
 				continue;
 			}
-			$mail = new Mail(array($lid->getEmail() => $lid->getNaamLink($uid, 'civitas', 'plain')), $this->getOnderwerp(), $bericht['bericht']);
+			$mail = new Mail(array($profiel->getPrimaryEmail() => $profiel->getNaam($uid, 'civitas')), $this->getOnderwerp(), $bericht['bericht']);
 			$mail->setFrom($this->getFrom());
 			$mail->addBcc($this->getBcc());
 			$mail->send();

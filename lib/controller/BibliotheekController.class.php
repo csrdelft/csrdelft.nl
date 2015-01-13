@@ -248,7 +248,7 @@ class BibliotheekController extends Controller {
 		} else {
 			$eigenaar = LoginModel::getUid();
 		}
-		if (Lid::isValidUid($eigenaar)) {
+		if (AccountModel::isValidUid($eigenaar)) {
 			if ($this->boek->addExemplaar($eigenaar)) {
 				setMelding('Exemplaar met succes toegevoegd.', 1);
 			} else {

@@ -12,16 +12,14 @@ chdir(dirname(__FILE__) . '/../lib/');
 require_once 'configuratie.include.php';
 require_once 'MVC/model/entity/Mail.class.php';
 
-$db = MijnSqli::instance();
-
-$result = $db->select("SELECT * FROM `lid` WHERE status = 'S_NOVIET'");
-if ($result !== false and $db->numRows($result) > 0) {
-	while ($sjaars = $db->next($result)) {
-		$nanonovieten = array();
-		if (!in_array($sjaars['uid'], $nanonovieten)) {
-			$url = CSR_ROOT . '/wachtwoord/vergeten';
-			$tekst = <<<EOD
-Beste noviet {$sjaars['voornaam']},
+foreach (ProfielModel::instance()->find('status = ?', array(LidStatus::Noviet)) as $profiel) {
+	$nanonovieten = array();
+	if (in_array($profiel->uid, $nanonovieten)) {
+		continue;
+	}
+	$url = CSR_ROOT . '/wachtwoord/vergeten';
+	$tekst = <<<TEXT
+Beste noviet {$profiel->voornaam},
 
 Bij je lidmaatschap van C.S.R. hoort ook de mogelijkheid om in te loggen op de C.S.R.-webstek.
 
@@ -35,7 +33,7 @@ Kun je niet op een maaltijd aanwezig zijn, meld je dan af op de webstek, voor om
 Waarom is dit belangrijk? Omdat een maaltijd €3,- kost en als je jezelf vergeet af te melden en niet komt, dit bedrag toch van je maalcie-saldo wordt afgeschreven. Het is goed om naar maaltijden te gaan, maar als je niet kunt, meld je dan af! Dat scheelt je pieken.
 Voor verdere vragen of opmerkingen of je maalcie-saldo je kun de MaalCie fiscus altijd mailen op maalcief@csrdelft.nl
 
-Gebruik je lidnummer om in te loggen op de webstek: {$sjaars['uid']}
+Gebruik je lidnummer om in te loggen op de webstek: {$profiel->uid}
 Gebruik de eerste keer de [url={$url}]wachtwoord vergeten[/url] functie om je eigen wachtwoord in te stellen.
 Nadat je bent ingelogd kun een bijnaam instellen die je in plaats van je lidnummer kunt gebruiken om in te loggen.
 
@@ -48,11 +46,9 @@ Met vriendelijke groet,
 
 Gerben Oolbekkink
 h.t. PubCie-Praeses der Civitas Studiosorum Reformatorum
-EOD;
-			$mail = new Mail(array($sjaars['email'] => $sjaars['voornaam']), 'Inloggegevens C.S.R.-webstek', $tekst);
-			$mail->addBcc(array('pubcie@csrdelft.nl' => 'PubCie C.S.R.'));
-			$mail->send();
-			echo $sjaars['email'] . "\n";
-		}
-	}
+TEXT;
+	$mail = new Mail(array($profiel->email => $profiel->voornaam), 'Inloggegevens C.S.R.-webstek', $tekst);
+	$mail->addBcc(array('pubcie@csrdelft.nl' => 'PubCie C.S.R.'));
+	$mail->send();
+	echo $profiel->email . "\n";
 }

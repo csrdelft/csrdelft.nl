@@ -30,7 +30,7 @@ if (isset($_GET['limit'])) {
 	$limiet = (int) $_GET['limit'];
 }
 
-$namen = Zoeker::zoekLeden($query, 'naam', 'alle', 'achternaam', $zoekin, $velden, $limiet);
+$namen = LidZoeker::zoekLeden($query, 'naam', 'alle', 'achternaam', $zoekin, $velden, $limiet);
 
 $result = array();
 foreach ($namen as $naam) {

@@ -159,7 +159,7 @@ class DocumentenController extends Controller {
 		}
 		$formulier = new Formulier(null, 'documentForm', '/documenten/bewerken/' . $this->document->getId());
 		$this->view = $formulier;
-		if (isset($_GET['catID']) AND DocCategorie::exists($_GET['catID'])) {
+		if (isset($_GET['catID']) AND DocCategorie::existsCategorie($_GET['catID'])) {
 			$this->document->setCatID($_GET['catID']);
 		}
 		$namen = array();

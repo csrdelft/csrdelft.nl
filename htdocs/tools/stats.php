@@ -53,10 +53,9 @@ class stats implements View {
 		echo '<table class="forumtable"><tr><td class="forumhoofd">tijd</td><td class="forumhoofd">Naam</td><td class="forumhoofd">hostnaam</td><td class="forumhoofd">url</td>';
 		echo '<td class="forumhoofd">useragent</td><td class="forumhoofd">referer</td></tr>';
 		while ($aLogRegel = $db->next($rLog)) {
-			$lid = LidCache::getLid($aLogRegel['uid']);
-			$lid->tsMode = 'link';
+			$profiel = ProfielModel::get($aLogRegel['uid']);
 			echo '<tr><td class="forumtitel">' . date('D H:i', strtotime($aLogRegel['moment'])) . '</td>';
-			echo '<td class="forumtitel" ><a href="?uid=' . htmlspecialchars($aLogRegel['uid']) . '">+</a> ' . (string) $lid . '</td>';
+			echo '<td class="forumtitel" ><a href="?uid=' . htmlspecialchars($aLogRegel['uid']) . '">+</a> ' . $profiel->getLink('volledig') . '</td>';
 			echo '<td class="forumtitel"><a href="?ip=' . htmlspecialchars($aLogRegel['ip']) . '">+</a>
 				' . gethostbyaddr($aLogRegel['ip']) . ' <span class="dikgedrukt">(' . $aLogRegel['locatie'] . ')</span></td>';
 			echo '<td class="forumtitel" ';
@@ -92,7 +91,7 @@ class stats implements View {
 	}
 
 	function uidLog($uid) {
-		if (!Lid::isValidUid($uid)) {
+		if (!AccountModel::isValidUid($uid)) {
 			echo 'geen correct uid opgegeven.';
 		}
 		$db = MijnSqli::instance();
@@ -109,9 +108,8 @@ class stats implements View {
 			LIMIT
 				0, 30;";
 		$rLog = $db->query($sLogQuery);
-		$lid = LidCache::getLid($uid);
-		$lid->tsMode = 'link';
-		echo 'Laatste bezoeken van <strong>' . (string) $lid . '</strong>';
+		$profiel = ProfielModel::get($uid);
+		echo 'Laatste bezoeken van <strong>' . $profiel->getLink('volledig') . '</strong>';
 		echo '<table class="forumtable"><tr><td class="forumhoofd">tijd</td><td class="forumhoofd">hostnaam</td><td class="forumhoofd">url</td>';
 		echo '<td class="forumhoofd">useragent</td><td class="forumhoofd">referer</td></tr>';
 		while ($aLogRegel = $db->next($rLog)) {
@@ -161,11 +159,10 @@ class stats implements View {
 		echo '<table class="forumtable"><tr><td class="forumhoofd">moment</td><td class="forumhoofd">naam</td><td class="forumhoofd">url</td>';
 		echo '<td class="forumhoofd">useragent</td><td class="forumhoofd">referer</td></tr>';
 		while ($aLogRegel = $db->next($rLog)) {
-			$lid = LidCache::getLid($aLogRegel['uid']);
-			$lid->tsMode = 'link';
+			$profiel = ProfielModel::get($aLogRegel['uid']);
 			echo '<tr>';
 			echo '<td class="forumtitel">' . date('D H:i', strtotime($aLogRegel['moment'])) . '</td>';
-			echo '<td class="forumtitel"><a href="?uid=' . htmlspecialchars($aLogRegel['uid']) . '">+</a> ' . (string) $lid . '</td>';
+			echo '<td class="forumtitel"><a href="?uid=' . htmlspecialchars($aLogRegel['uid']) . '">+</a> ' . $profiel->getLink('volledig') . '</td>';
 			echo '<td class="forumtitel"><a href="' . CSR_ROOT . $aLogRegel['url'] . '" target="_blank">' . $aLogRegel['url'] . '</a></td>';
 			echo '<td class="forumtitel">' . $aLogRegel['useragent'] . '</td>';
 			if ($aLogRegel['referer'] == '') {

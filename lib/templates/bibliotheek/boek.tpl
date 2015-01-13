@@ -103,7 +103,7 @@
 			<h3>Exemplaren</h3>
 			{foreach from=$boek->getExemplaren() item=exemplaar name=exemplaren}
 				<div class="exemplaar uitgebreid {if $smarty.foreach.exemplaren.total>4 AND !$boek->isEigenaar($exemplaar.id) AND ($exemplaar.eigenaar_uid!='x222' OR $total_exemplaren_bibliotheek>0 )}verborgen{/if}">
-					<div class="fotolabel">{$exemplaar.eigenaar_uid|pasfoto}</div>
+					<div class="fotolabel">{ProfielModel::getLink($exemplaar.eigenaar_uid, 'pasfoto')}</div>
 					<div class="gegevensexemplaar" id="ex{$exemplaar.id}">
 					{* eigenaar *}
 						<div class="regel">
@@ -111,7 +111,7 @@
 							{if $exemplaar.eigenaar_uid=='x222'}{assign var=total_exemplaren_bibliotheek value=$total_exemplaren_bibliotheek+1}
 								C.S.R.-bibliotheek
 							{else}
-								{$exemplaar.eigenaar_uid|csrnaam}
+								{ProfielModel::getLink($exemplaar.eigenaar_uid, 'civitas')}
 							{/if}
 						</div>
 					{* opmerking *}
@@ -128,9 +128,9 @@
 						<div class="regel">
 							<label>Status</label>
 							{if $exemplaar.status=='uitgeleend'}
-								<span title="Sinds {$exemplaar.uitleendatum|reldate|strip_tags}">Uitgeleend aan {$exemplaar.uitgeleend_uid|csrnaam}</span>
+								<span title="Sinds {$exemplaar.uitleendatum|reldate|strip_tags}">Uitgeleend aan {ProfielModel::getLink($exemplaar.uitgeleend_uid, 'civitas')}</span>
 							{elseif $exemplaar.status=='teruggegeven'}
-								<span title="Was uitgeleend sinds {$exemplaar.uitleendatum|reldate|strip_tags}">Teruggegeven door {$exemplaar.uitgeleend_uid|csrnaam}</span>
+								<span title="Was uitgeleend sinds {$exemplaar.uitleendatum|reldate|strip_tags}">Teruggegeven door {ProfielModel::getLink($exemplaar.uitgeleend_uid, 'civitas')}</span>
 							{elseif $exemplaar.status=='vermist'}
 								<span class="waarschuwing" title="Sinds {$exemplaar.uitleendatum|reldate|strip_tags}">Vermist</span>
 							{elseif $exemplaar.status=='beschikbaar' }
@@ -150,20 +150,20 @@
 											<span class="suggestie recht">Biebboek lenen: laat het kaartje achter voor de bibliothecaris.</span><br />
 										{/if}
 									{else}
-										<a class="btn" href="/bibliotheek/exemplaarlenen/{$boek->getId()}/{$exemplaar.id}" title="Leen dit boek" onclick="return confirm('U wilt dit boek van {$exemplaar.eigenaar_uid|csrnaam:'civitas':'plain'} lenen?')">{icon get="lorry"} Exemplaar lenen</a>
+										<a class="btn" href="/bibliotheek/exemplaarlenen/{$boek->getId()}/{$exemplaar.id}" title="Leen dit boek" onclick="return confirm('U wilt dit boek van {ProfielModel::getNaam($exemplaar.eigenaar_uid)} lenen?')">{icon get="lorry"} Exemplaar lenen</a>
 									{/if}
 								{elseif $exemplaar.status=='uitgeleend' AND LoginModel::getUid()==$exemplaar.uitgeleend_uid AND $exemplaar.uitgeleend_uid!=$exemplaar.eigenaar_uid}
-									<a class="btn" href="/bibliotheek/exemplaarteruggegeven/{$boek->getId()}/{$exemplaar.id}" title="Boek heb ik teruggegeven" onclick="return confirm('U heeft dit exemplaar van {$exemplaar.eigenaar_uid|csrnaam:'civitas':'plain'} teruggegeven?')">{icon get="lorry_go"} Teruggegeven</a>
+									<a class="btn" href="/bibliotheek/exemplaarteruggegeven/{$boek->getId()}/{$exemplaar.id}" title="Boek heb ik teruggegeven" onclick="return confirm('U heeft dit exemplaar van {ProfielModel::getNaam($exemplaar.eigenaar_uid)} teruggegeven?')">{icon get="lorry_go"} Teruggegeven</a>
 								{/if}
 								{if $boek->isEigenaar($exemplaar.id)}
 									{if ($exemplaar.status=='uitgeleend' OR $exemplaar.status=='teruggegeven')}
-										<a class="btn" href="/bibliotheek/exemplaarterugontvangen/{$boek->getId()}/{$exemplaar.id}" title="Boek is ontvangen" onclick="return confirm('Dit exemplaar van {$exemplaar.eigenaar_uid|csrnaam:'civitas':'plain'} is terugontvangen?')">{icon get="lorry_flatbed"} Ontvangen</a>
+										<a class="btn" href="/bibliotheek/exemplaarterugontvangen/{$boek->getId()}/{$exemplaar.id}" title="Boek is ontvangen" onclick="return confirm('Dit exemplaar van {ProfielModel::getNaam($exemplaar.eigenaar_uid)} is terugontvangen?')">{icon get="lorry_flatbed"} Ontvangen</a>
 									{elseif $exemplaar.status=='beschikbaar'}
-										<a class="btn" href="/bibliotheek/exemplaarvermist/{$boek->getId()}/{$exemplaar.id}" title="Exemplaar is vermist" onclick="return confirm('Is het exemplaar van {$exemplaar.eigenaar_uid|csrnaam:'civitas':'plain'} vermist?')">{icon get="emoticon_unhappy"} Vermist</a>
+										<a class="btn" href="/bibliotheek/exemplaarvermist/{$boek->getId()}/{$exemplaar.id}" title="Exemplaar is vermist" onclick="return confirm('Is het exemplaar van {ProfielModel::getNaam($exemplaar.eigenaar_uid)} vermist?')">{icon get="emoticon_unhappy"} Vermist</a>
 									{elseif $exemplaar.status=='vermist'}
-										<a class="btn" href="/bibliotheek/exemplaargevonden/{$boek->getId()}/{$exemplaar.id}" title="Exemplaar teruggevonden" onclick="return confirm('Is het exemplaar van {$exemplaar.eigenaar_uid|csrnaam:'civitas':'plain'} teruggevonden?')">{icon get="emoticon_smile"} Teruggevonden</a>
+										<a class="btn" href="/bibliotheek/exemplaargevonden/{$boek->getId()}/{$exemplaar.id}" title="Exemplaar teruggevonden" onclick="return confirm('Is het exemplaar van {ProfielModel::getNaam($exemplaar.eigenaar_uid)} teruggevonden?')">{icon get="emoticon_smile"} Teruggevonden</a>
 									{/if}
-									<a class="btn" href="/bibliotheek/verwijderexemplaar/{$boek->getId()}/{$exemplaar.id}" title="Exemplaar verwijderen" onclick="return confirm('Weet u zeker dat u dit exemplaar van {$exemplaar.eigenaar_uid|csrnaam:'civitas':'plain'} wilt verwijderen?')">{icon get="verwijderen"} Verwijderen</a>
+									<a class="btn" href="/bibliotheek/verwijderexemplaar/{$boek->getId()}/{$exemplaar.id}" title="Exemplaar verwijderen" onclick="return confirm('Weet u zeker dat u dit exemplaar van {ProfielModel::getNaam($exemplaar.eigenaar_uid)} wilt verwijderen?')">{icon get="verwijderen"} Verwijderen</a>
 								{/if}
 							</div>
 						</div>
@@ -179,7 +179,7 @@
 				<div class="exemplaar compact">
 					{foreach from=$boek->getExemplaren() item=exemplaar}
 						{if !$boek->isEigenaar($exemplaar.id) AND ($exemplaar.eigenaar_uid!='x222' OR $total_exemplaren_bibliotheek>0 )}
-							{$exemplaar.eigenaar_uid|pasfoto} 
+							{ProfielModel::getLink($exemplaar.eigenaar_uid, 'pasfoto')}
 							<div class="statusmarkering"><span class="biebindicator {$exemplaar.status}" title="Boek is {$exemplaar.status}">• </span></div>
 						{/if}
 						{if $exemplaar.eigenaar_uid=='x222'}
@@ -214,7 +214,7 @@
 						</td>
 					{else}
 						<td class="linkerkolom recensist">
-							<span class="recensist">{$beschrijving.schrijver_uid|csrnaam}</span><br />
+							<span class="recensist">{ProfielModel::getLink($beschrijving.schrijver_uid, 'civitas')}</span><br />
 							<span class="moment">{$beschrijving.toegevoegd|reldate}</span><br />
 
 						{* knopjes bij elke post *}	

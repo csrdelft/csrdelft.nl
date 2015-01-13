@@ -31,7 +31,7 @@
 
 		function updateData(timespan) {
 			jQuery.ajax({
-				url: '/tools/saldodata.php?uid={$profiel->getUid()}&timespan=' + timespan,
+				url: '/tools/saldodata.php?uid={$profiel->uid}&timespan=' + timespan,
 				dataType: 'json',
 				success: function (data) {
 					plot.setData(data);
@@ -52,7 +52,7 @@
 	}
 </script>
 <div id="saldografiek" class="verborgen" style="width: 670px; height: 220px;"></div>
-{if LoginModel::getUid() !== $profiel->getUid()}
+{if LoginModel::getUid() !== $profiel->uid}
 	<br /><a class="btn" onclick="jQuery('#saldografiek').show();
 			makePlot();
 			jQuery(this).remove()">Toon saldografiek</a>

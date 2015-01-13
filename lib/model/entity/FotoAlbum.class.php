@@ -38,7 +38,7 @@ class FotoAlbum extends Map {
 	private $fotos_incompleet;
 	/**
 	 * Creator
-	 * @var Lid
+	 * @var Profiel
 	 */
 	public $owner;
 	/**

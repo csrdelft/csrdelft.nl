@@ -2,33 +2,33 @@
 	<div id="profielregel">
 		<div class="naam">
 			<div class="floatR">
-				{$profiel->getUid()|pasfoto}<br />
+				{ProfielModel::getLink($profiel->uid, 'pasfoto')}<br />
 				<div class="knopjes">
 					{if $profiel->magBewerken()}
-						<a href="/profiel/{$profiel->getUid()}/bewerken" class="btn" title="Bewerk dit profiel">{icon get="bewerken"}</a>
-						<a href="/profiel/{$profiel->getUid()}/voorkeuren" class="btn" title="Pas voorkeuren voor commissies aan">{icon get="report_edit"}</a>
+						<a href="/profiel/{$profiel->uid}/bewerken" class="btn" title="Bewerk dit profiel">{icon get="bewerken"}</a>
+						<a href="/profiel/{$profiel->uid}/voorkeuren" class="btn" title="Pas voorkeuren voor commissies aan">{icon get="report_edit"}</a>
 					{/if}
-					{if $isLidMod}
-						<a href="/profiel/{$profiel->getUid()}/wijzigstatus" class="btn" title="Wijzig de lidstatus">{icon get="group_edit"}</a>
+					{if LoginModel::mag('P_LEDEN_MOD')}
+						<a href="/profiel/{$profiel->uid}/wijzigstatus" class="btn" title="Wijzig de lidstatus">{icon get="group_edit"}</a>
 					{/if}
-					{if $isBestuur}
-						<a href="/profiel/{$profiel->getUid()}/dd" class="btn" title="Wijzig de lidstatus">{icon get="group_edit"}</a>
+					{if LoginModel::mag('groep:bestuur')}
+						<a href="/profiel/{$profiel->uid}/dd" class="btn" title="Wijzig de lidstatus">{icon get="group_edit"}</a>
 					{/if}
-					<a href="/profiel/{$profiel->getUid()}/addToGoogleContacts/" class="btn" title="{*if $profiel->isInGoogleContacts()}Er bestaat al een contact met deze naam in je Google-contacts. Klik om te updaten.{else*}Voeg dit profiel toe aan mijn google adresboek{*/if*}"><img src="/plaetjes/knopjes/google.ico" width="16" height="16" alt="tovoegen aan Google contacts"/></a>
-						{if $isAdmin}
+					<a href="/profiel/{$profiel->uid}/addToGoogleContacts/" class="btn" title="{*if $profiel->isInGoogleContacts()}Er bestaat al een contact met deze naam in je Google-contacts. Klik om te updaten.{else*}Voeg dit profiel toe aan mijn google adresboek{*/if*}"><img src="/plaetjes/knopjes/google.ico" width="16" height="16" alt="tovoegen aan Google contacts"/></a>
+						{if LoginModel::mag('P_ADMIN')}
 						<br />
-						<a href="/tools/stats.php?uid={$profiel->getUid()}" class="btn" title="Toon bezoeklog">{icon get="server_chart"}</a>
-						<a href="/profiel/{$profiel->getUid()}/wachtwoord" class="btn post confirm prompt" data="wachtwoord=" title="Wachtwoord wijzigen voor {$profiel->getNaam()}">{icon get="resetpassword"}</a>
+						<a href="/tools/stats.php?uid={$profiel->uid}" class="btn" title="Toon bezoeklog">{icon get="server_chart"}</a>
+						<a href="/profiel/{$profiel->uid}/wachtwoord" class="btn post confirm prompt" data="wachtwoord=" title="Wachtwoord wijzigen voor {$profiel->getNaam()}">{icon get="resetpassword"}</a>
 					{/if}
-					{if $profiel->getStatus()=='S_NOVIET' AND LoginModel::mag('groep:novcie')}
-						<a href="/profiel/{$profiel->getUid()}/novietBewerken" class="btn"><img src="/plaetjes/forum/bewerken.png" title="Bewerk dit profiel" alt="bewerken" />Noviet bewerken</a><br />
+					{if $profiel->status === LidStatus::Noviet AND LoginModel::mag('groep:novcie')}
+						<a href="/profiel/{$profiel->uid}/bewerken" class="btn"><img src="/plaetjes/forum/bewerken.png" title="Bewerk dit profiel" alt="bewerken" />Noviet bewerken</a><br />
 						{/if}
 				</div>
 			</div>
 			{getMelding()}
-			<h1 title="Lid-status: {$profiel->getStatus()->getDescription()}">
-				<div class="status">{if !$profiel->isLid()}{$profiel->getStatus()->getChar()}{/if}&nbsp;</div>
-				{$profiel->getNaam('volledig', 'plain')}
+			<h1 title="Lid-status: {LidStatus::getDescription($profiel->status)}">
+				<div class="status">{LidStatus::getChar($profiel->status)}&nbsp;</div>
+				{$profiel->getNaam('volledig')}
 			</h1>
 		</div>
 	</div>
@@ -36,60 +36,60 @@
 	<div class="profielregel">
 		<div class="left">Naam</div>
 		<div class="gegevens">
-			<div class="label">&nbsp;</div> {$profiel->getNaamLink('civitas', 'plain')}<br />
+			<div class="label">&nbsp;</div> {$profiel->getNaam('civitas')}<br />
 			<div class="label">Lidnummer:</div>
-			{if LoginModel::instance()->maySuTo($profiel->getLid())}
-				<a href="/su/{$profiel->getUid()}/" title="Su naar dit lid">{$profiel->getUid()}</a>
+			{if LoginModel::instance()->maySuTo($profiel->getAccount())}
+				<a href="/su/{$profiel->uid}/" title="Su naar dit lid">{$profiel->uid}</a>
 			{else}
-				{$profhtml.uid}
+				{$profiel->uid}
 			{/if}<br />
-			{if $profhtml.nickname!=''}<div class="label">Bijnaam:</div> {$profhtml.nickname}<br />{/if}
-			{if $profhtml.duckname!=''}<div class="label">Duckstad-naam:</div> {$profhtml.duckname}<br /><br />{/if}
-			{if $profhtml.voorletters!=''}<div class="label">Voorletters:</div> {$profhtml.voorletters}<br />{/if}
-			{if $profhtml.gebdatum!='0000-00-00'}<div class="label">Geb.datum:</div> {$profhtml.gebdatum|date_format:"%d-%m-%Y"}<br />{/if}
-			{if $profiel->getStatus()=='S_OVERLEDEN' AND $profhtml.sterfdatum!='0000-00-00'}<div class="label">Overleden op:</div> {$profhtml.sterfdatum|date_format:"%d-%m-%Y"}<br />{/if}
-			{if $profiel->getEchtgenoot() instanceof Lid}
-				<div class="label">{if $profiel->getEchtgenoot()->getGeslacht()=='v'}Echtgenote{else}Echtgenoot{/if}:</div>
-				{$profiel->getEchtgenoot()->getNaamLink('civitas', 'link')}<br />
+			{if $profiel->nickname!=''}<div class="label">Bijnaam:</div> {$profiel->nickname}<br />{/if}
+			{if $profiel->duckname!=''}<div class="label">Duckstad-naam:</div> {$profiel->duckname}<br /><br />{/if}
+			{if $profiel->voorletters!=''}<div class="label">Voorletters:</div> {$profiel->voorletters}<br />{/if}
+			{if $profiel->gebdatum!='0000-00-00'}<div class="label">Geb.datum:</div> {$profiel->gebdatum|date_format:"%d-%m-%Y"}<br />{/if}
+			{if $profiel->status === LidStatus::Overleden AND $profiel->sterfdatum!='0000-00-00'}<div class="label">Overleden op:</div> {$profiel->sterfdatum|date_format:"%d-%m-%Y"}<br />{/if}
+			{if ProfielModel::get($profiel->echtgenoot)}
+				<div class="label">{if ProfielModel::get($profiel->echtgenoot)->geslacht === Geslacht::Vrouw}Echtgenote{else}Echtgenoot{/if}:</div>
+				{ProfielModel::get($profiel->echtgenoot)->getLink('civitas')}<br />
 			{/if}
 		</div>
 	</div>
-	{if $profiel->getStatus()!='S_OVERLEDEN' AND ($profhtml.adres!='' OR $profhtml.o_adres!='')}
+	{if $profiel->status != LidStatus::Overleden AND ($profiel->adres!='' OR $profiel->o_adres!='')}
 		<div class="profielregel">
 			<div class="gegevens">
 				<div class="gegevenszelf">
 					<div class="label">
-						{if $profhtml.adres!=''}
-							<a target="_blank" href="https://maps.google.nl/maps?q={$profhtml.adres|urlencode}+{$profhtml.woonplaats|urlencode}+{$profhtml.land|urlencode} ({if $profhtml.woonoord!=''}{$profiel->getWoonoord()->getNaam()}{else}{$profiel->getNaamLink('civitas', 'plain')}{/if})">
+						{if $profiel->adres!=''}
+							<a target="_blank" href="https://maps.google.nl/maps?q={$profiel->adres|urlencode}+{$profiel->woonplaats|urlencode}+{$profiel->land|urlencode} ({if $woonoord != ''}{$profiel->getWoonoord()->getNaam()}{else}{$profiel->getNaam('civitas')}{/if})">
 								<img src="/plaetjes/layout/googlemaps.gif" width="35px" alt="googlemap voor dit adres" />
 							</a>
 						{/if}
 					</div>
 					<div class="adres">
-						{$profhtml.woonoord}<br />
-						{$profhtml.adres}<br />
-						{$profhtml.postcode} {$profhtml.woonplaats}<br />
-						{$profhtml.land}<br />
-						{if $profhtml.telefoon!=''}{$profhtml.telefoon}<br />{/if}
-						{if $profhtml.mobiel!=''}{$profhtml.mobiel}<br />{/if}
+						{$woonoord}<br />
+						{$profiel->adres}<br />
+						{$profiel->postcode} {$profiel->woonplaats}<br />
+						{$profiel->land}<br />
+						{if $profiel->telefoon!=''}{$profiel->telefoon}<br />{/if}
+						{if $profiel->mobiel!=''}{$profiel->mobiel}<br />{/if}
 					</div>
 				</div>
 				{if $profiel->isLid()}
 					<div class="gegevensouders">
-						{if $profhtml.o_adres!=''}
+						{if $profiel->o_adres!=''}
 							<div class="label">
-								<a target="_blank" href="https://maps.google.nl/maps?q={$profhtml.o_adres|urlencode}+{$profhtml.o_woonplaats|urlencode}+{$profhtml.o_land|urlencode} (ouders van {$profiel->getNaamLink('civitas', 'plain')})">
+								<a target="_blank" href="https://maps.google.nl/maps?q={$profiel->o_adres|urlencode}+{$profiel->o_woonplaats|urlencode}+{$profiel->o_land|urlencode} (ouders van {$profiel->getNaam('civitas')})">
 									<img src="/plaetjes/layout/googlemaps.gif" width="35px" alt="googlemap voor dit adres" />
 								</a>
 							</div>
 						{/if}
 						<div class="adres">
-							{if $profhtml.o_adres!=''}
+							{if $profiel->o_adres!=''}
 								<strong>Ouders:</strong><br />
-								{$profhtml.o_adres}<br />
-								{$profhtml.o_postcode} {$profhtml.o_woonplaats}<br />
-								{$profhtml.o_land}<br />
-								{$profhtml.o_telefoon}
+								{$profiel->o_adres}<br />
+								{$profiel->o_postcode} {$profiel->o_woonplaats}<br />
+								{$profiel->o_land}<br />
+								{$profiel->o_telefoon}
 							{/if}
 						</div>
 					</div>
@@ -98,81 +98,64 @@
 			</div>
 		</div>
 	{/if}
-	{if count($profiel->getContactgegevens())>0}
-		<div class="profielregel">
-			<div class="gegevens">
-				{foreach from=$profiel->getContactgegevens() key="key" item="contact"}
-					{if in_array($key, array('website', 'linkedin'))}
-						<div class="label">{$key|ucfirst}:</div>
-						<a target="_blank" href="{$contact|escape:'html'}">{$contact|truncate:60|escape:'htmlall'}</a>
-					{elseif $key=='email'}
-						<div class="label">Email:</div>
-						<a href="mailto:{$contact|escape:'html'}">{$contact|escape:'htmlall'}</a>
-					{elseif $key=='jid'}
-						<div class="label">Jabber/GTalk:</div>
-						{$contact|escape:'htmlall'}
-					{elseif in_array($key, array('msn', 'icq'))}
-						<div class="label">{$key|upper}:</div>
-						{$contact|escape:'htmlall'}
-					{else}
-						<div class="label">{$key|ucfirst}:</div>
-						{$contact|escape:'htmlall'}
-					{/if}
-					<br />
-				{/foreach}
-
-			</div>
+	<div class="profielregel">
+		<div class="gegevens">
+			{foreach from=$profiel->getContactgegevens() key=key item=contact}
+				{if $contact != ''}
+					<div class="label">{$key}:</div>
+					{$contact}<br />
+				{/if}
+			{/foreach}
 		</div>
-	{/if}
+	</div>
 	<div class="profielregel">
 		<div class="gegevens">
 			<div class="half">
-				{if $profhtml.studie!=''}
-					<div class="label">Studie:</div> <div class="data">{$profhtml.studie}</div>
+				{if $profiel->studie!=''}
+					<div class="label">Studie:</div> <div class="data">{$profiel->studie}</div>
 
-					<div class="label">Studie sinds:</div> {$profhtml.studiejaar}<br />
+					<div class="label">Studie sinds:</div> {$profiel->studiejaar}<br />
 				{/if}
 				<div class="label">Lid sinds:</div>
-				{if $profhtml.lidjaar!=0}
-					<a href="/ledenlijst?q=lichting:{$profhtml.lidjaar}&amp;status=ALL" title="Bekijk de leden van lichting {$profhtml.lidjaar}">{$profhtml.lidjaar}</a>
+				{if $profiel->lidjaar!=0}
+					<a href="/ledenlijst?q=lichting:{$profiel->lidjaar}&amp;status=ALL" title="Bekijk de leden van lichting {$profiel->lidjaar}">{$profiel->lidjaar}</a>
 				{/if}
-				{if !$profiel->isLid() AND $profhtml.lidafdatum!='0000-00-00'} tot {$profhtml.lidafdatum|substr:0:4}{/if}<br />
-				<div class="label">Status:</div> {$profiel->getStatus()->getDescription()}<br />
+				{if !$profiel->isLid() AND $profiel->lidafdatum!='0000-00-00'} tot {$profiel->lidafdatum|substr:0:4}{/if}<br />
+				<div class="label">Status:</div> {LidStatus::getDescription($profiel->status)}<br />
 				<br />
 
 				{if $profiel->isOudlid()}
-					{if $profhtml.beroep!=''}<div class="label">Beroep/werk:</div><div class="data">{$profhtml.beroep}</div><br />{/if}
+					{if $profiel->beroep!=''}<div class="label">Beroep/werk:</div><div class="data">{$profiel->beroep}</div><br />{/if}
 				{/if}
-				{if $profhtml.kring!=0}
+				{if $profiel->kring}
 					<div class="label">Kring:</div>
-					{$profiel->getKring(true)}
-					<br />
-				{elseif $profhtml.verticale!=0}
+					{$profiel->getKringLink()}<br />
+				{elseif $profiel->verticale!=0}
 					<div class="label">Verticale:</div>
 					<a href="/ledenlijst?q=verticale:{$profiel->getVerticale()->letter}">{$profiel->getVerticale()->naam}</a><br />
 				{/if}
-				{if $profhtml.moot!=0}
+				{if $profiel->moot}
 					<div class="label">Oude moot:</div>
-					<a href="/ledenlijst?q=moot:{$profhtml.moot}">{$profhtml.moot}</a>
+					<a href="/ledenlijst?q=moot:{$profiel->moot}">{$profiel->moot}</a>
 				{/if}
 			</div>
 			<div class="familie">
-				{if $profiel->getPatroon() instanceof Lid OR $profiel->getKinderen()|@count > 0}
-					<a class="stamboom" href="/leden/stamboom/{$profiel->getUid()}" title="Stamboom van {$profiel->getNaam()}">
+				{if ProfielModel::get($profiel->patroon) OR $profiel->hasKinderen()}
+					<a class="stamboom" href="/leden/stamboom/{$profiel->uid}" title="Stamboom van {$profiel->getNaam()}">
 						<img src="/plaetjes/knopjes/stamboom.jpg" alt="Stamboom van {$profiel->getNaam()}" />
 					</a>
 				{/if}
-				{if $profiel->getPatroon() instanceof Lid}
-					<div class="label">{if $profiel->getPatroon()->getGeslacht()=='v'}M{else}P{/if}atroon:</div>
+				{if ProfielModel::get($profiel->patroon)}
+					<div class="label">{if ProfielModel::get($profiel->patroon)->geslacht === Geslacht::Vrouw}M{else}P{/if}atroon:</div>
 					<div class="data">
-						{$profiel->getPatroon()->getNaamLink('civitas', 'link')}<br />
+						{ProfielModel::get($profiel->patroon)->getLink('civitas')}<br />
 					</div>
 				{/if}
-				{if $profiel->getKinderen()|@count > 0}
+				{if $profiel->hasKinderen()}
 					<div class="label">Kinderen:</div>
 					<div class="data">
 						{foreach from=$profiel->getKinderen() item=kind name=kinderen}
-							{$kind->getNaamLink('civitas', 'link')}<br />
+							{$kind->getLink('civitas')}<br />
 						{/foreach}
 					</div>
 				{/if}
@@ -182,17 +165,17 @@
 	</div>
 	<div id="groepen" class="profielregel clear-right">
 		<div class="gegevens">
-			{$profhtml.groepen->view()}
+			{$groepen->view()}
 			<div class="clear-left"></div>
 		</div>
 	</div>
-	{if ($profiel->isLid() OR (LoginModel::mag('P_LEDEN_MOD') AND ($profhtml.soccieSaldo < 0 OR $profhtml.maalcieSaldo < 0))) AND (isset($saldografiek) OR $profhtml.bankrekening!='')}
+	{if ($profiel->isLid() OR (LoginModel::mag('P_LEDEN_MOD') AND ($profiel->soccieSaldo < 0 OR $profiel->maalcieSaldo < 0))) AND (isset($saldografiek) OR $profiel->bankrekening!='')}
 		<div class="profielregel">
 			<div class="gegevens">
-				{if $profhtml.bankrekening!=''}
-					<div class="label">Bankrekening:</div> {$profhtml.bankrekening}
+				{if $profiel->bankrekening!=''}
+					<div class="label">Bankrekening:</div> {$profiel->bankrekening}
 					{if LoginModel::mag('P_MAAL_MOD')}
-						<span class="lichtgrijs">({if $profhtml.machtiging=='nee'}geen {/if}machtiging getekend)</span>
+						<span class="lichtgrijs">({if !$profiel->machtiging}geen {/if}machtiging getekend)</span>
 					{/if}
 					<br />
 				{/if}
@@ -207,18 +190,18 @@
 
 	<div class="profielregel" id="maaltijden">
 		<div class="gegevens">
-			{if LoginModel::getUid()==$profhtml.uid OR LoginModel::mag('P_MAAL_MOD')}
+			{if LoginModel::getUid() === $profiel->uid OR LoginModel::mag('P_MAAL_MOD')}
 				<div class="label">Recent:</div>
 				<ul class="nobullets data">
-					{foreach from=$profhtml.recenteAanmeldingen item=aanmelding}
+					{foreach from=$recenteAanmeldingen item=aanmelding}
 						<li>{$aanmelding->getMaaltijd()->getTitel()} <span class="lichtgrijs">({$aanmelding->getMaaltijd()->getDatum()|date_format:"%a %e %b"})</span></li>
 						{/foreach}
 				</ul>
 				<br />
-				{if $profhtml.abos}
+				{if $abos}
 					<div class="label">Abo's:</div>
 					<ul class="nobullets data">
-						{foreach from=$profhtml.abos item=abonnement}
+						{foreach from=$abos item=abonnement}
 							<li>{$abonnement->getMaaltijdRepetitie()->getStandaardTitel()}</li>
 							{/foreach}
 					</ul>
@@ -227,12 +210,12 @@
 			{/if}
 			<div class="label">Allergie/dieet:</div>
 			<div class="data">{strip}
-				{if $profhtml.eetwens!=''}
-					{$profhtml.eetwens}
+				{if $profiel->eetwens!=''}
+					{$profiel->eetwens}
 				{else}
 					-
 				{/if}
-				{if LoginModel::getUid()==$profhtml.uid}
+				{if LoginModel::getUid() === $profiel->uid}
 					&nbsp;<div class="inline" style="position: absolute;"><a href="/corveevoorkeuren" title="Bewerk voorkeuren" class="btn">{icon get="pencil"}</a></div>
 					{/if}
 			</div>{/strip}
@@ -263,13 +246,13 @@
 		</div>
 	</div>
 
-	{if LoginModel::getUid()==$profiel->getUid()}
+	{if LoginModel::getUid() === $profiel->uid}
 		<div class="profielregel" id="agenda">
 			<div class="gegevens" id="agenda_gegevens">
 				<div class="label">ICal-feed:</div>
 				<div class="data">
-					{if $profhtml.rssToken!=''}
-						<a href="{$profiel->getICalLink()}">
+					{if $profiel->getAccount()->hasPrivateToken()}
+						<a href="{$profiel->getAccount()->getICalLink()}">
 							<img src="/plaetjes/knopjes/ical.gif" /> Persoonlijke ICal-feed agenda
 						</a>
 					{/if}
@@ -280,30 +263,30 @@
 		</div>
 	{/if}
 
-	{if $profiel->getForumPostCount() > 0 OR LoginModel::getUid()==$profiel->getUid()}
+	{if $forumpostcount > 0 OR LoginModel::getUid() === $profiel->uid}
 		<div class="profielregel" id="forum">
 			<div class="gegevens" id="forum_gegevens">
-				{if LoginModel::getUid()==$profiel->getUid()}
+				{if LoginModel::getUid() === $profiel->uid}
 					<div class="label">RSS-feed:</div>
 					<div class="data">
-						{if $profhtml.rssToken!=''}
-							<a href="{$profiel->getRssLink()}">
+						{if $profiel->getAccount()->hasPrivateToken()}
+							<a href="{$profiel->getAccount()->getRssLink()}">
 								{icon get='feed'} Persoonlijke RSS-feed forum
 							</a>
 						{/if}
-						<a name="tokenaanvragen" class="btn" href="/profiel/{$profiel->getUid()}/rssToken#forum">Nieuwe aanvragen</a>
+						<a name="tokenaanvragen" class="btn" href="/profiel/{$profiel->uid}/resetPrivateToken#forum">Nieuwe aanvragen</a>
 					</div>
 					<br />
 				{/if}
-				{if $profiel->getForumPostCount() > 0}
+				{if $forumpostcount > 0}
 					<div class="label"># bijdragen:</div>
 					<div class="data">
-						{$profiel->getForumPostCount()} bericht{if $profiel->getForumPostCount()> 1 }en{/if}.
+						{$forumpostcount} bericht{if $forumpostcount> 1 }en{/if}.
 					</div>
 					<div class="label">Recent:</div>
 					<div class="data">
 						<table id="recenteForumberichten">
-							{foreach from=$profiel->getRecenteForumberichten() item=post}
+							{foreach from=ForumPostsModel::instance()->getRecenteForumPostsVanLid($profiel->uid, (int) LidInstellingen::get('forum', 'draden_per_pagina')) item=post}
 								<tr>
 									<td><a href="/forum/reactie/{$post->post_id}#{$post->post_id}" title="{htmlspecialchars($post->tekst)}"{if $post->getForumDraad()->onGelezen()} class="{LidInstellingen::get('forum', 'ongelezenWeergave')}"{/if}>{$post->getForumDraad()->titel|truncate:75}</a></td>
 									<td>
@@ -323,7 +306,7 @@
 			</div>
 		</div>
 	{/if}
-	{if $boeken OR LoginModel::getUid()==$profhtml.uid OR $gerecenseerdeboeken}
+	{if $boeken OR LoginModel::getUid() === $profiel->uid OR $gerecenseerdeboeken}
 		<div class="profielregel boeken" id="boeken">
 			<div class="gegevens">
 				{if $boeken}
@@ -340,7 +323,7 @@
 							{/foreach}
 					</ul>
 				{/if}
-				{if LoginModel::getUid()==$profhtml.uid}
+				{if LoginModel::getUid() === $profiel->uid}
 					<a class="btn" href="/bibliotheek/nieuwboek" title="Nieuw boek toevoegen">{icon get="book_add"} Boek toevoegen</a>
 					<br />
 				{/if}
@@ -362,19 +345,19 @@
 			</div>
 		</div>
 	{/if}
-	{if LoginModel::mag('P_ADMIN,R_BESTUUR,groep:novcie') AND $profiel->getStatus()=='S_NOVIET' AND $profhtml.kgb!=''}
+	{if LoginModel::mag('P_ADMIN,groep:bestuur,groep:novcie') AND $profiel->status === LidStatus::Noviet AND $profiel->kgb!=''}
 		<div class="profielregel" id="novcieopmerking">
 			<div style="cursor: pointer;" onclick="$('#novcie_gegevens').toggle();">NovCie-Opmerking &raquo;</div>
-			<div class="gegevens verborgen" id="novcie_gegevens">{$profhtml.kgb|bbcode}</div>
+			<div class="gegevens verborgen" id="novcie_gegevens">{$profiel->kgb|bbcode}</div>
 		</div>
 	{/if}
-	{if ($isAdmin OR $isLidMod) AND $profhtml.changelog!=''}
+	{if LoginModel::mag('P_LEDEN_MOD')}
 		<div class="profielregel" id="changelog">
 			<div class="gegevens">
 				<div style="cursor: pointer;" onclick="$('#changelog_gegevens').toggle();
 						this.remove()">Bewerklog &raquo;</div>
 				<div class="verborgen" id="changelog_gegevens">
-					{$profhtml.changelog|bbcode}
+					{$profiel->changelog|bbcode}
 				</div>
 			</div>
 		</div>
