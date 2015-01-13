@@ -152,7 +152,7 @@ class ProfielForm extends Formulier {
 				$fields[] = new TextField('voornamen', $profiel->voornamen, 'Voornamen', 100);
 				if (!$inschrijven) {
 					$fields[] = new TextField('postfix', $profiel->postfix, 'Postfix', 7);
-					$fields[] = new NickField('nickname', $profiel->nickname, 'Bijnaam', $profiel);
+					$fields[] = new TextField('nickname', $profiel->nickname, 'Bijnaam', 20);
 				}
 			}
 			$fields[] = new DatumField('gebdatum', $profiel->gebdatum, 'Geboortedatum', date('Y') - 15);
@@ -239,7 +239,7 @@ class ProfielForm extends Formulier {
 
 		if (!$inschrijven) {
 			$fields[] = new Subkopje('Duckstad');
-			$fields[] = new DuckField('duckname', $profiel->duckname, 'Duckstad-naam', $profiel);
+			$fields[] = new DuckField('duckname', $profiel->duckname);
 			$duckfoto = new Afbeelding(PICS_PATH . $profiel->getPasfotoPath(false, 'Duckstad'));
 			if (!$duckfoto->exists() OR strpos($duckfoto->directory, '/Duckstad/') === false) {
 				$duckfoto = null;

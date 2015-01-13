@@ -932,17 +932,10 @@ class RequiredUrlField extends UrlField {
 
 }
 
-/**
- * NickField
- *
- * is pas valid als dit lid de enige is met deze nick.
- */
-class NickField extends TextField {
+class UsernameField extends TextField {
 
-	public $max_len = 20;
-
-	public function __construct($name, $value, $description) {
-		parent::__construct($name, $value, $description, 255, 0);
+	public function __construct($name, $value) {
+		parent::__construct($name, $value, 'Gebruikersnaam');
 	}
 
 	public function validate() {
@@ -953,29 +946,26 @@ class NickField extends TextField {
 		if ($this->value == '') {
 			return true;
 		}
-		// check met strtolower is toegevoegd omdat je anders je eigen nick niet van case kan veranderen
-		// doordat nickExists case-insensitive zoekt
-		if (ProfielModel::existsNick($this->value) AND strtolower($this->value) !== strtolower($this->origvalue)) {
-			$this->error = 'Deze bijnaam is al in gebruik';
+		// check met strtolower is toegevoegd omdat je anders niet van case kan veranderen
+		// doordat usernameExists case-insensitive zoekt
+		if (ProfielModel::existsUsername($this->value) AND strtolower($this->value) !== strtolower($this->origvalue)) {
+			$this->error = 'Deze gebruikersnaam is al in gebruik';
 		}
 		return $this->error === '';
 	}
 
 }
 
-/**
- * DuckField
- *
- * is pas valid als dit lid de enige is met deze duckname.
- * 
- * COPY-PASTE from NickField
- */
+class RequiredUsernameField extends UsernameField {
+
+	public $required = true;
+
+}
+
 class DuckField extends TextField {
 
-	public $max_len = 20;
-
-	public function __construct($name, $value, $description) {
-		parent::__construct($name, $value, $description, 255, 0);
+	public function __construct($name, $value) {
+		parent::__construct($name, $value, 'Duckstad-naam');
 	}
 
 	public function validate() {
@@ -993,6 +983,12 @@ class DuckField extends TextField {
 		}
 		return $this->error === '';
 	}
+
+}
+
+class RequiredDuckField extends DuckField {
+
+	public $required = true;
 
 }
 

@@ -25,24 +25,43 @@ class AccountModel extends CachedPersistenceModel {
 		return is_string($uid) AND preg_match('/^[a-z0-9]{4}$/', $uid);
 	}
 
+	public static function existsUid($uid) {
+		return static::instance()->existsByPrimaryKey(array($uid));
+	}
+
+	public static function existsUsername($name) {
+		return Database::sqlExists(static::instance()->orm->getTableName(), 'username = ?', array($name));
+	}
+
 	protected function __construct() {
 		parent::__construct('security/');
 	}
 
+	/**
+	 * Verify SSHA hash.
+	 * 
+	 * @param Account $account
+	 * @param string $pass_plain
+	 * @return boolean
+	 */
 	public function controleerWachtwoord(Account $account, $pass_plain) {
-		// Verify SSHA hash
 		$ohash = base64_decode(substr($account->pass_hash, 6));
 		$osalt = substr($ohash, 20);
 		$ohash = substr($ohash, 0, 20);
 		$nhash = pack("H*", sha1($pass_plain . $osalt));
-		#echo "ohash: {$ohash}, nhash: {$nhash}";
 		if ($ohash === $nhash) {
 			return true;
 		}
 		return false;
 	}
 
-	public function maakWachtwoord(Account $account, $pass_plain) {
+	/**
+	 * Create SSH hash.
+	 * 
+	 * @param string $pass_plain
+	 * @return string
+	 */
+	public function maakWachtwoord($pass_plain) {
 		$salt = mhash_keygen_s2k(MHASH_SHA1, $pass_plain, substr(pack('h*', md5(mt_rand())), 0, 8), 4);
 		return "{SSHA}" . base64_encode(mhash(MHASH_SHA1, $pass_plain . $salt) . $salt);
 	}
@@ -58,18 +77,12 @@ class AccountModel extends CachedPersistenceModel {
 		if ($this->controleerWachtwoord($account, $pass_plain)) {
 			return false;
 		}
-		$account->pass_hash = $this->maakWachtwoord($this, $pass_plain);
+		$account->pass_hash = $this->maakWachtwoord($pass_plain);
 		$account->pass_since = getDateTime();
 		$this->update($account);
 		$profiel = $account->getProfiel();
 		if ($profiel) {
-			try {
-				if (!ProfielModel::instance()->save_ldap($profiel)) {
-					throw new Exception('LDAP is niet bijgewerkt');
-				}
-			} catch (Exception $e) {
-				setMelding($e->getMessage(), -1);
-			}
+			ProfielModel::instance()->update($profiel);
 		}
 		return true;
 	}
