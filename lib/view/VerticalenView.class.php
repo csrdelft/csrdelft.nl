@@ -65,7 +65,7 @@ class VerticalenView implements View {
 				echo '<div id="leden' . $verticale->letter . '.' . $kringnaam . '" class="kringleden">';
 				foreach ($kring as $profiel) {
 					if ($profiel->kringleider !== Kringleider::Nee) {
-						echo '<em>';
+						echo '<span class="cursief">';
 					}
 					echo $profiel->getLink('volledig');
 					if ($profiel->status === LidStatus::Kringel) {
@@ -75,7 +75,7 @@ class VerticalenView implements View {
 						echo '&nbsp;L';
 					}
 					if ($profiel->kringleider !== Kringleider::Nee) {
-						echo '</em>';
+						echo '</span>';
 					}
 					echo '<br />';
 				}
