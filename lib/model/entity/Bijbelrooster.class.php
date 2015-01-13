@@ -1,5 +1,7 @@
 <?php
 
+require_once 'model/Agendeerbaar.interface.php';
+
 /**
  * Bijbelrooster.class.php
  * 
