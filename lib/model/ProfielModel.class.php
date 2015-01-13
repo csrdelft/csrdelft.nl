@@ -149,7 +149,7 @@ class ProfielModel extends CachedPersistenceModel {
 			$entry['mozillahomecountryname'] = $profiel->land;
 			$entry['mozillahomeurl'] = $profiel->website;
 			$entry['description'] = 'Ledenlijst C.S.R. Delft';
-			$entry['userPassword'] = $profiel->password;
+			$entry['userPassword'] = $profiel->getAccount()->pass_hash;
 
 			$woonoord = $profiel->getWoonoord();
 			if ($woonoord instanceof OldGroep) {
