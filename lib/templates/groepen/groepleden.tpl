@@ -96,7 +96,7 @@
 												</select>
 											{/foreach}
 										{else}
-											<input type="text" name="functie" maxlength="60" class="functie" />
+											<input type="text" name="functie" maxlength="60" class="functie" placeholder="opmerking" />
 										{/if}&nbsp;<input type="submit" value="aanmelden" onclick="event.preventDefault(); this.form.submit(); return false;" />
 									</form>
 
