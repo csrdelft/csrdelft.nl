@@ -87,7 +87,7 @@ class CorveePuntenModel {
 
 	private static function loadPuntenTotaal($where = null, $values = array(), $limit = null) {
 		$sql = 'SELECT uid, corvee_punten, corvee_punten_bonus';
-		$sql.= ' FROM lid';
+		$sql.= ' FROM profielen';
 		if ($where !== null) {
 			$sql.= ' WHERE ' . $where;
 		}

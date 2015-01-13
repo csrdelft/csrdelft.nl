@@ -392,7 +392,7 @@ class LidZoeker {
 	public function search() {
 		$db = MijnSqli::instance();
 
-		$query = "SELECT uid FROM lid WHERE ";
+		$query = "SELECT uid FROM profielen WHERE ";
 
 		if ($this->query != '') {
 			$query.=$this->defaultSearch($this->query);

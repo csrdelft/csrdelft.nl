@@ -117,7 +117,7 @@ class MaaltijdAbonnementenModel {
 		$sql.= ' r.abonnement_filter AS filter,'; // controleer later
 		$sql.= ' (r.abonneerbaar = false) AS abo_err, (lid.kring = 0) AS kring_err, (lid.status NOT IN("S_LID", "S_GASTLID", "S_NOVIET")) AS status_err,';
 		$sql.= ' (EXISTS ( SELECT * FROM mlt_abonnementen AS a WHERE a.mlt_repetitie_id = mrid AND a.uid = van )) AS abo';
-		$sql.= ' FROM lid, mlt_repetities AS r';
+		$sql.= ' FROM profielen AS lid, mlt_repetities AS r';
 		$values = array();
 		if ($alleenWaarschuwingen) {
 			$sql.= ' HAVING abo AND (filter != "" OR abo_err OR kring_err OR status_err)'; // niet-(kring)-leden met abo
@@ -220,7 +220,7 @@ class MaaltijdAbonnementenModel {
 				$sql.= ' VALUES (?, ?, ?)';
 				$values[] = $uid;
 			} else { // niet voor specifiek lid? dan voor alle novieten
-				$sql.= ' SELECT ?, uid, ? FROM lid';
+				$sql.= ' SELECT ?, uid, ? FROM profielen';
 				$sql.= ' WHERE status = "S_NOVIET"';
 			}
 			$wanneer = date('Y-m-d H:i');
@@ -230,7 +230,7 @@ class MaaltijdAbonnementenModel {
 			$abos = $pdo->rowCount();
 			// aanmelden voor komende repetitie-maaltijden
 			if ($uid === null) { // voor de novieten
-				$sql = 'SELECT uid FROM lid WHERE status = "S_NOVIET"';
+				$sql = 'SELECT uid FROM profielen WHERE status = "S_NOVIET"';
 				$pdo = $db->prepare($sql);
 				$pdo->execute($values);
 				$pdo->setFetchMode(PDO::FETCH_COLUMN, 0);

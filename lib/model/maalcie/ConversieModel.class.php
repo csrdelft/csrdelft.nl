@@ -273,7 +273,7 @@ class ConversieModel {
 
 		echo '<br />' . date('H:i:s') . ' converteren: vrijstelling => CorveeVrijstelling & kwalikok => CorveeKwalificatie & voorkeuren => CorveeVoorkeur';
 
-		$rows = self::queryDb('SELECT uid, corvee_vrijstelling, corvee_kwalikok, corvee_voorkeuren FROM lid');
+		$rows = self::queryDb('SELECT uid, corvee_vrijstelling, corvee_kwalikok, corvee_voorkeuren FROM profielen');
 		foreach ($rows as $row) {
 			$percentage = intval($row['corvee_vrijstelling']);
 			if ($percentage > 0) {

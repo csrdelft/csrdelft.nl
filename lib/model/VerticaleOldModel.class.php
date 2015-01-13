@@ -27,7 +27,7 @@ class VerticaleOldModel {
 		$db = MijnSqli::instance();
 		$query = "
 			SELECT kring, GROUP_CONCAT(uid ORDER BY kringleider DESC, achternaam ASC) as kringleden
-			FROM lid
+			FROM profielen
 			WHERE (status='S_NOVIET' OR status='S_GASTLID' OR status='S_LID' OR status='S_KRINGEL' OR (status='S_OUDLID' AND kring>0))
 			  AND verticale=" . $this->nummer . "
 			GROUP BY kring
@@ -107,7 +107,7 @@ class VerticaleOldModel {
 		$db = MijnSqli::instance();
 		$query = "
 			SELECT verticale, kring, GROUP_CONCAT(uid ORDER BY kringleider DESC, achternaam ASC) as kringleden
-			FROM lid
+			FROM profielen
 			WHERE (status='S_NOVIET' OR status='S_GASTLID' OR status='S_LID' OR status='S_KRINGEL' OR (status='S_OUDLID' AND kring>0))
 			  AND verticale !=0
 			GROUP BY verticale, kring

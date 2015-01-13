@@ -16,15 +16,7 @@ class Lichting {
 	}
 
 	public static function getOudsteLichting() {
-		$db = MijnSqli::instance();
-		$query = "
-			SELECT MIN(lidjaar) as oud
-			FROM lid
-			WHERE lidjaar>0";
-		$result = $db->query($query);
-		while ($row = $db->next($result)) {
-			return (int) $row['oud'];
-		}
+		return (int) Database::sqlSelect('MIN(lidjaar)', 'profielen', 'lidjaar > 0')->fetchColumn();
 	}
 
 }

@@ -129,7 +129,7 @@ h.t. Fiscus.';
 		}
 		$query = "
 			SELECT uid, " . $this->cie . "Saldo AS saldo
-			FROM lid
+			FROM profielen
 			WHERE " . $this->cie . "Saldo<" . str_replace(',', '.', $this->saldogrens) . "
 			 AND (" . $where . ")
 			ORDER BY achternaam, voornaam;";

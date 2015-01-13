@@ -104,7 +104,7 @@ class CorveeVoorkeurenModel {
 	private static function loadLedenVoorkeuren() {
 		$sql = 'SELECT lid.uid AS van, r.crv_repetitie_id AS crid, ';
 		$sql.= ' (EXISTS (SELECT * FROM crv_voorkeuren AS v WHERE v.crv_repetitie_id = crid AND v.uid = van )) AS voorkeur';
-		$sql.= ' FROM lid, crv_repetities AS r';
+		$sql.= ' FROM profielen AS lid, crv_repetities AS r';
 		$sql.= ' WHERE r.voorkeurbaar = true AND lid.status IN("S_LID", "S_GASTLID", "S_NOVIET")'; // alleen leden
 		$sql.= ' ORDER BY lid.achternaam, lid.voornaam ASC';
 		$db = \Database::instance();

@@ -13,11 +13,9 @@ class VerjaardagenModel {
 		$dag = (int) $dag;
 		$verjaardagen = array();
 		$query = "
-			SELECT
-				uid, voornaam, tussenvoegsel, achternaam, nickname, duckname, postfix, geslacht, email,
+			SELECT uid, voornaam, tussenvoegsel, achternaam, nickname, duckname, postfix, geslacht, email,
 				EXTRACT( DAY FROM gebdatum) as gebdag, status
-			FROM
-				lid
+			FROM profielen
 			WHERE
 				(status='S_LID' OR status='S_GASTLID' OR status='S_NOVIET' OR status='S_KRINGEL')
 			AND
@@ -38,8 +36,7 @@ class VerjaardagenModel {
 	public static function getKomende($aantal = 10) {
 		$db = MijnSqli::instance();
 		$query = "
-			SELECT
-				uid, nickname, duckname, voornaam, tussenvoegsel, achternaam, status, geslacht, postfix, gebdatum,
+			SELECT uid, nickname, duckname, voornaam, tussenvoegsel, achternaam, status, geslacht, postfix, gebdatum,
 				ADDDATE(
 					gebdatum,
 					INTERVAL TIMESTAMPDIFF(
@@ -48,8 +45,7 @@ class VerjaardagenModel {
 						CURRENT_DATE
 					)+1 YEAR
 				) AS verjaardag
-			FROM
-				lid
+			FROM profielen
 			WHERE
 				(status='S_LID' OR status='S_GASTLID' OR status='S_NOVIET' OR status='S_KRINGEL')
 			AND
@@ -84,7 +80,8 @@ class VerjaardagenModel {
 			$limitclause = '';
 		}
 		$query = "
-			SELECT uid, ADDDATE(
+			SELECT uid,
+				ADDDATE(
 					gebdatum,
 					INTERVAL TIMESTAMPDIFF(
 						year,
@@ -92,7 +89,7 @@ class VerjaardagenModel {
 						CURRENT_DATE
 					)+1 YEAR
 				) as verjaardag
-			FROM lid
+			FROM profielen
 			WHERE (
 				(CONCAT('" . $vanjaar . "', SUBSTRING(gebdatum, 5))>='" . $van . "' AND CONCAT('" . $vanjaar . "', SUBSTRING(gebdatum, 5))<'" . $tot . "')
 			OR

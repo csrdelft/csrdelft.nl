@@ -54,7 +54,7 @@ class ProfielModel extends CachedPersistenceModel {
 		$jj = substr($lidjaar, 2, 2);
 
 		// Volgnummer zijn de laatste 2 cijfers van lidnummer
-		$query = "SELECT max(uid) AS uid FROM lid WHERE LEFT(uid, 2)='" . $jj . "' LIMIT 1;";
+		$query = "SELECT max(uid) AS uid FROM profielen WHERE LEFT(uid, 2)='" . $jj . "' LIMIT 1;";
 		$result = $db->query($query);
 		if ($db->numRows($result) == 1) {
 			$lid = $db->result2array($result);

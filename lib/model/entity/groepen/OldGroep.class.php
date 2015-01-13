@@ -735,9 +735,9 @@ class OldGroep {
 			$db = MijnSqli::instance();
 			$statqueries = array(
 				'totaal'	 => "SELECT 'Totaal' as totaal, count(*) AS aantal FROM groeplid WHERE groepid=" . $this->getId() . ";",
-				'verticale'	 => "SELECT CONCAT('Verticale ', verticale.naam) AS verticale, count(*) as aantal FROM lid LEFT JOIN verticale ON(lid.verticale=verticale.id) WHERE uid IN(" . $this->getLedenCSV(true) . ") GROUP BY verticale;",
-				'geslacht'	 => "SELECT REPLACE(REPLACE(geslacht, 'm', 'Man'), 'v', 'Vrouw') AS geslacht, count(*) as aantal FROM lid WHERE uid IN( " . $this->getLedenCSV(true) . ") group by geslacht;",
-				'lidjaar'	 => "SELECT lidjaar, count(*) as aantal FROM lid WHERE uid IN( " . $this->getLedenCSV(true) . ") group by lidjaar;",
+				'verticale'	 => "SELECT CONCAT('Verticale ', verticale.naam) AS verticale, count(*) as aantal FROM profielen LEFT JOIN verticale ON(lid.verticale=verticale.id) WHERE uid IN(" . $this->getLedenCSV(true) . ") GROUP BY verticale;",
+				'geslacht'	 => "SELECT REPLACE(REPLACE(geslacht, 'm', 'Man'), 'v', 'Vrouw') AS geslacht, count(*) as aantal FROM profielen WHERE uid IN( " . $this->getLedenCSV(true) . ") group by geslacht;",
+				'lidjaar'	 => "SELECT lidjaar, count(*) as aantal FROM profielen WHERE uid IN( " . $this->getLedenCSV(true) . ") group by lidjaar;",
 				'opmerking'	 => "SELECT functie, count(*) as aantal FROM groeplid WHERE groepid=" . $this->getId() . " AND functie != '' GROUP BY functie;"
 			);
 
@@ -828,7 +828,7 @@ class OldGroep {
 			if ($this->getSnaam() == 'htleden') {
 				$query = "
 					SELECT uid 
-					FROM lid
+					FROM profielen
 					WHERE 
 						status IN ('S_LID','S_GASTLID','S_NOVIET')
 						OR uid IN ('x271', 'x030');";
