@@ -164,7 +164,7 @@ class LoginController extends AclController {
 			if ($account AND AccessModel::mag($account, 'P_LOGGED_IN') AND OneTimeTokensModel::instance()->verifyToken($account->uid, $tokenValue)) {
 				// redirect by verifyToken
 			}
-			setMelding(OneTimeTokensModel::instance()->getError(), -1);
+			setMelding('Je kunt deze link maar 1x gebruiken', -1);
 		}
 		$this->view = new CsrLayoutPage($form);
 	}
