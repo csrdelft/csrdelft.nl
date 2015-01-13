@@ -29,6 +29,11 @@ class Verticale extends PersistentEntity {
 	 */
 	private $leider;
 	/**
+	 * Kringen met kringleden
+	 * @var array
+	 */
+	private $kringen;
+	/**
 	 * Database table columns
 	 * @var array
 	 */
@@ -53,6 +58,30 @@ class Verticale extends PersistentEntity {
 			$this->leider = VerticalenModel::getLeider($this);
 		}
 		return $this->leider;
+	}
+
+	public function getKringen() {
+		if (!isset($this->kringen)) {
+			$this->kringen = array();
+			$kringen = Database::sqlSelect(array('kring, GROUP_CONCAT(uid ORDER BY kringleider DESC, achternaam ASC) as kringleden'), 'profielen', 'verticale = ? AND ( status IN (?,?,?,?) OR (status = ? AND kring > 0) )', array($this->letter, LidStatus::Noviet, LidStatus::Lid, LidStatus::Gastlid, LidStatus::Kringel, LidStatus::Oudlid), 'kring', 'kring');
+			foreach ($kringen as $result) {
+				$kring = $result['kring'];
+				$leden = explode(',', $result['kringleden']);
+				$this->kringen[$kring] = array();
+				foreach ($leden as $uid) {
+					$this->kringen[$kring][] = ProfielModel::get($uid);
+				}
+			}
+		}
+		return $this->kringen;
+	}
+
+	public function getKring($kring) {
+		$this->getKringen();
+		if (!isset($this->kringen[$kring])) {
+			return false;
+		}
+		return $this->kringen[$kring];
 	}
 
 }

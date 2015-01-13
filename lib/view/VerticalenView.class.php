@@ -1,4 +1,5 @@
 <?php
+require_once 'model/entity/LidStatus.enum.php';
 
 /**
  * VerticalenView.class.php
@@ -12,8 +13,8 @@ class VerticalenView implements View {
 
 	private $verticalen;
 
-	public function __construct() {
-		$this->verticalen = VerticaleOldModel::getAll();
+	public function __construct($verticalen) {
+		$this->verticalen = $verticalen;
 	}
 
 	public function getModel() {
@@ -44,20 +45,21 @@ class VerticalenView implements View {
 		<?php
 		foreach ($this->verticalen as $verticale) {
 			echo '<div class="verticale">';
-			echo '<h2><a name="' . $verticale->getLetter() . '">Verticale ' . $verticale->getNaam() . '</a></h2>';
+			echo '<h2><a name="' . $verticale->letter . '">Verticale ' . $verticale->naam . '</a></h2>';
+
 			foreach ($verticale->getKringen() as $kringnaam => $kring) {
 				$kringstyle = 'kring';
 				if ($kringnaam == 0) {
 					$kringstyle = 'geenkring';
 				}
-				echo '<div class="' . $kringstyle . '" id="kring' . $verticale->getLetter() . '.' . $kringnaam . '">';
-				echo '<div class="mailknopje" onclick="toggleEmails(\'' . $verticale->getLetter() . '.' . $kringnaam . '\')">@</div>';
+				echo '<div class="' . $kringstyle . '" id="kring' . $verticale->letter . '.' . $kringnaam . '">';
+				echo '<div class="mailknopje" onclick="toggleEmails(\'' . $verticale->letter . '.' . $kringnaam . '\')">@</div>';
 				if ($kringnaam == 0) {
 					echo '<h5>Geen kring</h5>';
 				} else {
 					echo '<h5>Kring ' . $kringnaam . '</h5>';
 				}
-				echo '<div id="leden' . $verticale->getLetter() . '.' . $kringnaam . '" class="kringleden">';
+				echo '<div id="leden' . $verticale->letter . '.' . $kringnaam . '" class="kringleden">';
 				foreach ($kring as $profiel) {
 					if ($profiel->kringleider !== Kringleider::Nee) {
 						echo '<em>';
@@ -103,7 +105,7 @@ class VerticaleEmailsView implements View {
 
 	public function __construct($vertkring) {
 		try {
-			$this->verticale = new VerticaleOldModel(substr($vertkring, 0, 1));
+			$this->verticale = VerticalenModel::get(substr($vertkring, 0, 1));
 			$this->kring = $this->verticale->getKring((int) substr($vertkring, 2, 1));
 		} catch (Exception $e) {
 			setMelding($e->getMessage(), -1);

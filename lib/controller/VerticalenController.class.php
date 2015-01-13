@@ -33,7 +33,7 @@ class VerticalenController extends AclController {
 	}
 
 	public function view() {
-		$body = new VerticalenView();
+		$body = new VerticalenView($this->model->find());
 		$this->view = new CsrLayoutPage($body);
 		$this->view->addCompressedResources('verticalen');
 	}

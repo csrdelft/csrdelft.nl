@@ -7,7 +7,6 @@ require_once 'model/entity/LidStatus.enum.php';
 require_once 'model/entity/Kringleider.enum.php';
 require_once 'ldap.class.php';
 require_once 'lichting.class.php';
-require_once 'model/VerticaleOldModel.class.php';
 require_once 'model/VerticalenModel.class.php';
 require_once 'model/entity/groepen/OldGroep.class.php';
 

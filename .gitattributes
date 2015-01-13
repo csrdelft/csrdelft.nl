@@ -4078,7 +4078,6 @@ lib/model/PeilingenModel.class.php -text
 lib/model/ProfielModel.class.php -text
 lib/model/TimerModel.class.php -text
 lib/model/VerjaardagenModel.class.php -text
-lib/model/VerticaleOldModel.class.php -text
 lib/model/VerticalenModel.class.php -text
 lib/model/bibliotheek/BiebBeschrijving.class.php -text
 lib/model/bibliotheek/BiebBoek.class.php -text
@@ -4108,7 +4107,6 @@ lib/model/entity/Mededeling.class.php -text
 lib/model/entity/MenuItem.class.php -text
 lib/model/entity/OntvangtContactueel.enum.php -text
 lib/model/entity/Profiel.class.php -text
-lib/model/entity/Verticale.class.php -text
 lib/model/entity/forum/ForumCategorie.class.php -text
 lib/model/entity/forum/ForumDeel.class.php -text
 lib/model/entity/forum/ForumDraad.class.php -text
@@ -4144,6 +4142,7 @@ lib/model/entity/groepen/KetzerSelectorSoort.enum.php -text
 lib/model/entity/groepen/OldGroep.class.php -text
 lib/model/entity/groepen/Ondervereniging.class.php -text
 lib/model/entity/groepen/Sjaarcie.class.php -text
+lib/model/entity/groepen/Verticale.class.php -text
 lib/model/entity/groepen/Werkgroep.class.php -text
 lib/model/entity/groepen/Woonoord.class.php -text
 lib/model/entity/maalcie/ArchiefMaaltijd.class.php -text

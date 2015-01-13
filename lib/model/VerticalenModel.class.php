@@ -21,6 +21,10 @@ class VerticalenModel extends CachedPersistenceModel {
 		return static::instance()->retrieveByPrimaryKey(array($letter));
 	}
 
+	protected function __construct() {
+		parent::__construct('groepen/');
+	}
+
 	/**
 	 * Get uid of verticale leider.
 	 * 
