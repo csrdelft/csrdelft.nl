@@ -1064,6 +1064,7 @@ class WachtwoordWijzigenField extends InputField {
 	public function __construct($name, Account $account, $require_current = true) {
 		$this->require_current = $require_current;
 		parent::__construct($name, null, null, $account);
+		$this->title = 'Het nieuwe wachtwoord moet langer zijn dan 23 tekens of langer dan 10 en ook hoofdletters, kleine letters, cijfers en speciale tekens bevatten.';
 		$this->leden_mod = (LoginModel::getUid() !== $account->uid);
 
 		// blacklist gegevens van account
