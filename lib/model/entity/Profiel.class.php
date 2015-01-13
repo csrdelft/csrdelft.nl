@@ -203,7 +203,7 @@ class Profiel extends PersistentEntity implements Agendeerbaar {
 	 * Database table name
 	 * @var string
 	 */
-	protected static $table_name = 'lid';
+	protected static $table_name = 'profielen';
 
 	public function getUUID() {
 		return $this->uid . '@csrdelft.nl';
