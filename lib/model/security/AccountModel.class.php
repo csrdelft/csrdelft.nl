@@ -101,23 +101,4 @@ class AccountModel extends CachedPersistenceModel {
 		$this->update($account);
 	}
 
-	public function convert() {
-		foreach (ProfielModel::instance()->find() as $profiel) {
-			$account = new Account();
-			$account->uid = $profiel->uid;
-			$account->username = $profiel->nickname;
-			$account->email = $profiel->email;
-			$account->pass_hash = $profiel->password;
-			$account->pass_since = getDateTime();
-			$account->last_login_success = null;
-			$account->last_login_attempt = null;
-			$account->failed_login_attempts = 0;
-			$account->blocked_reason = null;
-			$account->perm_role = $profiel->permissies;
-			$account->private_token = null;
-			$account->private_token_since = null;
-			$this->create($account);
-		}
-	}
-
 }

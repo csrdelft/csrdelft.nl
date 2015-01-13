@@ -49,11 +49,6 @@ class LoginModel extends PersistenceModel implements Validator {
 		if (!$this->validate()) {
 			// Subject assignment:
 			$_SESSION['_uid'] = 'x999';
-
-			if (!$this->getAccount()) {
-				AccountModel::instance()->convert();
-			}
-
 			/**
 			 * Als we x999 zijn checken we of er misschien een private token in de $_GET staat.
 			 * Deze staat toe zonder wachtwoord gelimiteerde rechten te krijgen op iemands naam.

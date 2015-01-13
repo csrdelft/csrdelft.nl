@@ -4693,3 +4693,4 @@ sql/8248_password_expire.sql -text
 sql/8339_account_profiel.sql -text
 sql/8340_alter_verticale_pk.sql -text
 sql/8345_index_post_moment.sql -text
+sql/8357_profiel_account.sql -text

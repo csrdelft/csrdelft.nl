@@ -24,9 +24,6 @@ class Profiel extends PersistentEntity implements Agendeerbaar {
 
 	// account
 	public $uid;
-	public $password;
-	public $permissies;
-	public $rssToken;
 	public $changelog;
 	// naam
 	public $voornamen;
@@ -59,7 +56,6 @@ class Profiel extends PersistentEntity implements Agendeerbaar {
 	public $o_telefoon;
 	// contact
 	public $mobiel;
-	public $email;
 	public $icq;
 	public $msn;
 	public $skype;
@@ -117,9 +113,6 @@ class Profiel extends PersistentEntity implements Agendeerbaar {
 	protected static $persistent_attributes = array(
 		// account
 		'uid'					 => array(T::UID),
-		'password'				 => array(T::String),
-		'permissies'			 => array(T::String),
-		'rssToken'				 => array(T::String, true),
 		'changelog'				 => array(T::Text),
 		// naam
 		'voornamen'				 => array(T::String),
@@ -152,7 +145,6 @@ class Profiel extends PersistentEntity implements Agendeerbaar {
 		'o_telefoon'			 => array(T::String),
 		// contact
 		'mobiel'				 => array(T::String),
-		'email'					 => array(T::String),
 		'icq'					 => array(T::String),
 		'msn'					 => array(T::String),
 		'skype'					 => array(T::String),

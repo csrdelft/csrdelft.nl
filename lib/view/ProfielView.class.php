@@ -106,12 +106,6 @@ class ProfielForm extends Formulier {
 		</p>');
 
 		if ($isMod) {
-			$roles = array();
-			foreach (AccessRoles::getTypeOptions() as $role) {
-				$roles[$role] = AccessRoles::getDescription($role);
-			}
-			$fields[] = new SelectField('permissies', $profiel->permissies, 'Permissies', $roles);
-
 			$statussen = array();
 			foreach (LidStatus::getTypeOptions() as $optie) {
 				$statussen[$optie] = LidStatus::getDescription($optie);
