@@ -176,10 +176,8 @@ switch (constant('MODE')) {
 		VerticalenModel::instance()->prefetch();
 		ForumModel::instance()->prefetch();
 
+		// Log
 		LoginModel::instance()->logBezoek();
-
-		CsrMemcache::instance();
-		setMelding(CsrMemcache::isAvailable() ? 'Memcache available' : 'Memcache NOT available', 0);
 
 		// Database modus meldingen
 		if (DB_MODIFY OR DB_DROP) {
