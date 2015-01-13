@@ -1,0 +1,1 @@
+ALTER TABLE `forum_posts` ADD INDEX(`datum_tijd`);

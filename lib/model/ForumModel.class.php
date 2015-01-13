@@ -847,7 +847,7 @@ class ForumPostsModel extends AbstractForumModel implements Paging {
 	 * Default ORDER BY
 	 * @var string
 	 */
-	protected $default_order = 'post_id ASC';
+	protected $default_order = 'datum_tijd ASC';
 	/**
 	 * Huidige pagina
 	 * @var int

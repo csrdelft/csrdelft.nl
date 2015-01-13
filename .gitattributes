@@ -4693,3 +4693,4 @@ sql/6868_fotoalbum_owner.sql -text
 sql/6888_verify_timeout.sql -text
 sql/6901_login_sessions.sql -text
 sql/8248_password_expire.sql -text
+sql/8345_index_post_moment.sql -text
