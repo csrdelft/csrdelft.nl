@@ -21,7 +21,7 @@
 		{/if}
 	</td>
 	<td class="reacties">{$draad->aantal_posts}</td>
-	<td>{ProfielModel::getNaam($draad->uid, 'user')}</td>
+	<td>{ProfielModel::getLink($draad->uid, 'user')}</td>
 	<td class="reactiemoment">
 		{if LidInstellingen::get('forum', 'datumWeergave') === 'relatief'}
 			{$draad->laatst_gewijzigd|reldate}
@@ -29,6 +29,6 @@
 			{$draad->laatst_gewijzigd}
 		{/if}
 		<br /><a href="/forum/reactie/{$draad->laatste_post_id}#{$draad->laatste_post_id}">bericht</a>
-		door {ProfielModel::getNaam($draad->laatste_wijziging_uid, 'user')}
+		door {ProfielModel::getLink($draad->laatste_wijziging_uid, 'user')}
 	</td>
 </tr>
