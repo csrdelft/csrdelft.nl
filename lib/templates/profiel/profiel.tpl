@@ -2,7 +2,7 @@
 	<div id="profielregel">
 		<div class="naam">
 			<div class="floatR">
-				{ProfielModel::getLink($profiel->uid, 'pasfoto')}<br />
+				{$profiel->getPasfotoTag(false)}<br />
 				<div class="knopjes">
 					{if $profiel->magBewerken()}
 						<a href="/profiel/{$profiel->uid}/bewerken" class="btn" title="Bewerk dit profiel">{icon get="bewerken"}</a>

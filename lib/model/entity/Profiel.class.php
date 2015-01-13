@@ -340,7 +340,7 @@ class Profiel extends PersistentEntity implements Agendeerbaar {
 		}
 		$naam = $this->getNaam($vorm);
 		if ($vorm === 'pasfoto') {
-			$naam = $this->getPasfototag();
+			$naam = $this->getPasfotoTag();
 		} elseif ($this->lidjaar === 2013) {
 			$naam = CsrBB::parse('[neuzen]' . $naam . '[/neuzen]');
 		}
