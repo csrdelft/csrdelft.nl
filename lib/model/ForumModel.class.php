@@ -222,12 +222,12 @@ class ForumDelenModel extends AbstractForumModel {
 			} else {
 				$melding = 'Draad ' . $draad->draad_id . ' niet goedgekeurd, maar alle posts wel. Automatische actie: ';
 				$draad->wacht_goedkeuring = false;
-				if ($draad->aantal_posts === 0) {
+				if (count($draad->getPosts()) === 0) {
 					$draad->verwijderd = true;
 					$melding .= 'verwijderd (bevat geen berichten)';
 					setMelding($melding, 2);
 				} else {
-					$melding .= 'goedgekeurd (bevat ' . $draad->aantal_posts . ' berichten)';
+					$melding .= 'goedgekeurd';
 					setMelding($melding, 2);
 				}
 				ForumDradenModel::instance()->update($draad);
@@ -801,7 +801,6 @@ class ForumDradenModel extends AbstractForumModel implements Paging {
 		$draad->laatst_gewijzigd = $draad->datum_tijd;
 		$draad->laatste_post_id = null;
 		$draad->laatste_wijziging_uid = null;
-		$draad->aantal_posts = 0;
 		$draad->gesloten = false;
 		$draad->verwijderd = false;
 		$draad->wacht_goedkeuring = $wacht_goedkeuring;
@@ -833,7 +832,6 @@ class ForumDradenModel extends AbstractForumModel implements Paging {
 			ForumDradenReagerenModel::instance()->verwijderReagerenVoorDraad($draad);
 			ForumPostsModel::instance()->verwijderForumPostsVoorDraad($draad);
 		}
-		ForumPostsModel::instance()->hertellenVoorDraad($draad);
 	}
 
 }
@@ -923,37 +921,6 @@ class ForumPostsModel extends AbstractForumModel implements Paging {
 		$count = 1 + $this->count('draad_id = ? AND datum_tijd <= ? AND wacht_goedkeuring = FALSE AND verwijderd = FALSE', array($gelezen->draad_id, $gelezen->datum_tijd));
 		$this->getAantalPaginas($gelezen->draad_id); // set per_pagina
 		$this->setHuidigePagina((int) ceil($count / $this->per_pagina), $gelezen->draad_id);
-	}
-
-	public function hertellenVoorDraad(ForumDraad $draad) {
-		$draad->aantal_posts = $this->count('draad_id = ? AND wacht_goedkeuring = FALSE AND verwijderd = FALSE', array($draad->draad_id));
-		if ($draad->verwijderd OR $draad->aantal_posts < 1) {
-			if (!$draad->verwijderd) {
-				$draad->verwijderd = true;
-				setMelding('Draad ' . $draad->draad_id . ' bevat geen berichten. Automatische actie: draad verwijderd', 2);
-			} elseif ($draad->aantal_posts > 0) {
-				ForumPostsModel::instance()->verwijderForumPostsVoorDraad($draad);
-				$draad->aantal_posts = 0;
-				setMelding('Draad ' . $draad->draad_id . ' bevat nog berichten. Automatische actie: berichten verwijderd', 2);
-			}
-			$draad->laatste_post_id = null;
-			$draad->laatste_wijziging_uid = null;
-			$draad->laatst_gewijzigd = null;
-			ForumDradenGelezenModel::instance()->verwijderDraadGelezen($draad);
-			ForumDradenVerbergenModel::instance()->toonDraadVoorIedereen($draad);
-			ForumDradenVolgenModel::instance()->stopVolgenVoorIedereen($draad);
-			ForumDradenReagerenModel::instance()->verwijderReagerenVoorDraad($draad);
-		} else { // reset last post
-			$last_post = $this->find('draad_id = ? AND wacht_goedkeuring = FALSE AND verwijderd = FALSE', array($draad->draad_id), null, 'laatst_gewijzigd DESC', 1)->fetch();
-			$draad->laatste_post_id = $last_post->post_id;
-			$draad->laatste_wijziging_uid = $last_post->uid;
-			$draad->laatst_gewijzigd = $last_post->laatst_gewijzigd;
-			if ($draad->gesloten) {
-				ForumDradenVolgenModel::instance()->stopVolgenVoorIedereen($draad);
-				ForumDradenReagerenModel::instance()->verwijderReagerenVoorDraad($draad);
-			}
-		}
-		ForumDradenModel::instance()->update($draad);
 	}
 
 	public function zoeken($query, $datumsoort, $ouder, $jaar, $limit) {
@@ -1074,7 +1041,6 @@ class ForumPostsModel extends AbstractForumModel implements Paging {
 		if ($rowCount !== 1) {
 			throw new Exception('Verwijderen mislukt');
 		}
-		$this->hertellenVoorDraad($post->getForumDraad());
 	}
 
 	public function verwijderForumPostsVoorDraad(ForumDraad $draad) {
@@ -1127,7 +1093,7 @@ class ForumPostsModel extends AbstractForumModel implements Paging {
 		}
 	}
 
-	public function goedkeurenOptellenForumPost(ForumPost $post) {
+	public function goedkeurenForumPost(ForumPost $post) {
 		if ($post->wacht_goedkeuring) {
 			$post->wacht_goedkeuring = false;
 			$post->laatst_gewijzigd = getDateTime();
@@ -1138,7 +1104,6 @@ class ForumPostsModel extends AbstractForumModel implements Paging {
 			}
 		}
 		$draad = $post->getForumDraad();
-		$draad->aantal_posts++;
 		$draad->laatst_gewijzigd = $post->laatst_gewijzigd;
 		$draad->laatste_post_id = $post->post_id;
 		$draad->laatste_wijziging_uid = $post->uid;

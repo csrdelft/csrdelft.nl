@@ -56,11 +56,6 @@ class ForumDraad extends PersistentEntity {
 	 */
 	public $laatste_wijziging_uid;
 	/**
-	 * Aantal zichtbare posts in dit topic
-	 * @var int
-	 */
-	public $aantal_posts;
-	/**
 	 * Gesloten (posten niet meer mogelijk)
 	 * @var boolean
 	 */
@@ -144,7 +139,6 @@ class ForumDraad extends PersistentEntity {
 		'laatst_gewijzigd'		 => array(T::DateTime, true),
 		'laatste_post_id'		 => array(T::Integer, true),
 		'laatste_wijziging_uid'	 => array(T::UID, true),
-		'aantal_posts'			 => array(T::Integer),
 		'gesloten'				 => array(T::Boolean),
 		'verwijderd'			 => array(T::Boolean),
 		'wacht_goedkeuring'		 => array(T::Boolean),

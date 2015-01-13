@@ -16,16 +16,14 @@
 	<thead>
 		<tr>
 			<th>Titel</th>
-			<th class="reacties">Reacties</th>
-			<th>Auteur</th>
-			<th class="reactiemoment">Recente wijziging</th>
+			<th colspan="2">Laatste wijziging</th>
 		</tr>
 	</thead>
 	<tbody>
 
 		{if !$deel->hasForumDraden()}
 			<tr>
-				<td colspan="4">Dit forum is nog leeg.</td>
+				<td colspan="3">Dit forum is nog leeg.</td>
 			</tr>
 		{/if}
 
@@ -35,7 +33,7 @@
 
 		{if $paging}
 			<tr>
-				<th colspan="4">
+				<th colspan="3">
 					{if isset($deel->forum_id)}
 						{sliding_pager baseurl="/forum/deel/"|cat:$deel->forum_id|cat:"/"
 							pagecount=ForumDradenModel::instance()->getAantalPaginas($deel->forum_id) curpage=ForumDradenModel::instance()->getHuidigePagina()
@@ -51,7 +49,7 @@
 		{/if}
 
 		<tr>
-			<td colspan="4">
+			<td colspan="3">
 				<div class="forumdeel-omschrijving">
 					<div class="float-right">{$breadcrumbs}</div>
 					<h2>{$deel->titel}</h2>
@@ -62,7 +60,7 @@
 
 		{if $deel->magPosten()}
 			<tr>
-				<td colspan="4">
+				<td colspan="3">
 					<br />
 					<table>
 						{include file='forum/post_form.tpl' draad=null}

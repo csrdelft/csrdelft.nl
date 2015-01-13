@@ -42,7 +42,6 @@ class ForumController extends Controller {
 			case 'aanmaken':
 			case 'beheren':
 			case 'opheffen':
-			case 'hertellen':
 				if (!LoginModel::mag('P_FORUM_ADMIN')) {
 					return false;
 				}
@@ -354,18 +353,6 @@ class ForumController extends Controller {
 	}
 
 	/**
-	 * Hertellen van alle berichten en draden in forum deel.
-	 */
-	public function hertellen($forum_id) {
-		$deel = ForumDelenModel::instance()->getForumDeel((int) $forum_id);
-		$draden = ForumDradenModel::instance()->find('forum_id = ?', array($deel->forum_id));
-		foreach ($draden as $draad) {
-			ForumPostsModel::instance()->hertellenVoorDraad($draad);
-		}
-		$this->view = new JsonResponse(true);
-	}
-
-	/**
 	 * Forum draad verbergen in zijbalk.
 	 * 
 	 * @param int $draad_id
@@ -612,7 +599,7 @@ class ForumController extends Controller {
 			}
 		} else {
 			// direct goedkeuren voor ingelogd
-			ForumPostsModel::instance()->goedkeurenOptellenForumPost($post);
+			ForumPostsModel::instance()->goedkeurenForumPost($post);
 			$self = LoginModel::getUid();
 			foreach ($draad->getVolgers() as $uid) {
 				$profiel = ProfielModel::get($uid);
@@ -690,8 +677,7 @@ class ForumController extends Controller {
 			$this->geentoegang();
 		}
 		ForumPostsModel::instance()->verplaatsForumPost($nieuwDraad, $post);
-		ForumPostsModel::instance()->hertellenVoorDraad($oudDraad);
-		ForumPostsModel::instance()->goedkeurenOptellenForumPost($post);
+		ForumPostsModel::instance()->goedkeurenForumPost($post);
 		$this->view = new ForumPostDeleteView($post->post_id);
 	}
 
@@ -718,7 +704,7 @@ class ForumController extends Controller {
 		if (!$post->getForumDraad()->magModereren()) {
 			$this->geentoegang();
 		}
-		ForumPostsModel::instance()->goedkeurenOptellenForumPost($post);
+		ForumPostsModel::instance()->goedkeurenForumPost($post);
 		$this->view = new ForumPostView($post);
 	}
 
