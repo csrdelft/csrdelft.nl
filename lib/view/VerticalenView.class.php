@@ -44,6 +44,9 @@ class VerticalenView implements View {
 		<hr />
 		<?php
 		foreach ($this->verticalen as $verticale) {
+			if ($verticale->letter == '') {
+				continue;
+			}
 			echo '<div class="verticale">';
 			echo '<h2><a name="' . $verticale->letter . '">Verticale ' . $verticale->naam . '</a></h2>';
 
