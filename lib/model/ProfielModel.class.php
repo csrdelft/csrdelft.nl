@@ -24,7 +24,7 @@ class ProfielModel extends CachedPersistenceModel {
 		if (!$profiel) {
 			return false;
 		}
-		return $this->cache($profiel, true);
+		return static::instance()->cache($profiel, true);
 	}
 
 	public static function getNaam($uid, $vorm) {
