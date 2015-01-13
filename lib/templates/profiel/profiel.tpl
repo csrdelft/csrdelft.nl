@@ -8,9 +8,6 @@
 						<a href="/profiel/{$profiel->uid}/bewerken" class="btn" title="Bewerk dit profiel">{icon get="bewerken"}</a>
 						<a href="/profiel/{$profiel->uid}/voorkeuren" class="btn" title="Pas voorkeuren voor commissies aan">{icon get="report_edit"}</a>
 					{/if}
-					{if LoginModel::mag('P_LEDEN_MOD')}
-						<a href="/profiel/{$profiel->uid}/wijzigstatus" class="btn" title="Wijzig de lidstatus">{icon get="group_edit"}</a>
-					{/if}
 					{if LoginModel::mag('groep:bestuur')}
 						<a href="/profiel/{$profiel->uid}/dd" class="btn" title="Wijzig de lidstatus">{icon get="group_edit"}</a>
 					{/if}
