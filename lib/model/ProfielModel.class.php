@@ -24,11 +24,19 @@ class ProfielModel extends CachedPersistenceModel {
 	}
 
 	public static function getNaam($uid, $vorm) {
-		return static::get($uid)->getNaam($vorm);
+		$profiel = static::get($uid);
+		if (!$profiel) {
+			return 'Lid met uid "' . htmlspecialchars($uid) . '" bestaat niet.';
+		}
+		return $profiel->getNaam($vorm);
 	}
 
 	public static function getLink($uid, $vorm) {
-		return static::get($uid)->getLink($vorm);
+		$profiel = static::get($uid);
+		if (!$profiel) {
+			return 'Lid met uid "' . htmlspecialchars($uid) . '" bestaat niet.';
+		}
+		return $profiel->getLink($vorm);
 	}
 
 	public static function existsUid($uid) {
