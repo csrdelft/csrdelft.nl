@@ -1,6 +1,6 @@
 <?php
 
-require_once 'view/framework/UrlDownloader.class.php';
+require_once 'view/formulier/UrlDownloader.class.php';
 require_once 'model/entity/Afbeelding.class.php';
 
 /**

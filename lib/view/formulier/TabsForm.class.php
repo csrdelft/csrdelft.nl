@@ -1,6 +1,6 @@
 <?php
 
-require_once 'view/framework/Formulier.class.php';
+require_once 'view/formulier/Formulier.class.php';
 
 /**
  * TabsForm.class.php

@@ -1,5 +1,5 @@
 <?php
-require_once 'view/framework/TabsForm.class.php';
+require_once 'view/formulier/TabsForm.class.php';
 
 /**
  * DataTable.class.php
