@@ -32,7 +32,7 @@ class EetplanModel {
   			eetplan.avond AS avond
 			FROM
 				eetplan
-			INNER JOIN lid ON(eetplan.uid=lid.uid)
+			INNER JOIN profielen AS lid ON(eetplan.uid=lid.uid)
 			ORDER BY
  				lid.achternaam, uid, avond;
 		");
@@ -100,7 +100,7 @@ class EetplanModel {
 				lid.email AS email
 			FROM
 				eetplanhuis, eetplan
-			INNER JOIN lid ON(eetplan.uid=lid.uid)
+			INNER JOIN profielen AS lid ON(eetplan.uid=lid.uid)
 			WHERE
 				eetplan.huis=eetplanhuis.id AND
 				eetplanhuis.id=" . $iHuisID . "

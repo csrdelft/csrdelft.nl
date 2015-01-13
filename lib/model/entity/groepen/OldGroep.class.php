@@ -24,7 +24,7 @@ class OldGroep {
 			if ((int) $init === 0) {
 				//dit zijn de defaultwaarden voor een nieuwe groep.
 
-				/* set eigenaar naar uid van aanmaker. 
+				/** set eigenaar naar uid van aanmaker. 
 				 * Als iemand groepen in een rubriek mag maken vanwege adminrechten zijn uid niet invullen.
 				 * Commissiecategorien permissies voor commissie houden, niet voor de idividuen.
 				 */
@@ -64,13 +64,12 @@ class OldGroep {
 		}
 	}
 
-	/*
+	/**
 	 * Laad een groep in aan de hand van het id of de snaam
 	 *
 	 * @param	$groepId	integer groepId of string snaam
 	 * @return	void
 	 */
-
 	public function load($groepId) {
 		$db = MijnSqli::instance();
 		if (preg_match('/^\d+$/', $groepId)) {
@@ -90,7 +89,7 @@ class OldGroep {
 			FROM groep
 			LEFT JOIN groeplid ON(groep.id=groeplid.groepid)
 			INNER JOIN groeptype ON(groep.gtype=groeptype.id)
-			LEFT JOIN lid ON (groeplid.uid=lid.uid)
+			LEFT JOIN profielen AS lid ON (groeplid.uid=lid.uid)
 			WHERE " . $wherePart . "
 			ORDER BY groeplid.prioriteit ASC, lid.achternaam ASC, lid.voornaam ASC;";
 		$rGroep = $db->query($qGroep);
@@ -110,7 +109,7 @@ class OldGroep {
 		}
 	}
 
-	/*
+	/**
 	 * save().
 	 * slaat groepinfo op, geen leden! Leden worden direct in de db opgeslagen, niet meer in de instantie
 	 * van de klasse bijgeschreven. Pas bij het inladen de volgende keer worden de nieuwe leden in de
@@ -118,7 +117,6 @@ class OldGroep {
 	 *
 	 * @return			Bool of het gelukt is of niet.
 	 */
-
 	public function save() {
 		$db = MijnSqli::instance();
 		if ($this->getId() == 0) {
@@ -177,10 +175,9 @@ class OldGroep {
 		return false;
 	}
 
-	/*
+	/**
 	 * Groep wegkekken
 	 */
-
 	public function delete() {
 		if ($this->getId() == 0) {
 			$this->error .= 'Kan geen lege groep wegkekken. OldGroep::delete()';
@@ -278,7 +275,7 @@ class OldGroep {
 		return $this->groep['eigenaar'];
 	}
 
-	/*
+	/**
 	 * Geef een bool terug of de functies getoond worden of niet.
 	 * Elke groep heeft een veld wat drie waarden kan hebben:
 	 *
@@ -287,7 +284,6 @@ class OldGroep {
 	 * verbergen			Alleen admins en groepOps mogen de functies zien.
 	 * niet					Functies worden in het geheel verborgen.
 	 */
-
 	public function toonFuncties() {
 		if ($this->getToonFuncties() != 'niet') {
 			if ($this->magBewerken()) {
@@ -326,30 +322,27 @@ class OldGroep {
 		return isset($this->leden[$uid]);
 	}
 
-	/*
+	/**
 	 * Eigenaar mag alles van groep aanpassen. Eigenaar wordt je door invullen door admin of 
 	 * automatisch bij aanmaken van activiteit in groepstype waar dat toegestaan is.
 	 */
-
 	public function isEigenaar() {
 		return LoginModel::mag($this->groep['eigenaar']);
 	}
 
-	/*
+	/**
 	 * LidIsMod houdt in dat élk lid van een groep leden kan toevoegen
 	 * en de groepsbeschrijving kan aanpassen.
 	 */
-
 	public function lidIsMod() {
 		return $this->getLidIsMod() == '1';
 	}
 
-	/*
+	/**
 	 * Een lid is MODerator (of OPerator) van een groep als:
 	 * - voor de groep is ingesteld dat elk lid moderator is.
 	 * - Bij zijn groepslidmaatschap is aangegeven dat hij moderator is.
 	 */
-
 	public function isOp($uid = null) {
 		if ($uid === null) {
 			$uid = LoginModel::getUid();
@@ -429,11 +422,10 @@ class OldGroep {
 				$this->isEigenaar() OR ( $this->isAanmeldbaar() AND $this->isIngelogged());
 	}
 
-	/*
+	/**
 	 * Kijkt of er naast de huidige groep al een andere groep h.t. is
 	 * met dezelfde snaam
 	 */
-
 	public function hasHt($snaam = null) {
 		$db = MijnSqli::instance();
 		if ($snaam == null) {
@@ -468,7 +460,7 @@ class OldGroep {
 		}
 	}
 
-	/*
+	/**
 	 * Gebruiker mag aanmelden als:
 	 *  - de groep aanmeldbaar is
 	 *  - de gebruiker leesrechten voor leden heeft
@@ -476,7 +468,6 @@ class OldGroep {
 	 *  - de einddatum van de groep groter is dan de huidige datum
 	 *  - de aanmeldlimiet van de groep nog niet overschreden is.
 	 */
-
 	public function magAanmelden() {
 		if (!$this->isAanmeldbaar())
 			return false;
@@ -508,7 +499,7 @@ class OldGroep {
 		}
 	}
 
-	/*
+	/**
 	 * Bewoners gaan uit een huis weg, en moeten dus naar de oudbewonersgroep verplaatst worden.
 	 * Daar hebben normale leden geen rechten voor, en het is een actie met twee stappen. Met
 	 * deze functie kan het in een keer.
@@ -521,7 +512,6 @@ class OldGroep {
 	 * 			bij een ongeldig uid.
 	 * 			bij het proberen van deze actie door een niet-mod van de huidige groep.
 	 */
-
 	public function maakLidOt($uid) {
 		if (!AccountModel::isValidUid($uid) OR ! $this->isLid($uid)) {
 			$this->error .= 'Gegeven uid zit niet in groep of is geen geldig uid. (OldGroep::maakLidOt())';
@@ -551,13 +541,12 @@ class OldGroep {
 		return false;
 	}
 
-	/*
+	/**
 	 * Functiefilters.
 	 * Groepen worden steeds vaker als inschrijfketzer gebruikt, daardoor
 	 * komt er vaak allerlei onzin in het functieveld terecht. Door het
 	 * groepfilter
 	 */
-
 	public function hasFunctiefilter() {
 		return $this->getFunctiefilter() != '';
 	}
@@ -588,10 +577,9 @@ class OldGroep {
 		}
 	}
 
-	/*
+	/**
 	 * voegt een nieuw lid aan een groep toe, of functie van groepslid wordt geupdate.
 	 */
-
 	public function addLid($uid, $functie = '', $bewerken = false) {
 		$op = 0;
 		$functie = str_replace(array("\n", "\r"), '', trim($functie));
@@ -653,11 +641,10 @@ class OldGroep {
 		}
 	}
 
-	/*
+	/**
 	 * Geef een array met een vorige en een volgende terug.
 	 * Dit levert dus vier query's op, niet erg efficient, maar optimaliseren kan altijd nog
 	 */
-
 	public function getOpvolgerVoorganger() {
 		$return = false;
 		$db = MijnSqli::instance();
@@ -703,12 +690,11 @@ class OldGroep {
 		return $this->getLink();
 	}
 
-	/*
+	/**
 	 * Geef een serie links terug voor de in $string gegeven groepid's.
 	 *
 	 * $string		Door comma's gescheiden groepid's.
 	 */
-
 	public static function ids2links($string, $separator = ',') {
 		//$veld mag een enkel id zijn of een serie door komma's gescheiden id's
 		$groepen = explode(',', $string);
@@ -725,17 +711,16 @@ class OldGroep {
 		return implode($separator, $groeplinks);
 	}
 
-	/*
+	/**
 	 * Groepstatistiekjes.
 	 * Worden weergegeven in een tabje bij de groepleden.
 	 */
-
 	public function getStats($force = false) {
 		if ($force OR $this->stats === null) {
 			$db = MijnSqli::instance();
 			$statqueries = array(
 				'totaal'	 => "SELECT 'Totaal' as totaal, count(*) AS aantal FROM groeplid WHERE groepid=" . $this->getId() . ";",
-				'verticale'	 => "SELECT CONCAT('Verticale ', verticale.naam) AS verticale, count(*) as aantal FROM profielen LEFT JOIN verticale ON(lid.verticale=verticale.id) WHERE uid IN(" . $this->getLedenCSV(true) . ") GROUP BY verticale;",
+				'verticale'	 => "SELECT CONCAT('Verticale ', verticale.naam) AS verticale, count(*) as aantal FROM profielen LEFT JOIN verticale ON(profielen.verticale=verticale.letter) WHERE uid IN(" . $this->getLedenCSV(true) . ") GROUP BY verticale;",
 				'geslacht'	 => "SELECT REPLACE(REPLACE(geslacht, 'm', 'Man'), 'v', 'Vrouw') AS geslacht, count(*) as aantal FROM profielen WHERE uid IN( " . $this->getLedenCSV(true) . ") group by geslacht;",
 				'lidjaar'	 => "SELECT lidjaar, count(*) as aantal FROM profielen WHERE uid IN( " . $this->getLedenCSV(true) . ") group by lidjaar;",
 				'opmerking'	 => "SELECT functie, count(*) as aantal FROM groeplid WHERE groepid=" . $this->getId() . " AND functie != '' GROUP BY functie;"
@@ -748,12 +733,11 @@ class OldGroep {
 		return $this->stats;
 	}
 
-	/*
+	/**
 	 * Deze functie geeft een array terug met functies en aantallen.
 	 *
 	 * Handig als de functie gebruikt wordt voor maten oid.
 	 */
-
 	public function getFunctieAantal() {
 		$functies = array();
 		if (is_array($this->leden)) {
@@ -767,11 +751,10 @@ class OldGroep {
 		return $functies;
 	}
 
-	/*
+	/**
 	 * Geeft de functie van een lid terug
 	 * @return array met functies/opmerkingen (scheidingsteken: && )
 	 */
-
 	public function getFunctie($uid = null) {
 		if ($uid === null) {
 			$uid = LoginModel::getUid();
@@ -780,11 +763,10 @@ class OldGroep {
 		return $leden[$uid]['functie'];
 	}
 
-	/*
+	/**
 	 * Experimentele groepgeschiedenis.
 	 * Een tijdbalkje klussen met de opeenvolgende groepen. Niet afgemaakt.
 	 */
-
 	public static function getGroepgeschiedenis($snaam, $limiet = 10) {
 		$db = MijnSqli::instance();
 		$limiet = (int) $limiet;
@@ -809,10 +791,9 @@ class OldGroep {
 		return LoginModel::mag('P_LEDEN_READ');
 	}
 
-	/*
+	/**
 	 * Sla huidige objectstatus op in LDAP
 	 */
-
 	public function save_ldap() {
 		require_once 'ldap.class.php';
 

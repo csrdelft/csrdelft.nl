@@ -153,8 +153,8 @@ class BiebCatalogus {
 				( SELECT count( * ) FROM biebexemplaar e2 WHERE e2.boek_id = b.id ) AS exaantal, 
 				( SELECT count( * ) FROM biebbeschrijving s2 WHERE s2.boek_id = b.id ) AS bsaantal";
 			$sLeftjoin = "
-				LEFT JOIN lid l1 ON(l1.uid=e.eigenaar_uid)
-				LEFT JOIN lid l2 ON(l2.uid=e.uitgeleend_uid)";
+				LEFT JOIN profielen l1 ON(l1.uid=e.eigenaar_uid)
+				LEFT JOIN profielen l2 ON(l2.uid=e.uitgeleend_uid)";
 			$sGroupby = "GROUP BY b.id";
 		} else {
 			//uitgelogden

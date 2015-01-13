@@ -45,7 +45,7 @@ class GroepLedenModel extends GroepenModel {
 		}
 		$in = implode(', ', array_fill(0, $count, '?'));
 		$stats['Totaal'] = $count;
-		$stats['Verticale'] = Database::instance()->sqlSelect(array('verticale.naam', 'count(*)'), 'lid LEFT JOIN verticale ON(lid.verticale = verticale.id)', 'uid IN (' . $in . ')', $uids, 'verticale.naam', null)->fetchAll();
+		$stats['Verticale'] = Database::instance()->sqlSelect(array('verticale.naam', 'count(*)'), 'lid LEFT JOIN verticale ON(provielen.verticale = verticale.letter)', 'uid IN (' . $in . ')', $uids, 'verticale.naam', null)->fetchAll();
 		$stats['Geslacht'] = Database::instance()->sqlSelect(array('geslacht', 'count(*)'), 'lid', 'uid IN (' . $in . ')', $uids, 'geslacht', null)->fetchAll();
 		$stats['Lidjaar'] = Database::instance()->sqlSelect(array('lidjaar', 'count(*)'), 'lid', 'uid IN (' . $in . ')', $uids, 'lidjaar', null)->fetchAll();
 		$stats['Opmerking'] = Database::instance()->sqlSelect(array('opmerking', 'count(*)'), GroepLid::getTableName(), 'groep_type = ? AND groep_id = ?', array(get_class($groep), $groep->id), 'opmerking', null)->fetchAll();

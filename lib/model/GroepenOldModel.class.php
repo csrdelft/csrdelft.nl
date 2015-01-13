@@ -93,7 +93,7 @@ class GroepenOldModel {
 				)AS vol
 			FROM groep
 			LEFT JOIN groeplid ON(groep.id=groeplid.groepid)
-			LEFT JOIN lid ON(groeplid.uid=lid.uid)
+			LEFT JOIN profielen AS lid ON(groeplid.uid=lid.uid)
 			WHERE groep.gtype=" . $this->getId() . "
 			  AND groep.zichtbaar='zichtbaar'
 			  AND (" . $htotFilter . ")
