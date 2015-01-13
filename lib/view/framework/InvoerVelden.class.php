@@ -1066,6 +1066,16 @@ class WachtwoordWijzigenField extends InputField {
 		parent::__construct($name, null, null, $account);
 		$this->leden_mod = (LoginModel::getUid() !== $account->uid);
 
+		// blacklist gegevens van account
+		$this->blacklist[] = $account->username;
+		foreach (explode('@', $account->email) as $email) {
+			foreach (explode('.', $email) as $part) {
+				if (strlen($part) >= 5) {
+					$this->blacklist[] = $part;
+				}
+			}
+		}
+
 		// blacklist gegevens van profiel
 		$profiel = $account->getProfiel();
 		$this->blacklist[] = $profiel->uid;
@@ -1075,48 +1085,12 @@ class WachtwoordWijzigenField extends InputField {
 				$this->blacklist[] = $part;
 			}
 		}
-		foreach (explode('@', $profiel->email) as $email) {
-			foreach (explode('.', $email) as $part) {
-				if (strlen($part) >= 5) {
-					$this->blacklist[] = $part;
-				}
-			}
-		}
 		$this->blacklist[] = $profiel->postcode;
 		$this->blacklist[] = str_replace(' ', '', $profiel->postcode);
 		$this->blacklist[] = $profiel->telefoon;
 		$this->blacklist[] = $profiel->mobiel;
-		$this->blacklist = array_filter_empty($this->blacklist);
 
-		// algemene blacklist
-		$this->blacklist[] = '1234';
-		$this->blacklist[] = 'abcd';
-		$this->blacklist[] = 'qwerty';
-		$this->blacklist[] = 'azerty';
-		$this->blacklist[] = 'asdf';
-		$this->blacklist[] = 'jkl;';
-		$this->blacklist[] = 'password';
-		$this->blacklist[] = 'wachtwoord';
-
-		// blacklist gegevens van profiel
-		$this->blacklist[] = $lid->getProperty('uid');
-		$this->blacklist[] = $lid->getProperty('voornaam');
-		foreach (explode(' ', $lid->getProperty('achternaam')) as $part) {
-			if (strlen($part) >= 4) {
-				$this->blacklist[] = $part;
-			}
-		}
-		foreach (explode('@', $lid->getProperty('email')) as $email) {
-			foreach (explode('.', $email) as $part) {
-				if (strlen($part) >= 5) {
-					$this->blacklist[] = $part;
-				}
-			}
-		}
-		$this->blacklist[] = $lid->getProperty('postcode');
-		$this->blacklist[] = str_replace(' ', '', $lid->getProperty('postcode'));
-		$this->blacklist[] = $lid->getProperty('telefoon');
-		$this->blacklist[] = $lid->getProperty('mobiel');
+		// wis lege waarden
 		$this->blacklist = array_filter_empty($this->blacklist);
 
 		// algemene blacklist

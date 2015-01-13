@@ -343,14 +343,14 @@ class MaaltijdAanmeldingenModel {
 	}
 
 	public static function checkAanmeldFilter($uid, $filter) {
-		$lid = ProfielModel::get($uid); // false if lid does not exist
-		if (!$lid instanceof Profiel) {
+		$account = AccountModel::get($uid); // false if account does not exist
+		if (!$account) {
 			throw new Exception('Lid bestaat niet: $uid =' . $uid);
 		}
 		if ($filter === '') {
 			return true;
 		}
-		return AccessModel::mag($lid, $filter, false);
+		return AccessModel::mag($account, $filter, false);
 	}
 
 	// Repetitie-Maaltijden ############################################################

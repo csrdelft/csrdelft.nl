@@ -75,7 +75,7 @@ class GroepEmailsView extends SmartyTemplateView {
 		parent::__construct($groep);
 		foreach ($this->model->getGroepLeden() as $groeplid) {
 			$profiel = ProfielModel::get($groeplid->uid);
-			if ($profiel instanceof Profiel AND $profiel->getPrimaryEmail() != '') {
+			if ($profiel AND $profiel->getPrimaryEmail() != '') {
 				$this->emails[] = $profiel->getPrimaryEmail();
 			}
 		}

@@ -32,7 +32,7 @@ class Barsysteem {
 			$persoon["status"] = LidStatus::Nobody;
 			if ($row["stekUID"]) {
 				$profiel = ProfielModel::get($row["stekUID"]);
-				if ($profiel instanceof Profiel) {
+				if ($profiel) {
 					$persoon["naam"] = $profiel->getNaam();
 					$persoon["status"] = LidStatus::getDescription($profiel->status);
 				}

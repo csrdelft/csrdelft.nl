@@ -48,26 +48,26 @@ class BeheerPuntenController extends AclController {
 	}
 
 	public function wijzigpunten($uid) {
-		$lid = ProfielModel::get($uid); // false if lid does not exist
-		if (!$lid instanceof Profiel) {
+		$profiel = ProfielModel::get($uid); // false if lid does not exist
+		if (!$profiel) {
 			throw new Exception('Lid bestaat niet: $uid =' . $uid);
 		}
 		$punten = (int) filter_input(INPUT_POST, 'totaal_punten', FILTER_SANITIZE_NUMBER_INT);
-		CorveePuntenModel::savePuntenVoorLid($lid, $punten, null);
+		CorveePuntenModel::savePuntenVoorLid($profiel, $punten, null);
 		$functies = FunctiesModel::instance()->getAlleFuncties(); // grouped by functie_id
-		$lijst = CorveePuntenModel::loadPuntenVoorLid($lid, $functies);
+		$lijst = CorveePuntenModel::loadPuntenVoorLid($profiel, $functies);
 		$this->view = new BeheerPuntenLidView($lijst);
 	}
 
 	public function wijzigbonus($uid) {
-		$lid = ProfielModel::get($uid); // false if lid does not exist
-		if (!$lid instanceof Profiel) {
+		$profiel = ProfielModel::get($uid); // false if lid does not exist
+		if (!$profiel) {
 			throw new Exception('Lid bestaat niet: $uid =' . $uid);
 		}
 		$bonus = (int) filter_input(INPUT_POST, 'totaal_bonus', FILTER_SANITIZE_NUMBER_INT);
-		CorveePuntenModel::savePuntenVoorLid($lid, null, $bonus);
+		CorveePuntenModel::savePuntenVoorLid($profiel, null, $bonus);
 		$functies = FunctiesModel::instance()->getAlleFuncties(); // grouped by functie_id
-		$lijst = CorveePuntenModel::loadPuntenVoorLid($lid, $functies);
+		$lijst = CorveePuntenModel::loadPuntenVoorLid($profiel, $functies);
 		$this->view = new BeheerPuntenLidView($lijst);
 	}
 

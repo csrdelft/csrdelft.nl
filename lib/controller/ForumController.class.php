@@ -616,7 +616,7 @@ class ForumController extends Controller {
 			$self = LoginModel::getUid();
 			foreach ($draad->getVolgers() as $uid) {
 				$profiel = ProfielModel::get($uid);
-				if ($uid === $self OR ! $profiel instanceof Profiel) {
+				if ($uid === $self OR ! $profiel) {
 					continue;
 				}
 				$lidnaam = $profiel->getNaam('civitas');

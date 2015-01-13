@@ -411,7 +411,7 @@ class AccessModel extends CachedPersistenceModel {
 		$profiel = ProfielModel::get($subject->uid);
 
 		// ga alleen verder als er een geldig profiel wordt teruggegeven
-		if (!$profiel instanceof Profiel) {
+		if (!$profiel) {
 			return false;
 		}
 

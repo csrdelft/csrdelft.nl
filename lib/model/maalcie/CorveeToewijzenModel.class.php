@@ -28,7 +28,7 @@ class CorveeToewijzenModel {
 			foreach ($functie->getKwalificaties() as $kwali) {
 				$uid = $kwali->uid;
 				$profiel = ProfielModel::get($uid); // false if lid does not exist
-				if (!$profiel instanceof Profiel) {
+				if (!$profiel) {
 					throw new Exception('Lid bestaat niet: $uid =' . $uid);
 				}
 				if (!$profiel->isLid()) {

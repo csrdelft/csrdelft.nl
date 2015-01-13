@@ -166,7 +166,7 @@ class auth_plugin_authcsr extends DokuWiki_Auth_Plugin {
 
 		if (AccountModel::isValidUid($useruid)) {
 			$profiel = ProfielModel::get($useruid);
-			if ($profiel instanceof Profiel) {
+			if ($profiel) {
 				$info['name'] = $profiel->getNaam();
 				$info['mail'] = $profiel->getPrimaryEmail();
 				require_once 'model/entity/groepen/OldGroep.class.php';

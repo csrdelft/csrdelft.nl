@@ -407,9 +407,9 @@ class LidZoeker {
 		$this->result = array();
 		if (is_array($result)) {
 			foreach ($result as $uid) {
-				$lid = ProfielModel::get($uid['uid']);
-				if ($lid instanceof Profiel) {
-					$this->result[] = $lid;
+				$profiel = ProfielModel::get($uid['uid']);
+				if ($profiel) {
+					$this->result[] = $profiel;
 				}
 			}
 		}

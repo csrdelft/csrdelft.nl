@@ -17,7 +17,7 @@ class CorveePuntenModel {
 		foreach ($matrix as $uid => $totalen) {
 			try {
 				$profiel = ProfielModel::get($uid); // false if lid does not exist
-				if (!$profiel instanceof Profiel) {
+				if (!$profiel) {
 					throw new Exception('Lid bestaat niet: $uid =' . $uid);
 				}
 				$punten = $totalen['puntenTotaal'];
@@ -49,7 +49,7 @@ class CorveePuntenModel {
 			throw new Exception('Punten toekennen faalt: geen integer');
 		}
 		$profiel = ProfielModel::get($uid); // false if lid does not exist
-		if (!$profiel instanceof Profiel) {
+		if (!$profiel) {
 			throw new Exception('Lid bestaat niet: $uid =' . $uid);
 		}
 		self::savePuntenVoorLid($profiel, (int) $profiel->corvee_punten + $punten, (int) $profiel->corvee_punten_bonus + $bonus_malus);
@@ -60,7 +60,7 @@ class CorveePuntenModel {
 			throw new Exception('Punten intrekken faalt: geen integer');
 		}
 		$profiel = ProfielModel::get($uid); // false if lid does not exist
-		if (!$profiel instanceof Profiel) {
+		if (!$profiel) {
 			throw new Exception('Lid bestaat niet: $uid =' . $uid);
 		}
 		self::savePuntenVoorLid($profiel, (int) $profiel->corvee_punten - $punten, (int) $profiel->corvee_punten_bonus - $bonus_malus);
@@ -115,7 +115,7 @@ class CorveePuntenModel {
 		$matrix = self::loadPuntenTotaalVoorAlleLeden();
 		foreach ($matrix as $uid => $totalen) {
 			$profiel = ProfielModel::get($uid); // false if lid does not exist
-			if (!$profiel instanceof Profiel) {
+			if (!$profiel) {
 				throw new Exception('Lid bestaat niet: $uid =' . $uid);
 			}
 			$lidtaken = array();

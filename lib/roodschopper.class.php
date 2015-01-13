@@ -201,7 +201,7 @@ h.t. Fiscus.';
 
 		foreach ($this->teschoppen as $uid => $bericht) {
 			$profiel = ProfielModel::get($uid);
-			if (!$profiel instanceof Profiel) {
+			if (!$profiel) {
 				continue;
 			}
 			$mail = new Mail(array($profiel->getPrimaryEmail() => $profiel->getNaam($uid, 'civitas')), $this->getOnderwerp(), $bericht['bericht']);

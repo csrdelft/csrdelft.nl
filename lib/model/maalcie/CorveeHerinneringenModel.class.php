@@ -15,7 +15,7 @@ class CorveeHerinneringenModel {
 		$datum = date('d-m-Y', strtotime($taak->getDatum()));
 		$uid = $taak->getUid();
 		$profiel = ProfielModel::get($uid);
-		if (!$profiel instanceof Profiel) {
+		if (!$profiel) {
 			throw new Exception($datum . ' ' . $taak->getCorveeFunctie()->naam . ' niet toegewezen!' . (!empty($uid) ? ' ($uid =' . $uid . ')' : ''));
 		}
 		$lidnaam = ProfielModel::getNaam($uid, 'civitas');
