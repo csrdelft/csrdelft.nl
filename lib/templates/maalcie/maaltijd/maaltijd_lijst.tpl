@@ -30,7 +30,7 @@
 									<tr>
 										{if $aanmelding->getUid()}
 											<td>{ProfielModel::getLink($aanmelding->getUid(), Instellingen::get('maaltijden', 'weergave_ledennamen_maaltijdlijst'))}<br />
-												{assign var=eetwens value=ProfielModel::get($aanmelding->getUid())->getProperty('eetwens')}
+												{assign var=eetwens value=ProfielModel::get($aanmelding->getUid())->eetwens}
 												{if $eetwens !== ''}
 													<span class="eetwens">
 														{$eetwens}
