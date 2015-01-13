@@ -96,11 +96,11 @@ abstract class CachedPersistenceModel extends PersistenceModel {
 	 * 
 	 * @param PersistentEntity $entity
 	 * @param boolean $memcache
+	 * @param boolean $overwrite
 	 */
-	protected function cache(PersistentEntity $entity, $memcache = false) {
+	protected function cache(PersistentEntity $entity, $memcache = false, $overwrite = false) {
 		$key = $this->cacheKey($entity->getValues(true));
-		// do NOT update (requires explicit unsetCache)
-		if ($this->isCached($key, $memcache)) {
+		if (!$overwrite AND $this->isCached($key, $memcache)) {
 			$entity = $this->getCached($key, $memcache);
 		} else {
 			$this->setCache($key, $entity, $memcache);

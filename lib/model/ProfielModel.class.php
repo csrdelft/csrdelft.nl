@@ -20,7 +20,11 @@ class ProfielModel extends CachedPersistenceModel {
 	 * @return Profiel|false
 	 */
 	public static function get($uid) {
-		return static::instance()->retrieveByPrimaryKey(array($uid));
+		$profiel = static::instance()->retrieveByPrimaryKey(array($uid));
+		if (!$profiel) {
+			return false;
+		}
+		return $this->cache($profiel, true);
 	}
 
 	public static function getNaam($uid, $vorm) {
@@ -104,6 +108,7 @@ class ProfielModel extends CachedPersistenceModel {
 		} catch (Exception $e) {
 			setMelding($e->getMessage(), -1); //TODO: logging
 		}
+		$this->cache($profiel, true, true);
 		return parent::update($profiel);
 	}
 
