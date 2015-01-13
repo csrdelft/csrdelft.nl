@@ -381,7 +381,7 @@ class Profiel extends PersistentEntity implements Agendeerbaar {
 			$k.= $this->mobiel . '</p>';
 			$k.= '<p>' . $this->adres . '<br />';
 			$k.= $this->postcode . ' ' . $this->woonplaats . '</p>';
-			$k.= '<p class="uitgebreid">' . $this->lidjaar . ' ' . $this->getVerticale()->naam . '</p>';
+			$k.= '<p class="uitgebreid">' . $this->lidjaar . ' ' . (empty($this->verticale) ? '' : $this->getVerticale()->naam) . '</p>';
 			$k.= '</div>';
 			if ($vorm === 'leeg') {
 				$naam = $k . $naam;
