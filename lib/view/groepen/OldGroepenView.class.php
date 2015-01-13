@@ -136,7 +136,7 @@ class GroepContent extends OldGroepView {
 
 		//verticalen.
 		foreach (VerticalenModel::instance()->prefetch() as $verticale) {
-			if ($verticale->letter == '_') {
+			if ($verticale->letter == '') {
 				continue;
 			}
 			$filter = 'verticale:' . $verticale->letter;

@@ -620,7 +620,7 @@ class Profiel extends PersistentEntity implements Agendeerbaar {
 	}
 
 	public function getKring($link = false) {
-		if (empty($this->verticale) OR $this->verticale === '_') {
+		if (empty($this->verticale)) {
 			return 'Geen kring';
 		}
 		$vertkring = $this->getVerticale()->letter . '.' . $this->kring;

@@ -327,7 +327,7 @@ class LidZoeker {
 				if ($verticale) {
 					$query = 'verticale="' . $verticale->letter . '" ';
 				} else {
-					$query = 'verticale="_" ';
+					$query = 'verticale="" ';
 				}
 			}
 		} elseif (preg_match('/^\d{2}$/', $zoekterm)) { //lichting bij een string van 2 cijfers
