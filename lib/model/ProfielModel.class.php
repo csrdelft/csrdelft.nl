@@ -26,7 +26,7 @@ class ProfielModel extends CachedPersistenceModel {
 	public static function getNaam($uid, $vorm) {
 		$profiel = static::get($uid);
 		if (!$profiel) {
-			return 'Lid met uid "' . htmlspecialchars($uid) . '" bestaat niet.';
+			return null;
 		}
 		return $profiel->getNaam($vorm);
 	}
@@ -34,7 +34,7 @@ class ProfielModel extends CachedPersistenceModel {
 	public static function getLink($uid, $vorm) {
 		$profiel = static::get($uid);
 		if (!$profiel) {
-			return 'Lid met uid "' . htmlspecialchars($uid) . '" bestaat niet.';
+			return null;
 		}
 		return $profiel->getLink($vorm);
 	}
