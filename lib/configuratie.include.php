@@ -178,7 +178,8 @@ switch (constant('MODE')) {
 
 		LoginModel::instance()->logBezoek();
 
-		setMelding(CsrMemcache::instance()->isAvailable() ? 'Memcache available' : 'Memcache NOT available', 0);
+		CsrMemcache::instance();
+		setMelding(CsrMemcache::isAvailable() ? 'Memcache available' : 'Memcache NOT available', 0);
 
 		// Database modus meldingen
 		if (DB_MODIFY OR DB_DROP) {
