@@ -30,6 +30,7 @@ if (isset($_GET['limit'])) {
 	$limiet = (int) $_GET['limit'];
 }
 
+require_once 'lid/lidzoeker.class.php';
 $namen = LidZoeker::zoekLeden($query, 'naam', 'alle', 'achternaam', $zoekin, $velden, $limiet);
 
 $result = array();
@@ -43,13 +44,13 @@ foreach ($namen as $naam) {
 	);
 }
 /*
-if (empty($result)) {
-	$result[] = array(
-		'url'	 => '/ledenlijst?status=LEDEN|OUDLEDEN&q=' . urlencode($query),
-		'value'	 => htmlspecialchars($query) . '<span class="lichtgrijs"> - Zoeken in <span class="dikgedrukt">leden & oudleden</span></span>'
-	);
-}
-*/
+  if (empty($result)) {
+  $result[] = array(
+  'url'	 => '/ledenlijst?status=LEDEN|OUDLEDEN&q=' . urlencode($query),
+  'value'	 => htmlspecialchars($query) . '<span class="lichtgrijs"> - Zoeken in <span class="dikgedrukt">leden & oudleden</span></span>'
+  );
+  }
+ */
 header('Content-Type: application/json');
 echo json_encode($result);
 exit;
