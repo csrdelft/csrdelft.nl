@@ -489,7 +489,7 @@ class AccessModel extends CachedPersistenceModel {
 					// wordt er een role gevraagd?
 					if (!$role) {
 						return true;
-					} elseif ($role == 'LEIDER' AND $profiel->motebal) {
+					} elseif ($role == 'LEIDER' AND $profiel->verticaleleider) {
 						return true;
 					}
 				}

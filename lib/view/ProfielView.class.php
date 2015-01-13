@@ -232,7 +232,8 @@ class ProfielForm extends Formulier {
 					$kringleider[$optie] = Kringleider::getDescription($optie);
 				}
 				$fields[] = new SelectField('kringleider', $profiel->kringleider, 'Kringleider', $kringleider);
-				$fields[] = new VinkField('motebal', $profiel->motebal, 'Verticaan');
+				$fields[] = new VerticaleField('kringcoach', $profiel->kringcoach, 'Kringcoach');
+				$fields[] = new VinkField('verticaleleider', $profiel->verticaleleider, 'Verticaan');
 			}
 			$fields[] = new LidField('patroon', $profiel->patroon, 'Patroon', 'allepersonen');
 		}

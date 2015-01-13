@@ -68,7 +68,7 @@ class VerticalenView implements View {
 					if ($profiel->status === LidStatus::Kringel) {
 						echo '&nbsp;~';
 					}
-					if ($profiel->motebal) {
+					if ($profiel->verticaleleider) {
 						echo '&nbsp;L';
 					}
 					if ($profiel->kringleider !== Kringleider::Nee) {

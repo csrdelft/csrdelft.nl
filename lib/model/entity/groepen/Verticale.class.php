@@ -19,16 +19,6 @@ class Verticale extends PersistentEntity {
 	 */
 	public $naam;
 	/**
-	 * Uid van kring-coach
-	 * @var string
-	 */
-	public $kringcoach;
-	/**
-	 * Uid van verticale-leider
-	 * @var string
-	 */
-	private $leider;
-	/**
 	 * Kringen met kringleden
 	 * @var array
 	 */
@@ -38,9 +28,8 @@ class Verticale extends PersistentEntity {
 	 * @var array
 	 */
 	protected static $persistent_attributes = array(
-		'letter'	 => array(T::Char),
-		'naam'		 => array(T::String),
-		'kringcoach' => array(T::UID)
+		'letter' => array(T::Char),
+		'naam'	 => array(T::String),
 	);
 	/**
 	 * Database primary key
@@ -52,13 +41,6 @@ class Verticale extends PersistentEntity {
 	 * @var string
 	 */
 	protected static $table_name = 'verticalen';
-
-	public function getLeider() {
-		if (!isset($this->leider)) {
-			$this->leider = VerticalenModel::getLeider($this);
-		}
-		return $this->leider;
-	}
 
 	public function getKringen() {
 		if (!isset($this->kringen)) {

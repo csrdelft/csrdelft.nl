@@ -25,14 +25,4 @@ class VerticalenModel extends CachedPersistenceModel {
 		parent::__construct('groepen/');
 	}
 
-	/**
-	 * Get uid of verticale leider.
-	 * 
-	 * @param Verticale $verticale
-	 * @return string
-	 */
-	public function getVerticaleLeider(Verticale $verticale) {
-		return Database::instance()->sqlSelect(array('uid'), 'lid', 'verticale = ? AND motebal = 1', array($verticale->letter), null, null, 1)->fetchColumn();
-	}
-
 }
