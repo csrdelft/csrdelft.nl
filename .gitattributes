@@ -4070,7 +4070,6 @@ lib/model/GroepenModel.class.php -text
 lib/model/GroepenOldModel.class.php -text
 lib/model/InstellingenModel.class.php -text
 lib/model/LidInstellingenModel.class.php -text
-lib/model/LoginModel.class.php -text
 lib/model/MededelingCategorieModel.class.php -text
 lib/model/MededelingenModel.class.php -text
 lib/model/MenuModel.class.php -text

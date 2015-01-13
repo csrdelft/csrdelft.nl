@@ -101,7 +101,7 @@ class AccountModel extends CachedPersistenceModel {
 		$this->update($account);
 	}
 
-	private function convert() {
+	public function convert() {
 		foreach (ProfielModel::instance()->find() as $profiel) {
 			$account = new Account();
 			$account->uid = $profiel->uid;
