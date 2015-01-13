@@ -121,7 +121,7 @@ class ProfielForm extends Formulier {
 			if (count($gelijknamigenovieten) > 1 OR ( $profiel->status !== LidStatus::Noviet AND ! empty($gelijknamigenovieten))) {
 				$html .= 'Gelijknamige novieten:<ul class="nobullets">';
 				foreach ($gelijknamigenovieten as $uid => $gevonden) {
-					$html .= '<li>' . ProfielModel::getLink($uid) . '</li>';
+					$html .= '<li>' . ProfielModel::getLink($uid, 'volledig') . '</li>';
 				}
 				$html .= '</ul>';
 			} else {
@@ -131,7 +131,7 @@ class ProfielForm extends Formulier {
 			if (count($gelijknamigeleden) > 1 OR ( !($profiel->status == LidStatus::Lid OR $profiel->status == LidStatus::Gastlid) AND ! empty($gelijknamigeleden))) {
 				$html .= 'Gelijknamige (gast)leden:<ul class="nobullets">';
 				foreach ($gelijknamigeleden as $uid => $gevonden) {
-					$html .= '<li>' . ProfielModel::getLink($uid) . '</li>';
+					$html .= '<li>' . ProfielModel::getLink($uid, 'volledig') . '</li>';
 				}
 				$html .= '</ul>';
 			} else {
