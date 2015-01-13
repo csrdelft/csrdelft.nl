@@ -581,7 +581,7 @@ class TextField extends InputField {
 
 	public function getValue() {
 		$value = parent::getValue();
-		if ($this->empty_null AND empty($value)) {
+		if ($this->empty_null AND $this->value == '') {
 			return null;
 		}
 		return htmlspecialchars($value);
@@ -1117,7 +1117,7 @@ class WachtwoordWijzigenField extends InputField {
 		} else {
 			$value = false;
 		}
-		if ($this->empty_null AND empty($value)) {
+		if ($this->empty_null AND $this->value == '') {
 			return null;
 		}
 		return $value;

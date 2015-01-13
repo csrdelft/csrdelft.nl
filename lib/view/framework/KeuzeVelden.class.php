@@ -48,7 +48,7 @@ class SelectField extends InputField {
 
 	public function getValue() {
 		$value = parent::getValue();
-		if ($this->empty_null AND empty($value)) {
+		if ($this->empty_null AND $value == '') {
 			return null;
 		}
 		return $value;
@@ -161,7 +161,7 @@ class EntityDropDown extends SelectField {
 
 	public function getValue() {
 		$value = json_decode(parent::getValue());
-		if ($this->empty_null AND empty($value)) {
+		if ($this->empty_null AND $this->value == '') {
 			return null;
 		}
 		return $value;
@@ -216,6 +216,8 @@ class WeekdagField extends SelectField {
  * Selecteer een verticale. Geeft een volgnummer terug.
  */
 class VerticaleField extends SelectField {
+
+	public $empty_null = true;
 
 	public function __construct($name, $value, $description) {
 		$verticalen = array();
