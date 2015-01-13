@@ -10,10 +10,9 @@
 class SessionsView extends DataTable implements FormElement {
 
 	public function __construct() {
-		parent::__construct(LoginModel::orm, 'Sessiebeheer');
+		parent::__construct(LoginModel::orm, 'Sessiebeheer', 'uid');
 		$this->dataUrl = '/sessions';
 		$this->hideColumn('uid');
-		$this->hideColumn('ip');
 		$this->searchColumn('login_moment');
 		$this->searchColumn('user_agent');
 	}
