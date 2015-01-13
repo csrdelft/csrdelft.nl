@@ -102,7 +102,7 @@ class auth_plugin_authcsr extends DokuWiki_Auth_Plugin {
 			// okay we're logged in - set the globals
 			require_once 'model/entity/groepen/OldGroep.class.php';
 			/** @var Lid $profiel */
-			$profiel = LoginModel::getAccount();
+			$profiel = LoginModel::getProfiel();
 			$USERINFO['name'] = $profiel->getNaam();
 			$USERINFO['mail'] = $profiel->getPrimaryEmail();
 			$USERINFO['grps'] = GroepenOldModel::getWikigroupsByUid($profiel->uid);
