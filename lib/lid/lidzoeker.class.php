@@ -133,8 +133,7 @@ class LidZoeker {
 			$sZoeken = "
 				SELECT
 					" . $velden_sql . "
-				FROM
-					lid
+				FROM profielen
 				WHERE
 					(" . $zoekfilter . ")
 				AND
@@ -190,8 +189,12 @@ class LidZoeker {
 	//toegestane opties voor de weergave.
 	private $allowWeergave = array('lijst', 'kaartje', 'CSV');
 	private $sortable = array(
-		'achternaam' => 'Achternaam', 'email'		 => 'Email', 'gebdatum'	 => 'Geboortedatum',
-		'lidjaar'	 => 'lichting', 'studie'	 => 'Studie');
+		'achternaam' => 'Achternaam',
+		'email'		 => 'Email',
+		'gebdatum'	 => 'Geboortedatum',
+		'lidjaar'	 => 'lichting',
+		'studie'	 => 'Studie'
+	);
 	//standaardwaarden voor het zoeken zonder parameters
 	private $rawQuery = array('status' => 'LEDEN', 'sort' => 'achternaam');
 	private $query = '';
@@ -227,14 +230,17 @@ class LidZoeker {
 
 		foreach ($this->rawQuery as $key => $value) {
 			switch ($key) {
+
 				case 'q':
 					$this->query = $value;
 					break;
+
 				case 'weergave':
 					if (in_array($value, $this->allowWeergave)) {
 						$this->weergave = $value;
 					}
 					break;
+
 				case 'velden':
 					$this->velden = array();
 					foreach ($value as $veld) {
@@ -246,6 +252,7 @@ class LidZoeker {
 						$this->velden = array('naam', 'adres', 'email', 'mobiel');
 					}
 					break;
+
 				case 'status':
 					$value = strtoupper($value);
 					//als op alle lid-statussen moet worden gezocht verwijderen we
@@ -275,6 +282,7 @@ class LidZoeker {
 					}
 					$this->addFilter('status', $add);
 					break;
+
 				case 'sort':
 					if (array_key_exists($value, $this->getSortableVelden())) {
 						$this->sort = array($value);
@@ -395,9 +403,9 @@ class LidZoeker {
 		$query = "SELECT uid FROM profielen WHERE ";
 
 		if ($this->query != '') {
-			$query.=$this->defaultSearch($this->query);
+			$query .= $this->defaultSearch($this->query);
 		}
-		$query.=$this->getFilterSQL();
+		$query .= $this->getFilterSQL();
 		$query .= ' ORDER BY ' . implode($this->sort) . ';';
 
 		$this->sqlquery = $query;

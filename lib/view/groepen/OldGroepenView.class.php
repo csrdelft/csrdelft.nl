@@ -134,7 +134,7 @@ class GroepContent extends OldGroepView {
 			'geslacht:m'	 => 'Alleen mannen',
 			'geslacht:v'	 => 'Alleen vrouwen');
 
-		//verticalen.
+		// Verticalen
 		foreach (VerticalenModel::instance()->prefetch() as $verticale) {
 			if ($verticale->letter == '') {
 				continue;
@@ -143,7 +143,7 @@ class GroepContent extends OldGroepView {
 			$filters[$filter] = 'Verticale ' . $verticale->naam;
 		}
 
-		//lichtingen
+		// Lichtingen
 		$nu = Lichting::getJongsteLichting();
 		for ($lichting = $nu; $lichting >= ($nu - 7); $lichting--) {
 			$filters['lichting:' . $lichting] = 'Lichting ' . $lichting;
