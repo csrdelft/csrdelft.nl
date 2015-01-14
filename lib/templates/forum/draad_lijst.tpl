@@ -3,23 +3,21 @@
 		{if $draad->wacht_goedkeuring}
 			<small class="niet-dik">[ter goedkeuring...]</small>
 		{/if}
-		<a id="{$draad->draad_id}" href="/forum/onderwerp/{$draad->draad_id}{if LidInstellingen::get('forum', 'open_draad_op_pagina') == 'ongelezen'}#ongelezen{elseif LidInstellingen::get('forum', 'open_draad_op_pagina') == 'laatste'}#reageren{/if}"{if $draad->onGelezen()} class="{LidInstellingen::get('forum', 'ongelezenWeergave')}"{/if}>
-			{if $draad->gesloten}
-				{icon get="slotje" title="Dit onderwerp is gesloten, u kunt niet meer reageren"}
-			{elseif $draad->belangrijk}
-				{icon get="belangrijk" title="Dit onderwerp is door het bestuur aangemerkt als belangrijk."}
-			{elseif $draad->plakkerig}
-				{icon get="plakkerig" title="Dit onderwerp is plakkerig, het blijft bovenaan."}
-			{else}
-				<div class="inline" style="width: 16px;"></div>
-			{/if}
-			{$draad->titel}
-		</a>
+		{if $draad->gesloten}
+			{icon get="slotje" title="Dit onderwerp is gesloten, u kunt niet meer reageren"}
+		{elseif $draad->belangrijk}
+			{icon get="belangrijk" title="Dit onderwerp is door het bestuur aangemerkt als belangrijk."}
+		{elseif $draad->plakkerig}
+			{icon get="plakkerig" title="Dit onderwerp is plakkerig, het blijft bovenaan."}
+		{else}
+			<div class="inline" style="width: 16px;"></div>
+		{/if}
+		<a id="{$draad->draad_id}" href="/forum/onderwerp/{$draad->draad_id}{if LidInstellingen::get('forum', 'open_draad_op_pagina') == 'ongelezen'}#ongelezen{elseif LidInstellingen::get('forum', 'open_draad_op_pagina') == 'laatste'}#reageren{/if}"{if $draad->onGelezen()} class="{LidInstellingen::get('forum', 'ongelezenWeergave')}"{/if}>{$draad->titel}</a>
 		{if $draad->getAantalOngelezenPosts() > 0}
 			<span class="badge">{$draad->getAantalOngelezenPosts()}</span>
 		{/if}
 		{if !isset($deel->forum_id)} 
-			<span class="lichtgrijs">[{$draad->getForumDeel()->titel}]</span> 
+			<span class="lichtgrijs float-right">[{$draad->getForumDeel()->titel}]</span> 
 		{/if}
 	</td>
 	<td class="laatstewijziging">
