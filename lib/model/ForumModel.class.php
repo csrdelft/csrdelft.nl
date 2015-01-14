@@ -834,6 +834,18 @@ class ForumDradenModel extends AbstractForumModel implements Paging {
 		}
 	}
 
+	public function resetLastPost(ForumDraad $draad) {
+		// reset last post
+		$last_post = ForumPostsModel::instance()->find('draad_id = ? AND wacht_goedkeuring = FALSE AND verwijderd = FALSE', array($draad->draad_id), null, 'laatst_gewijzigd DESC', 1)->fetch();
+		$draad->laatste_post_id = $last_post->post_id;
+		$draad->laatste_wijziging_uid = $last_post->uid;
+		$draad->laatst_gewijzigd = $last_post->laatst_gewijzigd;
+		$rowCount = $this->update($draad);
+		if ($rowCount !== 1) {
+			throw new Exception('Reset last post mislukt');
+		}
+	}
+
 }
 
 class ForumPostsModel extends AbstractForumModel implements Paging {
@@ -1041,6 +1053,7 @@ class ForumPostsModel extends AbstractForumModel implements Paging {
 		if ($rowCount !== 1) {
 			throw new Exception('Verwijderen mislukt');
 		}
+		ForumDradenModel::instance()->resetLastPost($post->getForumDraad());
 	}
 
 	public function verwijderForumPostsVoorDraad(ForumDraad $draad) {
@@ -1074,6 +1087,7 @@ class ForumPostsModel extends AbstractForumModel implements Paging {
 	}
 
 	public function verplaatsForumPost(ForumDraad $nieuwDraad, ForumPost $post) {
+		$oudeDraad = $post->draad_id;
 		$post->draad_id = $nieuwDraad->draad_id;
 		$post->laatst_gewijzigd = getDateTime();
 		$post->bewerkt_tekst .= 'verplaatst door [lid=' . LoginModel::getUid() . '] [reldate]' . $post->laatst_gewijzigd . '[/reldate]' . "\n";
@@ -1081,6 +1095,7 @@ class ForumPostsModel extends AbstractForumModel implements Paging {
 		if ($rowCount !== 1) {
 			throw new Exception('Verplaatsen mislukt');
 		}
+		ForumDradenModel::instance()->resetLastPost($oudeDraad);
 	}
 
 	public function offtopicForumPost(ForumPost $post) {
