@@ -4050,7 +4050,6 @@ lib/googlesync.class.php -text
 lib/icon.class.php -text
 lib/knop.class.php -text
 lib/ldap.class.php -text
-lib/lichting.class.php -text
 lib/lid/ledenlijstcontent.class.php -text
 lib/lid/lidzoeker.class.php -text
 lib/lid/saldi.class.php -text
@@ -4070,6 +4069,7 @@ lib/model/FotoAlbumModel.class.php -text
 lib/model/GroepenModel.class.php -text
 lib/model/GroepenOldModel.class.php -text
 lib/model/InstellingenModel.class.php -text
+lib/model/LichtingModel.class.php -text
 lib/model/LidInstellingenModel.class.php -text
 lib/model/MededelingCategorieModel.class.php -text
 lib/model/MededelingenModel.class.php -text
