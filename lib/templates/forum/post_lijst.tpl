@@ -28,8 +28,8 @@
 				{$post->datum_tijd}
 			{/if}
 		</span>
-		{if LoginModel::mag('P_LEDEN_READ')}
-			<div id="p{$post->post_id}" class="forumpasfoto{if LidInstellingen::get('forum', 'toonpasfotos') == 'nee'} verborgen">{elseif LoginModel::mag('P_LEDEN_READ')}">{ProfielModel::getLink($post->uid, 'pasfoto')}{/if}</div>
+		{if $post->uid !== 'x999' AND LoginModel::mag('P_LEDEN_READ')}
+			<div id="p{$post->post_id}" class="forumpasfoto{if LidInstellingen::get('forum', 'toonpasfotos') == 'nee'} verborgen{/if}">{ProfielModel::getLink($post->uid, 'pasfoto')}</div>
 		{/if}
 		<br />
 		{if isset($statistiek)}

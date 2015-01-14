@@ -534,28 +534,31 @@ class Profiel extends PersistentEntity implements Agendeerbaar {
 	 * @return string
 	 */
 	public function getPasfotoPath($vierkant = false, $vorm = 'user') {
-		if ($vierkant OR ! LoginModel::mag('P_LOGGED_IN')) {
-			$folders = array('');
-		} else {
-			if ($vorm === 'user') {
-				$vorm = LidInstellingen::get('forum', 'naamWeergave');
-			}
-			$folders = array($vorm . '/', '');
-		}
 		$path = null;
-		// loop de volgende folders af op zoek naar de gevraagde pasfoto vorm
-		foreach ($folders as $subfolder) {
-			foreach (array('png', 'jpeg', 'jpg', 'gif') as $validExtension) {
-				if (file_exists(PICS_PATH . 'pasfoto/' . $subfolder . $this->uid . '.' . $validExtension)) {
-					$path = 'pasfoto/' . $subfolder . $this->uid . '.' . $validExtension;
+		if (LoginModel::mag('P_OUDLEDEN_READ')) {
+			// in welke (sub)map moeten we zoeken?
+			if ($vierkant) {
+				$folders = array('');
+			} else {
+				if ($vorm === 'user') {
+					$vorm = LidInstellingen::get('forum', 'naamWeergave');
+				}
+				$folders = array($vorm . '/', '');
+			}
+			// loop de volgende folders af op zoek naar de gevraagde pasfoto vorm
+			foreach ($folders as $subfolder) {
+				foreach (array('png', 'jpeg', 'jpg', 'gif') as $validExtension) {
+					if (file_exists(PICS_PATH . 'pasfoto/' . $subfolder . $this->uid . '.' . $validExtension)) {
+						$path = 'pasfoto/' . $subfolder . $this->uid . '.' . $validExtension;
+						break;
+					}
+				}
+				if ($path) {
+					break;
+				} elseif ($vorm === 'Duckstad') {
+					$path = 'pasfoto/' . $vorm . '/eend.jpg';
 					break;
 				}
-			}
-			if ($path) {
-				break;
-			} elseif ($vorm === 'Duckstad') {
-				$path = 'pasfoto/' . $vorm . '/eend.jpg';
-				break;
 			}
 		}
 		if (!$path) {
