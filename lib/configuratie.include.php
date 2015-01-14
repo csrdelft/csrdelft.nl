@@ -169,15 +169,15 @@ switch (constant('MODE')) {
 			// Deletes old session
 			session_regenerate_id(true);
 		}
+
 		// Validate login
+		Instellingen::instance()->prefetch();
 		LoginModel::instance()->logBezoek();
 
 		// Prefetch
-		Instellingen::instance()->prefetch();
 		LidInstellingen::instance()->prefetch('uid = ?', array(LoginModel::getUid()));
 		VerticalenModel::instance()->prefetch();
 		ForumModel::instance()->prefetch();
-
 
 		// Database modus meldingen
 		if (DB_MODIFY OR DB_DROP) {
