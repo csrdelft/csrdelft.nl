@@ -74,10 +74,10 @@ section h1, h2.inschrijven {
     padding: 70px 0 100px;
 }
 #etiquette {
-    background: url(../img/etiquette.jpg) no-repeat fixed;
+    background: url("/plaetjes/layout/dies/2015/etiquette.jpg") no-repeat fixed;
 }
 #programma {
-    background: url(../img/programma.jpg) no-repeat fixed;
+    background: url("/plaetjes/layout/dies/2015/programma.jpg") no-repeat fixed;
 }
 .colbox {
     width: 90%;
@@ -126,7 +126,7 @@ h2.inschrijven a {
     text-decoration: none;
 }
 #commissie {
-    background: url(../img/commissie.jpg) no-repeat fixed;
+    background: url("/plaetjes/layout/dies/2015/commissie.jpg") no-repeat fixed;
     background-size: 105%;
 }
 #commissie div {
