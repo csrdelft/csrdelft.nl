@@ -157,12 +157,12 @@ switch (constant('MODE')) {
 		ini_set('session.use_trans_sid', 'Off');
 		ini_set('session.use_cookies', true);
 		ini_set('session.use_only_cookies', true);
-		// ini_set('session.cookie_lifetime', 0);
-		// ini_set('session.gc_maxlifetime', 0);
+		ini_set('session.cookie_lifetime', 0);
+		ini_set('session.gc_maxlifetime', 0);
 
 		session_save_path(SESSION_PATH);
 		session_name('CSRSESSID');
-		session_set_cookie_params(1036800, '/', 'csrdelft.nl', FORCE_HTTPS, true);
+		session_set_cookie_params(0, '/', 'csrdelft.nl', FORCE_HTTPS, true);
 
 		session_start();
 		if (session_id() == 'deleted') {

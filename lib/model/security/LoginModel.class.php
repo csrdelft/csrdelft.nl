@@ -92,7 +92,7 @@ class LoginModel extends PersistenceModel implements Validator {
 				setMelding('Uw wachtwoord is verlopen', 2);
 				redirect('/wachtwoord/verlopen');
 			}
-		} elseif (empty(REQUEST_URI) AND $pass_since < $waarschuwing_vooraf) {
+		} elseif (REQUEST_URI == '' AND $pass_since < $waarschuwing_vooraf) {
 			$uren = ($waarschuwing_vooraf - $pass_since) / 3600;
 			if ($uren < 24) {
 				setMelding('Uw wachtwoord verloopt binnen ' . $uren . ' uur', 2);
