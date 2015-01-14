@@ -73,7 +73,7 @@ class OneTimeTokensModel extends PersistenceModel {
 	}
 
 	public function opschonen() {
-		foreach ($this->find('? >= expire', array(getDateTime())) as $token) {
+		foreach ($this->find('? < expire', array(getDateTime())) as $token) {
 			$this->delete($token);
 		}
 	}
