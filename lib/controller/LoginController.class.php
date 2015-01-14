@@ -210,13 +210,11 @@ class LoginController extends AclController {
 		if ($form->validate()) {
 			$uid = $form->findByName('user')->getValue();
 			$account = AccountModel::get($uid);
-			if ($account AND AccessModel::mag($account, 'P_LOGGED_IN')) {
-				if (OneTimeTokensModel::instance()->verifyToken($account->uid, $tokenValue)) {
-					// redirect by verifyToken
-					// OF foutmelding
-				} else {
-					$this->geentoegang();
-				}
+			if ($account AND AccessModel::mag($account, 'P_LOGGED_IN') AND OneTimeTokensModel::instance()->verifyToken($account->uid, $tokenValue)) {
+				// redirect by verifyToken
+				// OF foutmelding
+			} else {
+				$this->geentoegang();
 			}
 		}
 		$this->view = new CsrLayoutPage($form);
