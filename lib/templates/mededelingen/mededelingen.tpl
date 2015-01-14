@@ -91,7 +91,7 @@
 				</div>
 				<div class="informatie">
 					<hr />
-					Geplaatst op {$geselecteerdeMededeling->getDatum()|date_format:'%d-%m-%Y'}{if $geselecteerdeMededeling->isModerator()} door {ProfielModel::getLink($geselecteerdeMededeling->getUid())}{/if}<br />
+					Geplaatst op {$geselecteerdeMededeling->getDatum()|date_format:'%d-%m-%Y'}{if $geselecteerdeMededeling->isModerator()} door {ProfielModel::getLink($geselecteerdeMededeling->getUid(), 'civitas')}{/if}<br />
 					Categorie: {$geselecteerdeMededeling->getCategorie()->getNaam()}<br />
 					{if $geselecteerdeMededeling->isModerator()}
 						Doelgroep: {$geselecteerdeMededeling->getDoelgroep()}<br />
