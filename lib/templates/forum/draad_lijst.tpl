@@ -10,6 +10,8 @@
 				{icon get="belangrijk" title="Dit onderwerp is door het bestuur aangemerkt als belangrijk."}
 			{elseif $draad->plakkerig}
 				{icon get="plakkerig" title="Dit onderwerp is plakkerig, het blijft bovenaan."}
+			{else}
+				<div class="inline" style="width: 16px;"></div>
 			{/if}
 			{$draad->titel}
 		</a>
