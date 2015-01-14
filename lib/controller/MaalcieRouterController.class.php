@@ -57,7 +57,7 @@ class MaalcieRouterController extends AclController {
 	protected function geentoegang() {
 		require_once 'model/CmsPaginaModel.class.php';
 		require_once 'view/CmsPaginaView.class.php';
-		if (isPosted()) {
+		if ($this->isPosted()) {
 			parent::geentoegang();
 		}
 		$body = new CmsPaginaView(CmsPaginaModel::instance()->getPagina('maaltijden'));

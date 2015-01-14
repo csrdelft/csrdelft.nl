@@ -35,6 +35,16 @@ class LoginController extends AclController {
 		parent::performAction($this->getParams(2));
 	}
 
+	protected function geentoegang() {
+		require_once 'model/CmsPaginaModel.class.php';
+		require_once 'view/CmsPaginaView.class.php';
+		if ($this->isPosted()) {
+			parent::geentoegang();
+		}
+		$body = new CmsPaginaView(CmsPaginaModel::instance()->getPagina('accountaanvragen'));
+		$this->view = new CsrLayoutPage($body);
+	}
+
 	public function login() {
 		require_once 'view/LoginView.class.php';
 		$form = new LoginForm(); // fetches POST values itself
@@ -86,16 +96,6 @@ class LoginController extends AclController {
 		require_once 'model/CmsPaginaModel.class.php';
 		require_once 'view/CmsPaginaView.class.php';
 		$body = new CmsPaginaView(CmsPaginaModel::instance()->getPagina('mobiel'));
-		$this->view = new CsrLayoutPage($body);
-	}
-
-	protected function geentoegang() {
-		require_once 'model/CmsPaginaModel.class.php';
-		require_once 'view/CmsPaginaView.class.php';
-		if ($this->isPosted()) {
-			parent::geentoegang();
-		}
-		$body = new CmsPaginaView(CmsPaginaModel::instance()->getPagina('accountaanvragen'));
 		$this->view = new CsrLayoutPage($body);
 	}
 
