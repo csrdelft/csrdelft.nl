@@ -56,7 +56,7 @@ class AgendaModel extends PersistenceModel {
 		}
 
 		// Verjaardagen
-		if (LidInstellingen::get('agenda', 'toonVerjaardagen') === 'ja') {
+		if (LoginModel::mag('P_LOGGED_IN') AND LidInstellingen::get('agenda', 'toonVerjaardagen') === 'ja') {
 			//Verjaardagen. Omdat Lid-objectjes eigenlijk niet Agendeerbaar, maar meer iets als
 			//PeriodiekAgendeerbaar zijn, maar we geen zin hebben om dat te implementeren,
 			//doen we hier even een vieze hack waardoor het wel soort van werkt.

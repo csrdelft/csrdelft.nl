@@ -10,7 +10,7 @@ abstract class Zijbalk {
 
 	public static function addStandaardZijbalk(array $zijbalk) {
 		// Favorieten menu
-		if (LidInstellingen::get('zijbalk', 'favorieten') == 'ja') {
+		if (LoginModel::mag('P_LOGGED_IN') AND LidInstellingen::get('zijbalk', 'favorieten') == 'ja') {
 			$menu = MenuModel::instance()->getMenu(LoginModel::getUid());
 			$menu->tekst = 'Favorieten';
 			array_unshift($zijbalk, new BlockMenuView($menu));
@@ -64,7 +64,7 @@ abstract class Zijbalk {
 			}
 		}
 		// Komende verjaardagen
-		if (LidInstellingen::get('zijbalk', 'verjaardagen') > 0) {
+		if (LoginModel::mag('P_LOGGED_IN') AND LidInstellingen::get('zijbalk', 'verjaardagen') > 0) {
 			require_once 'view/VerjaardagenView.class.php';
 			$zijbalk[] = new VerjaardagenView('komende');
 		}
