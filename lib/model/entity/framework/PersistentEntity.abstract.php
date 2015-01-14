@@ -250,8 +250,8 @@ abstract class PersistentEntity implements Sparse, JsonSerializable {
 				if ($attributes[$name]->extra !== $database_attributes[$name]->extra) {
 					$diff = true;
 				}
-				// TODO: support key: MUL, UNI, etc.
-				if ($attributes[$name]->key !== $database_attributes[$name]->key AND $attributes[$name]->key === 'PRI') {
+				// TODO: support other key types: MUL, UNI, etc.
+				if ($attributes[$name]->key !== $database_attributes[$name]->key AND ( $attributes[$name]->key === 'PRI' OR $database_attributes[$name]->key === 'PRI' )) {
 					$diff = true;
 				}
 				if ($diff) {
