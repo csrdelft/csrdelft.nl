@@ -278,7 +278,7 @@ class ForumDraad extends PersistentEntity {
 
 	public function getAantalOngelezenPosts() {
 		if (!isset($this->aantal_ongelezen_posts)) {
-			$where = 'draad_id = ? AND verwijderd = FALSE AND wacht_goedkeuring = FALSE';
+			$where = 'draad_id = ? AND wacht_goedkeuring = FALSE AND verwijderd = FALSE';
 			$params = array($this->draad_id);
 			$wanneer = $this->getWanneerGelezen();
 			if ($wanneer) {

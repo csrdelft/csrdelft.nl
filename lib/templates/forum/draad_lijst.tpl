@@ -13,9 +13,6 @@
 			{/if}
 			{$draad->titel}
 		</a>
-		{sliding_pager baseurl="/forum/onderwerp/"|cat:$draad->draad_id|cat:"/"
-			pagecount=ForumPostsModel::instance()->getAantalPaginas($draad->draad_id) curpage=0
-			txt_pre="&nbsp;[ " txt_post=" ]" link_current=true}
 		{if $draad->getAantalOngelezenPosts() > 0}
 			<span class="badge">{$draad->getAantalOngelezenPosts()}</span>
 		{/if}
