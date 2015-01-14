@@ -94,6 +94,17 @@ class LoginController extends AclController {
 		if ($uid === null OR ! LoginModel::mag('P_ADMIN')) {
 			$uid = LoginModel::getUid();
 		}
+		// aanvragen
+		if ($uid === 'x999') {
+			require_once 'model/CmsPaginaModel.class.php';
+			require_once 'view/CmsPaginaView.class.php';
+			if (isPosted()) {
+				parent::geentoegang();
+			}
+			$body = new CmsPaginaView(CmsPaginaModel::instance()->getPagina('accountaanvragen'));
+			$this->view = new CsrLayoutPage($body);
+			return;
+		}
 		$account = AccountModel::get($uid);
 		if (!$account AND LoginModel::mag('P_ADMIN')) {
 			$account = AccountModel::instance()->maakAccount($uid);
