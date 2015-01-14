@@ -14,7 +14,7 @@ class ForumDraad extends PersistentEntity {
 	 * Primary key
 	 * @var int
 	 */
-	public $this_id;
+	public $draad_id;
 	/**
 	 * Forum waaronder dit topic valt
 	 * @var int
