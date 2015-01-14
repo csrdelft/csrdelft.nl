@@ -122,7 +122,7 @@ class LoginController extends AclController {
 	public function wachtwoord($action = null) {
 		$account = LoginModel::getAccount();
 		// wijzigen
-		if (LoginModel::mag('P_PROFIEL_EDIT')) {
+		if ($action !== 'vergeten' AND LoginModel::mag('P_PROFIEL_EDIT')) {
 			$form = new WachtwoordWijzigenForm($account, $action);
 			if ($form->validate()) {
 				// wachtwoord opslaan
@@ -146,8 +146,9 @@ class LoginController extends AclController {
 				// stuur bevestigingsmail
 				$lidnaam = $account->getProfiel()->getNaam('civitas');
 				require_once 'model/entity/Mail.class.php';
-				$bericht = "Geachte " . $lidnaam . ",\n\nU heeft recent uw wachtwoord opnieuw ingesteld. Als u dit niet zelf gedaan heeft dan moet u nu direct uw wachtwoord wijzigen en de PubCie op de hoogte stellen.\n\nMet amicale groet,\nUw PubCie";
-				$mail = new Mail(array($account->email => $lidnaam), 'C.S.R. webstek: nieuw wachtwoord ingesteld', $bericht);
+				$bericht = "Geachte " . $lidnaam .
+						",\n\nU heeft recent uw wachtwoord opnieuw ingesteld. Als u dit niet zelf gedaan heeft dan moet u nu direct uw wachtwoord wijzigen en de PubCie op de hoogte stellen.\n\nMet amicale groet,\nUw PubCie";
+				$mail = new Mail(array($account->email => $lidnaam), '[C.S.R. webstek] Nieuw wachtwoord ingesteld', $bericht);
 				$mail->send();
 			}
 		}
@@ -174,7 +175,7 @@ class LoginController extends AclController {
 							",\n\nU heeft verzocht om uw wachtwoord opnieuw in te stellen. Dit is mogelijk met de onderstaande link tot " . $token->expire .
 							".\n\n[url=" . CSR_ROOT . "/verify/" . $token->token .
 							"]Wachtwoord instellen[/url].\n\nAls dit niet uw eigen verzoek is kunt u dit bericht negeren.\n\nMet amicale groet,\nUw PubCie";
-					$mail = new Mail(array($account->email => $lidnaam), 'C.S.R. webstek: nieuw wachtwoord instellen', $bericht);
+					$mail = new Mail(array($account->email => $lidnaam), '[C.S.R. webstek] Wachtwoord vergeten', $bericht);
 					$mail->send();
 					setMelding('Wachtwoord reset email verzonden', 1);
 				} else {
