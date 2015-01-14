@@ -187,7 +187,7 @@ class ProfielForm extends Formulier {
 		$fields[] = new Subkopje('Contact');
 		//TODO: email & multiple contacts
 		$fields['email'] = new RequiredEmailField('email', $profiel->email, 'E-mailadres');
-		if ($inschrijven) {
+		if (!$inschrijven AND $profiel->email != '') {
 			$fields['email']->readonly = true;
 			$fields['email']->title = 'Wijzig je e-mailadres met het inloggegevens-formulier.';
 		}
