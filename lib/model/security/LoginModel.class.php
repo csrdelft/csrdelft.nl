@@ -84,10 +84,24 @@ class LoginModel extends PersistenceModel implements Validator {
 			return false;
 		}
 		// Check of wachtwoord is verlopen:
-		if (strtotime($account->pass_since) < strtotime(Instellingen::get('beveiliging', 'wachtwoorden_verlopen_ouder_dan'))) {
+		$pass_since = strtotime($account->pass_since);
+		$verloop_na = strtotime(Instellingen::get('beveiliging', 'wachtwoorden_verlopen_ouder_dan'));
+		$waarschuwing_vooraf = strtotime(Instellingen::get('beveiliging', 'wachtwoorden_verlopen_waarschuwing_vooraf'), $verloop_na);
+		if ($pass_since < $verloop_na) {
 			if (!startsWith(REQUEST_URI, '/wachtwoord') AND ! startsWith(REQUEST_URI, '/tools/css.php') AND ! startsWith(REQUEST_URI, '/tools/js.php') AND REQUEST_URI !== '/endsu') {
 				setMelding('Uw wachtwoord is verlopen', 2);
 				redirect('/wachtwoord/verlopen');
+			}
+		} elseif ($pass_since < $waarschuwing_vooraf) {
+			$uren = ($waarschuwing_vooraf - $pass_since) / 3600;
+			if ($uren < 24) {
+				setMelding('Uw wachtwoord verloopt binnen ' . $uren . ' uur', 2);
+			} else {
+				$dagen = floor((double) $uren / (double) 24) . ' dag';
+				if ($dagen > 1) {
+					$dagen .= 'en';
+				}
+				setMelding('Uw wachtwoord verloopt over ' . $dagen, 2);
 			}
 		}
 		// Check login session

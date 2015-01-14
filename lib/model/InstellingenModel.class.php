@@ -35,8 +35,9 @@ class Instellingen extends CachedPersistenceModel {
 			'standaard_tijd_4'				 => '20:00-23:59'
 		),
 		'beveiliging'	 => array(
-			'one_time_token_expire_after'		 => '+1 hour',
-			'wachtwoorden_verlopen_ouder_dan'	 => '-1 year'
+			'one_time_token_expire_after'				 => '+1 hour',
+			'wachtwoorden_verlopen_ouder_dan'			 => '-1 year',
+			'wachtwoorden_verlopen_waarschuwing_vooraf'	 => '-2 weeks'
 		),
 		'corvee'		 => array(
 			'punten_per_jaar'						 => '11',
