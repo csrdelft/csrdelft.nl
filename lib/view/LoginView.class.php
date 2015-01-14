@@ -123,7 +123,7 @@ class AccountForm extends Formulier {
 			$fields[] = new SelectField('perm_role', $account->perm_role, 'Rechten', $roles);
 		}
 
-		$fields[] = new UsernameField('username', $account);
+		$fields[] = new UsernameField('username', $account->username);
 		$fields[] = new RequiredEmailField('email', $account->email, 'E-mailadres');
 		$fields[] = new WachtwoordWijzigenField('wijzigww', $account, true);
 		$fields['btn'] = new FormDefaultKnoppen('/', false, true, true, true);

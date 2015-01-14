@@ -934,18 +934,9 @@ class RequiredUrlField extends UrlField {
 
 class UsernameField extends TextField {
 
-	public function __construct($name, Account $account) {
-		parent::__construct($name, $account->username, 'Gebruikersnaam');
+	public function __construct($name, $value) {
+		parent::__construct($name, $value, 'Gebruikersnaam');
 		$this->title = 'Om mee in te loggen in plaats van het lidnummer.';
-		$this->model = $account;
-	}
-
-	public function getValue() {
-		$value = parent::getValue();
-		if ($value == '') {
-			return $this->getModel()->uid;
-		}
-		return $value;
 	}
 
 	public function validate() {

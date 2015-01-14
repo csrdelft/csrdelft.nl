@@ -108,6 +108,9 @@ class LoginController extends AclController {
 		}
 		$form = new AccountForm($account);
 		if ($form->validate()) {
+			if ($form->findByName('username')->getValue() == '') {
+				$account->username = $account->uid;
+			}
 			// username, email & wachtwoord opslaan
 			$pass_plain = $form->findByName('wijzigww')->getValue();
 			AccountModel::instance()->wijzigWachtwoord($account, $pass_plain);
