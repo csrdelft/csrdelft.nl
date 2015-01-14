@@ -21,6 +21,7 @@ RewriteRule ^su					index.php?c=Login [L]
 RewriteRule ^endsu				index.php?c=Login [L]
 RewriteRule ^pauper				index.php?c=Login [L]
 RewriteRule ^wachtwoord			index.php?c=Login [L]
+RewriteRule ^account			index.php?c=Login [L]
 RewriteRule ^sessions			index.php?c=Login [L]
 RewriteRule ^endsession			index.php?c=Login [L]
 

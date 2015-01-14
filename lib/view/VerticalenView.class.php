@@ -74,8 +74,8 @@ class VerticalenView implements View {
 					if ($profiel->verticaleleider) {
 						echo ' L';
 					}
-					if ($profiel->verticaleleider) {
-						echo ' <span title="Kringcoach van verticale ' . VerticalenModel::get($profiel->verticaleleider)->naam . '">C</span>';
+					if ($profiel->kringcoach) {
+						echo ' <span title="Kringcoach van verticale ' . VerticalenModel::get($profiel->kringcoach)->naam . '">C</span>';
 					}
 					if ($profiel->kringleider !== Kringleider::Nee) {
 						echo '</span>';

@@ -97,9 +97,35 @@ class WachtwoordWijzigenForm extends Formulier {
 	public function __construct(Account $account, $action, $require_current = true) {
 		parent::__construct($account, 'wwwijzigenform', '/wachtwoord/' . $action, 'Wachtwoord instellen');
 
-		$fields[] = new WachtwoordWijzigenField('wwreset', $account, $require_current);
+		$fields[] = new RequiredWachtwoordWijzigenField('wijzigww', $account, $require_current);
 		$fields[] = new FormDefaultKnoppen('/', false, true, true, true);
 		$fields[] = new HtmlComment('<img src="http://imgs.xkcd.com/comics/password_strength.png" title="http://xkcd.com/936/" style="margin-top: 50px;" />');
+
+		$this->addFields($fields);
+	}
+
+}
+
+class AccountForm extends Formulier {
+
+	public function __construct(Account $account) {
+		parent::__construct($account, 'accountForm', '/account/' . $account->uid, 'Inloggegevens aanpassen');
+
+		if (LoginModel::mag('P_LEDEN_MOD')) {
+			$roles = array();
+			foreach (AccessRoles::getTypeOptions() as $optie) {
+				$roles[$optie] = AccessRoles::getDescription($optie);
+			}
+			$fields[] = new SelectField('perm_role', $account->perm_role, 'Rechten', $roles);
+		}
+
+		$fields[] = new UsernameField('username', $account->username);
+		$fields[] = new RequiredEmailField('email', $account->email, 'E-mailadres');
+		$fields[] = new WachtwoordWijzigenField('wijzigww', $account, true);
+		$fields['btn'] = new FormDefaultKnoppen('/', false, true, true, true);
+
+		$delete = new DeleteKnop($this->action . '/delete');
+		$fields['btn']->addKnop($delete, true);
 
 		$this->addFields($fields);
 	}

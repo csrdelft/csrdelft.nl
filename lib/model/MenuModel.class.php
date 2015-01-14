@@ -114,13 +114,14 @@ class MenuModel extends CachedPersistenceModel {
 
 			case 'Verticalen':
 				foreach (VerticalenModel::instance()->prefetch() as $verticale) {
-					if ($verticale->letter != '') {
-						$item = $this->newMenuItem($parent->item_id);
-						$item->rechten_bekijken = $parent->rechten_bekijken;
-						$item->link = '/verticalen#' . $verticale->letter;
-						$item->tekst = $verticale->naam;
-						$parent->children[] = $item;
+					if ($verticale->letter == '') {
+						continue;
 					}
+					$item = $this->newMenuItem($parent->item_id);
+					$item->rechten_bekijken = $parent->rechten_bekijken;
+					$item->link = '/verticalen#' . $verticale->letter;
+					$item->tekst = $verticale->naam;
+					$parent->children[] = $item;
 				}
 				break;
 		}
@@ -157,7 +158,7 @@ class MenuModel extends CachedPersistenceModel {
 	public function getMenuRoot($naam) {
 		$root = $this->find('parent_id = ? AND tekst = ? ', array(0, $naam), null, null, 1)->fetch();
 		if ($root) {
-			return $this->cache($root, false);
+			return $this->cache($root);
 		}
 		return false;
 	}

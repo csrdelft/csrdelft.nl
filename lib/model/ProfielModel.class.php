@@ -55,51 +55,25 @@ class ProfielModel extends CachedPersistenceModel {
 		return Database::sqlExists(static::instance()->orm->getTableName(), 'duckname = ?', array($duck));
 	}
 
-	/**
-	 * Voeg een nieuw regeltje in de lid-tabel in met alleen een nieuw lid-nummer.
-	 * PAS OP: niet multi-user safe.
-	 */
-	public function nieuwProfiel($lidjaar, $lidstatus) {
-		$db = MijnSqli::instance();
+	public function nieuwProfiel($lidstatus, $lidjaar) {
+		$profiel = new Profiel();
+		$profiel->status = $lidstatus;
+		$profiel->lidjaar = $lidjaar;
+		return $profiel;
+	}
 
-		// Lichtingid zijn eerste 2 cijfers van lidnummer
-		$jj = substr($lidjaar, 2, 2);
-
-		// Volgnummer zijn de laatste 2 cijfers van lidnummer
-		$query = "SELECT max(uid) AS uid FROM profielen WHERE LEFT(uid, 2)='" . $jj . "' LIMIT 1;";
-		$result = $db->query($query);
-		if ($db->numRows($result) == 1) {
-			$lid = $db->result2array($result);
-			$volgnummer = substr($lid[0]['uid'], 2, 2) + 1;
+	public function create(PersistentEntity $profiel) {
+		// Lichting zijn de eerste 2 cijfers van uid
+		$jj = substr($profiel->lidjaar, 0, 2);
+		$laatste_uid = Database::sqlSelect(array('MAX(uid)'), 'profielen', 'LEFT(uid, 2) = ?', array($jj), null, null, 1)->fetchColumn();
+		if ($laatste_uid) {
+			// Volgnummer zijn de laatste 2 cijfers van uid
+			$volgnummer = intval(substr($laatste_uid, 2, 2)) + 1;
 		} else {
-			$volgnummer = '1';
+			$volgnummer = 1;
 		}
-		if ($volgnummer > 99) {
-			throw new Exception('Teveel leden dit jaar!');
-		}
-		// Lidnummer samenstellen
-		$uid = $jj . sprintf('%02d', $volgnummer);
-
-		// Zoek permissie voor de nieuwe status
-		$perm = AccessModel::instance()->getDefaultPermissionRole($lidstatus);
-
-		// Alleen bij novieten studiejaar invullen
-		$studiejaar = 0;
-		if ($lidstatus === LidStatus::Noviet) {
-			$studiejaar = $lidjaar;
-		}
-
-		// Opslaan in lid tabel
-		$changelog = 'Aangemaakt als ' . LidStatus::getDescription($lidstatus) . ' door [lid=' . LoginModel::getUid() . '] op [reldate]' . getDatetime() . '[/reldate][br]';
-
-		$query = "
-			INSERT INTO lid (uid, lidjaar, studiejaar, status, permissies, changelog, land, o_land)
-			VALUE ('" . $uid . "', '" . $lidjaar . "', '" . $studiejaar . "', '" . $lidstatus . "', '" . $perm . "', '" . $changelog . "', 'Nederland', 'Nederland');";
-		if ($db->query($query)) {
-			return $uid;
-		} else {
-			throw new Exception($db->error());
-		}
+		$profiel->uid = $jj . sprintf('%02d', $volgnummer);
+		return parent::create($profiel);
 	}
 
 	public function update(PersistentEntity $profiel) {

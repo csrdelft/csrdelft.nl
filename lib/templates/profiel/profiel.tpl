@@ -12,9 +12,15 @@
 						<a href="/profiel/{$profiel->uid}/dd" class="btn" title="Wijzig de lidstatus">{icon get="group_edit"}</a>
 					{/if}
 					<a href="/profiel/{$profiel->uid}/addToGoogleContacts/" class="btn" title="{*if $profiel->isInGoogleContacts()}Er bestaat al een contact met deze naam in je Google-contacts. Klik om te updaten.{else*}Voeg dit profiel toe aan mijn google adresboek{*/if*}"><img src="/plaetjes/knopjes/google.ico" width="16" height="16" alt="tovoegen aan Google contacts"/></a>
-					{if LoginModel::mag('P_ADMIN')}
-						<a href="/tools/stats.php?uid={$profiel->uid}" class="btn" title="Toon bezoeklog">{icon get="server_chart"}</a>
-						{*<a href="/profiel/{$profiel->uid}/wachtwoord" class="btn post confirm prompt" data="wachtwoord=" title="Wachtwoord wijzigen voor {$profiel->getNaam()}">{icon get="resetpassword"}</a>*}
+					{if LoginModel::getUid() === $profiel->uid OR LoginModel::mag('P_ADMIN')}
+						{if AccountModel::existsUid($profiel->uid)}
+							<a href="/account/{$profiel->uid}" class="btn accountEdit" title="Account bewerken"></a>
+						{else}
+							<a href="/account/{$profiel->uid}" class="btn accountCreate" title="Account aanmaken"></a>
+						{/if}
+						{if LoginModel::mag('P_ADMIN')}
+							<a href="/tools/stats.php?uid={$profiel->uid}" class="btn" title="Toon bezoeklog">{icon get="server_chart"}</a>
+						{/if}
 					{/if}
 					{if $profiel->status === LidStatus::Noviet AND LoginModel::mag('groep:novcie')}
 						<a href="/profiel/{$profiel->uid}/bewerken" class="btn"><img src="/plaetjes/forum/bewerken.png" title="Bewerk dit profiel" alt="bewerken" />Noviet bewerken</a><br />
@@ -34,7 +40,7 @@
 		<div class="gegevens">
 			<div class="label">&nbsp;</div> {$profiel->getNaam('civitas')}<br />
 			<div class="label">Lidnummer:</div>
-			{if LoginModel::instance()->maySuTo($profiel->getAccount())}
+			{if AccountModel::existsUid($profiel->uid) AND LoginModel::instance()->maySuTo($profiel->getAccount())}
 				<a href="/su/{$profiel->uid}/" title="Su naar dit lid">{$profiel->uid}</a>
 			{else}
 				{$profiel->uid}
@@ -129,10 +135,6 @@
 				{elseif $profiel->verticale!=0}
 					<div class="label">Verticale:</div>
 					<a href="/ledenlijst?q=verticale:{$profiel->verticale}">{$profiel->getVerticale()->naam}</a><br />
-				{/if}
-				{if $profiel->kringcoach}
-					<div class="label">Kring:</div>
-					{$profiel->getKringLink()}<br />
 				{/if}
 				{if $profiel->moot}
 					<div class="label">Oude moot:</div>

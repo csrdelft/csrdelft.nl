@@ -37,6 +37,22 @@ class AccountModel extends CachedPersistenceModel {
 		parent::__construct('security/');
 	}
 
+	public function maakAccount($uid) {
+		$profiel = ProfielModel::get($uid);
+		if (!$profiel) {
+			throw new Exception('Profiel bestaat niet');
+		}
+		$account = new Account();
+		$account->uid = $uid;
+		$account->username = $uid;
+		$account->email = $profiel->email;
+		$account->pass_hash = '';
+		$account->pass_since = '';
+		$account->perm_role = AccessModel::instance()->getDefaultPermissionRole($profiel->status);
+		$this->create($account);
+		return $account;
+	}
+
 	/**
 	 * Verify SSHA hash.
 	 * 
@@ -72,7 +88,7 @@ class AccountModel extends CachedPersistenceModel {
 	 *  - Reset naar random wachtwoord als null
 	 *  - Wordt niet gelogged in de changelog van het profiel
 	 */
-	public function resetWachtwoord(Account $account, $pass_plain) {
+	public function wijzigWachtwoord(Account $account, $pass_plain) {
 		// Niet veranderd?
 		if ($this->controleerWachtwoord($account, $pass_plain)) {
 			return false;

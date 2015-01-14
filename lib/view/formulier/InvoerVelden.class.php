@@ -936,6 +936,7 @@ class UsernameField extends TextField {
 
 	public function __construct($name, $value) {
 		parent::__construct($name, $value, 'Gebruikersnaam');
+		$this->title = 'Om mee in te loggen in plaats van het lidnummer.';
 	}
 
 	public function validate() {
@@ -948,7 +949,7 @@ class UsernameField extends TextField {
 		}
 		// check met strtolower is toegevoegd omdat je anders niet van case kan veranderen
 		// doordat usernameExists case-insensitive zoekt
-		if (ProfielModel::existsUsername($this->value) AND strtolower($this->value) !== strtolower($this->origvalue)) {
+		if (AccountModel::existsUsername($this->value) AND strtolower($this->value) !== strtolower($this->origvalue)) {
 			$this->error = 'Deze gebruikersnaam is al in gebruik';
 		}
 		return $this->error === '';
@@ -1110,7 +1111,7 @@ class WachtwoordWijzigenField extends InputField {
 
 	public function getValue() {
 		if ($this->isPosted()) {
-			$value = $_POST[$this->name . '_new'];
+			$value = filter_var($_POST[$this->name . '_new'], FILTER_SANITIZE_STRING);
 		} else {
 			$value = false;
 		}
@@ -1185,15 +1186,21 @@ class WachtwoordWijzigenField extends InputField {
 	public function getHtml() {
 		$html = '';
 		if ($this->require_current) {
-			$html .= '<label for="' . $this->getId() . '_current">Huidig wachtwoord</label>';
+			$html .= '<label for="' . $this->getId() . '_current">Huidig wachtwoord' . ($this->require_current ? '<span class="required"> *</span>' : '') . '</label>';
 			$html .= '<input type="password" autocomplete="off" id="' . $this->getId() . '_current" name="' . $this->name . '_current" />';
 		}
-		$html .= '<div class="WachtwoordField"><label for="' . $this->getId() . '_new">Nieuw wachtwoord</label>';
+		$html .= '<div class="WachtwoordField"><label for="' . $this->getId() . '_new">Nieuw wachtwoord' . ($this->required ? '<span class="required"> *</span>' : '') . '</label>';
 		$html .= '<input type="password" autocomplete="off" id="' . $this->getId() . '_new" name="' . $this->name . '_new" /></div>';
 		$html .= '<div class="WachtwoordField"><label for="' . $this->getId() . '_confirm">Herhaal nieuw wachtwoord</label>';
 		$html .= '<input type="password" autocomplete="off" id="' . $this->getId() . '_confirm" name="' . $this->name . '_confirm" /></div>';
 		return $html . '</div>';
 	}
+
+}
+
+class RequiredWachtwoordWijzigenField extends WachtwoordWijzigenField {
+
+	public $required = true;
 
 }
 

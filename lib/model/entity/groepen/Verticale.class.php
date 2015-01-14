@@ -45,7 +45,7 @@ class Verticale extends PersistentEntity {
 	public function getKringen() {
 		if (!isset($this->kringen)) {
 			$this->kringen = array();
-			$kringen = Database::sqlSelect(array('kring, GROUP_CONCAT(uid ORDER BY kringleider DESC, achternaam ASC) as kringleden'), 'profielen', 'verticale = ? AND ( status IN (?,?,?,?) OR (status = ? AND kring > 0) )', array($this->letter, LidStatus::Noviet, LidStatus::Lid, LidStatus::Gastlid, LidStatus::Kringel, LidStatus::Oudlid), 'kring', 'kring');
+			$kringen = Database::sqlSelect(array('kring, GROUP_CONCAT(uid ORDER BY kringleider ASC, achternaam ASC, voornaam ASC) as kringleden'), 'profielen', 'verticale = ? AND ( status IN (?,?,?,?) OR (status = ? AND kring > 0) )', array($this->letter, LidStatus::Noviet, LidStatus::Lid, LidStatus::Gastlid, LidStatus::Kringel, LidStatus::Oudlid), 'kring', 'kring');
 			foreach ($kringen as $result) {
 				$kring = $result['kring'];
 				$leden = explode(',', $result['kringleden']);

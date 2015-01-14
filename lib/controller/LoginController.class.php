@@ -19,6 +19,7 @@ class LoginController extends AclController {
 			'su'		 => 'P_ADMIN',
 			'endsu'		 => 'P_LOGGED_IN',
 			'pauper'	 => 'P_PUBLIC',
+			'account'	 => 'P_LOGGED_IN',
 			'wachtwoord' => 'P_PUBLIC',
 			'verify'	 => 'P_PUBLIC',
 			'sessions'	 => 'P_LOGGED_IN',
@@ -89,6 +90,32 @@ class LoginController extends AclController {
 		$this->view = new CsrLayoutPage($body);
 	}
 
+	public function account($uid = null, $delete = null) {
+		if ($uid === null OR ! LoginModel::mag('P_ADMIN')) {
+			$uid = LoginModel::getUid();
+		}
+		$account = AccountModel::get($uid);
+		if (!$account AND LoginModel::mag('P_ADMIN')) {
+			$account = AccountModel::instance()->maakAccount($uid);
+		}
+		if ($delete === 'delete' AND LoginModel::mag('P_ADMIN')) {
+			$result = AccountModel::instance()->delete($account);
+			if ($result === 1) {
+				setMelding('Account succesvol verwijderd', 1);
+				redirect('/profiel/' . $uid);
+			}
+			setMelding('Account verwijderen mislukt', -1);
+		}
+		$form = new AccountForm($account);
+		if ($form->validate()) {
+			// username, email & wachtwoord opslaan
+			$pass_plain = $form->findByName('wijzigww')->getValue();
+			AccountModel::instance()->wijzigWachtwoord($account, $pass_plain);
+			setMelding('Inloggegevens wijzigen geslaagd', 1);
+		}
+		$this->view = new CsrLayoutPage($form);
+	}
+
 	public function wachtwoord($action = null) {
 		$account = LoginModel::getAccount();
 		// wijzigen
@@ -96,8 +123,8 @@ class LoginController extends AclController {
 			$form = new WachtwoordWijzigenForm($account, $action);
 			if ($form->validate()) {
 				// wachtwoord opslaan
-				$pass_plain = $form->findByName('wwreset')->getValue();
-				AccountModel::instance()->resetWachtwoord($account, $pass_plain);
+				$pass_plain = $form->findByName('wijzigww')->getValue();
+				AccountModel::instance()->wijzigWachtwoord($account, $pass_plain);
 				setMelding('Wachtwoord instellen geslaagd', 1);
 			}
 		}
@@ -106,8 +133,8 @@ class LoginController extends AclController {
 			$form = new WachtwoordWijzigenForm($account, $action, false);
 			if ($form->validate()) {
 				// wachtwoord opslaan
-				$pass_plain = $form->findByName('wwreset')->getValue();
-				AccountModel::instance()->resetWachtwoord($account, $pass_plain);
+				$pass_plain = $form->findByName('wijzigww')->getValue();
+				AccountModel::instance()->wijzigWachtwoord($account, $pass_plain);
 				setMelding('Wachtwoord instellen geslaagd', 1);
 				// token verbruikt
 				OneTimeTokensModel::instance()->discardToken($account->uid, '/wachtwoord/reset');

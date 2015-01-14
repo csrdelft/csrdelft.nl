@@ -186,7 +186,11 @@ class ProfielForm extends Formulier {
 
 		$fields[] = new Subkopje('Contact');
 		//TODO: email & multiple contacts
-		//$fields[] = new RequiredEmailField('email', $profiel->getPrimaryEmail(), 'Emailadres');
+		$fields['email'] = new RequiredEmailField('email', $profiel->email, 'E-mailadres');
+		if ($inschrijven) {
+			$fields['email']->readonly = true;
+			$fields['email']->title = 'Wijzig je e-mailadres met het inloggegevens-formulier.';
+		}
 		$fields[] = new EmailField('msn', $profiel->msn, 'MSN');
 		$fields[] = new TextField('icq', $profiel->icq, 'ICQ', 10);
 		$fields[] = new EmailField('jid', $profiel->jid, 'Jabber/Google-talk');
@@ -281,11 +285,11 @@ class ProfielForm extends Formulier {
 	 * Maak een stukje bbcode aan met daarin de huidige wijziging, door wie en wanneer.
 	 */
 	public function changelog($diff) {
-		$changelog = '[div]Bewerking van [lid=' . LoginModel::getUid() . '] op [reldate]' . getDatetime() . '[/reldate][br]';
+		$changelog = '';
 		foreach ($diff as $change) {
 			$changelog .= '(' . $change->property . ') ' . $change->old_value . ' => ' . $change->new_value . '[br]';
 		}
-		return $changelog . '[/div][hr]';
+		return $changelog;
 	}
 
 }

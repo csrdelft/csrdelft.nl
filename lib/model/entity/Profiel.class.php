@@ -54,6 +54,7 @@ class Profiel extends PersistentEntity implements Agendeerbaar {
 	public $o_land;
 	public $o_telefoon;
 	// contact
+	public $email;
 	public $mobiel;
 	public $icq;
 	public $msn;
@@ -144,6 +145,7 @@ class Profiel extends PersistentEntity implements Agendeerbaar {
 		'o_land'				 => array(T::String),
 		'o_telefoon'			 => array(T::String),
 		// contact
+		'email'					 => array(T::String),
 		'mobiel'				 => array(T::String),
 		'icq'					 => array(T::String),
 		'msn'					 => array(T::String),
@@ -357,32 +359,32 @@ class Profiel extends PersistentEntity implements Agendeerbaar {
 			}
 			$k .= 'visitekaartje';
 			if ($this->isJarig()) {
-				$k.= ' jarig';
+				$k .= ' jarig';
 			}
 			if ($vorm === 'leeg') {
-				$k.= '" style="display: block; position: static;';
+				$k .= '" style="display: block; position: static;';
 			} else {
-				$k.= ' init';
+				$k .= ' init';
 			}
-			$k.= '">';
-			$k.= $this->getPasfotoTag(false);
-			$k.= '<div class="uid uitgebreid">(';
-			if (LoginModel::instance()->maySuTo($this->getAccount())) {
-				$k.= '<a href="/su/' . $this->uid . '" title="Su naar dit lid">' . $this->uid . '</a>';
+			$k .= '">';
+			$k .= $this->getPasfotoTag(false);
+			$k .= '<div class="uid uitgebreid">(';
+			if (AccountModel::existsUid($this->uid) AND LoginModel::instance()->maySuTo($this->getAccount())) {
+				$k .= '<a href="/su/' . $this->uid . '" title="Su naar dit lid">' . $this->uid . '</a>';
 			} else {
-				$k.= $this->uid;
+				$k .= $this->uid;
 			}
-			$k.= ')</div>';
-			$k.= '<p class="naam">' . $l . $this->getNaam('volledig');
+			$k .= ')</div>';
+			$k .= '<p class="naam">' . $l . $this->getNaam('volledig');
 			if (!$this->isLid()) {
-				$k.= '&nbsp;' . LidStatus::getChar($this->status);
+				$k .= '&nbsp;' . LidStatus::getChar($this->status);
 			}
-			$k.= '</a></p><p style="word-break: break-all;"><a href="mailto:' . $this->getPrimaryEmail() . '">' . $this->getPrimaryEmail() . '</a><br />';
-			$k.= $this->mobiel . '</p>';
-			$k.= '<p>' . $this->adres . '<br />';
-			$k.= $this->postcode . ' ' . $this->woonplaats . '</p>';
-			$k.= '<p class="uitgebreid">' . $this->lidjaar . ' ' . (empty($this->verticale) ? '' : $this->getVerticale()->naam) . '</p>';
-			$k.= '</div>';
+			$k .= '</a></p><p style="word-break: break-all;"><a href="mailto:' . $this->getPrimaryEmail() . '">' . $this->getPrimaryEmail() . '</a><br />';
+			$k .= $this->mobiel . '</p>';
+			$k .= '<p>' . $this->adres . '<br />';
+			$k .= $this->postcode . ' ' . $this->woonplaats . '</p>';
+			$k .= '<p class="uitgebreid">' . $this->lidjaar . ' ' . (empty($this->verticale) ? '' : $this->getVerticale()->naam) . '</p>';
+			$k .= '</div>';
 			if ($vorm === 'leeg') {
 				$naam = $k . $naam;
 			} else {
@@ -437,7 +439,7 @@ class Profiel extends PersistentEntity implements Agendeerbaar {
 			case 'voorletters':
 				$naam = $this->voorletters . ' ';
 				if (!empty($this->tussenvoegsel)) {
-					$naam.=$this->tussenvoegsel . ' ';
+					$naam .=$this->tussenvoegsel . ' ';
 				}
 				$naam .= $this->achternaam;
 				break;
@@ -624,14 +626,18 @@ class Profiel extends PersistentEntity implements Agendeerbaar {
 			return 'Geen kring';
 		}
 		$vertkring = $this->getVerticale()->letter . '.' . $this->kring;
+		$postfix = '';
 		if ($this->status === LidStatus::Kringel) {
 			$postfix = ' (kringel)';
-		} elseif ($this->verticaleleider) {
-			$postfix = ' (verticaaan)';
-		} elseif ($this->kringleider !== Kringleider::Nee) {
+		}
+		if ($this->verticaleleider) {
+			$postfix = ' (verticaan)';
+		}
+		if ($this->kringleider !== Kringleider::Nee) {
 			$postfix = ' (kringleider)';
-		} else {
-			$postfix = '';
+		}
+		if ($this->kringcoach) {
+			$postfix = ' <span title="Kringcoach van verticale ' . VerticalenModel::get($this->kringcoach)->naam . '">(kringcoach)</span>';
 		}
 		if ($link) {
 			return '<a href="/verticalen#kring' . $vertkring . '" title="Verticale ' . htmlspecialchars($this->getVerticale()->naam) . ' (' . $this->getVerticale()->letter . ') - kring ' . $this->kring . '">' . $this->getVerticale()->naam . ' ' . $vertkring . '</a>' . $postfix;

@@ -82,6 +82,21 @@ class ProfielController extends AclController {
 		return $this->profiel($profiel);
 	}
 
+	public function nieuw($lidjaar, $status) {
+		// Controleer invoer
+		$lidstatus = 'S_' . strtoupper($status);
+		if (!preg_match('/^[0-9]{4}$/', $lidjaar) OR ! in_array($lidstatus, LidStatus::getTypeOptions())) {
+			$this->geentoegang();
+		}
+		// NovCie mag novieten aanmaken
+		if ($lidstatus !== LidStatus::Noviet AND ! LoginModel::mag('P_LEDEN_MOD')) {
+			$this->geentoegang();
+		}
+		// Maak nieuw profiel zonder op te slaan
+		$profiel = ProfielModel::instance()->nieuwProfiel((int) $lidjaar, $lidstatus);
+		return $this->bewerken($profiel);
+	}
+
 	public function bewerken(Profiel $profiel) {
 		if (!$profiel->magBewerken()) {
 			$this->geentoegang();
@@ -89,7 +104,7 @@ class ProfielController extends AclController {
 		$form = new ProfielForm($profiel);
 		if ($form->validate()) {
 
-			//duck-pasfoto opslaan
+			// Duck-pasfoto opslaan
 			$duckfoto = $form->findByName('duckfoto');
 			if ($duckfoto AND $duckfoto->getModel() instanceof Afbeelding) {
 				$filename = $duckfoto->getModel()->filename;
@@ -103,24 +118,33 @@ class ProfielController extends AclController {
 			if (empty($diff)) {
 				setMelding('Geen wijzigingen', 0);
 			} else {
-				$changelog = $form->changelog($diff);
+				$nieuw = !$this->model->exists($profiel);
+				if ($nieuw) {
+					$changelog = '[div]Aangemaakt als ' . LidStatus::getDescription($profiel->status) . ' door [lid=' . LoginModel::getUid() . '] op [reldate]' . getDatetime() . '[/reldate][br]';
+				} else {
+					$changelog = '[div]Bewerking van [lid=' . LoginModel::getUid() . '] op [reldate]' . getDatetime() . '[/reldate][br]';
+				}
+				$changelog .= $form->changelog($diff);
 
-				//lidstatus wijzigen
+				// LidStatus wijzigen
 				foreach ($diff as $change) {
 					if ($change->property === 'status') {
 						$changelog .= $this->model->wijzig_lidstatus($profiel, $change->old_value);
 					}
 				}
 
-				$profiel->changelog = $changelog . $profiel->changelog;
+				$profiel->changelog = $changelog . '[/div][hr]' . $profiel->changelog;
 
-				if ($this->model->update($profiel)) {
-					setMelding(count($diff) . ' wijzigingen succesvol opgeslagen', 1);
+				if ($nieuw) {
+					$this->model->create($profiel);
+					setMelding('Profiel succesvol opgeslagen met lidnummer: ' . $profiel->uid, 1);
+				} elseif (1 === $this->model->update($profiel)) {
+					setMelding(count($diff) . ' wijziging(en) succesvol opgeslagen', 1);
 				} else {
-					setMelding('Opslaan van ' . count($diff) . ' wijzigingen mislukt', -1);
+					setMelding('Opslaan van ' . count($diff) . ' wijziging(en) mislukt', -1);
 				}
 			}
-			redirect(CSR_ROOT . '/profiel/' . $profiel->uid);
+			redirect('/profiel/' . $profiel->uid);
 		}
 		return $form;
 	}
@@ -153,37 +177,6 @@ class ProfielController extends AclController {
 		$msg = $gSync->syncLid($profiel->uid);
 		setMelding('Opgeslagen in Google Contacts: ' . $msg, 2);
 		return $this->profiel($profiel);
-	}
-
-	/**
-	 * Even wat uitleg over het toevoegen van nieuwe leden:
-	 * Door naar de url http://csrdelft.nl/leden/nieuw/2005/noviet/ te gaan wordt er een
-	 * nieuw profiel aangemaakt met het opgegeven lidjaar en lidstatus. Vervolgens wordt de browser meteen naar het
-	 * bewerken van het nieuwe profiel gestuurd, waar de gegevens van de noviet ingevoerd kunnen
-	 * worden. De code daarvoor is gelijk aan die van het bewerken van een bestaand profiel, met
-	 * een ander tekstje erboven.
-	 * 
-	 * @author Hans van Kranenburg (sep 2005)
-	 * 
-	 */
-	public function nieuw($lidjaar, $lidstatus) {
-		// Maak van een standaard statusstring van de input
-		$lidstatus = 'S_' . strtoupper($lidstatus);
-		if (!preg_match('/^[0-9]{4}$/', $lidjaar) OR ! in_array($lidstatus, LidStatus::getTypeOptions())) {
-			$this->geentoegang();
-		}
-		// NovCie mag novieten aanmaken
-		if ($lidstatus !== LidStatus::Noviet AND ! LoginModel::mag('P_LEDEN_MOD')) {
-			$this->geentoegang();
-		}
-		try {
-			//maak het nieuwe uid aan.
-			$uid = ProfielModel::nieuwProfiel($lidjaar, $lidstatus);
-			redirect('/profiel/' . $uid . '/bewerken');
-		} catch (Exception $e) {
-			setMelding('<h3>Nieuw lidnummer aanmaken mislukt.</h3>' . $e->getMessage(), -1);
-			redirect('/profiel/');
-		}
 	}
 
 	public function lijst() {
