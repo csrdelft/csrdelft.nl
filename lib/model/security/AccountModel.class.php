@@ -93,9 +93,12 @@ class AccountModel extends CachedPersistenceModel {
 		if ($this->controleerWachtwoord($account, $pass_plain)) {
 			return false;
 		}
-		$account->pass_hash = $this->maakWachtwoord($pass_plain);
-		$account->pass_since = getDateTime();
+		if ($pass_plain != '') {
+			$account->pass_hash = $this->maakWachtwoord($pass_plain);
+			$account->pass_since = getDateTime();
+		}
 		$this->update($account);
+		// Sync LDAP
 		$profiel = $account->getProfiel();
 		if ($profiel) {
 			$profiel->email = $account->email;
