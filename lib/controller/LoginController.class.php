@@ -14,16 +14,17 @@ class LoginController extends AclController {
 	public function __construct($query) {
 		parent::__construct($query, LoginModel::instance());
 		$this->acl = array(
-			'login'		 => 'P_PUBLIC',
-			'logout'	 => 'P_LOGGED_IN',
-			'su'		 => 'P_ADMIN',
-			'endsu'		 => 'P_LOGGED_IN',
-			'pauper'	 => 'P_PUBLIC',
-			'account'	 => 'P_LOGGED_IN',
-			'wachtwoord' => 'P_PUBLIC',
-			'verify'	 => 'P_PUBLIC',
-			'sessions'	 => 'P_LOGGED_IN',
-			'endsession' => 'P_LOGGED_IN'
+			'login'				 => 'P_PUBLIC',
+			'logout'			 => 'P_LOGGED_IN',
+			'su'				 => 'P_ADMIN',
+			'endsu'				 => 'P_LOGGED_IN',
+			'pauper'			 => 'P_PUBLIC',
+			'account'			 => 'P_LOGGED_IN',
+			'accountaanvragen'	 => 'P_PUBLIC',
+			'wachtwoord'		 => 'P_PUBLIC',
+			'verify'			 => 'P_PUBLIC',
+			'sessions'			 => 'P_LOGGED_IN',
+			'endsession'		 => 'P_LOGGED_IN'
 		);
 	}
 
@@ -82,12 +83,24 @@ class LoginController extends AclController {
 		} else {
 			$this->model->setPauper(true);
 		}
-
 		require_once 'model/CmsPaginaModel.class.php';
 		require_once 'view/CmsPaginaView.class.php';
-
 		$body = new CmsPaginaView(CmsPaginaModel::instance()->getPagina('mobiel'));
 		$this->view = new CsrLayoutPage($body);
+	}
+
+	protected function geentoegang() {
+		require_once 'model/CmsPaginaModel.class.php';
+		require_once 'view/CmsPaginaView.class.php';
+		if ($this->isPosted()) {
+			parent::geentoegang();
+		}
+		$body = new CmsPaginaView(CmsPaginaModel::instance()->getPagina('accountaanvragen'));
+		$this->view = new CsrLayoutPage($body);
+	}
+
+	public function accountaanvragen() {
+		return $this->geentoegang();
 	}
 
 	public function account($uid = null, $delete = null) {
@@ -96,15 +109,9 @@ class LoginController extends AclController {
 		}
 		// aanvragen
 		if ($uid === 'x999') {
-			require_once 'model/CmsPaginaModel.class.php';
-			require_once 'view/CmsPaginaView.class.php';
-			if (isPosted()) {
-				parent::geentoegang();
-			}
-			$body = new CmsPaginaView(CmsPaginaModel::instance()->getPagina('accountaanvragen'));
-			$this->view = new CsrLayoutPage($body);
-			return;
+			return $this->aanvragen();
 		}
+		// bewerken
 		$account = AccountModel::get($uid);
 		if (!$account AND LoginModel::mag('P_ADMIN')) {
 			$account = AccountModel::instance()->maakAccount($uid);
