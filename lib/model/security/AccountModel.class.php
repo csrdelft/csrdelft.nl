@@ -98,6 +98,7 @@ class AccountModel extends CachedPersistenceModel {
 		$this->update($account);
 		$profiel = $account->getProfiel();
 		if ($profiel) {
+			$profiel->email = $account->email;
 			ProfielModel::instance()->update($profiel);
 		}
 		return true;
