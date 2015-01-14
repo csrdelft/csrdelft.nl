@@ -23,10 +23,43 @@ $(document).ready(function(event){
     setbg($('section div#logo'), 800, 169);
 });
 
+$(window).scroll(function() {
+    var welkompos = $('#welkom').height();
+    var themapos = 2*welkompos;
+    var programmapos = $('#programma').height()+themapos;
+    var etiquettepos = $('#etiquette').height()+programmapos;
+    var pos = $(window).scrollTop();
+    if(pos >= themapos) {
+        $('#m').fadeIn();
+    } else {
+        $('#m').fadeOut();
+    }
+    if(pos < welkompos) {
+        $('nav li a').removeClass('selected');
+        $('nav li:first-child a').addClass('selected');
+    } else if(pos >= welkompos && pos < themapos ) {
+        $('nav li a').removeClass('selected');
+        $('nav li:nth-child(2) a').addClass('selected');
+    } else if(pos >= themapos && pos < programmapos ) {
+        $('nav li a').removeClass('selected');
+        $('nav li:nth-child(3) a').addClass('selected');
+    } else if(pos >= programmapos && pos < etiquettepos ) {
+        $('nav li a').removeClass('selected');
+        $('nav li:nth-child(4) a').addClass('selected');
+    } else if(pos >= etiquettepos ) {
+        $('nav li a').removeClass('selected');
+        $('nav li:nth-child(5) a').addClass('selected');
+    }
+})
+
 var parallax = function(el, event, imgwidth, imgheight, delay) {
     if($(window).width() <= 1280) {
         imgwidth = imgwidth/4*3;
         imgheight = imgheight/4*3;
+    }
+    if(imgwidth === 0 && imgheight === 0) {
+        imgwidth = $(el).width()*1.05;
+        imgheight = $(el).height()*0.85;
     }
     var x = event.pageX;
     var y = event.pageY;
@@ -49,6 +82,10 @@ $('#logo').mousemove(function(event) {
     parallax(this, event, 800, 169, 0.02);
 });
 
+$('#commissie').mousemove(function(event) {
+    parallax(this, event, 0, 0, 0.02);
+})
+
 $('nav a').click(function(event) {
     event.preventDefault();
     var el = $(this).attr('href');
@@ -57,9 +94,17 @@ $('nav a').click(function(event) {
     }, 800);
 });
 
+$('#m').click(function(event) {
+    event.preventDefault();
+    var el = $(this).parent().attr('href');
+    $('html, body').animate({
+        scrollTop: $(el).offset().top
+    }, 800);
+});
+
 $('nav a[href=#video]').click(function(event){
     player.playVideo();
-})
+});
 
 /**
 * Video player
@@ -89,13 +134,18 @@ player = new YT.Player('player', {
 }
 
 function onPlayerReady(event) {
-    
+    player.setPlaybackQuality('hd720');
 }
 
 function onPlayerStateChange(event) {
-    
+    var welkompos = $('#welkom').height();
+    var programmapos = $('#programma').height()+2*welkompos;
+    if(event.data === YT.PlayerState.ENDED && $(window).scrollTop() < programmapos) {
+        $('html, body').animate({
+            scrollTop: $('#programma').offset().top
+        }, 800);
+    }
 }
-
 function stopVideo() {
     player.stopVideo();
 }
