@@ -230,7 +230,10 @@ class Profiel extends PersistentEntity implements Agendeerbaar {
 	}
 
 	public function getPrimaryEmail() {
-		return $this->getAccount()->email;
+		if (AccountModel::existsUid($this->uid)) {
+			return $this->getAccount()->email;
+		}
+		return $this->email;
 	}
 
 	/**
