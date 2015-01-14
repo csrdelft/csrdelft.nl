@@ -338,7 +338,7 @@ class Profiel extends PersistentEntity implements Agendeerbaar {
 		return $this->getAdres();
 	}
 
-	public function getLink($vorm = 'user') {
+	public function getLink($vorm = 'civitas') {
 		if (!LoginModel::mag('P_LEDEN_READ') OR in_array($this->uid, array('x999', 'x101', 'x027', 'x222', '4444'))) {
 			return $this->getNaam();
 		}
@@ -405,7 +405,7 @@ class Profiel extends PersistentEntity implements Agendeerbaar {
 	 * @param string $vorm volledig, streeplijst, civitas, user, nick, bijnaam, aaidrom, Duckstad
 	 * @return string
 	 */
-	public function getNaam($vorm = 'user') {
+	public function getNaam($vorm = 'volledig') {
 		if ($vorm === 'user') {
 			$vorm = LidInstellingen::get('forum', 'naamWeergave');
 		}
