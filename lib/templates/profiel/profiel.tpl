@@ -14,8 +14,8 @@
 					<a href="/profiel/{$profiel->uid}/addToGoogleContacts/" class="btn" title="{*if $profiel->isInGoogleContacts()}Er bestaat al een contact met deze naam in je Google-contacts. Klik om te updaten.{else*}Voeg dit profiel toe aan mijn google adresboek{*/if*}"><img src="/plaetjes/knopjes/google.ico" width="16" height="16" alt="tovoegen aan Google contacts"/></a>
 					{if LoginModel::getUid() === $profiel->uid OR LoginModel::mag('P_ADMIN')}
 						{if AccountModel::existsUid($profiel->uid)}
-							<a href="/account/{$profiel->uid}" class="btn accountEdit" title="Account bewerken"></a>
-						{else}
+							<a href="/account/{$profiel->uid}" class="btn accountEdit" title="Inloggegevens bewerken"></a>
+						{elseif LoginModel::mag('P_ADMIN')}
 							<a href="/account/{$profiel->uid}" class="btn accountCreate" title="Account aanmaken"></a>
 						{/if}
 						{if LoginModel::mag('P_ADMIN')}
