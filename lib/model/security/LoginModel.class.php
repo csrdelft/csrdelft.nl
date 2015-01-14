@@ -56,7 +56,7 @@ class LoginModel extends PersistenceModel implements Validator {
 			$token = filter_input(INPUT_GET, 'private_token', FILTER_SANITIZE_STRING);
 			if (preg_match('/^[a-zA-Z0-9]{150}$/', $token)) {
 				$account = AccountModel::instance()->find('private_token = ?', array($token), null, null, 1)->fetch();
-				return $this->login($account->uid, null, true);
+				$this->login($account->uid, null, true, true);
 			}
 		}
 		if (!self::getAccount()) {
@@ -211,7 +211,7 @@ class LoginModel extends PersistenceModel implements Validator {
 	 * @param boolean $lockIP
 	 * @return boolean
 	 */
-	public function login($user, $pass_plain, $authByToken = false, $lockIP = false) {
+	public function login($user, $pass_plain, $authByToken = false, $lockIP = false, $noTimeout = false) {
 		$user = filter_var($user, FILTER_SANITIZE_STRING);
 		$pass_plain = filter_var($pass_plain, FILTER_SANITIZE_STRING);
 		switch (constant('MODE')) {
@@ -219,7 +219,7 @@ class LoginModel extends PersistenceModel implements Validator {
 				return $this->loginCli();
 			case 'WEB':
 			default:
-				return $this->loginWeb($user, $pass_plain, (boolean) $authByToken, (boolean) $lockIP);
+				return $this->loginWeb($user, $pass_plain, (boolean) $authByToken, (boolean) $lockIP, (boolean) $noTimeout);
 		}
 	}
 
@@ -233,10 +233,10 @@ class LoginModel extends PersistenceModel implements Validator {
 			);
 		}
 		$_SERVER['HTTP_USER_AGENT'] = 'CLI';
-		return $this->loginWeb($cred['user'], $cred['pass'], false, false);
+		return $this->loginWeb($cred['user'], $cred['pass']);
 	}
 
-	private function loginWeb($user, $pass_plain, $authByToken = false, $lockIP = false) {
+	private function loginWeb($user, $pass_plain, $authByToken = false, $lockIP = false, $noTimeout = false) {
 		$account = false;
 
 		// inloggen met lidnummer of gebruikersnaam
@@ -253,7 +253,7 @@ class LoginModel extends PersistenceModel implements Validator {
 
 		// check timeout
 		$timeout = AccountModel::instance()->moetWachten($account);
-		if ($timeout > 0) {
+		if (!$noTimeout AND $timeout > 0) {
 			$_SESSION['auth_error'] = 'Wacht ' . $timeout . ' seconden';
 			return false;
 		}
