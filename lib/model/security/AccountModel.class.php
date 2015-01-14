@@ -114,7 +114,7 @@ class AccountModel extends CachedPersistenceModel {
 	}
 
 	public function moetWachten(Account $account) {
-		$diff = strtotime($account->last_login_attempt) + 10 * pow(2, $account->failed_login_attempts - 1) - time();
+		$diff = strtotime($account->last_login_attempt) + 10 * pow(2, $account->failed_login_attempts - 3) - time();
 		if ($diff > 0) {
 			return $diff;
 		}
