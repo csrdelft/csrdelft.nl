@@ -307,10 +307,10 @@ class CsrBB extends eamBBParser {
 		if (isset($arguments['citaat'])) {
 			$van = trim(str_replace('_', ' ', $arguments['citaat']));
 		}
-		$lid = ProfielModel::getLink($van, 'user');
-		if ($lid !== false) {
-			$text .= ' van ' . $lid;
-		} elseif ($van !== '') {
+		$profiel = ProfielModel::getLink($van, 'user');
+		if ($profiel) {
+			$text .= ' van ' . $profiel;
+		} elseif ($van != '') {
 			if (isset($arguments['url']) AND url_like($arguments['url'])) {
 				$text .= ' van ' . external_url($arguments['url'], $van);
 			} else {
