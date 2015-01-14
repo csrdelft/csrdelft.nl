@@ -561,6 +561,7 @@ htdocs/tools/memcachestats.php -text
 htdocs/tools/naamlink.php -text
 htdocs/tools/naamsuggesties.php -text
 htdocs/tools/pasfotos.php -text
+htdocs/tools/passhash.php -text
 htdocs/tools/peilingbeheer.php -text
 htdocs/tools/phpinfo.php -text
 htdocs/tools/plaetjes.php -text
