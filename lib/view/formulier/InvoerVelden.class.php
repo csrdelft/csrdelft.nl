@@ -936,14 +936,14 @@ class UsernameField extends TextField {
 
 	public function __construct($name, Account $account) {
 		parent::__construct($name, $account->username, 'Gebruikersnaam');
-		$this->model = $account;
 		$this->title = 'Om mee in te loggen in plaats van het lidnummer.';
+		$this->model = $account;
 	}
 
 	public function getValue() {
 		$value = parent::getValue();
 		if ($value == '') {
-			return $this->model->uid;
+			return $this->getModel()->uid;
 		}
 		return $value;
 	}
@@ -1200,7 +1200,7 @@ class WachtwoordWijzigenField extends InputField {
 		}
 		$html .= '<div class="WachtwoordField"><label for="' . $this->getId() . '_new">Nieuw wachtwoord' . ($this->required ? '<span class="required"> *</span>' : '') . '</label>';
 		$html .= '<input type="password" autocomplete="off" id="' . $this->getId() . '_new" name="' . $this->name . '_new" /></div>';
-		$html .= '<div class="WachtwoordField"><label for="' . $this->getId() . '_confirm">Herhaal nieuw wachtwoord</label>';
+		$html .= '<div class="WachtwoordField"><label for="' . $this->getId() . '_confirm">Herhaal nieuw wachtwoord' . ($this->required ? '<span class="required"> *</span>' : '') . '</label>';
 		$html .= '<input type="password" autocomplete="off" id="' . $this->getId() . '_confirm" name="' . $this->name . '_confirm" /></div>';
 		return $html . '</div>';
 	}
