@@ -741,7 +741,7 @@ class eamBBParser {
 				$html = '<script>document.write("' . str_rot13(addslashes($html)) . '".replace(/[a-zA-Z]/g, function(c){ return String.fromCharCode((c<="Z"?90:122)>=(c=c.charCodeAt(0)+13)?c:c-26);}));</script>';
 			}
 		} else {
-			$html = '[email] Ongeldig email-adres (' . htmlspecialchars($mailto) . ')';
+			$html = '[email] Ongeldig e-mailadres (' . htmlspecialchars($mailto) . ')';
 		}
 		return $html;
 	}

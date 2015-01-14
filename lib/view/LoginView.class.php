@@ -97,6 +97,10 @@ class WachtwoordWijzigenForm extends Formulier {
 	public function __construct(Account $account, $action, $require_current = true) {
 		parent::__construct($account, 'wwwijzigenform', '/wachtwoord/' . $action, 'Wachtwoord instellen');
 
+		if ($account->email == '') {
+			setMelding('Vul uw e-mailadres in om uw wachtwoord te kunnen resetten als u deze bent vergeten.', 0);
+			$fields[] = new RequiredEmailField('email', $account->email, 'E-mailadres');
+		}
 		$fields[] = new RequiredWachtwoordWijzigenField('wijzigww', $account, $require_current);
 		$fields[] = new FormDefaultKnoppen('/', false, true, true, true);
 		$fields[] = new HtmlComment('<img src="http://imgs.xkcd.com/comics/password_strength.png" title="http://xkcd.com/936/" style="margin-top: 50px;" />');

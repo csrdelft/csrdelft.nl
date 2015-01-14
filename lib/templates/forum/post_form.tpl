@@ -49,9 +49,9 @@
 					Hier kunt u een bericht toevoegen aan het forum. Het zal echter niet direct zichtbaar worden, maar
 					&eacute;&eacute;rst door de PubCie worden goedgekeurd. Zoekmachines nemen berichten van dit openbare
 					forumdeel op in hun zoekresultaten.<br />
-					Het vermelden van <span class="cursief">uw naam en email-adres</span> is verplicht.
+					Het vermelden van <span class="cursief">uw naam en e-mailadres</span> is verplicht.
 				</div>
-				<input type="text" name="email" class="FormElement TextField forumEmail" placeholder="Email-adres" />
+				<input type="text" name="email" class="FormElement TextField forumEmail" placeholder="E-mailadres" />
 				<input type="text" name="firstname" value="" class="FormElement TextField verborgen" />{* spam trap, must be kept empty! *}
 				<br /><br />
 			{/if}

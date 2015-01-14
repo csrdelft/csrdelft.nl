@@ -563,7 +563,7 @@ class ForumController extends Controller {
 			$wacht_goedkeuring = true;
 			$mailadres = filter_input(INPUT_POST, 'email', FILTER_SANITIZE_EMAIL);
 			if (!email_like($mailadres)) {
-				setMelding('U moet een geldig email-adres opgeven!', -1);
+				setMelding('U moet een geldig e-mailadres opgeven!', -1);
 				redirect($url);
 			}
 			if ($filter->isSpam($mailadres)) { //TODO: logging

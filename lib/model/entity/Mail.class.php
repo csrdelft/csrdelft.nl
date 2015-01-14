@@ -47,7 +47,7 @@ class Mail {
 
 	public function setFrom($email, $name = null) {
 		if (!email_like($email)) {
-			throw new Exception('Emailadres in $from geen valide email-adres');
+			throw new Exception('Emailadres in $from geen valide e-mailadres');
 		}
 		$this->from = array($email => $name);
 	}
@@ -63,7 +63,7 @@ class Mail {
 
 	public function setReplyTo($email, $name = null) {
 		if (!email_like($email)) {
-			throw new Exception('Emailadres in $reply_to geen valide email-adres');
+			throw new Exception('Emailadres in $reply_to geen valide e-mailadres');
 		}
 		$this->replyTo = array($email => $name);
 	}

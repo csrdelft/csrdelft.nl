@@ -854,7 +854,7 @@ class StudieField extends TextField {
 class EmailField extends TextField {
 
 	/**
-	 * Dikke valideerfunctie voor emails.
+	 * Dikke valideerfunctie voor e-mails.
 	 */
 	public function validate() {
 		if (!parent::validate()) {
@@ -864,9 +864,9 @@ class EmailField extends TextField {
 		if ($this->value == '') {
 			return true;
 		}
-		// bevat het email-adres een @
+		// bevat het e-mailadres een @
 		if (strpos($this->value, '@') === false) {
-			$this->error = 'Ongeldig formaat email-adres';
+			$this->error = 'Ongeldig formaat e-mailadres';
 		} else {
 			# anders gaan we m ontleden en controleren
 			list ($usr, $dom) = explode('@', $this->value);
