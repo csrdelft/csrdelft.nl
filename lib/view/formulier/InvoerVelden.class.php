@@ -1062,7 +1062,6 @@ class WachtwoordWijzigenField extends InputField {
 		$this->require_current = $require_current;
 		parent::__construct($name, null, null, $account);
 		$this->title = 'Het nieuwe wachtwoord moet langer zijn dan 23 tekens of langer dan 10 en ook hoofdletters, kleine letters, cijfers en speciale tekens bevatten.';
-		$this->leden_mod = (LoginModel::getUid() !== $account->uid);
 
 		// blacklist gegevens van account
 		$this->blacklist[] = $account->username;
@@ -1143,13 +1142,10 @@ class WachtwoordWijzigenField extends InputField {
 		$confirm = filter_var($_POST[$this->name . '_confirm'], FILTER_SANITIZE_STRING);
 		$length = strlen(utf8_decode($new));
 		if ($this->require_current AND empty($current)) {
-			if ($this->leden_mod AND LoginModel::mag('P_LEDEN_MOD')) {
-				// exception for leden mod
-			} else {
-				$this->error = 'U dient uw huidige wachtwoord ook in te voeren';
-			}
-		}
-		if (!$this->require_current OR ! empty($new)) {
+			$this->error = 'U moet uw huidige wachtwoord invoeren';
+		} elseif ($this->required AND empty($new)) {
+			$this->error = 'U moet een nieuw wachtwoord invoeren';
+		} elseif (!$this->require_current OR ! empty($new)) {
 			if ($this->require_current AND $current == $new) {
 				$this->error = 'Het nieuwe wachtwoord is hetzelfde als het huidige wachtwoord';
 			} elseif ($length < 10) {
