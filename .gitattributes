@@ -4506,6 +4506,7 @@ lib/view/EetplanView.class.php -text
 lib/view/ForumView.class.php -text
 lib/view/FotoAlbumView.class.php -text
 lib/view/HtmlPage.abstract.php -text
+lib/view/InstantSearchForm.class.php -text
 lib/view/InstellingenBeheerView.class.php -text
 lib/view/IsHetAlView.class.php -text
 lib/view/JsonResponse.class.php -text
@@ -4526,7 +4527,6 @@ lib/view/VerjaardagenView.class.php -text
 lib/view/VerticalenView.class.php -text
 lib/view/View.interface.php -text
 lib/view/Zijbalk.static.php -text
-lib/view/ZoekbalkView.class.php -text
 lib/view/courant/CourantArchiefView.class.php -text
 lib/view/courant/CourantBeheerView.class.php -text
 lib/view/courant/CourantView.class.php -text

@@ -1,12 +1,12 @@
 <?php
 
 /**
- * ZoekbalkView.class.php
+ * InstantSearchForm.class.php
  * 
  * @author P.W.G. Brussee <brussee@live.nl>
  * 
  */
-class ZoekbalkView extends Formulier {
+class InstantSearchForm extends Formulier {
 
 	public function __construct() {
 		parent::__construct(null, 'cd-zoek-form', null);

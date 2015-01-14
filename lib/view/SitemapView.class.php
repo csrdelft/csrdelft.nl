@@ -30,9 +30,11 @@ class SitemapView implements View {
 	}
 
 	public function view() {
+		echo '<ul>';
 		foreach ($this->model->getChildren() as $parent) {
-			echo $this->viewTree($parent, 1);
+			echo '<li>' . $this->viewTree($parent, 1) . '</li>';
 		}
+		echo '</ul>';
 		echo $this->getScriptTag();
 	}
 
@@ -43,12 +45,13 @@ class SitemapView implements View {
 				$kopje->h += $level - 1;
 				$kopje->view();
 				$this->javascript .= $kopje->getJavascript();
+				echo '<ul>';
 				foreach ($item->getChildren() as $child) {
 					echo $this->viewTree($child, $level++);
 				}
-				echo '</div>';
+				echo '</ul></div>';
 			} else {
-				echo '<a href="' . $item->link . '">' . $item->tekst . '</a>';
+				echo '<li><a href="' . $item->link . '">' . $item->tekst . '</a></li>';
 			}
 		}
 	}

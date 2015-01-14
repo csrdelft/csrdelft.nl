@@ -52,7 +52,7 @@ class MainMenuView extends MenuView {
 		$this->smarty->assign('mcount', $mcount->count());
 		$this->smarty->assign('fcount', ForumPostsModel::instance()->getAantalWachtOpGoedkeuring());
 		$this->smarty->assign('favorieten', MenuModel::instance()->getMenu(LoginModel::getUid()));
-		$this->smarty->assign('zoekbalk', new ZoekbalkView());
+		$this->smarty->assign('zoekbalk', new InstantSearchForm());
 		$this->smarty->display('menu/main.tpl');
 	}
 
