@@ -214,6 +214,7 @@ class LoginController extends AclController {
 			if ($account AND AccessModel::mag($account, 'P_LOGGED_IN', true) AND OneTimeTokensModel::instance()->verifyToken($account->uid, $tokenValue)) {
 				// redirect by verifyToken
 			} else {
+				setMelding('Deze link is niet meer geldig', -1);
 				require_once 'model/CmsPaginaModel.class.php';
 				require_once 'view/CmsPaginaView.class.php';
 				$form = new CmsPaginaView(CmsPaginaModel::instance()->getPagina('geentoegang'));

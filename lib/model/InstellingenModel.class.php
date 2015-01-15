@@ -36,6 +36,7 @@ class Instellingen extends CachedPersistenceModel {
 		),
 		'beveiliging'	 => array(
 			'one_time_token_expire_after'				 => '+1 hour',
+			'one_time_token_expire_after_verified'		 => '+1 minute',
 			'wachtwoorden_verlopen_ouder_dan'			 => '-1 year',
 			'wachtwoorden_verlopen_waarschuwing_vooraf'	 => '-2 weeks'
 		),
@@ -65,8 +66,8 @@ class Instellingen extends CachedPersistenceModel {
 			'mail_niet_meeeten'						 => 'P.S.: U eet NIET mee met de maaltijd.'
 		),
 		'forum'			 => array(
-			'reageren_tijd'			 => '-2 minutes',
-			'grafiek_periode'		 => '-2 months',
+			'reageren_tijd'					 => '-2 minutes',
+			'grafiek_periode'				 => '-2 months',
 			'externen_geentoegang_gesloten'	 => '-1 year'
 		),
 		'maaltijden'	 => array(
