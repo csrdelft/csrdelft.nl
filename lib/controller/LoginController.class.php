@@ -210,11 +210,12 @@ class LoginController extends AclController {
 		if ($form->validate()) {
 			$uid = $form->findByName('user')->getValue();
 			$account = AccountModel::get($uid);
-			// als je sessie ooit met token is ingelogd (bijv. bij 2e keer verifieren) dan moet $allowAuthByToken = true
-			if ($account AND AccessModel::mag($account, 'P_LOGGED_IN', true) AND OneTimeTokensModel::instance()->verifyToken($account->uid, $tokenValue)) {
+			if ($account AND AccessModel::mag($account, 'P_LOGGED_IN') AND OneTimeTokensModel::instance()->verifyToken($account->uid, $tokenValue)) {
 				// redirect by verifyToken
 			} else {
-				setMelding('Deze link is niet meer geldig', -1);
+				require_once 'model/CmsPaginaModel.class.php';
+				require_once 'view/CmsPaginaView.class.php';
+				$form = new CmsPaginaView(CmsPaginaModel::instance()->getPagina('geentoegang'));
 			}
 		}
 		$this->view = new CsrLayoutPage($form);
