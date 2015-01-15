@@ -20,14 +20,7 @@ class OneTimeTokensModel extends PersistenceModel {
 
 	public function verifyToken($uid, $tokenString) {
 		$token = $this->find('uid = ? AND token = ?', array($uid, $tokenString), null, null, 1)->fetch();
-		if (!$token) {
-			return false;
-		}
-		if ($token->verified) {
-			setMelding('Je kunt deze link maar 1x gebruiken', -1);
-			return false;
-		} elseif (time() >= strtotime($token->expire)) {
-			setMelding('Deze link is niet meer geldig', -1);
+		if (!$token OR $token->verified OR time() >= strtotime($token->expire)) {
 			return false;
 		}
 		if (LoginModel::instance()->login($token->uid, null, true, true, true)) {
