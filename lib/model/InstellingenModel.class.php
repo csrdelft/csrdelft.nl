@@ -36,7 +36,6 @@ class Instellingen extends CachedPersistenceModel {
 		),
 		'beveiliging'	 => array(
 			'one_time_token_expire_after'				 => '+1 hour',
-			'one_time_token_expire_after_verified'		 => '+1 minute',
 			'wachtwoorden_verlopen_ouder_dan'			 => '-1 year',
 			'wachtwoorden_verlopen_waarschuwing_vooraf'	 => '-2 weeks'
 		),

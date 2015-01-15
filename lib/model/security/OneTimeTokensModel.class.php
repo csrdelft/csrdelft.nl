@@ -25,7 +25,6 @@ class OneTimeTokensModel extends PersistenceModel {
 		}
 		if (LoginModel::instance()->login($token->uid, null, true, true, true)) {
 			$token->verified = true;
-			$token->expire = getDateTime(Instellingen::get('beveiliging', 'one_time_token_expire_after_verified'));
 			$this->update($token);
 			redirect($token->url);
 		}
