@@ -21,14 +21,17 @@ class OneTimeTokensModel extends PersistenceModel {
 	public function verifyToken($uid, $tokenString) {
 		$token = $this->find('uid = ? AND token = ?', array($uid, $tokenString), null, null, 1)->fetch();
 		if (!$token OR $token->uid !== LoginModel::getUid()) {
-			setMelding('geen token gevonden OF uid ' . $token->uid . ' !== ' . LoginModel::getUid(), 0); //DEBUG
+			echo 'geen token gevonden OF uid ' . $token->uid . ' !== ' . LoginModel::getUid(); //DEBUG
+			exit;
 			return false;
 		}
 		if ($token->verified) {
-			setMelding('Je kunt deze link maar 1x gebruiken', -1);
+			echo 'Je kunt deze link maar 1x gebruiken';
+			exit;
 			return false;
 		} elseif (time() < strtotime($token->expire)) {
-			setMelding('Deze link is niet meer geldig', -1);
+			echo 'Deze link is niet meer geldig';
+			exit;
 			return false;
 		}
 		if (LoginModel::instance()->login($token->uid, null, true, true, true)) {
@@ -36,7 +39,8 @@ class OneTimeTokensModel extends PersistenceModel {
 			$this->update($token);
 			redirect($token->url);
 		}
-		setMelding('TEST', 0); //DEBUG
+		echo 'TEST'; //DEBUG
+		exit;
 		return false;
 	}
 
