@@ -26,7 +26,7 @@ class OneTimeTokensModel extends PersistenceModel {
 		if ($token->verified) {
 			setMelding('Je kunt deze link maar 1x gebruiken', -1);
 			return false;
-		} elseif (time() < strtotime($token->expire)) {
+		} elseif (time() >= strtotime($token->expire)) {
 			setMelding('Deze link is niet meer geldig', -1);
 			return false;
 		}
