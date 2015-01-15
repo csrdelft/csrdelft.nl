@@ -57,7 +57,7 @@ class LoginModel extends PersistenceModel implements Validator {
 			if (preg_match('/^[a-zA-Z0-9]{150}$/', $token)) {
 				$account = AccountModel::instance()->find('private_token = ?', array($token), null, null, 1)->fetch();
 				$expire = getDateTime(time() + (int) Instellingen::get('beveiliging', 'cookie_lifetime_seconds'));
-				$this->login($account->uid, null, $expire, true);
+				$this->login($account->uid, null, true, $expire, true);
 			}
 		}
 		if (!self::getAccount()) {
@@ -202,21 +202,25 @@ class LoginModel extends PersistenceModel implements Validator {
 	/**
 	 * Dispatch the login proces to a separate function based on MODE.
 	 * 
-	 * Als een gebruiker wordt ingelogd met $authByToken == true, dan wordt het wachtwoord
-	 * van de gebruiker NIET gecontroleerd, en wordt er vanuit gegaan dat een VOORAF
-	 * gecontroleerd token voldoende is voor authenticatie.
-	 * 
 	 * Als een gebruiker wordt ingelogd met $lockIP == true, dan wordt het IP-adres
 	 * van de gebruiker opgeslagen in de sessie, en het sessie-cookie zal ALLEEN
 	 * vanaf dat adres toegang geven tot de website.
 	 * 
+	 * Als een gebruiker wordt ingelogd met $expire == DateTime, dan verloopt de sessie
+	 * van de gebruiker op het gegeven moment en wordt de gebruiker uigelogd.
+	 * 
+	 * Als een gebruiker wordt ingelogd met $authByToken == true, dan wordt het wachtwoord
+	 * van de gebruiker NIET gecontroleerd, en wordt er vanuit gegaan dat een VOORAF
+	 * gecontroleerd token voldoende is voor authenticatie.
+	 * 
 	 * @param string $user
 	 * @param string $pass_plain
+	 * @param boolean $lockIP
 	 * @param string $expire
 	 * @param boolean $authByToken
 	 * @return boolean
 	 */
-	public function login($user, $pass_plain, $expire = null, $authByToken = false) {
+	public function login($user, $pass_plain, $lockIP = false, $expire = null, $authByToken = false) {
 		$user = filter_var($user, FILTER_SANITIZE_STRING);
 		$pass_plain = filter_var($pass_plain, FILTER_SANITIZE_STRING);
 		switch (constant('MODE')) {
@@ -224,7 +228,7 @@ class LoginModel extends PersistenceModel implements Validator {
 				return $this->loginCli();
 			case 'WEB':
 			default:
-				return $this->loginWeb($user, $pass_plain, $expire, $authByToken);
+				return $this->loginWeb($user, $pass_plain, $lockIP, $expire, $authByToken);
 		}
 	}
 
@@ -241,7 +245,7 @@ class LoginModel extends PersistenceModel implements Validator {
 		return $this->loginWeb($cred['user'], $cred['pass'], null);
 	}
 
-	private function loginWeb($user, $pass_plain, $expire, $authByToken) {
+	private function loginWeb($user, $pass_plain, $lockIP, $expire, $authByToken) {
 		$account = false;
 
 		// inloggen met lidnummer of gebruikersnaam
