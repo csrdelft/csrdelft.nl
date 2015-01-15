@@ -212,9 +212,10 @@ class LoginController extends AclController {
 			$account = AccountModel::get($uid);
 			if ($account AND AccessModel::mag($account, 'P_LOGGED_IN') AND OneTimeTokensModel::instance()->verifyToken($account->uid, $tokenValue)) {
 				// redirect by verifyToken
-				// OF foutmelding
 			} else {
-				$this->geentoegang();
+				require_once 'model/CmsPaginaModel.class.php';
+				require_once 'view/CmsPaginaView.class.php';
+				$form = new CmsPaginaView(CmsPaginaModel::instance()->getPagina('geentoegang'));
 			}
 		}
 		$this->view = new CsrLayoutPage($form);
