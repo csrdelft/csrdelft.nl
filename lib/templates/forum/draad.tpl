@@ -55,7 +55,12 @@
 		{if $draad->verwijderd}
 			<span class="draad-verwijderd">Dit onderwerp is verwijderd.</span>
 		{elseif $draad->gesloten}
-			<span class="draad-gesloten">U kunt hier niet meer reageren omdat dit onderwerp gesloten is.</span>
+			<span class="draad-gesloten">
+				U kunt hier niet meer reageren omdat dit onderwerp gesloten is.
+				{if $deel->isOpenbaar() AND strtotime($draad->laatst_gewijzigd) < strtotime(Instellingen::get('forum', 'externen_geentoegang_gesloten')}
+					Dit onderwerp is tevens verborgen voor externen en zoekmachines.
+				{/if}
+			</span>
 		{elseif !$draad->magPosten()}
 			<span class="draad-readonly">U mag in dit deel van het forum niet reageren.</span>
 		{/if}
