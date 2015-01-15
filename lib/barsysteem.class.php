@@ -33,7 +33,18 @@ class Barsysteem {
 			if ($row["stekUID"]) {
 				$profiel = ProfielModel::get($row["stekUID"]);
 				if ($profiel) {
-					$persoon["naam"] = $profiel->getNaam();
+
+					if (empty($profiel->voornaam)) {
+						$naam = $profiel->voorletters . ' ';
+					} else {
+						$naam = $profiel->voornaam . ' ';
+					}
+					if (!empty($profiel->tussenvoegsel)) {
+						$naam .= $profiel->tussenvoegsel . ' ';
+					}
+					$naam .= $profiel->achternaam;
+
+					$persoon["naam"] = $naam;
 					$persoon["status"] = $profiel->status;
 				}
 			}
