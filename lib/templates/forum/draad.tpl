@@ -57,7 +57,7 @@
 		{elseif $draad->gesloten}
 			<span class="draad-gesloten">
 				U kunt hier niet meer reageren omdat dit onderwerp gesloten is.
-				{if $deel->isOpenbaar() AND strtotime($draad->laatst_gewijzigd) < strtotime(Instellingen::get('forum', 'externen_geentoegang_gesloten')}
+				{if $draad->getForumDeel()->isOpenbaar() AND strtotime($draad->laatst_gewijzigd) < strtotime(Instellingen::get('forum', 'externen_geentoegang_gesloten'))}
 					Dit onderwerp is tevens verborgen voor externen en zoekmachines.
 				{/if}
 			</span>
