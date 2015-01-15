@@ -53,16 +53,16 @@
 
 	{capture name='magreageren'}
 		{if $draad->verwijderd}
-			<span class="draad-verwijderd">Dit onderwerp is verwijderd.</span>
+			<div class="draad-verwijderd">Dit onderwerp is verwijderd.</div>
 		{elseif $draad->gesloten}
-			<span class="draad-gesloten">
+			<div class="draad-gesloten">
 				U kunt hier niet meer reageren omdat dit onderwerp gesloten is.
 				{if $draad->getForumDeel()->isOpenbaar() AND strtotime($draad->laatst_gewijzigd) < strtotime(Instellingen::get('forum', 'externen_geentoegang_gesloten'))}
-					Dit onderwerp is tevens verborgen voor externen en zoekmachines.
+					<div class="dikgedrukt">Dit onderwerp is tevens verborgen voor externen en zoekmachines.</div>
 				{/if}
-			</span>
+			</div>
 		{elseif !$draad->magPosten()}
-			<span class="draad-readonly">U mag in dit deel van het forum niet reageren.</span>
+			<div class="draad-readonly">U mag in dit deel van het forum niet reageren.</div>
 		{/if}
 	{/capture}
 
