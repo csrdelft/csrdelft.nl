@@ -40,6 +40,7 @@ function fatal_handler(Exception $ex = null) {
 		$debug['trace'] = debug_backtrace(false);
 		$debug['POST'] = $_POST;
 		$debug['GET'] = $_GET;
+		$debug['SESSION'] = $_SESSION;
 		$debug['SERVER'] = $_SERVER;
 		if ($error['type'] === E_CORE_ERROR OR $error['type'] === E_ERROR) {
 
