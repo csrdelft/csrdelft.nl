@@ -266,6 +266,8 @@ class LoginModel extends PersistenceModel implements Validator {
 			AccountModel::instance()->failedLoginAttempt($account);
 			return false;
 		}
+		// Clear session
+		session_unset();
 
 		// Subject assignment:
 		$_SESSION['_uid'] = $account->uid;
