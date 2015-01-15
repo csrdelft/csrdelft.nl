@@ -388,13 +388,13 @@ class GoogleSync {
 
 		if ($this->extendedExport) {
 			//nickname
-			if ($profiel->getNickname() != '') {
-				$nick = $doc->createElement('gContact:nickname', $profiel->getNickname());
+			if ($profiel->nickname != '') {
+				$nick = $doc->createElement('gContact:nickname', $profiel->nickname);
 				$entry->appendChild($nick);
 			}
 			//duckname
-			if ($profiel->getDuckname() != '') {
-				$duck = $doc->createElement('gContact:duckname', $profiel->getDuckname());
+			if ($profiel->duckname != '') {
+				$duck = $doc->createElement('gContact:duckname', $profiel->duckname);
 				$entry->appendChild($duck);
 			}
 			//initialen
