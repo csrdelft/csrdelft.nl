@@ -58,7 +58,7 @@
 			<div class="draad-gesloten">
 				U kunt hier niet meer reageren omdat dit onderwerp gesloten is.
 				{if $draad->getForumDeel()->isOpenbaar() AND strtotime($draad->laatst_gewijzigd) < strtotime(Instellingen::get('forum', 'externen_geentoegang_gesloten'))}
-					<div class="dikgedrukt">Dit onderwerp is tevens verborgen voor externen en zoekmachines.</div>
+					<div class="dikgedrukt">Dit externe onderwerp is niet meer toegankelijk voor externen en zoekmachines.</div>
 				{/if}
 			</div>
 		{elseif !$draad->magPosten()}
