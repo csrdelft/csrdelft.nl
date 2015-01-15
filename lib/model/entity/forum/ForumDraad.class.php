@@ -174,8 +174,13 @@ class ForumDraad extends PersistentEntity {
 		if ($this->verwijderd AND ! $this->magModereren()) {
 			return false;
 		}
-		if (!LoginModel::mag('P_LOGGED_IN') AND ( !$this->gesloten OR ( $this->gesloten AND strtotime($this->laatst_gewijzigd) < strtotime(Instellingen::get('forum', 'externen_geentoegang')) ) )) {
-			return false;
+		if (!LoginModel::mag('P_LOGGED_IN')) {
+			if ($this->gesloten) {
+				return false;
+			}
+			if (!$this->gesloten AND strtotime($this->laatst_gewijzigd) < strtotime(Instellingen::get('forum', 'externen_geentoegang'))) {
+				return false;
+			}
 		}
 		return $this->getForumDeel()->magLezen() OR ( $this->isGedeeld() AND $this->getGedeeldMet()->magLezen() );
 	}
