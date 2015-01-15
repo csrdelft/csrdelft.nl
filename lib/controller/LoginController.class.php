@@ -216,8 +216,6 @@ class LoginController extends AclController {
 				require_once 'model/CmsPaginaModel.class.php';
 				require_once 'view/CmsPaginaView.class.php';
 				$form = new CmsPaginaView(CmsPaginaModel::instance()->getPagina('geentoegang'));
-
-				setMelding(print_r($_SESSION, true), 0); //DEBUG
 			}
 		}
 		$this->view = new CsrLayoutPage($form);

@@ -20,7 +20,7 @@ class OneTimeTokensModel extends PersistenceModel {
 
 	public function verifyToken($uid, $tokenString) {
 		$token = $this->find('uid = ? AND token = ?', array($uid, $tokenString), null, null, 1)->fetch();
-		if (!$token OR $token->uid !== LoginModel::getUid()) {
+		if (!$token) {
 			return false;
 		}
 		if ($token->verified) {
