@@ -48,7 +48,7 @@ class OneTimeTokensModel extends PersistenceModel {
 	public function isVerified($uid, $url) {
 		$token = $this->retrieveByPrimaryKey(array($uid, $url));
 		if ($token) {
-			return $this->verified AND LoginModel::getUid() === $this->uid AND time() < strtotime($this->expire);
+			return $token->verified AND LoginModel::getUid() === $token->uid AND time() < strtotime($token->expire);
 		}
 		return false;
 	}
