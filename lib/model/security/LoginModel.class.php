@@ -56,7 +56,8 @@ class LoginModel extends PersistenceModel implements Validator {
 			$token = filter_input(INPUT_GET, 'private_token', FILTER_SANITIZE_STRING);
 			if (preg_match('/^[a-zA-Z0-9]{150}$/', $token)) {
 				$account = AccountModel::instance()->find('private_token = ?', array($token), null, null, 1)->fetch();
-				$this->login($account->uid, null, true, true);
+				$expire = getDateTime(time() + (int) Instellingen::get('beveiliging', 'cookie_lifetime_seconds'));
+				$this->login($account->uid, null, $expire, true);
 			}
 		}
 		if (!self::getAccount()) {
@@ -78,12 +79,12 @@ class LoginModel extends PersistenceModel implements Validator {
 		if ($_SESSION['_uid'] === 'x999') {
 			return true;
 		}
-		// Check ingelogd account
+		// Controleer of ingelogd account bestaat
 		$account = self::getAccount();
 		if (!$account) {
 			return false;
 		}
-		// Check of wachtwoord is verlopen:
+		// Controleer of wachtwoord is verlopen:
 		$pass_since = strtotime($account->pass_since);
 		$verloop_na = strtotime(Instellingen::get('beveiliging', 'wachtwoorden_verlopen_ouder_dan'));
 		$waarschuwing_vooraf = strtotime(Instellingen::get('beveiliging', 'wachtwoorden_verlopen_waarschuwing_vooraf'), $verloop_na);
@@ -104,20 +105,24 @@ class LoginModel extends PersistenceModel implements Validator {
 				setMelding('Uw wachtwoord verloopt over ' . $dagen, 2);
 			}
 		}
-		// Check login session
+		// Controleer of sessie bestaat
 		$session = $this->retrieveByPrimaryKey(array(session_id()));
 		if (!$session) {
 			return false;
 		}
-		// Controleer consistentie van browser:
+		// Controleer of sessie is verlopen
+		if ($session->expire AND time() >= strtotime($session->expire)) {
+			return false;
+		}
+		// Controleer consistentie van browser
 		if ($session->user_agent !== $_SERVER['HTTP_USER_AGENT']) {
 			return false;
 		}
-		// Controleer gekoppeld ip:
+		// Controleer gekoppeld ip
 		if ($session->lock_ip AND $session->ip !== $_SERVER['REMOTE_ADDR']) {
 			return false;
 		}
-		// Controleer switch user status:
+		// Controleer switch user status
 		if (isset($_SESSION['_suedFrom'])) {
 			if ($session->uid !== $_SESSION['_suedFrom']) {
 				return false;
@@ -127,7 +132,7 @@ class LoginModel extends PersistenceModel implements Validator {
 				return false;
 			}
 		} else {
-			// Controleer consistentie van ingelogd account:
+			// Controleer consistentie van ingelogd account
 			if ($session->uid !== self::getUid()) {
 				return false;
 			}
@@ -207,11 +212,11 @@ class LoginModel extends PersistenceModel implements Validator {
 	 * 
 	 * @param string $user
 	 * @param string $pass_plain
+	 * @param string $expire
 	 * @param boolean $authByToken
-	 * @param boolean $lockIP
 	 * @return boolean
 	 */
-	public function login($user, $pass_plain, $authByToken = false, $lockIP = false, $noTimeout = false) {
+	public function login($user, $pass_plain, $expire = null, $authByToken = false) {
 		$user = filter_var($user, FILTER_SANITIZE_STRING);
 		$pass_plain = filter_var($pass_plain, FILTER_SANITIZE_STRING);
 		switch (constant('MODE')) {
@@ -219,7 +224,7 @@ class LoginModel extends PersistenceModel implements Validator {
 				return $this->loginCli();
 			case 'WEB':
 			default:
-				return $this->loginWeb($user, $pass_plain, (boolean) $authByToken, (boolean) $lockIP, (boolean) $noTimeout);
+				return $this->loginWeb($user, $pass_plain, $expire, $authByToken);
 		}
 	}
 
@@ -233,10 +238,10 @@ class LoginModel extends PersistenceModel implements Validator {
 			);
 		}
 		$_SERVER['HTTP_USER_AGENT'] = 'CLI';
-		return $this->loginWeb($cred['user'], $cred['pass']);
+		return $this->loginWeb($cred['user'], $cred['pass'], null);
 	}
 
-	private function loginWeb($user, $pass_plain, $authByToken = false, $lockIP = false, $noTimeout = false) {
+	private function loginWeb($user, $pass_plain, $expire, $authByToken) {
 		$account = false;
 
 		// inloggen met lidnummer of gebruikersnaam
@@ -253,7 +258,7 @@ class LoginModel extends PersistenceModel implements Validator {
 
 		// check timeout
 		$timeout = AccountModel::instance()->moetWachten($account);
-		if (!$noTimeout AND $timeout > 0) {
+		if (!$expire AND $timeout > 0) {
 			$_SESSION['auth_error'] = 'Wacht ' . $timeout . ' seconden';
 			return false;
 		}
@@ -284,6 +289,7 @@ class LoginModel extends PersistenceModel implements Validator {
 			$session->session_id = session_id();
 			$session->uid = $account->uid;
 			$session->login_moment = getDateTime();
+			$session->expire = $expire;
 			$session->user_agent = filter_var($_SERVER['HTTP_USER_AGENT'], FILTER_SANITIZE_STRING);
 			$session->ip = filter_var($_SERVER['REMOTE_ADDR'], FILTER_SANITIZE_STRING);
 			$session->lock_ip = $lockIP; // sessie koppelen aan ip?
@@ -378,6 +384,12 @@ class LoginModel extends PersistenceModel implements Validator {
 			$_SESSION['pauper'] = true;
 		} else {
 			unset($_SESSION['pauper']);
+		}
+	}
+
+	public function opschonen() {
+		foreach ($this->find('? < expire', array(getDateTime())) as $session) {
+			$this->delete($session);
 		}
 	}
 

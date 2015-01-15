@@ -145,6 +145,8 @@ switch (constant('MODE')) {
 		break;
 
 	case 'WEB':
+		Instellingen::instance()->prefetch();
+
 		// Terugvinden van temp upload files
 		ini_set('upload_tmp_dir', TMP_PATH);
 
@@ -157,21 +159,20 @@ switch (constant('MODE')) {
 		ini_set('session.use_trans_sid', 'Off');
 		ini_set('session.use_cookies', true);
 		ini_set('session.use_only_cookies', true);
-		// ini_set('session.cookie_lifetime', 0);
-		// ini_set('session.gc_maxlifetime', 0);
+		$lifetime = (int) Instellingen::get('beveiliging', 'cookie_lifetime_seconds');
+		ini_set('session.cookie_lifetime', $lifetime);
+		ini_set('session.gc_maxlifetime', $lifetime);
 
 		session_save_path(SESSION_PATH);
 		session_name('CSRSESSID');
-		session_set_cookie_params(1036800, '/', 'csrdelft.nl', FORCE_HTTPS, true);
+		session_set_cookie_params($lifetime, '/', 'csrdelft.nl', FORCE_HTTPS, true);
 
 		session_start();
 		if (session_id() == 'deleted') {
 			// Deletes old session
 			session_regenerate_id(true);
 		}
-
 		// Validate login
-		Instellingen::instance()->prefetch();
 		LoginModel::instance()->logBezoek();
 
 		// Prefetch

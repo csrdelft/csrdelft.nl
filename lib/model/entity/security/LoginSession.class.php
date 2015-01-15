@@ -24,6 +24,11 @@ class LoginSession extends PersistentEntity {
 	 */
 	public $login_moment;
 	/**
+	 * DateTime
+	 * @var string
+	 */
+	public $expire;
+	/**
 	 * User agent
 	 * @var string
 	 */
@@ -46,6 +51,7 @@ class LoginSession extends PersistentEntity {
 		'session_id'	 => array(T::String),
 		'uid'			 => array(T::UID),
 		'login_moment'	 => array(T::DateTime),
+		'expire'		 => array(T::DateTime, true),
 		'user_agent'	 => array(T::String, true),
 		'ip'			 => array(T::String, true),
 		'lock_ip'		 => array(T::Boolean)
