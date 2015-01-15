@@ -220,7 +220,7 @@ class LoginController extends AclController {
 			} else {
 				require_once 'model/CmsPaginaModel.class.php';
 				require_once 'view/CmsPaginaView.class.php';
-				$form = new CmsPaginaView(CmsPaginaModel::instance()->getPagina('geentoegang'));
+				//$form = new CmsPaginaView(CmsPaginaModel::instance()->getPagina('geentoegang'));
 			}
 		}
 		$this->view = new CsrLayoutPage($form);
