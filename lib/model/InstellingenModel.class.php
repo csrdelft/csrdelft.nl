@@ -67,7 +67,7 @@ class Instellingen extends CachedPersistenceModel {
 		'forum'			 => array(
 			'reageren_tijd'			 => '-2 minutes',
 			'grafiek_periode'		 => '-2 months',
-			'externen_geentoegang'	 => '-1 year'
+			'externen_geentoegang_gesloten'	 => '-1 year'
 		),
 		'maaltijden'	 => array(
 			'budget_maalcie'					 => '100',

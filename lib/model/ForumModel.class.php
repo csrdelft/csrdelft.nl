@@ -670,8 +670,8 @@ class ForumDradenModel extends AbstractForumModel implements Paging {
 			$where = 'forum_id = ? AND wacht_goedkeuring = FALSE AND verwijderd = FALSE';
 			$where_params = array($forum_id);
 			if (!LoginModel::mag('P_LOGGED_IN')) {
-				$where .= ' AND (gesloten = FALSE OR (gesloten = TRUE AND laatst_gewijzigd >= ?))';
-				$where_params[] = getDateTime(strtotime(Instellingen::get('forum', 'externen_geentoegang')));
+				$where .= ' AND (gesloten = FALSE OR laatst_gewijzigd >= ?)';
+				$where_params[] = getDateTime(strtotime(Instellingen::get('forum', 'externen_geentoegang_gesloten')));
 			}
 			$this->aantal_paginas[$forum_id] = (int) ceil($this->count($where, $where_params) / $this->per_pagina);
 		}
@@ -701,8 +701,8 @@ class ForumDradenModel extends AbstractForumModel implements Paging {
 		$where_params = array(implode(' +', $terms)); // set terms to AND
 		$where = 'wacht_goedkeuring = FALSE AND verwijderd = FALSE';
 		if (!LoginModel::mag('P_LOGGED_IN')) {
-			$where .= ' AND (gesloten = FALSE OR (gesloten = TRUE AND laatst_gewijzigd >= ?))';
-			$where_params[] = getDateTime(strtotime(Instellingen::get('forum', 'externen_geentoegang')));
+			$where .= ' AND (gesloten = FALSE OR laatst_gewijzigd >= ?)';
+			$where_params[] = getDateTime(strtotime(Instellingen::get('forum', 'externen_geentoegang_gesloten')));
 		}
 		$order = 'score DESC, plakkerig DESC';
 		if (in_array($datumsoort, array('datum_tijd', 'laatst_gewijzigd'))) {
@@ -731,8 +731,8 @@ class ForumDradenModel extends AbstractForumModel implements Paging {
 		$where = 'forum_id = ? AND wacht_goedkeuring = FALSE AND verwijderd = FALSE AND belangrijk = TRUE';
 		$where_params = array($deel->forum_id);
 		if (!LoginModel::mag('P_LOGGED_IN')) {
-			$where .= ' AND (gesloten = FALSE OR (gesloten = TRUE AND laatst_gewijzigd >= ?))';
-			$where_params[] = getDateTime(strtotime(Instellingen::get('forum', 'externen_geentoegang')));
+			$where .= ' AND (gesloten = FALSE OR laatst_gewijzigd >= ?)';
+			$where_params[] = getDateTime(strtotime(Instellingen::get('forum', 'externen_geentoegang_gesloten')));
 		}
 		return $this->prefetch($where, $where_params);
 	}
@@ -741,8 +741,8 @@ class ForumDradenModel extends AbstractForumModel implements Paging {
 		$where = '(forum_id = ? OR gedeeld_met = ?) AND wacht_goedkeuring = FALSE AND verwijderd = FALSE';
 		$where_params = array($deel->forum_id, $deel->forum_id);
 		if (!LoginModel::mag('P_LOGGED_IN')) {
-			$where .= ' AND (gesloten = FALSE OR (gesloten = TRUE AND laatst_gewijzigd >= ?))';
-			$where_params[] = getDateTime(strtotime(Instellingen::get('forum', 'externen_geentoegang')));
+			$where .= ' AND (gesloten = FALSE OR laatst_gewijzigd >= ?)';
+			$where_params[] = getDateTime(strtotime(Instellingen::get('forum', 'externen_geentoegang_gesloten')));
 		}
 		return $this->prefetch($where, $where_params, null, null, $this->per_pagina, ($this->pagina - 1) * $this->per_pagina);
 	}
@@ -790,8 +790,8 @@ class ForumDradenModel extends AbstractForumModel implements Paging {
 		}
 		$where = '(forum_id IN (' . $forum_ids_stub . ') OR gedeeld_met IN (' . $forum_ids_stub . '))' . $verborgen . ' AND wacht_goedkeuring = FALSE AND verwijderd = FALSE' . $belangrijk;
 		if (!LoginModel::mag('P_LOGGED_IN')) {
-			$where .= ' AND (gesloten = FALSE OR (gesloten = TRUE AND laatst_gewijzigd >= ?))';
-			$where_params[] = getDateTime(strtotime(Instellingen::get('forum', 'externen_geentoegang')));
+			$where .= ' AND (gesloten = FALSE OR laatst_gewijzigd >= ?)';
+			$where_params[] = getDateTime(strtotime(Instellingen::get('forum', 'externen_geentoegang_gesloten')));
 		}
 		$dradenById = group_by_distinct('draad_id', $this->find($where, $where_params, null, 'laatst_gewijzigd DESC', $aantal, ($pagina - 1) * $aantal));
 		$count = count($dradenById);
@@ -968,8 +968,8 @@ class ForumPostsModel extends AbstractForumModel implements Paging {
 		$where = 'wacht_goedkeuring = FALSE AND verwijderd = FALSE';
 		$where_params = array($query);
 		if (!LoginModel::mag('P_LOGGED_IN')) {
-			$where .= ' AND (gesloten = FALSE OR (gesloten = TRUE AND laatst_gewijzigd >= ?))';
-			$where_params[] = getDateTime(strtotime(Instellingen::get('forum', 'externen_geentoegang')));
+			$where .= ' AND (gesloten = FALSE OR laatst_gewijzigd >= ?)';
+			$where_params[] = getDateTime(strtotime(Instellingen::get('forum', 'externen_geentoegang_gesloten')));
 		}
 		$order = 'score DESC';
 		if (in_array($datumsoort, array('datum_tijd', 'laatst_gewijzigd'))) {
