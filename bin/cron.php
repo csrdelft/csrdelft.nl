@@ -29,6 +29,13 @@ try {
 	DebugLogModel::instance()->log('cron.php', 'DebugLogModel::opschonen()', array(), $e);
 }
 
+// LoginModel
+try {
+	LoginModel::instance()->opschonen();
+} catch (Exception $e) {
+	DebugLogModel::instance()->log('cron.php', 'LoginModel::opschonen()', array(), $e);
+}
+
 // VerifyModel
 try {
 	OneTimeTokensModel::instance()->opschonen();
