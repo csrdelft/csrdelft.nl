@@ -330,7 +330,9 @@ $(function () {
 		var warningGiven = false;
 	
 		$(this).click(function () {
-		
+
+            alert(selectedPerson.status);
+
 			var oudlid = selectedPerson.status != 'S_LID' && selectedPerson.status != 'S_GASTLID' && selectedPerson.status != 'S_NOVIET';
 			
 			var toRed;
@@ -339,7 +341,7 @@ $(function () {
 			else
 				toRed = selectedPerson.saldo - bestelTotaal() < 0;
 				
-			if(bestelTotaal() < 0 || selectedPerson.status == 'S_NOBODY' || beheer)
+			if(bestelTotaal() <= 0 || selectedPerson.status == 'S_NOBODY' || beheer)
 				toRed = false;
 			
 			// Hack

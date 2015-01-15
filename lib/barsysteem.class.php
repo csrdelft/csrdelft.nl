@@ -34,7 +34,7 @@ class Barsysteem {
 				$profiel = ProfielModel::get($row["stekUID"]);
 				if ($profiel) {
 					$persoon["naam"] = $profiel->getNaam();
-					$persoon["status"] = LidStatus::getDescription($profiel->status);
+					$persoon["status"] = $profiel->status;
 				}
 			}
 			$persoon["socCieId"] = $row["socCieId"];
