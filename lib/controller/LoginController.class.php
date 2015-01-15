@@ -210,6 +210,11 @@ class LoginController extends AclController {
 		if ($form->validate()) {
 			$uid = $form->findByName('user')->getValue();
 			$account = AccountModel::get($uid);
+			if (!$account) {
+				setMelding('geen account', 0); //DEBUG
+			} elseif (AccessModel::mag($account, 'P_LOGGED_IN')) {
+				setMelding('account mag niet inloggen', 0); //DEBUG
+			}
 			if ($account AND AccessModel::mag($account, 'P_LOGGED_IN') AND OneTimeTokensModel::instance()->verifyToken($account->uid, $tokenValue)) {
 				// redirect by verifyToken
 			} else {

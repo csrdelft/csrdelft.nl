@@ -20,8 +20,8 @@ class OneTimeTokensModel extends PersistenceModel {
 
 	public function verifyToken($uid, $tokenString) {
 		$token = $this->find('uid = ? AND token = ?', array($uid, $tokenString), null, null, 1)->fetch();
-		setMelding(LoginModel::getUid(), 0); //DEBUG
 		if (!$token OR $token->uid !== LoginModel::getUid()) {
+			setMelding('geen token gevonden OF uid ' . $token->uid . ' !== ' . LoginModel::getUid(), 0); //DEBUG
 			return false;
 		}
 		if ($token->verified) {
@@ -36,6 +36,7 @@ class OneTimeTokensModel extends PersistenceModel {
 			$this->update($token);
 			redirect($token->url);
 		}
+		setMelding('TEST', 0); //DEBUG
 		return false;
 	}
 
