@@ -210,7 +210,8 @@ class LoginController extends AclController {
 		if ($form->validate()) {
 			$uid = $form->findByName('user')->getValue();
 			$account = AccountModel::get($uid);
-			if ($account AND AccessModel::mag($account, 'P_LOGGED_IN') AND OneTimeTokensModel::instance()->verifyToken($account->uid, $tokenValue)) {
+			// als je sessie ooit met token is ingelogd (bijv. bij 2e keer verifieren) dan moet $allowAuthByToken = true
+			if ($account AND AccessModel::mag($account, 'P_LOGGED_IN', true) AND OneTimeTokensModel::instance()->verifyToken($account->uid, $tokenValue)) {
 				// redirect by verifyToken
 			} else {
 				require_once 'model/CmsPaginaModel.class.php';
