@@ -209,18 +209,18 @@ class LoginModel extends PersistenceModel implements Validator {
 	 * Als een gebruiker wordt ingelogd met $expire == DateTime, dan verloopt de sessie
 	 * van de gebruiker op het gegeven moment en wordt de gebruiker uigelogd.
 	 * 
-	 * Als een gebruiker wordt ingelogd met $authByToken == true, dan wordt het wachtwoord
-	 * van de gebruiker NIET gecontroleerd, en wordt er vanuit gegaan dat een VOORAF
-	 * gecontroleerd token voldoende is voor authenticatie.
+	 * Als een gebruiker wordt ingelogd met $tokenAuthenticated == true, dan wordt het wachtwoord
+	 * van de gebruiker NIET gecontroleerd en wordt er ook GEEN timeout geforceerd, er wordt
+	 * vanuit gegaan dat VOORAF een token is gecontroleerd en dat voldoende is voor authenticatie.
 	 * 
 	 * @param string $user
 	 * @param string $pass_plain
 	 * @param boolean $lockIP
 	 * @param string $expire
-	 * @param boolean $authByToken
+	 * @param boolean $tokenAuthenticated
 	 * @return boolean
 	 */
-	public function login($user, $pass_plain, $lockIP = false, $expire = null, $authByToken = false) {
+	public function login($user, $pass_plain, $lockIP = false, $expire = null, $tokenAuthenticated = false) {
 		$user = filter_var($user, FILTER_SANITIZE_STRING);
 		$pass_plain = filter_var($pass_plain, FILTER_SANITIZE_STRING);
 		switch (constant('MODE')) {
@@ -228,7 +228,7 @@ class LoginModel extends PersistenceModel implements Validator {
 				return $this->loginCli();
 			case 'WEB':
 			default:
-				return $this->loginWeb($user, $pass_plain, $lockIP, $expire, $authByToken);
+				return $this->loginWeb($user, $pass_plain, $lockIP, $expire, $tokenAuthenticated);
 		}
 	}
 
@@ -245,7 +245,7 @@ class LoginModel extends PersistenceModel implements Validator {
 		return $this->loginWeb($cred['user'], $cred['pass'], null);
 	}
 
-	private function loginWeb($user, $pass_plain, $lockIP, $expire, $authByToken) {
+	private function loginWeb($user, $pass_plain, $lockIP, $expire, $tokenAuthenticated) {
 		$account = false;
 
 		// inloggen met lidnummer of gebruikersnaam
@@ -262,13 +262,13 @@ class LoginModel extends PersistenceModel implements Validator {
 
 		// check timeout
 		$timeout = AccountModel::instance()->moetWachten($account);
-		if (!$expire AND $timeout > 0) {
+		if (!$tokenAuthenticated AND $timeout > 0) {
 			$_SESSION['auth_error'] = 'Wacht ' . $timeout . ' seconden';
 			return false;
 		}
 		// of het wachtwoord klopt
 		// of dat er eerder een token is gecontroleerd
-		if ($authByToken OR AccountModel::instance()->controleerWachtwoord($account, $pass_plain)) {
+		if ($tokenAuthenticated OR AccountModel::instance()->controleerWachtwoord($account, $pass_plain)) {
 			AccountModel::instance()->successfulLoginAttempt($account);
 		} else {
 			$_SESSION['auth_error'] = 'Inloggen niet geslaagd<br><a href="/wachtwoord/vergeten">Wachtwoord vergeten?</a>';
@@ -280,7 +280,7 @@ class LoginModel extends PersistenceModel implements Validator {
 
 		// Subject assignment:
 		$_SESSION['_uid'] = $account->uid;
-		if ($authByToken) {
+		if ($tokenAuthenticated) {
 			$_SESSION['_authByToken'] = true;
 		}
 
@@ -303,7 +303,7 @@ class LoginModel extends PersistenceModel implements Validator {
 				$this->create($session);
 			}
 
-			if (!$authByToken) {
+			if (!$tokenAuthenticated) {
 				// Controleer actief wachtwoordbeleid
 				$_POST['checkpw_new'] = $pass_plain;
 				$_POST['checkpw_confirm'] = $pass_plain;

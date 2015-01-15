@@ -174,17 +174,14 @@ class LoginController extends AclController {
 		else {
 			$form = new WachtwoordVergetenForm();
 			if ($form->validate()) {
+				// voorkom dat AccessModel ingelogde gebruiker blokkeerd met $allowAuthByToken == false
+				if (LoginModel::instance()->isAuthenticatedByToken()) {
+					LoginModel::instance()->login('x999', 'x999');
+				}
 				$values = $form->getValues();
 				$account = AccountModel::get($values['user']);
-				if (!$account) {
-					$account = AccountModel::get('x999');
-				}
-				$timeout = AccountModel::instance()->moetWachten($account);
-				if ($timeout > 0) {
-					setMelding('Wacht ' . $timeout . ' seconden', -1);
-				}
-				// mag wachtwoord resetten?
-				elseif (AccessModel::mag($account, 'P_PROFIEL_EDIT') AND $account->email === $values['mail']) {
+				// mag wachtwoord wijzigen?
+				if ($account AND AccessModel::mag($account, 'P_PROFIEL_EDIT') AND $account->email === $values['mail']) {
 					$token = OneTimeTokensModel::instance()->createToken($account->uid, '/wachtwoord/reset');
 					// stuur resetmail
 					$lidnaam = $account->getProfiel()->getNaam('civitas');
@@ -197,7 +194,9 @@ class LoginController extends AclController {
 					$mail->send();
 					setMelding('Wachtwoord reset email verzonden', 1);
 				} else {
-					AccountModel::instance()->failedLoginAttempt($account);
+					require_once 'model/CmsPaginaModel.class.php';
+					require_once 'view/CmsPaginaView.class.php';
+					$form = new CmsPaginaView(CmsPaginaModel::instance()->getPagina('geentoegang'));
 				}
 			}
 		}
@@ -208,16 +207,17 @@ class LoginController extends AclController {
 		$tokenValue = filter_input(INPUT_GET, 'onetime_token', FILTER_SANITIZE_STRING);
 		$form = new VerifyForm($tokenValue);
 		if ($form->validate()) {
+			// voorkom dat AccessModel ingelogde gebruiker blokkeerd met $allowAuthByToken == false
+			if (LoginModel::instance()->isAuthenticatedByToken()) {
+				LoginModel::instance()->login('x999', 'x999');
+			}
 			$uid = $form->findByName('user')->getValue();
 			$account = AccountModel::get($uid);
-			// als je sessie ooit met token is ingelogd (bijv. bij 2e keer verifieren) dan moet $allowAuthByToken = true
-			if ($account AND AccessModel::mag($account, 'P_LOGGED_IN', true) AND OneTimeTokensModel::instance()->verifyToken($account->uid, $tokenValue)) {
+			// mag inloggen?
+			if ($account AND AccessModel::mag($account, 'P_LOGGED_IN') AND OneTimeTokensModel::instance()->verifyToken($account->uid, $tokenValue)) {
 				// redirect by verifyToken
 			} else {
 				setMelding('Deze link is niet meer geldig', -1);
-				require_once 'model/CmsPaginaModel.class.php';
-				require_once 'view/CmsPaginaView.class.php';
-				$form = new CmsPaginaView(CmsPaginaModel::instance()->getPagina('geentoegang'));
 			}
 		}
 		$this->view = new CsrLayoutPage($form);

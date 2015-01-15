@@ -64,11 +64,13 @@ class AccessModel extends CachedPersistenceModel {
 	 */
 	public static function mag(Account $subject, $permission, $allowAuthByToken = false) {
 
-		// Als voor het ingelogde lid een permissie gevraagd wordt
-		// en deze sessie is ingelogd per token: doe extra check of dat mag.
-		// Alleen als inloggen per token ($allowAuthByToken) toegestaan is
-		// testen we met de permissies van het per token ingelogde account,
-		// anders met niet-ingelogd.
+		/**
+		 * Als voor het ingelogde lid een permissie gevraagd wordt
+		 * en deze sessie is ingelogd per token: doe extra check of dat mag.
+		 * Alleen als inloggen per token ($allowAuthByToken) toegestaan is
+		 * testen we met de permissies van het per token ingelogde account,
+		 * anders met niet-ingelogd.
+		 */
 		if (LoginModel::instance()->isAuthenticatedByToken() AND $subject->uid == LoginModel::getUid() AND ! $allowAuthByToken) {
 			$subject = AccountModel::get('x999');
 		}
@@ -297,10 +299,12 @@ class AccessModel extends CachedPersistenceModel {
 
 		// OR
 		if (strpos($permission, ',') !== false) {
-			// Het gevraagde mag een enkele permissie zijn, of meerdere, door komma's
-			// gescheiden, waarvan de gebruiker er dan een hoeft te hebben. Er kunnen
-			// dan ook uid's tussen zitten, als een daarvan gelijk is aan dat van de
-			// gebruiker heeft hij ook rechten.
+			/**
+			 * Het gevraagde mag een enkele permissie zijn, of meerdere, door komma's
+			 * gescheiden, waarvan de gebruiker er dan een hoeft te hebben. Er kunnen
+			 * dan ook uid's tussen zitten, als een daarvan gelijk is aan dat van de
+			 * gebruiker heeft hij ook rechten.
+			 */
 			$p = explode(',', $permission);
 			$result = false;
 			foreach ($p as $perm) {
@@ -309,8 +313,10 @@ class AccessModel extends CachedPersistenceModel {
 		}
 		// AND
 		elseif (strpos($permission, '+') !== false) {
-			// Gecombineerde permissie:
-			// gebruiker moet alle permissies bezitten
+			/**
+			 * Gecombineerde permissie:
+			 * gebruiker moet alle permissies bezitten
+			 */
 			$p = explode('+', $permission);
 			$result = true;
 			foreach ($p as $perm) {
@@ -319,9 +325,11 @@ class AccessModel extends CachedPersistenceModel {
 		}
 		// OR (secondary)
 		elseif (strpos($permission, '|') !== false) {
-			// Mogelijkheid voor OR binnen een AND
-			// Hierdoor zijn er geen haakjes nodig in de syntax voor niet al te ingewikkelde statements.
-			// Statements waarbij haakjes wel nodig zijn moet je niet willen.
+			/**
+			 * Mogelijkheid voor OR binnen een AND
+			 * Hierdoor zijn er geen haakjes nodig in de syntax voor niet al te ingewikkelde statements.
+			 * Statements waarbij haakjes wel nodig zijn moet je niet willen.
+			 */
 			$p = explode('|', $permission);
 			$result = false;
 			foreach ($p as $perm) {

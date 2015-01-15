@@ -19,19 +19,19 @@ register_shutdown_function('fatal_handler');
 
 function fatal_handler(Exception $ex = null) {
 
-	if (TIME_MEASURE) {
-		TimerModel::instance()->log();
-	}
+	try {
+		if (TIME_MEASURE) {
+			TimerModel::instance()->log();
+		}
 
-	if ($ex instanceof Exception) {
-		try {
+		if ($ex instanceof Exception) {
 			if (LoginModel::mag('P_LOGGED_IN')) {
 				echo str_replace('#', '<br />#', $ex); // stacktrace 
 			}
 			printDebug();
-		} catch (Exception $e) {
-			echo $e->getMessage();
 		}
+	} catch (Exception $e) {
+		echo $e->getMessage();
 	}
 
 	$error = error_get_last();
