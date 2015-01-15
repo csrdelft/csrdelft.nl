@@ -65,8 +65,9 @@ class Instellingen extends CachedPersistenceModel {
 			'mail_niet_meeeten'						 => 'P.S.: U eet NIET mee met de maaltijd.'
 		),
 		'forum'			 => array(
-			'reageren_tijd'		 => '-2 minutes',
-			'grafiek_periode'	 => '-2 months'
+			'reageren_tijd'			 => '-2 minutes',
+			'grafiek_periode'		 => '-2 months',
+			'externen_geentoegang'	 => '-1 year'
 		),
 		'maaltijden'	 => array(
 			'budget_maalcie'					 => '100',

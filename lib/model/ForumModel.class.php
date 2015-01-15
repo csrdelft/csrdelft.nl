@@ -667,7 +667,13 @@ class ForumDradenModel extends AbstractForumModel implements Paging {
 			return $this->pagina + 1;
 		}
 		if (!array_key_exists($forum_id, $this->aantal_paginas)) {
-			$this->aantal_paginas[$forum_id] = (int) ceil($this->count('forum_id = ? AND wacht_goedkeuring = FALSE AND verwijderd = FALSE', array($forum_id)) / $this->per_pagina);
+			$where = 'forum_id = ? AND wacht_goedkeuring = FALSE AND verwijderd = FALSE';
+			$where_params = array($forum_id);
+			if (!LoginModel::mag('P_LOGGED_IN')) {
+				$where .= ' AND laatst_gewijzigd >= ?';
+				$where_params[] = getDateTime(strtotime(Instellingen::get('forum', 'externen_geentoegang')));
+			}
+			$this->aantal_paginas[$forum_id] = (int) ceil($this->count($where, $where_params) / $this->per_pagina);
 		}
 		return max(1, $this->aantal_paginas[$forum_id]);
 	}
@@ -694,6 +700,10 @@ class ForumDradenModel extends AbstractForumModel implements Paging {
 		}
 		$where_params = array(implode(' +', $terms)); // set terms to AND
 		$where = 'wacht_goedkeuring = FALSE AND verwijderd = FALSE';
+		if (!LoginModel::mag('P_LOGGED_IN')) {
+			$where .= ' AND laatst_gewijzigd >= ?';
+			$where_params[] = getDateTime(strtotime(Instellingen::get('forum', 'externen_geentoegang')));
+		}
 		$order = 'score DESC, plakkerig DESC';
 		if (in_array($datumsoort, array('datum_tijd', 'laatst_gewijzigd'))) {
 			$order .=', ' . $datumsoort . ' DESC';
@@ -718,11 +728,23 @@ class ForumDradenModel extends AbstractForumModel implements Paging {
 	}
 
 	public function getBelangrijkeForumDradenVoorDeel(ForumDeel $deel) {
-		return $this->prefetch('forum_id = ? AND wacht_goedkeuring = FALSE AND verwijderd = FALSE AND belangrijk = TRUE', array($deel->forum_id));
+		$where = 'forum_id = ? AND wacht_goedkeuring = FALSE AND verwijderd = FALSE AND belangrijk = TRUE';
+		$where_params = array($deel->forum_id);
+		if (!LoginModel::mag('P_LOGGED_IN')) {
+			$where .= ' AND laatst_gewijzigd >= ?';
+			$where_params[] = getDateTime(strtotime(Instellingen::get('forum', 'externen_geentoegang')));
+		}
+		return $this->prefetch($where, $where_params);
 	}
 
 	public function getForumDradenVoorDeel(ForumDeel $deel) {
-		return $this->prefetch('(forum_id = ? OR gedeeld_met = ?) AND wacht_goedkeuring = FALSE AND verwijderd = FALSE', array($deel->forum_id, $deel->forum_id), null, null, $this->per_pagina, ($this->pagina - 1) * $this->per_pagina);
+		$where = '(forum_id = ? OR gedeeld_met = ?) AND wacht_goedkeuring = FALSE AND verwijderd = FALSE';
+		$where_params = array($deel->forum_id, $deel->forum_id);
+		if (!LoginModel::mag('P_LOGGED_IN')) {
+			$where .= ' AND laatst_gewijzigd >= ?';
+			$where_params[] = getDateTime(strtotime(Instellingen::get('forum', 'externen_geentoegang')));
+		}
+		return $this->prefetch($where, $where_params, null, null, $this->per_pagina, ($this->pagina - 1) * $this->per_pagina);
 	}
 
 	/**
@@ -750,23 +772,28 @@ class ForumDradenModel extends AbstractForumModel implements Paging {
 		}
 		$forum_ids_stub = implode(', ', array_fill(0, $count, '?'));
 		$forum_ids = array_keys($delenById);
-		$params = array_merge($forum_ids, $forum_ids);
+		$where_params = array_merge($forum_ids, $forum_ids);
 		$verbergen = ForumDradenVerbergenModel::instance()->prefetch('uid = ?', array(LoginModel::getUid()));
 		$draden_ids = array_keys(group_by_distinct('draad_id', $verbergen));
 		$count = count($draden_ids);
 		if ($count > 0) {
 			$verborgen = ' AND draad_id NOT IN (' . implode(', ', array_fill(0, $count, '?')) . ')';
-			$params = array_merge($params, $draden_ids);
+			$where_params = array_merge($where_params, $draden_ids);
 		} else {
 			$verborgen = '';
 		}
 		if ($belangrijk !== null) {
-			$params[] = (boolean) $belangrijk;
+			$where_params[] = (boolean) $belangrijk;
 			$belangrijk = ' AND belangrijk = ?';
 		} else {
 			$belangrijk = '';
 		}
-		$dradenById = group_by_distinct('draad_id', $this->find('(forum_id IN (' . $forum_ids_stub . ') OR gedeeld_met IN (' . $forum_ids_stub . '))' . $verborgen . ' AND wacht_goedkeuring = FALSE AND verwijderd = FALSE' . $belangrijk, $params, null, 'laatst_gewijzigd DESC', $aantal, ($pagina - 1) * $aantal));
+		$where = '(forum_id IN (' . $forum_ids_stub . ') OR gedeeld_met IN (' . $forum_ids_stub . '))' . $verborgen . ' AND wacht_goedkeuring = FALSE AND verwijderd = FALSE' . $belangrijk;
+		if (!LoginModel::mag('P_LOGGED_IN')) {
+			$where .= ' AND laatst_gewijzigd >= ?';
+			$where_params[] = getDateTime(strtotime(Instellingen::get('forum', 'externen_geentoegang')));
+		}
+		$dradenById = group_by_distinct('draad_id', $this->find($where, $where_params, null, 'laatst_gewijzigd DESC', $aantal, ($pagina - 1) * $aantal));
 		$count = count($dradenById);
 		$draden_ids = array_keys($dradenById);
 		array_unshift($draden_ids, LoginModel::getUid());
@@ -782,7 +809,7 @@ class ForumDradenModel extends AbstractForumModel implements Paging {
 		return $draad;
 	}
 
-	public function getForumDradenById(array $ids, $where = '', array $where_params = array()) {
+	public function getForumDradenById(array $ids, $where = null, array $where_params = array()) {
 		$count = count($ids);
 		if ($count < 1) {
 			return array();
@@ -940,6 +967,10 @@ class ForumPostsModel extends AbstractForumModel implements Paging {
 		$attributes = array('*', 'MATCH(tekst) AGAINST (? IN NATURAL LANGUAGE MODE) AS score');
 		$where = 'wacht_goedkeuring = FALSE AND verwijderd = FALSE';
 		$where_params = array($query);
+		if (!LoginModel::mag('P_LOGGED_IN')) {
+			$where .= ' AND laatst_gewijzigd >= ?';
+			$where_params[] = getDateTime(strtotime(Instellingen::get('forum', 'externen_geentoegang')));
+		}
 		$order = 'score DESC';
 		if (in_array($datumsoort, array('datum_tijd', 'laatst_gewijzigd'))) {
 			$order .= ', ' . $datumsoort . ' DESC';
