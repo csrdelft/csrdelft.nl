@@ -156,7 +156,7 @@ switch (constant('MODE')) {
 		ini_set('session.save_path', SESSION_PATH);
 		ini_set('session.hash_function', 'sha256');
 		ini_set('session.cache_limiter', 'nocache');
-		ini_set('session.use_trans_sid', 'Off');
+		ini_set('session.use_trans_sid', 0);
 		ini_set('session.gc_maxlifetime', (int) Instellingen::get('beveiliging', 'session_lifetime_seconds'));
 		ini_set('session.use_strict_mode', true);
 		ini_set('session.use_cookies', true);
