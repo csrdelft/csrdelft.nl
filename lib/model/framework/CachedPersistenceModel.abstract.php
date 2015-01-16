@@ -118,8 +118,10 @@ abstract class CachedPersistenceModel extends PersistenceModel {
 	 */
 	protected function cacheResult($resultset, $memcache = false) {
 		$cached = array();
-		foreach ($resultset as $entity) {
-			$cached[] = $this->cache($entity, $memcache);
+		if ($resultset) {
+			foreach ($resultset as $entity) {
+				$cached[] = $this->cache($entity, $memcache);
+			}
 		}
 		return $cached;
 	}
