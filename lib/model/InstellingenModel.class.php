@@ -35,7 +35,7 @@ class Instellingen extends CachedPersistenceModel {
 			'standaard_tijd_4'				 => '20:00-23:59'
 		),
 		'beveiliging'	 => array(
-			'cookie_lifetime_seconds'					 => '1036800',
+			'session_lifetime_seconds'					 => '1036800',
 			'one_time_token_expire_after'				 => '+1 hour',
 			'wachtwoorden_verlopen_ouder_dan'			 => '-1 year',
 			'wachtwoorden_verlopen_waarschuwing_vooraf'	 => '-2 weeks'

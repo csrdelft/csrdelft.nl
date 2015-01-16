@@ -160,7 +160,7 @@ switch (constant('MODE')) {
 		ini_set('session.use_trans_sid', 'Off');
 		ini_set('session.use_cookies', true);
 		ini_set('session.use_only_cookies', true);
-		$lifetime = (int) Instellingen::get('beveiliging', 'cookie_lifetime_seconds');
+		$lifetime = (int) Instellingen::get('beveiliging', 'session_lifetime_seconds');
 		ini_set('session.cookie_lifetime', $lifetime);
 		ini_set('session.gc_maxlifetime', $lifetime);
 

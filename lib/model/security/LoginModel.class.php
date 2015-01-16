@@ -56,7 +56,7 @@ class LoginModel extends PersistenceModel implements Validator {
 			$token = filter_input(INPUT_GET, 'private_token', FILTER_SANITIZE_STRING);
 			if (preg_match('/^[a-zA-Z0-9]{150}$/', $token)) {
 				$account = AccountModel::instance()->find('private_token = ?', array($token), null, null, 1)->fetch();
-				$expire = getDateTime(time() + (int) Instellingen::get('beveiliging', 'cookie_lifetime_seconds'));
+				$expire = getDateTime(time() + (int) Instellingen::get('beveiliging', 'session_lifetime_seconds'));
 				$this->login($account->uid, null, true, $expire, true);
 			}
 		}
