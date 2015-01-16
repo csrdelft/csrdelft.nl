@@ -4695,3 +4695,4 @@ sql/8340_alter_verticale_pk.sql -text
 sql/8345_index_post_moment.sql -text
 sql/8357_profiel_account.sql -text
 sql/8365_kringcoach.sql -text
+sql/8499_foreign_keys.sql -text
