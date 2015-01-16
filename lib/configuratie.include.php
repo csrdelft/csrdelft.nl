@@ -152,21 +152,20 @@ switch (constant('MODE')) {
 		ini_set('upload_tmp_dir', TMP_PATH);
 
 		// Sessie configureren
-		ini_set('session.use_strict_mode', true);
-		ini_set('session.cookie_httponly', true);
-		ini_set('session.cookie_secure', FORCE_HTTPS);
+		ini_set('session.name', 'CSRSESSID');
+		ini_set('session.save_path', SESSION_PATH);
 		ini_set('session.hash_function', 'sha256');
 		ini_set('session.cache_limiter', 'nocache');
 		ini_set('session.use_trans_sid', 'Off');
+		ini_set('session.gc_maxlifetime', (int) Instellingen::get('beveiliging', 'session_lifetime_seconds'));
+		ini_set('session.use_strict_mode', true);
 		ini_set('session.use_cookies', true);
 		ini_set('session.use_only_cookies', true);
-		$lifetime = (int) Instellingen::get('beveiliging', 'session_lifetime_seconds');
-		ini_set('session.cookie_lifetime', $lifetime);
-		ini_set('session.gc_maxlifetime', $lifetime);
-
-		session_save_path(SESSION_PATH);
-		session_name('CSRSESSID');
-		session_set_cookie_params($lifetime, '/', 'csrdelft.nl', FORCE_HTTPS, true);
+		ini_set('session.cookie_lifetime', 0);
+		ini_set('session.cookie_path', '/');
+		ini_set('session.cookie_domain', 'csrdelft.nl');
+		ini_set('session.cookie_secure', FORCE_HTTPS);
+		ini_set('session.cookie_httponly', true);
 
 		session_start();
 		if (session_id() == 'deleted') {
