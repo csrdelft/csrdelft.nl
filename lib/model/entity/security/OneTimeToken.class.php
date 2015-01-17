@@ -11,7 +11,7 @@
 class OneTimeToken extends PersistentEntity {
 
 	/**
-	 * Lid
+	 * Lidnummer
 	 * @var string
 	 */
 	public $uid;
@@ -21,7 +21,7 @@ class OneTimeToken extends PersistentEntity {
 	 */
 	public $url;
 	/**
-	 * OneTimeToken
+	 * Token string
 	 * @var string
 	 */
 	public $token;

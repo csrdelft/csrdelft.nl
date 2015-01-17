@@ -13,6 +13,7 @@ class SessionsView extends DataTable implements FormElement {
 		parent::__construct(LoginModel::orm, 'Sessiebeheer', 'ip');
 		$this->dataUrl = '/sessions';
 		$this->hideColumn('uid');
+		$this->hideColumn('lock_ip');
 		$this->searchColumn('login_moment');
 		$this->searchColumn('user_agent');
 	}
@@ -29,14 +30,12 @@ class SessionsView extends DataTable implements FormElement {
 
 class SessionsData extends DataTableResponse {
 
-	public function __construct($uid) {
-		parent::__construct(LoginModel::instance()->find('uid = ?', array($uid)));
-	}
-
-	public function getJson($sessie) {
-		$array = $sessie->jsonSerialize();
+	public function getJson($session) {
+		$array = $session->jsonSerialize();
 
 		$array['details'] = '<a href="/endsession/' . $array['session_id'] . '" class="post DataTableResponse" title="Log uit"><img width="16" height="16" class="icon" src="/plaetjes/famfamfam/door_in.png"></a>';
+
+		$array['details'] .= '<a href="/lockip/' . $array['session_id'] . '" class="post DataTableResponse slotje' . ($session->lock_ip ? 'Uit' : 'Aan') . '" title="' . ($session->lock_ip ? 'Ontkoppelen van' : 'Koppelen aan') . ' IP-adres"></a>';
 
 		return parent::getJson($array);
 	}
@@ -59,6 +58,19 @@ class LoginForm extends Formulier {
 
 		$fields['url'] = new UrlField('url', HTTP_REFERER, null);
 		$fields['url']->hidden = true;
+
+		$this->addFields($fields);
+	}
+
+}
+
+class RememberLoginForm extends Formulier {
+
+	public function __construct() {
+		parent::__construct(null, 'rememberform', '/remember');
+
+		$fields[] = new TextField('device_name', $_SERVER['HTTP_USER_AGENT'], 'Naam apparaat');
+		$fields[] = new VinkField('lock_ip', true, 'Koppel IP-adres');
 
 		$this->addFields($fields);
 	}

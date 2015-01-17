@@ -49,14 +49,23 @@ class LoginModel extends PersistenceModel implements Validator {
 		if (!$this->validate()) {
 			// Subject assignment:
 			$_SESSION['_uid'] = 'x999';
-			/**
-			 * Als we x999 zijn checken we of er misschien een private token in de $_GET staat.
-			 * Deze staat toe zonder wachtwoord gelimiteerde rechten te krijgen op iemands naam.
-			 */
-			$token = filter_input(INPUT_GET, 'private_token', FILTER_SANITIZE_STRING);
-			if (preg_match('/^[a-zA-Z0-9]{150}$/', $token)) {
-				$account = AccountModel::instance()->find('private_token = ?', array($token), null, null, 1)->fetch();
-				$this->login($account->uid, null, true, true, getDateTime());
+
+			// Remember login
+			if (isset($_COOKIE['remember'])) {
+				$remember = RememberLoginModel::instance()->verifyLogin($_SERVER['REMOTE_ADDR'], $_COOKIE['remember']);
+				if ($remember) {
+					$this->login($remember->uid, null, $remember, $remember->lock_ip);
+				}
+			} else {
+				/**
+				 * Als we x999 zijn checken we of er misschien een private token in de $_GET staat.
+				 * Deze staat toe zonder wachtwoord gelimiteerde rechten te krijgen op iemands naam.
+				 */
+				$token = filter_input(INPUT_GET, 'private_token', FILTER_SANITIZE_STRING);
+				if (preg_match('/^[a-zA-Z0-9]{150}$/', $token)) {
+					$account = AccountModel::instance()->find('private_token = ?', array($token), null, null, 1)->fetch();
+					$this->login($account->uid, null, null, true, true, getDateTime());
+				}
 			}
 		}
 		if (!self::getAccount()) {
@@ -210,7 +219,7 @@ class LoginModel extends PersistenceModel implements Validator {
 	 * @param string $expire
 	 * @return boolean
 	 */
-	public function login($user, $pass_plain, $lockIP = false, $tokenAuthenticated = false, $expire = null) {
+	public function login($user, $pass_plain, RememberLogin $remember = null, $lockIP = false, $tokenAuthenticated = false, $expire = null) {
 		$user = filter_var($user, FILTER_SANITIZE_STRING);
 		$pass_plain = filter_var($pass_plain, FILTER_SANITIZE_STRING);
 		switch (constant('MODE')) {
@@ -218,7 +227,7 @@ class LoginModel extends PersistenceModel implements Validator {
 				return $this->loginCli();
 			case 'WEB':
 			default:
-				return $this->loginWeb($user, $pass_plain, $lockIP, $tokenAuthenticated, $expire);
+				return $this->loginWeb($user, $pass_plain, $remember, $lockIP, $tokenAuthenticated, $expire);
 		}
 	}
 
@@ -235,7 +244,7 @@ class LoginModel extends PersistenceModel implements Validator {
 		return $this->loginWeb($cred['user'], $cred['pass'], null);
 	}
 
-	private function loginWeb($user, $pass_plain, $lockIP, $tokenAuthenticated, $expire) {
+	private function loginWeb($user, $pass_plain, RememberLogin $remember = null, $lockIP = false, $tokenAuthenticated = false, $expire = null) {
 		$account = false;
 		// Inloggen met lidnummer of gebruikersnaam
 		if (AccountModel::isValidUid($user)) {
@@ -249,12 +258,12 @@ class LoginModel extends PersistenceModel implements Validator {
 		}
 		// Check timeout
 		$timeout = AccountModel::instance()->moetWachten($account);
-		if (!$tokenAuthenticated AND $timeout > 0) {
+		if (!$remember AND ! $tokenAuthenticated AND $timeout > 0) {
 			$_SESSION['auth_error'] = 'Wacht ' . $timeout . ' seconden';
 			return false;
 		}
 		// If not yet authenticated by token: check password
-		if ($tokenAuthenticated OR AccountModel::instance()->controleerWachtwoord($account, $pass_plain)) {
+		if ($remember OR $tokenAuthenticated OR AccountModel::instance()->controleerWachtwoord($account, $pass_plain)) {
 			AccountModel::instance()->successfulLoginAttempt($account);
 		} else {
 			$_SESSION['auth_error'] = 'Inloggen niet geslaagd<br><a href="/wachtwoord/vergeten">Wachtwoord vergeten?</a>';
@@ -266,6 +275,9 @@ class LoginModel extends PersistenceModel implements Validator {
 
 		// Subject assignment:
 		$_SESSION['_uid'] = $account->uid;
+		if ($remember) {
+			$_SESSION['_authByCookie'] = true;
+		}
 		if ($tokenAuthenticated) {
 			$_SESSION['_authByToken'] = true;
 		}

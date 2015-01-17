@@ -24,6 +24,8 @@ RewriteRule ^wachtwoord			index.php?c=Login [L]
 RewriteRule ^account			index.php?c=Login [L]
 RewriteRule ^sessions			index.php?c=Login [L]
 RewriteRule ^endsession			index.php?c=Login [L]
+RewriteRule ^lockip				index.php?c=Login [L]
+RewriteRule ^remember			index.php?c=Login [L]
 
 RewriteRule ^eetplan			index.php?c=Eetplan		[QSA,L]
 RewriteRule ^documenten			index.php?c=Documenten	[QSA,L]

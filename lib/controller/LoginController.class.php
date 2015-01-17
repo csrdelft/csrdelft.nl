@@ -24,7 +24,9 @@ class LoginController extends AclController {
 			'wachtwoord'		 => 'P_PUBLIC',
 			'verify'			 => 'P_PUBLIC',
 			'sessions'			 => 'P_LOGGED_IN',
-			'endsession'		 => 'P_LOGGED_IN'
+			'endsession'		 => 'P_LOGGED_IN',
+			'lockip'			 => 'P_LOGGED_IN',
+			'remember'			 => 'P_LOGGED_IN'
 		);
 	}
 
@@ -224,7 +226,7 @@ class LoginController extends AclController {
 	}
 
 	public function sessions() {
-		$this->view = new SessionsData(LoginModel::getUid());
+		$this->view = new SessionsData($this->model->find('uid = ?', array(LoginModel::getUid())));
 	}
 
 	public function endsession($sessionid) {
@@ -234,6 +236,27 @@ class LoginController extends AclController {
 			$deleted = $this->model->delete($session);
 		}
 		$this->view = new RemoveRowsResponse(array($session), $deleted === 1 ? 200 : 404);
+	}
+
+	public function lockip($sessionid) {
+		$session = $this->model->find('session_id = ? AND uid = ?', array($sessionid, LoginModel::getUid()), null, null, 1)->fetch();
+		if ($session) {
+			$session->lock_ip = !$session->lock_ip;
+			$this->model->update($session);
+		}
+		$this->view = new SessionsData(array($session));
+	}
+
+	public function remember() {
+		$form = new RememberLoginForm();
+		if ($form->validate()) {
+			$values = $form->getValues();
+			$success = RememberLoginModel::instance()->rememberLogin($values['device_name'], $values['lock_ip']);
+			if ($success) {
+				//TODO
+			}
+		}
+		$this->view = $form;
 	}
 
 }

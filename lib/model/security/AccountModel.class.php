@@ -108,17 +108,21 @@ class AccountModel extends CachedPersistenceModel {
 	}
 
 	public function resetPrivateToken(Account $account) {
-		$account->private_token = crypto_rand_token(150);
+		$account->private_token = crypto_rand_token(150); // password equivalent: should be hashed
 		$account->private_token_since = getDateTime();
 		$this->update($account);
 	}
 
 	public function moetWachten(Account $account) {
-		$diff = strtotime($account->last_login_attempt) + 10 * pow(2, $account->failed_login_attempts - 3) - time();
-		if ($diff > 0) {
-			return $diff;
+		/**
+		 * @source OWASP best-practice
+		 */
+		switch ($account->failed_login_attempts) {
+			case 0: return 0;
+			case 1: return 5;
+			case 2: return 15;
+			default: return 45;
 		}
-		return 0;
 	}
 
 	public function failedLoginAttempt(Account $account) {

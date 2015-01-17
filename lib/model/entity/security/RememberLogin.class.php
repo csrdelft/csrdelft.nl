@@ -1,18 +1,18 @@
 <?php
 
 /**
- * LoginSession.class.php
+ * RememberLogin.class.php
  * 
  * @author P.W.G. Brussee <brussee@live.nl>
  * 
  */
-class LoginSession extends PersistentEntity {
+class RememberLogin extends PersistentEntity {
 
 	/**
 	 * Primary key
 	 * @var string
 	 */
-	public $session_id;
+	public $token;
 	/**
 	 * Lidnummer
 	 * @var string
@@ -22,17 +22,12 @@ class LoginSession extends PersistentEntity {
 	 * DateTime
 	 * @var string
 	 */
-	public $login_moment;
+	public $remember_since;
 	/**
-	 * DateTime
+	 * Device name
 	 * @var string
 	 */
-	public $expire;
-	/**
-	 * User agent
-	 * @var string
-	 */
-	public $user_agent;
+	public $device_name;
 	/**
 	 * IP address
 	 * @var string
@@ -48,11 +43,10 @@ class LoginSession extends PersistentEntity {
 	 * @var array
 	 */
 	protected static $persistent_attributes = array(
-		'session_id'	 => array(T::String),
+		'token'			 => array(T::String),
 		'uid'			 => array(T::UID),
-		'login_moment'	 => array(T::DateTime),
-		'expire'		 => array(T::DateTime),
-		'user_agent'	 => array(T::String),
+		'remember_since' => array(T::DateTime),
+		'device_name'	 => array(T::String),
 		'ip'			 => array(T::String),
 		'lock_ip'		 => array(T::Boolean)
 	);
@@ -60,11 +54,11 @@ class LoginSession extends PersistentEntity {
 	 * Database primary key
 	 * @var array
 	 */
-	protected static $primary_key = array('session_id');
+	protected static $primary_key = array('token');
 	/**
 	 * Database table name
 	 * @var string
 	 */
-	protected static $table_name = 'login_sessions';
+	protected static $table_name = 'remember_login';
 
 }

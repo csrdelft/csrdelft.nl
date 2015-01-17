@@ -23,7 +23,7 @@ class OneTimeTokensModel extends PersistenceModel {
 		if (!$token OR $token->verified OR strtotime($token->expire) <= time()) {
 			return false;
 		}
-		if (LoginModel::instance()->login($token->uid, null, true, true, $token->expire)) {
+		if (LoginModel::instance()->login($token->uid, null, null, true, true, $token->expire)) {
 			$token->verified = true;
 			$this->update($token);
 			redirect($token->url);
@@ -54,7 +54,7 @@ class OneTimeTokensModel extends PersistenceModel {
 		$token = new OneTimeToken();
 		$token->uid = $uid;
 		$token->url = $url;
-		$token->token = crypto_rand_token(200);
+		$token->token = crypto_rand_token(255); // password equivalent: should be hashed
 		$token->expire = getDateTime(strtotime(Instellingen::get('beveiliging', 'one_time_token_expire_after')));
 		$token->verified = false;
 		if ($this->exists($token)) {

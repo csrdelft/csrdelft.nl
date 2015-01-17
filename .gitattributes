@@ -4163,6 +4163,7 @@ lib/model/entity/security/AccessRoles.enum.php -text
 lib/model/entity/security/Account.class.php -text
 lib/model/entity/security/LoginSession.class.php -text
 lib/model/entity/security/OneTimeToken.class.php -text
+lib/model/entity/security/RememberLogin.class.php -text
 lib/model/framework/CachedPersistenceModel.abstract.php -text
 lib/model/framework/Database.singleton.php -text
 lib/model/framework/DatabaseAdmin.singleton.php -text
@@ -4187,6 +4188,7 @@ lib/model/security/AccessModel.class.php -text
 lib/model/security/AccountModel.class.php -text
 lib/model/security/LoginModel.class.php -text
 lib/model/security/OneTimeTokensModel.class.php -text
+lib/model/security/RememberLoginModel.class.php -text
 lib/roodschopper.class.php -text
 lib/roodschoppercontent.class.php -text
 lib/savedquery.class.php -text
