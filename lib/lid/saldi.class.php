@@ -175,7 +175,7 @@ class Saldi {
 				if (array_key_exists(0, $aRegel) AND array_key_exists(1, $aRegel) AND
 						AccountModel::isValidUid($aRegel[0]) AND is_numeric($aRegel[1])) {
 					$sQuery = "
-						UPDATE lid
+						UPDATE profielen
 						SET maalcieSaldo=" . $aRegel[1] . "
 						WHERE uid='" . $aRegel[0] . "'
 						LIMIT 1;";
