@@ -302,7 +302,9 @@ class LoginModel extends PersistenceModel implements Validator {
 				$this->create($session);
 			}
 
-			if (!$remember AND ! $tokenAuthenticated) {
+			if ($remember) {
+				setMelding('Welkom ' . ProfielModel::getNaam($account->uid, 'civitas') . '! U bent <a href="/instellingen#lidinstellingenform-tab-Beveiliging" style="text-decoration: underline;">automatisch ingelogd</a>.', 0);
+			} elseif (!$tokenAuthenticated) {
 				// Controleer actief wachtwoordbeleid
 				$_POST['checkpw_new'] = $pass_plain;
 				$_POST['checkpw_confirm'] = $pass_plain;
@@ -312,7 +314,7 @@ class LoginModel extends PersistenceModel implements Validator {
 					redirect('/wachtwoord/wijzigen');
 				}
 				// Welcome message
-				setMelding('Welkom ' . ProfielModel::getNaam($account->uid, 'civitas') . '! U bent momenteel <a href="/instellingen#lidinstellingenform-tab-Beveiliging">' . $this->count('uid = ?', array($account->uid)) . 'x ingelogd</a>.', 0);
+				setMelding('Welkom ' . ProfielModel::getNaam($account->uid, 'civitas') . '! U bent momenteel <a href="/instellingen#lidinstellingenform-tab-Beveiliging" style="text-decoration: underline;">' . $this->count('uid = ?', array($account->uid)) . 'x ingelogd</a>.', 0);
 			}
 		}
 		return true;
