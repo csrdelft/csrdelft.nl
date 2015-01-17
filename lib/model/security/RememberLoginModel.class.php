@@ -42,7 +42,7 @@ class RememberLoginModel extends PersistenceModel {
 		} else {
 			$this->create($remember);
 		}
-		return setcookie('remember', $remember->token, time() + (int) Instellingen::get('beveiliging', 'remember_login_seconds'), '/', 'csrdelft.nl', true, true);
+		return setcookie('remember', $remember->token, time() + (int) Instellingen::get('beveiliging', 'remember_login_seconds'), '/', 'csrdelft.nl', FORCE_HTTPS, true);
 	}
 
 	public function forgetLogin($tokenString) {
