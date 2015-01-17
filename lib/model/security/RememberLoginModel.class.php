@@ -29,7 +29,7 @@ class RememberLoginModel extends PersistenceModel {
 		$remember = new RememberLogin();
 		$remember->uid = LoginModel::getUid();
 		$remember->remember_since = getDateTime();
-		$remember->device_name = $_SERVER['HTTP_USER_AGENT'];
+		$remember->device_name = '';
 		$remember->ip = $_SERVER['REMOTE_ADDR'];
 		$remember->lock_ip = true;
 		return $remember;
