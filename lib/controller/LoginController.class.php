@@ -22,8 +22,7 @@ class LoginController extends AclController {
 				'account'			 => 'P_LOGGED_IN',
 				'accountaanvragen'	 => 'P_PUBLIC',
 				'wachtwoord'		 => 'P_PUBLIC',
-				'verify'			 => 'P_PUBLIC',
-				'loginremember'		 => 'P_LOGGED_IN'
+				'verify'			 => 'P_PUBLIC'
 			);
 		} else {
 			$this->acl = array(
@@ -287,13 +286,6 @@ class LoginController extends AclController {
 		if ($this->view->validate()) {
 			$success = RememberLoginModel::instance()->rememberLogin($remember);
 			$this->view = new RememberLoginData(array($remember), $success === true ? 200 : 500);
-		}
-		// Popup
-		elseif (!$this->isPosted()) {
-			require_once 'model/CmsPaginaModel.class.php';
-			require_once 'view/CmsPaginaView.class.php';
-			$body = new CmsPaginaView(CmsPaginaModel::instance()->getPagina(Instellingen::get('stek', 'homepage')));
-			$this->view = new CsrLayoutPage($body, array(), $this->view);
 		}
 	}
 
