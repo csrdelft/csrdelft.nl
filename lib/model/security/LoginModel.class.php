@@ -302,7 +302,7 @@ class LoginModel extends PersistenceModel implements Validator {
 				$this->create($session);
 			}
 
-			if (!$tokenAuthenticated) {
+			if (!$remember AND ! $tokenAuthenticated) {
 				// Controleer actief wachtwoordbeleid
 				$_POST['checkpw_new'] = $pass_plain;
 				$_POST['checkpw_confirm'] = $pass_plain;
