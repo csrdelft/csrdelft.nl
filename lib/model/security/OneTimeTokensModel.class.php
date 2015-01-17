@@ -23,7 +23,7 @@ class OneTimeTokensModel extends PersistenceModel {
 		if (!$token OR $token->verified OR strtotime($token->expire) <= time()) {
 			return false;
 		}
-		if (LoginModel::instance()->login($token->uid, null, true, $token->expire, true)) {
+		if (LoginModel::instance()->login($token->uid, null, true, true, $token->expire)) {
 			$token->verified = true;
 			$this->update($token);
 			redirect($token->url);

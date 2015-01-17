@@ -56,8 +56,7 @@ class LoginModel extends PersistenceModel implements Validator {
 			$token = filter_input(INPUT_GET, 'private_token', FILTER_SANITIZE_STRING);
 			if (preg_match('/^[a-zA-Z0-9]{150}$/', $token)) {
 				$account = AccountModel::instance()->find('private_token = ?', array($token), null, null, 1)->fetch();
-				$expire = getDateTime(time() + (int) Instellingen::get('beveiliging', 'session_lifetime_seconds'));
-				$this->login($account->uid, null, true, $expire, true);
+				$this->login($account->uid, null, true, true, getDateTime());
 			}
 		}
 		if (!self::getAccount()) {
@@ -105,10 +104,6 @@ class LoginModel extends PersistenceModel implements Validator {
 		}
 		// Controleer gekoppeld ip
 		if ($session->lock_ip AND $session->ip !== $_SERVER['REMOTE_ADDR']) {
-			return false;
-		}
-		// Controleer consistentie van browser
-		if ($session->user_agent !== $_SERVER['HTTP_USER_AGENT']) {
 			return false;
 		}
 		// Controleer of wachtwoord is verlopen:
@@ -211,11 +206,11 @@ class LoginModel extends PersistenceModel implements Validator {
 	 * @param string $user
 	 * @param string $pass_plain
 	 * @param boolean $lockIP
-	 * @param string $expire
 	 * @param boolean $tokenAuthenticated
+	 * @param string $expire
 	 * @return boolean
 	 */
-	public function login($user, $pass_plain, $lockIP = false, $expire = null, $tokenAuthenticated = false) {
+	public function login($user, $pass_plain, $lockIP = false, $tokenAuthenticated = false, $expire = null) {
 		$user = filter_var($user, FILTER_SANITIZE_STRING);
 		$pass_plain = filter_var($pass_plain, FILTER_SANITIZE_STRING);
 		switch (constant('MODE')) {
@@ -223,7 +218,7 @@ class LoginModel extends PersistenceModel implements Validator {
 				return $this->loginCli();
 			case 'WEB':
 			default:
-				return $this->loginWeb($user, $pass_plain, $lockIP, $expire, $tokenAuthenticated);
+				return $this->loginWeb($user, $pass_plain, $lockIP, $tokenAuthenticated, $expire);
 		}
 	}
 
@@ -240,29 +235,25 @@ class LoginModel extends PersistenceModel implements Validator {
 		return $this->loginWeb($cred['user'], $cred['pass'], null);
 	}
 
-	private function loginWeb($user, $pass_plain, $lockIP, $expire, $tokenAuthenticated) {
+	private function loginWeb($user, $pass_plain, $lockIP, $tokenAuthenticated, $expire) {
 		$account = false;
-
-		// inloggen met lidnummer of gebruikersnaam
+		// Inloggen met lidnummer of gebruikersnaam
 		if (AccountModel::isValidUid($user)) {
 			$account = AccountModel::get($user);
 		} else {
 			$account = AccountModel::instance()->find('username = ?', array($user), null, null, 1)->fetch();
 		}
-
-		// onbekende gebruiker?
+		// Onbekende gebruiker?
 		if (!$account) {
 			$account = AccountModel::get('x999');
 		}
-
-		// check timeout
+		// Check timeout
 		$timeout = AccountModel::instance()->moetWachten($account);
 		if (!$tokenAuthenticated AND $timeout > 0) {
 			$_SESSION['auth_error'] = 'Wacht ' . $timeout . ' seconden';
 			return false;
 		}
-		// of het wachtwoord klopt
-		// of dat er eerder een token is gecontroleerd
+		// If not yet authenticated by token: check password
 		if ($tokenAuthenticated OR AccountModel::instance()->controleerWachtwoord($account, $pass_plain)) {
 			AccountModel::instance()->successfulLoginAttempt($account);
 		} else {
@@ -288,7 +279,7 @@ class LoginModel extends PersistenceModel implements Validator {
 			$session->session_id = session_id();
 			$session->uid = $account->uid;
 			$session->login_moment = getDateTime();
-			$session->expire = $expire;
+			$session->expire = $expire ? $expire : getDateTime(time() + (int) Instellingen::get('beveiliging', 'session_lifetime_seconds'));
 			$session->user_agent = filter_var($_SERVER['HTTP_USER_AGENT'], FILTER_SANITIZE_STRING);
 			$session->ip = filter_var($_SERVER['REMOTE_ADDR'], FILTER_SANITIZE_STRING);
 			$session->lock_ip = $lockIP; // sessie koppelen aan ip?
@@ -307,7 +298,6 @@ class LoginModel extends PersistenceModel implements Validator {
 					setMelding('Uw wachtwoord is onveilig: ' . str_replace('nieuwe', 'huidige', $field->getError()), 2);
 					redirect('/wachtwoord/wijzigen');
 				}
-
 				// Welcome message
 				setMelding('Welkom ' . ProfielModel::getNaam($account->uid, 'civitas') . '! U bent momenteel <a href="/instellingen#lidinstellingenform-tab-Beveiliging">' . $this->count('uid = ?', array($account->uid)) . 'x ingelogd</a>.', 0);
 			}
