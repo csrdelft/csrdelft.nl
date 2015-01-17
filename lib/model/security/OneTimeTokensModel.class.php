@@ -20,7 +20,7 @@ class OneTimeTokensModel extends PersistenceModel {
 
 	public function verifyToken($uid, $tokenString) {
 		$token = $this->find('uid = ? AND token = ?', array($uid, $tokenString), null, null, 1)->fetch();
-		if (!$token OR $token->verified OR time() >= strtotime($token->expire)) {
+		if (!$token OR $token->verified OR strtotime($token->expire) <= time()) {
 			return false;
 		}
 		if (LoginModel::instance()->login($token->uid, null, true, $token->expire, true)) {
@@ -41,7 +41,7 @@ class OneTimeTokensModel extends PersistenceModel {
 	public function isVerified($uid, $url) {
 		$token = $this->retrieveByPrimaryKey(array($uid, $url));
 		if ($token) {
-			return $token->verified AND LoginModel::getUid() === $token->uid AND time() < strtotime($token->expire);
+			return $token->verified AND LoginModel::getUid() === $token->uid AND strtotime($token->expire) > time();
 		}
 		return false;
 	}
@@ -66,7 +66,7 @@ class OneTimeTokensModel extends PersistenceModel {
 	}
 
 	public function opschonen() {
-		foreach ($this->find('? < expire', array(getDateTime())) as $token) {
+		foreach ($this->find('expire <= ?', array(getDateTime())) as $token) {
 			$this->delete($token);
 		}
 	}

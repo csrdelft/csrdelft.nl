@@ -76,12 +76,39 @@ class LoginModel extends PersistenceModel implements Validator {
 		if (!isset($_SESSION['_uid'])) {
 			return false;
 		}
+		// Public gebruiker vereist geen authenticatie
 		if ($_SESSION['_uid'] === 'x999') {
 			return true;
 		}
-		// Controleer of ingelogd account bestaat
-		$account = self::getAccount();
-		if (!$account) {
+		// Controleer of sessie niet gesloten is door gebruiker
+		$session = $this->retrieveByPrimaryKey(array(session_id()));
+		if (!$session) {
+			return false;
+		}
+		// Controleer switch user status
+		if (isset($_SESSION['_suedFrom'])) {
+			$suedFrom = self::getSuedFrom();
+			if (!$suedFrom OR $session->uid !== $suedFrom->uid) {
+				return false;
+			}
+		}
+		// Controleer of sessie van gebruiker is
+		else {
+			$account = self::getAccount();
+			if (!$account OR $session->uid !== $account->uid) {
+				return false;
+			}
+		}
+		// Controleer of sessie is verlopen
+		if ($session->expire AND strtotime($session->expire) <= time()) {
+			return false;
+		}
+		// Controleer gekoppeld ip
+		if ($session->lock_ip AND $session->ip !== $_SERVER['REMOTE_ADDR']) {
+			return false;
+		}
+		// Controleer consistentie van browser
+		if ($session->user_agent !== $_SERVER['HTTP_USER_AGENT']) {
 			return false;
 		}
 		// Controleer of wachtwoord is verlopen:
@@ -103,38 +130,6 @@ class LoginModel extends PersistenceModel implements Validator {
 					$dagen .= 'en';
 				}
 				setMelding('Uw wachtwoord verloopt over ' . $dagen, 2);
-			}
-		}
-		// Controleer of sessie bestaat
-		$session = $this->retrieveByPrimaryKey(array(session_id()));
-		if (!$session) {
-			return false;
-		}
-		// Controleer of sessie is verlopen
-		if ($session->expire AND time() >= strtotime($session->expire)) {
-			return false;
-		}
-		// Controleer consistentie van browser
-		if ($session->user_agent !== $_SERVER['HTTP_USER_AGENT']) {
-			return false;
-		}
-		// Controleer gekoppeld ip
-		if ($session->lock_ip AND $session->ip !== $_SERVER['REMOTE_ADDR']) {
-			return false;
-		}
-		// Controleer switch user status
-		if (isset($_SESSION['_suedFrom'])) {
-			if ($session->uid !== $_SESSION['_suedFrom']) {
-				return false;
-			}
-			$suedFrom = self::getSuedFrom();
-			if (!$suedFrom) {
-				return false;
-			}
-		} else {
-			// Controleer consistentie van ingelogd account
-			if ($session->uid !== self::getUid()) {
-				return false;
 			}
 		}
 		return true;
@@ -164,9 +159,9 @@ class LoginModel extends PersistenceModel implements Validator {
 	public function logBezoek() {
 		$db = MijnSqli::instance();
 		if (isset($_SESSION['_suedFrom'])) {
-			$uid = self::getSuedFrom()->uid;
+			$uid = $_SESSION['_suedFrom'];
 		} else {
-			$uid = self::getAccount()->uid;
+			$uid = $_SESSION['_uid'];
 		}
 		$datumtijd = getDateTime();
 		$locatie = '';
@@ -392,7 +387,7 @@ class LoginModel extends PersistenceModel implements Validator {
 	}
 
 	public function opschonen() {
-		foreach ($this->find('? < expire', array(getDateTime())) as $session) {
+		foreach ($this->find('expire <= ?', array(getDateTime())) as $session) {
 			$this->delete($session);
 		}
 	}
