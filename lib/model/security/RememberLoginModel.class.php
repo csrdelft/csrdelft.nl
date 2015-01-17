@@ -37,7 +37,7 @@ class RememberLoginModel extends PersistenceModel {
 
 	public function rememberLogin(RememberLogin $remember) {
 		$remember->token = crypto_rand_token(255); // password equivalent: should be hashed
-		if ($this->exist($remember)) {
+		if ($this->exists($remember)) {
 			$this->update($remember);
 		} else {
 			$this->create($remember);
