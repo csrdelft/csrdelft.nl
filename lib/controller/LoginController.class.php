@@ -210,9 +210,7 @@ class LoginController extends AclController {
 					$mail->send();
 					setMelding('Wachtwoord reset email verzonden', 1);
 				} else {
-					require_once 'model/CmsPaginaModel.class.php';
-					require_once 'view/CmsPaginaView.class.php';
-					$form = new CmsPaginaView(CmsPaginaModel::instance()->getPagina('geentoegang'));
+					setMelding('Lidnummer en/of e-mailadres onjuist', -1);
 				}
 			}
 		}

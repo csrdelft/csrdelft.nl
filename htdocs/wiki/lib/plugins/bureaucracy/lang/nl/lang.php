@@ -9,7 +9,7 @@ $lang['e_labelpage']     = 'Labelpagina %s is niet gevonden';
 
 $lang['e_required']      = '"%s" is verplicht';
 $lang['e_match']         = '"%s" heeft een ongeldige waarde. (Moet voldoen aan /%s/i)';
-$lang['e_email']         = '"%s" moet een geldig e-mail adres zijn.';
+$lang['e_email']         = '"%s" moet een geldig E-mailadres zijn.';
 $lang['e_numeric']       = '"%s" moet een nummer zijn.';
 $lang['e_date']          = '"%s" moet een geldige datum zijn in het formaat jjjj-mm-dd.';
 $lang['e_user']          = '"%s" moet de naam van een bestaande gebruiker zijn.';
