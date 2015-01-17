@@ -16,7 +16,6 @@ class LoginSessionsTable extends DataTable implements FormElement {
 		$this->settings['tableTools']['aButtons'] = array();
 		$this->dataUrl = '/loginsessionsdata';
 		$this->hideColumn('uid');
-		$this->hideColumn('lock_ip');
 		$this->searchColumn('login_moment');
 		$this->searchColumn('user_agent');
 	}
@@ -39,7 +38,9 @@ class LoginSessionsData extends DataTableResponse {
 		$array['details'] = '<a href="/loginendsession/' . $session->session_id . '" class="post DataTableResponse" title="Log uit"><img width="16" height="16" class="icon" src="/plaetjes/famfamfam/door_in.png"></a>';
 
 		if ($session->lock_ip) {
-			$array['details'] .= '<img width="16" height="16" class="icon" src="/plaetjes/famfamfam/lock.png" title="Gekoppeld aan IP-adres">';
+			$array['lock_ip'] = '<img width="16" height="16" class="icon" src="/plaetjes/famfamfam/lock.png" title="Gekoppeld aan IP-adres">';
+		} else {
+			$array['lock_ip'] = '';
 		}
 
 		return parent::getJson($array);
@@ -54,7 +55,6 @@ class RememberLoginTable extends DataTable implements FormElement {
 		$this->settings['tableTools']['aButtons'] = array();
 		$this->dataUrl = '/loginrememberdata';
 		$this->hideColumn('uid');
-		$this->hideColumn('lock_ip');
 		$this->searchColumn('remember_since');
 		$this->searchColumn('device_name');
 
@@ -87,7 +87,9 @@ class RememberLoginData extends DataTableResponse {
 		$array = $remember->jsonSerialize();
 
 		if ($remember->lock_ip) {
-			$array['details'] = '<img width="16" height="16" class="icon" src="/plaetjes/famfamfam/lock.png" title="Gekoppeld aan IP-adres">';
+			$array['lock_ip'] = '<img width="16" height="16" class="icon" src="/plaetjes/famfamfam/lock.png" title="Gekoppeld aan IP-adres">';
+		} else {
+			$array['lock_ip'] = '';
 		}
 
 		return parent::getJson($array);
