@@ -99,12 +99,9 @@ class RememberLoginForm extends ModalForm {
 
 	public function __construct(RememberLogin $remember) {
 		parent::__construct($remember, 'rememberform', '/loginremember', 'Automatisch inloggen vanaf huidig apparaat');
+		$this->css_classes[] = 'DataTableResponse';
 
 		$fields[] = new RequiredTextField('device_name', $remember->device_name, 'Naam apparaat');
-		$fields['ip'] = new TextField('ip', $remember->ip, 'IP-adres');
-		$fields['ip']->readonly = true;
-		$fields['lock'] = new VinkField('lock_ip', $remember->lock_ip, 'Koppel IP-adres');
-		$fields['lock']->title = 'Alleen automatisch inloggen vanaf dat IP-adres';
 		$fields[] = new FormDefaultKnoppen('/', false, true, true, true, true);
 
 		$this->addFields($fields);

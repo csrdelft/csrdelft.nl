@@ -273,7 +273,7 @@ function knop_ajax(knop, type) {
 
 		var tableId = knop.attr('DataTableId');
 		if (!document.getElementById(tableId)) {
-			if (knop.parent().attr('id').indexOf('_toolbar') > 0) {
+			if (typeof knop.parent().attr('id') !== 'undefined' && knop.parent().attr('id').indexOf('_toolbar') > 0) {
 				tableId = knop.parent().next('table').attr('id');
 			}
 			else {

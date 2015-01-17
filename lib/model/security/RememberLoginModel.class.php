@@ -36,12 +36,11 @@ class RememberLoginModel extends PersistenceModel {
 	}
 
 	public function rememberLogin(RememberLogin $remember) {
-		$remember->token = crypto_rand_token(255); // password equivalent: should be hashed
 		if ($this->exists($remember)) {
-			$this->update($remember);
-		} else {
-			$this->create($remember);
+			$this->delete($remember);
 		}
+		$remember->token = crypto_rand_token(255); // password equivalent: should be hashed
+		$this->create($remember);
 		return setcookie('remember', $remember->token, time() + (int) Instellingen::get('beveiliging', 'remember_login_seconds'), '/', 'csrdelft.nl', FORCE_HTTPS, true);
 	}
 
