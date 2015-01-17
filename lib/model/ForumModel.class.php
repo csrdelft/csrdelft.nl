@@ -1120,7 +1120,7 @@ class ForumPostsModel extends AbstractForumModel implements Paging {
 	}
 
 	public function verplaatsForumPost(ForumDraad $nieuwDraad, ForumPost $post) {
-		$oudeDraad = $post->draad_id;
+		$oudeDraad = $post->getForumDraad();
 		$post->draad_id = $nieuwDraad->draad_id;
 		$post->laatst_gewijzigd = getDateTime();
 		$post->bewerkt_tekst .= 'verplaatst door [lid=' . LoginModel::getUid() . '] [reldate]' . $post->laatst_gewijzigd . '[/reldate]' . "\n";
