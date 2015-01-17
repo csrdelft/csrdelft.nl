@@ -1128,14 +1128,7 @@ class ForumPostsModel extends AbstractForumModel implements Paging {
 		if ($rowCount !== 1) {
 			throw new Exception('Verplaatsen mislukt');
 		}
-		$draad = $post->getForumDraad();
-		$draad->laatst_gewijzigd = $post->laatst_gewijzigd;
-		$draad->laatste_post_id = $post->post_id;
-		$draad->laatste_wijziging_uid = $post->uid;
-		$rowCount = ForumDradenModel::instance()->update($draad);
-		if ($rowCount !== 1) {
-			throw new Exception('Verplaatsen mislukt');
-		}
+		ForumDradenModel::instance()->resetLastPost($post->getForumDraad());
 		ForumDradenModel::instance()->resetLastPost($oudeDraad);
 	}
 
