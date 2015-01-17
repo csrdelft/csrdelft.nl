@@ -51,6 +51,7 @@ class Formulier implements View, Validator {
 	public $css_classes = array();
 	protected $javascript = '';
 	public $titel;
+	public $linkedDataTableId = null;
 
 	public function __construct($model, $formId, $action, $titel = false) {
 		$this->model = $model;
@@ -250,7 +251,7 @@ class Formulier implements View, Validator {
 	}
 
 	protected function getFormTag() {
-		return '<form enctype="' . $this->enctype . '" action="' . $this->action . '" id="' . $this->getFormId() . '" class="' . implode(' ', $this->css_classes) . '" method="' . ($this->post ? 'post' : 'get') . '">';
+		return '<form enctype="' . $this->enctype . '" action="' . $this->action . '" id="' . $this->getFormId() . '" class="' . implode(' ', $this->css_classes) . '" method="' . ($this->post ? 'post' : 'get') . '"' . ($this->linkedDataTableId ? ' datatableid="' . $this->linkedDataTableId . '"' : '') . '>';
 	}
 
 	protected function getScriptTag() {

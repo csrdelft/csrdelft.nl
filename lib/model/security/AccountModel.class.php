@@ -84,9 +84,8 @@ class AccountModel extends CachedPersistenceModel {
 
 	/**
 	 * Reset het wachtwoord van de gebruiker.
-	 *  - Controleerd GEEN eisen aan wachtwoord
-	 *  - Reset naar random wachtwoord als null
-	 *  - Wordt niet gelogged in de changelog van het profiel
+	 *  - Controleert GEEN eisen aan wachtwoord
+	 *  - Wordt NIET gelogged in de changelog van het profiel
 	 */
 	public function wijzigWachtwoord(Account $account, $pass_plain) {
 		// Niet veranderd?

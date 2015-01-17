@@ -21,23 +21,32 @@ class RememberLoginModel extends PersistenceModel {
 		if (!$remember OR ( $remember->lock_ip AND $ip !== $remember->ip )) {
 			return false;
 		}
+		$this->rememberLogin($remember);
 		return $remember;
+	}
+
+	public function nieuwRememberLogin() {
+		$remember = new RememberLogin();
+		$remember->uid = LoginModel::getUid();
+		$remember->remember_since = getDateTime();
+		$remember->device_name = $_SERVER['HTTP_USER_AGENT'];
+		$remember->ip = $_SERVER['REMOTE_ADDR'];
+		$remember->lock_ip = true;
+		return $remember;
+	}
+
+	public function rememberLogin(RememberLogin $remember) {
+		$remember->token = crypto_rand_token(255); // password equivalent: should be hashed
+		if ($this->exist($remember)) {
+			$this->update($remember);
+		} else {
+			$this->create($remember);
+		}
+		return setcookie('remember', $remember->token, time() + (int) Instellingen::get('beveiliging', 'remember_login_seconds'), '/', 'csrdelft.nl', true, true);
 	}
 
 	public function forgetLogin($tokenString) {
 		$this->deleteByPrimaryKey(array($tokenString));
-	}
-
-	public function rememberLogin($device_name, $lock_ip) {
-		$remember = new RememberLogin();
-		$remember->token = crypto_rand_token(255); // password equivalent: should be hashed
-		$remember->uid = LoginModel::getUid();
-		$remember->remember_since = getDateTime();
-		$remember->device_name = $device_name;
-		$remember->ip = $_SERVER['REMOTE_ADDR'];
-		$remember->lock_ip = $lock_ip;
-		$this->create($remember);
-		return setcookie('remember', $remember->token, time() + (int) Instellingen::get('beveiliging', 'remember_login_seconds'), '/', 'csrdelft.nl', true, true);
 	}
 
 }

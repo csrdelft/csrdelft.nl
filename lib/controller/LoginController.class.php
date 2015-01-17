@@ -23,10 +23,12 @@ class LoginController extends AclController {
 			'accountaanvragen'	 => 'P_PUBLIC',
 			'wachtwoord'		 => 'P_PUBLIC',
 			'verify'			 => 'P_PUBLIC',
-			'sessions'			 => 'P_LOGGED_IN',
-			'endsession'		 => 'P_LOGGED_IN',
-			'lockip'			 => 'P_LOGGED_IN',
-			'remember'			 => 'P_LOGGED_IN'
+			'loginsessionsdata'	 => 'P_LOGGED_IN',
+			'loginendsession'	 => 'P_LOGGED_IN',
+			'loginlockip'		 => 'P_LOGGED_IN',
+			'loginrememberdata'	 => 'P_LOGGED_IN',
+			'loginremember'		 => 'P_LOGGED_IN',
+			'loginforget'		 => 'P_LOGGED_IN'
 		);
 	}
 
@@ -205,9 +207,9 @@ class LoginController extends AclController {
 		$this->view = new CsrLayoutPage($form);
 	}
 
-	public function verify() {
-		$tokenValue = filter_input(INPUT_GET, 'onetime_token', FILTER_SANITIZE_STRING);
-		$form = new VerifyForm($tokenValue);
+	public function verify($tokenString = null) {
+		$tokenString = filter_var($tokenString, FILTER_SANITIZE_STRING);
+		$form = new VerifyForm($tokenString);
 		if ($form->validate()) {
 			// voorkom dat AccessModel ingelogde gebruiker blokkeerd met $allowAuthByToken == false
 			if (LoginModel::instance()->isAuthenticatedByToken()) {
@@ -216,7 +218,7 @@ class LoginController extends AclController {
 			$uid = $form->findByName('user')->getValue();
 			$account = AccountModel::get($uid);
 			// mag inloggen?
-			if ($account AND AccessModel::mag($account, 'P_LOGGED_IN') AND OneTimeTokensModel::instance()->verifyToken($account->uid, $tokenValue)) {
+			if ($account AND AccessModel::mag($account, 'P_LOGGED_IN') AND OneTimeTokensModel::instance()->verifyToken($account->uid, $tokenString)) {
 				// redirect by verifyToken
 			} else {
 				setMelding('Deze link is niet meer geldig', -1);
@@ -225,38 +227,70 @@ class LoginController extends AclController {
 		$this->view = new CsrLayoutPage($form);
 	}
 
-	public function sessions() {
-		$this->view = new SessionsData($this->model->find('uid = ?', array(LoginModel::getUid())));
+	public function loginsessionsdata() {
+		$this->view = new LoginSessionsData($this->model->find('uid = ?', array(LoginModel::getUid())));
 	}
 
-	public function endsession($sessionid) {
-		$session = $this->model->find('session_id = ? AND uid = ?', array($sessionid, LoginModel::getUid()), null, null, 1)->fetch();
-		$deleted = 0;
-		if ($session) {
-			$deleted = $this->model->delete($session);
+	public function loginendsession($sessionId = null) {
+		$session = false;
+		if ($sessionId) {
+			$session = $this->model->find('session_id = ? AND uid = ?', array($sessionId, LoginModel::getUid()), null, null, 1)->fetch();
 		}
+		if (!$session) {
+			$this->geentoegang();
+		}
+		$deleted = $this->model->delete($session);
 		$this->view = new RemoveRowsResponse(array($session), $deleted === 1 ? 200 : 404);
 	}
 
-	public function lockip($sessionid) {
-		$session = $this->model->find('session_id = ? AND uid = ?', array($sessionid, LoginModel::getUid()), null, null, 1)->fetch();
-		if ($session) {
-			$session->lock_ip = !$session->lock_ip;
-			$this->model->update($session);
+	public function loginlockip() {
+		$selection = filter_input(INPUT_POST, 'DataTableSelection', FILTER_SANITIZE_STRING, FILTER_FORCE_ARRAY);
+		$remember = false;
+		if ($selection) {
+			$token = reset($selection);
+			$remember = RememberLoginModel::instance()->find('token = ? AND uid = ?', array($token, LoginModel::getUid()), null, null, 1)->fetch();
 		}
-		$this->view = new SessionsData(array($session));
+		if (!$remember) {
+			$this->geentoegang();
+		}
+		$remember->lock_ip = !$remember->lock_ip;
+		RememberLoginModel::instance()->update($remember);
+		$this->view = new RememberLoginData(array($remember));
 	}
 
-	public function remember() {
-		$form = new RememberLoginForm();
-		if ($form->validate()) {
-			$values = $form->getValues();
-			$success = RememberLoginModel::instance()->rememberLogin($values['device_name'], $values['lock_ip']);
-			if ($success) {
-				//TODO
-			}
+	public function loginrememberdata() {
+		$this->view = new RememberLoginData(RememberLoginModel::instance()->find('uid = ?', array(LoginModel::getUid())));
+	}
+
+	public function loginremember() {
+		$selection = filter_input(INPUT_POST, 'DataTableSelection', FILTER_SANITIZE_STRING, FILTER_FORCE_ARRAY);
+		$remember = false;
+		if ($selection) {
+			$token = reset($selection);
+			$remember = RememberLoginModel::instance()->find('token = ? AND uid = ?', array($token, LoginModel::getUid()), null, null, 1)->fetch();
 		}
-		$this->view = $form;
+		if (!$remember) {
+			$remember = RememberLoginModel::instance()->nieuwRememberLogin();
+		}
+		$this->view = new RememberLoginForm($remember);
+		if ($this->view->validate()) {
+			$success = RememberLoginModel::instance()->rememberLogin($remember);
+			$this->view = new RememberLoginData(array($remember), $success === true ? 200 : 500);
+		}
+	}
+
+	public function loginforget() {
+		$selection = filter_input(INPUT_POST, 'DataTableSelection', FILTER_SANITIZE_STRING, FILTER_FORCE_ARRAY);
+		$remember = false;
+		if ($selection) {
+			$token = reset($selection);
+			$remember = RememberLoginModel::instance()->find('token = ? AND uid = ?', array($token, LoginModel::getUid()), null, null, 1)->fetch();
+		}
+		if (!$remember) {
+			$this->geentoegang();
+		}
+		$deleted = RememberLoginModel::instance()->delete($remember);
+		$this->view = new RemoveRowsResponse(array($remember), $deleted === 1 ? 200 : 404);
 	}
 
 }

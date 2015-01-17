@@ -63,7 +63,7 @@ class DataTable extends TabsForm {
 		$this->tableId = uniqid($orm);
 		parent::__construct(new $orm(), $this->tableId . '_toolbar', null, $titel);
 
-		$this->css_classes[] = 'ModalForm DataTableResponse';
+		$this->css_classes[] = 'ModalForm DataTableResponse DataTableToolbar';
 		$this->groupByColumn = $groupByColumn;
 
 		// create group expand / collapse column
@@ -376,12 +376,11 @@ class DataTableKnop extends FormulierKnop {
 	public $keyshortcut;
 	private $multiplicity;
 
-	public function __construct($multiplicity, $url, $action, $key, $label, $title, $css_class, $float_left = true) {
-		parent::__construct($url, $action, $label, $title, null, $float_left);
+	public function __construct($multiplicity, $url, $action, $key, $label, $title, $icon) {
+		parent::__construct($url, $action . ' DataTableResponse', $label, $title, $icon);
 		$this->multiplicity = $multiplicity;
 		$this->keyshortcut = $key;
 		$this->css_classes[] = 'DTTT_button';
-		$this->css_classes[] = $css_class;
 	}
 
 	public function getUpdateToolbar() {

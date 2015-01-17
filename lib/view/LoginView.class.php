@@ -1,5 +1,7 @@
 <?php
 
+require_once 'model/entity/security/RememberLogin.class.php';
+
 /**
  * LoginView.class.php
  * 
@@ -7,11 +9,12 @@
  * 
  * Tonen van login sessies en diverse formulieren.
  */
-class SessionsView extends DataTable implements FormElement {
+class LoginSessionsTable extends DataTable implements FormElement {
 
 	public function __construct() {
 		parent::__construct(LoginModel::orm, 'Sessiebeheer', 'ip');
-		$this->dataUrl = '/sessions';
+		$this->settings['tableTools']['aButtons'] = array();
+		$this->dataUrl = '/loginsessionsdata';
 		$this->hideColumn('uid');
 		$this->hideColumn('lock_ip');
 		$this->searchColumn('login_moment');
@@ -28,16 +31,83 @@ class SessionsView extends DataTable implements FormElement {
 
 }
 
-class SessionsData extends DataTableResponse {
+class LoginSessionsData extends DataTableResponse {
 
 	public function getJson($session) {
 		$array = $session->jsonSerialize();
 
-		$array['details'] = '<a href="/endsession/' . $array['session_id'] . '" class="post DataTableResponse" title="Log uit"><img width="16" height="16" class="icon" src="/plaetjes/famfamfam/door_in.png"></a>';
+		$array['details'] = '<a href="/loginendsession/' . $session->session_id . '" class="post DataTableResponse" title="Log uit"><img width="16" height="16" class="icon" src="/plaetjes/famfamfam/door_in.png"></a>';
 
-		$array['details'] .= '<a href="/lockip/' . $array['session_id'] . '" class="post DataTableResponse slotje' . ($session->lock_ip ? 'Uit' : 'Aan') . '" title="' . ($session->lock_ip ? 'Ontkoppelen van' : 'Koppelen aan') . ' IP-adres"></a>';
+		if ($session->lock_ip) {
+			$array['details'] .= '<img width="16" height="16" class="icon" src="/plaetjes/famfamfam/lock.png" title="Gekoppeld aan IP-adres">';
+		}
 
 		return parent::getJson($array);
+	}
+
+}
+
+class RememberLoginTable extends DataTable implements FormElement {
+
+	public function __construct() {
+		parent::__construct(RememberLoginModel::orm, 'Automatisch inloggen', 'ip');
+		$this->settings['tableTools']['aButtons'] = array();
+		$this->dataUrl = '/loginrememberdata';
+		$this->hideColumn('uid');
+		$this->hideColumn('lock_ip');
+		$this->searchColumn('remember_since');
+		$this->searchColumn('device_name');
+
+		$nieuw = new DataTableKnop('>= 0', '/loginremember', 'post popup', 78, 'Toevoegen', 'Automatisch inloggen vanaf dit apparaat (Sneltoets: N)', '/famfamfam/add.png');
+		$this->addKnop($nieuw);
+
+		$wijzig = new DataTableKnop('== 1', '/loginremember', 'post popup', 87, 'Naam wijzigen', 'Wijzig naam van apparaat (Sneltoets: W)', '/famfamfam/pencil.png');
+		$this->addKnop($wijzig);
+
+		$lock = new DataTableKnop('== 1', '/loginlockip', 'post', 76, '(Ont)Koppel IP', 'Alleen inloggen vanaf bepaald IP-adres (Sneltoets: L)', '/famfamfam/lock.png');
+		$this->addKnop($lock);
+
+		$forget = new DataTableKnop('== 1', '/loginforget', 'post', null, 'Verwijderen', 'Stop automatische login voor dit apparaat', '/famfamfam/cross.png');
+		$this->addKnop($forget);
+	}
+
+	public function getHtml() {
+		throw new Exception('unsupported');
+	}
+
+	public function getType() {
+		return get_class($this);
+	}
+
+}
+
+class RememberLoginData extends DataTableResponse {
+
+	public function getJson($remember) {
+		$array = $remember->jsonSerialize();
+
+		if ($remember->lock_ip) {
+			$array['details'] = '<img width="16" height="16" class="icon" src="/plaetjes/famfamfam/lock.png" title="Gekoppeld aan IP-adres">';
+		}
+
+		return parent::getJson($array);
+	}
+
+}
+
+class RememberLoginForm extends ModalForm {
+
+	public function __construct(RememberLogin $remember) {
+		parent::__construct($remember, 'rememberform', '/loginremember', 'Automatisch inloggen');
+
+		$fields[] = new TextField('device_name', $remember->device_name, 'Naam apparaat');
+		$fields['ip'] = new TextField('ip', $remember->ip, 'IP-adres');
+		$fields['ip']->readonly = true;
+		$fields['lock'] = new VinkField('lock_ip', $remember->lock_ip, 'Koppel IP-adres');
+		$fields['lock']->title = 'Alleen automatisch inloggen vanaf dat IP-adres';
+		$fields[] = new FormDefaultKnoppen('/', false, true, true, true, true);
+
+		$this->addFields($fields);
 	}
 
 }
@@ -64,23 +134,10 @@ class LoginForm extends Formulier {
 
 }
 
-class RememberLoginForm extends Formulier {
-
-	public function __construct() {
-		parent::__construct(null, 'rememberform', '/remember');
-
-		$fields[] = new TextField('device_name', $_SERVER['HTTP_USER_AGENT'], 'Naam apparaat');
-		$fields[] = new VinkField('lock_ip', true, 'Koppel IP-adres');
-
-		$this->addFields($fields);
-	}
-
-}
-
 class VerifyForm extends Formulier {
 
-	public function __construct($tokenValue) {
-		parent::__construct(null, 'verifyform', '/verify/' . $tokenValue, 'Verifieren');
+	public function __construct($tokenString) {
+		parent::__construct(null, 'verifyform', '/verify/' . $tokenString, 'Verifieren');
 
 		$fields[] = new RequiredTextField('user', null, 'Lidnummer');
 		$fields[] = new FormDefaultKnoppen('/', false, true, true, true);

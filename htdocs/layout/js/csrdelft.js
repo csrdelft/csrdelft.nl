@@ -252,6 +252,9 @@ function knop_ajax(knop, type) {
 	var done = dom_update;
 	var data = knop.attr('data');
 
+	if (knop.hasClass('popup')) {
+		source = false;
+	}
 	if (knop.hasClass('prompt')) {
 		data = data.split('=');
 		var val = prompt(data[0], data[1]);
@@ -266,7 +269,32 @@ function knop_ajax(knop, type) {
 			'link': this.location.href
 		};
 	}
-	if (knop.hasClass('popup')) {
+	if (knop.hasClass('DataTableResponse')) {
+
+		var tableId = knop.attr('DataTableId');
+		if (!document.getElementById(tableId)) {
+			tableId = knop.closest('table').attr('id');
+		}
+
+		var table = $('#' + tableId).DataTable();
+
+		var selection = fnGetSelection('#' + tableId);
+		if (selection) {
+			data = {
+				'DataTableSelection[]': selection
+			};
+		}
+
+		done = function (response) {
+			if (typeof response === 'object') { // JSON
+				fnUpdateDataTable(table, response);
+				modal_close();
+			}
+			else { // HTML
+				dom_update(response);
+			}
+		};
+
 		source = false;
 	}
 	if (knop.hasClass('ReloadPage')) {
@@ -274,20 +302,6 @@ function knop_ajax(knop, type) {
 	}
 	else if (knop.hasClass('redirect')) {
 		done = page_redirect;
-	}
-	else if (knop.hasClass('DataTableResponse')) {
-
-		var tableId = '#' + knop.closest('table').attr('id');
-		var table = $(tableId).DataTable();
-
-		done = function (response) {
-			if (typeof response === 'object') { // JSON
-				fnUpdateDataTable(table, response);
-			}
-			else { // HTML
-				dom_update(response);
-			}
-		};
 	}
 
 	ajax_request(type, knop.attr('href'), data, source, done, alert);
@@ -428,37 +442,42 @@ function form_submit(event) {
 			source = form;
 		}
 
-		if (form.hasClass('ReloadPage')) {
-			done = page_reload;
-		}
-		else if (form.hasClass('redirect')) {
-			done = page_redirect;
-		}
-
 		if (form.hasClass('DataTableResponse')) {
 
-			var tableId;
-			if (form.attr('id').indexOf('_toolbar') > 0) {
-				tableId = form.next('table').attr('id');
+			var tableId = form.attr('DataTableId');
+			if (!document.getElementById(tableId)) {
+				if (form.attr('id').indexOf('_toolbar') > 0) {
+					tableId = form.next('table').attr('id');
+				}
+				else {
+					tableId = form.closest('table').attr('id');
+				}
 			}
-			else {
-				tableId = form.closest('table').attr('id');
-			}
+			var table = $('#' + tableId).DataTable();
 
 			var selection = fnGetSelection('#' + tableId);
-			if (!selection) {
-				return false;
+			if (selection) {
+				formData.append('DataTableSelection[]', selection);
 			}
-			formData.append(tableId + '[]', selection);
 
 			done = function (response) {
 				if (typeof response === 'object') { // JSON
-					fnUpdateDataTable($(tableId).DataTable(), response);
+					fnUpdateDataTable(table, response);
+					modal_close();
 				}
 				else { // HTML
 					dom_update(response);
 				}
 			};
+
+			source = false;
+		}
+
+		if (form.hasClass('ReloadPage')) {
+			done = page_reload;
+		}
+		else if (form.hasClass('redirect')) {
+			done = page_redirect;
 		}
 
 		ajax_request('POST', form.attr('action'), formData, source, done, alert, function () {

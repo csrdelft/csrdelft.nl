@@ -82,10 +82,13 @@ JS;
 
 class FormDefaultKnoppen extends FormKnoppen {
 
-	public function __construct($cancel_url = null, $reset = true, $icons = true, $label = true, $reset_cancel = false) {
+	public function __construct($cancel_url = null, $reset = true, $icons = true, $label = true, $reset_cancel = false, $submit_DataTableResponse = false) {
 		$submit = new SubmitKnop();
 		if ($reset_cancel) {
 			$submit->icon = '/famfamfam/accept.png';
+		}
+		if ($submit_DataTableResponse) {
+			$submit->action .= ' DataTableResponse';
 		}
 		$this->addKnop($submit);
 		if ($reset) {
@@ -109,7 +112,7 @@ class FormDefaultKnoppen extends FormKnoppen {
 		}
 	}
 
-	public function confirmAll() {
+	public function setConfirmAll() {
 		foreach ($this->getModel() as $knop) {
 			$knop->action .= ' confirm';
 		}
