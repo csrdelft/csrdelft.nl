@@ -98,7 +98,7 @@ class RememberLoginData extends DataTableResponse {
 class RememberLoginForm extends ModalForm {
 
 	public function __construct(RememberLogin $remember) {
-		parent::__construct($remember, 'rememberform', '/loginremember', 'Automatisch inloggen');
+		parent::__construct($remember, 'rememberform', '/loginremember', 'Automatisch inloggen vanaf huidig apparaat');
 
 		$fields[] = new RequiredTextField('device_name', $remember->device_name, 'Naam apparaat');
 		$fields['ip'] = new TextField('ip', $remember->ip, 'IP-adres');
