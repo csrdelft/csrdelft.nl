@@ -267,7 +267,7 @@ class LoginModel extends PersistenceModel implements Validator {
 		if ($remember OR $tokenAuthenticated OR AccountModel::instance()->controleerWachtwoord($account, $pass_plain)) {
 			AccountModel::instance()->successfulLoginAttempt($account);
 		} else {
-			$_SESSION['auth_error'] = 'Inloggen niet geslaagd<br><a href="/wachtwoord/vergeten">Wachtwoord vergeten?</a>';
+			$_SESSION['auth_error'] = 'Inloggen niet geslaagd';
 			AccountModel::instance()->failedLoginAttempt($account);
 			return false;
 		}

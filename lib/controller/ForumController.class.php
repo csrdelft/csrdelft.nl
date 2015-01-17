@@ -123,7 +123,6 @@ class ForumController extends Controller {
 	 */
 	public function rss() {
 		header('Content-Type: application/rss+xml; charset=UTF-8');
-		header('Content-Disposition: attachment; filename="rss.xml"');
 		$draden = ForumDradenModel::instance()->getRecenteForumDraden(null, null, true);
 		$this->view = new ForumRssView($draden);
 	}

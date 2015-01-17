@@ -122,8 +122,12 @@ class LoginForm extends Formulier {
 		$fields['pass'] = new WachtwoordField('pass', null, null);
 		$fields['pass']->placeholder = 'Wachtwoord';
 
-		$fields['pauper'] = new VinkField('mobiel', LoginModel::instance()->isPauper(), null, 'Mobiel');
-		$fields['pauper']->onchange = 'this.form.submit();';
+		if (LoginModel::instance()->hasError()) {
+			$fields[] = new HtmlComment('<p class="error">' . LoginModel::instance()->getError() . '</p>');
+		} else {
+			$fields['pauper'] = new VinkField('mobiel', LoginModel::instance()->isPauper(), null, 'Mobiel');
+			$fields['pauper']->onchange = 'this.form.submit();';
+		}
 
 		$fields['url'] = new UrlField('url', HTTP_REFERER, null);
 		$fields['url']->hidden = true;

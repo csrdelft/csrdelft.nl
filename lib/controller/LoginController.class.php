@@ -63,7 +63,9 @@ class LoginController extends AclController {
 		require_once 'view/LoginView.class.php';
 		$form = new LoginForm(); // fetches POST values itself
 		$values = $form->getValues();
-		$this->model->setPauper($values['mobiel']);
+		if (isset($values['mobiel'])) {
+			$this->model->setPauper($values['mobiel']);
+		}
 		if ($form->validate() AND $this->model->login($values['user'], $values['pass'])) {
 			if ($values['mobiel']) {
 				$this->pauper();

@@ -62,7 +62,6 @@ class AgendaController extends AclController {
 
 	public function ical() {
 		header('Content-Type: text/calendar; charset=UTF-8');
-		header('Content-Disposition: attachment; filename="calendar.ics"');
 		$this->view = new AgendaICalendarView($this->model);
 	}
 

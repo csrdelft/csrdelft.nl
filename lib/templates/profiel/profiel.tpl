@@ -29,7 +29,7 @@
 			</div>
 			{getMelding()}
 			<h1 title="Lid-status: {LidStatus::getDescription($profiel->status)}">
-				<div class="status">{LidStatus::getChar($profiel->status)}&nbsp;</div>
+				<span class="status">{LidStatus::getChar($profiel->status)}&nbsp;</span>
 				{$profiel->getNaam('volledig')}
 			</h1>
 		</div>
@@ -63,7 +63,7 @@
 					<div class="label">
 						{if $profiel->adres!=''}
 							<a target="_blank" href="https://maps.google.nl/maps?q={$profiel->adres|urlencode}+{$profiel->woonplaats|urlencode}+{$profiel->land|urlencode} ({if $woonoord != ''}{$profiel->getWoonoord()->getNaam()}{else}{$profiel->getNaam('civitas')}{/if})">
-								<img src="/plaetjes/layout/googlemaps.gif" width="35px" alt="googlemap voor dit adres" />
+								<img src="/plaetjes/layout/googlemaps.gif" width="35" alt="googlemap voor dit adres" />
 							</a>
 						{/if}
 					</div>
@@ -81,7 +81,7 @@
 						{if $profiel->o_adres!=''}
 							<div class="label">
 								<a target="_blank" href="https://maps.google.nl/maps?q={$profiel->o_adres|urlencode}+{$profiel->o_woonplaats|urlencode}+{$profiel->o_land|urlencode} (ouders van {$profiel->getNaam('civitas')})">
-									<img src="/plaetjes/layout/googlemaps.gif" width="35px" alt="googlemap voor dit adres" />
+									<img src="/plaetjes/layout/googlemaps.gif" width="35" alt="googlemap voor dit adres" />
 								</a>
 							</div>
 						{/if}
@@ -225,8 +225,8 @@
 			<div class="label">Corvee-<br />voorkeuren:</div>
 			<ul class="nobullets data">
 				{foreach from=$corveevoorkeuren item=vrk}
-					<li>{$vrk->getCorveeRepetitie()->getDagVanDeWeekText()|truncate:2:""} {$vrk->getCorveeRepetitie()->getCorveeFunctie()->naam}</span></li>
-					{/foreach}
+					<li>{$vrk->getCorveeRepetitie()->getDagVanDeWeekText()|truncate:2:""} {$vrk->getCorveeRepetitie()->getCorveeFunctie()->naam}</li>
+				{/foreach}
 			</ul>
 			<br />
 			<div class="label">Kwalificaties:</div>
@@ -251,14 +251,12 @@
 	{if LoginModel::getUid() === $profiel->uid}
 		<div class="profielregel" id="agenda">
 			<div class="gegevens" id="agenda_gegevens">
-				<div class="label">ICal-feed:</div>
+				<div class="label">Persoonlijke<br />ICal-feed:</div>
 				<div class="data">
 					{if $profiel->getAccount()->hasPrivateToken()}
-						<a href="{$profiel->getAccount()->getICalLink()}">
-							<img src="/plaetjes/knopjes/ical.gif" /> Persoonlijke ICal-feed agenda
-						</a>
+						<input type="text" value="{$profiel->getAccount()->getICalLink()}" size="50" onclick="this.setSelectionRange(0, this.value.length);" readonly />
 					{/if}
-					<small>Gebruikt dezelfde private token als het forum (zie hieronder)</small>
+					&nbsp; <small>Gebruikt dezelfde private token als het forum (zie hieronder)</small>
 				</div>
 				<br />
 			</div>
@@ -269,14 +267,12 @@
 		<div class="profielregel" id="forum">
 			<div class="gegevens" id="forum_gegevens">
 				{if LoginModel::getUid() === $profiel->uid}
-					<div class="label">RSS-feed:</div>
+					<div class="label">Persoonlijk<br />RSS-feed:</div>
 					<div class="data">
 						{if $profiel->getAccount()->hasPrivateToken()}
-							<a href="{$profiel->getAccount()->getRssLink()}">
-								{icon get='feed'} Persoonlijke RSS-feed forum
-							</a>
+							<input type="text" value="{$profiel->getAccount()->getRssLink()}" size="50" onclick="this.setSelectionRange(0, this.value.length);" readonly />
 						{/if}
-						<a name="tokenaanvragen" class="btn" href="/profiel/{$profiel->uid}/resetPrivateToken#forum">Nieuwe aanvragen</a>
+						&nbsp; <a name="tokenaanvragen" class="btn" href="/profiel/{$profiel->uid}/resetPrivateToken#forum">Nieuwe aanvragen</a>
 					</div>
 					<br />
 				{/if}
