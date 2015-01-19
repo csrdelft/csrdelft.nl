@@ -404,9 +404,10 @@ ORDER BY yearweek DESC
 
 	public function removePerson($id) {
 
-		$q = $this->db->prepare("UPDATE socCieKlanten SET deleted = 1 WHERE socCieId = :id");
+		$q = $this->db->prepare("UPDATE socCieKlanten SET deleted = 1 WHERE socCieId = :id AND saldo = 0");
 		$q->bindValue(':id', $id, PDO::PARAM_INT);
-		return $q->execute();
+		$q->execute();
+		return $q->rowCount();
 	}
 
 	public function addPerson($name, $saldo, $uid) {
