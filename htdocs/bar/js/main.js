@@ -331,8 +331,6 @@ $(function () {
 	
 		$(this).click(function () {
 
-            alert(selectedPerson.status);
-
 			var oudlid = selectedPerson.status != 'S_LID' && selectedPerson.status != 'S_GASTLID' && selectedPerson.status != 'S_NOVIET';
 			
 			var toRed;
