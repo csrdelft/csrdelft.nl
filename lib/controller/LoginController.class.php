@@ -273,7 +273,6 @@ class LoginController extends AclController {
 	}
 
 	public function loginremember() {
-		$tableId = filter_input(INPUT_POST, 'DataTableId', FILTER_SANITIZE_STRING);
 		$UUIDs = filter_input(INPUT_POST, 'DataTableSelection', FILTER_SANITIZE_STRING, FILTER_FORCE_ARRAY);
 		if (count($UUIDs) === 1 AND isset($UUIDs[0])) {
 			$remember = RememberLoginModel::getUUID($UUIDs[0]);
@@ -283,7 +282,7 @@ class LoginController extends AclController {
 		if (!$remember OR $remember->uid !== LoginModel::getUid()) {
 			$this->geentoegang();
 		}
-		$form = new RememberLoginForm($tableId, $remember);
+		$form = new RememberLoginForm($remember);
 		if ($form->validate()) {
 			$success = RememberLoginModel::instance()->rememberLogin($remember);
 			$this->view = new RememberLoginData(array($remember), $success === true ? 200 : 500);

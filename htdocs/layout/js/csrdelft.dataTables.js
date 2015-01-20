@@ -35,8 +35,7 @@ function fnUpdateDataTable(table, data) {
 			}
 		}
 		else {
-			$tr = table.row.add(row).draw().node();
-			init_context($tr);
+			table.row.add(row);
 		}
 	});
 	table.draw(false);

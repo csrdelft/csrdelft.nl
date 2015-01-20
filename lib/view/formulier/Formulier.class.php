@@ -324,16 +324,10 @@ class ModalForm extends Formulier {
  */
 class DataTableForm extends ModalForm {
 
-	private $tableId;
-
-	public function __construct($tableId, $model, $formId, $action, $titel = false) {
-		parent::__construct($model, $formId, $action, $titel);
-		$this->tableId = $tableId;
-	}
-
 	protected function getFormTag() {
 		$tag = parent::getFormTag();
-		return substr($tag, 0, strlen($tag) - 1) . ' DataTableId="' . $this->tableId . '">';
+		$tableId = filter_input(INPUT_POST, 'DataTableId', FILTER_SANITIZE_STRING);
+		return substr($tag, 0, strlen($tag) - 1) . ' DataTableId="' . $tableId . '">';
 	}
 
 }

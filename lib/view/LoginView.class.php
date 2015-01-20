@@ -37,6 +37,8 @@ class LoginSessionsData extends DataTableResponse {
 
 		$array['details'] = '<a href="/loginendsession/' . $session->session_id . '" class="post DataTableResponse SingleRow" title="Log uit"><img width="16" height="16" class="icon" src="/plaetjes/famfamfam/door_in.png"></a>';
 
+		$array['login_moment'] = reldate($array['login_moment']);
+
 		if ($session->lock_ip) {
 			$array['lock_ip'] = '<img width="16" height="16" class="icon" src="/plaetjes/famfamfam/lock.png" title="Gekoppeld aan IP-adres">';
 		} else {
@@ -89,6 +91,8 @@ class RememberLoginData extends DataTableResponse {
 
 		$array['token'] = ''; // keep it private
 
+		$array['remember_since'] = reldate($array['remember_since']);
+
 		if ($remember->lock_ip) {
 			$array['lock_ip'] = '<img width="16" height="16" class="icon" src="/plaetjes/famfamfam/lock.png" title="Gekoppeld aan IP-adres">';
 		} else {
@@ -102,8 +106,8 @@ class RememberLoginData extends DataTableResponse {
 
 class RememberLoginForm extends DataTableForm {
 
-	public function __construct($tableId, RememberLogin $remember) {
-		parent::__construct($tableId, $remember, 'rememberform', '/loginremember', 'Automatisch inloggen vanaf huidig apparaat');
+	public function __construct(RememberLogin $remember) {
+		parent::__construct($remember, 'rememberform', '/loginremember', 'Automatisch inloggen vanaf huidig apparaat');
 		$this->css_classes[] = 'DataTableResponse';
 
 		$fields[] = new RequiredTextField('device_name', $remember->device_name, 'Naam apparaat');

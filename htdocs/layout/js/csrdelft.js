@@ -473,9 +473,6 @@ function form_submit(event) {
 			}
 
 			done = function (response) {
-
-				console.log(tableId);
-
 				if (typeof response === 'object') { // JSON
 					fnUpdateDataTable(table, response);
 					modal_close();
