@@ -1202,15 +1202,26 @@ class RequiredWachtwoordWijzigenField extends WachtwoordWijzigenField {
 
 class ObjectIdField extends InputField {
 
-	public function __construct(PersistentEntity $entity) {
+	public $empty_null = true;
+	protected $new;
+
+	public function __construct(PersistentEntity $entity, $new = false) {
 		parent::__construct(get_class($entity), $entity->getValues(true), null, $entity);
 		$this->readonly = true;
 		$this->hidden = true;
+		$this->new = $new;
 	}
 
 	public function getValue() {
 		if ($this->isPosted()) {
 			$this->value = filter_input(INPUT_POST, $this->name, FILTER_SANITIZE_STRING, FILTER_REQUIRE_ARRAY);
+			if ($this->empty_null) {
+				foreach ($this->value as $i => $key) {
+					if ($key == '') {
+						$this->value[$i] = null;
+					}
+				}
+			}
 		}
 		return $this->value;
 	}
@@ -1219,9 +1230,11 @@ class ObjectIdField extends InputField {
 		if (!parent::validate()) {
 			return false;
 		}
-		foreach ($this->model->getPrimaryKey() as $i => $key) {
-			if (!isset($this->value[$i])) {
-				$this->error = 'Missing part of objectId: ' . $key;
+		if (!$this->new) {
+			foreach ($this->model->getPrimaryKey() as $i => $key) {
+				if (!isset($this->value[$i])) {
+					$this->error = 'Missing part of objectId: ' . $key;
+				}
 			}
 		}
 		return $this->error === '';
@@ -1230,7 +1243,7 @@ class ObjectIdField extends InputField {
 	public function getHtml() {
 		$html = '';
 		foreach ($this->value as $i => $value) {
-			$html .= '<input name="' . $this->name . '[]" ' . $this->getInputAttribute(array('type', 'value')) . ' />';
+			$html .= '<input type="hidden" name="' . $this->name . '[]" value="' . $value . '" />';
 		}
 		return $html;
 	}

@@ -102,10 +102,11 @@ class RememberLoginData extends DataTableResponse {
 
 class RememberLoginForm extends ModalForm {
 
-	public function __construct(RememberLogin $remember) {
+	public function __construct(RememberLogin $remember, $new) {
 		parent::__construct($remember, 'rememberform', '/loginremember', 'Automatisch inloggen vanaf huidig apparaat');
-		$this->css_classes[] = 'DataTableResponse';
+		$this->css_classes[] = 'DataTableResponse SingleRow';
 
+		$fields[] = new ObjectIdField($remember, $new);
 		$fields[] = new RequiredTextField('device_name', $remember->device_name, 'Naam apparaat');
 		$fields[] = new FormDefaultKnoppen('/', false, true, true, true, true);
 

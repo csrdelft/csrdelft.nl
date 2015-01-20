@@ -279,10 +279,12 @@ class LoginController extends AclController {
 			if (!$remember OR $remember->uid !== LoginModel::getUid()) {
 				$this->geentoegang();
 			}
+			$new = false;
 		} else {
+			$new = true;
 			$remember = RememberLoginModel::instance()->nieuwRememberLogin();
 		}
-		$this->view = new RememberLoginForm($remember);
+		$this->view = new RememberLoginForm($remember, $new);
 		if ($this->view->validate()) {
 			$success = RememberLoginModel::instance()->rememberLogin($remember);
 			$this->view = new RememberLoginData(array($remember), $success === true ? 200 : 500);

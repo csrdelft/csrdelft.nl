@@ -461,9 +461,11 @@ function form_submit(event) {
 			}
 			var table = $('#' + tableId).DataTable();
 
-			var selection = fnGetSelection('#' + tableId);
-			if (selection) {
-				formData.append('DataTableSelection[]', selection);
+			if (!form.hasClass('SingleRow')) { // otherwise requires ObjectIdField
+				var selection = fnGetSelection('#' + tableId);
+				if (selection) {
+					formData.append('DataTableSelection[]', selection);
+				}
 			}
 
 			done = function (response) {
@@ -476,9 +478,7 @@ function form_submit(event) {
 				}
 			};
 
-			if (!form.hasClass('SingleRow')) {
-				source = false;
-			}
+			source = false;
 		}
 
 		if (form.hasClass('ReloadPage')) {
