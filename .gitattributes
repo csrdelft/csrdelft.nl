@@ -4700,3 +4700,4 @@ sql/8365_kringcoach.sql -text
 sql/8499_foreign_keys.sql -text
 sql/8507_remember_login.sql -text
 sql/8526_more_foreign_keys.sql -text
+sql/8528_token_id.sql -text

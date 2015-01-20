@@ -53,7 +53,7 @@ class LoginModel extends PersistenceModel implements Validator {
 
 			// Remember login
 			if (isset($_COOKIE['remember'])) {
-				$remember = RememberLoginModel::instance()->verifyLogin($_SERVER['REMOTE_ADDR'], $_COOKIE['remember']);
+				$remember = RememberLoginModel::instance()->verifyToken($_SERVER['REMOTE_ADDR'], $_COOKIE['remember']);
 				if ($remember) {
 					$this->login($remember->uid, null, $remember, $remember->lock_ip);
 				}

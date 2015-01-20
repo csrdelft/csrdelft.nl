@@ -299,7 +299,9 @@ function knop_ajax(knop, type) {
 			}
 		};
 
-		source = false;
+		if (!knop.hasClass('SingleRow')) {
+			source = false;
+		}
 	}
 	if (knop.hasClass('ReloadPage')) {
 		done = page_reload;
@@ -474,7 +476,9 @@ function form_submit(event) {
 				}
 			};
 
-			source = false;
+			if (!form.hasClass('SingleRow')) {
+				source = false;
+			}
 		}
 
 		if (form.hasClass('ReloadPage')) {

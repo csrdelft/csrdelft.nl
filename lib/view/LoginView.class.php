@@ -35,7 +35,7 @@ class LoginSessionsData extends DataTableResponse {
 	public function getJson($session) {
 		$array = $session->jsonSerialize();
 
-		$array['details'] = '<a href="/loginendsession/' . $session->session_id . '" class="post DataTableResponse" title="Log uit"><img width="16" height="16" class="icon" src="/plaetjes/famfamfam/door_in.png"></a>';
+		$array['details'] = '<a href="/loginendsession/' . $session->session_id . '" class="post DataTableResponse SingleRow" title="Log uit"><img width="16" height="16" class="icon" src="/plaetjes/famfamfam/door_in.png"></a>';
 
 		if ($session->lock_ip) {
 			$array['lock_ip'] = '<img width="16" height="16" class="icon" src="/plaetjes/famfamfam/lock.png" title="Gekoppeld aan IP-adres">';
@@ -54,20 +54,21 @@ class RememberLoginTable extends DataTable implements FormElement {
 		parent::__construct(RememberLoginModel::orm, 'Automatisch inloggen', 'ip');
 		$this->settings['tableTools']['aButtons'] = array();
 		$this->dataUrl = '/loginrememberdata';
+		$this->hideColumn('token');
 		$this->hideColumn('uid');
 		$this->searchColumn('remember_since');
 		$this->searchColumn('device_name');
 
-		$nieuw = new DataTableKnop('>= 0', '/loginremember', 'post popup', 78, 'Toevoegen', 'Automatisch inloggen vanaf dit apparaat (Sneltoets: N)', '/famfamfam/add.png');
+		$nieuw = new DataTableKnop('>= 0', '/loginremember', 'post popup', null, 'Toevoegen', 'Automatisch inloggen vanaf dit apparaat', '/famfamfam/add.png');
 		$this->addKnop($nieuw);
 
-		$wijzig = new DataTableKnop('== 1', '/loginremember', 'post popup', 87, 'Naam wijzigen', 'Wijzig naam van apparaat (Sneltoets: W)', '/famfamfam/pencil.png');
+		$wijzig = new DataTableKnop('== 1', '/loginremember', 'post popup', null, 'Naam wijzigen', 'Wijzig naam van apparaat', '/famfamfam/pencil.png');
 		$this->addKnop($wijzig);
 
-		$lock = new DataTableKnop('== 1', '/loginlockip', 'post', 76, '(Ont)Koppel IP', 'Alleen inloggen vanaf bepaald IP-adres (Sneltoets: L)', '/famfamfam/lock.png');
+		$lock = new DataTableKnop('>= 1', '/loginlockip', 'post', null, '(Ont)Koppel IP', 'Alleen inloggen vanaf bepaald IP-adres', '/famfamfam/lock.png');
 		$this->addKnop($lock);
 
-		$forget = new DataTableKnop('== 1', '/loginforget', 'post', null, 'Verwijderen', 'Stop automatische login voor dit apparaat', '/famfamfam/cross.png');
+		$forget = new DataTableKnop('>= 1', '/loginforget', 'post', null, 'Verwijderen', 'Stop automatische login voor dit apparaat', '/famfamfam/cross.png');
 		$this->addKnop($forget);
 	}
 
@@ -85,6 +86,8 @@ class RememberLoginData extends DataTableResponse {
 
 	public function getJson($remember) {
 		$array = $remember->jsonSerialize();
+
+		$array['token'] = ''; // keep it private
 
 		if ($remember->lock_ip) {
 			$array['lock_ip'] = '<img width="16" height="16" class="icon" src="/plaetjes/famfamfam/lock.png" title="Gekoppeld aan IP-adres">';

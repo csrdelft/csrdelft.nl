@@ -255,17 +255,17 @@ class LoginController extends AclController {
 
 	public function loginlockip() {
 		$selection = filter_input(INPUT_POST, 'DataTableSelection', FILTER_SANITIZE_STRING, FILTER_FORCE_ARRAY);
-		$remember = false;
-		if ($selection) {
-			$token = reset($selection);
-			$remember = RememberLoginModel::instance()->find('token = ? AND uid = ?', array($token, LoginModel::getUid()), null, null, 1)->fetch();
+		$response = array();
+		foreach ($selection as $id) {
+			$remember = RememberLoginModel::get($id);
+			if (!$remember OR $remember->uid !== LoginModel::getUid()) {
+				$this->geentoegang();
+			}
+			$remember->lock_ip = !$remember->lock_ip;
+			RememberLoginModel::instance()->update($remember);
+			$response[] = $remember;
 		}
-		if (!$remember) {
-			$this->geentoegang();
-		}
-		$remember->lock_ip = !$remember->lock_ip;
-		RememberLoginModel::instance()->update($remember);
-		$this->view = new RememberLoginData(array($remember));
+		$this->view = new RememberLoginData($response);
 	}
 
 	public function loginrememberdata() {
@@ -274,12 +274,12 @@ class LoginController extends AclController {
 
 	public function loginremember() {
 		$selection = filter_input(INPUT_POST, 'DataTableSelection', FILTER_SANITIZE_STRING, FILTER_FORCE_ARRAY);
-		$remember = false;
-		if ($selection) {
-			$token = reset($selection);
-			$remember = RememberLoginModel::instance()->find('token = ? AND uid = ?', array($token, LoginModel::getUid()), null, null, 1)->fetch();
-		}
-		if (!$remember) {
+		if (count($selection) === 1) {
+			$remember = RememberLoginModel::get(reset($selection));
+			if (!$remember OR $remember->uid !== LoginModel::getUid()) {
+				$this->geentoegang();
+			}
+		} else {
 			$remember = RememberLoginModel::instance()->nieuwRememberLogin();
 		}
 		$this->view = new RememberLoginForm($remember);
@@ -291,16 +291,16 @@ class LoginController extends AclController {
 
 	public function loginforget() {
 		$selection = filter_input(INPUT_POST, 'DataTableSelection', FILTER_SANITIZE_STRING, FILTER_FORCE_ARRAY);
-		$remember = false;
-		if ($selection) {
-			$token = reset($selection);
-			$remember = RememberLoginModel::instance()->find('token = ? AND uid = ?', array($token, LoginModel::getUid()), null, null, 1)->fetch();
+		$response = array();
+		foreach ($selection as $id) {
+			$remember = RememberLoginModel::get($id);
+			if (!$remember OR $remember->uid !== LoginModel::getUid()) {
+				$this->geentoegang();
+			}
+			RememberLoginModel::instance()->delete($remember);
+			$response[] = $remember;
 		}
-		if (!$remember) {
-			$this->geentoegang();
-		}
-		$deleted = RememberLoginModel::instance()->delete($remember);
-		$this->view = new RemoveRowsResponse(array($remember), $deleted === 1 ? 200 : 404);
+		$this->view = new RemoveRowsResponse($response);
 	}
 
 }
