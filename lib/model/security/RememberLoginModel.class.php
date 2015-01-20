@@ -21,7 +21,7 @@ class RememberLoginModel extends PersistenceModel {
 	}
 
 	public function verifyToken($ip, $tokenString) {
-		$remember = $this->find('token = ? AND (lock_ip = FALSE OR ip = ?)', array($tokenString, $ip));
+		$remember = $this->find('token = ? AND (lock_ip = FALSE OR ip = ?)', array($tokenString, $ip), null, null, 1)->fetch();
 		if (!$remember) {
 			return false;
 		}
