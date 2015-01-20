@@ -3,7 +3,7 @@
 	<ul class="is-hidden">
 		<li class="go-back"><a href="#0">{LoginModel::getProfiel()->getNaam('volledig')}</a></li>
 	{if LoginModel::instance()->isSued()}
-		<li><a href="/endsu" class="error" title="Switch user actie beeindingen">SU {LoginModel::getSuedFrom()->getNaam('civitas')}</a></li>
+		<li><a href="/endsu" class="error" title="Switch user actie beeindingen">SU {ProfielModel::getNaam(LoginModel::getSuedFrom()->uid, 'civitas')}</a></li>
 	{/if}
 		<li>
 			<a href="/profiel/{LoginModel::getUid()}#SocCieSaldo" title="Bekijk SocCie saldo historie">
