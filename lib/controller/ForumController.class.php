@@ -512,13 +512,11 @@ class ForumController extends Controller {
 			if (!$draad OR $draad->forum_id !== $deel->forum_id OR ! $draad->magPosten()) {
 				$this->geentoegang();
 			}
-			$url = '/forum/onderwerp/' . $draad->draad_id;
 			$nieuw = false;
 		} else {
 			if (!$deel->magPosten()) {
 				$this->geentoegang();
 			}
-			$url = '/forum/deel/' . $deel->forum_id;
 			$nieuw = true;
 
 			$titel = trim(filter_input(INPUT_POST, 'titel', FILTER_SANITIZE_STRING));
@@ -531,7 +529,7 @@ class ForumController extends Controller {
 		$spamtrap = filter_input(INPUT_POST, 'firstname', FILTER_UNSAFE_RAW);
 		if (!empty($spamtrap) OR $filter->isSpam($tekst) OR ( isset($titel) AND $filter->isSpam($titel) )) { //TODO: logging
 			setMelding('SPAM', -1);
-			redirect('/forum');
+			$this->geentoegang();
 		}
 
 		// voorkom dubbelposts
@@ -541,11 +539,11 @@ class ForumController extends Controller {
 			// concept wissen
 			if ($nieuw) {
 				ForumDradenReagerenModel::instance()->setConcept($deel);
+				return $this->deel($deel->forum_id);
 			} else {
 				ForumDradenReagerenModel::instance()->setConcept($deel, $draad->draad_id);
+				return $this->onderwerp($draad->draad_id);
 			}
-
-			redirect($url);
 		}
 
 		// concept opslaan
@@ -563,11 +561,15 @@ class ForumController extends Controller {
 			$mailadres = filter_input(INPUT_POST, 'email', FILTER_SANITIZE_EMAIL);
 			if (!email_like($mailadres)) {
 				setMelding('U moet een geldig e-mailadres opgeven!', -1);
-				redirect($url);
+				if ($nieuw) {
+					return $this->deel($deel->forum_id);
+				} else {
+					return $this->onderwerp($draad->draad_id);
+				}
 			}
 			if ($filter->isSpam($mailadres)) { //TODO: logging
 				setMelding('SPAM', -1);
-				redirect($url);
+				$this->geentoegang();
 			}
 		}
 
@@ -575,7 +577,7 @@ class ForumController extends Controller {
 		if ($nieuw) {
 			if (empty($titel)) {
 				setMelding('U moet een titel opgeven!', -1);
-				redirect($url);
+				return $this->deel($deel->forum_id);
 			}
 			// maak draad
 			$draad = ForumDradenModel::instance()->maakForumDraad($deel->forum_id, $titel, $wacht_goedkeuring);
@@ -589,10 +591,6 @@ class ForumController extends Controller {
 			setMelding('Uw bericht is opgeslagen en zal als het goedgekeurd is geplaatst worden.', 1);
 
 			mail('pubcie@csrdelft.nl', 'Nieuw bericht wacht op goedkeuring', CSR_ROOT . "/forum/onderwerp/" . $draad->draad_id . "/wacht#" . $post->post_id . "\n\nDe inhoud van het bericht is als volgt: \n\n" . str_replace('\r\n', "\n", $tekst) . "\n\nEINDE BERICHT", "From: pubcie@csrdelft.nl\r\nReply-To: " . $mailadres);
-
-			if ($nieuw) {
-				redirect('/forum/deel/' . $deel->forum_id);
-			}
 		} else {
 			// direct goedkeuren voor ingelogd
 			ForumPostsModel::instance()->goedkeurenForumPost($post);
@@ -610,15 +608,6 @@ class ForumController extends Controller {
 			}
 
 			setMelding(($nieuw ? 'Draad' : 'Post') . ' succesvol toegevoegd', 1);
-
-			$url = '/forum/reactie/' . $post->post_id . '#' . $post->post_id;
-		}
-
-		// concept wissen
-		if ($nieuw) {
-			ForumDradenReagerenModel::instance()->setConcept($deel);
-		} else {
-			ForumDradenReagerenModel::instance()->setConcept($deel, $draad->draad_id);
 		}
 
 		// markeer als gelezen
@@ -627,8 +616,22 @@ class ForumController extends Controller {
 		// voorkom dubbelposts
 		$_SESSION['forum_laatste_post_tekst'] = $tekst;
 
-		// redirect naar post
-		redirect($url);
+		// concept wissen
+		if ($nieuw) {
+			ForumDradenReagerenModel::instance()->setConcept($deel);
+
+			if ($wacht_goedkeuring) {
+				return $this->deel($deel->forum_id);
+			}
+			return $this->onderwerp($draad->draad_id);
+		} else {
+			ForumDradenReagerenModel::instance()->setConcept($deel, $draad->draad_id);
+
+			if ($wacht_goedkeuring) {
+				return $this->onderwerp($draad->draad_id);
+			}
+			return $this->reactie($post->post_id);
+		}
 	}
 
 	public function citeren($post_id) {
