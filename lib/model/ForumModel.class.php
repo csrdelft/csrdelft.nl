@@ -868,9 +868,6 @@ class ForumDradenModel extends AbstractForumModel implements Paging {
 		$draad->laatste_wijziging_uid = $last_post->uid;
 		$draad->laatst_gewijzigd = $last_post->laatst_gewijzigd;
 		$rowCount = $this->update($draad);
-		if ($rowCount !== 1) {
-			throw new Exception('Reset last post mislukt');
-		}
 	}
 
 }
