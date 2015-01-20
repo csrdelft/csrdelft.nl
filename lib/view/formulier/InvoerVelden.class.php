@@ -20,8 +20,9 @@
  *  	* NickField					Nicknames
  *  	* DuckField					Ducknames
  * 		* LidField					Leden selecteren
+ * 		* DataTableSelectionField	DataTable selection of UUIDs
  * 	- WachtwoordWijzigenField		Wachtwoorden (oude, nieuwe, nieuwe ter bevestiging)
- *  - ObjectIdField					PersistentEntity primary key values array
+ *  - EntityField					PersistentEntity primary key values array
  * 
  * 
  * Meer uitbreidingen van InputField:
@@ -62,8 +63,8 @@ abstract class InputField implements FormElement, Validator {
 	public $onkeydown = null; // prevent illegal character from being entered
 	public $onkeyup = null; // respond to keyboard strokes
 	public $typeahead_selected = null; // callback gekozen suggestie
-	public $max_len = 0; // maximale lengte van de invoer
-	public $min_len = 0; // minimale lengte van de invoer
+	public $max_len = null; // maximale lengte van de invoer
+	public $min_len = null; // minimale lengte van de invoer
 	public $rows = 0; // aantal rijen van textarea
 	public $css_classes = array('FormElement'); // array met classnames die later in de class-tag komen
 	public $suggestions = array(); // lijst van search providers
@@ -145,12 +146,12 @@ abstract class InputField implements FormElement, Validator {
 				$this->error = 'Dit is een verplicht veld';
 			}
 		}
-		// als max_len > 0 dan checken of de lengte er niet boven zit
-		if ($this->max_len > 0 AND strlen($this->value) > $this->max_len) {
+		// als max_len is gezet dan checken of de lengte er niet boven zit
+		if (is_int($this->max_len) AND strlen($this->value) > $this->max_len) {
 			$this->error = 'Dit veld mag maximaal ' . $this->max_len . ' tekens lang zijn';
 		}
-		// als min_len > 0 dan checken of de lengte er niet onder zit
-		if ($this->min_len > 0 AND strlen($this->value) < $this->min_len) {
+		// als min_len is gezet dan checken of de lengte er niet onder zit
+		if (is_int($this->min_len) AND strlen($this->value) < $this->min_len) {
 			$this->error = 'Dit veld moet minimaal ' . $this->min_len . ' tekens lang zijn';
 		}
 		// als blacklist is gezet dan controleren
@@ -328,12 +329,12 @@ abstract class InputField implements FormElement, Validator {
 				}
 				break;
 			case 'maxlength':
-				if ($this->max_len > 0) {
+				if (is_int($this->max_len)) {
 					return 'maxlength="' . $this->max_len . '"';
 				}
 				break;
 			case 'rows':
-				if ($this->rows > 0) {
+				if (is_int($this->rows)) {
 					return 'rows="' . $this->rows . '"';
 				}
 				break;
@@ -561,8 +562,12 @@ class TextField extends InputField {
 
 	public function __construct($name, $value, $description, $max_len = 255, $min_len = 0, $model = null) {
 		parent::__construct($name, $value === null ? $value : htmlspecialchars_decode($value), $description, $model);
-		$this->max_len = (int) $max_len;
-		$this->min_len = (int) $min_len;
+		if (is_int($max_len)) {
+			$this->max_len = $max_len;
+		}
+		if (is_int($min_len)) {
+			$this->min_len = $min_len;
+		}
 		if ($this->isPosted()) {
 			// reverse InputField constructor $this->getValue()
 			$this->value = htmlspecialchars_decode($this->value);
@@ -1000,7 +1005,9 @@ class TextareaField extends TextField {
 
 	public function __construct($name, $value, $description, $rows = 3, $max_len = null, $min_len = null) {
 		parent::__construct($name, $value, $description, $max_len, $min_len);
-		$this->rows = (int) $rows;
+		if (is_int($rows)) {
+			$this->rows = $rows;
+		}
 		$this->css_classes[] = 'AutoSize textarea-transition';
 	}
 
@@ -1200,52 +1207,49 @@ class RequiredWachtwoordWijzigenField extends WachtwoordWijzigenField {
 
 }
 
-class ObjectIdField extends InputField {
+class DataTableSelectionField extends InputField {
 
-	public $empty_null = true;
-	protected $new;
+	public $hidden = true;
+	public $readonly = true;
+	public $min = null;
+	public $max = null;
 
-	public function __construct(PersistentEntity $entity, $new = false) {
-		parent::__construct(get_class($entity), $entity->getValues(true), null, $entity);
-		$this->readonly = true;
-		$this->hidden = true;
-		$this->new = $new;
+	public function __construct(array $UUIDs, $min = 0, $max = null) {
+		parent::__construct('DataTableSelection', $UUIDs, null);
+		if (is_int($min)) {
+			$this->min = $min;
+		}
+		if (is_int($max)) {
+			$this->max = $max;
+		}
+	}
+
+	public function isPosted() {
+		if ($this->min === 0) {
+			return true;
+		}
+		return parent::isPosted();
 	}
 
 	public function getValue() {
 		if ($this->isPosted()) {
 			$this->value = filter_input(INPUT_POST, $this->name, FILTER_SANITIZE_STRING, FILTER_REQUIRE_ARRAY);
-			if ($this->empty_null) {
-				foreach ($this->value as $i => $key) {
-					if ($key == '') {
-						$this->value[$i] = null;
-					}
-				}
-			}
 		}
 		return $this->value;
 	}
 
-	public function validate() {
-		if (!parent::validate()) {
-			return false;
-		}
-		if (!$this->new) {
-			foreach ($this->model->getPrimaryKey() as $i => $key) {
-				if (!isset($this->value[$i])) {
-					$this->error = 'Missing part of objectId: ' . $key;
-				}
-			}
-		}
-		return $this->error === '';
-	}
-
 	public function getHtml() {
 		$html = '';
-		foreach ($this->value as $i => $value) {
-			$html .= '<input type="hidden" name="' . $this->name . '[]" value="' . $value . '" />';
+		foreach ($this->value as $UUID) {
+			$html .= '<input name="' . $this->name . '[]" value="' . $UUID . '" origvalue="' . $UUID . '" ' . $this->getInputAttribute(array('type', 'id', 'disabled', 'readonly')) . ' />';
 		}
 		return $html;
 	}
+
+}
+
+class RequiredDataTableSelectionField extends DataTableSelectionField {
+
+	public $required = true;
 
 }

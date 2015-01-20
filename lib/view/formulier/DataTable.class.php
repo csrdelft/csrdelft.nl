@@ -241,7 +241,7 @@ class DataTable extends TabsForm {
 				};
 
 				var fnCreatedRowCallback = function (tr, data, index) {
-					$(tr).attr('data-objectid', data.objectId);
+					$(tr).attr('data-UUID', data.UUID);
 					init_context(tr);
 					if ('detailSource' in data) {
 						$(tr).children('td:first').addClass('toggle-childrow').data('detailSource', data.detailSource);
@@ -265,7 +265,7 @@ class DataTable extends TabsForm {
 
 				var tableId = '#<?= $this->tableId; ?>';
 				var table = $(tableId).DataTable(<?= $settingsJson; ?>);
-				var keys = new $.fn.dataTable.KeyTable($(tableId));
+				//var keys = new $.fn.dataTable.KeyTable($(tableId));
 
 				// Toolbar update on row selection
 				var fnUpdateToolbar = <?= $this->getUpdateToolbarFunction(); ?>;
@@ -315,17 +315,19 @@ class DataTable extends TabsForm {
 					if (element == 'INPUT' || element == 'TEXTAREA' || element == 'SELECT') {
 						return;
 					}
-					if (keyshortcuts.indexOf(event.keyCode) >= 0) {
-						event.preventDefault();
-						var td = keys.fnGetCurrentTD();
-						if (td) {
-							fnMultiSelect(event, $(td).parent());
-							fnUpdateToolbar();
-							if (event.keyCode === 13 || event.keyCode === 32) { // enter, space
-								$(td).trigger('click');
-							}
-						}
-					}
+					/*
+					 if (keyshortcuts.indexOf(event.keyCode) >= 0) {
+					 event.preventDefault();
+					 var td = keys.fnGetCurrentTD();
+					 if (td) {
+					 fnMultiSelect(event, $(td).parent());
+					 fnUpdateToolbar();
+					 if (event.keyCode === 13 || event.keyCode === 32) { // enter, space
+					 $(td).trigger('click');
+					 }
+					 }
+					 }
+					 */
 		<?php
 		$keyshortcuts = '[13,32'; // enter, space
 		foreach ($this->getFields() as $field) {
@@ -417,8 +419,8 @@ class RemoveRowsResponse extends DataTableResponse {
 
 	public function getJson($entity) {
 		return parent::getJson(array(
-					'objectId'	 => $entity->getValues(true),
-					'remove'	 => true
+					'UUID'	 => $entity->getUUID(),
+					'remove' => true
 		));
 	}
 

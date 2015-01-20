@@ -24,6 +24,18 @@ abstract class PersistenceModel implements Persistence {
 	}
 
 	/**
+	 * Do NOT use @ and . in your primary keys or you WILL run into trouble here!
+	 * 
+	 * @param string $UUID
+	 * @return PersistentEntity
+	 */
+	public static function getUUID($UUID) {
+		$parts = explode('@', $UUID, 2);
+		$primary_key_values = explode('.', $parts[0]);
+		return static::instance()->retrieveByPrimaryKey($primary_key_values);
+	}
+
+	/**
 	 * Object relational mapping
 	 * @var PersistentEntity
 	 */

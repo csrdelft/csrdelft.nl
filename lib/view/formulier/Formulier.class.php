@@ -51,7 +51,6 @@ class Formulier implements View, Validator {
 	public $css_classes = array();
 	protected $javascript = '';
 	public $titel;
-	public $linkedDataTableId = null;
 
 	public function __construct($model, $formId, $action, $titel = false) {
 		$this->model = $model;
@@ -251,7 +250,7 @@ class Formulier implements View, Validator {
 	}
 
 	protected function getFormTag() {
-		return '<form enctype="' . $this->enctype . '" action="' . $this->action . '" id="' . $this->getFormId() . '" class="' . implode(' ', $this->css_classes) . '" method="' . ($this->post ? 'post' : 'get') . '"' . ($this->linkedDataTableId ? ' datatableid="' . $this->linkedDataTableId . '"' : '') . '>';
+		return '<form enctype="' . $this->enctype . '" action="' . $this->action . '" id="' . $this->getFormId() . '" class="' . implode(' ', $this->css_classes) . '" method="' . ($this->post ? 'post' : 'get') . '">';
 	}
 
 	protected function getScriptTag() {
@@ -316,6 +315,25 @@ class ModalForm extends Formulier {
 		parent::view();
 		printDebug();
 		echo '</div>';
+	}
+
+}
+
+/**
+ * Formulier linked to a DataTable.
+ */
+class DataTableForm extends ModalForm {
+
+	private $tableId;
+
+	public function __construct($tableId, $model, $formId, $action, $titel = false) {
+		parent::__construct($model, $formId, $action, $titel);
+		$this->tableId = $tableId;
+	}
+
+	protected function getFormTag() {
+		$tag = parent::getFormTag();
+		return substr($tag, 0, strlen($tag) - 1) . ' DataTableId="' . $this->tableId . '">';
 	}
 
 }

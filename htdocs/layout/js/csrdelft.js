@@ -281,10 +281,14 @@ function knop_ajax(knop, type) {
 			}
 		}
 		var table = $('#' + tableId).DataTable();
+		data = {
+			'DataTableId': tableId
+		};
 
 		var selection = fnGetSelection('#' + tableId);
-		if (selection) {
+		if (selection.length > 0) {
 			data = {
+				'DataTableId': tableId,
 				'DataTableSelection[]': selection
 			};
 		}
@@ -360,6 +364,7 @@ function modal_close() {
 }
 
 function init_forms(parent) {
+	$(parent).find('form').submit(form_submit);
 	$(parent).find('.submit').bind('click.submit', form_submit);
 	$(parent).find('.reset').bind('click.reset', form_reset);
 	$(parent).find('.cancel').bind('click.cancel', form_cancel);
@@ -460,15 +465,17 @@ function form_submit(event) {
 				}
 			}
 			var table = $('#' + tableId).DataTable();
+			formData.append('DataTableId', tableId);
 
-			if (!form.hasClass('SingleRow')) { // otherwise requires ObjectIdField
-				var selection = fnGetSelection('#' + tableId);
-				if (selection) {
-					formData.append('DataTableSelection[]', selection);
-				}
+			var selection = fnGetSelection('#' + tableId);
+			if (selection.length > 0) {
+				formData.append('DataTableSelection[]', selection);
 			}
 
 			done = function (response) {
+
+				console.log(tableId);
+
 				if (typeof response === 'object') { // JSON
 					fnUpdateDataTable(table, response);
 					modal_close();

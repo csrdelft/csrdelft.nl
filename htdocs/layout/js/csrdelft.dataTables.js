@@ -24,7 +24,7 @@ function fnInitDataTables() {
 function fnUpdateDataTable(table, data) {
 	// update or remove existing rows or add new rows
 	data.data.forEach(function (row) {
-		var $tr = $('tr[data-objectid="' + row.objectId + '"]');
+		var $tr = $('tr[data-UUID="' + row.UUID + '"]');
 		if ($tr.length === 1) {
 			if ('remove'in row) {
 				table.row($tr).remove();
@@ -49,13 +49,13 @@ function fnGetSelectionSize(tableId) {
 function fnGetSelection(tableId) {
 	var selection = [];
 	$(tableId + ' tbody tr.selected').each(function () {
-		selection.push($(this).attr('data-objectid'));
+		selection.push($(this).attr('data-UUID'));
 	});
 	return selection;
 }
 
-function fnGetSelectedObjectId(tableId) {
-	return $(tableId + ' tbody tr.selected:first').attr('data-objectid');
+function fnGetSelectedUUID(tableId) {
+	return $(tableId + ' tbody tr.selected:first').attr('data-UUID');
 }
 
 /**

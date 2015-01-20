@@ -256,8 +256,8 @@ class LoginController extends AclController {
 	public function loginlockip() {
 		$selection = filter_input(INPUT_POST, 'DataTableSelection', FILTER_SANITIZE_STRING, FILTER_FORCE_ARRAY);
 		$response = array();
-		foreach ($selection as $id) {
-			$remember = RememberLoginModel::get($id);
+		foreach ($selection as $UUID) {
+			$remember = RememberLoginModel::getUUID($UUID);
 			if (!$remember OR $remember->uid !== LoginModel::getUid()) {
 				$this->geentoegang();
 			}
@@ -273,29 +273,30 @@ class LoginController extends AclController {
 	}
 
 	public function loginremember() {
-		$selection = filter_input(INPUT_POST, 'DataTableSelection', FILTER_SANITIZE_STRING, FILTER_FORCE_ARRAY);
-		if (count($selection) === 1) {
-			$remember = RememberLoginModel::get(reset($selection));
-			if (!$remember OR $remember->uid !== LoginModel::getUid()) {
-				$this->geentoegang();
-			}
-			$new = false;
+		$tableId = filter_input(INPUT_POST, 'DataTableId', FILTER_SANITIZE_STRING);
+		$UUIDs = filter_input(INPUT_POST, 'DataTableSelection', FILTER_SANITIZE_STRING, FILTER_FORCE_ARRAY);
+		if (count($UUIDs) === 1 AND isset($UUIDs[0])) {
+			$remember = RememberLoginModel::getUUID($UUIDs[0]);
 		} else {
-			$new = true;
 			$remember = RememberLoginModel::instance()->nieuwRememberLogin();
 		}
-		$this->view = new RememberLoginForm($remember, $new);
-		if ($this->view->validate()) {
+		if (!$remember OR $remember->uid !== LoginModel::getUid()) {
+			$this->geentoegang();
+		}
+		$form = new RememberLoginForm($tableId, $remember);
+		if ($form->validate()) {
 			$success = RememberLoginModel::instance()->rememberLogin($remember);
 			$this->view = new RememberLoginData(array($remember), $success === true ? 200 : 500);
+		} else {
+			$this->view = $form;
 		}
 	}
 
 	public function loginforget() {
 		$selection = filter_input(INPUT_POST, 'DataTableSelection', FILTER_SANITIZE_STRING, FILTER_FORCE_ARRAY);
 		$response = array();
-		foreach ($selection as $id) {
-			$remember = RememberLoginModel::get($id);
+		foreach ($selection as $UUID) {
+			$remember = RememberLoginModel::getUUID($UUID);
 			if (!$remember OR $remember->uid !== LoginModel::getUid()) {
 				$this->geentoegang();
 			}

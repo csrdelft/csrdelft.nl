@@ -99,7 +99,7 @@ abstract class PersistentEntity implements Sparse, JsonSerializable {
 				unset($array[$key]);
 			}
 		}
-		$array['objectId'] = $this->getValues(true);
+		$array['UUID'] = $this->getUUID();
 		return $array;
 	}
 

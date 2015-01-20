@@ -59,7 +59,7 @@ class RememberLoginTable extends DataTable implements FormElement {
 		$this->searchColumn('remember_since');
 		$this->searchColumn('device_name');
 
-		$nieuw = new DataTableKnop('>= 0', '/loginremember', 'post popup', null, 'Toevoegen', 'Automatisch inloggen vanaf dit apparaat', '/famfamfam/add.png');
+		$nieuw = new DataTableKnop('== 0', '/loginremember', 'post popup', null, 'Toevoegen', 'Automatisch inloggen vanaf dit apparaat', '/famfamfam/add.png');
 		$this->addKnop($nieuw);
 
 		$wijzig = new DataTableKnop('== 1', '/loginremember', 'post popup', null, 'Naam wijzigen', 'Wijzig naam van apparaat', '/famfamfam/pencil.png');
@@ -100,13 +100,12 @@ class RememberLoginData extends DataTableResponse {
 
 }
 
-class RememberLoginForm extends ModalForm {
+class RememberLoginForm extends DataTableForm {
 
-	public function __construct(RememberLogin $remember, $new) {
-		parent::__construct($remember, 'rememberform', '/loginremember', 'Automatisch inloggen vanaf huidig apparaat');
-		$this->css_classes[] = 'DataTableResponse SingleRow';
+	public function __construct($tableId, RememberLogin $remember) {
+		parent::__construct($tableId, $remember, 'rememberform', '/loginremember', 'Automatisch inloggen vanaf huidig apparaat');
+		$this->css_classes[] = 'DataTableResponse';
 
-		$fields[] = new ObjectIdField($remember, $new);
 		$fields[] = new RequiredTextField('device_name', $remember->device_name, 'Naam apparaat');
 		$fields[] = new FormDefaultKnoppen('/', false, true, true, true, true);
 

@@ -38,12 +38,12 @@ class IntField extends InputField {
 		if (!is_int($this->origvalue) AND $this->origvalue !== null) {
 			throw new Exception('origvalue geen int');
 		}
-		if ($min !== null) {
-			$this->min = (int) $min;
+		if (is_int($min)) {
+			$this->min = $min;
 			$this->min_alert = 'Minimaal ' . $this->min;
 		}
-		if ($max !== null) {
-			$this->max = (int) $max;
+		if (is_int($max)) {
+			$this->max = $max;
 			$this->max_alert = 'Maximaal ' . $this->max;
 		}
 		$this->onkeydown .= <<<JS
@@ -82,11 +82,11 @@ JS;
 			return true;
 		} elseif (!preg_match('/^' . $this->pattern . '$/', $this->value)) {
 			$this->error = 'Alleen gehele getallen toegestaan';
-		} elseif ($this->max !== null AND $this->value > $this->max) {
+		} elseif (is_int($this->max) AND $this->value > $this->max) {
 			$this->error = 'Maximale waarde is ' . $this->max . ' ';
 		} elseif ($this->leden_mod AND LoginModel::mag('P_LEDEN_MOD')) {
 			// exception for leden mod
-		} elseif ($this->min !== null AND $this->value < $this->min) {
+		} elseif (is_int($this->min) AND $this->value < $this->min) {
 			$this->error = 'Minimale waarde is ' . $this->min . ' ';
 		}
 		return $this->error === '';
