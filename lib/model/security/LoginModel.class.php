@@ -347,11 +347,13 @@ class LoginModel extends PersistenceModel implements Validator {
 	}
 
 	public function endSwitchUser() {
+		$suedFrom = self::getSuedFrom();
+
 		// Clear session
 		session_unset();
 
 		// Subject assignment:
-		$_SESSION['_uid'] = self::getSuedFrom()->uid;
+		$_SESSION['_uid'] = $suedFrom->uid;
 		$_SESSION['_suedFrom'] = null;
 	}
 
