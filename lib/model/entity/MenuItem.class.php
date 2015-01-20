@@ -62,7 +62,7 @@ class MenuItem extends PersistentEntity {
 	 */
 	protected static $persistent_attributes = array(
 		'item_id'			 => array(T::Integer, false, 'auto_increment'),
-		'parent_id'			 => array(T::Integer, true),
+		'parent_id'			 => array(T::Integer),
 		'prioriteit'		 => array(T::Integer),
 		'tekst'				 => array(T::String),
 		'link'				 => array(T::String),

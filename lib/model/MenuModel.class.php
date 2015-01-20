@@ -43,7 +43,7 @@ class MenuModel extends CachedPersistenceModel {
 			$this->getExtendedTree($root);
 		} else {
 			// niet bestaand menu?
-			$root = $this->newMenuItem(null);
+			$root = $this->newMenuItem(0);
 			$root->tekst = $naam;
 			if ($naam == LoginModel::getUid()) {
 				// maak favorieten menu 
@@ -156,7 +156,7 @@ class MenuModel extends CachedPersistenceModel {
 	}
 
 	public function getMenuRoot($naam) {
-		$root = $this->find('parent_id = ? AND tekst = ? ', array(null, $naam), null, null, 1)->fetch();
+		$root = $this->find('parent_id = ? AND tekst = ? ', array(0, $naam), null, null, 1)->fetch();
 		if ($root) {
 			return $this->cache($root);
 		}
@@ -174,14 +174,14 @@ class MenuModel extends CachedPersistenceModel {
 	 */
 	public function getMenuBeheerLijst() {
 		if (LoginModel::mag('P_ADMIN')) {
-			return $this->find('parent_id = ?', array(null));
+			return $this->find('parent_id = ?', array(0));
 		} else {
 			return false;
 		}
 	}
 
 	public function getRoot(MenuItem $item) {
-		if ($item->parent_id === null) {
+		if ($item->parent_id === 0) {
 			return $item;
 		}
 		return $this->getRoot($item->getParent());
