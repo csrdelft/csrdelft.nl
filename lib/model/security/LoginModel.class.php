@@ -333,11 +333,13 @@ class LoginModel extends PersistenceModel implements Validator {
 		if (!$this->maySuTo($suNaar)) {
 			throw new Exception('Deze gebruiker mag niet inloggen!');
 		}
+		$suedFrom = self::getAccount();
+
 		// Clear session
 		session_unset();
 
 		// Subject assignment:
-		$_SESSION['_suedFrom'] = self::getAccount()->uid;
+		$_SESSION['_suedFrom'] = $suedFrom->uid;
 		$_SESSION['_uid'] = $suNaar->uid;
 	}
 
