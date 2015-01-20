@@ -94,20 +94,6 @@ class LoginModel extends PersistenceModel implements Validator {
 		if (!$session) {
 			return false;
 		}
-		// Controleer switch user status
-		if (isset($_SESSION['_suedFrom'])) {
-			$suedFrom = self::getSuedFrom();
-			if (!$suedFrom OR $session->uid !== $suedFrom->uid) {
-				return false;
-			}
-		}
-		// Controleer of sessie van gebruiker is
-		else {
-			$account = self::getAccount();
-			if (!$account OR $session->uid !== $account->uid) {
-				return false;
-			}
-		}
 		// Controleer of sessie is verlopen
 		if ($session->expire AND strtotime($session->expire) <= time()) {
 			return false;
@@ -116,7 +102,24 @@ class LoginModel extends PersistenceModel implements Validator {
 		if ($session->lock_ip AND $session->ip !== $_SERVER['REMOTE_ADDR']) {
 			return false;
 		}
-		// Controleer of wachtwoord is verlopen:
+		// Controleer switch user status
+		if (isset($_SESSION['_suedFrom'])) {
+			$suedFrom = self::getSuedFrom();
+			if (!$suedFrom OR $session->uid !== $suedFrom->uid) {
+				return false;
+			}
+			// Controleer of account bestaat
+			if (!self::getAccount()) {
+				return false;
+			}
+			return true;
+		}
+		// Controleer of sessie van gebruiker is
+		$account = self::getAccount();
+		if (!$account OR $session->uid !== $account->uid) {
+			return false;
+		}
+		// Controleer of wachtwoord is verlopen
 		$pass_since = strtotime($account->pass_since);
 		$verloop_na = strtotime(Instellingen::get('beveiliging', 'wachtwoorden_verlopen_ouder_dan'));
 		$waarschuwing_vooraf = strtotime(Instellingen::get('beveiliging', 'wachtwoorden_verlopen_waarschuwing_vooraf'), $verloop_na);
