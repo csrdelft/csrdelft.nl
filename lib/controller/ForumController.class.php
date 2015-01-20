@@ -94,17 +94,30 @@ class ForumController extends Controller {
 			$this->action = 'forum';
 			parent::performAction(array());
 		}
-		if ((!$this->isPosted() OR $this->action == 'zoeken') AND ! in_array($this->action, array('titelzoeken', 'grafiekdata', 'rss'))) {
-			if (LoginModel::mag('P_LOGGED_IN')) {
-				$this->view = new CsrLayoutPage($this->view);
-				if ($this->action === 'forum') {
-					$this->view->addCompressedResources('grafiek');
+		switch ($this->action) {
+			case 'titelzoeken':
+			case 'grafiekdata':
+			case 'rss':
+				return;
+
+			case 'zoeken':
+			case 'posten':
+				break;
+
+			default:
+				if ($this->isPosted()) {
+					return;
 				}
-			} else { // uitgelogd heeft nieuwe layout
-				$this->view = new CsrLayout2Page($this->view);
-			}
-			$this->view->addCompressedResources('forum');
 		}
+		if (LoginModel::mag('P_LOGGED_IN')) {
+			$this->view = new CsrLayoutPage($this->view);
+			if ($this->action === 'forum') {
+				$this->view->addCompressedResources('grafiek');
+			}
+		} else { // uitgelogd heeft nieuwe layout
+			$this->view = new CsrLayout2Page($this->view);
+		}
+		$this->view->addCompressedResources('forum');
 	}
 
 	/**
