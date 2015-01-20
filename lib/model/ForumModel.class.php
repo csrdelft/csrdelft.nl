@@ -864,10 +864,18 @@ class ForumDradenModel extends AbstractForumModel implements Paging {
 	public function resetLastPost(ForumDraad $draad) {
 		// reset last post
 		$last_post = ForumPostsModel::instance()->find('draad_id = ? AND wacht_goedkeuring = FALSE AND verwijderd = FALSE', array($draad->draad_id), null, 'laatst_gewijzigd DESC', 1)->fetch();
-		$draad->laatste_post_id = $last_post->post_id;
-		$draad->laatste_wijziging_uid = $last_post->uid;
-		$draad->laatst_gewijzigd = $last_post->laatst_gewijzigd;
-		$rowCount = $this->update($draad);
+		if ($last_post) {
+			$draad->laatste_post_id = $last_post->post_id;
+			$draad->laatste_wijziging_uid = $last_post->uid;
+			$draad->laatst_gewijzigd = $last_post->laatst_gewijzigd;
+		} else {
+			$draad->laatste_post_id = null;
+			$draad->laatste_wijziging_uid = null;
+			$draad->laatst_gewijzigd = null;
+			$draad->verwijderd = true;
+			setMelding('Enige bericht in draad verwijderd: draad ook verwijderd', 2);
+		}
+		$this->update($draad);
 	}
 
 }
