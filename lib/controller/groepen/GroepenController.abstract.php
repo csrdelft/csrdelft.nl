@@ -25,14 +25,12 @@ abstract class GroepenController extends Controller {
 			case 'overzicht':
 			case A::Beheren:
 			case A::Aanmaken:
+			case A::Wijzigen:
 			case A::Verwijderen:
 
-				if (DEBUG) {
-					break;
-				}
 				$model = $this->model;
 				$algemeen = AccessModel::get($model::orm, $this->action, null);
-				if (!LoginModel::mag($algemeen)) {
+				if (!LoginModel::mag($algemeen) AND ! DEBUG) {
 					$this->geentoegang();
 				}
 				break;
@@ -56,7 +54,7 @@ abstract class GroepenController extends Controller {
 				} else {
 					$this->action = A::Bekijken; // default
 				}
-				if (!$groep->mag($this->action)) {
+				if (!$groep->mag($this->action) AND ! DEBUG) {
 					$this->geentoegang();
 				}
 		}
@@ -94,17 +92,6 @@ abstract class GroepenController extends Controller {
 
 			default:
 				return false;
-		}
-	}
-
-	public function beheren() {
-		if ($this->isPosted()) {
-			$groepen = $this->model->find();
-			$this->view = new GroepenBeheerData($groepen);
-		} else {
-			$body = new GroepenBeheerTable($this->model);
-			$this->view = new CsrLayoutPage($body);
-			$this->view->addCompressedResources('datatable');
 		}
 	}
 
@@ -150,6 +137,17 @@ abstract class GroepenController extends Controller {
 		}
 	}
 
+	public function beheren() {
+		if ($this->isPosted()) {
+			$groepen = $this->model->find();
+			$this->view = new GroepenBeheerData($groepen);
+		} else {
+			$body = new GroepenBeheerTable($this->model);
+			$this->view = new CsrLayoutPage($body);
+			$this->view->addCompressedResources('datatable');
+		}
+	}
+
 	public function aanmaken() {
 		$groep = $this->model->nieuw();
 		$form = new GroepForm($groep, groepenUrl . $this->action);
@@ -161,8 +159,15 @@ abstract class GroepenController extends Controller {
 		}
 	}
 
-	public function wijzigen(Groep $groep) {
-		$form = new GroepForm($groep, groepenUrl . $groep->id . '/' . $this->action);
+	public function wijzigen(Groep $groep = null) {
+		$selection = filter_input(INPUT_POST, 'DataTableSelection', FILTER_SANITIZE_STRING, FILTER_FORCE_ARRAY);
+		if (isset($selection[0])) {
+			$groep = $this->model->getUUID($selection[0]);
+		}
+		if (!$groep) {
+			$this->geentoegang();
+		}
+		$form = new GroepForm($groep, groepenUrl . $this->action);
 		if ($form->validate()) {
 			$this->model->update($groep);
 			$this->view = new GroepLedenData(array($groep));

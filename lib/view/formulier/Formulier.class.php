@@ -329,6 +329,7 @@ class ModalForm extends Formulier {
 class DataTableForm extends ModalForm {
 
 	protected function getFormTag() {
+		$this->css_classes[] = 'DataTableResponse';
 		$tableId = filter_input(INPUT_POST, 'DataTableId', FILTER_SANITIZE_STRING);
 		return str_replace('<form ', '<form data-tableid="' . $tableId . '" ', parent::getFormTag());
 	}

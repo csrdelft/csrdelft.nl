@@ -63,13 +63,13 @@ class GroepLedenTable extends DataTable {
 		parent::__construct($model::orm, 'Leden van ' . $groep->naam, 'functie');
 		$this->dataUrl = groepenUrl . A::Beheren;
 
-		$create = new DataTableKnop('== 0', $this->tableId, groepenUrl . A::Aanmelden, 'post popup', null, 'Aanmelden', 'Lid aanmelden', '/famfamfam/add.png');
+		$create = new DataTableKnop('== 0', $this->tableId, groepenUrl . $groep->id . '/' . A::Aanmelden, 'post popup', null, 'Aanmelden', 'Lid aanmelden', '/famfamfam/add.png');
 		$this->addKnop($create);
 
-		$update = new DataTableKnop('== 1', $this->tableId, groepenUrl . A::Bewerken, 'post popup', null, 'Bewerken', 'Aanmelding bewerken', '/famfamfam/pencil.png');
+		$update = new DataTableKnop('== 1', $this->tableId, groepenUrl . $groep->id . '/' . A::Bewerken, 'post popup', null, 'Bewerken', 'Aanmelding bewerken', '/famfamfam/pencil.png');
 		$this->addKnop($update);
 
-		$delete = new DataTableKnop('>= 1', $this->tableId, groepenUrl . A::Afmelden, 'post confirm', null, 'Afmelden', 'Geselecteerde leden afmelden', '/famfamfam/cross.png');
+		$delete = new DataTableKnop('>= 1', $this->tableId, groepenUrl . $groep->id . '/' . A::Afmelden, 'post confirm', null, 'Afmelden', 'Geselecteerde leden afmelden', '/famfamfam/cross.png');
 		$this->addKnop($delete);
 	}
 

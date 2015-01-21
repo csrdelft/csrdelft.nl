@@ -108,7 +108,6 @@ class RememberLoginForm extends DataTableForm {
 
 	public function __construct(RememberLogin $remember) {
 		parent::__construct($remember, '/loginremember', 'Automatisch inloggen vanaf huidig apparaat');
-		$this->css_classes[] = 'DataTableResponse';
 
 		$fields[] = new RequiredTextField('device_name', $remember->device_name, 'Naam apparaat');
 		$fields[] = new FormDefaultKnoppen('/', false, true, true, true, true);

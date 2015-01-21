@@ -20,7 +20,6 @@
  *  	* NickField					Nicknames
  *  	* DuckField					Ducknames
  * 		* LidField					Leden selecteren
- * 		* DataTableSelectionField	DataTable selection of UUIDs
  * 	- WachtwoordWijzigenField		Wachtwoorden (oude, nieuwe, nieuwe ter bevestiging)
  *  - EntityField					PersistentEntity primary key values array
  * 
@@ -1202,53 +1201,6 @@ class WachtwoordWijzigenField extends InputField {
 }
 
 class RequiredWachtwoordWijzigenField extends WachtwoordWijzigenField {
-
-	public $required = true;
-
-}
-
-class DataTableSelectionField extends InputField {
-
-	public $hidden = true;
-	public $readonly = true;
-	public $min = null;
-	public $max = null;
-
-	public function __construct(array $UUIDs, $min = 0, $max = null) {
-		parent::__construct('DataTableSelection', $UUIDs, null);
-		if (is_int($min)) {
-			$this->min = $min;
-		}
-		if (is_int($max)) {
-			$this->max = $max;
-		}
-	}
-
-	public function isPosted() {
-		if ($this->min === 0) {
-			return true;
-		}
-		return parent::isPosted();
-	}
-
-	public function getValue() {
-		if ($this->isPosted()) {
-			$this->value = filter_input(INPUT_POST, $this->name, FILTER_SANITIZE_STRING, FILTER_REQUIRE_ARRAY);
-		}
-		return $this->value;
-	}
-
-	public function getHtml() {
-		$html = '';
-		foreach ($this->value as $UUID) {
-			$html .= '<input name="' . $this->name . '[]" value="' . $UUID . '" origvalue="' . $UUID . '" ' . $this->getInputAttribute(array('type', 'id', 'disabled', 'readonly')) . ' />';
-		}
-		return $html;
-	}
-
-}
-
-class RequiredDataTableSelectionField extends DataTableSelectionField {
 
 	public $required = true;
 

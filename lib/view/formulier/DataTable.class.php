@@ -64,7 +64,7 @@ class DataTable extends TabsForm {
 		parent::__construct(new $orm(), null, $titel);
 		$this->tableId = $this->formId;
 		$this->formId .= '_toolbar';
-		$this->css_classes[] = 'ModalForm DataTableResponse DataTableToolbar';
+		$this->css_classes[] = 'DataTableToolbar';
 		$this->groupByColumn = $groupByColumn;
 
 		// create group expand / collapse column
