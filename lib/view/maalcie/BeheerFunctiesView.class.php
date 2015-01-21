@@ -54,7 +54,7 @@ class FunctieDeleteView extends SmartyTemplateView {
 class FunctieForm extends ModalForm {
 
 	public function __construct(CorveeFunctie $functie, $actie) {
-		parent::__construct($functie, 'maalcie-functie-form', maalcieUrl . '/' . $actie . '/' . $functie->functie_id);
+		parent::__construct($functie, maalcieUrl . '/' . $actie . '/' . $functie->functie_id);
 		$this->titel = 'Corveefunctie ' . $actie;
 		if ($actie === 'bewerken') {
 			$this->css_classes[] = 'PreventUnchanged';
@@ -89,7 +89,7 @@ class FunctieForm extends ModalForm {
 class KwalificatieForm extends ModalForm {
 
 	public function __construct(CorveeKwalificatie $kwalificatie) {
-		parent::__construct($kwalificatie, 'maalcie-kwalificatie-form', maalcieUrl . '/kwalificeer/' . $kwalificatie->functie_id);
+		parent::__construct($kwalificatie, maalcieUrl . '/kwalificeer/' . $kwalificatie->functie_id);
 		$this->titel = 'Kwalificatie toewijzen';
 		$this->css_classes[] = 'PreventUnchanged';
 

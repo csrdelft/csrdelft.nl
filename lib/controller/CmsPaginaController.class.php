@@ -50,9 +50,9 @@ class CmsPaginaController extends Controller {
 	}
 
 	public function bekijken($naam) {
-		$pagina = $this->model->getPagina($naam);
+		$pagina = $this->model->get($naam);
 		if (!$pagina) { // 404
-			$pagina = $this->model->getPagina('thuis');
+			$pagina = $this->model->get('thuis');
 		}
 		if (!$pagina->magBekijken()) { // 403
 			$this->geentoegang();
@@ -78,9 +78,9 @@ class CmsPaginaController extends Controller {
 	}
 
 	public function bewerken($naam) {
-		$pagina = $this->model->getPagina($naam);
+		$pagina = $this->model->get($naam);
 		if (!$pagina) {
-			$pagina = $this->model->newPagina($naam);
+			$pagina = $this->model->nieuw($naam);
 		}
 		if (!$pagina->magBewerken()) {
 			$this->geentoegang();
@@ -101,7 +101,7 @@ class CmsPaginaController extends Controller {
 	}
 
 	public function verwijderen($naam) {
-		$pagina = $this->model->getPagina($naam);
+		$pagina = $this->model->get($naam);
 		if (!$pagina OR ! $pagina->magVerwijderen()) {
 			$this->geentoegang();
 		}

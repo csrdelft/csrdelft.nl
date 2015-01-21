@@ -57,15 +57,17 @@ class MenuBeheerController extends AclController {
 		if (!$parent OR ! $parent->magBeheren()) {
 			$this->geentoegang();
 		}
-		$item = $this->model->newMenuItem($parent->item_id);
+		$item = $this->model->nieuw($parent->item_id);
 		if (!$item OR ! $item->magBeheren()) {
 			$this->geentoegang();
 		}
-		$this->view = new MenuItemForm($item, $this->action, $parent_id); // fetches POST values itself
-		if ($this->view->validate()) { // form checks if hidden fields are modified
+		$form = new MenuItemForm($item, $this->action, $parent_id); // fetches POST values itself
+		if ($form->validate()) { // form checks if hidden fields are modified
 			$this->model->create($item);
 			setMelding('Toegevoegd: ' . $item->tekst, 1);
 			$this->view = new JsonResponse(true);
+		} else {
+			$this->view = $form;
 		}
 	}
 
@@ -74,15 +76,17 @@ class MenuBeheerController extends AclController {
 		if (!$item OR ! $item->magBeheren()) {
 			$this->geentoegang();
 		}
-		$this->view = new MenuItemForm($item, $this->action, $item->item_id); // fetches POST values itself
-		if ($this->view->validate()) { // form checks if hidden fields are modified
+		$form = new MenuItemForm($item, $this->action, $item->item_id); // fetches POST values itself
+		if ($form->validate()) { // form checks if hidden fields are modified
 			$rowCount = $this->model->update($item);
 			if ($rowCount > 0) {
 				setMelding($item->tekst . ' bijgewerkt', 1);
 			} else {
-				setMelding($item->tekst . ' ongewijzigd', -1);
+				setMelding($item->tekst . ' ongewijzigd', 0);
 			}
 			$this->view = new JsonResponse(true);
+		} else {
+			$this->view = $form;
 		}
 	}
 
@@ -109,7 +113,7 @@ class MenuBeheerController extends AclController {
 		if ($rowCount > 0) {
 			setMelding($item->tekst . ($item->zichtbaar ? ' ' : ' on') . 'zichtbaar gemaakt', 1);
 		} else {
-			setMelding($item->tekst . ' ongewijzigd', -1);
+			setMelding($item->tekst . ' ongewijzigd', 0);
 		}
 		$this->view = new JsonResponse(true);
 	}

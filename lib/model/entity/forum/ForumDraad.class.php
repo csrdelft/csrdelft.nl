@@ -159,11 +159,11 @@ class ForumDraad extends PersistentEntity {
 	protected static $table_name = 'forum_draden';
 
 	public function getForumDeel() {
-		return ForumDelenModel::instance()->getForumDeel($this->forum_id);
+		return ForumDelenModel::get($this->forum_id);
 	}
 
 	public function getGedeeldMet() {
-		return ForumDelenModel::instance()->getForumDeel($this->gedeeld_met);
+		return ForumDelenModel::get($this->gedeeld_met);
 	}
 
 	public function isGedeeld() {
@@ -260,7 +260,7 @@ class ForumDraad extends PersistentEntity {
 	 */
 	public function getForumPosts() {
 		if (!isset($this->forum_posts)) {
-			$this->setForumPosts(ForumPostsModel::instance()->getForumPostsVoorDraad($this));
+			$this->setForumPosts(ForumPostsModel::getsVoorDraad($this));
 		}
 		return $this->forum_posts;
 	}

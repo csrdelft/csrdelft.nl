@@ -38,7 +38,7 @@ class MenuItemView extends SmartyTemplateView {
 class MenuItemForm extends ModalForm {
 
 	public function __construct(MenuItem $item, $actie, $id) {
-		parent::__construct($item, 'menu-item-form', '/menubeheer/' . $actie . '/' . $id);
+		parent::__construct($item, '/menubeheer/' . $actie . '/' . $id);
 		if ($id == 'favoriet') {
 			$this->titel = 'Favoriet ' . $actie;
 		} else {

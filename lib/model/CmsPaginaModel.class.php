@@ -29,7 +29,7 @@ class CmsPaginaModel extends PersistenceModel {
 		return $result;
 	}
 
-	public function newPagina($naam) {
+	public function nieuw($naam) {
 		$pagina = new CmsPagina();
 		$pagina->naam = $naam;
 		$pagina->titel = $naam;

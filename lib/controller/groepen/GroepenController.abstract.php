@@ -21,42 +21,50 @@ abstract class GroepenController extends Controller {
 		} else {
 			$this->action = 'overzicht'; // default
 		}
-		if ($this->action === 'overzicht' OR $this->action === 'beheren') {
-			if (!DEBUG) {
+		switch ($this->action) {
+			case 'overzicht':
+			case A::Beheren:
+			case A::Aanmaken:
+			case A::Verwijderen:
+
+				if (DEBUG) {
+					break;
+				}
 				$model = $this->model;
 				$algemeen = AccessModel::get($model::orm, $this->action, null);
 				if (!LoginModel::mag($algemeen)) {
 					$this->geentoegang();
 				}
-			}
-		} else {
-			$id = (int) $this->action; // id
-			$groep = $this->model->get($id);
-			if (!$groep) {
-				$this->geentoegang();
-			}
-			$args[] = $groep;
-			if ($this->hasParam(4)) { // action
-				$this->action = $this->getParam(4);
-				if ($this->hasParam(5)) { // uid
-					$profiel = ProfielModel::get($this->getParam(5)); // uid
-					if (!$profiel) {
-						$this->geentoegang();
-					}
-					$args[] = $profiel;
+				break;
+
+			default:
+				$id = (int) $this->action; // id
+				$groep = $this->model->get($id);
+				if (!$groep) {
+					$this->geentoegang();
 				}
-			} else {
-				$this->action = A::Bekijken; // default
-			}
-			if (!$groep->mag($this->action)) {
-				$this->geentoegang();
-			}
+				$args[] = $groep;
+				if ($this->hasParam(4)) { // action
+					$this->action = $this->getParam(4);
+					if ($this->hasParam(5)) { // uid
+						$uid = $this->getParam(5);
+						if (!ProfielModel::existsUid($uid)) {
+							$this->geentoegang();
+						}
+						$args[] = $uid;
+					}
+				} else {
+					$this->action = A::Bekijken; // default
+				}
+				if (!$groep->mag($this->action)) {
+					$this->geentoegang();
+				}
 		}
 		return parent::performAction($args);
 	}
 
 	/**
-	 * Check permissions & valid params in actions.
+	 * Check permissions & valid params in performAction.
 	 * 
 	 * @return boolean
 	 */
@@ -75,6 +83,7 @@ abstract class GroepenController extends Controller {
 			case GroepTab::Statistiek:
 			case GroepTab::Emails:
 
+			case 'leden':
 			case A::Aanmaken:
 			case A::Wijzigen:
 			case A::Verwijderen:
@@ -91,9 +100,9 @@ abstract class GroepenController extends Controller {
 	public function beheren() {
 		if ($this->isPosted()) {
 			$groepen = $this->model->find();
-			$this->view = new DataTableResponse($groepen);
+			$this->view = new GroepenBeheerData($groepen);
 		} else {
-			$body = new GroepenBeheerView($this->model);
+			$body = new GroepenBeheerTable($this->model);
 			$this->view = new CsrLayoutPage($body);
 			$this->view->addCompressedResources('datatable');
 		}
@@ -130,28 +139,96 @@ abstract class GroepenController extends Controller {
 		return $this->groeptab($groep);
 	}
 
+	public function leden(Groep $groep) {
+		if ($this->isPosted()) {
+			$leden = $groep->getLeden();
+			$this->view = new GroepLedenData($leden);
+		} else {
+			$body = new GroepLedenTable($this->model);
+			$this->view = new CsrLayoutPage($body);
+			$this->view->addCompressedResources('datatable');
+		}
+	}
+
 	public function aanmaken() {
-		//TODO
+		$groep = $this->model->nieuw();
+		$form = new GroepForm($groep, groepenUrl . $this->action);
+		if ($form->validate()) {
+			$this->model->create($groep);
+			$this->view = new GroepLedenData(array($groep));
+		} else {
+			$this->view = $form;
+		}
 	}
 
 	public function wijzigen(Groep $groep) {
+		$form = new GroepForm($groep, groepenUrl . $groep->id . '/' . $this->action);
+		if ($form->validate()) {
+			$this->model->update($groep);
+			$this->view = new GroepLedenData(array($groep));
+		} else {
+			$this->view = $form;
+		}
+	}
+
+	public function verwijderen() {
+		$selection = filter_input(INPUT_POST, 'DataTableSelection', FILTER_SANITIZE_STRING, FILTER_FORCE_ARRAY);
+		$response = array();
+		foreach ($selection as $UUID) {
+			$groep = $this->model->getUUID($UUID);
+			if (!$groep) {
+				$this->geentoegang();
+			}
+			$this->model->delete($groep);
+			$response[] = $groep;
+		}
+		$this->view = new RemoveRowsResponse($response);
+	}
+
+	public function aanmelden(Groep $groep, $uid = null) {
+		if (!$uid) {
+			$lid = GroepLedenModel::instance()->nieuw($groep, LoginModel::getUid());
+			$form = new GroepAanmeldingForm($lid, $this->action);
+			if ($form->validate()) {
+				GroepLedenModel::instance()->create($lid);
+			}
+			$this->view = $form;
+		}
+		// beheren
+		else {
+			$lid = GroepLedenModel::instance()->nieuw($groep, $uid);
+			$form = new GroepLidForm($lid, $this->action);
+			if ($form->validate()) {
+				GroepLedenModel::instance()->create($lid);
+				$this->view = new GroepLedenData(array($lid));
+			} else {
+				$this->view = $form;
+			}
+		}
+	}
+
+	public function bewerken(Groep $groep, $uid = null) {
 		//TODO
 	}
 
-	public function verwijderen(Groep $groep) {
-		//TODO
-	}
-
-	public function aanmelden(Groep $groep, Profiel $profiel) {
-		//TODO
-	}
-
-	public function afmelden(Groep $groep, Profiel $profiel) {
-		//TODO
-	}
-
-	public function bewerken(Groep $groep, Profiel $profiel) {
-		//TODO
+	public function afmelden(Groep $groep, $uid = null) {
+		if (!$uid) {
+			
+		}
+		// beheren
+		else {
+			$selection = filter_input(INPUT_POST, 'DataTableSelection', FILTER_SANITIZE_STRING, FILTER_FORCE_ARRAY);
+			$response = array();
+			foreach ($selection as $UUID) {
+				$groep = $this->model->getUUID($UUID);
+				if (!$groep) {
+					$this->geentoegang();
+				}
+				$this->model->delete($groep);
+				$response[] = $groep;
+			}
+			$this->view = new RemoveRowsResponse($response);
+		}
 	}
 
 }

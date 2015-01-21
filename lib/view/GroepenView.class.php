@@ -10,12 +10,96 @@ require_once 'view/CmsPaginaView.class.php';
  * @author P.W.G. Brussee <brussee@live.nl>
  * 
  */
-class GroepenBeheerView extends DataTable {
+class GroepenBeheerTable extends DataTable {
 
 	public function __construct(GroepenModel $model) {
 		parent::__construct($model::orm, null, 'familie_id');
+		$this->dataUrl = groepenUrl . A::Beheren;
 		$this->titel = 'Beheer ' . lcfirst(str_replace('Model', '', get_class($model)));
-		$this->dataUrl = groepenUrl . '/beheren';
+		$this->hideColumn('samenvatting');
+		$this->hideColumn('omschrijving');
+		$this->hideColumn('website');
+		$this->hideColumn('door_uid');
+
+		$create = new DataTableKnop('== 0', $this->tableId, groepenUrl . A::Aanmaken, 'post popup', null, 'Toevoegen', 'Nieuwe groep toevoegen', '/famfamfam/add.png');
+		$this->addKnop($create);
+
+		$update = new DataTableKnop('== 1', $this->tableId, groepenUrl . A::Wijzigen, 'post popup', null, 'Wijzigen', 'Wijzig geselecteerde groep', '/famfamfam/pencil.png');
+		$this->addKnop($update);
+
+		$delete = new DataTableKnop('>= 1', $this->tableId, groepenUrl . A::Verwijderen, 'post confirm', null, 'Verwijderen', 'Geselecteerde groepen definitief verwijderen', '/famfamfam/cross.png');
+		$this->addKnop($delete);
+	}
+
+}
+
+class GroepenBeheerData extends DataTableResponse {
+
+	public function getJson($groep) {
+		$array = $groep->jsonSerialize();
+
+		$array['samenvatting'] = null;
+		$array['omschrijving'] = null;
+		$array['website'] = null;
+		$array['door_uid'] = null;
+
+		return parent::getJson($array);
+	}
+
+}
+
+class GroepForm extends DataTableForm {
+
+	public function __construct(Groep $groep, $action) {
+		parent::__construct($groep, $action, get_class($groep) . ' ' . A::Wijzigen);
+		$this->generateFields();
+	}
+
+}
+
+class GroepLedenTable extends DataTable {
+
+	public function __construct(GroepLedenModel $model, Groep $groep) {
+		parent::__construct($model::orm, 'Leden van ' . $groep->naam, 'functie');
+		$this->dataUrl = groepenUrl . A::Beheren;
+
+		$create = new DataTableKnop('== 0', $this->tableId, groepenUrl . A::Aanmelden, 'post popup', null, 'Aanmelden', 'Lid aanmelden', '/famfamfam/add.png');
+		$this->addKnop($create);
+
+		$update = new DataTableKnop('== 1', $this->tableId, groepenUrl . A::Bewerken, 'post popup', null, 'Bewerken', 'Aanmelding bewerken', '/famfamfam/pencil.png');
+		$this->addKnop($update);
+
+		$delete = new DataTableKnop('>= 1', $this->tableId, groepenUrl . A::Afmelden, 'post confirm', null, 'Afmelden', 'Geselecteerde leden afmelden', '/famfamfam/cross.png');
+		$this->addKnop($delete);
+	}
+
+}
+
+class GroepLedenData extends DataTableResponse {
+
+	public function getJson($lid) {
+		$array = $lid->jsonSerialize();
+
+		return parent::getJson($array);
+	}
+
+}
+
+class GroepLidForm extends DataTableForm {
+
+	public function __construct(GroepLid $lid, $action) {
+		parent::__construct($lid, groepenUrl . $lid->groep_id . '/' . $action . '/' . $lid->uid, 'Aanmelding ' . A::Bewerken);
+		$this->generateFields();
+	}
+
+}
+
+class GroepAanmeldingForm extends InlineForm {
+
+	public function __construct(GroepLid $lid, $action, array $suggestions = array()) {
+		parent::__construct($lid, groepenUrl . $lid->groep_id . '/' . $action . '/' . $lid->uid);
+		$this->field = new TextField('opmerking', $lid->opmerking, 'Functie of opmerking bij lidmaatschap');
+		$this->field->suggestions[] = $suggestions;
 	}
 
 }
@@ -93,7 +177,7 @@ class GroepView implements View {
 		$smarty->assign('groep', $this->groep);
 		$smarty->assign('tab', $this->tab);
 		$smarty->assign('tabContent', $this->tabContent);
-		$smarty->display('groepen/groep.tpl'); //TODO: get_class($this->groep)
+		$smarty->display('groepen/groep_new.tpl'); //TODO: get_class($this->groep)
 	}
 
 }
@@ -126,8 +210,16 @@ class GroepLijstView extends GroepTabView {
 
 	public function __construct(Groep $groep) {
 		parent::__construct($groep);
-		foreach ($this->groep->getGroepLeden() as $groeplid) {
-			$this->forms[] = new GroepLidForm($groeplid);
+		if ($groep instanceof Commissie OR $groep instanceof Bestuur) {
+			$suggestions = CommissieFunctie::getTypeOptions();
+		} else {
+			$suggestions = array();
+			foreach ($this->groep->getLeden() as $lid) {
+				$suggestions[] = $lid->opmerking;
+			}
+		}
+		foreach ($this->groep->getLeden() as $lid) {
+			$this->forms[] = new GroepAanmeldingForm($lid, A::Bewerken, $suggestions);
 		}
 	}
 
@@ -151,8 +243,8 @@ class GroepPasfotosView extends GroepTabView {
 	}
 
 	public function view() {
-		foreach ($this->groep->getGroepLeden() as $groeplid) {
-			echo '<div class="pasfoto">' . ProfielModel::getLink($groeplid->uid, 'pasfoto') . '</div>';
+		foreach ($this->groep->getLeden() as $lid) {
+			echo '<div class="pasfoto">' . ProfielModel::getLink($lid->uid, 'pasfoto') . '</div>';
 		}
 	}
 
@@ -187,8 +279,8 @@ class GroepEmailsView extends GroepTabView {
 
 	public function __construct(Groep $groep) {
 		parent::__construct($groep);
-		foreach ($this->groep->getGroepLeden() as $groeplid) {
-			$profiel = ProfielModel::get($groeplid->uid);
+		foreach ($this->groep->getLeden() as $lid) {
+			$profiel = ProfielModel::get($lid->uid);
 			if ($profiel AND $profiel->getPrimaryEmail() != '') {
 				$this->emails[] = $profiel->getPrimaryEmail();
 			}
@@ -197,25 +289,6 @@ class GroepEmailsView extends GroepTabView {
 
 	public function view() {
 		echo '<div class="emails">' . implode(', ', $this->emails) . '</div>';
-	}
-
-}
-
-class GroepForm extends Formulier {
-
-	public function __construct(Groep $groep, $action) {
-		parent::__construct($groep, 'groepform-' . $groep->id, groepenUrl . '/' . $action . '/' . $groep->id);
-		$this->titel = get_class($groep) . ' ' . $action;
-		$this->generateFields();
-	}
-
-}
-
-class GroepLidForm extends InlineForm {
-
-	public function __construct(GroepLid $groeplid) {
-		parent::__construct($groeplid, 'lidform-' . $groeplid->uid, groepenUrl . '/wijzigen/' . $groeplid->groep_id . '/' . $groeplid->uid, $field = new TextField('opmerking', $groeplid->opmerking, null, 255, 0, $groeplid));
-		$field->suggestions[] = GroepFunctie::getTypeOptions();
 	}
 
 }

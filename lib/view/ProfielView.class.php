@@ -78,7 +78,7 @@ class ProfielForm extends Formulier {
 	}
 
 	public function __construct(Profiel $profiel) {
-		parent::__construct($profiel, 'profielForm', '/profiel/' . $profiel->uid . '/bewerken');
+		parent::__construct($profiel, '/profiel/' . $profiel->uid . '/bewerken');
 
 		$admin = LoginModel::mag('P_LEDEN_MOD');
 		$inschrijven = !$profiel->getAccount();
@@ -284,17 +284,6 @@ class ProfielForm extends Formulier {
 		$fields[] = new FormDefaultKnoppen('/profiel/' . $profiel->uid);
 
 		$this->addFields($fields);
-	}
-
-	/**
-	 * Maak een stukje bbcode aan met daarin de huidige wijziging, door wie en wanneer.
-	 */
-	public function changelog($diff) {
-		$changelog = '';
-		foreach ($diff as $change) {
-			$changelog .= '(' . $change->property . ') ' . $change->old_value . ' => ' . $change->new_value . '[br]';
-		}
-		return $changelog;
 	}
 
 }

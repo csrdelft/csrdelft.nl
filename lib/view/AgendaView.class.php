@@ -121,7 +121,7 @@ class AgendaItemDeleteView extends AgendaView {
 class AgendaItemForm extends ModalForm {
 
 	public function __construct(AgendaItem $item, $actie) {
-		parent::__construct($item, 'agenda-item-form', '/agenda/' . $actie . '/' . $item->item_id);
+		parent::__construct($item, '/agenda/' . $actie . '/' . $item->item_id);
 		$this->titel = 'Agenda-item ' . $actie;
 		if ($actie === 'bewerken') {
 			$this->css_classes[] = 'PreventUnchanged';

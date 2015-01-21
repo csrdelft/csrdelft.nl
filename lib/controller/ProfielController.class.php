@@ -93,7 +93,7 @@ class ProfielController extends AclController {
 			$this->geentoegang();
 		}
 		// Maak nieuw profiel zonder op te slaan
-		$profiel = ProfielModel::instance()->nieuwProfiel((int) $lidjaar, $lidstatus);
+		$profiel = ProfielModel::instance()->nieuw((int) $lidjaar, $lidstatus);
 		return $this->bewerken($profiel);
 	}
 
@@ -119,21 +119,16 @@ class ProfielController extends AclController {
 				setMelding('Geen wijzigingen', 0);
 			} else {
 				$nieuw = !$this->model->exists($profiel);
-				if ($nieuw) {
-					$changelog = '[div]Aangemaakt als ' . LidStatus::getDescription($profiel->status) . ' door [lid=' . LoginModel::getUid() . '] op [reldate]' . getDatetime() . '[/reldate][br]';
-				} else {
-					$changelog = '[div]Bewerking van [lid=' . LoginModel::getUid() . '] op [reldate]' . getDatetime() . '[/reldate][br]';
-				}
-				$changelog .= $form->changelog($diff);
+				$changelog = $form->changelog($diff, $nieuw);
 
 				// LidStatus wijzigen
 				foreach ($diff as $change) {
 					if ($change->property === 'status') {
-						$changelog .= $this->model->wijzig_lidstatus($profiel, $change->old_value);
+						$changelog .= '[div]' . $this->model->wijzig_lidstatus($profiel, $change->old_value) . '[/div][hr]';
 					}
 				}
 
-				$profiel->changelog = $changelog . '[/div][hr]' . $profiel->changelog;
+				$profiel->changelog = $changelog . $profiel->changelog;
 
 				if ($nieuw) {
 					$this->model->create($profiel);

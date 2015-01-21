@@ -29,7 +29,7 @@ class RememberLoginModel extends PersistenceModel {
 		return $remember;
 	}
 
-	public function nieuwRememberLogin() {
+	public function nieuw() {
 		$remember = new RememberLogin();
 		$remember->uid = LoginModel::getUid();
 		$remember->remember_since = getDateTime();

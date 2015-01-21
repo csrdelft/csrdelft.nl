@@ -273,12 +273,7 @@ function knop_ajax(knop, type) {
 
 		var tableId = knop.attr('DataTableId');
 		if (!document.getElementById(tableId)) {
-			if (typeof knop.parent().attr('id') !== 'undefined' && knop.parent().attr('id').indexOf('_toolbar') > 0) {
-				tableId = knop.parent().next('table').attr('id');
-			}
-			else {
-				tableId = knop.closest('table').attr('id');
-			}
+			alert('DataTable not found');
 		}
 		var table = $('#' + tableId).DataTable();
 		data = {
@@ -457,12 +452,7 @@ function form_submit(event) {
 
 			var tableId = form.attr('DataTableId');
 			if (!document.getElementById(tableId)) {
-				if (form.attr('id').indexOf('_toolbar') > 0) {
-					tableId = form.next('table').attr('id');
-				}
-				else {
-					tableId = form.closest('table').attr('id');
-				}
+				alert('DataTable not found');
 			}
 			var table = $('#' + tableId).DataTable();
 			formData.append('DataTableId', tableId);

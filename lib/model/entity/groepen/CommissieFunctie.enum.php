@@ -1,14 +1,14 @@
 <?php
 
 /**
- * GroepFunctie.enum.php
+ * CommissieFunctie.enum.php
  * 
  * @author P.W.G. Brussee <brussee@live.nl>
  * 
  * Standaard functies binnen het bestuur en commissies.
  * 
  */
-abstract class GroepFunctie implements PersistentEnum {
+abstract class CommissieFunctie implements PersistentEnum {
 
 	// Bestuur
 	const Praeses = 'Praeses';
@@ -23,11 +23,9 @@ abstract class GroepFunctie implements PersistentEnum {
 	const Archivarus = 'Archivarus';
 	const Statisticus = 'Statisticus';
 	const Fotocommissaris = 'Fotocommissaris';
-	// Werkgroep
-	const Leider = 'Leider';
 
 	public static function getTypeOptions() {
-		return array(self::Praeses, self::Abactis, self::Fiscus, self::VicePraeses, self::ViceAbactis, self::QQ, self::Bibliothecarus, self::Archivarus, self::Statisticus, self::Fotocommissaris, self::Leider);
+		return array(self::Praeses, self::Abactis, self::Fiscus, self::VicePraeses, self::ViceAbactis, self::QQ, self::Bibliothecarus, self::Archivarus, self::Statisticus, self::Fotocommissaris);
 	}
 
 	public static function getDescription($option) {
@@ -42,9 +40,8 @@ abstract class GroepFunctie implements PersistentEnum {
 			case self::Archivarus:
 			case self::Statisticus:
 			case self::Fotocommissaris:
-			case self::Leider:
 				return $option;
-			default: throw new Exception('Ongeldige GroepFunctie');
+			default: throw new Exception('CommissieFunctie onbekend');
 		}
 	}
 
@@ -60,9 +57,8 @@ abstract class GroepFunctie implements PersistentEnum {
 			case self::Archivarus:
 			case self::Statisticus:
 			case self::Fotocommissaris:
-			case self::Leider:
 				return '';
-			default: throw new Exception('Ongeldige GroepFunctie');
+			default: throw new Exception('CommissieFunctie onbekend');
 		}
 	}
 

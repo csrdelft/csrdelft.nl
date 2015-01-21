@@ -49,7 +49,7 @@ class CmsPaginaView implements View {
 class CmsPaginaForm extends Formulier {
 
 	function __construct(CmsPagina $pagina) {
-		parent::__construct($pagina, 'cms-pagina-form', '/pagina/bewerken/' . $pagina->naam);
+		parent::__construct($pagina, '/pagina/bewerken/' . $pagina->naam);
 		$this->titel = 'Pagina bewerken: ' . $pagina->naam;
 
 		$fields[] = new HtmlComment('<div><label>Laatst gewijzigd</label>' . reldate($pagina->laatst_gewijzigd) . '</div>');

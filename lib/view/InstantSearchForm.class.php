@@ -9,7 +9,7 @@
 class InstantSearchForm extends Formulier {
 
 	public function __construct() {
-		parent::__construct(null, 'cd-zoek-form', null);
+		parent::__construct(null, null);
 		$this->post = false;
 		$fields[] = new ZoekInputGroup('q');
 		$this->addFields($fields);

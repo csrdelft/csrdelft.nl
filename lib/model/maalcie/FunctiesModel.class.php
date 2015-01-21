@@ -14,6 +14,16 @@ class FunctiesModel extends CachedPersistenceModel {
 
 	protected static $instance;
 
+	/**
+	 * Lazy loading of kwalificaties.
+	 * 
+	 * @param int $fid
+	 * @return CorveeFunctie[]
+	 */
+	public static function get($fid) {
+		return static::instance()->retrieveByPrimaryKey(array($fid));
+	}
+
 	protected function __construct() {
 		parent::__construct('maalcie/');
 	}
@@ -28,17 +38,7 @@ class FunctiesModel extends CachedPersistenceModel {
 		return group_by_distinct('functie_id', $this->prefetch());
 	}
 
-	/**
-	 * Lazy loading of kwalificaties.
-	 * 
-	 * @param int $fid
-	 * @return CorveeFunctie[]
-	 */
-	public function getFunctie($fid) {
-		return $this->retrieveByPrimaryKey(array($fid));
-	}
-
-	public function newFunctie() {
+	public function nieuw() {
 		$functie = new CorveeFunctie();
 		$functie->kwalificatie_benodigd = (boolean) Instellingen::get('corvee', 'standaard_kwalificatie');
 		return $functie;

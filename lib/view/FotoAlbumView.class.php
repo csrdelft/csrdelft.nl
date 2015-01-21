@@ -83,7 +83,7 @@ class FotoAlbumView extends SmartyTemplateView {
 class FotoAlbumToevoegenForm extends ModalForm {
 
 	public function __construct(FotoAlbum $album) {
-		parent::__construct($album, get_class(), '/fotoalbum/toevoegen/' . $album->subdir);
+		parent::__construct($album, '/fotoalbum/toevoegen/' . $album->subdir);
 		$this->titel = 'Fotoalbum toevoegen in: ' . $album->dirname;
 		$this->css_classes[] = 'redirect';
 		$fields[] = new RequiredFileNameField('subalbum', null, 'Naam');
@@ -96,7 +96,7 @@ class FotoAlbumToevoegenForm extends ModalForm {
 class PosterUploadForm extends Formulier {
 
 	public function __construct(FotoAlbum $album) {
-		parent::__construct($album, get_class(), '/fotoalbum/uploaden/' . $album->subdir);
+		parent::__construct($album, '/fotoalbum/uploaden/' . $album->subdir);
 		$this->titel = 'Poster toevoegen in: ' . $album->getParentName();
 		$fields[] = new HtmlComment('Alleen jpeg afbeeldingen.<br/><br/>');
 		$fields[] = new RequiredFileNameField('posternaam', null, 'Posternaam', 50, 5);
@@ -126,7 +126,7 @@ class PosterUploadForm extends Formulier {
 class FotosDropzone extends Dropzone {
 
 	public function __construct(FotoAlbum $album) {
-		parent::__construct($album, get_class(), '/fotoalbum/uploaden/' . $album->subdir, new ImageField('afbeelding', 'Foto', null, null, array('image/jpeg')), '/fotoalbum');
+		parent::__construct($album, '/fotoalbum/uploaden/' . $album->subdir, new ImageField('afbeelding', 'Foto', null, null, array('image/jpeg')), '/fotoalbum');
 		$this->titel = 'Fotos toevoegen aan: ' . ucfirst($album->dirname);
 	}
 
@@ -138,7 +138,7 @@ class FotosDropzone extends Dropzone {
 	public function view() {
 		echo parent::view();
 		echo '<br /><span class="cursief">Maak nooit inbreuk op de auteursrechten of het recht op privacy van anderen.</span>';
-		echo '<div class="float-right"><a class="btn" onclick="showExisting_' . $this->getFormId() . '();$(this).remove();"><img src="/plaetjes/famfamfam/photos.png" width="16" height="16" alt="photos" class="icon"> Toon bestaande foto\'s in dit album</a></div>';
+		echo '<div class="float-right"><a class="btn" onclick="showExisting_' . $this->formId . '();$(this).remove();"><img src="/plaetjes/famfamfam/photos.png" width="16" height="16" alt="photos" class="icon"> Toon bestaande foto\'s in dit album</a></div>';
 		// Uitleg foto's toevoegen
 		require_once 'controller/CmsPaginaController.class.php';
 		$c = new CmsPaginaController('');

@@ -94,7 +94,7 @@ class CommissieVoorkeurenForm extends Formulier {
 	}
 
 	public function __construct(Profiel $profiel) {
-		parent::__construct($profiel, 'profielForm', '/profiel/' . $profiel->uid . '/voorkeuren', 'Commissie-voorkeuren');
+		parent::__construct($profiel, '/profiel/' . $profiel->uid . '/voorkeuren', 'Commissie-voorkeuren');
 
 		//permissies
 		$opties = array(1 => 'nee', 2 => 'misschien', 3 => 'ja');

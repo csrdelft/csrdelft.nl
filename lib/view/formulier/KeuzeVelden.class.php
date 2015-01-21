@@ -289,20 +289,27 @@ class RequiredKeuzeRondjeField extends KeuzeRondjeField {
  */
 class DatumField extends InputField {
 
-	protected $maxyear;
-	protected $minyear;
+	protected $max_jaar;
+	protected $min_jaar;
 
 	public function __construct($name, $value, $description, $maxyear = null, $minyear = null) {
 		parent::__construct($name, $value, $description);
-		if ($maxyear === null) {
-			$this->maxyear = date('Y');
+		if (is_int($maxyear)) {
+			$this->max_jaar = $maxyear;
 		} else {
-			$this->maxyear = (int) $maxyear;
+			$this->max_jaar = (int) date('Y') + 10;
 		}
-		if ($minyear === null) {
-			$this->minyear = 1920;
+		if (is_int($minyear)) {
+			$this->min_jaar = $minyear;
 		} else {
-			$this->minyear = (int) $minyear;
+			$this->min_jaar = (int) date('Y') - 10;
+		}
+		$jaar = (int) date('Y', strtotime($value));
+		if ($jaar > $this->max_jaar) {
+			$this->max_jaar = $jaar;
+		}
+		if ($jaar < $this->min_jaar) {
+			$this->min_jaar = $jaar;
 		}
 	}
 
@@ -338,12 +345,19 @@ class DatumField extends InputField {
 		if (!parent::validate()) {
 			return false;
 		}
-		if (!preg_match('/^(\d{4})-(\d\d?)-(\d\d?)$/', $this->value)) {
+		$jaar = (int) $this->getJaar();
+		$maand = (int) $this->getMaand();
+		$dag = (int) $this->getDag();
+		if ($this->value == '0000-00-00' OR empty($this->value)) {
+			if ($this->required) {
+				$this->error = 'Dit is een verplicht veld';
+			}
+		} elseif (!preg_match('/^(\d{4})-(\d\d?)-(\d\d?)$/', $this->value) OR ! checkdate($maand, $dag, $jaar)) {
 			$this->error = 'Ongeldige datum';
-		} elseif (substr($this->value, 0, 4) > $this->maxyear) {
-			$this->error = 'Er kunnen geen data later dan ' . $this->maxyear . ' worden weergegeven';
-		} elseif ($this->value != '0000-00-00' AND ! checkdate($this->getMaand(), $this->getDag(), $this->getJaar())) {
-			$this->error = 'Datum bestaat niet';
+		} elseif (is_int($this->max_jaar) AND $jaar > $this->max_jaar) {
+			$this->error = 'Kies een jaar voor ' . $this->max_jaar;
+		} elseif (is_int($this->min_jaar) AND $jaar < $this->min_jaar) {
+			$this->error = 'Kies een jaar na ' . $this->min_jaar;
 		}
 		return $this->error === '';
 	}
@@ -371,15 +385,15 @@ JS;
 	}
 
 	public function getHtml() {
-		$years = range($this->minyear, $this->maxyear);
+		$years = range($this->min_jaar, $this->max_jaar);
 		$months = range(1, 12);
 		$days = range(1, 31);
 
-		//als de datum al nul is, moet ie dat ook weer kunnen worden...
-		if ($this->value == '0000-00-00' OR $this->value == 0) {
-			$years[] = '0000';
-			$months[] = 0;
-			$days[] = 0;
+		// Als de datum al null is, moet ie dat ook weer kunnen worden
+		if ($this->value == '0000-00-00' OR empty($this->value)) {
+			array_unshift($years, 0);
+			array_unshift($months, 0);
+			array_unshift($days, 0);
 		}
 
 		$html = '<select id="' . $this->getId() . '_dag" name="' . $this->name . '_dag" origvalue="' . substr($this->origvalue, 8, 2) . '" ' . $this->getInputAttribute('class') . '>';
@@ -390,8 +404,12 @@ JS;
 				$html .= ' selected="selected"';
 			}
 			$label = (int) $value;
-			if ($label < 10) {
-				$label = '&nbsp;&nbsp;' . $label;
+			if ($label > 0) {
+				if ($label < 10) {
+					$label = '&nbsp;&nbsp;' . $label;
+				}
+			} else {
+				$label = '';
 			}
 			$html .= '>' . $label . '</option>';
 		}
@@ -404,18 +422,29 @@ JS;
 			if ($value == substr($this->value, 5, 2)) {
 				$html .= ' selected="selected"';
 			}
-
-			$html .= '>' . strftime('%B', mktime(0, 0, 0, $value, 1, 0)) . '</option>';
+			$label = (int) $value;
+			if ($label > 0) {
+				$label = '&nbsp;&nbsp;' . strftime('%B', mktime(0, 0, 0, $label, 1, 0));
+			} else {
+				$label = '';
+			}
+			$html .= '>' . $label . '</option>';
 		}
 		$html .= '</select> ';
 
 		$html .= '<select id="' . $this->getId() . '_jaar" name="' . $this->name . '_jaar" origvalue="' . substr($this->origvalue, 0, 4) . '" ' . $this->getInputAttribute('class') . '>';
 		foreach ($years as $value) {
+			$value = sprintf('%04d', $value);
 			$html .= '<option value="' . $value . '"';
 			if ($value == substr($this->value, 0, 4)) {
 				$html .= ' selected="selected"';
 			}
-			$html .= '>' . $value . '</option>';
+			if ((int) $value > 0) {
+				$label = $value;
+			} else {
+				$label = '';
+			}
+			$html .= '>' . $label . '</option>';
 		}
 		return $html . '</select>';
 	}
@@ -465,10 +494,10 @@ class TijdField extends InputField {
 		if (!parent::validate()) {
 			return false;
 		}
-		if (!preg_match('/^(\d\d?):(\d{2})$/', $this->value)) {
+		$uren = (int) substr($this->value, 0, 2);
+		$minuten = (int) substr($this->value, 3, 5);
+		if (!preg_match('/^(\d\d?):(\d{2})$/', $this->value) OR $uren < 0 OR $uren > 23 OR $minuten < 0 OR $minuten > 59) {
 			$this->error = 'Ongeldige tijdstip';
-		} elseif (substr($this->value, 0, 2) > 23 OR substr($this->value, 3, 5) > 59) {
-			$this->error = 'Tijdstip bestaat niet';
 		}
 		return $this->error === '';
 	}

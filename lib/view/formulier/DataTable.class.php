@@ -12,6 +12,7 @@ require_once 'view/formulier/TabsForm.class.php';
  */
 class DataTable extends TabsForm {
 
+	public $nestedForm = true;
 	protected $tableId;
 	protected $dataUrl;
 	protected $autoUpdate = false;
@@ -60,9 +61,9 @@ class DataTable extends TabsForm {
 	);
 
 	public function __construct($orm, $titel = false, $groupByColumn = null) {
-		$this->tableId = uniqid($orm);
-		parent::__construct(new $orm(), $this->tableId . '_toolbar', null, $titel);
-
+		parent::__construct(new $orm(), null, $titel);
+		$this->tableId = $this->formId;
+		$this->formId .= '_toolbar';
 		$this->css_classes[] = 'ModalForm DataTableResponse DataTableToolbar';
 		$this->groupByColumn = $groupByColumn;
 
@@ -377,18 +378,24 @@ JS;
 
 class DataTableKnop extends FormulierKnop {
 
-	public $keyshortcut;
 	private $multiplicity;
+	protected $tableId;
+	public $keyshortcut;
 
-	public function __construct($multiplicity, $url, $action, $key, $label, $title, $icon) {
+	public function __construct($multiplicity, $tableId, $url, $action, $key, $label, $title, $icon) {
 		parent::__construct($url, $action . ' DataTableResponse', $label, $title, $icon);
 		$this->multiplicity = $multiplicity;
+		$this->tableId = $tableId;
 		$this->keyshortcut = $key;
 		$this->css_classes[] = 'DTTT_button';
 	}
 
 	public function getUpdateToolbar() {
 		return "$('#{$this->getId()}').attr('disabled', !(aantal {$this->multiplicity})).toggleClass('DTTT_disabled', !(aantal {$this->multiplicity}));";
+	}
+
+	public function getHtml() {
+		return str_replace('<a ', '<a DataTableId="' . $this->tableId . '" ', parent::getHtml());
 	}
 
 }

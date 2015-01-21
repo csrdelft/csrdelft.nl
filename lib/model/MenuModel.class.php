@@ -43,7 +43,7 @@ class MenuModel extends CachedPersistenceModel {
 			$this->getExtendedTree($root);
 		} else {
 			// niet bestaand menu?
-			$root = $this->newMenuItem(0);
+			$root = $this->nieuw(0);
 			$root->tekst = $naam;
 			if ($naam == LoginModel::getUid()) {
 				// maak favorieten menu 
@@ -75,7 +75,7 @@ class MenuModel extends CachedPersistenceModel {
 			case 'Forum':
 				require_once 'model/ForumModel.class.php';
 				foreach (ForumModel::instance()->prefetch() as $categorie) {
-					$item = $this->newMenuItem($parent->item_id);
+					$item = $this->nieuw($parent->item_id);
 					$item->item_id = - $categorie->categorie_id; // nodig voor getParent()
 					$item->rechten_bekijken = $categorie->rechten_lezen;
 					$item->link = '/forum#' . $categorie->categorie_id;
@@ -84,7 +84,7 @@ class MenuModel extends CachedPersistenceModel {
 					$this->cache($item);
 
 					foreach ($categorie->getForumDelen() as $deel) {
-						$subitem = $this->newMenuItem($item->item_id);
+						$subitem = $this->nieuw($item->item_id);
 						$subitem->rechten_bekijken = $deel->rechten_lezen;
 						$subitem->link = '/forum/deel/' . $deel->forum_id;
 						$subitem->tekst = $deel->titel;
@@ -97,7 +97,7 @@ class MenuModel extends CachedPersistenceModel {
 				require_once 'model/documenten/DocCategorie.class.php';
 				$overig = false;
 				foreach (DocCategorie::getAll() as $categorie) {
-					$item = $this->newMenuItem($parent->item_id);
+					$item = $this->nieuw($parent->item_id);
 					$item->rechten_bekijken = $categorie->getLeesrechten();
 					$item->link = '/documenten/categorie/' . $categorie->getID();
 					$item->tekst = $categorie->getNaam();
@@ -117,7 +117,7 @@ class MenuModel extends CachedPersistenceModel {
 					if ($verticale->letter == '') {
 						continue;
 					}
-					$item = $this->newMenuItem($parent->item_id);
+					$item = $this->nieuw($parent->item_id);
 					$item->rechten_bekijken = $parent->rechten_bekijken;
 					$item->link = '/verticalen#' . $verticale->letter;
 					$item->tekst = $verticale->naam;
@@ -207,7 +207,7 @@ class MenuModel extends CachedPersistenceModel {
 		return $this->getMenuItem($item->parent_id);
 	}
 
-	public function newMenuItem($parent_id) {
+	public function nieuw($parent_id) {
 		$item = new MenuItem();
 		$item->parent_id = $parent_id;
 		$item->volgorde = 0;

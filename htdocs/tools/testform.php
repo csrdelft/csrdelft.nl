@@ -7,7 +7,7 @@ require_once 'configuratie.include.php';
 class TestFormulier extends Formulier {
 
 	public function __construct($model) {
-		parent::__construct($model, 'test-form', '/testform.php');
+		parent::__construct($model, '/testform.php');
 		$this->titel = 'Testformulier';
 
 		$fields[] = new HtmlComment('<p>Wat autoaanvullen dingen testen, net als hippe ajax-inline-bewerkzaken...</p>');

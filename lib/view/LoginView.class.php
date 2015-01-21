@@ -42,7 +42,7 @@ class LoginSessionsData extends DataTableResponse {
 		if ($session->lock_ip) {
 			$array['lock_ip'] = '<img width="16" height="16" class="icon" src="/plaetjes/famfamfam/lock.png" title="Gekoppeld aan IP-adres">';
 		} else {
-			$array['lock_ip'] = '';
+			$array['lock_ip'] = null;
 		}
 
 		return parent::getJson($array);
@@ -61,17 +61,17 @@ class RememberLoginTable extends DataTable implements FormElement {
 		$this->searchColumn('remember_since');
 		$this->searchColumn('device_name');
 
-		$nieuw = new DataTableKnop('== 0', '/loginremember', 'post popup', null, 'Toevoegen', 'Automatisch inloggen vanaf dit apparaat', '/famfamfam/add.png');
-		$this->addKnop($nieuw);
+		$create = new DataTableKnop('== 0', $this->tableId, '/loginremember', 'post popup', null, 'Toevoegen', 'Automatisch inloggen vanaf dit apparaat', '/famfamfam/add.png');
+		$this->addKnop($create);
 
-		$wijzig = new DataTableKnop('== 1', '/loginremember', 'post popup', null, 'Naam wijzigen', 'Wijzig naam van apparaat', '/famfamfam/pencil.png');
-		$this->addKnop($wijzig);
+		$update = new DataTableKnop('== 1', $this->tableId, '/loginremember', 'post popup', null, 'Naam wijzigen', 'Wijzig naam van apparaat', '/famfamfam/pencil.png');
+		$this->addKnop($update);
 
-		$lock = new DataTableKnop('>= 1', '/loginlockip', 'post', null, '(Ont)Koppel IP', 'Alleen inloggen vanaf bepaald IP-adres', '/famfamfam/lock.png');
+		$lock = new DataTableKnop('>= 1', $this->tableId, '/loginlockip', 'post', null, '(Ont)Koppel IP', 'Alleen inloggen vanaf bepaald IP-adres', '/famfamfam/lock.png');
 		$this->addKnop($lock);
 
-		$forget = new DataTableKnop('>= 1', '/loginforget', 'post', null, 'Verwijderen', 'Stop automatische login voor dit apparaat', '/famfamfam/cross.png');
-		$this->addKnop($forget);
+		$delte = new DataTableKnop('>= 1', $this->tableId, '/loginforget', 'post', null, 'Verwijderen', 'Stop automatische login voor dit apparaat', '/famfamfam/cross.png');
+		$this->addKnop($delte);
 	}
 
 	public function getHtml() {
@@ -89,7 +89,7 @@ class RememberLoginData extends DataTableResponse {
 	public function getJson($remember) {
 		$array = $remember->jsonSerialize();
 
-		$array['token'] = ''; // keep it private
+		$array['token'] = null; // keep it private
 
 		$array['remember_since'] = reldate($array['remember_since']);
 
@@ -107,7 +107,7 @@ class RememberLoginData extends DataTableResponse {
 class RememberLoginForm extends DataTableForm {
 
 	public function __construct(RememberLogin $remember) {
-		parent::__construct($remember, 'rememberform', '/loginremember', 'Automatisch inloggen vanaf huidig apparaat');
+		parent::__construct($remember, '/loginremember', 'Automatisch inloggen vanaf huidig apparaat');
 		$this->css_classes[] = 'DataTableResponse';
 
 		$fields[] = new RequiredTextField('device_name', $remember->device_name, 'Naam apparaat');
@@ -121,7 +121,7 @@ class RememberLoginForm extends DataTableForm {
 class LoginForm extends Formulier {
 
 	public function __construct() {
-		parent::__construct(null, 'loginform', '/login');
+		parent::__construct(null, '/login');
 
 		$fields['user'] = new TextField('user', null, null);
 		$fields['user']->placeholder = 'Bijnaam of lidnummer';
@@ -147,7 +147,7 @@ class LoginForm extends Formulier {
 class VerifyForm extends Formulier {
 
 	public function __construct($tokenString) {
-		parent::__construct(null, 'verifyform', '/verify/' . $tokenString, 'Verifieren');
+		parent::__construct(null, '/verify/' . $tokenString, 'Verifieren');
 
 		$fields[] = new RequiredTextField('user', null, 'Lidnummer');
 		$fields[] = new FormDefaultKnoppen('/', false, true, true, true);
@@ -160,7 +160,7 @@ class VerifyForm extends Formulier {
 class WachtwoordVergetenForm extends Formulier {
 
 	public function __construct() {
-		parent::__construct(null, 'wwvergetenform', '/wachtwoord/vergeten', 'Wachtwoord vergeten');
+		parent::__construct(null, '/wachtwoord/vergeten', 'Wachtwoord vergeten');
 
 		$fields[] = new RequiredTextField('user', null, 'Lidnummer');
 		$fields[] = new RequiredEmailField('mail', null, 'E-mailadres');
@@ -174,7 +174,7 @@ class WachtwoordVergetenForm extends Formulier {
 class WachtwoordWijzigenForm extends Formulier {
 
 	public function __construct(Account $account, $action, $require_current = true) {
-		parent::__construct($account, 'wwwijzigenform', '/wachtwoord/' . $action, 'Wachtwoord instellen');
+		parent::__construct($account, '/wachtwoord/' . $action, 'Wachtwoord instellen');
 
 		if ($account->email == '') {
 			setMelding('Vul uw e-mailadres in om uw wachtwoord te kunnen resetten als u deze bent vergeten.', 0);
@@ -192,7 +192,7 @@ class WachtwoordWijzigenForm extends Formulier {
 class AccountForm extends Formulier {
 
 	public function __construct(Account $account) {
-		parent::__construct($account, 'accountForm', '/account/' . $account->uid, 'Inloggegevens aanpassen');
+		parent::__construct($account, '/account/' . $account->uid, 'Inloggegevens aanpassen');
 
 		if (LoginModel::mag('P_LEDEN_MOD')) {
 			$roles = array();

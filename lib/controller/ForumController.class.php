@@ -256,7 +256,7 @@ class ForumController extends Controller {
 	 * @param int $pagina or 'laatste' or 'prullenbak'
 	 */
 	public function deel($forum_id, $pagina = 1) {
-		$deel = ForumDelenModel::instance()->getForumDeel((int) $forum_id);
+		$deel = ForumDelenModel::get((int) $forum_id);
 		if (!$deel->magLezen()) {
 			$this->geentoegang();
 		}
@@ -282,7 +282,7 @@ class ForumController extends Controller {
 	 * @param int $pagina or 'laatste' or 'ongelezen'
 	 */
 	public function onderwerp($draad_id, $pagina = null, $statistiek = null) {
-		$draad = ForumDradenModel::instance()->getForumDraad((int) $draad_id);
+		$draad = ForumDradenModel::get((int) $draad_id);
 		if (!$draad->magLezen()) {
 			$this->geentoegang();
 		}
@@ -315,7 +315,7 @@ class ForumController extends Controller {
 	 * @param int $post_id
 	 */
 	public function reactie($post_id) {
-		$post = ForumPostsModel::instance()->getForumPost((int) $post_id);
+		$post = ForumPostsModel::get((int) $post_id);
 		if ($post->verwijderd) {
 			setMelding('Deze reactie is verwijderd', 0);
 		}
@@ -336,14 +336,16 @@ class ForumController extends Controller {
 	 * @param int $forum_id
 	 */
 	public function beheren($forum_id) {
-		$deel = ForumDelenModel::instance()->getForumDeel((int) $forum_id);
-		$this->view = new ForumDeelForm($deel); // fetches POST values itself
-		if ($this->view->validate()) {
+		$deel = ForumDelenModel::get((int) $forum_id);
+		$form = new ForumDeelForm($deel); // fetches POST values itself
+		if ($form->validate()) {
 			$rowCount = ForumDelenModel::instance()->update($deel);
 			if ($rowCount !== 1) {
 				throw new Exception('Forum beheren mislukt!');
 			}
 			$this->view = new JsonResponse(true);
+		} else {
+			$this->view = $form;
 		}
 	}
 
@@ -353,7 +355,7 @@ class ForumController extends Controller {
 	 * @param int $forum_id
 	 */
 	public function opheffen($forum_id) {
-		$deel = ForumDelenModel::instance()->getForumDeel((int) $forum_id);
+		$deel = ForumDelenModel::get((int) $forum_id);
 		if (ForumDradenModel::instance()->exist('forum_id = ?', array($deel->forum_id))) {
 			setMelding('Verwijder eerst alle draadjes van dit deelforum uit de database!', -1);
 		} else {
@@ -369,7 +371,7 @@ class ForumController extends Controller {
 	 * @param int $draad_id
 	 */
 	public function verbergen($draad_id) {
-		$draad = ForumDradenModel::instance()->getForumDraad((int) $draad_id);
+		$draad = ForumDradenModel::get((int) $draad_id);
 		if (!$draad->magVerbergen()) {
 			throw new Exception('Onderwerp mag niet verborgen worden');
 		}
@@ -386,7 +388,7 @@ class ForumController extends Controller {
 	 * @param int $draad_id
 	 */
 	public function tonen($draad_id) {
-		$draad = ForumDradenModel::instance()->getForumDraad((int) $draad_id);
+		$draad = ForumDradenModel::get((int) $draad_id);
 		if (!$draad->isVerborgen()) {
 			throw new Exception('Onderwerp is niet verborgen');
 		}
@@ -410,7 +412,7 @@ class ForumController extends Controller {
 	 * @param int $draad_id
 	 */
 	public function volgenaan($draad_id) {
-		$draad = ForumDradenModel::instance()->getForumDraad((int) $draad_id);
+		$draad = ForumDradenModel::get((int) $draad_id);
 		if (!$draad->magVolgen()) {
 			throw new Exception('Onderwerp mag niet gevolgd worden');
 		}
@@ -427,7 +429,7 @@ class ForumController extends Controller {
 	 * @param int $draad_id
 	 */
 	public function volgenuit($draad_id) {
-		$draad = ForumDradenModel::instance()->getForumDraad((int) $draad_id);
+		$draad = ForumDradenModel::get((int) $draad_id);
 		if (!$draad->isGevolgd()) {
 			throw new Exception('Onderwerp wordt niet gevolgd');
 		}
@@ -451,7 +453,7 @@ class ForumController extends Controller {
 	 * @param int $draad_id
 	 */
 	public function bladwijzer($draad_id) {
-		$draad = ForumDradenModel::instance()->getForumDraad((int) $draad_id);
+		$draad = ForumDradenModel::get((int) $draad_id);
 		$timestamp = (int) filter_input(INPUT_POST, 'timestamp', FILTER_SANITIZE_NUMBER_INT);
 		if (ForumDradenGelezenModel::instance()->setWanneerGelezenDoorLid($draad, $timestamp - 1)) {
 			echo '<img id="timestamp' . $timestamp . '" src="/plaetjes/famfamfam/tick.png" class="icon" title="Bladwijzer succesvol geplaatst">';
@@ -468,7 +470,7 @@ class ForumController extends Controller {
 	 * @throws Exception indien forum niet bestaat bij verplaatsen of wijzigen mislukt
 	 */
 	public function wijzigen($draad_id, $property, $value = null) {
-		$draad = ForumDradenModel::instance()->getForumDraad((int) $draad_id);
+		$draad = ForumDradenModel::get((int) $draad_id);
 		// gedeelde moderators mogen dit niet
 		if (!$draad->getForumDeel()->magModereren()) {
 			$this->geentoegang();
@@ -481,7 +483,7 @@ class ForumController extends Controller {
 		} elseif ($property === 'forum_id' OR $property === 'gedeeld_met') {
 			$value = (int) filter_input(INPUT_POST, $property, FILTER_SANITIZE_NUMBER_INT);
 			if ($property === 'forum_id') {
-				$deel = ForumDelenModel::instance()->getForumDeel($value);
+				$deel = ForumDelenModel::get($value);
 				if (!$deel->magModereren()) {
 					$this->geentoegang();
 				}
@@ -514,11 +516,11 @@ class ForumController extends Controller {
 	 * @param int $draad_id
 	 */
 	public function posten($forum_id, $draad_id = null) {
-		$deel = ForumDelenModel::instance()->getForumDeel((int) $forum_id);
+		$deel = ForumDelenModel::get((int) $forum_id);
 
 		// post in bestaand draadje?
 		if ($draad_id !== null) {
-			$draad = ForumDradenModel::instance()->getForumDraad((int) $draad_id);
+			$draad = ForumDradenModel::get((int) $draad_id);
 
 			// check draad in forum deel
 			if (!$draad OR $draad->forum_id !== $deel->forum_id OR ! $draad->magPosten()) {
@@ -640,7 +642,7 @@ class ForumController extends Controller {
 	}
 
 	public function citeren($post_id) {
-		$post = ForumPostsModel::instance()->getForumPost((int) $post_id);
+		$post = ForumPostsModel::get((int) $post_id);
 		if (!$post->magCiteren()) {
 			$this->geentoegang();
 		}
@@ -649,7 +651,7 @@ class ForumController extends Controller {
 	}
 
 	public function tekst($post_id) {
-		$post = ForumPostsModel::instance()->getForumPost((int) $post_id);
+		$post = ForumPostsModel::get((int) $post_id);
 		if (!$post->magBewerken()) {
 			$this->geentoegang();
 		}
@@ -658,7 +660,7 @@ class ForumController extends Controller {
 	}
 
 	public function bewerken($post_id) {
-		$post = ForumPostsModel::instance()->getForumPost((int) $post_id);
+		$post = ForumPostsModel::get((int) $post_id);
 		if (!$post->magBewerken()) {
 			$this->geentoegang();
 		}
@@ -670,13 +672,13 @@ class ForumController extends Controller {
 	}
 
 	public function verplaatsen($post_id) {
-		$post = ForumPostsModel::instance()->getForumPost((int) $post_id);
+		$post = ForumPostsModel::get((int) $post_id);
 		$oudDraad = $post->getForumDraad();
 		if (!$oudDraad->magModereren()) {
 			$this->geentoegang();
 		}
 		$nieuw = filter_input(INPUT_POST, 'Draad_id', FILTER_SANITIZE_NUMBER_INT);
-		$nieuwDraad = ForumDradenModel::instance()->getForumDraad((int) $nieuw);
+		$nieuwDraad = ForumDradenModel::get((int) $nieuw);
 		if (!$nieuwDraad->magModereren()) {
 			$this->geentoegang();
 		}
@@ -686,7 +688,7 @@ class ForumController extends Controller {
 	}
 
 	public function verwijderen($post_id) {
-		$post = ForumPostsModel::instance()->getForumPost((int) $post_id);
+		$post = ForumPostsModel::get((int) $post_id);
 		if (!$post->getForumDraad()->magModereren()) {
 			$this->geentoegang();
 		}
@@ -695,7 +697,7 @@ class ForumController extends Controller {
 	}
 
 	public function offtopic($post_id) {
-		$post = ForumPostsModel::instance()->getForumPost((int) $post_id);
+		$post = ForumPostsModel::get((int) $post_id);
 		if (!$post->getForumDraad()->magModereren()) {
 			$this->geentoegang();
 		}
@@ -704,7 +706,7 @@ class ForumController extends Controller {
 	}
 
 	public function goedkeuren($post_id) {
-		$post = ForumPostsModel::instance()->getForumPost((int) $post_id);
+		$post = ForumPostsModel::get((int) $post_id);
 		if (!$post->getForumDraad()->magModereren()) {
 			$this->geentoegang();
 		}
@@ -720,10 +722,10 @@ class ForumController extends Controller {
 		$concept = trim(filter_input(INPUT_POST, 'forumBericht', FILTER_UNSAFE_RAW));
 		$ping = filter_input(INPUT_POST, 'ping', FILTER_SANITIZE_STRING);
 
-		$deel = ForumDelenModel::instance()->getForumDeel((int) $forum_id);
+		$deel = ForumDelenModel::get((int) $forum_id);
 		// bestaand draadje?
 		if ($draad_id !== null) {
-			$draad = ForumDradenModel::instance()->getForumDraad((int) $draad_id);
+			$draad = ForumDradenModel::get((int) $draad_id);
 			$draad_id = $draad->draad_id;
 			// check draad in forum deel
 			if (!$draad OR $draad->forum_id !== $deel->forum_id OR ! $draad->magPosten()) {

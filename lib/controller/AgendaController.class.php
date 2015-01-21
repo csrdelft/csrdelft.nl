@@ -101,9 +101,9 @@ class AgendaController extends AclController {
 	}
 
 	public function toevoegen($datum = '') {
-		$item = $this->model->newAgendaItem($datum);
-		$this->view = new AgendaItemForm($item, $this->action); // fetches POST values itself
-		if ($this->view->validate()) {
+		$item = $this->model->nieuw($datum);
+		$form = new AgendaItemForm($item, $this->action); // fetches POST values itself
+		if ($form->validate()) {
 			$item->item_id = (int) $this->model->create($item);
 			if ($datum === 'doorgaan') {
 				$_POST = array(); // clear post values of previous input
@@ -114,6 +114,8 @@ class AgendaController extends AclController {
 			} else {
 				$this->view = new AgendaItemMaandView($item);
 			}
+		} else {
+			$this->view = $form;
 		}
 	}
 
@@ -122,8 +124,8 @@ class AgendaController extends AclController {
 		if (!$item->magBeheren()) {
 			$this->geentoegang();
 		}
-		$this->view = new AgendaItemForm($item, $this->action); // fetches POST values itself
-		if ($this->view->validate()) {
+		$form = new AgendaItemForm($item, $this->action); // fetches POST values itself
+		if ($form->validate()) {
 			$rowCount = $this->model->update($item);
 			if ($rowCount > 0) {
 				//setMelding('Bijgewerkt', 1);
@@ -131,6 +133,8 @@ class AgendaController extends AclController {
 				//setMelding('Geen wijzigingen', 0);
 			}
 			$this->view = new AgendaItemMaandView($item);
+		} else {
+			$this->view = $form;
 		}
 	}
 

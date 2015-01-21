@@ -34,7 +34,7 @@ abstract class A implements PersistentEnum {
 			case self::Afmelden:
 			case self::Bewerken:
 				return $option;
-			default: throw new Exception('Ongeldige AccessAction');
+			default: throw new Exception('AccessAction onbekend');
 		}
 	}
 
@@ -48,7 +48,7 @@ abstract class A implements PersistentEnum {
 			case self::Aanmelden: return 'J';
 			case self::Afmelden: return 'L';
 			case self::Bewerken: return 'E';
-			default: throw new Exception('Ongeldige AccessAction');
+			default: throw new Exception('AccessAction onbekend');
 		}
 	}
 

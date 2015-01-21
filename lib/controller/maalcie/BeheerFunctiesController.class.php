@@ -50,20 +50,22 @@ class BeheerFunctiesController extends AclController {
 	}
 
 	public function toevoegen() {
-		$functie = $this->model->newFunctie();
-		$this->view = new FunctieForm($functie, $this->action); // fetches POST values itself
-		if ($this->view->validate()) {
+		$functie = $this->model->nieuw();
+		$form = new FunctieForm($functie, $this->action); // fetches POST values itself
+		if ($form->validate()) {
 			$id = $this->model->create($functie);
 			$functie->functie_id = (int) $id;
 			setMelding('Toegevoegd', 1);
 			$this->view = new FunctieView($functie);
+		} else {
+			$this->view = $form;
 		}
 	}
 
 	public function bewerken($fid) {
-		$functie = $this->model->getFunctie((int) $fid);
-		$this->view = new FunctieForm($functie, $this->action); // fetches POST values itself
-		if ($this->view->validate()) {
+		$functie = $this->model->get((int) $fid);
+		$form = new FunctieForm($functie, $this->action); // fetches POST values itself
+		if ($form->validate()) {
 			$rowCount = $this->model->update($functie);
 			if ($rowCount > 0) {
 				setMelding('Bijgewerkt', 1);
@@ -71,28 +73,32 @@ class BeheerFunctiesController extends AclController {
 				setMelding('Geen wijzigingen', 0);
 			}
 			$this->view = new FunctieView($functie);
+		} else {
+			$this->view = $form;
 		}
 	}
 
 	public function verwijderen($fid) {
-		$functie = $this->model->getFunctie((int) $fid);
+		$functie = $this->model->get((int) $fid);
 		$this->model->removeFunctie($functie);
 		setMelding('Verwijderd', 1);
 		$this->view = new FunctieDeleteView($fid);
 	}
 
 	public function kwalificeer($fid) {
-		$functie = $this->model->getFunctie((int) $fid);
-		$kwalificatie = KwalificatiesModel::instance()->newKwalificatie($functie);
-		$this->view = new KwalificatieForm($kwalificatie); // fetches POST values itself
-		if ($this->view->validate()) {
+		$functie = $this->model->get((int) $fid);
+		$kwalificatie = KwalificatiesModel::instance()->nieuw($functie);
+		$form = new KwalificatieForm($kwalificatie); // fetches POST values itself
+		if ($form->validate()) {
 			KwalificatiesModel::instance()->kwalificatieToewijzen($kwalificatie);
 			$this->view = new FunctieView($functie);
+		} else {
+			$this->view = $form;
 		}
 	}
 
 	public function dekwalificeer($fid, $uid) {
-		$functie = $this->model->getFunctie((int) $fid);
+		$functie = $this->model->get((int) $fid);
 		KwalificatiesModel::instance()->kwalificatieTerugtrekken($uid, $functie->functie_id);
 		$this->view = new FunctieView($functie);
 	}

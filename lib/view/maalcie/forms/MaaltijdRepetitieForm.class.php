@@ -11,7 +11,7 @@
 class MaaltijdRepetitieForm extends ModalForm {
 
 	public function __construct($mrid, $dag = null, $periode = null, $titel = null, $tijd = null, $prijs = null, $abo = null, $limiet = null, $filter = null, $verplaats = null) {
-		parent::__construct(null, 'maalcie-maaltijd-repetitie-form', maalcieUrl . '/opslaan/' . $mrid);
+		parent::__construct(null, maalcieUrl . '/opslaan/' . $mrid);
 
 		if (!is_int($mrid) || $mrid < 0) {
 			throw new Exception('invalid mrid');

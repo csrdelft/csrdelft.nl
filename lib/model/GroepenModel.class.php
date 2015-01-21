@@ -14,12 +14,30 @@ class GroepenModel extends CachedPersistenceModel {
 
 	protected static $instance;
 
+	public static function get($id) {
+		return static::instance()->retrieveByPrimaryKey(array($id));
+	}
+
 	protected function __construct() {
 		parent::__construct('groepen/');
 	}
 
-	public static function get($id) {
-		return static::instance()->retrieveByPrimaryKey(array($id));
+	public function nieuw() {
+		$class = static::orm;
+		$groep = new $class();
+		$groep->naam = null;
+		$groep->samenvatting = null;
+		$groep->omschrijving = null;
+		$groep->begin_moment = getDateTime();
+		$groep->eind_moment = null;
+		$groep->website = null;
+		$groep->door_uid = LoginModel::getUid();
+		return $groep;
+	}
+	
+	public function create(PersistentEntity $entity) {
+		$entity->item_id = (int) parent::create($entity);
+		$this->flushCache(true);
 	}
 
 }
@@ -30,6 +48,13 @@ class OnderverenigingenModel extends GroepenModel {
 
 	protected static $instance;
 
+	public function nieuw() {
+		$ondervereniging = parent::nieuw();
+		$ondervereniging->status = OnderverenigingStatus::AdspirantOndervereniging;
+		$ondervereniging->status_historie = '[div]Aangemaakt als ' . OnderverenigingStatus::getDescription($ondervereniging->status) . ' door [lid=' . LoginModel::getUid() . '] op [reldate]' . getDatetime() . '[/reldate][/div][hr]';
+		return $ondervereniging;
+	}
+
 }
 
 class WoonoordenModel extends GroepenModel {
@@ -37,6 +62,13 @@ class WoonoordenModel extends GroepenModel {
 	const orm = 'Woonoord';
 
 	protected static $instance;
+
+	public function nieuw() {
+		$woonoord = parent::nieuw();
+		$woonoord->status = HuisStatus::Woonoord;
+		$woonoord->status_historie = '[div]Aangemaakt als ' . HuisStatus::getDescription($woonoord->status) . ' door [lid=' . LoginModel::getUid() . '] op [reldate]' . getDatetime() . '[/reldate][/div][hr]';
+		return $woonoord;
+	}
 
 }
 
@@ -79,6 +111,14 @@ class OpvolgbareGroepenModel extends GroepenModel {
 
 	protected static $instance;
 
+	public function nieuw() {
+		$groep = parent::nieuw();
+		$groep->familie_id = null;
+		$groep->jaargang = LichtingenModel::getHuidigeJaargang();
+		$groep->status = GroepStatus::HT;
+		return $groep;
+	}
+
 }
 
 class KringenModel extends OpvolgbareGroepenModel {
@@ -103,9 +143,15 @@ class CommissiesModel extends OpvolgbareGroepenModel {
 
 	protected static $instance;
 
+	public function nieuw() {
+		$commissie = parent::nieuw();
+		$commissie->soort = CommissieSoort::Commissie;
+		return $commissie;
+	}
+
 }
 
-class BesturenModel extends CommissiesModel {
+class BesturenModel extends OpvolgbareGroepenModel {
 
 	const orm = 'Bestuur';
 
@@ -173,7 +219,7 @@ class KetzerKeuzesModel extends GroepenModel {
 
 }
 
-class GroepLedenModel extends GroepenModel {
+class GroepLedenModel extends CachedPersistenceModel {
 
 	const orm = 'GroepLid';
 
@@ -189,22 +235,45 @@ class GroepLedenModel extends GroepenModel {
 	 */
 	protected $memcache_prefetch = true;
 
-	public function getLedenVoorGroep(Groep $groep) {
-		return $this->prefetch('groep_type = ? AND groep_id = ?', array(get_class($groep), $groep->id));
+	protected function __construct() {
+		parent::__construct('groepen/');
+	}
+
+	public function nieuw(Groep $groep, $uid) {
+		$lid = new GroepLid();
+		$lid->groep_class = get_class($groep);
+		$lid->groep_id = $groep->id;
+		$lid->uid = $uid;
+		$lid->door_uid = LoginModel::getUid();
+		$lid->lid_sinds = getDateTime();
+		$lid->lid_tot = null;
+		$lid->opmerking = null;
+		$lid->status = GroepStatus::HT;
+		$lid->volgorde = 0;
+		return $lid;
+	}
+
+	public function getLedenVoorGroep(Groep $groep, $status = null) {
+		$where = 'groep_class = ? AND groep_id = ?';
+		$params = array(get_class($groep), $groep->id);
+		if (in_array($status, GroepStatus::getTypeOptions())) {
+			$where .= ' AND status = ?';
+			$params[] = $status;
+		}
+		return $this->prefetch($where, $params);
 	}
 
 	public function getStatistieken(Groep $groep) {
-		$uids = array_keys(group_by_distinct('uid', $groep->getGroepLeden(), false));
+		$uids = array_keys(group_by_distinct('uid', $groep->getLeden(), false));
 		$count = count($uids);
 		if ($count < 1) {
 			return array();
 		}
 		$in = implode(', ', array_fill(0, $count, '?'));
 		$stats['Totaal'] = $count;
-		$stats['Verticale'] = Database::instance()->sqlSelect(array('verticale.naam', 'count(*)'), 'lid LEFT JOIN verticale ON(provielen.verticale = verticale.letter)', 'uid IN (' . $in . ')', $uids, 'verticale.naam', null)->fetchAll();
-		$stats['Geslacht'] = Database::instance()->sqlSelect(array('geslacht', 'count(*)'), 'lid', 'uid IN (' . $in . ')', $uids, 'geslacht', null)->fetchAll();
-		$stats['Lidjaar'] = Database::instance()->sqlSelect(array('lidjaar', 'count(*)'), 'lid', 'uid IN (' . $in . ')', $uids, 'lidjaar', null)->fetchAll();
-		$stats['Opmerking'] = Database::instance()->sqlSelect(array('opmerking', 'count(*)'), GroepLid::getTableName(), 'groep_type = ? AND groep_id = ?', array(get_class($groep), $groep->id), 'opmerking', null)->fetchAll();
+		$stats['Verticale'] = Database::instance()->sqlSelect(array('verticale.naam', 'count(*)'), 'profielen LEFT JOIN verticale ON(provielen.verticale = verticale.letter)', 'uid IN (' . $in . ')', $uids, 'verticale.naam', null)->fetchAll();
+		$stats['Geslacht'] = Database::instance()->sqlSelect(array('geslacht', 'count(*)'), 'profielen', 'uid IN (' . $in . ')', $uids, 'geslacht', null)->fetchAll();
+		$stats['Lidjaar'] = Database::instance()->sqlSelect(array('lidjaar', 'count(*)'), 'profielen', 'uid IN (' . $in . ')', $uids, 'lidjaar', null)->fetchAll();
 		return $stats;
 	}
 

@@ -43,7 +43,7 @@ class KwalificatiesModel extends CachedPersistenceModel {
 		return $this->existsByPrimaryKey(array($uid, $fid));
 	}
 
-	public function newKwalificatie(CorveeFunctie $functie) {
+	public function nieuw(CorveeFunctie $functie) {
 		$kwalificatie = new CorveeKwalificatie();
 		$kwalificatie->functie_id = $functie->functie_id;
 		$kwalificatie->wanneer_toegewezen = date('Y-m-d H:i');

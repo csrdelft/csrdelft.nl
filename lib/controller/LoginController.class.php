@@ -277,7 +277,7 @@ class LoginController extends AclController {
 		if (count($UUIDs) === 1 AND isset($UUIDs[0])) {
 			$remember = RememberLoginModel::getUUID($UUIDs[0]);
 		} else {
-			$remember = RememberLoginModel::instance()->nieuwRememberLogin();
+			$remember = RememberLoginModel::instance()->nieuw();
 		}
 		if (!$remember OR $remember->uid !== LoginModel::getUid()) {
 			$this->geentoegang();

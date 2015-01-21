@@ -25,7 +25,7 @@ class GroepenRouterController extends Controller {
 		if (!$this->mag($this->action, null)) {
 			$this->geentoegang();
 		}
-		define('groepenUrl', '/groep/' . $this->action);
+		define('groepenUrl', '/groep/' . $this->action . '/');
 
 		if ($this->action === 'overig') {
 			$this->action = 'OpvolgbareGroepen';
@@ -40,7 +40,7 @@ class GroepenRouterController extends Controller {
 	}
 
 	/**
-	 * Check permissions & valid params in actions.
+	 * Check permissions & valid params in sub-controller.
 	 * 
 	 * @return boolean
 	 */

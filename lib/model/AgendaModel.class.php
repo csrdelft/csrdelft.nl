@@ -150,7 +150,7 @@ class AgendaModel extends PersistenceModel {
 		return null;
 	}
 
-	public function newAgendaItem($datum) {
+	public function nieuw($datum) {
 		$item = new AgendaItem();
 		if (!preg_match('/^[0-9]{4}\-[0-9]{1,2}-[0-9]{1,2}$/', $datum)) {
 			$datum = strtotime('Y-m-d');

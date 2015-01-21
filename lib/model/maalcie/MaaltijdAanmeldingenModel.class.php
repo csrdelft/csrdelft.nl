@@ -252,7 +252,7 @@ class MaaltijdAanmeldingenModel {
 		$wanneer = date('Y-m-d H:i');
 		if ($mid === null) { // niet voor specifieke maaltijd? dan voor alle komende repetitie-maaltijden
 			$sql.= ' SELECT maaltijd_id, ?, ?, ?, ?, ?, ? FROM mlt_maaltijden';
-			$sql.= ' WHERE mlt_repetitie_id = ? AND gesloten = false AND verwijderd = false AND datum >= ?';
+			$sql.= ' WHERE mlt_repetitie_id = ? AND gesloten = FALSE AND verwijderd = FALSE AND datum >= ?';
 			$values = array($uid, $gasten, $opmerking, $doorAbo, $doorUid, $wanneer, $doorAbo, date('Y-m-d'));
 		} else {
 			$sql.= ' VALUES (?, ?, ?, ?, ?, ?, ?)';

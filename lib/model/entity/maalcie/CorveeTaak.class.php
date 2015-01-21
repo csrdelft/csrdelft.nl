@@ -42,7 +42,6 @@ class CorveeTaak implements Agendeerbaar {
 	private $wanneer_toegekend; # datetime
 	private $wanneer_gemaild; # text
 	private $verwijderd; # boolean
-	private $corvee_functie;
 
 	public function __construct($tid = 0, $fid = 0, $uid = null, $crid = null, $mid = null, $datum = null, $punten = 0, $bonus_malus = 0, $toegekend = 0, $bonus_toegekend = 0, $wanneer = null, $gemaild = '', $verwijderd = false) {
 		$this->taak_id = (int) $tid;
@@ -196,8 +195,13 @@ class CorveeTaak implements Agendeerbaar {
 		return false;
 	}
 
+	/**
+	 * Lazy loading by foreign key.
+	 * 
+	 * @return CorveeFunctie
+	 */
 	public function getCorveeFunctie() {
-		return $this->corvee_functie;
+		return FunctiesModel::get($this->functie_id);
 	}
 
 	public function setFunctieId($int) {
@@ -285,10 +289,6 @@ class CorveeTaak implements Agendeerbaar {
 			throw new Exception('Geen boolean: verwijderd');
 		}
 		$this->verwijderd = $bool;
-	}
-
-	public function setCorveeFunctie(CorveeFunctie $functie) {
-		$this->corvee_functie = $functie;
 	}
 
 	// Agendeerbaar ############################################################

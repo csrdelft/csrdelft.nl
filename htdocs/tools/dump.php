@@ -15,7 +15,7 @@ foreach ($results as $result) {
 }
 $fields['tabel'] = new SelectField('tabel', null, 'Tabel', $tables);
 $fields['btn'] = new FormDefaultKnoppen('/', false);
-$form = new Formulier(null, 'form', null);
+$form = new Formulier(null, null);
 $form->addFields($fields);
 $form->titel = 'Dump database table';
 

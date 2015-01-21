@@ -43,19 +43,16 @@ class TabsForm extends Formulier {
 		parent::addFields($fields);
 	}
 
-	protected function getFormTag() {
-		if ($this->nestedForm) {
-			return '<div id="' . $this->getFormId() . '" class="' . implode(' ', $this->css_classes) . '">';
-		}
-		return parent::getFormTag();
-	}
-
 	/**
 	 * Toont het formulier en javascript van alle fields.
 	 */
 	public function view() {
 		echo getMelding();
-		echo $this->getFormTag();
+		if ($this->nestedForm) {
+			echo '<div id="' . $this->formId . '" class="' . implode(' ', $this->css_classes) . '">';
+		} else {
+			echo $this->getFormTag();
+		}
 		if ($this->getTitel()) {
 			echo '<h1 class="Titel">' . $this->getTitel() . '</h1>';
 		}
@@ -73,13 +70,13 @@ class TabsForm extends Formulier {
 		}
 		// tabs
 		if (sizeof($this->tabs) > 0) {
-			echo '<br /><div id="' . $this->getFormId() . '-tabs" class="tabs-list"><ul>';
+			echo '<br /><div id="' . $this->formId . '-tabs" class="tabs-list"><ul>';
 			foreach ($this->tabs as $tab => $fields) {
-				echo '<li><a href="#' . $this->getFormId() . '-tab-' . $tab . '" class="tab-item">' . ucfirst($tab) . '</a></li>';
+				echo '<li><a href="#' . $this->formId . '-tab-' . $tab . '" class="tab-item">' . ucfirst($tab) . '</a></li>';
 			}
 			echo '</ul>';
 			foreach ($this->tabs as $tab => $fields) {
-				echo '<div id="' . $this->getFormId() . '-tab-' . $tab . '" class="tabs-content">';
+				echo '<div id="' . $this->formId . '-tab-' . $tab . '" class="tabs-content">';
 				foreach ($fields as $field) {
 					$field->view();
 				}
@@ -104,20 +101,20 @@ class TabsForm extends Formulier {
 	public function getJavascript() {
 		$js = <<<JS
 
-$('#{$this->getFormId()}-tabs').tabs();
+$('#{$this->formId}-tabs').tabs();
 JS;
 		if ($this->vertical) {
 			$js .= <<<JS
 
-$('#{$this->getFormId()}-tabs').tabs().addClass('ui-tabs-vertical ui-helper-clearfix');
-$('#{$this->getFormId()}-tabs li').removeClass('ui-corner-top').addClass('ui-corner-left');
+$('#{$this->formId}-tabs').tabs().addClass('ui-tabs-vertical ui-helper-clearfix');
+$('#{$this->formId}-tabs li').removeClass('ui-corner-top').addClass('ui-corner-left');
 JS;
 		}
 		if ($this->hoverintent) {
 			$js .= <<<JS
 
 try {
-	$('#{$this->getFormId()}-tabs .tab-item').hoverIntent(function() {
+	$('#{$this->formId}-tabs .tab-item').hoverIntent(function() {
 		$(this).trigger('click');
 	});
 } catch(e) {

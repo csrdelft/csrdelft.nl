@@ -121,7 +121,7 @@ class AccessModel extends CachedPersistenceModel {
 			case LidStatus::Overleden:
 			case LidStatus::Exlid:
 			case LidStatus::Nobody: return AccessRoles::Nobody;
-			default: throw new Exception('Ongeldige LidStatus');
+			default: throw new Exception('LidStatus onbekend');
 		}
 	}
 

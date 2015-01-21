@@ -545,7 +545,7 @@ class NieuwBoek extends BiebBoek {
 			}
 			$nieuwboekformulier[] = new FormDefaultKnoppen('/bibliotheek/');
 
-			$this->formulier = new Formulier(null, 'boekaddForm', '/bibliotheek/nieuwboek/0');
+			$this->formulier = new Formulier(null, '/bibliotheek/nieuwboek/0');
 			$this->formulier->addFields($nieuwboekformulier);
 		}
 	}
@@ -644,7 +644,7 @@ class BewerkBoek extends BiebBoek {
 				}
 			}
 		}
-		$this->ajaxformuliervelden = new Formulier(null, '', '');
+		$this->ajaxformuliervelden = new Formulier(null, null);
 		$this->ajaxformuliervelden->addFields($ajaxformuliervelden);
 	}
 
@@ -1005,7 +1005,7 @@ class BewerkBoek extends BiebBoek {
 			$boekbeschrijvingform[] = $textfield;
 			$boekbeschrijvingform[] = new FormDefaultKnoppen($annuleer);
 
-			$this->formulier = new Formulier(null, 'Beschrijvingsformulier', $posturl);
+			$this->formulier = new Formulier(null, $posturl);
 			$this->formulier->addFields($boekbeschrijvingform);
 		}
 	}

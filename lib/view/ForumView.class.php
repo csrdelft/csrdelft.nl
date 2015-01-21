@@ -36,7 +36,7 @@ class ForumOverzichtView extends ForumView {
 class ForumZoekenForm extends Formulier {
 
 	public function __construct() {
-		parent::__construct(null, 'forumZoekenForm', '/forum/zoeken');
+		parent::__construct(null, '/forum/zoeken');
 		$this->css_classes[] = 'hoverIntent';
 
 		$fields[] = new HtmlComment('<div class="forumZoekenGeavanceerd hoverIntentContent verborgen">');
@@ -119,7 +119,7 @@ class ForumDeelView extends ForumView {
 class ForumDeelForm extends ModalForm {
 
 	public function __construct(ForumDeel $deel) {
-		parent::__construct($deel, 'beheerdeelforum', '/forum/beheren/' . $deel->forum_id);
+		parent::__construct($deel, '/forum/beheren/' . $deel->forum_id);
 		$this->titel = 'Deelforum beheren';
 		$this->css_classes[] = 'ReloadPage PreventUnchanged';
 

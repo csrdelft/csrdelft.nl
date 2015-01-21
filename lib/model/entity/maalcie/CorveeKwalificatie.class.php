@@ -31,17 +31,12 @@ class CorveeKwalificatie extends PersistentEntity {
 	 */
 	public $wanneer_toegewezen;
 	/**
-	 * Functie instantie
-	 * @var CorveeFunctie
-	 */
-	private $corvee_functie;
-	/**
 	 * Database table columns
 	 * @var array
 	 */
 	protected static $persistent_attributes = array(
-		'uid' => array(T::UID),
-		'functie_id' => array(T::Integer),
+		'uid'				 => array(T::UID),
+		'functie_id'		 => array(T::Integer),
 		'wanneer_toegewezen' => array(T::DateTime)
 	);
 	/**
@@ -61,14 +56,7 @@ class CorveeKwalificatie extends PersistentEntity {
 	 * @return CorveeFunctie
 	 */
 	public function getCorveeFunctie() {
-		if (!isset($this->corvee_functie)) {
-			$this->setCorveeFunctie(FunctiesModel::instance()->getFunctie($this->functie_id));
-		}
-		return $this->corvee_functie;
-	}
-
-	private function setCorveeFunctie(CorveeFunctie $functie) {
-		$this->corvee_functie = $functie;
+		return FunctiesModel::get($this->functie_id);
 	}
 
 }

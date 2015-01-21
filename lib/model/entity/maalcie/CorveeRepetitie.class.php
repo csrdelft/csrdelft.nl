@@ -38,7 +38,6 @@ class CorveeRepetitie {
 	private $standaard_punten; # int 11
 	private $standaard_aantal; # int 11
 	private $voorkeurbaar; # boolean
-	private $corvee_functie;
 
 	public function __construct($crid = 0, $mrid = null, $dag = null, $periode = null, $fid = 0, $punten = 0, $aantal = null, $voorkeur = null) {
 		$this->crv_repetitie_id = (int) $crid;
@@ -120,8 +119,13 @@ class CorveeRepetitie {
 		return (boolean) $this->voorkeurbaar;
 	}
 
+	/**
+	 * Lazy loading by foreign key.
+	 * 
+	 * @return CorveeFunctie
+	 */
 	public function getCorveeFunctie() {
-		return $this->corvee_functie;
+		return FunctiesModel::get($this->functie_id);
 	}
 
 	public function setMaaltijdRepetitieId($mrid) {
@@ -171,10 +175,6 @@ class CorveeRepetitie {
 			throw new Exception('Geen boolean: voorkeurbaar');
 		}
 		$this->voorkeurbaar = $bool;
-	}
-
-	public function setCorveeFunctie(CorveeFunctie $functie) {
-		$this->corvee_functie = $functie;
 	}
 
 }

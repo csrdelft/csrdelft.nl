@@ -120,7 +120,7 @@ $ingelogd = false;
 					$fields['btn'] = new FormDefaultKnoppen('/dies', true, false);
 					$fields['btn']->submitTitle = 'Aanmelding opslaan';
 
-					$form = new Formulier(null, 'galaaanmelding', '/dies/galaaanmelding.php');
+					$form = new Formulier(null, '/dies/galaaanmelding.php');
 					$form->addFields($fields);
 					$form->view();
 				} else {

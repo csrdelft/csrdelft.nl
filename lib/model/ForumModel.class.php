@@ -37,6 +37,14 @@ class ForumModel extends AbstractForumModel {
 	 */
 	private $indeling;
 
+	public static function get($id) {
+		$cat = static::instance()->retrieveByPrimaryKey(array($id));
+		if (!$cat) {
+			throw new Exception('Forum-categorie bestaat niet!');
+		}
+		return $cat;
+	}
+
 	/**
 	 * Eager loading of ForumDeel[].
 	 * 
@@ -60,14 +68,6 @@ class ForumModel extends AbstractForumModel {
 		return $this->indeling;
 	}
 
-	public function getForumCategorie($id) {
-		$cat = $this->retrieveByPrimaryKey(array($id));
-		if (!$cat) {
-			throw new Exception('Forum-categorie bestaat niet!');
-		}
-		return $cat;
-	}
-
 	public function opschonen() {
 		// Oude lege concepten verwijderen
 		ForumDradenReagerenModel::instance()->verwijderLegeConcepten();
@@ -79,7 +79,7 @@ class ForumModel extends AbstractForumModel {
 		}
 
 		// Voor alle ex-leden settings opschonen
-		$uids = Database::instance()->sqlSelect(array('uid'), 'lid', 'status IN (?,?,?,?)', array(LidStatus::Commissie, LidStatus::Nobody, LidStatus::Exlid, LidStatus::Overleden));
+		$uids = Database::instance()->sqlSelect(array('uid'), 'profielen', 'status IN (?,?,?,?)', array(LidStatus::Commissie, LidStatus::Nobody, LidStatus::Exlid, LidStatus::Overleden));
 		$uids->setFetchMode(PDO::FETCH_COLUMN, 0);
 		foreach ($uids as $uid) {
 			ForumDradenGelezenModel::instance()->verwijderDraadGelezenVoorLid($uid);
@@ -130,6 +130,38 @@ class ForumDelenModel extends AbstractForumModel {
 	 */
 	protected $memcache_prefetch = true;
 
+	public static function get($id) {
+		$deel = static::instance()->retrieveByPrimaryKey(array($id));
+		if (!$deel) {
+			throw new Exception('Forum bestaat niet!');
+		}
+		return $deel;
+	}
+
+	public function bestaatForumDeel($id) {
+		return $this->existsByPrimaryKey(array($id));
+	}
+
+	public function maakForumDeel() {
+		$deel = new ForumDeel();
+		$deel->categorie_id = 0;
+		$deel->titel = '';
+		$deel->omschrijving = '';
+		$deel->rechten_lezen = 'P_FORUM_READ';
+		$deel->rechten_posten = 'P_FORUM_POST';
+		$deel->rechten_modereren = 'P_FORUM_MOD';
+		$deel->volgorde = 0;
+		$deel->forum_id = (int) $this->create($deel);
+		return $deel;
+	}
+
+	public function verwijderForumDeel($id) {
+		$rowCount = $this->deleteByPrimaryKey(array($id));
+		if ($rowCount !== 1) {
+			throw new Exception('Deelforum verwijderen mislukt');
+		}
+	}
+
 	public function getForumDelenVoorCategorie(ForumCategorie $cat) {
 		return $this->prefetch('categorie_id = ?', array($cat->categorie_id));
 	}
@@ -161,38 +193,6 @@ class ForumDelenModel extends AbstractForumModel {
 			return array();
 		}
 		return $this->prefetch('rechten_posten != ? AND rechten_posten LIKE ?', array($deel->rechten_posten, $query), null, $orderby);
-	}
-
-	public function bestaatForumDeel($id) {
-		return $this->existsByPrimaryKey(array($id));
-	}
-
-	public function getForumDeel($id) {
-		$deel = $this->retrieveByPrimaryKey(array($id));
-		if (!$deel) {
-			throw new Exception('Forum bestaat niet!');
-		}
-		return $deel;
-	}
-
-	public function maakForumDeel() {
-		$deel = new ForumDeel();
-		$deel->categorie_id = 0;
-		$deel->titel = '';
-		$deel->omschrijving = '';
-		$deel->rechten_lezen = 'P_FORUM_READ';
-		$deel->rechten_posten = 'P_FORUM_POST';
-		$deel->rechten_modereren = 'P_FORUM_MOD';
-		$deel->volgorde = 0;
-		$deel->forum_id = $this->create($deel);
-		return $deel;
-	}
-
-	public function verwijderForumDeel($id) {
-		$rowCount = $this->deleteByPrimaryKey(array($id));
-		if ($rowCount !== 1) {
-			throw new Exception('Deelforum verwijderen mislukt');
-		}
 	}
 
 	public function getRecent($belangrijk = null) {
@@ -629,6 +629,14 @@ class ForumDradenModel extends AbstractForumModel implements Paging {
 	 */
 	private $aantal_plakkerig;
 
+	public static function get($id) {
+		$draad = static::instance()->retrieveByPrimaryKey(array($id));
+		if (!$draad) {
+			throw new Exception('Forum-onderwerp bestaat niet!');
+		}
+		return $draad;
+	}
+
 	protected function __construct() {
 		parent::__construct();
 		$this->pagina = 1;
@@ -801,14 +809,6 @@ class ForumDradenModel extends AbstractForumModel implements Paging {
 		return $dradenById;
 	}
 
-	public function getForumDraad($id) {
-		$draad = $this->retrieveByPrimaryKey(array($id));
-		if (!$draad) {
-			throw new Exception('Forum-onderwerp bestaat niet!');
-		}
-		return $draad;
-	}
-
 	public function getForumDradenById(array $ids, $where = null, array $where_params = array()) {
 		$count = count($ids);
 		if ($count < 1) {
@@ -835,7 +835,7 @@ class ForumDradenModel extends AbstractForumModel implements Paging {
 		$draad->belangrijk = false;
 		$draad->eerste_post_plakkerig = false;
 		$draad->pagina_per_post = false;
-		$draad->draad_id = (int) ForumDradenModel::instance()->create($draad);
+		$draad->draad_id = (int) $this->create($draad);
 		return $draad;
 	}
 
@@ -911,6 +911,14 @@ class ForumPostsModel extends AbstractForumModel implements Paging {
 	 */
 	private $aantal_wacht;
 
+	public static function get($id) {
+		$post = static::instance()->retrieveByPrimaryKey(array($id));
+		if (!$post) {
+			throw new Exception('Forum-reactie bestaat niet!');
+		}
+		return $post;
+	}
+
 	protected function __construct() {
 		parent::__construct();
 		$this->pagina = 1;
@@ -945,7 +953,7 @@ class ForumPostsModel extends AbstractForumModel implements Paging {
 
 	public function getAantalPaginas($draad_id) {
 		if (!array_key_exists($draad_id, $this->aantal_paginas)) {
-			$draad = ForumDradenModel::instance()->getForumDraad($draad_id);
+			$draad = ForumDradenModel::get($draad_id);
 			if ($draad->pagina_per_post) {
 				$this->per_pagina = 1;
 			} else {
@@ -1059,14 +1067,6 @@ class ForumPostsModel extends AbstractForumModel implements Paging {
 		return $posts;
 	}
 
-	public function getForumPost($id) {
-		$post = $this->retrieveByPrimaryKey(array($id));
-		if (!$post) {
-			throw new Exception('Forum-reactie bestaat niet!');
-		}
-		return $post;
-	}
-
 	public function maakForumPost($draad_id, $tekst, $ip, $wacht_goedkeuring, $email) {
 		$post = new ForumPost();
 		$post->draad_id = (int) $draad_id;
@@ -1081,7 +1081,7 @@ class ForumPostsModel extends AbstractForumModel implements Paging {
 		if ($wacht_goedkeuring) {
 			$post->bewerkt_tekst = '[prive]email: [email]' . $email . '[/email][/prive]' . "\n";
 		}
-		$post->post_id = (int) ForumPostsModel::instance()->create($post);
+		$post->post_id = (int) $this->create($post);
 		return $post;
 	}
 

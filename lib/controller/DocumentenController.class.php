@@ -157,7 +157,7 @@ class DocumentenController extends Controller {
 			//maak een nieuw, leeg document aan.
 			$this->document = new Document(0);
 		}
-		$formulier = new Formulier(null, 'documentForm', '/documenten/bewerken/' . $this->document->getId());
+		$formulier = new Formulier(null, '/documenten/bewerken/' . $this->document->getId());
 		$this->view = $formulier;
 		if (isset($_GET['catID']) AND DocCategorie::existsCategorie($_GET['catID'])) {
 			$this->document->setCatID($_GET['catID']);

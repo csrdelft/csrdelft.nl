@@ -1,7 +1,6 @@
 <?php
 
 require_once 'configuratie.include.php';
-require_once 'lid/profiel.class.php';
 
 if (!LoginModel::mag('P_OUDLEDEN_READ')) {
 	# geen rechten

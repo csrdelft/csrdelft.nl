@@ -1,6 +1,6 @@
 <?php
 
-require_once 'model/entity/groepen/GroepFunctie.enum.php';
+require_once 'model/entity/groepen/CommissieFunctie.enum.php';
 
 /**
  * GroepLid.class.php
@@ -13,25 +13,23 @@ require_once 'model/entity/groepen/GroepFunctie.enum.php';
 class GroepLid extends PersistentEntity {
 
 	/**
-	 * Type van groep
-	 * @see Groep extends
-	 * @var string
+	 * Class extends Groep
+	 * @var class
 	 */
-	public $groep_type;
+	public $groep_class;
 	/**
-	 * Lid van deze groep
+	 * Primary key of Groep
 	 * @var int
 	 */
 	public $groep_id;
 	/**
-	 * Uid van lid
+	 * Lidnummer
 	 * @var string
 	 */
 	public $uid;
 	/**
-	 * Opmerking bij lidmaatschap
-	 * @see GroepFunctie
-	 * @var string
+	 * CommissieFunctie of opmerking bij lidmaatschap
+	 * @var CommissieFunctie
 	 */
 	public $opmerking;
 	/**
@@ -64,22 +62,21 @@ class GroepLid extends PersistentEntity {
 	 * @var array
 	 */
 	protected static $persistent_attributes = array(
-		'groep_type' => array(T::String),
-		'groep_id'	 => array(T::Integer),
-		'uid'		 => array(T::UID),
-		'functie'	 => array(T::Enumeration, true, 'GroepFunctie'),
-		'opmerking'	 => array(T::String),
-		'lid_sinds'	 => array(T::DateTime),
-		'lid_tot'	 => array(T::DateTime, true),
-		'status'	 => array(T::Enumeration, false, 'GroepStatus'),
-		'volgorde'	 => array(T::Integer),
-		'door_uid'	 => array(T::UID)
+		'groep_class'	 => array(T::String),
+		'groep_id'		 => array(T::Integer),
+		'uid'			 => array(T::UID),
+		'opmerking'		 => array(T::String, true),
+		'lid_sinds'		 => array(T::DateTime),
+		'lid_tot'		 => array(T::DateTime, true),
+		'status'		 => array(T::Enumeration, false, 'GroepStatus'),
+		'volgorde'		 => array(T::Integer),
+		'door_uid'		 => array(T::UID)
 	);
 	/**
 	 * Database primary key
 	 * @var array
 	 */
-	protected static $primary_key = array('groep_type', 'groep_id', 'uid');
+	protected static $primary_key = array('groep_class', 'groep_id', 'uid');
 	/**
 	 * Database table name
 	 * @var string

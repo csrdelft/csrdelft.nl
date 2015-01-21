@@ -54,11 +54,6 @@ class Groep extends PersistentEntity {
 	 */
 	public $door_uid;
 	/**
-	 * Groepsleden
-	 * @var GroepLid[]
-	 */
-	private $groep_leden;
-	/**
 	 * Database table columns
 	 * @var array
 	 */
@@ -66,10 +61,10 @@ class Groep extends PersistentEntity {
 		'id'			 => array(T::Integer, false, 'auto_increment'),
 		'naam'			 => array(T::String),
 		'samenvatting'	 => array(T::Text),
-		'omschrijving'	 => array(T::Text),
-		'begin_moment'	 => array(T::DateTime, true),
+		'omschrijving'	 => array(T::Text, true),
+		'begin_moment'	 => array(T::DateTime),
 		'eind_moment'	 => array(T::DateTime, true),
-		'website'		 => array(T::String),
+		'website'		 => array(T::String, true),
 		'door_uid'		 => array(T::UID)
 	);
 	/**
@@ -83,35 +78,8 @@ class Groep extends PersistentEntity {
 	 * 
 	 * @return GroepLid[]
 	 */
-	public function getGroepLeden() {
-		if (!isset($this->groep_leden)) {
-			$this->setGroepLeden(GroepLedenModel::instance()->getLedenVoorGroep($this));
-		}
-		return $this->groep_leden;
-	}
-
-	public function hasGroepLeden() {
-		$this->getGroepLeden();
-		return !empty($this->groep_leden);
-	}
-
-	private function setGroepLeden(array $leden) {
-		$this->groep_leden = $leden;
-	}
-
-	/**
-	 * Gaat er vanuit dat er precies 1 groeplid met de gevraagde functie bestaat in deze groep.
-	 * 
-	 * @see GroepFunctie
-	 * @param string $functie
-	 * @return GroepLid
-	 */
-	public function getGroepLidByFunctie($functie) {
-		foreach ($this->getGroepLeden() as $groeplid) {
-			if ($groeplid->omschrijving === $functie) {
-				return $groeplid;
-			}
-		}
+	public function getLeden($status = null) {
+		return GroepLedenModel::instance()->getLedenVoorGroep($this, $status);
 	}
 
 	public function getStatistieken() {

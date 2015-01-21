@@ -47,7 +47,7 @@ class MaaltijdenModel {
 		if (!is_int($tot)) {
 			throw new Exception('Invalid timestamp: $tot getMaaltijdenVoorAgenda()');
 		}
-		$maaltijden = self::loadMaaltijden('verwijderd = false AND datum >= ? AND datum <= ?', array(date('Y-m-d', $van), date('Y-m-d', $tot)));
+		$maaltijden = self::loadMaaltijden('verwijderd = FALSE AND datum >= ? AND datum <= ?', array(date('Y-m-d', $van), date('Y-m-d', $tot)));
 		$maaltijden = self::filterMaaltijdenVoorLid($maaltijden, \LoginModel::getUid());
 		return $maaltijden;
 	}
@@ -59,7 +59,7 @@ class MaaltijdenModel {
 	 * @return Maaltijd[]
 	 */
 	public static function getKomendeMaaltijdenVoorLid($uid) {
-		$maaltijden = self::loadMaaltijden('verwijderd = false AND datum >= ? AND datum <= ?', array(date('Y-m-d'), date('Y-m-d', strtotime(Instellingen::get('maaltijden', 'toon_ketzer_vooraf')))));
+		$maaltijden = self::loadMaaltijden('verwijderd = FALSE AND datum >= ? AND datum <= ?', array(date('Y-m-d'), date('Y-m-d', strtotime(Instellingen::get('maaltijden', 'toon_ketzer_vooraf')))));
 		$maaltijden = self::filterMaaltijdenVoorLid($maaltijden, $uid);
 		return $maaltijden;
 	}
@@ -70,7 +70,7 @@ class MaaltijdenModel {
 	 * @return Maaltijd[]
 	 */
 	public static function getRecentBezochteMaaltijden() {
-		$maaltijden = self::loadMaaltijden('verwijderd = false AND datum >= ? AND datum <= ?', array(date('Y-m-d', strtotime(Instellingen::get('maaltijden', 'recent_lidprofiel'))), date('Y-m-d')));
+		$maaltijden = self::loadMaaltijden('verwijderd = FALSE AND datum >= ? AND datum <= ?', array(date('Y-m-d', strtotime(Instellingen::get('maaltijden', 'recent_lidprofiel'))), date('Y-m-d')));
 		$maaltijdenById = array();
 		foreach ($maaltijden as $maaltijd) {
 			$maaltijdenById[$maaltijd->getMaaltijdId()] = $maaltijd;
@@ -362,7 +362,7 @@ class MaaltijdenModel {
 			throw new Exception('Invalid timestamp: archiveerOudeMaaltijden()');
 		}
 		$errors = array();
-		$maaltijden = self::loadMaaltijden('verwijderd = false AND datum >= ? AND datum <= ?', array(date('Y-m-d', $van), date('Y-m-d', $tot)));
+		$maaltijden = self::loadMaaltijden('verwijderd = FALSE AND datum >= ? AND datum <= ?', array(date('Y-m-d', $van), date('Y-m-d', $tot)));
 		foreach ($maaltijden as $maaltijd) {
 			try {
 				self::verplaatsNaarArchief($maaltijd);
@@ -417,11 +417,11 @@ class MaaltijdenModel {
 	// Repetitie-Maaltijden ############################################################
 
 	public static function getKomendeRepetitieMaaltijden($mrid) {
-		return self::loadMaaltijden('mlt_repetitie_id = ? AND verwijderd = false AND datum >= ?', array($mrid, date('Y-m-d')));
+		return self::loadMaaltijden('mlt_repetitie_id = ? AND verwijderd = FALSE AND datum >= ?', array($mrid, date('Y-m-d')));
 	}
 
 	public static function getKomendeOpenRepetitieMaaltijden($mrid) {
-		return self::loadMaaltijden('mlt_repetitie_id = ? AND gesloten = false AND verwijderd = false AND datum >= ?', array($mrid, date('Y-m-d')));
+		return self::loadMaaltijden('mlt_repetitie_id = ? AND gesloten = FALSE AND verwijderd = FALSE AND datum >= ?', array($mrid, date('Y-m-d')));
 	}
 
 	public static function verwijderRepetitieMaaltijden($mrid) {
@@ -461,7 +461,7 @@ class MaaltijdenModel {
 			// update day of the week & check filter
 			$updated = 0;
 			$aanmeldingen = 0;
-			$maaltijden = self::loadMaaltijden('verwijderd = false AND mlt_repetitie_id = ?', array($repetitie->getMaaltijdRepetitieId()));
+			$maaltijden = self::loadMaaltijden('verwijderd = FALSE AND mlt_repetitie_id = ?', array($repetitie->getMaaltijdRepetitieId()));
 			$filter = $repetitie->getAbonnementFilter();
 			if (!empty($filter)) {
 				$aanmeldingen = MaaltijdAanmeldingenModel::checkAanmeldingenFilter($filter, $maaltijden);

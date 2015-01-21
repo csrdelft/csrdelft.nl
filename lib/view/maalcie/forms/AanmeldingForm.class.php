@@ -11,7 +11,7 @@
 class AanmeldingForm extends ModalForm {
 
 	public function __construct($mid, $nieuw, $uid = null, $gasten = 0) {
-		parent::__construct(null, 'maalcie-aanmelding-form', maalcieUrl . '/ander' . ($nieuw ? 'aanmelden' : 'afmelden') . '/' . $mid);
+		parent::__construct(null, maalcieUrl . '/ander' . ($nieuw ? 'aanmelden' : 'afmelden') . '/' . $mid);
 
 		if (!is_int($mid) || $mid <= 0) {
 			throw new Exception('invalid mid');

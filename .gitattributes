@@ -4126,10 +4126,10 @@ lib/model/entity/groepen/Activiteit.class.php -text
 lib/model/entity/groepen/ActiviteitSoort.enum.php -text
 lib/model/entity/groepen/Bestuur.class.php -text
 lib/model/entity/groepen/Commissie.class.php -text
+lib/model/entity/groepen/CommissieFunctie.enum.php -text
 lib/model/entity/groepen/CommissieSoort.enum.php -text
 lib/model/entity/groepen/Conferentie.class.php -text
 lib/model/entity/groepen/Groep.class.php -text
-lib/model/entity/groepen/GroepFunctie.enum.php -text
 lib/model/entity/groepen/GroepLid.class.php -text
 lib/model/entity/groepen/GroepStatus.enum.php -text
 lib/model/entity/groepen/GroepTab.enum.php -text
@@ -4405,7 +4405,7 @@ lib/templates/fotoalbum/album.tpl -text
 lib/templates/fotoalbum/slider.tpl -text
 lib/templates/groepen/groep.bb.tpl -text
 lib/templates/groepen/groep.tpl -text
-lib/templates/groepen/groep_1.tpl -text
+lib/templates/groepen/groep_new.tpl -text
 lib/templates/groepen/groepen.tpl -text
 lib/templates/groepen/groepformulier.tpl -text
 lib/templates/groepen/groepleden.tpl -text

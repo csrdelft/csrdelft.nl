@@ -364,8 +364,8 @@ class GroepEmailContent extends OldGroepView {
 		$emails = array();
 		$groepleden = $this->model->getLeden();
 		if (is_array($groepleden)) {
-			foreach ($groepleden as $groeplid) {
-				$profiel = ProfielModel::get($groeplid['uid']);
+			foreach ($groepleden as $lid) {
+				$profiel = ProfielModel::get($lid['uid']);
 				if ($profiel AND $profiel->getPrimaryEmail() != '') {
 					$emails[] = $profiel->getPrimaryEmail();
 				}

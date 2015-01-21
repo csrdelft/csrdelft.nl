@@ -79,15 +79,15 @@ class CorveeTakenModel {
 	}
 
 	public static function getKomendeTaken() {
-		return self::loadTaken('verwijderd = false AND datum >= ?', array(date('Y-m-d')));
+		return self::loadTaken('verwijderd = FALSE AND datum >= ?', array(date('Y-m-d')));
 	}
 
 	public static function getVerledenTaken() {
-		return self::loadTaken('verwijderd = false AND datum < ?', array(date('Y-m-d')));
+		return self::loadTaken('verwijderd = FALSE AND datum < ?', array(date('Y-m-d')));
 	}
 
 	public static function getAlleTaken($groupByUid = false) {
-		$taken = self::loadTaken('verwijderd = false');
+		$taken = self::loadTaken('verwijderd = FALSE');
 		if ($groupByUid) {
 			$takenByUid = array();
 			foreach ($taken as $taak) {
@@ -138,7 +138,7 @@ class CorveeTakenModel {
 		if (!is_int($tot)) {
 			throw new Exception('Invalid timestamp: $tot getTakenVoorAgenda()');
 		}
-		$where = 'verwijderd = false AND datum >= ? AND datum <= ?';
+		$where = 'verwijderd = FALSE AND datum >= ? AND datum <= ?';
 		$values = array(date('Y-m-d', $van), date('Y-m-d', $tot));
 		if (!$iedereen) {
 			$where .= ' AND uid = ?';
@@ -154,7 +154,7 @@ class CorveeTakenModel {
 	 * @return CorveeTaak[]
 	 */
 	public static function getTakenVoorLid($uid) {
-		return self::loadTaken('verwijderd = false AND uid = ?', array($uid));
+		return self::loadTaken('verwijderd = FALSE AND uid = ?', array($uid));
 	}
 
 	/**
@@ -164,7 +164,7 @@ class CorveeTakenModel {
 	 * @return CorveeTaak[]
 	 */
 	public static function getLaatsteTaakVanLid($uid) {
-		$taken = self::loadTaken('verwijderd = false AND uid = ?', array($uid), 1, false);
+		$taken = self::loadTaken('verwijderd = FALSE AND uid = ?', array($uid), 1, false);
 		if (!array_key_exists(0, $taken)) {
 			return null;
 		}
@@ -178,7 +178,7 @@ class CorveeTakenModel {
 	 * @return CorveeTaak[]
 	 */
 	public static function getKomendeTakenVoorLid($uid) {
-		return self::loadTaken('verwijderd = false AND uid = ? AND datum >= ?', array($uid, date('Y-m-d')));
+		return self::loadTaken('verwijderd = FALSE AND uid = ? AND datum >= ?', array($uid, date('Y-m-d')));
 	}
 
 	public static function saveTaak($tid, $fid, $uid, $crid, $mid, $datum, $punten, $bonus_malus) {
@@ -201,7 +201,6 @@ class CorveeTakenModel {
 					self::updateTaak($taak);
 				}
 			}
-			$taak->setCorveeFunctie(FunctiesModel::instance()->getFunctie($taak->getFunctieId()));
 			$db->commit();
 			return $taak;
 		} catch (\Exception $e) {
@@ -288,15 +287,6 @@ class CorveeTakenModel {
 		$query = $db->prepare($sql);
 		$query->execute($values);
 		$result = $query->fetchAll(\PDO::FETCH_CLASS | \PDO::FETCH_PROPS_LATE, '\CorveeTaak');
-		// load corvee functies
-		if ($query->rowCount() === 1) {
-			$result[0]->setCorveeFunctie(FunctiesModel::instance()->getFunctie($result[0]->getFunctieId()));
-		} elseif ($query->rowCount() > 1) {
-			$functies = FunctiesModel::instance()->getAlleFuncties(); // grouped by functie_id
-			foreach ($result as $taak) {
-				$taak->setCorveeFunctie($functies[$taak->getFunctieId()]);
-			}
-		}
 		return $result;
 	}
 
@@ -361,7 +351,7 @@ class CorveeTakenModel {
 		if ($verwijderd) {
 			return self::loadTaken('maaltijd_id = ?', array($mid));
 		}
-		return self::loadTaken('verwijderd = false AND maaltijd_id = ?', array($mid));
+		return self::loadTaken('verwijderd = FALSE AND maaltijd_id = ?', array($mid));
 	}
 
 	/**
@@ -410,7 +400,7 @@ class CorveeTakenModel {
 		if (!is_int($fid) || $fid <= 0) {
 			throw new Exception('Load taken van functie faalt: Invalid $fid =' . $fid);
 		}
-		return self::loadTaken('verwijderd = false AND functie_id = ?', array($fid));
+		return self::loadTaken('verwijderd = FALSE AND functie_id = ?', array($fid));
 	}
 
 	/**
@@ -457,14 +447,10 @@ class CorveeTakenModel {
 			$beginDatum = strtotime('+' . $shift . ' days', $beginDatum);
 		}
 		$datum = $beginDatum;
-		$functie = FunctiesModel::instance()->getFunctie($repetitie->getFunctieId());
 		$taken = array();
 		while ($datum <= $eindDatum) { // break after one
 			for ($i = $repetitie->getStandaardAantal(); $i > 0; $i--) {
-				$taak = self::newTaak(
-								$repetitie->getFunctieId(), null, $repetitie->getCorveeRepetitieId(), $mid, date('Y-m-d', $datum), $repetitie->getStandaardPunten(), 0
-				);
-				$taak->setCorveeFunctie($functie);
+				$taak = self::newTaak($repetitie->getFunctieId(), null, $repetitie->getCorveeRepetitieId(), $mid, date('Y-m-d', $datum), $repetitie->getStandaardPunten(), 0);
 				$taken[] = $taak;
 			}
 			if ($repetitie->getPeriodeInDagen() < 1) {
@@ -513,7 +499,7 @@ class CorveeTakenModel {
 			$db->beginTransaction();
 			$sql = 'UPDATE crv_taken';
 			$sql.= ' SET functie_id=?, punten=?';
-			$sql.= ' WHERE verwijderd = false AND crv_repetitie_id = ?';
+			$sql.= ' WHERE verwijderd = FALSE AND crv_repetitie_id = ?';
 			$values = array(
 				$repetitie->getFunctieId(),
 				$repetitie->getStandaardPunten(),
@@ -523,7 +509,7 @@ class CorveeTakenModel {
 			$query->execute($values);
 			$updatecount = $query->rowCount();
 
-			$taken = self::loadTaken('verwijderd = false AND crv_repetitie_id = ?', array($repetitie->getCorveeRepetitieId()));
+			$taken = self::loadTaken('verwijderd = FALSE AND crv_repetitie_id = ?', array($repetitie->getCorveeRepetitieId()));
 			$takenPerDatum = array(); // taken per datum indien geen maaltijd
 			$takenPerMaaltijd = array(); // taken per maaltijd
 			require_once 'model/maalcie/MaaltijdenModel.class.php';

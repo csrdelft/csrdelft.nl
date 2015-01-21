@@ -9,7 +9,7 @@
 class LidInstellingenView extends TabsForm {
 
 	public function __construct(LidInstellingen $model) {
-		parent::__construct($model, 'lidinstellingenform', '/instellingen/opslaan', 'Webstekinstellingen');
+		parent::__construct($model, '/instellingen/opslaan', 'Webstekinstellingen');
 		$this->vertical = true;
 		$this->hoverintent = true;
 
@@ -34,14 +34,8 @@ class LidInstellingenView extends TabsForm {
 			}
 			$this->addFields($fields, ucfirst($module));
 		}
-
-		$remember = new RememberLoginTable();
-		$remember->nestedForm = true;
-		$this->addFields(array($remember), 'Beveiliging');
-
-		$sessions = new LoginSessionsTable();
-		$sessions->nestedForm = true;
-		$this->addFields(array($sessions), 'Beveiliging');
+		$this->addFields(array(new RememberLoginTable()), 'Beveiliging');
+		$this->addFields(array(new LoginSessionsTable()), 'Beveiliging');
 
 		$fields = array();
 
