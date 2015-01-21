@@ -5,14 +5,20 @@
  * 
  * @author P.W.G. Brussee <brussee@live.nl>
  * 
+ * TODO: extend Groep
  */
-class Verticale extends Groep {
+class Verticale extends PersistentEntity {
 
 	/**
 	 * Letter
 	 * @var string
 	 */
 	public $letter;
+	/**
+	 * Naam
+	 * @var string
+	 */
+	public $naam;
 	/**
 	 * Kringen met kringleden
 	 * @var array
@@ -23,8 +29,14 @@ class Verticale extends Groep {
 	 * @var array
 	 */
 	protected static $persistent_attributes = array(
-		'letter' => array(T::Char)
+		'letter' => array(T::Char),
+		'naam'	 => array(T::String)
 	);
+	/**
+	 * Database primary key
+	 * @var array
+	 */
+	protected static $primary_key = array('letter');
 	/**
 	 * Database table name
 	 * @var string
@@ -32,15 +44,7 @@ class Verticale extends Groep {
 	protected static $table_name = 'verticalen';
 
 	/**
-	 * Extend the persistent attributes.
-	 */
-	public static function __constructStatic() {
-		parent::__constructStatic();
-		self::$persistent_attributes = parent::$persistent_attributes + self::$persistent_attributes;
-	}
-
-	/**
-	 * @deprecated
+	 * TODO: Kring extend OpvolgbareGroep
 	 */
 	public function getKringen() {
 		if (!isset($this->kringen)) {
@@ -59,7 +63,7 @@ class Verticale extends Groep {
 	}
 
 	/**
-	 * @deprecated
+	 * TODO: Kring extend OpvolgbareGroep
 	 */
 	public function getKring($kring) {
 		$this->getKringen();

@@ -41,6 +41,26 @@ class WoonoordenModel extends GroepenModel {
 
 }
 
+/**
+ * TODO: extend GroepenModel
+ */
+class LichtingenModel {
+
+	public static function getHuidigeJaargang() {
+		$jaargang = self::getJongsteLichting();
+		return $jaargang . '-' . ($jaargang + 1);
+	}
+
+	public static function getJongsteLichting() {
+		return (int) Database::sqlSelect(array('MAX(lidjaar)'), 'profielen')->fetchColumn();
+	}
+
+	public static function getOudsteLichting() {
+		return (int) Database::sqlSelect(array('MIN(lidjaar)'), 'profielen', 'lidjaar > 0')->fetchColumn();
+	}
+
+}
+
 class VerticalenModel extends GroepenModel {
 
 	const orm = 'Verticale';

@@ -2,8 +2,7 @@
 
 require_once 'model/entity/security/AccessRoles.enum.php';
 require_once 'model/security/LoginModel.class.php';
-require_once 'model/LichtingModel.class.php';
-require_once 'model/VerticalenModel.class.php';
+require_once 'model/GroepenModel.class.php';
 
 /**
  * AccessModel.class.php
@@ -136,7 +135,7 @@ class AccessModel extends CachedPersistenceModel {
 		foreach (VerticalenModel::instance()->prefetch() as $verticale) {
 			$valid[] = 'verticale:' . $verticale->naam;
 		}
-		$jong = LichtingModel::getJongsteLichting();
+		$jong = LichtingenModel::getJongsteLichting();
 		for ($jaar = $jong; $jaar > $jong - 7; $jaar--) {
 			$valid[] = 'lichting:' . $jaar;
 		}
@@ -535,7 +534,7 @@ class AccessModel extends CachedPersistenceModel {
 
 				$lidjaar = $profiel->lidjaar;
 				// Niet ingelogd heeft lichting 0
-				if ($lidjaar > 0 AND LichtingModel::getJongsteLichting() > $lidjaar) {
+				if ($lidjaar > 0 AND LichtingenModel::getJongsteLichting() > $lidjaar) {
 					return true;
 				}
 
@@ -545,7 +544,7 @@ class AccessModel extends CachedPersistenceModel {
 
 				$lidjaar = $profiel->lidjaar;
 				// Niet ingelogd heeft lichting 0
-				if ($lidjaar > 0 AND LichtingModel::getJongsteLichting() == $lidjaar) {
+				if ($lidjaar > 0 AND LichtingenModel::getJongsteLichting() == $lidjaar) {
 					return true;
 				}
 

@@ -35,7 +35,7 @@ class LedenMemoryView extends CompressedLayout {
 		} else {
 			$this->lichting = (int) filter_input(INPUT_GET, 'lichting', FILTER_SANITIZE_NUMBER_INT);
 			if ($this->lichting < 1950) {
-				$this->lichting = LichtingModel::getJongsteLichting();
+				$this->lichting = LichtingenModel::getJongsteLichting();
 			}
 			$this->leden = Database::instance()->sqlSelect(array('uid', 'geslacht', 'voorletters', 'voornaam', 'tussenvoegsel', 'achternaam', 'postfix'), 'lid', 'lidjaar = ? AND status IN ("S_GASTLID","S_LID","S_NOVIET","S_OUDLID","S_ERELID","S_OVERLEDEN")', array($this->lichting), null, 'achternaam, tussenvoegsel, voornaam, voorletters')->fetchAll(PDO::FETCH_ASSOC);
 		}

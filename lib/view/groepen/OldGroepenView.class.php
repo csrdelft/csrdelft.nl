@@ -144,7 +144,7 @@ class GroepContent extends OldGroepView {
 		}
 
 		// Lichtingen
-		$nu = LichtingModel::getJongsteLichting();
+		$nu = LichtingenModel::getJongsteLichting();
 		for ($lichting = $nu; $lichting >= ($nu - 7); $lichting--) {
 			$filters['lichting:' . $lichting] = 'Lichting ' . $lichting;
 		}

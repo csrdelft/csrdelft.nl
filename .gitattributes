@@ -4069,7 +4069,6 @@ lib/model/FotoAlbumModel.class.php -text
 lib/model/GroepenModel.class.php -text
 lib/model/GroepenOldModel.class.php -text
 lib/model/InstellingenModel.class.php -text
-lib/model/LichtingModel.class.php -text
 lib/model/LidInstellingenModel.class.php -text
 lib/model/MededelingCategorieModel.class.php -text
 lib/model/MededelingenModel.class.php -text
@@ -4703,3 +4702,4 @@ sql/8499_foreign_keys.sql -text
 sql/8507_remember_login.sql -text
 sql/8526_more_foreign_keys.sql -text
 sql/8528_token_id.sql -text
+sql/8545_rename_menu.sql -text

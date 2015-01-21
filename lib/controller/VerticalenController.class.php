@@ -1,6 +1,6 @@
 <?php
 
-require_once 'model/VerticalenModel.class.php';
+require_once 'model/GroepenModel.class.php';
 require_once 'view/VerticalenView.class.php';
 
 /**

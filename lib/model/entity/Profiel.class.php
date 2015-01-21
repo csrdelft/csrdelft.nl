@@ -6,7 +6,7 @@ require_once 'model/entity/OntvangtContactueel.enum.php';
 require_once 'model/entity/LidStatus.enum.php';
 require_once 'model/entity/Kringleider.enum.php';
 require_once 'ldap.class.php';
-require_once 'model/VerticalenModel.class.php';
+require_once 'model/GroepenModel.class.php';
 require_once 'model/entity/groepen/OldGroep.class.php';
 
 /**

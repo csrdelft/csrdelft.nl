@@ -254,7 +254,7 @@ class GroepController extends Controller {
 						if (isset($_POST['aanmeldbaar'])) {
 							//bij sjaarsacties(gtype:11) alleen aanmeldbaar voor laatste lichting
 							if ($this->groep->getType()->getId() == 11 AND ( $this->groep->getId() == 0 OR ! $this->groep->isAdmin())) {
-								$this->groep->setValue('aanmeldbaar', 'lichting:' . LichtingModel::getJongsteLichting());
+								$this->groep->setValue('aanmeldbaar', 'lichting:' . LichtingenModel::getJongsteLichting());
 							} else {
 								$this->groep->setValue('aanmeldbaar', $_POST['aanmeldbaar']);
 							}
