@@ -31,6 +31,9 @@ class GroepenBeheerTable extends DataTable {
 		$update = new DataTableKnop('== 1', $this->tableId, groepenUrl . A::Wijzigen, 'post popup', null, 'Wijzigen', 'Wijzig geselecteerde groep', '/famfamfam/pencil.png');
 		$this->addKnop($update);
 
+		$leden = new DataTableKnop('== 1', $this->tableId, groepenUrl . 'leden', 'post popup', null, 'Leden', 'Groepleden beheren', '/famfamfam/user.png');
+		$this->addKnop($leden);
+
 		$delete = new DataTableKnop('>= 1', $this->tableId, groepenUrl . A::Verwijderen, 'post confirm', null, 'Verwijderen', 'Geselecteerde groepen definitief verwijderen', '/famfamfam/cross.png');
 		$this->addKnop($delete);
 	}
@@ -61,20 +64,28 @@ class GroepForm extends DataTableForm {
 
 }
 
-class GroepLedenTable extends DataTable {
+class GroepLedenTable extends DataTable implements FormElement {
 
 	public function __construct(GroepLedenModel $model, Groep $groep) {
-		parent::__construct($model::orm, 'Leden van ' . $groep->naam, 'functie');
-		$this->dataUrl = groepenUrl . A::Beheren;
+		parent::__construct($model::orm, 'Leden van ' . $groep->naam, 'status');
+		$this->dataUrl = groepenUrl . $groep->id . '/leden';
 
-		$create = new DataTableKnop('== 0', $this->tableId, groepenUrl . $groep->id . '/' . A::Aanmelden, 'post popup', null, 'Aanmelden', 'Lid aanmelden', '/famfamfam/add.png');
+		$create = new DataTableKnop('== 0', $this->tableId, groepenUrl . $groep->id . '/' . A::Aanmelden, 'post popup', null, 'Aanmelden', 'Lid aanmelden', '/famfamfam/user_add.png');
 		$this->addKnop($create);
 
-		$update = new DataTableKnop('== 1', $this->tableId, groepenUrl . $groep->id . '/' . A::Bewerken, 'post popup', null, 'Bewerken', 'Aanmelding bewerken', '/famfamfam/pencil.png');
+		$update = new DataTableKnop('== 1', $this->tableId, groepenUrl . $groep->id . '/' . A::Bewerken, 'post popup', null, 'Bewerken', 'Aanmelding bewerken', '/famfamfam/user_edit.png');
 		$this->addKnop($update);
 
-		$delete = new DataTableKnop('>= 1', $this->tableId, groepenUrl . $groep->id . '/' . A::Afmelden, 'post confirm', null, 'Afmelden', 'Geselecteerde leden afmelden', '/famfamfam/cross.png');
+		$delete = new DataTableKnop('>= 1', $this->tableId, groepenUrl . $groep->id . '/' . A::Afmelden, 'post confirm', null, 'Afmelden', 'Geselecteerde leden afmelden', '/famfamfam/user_delete.png');
 		$this->addKnop($delete);
+	}
+
+	public function getHtml() {
+		throw new Exception('unsupported');
+	}
+
+	public function getType() {
+		return get_class($this);
 	}
 
 }

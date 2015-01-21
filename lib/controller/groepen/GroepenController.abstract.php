@@ -27,6 +27,7 @@ abstract class GroepenController extends Controller {
 			case A::Aanmaken:
 			case A::Wijzigen:
 			case A::Verwijderen:
+			case 'leden':
 
 				$model = $this->model;
 				$algemeen = AccessModel::get($model::orm, $this->action, null);
@@ -126,17 +127,6 @@ abstract class GroepenController extends Controller {
 		return $this->groeptab($groep);
 	}
 
-	public function leden(Groep $groep) {
-		if ($this->isPosted()) {
-			$leden = $groep->getLeden();
-			$this->view = new GroepLedenData($leden);
-		} else {
-			$body = new GroepLedenTable($this->model);
-			$this->view = new CsrLayoutPage($body);
-			$this->view->addCompressedResources('datatable');
-		}
-	}
-
 	public function beheren() {
 		if ($this->isPosted()) {
 			$groepen = $this->model->find();
@@ -159,10 +149,12 @@ abstract class GroepenController extends Controller {
 		}
 	}
 
-	public function wijzigen(Groep $groep = null) {
+	public function wijzigen() {
 		$selection = filter_input(INPUT_POST, 'DataTableSelection', FILTER_SANITIZE_STRING, FILTER_FORCE_ARRAY);
 		if (isset($selection[0])) {
 			$groep = $this->model->getUUID($selection[0]);
+		} else {
+			$groep = false;
 		}
 		if (!$groep) {
 			$this->geentoegang();
@@ -188,6 +180,25 @@ abstract class GroepenController extends Controller {
 			$response[] = $groep;
 		}
 		$this->view = new RemoveRowsResponse($response);
+	}
+
+	public function leden(Groep $groep = null) {
+		if ($groep) {
+			$leden = $groep->getLeden();
+			$this->view = new GroepLedenData($leden);
+		} else {
+			$selection = filter_input(INPUT_POST, 'DataTableSelection', FILTER_SANITIZE_STRING, FILTER_FORCE_ARRAY);
+			if (isset($selection[0])) {
+				$groep = $this->model->getUUID($selection[0]);
+			}
+			if (!$groep) {
+				$this->geentoegang();
+			}
+			$table = new GroepLedenTable(GroepLedenModel::instance(), $groep);
+			$form = new ModalForm($table, null);
+			$form->addFields(array($table));
+			$this->view = $form;
+		}
 	}
 
 	public function aanmelden(Groep $groep, $uid = null) {
