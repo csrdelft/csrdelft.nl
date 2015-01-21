@@ -1,8 +1,7 @@
 <?php
 
-require_once 'controller/groepen/GroepenController.class.php';
 require_once 'model/GroepenModel.class.php';
-require_once 'view/groepen/GroepenView.class.php';
+require_once 'controller/groepen/GroepenController.class.php';
 
 /**
  * GroepenRouterController.class.php

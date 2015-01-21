@@ -23,6 +23,10 @@ class GroepenModel extends CachedPersistenceModel {
 		return static::instance()->retrieveByPrimaryKey(array($id));
 	}
 
+	public function isOpvolgbaar() {
+		return $this->orm instanceof OpvolgbareGroep;
+	}
+
 }
 
 class OnderverenigingenModel extends GroepenModel {

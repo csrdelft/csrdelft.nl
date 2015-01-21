@@ -1,5 +1,7 @@
 <?php
 
+require_once 'model/entity/groepen/OnderverenigingStatus.enum.php';
+
 /**
  * Ondervereniging.class.php
  * 

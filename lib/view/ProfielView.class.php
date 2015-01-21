@@ -27,7 +27,7 @@ class ProfielView extends SmartyTemplateView {
 			$this->smarty->assign('woonoord', '');
 		}
 
-		require_once 'view/groepen/OldGroepenView.class.php';
+		require_once 'view/GroepenOldView.class.php';
 		$this->smarty->assign('groepen', new GroepenProfielContent($this->model->uid));
 
 		if (LoginModel::getUid() == $this->model->uid || LoginModel::mag('P_MAAL_MOD')) {

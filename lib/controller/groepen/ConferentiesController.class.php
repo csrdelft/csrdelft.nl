@@ -1,7 +1,5 @@
 <?php
 
-require_once 'view/groepen/ConferentiesView.class.php';
-
 /**
  * ConferentiesController.abstract.php
  * 

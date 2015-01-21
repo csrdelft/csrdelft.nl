@@ -3,7 +3,7 @@
 require_once 'model/entity/groepen/OldGroep.class.php';
 
 /**
- * OldGroepView.class.php	| 	Jan Pieter Waagmeester (jieter@jpwaag.com)
+ * GroepenOldView.class.php	| 	Jan Pieter Waagmeester (jieter@jpwaag.com)
  *
  *
  * Een verzameling contentclassen voor de groepenketzer.
@@ -171,7 +171,7 @@ class GroepContent extends OldGroepView {
 
 }
 
-class OldGroepenView extends OldGroepView {
+class GroepenOldView extends OldGroepView {
 
 	private $action = 'view';
 

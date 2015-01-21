@@ -1,5 +1,7 @@
 <?php
 
+require_once 'model/entity/groepen/HuisStatus.enum.php';
+
 /**
  * Woonoord.class.php
  * 

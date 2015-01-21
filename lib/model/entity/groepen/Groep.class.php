@@ -1,7 +1,7 @@
 <?php
 
-require_once 'model/entity/groepen/GroepLid.class.php';
 require_once 'model/entity/groepen/GroepStatus.enum.php';
+require_once 'model/entity/groepen/GroepLid.class.php';
 
 /**
  * Groep.class.php

@@ -1,7 +1,5 @@
 <?php
 
-require_once 'view/groepen/KetzersView.class.php';
-
 /**
  * KetzersController.abstract.php
  * 

@@ -1,7 +1,5 @@
 <?php
 
-require_once 'view/groepen/WoonoordenView.class.php';
-
 /**
  * WoonoordenController.abstract.php
  * 

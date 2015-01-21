@@ -13,7 +13,7 @@ if (!LoginModel::mag('P_LOGGED_IN')) { // nieuwe layout altijd voor uitgelogde b
 }
 
 require_once 'model/GroepenOldModel.class.php';
-require_once 'view/groepen/OldGroepenView.class.php';
+require_once 'view/GroepenOldView.class.php';
 require_once 'controller/GroepenController.class.php';
 
 
@@ -26,7 +26,7 @@ if (isset($_GET['gtype'])) {
 try {
 	$groepen = new GroepenOldModel($gtype);
 
-	$content = new OldGroepenView($groepen);
+	$content = new GroepenOldView($groepen);
 } catch (Exception $e) {
 	setMelding('Groeptype (' . htmlspecialchars($gtype) . ') bestaat niet', -1);
 	redirect('/groepen/');

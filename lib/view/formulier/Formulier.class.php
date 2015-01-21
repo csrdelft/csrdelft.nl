@@ -119,7 +119,7 @@ class Formulier implements View, Validator {
 			if ($definition[0] == T::Enumeration) {
 				$options = array();
 				foreach ($definition[2]::getTypeOptions() as $option) {
-					$options[$option] = $option;
+					$options[$option] = $definition[2]::getDescription($option);
 				}
 				$fields[$fieldName] = new $class($fieldName, $this->model->$fieldName, $desc, $options);
 			} else {

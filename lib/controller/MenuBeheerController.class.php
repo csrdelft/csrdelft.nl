@@ -15,8 +15,7 @@ class MenuBeheerController extends AclController {
 		parent::__construct($query, MenuModel::instance());
 		if (!$this->isPosted()) {
 			$this->acl = array(
-				'sitemap'	 => 'P_LOGGED_IN',
-				'beheer'	 => 'P_LOGGED_IN'
+				'beheer' => 'P_LOGGED_IN'
 			);
 		} else {
 			$this->acl = array(
@@ -34,11 +33,6 @@ class MenuBeheerController extends AclController {
 			$this->action = $this->getParam(2);
 		}
 		parent::performAction($this->getParams(3));
-	}
-
-	public function sitemap() {
-		$body = new SitemapView();
-		$this->view = new CsrLayoutPage($body);
 	}
 
 	public function beheer($menu_name = 'main') {

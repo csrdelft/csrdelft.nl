@@ -1,7 +1,5 @@
 <?php
 
-require_once 'view/groepen/OnderverenigingenView.class.php';
-
 /**
  * OnderverenigingenController.abstract.php
  * 

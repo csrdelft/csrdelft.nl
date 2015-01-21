@@ -1,6 +1,7 @@
 <?php
 
 require_once 'model/entity/groepen/Ketzer.class.php';
+require_once 'model/entity/groepen/ActiviteitSoort.enum.php';
 
 /**
  * Activiteit.class.php

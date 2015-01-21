@@ -1,7 +1,5 @@
 <?php
 
-require_once 'view/groepen/ActiviteitenView.class.php';
-
 /**
  * ActiviteitenController.abstract.php
  * 

@@ -1,5 +1,7 @@
 <?php
 
+require_once 'model/entity/groepen/CommissieSoort.enum.php';
+
 /**
  * Commissie.class.php
  * 

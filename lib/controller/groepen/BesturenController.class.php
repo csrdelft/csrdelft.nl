@@ -1,7 +1,5 @@
 <?php
 
-require_once 'view/groepen/BesturenView.class.php';
-
 /**
  * BesturenController.abstract.php
  * 

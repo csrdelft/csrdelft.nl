@@ -1,6 +1,6 @@
 <?php
 
-require_once 'view/groepen/GroepenView.class.php';
+require_once 'view/GroepenView.class.php';
 
 /**
  * GroepenController.class.php
@@ -39,9 +39,12 @@ class GroepenController extends Controller {
 			}
 		} else {
 			$this->action = GroepStatus::HT; // default
-			$algemeen = AccessModel::get(get_class($this->model->orm), $this->action, null);
-			if (!LoginModel::mag($algemeen)) {
-				$this->geentoegang();
+			if (!DEBUG) {
+				$model = $this->model;
+				$algemeen = AccessModel::get($model::orm, $this->action, null);
+				if (!LoginModel::mag($algemeen)) {
+					$this->geentoegang();
+				}
 			}
 		}
 		parent::performAction($args);
@@ -54,6 +57,7 @@ class GroepenController extends Controller {
 	 */
 	protected function mag($action, $method) {
 		switch ($action) {
+			case 'overzicht':
 			case GroepStatus::FT:
 			case GroepStatus::HT:
 			case GroepStatus::OT:
@@ -78,11 +82,15 @@ class GroepenController extends Controller {
 		}
 	}
 
-	protected function overzicht($status) {
-		$groepen = $this->model->find('status = ?', array($status));
-		$class = str_replace('Model', '', get_class($this->model));
-		$view = $class . 'View';
-		$this->view = new $view($groepen, $class, $class . ' ' . GroepStatus::getChar($status));
+	public function overzicht($status = null) {
+		$titel = str_replace('Model', '', get_class($this->model));
+		if ($status !== null AND $this->model->isOpvolgbaar()) {
+			$titel = GroepStatus::getChar($status) . ' ' . $titel;
+			$groepen = $this->model->find('status = ?', array($status));
+		} else {
+			$groepen = $this->model->find();
+		}
+		$this->view = new GroepenView($this->model, $groepen, $titel);
 		$this->view = new CsrLayoutPage($this->view);
 	}
 
