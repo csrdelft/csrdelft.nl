@@ -10,14 +10,14 @@
  */
 abstract class A implements PersistentEnum {
 
-	const Aanmaken = 'create';
-	const Bekijken = 'retrieve';
-	const Wijzigen = 'update';
-	const Verwijderen = 'delete';
-	const Beheren = 'manage';
-	const Aanmelden = 'join';
-	const Afmelden = 'leave';
-	const Bewerken = 'edit';
+	const Aanmaken = 'aanmaken';
+	const Bekijken = 'bekijken';
+	const Wijzigen = 'wijzigen';
+	const Verwijderen = 'verwijderen';
+	const Beheren = 'beheren';
+	const Aanmelden = 'aanmelden';
+	const Afmelden = 'afmelden';
+	const Bewerken = 'bewerken';
 
 	public static function getTypeOptions() {
 		return array(self::Nobody, self::Eter, self::Oudlid, self::Lid, self::Basfcie, self::Maalcie, self::Bestuur, self::Pubcie);
@@ -25,14 +25,15 @@ abstract class A implements PersistentEnum {
 
 	public static function getDescription($option) {
 		switch ($option) {
-			case self::Aanmaken: return 'aanmaken';
-			case self::Bekijken: return 'bekijken';
-			case self::Wijzigen: return 'wijzigen';
-			case self::Verwijderen: return 'verwijderen';
-			case self::Beheren: return 'beheren';
-			case self::Aanmelden: return 'aanmelden';
-			case self::Afmelden: return 'afmelden';
-			case self::Bewerken: return 'bewerken';
+			case self::Aanmaken:
+			case self::Bekijken:
+			case self::Wijzigen:
+			case self::Verwijderen:
+			case self::Beheren:
+			case self::Aanmelden:
+			case self::Afmelden:
+			case self::Bewerken:
+				return $option;
 			default: throw new Exception('Ongeldige AccessAction');
 		}
 	}

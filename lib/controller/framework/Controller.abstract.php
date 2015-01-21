@@ -164,7 +164,7 @@ abstract class Controller {
 		} else {
 			require_once 'model/CmsPaginaModel.class.php';
 			require_once 'view/CmsPaginaView.class.php';
-			$body = new CmsPaginaView(CmsPaginaModel::instance()->getPagina('geentoegang'));
+			$body = new CmsPaginaView(CmsPaginaModel::get('geentoegang'));
 			$this->view = new CsrLayoutPage($body);
 			$this->view->view();
 		}

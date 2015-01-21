@@ -60,7 +60,7 @@ class MaalcieRouterController extends AclController {
 		if ($this->isPosted()) {
 			parent::geentoegang();
 		}
-		$body = new CmsPaginaView(CmsPaginaModel::instance()->getPagina('maaltijden'));
+		$body = new CmsPaginaView(CmsPaginaModel::get('maaltijden'));
 		$this->view = new CsrLayoutPage($body);
 	}
 

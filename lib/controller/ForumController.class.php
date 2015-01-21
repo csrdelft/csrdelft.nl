@@ -36,7 +36,7 @@ class ForumController extends Controller {
 			case 'onderwerp':
 			case 'reactie':
 			case 'wacht':
-				return !$this->isPosted();
+				return $method === 'GET';
 
 			// ForumDeel
 			case 'aanmaken':
@@ -72,7 +72,7 @@ class ForumController extends Controller {
 			case 'volgenaan':
 			case 'volgenuit':
 			case 'volgniets':
-				return $this->isPosted();
+				return $method === 'POST';
 
 			default:
 				$this->action = 'forum';

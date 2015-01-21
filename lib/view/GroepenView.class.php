@@ -10,53 +10,41 @@ require_once 'view/CmsPaginaView.class.php';
  * @author P.W.G. Brussee <brussee@live.nl>
  * 
  */
-class GroepenView implements View {
+class GroepenBeheerView extends DataTable {
 
-	protected $titel;
+	public function __construct(GroepenModel $model) {
+		parent::__construct($model::orm, null, 'familie_id');
+		$this->titel = 'Beheer ' . lcfirst(str_replace('Model', '', get_class($model)));
+		$this->dataUrl = groepenUrl . '/beheren';
+	}
+
+}
+
+class GroepenView extends SmartyTemplateView {
+
 	/**
 	 * Toon CMS pagina
 	 * @var string
 	 */
 	protected $pagina;
-	/**
-	 * Lijst van groepen
-	 * @var PDOStatement
-	 */
-	protected $groepen;
 
-	public function __construct(GroepenModel $model, $groepen, $pagina) {
-		$this->groepen = $groepen;
-		$this->pagina = CmsPaginaModel::instance()->getPagina($model::orm);
-		if ($this->pagina) {
-			$this->titel = $this->pagina->titel;
+	public function __construct(GroepenModel $model, $groepen) {
+		parent::__construct($groepen);
+		$this->pagina = CmsPaginaModel::get($model::orm);
+		if (!$this->pagina) {
+			$this->pagina = CmsPaginaModel::get('');
 		}
-	}
-
-	public function getModel() {
-		return $this->groepen;
-	}
-
-	public function getBreadcrumbs() {
-		return null;
-	}
-
-	public function getTitel() {
-		return $this->titel;
+		$this->titel = $this->pagina->titel;
 	}
 
 	public function view() {
-		$smarty = CsrSmarty::instance();
-		$smarty->assign('groepen', $this->groepen);
-		$smarty->display('groepen/menu_pagina.tpl');
+		$this->smarty->display('groepen/menu_pagina.tpl');
 		//$this->smarty->display('groepen/inhoudsopgave.tpl'); //FIXME: cannot iterate more than once over PDO statement of groepen
-		if ($this->pagina) {
-			$pagina = new CmsPaginaView($this->pagina);
-			$pagina->view();
-		}
-		foreach ($this->groepen as $groep) {
-			$class = get_class($groep) . 'View';
-			$class = new $class($groep, GroepTab::Lijst);
-			$class->view();
+		$view = new CmsPaginaView($this->pagina);
+		$view->view();
+		foreach ($this->model as $groep) {
+			$view = new GroepView($groep, GroepTab::Lijst);
+			$view->view();
 		}
 	}
 
@@ -110,13 +98,35 @@ class GroepView implements View {
 
 }
 
-class GroepLijstView extends SmartyTemplateView {
+abstract class GroepTabView implements View {
+
+	protected $groep;
+
+	public function __construct(Groep $groep) {
+		$this->groep = $groep;
+	}
+
+	public function getBreadcrumbs() {
+		return null;
+	}
+
+	public function getModel() {
+		return $this->groep;
+	}
+
+	public function getTitel() {
+		return $this->groep->naam;
+	}
+
+}
+
+class GroepLijstView extends GroepTabView {
 
 	private $forms = array();
 
 	public function __construct(Groep $groep) {
 		parent::__construct($groep);
-		foreach ($this->model->getGroepLeden() as $groeplid) {
+		foreach ($this->groep->getGroepLeden() as $groeplid) {
 			$this->forms[] = new GroepLidForm($groeplid);
 		}
 	}
@@ -134,21 +144,21 @@ class GroepLijstView extends SmartyTemplateView {
 
 }
 
-class GroepPasfotosView extends SmartyTemplateView {
+class GroepPasfotosView extends GroepTabView {
 
 	public function __construct(Groep $groep) {
 		parent::__construct($groep);
 	}
 
 	public function view() {
-		foreach ($this->model->getGroepLeden() as $groeplid) {
+		foreach ($this->groep->getGroepLeden() as $groeplid) {
 			echo '<div class="pasfoto">' . ProfielModel::getLink($groeplid->uid, 'pasfoto') . '</div>';
 		}
 	}
 
 }
 
-class GroepStatistiekView extends SmartyTemplateView {
+class GroepStatistiekView extends GroepTabView {
 
 	public function __construct(Groep $groep) {
 		parent::__construct($groep->getStatistieken());
@@ -156,7 +166,7 @@ class GroepStatistiekView extends SmartyTemplateView {
 
 	public function view() {
 		echo '<table class="groepStats">';
-		foreach ($this->model as $title => $stat) {
+		foreach ($this->groep as $title => $stat) {
 			echo '<thead><tr><th colspan="2">' . $title . '</th></tr></thead><tbody>';
 			if (!is_array($stat)) {
 				echo '<tr><td colspan="2">' . $stat . '</td></tr>';
@@ -171,13 +181,13 @@ class GroepStatistiekView extends SmartyTemplateView {
 
 }
 
-class GroepEmailsView extends SmartyTemplateView {
+class GroepEmailsView extends GroepTabView {
 
 	private $emails = array();
 
 	public function __construct(Groep $groep) {
 		parent::__construct($groep);
-		foreach ($this->model->getGroepLeden() as $groeplid) {
+		foreach ($this->groep->getGroepLeden() as $groeplid) {
 			$profiel = ProfielModel::get($groeplid->uid);
 			if ($profiel AND $profiel->getPrimaryEmail() != '') {
 				$this->emails[] = $profiel->getPrimaryEmail();

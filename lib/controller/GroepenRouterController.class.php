@@ -1,7 +1,7 @@
 <?php
 
 require_once 'model/GroepenModel.class.php';
-require_once 'controller/groepen/GroepenController.class.php';
+require_once 'controller/groepen/OpvolgbareGroepenController.class.php';
 
 /**
  * GroepenRouterController.class.php
@@ -13,8 +13,7 @@ require_once 'controller/groepen/GroepenController.class.php';
 class GroepenRouterController extends Controller {
 
 	public function __construct($query) {
-		$query = str_replace('/overig', '/groepen', $query);
-		parent::__construct($query, $query); // use model to pass through query
+		parent::__construct($query, null);
 	}
 
 	public function performAction(array $args = array()) {
@@ -23,13 +22,20 @@ class GroepenRouterController extends Controller {
 		} else {
 			$this->action = 'ketzers'; // default
 		}
+		if (!$this->mag($this->action, null)) {
+			$this->geentoegang();
+		}
+		define('groepenUrl', '/groep/' . $this->action);
+
+		if ($this->action === 'overig') {
+			$this->action = 'OpvolgbareGroepen';
+		}
 		$class = ucfirst($this->action) . 'Controller';
 
 		require_once 'controller/groepen/' . $class . '.class.php';
-		$controller = new $class($this->model); // query
+		$controller = new $class(REQUEST_URI);
 		$controller->performAction();
 
-		define('groepenUrl', '/groepen/' . $this->action);
 		$this->view = $controller->getView();
 	}
 
@@ -41,7 +47,7 @@ class GroepenRouterController extends Controller {
 	protected function mag($action, $method) {
 		switch ($action) {
 			// groep
-			case 'groepen':
+			case 'overig':
 			case 'onderverenigingen':
 			case 'woonoorden':
 			case 'lichtingen':

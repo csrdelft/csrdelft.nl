@@ -1,6 +1,5 @@
 <?php
 
-require_once 'model/entity/groepen/Groep.class.php';
 require_once 'model/entity/groepen/OpvolgbareGroep.class.php';
 
 /**
@@ -21,10 +20,6 @@ class GroepenModel extends CachedPersistenceModel {
 
 	public static function get($id) {
 		return static::instance()->retrieveByPrimaryKey(array($id));
-	}
-
-	public function isOpvolgbaar() {
-		return $this->orm instanceof OpvolgbareGroep;
 	}
 
 }

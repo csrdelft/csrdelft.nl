@@ -26,20 +26,15 @@ class Ketzer extends OpvolgbareGroep {
 	 */
 	public $aanmelden_tot;
 	/**
-	 * Bedrag dat mag worden afgeschreven
-	 * @var float
+	 * Bedrag in centen
+	 * @var integer
 	 */
 	public $kosten_bedrag;
 	/**
-	 * Tegenrekening van machtiging 
+	 * Rekeningnummer voor machtiging 
 	 * @var string
 	 */
 	public $machtiging_rekening;
-	/**
-	 * Ketzer-selectors
-	 * @var KetzerSelector[]
-	 */
-	private $ketzer_selectors;
 	/**
 	 * Database table columns
 	 * @var array
@@ -48,7 +43,7 @@ class Ketzer extends OpvolgbareGroep {
 		'aanmeld_limiet'		 => array(T::Integer, true),
 		'aanmelden_vanaf'		 => array(T::DateTime),
 		'aanmelden_tot'			 => array(T::DateTime),
-		'kosten_bedrag'			 => array(T::Float, true),
+		'kosten_bedrag'			 => array(T::Integer, true),
 		'machtiging_rekening'	 => array(T::String, true)
 	);
 	/**
@@ -70,19 +65,8 @@ class Ketzer extends OpvolgbareGroep {
 	 * 
 	 * @return KetzerSelector[]
 	 */
-	public function getKetzerSelectors() {
-		if (!isset($this->ketzer_selectors)) {
-			$this->setKetzerSelectors(KetzerSelectorsModel::instance()->getSelectorsVoorKetzer($this));
-		}
-		return $this->ketzer_selectors;
-	}
-
-	public function hasKetzerSelectors() {
-		return count($this->getKetzerSelectors()) > 0;
-	}
-
-	private function setKetzerSelectors(array $selectors) {
-		$this->ketzer_selectors = $selectors;
+	public function getSelectors() {
+		return KetzerSelectorsModel::instance()->getSelectorsVoorKetzer($this);
 	}
 
 }

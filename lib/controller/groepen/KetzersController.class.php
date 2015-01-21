@@ -7,7 +7,7 @@
  * 
  * Controller voor ketzers.
  */
-class KetzersController extends GroepenController {
+class KetzersController extends OpvolgbareGroepenController {
 
 	public function __construct($query) {
 		parent::__construct($query, KetzersModel::instance());

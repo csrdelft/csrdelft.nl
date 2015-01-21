@@ -7,7 +7,7 @@
  * 
  * Controller voor conferenties.
  */
-class ConferentiesController extends GroepenController {
+class ConferentiesController extends ActiviteitenController {
 
 	public function __construct($query) {
 		parent::__construct($query, ConferentiesModel::instance());

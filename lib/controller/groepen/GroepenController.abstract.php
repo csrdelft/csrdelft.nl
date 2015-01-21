@@ -3,22 +3,34 @@
 require_once 'view/GroepenView.class.php';
 
 /**
- * GroepenController.class.php
+ * GroepenController.abstract.php
  * 
  * @author P.W.G. Brussee <brussee@live.nl>
  * 
  * Controller voor groepen.
  */
-class GroepenController extends Controller {
+abstract class GroepenController extends Controller {
 
 	public function __construct($query, GroepenModel $model) {
 		parent::__construct($query, $model);
 	}
 
 	public function performAction(array $args = array()) {
-		if ($this->hasParam(3)) { // id
-			$this->action = A::Bekijken;
-			$id = (int) $this->getParam(3);
+		if ($this->hasParam(3)) { // id or action
+			$this->action = $this->getParam(3);
+		} else {
+			$this->action = 'overzicht'; // default
+		}
+		if ($this->action === 'overzicht' OR $this->action === 'beheren') {
+			if (!DEBUG) {
+				$model = $this->model;
+				$algemeen = AccessModel::get($model::orm, $this->action, null);
+				if (!LoginModel::mag($algemeen)) {
+					$this->geentoegang();
+				}
+			}
+		} else {
+			$id = (int) $this->action; // id
 			$groep = $this->model->get($id);
 			if (!$groep) {
 				$this->geentoegang();
@@ -27,27 +39,20 @@ class GroepenController extends Controller {
 			if ($this->hasParam(4)) { // action
 				$this->action = $this->getParam(4);
 				if ($this->hasParam(5)) { // uid
-					$profiel = ProfielModel::get($this->getParam(5));
+					$profiel = ProfielModel::get($this->getParam(5)); // uid
 					if (!$profiel) {
 						$this->geentoegang();
 					}
 					$args[] = $profiel;
 				}
+			} else {
+				$this->action = A::Bekijken; // default
 			}
 			if (!$groep->mag($this->action)) {
 				$this->geentoegang();
 			}
-		} else {
-			$this->action = GroepStatus::HT; // default
-			if (!DEBUG) {
-				$model = $this->model;
-				$algemeen = AccessModel::get($model::orm, $this->action, null);
-				if (!LoginModel::mag($algemeen)) {
-					$this->geentoegang();
-				}
-			}
 		}
-		parent::performAction($args);
+		return parent::performAction($args);
 	}
 
 	/**
@@ -57,16 +62,18 @@ class GroepenController extends Controller {
 	 */
 	protected function mag($action, $method) {
 		switch ($action) {
+			case A::Beheren:
+				return true;
+
 			case 'overzicht':
-			case GroepStatus::FT:
-			case GroepStatus::HT:
-			case GroepStatus::OT:
 			case A::Bekijken:
+				return $method === 'GET';
+
+			case 'overzicht':
 			case GroepTab::Lijst:
 			case GroepTab::Pasfotos:
 			case GroepTab::Statistiek:
 			case GroepTab::Emails:
-				return !$this->isPosted();
 
 			case A::Aanmaken:
 			case A::Wijzigen:
@@ -74,46 +81,37 @@ class GroepenController extends Controller {
 			case A::Aanmelden:
 			case A::Afmelden:
 			case A::Bewerken:
-				return $this->isPosted();
+				return $method === 'POST';
 
 			default:
-				$this->action = 'overzicht';
-				return true;
+				return false;
 		}
 	}
 
-	public function overzicht($status = null) {
-		$titel = str_replace('Model', '', get_class($this->model));
-		if ($status !== null AND $this->model->isOpvolgbaar()) {
-			$titel = GroepStatus::getChar($status) . ' ' . $titel;
-			$groepen = $this->model->find('status = ?', array($status));
-		} else {
+	public function beheren() {
+		if ($this->isPosted()) {
 			$groepen = $this->model->find();
+			$this->view = new DataTableResponse($groepen);
+		} else {
+			$body = new GroepenBeheerView($this->model);
+			$this->view = new CsrLayoutPage($body);
+			$this->view->addCompressedResources('datatable');
 		}
-		$this->view = new GroepenView($this->model, $groepen, $titel);
-		$this->view = new CsrLayoutPage($this->view);
 	}
 
-	public function ft() {
-		return $this->overzicht($this->action);
-	}
-
-	public function ht() {
-		return $this->overzicht($this->action);
-	}
-
-	public function ot() {
-		return $this->overzicht($this->action);
+	public function overzicht() {
+		$groepen = $this->model->find();
+		$body = new GroepenView($this->model, $groepen);
+		$this->view = new CsrLayoutPage($body);
 	}
 
 	public function bekijken(Groep $groep) {
-		$this->groeptab($groep);
-		$this->view = new CsrLayoutPage($this->view);
+		$body = new GroepView($groep, GroepTab::Lijst);
+		$this->view = new CsrLayoutPage($body);
 	}
 
 	protected function groeptab(Groep $groep) {
-		$view = get_class($groep) . 'View';
-		$this->view = new $view($groep, $this->action);
+		$this->view = new GroepView($groep, $this->action);
 	}
 
 	public function lijst(Groep $groep) {

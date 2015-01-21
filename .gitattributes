@@ -4024,10 +4024,11 @@ lib/controller/groepen/ActiviteitenController.class.php -text
 lib/controller/groepen/BesturenController.class.php -text
 lib/controller/groepen/CommissiesController.class.php -text
 lib/controller/groepen/ConferentiesController.class.php -text
-lib/controller/groepen/GroepenController.class.php -text
+lib/controller/groepen/GroepenController.abstract.php -text
 lib/controller/groepen/KetzersController.class.php -text
 lib/controller/groepen/KringenController.class.php -text
 lib/controller/groepen/OnderverenigingenController.class.php -text
+lib/controller/groepen/OpvolgbareGroepenController.class.php -text
 lib/controller/groepen/WerkgroepenController.class.php -text
 lib/controller/groepen/WoonoordenController.class.php -text
 lib/controller/maalcie/BeheerAbonnementenController.class.php -text

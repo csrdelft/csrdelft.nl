@@ -1,6 +1,7 @@
 <?php
 
 require_once 'model/entity/security/AccessRoles.enum.php';
+require_once 'model/entity/security/AccessAction.enum.php';
 require_once 'model/security/LoginModel.class.php';
 require_once 'model/GroepenModel.class.php';
 

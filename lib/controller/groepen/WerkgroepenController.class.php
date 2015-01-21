@@ -7,7 +7,7 @@
  * 
  * Controller voor werkgroepen.
  */
-class WerkgroepenController extends GroepenController {
+class WerkgroepenController extends OpvolgbareGroepenController {
 
 	public function __construct($query) {
 		parent::__construct($query, WerkgroepenModel::instance());

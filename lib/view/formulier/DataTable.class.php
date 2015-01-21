@@ -175,6 +175,8 @@ class DataTable extends TabsForm {
 			$this->settings['orderFixed'] = array(
 				array($this->groupByColumn, 'asc')
 			);
+		} else {
+			$this->groupByColumn = false;
 		}
 
 		// create visible columns index array and default order

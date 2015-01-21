@@ -45,4 +45,13 @@ class KetzerOptie extends PersistentEntity {
 	 */
 	protected static $primary_key = array('optie_id');
 
+	/**
+	 * Lazy loading by foreign key.
+	 * 
+	 * @return KetzerKeuze[]
+	 */
+	public function getKeuzes() {
+		return KetzerKeuzesModel::instance()->getKeuzesVoorOptie($this);
+	}
+
 }

@@ -52,7 +52,7 @@ class KetzerSelector extends PersistentEntity {
 	 * 
 	 * @return KetzerOptie[]
 	 */
-	public function getKetzerOpties() {
+	public function getOpties() {
 		return KetzerOptiesModel::instance()->getOptiesVoorSelect($this);
 	}
 

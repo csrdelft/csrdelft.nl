@@ -55,7 +55,7 @@ class LoginController extends AclController {
 		if ($this->isPosted()) {
 			parent::geentoegang();
 		}
-		$body = new CmsPaginaView(CmsPaginaModel::instance()->getPagina('accountaanvragen'));
+		$body = new CmsPaginaView(CmsPaginaModel::get('accountaanvragen'));
 		$this->view = new CsrLayoutPage($body);
 	}
 
@@ -111,7 +111,7 @@ class LoginController extends AclController {
 		}
 		require_once 'model/CmsPaginaModel.class.php';
 		require_once 'view/CmsPaginaView.class.php';
-		$body = new CmsPaginaView(CmsPaginaModel::instance()->getPagina('mobiel'));
+		$body = new CmsPaginaView(CmsPaginaModel::get('mobiel'));
 		$this->view = new CsrLayoutPage($body);
 	}
 

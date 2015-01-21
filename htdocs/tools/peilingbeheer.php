@@ -63,7 +63,7 @@ if (!LoginModel::mag('P_LOGGED_IN') OR ! PeilingenModel::magBewerken()) {
 	# geen rechten
 	require_once 'model/CmsPaginaModel.class.php';
 	require_once 'view/CmsPaginaView.class.php';
-	$beheer = new CmsPaginaView(CmsPaginaModel::instance()->getPagina('geentoegang'));
+	$beheer = new CmsPaginaView(CmsPaginaModel::get('geentoegang'));
 }
 
 $pagina = new CsrLayoutPage($beheer);
